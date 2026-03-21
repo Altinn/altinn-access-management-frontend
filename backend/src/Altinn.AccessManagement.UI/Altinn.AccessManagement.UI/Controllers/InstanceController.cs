@@ -237,7 +237,7 @@ namespace Altinn.AccessManagement.UI.Controllers
         /// <param name="to">The party the instance access was delegated to.</param>
         /// <param name="resource">The resource identifier.</param>
         /// <param name="instance">The instance urn.</param>
-        /// <response code="204">No Content</response>
+        /// <response code="200">OK</response>
         /// <response code="400">Bad Request</response>
         /// <response code="500">Internal Server Error</response>
         [HttpDelete]
@@ -250,15 +250,10 @@ namespace Altinn.AccessManagement.UI.Controllers
                 var response = await _instanceService.RemoveInstance(party, from, to, resource, instance);
                 if (response.IsSuccessStatusCode)
                 {
-                    return NoContent();
+                    return Ok(response);
                 }
-
+                
                 return new ObjectResult(ProblemDetailsFactory.CreateProblemDetails(HttpContext, (int?)response.StatusCode, "Error returned from backend"));
-            }
-            catch (HttpStatusException statusEx)
-            {
-                string responseContent = statusEx.Message;
-                return new ObjectResult(ProblemDetailsFactory.CreateProblemDetails(HttpContext, (int?)statusEx.StatusCode, "Unexpected HttpStatus response", detail: responseContent));
             }
             catch (Exception ex)
             {

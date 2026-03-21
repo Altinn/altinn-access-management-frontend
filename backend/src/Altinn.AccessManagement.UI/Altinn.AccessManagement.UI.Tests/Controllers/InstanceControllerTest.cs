@@ -632,7 +632,7 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
             HttpResponseMessage httpResponse = await _client.DeleteAsync(
                 $"accessmanagement/api/v1/instances/delegation/instances?party={party}&from={from}&to={to}&resource={resource}&instance={Uri.EscapeDataString(instance)}");
 
-            Assert.Equal(HttpStatusCode.NoContent, httpResponse.StatusCode);
+            Assert.Equal(HttpStatusCode.OK, httpResponse.StatusCode);
         }
 
         /// <summary>

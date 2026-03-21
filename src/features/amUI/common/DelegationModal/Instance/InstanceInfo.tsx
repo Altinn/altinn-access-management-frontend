@@ -7,7 +7,6 @@ import type { ServiceResource } from '@/rtk/features/singleRights/singleRightsAp
 import { StatusMessageForScreenReader } from '@/components/StatusMessageForScreenReader/StatusMessageForScreenReader';
 import { useIsMobileOrSmaller } from '@/resources/utils/screensizeUtils';
 import { PartyType } from '@/rtk/features/userInfoApi';
-import { createErrorDetails } from '@/features/amUI/common/TechnicalErrorParagraphs/TechnicalErrorParagraphs';
 
 import { StatusSection } from '../../StatusSection/StatusSection';
 import { LoadingAnimation } from '../../LoadingAnimation/LoadingAnimation';
@@ -52,7 +51,7 @@ export const InstanceInfo = ({
       fullName: toParty?.name ?? '',
       type: toParty?.partyTypeName === PartyType.Organization ? 'company' : 'person',
     });
-  const hasToParty = !!toParty || !!toPartyNameProp;
+
   const hasDelegateAction = availableActions?.includes(DelegationAction.DELEGATE);
 
   const {
@@ -66,13 +65,12 @@ export const InstanceInfo = ({
     hasAccess,
     isDelegationCheckLoading,
     isDelegationCheckError,
-    delegationCheckError,
     delegationError,
     missingAccess,
     isLoading,
     isActionLoading,
     isActionSuccess,
-    rightsMetaTechnicalErrorDetails,
+    technicalErrorDetails,
   } = useInstanceRightsSection({
     resource,
     instanceUrn,
@@ -86,17 +84,12 @@ export const InstanceInfo = ({
   const cannotDelegateHere = resource?.delegable === false;
 
   const displayResourceAlert =
-    !!rightsMetaTechnicalErrorDetails ||
+    !!technicalErrorDetails ||
     (hasDelegateAction &&
       !hasAccess &&
       (isDelegationCheckError ||
         resource?.delegable === false ||
         (rights.length > 0 && !rights.some((r) => r.delegable === true))));
-
-  const delegationCheckErrorDetails = isDelegationCheckError
-    ? createErrorDetails(delegationCheckError)
-    : null;
-  const technicalErrorDetails = rightsMetaTechnicalErrorDetails ?? delegationCheckErrorDetails;
 
   const shortId = instanceUrn.slice(-10);
 
@@ -168,7 +161,7 @@ export const InstanceInfo = ({
                   {hasAccess ? t('common.update_poa') : t('common.give_poa')}
                 </Button>
               )}
-              {hasAccess && hasToParty && (
+              {hasAccess && (!!toParty || !!toPartyUuid) && (
                 <Button
                   variant={hasDelegateAction ? 'tertiary' : 'primary'}
                   onClick={revokeResource}

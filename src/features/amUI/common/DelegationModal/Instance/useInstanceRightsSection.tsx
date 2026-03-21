@@ -1,14 +1,11 @@
-import { useCallback, useEffect, useRef, useState } from 'react';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import {
   type DelegationCheckedRight,
   type ServiceResource,
-  useGetResourceRightsMetaQuery,
 } from '@/rtk/features/singleRights/singleRightsApi';
 import {
-  useGetInstanceRightsQuery,
-  useInstanceDelegationCheckQuery,
   useDelegateInstanceRightsMutation,
   useUpdateInstanceRightsMutation,
   useRemoveInstanceMutation,
@@ -17,7 +14,7 @@ import { usePartyRepresentation } from '../../PartyRepresentationContext/PartyRe
 import { ErrorCode } from '@/resources/utils/errorCodeUtils';
 import { createErrorDetails } from '@/features/amUI/common/TechnicalErrorParagraphs/TechnicalErrorParagraphs';
 import { useGetReporteeQuery } from '@/rtk/features/userInfoApi';
-import { mapRightsToChipRights, type ChipRight } from '../SingleRights/hooks/rightsUtils';
+import { useInstanceDelegationRightsData } from './useInstanceDelegationRightsData';
 
 export const useInstanceRightsSection = ({
   resource,
@@ -36,8 +33,6 @@ export const useInstanceRightsSection = ({
   const { toParty, fromParty, actingParty } = usePartyRepresentation();
   const toPartyUuid = toPartyUuidProp ?? toParty?.partyUuid ?? '';
 
-  const [rights, setRights] = useState<ChipRight[]>([]);
-  const [hasAccess, setHasAccess] = useState(false);
   const [delegationError, setDelegationError] = useState<'delegate' | 'revoke' | 'edit' | null>(
     null,
   );
@@ -58,50 +53,22 @@ export const useInstanceRightsSection = ({
   const [removeInstance] = useRemoveInstanceMutation();
 
   const {
-    data: instanceRights,
-    isFetching: isInstanceRightsFetching,
-    isLoading: isInstanceRightsLoading,
-  } = useGetInstanceRightsQuery(
-    {
-      party: actingParty?.partyUuid || '',
-      from: fromParty?.partyUuid || '',
-      to: toPartyUuid,
-      resource: resource.identifier,
-      instance: instanceUrn,
-    },
-    {
-      skip:
-        !actingParty?.partyUuid ||
-        !fromParty?.partyUuid ||
-        !toPartyUuid ||
-        !resource.identifier ||
-        !instanceUrn,
-    },
-  );
-
-  const {
-    data: rightsMeta,
-    isLoading: isRightsMetaLoading,
-    isError: isRightsMetaError,
-    error: rightsMetaError,
-  } = useGetResourceRightsMetaQuery(
-    { resourceId: resource.identifier },
-    { skip: !resource.identifier },
-  );
-
-  const {
-    data: delegationCheckedActions,
-    isError: isDelegationCheckError,
-    error: delegationCheckError,
-    isLoading: isDelegationCheckLoading,
-  } = useInstanceDelegationCheckQuery(
-    {
-      party: actingParty?.partyUuid || '',
-      resource: resource.identifier,
-      instance: instanceUrn,
-    },
-    { skip: !actingParty?.partyUuid || !resource.identifier || !instanceUrn },
-  );
+    rights,
+    setRights,
+    hasAccess,
+    isLoading,
+    isDelegationCheckLoading,
+    isDelegationCheckError,
+    delegationCheckError,
+    delegationCheckedRights,
+    rightsMetaTechnicalErrorDetails,
+    instanceRightsErrorDetails,
+  } = useInstanceDelegationRightsData({
+    resourceId: resource.identifier,
+    instanceUrn,
+    fromPartyUuid: fromParty?.partyUuid,
+    toPartyUuid,
+  });
 
   useEffect(() => {
     setDelegationError(null);
@@ -112,24 +79,6 @@ export const useInstanceRightsSection = ({
       setDelegationError(initialDelegationError);
     }
   }, [initialDelegationError]);
-
-  const isLoading = isRightsMetaLoading || isDelegationCheckLoading || isInstanceRightsLoading;
-
-  const isRightsMetaEmpty =
-    !isRightsMetaLoading &&
-    !isRightsMetaError &&
-    Array.isArray(rightsMeta) &&
-    rightsMeta.length === 0;
-
-  const rightsMetaErrorDetails = createErrorDetails(rightsMetaError);
-  const rightsMetaTechnicalErrorDetails =
-    isRightsMetaError || isRightsMetaEmpty
-      ? {
-          status:
-            rightsMetaErrorDetails?.status ?? (isRightsMetaEmpty ? 'empty response' : 'no status'),
-          time: rightsMetaErrorDetails?.time ?? new Date().toISOString(),
-        }
-      : null;
 
   const hasUnsavedChanges = rights.some((r) => r.checked !== r.delegated);
   const undelegableActions = rights.filter((r) => !r.delegable).map((r) => r.rightName);
@@ -168,50 +117,25 @@ export const useInstanceRightsSection = ({
     [t, resource?.resourceOwnerName, reportee?.name],
   );
 
-  useEffect(() => {
-    if (!isInstanceRightsFetching) {
-      if (
-        instanceRights &&
-        (instanceRights.directRights.length > 0 || instanceRights.indirectRights.length > 0)
-      ) {
-        setHasAccess(true);
-      } else {
-        setHasAccess(false);
-      }
+  const defaultMissingAccess = useMemo(() => {
+    if (!delegationCheckedRights) {
+      return null;
     }
-  }, [instanceRights, isInstanceRightsFetching]);
+
+    return getMissingAccessMessage(delegationCheckedRights);
+  }, [delegationCheckedRights, getMissingAccessMessage]);
 
   useEffect(() => {
-    if (!rightsMeta || rightsMeta.length === 0) return;
-    if (!delegationCheckedActions && !isDelegationCheckError) return;
+    setMissingAccess(defaultMissingAccess);
+  }, [defaultMissingAccess]);
 
-    if (delegationCheckedActions) {
-      setMissingAccess(getMissingAccessMessage(delegationCheckedActions));
-    }
-
-    if (hasAccess && instanceRights) {
-      const chipRights = mapRightsToChipRights(rightsMeta, delegationCheckedActions, {
-        isDelegated: (right) =>
-          instanceRights.directRights.some((r) => r.right.key === right.right.key) ||
-          instanceRights.indirectRights.some((r) => r.right.key === right.right.key),
-        isInherited: (rightKey) =>
-          instanceRights.indirectRights.some((r) => r.right.key === rightKey),
-      });
-      setRights(chipRights);
-    } else {
-      const chipRights = mapRightsToChipRights(rightsMeta, delegationCheckedActions, {
-        isChecked: (right) => right.result === true,
-      });
-      setRights(chipRights);
-    }
-  }, [
-    rightsMeta,
-    delegationCheckedActions,
-    isDelegationCheckError,
-    hasAccess,
-    instanceRights,
-    getMissingAccessMessage,
-  ]);
+  const delegationCheckErrorDetails = isDelegationCheckError
+    ? createErrorDetails(delegationCheckError)
+    : null;
+  const technicalErrorDetails =
+    rightsMetaTechnicalErrorDetails ??
+    instanceRightsErrorDetails ??
+    (hasAccess ? null : delegationCheckErrorDetails);
 
   const onSuccess = () => {
     setIsActionLoading(false);
@@ -297,12 +221,11 @@ export const useInstanceRightsSection = ({
     hasAccess,
     isDelegationCheckLoading,
     isDelegationCheckError,
-    delegationCheckError,
     delegationError,
     missingAccess,
     isActionLoading,
     isActionSuccess,
     isLoading,
-    rightsMetaTechnicalErrorDetails,
+    technicalErrorDetails,
   };
 };
