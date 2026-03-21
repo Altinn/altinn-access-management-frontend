@@ -939,7 +939,6 @@
     "description": "Her kan du dele ei melding/eit skjema frå innboksen eller få oversikt over kven som allereie har tilgang. Bruk søkjefeltet til å søkje etter personar/verksemder eller legg dei til som ny brukar.",
     "no_users": "Ingen brukarar har tilgang.",
     "no_access_description": "<b>Du har ikkje fullmakt til å gi vidare denne tenesta/meldinga.</b> For å kunne dele og gi tilgang frå innboksen må du ha tilgangspakka: Tilgangsstyrar for enkeltmeldingar, skjema og dialogar.",
-    "instance_not_found": "Du har ikkje tilgang til dette elementet, eller det finst ikkje lenger.",
     "add_user_modal": {
       "heading": "Gi fullmakt til ny brukar",
       "user_will_receive": "Brukaren vil få:"
