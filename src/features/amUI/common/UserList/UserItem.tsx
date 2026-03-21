@@ -172,15 +172,15 @@ export const UserItem = ({
         else if (onSelect) onSelect();
       }}
       as={
-        hasInheritingUsers || onSelect
-          ? 'button'
-          : interactive
-            ? (props) => (
-                <Link
-                  {...props}
-                  to={linkTo ?? user.id}
-                />
-              )
+        interactive && !hasInheritingUsers
+          ? (props) => (
+              <Link
+                {...props}
+                to={linkTo ?? user.id}
+              />
+            )
+          : hasInheritingUsers || onSelect
+            ? 'button'
             : 'div'
       }
       controls={!hasInheritingUsers && controls && controls(user)}

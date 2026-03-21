@@ -149,7 +149,7 @@ namespace Altinn.AccessManagement.UI.Integration.Clients
                 var response = await _client.PutAsync(token, endpointUrl, content);
                 if (!response.IsSuccessStatusCode)
                 {
-                    _logger.LogError("InstanceClient // UpdateInstanceRightsAccess // Unexpected status {StatusCode} for party={Party}, to={To}, resource={Resource}, instance={Instance}", (int)response.StatusCode, party, to, resource, instance);
+                    _logger.LogError("InstanceClient // UpdateInstanceRightsAccess // Unexpected status {StatusCode}", (int)response.StatusCode);
                 }
 
                 return response;
