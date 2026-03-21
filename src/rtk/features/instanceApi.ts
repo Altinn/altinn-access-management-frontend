@@ -1,9 +1,8 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 
 import { getCookie } from '@/resources/Cookie/CookieMethods';
-import type { SimplifiedParty } from './connectionApi';
+import type { SimplifiedParty, PersonInput } from './connectionApi';
 import type { Permissions } from '@/dataObjects/dtos/accessPackage';
-import type { PersonInput } from './connectionApi';
 import type {
   DelegationCheckedRight,
   RightAccess,

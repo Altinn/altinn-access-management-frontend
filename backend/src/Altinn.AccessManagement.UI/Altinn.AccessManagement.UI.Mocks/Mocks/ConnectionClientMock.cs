@@ -175,28 +175,5 @@ namespace Altinn.AccessManagement.UI.Mocks.Mocks
             }
         }
 
-        /// <inheritdoc/>
-        public Task<List<SimplifiedParty>> GetInstanceUsers(Guid party, string resource, string instance)
-        {
-            if (party == Guid.Empty)
-            {
-                throw new HttpStatusException("Test", "Mock internal server error", HttpStatusCode.InternalServerError, null);
-            }
-
-            // Return a mock list of simplified parties
-            var users = new List<SimplifiedParty>
-            {
-                new SimplifiedParty
-                {
-                    Id = Guid.NewGuid(),
-                    Name = "Mock Instance User",
-                    Type = "Person",
-                    Variant = "person",
-                    IsDeleted = false,
-                },
-            };
-
-            return Task.FromResult(users);
-        }
     }
 }

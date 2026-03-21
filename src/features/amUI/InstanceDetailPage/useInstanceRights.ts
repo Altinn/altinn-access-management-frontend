@@ -35,19 +35,41 @@ export const useInstanceRights = ({
   isOpen: boolean;
 }) => {
   const { actingParty } = usePartyRepresentation();
-  const { data: isAdmin } = useGetIsAdminQuery();
-  const { data: isInstanceAdmin } = useGetIsInstanceAdminQuery();
+  const {
+    data: isAdmin,
+    isLoading: isAdminLoading,
+    isFetching: isAdminFetching,
+    isError: isAdminError,
+    error: isAdminErrorObj,
+  } = useGetIsAdminQuery();
+  const {
+    data: isInstanceAdmin,
+    isLoading: isInstanceAdminLoading,
+    isFetching: isInstanceAdminFetching,
+    isError: isInstanceAdminError,
+    error: isInstanceAdminErrorObj,
+  } = useGetIsInstanceAdminQuery();
   const [rights, setRights] = useState<ChipRight[]>([]);
 
   const {
     data: rightsMeta,
     isLoading: isRightsMetaLoading,
+    isFetching: isRightsMetaFetching,
+    isError: isRightsMetaError,
     error: rightsMetaError,
   } = useGetResourceRightsMetaQuery({ resourceId }, { skip: !isOpen || !resourceId });
+
+  const isAdminStateLoading =
+    isAdminLoading || isAdminFetching || isInstanceAdminLoading || isInstanceAdminFetching;
+  const isAdminStateError = isAdminError || isInstanceAdminError;
+  const hasAdminAccess = Boolean(isAdmin || isInstanceAdmin);
+  const shouldCheckDelegation = hasAdminAccess && !isAdminStateLoading && !isAdminStateError;
 
   const {
     data: delegationCheckedRights,
     isLoading: isDelegationCheckLoading,
+    isFetching: isDelegationCheckFetching,
+    isError: isDelegationCheckError,
     error: delegationCheckError,
   } = useInstanceDelegationCheckQuery(
     {
@@ -57,30 +79,51 @@ export const useInstanceRights = ({
     },
     {
       skip:
-        (!isAdmin && !isInstanceAdmin) ||
-        !isOpen ||
-        !actingParty?.partyUuid ||
-        !resourceId ||
-        !instanceUrn,
+        !shouldCheckDelegation || !isOpen || !actingParty?.partyUuid || !resourceId || !instanceUrn,
     },
   );
 
-  const mappedRights = useMemo(() => {
-    if (!rightsMeta || !delegationCheckedRights) return [];
+  const isLoading =
+    isOpen &&
+    (isAdminStateLoading ||
+      isRightsMetaLoading ||
+      isRightsMetaFetching ||
+      (shouldCheckDelegation && (isDelegationCheckLoading || isDelegationCheckFetching)));
+  const isError = isAdminStateError || isRightsMetaError || isDelegationCheckError;
+  const errorDetails =
+    createErrorDetails(isAdminErrorObj) ??
+    createErrorDetails(isInstanceAdminErrorObj) ??
+    createErrorDetails(rightsMetaError) ??
+    createErrorDetails(delegationCheckError) ??
+    (isError
+      ? {
+          status: 'unknown',
+          time: new Date().toISOString(),
+        }
+      : null);
+
+  // Wait for every upstream query to settle before treating missing rights data as a real empty set.
+  const hasSettledRightsDependencies =
+    !isLoading &&
+    !isError &&
+    rightsMeta !== undefined &&
+    (!shouldCheckDelegation || delegationCheckedRights !== undefined);
+
+  const mappedRights = useMemo<ChipRight[] | null>(() => {
+    if (!hasSettledRightsDependencies) return null;
+    if (!shouldCheckDelegation || !rightsMeta) return [];
+
     return mapRightsToChipRights(rightsMeta, delegationCheckedRights, {
       isChecked: (right) => right.result === true,
     });
-  }, [delegationCheckedRights, rightsMeta]);
+  }, [delegationCheckedRights, hasSettledRightsDependencies, rightsMeta, shouldCheckDelegation]);
 
   useEffect(() => {
+    if (mappedRights === null) return;
     setRights(mappedRights);
   }, [mappedRights]);
 
-  const resetRights = () => setRights(mappedRights);
+  const resetRights = () => setRights(mappedRights ?? []);
 
-  const isLoading = isRightsMetaLoading || isDelegationCheckLoading;
-  const errorDetails =
-    createErrorDetails(rightsMetaError) ?? createErrorDetails(delegationCheckError);
-
-  return { rights, setRights, resetRights, isLoading, errorDetails };
+  return { rights, setRights, resetRights, isLoading, isError, errorDetails };
 };

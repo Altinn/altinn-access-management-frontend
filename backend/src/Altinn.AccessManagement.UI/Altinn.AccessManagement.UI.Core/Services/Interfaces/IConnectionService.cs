@@ -64,15 +64,5 @@ namespace Altinn.AccessManagement.UI.Core.Services.Interfaces
         /// <param name="party">The uuid of the party.</param>
         /// <returns>A list of <see cref="SimplifiedConnection"/> representing available users.</returns>
         Task<List<SimplifiedConnection>> GetAvailableUsers(Guid party);
-
-        /// <summary>
-        /// Gets all users who have access to a specific instance.
-        /// Limited endpoint for client admins without full admin access.
-        /// </summary>
-        /// <param name="party">The uuid of the party.</param>
-        /// <param name="resource">The resource identifier.</param>
-        /// <param name="instance">The instance URN.</param>
-        /// <returns>A list of <see cref="SimplifiedParty"/> representing users with instance access.</returns>
-        Task<List<SimplifiedParty>> GetInstanceUsers(Guid party, string resource, string instance);
     }
 }

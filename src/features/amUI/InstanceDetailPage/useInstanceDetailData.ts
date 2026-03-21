@@ -39,6 +39,8 @@ export const useInstanceDetailData = ({
   } = useGetIsInstanceAdminQuery();
 
   const useLimitedEndpoints = !isAdmin && isInstanceAdmin;
+  const shouldGetIndirectConnections = isAdmin && fromParty?.partyUuid;
+  const shouldGetAvailableUsers = useLimitedEndpoints && fromParty?.partyUuid;
 
   // --- Full admin endpoints ---
 
@@ -73,6 +75,8 @@ export const useInstanceDetailData = ({
     data: indirectConnections,
     isLoading: isLoadingIndirectConnections,
     isFetching: isFetchingIndirectConnections,
+    isError: isIndirectConnectionsError,
+    error: indirectConnectionsError,
   } = useGetRightHoldersQuery(
     {
       partyUuid: fromParty?.partyUuid ?? '',
@@ -80,7 +84,7 @@ export const useInstanceDetailData = ({
       toUuid: '',
     },
     {
-      skip: !isAdmin || !fromParty?.partyUuid,
+      skip: !shouldGetIndirectConnections,
     },
   );
 
@@ -116,12 +120,14 @@ export const useInstanceDetailData = ({
     data: availableUsers,
     isLoading: isAvailableUsersLoading,
     isFetching: isFetchingAvailableUsers,
+    isError: isAvailableUsersError,
+    error: availableUsersError,
   } = useGetAvailableUsersQuery(
     {
       partyUuid: fromParty?.partyUuid ?? '',
     },
     {
-      skip: !useLimitedEndpoints || !fromParty?.partyUuid,
+      skip: !shouldGetAvailableUsers,
     },
   );
 
@@ -151,20 +157,29 @@ export const useInstanceDetailData = ({
 
   // --- Error handling ---
 
-  const contentTechnicalError =
+  const hasContentTechnicalError =
     isAdminError ||
     isInstanceAdminError ||
     isInstancesError ||
+    (shouldGetIndirectConnections && isIndirectConnectionsError) ||
     isInstanceUsersError ||
-    resourceError
-      ? createErrorDetails(
-          instancesError ||
-            instanceUsersError ||
-            isAdminErrorObj ||
-            isInstanceAdminErrorObj ||
-            resourceError,
-        )
-      : null;
+    (shouldGetAvailableUsers && isAvailableUsersError) ||
+    Boolean(resourceError);
+
+  const contentTechnicalError = hasContentTechnicalError
+    ? (createErrorDetails(
+        instancesError ||
+          (shouldGetIndirectConnections ? indirectConnectionsError : undefined) ||
+          instanceUsersError ||
+          (shouldGetAvailableUsers ? availableUsersError : undefined) ||
+          isAdminErrorObj ||
+          isInstanceAdminErrorObj ||
+          resourceError,
+      ) ?? {
+        status: 'unknown',
+        time: new Date().toISOString(),
+      })
+    : null;
 
   // --- Loading states ---
 

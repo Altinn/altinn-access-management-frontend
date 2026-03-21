@@ -145,7 +145,7 @@ namespace Altinn.AccessManagement.UI.Integration.Clients
                 string content = await httpResponse.Content.ReadAsStringAsync();
                 PaginatedResult<SimplifiedConnection> result = JsonSerializer.Deserialize<PaginatedResult<SimplifiedConnection>>(content, _serializerOptions);
 
-                return result.Items.ToList();
+                return result?.Items?.ToList() ?? new List<SimplifiedConnection>();
             }
             catch (HttpStatusException)
             {
@@ -154,36 +154,6 @@ namespace Altinn.AccessManagement.UI.Integration.Clients
             catch (Exception ex)
             {
                 _logger.LogError(ex, "Error while getting available users");
-                throw new HttpStatusException("Unexpected http response.", "Unexpected http response.", HttpStatusCode.InternalServerError, null, ex.Message);
-            }
-        }
-
-        /// <inheritdoc />
-        public async Task<List<SimplifiedParty>> GetInstanceUsers(Guid party, string resource, string instance)
-        {
-            string endpointUrl = $"enduser/connections/resources/instances/users?party={party}&resource={Uri.EscapeDataString(resource)}&instance={Uri.EscapeDataString(instance)}";
-            string token = JwtTokenUtil.GetTokenFromContext(_httpContextAccessor.HttpContext, _platformSettings.JwtCookieName);
-
-            try
-            {
-                var httpResponse = await _client.GetAsync(token, endpointUrl);
-                if (!httpResponse.IsSuccessStatusCode)
-                {
-                    throw new HttpStatusException("Unexpected http response.", "Unexpected http response.", httpResponse.StatusCode, null, httpResponse.ReasonPhrase);
-                }
-
-                string content = await httpResponse.Content.ReadAsStringAsync();
-                PaginatedResult<SimplifiedParty> result = JsonSerializer.Deserialize<PaginatedResult<SimplifiedParty>>(content, _serializerOptions);
-
-                return result.Items.ToList();
-            }
-            catch (HttpStatusException)
-            {
-                throw;
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError(ex, "Error while getting instance users");
                 throw new HttpStatusException("Unexpected http response.", "Unexpected http response.", HttpStatusCode.InternalServerError, null, ex.Message);
             }
         }

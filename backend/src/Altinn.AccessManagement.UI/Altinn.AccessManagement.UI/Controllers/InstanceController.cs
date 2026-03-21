@@ -21,24 +21,20 @@ namespace Altinn.AccessManagement.UI.Controllers
     {
         private readonly IHttpContextAccessor _httpContextAccessor;
         private readonly IInstanceService _instanceService;
-        private readonly IConnectionService _connectionService;
         private readonly ILogger<InstanceController> _logger;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="InstanceController"/> class.
         /// </summary>
         /// <param name="instanceService">The instance delegation service.</param>
-        /// <param name="connectionService">The connection service (used for simplified instance user queries).</param>
         /// <param name="httpContextAccessor">Accessor for the current http context.</param>
         /// <param name="logger">Logger instance.</param>
         public InstanceController(
             IInstanceService instanceService,
-            IConnectionService connectionService,
             IHttpContextAccessor httpContextAccessor,
             ILogger<InstanceController> logger)
         {
             _instanceService = instanceService;
-            _connectionService = connectionService;
             _httpContextAccessor = httpContextAccessor;
             _logger = logger;
         }
@@ -258,7 +254,7 @@ namespace Altinn.AccessManagement.UI.Controllers
 
             try
             {
-                var users = await _connectionService.GetInstanceUsers(party, resource, instance);
+                var users = await _instanceService.GetInstanceUsers(party, resource, instance);
                 return Ok(users);
             }
             catch (HttpStatusException ex)

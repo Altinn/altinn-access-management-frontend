@@ -6,6 +6,7 @@ using Altinn.AccessManagement.UI.Core.Helpers;
 using Altinn.AccessManagement.UI.Core.Models.Common;
 using Altinn.AccessManagement.UI.Core.Models.InstanceDelegation;
 using Altinn.AccessManagement.UI.Core.Models.SingleRight;
+using Altinn.AccessManagement.UI.Core.Models.User;
 using Altinn.AccessManagement.UI.Integration.Configuration;
 using Altinn.AccessManagement.UI.Integration.Util;
 using Microsoft.AspNetCore.Http;
@@ -153,6 +154,20 @@ namespace Altinn.AccessManagement.UI.Integration.Clients
                 _logger.LogError(ex, "AccessManagement.UI // InstanceClient // UpdateInstanceRightsAccess // Exception");
                 throw;
             }
+        }
+
+        /// <inheritdoc />
+        public async Task<List<SimplifiedParty>> GetInstanceUsers(Guid party, string resource, string instance)
+        {
+            string endpointUrl = $"enduser/connections/resources/instances/users?party={party}&resource={Uri.EscapeDataString(resource)}&instance={Uri.EscapeDataString(instance)}";
+            string token = JwtTokenUtil.GetTokenFromContext(_httpContextAccessor.HttpContext, _platformSettings.JwtCookieName);
+
+            HttpResponseMessage response = await _client.GetAsync(token, endpointUrl);
+
+            PaginatedResult<SimplifiedParty> paginatedResult =
+                await ClientUtils.DeserializeIfSuccessfullStatusCode<PaginatedResult<SimplifiedParty>>(response, _logger, "InstanceClient // GetInstanceUsers");
+
+            return paginatedResult?.Items?.ToList() ?? [];
         }
     }
 }

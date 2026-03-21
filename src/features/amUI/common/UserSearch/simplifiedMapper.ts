@@ -7,7 +7,10 @@ import type { UserSearchNode } from './types';
  * Maps a SimplifiedParty (from the limited instance users endpoint) to a UserSearchNode.
  * Used when the caller has isClientAdmin but not isAdmin, so only basic party info is available.
  */
-const mapSimplifiedPartyToUserSearchNode = (party: SimplifiedParty): UserSearchNode => ({
+const mapSimplifiedPartyToUserSearchNode = (
+  party: SimplifiedParty,
+  isInherited = false,
+): UserSearchNode => ({
   id: party.id,
   name: party.name,
   type: normalizeType(party.type),
@@ -17,8 +20,7 @@ const mapSimplifiedPartyToUserSearchNode = (party: SimplifiedParty): UserSearchN
   sortKey: buildSortKey(party.name),
   roles: [],
   children: null,
-  // All users from the limited endpoint are direct delegations (not inherited)
-  isInherited: false,
+  isInherited,
 });
 
 /**
@@ -33,7 +35,7 @@ export const mapSimplifiedPartiesToUserSearchNodes = (
     return [];
   }
 
-  return parties.map(mapSimplifiedPartyToUserSearchNode);
+  return parties.map((party) => mapSimplifiedPartyToUserSearchNode(party));
 };
 
 /**
@@ -43,15 +45,16 @@ export const mapSimplifiedPartiesToUserSearchNodes = (
  */
 export const mapSimplifiedConnectionsToUserSearchNodes = (
   connections?: SimplifiedConnection[],
+  inherited = false,
 ): UserSearchNode[] => {
   if (!connections?.length) {
     return [];
   }
 
   return connections.map((connection) => ({
-    ...mapSimplifiedPartyToUserSearchNode(connection.party),
+    ...mapSimplifiedPartyToUserSearchNode(connection.party, inherited),
     children: connection.connections?.length
-      ? mapSimplifiedConnectionsToUserSearchNodes(connection.connections)
+      ? mapSimplifiedConnectionsToUserSearchNodes(connection.connections, true)
       : null,
   }));
 };
