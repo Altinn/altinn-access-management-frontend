@@ -16,12 +16,14 @@ export const useInstanceDelegationRightsData = ({
   isEnabled = true,
   fromPartyUuid,
   toPartyUuid,
+  mode = 'edit',
 }: {
   resourceId: string;
   instanceUrn: string;
   isEnabled?: boolean;
   fromPartyUuid?: string;
   toPartyUuid?: string;
+  mode?: 'edit' | 'delegate';
 }) => {
   const { actingParty } = usePartyRepresentation();
   const [rights, setRights] = useState<ChipRight[]>([]);
@@ -102,6 +104,14 @@ export const useInstanceDelegationRightsData = ({
     return instanceRights.directRights.length > 0 || instanceRights.indirectRights.length > 0;
   }, [instanceRights, isInstanceRightsFetching, shouldLoadInstanceRights]);
 
+  const hasDirectAccess = useMemo(() => {
+    if (!shouldLoadInstanceRights || isInstanceRightsFetching || !instanceRights) {
+      return false;
+    }
+
+    return instanceRights.directRights.length > 0;
+  }, [instanceRights, isInstanceRightsFetching, shouldLoadInstanceRights]);
+
   const defaultRights = useMemo(() => {
     if (!rightsMeta || rightsMeta.length === 0) {
       return null;
@@ -111,7 +121,7 @@ export const useInstanceDelegationRightsData = ({
       return null;
     }
 
-    if (shouldLoadInstanceRights) {
+    if (shouldLoadInstanceRights && mode === 'edit') {
       if (!instanceRights) {
         return null;
       }
@@ -135,6 +145,7 @@ export const useInstanceDelegationRightsData = ({
     delegationCheckedRights,
     isDelegationCheckError,
     shouldLoadInstanceRights,
+    mode,
     instanceRights,
     hasAccess,
   ]);
@@ -156,6 +167,7 @@ export const useInstanceDelegationRightsData = ({
     setRights,
     resetRights,
     hasAccess,
+    hasDirectAccess,
     isLoading,
     isDelegationCheckLoading,
     isDelegationCheckError,

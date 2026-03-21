@@ -4,6 +4,9 @@ import { useTranslation } from 'react-i18next';
 import { MinusCircleIcon } from '@navikt/aksel-icons';
 
 import type { ServiceResource } from '@/rtk/features/singleRights/singleRightsApi';
+import type { Party } from '@/rtk/features/lookupApi';
+
+type ToParty = Pick<Party, 'partyUuid' | 'name' | 'partyTypeName'>;
 import { StatusMessageForScreenReader } from '@/components/StatusMessageForScreenReader/StatusMessageForScreenReader';
 import { useIsMobileOrSmaller } from '@/resources/utils/screensizeUtils';
 import { PartyType } from '@/rtk/features/userInfoApi';
@@ -24,35 +27,32 @@ export interface InstanceInfoProps {
   resource: ServiceResource;
   instanceUrn: string;
   instanceName?: string;
-  toPartyUuid?: string;
-  toPartyName?: string;
+  toParty?: ToParty;
   availableActions?: DelegationAction[];
-  onDelegate?: () => void;
-  openWithError?: 'delegate' | 'revoke' | 'edit' | null;
+  onSuccess?: () => void;
 }
 
 export const InstanceInfo = ({
   resource,
   instanceUrn,
   instanceName,
-  toPartyUuid,
-  toPartyName: toPartyNameProp,
+  toParty: toPartyProp,
   availableActions,
-  onDelegate,
-  openWithError,
+  onSuccess,
 }: InstanceInfoProps) => {
   const { t } = useTranslation();
   const isSmall = useIsMobileOrSmaller();
-  const { toParty } = usePartyRepresentation();
+  const { toParty: toPartyContext } = usePartyRepresentation();
 
-  const toName =
-    toPartyNameProp ??
-    formatDisplayName({
-      fullName: toParty?.name ?? '',
-      type: toParty?.partyTypeName === PartyType.Organization ? 'company' : 'person',
-    });
+  const toParty = toPartyProp ?? toPartyContext;
+
+  const toName = formatDisplayName({
+    fullName: toParty?.name ?? '',
+    type: toParty?.partyTypeName === PartyType.Organization ? 'company' : 'person',
+  });
 
   const hasDelegateAction = availableActions?.includes(DelegationAction.DELEGATE);
+  const canRevoke = availableActions?.includes(DelegationAction.REVOKE) ?? false;
 
   const {
     rights,
@@ -63,6 +63,7 @@ export const InstanceInfo = ({
     undelegableActions,
     hasUnsavedChanges,
     hasAccess,
+    hasDirectAccess,
     isDelegationCheckLoading,
     isDelegationCheckError,
     delegationError,
@@ -74,9 +75,9 @@ export const InstanceInfo = ({
   } = useInstanceRightsSection({
     resource,
     instanceUrn,
-    toPartyUuid,
-    onDelegate,
-    initialDelegationError: openWithError,
+    toPartyUuid: toParty?.partyUuid,
+    onSuccess,
+    mode: canRevoke ? 'edit' : 'delegate',
   });
 
   const hasDelegableRights = rights.some((r) => r.delegable);
@@ -144,7 +145,7 @@ export const InstanceInfo = ({
                 availableActions={availableActions}
                 delegationError={delegationError}
                 missingAccess={missingAccess && hasDelegateAction ? missingAccess : null}
-                hasAccessAndNoChanges={hasAccess && !hasUnsavedChanges}
+                hasAccessAndNoChanges={hasDirectAccess && !hasUnsavedChanges}
               />
             )}
             <div className={classes.editButtons}>
@@ -156,12 +157,12 @@ export const InstanceInfo = ({
                     !rights.some((r) => r.checked === true) ||
                     !hasUnsavedChanges
                   }
-                  onClick={hasAccess ? saveEditedRights : delegateChosenRights}
+                  onClick={hasDirectAccess ? saveEditedRights : delegateChosenRights}
                 >
-                  {hasAccess ? t('common.update_poa') : t('common.give_poa')}
+                  {hasDirectAccess ? t('common.update_poa') : t('common.give_poa')}
                 </Button>
               )}
-              {hasAccess && (!!toParty || !!toPartyUuid) && (
+              {canRevoke && hasDirectAccess && !!toParty && (
                 <Button
                   variant={hasDelegateAction ? 'tertiary' : 'primary'}
                   onClick={revokeResource}

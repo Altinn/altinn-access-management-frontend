@@ -4,8 +4,7 @@ import { DsAlert, DsHeading, DsParagraph } from '@altinn/altinn-components';
 
 import { usePartyRepresentation } from '../../common/PartyRepresentationContext/PartyRepresentationContext';
 import { InstanceList } from '@/features/amUI/common/InstanceList/InstanceList';
-import { InstanceEditModal } from '@/features/amUI/common/DelegationModal/Instance/InstanceEditModal';
-import { DelegationAction } from '@/features/amUI/common/DelegationModal/EditModal';
+import { DelegationAction, EditModal } from '@/features/amUI/common/DelegationModal/EditModal';
 import { type InstanceDelegation, useGetInstancesQuery } from '@/rtk/features/instanceApi';
 import classes from './InstanceSection.module.css';
 
@@ -57,11 +56,17 @@ export const InstanceSection = () => {
           }}
         />
       )}
-      <InstanceEditModal
+      <EditModal
         ref={modalRef}
         resource={selectedInstance?.resource}
-        instanceUrn={selectedInstance?.instance.refId}
-        instanceName={selectedInstance?.instance.type?.name}
+        instance={
+          selectedInstance
+            ? {
+                instanceUrn: selectedInstance.instance.refId,
+                instanceName: selectedInstance.instance.type?.name,
+              }
+            : undefined
+        }
         onClose={() => setSelectedInstance(null)}
         availableActions={[DelegationAction.REVOKE, DelegationAction.DELEGATE]}
       />

@@ -18,11 +18,15 @@ import { useGetRightHoldersQuery } from '@/rtk/features/connectionApi';
 import { useGetInstancesQuery, useRemoveInstanceMutation } from '@/rtk/features/instanceApi';
 import { useGetResourceQuery } from '@/rtk/features/resourceApi';
 import { useProviderLogoUrl } from '@/resources/hooks';
-import { useGetIsAdminQuery, useGetIsInstanceAdminQuery } from '@/rtk/features/userInfoApi';
+import {
+  PartyType,
+  useGetIsAdminQuery,
+  useGetIsInstanceAdminQuery,
+} from '@/rtk/features/userInfoApi';
 import { getAfUrl } from '@/resources/utils/pathUtils';
 import { CheckmarkIcon, EnvelopeClosedIcon } from '@navikt/aksel-icons';
-import { InstanceEditModal } from '../common/DelegationModal/Instance/InstanceEditModal';
-import { DelegationAction } from '../common/DelegationModal/EditModal';
+import { DelegationAction, EditModal } from '../common/DelegationModal/EditModal';
+import type { ActionError } from '@/resources/hooks/useActionError';
 import type { UserActionTarget } from '../common/UserSearch/types';
 import { AddUserButton } from './AddUserModal';
 
@@ -35,7 +39,8 @@ export const InstanceDetailPageContent = () => {
 
   const modalRef = useRef<HTMLDialogElement>(null);
   const [selectedUser, setSelectedUser] = useState<UserActionTarget | null>(null);
-  const [revokeError, setRevokeError] = useState<'revoke' | null>(null);
+  const [selectedUserMode, setSelectedUserMode] = useState<'edit' | 'delegate'>('edit');
+  const [actionError, setActionError] = useState<ActionError | null>(null);
   const [removeInstance, { isLoading: isRevoking }] = useRemoveInstanceMutation();
 
   useEffect(() => {
@@ -45,7 +50,12 @@ export const InstanceDetailPageContent = () => {
   }, [selectedUser]);
 
   const handleUserSelect = (user: UserActionTarget) => {
-    setRevokeError(null);
+    setSelectedUserMode('edit');
+    setSelectedUser(user);
+  };
+
+  const handleIndirectUserDelegate = (user: UserActionTarget) => {
+    setSelectedUserMode('delegate');
     setSelectedUser(user);
   };
 
@@ -61,10 +71,14 @@ export const InstanceDetailPageContent = () => {
       .unwrap()
       .then(() => {
         setSelectedUser(null);
-        setRevokeError(null);
+        setActionError(null);
       })
       .catch(() => {
-        setRevokeError('revoke');
+        setActionError({
+          httpStatus: 'unknown',
+          timestamp: new Date().toISOString(),
+        });
+        setSelectedUserMode('edit');
         setSelectedUser(user);
       });
   };
@@ -201,6 +215,10 @@ export const InstanceDetailPageContent = () => {
   const providerLogoUrl = resource?.resourceOwnerOrgcode
     ? getProviderLogoUrl(resource.resourceOwnerOrgcode)
     : undefined;
+  const selectedUserAvailableActions =
+    selectedUserMode === 'delegate'
+      ? [DelegationAction.DELEGATE]
+      : [DelegationAction.REVOKE, DelegationAction.DELEGATE];
 
   return (
     <>
@@ -252,6 +270,7 @@ export const InstanceDetailPageContent = () => {
               isActionLoading={isFetchingIndirectConnections || isRevoking}
               canDelegate
               noUsersText={t('instance_detail_page.no_users')}
+              onDelegate={handleIndirectUserDelegate}
               onSelect={handleUserSelect}
               onRevoke={handleRevoke}
             />
@@ -261,18 +280,23 @@ export const InstanceDetailPageContent = () => {
         </div>
       )}
       {resource && selectedUser && (
-        <InstanceEditModal
+        <EditModal
           ref={modalRef}
           resource={resource}
-          instanceUrn={instanceUrn}
-          toPartyUuid={selectedUser.id}
-          toPartyName={selectedUser.name}
-          openWithError={revokeError}
+          instance={{ instanceUrn }}
+          toParty={{
+            partyUuid: selectedUser.id,
+            name: selectedUser.name,
+            partyTypeName:
+              selectedUser.type === 'person' ? PartyType.Person : PartyType.Organization,
+          }}
+          openWithError={actionError}
+          onSuccess={() => modalRef.current?.close()}
           onClose={() => {
             setSelectedUser(null);
-            setRevokeError(null);
+            setActionError(null);
           }}
-          availableActions={[DelegationAction.REVOKE, DelegationAction.DELEGATE]}
+          availableActions={selectedUserAvailableActions}
         />
       )}
     </>

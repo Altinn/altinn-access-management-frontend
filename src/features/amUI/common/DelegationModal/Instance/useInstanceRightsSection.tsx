@@ -20,14 +20,14 @@ export const useInstanceRightsSection = ({
   resource,
   instanceUrn,
   toPartyUuid: toPartyUuidProp,
-  onDelegate,
-  initialDelegationError,
+  onSuccess,
+  mode = 'edit',
 }: {
   resource: ServiceResource;
   instanceUrn: string;
   toPartyUuid?: string;
-  onDelegate?: () => void;
-  initialDelegationError?: 'delegate' | 'revoke' | 'edit' | null;
+  onSuccess?: () => void;
+  mode?: 'edit' | 'delegate';
 }) => {
   const { t } = useTranslation();
   const { toParty, fromParty, actingParty } = usePartyRepresentation();
@@ -56,6 +56,7 @@ export const useInstanceRightsSection = ({
     rights,
     setRights,
     hasAccess,
+    hasDirectAccess,
     isLoading,
     isDelegationCheckLoading,
     isDelegationCheckError,
@@ -68,17 +69,12 @@ export const useInstanceRightsSection = ({
     instanceUrn,
     fromPartyUuid: fromParty?.partyUuid,
     toPartyUuid,
+    mode,
   });
 
   useEffect(() => {
     setDelegationError(null);
   }, [toPartyUuid]);
-
-  useEffect(() => {
-    if (initialDelegationError) {
-      setDelegationError(initialDelegationError);
-    }
-  }, [initialDelegationError]);
 
   const hasUnsavedChanges = rights.some((r) => r.checked !== r.delegated);
   const undelegableActions = rights.filter((r) => !r.delegable).map((r) => r.rightName);
@@ -137,11 +133,11 @@ export const useInstanceRightsSection = ({
     instanceRightsErrorDetails ??
     (hasAccess ? null : delegationCheckErrorDetails);
 
-  const onSuccess = () => {
+  const handleSuccess = () => {
     setIsActionLoading(false);
     setIsActionSuccess(true);
     successTimerRef.current = setTimeout(() => setIsActionSuccess(false), 2000);
-    onDelegate?.();
+    onSuccess?.();
   };
 
   const applyActionStates = () => {
@@ -163,7 +159,7 @@ export const useInstanceRightsSection = ({
         actionKeys,
       })
         .unwrap()
-        .then(onSuccess)
+        .then(handleSuccess)
         .catch(() => {
           setIsActionLoading(false);
           setDelegationError('edit');
@@ -183,7 +179,7 @@ export const useInstanceRightsSection = ({
         input: { directRightKeys: actionKeys },
       })
         .unwrap()
-        .then(onSuccess)
+        .then(handleSuccess)
         .catch(() => {
           setIsActionLoading(false);
           setDelegationError('delegate');
@@ -202,7 +198,7 @@ export const useInstanceRightsSection = ({
         instance: instanceUrn,
       })
         .unwrap()
-        .then(onSuccess)
+        .then(handleSuccess)
         .catch(() => {
           setIsActionLoading(false);
           setDelegationError('revoke');
@@ -219,6 +215,7 @@ export const useInstanceRightsSection = ({
     undelegableActions,
     hasUnsavedChanges,
     hasAccess,
+    hasDirectAccess,
     isDelegationCheckLoading,
     isDelegationCheckError,
     delegationError,
