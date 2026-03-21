@@ -42,13 +42,5 @@ namespace Altinn.AccessManagement.UI.Core.ClientInterfaces
             Guid? to,
             bool includeClientDelegations = true,
             bool includeAgentConnections = true);
-
-        /// <summary>
-        /// Gets all available users who already have some access from the specified party.
-        /// This is a limited endpoint available to client admins (isClientAdmin) who don't have full admin access.
-        /// </summary>
-        /// <param name="party">The GUID identifying the party.</param>
-        /// <returns>A list of <see cref="SimplifiedConnection"/> representing available users.</returns>
-        Task<List<SimplifiedConnection>> GetAvailableUsers(Guid party);
     }
 }

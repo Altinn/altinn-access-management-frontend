@@ -86,5 +86,11 @@ namespace Altinn.AccessManagement.UI.Core.Services
         {
             return await _instanceClient.GetInstanceUsers(party, resource, instance);
         }
+
+        /// <inheritdoc />
+        public async Task<List<SimplifiedConnection>> GetAvailableUsers(Guid party)
+        {
+            return await _instanceClient.GetAvailableUsers(party);
+        }
     }
 }

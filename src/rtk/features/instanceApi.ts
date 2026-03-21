@@ -1,7 +1,7 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 
 import { getCookie } from '@/resources/Cookie/CookieMethods';
-import type { SimplifiedParty, PersonInput } from './connectionApi';
+import type { SimplifiedConnection, SimplifiedParty, PersonInput } from './connectionApi';
 import type { Permissions } from '@/dataObjects/dtos/accessPackage';
 import type {
   DelegationCheckedRight,
@@ -107,8 +107,8 @@ export const instanceApi = createApi({
     }),
 
     /**
-     * Gets users who have access to a specific instance (simplified parties).
-     * Limited endpoint for client/instance admins without full admin access.
+     * Gets users who have direct access to a specific instance (simplified parties).
+     * Limited endpoint for instance admins without full admin access.
      * Backend: GET enduser/connections/resources/instances/users
      */
     getInstanceUsers: builder.query<
@@ -120,6 +120,21 @@ export const instanceApi = createApi({
       keepUnusedDataFor: 3,
       providesTags: ['instances'],
     }),
+    /**
+     * Gets available users for instance delegation as simplified connections.
+     * Limited endpoint for instance admins without full admin access.
+     * Backend: GET enduser/connections/users
+     */
+    getAvailableUsers: builder.query<SimplifiedConnection[], { partyUuid: string }>({
+      query: ({ partyUuid }) => `instances/delegation/available-users?party=${partyUuid}`,
+      keepUnusedDataFor: 3,
+      providesTags: ['instances'],
+      transformErrorResponse: (response: {
+        status: string | number;
+      }): { status: string | number; data: string } => {
+        return { status: response.status, data: new Date().toISOString() };
+      },
+    }),
   }),
 });
 
@@ -130,6 +145,7 @@ export const {
   useDelegateInstanceRightsMutation,
   useUpdateInstanceRightsMutation,
   useGetInstanceUsersQuery,
+  useGetAvailableUsersQuery,
 } = instanceApi;
 
 export const { endpoints, reducerPath, reducer, middleware } = instanceApi;

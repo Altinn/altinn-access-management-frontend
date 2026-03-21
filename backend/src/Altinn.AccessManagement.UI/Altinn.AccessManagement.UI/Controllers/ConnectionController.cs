@@ -281,38 +281,5 @@ namespace Altinn.AccessManagement.UI.Controllers
                 return new ObjectResult(ProblemDetailsFactory.CreateProblemDetails(HttpContext, (int?)ex.StatusCode, "Unexpected HttpStatus response"));
             }
         }
-
-        /// <summary>
-        /// Gets all available users who already have some access from the specified party.
-        /// Limited endpoint for client admins (isClientAdmin) without full admin access.
-        /// Proxies to backend: GET enduser/connections/users
-        /// </summary>
-        /// <param name="party">The party UUID.</param>
-        /// <returns>List of simplified connections representing available users.</returns>
-        [HttpGet]
-        [Authorize]
-        [Route("simplified/users")]
-        public async Task<ActionResult<List<SimplifiedConnection>>> GetAvailableUsers([FromQuery] Guid party)
-        {
-            if (!ModelState.IsValid)
-            {
-                return BadRequest(ModelState);
-            }
-
-            try
-            {
-                var users = await _connectionService.GetAvailableUsers(party);
-                return Ok(users);
-            }
-            catch (HttpStatusException ex)
-            {
-                return new ObjectResult(ProblemDetailsFactory.CreateProblemDetails(HttpContext, (int?)ex.StatusCode, "Unexpected HttpStatus response"));
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError(ex, "GetAvailableUsers failed unexpectedly");
-                return StatusCode(500);
-            }
-        }
     }
 }

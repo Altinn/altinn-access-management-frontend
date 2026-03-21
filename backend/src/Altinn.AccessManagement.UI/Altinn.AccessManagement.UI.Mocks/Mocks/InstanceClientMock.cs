@@ -173,6 +173,43 @@ namespace Altinn.AccessManagement.UI.Mocks.Mocks
             return Task.FromResult(users);
         }
 
+        /// <inheritdoc />
+        public Task<List<SimplifiedConnection>> GetAvailableUsers(Guid party)
+        {
+            ThrowExceptionIfTriggerParty(party.ToString());
+
+            var users = new List<SimplifiedConnection>
+            {
+                new SimplifiedConnection
+                {
+                    Party = new SimplifiedParty
+                    {
+                        Id = Guid.NewGuid(),
+                        Name = "Mock Available User",
+                        Type = "Person",
+                        Variant = "person",
+                        IsDeleted = false,
+                    },
+                    Connections = new List<SimplifiedConnection>
+                    {
+                        new SimplifiedConnection
+                        {
+                            Party = new SimplifiedParty
+                            {
+                                Id = Guid.NewGuid(),
+                                Name = "Mock Nested Available User",
+                                Type = "Person",
+                                Variant = "person",
+                                IsDeleted = false,
+                            },
+                        },
+                    },
+                },
+            };
+
+            return Task.FromResult(users);
+        }
+
         private static void ThrowExceptionIfTriggerParty(string id)
         {
             if (id == "********" || id == "00000000-0000-0000-0000-000000000000")

@@ -5,7 +5,7 @@ import type { UserSearchNode } from './types';
 
 /**
  * Maps a SimplifiedParty (from the limited instance users endpoint) to a UserSearchNode.
- * Used when the caller has isClientAdmin but not isAdmin, so only basic party info is available.
+ * Used when the caller has instance-admin access but not full admin access, so only basic party info is available.
  */
 const mapSimplifiedPartyToUserSearchNode = (
   party: SimplifiedParty,
@@ -26,7 +26,7 @@ const mapSimplifiedPartyToUserSearchNode = (
 /**
  * Maps SimplifiedParty[] (from GET connections/resources/instances/users) to UserSearchNode[].
  * These are users who have access to a specific instance.
- * Used when isClientAdmin=true but isAdmin=false.
+ * Used when the caller is instance admin without full admin access.
  */
 export const mapSimplifiedPartiesToUserSearchNodes = (
   parties?: SimplifiedParty[],
@@ -40,8 +40,8 @@ export const mapSimplifiedPartiesToUserSearchNodes = (
 
 /**
  * Maps SimplifiedConnection[] (from GET connections/users) to UserSearchNode[].
- * These are indirect connections (users who have some access from the party).
- * Used when isClientAdmin=true but isAdmin=false.
+ * These are available indirect users for instance delegation.
+ * Used when the caller is instance admin without full admin access.
  */
 export const mapSimplifiedConnectionsToUserSearchNodes = (
   connections?: SimplifiedConnection[],

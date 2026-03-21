@@ -1,8 +1,8 @@
 namespace Altinn.AccessManagement.UI.Core.Models.User
 {
     /// <summary>
-    /// Simplified party information returned by the limited connections endpoints.
-    /// Used when the caller has isClientAdmin but not isAdmin.
+    /// Simplified party information returned by limited instance delegation endpoints.
+    /// Used for instance admins without full admin access.
     /// </summary>
     public class SimplifiedParty
     {

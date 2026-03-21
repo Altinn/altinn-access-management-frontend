@@ -231,8 +231,8 @@ namespace Altinn.AccessManagement.UI.Controllers
         }
 
         /// <summary>
-        /// Gets all users who have access to a specific instance (simplified party info).
-        /// Limited endpoint for client/instance admins without full admin access.
+        /// Gets all users who have direct access to a specific instance (simplified party info).
+        /// Limited endpoint for instance admins without full admin access.
         /// Proxies to backend: GET enduser/connections/resources/instances/users
         /// </summary>
         /// <param name="party">The party UUID.</param>
@@ -264,6 +264,39 @@ namespace Altinn.AccessManagement.UI.Controllers
             catch (Exception ex)
             {
                 _logger.LogError(ex, "GetInstanceUsers failed unexpectedly");
+                return StatusCode(500);
+            }
+        }
+
+        /// <summary>
+        /// Gets available users for instance delegation as simplified connections.
+        /// Limited endpoint for instance admins without full admin access.
+        /// Proxies to backend: GET enduser/connections/users
+        /// </summary>
+        /// <param name="party">The party UUID.</param>
+        /// <returns>List of simplified connections representing available users for instance delegation.</returns>
+        [HttpGet]
+        [Authorize]
+        [Route("delegation/available-users")]
+        public async Task<ActionResult<List<SimplifiedConnection>>> GetAvailableUsers([FromQuery] Guid party)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            try
+            {
+                var users = await _instanceService.GetAvailableUsers(party);
+                return Ok(users);
+            }
+            catch (HttpStatusException ex)
+            {
+                return new ObjectResult(ProblemDetailsFactory.CreateProblemDetails(HttpContext, (int?)ex.StatusCode, "Unexpected HttpStatus response"));
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "GetAvailableUsers failed unexpectedly");
                 return StatusCode(500);
             }
         }

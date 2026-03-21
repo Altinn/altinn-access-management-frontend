@@ -36,7 +36,7 @@ export type PersonInput = {
   lastName: string;
 };
 
-/** Simplified party info from limited endpoints (for isClientAdmin without isAdmin) */
+/** Simplified party info returned by limited instance delegation endpoints. */
 export interface SimplifiedParty {
   id: string;
   name: string;
@@ -46,7 +46,7 @@ export interface SimplifiedParty {
   isDeleted?: boolean;
 }
 
-/** Simplified connection from GET connections/users (for isClientAdmin without isAdmin) */
+/** Simplified connection returned by limited instance delegation endpoints. */
 export interface SimplifiedConnection {
   party: SimplifiedParty;
   connections: SimplifiedConnection[];
@@ -131,22 +131,6 @@ export const connectionApi = createApi({
         return { status: response.status };
       },
     }),
-
-    /**
-     * Gets available users (simplified connections) for a party.
-     * Limited endpoint for client admins (isClientAdmin) who don't have full admin access.
-     * Backend: GET enduser/connections/users
-     */
-    getAvailableUsers: builder.query<SimplifiedConnection[], { partyUuid: string }>({
-      query: ({ partyUuid }) => `simplified/users?party=${partyUuid}`,
-      keepUnusedDataFor: 3,
-      providesTags: ['Connections'],
-      transformErrorResponse: (response: {
-        status: string | number;
-      }): { status: string | number; data: string } => {
-        return { status: response.status, data: new Date().toISOString() };
-      },
-    }),
   }),
 });
 
@@ -155,7 +139,6 @@ export const {
   useAddRightHolderMutation,
   useRemoveRightHolderMutation,
   useValidateNewUserPersonMutation,
-  useGetAvailableUsersQuery,
 } = connectionApi;
 
 export const { endpoints, reducerPath, reducer, middleware } = connectionApi;

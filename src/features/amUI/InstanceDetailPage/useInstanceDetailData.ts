@@ -1,7 +1,11 @@
 import { useMemo } from 'react';
 
-import { useGetRightHoldersQuery, useGetAvailableUsersQuery } from '@/rtk/features/connectionApi';
-import { useGetInstancesQuery, useGetInstanceUsersQuery } from '@/rtk/features/instanceApi';
+import { useGetRightHoldersQuery } from '@/rtk/features/connectionApi';
+import {
+  useGetAvailableUsersQuery,
+  useGetInstancesQuery,
+  useGetInstanceUsersQuery,
+} from '@/rtk/features/instanceApi';
 import { useGetResourceQuery } from '@/rtk/features/resourceApi';
 import { useGetIsAdminQuery, useGetIsInstanceAdminQuery } from '@/rtk/features/userInfoApi';
 import { useProviderLogoUrl } from '@/resources/hooks';
@@ -111,7 +115,7 @@ export const useInstanceDetailData = ({
     },
   );
 
-  const clientAdminUsers = useMemo(
+  const instanceAdminUsers = useMemo(
     () => mapSimplifiedPartiesToUserSearchNodes(instanceUsers),
     [instanceUsers],
   );
@@ -131,7 +135,7 @@ export const useInstanceDetailData = ({
     },
   );
 
-  const clientAdminIndirectUsers = useMemo(
+  const instanceAdminIndirectUsers = useMemo(
     () => mapSimplifiedConnectionsToUserSearchNodes(availableUsers),
     [availableUsers],
   );
@@ -152,8 +156,8 @@ export const useInstanceDetailData = ({
 
   // --- Resolved data ---
 
-  const users = isAdmin ? adminUsers : clientAdminUsers;
-  const indirectUsers = isAdmin ? adminIndirectUsers : clientAdminIndirectUsers;
+  const users = isAdmin ? adminUsers : instanceAdminUsers;
+  const indirectUsers = isAdmin ? adminIndirectUsers : instanceAdminIndirectUsers;
 
   // --- Error handling ---
 

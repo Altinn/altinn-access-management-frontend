@@ -66,12 +66,20 @@ namespace Altinn.AccessManagement.UI.Core.Services.Interfaces
         Task<HttpResponseMessage> UpdateInstanceAccess(Guid party, Guid to, string resource, string instance, List<string> actionKeys);
 
         /// <summary>
-        /// Gets all users who have access to a specific instance.
+        /// Gets all users who have direct access to a specific instance.
         /// </summary>
         /// <param name="party">The party UUID.</param>
         /// <param name="resource">The resource identifier.</param>
         /// <param name="instance">The instance URN.</param>
         /// <returns>A list of simplified parties.</returns>
         Task<List<SimplifiedParty>> GetInstanceUsers(Guid party, string resource, string instance);
+
+        /// <summary>
+        /// Gets available users for instance delegation as simplified connections.
+        /// This is a limited endpoint for instance admins without full admin access.
+        /// </summary>
+        /// <param name="party">The party UUID.</param>
+        /// <returns>A list of simplified connections.</returns>
+        Task<List<SimplifiedConnection>> GetAvailableUsers(Guid party);
     }
 }

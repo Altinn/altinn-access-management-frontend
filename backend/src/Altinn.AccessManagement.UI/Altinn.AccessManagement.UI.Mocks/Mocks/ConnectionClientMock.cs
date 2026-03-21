@@ -125,55 +125,5 @@ namespace Altinn.AccessManagement.UI.Mocks.Mocks
 
             return to.HasValue ? Task.FromResult(to.Value) : Task.FromException<Guid>(new InvalidOperationException("No valid Guid provided."));
         }
-
-        /// <inheritdoc/>
-        public Task<List<SimplifiedConnection>> GetAvailableUsers(Guid party)
-        {
-            if (party == Guid.Empty)
-            {
-                throw new HttpStatusException("Test", "Mock internal server error", HttpStatusCode.InternalServerError, null);
-            }
-
-            // Return mock simplified connections based on existing right holders data
-            try
-            {
-                var testDataPath = Path.Combine(dataFolder, "RightHolders", $"{party}.json");
-                var jsonContent = File.ReadAllText(testDataPath);
-                var connections = JsonSerializer.Deserialize<List<Connection>>(jsonContent, options);
-
-                // Convert full connections to simplified connections
-                var simplified = connections?.Select(c => new SimplifiedConnection
-                {
-                    Party = new SimplifiedParty
-                    {
-                        Id = c.Party.Id,
-                        Name = c.Party.Name,
-                        Type = c.Party.Type,
-                        Variant = c.Party.Variant,
-                        OrganizationIdentifier = c.Party.OrganizationIdentifier,
-                        IsDeleted = c.Party.IsDeleted,
-                    },
-                    Connections = c.Connections?.Select(sc => new SimplifiedConnection
-                    {
-                        Party = new SimplifiedParty
-                        {
-                            Id = sc.Party.Id,
-                            Name = sc.Party.Name,
-                            Type = sc.Party.Type,
-                            Variant = sc.Party.Variant,
-                            OrganizationIdentifier = sc.Party.OrganizationIdentifier,
-                            IsDeleted = sc.Party.IsDeleted,
-                        },
-                    }).ToList() ?? new List<SimplifiedConnection>(),
-                }).ToList() ?? new List<SimplifiedConnection>();
-
-                return Task.FromResult(simplified);
-            }
-            catch
-            {
-                return Task.FromResult(new List<SimplifiedConnection>());
-            }
-        }
-
     }
 }

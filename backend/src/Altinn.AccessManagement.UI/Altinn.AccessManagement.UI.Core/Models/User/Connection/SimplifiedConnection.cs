@@ -1,8 +1,8 @@
 namespace Altinn.AccessManagement.UI.Core.Models.User
 {
     /// <summary>
-    /// Simplified connection for listing available users.
-    /// Returned by the limited connections/users endpoint for callers with isClientAdmin but not isAdmin.
+    /// Simplified connection for listing available users in instance delegation.
+    /// Returned by limited instance delegation endpoints for instance admins without full admin access.
     /// </summary>
     public class SimplifiedConnection
     {
