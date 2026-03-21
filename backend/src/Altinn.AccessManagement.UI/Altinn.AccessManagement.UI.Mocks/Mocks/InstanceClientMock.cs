@@ -15,6 +15,9 @@ namespace Altinn.AccessManagement.UI.Mocks.Mocks
     /// </summary>
     public class InstanceClientMock : IInstanceClient
     {
+        private static readonly Guid MockInstanceUserId = Guid.Parse("11111111-1111-1111-1111-111111111111");
+        private static readonly Guid MockAvailableUserId = Guid.Parse("22222222-2222-2222-2222-222222222222");
+        private static readonly Guid MockNestedAvailableUserId = Guid.Parse("33333333-3333-3333-3333-333333333333");
         private readonly string dataFolder;
 
         /// <summary>
@@ -162,7 +165,7 @@ namespace Altinn.AccessManagement.UI.Mocks.Mocks
             {
                 new SimplifiedParty
                 {
-                    Id = Guid.NewGuid(),
+                    Id = MockInstanceUserId,
                     Name = "Mock Instance User",
                     Type = "Person",
                     Variant = "person",
@@ -184,7 +187,7 @@ namespace Altinn.AccessManagement.UI.Mocks.Mocks
                 {
                     Party = new SimplifiedParty
                     {
-                        Id = Guid.NewGuid(),
+                        Id = MockAvailableUserId,
                         Name = "Mock Available User",
                         Type = "Person",
                         Variant = "person",
@@ -196,7 +199,7 @@ namespace Altinn.AccessManagement.UI.Mocks.Mocks
                         {
                             Party = new SimplifiedParty
                             {
-                                Id = Guid.NewGuid(),
+                                Id = MockNestedAvailableUserId,
                                 Name = "Mock Nested Available User",
                                 Type = "Person",
                                 Variant = "person",

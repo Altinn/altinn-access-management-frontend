@@ -12,6 +12,7 @@ using Altinn.AccessManagement.UI.Core.Models.Connections;
 using Altinn.AccessManagement.UI.Core.Models.InstanceDelegation;
 using Altinn.AccessManagement.UI.Core.Models.InstanceDelegation.Frontend;
 using Altinn.AccessManagement.UI.Core.Models.SingleRight;
+using Altinn.AccessManagement.UI.Core.Models.User;
 using Altinn.AccessManagement.UI.Core.Services;
 using Altinn.AccessManagement.UI.Core.Services.Interfaces;
 using Altinn.AccessManagement.UI.Mocks.Mocks;
@@ -593,6 +594,137 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
             HttpResponseMessage httpResponse = await _client.PutAsync(
                 $"accessmanagement/api/v1/instances/delegation/instances/rights?party={party}&to={to}&resource={resource}&instance={Uri.EscapeDataString(instance)}",
                 content);
+
+            Assert.Equal(HttpStatusCode.InternalServerError, httpResponse.StatusCode);
+        }
+
+        /// <summary>
+        /// Test case: Successfully retrieve users who have direct access to an instance.
+        /// Expected: Returns OK and the list of simplified parties.
+        /// </summary>
+        [Fact]
+        public async Task GetInstanceUsers_ReturnsValid()
+        {
+            Guid party = Guid.Parse("cd35779b-b174-4ecc-bbef-ece13611be7f");
+            string resource = "generic-access-resource";
+            string instance = "urn:altinn:instance-id:51599233/df333e75-5896-4254-a69f-146736eaf668";
+            List<SimplifiedParty> expectedResponse =
+            [
+                new SimplifiedParty
+                {
+                    Id = Guid.Parse("11111111-1111-1111-1111-111111111111"),
+                    Name = "Mock Instance User",
+                    Type = "Person",
+                    Variant = "person",
+                    IsDeleted = false,
+                },
+            ];
+
+            HttpResponseMessage httpResponse = await _client.GetAsync(
+                $"accessmanagement/api/v1/instances/delegation/instances/simplified/users?party={party}&resource={resource}&instance={Uri.EscapeDataString(instance)}");
+            List<SimplifiedParty> actualResponse = await httpResponse.Content.ReadFromJsonAsync<List<SimplifiedParty>>();
+
+            Assert.Equal(HttpStatusCode.OK, httpResponse.StatusCode);
+            AssertionUtil.AssertCollections(expectedResponse, actualResponse, AssertionUtil.AssertEqual);
+        }
+
+        /// <summary>
+        /// Test case: Handles unexpected errors when retrieving users with direct instance access.
+        /// Expected: Returns an internal server error.
+        /// </summary>
+        [Fact]
+        public async Task GetInstanceUsers_InternalServerError()
+        {
+            Guid party = Guid.Parse("00000000-0000-0000-0000-000000000000"); // Triggers exception in client mock
+            string resource = "generic-access-resource";
+            string instance = "urn:altinn:instance-id:51599233/df333e75-5896-4254-a69f-146736eaf668";
+
+            HttpResponseMessage httpResponse = await _client.GetAsync(
+                $"accessmanagement/api/v1/instances/delegation/instances/simplified/users?party={party}&resource={resource}&instance={Uri.EscapeDataString(instance)}");
+
+            Assert.Equal(HttpStatusCode.InternalServerError, httpResponse.StatusCode);
+        }
+
+        /// <summary>
+        /// Test case: Successfully retrieve available users for instance delegation.
+        /// Expected: Returns OK and the list of simplified connections.
+        /// </summary>
+        [Fact]
+        public async Task GetAvailableUsers_ReturnsValid()
+        {
+            Guid party = Guid.Parse("cd35779b-b174-4ecc-bbef-ece13611be7f");
+            List<SimplifiedConnection> expectedResponse =
+            [
+                new SimplifiedConnection
+                {
+                    Party = new SimplifiedParty
+                    {
+                        Id = Guid.Parse("22222222-2222-2222-2222-222222222222"),
+                        Name = "Mock Available User",
+                        Type = "Person",
+                        Variant = "person",
+                        IsDeleted = false,
+                    },
+                    Connections =
+                    [
+                        new SimplifiedConnection
+                        {
+                            Party = new SimplifiedParty
+                            {
+                                Id = Guid.Parse("33333333-3333-3333-3333-333333333333"),
+                                Name = "Mock Nested Available User",
+                                Type = "Person",
+                                Variant = "person",
+                                IsDeleted = false,
+                            },
+                        },
+                    ],
+                },
+            ];
+
+            HttpResponseMessage httpResponse = await _client.GetAsync(
+                $"accessmanagement/api/v1/instances/delegation/available-users?party={party}");
+            List<SimplifiedConnection> actualResponse = await httpResponse.Content.ReadFromJsonAsync<List<SimplifiedConnection>>();
+
+            Assert.Equal(HttpStatusCode.OK, httpResponse.StatusCode);
+            AssertionUtil.AssertCollections(expectedResponse, actualResponse, AssertionUtil.AssertEqual);
+        }
+
+        /// <summary>
+        /// Test case: Handles HttpStatusException when retrieving available users for instance delegation.
+        /// Expected: Returns problem details with the backend status code.
+        /// </summary>
+        [Fact]
+        public async Task GetAvailableUsers_HttpStatusException_ReturnsProblemDetails()
+        {
+            Guid party = Guid.Parse("cd35779b-b174-4ecc-bbef-ece13611be7f");
+
+            var instanceServiceMock = new Mock<IInstanceService>();
+            instanceServiceMock
+                .Setup(service => service.GetAvailableUsers(party))
+                .ThrowsAsync(new HttpStatusException("StatusError", "Test error", HttpStatusCode.BadGateway, ""));
+            HttpClient client = GetTestClient(instanceServiceMock.Object);
+
+            HttpResponseMessage httpResponse = await client.GetAsync(
+                $"accessmanagement/api/v1/instances/delegation/available-users?party={party}");
+            ProblemDetails problemDetails = await httpResponse.Content.ReadFromJsonAsync<ProblemDetails>();
+
+            Assert.Equal(HttpStatusCode.BadGateway, httpResponse.StatusCode);
+            Assert.NotNull(problemDetails);
+            Assert.Equal((int)HttpStatusCode.BadGateway, problemDetails.Status);
+        }
+
+        /// <summary>
+        /// Test case: Handles unexpected errors when retrieving available users for instance delegation.
+        /// Expected: Returns an internal server error.
+        /// </summary>
+        [Fact]
+        public async Task GetAvailableUsers_InternalServerError()
+        {
+            Guid party = Guid.Parse("00000000-0000-0000-0000-000000000000"); // Triggers exception in client mock
+
+            HttpResponseMessage httpResponse = await _client.GetAsync(
+                $"accessmanagement/api/v1/instances/delegation/available-users?party={party}");
 
             Assert.Equal(HttpStatusCode.InternalServerError, httpResponse.StatusCode);
         }

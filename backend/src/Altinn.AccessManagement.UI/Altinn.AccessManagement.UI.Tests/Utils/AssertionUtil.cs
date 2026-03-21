@@ -402,6 +402,28 @@ namespace Altinn.AccessManagement.UI.Tests.Utils
 
         }
 
+        public static void AssertEqual(SimplifiedParty expected, SimplifiedParty actual)
+        {
+            Assert.NotNull(actual);
+            Assert.NotNull(expected);
+
+            Assert.Equal(expected.Id, actual.Id);
+            Assert.Equal(expected.Name, actual.Name);
+            Assert.Equal(expected.Type, actual.Type);
+            Assert.Equal(expected.Variant, actual.Variant);
+            Assert.Equal(expected.OrganizationIdentifier, actual.OrganizationIdentifier);
+            Assert.Equal(expected.IsDeleted, actual.IsDeleted);
+        }
+
+        public static void AssertEqual(SimplifiedConnection expected, SimplifiedConnection actual)
+        {
+            Assert.NotNull(actual);
+            Assert.NotNull(expected);
+
+            AssertEqual(expected.Party, actual.Party);
+            AssertCollections(expected.Connections, actual.Connections, AssertEqual);
+        }
+
         private static void AssertEqual(IdValuePair expected, IdValuePair actual)
         {
             Assert.NotNull(actual);
