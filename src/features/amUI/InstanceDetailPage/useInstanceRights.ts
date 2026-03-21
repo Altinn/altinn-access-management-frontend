@@ -3,6 +3,7 @@ import { useTranslation } from 'react-i18next';
 
 import { useInstanceDelegationCheckQuery } from '@/rtk/features/instanceApi';
 import { useGetResourceRightsMetaQuery } from '@/rtk/features/singleRights/singleRightsApi';
+import { useGetIsAdminQuery, useGetIsInstanceAdminQuery } from '@/rtk/features/userInfoApi';
 import {
   ChipRight,
   mapRightsToChipRights,
@@ -34,6 +35,8 @@ export const useInstanceRights = ({
   isOpen: boolean;
 }) => {
   const { actingParty } = usePartyRepresentation();
+  const { data: isAdmin } = useGetIsAdminQuery();
+  const { data: isInstanceAdmin } = useGetIsInstanceAdminQuery();
   const [rights, setRights] = useState<ChipRight[]>([]);
 
   const {
@@ -52,7 +55,14 @@ export const useInstanceRights = ({
       resource: resourceId,
       instance: instanceUrn,
     },
-    { skip: !isOpen || !actingParty?.partyUuid || !resourceId || !instanceUrn },
+    {
+      skip:
+        (!isAdmin && !isInstanceAdmin) ||
+        !isOpen ||
+        !actingParty?.partyUuid ||
+        !resourceId ||
+        !instanceUrn,
+    },
   );
 
   const mappedRights = useMemo(() => {
