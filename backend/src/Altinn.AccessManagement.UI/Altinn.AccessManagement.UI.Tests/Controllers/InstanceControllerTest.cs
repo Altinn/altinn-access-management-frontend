@@ -673,6 +673,35 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
             Assert.Equal(HttpStatusCode.InternalServerError, httpResponse.StatusCode);
         }
 
+        /// <summary>
+        /// Test case: Backend returns a non-success status code without throwing.
+        /// Expected: Returns problem details with the backend status code.
+        /// </summary>
+        [Fact]
+        public async Task RemoveInstance_UnsuccessfulBackendResponse_ReturnsProblemDetails()
+        {
+            Guid party = Guid.Parse("cd35779b-b174-4ecc-bbef-ece13611be7f");
+            Guid from = Guid.Parse("cd35779b-b174-4ecc-bbef-ece13611be7f");
+            Guid to = Guid.Parse("167536b5-f8ed-4c5a-8f48-0279507e53ae");
+            string resource = "generic-access-resource";
+            string instance = "urn:altinn:instance-id:51599233/df333e75-5896-4254-a69f-146736eaf668";
+
+            var instanceServiceMock = new Mock<IInstanceService>();
+            instanceServiceMock
+                .Setup(service => service.RemoveInstance(party, from, to, resource, instance))
+                .ReturnsAsync(new HttpResponseMessage(HttpStatusCode.Forbidden));
+            HttpClient client = GetTestClient(instanceServiceMock.Object);
+
+            HttpResponseMessage httpResponse = await client.DeleteAsync(
+                $"accessmanagement/api/v1/instances/delegation/instances?party={party}&from={from}&to={to}&resource={resource}&instance={Uri.EscapeDataString(instance)}");
+            ProblemDetails problemDetails = await httpResponse.Content.ReadFromJsonAsync<ProblemDetails>();
+
+            Assert.Equal(HttpStatusCode.Forbidden, httpResponse.StatusCode);
+            Assert.NotNull(problemDetails);
+            Assert.Equal((int)HttpStatusCode.Forbidden, problemDetails.Status);
+            Assert.Equal("Error returned from backend", problemDetails.Title);
+        }
+
         private HttpClient GetTestClient(IInstanceService instanceService)
         {
             WebApplicationFactory<InstanceController> factory = _factory.WithWebHostBuilder(builder =>
