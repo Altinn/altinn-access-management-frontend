@@ -13,7 +13,6 @@ import { displaySubConnections } from '@/resources/utils/featureFlagUtils';
 import { formatOrgNr, isSubUnitByType } from '@/resources/utils/reporteeUtils';
 import { ECC_PROVIDER_CODE, useRoleMetadata } from '../UserRoles/useRoleMetadata';
 import { isNewUser } from '../isNewUser';
-import { color } from 'storybook/internal/theming';
 
 function isExtendedUser(item: ExtendedUser | User): item is ExtendedUser {
   return (item as ExtendedUser).roles !== undefined && Array.isArray((item as ExtendedUser).roles);

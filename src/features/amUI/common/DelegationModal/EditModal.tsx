@@ -6,9 +6,12 @@ import type { ActionError } from '@/resources/hooks/useActionError';
 import type { ServiceResource } from '@/rtk/features/singleRights/singleRightsApi';
 import type { AccessPackage } from '@/rtk/features/accessPackageApi';
 import type { Role } from '@/rtk/features/roleApi';
-import type { Party } from '@/rtk/features/lookupApi';
-
-type ToParty = Pick<Party, 'partyUuid' | 'name' | 'partyTypeName'>;
+/** The party receiving a delegation — uuid for backend calls, name + type for display. */
+export interface DelegationRecipient {
+  partyUuid: string;
+  name: string;
+  partyTypeName: string;
+}
 
 import { ResourceInfo } from './SingleRights/ResourceInfo';
 import { InstanceInfo } from './Instance/InstanceInfo';
@@ -33,7 +36,7 @@ export interface EditModalProps {
   accessPackage?: AccessPackage;
   role?: Role;
   instance?: InstanceData;
-  toParty?: ToParty;
+  toParty?: DelegationRecipient;
   availableActions?: DelegationAction[];
   openWithError?: ActionError | null;
   onSuccess?: () => void;
@@ -122,7 +125,7 @@ const renderModalContent = ({
   accessPackage?: AccessPackage;
   role?: Role;
   instance?: InstanceData;
-  toParty?: ToParty;
+  toParty?: DelegationRecipient;
   availableActions?: DelegationAction[];
   onSuccess?: () => void;
 }) => {

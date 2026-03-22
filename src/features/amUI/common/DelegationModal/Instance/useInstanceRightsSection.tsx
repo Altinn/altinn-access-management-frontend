@@ -36,7 +36,6 @@ export const useInstanceRightsSection = ({
   const [delegationError, setDelegationError] = useState<'delegate' | 'revoke' | 'edit' | null>(
     null,
   );
-  const [missingAccess, setMissingAccess] = useState<string | null>(null);
   const [isActionLoading, setIsActionLoading] = useState(false);
   const [isActionSuccess, setIsActionSuccess] = useState(false);
   const successTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
@@ -121,9 +120,7 @@ export const useInstanceRightsSection = ({
     return getMissingAccessMessage(delegationCheckedRights);
   }, [delegationCheckedRights, getMissingAccessMessage]);
 
-  useEffect(() => {
-    setMissingAccess(defaultMissingAccess);
-  }, [defaultMissingAccess]);
+  const missingAccess = isActionLoading || delegationError ? null : defaultMissingAccess;
 
   const delegationCheckErrorDetails = isDelegationCheckError
     ? createErrorDetails(delegationCheckError)
@@ -144,12 +141,11 @@ export const useInstanceRightsSection = ({
     setIsActionLoading(true);
     setIsActionSuccess(false);
     setDelegationError(null);
-    setMissingAccess(null);
   };
 
   const saveEditedRights = () => {
     const actionKeys = rights.filter((r) => r.checked).map((r) => r.rightKey);
-    if (actingParty && fromParty && toPartyUuid) {
+    if (actingParty && toPartyUuid) {
       applyActionStates();
       updateInstance({
         party: actingParty.partyUuid,
@@ -169,7 +165,7 @@ export const useInstanceRightsSection = ({
 
   const delegateChosenRights = () => {
     const actionKeys = rights.filter((r) => r.checked).map((r) => r.rightKey);
-    if (actingParty && fromParty && toPartyUuid) {
+    if (actingParty && toPartyUuid) {
       applyActionStates();
       delegateInstance({
         party: actingParty.partyUuid,

@@ -4,9 +4,8 @@ import { useTranslation } from 'react-i18next';
 import { MinusCircleIcon } from '@navikt/aksel-icons';
 
 import type { ServiceResource } from '@/rtk/features/singleRights/singleRightsApi';
-import type { Party } from '@/rtk/features/lookupApi';
 
-type ToParty = Pick<Party, 'partyUuid' | 'name' | 'partyTypeName'>;
+import type { DelegationRecipient } from '../EditModal';
 import { StatusMessageForScreenReader } from '@/components/StatusMessageForScreenReader/StatusMessageForScreenReader';
 import { useIsMobileOrSmaller } from '@/resources/utils/screensizeUtils';
 import { PartyType } from '@/rtk/features/userInfoApi';
@@ -27,7 +26,7 @@ export interface InstanceInfoProps {
   resource: ServiceResource;
   instanceUrn: string;
   instanceName?: string;
-  toParty?: ToParty;
+  toParty?: DelegationRecipient;
   availableActions?: DelegationAction[];
   onSuccess?: () => void;
 }
