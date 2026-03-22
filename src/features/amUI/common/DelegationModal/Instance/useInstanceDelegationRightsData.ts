@@ -32,6 +32,7 @@ export const useInstanceDelegationRightsData = ({
   const shouldSkipRightsMetaQuery = !isEnabled || !resourceId;
   const shouldSkipDelegationCheckQuery =
     !isEnabled || !actingParty?.partyUuid || !resourceId || !instanceUrn;
+
   const shouldSkipInstanceRightsQuery =
     !isEnabled ||
     !actingParty?.partyUuid ||
@@ -85,16 +86,21 @@ export const useInstanceDelegationRightsData = ({
     Array.isArray(rightsMeta) &&
     rightsMeta.length === 0;
 
-  const rightsMetaErrorDetails = createErrorDetails(rightsMetaError);
-  const rightsMetaTechnicalErrorDetails =
-    isRightsMetaError || isRightsMetaEmpty
-      ? {
-          status:
-            rightsMetaErrorDetails?.status ?? (isRightsMetaEmpty ? 'empty response' : 'no status'),
-          time: rightsMetaErrorDetails?.time ?? new Date().toISOString(),
-        }
-      : null;
-  const instanceRightsErrorDetails = createErrorDetails(instanceRightsError);
+  const rightsMetaTechnicalErrorDetails = useMemo(() => {
+    if (!isRightsMetaError && !isRightsMetaEmpty) {
+      return null;
+    }
+    const errorDetails = createErrorDetails(rightsMetaError);
+    return {
+      status: errorDetails?.status ?? (isRightsMetaEmpty ? 'empty response' : 'no status'),
+      time: errorDetails?.time ?? new Date().toISOString(),
+    };
+  }, [isRightsMetaError, isRightsMetaEmpty, rightsMetaError]);
+
+  const instanceRightsErrorDetails = useMemo(
+    () => createErrorDetails(instanceRightsError),
+    [instanceRightsError],
+  );
 
   const hasAccess = useMemo(() => {
     if (!shouldLoadInstanceRights || isInstanceRightsFetching || !instanceRights) {

@@ -170,7 +170,13 @@ namespace Altinn.AccessManagement.UI.Integration.Clients
                     $"enduser/connections/resources/instances?party={party}&from={from}&to={to}&resource={Uri.EscapeDataString(resource)}&instance={Uri.EscapeDataString(instance)}";
                 string token = JwtTokenUtil.GetTokenFromContext(_httpContextAccessor.HttpContext, _platformSettings.JwtCookieName);
 
-                return await _client.DeleteAsync(token, endpointUrl);
+                var response = await _client.DeleteAsync(token, endpointUrl);
+                if (!response.IsSuccessStatusCode)
+                {
+                    _logger.LogError("InstanceClient // RemoveInstance // Unexpected status {StatusCode}", (int)response.StatusCode);
+                }
+
+                return response;
             }
             catch (Exception ex)
             {

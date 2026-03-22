@@ -618,7 +618,7 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
 
         /// <summary>
         /// Test case: Successfully remove an instance delegation.
-        /// Expected: Returns NoContent.
+        /// Expected: Returns OK.
         /// </summary>
         [Fact]
         public async Task RemoveInstance_Success()
@@ -633,6 +633,25 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
                 $"accessmanagement/api/v1/instances/delegation/instances?party={party}&from={from}&to={to}&resource={resource}&instance={Uri.EscapeDataString(instance)}");
 
             Assert.Equal(HttpStatusCode.OK, httpResponse.StatusCode);
+        }
+
+        /// <summary>
+        /// Test case: Attempting to remove a non-existing instance delegation.
+        /// Expected: Returns BadRequest from HttpStatusException.
+        /// </summary>
+        [Fact]
+        public async Task RemoveInstance_NotFound_ReturnsBadRequest()
+        {
+            Guid party = Guid.Parse("cd35779b-b174-4ecc-bbef-ece13611be7f");
+            Guid from = Guid.Parse("cd35779b-b174-4ecc-bbef-ece13611be7f");
+            Guid to = Guid.Parse("00000000-0000-0000-0000-000000000001"); // Non-matching to party
+            string resource = "generic-access-resource";
+            string instance = "urn:altinn:instance-id:51599233/df333e75-5896-4254-a69f-146736eaf668";
+
+            HttpResponseMessage httpResponse = await _client.DeleteAsync(
+                $"accessmanagement/api/v1/instances/delegation/instances?party={party}&from={from}&to={to}&resource={resource}&instance={Uri.EscapeDataString(instance)}");
+
+            Assert.Equal(HttpStatusCode.BadRequest, httpResponse.StatusCode);
         }
 
         /// <summary>

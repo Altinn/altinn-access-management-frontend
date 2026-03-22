@@ -6,19 +6,18 @@ import type { ActionError } from '@/resources/hooks/useActionError';
 import type { ServiceResource } from '@/rtk/features/singleRights/singleRightsApi';
 import type { AccessPackage } from '@/rtk/features/accessPackageApi';
 import type { Role } from '@/rtk/features/roleApi';
-/** The party receiving a delegation — uuid for backend calls, name + type for display. */
-export interface DelegationRecipient {
-  partyUuid: string;
-  name: string;
-  partyTypeName: string;
-}
-
 import { ResourceInfo } from './SingleRights/ResourceInfo';
 import { InstanceInfo } from './Instance/InstanceInfo';
 import classes from './DelegationModal.module.css';
 import { AccessPackageInfo } from './AccessPackages/AccessPackageInfo';
 import { RoleInfo } from './Role/RoleInfo';
 import { useDelegationModalContext } from './DelegationModalContext';
+
+export interface DelegationRecipient {
+  partyUuid: string;
+  name: string;
+  partyTypeName: string;
+}
 
 export enum DelegationAction {
   DELEGATE = 'DELEGATE',
@@ -60,11 +59,6 @@ export const EditModal = forwardRef<HTMLDialogElement, EditModalProps>(
   ) => {
     const { setActionError, reset } = useDelegationModalContext();
 
-    const onClosing = () => {
-      onClose?.();
-      reset();
-    };
-
     useEffect(() => {
       if (openWithError) {
         setActionError(openWithError);
@@ -75,7 +69,10 @@ export const EditModal = forwardRef<HTMLDialogElement, EditModalProps>(
 
     /* handle closing */
     useEffect(() => {
-      const handleClose = () => onClosing?.();
+      const handleClose = () => {
+        onClose?.();
+        reset();
+      };
 
       if (ref && 'current' in ref && ref.current) {
         ref.current.addEventListener('close', handleClose);
@@ -85,7 +82,7 @@ export const EditModal = forwardRef<HTMLDialogElement, EditModalProps>(
           ref.current.removeEventListener('close', handleClose);
         }
       };
-    }, [onClosing, ref]);
+    }, [onClose, reset, ref]);
 
     return (
       <DsDialog
@@ -93,7 +90,8 @@ export const EditModal = forwardRef<HTMLDialogElement, EditModalProps>(
         className={classes.modalDialog}
         closedby='any'
         onClose={() => {
-          onClosing();
+          onClose?.();
+          reset();
         }}
       >
         <div className={classes.content}>

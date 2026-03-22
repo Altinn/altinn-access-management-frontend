@@ -50,11 +50,13 @@ export const InstanceDetailPageContent = () => {
   }, [selectedUser]);
 
   const handleUserSelect = (user: UserActionTarget) => {
+    setActionError(null);
     setSelectedUserMode('edit');
     setSelectedUser(user);
   };
 
   const handleIndirectUserDelegate = (user: UserActionTarget) => {
+    setActionError(null);
     setSelectedUserMode('delegate');
     setSelectedUser(user);
   };
