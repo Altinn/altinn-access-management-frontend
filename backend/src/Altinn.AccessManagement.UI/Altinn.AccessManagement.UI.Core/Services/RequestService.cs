@@ -140,7 +140,7 @@ namespace Altinn.AccessManagement.UI.Core.Services
                     LastUpdated = request.LastUpdated,
                     Resource = resource
                 };
-            });
+            }).ToList();
         }
     }
 }

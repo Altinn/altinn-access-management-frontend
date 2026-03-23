@@ -108,11 +108,11 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
         }
 
         /// <summary>
-        ///     Test case: GetEnrichedSentResourceRequests encounters an InvalidOperationException
-        ///     Expected: Returns 500 Internal Server Error
+        ///     Test case: GetEnrichedSentResourceRequests encounters an NotFoundException due to invalid resource reference in request
+        ///     Expected: Returns 404 Not Found
         /// </summary>
         [Fact]
-        public async Task GetEnrichedSentResourceRequests_InvalidOperationException()
+        public async Task GetEnrichedSentResourceRequests_NotFoundException()
         {
             // Arrange - Guid.Empty triggers ThrowExceptionIfTriggerParty in mock
             string party = "22222222-2222-2222-2222-222222222222";
@@ -203,11 +203,11 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
         }
         
         /// <summary>
-        ///     Test case: GetEnrichedReceivedResourceRequests encounters an InvalidOperationException
-        ///     Expected: Returns 500 Internal Server Error
+        ///     Test case: GetEnrichedReceivedResourceRequests encounters a NotFoundException due to invalid resource reference in request
+        ///     Expected: Returns 404 Not Found
         /// </summary>
         [Fact]
-        public async Task GetEnrichedReceivedResourceRequests_InvalidOperationException()
+        public async Task GetEnrichedReceivedResourceRequests_NotFoundException()
         {
             // Arrange - Guid.Empty triggers ThrowExceptionIfTriggerParty in mock
             string party = "22222222-2222-2222-2222-222222222222";
