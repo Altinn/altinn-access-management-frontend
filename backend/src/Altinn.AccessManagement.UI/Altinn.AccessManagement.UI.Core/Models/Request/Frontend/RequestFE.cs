@@ -8,7 +8,7 @@ namespace Altinn.AccessManagement.UI.Core.Models.Request.Frontend
     /// <summary>
     /// Used to show single right requests
     /// </summary>
-    public class SingleRightRequest
+    public class RequestFE
     {
         /// <summary>
         /// Request id

@@ -40,11 +40,11 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
             string party = "167536b5-f8ed-4c5a-8f48-0279507e53ae";
             string toParty = "feb51634-0042-4ab0-a9db-8705300141a6";
             string path = Path.Combine(_expectedDataPath, "Request", "getSentRequests.json");
-            IEnumerable<SingleRightRequest> expectedResponse = Util.GetMockData<IEnumerable<SingleRightRequest>>(path);
+            IEnumerable<RequestFE> expectedResponse = Util.GetMockData<IEnumerable<RequestFE>>(path);
 
             // Act
             HttpResponseMessage httpResponse = await _client.GetAsync($"accessmanagement/api/v1/request/sent?party={party}&to={toParty}");
-            IEnumerable<SingleRightRequest> actualResponse = await httpResponse.Content.ReadFromJsonAsync<IEnumerable<SingleRightRequest>>();
+            IEnumerable<RequestFE> actualResponse = await httpResponse.Content.ReadFromJsonAsync<IEnumerable<RequestFE>>();
 
             // Assert
             Assert.Equal(HttpStatusCode.OK, httpResponse.StatusCode);
@@ -135,11 +135,11 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
             string party = "167536b5-f8ed-4c5a-8f48-0279507e53ae";
             string fromParty = "feb51634-0042-4ab0-a9db-8705300141a6";
             string path = Path.Combine(_expectedDataPath, "Request", "getReceivedRequests.json");
-            IEnumerable<SingleRightRequest> expectedResponse = Util.GetMockData<IEnumerable<SingleRightRequest>>(path);
+            IEnumerable<RequestFE> expectedResponse = Util.GetMockData<IEnumerable<RequestFE>>(path);
 
             // Act
             HttpResponseMessage httpResponse = await _client.GetAsync($"accessmanagement/api/v1/request/received?party={party}&from={fromParty}");
-            IEnumerable<SingleRightRequest> actualResponse = await httpResponse.Content.ReadFromJsonAsync<IEnumerable<SingleRightRequest>>();
+            IEnumerable<RequestFE> actualResponse = await httpResponse.Content.ReadFromJsonAsync<IEnumerable<RequestFE>>();
 
             // Assert
             Assert.Equal(HttpStatusCode.OK, httpResponse.StatusCode);
@@ -230,11 +230,11 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
             string party = "167536b5-f8ed-4c5a-8f48-0279507e53ae";
             string requestId = "da45b77b-a068-4d53-b6be-0837cc9c5a3f";
             string path = Path.Combine(_expectedDataPath, "Request", "getRequest.json");
-            SingleRightRequest expectedResponse = Util.GetMockData<SingleRightRequest>(path);
+            RequestFE expectedResponse = Util.GetMockData<RequestFE>(path);
 
             // Act
             HttpResponseMessage httpResponse = await _client.GetAsync($"accessmanagement/api/v1/request/{requestId}?party={party}");
-            SingleRightRequest actualResponse = await httpResponse.Content.ReadFromJsonAsync<SingleRightRequest>();
+            RequestFE actualResponse = await httpResponse.Content.ReadFromJsonAsync<RequestFE>();
 
             // Assert
             Assert.Equal(HttpStatusCode.OK, httpResponse.StatusCode);
@@ -253,11 +253,11 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
             string toParty = "feb51634-0042-4ab0-a9db-8705300141a6";
             string resourceId = "1337";
             string path = Path.Combine(_expectedDataPath, "Request", "getRequest.json");
-            SingleRightRequest expectedResponse = Util.GetMockData<SingleRightRequest>(path);
+            RequestFE expectedResponse = Util.GetMockData<RequestFE>(path);
 
             // Act
             HttpResponseMessage httpResponse = await _client.PostAsync($"accessmanagement/api/v1/request/resource?party={party}&to={toParty}&resource={resourceId}", null);
-            SingleRightRequest actualResponse = await httpResponse.Content.ReadFromJsonAsync<SingleRightRequest>();
+            RequestFE actualResponse = await httpResponse.Content.ReadFromJsonAsync<RequestFE>();
 
             // Assert
             Assert.Equal(HttpStatusCode.OK, httpResponse.StatusCode);
@@ -275,11 +275,11 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
             string party = "167536b5-f8ed-4c5a-8f48-0279507e53ae";
             string requestId = "da45b77b-a068-4d53-b6be-0837cc9c5a3f";
             string path = Path.Combine(_expectedDataPath, "Request", "getRequest.json");
-            SingleRightRequest expectedResponse = Util.GetMockData<SingleRightRequest>(path);
+            RequestFE expectedResponse = Util.GetMockData<RequestFE>(path);
 
             // Act
             HttpResponseMessage httpResponse = await _client.DeleteAsync($"accessmanagement/api/v1/request/sent/withdraw?party={party}&id={requestId}");
-            SingleRightRequest actualResponse = await httpResponse.Content.ReadFromJsonAsync<SingleRightRequest>();
+            RequestFE actualResponse = await httpResponse.Content.ReadFromJsonAsync<RequestFE>();
 
             // Assert
             Assert.Equal(HttpStatusCode.OK, httpResponse.StatusCode);
@@ -475,11 +475,11 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
             string party = "167536b5-f8ed-4c5a-8f48-0279507e53ae";
             string requestId = "da45b77b-a068-4d53-b6be-0837cc9c5a3f";
             string path = Path.Combine(_expectedDataPath, "Request", "getRequest.json");
-            SingleRightRequest expectedResponse = Util.GetMockData<SingleRightRequest>(path);
+            RequestFE expectedResponse = Util.GetMockData<RequestFE>(path);
 
             // Act
             HttpResponseMessage httpResponse = await _client.SendAsync(new HttpRequestMessage(HttpMethod.Put, $"accessmanagement/api/v1/request/sent/confirm?party={party}&id={requestId}"));
-            SingleRightRequest actualResponse = await httpResponse.Content.ReadFromJsonAsync<SingleRightRequest>();
+            RequestFE actualResponse = await httpResponse.Content.ReadFromJsonAsync<RequestFE>();
 
             // Assert
             Assert.Equal(HttpStatusCode.OK, httpResponse.StatusCode);
@@ -533,11 +533,11 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
             string party = "167536b5-f8ed-4c5a-8f48-0279507e53ae";
             string requestId = "da45b77b-a068-4d53-b6be-0837cc9c5a3f";
             string path = Path.Combine(_expectedDataPath, "Request", "getRequest.json");
-            SingleRightRequest expectedResponse = Util.GetMockData<SingleRightRequest>(path);
+            RequestFE expectedResponse = Util.GetMockData<RequestFE>(path);
 
             // Act
             HttpResponseMessage httpResponse = await _client.SendAsync(new HttpRequestMessage(HttpMethod.Put, $"accessmanagement/api/v1/request/received/reject?party={party}&id={requestId}"));
-            SingleRightRequest actualResponse = await httpResponse.Content.ReadFromJsonAsync<SingleRightRequest>();
+            RequestFE actualResponse = await httpResponse.Content.ReadFromJsonAsync<RequestFE>();
 
             // Assert
             Assert.Equal(HttpStatusCode.OK, httpResponse.StatusCode);
@@ -591,11 +591,11 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
             string party = "167536b5-f8ed-4c5a-8f48-0279507e53ae";
             string requestId = "da45b77b-a068-4d53-b6be-0837cc9c5a3f";
             string path = Path.Combine(_expectedDataPath, "Request", "getRequest.json");
-            SingleRightRequest expectedResponse = Util.GetMockData<SingleRightRequest>(path);
+            RequestFE expectedResponse = Util.GetMockData<RequestFE>(path);
 
             // Act
             HttpResponseMessage httpResponse = await _client.SendAsync(new HttpRequestMessage(HttpMethod.Put, $"accessmanagement/api/v1/request/received/approve?party={party}&id={requestId}"));
-            SingleRightRequest actualResponse = await httpResponse.Content.ReadFromJsonAsync<SingleRightRequest>();
+            RequestFE actualResponse = await httpResponse.Content.ReadFromJsonAsync<RequestFE>();
 
             // Assert
             Assert.Equal(HttpStatusCode.OK, httpResponse.StatusCode);
