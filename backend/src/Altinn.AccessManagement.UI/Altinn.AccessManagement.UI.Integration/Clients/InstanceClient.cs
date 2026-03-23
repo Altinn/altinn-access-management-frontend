@@ -147,7 +147,13 @@ namespace Altinn.AccessManagement.UI.Integration.Clients
                 string requestBody = JsonSerializer.Serialize(rightKeys);
                 StringContent content = new StringContent(requestBody, Encoding.UTF8, "application/json");
 
-                return await _client.PutAsync(token, endpointUrl, content);
+                var response = await _client.PutAsync(token, endpointUrl, content);
+                if (!response.IsSuccessStatusCode)
+                {
+                    _logger.LogError("InstanceClient // UpdateInstanceRightsAccess // Unexpected status {StatusCode}", (int)response.StatusCode);
+                }
+
+                return response;
             }
             catch (Exception ex)
             {
@@ -182,6 +188,30 @@ namespace Altinn.AccessManagement.UI.Integration.Clients
                 await ClientUtils.DeserializeIfSuccessfullStatusCode<PaginatedResult<SimplifiedConnection>>(response, _logger, "InstanceClient // GetAvailableUsers");
 
             return paginatedResult?.Items?.ToList() ?? [];
+        }
+
+        /// <inheritdoc />
+        public async Task<HttpResponseMessage> RemoveInstance(Guid party, Guid from, Guid to, string resource, string instance)
+        {
+            try
+            {
+                string endpointUrl =
+                    $"enduser/connections/resources/instances?party={party}&from={from}&to={to}&resource={Uri.EscapeDataString(resource)}&instance={Uri.EscapeDataString(instance)}";
+                string token = JwtTokenUtil.GetTokenFromContext(_httpContextAccessor.HttpContext, _platformSettings.JwtCookieName);
+
+                var response = await _client.DeleteAsync(token, endpointUrl);
+                if (!response.IsSuccessStatusCode)
+                {
+                    _logger.LogError("InstanceClient // RemoveInstance // Unexpected status {StatusCode}", (int)response.StatusCode);
+                }
+
+                return response;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "AccessManagement.UI // InstanceClient // RemoveInstance // Exception");
+                throw;
+            }
         }
     }
 }

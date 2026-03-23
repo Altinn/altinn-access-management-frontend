@@ -85,6 +85,36 @@ namespace Altinn.AccessManagement.UI.Mocks.Mocks
             return await Task.FromResult(Util.GetMockData<RequestResourceDto>(dataPath));
         }
 
+        /// <inheritdoc />
+        public async Task<RequestResourceDto> ConfirmRequest(Guid party, Guid id, CancellationToken cancellationToken)
+        {
+            ThrowExceptionIfTriggerParty(party.ToString());
+            ThrowHttpStatusExceptionIfTriggerParty(party.ToString());
+
+            string dataPath = Path.Combine(dataFolder, "Request", "singleRequest.json");
+            return await Task.FromResult(Util.GetMockData<RequestResourceDto>(dataPath));
+        }
+
+        /// <inheritdoc />
+        public async Task<RequestResourceDto> RejectRequest(Guid party, Guid id, CancellationToken cancellationToken)
+        {
+            ThrowExceptionIfTriggerParty(party.ToString());
+            ThrowHttpStatusExceptionIfTriggerParty(party.ToString());
+
+            string dataPath = Path.Combine(dataFolder, "Request", "singleRequest.json");
+            return await Task.FromResult(Util.GetMockData<RequestResourceDto>(dataPath));
+        }
+
+        /// <inheritdoc />
+        public async Task<RequestResourceDto> ApproveRequest(Guid party, Guid id, CancellationToken cancellationToken)
+        {
+            ThrowExceptionIfTriggerParty(party.ToString());
+            ThrowHttpStatusExceptionIfTriggerParty(party.ToString());
+
+            string dataPath = Path.Combine(dataFolder, "Request", "singleRequest.json");
+            return await Task.FromResult(Util.GetMockData<RequestResourceDto>(dataPath));
+        }
+
         private static void ThrowExceptionIfTriggerParty(string id)
         {
             if (id == "00000000-0000-0000-0000-000000000000")

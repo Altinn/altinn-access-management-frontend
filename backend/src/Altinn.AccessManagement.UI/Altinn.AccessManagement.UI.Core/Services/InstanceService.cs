@@ -92,5 +92,11 @@ namespace Altinn.AccessManagement.UI.Core.Services
         {
             return await _instanceClient.GetAvailableUsers(party);
         }
+
+        /// <inheritdoc />
+        public async Task<HttpResponseMessage> RemoveInstance(Guid party, Guid from, Guid to, string resource, string instance)
+        {
+            return await _instanceClient.RemoveInstance(party, from, to, resource, instance);
+        }
     }
 }

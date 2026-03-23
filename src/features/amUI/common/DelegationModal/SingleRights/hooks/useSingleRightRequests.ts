@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import {
   useCreateResourceRequestMutation,
-  useGetPendingSingleRightRequestsQuery,
+  useGetPendingSentSingleRightRequestsQuery,
   useWithdrawRequestMutation,
 } from '@/rtk/features/requestApi';
 import {
@@ -33,7 +33,7 @@ export const useSingleRightRequests = ({ canRequestRights }: UseSingleRightReque
     data: singleRightRequests,
     isFetching: isRefetching,
     isError: isLoadError,
-  } = useGetPendingSingleRightRequestsQuery(
+  } = useGetPendingSentSingleRightRequestsQuery(
     {
       ...requestQueryParams,
     },

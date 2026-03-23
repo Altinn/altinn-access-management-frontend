@@ -56,5 +56,32 @@ namespace Altinn.AccessManagement.UI.Core.ClientInterfaces
         /// <param name="cancellationToken">Cancellation token</param>
         /// <returns>The request</returns>
         Task<RequestResourceDto> WithdrawRequest(Guid party, Guid id, CancellationToken cancellationToken);
+
+        /// <summary>
+        /// Confirm a draft request (transitions Draft → Pending)
+        /// </summary>
+        /// <param name="party">The acting party confirming the request</param>
+        /// <param name="id">The request id to confirm</param>
+        /// <param name="cancellationToken">Cancellation token</param>
+        /// <returns>The request</returns>
+        Task<RequestResourceDto> ConfirmRequest(Guid party, Guid id, CancellationToken cancellationToken);
+
+        /// <summary>
+        /// Reject a pending request
+        /// </summary>
+        /// <param name="party">The acting party rejecting the request</param>
+        /// <param name="id">The request id to reject</param>
+        /// <param name="cancellationToken">Cancellation token</param>
+        /// <returns>The request</returns>
+        Task<RequestResourceDto> RejectRequest(Guid party, Guid id, CancellationToken cancellationToken);
+
+        /// <summary>
+        /// Approve a pending request
+        /// </summary>
+        /// <param name="party">The acting party approving the request</param>
+        /// <param name="id">The request id to approve</param>
+        /// <param name="cancellationToken">Cancellation token</param>
+        /// <returns>The request</returns>
+        Task<RequestResourceDto> ApproveRequest(Guid party, Guid id, CancellationToken cancellationToken);
     }
 }

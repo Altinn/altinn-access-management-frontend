@@ -135,6 +135,16 @@ export const instanceApi = createApi({
         return { status: response.status, data: new Date().toISOString() };
       },
     }),
+    removeInstance: builder.mutation<
+      void,
+      { party: string; from: string; to: string; resource: string; instance: string }
+    >({
+      query: ({ party, from, to, resource, instance }) => ({
+        url: `instances/delegation/instances?party=${party}&from=${from}&to=${to}&resource=${encodeURIComponent(resource)}&instance=${encodeURIComponent(instance)}`,
+        method: 'DELETE',
+      }),
+      invalidatesTags: ['instances', 'instanceRights', 'instanceDelegationCheck'],
+    }),
   }),
 });
 
@@ -146,6 +156,7 @@ export const {
   useUpdateInstanceRightsMutation,
   useGetInstanceUsersQuery,
   useGetAvailableUsersQuery,
+  useRemoveInstanceMutation,
 } = instanceApi;
 
 export const { endpoints, reducerPath, reducer, middleware } = instanceApi;

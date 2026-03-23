@@ -65,7 +65,7 @@ export const ReporteeRightsPage = () => {
                 singleRightsPanel={<SingleRightsSection isReportee />}
                 roleAssignmentsPanel={<ReporteeRoleSection />}
                 guardianshipsPanel={<GuardianshipSection />}
-                instancesPanel={instanceDelegationEnabled ? <InstanceSection /> : null}
+                instancesPanel={instanceDelegationEnabled ? <InstanceSection isReportee /> : null}
               />
             </PageContainer>
           </DelegationModalProvider>

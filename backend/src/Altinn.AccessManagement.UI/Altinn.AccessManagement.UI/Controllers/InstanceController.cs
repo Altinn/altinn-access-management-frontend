@@ -142,11 +142,6 @@ namespace Altinn.AccessManagement.UI.Controllers
 
                 return new ObjectResult(ProblemDetailsFactory.CreateProblemDetails(HttpContext, (int?)response.StatusCode, "Error returned from backend"));
             }
-            catch (HttpStatusException statusEx)
-            {
-                string responseContent = statusEx.Message;
-                return new ObjectResult(ProblemDetailsFactory.CreateProblemDetails(HttpContext, (int?)statusEx.StatusCode, "Unexpected HttpStatus response", detail: responseContent));
-            }
             catch (Exception ex)
             {
                 _logger.LogError(ex, "Unexpected exception occurred while adding instance rights for right holder: {Message}", ex.Message);
@@ -217,11 +212,6 @@ namespace Altinn.AccessManagement.UI.Controllers
                 }
 
                 return new ObjectResult(ProblemDetailsFactory.CreateProblemDetails(HttpContext, (int?)response.StatusCode, "Error returned from backend"));
-            }
-            catch (HttpStatusException statusEx)
-            {
-                string responseContent = statusEx.Message;
-                return new ObjectResult(ProblemDetailsFactory.CreateProblemDetails(HttpContext, (int?)statusEx.StatusCode, "Unexpected HttpStatus response", detail: responseContent));
             }
             catch (Exception ex)
             {
@@ -298,6 +288,39 @@ namespace Altinn.AccessManagement.UI.Controllers
             {
                 _logger.LogError(ex, "GetAvailableUsers failed unexpectedly");
                 return StatusCode(500);
+            }
+        }
+
+        /// <summary>
+        /// Removes an instance delegation and all its rights.
+        /// </summary>
+        /// <param name="party">The acting party performing the removal.</param>
+        /// <param name="from">The party the instance access was delegated from.</param>
+        /// <param name="to">The party the instance access was delegated to.</param>
+        /// <param name="resource">The resource identifier.</param>
+        /// <param name="instance">The instance urn.</param>
+        /// <response code="200">OK</response>
+        /// <response code="400">Bad Request</response>
+        /// <response code="500">Internal Server Error</response>
+        [HttpDelete]
+        [Authorize]
+        [Route("delegation/instances")]
+        public async Task<ActionResult> RemoveInstance([FromQuery] Guid party, [FromQuery] Guid from, [FromQuery] Guid to, [FromQuery] string resource, [FromQuery] string instance)
+        {
+            try
+            {
+                var response = await _instanceService.RemoveInstance(party, from, to, resource, instance);
+                if (response.IsSuccessStatusCode)
+                {
+                    return Ok(response);
+                }
+
+                return new ObjectResult(ProblemDetailsFactory.CreateProblemDetails(HttpContext, (int?)response.StatusCode, "Error returned from backend"));
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Unexpected exception occurred during removal of instance delegation: {Message}", ex.Message);
+                return new ObjectResult(ProblemDetailsFactory.CreateProblemDetails(HttpContext));
             }
         }
     }
