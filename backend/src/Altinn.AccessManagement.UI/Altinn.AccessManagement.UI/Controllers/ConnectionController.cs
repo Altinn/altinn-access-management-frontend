@@ -294,24 +294,15 @@ namespace Altinn.AccessManagement.UI.Controllers
         [Route("simplified")]
         public async Task<ActionResult<List<SimplifiedConnection>>> GetSimplifiedConnections([FromQuery] Guid party)
         {
-            if (!ModelState.IsValid)
-            {
-                return BadRequest(ModelState);
-            }
-
             try
             {
                 var connections = await _connectionService.GetSimplifiedConnections(party);
                 return Ok(connections);
             }
-            catch (HttpStatusException ex)
-            {
-                return new ObjectResult(ProblemDetailsFactory.CreateProblemDetails(HttpContext, (int?)ex.StatusCode, "Unexpected HttpStatus response"));
-            }
             catch (Exception ex)
             {
                 _logger.LogError(ex, "GetSimplifiedConnections failed unexpectedly");
-                return StatusCode(500);
+                return new ObjectResult(ProblemDetailsFactory.CreateProblemDetails(HttpContext));
             }
         }
     }

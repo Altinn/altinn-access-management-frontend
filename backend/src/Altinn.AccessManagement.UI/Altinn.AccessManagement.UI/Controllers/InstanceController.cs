@@ -237,24 +237,15 @@ namespace Altinn.AccessManagement.UI.Controllers
             [FromQuery] string resource,
             [FromQuery] string instance)
         {
-            if (!ModelState.IsValid)
-            {
-                return BadRequest(ModelState);
-            }
-
             try
             {
                 var users = await _instanceService.GetInstanceUsers(party, resource, instance);
                 return Ok(users);
             }
-            catch (HttpStatusException ex)
-            {
-                return new ObjectResult(ProblemDetailsFactory.CreateProblemDetails(HttpContext, (int?)ex.StatusCode, "Unexpected HttpStatus response"));
-            }
             catch (Exception ex)
             {
                 _logger.LogError(ex, "GetInstanceUsers failed unexpectedly");
-                return StatusCode(500);
+                return new ObjectResult(ProblemDetailsFactory.CreateProblemDetails(HttpContext));
             }
         }
 
