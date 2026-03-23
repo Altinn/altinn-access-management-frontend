@@ -36,22 +36,30 @@ namespace Altinn.AccessManagement.UI.Mocks.Mocks
         }
 
         /// <inheritdoc />
-        public async Task<PaginatedResult<RequestResourceDto>> GetSentRequests(Guid party, Guid? to, List<RequestStatus> status, CancellationToken cancellationToken)
+        public async Task<PaginatedResult<RequestResourceDto>> GetSentRequests(Guid party, Guid? to, List<RequestStatus> status, string type, CancellationToken cancellationToken)
         {
             ThrowExceptionIfTriggerParty(party.ToString());
             ThrowHttpStatusExceptionIfTriggerParty(party.ToString());
 
             string dataPath = Path.Combine(dataFolder, "Request", "sentRequests.json");
+            if (party == Guid.Parse("22222222-2222-2222-2222-222222222222"))
+            {
+                dataPath = Path.Combine(dataFolder, "Request", "sentRequestsInvalidResource.json");
+            }
             return await Task.FromResult(Util.GetMockData<PaginatedResult<RequestResourceDto>>(dataPath));
         }
 
         /// <inheritdoc />
-        public async Task<PaginatedResult<RequestResourceDto>> GetReceivedRequests(Guid party, Guid? from, List<RequestStatus> status, CancellationToken cancellationToken)
+        public async Task<PaginatedResult<RequestResourceDto>> GetReceivedRequests(Guid party, Guid? from, List<RequestStatus> status, string type, CancellationToken cancellationToken)
         {
             ThrowExceptionIfTriggerParty(party.ToString());
             ThrowHttpStatusExceptionIfTriggerParty(party.ToString());
 
             string dataPath = Path.Combine(dataFolder, "Request", "receivedRequests.json");
+            if (party == Guid.Parse("22222222-2222-2222-2222-222222222222"))
+            {
+                dataPath = Path.Combine(dataFolder, "Request", "receivedRequestsInvalidResource.json");
+            }
             return await Task.FromResult(Util.GetMockData<PaginatedResult<RequestResourceDto>>(dataPath));
         }
 

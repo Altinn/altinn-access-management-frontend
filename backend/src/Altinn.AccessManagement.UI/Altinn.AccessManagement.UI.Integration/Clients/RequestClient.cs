@@ -45,7 +45,7 @@ namespace Altinn.AccessManagement.UI.Integration.Clients
         }
 
         /// <inheritdoc />
-        public async Task<PaginatedResult<RequestResourceDto>> GetSentRequests(Guid party, Guid? to, List<RequestStatus> status, CancellationToken cancellationToken)
+        public async Task<PaginatedResult<RequestResourceDto>> GetSentRequests(Guid party, Guid? to, List<RequestStatus> status, string type, CancellationToken cancellationToken)
         {
             try
             {
@@ -60,6 +60,13 @@ namespace Altinn.AccessManagement.UI.Integration.Clients
                 }
 
                 var statusParams = status?.Select(s => new KeyValuePair<string, string>("status", s.ToString())) ?? [];
+                /*
+                if (!string.IsNullOrEmpty(type))
+                {
+                    queryParams.Add("type", type);
+                }
+                */
+                
                 string endpointUrl = QueryHelpers.AddQueryString("enduser/request/sent", queryParams.Concat(statusParams));
                 string token = JwtTokenUtil.GetTokenFromContext(_httpContextAccessor.HttpContext, _platformSettings.JwtCookieName);
 
@@ -74,7 +81,7 @@ namespace Altinn.AccessManagement.UI.Integration.Clients
         }
 
         /// <inheritdoc />
-        public async Task<PaginatedResult<RequestResourceDto>> GetReceivedRequests(Guid party, Guid? from, List<RequestStatus> status, CancellationToken cancellationToken)
+        public async Task<PaginatedResult<RequestResourceDto>> GetReceivedRequests(Guid party, Guid? from, List<RequestStatus> status, string type, CancellationToken cancellationToken)
         {
             try
             {
@@ -89,6 +96,13 @@ namespace Altinn.AccessManagement.UI.Integration.Clients
                 }
 
                 var statusParams = status?.Select(s => new KeyValuePair<string, string>("status", s.ToString())) ?? [];
+                /*
+                if (!string.IsNullOrEmpty(type))
+                {
+                    queryParams.Add("type", type);
+                }
+                */
+                
                 string endpointUrl = QueryHelpers.AddQueryString("enduser/request/received", queryParams.Concat(statusParams));
                 string token = JwtTokenUtil.GetTokenFromContext(_httpContextAccessor.HttpContext, _platformSettings.JwtCookieName);
 

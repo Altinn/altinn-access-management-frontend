@@ -19,6 +19,7 @@ import { useIsTabletOrSmaller } from '@/resources/utils/screensizeUtils';
 import { SingleRightsSectionSkeleton } from './SingleRightsSectionSkeleton';
 import { getInheritedStatus } from '../../common/useInheritedStatus';
 import { QuestionmarkCircleIcon } from '@navikt/aksel-icons';
+import { PendingRequests } from './PendingRequests';
 
 export const SingleRightsSection = ({ isReportee = false }: { isReportee?: boolean }) => {
   const { id } = useParams();
@@ -127,6 +128,7 @@ export const SingleRightsSection = ({ isReportee = false }: { isReportee?: boole
           </DsPopover.TriggerContext>
         </div>
         {isError && <div>{t('user_rights_page.error')}</div>}
+        {availableActions.includes(DelegationAction.REQUEST) && <PendingRequests />}
         <div className={classes.singleRightsList}>
           <ResourceList
             resources={resources ?? []}
