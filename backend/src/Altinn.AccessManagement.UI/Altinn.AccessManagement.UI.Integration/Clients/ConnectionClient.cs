@@ -135,15 +135,11 @@ namespace Altinn.AccessManagement.UI.Integration.Clients
             string token = JwtTokenUtil.GetTokenFromContext(_httpContextAccessor.HttpContext, _platformSettings.JwtCookieName);
 
             var httpResponse = await _client.GetAsync(token, endpointUrl);
-            if (!httpResponse.IsSuccessStatusCode)
-            {
-                _logger.LogError("ConnectionClient // GetSimplifiedConnections // Unexpected status {StatusCode}", (int)httpResponse.StatusCode);
-                throw new HttpStatusException("Unexpected http response.", "Unexpected http response.", httpResponse.StatusCode, null, httpResponse.ReasonPhrase);
-            }
-
-            string content = await httpResponse.Content.ReadAsStringAsync();
-            PaginatedResult<SimplifiedConnection> result = JsonSerializer.Deserialize<PaginatedResult<SimplifiedConnection>>(content, _serializerOptions);
-
+            PaginatedResult<SimplifiedConnection> result =
+                await ClientUtils.DeserializeIfSuccessfullStatusCode<PaginatedResult<SimplifiedConnection>>(
+                    _logger,
+                    httpResponse,
+                    _serializerOptions);
             return result?.Items?.ToList() ?? [];
         }
     }
