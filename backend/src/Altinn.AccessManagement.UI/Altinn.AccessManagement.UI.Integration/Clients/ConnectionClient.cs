@@ -9,6 +9,7 @@ using Altinn.AccessManagement.UI.Core.Models.Connections;
 using Altinn.AccessManagement.UI.Core.Models.User;
 using Altinn.AccessManagement.UI.Core.Services.Interfaces;
 using Altinn.AccessManagement.UI.Integration.Configuration;
+using Altinn.AccessManagement.UI.Integration.Util;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
@@ -137,9 +138,9 @@ namespace Altinn.AccessManagement.UI.Integration.Clients
             var httpResponse = await _client.GetAsync(token, endpointUrl);
             PaginatedResult<SimplifiedConnection> result =
                 await ClientUtils.DeserializeIfSuccessfullStatusCode<PaginatedResult<SimplifiedConnection>>(
-                    _logger,
                     httpResponse,
-                    _serializerOptions);
+                    _logger,
+                    "ConnectionClient // GetSimplifiedConnections");
             return result?.Items?.ToList() ?? [];
         }
     }

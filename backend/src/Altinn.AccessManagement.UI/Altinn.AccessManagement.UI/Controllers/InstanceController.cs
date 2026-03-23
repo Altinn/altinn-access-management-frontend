@@ -242,6 +242,11 @@ namespace Altinn.AccessManagement.UI.Controllers
             [FromQuery] string resource,
             [FromQuery] string instance)
         {
+            if (party == Guid.Empty || string.IsNullOrWhiteSpace(resource) || string.IsNullOrWhiteSpace(instance))
+            {
+                return new ObjectResult(ProblemDetailsFactory.CreateProblemDetails(HttpContext, 400));
+            }
+
             try
             {
                 var users = await _instanceService.GetInstanceUsers(party, resource, instance);

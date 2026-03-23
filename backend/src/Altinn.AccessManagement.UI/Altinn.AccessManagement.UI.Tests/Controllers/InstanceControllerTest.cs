@@ -579,20 +579,109 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
         }
 
         /// <summary>
+        /// Test case: Rejects empty party values when retrieving users with direct instance access.
+        /// Expected: Returns a bad request problem details response.
+        /// </summary>
+        [Fact]
+        public async Task GetInstanceUsers_EmptyParty_ReturnsBadRequest()
+        {
+            Guid party = Guid.Empty;
+            string resource = "generic-access-resource";
+            string instance = "urn:altinn:instance-id:51599233/df333e75-5896-4254-a69f-146736eaf668";
+
+            HttpResponseMessage httpResponse = await _client.GetAsync(
+                $"accessmanagement/api/v1/instances/delegation/instances/simplified/users?party={party}&resource={resource}&instance={Uri.EscapeDataString(instance)}");
+            ProblemDetails problemDetails = await httpResponse.Content.ReadFromJsonAsync<ProblemDetails>();
+
+            Assert.Equal(HttpStatusCode.BadRequest, httpResponse.StatusCode);
+            Assert.NotNull(problemDetails);
+            Assert.Equal((int)HttpStatusCode.BadRequest, problemDetails.Status);
+        }
+
+        /// <summary>
+        /// Test case: Rejects missing or whitespace resource and instance values when retrieving users with direct instance access.
+        /// Expected: Returns a bad request problem details response.
+        /// </summary>
+        [Theory]
+        [InlineData(null, "urn:altinn:instance-id:51599233/df333e75-5896-4254-a69f-146736eaf668")]
+        [InlineData("", "urn:altinn:instance-id:51599233/df333e75-5896-4254-a69f-146736eaf668")]
+        [InlineData("   ", "urn:altinn:instance-id:51599233/df333e75-5896-4254-a69f-146736eaf668")]
+        [InlineData("generic-access-resource", null)]
+        [InlineData("generic-access-resource", "")]
+        [InlineData("generic-access-resource", "   ")]
+        public async Task GetInstanceUsers_InvalidResourceOrInstance_ReturnsBadRequest(string resource, string instance)
+        {
+            Guid party = Guid.Parse("cd35779b-b174-4ecc-bbef-ece13611be7f");
+            var query = new List<string> { $"party={party}" };
+
+            if (resource is not null)
+            {
+                query.Add($"resource={Uri.EscapeDataString(resource)}");
+            }
+
+            if (instance is not null)
+            {
+                query.Add($"instance={Uri.EscapeDataString(instance)}");
+            }
+
+            HttpResponseMessage httpResponse = await _client.GetAsync(
+                $"accessmanagement/api/v1/instances/delegation/instances/simplified/users?{string.Join("&", query)}");
+            ProblemDetails problemDetails = await httpResponse.Content.ReadFromJsonAsync<ProblemDetails>();
+
+            Assert.Equal(HttpStatusCode.BadRequest, httpResponse.StatusCode);
+            Assert.NotNull(problemDetails);
+            Assert.Equal((int)HttpStatusCode.BadRequest, problemDetails.Status);
+        }
+
+        /// <summary>
         /// Test case: Handles unexpected errors when retrieving users with direct instance access.
         /// Expected: Returns an internal server error.
         /// </summary>
         [Fact]
         public async Task GetInstanceUsers_InternalServerError()
         {
-            Guid party = Guid.Parse("00000000-0000-0000-0000-000000000000"); // Triggers exception in client mock
+            Guid party = Guid.Parse("cd35779b-b174-4ecc-bbef-ece13611be7f");
             string resource = "generic-access-resource";
             string instance = "urn:altinn:instance-id:51599233/df333e75-5896-4254-a69f-146736eaf668";
+            var instanceServiceMock = new Mock<IInstanceService>();
+            instanceServiceMock
+                .Setup(service => service.GetInstanceUsers(party, resource, instance))
+                .ThrowsAsync(new Exception("Unexpected failure"));
+            HttpClient client = GetTestClient(instanceServiceMock.Object);
 
-            HttpResponseMessage httpResponse = await _client.GetAsync(
+            HttpResponseMessage httpResponse = await client.GetAsync(
                 $"accessmanagement/api/v1/instances/delegation/instances/simplified/users?party={party}&resource={resource}&instance={Uri.EscapeDataString(instance)}");
 
             Assert.Equal(HttpStatusCode.InternalServerError, httpResponse.StatusCode);
+        }
+
+        /// <summary>
+        /// Test case: Handles HttpStatusException when retrieving users with direct instance access.
+        /// Expected: Returns problem details with the backend status code and detail message.
+        /// </summary>
+        [Fact]
+        public async Task GetInstanceUsers_HttpStatusException_ReturnsProblemDetails()
+        {
+            Guid party = Guid.Parse("cd35779b-b174-4ecc-bbef-ece13611be7f");
+            string resource = "generic-access-resource";
+            string instance = "urn:altinn:instance-id:51599233/df333e75-5896-4254-a69f-146736eaf668";
+            const string errorMessage = "Backend denied access to instance users.";
+
+            var instanceServiceMock = new Mock<IInstanceService>();
+            instanceServiceMock
+                .Setup(service => service.GetInstanceUsers(party, resource, instance))
+                .ThrowsAsync(new HttpStatusException("Forbidden", "Forbidden", HttpStatusCode.Forbidden, string.Empty, errorMessage));
+            HttpClient client = GetTestClient(instanceServiceMock.Object);
+
+            HttpResponseMessage httpResponse = await client.GetAsync(
+                $"accessmanagement/api/v1/instances/delegation/instances/simplified/users?party={party}&resource={resource}&instance={Uri.EscapeDataString(instance)}");
+            ProblemDetails problemDetails = await httpResponse.Content.ReadFromJsonAsync<ProblemDetails>();
+
+            Assert.Equal(HttpStatusCode.Forbidden, httpResponse.StatusCode);
+            Assert.NotNull(problemDetails);
+            Assert.Equal((int)HttpStatusCode.Forbidden, problemDetails.Status);
+            Assert.Equal("Unexpected HttpStatus response", problemDetails.Title);
+            Assert.Equal(errorMessage, problemDetails.Detail);
         }
 
         /// <summary>

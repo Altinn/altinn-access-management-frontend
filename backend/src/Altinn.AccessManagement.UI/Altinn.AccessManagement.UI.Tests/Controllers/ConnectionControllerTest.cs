@@ -5,13 +5,23 @@ using System.Reflection;
 using System.Text;
 using System.Text.Json;
 using Altinn.AccessManagement.UI.Controllers;
+using Altinn.AccessManagement.UI.Core.Configuration;
+using Altinn.AccessManagement.UI.Core.Helpers;
 using Altinn.AccessManagement.UI.Core.Models.Connections;
 using Altinn.AccessManagement.UI.Core.Models.User;
+using Altinn.AccessManagement.UI.Core.Services.Interfaces;
 using Altinn.AccessManagement.UI.Mocks.Mocks;
 using Altinn.AccessManagement.UI.Mocks.Utils;
 using Altinn.AccessManagement.UI.Models;
 using Altinn.AccessManagement.UI.Tests.Utils;
+using AltinnCore.Authentication.JwtCookie;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Testing;
+using Microsoft.AspNetCore.TestHost;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Options;
 using Moq;
 using User = Altinn.AccessManagement.UI.Core.Models.User.User;
 
@@ -891,6 +901,28 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
         }
 
         /// <summary>
+        /// Test case: Rejects empty party GUID values for simplified connections.
+        /// Expected: Returns bad request before calling the service.
+        /// </summary>
+        [Fact]
+        public async Task GetSimplifiedConnections_EmptyParty_ReturnsBadRequest()
+        {
+            // Arrange
+            Guid party = Guid.Empty;
+            var token = PrincipalUtil.GetToken(1234, 1234, 2);
+            _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+
+            // Act
+            HttpResponseMessage httpResponse = await _client.GetAsync(
+                $"accessmanagement/api/v1/connection/simplified?party={party}");
+            string responseContent = await httpResponse.Content.ReadAsStringAsync();
+
+            // Assert
+            Assert.Equal(HttpStatusCode.BadRequest, httpResponse.StatusCode);
+            Assert.Contains("Query parameter 'party' must be a non-empty GUID.", responseContent);
+        }
+
+        /// <summary>
         /// Test case: Handles unexpected errors when retrieving simplified connections.
         /// Expected: Returns an internal server error.
         /// </summary>
@@ -898,16 +930,80 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
         public async Task GetSimplifiedConnections_InternalServerError()
         {
             // Arrange
-            Guid party = Guid.Parse("00000000-0000-0000-0000-000000000000"); // Triggers exception in client mock
-            var token = PrincipalUtil.GetToken(1234, 1234, 2);
-            _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+            Guid party = Guid.Parse("cd35779b-b174-4ecc-bbef-ece13611be7f");
+
+            var connectionServiceMock = new Mock<IConnectionService>();
+            connectionServiceMock
+                .Setup(service => service.GetSimplifiedConnections(party))
+                .ThrowsAsync(new Exception("Unexpected failure"));
+
+            HttpClient client = GetTestClient(connectionServiceMock.Object);
 
             // Act
-            HttpResponseMessage httpResponse = await _client.GetAsync(
+            HttpResponseMessage httpResponse = await client.GetAsync(
                 $"accessmanagement/api/v1/connection/simplified?party={party}");
 
             // Assert
             Assert.Equal(HttpStatusCode.InternalServerError, httpResponse.StatusCode);
+        }
+
+        /// <summary>
+        /// Test case: Handles HttpStatusException when retrieving simplified connections.
+        /// Expected: Returns problem details with the backend status code and detail message.
+        /// </summary>
+        [Fact]
+        public async Task GetSimplifiedConnections_HttpStatusException_ReturnsProblemDetails()
+        {
+            // Arrange
+            Guid party = Guid.Parse("cd35779b-b174-4ecc-bbef-ece13611be7f");
+            const string errorMessage = "Backend denied access to simplified connections.";
+
+            var connectionServiceMock = new Mock<IConnectionService>();
+            connectionServiceMock
+                .Setup(service => service.GetSimplifiedConnections(party))
+                .ThrowsAsync(new HttpStatusException("Forbidden", "Forbidden", HttpStatusCode.Forbidden, string.Empty, errorMessage));
+
+            HttpClient client = GetTestClient(connectionServiceMock.Object);
+
+            // Act
+            HttpResponseMessage httpResponse = await client.GetAsync(
+                $"accessmanagement/api/v1/connection/simplified?party={party}");
+            ProblemDetails problemDetails = await httpResponse.Content.ReadFromJsonAsync<ProblemDetails>();
+
+            // Assert
+            Assert.Equal(HttpStatusCode.Forbidden, httpResponse.StatusCode);
+            Assert.NotNull(problemDetails);
+            Assert.Equal((int)HttpStatusCode.Forbidden, problemDetails.Status);
+            Assert.Equal("Unexpected HttpStatus response", problemDetails.Title);
+            Assert.Equal(errorMessage, problemDetails.Detail);
+        }
+
+        private HttpClient GetTestClient(IConnectionService connectionService, FeatureFlags flags = null)
+        {
+            WebApplicationFactory<ConnectionController> factory = _factory.WithWebHostBuilder(builder =>
+            {
+                builder.ConfigureTestServices(services =>
+                {
+                    services.AddSingleton<IConnectionService>(connectionService);
+                    services.AddSingleton<ILogger<ConnectionController>>(new Mock<ILogger<ConnectionController>>().Object);
+                    services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
+                    services.AddSingleton<IPostConfigureOptions<JwtCookieOptions>, JwtCookiePostConfigureOptionsStub>();
+                    services.Configure<FeatureFlags>(options =>
+                    {
+                        options.DisplayPopularSingleRightsServices = flags?.DisplayPopularSingleRightsServices ?? true;
+                        options.DisplayResourceDelegation = flags?.DisplayResourceDelegation ?? true;
+                        options.DisplayConfettiPackage = flags?.DisplayConfettiPackage ?? true;
+                        options.DisplayRoles = flags?.DisplayRoles ?? true;
+                        options.UseNewActorsList = flags?.UseNewActorsList ?? false;
+                    });
+                });
+            });
+
+            factory.Server.AllowSynchronousIO = true;
+            HttpClient client = factory.CreateClient();
+            client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", PrincipalUtil.GetToken(1234, 1234, 2));
+
+            return client;
         }
     }
 }

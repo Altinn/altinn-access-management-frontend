@@ -294,10 +294,19 @@ namespace Altinn.AccessManagement.UI.Controllers
         [Route("simplified")]
         public async Task<ActionResult<List<SimplifiedConnection>>> GetSimplifiedConnections([FromQuery] Guid party)
         {
+            if (party == Guid.Empty)
+            {
+                return BadRequest("Query parameter 'party' must be a non-empty GUID.");
+            }
+
             try
             {
                 var connections = await _connectionService.GetSimplifiedConnections(party);
                 return Ok(connections);
+            }
+            catch (HttpStatusException ex)
+            {
+                return new ObjectResult(ProblemDetailsFactory.CreateProblemDetails(HttpContext, (int?)ex.StatusCode, "Unexpected HttpStatus response", detail: ex.Message));
             }
             catch (Exception ex)
             {
