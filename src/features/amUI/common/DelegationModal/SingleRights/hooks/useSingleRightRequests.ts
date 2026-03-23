@@ -38,6 +38,7 @@ export const useSingleRightRequests = ({ canRequestRights }: UseSingleRightReque
     {
       ...requestQueryParams,
       status: ['Pending'],
+      type: 'resource',
     },
     {
       skip: !canRequestRights || !requestQueryParams?.party || !requestQueryParams?.to,
