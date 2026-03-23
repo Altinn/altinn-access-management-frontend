@@ -212,7 +212,8 @@ namespace Altinn.AccessManagement.UI.Controllers
         {
             try
             {
-                var returnVal = await _requestService.GetDraftRequest(id, cancellationToken);
+                var languageCode = LanguageHelper.GetSelectedLanguageCookieValueBackendStandard(HttpContext);
+                var returnVal = await _requestService.GetDraftRequest(id, languageCode, cancellationToken);
                 return Ok(returnVal);
             }
             catch (HttpStatusException statusEx)
