@@ -29,28 +29,28 @@ namespace Altinn.AccessManagement.UI.Core.Services
         /// <inheritdoc />
         public async Task<IEnumerable<SingleRightRequest>> GetSentRequests(Guid party, Guid? to, List<RequestStatus> status, CancellationToken cancellationToken)
         {
-            PaginatedResult<RequestResourceDto> response = await _requestClient.GetSentRequests(party, to, status, cancellationToken);
+            PaginatedResult<RequestResourceDto> response = await _requestClient.GetSentRequests(party, to, status, null, cancellationToken);
             return response.Items.Select(MapToSingleRightRequest);
         }
 
         /// <inheritdoc />
         public async Task<IEnumerable<EnrichedResourceRequest>> GetEnrichedSentResourceRequests(Guid party, Guid? to, List<RequestStatus> status, string languageCode, CancellationToken cancellationToken)
         {
-            PaginatedResult<RequestResourceDto> response = await _requestClient.GetSentRequests(party, to, status, cancellationToken);
+            PaginatedResult<RequestResourceDto> response = await _requestClient.GetSentRequests(party, to, status, "resource", cancellationToken);
             return await MapToEnrichedResourceRequestList(response, languageCode);
         }
 
         /// <inheritdoc />
         public async Task<IEnumerable<SingleRightRequest>> GetReceivedRequests(Guid party, Guid? from, List<RequestStatus> status, CancellationToken cancellationToken)
         {
-            PaginatedResult<RequestResourceDto> response = await _requestClient.GetReceivedRequests(party, from, status, cancellationToken);
+            PaginatedResult<RequestResourceDto> response = await _requestClient.GetReceivedRequests(party, from, status, null, cancellationToken);
             return response.Items.Select(MapToSingleRightRequest);
         }
 
         /// <inheritdoc />
         public async Task<IEnumerable<EnrichedResourceRequest>> GetEnrichedReceivedResourceRequests(Guid party, Guid? from, List<RequestStatus> status, string languageCode, CancellationToken cancellationToken)
         {
-            PaginatedResult<RequestResourceDto> response = await _requestClient.GetReceivedRequests(party, from, status, cancellationToken);
+            PaginatedResult<RequestResourceDto> response = await _requestClient.GetReceivedRequests(party, from, status, "resource", cancellationToken);
             return await MapToEnrichedResourceRequestList(response, languageCode);
         }
 

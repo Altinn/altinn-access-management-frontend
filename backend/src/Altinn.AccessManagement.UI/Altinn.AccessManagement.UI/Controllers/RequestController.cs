@@ -75,7 +75,7 @@ namespace Altinn.AccessManagement.UI.Controllers
         /// <response code="500">Internal Server Error</response>
         [HttpGet]
         [Authorize]
-        [Route("sent/enriched/resource")]
+        [Route("sent/resource")]
         public async Task<ActionResult> GetEnrichedSentResourceRequests([FromQuery] Guid party, [FromQuery] Guid? to, [FromQuery] List<RequestStatus> status, CancellationToken cancellationToken)
         {
             try
@@ -138,7 +138,7 @@ namespace Altinn.AccessManagement.UI.Controllers
         /// <response code="500">Internal Server Error</response>
         [HttpGet]
         [Authorize]
-        [Route("received/enriched/resource")]
+        [Route("received/resource")]
         public async Task<ActionResult> GetEnrichedReceivedResourceRequests([FromQuery] Guid party, [FromQuery] Guid? from, [FromQuery] List<RequestStatus> status, CancellationToken cancellationToken)
         {
             try

@@ -65,7 +65,7 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
             IEnumerable<EnrichedResourceRequest> expectedResponse = Util.GetMockData<IEnumerable<EnrichedResourceRequest>>(path);
 
             // Act
-            HttpResponseMessage httpResponse = await _client.GetAsync($"accessmanagement/api/v1/request/sent/enriched/resource?party={party}&to={toParty}");
+            HttpResponseMessage httpResponse = await _client.GetAsync($"accessmanagement/api/v1/request/sent/resource?party={party}&to={toParty}");
             IEnumerable<EnrichedResourceRequest> actualResponse = await httpResponse.Content.ReadFromJsonAsync<IEnumerable<EnrichedResourceRequest>>();
 
             // Assert
@@ -109,7 +109,7 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
             IEnumerable<EnrichedResourceRequest> expectedResponse = Util.GetMockData<IEnumerable<EnrichedResourceRequest>>(path);
 
             // Act
-            HttpResponseMessage httpResponse = await _client.GetAsync($"accessmanagement/api/v1/request/received/enriched/resource?party={party}&from={fromParty}");
+            HttpResponseMessage httpResponse = await _client.GetAsync($"accessmanagement/api/v1/request/received/resource?party={party}&from={fromParty}");
             IEnumerable<EnrichedResourceRequest> actualResponse = await httpResponse.Content.ReadFromJsonAsync<IEnumerable<EnrichedResourceRequest>>();
 
             // Assert
