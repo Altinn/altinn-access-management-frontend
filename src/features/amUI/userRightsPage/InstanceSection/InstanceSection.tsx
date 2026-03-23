@@ -7,13 +7,18 @@ import { InstanceList } from '@/features/amUI/common/InstanceList/InstanceList';
 import { DelegationAction, EditModal } from '@/features/amUI/common/DelegationModal/EditModal';
 import { type InstanceDelegation, useGetInstancesQuery } from '@/rtk/features/instanceApi';
 import classes from './InstanceSection.module.css';
+import { useCanGiveAccess } from '@/resources/hooks/useCanGiveAccess';
+import { useParams } from 'react-router';
 
-export const InstanceSection = () => {
+export const InstanceSection = ({ isReportee = false }: { isReportee?: boolean }) => {
   const { t } = useTranslation();
   const { toParty, actingParty, fromParty } = usePartyRepresentation();
 
   const modalRef = React.useRef<HTMLDialogElement>(null);
   const [selectedInstance, setSelectedInstance] = React.useState<InstanceDelegation | null>(null);
+
+  const { id } = useParams();
+  const canGiveAccess = useCanGiveAccess(id ?? '', isReportee);
 
   const {
     data: instances = [],
@@ -68,7 +73,10 @@ export const InstanceSection = () => {
             : undefined
         }
         onClose={() => setSelectedInstance(null)}
-        availableActions={[DelegationAction.REVOKE, DelegationAction.DELEGATE]}
+        availableActions={[
+          ...(canGiveAccess ? [DelegationAction.DELEGATE] : []),
+          DelegationAction.REVOKE,
+        ]}
       />
     </div>
   );
