@@ -52,21 +52,21 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
         }
 
         /// <summary>
-        ///     Test case: GetSentRequests returns sent requests for party with resource data included
-        ///     Expected: GetSentRequests returns the requests sent by a party with resource data included
+        ///     Test case: GetEnrichedSentResourceRequests returns sent requests for party with resource data included
+        ///     Expected: GetEnrichedSentResourceRequests returns the requests sent by a party with resource data included
         /// </summary>
         [Fact]
-        public async Task GetSentRequests_IncludeResources_ReturnsRequestsForParty()
+        public async Task GetEnrichedSentResourceRequests_ReturnsRequestsForParty()
         {
             // Arrange
             string party = "167536b5-f8ed-4c5a-8f48-0279507e53ae";
             string toParty = "feb51634-0042-4ab0-a9db-8705300141a6";
-            string path = Path.Combine(_expectedDataPath, "Request", "getSentRequestsWithResources.json");
-            IEnumerable<SingleRightRequest> expectedResponse = Util.GetMockData<IEnumerable<SingleRightRequest>>(path);
+            string path = Path.Combine(_expectedDataPath, "Request", "getEnrichedSentResourceRequests.json");
+            IEnumerable<EnrichedResourceRequest> expectedResponse = Util.GetMockData<IEnumerable<EnrichedResourceRequest>>(path);
 
             // Act
-            HttpResponseMessage httpResponse = await _client.GetAsync($"accessmanagement/api/v1/request/sent?party={party}&to={toParty}&includeResources=true");
-            IEnumerable<SingleRightRequest> actualResponse = await httpResponse.Content.ReadFromJsonAsync<IEnumerable<SingleRightRequest>>();
+            HttpResponseMessage httpResponse = await _client.GetAsync($"accessmanagement/api/v1/request/sent/enriched/resource?party={party}&to={toParty}");
+            IEnumerable<EnrichedResourceRequest> actualResponse = await httpResponse.Content.ReadFromJsonAsync<IEnumerable<EnrichedResourceRequest>>();
 
             // Assert
             Assert.Equal(HttpStatusCode.OK, httpResponse.StatusCode);
@@ -96,21 +96,21 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
         }
 
         /// <summary>
-        ///     Test case: GetReceivedRequests returns received requests for party with resource data included
-        ///     Expected: GetReceivedRequests returns the requests received by a party with resource data included
+        ///     Test case: GetEnrichedReceivedResourceRequests returns received requests for party with resource data included
+        ///     Expected: GetEnrichedReceivedResourceRequests returns the requests received by a party with resource data included
         /// </summary>
         [Fact]
-        public async Task GetReceivedRequests_IncludeResources_ReturnsRequestsForParty()
+        public async Task GetEnrichedReceivedResourceRequests_ReturnsRequestsForParty()
         {
             // Arrange
             string party = "167536b5-f8ed-4c5a-8f48-0279507e53ae";
             string fromParty = "feb51634-0042-4ab0-a9db-8705300141a6";
-            string path = Path.Combine(_expectedDataPath, "Request", "getReceivedRequestsWithResources.json");
-            IEnumerable<SingleRightRequest> expectedResponse = Util.GetMockData<IEnumerable<SingleRightRequest>>(path);
+            string path = Path.Combine(_expectedDataPath, "Request", "getEnrichedReceivedResourceRequests.json");
+            IEnumerable<EnrichedResourceRequest> expectedResponse = Util.GetMockData<IEnumerable<EnrichedResourceRequest>>(path);
 
             // Act
-            HttpResponseMessage httpResponse = await _client.GetAsync($"accessmanagement/api/v1/request/received?party={party}&from={fromParty}&includeResources=true");
-            IEnumerable<SingleRightRequest> actualResponse = await httpResponse.Content.ReadFromJsonAsync<IEnumerable<SingleRightRequest>>();
+            HttpResponseMessage httpResponse = await _client.GetAsync($"accessmanagement/api/v1/request/received/enriched/resource?party={party}&from={fromParty}");
+            IEnumerable<EnrichedResourceRequest> actualResponse = await httpResponse.Content.ReadFromJsonAsync<IEnumerable<EnrichedResourceRequest>>();
 
             // Assert
             Assert.Equal(HttpStatusCode.OK, httpResponse.StatusCode);
