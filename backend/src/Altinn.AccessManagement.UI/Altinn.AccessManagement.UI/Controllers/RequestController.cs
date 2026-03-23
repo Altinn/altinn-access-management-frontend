@@ -33,7 +33,7 @@ namespace Altinn.AccessManagement.UI.Controllers
             _logger = logger;
         }
 
-         /// <summary>
+        /// <summary>
         ///     Endpoint for getting requests sent by a party
         /// </summary>
         /// <param name="party">The acting party</param>

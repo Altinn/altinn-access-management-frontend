@@ -12,7 +12,7 @@ export interface RequestDto {
   from: Entity;
   to: Entity;
   lastUpdated: string;
-  resourceId: string;
+  resourceId?: string;
 }
 
 export interface EnrichedRequestDto extends RequestDto {

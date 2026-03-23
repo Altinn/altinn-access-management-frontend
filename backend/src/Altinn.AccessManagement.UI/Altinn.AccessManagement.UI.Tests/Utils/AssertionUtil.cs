@@ -1004,7 +1004,7 @@ namespace Altinn.AccessManagement.UI.Tests.Utils
             Assert.Equal(expected.To.Id, actual.To.Id);
             Assert.Equal(expected.ResourceId, actual.ResourceId);
             Assert.Equal(expected.Type, actual.Type);
-            Assert.Equal(expected.Type, actual.Type);
+            Assert.Equal(expected.Status, actual.Status);
             Assert.Equal(expected.LastUpdated, actual.LastUpdated);
             AssertEqual(expected.Resource, actual.Resource);
         }

@@ -133,7 +133,7 @@ namespace Altinn.AccessManagement.UI.Core.Services
                     LastUpdated = request.LastUpdated,
                 };
                 
-                if (resourceDictionary.TryGetValue(x.Resource.ReferenceId, out var resource))
+                if (resourceDictionary.TryGetValue(request.ResourceId, out var resource))
                 {
                     enrichedRequest.Resource = resource;
                 }

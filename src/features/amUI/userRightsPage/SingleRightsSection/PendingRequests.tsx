@@ -104,7 +104,7 @@ const PendingRequestsList = ({
         status: ['Pending'],
       },
       {
-        skip: !actingParty?.partyUuid && !fromParty?.partyUuid,
+        skip: !actingParty?.partyUuid || !fromParty?.partyUuid,
       },
     );
 
