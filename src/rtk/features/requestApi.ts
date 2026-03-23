@@ -36,7 +36,7 @@ export const requestApi = createApi({
     // requests page queries
     getSentRequests: builder.query<
       RequestDto[],
-      { party: string; to?: string; status?: RequestStatus[]; type?: string }
+      { party: string; to?: string; status?: RequestStatus[]; type?: 'resource' | 'package' }
     >({
       query: ({ party, to, status = [], type }) => {
         let params = `?party=${party}`;
@@ -49,7 +49,7 @@ export const requestApi = createApi({
     }),
     getReceivedRequests: builder.query<
       RequestDto[],
-      { party: string; from?: string; status?: RequestStatus[]; type?: string }
+      { party: string; from?: string; status?: RequestStatus[]; type?: 'resource' | 'package' }
     >({
       query: ({ party, from, status = [], type }) => {
         let params = `?party=${party}`;

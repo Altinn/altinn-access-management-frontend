@@ -16,7 +16,7 @@ namespace Altinn.AccessManagement.UI.Core.Models.Request.Frontend
         public Guid Id { get; set; }
 
         /// <summary>
-        /// Discriminator indicating the request type: "resource", "package", or "assignment"
+        /// Discriminator indicating the request type: "resource", "package"
         /// </summary>
         public required string Type { get; set; }
 
