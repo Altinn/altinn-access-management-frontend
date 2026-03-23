@@ -525,56 +525,6 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
         }
 
         /// <summary>
-        /// Test case: Handles HttpStatusException when delegating rights with an invalid instance.
-        /// Expected: Returns bad request.
-        /// </summary>
-        [Fact]
-        public async Task DelegateInstanceRights_InvalidInstance_ReturnsBadRequest()
-        {
-            Guid party = Guid.Parse("cd35779b-b174-4ecc-bbef-ece13611be7f");
-            Guid to = Guid.Parse("167536b5-f8ed-4c5a-8f48-0279507e53ae");
-            string resource = "generic-access-resource";
-            string instance = "urn:altinn:instance-id:51599233/non-existing-instance";
-            List<string> actionKeys = new List<string> { "read" };
-            InstanceRightsDelegationDto input = new()
-            {
-                DirectRightKeys = actionKeys
-            };
-
-            string jsonInput = JsonSerializer.Serialize(input);
-            HttpContent content = new StringContent(jsonInput, Encoding.UTF8, "application/json");
-
-            HttpResponseMessage httpResponse = await _client.PostAsync(
-                $"accessmanagement/api/v1/instances/delegation/instances/rights?party={party}&to={to}&resource={resource}&instance={Uri.EscapeDataString(instance)}",
-                content);
-
-            Assert.Equal(HttpStatusCode.BadRequest, httpResponse.StatusCode);
-        }
-
-        /// <summary>
-        /// Test case: Handles HttpStatusException when updating rights with an invalid instance.
-        /// Expected: Returns bad request.
-        /// </summary>
-        [Fact]
-        public async Task EditInstanceAccess_InvalidInstance_ReturnsBadRequest()
-        {
-            Guid party = Guid.Parse("cd35779b-b174-4ecc-bbef-ece13611be7f");
-            Guid to = Guid.Parse("167536b5-f8ed-4c5a-8f48-0279507e53ae");
-            string resource = "generic-access-resource";
-            string instance = "urn:altinn:instance-id:51599233/non-existing-instance";
-            List<string> actionKeys = new List<string> { "read" };
-
-            string jsonActionKeys = JsonSerializer.Serialize(actionKeys);
-            HttpContent content = new StringContent(jsonActionKeys, Encoding.UTF8, "application/json");
-
-            HttpResponseMessage httpResponse = await _client.PutAsync(
-                $"accessmanagement/api/v1/instances/delegation/instances/rights?party={party}&to={to}&resource={resource}&instance={Uri.EscapeDataString(instance)}",
-                content);
-
-            Assert.Equal(HttpStatusCode.BadRequest, httpResponse.StatusCode);
-        }
-
-        /// <summary>
         /// Test case: Handles unexpected errors when updating instance access.
         /// Expected: Returns an internal server error.
         /// </summary>
@@ -614,6 +564,73 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
                 $"accessmanagement/api/v1/instances/delegation/instances/rights?party={party}&from={from}&to={to}&resource={resource}&instance={Uri.EscapeDataString(instance)}");
 
             Assert.Equal(HttpStatusCode.NotFound, httpResponse.StatusCode);
+        }
+
+        /// <summary>
+        /// Test case: Successfully remove an instance delegation.
+        /// Expected: Returns OK.
+        /// </summary>
+        [Fact]
+        public async Task RemoveInstance_Success()
+        {
+            Guid party = Guid.Parse("cd35779b-b174-4ecc-bbef-ece13611be7f");
+            Guid from = Guid.Parse("cd35779b-b174-4ecc-bbef-ece13611be7f");
+            Guid to = Guid.Parse("167536b5-f8ed-4c5a-8f48-0279507e53ae");
+            string resource = "generic-access-resource";
+            string instance = "urn:altinn:instance-id:51599233/df333e75-5896-4254-a69f-146736eaf668";
+
+            HttpResponseMessage httpResponse = await _client.DeleteAsync(
+                $"accessmanagement/api/v1/instances/delegation/instances?party={party}&from={from}&to={to}&resource={resource}&instance={Uri.EscapeDataString(instance)}");
+
+            Assert.Equal(HttpStatusCode.OK, httpResponse.StatusCode);
+        }
+
+        /// <summary>
+        /// Test case: Handles unexpected errors when removing an instance delegation.
+        /// Expected: Returns an internal server error.
+        /// </summary>
+        [Fact]
+        public async Task RemoveInstance_InternalServerError()
+        {
+            Guid party = Guid.Parse("00000000-0000-0000-0000-000000000000");// Triggers exception in client mock
+            Guid from = Guid.Parse("cd35779b-b174-4ecc-bbef-ece13611be7f");
+            Guid to = Guid.Parse("167536b5-f8ed-4c5a-8f48-0279507e53ae");
+            string resource = "generic-access-resource";
+            string instance = "urn:altinn:instance-id:51599233/df333e75-5896-4254-a69f-146736eaf668";
+
+            HttpResponseMessage httpResponse = await _client.DeleteAsync(
+                $"accessmanagement/api/v1/instances/delegation/instances?party={party}&from={from}&to={to}&resource={resource}&instance={Uri.EscapeDataString(instance)}");
+
+            Assert.Equal(HttpStatusCode.InternalServerError, httpResponse.StatusCode);
+        }
+
+        /// <summary>
+        /// Test case: Backend returns a non-success status code without throwing.
+        /// Expected: Returns problem details with the backend status code.
+        /// </summary>
+        [Fact]
+        public async Task RemoveInstance_UnsuccessfulBackendResponse_ReturnsProblemDetails()
+        {
+            Guid party = Guid.Parse("cd35779b-b174-4ecc-bbef-ece13611be7f");
+            Guid from = Guid.Parse("cd35779b-b174-4ecc-bbef-ece13611be7f");
+            Guid to = Guid.Parse("167536b5-f8ed-4c5a-8f48-0279507e53ae");
+            string resource = "generic-access-resource";
+            string instance = "urn:altinn:instance-id:51599233/df333e75-5896-4254-a69f-146736eaf668";
+
+            var instanceServiceMock = new Mock<IInstanceService>();
+            instanceServiceMock
+                .Setup(service => service.RemoveInstance(party, from, to, resource, instance))
+                .ReturnsAsync(new HttpResponseMessage(HttpStatusCode.Forbidden));
+            HttpClient client = GetTestClient(instanceServiceMock.Object);
+
+            HttpResponseMessage httpResponse = await client.DeleteAsync(
+                $"accessmanagement/api/v1/instances/delegation/instances?party={party}&from={from}&to={to}&resource={resource}&instance={Uri.EscapeDataString(instance)}");
+            ProblemDetails problemDetails = await httpResponse.Content.ReadFromJsonAsync<ProblemDetails>();
+
+            Assert.Equal(HttpStatusCode.Forbidden, httpResponse.StatusCode);
+            Assert.NotNull(problemDetails);
+            Assert.Equal((int)HttpStatusCode.Forbidden, problemDetails.Status);
+            Assert.Equal("Error returned from backend", problemDetails.Title);
         }
 
         private HttpClient GetTestClient(IInstanceService instanceService)

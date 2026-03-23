@@ -1,14 +1,8 @@
-import { useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
-import { useInstanceDelegationCheckQuery } from '@/rtk/features/instanceApi';
-import { useGetResourceRightsMetaQuery } from '@/rtk/features/singleRights/singleRightsApi';
-import {
-  ChipRight,
-  mapRightsToChipRights,
-} from '../common/DelegationModal/SingleRights/hooks/rightsUtils';
+import { ChipRight } from '../common/DelegationModal/SingleRights/hooks/rightsUtils';
 import { createErrorDetails } from '../common/TechnicalErrorParagraphs/TechnicalErrorParagraphs';
-import { usePartyRepresentation } from '../common/PartyRepresentationContext/PartyRepresentationContext';
+import { useInstanceDelegationRightsData } from '../common/DelegationModal/Instance/useInstanceDelegationRightsData';
 
 export const getRightsSummaryTitle = (
   rights: ChipRight[],
@@ -33,44 +27,20 @@ export const useInstanceRights = ({
   instanceUrn: string;
   isOpen: boolean;
 }) => {
-  const { actingParty } = usePartyRepresentation();
-  const [rights, setRights] = useState<ChipRight[]>([]);
-
   const {
-    data: rightsMeta,
-    isLoading: isRightsMetaLoading,
-    error: rightsMetaError,
-  } = useGetResourceRightsMetaQuery({ resourceId }, { skip: !isOpen || !resourceId });
+    rights,
+    setRights,
+    resetRights,
+    isLoading,
+    rightsMetaTechnicalErrorDetails,
+    delegationCheckError,
+  } = useInstanceDelegationRightsData({
+    resourceId,
+    instanceUrn,
+    isEnabled: isOpen,
+  });
 
-  const {
-    data: delegationCheckedRights,
-    isLoading: isDelegationCheckLoading,
-    error: delegationCheckError,
-  } = useInstanceDelegationCheckQuery(
-    {
-      party: actingParty?.partyUuid || '',
-      resource: resourceId,
-      instance: instanceUrn,
-    },
-    { skip: !isOpen || !actingParty?.partyUuid || !resourceId || !instanceUrn },
-  );
-
-  const mappedRights = useMemo(() => {
-    if (!rightsMeta || !delegationCheckedRights) return [];
-    return mapRightsToChipRights(rightsMeta, delegationCheckedRights, {
-      isChecked: (right) => right.result === true,
-    });
-  }, [delegationCheckedRights, rightsMeta]);
-
-  useEffect(() => {
-    setRights(mappedRights);
-  }, [mappedRights]);
-
-  const resetRights = () => setRights(mappedRights);
-
-  const isLoading = isRightsMetaLoading || isDelegationCheckLoading;
-  const errorDetails =
-    createErrorDetails(rightsMetaError) ?? createErrorDetails(delegationCheckError);
+  const errorDetails = rightsMetaTechnicalErrorDetails ?? createErrorDetails(delegationCheckError);
 
   return { rights, setRights, resetRights, isLoading, errorDetails };
 };

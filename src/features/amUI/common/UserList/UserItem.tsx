@@ -13,7 +13,6 @@ import { displaySubConnections } from '@/resources/utils/featureFlagUtils';
 import { formatOrgNr, isSubUnitByType } from '@/resources/utils/reporteeUtils';
 import { ECC_PROVIDER_CODE, useRoleMetadata } from '../UserRoles/useRoleMetadata';
 import { isNewUser } from '../isNewUser';
-import { color } from 'storybook/internal/theming';
 
 function isExtendedUser(item: ExtendedUser | User): item is ExtendedUser {
   return (item as ExtendedUser).roles !== undefined && Array.isArray((item as ExtendedUser).roles);
@@ -29,6 +28,7 @@ interface UserItemProps extends Pick<
   disableLinks?: boolean;
   includeSelfAsChild?: boolean;
   linkTo?: string;
+  onSelect?: () => void;
   controls?: (user: ExtendedUser | User) => ReactNode;
 }
 
@@ -58,6 +58,7 @@ export const UserItem = ({
   disableLinks = false,
   includeSelfAsChild = true,
   linkTo,
+  onSelect,
   shadow,
   controls,
   ...props
@@ -162,23 +163,24 @@ export const UserItem = ({
       type={type}
       expanded={isExpanded}
       collapsible={!!hasInheritingUsers}
-      interactive={!!hasInheritingUsers || interactive}
+      interactive={!!hasInheritingUsers || !!onSelect || interactive}
       shadow={shadow}
       linkIcon={!hasInheritingUsers && !disableLinks}
       onClick={() => {
         if (hasInheritingUsers) setExpanded(!isExpanded);
+        else if (onSelect) onSelect();
       }}
       as={
-        hasInheritingUsers
-          ? 'button'
-          : !interactive
-            ? 'div'
-            : (props) => (
-                <Link
-                  {...props}
-                  to={linkTo ?? user.id}
-                />
-              )
+        interactive && !hasInheritingUsers
+          ? (props) => (
+              <Link
+                {...props}
+                to={linkTo ?? user.id}
+              />
+            )
+          : hasInheritingUsers || onSelect
+            ? 'button'
+            : 'div'
       }
       controls={!hasInheritingUsers && controls && controls(user)}
       titleAs={titleAs}

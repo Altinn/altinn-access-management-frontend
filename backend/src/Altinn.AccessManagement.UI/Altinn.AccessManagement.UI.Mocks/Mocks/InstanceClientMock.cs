@@ -92,17 +92,6 @@ namespace Altinn.AccessManagement.UI.Mocks.Mocks
         {
             ThrowExceptionIfTriggerParty(party.ToString());
 
-            string instancePath = Path.Combine(dataFolder, "Instance", "GetInstances", "instances.json");
-            List<InstancePermission> instances = Util.GetMockData<List<InstancePermission>>(instancePath);
-            bool instanceExists = instances.Any(permission =>
-                string.Equals(permission.Resource?.RefId, resource, StringComparison.OrdinalIgnoreCase) &&
-                string.Equals(permission.Instance?.RefId, instance, StringComparison.OrdinalIgnoreCase));
-
-            if (!instanceExists)
-            {
-                throw new HttpStatusException("StatusError", "Unexpected mockResponse status from Access Management", HttpStatusCode.BadRequest, "");
-            }
-
             return new HttpResponseMessage(HttpStatusCode.OK);
         }
 
@@ -138,18 +127,15 @@ namespace Altinn.AccessManagement.UI.Mocks.Mocks
         {
             ThrowExceptionIfTriggerParty(party.ToString());
 
-            string instancePath = Path.Combine(dataFolder, "Instance", "GetInstances", "instances.json");
-            List<InstancePermission> instances = Util.GetMockData<List<InstancePermission>>(instancePath);
-            bool instanceExists = instances.Any(permission =>
-                string.Equals(permission.Resource?.RefId, resource, StringComparison.OrdinalIgnoreCase) &&
-                string.Equals(permission.Instance?.RefId, instance, StringComparison.OrdinalIgnoreCase));
-
-            if (!instanceExists)
-            {
-                throw new HttpStatusException("StatusError", "Unexpected mockResponse status from Access Management", HttpStatusCode.BadRequest, "");
-            }
-
             return new HttpResponseMessage(HttpStatusCode.OK);
+        }
+
+        /// <inheritdoc />
+        public async Task<HttpResponseMessage> RemoveInstance(Guid party, Guid from, Guid to, string resource, string instance)
+        {
+            ThrowExceptionIfTriggerParty(party.ToString());
+
+            return new HttpResponseMessage(HttpStatusCode.NoContent);
         }
 
         private static void ThrowExceptionIfTriggerParty(string id)

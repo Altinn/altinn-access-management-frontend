@@ -14,6 +14,7 @@ import { DeeplinkReporteeGuard } from '../common/DeeplinkReporteeGuard/DeeplinkR
 import { PageContainer } from '../common/PageContainer/PageContainer';
 import { PageLayoutWrapper } from '../common/PageLayoutWrapper';
 import { PartyRepresentationProvider } from '../common/PartyRepresentationContext/PartyRepresentationContext';
+import { DelegationModalProvider } from '../common/DelegationModal/DelegationModalContext';
 
 import { InstanceDetailPageContent } from './InstanceDetailPageContent';
 import classes from './InstanceDetailPageContent.module.css';
@@ -65,7 +66,9 @@ export const InstanceDetailPage = () => {
               fromPartyUuid={partyUuid}
               actingPartyUuid={partyUuid}
             >
-              <InstanceDetailPageContent />
+              <DelegationModalProvider>
+                <InstanceDetailPageContent />
+              </DelegationModalProvider>
             </PartyRepresentationProvider>
           </DeeplinkReporteeGuard>
         </PageContainer>

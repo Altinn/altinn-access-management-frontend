@@ -1,4 +1,4 @@
-import { useMemo } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import { DsAlert, DsButton, DsParagraph } from '@altinn/altinn-components';
 import { Navigate, useSearchParams } from 'react-router';
 import { Trans, useTranslation } from 'react-i18next';
@@ -15,13 +15,20 @@ import {
   TechnicalErrorParagraphs,
 } from '../common/TechnicalErrorParagraphs/TechnicalErrorParagraphs';
 import { useGetRightHoldersQuery } from '@/rtk/features/connectionApi';
-import { useGetInstancesQuery } from '@/rtk/features/instanceApi';
+import { useGetInstancesQuery, useRemoveInstanceMutation } from '@/rtk/features/instanceApi';
 import { useGetResourceQuery } from '@/rtk/features/resourceApi';
 import { useProviderLogoUrl } from '@/resources/hooks';
-import { useGetIsAdminQuery, useGetIsInstanceAdminQuery } from '@/rtk/features/userInfoApi';
+import {
+  PartyType,
+  useGetIsAdminQuery,
+  useGetIsInstanceAdminQuery,
+} from '@/rtk/features/userInfoApi';
 import { getAfUrl } from '@/resources/utils/pathUtils';
-import { AddUserButton } from './AddUserModal';
 import { CheckmarkIcon, EnvelopeClosedIcon } from '@navikt/aksel-icons';
+import { DelegationAction, EditModal } from '../common/DelegationModal/EditModal';
+import type { ActionError } from '@/resources/hooks/useActionError';
+import type { UserActionTarget } from '../common/UserSearch/types';
+import { AddUserButton } from './AddUserModal';
 
 import classes from './InstanceDetailPageContent.module.css';
 
@@ -29,6 +36,54 @@ export const InstanceDetailPageContent = () => {
   const { t } = useTranslation();
   const [searchParams] = useSearchParams();
   const { actingParty, fromParty } = usePartyRepresentation();
+
+  const modalRef = useRef<HTMLDialogElement>(null);
+  const [selectedUser, setSelectedUser] = useState<UserActionTarget | null>(null);
+  const [selectedUserMode, setSelectedUserMode] = useState<'edit' | 'delegate'>('edit');
+  const [actionError, setActionError] = useState<ActionError | null>(null);
+  const [removeInstance, { isLoading: isRevoking }] = useRemoveInstanceMutation();
+
+  useEffect(() => {
+    if (selectedUser && modalRef.current) {
+      modalRef.current.showModal();
+    }
+  }, [selectedUser]);
+
+  const handleUserSelect = (user: UserActionTarget) => {
+    setActionError(null);
+    setSelectedUserMode('edit');
+    setSelectedUser(user);
+  };
+
+  const handleIndirectUserDelegate = (user: UserActionTarget) => {
+    setActionError(null);
+    setSelectedUserMode('delegate');
+    setSelectedUser(user);
+  };
+
+  const handleRevoke = (user: UserActionTarget) => {
+    if (!actingParty?.partyUuid || !fromParty?.partyUuid) return;
+    removeInstance({
+      party: actingParty.partyUuid,
+      from: fromParty.partyUuid,
+      to: user.id,
+      resource: resourceId,
+      instance: instanceUrn,
+    })
+      .unwrap()
+      .then(() => {
+        setSelectedUser(null);
+        setActionError(null);
+      })
+      .catch(() => {
+        setActionError({
+          httpStatus: 'unknown',
+          timestamp: new Date().toISOString(),
+        });
+        setSelectedUserMode('edit');
+        setSelectedUser(user);
+      });
+  };
 
   const { getProviderLogoUrl } = useProviderLogoUrl();
   const instanceUrn = searchParams.get('instanceUrn') ?? '';
@@ -162,6 +217,10 @@ export const InstanceDetailPageContent = () => {
   const providerLogoUrl = resource?.resourceOwnerOrgcode
     ? getProviderLogoUrl(resource.resourceOwnerOrgcode)
     : undefined;
+  const selectedUserAvailableActions =
+    selectedUserMode === 'delegate'
+      ? [DelegationAction.DELEGATE]
+      : [DelegationAction.REVOKE, DelegationAction.DELEGATE];
 
   return (
     <>
@@ -210,14 +269,37 @@ export const InstanceDetailPageContent = () => {
               isLoading={
                 isInstancesLoading || isLoadingIndirectConnections || isInstanceAdminLoading
               }
-              isActionLoading={isFetchingIndirectConnections}
+              isActionLoading={isFetchingIndirectConnections || isRevoking}
               canDelegate
               noUsersText={t('instance_detail_page.no_users')}
+              onDelegate={handleIndirectUserDelegate}
+              onSelect={handleUserSelect}
+              onRevoke={handleRevoke}
             />
           ) : isInstanceAdmin ? (
             <InstanceAddUserButton isLarge />
           ) : null}
         </div>
+      )}
+      {resource && selectedUser && (
+        <EditModal
+          ref={modalRef}
+          resource={resource}
+          instance={{ instanceUrn }}
+          toParty={{
+            partyUuid: selectedUser.id,
+            name: selectedUser.name,
+            partyTypeName:
+              selectedUser.type === 'person' ? PartyType.Person : PartyType.Organization,
+          }}
+          openWithError={actionError}
+          onSuccess={selectedUserMode === 'delegate' ? () => modalRef.current?.close() : undefined}
+          onClose={() => {
+            setSelectedUser(null);
+            setActionError(null);
+          }}
+          availableActions={selectedUserAvailableActions}
+        />
       )}
     </>
   );
