@@ -36,22 +36,6 @@ export type PersonInput = {
   lastName: string;
 };
 
-/** Simplified party info returned by limited instance delegation endpoints. */
-export interface SimplifiedParty {
-  id: string;
-  name: string;
-  type?: string;
-  variant?: string;
-  organizationIdentifier?: string;
-  isDeleted?: boolean;
-}
-
-/** Simplified connection returned by limited instance delegation endpoints. */
-export interface SimplifiedConnection {
-  party: SimplifiedParty;
-  connections: SimplifiedConnection[];
-}
-
 const baseUrl = `${import.meta.env.BASE_URL}accessmanagement/api/v1/connection`;
 
 export const connectionApi = createApi({

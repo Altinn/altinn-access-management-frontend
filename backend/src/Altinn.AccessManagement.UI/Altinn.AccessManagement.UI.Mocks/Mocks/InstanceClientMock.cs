@@ -16,8 +16,6 @@ namespace Altinn.AccessManagement.UI.Mocks.Mocks
     public class InstanceClientMock : IInstanceClient
     {
         private static readonly Guid MockInstanceUserId = Guid.Parse("11111111-1111-1111-1111-111111111111");
-        private static readonly Guid MockAvailableUserId = Guid.Parse("22222222-2222-2222-2222-222222222222");
-        private static readonly Guid MockNestedAvailableUserId = Guid.Parse("33333333-3333-3333-3333-333333333333");
         private readonly string dataFolder;
 
         /// <summary>
@@ -148,43 +146,6 @@ namespace Altinn.AccessManagement.UI.Mocks.Mocks
                     Type = "Person",
                     Variant = "person",
                     IsDeleted = false,
-                },
-            };
-
-            return Task.FromResult(users);
-        }
-
-        /// <inheritdoc />
-        public Task<List<SimplifiedConnection>> GetAvailableUsers(Guid party)
-        {
-            ThrowExceptionIfTriggerParty(party.ToString());
-
-            var users = new List<SimplifiedConnection>
-            {
-                new SimplifiedConnection
-                {
-                    Party = new SimplifiedParty
-                    {
-                        Id = MockAvailableUserId,
-                        Name = "Mock Available User",
-                        Type = "Person",
-                        Variant = "person",
-                        IsDeleted = false,
-                    },
-                    Connections = new List<SimplifiedConnection>
-                    {
-                        new SimplifiedConnection
-                        {
-                            Party = new SimplifiedParty
-                            {
-                                Id = MockNestedAvailableUserId,
-                                Name = "Mock Nested Available User",
-                                Type = "Person",
-                                Variant = "person",
-                                IsDeleted = false,
-                            },
-                        },
-                    },
                 },
             };
 

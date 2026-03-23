@@ -177,20 +177,6 @@ namespace Altinn.AccessManagement.UI.Integration.Clients
         }
 
         /// <inheritdoc />
-        public async Task<List<SimplifiedConnection>> GetAvailableUsers(Guid party)
-        {
-            string endpointUrl = $"enduser/connections/users?party={party}";
-            string token = JwtTokenUtil.GetTokenFromContext(_httpContextAccessor.HttpContext, _platformSettings.JwtCookieName);
-
-            HttpResponseMessage response = await _client.GetAsync(token, endpointUrl);
-
-            PaginatedResult<SimplifiedConnection> paginatedResult =
-                await ClientUtils.DeserializeIfSuccessfullStatusCode<PaginatedResult<SimplifiedConnection>>(response, _logger, "InstanceClient // GetAvailableUsers");
-
-            return paginatedResult?.Items?.ToList() ?? [];
-        }
-
-        /// <inheritdoc />
         public async Task<HttpResponseMessage> RemoveInstance(Guid party, Guid from, Guid to, string resource, string instance)
         {
             try

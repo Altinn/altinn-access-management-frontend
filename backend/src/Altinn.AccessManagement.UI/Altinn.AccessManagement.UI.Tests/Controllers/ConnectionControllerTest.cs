@@ -838,5 +838,76 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
             }
             Assert.DoesNotContain("personIdentifier", content, StringComparison.OrdinalIgnoreCase);
         }
+
+        /// <summary>
+        /// Test case: Successfully retrieve simplified connections.
+        /// Expected: Returns OK and the list of simplified connections.
+        /// </summary>
+        [Fact]
+        public async Task GetSimplifiedConnections_ReturnsValid()
+        {
+            // Arrange
+            Guid party = Guid.Parse("cd35779b-b174-4ecc-bbef-ece13611be7f");
+            var token = PrincipalUtil.GetToken(1234, 1234, 2);
+            _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+
+            List<SimplifiedConnection> expectedResponse =
+            [
+                new SimplifiedConnection
+                {
+                    Party = new SimplifiedParty
+                    {
+                        Id = Guid.Parse("22222222-2222-2222-2222-222222222222"),
+                        Name = "Mock Available User",
+                        Type = "Person",
+                        Variant = "person",
+                        IsDeleted = false,
+                    },
+                    Connections =
+                    [
+                        new SimplifiedConnection
+                        {
+                            Party = new SimplifiedParty
+                            {
+                                Id = Guid.Parse("33333333-3333-3333-3333-333333333333"),
+                                Name = "Mock Nested Available User",
+                                Type = "Person",
+                                Variant = "person",
+                                IsDeleted = false,
+                            },
+                        },
+                    ],
+                },
+            ];
+
+            // Act
+            HttpResponseMessage httpResponse = await _client.GetAsync(
+                $"accessmanagement/api/v1/connection/simplified?party={party}");
+            List<SimplifiedConnection> actualResponse = await httpResponse.Content.ReadFromJsonAsync<List<SimplifiedConnection>>();
+
+            // Assert
+            Assert.Equal(HttpStatusCode.OK, httpResponse.StatusCode);
+            AssertionUtil.AssertCollections(expectedResponse, actualResponse, AssertionUtil.AssertEqual);
+        }
+
+        /// <summary>
+        /// Test case: Handles unexpected errors when retrieving simplified connections.
+        /// Expected: Returns an internal server error.
+        /// </summary>
+        [Fact]
+        public async Task GetSimplifiedConnections_InternalServerError()
+        {
+            // Arrange
+            Guid party = Guid.Parse("00000000-0000-0000-0000-000000000000"); // Triggers exception in client mock
+            var token = PrincipalUtil.GetToken(1234, 1234, 2);
+            _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+
+            // Act
+            HttpResponseMessage httpResponse = await _client.GetAsync(
+                $"accessmanagement/api/v1/connection/simplified?party={party}");
+
+            // Assert
+            Assert.Equal(HttpStatusCode.InternalServerError, httpResponse.StatusCode);
+        }
     }
 }

@@ -259,39 +259,6 @@ namespace Altinn.AccessManagement.UI.Controllers
         }
 
         /// <summary>
-        /// Gets available users for instance delegation as simplified connections.
-        /// Limited endpoint for instance admins without full admin access.
-        /// Proxies to backend: GET enduser/connections/users
-        /// </summary>
-        /// <param name="party">The party UUID.</param>
-        /// <returns>List of simplified connections representing available users for instance delegation.</returns>
-        [HttpGet]
-        [Authorize]
-        [Route("delegation/available-users")]
-        public async Task<ActionResult<List<SimplifiedConnection>>> GetAvailableUsers([FromQuery] Guid party)
-        {
-            if (!ModelState.IsValid)
-            {
-                return BadRequest(ModelState);
-            }
-
-            try
-            {
-                var users = await _instanceService.GetAvailableUsers(party);
-                return Ok(users);
-            }
-            catch (HttpStatusException ex)
-            {
-                return new ObjectResult(ProblemDetailsFactory.CreateProblemDetails(HttpContext, (int?)ex.StatusCode, "Unexpected HttpStatus response"));
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError(ex, "GetAvailableUsers failed unexpectedly");
-                return StatusCode(500);
-            }
-        }
-
-        /// <summary>
         /// Removes an instance delegation and all its rights.
         /// </summary>
         /// <param name="party">The acting party performing the removal.</param>

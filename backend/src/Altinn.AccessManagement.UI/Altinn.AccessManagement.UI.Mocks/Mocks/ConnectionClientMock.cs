@@ -125,5 +125,45 @@ namespace Altinn.AccessManagement.UI.Mocks.Mocks
 
             return to.HasValue ? Task.FromResult(to.Value) : Task.FromException<Guid>(new InvalidOperationException("No valid Guid provided."));
         }
+
+        /// <inheritdoc/>
+        public Task<List<SimplifiedConnection>> GetSimplifiedConnections(Guid party)
+        {
+            if (party == Guid.Empty)
+            {
+                throw new HttpStatusException("Test", "Mock internal server error", HttpStatusCode.InternalServerError, null);
+            }
+
+            var connections = new List<SimplifiedConnection>
+            {
+                new SimplifiedConnection
+                {
+                    Party = new SimplifiedParty
+                    {
+                        Id = Guid.Parse("22222222-2222-2222-2222-222222222222"),
+                        Name = "Mock Available User",
+                        Type = "Person",
+                        Variant = "person",
+                        IsDeleted = false,
+                    },
+                    Connections = new List<SimplifiedConnection>
+                    {
+                        new SimplifiedConnection
+                        {
+                            Party = new SimplifiedParty
+                            {
+                                Id = Guid.Parse("33333333-3333-3333-3333-333333333333"),
+                                Name = "Mock Nested Available User",
+                                Type = "Person",
+                                Variant = "person",
+                                IsDeleted = false,
+                            },
+                        },
+                    },
+                },
+            };
+
+            return Task.FromResult(connections);
+        }
     }
 }

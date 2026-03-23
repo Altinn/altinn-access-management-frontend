@@ -1,8 +1,8 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 
 import { getCookie } from '@/resources/Cookie/CookieMethods';
-import type { SimplifiedConnection, SimplifiedParty, PersonInput } from './connectionApi';
 import type { Permissions } from '@/dataObjects/dtos/accessPackage';
+import type { PersonInput } from './connectionApi';
 import type {
   DelegationCheckedRight,
   RightAccess,
@@ -105,36 +105,6 @@ export const instanceApi = createApi({
       }),
       invalidatesTags: ['instances', 'instanceRights', 'instanceDelegationCheck'],
     }),
-
-    /**
-     * Gets users who have direct access to a specific instance (simplified parties).
-     * Limited endpoint for instance admins without full admin access.
-     * Backend: GET enduser/connections/resources/instances/users
-     */
-    getInstanceUsers: builder.query<
-      SimplifiedParty[],
-      { partyUuid: string; resource: string; instance: string }
-    >({
-      query: ({ partyUuid, resource, instance }) =>
-        `instances/delegation/instances/simplified/users?party=${partyUuid}&resource=${encodeURIComponent(resource)}&instance=${encodeURIComponent(instance)}`,
-      keepUnusedDataFor: 3,
-      providesTags: ['instances'],
-    }),
-    /**
-     * Gets available users for instance delegation as simplified connections.
-     * Limited endpoint for instance admins without full admin access.
-     * Backend: GET enduser/connections/users
-     */
-    getAvailableUsers: builder.query<SimplifiedConnection[], { partyUuid: string }>({
-      query: ({ partyUuid }) => `instances/delegation/available-users?party=${partyUuid}`,
-      keepUnusedDataFor: 3,
-      providesTags: ['instances'],
-      transformErrorResponse: (response: {
-        status: string | number;
-      }): { status: string | number; data: string } => {
-        return { status: response.status, data: new Date().toISOString() };
-      },
-    }),
     removeInstance: builder.mutation<
       void,
       { party: string; from: string; to: string; resource: string; instance: string }
@@ -154,8 +124,6 @@ export const {
   useInstanceDelegationCheckQuery,
   useDelegateInstanceRightsMutation,
   useUpdateInstanceRightsMutation,
-  useGetInstanceUsersQuery,
-  useGetAvailableUsersQuery,
   useRemoveInstanceMutation,
 } = instanceApi;
 

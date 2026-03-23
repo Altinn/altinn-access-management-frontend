@@ -75,14 +75,6 @@ namespace Altinn.AccessManagement.UI.Core.Services.Interfaces
         Task<List<SimplifiedParty>> GetInstanceUsers(Guid party, string resource, string instance);
 
         /// <summary>
-        /// Gets available users for instance delegation as simplified connections.
-        /// This is a limited endpoint for instance admins without full admin access.
-        /// </summary>
-        /// <param name="party">The party UUID.</param>
-        /// <returns>A list of simplified connections.</returns>
-        Task<List<SimplifiedConnection>> GetAvailableUsers(Guid party);
-
-        /// <summary>
         /// Removes an instance delegation and all its rights.
         /// </summary>
         /// <param name="party">The acting party performing the removal.</param>
