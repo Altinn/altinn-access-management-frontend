@@ -293,7 +293,7 @@ export const InstanceDetailPageContent = () => {
               selectedUser.type === 'person' ? PartyType.Person : PartyType.Organization,
           }}
           openWithError={actionError}
-          onSuccess={() => modalRef.current?.close()}
+          onSuccess={selectedUserMode === 'delegate' ? () => modalRef.current?.close() : undefined}
           onClose={() => {
             setSelectedUser(null);
             setActionError(null);
