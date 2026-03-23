@@ -124,6 +124,7 @@ export const InstanceInfo = ({
                 userHasAccess={hasAccess}
                 showDelegationCheckWarning={showMissingRightsStatus}
                 cannotDelegateHere={cannotDelegateHere}
+                toPartyName={toName}
               />
               {resource.description && <DsParagraph>{resource.description}</DsParagraph>}
             </div>
