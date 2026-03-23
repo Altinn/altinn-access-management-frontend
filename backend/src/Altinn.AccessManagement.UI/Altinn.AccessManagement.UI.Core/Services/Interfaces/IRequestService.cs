@@ -14,9 +14,10 @@ namespace Altinn.AccessManagement.UI.Core.Services.Interfaces
         /// <param name="party">The acting party asking for sent requests</param>
         /// <param name="to">The party the requests were sent to</param>
         /// <param name="status">The statuses to get</param>
+        /// <param name="type">The type of requests to get. Either "resource" or "package"</param>
         /// <param name="cancellationToken">Cancellation token</param>
         /// <returns>List of sent requests</returns>
-        Task<IEnumerable<SingleRightRequest>> GetSentRequests(Guid party, Guid? to, List<RequestStatus> status, CancellationToken cancellationToken);
+        Task<IEnumerable<SingleRightRequest>> GetSentRequests(Guid party, Guid? to, List<RequestStatus> status, string type, CancellationToken cancellationToken);
 
          /// <summary>
         /// Get enriched resource requests sent by a party
@@ -35,9 +36,10 @@ namespace Altinn.AccessManagement.UI.Core.Services.Interfaces
         /// <param name="party">The acting party asking for received requests</param>
         /// <param name="from">The party who sent the requests</param>
         /// <param name="status">The statuses to get</param>
+        /// <param name="type">The type of requests to get. Either "resource" or "package"</param>
         /// <param name="cancellationToken">Cancellation token</param>
         /// <returns>List of received requests</returns>
-        Task<IEnumerable<SingleRightRequest>> GetReceivedRequests(Guid party, Guid? from, List<RequestStatus> status, CancellationToken cancellationToken);
+        Task<IEnumerable<SingleRightRequest>> GetReceivedRequests(Guid party, Guid? from, List<RequestStatus> status, string type, CancellationToken cancellationToken);
 
         /// <summary>
         /// Get enriched resource requests received by a party
