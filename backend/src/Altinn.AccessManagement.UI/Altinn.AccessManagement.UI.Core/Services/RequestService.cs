@@ -122,7 +122,13 @@ namespace Altinn.AccessManagement.UI.Core.Services
             return list.Items.Select(x => 
             {
                 SingleRightRequest request = MapToSingleRightRequest(x);
-                EnrichedResourceRequest enrichedRequest = new EnrichedResourceRequest()
+                
+                if (!resourceDictionary.TryGetValue(request.ResourceId, out var resource))
+                {
+                    throw new InvalidOperationException($"Resource not found for ID: {request.ResourceId}");
+                }
+                
+                return new EnrichedResourceRequest()
                 {
                     Id = request.Id,
                     From = request.From,
@@ -131,14 +137,8 @@ namespace Altinn.AccessManagement.UI.Core.Services
                     Status = request.Status,
                     ResourceId = request.ResourceId,
                     LastUpdated = request.LastUpdated,
+                    Resource = resource
                 };
-                
-                if (resourceDictionary.TryGetValue(request.ResourceId, out var resource))
-                {
-                    enrichedRequest.Resource = resource;
-                }
-                
-                return enrichedRequest;
             });
         }
     }
