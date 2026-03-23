@@ -72,7 +72,7 @@ export const requestApi = createApi({
         let params = `?party=${party}`;
         if (to) params += `&to=${to}`;
         for (const s of status) params += `&status=${s}`;
-        return `sent/enriched/resource${params}`;
+        return `sent/resource${params}`;
       },
       providesTags: ['enrichedSentResourceRequests'],
     }),
