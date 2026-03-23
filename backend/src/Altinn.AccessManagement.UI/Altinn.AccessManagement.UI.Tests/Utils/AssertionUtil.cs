@@ -992,6 +992,7 @@ namespace Altinn.AccessManagement.UI.Tests.Utils
             Assert.Equal(expected.ResourceId, actual.ResourceId);
             Assert.Equal(expected.Type, actual.Type);
             Assert.Equal(expected.LastUpdated, actual.LastUpdated);
+            Assert.Equal(expected.Status, actual.Status);
         }
 
         public static void AssertEqual(EnrichedResourceRequest expected, EnrichedResourceRequest actual)

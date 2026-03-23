@@ -6,7 +6,7 @@ using Altinn.AccessManagement.UI.Core.Models.User;
 namespace Altinn.AccessManagement.UI.Core.Models.Request.Frontend
 {
     /// <summary>
-    /// Used to show single right requests
+    /// Used to show requests in the frontend
     /// </summary>
     public class RequestFE
     {
