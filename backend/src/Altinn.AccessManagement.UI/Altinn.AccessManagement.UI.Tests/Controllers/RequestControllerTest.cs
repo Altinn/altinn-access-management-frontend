@@ -361,5 +361,179 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
             // Assert
             Assert.Equal(HttpStatusCode.BadRequest, httpResponse.StatusCode);
         }
+
+        /// <summary>
+        ///     Test case: ConfirmRequest confirms a draft request
+        ///     Expected: ConfirmRequest returns the request
+        /// </summary>
+        [Fact]
+        public async Task ConfirmRequest_ReturnsRequest()
+        {
+            // Arrange
+            string party = "167536b5-f8ed-4c5a-8f48-0279507e53ae";
+            string requestId = "da45b77b-a068-4d53-b6be-0837cc9c5a3f";
+            string path = Path.Combine(_expectedDataPath, "Request", "getRequest.json");
+            SingleRightRequest expectedResponse = Util.GetMockData<SingleRightRequest>(path);
+
+            // Act
+            HttpResponseMessage httpResponse = await _client.SendAsync(new HttpRequestMessage(HttpMethod.Put, $"accessmanagement/api/v1/request/sent/confirm?party={party}&id={requestId}"));
+            SingleRightRequest actualResponse = await httpResponse.Content.ReadFromJsonAsync<SingleRightRequest>();
+
+            // Assert
+            Assert.Equal(HttpStatusCode.OK, httpResponse.StatusCode);
+            AssertionUtil.AssertEqual(expectedResponse, actualResponse);
+        }
+
+        /// <summary>
+        ///     Test case: ConfirmRequest encounters an unexpected internal error
+        ///     Expected: Returns 500 Internal Server Error
+        /// </summary>
+        [Fact]
+        public async Task ConfirmRequest_InternalServerError()
+        {
+            // Arrange - Guid.Empty triggers ThrowExceptionIfTriggerParty in mock
+            string party = "00000000-0000-0000-0000-000000000000";
+            string requestId = "da45b77b-a068-4d53-b6be-0837cc9c5a3f";
+
+            // Act
+            HttpResponseMessage httpResponse = await _client.SendAsync(new HttpRequestMessage(HttpMethod.Put, $"accessmanagement/api/v1/request/sent/confirm?party={party}&id={requestId}"));
+
+            // Assert
+            Assert.Equal(HttpStatusCode.InternalServerError, httpResponse.StatusCode);
+        }
+
+        /// <summary>
+        ///     Test case: ConfirmRequest encounters an HttpStatusException from the backend
+        ///     Expected: Returns the status code from the exception (BadRequest)
+        /// </summary>
+        [Fact]
+        public async Task ConfirmRequest_HttpStatusException()
+        {
+            // Arrange - Triggers ThrowHttpStatusExceptionIfTriggerParty in mock
+            string party = "11111111-1111-1111-1111-111111111111";
+            string requestId = "da45b77b-a068-4d53-b6be-0837cc9c5a3f";
+
+            // Act
+            HttpResponseMessage httpResponse = await _client.SendAsync(new HttpRequestMessage(HttpMethod.Put, $"accessmanagement/api/v1/request/sent/confirm?party={party}&id={requestId}"));
+
+            // Assert
+            Assert.Equal(HttpStatusCode.BadRequest, httpResponse.StatusCode);
+        }
+
+        /// <summary>
+        ///     Test case: RejectRequest rejects a pending request
+        ///     Expected: RejectRequest returns the request
+        /// </summary>
+        [Fact]
+        public async Task RejectRequest_ReturnsRequest()
+        {
+            // Arrange
+            string party = "167536b5-f8ed-4c5a-8f48-0279507e53ae";
+            string requestId = "da45b77b-a068-4d53-b6be-0837cc9c5a3f";
+            string path = Path.Combine(_expectedDataPath, "Request", "getRequest.json");
+            SingleRightRequest expectedResponse = Util.GetMockData<SingleRightRequest>(path);
+
+            // Act
+            HttpResponseMessage httpResponse = await _client.SendAsync(new HttpRequestMessage(HttpMethod.Put, $"accessmanagement/api/v1/request/received/reject?party={party}&id={requestId}"));
+            SingleRightRequest actualResponse = await httpResponse.Content.ReadFromJsonAsync<SingleRightRequest>();
+
+            // Assert
+            Assert.Equal(HttpStatusCode.OK, httpResponse.StatusCode);
+            AssertionUtil.AssertEqual(expectedResponse, actualResponse);
+        }
+
+        /// <summary>
+        ///     Test case: RejectRequest encounters an unexpected internal error
+        ///     Expected: Returns 500 Internal Server Error
+        /// </summary>
+        [Fact]
+        public async Task RejectRequest_InternalServerError()
+        {
+            // Arrange - Guid.Empty triggers ThrowExceptionIfTriggerParty in mock
+            string party = "00000000-0000-0000-0000-000000000000";
+            string requestId = "da45b77b-a068-4d53-b6be-0837cc9c5a3f";
+
+            // Act
+            HttpResponseMessage httpResponse = await _client.SendAsync(new HttpRequestMessage(HttpMethod.Put, $"accessmanagement/api/v1/request/received/reject?party={party}&id={requestId}"));
+
+            // Assert
+            Assert.Equal(HttpStatusCode.InternalServerError, httpResponse.StatusCode);
+        }
+
+        /// <summary>
+        ///     Test case: RejectRequest encounters an HttpStatusException from the backend
+        ///     Expected: Returns the status code from the exception (BadRequest)
+        /// </summary>
+        [Fact]
+        public async Task RejectRequest_HttpStatusException()
+        {
+            // Arrange - Triggers ThrowHttpStatusExceptionIfTriggerParty in mock
+            string party = "11111111-1111-1111-1111-111111111111";
+            string requestId = "da45b77b-a068-4d53-b6be-0837cc9c5a3f";
+
+            // Act
+            HttpResponseMessage httpResponse = await _client.SendAsync(new HttpRequestMessage(HttpMethod.Put, $"accessmanagement/api/v1/request/received/reject?party={party}&id={requestId}"));
+
+            // Assert
+            Assert.Equal(HttpStatusCode.BadRequest, httpResponse.StatusCode);
+        }
+
+        /// <summary>
+        ///     Test case: ApproveRequest approves a pending request
+        ///     Expected: ApproveRequest returns the request
+        /// </summary>
+        [Fact]
+        public async Task ApproveRequest_ReturnsRequest()
+        {
+            // Arrange
+            string party = "167536b5-f8ed-4c5a-8f48-0279507e53ae";
+            string requestId = "da45b77b-a068-4d53-b6be-0837cc9c5a3f";
+            string path = Path.Combine(_expectedDataPath, "Request", "getRequest.json");
+            SingleRightRequest expectedResponse = Util.GetMockData<SingleRightRequest>(path);
+
+            // Act
+            HttpResponseMessage httpResponse = await _client.SendAsync(new HttpRequestMessage(HttpMethod.Put, $"accessmanagement/api/v1/request/received/approve?party={party}&id={requestId}"));
+            SingleRightRequest actualResponse = await httpResponse.Content.ReadFromJsonAsync<SingleRightRequest>();
+
+            // Assert
+            Assert.Equal(HttpStatusCode.OK, httpResponse.StatusCode);
+            AssertionUtil.AssertEqual(expectedResponse, actualResponse);
+        }
+
+        /// <summary>
+        ///     Test case: ApproveRequest encounters an unexpected internal error
+        ///     Expected: Returns 500 Internal Server Error
+        /// </summary>
+        [Fact]
+        public async Task ApproveRequest_InternalServerError()
+        {
+            // Arrange - Guid.Empty triggers ThrowExceptionIfTriggerParty in mock
+            string party = "00000000-0000-0000-0000-000000000000";
+            string requestId = "da45b77b-a068-4d53-b6be-0837cc9c5a3f";
+
+            // Act
+            HttpResponseMessage httpResponse = await _client.SendAsync(new HttpRequestMessage(HttpMethod.Put, $"accessmanagement/api/v1/request/received/approve?party={party}&id={requestId}"));
+
+            // Assert
+            Assert.Equal(HttpStatusCode.InternalServerError, httpResponse.StatusCode);
+        }
+
+        /// <summary>
+        ///     Test case: ApproveRequest encounters an HttpStatusException from the backend
+        ///     Expected: Returns the status code from the exception (BadRequest)
+        /// </summary>
+        [Fact]
+        public async Task ApproveRequest_HttpStatusException()
+        {
+            // Arrange - Triggers ThrowHttpStatusExceptionIfTriggerParty in mock
+            string party = "11111111-1111-1111-1111-111111111111";
+            string requestId = "da45b77b-a068-4d53-b6be-0837cc9c5a3f";
+
+            // Act
+            HttpResponseMessage httpResponse = await _client.SendAsync(new HttpRequestMessage(HttpMethod.Put, $"accessmanagement/api/v1/request/received/approve?party={party}&id={requestId}"));
+
+            // Assert
+            Assert.Equal(HttpStatusCode.BadRequest, httpResponse.StatusCode);
+        }
     }
 }

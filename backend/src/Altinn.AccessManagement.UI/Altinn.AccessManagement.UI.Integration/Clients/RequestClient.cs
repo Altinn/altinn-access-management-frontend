@@ -155,5 +155,59 @@ namespace Altinn.AccessManagement.UI.Integration.Clients
                 throw;
             }
         }
+
+        /// <inheritdoc />
+        public async Task<RequestResourceDto> ConfirmRequest(Guid party, Guid id, CancellationToken cancellationToken)
+        {
+            try
+            {
+                string endpointUrl = $"enduser/request/sent/confirm?party={party}&id={id}";
+                string token = JwtTokenUtil.GetTokenFromContext(_httpContextAccessor.HttpContext, _platformSettings.JwtCookieName);
+
+                var httpResponse = await _client.PutAsync(token, endpointUrl, null);
+                return await ClientUtils.DeserializeIfSuccessfullStatusCode<RequestResourceDto>(httpResponse);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "AccessManagement.UI // RequestClient // ConfirmRequest // Exception");
+                throw;
+            }
+        }
+
+        /// <inheritdoc />
+        public async Task<RequestResourceDto> RejectRequest(Guid party, Guid id, CancellationToken cancellationToken)
+        {
+            try
+            {
+                string endpointUrl = $"enduser/request/received/reject?party={party}&id={id}";
+                string token = JwtTokenUtil.GetTokenFromContext(_httpContextAccessor.HttpContext, _platformSettings.JwtCookieName);
+
+                var httpResponse = await _client.PutAsync(token, endpointUrl, null);
+                return await ClientUtils.DeserializeIfSuccessfullStatusCode<RequestResourceDto>(httpResponse);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "AccessManagement.UI // RequestClient // RejectRequest // Exception");
+                throw;
+            }
+        }
+
+        /// <inheritdoc />
+        public async Task<RequestResourceDto> ApproveRequest(Guid party, Guid id, CancellationToken cancellationToken)
+        {
+            try
+            {
+                string endpointUrl = $"enduser/request/received/approve?party={party}&id={id}";
+                string token = JwtTokenUtil.GetTokenFromContext(_httpContextAccessor.HttpContext, _platformSettings.JwtCookieName);
+
+                var httpResponse = await _client.PutAsync(token, endpointUrl, null);
+                return await ClientUtils.DeserializeIfSuccessfullStatusCode<RequestResourceDto>(httpResponse);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "AccessManagement.UI // RequestClient // ApproveRequest // Exception");
+                throw;
+            }
+        }
     }
 }

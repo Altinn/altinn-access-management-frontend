@@ -23,6 +23,7 @@ export interface UserSearchProps {
   onDelegate?: (user: UserActionTarget) => void;
   onAddNewUser?: (user: User) => void;
   onRevoke?: (user: UserActionTarget) => void;
+  onSelect?: (user: UserActionTarget) => void;
   isLoading?: boolean;
   isActionLoading?: boolean;
   canDelegate?: boolean;
@@ -52,6 +53,7 @@ export const UserSearch: React.FC<UserSearchProps> = ({
   onDelegate,
   onAddNewUser,
   onRevoke,
+  onSelect,
   isLoading = false,
   isActionLoading = false,
   canDelegate = true,
@@ -168,6 +170,7 @@ export const UserSearch: React.FC<UserSearchProps> = ({
             availableAction={DelegationAction.REVOKE}
             isActionLoading={isActionLoading}
             onRevoke={onRevoke}
+            onSelect={onSelect}
             includeSelfAsChild={includeSelfAsChild}
             getUserLink={getUserLink}
             titleAs={titleAs}

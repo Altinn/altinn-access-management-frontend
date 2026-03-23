@@ -45,12 +45,12 @@ namespace Altinn.AccessManagement.UI.Core.ClientInterfaces
         /// Delegates rights on a specific instance.
         /// </summary>
         /// <param name="party">The acting party performing the delegation.</param>
-        /// <param name="to">The receiving party.</param>
+        /// <param name="to">The receiving party when delegating to an existing connection.</param>
         /// <param name="resource">The resource identifier.</param>
         /// <param name="instance">The instance urn.</param>
-        /// <param name="actionKeys">The right keys to delegate.</param>
+        /// <param name="input">The delegation input.</param>
         /// <returns>The backend response.</returns>
-        Task<HttpResponseMessage> CreateInstanceRightsAccess(Guid party, Guid to, string resource, string instance, List<string> actionKeys);
+        Task<HttpResponseMessage> CreateInstanceRightsAccess(Guid party, Guid? to, string resource, string instance, InstanceRightsDelegationDto input);
 
         /// <summary>
         /// Updates rights on a specific instance delegation.
@@ -62,5 +62,16 @@ namespace Altinn.AccessManagement.UI.Core.ClientInterfaces
         /// <param name="actionKeys">The updated right keys.</param>
         /// <returns>The backend response.</returns>
         Task<HttpResponseMessage> UpdateInstanceRightsAccess(Guid party, Guid to, string resource, string instance, List<string> actionKeys);
+
+        /// <summary>
+        /// Removes an instance delegation and all its rights.
+        /// </summary>
+        /// <param name="party">The acting party performing the removal.</param>
+        /// <param name="from">The party the instance access was delegated from.</param>
+        /// <param name="to">The party the instance access was delegated to.</param>
+        /// <param name="resource">The resource identifier.</param>
+        /// <param name="instance">The instance urn.</param>
+        /// <returns>The backend response.</returns>
+        Task<HttpResponseMessage> RemoveInstance(Guid party, Guid from, Guid to, string resource, string instance);
     }
 }

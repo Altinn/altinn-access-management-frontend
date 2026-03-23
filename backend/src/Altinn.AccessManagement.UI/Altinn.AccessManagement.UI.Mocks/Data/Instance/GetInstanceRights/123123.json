@@ -20,8 +20,7 @@
     }
   },
   "instance": {
-    "id": "b42df1f3-56f2-436a-bad7-222222222222",
-    "urn": "urn:altinn:instance-id:51599233/b42df1f3-56f2-436a-bad7-222222222222",
+    "refId": "urn:altinn:instance-id:51599233/b42df1f3-56f2-436a-bad7-222222222222",
     "type": {
       "id": "eb7cd8eb-eee4-43cf-814b-f54e143cd954",
       "name": "BrukerstyrtAppInstansDelegering"

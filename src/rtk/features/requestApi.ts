@@ -67,7 +67,7 @@ export const requestApi = createApi({
     }),
 
     // delegation modal queries and mutations
-    getPendingSingleRightRequests: builder.query<
+    getPendingSentSingleRightRequests: builder.query<
       RequestDto[],
       { party: string; to: string; includeResources?: boolean }
     >({
@@ -92,6 +92,27 @@ export const requestApi = createApi({
       }),
       invalidatesTags: [Tags.PendingSentRequests, 'sentRequests'],
     }),
+    confirmRequest: builder.mutation<RequestDto, { party: string; id: string }>({
+      query: ({ party, id }) => ({
+        url: `sent/confirm?party=${party}&id=${id}`,
+        method: 'PUT',
+      }),
+      invalidatesTags: ['sentRequests', Tags.PendingSentRequests],
+    }),
+    rejectRequest: builder.mutation<RequestDto, { party: string; id: string }>({
+      query: ({ party, id }) => ({
+        url: `received/reject?party=${party}&id=${id}`,
+        method: 'PUT',
+      }),
+      invalidatesTags: ['receivedRequests'],
+    }),
+    approveRequest: builder.mutation<RequestDto, { party: string; id: string }>({
+      query: ({ party, id }) => ({
+        url: `received/approve?party=${party}&id=${id}`,
+        method: 'PUT',
+      }),
+      invalidatesTags: ['receivedRequests'],
+    }),
   }),
 });
 
@@ -99,9 +120,12 @@ export const {
   useGetSentRequestsQuery,
   useGetReceivedRequestsQuery,
   useGetRequestQuery,
-  useGetPendingSingleRightRequestsQuery,
+  useGetPendingSentSingleRightRequestsQuery,
   useCreateResourceRequestMutation,
   useWithdrawRequestMutation,
+  useConfirmRequestMutation,
+  useRejectRequestMutation,
+  useApproveRequestMutation,
 } = requestApi;
 
 export const { endpoints, reducerPath, reducer, middleware } = requestApi;

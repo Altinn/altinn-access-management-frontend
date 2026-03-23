@@ -55,7 +55,7 @@ namespace Altinn.AccessManagement.UI.Mocks.Mocks
 
             if (!string.IsNullOrWhiteSpace(instance))
             {
-                instances = instances.Where(permission => string.Equals(permission.Instance?.Urn, instance, StringComparison.OrdinalIgnoreCase));
+                instances = instances.Where(permission => string.Equals(permission.Instance?.RefId, instance, StringComparison.OrdinalIgnoreCase));
             }
 
             return Task.FromResult(instances.ToList());
@@ -69,7 +69,7 @@ namespace Altinn.AccessManagement.UI.Mocks.Mocks
             string instancePath = Path.Combine(dataFolder, "Instance", "GetInstances", "instances.json");
             List<InstancePermission> instances = Util.GetMockData<List<InstancePermission>>(instancePath);
             bool knownInstanceExists = instances.Any(permission =>
-                string.Equals(permission.Instance?.Urn, instance, StringComparison.OrdinalIgnoreCase));
+                string.Equals(permission.Instance?.RefId, instance, StringComparison.OrdinalIgnoreCase));
 
             if (!knownInstanceExists)
             {
@@ -88,20 +88,9 @@ namespace Altinn.AccessManagement.UI.Mocks.Mocks
         }
 
         /// <inheritdoc />
-        public async Task<HttpResponseMessage> CreateInstanceRightsAccess(Guid party, Guid to, string resource, string instance, List<string> actionKeys)
+        public async Task<HttpResponseMessage> CreateInstanceRightsAccess(Guid party, Guid? to, string resource, string instance, InstanceRightsDelegationDto input)
         {
             ThrowExceptionIfTriggerParty(party.ToString());
-
-            string instancePath = Path.Combine(dataFolder, "Instance", "GetInstances", "instances.json");
-            List<InstancePermission> instances = Util.GetMockData<List<InstancePermission>>(instancePath);
-            bool instanceExists = instances.Any(permission =>
-                string.Equals(permission.Resource?.RefId, resource, StringComparison.OrdinalIgnoreCase) &&
-                string.Equals(permission.Instance?.Urn, instance, StringComparison.OrdinalIgnoreCase));
-
-            if (!instanceExists)
-            {
-                throw new HttpStatusException("StatusError", "Unexpected mockResponse status from Access Management", HttpStatusCode.BadRequest, "");
-            }
 
             return new HttpResponseMessage(HttpStatusCode.OK);
         }
@@ -114,7 +103,7 @@ namespace Altinn.AccessManagement.UI.Mocks.Mocks
             string instancePath = Path.Combine(dataFolder, "Instance", "GetInstances", "instances.json");
             List<InstancePermission> instances = Util.GetMockData<List<InstancePermission>>(instancePath);
             bool knownInstanceExists = instances.Any(permission =>
-                string.Equals(permission.Instance?.Urn, instance, StringComparison.OrdinalIgnoreCase));
+                string.Equals(permission.Instance?.RefId, instance, StringComparison.OrdinalIgnoreCase));
 
             if (!knownInstanceExists)
             {
@@ -138,18 +127,15 @@ namespace Altinn.AccessManagement.UI.Mocks.Mocks
         {
             ThrowExceptionIfTriggerParty(party.ToString());
 
-            string instancePath = Path.Combine(dataFolder, "Instance", "GetInstances", "instances.json");
-            List<InstancePermission> instances = Util.GetMockData<List<InstancePermission>>(instancePath);
-            bool instanceExists = instances.Any(permission =>
-                string.Equals(permission.Resource?.RefId, resource, StringComparison.OrdinalIgnoreCase) &&
-                string.Equals(permission.Instance?.Urn, instance, StringComparison.OrdinalIgnoreCase));
-
-            if (!instanceExists)
-            {
-                throw new HttpStatusException("StatusError", "Unexpected mockResponse status from Access Management", HttpStatusCode.BadRequest, "");
-            }
-
             return new HttpResponseMessage(HttpStatusCode.OK);
+        }
+
+        /// <inheritdoc />
+        public async Task<HttpResponseMessage> RemoveInstance(Guid party, Guid from, Guid to, string resource, string instance)
+        {
+            ThrowExceptionIfTriggerParty(party.ToString());
+
+            return new HttpResponseMessage(HttpStatusCode.NoContent);
         }
 
         private static void ThrowExceptionIfTriggerParty(string id)

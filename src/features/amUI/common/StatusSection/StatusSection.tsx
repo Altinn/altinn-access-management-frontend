@@ -31,6 +31,7 @@ export interface StatusSectionProps {
   undelegatedPackageName?: string;
   isPendingRequest?: boolean;
   cannotRequestRight?: boolean;
+  toPartyName?: string;
 }
 
 export const StatusSection = ({
@@ -44,6 +45,7 @@ export const StatusSection = ({
   undelegatedPackageName,
   isPendingRequest,
   cannotRequestRight,
+  toPartyName,
 }: StatusSectionProps) => {
   const { t } = useTranslation();
   const { fromParty, toParty } = usePartyRepresentation();
@@ -60,11 +62,13 @@ export const StatusSection = ({
     return null;
   }
 
-  const formattedToPartyName = formatDisplayName({
-    fullName: toParty?.name || '',
-    type: toParty?.partyTypeName === PartyType.Person ? 'person' : 'company',
-    reverseNameOrder: false,
-  });
+  const formattedToPartyName =
+    toPartyName ??
+    formatDisplayName({
+      fullName: toParty?.name || '',
+      type: toParty?.partyTypeName === PartyType.Person ? 'person' : 'company',
+      reverseNameOrder: false,
+    });
 
   const formattedFromPartyName = formatDisplayName({
     fullName: fromParty?.name || '',

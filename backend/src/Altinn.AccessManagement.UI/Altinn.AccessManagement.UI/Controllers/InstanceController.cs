@@ -109,32 +109,37 @@ namespace Altinn.AccessManagement.UI.Controllers
         /// Delegates a given set of rights on an instance.
         /// </summary>
         /// <param name="party">The acting party performing the delegation.</param>
-        /// <param name="to">The receiving party.</param>
+        /// <param name="to">The receiving party when delegating to an existing connection.</param>
         /// <param name="resource">The resource identifier.</param>
         /// <param name="instance">The instance urn.</param>
-        /// <param name="actionKeys">The identifiers of the rights/actions to be delegated.</param>
+        /// <param name="input">The delegation input, including right keys and optional person details for new recipients.</param>
         /// <response code="200">OK</response>
         /// <response code="400">Bad Request</response>
         /// <response code="500">Internal Server Error</response>
         [HttpPost]
         [Authorize]
         [Route("delegation/instances/rights")]
-        public async Task<ActionResult<HttpResponseMessage>> DelegateInstanceRights([FromQuery] Guid party, [FromQuery] Guid to, [FromQuery] string resource, [FromQuery] string instance, [FromBody] List<string> actionKeys)
+        public async Task<ActionResult<HttpResponseMessage>> DelegateInstanceRights([FromQuery] Guid party, [FromQuery] Guid? to, [FromQuery] string resource, [FromQuery] string instance, [FromBody] InstanceRightsDelegationDto input)
         {
+            if (!to.HasValue && input?.To == null)
+            {
+                return BadRequest("At least one recipient must be specified.");
+            }
+
+            if (to.HasValue && input?.To != null)
+            {
+                return BadRequest("Recipient must be specified either via the 'to' query parameter or the request body, not both.");
+            }
+
             try
             {
-                var response = await _instanceService.Delegate(party, to, resource, instance, actionKeys);
+                var response = await _instanceService.Delegate(party, to, resource, instance, input);
                 if (response.IsSuccessStatusCode)
                 {
                     return Ok(await response.Content.ReadAsStringAsync());
                 }
 
                 return new ObjectResult(ProblemDetailsFactory.CreateProblemDetails(HttpContext, (int?)response.StatusCode, "Error returned from backend"));
-            }
-            catch (HttpStatusException statusEx)
-            {
-                string responseContent = statusEx.Message;
-                return new ObjectResult(ProblemDetailsFactory.CreateProblemDetails(HttpContext, (int?)statusEx.StatusCode, "Unexpected HttpStatus response", detail: responseContent));
             }
             catch (Exception ex)
             {
@@ -207,14 +212,42 @@ namespace Altinn.AccessManagement.UI.Controllers
 
                 return new ObjectResult(ProblemDetailsFactory.CreateProblemDetails(HttpContext, (int?)response.StatusCode, "Error returned from backend"));
             }
-            catch (HttpStatusException statusEx)
-            {
-                string responseContent = statusEx.Message;
-                return new ObjectResult(ProblemDetailsFactory.CreateProblemDetails(HttpContext, (int?)statusEx.StatusCode, "Unexpected HttpStatus response", detail: responseContent));
-            }
             catch (Exception ex)
             {
                 _logger.LogError(ex, "Unexpected exception occurred during update of instance access: {Message}", ex.Message);
+                return new ObjectResult(ProblemDetailsFactory.CreateProblemDetails(HttpContext));
+            }
+        }
+
+        /// <summary>
+        /// Removes an instance delegation and all its rights.
+        /// </summary>
+        /// <param name="party">The acting party performing the removal.</param>
+        /// <param name="from">The party the instance access was delegated from.</param>
+        /// <param name="to">The party the instance access was delegated to.</param>
+        /// <param name="resource">The resource identifier.</param>
+        /// <param name="instance">The instance urn.</param>
+        /// <response code="200">OK</response>
+        /// <response code="400">Bad Request</response>
+        /// <response code="500">Internal Server Error</response>
+        [HttpDelete]
+        [Authorize]
+        [Route("delegation/instances")]
+        public async Task<ActionResult> RemoveInstance([FromQuery] Guid party, [FromQuery] Guid from, [FromQuery] Guid to, [FromQuery] string resource, [FromQuery] string instance)
+        {
+            try
+            {
+                var response = await _instanceService.RemoveInstance(party, from, to, resource, instance);
+                if (response.IsSuccessStatusCode)
+                {
+                    return Ok(response);
+                }
+
+                return new ObjectResult(ProblemDetailsFactory.CreateProblemDetails(HttpContext, (int?)response.StatusCode, "Error returned from backend"));
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Unexpected exception occurred during removal of instance delegation: {Message}", ex.Message);
                 return new ObjectResult(ProblemDetailsFactory.CreateProblemDetails(HttpContext));
             }
         }

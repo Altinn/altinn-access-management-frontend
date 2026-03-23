@@ -1,9 +1,8 @@
 import { useDelegateRights } from '@/resources/hooks/useDelegateRights';
-import { useCallback, useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { ChipRight, mapRightsToChipRights } from './rightsUtils';
 import {
-  DelegationCheckedRight,
   ServiceResource,
   useDelegationCheckQuery,
   useGetResourceRightsMetaQuery,
@@ -11,7 +10,7 @@ import {
 } from '@/rtk/features/singleRights/singleRightsApi';
 import { PartyType, useGetReporteeQuery } from '@/rtk/features/userInfoApi';
 import { usePartyRepresentation } from '../../../PartyRepresentationContext/PartyRepresentationContext';
-import { ErrorCode } from '@/resources/utils/errorCodeUtils';
+import { getMissingAccessMessage } from '../../missingAccessUtils';
 import { createErrorDetails } from '@/features/amUI/common/TechnicalErrorParagraphs/TechnicalErrorParagraphs';
 
 import { useUpdateResource } from '@/resources/hooks/useUpdateResource';
@@ -114,41 +113,6 @@ export const useRightsSection = ({
   const hasUnsavedChanges = rights.some((r) => r.checked !== r.delegated);
   const undelegableActions = rights.filter((r) => !r.delegable).map((r) => r.rightName);
 
-  const getMissingAccessMessage = useCallback(
-    (response: DelegationCheckedRight[]) => {
-      const hasMissingRoleAccess = response.some((right) =>
-        right.reasonCodes.some(
-          (reasonCode) =>
-            reasonCode === ErrorCode.MissingRoleAccess ||
-            reasonCode === ErrorCode.MissingRightAccess ||
-            reasonCode === ErrorCode.MissingDelegationAccess ||
-            reasonCode === ErrorCode.MissingPackageAccess,
-        ),
-      );
-      const hasMissingSrrRightAccess = response.some(
-        (right) =>
-          !hasMissingRoleAccess &&
-          right.reasonCodes.some(
-            (reasonCode) =>
-              reasonCode === ErrorCode.MissingSrrRightAccess ||
-              reasonCode === ErrorCode.AccessListValidationFail,
-          ),
-      );
-
-      if (hasMissingRoleAccess) {
-        return t('delegation_modal.specific_rights.missing_role_message');
-      }
-      if (hasMissingSrrRightAccess) {
-        return t('delegation_modal.specific_rights.missing_srr_right_message', {
-          resourceOwner: resource?.resourceOwnerName,
-          reportee: reportee?.name,
-        });
-      }
-      return null;
-    },
-    [t, resource?.resourceOwnerName, reportee?.name],
-  );
-
   /// UseEffect hooks
 
   // Instantiate/reset access and rights states
@@ -177,7 +141,14 @@ export const useRightsSection = ({
     }
 
     if (delegationCheckedActions) {
-      setMissingAccess(getMissingAccessMessage(delegationCheckedActions));
+      setMissingAccess(
+        getMissingAccessMessage(
+          delegationCheckedActions,
+          t,
+          resource?.resourceOwnerName,
+          reportee?.name,
+        ),
+      );
     }
 
     if (hasAccess && resourceRights) {
@@ -203,7 +174,9 @@ export const useRightsSection = ({
     hasAccess,
     resourceRights,
     isRequest,
-    getMissingAccessMessage,
+    t,
+    resource?.resourceOwnerName,
+    reportee?.name,
   ]);
 
   /// Functions

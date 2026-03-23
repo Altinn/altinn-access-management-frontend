@@ -213,5 +213,95 @@ namespace Altinn.AccessManagement.UI.Controllers
                 return new ObjectResult(ProblemDetailsFactory.CreateProblemDetails(HttpContext));
             }
         }
+
+        /// <summary>
+        ///     Endpoint for confirming a draft request (transitions Draft → Pending)
+        /// </summary>
+        /// <param name="party">The acting party confirming the request</param>
+        /// <param name="id">The request id to confirm</param>
+        /// <param name="cancellationToken">Cancellation token</param>
+        /// <response code="400">Bad Request</response>
+        /// <response code="500">Internal Server Error</response>
+        [HttpPut]
+        [Authorize]
+        [Route("sent/confirm")]
+        public async Task<ActionResult> ConfirmRequest([FromQuery] Guid party, [FromQuery] Guid id, CancellationToken cancellationToken)
+        {
+            try
+            {
+                var returnVal = await _requestService.ConfirmRequest(party, id, cancellationToken);
+                return Ok(returnVal);
+            }
+            catch (HttpStatusException statusEx)
+            {
+                string responseContent = statusEx.Message;
+                return new ObjectResult(ProblemDetailsFactory.CreateProblemDetails(HttpContext, (int?)statusEx.StatusCode, "Unexpected HttpStatus response from backend", detail: responseContent));
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Unexpected exception occurred during ConfirmRequest: {Message}", ex.Message);
+                return new ObjectResult(ProblemDetailsFactory.CreateProblemDetails(HttpContext));
+            }
+        }
+
+        /// <summary>
+        ///     Endpoint for rejecting a pending request
+        /// </summary>
+        /// <param name="party">The acting party rejecting the request</param>
+        /// <param name="id">The request id to reject</param>
+        /// <param name="cancellationToken">Cancellation token</param>
+        /// <response code="400">Bad Request</response>
+        /// <response code="500">Internal Server Error</response>
+        [HttpPut]
+        [Authorize]
+        [Route("received/reject")]
+        public async Task<ActionResult> RejectRequest([FromQuery] Guid party, [FromQuery] Guid id, CancellationToken cancellationToken)
+        {
+            try
+            {
+                var returnVal = await _requestService.RejectRequest(party, id, cancellationToken);
+                return Ok(returnVal);
+            }
+            catch (HttpStatusException statusEx)
+            {
+                string responseContent = statusEx.Message;
+                return new ObjectResult(ProblemDetailsFactory.CreateProblemDetails(HttpContext, (int?)statusEx.StatusCode, "Unexpected HttpStatus response from backend", detail: responseContent));
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Unexpected exception occurred during RejectRequest: {Message}", ex.Message);
+                return new ObjectResult(ProblemDetailsFactory.CreateProblemDetails(HttpContext));
+            }
+        }
+
+        /// <summary>
+        ///     Endpoint for approving a pending request
+        /// </summary>
+        /// <param name="party">The acting party approving the request</param>
+        /// <param name="id">The request id to approve</param>
+        /// <param name="cancellationToken">Cancellation token</param>
+        /// <response code="400">Bad Request</response>
+        /// <response code="500">Internal Server Error</response>
+        [HttpPut]
+        [Authorize]
+        [Route("received/approve")]
+        public async Task<ActionResult> ApproveRequest([FromQuery] Guid party, [FromQuery] Guid id, CancellationToken cancellationToken)
+        {
+            try
+            {
+                var returnVal = await _requestService.ApproveRequest(party, id, cancellationToken);
+                return Ok(returnVal);
+            }
+            catch (HttpStatusException statusEx)
+            {
+                string responseContent = statusEx.Message;
+                return new ObjectResult(ProblemDetailsFactory.CreateProblemDetails(HttpContext, (int?)statusEx.StatusCode, "Unexpected HttpStatus response from backend", detail: responseContent));
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Unexpected exception occurred during ApproveRequest: {Message}", ex.Message);
+                return new ObjectResult(ProblemDetailsFactory.CreateProblemDetails(HttpContext));
+            }
+        }
     }
 }

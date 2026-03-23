@@ -92,10 +92,6 @@ export const addAllSystemuserCustomers = () => {
   return window.featureFlags?.addAllSystemuserCustomers === true;
 };
 
-export const enableAddUserByUsername = () => {
-  return window.featureFlags?.enableAddUserByUsername === true;
-};
-
 export const enableAddSelfToSystemuser = () => {
   return window.featureFlags?.enableAddSelfToSystemuser === true;
 };

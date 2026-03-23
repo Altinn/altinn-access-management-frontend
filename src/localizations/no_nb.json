@@ -544,7 +544,6 @@
   },
   "new_user_modal": {
     "not_found_error_person": "Fant ingen bruker med dette fødselsnr./brukernavnet og navnet. Vennligst sjekk at informasjonen er korrekt.",
-    "not_found_error_person_ssn": "Fant ingen bruker med dette fødselsnummeret og navnet. Vennligst sjekk at informasjonen er korrekt.",
     "not_found_error_org": "Fant ingen organisasjon med dette organisasjonsnummeret. Vennligst sjekk at informasjonen er korrekt.",
     "too_many_requests_error": "Du er blitt sperret pga for mange feilende forsøk. Du kan prøve igjen om en time.",
     "person": "Person",
@@ -944,7 +943,11 @@
     "see_in_inbox": "Se i innboks",
     "description": "Her kan du dele en melding/skjema fra innboksen eller få en oversikt over hvem som allerede har tilgang. Bruk søkefeltet til å søke etter personer/virksomheter eller legg dem til som ny bruker.",
     "no_users": "Ingen brukere har tilgang.",
-    "no_access_description": "<b>Du har ikke fullmakt til å gi videre denne tjenesten/meldingen.</b> For å kunne dele og gi tilgang fra innboksen må du ha tilgangspakken: Tilgangsstyrer for enkeltmeldinger, skjema og dialoger."
+    "no_access_description": "<b>Du har ikke fullmakt til å gi videre denne tjenesten/meldingen.</b> For å kunne dele og gi tilgang fra innboksen må du ha tilgangspakken: Tilgangsstyrer for enkeltmeldinger, skjema og dialoger.",
+    "add_user_modal": {
+      "heading": "Gi fullmakt til ny bruker",
+      "user_will_receive": "Brukeren vil få:"
+    }
   },
   "poa_status": {
     "no_permissions": "Du må gi fullmakt."

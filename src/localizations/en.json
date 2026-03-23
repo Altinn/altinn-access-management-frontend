@@ -547,7 +547,6 @@
   },
   "new_user_modal": {
     "not_found_error_person": "Did not find a user with the given name and national identity number or username. Please check that you entered the correct information.",
-    "not_found_error_person_ssn": "Did not find a user with the given name and national identity number. Please check that you entered the correct information.",
     "not_found_error_org": "Did not find an organization with the given number. Please check that you entered the correct information.",
     "too_many_requests_error": "You have been blocked due to too many failing attempts. Try again in an hour.",
     "person": "Person",
@@ -947,7 +946,11 @@
     "see_in_inbox": "View in inbox",
     "description": "Here you can share a message/form from the inbox or get an overview of who already has access. Use the search field to search for people/organizations or add them as a new user.",
     "no_users": "No users have access.",
-    "no_access_description": "<b>You do not have the authority to share this service/message with others.</b> To share and grant access from the inbox, you must have the access package: Access manager for single messages, forms and dialogs."
+    "no_access_description": "<b>You do not have the authority to share this service/message with others.</b> To share and grant access from the inbox, you must have the access package: Access manager for single messages, forms and dialogs.",
+    "add_user_modal": {
+      "heading": "Grant access to new user",
+      "user_will_receive": "The user will receive:"
+    }
   },
   "poa_status": {
     "no_permissions": "You have to give power of attorney"
