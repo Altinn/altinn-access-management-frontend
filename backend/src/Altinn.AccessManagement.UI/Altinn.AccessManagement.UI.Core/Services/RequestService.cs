@@ -43,6 +43,13 @@ namespace Altinn.AccessManagement.UI.Core.Services
         }
 
         /// <inheritdoc />
+        public async Task<SingleRightRequest> GetDraftRequest(Guid id, CancellationToken cancellationToken)
+        {
+            RequestResourceDto response = await _requestClient.GetDraftRequest(id, cancellationToken);
+            return MapToSingleRightRequest(response);
+        }
+
+        /// <inheritdoc />
         public async Task<SingleRightRequest> CreateResourceRequest(Guid party, Guid to, string resource, CancellationToken cancellationToken)
         {
             RequestResourceDto response = await _requestClient.CreateResourceRequest(party, to, resource, cancellationToken);

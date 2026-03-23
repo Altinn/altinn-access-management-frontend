@@ -38,6 +38,14 @@ namespace Altinn.AccessManagement.UI.Core.Services.Interfaces
         Task<SingleRightRequest> GetRequest(Guid party, Guid id, CancellationToken cancellationToken);
 
         /// <summary>
+        /// Get a single draft request by id
+        /// </summary>
+        /// <param name="id">The request id</param>
+        /// <param name="cancellationToken">Cancellation token</param>
+        /// <returns>The request</returns>
+        Task<SingleRightRequest> GetDraftRequest(Guid id, CancellationToken cancellationToken);
+
+        /// <summary>
         /// Creates a new resource request
         /// </summary>
         /// <param name="party">The acting party creating the request</param>

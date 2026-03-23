@@ -126,6 +126,35 @@ namespace Altinn.AccessManagement.UI.Controllers
         }
 
         /// <summary>
+        ///     Endpoint for getting a single draft request by id
+        /// </summary>
+        /// <param name="id">The request id</param>
+        /// <param name="cancellationToken">Cancellation token</param>
+        /// <response code="400">Bad Request</response>
+        /// <response code="500">Internal Server Error</response>
+        [HttpGet]
+        [Authorize]
+        [Route("draft/{id}")]
+        public async Task<ActionResult> GetDraftRequest([FromRoute] Guid id, CancellationToken cancellationToken)
+        {
+            try
+            {
+                var returnVal = await _requestService.GetDraftRequest(id, cancellationToken);
+                return Ok(returnVal);
+            }
+            catch (HttpStatusException statusEx)
+            {
+                string responseContent = statusEx.Message;
+                return new ObjectResult(ProblemDetailsFactory.CreateProblemDetails(HttpContext, (int?)statusEx.StatusCode, "Unexpected HttpStatus response from backend", detail: responseContent));
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Unexpected exception occurred during GetDraftRequest: {Message}", ex.Message);
+                return new ObjectResult(ProblemDetailsFactory.CreateProblemDetails(HttpContext));
+            }
+        }
+
+        /// <summary>
         ///     Endpoint for creating a resource request
         /// </summary>
         /// <param name="party">The acting party creating the request</param>
