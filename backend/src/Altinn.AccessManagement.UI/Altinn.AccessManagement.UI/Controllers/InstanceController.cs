@@ -141,11 +141,6 @@ namespace Altinn.AccessManagement.UI.Controllers
 
                 return new ObjectResult(ProblemDetailsFactory.CreateProblemDetails(HttpContext, (int?)response.StatusCode, "Error returned from backend"));
             }
-            catch (HttpStatusException statusEx)
-            {
-                string responseContent = statusEx.Message;
-                return new ObjectResult(ProblemDetailsFactory.CreateProblemDetails(HttpContext, (int?)statusEx.StatusCode, "Unexpected HttpStatus response", detail: responseContent));
-            }
             catch (Exception ex)
             {
                 _logger.LogError(ex, "Unexpected exception occurred while adding instance rights for right holder: {Message}", ex.Message);
@@ -217,11 +212,6 @@ namespace Altinn.AccessManagement.UI.Controllers
 
                 return new ObjectResult(ProblemDetailsFactory.CreateProblemDetails(HttpContext, (int?)response.StatusCode, "Error returned from backend"));
             }
-            catch (HttpStatusException statusEx)
-            {
-                string responseContent = statusEx.Message;
-                return new ObjectResult(ProblemDetailsFactory.CreateProblemDetails(HttpContext, (int?)statusEx.StatusCode, "Unexpected HttpStatus response", detail: responseContent));
-            }
             catch (Exception ex)
             {
                 _logger.LogError(ex, "Unexpected exception occurred during update of instance access: {Message}", ex.Message);
@@ -254,11 +244,6 @@ namespace Altinn.AccessManagement.UI.Controllers
                 }
 
                 return new ObjectResult(ProblemDetailsFactory.CreateProblemDetails(HttpContext, (int?)response.StatusCode, "Error returned from backend"));
-            }
-            catch (HttpStatusException statusEx)
-            {
-                string responseContent = statusEx.Message;
-                return new ObjectResult(ProblemDetailsFactory.CreateProblemDetails(HttpContext, (int?)statusEx.StatusCode, "Unexpected HttpStatus response", detail: responseContent));
             }
             catch (Exception ex)
             {
