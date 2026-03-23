@@ -15,7 +15,6 @@ namespace Altinn.AccessManagement.UI.Mocks.Mocks
     /// </summary>
     public class InstanceClientMock : IInstanceClient
     {
-        private static readonly Guid MockInstanceUserId = Guid.Parse("11111111-1111-1111-1111-111111111111");
         private readonly string dataFolder;
 
         /// <summary>
@@ -137,19 +136,8 @@ namespace Altinn.AccessManagement.UI.Mocks.Mocks
         {
             ThrowExceptionIfTriggerParty(party.ToString());
 
-            var users = new List<SimplifiedParty>
-            {
-                new SimplifiedParty
-                {
-                    Id = MockInstanceUserId,
-                    Name = "Mock Instance User",
-                    Type = "Person",
-                    Variant = "person",
-                    IsDeleted = false,
-                },
-            };
-
-            return Task.FromResult(users);
+            string dataPath = Path.Combine(dataFolder, "Instance", "GetInstanceUsers", $"{resource}.json");
+            return Task.FromResult(Util.GetMockData<List<SimplifiedParty>>(dataPath));
         }
 
         /// <inheritdoc />

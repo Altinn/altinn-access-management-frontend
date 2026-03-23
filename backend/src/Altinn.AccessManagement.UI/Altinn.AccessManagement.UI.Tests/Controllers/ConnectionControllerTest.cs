@@ -860,35 +860,8 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
             Guid party = Guid.Parse("cd35779b-b174-4ecc-bbef-ece13611be7f");
             var token = PrincipalUtil.GetToken(1234, 1234, 2);
             _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
-
-            List<SimplifiedConnection> expectedResponse =
-            [
-                new SimplifiedConnection
-                {
-                    Party = new SimplifiedParty
-                    {
-                        Id = Guid.Parse("22222222-2222-2222-2222-222222222222"),
-                        Name = "Mock Available User",
-                        Type = "Person",
-                        Variant = "person",
-                        IsDeleted = false,
-                    },
-                    Connections =
-                    [
-                        new SimplifiedConnection
-                        {
-                            Party = new SimplifiedParty
-                            {
-                                Id = Guid.Parse("33333333-3333-3333-3333-333333333333"),
-                                Name = "Mock Nested Available User",
-                                Type = "Person",
-                                Variant = "person",
-                                IsDeleted = false,
-                            },
-                        },
-                    ],
-                },
-            ];
+            string path = Path.Combine(_testDataFolder, "Data", "ExpectedResults", "RightHolders", "SimplifiedConnections", $"{party}.json");
+            List<SimplifiedConnection> expectedResponse = Util.GetMockData<List<SimplifiedConnection>>(path);
 
             // Act
             HttpResponseMessage httpResponse = await _client.GetAsync(
@@ -920,6 +893,25 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
             // Assert
             Assert.Equal(HttpStatusCode.BadRequest, httpResponse.StatusCode);
             Assert.Contains("Query parameter 'party' must be a non-empty GUID.", responseContent);
+        }
+
+        /// <summary>
+        /// Test case: Rejects invalid party GUID values for simplified connections.
+        /// Expected: Returns bad request from model state validation.
+        /// </summary>
+        [Fact]
+        public async Task GetSimplifiedConnections_InvalidParty_ReturnsBadRequest()
+        {
+            // Arrange
+            var token = PrincipalUtil.GetToken(1234, 1234, 2);
+            _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+
+            // Act
+            HttpResponseMessage httpResponse = await _client.GetAsync(
+                "accessmanagement/api/v1/connection/simplified?party=invalid-party-id");
+
+            // Assert
+            Assert.Equal(HttpStatusCode.BadRequest, httpResponse.StatusCode);
         }
 
         /// <summary>

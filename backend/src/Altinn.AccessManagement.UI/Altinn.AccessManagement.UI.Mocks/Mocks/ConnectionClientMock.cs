@@ -2,6 +2,7 @@
 using Altinn.AccessManagement.UI.Core.Helpers;
 using Altinn.AccessManagement.UI.Core.Models.Connections;
 using Altinn.AccessManagement.UI.Core.Models.User;
+using Altinn.AccessManagement.UI.Mocks.Utils;
 using Altinn.Register.Contracts.V1;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
@@ -134,36 +135,8 @@ namespace Altinn.AccessManagement.UI.Mocks.Mocks
                 throw new HttpStatusException("Test", "Mock internal server error", HttpStatusCode.InternalServerError, null);
             }
 
-            var connections = new List<SimplifiedConnection>
-            {
-                new SimplifiedConnection
-                {
-                    Party = new SimplifiedParty
-                    {
-                        Id = Guid.Parse("22222222-2222-2222-2222-222222222222"),
-                        Name = "Mock Available User",
-                        Type = "Person",
-                        Variant = "person",
-                        IsDeleted = false,
-                    },
-                    Connections = new List<SimplifiedConnection>
-                    {
-                        new SimplifiedConnection
-                        {
-                            Party = new SimplifiedParty
-                            {
-                                Id = Guid.Parse("33333333-3333-3333-3333-333333333333"),
-                                Name = "Mock Nested Available User",
-                                Type = "Person",
-                                Variant = "person",
-                                IsDeleted = false,
-                            },
-                        },
-                    },
-                },
-            };
-
-            return Task.FromResult(connections);
+            string dataPath = Path.Combine(dataFolder, "RightHolders", "SimplifiedConnections", $"{party}.json");
+            return Task.FromResult(Util.GetMockData<List<SimplifiedConnection>>(dataPath));
         }
     }
 }

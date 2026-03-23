@@ -294,6 +294,11 @@ namespace Altinn.AccessManagement.UI.Controllers
         [Route("simplified")]
         public async Task<ActionResult<List<SimplifiedConnection>>> GetSimplifiedConnections([FromQuery] Guid party)
         {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
             if (party == Guid.Empty)
             {
                 return BadRequest("Query parameter 'party' must be a non-empty GUID.");

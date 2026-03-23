@@ -558,17 +558,8 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
             Guid party = Guid.Parse("cd35779b-b174-4ecc-bbef-ece13611be7f");
             string resource = "generic-access-resource";
             string instance = "urn:altinn:instance-id:51599233/df333e75-5896-4254-a69f-146736eaf668";
-            List<SimplifiedParty> expectedResponse =
-            [
-                new SimplifiedParty
-                {
-                    Id = Guid.Parse("11111111-1111-1111-1111-111111111111"),
-                    Name = "Mock Instance User",
-                    Type = "Person",
-                    Variant = "person",
-                    IsDeleted = false,
-                },
-            ];
+            string path = Path.Combine(_mockFolder, "Data", "ExpectedResults", "Instance", "GetInstanceUsers", $"{resource}.json");
+            List<SimplifiedParty> expectedResponse = Util.GetMockData<List<SimplifiedParty>>(path);
 
             HttpResponseMessage httpResponse = await _client.GetAsync(
                 $"accessmanagement/api/v1/instances/delegation/instances/simplified/users?party={party}&resource={resource}&instance={Uri.EscapeDataString(instance)}");
