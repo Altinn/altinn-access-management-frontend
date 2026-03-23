@@ -1,17 +1,14 @@
-import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
-import {
-  type DelegationCheckedRight,
-  type ServiceResource,
-} from '@/rtk/features/singleRights/singleRightsApi';
+import { type ServiceResource } from '@/rtk/features/singleRights/singleRightsApi';
 import {
   useDelegateInstanceRightsMutation,
   useUpdateInstanceRightsMutation,
   useRemoveInstanceMutation,
 } from '@/rtk/features/instanceApi';
 import { usePartyRepresentation } from '../../PartyRepresentationContext/PartyRepresentationContext';
-import { ErrorCode } from '@/resources/utils/errorCodeUtils';
+import { getMissingAccessMessage } from '../missingAccessUtils';
 import { createErrorDetails } from '@/features/amUI/common/TechnicalErrorParagraphs/TechnicalErrorParagraphs';
 import { useGetReporteeQuery } from '@/rtk/features/userInfoApi';
 import { useInstanceDelegationRightsData } from './useInstanceDelegationRightsData';
@@ -78,47 +75,18 @@ export const useInstanceRightsSection = ({
   const hasUnsavedChanges = rights.some((r) => r.checked !== r.delegated);
   const undelegableActions = rights.filter((r) => !r.delegable).map((r) => r.rightName);
 
-  const getMissingAccessMessage = useCallback(
-    (response: DelegationCheckedRight[]) => {
-      const hasMissingRoleAccess = response.some((right) =>
-        right.reasonCodes.some(
-          (reasonCode) =>
-            reasonCode === ErrorCode.MissingRoleAccess ||
-            reasonCode === ErrorCode.MissingRightAccess ||
-            reasonCode === ErrorCode.MissingDelegationAccess ||
-            reasonCode === ErrorCode.MissingPackageAccess,
-        ),
-      );
-      const hasMissingSrrRightAccess = response.some(
-        (right) =>
-          !hasMissingRoleAccess &&
-          right.reasonCodes.some(
-            (reasonCode) =>
-              reasonCode === ErrorCode.MissingSrrRightAccess ||
-              reasonCode === ErrorCode.AccessListValidationFail,
-          ),
-      );
-      if (hasMissingRoleAccess) {
-        return t('delegation_modal.specific_rights.missing_role_message');
-      }
-      if (hasMissingSrrRightAccess) {
-        return t('delegation_modal.specific_rights.missing_srr_right_message', {
-          resourceOwner: resource?.resourceOwnerName,
-          reportee: reportee?.name,
-        });
-      }
-      return null;
-    },
-    [t, resource?.resourceOwnerName, reportee?.name],
-  );
-
   const defaultMissingAccess = useMemo(() => {
     if (!delegationCheckedRights) {
       return null;
     }
 
-    return getMissingAccessMessage(delegationCheckedRights);
-  }, [delegationCheckedRights, getMissingAccessMessage]);
+    return getMissingAccessMessage(
+      delegationCheckedRights,
+      t,
+      resource?.resourceOwnerName,
+      reportee?.name,
+    );
+  }, [delegationCheckedRights, t, resource?.resourceOwnerName, reportee?.name]);
 
   const missingAccess = isActionLoading || delegationError ? null : defaultMissingAccess;
 
