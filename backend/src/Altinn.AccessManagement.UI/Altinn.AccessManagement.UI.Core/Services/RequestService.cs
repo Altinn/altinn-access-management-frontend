@@ -121,13 +121,24 @@ namespace Altinn.AccessManagement.UI.Core.Services
             
             return list.Items.Select(x => 
             {
-                EnrichedResourceRequest request = MapToSingleRightRequest(x) as EnrichedResourceRequest;
+                SingleRightRequest request = MapToSingleRightRequest(x);
+                EnrichedResourceRequest enrichedRequest = new EnrichedResourceRequest()
+                {
+                    Id = request.Id,
+                    From = request.From,
+                    To = request.To,
+                    Type = request.Type,
+                    Status = request.Status,
+                    ResourceId = request.ResourceId,
+                    LastUpdated = request.LastUpdated,
+                };
+                
                 if (resourceDictionary.TryGetValue(x.Resource.ReferenceId, out var resource))
                 {
-                    request.Resource = resource;
+                    enrichedRequest.Resource = resource;
                 }
                 
-                return request;
+                return enrichedRequest;
             });
         }
     }

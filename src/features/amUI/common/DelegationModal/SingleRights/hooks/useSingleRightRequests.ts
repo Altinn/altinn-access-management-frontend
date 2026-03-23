@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import {
   useCreateResourceRequestMutation,
-  useGetPendingSentSingleRightRequestsQuery,
+  useGetSentRequestsQuery,
   useWithdrawRequestMutation,
 } from '@/rtk/features/requestApi';
 import {
@@ -15,13 +15,9 @@ import { usePartyRepresentation } from '../../../PartyRepresentationContext/Part
 
 interface UseSingleRightRequestsProps {
   canRequestRights?: boolean;
-  includeResources?: boolean;
 }
 
-export const useSingleRightRequests = ({
-  canRequestRights,
-  includeResources,
-}: UseSingleRightRequestsProps) => {
+export const useSingleRightRequests = ({ canRequestRights }: UseSingleRightRequestsProps) => {
   const [loadingByResourceId, setLoadingByResourceId] = useState<Record<string, boolean>>({});
   const { fromParty, actingParty } = usePartyRepresentation();
 
@@ -38,10 +34,10 @@ export const useSingleRightRequests = ({
     isFetching: isRefetching,
     isLoading: isLoadingRequests,
     isError: isLoadError,
-  } = useGetPendingSentSingleRightRequestsQuery(
+  } = useGetSentRequestsQuery(
     {
       ...requestQueryParams,
-      includeResources: includeResources || false,
+      status: ['Pending'],
     },
     {
       skip: !canRequestRights || !requestQueryParams?.party || !requestQueryParams?.to,

@@ -19,6 +19,8 @@ import { useTranslation } from 'react-i18next';
 import { usePartyRepresentation } from '../../common/PartyRepresentationContext/PartyRepresentationContext';
 import { PartyType } from '@/rtk/features/userInfoApi';
 import { useIsTabletOrSmaller } from '@/resources/utils/screensizeUtils';
+import { useGetEnrichedSentResourceRequestsQuery } from '@/rtk/features/requestApi';
+import { getRequestPartyQueryParams } from '@/resources/utils/singleRightRequestUtils';
 
 export const PendingRequests = () => {
   const modalRef = useRef<HTMLDialogElement>(null);
@@ -93,16 +95,21 @@ const PendingRequestsList = ({
 }: PendingRequestsListProps) => {
   const { t } = useTranslation();
   const isSmallScreen = useIsTabletOrSmaller();
-  const { fromParty } = usePartyRepresentation();
+  const { actingParty, fromParty } = usePartyRepresentation();
 
-  const {
-    singleRightRequests = [],
-    isLoadingRequests,
-    deleteRequest,
-    isLoadingRequest,
-  } = useSingleRightRequests({
+  const { data: singleRightRequests = [], isLoading: isLoadingRequests } =
+    useGetEnrichedSentResourceRequestsQuery(
+      {
+        ...getRequestPartyQueryParams(actingParty?.partyUuid, fromParty?.partyUuid),
+        status: ['Pending'],
+      },
+      {
+        skip: !actingParty?.partyUuid && !fromParty?.partyUuid,
+      },
+    );
+
+  const { deleteRequest, isLoadingRequest } = useSingleRightRequests({
     canRequestRights: true,
-    includeResources: true,
   });
 
   return (
