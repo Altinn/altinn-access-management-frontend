@@ -14,11 +14,20 @@ namespace Altinn.AccessManagement.UI.Core.Services.Interfaces
         /// <param name="party">The acting party asking for sent requests</param>
         /// <param name="to">The party the requests were sent to</param>
         /// <param name="status">The statuses to get</param>
-        /// <param name="includeResources">Whether to include resource data in the response</param>
-        /// <param name="languageCode">The language code for the response</param>
         /// <param name="cancellationToken">Cancellation token</param>
         /// <returns>List of sent requests</returns>
-        Task<IEnumerable<SingleRightRequest>> GetSentRequests(Guid party, Guid? to, List<RequestStatus> status, bool includeResources, string languageCode, CancellationToken cancellationToken);
+        Task<IEnumerable<SingleRightRequest>> GetSentRequests(Guid party, Guid? to, List<RequestStatus> status, CancellationToken cancellationToken);
+
+         /// <summary>
+        /// Get enriched resource requests sent by a party
+        /// </summary>
+        /// <param name="party">The acting party asking for sent requests</param>
+        /// <param name="to">The party the requests were sent to</param>
+        /// <param name="status">The statuses to get</param>
+        /// <param name="languageCode">The language code for the response</param>
+        /// <param name="cancellationToken">Cancellation token</param>
+        /// <returns>List of enriched resource requests sent by a party</returns>
+        Task<IEnumerable<EnrichedResourceRequest>> GetEnrichedSentResourceRequests(Guid party, Guid? to, List<RequestStatus> status, string languageCode, CancellationToken cancellationToken);
 
         /// <summary>
         /// Get requests received by a party
@@ -26,11 +35,20 @@ namespace Altinn.AccessManagement.UI.Core.Services.Interfaces
         /// <param name="party">The acting party asking for received requests</param>
         /// <param name="from">The party who sent the requests</param>
         /// <param name="status">The statuses to get</param>
-        /// <param name="includeResources">Whether to include resource data in the response</param>
+        /// <param name="cancellationToken">Cancellation token</param>
+        /// <returns>List of received requests</returns>
+        Task<IEnumerable<SingleRightRequest>> GetReceivedRequests(Guid party, Guid? from, List<RequestStatus> status, CancellationToken cancellationToken);
+
+        /// <summary>
+        /// Get enriched resource requests received by a party
+        /// </summary>
+        /// <param name="party">The acting party asking for received requests</param>
+        /// <param name="from">The party who sent the requests</param>
+        /// <param name="status">The statuses to get</param>
         /// <param name="languageCode">The language code for the response</param>
         /// <param name="cancellationToken">Cancellation token</param>
         /// <returns>List of received requests</returns>
-        Task<IEnumerable<SingleRightRequest>> GetReceivedRequests(Guid party, Guid? from, List<RequestStatus> status, bool includeResources, string languageCode, CancellationToken cancellationToken);
+        Task<IEnumerable<EnrichedResourceRequest>> GetEnrichedReceivedResourceRequests(Guid party, Guid? from, List<RequestStatus> status, string languageCode, CancellationToken cancellationToken);
 
         /// <summary>
         /// Get a single request by id
