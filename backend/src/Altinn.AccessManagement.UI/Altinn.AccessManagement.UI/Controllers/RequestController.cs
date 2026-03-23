@@ -87,7 +87,7 @@ namespace Altinn.AccessManagement.UI.Controllers
             }
             catch (ResourceNotFoundException ex)
             {
-                return NotFound(ProblemDetailsFactory.CreateProblemDetails(HttpContext, (int?)StatusCodes.Status404NotFound, "Resource not found", detail: ex.Message));
+                return NotFound(ProblemDetailsFactory.CreateProblemDetails(HttpContext, (int?)StatusCodes.Status404NotFound, "Service Resource not found", detail: ex.Message));
             }
             catch (HttpStatusException statusEx)
             {
