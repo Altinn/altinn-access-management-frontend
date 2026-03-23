@@ -1,6 +1,7 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 import { getCookie } from '@/resources/Cookie/CookieMethods';
 import type { Entity } from '@/dataObjects/dtos/Common';
+import { ServiceResource } from './singleRights/singleRightsApi';
 
 export type RequestStatus = 'None' | 'Draft' | 'Pending' | 'Approved' | 'Rejected' | 'Withdrawn';
 
@@ -11,14 +12,14 @@ export interface RequestDto {
   from: Entity;
   to: Entity;
   lastUpdated: string;
-  resourceId: string;
+  resourceId?: string;
+}
+
+export interface EnrichedRequestDto extends RequestDto {
+  resource: ServiceResource;
 }
 
 const baseUrl = `${import.meta.env.BASE_URL}accessmanagement/api/v1/request`;
-
-enum Tags {
-  PendingSentRequests = 'PendingSentRequests',
-}
 
 export const requestApi = createApi({
   reducerPath: 'requestApi',
@@ -30,7 +31,7 @@ export const requestApi = createApi({
       return headers;
     },
   }),
-  tagTypes: [Tags.PendingSentRequests, 'sentRequests', 'receivedRequests', 'request'],
+  tagTypes: ['sentRequests', 'receivedRequests', 'request', 'enrichedSentResourceRequests'],
   endpoints: (builder) => ({
     // requests page queries
     getSentRequests: builder.query<
@@ -63,9 +64,17 @@ export const requestApi = createApi({
     }),
 
     // delegation modal queries and mutations
-    getPendingSentSingleRightRequests: builder.query<RequestDto[], { party: string; to: string }>({
-      query: ({ party, to }) => `sent?party=${party}&to=${to}&status=pending`,
-      providesTags: [Tags.PendingSentRequests],
+    getEnrichedSentResourceRequests: builder.query<
+      EnrichedRequestDto[],
+      { party: string; to?: string; status?: RequestStatus[] }
+    >({
+      query: ({ party, to, status = [] }) => {
+        let params = `?party=${party}`;
+        if (to) params += `&to=${to}`;
+        for (const s of status) params += `&status=${s}`;
+        return `sent/resource${params}`;
+      },
+      providesTags: ['enrichedSentResourceRequests'],
     }),
     createResourceRequest: builder.mutation<
       RequestDto,
@@ -75,21 +84,21 @@ export const requestApi = createApi({
         url: `resource?party=${party}&to=${to}&resource=${encodeURIComponent(resource)}`,
         method: 'POST',
       }),
-      invalidatesTags: [Tags.PendingSentRequests, 'sentRequests'],
+      invalidatesTags: ['sentRequests', 'enrichedSentResourceRequests'],
     }),
     withdrawRequest: builder.mutation<RequestDto, { party: string; id: string }>({
       query: ({ party, id }) => ({
         url: `sent/withdraw?party=${party}&id=${id}`,
         method: 'DELETE',
       }),
-      invalidatesTags: [Tags.PendingSentRequests, 'sentRequests'],
+      invalidatesTags: ['sentRequests', 'enrichedSentResourceRequests'],
     }),
     confirmRequest: builder.mutation<RequestDto, { party: string; id: string }>({
       query: ({ party, id }) => ({
         url: `sent/confirm?party=${party}&id=${id}`,
         method: 'PUT',
       }),
-      invalidatesTags: ['sentRequests', Tags.PendingSentRequests],
+      invalidatesTags: ['sentRequests', 'enrichedSentResourceRequests'],
     }),
     rejectRequest: builder.mutation<RequestDto, { party: string; id: string }>({
       query: ({ party, id }) => ({
@@ -112,12 +121,12 @@ export const {
   useGetSentRequestsQuery,
   useGetReceivedRequestsQuery,
   useGetRequestQuery,
-  useGetPendingSentSingleRightRequestsQuery,
   useCreateResourceRequestMutation,
   useWithdrawRequestMutation,
   useConfirmRequestMutation,
   useRejectRequestMutation,
   useApproveRequestMutation,
+  useGetEnrichedSentResourceRequestsQuery,
 } = requestApi;
 
 export const { endpoints, reducerPath, reducer, middleware } = requestApi;

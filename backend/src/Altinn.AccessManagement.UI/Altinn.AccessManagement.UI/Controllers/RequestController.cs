@@ -1,6 +1,7 @@
 using System.Text.Json;
 using System.Text.Json.Serialization;
 using Altinn.AccessManagement.UI.Core.Enums;
+using Altinn.AccessManagement.UI.Core.Exceptions;
 using Altinn.AccessManagement.UI.Core.Helpers;
 using Altinn.AccessManagement.UI.Core.Services.Interfaces;
 using Altinn.AccessManagement.UI.Filters;
@@ -65,6 +66,42 @@ namespace Altinn.AccessManagement.UI.Controllers
         }
 
         /// <summary>
+        ///     Endpoint for getting enriched resource requests sent by a party
+        /// </summary>
+        /// <param name="party">The acting party</param>
+        /// <param name="to">The party the requests were sent to</param>
+        /// <param name="status">Status filter</param>
+        /// <param name="cancellationToken">Cancellation token</param>
+        /// <response code="400">Bad Request</response>
+        /// <response code="500">Internal Server Error</response>
+        [HttpGet]
+        [Authorize]
+        [Route("sent/resource")]
+        public async Task<ActionResult> GetEnrichedSentResourceRequests([FromQuery] Guid party, [FromQuery] Guid? to, [FromQuery] List<RequestStatus> status, CancellationToken cancellationToken)
+        {
+            try
+            {
+                var languageCode = LanguageHelper.GetSelectedLanguageCookieValueBackendStandard(HttpContext);
+                var returnVal = await _requestService.GetEnrichedSentResourceRequests(party, to, status, languageCode, cancellationToken);
+                return Ok(returnVal);
+            }
+            catch (ResourceNotFoundException ex)
+            {
+                return NotFound(ProblemDetailsFactory.CreateProblemDetails(HttpContext, (int?)StatusCodes.Status404NotFound, "Service Resource not found", detail: ex.Message));
+            }
+            catch (HttpStatusException statusEx)
+            {
+                string responseContent = statusEx.Message;
+                return new ObjectResult(ProblemDetailsFactory.CreateProblemDetails(HttpContext, (int?)statusEx.StatusCode, "Unexpected HttpStatus response from backend", detail: responseContent));
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Unexpected exception occurred during GetEnrichedSentResourceRequests: {Message}", ex.Message);
+                return new ObjectResult(ProblemDetailsFactory.CreateProblemDetails(HttpContext));
+            }
+        }
+
+        /// <summary>
         ///     Endpoint for getting requests received by a party
         /// </summary>
         /// <param name="party">The acting party</param>
@@ -91,6 +128,42 @@ namespace Altinn.AccessManagement.UI.Controllers
             catch (Exception ex)
             {
                 _logger.LogError(ex, "Unexpected exception occurred during GetReceivedRequests: {Message}", ex.Message);
+                return new ObjectResult(ProblemDetailsFactory.CreateProblemDetails(HttpContext));
+            }
+        }
+
+        /// <summary>
+        ///     Endpoint for getting enriched requests received by a party
+        /// </summary>
+        /// <param name="party">The acting party</param>
+        /// <param name="from">The party who sent the requests</param>
+        /// <param name="status">Status filter</param>
+        /// <param name="cancellationToken">Cancellation token</param>
+        /// <response code="400">Bad Request</response>
+        /// <response code="500">Internal Server Error</response>
+        [HttpGet]
+        [Authorize]
+        [Route("received/resource")]
+        public async Task<ActionResult> GetEnrichedReceivedResourceRequests([FromQuery] Guid party, [FromQuery] Guid? from, [FromQuery] List<RequestStatus> status, CancellationToken cancellationToken)
+        {
+            try
+            {
+                var languageCode = LanguageHelper.GetSelectedLanguageCookieValueBackendStandard(HttpContext);
+                var returnVal = await _requestService.GetEnrichedReceivedResourceRequests(party, from, status, languageCode, cancellationToken);
+                return Ok(returnVal);
+            }
+            catch (ResourceNotFoundException ex)
+            {
+                return NotFound(ProblemDetailsFactory.CreateProblemDetails(HttpContext, (int?)StatusCodes.Status404NotFound, "Service Resource not found", detail: ex.Message));
+            }
+            catch (HttpStatusException statusEx)
+            {
+                string responseContent = statusEx.Message;
+                return new ObjectResult(ProblemDetailsFactory.CreateProblemDetails(HttpContext, (int?)statusEx.StatusCode, "Unexpected HttpStatus response from backend", detail: responseContent));
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Unexpected exception occurred during GetEnrichedReceivedResourceRequests: {Message}", ex.Message);
                 return new ObjectResult(ProblemDetailsFactory.CreateProblemDetails(HttpContext));
             }
         }

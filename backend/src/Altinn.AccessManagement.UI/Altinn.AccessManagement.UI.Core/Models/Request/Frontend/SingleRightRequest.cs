@@ -1,3 +1,5 @@
+#nullable enable
+
 using Altinn.AccessManagement.UI.Core.Enums;
 using Altinn.AccessManagement.UI.Core.Models.User;
 
@@ -16,7 +18,7 @@ namespace Altinn.AccessManagement.UI.Core.Models.Request.Frontend
         /// <summary>
         /// Discriminator indicating the request type: "resource", "package", or "assignment"
         /// </summary>
-        public string Type { get; set; }
+        public required string Type { get; set; }
 
         /// <summary>
         /// Request status (e.g. draft, pending, approved, rejected, withdrawn)
@@ -26,17 +28,17 @@ namespace Altinn.AccessManagement.UI.Core.Models.Request.Frontend
         /// <summary>
         /// Party that is requested to grant access
         /// </summary>
-        public Entity From { get; set; }
+        public required Entity From { get; set; }
 
         /// <summary>
         /// Party that access is requested for
         /// </summary>
-        public Entity To { get; set; }
+        public required Entity To { get; set; }
 
         /// <summary>
         /// The resource id access is requested for
         /// </summary>
-        public string ResourceId { get; set; }
+        public string? ResourceId { get; set; }
 
         /// <summary>
         /// Last updated

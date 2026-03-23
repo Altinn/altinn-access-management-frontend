@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import {
   useCreateResourceRequestMutation,
-  useGetPendingSentSingleRightRequestsQuery,
+  useGetSentRequestsQuery,
   useWithdrawRequestMutation,
 } from '@/rtk/features/requestApi';
 import {
@@ -32,10 +32,12 @@ export const useSingleRightRequests = ({ canRequestRights }: UseSingleRightReque
   const {
     data: singleRightRequests,
     isFetching: isRefetching,
+    isLoading: isLoadingRequests,
     isError: isLoadError,
-  } = useGetPendingSentSingleRightRequestsQuery(
+  } = useGetSentRequestsQuery(
     {
       ...requestQueryParams,
+      status: ['Pending'],
     },
     {
       skip: !canRequestRights || !requestQueryParams?.party || !requestQueryParams?.to,
@@ -142,5 +144,7 @@ export const useSingleRightRequests = ({ canRequestRights }: UseSingleRightReque
     deleteRequest,
     hasPendingRequest: (resourceId: string) => !!getRequestId(resourceId),
     isLoadingRequest,
+    singleRightRequests,
+    isLoadingRequests,
   };
 };

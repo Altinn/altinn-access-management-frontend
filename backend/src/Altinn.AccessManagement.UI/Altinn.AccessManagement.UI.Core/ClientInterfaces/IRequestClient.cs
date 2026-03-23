@@ -15,9 +15,10 @@ namespace Altinn.AccessManagement.UI.Core.ClientInterfaces
         /// <param name="party">The acting party asking for sent requests</param>
         /// <param name="to">The party the requests were sent to</param>
         /// <param name="status">The statuses to get</param>
+        /// <param name="type">The type of requests to get. Either "resource" or "package"</param>
         /// <param name="cancellationToken">Cancellation token</param>
         /// <returns>Paginated list of sent requests</returns>
-        Task<PaginatedResult<RequestResourceDto>> GetSentRequests(Guid party, Guid? to, List<RequestStatus> status, CancellationToken cancellationToken);
+        Task<PaginatedResult<RequestResourceDto>> GetSentRequests(Guid party, Guid? to, List<RequestStatus> status, string type, CancellationToken cancellationToken);
 
         /// <summary>
         /// Get requests received by a party
@@ -25,9 +26,10 @@ namespace Altinn.AccessManagement.UI.Core.ClientInterfaces
         /// <param name="party">The acting party asking for received requests</param>
         /// <param name="from">The party who sent the requests</param>
         /// <param name="status">The statuses to get</param>
+        /// <param name="type">The type of requests to get. Either "resource" or "package"</param>
         /// <param name="cancellationToken">Cancellation token</param>
         /// <returns>Paginated list of received requests</returns>
-        Task<PaginatedResult<RequestResourceDto>> GetReceivedRequests(Guid party, Guid? from, List<RequestStatus> status, CancellationToken cancellationToken);
+        Task<PaginatedResult<RequestResourceDto>> GetReceivedRequests(Guid party, Guid? from, List<RequestStatus> status, string type, CancellationToken cancellationToken);
 
         /// <summary>
         /// Get a single request by id
