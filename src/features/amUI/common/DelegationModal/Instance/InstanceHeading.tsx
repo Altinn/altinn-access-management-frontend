@@ -4,7 +4,7 @@ import { Avatar, DsHeading, DsParagraph, formatDisplayName, Icon } from '@altinn
 
 import classes from './InstanceHeading.module.css';
 import { PartyType } from '@/rtk/features/userInfoApi';
-import { t } from 'i18next';
+import { useTranslation } from 'react-i18next';
 
 export const InstanceHeading = ({
   resource,
@@ -16,6 +16,7 @@ export const InstanceHeading = ({
   fromPartyType?: PartyType;
 }) => {
   const { getProviderLogoUrl } = useProviderLogoUrl();
+  const { t } = useTranslation();
   const emblem = getProviderLogoUrl(resource.resourceOwnerOrgcode ?? '');
   const fromName = formatDisplayName({
     fullName: fromPartyName ?? '',

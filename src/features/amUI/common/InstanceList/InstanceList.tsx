@@ -91,13 +91,12 @@ export const InstanceList = ({
         <List>
           {filteredInstances.map((instanceDelegation) => {
             const item = toInstanceListItem(instanceDelegation, getProviderLogoUrl);
-            if (!item || !item.id) {
-              return null;
-            }
+
             const Component = getItemAs?.(instanceDelegation);
-            const isCorrespondenceInstance =
-              item.id.startsWith('urn:altinn:correspondence-id:') ?? false;
-            const inboxUrl = `${getAfUrl()}redirect?instanceUrn=${encodeURIComponent(item.id)}`;
+            const isCorrespondenceInstance = instanceDelegation.instance.refId.startsWith(
+              'urn:altinn:correspondence-id:',
+            );
+            const inboxUrl = `${getAfUrl()}redirect?instanceUrn=${encodeURIComponent(instanceDelegation.instance.refId)}`;
 
             return (
               <DialogListItem
