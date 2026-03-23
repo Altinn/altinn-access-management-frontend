@@ -98,8 +98,13 @@ test.describe('Enkelttjenestedelegering fra person til person og person til org'
     const login = new LoginPage(page);
     const aktorvalgHeader = new AktorvalgHeader(page);
     await test.step('sett opp testdata', async () => {
-      await api.deleteConnection('09889499432', '09889499432', ['50907400120']);
       await api.addConnection('09889499432', '09889499432', '50907400120');
+      await api.delegateSingleService(
+        '09889499432',
+        '09889499432',
+        '50907400120',
+        'bruno-correspondence',
+      );
     });
 
     await test.step('Logg inn', async () => {
@@ -114,15 +119,6 @@ test.describe('Enkelttjenestedelegering fra person til person og person til org'
     await test.step('Gå til brukere-siden og klikk på "VASSEN ERT"', async () => {
       await accessManagementFrontPage.goToUsers();
       await accessManagementFrontPage.clickUser('VASSEN ERT');
-    });
-
-    await test.step('Gi VASSEN ERT fullmakt til enkelttjenesten "bruno-correspondence"', async () => {
-      await accessManagementFrontPage.goToEnkelttjenester();
-      await accessManagementFrontPage.clickGiFullmakt();
-      await accessManagementFrontPage.sokEtterEnkelttjeneste('bruno-correspondence');
-      await accessManagementFrontPage.clickEnkelttjeneste('bruno-correspondence');
-      await accessManagementFrontPage.clickGiFullmaktEnkelttjeneste();
-      await accessManagementFrontPage.LukkGiFullmaktVindu();
     });
 
     await test.step('slett "bruno-correspondence" for VASSEN ERT', async () => {
@@ -147,6 +143,12 @@ test.describe('Enkelttjenestedelegering fra person til person og person til org'
     const aktorvalgHeader = new AktorvalgHeader(page);
     await test.step('sett opp testdata', async () => {
       await api.addConnection('09889499432', '09889499432', '210530932');
+      await api.delegateSingleService(
+        '09889499432',
+        '09889499432',
+        '210530932',
+        'bruno-correspondence',
+      );
     });
 
     await test.step('Logg inn', async () => {
@@ -162,15 +164,6 @@ test.describe('Enkelttjenestedelegering fra person til person og person til org'
       await accessManagementFrontPage.goToUsers();
       await accessManagementFrontPage.expandOrg('TYDELIG VIS TIGER AS');
       await accessManagementFrontPage.clickUser('TYDELIG VIS TIGER AS');
-    });
-
-    await test.step('Gi TYDELIG VIS TIGER AS fullmakt til enkelttjenesten "bruno-correspondence"', async () => {
-      await accessManagementFrontPage.goToEnkelttjenester();
-      await accessManagementFrontPage.clickGiFullmakt();
-      await accessManagementFrontPage.sokEtterEnkelttjeneste('bruno-correspondence');
-      await accessManagementFrontPage.clickEnkelttjeneste('bruno-correspondence');
-      await accessManagementFrontPage.clickGiFullmaktEnkelttjeneste();
-      await accessManagementFrontPage.LukkGiFullmaktVindu();
     });
 
     await test.step('slett "bruno-correspondence" for TYDELIG VIS TIGER AS', async () => {
