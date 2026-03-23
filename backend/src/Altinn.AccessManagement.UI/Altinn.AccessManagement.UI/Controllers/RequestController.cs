@@ -80,7 +80,7 @@ namespace Altinn.AccessManagement.UI.Controllers
         {
             try
             {
-                var languageCode = LanguageHelper.GetSelectedLanguageCookieValueBackendStandard(HttpContext) ?? string.Empty;
+                var languageCode = LanguageHelper.GetSelectedLanguageCookieValueBackendStandard(HttpContext);
                 var returnVal = await _requestService.GetEnrichedSentResourceRequests(party, to, status, languageCode, cancellationToken);
                 return Ok(returnVal);
             }
@@ -143,7 +143,7 @@ namespace Altinn.AccessManagement.UI.Controllers
         {
             try
             {
-                var languageCode = LanguageHelper.GetSelectedLanguageCookieValueBackendStandard(HttpContext) ?? string.Empty;
+                var languageCode = LanguageHelper.GetSelectedLanguageCookieValueBackendStandard(HttpContext);
                 var returnVal = await _requestService.GetEnrichedReceivedResourceRequests(party, from, status, languageCode, cancellationToken);
                 return Ok(returnVal);
             }
