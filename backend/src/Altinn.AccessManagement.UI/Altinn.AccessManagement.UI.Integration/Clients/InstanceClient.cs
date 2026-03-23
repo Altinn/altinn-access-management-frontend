@@ -118,7 +118,8 @@ namespace Altinn.AccessManagement.UI.Integration.Clients
                 StringContent content = new StringContent(requestBody, Encoding.UTF8, "application/json");
 
                 var response = await _client.PostAsync(token, endpointUrl, content);
-
+                var resContent = await response.Content.ReadAsStringAsync();
+                
                 if (!response.IsSuccessStatusCode)
                 {
                     _logger.LogError($"Unexpected http response. Status code: {response.StatusCode}, Reason: {response.ReasonPhrase}");

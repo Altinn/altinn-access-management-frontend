@@ -139,8 +139,13 @@ namespace Altinn.AccessManagement.UI.Controllers
                 {
                     return Ok(await response.Content.ReadAsStringAsync());
                 }
-
+                
                 return new ObjectResult(ProblemDetailsFactory.CreateProblemDetails(HttpContext, (int?)response.StatusCode, "Error returned from backend"));
+            }
+            catch (HttpStatusException statusEx)
+            {
+                string responseContent = statusEx.Message;
+                return new ObjectResult(ProblemDetailsFactory.CreateProblemDetails(HttpContext, (int?)statusEx.StatusCode, "Unexpected HttpStatus response from backend", detail: responseContent));
             }
             catch (Exception ex)
             {
@@ -241,6 +246,11 @@ namespace Altinn.AccessManagement.UI.Controllers
             {
                 var users = await _instanceService.GetInstanceUsers(party, resource, instance);
                 return Ok(users);
+            }
+            catch (HttpStatusException statusEx)
+            {
+                string responseContent = statusEx.Message;
+                return new ObjectResult(ProblemDetailsFactory.CreateProblemDetails(HttpContext, (int?)statusEx.StatusCode, "Unexpected HttpStatus response", detail: responseContent));
             }
             catch (Exception ex)
             {
