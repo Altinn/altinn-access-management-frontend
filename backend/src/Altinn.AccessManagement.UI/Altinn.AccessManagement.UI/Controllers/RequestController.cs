@@ -1,6 +1,7 @@
 using System.Text.Json;
 using System.Text.Json.Serialization;
 using Altinn.AccessManagement.UI.Core.Enums;
+using Altinn.AccessManagement.UI.Core.Exceptions;
 using Altinn.AccessManagement.UI.Core.Helpers;
 using Altinn.AccessManagement.UI.Core.Services.Interfaces;
 using Altinn.AccessManagement.UI.Filters;
@@ -84,6 +85,10 @@ namespace Altinn.AccessManagement.UI.Controllers
                 var returnVal = await _requestService.GetEnrichedSentResourceRequests(party, to, status, languageCode, cancellationToken);
                 return Ok(returnVal);
             }
+            catch (ResourceNotFoundException ex)
+            {
+                return NotFound(ProblemDetailsFactory.CreateProblemDetails(HttpContext, (int?)StatusCodes.Status404NotFound, "Resource not found", detail: ex.Message));
+            }
             catch (HttpStatusException statusEx)
             {
                 string responseContent = statusEx.Message;
@@ -146,6 +151,10 @@ namespace Altinn.AccessManagement.UI.Controllers
                 var languageCode = LanguageHelper.GetSelectedLanguageCookieValueBackendStandard(HttpContext);
                 var returnVal = await _requestService.GetEnrichedReceivedResourceRequests(party, from, status, languageCode, cancellationToken);
                 return Ok(returnVal);
+            }
+            catch (ResourceNotFoundException ex)
+            {
+                return NotFound(ProblemDetailsFactory.CreateProblemDetails(HttpContext, (int?)StatusCodes.Status404NotFound, "Resource not found", detail: ex.Message));
             }
             catch (HttpStatusException statusEx)
             {

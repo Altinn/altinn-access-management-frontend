@@ -1,5 +1,6 @@
 using Altinn.AccessManagement.UI.Core.ClientInterfaces;
 using Altinn.AccessManagement.UI.Core.Enums;
+using Altinn.AccessManagement.UI.Core.Exceptions;
 using Altinn.AccessManagement.UI.Core.Helpers;
 using Altinn.AccessManagement.UI.Core.Models.Common;
 using Altinn.AccessManagement.UI.Core.Models.Request;
@@ -125,7 +126,7 @@ namespace Altinn.AccessManagement.UI.Core.Services
                 
                 if (!resourceDictionary.TryGetValue(request.ResourceId, out var resource))
                 {
-                    throw new InvalidOperationException($"Resource not found for ID: {request.ResourceId}");
+                    throw new ResourceNotFoundException($"Resource not found for ID: {request.ResourceId}");
                 }
                 
                 return new EnrichedResourceRequest()

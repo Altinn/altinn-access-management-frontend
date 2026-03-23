@@ -107,6 +107,22 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
             Assert.Equal(HttpStatusCode.BadRequest, httpResponse.StatusCode);
         }
 
+        /// <summary>
+        ///     Test case: GetEnrichedSentResourceRequests encounters an InvalidOperationException
+        ///     Expected: Returns 500 Internal Server Error
+        /// </summary>
+        [Fact]
+        public async Task GetEnrichedSentResourceRequests_InvalidOperationException()
+        {
+            // Arrange - Guid.Empty triggers ThrowExceptionIfTriggerParty in mock
+            string party = "22222222-2222-2222-2222-222222222222";
+
+            // Act
+            HttpResponseMessage httpResponse = await _client.GetAsync($"accessmanagement/api/v1/request/sent/resource?party={party}");
+
+            // Assert
+            Assert.Equal(HttpStatusCode.NotFound, httpResponse.StatusCode);
+        }
 
         /// <summary>
         ///     Test case: GetReceivedRequests returns received requests for party
@@ -184,6 +200,23 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
 
             // Assert
             Assert.Equal(HttpStatusCode.BadRequest, httpResponse.StatusCode);
+        }
+        
+        /// <summary>
+        ///     Test case: GetEnrichedReceivedResourceRequests encounters an InvalidOperationException
+        ///     Expected: Returns 500 Internal Server Error
+        /// </summary>
+        [Fact]
+        public async Task GetEnrichedReceivedResourceRequests_InvalidOperationException()
+        {
+            // Arrange - Guid.Empty triggers ThrowExceptionIfTriggerParty in mock
+            string party = "22222222-2222-2222-2222-222222222222";
+
+            // Act
+            HttpResponseMessage httpResponse = await _client.GetAsync($"accessmanagement/api/v1/request/received/resource?party={party}");
+
+            // Assert
+            Assert.Equal(HttpStatusCode.NotFound, httpResponse.StatusCode);
         }
 
         /// <summary>
