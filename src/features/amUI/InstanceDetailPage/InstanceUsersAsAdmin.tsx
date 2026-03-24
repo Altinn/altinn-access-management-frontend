@@ -4,6 +4,7 @@ import { useTranslation } from 'react-i18next';
 import UserSearch from '../common/UserSearch/UserSearch';
 import { mapPermissionsToUserSearchNodes } from '../common/UserSearch/permissionMapper';
 import { mapConnectionsToUserSearchNodes } from '../common/UserSearch/connectionMapper';
+import { ConnectionUserType } from '@/rtk/features/connectionApi';
 import { usePartyRepresentation } from '../common/PartyRepresentationContext/PartyRepresentationContext';
 import { useGetRightHoldersQuery } from '@/rtk/features/connectionApi';
 import { useGetInstancesQuery, useRemoveInstanceMutation } from '@/rtk/features/instanceApi';
@@ -71,13 +72,19 @@ export const InstanceUsersAsAdmin = ({
   );
 
   const indirectUsers = useMemo(
-    () => mapConnectionsToUserSearchNodes(indirectConnections),
+    () =>
+      mapConnectionsToUserSearchNodes(indirectConnections).filter(
+        (user) =>
+          user.type !== ConnectionUserType.Organization ||
+          (user.children && user.children.length > 0),
+      ),
     [indirectConnections],
   );
 
   return (
     <UserSearch
       includeSelfAsChild={false}
+      includeSelfAsChildOnIndirect={false}
       AddUserButton={AddUserButton}
       users={users}
       indirectUsers={indirectUsers}
