@@ -166,7 +166,7 @@ export const InstanceDetailPageContent = () => {
     ? getProviderLogoUrl(resource.resourceOwnerOrgcode)
     : undefined;
   const selectedUserAvailableActions =
-    selectedUserMode === 'delegate' || !isAdmin
+    selectedUserMode === 'delegate' || isAdmin === false
       ? [DelegationAction.DELEGATE]
       : [DelegationAction.REVOKE, DelegationAction.DELEGATE];
 
@@ -208,7 +208,7 @@ export const InstanceDetailPageContent = () => {
               />
             )}
           </DsParagraph>
-          {isInstanceAdmin && !isAdmin && (
+          {isInstanceAdmin && isAdmin === false && (
             <DsParagraph data-size='sm'>
               {t('instance_detail_page.instance_admin_edit_disclaimer')}
             </DsParagraph>
