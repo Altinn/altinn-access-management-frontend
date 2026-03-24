@@ -195,6 +195,26 @@ const InnerContent = ({ request }: InnerContentProps) => {
   const isSelfParty = selfParty?.partyUuid === request.from.id;
   const isActionButtonDisabled = isConfirmingRequest || isWithdrawingRequest;
 
+  if (confirmResponse) {
+    return (
+      <RequestReceipt
+        headerTextKey='draft_request_page.request_approved'
+        bodyTextKey='draft_request_page.request_approved_info'
+        toName={toName}
+      />
+    );
+  }
+
+  if (withdrawResponse) {
+    return (
+      <RequestReceipt
+        headerTextKey='draft_request_page.request_withdrawn'
+        bodyTextKey='draft_request_page.request_withdrawn_info'
+        toName={toName}
+      />
+    );
+  }
+
   return (
     <div className={classes.centerBlock}>
       <div className={cn(classes.requestBlock, classes.headerBlock)}>
@@ -270,6 +290,45 @@ const InnerContent = ({ request }: InnerContentProps) => {
             </DsButton>
           </div>
         </div>
+      </div>
+    </div>
+  );
+};
+
+interface RequestReceiptProps {
+  headerTextKey: string;
+  bodyTextKey: string;
+  toName: string;
+}
+
+const RequestReceipt = ({ headerTextKey, bodyTextKey, toName }: RequestReceiptProps) => {
+  const { t } = useTranslation();
+
+  return (
+    <div className={classes.centerBlock}>
+      <div className={cn(classes.requestBlock, classes.headerBlock)}>
+        <DsHeading
+          level={1}
+          data-size='md'
+        >
+          <Trans
+            i18nKey={headerTextKey}
+            components={{ b: <strong /> }}
+            values={{ to_name: toName }}
+          />
+        </DsHeading>
+      </div>
+      <div className={classes.requestBlock}>
+        <DsParagraph>
+          <Trans
+            i18nKey={bodyTextKey}
+            components={{ b: <strong /> }}
+            values={{ to_name: toName }}
+          />
+        </DsParagraph>
+        <DsParagraph>
+          <div className={classes.closeWindowInfo}>{t('draft_request_page.close_window_info')}</div>
+        </DsParagraph>
       </div>
     </div>
   );

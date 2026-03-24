@@ -1030,6 +1030,11 @@
     "loading_request": "Laster forespørsel",
     "load_request_error": "Kunne ikke laste forespørsel",
     "approve_request_error": "Kunne ikke godkjenne forespørsel",
-    "withdraw_request_error": "Kunne ikke avvise forespørsel"
+    "withdraw_request_error": "Kunne ikke avvise forespørsel",
+    "request_approved": "Forespørselen er sendt til <strong>{{to_name}}</strong>",
+    "request_approved_info": "Noen i <strong>{{to_name}}</strong> vil snart behandle foresørselen din, og du vil få varsel når den er godkjent.",
+    "request_withdrawn": "Forespørselen er avvist",
+    "request_withdrawn_info": "Du har avvist forespørselen og vil dermed ikke få fullmakt til <strong>{{to_name}}</strong>.",
+    "close_window_info": "Du kan nå lukke dette vinduet."
   }
 }
