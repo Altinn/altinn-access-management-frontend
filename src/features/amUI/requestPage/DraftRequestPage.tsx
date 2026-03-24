@@ -24,10 +24,14 @@ import {
 } from '@/rtk/features/requestApi';
 import { redirectToChangeReporteeAndRedirect } from '@/resources/utils/changeReporteeUtils';
 import { getCookie } from '@/resources/Cookie/CookieMethods';
-import { PartyRepresentationProvider } from '../common/PartyRepresentationContext/PartyRepresentationContext';
+import {
+  PartyRepresentationProvider,
+  usePartyRepresentation,
+} from '../common/PartyRepresentationContext/PartyRepresentationContext';
 import { ResourceHeading } from '../common/DelegationModal/SingleRights/ResourceHeading';
 import { RightsSection } from '../common/DelegationModal/SingleRights/RightsSection';
 import { useRightsSection } from '../common/DelegationModal/SingleRights/hooks/useRightsSection';
+import { useGetUserProfileQuery } from '@/rtk/features/userInfoApi';
 
 export const DraftRequestPage = () => {
   const { t, i18n } = useTranslation();
@@ -37,8 +41,6 @@ export const DraftRequestPage = () => {
   const [searchParams] = useSearchParams();
   const requestId = searchParams.get('id') ?? '';
   const partyUuid = getCookie('AltinnPartyUuid') || '';
-
-  //const { data: userData } = useGetUserProfileQuery();
 
   const {
     data: request,
@@ -50,6 +52,8 @@ export const DraftRequestPage = () => {
       skip: !requestId,
     },
   );
+
+  const { data: userData } = useGetUserProfileQuery();
 
   useEffect(() => {
     // If the request is for a different user than the one currently logged in, redirect to the correct reportee
@@ -110,9 +114,9 @@ export const DraftRequestPage = () => {
                 'current-user': {
                   title: t('header.logged_in_as_name', {
                     name: formatDisplayName({
-                      fullName: request?.from.name || '', // TODO; navn på den som faktisk er logget inn (hvis det brukes i ny header)
+                      fullName: userData?.name || '',
                       type: 'person',
-                      reverseNameOrder: false,
+                      reverseNameOrder: true,
                     }),
                   }),
                 },
@@ -121,20 +125,16 @@ export const DraftRequestPage = () => {
           },
         }}
       >
-        <div className={classes.centerBlock}>
-          {isLoadingRequest && (
-            <DsSpinner
-              aria-label={t('consent_request.loading_consent')}
-              data-size='lg'
-            />
-          )}
-        </div>
+        {isLoadingRequest && <LoadingState />}
+        {loadRequestError && (
+          <DsAlert data-color='danger'>{t('draft_request_page.load_request_error')}</DsAlert>
+        )}
         {request && (
           <PartyRepresentationProvider
-            fromPartyUuid={request.from.id}
-            actingPartyUuid={request.from.id || ''}
+            fromPartyUuid={partyUuid}
+            actingPartyUuid={partyUuid}
             toPartyUuid={''}
-            errorOnPriv={true}
+            loadingComponent={<LoadingState />}
           >
             <InnerContent request={request} />
           </PartyRepresentationProvider>
@@ -144,15 +144,33 @@ export const DraftRequestPage = () => {
   );
 };
 
+const LoadingState = () => {
+  const { t } = useTranslation();
+  return (
+    <div className={classes.centerBlock}>
+      <DsSpinner
+        aria-label={t('draft_request_page.loading_request')}
+        data-size='lg'
+      />
+    </div>
+  );
+};
+
 interface InnerContentProps {
   request: EnrichedRequestDto;
 }
 
 const InnerContent = ({ request }: InnerContentProps) => {
   const { t } = useTranslation();
+
+  const { selfParty } = usePartyRepresentation();
   const toName = formatDisplayName({
     fullName: request.to.name,
     type: request.to.type === 'Person' ? 'person' : 'company',
+  });
+  const fromName = formatDisplayName({
+    fullName: request.from.name,
+    type: request.from.type === 'Person' ? 'person' : 'company',
   });
 
   const [
@@ -174,8 +192,7 @@ const InnerContent = ({ request }: InnerContentProps) => {
   const onWithdrawRequest = () => {
     withdrawRequest({ party: request.from.id, id: request.id });
   };
-
-  const canRequestBeApproved = request.status === 'Draft';
+  const isSelfParty = selfParty?.partyUuid === request.from.id;
   const isActionButtonDisabled = isConfirmingRequest || isWithdrawingRequest;
 
   return (
@@ -188,14 +205,16 @@ const InnerContent = ({ request }: InnerContentProps) => {
           <Trans
             i18nKey={'draft_request_page.heading'}
             components={{ b: <strong /> }}
-            values={{ name: toName }}
+            values={{ to_name: toName }}
           />
         </DsHeading>
         <DsParagraph>
           <Trans
-            i18nKey={'draft_request_page.introduction'}
+            i18nKey={
+              isSelfParty ? 'draft_request_page.intro_person' : 'draft_request_page.intro_company'
+            }
             components={{ b: <strong /> }}
-            values={{ name: toName }}
+            values={{ to_name: toName, from_name: fromName }}
           />
         </DsParagraph>
       </div>
@@ -219,37 +238,37 @@ const InnerContent = ({ request }: InnerContentProps) => {
           setRights={setRights}
           undelegableActions={[]}
           isDelegationCheckLoading={false}
-          toName={t('common.you_uppercase')}
+          toName={isSelfParty ? t('common.you_uppercase') : fromName}
           isSingleRightRequest={true}
           availableActions={[]}
           delegationError={null}
           missingAccess={null}
         />
         <div>
-          {confirmRequestError && <DsAlert data-color='danger'>Feil på confirm</DsAlert>}
-          {withdrawRequestError && <DsAlert data-color='danger'>Feil på withdraw</DsAlert>}
-          {canRequestBeApproved ? (
-            <div className={classes.buttonRow}>
-              <DsButton
-                variant='primary'
-                aria-disabled={isActionButtonDisabled}
-                loading={isConfirmingRequest}
-                onClick={onConfirmRequest}
-              >
-                {t('draft_request_page.confirm_request')}
-              </DsButton>
-              <DsButton
-                variant='primary'
-                aria-disabled={isActionButtonDisabled}
-                loading={isWithdrawingRequest}
-                onClick={onWithdrawRequest}
-              >
-                {t('draft_request_page.withdraw_request')}
-              </DsButton>
-            </div>
-          ) : (
-            <DsAlert data-color='danger'>Denne forespørselen kan ikke godkjennes.</DsAlert>
+          {confirmRequestError && (
+            <DsAlert data-color='danger'>{t('draft_request_page.approve_request_error')}</DsAlert>
           )}
+          {withdrawRequestError && (
+            <DsAlert data-color='danger'>{t('draft_request_page.withdraw_request_error')}</DsAlert>
+          )}
+          <div className={classes.buttonRow}>
+            <DsButton
+              variant='primary'
+              aria-disabled={isActionButtonDisabled}
+              loading={isConfirmingRequest}
+              onClick={onConfirmRequest}
+            >
+              {t('draft_request_page.confirm_request')}
+            </DsButton>
+            <DsButton
+              variant='primary'
+              aria-disabled={isActionButtonDisabled}
+              loading={isWithdrawingRequest}
+              onClick={onWithdrawRequest}
+            >
+              {t('draft_request_page.withdraw_request')}
+            </DsButton>
+          </div>
         </div>
       </div>
     </div>

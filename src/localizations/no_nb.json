@@ -1022,9 +1022,14 @@
   },
   "draft_request_page": {
     "page_title": "Forespørsel om fullmakt - Altinn",
-    "heading": "Vil du be om tilgang til <strong>{{name}}</strong>?",
-    "introduction": "Det er opprettet et forslag om tilgang til en tjeneste på dine vegne, men du må selv godkjenne den for at den skal tre i kraft. Forespørselen vil kun sendes til <strong>{{name}}</strong> dersom du sier deg enig.",
+    "heading": "Vil du be om tilgang til <strong>{{to_name}}</strong>?",
+    "intro_person": "Det er opprettet et forslag om tilgang til en tjeneste på dine vegne, men du må selv godkjenne den for at den skal tre i kraft. Forespørselen vil kun sendes til <strong>{{to_name}}</strong> dersom du sier deg enig.",
+    "intro_company": "Det er opprettet et forslag om tilgang til en tjeneste på vegne av <strong>{{from_name}}</strong>, men du må selv godkjenne den for at den skal tre i kraft. Forespørselen vil kun sendes til <strong>{{to_name}}</strong> dersom du sier deg enig.",
     "confirm_request": "Ja, be om tilgang",
-    "withdraw_request": "Nei, avbryt"
+    "withdraw_request": "Nei, avvis",
+    "loading_request": "Laster forespørsel",
+    "load_request_error": "Kunne ikke laste forespørsel",
+    "approve_request_error": "Kunne ikke godkjenne forespørsel",
+    "withdraw_request_error": "Kunne ikke avvise forespørsel"
   }
 }
