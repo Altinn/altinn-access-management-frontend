@@ -467,6 +467,7 @@
     "give_package_to_name": "Gi <strong>{{name}}</strong> fullmakt til ny tilgangspakke",
     "name_will_receive": "<strong>{{name}}</strong> vil få:",
     "name_has_the_following": "<strong>{{name}}</strong> har:",
+    "name_requests_access_to": "<strong>{{name}}</strong> ber om:",
     "give_poa": "Gi fullmakt",
     "success_message": "Fullmakt gitt til {{name}}",
     "error_message": "Kunne ikke gi fullmakt til {{name}}",
@@ -1018,5 +1019,12 @@
     "request_systemuser": "Ber om å opprette systembruker",
     "error_loading_requests": "Kunne ikke laste forespørsler",
     "error_partial_loading_requests": "Kunne ikke laste alle forespørsler"
+  },
+  "draft_request_page": {
+    "page_title": "Forespørsel om fullmakt - Altinn",
+    "heading": "Vil du be om tilgang til <strong>{{name}}</strong>?",
+    "introduction": "Det er opprettet et forslag om tilgang til en tjeneste på dine vegne, men du må selv godkjenne den for at den skal tre i kraft. Forespørselen vil kun sendes til <strong>{{name}}</strong> dersom du sier deg enig.",
+    "confirm_request": "Ja, be om tilgang",
+    "withdraw_request": "Nei, avbryt"
   }
 }

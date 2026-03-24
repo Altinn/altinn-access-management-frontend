@@ -76,7 +76,9 @@ export const RightsSection = ({
             i18nKey={
               hasAccessAndNoChanges
                 ? 'delegation_modal.name_has_the_following'
-                : 'delegation_modal.name_will_receive'
+                : isSingleRightRequest
+                  ? 'delegation_modal.name_requests_access_to'
+                  : 'delegation_modal.name_will_receive'
             }
             values={{ name: toName }}
             components={{ strong: <strong /> }}

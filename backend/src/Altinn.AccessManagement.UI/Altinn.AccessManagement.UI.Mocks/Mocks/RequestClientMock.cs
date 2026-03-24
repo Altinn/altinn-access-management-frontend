@@ -123,6 +123,11 @@ namespace Altinn.AccessManagement.UI.Mocks.Mocks
             return await Task.FromResult(Util.GetMockData<RequestResourceDto>(dataPath));
         }
 
+        public async Task<RequestResourceDto> GetDraftRequest(Guid id, CancellationToken cancellationToken)
+        {
+            throw new NotImplementedException();
+        }
+
         private static void ThrowExceptionIfTriggerParty(string id)
         {
             if (id == "00000000-0000-0000-0000-000000000000")

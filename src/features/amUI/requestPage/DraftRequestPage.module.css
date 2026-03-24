@@ -1,0 +1,43 @@
+.centerBlock {
+  display: block;
+  align-self: center;
+  margin-top: var(--ds-size-4);
+  max-width: 65rem;
+}
+
+.requestBlock {
+  background-color: var(--ds-color-accent-background-default);
+  padding: var(--ds-size-9) var(--ds-size-15);
+}
+
+.headerBlock {
+  display: flex;
+  flex-direction: column;
+  gap: var(--ds-size-2);
+  padding-top: var(--ds-size-14);
+  margin-bottom: 3px;
+}
+
+.buttonRow {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  gap: var(--ds-size-4);
+  margin-top: var(--ds-size-6);
+  margin-bottom: var(--ds-size-6);
+}
+
+.resourceInfo {
+  display: flex;
+  flex-direction: column;
+  gap: var(--ds-size-1);
+  margin-bottom: var(--ds-size-4);
+}
+
+@media only screen and (max-width: 769px) {
+  .requestBlock {
+    padding-left: var(--ds-size-6);
+    padding-right: var(--ds-size-6);
+    margin-bottom: 6px;
+  }
+}
