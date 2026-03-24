@@ -1,14 +1,18 @@
 import { useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
+import { DsAlert, DsParagraph } from '@altinn/altinn-components';
 
 import UserSearch from '../common/UserSearch/UserSearch';
 import {
   mapSimplifiedConnectionsToUserSearchNodes,
   mapSimplifiedPartiesToUserSearchNodes,
 } from '../common/UserSearch/connectionMapper';
-import { ConnectionUserType } from '@/rtk/features/connectionApi';
+import {
+  createErrorDetails,
+  TechnicalErrorParagraphs,
+} from '../common/TechnicalErrorParagraphs/TechnicalErrorParagraphs';
+import { ConnectionUserType, useGetSimplifiedConnectionsQuery } from '@/rtk/features/connectionApi';
 import { usePartyRepresentation } from '../common/PartyRepresentationContext/PartyRepresentationContext';
-import { useGetSimplifiedConnectionsQuery } from '@/rtk/features/connectionApi';
 import { useGetInstanceUsersQuery } from '@/rtk/features/instanceApi';
 import type { UserActionTarget } from '../common/UserSearch/types';
 import type { UserSearchProps } from '../common/UserSearch/UserSearch';
@@ -29,7 +33,12 @@ export const InstanceUsersAsInstanceAdmin = ({
   const { t } = useTranslation();
   const { actingParty, fromParty } = usePartyRepresentation();
 
-  const { data: instanceUsers, isLoading: isLoadingInstanceUsers } = useGetInstanceUsersQuery(
+  const {
+    data: instanceUsers,
+    isLoading: isLoadingInstanceUsers,
+    isError: isInstanceUsersError,
+    error: instanceUsersError,
+  } = useGetInstanceUsersQuery(
     {
       party: actingParty?.partyUuid || '',
       resource: resourceId,
@@ -44,6 +53,8 @@ export const InstanceUsersAsInstanceAdmin = ({
     data: simplifiedConnections,
     isLoading: isLoadingSimplifiedConnections,
     isFetching: isFetchingSimplifiedConnections,
+    isError: isConnectionError,
+    error: connectionError,
   } = useGetSimplifiedConnectionsQuery(
     { partyUuid: fromParty?.partyUuid ?? '' },
     {
@@ -66,18 +77,39 @@ export const InstanceUsersAsInstanceAdmin = ({
     [simplifiedConnections],
   );
 
+  const errorDetails =
+    isInstanceUsersError || isConnectionError
+      ? createErrorDetails(instanceUsersError || connectionError)
+      : null;
+
   return (
-    <UserSearch
-      includeSelfAsChild={false}
-      includeSelfAsChildOnIndirect={false}
-      AddUserButton={AddUserButton}
-      users={users}
-      indirectUsers={indirectUsers}
-      isLoading={isLoadingInstanceUsers || isLoadingSimplifiedConnections}
-      isActionLoading={isFetchingSimplifiedConnections}
-      canDelegate
-      noUsersText={t('instance_detail_page.no_users')}
-      onDelegate={onDelegate}
-    />
+    <>
+      {errorDetails && (
+        <DsAlert
+          role='alert'
+          data-color='danger'
+        >
+          <DsParagraph>{t('common.general_error_paragraph')}</DsParagraph>
+          <TechnicalErrorParagraphs
+            size='sm'
+            status={errorDetails.status}
+            time={errorDetails.time}
+            traceId={errorDetails.traceId}
+          />
+        </DsAlert>
+      )}
+      <UserSearch
+        includeSelfAsChild={false}
+        includeSelfAsChildOnIndirect={false}
+        AddUserButton={AddUserButton}
+        users={users}
+        indirectUsers={indirectUsers}
+        isLoading={isLoadingInstanceUsers || isLoadingSimplifiedConnections}
+        isActionLoading={isFetchingSimplifiedConnections}
+        canDelegate
+        noUsersText={t('instance_detail_page.no_users')}
+        onDelegate={onDelegate}
+      />
+    </>
   );
 };

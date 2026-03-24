@@ -1,13 +1,17 @@
 import { useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
+import { DsAlert, DsParagraph } from '@altinn/altinn-components';
 
 import UserSearch from '../common/UserSearch/UserSearch';
 import { mapPermissionsToUserSearchNodes } from '../common/UserSearch/permissionMapper';
 import { mapConnectionsToUserSearchNodes } from '../common/UserSearch/connectionMapper';
-import { ConnectionUserType } from '@/rtk/features/connectionApi';
+import {
+  createErrorDetails,
+  TechnicalErrorParagraphs,
+} from '../common/TechnicalErrorParagraphs/TechnicalErrorParagraphs';
+import { ConnectionUserType, useGetRightHoldersQuery } from '@/rtk/features/connectionApi';
 import { usePartyRepresentation } from '../common/PartyRepresentationContext/PartyRepresentationContext';
-import { useGetRightHoldersQuery } from '@/rtk/features/connectionApi';
-import { useGetInstancesQuery, useRemoveInstanceMutation } from '@/rtk/features/instanceApi';
+import { useGetInstancesQuery } from '@/rtk/features/instanceApi';
 import type { UserActionTarget } from '../common/UserSearch/types';
 import type { UserSearchProps } from '../common/UserSearch/UserSearch';
 
@@ -33,7 +37,12 @@ export const InstanceUsersAsAdmin = ({
   const { t } = useTranslation();
   const { actingParty, fromParty } = usePartyRepresentation();
 
-  const { data: instances = [], isLoading: isInstancesLoading } = useGetInstancesQuery(
+  const {
+    data: instances = [],
+    isLoading: isInstancesLoading,
+    isError: isInstancesError,
+    error: instancesError,
+  } = useGetInstancesQuery(
     {
       party: actingParty?.partyUuid || '',
       from: fromParty?.partyUuid,
@@ -60,6 +69,8 @@ export const InstanceUsersAsAdmin = ({
     data: indirectConnections,
     isLoading: isLoadingIndirectConnections,
     isFetching: isFetchingIndirectConnections,
+    isError: isIndirectError,
+    error: indirectError,
   } = useGetRightHoldersQuery(
     {
       partyUuid: fromParty?.partyUuid ?? '',
@@ -81,20 +92,41 @@ export const InstanceUsersAsAdmin = ({
     [indirectConnections],
   );
 
+  const errorDetails =
+    isInstancesError || isIndirectError
+      ? createErrorDetails(instancesError || indirectError)
+      : null;
+
   return (
-    <UserSearch
-      includeSelfAsChild={false}
-      includeSelfAsChildOnIndirect={false}
-      AddUserButton={AddUserButton}
-      users={users}
-      indirectUsers={indirectUsers}
-      isLoading={isInstancesLoading || isLoadingIndirectConnections}
-      isActionLoading={isFetchingIndirectConnections || isRevoking}
-      canDelegate
-      noUsersText={t('instance_detail_page.no_users')}
-      onDelegate={onDelegate}
-      onSelect={onSelect}
-      onRevoke={onRevoke}
-    />
+    <>
+      {errorDetails && (
+        <DsAlert
+          role='alert'
+          data-color='danger'
+        >
+          <DsParagraph>{t('common.general_error_paragraph')}</DsParagraph>
+          <TechnicalErrorParagraphs
+            size='sm'
+            status={errorDetails.status}
+            time={errorDetails.time}
+            traceId={errorDetails.traceId}
+          />
+        </DsAlert>
+      )}
+      <UserSearch
+        includeSelfAsChild={false}
+        includeSelfAsChildOnIndirect={false}
+        AddUserButton={AddUserButton}
+        users={users}
+        indirectUsers={indirectUsers}
+        isLoading={isInstancesLoading || isLoadingIndirectConnections}
+        isActionLoading={isFetchingIndirectConnections || isRevoking}
+        canDelegate
+        noUsersText={t('instance_detail_page.no_users')}
+        onDelegate={onDelegate}
+        onSelect={onSelect}
+        onRevoke={onRevoke}
+      />
+    </>
   );
 };
