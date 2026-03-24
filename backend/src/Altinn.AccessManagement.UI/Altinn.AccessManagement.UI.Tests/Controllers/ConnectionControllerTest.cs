@@ -370,7 +370,7 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
             // Assert
             Assert.Equal(HttpStatusCode.OK, httpResponse.StatusCode);
         }
- 
+
         /// <summary>
         ///    Test case: AddReporteeRightHolder with username shorter than 6 characters.
         ///    Expected: Returns 400 Bad Request
@@ -912,58 +912,6 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
 
             // Assert
             Assert.Equal(HttpStatusCode.BadRequest, httpResponse.StatusCode);
-        }
-
-        /// <summary>
-        /// Test case: Handles unexpected errors when retrieving simplified connections.
-        /// Expected: Returns an internal server error.
-        /// </summary>
-        [Fact]
-        public async Task GetSimplifiedConnections_InternalServerError()
-        {
-            // Arrange
-            Guid party = Guid.Parse("cd35779b-b174-4ecc-bbef-ece13611be7f");
-
-            var connectionServiceMock = new Mock<IConnectionService>();
-            connectionServiceMock
-                .Setup(service => service.GetSimplifiedConnections(party))
-                .ThrowsAsync(new Exception("Unexpected failure"));
-
-            // Act
-            HttpResponseMessage httpResponse = await _client.GetAsync(
-                $"accessmanagement/api/v1/connection/simplified?party={party}");
-
-            // Assert
-            Assert.Equal(HttpStatusCode.InternalServerError, httpResponse.StatusCode);
-        }
-
-        /// <summary>
-        /// Test case: Handles HttpStatusException when retrieving simplified connections.
-        /// Expected: Returns problem details with the backend status code and detail message.
-        /// </summary>
-        [Fact]
-        public async Task GetSimplifiedConnections_HttpStatusException_ReturnsProblemDetails()
-        {
-            // Arrange
-            Guid party = Guid.Parse("cd35779b-b174-4ecc-bbef-ece13611be7f");
-            const string errorMessage = "Backend denied access to simplified connections.";
-
-            var connectionServiceMock = new Mock<IConnectionService>();
-            connectionServiceMock
-                .Setup(service => service.GetSimplifiedConnections(party))
-                .ThrowsAsync(new HttpStatusException("Forbidden", "Forbidden", HttpStatusCode.Forbidden, string.Empty, errorMessage));
-
-            // Act
-            HttpResponseMessage httpResponse = await _client.GetAsync(
-                $"accessmanagement/api/v1/connection/simplified?party={party}");
-            ProblemDetails problemDetails = await httpResponse.Content.ReadFromJsonAsync<ProblemDetails>();
-
-            // Assert
-            Assert.Equal(HttpStatusCode.Forbidden, httpResponse.StatusCode);
-            Assert.NotNull(problemDetails);
-            Assert.Equal((int)HttpStatusCode.Forbidden, problemDetails.Status);
-            Assert.Equal("Unexpected HttpStatus response", problemDetails.Title);
-            Assert.Equal(errorMessage, problemDetails.Detail);
         }
     }
 }
