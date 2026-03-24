@@ -42,5 +42,13 @@ namespace Altinn.AccessManagement.UI.Core.ClientInterfaces
             Guid? to,
             bool includeClientDelegations = true,
             bool includeAgentConnections = true);
+
+        /// <summary>
+        /// Gets simplified connections for a party.
+        /// This is a limited endpoint for instance admins without full admin access.
+        /// </summary>
+        /// <param name="party">The party UUID.</param>
+        /// <returns>A list of simplified connections.</returns>
+        Task<List<SimplifiedConnection>> GetSimplifiedConnections(Guid party);
     }
 }

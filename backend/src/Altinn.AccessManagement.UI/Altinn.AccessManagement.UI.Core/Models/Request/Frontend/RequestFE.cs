@@ -6,9 +6,9 @@ using Altinn.AccessManagement.UI.Core.Models.User;
 namespace Altinn.AccessManagement.UI.Core.Models.Request.Frontend
 {
     /// <summary>
-    /// Used to show single right requests
+    /// Used to show requests in the frontend
     /// </summary>
-    public class SingleRightRequest
+    public class RequestFE
     {
         /// <summary>
         /// Request id
@@ -16,7 +16,7 @@ namespace Altinn.AccessManagement.UI.Core.Models.Request.Frontend
         public Guid Id { get; set; }
 
         /// <summary>
-        /// Discriminator indicating the request type: "resource", "package", or "assignment"
+        /// Discriminator indicating the request type: "resource", "package"
         /// </summary>
         public required string Type { get; set; }
 

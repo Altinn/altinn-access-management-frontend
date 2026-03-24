@@ -52,6 +52,7 @@ export const InstancePermissions = () => {
       instances={instances}
       isLoading={isLoading}
       getItemAs={getItemAs}
+      interactive
     />
   );
 };

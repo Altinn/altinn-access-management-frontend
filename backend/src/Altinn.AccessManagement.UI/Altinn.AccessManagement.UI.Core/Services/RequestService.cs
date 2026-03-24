@@ -28,10 +28,10 @@ namespace Altinn.AccessManagement.UI.Core.Services
         }
 
         /// <inheritdoc />
-        public async Task<IEnumerable<SingleRightRequest>> GetSentRequests(Guid party, Guid? to, List<RequestStatus> status, CancellationToken cancellationToken)
+        public async Task<IEnumerable<RequestFE>> GetSentRequests(Guid party, Guid? to, List<RequestStatus> status, string type, CancellationToken cancellationToken)
         {
-            PaginatedResult<RequestResourceDto> response = await _requestClient.GetSentRequests(party, to, status, null, cancellationToken);
-            return response.Items.Select(MapToSingleRightRequest);
+            PaginatedResult<RequestResourceDto> response = await _requestClient.GetSentRequests(party, to, status, type, cancellationToken);
+            return response.Items.Select(MapToRequestFE);
         }
 
         /// <inheritdoc />
@@ -42,10 +42,10 @@ namespace Altinn.AccessManagement.UI.Core.Services
         }
 
         /// <inheritdoc />
-        public async Task<IEnumerable<SingleRightRequest>> GetReceivedRequests(Guid party, Guid? from, List<RequestStatus> status, CancellationToken cancellationToken)
+        public async Task<IEnumerable<RequestFE>> GetReceivedRequests(Guid party, Guid? from, List<RequestStatus> status, string type, CancellationToken cancellationToken)
         {
-            PaginatedResult<RequestResourceDto> response = await _requestClient.GetReceivedRequests(party, from, status, null, cancellationToken);
-            return response.Items.Select(MapToSingleRightRequest);
+            PaginatedResult<RequestResourceDto> response = await _requestClient.GetReceivedRequests(party, from, status, type, cancellationToken);
+            return response.Items.Select(MapToRequestFE);
         }
 
         /// <inheritdoc />
@@ -56,10 +56,10 @@ namespace Altinn.AccessManagement.UI.Core.Services
         }
 
         /// <inheritdoc />
-        public async Task<SingleRightRequest> GetRequest(Guid party, Guid id, CancellationToken cancellationToken)
+        public async Task<RequestFE> GetRequest(Guid party, Guid id, CancellationToken cancellationToken)
         {
             RequestResourceDto response = await _requestClient.GetRequest(party, id, cancellationToken);
-            return MapToSingleRightRequest(response);
+            return MapToRequestFE(response);
         }
 
         /// <inheritdoc />
@@ -70,43 +70,43 @@ namespace Altinn.AccessManagement.UI.Core.Services
         }
 
         /// <inheritdoc />
-        public async Task<SingleRightRequest> CreateResourceRequest(Guid party, Guid to, string resource, CancellationToken cancellationToken)
+        public async Task<RequestFE> CreateResourceRequest(Guid party, Guid to, string resource, CancellationToken cancellationToken)
         {
             RequestResourceDto response = await _requestClient.CreateResourceRequest(party, to, resource, cancellationToken);
-            return MapToSingleRightRequest(response);
+            return MapToRequestFE(response);
         }
 
         /// <inheritdoc />
-        public async Task<SingleRightRequest> WithdrawRequest(Guid party, Guid id, CancellationToken cancellationToken)
+        public async Task<RequestFE> WithdrawRequest(Guid party, Guid id, CancellationToken cancellationToken)
         {
             RequestResourceDto response = await _requestClient.WithdrawRequest(party, id, cancellationToken);
-            return MapToSingleRightRequest(response);
+            return MapToRequestFE(response);
         }
 
         /// <inheritdoc />
-        public async Task<SingleRightRequest> ConfirmRequest(Guid party, Guid id, CancellationToken cancellationToken)
+        public async Task<RequestFE> ConfirmRequest(Guid party, Guid id, CancellationToken cancellationToken)
         {
             RequestResourceDto response = await _requestClient.ConfirmRequest(party, id, cancellationToken);
-            return MapToSingleRightRequest(response);
+            return MapToRequestFE(response);
         }
 
         /// <inheritdoc />
-        public async Task<SingleRightRequest> RejectRequest(Guid party, Guid id, CancellationToken cancellationToken)
+        public async Task<RequestFE> RejectRequest(Guid party, Guid id, CancellationToken cancellationToken)
         {
             RequestResourceDto response = await _requestClient.RejectRequest(party, id, cancellationToken);
-            return MapToSingleRightRequest(response);
+            return MapToRequestFE(response);
         }
 
         /// <inheritdoc />
-        public async Task<SingleRightRequest> ApproveRequest(Guid party, Guid id, CancellationToken cancellationToken)
+        public async Task<RequestFE> ApproveRequest(Guid party, Guid id, CancellationToken cancellationToken)
         {
             RequestResourceDto response = await _requestClient.ApproveRequest(party, id, cancellationToken);
-            return MapToSingleRightRequest(response);
+            return MapToRequestFE(response);
         }
 
-        private static SingleRightRequest MapToSingleRightRequest(RequestResourceDto x)
+        private static RequestFE MapToRequestFE(RequestResourceDto x)
         {
-            return new SingleRightRequest()
+            return new RequestFE()
             {
                 Id = x.Id,
                 From = x.From,
@@ -129,7 +129,7 @@ namespace Altinn.AccessManagement.UI.Core.Services
             
             return list.Select(x => 
             {
-                SingleRightRequest request = MapToSingleRightRequest(x);
+                RequestFE request = MapToRequestFE(x);
                 
                 if (!resourceDictionary.TryGetValue(request.ResourceId, out var resource))
                 {

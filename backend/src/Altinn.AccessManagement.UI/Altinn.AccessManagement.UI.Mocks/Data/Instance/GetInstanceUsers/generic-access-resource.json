@@ -1,0 +1,10 @@
+[
+  {
+    "id": "11111111-1111-1111-1111-111111111111",
+    "name": "Mock Instance User",
+    "type": "Person",
+    "variant": "person",
+    "organizationIdentifier": null,
+    "isDeleted": false
+  }
+]

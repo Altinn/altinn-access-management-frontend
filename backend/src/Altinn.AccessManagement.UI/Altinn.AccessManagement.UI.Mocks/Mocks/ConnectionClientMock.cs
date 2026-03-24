@@ -2,6 +2,7 @@
 using Altinn.AccessManagement.UI.Core.Helpers;
 using Altinn.AccessManagement.UI.Core.Models.Connections;
 using Altinn.AccessManagement.UI.Core.Models.User;
+using Altinn.AccessManagement.UI.Mocks.Utils;
 using Altinn.Register.Contracts.V1;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
@@ -124,6 +125,18 @@ namespace Altinn.AccessManagement.UI.Mocks.Mocks
             }
 
             return to.HasValue ? Task.FromResult(to.Value) : Task.FromException<Guid>(new InvalidOperationException("No valid Guid provided."));
+        }
+
+        /// <inheritdoc/>
+        public Task<List<SimplifiedConnection>> GetSimplifiedConnections(Guid party)
+        {
+            if (party == Guid.Empty)
+            {
+                throw new HttpStatusException("Test", "Mock internal server error", HttpStatusCode.InternalServerError, null);
+            }
+
+            string dataPath = Path.Combine(dataFolder, "RightHolders", "SimplifiedConnections", $"{party}.json");
+            return Task.FromResult(Util.GetMockData<List<SimplifiedConnection>>(dataPath));
         }
     }
 }

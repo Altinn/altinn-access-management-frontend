@@ -36,24 +36,26 @@ export const requestApi = createApi({
     // requests page queries
     getSentRequests: builder.query<
       RequestDto[],
-      { party: string; to?: string; status?: RequestStatus[] }
+      { party: string; to?: string; status?: RequestStatus[]; type?: 'resource' | 'package' }
     >({
-      query: ({ party, to, status = [] }) => {
+      query: ({ party, to, status = [], type }) => {
         let params = `?party=${party}`;
         if (to) params += `&to=${to}`;
         for (const s of status) params += `&status=${s}`;
+        if (type) params += `&type=${type}`;
         return `sent${params}`;
       },
       providesTags: ['sentRequests'],
     }),
     getReceivedRequests: builder.query<
       RequestDto[],
-      { party: string; from?: string; status?: RequestStatus[] }
+      { party: string; from?: string; status?: RequestStatus[]; type?: 'resource' | 'package' }
     >({
-      query: ({ party, from, status = [] }) => {
+      query: ({ party, from, status = [], type }) => {
         let params = `?party=${party}`;
         if (from) params += `&from=${from}`;
         for (const s of status) params += `&status=${s}`;
+        if (type) params += `&type=${type}`;
         return `received${params}`;
       },
       providesTags: ['receivedRequests'],
