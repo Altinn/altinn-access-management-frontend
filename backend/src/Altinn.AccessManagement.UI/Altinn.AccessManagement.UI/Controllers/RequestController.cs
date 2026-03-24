@@ -40,17 +40,18 @@ namespace Altinn.AccessManagement.UI.Controllers
         /// <param name="party">The acting party</param>
         /// <param name="to">The party the requests were sent to</param>
         /// <param name="status">Status filter</param>
+        /// <param name="type">The type of requests to get. Either "resource" or "package"</param>
         /// <param name="cancellationToken">Cancellation token</param>
         /// <response code="400">Bad Request</response>
         /// <response code="500">Internal Server Error</response>
         [HttpGet]
         [Authorize]
         [Route("sent")]
-        public async Task<ActionResult> GetSentRequests([FromQuery] Guid party, [FromQuery] Guid? to, [FromQuery] List<RequestStatus> status, CancellationToken cancellationToken)
+        public async Task<ActionResult> GetSentRequests([FromQuery] Guid party, [FromQuery] Guid? to, [FromQuery] List<RequestStatus> status, [FromQuery] string type, CancellationToken cancellationToken)
         {
             try
             {
-                var returnVal = await _requestService.GetSentRequests(party, to, status, cancellationToken);
+                var returnVal = await _requestService.GetSentRequests(party, to, status, type, cancellationToken);
                 return Ok(returnVal);
             }
             catch (HttpStatusException statusEx)
@@ -107,17 +108,18 @@ namespace Altinn.AccessManagement.UI.Controllers
         /// <param name="party">The acting party</param>
         /// <param name="from">The party who sent the requests</param>
         /// <param name="status">Status filter</param>
+        /// <param name="type">The type of requests to get. Either "resource" or "package"</param>
         /// <param name="cancellationToken">Cancellation token</param>
         /// <response code="400">Bad Request</response>
         /// <response code="500">Internal Server Error</response>
         [HttpGet]
         [Authorize]
         [Route("received")]
-        public async Task<ActionResult> GetReceivedRequests([FromQuery] Guid party, [FromQuery] Guid? from, [FromQuery] List<RequestStatus> status, CancellationToken cancellationToken)
+        public async Task<ActionResult> GetReceivedRequests([FromQuery] Guid party, [FromQuery] Guid? from, [FromQuery] List<RequestStatus> status, [FromQuery] string type, CancellationToken cancellationToken)
         {
             try
             {
-                var returnVal = await _requestService.GetReceivedRequests(party, from, status, cancellationToken);
+                var returnVal = await _requestService.GetReceivedRequests(party, from, status, type, cancellationToken);
                 return Ok(returnVal);
             }
             catch (HttpStatusException statusEx)
