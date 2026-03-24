@@ -109,9 +109,9 @@ export const UserItem = ({
     let descriptionString = subUnit ? '↳ ' : '';
     if (user.type === ConnectionUserType.Person) {
       const formattedDate = formatDate(user.dateOfBirth || undefined);
-      descriptionString += formattedDate
-        ? t('common.date_of_birth') + ' ' + formattedDate
-        : undefined;
+      if (formattedDate) {
+        descriptionString += t('common.date_of_birth') + ' ' + formattedDate;
+      }
     } else if (user.type === ConnectionUserType.Organization) {
       descriptionString +=
         t('common.org_nr') +
