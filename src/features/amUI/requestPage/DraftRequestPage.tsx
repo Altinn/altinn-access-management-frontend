@@ -200,8 +200,13 @@ const InnerContent = ({ request }: InnerContentProps) => {
         </DsParagraph>
       </div>
       <div className={classes.requestBlock}>
-        <div className={classes.resourceInfo}>
+        <div
+          className={classes.resourceInfo}
+          data-size='sm'
+        >
           <ResourceHeading resource={request.resource} />
+        </div>
+        <div className={classes.resourceInfo}>
           {request.resource.description && (
             <DsParagraph>{request.resource.description}</DsParagraph>
           )}
