@@ -929,10 +929,8 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
                 .Setup(service => service.GetSimplifiedConnections(party))
                 .ThrowsAsync(new Exception("Unexpected failure"));
 
-            HttpClient client = GetTestClient(connectionServiceMock.Object);
-
             // Act
-            HttpResponseMessage httpResponse = await client.GetAsync(
+            HttpResponseMessage httpResponse = await _client.GetAsync(
                 $"accessmanagement/api/v1/connection/simplified?party={party}");
 
             // Assert
@@ -955,10 +953,8 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
                 .Setup(service => service.GetSimplifiedConnections(party))
                 .ThrowsAsync(new HttpStatusException("Forbidden", "Forbidden", HttpStatusCode.Forbidden, string.Empty, errorMessage));
 
-            HttpClient client = GetTestClient(connectionServiceMock.Object);
-
             // Act
-            HttpResponseMessage httpResponse = await client.GetAsync(
+            HttpResponseMessage httpResponse = await _client.GetAsync(
                 $"accessmanagement/api/v1/connection/simplified?party={party}");
             ProblemDetails problemDetails = await httpResponse.Content.ReadFromJsonAsync<ProblemDetails>();
 
@@ -968,34 +964,6 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
             Assert.Equal((int)HttpStatusCode.Forbidden, problemDetails.Status);
             Assert.Equal("Unexpected HttpStatus response", problemDetails.Title);
             Assert.Equal(errorMessage, problemDetails.Detail);
-        }
-
-        private HttpClient GetTestClient(IConnectionService connectionService, FeatureFlags flags = null)
-        {
-            WebApplicationFactory<ConnectionController> factory = _factory.WithWebHostBuilder(builder =>
-            {
-                builder.ConfigureTestServices(services =>
-                {
-                    services.AddSingleton<IConnectionService>(connectionService);
-                    services.AddSingleton<ILogger<ConnectionController>>(new Mock<ILogger<ConnectionController>>().Object);
-                    services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
-                    services.AddSingleton<IPostConfigureOptions<JwtCookieOptions>, JwtCookiePostConfigureOptionsStub>();
-                    services.Configure<FeatureFlags>(options =>
-                    {
-                        options.DisplayPopularSingleRightsServices = flags?.DisplayPopularSingleRightsServices ?? true;
-                        options.DisplayResourceDelegation = flags?.DisplayResourceDelegation ?? true;
-                        options.DisplayConfettiPackage = flags?.DisplayConfettiPackage ?? true;
-                        options.DisplayRoles = flags?.DisplayRoles ?? true;
-                        options.UseNewActorsList = flags?.UseNewActorsList ?? false;
-                    });
-                });
-            });
-
-            factory.Server.AllowSynchronousIO = true;
-            HttpClient client = factory.CreateClient();
-            client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", PrincipalUtil.GetToken(1234, 1234, 2));
-
-            return client;
         }
     }
 }
