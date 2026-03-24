@@ -125,7 +125,11 @@ namespace Altinn.AccessManagement.UI.Mocks.Mocks
 
         public async Task<RequestResourceDto> GetDraftRequest(Guid id, CancellationToken cancellationToken)
         {
-            throw new NotImplementedException();
+            ThrowExceptionIfTriggerParty(id.ToString());
+            ThrowHttpStatusExceptionIfTriggerParty(id.ToString());
+
+            string dataPath = Path.Combine(dataFolder, "Request", "singleRequest.json");
+            return await Task.FromResult(Util.GetMockData<RequestResourceDto>(dataPath));
         }
 
         private static void ThrowExceptionIfTriggerParty(string id)
