@@ -160,5 +160,6 @@ const mapAccessRequestToRequest = (
     displayPartyType: partyType,
     description: undefined, // Use default description for access requests
     numberOfRequests: numberOfRequests ?? 1,
+    partyUuid: party.id,
   };
 };

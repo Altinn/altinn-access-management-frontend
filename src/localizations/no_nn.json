@@ -1017,6 +1017,9 @@
     "request_poa": "Ber om fullmakt",
     "request_systemuser": "Ber om å opprette systembruker",
     "error_loading_requests": "Kunne ikkje laste førespurnader",
-    "error_partial_loading_requests": "Kunne ikkje laste alle førespurnader"
+    "error_partial_loading_requests": "Kunne ikkje laste alle førespurnader",
+    "review_modal_title": "{{fromPartyName}} ber om desse fullmaktene",
+    "approve_request": "Godkjenn",
+    "reject_request": "Avvis"
   }
 }

@@ -5,8 +5,10 @@ import {
   getSystemUserAgentRequestUrl,
 } from '@/routes/paths/systemUserPath';
 import { DsAlert, List, UserListItem } from '@altinn/altinn-components';
+import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Link } from 'react-router';
+import { RequestReviewModal } from './RequestReviewModal';
 import { Request } from './types';
 
 import classes from './RequestPage.module.css';
@@ -61,17 +63,19 @@ interface PendingRequestsProps {
 
 const PendingRequests = ({ pendingRequests }: PendingRequestsProps) => {
   const { t } = useTranslation();
+  const [openAccessRequest, setOpenAccessRequest] = useState<Request | null>(null);
   return (
     <>
       {pendingRequests?.map((request) => {
-        let toUrl = '';
-        if (request.type === 'consent') {
-          toUrl = getConsentRequestUrl(request.id, 'landingpage');
-        } else if (request.type === 'systemuser') {
-          toUrl = getSystemUserRequestUrl(request.id, 'landingpage');
-        } else if (request.type === 'agentsystemuser') {
-          toUrl = getSystemUserAgentRequestUrl(request.id, 'landingpage');
-        }
+        const getRequestUrl = () => {
+          if (request.type === 'consent') return getConsentRequestUrl(request.id, 'landingpage');
+          if (request.type === 'systemuser')
+            return getSystemUserRequestUrl(request.id, 'landingpage');
+          if (request.type === 'agentsystemuser')
+            return getSystemUserAgentRequestUrl(request.id, 'landingpage');
+          return null;
+        };
+        const toUrl = getRequestUrl();
         return (
           <UserListItem
             key={request.id}
@@ -80,18 +84,29 @@ const PendingRequests = ({ pendingRequests }: PendingRequestsProps) => {
             type={request.displayPartyType}
             linkIcon
             description={`${request.description ? t(request.description) : t('request_page.asks_for_number', { count: request.numberOfRequests })} (${formatDateToNorwegian(request.createdDate)})`}
-            as={(props) => (
-              <Link
-                {...props}
-                to={toUrl}
-              />
-            )}
+            as={(props) =>
+              toUrl ? (
+                <Link
+                  {...props}
+                  to={toUrl}
+                />
+              ) : (
+                <button
+                  {...props}
+                  onClick={() => setOpenAccessRequest(request)}
+                />
+              )
+            }
             controls={
               <div className={classes.requestItemBadge}>{t('request_page.process_request')}</div>
             }
           />
         );
       })}
+      <RequestReviewModal
+        request={openAccessRequest}
+        onClose={() => setOpenAccessRequest(null)}
+      />
     </>
   );
 };

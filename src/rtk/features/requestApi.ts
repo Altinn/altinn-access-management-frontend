@@ -31,7 +31,13 @@ export const requestApi = createApi({
       return headers;
     },
   }),
-  tagTypes: ['sentRequests', 'receivedRequests', 'request', 'enrichedSentResourceRequests'],
+  tagTypes: [
+    'sentRequests',
+    'receivedRequests',
+    'request',
+    'enrichedSentResourceRequests',
+    'enrichedReceivedResourceRequests',
+  ],
   endpoints: (builder) => ({
     // requests page queries
     getSentRequests: builder.query<
@@ -75,6 +81,18 @@ export const requestApi = createApi({
         return `sent/resource${params}`;
       },
       providesTags: ['enrichedSentResourceRequests'],
+    }),
+    getEnrichedReceivedResourceRequests: builder.query<
+      EnrichedRequestDto[],
+      { party: string; from?: string; status?: RequestStatus[] }
+    >({
+      query: ({ party, from, status = [] }) => {
+        let params = `?party=${party}`;
+        if (from) params += `&from=${from}`;
+        for (const s of status) params += `&status=${s}`;
+        return `received/resource${params}`;
+      },
+      providesTags: ['enrichedReceivedResourceRequests'],
     }),
     createResourceRequest: builder.mutation<
       RequestDto,
@@ -127,6 +145,7 @@ export const {
   useRejectRequestMutation,
   useApproveRequestMutation,
   useGetEnrichedSentResourceRequestsQuery,
+  useGetEnrichedReceivedResourceRequestsQuery,
 } = requestApi;
 
 export const { endpoints, reducerPath, reducer, middleware } = requestApi;

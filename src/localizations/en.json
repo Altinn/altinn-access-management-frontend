@@ -1020,6 +1020,9 @@
     "request_poa": "Requests power of attorney",
     "request_systemuser": "Requests to create system user",
     "error_loading_requests": "Could not load requests",
-    "error_partial_loading_requests": "Could not load all requests"
+    "error_partial_loading_requests": "Could not load all requests",
+    "review_modal_title": "{{fromPartyName}} is requesting these rights",
+    "approve_request": "Approve",
+    "reject_request": "Reject"
   }
 }
