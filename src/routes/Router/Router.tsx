@@ -44,7 +44,7 @@ import { ClientAdministrationPage } from '@/features/amUI/clientAdministration/C
 import { AgentDetailsPage } from '@/features/amUI/agentDetails/AgentDetailsPage';
 import { ClientDetailsPage } from '@/features/amUI/clientDetails/ClientDetailsPage';
 import { MyClientsPage } from '@/features/amUI/myClients/MyClientsPage';
-import { DraftRequestPage } from '@/features/amUI/requestPage/DraftRequestPage';
+import { DraftRequestPage } from '@/features/amUI/requestPage/DraftRequestPage/DraftRequestPage';
 
 export const Router = createBrowserRouter(
   createRoutesFromElements(
