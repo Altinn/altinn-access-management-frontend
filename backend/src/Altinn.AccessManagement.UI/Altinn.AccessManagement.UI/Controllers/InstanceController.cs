@@ -3,6 +3,7 @@ using Altinn.AccessManagement.UI.Core.Helpers;
 using Altinn.AccessManagement.UI.Core.Models.InstanceDelegation;
 using Altinn.AccessManagement.UI.Core.Models.InstanceDelegation.Frontend;
 using Altinn.AccessManagement.UI.Core.Models.SingleRight;
+using Altinn.AccessManagement.UI.Core.Models.User;
 using Altinn.AccessManagement.UI.Core.Services.Interfaces;
 using Altinn.AccessManagement.UI.Filters;
 using Microsoft.AspNetCore.Authorization;
@@ -138,8 +139,13 @@ namespace Altinn.AccessManagement.UI.Controllers
                 {
                     return Ok(await response.Content.ReadAsStringAsync());
                 }
-
+                
                 return new ObjectResult(ProblemDetailsFactory.CreateProblemDetails(HttpContext, (int?)response.StatusCode, "Error returned from backend"));
+            }
+            catch (HttpStatusException statusEx)
+            {
+                string responseContent = statusEx.Message;
+                return new ObjectResult(ProblemDetailsFactory.CreateProblemDetails(HttpContext, (int?)statusEx.StatusCode, "Unexpected HttpStatus response from backend", detail: responseContent));
             }
             catch (Exception ex)
             {
@@ -215,6 +221,45 @@ namespace Altinn.AccessManagement.UI.Controllers
             catch (Exception ex)
             {
                 _logger.LogError(ex, "Unexpected exception occurred during update of instance access: {Message}", ex.Message);
+                return new ObjectResult(ProblemDetailsFactory.CreateProblemDetails(HttpContext));
+            }
+        }
+
+        /// <summary>
+        /// Gets all users who have direct access to a specific instance (simplified party info).
+        /// Limited endpoint for instance admins without full admin access.
+        /// Proxies to backend: GET enduser/connections/resources/instances/users
+        /// </summary>
+        /// <param name="party">The party UUID.</param>
+        /// <param name="resource">The resource identifier.</param>
+        /// <param name="instance">The instance URN.</param>
+        /// <returns>List of simplified parties representing users with access to the instance.</returns>
+        [HttpGet]
+        [Authorize]
+        [Route("delegation/instances/simplified/users")]
+        public async Task<ActionResult<List<SimplifiedParty>>> GetInstanceUsers(
+            [FromQuery] Guid party,
+            [FromQuery] string resource,
+            [FromQuery] string instance)
+        {
+            if (party == Guid.Empty || string.IsNullOrWhiteSpace(resource) || string.IsNullOrWhiteSpace(instance))
+            {
+                return new ObjectResult(ProblemDetailsFactory.CreateProblemDetails(HttpContext, 400));
+            }
+
+            try
+            {
+                var users = await _instanceService.GetInstanceUsers(party, resource, instance);
+                return Ok(users);
+            }
+            catch (HttpStatusException statusEx)
+            {
+                string responseContent = statusEx.Message;
+                return new ObjectResult(ProblemDetailsFactory.CreateProblemDetails(HttpContext, (int?)statusEx.StatusCode, "Unexpected HttpStatus response", detail: responseContent));
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "GetInstanceUsers failed unexpectedly");
                 return new ObjectResult(ProblemDetailsFactory.CreateProblemDetails(HttpContext));
             }
         }

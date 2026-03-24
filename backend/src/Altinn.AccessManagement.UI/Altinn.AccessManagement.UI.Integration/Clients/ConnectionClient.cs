@@ -9,6 +9,7 @@ using Altinn.AccessManagement.UI.Core.Models.Connections;
 using Altinn.AccessManagement.UI.Core.Models.User;
 using Altinn.AccessManagement.UI.Core.Services.Interfaces;
 using Altinn.AccessManagement.UI.Integration.Configuration;
+using Altinn.AccessManagement.UI.Integration.Util;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
@@ -126,6 +127,21 @@ namespace Altinn.AccessManagement.UI.Integration.Clients
                 _logger.LogError(ex, "Error while getting right holders");
                 throw new HttpStatusException("Unexpected http response.", "Unexpected http response.", HttpStatusCode.InternalServerError, null, ex.Message);
             }
+        }
+
+        /// <inheritdoc />
+        public async Task<List<SimplifiedConnection>> GetSimplifiedConnections(Guid party)
+        {
+            string endpointUrl = $"enduser/connections/users?party={party}";
+            string token = JwtTokenUtil.GetTokenFromContext(_httpContextAccessor.HttpContext, _platformSettings.JwtCookieName);
+
+            var httpResponse = await _client.GetAsync(token, endpointUrl);
+            PaginatedResult<SimplifiedConnection> result =
+                await ClientUtils.DeserializeIfSuccessfullStatusCode<PaginatedResult<SimplifiedConnection>>(
+                    httpResponse,
+                    _logger,
+                    "ConnectionClient // GetSimplifiedConnections");
+            return result?.Items?.ToList() ?? [];
         }
     }
 }

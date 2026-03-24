@@ -1,5 +1,6 @@
 using Altinn.AccessManagement.UI.Core.Models.InstanceDelegation;
 using Altinn.AccessManagement.UI.Core.Models.SingleRight;
+using Altinn.AccessManagement.UI.Core.Models.User;
 
 namespace Altinn.AccessManagement.UI.Core.ClientInterfaces
 {
@@ -62,6 +63,15 @@ namespace Altinn.AccessManagement.UI.Core.ClientInterfaces
         /// <param name="actionKeys">The updated right keys.</param>
         /// <returns>The backend response.</returns>
         Task<HttpResponseMessage> UpdateInstanceRightsAccess(Guid party, Guid to, string resource, string instance, List<string> actionKeys);
+
+        /// <summary>
+        /// Gets all users who have direct access to a specific instance.
+        /// </summary>
+        /// <param name="party">The party UUID.</param>
+        /// <param name="resource">The resource identifier.</param>
+        /// <param name="instance">The instance URN.</param>
+        /// <returns>A list of simplified parties representing users with access to the instance.</returns>
+        Task<List<SimplifiedParty>> GetInstanceUsers(Guid party, string resource, string instance);
 
         /// <summary>
         /// Removes an instance delegation and all its rights.

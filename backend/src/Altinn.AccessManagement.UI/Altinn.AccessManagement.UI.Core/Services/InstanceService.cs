@@ -3,6 +3,7 @@ using Altinn.AccessManagement.UI.Core.Models.InstanceDelegation;
 using Altinn.AccessManagement.UI.Core.Models.InstanceDelegation.Frontend;
 using Altinn.AccessManagement.UI.Core.Models.ResourceRegistry.Frontend;
 using Altinn.AccessManagement.UI.Core.Models.SingleRight;
+using Altinn.AccessManagement.UI.Core.Models.User;
 using Altinn.AccessManagement.UI.Core.Services.Interfaces;
 
 namespace Altinn.AccessManagement.UI.Core.Services
@@ -78,6 +79,12 @@ namespace Altinn.AccessManagement.UI.Core.Services
         public async Task<HttpResponseMessage> UpdateInstanceAccess(Guid party, Guid to, string resource, string instance, List<string> actionKeys)
         {
             return await _instanceClient.UpdateInstanceRightsAccess(party, to, resource, instance, actionKeys);
+        }
+
+        /// <inheritdoc />
+        public async Task<List<SimplifiedParty>> GetInstanceUsers(Guid party, string resource, string instance)
+        {
+            return await _instanceClient.GetInstanceUsers(party, resource, instance);
         }
 
         /// <inheritdoc />
