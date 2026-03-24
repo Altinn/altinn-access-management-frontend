@@ -8,6 +8,7 @@ import {
   useGetEnrichedReceivedResourceRequestsQuery,
 } from '@/rtk/features/requestApi';
 import { ResourceList } from '../common/ResourceList/ResourceList';
+import { useLazyDelegationCheckQuery } from '@/rtk/features/singleRights/singleRightsApi';
 
 interface RequestReviewModalProps {
   request: Request | null;
@@ -24,6 +25,8 @@ export const RequestReviewModal = ({ request, onClose }: RequestReviewModalProps
       { party: actingParty?.partyUuid || '', from: request?.partyUuid || '', status: ['Pending'] },
       { skip: !actingParty?.partyUuid || !request?.partyUuid },
     );
+  const [lazyDelegationCheck, { data: delegationCheckData, isLoading: isLoadingDelegationCheck }] =
+    useLazyDelegationCheckQuery();
 
   const requestedResources = resourceRequests?.map((r) => r.resource);
 
