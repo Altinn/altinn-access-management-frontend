@@ -144,5 +144,11 @@ namespace Altinn.AccessManagement.UI.Core.Services
                 throw;
             }
         }
+
+        /// <inheritdoc/>
+        public async Task<List<SimplifiedConnection>> GetSimplifiedConnections(Guid party)
+        {
+            return await _connectionClient.GetSimplifiedConnections(party);
+        }
     }
 }

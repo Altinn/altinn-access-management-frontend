@@ -3,6 +3,7 @@ using Altinn.AccessManagement.UI.Core.ClientInterfaces;
 using Altinn.AccessManagement.UI.Core.Helpers;
 using Altinn.AccessManagement.UI.Core.Models.InstanceDelegation;
 using Altinn.AccessManagement.UI.Core.Models.SingleRight;
+using Altinn.AccessManagement.UI.Core.Models.User;
 using Altinn.AccessManagement.UI.Mocks.Utils;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
@@ -128,6 +129,15 @@ namespace Altinn.AccessManagement.UI.Mocks.Mocks
             ThrowExceptionIfTriggerParty(party.ToString());
 
             return new HttpResponseMessage(HttpStatusCode.OK);
+        }
+
+        /// <inheritdoc />
+        public Task<List<SimplifiedParty>> GetInstanceUsers(Guid party, string resource, string instance)
+        {
+            ThrowExceptionIfTriggerParty(party.ToString());
+
+            string dataPath = Path.Combine(dataFolder, "Instance", "GetInstanceUsers", $"{resource}.json");
+            return Task.FromResult(Util.GetMockData<List<SimplifiedParty>>(dataPath));
         }
 
         /// <inheritdoc />

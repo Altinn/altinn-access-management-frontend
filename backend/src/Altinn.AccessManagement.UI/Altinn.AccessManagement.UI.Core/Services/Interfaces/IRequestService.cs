@@ -17,7 +17,7 @@ namespace Altinn.AccessManagement.UI.Core.Services.Interfaces
         /// <param name="type">The type of requests to get. Either "resource" or "package"</param>
         /// <param name="cancellationToken">Cancellation token</param>
         /// <returns>List of sent requests</returns>
-        Task<IEnumerable<SingleRightRequest>> GetSentRequests(Guid party, Guid? to, List<RequestStatus> status, string type, CancellationToken cancellationToken);
+        Task<IEnumerable<RequestFE>> GetSentRequests(Guid party, Guid? to, List<RequestStatus> status, string type, CancellationToken cancellationToken);
 
          /// <summary>
         /// Get enriched resource requests sent by a party
@@ -39,7 +39,7 @@ namespace Altinn.AccessManagement.UI.Core.Services.Interfaces
         /// <param name="type">The type of requests to get. Either "resource" or "package"</param>
         /// <param name="cancellationToken">Cancellation token</param>
         /// <returns>List of received requests</returns>
-        Task<IEnumerable<SingleRightRequest>> GetReceivedRequests(Guid party, Guid? from, List<RequestStatus> status, string type, CancellationToken cancellationToken);
+        Task<IEnumerable<RequestFE>> GetReceivedRequests(Guid party, Guid? from, List<RequestStatus> status, string type, CancellationToken cancellationToken);
 
         /// <summary>
         /// Get enriched resource requests received by a party
@@ -59,7 +59,7 @@ namespace Altinn.AccessManagement.UI.Core.Services.Interfaces
         /// <param name="id">The request id</param>
         /// <param name="cancellationToken">Cancellation token</param>
         /// <returns>The request</returns>
-        Task<SingleRightRequest> GetRequest(Guid party, Guid id, CancellationToken cancellationToken);
+        Task<RequestFE> GetRequest(Guid party, Guid id, CancellationToken cancellationToken);
 
         /// <summary>
         /// Creates a new resource request
@@ -69,7 +69,7 @@ namespace Altinn.AccessManagement.UI.Core.Services.Interfaces
         /// <param name="resource">The resource to request</param>
         /// <param name="cancellationToken">Cancellation token</param>
         /// <returns>The request</returns>
-        Task<SingleRightRequest> CreateResourceRequest(Guid party, Guid to, string resource, CancellationToken cancellationToken);
+        Task<RequestFE> CreateResourceRequest(Guid party, Guid to, string resource, CancellationToken cancellationToken);
 
         /// <summary>
         /// Withdraw a request by id
@@ -78,7 +78,7 @@ namespace Altinn.AccessManagement.UI.Core.Services.Interfaces
         /// <param name="id">The request id to withdraw</param>
         /// <param name="cancellationToken">Cancellation token</param>
         /// <returns>The request</returns>
-        Task<SingleRightRequest> WithdrawRequest(Guid party, Guid id, CancellationToken cancellationToken);
+        Task<RequestFE> WithdrawRequest(Guid party, Guid id, CancellationToken cancellationToken);
 
         /// <summary>
         /// Confirm a draft request (transitions Draft → Pending)
@@ -87,7 +87,7 @@ namespace Altinn.AccessManagement.UI.Core.Services.Interfaces
         /// <param name="id">The request id to confirm</param>
         /// <param name="cancellationToken">Cancellation token</param>
         /// <returns>The request</returns>
-        Task<SingleRightRequest> ConfirmRequest(Guid party, Guid id, CancellationToken cancellationToken);
+        Task<RequestFE> ConfirmRequest(Guid party, Guid id, CancellationToken cancellationToken);
 
         /// <summary>
         /// Reject a pending request
@@ -96,7 +96,7 @@ namespace Altinn.AccessManagement.UI.Core.Services.Interfaces
         /// <param name="id">The request id to reject</param>
         /// <param name="cancellationToken">Cancellation token</param>
         /// <returns>The request</returns>
-        Task<SingleRightRequest> RejectRequest(Guid party, Guid id, CancellationToken cancellationToken);
+        Task<RequestFE> RejectRequest(Guid party, Guid id, CancellationToken cancellationToken);
 
         /// <summary>
         /// Approve a pending request
@@ -105,6 +105,6 @@ namespace Altinn.AccessManagement.UI.Core.Services.Interfaces
         /// <param name="id">The request id to approve</param>
         /// <param name="cancellationToken">Cancellation token</param>
         /// <returns>The request</returns>
-        Task<SingleRightRequest> ApproveRequest(Guid party, Guid id, CancellationToken cancellationToken);
+        Task<RequestFE> ApproveRequest(Guid party, Guid id, CancellationToken cancellationToken);
     }
 }

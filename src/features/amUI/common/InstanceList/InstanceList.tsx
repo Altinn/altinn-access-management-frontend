@@ -1,6 +1,7 @@
 import { ElementType, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import {
+  Button,
   DialogListItem,
   DsParagraph,
   List,
@@ -12,6 +13,8 @@ import { InstanceDelegation } from '@/rtk/features/instanceApi';
 import { useProviderLogoUrl } from '@/resources/hooks';
 
 import { InstanceListSkeleton } from './InstanceListSkeleton';
+import { EnvelopeClosedIcon } from '@navikt/aksel-icons';
+import { getAfUrl } from '@/resources/utils/pathUtils';
 
 interface InstanceListProps {
   instances: InstanceDelegation[];
@@ -88,7 +91,12 @@ export const InstanceList = ({
         <List>
           {filteredInstances.map((instanceDelegation) => {
             const item = toInstanceListItem(instanceDelegation, getProviderLogoUrl);
+
             const Component = getItemAs?.(instanceDelegation);
+            const isCorrespondenceInstance = instanceDelegation.instance.refId.startsWith(
+              'urn:altinn:correspondence-id:',
+            );
+            const inboxUrl = `${getAfUrl()}redirect?instanceUrn=${encodeURIComponent(instanceDelegation.instance.refId)}`;
 
             return (
               <DialogListItem
@@ -98,6 +106,20 @@ export const InstanceList = ({
                 interactive={interactive || !!onSelect}
                 onClick={onSelect ? () => onSelect(instanceDelegation) : undefined}
                 {...item}
+                controls={
+                  !isCorrespondenceInstance && (
+                    <Button
+                      variant='tertiary'
+                      rounded
+                      size={'xs'}
+                      as='a'
+                      href={inboxUrl}
+                    >
+                      <EnvelopeClosedIcon aria-hidden='true' />{' '}
+                      {t('instance_detail_page.see_in_inbox')}
+                    </Button>
+                  )
+                }
               />
             );
           })}
