@@ -31,6 +31,20 @@ export interface UserInfo {
   party: Party;
 }
 
+export interface SimplifiedParty {
+  id: string;
+  name: string;
+  type: string;
+  variant?: string;
+  organizationIdentifier?: string;
+  isDeleted?: boolean;
+}
+
+export interface SimplifiedConnection {
+  party: SimplifiedParty;
+  connections: SimplifiedConnection[];
+}
+
 export type PersonInput = {
   personIdentifier: string;
   lastName: string;
@@ -115,6 +129,10 @@ export const connectionApi = createApi({
         return { status: response.status };
       },
     }),
+    getSimplifiedConnections: builder.query<SimplifiedConnection[], { partyUuid: string }>({
+      query: ({ partyUuid }) => `simplified?party=${partyUuid}`,
+      providesTags: ['Connections'],
+    }),
   }),
 });
 
@@ -123,6 +141,7 @@ export const {
   useAddRightHolderMutation,
   useRemoveRightHolderMutation,
   useValidateNewUserPersonMutation,
+  useGetSimplifiedConnectionsQuery,
 } = connectionApi;
 
 export const { endpoints, reducerPath, reducer, middleware } = connectionApi;

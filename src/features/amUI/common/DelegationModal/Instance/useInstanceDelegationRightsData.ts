@@ -34,6 +34,7 @@ export const useInstanceDelegationRightsData = ({
     !isEnabled || !actingParty?.partyUuid || !resourceId || !instanceUrn;
 
   const shouldSkipInstanceRightsQuery =
+    mode === 'delegate' ||
     !isEnabled ||
     !actingParty?.partyUuid ||
     !fromPartyUuid ||
