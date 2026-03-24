@@ -6,16 +6,14 @@ import { Trans, useTranslation } from 'react-i18next';
 import { InstanceDetailHeader } from './InstanceDetailHeader';
 import { ResourceInfoSkeleton } from '../common/DelegationModal/SingleRights/ResourceInfoSkeleton';
 import { PageDivider } from '../common/PageDivider/PageDivider';
-import UserSearch from '../common/UserSearch/UserSearch';
-import { mapPermissionsToUserSearchNodes } from '../common/UserSearch/permissionMapper';
-import { mapConnectionsToUserSearchNodes } from '../common/UserSearch/connectionMapper';
+import { InstanceUsersAsAdmin } from './InstanceUsersAsAdmin';
+import { InstanceUsersAsInstanceAdmin } from './InstanceUsersAsInstanceAdmin';
 import { usePartyRepresentation } from '../common/PartyRepresentationContext/PartyRepresentationContext';
 import {
   createErrorDetails,
   TechnicalErrorParagraphs,
 } from '../common/TechnicalErrorParagraphs/TechnicalErrorParagraphs';
-import { useGetRightHoldersQuery } from '@/rtk/features/connectionApi';
-import { useGetInstancesQuery, useRemoveInstanceMutation } from '@/rtk/features/instanceApi';
+import { useRemoveInstanceMutation } from '@/rtk/features/instanceApi';
 import { useGetResourceQuery } from '@/rtk/features/resourceApi';
 import { useProviderLogoUrl } from '@/resources/hooks';
 import {
@@ -90,6 +88,18 @@ export const InstanceDetailPageContent = () => {
   const resourceId = searchParams.get('resourceId') ?? '';
   const dialogId = searchParams.get('dialogId');
 
+  const InstanceAddUserButton = useMemo(
+    () =>
+      ({ isLarge }: { isLarge?: boolean }) => (
+        <AddUserButton
+          isLarge={isLarge}
+          resourceId={resourceId}
+          instanceUrn={instanceUrn}
+        />
+      ),
+    [resourceId, instanceUrn],
+  );
+
   const {
     data: isAdmin,
     isLoading: isAdminLoading,
@@ -102,66 +112,6 @@ export const InstanceDetailPageContent = () => {
     isError: isInstanceAdminError,
     error: isInstanceAdminErrorObj,
   } = useGetIsInstanceAdminQuery();
-
-  const {
-    data: instances = [],
-    isLoading: isInstancesLoading,
-    isError: isInstancesError,
-    error: instancesError,
-  } = useGetInstancesQuery(
-    {
-      party: actingParty?.partyUuid || '',
-      from: fromParty?.partyUuid,
-      resource: resourceId,
-      instance: instanceUrn,
-    },
-    {
-      skip:
-        !isAdmin || !actingParty?.partyUuid || !fromParty?.partyUuid || !resourceId || !instanceUrn,
-    },
-  );
-
-  const users = useMemo(
-    () =>
-      mapPermissionsToUserSearchNodes(
-        instances.flatMap((instanceDelegation) => instanceDelegation.permissions),
-        {
-          fromPartyUuid: fromParty?.partyUuid,
-        },
-      ),
-    [fromParty?.partyUuid, instances],
-  );
-  const {
-    data: indirectConnections,
-    isLoading: isLoadingIndirectConnections,
-    isFetching: isFetchingIndirectConnections,
-  } = useGetRightHoldersQuery(
-    {
-      partyUuid: fromParty?.partyUuid ?? '',
-      fromUuid: fromParty?.partyUuid ?? '',
-      toUuid: '',
-    },
-    {
-      skip: !isAdmin || !fromParty?.partyUuid,
-    },
-  );
-
-  const indirectUsers = useMemo(
-    () => mapConnectionsToUserSearchNodes(indirectConnections),
-    [indirectConnections],
-  );
-
-  const InstanceAddUserButton = useMemo(
-    () =>
-      ({ isLarge }: { isLarge?: boolean }) => (
-        <AddUserButton
-          isLarge={isLarge}
-          resourceId={resourceId}
-          instanceUrn={instanceUrn}
-        />
-      ),
-    [resourceId, instanceUrn],
-  );
 
   const {
     data: resource,
@@ -208,17 +158,15 @@ export const InstanceDetailPageContent = () => {
   }
 
   const contentTechnicalError =
-    isAdminError || isInstanceAdminError || isInstancesError || resourceError
-      ? createErrorDetails(
-          instancesError || isAdminErrorObj || isInstanceAdminErrorObj || resourceError,
-        )
+    isAdminError || isInstanceAdminError || resourceError
+      ? createErrorDetails(isAdminErrorObj || isInstanceAdminErrorObj || resourceError)
       : null;
 
   const providerLogoUrl = resource?.resourceOwnerOrgcode
     ? getProviderLogoUrl(resource.resourceOwnerOrgcode)
     : undefined;
   const selectedUserAvailableActions =
-    selectedUserMode === 'delegate'
+    selectedUserMode === 'delegate' || isAdmin === false
       ? [DelegationAction.DELEGATE]
       : [DelegationAction.REVOKE, DelegationAction.DELEGATE];
 
@@ -260,24 +208,28 @@ export const InstanceDetailPageContent = () => {
               />
             )}
           </DsParagraph>
+          {isInstanceAdmin && isAdmin === false && (
+            <DsParagraph data-size='sm'>
+              {t('instance_detail_page.instance_admin_edit_disclaimer')}
+            </DsParagraph>
+          )}
           {isAdmin ? (
-            <UserSearch
-              includeSelfAsChild={false}
+            <InstanceUsersAsAdmin
+              resourceId={resourceId}
+              instanceUrn={instanceUrn}
               AddUserButton={InstanceAddUserButton}
-              users={users}
-              indirectUsers={indirectUsers}
-              isLoading={
-                isInstancesLoading || isLoadingIndirectConnections || isInstanceAdminLoading
-              }
-              isActionLoading={isFetchingIndirectConnections || isRevoking}
-              canDelegate
-              noUsersText={t('instance_detail_page.no_users')}
-              onDelegate={handleIndirectUserDelegate}
               onSelect={handleUserSelect}
+              onDelegate={handleIndirectUserDelegate}
               onRevoke={handleRevoke}
+              isRevoking={isRevoking}
             />
           ) : isInstanceAdmin ? (
-            <InstanceAddUserButton isLarge />
+            <InstanceUsersAsInstanceAdmin
+              resourceId={resourceId}
+              instanceUrn={instanceUrn}
+              AddUserButton={InstanceAddUserButton}
+              onDelegate={handleIndirectUserDelegate}
+            />
           ) : null}
         </div>
       )}

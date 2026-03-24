@@ -28,9 +28,9 @@ namespace Altinn.AccessManagement.UI.Core.Services
         }
 
         /// <inheritdoc />
-        public async Task<IEnumerable<RequestFE>> GetSentRequests(Guid party, Guid? to, List<RequestStatus> status, CancellationToken cancellationToken)
+        public async Task<IEnumerable<RequestFE>> GetSentRequests(Guid party, Guid? to, List<RequestStatus> status, string type, CancellationToken cancellationToken)
         {
-            PaginatedResult<RequestResourceDto> response = await _requestClient.GetSentRequests(party, to, status, null, cancellationToken);
+            PaginatedResult<RequestResourceDto> response = await _requestClient.GetSentRequests(party, to, status, type, cancellationToken);
             return response.Items.Select(MapToRequestFE);
         }
 
@@ -42,9 +42,9 @@ namespace Altinn.AccessManagement.UI.Core.Services
         }
 
         /// <inheritdoc />
-        public async Task<IEnumerable<RequestFE>> GetReceivedRequests(Guid party, Guid? from, List<RequestStatus> status, CancellationToken cancellationToken)
+        public async Task<IEnumerable<RequestFE>> GetReceivedRequests(Guid party, Guid? from, List<RequestStatus> status, string type, CancellationToken cancellationToken)
         {
-            PaginatedResult<RequestResourceDto> response = await _requestClient.GetReceivedRequests(party, from, status, null, cancellationToken);
+            PaginatedResult<RequestResourceDto> response = await _requestClient.GetReceivedRequests(party, from, status, type, cancellationToken);
             return response.Items.Select(MapToRequestFE);
         }
 
