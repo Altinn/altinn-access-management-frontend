@@ -981,7 +981,7 @@ namespace Altinn.AccessManagement.UI.Tests.Utils
             Assert.Equal(expected.Description, actual.Description);
         }
 
-        public static void AssertEqual(SingleRightRequest expected, SingleRightRequest actual)
+        public static void AssertEqual(RequestFE expected, RequestFE actual)
         {
             Assert.NotNull(actual);
             Assert.NotNull(expected);
@@ -992,6 +992,7 @@ namespace Altinn.AccessManagement.UI.Tests.Utils
             Assert.Equal(expected.ResourceId, actual.ResourceId);
             Assert.Equal(expected.Type, actual.Type);
             Assert.Equal(expected.LastUpdated, actual.LastUpdated);
+            Assert.Equal(expected.Status, actual.Status);
         }
 
         public static void AssertEqual(EnrichedResourceRequest expected, EnrichedResourceRequest actual)
