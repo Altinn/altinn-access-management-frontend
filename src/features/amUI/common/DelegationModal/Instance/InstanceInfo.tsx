@@ -12,15 +12,15 @@ import { PartyType } from '@/rtk/features/userInfoApi';
 
 import { StatusSection } from '../../StatusSection/StatusSection';
 import { LoadingAnimation } from '../../LoadingAnimation/LoadingAnimation';
-import { ResourceHeading } from '../SingleRights/ResourceHeading';
 import { RightsSection } from '../SingleRights/RightsSection';
 import { ResourceAlert } from '../SingleRights/ResourceAlert';
 import { ResourceInfoSkeleton } from '../SingleRights/ResourceInfoSkeleton';
 import { usePartyRepresentation } from '../../PartyRepresentationContext/PartyRepresentationContext';
 import { DelegationAction } from '../EditModal';
 import { useInstanceRightsSection } from './useInstanceRightsSection';
+import { InstanceHeading } from './InstanceHeading';
 
-import classes from '../SingleRights/ResourceInfo.module.css';
+import classes from './InstanceInfo.module.css';
 
 export interface InstanceInfoProps {
   resource: ServiceResource;
@@ -41,7 +41,7 @@ export const InstanceInfo = ({
 }: InstanceInfoProps) => {
   const { t } = useTranslation();
   const isSmall = useIsMobileOrSmaller();
-  const { toParty: toPartyContext } = usePartyRepresentation();
+  const { toParty: toPartyContext, fromParty } = usePartyRepresentation();
 
   const toParty = toPartyProp ?? toPartyContext;
 
@@ -91,8 +91,6 @@ export const InstanceInfo = ({
         resource?.delegable === false ||
         (rights.length > 0 && !rights.some((r) => r.delegable === true))));
 
-  const shortId = instanceUrn.slice(-10);
-
   return (
     <>
       <StatusMessageForScreenReader politenessSetting='assertive'>
@@ -103,7 +101,12 @@ export const InstanceInfo = ({
           : (missingAccess ?? '')}
       </StatusMessageForScreenReader>
       <div>
-        <ResourceHeading resource={resource} />
+        <InstanceHeading
+          resource={resource}
+          fromPartyName={fromParty?.name}
+          fromPartyType={fromParty?.partyTypeName}
+        />
+
         {isActionLoading || isActionSuccess ? (
           <LoadingAnimation
             isLoading={isActionLoading}
@@ -117,9 +120,6 @@ export const InstanceInfo = ({
               className={classes.resourceInfo}
               data-size={isSmall ? 'xs' : 'md'}
             >
-              <DsParagraph data-size='sm'>
-                {instanceName ? `${instanceName} (${shortId})` : shortId}
-              </DsParagraph>
               <StatusSection
                 userHasAccess={hasAccess}
                 showDelegationCheckWarning={showMissingRightsStatus}
@@ -164,6 +164,7 @@ export const InstanceInfo = ({
               )}
               {canRevoke && hasDirectAccess && !!toParty && (
                 <Button
+                  data-size='sm'
                   variant={hasDelegateAction ? 'tertiary' : 'primary'}
                   onClick={revokeResource}
                   disabled={!rights.some((r) => r.delegated === true && r.inherited !== true)}
