@@ -1,5 +1,4 @@
 import { getCookie } from '@/resources/Cookie/CookieMethods';
-import { useRequests } from '@/resources/hooks/useRequests';
 import { clientAdministrationPageEnabled } from '@/resources/utils/featureFlagUtils';
 import {
   hasConsentPermission,
@@ -29,6 +28,7 @@ import {
 import { BadgeVariant, Color, MenuItemProps } from '@altinn/altinn-components';
 import { useLocation } from 'react-router';
 import { useGetRolePermissionsQuery } from '@/rtk/features/roleApi';
+import { useGetReceivedRequestsCountQuery } from '@/rtk/features/requestApi';
 
 export const useSidebarItems = ({ isSmall }: { isSmall?: boolean }) => {
   const displayConfettiPackage = window.featureFlags?.displayConfettiPackage;
@@ -60,7 +60,12 @@ export const useSidebarItems = ({ isSmall }: { isSmall?: boolean }) => {
   const { data: isClientAdmin, isLoading: isLoadingIsClientAdmin } = useGetIsClientAdminQuery();
   const { data: canAccessSettings, isLoading: isLoadingCompanyProfileAdmin } =
     useGetIsCompanyProfileAdminQuery();
-  const { pendingRequests } = useRequests();
+
+  const partyUuid = getCookie('AltinnPartyUuid');
+  const { data: receivedRequestsCount } = useGetReceivedRequestsCountQuery(
+    { party: partyUuid ?? '', status: ['Pending'] },
+    { skip: !partyUuid },
+  );
 
   const isLoading =
     isLoadingReportee || isLoadingIsAdmin || isLoadingIsClientAdmin || isLoadingCompanyProfileAdmin;
@@ -72,9 +77,9 @@ export const useSidebarItems = ({ isSmall }: { isSmall?: boolean }) => {
   }
   if (displayRequestsPage) {
     const requestsBadge =
-      pendingRequests && pendingRequests.received.length > 0
+      receivedRequestsCount && receivedRequestsCount > 0
         ? {
-            label: pendingRequests.received.length,
+            label: receivedRequestsCount,
             color: 'warning' as Color,
             variant: 'base' as BadgeVariant,
           }
