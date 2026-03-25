@@ -28,10 +28,7 @@
 }
 
 .resourceInfo {
-  display: flex;
-  flex-direction: column;
-  gap: var(--ds-size-1);
-  margin-bottom: var(--ds-size-4);
+  margin-bottom: var(--ds-size-2);
 }
 
 .closeWindowInfo {

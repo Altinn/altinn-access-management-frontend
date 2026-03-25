@@ -108,14 +108,14 @@ export const DraftRequestPageContent = ({ request }: DraftRequestPageContentProp
         >
           <ResourceHeading resource={request.resource} />
         </div>
-        <div className={classes.resourceInfo}>
-          {request.resource.description && (
-            <DsParagraph>{request.resource.description}</DsParagraph>
-          )}
-          {request.resource.rightDescription && (
-            <DsParagraph>{request.resource.rightDescription}</DsParagraph>
-          )}
-        </div>
+        {request.resource.description && (
+          <DsParagraph className={classes.resourceInfo}>{request.resource.description}</DsParagraph>
+        )}
+        {request.resource.rightDescription && (
+          <DsParagraph className={classes.resourceInfo}>
+            {request.resource.rightDescription}
+          </DsParagraph>
+        )}
         <RightsSection
           rights={rights}
           setRights={setRights}
@@ -127,31 +127,29 @@ export const DraftRequestPageContent = ({ request }: DraftRequestPageContentProp
           delegationError={null}
           missingAccess={null}
         />
-        <div>
-          {confirmRequestError && (
-            <DsAlert data-color='danger'>{t('draft_request_page.approve_request_error')}</DsAlert>
-          )}
-          {withdrawRequestError && (
-            <DsAlert data-color='danger'>{t('draft_request_page.withdraw_request_error')}</DsAlert>
-          )}
-          <div className={classes.buttonRow}>
-            <DsButton
-              variant='primary'
-              aria-disabled={isActionButtonDisabled}
-              loading={isConfirmingRequest}
-              onClick={onConfirmRequest}
-            >
-              {t('draft_request_page.confirm_request')}
-            </DsButton>
-            <DsButton
-              variant='primary'
-              aria-disabled={isActionButtonDisabled}
-              loading={isWithdrawingRequest}
-              onClick={onWithdrawRequest}
-            >
-              {t('draft_request_page.withdraw_request')}
-            </DsButton>
-          </div>
+        {confirmRequestError && (
+          <DsAlert data-color='danger'>{t('draft_request_page.approve_request_error')}</DsAlert>
+        )}
+        {withdrawRequestError && (
+          <DsAlert data-color='danger'>{t('draft_request_page.withdraw_request_error')}</DsAlert>
+        )}
+        <div className={classes.buttonRow}>
+          <DsButton
+            variant='primary'
+            aria-disabled={isActionButtonDisabled}
+            loading={isConfirmingRequest}
+            onClick={onConfirmRequest}
+          >
+            {t('draft_request_page.confirm_request')}
+          </DsButton>
+          <DsButton
+            variant='primary'
+            aria-disabled={isActionButtonDisabled}
+            loading={isWithdrawingRequest}
+            onClick={onWithdrawRequest}
+          >
+            {t('draft_request_page.withdraw_request')}
+          </DsButton>
         </div>
       </div>
     </div>
