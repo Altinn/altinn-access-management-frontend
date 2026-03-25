@@ -239,5 +239,41 @@ namespace Altinn.AccessManagement.UI.Integration.Clients
                 throw;
             }
         }
+
+        /// <inheritdoc />
+        public async Task<int> GetSentRequestsCount(Guid party, Guid? to, List<RequestStatus> status, string type, CancellationToken cancellationToken)
+        {
+            try
+            {
+                string endpointUrl = $"enduser/request/sent/count?party={party}";
+                string token = JwtTokenUtil.GetTokenFromContext(_httpContextAccessor.HttpContext, _platformSettings.JwtCookieName);
+
+                var httpResponse = await _client.GetAsync(token, endpointUrl);
+                return await ClientUtils.DeserializeIfSuccessfullStatusCode<int>(httpResponse);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "AccessManagement.UI // RequestClient // GetSentRequestsCount // Exception");
+                throw;
+            }
+        }
+
+        /// <inheritdoc />
+        public async Task<int> GetReceivedRequestsCount(Guid party, Guid? from, List<RequestStatus> status, string type, CancellationToken cancellationToken)
+        {
+            try
+            {
+                string endpointUrl = $"enduser/request/received/count?party={party}";
+                string token = JwtTokenUtil.GetTokenFromContext(_httpContextAccessor.HttpContext, _platformSettings.JwtCookieName);
+
+                var httpResponse = await _client.GetAsync(token, endpointUrl);
+                return await ClientUtils.DeserializeIfSuccessfullStatusCode<int>(httpResponse);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "AccessManagement.UI // RequestClient // GetReceivedRequestsCount // Exception");
+                throw;
+            }
+        }
     }
 }

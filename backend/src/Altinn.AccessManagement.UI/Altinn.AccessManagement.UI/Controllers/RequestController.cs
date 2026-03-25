@@ -171,6 +171,70 @@ namespace Altinn.AccessManagement.UI.Controllers
         }
 
         /// <summary>
+        ///     Endpoint for getting count of requests sent by a party
+        /// </summary>
+        /// <param name="party">The acting party</param>
+        /// <param name="to">The party the requests were sent to</param>
+        /// <param name="status">Status filter</param>
+        /// <param name="type">The type of requests to count. Either "resource" or "package"</param>
+        /// <param name="cancellationToken">Cancellation token</param>
+        /// <response code="400">Bad Request</response>
+        /// <response code="500">Internal Server Error</response>
+        [HttpGet]
+        [Authorize]
+        [Route("sent/count")]
+        public async Task<ActionResult> GetSentRequestsCount([FromQuery] Guid party, [FromQuery] Guid? to, [FromQuery] List<RequestStatus> status, [FromQuery] string type, CancellationToken cancellationToken)
+        {
+            try
+            {
+                var returnVal = await _requestService.GetSentRequestsCount(party, to, status, type, cancellationToken);
+                return Ok(returnVal);
+            }
+            catch (HttpStatusException statusEx)
+            {
+                string responseContent = statusEx.Message;
+                return new ObjectResult(ProblemDetailsFactory.CreateProblemDetails(HttpContext, (int?)statusEx.StatusCode, "Unexpected HttpStatus response from backend", detail: responseContent));
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Unexpected exception occurred during GetSentRequestsCount: {Message}", ex.Message);
+                return new ObjectResult(ProblemDetailsFactory.CreateProblemDetails(HttpContext));
+            }
+        }
+
+        /// <summary>
+        ///     Endpoint for getting count of requests received by a party
+        /// </summary>
+        /// <param name="party">The acting party</param>
+        /// <param name="from">The party who sent the requests</param>
+        /// <param name="status">Status filter</param>
+        /// <param name="type">The type of requests to count. Either "resource" or "package"</param>
+        /// <param name="cancellationToken">Cancellation token</param>
+        /// <response code="400">Bad Request</response>
+        /// <response code="500">Internal Server Error</response>
+        [HttpGet]
+        [Authorize]
+        [Route("received/count")]
+        public async Task<ActionResult> GetReceivedRequestsCount([FromQuery] Guid party, [FromQuery] Guid? from, [FromQuery] List<RequestStatus> status, [FromQuery] string type, CancellationToken cancellationToken)
+        {
+            try
+            {
+                var returnVal = await _requestService.GetReceivedRequestsCount(party, from, status, type, cancellationToken);
+                return Ok(returnVal);
+            }
+            catch (HttpStatusException statusEx)
+            {
+                string responseContent = statusEx.Message;
+                return new ObjectResult(ProblemDetailsFactory.CreateProblemDetails(HttpContext, (int?)statusEx.StatusCode, "Unexpected HttpStatus response from backend", detail: responseContent));
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Unexpected exception occurred during GetReceivedRequestsCount: {Message}", ex.Message);
+                return new ObjectResult(ProblemDetailsFactory.CreateProblemDetails(HttpContext));
+            }
+        }
+
+        /// <summary>
         ///     Endpoint for getting a single request by id
         /// </summary>
         /// <param name="party">The acting party</param>
