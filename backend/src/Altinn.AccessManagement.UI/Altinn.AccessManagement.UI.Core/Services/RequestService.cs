@@ -98,15 +98,15 @@ namespace Altinn.AccessManagement.UI.Core.Services
         }
 
         /// <inheritdoc />
-        public async Task<int> GetSentRequestsCount(Guid party, Guid? to, List<RequestStatus> status, string type, CancellationToken cancellationToken)
+        public async Task<int> GetSentRequestsCount(Guid party, Guid? to, List<RequestStatus> status, CancellationToken cancellationToken)
         {
-            return await _requestClient.GetSentRequestsCount(party, to, status, type, cancellationToken);
+            return await _requestClient.GetSentRequestsCount(party, to, status, cancellationToken);
         }
 
         /// <inheritdoc />
-        public async Task<int> GetReceivedRequestsCount(Guid party, Guid? from, List<RequestStatus> status, string type, CancellationToken cancellationToken)
+        public async Task<int> GetReceivedRequestsCount(Guid party, Guid? from, List<RequestStatus> status, CancellationToken cancellationToken)
         {
-            return await _requestClient.GetReceivedRequestsCount(party, from, status, type, cancellationToken);
+            return await _requestClient.GetReceivedRequestsCount(party, from, status, cancellationToken);
         }
 
         private static RequestFE MapToRequestFE(RequestResourceDto x)

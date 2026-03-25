@@ -176,18 +176,17 @@ namespace Altinn.AccessManagement.UI.Controllers
         /// <param name="party">The acting party</param>
         /// <param name="to">The party the requests were sent to</param>
         /// <param name="status">Status filter</param>
-        /// <param name="type">The type of requests to count. Either "resource" or "package"</param>
         /// <param name="cancellationToken">Cancellation token</param>
         /// <response code="400">Bad Request</response>
         /// <response code="500">Internal Server Error</response>
         [HttpGet]
         [Authorize]
         [Route("sent/count")]
-        public async Task<ActionResult> GetSentRequestsCount([FromQuery] Guid party, [FromQuery] Guid? to, [FromQuery] List<RequestStatus> status, [FromQuery] string type, CancellationToken cancellationToken)
+        public async Task<ActionResult> GetSentRequestsCount([FromQuery] Guid party, [FromQuery] Guid? to, [FromQuery] List<RequestStatus> status, CancellationToken cancellationToken)
         {
             try
             {
-                var returnVal = await _requestService.GetSentRequestsCount(party, to, status, type, cancellationToken);
+                var returnVal = await _requestService.GetSentRequestsCount(party, to, status, cancellationToken);
                 return Ok(returnVal);
             }
             catch (HttpStatusException statusEx)
@@ -208,18 +207,17 @@ namespace Altinn.AccessManagement.UI.Controllers
         /// <param name="party">The acting party</param>
         /// <param name="from">The party who sent the requests</param>
         /// <param name="status">Status filter</param>
-        /// <param name="type">The type of requests to count. Either "resource" or "package"</param>
         /// <param name="cancellationToken">Cancellation token</param>
         /// <response code="400">Bad Request</response>
         /// <response code="500">Internal Server Error</response>
         [HttpGet]
         [Authorize]
         [Route("received/count")]
-        public async Task<ActionResult> GetReceivedRequestsCount([FromQuery] Guid party, [FromQuery] Guid? from, [FromQuery] List<RequestStatus> status, [FromQuery] string type, CancellationToken cancellationToken)
+        public async Task<ActionResult> GetReceivedRequestsCount([FromQuery] Guid party, [FromQuery] Guid? from, [FromQuery] List<RequestStatus> status, CancellationToken cancellationToken)
         {
             try
             {
-                var returnVal = await _requestService.GetReceivedRequestsCount(party, from, status, type, cancellationToken);
+                var returnVal = await _requestService.GetReceivedRequestsCount(party, from, status, cancellationToken);
                 return Ok(returnVal);
             }
             catch (HttpStatusException statusEx)

@@ -92,10 +92,9 @@ namespace Altinn.AccessManagement.UI.Core.ClientInterfaces
         /// <param name="party">The acting party asking for sent request count</param>
         /// <param name="to">The party the requests were sent to</param>
         /// <param name="status">The statuses to count</param>
-        /// <param name="type">The type of requests to count. Either "resource" or "package"</param>
         /// <param name="cancellationToken">Cancellation token</param>
         /// <returns>Count of sent requests</returns>
-        Task<int> GetSentRequestsCount(Guid party, Guid? to, List<RequestStatus> status, string type, CancellationToken cancellationToken);
+        Task<int> GetSentRequestsCount(Guid party, Guid? to, List<RequestStatus> status, CancellationToken cancellationToken);
 
         /// <summary>
         /// Get count of requests received by a party
@@ -103,9 +102,8 @@ namespace Altinn.AccessManagement.UI.Core.ClientInterfaces
         /// <param name="party">The acting party asking for received request count</param>
         /// <param name="from">The party who sent the requests</param>
         /// <param name="status">The statuses to count</param>
-        /// <param name="type">The type of requests to count. Either "resource" or "package"</param>
         /// <param name="cancellationToken">Cancellation token</param>
         /// <returns>Count of received requests</returns>
-        Task<int> GetReceivedRequestsCount(Guid party, Guid? from, List<RequestStatus> status, string type, CancellationToken cancellationToken);
+        Task<int> GetReceivedRequestsCount(Guid party, Guid? from, List<RequestStatus> status, CancellationToken cancellationToken);
     }
 }
