@@ -111,6 +111,11 @@ export const DraftRequestPage = () => {
           },
         }}
       >
+        {!requestId && (
+          <div className={classes.centerBlock}>
+            <DsAlert data-color='warning'>{t('draft_request_page.missing_request_id')}</DsAlert>
+          </div>
+        )}
         {isLoadingRequest && <LoadingState />}
         {loadRequestError && (
           <DsAlert data-color='danger'>{t('draft_request_page.load_request_error')}</DsAlert>

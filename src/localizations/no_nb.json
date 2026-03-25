@@ -1035,6 +1035,7 @@
     "request_approved_info": "Noen i <strong>{{to_name}}</strong> vil snart behandle foresørselen din, og du vil få varsel når den er godkjent.",
     "request_withdrawn": "Forespørselen er avvist",
     "request_withdrawn_info": "Du har avvist forespørselen og vil dermed ikke få fullmakt til <strong>{{to_name}}</strong>.",
-    "close_window_info": "Du kan nå lukke dette vinduet."
+    "close_window_info": "Du kan nå lukke dette vinduet.",
+    "missing_request_id": "Kan ikke laste forespørsel: requestId-parameter er ikke satt i url"
   }
 }

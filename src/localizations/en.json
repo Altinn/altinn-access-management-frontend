@@ -1038,6 +1038,7 @@
     "request_approved_info": "Someone at <strong>{{to_name}}</strong> will soon process your request, and you will receive a notification when it is approved.",
     "request_withdrawn": "The request has been rejected",
     "request_withdrawn_info": "You have rejected the request and will therefore not receive power of attorney for <strong>{{to_name}}</strong>.",
-    "close_window_info": "You can now close this window."
+    "close_window_info": "You can now close this window.",
+    "missing_request_id": "Cannot load request: requestId-parameter is not set in url"
   }
 }
