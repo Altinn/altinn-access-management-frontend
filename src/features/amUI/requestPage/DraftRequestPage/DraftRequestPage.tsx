@@ -25,7 +25,7 @@ export const DraftRequestPage = () => {
 
   useDocumentTitle(t('draft_request_page.page_title'));
   const [searchParams] = useSearchParams();
-  const requestId = searchParams.get('id') ?? '';
+  const requestId = searchParams.get('requestId') ?? '';
   const partyUuid = getCookie('AltinnPartyUuid') || '';
 
   const {

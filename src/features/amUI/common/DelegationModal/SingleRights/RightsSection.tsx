@@ -38,6 +38,12 @@ export const RightsSection = ({
 
   const [rightsExpanded, setRightsExpanded] = useState(false);
 
+  const getListItemHeading = (hasAccessAndNoChanges?: boolean, isSingleRightRequest?: boolean) => {
+    if (hasAccessAndNoChanges) return 'delegation_modal.name_has_the_following';
+    if (isSingleRightRequest) return 'delegation_modal.name_requests_access_to';
+    return 'delegation_modal.name_will_receive';
+  };
+
   return (
     <>
       {delegationError && (
@@ -73,13 +79,7 @@ export const RightsSection = ({
           data-size={isSmall ? '2xs' : 'xs'}
         >
           <Trans
-            i18nKey={
-              hasAccessAndNoChanges
-                ? 'delegation_modal.name_has_the_following'
-                : isSingleRightRequest
-                  ? 'delegation_modal.name_requests_access_to'
-                  : 'delegation_modal.name_will_receive'
-            }
+            i18nKey={getListItemHeading(hasAccessAndNoChanges, isSingleRightRequest)}
             values={{ name: toName }}
             components={{ strong: <strong /> }}
           />
