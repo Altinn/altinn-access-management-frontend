@@ -3,10 +3,13 @@ import { useTranslation } from 'react-i18next';
 import { Badge, BadgeVariant, Color, DsTabs, formatDisplayName } from '@altinn/altinn-components';
 import { PageWrapper } from '@/components';
 import { PageLayoutWrapper } from '../common/PageLayoutWrapper';
-import { useRerouteIfRequestPageDisabled } from '@/resources/utils/featureFlagUtils';
+import {
+  enableRequestSingleRight,
+  useRerouteIfRequestPageDisabled,
+} from '@/resources/utils/featureFlagUtils';
 import { Breadcrumbs } from '../common/Breadcrumbs/Breadcrumbs';
 import ReporteePageHeading from '../common/ReporteePageHeading';
-import { useGetReporteeQuery } from '@/rtk/features/userInfoApi';
+import { useGetIsAdminQuery, useGetReporteeQuery } from '@/rtk/features/userInfoApi';
 import { useDocumentTitle } from '@/resources/hooks/useDocumentTitle';
 import { useRequests } from '@/resources/hooks/useRequests';
 import { useGetSentRequestsCountQuery } from '@/rtk/features/requestApi';
@@ -35,12 +38,13 @@ export const RequestPage = () => {
   useDocumentTitle(t('request_page.page_title'));
 
   const { data: reportee, isLoading: isLoadingReportee } = useGetReporteeQuery();
+  const { data: isAdmin } = useGetIsAdminQuery();
   const { pendingRequests, isLoadingRequests, isError } = useRequests();
 
   const partyUuid = getCookie('AltinnPartyUuid');
   const { data: sentRequestCount = 0 } = useGetSentRequestsCountQuery(
     { party: partyUuid || '', status: ['Pending'] },
-    { skip: !partyUuid },
+    { skip: !partyUuid || !isAdmin || !enableRequestSingleRight() },
   );
 
   const getBadgeProps = (tabValue: string) =>
