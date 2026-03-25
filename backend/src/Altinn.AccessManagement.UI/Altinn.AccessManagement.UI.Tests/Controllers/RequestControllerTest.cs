@@ -295,7 +295,23 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
             // Assert
             Assert.Equal(HttpStatusCode.BadRequest, httpResponse.StatusCode);
         }
+        
+        /// <summary>
+        ///     Test case: GetDraftRequest encounters a NotFoundException from the backend
+        ///     Expected: Returns the status code from the exception (NotFound)
+        /// </summary>
+        [Fact]
+        public async Task GetDraftRequest_NotFoundException()
+        {
+            // Arrange
+            string requestId = "22222222-2222-2222-2222-222222222222"; // This ID triggers a NotFoundException in the mock
 
+            // Act
+            HttpResponseMessage httpResponse = await _client.GetAsync($"accessmanagement/api/v1/request/draft/{requestId}");
+
+            // Assert
+            Assert.Equal(HttpStatusCode.NotFound, httpResponse.StatusCode);
+        }
 
         /// <summary>
         ///     Test case: CreateResourceRequest creates a resource request

@@ -129,6 +129,11 @@ namespace Altinn.AccessManagement.UI.Mocks.Mocks
             ThrowHttpStatusExceptionIfTriggerParty(id.ToString());
 
             string dataPath = Path.Combine(dataFolder, "Request", "draftRequest.json");
+            if (id == Guid.Parse("22222222-2222-2222-2222-222222222222"))
+            {
+                dataPath = Path.Combine(dataFolder, "Request", "draftRequestInvalidResource.json");
+            }
+
             return await Task.FromResult(Util.GetMockData<RequestResourceDto>(dataPath));
         }
 
