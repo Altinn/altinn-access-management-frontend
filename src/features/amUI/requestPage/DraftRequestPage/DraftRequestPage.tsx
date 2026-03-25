@@ -62,7 +62,7 @@ export const DraftRequestPage = () => {
   return (
     <RootProvider>
       <Layout
-        color='neutral'
+        color={request?.from.type === 'Person' ? 'person' : 'company'}
         theme='subtle'
         header={{
           locale: {
