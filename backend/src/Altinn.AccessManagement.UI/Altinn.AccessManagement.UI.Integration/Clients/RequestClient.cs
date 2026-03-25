@@ -245,7 +245,7 @@ namespace Altinn.AccessManagement.UI.Integration.Clients
         {
             try
             {
-                string endpointUrl = $"enduser/request/sent/count?party={party}";
+                string endpointUrl = $"enduser/request/sent/count?party={party}&to={to}";
                 string token = JwtTokenUtil.GetTokenFromContext(_httpContextAccessor.HttpContext, _platformSettings.JwtCookieName);
 
                 var httpResponse = await _client.GetAsync(token, endpointUrl);
@@ -263,7 +263,7 @@ namespace Altinn.AccessManagement.UI.Integration.Clients
         {
             try
             {
-                string endpointUrl = $"enduser/request/received/count?party={party}";
+                string endpointUrl = $"enduser/request/received/count?party={party}&from={from}";
                 string token = JwtTokenUtil.GetTokenFromContext(_httpContextAccessor.HttpContext, _platformSettings.JwtCookieName);
 
                 var httpResponse = await _client.GetAsync(token, endpointUrl);

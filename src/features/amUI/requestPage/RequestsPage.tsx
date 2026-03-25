@@ -9,6 +9,8 @@ import ReporteePageHeading from '../common/ReporteePageHeading';
 import { useGetReporteeQuery } from '@/rtk/features/userInfoApi';
 import { useDocumentTitle } from '@/resources/hooks/useDocumentTitle';
 import { useRequests } from '@/resources/hooks/useRequests';
+import { useGetSentRequestsCountQuery } from '@/rtk/features/requestApi';
+import { getCookie } from '@/resources/Cookie/CookieMethods';
 import { RequestsTabPanel } from './RequestsTabPanel';
 import classes from './RequestPage.module.css';
 
@@ -35,6 +37,12 @@ export const RequestPage = () => {
   const { data: reportee, isLoading: isLoadingReportee } = useGetReporteeQuery();
   const { pendingRequests, isLoadingRequests, isError } = useRequests();
 
+  const partyUuid = getCookie('AltinnPartyUuid');
+  const { data: sentRequestCount = 0 } = useGetSentRequestsCountQuery(
+    { party: partyUuid || '', status: ['Pending'] },
+    { skip: !partyUuid },
+  );
+
   const getBadgeProps = (tabValue: string) =>
     selectedTab === tabValue ? selectedTabProps : unselectedTabProps;
 
@@ -44,7 +52,6 @@ export const RequestPage = () => {
   });
 
   const receivedRequestsCount = pendingRequests ? pendingRequests.received.length : 0;
-  const sentRequestCount = pendingRequests ? pendingRequests.sent.length : 0;
 
   return (
     <PageWrapper>
