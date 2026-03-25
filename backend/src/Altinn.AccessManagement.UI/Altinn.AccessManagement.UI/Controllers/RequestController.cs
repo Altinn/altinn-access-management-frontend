@@ -218,6 +218,10 @@ namespace Altinn.AccessManagement.UI.Controllers
                 var returnVal = await _requestService.GetDraftRequest(id, languageCode, cancellationToken);
                 return Ok(returnVal);
             }
+            catch (ResourceNotFoundException ex)
+            {
+                return NotFound(ProblemDetailsFactory.CreateProblemDetails(HttpContext, (int?)StatusCodes.Status404NotFound, "Service Resource not found", detail: ex.Message));
+            }
             catch (HttpStatusException statusEx)
             {
                 string responseContent = statusEx.Message;
