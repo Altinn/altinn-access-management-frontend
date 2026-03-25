@@ -125,14 +125,14 @@ export const requestApi = createApi({
         url: `received/reject?party=${party}&id=${id}`,
         method: 'PUT',
       }),
-      invalidatesTags: ['receivedRequests'],
+      invalidatesTags: ['receivedRequests', 'enrichedReceivedResourceRequests'],
     }),
     approveRequest: builder.mutation<RequestDto, { party: string; id: string }>({
       query: ({ party, id }) => ({
         url: `received/approve?party=${party}&id=${id}`,
         method: 'PUT',
       }),
-      invalidatesTags: ['receivedRequests'],
+      invalidatesTags: ['receivedRequests', 'enrichedReceivedResourceRequests'],
     }),
   }),
 });

@@ -481,6 +481,7 @@
       "partial_access": "Access to {{count}} of {{total}} actions",
       "action_description": "These are the technical actions that the service offers. You can grant power of attorney to the entire service or choose specific actions.",
       "request_action_description": "These are the technical actions that the service offers. You can only request power of attorney for the entire service.",
+      "approve_action_description": "These are the technical actions that the service offers. You can only approve power of attorney for the entire service.",
       "cannot_give_header": "You cannot grant access to:"
     },
     "specific_rights": {
@@ -509,12 +510,14 @@
     },
     "service_error": {
       "general_heading": "You cannot give power of attorney to this service",
+      "approve_heading": "You cannot approve requests for this service",
       "technical_error_heading": "Something went wrong",
       "undelegable_service": "{{resourceOwner}} has determined that this service cannot be given to others.",
       "technical_error": "A technical error has occurred. Please try again or contact Altinn user service if the problem persists.",
       "time_of_error": "Error occurred at time: {{time}}",
       "error_status": "Status: {{status}}",
       "access_list_service": "Who can use this service is determined by {{resourceOwner}}, and {{reportee}} has not been given that opportunity. We recommend contacting {{resourceOwner}}.",
+      "missing_approve_rights": "You do not have the necessary authorization for all or part of this service and therefore cannot approve requests from others. If you only want to grant parts of the service, you can do so by granting authorization in the usual way.",
       "missing_rights": "You cannot give this power of attorney because you do not have access yourself."
     },
     "request": {
@@ -1024,6 +1027,10 @@
     "error_partial_loading_requests": "Could not load all requests",
     "review_modal_title": "{{fromPartyName}} is requesting these rights",
     "approve_request": "Approve",
-    "reject_request": "Reject"
+    "reject_request": "Reject request",
+    "review_approved": "Approved",
+    "review_rejected": "Rejected",
+    "review_warning": "You cannot approve",
+    "review_close_info": "If you do not choose to approve or reject a request, it will remain as an active request."
   }
 }

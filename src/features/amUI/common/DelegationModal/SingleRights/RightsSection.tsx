@@ -14,7 +14,6 @@ interface RightsSectionProps {
   undelegableActions: string[];
   isDelegationCheckLoading: boolean;
   toName?: string;
-  isSingleRightRequest?: boolean;
   availableActions: DelegationAction[] | undefined;
   delegationError: 'delegate' | 'revoke' | 'edit' | null;
   missingAccess: string | null;
@@ -27,7 +26,6 @@ export const RightsSection = ({
   undelegableActions,
   isDelegationCheckLoading,
   toName,
-  isSingleRightRequest,
   availableActions,
   delegationError,
   missingAccess,
@@ -37,6 +35,16 @@ export const RightsSection = ({
   const isSmall = useIsMobileOrSmaller();
 
   const [rightsExpanded, setRightsExpanded] = useState(false);
+
+  const rightsDescription = () => {
+    if (availableActions?.includes(DelegationAction.REQUEST)) {
+      return t('delegation_modal.actions.request_action_description');
+    }
+    if (availableActions?.includes(DelegationAction.APPROVE)) {
+      return t('delegation_modal.actions.approve_action_description');
+    }
+    return t('delegation_modal.actions.action_description');
+  };
 
   return (
     <>
@@ -102,11 +110,7 @@ export const RightsSection = ({
           shadow='none'
         >
           <div className={classes.rightExpandableContent}>
-            <DsParagraph>
-              {isSingleRightRequest
-                ? t('delegation_modal.actions.request_action_description')
-                : t('delegation_modal.actions.action_description')}
-            </DsParagraph>
+            <DsParagraph>{rightsDescription()}</DsParagraph>
             <div className={classes.rightChips}>
               <RightChips
                 rights={rights}
