@@ -1019,5 +1019,22 @@
     "request_systemuser": "Ber om å opprette systembruker",
     "error_loading_requests": "Kunne ikkje laste førespurnader",
     "error_partial_loading_requests": "Kunne ikkje laste alle førespurnader"
+  },
+  "draft_request_page": {
+    "page_title": "Førespurnad om fullmakt - Altinn",
+    "heading": "Vil du be om tilgang til <strong>{{to_name}}</strong>?",
+    "intro_person": "Det er opprettet eit forslag om tilgang til ei tjeneste på dine vegne, men du må sjølv godkjenne ho for at ho skal tre i kraft. Førespurnaden vil berre sendast til <strong>{{to_name}}</strong> dersom du seier deg einig.",
+    "intro_company": "Det er opprettet eit forslag om tilgang til ei tjeneste på vegne av <strong>{{from_name}}</strong>, men du må sjølv godkjenne ho for at ho skal tre i kraft. Førespurnaden vil berre sendast til <strong>{{to_name}}</strong> dersom du seier deg einig.",
+    "confirm_request": "Ja, be om tilgang",
+    "withdraw_request": "Nei, avslå",
+    "loading_request": "Lastar førespurnad",
+    "load_request_error": "Kunne ikkje laste førespurnad",
+    "approve_request_error": "Kunne ikkje godkjenne førespurnad",
+    "withdraw_request_error": "Kunne ikkje avslå førespurnad",
+    "request_approved": "Førespurnaden er sendt til <strong>{{to_name}}</strong>",
+    "request_approved_info": "Nokon i <strong>{{to_name}}</strong> vil snart handsambare førespurnaden din, og du vil få varsel når ho er godkjend.",
+    "request_withdrawn": "Førespurnaden er avslått",
+    "request_withdrawn_info": "Du har avslått førespurnaden og vil dermed ikkje få fullmakt til <strong>{{to_name}}</strong>.",
+    "close_window_info": "Du kan no lukke dette vinduet."
   }
 }

@@ -1022,5 +1022,22 @@
     "request_systemuser": "Requests to create system user",
     "error_loading_requests": "Could not load requests",
     "error_partial_loading_requests": "Could not load all requests"
+  },
+  "draft_request_page": {
+    "page_title": "Power of Attorney Request - Altinn",
+    "heading": "Do you want to request access to <strong>{{to_name}}</strong>?",
+    "intro_person": "A proposal for access to a service on your behalf has been created, but you must approve it for it to take effect. The request will only be sent to <strong>{{to_name}}</strong> if you agree.",
+    "intro_company": "A proposal for access to a service on behalf of <strong>{{from_name}}</strong> has been created, but you must approve it for it to take effect. The request will only be sent to <strong>{{to_name}}</strong> if you agree.",
+    "confirm_request": "Yes, request access",
+    "withdraw_request": "No, reject",
+    "loading_request": "Loading request",
+    "load_request_error": "Could not load request",
+    "approve_request_error": "Could not approve request",
+    "withdraw_request_error": "Could not reject request",
+    "request_approved": "The request has been sent to <strong>{{to_name}}</strong>",
+    "request_approved_info": "Someone at <strong>{{to_name}}</strong> will soon process your request, and you will receive a notification when it is approved.",
+    "request_withdrawn": "The request has been rejected",
+    "request_withdrawn_info": "You have rejected the request and will therefore not receive power of attorney for <strong>{{to_name}}</strong>.",
+    "close_window_info": "You can now close this window."
   }
 }
