@@ -15,9 +15,15 @@ import { usePartyRepresentation } from '../../../PartyRepresentationContext/Part
 
 interface UseSingleRightRequestsProps {
   canRequestRights?: boolean;
+  onCreateRequestError?: (resource: ServiceResource) => void;
+  onDeleteRequestError?: (resource: ServiceResource) => void;
 }
 
-export const useSingleRightRequests = ({ canRequestRights }: UseSingleRightRequestsProps) => {
+export const useSingleRightRequests = ({
+  canRequestRights,
+  onCreateRequestError,
+  onDeleteRequestError,
+}: UseSingleRightRequestsProps) => {
   const [loadingByResourceId, setLoadingByResourceId] = useState<Record<string, boolean>>({});
   const { fromParty, actingParty } = usePartyRepresentation();
 
@@ -83,12 +89,16 @@ export const useSingleRightRequests = ({ canRequestRights }: UseSingleRightReque
           ...prev,
           [resource.identifier]: false,
         }));
-        openSnackbar({
-          message: t('delegation_modal.request.sent_request_error', {
-            resource: resource.title,
-          }),
-          color: 'danger',
-        });
+        if (onCreateRequestError) {
+          onCreateRequestError(resource);
+        } else {
+          openSnackbar({
+            message: t('delegation_modal.request.sent_request_error', {
+              resource: resource.title,
+            }),
+            color: 'danger',
+          });
+        }
       });
   };
 
@@ -127,12 +137,16 @@ export const useSingleRightRequests = ({ canRequestRights }: UseSingleRightReque
           ...prev,
           [resource.identifier]: false,
         }));
-        openSnackbar({
-          message: t('delegation_modal.request.withdraw_request_error', {
-            resource: resource.title,
-          }),
-          color: 'danger',
-        });
+        if (onDeleteRequestError) {
+          onDeleteRequestError(resource);
+        } else {
+          openSnackbar({
+            message: t('delegation_modal.request.withdraw_request_error', {
+              resource: resource.title,
+            }),
+            color: 'danger',
+          });
+        }
       });
   };
 
