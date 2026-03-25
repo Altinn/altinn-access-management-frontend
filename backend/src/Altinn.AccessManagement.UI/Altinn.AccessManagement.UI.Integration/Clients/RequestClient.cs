@@ -227,7 +227,19 @@ namespace Altinn.AccessManagement.UI.Integration.Clients
         {
             try
             {
-                string endpointUrl = $"enduser/request/sent/count?party={party}&to={to}";
+                var queryParams = new Dictionary<string, string>
+                {
+                    { "party", party.ToString() }
+                };
+
+                if (to.HasValue)
+                {
+                    queryParams.Add("to", to.Value.ToString());
+                }
+
+                var statusParams = status?.Select(s => new KeyValuePair<string, string>("status", s.ToString())) ?? [];
+
+                string endpointUrl = QueryHelpers.AddQueryString("enduser/request/sent/count", queryParams.Concat(statusParams));
                 string token = JwtTokenUtil.GetTokenFromContext(_httpContextAccessor.HttpContext, _platformSettings.JwtCookieName);
 
                 var httpResponse = await _client.GetAsync(token, endpointUrl);
@@ -245,7 +257,19 @@ namespace Altinn.AccessManagement.UI.Integration.Clients
         {
             try
             {
-                string endpointUrl = $"enduser/request/received/count?party={party}&from={from}";
+                var queryParams = new Dictionary<string, string>
+                {
+                    { "party", party.ToString() }
+                };
+
+                if (from.HasValue)
+                {
+                    queryParams.Add("from", from.Value.ToString());
+                }
+
+                var statusParams = status?.Select(s => new KeyValuePair<string, string>("status", s.ToString())) ?? [];
+
+                string endpointUrl = QueryHelpers.AddQueryString("enduser/request/received/count", queryParams.Concat(statusParams));
                 string token = JwtTokenUtil.GetTokenFromContext(_httpContextAccessor.HttpContext, _platformSettings.JwtCookieName);
 
                 var httpResponse = await _client.GetAsync(token, endpointUrl);

@@ -28,7 +28,7 @@ import {
 import { BadgeVariant, Color, MenuItemProps } from '@altinn/altinn-components';
 import { useLocation } from 'react-router';
 import { useGetRolePermissionsQuery } from '@/rtk/features/roleApi';
-import { useGetReceivedRequestsCountQuery } from '@/rtk/features/requestApi';
+import { useRequests } from '@/resources/hooks/useRequests';
 
 export const useSidebarItems = ({ isSmall }: { isSmall?: boolean }) => {
   const displayConfettiPackage = window.featureFlags?.displayConfettiPackage;
@@ -62,10 +62,8 @@ export const useSidebarItems = ({ isSmall }: { isSmall?: boolean }) => {
     useGetIsCompanyProfileAdminQuery();
 
   const partyUuid = getCookie('AltinnPartyUuid');
-  const { data: receivedRequestsCount } = useGetReceivedRequestsCountQuery(
-    { party: partyUuid ?? '', status: ['Pending'] },
-    { skip: !partyUuid },
-  );
+  const { pendingRequests } = useRequests();
+  const receivedRequestsCount = pendingRequests ? pendingRequests.received.length : 0;
 
   const isLoading =
     isLoadingReportee || isLoadingIsAdmin || isLoadingIsClientAdmin || isLoadingCompanyProfileAdmin;
