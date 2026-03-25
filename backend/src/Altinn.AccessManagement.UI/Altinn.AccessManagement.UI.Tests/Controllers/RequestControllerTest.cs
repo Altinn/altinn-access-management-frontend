@@ -250,7 +250,7 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
         {
             // Arrange
             string requestId = "da45b77b-a068-4d53-b6be-0837cc9c5a3f";
-            string path = Path.Combine(_expectedDataPath, "Request", "getSingleDraftRequest.json");
+            string path = Path.Combine(_expectedDataPath, "Request", "getEnrichedDraftRequest.json");
             EnrichedResourceRequest expectedResponse = Util.GetMockData<EnrichedResourceRequest>(path);
 
             // Act
