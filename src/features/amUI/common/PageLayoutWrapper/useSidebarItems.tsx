@@ -61,7 +61,6 @@ export const useSidebarItems = ({ isSmall }: { isSmall?: boolean }) => {
   const { data: canAccessSettings, isLoading: isLoadingCompanyProfileAdmin } =
     useGetIsCompanyProfileAdminQuery();
 
-  const partyUuid = getCookie('AltinnPartyUuid');
   const { pendingRequests } = useRequests();
   const receivedRequestsCount = pendingRequests ? pendingRequests.received.length : 0;
 
