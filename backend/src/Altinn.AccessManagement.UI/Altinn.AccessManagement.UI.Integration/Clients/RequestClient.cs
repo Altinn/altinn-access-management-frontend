@@ -241,7 +241,7 @@ namespace Altinn.AccessManagement.UI.Integration.Clients
         }
 
         /// <inheritdoc />
-        public async Task<int> GetSentRequestsCount(Guid party, Guid? to, List<RequestStatus> status, string type, CancellationToken cancellationToken)
+        public async Task<int> GetSentRequestsCount(Guid party, Guid? to, List<RequestStatus> status, CancellationToken cancellationToken)
         {
             try
             {
@@ -259,7 +259,7 @@ namespace Altinn.AccessManagement.UI.Integration.Clients
         }
 
         /// <inheritdoc />
-        public async Task<int> GetReceivedRequestsCount(Guid party, Guid? from, List<RequestStatus> status, string type, CancellationToken cancellationToken)
+        public async Task<int> GetReceivedRequestsCount(Guid party, Guid? from, List<RequestStatus> status, CancellationToken cancellationToken)
         {
             try
             {

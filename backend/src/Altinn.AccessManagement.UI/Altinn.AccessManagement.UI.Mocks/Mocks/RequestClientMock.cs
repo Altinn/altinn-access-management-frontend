@@ -138,7 +138,7 @@ namespace Altinn.AccessManagement.UI.Mocks.Mocks
         }
 
         /// <inheritdoc />
-        public async Task<int> GetSentRequestsCount(Guid party, Guid? to, List<RequestStatus> status, string type, CancellationToken cancellationToken)
+        public async Task<int> GetSentRequestsCount(Guid party, Guid? to, List<RequestStatus> status, CancellationToken cancellationToken)
         {
             ThrowExceptionIfTriggerParty(party.ToString());
             ThrowHttpStatusExceptionIfTriggerParty(party.ToString());
@@ -147,7 +147,7 @@ namespace Altinn.AccessManagement.UI.Mocks.Mocks
         }
 
         /// <inheritdoc />
-        public async Task<int> GetReceivedRequestsCount(Guid party, Guid? from, List<RequestStatus> status, string type, CancellationToken cancellationToken)
+        public async Task<int> GetReceivedRequestsCount(Guid party, Guid? from, List<RequestStatus> status, CancellationToken cancellationToken)
         {
             ThrowExceptionIfTriggerParty(party.ToString());
             ThrowHttpStatusExceptionIfTriggerParty(party.ToString());
