@@ -115,6 +115,7 @@ export const requestApi = createApi({
       query: ({ id }) => {
         return `draft/${id}`;
       },
+      keepUnusedDataFor: 0,
     }),
     confirmRequest: builder.mutation<RequestDto, { party: string; id: string }>({
       query: ({ party, id }) => ({

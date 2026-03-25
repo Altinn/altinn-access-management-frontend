@@ -1032,10 +1032,10 @@
     "approve_request_error": "Kunne ikkje godkjenne førespurnad",
     "withdraw_request_error": "Kunne ikkje avslå førespurnad",
     "request_approved": "Førespurnaden er sendt til <strong>{{to_name}}</strong>",
-    "request_approved_info": "Nokon i <strong>{{to_name}}</strong> vil snart handsambare førespurnaden din, og du vil få varsel når ho er godkjend.",
+    "request_approved_info": "Nokon i <strong>{{to_name}}</strong> vil snart behandle førespurnaden din, og du vil få varsel når ho er godkjend.",
     "request_withdrawn": "Førespurnaden er avslått",
     "request_withdrawn_info": "Du har avslått førespurnaden og vil dermed ikkje få fullmakt til <strong>{{to_name}}</strong>.",
     "close_window_info": "Du kan no lukke dette vinduet.",
-    "missing_request_id": "Kan ikkje laste førespurnaden: requestId-parameter er ikkje satt i url"
+    "missing_request_id": "Kan ikkje laste førespurnaden: requestId-parameter er ikkje sett i url"
   }
 }

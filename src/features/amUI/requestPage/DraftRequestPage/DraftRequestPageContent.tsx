@@ -49,11 +49,15 @@ export const DraftRequestPageContent = ({ request }: DraftRequestPageContentProp
   const { rights, setRights } = useRightsSection({ resource: request.resource, isRequest: true });
 
   const onConfirmRequest = () => {
-    confirmRequest({ party: request.from.id, id: request.id });
+    if (!isActionButtonDisabled) {
+      confirmRequest({ party: request.from.id, id: request.id });
+    }
   };
 
   const onWithdrawRequest = () => {
-    withdrawRequest({ party: request.from.id, id: request.id });
+    if (!isActionButtonDisabled) {
+      withdrawRequest({ party: request.from.id, id: request.id });
+    }
   };
   const isSelfParty = selfParty?.partyUuid === request.from.id;
   const isActionButtonDisabled = isConfirmingRequest || isWithdrawingRequest;
@@ -187,8 +191,8 @@ const RequestReceipt = ({ headerTextKey, bodyTextKey, toName }: RequestReceiptPr
             values={{ to_name: toName }}
           />
         </DsParagraph>
-        <DsParagraph>
-          <div className={classes.closeWindowInfo}>{t('draft_request_page.close_window_info')}</div>
+        <DsParagraph className={classes.closeWindowInfo}>
+          {t('draft_request_page.close_window_info')}
         </DsParagraph>
       </div>
     </div>

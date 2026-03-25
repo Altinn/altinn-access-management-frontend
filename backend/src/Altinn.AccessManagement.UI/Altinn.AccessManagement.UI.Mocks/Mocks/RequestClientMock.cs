@@ -128,7 +128,7 @@ namespace Altinn.AccessManagement.UI.Mocks.Mocks
             ThrowExceptionIfTriggerParty(id.ToString());
             ThrowHttpStatusExceptionIfTriggerParty(id.ToString());
 
-            string dataPath = Path.Combine(dataFolder, "Request", "singleRequest.json");
+            string dataPath = Path.Combine(dataFolder, "Request", "draftRequest.json");
             return await Task.FromResult(Util.GetMockData<RequestResourceDto>(dataPath));
         }
 

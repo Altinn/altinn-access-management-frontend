@@ -250,7 +250,7 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
         {
             // Arrange
             string requestId = "da45b77b-a068-4d53-b6be-0837cc9c5a3f";
-            string path = Path.Combine(_expectedDataPath, "Request", "getSingleEnrichedRequest.json");
+            string path = Path.Combine(_expectedDataPath, "Request", "getSingleDraftRequest.json");
             EnrichedResourceRequest expectedResponse = Util.GetMockData<EnrichedResourceRequest>(path);
 
             // Act
@@ -287,7 +287,7 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
         public async Task GetDraftRequest_HttpStatusException()
         {
             // Arrange
-            string requestId = "11111111-1111-1111-1111-111111111111";; // This ID triggers an HttpStatusException in the mock
+            string requestId = "11111111-1111-1111-1111-111111111111"; // This ID triggers an HttpStatusException in the mock
 
             // Act
             HttpResponseMessage httpResponse = await _client.GetAsync($"accessmanagement/api/v1/request/draft/{requestId}");
