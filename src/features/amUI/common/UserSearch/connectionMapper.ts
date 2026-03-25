@@ -1,4 +1,8 @@
-import type { Connection } from '@/rtk/features/connectionApi';
+import type {
+  Connection,
+  SimplifiedConnection,
+  SimplifiedParty,
+} from '@/rtk/features/connectionApi';
 
 import { buildSortKey, normalizeType } from './mapperUtils';
 import type { UserSearchNode } from './types';
@@ -34,3 +38,29 @@ export const mapConnectionsToUserSearchNodes = (connections?: Connection[]): Use
       ? mapConnectionsToUserSearchNodes(connection.connections)
       : (connection.party.children?.map(mapUserToUserSearchNode) ?? null),
   })) ?? [];
+
+const mapSimplifiedPartyToNode = (party: SimplifiedParty): UserSearchNode => ({
+  id: party.id,
+  name: party.name,
+  type: normalizeType(party.type),
+  variant: party.variant,
+  organizationIdentifier: party.organizationIdentifier,
+  isDeleted: party.isDeleted ?? undefined,
+  sortKey: buildSortKey(party.name),
+  roles: [],
+  children: null,
+});
+
+export const mapSimplifiedConnectionsToUserSearchNodes = (
+  connections?: SimplifiedConnection[],
+): UserSearchNode[] =>
+  connections?.map((connection) => ({
+    ...mapSimplifiedPartyToNode(connection.party),
+    children: connection.connections?.length
+      ? mapSimplifiedConnectionsToUserSearchNodes(connection.connections)
+      : null,
+  })) ?? [];
+
+export const mapSimplifiedPartiesToUserSearchNodes = (
+  parties?: SimplifiedParty[],
+): UserSearchNode[] => parties?.map(mapSimplifiedPartyToNode) ?? [];

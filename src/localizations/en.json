@@ -948,6 +948,7 @@
     "description": "Here you can share a message/form from the inbox or get an overview of who already has access. Use the search field to search for people/organizations or add them as a new user.",
     "no_users": "No users have access.",
     "no_access_description": "<b>You do not have the authority to share this service/message with others.</b> To share and grant access from the inbox, you must have the access package: Access manager for single messages, forms and dialogs.",
+    "instance_admin_edit_disclaimer": "Only Access Managers or Main Administrators can edit an access grant after it has been given to a user.",
     "add_user_modal": {
       "heading": "Grant access to new user",
       "user_will_receive": "The user will receive:"

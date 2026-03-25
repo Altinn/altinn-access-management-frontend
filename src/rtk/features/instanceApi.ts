@@ -2,7 +2,7 @@ import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 
 import { getCookie } from '@/resources/Cookie/CookieMethods';
 import type { Permissions } from '@/dataObjects/dtos/accessPackage';
-import type { PersonInput } from './connectionApi';
+import type { PersonInput, SimplifiedParty } from './connectionApi';
 import type {
   DelegationCheckedRight,
   RightAccess,
@@ -105,6 +105,14 @@ export const instanceApi = createApi({
       }),
       invalidatesTags: ['instances', 'instanceRights', 'instanceDelegationCheck'],
     }),
+    getInstanceUsers: builder.query<
+      SimplifiedParty[],
+      { party: string; resource: string; instance: string }
+    >({
+      query: ({ party, resource, instance }) =>
+        `instances/delegation/instances/simplified/users?party=${party}&resource=${encodeURIComponent(resource)}&instance=${encodeURIComponent(instance)}`,
+      providesTags: ['instances'],
+    }),
     removeInstance: builder.mutation<
       void,
       { party: string; from: string; to: string; resource: string; instance: string }
@@ -125,6 +133,7 @@ export const {
   useDelegateInstanceRightsMutation,
   useUpdateInstanceRightsMutation,
   useRemoveInstanceMutation,
+  useGetInstanceUsersQuery,
 } = instanceApi;
 
 export const { endpoints, reducerPath, reducer, middleware } = instanceApi;
