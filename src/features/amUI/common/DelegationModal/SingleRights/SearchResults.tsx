@@ -55,10 +55,10 @@ export const SearchResults = ({
     useSingleRightRequests({
       canRequestRights: availableActions?.includes(DelegationAction.REQUEST) ?? false,
       onCreateRequestError: (resource) => {
-        onSelect(resource, true);
+        onSelect(resource);
       },
       onDeleteRequestError: (resource) => {
-        onSelect(resource, true);
+        onSelect(resource);
       },
     });
 
