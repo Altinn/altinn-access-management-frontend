@@ -124,6 +124,24 @@ export const requestApi = createApi({
       }),
       invalidatesTags: ['sentRequests', 'enrichedSentResourceRequests'],
     }),
+
+    // count queries
+    getSentRequestsCount: builder.query<number, { party: string; status?: RequestStatus[] }>({
+      query: ({ party, status = [] }) => {
+        let params = `?party=${party}`;
+        for (const s of status) params += `&status=${s}`;
+        return `sent/count${params}`;
+      },
+      providesTags: ['sentRequests'],
+    }),
+    getReceivedRequestsCount: builder.query<number, { party: string; status?: RequestStatus[] }>({
+      query: ({ party, status = [] }) => {
+        let params = `?party=${party}`;
+        for (const s of status) params += `&status=${s}`;
+        return `received/count${params}`;
+      },
+      providesTags: ['receivedRequests'],
+    }),
   }),
 });
 
@@ -138,6 +156,8 @@ export const {
   useApproveRequestMutation,
   useGetEnrichedSentResourceRequestsQuery,
   useGetEnrichedDraftRequestQuery,
+  useGetSentRequestsCountQuery,
+  useGetReceivedRequestsCountQuery,
 } = requestApi;
 
 export const { endpoints, reducerPath, reducer, middleware } = requestApi;
