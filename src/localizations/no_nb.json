@@ -1028,7 +1028,7 @@
     "review_approved": "Godkjent",
     "review_rejected": "Avvist",
     "review_warning": "Du kan ikke godkjenne",
-    "review_user_link": "Se tilgangene {{name}} har nå",
+    "review_user_link": "Se fullmaktene {{name}} har nå",
     "review_close_info": "Hvis du ikke velger godkjenn eller avvis på en forespørsel, vil den bli liggende igjen som en aktiv forespørsel.",
     "request_approved": "Forespørsel godkjent",
     "request_rejected": "Forespørsel avvist",

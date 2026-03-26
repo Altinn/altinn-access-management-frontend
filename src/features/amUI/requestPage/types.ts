@@ -8,3 +8,5 @@ export interface Request {
   description?: string;
   numberOfRequests?: number;
 }
+
+export type ProcessedStatus = 'approved' | 'rejected';
