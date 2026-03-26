@@ -61,7 +61,7 @@ export const useSidebarItems = ({ isSmall }: { isSmall?: boolean }) => {
   const { data: canAccessSettings, isLoading: isLoadingCompanyProfileAdmin } =
     useGetIsCompanyProfileAdminQuery();
 
-  const { pendingRequests } = useRequests();
+  const { pendingRequests, isLoadingRequests } = useRequests();
   const receivedRequestsCount = pendingRequests ? pendingRequests.received.length : 0;
 
   const isLoading =
@@ -74,7 +74,7 @@ export const useSidebarItems = ({ isSmall }: { isSmall?: boolean }) => {
   }
   if (displayRequestsPage && isAdmin) {
     const requestsBadge =
-      receivedRequestsCount && receivedRequestsCount > 0
+      !isLoadingRequests && receivedRequestsCount > 0
         ? {
             label: receivedRequestsCount,
             color: 'warning' as Color,

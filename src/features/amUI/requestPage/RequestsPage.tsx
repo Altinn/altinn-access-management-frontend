@@ -90,7 +90,7 @@ export const RequestPage = () => {
             >
               <Badge
                 {...getBadgeProps(SENT_REQUESTS_TAB)}
-                label={sentRequestCount}
+                label={String(sentRequestCount)}
               />
               {t('request_page.sent_requests')}
             </DsTabs.Tab>
