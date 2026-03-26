@@ -93,5 +93,25 @@ namespace Altinn.AccessManagement.UI.Core.ClientInterfaces
         /// <param name="cancellationToken">Cancellation token</param>
         /// <returns>The request</returns>
         Task<RequestResourceDto> ApproveRequest(Guid party, Guid id, CancellationToken cancellationToken);
+
+        /// <summary>
+        /// Get count of requests sent by a party
+        /// </summary>
+        /// <param name="party">The acting party asking for sent request count</param>
+        /// <param name="to">The party the requests were sent to</param>
+        /// <param name="status">The statuses to count</param>
+        /// <param name="cancellationToken">Cancellation token</param>
+        /// <returns>Count of sent requests</returns>
+        Task<int> GetSentRequestsCount(Guid party, Guid? to, List<RequestStatus> status, CancellationToken cancellationToken);
+
+        /// <summary>
+        /// Get count of requests received by a party
+        /// </summary>
+        /// <param name="party">The acting party asking for received request count</param>
+        /// <param name="from">The party who sent the requests</param>
+        /// <param name="status">The statuses to count</param>
+        /// <param name="cancellationToken">Cancellation token</param>
+        /// <returns>Count of received requests</returns>
+        Task<int> GetReceivedRequestsCount(Guid party, Guid? from, List<RequestStatus> status, CancellationToken cancellationToken);
     }
 }

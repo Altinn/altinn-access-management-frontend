@@ -359,6 +359,112 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
         }
 
         /// <summary>
+        ///     Test case: GetSentRequestsCount returns count for party
+        ///     Expected: GetSentRequestsCount returns an integer count
+        /// </summary>
+        [Fact]
+        public async Task GetSentRequestsCount_ReturnsCountForParty()
+        {
+            // Arrange
+            string party = "167536b5-f8ed-4c5a-8f48-0279507e53ae";
+
+            // Act
+            HttpResponseMessage httpResponse = await _client.GetAsync($"accessmanagement/api/v1/request/sent/count?party={party}&status=Pending");
+            int actualResponse = await httpResponse.Content.ReadFromJsonAsync<int>();
+
+            // Assert
+            Assert.Equal(HttpStatusCode.OK, httpResponse.StatusCode);
+            Assert.Equal(3, actualResponse);
+        }
+
+        /// <summary>
+        ///     Test case: GetSentRequestsCount encounters an unexpected internal error
+        ///     Expected: Returns 500 Internal Server Error
+        /// </summary>
+        [Fact]
+        public async Task GetSentRequestsCount_InternalServerError()
+        {
+            // Arrange
+            string party = "00000000-0000-0000-0000-000000000000";
+
+            // Act
+            HttpResponseMessage httpResponse = await _client.GetAsync($"accessmanagement/api/v1/request/sent/count?party={party}");
+
+            // Assert
+            Assert.Equal(HttpStatusCode.InternalServerError, httpResponse.StatusCode);
+        }
+
+        /// <summary>
+        ///     Test case: GetSentRequestsCount encounters an HttpStatusException
+        ///     Expected: Returns the status code from the exception (BadRequest)
+        /// </summary>
+        [Fact]
+        public async Task GetSentRequestsCount_HttpStatusException()
+        {
+            // Arrange
+            string party = "11111111-1111-1111-1111-111111111111";
+
+            // Act
+            HttpResponseMessage httpResponse = await _client.GetAsync($"accessmanagement/api/v1/request/sent/count?party={party}");
+
+            // Assert
+            Assert.Equal(HttpStatusCode.BadRequest, httpResponse.StatusCode);
+        }
+
+        /// <summary>
+        ///     Test case: GetReceivedRequestsCount returns count for party
+        ///     Expected: GetReceivedRequestsCount returns an integer count
+        /// </summary>
+        [Fact]
+        public async Task GetReceivedRequestsCount_ReturnsCountForParty()
+        {
+            // Arrange
+            string party = "167536b5-f8ed-4c5a-8f48-0279507e53ae";
+
+            // Act
+            HttpResponseMessage httpResponse = await _client.GetAsync($"accessmanagement/api/v1/request/received/count?party={party}&status=Pending");
+            int actualResponse = await httpResponse.Content.ReadFromJsonAsync<int>();
+
+            // Assert
+            Assert.Equal(HttpStatusCode.OK, httpResponse.StatusCode);
+            Assert.Equal(3, actualResponse);
+        }
+
+        /// <summary>
+        ///     Test case: GetReceivedRequestsCount encounters an unexpected internal error
+        ///     Expected: Returns 500 Internal Server Error
+        /// </summary>
+        [Fact]
+        public async Task GetReceivedRequestsCount_InternalServerError()
+        {
+            // Arrange
+            string party = "00000000-0000-0000-0000-000000000000";
+
+            // Act
+            HttpResponseMessage httpResponse = await _client.GetAsync($"accessmanagement/api/v1/request/received/count?party={party}");
+
+            // Assert
+            Assert.Equal(HttpStatusCode.InternalServerError, httpResponse.StatusCode);
+        }
+
+        /// <summary>
+        ///     Test case: GetReceivedRequestsCount encounters an HttpStatusException
+        ///     Expected: Returns the status code from the exception (BadRequest)
+        /// </summary>
+        [Fact]
+        public async Task GetReceivedRequestsCount_HttpStatusException()
+        {
+            // Arrange
+            string party = "11111111-1111-1111-1111-111111111111";
+
+            // Act
+            HttpResponseMessage httpResponse = await _client.GetAsync($"accessmanagement/api/v1/request/received/count?party={party}");
+
+            // Assert
+            Assert.Equal(HttpStatusCode.BadRequest, httpResponse.StatusCode);
+        }
+
+        /// <summary>
         ///     Test case: GetSentRequests encounters an unexpected internal error
         ///     Expected: Returns 500 Internal Server Error
         /// </summary>

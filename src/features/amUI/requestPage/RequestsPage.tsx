@@ -3,12 +3,16 @@ import { useTranslation } from 'react-i18next';
 import { Badge, BadgeVariant, Color, DsTabs, formatDisplayName } from '@altinn/altinn-components';
 import { PageWrapper } from '@/components';
 import { PageLayoutWrapper } from '../common/PageLayoutWrapper';
-import { useRerouteIfRequestPageDisabled } from '@/resources/utils/featureFlagUtils';
+import {
+  enableRequestSingleRight,
+  useRerouteIfRequestPageDisabled,
+} from '@/resources/utils/featureFlagUtils';
 import { Breadcrumbs } from '../common/Breadcrumbs/Breadcrumbs';
 import ReporteePageHeading from '../common/ReporteePageHeading';
-import { useGetReporteeQuery } from '@/rtk/features/userInfoApi';
+import { useGetIsAdminQuery, useGetReporteeQuery } from '@/rtk/features/userInfoApi';
 import { useDocumentTitle } from '@/resources/hooks/useDocumentTitle';
 import { useRequests } from '@/resources/hooks/useRequests';
+import { useGetSentRequestsCountQuery } from '@/rtk/features/requestApi';
 import { RequestsTabPanel } from './RequestsTabPanel';
 import classes from './RequestPage.module.css';
 import { PartyRepresentationProvider } from '../common/PartyRepresentationContext/PartyRepresentationContext';
@@ -35,7 +39,15 @@ export const RequestPage = () => {
   useDocumentTitle(t('request_page.page_title'));
 
   const { data: reportee, isLoading: isLoadingReportee } = useGetReporteeQuery();
+  const { data: isAdmin } = useGetIsAdminQuery();
   const { pendingRequests, isLoadingRequests, isError } = useRequests();
+
+  const partyUuid = getCookie('AltinnPartyUuid');
+  const { data: sentRequestCount, isLoading: isLoadingSentRequestCount } =
+    useGetSentRequestsCountQuery(
+      { party: partyUuid || '', status: ['Pending'] },
+      { skip: !partyUuid || !isAdmin || !enableRequestSingleRight() },
+    );
 
   const getBadgeProps = (tabValue: string) =>
     selectedTab === tabValue ? selectedTabProps : unselectedTabProps;
@@ -46,7 +58,7 @@ export const RequestPage = () => {
   });
 
   const receivedRequestsCount = pendingRequests ? pendingRequests.received.length : 0;
-  const sentRequestCount = pendingRequests ? pendingRequests.sent.length : 0;
+  const resolvedSentRequestCount = sentRequestCount ?? 0;
 
   return (
     <PageWrapper>
@@ -86,7 +98,7 @@ export const RequestPage = () => {
               >
                 <Badge
                   {...getBadgeProps(SENT_REQUESTS_TAB)}
-                  label={sentRequestCount}
+                  label={String(resolvedSentRequestCount)}
                 />
                 {t('request_page.sent_requests')}
               </DsTabs.Tab>
@@ -103,7 +115,7 @@ export const RequestPage = () => {
             <DsTabs.Panel value={SENT_REQUESTS_TAB}>
               <RequestsTabPanel
                 requests={pendingRequests.sent}
-                count={sentRequestCount}
+                count={resolvedSentRequestCount}
                 isLoading={isLoadingRequests}
                 isError={isError}
                 emptyMessageKey='request_page.no_sent_requests'
