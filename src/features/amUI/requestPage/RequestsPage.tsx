@@ -13,9 +13,10 @@ import { useGetIsAdminQuery, useGetReporteeQuery } from '@/rtk/features/userInfo
 import { useDocumentTitle } from '@/resources/hooks/useDocumentTitle';
 import { useRequests } from '@/resources/hooks/useRequests';
 import { useGetSentRequestsCountQuery } from '@/rtk/features/requestApi';
-import { getCookie } from '@/resources/Cookie/CookieMethods';
 import { RequestsTabPanel } from './RequestsTabPanel';
 import classes from './RequestPage.module.css';
+import { PartyRepresentationProvider } from '../common/PartyRepresentationContext/PartyRepresentationContext';
+import { getCookie } from '@/resources/Cookie/CookieMethods';
 
 const selectedTabProps = {
   'data-size': 'sm',
@@ -63,61 +64,65 @@ export const RequestPage = () => {
     <PageWrapper>
       <PageLayoutWrapper>
         <Breadcrumbs items={['root', 'requests']} />
-        <ReporteePageHeading
-          title={t('request_page.heading', { name })}
-          reportee={reportee}
+        <PartyRepresentationProvider
+          fromPartyUuid={getCookie('AltinnPartyUuid')}
+          actingPartyUuid={getCookie('AltinnPartyUuid')}
           isLoading={isLoadingReportee}
-        />
-        <DsTabs
-          value={selectedTab}
-          onChange={setSelectedTab}
-          data-size='sm'
         >
-          <DsTabs.List className={classes.requestPageTabs}>
-            <DsTabs.Tab
-              value={INCOMING_REQUESTS_TAB}
-              className={classes.requestTab}
-            >
-              {!!receivedRequestsCount && (
-                <Badge
-                  {...getBadgeProps(INCOMING_REQUESTS_TAB)}
-                  label={receivedRequestsCount}
-                />
-              )}
-              {t('request_page.incoming_requests')}
-            </DsTabs.Tab>
-            <DsTabs.Tab
-              value={SENT_REQUESTS_TAB}
-              className={classes.requestTab}
-            >
-              {!isLoadingSentRequestCount && (
+          <ReporteePageHeading
+            title={t('request_page.heading', { name })}
+            reportee={reportee}
+            isLoading={isLoadingReportee}
+          />
+          <DsTabs
+            value={selectedTab}
+            onChange={setSelectedTab}
+            data-size='sm'
+          >
+            <DsTabs.List className={classes.requestPageTabs}>
+              <DsTabs.Tab
+                value={INCOMING_REQUESTS_TAB}
+                className={classes.requestTab}
+              >
+                {!!receivedRequestsCount && (
+                  <Badge
+                    {...getBadgeProps(INCOMING_REQUESTS_TAB)}
+                    label={receivedRequestsCount}
+                  />
+                )}
+                {t('request_page.incoming_requests')}
+              </DsTabs.Tab>
+              <DsTabs.Tab
+                value={SENT_REQUESTS_TAB}
+                className={classes.requestTab}
+              >
                 <Badge
                   {...getBadgeProps(SENT_REQUESTS_TAB)}
                   label={String(resolvedSentRequestCount)}
                 />
-              )}
-              {t('request_page.sent_requests')}
-            </DsTabs.Tab>
-          </DsTabs.List>
-          <DsTabs.Panel value={INCOMING_REQUESTS_TAB}>
-            <RequestsTabPanel
-              requests={pendingRequests.received}
-              count={receivedRequestsCount}
-              isLoading={isLoadingRequests}
-              isError={isError}
-              emptyMessageKey='request_page.no_received_requests'
-            />
-          </DsTabs.Panel>
-          <DsTabs.Panel value={SENT_REQUESTS_TAB}>
-            <RequestsTabPanel
-              requests={pendingRequests.sent}
-              count={resolvedSentRequestCount}
-              isLoading={isLoadingRequests}
-              isError={isError}
-              emptyMessageKey='request_page.no_sent_requests'
-            />
-          </DsTabs.Panel>
-        </DsTabs>
+                {t('request_page.sent_requests')}
+              </DsTabs.Tab>
+            </DsTabs.List>
+            <DsTabs.Panel value={INCOMING_REQUESTS_TAB}>
+              <RequestsTabPanel
+                requests={pendingRequests.received}
+                count={receivedRequestsCount}
+                isLoading={isLoadingRequests}
+                isError={isError}
+                emptyMessageKey='request_page.no_received_requests'
+              />
+            </DsTabs.Panel>
+            <DsTabs.Panel value={SENT_REQUESTS_TAB}>
+              <RequestsTabPanel
+                requests={pendingRequests.sent}
+                count={resolvedSentRequestCount}
+                isLoading={isLoadingRequests}
+                isError={isError}
+                emptyMessageKey='request_page.no_sent_requests'
+              />
+            </DsTabs.Panel>
+          </DsTabs>
+        </PartyRepresentationProvider>
       </PageLayoutWrapper>
     </PageWrapper>
   );

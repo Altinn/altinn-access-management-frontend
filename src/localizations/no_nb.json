@@ -479,6 +479,7 @@
       "partial_access": "Tilgang til {{count}} av {{total}} handlinger",
       "action_description": "Her ser du de tekniske handlingene som tjenesten tilbyr. Du kan gi fullmakt til hele tjenesten eller velge spesifikke handlinger.",
       "request_action_description": "Her ser du de tekniske handlingene som tjenesten tilbyr. Du kan kun be om fullmakt til hele tjenesten.",
+      "approve_action_description": "Her ser du de tekniske handlingene som tjenesten tilbyr. Du kan kun godkjenne fullmakt til hele tjenesten.",
       "cannot_give_header": "Du kan ikke gi tilgang til:"
     },
     "technical_error_message": {
@@ -507,12 +508,14 @@
     },
     "service_error": {
       "general_heading": "Du kan ikke gi fullmakt til denne tjenesten",
+      "approve_heading": "Du kan ikke godkjenne forespørsler for denne tjenesten",
       "technical_error_heading": "Noe gikk galt",
       "undelegable_service": "{{resourceOwner}} har bestemt at denne tjenesten kan ikke gis videre til andre.",
       "technical_error": "Beklager, det har skjedd en teknisk feil. Vennligst ta kontakt med Altinn brukerservice hvis problemet fortsetter.",
       "time_of_error": "Tidspunkt feilen inntraff: {{time}}",
       "error_status": "Status: {{status}}",
       "access_list_service": "Hvem som får benytte denne tjenesten bestemmes av {{resourceOwner}}, og {{reportee}} er ikke gitt den muligheten. Vi anbefaler dere å ta kontakt med {{resourceOwner}}.",
+      "missing_approve_rights": "Du mangler fullmakt til hele eller deler av denne tjenesten og kan derfor ikke godkjenne forespørsler fra andre. Dersom du kun ønsker å gi deler av tjenesten, kan du gjøre dette ved å gi fullmakt på vanlig vis.",
       "missing_rights": "Du får ikke gitt denne fullmakten til andre fordi du mangler tilgang til den selv."
     },
     "request": {
@@ -1027,6 +1030,18 @@
     "request_poa": "Ber om fullmakt",
     "request_systemuser": "Ber om å opprette systembruker",
     "error_loading_requests": "Kunne ikke laste forespørsler",
+    "review_modal_title": "{{fromPartyName}} ber om disse fullmaktene",
+    "approve_request": "Godkjenn",
+    "reject_request": "Avvis forespørsel",
+    "review_approved": "Godkjent",
+    "review_rejected": "Avvist",
+    "review_warning": "Du kan ikke godkjenne",
+    "review_user_link": "Se fullmaktene {{name}} har nå",
+    "review_close_info": "Hvis du ikke velger godkjenn eller avvis på en forespørsel, vil den bli liggende igjen som en aktiv forespørsel.",
+    "request_approved": "Forespørsel godkjent",
+    "request_rejected": "Forespørsel avvist",
+    "approve_failed": "Godkjenning feilet",
+    "reject_failed": "Avvising feilet",
     "error_partial_loading_requests": "Kunne ikke laste alle forespørsler"
   },
   "draft_request_page": {

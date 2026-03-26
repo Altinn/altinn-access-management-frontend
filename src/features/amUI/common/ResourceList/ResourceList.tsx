@@ -39,7 +39,7 @@ export interface ResourceListProps<
   showDetails?: boolean;
   size?: ResourceListItemProps['size'];
   titleAs?: ResourceListItemProps['titleAs'];
-  interactive?: boolean;
+  interactive?: boolean | ((resource: TResource) => boolean);
   as?: ResourceListItemProps['as'];
   showMoreButton?: boolean;
   skeletonCount?: number;
@@ -82,7 +82,12 @@ export const ResourceList = <
   );
 
   const shouldShowDetails = showDetails ?? !onSelect;
-  const derivedInteractive = interactive ?? Boolean(onSelect || shouldShowDetails);
+  const derivedInteractive = (resource: TResource) => {
+    if (typeof interactive === 'function') {
+      return interactive(resource);
+    }
+    return interactive ?? Boolean(onSelect || shouldShowDetails);
+  };
 
   const handleSelect = React.useCallback(
     (resource: TResource) => {
@@ -172,7 +177,7 @@ export const ResourceList = <
                   const fallbackLogoUrl = extractLogoUrl(resource);
                   const ownerLogoUrl = providerLogo ?? fallbackLogoUrl;
                   const ownerLogoAlt = extractLogoAlt(resource) ?? ownerName;
-                  const itemInteractive = derivedInteractive;
+                  const itemInteractive = derivedInteractive(resource);
                   const itemAs = as ?? (itemInteractive ? 'button' : 'div');
                   const itemSize = size ?? 'xs';
                   const itemTitleAs = titleAs ?? 'h3';

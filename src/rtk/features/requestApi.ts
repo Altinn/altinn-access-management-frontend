@@ -31,7 +31,13 @@ export const requestApi = createApi({
       return headers;
     },
   }),
-  tagTypes: ['sentRequests', 'receivedRequests', 'request', 'enrichedSentResourceRequests'],
+  tagTypes: [
+    'sentRequests',
+    'receivedRequests',
+    'request',
+    'enrichedSentResourceRequests',
+    'enrichedReceivedResourceRequests',
+  ],
   endpoints: (builder) => ({
     // requests page queries
     getSentRequests: builder.query<
@@ -78,6 +84,18 @@ export const requestApi = createApi({
       },
       providesTags: ['enrichedSentResourceRequests'],
     }),
+    getEnrichedReceivedResourceRequests: builder.query<
+      EnrichedRequestDto[],
+      { party: string; from?: string; status?: RequestStatus[] }
+    >({
+      query: ({ party, from, status = [] }) => {
+        let params = `?party=${party}`;
+        if (from) params += `&from=${from}`;
+        for (const s of status) params += `&status=${s}`;
+        return `received/resource${params}`;
+      },
+      providesTags: ['enrichedReceivedResourceRequests'],
+    }),
     createResourceRequest: builder.mutation<
       RequestDto,
       { party: string; to: string; resource: string }
@@ -100,14 +118,14 @@ export const requestApi = createApi({
         url: `received/reject?party=${party}&id=${id}`,
         method: 'PUT',
       }),
-      invalidatesTags: ['receivedRequests'],
+      invalidatesTags: ['receivedRequests', 'enrichedReceivedResourceRequests'],
     }),
     approveRequest: builder.mutation<RequestDto, { party: string; id: string }>({
       query: ({ party, id }) => ({
         url: `received/approve?party=${party}&id=${id}`,
         method: 'PUT',
       }),
-      invalidatesTags: ['receivedRequests'],
+      invalidatesTags: ['receivedRequests', 'enrichedReceivedResourceRequests'],
     }),
 
     // count queries
@@ -155,6 +173,7 @@ export const {
   useRejectRequestMutation,
   useApproveRequestMutation,
   useGetEnrichedSentResourceRequestsQuery,
+  useGetEnrichedReceivedResourceRequestsQuery,
   useGetEnrichedDraftRequestQuery,
   useGetSentRequestsCountQuery,
   useGetReceivedRequestsCountQuery,

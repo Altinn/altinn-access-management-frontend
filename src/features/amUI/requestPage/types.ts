@@ -4,6 +4,9 @@ export interface Request {
   createdDate: string;
   displayPartyName: string;
   displayPartyType: 'person' | 'company' | 'system';
+  partyUuid?: string;
   description?: string;
   numberOfRequests?: number;
 }
+
+export type ProcessedStatus = 'approved' | 'rejected';

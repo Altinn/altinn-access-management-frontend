@@ -479,6 +479,7 @@
       "partial_access": "Tilgang til {{count}} av {{total}} handlingar",
       "action_description": "Her ser du dei tekniske handlingane som tenesta tilbyr. Du kan gi fullmakt til heile tenesta eller velje spesifikke handlingar.",
       "request_action_description": "Her ser du dei tekniske handlingane som tenesta tilbyr. Du kan berre be om fullmakt til heile tenesta.",
+      "approve_action_description": "Her ser du dei tekniske handlingane som tenesta tilbyr. Du kan berre godkjenne fullmakt til heile tenesta.",
       "cannot_give_header": "Du kan ikkje gi tilgang til:"
     },
     "specific_rights": {
@@ -507,12 +508,14 @@
     },
     "service_error": {
       "general_heading": "Du kan ikkje gi fullmakt til denne tenesta",
+      "approve_heading": "Du kan ikkje godkjenne førespurnader for denne tenesta",
       "technical_error_heading": "Noko gjekk gale",
       "undelegable_service": "{{resourceOwner}} har bestemt at denne tenesta ikkje kan bli gitt vidare til andre.",
       "technical_error": "Beklagar, det har skjedd ein teknisk feil. Ver venleg å ta kontakt med Altinn brukerservice om problemet held fram.",
       "time_of_error": "Tidspunkt feilen oppstod: {{time}}",
       "error_status": "Status: {{status}}",
       "access_list_service": "Kven som får bruke denne tenesta blir bestemt av {{resourceOwner}}, og {{reportee}} har ikkje fått den moglegheita. Vi tilrår å ta kontakt med {{resourceOwner}}.",
+      "missing_approve_rights": "Du manglar fullmakt til heile eller deler av denne tenesten og kan derfor ikkje godkjenne førespurnader frå andre. Dersom du kun ønskjer å gi delar av tenesta, kan du gjere dette ved å gi fullmakt på vanleg vis.",
       "missing_rights": "Du kan ikkje gi denne fullmakta til andre fordi du manglar tilgang til den sjølv."
     },
     "request": {
@@ -1027,6 +1030,18 @@
     "request_poa": "Ber om fullmakt",
     "request_systemuser": "Ber om å opprette systembruker",
     "error_loading_requests": "Kunne ikkje laste førespurnader",
+    "review_modal_title": "{{fromPartyName}} ber om desse fullmaktene",
+    "approve_request": "Godkjenn",
+    "reject_request": "Avvis førespurnad",
+    "review_approved": "Godkjent",
+    "review_rejected": "Avvist",
+    "review_warning": "Du kan ikkje godkjenne",
+    "review_user_link": "Sjå fullmaktene {{name}} har no",
+    "review_close_info": "Viss du ikkje vel godkjenn eller avvis på ein førespurnad, vil han bli liggande att som ein aktiv førespurnad.",
+    "request_approved": "Førespurnad godkjend",
+    "request_rejected": "Førespurnad avvist",
+    "approve_failed": "Godkjenning feila",
+    "reject_failed": "Avvising feila",
     "error_partial_loading_requests": "Kunne ikkje laste alle førespurnader"
   },
   "draft_request_page": {
