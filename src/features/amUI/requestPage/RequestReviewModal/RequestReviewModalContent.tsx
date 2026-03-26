@@ -102,7 +102,7 @@ export const RequestReviewModalContent = ({ request, onClose }: RequestReviewMod
           <ResourceList
             enableSearch={false}
             showDetails={false}
-            interactive={true}
+            interactive={(resource) => processedRequests[resource.identifier] === undefined}
             resources={snapshotResources}
             onSelect={(resource) => handleSelection(resource)}
             renderControls={(resource) => {
