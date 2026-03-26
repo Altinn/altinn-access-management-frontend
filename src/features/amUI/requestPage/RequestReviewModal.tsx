@@ -1,16 +1,24 @@
 import { useRef, useState, useEffect, useCallback } from 'react';
+import { Link } from 'react-router';
 import {
+  BadgeProps,
   DsButton,
   DsDialog,
   DsHeading,
+  DsLink,
   DsParagraph,
   List,
   ResourceListItem,
+  Snackbar,
+  SnackbarDuration,
+  SnackbarProvider,
+  useSnackbar,
 } from '@altinn/altinn-components';
 import { useTranslation } from 'react-i18next';
 import {
   ArrowLeftIcon,
   CheckmarkCircleIcon,
+  ChevronRightIcon,
   CircleSlashIcon,
   ExclamationmarkTriangleFillIcon,
 } from '@navikt/aksel-icons';
@@ -40,12 +48,43 @@ interface RequestReviewModalProps {
 }
 
 export const RequestReviewModal = ({ request, onClose }: RequestReviewModalProps) => {
+  const modalRef = useRef<HTMLDialogElement>(null);
+
+  // Open/close the dialog based on the request prop
+  useEffect(() => {
+    if (request) {
+      modalRef.current?.showModal();
+    } else {
+      modalRef.current?.close();
+    }
+  }, [request]);
+
+  return (
+    <DsDialog
+      ref={modalRef}
+      closedby='any'
+      closeButton={useTranslation().t('common.close')}
+      onClose={onClose}
+      className={classes.reviewModal}
+    >
+      <SnackbarProvider>
+        <RequestReviewModalContent
+          request={request}
+          onClose={onClose}
+        />
+        <Snackbar />
+      </SnackbarProvider>
+    </DsDialog>
+  );
+};
+
+const RequestReviewModalContent = ({ request, onClose }: RequestReviewModalProps) => {
   const { t } = useTranslation();
   const { actingParty } = usePartyRepresentation();
-  const modalRef = useRef<HTMLDialogElement>(null);
   const [approveRequest] = useApproveRequestMutation();
   const [rejectRequest] = useRejectRequestMutation();
   const [lazyDelegationCheck] = useLazyDelegationCheckQuery();
+  const { openSnackbar } = useSnackbar();
 
   const {
     data: resourceRequests,
@@ -64,15 +103,6 @@ export const RequestReviewModal = ({ request, onClose }: RequestReviewModalProps
     Record<string, DelegationCheckedRight[]>
   >({});
   const [actionLoading, setActionLoading] = useState<'approve' | 'reject' | null>(null);
-
-  // Open/close the dialog based on the request prop
-  useEffect(() => {
-    if (request) {
-      modalRef.current?.showModal();
-    } else {
-      modalRef.current?.close();
-    }
-  }, [request]);
 
   // Reset state only when switching to a different party (not on every object reference change)
   const requestPartyUuid = request?.partyUuid;
@@ -139,6 +169,17 @@ export const RequestReviewModal = ({ request, onClose }: RequestReviewModalProps
       await approveRequest({ party: actingParty.partyUuid, id: requestId }).unwrap();
       setProcessedRequests((prev) => ({ ...prev, [resource.identifier]: 'approved' }));
       setSelectedResource(null);
+      openSnackbar({
+        message: t('request_page.request_approved'),
+        color: 'success',
+        duration: SnackbarDuration.normal,
+      });
+    } catch {
+      openSnackbar({
+        message: t('request_page.approve_failed'),
+        color: 'danger',
+        duration: SnackbarDuration.infinite,
+      });
     } finally {
       setActionLoading(null);
     }
@@ -152,6 +193,17 @@ export const RequestReviewModal = ({ request, onClose }: RequestReviewModalProps
       await rejectRequest({ party: actingParty.partyUuid, id: requestId }).unwrap();
       setProcessedRequests((prev) => ({ ...prev, [resource.identifier]: 'rejected' }));
       setSelectedResource(null);
+      openSnackbar({
+        message: t('request_page.request_rejected'),
+        color: 'success',
+        duration: SnackbarDuration.normal,
+      });
+    } catch {
+      openSnackbar({
+        message: t('request_page.reject_failed'),
+        color: 'danger',
+        duration: SnackbarDuration.infinite,
+      });
     } finally {
       setActionLoading(null);
     }
@@ -166,13 +218,7 @@ export const RequestReviewModal = ({ request, onClose }: RequestReviewModalProps
   const snapshotResources = snapshotRequests.map((r) => r.resource);
 
   return (
-    <DsDialog
-      ref={modalRef}
-      closedby='any'
-      closeButton={t('common.close')}
-      onClose={handleClose}
-      className={classes.reviewModal}
-    >
+    <>
       {selectedResource ? (
         <RequestResourceDetail
           resource={selectedResource}
@@ -194,6 +240,16 @@ export const RequestReviewModal = ({ request, onClose }: RequestReviewModalProps
               fromPartyName: request?.displayPartyName,
             })}
           </DsHeading>
+          <DsLink
+            asChild
+            className={classes.userLink}
+          >
+            <Link to={`/users/${request?.partyUuid}`}>
+              {t('request_page.review_user_link', {
+                name: request?.displayPartyName,
+              })}
+            </Link>
+          </DsLink>
           <List>
             {isLoadingRequests || isFetchingRequests ? (
               <>
@@ -247,13 +303,13 @@ export const RequestReviewModal = ({ request, onClose }: RequestReviewModalProps
                       </span>
                     );
                   }
-                  return null;
+                  return <ChevronRightIcon className={classes.chevronIcon} />;
                 }}
               />
             )}
           </List>
 
-          <DsParagraph data-size='sm'>{t('request_page.review_close_info')}</DsParagraph>
+          <DsParagraph data-size='md'>{t('request_page.review_close_info')}</DsParagraph>
           <DsButton
             variant='secondary'
             onClick={handleClose}
@@ -263,7 +319,7 @@ export const RequestReviewModal = ({ request, onClose }: RequestReviewModalProps
           </DsButton>
         </div>
       )}
-    </DsDialog>
+    </>
   );
 };
 

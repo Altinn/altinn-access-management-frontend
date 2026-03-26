@@ -1028,6 +1028,11 @@
     "review_approved": "Godkjent",
     "review_rejected": "Avvist",
     "review_warning": "Du kan ikkje godkjenne",
-    "review_close_info": "Viss du ikkje vel godkjenn eller avvis på ein førespurnad, vil han bli liggande att som ein aktiv førespurnad."
+    "review_user_link": "Sjå tilgangane {{name}} har no",
+    "review_close_info": "Viss du ikkje vel godkjenn eller avvis på ein førespurnad, vil han bli liggande att som ein aktiv førespurnad.",
+    "request_approved": "Førespurnad godkjend",
+    "request_rejected": "Førespurnad avvist",
+    "approve_failed": "Godkjenning feila",
+    "reject_failed": "Avvising feila"
   }
 }
