@@ -78,7 +78,7 @@ export const ResourceAlert = ({
           })}
         </DsParagraph>
       );
-    } else if (isApprove && rightReasons.length > 0) {
+    } else if (isApprove && rightReasons?.length > 0) {
       headingText = t('delegation_modal.service_error.approve_heading');
       content = (
         <DsParagraph>{t('delegation_modal.service_error.missing_approve_rights')}</DsParagraph>

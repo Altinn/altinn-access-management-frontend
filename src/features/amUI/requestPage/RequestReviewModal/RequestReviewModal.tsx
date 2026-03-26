@@ -11,6 +11,7 @@ interface RequestReviewModalProps {
 }
 
 export const RequestReviewModal = ({ request, onClose }: RequestReviewModalProps) => {
+  const { t } = useTranslation();
   const modalRef = useRef<HTMLDialogElement>(null);
 
   // Open/close the dialog based on the request prop to allow for external control
@@ -26,7 +27,7 @@ export const RequestReviewModal = ({ request, onClose }: RequestReviewModalProps
     <DsDialog
       ref={modalRef}
       closedby='any'
-      closeButton={useTranslation().t('common.close')}
+      closeButton={t('common.close')}
       onClose={onClose}
       className={classes.reviewModal}
     >

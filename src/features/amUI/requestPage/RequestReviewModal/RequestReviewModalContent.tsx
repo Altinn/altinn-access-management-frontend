@@ -43,6 +43,10 @@ export const RequestReviewModalContent = ({ request, onClose }: RequestReviewMod
     handleSelection,
   } = useRequestReview(request, onClose);
 
+  if (request === null) {
+    return null;
+  }
+
   if (selectedResource) {
     return (
       <RequestResourceDetail
