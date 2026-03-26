@@ -218,7 +218,7 @@ export const systemUserApi = createApi({
       }),
     }),
     assignSelfCustomer: builder.mutation<
-      void,
+      boolean,
       {
         partyId: string;
         systemUserId: string;
@@ -226,12 +226,12 @@ export const systemUserApi = createApi({
       }
     >({
       query: ({ partyId, systemUserId, partyUuid }) => ({
-        url: `systemuser/agentdelegation/${partyId}/${systemUserId}/self?partyUuid=${partyUuid}`,
+        url: `systemuser/agentdelegation/${partyId}/${systemUserId}/self?partyuuid=${partyUuid}`,
         method: 'POST',
       }),
     }),
     removeSelfCustomer: builder.mutation<
-      void,
+      boolean,
       {
         partyId: string;
         systemUserId: string;
@@ -239,7 +239,7 @@ export const systemUserApi = createApi({
       }
     >({
       query: ({ partyId, systemUserId, partyUuid }) => ({
-        url: `systemuser/agentdelegation/${partyId}/${systemUserId}/self?partyUuid=${partyUuid}`,
+        url: `systemuser/agentdelegation/${partyId}/${systemUserId}/self?partyuuid=${partyUuid}`,
         method: 'DELETE',
       }),
     }),
@@ -252,7 +252,7 @@ export const systemUserApi = createApi({
       }
     >({
       query: ({ partyId, systemUserId, partyUuid }) => ({
-        url: `systemuser/agentdelegation/${partyId}/${systemUserId}/self?partyUuid=${partyUuid}`,
+        url: `systemuser/agentdelegation/${partyId}/${systemUserId}/self?partyuuid=${partyUuid}`,
         method: 'GET',
       }),
       keepUnusedDataFor: 0,

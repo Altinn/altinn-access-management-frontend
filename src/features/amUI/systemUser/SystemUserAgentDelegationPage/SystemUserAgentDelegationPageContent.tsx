@@ -81,8 +81,8 @@ export const SystemUserAgentDelegationPageContent = ({
     useRemoveSelfCustomerMutation();
   const {
     data: isSelfAdded,
-    isFetching: isLoadingIsSelfAdded,
-    refetch: refetchIsLoadingIsSelfAdded,
+    isFetching: isRefetchingIsSelfAdded,
+    refetch: refetchIsSelfAdded,
   } = useIsSelfAddedQuery(
     {
       partyId: partyId,
@@ -240,19 +240,19 @@ export const SystemUserAgentDelegationPageContent = ({
   const assignSelfToSystemUser = () => {
     assignSelf({ partyId: partyId, systemUserId: id ?? '', partyUuid: partyUuid })
       .unwrap()
-      .then(refetchIsLoadingIsSelfAdded);
+      .then(refetchIsSelfAdded);
   };
 
   const removeSelfFromSystemuser = () => {
     removeSelf({ partyId: partyId, systemUserId: id ?? '', partyUuid: partyUuid })
       .unwrap()
-      .then(refetchIsLoadingIsSelfAdded);
+      .then(refetchIsSelfAdded);
   };
 
   const isAllAccessPackagesDelegable = systemUser.accessPackages.every((x) => x.isDelegable);
   const hasAddSelfPermission =
     isAdmin && isAllAccessPackagesDelegable && enableAddSelfToSystemuser();
-  const isLoadingSelf = isAssigningSelf || isRemovingSelf || isLoadingIsSelfAdded;
+  const isLoadingSelf = isAssigningSelf || isRemovingSelf || isRefetchingIsSelfAdded;
   const assignedCustomersList =
     hasAddSelfPermission && reporteeData && (isSelfAdded || assignedCustomers.length > 0)
       ? [
