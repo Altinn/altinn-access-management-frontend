@@ -19,14 +19,14 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@altinn/altinn-components@npm:0.56.32":
-  version: 0.56.32
-  resolution: "@altinn/altinn-components@npm:0.56.32"
+"@altinn/altinn-components@npm:0.56.33":
+  version: 0.56.33
+  resolution: "@altinn/altinn-components@npm:0.56.33"
   dependencies:
     "@digdir/designsystemet-css": "npm:^1.9.0"
     "@digdir/designsystemet-react": "npm:^1.9.0"
     "@digdir/designsystemet-theme": "npm:^1.9.0"
-    "@navikt/aksel-icons": "npm:^7.37.0"
+    "@navikt/aksel-icons": "npm:^8.0.0"
     "@tanstack/react-virtual": "npm:^3.13.9"
     classnames: "npm:^2.5.1"
     react: "npm:^19.1.0"
@@ -34,7 +34,7 @@ __metadata:
   peerDependencies:
     react: ">=18.3.1 || ^19.0.0"
     react-dom: ">=18.3.1 || ^19.0.0"
-  checksum: 10/ffb2eb28680eb18ec16c16b3b0ca00c98f3fc9d63d67d4e2bdd48da4c788fb3cca378cc3f17ce04d303d741500a29d6650b586bd22a33e6219609ee7e3263b34
+  checksum: 10/b486b57d5cbf4d56f508ae194d67b01537b662da249211de907abff0f953029baf453b55fd6e75de3d12403d0e7ae348093be1fb00e68f951cb6069c343b7771
   languageName: node
   linkType: hard
 
@@ -1394,10 +1394,17 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@navikt/aksel-icons@npm:^7.33.3, @navikt/aksel-icons@npm:^7.37.0":
+"@navikt/aksel-icons@npm:^7.33.3":
   version: 7.40.0
   resolution: "@navikt/aksel-icons@npm:7.40.0"
   checksum: 10/3aa95caee5484355b8e1bbe06fa3f4c1dd2f5db48c3c27e445f8ce53438e3571949f957178b2dbc81163c148f5c5c000222e67afe60556955419ad06ce505fab
+  languageName: node
+  linkType: hard
+
+"@navikt/aksel-icons@npm:^8.0.0":
+  version: 8.8.0
+  resolution: "@navikt/aksel-icons@npm:8.8.0"
+  checksum: 10/bd0af050899cf925689704815ad10ade00006a3270a3195a63b5ce964db250baf5bac0b926e60de6923b859b4a9ea7f49a8a8bd96b8a2886ff64bf77ef573740
   languageName: node
   linkType: hard
 
@@ -3153,7 +3160,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "access-management@workspace:."
   dependencies:
-    "@altinn/altinn-components": "npm:0.56.32"
+    "@altinn/altinn-components": "npm:0.56.33"
     "@axe-core/playwright": "npm:^4.10.2"
     "@navikt/aksel-icons": "npm:^7.33.3"
     "@playwright/test": "npm:^1.55.0"
