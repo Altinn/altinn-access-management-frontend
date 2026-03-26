@@ -75,7 +75,7 @@ export const useSidebarItems = ({ isSmall }: { isSmall?: boolean }) => {
   if (!isSmall) {
     items.push(getHeadingMenuItem(pathname, isLoading));
   }
-  if (displayRequestsPage) {
+  if (displayRequestsPage && isAdmin) {
     const requestsBadge =
       !isLoadingRequestsBadge && requestsBadgeCount > 0
         ? {

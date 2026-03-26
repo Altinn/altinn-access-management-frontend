@@ -242,6 +242,78 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
         }
 
         /// <summary>
+        ///     Test case: GetDraftRequest returns a single draft request by id
+        ///     Expected: GetDraftRequest returns the correct draft request
+        /// </summary>
+        [Fact]
+        public async Task GetDraftRequest_ReturnsSingleDraftRequest()
+        {
+            // Arrange
+            string requestId = "da45b77b-a068-4d53-b6be-0837cc9c5a3f";
+            string path = Path.Combine(_expectedDataPath, "Request", "getEnrichedDraftRequest.json");
+            EnrichedResourceRequest expectedResponse = Util.GetMockData<EnrichedResourceRequest>(path);
+
+            // Act
+            HttpResponseMessage httpResponse = await _client.GetAsync($"accessmanagement/api/v1/request/draft/{requestId}");
+            EnrichedResourceRequest actualResponse = await httpResponse.Content.ReadFromJsonAsync<EnrichedResourceRequest>();
+
+            // Assert
+            Assert.Equal(HttpStatusCode.OK, httpResponse.StatusCode);
+            AssertionUtil.AssertEqual(expectedResponse, actualResponse);
+        }
+
+        /// <summary>
+        ///     Test case: GetDraftRequest encounters an unexpected internal error
+        ///     Expected: Returns 500 Internal Server Error
+        /// </summary>
+        [Fact]
+        public async Task GetDraftRequest_InternalServerError()
+        {
+            // Arrange
+            string requestId = "00000000-0000-0000-0000-000000000000"; // This ID triggers an internal error in the mock
+
+            // Act
+            HttpResponseMessage httpResponse = await _client.GetAsync($"accessmanagement/api/v1/request/draft/{requestId}");
+
+            // Assert
+            Assert.Equal(HttpStatusCode.InternalServerError, httpResponse.StatusCode);
+        }
+
+        /// <summary>
+        ///     Test case: GetDraftRequest encounters an HttpStatusException from the backend
+        ///     Expected: Returns the status code from the exception (BadRequest)
+        /// </summary>
+        [Fact]
+        public async Task GetDraftRequest_HttpStatusException()
+        {
+            // Arrange
+            string requestId = "11111111-1111-1111-1111-111111111111"; // This ID triggers an HttpStatusException in the mock
+
+            // Act
+            HttpResponseMessage httpResponse = await _client.GetAsync($"accessmanagement/api/v1/request/draft/{requestId}");
+
+            // Assert
+            Assert.Equal(HttpStatusCode.BadRequest, httpResponse.StatusCode);
+        }
+        
+        /// <summary>
+        ///     Test case: GetDraftRequest encounters a NotFoundException from the backend
+        ///     Expected: Returns the status code from the exception (NotFound)
+        /// </summary>
+        [Fact]
+        public async Task GetDraftRequest_NotFoundException()
+        {
+            // Arrange
+            string requestId = "22222222-2222-2222-2222-222222222222"; // This ID triggers a NotFoundException in the mock
+
+            // Act
+            HttpResponseMessage httpResponse = await _client.GetAsync($"accessmanagement/api/v1/request/draft/{requestId}");
+
+            // Assert
+            Assert.Equal(HttpStatusCode.NotFound, httpResponse.StatusCode);
+        }
+
+        /// <summary>
         ///     Test case: CreateResourceRequest creates a resource request
         ///     Expected: CreateResourceRequest returns request
         /// </summary>
@@ -584,7 +656,7 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
             RequestFE expectedResponse = Util.GetMockData<RequestFE>(path);
 
             // Act
-            HttpResponseMessage httpResponse = await _client.SendAsync(new HttpRequestMessage(HttpMethod.Put, $"accessmanagement/api/v1/request/sent/confirm?party={party}&id={requestId}"));
+            HttpResponseMessage httpResponse = await _client.SendAsync(new HttpRequestMessage(HttpMethod.Put, $"accessmanagement/api/v1/request/draft/confirm?party={party}&id={requestId}"));
             RequestFE actualResponse = await httpResponse.Content.ReadFromJsonAsync<RequestFE>();
 
             // Assert
@@ -604,7 +676,7 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
             string requestId = "da45b77b-a068-4d53-b6be-0837cc9c5a3f";
 
             // Act
-            HttpResponseMessage httpResponse = await _client.SendAsync(new HttpRequestMessage(HttpMethod.Put, $"accessmanagement/api/v1/request/sent/confirm?party={party}&id={requestId}"));
+            HttpResponseMessage httpResponse = await _client.SendAsync(new HttpRequestMessage(HttpMethod.Put, $"accessmanagement/api/v1/request/draft/confirm?party={party}&id={requestId}"));
 
             // Assert
             Assert.Equal(HttpStatusCode.InternalServerError, httpResponse.StatusCode);
@@ -622,7 +694,7 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
             string requestId = "da45b77b-a068-4d53-b6be-0837cc9c5a3f";
 
             // Act
-            HttpResponseMessage httpResponse = await _client.SendAsync(new HttpRequestMessage(HttpMethod.Put, $"accessmanagement/api/v1/request/sent/confirm?party={party}&id={requestId}"));
+            HttpResponseMessage httpResponse = await _client.SendAsync(new HttpRequestMessage(HttpMethod.Put, $"accessmanagement/api/v1/request/draft/confirm?party={party}&id={requestId}"));
 
             // Assert
             Assert.Equal(HttpStatusCode.BadRequest, httpResponse.StatusCode);

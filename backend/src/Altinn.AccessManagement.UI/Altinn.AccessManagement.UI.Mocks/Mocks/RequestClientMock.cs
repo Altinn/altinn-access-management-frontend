@@ -123,6 +123,20 @@ namespace Altinn.AccessManagement.UI.Mocks.Mocks
             return await Task.FromResult(Util.GetMockData<RequestResourceDto>(dataPath));
         }
 
+        public async Task<RequestResourceDto> GetDraftRequest(Guid id, CancellationToken cancellationToken)
+        {
+            ThrowExceptionIfTriggerParty(id.ToString());
+            ThrowHttpStatusExceptionIfTriggerParty(id.ToString());
+
+            string dataPath = Path.Combine(dataFolder, "Request", "draftRequest.json");
+            if (id == Guid.Parse("22222222-2222-2222-2222-222222222222"))
+            {
+                dataPath = Path.Combine(dataFolder, "Request", "draftRequestInvalidResource.json");
+            }
+
+            return await Task.FromResult(Util.GetMockData<RequestResourceDto>(dataPath));
+        }
+
         /// <inheritdoc />
         public async Task<int> GetSentRequestsCount(Guid party, Guid? to, List<RequestStatus> status, CancellationToken cancellationToken)
         {

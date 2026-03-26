@@ -38,7 +38,7 @@ namespace Altinn.AccessManagement.UI.Core.Services
         public async Task<IEnumerable<EnrichedResourceRequest>> GetEnrichedSentResourceRequests(Guid party, Guid? to, List<RequestStatus> status, string languageCode, CancellationToken cancellationToken)
         {
             PaginatedResult<RequestResourceDto> response = await _requestClient.GetSentRequests(party, to, status, "resource", cancellationToken);
-            return await MapToEnrichedResourceRequestList(response, languageCode);
+            return await MapToEnrichedResourceRequestList(response.Items, languageCode);
         }
 
         /// <inheritdoc />
@@ -52,7 +52,7 @@ namespace Altinn.AccessManagement.UI.Core.Services
         public async Task<IEnumerable<EnrichedResourceRequest>> GetEnrichedReceivedResourceRequests(Guid party, Guid? from, List<RequestStatus> status, string languageCode, CancellationToken cancellationToken)
         {
             PaginatedResult<RequestResourceDto> response = await _requestClient.GetReceivedRequests(party, from, status, "resource", cancellationToken);
-            return await MapToEnrichedResourceRequestList(response, languageCode);
+            return await MapToEnrichedResourceRequestList(response.Items, languageCode);
         }
 
         /// <inheritdoc />
@@ -60,6 +60,13 @@ namespace Altinn.AccessManagement.UI.Core.Services
         {
             RequestResourceDto response = await _requestClient.GetRequest(party, id, cancellationToken);
             return MapToRequestFE(response);
+        }
+
+        /// <inheritdoc />
+        public async Task<EnrichedResourceRequest> GetDraftRequest(Guid id, string languageCode, CancellationToken cancellationToken)
+        {
+            RequestResourceDto response = await _requestClient.GetDraftRequest(id, cancellationToken);
+            return (await MapToEnrichedResourceRequestList(new[] { response }, languageCode)).First();
         }
 
         /// <inheritdoc />
@@ -123,16 +130,16 @@ namespace Altinn.AccessManagement.UI.Core.Services
             };
         }
 
-        private async Task<IEnumerable<EnrichedResourceRequest>> MapToEnrichedResourceRequestList(PaginatedResult<RequestResourceDto> list, string languageCode)
+        private async Task<IEnumerable<EnrichedResourceRequest>> MapToEnrichedResourceRequestList(IEnumerable<RequestResourceDto> list, string languageCode)
         {
             Dictionary<string, ServiceResourceFE> resourceDictionary = [];
-            var uniqueResourceIds = list.Items
+            var uniqueResourceIds = list
                 .Select(x => x.Resource.ReferenceId)
                 .Distinct();
             var resources = await _resourceHelper.EnrichResources(uniqueResourceIds, languageCode);
             resourceDictionary = resources.ToDictionary(r => r.Identifier);
             
-            return list.Items.Select(x => 
+            return list.Select(x => 
             {
                 RequestFE request = MapToRequestFE(x);
                 
