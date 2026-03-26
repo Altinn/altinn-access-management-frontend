@@ -8,6 +8,7 @@ import { useRef, useState } from 'react';
 import { SentRequestsModal } from '../userRightsPage/SingleRightsSection/PendingRequests';
 import { PartyRepresentationProvider } from '../common/PartyRepresentationContext/PartyRepresentationContext';
 import { getCookie } from '@/resources/Cookie/CookieMethods';
+import { PartyType } from '@/rtk/features/userInfoApi';
 
 interface SentRequestsTabPanelProps {
   requests: Request[] | undefined;
@@ -91,7 +92,15 @@ const SentRequests = ({ pendingRequests }: SentRequestsProps) => {
         );
       })}
       <PartyRepresentationProvider
-        fromPartyUuid={openAccessRequest?.partyUuid || ''}
+        fromPartyOverride={{
+          partyId: 1,
+          partyUuid: openAccessRequest?.partyUuid || '',
+          name: openAccessRequest?.displayPartyName || '',
+          partyTypeName:
+            openAccessRequest?.displayPartyType == 'person'
+              ? PartyType.Person
+              : PartyType.Organization,
+        }}
         toPartyUuid={getCookie('AltinnPartyUuid')}
         actingPartyUuid={getCookie('AltinnPartyUuid')}
       >

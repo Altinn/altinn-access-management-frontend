@@ -36,6 +36,10 @@ interface PartyRepresentationProviderProps {
   isLoading?: boolean;
   /** If true, an error alert will be shown if the acting party has 'person' user type */
   errorOnPriv?: boolean;
+  /** Optional override of the toParty - only use this if absolutely necessary */
+  toPartyOverride?: Party;
+  /** Optional override of the fromParty - only use this if absolutely necessary */
+  fromPartyOverride?: Party;
 }
 
 export interface PartyRepresentationContextOutput {
@@ -68,6 +72,8 @@ export const PartyRepresentationProvider = ({
   loadingComponent,
   isLoading: externalIsLoading,
   errorOnPriv = false,
+  toPartyOverride,
+  fromPartyOverride,
 }: PartyRepresentationProviderProps) => {
   if (!toPartyUuid && !fromPartyUuid) {
     throw new Error('PartyRepresentationProvider must be used with at least one party UUID');
@@ -89,7 +95,8 @@ export const PartyRepresentationProvider = ({
       !fromPartyUuid ||
       fromPartyUuid === actingPartyUuid ||
       fromPartyUuid === currentUser?.partyUuid ||
-      fromPartyUuid === reportee?.partyUuid,
+      fromPartyUuid === reportee?.partyUuid ||
+      !!fromPartyOverride, // Skip if fromPartyOverride is provided, since that means the consumer is providing the fromParty data themselves
   });
 
   const { party: toConnectedParty, isLoading: toPartyIsLoading } = useConnectedParty({
@@ -98,7 +105,8 @@ export const PartyRepresentationProvider = ({
       !toPartyUuid ||
       toPartyUuid === actingPartyUuid ||
       toPartyUuid === currentUser?.partyUuid ||
-      toPartyUuid === reportee?.partyUuid,
+      toPartyUuid === reportee?.partyUuid ||
+      !!toPartyOverride, // Skip if toPartyOverride is provided, since that means the consumer is providing the toParty data themselves
   });
 
   let actingParty: Party | undefined;
@@ -110,18 +118,20 @@ export const PartyRepresentationProvider = ({
     actingParty = reportee;
   }
 
-  const fromParty =
-    fromPartyUuid === actingPartyUuid
+  const fromParty = !!fromPartyOverride
+    ? fromPartyOverride
+    : fromPartyUuid === actingPartyUuid
       ? actingParty
       : fromPartyUuid === reportee?.partyUuid
         ? reportee
         : fromConnectedParty;
 
-  const toParty =
-    toPartyUuid === actingPartyUuid
+  const toParty = !!toPartyOverride
+    ? toPartyOverride
+    : toPartyUuid === actingPartyUuid
       ? actingParty
-      : toPartyUuid === currentUser?.partyUuid
-        ? currentUser
+      : toPartyUuid === reportee?.partyUuid
+        ? reportee
         : toConnectedParty;
 
   const {
