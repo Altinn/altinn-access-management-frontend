@@ -6,10 +6,22 @@
   margin-bottom: var(--ds-spacing-3);
 }
 
+.titleSection {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--ds-spacing-1);
+  margin-bottom: var(--ds-spacing-2);
+}
+
 .resourceOwner {
   display: flex;
   align-items: center;
   gap: var(--ds-spacing-2);
+}
+
+.instanceSubtitle {
+  color: var(--ds-color-text-subtle);
 }
 
 .providerName {

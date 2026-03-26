@@ -480,6 +480,10 @@
       "request_action_description": "Her ser du de tekniske handlingene som tjenesten tilbyr. Du kan kun be om fullmakt til hele tjenesten.",
       "cannot_give_header": "Du kan ikke gi tilgang til:"
     },
+    "instance_actions": {
+      "access_to_all": "Tilgang til hele meldingen eller skjemaet",
+      "action_description": "Her vises de tekniske handlingene som er tilgjengelige. Du kan gi fullmakt til alle handlingene eller velge enkelte av dem."
+    },
     "technical_error_message": {
       "heading": "Oi! Noe gikk galt",
       "message": "Pga en teknisk feil ble ikke tjenesten delegert. Vennligst prøv på nytt eller kontakt Altinn brukerservice hvis feilen fortsetter.",
@@ -938,12 +942,13 @@
   },
   "instance_detail_page": {
     "document_title": "Delt fra innboks",
+    "instanceSubtitle": "Gjelder kun denne meldingen eller dette skjemaet.",
     "provider_name": "til {{name}}",
     "back_to_inbox": "Gå til innboks",
     "see_in_inbox": "Se i innboks",
-    "description": "Her kan du dele en melding/skjema fra innboksen eller få en oversikt over hvem som allerede har tilgang. Bruk søkefeltet til å søke etter personer/virksomheter eller legg dem til som ny bruker.",
+    "description": "Her kan du dele en melding eller et skjema fra innboksen eller få en oversikt over hvem som allerede har tilgang. Bruk søkefeltet til å søke etter personer eller legg dem til som ny bruker.",
     "no_users": "Ingen brukere har tilgang.",
-    "no_access_description": "<b>Du har ikke fullmakt til å gi videre denne tjenesten/meldingen.</b> For å kunne dele og gi tilgang fra innboksen må du ha tilgangspakken: Tilgangsstyrer for enkeltmeldinger, skjema og dialoger.",
+    "no_access_description": "<b>Du har ikke fullmakt til å gi videre denne meldingen eller dette skjemaet.</b> For å kunne dele og gi tilgang fra innboksen må du ha tilgangspakken: Tilgangsstyrer for enkeltmeldinger, skjema og dialoger.",
     "instance_admin_edit_disclaimer": "Kun Tilgangsstyrere eller Hovedadministratorer kan redigere en fullmakt etter den er gitt til en bruker.",
     "add_user_modal": {
       "heading": "Gi fullmakt til ny bruker",

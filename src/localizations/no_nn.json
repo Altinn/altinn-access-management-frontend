@@ -480,6 +480,10 @@
       "request_action_description": "Her ser du dei tekniske handlingane som tenesta tilbyr. Du kan berre be om fullmakt til heile tenesta.",
       "cannot_give_header": "Du kan ikkje gi tilgang til:"
     },
+    "instance_actions": {
+      "access_to_all": "Tilgang til heile meldinga eller skjemaet",
+      "action_description": "Her blir dei tekniske handlingane som er tilgjengelege viste. Du kan gi fullmakt til alle handlingane eller velje enkelte av dei."
+    },
     "specific_rights": {
       "missing_role_message": "Du får ikkje delegert heile tenesta, fordi du manglar nokre av rettane sjølv.",
       "missing_srr_right_message": "{{reportee}} har ikkje fått løyve frå {{resourceOwner}} til å delegere heile tenesta. Ta kontakt med dei dersom du ønsker å endre dette."
@@ -938,12 +942,13 @@
   },
   "instance_detail_page": {
     "document_title": "Delt frå innboks",
+    "instanceSubtitle": "Gjeld berre denne meldinga eller dette skjemaet.",
     "provider_name": "til {{name}}",
     "back_to_inbox": "Gå til innboks",
     "see_in_inbox": "Sjå i innboks",
-    "description": "Her kan du dele ei melding/eit skjema frå innboksen eller få oversikt over kven som allereie har tilgang. Bruk søkjefeltet til å søkje etter personar/verksemder eller legg dei til som ny brukar.",
+    "description": "Her kan du dele ei melding eller eit skjema frå innboksen eller få oversikt over kven som allereie har tilgang. Bruk søkjefeltet til å søkje etter personar eller legg dei til som ny brukar.",
     "no_users": "Ingen brukarar har tilgang.",
-    "no_access_description": "<b>Du har ikkje fullmakt til å gi vidare denne tenesta/meldinga.</b> For å kunne dele og gi tilgang frå innboksen må du ha tilgangspakka: Tilgangsstyrar for enkeltmeldingar, skjema og dialogar.",
+    "no_access_description": "<b>Du har ikkje fullmakt til å gi vidare denne meldinga eller dette skjemaet.</b> For å kunne dele og gi tilgang frå innboksen må du ha tilgangspakka: Tilgangsstyrar for enkeltmeldingar, skjema og dialogar.",
     "instance_admin_edit_disclaimer": "Berre Tilgangsstyrarar eller Hovudadministratorar kan redigere ei fullmakt etter ho er gitt til ein brukar.",
     "add_user_modal": {
       "heading": "Gi fullmakt til ny brukar",

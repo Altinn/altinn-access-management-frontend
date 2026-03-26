@@ -483,6 +483,10 @@
       "request_action_description": "These are the technical actions that the service offers. You can only request power of attorney for the entire service.",
       "cannot_give_header": "You cannot grant access to:"
     },
+    "instance_actions": {
+      "access_to_all": "Access to the entire message or form",
+      "action_description": "The available technical actions are shown here. You can grant power of attorney to all actions or choose individual ones."
+    },
     "specific_rights": {
       "missing_role_message": "You cannot delegate the entire service because you lack some of the rights yourself.",
       "missing_srr_right_message": "{{reportee}} is not given permission from {{resourceOwner}} to delegate the whole service. Contact them if you want to change this."
@@ -941,12 +945,13 @@
   },
   "instance_detail_page": {
     "document_title": "Shared from inbox",
+    "instanceSubtitle": "Applies only to this message or form.",
     "provider_name": "to {{name}}",
     "back_to_inbox": "Go to inbox",
     "see_in_inbox": "View in inbox",
-    "description": "Here you can share a message/form from the inbox or get an overview of who already has access. Use the search field to search for people/organizations or add them as a new user.",
+    "description": "Here you can share a message or form from the inbox or get an overview of who already has access. Use the search field to search for people or add them as a new user.",
     "no_users": "No users have access.",
-    "no_access_description": "<b>You do not have the authority to share this service/message with others.</b> To share and grant access from the inbox, you must have the access package: Access manager for single messages, forms and dialogs.",
+    "no_access_description": "<b>You do not have the authority to share this message or form with others.</b> To share and grant access from the inbox, you must have the access package: Access manager for single messages, forms and dialogs.",
     "instance_admin_edit_disclaimer": "Only Access Managers or Main Administrators can edit an access grant after it has been given to a user.",
     "add_user_modal": {
       "heading": "Grant access to new user",

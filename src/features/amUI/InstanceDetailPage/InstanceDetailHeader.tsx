@@ -25,12 +25,20 @@ export const InstanceDetailHeader = ({
 
   return (
     <div className={classes.infoHeading}>
-      <DsHeading
-        level={1}
-        data-size='sm'
-      >
-        {resource.title ?? resourceId}
-      </DsHeading>
+      <div className={classes.titleSection}>
+        <DsHeading
+          level={1}
+          data-size='sm'
+        >
+          {resource.title ?? resourceId}
+        </DsHeading>
+        <DsParagraph
+          data-size='sm'
+          className={classes.instanceSubtitle}
+        >
+          {t('instance_detail_page.instanceSubtitle')}
+        </DsParagraph>
+      </div>
       <div className={classes.resourceOwner}>
         <Icon
           iconUrl={providerLogoUrl ?? resource.resourceOwnerLogoUrl}

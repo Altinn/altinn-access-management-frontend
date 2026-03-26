@@ -19,6 +19,8 @@ interface RightsSectionProps {
   delegationError: 'delegate' | 'revoke' | 'edit' | null;
   missingAccess: string | null;
   hasAccessAndNoChanges?: boolean;
+  allAccessTitle?: string;
+  actionDescription?: string;
 }
 
 export const RightsSection = ({
@@ -32,6 +34,8 @@ export const RightsSection = ({
   delegationError,
   missingAccess,
   hasAccessAndNoChanges,
+  allAccessTitle,
+  actionDescription,
 }: RightsSectionProps) => {
   const { t } = useTranslation();
   const isSmall = useIsMobileOrSmaller();
@@ -93,7 +97,7 @@ export const RightsSection = ({
                   count: rights.filter((r) => r.checked).length,
                   total: rights.length,
                 })
-              : t('delegation_modal.actions.access_to_all')
+              : (allAccessTitle ?? t('delegation_modal.actions.access_to_all'))
           }
           onClick={() => setRightsExpanded(!rightsExpanded)}
           expanded={rightsExpanded}
@@ -105,7 +109,7 @@ export const RightsSection = ({
             <DsParagraph>
               {isSingleRightRequest
                 ? t('delegation_modal.actions.request_action_description')
-                : t('delegation_modal.actions.action_description')}
+                : (actionDescription ?? t('delegation_modal.actions.action_description'))}
             </DsParagraph>
             <div className={classes.rightChips}>
               <RightChips
