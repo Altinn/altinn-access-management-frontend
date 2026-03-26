@@ -1023,6 +1023,8 @@
     "request_consent": "Ber om samtykke",
     "asks_for_number_one": "Ber om {{count}} fullmakt",
     "asks_for_number_other": "Ber om {{count}} fullmakter",
+    "waiting_for_number_one": "{{count}} forespørsel venter på behandling",
+    "waiting_for_number_other": "{{count}} forespørsler venter på behandling",
     "request_poa": "Ber om fullmakt",
     "request_systemuser": "Ber om å opprette systembruker",
     "error_loading_requests": "Kunne ikke laste forespørsler",

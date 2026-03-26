@@ -27,8 +27,8 @@ export const PendingRequests = () => {
 
   const { t } = useTranslation();
   const isSmallScreen = useIsTabletOrSmaller();
+  const { fromParty } = usePartyRepresentation();
 
-  const [selectedResource, setSelectedResource] = useState<ServiceResource | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   const { singleRightRequests = [] } = useSingleRightRequests({
@@ -37,26 +37,21 @@ export const PendingRequests = () => {
 
   return (
     <>
-      <DsDialog
-        ref={modalRef}
-        closedby='any'
+      <SentRequestsModal
+        toPartyUuid={fromParty?.partyUuid || ''}
+        isModalOpen={isModalOpen}
+        modalRef={modalRef}
+        heading={t('delegation_modal.request.sent_requests_modal_header', {
+          partyName: formatDisplayName({
+            fullName: fromParty?.name || '',
+            type: fromParty?.partyTypeName === PartyType.Person ? 'person' : 'company',
+          }),
+        })}
         onClose={() => {
-          setSelectedResource(null);
           setIsModalOpen(false);
+          modalRef.current?.close();
         }}
-        className={classes.pendingRequestsModal}
-      >
-        <SnackbarProvider>
-          {isModalOpen && (
-            <PendingRequestsList
-              onClose={() => modalRef.current?.close()}
-              selectedResource={selectedResource}
-              setSelectedResource={setSelectedResource}
-            />
-          )}
-          <Snackbar />
-        </SnackbarProvider>
-      </DsDialog>
+      />
       {singleRightRequests.length > 0 && (
         <ListItem
           title={t('delegation_modal.request.sent_requests_item')}
@@ -83,28 +78,72 @@ export const PendingRequests = () => {
   );
 };
 
+interface SentRequestsModalProps {
+  modalRef: React.RefObject<HTMLDialogElement | null>;
+  isModalOpen: boolean;
+  heading: string;
+  onClose: () => void;
+  toPartyUuid: string;
+}
+export const SentRequestsModal = ({
+  toPartyUuid,
+  modalRef,
+  isModalOpen,
+  onClose,
+  heading,
+}: SentRequestsModalProps) => {
+  const [selectedResource, setSelectedResource] = useState<ServiceResource | null>(null);
+
+  return (
+    <DsDialog
+      ref={modalRef}
+      closedby='any'
+      onClose={onClose}
+      className={classes.pendingRequestsModal}
+    >
+      <SnackbarProvider>
+        {isModalOpen && (
+          <PendingRequestsList
+            onClose={onClose}
+            heading={heading}
+            selectedResource={selectedResource}
+            setSelectedResource={setSelectedResource}
+            toPartyUuid={toPartyUuid}
+          />
+        )}
+        <Snackbar />
+      </SnackbarProvider>
+    </DsDialog>
+  );
+};
+
 interface PendingRequestsListProps {
   selectedResource: ServiceResource | null;
+  toPartyUuid: string;
+  heading: string;
   setSelectedResource: (resource: ServiceResource | null) => void;
   onClose: () => void;
 }
-const PendingRequestsList = ({
+
+export const PendingRequestsList = ({
   onClose,
   selectedResource,
+  heading,
+  toPartyUuid,
   setSelectedResource,
 }: PendingRequestsListProps) => {
   const { t } = useTranslation();
   const isSmallScreen = useIsTabletOrSmaller();
-  const { actingParty, fromParty } = usePartyRepresentation();
+  const { actingParty } = usePartyRepresentation();
 
   const { data: singleRightRequests = [], isLoading: isLoadingRequests } =
     useGetEnrichedSentResourceRequestsQuery(
       {
-        ...getRequestPartyQueryParams(actingParty?.partyUuid, fromParty?.partyUuid),
+        ...getRequestPartyQueryParams(actingParty?.partyUuid, toPartyUuid),
         status: ['Pending'],
       },
       {
-        skip: !actingParty?.partyUuid || !fromParty?.partyUuid,
+        skip: !actingParty?.partyUuid || !toPartyUuid,
       },
     );
 
@@ -135,12 +174,7 @@ const PendingRequestsList = ({
             data-size='xs'
             level={1}
           >
-            {t('delegation_modal.request.sent_requests_modal_header', {
-              partyName: formatDisplayName({
-                fullName: fromParty?.name || '',
-                type: fromParty?.partyTypeName === PartyType.Person ? 'person' : 'company',
-              }),
-            })}
+            {heading}
           </DsHeading>
           <ResourceList
             isLoading={isLoadingRequests}

@@ -11,6 +11,7 @@ import { useDocumentTitle } from '@/resources/hooks/useDocumentTitle';
 import { useRequests } from '@/resources/hooks/useRequests';
 import { RequestsTabPanel } from './RequestsTabPanel';
 import classes from './RequestPage.module.css';
+import { SentRequestsTabPanel } from './SentRequestsTabPanel';
 
 const selectedTabProps = {
   'data-size': 'sm',
@@ -94,7 +95,7 @@ export const RequestPage = () => {
             />
           </DsTabs.Panel>
           <DsTabs.Panel value={SENT_REQUESTS_TAB}>
-            <RequestsTabPanel
+            <SentRequestsTabPanel
               requests={pendingRequests.sent}
               count={sentRequestCount}
               isLoading={isLoadingRequests}
