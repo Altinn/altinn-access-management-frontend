@@ -197,7 +197,7 @@ export const LandingPage = () => {
     const requestCount = pendingRequests ? pendingRequests.received.length : 0;
     const items: MenuItemProps[] = [];
 
-    if (displayRequestsPage) {
+    if (displayRequestsPage && isAdmin) {
       items.push({
         ...getRequestsMenuItem(),
         title: getRequestCountText(requestCount),

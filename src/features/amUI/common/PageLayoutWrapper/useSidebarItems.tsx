@@ -70,7 +70,7 @@ export const useSidebarItems = ({ isSmall }: { isSmall?: boolean }) => {
   if (!isSmall) {
     items.push(getHeadingMenuItem(pathname, isLoading));
   }
-  if (displayRequestsPage) {
+  if (displayRequestsPage && isAdmin) {
     const requestsBadge =
       pendingRequests && pendingRequests.received.length > 0
         ? {
