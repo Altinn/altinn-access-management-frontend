@@ -137,6 +137,24 @@ namespace Altinn.AccessManagement.UI.Mocks.Mocks
             return await Task.FromResult(Util.GetMockData<RequestResourceDto>(dataPath));
         }
 
+        /// <inheritdoc />
+        public async Task<int> GetSentRequestsCount(Guid party, Guid? to, List<RequestStatus> status, CancellationToken cancellationToken)
+        {
+            ThrowExceptionIfTriggerParty(party.ToString());
+            ThrowHttpStatusExceptionIfTriggerParty(party.ToString());
+
+            return await Task.FromResult(3);
+        }
+
+        /// <inheritdoc />
+        public async Task<int> GetReceivedRequestsCount(Guid party, Guid? from, List<RequestStatus> status, CancellationToken cancellationToken)
+        {
+            ThrowExceptionIfTriggerParty(party.ToString());
+            ThrowHttpStatusExceptionIfTriggerParty(party.ToString());
+
+            return await Task.FromResult(3);
+        }
+
         private static void ThrowExceptionIfTriggerParty(string id)
         {
             if (id == "00000000-0000-0000-0000-000000000000")
