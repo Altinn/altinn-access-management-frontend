@@ -28,7 +28,7 @@ import {
 import { BadgeVariant, Color, MenuItemProps } from '@altinn/altinn-components';
 import { useLocation } from 'react-router';
 import { useGetRolePermissionsQuery } from '@/rtk/features/roleApi';
-import { useRequests } from '@/resources/hooks/useRequests';
+import { useSidebarRequestCount } from '@/resources/hooks/useSidebarRequestCount';
 
 export const useSidebarItems = ({ isSmall }: { isSmall?: boolean }) => {
   const displayConfettiPackage = window.featureFlags?.displayConfettiPackage;
@@ -61,11 +61,14 @@ export const useSidebarItems = ({ isSmall }: { isSmall?: boolean }) => {
   const { data: canAccessSettings, isLoading: isLoadingCompanyProfileAdmin } =
     useGetIsCompanyProfileAdminQuery();
 
-  const { pendingRequests, isLoadingRequests } = useRequests();
-  const receivedRequestsCount = pendingRequests ? pendingRequests.received.length : 0;
-
   const isLoading =
     isLoadingReportee || isLoadingIsAdmin || isLoadingIsClientAdmin || isLoadingCompanyProfileAdmin;
+  const { requestsBadgeCount, isLoading: isLoadingRequestsBadge } = useSidebarRequestCount({
+    displayRequestsPage: !!displayRequestsPage,
+    isAdmin,
+    reportee,
+    isLoadingPermissions: isLoadingReportee || isLoadingIsAdmin,
+  });
 
   const items: MenuItemProps[] = [];
 
@@ -74,9 +77,9 @@ export const useSidebarItems = ({ isSmall }: { isSmall?: boolean }) => {
   }
   if (displayRequestsPage) {
     const requestsBadge =
-      !isLoadingRequests && receivedRequestsCount > 0
+      !isLoadingRequestsBadge && requestsBadgeCount > 0
         ? {
-            label: receivedRequestsCount,
+            label: requestsBadgeCount,
             color: 'warning' as Color,
             variant: 'base' as BadgeVariant,
           }
