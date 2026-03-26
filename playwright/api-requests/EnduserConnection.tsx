@@ -229,7 +229,7 @@ export class EnduserConnection {
 
         if (!response.ok) {
           throw new Error(
-            `Failed to fetch status for addConnectionPackagePerson request. Status: ${response.status}`,
+            `Failed to fetch status for addPackagePerson request. Status: ${response.status}`,
           );
         }
         responses.push(response);
@@ -279,7 +279,7 @@ export class EnduserConnection {
 
         if (!response.ok) {
           throw new Error(
-            `Failed to fetch status for addConnectionPackagePerson request. Status: ${response.status}`,
+            `Failed to fetch status for addPackageOrg request. Status: ${response.status}`,
           );
         }
         responses.push(response);
@@ -372,7 +372,7 @@ export class EnduserConnection {
 
     if (!response.ok) {
       throw new Error(
-        `Failed to fetch status for addConnectionPackagePerson request. Status: ${response.status}, ${await response.text()}`,
+        `Failed to fetch status for delegateSingleService request. Status: ${response.status}, ${await response.text()}`,
       );
     }
 
