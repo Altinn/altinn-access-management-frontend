@@ -62,6 +62,15 @@ namespace Altinn.AccessManagement.UI.Core.Services.Interfaces
         Task<RequestFE> GetRequest(Guid party, Guid id, CancellationToken cancellationToken);
 
         /// <summary>
+        /// Get a single draft request by id
+        /// </summary>
+        /// <param name="id">The request id</param>
+        /// <param name="languageCode">The language code for the response</param>
+        /// <param name="cancellationToken">Cancellation token</param>
+        /// <returns>The request</returns>
+        Task<EnrichedResourceRequest> GetDraftRequest(Guid id, string languageCode, CancellationToken cancellationToken);
+
+        /// <summary>
         /// Creates a new resource request
         /// </summary>
         /// <param name="party">The acting party creating the request</param>
