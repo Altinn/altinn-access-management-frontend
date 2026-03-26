@@ -133,6 +133,24 @@ namespace Altinn.AccessManagement.UI.Integration.Clients
         }
 
         /// <inheritdoc />
+        public async Task<RequestResourceDto> GetDraftRequest(Guid id, CancellationToken cancellationToken)
+        {
+            try
+            {
+                string endpointUrl = $"enduser/request/draft?id={id}";
+                string token = JwtTokenUtil.GetTokenFromContext(_httpContextAccessor.HttpContext, _platformSettings.JwtCookieName);
+
+                var httpResponse = await _client.GetAsync(token, endpointUrl);
+                return await ClientUtils.DeserializeIfSuccessfullStatusCode<RequestResourceDto>(httpResponse);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "AccessManagement.UI // RequestClient // GetDraftRequest // Exception");
+                throw;
+            }
+        }
+
+        /// <inheritdoc />
         public async Task<RequestResourceDto> CreateResourceRequest(Guid party, Guid to, string resource, CancellationToken cancellationToken)
         {
             try
@@ -173,7 +191,7 @@ namespace Altinn.AccessManagement.UI.Integration.Clients
         {
             try
             {
-                string endpointUrl = $"enduser/request/sent/confirm?party={party}&id={id}";
+                string endpointUrl = $"enduser/request/draft/confirm?party={party}&id={id}";
                 string token = JwtTokenUtil.GetTokenFromContext(_httpContextAccessor.HttpContext, _platformSettings.JwtCookieName);
 
                 var httpResponse = await _client.PutAsync(token, endpointUrl, null);

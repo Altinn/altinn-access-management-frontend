@@ -35,15 +35,23 @@ export const RightsSection = ({
   const isSmall = useIsMobileOrSmaller();
 
   const [rightsExpanded, setRightsExpanded] = useState(false);
+  const isRequest = availableActions?.includes(DelegationAction.REQUEST);
+  const isApprove = availableActions?.includes(DelegationAction.APPROVE);
 
   const rightsDescription = () => {
-    if (availableActions?.includes(DelegationAction.REQUEST)) {
+    if (isRequest) {
       return t('delegation_modal.actions.request_action_description');
     }
-    if (availableActions?.includes(DelegationAction.APPROVE)) {
+    if (isApprove) {
       return t('delegation_modal.actions.approve_action_description');
     }
     return t('delegation_modal.actions.action_description');
+  };
+
+  const getListItemHeading = (hasAccessAndNoChanges?: boolean, isSingleRightRequest?: boolean) => {
+    if (hasAccessAndNoChanges) return 'delegation_modal.name_has_the_following';
+    if (isSingleRightRequest) return 'delegation_modal.name_requests_access_to';
+    return 'delegation_modal.name_will_receive';
   };
 
   return (
@@ -81,11 +89,7 @@ export const RightsSection = ({
           data-size={isSmall ? '2xs' : 'xs'}
         >
           <Trans
-            i18nKey={
-              hasAccessAndNoChanges
-                ? 'delegation_modal.name_has_the_following'
-                : 'delegation_modal.name_will_receive'
-            }
+            i18nKey={getListItemHeading(hasAccessAndNoChanges, isRequest)}
             values={{ name: toName }}
             components={{ strong: <strong /> }}
           />
