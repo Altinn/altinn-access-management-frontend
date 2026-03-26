@@ -19,7 +19,7 @@ import { DeletableStatus, getDeletableStatus } from '../../AccessPackageList/use
 import { ValidationErrorMessage } from '../../ValidationErrorMessage';
 import { PackageIsPartiallyDeletableAlert } from '../../AccessPackageList/PackageIsPartiallyDeletableAlert/PackageIsPartiallyDeletableAlert';
 
-import { displayAccessRequest } from '@/resources/utils/featureFlagUtils';
+import { displayPackageRequests } from '@/resources/utils/featureFlagUtils';
 import classes from './AccessPackageInfo.module.css';
 import { PartyType } from '@/rtk/features/userInfoApi';
 import { StatusSection } from '../../StatusSection/StatusSection';
@@ -34,7 +34,7 @@ export const AccessPackageInfo = ({ accessPackage, availableActions = [] }: Pack
   const { t } = useTranslation();
   const { fromParty, toParty, actingParty } = usePartyRepresentation();
   const { canDelegatePackage } = useAccessPackageDelegationCheck();
-  const displayAccessRequestFeature = displayAccessRequest();
+  const displayPackageRequestsFeature = displayPackageRequests();
   const isSmall = useIsMobileOrSmaller();
 
   const {
@@ -221,7 +221,7 @@ export const AccessPackageInfo = ({ accessPackage, availableActions = [] }: Pack
             {!userHasPackage &&
               availableActions.includes(DelegationAction.REQUEST) &&
               // Todo: Implement request access package
-              displayAccessRequestFeature && (
+              displayPackageRequestsFeature && (
                 <DsButton disabled>{t('common.request_poa')}</DsButton>
               )}
           </div>

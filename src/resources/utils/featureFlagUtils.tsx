@@ -76,8 +76,8 @@ export const displayInstanceDelegation = () => {
   return window.featureFlags?.displayInstanceDelegation === true;
 };
 
-export const displayAccessRequest = () => {
-  return window.featureFlags?.displayAccessRequest === true;
+export const displayPackageRequests = () => {
+  return window.featureFlags?.displayPackageRequests === true;
 };
 
 export const displaySubConnections = () => {
