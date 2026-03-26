@@ -110,21 +110,6 @@ export const requestApi = createApi({
       invalidatesTags: ['receivedRequests'],
     }),
 
-    // draft request page query
-    getEnrichedDraftRequest: builder.query<EnrichedRequestDto, { id: string }>({
-      query: ({ id }) => {
-        return `draft/${id}`;
-      },
-      keepUnusedDataFor: 0,
-    }),
-    confirmRequest: builder.mutation<RequestDto, { party: string; id: string }>({
-      query: ({ party, id }) => ({
-        url: `draft/confirm?party=${party}&id=${id}`,
-        method: 'PUT',
-      }),
-      invalidatesTags: ['sentRequests', 'enrichedSentResourceRequests'],
-    }),
-
     // count queries
     getSentRequestsCount: builder.query<number, { party: string; status?: RequestStatus[] }>({
       query: ({ party, status = [] }) => {
@@ -141,6 +126,21 @@ export const requestApi = createApi({
         return `received/count${params}`;
       },
       providesTags: ['receivedRequests'],
+    }),
+
+    // draft request page query
+    getEnrichedDraftRequest: builder.query<EnrichedRequestDto, { id: string }>({
+      query: ({ id }) => {
+        return `draft/${id}`;
+      },
+      keepUnusedDataFor: 0,
+    }),
+    confirmRequest: builder.mutation<RequestDto, { party: string; id: string }>({
+      query: ({ party, id }) => ({
+        url: `draft/confirm?party=${party}&id=${id}`,
+        method: 'PUT',
+      }),
+      invalidatesTags: ['sentRequests', 'enrichedSentResourceRequests'],
     }),
   }),
 });
