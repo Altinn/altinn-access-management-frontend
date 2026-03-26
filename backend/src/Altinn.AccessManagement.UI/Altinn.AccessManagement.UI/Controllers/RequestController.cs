@@ -305,7 +305,7 @@ namespace Altinn.AccessManagement.UI.Controllers
         /// <response code="500">Internal Server Error</response>
         [HttpPut]
         [Authorize]
-        [Route("sent/confirm")]
+        [Route("draft/confirm")]
         public async Task<ActionResult> ConfirmRequest([FromQuery] Guid party, [FromQuery] Guid id, CancellationToken cancellationToken)
         {
             try

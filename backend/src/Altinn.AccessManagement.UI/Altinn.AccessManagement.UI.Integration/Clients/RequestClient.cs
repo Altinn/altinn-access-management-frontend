@@ -191,7 +191,7 @@ namespace Altinn.AccessManagement.UI.Integration.Clients
         {
             try
             {
-                string endpointUrl = $"enduser/request/sent/confirm?party={party}&id={id}";
+                string endpointUrl = $"enduser/request/draft/confirm?party={party}&id={id}";
                 string token = JwtTokenUtil.GetTokenFromContext(_httpContextAccessor.HttpContext, _platformSettings.JwtCookieName);
 
                 var httpResponse = await _client.PutAsync(token, endpointUrl, null);

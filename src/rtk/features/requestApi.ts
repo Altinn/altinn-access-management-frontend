@@ -119,7 +119,7 @@ export const requestApi = createApi({
     }),
     confirmRequest: builder.mutation<RequestDto, { party: string; id: string }>({
       query: ({ party, id }) => ({
-        url: `sent/confirm?party=${party}&id=${id}`,
+        url: `draft/confirm?party=${party}&id=${id}`,
         method: 'PUT',
       }),
       invalidatesTags: ['sentRequests', 'enrichedSentResourceRequests'],
