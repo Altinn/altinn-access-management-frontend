@@ -42,10 +42,11 @@ export const RequestPage = () => {
   const { pendingRequests, isLoadingRequests, isError } = useRequests();
 
   const partyUuid = getCookie('AltinnPartyUuid');
-  const { data: sentRequestCount = 0 } = useGetSentRequestsCountQuery(
-    { party: partyUuid || '', status: ['Pending'] },
-    { skip: !partyUuid || !isAdmin || !enableRequestSingleRight() },
-  );
+  const { data: sentRequestCount, isLoading: isLoadingSentRequestCount } =
+    useGetSentRequestsCountQuery(
+      { party: partyUuid || '', status: ['Pending'] },
+      { skip: !partyUuid || !isAdmin || !enableRequestSingleRight() },
+    );
 
   const getBadgeProps = (tabValue: string) =>
     selectedTab === tabValue ? selectedTabProps : unselectedTabProps;
@@ -56,6 +57,7 @@ export const RequestPage = () => {
   });
 
   const receivedRequestsCount = pendingRequests ? pendingRequests.received.length : 0;
+  const resolvedSentRequestCount = sentRequestCount ?? 0;
 
   return (
     <PageWrapper>
@@ -88,10 +90,12 @@ export const RequestPage = () => {
               value={SENT_REQUESTS_TAB}
               className={classes.requestTab}
             >
-              <Badge
-                {...getBadgeProps(SENT_REQUESTS_TAB)}
-                label={String(sentRequestCount)}
-              />
+              {!isLoadingSentRequestCount && (
+                <Badge
+                  {...getBadgeProps(SENT_REQUESTS_TAB)}
+                  label={String(resolvedSentRequestCount)}
+                />
+              )}
               {t('request_page.sent_requests')}
             </DsTabs.Tab>
           </DsTabs.List>
@@ -107,7 +111,7 @@ export const RequestPage = () => {
           <DsTabs.Panel value={SENT_REQUESTS_TAB}>
             <RequestsTabPanel
               requests={pendingRequests.sent}
-              count={sentRequestCount}
+              count={resolvedSentRequestCount}
               isLoading={isLoadingRequests}
               isError={isError}
               emptyMessageKey='request_page.no_sent_requests'
