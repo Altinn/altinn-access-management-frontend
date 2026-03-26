@@ -813,7 +813,15 @@
     "add_all_customers_partial": "Kun {{successCount}} av {{totalCount}} klienter ble lagt til.",
     "add_all_customers_failed_list": "Følgende klienter kunne ikke legges til:",
     "add_all_customers_in_progress_warning": "Ikke lukk denne nettsiden før alle klienter er lagt til.",
-    "add_all_customers_progress": "Legger til klient {{progress}} av {{totalCount}}"
+    "add_all_customers_progress": "Legger til klient {{progress}} av {{totalCount}}",
+    "own_organization": "Din virksomhet",
+    "remove": "Fjern fra systemtilgang",
+    "remove_own_organization": "Fjern din virksomhet fra systemtilgang",
+    "add_own_organization_list": "Legg til i systemtilgang",
+    "add_own_organization_list_aria": "Legg til din virksomhet i systemtilgang",
+    "add_own_organization": "Legg til din virksomhet",
+    "add_own_organization_error": "Kunne ikke legge til din virksomhet",
+    "remove_own_organization_error": "Kunne ikke fjerne din virksomhet"
   },
   "systemuser_delegation_errors": {
     "01_rights_not_found_or_not_delegable": "En eller flere tjenester eksisterer ikke, eller er ikke delegerbare.",

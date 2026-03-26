@@ -816,7 +816,15 @@
     "add_all_customers_partial": "Only {{successCount}} out of {{totalCount}} clients were added.",
     "add_all_customers_failed_list": "The following clients could not be added:",
     "add_all_customers_in_progress_warning": "Do not close this website before all clients are added.",
-    "add_all_customers_progress": "Adding client {{progress}} of {{totalCount}}"
+    "add_all_customers_progress": "Adding client {{progress}} of {{totalCount}}",
+    "own_organization": "Your organization",
+    "remove": "Remove from system access",
+    "remove_own_organization": "Remove your organization from system access",
+    "add_own_organization_list": "Add to system access",
+    "add_own_organization_list_aria": "Add your organization to system access",
+    "add_own_organization": "Add your organization",
+    "add_own_organization_error": "Could not add your organization",
+    "remove_own_organization_error": "Could not remove your organization"
   },
   "systemuser_delegation_errors": {
     "01_rights_not_found_or_not_delegable": "One or more services do not exist, or cannot be delegated.",
