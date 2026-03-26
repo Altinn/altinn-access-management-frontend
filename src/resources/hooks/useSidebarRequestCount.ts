@@ -22,7 +22,7 @@ export const useSidebarRequestCount = ({
   const partyUuid = getCookie('AltinnPartyUuid');
 
   const shouldFetchReceivedRequestsCount =
-    displayRequestsPage && !!partyUuid && enableRequestSingleRight();
+    displayRequestsPage && !!partyUuid && enableRequestSingleRight() && !!isAdmin;
   const shouldFetchConsents = displayRequestsPage && !!partyUuid && hasConsentPermission(isAdmin);
   const shouldFetchSystemUsers =
     displayRequestsPage && !!partyUuid && !!hasCreateSystemUserPermission(reportee, isAdmin);
