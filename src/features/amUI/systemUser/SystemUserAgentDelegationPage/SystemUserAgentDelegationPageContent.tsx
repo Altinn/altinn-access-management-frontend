@@ -81,7 +81,7 @@ export const SystemUserAgentDelegationPageContent = ({
     useRemoveSelfCustomerMutation();
   const {
     data: isSelfAdded,
-    isLoading: isLoadingIsSelfAdded,
+    isFetching: isLoadingIsSelfAdded,
     refetch: refetchIsLoadingIsSelfAdded,
   } = useIsSelfAddedQuery(
     {
