@@ -46,7 +46,7 @@ import { getCookie } from '@/resources/Cookie/CookieMethods';
 import { useGetPartyFromLoggedInUserQuery } from '@/rtk/features/lookupApi';
 import { formatOrgNr, isOrganization, isSubUnit } from '@/resources/utils/reporteeUtils';
 import { getHostUrl } from '@/resources/utils/pathUtils';
-import { useRequests } from '@/resources/hooks/useRequests';
+import { useSidebarRequestCount } from '@/resources/hooks/useSidebarRequestCount';
 import cn from 'classnames';
 import { clientAdministrationPageEnabled } from '@/resources/utils/featureFlagUtils';
 import { useSelfConnection } from '../common/PartyRepresentationContext/useSelfConnection';
@@ -62,9 +62,15 @@ export const LandingPage = () => {
   const { data: canAccessSettings, isLoading: isLoadingCanAccessSettings } =
     useGetIsCompanyProfileAdminQuery();
   const { data: currentUser, isLoading: currentUserIsLoading } = useGetPartyFromLoggedInUserQuery();
-  const { pendingRequests, isLoadingRequests } = useRequests();
   const actingPartyUuid = getCookie('AltinnPartyUuid') ?? '';
   const displayClientAdministrationPage = clientAdministrationPageEnabled();
+  const displayRequestsPage = window.featureFlags?.displayRequestsPage;
+  const { requestsBadgeCount, isLoading: isLoadingRequestsBadge } = useSidebarRequestCount({
+    displayRequestsPage: !!displayRequestsPage,
+    isAdmin,
+    reportee,
+    isLoadingPermissions: isLoadingReportee || isLoadingIsAdmin,
+  });
 
   const reporteeName = formatDisplayName({
     fullName: reportee?.name || '',
@@ -105,8 +111,7 @@ export const LandingPage = () => {
     isLoadingIsAdmin ||
     isLoadingIsClientAdmin ||
     isLoadingCanAccessSettings ||
-    currentUserIsLoading ||
-    isLoadingRequests;
+    currentUserIsLoading;
 
   const getMenuItems = (): MenuItemProps[] => {
     const displayConfettiPackage = window.featureFlags?.displayConfettiPackage;
@@ -193,15 +198,13 @@ export const LandingPage = () => {
 
   const getOtherItems = (): MenuItemProps[] => {
     const displaySettingsPage = window.featureFlags?.displaySettingsPage;
-    const displayRequestsPage = window.featureFlags?.displayRequestsPage;
-    const requestCount = pendingRequests ? pendingRequests.received.length : 0;
     const items: MenuItemProps[] = [];
 
     if (displayRequestsPage && isAdmin) {
       items.push({
         ...getRequestsMenuItem(),
-        title: getRequestCountText(requestCount),
-        loading: isLoading,
+        title: getRequestCountText(isLoadingRequestsBadge ? 0 : requestsBadgeCount),
+        loading: isLoading || isLoadingRequestsBadge,
       });
     }
 
