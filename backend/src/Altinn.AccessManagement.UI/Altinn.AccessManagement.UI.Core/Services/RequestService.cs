@@ -1,0 +1,146 @@
+using Altinn.AccessManagement.UI.Core.ClientInterfaces;
+using Altinn.AccessManagement.UI.Core.Enums;
+using Altinn.AccessManagement.UI.Core.Exceptions;
+using Altinn.AccessManagement.UI.Core.Helpers;
+using Altinn.AccessManagement.UI.Core.Models.Common;
+using Altinn.AccessManagement.UI.Core.Models.Request;
+using Altinn.AccessManagement.UI.Core.Models.Request.Frontend;
+using Altinn.AccessManagement.UI.Core.Models.ResourceRegistry.Frontend;
+using Altinn.AccessManagement.UI.Core.Services.Interfaces;
+
+namespace Altinn.AccessManagement.UI.Core.Services
+{
+    /// <inheritdoc />
+    public class RequestService : IRequestService
+    {
+        private readonly IRequestClient _requestClient;
+        private readonly ResourceHelper _resourceHelper;
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="RequestService"/> class.
+        /// </summary>
+        /// <param name="requestClient">The request client.</param>
+        /// <param name="resourceHelper">The resource helper.</param>
+        public RequestService(IRequestClient requestClient, ResourceHelper resourceHelper)
+        {
+            _requestClient = requestClient;
+            _resourceHelper = resourceHelper;
+        }
+
+        /// <inheritdoc />
+        public async Task<IEnumerable<RequestFE>> GetSentRequests(Guid party, Guid? to, List<RequestStatus> status, string type, CancellationToken cancellationToken)
+        {
+            PaginatedResult<RequestResourceDto> response = await _requestClient.GetSentRequests(party, to, status, type, cancellationToken);
+            return response.Items.Select(MapToRequestFE);
+        }
+
+        /// <inheritdoc />
+        public async Task<IEnumerable<EnrichedResourceRequest>> GetEnrichedSentResourceRequests(Guid party, Guid? to, List<RequestStatus> status, string languageCode, CancellationToken cancellationToken)
+        {
+            PaginatedResult<RequestResourceDto> response = await _requestClient.GetSentRequests(party, to, status, "resource", cancellationToken);
+            return await MapToEnrichedResourceRequestList(response, languageCode);
+        }
+
+        /// <inheritdoc />
+        public async Task<IEnumerable<RequestFE>> GetReceivedRequests(Guid party, Guid? from, List<RequestStatus> status, string type, CancellationToken cancellationToken)
+        {
+            PaginatedResult<RequestResourceDto> response = await _requestClient.GetReceivedRequests(party, from, status, type, cancellationToken);
+            return response.Items.Select(MapToRequestFE);
+        }
+
+        /// <inheritdoc />
+        public async Task<IEnumerable<EnrichedResourceRequest>> GetEnrichedReceivedResourceRequests(Guid party, Guid? from, List<RequestStatus> status, string languageCode, CancellationToken cancellationToken)
+        {
+            PaginatedResult<RequestResourceDto> response = await _requestClient.GetReceivedRequests(party, from, status, "resource", cancellationToken);
+            return await MapToEnrichedResourceRequestList(response, languageCode);
+        }
+
+        /// <inheritdoc />
+        public async Task<RequestFE> GetRequest(Guid party, Guid id, CancellationToken cancellationToken)
+        {
+            RequestResourceDto response = await _requestClient.GetRequest(party, id, cancellationToken);
+            return MapToRequestFE(response);
+        }
+
+        /// <inheritdoc />
+        public async Task<RequestFE> CreateResourceRequest(Guid party, Guid to, string resource, CancellationToken cancellationToken)
+        {
+            RequestResourceDto response = await _requestClient.CreateResourceRequest(party, to, resource, cancellationToken);
+            return MapToRequestFE(response);
+        }
+
+        /// <inheritdoc />
+        public async Task<RequestFE> WithdrawRequest(Guid party, Guid id, CancellationToken cancellationToken)
+        {
+            RequestResourceDto response = await _requestClient.WithdrawRequest(party, id, cancellationToken);
+            return MapToRequestFE(response);
+        }
+
+        /// <inheritdoc />
+        public async Task<RequestFE> ConfirmRequest(Guid party, Guid id, CancellationToken cancellationToken)
+        {
+            RequestResourceDto response = await _requestClient.ConfirmRequest(party, id, cancellationToken);
+            return MapToRequestFE(response);
+        }
+
+        /// <inheritdoc />
+        public async Task<RequestFE> RejectRequest(Guid party, Guid id, CancellationToken cancellationToken)
+        {
+            RequestResourceDto response = await _requestClient.RejectRequest(party, id, cancellationToken);
+            return MapToRequestFE(response);
+        }
+
+        /// <inheritdoc />
+        public async Task<RequestFE> ApproveRequest(Guid party, Guid id, CancellationToken cancellationToken)
+        {
+            RequestResourceDto response = await _requestClient.ApproveRequest(party, id, cancellationToken);
+            return MapToRequestFE(response);
+        }
+
+        private static RequestFE MapToRequestFE(RequestResourceDto x)
+        {
+            return new RequestFE()
+            {
+                Id = x.Id,
+                From = x.From,
+                To = x.To,
+                Type = x.Type,
+                Status = x.Status,
+                ResourceId = x.Resource?.ReferenceId,
+                LastUpdated = x.LastUpdated
+            };
+        }
+
+        private async Task<IEnumerable<EnrichedResourceRequest>> MapToEnrichedResourceRequestList(PaginatedResult<RequestResourceDto> list, string languageCode)
+        {
+            Dictionary<string, ServiceResourceFE> resourceDictionary = [];
+            var uniqueResourceIds = list.Items
+                .Select(x => x.Resource.ReferenceId)
+                .Distinct();
+            var resources = await _resourceHelper.EnrichResources(uniqueResourceIds, languageCode);
+            resourceDictionary = resources.ToDictionary(r => r.Identifier);
+            
+            return list.Items.Select(x => 
+            {
+                RequestFE request = MapToRequestFE(x);
+                
+                if (!resourceDictionary.TryGetValue(request.ResourceId, out var resource))
+                {
+                    throw new ResourceNotFoundException($"Resource not found for ID: {request.ResourceId}");
+                }
+                
+                return new EnrichedResourceRequest()
+                {
+                    Id = request.Id,
+                    From = request.From,
+                    To = request.To,
+                    Type = request.Type,
+                    Status = request.Status,
+                    ResourceId = request.ResourceId,
+                    LastUpdated = request.LastUpdated,
+                    Resource = resource
+                };
+            }).ToList();
+        }
+    }
+}

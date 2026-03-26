@@ -19,6 +19,7 @@ import { useIsTabletOrSmaller } from '@/resources/utils/screensizeUtils';
 import { SingleRightsSectionSkeleton } from './SingleRightsSectionSkeleton';
 import { getInheritedStatus } from '../../common/useInheritedStatus';
 import { QuestionmarkCircleIcon } from '@navikt/aksel-icons';
+import { PendingRequests } from './PendingRequests';
 
 export const SingleRightsSection = ({ isReportee = false }: { isReportee?: boolean }) => {
   const { id } = useParams();
@@ -27,7 +28,12 @@ export const SingleRightsSection = ({ isReportee = false }: { isReportee?: boole
   const { displayResourceDelegation } = window.featureFlags;
   const { toParty, fromParty, actingParty, isLoading: isPartyLoading } = usePartyRepresentation();
 
-  const canGiveAccess = useCanGiveAccess(id ?? '');
+  const canGiveAccess = useCanGiveAccess(id ?? '', isReportee);
+  const canRequestAccess =
+    !canGiveAccess &&
+    actingParty?.partyUuid === toParty?.partyUuid &&
+    toParty?.partyUuid !== fromParty?.partyUuid &&
+    window.featureFlags?.enableRequestAccess;
 
   const {
     data: delegatedResources,
@@ -93,6 +99,12 @@ export const SingleRightsSection = ({ isReportee = false }: { isReportee?: boole
     return <SingleRightsSectionSkeleton />;
   }
 
+  const availableActions = [
+    DelegationAction.REVOKE,
+    ...(canGiveAccess ? [DelegationAction.DELEGATE] : []),
+    ...(canRequestAccess ? [DelegationAction.REQUEST] : []),
+  ];
+
   return (
     toParty && (
       <div className={classes.singleRightsSectionContainer}>
@@ -116,6 +128,7 @@ export const SingleRightsSection = ({ isReportee = false }: { isReportee?: boole
           </DsPopover.TriggerContext>
         </div>
         {isError && <div>{t('user_rights_page.error')}</div>}
+        {availableActions.includes(DelegationAction.REQUEST) && <PendingRequests />}
         <div className={classes.singleRightsList}>
           <ResourceList
             resources={resources ?? []}
@@ -128,16 +141,11 @@ export const SingleRightsSection = ({ isReportee = false }: { isReportee?: boole
             size={isSmallScreen ? 'sm' : 'md'}
             titleAs='h3'
             delegationModal={
-              canGiveAccess &&
-              !isReportee && (
+              (availableActions.includes(DelegationAction.DELEGATE) ||
+                availableActions.includes(DelegationAction.REQUEST)) && (
                 <DelegationModal
                   delegationType={DelegationType.SingleRights}
-                  availableActions={[
-                    DelegationAction.REVOKE,
-                    canGiveAccess && !isReportee
-                      ? DelegationAction.DELEGATE
-                      : DelegationAction.REQUEST,
-                  ]}
+                  availableActions={availableActions}
                 />
               )
             }
@@ -157,10 +165,7 @@ export const SingleRightsSection = ({ isReportee = false }: { isReportee?: boole
           ref={modalRef}
           resource={selectedResource ?? undefined}
           onClose={() => setSelectedResource(null)}
-          availableActions={[
-            DelegationAction.REVOKE,
-            canGiveAccess && !isReportee ? DelegationAction.DELEGATE : DelegationAction.REQUEST,
-          ]}
+          availableActions={availableActions}
         />
       </div>
     )

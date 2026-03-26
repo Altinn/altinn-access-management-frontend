@@ -5,13 +5,23 @@ using System.Reflection;
 using System.Text;
 using System.Text.Json;
 using Altinn.AccessManagement.UI.Controllers;
+using Altinn.AccessManagement.UI.Core.Configuration;
+using Altinn.AccessManagement.UI.Core.Helpers;
 using Altinn.AccessManagement.UI.Core.Models.Connections;
 using Altinn.AccessManagement.UI.Core.Models.User;
+using Altinn.AccessManagement.UI.Core.Services.Interfaces;
 using Altinn.AccessManagement.UI.Mocks.Mocks;
 using Altinn.AccessManagement.UI.Mocks.Utils;
 using Altinn.AccessManagement.UI.Models;
 using Altinn.AccessManagement.UI.Tests.Utils;
+using AltinnCore.Authentication.JwtCookie;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Testing;
+using Microsoft.AspNetCore.TestHost;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Options;
 using Moq;
 using User = Altinn.AccessManagement.UI.Core.Models.User.User;
 
@@ -360,7 +370,7 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
             // Assert
             Assert.Equal(HttpStatusCode.OK, httpResponse.StatusCode);
         }
- 
+
         /// <summary>
         ///    Test case: AddReporteeRightHolder with username shorter than 6 characters.
         ///    Expected: Returns 400 Bad Request
@@ -837,6 +847,71 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
                 Assert.False(partyElement.TryGetProperty("personIdentifier", out _), "personIdentifier should not be returned from BFF");
             }
             Assert.DoesNotContain("personIdentifier", content, StringComparison.OrdinalIgnoreCase);
+        }
+
+        /// <summary>
+        /// Test case: Successfully retrieve simplified connections.
+        /// Expected: Returns OK and the list of simplified connections.
+        /// </summary>
+        [Fact]
+        public async Task GetSimplifiedConnections_ReturnsValid()
+        {
+            // Arrange
+            Guid party = Guid.Parse("cd35779b-b174-4ecc-bbef-ece13611be7f");
+            var token = PrincipalUtil.GetToken(1234, 1234, 2);
+            _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+            string path = Path.Combine(_testDataFolder, "Data", "ExpectedResults", "RightHolders", "SimplifiedConnections", $"{party}.json");
+            List<SimplifiedConnection> expectedResponse = Util.GetMockData<List<SimplifiedConnection>>(path);
+
+            // Act
+            HttpResponseMessage httpResponse = await _client.GetAsync(
+                $"accessmanagement/api/v1/connection/simplified?party={party}");
+            List<SimplifiedConnection> actualResponse = await httpResponse.Content.ReadFromJsonAsync<List<SimplifiedConnection>>();
+
+            // Assert
+            Assert.Equal(HttpStatusCode.OK, httpResponse.StatusCode);
+            AssertionUtil.AssertCollections(expectedResponse, actualResponse, AssertionUtil.AssertEqual);
+        }
+
+        /// <summary>
+        /// Test case: Rejects empty party GUID values for simplified connections.
+        /// Expected: Returns bad request before calling the service.
+        /// </summary>
+        [Fact]
+        public async Task GetSimplifiedConnections_EmptyParty_ReturnsBadRequest()
+        {
+            // Arrange
+            Guid party = Guid.Empty;
+            var token = PrincipalUtil.GetToken(1234, 1234, 2);
+            _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+
+            // Act
+            HttpResponseMessage httpResponse = await _client.GetAsync(
+                $"accessmanagement/api/v1/connection/simplified?party={party}");
+            string responseContent = await httpResponse.Content.ReadAsStringAsync();
+
+            // Assert
+            Assert.Equal(HttpStatusCode.BadRequest, httpResponse.StatusCode);
+            Assert.Contains("Query parameter 'party' must be a non-empty GUID.", responseContent);
+        }
+
+        /// <summary>
+        /// Test case: Rejects invalid party GUID values for simplified connections.
+        /// Expected: Returns bad request from model state validation.
+        /// </summary>
+        [Fact]
+        public async Task GetSimplifiedConnections_InvalidParty_ReturnsBadRequest()
+        {
+            // Arrange
+            var token = PrincipalUtil.GetToken(1234, 1234, 2);
+            _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+
+            // Act
+            HttpResponseMessage httpResponse = await _client.GetAsync(
+                "accessmanagement/api/v1/connection/simplified?party=invalid-party-id");
+
+            // Assert
+            Assert.Equal(HttpStatusCode.BadRequest, httpResponse.StatusCode);
         }
     }
 }

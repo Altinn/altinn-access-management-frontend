@@ -1,6 +1,7 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 
 import { getCookie } from '@/resources/Cookie/CookieMethods';
+import type { ServiceResource } from '@/rtk/features/singleRights/singleRightsApi';
 
 export interface ResourceOwner {
   organisationName: string | null;
@@ -31,6 +32,12 @@ export const resourceApi = createApi({
   }),
   tagTypes: ['APIs'],
   endpoints: (builder) => ({
+    getResource: builder.query<ServiceResource, string>({
+      query: (resourceId) => ({
+        url: '',
+        params: { resourceId },
+      }),
+    }),
     getResourceOwners: builder.query<ResourceOwner[], ResourceType[] | void>({
       query: (resourceTypeList) => {
         return (
@@ -44,6 +51,6 @@ export const resourceApi = createApi({
   }),
 });
 
-export const { useGetResourceOwnersQuery } = resourceApi;
+export const { useGetResourceQuery, useGetResourceOwnersQuery } = resourceApi;
 
 export const { endpoints, reducerPath, reducer, middleware } = resourceApi;

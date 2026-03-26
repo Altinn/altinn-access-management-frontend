@@ -1,10 +1,8 @@
 import { useDelegateRights } from '@/resources/hooks/useDelegateRights';
-import { formatDisplayName } from '@altinn/altinn-components';
-import { useCallback, useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { ChipRight, mapRightsToChipRights } from './rightsUtils';
 import {
-  DelegationCheckedRight,
   ServiceResource,
   useDelegationCheckQuery,
   useGetResourceRightsMetaQuery,
@@ -12,20 +10,21 @@ import {
 } from '@/rtk/features/singleRights/singleRightsApi';
 import { PartyType, useGetReporteeQuery } from '@/rtk/features/userInfoApi';
 import { usePartyRepresentation } from '../../../PartyRepresentationContext/PartyRepresentationContext';
-import { ErrorCode } from '@/resources/utils/errorCodeUtils';
+import { getMissingAccessMessage } from '../../missingAccessUtils';
 import { createErrorDetails } from '@/features/amUI/common/TechnicalErrorParagraphs/TechnicalErrorParagraphs';
 
-import classes from '../ResourceInfo.module.css';
-import { useRightChips } from './useRightChips';
 import { useUpdateResource } from '@/resources/hooks/useUpdateResource';
 import { useRevokeResource } from '@/resources/hooks/useRevokeResource';
 import { useHasResourceCheck } from './useHasResourceCheck';
+import { useSingleRightRequests } from './useSingleRightRequests';
 
 export const useRightsSection = ({
   resource,
+  isRequest,
   onDelegate,
 }: {
   resource: ServiceResource;
+  isRequest?: boolean;
   onDelegate?: () => void;
 }) => {
   const { t } = useTranslation();
@@ -75,13 +74,17 @@ export const useRightsSection = ({
     },
     { skip: !resource.identifier },
   );
+  const { createRequest, deleteRequest, hasPendingRequest, isLoadingRequest } =
+    useSingleRightRequests({
+      canRequestRights: isRequest,
+    });
 
   const {
     data: delegationCheckedActions,
     isError: isDelegationCheckError,
     error: delegationCheckError,
     isLoading: isDelegationCheckLoading,
-  } = useDelegationCheckQuery(resource.identifier, { skip: !resource.identifier });
+  } = useDelegationCheckQuery(resource.identifier, { skip: !resource.identifier || isRequest });
 
   const isLoading =
     isResourceAccessLoading ||
@@ -110,41 +113,6 @@ export const useRightsSection = ({
   const hasUnsavedChanges = rights.some((r) => r.checked !== r.delegated);
   const undelegableActions = rights.filter((r) => !r.delegable).map((r) => r.rightName);
 
-  const getMissingAccessMessage = useCallback(
-    (response: DelegationCheckedRight[]) => {
-      const hasMissingRoleAccess = response.some((right) =>
-        right.reasonCodes.some(
-          (reasonCode) =>
-            reasonCode === ErrorCode.MissingRoleAccess ||
-            reasonCode === ErrorCode.MissingRightAccess ||
-            reasonCode === ErrorCode.MissingDelegationAccess ||
-            reasonCode === ErrorCode.MissingPackageAccess,
-        ),
-      );
-      const hasMissingSrrRightAccess = response.some(
-        (right) =>
-          !hasMissingRoleAccess &&
-          right.reasonCodes.some(
-            (reasonCode) =>
-              reasonCode === ErrorCode.MissingSrrRightAccess ||
-              reasonCode === ErrorCode.AccessListValidationFail,
-          ),
-      );
-
-      if (hasMissingRoleAccess) {
-        return t('delegation_modal.specific_rights.missing_role_message');
-      }
-      if (hasMissingSrrRightAccess) {
-        return t('delegation_modal.specific_rights.missing_srr_right_message', {
-          resourceOwner: resource?.resourceOwnerName,
-          reportee: reportee?.name,
-        });
-      }
-      return null;
-    },
-    [t, resource?.resourceOwnerName, reportee?.name],
-  );
-
   /// UseEffect hooks
 
   // Instantiate/reset access and rights states
@@ -168,12 +136,19 @@ export const useRightsSection = ({
       return;
     }
 
-    if (!delegationCheckedActions && !isDelegationCheckError) {
+    if (!delegationCheckedActions && !isDelegationCheckError && !isRequest) {
       return;
     }
 
     if (delegationCheckedActions) {
-      setMissingAccess(getMissingAccessMessage(delegationCheckedActions));
+      setMissingAccess(
+        getMissingAccessMessage(
+          delegationCheckedActions,
+          t,
+          resource?.resourceOwnerName,
+          reportee?.name,
+        ),
+      );
     }
 
     if (hasAccess && resourceRights) {
@@ -187,7 +162,7 @@ export const useRightsSection = ({
       setRights(chipRights);
     } else {
       const chipRights: ChipRight[] = mapRightsToChipRights(rightsMeta, delegationCheckedActions, {
-        isChecked: (right) => right.result === true,
+        isChecked: (right) => right.result === true || isRequest === true,
       });
       setRights(chipRights);
     }
@@ -198,7 +173,10 @@ export const useRightsSection = ({
     resource.identifier,
     hasAccess,
     resourceRights,
-    getMissingAccessMessage,
+    isRequest,
+    t,
+    resource?.resourceOwnerName,
+    reportee?.name,
   ]);
 
   /// Functions
@@ -254,15 +232,13 @@ export const useRightsSection = ({
     }
   };
 
-  const { chips } = useRightChips(rights, setRights, classes.chip);
-
   return {
-    chips,
+    rights,
+    setRights,
     saveEditedRights,
     delegateChosenRights,
     revokeResource,
     undelegableActions,
-    rights,
     hasUnsavedChanges,
     hasAccess,
     isDelegationCheckLoading,
@@ -274,5 +250,9 @@ export const useRightsSection = ({
     isActionSuccess,
     isLoading,
     rightsMetaTechnicalErrorDetails,
+    hasPendingRequest,
+    isLoadingRequest,
+    createRequest,
+    deleteRequest,
   };
 };

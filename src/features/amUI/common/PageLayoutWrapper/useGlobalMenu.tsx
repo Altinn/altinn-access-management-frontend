@@ -11,6 +11,7 @@ import {
   MenuGridIcon,
   Buildings2Icon,
   ChatExclamationmarkIcon,
+  MagnifyingGlassIcon,
 } from '@navikt/aksel-icons';
 import { useTranslation } from 'react-i18next';
 import { Link } from 'react-router';
@@ -41,9 +42,18 @@ const linkUrls = {
     no_nn: 'hjelp',
     en: 'help',
   },
+  search: {
+    no_nb: 'sok',
+    no_nn: 'sok',
+    en: 'search',
+  },
 };
 
-export const useGlobalMenu = () => {
+export const useGlobalMenu = ({
+  hideSidebarItems = false,
+}: {
+  hideSidebarItems?: boolean;
+} = {}) => {
   const { t, i18n } = useTranslation();
 
   const lang = i18n.language as 'no_nb' | 'no_nn' | 'en';
@@ -83,7 +93,7 @@ export const useGlobalMenu = () => {
       ),
       badge: { label: t('common.beta'), variant: 'base', color: 'neutral' },
     },
-    ...(isSm ? sidebarItems : []),
+    ...(isSm && !hideSidebarItems ? sidebarItems : []),
     {
       groupId: '100',
       icon: { svgElement: MenuGridIcon, theme: 'surface' },
@@ -94,6 +104,19 @@ export const useGlobalMenu = () => {
         <a
           {...props}
           href={`${getAltinnStartPageUrl()}${linkUrls['forms'][lang] ?? linkUrls['forms']['no_nb']}`}
+        />
+      ),
+    },
+    {
+      groupId: '100',
+      icon: { svgElement: MagnifyingGlassIcon, theme: 'surface' },
+      id: 'search',
+      size: 'lg',
+      title: t('header.search'),
+      as: (props) => (
+        <a
+          {...props}
+          href={`${getAltinnStartPageUrl()}${linkUrls['search'][lang] ?? linkUrls['search']['no_nb']}`}
         />
       ),
     },

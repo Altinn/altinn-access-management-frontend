@@ -7,32 +7,35 @@ import { UserItem } from '@/features/amUI/common/UserList/UserItem';
 import { UserListActions } from '../UserList/UserListActions';
 import { DelegationAction } from '../DelegationModal/EditModal';
 
-import classes from './AdvancedUserSearch.module.css';
+import classes from './UserSearch.module.css';
 import { isSubUnitByType } from '@/resources/utils/reporteeUtils';
+import type { UserActionTarget, UserSearchNode } from './types';
 
 export type titleAsType = 'h1' | 'h2' | 'h3' | 'h4' | 'h5' | 'h6' | 'p' | 'div' | 'span';
 
-export interface ConnectionsListProps {
-  users: ExtendedUser[];
+export interface UserSearchResultsProps {
+  users: UserSearchNode[];
   hasNextPage: boolean;
   goNextPage: () => void;
   availableAction: DelegationAction;
-  onRevoke?: (user: ExtendedUser) => void;
-  onDelegate?: (user: ExtendedUser) => void;
+  onRevoke?: (user: UserActionTarget) => void;
+  onDelegate?: (user: UserActionTarget) => void;
+  onSelect?: (user: UserActionTarget) => void;
   isActionLoading?: boolean;
   includeSelfAsChild?: boolean;
   delegateLabel?: string;
-  getUserLink?: (user: ExtendedUser) => string;
+  getUserLink?: (user: UserActionTarget) => string;
   titleAs?: titleAsType;
 }
 
-export const ConnectionsList: React.FC<ConnectionsListProps> = ({
+export const UserSearchResults: React.FC<UserSearchResultsProps> = ({
   users,
   hasNextPage,
   goNextPage,
   availableAction,
   onRevoke,
   onDelegate,
+  onSelect,
   isActionLoading = false,
   includeSelfAsChild = true,
   delegateLabel,
@@ -55,6 +58,11 @@ export const ConnectionsList: React.FC<ConnectionsListProps> = ({
             titleAs={titleAs}
             interactive={isInteractive}
             linkTo={getUserLink ? getUserLink(user) : undefined}
+            onSelect={
+              onSelect
+                ? () => onSelect({ id: user.id, name: user.name, type: user.type })
+                : undefined
+            }
             roleDirection='toUser'
             disableLinks={!isInteractive}
             controls={(user) => (
@@ -86,4 +94,4 @@ export const ConnectionsList: React.FC<ConnectionsListProps> = ({
   );
 };
 
-export default ConnectionsList;
+export default UserSearchResults;

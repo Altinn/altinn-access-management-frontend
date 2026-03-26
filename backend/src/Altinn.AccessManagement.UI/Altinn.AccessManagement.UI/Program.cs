@@ -64,7 +64,8 @@ builder.Services.AddAuthorizationBuilder()
     .AddPolicy(AuthzConstants.POLICY_ACCESS_MANAGEMENT_ENDUSER_READ_WITH_PASS_THROUGH, policy => policy.Requirements.Add(new EndUserResourceAccessRequirement("read", "altinn_access_management", true)))
     .AddPolicy(AuthzConstants.POLICY_ACCESS_MANAGEMENT_CLIENT_ADMINISTRATION_READ_WITH_PASS_THROUGH, policy => policy.Requirements.Add(new EndUserResourceAccessRequirement("read", "altinn_client_administration", true)))
     .AddPolicy(AuthzConstants.POLICY_ACCESS_MANAGEMENT_PROFIL_API_VARSLINGSDARESSER_FOR_VIRKSOMHETER_READ_WITH_PASS_THROUGH, policy => policy.Requirements.Add(new EndUserResourceAccessRequirement("read", "altinn-profil-api-varslingsdaresser-for-virksomheter", true)))
-    .AddPolicy(AuthzConstants.POLICY_ACCESS_MANAGEMENT_HOVEDADMIN_READ_WITH_PASS_THROUGH, policy => policy.Requirements.Add(new EndUserResourceAccessRequirement("read", "altinn_access_management_hovedadmin", true)));
+    .AddPolicy(AuthzConstants.POLICY_ACCESS_MANAGEMENT_HOVEDADMIN_READ_WITH_PASS_THROUGH, policy => policy.Requirements.Add(new EndUserResourceAccessRequirement("read", "altinn_access_management_hovedadmin", true)))
+    .AddPolicy(AuthzConstants.POLICY_ACCESS_MANAGEMENT_INSTANCE_DELEGATION_READ_WITH_PASS_THROUGH, policy => policy.Requirements.Add(new EndUserResourceAccessRequirement("read", "altinn_instance_delegation", true)));
 
 builder.Services.AddScoped<IAuthorizationHandler, EndUserResourceAccessHandler>();
 
@@ -225,6 +226,8 @@ void ConfigureServices(IServiceCollection services, IConfiguration config)
     services.AddSingleton<IAccessTokenGenerator, AccessTokenGenerator>();
     services.AddSingleton<IAccessTokenProvider, AccessTokenProvider>();
     services.AddSingleton<ISingleRightService, SingleRightService>();
+    services.AddSingleton<IRequestService, RequestService>();
+    services.AddSingleton<IInstanceService, InstanceService>();
     services.AddSingleton<IAccessPackageService, AccessPackageService>();
     services.AddSingleton<ISystemRegisterService, SystemRegisterService>();
     services.AddSingleton<ISystemUserService, SystemUserService>();
@@ -360,6 +363,24 @@ void ConfigureMockableClients(IServiceCollection services, IConfiguration config
     else
     {
         services.AddHttpClient<ISingleRightClient, SingleRightClient>();
+    }
+
+    if (mockSettings.Request)
+    {
+        services.AddHttpClient<IRequestClient, RequestClientMock>();
+    }
+    else
+    {
+        services.AddHttpClient<IRequestClient, RequestClient>();
+    }
+
+    if (mockSettings.Instance)
+    {
+        services.AddHttpClient<IInstanceClient, InstanceClientMock>();
+    }
+    else
+    {
+        services.AddHttpClient<IInstanceClient, InstanceClient>();
     }
 
     if (mockSettings.Role)

@@ -1,0 +1,25 @@
+{
+  "title": {
+    "en": "generic-access-resource",
+    "nb": "generic-access-resource",
+    "nn": "generic-access-resource"
+  },
+  "identifier": "generic-access-resource",
+  "visible": true,
+  "delegable": true,
+  "description": {
+    "en": "An Altinn 3 app",
+    "nb": "An Altinn 3 app",
+    "nn": "An Altinn 3 app"
+  },
+  "resourceType": "AltinnApp",
+  "hasCompetentAuthority": {
+    "orgcode": "TTD",
+    "organization": "",
+    "name": {
+      "en": "Testdepartementet",
+      "nb": "Testdepartementet",
+      "nn": "Testdepartementet"
+    }
+  }
+}

@@ -1,6 +1,7 @@
 import {
   CheckmarkCircleFillIcon,
   ExclamationmarkTriangleFillIcon,
+  HourglassIcon,
   InformationSquareFillIcon,
   XMarkOctagonFillIcon,
 } from '@navikt/aksel-icons';
@@ -28,6 +29,9 @@ export interface StatusSectionProps {
   delegationCheckValues?: Record<string, unknown>;
   showUndelegatedWarning?: boolean;
   undelegatedPackageName?: string;
+  isPendingRequest?: boolean;
+  cannotRequestRight?: boolean;
+  toPartyName?: string;
 }
 
 export const StatusSection = ({
@@ -39,6 +43,9 @@ export const StatusSection = ({
   delegationCheckValues,
   showUndelegatedWarning = false,
   undelegatedPackageName,
+  isPendingRequest,
+  cannotRequestRight,
+  toPartyName,
 }: StatusSectionProps) => {
   const { t } = useTranslation();
   const { fromParty, toParty } = usePartyRepresentation();
@@ -48,16 +55,20 @@ export const StatusSection = ({
     (!inheritedStatus || !inheritedStatus.length) &&
     !cannotDelegateHere &&
     !showDelegationCheckWarning &&
-    !showUndelegatedWarning
+    !showUndelegatedWarning &&
+    !isPendingRequest &&
+    !cannotRequestRight
   ) {
     return null;
   }
 
-  const formattedToPartyName = formatDisplayName({
-    fullName: toParty?.name || '',
-    type: toParty?.partyTypeName === PartyType.Person ? 'person' : 'company',
-    reverseNameOrder: false,
-  });
+  const formattedToPartyName =
+    toPartyName ??
+    formatDisplayName({
+      fullName: toParty?.name || '',
+      type: toParty?.partyTypeName === PartyType.Person ? 'person' : 'company',
+      reverseNameOrder: false,
+    });
 
   const formattedFromPartyName = formatDisplayName({
     fullName: fromParty?.name || '',
@@ -181,6 +192,34 @@ export const StatusSection = ({
               components={{ b: <strong /> }}
               values={delegationCheckValuesWithDefaults}
             />
+          </DsParagraph>
+        </div>
+      )}
+      {isPendingRequest && (
+        <div className={classes.infoLine}>
+          <HourglassIcon
+            className={classes.inheritedInfoIcon}
+            aria-hidden='true'
+          />
+          <DsParagraph data-size='sm'>
+            <Trans
+              i18nKey={'delegation_modal.request.pending_request_info'}
+              components={{ strong: <strong /> }}
+              values={{
+                partyName: formattedFromPartyName,
+              }}
+            />
+          </DsParagraph>
+        </div>
+      )}
+      {cannotRequestRight && (
+        <div className={classes.infoLine}>
+          <XMarkOctagonFillIcon
+            className={classes.dangerIcon}
+            aria-hidden='true'
+          />
+          <DsParagraph data-size='sm'>
+            {t('delegation_modal.request.cannot_request_right')}
           </DsParagraph>
         </div>
       )}

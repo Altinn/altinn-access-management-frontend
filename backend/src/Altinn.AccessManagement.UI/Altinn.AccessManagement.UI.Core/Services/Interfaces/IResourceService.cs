@@ -57,6 +57,14 @@ namespace Altinn.AccessManagement.UI.Core.Services.Interfaces
         Task<ServiceResource> GetResource(string resourceRegistryId);
 
         /// <summary>
+        ///     Integration point for retrieving a single resource by it's resource id, mapped for frontend use.
+        /// </summary>
+        /// <param name="resourceRegistryId">The identifier of the resource in the Resource Registry.</param>
+        /// <param name="languageCode">The language code.</param>
+        /// <returns>The resource if it exists.</returns>
+        Task<ServiceResourceFE> GetResource(string resourceRegistryId, string languageCode);
+
+        /// <summary>
         ///     Gets list of all resource owners.
         /// </summary>
         /// <returns>Simplified list of resource owners for frontend.</returns>

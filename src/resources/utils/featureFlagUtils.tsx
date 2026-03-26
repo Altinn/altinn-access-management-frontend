@@ -72,6 +72,10 @@ export const displayPrivDelegation = () => {
   return window.featureFlags?.displayPrivDelegation === true;
 };
 
+export const displayInstanceDelegation = () => {
+  return window.featureFlags?.displayInstanceDelegation === true;
+};
+
 export const displayAccessRequest = () => {
   return window.featureFlags?.displayAccessRequest === true;
 };
@@ -88,10 +92,10 @@ export const addAllSystemuserCustomers = () => {
   return window.featureFlags?.addAllSystemuserCustomers === true;
 };
 
-export const enableAddUserByUsername = () => {
-  return window.featureFlags?.enableAddUserByUsername === true;
-};
-
 export const enableAddSelfToSystemuser = () => {
   return window.featureFlags?.enableAddSelfToSystemuser === true;
+};
+
+export const enableRequestSingleRight = () => {
+  return window.featureFlags?.enableRequestAccess === true;
 };

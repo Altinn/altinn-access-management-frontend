@@ -34,6 +34,7 @@
     "next": "Next",
     "general_error_title": "Sorry, looks like something went wrong",
     "general_error_paragraph": "We aren't able to get the requested information, please try again later. If the error persists, please contact Altinn support.",
+    "reportee_access_missing_title": "You do not have access to this content",
     "cancel": "Cancel",
     "confirm": "Confirm",
     "complete": "Complete",
@@ -69,6 +70,7 @@
     "give_poa_for": "Give power of attorney for {{poa_object}}",
     "request_poa": "Request power of attorney",
     "request_poa_for": "Request power of attorney for {{poa_object}}",
+    "delete_request_for": "Delete request for {{poa_object}}",
     "delete_poa": "Delete power of attorney",
     "delete_poa_for": "Delete power of attorney for {{poa_object}}",
     "delete_pos_confirm": "Are you sure you want to delete the power of attorney?",
@@ -126,6 +128,7 @@
     "leave_beta": "Go to old Altinn",
     "shortcuts": "Shortcuts",
     "all_forms": "All forms and services",
+    "search": "Search in Altinn",
     "start_business": "Start and run business",
     "help": "Do you need help?"
   },
@@ -421,6 +424,7 @@
     "page_title": "User access - Altinn",
     "access_packages_title": "Access packages",
     "single_rights_title": "Single services",
+    "instances_title": "Shared from inbox",
     "roles_title": "Roles",
     "guardianships_title": "Guardianships",
     "resource_type_text": "Single right",
@@ -461,6 +465,7 @@
     "heading_subtitle": "Power of attorney given to {{name}}"
   },
   "delegation_modal": {
+    "request_service": "Which service do you want to request power of attorney for?",
     "give_service_to_name": "Give <strong>{{name}}</strong> power of attorney for new service",
     "give_package_to_name": "Give <strong>{{name}}</strong> power of attorney for new access package",
     "name_will_receive": "<strong>{{name}}</strong> will receive:",
@@ -475,6 +480,7 @@
       "access_to_all": "Access to the full service",
       "partial_access": "Access to {{count}} of {{total}} actions",
       "action_description": "These are the technical actions that the service offers. You can grant power of attorney to the entire service or choose specific actions.",
+      "request_action_description": "These are the technical actions that the service offers. You can only request power of attorney for the entire service.",
       "cannot_give_header": "You cannot grant access to:"
     },
     "specific_rights": {
@@ -510,6 +516,21 @@
       "error_status": "Status: {{status}}",
       "access_list_service": "Who can use this service is determined by {{resourceOwner}}, and {{reportee}} has not been given that opportunity. We recommend contacting {{resourceOwner}}.",
       "missing_rights": "You cannot give this power of attorney because you do not have access yourself."
+    },
+    "request": {
+      "request_service": "Request single service",
+      "delete_request": "Delete request",
+      "pending_request_info": "Waiting for someone in <strong>{{partyName}}</strong> to process your request",
+      "cannot_request_right": "You cannot request power of attorney for this service.",
+      "sent_request_success": "Request for power of attorney for {{resource}} has been sent",
+      "sent_request_error": "Could not send request for power of attorney for {{resource}}",
+      "withdraw_request_success": "Request for power of attorney for {{resource}} has been deleted",
+      "withdraw_request_error": "Could not delete request for power of attorney for {{resource}}",
+      "sent_requests_item": "Access request",
+      "active_access_request_one": "{{count}} active",
+      "active_access_request_other": "{{count}} active",
+      "view_requests": "View requests",
+      "sent_requests_modal_header": "Your request for access to {{partyName}} has been sent. You will be notified when it is approved."
     }
   },
   "status_section": {
@@ -526,7 +547,6 @@
   },
   "new_user_modal": {
     "not_found_error_person": "Did not find a user with the given name and national identity number or username. Please check that you entered the correct information.",
-    "not_found_error_person_ssn": "Did not find a user with the given name and national identity number. Please check that you entered the correct information.",
     "not_found_error_org": "Did not find an organization with the given number. Please check that you entered the correct information.",
     "too_many_requests_error": "You have been blocked due to too many failing attempts. Try again in an hour.",
     "person": "Person",
@@ -919,7 +939,27 @@
   },
   "poa_overview_page": {
     "page_title": "Powers of attorney overview - Altinn",
-    "heading": "Powers of attorney overview for {{name}}"
+    "heading": "Powers of attorney overview for {{name}}",
+    "no_access_title": "You do not have access to this page",
+    "instances_tab": {
+      "search_label": "Search for inbox items",
+      "no_results": "No inbox items found.",
+      "no_search_results": "No matches for inbox items."
+    }
+  },
+  "instance_detail_page": {
+    "document_title": "Shared from inbox",
+    "provider_name": "to {{name}}",
+    "back_to_inbox": "Go to inbox",
+    "see_in_inbox": "View in inbox",
+    "description": "Here you can share a message/form from the inbox or get an overview of who already has access. Use the search field to search for people/organizations or add them as a new user.",
+    "no_users": "No users have access.",
+    "no_access_description": "<b>You do not have the authority to share this service/message with others.</b> To share and grant access from the inbox, you must have the access package: Access manager for single messages, forms and dialogs.",
+    "instance_admin_edit_disclaimer": "Only Access Managers or Main Administrators can edit an access grant after it has been given to a user.",
+    "add_user_modal": {
+      "heading": "Grant access to new user",
+      "user_will_receive": "The user will receive:"
+    }
   },
   "poa_status": {
     "no_permissions": "You have to give power of attorney"
@@ -984,9 +1024,11 @@
     "no_sent_requests": "No sent requests",
     "process_request": "Process request",
     "request_consent": "Requests consent",
+    "asks_for_number_one": "Requests {{count}} power of attorney",
+    "asks_for_number_other": "Requests {{count}} powers of attorney",
     "request_poa": "Requests power of attorney",
     "request_systemuser": "Requests to create system user",
-    "error_loading_requests": "Could not load received requests",
-    "error_partial_loading_requests": "Could not load all received requests"
+    "error_loading_requests": "Could not load requests",
+    "error_partial_loading_requests": "Could not load all requests"
   }
 }

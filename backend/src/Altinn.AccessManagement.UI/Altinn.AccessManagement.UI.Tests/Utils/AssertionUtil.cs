@@ -7,7 +7,10 @@ using Altinn.AccessManagement.UI.Core.Models.Common;
 using Altinn.AccessManagement.UI.Core.Models.Consent;
 using Altinn.AccessManagement.UI.Core.Models.Consent.Frontend;
 using Altinn.AccessManagement.UI.Core.Models.Delegation.Frontend;
+using Altinn.AccessManagement.UI.Core.Models.InstanceDelegation;
+using Altinn.AccessManagement.UI.Core.Models.InstanceDelegation.Frontend;
 using Altinn.AccessManagement.UI.Core.Models.Profile;
+using Altinn.AccessManagement.UI.Core.Models.Request.Frontend;
 using Altinn.AccessManagement.UI.Core.Models.ResourceRegistry;
 using Altinn.AccessManagement.UI.Core.Models.ResourceRegistry.Frontend;
 using Altinn.AccessManagement.UI.Core.Models.Role;
@@ -226,10 +229,44 @@ namespace Altinn.AccessManagement.UI.Tests.Utils
             Assert.Equal(expected.Name, actual.Name);
             Assert.Equal(expected.Description, actual.Description);
             Assert.Equal(expected.ProviderId, actual.ProviderId);
+            Assert.Equal(expected.RefId, actual.RefId);
+            Assert.Equal(expected.TypeId, actual.TypeId);
             Assert.Equal(expected.Type.Name, actual.Type.Name);
+            Assert.Equal(expected.Type.Id, actual.Type.Id);
             Assert.NotNull(expected.Provider);
             Assert.NotNull(actual.Provider);
-            Assert.Equal(expected.Provider.Name, actual.Provider.Name);
+            AssertEqual(expected.Provider, actual.Provider);
+        }
+
+        /// <summary>
+        ///     Assert that two <see cref="InstanceRights" /> have the same property values.
+        /// </summary>
+        /// <param name="expected">An instance with the expected values.</param>
+        /// <param name="actual">The instance to verify.</param>
+        public static void AssertEqual(InstanceRights expected, InstanceRights actual)
+        {
+            Assert.NotNull(actual);
+            Assert.NotNull(expected);
+
+            AssertEqual(expected.Resource, actual.Resource);
+            AssertEqual(expected.Instance, actual.Instance);
+            AssertCollections(expected.DirectRights, actual.DirectRights, AssertEqual);
+            AssertCollections(expected.IndirectRights, actual.IndirectRights, AssertEqual);
+        }
+
+        /// <summary>
+        ///     Assert that two <see cref="InstanceDelegation" /> have the same property values.
+        /// </summary>
+        /// <param name="expected">An instance with the expected values.</param>
+        /// <param name="actual">The instance to verify.</param>
+        public static void AssertEqual(InstanceDelegation expected, InstanceDelegation actual)
+        {
+            Assert.NotNull(actual);
+            Assert.NotNull(expected);
+
+            AssertEqual(expected.Resource, actual.Resource);
+            AssertEqual(expected.Instance, actual.Instance);
+            AssertCollections(expected.Permissions, actual.Permissions, AssertEqual);
         }
 
         /// <summary>
@@ -260,6 +297,12 @@ namespace Altinn.AccessManagement.UI.Tests.Utils
         /// <param name="actual">The instance to verify.</param>
         public static void AssertEqual(List<ContactPoint> expected, List<ContactPoint> actual)
         {
+            if (actual == null)
+            {
+                Assert.Null(expected);
+                return;
+            }
+
             Assert.NotNull(actual);
             Assert.NotNull(expected);
 
@@ -357,6 +400,28 @@ namespace Altinn.AccessManagement.UI.Tests.Utils
             Assert.Equal(expected.PartyType, actual.PartyType);
             AssertCollections(expected.Roles, actual.Roles, Assert.Equal);
 
+        }
+
+        public static void AssertEqual(SimplifiedParty expected, SimplifiedParty actual)
+        {
+            Assert.NotNull(actual);
+            Assert.NotNull(expected);
+
+            Assert.Equal(expected.Id, actual.Id);
+            Assert.Equal(expected.Name, actual.Name);
+            Assert.Equal(expected.Type, actual.Type);
+            Assert.Equal(expected.Variant, actual.Variant);
+            Assert.Equal(expected.OrganizationIdentifier, actual.OrganizationIdentifier);
+            Assert.Equal(expected.IsDeleted, actual.IsDeleted);
+        }
+
+        public static void AssertEqual(SimplifiedConnection expected, SimplifiedConnection actual)
+        {
+            Assert.NotNull(actual);
+            Assert.NotNull(expected);
+
+            AssertEqual(expected.Party, actual.Party);
+            AssertCollections(expected.Connections, actual.Connections, AssertEqual);
         }
 
         private static void AssertEqual(IdValuePair expected, IdValuePair actual)
@@ -459,8 +524,19 @@ namespace Altinn.AccessManagement.UI.Tests.Utils
             AssertEqual(expected.Via, actual.Via);
             AssertEqual(expected.Role, actual.Role);
             AssertEqual(expected.ViaRole, actual.ViaRole);
-
+            AssertEqual(expected.Reason, actual.Reason);
         }
+
+        public static void AssertEqual(DelegationInstance expected, DelegationInstance actual)
+        {
+            Assert.NotNull(actual);
+            Assert.NotNull(expected);
+
+            Assert.Equal(expected.RefId, actual.RefId);
+            Assert.Equal(expected.Type?.Id, actual.Type?.Id);
+            Assert.Equal(expected.Type?.Name, actual.Type?.Name);
+        }
+
 
         public static void AssertEqual(CompactEntity expected, CompactEntity actual)
         {
@@ -484,6 +560,18 @@ namespace Altinn.AccessManagement.UI.Tests.Utils
         {
             Assert.Equal(expected?.Id, actual?.Id);
             Assert.Equal(expected?.Code, actual?.Code);
+            Assert.Equal(expected?.Urn, actual?.Urn);
+            Assert.Equal(expected?.LegacyUrn, actual?.LegacyUrn);
+        }
+
+        public static void AssertEqual(RightAccess expected, RightAccess actual)
+        {
+            Assert.NotNull(actual);
+            Assert.NotNull(expected);
+
+            AssertEqual(expected.Right, actual.Right);
+            AssertEqual(expected.Reason, actual.Reason);
+            AssertCollections(expected.Permissions, actual.Permissions, AssertEqual);
         }
 
         public static void AssertEqual(RegisteredSystemFE expected, RegisteredSystemFE actual)
@@ -891,6 +979,68 @@ namespace Altinn.AccessManagement.UI.Tests.Utils
             Assert.NotNull(expected);
 
             Assert.Equal(expected.Key, actual.Key);
+            Assert.Equal(expected.Name, actual.Name);
+        }
+
+        public static void AssertEqual(Reason expected, Reason actual)
+        {
+            if (expected == null)
+            {
+                Assert.Null(actual);
+                return;
+            }
+
+            Assert.NotNull(actual);
+            AssertCollections(expected.Items, actual.Items, AssertEqual);
+        }
+
+        public static void AssertEqual(ReasonItem expected, ReasonItem actual)
+        {
+            Assert.NotNull(actual);
+            Assert.NotNull(expected);
+
+            Assert.Equal(expected.Name, actual.Name);
+            Assert.Equal(expected.Description, actual.Description);
+        }
+
+        public static void AssertEqual(RequestFE expected, RequestFE actual)
+        {
+            Assert.NotNull(actual);
+            Assert.NotNull(expected);
+
+            Assert.Equal(expected.Id, actual.Id);
+            Assert.Equal(expected.From.Id, actual.From.Id);
+            Assert.Equal(expected.To.Id, actual.To.Id);
+            Assert.Equal(expected.ResourceId, actual.ResourceId);
+            Assert.Equal(expected.Type, actual.Type);
+            Assert.Equal(expected.LastUpdated, actual.LastUpdated);
+            Assert.Equal(expected.Status, actual.Status);
+        }
+
+        public static void AssertEqual(EnrichedResourceRequest expected, EnrichedResourceRequest actual)
+        {
+            Assert.NotNull(actual);
+            Assert.NotNull(expected);
+
+            Assert.Equal(expected.Id, actual.Id);
+            Assert.Equal(expected.From.Id, actual.From.Id);
+            Assert.Equal(expected.To.Id, actual.To.Id);
+            Assert.Equal(expected.ResourceId, actual.ResourceId);
+            Assert.Equal(expected.Type, actual.Type);
+            Assert.Equal(expected.Status, actual.Status);
+            Assert.Equal(expected.LastUpdated, actual.LastUpdated);
+            AssertEqual(expected.Resource, actual.Resource);
+        }
+
+        private static void AssertEqual(Provider expected, Provider actual)
+        {
+            if (expected == null)
+            {
+                Assert.Null(actual);
+                return;
+            }
+
+            Assert.NotNull(actual);
             Assert.Equal(expected.Name, actual.Name);
         }
     }

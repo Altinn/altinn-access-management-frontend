@@ -5,6 +5,7 @@ import type { ExtendedUser } from '@/rtk/features/userInfoApi';
 
 import { useFilteredUsers } from './useFilteredUsers';
 import { Connection } from '@/rtk/features/connectionApi';
+import { mapConnectionsToUserSearchNodes } from '../UserSearch/connectionMapper';
 
 const mockConnections: Connection[] = [
   {
@@ -123,11 +124,15 @@ const mockConnections: Connection[] = [
     sortKey: 'TYKKHUDET IDIOTSIKKER STRUTS LTD',
   },
 ];
+const mappedMockConnections = mapConnectionsToUserSearchNodes(mockConnections);
 
 describe('useFilteredUsers', () => {
   it('should return filtered users based on search string', () => {
     const { result } = renderHook(() =>
-      useFilteredUsers({ connections: mockConnections, searchString: 'Alice' }),
+      useFilteredUsers({
+        users: mappedMockConnections,
+        searchString: 'Alice',
+      }),
     );
 
     expect(result.current.users).toHaveLength(2);
@@ -137,7 +142,10 @@ describe('useFilteredUsers', () => {
 
   it('should return all users when search string is empty', () => {
     const { result } = renderHook(() =>
-      useFilteredUsers({ connections: mockConnections, searchString: '' }),
+      useFilteredUsers({
+        users: mappedMockConnections,
+        searchString: '',
+      }),
     );
 
     expect(result.current.users).toHaveLength(5);
@@ -145,7 +153,10 @@ describe('useFilteredUsers', () => {
 
   it('should handle organization number search correctly', () => {
     const { result } = renderHook(() =>
-      useFilteredUsers({ connections: mockConnections, searchString: '789' }),
+      useFilteredUsers({
+        users: mappedMockConnections,
+        searchString: '789',
+      }),
     );
 
     expect(result.current.users).toHaveLength(1);
@@ -154,16 +165,20 @@ describe('useFilteredUsers', () => {
 
   it('should return hasNextPage: false when list contains less than 10 users', () => {
     const { result } = renderHook(() =>
-      useFilteredUsers({ connections: mockConnections, searchString: '' }),
+      useFilteredUsers({
+        users: mappedMockConnections,
+        searchString: '',
+      }),
     );
     expect(result.current.hasNextPage).toBe(false);
   });
 
   it('should return hasNextPage: true when list contains more than 10 users', () => {
     const connections = [...mockConnections, ...mockConnections, ...mockConnections];
+    const users = mapConnectionsToUserSearchNodes(connections);
     const { result } = renderHook(() =>
       useFilteredUsers({
-        connections,
+        users,
         searchString: '',
       }),
     );
@@ -176,9 +191,10 @@ describe('useFilteredUsers', () => {
       ...mockConnections,
       ...mockConnections,
     ] as Connection[];
+    const users = mapConnectionsToUserSearchNodes(connections);
     const { result } = renderHook(() =>
       useFilteredUsers({
-        connections,
+        users,
         searchString: '',
       }),
     );
@@ -190,14 +206,20 @@ describe('useFilteredUsers', () => {
 
   it('should return no users when search string does not match any user', () => {
     const { result } = renderHook(() =>
-      useFilteredUsers({ connections: mockConnections, searchString: 'NonExistent' }),
+      useFilteredUsers({
+        users: mappedMockConnections,
+        searchString: 'NonExistent',
+      }),
     );
     expect(result.current.users).toHaveLength(0);
   });
 
   it('should handle inheriting users correctly', () => {
     const { result } = renderHook(() =>
-      useFilteredUsers({ connections: mockConnections, searchString: 'InheritAlice' }),
+      useFilteredUsers({
+        users: mappedMockConnections,
+        searchString: 'InheritAlice',
+      }),
     );
 
     expect(result.current.users).toHaveLength(1);
@@ -209,7 +231,10 @@ describe('useFilteredUsers', () => {
 
   it('sorts by sort key before type ordering when listing users', () => {
     const { result } = renderHook(() =>
-      useFilteredUsers({ connections: mockConnections, searchString: '' }),
+      useFilteredUsers({
+        users: mappedMockConnections,
+        searchString: '',
+      }),
     );
 
     expect(result.current.users.map((user) => user.name)).toEqual([
@@ -273,7 +298,8 @@ describe('useFilteredUsers', () => {
       },
     ];
 
-    const { result } = renderHook(() => useFilteredUsers({ connections, searchString: '' }));
+    const users = mapConnectionsToUserSearchNodes(connections);
+    const { result } = renderHook(() => useFilteredUsers({ users, searchString: '' }));
 
     expect(result.current.users.map((user) => user.name)).toEqual([
       'Newer Person',
@@ -284,7 +310,10 @@ describe('useFilteredUsers', () => {
 
   it('should keep all children when parent matches search string', () => {
     const { result } = renderHook(() =>
-      useFilteredUsers({ connections: mockConnections, searchString: 'Lorem' }),
+      useFilteredUsers({
+        users: mappedMockConnections,
+        searchString: 'Lorem',
+      }),
     );
 
     expect(result.current.users).toHaveLength(1);
@@ -324,9 +353,14 @@ describe('useFilteredUsers', () => {
         connections: [],
       },
     ];
+    const indirectUsers = mapConnectionsToUserSearchNodes(indirectConnections);
 
     const { result } = renderHook(() =>
-      useFilteredUsers({ connections: mockConnections, indirectConnections, searchString: '' }),
+      useFilteredUsers({
+        users: mappedMockConnections,
+        indirectUsers,
+        searchString: '',
+      }),
     );
 
     // Alice should be removed from indirect users because she exists directly
@@ -352,9 +386,14 @@ describe('useFilteredUsers', () => {
       }));
 
     const indirectConnections = makeIndirect(12);
+    const indirectUsers = mapConnectionsToUserSearchNodes(indirectConnections);
 
     const { result } = renderHook(() =>
-      useFilteredUsers({ connections: mockConnections, indirectConnections, searchString: '' }),
+      useFilteredUsers({
+        users: mappedMockConnections,
+        indirectUsers,
+        searchString: '',
+      }),
     );
 
     // Page size is 10

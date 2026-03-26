@@ -72,6 +72,11 @@ namespace Altinn.AccessManagement.UI.Core.Configuration
         public bool DisplayPrivDelegation { get; set; }
 
         /// <summary>
+        /// Whether to display the instance delegation feature
+        /// </summary>
+        public bool DisplayInstanceDelegation { get; set; }
+
+        /// <summary>
         /// Whether to display the access request feature
         /// </summary>
         public bool DisplayAccessRequest { get; set; }
@@ -87,13 +92,13 @@ namespace Altinn.AccessManagement.UI.Core.Configuration
         public bool AddAllSystemuserCustomers { get; set; }
 
         /// <summary>
-        /// Whether to enable adding users by username
-        /// </summary>
-        public bool EnableAddUserByUsername { get; set; }
-
-        /// <summary>
         /// Whether to enable adding own organization to agent system user is enabled
         /// </summary>
         public bool EnableAddSelfToSystemuser { get; set; }
+        
+        /// <summary>
+        /// Whether to enable request access
+        /// </summary>
+        public bool EnableRequestAccess { get; set; }
     }
 }

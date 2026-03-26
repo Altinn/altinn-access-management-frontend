@@ -358,5 +358,22 @@ namespace Altinn.AccessManagement.UI.Controllers
 
             return Ok(false);
         }
+
+        /// <summary>
+        /// Endpoint for checking if the authenticated user has access to the altinn_instance_delegation resource.
+        /// </summary>
+        [HttpGet]
+        [Authorize(Policy = AuthzConstants.POLICY_ACCESS_MANAGEMENT_INSTANCE_DELEGATION_READ_WITH_PASS_THROUGH)]
+        [Route("isInstanceAdmin")]
+        public ActionResult<bool> IsInstanceAdmin()
+        {
+            if (_httpContextAccessor.HttpContext.Items.TryGetValue("HasRequestedPermission", out object hasPermissionObj) &&
+                hasPermissionObj is bool hasPermission)
+            {
+                return Ok(hasPermission);
+            }
+
+            return Ok(false);
+        }
     }
 }

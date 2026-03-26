@@ -1,8 +1,6 @@
-import { getHostUrl, getAltinnStartPageUrl } from '@/resources/utils/pathUtils';
-import { GeneralPath } from '@/routes/paths';
+import { getAltinnStartPageUrl } from '@/resources/utils/pathUtils';
 import { HeaderProps, useAccountSelector } from '@altinn/altinn-components';
 import { AccountSelectorProps } from '@altinn/altinn-components/dist/types/lib/components/GlobalHeader/AccountSelector';
-import { GlobalSearchProps } from '@altinn/altinn-components/dist/types/lib/components/GlobalHeader/GlobalSearch';
 import { useGlobalMenu } from './useGlobalMenu';
 import { useTranslation } from 'react-i18next';
 import {
@@ -18,23 +16,26 @@ import { GlobalHeaderProps } from '@altinn/altinn-components/dist/types/lib/comp
 import { useEffect, useState } from 'react';
 import { useUpdateSelectedLanguageMutation } from '@/rtk/features/settingsApi';
 import { displayDeletedAccountToggle } from '@/resources/utils/featureFlagUtils';
+import {
+  redirectToChangeReporteeAndRedirect,
+  getDefaultChangeReporteeRedirectTarget,
+} from '@/resources/utils/changeReporteeUtils';
 
-export const handleSelectAccount = (accountUuid: string) => {
-  // always redirect to start-page when changing account
-  const redirectUrl = new URL(`${window.location.origin}${GeneralPath.BasePath}`).toString();
-  const changeUrl = new URL(`${getHostUrl()}ui/Reportee/ChangeReporteeAndRedirect/`);
-  const queryKey = 'P';
-  changeUrl.searchParams.set(queryKey, accountUuid);
-  changeUrl.searchParams.set('goTo', redirectUrl);
-  (window as Window).open(changeUrl.toString(), '_self');
+export const handleSelectAccount = (
+  accountUuid: string,
+  goTo = getDefaultChangeReporteeRedirectTarget(),
+) => {
+  redirectToChangeReporteeAndRedirect(accountUuid, goTo);
 };
 
 export const useHeader = ({
   openAccountMenu = false,
   hideAccountSelector = false,
+  hideSidebarItems = false,
 }: {
   openAccountMenu?: boolean;
   hideAccountSelector?: boolean;
+  hideSidebarItems?: boolean;
 }) => {
   const { t, i18n } = useTranslation();
   const [shouldOpenAccountMenu, setShouldOpenAccountMenu] = useState<boolean>(openAccountMenu);
@@ -52,7 +53,7 @@ export const useHeader = ({
   const [removeFavoriteActorUuid] = useRemoveFavoriteActorUuidMutation();
   const [updateShowDeleted] = useUpdateShowDeletedMutation();
 
-  const { globalMenu, desktopMenu, mobileMenu } = useGlobalMenu();
+  const { globalMenu, desktopMenu, mobileMenu } = useGlobalMenu({ hideSidebarItems });
   const [updateSelectedLanguage] = useUpdateSelectedLanguageMutation();
 
   useEffect(() => {
@@ -139,13 +140,6 @@ export const useHeader = ({
     },
   });
 
-  const search: GlobalSearchProps = {
-    onSearch: (value: string) => {
-      const encodedValue = encodeURIComponent(value);
-      window.location.href = `${getHostUrl()}sok?q=${encodedValue}`;
-    },
-  };
-
   const accountSelector: AccountSelectorProps = {
     ...accountSelectorData,
     forceOpenFullScreen: shouldOpenAccountMenu,
@@ -165,7 +159,6 @@ export const useHeader = ({
     globalMenu: globalMenu,
     desktopMenu: desktopMenu,
     mobileMenu: mobileMenu,
-    globalSearch: search,
     accountSelector: accountSelector,
   };
   return { header, languageCode };

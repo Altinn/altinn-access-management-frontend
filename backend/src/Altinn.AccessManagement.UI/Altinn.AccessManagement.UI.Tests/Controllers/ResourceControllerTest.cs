@@ -82,6 +82,51 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
         }
 
         /// <summary>
+        ///     Test case: GetResource returns a single resource by id.
+        ///     Expected: GetResource returns the resource mapped to the frontend model in the authenticated user's language.
+        /// </summary>
+        [Fact]
+        public async Task GetResource_validId_ReturnsResource()
+        {
+            // Arrange
+            string unitTestFolder = Path.GetDirectoryName(new Uri(typeof(ResourceControllerTest).Assembly.Location).LocalPath);
+            string path = Path.Combine(unitTestFolder, "Data", "ExpectedResults", "ResourceRegistry", "ske-innrapportering-boligsameie.json");
+            string token = PrincipalUtil.GetToken(1337, 501337);
+            _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+            ServiceResourceFE expectedResource = Util.GetMockData<ServiceResourceFE>(path);
+            Assert.NotNull(expectedResource);
+
+            // Act
+            HttpResponseMessage response = await _client.GetAsync($"accessmanagement/api/v1/resources?resourceId={Uri.EscapeDataString(expectedResource.Identifier)}");
+
+            // Assert
+            Assert.Equal(HttpStatusCode.OK, response.StatusCode);
+
+            ServiceResourceFE actualResource = JsonSerializer.Deserialize<ServiceResourceFE>(await response.Content.ReadAsStringAsync(), options);
+            AssertionUtil.AssertEqual(expectedResource, actualResource);
+            Assert.Equal(expectedResource.ResourceOwnerLogoUrl, actualResource.ResourceOwnerLogoUrl);
+            Assert.Equal(expectedResource.ResourceOwnerOrgcode, actualResource.ResourceOwnerOrgcode);
+        }
+
+        /// <summary>
+        ///     Test case: GetResource with an unknown id.
+        ///     Expected: GetResource returns not found.
+        /// </summary>
+        [Fact]
+        public async Task GetResource_invalidId_ReturnsNotFound()
+        {
+            // Arrange
+            string token = PrincipalUtil.GetToken(1337, 501337);
+            _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+
+            // Act
+            HttpResponseMessage response = await _client.GetAsync("accessmanagement/api/v1/resources?resourceId=does-not-exist");
+
+            // Assert
+            Assert.Equal(HttpStatusCode.NotFound, response.StatusCode);
+        }
+
+        /// <summary>
         ///     Test case: PaginatedSearch with pagination (no search string or filters)
         ///     Expected: PaginatedSearch returns a list of all single rights resources in paginated form with language filtered
         ///     for the authenticated users selected language

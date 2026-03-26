@@ -31,6 +31,11 @@ namespace Altinn.AccessManagement.UI.Core.Configuration
         public bool SingleRights { get; set; }
 
         /// <summary>
+        /// Set to mock InstanceClient during runtime
+        /// </summary>
+        public bool Instance { get; set; }
+
+        /// <summary>
         /// Set to mock RoleClient during runtime
         /// </summary>
         public bool Role { get; set; }
@@ -91,6 +96,11 @@ namespace Altinn.AccessManagement.UI.Core.Configuration
         public bool AltinnCdn { get; set; }
 
         /// <summary>
+        /// Set to run RequestClient locally during runtime
+        /// </summary>
+        public bool Request { get; set; }
+
+        /// <summary>
         /// Default constructor
         /// </summary>
         public MockSettings()
@@ -103,7 +113,7 @@ namespace Altinn.AccessManagement.UI.Core.Configuration
         /// <param name="value">The boolean value to which all memebers will be set</param>
         public MockSettings(bool value)
         {
-            AccessManagement = AccessManagement_V0 = AccessPackage = Profile = Register = ResourceRegistry = KeyVault = ClientDelegation = value;
+            AccessManagement = AccessManagement_V0 = AccessPackage = SingleRights = Instance = Profile = Register = ResourceRegistry = KeyVault = ClientDelegation = value;
         }
     }
 }

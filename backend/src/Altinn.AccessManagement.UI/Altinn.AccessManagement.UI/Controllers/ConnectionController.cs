@@ -281,5 +281,43 @@ namespace Altinn.AccessManagement.UI.Controllers
                 return new ObjectResult(ProblemDetailsFactory.CreateProblemDetails(HttpContext, (int?)ex.StatusCode, "Unexpected HttpStatus response"));
             }
         }
+
+        /// <summary>
+        /// Gets simplified connections for a party.
+        /// Limited endpoint for instance admins without full admin access.
+        /// Proxies to backend: GET enduser/connections/users
+        /// </summary>
+        /// <param name="party">The party UUID.</param>
+        /// <returns>List of simplified connections.</returns>
+        [HttpGet]
+        [Authorize]
+        [Route("simplified")]
+        public async Task<ActionResult<List<SimplifiedConnection>>> GetSimplifiedConnections([FromQuery] Guid party)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            if (party == Guid.Empty)
+            {
+                return BadRequest("Query parameter 'party' must be a non-empty GUID.");
+            }
+
+            try
+            {
+                var connections = await _connectionService.GetSimplifiedConnections(party);
+                return Ok(connections);
+            }
+            catch (HttpStatusException ex)
+            {
+                return new ObjectResult(ProblemDetailsFactory.CreateProblemDetails(HttpContext, (int?)ex.StatusCode, "Unexpected HttpStatus response", detail: ex.Message));
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "GetSimplifiedConnections failed unexpectedly");
+                return new ObjectResult(ProblemDetailsFactory.CreateProblemDetails(HttpContext));
+            }
+        }
     }
 }

@@ -15,12 +15,13 @@ declare global {
       displayRequestsPage: boolean;
       displayDeletedAccountToggle: boolean;
       displayPrivDelegation: boolean;
+      displayInstanceDelegation: boolean;
       displayAccessRequest: boolean;
       displaySubConnections: boolean;
       displayRoles: boolean;
       addAllSystemuserCustomers: boolean;
-      enableAddUserByUsername: boolean;
       enableAddSelfToSystemuser: boolean;
+      enableRequestAccess: boolean;
     };
   }
 }

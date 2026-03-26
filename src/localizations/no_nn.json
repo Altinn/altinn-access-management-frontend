@@ -33,6 +33,7 @@
     "next": "Neste",
     "general_error_title": "Beklagar, men det har skjedd ein feil",
     "general_error_paragraph": "Vi klarar ikkje å hente informasjonen du ser etter akkurat no. Prøv igjen seinare. Om problemet held fram, kan du kontakte Altinn brukarservice på telefon 75 00 60 00.",
+    "reportee_access_missing_title": "Du har ikkje tilgang til dette innhaldet",
     "cancel": "Avbryt",
     "confirm": "Stadfest",
     "complete": "Fullfør",
@@ -68,6 +69,7 @@
     "give_poa_for": "Gi fullmakt for {{poa_object}}",
     "request_poa": "Be om fullmakt",
     "request_poa_for": "Be om fullmakt for {{poa_object}}",
+    "delete_request_for": "Slett forespørsel for {{poa_object}}",
     "delete_poa": "Slett fullmakt",
     "delete_poa_for": "Slett fullmakt for {{poa_object}}",
     "delete_pos_confirm": "Er du sikker på at du vil slette denne?",
@@ -123,6 +125,7 @@
     "leave_beta": "Til gamle Altinn",
     "shortcuts": "Snarvegar",
     "all_forms": "Alle skjema og tenester",
+    "search": "Søk i Altinn",
     "start_business": "Starte og drive bedrift",
     "help": "Treng du hjelp?"
   },
@@ -418,6 +421,7 @@
     "page_title": "Brukertilgang - Altinn",
     "access_packages_title": "Tilgangspakkar",
     "single_rights_title": "Enkelttenester",
+    "instances_title": "Delt frå innboks",
     "roles_title": "Roller",
     "guardianships_title": "Vergemål",
     "resource_type_text": "Enkeltteneste",
@@ -458,6 +462,7 @@
     "heading_subtitle": "fullmakter gitt til {{name}}"
   },
   "delegation_modal": {
+    "request_service": "Kva for enkelttenester ønsker du fullmakt til?",
     "give_service_to_name": "Gi <strong>{{name}}</strong> fullmakt til ny teneste",
     "give_package_to_name": "Gi <strong>{{name}}</strong> fullmakt til ny tilgangspakke",
     "name_will_receive": "<strong>{{name}}</strong> vil få:",
@@ -472,6 +477,7 @@
       "access_to_all": "Tilgang til heile tenesten",
       "partial_access": "Tilgang til {{count}} av {{total}} handlingar",
       "action_description": "Her ser du dei tekniske handlingane som tenesta tilbyr. Du kan gi fullmakt til heile tenesta eller velje spesifikke handlingar.",
+      "request_action_description": "Her ser du dei tekniske handlingane som tenesta tilbyr. Du kan berre be om fullmakt til heile tenesta.",
       "cannot_give_header": "Du kan ikkje gi tilgang til:"
     },
     "specific_rights": {
@@ -507,6 +513,21 @@
       "error_status": "Status: {{status}}",
       "access_list_service": "Kven som får bruke denne tenesta blir bestemt av {{resourceOwner}}, og {{reportee}} har ikkje fått den moglegheita. Vi tilrår å ta kontakt med {{resourceOwner}}.",
       "missing_rights": "Du kan ikkje gi denne fullmakta til andre fordi du manglar tilgang til den sjølv."
+    },
+    "request": {
+      "request_service": "Be om enkeltteneste",
+      "delete_request": "Slett førespurnad",
+      "pending_request_info": "Ventar på at nokon i <strong>{{partyName}}</strong> skal handtere di førespurnad om fullmakt",
+      "cannot_request_right": "Du kan ikkje be om fullmakt til denne tenesten.",
+      "sent_request_success": "Førespurnad om fullmakt til {{resource}} er sendt",
+      "sent_request_error": "Kunne ikkje sende førespurnad om fullmakt til {{resource}}",
+      "withdraw_request_success": "Førespurnad om fullmakt til {{resource}} er sletta",
+      "withdraw_request_error": "Kunne ikkje slette førespurnad om fullmakt til {{resource}}",
+      "sent_requests_item": "Førespurnad om tilgang",
+      "active_access_request_one": "{{count}} aktiv",
+      "active_access_request_other": "{{count}} aktive",
+      "view_requests": "Sjå førespurnader",
+      "sent_requests_modal_header": "Di førespurnad om tilgangar til {{partyName}} er sendt. Du vil få beskjed når dei er godkjende."
     }
   },
   "status_section": {
@@ -523,7 +544,6 @@
   },
   "new_user_modal": {
     "not_found_error_person": "Fann ingen brukar med dette fødselsnr./brukarnamnet og namnet. Sjekk at informasjonen er korrekt.",
-    "not_found_error_person_ssn": "Fann ingen brukar med dette fødselsnummeret og namnet. Sjekk at informasjonen er korrekt.",
     "not_found_error_org": "Fant ingen organisasjon med dette organisasjonsnummeret. Sjekk at informasjonen er korrekt.",
     "too_many_requests_error": "Du er blitt sperra pga. for mange feilande forsøk. Du kan prøve igjen om ein time.",
     "person": "Person",
@@ -916,7 +936,27 @@
   },
   "poa_overview_page": {
     "page_title": "Fullmaktsoversikt - Altinn",
-    "heading": "Fullmaktsoversikt for {{name}}"
+    "heading": "Fullmaktsoversikt for {{name}}",
+    "no_access_title": "Du har ikkje tilgang til denne sida",
+    "instances_tab": {
+      "search_label": "Søk etter delingar frå innboks",
+      "no_results": "Ingen element frå innboks funne.",
+      "no_search_results": "Ingen treff på element frå innboks."
+    }
+  },
+  "instance_detail_page": {
+    "document_title": "Delt frå innboks",
+    "provider_name": "til {{name}}",
+    "back_to_inbox": "Gå til innboks",
+    "see_in_inbox": "Sjå i innboks",
+    "description": "Her kan du dele ei melding/eit skjema frå innboksen eller få oversikt over kven som allereie har tilgang. Bruk søkjefeltet til å søkje etter personar/verksemder eller legg dei til som ny brukar.",
+    "no_users": "Ingen brukarar har tilgang.",
+    "no_access_description": "<b>Du har ikkje fullmakt til å gi vidare denne tenesta/meldinga.</b> For å kunne dele og gi tilgang frå innboksen må du ha tilgangspakka: Tilgangsstyrar for enkeltmeldingar, skjema og dialogar.",
+    "instance_admin_edit_disclaimer": "Berre Tilgangsstyrarar eller Hovudadministratorar kan redigere ei fullmakt etter ho er gitt til ein brukar.",
+    "add_user_modal": {
+      "heading": "Gi fullmakt til ny brukar",
+      "user_will_receive": "Brukaren vil få:"
+    }
   },
   "poa_status": {
     "no_permissions": "Du må gi fullmakt"
@@ -981,9 +1021,11 @@
     "no_sent_requests": "Ingen sendte førespurnader",
     "process_request": "Behandle førespurnad",
     "request_consent": "Ber om samtykke",
+    "asks_for_number_one": "Ber om {{count}} fullmakt",
+    "asks_for_number_other": "Ber om {{count}} fullmakter",
     "request_poa": "Ber om fullmakt",
     "request_systemuser": "Ber om å opprette systembruker",
-    "error_loading_requests": "Kunne ikkje laste mottatte førespurnader",
-    "error_partial_loading_requests": "Kunne ikkje laste alle mottatte førespurnader"
+    "error_loading_requests": "Kunne ikkje laste førespurnader",
+    "error_partial_loading_requests": "Kunne ikkje laste alle førespurnader"
   }
 }

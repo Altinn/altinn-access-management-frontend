@@ -2,26 +2,28 @@ import React, { useMemo, useState } from 'react';
 import { DsSearch, DsParagraph, formatDisplayName } from '@altinn/altinn-components';
 import { useTranslation } from 'react-i18next';
 
-import { ExtendedUser, PartyType, User } from '@/rtk/features/userInfoApi';
-import { ConnectionUserType, type Connection } from '@/rtk/features/connectionApi';
+import { PartyType, User } from '@/rtk/features/userInfoApi';
+import { ConnectionUserType } from '@/rtk/features/connectionApi';
 import { NewUserButton } from '@/features/amUI/users/NewUserModal/NewUserModal';
 
-import classes from './AdvancedUserSearch.module.css';
+import classes from './UserSearch.module.css';
 import { useFilteredUsers } from '../UserList/useFilteredUsers';
 import { DelegationAction } from '../DelegationModal/EditModal';
 import { UserList } from '../UserList/UserList';
-import { ConnectionsList, titleAsType } from './ConnectionsList';
+import { UserSearchResults, titleAsType } from './UserSearchResults';
 import { usePartyRepresentation } from '../PartyRepresentationContext/PartyRepresentationContext';
+import type { UserActionTarget, UserSearchNode } from './types';
 
-export interface AdvancedUserSearchProps {
+export interface UserSearchProps {
   includeSelfAsChild: boolean;
   includeSelfAsChildOnIndirect?: boolean;
-  connections?: Connection[];
-  indirectConnections?: Connection[];
-  getUserLink?: (user: ExtendedUser) => string;
-  onDelegate?: (user: User) => void;
+  users?: UserSearchNode[];
+  indirectUsers?: UserSearchNode[];
+  getUserLink?: (user: UserActionTarget) => string;
+  onDelegate?: (user: UserActionTarget) => void;
   onAddNewUser?: (user: User) => void;
-  onRevoke?: (user: User) => void;
+  onRevoke?: (user: UserActionTarget) => void;
+  onSelect?: (user: UserActionTarget) => void;
   isLoading?: boolean;
   isActionLoading?: boolean;
   canDelegate?: boolean;
@@ -36,22 +38,22 @@ export interface AdvancedUserSearchProps {
   titleAs?: titleAsType;
 }
 
-const filterAvailableUserTypes = (items?: Connection[]) =>
+const filterAvailableUserTypes = (items?: UserSearchNode[]) =>
   items?.filter(
     (item) =>
-      item.party.type === ConnectionUserType.Person ||
-      item.party.type === ConnectionUserType.Organization,
+      item.type === ConnectionUserType.Person || item.type === ConnectionUserType.Organization,
   ) || [];
 
-export const AdvancedUserSearch: React.FC<AdvancedUserSearchProps> = ({
+export const UserSearch: React.FC<UserSearchProps> = ({
   includeSelfAsChild,
   includeSelfAsChildOnIndirect = true,
-  connections,
-  indirectConnections,
+  users: initialUsers,
+  indirectUsers: initialIndirectUsers,
   getUserLink,
   onDelegate,
   onAddNewUser,
   onRevoke,
+  onSelect,
   isLoading = false,
   isActionLoading = false,
   canDelegate = true,
@@ -68,27 +70,33 @@ export const AdvancedUserSearch: React.FC<AdvancedUserSearchProps> = ({
   const { t } = useTranslation();
   const [query, setQuery] = useState('');
   const { fromParty } = usePartyRepresentation();
-  const filteredConnections = useMemo(() => filterAvailableUserTypes(connections), [connections]);
+  const directUsers = useMemo(() => filterAvailableUserTypes(initialUsers), [initialUsers]);
 
-  const filteredIndirectConnections = useMemo(
-    () => filterAvailableUserTypes(indirectConnections),
-    [indirectConnections],
+  const indirectUsers = useMemo(
+    () => filterAvailableUserTypes(initialIndirectUsers),
+    [initialIndirectUsers],
   );
 
   const trimmedQuery = query.trim();
   const isQuery = trimmedQuery !== '' || hasActiveAdditionalFilters;
   const hasFiltersOnly = hasActiveAdditionalFilters && trimmedQuery === '';
 
-  const { users, hasNextPage, goNextPage, indirectUsers, hasNextIndirectPage, goNextIndirectPage } =
-    useFilteredUsers({
-      connections: filteredConnections,
-      indirectConnections: filteredIndirectConnections,
-      searchString: trimmedQuery,
-    });
+  const {
+    users: filteredDirectUsers,
+    hasNextPage,
+    goNextPage,
+    indirectUsers: filteredIndirectUsers,
+    hasNextIndirectPage,
+    goNextIndirectPage,
+  } = useFilteredUsers({
+    users: directUsers,
+    indirectUsers,
+    searchString: trimmedQuery,
+  });
 
-  const hasDirectConnections = (connections?.length ?? 0) > 0;
-  const directHasResults = (users?.length ?? 0) > 0;
-  const indirectHasResults = (indirectUsers?.length ?? 0) > 0;
+  const hasDirectUsers = (directUsers?.length ?? 0) > 0;
+  const directHasResults = (filteredDirectUsers?.length ?? 0) > 0;
+  const indirectHasResults = (filteredIndirectUsers?.length ?? 0) > 0;
 
   const showDirectNoResults = isQuery && !directHasResults && indirectHasResults;
   const showIndirectList = isQuery && indirectHasResults && canDelegate;
@@ -136,7 +144,7 @@ export const AdvancedUserSearch: React.FC<AdvancedUserSearchProps> = ({
 
       <div className={classes.results}>
         <>
-          {!hasDirectConnections && !isLoading && !isQuery && (
+          {!hasDirectUsers && !isLoading && !isQuery && (
             <DsParagraph
               data-size='md'
               className={classes.tabDescription}
@@ -155,13 +163,14 @@ export const AdvancedUserSearch: React.FC<AdvancedUserSearchProps> = ({
               {directConnectionsHeading ?? t('advanced_user_search.direct_connections')}
             </h3>
           )}
-          <ConnectionsList
-            users={users as ExtendedUser[]}
+          <UserSearchResults
+            users={filteredDirectUsers}
             hasNextPage={hasNextPage}
             goNextPage={goNextPage}
             availableAction={DelegationAction.REVOKE}
             isActionLoading={isActionLoading}
             onRevoke={onRevoke}
+            onSelect={onSelect}
             includeSelfAsChild={includeSelfAsChild}
             getUserLink={getUserLink}
             titleAs={titleAs}
@@ -183,8 +192,8 @@ export const AdvancedUserSearch: React.FC<AdvancedUserSearchProps> = ({
             <h3 className={classes.subHeader}>
               {indirectConnectionsHeading ?? t('advanced_user_search.indirect_connections')}
             </h3>
-            <ConnectionsList
-              users={indirectUsers as ExtendedUser[]}
+            <UserSearchResults
+              users={filteredIndirectUsers}
               hasNextPage={!!hasNextIndirectPage}
               goNextPage={goNextIndirectPage}
               availableAction={DelegationAction.DELEGATE}
@@ -223,4 +232,4 @@ export const AdvancedUserSearch: React.FC<AdvancedUserSearchProps> = ({
   );
 };
 
-export default AdvancedUserSearch;
+export default UserSearch;

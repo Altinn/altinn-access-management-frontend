@@ -1,0 +1,25 @@
+{
+  "title": {
+    "en": "123123",
+    "nb": "123123",
+    "nn": "123123"
+  },
+  "identifier": "123123",
+  "visible": true,
+  "delegable": true,
+  "description": {
+    "en": "A generic access resource",
+    "nb": "A generic access resource",
+    "nn": "A generic access resource"
+  },
+  "resourceType": "AltinnApp",
+  "hasCompetentAuthority": {
+    "orgcode": "TTD",
+    "organization": "",
+    "name": {
+      "en": "Testdepartementet",
+      "nb": "Testdepartementet",
+      "nn": "Testdepartementet"
+    }
+  }
+}

@@ -194,7 +194,7 @@ export const LandingPage = () => {
   const getOtherItems = (): MenuItemProps[] => {
     const displaySettingsPage = window.featureFlags?.displaySettingsPage;
     const displayRequestsPage = window.featureFlags?.displayRequestsPage;
-    const requestCount = pendingRequests ? pendingRequests.length : 0;
+    const requestCount = pendingRequests ? pendingRequests.received.length : 0;
     const items: MenuItemProps[] = [];
 
     if (displayRequestsPage) {
