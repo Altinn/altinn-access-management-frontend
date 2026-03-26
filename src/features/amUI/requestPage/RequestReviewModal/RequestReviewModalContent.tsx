@@ -84,7 +84,7 @@ export const RequestReviewModalContent = ({ request, onClose }: RequestReviewMod
             {Array.from({ length: request?.numberOfRequests || 2 }).map((_, index) => (
               <ResourceListItem
                 key={index}
-                id='1'
+                id={`placeholder-${index}`}
                 resourceName='xxxxxxxxxxxxxxxxxxxx'
                 ownerName='xxxxxxxxx xxxxxxxxxxx'
                 loading
