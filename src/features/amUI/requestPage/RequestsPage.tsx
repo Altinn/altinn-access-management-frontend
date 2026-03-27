@@ -41,7 +41,13 @@ export const RequestPage = () => {
 
   const { data: reportee, isLoading: isLoadingReportee } = useGetReporteeQuery();
   const { data: isAdmin } = useGetIsAdminQuery();
-  const { pendingRequests, isLoadingRequests, isError } = useRequests();
+  const {
+    pendingRequests,
+    isLoadingSentRequests,
+    isLoadingReceivedRequests,
+    isSentRequestsError,
+    isReceivedRequestsError,
+  } = useRequests();
 
   const partyUuid = getCookie('AltinnPartyUuid');
   const { data: sentRequestCount, isLoading: isLoadingSentRequestCount } =
@@ -107,8 +113,8 @@ export const RequestPage = () => {
             <DsTabs.Panel value={INCOMING_REQUESTS_TAB}>
               <RequestsTabPanel
                 count={receivedRequestsCount}
-                isLoading={isLoadingRequests}
-                isError={isError}
+                isLoading={isLoadingReceivedRequests}
+                isError={isReceivedRequestsError}
                 emptyMessageKey='request_page.no_received_requests'
               >
                 <PendingRequests pendingRequests={pendingRequests.received} />
@@ -117,8 +123,8 @@ export const RequestPage = () => {
             <DsTabs.Panel value={SENT_REQUESTS_TAB}>
               <RequestsTabPanel
                 count={sentRequestCount ?? 0}
-                isLoading={isLoadingRequests}
-                isError={isError}
+                isLoading={isLoadingSentRequests}
+                isError={isSentRequestsError}
                 emptyMessageKey='request_page.no_sent_requests'
               >
                 <SentRequestsTabPanel pendingRequests={pendingRequests.sent} />

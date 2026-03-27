@@ -47,16 +47,22 @@ export const useRequests = () => {
     skip: !partyUuid || !hasSystemUserPermission,
   });
 
-  const { data: pendingSentAccessRequests, isLoading: isLoadingPendingSentAccessRequests } =
-    useGetSentRequestsQuery(
-      { party: partyUuid || '', status: ['Pending'], to: '' },
-      { skip: !partyUuid },
-    );
-  const { data: pendingReceivedAccessRequests, isLoading: isLoadingPendingReceivedAccessRequests } =
-    useGetReceivedRequestsQuery(
-      { party: partyUuid || '', status: ['Pending'], from: '' },
-      { skip: !partyUuid },
-    );
+  const {
+    data: pendingSentAccessRequests,
+    isLoading: isLoadingPendingSentAccessRequests,
+    isError: isSentAccessRequestsError,
+  } = useGetSentRequestsQuery(
+    { party: partyUuid || '', status: ['Pending'], to: '' },
+    { skip: !partyUuid },
+  );
+  const {
+    data: pendingReceivedAccessRequests,
+    isLoading: isLoadingPendingReceivedAccessRequests,
+    isError: isReceivedAccessRequestsError,
+  } = useGetReceivedRequestsQuery(
+    { party: partyUuid || '', status: ['Pending'], from: '' },
+    { skip: !partyUuid },
+  );
 
   const pendingRequests: { sent: Request[]; received: Request[] } = useMemo(() => {
     const consents = (activeConsents || [])
@@ -87,15 +93,21 @@ export const useRequests = () => {
 
   return {
     pendingRequests,
-    isError:
-      isAdminError || isReporteeError || isLoadingConsentsError || isLoadingPendingSystemUsersError,
-    isLoadingRequests:
+    isReceivedRequestsError:
+      isAdminError ||
+      isReporteeError ||
+      isLoadingConsentsError ||
+      isLoadingPendingSystemUsersError ||
+      isReceivedAccessRequestsError,
+    isSentRequestsError: isAdminError || isReporteeError || isSentAccessRequestsError,
+    isLoadingReceivedRequests:
       isLoadingIsAdmin ||
       isLoadingReportee ||
       isLoadingActiveConsents ||
       isLoadingPendingSystemUsers ||
-      isLoadingPendingSentAccessRequests ||
       isLoadingPendingReceivedAccessRequests,
+    isLoadingSentRequests:
+      isLoadingIsAdmin || isLoadingReportee || isLoadingPendingSentAccessRequests,
   };
 };
 
