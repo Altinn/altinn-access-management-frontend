@@ -52,7 +52,7 @@ export const SentRequestsTabPanel = ({ pendingRequests }: SentRequestsTabPanelPr
       })}
       <PartyRepresentationProvider
         fromPartyOverride={{
-          partyId: 1,
+          partyId: 0,
           partyUuid: openAccessRequest?.partyUuid || '',
           name: openAccessRequest?.displayPartyName || '',
           partyTypeName:
