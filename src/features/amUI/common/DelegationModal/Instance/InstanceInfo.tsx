@@ -146,6 +146,8 @@ export const InstanceInfo = ({
                 delegationError={delegationError}
                 missingAccess={missingAccess && hasDelegateAction ? missingAccess : null}
                 hasAccessAndNoChanges={hasDirectAccess && !hasUnsavedChanges}
+                allAccessTitle={t('delegation_modal.instance_actions.access_to_all')}
+                actionDescription={t('delegation_modal.instance_actions.action_description')}
               />
             )}
             <div className={classes.editButtons}>

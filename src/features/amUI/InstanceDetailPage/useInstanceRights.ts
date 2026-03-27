@@ -10,7 +10,7 @@ export const getRightsSummaryTitle = (
 ): string => {
   const checkedCount = rights.filter((r) => r.checked).length;
   if (checkedCount === rights.length) {
-    return t('delegation_modal.actions.access_to_all');
+    return t('delegation_modal.instance_actions.access_to_all');
   }
   return t('delegation_modal.actions.partial_access', {
     count: checkedCount,

@@ -18,6 +18,8 @@ interface RightsSectionProps {
   delegationError: 'delegate' | 'revoke' | 'edit' | null;
   missingAccess: string | null;
   hasAccessAndNoChanges?: boolean;
+  allAccessTitle?: string;
+  actionDescription?: string;
 }
 
 export const RightsSection = ({
@@ -30,6 +32,8 @@ export const RightsSection = ({
   delegationError,
   missingAccess,
   hasAccessAndNoChanges,
+  allAccessTitle,
+  actionDescription,
 }: RightsSectionProps) => {
   const { t } = useTranslation();
   const isSmall = useIsMobileOrSmaller();
@@ -45,7 +49,7 @@ export const RightsSection = ({
     if (isApprove) {
       return t('delegation_modal.actions.approve_action_description');
     }
-    return t('delegation_modal.actions.action_description');
+    return actionDescription ?? t('delegation_modal.actions.action_description');
   };
 
   const getListItemHeading = (hasAccessAndNoChanges?: boolean, isSingleRightRequest?: boolean) => {
@@ -105,7 +109,7 @@ export const RightsSection = ({
                   count: rights.filter((r) => r.checked).length,
                   total: rights.length,
                 })
-              : t('delegation_modal.actions.access_to_all')
+              : (allAccessTitle ?? t('delegation_modal.actions.access_to_all'))
           }
           onClick={() => setRightsExpanded(!rightsExpanded)}
           expanded={rightsExpanded}

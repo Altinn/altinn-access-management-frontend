@@ -257,7 +257,9 @@ const AddUserModal = ({
               shadow='none'
             >
               <div className={classes.rightExpandableContent}>
-                <DsParagraph>{t('delegation_modal.actions.action_description')}</DsParagraph>
+                <DsParagraph>
+                  {t('delegation_modal.instance_actions.action_description')}
+                </DsParagraph>
                 <div className={classes.rightChips}>
                   <RightChips
                     rights={rights}
