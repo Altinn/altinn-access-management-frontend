@@ -949,7 +949,7 @@
     "instances_tab": {
       "search_label": "Søk etter element",
       "no_results": "Ingen elementer fra innboks funnet.",
-      "no_search_results": "Ingen treff på elementer fra innboks."
+      "no_search_results": "Ingen treff på melding eller skjema."
     }
   },
   "instance_detail_page": {

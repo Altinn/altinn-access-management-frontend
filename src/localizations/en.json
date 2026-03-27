@@ -952,7 +952,7 @@
     "instances_tab": {
       "search_label": "Search for inbox items",
       "no_results": "No inbox items found.",
-      "no_search_results": "No matches for inbox items."
+      "no_search_results": "No matches for message or form."
     }
   },
   "instance_detail_page": {
