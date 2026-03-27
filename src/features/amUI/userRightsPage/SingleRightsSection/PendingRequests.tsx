@@ -27,8 +27,8 @@ export const PendingRequests = () => {
 
   const { t } = useTranslation();
   const isSmallScreen = useIsTabletOrSmaller();
+  const { fromParty } = usePartyRepresentation();
 
-  const [selectedResource, setSelectedResource] = useState<ServiceResource | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   const { singleRightRequests = [] } = useSingleRightRequests({
@@ -37,26 +37,18 @@ export const PendingRequests = () => {
 
   return (
     <>
-      <DsDialog
-        ref={modalRef}
-        closedby='any'
-        onClose={() => {
-          setSelectedResource(null);
-          setIsModalOpen(false);
-        }}
-        className={classes.pendingRequestsModal}
-      >
-        <SnackbarProvider>
-          {isModalOpen && (
-            <PendingRequestsList
-              onClose={() => modalRef.current?.close()}
-              selectedResource={selectedResource}
-              setSelectedResource={setSelectedResource}
-            />
-          )}
-          <Snackbar />
-        </SnackbarProvider>
-      </DsDialog>
+      <SentRequestsModal
+        toPartyUuid={fromParty?.partyUuid || ''}
+        isModalOpen={isModalOpen}
+        modalRef={modalRef}
+        heading={t('delegation_modal.request.sent_requests_modal_header', {
+          partyName: formatDisplayName({
+            fullName: fromParty?.name || '',
+            type: fromParty?.partyTypeName === PartyType.Person ? 'person' : 'company',
+          }),
+        })}
+        onClose={() => setIsModalOpen(false)}
+      />
       {singleRightRequests.length > 0 && (
         <ListItem
           title={t('delegation_modal.request.sent_requests_item')}
@@ -83,28 +75,82 @@ export const PendingRequests = () => {
   );
 };
 
+interface SentRequestsModalProps {
+  modalRef: React.RefObject<HTMLDialogElement | null>;
+  isModalOpen: boolean;
+  heading: string;
+  onClose: () => void;
+  toPartyUuid: string;
+}
+export const SentRequestsModal = ({
+  toPartyUuid,
+  modalRef,
+  isModalOpen,
+  onClose,
+  heading,
+}: SentRequestsModalProps) => {
+  const { t } = useTranslation();
+  const [selectedResource, setSelectedResource] = useState<ServiceResource | null>(null);
+
+  return (
+    <DsDialog
+      ref={modalRef}
+      closedby='any'
+      onClose={() => {
+        setSelectedResource(null);
+        onClose();
+      }}
+      className={classes.pendingRequestsModal}
+    >
+      <SnackbarProvider>
+        {isModalOpen && (
+          <PendingRequestsList
+            heading={heading}
+            selectedResource={selectedResource}
+            setSelectedResource={setSelectedResource}
+            toPartyUuid={toPartyUuid}
+          />
+        )}
+        <Snackbar />
+      </SnackbarProvider>
+      {!selectedResource && (
+        <DsButton
+          variant='primary'
+          className={classes.closeButton}
+          onClick={() => modalRef.current?.close()}
+        >
+          {t('common.close')}
+        </DsButton>
+      )}
+    </DsDialog>
+  );
+};
+
 interface PendingRequestsListProps {
   selectedResource: ServiceResource | null;
+  toPartyUuid: string;
+  heading: string;
   setSelectedResource: (resource: ServiceResource | null) => void;
-  onClose: () => void;
 }
-const PendingRequestsList = ({
-  onClose,
+
+export const PendingRequestsList = ({
   selectedResource,
+  heading,
+  toPartyUuid,
   setSelectedResource,
 }: PendingRequestsListProps) => {
   const { t } = useTranslation();
   const isSmallScreen = useIsTabletOrSmaller();
-  const { actingParty, fromParty } = usePartyRepresentation();
+  const { actingParty } = usePartyRepresentation();
 
   const { data: singleRightRequests = [], isLoading: isLoadingRequests } =
     useGetEnrichedSentResourceRequestsQuery(
       {
-        ...getRequestPartyQueryParams(actingParty?.partyUuid, fromParty?.partyUuid),
+        ...getRequestPartyQueryParams(actingParty?.partyUuid, toPartyUuid),
         status: ['Pending'],
       },
       {
-        skip: !actingParty?.partyUuid || !fromParty?.partyUuid,
+        skip: !actingParty?.partyUuid || !toPartyUuid,
       },
     );
 
@@ -134,13 +180,9 @@ const PendingRequestsList = ({
           <DsHeading
             data-size='xs'
             level={1}
+            className={classes.pendingRequestsHeading}
           >
-            {t('delegation_modal.request.sent_requests_modal_header', {
-              partyName: formatDisplayName({
-                fullName: fromParty?.name || '',
-                type: fromParty?.partyTypeName === PartyType.Person ? 'person' : 'company',
-              }),
-            })}
+            {heading}
           </DsHeading>
           <ResourceList
             isLoading={isLoadingRequests}
@@ -166,13 +208,6 @@ const PendingRequestsList = ({
               );
             }}
           />
-          <DsButton
-            variant='primary'
-            className={classes.closeButton}
-            onClick={onClose}
-          >
-            {t('common.close')}
-          </DsButton>
         </>
       )}
     </>

@@ -13,8 +13,9 @@ import { useGetIsAdminQuery, useGetReporteeQuery } from '@/rtk/features/userInfo
 import { useDocumentTitle } from '@/resources/hooks/useDocumentTitle';
 import { useRequests } from '@/resources/hooks/useRequests';
 import { useGetSentRequestsCountQuery } from '@/rtk/features/requestApi';
-import { RequestsTabPanel } from './RequestsTabPanel';
+import { PendingRequests, RequestsTabPanel } from './RequestsTabPanel';
 import classes from './RequestPage.module.css';
+import { SentRequestsTabPanel } from './SentRequestsTabPanel';
 import { PartyRepresentationProvider } from '../common/PartyRepresentationContext/PartyRepresentationContext';
 import { getCookie } from '@/resources/Cookie/CookieMethods';
 
@@ -40,7 +41,13 @@ export const RequestPage = () => {
 
   const { data: reportee, isLoading: isLoadingReportee } = useGetReporteeQuery();
   const { data: isAdmin } = useGetIsAdminQuery();
-  const { pendingRequests, isLoadingRequests, isError } = useRequests();
+  const {
+    pendingRequests,
+    isLoadingSentRequests,
+    isLoadingReceivedRequests,
+    isSentRequestsError,
+    isReceivedRequestsError,
+  } = useRequests();
 
   const partyUuid = getCookie('AltinnPartyUuid');
   const { data: sentRequestCount, isLoading: isLoadingSentRequestCount } =
@@ -105,21 +112,23 @@ export const RequestPage = () => {
             </DsTabs.List>
             <DsTabs.Panel value={INCOMING_REQUESTS_TAB}>
               <RequestsTabPanel
-                requests={pendingRequests.received}
                 count={receivedRequestsCount}
-                isLoading={isLoadingRequests}
-                isError={isError}
+                isLoading={isLoadingReceivedRequests}
+                isError={isReceivedRequestsError}
                 emptyMessageKey='request_page.no_received_requests'
-              />
+              >
+                <PendingRequests pendingRequests={pendingRequests.received} />
+              </RequestsTabPanel>
             </DsTabs.Panel>
             <DsTabs.Panel value={SENT_REQUESTS_TAB}>
               <RequestsTabPanel
-                requests={pendingRequests.sent}
-                count={resolvedSentRequestCount}
-                isLoading={isLoadingRequests}
-                isError={isError}
+                count={sentRequestCount ?? 0}
+                isLoading={isLoadingSentRequests}
+                isError={isSentRequestsError}
                 emptyMessageKey='request_page.no_sent_requests'
-              />
+              >
+                <SentRequestsTabPanel pendingRequests={pendingRequests.sent} />
+              </RequestsTabPanel>
             </DsTabs.Panel>
           </DsTabs>
         </PartyRepresentationProvider>

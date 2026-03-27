@@ -14,19 +14,19 @@ import { Request } from './types';
 import classes from './RequestPage.module.css';
 
 interface RequestsTabPanelProps {
-  requests: Request[] | undefined;
   count: number;
   isLoading: boolean;
   isError: boolean;
   emptyMessageKey: string;
+  children?: React.ReactNode;
 }
 
 export const RequestsTabPanel = ({
-  requests,
   count,
   isLoading,
   isError,
   emptyMessageKey,
+  children,
 }: RequestsTabPanelProps) => {
   const { t } = useTranslation();
   return (
@@ -49,7 +49,7 @@ export const RequestsTabPanel = ({
             <LoadingRequestListItem />
           </>
         ) : (
-          <PendingRequests pendingRequests={requests} />
+          <>{children}</>
         )}
         {!isError && !isLoading && count === 0 && <div>{t(emptyMessageKey)}</div>}
       </List>
@@ -61,7 +61,7 @@ interface PendingRequestsProps {
   pendingRequests: Request[] | undefined;
 }
 
-const PendingRequests = ({ pendingRequests }: PendingRequestsProps) => {
+export const PendingRequests = ({ pendingRequests }: PendingRequestsProps) => {
   const { t } = useTranslation();
   const [openAccessRequest, setOpenAccessRequest] = useState<Request | null>(null);
   return (
@@ -82,6 +82,7 @@ const PendingRequests = ({ pendingRequests }: PendingRequestsProps) => {
             id={request.id}
             name={request.displayPartyName}
             type={request.displayPartyType}
+            titleAs='h2'
             linkIcon
             description={`${request.description ? t(request.description) : t('request_page.asks_for_number', { count: request.numberOfRequests })} (${formatDateToNorwegian(request.createdDate)})`}
             as={(props) =>
@@ -98,7 +99,9 @@ const PendingRequests = ({ pendingRequests }: PendingRequestsProps) => {
               )
             }
             controls={
-              <div className={classes.requestItemBadge}>{t('request_page.process_request')}</div>
+              <div className={classes.requestItemBadge}>
+                {t('request_page.process_request', { count: request.numberOfRequests || 1 })}
+              </div>
             }
           />
         );
