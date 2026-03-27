@@ -23,6 +23,7 @@ export enum DelegationAction {
   DELEGATE = 'DELEGATE',
   REQUEST = 'REQUEST',
   REVOKE = 'REVOKE',
+  APPROVE = 'APPROVE',
 }
 
 export interface InstanceData {

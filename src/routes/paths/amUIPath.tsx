@@ -9,6 +9,7 @@ export enum amUIPath {
   PackagePoaDetails = 'poa-overview/access-package/:id',
   Settings = 'settings',
   Requests = 'requests',
+  DraftRequest = 'requests/resource',
   ClientAdministration = 'clientadministration',
   ClientAdministrationAgent = 'clientadministration/agent/:id',
   ClientAdministrationClient = 'clientadministration/client/:id',

@@ -5,6 +5,7 @@ import { useDelegationCheckQuery } from '@/rtk/features/accessPackageApi';
 import { usePartyRepresentation } from '../PartyRepresentationContext/PartyRepresentationContext';
 import { FetchBaseQueryError } from '@reduxjs/toolkit/query';
 import { SerializedError } from '@reduxjs/toolkit';
+import { useGetIsAdminQuery } from '@/rtk/features/userInfoApi';
 
 interface AccessPackageDelegationCheckContextProps {
   canDelegatePackage: (packageId: string) => { result: boolean; reasons: Reason[] } | undefined;
@@ -29,10 +30,11 @@ export const AccessPackageDelegationCheckProvider = ({
   children,
 }: AccessPackageDelegationCheckProviderProps) => {
   const { actingParty } = usePartyRepresentation();
+  const { data: isAdmin } = useGetIsAdminQuery();
 
   const { data, isLoading, error, isError } = useDelegationCheckQuery(
     { party: actingParty?.partyUuid },
-    { skip: !actingParty?.partyUuid },
+    { skip: !actingParty?.partyUuid || !isAdmin },
   );
 
   const resultMap = useMemo(

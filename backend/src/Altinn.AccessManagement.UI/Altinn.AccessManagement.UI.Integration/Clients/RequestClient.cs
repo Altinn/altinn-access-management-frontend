@@ -133,6 +133,24 @@ namespace Altinn.AccessManagement.UI.Integration.Clients
         }
 
         /// <inheritdoc />
+        public async Task<RequestResourceDto> GetDraftRequest(Guid id, CancellationToken cancellationToken)
+        {
+            try
+            {
+                string endpointUrl = $"enduser/request/draft?id={id}";
+                string token = JwtTokenUtil.GetTokenFromContext(_httpContextAccessor.HttpContext, _platformSettings.JwtCookieName);
+
+                var httpResponse = await _client.GetAsync(token, endpointUrl);
+                return await ClientUtils.DeserializeIfSuccessfullStatusCode<RequestResourceDto>(httpResponse);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "AccessManagement.UI // RequestClient // GetDraftRequest // Exception");
+                throw;
+            }
+        }
+
+        /// <inheritdoc />
         public async Task<RequestResourceDto> CreateResourceRequest(Guid party, Guid to, string resource, CancellationToken cancellationToken)
         {
             try
@@ -173,7 +191,7 @@ namespace Altinn.AccessManagement.UI.Integration.Clients
         {
             try
             {
-                string endpointUrl = $"enduser/request/sent/confirm?party={party}&id={id}";
+                string endpointUrl = $"enduser/request/draft/confirm?party={party}&id={id}";
                 string token = JwtTokenUtil.GetTokenFromContext(_httpContextAccessor.HttpContext, _platformSettings.JwtCookieName);
 
                 var httpResponse = await _client.PutAsync(token, endpointUrl, null);
@@ -218,6 +236,66 @@ namespace Altinn.AccessManagement.UI.Integration.Clients
             catch (Exception ex)
             {
                 _logger.LogError(ex, "AccessManagement.UI // RequestClient // ApproveRequest // Exception");
+                throw;
+            }
+        }
+
+        /// <inheritdoc />
+        public async Task<int> GetSentRequestsCount(Guid party, Guid? to, List<RequestStatus> status, CancellationToken cancellationToken)
+        {
+            try
+            {
+                var queryParams = new Dictionary<string, string>
+                {
+                    { "party", party.ToString() }
+                };
+
+                if (to.HasValue)
+                {
+                    queryParams.Add("to", to.Value.ToString());
+                }
+
+                var statusParams = status?.Select(s => new KeyValuePair<string, string>("status", s.ToString())) ?? [];
+
+                string endpointUrl = QueryHelpers.AddQueryString("enduser/request/sent/count", queryParams.Concat(statusParams));
+                string token = JwtTokenUtil.GetTokenFromContext(_httpContextAccessor.HttpContext, _platformSettings.JwtCookieName);
+
+                var httpResponse = await _client.GetAsync(token, endpointUrl);
+                return await ClientUtils.DeserializeIfSuccessfullStatusCode<int>(httpResponse);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "AccessManagement.UI // RequestClient // GetSentRequestsCount // Exception");
+                throw;
+            }
+        }
+
+        /// <inheritdoc />
+        public async Task<int> GetReceivedRequestsCount(Guid party, Guid? from, List<RequestStatus> status, CancellationToken cancellationToken)
+        {
+            try
+            {
+                var queryParams = new Dictionary<string, string>
+                {
+                    { "party", party.ToString() }
+                };
+
+                if (from.HasValue)
+                {
+                    queryParams.Add("from", from.Value.ToString());
+                }
+
+                var statusParams = status?.Select(s => new KeyValuePair<string, string>("status", s.ToString())) ?? [];
+
+                string endpointUrl = QueryHelpers.AddQueryString("enduser/request/received/count", queryParams.Concat(statusParams));
+                string token = JwtTokenUtil.GetTokenFromContext(_httpContextAccessor.HttpContext, _platformSettings.JwtCookieName);
+
+                var httpResponse = await _client.GetAsync(token, endpointUrl);
+                return await ClientUtils.DeserializeIfSuccessfullStatusCode<int>(httpResponse);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "AccessManagement.UI // RequestClient // GetReceivedRequestsCount // Exception");
                 throw;
             }
         }

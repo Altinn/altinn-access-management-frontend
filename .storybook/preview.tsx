@@ -17,7 +17,7 @@ declare global {
       crossPlatformLinks: boolean;
       useNewActorsList: boolean;
       displayPrivDelegation: boolean;
-      displayAccessRequest: boolean;
+      displayPackageRequests: boolean;
       displaySubConnections: boolean;
       displayRoles: boolean;
     };
@@ -53,7 +53,7 @@ window.featureFlags = {
   crossPlatformLinks: false,
   useNewActorsList: false,
   displayPrivDelegation: false,
-  displayAccessRequest: false,
+  displayPackageRequests: false,
   displaySubConnections: false,
 };
 
