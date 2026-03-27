@@ -16,7 +16,7 @@ declare global {
       displayDeletedAccountToggle: boolean;
       displayPrivDelegation: boolean;
       displayInstanceDelegation: boolean;
-      displayAccessRequest: boolean;
+      displayPackageRequests: boolean;
       displaySubConnections: boolean;
       displayRoles: boolean;
       addAllSystemuserCustomers: boolean;
