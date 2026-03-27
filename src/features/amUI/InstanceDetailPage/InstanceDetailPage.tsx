@@ -18,6 +18,8 @@ import { DelegationModalProvider } from '../common/DelegationModal/DelegationMod
 
 import { InstanceDetailPageContent } from './InstanceDetailPageContent';
 import classes from './InstanceDetailPageContent.module.css';
+import { Breadcrumbs } from '../common/Breadcrumbs/Breadcrumbs';
+import { useGetResourceQuery } from '@/rtk/features/resourceApi';
 
 const getInboxUrl = (dialogId: string) => `${getAfUrl()}inbox/${encodeURIComponent(dialogId)}`;
 
@@ -58,6 +60,7 @@ export const InstanceDetailPage = () => {
   return (
     <PageWrapper>
       <PageLayoutWrapper hideSidebar={isInboxDeeplink}>
+        {!isInboxDeeplink && <BreadcrumbsWrapper />}
         <PageContainer
           backUrl={isInboxDeeplink ? getInboxUrl(dialogId) : `/${amUIPath.PoaOverview}`}
         >
@@ -74,5 +77,21 @@ export const InstanceDetailPage = () => {
         </PageContainer>
       </PageLayoutWrapper>
     </PageWrapper>
+  );
+};
+
+const BreadcrumbsWrapper = () => {
+  const [searchParams] = useSearchParams();
+  const resourceId = searchParams.get('resourceId') ?? '';
+
+  const { data: resource } = useGetResourceQuery(resourceId, {
+    skip: !resourceId,
+  });
+
+  return (
+    <Breadcrumbs
+      items={['root', 'poa_overview']}
+      lastBreadcrumb={{ label: resource?.title }}
+    />
   );
 };
