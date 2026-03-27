@@ -77,9 +77,9 @@ namespace Altinn.AccessManagement.UI.Core.Configuration
         public bool DisplayInstanceDelegation { get; set; }
 
         /// <summary>
-        /// Whether to display the access request feature
+        /// Whether to display the package request feature
         /// </summary>
-        public bool DisplayAccessRequest { get; set; }
+        public bool DisplayPackageRequests { get; set; }
 
         /// <summary>
         /// Whether to display sub-connections feature
@@ -95,7 +95,7 @@ namespace Altinn.AccessManagement.UI.Core.Configuration
         /// Whether to enable adding own organization to agent system user is enabled
         /// </summary>
         public bool EnableAddSelfToSystemuser { get; set; }
-        
+
         /// <summary>
         /// Whether to enable request access
         /// </summary>

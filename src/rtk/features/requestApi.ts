@@ -31,7 +31,13 @@ export const requestApi = createApi({
       return headers;
     },
   }),
-  tagTypes: ['sentRequests', 'receivedRequests', 'request', 'enrichedSentResourceRequests'],
+  tagTypes: [
+    'sentRequests',
+    'receivedRequests',
+    'request',
+    'enrichedSentResourceRequests',
+    'enrichedReceivedResourceRequests',
+  ],
   endpoints: (builder) => ({
     // requests page queries
     getSentRequests: builder.query<
@@ -78,6 +84,18 @@ export const requestApi = createApi({
       },
       providesTags: ['enrichedSentResourceRequests'],
     }),
+    getEnrichedReceivedResourceRequests: builder.query<
+      EnrichedRequestDto[],
+      { party: string; from?: string; status?: RequestStatus[] }
+    >({
+      query: ({ party, from, status = [] }) => {
+        let params = `?party=${party}`;
+        if (from) params += `&from=${from}`;
+        for (const s of status) params += `&status=${s}`;
+        return `received/resource${params}`;
+      },
+      providesTags: ['enrichedReceivedResourceRequests'],
+    }),
     createResourceRequest: builder.mutation<
       RequestDto,
       { party: string; to: string; resource: string }
@@ -95,26 +113,52 @@ export const requestApi = createApi({
       }),
       invalidatesTags: ['sentRequests', 'enrichedSentResourceRequests'],
     }),
-    confirmRequest: builder.mutation<RequestDto, { party: string; id: string }>({
-      query: ({ party, id }) => ({
-        url: `sent/confirm?party=${party}&id=${id}`,
-        method: 'PUT',
-      }),
-      invalidatesTags: ['sentRequests', 'enrichedSentResourceRequests'],
-    }),
     rejectRequest: builder.mutation<RequestDto, { party: string; id: string }>({
       query: ({ party, id }) => ({
         url: `received/reject?party=${party}&id=${id}`,
         method: 'PUT',
       }),
-      invalidatesTags: ['receivedRequests'],
+      invalidatesTags: ['receivedRequests', 'enrichedReceivedResourceRequests'],
     }),
     approveRequest: builder.mutation<RequestDto, { party: string; id: string }>({
       query: ({ party, id }) => ({
         url: `received/approve?party=${party}&id=${id}`,
         method: 'PUT',
       }),
-      invalidatesTags: ['receivedRequests'],
+      invalidatesTags: ['receivedRequests', 'enrichedReceivedResourceRequests'],
+    }),
+
+    // count queries
+    getSentRequestsCount: builder.query<number, { party: string; status?: RequestStatus[] }>({
+      query: ({ party, status = [] }) => {
+        let params = `?party=${party}`;
+        for (const s of status) params += `&status=${s}`;
+        return `sent/count${params}`;
+      },
+      providesTags: ['sentRequests'],
+    }),
+    getReceivedRequestsCount: builder.query<number, { party: string; status?: RequestStatus[] }>({
+      query: ({ party, status = [] }) => {
+        let params = `?party=${party}`;
+        for (const s of status) params += `&status=${s}`;
+        return `received/count${params}`;
+      },
+      providesTags: ['receivedRequests'],
+    }),
+
+    // draft request page query
+    getEnrichedDraftRequest: builder.query<EnrichedRequestDto, { id: string }>({
+      query: ({ id }) => {
+        return `draft/${id}`;
+      },
+      keepUnusedDataFor: 0,
+    }),
+    confirmRequest: builder.mutation<RequestDto, { party: string; id: string }>({
+      query: ({ party, id }) => ({
+        url: `draft/confirm?party=${party}&id=${id}`,
+        method: 'PUT',
+      }),
+      invalidatesTags: ['sentRequests', 'enrichedSentResourceRequests'],
     }),
   }),
 });
@@ -129,6 +173,10 @@ export const {
   useRejectRequestMutation,
   useApproveRequestMutation,
   useGetEnrichedSentResourceRequestsQuery,
+  useGetEnrichedReceivedResourceRequestsQuery,
+  useGetEnrichedDraftRequestQuery,
+  useGetSentRequestsCountQuery,
+  useGetReceivedRequestsCountQuery,
 } = requestApi;
 
 export const { endpoints, reducerPath, reducer, middleware } = requestApi;

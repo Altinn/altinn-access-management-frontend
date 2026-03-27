@@ -6,6 +6,7 @@ import type { ServiceResource } from '@/rtk/features/singleRights/singleRightsAp
 import { ErrorCode } from '@/resources/utils/errorCodeUtils';
 import { useGetReporteeQuery } from '@/rtk/features/userInfoApi';
 import { TechnicalErrorParagraphs } from '@/features/amUI/common/TechnicalErrorParagraphs/TechnicalErrorParagraphs';
+import { DelegationAction } from '../EditModal';
 
 export interface ResourceAlertProps {
   /*** The resource */
@@ -16,8 +17,8 @@ export interface ResourceAlertProps {
   rightReasons?: string[];
   /** Optional className for custom styling */
   className?: string;
-  /** Optional flag to indicate if this is a resource request */
-  isRequest?: boolean;
+  /** Optional list of available actions */
+  availableActions?: DelegationAction[];
 }
 
 export const ResourceAlert = ({
@@ -25,13 +26,16 @@ export const ResourceAlert = ({
   error,
   rightReasons,
   className,
-  isRequest,
+  availableActions,
 }: ResourceAlertProps) => {
   const { t } = useTranslation();
   const { data: reportee } = useGetReporteeQuery();
   let headingText = '';
   let content = null;
   let color = 'warning';
+
+  const isRequest = availableActions?.includes(DelegationAction.REQUEST);
+  const isApprove = availableActions?.includes(DelegationAction.APPROVE);
 
   if (resource.delegable === false) {
     headingText = isRequest
@@ -73,6 +77,11 @@ export const ResourceAlert = ({
             }),
           })}
         </DsParagraph>
+      );
+    } else if (isApprove && rightReasons?.length > 0) {
+      headingText = t('delegation_modal.service_error.approve_heading');
+      content = (
+        <DsParagraph>{t('delegation_modal.service_error.missing_approve_rights')}</DsParagraph>
       );
     } else {
       headingText = t('delegation_modal.service_error.general_heading');

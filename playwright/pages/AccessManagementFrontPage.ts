@@ -85,9 +85,7 @@ export class AccessManagementFrontPage {
   }
 
   async expectUserToHaveEnkelttjeneste(resourceName: string) {
-    await expect(
-      this.page.getByRole('button', { name: 'Slett ' + resourceName }),
-    ).toBeVisible();
+    await expect(this.page.getByRole('button', { name: 'Slett ' + resourceName })).toBeVisible();
   }
 
   async clickSlettFullmaktForTilgangspakke(packageName: string) {
