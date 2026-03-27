@@ -1024,6 +1024,8 @@
     "no_received_requests": "Ingen mottatte forespørsler",
     "no_sent_requests": "Ingen sendte forespørsler",
     "process_request": "Behandle forespørsel",
+    "view_request_one": "Se forespørsel",
+    "view_request_other": "Se forespørsler",
     "request_consent": "Ber om samtykke",
     "asks_for_number_one": "Ber om {{count}} fullmakt",
     "asks_for_number_other": "Ber om {{count}} fullmakter",

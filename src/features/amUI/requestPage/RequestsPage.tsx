@@ -13,7 +13,7 @@ import { useGetIsAdminQuery, useGetReporteeQuery } from '@/rtk/features/userInfo
 import { useDocumentTitle } from '@/resources/hooks/useDocumentTitle';
 import { useRequests } from '@/resources/hooks/useRequests';
 import { useGetSentRequestsCountQuery } from '@/rtk/features/requestApi';
-import { RequestsTabPanel } from './RequestsTabPanel';
+import { PendingRequests, RequestsTabPanel } from './RequestsTabPanel';
 import classes from './RequestPage.module.css';
 import { SentRequestsTabPanel } from './SentRequestsTabPanel';
 import { PartyRepresentationProvider } from '../common/PartyRepresentationContext/PartyRepresentationContext';
@@ -106,21 +106,23 @@ export const RequestPage = () => {
             </DsTabs.List>
             <DsTabs.Panel value={INCOMING_REQUESTS_TAB}>
               <RequestsTabPanel
-                requests={pendingRequests.received}
                 count={receivedRequestsCount}
                 isLoading={isLoadingRequests}
                 isError={isError}
                 emptyMessageKey='request_page.no_received_requests'
-              />
+              >
+                <PendingRequests pendingRequests={pendingRequests.received} />
+              </RequestsTabPanel>
             </DsTabs.Panel>
             <DsTabs.Panel value={SENT_REQUESTS_TAB}>
-              <SentRequestsTabPanel
-                requests={pendingRequests.sent}
-                count={resolvedSentRequestCount}
+              <RequestsTabPanel
+                count={sentRequestCount ?? 0}
                 isLoading={isLoadingRequests}
                 isError={isError}
                 emptyMessageKey='request_page.no_sent_requests'
-              />
+              >
+                <SentRequestsTabPanel pendingRequests={pendingRequests.sent} />
+              </RequestsTabPanel>
             </DsTabs.Panel>
           </DsTabs>
         </PartyRepresentationProvider>

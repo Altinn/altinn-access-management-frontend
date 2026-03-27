@@ -1,5 +1,5 @@
 import { formatDateToNorwegian } from '@/resources/utils';
-import { DsAlert, formatDisplayName, List, UserListItem } from '@altinn/altinn-components';
+import { formatDisplayName, UserListItem } from '@altinn/altinn-components';
 import { useTranslation } from 'react-i18next';
 import { Request } from './types';
 
@@ -11,54 +11,10 @@ import { getCookie } from '@/resources/Cookie/CookieMethods';
 import { PartyType } from '@/rtk/features/userInfoApi';
 
 interface SentRequestsTabPanelProps {
-  requests: Request[] | undefined;
-  count: number;
-  isLoading: boolean;
-  isError: boolean;
-  emptyMessageKey: string;
-}
-
-export const SentRequestsTabPanel = ({
-  requests,
-  count,
-  isLoading,
-  isError,
-  emptyMessageKey,
-}: SentRequestsTabPanelProps) => {
-  const { t } = useTranslation();
-  return (
-    <>
-      {isError && (
-        <div className={classes.errorWrapper}>
-          <DsAlert data-color='danger'>
-            {count > 0
-              ? t('request_page.error_partial_loading_requests')
-              : t('request_page.error_loading_requests')}
-          </DsAlert>
-        </div>
-      )}
-      <List>
-        {isLoading ? (
-          <>
-            <LoadingRequestListItem />
-            <LoadingRequestListItem />
-            <LoadingRequestListItem />
-            <LoadingRequestListItem />
-          </>
-        ) : (
-          <SentRequests pendingRequests={requests} />
-        )}
-        {!isError && !isLoading && count === 0 && <div>{t(emptyMessageKey)}</div>}
-      </List>
-    </>
-  );
-};
-
-interface SentRequestsProps {
   pendingRequests: Request[] | undefined;
 }
 
-const SentRequests = ({ pendingRequests }: SentRequestsProps) => {
+export const SentRequestsTabPanel = ({ pendingRequests }: SentRequestsTabPanelProps) => {
   const modalRef = useRef<HTMLDialogElement>(null);
   const [openAccessRequest, setOpenAccessRequest] = useState<Request | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -86,7 +42,9 @@ const SentRequests = ({ pendingRequests }: SentRequestsProps) => {
               />
             )}
             controls={
-              <div className={classes.requestItemBadge}>{t('request_page.process_request')}</div>
+              <div className={classes.requestItemBadge}>
+                {t('request_page.view_request', { count: request.numberOfRequests })}
+              </div>
             }
           />
         );
@@ -121,18 +79,5 @@ const SentRequests = ({ pendingRequests }: SentRequestsProps) => {
         />
       </PartyRepresentationProvider>
     </>
-  );
-};
-
-const LoadingRequestListItem = () => {
-  return (
-    <UserListItem
-      id={''}
-      name={'xxxxxxxxxxxx'}
-      description='xxxxxxxxxxxxxxxxxxxxxxxxxxxx'
-      type={'person'}
-      interactive={false}
-      loading
-    />
   );
 };

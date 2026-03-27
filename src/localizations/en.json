@@ -1027,6 +1027,8 @@
     "no_received_requests": "No received requests",
     "no_sent_requests": "No sent requests",
     "process_request": "Process request",
+    "view_request_one": "View request",
+    "view_request_other": "View requests",
     "request_consent": "Requests consent",
     "asks_for_number_one": "Requests {{count}} power of attorney",
     "asks_for_number_other": "Requests {{count}} powers of attorney",
