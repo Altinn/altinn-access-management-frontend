@@ -1,5 +1,4 @@
 import { getCookie } from '@/resources/Cookie/CookieMethods';
-import { useRequests } from '@/resources/hooks/useRequests';
 import { clientAdministrationPageEnabled } from '@/resources/utils/featureFlagUtils';
 import {
   hasConsentPermission,
@@ -29,6 +28,7 @@ import {
 import { BadgeVariant, Color, MenuItemProps } from '@altinn/altinn-components';
 import { useLocation } from 'react-router';
 import { useGetRolePermissionsQuery } from '@/rtk/features/roleApi';
+import { useSidebarRequestCount } from '@/resources/hooks/useSidebarRequestCount';
 
 export const useSidebarItems = ({ isSmall }: { isSmall?: boolean }) => {
   const displayConfettiPackage = window.featureFlags?.displayConfettiPackage;
@@ -60,21 +60,26 @@ export const useSidebarItems = ({ isSmall }: { isSmall?: boolean }) => {
   const { data: isClientAdmin, isLoading: isLoadingIsClientAdmin } = useGetIsClientAdminQuery();
   const { data: canAccessSettings, isLoading: isLoadingCompanyProfileAdmin } =
     useGetIsCompanyProfileAdminQuery();
-  const { pendingRequests } = useRequests();
 
   const isLoading =
     isLoadingReportee || isLoadingIsAdmin || isLoadingIsClientAdmin || isLoadingCompanyProfileAdmin;
+  const { requestsBadgeCount, isLoading: isLoadingRequestsBadge } = useSidebarRequestCount({
+    displayRequestsPage: !!displayRequestsPage,
+    isAdmin,
+    reportee,
+    isLoadingPermissions: isLoadingReportee || isLoadingIsAdmin,
+  });
 
   const items: MenuItemProps[] = [];
 
   if (!isSmall) {
     items.push(getHeadingMenuItem(pathname, isLoading));
   }
-  if (displayRequestsPage) {
+  if (displayRequestsPage && isAdmin) {
     const requestsBadge =
-      pendingRequests && pendingRequests.received.length > 0
+      !isLoadingRequestsBadge && requestsBadgeCount > 0
         ? {
-            label: pendingRequests.received.length,
+            label: requestsBadgeCount,
             color: 'warning' as Color,
             variant: 'base' as BadgeVariant,
           }

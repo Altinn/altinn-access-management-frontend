@@ -104,10 +104,46 @@ namespace Altinn.AccessManagement.UI.Core.Services
 
             return response.Value;
         }
+        
+        /// <inheritdoc />
+        public async Task<Result<bool>> AddSelf(int partyId, Guid systemUserGuid, Guid partyUuid, CancellationToken cancellationToken)
+        {
+            Result<bool> response = await _systemUserAgentDelegationClient.AddSelf(partyId, systemUserGuid, partyUuid, cancellationToken);
+            if (response.IsProblem)
+            {
+                return new Result<bool>(response.Problem);
+            }
+
+            return response.Value;
+        }
+        
+        /// <inheritdoc />
+        public async Task<Result<bool>> RemoveSelf(int partyId, Guid systemUserGuid, Guid partyUuid, CancellationToken cancellationToken)
+        {
+            Result<bool> response = await _systemUserAgentDelegationClient.RemoveSelf(partyId, systemUserGuid, partyUuid, cancellationToken);
+            if (response.IsProblem)
+            {
+                return new Result<bool>(response.Problem);
+            }
+
+            return response.Value;
+        }
+
+        /// <inheritdoc />
+        public async Task<Result<bool>> IsSelfAdded(int partyId, Guid systemUserGuid, Guid partyUuid, CancellationToken cancellationToken)
+        {
+            Result<bool> response = await _systemUserAgentDelegationClient.IsSelfAdded(partyId, systemUserGuid, partyUuid, cancellationToken);
+            if (response.IsProblem)
+            {
+                return new Result<bool>(response.Problem);
+            }
+
+            return response.Value;
+        }
 
         private static List<CustomerPartyFE> MapCustomerListToCustomerFE(List<Customer> customers)
         {
-            return customers.Select(x => 
+            return customers.Select(x =>
             {
                 return new CustomerPartyFE()
                 {

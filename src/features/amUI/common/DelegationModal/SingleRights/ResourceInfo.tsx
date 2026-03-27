@@ -29,9 +29,16 @@ export interface ResourceInfoProps {
   resource: ServiceResource;
   onDelegate?: () => void;
   availableActions?: DelegationAction[];
+  // Optional for single right request flow, where we want to show the resource info but not have a to party context
+  toPartyName?: string;
 }
 
-export const ResourceInfo = ({ resource, onDelegate, availableActions }: ResourceInfoProps) => {
+export const ResourceInfo = ({
+  resource,
+  onDelegate,
+  availableActions,
+  toPartyName,
+}: ResourceInfoProps) => {
   const isSmall = useIsMobileOrSmaller();
 
   const { t } = useTranslation();
@@ -50,6 +57,7 @@ export const ResourceInfo = ({ resource, onDelegate, availableActions }: Resourc
 
   const isSingleRightRequest = availableActions?.includes(DelegationAction.REQUEST);
   const hasDelegateAction = availableActions?.includes(DelegationAction.DELEGATE);
+  const hasApproveAction = availableActions?.includes(DelegationAction.APPROVE);
 
   const {
     rights,
@@ -85,14 +93,17 @@ export const ResourceInfo = ({ resource, onDelegate, availableActions }: Resourc
       (delegation) => delegation.resource.identifier === resource.identifier,
     )?.permissions || [];
 
-  const toName = formatDisplayName({
-    fullName: toParty?.name ?? '',
-    type: toParty?.partyTypeName === PartyType.Organization ? 'company' : 'person',
-  });
+  const toName =
+    toPartyName ??
+    formatDisplayName({
+      fullName: toParty?.name ?? '',
+      type: toParty?.partyTypeName === PartyType.Organization ? 'company' : 'person',
+    });
   const displayResourceAlert =
     (isSingleRightRequest && resource?.delegable === false) ||
     !!rightsMetaTechnicalErrorDetails ||
-    (hasDelegateAction &&
+    (hasApproveAction && !hasAccess && missingAccess) ||
+    ((hasDelegateAction || hasApproveAction) &&
       !hasAccess &&
       (isDelegationCheckError ||
         resource?.delegable === false ||
@@ -146,7 +157,7 @@ export const ResourceInfo = ({ resource, onDelegate, availableActions }: Resourc
             {displayResourceAlert ? (
               <ResourceAlert
                 error={technicalErrorDetails}
-                isRequest={isSingleRightRequest}
+                availableActions={availableActions}
                 rightReasons={rights.map((r) => r.delegationReason)}
                 resource={resource}
                 className={classes.resourceAlert}
@@ -158,7 +169,6 @@ export const ResourceInfo = ({ resource, onDelegate, availableActions }: Resourc
                 undelegableActions={undelegableActions}
                 isDelegationCheckLoading={isDelegationCheckLoading}
                 toName={toName}
-                isSingleRightRequest={isSingleRightRequest}
                 availableActions={availableActions}
                 delegationError={delegationError}
                 missingAccess={missingAccess && hasDelegateAction ? missingAccess : null}
@@ -170,7 +180,7 @@ export const ResourceInfo = ({ resource, onDelegate, availableActions }: Resourc
                 <Button
                   data-size='sm'
                   disabled={
-                    displayResourceAlert ||
+                    !!displayResourceAlert ||
                     !rights.some((r) => r.checked === true) ||
                     !hasUnsavedChanges
                   }
@@ -193,7 +203,7 @@ export const ResourceInfo = ({ resource, onDelegate, availableActions }: Resourc
               {!hasAccess && !hasPendingRequest(resource.identifier) && isSingleRightRequest && (
                 <DsButton
                   data-size='sm'
-                  disabled={displayResourceAlert || isLoadingSingleRightRequest}
+                  disabled={!!displayResourceAlert || isLoadingSingleRightRequest}
                   loading={isLoadingSingleRightRequest}
                   onClick={() => createRequest(resource)}
                 >

@@ -41,8 +41,31 @@ export class AccessManagementFrontPage {
     await this.page.getByRole('link', { name: userName }).click();
   }
 
+  async goToEnkelttjenester() {
+    await this.page.getByRole('tab', { name: 'Enkelttjenester' }).click();
+  }
+
+  async sokEtterEnkelttjeneste(tjenesteNavn: string) {
+    await this.page
+      .getByRole('searchbox', { name: 'Søk etter tjenester' })
+      .first()
+      .fill(tjenesteNavn);
+  }
+
+  async clickEnkelttjeneste(tjenesteNavn: string) {
+    await this.page.getByRole('button', { name: tjenesteNavn }).first().click();
+  }
+
+  async expectEnkelttjenesteToBeDelegable(tjenesteNavn: string) {
+    await expect(this.page.getByRole('button', { name: tjenesteNavn }).first()).toBeVisible();
+  }
+
   async clickGiFullmakt() {
     await this.page.getByRole('button', { name: 'Gi fullmakt' }).click();
+  }
+
+  async clickGiFullmaktEnkelttjeneste() {
+    await this.page.getByRole('dialog').getByRole('button', { name: 'Gi fullmakt' }).click();
   }
 
   async goToArea(areaName: string) {
@@ -61,8 +84,19 @@ export class AccessManagementFrontPage {
     ).toBeVisible();
   }
 
+  async expectUserToHaveEnkelttjeneste(resourceName: string) {
+    await expect(this.page.getByRole('button', { name: 'Slett ' + resourceName })).toBeVisible();
+  }
+
   async clickSlettFullmaktForTilgangspakke(packageName: string) {
     await this.page.getByRole('button', { name: 'Slett fullmakt for ' + packageName }).click();
+  }
+
+  async clickSlettEnkelttjeneste(resourceName: string) {
+    await this.page
+      .getByRole('button', { name: 'Slett ' + resourceName })
+      .first()
+      .click();
   }
 
   async clickGiFullmaktForTilgangspakke(packageName: string) {

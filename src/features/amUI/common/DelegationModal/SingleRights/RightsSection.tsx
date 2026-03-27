@@ -14,7 +14,6 @@ interface RightsSectionProps {
   undelegableActions: string[];
   isDelegationCheckLoading: boolean;
   toName?: string;
-  isSingleRightRequest?: boolean;
   availableActions: DelegationAction[] | undefined;
   delegationError: 'delegate' | 'revoke' | 'edit' | null;
   missingAccess: string | null;
@@ -29,7 +28,6 @@ export const RightsSection = ({
   undelegableActions,
   isDelegationCheckLoading,
   toName,
-  isSingleRightRequest,
   availableActions,
   delegationError,
   missingAccess,
@@ -41,6 +39,24 @@ export const RightsSection = ({
   const isSmall = useIsMobileOrSmaller();
 
   const [rightsExpanded, setRightsExpanded] = useState(false);
+  const isRequest = availableActions?.includes(DelegationAction.REQUEST);
+  const isApprove = availableActions?.includes(DelegationAction.APPROVE);
+
+  const rightsDescription = () => {
+    if (isRequest) {
+      return t('delegation_modal.actions.request_action_description');
+    }
+    if (isApprove) {
+      return t('delegation_modal.actions.approve_action_description');
+    }
+    return actionDescription ?? t('delegation_modal.actions.action_description');
+  };
+
+  const getListItemHeading = (hasAccessAndNoChanges?: boolean, isSingleRightRequest?: boolean) => {
+    if (hasAccessAndNoChanges) return 'delegation_modal.name_has_the_following';
+    if (isSingleRightRequest) return 'delegation_modal.name_requests_access_to';
+    return 'delegation_modal.name_will_receive';
+  };
 
   return (
     <>
@@ -77,11 +93,7 @@ export const RightsSection = ({
           data-size={isSmall ? '2xs' : 'xs'}
         >
           <Trans
-            i18nKey={
-              hasAccessAndNoChanges
-                ? 'delegation_modal.name_has_the_following'
-                : 'delegation_modal.name_will_receive'
-            }
+            i18nKey={getListItemHeading(hasAccessAndNoChanges, isRequest)}
             values={{ name: toName }}
             components={{ strong: <strong /> }}
           />
@@ -106,11 +118,7 @@ export const RightsSection = ({
           shadow='none'
         >
           <div className={classes.rightExpandableContent}>
-            <DsParagraph>
-              {isSingleRightRequest
-                ? t('delegation_modal.actions.request_action_description')
-                : (actionDescription ?? t('delegation_modal.actions.action_description'))}
-            </DsParagraph>
+            <DsParagraph>{rightsDescription()}</DsParagraph>
             <div className={classes.rightChips}>
               <RightChips
                 rights={rights}

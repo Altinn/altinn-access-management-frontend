@@ -54,6 +54,12 @@ export const SearchResults = ({
   const { createRequest, deleteRequest, hasPendingRequest, isLoadingRequest } =
     useSingleRightRequests({
       canRequestRights: availableActions?.includes(DelegationAction.REQUEST) ?? false,
+      onCreateRequestError: (resource) => {
+        onSelect(resource);
+      },
+      onDeleteRequestError: (resource) => {
+        onSelect(resource);
+      },
     });
 
   const { delegateFromList, revokeFromList, isResourceLoading } = useResourceListDelegation({

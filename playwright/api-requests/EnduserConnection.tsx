@@ -229,7 +229,7 @@ export class EnduserConnection {
 
         if (!response.ok) {
           throw new Error(
-            `Failed to fetch status for addConnectionPackagePerson request. Status: ${response.status}`,
+            `Failed to fetch status for addPackagePerson request. Status: ${response.status}`,
           );
         }
         responses.push(response);
@@ -279,7 +279,7 @@ export class EnduserConnection {
 
         if (!response.ok) {
           throw new Error(
-            `Failed to fetch status for addConnectionPackagePerson request. Status: ${response.status}`,
+            `Failed to fetch status for addPackageOrg request. Status: ${response.status}`,
           );
         }
         responses.push(response);
@@ -324,5 +324,94 @@ export class EnduserConnection {
     }
 
     return response;
+  }
+
+  /**
+   * Delegerer en enkelttjenesten 'resource' fra 'from' til 'to' med leserettigheter hvis ikke 'action' er oppgitt.
+   *
+   * @param pid - Fødselsnummeret til "from" som trengs for å lage en Personal Altinn Token.
+   * @param from - Fødselsnummeret eller organisasjonsnummeret til den som skal delegere enkelttjenesten.
+   * @param to - Fødselsnummeret eller organisasjonsnummeret til den som skal motta enkelttjenestedelegeringen.
+   * @param resource - Navnet på tjenesten
+   * @param fromUuid - partyUuid på den som skal delegere enkelttjenesten (valgfritt)
+   * @param toUuid - partyUuid på den som skal motta enkelttjenestedelegeringen (valgfritt)
+   * @param action - Hvilken handling mottakeren skal få rettighet til (f.eks. 'Read', 'Write', 'Sign', osv). Default verdi er 'Read.'
+   * @returns A promise resolving to the API response JSON payload.
+   * @throws
+   */
+  public async delegateSingleService(
+    pid: string,
+    from: string,
+    to: string,
+    resource: string,
+    fromUuid?: string,
+    toUuid?: string,
+    action = 'Read',
+  ) {
+    fromUuid = fromUuid || (await this.tokenClass.getPartyUuid(from));
+    toUuid = toUuid || (await this.tokenClass.getPartyUuid(to));
+    const url = `${env('API_BASE_URL')}/accessmanagement/api/v1/enduser/connections/resources/rights?party=${fromUuid}&to=${toUuid}&resource=${resource}`;
+
+    const resourceDelegationCheck = await this.getResourceDelegationcheck(pid, pid, resource);
+    const rightKey = resourceDelegationCheck.rights.find(
+      (element: { right: { name: string } }) => element.right.name == action,
+    ).right.key;
+
+    const payload = {
+      directRightKeys: [rightKey],
+    };
+    const token = await this.tokenClass.getPersonalTokenByPid(pid);
+    const response = await fetch(url, {
+      method: 'POST',
+      headers: {
+        Authorization: `Bearer ${token}`,
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(payload),
+    });
+
+    if (!response.ok) {
+      throw new Error(
+        `Failed to fetch status for delegateSingleService request. Status: ${response.status}, ${await response.text()}`,
+      );
+    }
+
+    return response;
+  }
+
+  /**
+   * Ser hvilke rettigheter "party" har lov til å delegere for tjenesten 'resource'.
+   *
+   * @param pid - Fødselsnummer som trengs for å lage en Personal Altinn Token.
+   * @param party - Fødselsnummeret eller organisasjonsnummeret til den som skal gjøre en delegationcheck.
+   * @param resource - Navnet på tjenesten
+   * @param partyUuid - partyUuid til den som skal gjøre en delegationcheck. (valgfritt)
+   * @returns A promise resolving to the API response JSON payload.
+   * @throws
+   */
+  public async getResourceDelegationcheck(
+    pid: string,
+    party: string,
+    resource: string,
+    partyUuid?: string,
+  ) {
+    partyUuid = partyUuid || (await this.tokenClass.getPartyUuid(party));
+    const url = `${env('API_BASE_URL')}/accessmanagement/api/v1/enduser/connections/resources/delegationcheck?party=${partyUuid}&resource=${resource}`;
+    const token = await this.tokenClass.getPersonalTokenByPid(pid);
+    const response = await fetch(url, {
+      method: 'GET',
+      headers: {
+        Authorization: `Bearer ${token}`,
+        'Content-Type': 'application/json',
+      },
+    });
+
+    if (!response.ok) {
+      throw new Error(
+        `Failed to fetch status for getResourceDelegationcheck request. Status: ${response.status}, ${await response.text()}`,
+      );
+    }
+
+    return response.json();
   }
 }
