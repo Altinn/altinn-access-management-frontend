@@ -11,3 +11,7 @@
 .backButton {
   margin-bottom: var(--ds-spacing-4);
 }
+
+.pendingRequestsHeading {
+  min-height: var(--ds-spacing-11);
+}

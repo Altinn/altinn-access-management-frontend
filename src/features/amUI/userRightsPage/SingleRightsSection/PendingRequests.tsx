@@ -47,10 +47,7 @@ export const PendingRequests = () => {
             type: fromParty?.partyTypeName === PartyType.Person ? 'person' : 'company',
           }),
         })}
-        onClose={() => {
-          setIsModalOpen(false);
-          modalRef.current?.close();
-        }}
+        onClose={() => setIsModalOpen(false)}
       />
       {singleRightRequests.length > 0 && (
         <ListItem
@@ -92,19 +89,22 @@ export const SentRequestsModal = ({
   onClose,
   heading,
 }: SentRequestsModalProps) => {
+  const { t } = useTranslation();
   const [selectedResource, setSelectedResource] = useState<ServiceResource | null>(null);
 
   return (
     <DsDialog
       ref={modalRef}
       closedby='any'
-      onClose={onClose}
+      onClose={() => {
+        setSelectedResource(null);
+        onClose();
+      }}
       className={classes.pendingRequestsModal}
     >
       <SnackbarProvider>
         {isModalOpen && (
           <PendingRequestsList
-            onClose={onClose}
             heading={heading}
             selectedResource={selectedResource}
             setSelectedResource={setSelectedResource}
@@ -113,6 +113,15 @@ export const SentRequestsModal = ({
         )}
         <Snackbar />
       </SnackbarProvider>
+      {!selectedResource && (
+        <DsButton
+          variant='primary'
+          className={classes.closeButton}
+          onClick={() => modalRef.current?.close()}
+        >
+          {t('common.close')}
+        </DsButton>
+      )}
     </DsDialog>
   );
 };
@@ -122,11 +131,9 @@ interface PendingRequestsListProps {
   toPartyUuid: string;
   heading: string;
   setSelectedResource: (resource: ServiceResource | null) => void;
-  onClose: () => void;
 }
 
 export const PendingRequestsList = ({
-  onClose,
   selectedResource,
   heading,
   toPartyUuid,
@@ -173,6 +180,7 @@ export const PendingRequestsList = ({
           <DsHeading
             data-size='xs'
             level={1}
+            className={classes.pendingRequestsHeading}
           >
             {heading}
           </DsHeading>
@@ -200,13 +208,6 @@ export const PendingRequestsList = ({
               );
             }}
           />
-          <DsButton
-            variant='primary'
-            className={classes.closeButton}
-            onClick={onClose}
-          >
-            {t('common.close')}
-          </DsButton>
         </>
       )}
     </>
