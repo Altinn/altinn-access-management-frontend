@@ -123,6 +123,7 @@ export const InstanceUsersAsAdmin = ({
         isActionLoading={isFetchingIndirectConnections || isRevoking}
         canDelegate
         noUsersText={t('instance_detail_page.no_users')}
+        searchPlaceholder={t('instance_detail_page.search_placeholder')}
         onDelegate={onDelegate}
         onSelect={onSelect}
         onRevoke={onRevoke}

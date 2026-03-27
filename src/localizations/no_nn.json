@@ -942,10 +942,11 @@
   },
   "instance_detail_page": {
     "document_title": "Delt frå innboks",
-    "resourceTitle": "Melding eller skjema: {{title}}",
+    "resource_title": "Melding eller skjema: {{title}}",
     "provider_name": "til {{name}}",
     "back_to_inbox": "Gå til innboks",
     "see_in_inbox": "Sjå i innboks",
+    "search_placeholder": "Søk etter person",
     "description": "Her kan du dele ei melding eller eit skjema frå innboksen eller få oversikt over kven som allereie har tilgang. Bruk søkjefeltet til å søkje etter personar eller legg dei til som ny brukar.",
     "no_users": "Ingen brukarar har tilgang.",
     "no_access_description": "<b>Du har ikkje fullmakt til å gi vidare denne meldinga eller dette skjemaet.</b> For å kunne dele og gi tilgang frå innboksen må du ha tilgangspakka: Tilgangsstyrar for enkeltmeldingar, skjema og dialogar.",

@@ -108,6 +108,7 @@ export const InstanceUsersAsInstanceAdmin = ({
         isActionLoading={isFetchingSimplifiedConnections}
         canDelegate
         noUsersText={t('instance_detail_page.no_users')}
+        searchPlaceholder={t('instance_detail_page.search_placeholder')}
         onDelegate={onDelegate}
       />
     </>

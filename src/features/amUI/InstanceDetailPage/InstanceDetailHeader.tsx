@@ -29,7 +29,7 @@ export const InstanceDetailHeader = ({
         level={1}
         data-size='sm'
       >
-        {t('instance_detail_page.resourceTitle', { title: resource.title ?? resourceId })}
+        {t('instance_detail_page.resource_title', { title: resource.title ?? resourceId })}
       </DsHeading>
       <div className={classes.resourceOwner}>
         <Icon
