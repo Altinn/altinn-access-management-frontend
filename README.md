@@ -18,7 +18,7 @@
 
 Access management has a lot of dependencies, which can get tedious to work with when developing locally. If all you are working with is frontend-specific code (that is, the code found in this repo) then this hybrid solution will simplify your setup, allowing you to run the React application and the BFF (Backend For Frontend) locally, while using the access management backend and other dependencies that are deployed in an AT-environment.
 
-However, it has an additional prerequisit as it will require you to log into your IDE (ex: Visual Studio) with a user that has access to the Keyvault used by test environment AT22.
+However, it has an additional prerequisit as it will require you to log into your IDE (ex: Visual Studio) with a user that has access to the Keyvault used by the test environment you want to use locally.
 
 To get these accesses on your ai-dev user, you need to be part of the following Azure team:
 
@@ -26,9 +26,11 @@ To get these accesses on your ai-dev user, you need to be part of the following 
 
 Make sure you have the neccecary accesses before proceeding with this setup alternative.
 
+AT22 is the default local hybrid setup in this repo. If you only occasionally need to test against AT23, keep the default setup as-is and temporarily apply the AT23-specific changes described in the "Switching from AT22 to AT23 temporarily" section below.
+
 ### Step 1: Setting up the host file
 
-In order to integrate the local code with AT22 in the most seamless way, using the login method, test data, and sdomain-specific tokens, we need to tell the computer when to divert from the the actual AT environment and instead use the localhoast port where our local BFF will be running from.
+In order to integrate the local code with AT22 in the most seamless way, using the login method, test data, and domain-specific tokens, we need to tell the computer when to divert from the the actual AT environment and instead use the localhost port where our local BFF will be running from.
 
 You can do this by adding following to the host file on your computer:
 
@@ -157,6 +159,69 @@ That's it!
 You can now access the regular altinn features enabled in the environment. Once you navigate into a domain that belongs to this repo (am.ui.at22.altinn.cloud), the local code will run instead of the deployed code of this environment.
 
 Happy coding!
+
+## Switching from AT22 to AT23 temporarily
+
+AT22 is the default local hybrid target. When you need to test against AT23 instead, keep `ASPNETCORE_ENVIRONMENT=Development` and temporarily switch the development-specific values below.
+
+Do not change the launch profile to `AT23`. The backend view only loads the Vite dev server when the ASP.NET environment is `Development`.
+
+### 1. Update host file
+
+Replace the AT22 host override with the AT23 equivalent:
+
+```bash
+127.0.0.1 am.ui.at23.altinn.cloud
+```
+
+If you want to switch back afterwards, restore the original AT22 entry:
+
+```bash
+127.0.0.1 am.ui.at22.altinn.cloud
+```
+
+If the host file change does not seem to take effect, flush DNS and clear browser cache before retrying.
+
+macOS:
+
+```bash
+sudo dscacheutil -flushcache; sudo killall -HUP mDNSResponder
+```
+
+Windows:
+
+```bash
+ipconfig /flushdns
+```
+
+It can also help to fully close the browser or open a fresh private/incognito window before testing again.
+
+### 2. Update `appsettings.Development.json`
+
+Temporarily change the following values in [appsettings.Development.json](/Users/sondre/workspace/altinn-access-management-frontend/backend/src/Altinn.AccessManagement.UI/Altinn.AccessManagement.UI/appsettings.Development.json):
+
+- All `PlatformSettings` URLs from `at22` to `at23`
+- `GeneralSettings.FrontendBaseUrl` from `https://am.ui.at22.altinn.cloud` to `https://am.ui.at23.altinn.cloud`
+- `GeneralSettings.Hostname` from `at22.altinn.cloud` to `at23.altinn.cloud`
+- `KeyVaultSettings.SecretUri` from `https://altinn-dev-amui-kv.vault.azure.net/` to `https://altinn-dev-amui-at23-kv.vault.azure.net/`
+
+This is needed because the local BFF uses:
+
+- `FrontendBaseUrl` when redirecting to login
+- `Hostname` when setting cookies
+- `OpenIdWellKnownEndpoint` and the other platform endpoints for auth and API calls
+- `KeyVaultSettings.SecretUri` to fetch secrets with `DefaultAzureCredential`
+
+### 3. Keep the usual local startup flow
+
+After the temporary config change:
+
+- Start the backend with the existing `LocalDev` profile
+- Start the frontend with `yarn start`
+- Open `https://info.at23.altinn.cloud/` and log in normally
+
+When you navigate to `am.ui.at23.altinn.cloud`, your local BFF and frontend will be used.
+
 
 ## Running with "The Mock"
 
@@ -316,5 +381,3 @@ This project uses [MSW (Mock Service Worker)](https://mswjs.io/) to mock API req
 ### Documentation: 
 *  For more information on writing stories, see the [Storybook Docs](https://storybook.js.org/docs/react/get-started/introduction).
 *  To learn about using MSW with Storybook, check out the [MSW documentation](https://mswjs.io/docs/getting-started/integrate/storybook).
-
-

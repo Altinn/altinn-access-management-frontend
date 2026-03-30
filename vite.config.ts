@@ -15,6 +15,7 @@ export default defineConfig({
     cors: {
       origin: [
         'https://am.ui.at22.altinn.cloud',
+        'https://am.ui.at23.altinn.cloud',
         'https://am.ui.altinn.no',
         'https://am.ui.tt02.altinn.no',
       ],
