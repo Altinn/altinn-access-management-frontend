@@ -65,7 +65,6 @@ export const SentRequestsTabPanel = ({ pendingRequests }: SentRequestsTabPanelPr
       >
         <SentRequestsModal
           modalRef={modalRef}
-          toPartyUuid={openAccessRequest?.partyUuid || ''}
           heading={t('delegation_modal.request.sent_requests_modal_header', {
             partyName: formatDisplayName({
               fullName: openAccessRequest?.displayPartyName || '',

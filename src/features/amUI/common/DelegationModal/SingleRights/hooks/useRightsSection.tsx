@@ -77,6 +77,8 @@ export const useRightsSection = ({
   const { createRequest, deleteRequest, hasPendingRequest, isLoadingRequest } =
     useSingleRightRequests({
       canRequestRights: isRequest,
+      actingPartyUuid: actingParty?.partyUuid,
+      fromPartyUuid: fromParty?.partyUuid,
     });
 
   const {

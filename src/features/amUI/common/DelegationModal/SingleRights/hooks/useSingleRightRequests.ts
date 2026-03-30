@@ -11,26 +11,25 @@ import {
 import { useSnackbar } from '@altinn/altinn-components';
 import { useTranslation } from 'react-i18next';
 import { ServiceResource } from '@/rtk/features/singleRights/singleRightsApi';
-import { usePartyRepresentation } from '../../../PartyRepresentationContext/PartyRepresentationContext';
 
 interface UseSingleRightRequestsProps {
   canRequestRights?: boolean;
+  actingPartyUuid?: string;
+  fromPartyUuid?: string;
   onCreateRequestError?: (resource: ServiceResource) => void;
   onDeleteRequestError?: (resource: ServiceResource) => void;
 }
 
 export const useSingleRightRequests = ({
   canRequestRights,
+  actingPartyUuid,
+  fromPartyUuid,
   onCreateRequestError,
   onDeleteRequestError,
 }: UseSingleRightRequestsProps) => {
   const [loadingByResourceId, setLoadingByResourceId] = useState<Record<string, boolean>>({});
-  const { fromParty, actingParty } = usePartyRepresentation();
 
-  const requestQueryParams = getRequestPartyQueryParams(
-    actingParty?.partyUuid,
-    fromParty?.partyUuid,
-  );
+  const requestQueryParams = getRequestPartyQueryParams(actingPartyUuid, fromPartyUuid);
 
   const { openSnackbar } = useSnackbar();
   const { t } = useTranslation();
