@@ -28,7 +28,7 @@ vi.mock('@/rtk/features/userInfoApi', async () => {
   const actual = await vi.importActual('@/rtk/features/userInfoApi');
   return {
     ...actual,
-    useGetIsHovedadminQuery: vi.fn(),
+    useGetReporteeQuery: vi.fn(),
   };
 });
 
@@ -190,9 +190,9 @@ describe('PartyRepresentationProvider - Acting Party Logic', () => {
       isError: false,
     });
 
-    // Set default mock for useGetIsHovedadminQuery
-    vi.mocked(userInfoApi.useGetIsHovedadminQuery).mockReturnValue({
-      data: false,
+    // Set default mock for useGetReporteeQuery
+    vi.mocked(userInfoApi.useGetReporteeQuery).mockReturnValue({
+      data: undefined,
       isLoading: false,
       isSuccess: true,
       isError: false,
@@ -259,14 +259,6 @@ describe('PartyRepresentationProvider - Acting Party Logic', () => {
       isError: false,
     } as any);
 
-    // Mock NOT hovedadmin
-    vi.mocked(userInfoApi.useGetIsHovedadminQuery).mockReturnValue({
-      data: false,
-      isLoading: false,
-      isSuccess: true,
-      isError: false,
-    } as any);
-
     // Mock useReporteeParty - not needed in this case
     vi.mocked(useReporteeParty).mockReturnValue({
       party: undefined,
@@ -294,7 +286,18 @@ describe('PartyRepresentationProvider - Acting Party Logic', () => {
     });
   });
 
-  test('Case 2: User on their own page but IS hovedadmin - actingParty should be currentUser', async () => {
+  test('Case 2: Unsynced connection alert shown when reportee is valid but connection is unsynced', async () => {
+    const mockReporteeInfo = {
+      partyUuid: mockReporteeParty.partyUuid,
+      name: mockReporteeParty.name,
+      organizationNumber: '987654321',
+      partyId: '456',
+      isDeleted: false,
+      onlyHierarchyElementWithNoAccess: false,
+      authorizedResources: [],
+      authorizedRoles: [],
+    };
+
     // Mock current user
     vi.mocked(lookupApi.useGetPartyFromLoggedInUserQuery).mockReturnValue({
       data: mockCurrentUser,
@@ -303,23 +306,30 @@ describe('PartyRepresentationProvider - Acting Party Logic', () => {
       isError: false,
     } as any);
 
-    // Mock IS hovedadmin
-    vi.mocked(userInfoApi.useGetIsHovedadminQuery).mockReturnValue({
-      data: true,
+    // Mock useGetReporteeQuery - returns the reportee info
+    vi.mocked(userInfoApi.useGetReporteeQuery).mockReturnValue({
+      data: mockReporteeInfo,
       isLoading: false,
       isSuccess: true,
       isError: false,
     } as any);
 
-    // Mock useReporteeParty - not needed in this case
+    // Mock useReporteeParty - acting on behalf of reportee
     vi.mocked(useReporteeParty).mockReturnValue({
-      party: undefined,
+      party: mockReporteeParty,
       isLoading: false,
       error: undefined,
     });
 
-    // Mock connections
-    vi.mocked(useGetRightHoldersQuery).mockReturnValue({
+    vi.mocked(useConnectedParty).mockReturnValue({
+      party: undefined,
+      isLoading: false,
+      error: undefined,
+      isError: false,
+    });
+
+    // Return empty connections to simulate unsynced connection
+    vi.mocked(connectionApi.useGetRightHoldersQuery).mockReturnValue({
       data: [],
       isLoading: false,
       isSuccess: true,
@@ -327,13 +337,15 @@ describe('PartyRepresentationProvider - Acting Party Logic', () => {
     } as any);
 
     renderWithProvider(<TestConsumer />, {
+      fromPartyUuid: mockReporteeParty.partyUuid,
       toPartyUuid: mockCurrentUser.partyUuid,
-      actingPartyUuid: mockCurrentUser.partyUuid,
+      actingPartyUuid: mockReporteeParty.partyUuid,
     });
 
     await waitFor(() => {
-      expect(screen.getByTestId('acting-party')).toHaveTextContent('Current User');
-      expect(screen.getByTestId('self-party')).toHaveTextContent('Current User');
+      // The unsynced connection alert should be shown instead of the content
+      expect(screen.queryByTestId('from-party')).not.toBeInTheDocument();
+      expect(screen.queryByTestId('to-party')).not.toBeInTheDocument();
     });
   });
 

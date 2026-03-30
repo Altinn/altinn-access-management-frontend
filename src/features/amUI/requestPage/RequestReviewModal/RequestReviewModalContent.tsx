@@ -19,6 +19,7 @@ import { ResourceList } from '../../common/ResourceList/ResourceList';
 import { RequestResourceDetail } from './RequestResourceDetail';
 import { useRequestReview } from './useRequestReview';
 import classes from './RequestReviewModal.module.css';
+import { amUIPath } from '@/routes/paths';
 
 interface RequestReviewModalContentProps {
   request: Request | null;
@@ -76,7 +77,7 @@ export const RequestReviewModalContent = ({ request, onClose }: RequestReviewMod
         asChild
         className={classes.userLink}
       >
-        <Link to={`/users/${request?.partyUuid}?returnTo=/requests`}>
+        <Link to={`/${amUIPath.Users}/${request?.partyUuid}?returnTo=/${amUIPath.Requests}`}>
           {t('request_page.review_user_link', {
             name: request?.displayPartyName,
           })}
