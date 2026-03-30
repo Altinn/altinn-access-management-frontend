@@ -174,12 +174,6 @@ Replace the AT22 host override with the AT23 equivalent:
 127.0.0.1 am.ui.at23.altinn.cloud
 ```
 
-If you want to switch back afterwards, restore the original AT22 entry:
-
-```bash
-127.0.0.1 am.ui.at22.altinn.cloud
-```
-
 If the host file change does not seem to take effect, flush DNS and clear browser cache before retrying.
 
 macOS:
