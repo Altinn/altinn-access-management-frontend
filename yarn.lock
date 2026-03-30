@@ -19,14 +19,14 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@altinn/altinn-components@npm:0.56.32":
-  version: 0.56.32
-  resolution: "@altinn/altinn-components@npm:0.56.32"
+"@altinn/altinn-components@npm:0.56.34":
+  version: 0.56.34
+  resolution: "@altinn/altinn-components@npm:0.56.34"
   dependencies:
     "@digdir/designsystemet-css": "npm:^1.9.0"
     "@digdir/designsystemet-react": "npm:^1.9.0"
     "@digdir/designsystemet-theme": "npm:^1.9.0"
-    "@navikt/aksel-icons": "npm:^7.37.0"
+    "@navikt/aksel-icons": "npm:^8.0.0"
     "@tanstack/react-virtual": "npm:^3.13.9"
     classnames: "npm:^2.5.1"
     react: "npm:^19.1.0"
@@ -34,7 +34,7 @@ __metadata:
   peerDependencies:
     react: ">=18.3.1 || ^19.0.0"
     react-dom: ">=18.3.1 || ^19.0.0"
-  checksum: 10/ffb2eb28680eb18ec16c16b3b0ca00c98f3fc9d63d67d4e2bdd48da4c788fb3cca378cc3f17ce04d303d741500a29d6650b586bd22a33e6219609ee7e3263b34
+  checksum: 10/e6773ee1ca8081a296e04ec15787947625acb4da8eb5d1ddd560eb7fec8f6b2065868a46671c19991d49862cdc0e33e6b4b08b2b15f93aeabaf9d96f2c61278a
   languageName: node
   linkType: hard
 
@@ -453,10 +453,17 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@babel/runtime@npm:^7.12.5, @babel/runtime@npm:^7.14.6, @babel/runtime@npm:^7.23.2, @babel/runtime@npm:^7.28.4":
+"@babel/runtime@npm:^7.12.5, @babel/runtime@npm:^7.14.6, @babel/runtime@npm:^7.23.2":
   version: 7.28.6
   resolution: "@babel/runtime@npm:7.28.6"
   checksum: 10/fbcd439cb74d4a681958eb064c509829e3f46d8a4bfaaf441baa81bb6733d1e680bccc676c813883d7741bcaada1d0d04b15aa320ef280b5734e2192b50decf9
+  languageName: node
+  linkType: hard
+
+"@babel/runtime@npm:^7.29.2":
+  version: 7.29.2
+  resolution: "@babel/runtime@npm:7.29.2"
+  checksum: 10/f55ba4052aa0255055b34371a145fbe69c29b37b49eaea14805b095bfb4153701486416e89392fd27ec8abafa53868be86e960b9f8f959fff91f2c8ac2a14b02
   languageName: node
   linkType: hard
 
@@ -1394,10 +1401,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@navikt/aksel-icons@npm:^7.33.3, @navikt/aksel-icons@npm:^7.37.0":
-  version: 7.40.0
-  resolution: "@navikt/aksel-icons@npm:7.40.0"
-  checksum: 10/3aa95caee5484355b8e1bbe06fa3f4c1dd2f5db48c3c27e445f8ce53438e3571949f957178b2dbc81163c148f5c5c000222e67afe60556955419ad06ce505fab
+"@navikt/aksel-icons@npm:^8.0.0, @navikt/aksel-icons@npm:^8.9.0":
+  version: 8.9.0
+  resolution: "@navikt/aksel-icons@npm:8.9.0"
+  checksum: 10/8475ee3ca22ef807d426eb4e72975e535042b131e7c5cd5aeab7ddc31069d2f28a85f1574a6a59ebd232a9748ad1563d73c7cf30e202ea822a234448f93e4958
   languageName: node
   linkType: hard
 
@@ -1651,7 +1658,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@reduxjs/toolkit@npm:^2.10.1":
+"@reduxjs/toolkit@npm:^2.11.2":
   version: 2.11.2
   resolution: "@reduxjs/toolkit@npm:2.11.2"
   dependencies:
@@ -2140,21 +2147,21 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@tanstack/query-core@npm:5.90.20":
-  version: 5.90.20
-  resolution: "@tanstack/query-core@npm:5.90.20"
-  checksum: 10/25e38f4382442bc15e0f6cce8d787e9df8d8822c61d3f3e9427e89e01b1e2506f848292e086dae29aeb55f8ce71b097c34221f3c5eda37fb4a688b5ceca5d1b3
+"@tanstack/query-core@npm:5.95.2":
+  version: 5.95.2
+  resolution: "@tanstack/query-core@npm:5.95.2"
+  checksum: 10/ebacd841a28bffd7e5ad05ac7b5ca3dcb08533d87c6457f6df34c9478129f2dd5c573eaf0037e74c25df53192eba57733f587593a34539dab139fcd2fe93e432
   languageName: node
   linkType: hard
 
-"@tanstack/react-query@npm:^5.90.10":
-  version: 5.90.21
-  resolution: "@tanstack/react-query@npm:5.90.21"
+"@tanstack/react-query@npm:^5.95.2":
+  version: 5.95.2
+  resolution: "@tanstack/react-query@npm:5.95.2"
   dependencies:
-    "@tanstack/query-core": "npm:5.90.20"
+    "@tanstack/query-core": "npm:5.95.2"
   peerDependencies:
     react: ^18 || ^19
-  checksum: 10/5bb4b6be7ac34a7423aca60484f1e35a0c7f8b2f86ef6656a3b6757943417561a50d9a159e2bff9d97a57a82ecec920df067b507c2ec6488beb286635b25e518
+  checksum: 10/5fb9948d2dcfce44ad305c888ad8246501d3de264356995ae0b025c3bceb80e710a9946ea6012a39adec71e64d255d05416861ddb525b66bc5547df8f6dd2253
   languageName: node
   linkType: hard
 
@@ -3153,15 +3160,15 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "access-management@workspace:."
   dependencies:
-    "@altinn/altinn-components": "npm:0.56.32"
+    "@altinn/altinn-components": "npm:0.56.34"
     "@axe-core/playwright": "npm:^4.10.2"
-    "@navikt/aksel-icons": "npm:^7.33.3"
+    "@navikt/aksel-icons": "npm:^8.9.0"
     "@playwright/test": "npm:^1.55.0"
-    "@reduxjs/toolkit": "npm:^2.10.1"
+    "@reduxjs/toolkit": "npm:^2.11.2"
     "@storybook/addon-a11y": "npm:^9.1.3"
     "@storybook/addon-docs": "npm:^9.1.3"
     "@storybook/react-vite": "npm:^9.1.3"
-    "@tanstack/react-query": "npm:^5.90.10"
+    "@tanstack/react-query": "npm:^5.95.2"
     "@testing-library/cypress": "npm:^10.0.3"
     "@testing-library/dom": "npm:^10.4.1"
     "@testing-library/react": "npm:^16.3.0"
@@ -3173,7 +3180,7 @@ __metadata:
     "@typescript-eslint/parser": "npm:^8.40.0"
     "@vitejs/plugin-react": "npm:^4.7.0"
     "@vitest/coverage-istanbul": "npm:^4.0.5"
-    axios: "npm:^1.13.2"
+    axios: "npm:^1.14.0"
     classnames: "npm:^2.5.1"
     cross-env: "npm:^10.1.0"
     csv-parser: "npm:^3.2.0"
@@ -3195,7 +3202,7 @@ __metadata:
     eslint-plugin-storybook: "npm:^9.1.3"
     html-react-parser: "npm:^5.2.5"
     husky: "npm:^9.1.7"
-    i18next: "npm:^25.6.2"
+    i18next: "npm:^25.10.10"
     i18next-browser-languagedetector: "npm:^8.2.0"
     jsdom: "npm:^26.1.0"
     lint-staged: "npm:^16.1.5"
@@ -3206,13 +3213,13 @@ __metadata:
     prettier: "npm:^3.6.2"
     react: "npm:^19.2.0"
     react-dom: "npm:^19.2.0"
-    react-i18next: "npm:^16.3.3"
+    react-i18next: "npm:^16.6.6"
     react-redux: "npm:^9.2.0"
     react-router: "npm:^7.9.6"
-    storybook: "npm:9.1.19"
+    storybook: "npm:9.1.20"
     typescript: "npm:5.9.3"
     typescript-plugin-css-modules: "npm:^5.2.0"
-    vite: "npm:^6.3.6"
+    vite: "npm:^6.4.1"
     vite-plugin-svgr: "npm:^4.5.0"
     vitest: "npm:^4.0.5"
   languageName: unknown
@@ -3596,7 +3603,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"axios@npm:^1.12.0, axios@npm:^1.13.2":
+"axios@npm:^1.12.0":
   version: 1.13.6
   resolution: "axios@npm:1.13.6"
   dependencies:
@@ -3604,6 +3611,17 @@ __metadata:
     form-data: "npm:^4.0.5"
     proxy-from-env: "npm:^1.1.0"
   checksum: 10/a7ed83c2af3ef21d64609df0f85e76893a915a864c5934df69241001d0578082d6521a0c730bf37518ee458821b5695957cb10db9fc705f2a8996c8686ea7a89
+  languageName: node
+  linkType: hard
+
+"axios@npm:^1.14.0":
+  version: 1.14.0
+  resolution: "axios@npm:1.14.0"
+  dependencies:
+    follow-redirects: "npm:^1.15.11"
+    form-data: "npm:^4.0.5"
+    proxy-from-env: "npm:^2.1.0"
+  checksum: 10/c3444e9e3da1714916e4ddd7cda05bb41a5d5d80e3e27b099a116439684c63f2280c88503d1acd65841698b63af0b542b4d5780454e28fd0aed2d783ef90943e
   languageName: node
   linkType: hard
 
@@ -6525,17 +6543,17 @@ __metadata:
   languageName: node
   linkType: hard
 
-"i18next@npm:^25.6.2":
-  version: 25.8.14
-  resolution: "i18next@npm:25.8.14"
+"i18next@npm:^25.10.10":
+  version: 25.10.10
+  resolution: "i18next@npm:25.10.10"
   dependencies:
-    "@babel/runtime": "npm:^7.28.4"
+    "@babel/runtime": "npm:^7.29.2"
   peerDependencies:
-    typescript: ^5
+    typescript: ^5 || ^6
   peerDependenciesMeta:
     typescript:
       optional: true
-  checksum: 10/7389c39909f1836da06191cb31bc85074bf025d5ffaed071e2889ddd1ea34419232ed38cfc521b3283ba6a85e91329a0d7e2bb41614df30766b42b1dd844a411
+  checksum: 10/ee4f6ba360902a2f0550cfeef234c9e68a67487b575d204e89bdf2f2db647934aa3900a39c64174b9201a8979e455d0bf8f56b57934c34fc8f9aa3b430cb152d
   languageName: node
   linkType: hard
 
@@ -8928,6 +8946,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"proxy-from-env@npm:^2.1.0":
+  version: 2.1.0
+  resolution: "proxy-from-env@npm:2.1.0"
+  checksum: 10/fbbaf4dab2a6231dc9e394903a5f66f20475e36b734335790b46feb9da07c37d6b32e2c02e3e2ea4d4b23774c53d8562e5b7cc73282cb43f4a597b7eacaee2ee
+  languageName: node
+  linkType: hard
+
 "prr@npm:~1.0.1":
   version: 1.0.1
   resolution: "prr@npm:1.0.1"
@@ -9020,17 +9045,17 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react-i18next@npm:^16.3.3":
-  version: 16.5.4
-  resolution: "react-i18next@npm:16.5.4"
+"react-i18next@npm:^16.6.6":
+  version: 16.6.6
+  resolution: "react-i18next@npm:16.6.6"
   dependencies:
-    "@babel/runtime": "npm:^7.28.4"
+    "@babel/runtime": "npm:^7.29.2"
     html-parse-stringify: "npm:^3.0.1"
     use-sync-external-store: "npm:^1.6.0"
   peerDependencies:
-    i18next: ">= 25.6.2"
+    i18next: ">= 25.10.9"
     react: ">= 16.8.0"
-    typescript: ^5
+    typescript: ^5 || ^6
   peerDependenciesMeta:
     react-dom:
       optional: true
@@ -9038,7 +9063,7 @@ __metadata:
       optional: true
     typescript:
       optional: true
-  checksum: 10/68319027cf93d33a7b782a9c8e9d27bda4df30790d2e8b17fe6f81181c4f7c729b02001e03b4462f44c7141a5cc6983e038c92bb2e4a531f046a75a853f9c203
+  checksum: 10/5916b8eb0bf2e8d6aef06077640c2ac81603b47aca82c1314c73be3604f0a64337964049d6efc07607f296209f02ffe2ba7a0fa6fbed570f3d5e1b83ee8a4059
   languageName: node
   linkType: hard
 
@@ -9904,9 +9929,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"storybook@npm:9.1.19":
-  version: 9.1.19
-  resolution: "storybook@npm:9.1.19"
+"storybook@npm:9.1.20":
+  version: 9.1.20
+  resolution: "storybook@npm:9.1.20"
   dependencies:
     "@storybook/global": "npm:^5.0.0"
     "@testing-library/jest-dom": "npm:^6.6.3"
@@ -9927,7 +9952,7 @@ __metadata:
       optional: true
   bin:
     storybook: ./bin/index.cjs
-  checksum: 10/f9c69030cea70ba9aa8305c149beed6764acae75879b210db0b7ce4865ce11eb2d9c6d6f4ee30ed5d0a252c11990ab634edb6088451e1fb6d7a3747c2e61d2a6
+  checksum: 10/e09f29cd5fd0a635df10298b650143e4145feb63e8b217b71a20eae6162112decf3a3715655aec5fa57c9ed08c86886944c9b93551f041b9b60e151b343d1f7c
   languageName: node
   linkType: hard
 
@@ -10941,7 +10966,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"vite@npm:^6.3.6":
+"vite@npm:^6.4.1":
   version: 6.4.1
   resolution: "vite@npm:6.4.1"
   dependencies:
