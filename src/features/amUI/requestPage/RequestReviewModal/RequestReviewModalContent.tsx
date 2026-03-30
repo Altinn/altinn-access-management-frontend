@@ -76,7 +76,7 @@ export const RequestReviewModalContent = ({ request, onClose }: RequestReviewMod
         asChild
         className={classes.userLink}
       >
-        <Link to={`/users/${request?.partyUuid}`}>
+        <Link to={`/users/${request?.partyUuid}?returnTo=/requests`}>
           {t('request_page.review_user_link', {
             name: request?.displayPartyName,
           })}
