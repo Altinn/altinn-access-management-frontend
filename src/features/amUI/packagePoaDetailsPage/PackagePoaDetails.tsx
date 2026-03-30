@@ -2,21 +2,22 @@ import { useState } from 'react';
 import pageClasses from './PackagePoaDetailsPage.module.css';
 import headerClasses from './PackagePoaDetailsHeader.module.css';
 import { DsAlert, DsTabs } from '@altinn/altinn-components';
-import { Link, useParams } from 'react-router';
+import { Link, useParams, useSearchParams } from 'react-router';
 import { usePartyRepresentation } from '../common/PartyRepresentationContext/PartyRepresentationContext';
 import { useGetPackagePermissionDetailsQuery } from '@/rtk/features/accessPackageApi';
 import { useTranslation } from 'react-i18next';
 import { PackagePoaDetailsHeader } from './PackagePoaDetailsHeader';
-import { amUIPath } from '@/routes/paths/amUIPath';
 import { ResourceList } from '../common/ResourceList/ResourceList';
 import { UsersTab } from './UsersTab';
 import { StatusSection } from '../common/StatusSection/StatusSection';
 import { useAccessPackageDelegationCheck } from '../common/DelegationCheck/AccessPackageDelegationCheckContext';
 import { isCriticalAndUndelegated } from '../common/AccessPackageList/UndelegatedPackageWarning';
 import { FilesIcon, PersonGroupIcon } from '@navikt/aksel-icons';
+import { amUIPath } from '@/routes/paths/amUIPath';
 
 export const PackagePoaDetails = () => {
   const { id } = useParams<{ id: string }>();
+  const [searchParams] = useSearchParams();
   const { t, i18n } = useTranslation();
   const { fromParty } = usePartyRepresentation();
   const { canDelegatePackage } = useAccessPackageDelegationCheck();
@@ -36,6 +37,8 @@ export const PackagePoaDetails = () => {
   );
 
   const [chosenTab, setChosenTab] = useState('users');
+  const tab = searchParams.get('tab');
+  const poaOverviewUrl = `/${amUIPath.PoaOverview}${tab ? `?tab=${encodeURIComponent(tab)}` : ''}`;
 
   const cannotDelegateHere = !!(accessPackage && accessPackage.isAssignable === false);
   const showUndelegatedWarning = !!(accessPackage && isCriticalAndUndelegated(accessPackage));
@@ -47,9 +50,7 @@ export const PackagePoaDetails = () => {
     return (
       <DsAlert data-color='danger'>
         {t('package_poa_details_page.load_error')}{' '}
-        <Link to={`/${amUIPath.PoaOverview}`}>
-          {t('package_poa_details_page.back_to_overview_link')}
-        </Link>
+        <Link to={poaOverviewUrl}>{t('package_poa_details_page.back_to_overview_link')}</Link>
       </DsAlert>
     );
   }

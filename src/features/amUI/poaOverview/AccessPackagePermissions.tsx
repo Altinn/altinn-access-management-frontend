@@ -26,7 +26,7 @@ export const AccessPackagePermissions = () => {
         showPackagesCount={false}
         packageAs={(props) => (
           <Link
-            to={`/poa-overview/access-package/${props.packageId}`}
+            to={`/poa-overview/access-package/${props.packageId}?tab=packages`}
             {...props}
           />
         )}

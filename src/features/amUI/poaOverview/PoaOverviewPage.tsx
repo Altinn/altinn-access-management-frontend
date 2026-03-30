@@ -21,6 +21,9 @@ import { Breadcrumbs } from '../common/Breadcrumbs/Breadcrumbs';
 import { GuardianshipPermissions } from './GuardianshipPermissions';
 import { InstancePermissions } from './InstancePermissions';
 import classes from './PoaOverviewPage.module.css';
+import { useUrlParamState } from '../common/useUrlParamState';
+
+const poaOverviewTabs = ['packages', 'instances', 'guardianships'] as const;
 
 export const PoaOverviewPage = () => {
   const { t } = useTranslation();
@@ -36,6 +39,11 @@ export const PoaOverviewPage = () => {
 
   const partyUuid = getCookie('AltinnPartyUuid') || undefined;
   const showInstancesTab = instanceDelegationEnabled;
+  const [chosenTab, setChosenTab] = useUrlParamState({
+    key: 'tab',
+    defaultValue: 'packages',
+    validValues: poaOverviewTabs,
+  });
   useRerouteIfPoaOverviewPageDisabled();
 
   return (
@@ -62,6 +70,8 @@ export const PoaOverviewPage = () => {
               roleAssignmentsPanel={null}
               guardianshipsPanel={<GuardianshipPermissions />}
               tabProps={{ className: classes.tab }}
+              value={chosenTab}
+              onChange={setChosenTab}
             />
           </PartyRepresentationProvider>
         )}

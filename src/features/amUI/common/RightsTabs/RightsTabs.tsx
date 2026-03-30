@@ -1,5 +1,5 @@
 import type { ReactNode } from 'react';
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router';
 import { useTranslation } from 'react-i18next';
 import { DsBadge, DsTabs } from '@altinn/altinn-components';
@@ -31,6 +31,8 @@ interface RightsTabsProps {
   roleAssignmentsPanel: ReactNode;
   guardianshipsPanel?: ReactNode;
   tabProps?: Partial<React.ComponentProps<typeof DsTabs.Tab>>;
+  value?: string;
+  onChange?: (value: string) => void;
 }
 
 export const RightsTabs = ({
@@ -41,11 +43,13 @@ export const RightsTabs = ({
   roleAssignmentsPanel,
   guardianshipsPanel,
   tabProps,
+  value,
+  onChange,
 }: RightsTabsProps) => {
   const { t } = useTranslation();
   const { hash } = useLocation();
   const navigate = useNavigate();
-  const [chosenTab, setChosenTab] = useState('packages');
+  const [internalChosenTab, setInternalChosenTab] = useState('packages');
 
   const { displayRoles } = window.featureFlags;
   const { toParty, fromParty, actingParty } = usePartyRepresentation();
@@ -68,6 +72,19 @@ export const RightsTabs = ({
 
   const showGuardianshipsTab =
     guardianshipsPanel && fromParty?.partyTypeName === PartyType.Person && hasGuardianPermission;
+  // Support both URL-controlled tabs and the existing internal tab state.
+  const chosenTab = value ?? internalChosenTab;
+  const setChosenTab = onChange ?? setInternalChosenTab;
+  const availableTabs = useMemo(
+    () => [
+      'packages',
+      ...(singleRightsPanel ? ['singleRights'] : []),
+      ...(instancesPanel ? ['instances'] : []),
+      ...(displayRoles && roleAssignmentsPanel ? ['roleAssignments'] : []),
+      ...(showGuardianshipsTab ? ['guardianships'] : []),
+    ],
+    [singleRightsPanel, instancesPanel, displayRoles, roleAssignmentsPanel, showGuardianshipsTab],
+  );
 
   useEffect(() => {
     if (hash) {
@@ -78,6 +95,12 @@ export const RightsTabs = ({
       }
     }
   }, [hash, showGuardianshipsTab, navigate]);
+
+  useEffect(() => {
+    if (!availableTabs.includes(chosenTab)) {
+      setChosenTab('packages');
+    }
+  }, [availableTabs, chosenTab, setChosenTab]);
 
   return (
     <DsTabs

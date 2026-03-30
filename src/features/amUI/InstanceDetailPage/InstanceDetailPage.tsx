@@ -6,7 +6,6 @@ import { EnvelopeClosedIcon } from '@navikt/aksel-icons';
 import { PageWrapper } from '@/components';
 import { getCookie } from '@/resources/Cookie/CookieMethods';
 import { useDocumentTitle } from '@/resources/hooks/useDocumentTitle';
-import { amUIPath } from '@/routes/paths/amUIPath';
 import { displayInstanceDelegation } from '@/resources/utils/featureFlagUtils';
 import { getAfUrl } from '@/resources/utils/pathUtils';
 
@@ -20,6 +19,7 @@ import { InstanceDetailPageContent } from './InstanceDetailPageContent';
 import classes from './InstanceDetailPageContent.module.css';
 import { Breadcrumbs } from '../common/Breadcrumbs/Breadcrumbs';
 import { useGetResourceQuery } from '@/rtk/features/resourceApi';
+import { amUIPath } from '@/routes/paths/amUIPath';
 
 const getInboxUrl = (dialogId: string) => `${getAfUrl()}inbox/${encodeURIComponent(dialogId)}`;
 
@@ -30,6 +30,7 @@ export const InstanceDetailPage = () => {
   const dialogId = searchParams.get('dialogId');
   const isInboxDeeplink = !!dialogId;
   const instanceDelegationEnabled = displayInstanceDelegation();
+  const poaOverviewUrl = `/${amUIPath.PoaOverview}?tab=instances`;
 
   useDocumentTitle(t('instance_detail_page.document_title'));
 
@@ -61,9 +62,7 @@ export const InstanceDetailPage = () => {
     <PageWrapper>
       <PageLayoutWrapper hideSidebar={isInboxDeeplink}>
         {!isInboxDeeplink && <BreadcrumbsWrapper />}
-        <PageContainer
-          backUrl={isInboxDeeplink ? getInboxUrl(dialogId) : `/${amUIPath.PoaOverview}`}
-        >
+        <PageContainer backUrl={isInboxDeeplink ? getInboxUrl(dialogId) : poaOverviewUrl}>
           <DeeplinkReporteeGuard fallbackContent={inboxLink}>
             <PartyRepresentationProvider
               fromPartyUuid={partyUuid}
