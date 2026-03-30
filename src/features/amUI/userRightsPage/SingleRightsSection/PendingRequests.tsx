@@ -27,18 +27,19 @@ export const PendingRequests = () => {
 
   const { t } = useTranslation();
   const isSmallScreen = useIsTabletOrSmaller();
-  const { fromParty } = usePartyRepresentation();
+  const { actingParty, fromParty } = usePartyRepresentation();
 
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   const { singleRightRequests = [] } = useSingleRightRequests({
     canRequestRights: true,
+    actingPartyUuid: actingParty?.partyUuid,
+    fromPartyUuid: fromParty?.partyUuid,
   });
 
   return (
     <>
       <SentRequestsModal
-        toPartyUuid={fromParty?.partyUuid || ''}
         isModalOpen={isModalOpen}
         modalRef={modalRef}
         heading={t('delegation_modal.request.sent_requests_modal_header', {
@@ -80,10 +81,8 @@ interface SentRequestsModalProps {
   isModalOpen: boolean;
   heading: string;
   onClose: () => void;
-  toPartyUuid: string;
 }
 export const SentRequestsModal = ({
-  toPartyUuid,
   modalRef,
   isModalOpen,
   onClose,
@@ -108,7 +107,6 @@ export const SentRequestsModal = ({
             heading={heading}
             selectedResource={selectedResource}
             setSelectedResource={setSelectedResource}
-            toPartyUuid={toPartyUuid}
           />
         )}
         <Snackbar />
@@ -128,34 +126,34 @@ export const SentRequestsModal = ({
 
 interface PendingRequestsListProps {
   selectedResource: ServiceResource | null;
-  toPartyUuid: string;
   heading: string;
   setSelectedResource: (resource: ServiceResource | null) => void;
 }
 
-export const PendingRequestsList = ({
+const PendingRequestsList = ({
   selectedResource,
   heading,
-  toPartyUuid,
   setSelectedResource,
 }: PendingRequestsListProps) => {
   const { t } = useTranslation();
   const isSmallScreen = useIsTabletOrSmaller();
-  const { actingParty } = usePartyRepresentation();
+  const { actingParty, fromParty } = usePartyRepresentation();
 
   const { data: singleRightRequests = [], isLoading: isLoadingRequests } =
     useGetEnrichedSentResourceRequestsQuery(
       {
-        ...getRequestPartyQueryParams(actingParty?.partyUuid, toPartyUuid),
+        ...getRequestPartyQueryParams(actingParty?.partyUuid, fromParty?.partyUuid),
         status: ['Pending'],
       },
       {
-        skip: !actingParty?.partyUuid || !toPartyUuid,
+        skip: !actingParty?.partyUuid || !fromParty?.partyUuid,
       },
     );
 
   const { deleteRequest, isLoadingRequest } = useSingleRightRequests({
     canRequestRights: true,
+    actingPartyUuid: actingParty?.partyUuid,
+    fromPartyUuid: fromParty?.partyUuid,
   });
 
   return (

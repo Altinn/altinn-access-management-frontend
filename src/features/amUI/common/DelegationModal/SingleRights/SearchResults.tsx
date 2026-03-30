@@ -49,11 +49,13 @@ export const SearchResults = ({
 }: SearchResultsProps) => {
   const { t } = useTranslation();
   const { setActionError } = useDelegationModalContext();
-  const { toParty } = usePartyRepresentation();
+  const { actingParty, fromParty, toParty } = usePartyRepresentation();
 
   const { createRequest, deleteRequest, hasPendingRequest, isLoadingRequest } =
     useSingleRightRequests({
       canRequestRights: availableActions?.includes(DelegationAction.REQUEST) ?? false,
+      actingPartyUuid: actingParty?.partyUuid,
+      fromPartyUuid: fromParty?.partyUuid,
       onCreateRequestError: (resource) => {
         onSelect(resource);
       },
