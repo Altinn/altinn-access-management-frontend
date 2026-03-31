@@ -1,33 +1,62 @@
 using Altinn.AccessManagement.UI.Core.ClientInterfaces;
+using Altinn.AccessManagement.UI.Core.Configuration;
 using Altinn.AccessManagement.UI.Core.Models.InstanceDelegation;
 using Altinn.AccessManagement.UI.Core.Models.InstanceDelegation.Frontend;
 using Altinn.AccessManagement.UI.Core.Models.ResourceRegistry.Frontend;
 using Altinn.AccessManagement.UI.Core.Models.SingleRight;
 using Altinn.AccessManagement.UI.Core.Models.User;
 using Altinn.AccessManagement.UI.Core.Services.Interfaces;
+using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Options;
 
 namespace Altinn.AccessManagement.UI.Core.Services
 {
     /// <inheritdoc />
     public class InstanceService : IInstanceService
     {
+        private readonly IAuthenticationClient _authenticationClient;
+        private readonly FeatureFlags _featureFlags;
+        private readonly IDialogportClient _dialogportClient;
         private readonly IInstanceClient _instanceClient;
+        private readonly ILogger<InstanceService> _logger;
         private readonly IResourceService _resourceService;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="InstanceService"/> class.
         /// </summary>
+        /// <param name="authenticationClient">Client for fetching enriched end user tokens.</param>
+        /// <param name="featureFlags">Feature flag configuration.</param>
+        /// <param name="dialogportClient">Client for dialogporten lookups.</param>
         /// <param name="instanceClient">Client for instance delegation data.</param>
+        /// <param name="logger">Logger instance.</param>
         /// <param name="resourceService">Service for resource data.</param>
-        public InstanceService(IInstanceClient instanceClient, IResourceService resourceService)
+        public InstanceService(
+            IAuthenticationClient authenticationClient,
+            IOptions<FeatureFlags> featureFlags,
+            IDialogportClient dialogportClient,
+            IInstanceClient instanceClient,
+            ILogger<InstanceService> logger,
+            IResourceService resourceService)
         {
+            _authenticationClient = authenticationClient;
+            _featureFlags = featureFlags.Value;
+            _dialogportClient = dialogportClient;
             _instanceClient = instanceClient;
+            _logger = logger;
             _resourceService = resourceService;
         }
 
         /// <inheritdoc />
         public async Task<List<InstanceDelegation>> GetDelegatedInstances(string languageCode, Guid party, Guid? from, Guid? to, string resource, string instance)
         {
+            bool shouldEnrichWithDialogporten = _featureFlags.EnableDialogportenInstanceLookup;
+            string enrichedToken = null;
+
+            if (shouldEnrichWithDialogporten)
+            {
+                enrichedToken = await _authenticationClient.GetEnrichedToken();
+            }
+
             List<InstancePermission> instancePermissions = await _instanceClient.GetDelegatedInstances(languageCode, party, from, to, resource, instance);
             List<InstanceDelegation> result = new List<InstanceDelegation>();
 
@@ -44,7 +73,22 @@ namespace Altinn.AccessManagement.UI.Core.Services
 
                 if (resourceFe != null)
                 {
-                    result.Add(new InstanceDelegation(resourceFe, instancePermission.Instance, instancePermission.Permissions));
+                    InstanceDelegation instanceDelegation = new InstanceDelegation(resourceFe, instancePermission.Instance, instancePermission.Permissions);
+
+                    if (shouldEnrichWithDialogporten && !string.IsNullOrWhiteSpace(enrichedToken) && !string.IsNullOrWhiteSpace(instancePermission.Instance?.RefId))
+                    {
+                        try
+                        {
+                            instanceDelegation.DialogLookup =
+                                await _dialogportClient.GetDialogByInstanceRef(enrichedToken, languageCode, instancePermission.Instance.RefId);
+                        }
+                        catch (Exception ex)
+                        {
+                            _logger.LogWarning(ex, "InstanceService // GetDelegatedInstances // Dialog lookup failed for instanceRef {InstanceRef}", instancePermission.Instance.RefId);
+                        }
+                    }
+
+                    result.Add(instanceDelegation);
                 }
             }
 

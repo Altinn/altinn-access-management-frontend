@@ -374,6 +374,15 @@ void ConfigureMockableClients(IServiceCollection services, IConfiguration config
         services.AddHttpClient<IRequestClient, RequestClient>();
     }
 
+    if (mockSettings.Dialogporten)
+    {
+        services.AddHttpClient<IDialogportClient, DialogportClientMock>();
+    }
+    else
+    {
+        services.AddHttpClient<IDialogportClient, DialogportClient>();
+    }
+
     if (mockSettings.Instance)
     {
         services.AddHttpClient<IInstanceClient, InstanceClientMock>();

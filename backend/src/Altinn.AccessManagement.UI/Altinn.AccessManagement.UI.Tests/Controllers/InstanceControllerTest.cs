@@ -121,6 +121,30 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
         }
 
         /// <summary>
+        /// Test case: Returns the instance even when dialogporten lookup is not found.
+        /// Expected: Returns OK and the instance without dialog lookup data.
+        /// </summary>
+        [Fact]
+        public async Task GetInstances_WhenDialogLookupIsMissing_ReturnsInstanceWithoutDialogData()
+        {
+            Guid party = Guid.Parse("cd35779b-b174-4ecc-bbef-ece13611be7f");
+            Guid from = Guid.Parse("cd35779b-b174-4ecc-bbef-ece13611be7f");
+            string instance = "urn:altinn:instance-id:51599233/6f4a3c12-8fd1-4a8b-8dc6-777777777777";
+            string path = Path.Combine(_mockFolder, "Data", "ExpectedResults", "Instance", "GetInstances", "instances.json");
+            List<InstanceDelegation> expectedResponses = Util.GetMockData<List<InstanceDelegation>>(path);
+            InstanceDelegation expectedResponse = expectedResponses.Single(delegation => delegation.Instance.RefId == instance);
+
+            HttpResponseMessage httpResponse = await _client.GetAsync($"accessmanagement/api/v1/instances/delegation/instances?party={party}&from={from}&instance={Uri.EscapeDataString(instance)}");
+            List<InstanceDelegation> actualResponse = await httpResponse.Content.ReadFromJsonAsync<List<InstanceDelegation>>();
+
+            Assert.Equal(HttpStatusCode.OK, httpResponse.StatusCode);
+            Assert.NotNull(actualResponse);
+            Assert.Single(actualResponse);
+            AssertionUtil.AssertEqual(expectedResponse, actualResponse[0]);
+            Assert.Null(actualResponse[0].DialogLookup);
+        }
+
+        /// <summary>
         /// Test case: Rejects requests that omit both from and to parameters.
         /// Expected: Returns bad request.
         /// </summary>

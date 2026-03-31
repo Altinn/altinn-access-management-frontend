@@ -1,0 +1,10 @@
+{
+  "dialogId": "22222222-2222-2222-2222-222222222222",
+  "instanceRef": "urn:altinn:instance-id:51599233/c1d2e3f4-1111-2222-3333-444455556666",
+  "title": [
+    {
+      "value": "Dialog for abctest",
+      "languageCode": "nb"
+    }
+  ]
+}

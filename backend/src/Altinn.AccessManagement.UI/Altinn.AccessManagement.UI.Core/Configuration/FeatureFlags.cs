@@ -100,5 +100,10 @@ namespace Altinn.AccessManagement.UI.Core.Configuration
         /// Whether to enable request access
         /// </summary>
         public bool EnableRequestAccess { get; set; }
+
+        /// <summary>
+        /// Whether to enrich instance delegations with dialogporten lookup data
+        /// </summary>
+        public bool EnableDialogportenInstanceLookup { get; set; }
     }
 }

@@ -44,9 +44,20 @@ public class AuthenticationClient : IAuthenticationClient
     /// <inheritdoc />
     public async Task<string> RefreshToken()
     {
+        return await RefreshTokenInternal();
+    }
+
+    /// <inheritdoc />
+    public async Task<string> GetEnrichedToken()
+    {
+        return await RefreshTokenInternal(true);
+    }
+
+    private async Task<string> RefreshTokenInternal(bool enrichPid = false)
+    {
         try
         {
-            string endpointUrl = $"refresh";
+            string endpointUrl = enrichPid ? "refresh?enrichPid=true" : "refresh";
             string token = JwtTokenUtil.GetTokenFromContext(_httpContextAccessor.HttpContext, _platformSettings.JwtCookieName);
             _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
             HttpResponseMessage response = await _client.GetAsync(endpointUrl);
@@ -64,7 +75,7 @@ public class AuthenticationClient : IAuthenticationClient
         }
         catch (Exception ex)
         {
-            _logger.LogError(ex, "AccessManagementUI // AuthenticationClient // Refresh // Exception");
+            _logger.LogError(ex, "AccessManagementUI // AuthenticationClient // RefreshTokenInternal // Exception");
             throw;
         }
 

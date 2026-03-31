@@ -54,7 +54,17 @@
         "viaRole": null,
         "reason": null
       }
-    ]
+    ],
+    "dialogLookup": {
+      "dialogId": "11111111-1111-1111-1111-111111111111",
+      "instanceRef": "urn:altinn:instance-id:51599233/df333e75-5896-4254-a69f-146736eaf668",
+      "title": [
+        {
+          "value": "Dialog for generic-access-resource",
+          "languageCode": "nb"
+        }
+      ]
+    }
   },
   {
     "resource": {
@@ -115,7 +125,17 @@
         "viaRole": null,
         "reason": null
       }
-    ]
+    ],
+    "dialogLookup": {
+      "dialogId": "22222222-2222-2222-2222-222222222222",
+      "instanceRef": "urn:altinn:instance-id:51599233/c1d2e3f4-1111-2222-3333-444455556666",
+      "title": [
+        {
+          "value": "Dialog for abctest",
+          "languageCode": "nb"
+        }
+      ]
+    }
   },
   {
     "resource": {
@@ -172,7 +192,8 @@
         "viaRole": null,
         "reason": null
       }
-    ]
+    ],
+    "dialogLookup": null
   },
   {
     "resource": {
@@ -229,6 +250,16 @@
         "viaRole": null,
         "reason": null
       }
-    ]
+    ],
+    "dialogLookup": {
+      "dialogId": "44444444-4444-4444-4444-444444444444",
+      "instanceRef": "urn:altinn:instance-id:51599233/b42df1f3-56f2-436a-bad7-222222222222",
+      "title": [
+        {
+          "value": "Dialog for 123123",
+          "languageCode": "nb"
+        }
+      ]
+    }
   }
 ]

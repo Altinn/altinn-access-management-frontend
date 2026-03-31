@@ -87,6 +87,14 @@ namespace Altinn.AccessManagement.UI.Tests.Utils
             {
                 builder.ConfigureTestServices(services =>
                 {
+                    services.AddSingleton<IAuthenticationClient, AuthenticationMock>();
+                    services.AddSingleton<IDialogportClient, DialogportClientMock>();
+                    services.AddSingleton<IInstanceClient, InstanceClientMock>();
+                    services.AddSingleton<IResourceRegistryClient, ResourceRegistryClientMock>();
+                    services.Configure<FeatureFlags>(options =>
+                    {
+                        options.EnableDialogportenInstanceLookup = true;
+                    });
                     services.AddSingleton<IPostConfigureOptions<JwtCookieOptions>, JwtCookiePostConfigureOptionsStub>();
                 });
             });

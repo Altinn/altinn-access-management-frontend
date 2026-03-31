@@ -14,5 +14,11 @@ namespace Altinn.AccessManagement.UI.Mocks.Mocks
         {
             return Task.FromResult(PrincipalUtil.GetAccessToken("sbl-authorization"));
         }
+
+        /// <inheritdoc/>
+        public Task<string> GetEnrichedToken()
+        {
+            return Task.FromResult(PrincipalUtil.GetAccessToken("sbl-authorization"));
+        }
     }
 }

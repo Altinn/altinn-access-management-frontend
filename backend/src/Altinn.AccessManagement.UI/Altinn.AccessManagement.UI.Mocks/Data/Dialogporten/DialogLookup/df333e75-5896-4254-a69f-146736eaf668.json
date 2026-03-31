@@ -1,0 +1,10 @@
+{
+  "dialogId": "11111111-1111-1111-1111-111111111111",
+  "instanceRef": "urn:altinn:instance-id:51599233/df333e75-5896-4254-a69f-146736eaf668",
+  "title": [
+    {
+      "value": "Dialog for generic-access-resource",
+      "languageCode": "nb"
+    }
+  ]
+}
