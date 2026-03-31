@@ -30,15 +30,15 @@ export const useUrlParamState = <T extends string>({
       : defaultValue;
 
   const setValue = useCallback(
-    (nextValue: string) => {
-      if (validValues && !validValues.includes(nextValue as T)) {
+    (newValue: string) => {
+      if (validValues && !validValues.includes(newValue as T)) {
         return;
       }
 
       setSearchParams(
         (prev) => {
           const next = new URLSearchParams(prev);
-          next.set(key, nextValue);
+          next.set(key, newValue);
           return next;
         },
         { replace: true },
