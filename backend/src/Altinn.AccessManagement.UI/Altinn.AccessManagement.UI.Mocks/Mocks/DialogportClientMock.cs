@@ -20,7 +20,7 @@ namespace Altinn.AccessManagement.UI.Mocks.Mocks
         }
 
         /// <inheritdoc />
-        public Task<DialogLookup> GetDialogByInstanceRef(string authorizationToken, string languageCode, string instanceRef)
+        public Task<DialogLookup> GetDialogLookupByInstanceRef(string authorizationToken, string languageCode, string instanceRef)
         {
             string fileName = instanceRef[(instanceRef.LastIndexOf('/') + 1)..];
             string path = Path.Combine(_dataFolder, $"{fileName}.json");

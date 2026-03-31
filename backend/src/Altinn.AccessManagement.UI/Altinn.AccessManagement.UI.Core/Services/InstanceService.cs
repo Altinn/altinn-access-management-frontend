@@ -49,12 +49,20 @@ namespace Altinn.AccessManagement.UI.Core.Services
         /// <inheritdoc />
         public async Task<List<InstanceDelegation>> GetDelegatedInstances(string languageCode, Guid party, Guid? from, Guid? to, string resource, string instance)
         {
-            bool shouldEnrichWithDialogporten = _featureFlags.EnableDialogportenInstanceLookup;
+            bool shouldEnrichWithDialogporten = _featureFlags.EnableDialogportenDialogLookup;
             string enrichedToken = null;
 
             if (shouldEnrichWithDialogporten)
             {
-                enrichedToken = await _authenticationClient.GetEnrichedToken();
+                try
+                {
+                    enrichedToken = await _authenticationClient.GetPidEnrichedToken();
+                }
+                catch (Exception ex)
+                {
+                    enrichedToken = null;
+                    _logger.LogWarning(ex, "InstanceService // GetDelegatedInstances // Failed to fetch enriched token for dialogporten lookup");
+                }
             }
 
             List<InstancePermission> instancePermissions = await _instanceClient.GetDelegatedInstances(languageCode, party, from, to, resource, instance);
@@ -80,7 +88,7 @@ namespace Altinn.AccessManagement.UI.Core.Services
                         try
                         {
                             instanceDelegation.DialogLookup =
-                                await _dialogportClient.GetDialogByInstanceRef(enrichedToken, languageCode, instancePermission.Instance.RefId);
+                                await _dialogportClient.GetDialogLookupByInstanceRef(enrichedToken, languageCode, instancePermission.Instance.RefId);
                         }
                         catch (Exception ex)
                         {

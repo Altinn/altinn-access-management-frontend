@@ -104,6 +104,6 @@ namespace Altinn.AccessManagement.UI.Core.Configuration
         /// <summary>
         /// Whether to enrich instance delegations with dialogporten lookup data
         /// </summary>
-        public bool EnableDialogportenInstanceLookup { get; set; }
+        public bool EnableDialogportenDialogLookup { get; set; }
     }
 }

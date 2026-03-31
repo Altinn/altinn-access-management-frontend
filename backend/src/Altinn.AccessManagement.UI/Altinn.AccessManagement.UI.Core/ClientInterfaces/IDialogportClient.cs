@@ -14,6 +14,6 @@ namespace Altinn.AccessManagement.UI.Core.ClientInterfaces
         /// <param name="languageCode">Language to use for localized fields.</param>
         /// <param name="instanceRef">The instance reference to resolve.</param>
         /// <returns>The dialog lookup response, or null if no dialog was found.</returns>
-        Task<DialogLookup> GetDialogByInstanceRef(string authorizationToken, string languageCode, string instanceRef);
+        Task<DialogLookup> GetDialogLookupByInstanceRef(string authorizationToken, string languageCode, string instanceRef);
     }
 }

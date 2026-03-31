@@ -36,7 +36,7 @@ namespace Altinn.AccessManagement.UI.Integration.Clients
         }
 
         /// <inheritdoc />
-        public async Task<DialogLookup> GetDialogByInstanceRef(string authorizationToken, string languageCode, string instanceRef)
+        public async Task<DialogLookup> GetDialogLookupByInstanceRef(string authorizationToken, string languageCode, string instanceRef)
         {
             if (string.IsNullOrWhiteSpace(_platformSettings.ApiDialogportenEndpoint))
             {
@@ -54,7 +54,7 @@ namespace Altinn.AccessManagement.UI.Integration.Clients
             return await ClientUtils.DeserializeIfSuccessfullStatusCode<DialogLookup>(
                 response,
                 _logger,
-                "DialogportClient // GetDialogByInstanceRef");
+                "DialogportClient // GetDialogLookupByInstanceRef");
         }
     }
 }

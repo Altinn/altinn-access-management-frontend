@@ -93,7 +93,7 @@ namespace Altinn.AccessManagement.UI.Tests.Utils
                     services.AddSingleton<IResourceRegistryClient, ResourceRegistryClientMock>();
                     services.Configure<FeatureFlags>(options =>
                     {
-                        options.EnableDialogportenInstanceLookup = true;
+                        options.EnableDialogportenDialogLookup = true;
                     });
                     services.AddSingleton<IPostConfigureOptions<JwtCookieOptions>, JwtCookiePostConfigureOptionsStub>();
                 });

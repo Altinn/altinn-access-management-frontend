@@ -15,6 +15,6 @@
         /// Refreshes the AltinnStudioRuntime JwtToken and enriches it with PID when available.
         /// </summary>
         /// <returns>Response message from Altinn Platform with refreshed token.</returns>
-        Task<string> GetEnrichedToken();
+        Task<string> GetPidEnrichedToken();
     }
 }

@@ -48,7 +48,7 @@ public class AuthenticationClient : IAuthenticationClient
     }
 
     /// <inheritdoc />
-    public async Task<string> GetEnrichedToken()
+    public async Task<string> GetPidEnrichedToken()
     {
         return await RefreshTokenInternal(true);
     }
