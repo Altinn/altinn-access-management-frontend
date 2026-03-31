@@ -27,6 +27,7 @@ export class ConsentPage {
   readonly buttonReject: Locator;
   readonly buttonFullmaktApprove: Locator;
   readonly buttonFullmaktReject: Locator;
+  readonly menuButton: Locator;
   readonly languagePicker: Locator;
   readonly norwegian: Locator;
   readonly nynorsk: Locator;
@@ -97,7 +98,9 @@ export class ConsentPage {
     this.language = language; // now the fixture value wins
 
     // Controls/links
-    this.languagePicker = page.getByRole('button', { name: /language/i });
+
+    this.menuButton = page.getByRole('button', { name: 'Meny' });
+    this.languagePicker = page.getByLabel('Språk/language');
     this.norwegian = page.locator('#no_nb');
     this.english = page.locator('#en');
     this.nynorsk = page.locator('#no_nn');
@@ -452,6 +455,10 @@ export class ConsentPage {
     await expect(this.buttonReject).toBeEnabled();
     await this.buttonReject.click();
     await this.waitForLogout(redirectUrl);
+  }
+
+  async openMenu(): Promise<void> {
+    await this.menuButton.click();
   }
 
   async pickLanguage(lang: Language): Promise<void> {

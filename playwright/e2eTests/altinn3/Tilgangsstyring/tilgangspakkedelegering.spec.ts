@@ -4,7 +4,7 @@ import { test } from '../../../fixture/pomFixture';
 import { AktorvalgHeader } from '../../../pages/AktorvalgHeader';
 import { EnduserConnection } from '../../../api-requests/EnduserConnection';
 
-test.describe('tilgangspakkedelegering fra person til person og person til org', () => {
+test.describe.serial('tilgangspakkedelegering fra person til person og person til org', () => {
   const api = new EnduserConnection();
 
   test.afterAll('slett testdata', async () => {

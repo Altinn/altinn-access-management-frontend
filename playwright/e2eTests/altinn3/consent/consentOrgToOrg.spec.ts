@@ -48,6 +48,7 @@ LANGUAGES.forEach((language) => {
       });
 
       await test.step('Pick language', async () => {
+        await consentPage.openMenu();
         await consentPage.pickLanguage(consentPage.language);
       });
 
