@@ -4,7 +4,7 @@ import { test } from '../../../fixture/pomFixture';
 import { AktorvalgHeader } from '../../../pages/AktorvalgHeader';
 import { EnduserConnection } from '../../../api-requests/EnduserConnection';
 
-test.describe('Tilgangsstyring', () => {
+test.describe.serial('Tilgangsstyring', () => {
   const api = new EnduserConnection();
   test.afterAll(async () => {
     await api.deleteConnection('12816699205', '314138910', [
