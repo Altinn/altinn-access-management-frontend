@@ -60,8 +60,8 @@ namespace Altinn.AccessManagement.UI.Core.Services
                 }
                 catch (Exception ex)
                 {
-                    enrichedToken = null;
                     _logger.LogWarning(ex, "InstanceService // GetDelegatedInstances // Failed to fetch enriched token for dialogporten lookup");
+                    throw new ApplicationException("Failed to enrich token for dialogporten lookup", ex);
                 }
             }
 
