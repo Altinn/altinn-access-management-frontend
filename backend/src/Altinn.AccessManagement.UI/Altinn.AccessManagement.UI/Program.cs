@@ -376,7 +376,7 @@ void ConfigureMockableClients(IServiceCollection services, IConfiguration config
 
     if (mockSettings.Dialogporten)
     {
-        services.AddHttpClient<IDialogportClient, DialogportClientMock>();
+        services.AddSingleton<IDialogportClient, DialogportClientMock>();
     }
     else
     {
