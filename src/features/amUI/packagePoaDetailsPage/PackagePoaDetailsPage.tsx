@@ -16,13 +16,16 @@ import {
 import { poaOverviewPageEnabled } from '@/resources/utils/featureFlagUtils';
 
 import { PackagePoaDetails } from './PackagePoaDetails';
-import { amUIPath } from '@/routes/paths/amUIPath';
-import { Navigate, useParams } from 'react-router';
+import { Navigate, useParams, useSearchParams } from 'react-router';
 import { Breadcrumbs } from '../common/Breadcrumbs/Breadcrumbs';
 import { useGetPackagePermissionDetailsQuery } from '@/rtk/features/accessPackageApi';
+import { amUIPath } from '@/routes/paths/amUIPath';
 
 export const PackagePoaDetailsPage = () => {
   const { t } = useTranslation();
+  const [searchParams] = useSearchParams();
+  const tab = searchParams.get('tab');
+  const poaOverviewUrl = `/${amUIPath.PoaOverview}${tab ? `?tab=${encodeURIComponent(tab)}` : ''}`;
 
   useDocumentTitle(t('package_poa_details_page.page_title'));
 
@@ -46,7 +49,7 @@ export const PackagePoaDetailsPage = () => {
           actingPartyUuid={partyUuid}
         >
           <BreadcrumbsWrapper />
-          <PageContainer backUrl={`/${amUIPath.PoaOverview}`}>
+          <PageContainer backUrl={poaOverviewUrl}>
             <PackagePoaDetails />
           </PageContainer>
         </PartyRepresentationProvider>

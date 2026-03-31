@@ -30,7 +30,7 @@ export const GuardianshipPermissions = () => {
           const { packageId, ...rest } = props;
           return (
             <Link
-              to={`/poa-overview/access-package/${packageId}`}
+              to={`/poa-overview/access-package/${packageId}?tab=guardianships`}
               {...rest}
             />
           );

@@ -1,6 +1,6 @@
 import React from 'react';
 import { Trans, useTranslation } from 'react-i18next';
-import { Navigate, useSearchParams } from 'react-router';
+import { Navigate } from 'react-router';
 import {
   DsAlert,
   DsHeading,
@@ -18,6 +18,9 @@ import { ClientAdministrationClientsTab } from './ClientAdministrationClientsTab
 import classes from './ClientAdministrationPageContent.module.css';
 import { DatabaseIcon, PersonGroupIcon } from '@navikt/aksel-icons';
 import { isSubUnitByType } from '@/resources/utils/reporteeUtils';
+import { useUrlParamState } from '../common/useUrlParamState';
+
+const clientAdministrationTabs = ['users', 'clients'] as const;
 
 export const ClientAdministrationPageContent = () => {
   const { t } = useTranslation();
@@ -28,12 +31,11 @@ export const ClientAdministrationPageContent = () => {
     ? t('common.subunit_lowercase')
     : t('common.mainunit_lowercase');
 
-  const [params, setParams] = useSearchParams();
-  const activeTab = params.get('tab') === 'clients' ? 'clients' : 'users';
-
-  const handleTabChange = (value: string) => {
-    setParams({ tab: value }, { replace: true });
-  };
+  const [activeTab, setActiveTab] = useUrlParamState({
+    key: 'tab',
+    defaultValue: 'users',
+    validValues: clientAdministrationTabs,
+  });
 
   const { data: isClientAdmin, isLoading: isLoadingIsClientAdmin } = useGetIsClientAdminQuery();
 
@@ -119,10 +121,9 @@ export const ClientAdministrationPageContent = () => {
         </DsParagraph>
       </div>
       <DsTabs
-        defaultValue='users'
         data-size='sm'
         value={activeTab}
-        onChange={handleTabChange}
+        onChange={setActiveTab}
       >
         <DsTabs.List>
           <DsTabs.Tab
