@@ -59,8 +59,9 @@ public class AuthenticationClient : IAuthenticationClient
         {
             string endpointUrl = enrichPid ? "refresh?enrichPid=true" : "refresh";
             string token = JwtTokenUtil.GetTokenFromContext(_httpContextAccessor.HttpContext, _platformSettings.JwtCookieName);
-            _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
-            HttpResponseMessage response = await _client.GetAsync(endpointUrl);
+            using HttpRequestMessage request = new HttpRequestMessage(HttpMethod.Get, endpointUrl);
+            request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", token);
+            HttpResponseMessage response = await _client.SendAsync(request);
 
             if (response.StatusCode == System.Net.HttpStatusCode.OK)
             {
