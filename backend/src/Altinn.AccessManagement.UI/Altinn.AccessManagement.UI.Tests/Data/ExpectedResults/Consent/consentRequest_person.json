@@ -3,17 +3,17 @@
   "fromParty": {
     "id": "urn:altinn:person:identifier-no:167536b5-f8ed-4c5a-8f48-0279507e53ae",
     "name": "SITRONGUL MEDALJONG",
-    "type": "Person"
+    "type": 1
   },
   "toParty": {
     "id": "urn:altinn:organization:identifier-no:cd35779b-b174-4ecc-bbef-ece13611be7f",
     "name": "DISKRET NÆR TIGER AS",
-    "type": "Organization"
+    "type": 2
   },
   "handledByParty": {
     "id": "urn:altinn:organization:identifier-no:87ee6b0e-5d14-4365-82df-d1ee436b51a8",
     "name": "STA TOM TIGER AS",
-    "type": "Organization"
+    "type": 2
   },
   "isPoa": false,
   "title": {
