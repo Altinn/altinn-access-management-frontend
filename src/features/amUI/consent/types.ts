@@ -1,4 +1,4 @@
-import { PartyType } from '@/rtk/features/userInfoApi';
+import type { PartyType } from '@/rtk/features/userInfoApi';
 
 export type ConsentLocale = 'nb' | 'nn' | 'en';
 export type ConsentLanguage = Record<ConsentLocale, string>;
