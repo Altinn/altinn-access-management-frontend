@@ -1,4 +1,4 @@
-using Altinn.AccessManagement.UI.Core.Enums;
+using Altinn.Register.Contracts.V1;
 
 namespace Altinn.AccessManagement.UI.Core.Models.Consent.Frontend
 {
@@ -20,6 +20,6 @@ namespace Altinn.AccessManagement.UI.Core.Models.Consent.Frontend
         /// <summary>
         /// Consent party Type, Person or Organization
         /// </summary>
-        public AuthorizedPartyType Type { get; set; }
+        public PartyType Type { get; set; }
     }
 }

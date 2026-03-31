@@ -6,7 +6,7 @@ import { DsSpinner, formatDisplayName, Layout, RootProvider } from '@altinn/alti
 import { useDocumentTitle } from '@/resources/hooks/useDocumentTitle';
 import { useGetConsentRequestQuery } from '@/rtk/features/consentApi';
 import { getAltinnStartPageUrl, getLogoutUrl } from '@/resources/utils/pathUtils';
-import { useGetUserProfileQuery } from '@/rtk/features/userInfoApi';
+import { PartyType, useGetUserProfileQuery } from '@/rtk/features/userInfoApi';
 import { useUpdateSelectedLanguageMutation } from '@/rtk/features/settingsApi';
 
 import type { ConsentRequest, ProblemDetail } from '../types';
@@ -58,7 +58,7 @@ export const ConsentRequestPage = () => {
 
   const account: { name: string; type: 'person' | 'company' } = {
     name: memoizedRequest?.fromParty.name ?? '',
-    type: memoizedRequest?.fromParty.type === 'Person' ? 'person' : 'company',
+    type: memoizedRequest?.fromParty.type === PartyType.Person ? 'person' : 'company',
   };
 
   return (
