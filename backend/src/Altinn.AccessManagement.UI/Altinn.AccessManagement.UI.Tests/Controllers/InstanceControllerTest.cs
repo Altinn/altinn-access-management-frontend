@@ -6,6 +6,7 @@ using System.Text;
 using System.Text.Json;
 using Altinn.AccessManagement.UI.Controllers;
 using Altinn.AccessManagement.UI.Core.ClientInterfaces;
+using Altinn.AccessManagement.UI.Core.Configuration;
 using Altinn.AccessManagement.UI.Core.Helpers;
 using Altinn.AccessManagement.UI.Core.Models.AccessPackage;
 using Altinn.AccessManagement.UI.Core.Models.Connections;
@@ -173,6 +174,42 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
             HttpResponseMessage httpResponse = await _client.GetAsync($"accessmanagement/api/v1/instances/delegation/instances?party={party}&from={from}");
 
             Assert.Equal(HttpStatusCode.InternalServerError, httpResponse.StatusCode);
+        }
+
+        /// <summary>
+        /// Test case: PID-enriched token retrieval fails before dialog lookup.
+        /// Expected: Returns an internal server error.
+        /// </summary>
+        [Fact]
+        public async Task GetInstances_WhenPidEnrichedTokenFails_ReturnsInternalServerError()
+        {
+            Guid party = Guid.Parse("cd35779b-b174-4ecc-bbef-ece13611be7f");
+            Guid from = Guid.Parse("cd35779b-b174-4ecc-bbef-ece13611be7f");
+
+            var authenticationClientMock = new Mock<IAuthenticationClient>();
+            authenticationClientMock
+                .Setup(client => client.GetPidEnrichedToken())
+                .ThrowsAsync(new Exception("Failed to fetch enriched token"));
+
+            var instanceClientMock = new Mock<IInstanceClient>(MockBehavior.Strict);
+            var dialogportClientMock = new Mock<IDialogportClient>(MockBehavior.Strict);
+            var resourceServiceMock = new Mock<IResourceService>(MockBehavior.Strict);
+            var instanceService = new InstanceService(
+                authenticationClientMock.Object,
+                Options.Create(new FeatureFlags { EnableDialogportenDialogLookup = true }),
+                dialogportClientMock.Object,
+                instanceClientMock.Object,
+                new Mock<ILogger<InstanceService>>().Object,
+                resourceServiceMock.Object);
+
+            HttpClient client = GetTestClient(instanceService);
+
+            HttpResponseMessage httpResponse = await client.GetAsync($"accessmanagement/api/v1/instances/delegation/instances?party={party}&from={from}");
+
+            Assert.Equal(HttpStatusCode.InternalServerError, httpResponse.StatusCode);
+            instanceClientMock.Verify(
+                service => service.GetDelegatedInstances(It.IsAny<string>(), It.IsAny<Guid>(), It.IsAny<Guid?>(), It.IsAny<Guid?>(), It.IsAny<string>(), It.IsAny<string>()),
+                Times.Never);
         }
 
         /// <summary>
