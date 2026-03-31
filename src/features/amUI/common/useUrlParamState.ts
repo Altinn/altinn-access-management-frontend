@@ -1,3 +1,4 @@
+import { useCallback } from 'react';
 import { useSearchParams } from 'react-router';
 
 /**
@@ -28,20 +29,23 @@ export const useUrlParamState = <T extends string>({
       ? (paramValue as T)
       : defaultValue;
 
-  const setValue = (nextValue: string) => {
-    if (validValues && !validValues.includes(nextValue as T)) {
-      return;
-    }
+  const setValue = useCallback(
+    (nextValue: string) => {
+      if (validValues && !validValues.includes(nextValue as T)) {
+        return;
+      }
 
-    setSearchParams(
-      (prev) => {
-        const next = new URLSearchParams(prev);
-        next.set(key, nextValue);
-        return next;
-      },
-      { replace: true },
-    );
-  };
+      setSearchParams(
+        (prev) => {
+          const next = new URLSearchParams(prev);
+          next.set(key, nextValue);
+          return next;
+        },
+        { replace: true },
+      );
+    },
+    [key, setSearchParams, validValues],
+  );
 
   return [value, setValue] as const;
 };

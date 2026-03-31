@@ -121,7 +121,6 @@ export const ClientAdministrationPageContent = () => {
         </DsParagraph>
       </div>
       <DsTabs
-        defaultValue='users'
         data-size='sm'
         value={activeTab}
         onChange={setActiveTab}

@@ -94,7 +94,7 @@ export const RightsTabs = ({
         navigate('', { replace: true }); // clear hash fragment from URL after navigating to correct tab
       }
     }
-  }, [hash, showGuardianshipsTab, navigate]);
+  }, [hash, showGuardianshipsTab, navigate, setChosenTab]);
 
   useEffect(() => {
     if (!availableTabs.includes(chosenTab)) {
@@ -104,7 +104,6 @@ export const RightsTabs = ({
 
   return (
     <DsTabs
-      defaultValue='packages'
       data-size='sm'
       value={chosenTab}
       onChange={setChosenTab}
