@@ -35,6 +35,7 @@ namespace Altinn.AccessManagement.UI.Core.Models.InstanceDelegation.Frontend
         /// <param name="resource">The delegated resource.</param>
         /// <param name="instance">The delegated instance.</param>
         /// <param name="permissions">The delegation permissions.</param>
+        /// <param name="dialogLookup">Dialogporten lookup metadata for the delegated instance.</param>
         public InstanceDelegation(ServiceResourceFE resource, DelegationInstance instance, List<Permission> permissions, DialogLookup dialogLookup = null)
         {
             Resource = resource;

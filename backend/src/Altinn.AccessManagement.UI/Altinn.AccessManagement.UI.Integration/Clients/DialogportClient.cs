@@ -16,6 +16,7 @@ namespace Altinn.AccessManagement.UI.Integration.Clients
         private readonly HttpClient _httpClient;
         private readonly ILogger<DialogportClient> _logger;
         private readonly PlatformSettings _platformSettings;
+
         /// <summary>
         /// Initializes a new instance of the <see cref="DialogportClient"/> class.
         /// </summary>
