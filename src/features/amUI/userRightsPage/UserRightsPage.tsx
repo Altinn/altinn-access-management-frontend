@@ -62,6 +62,7 @@ export const UserRightsPage = () => {
           actingPartyUuid={actingPartyUuid ?? ''}
           fromPartyUuid={getCookie('AltinnPartyUuid')}
           toPartyUuid={id ?? undefined}
+          noConnectionBackUrl={backUrl}
         >
           <BreadcrumbsWrapper />
           <DelegationModalProvider>

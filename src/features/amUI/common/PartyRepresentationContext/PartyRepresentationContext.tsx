@@ -1,6 +1,12 @@
 import type { JSX } from 'react';
 import { createContext, useContext } from 'react';
-import { DsAlert, DsHeading, DsLink, DsParagraph } from '@altinn/altinn-components';
+import {
+  DsAlert,
+  DsHeading,
+  DsLink,
+  DsParagraph,
+  formatDisplayName,
+} from '@altinn/altinn-components';
 import { type SerializedError } from '@reduxjs/toolkit';
 import type { FetchBaseQueryError } from '@reduxjs/toolkit/query';
 import { Link } from 'react-router';
@@ -16,7 +22,7 @@ import { AccessPackageDelegationCheckProvider } from '../DelegationCheck/AccessP
 import { useGetRightHoldersQuery } from '@/rtk/features/connectionApi';
 import { useReporteeParty } from './useReporteeParty';
 import { useConnectedParty } from './useConnectedParty';
-import { useGetReporteeQuery } from '@/rtk/features/userInfoApi';
+import { PartyType, useGetReporteeQuery } from '@/rtk/features/userInfoApi';
 import { getHostUrl } from '@/resources/utils/pathUtils';
 import { ArrowRightIcon } from '@navikt/aksel-icons';
 import classes from './PartyRepresentationContext.module.css';
@@ -36,6 +42,8 @@ interface PartyRepresentationProviderProps {
   isLoading?: boolean;
   /** If true, an error alert will be shown if the acting party has 'person' user type */
   errorOnPriv?: boolean;
+  /** Optional override of the back URL in case of an error - defaults to '/' */
+  noConnectionBackUrl?: string;
   /** Optional override of the toParty - only use this if absolutely necessary */
   toPartyOverride?: Party;
   /** Optional override of the fromParty - only use this if absolutely necessary */
@@ -74,6 +82,7 @@ export const PartyRepresentationProvider = ({
   errorOnPriv = false,
   toPartyOverride,
   fromPartyOverride,
+  noConnectionBackUrl,
 }: PartyRepresentationProviderProps) => {
   if (!toPartyUuid && !fromPartyUuid) {
     throw new Error('PartyRepresentationProvider must be used with at least one party UUID');
@@ -216,7 +225,8 @@ export const PartyRepresentationProvider = ({
       }}
     >
       {shouldShowUnsyncedConnectionAlert && <UnsyncedConnectionAlert />}
-      {shouldShowConnectionErrorAlert && connectionErrorAlert(error, '/')}
+      {shouldShowConnectionErrorAlert &&
+        connectionErrorAlert(error, noConnectionBackUrl ?? '/', formattedReporteeName(reportee))}
       {shouldShowUserTypeRestrictionAlert && <NotAvailableForUserTypeAlert />}
       {shouldShowTechnicalErrorAlert && (
         <DsAlert data-color='warning'>
@@ -230,6 +240,12 @@ export const PartyRepresentationProvider = ({
   );
 };
 
+const formattedReporteeName = (reportee?: Party): string => {
+  if (!reportee) return '';
+  const reporteeType = reportee.partyTypeName === PartyType.Person ? 'person' : 'company';
+  return formatDisplayName({ fullName: reportee.name, type: reporteeType });
+};
+
 export const usePartyRepresentation = (): PartyRepresentationContextOutput => {
   const context = useContext(PartyRepresentationContext);
   if (!context) {
@@ -241,6 +257,7 @@ export const usePartyRepresentation = (): PartyRepresentationContextOutput => {
 const connectionErrorAlert = (
   error: FetchBaseQueryError | SerializedError | undefined,
   returnToUrl?: string,
+  reporteeName?: string,
 ) => {
   if (error && 'status' in error && error.status !== 403) {
     const errorDetails = createErrorDetails(error);
@@ -257,7 +274,7 @@ const connectionErrorAlert = (
   return (
     <DsAlert data-color='warning'>
       <DsParagraph>
-        {t('error_page.user_connection_error')}{' '}
+        {t('error_page.no_user_connection', { reportee: reporteeName })}{' '}
         {returnToUrl && <Link to={returnToUrl}>{t('common.go_back')}</Link>}
       </DsParagraph>
     </DsAlert>
