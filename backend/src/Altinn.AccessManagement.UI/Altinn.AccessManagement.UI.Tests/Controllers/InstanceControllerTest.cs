@@ -122,6 +122,32 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
         }
 
         /// <summary>
+        /// Test case: Returns dialog metadata when dialogporten lookup succeeds.
+        /// Expected: Returns OK and the instance with dialog lookup metadata.
+        /// </summary>
+        [Fact]
+        public async Task GetInstances_WhenDialogLookupSucceeds_ReturnsDialogMetadata()
+        {
+            Guid party = Guid.Parse("cd35779b-b174-4ecc-bbef-ece13611be7f");
+            Guid from = Guid.Parse("cd35779b-b174-4ecc-bbef-ece13611be7f");
+            string instance = "urn:altinn:instance-id:51599233/df333e75-5896-4254-a69f-146736eaf668";
+
+            HttpResponseMessage httpResponse = await _client.GetAsync(
+                $"accessmanagement/api/v1/instances/delegation/instances?party={party}&from={from}&instance={Uri.EscapeDataString(instance)}");
+            List<InstanceDelegation> actualResponse = await httpResponse.Content.ReadFromJsonAsync<List<InstanceDelegation>>();
+
+            Assert.Equal(HttpStatusCode.OK, httpResponse.StatusCode);
+            Assert.NotNull(actualResponse);
+            Assert.Single(actualResponse);
+            Assert.NotNull(actualResponse[0].DialogLookup);
+            Assert.Equal(Guid.Parse("11111111-1111-1111-1111-111111111111"), actualResponse[0].DialogLookup.DialogId);
+            Assert.Equal(instance, actualResponse[0].DialogLookup.InstanceRef);
+            Assert.NotNull(actualResponse[0].DialogLookup.Title);
+            Assert.Single(actualResponse[0].DialogLookup.Title);
+            Assert.Equal("Dialog for generic-access-resource", actualResponse[0].DialogLookup.Title[0].Value);
+        }
+
+        /// <summary>
         /// Test case: Returns the instance even when dialogporten lookup is not found.
         /// Expected: Returns OK and the instance without dialog lookup data.
         /// </summary>
