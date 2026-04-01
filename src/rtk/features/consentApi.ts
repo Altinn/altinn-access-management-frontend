@@ -9,11 +9,12 @@ import type {
   ConsentRequest,
 } from '@/features/amUI/consent/types';
 import { formatDisplayName } from '@altinn/altinn-components';
+import { PartyType } from './userInfoApi';
 
 const baseUrl = `${import.meta.env.BASE_URL}accessmanagement/api/v1/`;
 
 const formatName = (party: ConsentParty): ConsentParty => {
-  const type = party.type === 'Person' ? 'person' : 'company';
+  const type = party.type === PartyType.Person ? 'person' : 'company';
   return {
     ...party,
     name: formatDisplayName({ fullName: party.name, type: type }),

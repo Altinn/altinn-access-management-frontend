@@ -4,12 +4,12 @@
   "fromParty": {
     "id": "urn:altinn:organization:identifier-no:cd35779b-b174-4ecc-bbef-ece13611be7f",
     "name": "DISKRET NÆR TIGER AS",
-    "type": "Organization"
+    "type": 2
   },
   "toParty": {
     "id": "urn:altinn:organization:identifier-no:60fb3d5b-99c2-4df0-aa77-f3fca3bc5199",
     "name": "RAKRYGGET UNG TIGER AS",
-    "type": "Organization"
+    "type": 2
   },
   "handledByParty": null,
   "isPoa": true,

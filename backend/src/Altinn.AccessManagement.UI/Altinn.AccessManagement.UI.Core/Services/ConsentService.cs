@@ -166,8 +166,8 @@ namespace Altinn.AccessManagement.UI.Core.Services
                     Id = consent.Id,
                     IsPendingConsent = !IsConsentAccepted(consent) && IsPortalModeConsent(consent),
                     IsPoa = IsPoaTemplate(consentTemplates, consent.TemplateId),
-                    ToParty = GetConsentParty(consent.To, toParty?.Name),
-                    FromParty = GetConsentParty(consent.From, fromParty?.Name),
+                    ToParty = GetConsentParty(consent.To, toParty),
+                    FromParty = GetConsentParty(consent.From, fromParty),
                     CreatedDate = consent.ConsentRequestEvents.Find(e => string.Equals(e.EventType, "created", StringComparison.OrdinalIgnoreCase))?.Created ?? DateTimeOffset.MinValue,
                     ConsentedDate = consent.ConsentRequestEvents.Find(e => string.Equals(e.EventType, "accepted", StringComparison.OrdinalIgnoreCase))?.Created ?? null
                 };
@@ -207,9 +207,9 @@ namespace Altinn.AccessManagement.UI.Core.Services
                 {
                     Id = consent.Id,
                     IsPoa = IsPoaTemplate(consentTemplates, consent.TemplateId),
-                    ToParty = GetConsentParty(consent.To, toParty?.Name),
-                    FromParty = GetConsentParty(consent.From, fromParty?.Name),
-                    HandledByParty = GetConsentParty(consent.HandledBy, handledByParty?.Name),
+                    ToParty = GetConsentParty(consent.To, toParty),
+                    FromParty = GetConsentParty(consent.From, fromParty),
+                    HandledByParty = GetConsentParty(consent.HandledBy, handledByParty),
                     ValidTo = consent.ValidTo,
                     ConsentRequestEvents = consent.ConsentRequestEvents,
                 };
@@ -445,9 +445,9 @@ namespace Altinn.AccessManagement.UI.Core.Services
                 HandledBy = handledByParty != null ? consentTemplate.Texts.HandledBy : null,
                 ConsentMessage = request.RequestMessage ?? consentTemplate.Texts.OverriddenDelegationContext,
                 Expiration = expirationText,
-                FromParty = GetConsentParty(request.From, fromParty.Name),
-                ToParty = GetConsentParty(request.To, toParty.Name),
-                HandledByParty = GetConsentParty(request.HandledBy, handledByParty?.Name),
+                FromParty = GetConsentParty(request.From, fromParty),
+                ToParty = GetConsentParty(request.To, toParty),
+                HandledByParty = GetConsentParty(request.HandledBy, handledByParty),
             };
         }
 
@@ -477,23 +477,19 @@ namespace Altinn.AccessManagement.UI.Core.Services
             return consentTemplates.Any((template) => template.Id.Equals(templateId) && template.IsPoa);
         }
 
-        private static AuthorizedPartyType GetPartyOrgType(string partyId)
-        {
-            return partyId.Contains("urn:altinn:person") ? AuthorizedPartyType.Person : AuthorizedPartyType.Organization;
-        }
-
-        private static ConsentPartyFE GetConsentParty(string partyId, string partyName)
+        private static ConsentPartyFE GetConsentParty(string partyId, Party party)
         {
             if (string.IsNullOrEmpty(partyId))
             {
                 return null;
             }
-            
+
+            bool isSubUnit = party?.UnitType == "BEDR" || party?.UnitType == "AAFY";
             return new ConsentPartyFE()
             {
                 Id = partyId,
-                Name = partyName ?? string.Empty,
-                Type = GetPartyOrgType(partyId)
+                Name = party?.Name ?? string.Empty,
+                Type = isSubUnit ? PartyType.SubUnit : party?.PartyTypeName ?? PartyType.Organisation
             };
         }
     }

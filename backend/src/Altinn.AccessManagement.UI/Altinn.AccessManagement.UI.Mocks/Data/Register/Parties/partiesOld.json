@@ -481,6 +481,35 @@
     "ChildParties": null
   },
   {
+    "PartyTypeName": 2,
+    "SSN": "",
+    "OrgNumber": "311312294",
+    "Person": null,
+    "Organization": {
+      "OrgNumber": "311312294",
+      "Name": "DISKRET NÆR TIGER AS",
+      "UnitType": "BEDR",
+      "TelephoneNumber": "12345678",
+      "MobileNumber": "92010000",
+      "FaxNumber": "92110000",
+      "EMailAddress": "central@vikesaa.no",
+      "InternetAddress": "http://vikesaa.no",
+      "MailingAddress": "Medalje Gate 1",
+      "MailingPostalCode": "0170",
+      "MailingPostalCity": "Oslo",
+      "BusinessAddress": "Medalje Gate 1",
+      "BusinessPostalCode": "0170",
+      "BusinessPostalCity": "By"
+    },
+    "PartyId": 51433301,
+    "PartyUuid": "b0a79f3d-4cef-430a-9774-301b754e0f6f",
+    "UnitType": "BEDR",
+    "Name": "DISKRET NÆR TIGER AS",
+    "IsDeleted": false,
+    "OnlyHierarchyElementWithNoAccess": false,
+    "ChildParties": null
+  },
+  {
     "PartyId": 50019992,
     "PartyUuid": "cd772c20-f780-43f6-819f-2d9f23fc0a1a",
     "PartyTypeName": 1,
