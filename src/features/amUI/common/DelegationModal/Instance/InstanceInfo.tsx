@@ -4,6 +4,7 @@ import { useTranslation } from 'react-i18next';
 import { MinusCircleIcon } from '@navikt/aksel-icons';
 
 import type { ServiceResource } from '@/rtk/features/singleRights/singleRightsApi';
+import type { DialogLookup } from '@/rtk/features/instanceApi';
 
 import type { DelegationRecipient } from '../EditModal';
 import { StatusMessageForScreenReader } from '@/components/StatusMessageForScreenReader/StatusMessageForScreenReader';
@@ -26,6 +27,7 @@ export interface InstanceInfoProps {
   resource: ServiceResource;
   instanceUrn: string;
   instanceName?: string;
+  dialogLookup?: DialogLookup | null;
   toParty?: DelegationRecipient;
   availableActions?: DelegationAction[];
   onSuccess?: () => void;
@@ -35,6 +37,7 @@ export const InstanceInfo = ({
   resource,
   instanceUrn,
   instanceName,
+  dialogLookup,
   toParty: toPartyProp,
   availableActions,
   onSuccess,
@@ -103,6 +106,8 @@ export const InstanceInfo = ({
       <div>
         <InstanceHeading
           resource={resource}
+          instanceUrn={instanceUrn}
+          dialogLookup={dialogLookup}
           fromPartyName={fromParty?.name}
           fromPartyType={fromParty?.partyTypeName}
         />

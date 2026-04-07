@@ -4,6 +4,7 @@ import { DsDialog } from '@altinn/altinn-components';
 
 import type { ActionError } from '@/resources/hooks/useActionError';
 import type { ServiceResource } from '@/rtk/features/singleRights/singleRightsApi';
+import type { DialogLookup } from '@/rtk/features/instanceApi';
 import type { AccessPackage } from '@/rtk/features/accessPackageApi';
 import type { Role } from '@/rtk/features/roleApi';
 import { ResourceInfo } from './SingleRights/ResourceInfo';
@@ -29,6 +30,7 @@ export enum DelegationAction {
 export interface InstanceData {
   instanceUrn: string;
   instanceName?: string;
+  dialogLookup?: DialogLookup | null;
 }
 
 export interface EditModalProps {
@@ -134,6 +136,7 @@ const renderModalContent = ({
         resource={resource}
         instanceUrn={instance.instanceUrn}
         instanceName={instance.instanceName}
+        dialogLookup={instance.dialogLookup}
         toParty={toParty}
         availableActions={availableActions}
         onSuccess={onSuccess}

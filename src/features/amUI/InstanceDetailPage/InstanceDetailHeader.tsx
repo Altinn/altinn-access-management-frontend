@@ -3,12 +3,16 @@ import { useTranslation } from 'react-i18next';
 
 import { PartyType } from '@/rtk/features/userInfoApi';
 import type { ServiceResource } from '@/rtk/features/singleRights/singleRightsApi';
+import type { DialogLookup } from '@/rtk/features/instanceApi';
+import { resolveInstanceTitle } from '@/resources/utils/instanceTitleUtils';
 
 import classes from './InstanceDetailHeader.module.css';
 
 interface InstanceDetailHeaderProps {
   resource: ServiceResource;
   resourceId: string;
+  instanceUrn?: string;
+  dialogLookup?: DialogLookup | null;
   providerLogoUrl?: string;
   fromPartyName?: string;
   fromPartyTypeName?: PartyType;
@@ -17,11 +21,14 @@ interface InstanceDetailHeaderProps {
 export const InstanceDetailHeader = ({
   resource,
   resourceId,
+  instanceUrn,
+  dialogLookup,
   providerLogoUrl,
   fromPartyName,
   fromPartyTypeName,
 }: InstanceDetailHeaderProps) => {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
+  const title = resolveInstanceTitle(dialogLookup, resource, instanceUrn, t, i18n.language);
 
   return (
     <div className={classes.infoHeading}>
@@ -29,7 +36,7 @@ export const InstanceDetailHeader = ({
         level={1}
         data-size='sm'
       >
-        {t('instance_detail_page.resource_title', { title: resource.title ?? resourceId })}
+        {t('instance_detail_page.resource_title', { title })}
       </DsHeading>
       <div className={classes.resourceOwner}>
         <Icon

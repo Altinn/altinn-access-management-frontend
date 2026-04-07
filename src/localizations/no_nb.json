@@ -952,6 +952,11 @@
       "no_search_results": "Ingen treff på melding eller skjema."
     }
   },
+  "instance_header": {
+    "title_forbidden": "Melding eller skjema du ikke har fullmakt til",
+    "title_not_found": "Ukjent melding eller skjema",
+    "title_correspondence_not_found": "Melding om tjenesten {{resourceName}}"
+  },
   "instance_detail_page": {
     "document_title": "Delt fra innboks",
     "resource_title": "Melding eller skjema: {{title}}",

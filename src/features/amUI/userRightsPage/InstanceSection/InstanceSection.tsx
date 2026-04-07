@@ -69,6 +69,7 @@ export const InstanceSection = ({ isReportee = false }: { isReportee?: boolean }
             ? {
                 instanceUrn: selectedInstance.instance.refId,
                 instanceName: selectedInstance.instance.type?.name,
+                dialogLookup: selectedInstance.dialogLookup,
               }
             : undefined
         }

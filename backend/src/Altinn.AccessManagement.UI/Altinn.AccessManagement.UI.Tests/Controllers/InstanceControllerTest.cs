@@ -10,6 +10,7 @@ using Altinn.AccessManagement.UI.Core.Configuration;
 using Altinn.AccessManagement.UI.Core.Helpers;
 using Altinn.AccessManagement.UI.Core.Models.AccessPackage;
 using Altinn.AccessManagement.UI.Core.Models.Connections;
+using Altinn.AccessManagement.UI.Core.Models.Dialogporten;
 using Altinn.AccessManagement.UI.Core.Models.InstanceDelegation;
 using Altinn.AccessManagement.UI.Core.Models.InstanceDelegation.Frontend;
 using Altinn.AccessManagement.UI.Core.Models.ResourceRegistry.Frontend;
@@ -169,7 +170,8 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
             Assert.NotNull(actualResponse);
             Assert.Single(actualResponse);
             AssertionUtil.AssertEqual(expectedResponse, actualResponse[0]);
-            Assert.Null(actualResponse[0].DialogLookup);
+            Assert.NotNull(actualResponse[0].DialogLookup);
+            Assert.Equal(DialogLookupStatus.NotFound, actualResponse[0].DialogLookup.Status);
         }
 
         /// <summary>

@@ -13,7 +13,7 @@ import {
   createErrorDetails,
   TechnicalErrorParagraphs,
 } from '../common/TechnicalErrorParagraphs/TechnicalErrorParagraphs';
-import { useRemoveInstanceMutation } from '@/rtk/features/instanceApi';
+import { useRemoveInstanceMutation, useGetInstancesQuery } from '@/rtk/features/instanceApi';
 import { useGetResourceQuery } from '@/rtk/features/resourceApi';
 import { useProviderLogoUrl } from '@/resources/hooks';
 import {
@@ -121,6 +121,16 @@ export const InstanceDetailPageContent = () => {
     skip: !resourceId,
   });
 
+  const { data: instanceDelegations } = useGetInstancesQuery(
+    {
+      party: actingParty?.partyUuid ?? '',
+      from: fromParty?.partyUuid,
+      instance: instanceUrn,
+    },
+    { skip: !actingParty?.partyUuid || !fromParty?.partyUuid || !instanceUrn },
+  );
+  const dialogLookup = instanceDelegations?.[0]?.dialogLookup;
+
   if (!resourceId || !instanceUrn) {
     return (
       <Navigate
@@ -132,22 +142,24 @@ export const InstanceDetailPageContent = () => {
 
   const isCorrespondenceInstance = instanceUrn.startsWith('urn:altinn:correspondence-id:');
 
-  const inboxUrl = dialogId
-    ? `${getAfUrl()}inbox/${encodeURIComponent(dialogId)}`
+  const resolvedDialogId = dialogId ?? dialogLookup?.dialogId;
+  const inboxUrl = resolvedDialogId
+    ? `${getAfUrl()}inbox/${encodeURIComponent(resolvedDialogId)}`
     : `${getAfUrl()}redirect?instanceUrn=${encodeURIComponent(instanceUrn)}`;
 
-  const showInboxLink = dialogId || !isCorrespondenceInstance;
+  const showInboxLink =
+    resolvedDialogId || (!isCorrespondenceInstance && dialogLookup?.status === 'Success');
 
   const inboxLink = showInboxLink ? (
     <div className={classes.inboxLinkContainer}>
       <DsButton
         asChild
-        variant={dialogId ? 'primary' : 'secondary'}
+        variant={resolvedDialogId ? 'primary' : 'secondary'}
         className={classes.inboxButton}
       >
         <a href={inboxUrl}>
-          {dialogId ? <CheckmarkIcon aria-hidden /> : <EnvelopeClosedIcon aria-hidden />}
-          {dialogId ? t('common.finished') : t('instance_detail_page.see_in_inbox')}
+          {resolvedDialogId ? <CheckmarkIcon aria-hidden /> : <EnvelopeClosedIcon aria-hidden />}
+          {resolvedDialogId ? t('common.finished') : t('instance_detail_page.see_in_inbox')}
         </a>
       </DsButton>
     </div>
@@ -176,6 +188,8 @@ export const InstanceDetailPageContent = () => {
         <InstanceDetailHeader
           resource={resource}
           resourceId={resourceId}
+          instanceUrn={instanceUrn}
+          dialogLookup={dialogLookup}
           providerLogoUrl={providerLogoUrl}
           fromPartyName={fromParty?.name}
           fromPartyTypeName={fromParty?.partyTypeName}

@@ -15,6 +15,9 @@ import { useProviderLogoUrl } from '@/resources/hooks';
 import { InstanceListSkeleton } from './InstanceListSkeleton';
 import { EnvelopeClosedIcon } from '@navikt/aksel-icons';
 import { getAfUrl } from '@/resources/utils/pathUtils';
+import type { TFunction } from 'i18next';
+import { resolveInstanceTitle } from '@/resources/utils/instanceTitleUtils';
+import classes from './InstanceList.module.css';
 
 interface InstanceListProps {
   instances: InstanceDelegation[];
@@ -27,17 +30,20 @@ interface InstanceListProps {
 const toInstanceListItem = (
   instanceDelegation: InstanceDelegation,
   getProviderLogoUrl: (orgCode: string) => string | undefined,
+  t: TFunction,
+  language: string,
 ): DialogListItemProps => {
-  const { instance, resource } = instanceDelegation;
+  const { instance, resource, dialogLookup } = instanceDelegation;
   const providerLogoUrl = resource.resourceOwnerOrgcode
     ? getProviderLogoUrl(resource.resourceOwnerOrgcode)
     : undefined;
   const dialogItemId = `${resource.identifier}-${instance.refId}`;
   const shortId = instance.refId.slice(-10);
+  const title = resolveInstanceTitle(dialogLookup, resource, instance.refId, t, language);
 
   return {
     id: dialogItemId,
-    title: resource.title ?? resource.identifier,
+    title,
     description: `${instance.refId} ${resource.title}`,
     sender: {
       name: resource.resourceOwnerName ?? '',
@@ -57,7 +63,7 @@ export const InstanceList = ({
   onSelect,
   interactive,
 }: InstanceListProps) => {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   const [debouncedSearchString, setDebouncedSearchString] = useState('');
   const hasSearch = debouncedSearchString.trim().length > 0;
 
@@ -90,13 +96,20 @@ export const InstanceList = ({
       ) : filteredInstances.length > 0 ? (
         <List>
           {filteredInstances.map((instanceDelegation) => {
-            const item = toInstanceListItem(instanceDelegation, getProviderLogoUrl);
+            const item = toInstanceListItem(
+              instanceDelegation,
+              getProviderLogoUrl,
+              t,
+              i18n.language,
+            );
 
             const Component = getItemAs?.(instanceDelegation);
             const isCorrespondenceInstance = instanceDelegation.instance.refId.startsWith(
               'urn:altinn:correspondence-id:',
             );
             const inboxUrl = `${getAfUrl()}redirect?instanceUrn=${encodeURIComponent(instanceDelegation.instance.refId)}`;
+
+            const isSuccess = instanceDelegation.dialogLookup?.status === 'Success';
 
             return (
               <DialogListItem
@@ -105,9 +118,11 @@ export const InstanceList = ({
                 as={Component ?? (onSelect ? 'button' : undefined)}
                 interactive={interactive || !!onSelect}
                 onClick={onSelect ? () => onSelect(instanceDelegation) : undefined}
+                className={!isSuccess ? classes.subtleTitle : undefined}
                 {...item}
                 controls={
-                  !isCorrespondenceInstance && (
+                  !isCorrespondenceInstance &&
+                  isSuccess && (
                     <Button
                       variant='tertiary'
                       rounded

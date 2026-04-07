@@ -5,18 +5,25 @@ import { Avatar, DsHeading, DsParagraph, formatDisplayName, Icon } from '@altinn
 import classes from './InstanceHeading.module.css';
 import { PartyType } from '@/rtk/features/userInfoApi';
 import { useTranslation } from 'react-i18next';
+import type { DialogLookup } from '@/rtk/features/instanceApi';
+import { resolveInstanceTitle } from '@/resources/utils/instanceTitleUtils';
 
 export const InstanceHeading = ({
   resource,
+  instanceUrn,
+  dialogLookup,
   fromPartyName,
   fromPartyType,
 }: {
   resource: ServiceResource;
+  instanceUrn?: string;
+  dialogLookup?: DialogLookup | null;
   fromPartyName?: string;
   fromPartyType?: PartyType;
 }) => {
   const { getProviderLogoUrl } = useProviderLogoUrl();
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
+  const title = resolveInstanceTitle(dialogLookup, resource, instanceUrn, t, i18n.language);
   const emblem = getProviderLogoUrl(resource.resourceOwnerOrgcode ?? '');
   const fromName = formatDisplayName({
     fullName: fromPartyName ?? '',
@@ -48,7 +55,7 @@ export const InstanceHeading = ({
             level={3}
             data-size={'sm'}
           >
-            {resource.title}
+            {title}
           </DsHeading>
         </div>
 

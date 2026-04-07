@@ -19,10 +19,25 @@ export interface DelegationInstance {
   type: InstanceType | null;
 }
 
+export type DialogLookupStatus = 'Success' | 'NotFound' | 'Forbidden';
+
+export interface DialogLookupLocalization {
+  value: string;
+  languageCode: string;
+}
+
+export interface DialogLookup {
+  status: DialogLookupStatus;
+  dialogId?: string;
+  instanceRef?: string;
+  title?: DialogLookupLocalization[];
+}
+
 export interface InstanceDelegation {
   resource: ServiceResource;
   instance: DelegationInstance;
   permissions: Permissions[];
+  dialogLookup?: DialogLookup | null;
 }
 
 export interface InstanceRights {
