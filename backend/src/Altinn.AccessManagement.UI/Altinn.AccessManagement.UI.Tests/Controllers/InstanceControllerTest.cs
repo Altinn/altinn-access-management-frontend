@@ -239,6 +239,47 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
         }
 
         /// <summary>
+        /// Test case: Dialogporten lookup throws an exception for an instance.
+        /// Expected: Returns OK with the instance included but DialogLookup is null (failure is swallowed).
+        /// </summary>
+        [Fact]
+        public async Task GetInstances_WhenDialogLookupThrows_ReturnsInstanceWithoutDialogData()
+        {
+            Guid party = Guid.Parse("cd35779b-b174-4ecc-bbef-ece13611be7f");
+            Guid from = Guid.Parse("cd35779b-b174-4ecc-bbef-ece13611be7f");
+            string instanceRef = "urn:altinn:instance-id:51599233/df333e75-5896-4254-a69f-146736eaf668";
+
+            var authenticationClientMock = new Mock<IAuthenticationClient>();
+            authenticationClientMock
+                .Setup(c => c.GetPidEnrichedToken())
+                .ReturnsAsync("enriched-token");
+
+            var dialogportClientMock = new Mock<IDialogportClient>();
+            dialogportClientMock
+                .Setup(c => c.GetDialogLookupByInstanceRef(It.IsAny<string>(), It.IsAny<string>(), instanceRef))
+                .ThrowsAsync(new Exception("Dialogporten unavailable"));
+
+            var instanceService = new InstanceService(
+                authenticationClientMock.Object,
+                Options.Create(new FeatureFlags { EnableDialogportenDialogLookup = true }),
+                dialogportClientMock.Object,
+                new InstanceClientMock(null, new Mock<ILogger<InstanceClientMock>>().Object, null),
+                new Mock<ILogger<InstanceService>>().Object,
+                _factory.Services.GetRequiredService<IResourceService>());
+
+            HttpClient client = GetTestClient(instanceService);
+
+            HttpResponseMessage httpResponse = await client.GetAsync(
+                $"accessmanagement/api/v1/instances/delegation/instances?party={party}&from={from}&instance={Uri.EscapeDataString(instanceRef)}");
+            List<InstanceDelegation> actualResponse = await httpResponse.Content.ReadFromJsonAsync<List<InstanceDelegation>>();
+
+            Assert.Equal(HttpStatusCode.OK, httpResponse.StatusCode);
+            Assert.NotNull(actualResponse);
+            Assert.Single(actualResponse);
+            Assert.Null(actualResponse[0].DialogLookup);
+        }
+
+        /// <summary>
         /// Test case: Successfully perform delegation check on an instance.
         /// Expected: Returns OK and the checked accesses of the given instance.
         /// </summary>
