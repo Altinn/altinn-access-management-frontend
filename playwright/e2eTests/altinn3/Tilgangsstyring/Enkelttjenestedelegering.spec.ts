@@ -122,8 +122,6 @@ test.describe.serial('Enkelttjenestedelegering fra person til person og person t
     });
 
     await test.step('slett "bruno-correspondence" for VASSEN ERT', async () => {
-      await accessManagementFrontPage.goToUsers();
-      await accessManagementFrontPage.clickUser('VASSEN ERT');
       await accessManagementFrontPage.goToEnkelttjenester();
       await accessManagementFrontPage.clickSlettEnkelttjeneste('bruno-correspondence');
     });
