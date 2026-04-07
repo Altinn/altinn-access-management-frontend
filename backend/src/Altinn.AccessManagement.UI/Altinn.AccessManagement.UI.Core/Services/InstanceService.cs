@@ -1,54 +1,112 @@
 using Altinn.AccessManagement.UI.Core.ClientInterfaces;
+using Altinn.AccessManagement.UI.Core.Configuration;
 using Altinn.AccessManagement.UI.Core.Models.InstanceDelegation;
 using Altinn.AccessManagement.UI.Core.Models.InstanceDelegation.Frontend;
 using Altinn.AccessManagement.UI.Core.Models.ResourceRegistry.Frontend;
 using Altinn.AccessManagement.UI.Core.Models.SingleRight;
 using Altinn.AccessManagement.UI.Core.Models.User;
 using Altinn.AccessManagement.UI.Core.Services.Interfaces;
+using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Options;
 
 namespace Altinn.AccessManagement.UI.Core.Services
 {
     /// <inheritdoc />
     public class InstanceService : IInstanceService
     {
+        private readonly IAuthenticationClient _authenticationClient;
+        private readonly FeatureFlags _featureFlags;
+        private readonly IDialogportClient _dialogportClient;
         private readonly IInstanceClient _instanceClient;
+        private readonly ILogger<InstanceService> _logger;
         private readonly IResourceService _resourceService;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="InstanceService"/> class.
         /// </summary>
+        /// <param name="authenticationClient">Client for fetching enriched end user tokens.</param>
+        /// <param name="featureFlags">Feature flag configuration.</param>
+        /// <param name="dialogportClient">Client for dialogporten lookups.</param>
         /// <param name="instanceClient">Client for instance delegation data.</param>
+        /// <param name="logger">Logger instance.</param>
         /// <param name="resourceService">Service for resource data.</param>
-        public InstanceService(IInstanceClient instanceClient, IResourceService resourceService)
+        public InstanceService(
+            IAuthenticationClient authenticationClient,
+            IOptions<FeatureFlags> featureFlags,
+            IDialogportClient dialogportClient,
+            IInstanceClient instanceClient,
+            ILogger<InstanceService> logger,
+            IResourceService resourceService)
         {
+            _authenticationClient = authenticationClient;
+            _featureFlags = featureFlags.Value;
+            _dialogportClient = dialogportClient;
             _instanceClient = instanceClient;
+            _logger = logger;
             _resourceService = resourceService;
         }
 
         /// <inheritdoc />
         public async Task<List<InstanceDelegation>> GetDelegatedInstances(string languageCode, Guid party, Guid? from, Guid? to, string resource, string instance)
         {
-            List<InstancePermission> instancePermissions = await _instanceClient.GetDelegatedInstances(languageCode, party, from, to, resource, instance);
-            List<InstanceDelegation> result = new List<InstanceDelegation>();
+            bool shouldEnrichWithDialogporten = _featureFlags.EnableDialogportenDialogLookup;
+            string enrichedToken = null;
 
-            foreach (var instancePermission in instancePermissions)
+            if (shouldEnrichWithDialogporten)
             {
-                string resourceId = instancePermission.Resource?.RefId;
-
-                if (string.IsNullOrEmpty(resourceId))
+                try
                 {
-                    continue;
+                    enrichedToken = await _authenticationClient.GetPidEnrichedToken();
                 }
-
-                ServiceResourceFE resourceFe = await _resourceService.GetResource(resourceId, languageCode);
-
-                if (resourceFe != null)
+                catch (Exception ex)
                 {
-                    result.Add(new InstanceDelegation(resourceFe, instancePermission.Instance, instancePermission.Permissions));
+                    _logger.LogWarning(ex, "InstanceService // GetDelegatedInstances // Failed to fetch enriched token for dialogporten lookup");
+                    throw new ApplicationException("Failed to enrich token for dialogporten lookup", ex);
                 }
             }
 
-            return result;
+            List<InstancePermission> instancePermissions = await _instanceClient.GetDelegatedInstances(languageCode, party, from, to, resource, instance);
+
+            var validPermissions = instancePermissions
+                .Where(p => !string.IsNullOrEmpty(p.Resource?.RefId))
+                .ToList();
+
+            // Fan out all resource lookups in parallel instead of one-by-one
+            ServiceResourceFE[] resources = await Task.WhenAll(
+                validPermissions.Select(p => _resourceService.GetResource(p.Resource.RefId, languageCode)));
+
+            // Pair each permission with its resolved resource, drop any where the lookup returned null
+            List<InstanceDelegation> delegations = validPermissions
+                .Zip(resources, (permission, resourceFe) => (permission, resourceFe))
+                .Where(x => x.resourceFe != null)
+                .Select(x => new InstanceDelegation(x.resourceFe, x.permission.Instance, x.permission.Permissions))
+                .ToList();
+
+            if (!shouldEnrichWithDialogporten || string.IsNullOrWhiteSpace(enrichedToken))
+            {
+                return delegations;
+            }
+
+            // Fan out all dialogporten lookups in parallel.
+            // Each lookup is fire-and-assign; failures are logged but don't abort the others.
+            await Task.WhenAll(delegations.Select(async d =>
+            {
+                if (string.IsNullOrWhiteSpace(d.Instance?.RefId))
+                {
+                    return;
+                }
+
+                try
+                {
+                    d.DialogLookup = await _dialogportClient.GetDialogLookupByInstanceRef(enrichedToken, languageCode, d.Instance.RefId);
+                }
+                catch (Exception ex)
+                {
+                    _logger.LogWarning(ex, "InstanceService // GetDelegatedInstances // Dialog lookup failed for instanceRef {InstanceRef}", d.Instance.RefId);
+                }
+            }));
+
+            return delegations;
         }
 
         /// <inheritdoc />

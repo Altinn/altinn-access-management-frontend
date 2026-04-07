@@ -7,6 +7,7 @@ using Altinn.AccessManagement.UI.Core.Models.Common;
 using Altinn.AccessManagement.UI.Core.Models.Consent;
 using Altinn.AccessManagement.UI.Core.Models.Consent.Frontend;
 using Altinn.AccessManagement.UI.Core.Models.Delegation.Frontend;
+using Altinn.AccessManagement.UI.Core.Models.Dialogporten;
 using Altinn.AccessManagement.UI.Core.Models.InstanceDelegation;
 using Altinn.AccessManagement.UI.Core.Models.InstanceDelegation.Frontend;
 using Altinn.AccessManagement.UI.Core.Models.Profile;
@@ -267,6 +268,38 @@ namespace Altinn.AccessManagement.UI.Tests.Utils
             AssertEqual(expected.Resource, actual.Resource);
             AssertEqual(expected.Instance, actual.Instance);
             AssertCollections(expected.Permissions, actual.Permissions, AssertEqual);
+            AssertEqual(expected.DialogLookup, actual.DialogLookup);
+        }
+
+        /// <summary>
+        ///     Assert that two <see cref="DialogLookup" /> have the same property values.
+        /// </summary>
+        /// <param name="expected">An instance with the expected values.</param>
+        /// <param name="actual">The instance to verify.</param>
+        public static void AssertEqual(DialogLookup expected, DialogLookup actual)
+        {
+            if (actual == null)
+            {
+                Assert.Null(expected);
+                return;
+            }
+
+            Assert.NotNull(expected);
+            Assert.Equal(expected.DialogId, actual.DialogId);
+            Assert.Equal(expected.InstanceRef, actual.InstanceRef);
+            AssertCollections(expected.Title, actual.Title, AssertEqual);
+        }
+
+        /// <summary>
+        ///     Assert that two <see cref="DialogLookupLocalization" /> have the same property values.
+        /// </summary>
+        public static void AssertEqual(DialogLookupLocalization expected, DialogLookupLocalization actual)
+        {
+            Assert.NotNull(actual);
+            Assert.NotNull(expected);
+
+            Assert.Equal(expected.Value, actual.Value);
+            Assert.Equal(expected.LanguageCode, actual.LanguageCode);
         }
 
         /// <summary>

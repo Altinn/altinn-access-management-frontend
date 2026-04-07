@@ -36,6 +36,11 @@
         public string ApiRegisterEndpoint { get; set; }
 
         /// <summary>
+        /// Gets or sets the dialogporten api endpoint.
+        /// </summary>
+        public string ApiDialogportenEndpoint { get; set; }
+
+        /// <summary>
         /// Gets or sets the resource registry api endpoint.
         /// </summary>
         public string ApiResourceRegistryEndpoint { get; set; }

@@ -39,11 +39,6 @@ namespace Altinn.AccessManagement.UI.Mocks.Mocks
             string dataPath = Path.Combine(dataFolder, "Instance", "GetInstances", "instances.json");
             IEnumerable<InstancePermission> instances = Util.GetMockData<List<InstancePermission>>(dataPath);
 
-            if (from.HasValue)
-            {
-                instances = instances.Where(permission => permission.Permissions.Any(item => item.From?.Id == from.Value));
-            }
-
             if (to.HasValue)
             {
                 instances = instances.Where(permission => permission.Permissions.Any(item => item.To?.Id == to.Value));

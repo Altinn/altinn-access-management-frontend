@@ -14,5 +14,11 @@ namespace Altinn.AccessManagement.UI.Mocks.Mocks
         {
             return Task.FromResult<string>(null);
         }
+
+        /// <inheritdoc/>
+        public Task<string> GetPidEnrichedToken()
+        {
+            return Task.FromResult<string>(null);
+        }
     }
 }
