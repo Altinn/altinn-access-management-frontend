@@ -4,6 +4,7 @@ export interface Request {
   createdDate: string;
   displayPartyName: string;
   displayPartyType: 'person' | 'company' | 'system';
+  isSubUnit?: boolean;
   partyUuid?: string;
   description?: string;
   numberOfRequests?: number;

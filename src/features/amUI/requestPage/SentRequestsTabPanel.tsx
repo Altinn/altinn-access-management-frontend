@@ -29,6 +29,7 @@ export const SentRequestsTabPanel = ({ pendingRequests }: SentRequestsTabPanelPr
             id={request.id}
             name={request.displayPartyName}
             type={request.displayPartyType}
+            subUnit={request.isSubUnit}
             titleAs='h2'
             linkIcon
             description={`${request.description ? t(request.description) : t('request_page.waiting_for_number', { count: request.numberOfRequests })} (${formatDateToNorwegian(request.createdDate)})`}
