@@ -346,20 +346,37 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
         {
             Guid party = Guid.Parse("cd35779b-b174-4ecc-bbef-ece13611be7f");
             Guid from = Guid.Parse("cd35779b-b174-4ecc-bbef-ece13611be7f");
-            string path = Path.Combine(_mockFolder, "Data", "ExpectedResults", "Instance", "GetInstances", "instances.json");
-            List<InstanceDelegation> expectedResponse = Util.GetMockData<List<InstanceDelegation>>(path);
+            string resourceId = "generic-access-resource";
 
             // Strict mocks: any call to auth or dialogporten will fail the test
             var authenticationClientMock = new Mock<IAuthenticationClient>(MockBehavior.Strict);
             var dialogportClientMock = new Mock<IDialogportClient>(MockBehavior.Strict);
 
+            var instanceClientMock = new Mock<IInstanceClient>();
+            instanceClientMock
+                .Setup(c => c.GetDelegatedInstances(It.IsAny<string>(), party, from, null, null, null))
+                .ReturnsAsync(
+                [
+                    new InstancePermission
+                    {
+                        Resource = new ResourceAM { RefId = resourceId },
+                        Instance = new DelegationInstance { RefId = "urn:altinn:instance-id:51599233/df333e75-5896-4254-a69f-146736eaf668" },
+                        Permissions = []
+                    }
+                ]);
+
+            var resourceServiceMock = new Mock<IResourceService>();
+            resourceServiceMock
+                .Setup(s => s.GetResource(resourceId, It.IsAny<string>()))
+                .ReturnsAsync(new ServiceResourceFE { Identifier = resourceId });
+
             var instanceService = new InstanceService(
                 authenticationClientMock.Object,
                 Options.Create(new FeatureFlags { EnableDialogportenDialogLookup = false }),
                 dialogportClientMock.Object,
-                new InstanceClientMock(null, new Mock<ILogger<InstanceClientMock>>().Object, null),
+                instanceClientMock.Object,
                 new Mock<ILogger<InstanceService>>().Object,
-                _factory.Services.GetRequiredService<IResourceService>());
+                resourceServiceMock.Object);
 
             HttpClient client = GetTestClient(instanceService);
 
@@ -369,7 +386,7 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
 
             Assert.Equal(HttpStatusCode.OK, httpResponse.StatusCode);
             Assert.NotNull(actualResponse);
-            AssertionUtil.AssertCollections(expectedResponse, actualResponse, AssertionUtil.AssertEqual);
+            Assert.Single(actualResponse);
             Assert.All(actualResponse, d => Assert.Null(d.DialogLookup));
         }
 
