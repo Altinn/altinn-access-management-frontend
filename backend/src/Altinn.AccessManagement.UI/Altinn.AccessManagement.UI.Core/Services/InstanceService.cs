@@ -66,41 +66,47 @@ namespace Altinn.AccessManagement.UI.Core.Services
             }
 
             List<InstancePermission> instancePermissions = await _instanceClient.GetDelegatedInstances(languageCode, party, from, to, resource, instance);
-            List<InstanceDelegation> result = new List<InstanceDelegation>();
 
-            foreach (var instancePermission in instancePermissions)
+            var validPermissions = instancePermissions
+                .Where(p => !string.IsNullOrEmpty(p.Resource?.RefId))
+                .ToList();
+
+            // Fan out all resource lookups in parallel instead of one-by-one
+            ServiceResourceFE[] resources = await Task.WhenAll(
+                validPermissions.Select(p => _resourceService.GetResource(p.Resource.RefId, languageCode)));
+
+            // Pair each permission with its resolved resource, drop any where the lookup returned null
+            List<InstanceDelegation> delegations = validPermissions
+                .Zip(resources, (permission, resourceFe) => (permission, resourceFe))
+                .Where(x => x.resourceFe != null)
+                .Select(x => new InstanceDelegation(x.resourceFe, x.permission.Instance, x.permission.Permissions))
+                .ToList();
+
+            if (!shouldEnrichWithDialogporten || string.IsNullOrWhiteSpace(enrichedToken))
             {
-                string resourceId = instancePermission.Resource?.RefId;
-
-                if (string.IsNullOrEmpty(resourceId))
-                {
-                    continue;
-                }
-
-                ServiceResourceFE resourceFe = await _resourceService.GetResource(resourceId, languageCode);
-
-                if (resourceFe != null)
-                {
-                    InstanceDelegation instanceDelegation = new InstanceDelegation(resourceFe, instancePermission.Instance, instancePermission.Permissions);
-
-                    if (shouldEnrichWithDialogporten && !string.IsNullOrWhiteSpace(enrichedToken) && !string.IsNullOrWhiteSpace(instancePermission.Instance?.RefId))
-                    {
-                        try
-                        {
-                            instanceDelegation.DialogLookup =
-                                await _dialogportClient.GetDialogLookupByInstanceRef(enrichedToken, languageCode, instancePermission.Instance.RefId);
-                        }
-                        catch (Exception ex)
-                        {
-                            _logger.LogWarning(ex, "InstanceService // GetDelegatedInstances // Dialog lookup failed for instanceRef {InstanceRef}", instancePermission.Instance.RefId);
-                        }
-                    }
-
-                    result.Add(instanceDelegation);
-                }
+                return delegations;
             }
 
-            return result;
+            // Fan out all dialogporten lookups in parallel.
+            // Each lookup is fire-and-assign; failures are logged but don't abort the others.
+            await Task.WhenAll(delegations.Select(async d =>
+            {
+                if (string.IsNullOrWhiteSpace(d.Instance?.RefId))
+                {
+                    return;
+                }
+
+                try
+                {
+                    d.DialogLookup = await _dialogportClient.GetDialogLookupByInstanceRef(enrichedToken, languageCode, d.Instance.RefId);
+                }
+                catch (Exception ex)
+                {
+                    _logger.LogWarning(ex, "InstanceService // GetDelegatedInstances // Dialog lookup failed for instanceRef {InstanceRef}", d.Instance.RefId);
+                }
+            }));
+
+            return delegations;
         }
 
         /// <inheritdoc />
