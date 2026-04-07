@@ -12,6 +12,7 @@ using Altinn.AccessManagement.UI.Core.Models.AccessPackage;
 using Altinn.AccessManagement.UI.Core.Models.Connections;
 using Altinn.AccessManagement.UI.Core.Models.InstanceDelegation;
 using Altinn.AccessManagement.UI.Core.Models.InstanceDelegation.Frontend;
+using Altinn.AccessManagement.UI.Core.Models.ResourceRegistry.Frontend;
 using Altinn.AccessManagement.UI.Core.Models.SingleRight;
 using Altinn.AccessManagement.UI.Core.Models.User;
 using Altinn.AccessManagement.UI.Core.Services;
@@ -277,6 +278,99 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
             Assert.NotNull(actualResponse);
             Assert.Single(actualResponse);
             Assert.Null(actualResponse[0].DialogLookup);
+        }
+
+        /// <summary>
+        /// Test case: Dialogporten lookup is skipped when the instance has no RefId.
+        /// Expected: Returns OK with the instance included and DialogLookup is null (dialogporten never called).
+        /// </summary>
+        [Fact]
+        public async Task GetInstances_WhenInstanceRefIdIsNull_SkipsDialogLookup()
+        {
+            Guid party = Guid.Parse("cd35779b-b174-4ecc-bbef-ece13611be7f");
+            Guid from = Guid.Parse("cd35779b-b174-4ecc-bbef-ece13611be7f");
+            string resourceId = "generic-access-resource";
+
+            var authenticationClientMock = new Mock<IAuthenticationClient>();
+            authenticationClientMock
+                .Setup(c => c.GetPidEnrichedToken())
+                .ReturnsAsync("enriched-token");
+
+            var instanceClientMock = new Mock<IInstanceClient>();
+            instanceClientMock
+                .Setup(c => c.GetDelegatedInstances(It.IsAny<string>(), party, from, null, null, null))
+                .ReturnsAsync(
+                [
+                    new InstancePermission
+                    {
+                        Resource = new ResourceAM { RefId = resourceId },
+                        Instance = new DelegationInstance { RefId = null },
+                        Permissions = []
+                    }
+                ]);
+
+            var resourceServiceMock = new Mock<IResourceService>();
+            resourceServiceMock
+                .Setup(s => s.GetResource(resourceId, It.IsAny<string>()))
+                .ReturnsAsync(new ServiceResourceFE { Identifier = resourceId });
+
+            // Strict mock: any call to dialogporten will fail the test
+            var dialogportClientMock = new Mock<IDialogportClient>(MockBehavior.Strict);
+
+            var instanceService = new InstanceService(
+                authenticationClientMock.Object,
+                Options.Create(new FeatureFlags { EnableDialogportenDialogLookup = true }),
+                dialogportClientMock.Object,
+                instanceClientMock.Object,
+                new Mock<ILogger<InstanceService>>().Object,
+                resourceServiceMock.Object);
+
+            HttpClient client = GetTestClient(instanceService);
+
+            HttpResponseMessage httpResponse = await client.GetAsync(
+                $"accessmanagement/api/v1/instances/delegation/instances?party={party}&from={from}");
+            List<InstanceDelegation> actualResponse = await httpResponse.Content.ReadFromJsonAsync<List<InstanceDelegation>>();
+
+            Assert.Equal(HttpStatusCode.OK, httpResponse.StatusCode);
+            Assert.NotNull(actualResponse);
+            Assert.Single(actualResponse);
+            Assert.Null(actualResponse[0].DialogLookup);
+        }
+
+        /// <summary>
+        /// Test case: Dialogporten feature flag is disabled.
+        /// Expected: Returns OK with delegations and neither auth nor dialogporten is called.
+        /// </summary>
+        [Fact]
+        public async Task GetInstances_WhenDialogportenFeatureFlagDisabled_ReturnsDelegationsWithoutDialogLookup()
+        {
+            Guid party = Guid.Parse("cd35779b-b174-4ecc-bbef-ece13611be7f");
+            Guid from = Guid.Parse("cd35779b-b174-4ecc-bbef-ece13611be7f");
+            string path = Path.Combine(_mockFolder, "Data", "ExpectedResults", "Instance", "GetInstances", "instances.json");
+            List<InstanceDelegation> expectedResponse = Util.GetMockData<List<InstanceDelegation>>(path);
+
+            // Strict mocks: any call to auth or dialogporten will fail the test
+            var authenticationClientMock = new Mock<IAuthenticationClient>(MockBehavior.Strict);
+            var dialogportClientMock = new Mock<IDialogportClient>(MockBehavior.Strict);
+
+            var instanceService = new InstanceService(
+                authenticationClientMock.Object,
+                Options.Create(new FeatureFlags { EnableDialogportenDialogLookup = false }),
+                dialogportClientMock.Object,
+                new InstanceClientMock(null, new Mock<ILogger<InstanceClientMock>>().Object, null),
+                new Mock<ILogger<InstanceService>>().Object,
+                _factory.Services.GetRequiredService<IResourceService>());
+
+            HttpClient client = GetTestClient(instanceService);
+
+            HttpResponseMessage httpResponse = await client.GetAsync(
+                $"accessmanagement/api/v1/instances/delegation/instances?party={party}&from={from}");
+            List<InstanceDelegation> actualResponse = await httpResponse.Content.ReadFromJsonAsync<List<InstanceDelegation>>();
+
+            Assert.Equal(HttpStatusCode.OK, httpResponse.StatusCode);
+            Assert.NotNull(actualResponse);
+            AssertionUtil.AssertCollections(expectedResponse, actualResponse, AssertionUtil.AssertEqual);
+            Assert.All(actualResponse, d => Assert.Null(d.DialogLookup));
         }
 
         /// <summary>
