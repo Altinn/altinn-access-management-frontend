@@ -1,6 +1,6 @@
 import { useMemo } from 'react';
 import { getCookie } from '../Cookie/CookieMethods';
-import { useGetIsAdminQuery, useGetReporteeQuery } from '@/rtk/features/userInfoApi';
+import { PartyType, useGetIsAdminQuery, useGetReporteeQuery } from '@/rtk/features/userInfoApi';
 import { hasConsentPermission, hasCreateSystemUserPermission } from '../utils/permissionUtils';
 import { useGetActiveConsentsQuery } from '@/rtk/features/consentApi';
 import { Request } from '@/features/amUI/requestPage/types';
@@ -13,6 +13,7 @@ import {
   useGetSentRequestsQuery,
 } from '@/rtk/features/requestApi';
 import { formatDisplayName } from '@altinn/altinn-components';
+import { isSubUnitByType } from '@/resources/utils/reporteeUtils';
 
 export const useRequests = () => {
   const partyUuid = getCookie('AltinnPartyUuid');
@@ -117,7 +118,8 @@ const mapConsentToRequest = (request: ActiveConsentListItem): Request => {
     type: 'consent',
     createdDate: request.createdDate,
     displayPartyName: request.toParty.name,
-    displayPartyType: request.toParty.type === 'Person' ? 'person' : 'company',
+    displayPartyType: request.toParty.type === PartyType.Person ? 'person' : 'company',
+    isSubUnit: request.toParty.type === PartyType.SubUnit,
     description: request.isPoa ? 'request_page.request_poa' : 'request_page.request_consent',
   };
 };
@@ -171,6 +173,7 @@ const mapAccessRequestToRequest = (
     displayPartyName: partyName,
     displayPartyType: partyType,
     partyUuid: party.id,
+    isSubUnit: isSubUnitByType(party.variant),
     description: undefined, // Use default description for access requests
     numberOfRequests: numberOfRequests ?? 1,
   };
