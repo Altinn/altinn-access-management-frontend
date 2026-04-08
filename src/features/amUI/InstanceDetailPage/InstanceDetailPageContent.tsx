@@ -251,7 +251,7 @@ export const InstanceDetailPageContent = () => {
         <EditModal
           ref={modalRef}
           resource={resource}
-          instance={{ instanceUrn }}
+          instance={{ instanceUrn, dialogLookup }}
           toParty={{
             partyUuid: selectedUser.id,
             name: selectedUser.name,

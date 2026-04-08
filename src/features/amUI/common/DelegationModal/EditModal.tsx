@@ -7,6 +7,7 @@ import type { ServiceResource } from '@/rtk/features/singleRights/singleRightsAp
 import type { DialogLookup } from '@/rtk/features/instanceApi';
 import type { AccessPackage } from '@/rtk/features/accessPackageApi';
 import type { Role } from '@/rtk/features/roleApi';
+import { PartyType } from '@/rtk/features/userInfoApi';
 import { ResourceInfo } from './SingleRights/ResourceInfo';
 import { InstanceInfo } from './Instance/InstanceInfo';
 import classes from './DelegationModal.module.css';
@@ -17,7 +18,7 @@ import { useDelegationModalContext } from './DelegationModalContext';
 export interface DelegationRecipient {
   partyUuid: string;
   name: string;
-  partyTypeName: string;
+  partyTypeName: PartyType;
 }
 
 export enum DelegationAction {

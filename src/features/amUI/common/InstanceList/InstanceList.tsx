@@ -27,6 +27,19 @@ interface InstanceListProps {
   interactive?: boolean;
 }
 
+const getResolvedInstanceTitle = (
+  instanceDelegation: InstanceDelegation,
+  t: TFunction,
+  language: string,
+) =>
+  resolveInstanceTitle(
+    instanceDelegation.dialogLookup,
+    instanceDelegation.resource,
+    instanceDelegation.instance.refId,
+    t,
+    language,
+  );
+
 const toInstanceListItem = (
   instanceDelegation: InstanceDelegation,
   getProviderLogoUrl: (orgCode: string) => string | undefined,
@@ -39,12 +52,12 @@ const toInstanceListItem = (
     : undefined;
   const dialogItemId = `${resource.identifier}-${instance.refId}`;
   const shortId = instance.refId.slice(-10);
-  const title = resolveInstanceTitle(dialogLookup, resource, instance.refId, t, language);
+  const title = getResolvedInstanceTitle(instanceDelegation, t, language);
 
   return {
     id: dialogItemId,
     title,
-    description: `${instance.refId} ${resource.title}`,
+    description: `${instance.refId} ${title}`,
     sender: {
       name: resource.resourceOwnerName ?? '',
       type: 'company',
@@ -77,13 +90,19 @@ export const InstanceList = ({
 
     const normalizedSearch = debouncedSearchString.trim().toLowerCase();
 
-    return instanceList.filter((instanceDelegation) =>
-      [instanceDelegation.resource.title, instanceDelegation.resource.resourceOwnerName]
+    return instanceList.filter((instanceDelegation) => {
+      const resolvedTitle = getResolvedInstanceTitle(instanceDelegation, t, i18n.language);
+
+      return [
+        resolvedTitle,
+        instanceDelegation.resource.title,
+        instanceDelegation.resource.resourceOwnerName,
+      ]
         .join(' ')
         .toLowerCase()
-        .includes(normalizedSearch),
-    );
-  }, [debouncedSearchString, hasSearch, instances]);
+        .includes(normalizedSearch);
+    });
+  }, [debouncedSearchString, hasSearch, i18n.language, instances, t]);
 
   return (
     <>

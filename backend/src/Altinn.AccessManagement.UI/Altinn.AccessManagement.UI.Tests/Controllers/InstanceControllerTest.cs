@@ -151,10 +151,10 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
 
         /// <summary>
         /// Test case: Returns the instance even when dialogporten lookup is not found.
-        /// Expected: Returns OK and the instance without dialog lookup data.
+        /// Expected: Returns OK and the instance with dialog lookup marked as not found.
         /// </summary>
         [Fact]
-        public async Task GetInstances_WhenDialogLookupIsMissing_ReturnsInstanceWithoutDialogData()
+        public async Task GetInstances_WhenDialogLookupIsMissing_ReturnsInstanceWithDialogLookupMarkedNotFound()
         {
             Guid party = Guid.Parse("cd35779b-b174-4ecc-bbef-ece13611be7f");
             Guid from = Guid.Parse("cd35779b-b174-4ecc-bbef-ece13611be7f");
