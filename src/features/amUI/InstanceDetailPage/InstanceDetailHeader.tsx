@@ -10,7 +10,6 @@ import classes from './InstanceDetailHeader.module.css';
 
 interface InstanceDetailHeaderProps {
   resource: ServiceResource;
-  resourceId: string;
   instanceUrn?: string;
   dialogLookup?: DialogLookup | null;
   providerLogoUrl?: string;
@@ -20,7 +19,6 @@ interface InstanceDetailHeaderProps {
 
 export const InstanceDetailHeader = ({
   resource,
-  resourceId,
   instanceUrn,
   dialogLookup,
   providerLogoUrl,
