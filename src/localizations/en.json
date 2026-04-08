@@ -962,7 +962,6 @@
   },
   "instance_detail_page": {
     "document_title": "Shared from inbox",
-    "resource_title": "Message or form: {{title}}",
     "provider_name": "to {{name}}",
     "back_to_inbox": "Go to inbox",
     "see_in_inbox": "View in inbox",

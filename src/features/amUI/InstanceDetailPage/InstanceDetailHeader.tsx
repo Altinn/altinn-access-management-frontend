@@ -36,7 +36,7 @@ export const InstanceDetailHeader = ({
         level={1}
         data-size='sm'
       >
-        {t('instance_detail_page.resource_title', { title })}
+        {title}
       </DsHeading>
       <div className={classes.resourceOwner}>
         <Icon
