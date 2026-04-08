@@ -41,8 +41,13 @@ export const resolveInstanceTitle = (
 
   const isCorrespondence = instanceRefId?.startsWith('urn:altinn:correspondence-id:');
   if (dialogLookup?.status === 'NotFound' && isCorrespondence) {
+    const resourceName = resource?.title ?? resource?.identifier;
+    if (!resourceName) {
+      return t('instance_header.title_not_found');
+    }
+
     return t('instance_header.title_correspondence_not_found', {
-      resourceName: resource?.title ?? resource?.identifier,
+      resourceName,
     });
   }
   if (dialogLookup?.status === 'NotFound') {
