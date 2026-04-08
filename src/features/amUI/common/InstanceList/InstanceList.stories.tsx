@@ -1,4 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
+import type { ReactNode } from 'react';
 import { Provider } from 'react-redux';
 import { RootProvider } from '@altinn/altinn-components';
 
@@ -75,7 +76,7 @@ const noDialogLookup: InstanceDelegation = {
   dialogLookup: null,
 };
 
-const Wrapper = ({ children }: { children: React.ReactNode }) => (
+const Wrapper = ({ children }: { children: ReactNode }) => (
   <Provider store={store}>
     <RootProvider>{children}</RootProvider>
   </Provider>
