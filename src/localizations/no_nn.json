@@ -962,6 +962,8 @@
     "provider_name": "til {{name}}",
     "back_to_inbox": "Gå til innboks",
     "see_in_inbox": "Sjå i innboks",
+    "service_title_label": "Skjema av tenesta",
+    "instance_id_label": "Id",
     "search_placeholder": "Søk etter person",
     "description": "Her kan du dele ei melding eller eit skjema frå innboksen eller få oversikt over kven som allereie har tilgang. Bruk søkjefeltet til å søkje etter personar eller legg dei til som ny brukar.",
     "no_users": "Ingen brukarar har tilgang.",

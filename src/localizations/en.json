@@ -965,6 +965,8 @@
     "provider_name": "to {{name}}",
     "back_to_inbox": "Go to inbox",
     "see_in_inbox": "View in inbox",
+    "service_title_label": "Form for service",
+    "instance_id_label": "Id",
     "search_placeholder": "Search for person",
     "description": "Here you can share a message or form from the inbox or get an overview of who already has access. Use the search field to search for people or add them as a new user.",
     "no_users": "No users have access.",

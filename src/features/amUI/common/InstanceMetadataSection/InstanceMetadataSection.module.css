@@ -1,0 +1,63 @@
+.container {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--ds-spacing-2);
+}
+
+.resourceOwner {
+  display: flex;
+  align-items: center;
+  gap: var(--ds-spacing-2);
+}
+
+.ownerTag {
+  display: flex;
+  align-items: center;
+  gap: var(--ds-spacing-1);
+  flex-wrap: wrap;
+}
+
+.ownerName {
+  color: var(--ds-color-text-subtle);
+}
+
+.metadataList {
+  width: 100%;
+  margin: var(--ds-spacing-3) 0;
+}
+
+.metadataRow {
+  display: grid;
+  grid-template-columns: minmax(0, auto) minmax(0, 1fr);
+  column-gap: var(--ds-spacing-2);
+  row-gap: var(--ds-spacing-1);
+  margin: 0;
+}
+
+.metadataRow + .metadataRow {
+  margin-top: var(--ds-spacing-2);
+}
+
+.metadataTerm {
+  margin: 0;
+  font-size: var(--ds-body-sm-font-size);
+  line-height: var(--ds-body-sm-line-height);
+  font-weight: 600;
+}
+
+.metadataValue {
+  margin: 0;
+  font-size: var(--ds-body-sm-font-size);
+  line-height: var(--ds-body-sm-line-height);
+}
+
+@media (max-width: 600px) {
+  .resourceOwner {
+    padding-top: 4px;
+  }
+
+  .metadataRow {
+    grid-template-columns: 1fr;
+  }
+}

@@ -962,6 +962,8 @@
     "provider_name": "til {{name}}",
     "back_to_inbox": "Gå til innboks",
     "see_in_inbox": "Se i innboks",
+    "service_title_label": "Skjema av tjenesten",
+    "instance_id_label": "Id",
     "search_placeholder": "Søk etter person",
     "description": "Her kan du dele en melding eller et skjema fra innboksen eller få en oversikt over hvem som allerede har tilgang. Bruk søkefeltet til å søke etter personer eller legg dem til som ny bruker.",
     "no_users": "Ingen brukere har tilgang.",

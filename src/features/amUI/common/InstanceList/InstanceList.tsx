@@ -46,7 +46,7 @@ const toInstanceListItem = (
   t: TFunction,
   language: string,
 ): DialogListItemProps => {
-  const { instance, resource, dialogLookup } = instanceDelegation;
+  const { instance, resource } = instanceDelegation;
   const providerLogoUrl = resource.resourceOwnerOrgcode
     ? getProviderLogoUrl(resource.resourceOwnerOrgcode)
     : undefined;
@@ -65,7 +65,8 @@ const toInstanceListItem = (
       imageUrlAlt: resource.resourceOwnerName ?? '',
     },
     updatedAt: instance.refId,
-    updatedAtLabel: shortId,
+    updatedAtLabel: `${t('instance_detail_page.instance_id_label')}: ${shortId}`,
+    extendedStatusLabel: `${t('instance_detail_page.service_title_label')}: ${resource.title}`,
   };
 };
 
