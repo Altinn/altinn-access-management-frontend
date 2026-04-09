@@ -410,25 +410,6 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
         }
 
         /// <summary>
-        ///     Test case: GetConsentRequestCount returns zero for a party with no consent data
-        ///     Expected: Returns 0
-        /// </summary>
-        [Fact]
-        public async Task GetConsentRequestCount_ReturnsZeroForPartyWithNoConsents()
-        {
-            // Arrange
-            string party = "477717d1-d9b2-40f0-98c7-0fd8eb0626c2";
-
-            // Act
-            HttpResponseMessage httpResponse = await _client.GetAsync($"accessmanagement/api/v1/consent/count/{party}?status=Created");
-            int actualCount = await httpResponse.Content.ReadFromJsonAsync<int>();
-
-            // Assert
-            Assert.Equal(HttpStatusCode.OK, httpResponse.StatusCode);
-            Assert.Equal(0, actualCount);
-        }
-
-        /// <summary>
         ///     Test case: GetConsentRequestCount returns the count of consent requests with Revoked status for an org party
         ///     Expected: Returns 1
         /// </summary>
@@ -445,6 +426,23 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
             // Assert
             Assert.Equal(HttpStatusCode.OK, httpResponse.StatusCode);
             Assert.Equal(1, actualCount);
+        }
+
+        /// <summary>
+        ///     Test case: GetConsentRequestCount returns error for a party with no consent data
+        ///     Expected: Returns NotFound
+        /// </summary>
+        [Fact]
+        public async Task GetConsentRequestCount_ReturnsNotFoundForPartyWithNoConsents()
+        {
+            // Arrange
+            string party = "477717d1-d9b2-40f0-98c7-0fd8eb0626c2";
+
+            // Act
+            HttpResponseMessage httpResponse = await _client.GetAsync($"accessmanagement/api/v1/consent/count/{party}?status=Revoked");
+
+            // Assert
+            Assert.Equal(HttpStatusCode.NotFound, httpResponse.StatusCode);
         }
 
         private static string GetRedirectCookieValue(HttpResponseMessage httpResponse)
