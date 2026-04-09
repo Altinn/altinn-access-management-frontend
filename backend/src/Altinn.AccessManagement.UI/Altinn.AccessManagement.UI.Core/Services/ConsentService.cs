@@ -275,6 +275,12 @@ namespace Altinn.AccessManagement.UI.Core.Services
             return await _consentClient.RevokeConsent(consentId, cancellationToken);
         }
 
+        /// <inheritdoc />
+        public async Task<Result<int>> GetConsentRequestCount(Guid party, ConsentRequestStatusType status, CancellationToken cancellationToken)
+        {
+            return await _consentClient.GetConsentRequestCount(party, status, cancellationToken);
+        }
+
         private static Dictionary<string, Party> PartyListToDict(IEnumerable<Party> parties)
         {
             return parties.Where(p => p != null && p.PartyUuid.HasValue).ToDictionary(p => p.PartyUuid.ToString(), p => p, StringComparer.OrdinalIgnoreCase);
