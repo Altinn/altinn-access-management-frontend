@@ -37,9 +37,9 @@ export const useSidebarRequestCount = ({
   );
 
   const {
-    data: activeConsents,
-    isLoading: isLoadingActiveConsents,
-    isError: isErrorActiveConsents,
+    data: pendingConsentsCount,
+    isLoading: isLoadingPendingConsents,
+    isError: isErrorPendingConsents,
   } = useGetConsentRequestsCountQuery({ partyId: partyUuid ?? '' }, { skip: !shouldFetchConsents });
 
   const {
@@ -50,16 +50,16 @@ export const useSidebarRequestCount = ({
     skip: !shouldFetchSystemUsers,
   });
 
-  const pendingConsentCount = activeConsents ?? 0;
   const pendingSystemUserCount = (pendingSystemUsers ?? []).length;
 
   return {
-    requestsBadgeCount: (receivedRequestsCount ?? 0) + pendingConsentCount + pendingSystemUserCount,
+    requestsBadgeCount:
+      (receivedRequestsCount ?? 0) + (pendingConsentsCount ?? 0) + pendingSystemUserCount,
     isLoading:
       isLoadingPermissions ||
       isLoadingReceivedRequestsCount ||
-      isLoadingActiveConsents ||
+      isLoadingPendingConsents ||
       isLoadingPendingSystemUsers,
-    isError: isErrorReceivedRequestsCount || isErrorActiveConsents || isErrorPendingSystemUsers,
+    isError: isErrorReceivedRequestsCount || isErrorPendingConsents || isErrorPendingSystemUsers,
   };
 };

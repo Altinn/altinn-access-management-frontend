@@ -90,7 +90,7 @@ export const consentApi = createApi({
       },
     }),
     getConsentRequestsCount: builder.query<number, { partyId: string }>({
-      query: ({ partyId }) => `consent/count/${partyId}?status=active`,
+      query: ({ partyId }) => `consent/count/${partyId}?status=Created`,
       providesTags: [Tags.ConsentList],
       transformResponse: (response: number): number => {
         return response;
