@@ -106,7 +106,7 @@ namespace Altinn.AccessManagement.UI.Core.Services
                 return request.Problem;
             }
 
-            // Build status query params to prepend to the redirect URL
+            // Build status query params to append to the redirect URL
             NameValueCollection statusParams = HttpUtility.ParseQueryString(string.Empty);
 
             if (request.Value.ConsentRequestEvents.Any(e => string.Equals(e.EventType, "accepted", StringComparison.OrdinalIgnoreCase)))
