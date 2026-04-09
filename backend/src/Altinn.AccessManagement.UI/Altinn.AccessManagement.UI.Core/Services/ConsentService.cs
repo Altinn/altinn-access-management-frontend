@@ -125,9 +125,10 @@ namespace Altinn.AccessManagement.UI.Core.Services
             string statusQueryString = statusParams.ToString();
 
             // If the redirect URL uses hash-based routing (e.g. https://example.com/#/path?foo=bar),
-            // query params must be appended inside the fragment, not before the '#'.
+            // where the fragment contains a '/' indicating a path, query params must be appended inside the fragment.
+            // Otherwise, it's a standard URL with a bookmark anchor, and params go in the query string.
             int hashIndex = redirectUrl.IndexOf('#');
-            if (hashIndex >= 0)
+            if (hashIndex >= 0 && redirectUrl.Contains("/#"))
             {
                 string baseUrl = redirectUrl.Substring(0, hashIndex);
                 string fragment = redirectUrl.Substring(hashIndex + 1);
@@ -147,7 +148,7 @@ namespace Altinn.AccessManagement.UI.Core.Services
             }
             else
             {
-                // Standard URL — prepend status params before any existing query params
+                // Standard URL (with or without bookmark) — append status params to query string
                 UriBuilder uriBuilder = new UriBuilder(redirectUrl);
                 NameValueCollection existingParams = HttpUtility.ParseQueryString(uriBuilder.Query);
                 foreach (string key in existingParams.AllKeys)
