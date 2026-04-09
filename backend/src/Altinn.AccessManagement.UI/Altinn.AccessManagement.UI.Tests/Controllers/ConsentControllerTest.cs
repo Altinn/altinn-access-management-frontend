@@ -204,7 +204,7 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
         ///     Expected: RedirectAfterApprove redirects to logout url
         /// </summary>
         [Fact]
-        public async Task LogoutAfterApprove_RedirectsToLogoutUrl()
+        public async Task LogoutAfterApprove_RedirectsToLogoutUrlWithFragmentPathAndQuery()
         {
             // Arrange
             string expectedRedirectUrl = "http://localhost:5101/authentication/api/v1/logout";
@@ -226,11 +226,11 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
         ///     Expected: RedirectAfterApprove redirects to logout url
         /// </summary>
         [Fact]
-        public async Task LogoutAfterApprove_RedirectsToLogoutUrlWithNormalFragment()
+        public async Task LogoutAfterApprove_RedirectsToLogoutUrlWithFragmentPath()
         {
             // Arrange
             string expectedRedirectUrl = "http://localhost:5101/authentication/api/v1/logout";
-            string expectedDecryptedUrl = "https://smartbank.no/consent/?authcode=123&Status=OK#fragment";
+            string expectedDecryptedUrl = "https://smartbank.no/consent/#/fragmentpath?Status=OK";
             string approvedRequestId = "4c42c6cc-7901-4e53-91ca-031f3145a09c";
 
             // Act

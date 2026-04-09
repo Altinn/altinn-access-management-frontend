@@ -28,7 +28,7 @@
     }
   ],
   "requestMessage": null,
-  "redirectUrl": "https://smartbank.no/consent/#/fragmentpath?authcode=123",
+  "redirectUrl": "https://smartbank.no/consent/#/fragmentpath",
   "templateId": "sblanesoknad",
   "templateVersion": 1
 }
