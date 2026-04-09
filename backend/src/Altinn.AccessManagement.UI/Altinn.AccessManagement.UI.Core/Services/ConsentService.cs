@@ -121,44 +121,26 @@ namespace Altinn.AccessManagement.UI.Core.Services
                 statusParams.Add("ErrorMessage", "User did not give consent");
             }
 
-            string redirectUrl = request.Value.RedirectUrl;
             string statusQueryString = statusParams.ToString();
+            string redirectUrl = request.Value.RedirectUrl;
+
+            Uri uri = new Uri(redirectUrl);
+            string redirectUrlWithResponse = string.Empty;
 
             // If the redirect URL uses hash-based routing (e.g. https://example.com/#/path?foo=bar),
             // where the fragment contains a '/' indicating a path, query params must be appended inside the fragment.
             // Otherwise, it's a standard URL with a bookmark anchor, and params go in the query string.
-            int hashIndex = redirectUrl.IndexOf('#');
-            if (hashIndex >= 0 && redirectUrl.Contains("/#"))
+            if (redirectUrl.Contains("#/"))
             {
-                string baseUrl = redirectUrl.Substring(0, hashIndex);
-                string fragment = redirectUrl.Substring(hashIndex + 1);
-
-                if (fragment.Contains('?'))
-                {
-                    // Fragment already has query params — prepend status params before them
-                    int fragmentQueryIndex = fragment.IndexOf('?');
-                    string fragmentPath = fragment.Substring(0, fragmentQueryIndex);
-                    string fragmentQuery = fragment.Substring(fragmentQueryIndex + 1);
-                    return baseUrl + "#" + fragmentPath + "?" + statusQueryString + "&" + fragmentQuery;
-                }
-                else
-                {
-                    return baseUrl + "#" + fragment + "?" + statusQueryString;
-                }
+                redirectUrlWithResponse = string.Concat(redirectUrl, redirectUrl.Contains('?') ? "&" : "?", statusQueryString);
             }
             else
             {
-                // Standard URL (with or without bookmark) — append status params to query string
-                UriBuilder uriBuilder = new UriBuilder(redirectUrl);
-                NameValueCollection existingParams = HttpUtility.ParseQueryString(uriBuilder.Query);
-                foreach (string key in existingParams.AllKeys)
-                {
-                    statusParams.Add(key, existingParams[key]);
-                }
-                
-                uriBuilder.Query = statusParams.ToString();
-                return uriBuilder.Uri.ToString();
+                string url = uri.GetLeftPart(UriPartial.Query);
+                redirectUrlWithResponse = string.Concat(url, url.Contains('?') ? "&" : "?", statusQueryString) + uri.Fragment;
             }
+
+            return redirectUrlWithResponse;
         }
 
         /// <inheritdoc />
