@@ -61,7 +61,7 @@ namespace Altinn.AccessManagement.UI.Mocks.Mocks
             }
             else if (consentRequestId == PERSON_REJECTED_CONSENT_ID)
             {
-                ConsentRequestDetails request = Util.GetMockData<ConsentRequestDetails>($"{dataFolder}/Consent/consentRequest_person_rejected.json");
+                ConsentRequestDetails request = Util.GetMockData<ConsentRequestDetails>($"{dataFolder}/Consent/consentRequest_person_rejected_with_fragment.json");
                 return Task.FromResult(new Result<ConsentRequestDetails>(request));
             }
             else if (consentRequestId == PERSON_REJECTED_CONSENT_WITH_QUERY_ID)

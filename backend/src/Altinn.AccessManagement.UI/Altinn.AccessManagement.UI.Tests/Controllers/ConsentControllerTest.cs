@@ -248,11 +248,11 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
         ///     Expected: RedirectAfterReject redirects to logout url
         /// </summary>
         [Fact]
-        public async Task LogoutAfterReject_RedirectsToLogoutUrl()
+        public async Task LogoutAfterReject_RedirectsToLogoutUrlWithFragment()
         {
             // Arrange
             string expectedRedirectUrl = "http://localhost:5101/authentication/api/v1/logout";
-            string expectedDecryptedUrl = "https://smartbank.no/consent?Status=Failed&ErrorMessage=User+did+not+give+consent";
+            string expectedDecryptedUrl = "https://smartbank.no/consent?Status=Failed&ErrorMessage=User+did+not+give+consent#fragment";
             string rejectedRequestId = "52574a16-4114-4bdf-b471-85ac10a722b9";
 
             // Act
