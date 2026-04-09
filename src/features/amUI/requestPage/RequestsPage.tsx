@@ -18,6 +18,7 @@ import classes from './RequestPage.module.css';
 import { SentRequestsTabPanel } from './SentRequestsTabPanel';
 import { PartyRepresentationProvider } from '../common/PartyRepresentationContext/PartyRepresentationContext';
 import { getCookie } from '@/resources/Cookie/CookieMethods';
+import { useSidebarRequestCount } from '@/resources/hooks/useSidebarRequestCount';
 
 const selectedTabProps = {
   'data-size': 'sm',
@@ -50,11 +51,16 @@ export const RequestPage = () => {
   } = useRequests();
 
   const partyUuid = getCookie('AltinnPartyUuid');
-  const { data: sentRequestCount, isLoading: isLoadingSentRequestCount } =
-    useGetSentRequestsCountQuery(
-      { party: partyUuid || '', status: ['Pending'] },
-      { skip: !partyUuid || !isAdmin || !enableRequestSingleRight() },
-    );
+  const { data: sentRequestCount } = useGetSentRequestsCountQuery(
+    { party: partyUuid || '', status: ['Pending'] },
+    { skip: !partyUuid || !isAdmin || !enableRequestSingleRight() },
+  );
+  const { requestsBadgeCount: receivedRequestCount } = useSidebarRequestCount({
+    displayRequestsPage: true,
+    isAdmin,
+    reportee,
+    isLoadingPermissions: isLoadingReportee,
+  });
 
   const getBadgeProps = (tabValue: string) =>
     selectedTab === tabValue ? selectedTabProps : unselectedTabProps;
@@ -64,7 +70,7 @@ export const RequestPage = () => {
     type: reportee?.type === 'Person' ? 'person' : 'company',
   });
 
-  const receivedRequestsCount = pendingRequests ? pendingRequests.received.length : 0;
+  const receivedRequestsCount = receivedRequestCount ?? 0;
   const resolvedSentRequestCount = sentRequestCount ?? 0;
 
   return (
