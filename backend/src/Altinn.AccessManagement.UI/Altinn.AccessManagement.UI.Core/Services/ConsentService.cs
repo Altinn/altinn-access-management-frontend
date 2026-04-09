@@ -106,24 +106,58 @@ namespace Altinn.AccessManagement.UI.Core.Services
                 return request.Problem;
             }
 
-            // add Status to RedirectUrl
-            UriBuilder uriBuilder = new UriBuilder(request.Value.RedirectUrl);
-            NameValueCollection queryParams = HttpUtility.ParseQueryString(uriBuilder.Query);
+            // Build status query params to prepend to the redirect URL
+            NameValueCollection statusParams = HttpUtility.ParseQueryString(string.Empty);
 
             if (request.Value.ConsentRequestEvents.Any(e => string.Equals(e.EventType, "accepted", StringComparison.OrdinalIgnoreCase)))
             {
                 // if consent was approved
-                queryParams.Add("Status", "OK");
+                statusParams.Add("Status", "OK");
             }
             else if (request.Value.ConsentRequestEvents.Any(e => string.Equals(e.EventType, "rejected", StringComparison.OrdinalIgnoreCase)))
             {
                 // if consent was rejected
-                queryParams.Add("Status", "Failed");
-                queryParams.Add("ErrorMessage", "User did not give consent");
+                statusParams.Add("Status", "Failed");
+                statusParams.Add("ErrorMessage", "User did not give consent");
             }
-            
-            uriBuilder.Query = queryParams.ToString();
-            return uriBuilder.Uri.ToString();
+
+            string redirectUrl = request.Value.RedirectUrl;
+            string statusQueryString = statusParams.ToString();
+
+            // If the redirect URL uses hash-based routing (e.g. https://example.com/#/path?foo=bar),
+            // query params must be appended inside the fragment, not before the '#'.
+            int hashIndex = redirectUrl.IndexOf('#');
+            if (hashIndex >= 0)
+            {
+                string baseUrl = redirectUrl.Substring(0, hashIndex);
+                string fragment = redirectUrl.Substring(hashIndex + 1);
+
+                if (fragment.Contains('?'))
+                {
+                    // Fragment already has query params — prepend status params before them
+                    int fragmentQueryIndex = fragment.IndexOf('?');
+                    string fragmentPath = fragment.Substring(0, fragmentQueryIndex);
+                    string fragmentQuery = fragment.Substring(fragmentQueryIndex + 1);
+                    return baseUrl + "#" + fragmentPath + "?" + statusQueryString + "&" + fragmentQuery;
+                }
+                else
+                {
+                    return baseUrl + "#" + fragment + "?" + statusQueryString;
+                }
+            }
+            else
+            {
+                // Standard URL — prepend status params before any existing query params
+                UriBuilder uriBuilder = new UriBuilder(redirectUrl);
+                NameValueCollection existingParams = HttpUtility.ParseQueryString(uriBuilder.Query);
+                foreach (string key in existingParams.AllKeys)
+                {
+                    statusParams.Add(key, existingParams[key]);
+                }
+                
+                uriBuilder.Query = statusParams.ToString();
+                return uriBuilder.Uri.ToString();
+            }
         }
 
         /// <inheritdoc />

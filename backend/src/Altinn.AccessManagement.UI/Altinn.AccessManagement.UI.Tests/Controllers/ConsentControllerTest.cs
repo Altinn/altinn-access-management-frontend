@@ -208,7 +208,7 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
         {
             // Arrange
             string expectedRedirectUrl = "http://localhost:5101/authentication/api/v1/logout";
-            string expectedDecryptedUrl = "https://smartbank.no/consent?Status=OK";
+            string expectedDecryptedUrl = "https://smartbank.no/consent/#/?Status=OK";
             string approvedRequestId = "62334b04-a65b-4eb2-b198-ab3c15e27f16";
 
             // Act
