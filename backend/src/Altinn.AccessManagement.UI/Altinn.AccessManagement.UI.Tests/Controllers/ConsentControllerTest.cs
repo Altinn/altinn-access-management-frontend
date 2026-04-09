@@ -222,6 +222,28 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
         }
 
         /// <summary>
+        ///     Test case: RedirectAfterApprove checks that redirect is done to logout url and redirect url is encrypted in cookie
+        ///     Expected: RedirectAfterApprove redirects to logout url
+        /// </summary>
+        [Fact]
+        public async Task LogoutAfterApprove_RedirectsToLogoutUrlWithNormalFragment()
+        {
+            // Arrange
+            string expectedRedirectUrl = "http://localhost:5101/authentication/api/v1/logout";
+            string expectedDecryptedUrl = "https://smartbank.no/consent/?authcode=123&Status=OK#fragment";
+            string approvedRequestId = "4c42c6cc-7901-4e53-91ca-031f3145a09c";
+
+            // Act
+            HttpResponseMessage httpResponse = await _client.GetAsync($"accessmanagement/api/v1/consent/request/{approvedRequestId}/logout");
+            string decryptedUrl = GetRedirectCookieValue(httpResponse);
+
+            // Assert
+            Assert.Equal(HttpStatusCode.Found, httpResponse.StatusCode);
+            Assert.Equal(expectedRedirectUrl, httpResponse.Headers.Location.OriginalString);
+            Assert.Equal(expectedDecryptedUrl, decryptedUrl);
+        }
+
+        /// <summary>
         ///     Test case: RedirectAfterReject checks that redirect is done to logout url and redirect url is encrypted in cookie
         ///     Expected: RedirectAfterReject redirects to logout url
         /// </summary>
