@@ -266,6 +266,28 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
         }
 
         /// <summary>
+        ///     Test case: RedirectAfterReject checks that redirect is done to logout url and redirect url is encrypted in cookie
+        ///     Expected: RedirectAfterReject redirects to logout url
+        /// </summary>
+        [Fact]
+        public async Task LogoutAfterReject_RedirectsToLogoutUrlWithQuery()
+        {
+            // Arrange
+            string expectedRedirectUrl = "http://localhost:5101/authentication/api/v1/logout";
+            string expectedDecryptedUrl = "https://smartbank.no/consent?authcode=123&Status=Failed&ErrorMessage=User+did+not+give+consent";
+            string rejectedRequestId = "ecc578c9-f0d6-45c7-a989-fd448f1be4e0";
+
+            // Act
+            HttpResponseMessage httpResponse = await _client.GetAsync($"accessmanagement/api/v1/consent/request/{rejectedRequestId}/logout");
+            string decryptedUrl = GetRedirectCookieValue(httpResponse);
+
+            // Assert
+            Assert.Equal(HttpStatusCode.Found, httpResponse.StatusCode);
+            Assert.Equal(expectedRedirectUrl, httpResponse.Headers.Location.OriginalString);
+            Assert.Equal(expectedDecryptedUrl, decryptedUrl);
+        }
+
+        /// <summary>
         ///     Test case: GetActiveConsents checks that active consents are returned
         ///     Expected: GetActiveConsents returns active consents
         /// </summary>

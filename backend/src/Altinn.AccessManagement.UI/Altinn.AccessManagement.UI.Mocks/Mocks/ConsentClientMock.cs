@@ -18,6 +18,7 @@ namespace Altinn.AccessManagement.UI.Mocks.Mocks
         private readonly Guid PERSON_APPROVED_CONSENT_ID = Guid.Parse("62334b04-a65b-4eb2-b198-ab3c15e27f16");
         private readonly Guid PERSON_APPROVED_CONSENT_WITH_FRAGMENT_ID = Guid.Parse("4c42c6cc-7901-4e53-91ca-031f3145a09c");
         private readonly Guid PERSON_REJECTED_CONSENT_ID = Guid.Parse("52574a16-4114-4bdf-b471-85ac10a722b9");
+        private readonly Guid PERSON_REJECTED_CONSENT_WITH_QUERY_ID = Guid.Parse("ecc578c9-f0d6-45c7-a989-fd448f1be4e0");
         private readonly Guid ORG_CONSENT_ID = Guid.Parse("7e540335-d82f-41e9-8b8f-619336d792b4");
         private readonly Guid ORG_CONSENT_WITHOUT_MESSAGE_ID = Guid.Parse("1a04a7fa-24c1-4e06-9217-8aee89239a9f");
         private readonly Guid PERSON_PARTY_ID = Guid.Parse("167536b5-f8ed-4c5a-8f48-0279507e53ae");
@@ -61,6 +62,11 @@ namespace Altinn.AccessManagement.UI.Mocks.Mocks
             else if (consentRequestId == PERSON_REJECTED_CONSENT_ID)
             {
                 ConsentRequestDetails request = Util.GetMockData<ConsentRequestDetails>($"{dataFolder}/Consent/consentRequest_person_rejected.json");
+                return Task.FromResult(new Result<ConsentRequestDetails>(request));
+            }
+            else if (consentRequestId == PERSON_REJECTED_CONSENT_WITH_QUERY_ID)
+            {
+                ConsentRequestDetails request = Util.GetMockData<ConsentRequestDetails>($"{dataFolder}/Consent/consentRequest_person_rejected_with_query.json");
                 return Task.FromResult(new Result<ConsentRequestDetails>(request));
             }
             // try to get consentRequest from consents_org.json
