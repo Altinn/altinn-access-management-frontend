@@ -89,6 +89,13 @@ export const consentApi = createApi({
         return response.map(formatPartyNames<ConsentHistoryItem>);
       },
     }),
+    getConsentRequestsCount: builder.query<number, { partyId: string }>({
+      query: ({ partyId }) => `consent/count/${partyId}?status=active`,
+      providesTags: [Tags.ConsentList],
+      transformResponse: (response: number): number => {
+        return response;
+      },
+    }),
     getConsent: builder.query<Consent, { consentId: string }>({
       query: ({ consentId }) => `consent/${consentId}`,
       transformResponse: (response: Consent): Consent => {
@@ -117,6 +124,7 @@ export const {
   useGetConsentLogQuery,
   useGetConsentQuery,
   useRevokeConsentMutation,
+  useGetConsentRequestsCountQuery,
 } = apiWithTags;
 
 export const { endpoints, reducerPath, reducer, middleware } = apiWithTags;

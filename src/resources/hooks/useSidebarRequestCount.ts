@@ -1,5 +1,5 @@
 import { getCookie } from '../Cookie/CookieMethods';
-import { useGetActiveConsentsQuery } from '@/rtk/features/consentApi';
+import { useGetConsentRequestsCountQuery } from '@/rtk/features/consentApi';
 import { useGetReceivedRequestsCountQuery } from '@/rtk/features/requestApi';
 import { useGetPendingSystemUserRequestsQuery } from '@/rtk/features/systemUserApi';
 import type { ReporteeInfo } from '@/rtk/features/userInfoApi';
@@ -40,7 +40,7 @@ export const useSidebarRequestCount = ({
     data: activeConsents,
     isLoading: isLoadingActiveConsents,
     isError: isErrorActiveConsents,
-  } = useGetActiveConsentsQuery({ partyId: partyUuid ?? '' }, { skip: !shouldFetchConsents });
+  } = useGetConsentRequestsCountQuery({ partyId: partyUuid ?? '' }, { skip: !shouldFetchConsents });
 
   const {
     data: pendingSystemUsers,
@@ -50,9 +50,7 @@ export const useSidebarRequestCount = ({
     skip: !shouldFetchSystemUsers,
   });
 
-  const pendingConsentCount = (activeConsents ?? []).filter(
-    (consent) => consent.isPendingConsent,
-  ).length;
+  const pendingConsentCount = activeConsents ?? 0;
   const pendingSystemUserCount = (pendingSystemUsers ?? []).length;
 
   return {
