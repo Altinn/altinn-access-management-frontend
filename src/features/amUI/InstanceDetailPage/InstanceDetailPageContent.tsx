@@ -136,18 +136,18 @@ export const InstanceDetailPageContent = () => {
     ? `${getAfUrl()}inbox/${encodeURIComponent(dialogId)}`
     : `${getAfUrl()}redirect?instanceUrn=${encodeURIComponent(instanceUrn)}`;
 
-  const showInboxLink = dialogId || !isCorrespondenceInstance;
+  const showInboxLink = !dialogId && !isCorrespondenceInstance;
 
   const inboxLink = showInboxLink ? (
     <div className={classes.inboxLinkContainer}>
       <DsButton
         asChild
-        variant={dialogId ? 'primary' : 'secondary'}
+        variant={'secondary'}
         className={classes.inboxButton}
       >
         <a href={inboxUrl}>
-          {dialogId ? <CheckmarkIcon aria-hidden /> : <EnvelopeClosedIcon aria-hidden />}
-          {dialogId ? t('common.finished') : t('instance_detail_page.see_in_inbox')}
+          {<EnvelopeClosedIcon aria-hidden />}
+          {t('instance_detail_page.see_in_inbox')}
         </a>
       </DsButton>
     </div>
