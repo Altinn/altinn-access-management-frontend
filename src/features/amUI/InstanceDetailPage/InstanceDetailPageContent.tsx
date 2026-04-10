@@ -22,7 +22,7 @@ import {
   useGetIsInstanceAdminQuery,
 } from '@/rtk/features/userInfoApi';
 import { getAfUrl } from '@/resources/utils/pathUtils';
-import { CheckmarkIcon, EnvelopeClosedIcon } from '@navikt/aksel-icons';
+import { EnvelopeClosedIcon } from '@navikt/aksel-icons';
 import { DelegationAction, EditModal } from '../common/DelegationModal/EditModal';
 import type { ActionError } from '@/resources/hooks/useActionError';
 import type { UserActionTarget } from '../common/UserSearch/types';
@@ -132,9 +132,7 @@ export const InstanceDetailPageContent = () => {
 
   const isCorrespondenceInstance = instanceUrn.startsWith('urn:altinn:correspondence-id:');
 
-  const inboxUrl = dialogId
-    ? `${getAfUrl()}inbox/${encodeURIComponent(dialogId)}`
-    : `${getAfUrl()}redirect?instanceUrn=${encodeURIComponent(instanceUrn)}`;
+  const inboxUrl = `${getAfUrl()}redirect?instanceUrn=${encodeURIComponent(instanceUrn)}`;
 
   const showInboxLink = !dialogId && !isCorrespondenceInstance;
 
