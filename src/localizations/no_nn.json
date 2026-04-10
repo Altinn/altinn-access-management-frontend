@@ -95,7 +95,8 @@
     "save_changes": "Lagre endringar",
     "none": "ingen",
     "digdir": "Digitaliseringsdirektoratet",
-    "skiplink": "Hopp til hovudinnhaldet"
+    "skiplink": "Hopp til hovudinnhaldet",
+    "no_access_to_page": "Du har ikkje tilgang til denne sida for vald aktør"
   },
   "beta_banner": {
     "info": "Du ser no på ein betaversjon av dei nye sidene for tilgangsstyring i Altinn.",
