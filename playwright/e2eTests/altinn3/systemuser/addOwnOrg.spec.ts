@@ -62,7 +62,9 @@ test.describe('Systembruker - Legg til egen organisasjon', () => {
     });
   });
 
-  test.afterEach(async () => {
+  test.afterEach(async ({}, testInfo) => {
+    if (testInfo.status === 'passed') return;
+
     try {
       await api.deleteAgentSystemUser(systemId, partyOrgNo, externalRef, managerPid);
     } catch (error) {
