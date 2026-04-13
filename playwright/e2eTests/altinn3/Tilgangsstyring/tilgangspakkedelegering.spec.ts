@@ -38,7 +38,7 @@ test.describe.serial('tilgangspakkedelegering fra person til person og person ti
       await accessManagementFrontPage.addPerson('52858201748', 'KOMPOSISJON');
     });
 
-    await test.step('210638962 finnes i listen over brukere', async () => {
+    await test.step('MEMORERENDE KOMPOSISJON finnes i listen over brukere', async () => {
       await accessManagementFrontPage.goToUsers();
       await accessManagementFrontPage.clickUser('MEMORERENDE KOMPOSISJON');
     });
