@@ -135,7 +135,7 @@ Concrete rules:
 
 ## Structure
 
-```
+```text
 playwright/
   api-requests/   # API clients for setup/teardown
   pages/          # Page Object Model classes
