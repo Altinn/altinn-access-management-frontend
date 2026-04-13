@@ -45,6 +45,7 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
             IEnumerable<string> contentTypeHeaders = response.Headers.GetValues("X-Content-Type-Options");
             IEnumerable<string> xxsProtectionHeaders = response.Headers.GetValues("X-XSS-Protection");
             IEnumerable<string> refererpolicyHeaders = response.Headers.GetValues("Referer-Policy");
+            IEnumerable<string> cspReportOnlyHeaders = response.Headers.GetValues("Content-Security-Policy-Report-Only");
 
             // Assert
             Assert.Equal(HttpStatusCode.OK, response.StatusCode);
@@ -58,6 +59,12 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
             Assert.StartsWith("nosniff", contentTypeHeaders.ElementAt(0));
             Assert.StartsWith("0", xxsProtectionHeaders.ElementAt(0));
             Assert.StartsWith("no-referer", refererpolicyHeaders.ElementAt(0));
+            Assert.Contains("default-src 'self';", cspReportOnlyHeaders.ElementAt(0));
+            Assert.Contains("script-src 'self' 'unsafe-inline'", cspReportOnlyHeaders.ElementAt(0));
+            Assert.Contains("style-src 'self' 'unsafe-inline' https://altinncdn.no;", cspReportOnlyHeaders.ElementAt(0));
+            Assert.Contains("font-src 'self' https://altinncdn.no data:;", cspReportOnlyHeaders.ElementAt(0));
+            Assert.Contains("img-src 'self' data: https://altinncdn.no;", cspReportOnlyHeaders.ElementAt(0));
+            Assert.Contains("frame-ancestors 'none';", cspReportOnlyHeaders.ElementAt(0));
         }
 
         /// <summary>
