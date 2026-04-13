@@ -148,7 +148,7 @@ export const SystemUserAgentRequestPage = () => {
                 vendorName: request.system.name,
                 companyName: reporteeData?.name,
                 addSelfInfo:
-                  request.accessPackages.every((p) => p.isDelegable) && enableAddSelfToSystemuser()
+                  request.accessPackages.every((p) => p.isAssignable) && enableAddSelfToSystemuser()
                     ? t('systemuser_agent_request.add_self_possible')
                     : '',
               }}
