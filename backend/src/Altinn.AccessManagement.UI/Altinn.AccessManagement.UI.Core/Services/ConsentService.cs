@@ -106,24 +106,41 @@ namespace Altinn.AccessManagement.UI.Core.Services
                 return request.Problem;
             }
 
-            // add Status to RedirectUrl
-            UriBuilder uriBuilder = new UriBuilder(request.Value.RedirectUrl);
-            NameValueCollection queryParams = HttpUtility.ParseQueryString(uriBuilder.Query);
+            // Build status query params to append to the redirect URL
+            NameValueCollection statusParams = HttpUtility.ParseQueryString(string.Empty);
 
             if (request.Value.ConsentRequestEvents.Any(e => string.Equals(e.EventType, "accepted", StringComparison.OrdinalIgnoreCase)))
             {
                 // if consent was approved
-                queryParams.Add("Status", "OK");
+                statusParams.Add("Status", "OK");
             }
             else if (request.Value.ConsentRequestEvents.Any(e => string.Equals(e.EventType, "rejected", StringComparison.OrdinalIgnoreCase)))
             {
                 // if consent was rejected
-                queryParams.Add("Status", "Failed");
-                queryParams.Add("ErrorMessage", "User did not give consent");
+                statusParams.Add("Status", "Failed");
+                statusParams.Add("ErrorMessage", "User did not give consent");
             }
-            
-            uriBuilder.Query = queryParams.ToString();
-            return uriBuilder.Uri.ToString();
+
+            string statusQueryString = statusParams.ToString();
+            string redirectUrl = request.Value.RedirectUrl;
+
+            Uri uri = new Uri(redirectUrl);
+            string redirectUrlWithResponse = string.Empty;
+
+            // If the redirect URL uses hash-based routing (e.g. https://example.com/#/path?foo=bar),
+            // where the fragment contains a '/' indicating a path, query params must be appended inside the fragment.
+            // Otherwise, it's a standard URL with a bookmark anchor, and params go in the query string.
+            if (redirectUrl.Contains("#/"))
+            {
+                redirectUrlWithResponse = string.Concat(redirectUrl, redirectUrl.Contains('?') ? "&" : "?", statusQueryString);
+            }
+            else
+            {
+                string url = uri.GetLeftPart(UriPartial.Query);
+                redirectUrlWithResponse = string.Concat(url, url.Contains('?') ? "&" : "?", statusQueryString) + uri.Fragment;
+            }
+
+            return redirectUrlWithResponse;
         }
 
         /// <inheritdoc />
