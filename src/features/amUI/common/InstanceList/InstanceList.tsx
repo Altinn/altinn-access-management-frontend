@@ -1,7 +1,6 @@
 import { ElementType, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import {
-  Button,
   DialogListItem,
   DsParagraph,
   List,
@@ -13,10 +12,13 @@ import { InstanceDelegation } from '@/rtk/features/instanceApi';
 import { useProviderLogoUrl } from '@/resources/hooks';
 
 import { InstanceListSkeleton } from './InstanceListSkeleton';
-import { EnvelopeClosedIcon } from '@navikt/aksel-icons';
-import { getAfUrl } from '@/resources/utils/pathUtils';
 import type { TFunction } from 'i18next';
-import { resolveInstanceTitle } from '@/resources/utils/instanceTitleUtils';
+import { InstanceInboxLink } from './InstanceInboxLink';
+import {
+  getInstanceShortId,
+  resolveInstanceTitle,
+  toInstancePresentationData,
+} from './instancePresentation';
 import classes from './InstanceList.module.css';
 
 interface InstanceListProps {
@@ -33,9 +35,8 @@ const getResolvedInstanceTitle = (
   language: string,
 ) =>
   resolveInstanceTitle(
-    instanceDelegation.dialogLookup,
+    toInstancePresentationData(instanceDelegation),
     instanceDelegation.resource,
-    instanceDelegation.instance.refId,
     t,
     language,
   );
@@ -51,7 +52,7 @@ const toInstanceListItem = (
     ? getProviderLogoUrl(resource.resourceOwnerOrgcode)
     : undefined;
   const dialogItemId = `${resource.identifier}-${instance.refId}`;
-  const shortId = instance.refId.slice(-10);
+  const shortId = getInstanceShortId(instance.refId);
   const title = getResolvedInstanceTitle(instanceDelegation, t, language);
 
   return {
@@ -124,11 +125,6 @@ export const InstanceList = ({
             );
 
             const Component = getItemAs?.(instanceDelegation);
-            const isCorrespondenceInstance = instanceDelegation.instance.refId.startsWith(
-              'urn:altinn:correspondence-id:',
-            );
-            const inboxUrl = `${getAfUrl()}redirect?instanceUrn=${encodeURIComponent(instanceDelegation.instance.refId)}`;
-
             const isSuccess = instanceDelegation.dialogLookup?.status === 'Success';
 
             return (
@@ -141,19 +137,10 @@ export const InstanceList = ({
                 className={!isSuccess ? classes.subtleTitle : undefined}
                 {...item}
                 controls={
-                  !isCorrespondenceInstance &&
-                  isSuccess && (
-                    <Button
-                      variant='tertiary'
-                      rounded
-                      size={'xs'}
-                      as='a'
-                      href={inboxUrl}
-                    >
-                      <EnvelopeClosedIcon aria-hidden='true' />{' '}
-                      {t('instance_detail_page.see_in_inbox')}
-                    </Button>
-                  )
+                  <InstanceInboxLink
+                    instanceUrn={instanceDelegation.instance.refId}
+                    dialogLookup={instanceDelegation.dialogLookup}
+                  />
                 }
               />
             );

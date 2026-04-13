@@ -4,7 +4,6 @@ import { useTranslation } from 'react-i18next';
 import { MinusCircleIcon } from '@navikt/aksel-icons';
 
 import type { ServiceResource } from '@/rtk/features/singleRights/singleRightsApi';
-import type { DialogLookup } from '@/rtk/features/instanceApi';
 
 import type { DelegationRecipient } from '../EditModal';
 import { StatusMessageForScreenReader } from '@/components/StatusMessageForScreenReader/StatusMessageForScreenReader';
@@ -18,6 +17,7 @@ import { ResourceAlert } from '../SingleRights/ResourceAlert';
 import { ResourceInfoSkeleton } from '../SingleRights/ResourceInfoSkeleton';
 import { usePartyRepresentation } from '../../PartyRepresentationContext/PartyRepresentationContext';
 import { DelegationAction } from '../EditModal';
+import type { InstancePresentationData } from '../../InstanceList/instancePresentation';
 import { useInstanceRightsSection } from './useInstanceRightsSection';
 import { InstanceMetadataSection } from '../../InstanceMetadataSection/InstanceMetadataSection';
 
@@ -25,9 +25,7 @@ import classes from './InstanceInfo.module.css';
 
 export interface InstanceInfoProps {
   resource: ServiceResource;
-  instanceUrn: string;
-  instanceName?: string;
-  dialogLookup?: DialogLookup | null;
+  instanceData: InstancePresentationData;
   toParty?: DelegationRecipient;
   availableActions?: DelegationAction[];
   onSuccess?: () => void;
@@ -35,9 +33,7 @@ export interface InstanceInfoProps {
 
 export const InstanceInfo = ({
   resource,
-  instanceUrn,
-  instanceName,
-  dialogLookup,
+  instanceData,
   toParty: toPartyProp,
   availableActions,
   onSuccess,
@@ -76,7 +72,7 @@ export const InstanceInfo = ({
     technicalErrorDetails,
   } = useInstanceRightsSection({
     resource,
-    instanceUrn,
+    instanceUrn: instanceData.instance.refId,
     toPartyUuid: toParty?.partyUuid,
     onSuccess,
     mode: canRevoke ? 'edit' : 'delegate',
@@ -106,8 +102,7 @@ export const InstanceInfo = ({
       <div>
         <InstanceMetadataSection
           resource={resource}
-          instanceUrn={instanceUrn}
-          dialogLookup={dialogLookup}
+          instanceData={instanceData}
           fromPartyName={fromParty?.name}
           fromPartyType={fromParty?.partyTypeName}
           statusSection={

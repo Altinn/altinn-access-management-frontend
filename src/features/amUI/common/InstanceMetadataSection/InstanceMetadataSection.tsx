@@ -5,15 +5,17 @@ import { useTranslation } from 'react-i18next';
 import { useProviderLogoUrl } from '@/resources/hooks';
 import { PartyType } from '@/rtk/features/userInfoApi';
 import type { ServiceResource } from '@/rtk/features/singleRights/singleRightsApi';
-import type { DialogLookup } from '@/rtk/features/instanceApi';
-import { resolveInstanceTitle } from '@/resources/utils/instanceTitleUtils';
+import {
+  getInstanceShortId,
+  type InstancePresentationData,
+  resolveInstanceTitle,
+} from '../InstanceList/instancePresentation';
 
 import classes from './InstanceMetadataSection.module.css';
 
 interface InstanceMetadataSectionProps {
   resource: ServiceResource;
-  instanceUrn?: string;
-  dialogLookup?: DialogLookup | null;
+  instanceData?: InstancePresentationData;
   fromPartyName?: string;
   fromPartyType?: PartyType;
   titleLevel?: 1 | 2 | 3 | 4 | 5 | 6;
@@ -22,8 +24,7 @@ interface InstanceMetadataSectionProps {
 
 export const InstanceMetadataSection = ({
   resource,
-  instanceUrn,
-  dialogLookup,
+  instanceData,
   fromPartyName,
   fromPartyType,
   titleLevel = 3,
@@ -32,8 +33,8 @@ export const InstanceMetadataSection = ({
   const { getProviderLogoUrl } = useProviderLogoUrl();
   const { t, i18n } = useTranslation();
 
-  const shortId = instanceUrn?.slice(-10);
-  const title = resolveInstanceTitle(dialogLookup, resource, instanceUrn, t, i18n.language);
+  const shortId = getInstanceShortId(instanceData?.instance.refId);
+  const title = resolveInstanceTitle(instanceData, resource, t, i18n.language);
   const providerLogoUrl = resource.resourceOwnerOrgcode
     ? getProviderLogoUrl(resource.resourceOwnerOrgcode)
     : undefined;
@@ -76,7 +77,7 @@ export const InstanceMetadataSection = ({
         </DsParagraph>
       </div>
       {statusSection}
-      {(resource.title || instanceUrn) && (
+      {(resource.title || instanceData?.instance.refId) && (
         <dl className={classes.metadataList}>
           {resource.title && (
             <div className={classes.metadataRow}>
@@ -86,7 +87,7 @@ export const InstanceMetadataSection = ({
               <dd className={classes.metadataValue}>{resource.title}</dd>
             </div>
           )}
-          {instanceUrn && (
+          {instanceData?.instance.refId && (
             <div className={classes.metadataRow}>
               <dt className={classes.metadataTerm}>
                 {t('instance_detail_page.instance_id_label')}

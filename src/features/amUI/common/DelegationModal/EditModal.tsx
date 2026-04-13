@@ -4,7 +4,6 @@ import { DsDialog } from '@altinn/altinn-components';
 
 import type { ActionError } from '@/resources/hooks/useActionError';
 import type { ServiceResource } from '@/rtk/features/singleRights/singleRightsApi';
-import type { DialogLookup } from '@/rtk/features/instanceApi';
 import type { AccessPackage } from '@/rtk/features/accessPackageApi';
 import type { Role } from '@/rtk/features/roleApi';
 import { PartyType } from '@/rtk/features/userInfoApi';
@@ -14,6 +13,7 @@ import classes from './DelegationModal.module.css';
 import { AccessPackageInfo } from './AccessPackages/AccessPackageInfo';
 import { RoleInfo } from './Role/RoleInfo';
 import { useDelegationModalContext } from './DelegationModalContext';
+import type { InstancePresentationData } from '../InstanceList/instancePresentation';
 
 export interface DelegationRecipient {
   partyUuid: string;
@@ -28,17 +28,11 @@ export enum DelegationAction {
   APPROVE = 'APPROVE',
 }
 
-export interface InstanceData {
-  instanceUrn: string;
-  instanceName?: string;
-  dialogLookup?: DialogLookup | null;
-}
-
 export interface EditModalProps {
   resource?: ServiceResource;
   accessPackage?: AccessPackage;
   role?: Role;
-  instance?: InstanceData;
+  instance?: InstancePresentationData;
   toParty?: DelegationRecipient;
   availableActions?: DelegationAction[];
   openWithError?: ActionError | null;
@@ -126,7 +120,7 @@ const renderModalContent = ({
   resource?: ServiceResource;
   accessPackage?: AccessPackage;
   role?: Role;
-  instance?: InstanceData;
+  instance?: InstancePresentationData;
   toParty?: DelegationRecipient;
   availableActions?: DelegationAction[];
   onSuccess?: () => void;
@@ -135,9 +129,7 @@ const renderModalContent = ({
     return (
       <InstanceInfo
         resource={resource}
-        instanceUrn={instance.instanceUrn}
-        instanceName={instance.instanceName}
-        dialogLookup={instance.dialogLookup}
+        instanceData={instance}
         toParty={toParty}
         availableActions={availableActions}
         onSuccess={onSuccess}
