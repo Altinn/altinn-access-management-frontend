@@ -445,6 +445,7 @@ namespace Altinn.AccessManagement.UI.Core.Services
                     || StringUtils.NotNullAndContains(res.Description, word)
                     || StringUtils.NotNullAndContains(res.RightDescription, word)
                     || StringUtils.NotNullAndContains(res.ResourceOwnerName, word)
+                    || StringUtils.NotNullAndContains(res.Identifier, word)
                     || (res.Keywords != null && res.Keywords.Exists((kw) => StringUtils.NotNullAndContains(kw, word))))
                     {
                         numMatches++;
@@ -454,10 +455,14 @@ namespace Altinn.AccessManagement.UI.Core.Services
                 if (numMatches > 0)
                 {
                     res.PriorityCounter = numMatches;
-
-                    if (res.Title != null && searchString.Trim().Equals(searchString.Trim(), StringComparison.CurrentCultureIgnoreCase))
+                    if (res.Identifier != null && searchString.Trim().Equals(res.Identifier.Trim(), StringComparison.CurrentCultureIgnoreCase))
                     {
-                        res.PriorityCounter++; // Prioritize resources who's title is an exact match
+                        res.PriorityCounter += 2; // Prioritize resources who's identifier is an exact match
+                    }
+
+                    if (res.Title != null && searchString.Trim().Equals(res.Title.Trim(), StringComparison.CurrentCultureIgnoreCase))
+                    {
+                        res.PriorityCounter += 2; // Prioritize resources who's title is an exact match
                     }
 
                     matchedResources.Add(res);
