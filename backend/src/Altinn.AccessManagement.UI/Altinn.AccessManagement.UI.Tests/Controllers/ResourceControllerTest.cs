@@ -33,6 +33,7 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
         private readonly ResourceService _resourceService;
         private readonly JsonSerializerOptions options = new JsonSerializerOptions { PropertyNameCaseInsensitive = true };
         private readonly string mockFolder;
+        private const string ExpectedDataPath = "Data/ExpectedResults";
 
         /// <summary>
         ///     Constructor setting up factory, test client and dependencies
@@ -248,6 +249,51 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
             Assert.Equal(expectedResult.Page, actualResources.Page);
             Assert.Equal(expectedResult.NumEntriesTotal, actualResources.NumEntriesTotal);
             AssertionUtil.AssertCollections(expectedResult.PageList, actualResources.PageList, AssertionUtil.AssertEqual);
+        }
+
+        /// <summary>
+        ///     Test case: PaginatedSearch with exact title, exact identifier, and identifier substring.
+        ///     Expected: PaginatedSearch prioritizes exact title and identifier matches, and returns partial identifier
+        ///     matches with the expected weights.
+        /// </summary>
+        [Fact]
+        public async Task GetSingleRightsSearch_searchByIdentifier_SetsExpectedWeights()
+        {
+            // Arrange
+            string token = PrincipalUtil.GetToken(1337, 501337);
+            _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+            PaginatedList<ServiceResourceFE> expectedExactTitleResult = Util.GetMockData<PaginatedList<ServiceResourceFE>>($"{ExpectedDataPath}/ResourceRegistry/Search/exactTitle_digdir-sommerfest.json");
+            PaginatedList<ServiceResourceFE> expectedExactIdentifierResult = Util.GetMockData<PaginatedList<ServiceResourceFE>>($"{ExpectedDataPath}/ResourceRegistry/Search/exactIdentifier_appid-511.json");
+            PaginatedList<ServiceResourceFE> expectedPartialIdentifierResult = Util.GetMockData<PaginatedList<ServiceResourceFE>>($"{ExpectedDataPath}/ResourceRegistry/Search/partialIdentifier_appid-51.json");
+
+            // Act
+            HttpResponseMessage exactTitleResponse = await _client.GetAsync("accessmanagement/api/v1/resources/search?ResultsPerPage=10&Page=1&SearchString=DigDir%20Sommerfest");
+            HttpResponseMessage exactIdentifierResponse = await _client.GetAsync("accessmanagement/api/v1/resources/search?ResultsPerPage=10&Page=1&SearchString=appid-511");
+            HttpResponseMessage partialIdentifierResponse = await _client.GetAsync("accessmanagement/api/v1/resources/search?ResultsPerPage=10&Page=1&SearchString=appid-51");
+
+            // Assert
+            Assert.Equal(HttpStatusCode.OK, exactTitleResponse.StatusCode);
+            Assert.Equal(HttpStatusCode.OK, exactIdentifierResponse.StatusCode);
+            Assert.Equal(HttpStatusCode.OK, partialIdentifierResponse.StatusCode);
+
+            PaginatedList<ServiceResourceFE> exactTitleResults = JsonSerializer.Deserialize<PaginatedList<ServiceResourceFE>>(await exactTitleResponse.Content.ReadAsStringAsync(), options);
+            PaginatedList<ServiceResourceFE> exactIdentifierResults = JsonSerializer.Deserialize<PaginatedList<ServiceResourceFE>>(await exactIdentifierResponse.Content.ReadAsStringAsync(), options);
+            PaginatedList<ServiceResourceFE> partialIdentifierResults = JsonSerializer.Deserialize<PaginatedList<ServiceResourceFE>>(await partialIdentifierResponse.Content.ReadAsStringAsync(), options);
+
+            Assert.Equal(expectedExactTitleResult.Page, exactTitleResults.Page);
+            Assert.Equal(expectedExactTitleResult.NumEntriesTotal, exactTitleResults.NumEntriesTotal);
+            AssertionUtil.AssertCollections(expectedExactTitleResult.PageList, exactTitleResults.PageList, AssertionUtil.AssertEqual);
+            AssertionUtil.AssertCollections(expectedExactTitleResult.PageList.Select(resource => resource.PriorityCounter).ToList(), exactTitleResults.PageList.Select(resource => resource.PriorityCounter).ToList(), Assert.Equal);
+
+            Assert.Equal(expectedExactIdentifierResult.Page, exactIdentifierResults.Page);
+            Assert.Equal(expectedExactIdentifierResult.NumEntriesTotal, exactIdentifierResults.NumEntriesTotal);
+            AssertionUtil.AssertCollections(expectedExactIdentifierResult.PageList, exactIdentifierResults.PageList, AssertionUtil.AssertEqual);
+            AssertionUtil.AssertCollections(expectedExactIdentifierResult.PageList.Select(resource => resource.PriorityCounter).ToList(), exactIdentifierResults.PageList.Select(resource => resource.PriorityCounter).ToList(), Assert.Equal);
+
+            Assert.Equal(expectedPartialIdentifierResult.Page, partialIdentifierResults.Page);
+            Assert.Equal(expectedPartialIdentifierResult.NumEntriesTotal, partialIdentifierResults.NumEntriesTotal);
+            AssertionUtil.AssertCollections(expectedPartialIdentifierResult.PageList, partialIdentifierResults.PageList, AssertionUtil.AssertEqual);
+            AssertionUtil.AssertCollections(expectedPartialIdentifierResult.PageList.Select(resource => resource.PriorityCounter).ToList(), partialIdentifierResults.PageList.Select(resource => resource.PriorityCounter).ToList(), Assert.Equal);
         }
 
         /// <summary>
