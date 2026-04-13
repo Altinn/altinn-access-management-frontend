@@ -391,7 +391,7 @@ test.describe.serial('tilgangspakkedelegering fra org til person og org til org'
       await accessManagementFrontPage.clickUser('UTROLIG KLØVER');
     });
 
-    await test.step('Slett "Samliv" fullmakten for UTROLIG KLØVER', async () => {
+    await test.step('Slett tilgangspakken "Posttjenester" for UTROLIG KLØVER', async () => {
       await accessManagementFrontPage.goToArea('Andre tjenesteytende næringer');
       await accessManagementFrontPage.clickSlettFullmaktForTilgangspakke('Posttjenester');
     });
