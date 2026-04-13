@@ -9,7 +9,10 @@ export class ApiRequests {
     this.tokenClass = new Token(org);
   }
 
-  public async createSystemInSystemregisterWithAccessPackages(name: string): Promise<string> {
+  public async createSystemInSystemregisterWithAccessPackages(
+    name: string,
+    accessPackages?: { urn: string }[],
+  ): Promise<string> {
     const vendorId = this.tokenClass.orgNo;
     const clientId = `Client_${Date.now()}_${Math.random()}`;
 
@@ -28,7 +31,7 @@ export class ApiRequests {
         nb: 'Integrasjonstest. Noe er randomisert her, men mye blir likt.',
         nn: 'integrasjonstest på nynorsk. Noe er randomisert her, men mye blir likt.',
       },
-      accessPackages: [
+      accessPackages: accessPackages ?? [
         { urn: 'urn:altinn:accesspackage:regnskapsforer-med-signeringsrettighet' },
         { urn: 'urn:altinn:accesspackage:regnskapsforer-uten-signeringsrettighet' },
         { urn: 'urn:altinn:accesspackage:regnskapsforer-lonn' },
@@ -88,6 +91,32 @@ export class ApiRequests {
     }
   }
 
+  public async deleteAgentSystemUser(
+    systemId: string,
+    partyOrgNo: string,
+    externalRef: string,
+    managerPid: string,
+  ): Promise<void> {
+    const { partyId, partyUuid } = await this.tokenClass.getIds(partyOrgNo);
+    const systemUserId = await this.getSystemUserByQuery(systemId, partyOrgNo, externalRef);
+    const token = await this.tokenClass.getPersonalTokenByPid(managerPid);
+    const url = `${env('API_BASE_URL')}/authentication/api/v1/systemuser/agent/${partyId}/${systemUserId}?partyuuid=${partyUuid}`;
+
+    const response = await fetch(url, {
+      method: 'DELETE',
+      headers: {
+        Authorization: `Bearer ${token}`,
+        'Content-Type': 'application/json',
+      },
+    });
+
+    if (!response.ok) {
+      const errorBody = await response.text();
+      console.error('Failed to delete agent system user:', response.status, errorBody);
+      throw new Error(`Failed to delete agent system user: ${response.statusText}`);
+    }
+  }
+
   public async deleteSystemInSystemRegister(systemName: string) {
     const endpoint = `v1/systemregister/vendor/${this.tokenClass.orgNo}_${systemName}`;
     const scopes =
@@ -143,9 +172,8 @@ export class ApiRequests {
     systemId: string,
     accessPackageUrn: string,
     partyOrgNo: string,
+    externalRef: string,
   ) {
-    const externalRef = TestdataApi.generateExternalRef();
-
     const payload = {
       externalRef,
       systemId,

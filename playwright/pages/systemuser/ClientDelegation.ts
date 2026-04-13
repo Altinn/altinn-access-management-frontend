@@ -13,6 +13,9 @@ export class ClientDelegationPage {
   readonly confirmAndCloseButton: Locator;
   readonly deleteSystemAccessButtons: Locator;
   readonly clientSearchBox: Locator;
+  readonly addOwnOrgButton: Locator;
+  readonly ownOrgBadge: Locator;
+  readonly removeOwnOrgButton: Locator;
 
   constructor(page: Page) {
     this.page = page;
@@ -32,10 +35,36 @@ export class ClientDelegationPage {
     this.clientSearchBox = page
       .getByRole('dialog')
       .getByRole('searchbox', { name: 'Søk i klienter' });
+
+    this.addOwnOrgButton = page.getByRole('button', { name: 'Legg til din virksomhet' });
+
+    this.ownOrgBadge = page.getByText('Din virksomhet', { exact: true });
+
+    this.removeOwnOrgButton = page.getByRole('button', {
+      name: 'Fjern din virksomhet fra systemtilgang',
+    });
   }
 
   systemUserLink(name: string): Locator {
     return this.page.getByRole('link', { name });
+  }
+
+  ownOrgHeading(orgName: string): Locator {
+    return this.page.getByRole('heading', { name: orgName, level: 3 });
+  }
+
+  ownOrgNumber(orgName: string, formattedOrgNo: string): Locator {
+    return this.page
+      .getByRole('listitem')
+      .filter({ has: this.page.getByRole('heading', { name: orgName, level: 3 }) })
+      .getByText(formattedOrgNo, { exact: true });
+  }
+
+  clientOrgNumber(orgName: string, formattedOrgNo: string): Locator {
+    return this.page
+      .getByRole('listitem')
+      .filter({ has: this.page.getByRole('heading', { name: orgName, level: 3 }) })
+      .getByText(formattedOrgNo, { exact: true });
   }
 
   addCustomerButtonByName(name: string): Locator {
