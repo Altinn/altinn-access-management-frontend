@@ -45,6 +45,7 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
             IEnumerable<string> contentTypeHeaders = response.Headers.GetValues("X-Content-Type-Options");
             IEnumerable<string> xxsProtectionHeaders = response.Headers.GetValues("X-XSS-Protection");
             IEnumerable<string> referrerPolicyHeaders = response.Headers.GetValues("Referrer-Policy");
+            IEnumerable<string> contentSecurityPolicyHeaders = response.Headers.GetValues("Content-Security-Policy");
 
             // Assert
             Assert.Equal(HttpStatusCode.OK, response.StatusCode);
@@ -58,6 +59,15 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
             Assert.StartsWith("nosniff", contentTypeHeaders.ElementAt(0));
             Assert.StartsWith("0", xxsProtectionHeaders.ElementAt(0));
             Assert.StartsWith("strict-origin-when-cross-origin", referrerPolicyHeaders.ElementAt(0));
+            Assert.Contains("default-src 'self';", contentSecurityPolicyHeaders.ElementAt(0));
+            Assert.Contains("script-src 'self' 'unsafe-inline'", contentSecurityPolicyHeaders.ElementAt(0));
+            Assert.Contains("style-src 'self' 'unsafe-inline' https://altinncdn.no;", contentSecurityPolicyHeaders.ElementAt(0));
+            Assert.Contains("font-src 'self' https://altinncdn.no data:;", contentSecurityPolicyHeaders.ElementAt(0));
+            Assert.Contains("img-src 'self' data: https://altinncdn.no;", contentSecurityPolicyHeaders.ElementAt(0));
+            Assert.Contains("connect-src 'self';", contentSecurityPolicyHeaders.ElementAt(0));
+            Assert.Contains("frame-ancestors 'none';", contentSecurityPolicyHeaders.ElementAt(0));
+            Assert.Contains("base-uri 'self';", contentSecurityPolicyHeaders.ElementAt(0));
+            Assert.Contains("object-src 'none';", contentSecurityPolicyHeaders.ElementAt(0));
         }
 
         /// <summary>
