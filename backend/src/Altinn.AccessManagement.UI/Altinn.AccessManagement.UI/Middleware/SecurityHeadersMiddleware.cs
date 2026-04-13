@@ -12,7 +12,7 @@ namespace Altinn.AccessManagement.UI.Middleware
     /// X-Content-Type-Options
     /// X-XSS-Protection
     /// Referrer-Policy
-    /// Content-Security-Policy-Report-Only
+    /// Content-Security-Policy
     /// </summary>
     public class SecurityHeadersMiddleware
     {
@@ -41,7 +41,7 @@ namespace Altinn.AccessManagement.UI.Middleware
             context.Response.Headers.Append("X-Content-Type-Options", "nosniff");
             context.Response.Headers.Append("X-XSS-Protection", "0");
             context.Response.Headers.Append("Referrer-Policy", "strict-origin-when-cross-origin");
-            context.Response.Headers.Append("Content-Security-Policy-Report-Only", CreateContentSecurityPolicy());
+            context.Response.Headers.Append("Content-Security-Policy", CreateContentSecurityPolicy());
 
             return _next(context);
         }
