@@ -44,7 +44,7 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
             IEnumerable<string> xframeHeaders = response.Headers.GetValues("X-Frame-Options");
             IEnumerable<string> contentTypeHeaders = response.Headers.GetValues("X-Content-Type-Options");
             IEnumerable<string> xxsProtectionHeaders = response.Headers.GetValues("X-XSS-Protection");
-            IEnumerable<string> refererpolicyHeaders = response.Headers.GetValues("Referer-Policy");
+            IEnumerable<string> referrerPolicyHeaders = response.Headers.GetValues("Referrer-Policy");
 
             // Assert
             Assert.Equal(HttpStatusCode.OK, response.StatusCode);
@@ -57,7 +57,7 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
             Assert.StartsWith("deny", xframeHeaders.ElementAt(0));
             Assert.StartsWith("nosniff", contentTypeHeaders.ElementAt(0));
             Assert.StartsWith("0", xxsProtectionHeaders.ElementAt(0));
-            Assert.StartsWith("no-referer", refererpolicyHeaders.ElementAt(0));
+            Assert.StartsWith("strict-origin-when-cross-origin", referrerPolicyHeaders.ElementAt(0));
         }
 
         /// <summary>
