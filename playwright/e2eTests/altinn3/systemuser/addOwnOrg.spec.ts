@@ -2,8 +2,6 @@ import { test, expect } from 'playwright/fixture/pomFixture';
 
 import { ApiRequests } from 'playwright/api-requests/ApiRequests';
 import { EnduserConnection } from 'playwright/api-requests/EnduserConnection';
-import { ClientDelegationPage } from 'playwright/pages/systemuser/ClientDelegation';
-import { AccessManagementFrontPage } from 'playwright/pages/AccessManagementFrontPage';
 import { TestdataApi } from 'playwright/util/TestdataApi';
 import { pickRandom } from 'playwright/util/helper';
 
@@ -30,14 +28,12 @@ test.describe('Systembruker - Legg til egen organisasjon', () => {
   let name: string;
   let systemId: string;
   let externalRef: string;
-  let clientDelegationPage: ClientDelegationPage;
   let response: { confirmUrl: string; id: string };
 
-  test.beforeEach(async ({ page }) => {
+  test.beforeEach(async () => {
     api = new ApiRequests(vendorOrgNumber);
     name = `Playwright-e2e-${accessPackageApiName}-${Date.now()}`;
     externalRef = TestdataApi.generateExternalRef();
-    clientDelegationPage = new ClientDelegationPage(page);
 
     systemId = await test.step('Create system with access package', async () => {
       return await api.createSystemInSystemregisterWithAccessPackages(name, [
@@ -79,7 +75,12 @@ test.describe('Systembruker - Legg til egen organisasjon', () => {
     }
   });
 
-  test('Legg til din virksomhet', async ({ page, login }): Promise<void> => {
+  test('Legg til din virksomhet', async ({
+    page,
+    login,
+    accessManagementFrontPage,
+    clientDelegationPage,
+  }): Promise<void> => {
     await test.step('Navigate to confirmation page and approve request', async () => {
       await page.goto(response.confirmUrl);
       await login.loginNotChoosingActor(managerPid);
@@ -91,9 +92,7 @@ test.describe('Systembruker - Legg til egen organisasjon', () => {
     await test.step('Login and navigate to system user', async () => {
       await login.LoginToAccessManagement(managerPid);
       await login.chooseReportee(orgName, orgName);
-
-      const frontPage = new AccessManagementFrontPage(page);
-      await frontPage.systemAccessLink.click();
+      await accessManagementFrontPage.systemAccessLink.click();
 
       await expect(clientDelegationPage.systemUserLink(name)).toBeVisible();
       await clientDelegationPage.systemUserLink(name).click();

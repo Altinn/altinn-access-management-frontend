@@ -7,6 +7,7 @@ import { SystemUserPage } from 'playwright/pages/systemuser/SystemUserPage';
 import { DelegationPage } from 'playwright/pages/profile/accessPkgDelegationPage';
 import { apiDelegation } from 'playwright/pages/profile/apidelegeringPage';
 import { AktorvalgHeader } from 'playwright/pages/AktorvalgHeader';
+import { ClientDelegationPage } from 'playwright/pages/systemuser/ClientDelegation';
 import {
   delegateRightsToUser,
   delegateToUser,
@@ -38,6 +39,7 @@ type Fixtures = {
   delegation: DelegationPage;
   consentPage: ConsentPage;
   aktorvalgHeader: AktorvalgHeader;
+  clientDelegationPage: ClientDelegationPage;
 };
 
 const test = baseTest.extend<Fixtures>({
@@ -91,6 +93,10 @@ const test = baseTest.extend<Fixtures>({
 
   aktorvalgHeader: async ({ page, language }, use) => {
     await use(new AktorvalgHeader(page));
+  },
+
+  clientDelegationPage: async ({ page }, use) => {
+    await use(new ClientDelegationPage(page));
   },
 });
 
