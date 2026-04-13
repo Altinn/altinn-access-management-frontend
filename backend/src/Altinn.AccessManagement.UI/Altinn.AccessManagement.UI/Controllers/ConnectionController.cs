@@ -162,6 +162,7 @@ namespace Altinn.AccessManagement.UI.Controllers
         /// <response code="429">TooManyRequests</response>
         [HttpPost]
         [Authorize]
+        [ValidateAntiForgeryToken]
         [Route("reportee/{partyUuid}/rightholder")]
         public async Task<ActionResult<Guid>> AddReporteeRightHolder([FromRoute] Guid partyUuid, [FromQuery] Guid? rightholderPartyUuid)
         {
