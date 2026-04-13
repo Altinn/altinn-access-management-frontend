@@ -8,6 +8,8 @@ import type {
 } from '@/rtk/features/instanceApi';
 import type { ServiceResource } from '@/rtk/features/singleRights/singleRightsApi';
 
+import { enableDialogportenDialogLookup } from '@/resources/utils/featureFlagUtils';
+
 export interface InstancePresentationData {
   instance: DelegationInstance;
   dialogLookup?: DialogLookup | null;
@@ -75,15 +77,20 @@ export const getInboxLinkData = ({
   dialogId,
 }: {
   instanceUrn: string;
-  dialogLookup?: DialogLookup | null;
-  dialogId?: string | null;
+  dialogLookup?: DialogLookup;
+  dialogId?: string;
 }) => {
+  const dialoglookupEnabled = enableDialogportenDialogLookup();
+
   const isInboxDeepLink = !!dialogId;
-  const validatedDialogId = dialogLookup?.status === 'Success' ? dialogLookup.dialogId : undefined;
-  const inboxDialogId = dialogId ?? validatedDialogId;
-  const showInboxLink = isInboxDeepLink || !isCorrespondenceInstanceUrn(instanceUrn);
-  const href = inboxDialogId
-    ? `${getAfUrl()}inbox/${encodeURIComponent(inboxDialogId)}`
+
+  const showInboxLink =
+    isInboxDeepLink ||
+    !isCorrespondenceInstanceUrn(instanceUrn) ||
+    (dialoglookupEnabled && dialogLookup?.status === 'Success');
+
+  const href = !!dialogId
+    ? `${getAfUrl()}inbox/${encodeURIComponent(dialogId)}`
     : `${getAfUrl()}redirect?instanceUrn=${encodeURIComponent(instanceUrn)}`;
 
   return {

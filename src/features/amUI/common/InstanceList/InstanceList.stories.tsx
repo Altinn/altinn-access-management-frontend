@@ -35,12 +35,12 @@ const skdResource = {
 
 const dialogSuccess: InstanceDelegation = {
   resource: digdirResource,
-  instance: { refId: 'urn:altinn:instance-id:abc123', type: { id: '1', name: 'Søknad' } },
+  instance: { refId: 'urn:altinn:instance-id:abc1234567', type: { id: '1', name: 'Søknad' } },
   permissions: [],
   dialogLookup: {
     status: 'Success',
     dialogId: 'df333e75-0000-0000-0000-000000000001',
-    instanceRef: 'urn:altinn:instance-id:abc123',
+    instanceRef: 'urn:altinn:instance-id:abc123567',
     title: [
       { languageCode: 'nb', value: 'Melding om innvilget søknad om dagpenger' },
       { languageCode: 'en', value: 'Application for unemployment benefits approved' },
@@ -50,28 +50,31 @@ const dialogSuccess: InstanceDelegation = {
 
 const dialogNotFound: InstanceDelegation = {
   resource: digdirResource,
-  instance: { refId: 'urn:altinn:instance-id:def456', type: null },
+  instance: { refId: 'urn:altinn:instance-id:def4569878', type: null },
   permissions: [],
   dialogLookup: { status: 'NotFound' },
 };
 
 const dialogNotFoundCorrespondence: InstanceDelegation = {
   resource: skdResource,
-  instance: { refId: 'urn:altinn:correspondence-id:ghi789', type: { id: '2', name: 'Melding' } },
+  instance: {
+    refId: 'urn:altinn:correspondence-id:ghi7892344',
+    type: { id: '2', name: 'Melding' },
+  },
   permissions: [],
   dialogLookup: { status: 'NotFound' },
 };
 
 const dialogForbidden: InstanceDelegation = {
   resource: digdirResource,
-  instance: { refId: 'urn:altinn:instance-id:jkl012', type: null },
+  instance: { refId: 'urn:altinn:instance-id:jkl0123456', type: null },
   permissions: [],
   dialogLookup: { status: 'Forbidden' },
 };
 
 const noDialogLookup: InstanceDelegation = {
   resource: digdirResource,
-  instance: { refId: 'urn:altinn:instance-id:mno345', type: null },
+  instance: { refId: 'urn:altinn:instance-id:mno3456789', type: null },
   permissions: [],
   dialogLookup: null,
 };

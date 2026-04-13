@@ -8,6 +8,7 @@
 .inboxLinkContainer {
   display: flex;
   justify-content: flex-start;
+  margin-bottom: var(--ds-spacing-4);
 }
 
 .contentSection {
