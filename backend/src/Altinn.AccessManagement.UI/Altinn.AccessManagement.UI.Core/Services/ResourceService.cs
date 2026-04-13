@@ -427,13 +427,14 @@ namespace Altinn.AccessManagement.UI.Core.Services
         /// </returns>
         private List<ServiceResourceFE> SearchInResourceList(List<ServiceResourceFE> resources, string searchString)
         {
-            if (string.IsNullOrEmpty(searchString))
+            string trimmedSearchString = searchString?.Trim();
+            if (string.IsNullOrEmpty(trimmedSearchString))
             {
                 return resources;
             }
 
             List<ServiceResourceFE> matchedResources = new List<ServiceResourceFE>();
-            string[] searchWords = searchString.Trim().ToLower().Split();
+            string[] searchWords = trimmedSearchString.ToLower().Split();
 
             foreach (ServiceResourceFE res in resources)
             {
@@ -455,14 +456,14 @@ namespace Altinn.AccessManagement.UI.Core.Services
                 if (numMatches > 0)
                 {
                     res.PriorityCounter = numMatches;
-                    if (res.Identifier != null && searchString.Trim().Equals(res.Identifier.Trim(), StringComparison.CurrentCultureIgnoreCase))
+                    if (res.Identifier != null && string.Equals(trimmedSearchString, res.Identifier.Trim(), StringComparison.OrdinalIgnoreCase))
                     {
-                        res.PriorityCounter += 2; // Prioritize resources who's identifier is an exact match
+                        res.PriorityCounter += 2; // Prioritize resources whose identifier is an exact match
                     }
 
-                    if (res.Title != null && searchString.Trim().Equals(res.Title.Trim(), StringComparison.CurrentCultureIgnoreCase))
+                    if (res.Title != null && string.Equals(trimmedSearchString, res.Title.Trim(), StringComparison.OrdinalIgnoreCase))
                     {
-                        res.PriorityCounter += 2; // Prioritize resources who's title is an exact match
+                        res.PriorityCounter += 2; // Prioritize resources whose title is an exact match
                     }
 
                     matchedResources.Add(res);
