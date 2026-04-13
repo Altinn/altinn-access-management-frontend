@@ -132,5 +132,9 @@ test.describe('Systembruker - Legg til egen organisasjon', () => {
       await expect(clientDelegationPage.removeOwnOrgButton).not.toBeVisible();
       await expect(clientDelegationPage.addOwnOrgButton).toBeVisible();
     });
+
+    await test.step('Delete system user and verify it is removed', async () => {
+      await clientDelegationPage.deleteSystemUser(name);
+    });
   });
 });
