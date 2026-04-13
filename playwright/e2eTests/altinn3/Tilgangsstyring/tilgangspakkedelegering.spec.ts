@@ -284,10 +284,10 @@ test.describe.serial('tilgangspakkedelegering fra org til person og org til org'
     });
 
     await test.step('Legg til virksomheten 212209562 ALLSIDIG SIGEN TIGER AS', async () => {
-      await accessManagementFrontPage.addOrg('212209562 ');
+      await accessManagementFrontPage.addOrg('212209562');
     });
 
-    await test.step('210638962 finnes i listen over brukere', async () => {
+    await test.step('ALLSIDIG SIGEN TIGER AS   finnes i listen over brukere', async () => {
       await accessManagementFrontPage.goToUsers();
       await accessManagementFrontPage.expandOrg('ALLSIDIG SIGEN TIGER AS');
       await accessManagementFrontPage.clickUser('ALLSIDIG SIGEN TIGER AS');
