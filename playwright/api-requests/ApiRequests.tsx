@@ -97,10 +97,10 @@ export class ApiRequests {
     externalRef: string,
     managerPid: string,
   ): Promise<void> {
-    const partyId = (await this.tokenClass.getIds(partyOrgNo)).partyId;
+    const { partyId, partyUuid } = await this.tokenClass.getIds(partyOrgNo);
     const systemUserId = await this.getSystemUserByQuery(systemId, partyOrgNo, externalRef);
     const token = await this.tokenClass.getPersonalTokenByPid(managerPid);
-    const url = `${env('API_BASE_URL')}/authentication/api/v1/systemuser/${partyId}/${systemUserId}`;
+    const url = `${env('API_BASE_URL')}/authentication/api/v1/systemuser/agent/${partyId}/${systemUserId}?partyuuid=${partyUuid}`;
 
     const response = await fetch(url, {
       method: 'DELETE',
