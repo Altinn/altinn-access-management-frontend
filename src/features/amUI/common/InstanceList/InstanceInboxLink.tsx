@@ -8,8 +8,8 @@ import { getInboxLinkData } from './instancePresentation';
 
 interface InstanceInboxLinkProps {
   instanceUrn: string;
-  dialogLookup?: DialogLookup | null;
-  dialogId?: string | null;
+  dialogLookup?: DialogLookup;
+  dialogId?: string;
   isLarge?: boolean;
 }
 
