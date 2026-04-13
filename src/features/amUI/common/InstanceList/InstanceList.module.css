@@ -1,3 +1,7 @@
+.container {
+  margin-top: var(--ds-size-4);
+}
+
 .subtleTitle h2 {
   color: var(--ds-color-neutral-text-subtle);
 }

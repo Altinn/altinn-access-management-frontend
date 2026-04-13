@@ -108,31 +108,6 @@ export const AllTitleCases: Story = {
   },
 };
 
-export const DialogSuccess: Story = {
-  name: 'Dialogporten: tittel funnet',
-  args: { instances: [dialogSuccess] },
-};
-
-export const DialogNotFound: Story = {
-  name: 'Dialogporten: ikke funnet (skjema)',
-  args: { instances: [dialogNotFound] },
-};
-
-export const DialogNotFoundCorrespondence: Story = {
-  name: 'Dialogporten: ikke funnet (korrespondanse)',
-  args: { instances: [dialogNotFoundCorrespondence] },
-};
-
-export const DialogForbidden: Story = {
-  name: 'Dialogporten: ingen tilgang',
-  args: { instances: [dialogForbidden] },
-};
-
-export const NoDialogLookup: Story = {
-  name: 'Ingen dialog-oppslag (fallback)',
-  args: { instances: [noDialogLookup] },
-};
-
 export const Loading: Story = {
   args: { instances: [], isLoading: true },
 };

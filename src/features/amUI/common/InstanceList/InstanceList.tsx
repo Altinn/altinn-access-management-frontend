@@ -112,47 +112,49 @@ export const InstanceList = ({
         placeholder={t('poa_overview_page.instances_tab.search_label')}
         setDebouncedSearchString={setDebouncedSearchString}
       />
-      {isLoading ? (
-        <InstanceListSkeleton />
-      ) : filteredInstances.length > 0 ? (
-        <List>
-          {filteredInstances.map((instanceDelegation) => {
-            const item = toInstanceListItem(
-              instanceDelegation,
-              getProviderLogoUrl,
-              t,
-              i18n.language,
-            );
+      <div className={classes.container}>
+        {isLoading ? (
+          <InstanceListSkeleton />
+        ) : filteredInstances.length > 0 ? (
+          <List>
+            {filteredInstances.map((instanceDelegation) => {
+              const item = toInstanceListItem(
+                instanceDelegation,
+                getProviderLogoUrl,
+                t,
+                i18n.language,
+              );
 
-            const Component = getItemAs?.(instanceDelegation);
-            const isSuccess = instanceDelegation.dialogLookup?.status === 'Success';
+              const Component = getItemAs?.(instanceDelegation);
+              const isSuccess = instanceDelegation.dialogLookup?.status === 'Success';
 
-            return (
-              <DialogListItem
-                key={item.id}
-                size='md'
-                as={Component ?? (onSelect ? 'button' : undefined)}
-                interactive={interactive || !!onSelect}
-                onClick={onSelect ? () => onSelect(instanceDelegation) : undefined}
-                className={!isSuccess ? classes.subtleTitle : undefined}
-                {...item}
-                controls={
-                  <InstanceInboxLink
-                    instanceUrn={instanceDelegation.instance.refId}
-                    dialogLookup={instanceDelegation.dialogLookup}
-                  />
-                }
-              />
-            );
-          })}
-        </List>
-      ) : (
-        <DsParagraph>
-          {hasSearch
-            ? t('poa_overview_page.instances_tab.no_search_results')
-            : t('poa_overview_page.instances_tab.no_results')}
-        </DsParagraph>
-      )}
+              return (
+                <DialogListItem
+                  key={item.id}
+                  size='md'
+                  as={Component ?? (onSelect ? 'button' : undefined)}
+                  interactive={interactive || !!onSelect}
+                  onClick={onSelect ? () => onSelect(instanceDelegation) : undefined}
+                  className={!isSuccess ? classes.subtleTitle : undefined}
+                  {...item}
+                  controls={
+                    <InstanceInboxLink
+                      instanceUrn={instanceDelegation.instance.refId}
+                      dialogLookup={instanceDelegation.dialogLookup}
+                    />
+                  }
+                />
+              );
+            })}
+          </List>
+        ) : (
+          <DsParagraph>
+            {hasSearch
+              ? t('poa_overview_page.instances_tab.no_search_results')
+              : t('poa_overview_page.instances_tab.no_results')}
+          </DsParagraph>
+        )}
+      </div>
     </>
   );
 };
