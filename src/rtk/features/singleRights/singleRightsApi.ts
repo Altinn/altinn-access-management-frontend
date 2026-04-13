@@ -107,7 +107,7 @@ export const singleRightsApi = createApi({
           // Default is to not include migrated apps, so only add param if true
           searchParams = searchParams + `&includeMigratedApps=true`;
         }
-        return `resources/search?Page=${page}&ResultsPerPage=${resultsPerPage}&SearchString=${searchString}${searchParams}`;
+        return `resources/search?Page=${page}&ResultsPerPage=${resultsPerPage}&SearchString=${encodeURIComponent(searchString)}${searchParams}`;
       },
     }),
     getSingleRightsForRightholder: builder.query<
