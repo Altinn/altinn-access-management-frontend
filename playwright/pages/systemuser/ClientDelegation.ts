@@ -57,6 +57,13 @@ export class ClientDelegationPage {
     return this.page.locator('span[data-variant="subtle"]', { hasText: formattedOrgNo });
   }
 
+  clientOrgNumber(orgName: string, formattedOrgNo: string): Locator {
+    return this.page
+      .getByRole('listitem')
+      .filter({ has: this.page.getByRole('heading', { name: orgName, level: 3 }) })
+      .locator('span[data-variant="subtle"]', { hasText: formattedOrgNo });
+  }
+
   addCustomerButtonByName(name: string): Locator {
     return this.page.getByRole('dialog').getByRole('button', { name: `Legg til ${name}` });
   }
@@ -82,6 +89,20 @@ export class ClientDelegationPage {
     await expect(button).toBeVisible();
     await button.click();
     await this.page.keyboard.press('Escape');
+  }
+
+  async addCustomerByOrgNumber(orgnummer: string) {
+    await expect(this.customersButton).toBeVisible();
+    await this.customersButton.click();
+    await this.clientSearchBox.fill(orgnummer);
+    const addButton = this.page
+      .getByRole('dialog')
+      .getByRole('button', { name: /^Legg til / })
+      .first();
+    await expect(addButton).toBeVisible();
+    await addButton.click();
+    await expect(this.confirmAndCloseButton).toBeVisible();
+    await this.confirmAndCloseButton.click();
   }
 
   async addCustomer(

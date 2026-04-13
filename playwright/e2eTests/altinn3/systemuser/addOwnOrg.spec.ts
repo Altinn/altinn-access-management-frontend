@@ -1,6 +1,7 @@
 import { test, expect } from 'playwright/fixture/pomFixture';
 
 import { ApiRequests } from 'playwright/api-requests/ApiRequests';
+import { EnduserConnection } from 'playwright/api-requests/EnduserConnection';
 import { ClientDelegationPage } from 'playwright/pages/systemuser/ClientDelegation';
 import { AccessManagementFrontPage } from 'playwright/pages/AccessManagementFrontPage';
 import { pickRandom } from 'playwright/util/helper';
@@ -11,8 +12,15 @@ test.describe('Systembruker - Legg til eigen organisasjon', () => {
   const managerPid = '02858098613';
   const orgName = 'Elegant Lett Tiger AS';
 
+  const clients = [
+    { orgNo: '310629499', managerPid: '03878497650', orgName: 'Allslags Kompatibel Tiger AS' },
+    { orgNo: '310349070', managerPid: '16926997746', orgName: 'Blomstrete Vrien Tiger AS' },
+    { orgNo: '313089789', managerPid: '17906298724', orgName: 'Klok Spesiell Tiger AS' },
+  ];
+
   const accessPackages = ['jordbruk', 'motorvognavgift', 'innbygger-vapen', 'pensjon'];
   const accessPackageApiName = pickRandom(accessPackages);
+  const accessPackageUrn = `urn:altinn:accesspackage:${accessPackageApiName}`;
 
   let api: ApiRequests;
   let name: string;
@@ -26,12 +34,23 @@ test.describe('Systembruker - Legg til eigen organisasjon', () => {
 
     const systemId = await test.step('Create system with access package', async () => {
       return await api.createSystemInSystemregisterWithAccessPackages(name, [
-        { urn: `urn:altinn:accesspackage:${accessPackageApiName}` },
+        { urn: accessPackageUrn },
       ]);
     });
 
     response = await test.step('Create system user agent request', async () => {
       return await api.postClientDelegationAgentRequest(systemId, accessPackageApiName, partyOrgNo);
+    });
+
+    await test.step('Setup client connections via API', async () => {
+      const connection = new EnduserConnection();
+      await Promise.all(
+        clients.map(({ orgNo, managerPid: clientPid }) =>
+          connection.addConnectionAndPackagesToUser(clientPid, orgNo, partyOrgNo, [
+            accessPackageUrn,
+          ]),
+        ),
+      );
     });
   });
 
@@ -55,6 +74,19 @@ test.describe('Systembruker - Legg til eigen organisasjon', () => {
       await clientDelegationPage.systemUserLink(name).click();
     });
 
+    await test.step('Add all clients', async () => {
+      await clientDelegationPage.addAllCustomers();
+      await clientDelegationPage.confirmAndCloseButton.click();
+    });
+
+    await test.step('Verify clients are added', async () => {
+      for (const { orgNo, orgName } of clients) {
+        const formatted = `Org.nr. ${orgNo.slice(0, 3)} ${orgNo.slice(3, 6)} ${orgNo.slice(6)}`;
+        await expect(clientDelegationPage.ownOrgHeading(orgName)).toBeVisible();
+        await expect(clientDelegationPage.clientOrgNumber(orgName, formatted)).toBeVisible();
+      }
+    });
+
     await test.step('Add own org to system user', async () => {
       await clientDelegationPage.addOwnOrgButton.click();
     });
@@ -72,8 +104,8 @@ test.describe('Systembruker - Legg til eigen organisasjon', () => {
 
     await test.step('Remove own org via "Fjern fra systemtilgang" link', async () => {
       await clientDelegationPage.removeOwnOrgButton.click();
-      await expect(clientDelegationPage.ownOrgBadge).not.toBeVisible();
       await expect(clientDelegationPage.removeOwnOrgButton).not.toBeVisible();
+      await expect(clientDelegationPage.addOwnOrgButton).toBeVisible();
     });
 
     await test.step('Cleanup: Delete system user', async () => {
