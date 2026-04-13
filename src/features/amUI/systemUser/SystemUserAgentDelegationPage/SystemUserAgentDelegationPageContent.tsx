@@ -249,9 +249,9 @@ export const SystemUserAgentDelegationPageContent = ({
       .then(refetchIsSelfAdded);
   };
 
-  const isAllAccessPackagesDelegable = systemUser.accessPackages.every((x) => x.isDelegable);
+  const isAllAccessPackagesAssignable = systemUser.accessPackages.every((x) => x.isAssignable);
   const hasAddSelfPermission =
-    isAdmin && isAllAccessPackagesDelegable && enableAddSelfToSystemuser();
+    isAdmin && isAllAccessPackagesAssignable && enableAddSelfToSystemuser();
   const isLoadingSelf = isAssigningSelf || isRemovingSelf || isRefetchingIsSelfAdded;
   const assignedCustomersList =
     hasAddSelfPermission && reporteeData && (isSelfAdded || assignedCustomers.length > 0)
