@@ -9,7 +9,10 @@ export class ApiRequests {
     this.tokenClass = new Token(org);
   }
 
-  public async createSystemInSystemregisterWithAccessPackages(name: string): Promise<string> {
+  public async createSystemInSystemregisterWithAccessPackages(
+    name: string,
+    accessPackages?: { urn: string }[],
+  ): Promise<string> {
     const vendorId = this.tokenClass.orgNo;
     const clientId = `Client_${Date.now()}_${Math.random()}`;
 
@@ -28,7 +31,7 @@ export class ApiRequests {
         nb: 'Integrasjonstest. Noe er randomisert her, men mye blir likt.',
         nn: 'integrasjonstest på nynorsk. Noe er randomisert her, men mye blir likt.',
       },
-      accessPackages: [
+      accessPackages: accessPackages ?? [
         { urn: 'urn:altinn:accesspackage:regnskapsforer-med-signeringsrettighet' },
         { urn: 'urn:altinn:accesspackage:regnskapsforer-uten-signeringsrettighet' },
         { urn: 'urn:altinn:accesspackage:regnskapsforer-lonn' },
