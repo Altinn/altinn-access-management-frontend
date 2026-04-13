@@ -409,7 +409,6 @@ test.describe.serial('tilgangspakkedelegering fra org til person og org til org'
   });
 
   test('Slett tilgangspakke hos virksomhet', async ({ page, accessManagementFrontPage }) => {
-    // todo
     const login = new LoginPage(page);
     const aktorvalgHeader = new AktorvalgHeader(page);
     await test.step('sett opp testdata', async () => {

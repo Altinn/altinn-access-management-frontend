@@ -274,7 +274,6 @@ test.describe.serial('Enkelttjenestedelegering fra org til person og org til org
     page,
     accessManagementFrontPage,
   }) => {
-    // todo
     const login = new LoginPage(page);
     const aktorvalgHeader = new AktorvalgHeader(page);
     await test.step('sett opp testdata', async () => {
@@ -317,7 +316,6 @@ test.describe.serial('Enkelttjenestedelegering fra org til person og org til org
   });
 
   test('Slett enkelttjeneste fra org til org', async ({ page, accessManagementFrontPage }) => {
-    // todo
     const login = new LoginPage(page);
     const aktorvalgHeader = new AktorvalgHeader(page);
     await test.step('sett opp testdata', async () => {
