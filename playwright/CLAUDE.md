@@ -86,7 +86,9 @@ Each test must be fully independent. Never rely on state left by a previous test
 - Wrap each cleanup step in its own `try/catch` so one failure doesn't prevent others
 
 ```ts
-test.afterEach(async () => {
+test.afterEach(async ({}, testInfo) => {
+  if (testInfo.status === 'passed') return;
+
   try {
     await api.deleteAgentSystemUser(systemId, partyOrgNo, externalRef, managerPid);
   } catch (error) {
@@ -99,6 +101,10 @@ test.afterEach(async () => {
   }
 });
 ```
+
+Skip cleanup when the test passed — if the test includes a UI deletion step, that already handled it. API cleanup is a fallback for failed runs only. This avoids 404 log spam and makes failure-only cleanup explicit.
+
+If a test has no UI deletion step and cleanup should always run, omit the `status` check.
 
 ## API setup
 
