@@ -12,6 +12,7 @@ namespace Altinn.AccessManagement.UI.Middleware
     /// X-Content-Type-Options
     /// X-XSS-Protection
     /// Referrer-Policy
+    /// Content-Security-Policy-Report-Only
     /// </summary>
     public class SecurityHeadersMiddleware
     {
@@ -55,7 +56,8 @@ namespace Altinn.AccessManagement.UI.Middleware
                 ? "connect-src 'self' http://localhost:5173 ws://localhost:5173;"
                 : "connect-src 'self';";
 
-            return string.Join(" ",
+            return string.Join(
+                " ",
                 "default-src 'self';",
                 scriptSrc,
                 "style-src 'self' 'unsafe-inline' https://altinncdn.no;",
