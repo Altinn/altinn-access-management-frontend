@@ -285,6 +285,7 @@ namespace Altinn.AccessManagement.UI.Tests.Utils
             }
 
             Assert.NotNull(expected);
+            Assert.Equal(expected.Status, actual.Status);
             Assert.Equal(expected.DialogId, actual.DialogId);
             Assert.Equal(expected.InstanceRef, actual.InstanceRef);
             AssertCollections(expected.Title, actual.Title, AssertEqual);

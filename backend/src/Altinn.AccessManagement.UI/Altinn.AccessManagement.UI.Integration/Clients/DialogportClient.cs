@@ -46,11 +46,6 @@ namespace Altinn.AccessManagement.UI.Integration.Clients
             string endpointUrl = $"enduser/dialoglookup?instanceRef={Uri.EscapeDataString(instanceRef)}";
             HttpResponseMessage response = await _httpClient.GetAsync(authorizationToken, endpointUrl, languageCode: languageCode);
 
-            if (response.StatusCode == System.Net.HttpStatusCode.NotFound)
-            {
-                return null;
-            }
-
             return await ClientUtils.DeserializeIfSuccessfullStatusCode<DialogLookup>(
                 response,
                 _logger,

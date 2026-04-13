@@ -953,12 +953,18 @@
       "no_search_results": "Ingen treff på melding eller skjema."
     }
   },
+  "instance_header": {
+    "title_forbidden": "Melding eller skjema du ikkje har fullmakt til",
+    "title_not_found": "Ukjent melding eller skjema",
+    "title_correspondence_not_found": "Melding om tenesta {{resourceName}}"
+  },
   "instance_detail_page": {
     "document_title": "Delt frå innboks",
-    "resource_title": "Melding eller skjema: {{title}}",
     "provider_name": "til {{name}}",
     "back_to_inbox": "Gå til innboks",
     "see_in_inbox": "Sjå i innboks",
+    "service_title_label": "Skjema av tenesta",
+    "instance_id_label": "Id",
     "search_placeholder": "Søk etter person",
     "description": "Her kan du dele ei melding eller eit skjema frå innboksen eller få oversikt over kven som allereie har tilgang. Bruk søkjefeltet til å søkje etter personar eller legg dei til som ny brukar.",
     "no_users": "Ingen brukarar har tilgang.",

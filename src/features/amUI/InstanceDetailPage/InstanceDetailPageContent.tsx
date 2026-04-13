@@ -1,9 +1,8 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
-import { DsAlert, DsButton, DsParagraph } from '@altinn/altinn-components';
+import { DsAlert, DsParagraph } from '@altinn/altinn-components';
 import { Navigate, useSearchParams } from 'react-router';
 import { Trans, useTranslation } from 'react-i18next';
 
-import { InstanceDetailHeader } from './InstanceDetailHeader';
 import { ResourceInfoSkeleton } from '../common/DelegationModal/SingleRights/ResourceInfoSkeleton';
 import { PageDivider } from '../common/PageDivider/PageDivider';
 import { InstanceUsersAsAdmin } from './InstanceUsersAsAdmin';
@@ -13,20 +12,19 @@ import {
   createErrorDetails,
   TechnicalErrorParagraphs,
 } from '../common/TechnicalErrorParagraphs/TechnicalErrorParagraphs';
-import { useRemoveInstanceMutation } from '@/rtk/features/instanceApi';
+import { useRemoveInstanceMutation, useGetInstancesQuery } from '@/rtk/features/instanceApi';
 import { useGetResourceQuery } from '@/rtk/features/resourceApi';
-import { useProviderLogoUrl } from '@/resources/hooks';
 import {
   PartyType,
   useGetIsAdminQuery,
   useGetIsInstanceAdminQuery,
 } from '@/rtk/features/userInfoApi';
-import { getAfUrl } from '@/resources/utils/pathUtils';
-import { CheckmarkIcon, EnvelopeClosedIcon } from '@navikt/aksel-icons';
 import { DelegationAction, EditModal } from '../common/DelegationModal/EditModal';
 import type { ActionError } from '@/resources/hooks/useActionError';
 import type { UserActionTarget } from '../common/UserSearch/types';
 import { AddUserButton } from './AddUserModal';
+import { InstanceInboxLink } from '../common/InstanceList/InstanceInboxLink';
+import { InstanceMetadataSection } from '../common/InstanceMetadataSection/InstanceMetadataSection';
 
 import classes from './InstanceDetailPageContent.module.css';
 
@@ -83,7 +81,6 @@ export const InstanceDetailPageContent = () => {
       });
   };
 
-  const { getProviderLogoUrl } = useProviderLogoUrl();
   const instanceUrn = searchParams.get('instanceUrn') ?? '';
   const resourceId = searchParams.get('resourceId') ?? '';
   const dialogId = searchParams.get('dialogId');
@@ -121,6 +118,20 @@ export const InstanceDetailPageContent = () => {
     skip: !resourceId,
   });
 
+  const { data: instanceDelegations, isError: isInstanceDelegationsError } = useGetInstancesQuery(
+    {
+      party: actingParty?.partyUuid ?? '',
+      from: fromParty?.partyUuid,
+      instance: instanceUrn,
+    },
+    { skip: !actingParty?.partyUuid || !fromParty?.partyUuid || !instanceUrn },
+  );
+  const dialogLookup = instanceDelegations?.[0]?.dialogLookup;
+  const instanceData = {
+    instance: { refId: instanceUrn, type: null },
+    dialogLookup,
+  };
+
   if (!resourceId || !instanceUrn) {
     return (
       <Navigate
@@ -129,29 +140,6 @@ export const InstanceDetailPageContent = () => {
       />
     );
   }
-
-  const isCorrespondenceInstance = instanceUrn.startsWith('urn:altinn:correspondence-id:');
-
-  const inboxUrl = dialogId
-    ? `${getAfUrl()}inbox/${encodeURIComponent(dialogId)}`
-    : `${getAfUrl()}redirect?instanceUrn=${encodeURIComponent(instanceUrn)}`;
-
-  const showInboxLink = dialogId || !isCorrespondenceInstance;
-
-  const inboxLink = showInboxLink ? (
-    <div className={classes.inboxLinkContainer}>
-      <DsButton
-        asChild
-        variant={dialogId ? 'primary' : 'secondary'}
-        className={classes.inboxButton}
-      >
-        <a href={inboxUrl}>
-          {dialogId ? <CheckmarkIcon aria-hidden /> : <EnvelopeClosedIcon aria-hidden />}
-          {dialogId ? t('common.finished') : t('instance_detail_page.see_in_inbox')}
-        </a>
-      </DsButton>
-    </div>
-  ) : null;
 
   if (isResourceLoading || isAdminLoading || isInstanceAdminLoading) {
     return <ResourceInfoSkeleton />;
@@ -162,9 +150,6 @@ export const InstanceDetailPageContent = () => {
       ? createErrorDetails(isAdminErrorObj || isInstanceAdminErrorObj || resourceError)
       : null;
 
-  const providerLogoUrl = resource?.resourceOwnerOrgcode
-    ? getProviderLogoUrl(resource.resourceOwnerOrgcode)
-    : undefined;
   const selectedUserAvailableActions =
     selectedUserMode === 'delegate' || isAdmin === false
       ? [DelegationAction.DELEGATE]
@@ -172,16 +157,25 @@ export const InstanceDetailPageContent = () => {
 
   return (
     <>
-      {resource && (
-        <InstanceDetailHeader
-          resource={resource}
-          resourceId={resourceId}
-          providerLogoUrl={providerLogoUrl}
-          fromPartyName={fromParty?.name}
-          fromPartyTypeName={fromParty?.partyTypeName}
-        />
+      {resource && !isInstanceDelegationsError && (
+        <>
+          <InstanceMetadataSection
+            resource={resource}
+            instanceData={instanceData}
+            fromPartyName={fromParty?.name}
+            fromPartyType={fromParty?.partyTypeName}
+            titleLevel={1}
+          />
+        </>
       )}
-      {inboxLink}
+      <div className={classes.inboxLinkContainer}>
+        <InstanceInboxLink
+          instanceUrn={instanceUrn}
+          dialogLookup={dialogLookup}
+          dialogId={dialogId}
+          isLarge
+        />
+      </div>
       <PageDivider />
       {contentTechnicalError ? (
         <DsAlert
@@ -237,7 +231,7 @@ export const InstanceDetailPageContent = () => {
         <EditModal
           ref={modalRef}
           resource={resource}
-          instance={{ instanceUrn }}
+          instance={instanceData}
           toParty={{
             partyUuid: selectedUser.id,
             name: selectedUser.name,

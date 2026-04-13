@@ -1,7 +1,6 @@
 import { ElementType, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import {
-  Button,
   DialogListItem,
   DsParagraph,
   List,
@@ -13,8 +12,14 @@ import { InstanceDelegation } from '@/rtk/features/instanceApi';
 import { useProviderLogoUrl } from '@/resources/hooks';
 
 import { InstanceListSkeleton } from './InstanceListSkeleton';
-import { EnvelopeClosedIcon } from '@navikt/aksel-icons';
-import { getAfUrl } from '@/resources/utils/pathUtils';
+import type { TFunction } from 'i18next';
+import { InstanceInboxLink } from './InstanceInboxLink';
+import {
+  getInstanceShortId,
+  resolveInstanceTitle,
+  toInstancePresentationData,
+} from './instancePresentation';
+import classes from './InstanceList.module.css';
 
 interface InstanceListProps {
   instances: InstanceDelegation[];
@@ -24,21 +29,36 @@ interface InstanceListProps {
   interactive?: boolean;
 }
 
+const getResolvedInstanceTitle = (
+  instanceDelegation: InstanceDelegation,
+  t: TFunction,
+  language: string,
+) =>
+  resolveInstanceTitle(
+    toInstancePresentationData(instanceDelegation),
+    instanceDelegation.resource,
+    t,
+    language,
+  );
+
 const toInstanceListItem = (
   instanceDelegation: InstanceDelegation,
   getProviderLogoUrl: (orgCode: string) => string | undefined,
+  t: TFunction,
+  language: string,
 ): DialogListItemProps => {
   const { instance, resource } = instanceDelegation;
   const providerLogoUrl = resource.resourceOwnerOrgcode
     ? getProviderLogoUrl(resource.resourceOwnerOrgcode)
     : undefined;
   const dialogItemId = `${resource.identifier}-${instance.refId}`;
-  const shortId = instance.refId.slice(-10);
+  const shortId = getInstanceShortId(instance.refId);
+  const title = getResolvedInstanceTitle(instanceDelegation, t, language);
 
   return {
     id: dialogItemId,
-    title: resource.title ?? resource.identifier,
-    description: `${instance.refId} ${resource.title}`,
+    title,
+    description: `${instance.refId} ${title}`,
     sender: {
       name: resource.resourceOwnerName ?? '',
       type: 'company',
@@ -46,7 +66,8 @@ const toInstanceListItem = (
       imageUrlAlt: resource.resourceOwnerName ?? '',
     },
     updatedAt: instance.refId,
-    updatedAtLabel: shortId,
+    updatedAtLabel: `${t('instance_detail_page.instance_id_label')}: ${shortId}`,
+    extendedStatusLabel: `${t('instance_detail_page.service_title_label')}: ${resource.title}`,
   };
 };
 
@@ -57,7 +78,7 @@ export const InstanceList = ({
   onSelect,
   interactive,
 }: InstanceListProps) => {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   const [debouncedSearchString, setDebouncedSearchString] = useState('');
   const hasSearch = debouncedSearchString.trim().length > 0;
 
@@ -71,13 +92,19 @@ export const InstanceList = ({
 
     const normalizedSearch = debouncedSearchString.trim().toLowerCase();
 
-    return instanceList.filter((instanceDelegation) =>
-      [instanceDelegation.resource.title, instanceDelegation.resource.resourceOwnerName]
+    return instanceList.filter((instanceDelegation) => {
+      const resolvedTitle = getResolvedInstanceTitle(instanceDelegation, t, i18n.language);
+
+      return [
+        resolvedTitle,
+        instanceDelegation.resource.title,
+        instanceDelegation.resource.resourceOwnerName,
+      ]
         .join(' ')
         .toLowerCase()
-        .includes(normalizedSearch),
-    );
-  }, [debouncedSearchString, hasSearch, instances]);
+        .includes(normalizedSearch);
+    });
+  }, [debouncedSearchString, hasSearch, i18n.language, instances, t]);
 
   return (
     <>
@@ -90,13 +117,15 @@ export const InstanceList = ({
       ) : filteredInstances.length > 0 ? (
         <List>
           {filteredInstances.map((instanceDelegation) => {
-            const item = toInstanceListItem(instanceDelegation, getProviderLogoUrl);
+            const item = toInstanceListItem(
+              instanceDelegation,
+              getProviderLogoUrl,
+              t,
+              i18n.language,
+            );
 
             const Component = getItemAs?.(instanceDelegation);
-            const isCorrespondenceInstance = instanceDelegation.instance.refId.startsWith(
-              'urn:altinn:correspondence-id:',
-            );
-            const inboxUrl = `${getAfUrl()}redirect?instanceUrn=${encodeURIComponent(instanceDelegation.instance.refId)}`;
+            const isSuccess = instanceDelegation.dialogLookup?.status === 'Success';
 
             return (
               <DialogListItem
@@ -105,20 +134,13 @@ export const InstanceList = ({
                 as={Component ?? (onSelect ? 'button' : undefined)}
                 interactive={interactive || !!onSelect}
                 onClick={onSelect ? () => onSelect(instanceDelegation) : undefined}
+                className={!isSuccess ? classes.subtleTitle : undefined}
                 {...item}
                 controls={
-                  !isCorrespondenceInstance && (
-                    <Button
-                      variant='tertiary'
-                      rounded
-                      size={'xs'}
-                      as='a'
-                      href={inboxUrl}
-                    >
-                      <EnvelopeClosedIcon aria-hidden='true' />{' '}
-                      {t('instance_detail_page.see_in_inbox')}
-                    </Button>
-                  )
+                  <InstanceInboxLink
+                    instanceUrn={instanceDelegation.instance.refId}
+                    dialogLookup={instanceDelegation.dialogLookup}
+                  />
                 }
               />
             );

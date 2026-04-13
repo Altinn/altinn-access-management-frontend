@@ -953,12 +953,18 @@
       "no_search_results": "Ingen treff på melding eller skjema."
     }
   },
+  "instance_header": {
+    "title_forbidden": "Melding eller skjema du ikke har fullmakt til",
+    "title_not_found": "Ukjent melding eller skjema",
+    "title_correspondence_not_found": "Melding om tjenesten {{resourceName}}"
+  },
   "instance_detail_page": {
     "document_title": "Delt fra innboks",
-    "resource_title": "Melding eller skjema: {{title}}",
     "provider_name": "til {{name}}",
     "back_to_inbox": "Gå til innboks",
     "see_in_inbox": "Se i innboks",
+    "service_title_label": "Skjema av tjenesten",
+    "instance_id_label": "Id",
     "search_placeholder": "Søk etter person",
     "description": "Her kan du dele en melding eller et skjema fra innboksen eller få en oversikt over hvem som allerede har tilgang. Bruk søkefeltet til å søke etter personer eller legg dem til som ny bruker.",
     "no_users": "Ingen brukere har tilgang.",

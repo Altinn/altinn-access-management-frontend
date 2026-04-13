@@ -27,7 +27,7 @@ namespace Altinn.AccessManagement.UI.Mocks.Mocks
 
             if (!File.Exists(path))
             {
-                return Task.FromResult<DialogLookup>(null);
+                return Task.FromResult(new DialogLookup { Status = DialogLookupStatus.NotFound });
             }
 
             return Task.FromResult(Util.GetMockData<DialogLookup>(path));

@@ -212,7 +212,9 @@ export const RightsTabs = ({
           className={classes.tabContent}
           value='instances'
         >
-          <div className={classes.innerTabContent}>{instancesPanel}</div>
+          <div className={classes.innerTabContent}>
+            {chosenTab === 'instances' ? instancesPanel : null}
+          </div>
         </DsTabs.Panel>
       )}
       {displayRoles && roleAssignmentsPanel && (
