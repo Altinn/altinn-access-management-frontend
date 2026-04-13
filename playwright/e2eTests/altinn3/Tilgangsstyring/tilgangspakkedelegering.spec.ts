@@ -14,8 +14,6 @@ test.describe.serial('tilgangspakkedelegering fra person til person og person ti
     await api.deleteConnection('08857499981', '08857499981', ['22911648052']);
     await api.deleteConnection('15855499484', '15855499484', ['313904490']);
     await api.deleteConnection('26917699703', '26917699703', ['43818900555']);
-
-    await api.deleteConnection('25928698737', '25928698737', ['313435482', '123', '234', '456']);
   });
 
   test('Legg til ny person hos deg selv', async ({ page, accessManagementFrontPage }) => {
