@@ -53,8 +53,11 @@ export class ClientDelegationPage {
     return this.page.getByRole('heading', { name: orgName, level: 3 });
   }
 
-  ownOrgNumber(formattedOrgNo: string): Locator {
-    return this.page.getByText(formattedOrgNo, { exact: true });
+  ownOrgNumber(orgName: string, formattedOrgNo: string): Locator {
+    return this.page
+      .getByRole('listitem')
+      .filter({ has: this.page.getByRole('heading', { name: orgName, level: 3 }) })
+      .getByText(formattedOrgNo, { exact: true });
   }
 
   clientOrgNumber(orgName: string, formattedOrgNo: string): Locator {

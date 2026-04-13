@@ -121,6 +121,7 @@ test.describe('Systembruker - Legg til egen organisasjon', () => {
       await expect(clientDelegationPage.ownOrgHeading(orgName)).toBeVisible();
       await expect(
         clientDelegationPage.ownOrgNumber(
+          orgName,
           `Org.nr. ${partyOrgNo.slice(0, 3)} ${partyOrgNo.slice(3, 6)} ${partyOrgNo.slice(6)}`,
         ),
       ).toBeVisible();
