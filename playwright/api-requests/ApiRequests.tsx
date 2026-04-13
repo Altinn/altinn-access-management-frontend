@@ -91,6 +91,32 @@ export class ApiRequests {
     }
   }
 
+  public async deleteAgentSystemUser(
+    systemId: string,
+    partyOrgNo: string,
+    externalRef: string,
+    managerPid: string,
+  ): Promise<void> {
+    const partyId = (await this.tokenClass.getIds(partyOrgNo)).partyId;
+    const systemUserId = await this.getSystemUserByQuery(systemId, partyOrgNo, externalRef);
+    const token = await this.tokenClass.getPersonalTokenByPid(managerPid);
+    const url = `${env('API_BASE_URL')}/authentication/api/v1/systemuser/${partyId}/${systemUserId}`;
+
+    const response = await fetch(url, {
+      method: 'DELETE',
+      headers: {
+        Authorization: `Bearer ${token}`,
+        'Content-Type': 'application/json',
+      },
+    });
+
+    if (!response.ok) {
+      const errorBody = await response.text();
+      console.error('Failed to delete agent system user:', response.status, errorBody);
+      throw new Error(`Failed to delete agent system user: ${response.statusText}`);
+    }
+  }
+
   public async deleteSystemInSystemRegister(systemName: string) {
     const endpoint = `v1/systemregister/vendor/${this.tokenClass.orgNo}_${systemName}`;
     const scopes =
@@ -146,9 +172,8 @@ export class ApiRequests {
     systemId: string,
     accessPackageUrn: string,
     partyOrgNo: string,
+    externalRef: string,
   ) {
-    const externalRef = TestdataApi.generateExternalRef();
-
     const payload = {
       externalRef,
       systemId,

@@ -91,20 +91,6 @@ export class ClientDelegationPage {
     await this.page.keyboard.press('Escape');
   }
 
-  async addCustomerByOrgNumber(orgnummer: string) {
-    await expect(this.customersButton).toBeVisible();
-    await this.customersButton.click();
-    await this.clientSearchBox.fill(orgnummer);
-    const addButton = this.page
-      .getByRole('dialog')
-      .getByRole('button', { name: /^Legg til / })
-      .first();
-    await expect(addButton).toBeVisible();
-    await addButton.click();
-    await expect(this.confirmAndCloseButton).toBeVisible();
-    await this.confirmAndCloseButton.click();
-  }
-
   async addCustomer(
     customerLabel: string,
     confirmationText: string,
