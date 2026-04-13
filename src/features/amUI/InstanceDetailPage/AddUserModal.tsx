@@ -48,7 +48,7 @@ export const AddUserButton = ({ resourceId, instanceUrn, isLarge }: AddUserButto
   return (
     <>
       <DsButton
-        variant={isLarge ? 'primary' : 'secondary'}
+        variant={isLarge ? 'secondary' : 'primary'}
         onClick={() => {
           setIsOpen(true);
           modalRef.current?.showModal();
