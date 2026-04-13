@@ -233,7 +233,6 @@ test.describe.serial('tilgangspakkedelegering fra org til person og org til org'
     await api.deleteConnection('28839195259', '312841150', ['212209562']);
     await api.deleteConnection('15857698093', '310394955', ['26832047936']);
     await api.deleteConnection('08904899020', '310977756', ['312188198']);
-    await api.deleteConnection('08904899020', '310977756', ['312188198']);
     await api.deleteConnection('20826696746', '313500640', ['18894799990']);
     await api.deleteConnection('04833348529', '312738147', ['312861305']);
   });
@@ -260,7 +259,7 @@ test.describe.serial('tilgangspakkedelegering fra org til person og org til org'
       await accessManagementFrontPage.addPerson('41926701744', 'APRIKOS');
     });
 
-    await test.step('210638962 finnes i listen over brukere', async () => {
+    await test.step('41926701744 OMSORGSFULL APRIKOS finnes i listen over brukere', async () => {
       await accessManagementFrontPage.goToUsers();
       await accessManagementFrontPage.clickUser('OMSORGSFULL APRIKOS');
     });
