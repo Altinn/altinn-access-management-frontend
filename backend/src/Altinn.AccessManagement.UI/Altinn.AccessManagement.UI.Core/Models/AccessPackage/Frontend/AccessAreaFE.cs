@@ -31,6 +31,11 @@
         public string IconUrl { get; set; }
 
         /// <summary>
+        /// The type of are this is, e.g. "Person"
+        /// </summary>
+        public string TypeName { get; set; }
+
+        /// <summary>
         /// The packages that are in this group
         /// </summary>
         public List<AccessPackage> AccessPackages { get; set; }
@@ -46,6 +51,7 @@
             Description = area.Description;
             IconUrl = area.IconUrl;
             AccessPackages = packages;
+            TypeName = packages.FirstOrDefault()?.Type?.Name ?? string.Empty;
         }
 
         /// <summary>

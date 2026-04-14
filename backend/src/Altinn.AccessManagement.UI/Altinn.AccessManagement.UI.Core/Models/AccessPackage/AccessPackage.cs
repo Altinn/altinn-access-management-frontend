@@ -44,5 +44,31 @@
         /// Gets or sets the collection of resources linked to the package.
         /// </summary>
         public IEnumerable<ResourceAM> Resources { get; set; }
+
+        /// <summary>
+        /// Gets or sets the type of the package.
+        /// </summary>
+        public TypeDto Type { get; set; }
     }
+}
+
+/// <summary>
+/// Type DTO for AccessPackage
+/// </summary>
+public class TypeDto
+{
+    /// <summary>
+    /// Id
+    /// </summary>
+    public Guid Id { get; set; }
+
+    /// <summary>
+    /// ProviderId
+    /// </summary>
+    public Guid ProviderId { get; set; }
+
+    /// <summary>
+    /// Name
+    /// </summary>
+    public string Name { get; set; }
 }
