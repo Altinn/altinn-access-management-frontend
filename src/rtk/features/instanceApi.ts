@@ -37,7 +37,7 @@ export interface InstanceDelegation {
   resource: ServiceResource;
   instance: DelegationInstance;
   permissions: Permissions[];
-  dialogLookup?: DialogLookup | null;
+  dialogLookup?: DialogLookup;
 }
 
 export interface InstanceRights {

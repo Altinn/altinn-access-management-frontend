@@ -11,24 +11,24 @@ import type { ServiceResource } from '@/rtk/features/singleRights/singleRightsAp
 
 export interface InstancePresentationData {
   instance: DelegationInstance;
-  dialogLookup?: DialogLookup | null;
+  dialogLookup?: DialogLookup;
 }
 
-export const isCorrespondenceInstanceUrn = (instanceUrn: string | undefined): boolean =>
+export const isCorrespondenceInstanceUrn = (instanceUrn?: string): boolean =>
   instanceUrn?.startsWith('urn:altinn:correspondence-id:') ?? false;
 
-export const getInstanceShortId = (instanceUrn: string | undefined): string | undefined =>
+export const getInstanceShortId = (instanceUrn?: string): string | undefined =>
   instanceUrn?.slice(-10);
 
 export const getDialogTitle = (
-  dialogLookup: DialogLookup | null | undefined,
-  language: string,
+  dialogLookup?: DialogLookup,
+  language?: string,
 ): string | undefined => {
   if (dialogLookup?.status !== 'Success' || !dialogLookup.title?.length) {
     return undefined;
   }
 
-  const langCode = language.replace('no_', '');
+  const langCode = language?.replace('no_', '');
   return (
     dialogLookup.title.find((title) => title.languageCode === langCode)?.value ??
     dialogLookup.title[0].value
@@ -39,7 +39,7 @@ export const resolveInstanceTitle = (
   instanceData: InstancePresentationData | undefined,
   resource: ServiceResource | undefined,
   t: TFunction,
-  language: string,
+  language?: string,
 ): string => {
   const dialogLookup = instanceData?.dialogLookup;
   const instanceUrn = instanceData?.instance.refId;

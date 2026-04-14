@@ -27,6 +27,7 @@ import { DelegationAction, EditModal } from '../common/DelegationModal/EditModal
 import type { ActionError } from '@/resources/hooks/useActionError';
 import type { UserActionTarget } from '../common/UserSearch/types';
 import { AddUserButton } from './AddUserModal';
+import { isCorrespondenceInstanceUrn } from '../common/InstanceList/instanceListUtils';
 
 import classes from './InstanceDetailPageContent.module.css';
 
@@ -130,11 +131,9 @@ export const InstanceDetailPageContent = () => {
     );
   }
 
-  const isCorrespondenceInstance = instanceUrn.startsWith('urn:altinn:correspondence-id:');
-
   const inboxUrl = `${getAfUrl()}redirect?instanceUrn=${encodeURIComponent(instanceUrn)}`;
 
-  const showInboxLink = !dialogId && !isCorrespondenceInstance;
+  const showInboxLink = !dialogId && !isCorrespondenceInstanceUrn(instanceUrn);
 
   const inboxLink = showInboxLink ? (
     <div className={classes.inboxLinkContainer}>
