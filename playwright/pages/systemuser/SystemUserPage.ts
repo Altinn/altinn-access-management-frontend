@@ -15,6 +15,9 @@ export class SystemUserPage {
   public readonly MAIN_HEADER: Locator;
   public readonly NEW_SYSTEMUSER_LABEL: Locator;
   public readonly TRY_NEW_ACCESS_MANAGEMENT_BUTTON: Locator;
+  public readonly escalateConfirmButton: Locator;
+  public readonly finish: Locator;
+  public readonly requestsMenuItem: Locator;
 
   constructor(public page: Page) {
     this.SELECT_VENDOR_LABEL = this.page.getByLabel(
@@ -63,6 +66,16 @@ export class SystemUserPage {
     this.TRY_NEW_ACCESS_MANAGEMENT_BUTTON = this.page.getByRole('button', {
       name: 'Prøv ny tilgangsstyring',
     });
+
+    this.escalateConfirmButton = this.page.getByRole('button', { name: 'Ja, send videre' });
+
+    this.finish = this.page.getByRole('button', { name: 'Avslutt' });
+
+    this.requestsMenuItem = this.page.getByText('Forespørsler', { exact: true });
+  }
+
+  requestLink(requestId: string) {
+    return this.page.locator(`a[href*="${requestId}"]`);
   }
 
   async selectSystem(system: string) {

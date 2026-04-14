@@ -12,6 +12,7 @@ export class ApiRequests {
   public async createSystemInSystemregisterWithAccessPackages(
     name: string,
     accessPackages?: { urn: string }[],
+    redirectUrl?: string,
   ): Promise<string> {
     const vendorId = this.tokenClass.orgNo;
     const clientId = `Client_${Date.now()}_${Math.random()}`;
@@ -40,7 +41,7 @@ export class ApiRequests {
         { urn: 'urn:altinn:accesspackage:skattegrunnlag' },
         { urn: 'urn:altinn:accesspackage:forretningsforer-eiendom' },
       ],
-      allowedRedirectUrls: ['https://www.vg.no'],
+      allowedRedirectUrls: [redirectUrl ?? 'https://www.vg.no'],
       isVisible: false,
       ClientId: [clientId],
     };
@@ -193,30 +194,65 @@ export class ApiRequests {
     );
   }
 
-  public async postSystemuserRequest(externalRef: string, systemId: string) {
+  public async deleteRegularSystemUser(
+    systemId: string,
+    partyOrgNo: string,
+    managerPid: string,
+  ): Promise<void> {
+    const { partyId } = await this.tokenClass.getIds(partyOrgNo);
+    const token = await this.tokenClass.getPersonalTokenByPid(managerPid);
+    const listUrl = `${env('API_BASE_URL')}/authentication/api/v1/systemuser/${partyId}`;
+
+    const listResponse = await fetch(listUrl, {
+      headers: { Authorization: `Bearer ${token}` },
+    });
+
+    const rawText = await listResponse.text();
+    console.log('[deleteRegularSystemUser] Status:', listResponse.status);
+    console.log('[deleteRegularSystemUser] Response:', rawText);
+
+    if (!listResponse.ok) {
+      throw new Error(`Failed to list system users: ${listResponse.status} ${rawText}`);
+    }
+
+    const systemUsers: Record<string, unknown>[] = JSON.parse(rawText);
+
+    const match = systemUsers.find(
+      (u) => u['systemId'] === systemId || u['system_id'] === systemId,
+    );
+
+    if (!match) {
+      throw new Error(`System user for systemId ${systemId} not found`);
+    }
+
+    const deleteUrl = `${env('API_BASE_URL')}/authentication/api/v1/systemuser/${partyId}/${match['id']}`;
+    const deleteResponse = await fetch(deleteUrl, {
+      method: 'DELETE',
+      headers: { Authorization: `Bearer ${token}` },
+    });
+
+    if (!deleteResponse.ok) {
+      const errorBody = await deleteResponse.text();
+      throw new Error(`Failed to delete system user: ${deleteResponse.status} ${errorBody}`);
+    }
+  }
+
+  public async postSystemuserRequest(externalRef: string, systemId: string, partyOrgNo?: string) {
+    const resolvedPartyOrgNo = partyOrgNo ?? `${this.tokenClass.orgNo}`;
     const payload = {
       systemId: `${systemId}`,
-      partyOrgNo: `${this.tokenClass.orgNo}`,
+      partyOrgNo: resolvedPartyOrgNo,
       externalRef: externalRef,
-      rights: [
-        {
-          resource: [
-            {
-              value: 'authentication-e2e-test',
-              id: 'urn:altinn:resource',
-            },
-          ],
-        },
-      ],
       accessPackages: [
         {
           urn: 'urn:altinn:accesspackage:baerekraft',
         },
       ],
-      redirectUrl: 'https://altinn.no',
+      redirectUrl: 'https://example.com/',
     };
 
     const endpoint = '/authentication/api/v1/systemuser/request/vendor';
+    const url = `${env('API_BASE_URL')}${endpoint}`;
     const scopes =
       'altinn:authentication/systemuser.request.read altinn:authentication/systemuser.request.write';
 
@@ -224,6 +260,7 @@ export class ApiRequests {
       typeof payload,
       { confirmUrl: string; id: string }
     >(payload, endpoint, scopes);
+
     return apiResponse;
   }
 
