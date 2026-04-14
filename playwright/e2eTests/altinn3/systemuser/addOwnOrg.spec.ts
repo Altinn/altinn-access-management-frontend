@@ -3,9 +3,10 @@ import { test, expect } from 'playwright/fixture/pomFixture';
 import { ApiRequests } from 'playwright/api-requests/ApiRequests';
 import { EnduserConnection } from 'playwright/api-requests/EnduserConnection';
 import { TestdataApi } from 'playwright/util/TestdataApi';
-import { pickRandom } from 'playwright/util/helper';
+import { env, pickRandom } from 'playwright/util/helper';
 
 test.describe('Systembruker - Legg til egen organisasjon', () => {
+  test.skip(process.env.ENV_NAME !== 'at23', 'Only runs in AT23');
   const vendorOrgNumber = '310547891';
   const partyOrgNo = '314240545';
   const managerPid = '02858098613';
