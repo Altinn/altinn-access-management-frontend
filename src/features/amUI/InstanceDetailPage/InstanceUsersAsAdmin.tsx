@@ -34,7 +34,7 @@ export const InstanceUsersAsAdmin = ({
   onRevoke,
   isRevoking,
 }: InstanceUsersAsAdminProps) => {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   const { actingParty, fromParty } = usePartyRepresentation();
 
   const {
@@ -48,6 +48,7 @@ export const InstanceUsersAsAdmin = ({
       from: fromParty?.partyUuid,
       resource: resourceId,
       instance: instanceUrn,
+      language: i18n.language,
     },
     {
       skip: !actingParty?.partyUuid || !fromParty?.partyUuid || !resourceId || !instanceUrn,

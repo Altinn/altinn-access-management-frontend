@@ -6,6 +6,7 @@ import type { ActionError } from '@/resources/hooks/useActionError';
 import type { ServiceResource } from '@/rtk/features/singleRights/singleRightsApi';
 import type { AccessPackage } from '@/rtk/features/accessPackageApi';
 import type { Role } from '@/rtk/features/roleApi';
+import type { DialogLookup } from '@/rtk/features/instanceApi';
 import { ResourceInfo } from './SingleRights/ResourceInfo';
 import { InstanceInfo } from './Instance/InstanceInfo';
 import classes from './DelegationModal.module.css';
@@ -28,7 +29,7 @@ export enum DelegationAction {
 
 export interface InstanceData {
   instanceUrn: string;
-  instanceName?: string;
+  dialogLookup?: DialogLookup;
 }
 
 export interface EditModalProps {
@@ -133,7 +134,7 @@ const renderModalContent = ({
       <InstanceInfo
         resource={resource}
         instanceUrn={instance.instanceUrn}
-        instanceName={instance.instanceName}
+        dialogLookup={instance.dialogLookup}
         toParty={toParty}
         availableActions={availableActions}
         onSuccess={onSuccess}

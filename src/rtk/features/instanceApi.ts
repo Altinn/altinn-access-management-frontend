@@ -68,12 +68,28 @@ export const instanceApi = createApi({
   endpoints: (builder) => ({
     getInstances: builder.query<
       InstanceDelegation[],
-      { party: string; from?: string; to?: string; resource?: string; instance?: string }
+      {
+        party: string;
+        from?: string;
+        to?: string;
+        resource?: string;
+        instance?: string;
+        language: string;
+      }
     >({
       query: ({ party, from, to, resource, instance }) => {
         return `instances/delegation/instances?party=${party}&from=${from ?? ''}&to=${to ?? ''}&resource=${encodeURIComponent(resource ?? '')}&instance=${encodeURIComponent(instance ?? '')}`;
       },
       providesTags: ['instances'],
+      serializeQueryArgs: ({ queryArgs, endpointName }) => ({
+        endpointName,
+        party: queryArgs.party,
+        from: queryArgs.from,
+        to: queryArgs.to,
+        resource: queryArgs.resource,
+        instance: queryArgs.instance,
+        language: queryArgs.language,
+      }),
     }),
     getInstanceRights: builder.query<
       InstanceRights,
