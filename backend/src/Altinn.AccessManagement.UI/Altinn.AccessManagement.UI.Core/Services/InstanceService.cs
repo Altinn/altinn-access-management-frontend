@@ -1,5 +1,8 @@
+using System.Net;
 using Altinn.AccessManagement.UI.Core.ClientInterfaces;
 using Altinn.AccessManagement.UI.Core.Configuration;
+using Altinn.AccessManagement.UI.Core.Helpers;
+using Altinn.AccessManagement.UI.Core.Models.Dialogporten;
 using Altinn.AccessManagement.UI.Core.Models.InstanceDelegation;
 using Altinn.AccessManagement.UI.Core.Models.InstanceDelegation.Frontend;
 using Altinn.AccessManagement.UI.Core.Models.ResourceRegistry.Frontend;
@@ -99,6 +102,14 @@ namespace Altinn.AccessManagement.UI.Core.Services
                 try
                 {
                     d.DialogLookup = await _dialogportClient.GetDialogLookupByInstanceRef(enrichedToken, languageCode, d.Instance.RefId);
+                }
+                catch (HttpStatusException ex) when (ex.StatusCode == HttpStatusCode.NotFound)
+                {
+                    d.DialogLookup = new DialogLookup { Status = DialogLookupStatus.NotFound };
+                }
+                catch (HttpStatusException ex) when (ex.StatusCode == HttpStatusCode.Forbidden)
+                {
+                    d.DialogLookup = new DialogLookup { Status = DialogLookupStatus.Forbidden };
                 }
                 catch (Exception ex)
                 {
