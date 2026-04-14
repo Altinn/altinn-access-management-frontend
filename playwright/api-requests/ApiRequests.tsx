@@ -55,8 +55,9 @@ export class ApiRequests {
 
   public async cleanUpSystemUsers(systemUsers: { id: string }[]): Promise<void> {
     const token = await this.tokenClass.getPersonalAltinnToken();
+    const partyId = env('ALTINN_PARTY_ID');
     for (const systemuser of systemUsers) {
-      await this.deleteSystemUser(token, systemuser.id);
+      await this.deleteSystemUser(token, partyId, systemuser.id);
     }
   }
 
@@ -145,8 +146,12 @@ export class ApiRequests {
     }
   }
 
-  public async deleteSystemUser(token: string, systemUserId: string): Promise<void> {
-    const endpoint = `v1/systemuser/${env('ALTINN_PARTY_ID')}/${systemUserId}`;
+  public async deleteSystemUser(
+    token: string,
+    partyId: string,
+    systemUserId: string,
+  ): Promise<void> {
+    const endpoint = `v1/systemuser/${partyId}/${systemUserId}`;
     const url = `${env('API_BASE_URL')}/authentication/api/${endpoint}`;
 
     try {
@@ -197,44 +202,13 @@ export class ApiRequests {
   public async deleteRegularSystemUser(
     systemId: string,
     partyOrgNo: string,
+    externalRef: string,
     managerPid: string,
   ): Promise<void> {
     const { partyId } = await this.tokenClass.getIds(partyOrgNo);
+    const systemUserId = await this.getSystemUserByQuery(systemId, partyOrgNo, externalRef);
     const token = await this.tokenClass.getPersonalTokenByPid(managerPid);
-    const listUrl = `${env('API_BASE_URL')}/authentication/api/v1/systemuser/${partyId}`;
-
-    const listResponse = await fetch(listUrl, {
-      headers: { Authorization: `Bearer ${token}` },
-    });
-
-    const rawText = await listResponse.text();
-    console.log('[deleteRegularSystemUser] Status:', listResponse.status);
-    console.log('[deleteRegularSystemUser] Response:', rawText);
-
-    if (!listResponse.ok) {
-      throw new Error(`Failed to list system users: ${listResponse.status} ${rawText}`);
-    }
-
-    const systemUsers: Record<string, unknown>[] = JSON.parse(rawText);
-
-    const match = systemUsers.find(
-      (u) => u['systemId'] === systemId || u['system_id'] === systemId,
-    );
-
-    if (!match) {
-      throw new Error(`System user for systemId ${systemId} not found`);
-    }
-
-    const deleteUrl = `${env('API_BASE_URL')}/authentication/api/v1/systemuser/${partyId}/${match['id']}`;
-    const deleteResponse = await fetch(deleteUrl, {
-      method: 'DELETE',
-      headers: { Authorization: `Bearer ${token}` },
-    });
-
-    if (!deleteResponse.ok) {
-      const errorBody = await deleteResponse.text();
-      throw new Error(`Failed to delete system user: ${deleteResponse.status} ${errorBody}`);
-    }
+    await this.deleteSystemUser(token, partyId, systemUserId);
   }
 
   public async postSystemuserRequest(externalRef: string, systemId: string, partyOrgNo?: string) {
