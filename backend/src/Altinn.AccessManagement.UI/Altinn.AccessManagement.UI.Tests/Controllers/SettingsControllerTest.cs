@@ -8,9 +8,17 @@ using System.Text;
 using System.Text.Json;
 using Microsoft.Net.Http.Headers;
 using Altinn.AccessManagement.UI.Controllers;
+using Altinn.AccessManagement.UI.Core.ClientInterfaces;
 using Altinn.AccessManagement.UI.Core.Models.Profile;
+using Altinn.AccessManagement.UI.Mocks.Mocks;
 using Altinn.AccessManagement.UI.Mocks.Utils;
 using Altinn.AccessManagement.UI.Tests.Utils;
+using AltinnCore.Authentication.JwtCookie;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc.Testing;
+using Microsoft.AspNetCore.TestHost;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Options;
 
 namespace Altinn.AccessManagement.UI.Tests.Controllers
 {
@@ -526,6 +534,82 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
             // Assert
             Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
             Assert.Equal("\"Org number must be a number with 9 digits\"", await response.Content.ReadAsStringAsync());
+        }
+
+        /// <summary>
+        ///     Test case: POST with auth cookie present but X-XSRF-TOKEN header missing
+        ///     Expected: Antiforgery filter rejects the request with 400 Bad Request
+        /// </summary>
+        [Fact]
+        public async Task UpdateSelectedLanguage_WithAuthCookieAndMissingXsrfToken_ReturnsBadRequest()
+        {
+            // Arrange
+            HttpClient client = GetCookieAuthTestClient();
+            string token = PrincipalUtil.GetAccessToken("sbl.authorization");
+
+            var request = new HttpRequestMessage(HttpMethod.Post, "accessmanagement/api/v1/settings/language/selectedLanguage");
+            request.Content = JsonContent.Create(new { LanguageCode = "nb" });
+            // Auth cookie is present — this causes the antiforgery filter to fire.
+            // Deliberately omit the X-XSRF-TOKEN header so validation fails.
+            SetupUtils.AddAuthCookie(request, token, "AltinnStudioRuntime");
+
+            // Act
+            HttpResponseMessage response = await client.SendAsync(request);
+
+            // Assert
+            Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
+        }
+
+        /// <summary>
+        ///     Test case: POST with auth cookie present and a valid X-XSRF-TOKEN header
+        ///     Expected: Antiforgery filter passes and the request succeeds with 200 OK
+        /// </summary>
+        [Fact]
+        public async Task UpdateSelectedLanguage_WithAuthCookieAndValidXsrfToken_ReturnsOk()
+        {
+            // Arrange
+            HttpClient client = GetCookieAuthTestClient();
+            string token = PrincipalUtil.GetAccessToken("sbl.authorization");
+
+            // First request: GET the home page to obtain an antiforgery token pair.
+            // HomeController calls IAntiforgery.GetAndStoreTokens, which writes:
+            //   Index 0 — AS-XSRF-TOKEN (server validation cookie, HttpOnly)
+            //   Index 1 — XSRF-TOKEN   (JS-readable request token)
+            // HandleCookies = true on the client automatically stores AS-XSRF-TOKEN
+            // so it is sent on subsequent requests without manual handling.
+            var homeRequest = new HttpRequestMessage(HttpMethod.Get, "accessmanagement/");
+            SetupUtils.AddAuthCookie(homeRequest, token, "AltinnStudioRuntime");
+            SetupUtils.AddLanguageCookie(homeRequest);
+            HttpResponseMessage homeResponse = await client.SendAsync(homeRequest);
+
+            IEnumerable<string> setCookieHeaders = homeResponse.Headers.GetValues("Set-Cookie");
+            // Extract the request token value from the XSRF-TOKEN cookie header.
+            // Cookie header format: "XSRF-TOKEN=<value>; path=/; samesite=strict"
+            string xsrfToken = setCookieHeaders.ElementAt(1).Split("=")[1].Trim().Split(";")[0].Trim();
+
+            // Act — POST with auth cookie and X-XSRF-TOKEN; AS-XSRF-TOKEN is sent
+            // automatically by the client's cookie container.
+            var request = new HttpRequestMessage(HttpMethod.Post, "accessmanagement/api/v1/settings/language/selectedLanguage");
+            request.Content = JsonContent.Create(new { LanguageCode = "nb" });
+            SetupUtils.AddAuthCookie(request, token, "AltinnStudioRuntime", xsrfToken);
+
+            HttpResponseMessage response = await client.SendAsync(request);
+
+            // Assert
+            Assert.Equal(HttpStatusCode.OK, response.StatusCode);
+        }
+
+        private HttpClient GetCookieAuthTestClient()
+        {
+            return _factory.WithWebHostBuilder(builder =>
+            {
+                builder.ConfigureTestServices(services =>
+                {
+                    services.AddTransient<IProfileClient, ProfileClientMock>();
+                    services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
+                    services.AddSingleton<IPostConfigureOptions<JwtCookieOptions>, JwtCookiePostConfigureOptionsStub>();
+                });
+            }).CreateClient(new WebApplicationFactoryClientOptions { AllowAutoRedirect = false });
         }
     }
 }

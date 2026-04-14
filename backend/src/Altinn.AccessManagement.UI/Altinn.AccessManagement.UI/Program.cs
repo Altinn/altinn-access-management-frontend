@@ -53,7 +53,10 @@ builder.Configuration.AddJsonFile(frontendProdFolder + "manifest.json", true, tr
 
 ConfigureServices(builder.Services, builder.Configuration);
 
-builder.Services.AddControllers();
+builder.Services.AddControllers(opt =>
+{
+    opt.Filters.Add(new AutoValidateAntiforgeryTokenIfAuthCookieAttribute());
+});
 
 builder.Services.AddMemoryCache();
 
