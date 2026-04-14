@@ -16,7 +16,6 @@ export const InstanceInboxLink = ({ instance, isLarge = false }: InstanceInboxLi
   const { href, showInboxLink } = getInboxLinkData({
     instanceUrn: instance.instance.refId,
     dialogLookup: instance.dialogLookup ?? undefined,
-    dialogId: instance.dialogLookup?.dialogId,
   });
 
   if (!showInboxLink) {

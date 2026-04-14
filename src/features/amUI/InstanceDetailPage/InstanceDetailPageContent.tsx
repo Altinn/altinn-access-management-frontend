@@ -145,7 +145,7 @@ export const InstanceDetailPageContent = () => {
   const { href: inboxUrl, showInboxLink } = getInboxLinkData({
     instanceUrn,
     dialogLookup: instanceDelegation?.dialogLookup,
-    dialogId: dialogId ?? undefined,
+    isDialogDeepLink: Boolean(dialogId),
   });
 
   const inboxLink = showInboxLink ? (
