@@ -109,7 +109,8 @@ export const InstanceList = ({
                   : undefined,
               };
               const Component = getItemAs?.(instanceDelegation);
-              const hasDialogLookup = dialogLookup !== null && dialogLookup !== undefined;
+              const className =
+                dialogLookup && dialogLookup.status !== 'Success' ? classes.subtleTitle : undefined;
 
               return (
                 <DialogListItem
@@ -118,11 +119,7 @@ export const InstanceList = ({
                   as={Component ?? (onSelect ? 'button' : undefined)}
                   interactive={interactive || !!onSelect}
                   onClick={onSelect ? () => onSelect(instanceDelegation) : undefined}
-                  className={
-                    hasDialogLookup && dialogLookup.status !== 'Success'
-                      ? classes.subtleTitle
-                      : undefined
-                  }
+                  className={className}
                   {...item}
                   controls={<InstanceInboxLink instance={instanceDelegation} />}
                 />
