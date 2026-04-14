@@ -39,7 +39,7 @@ test.describe('Systembruker - Eskaler systembrukerforespørsel', () => {
 
   test.afterEach(async () => {
     try {
-      await api.deleteRegularSystemUser(systemId, partyOrgNo, managerPid);
+      await api.deleteRegularSystemUser(systemId, partyOrgNo, externalRef, managerPid);
     } catch (error) {
       console.error('Cleanup: Failed to delete system user:', error);
     }
