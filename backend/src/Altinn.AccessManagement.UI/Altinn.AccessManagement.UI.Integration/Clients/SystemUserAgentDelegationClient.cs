@@ -126,6 +126,32 @@ namespace Altinn.AccessManagement.UI.Integration.Clients
         }
 
         /// <inheritdoc/>
+        public async Task<Result<bool>> RemoveClient2(int partyId, Guid systemUserId, Guid facilitatorId, Guid clientId, CancellationToken cancellationToken)
+        {
+            try
+            {
+                string token = JwtTokenUtil.GetTokenFromContext(_httpContextAccessor.HttpContext, _platformSettings.JwtCookieName);
+                string endpointUrl = $"systemuser/agent/{partyId}/{systemUserId}?provider={facilitatorId}client={clientId}";
+
+                HttpResponseMessage response = await _client.DeleteAsync(token, endpointUrl);
+                string responseContent = await response.Content.ReadAsStringAsync(cancellationToken);
+
+                if (response.IsSuccessStatusCode)
+                {
+                    return true;
+                }
+
+                _logger.LogError("AccessManagement.UI // SystemUserAgentDelegationClient // RemoveClient // Unexpected HttpStatusCode: {StatusCode}\n {responseBody}", response.StatusCode, responseContent);
+                return ProblemMapper.MapToAuthUiError(responseContent, response.StatusCode);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "AccessManagement.UI // SystemUserAgentDelegationClient // RemoveClient // Exception");
+                throw;
+            }
+        }
+
+        /// <inheritdoc/>
         public async Task<Result<bool>> AddSelf(int partyId, Guid systemUserGuid, Guid partyUuid, CancellationToken cancellationToken)
         {
             try

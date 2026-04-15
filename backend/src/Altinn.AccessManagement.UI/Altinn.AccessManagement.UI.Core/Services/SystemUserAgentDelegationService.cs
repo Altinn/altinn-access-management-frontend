@@ -1,9 +1,11 @@
 using Altinn.AccessManagement.UI.Core.ClientInterfaces;
+using Altinn.AccessManagement.UI.Core.Configuration;
 using Altinn.AccessManagement.UI.Core.Constants;
 using Altinn.AccessManagement.UI.Core.Models.SystemUser;
 using Altinn.AccessManagement.UI.Core.Models.SystemUser.Frontend;
 using Altinn.AccessManagement.UI.Core.Services.Interfaces;
 using Altinn.Authorization.ProblemDetails;
+using Microsoft.Extensions.Options;
 
 namespace Altinn.AccessManagement.UI.Core.Services
 {
@@ -12,18 +14,22 @@ namespace Altinn.AccessManagement.UI.Core.Services
     {
         private readonly ISystemUserAgentDelegationClient _systemUserAgentDelegationClient;
         private readonly ISystemUserClient _systemUserClient;
+        private readonly FeatureFlags _featureFlags;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="SystemUserAgentDelegationService"/> class.
         /// </summary>
         /// <param name="systemUserAgentDelegationClient">The system user client administration client.</param>
         /// <param name="systemUserClient">The system user client</param>
+        /// <param name="featureFlags">Feature flags</param>
         public SystemUserAgentDelegationService(
             ISystemUserAgentDelegationClient systemUserAgentDelegationClient,
-            ISystemUserClient systemUserClient)
+            ISystemUserClient systemUserClient,
+            IOptions<FeatureFlags> featureFlags)
         {
             _systemUserAgentDelegationClient = systemUserAgentDelegationClient;
             _systemUserClient = systemUserClient;
+            _featureFlags = featureFlags.Value;
         }
         
         /// <inheritdoc /> 
@@ -51,15 +57,7 @@ namespace Altinn.AccessManagement.UI.Core.Services
         {
             List<AgentDelegation> delegations = await _systemUserAgentDelegationClient.GetSystemUserAgentDelegations(partyId, partyUuid, systemUserGuid, cancellationToken);
 
-            return delegations.Select(delegation => 
-            {
-                return new AgentDelegationFE()
-                {
-                    AgentSystemUserId = delegation.AgentSystemUserId,
-                    CustomerId = delegation.CustomerId,
-                    DelegationId = delegation.DelegationId,
-                };
-            }).ToList();
+            return delegations.Select(MapAgentDelegationToAgentDelegationFE).ToList();
         }
 
         /// <inheritdoc />
@@ -85,18 +83,15 @@ namespace Altinn.AccessManagement.UI.Core.Services
                 return Problem.CustomerIdNotFound;
             }
 
-            return new AgentDelegationFE()
-            {
-                AgentSystemUserId = addedDelegation.AgentSystemUserId,
-                CustomerId = addedDelegation.CustomerId,
-                DelegationId = addedDelegation.DelegationId,
-            };
+            return MapAgentDelegationToAgentDelegationFE(addedDelegation);
         }
 
         /// <inheritdoc />
-        public async Task<Result<bool>> RemoveClient(int partyId, Guid delegationId, Guid partyUuid, CancellationToken cancellationToken)
+        public async Task<Result<bool>> RemoveClient(int partyId, Guid delegationId, Guid partyUuid, Guid systemUserGuid, CancellationToken cancellationToken)
         {
-            Result<bool> response = await _systemUserAgentDelegationClient.RemoveClient(partyId, partyUuid, delegationId, cancellationToken);
+            Result<bool> response = _featureFlags.UseConnectionsForAgentSystemuser
+                ? await _systemUserAgentDelegationClient.RemoveClient2(partyId, partyUuid, delegationId, systemUserGuid, cancellationToken)
+                : await _systemUserAgentDelegationClient.RemoveClient(partyId, partyUuid, delegationId, cancellationToken);
             if (response.IsProblem)
             {
                 return new Result<bool>(response.Problem);
@@ -139,6 +134,16 @@ namespace Altinn.AccessManagement.UI.Core.Services
             }
 
             return response.Value;
+        }
+
+        private AgentDelegationFE MapAgentDelegationToAgentDelegationFE(AgentDelegation delegation)
+        {
+            return new AgentDelegationFE()
+            {
+                AgentSystemUserId = delegation.AgentSystemUserId,
+                CustomerId = delegation.CustomerId,
+                DelegationId = _featureFlags.UseConnectionsForAgentSystemuser ? delegation.CustomerId : delegation.DelegationId
+            };
         }
 
         private static List<CustomerPartyFE> MapCustomerListToCustomerFE(List<Customer> customers)
