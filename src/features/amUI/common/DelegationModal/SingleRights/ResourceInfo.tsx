@@ -1,35 +1,41 @@
 import * as React from 'react';
 import { Button, DsButton, DsParagraph, formatDisplayName } from '@altinn/altinn-components';
+import { useTranslation } from 'react-i18next';
+import { MinusCircleIcon } from '@navikt/aksel-icons';
 
 import {
   useGetSingleRightsForRightholderQuery,
   type ServiceResource,
 } from '@/rtk/features/singleRights/singleRightsApi';
+import { useGetReporteeQuery, PartyType } from '@/rtk/features/userInfoApi';
+import { useDelegateRights } from '@/resources/hooks/useDelegateRights';
+import { useUpdateResource } from '@/resources/hooks/useUpdateResource';
+import { useRevokeResource } from '@/resources/hooks/useRevokeResource';
 import { StatusMessageForScreenReader } from '@/components/StatusMessageForScreenReader/StatusMessageForScreenReader';
+import { useIsMobileOrSmaller } from '@/resources/utils/screensizeUtils';
+import { createErrorDetails } from '../../TechnicalErrorParagraphs/TechnicalErrorParagraphs';
 
 import { StatusSection } from '../../StatusSection/StatusSection';
-import { useRightsSection } from './hooks/useRightsSection';
 import { LoadingAnimation } from '../../LoadingAnimation/LoadingAnimation';
-import { ResourceHeading } from './ResourceHeading';
-import { ResourceInfoSkeleton } from './ResourceInfoSkeleton';
-
-import classes from './ResourceInfo.module.css';
 import { useInheritedStatusInfo } from '../../useInheritedStatus';
 import { usePartyRepresentation } from '../../PartyRepresentationContext/PartyRepresentationContext';
+import { getMissingAccessMessage } from '../missingAccessUtils';
+import { useRightsSection } from '../hooks/useRightsSection';
 import { DelegationAction } from '../EditModal';
-import { useIsMobileOrSmaller } from '@/resources/utils/screensizeUtils';
-import { useTranslation } from 'react-i18next';
-import { PartyType } from '@/rtk/features/userInfoApi';
-import { createErrorDetails } from '../../TechnicalErrorParagraphs/TechnicalErrorParagraphs';
+import { ResourceHeading } from './ResourceHeading';
+import { ResourceInfoSkeleton } from './ResourceInfoSkeleton';
 import { ResourceAlert } from './ResourceAlert';
-import { MinusCircleIcon } from '@navikt/aksel-icons';
 import { RightsSection } from './RightsSection';
+import { useSingleRightsDelegationRightsData } from './hooks/useSingleRightsDelegationRightsData';
+import { useSingleRightRequests } from './hooks/useSingleRightRequests';
+
+import classes from './ResourceInfo.module.css';
 
 export interface ResourceInfoProps {
   resource: ServiceResource;
   onDelegate?: () => void;
   availableActions?: DelegationAction[];
-  // Optional for single right request flow, where we want to show the resource info but not have a to party context
+  // Optional for the single right request flow, where there may not be a toParty in context
   toPartyName?: string;
 }
 
@@ -40,9 +46,14 @@ export const ResourceInfo = ({
   toPartyName,
 }: ResourceInfoProps) => {
   const isSmall = useIsMobileOrSmaller();
-
   const { t } = useTranslation();
   const { actingParty, fromParty, toParty } = usePartyRepresentation();
+
+  const isSingleRightRequest = availableActions?.includes(DelegationAction.REQUEST);
+  const hasDelegateAction = availableActions?.includes(DelegationAction.DELEGATE);
+  const hasApproveAction = availableActions?.includes(DelegationAction.APPROVE);
+
+  // Used to determine inherited access status (role-based vs directly delegated)
   const { data: resourceDelegations, isLoading: isResourceDelegationsLoading } =
     useGetSingleRightsForRightholderQuery(
       {
@@ -50,48 +61,86 @@ export const ResourceInfo = ({
         from: fromParty?.partyUuid || '',
         to: toParty?.partyUuid || '',
       },
-      {
-        skip: !actingParty || !fromParty || !toParty,
-      },
+      { skip: !actingParty || !fromParty || !toParty },
     );
 
-  const isSingleRightRequest = availableActions?.includes(DelegationAction.REQUEST);
-  const hasDelegateAction = availableActions?.includes(DelegationAction.DELEGATE);
-  const hasApproveAction = availableActions?.includes(DelegationAction.APPROVE);
-
+  // Rights data: which rights exist, which are delegable, and current access state
   const {
     rights,
     setRights,
-    saveEditedRights,
-    delegateChosenRights,
-    revokeResource,
-    undelegableActions,
-    hasUnsavedChanges,
     hasAccess,
+    isLoading: isRightsSectionLoading,
     isDelegationCheckLoading,
     isDelegationCheckError,
     delegationCheckError,
+    delegationCheckedActions,
+    rightsMetaTechnicalErrorDetails,
+  } = useSingleRightsDelegationRightsData({ resource, isRequest: isSingleRightRequest });
+
+  // Request flow: separate from delegation, only available for single right requests
+  const { createRequest, deleteRequest, hasPendingRequest, isLoadingRequest } =
+    useSingleRightRequests({
+      canRequestRights: isSingleRightRequest,
+      actingPartyUuid: actingParty?.partyUuid,
+      fromPartyUuid: fromParty?.partyUuid,
+    });
+
+  // Action functions – each wraps the corresponding hook result and resource context
+  const delegateRights = useDelegateRights();
+  const updateResource = useUpdateResource();
+  const revokeRight = useRevokeResource();
+
+  // Action state: loading/success/error and the three delegation actions
+  const {
+    delegateChosenRights,
+    saveEditedRights,
+    revokeResource,
+    hasUnsavedChanges,
+    undelegableActions,
     delegationError,
-    missingAccess,
-    isLoading: isRightsSectionLoading,
     isActionLoading,
     isActionSuccess,
-    rightsMetaTechnicalErrorDetails,
-    createRequest,
-    deleteRequest,
-    hasPendingRequest,
-    isLoadingRequest,
-  } = useRightsSection({ resource, isRequest: isSingleRightRequest, onDelegate });
+  } = useRightsSection({
+    rights,
+    onDelegate,
+    actions: {
+      delegate: (actionKeys, onSuccess, onError) =>
+        delegateRights(actionKeys, resource.identifier, onSuccess, onError),
+      update: (actionKeys, onSuccess, onError) =>
+        updateResource(resource.identifier, actionKeys, onSuccess, onError),
+      revoke: (onSuccess, onError) => revokeRight(resource.identifier, onSuccess, onError),
+    },
+  });
 
-  const hasDelegableRights = rights.some((r) => r.delegable);
-  const showMissingRightsStatus =
-    !hasAccess && rights.length > 0 && !hasDelegableRights && !isSingleRightRequest;
-  const cannotDelegateHere = resource?.delegable === false && !isSingleRightRequest;
-  const cannotRequestRight = resource?.delegable === false && isSingleRightRequest;
-  const resourcePermissions =
-    resourceDelegations?.find(
-      (delegation) => delegation.resource.identifier === resource.identifier,
-    )?.permissions || [];
+  // Reportee name is used in the missing access message when the acting party lacks rights
+  const { data: reportee } = useGetReporteeQuery();
+
+  // Warning shown when the acting party cannot delegate one or more rights.
+  // Suppressed while an action is running or has just failed (error message takes precedence).
+  const rawMissingAccess = delegationCheckedActions
+    ? getMissingAccessMessage(
+        delegationCheckedActions,
+        t,
+        resource?.resourceOwnerName,
+        reportee?.name,
+      )
+    : null;
+  const missingAccess = isActionLoading || delegationError ? null : rawMissingAccess;
+
+  // Technical error details used in ResourceAlert (shown instead of the rights list)
+  const delegationCheckErrorDetails = isDelegationCheckError
+    ? createErrorDetails(delegationCheckError)
+    : null;
+  const technicalErrorDetails = rightsMetaTechnicalErrorDetails ?? delegationCheckErrorDetails;
+
+  const inheritedStatus = useInheritedStatusInfo({
+    permissions:
+      resourceDelegations?.find((d) => d.resource.identifier === resource.identifier)
+        ?.permissions || [],
+    toParty,
+    fromParty,
+    actingParty,
+  });
 
   const toName =
     toPartyName ??
@@ -99,9 +148,16 @@ export const ResourceInfo = ({
       fullName: toParty?.name ?? '',
       type: toParty?.partyTypeName === PartyType.Organization ? 'company' : 'person',
     });
+
+  const hasDelegableRights = rights.some((r) => r.delegable);
+  const showMissingRightsStatus =
+    !hasAccess && rights.length > 0 && !hasDelegableRights && !isSingleRightRequest;
+  const cannotDelegateHere = resource?.delegable === false && !isSingleRightRequest;
+  const cannotRequestRight = resource?.delegable === false && isSingleRightRequest;
+
   const displayResourceAlert =
     (isSingleRightRequest && resource?.delegable === false) ||
-    !!rightsMetaTechnicalErrorDetails ||
+    !!technicalErrorDetails ||
     (hasApproveAction && !hasAccess && missingAccess) ||
     ((hasDelegateAction || hasApproveAction) &&
       !hasAccess &&
@@ -109,18 +165,6 @@ export const ResourceInfo = ({
         resource?.delegable === false ||
         (rights.length > 0 && !rights.some((r) => r.delegable === true))));
 
-  const delegationCheckErrorDetails = isDelegationCheckError
-    ? createErrorDetails(delegationCheckError)
-    : null;
-
-  const technicalErrorDetails = rightsMetaTechnicalErrorDetails ?? delegationCheckErrorDetails;
-
-  const inheritedStatus = useInheritedStatusInfo({
-    permissions: resourcePermissions,
-    toParty,
-    fromParty,
-    actingParty,
-  });
   const isLoadingSingleRightRequest = isLoadingRequest(resource.identifier);
 
   return (
