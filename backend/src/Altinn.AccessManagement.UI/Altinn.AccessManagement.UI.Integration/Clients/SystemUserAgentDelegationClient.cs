@@ -131,7 +131,7 @@ namespace Altinn.AccessManagement.UI.Integration.Clients
             try
             {
                 string token = JwtTokenUtil.GetTokenFromContext(_httpContextAccessor.HttpContext, _platformSettings.JwtCookieName);
-                string endpointUrl = $"systemuser/agent/{partyId}/{systemUserGuid}?provider={facilitatorId}client={clientId}";
+                string endpointUrl = $"systemuser/agent/{partyId}/{systemUserGuid}?provider={facilitatorId}&client={clientId}";
 
                 HttpResponseMessage response = await _client.DeleteAsync(token, endpointUrl);
                 string responseContent = await response.Content.ReadAsStringAsync(cancellationToken);
@@ -141,12 +141,12 @@ namespace Altinn.AccessManagement.UI.Integration.Clients
                     return true;
                 }
 
-                _logger.LogError("AccessManagement.UI // SystemUserAgentDelegationClient // RemoveClient // Unexpected HttpStatusCode: {StatusCode}\n {responseBody}", response.StatusCode, responseContent);
+                _logger.LogError("AccessManagement.UI // SystemUserAgentDelegationClient // RemoveClient2 // Unexpected HttpStatusCode: {StatusCode}\n {responseBody}", response.StatusCode, responseContent);
                 return ProblemMapper.MapToAuthUiError(responseContent, response.StatusCode);
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "AccessManagement.UI // SystemUserAgentDelegationClient // RemoveClient // Exception");
+                _logger.LogError(ex, "AccessManagement.UI // SystemUserAgentDelegationClient // RemoveClient2 // Exception");
                 throw;
             }
         }
