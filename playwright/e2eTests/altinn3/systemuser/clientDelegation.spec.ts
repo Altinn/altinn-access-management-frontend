@@ -9,8 +9,7 @@ test.describe('Delegering av klienter til Systembruker', () => {
   let api: ApiRequests;
 
   test.beforeEach(() => {
-    const orgNumber = '310547891'; // Hardcoded org ID for testing
-    api = new ApiRequests(orgNumber);
+    api = new ApiRequests('310547891');
   });
 
   test.describe('Ansvarlig revisor', () => {

@@ -3,17 +3,20 @@ import { expect, test } from 'playwright/fixture/pomFixture';
 import { TestdataApi } from 'playwright/util/TestdataApi';
 import { ApiRequests } from 'playwright/api-requests/ApiRequests';
 import { env } from 'playwright/util/helper';
+const vendorOrgNumber = '310547891';
+const testUserPid = '14824497789';
+const testOrgName = 'Aktverdig Retorisk Ape';
+const testUserName = 'Skravlete Blåveis';
 
 test.describe('System Register', async () => {
   let system: string;
 
   test.beforeEach(async ({ page, login }) => {
-    const orgNumber = '310547891';
-    const api = new ApiRequests(orgNumber);
+    const api = new ApiRequests(vendorOrgNumber);
     await page.goto(env('BASE_URL'));
     system = await api.createSystemSystemRegister();
-    await login.LoginToAccessManagement('14824497789');
-    await login.chooseReportee('Skravlete Blåveis', 'Aktverdig Retorisk Ape');
+    await login.LoginToAccessManagement(testUserPid);
+    await login.chooseReportee(testUserName, testOrgName);
   });
 
   test('Create system user and verify landing page', async ({

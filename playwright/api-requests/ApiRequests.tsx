@@ -13,6 +13,7 @@ export class ApiRequests {
     name: string,
     accessPackages?: { urn: string }[],
     redirectUrl?: string,
+    rights?: { resource: { value: string; id: string }[] }[],
   ): Promise<string> {
     const vendorId = this.tokenClass.orgNo;
     const clientId = `Client_${Date.now()}_${Math.random()}`;
@@ -32,6 +33,7 @@ export class ApiRequests {
         nb: 'Integrasjonstest. Noe er randomisert her, men mye blir likt.',
         nn: 'integrasjonstest på nynorsk. Noe er randomisert her, men mye blir likt.',
       },
+      rights: rights ?? [],
       accessPackages: accessPackages ?? [
         { urn: 'urn:altinn:accesspackage:regnskapsforer-med-signeringsrettighet' },
         { urn: 'urn:altinn:accesspackage:regnskapsforer-uten-signeringsrettighet' },
@@ -178,7 +180,7 @@ export class ApiRequests {
     systemId: string,
     accessPackageUrn: string,
     partyOrgNo: string,
-    externalRef: string,
+    externalRef: string = TestdataApi.generateExternalRef(),
   ) {
     const payload = {
       externalRef,
@@ -200,29 +202,31 @@ export class ApiRequests {
   }
 
   public async deleteRegularSystemUser(
-    systemId: string,
+    systemUserId: string,
     partyOrgNo: string,
-    externalRef: string,
     managerPid: string,
   ): Promise<void> {
     const { partyId } = await this.tokenClass.getIds(partyOrgNo);
-    const systemUserId = await this.getSystemUserByQuery(systemId, partyOrgNo, externalRef);
     const token = await this.tokenClass.getPersonalTokenByPid(managerPid);
     await this.deleteSystemUser(token, partyId, systemUserId);
   }
 
-  public async postSystemuserRequest(externalRef: string, systemId: string, partyOrgNo?: string) {
+  public async postSystemuserRequest(
+    externalRef: string,
+    systemId: string,
+    partyOrgNo?: string,
+    redirectUrl?: string,
+    rights?: { resource: { value: string; id: string }[] }[],
+    accessPackages?: { urn: string }[],
+  ) {
     const resolvedPartyOrgNo = partyOrgNo ?? `${this.tokenClass.orgNo}`;
     const payload = {
       systemId: `${systemId}`,
       partyOrgNo: resolvedPartyOrgNo,
       externalRef: externalRef,
-      accessPackages: [
-        {
-          urn: 'urn:altinn:accesspackage:baerekraft',
-        },
-      ],
-      redirectUrl: 'https://example.com/',
+      rights: rights ?? [],
+      accessPackages: accessPackages ?? [{ urn: 'urn:altinn:accesspackage:baerekraft' }],
+      redirectUrl: redirectUrl ?? '',
     };
 
     const endpoint = '/authentication/api/v1/systemuser/request/vendor';
@@ -263,40 +267,22 @@ export class ApiRequests {
     }
   }
 
-  public async postSystemuserChangeRequest(systemUserId: string) {
+  public async postSystemuserChangeRequest(
+    systemUserId: string,
+    changes: {
+      requiredRights: { resource: { value: string; id: string }[] }[];
+      unwantedRights: { resource: { value: string; id: string }[] }[];
+      requiredAccessPackages: { urn: string }[];
+      unwantedAccessPackages: { urn: string }[];
+    },
+  ) {
     const id: string = crypto.randomUUID();
 
     const payload = {
-      unwantedRights: [
-        {
-          resource: [
-            {
-              value: 'authentication-e2e-test',
-              id: 'urn:altinn:resource',
-            },
-          ],
-        },
-      ],
-      requiredRights: [
-        {
-          resource: [
-            {
-              value: 'vegardtestressurs',
-              id: 'urn:altinn:resource',
-            },
-          ],
-        },
-      ],
-      requiredAccessPackages: [
-        {
-          urn: 'urn:altinn:accesspackage:plansak',
-        },
-      ],
-      unwantedAccessPackages: [
-        {
-          urn: 'urn:altinn:accesspackage:baerekraft',
-        },
-      ],
+      unwantedRights: changes.unwantedRights,
+      requiredRights: changes.requiredRights,
+      requiredAccessPackages: changes.requiredAccessPackages,
+      unwantedAccessPackages: changes.unwantedAccessPackages,
     };
 
     const endpoint = `/authentication/api/v1/systemuser/changerequest/vendor?correlation-id=${id}&system-user-id=${systemUserId}`;
