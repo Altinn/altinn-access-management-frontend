@@ -20,7 +20,7 @@ test.describe('Godkjenn og avvis Systembrukerforespørsel', () => {
       return await api.postSystemuserRequest(
         externalRef,
         prebuiltSystemId,
-        undefined,
+        vendorOrgNumber,
         'https://altinn.no/',
       );
     });
@@ -53,7 +53,7 @@ test.describe('Godkjenn og avvis Systembrukerforespørsel', () => {
       return await api.postSystemuserRequest(
         externalRef,
         prebuiltSystemId,
-        undefined,
+        vendorOrgNumber,
         'https://altinn.no/',
       );
     });

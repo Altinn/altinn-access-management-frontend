@@ -41,7 +41,11 @@ test.describe('Systembruker endringsforespørsel', () => {
     const externalRef = TestdataApi.generateExternalRef();
 
     await test.step('Create and approve system user request', async () => {
-      const response = await api.postSystemuserRequest(externalRef, prebuiltSystemId);
+      const response = await api.postSystemuserRequest(
+        externalRef,
+        prebuiltSystemId,
+        vendorOrgNumber,
+      );
       await api.approveSystemuserRequest(response.id);
     });
 
@@ -83,7 +87,11 @@ test.describe('Systembruker endringsforespørsel', () => {
     const externalRef = TestdataApi.generateExternalRef();
 
     await test.step('Create and approve system user request', async () => {
-      const response = await api.postSystemuserRequest(externalRef, prebuiltSystemId);
+      const response = await api.postSystemuserRequest(
+        externalRef,
+        prebuiltSystemId,
+        vendorOrgNumber,
+      );
       await api.approveSystemuserRequest(response.id);
     });
 

@@ -77,8 +77,8 @@ test.describe('Systembruker - Eskaler systembrukerforespørsel', () => {
       await clientDelegationPage.systemUserLink(name).click();
       systemUserId = new URL(page.url()).pathname.split('/').pop()!;
       await expect(page.getByRole('button', { name: 'Bærekraft' })).toBeVisible();
-      await expect(page.getByRole('button', { name: 'vegardtestressurs' })).toBeVisible();
-      await expect(page.getByRole('button', { name: 'authentication-e2e-test' })).not.toBeVisible();
+      await expect(page.getByRole('button', { name: 'vegardendetilende' })).toBeVisible();
+      await expect(page.getByRole('button', { name: 'authentication-e2e-test' })).toBeVisible();
     });
   });
 

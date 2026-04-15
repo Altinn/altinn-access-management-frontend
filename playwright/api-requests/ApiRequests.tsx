@@ -214,15 +214,14 @@ export class ApiRequests {
   public async postSystemuserRequest(
     externalRef: string,
     systemId: string,
-    partyOrgNo?: string,
+    partyOrgNo: string,
     redirectUrl?: string,
     rights?: { resource: { value: string; id: string }[] }[],
     accessPackages?: { urn: string }[],
   ) {
-    const resolvedPartyOrgNo = partyOrgNo ?? `${this.tokenClass.orgNo}`;
     const payload = {
       systemId: `${systemId}`,
-      partyOrgNo: resolvedPartyOrgNo,
+      partyOrgNo,
       externalRef: externalRef,
       rights: rights ?? [],
       accessPackages: accessPackages ?? [{ urn: 'urn:altinn:accesspackage:baerekraft' }],
