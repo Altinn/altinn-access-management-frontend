@@ -126,12 +126,12 @@ namespace Altinn.AccessManagement.UI.Integration.Clients
         }
 
         /// <inheritdoc/>
-        public async Task<Result<bool>> RemoveClient2(int partyId, Guid systemUserId, Guid facilitatorId, Guid clientId, CancellationToken cancellationToken)
+        public async Task<Result<bool>> RemoveClient2(int partyId, Guid systemUserGuid, Guid facilitatorId, Guid clientId, CancellationToken cancellationToken)
         {
             try
             {
                 string token = JwtTokenUtil.GetTokenFromContext(_httpContextAccessor.HttpContext, _platformSettings.JwtCookieName);
-                string endpointUrl = $"systemuser/agent/{partyId}/{systemUserId}?provider={facilitatorId}client={clientId}";
+                string endpointUrl = $"systemuser/agent/{partyId}/{systemUserGuid}?provider={facilitatorId}client={clientId}";
 
                 HttpResponseMessage response = await _client.DeleteAsync(token, endpointUrl);
                 string responseContent = await response.Content.ReadAsStringAsync(cancellationToken);

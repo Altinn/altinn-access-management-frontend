@@ -73,9 +73,9 @@ namespace Altinn.AccessManagement.UI.Mocks.Mocks
             return Task.FromResult(new Result<bool>(true));
         }
 
-        public Task<Result<bool>> RemoveClient2(int partyId, Guid facilitatorId, Guid delegationId, Guid systemUserGuid, CancellationToken cancellationToken)
+        public Task<Result<bool>> RemoveClient2(int partyId, Guid systemUserGuid, Guid facilitatorId, Guid clientId, CancellationToken cancellationToken)
         {
-            if (delegationId.Equals(Guid.Parse("60f1ade9-ed48-4083-a369-178d45d6ffd1"))) 
+            if (clientId.Equals(Guid.Parse("60f1ade9-ed48-4083-a369-178d45d6ffd1"))) 
             {
                 return Task.FromResult(new Result<bool>(TestErrors.CustomerNotFound));
             }

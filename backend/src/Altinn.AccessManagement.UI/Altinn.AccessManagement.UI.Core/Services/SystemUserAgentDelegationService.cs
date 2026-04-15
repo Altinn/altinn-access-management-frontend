@@ -90,7 +90,7 @@ namespace Altinn.AccessManagement.UI.Core.Services
         public async Task<Result<bool>> RemoveClient(int partyId, Guid delegationId, Guid partyUuid, Guid systemUserGuid, CancellationToken cancellationToken)
         {
             Result<bool> response = _featureFlags.UseConnectionsForAgentSystemuser
-                ? await _systemUserAgentDelegationClient.RemoveClient2(partyId, partyUuid, delegationId, systemUserGuid, cancellationToken)
+                ? await _systemUserAgentDelegationClient.RemoveClient2(partyId, systemUserGuid, partyUuid, delegationId, cancellationToken)
                 : await _systemUserAgentDelegationClient.RemoveClient(partyId, partyUuid, delegationId, cancellationToken);
             if (response.IsProblem)
             {
