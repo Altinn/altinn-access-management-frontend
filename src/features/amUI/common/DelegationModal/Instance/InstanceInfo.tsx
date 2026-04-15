@@ -4,21 +4,28 @@ import { useTranslation } from 'react-i18next';
 import { MinusCircleIcon } from '@navikt/aksel-icons';
 
 import type { ServiceResource } from '@/rtk/features/singleRights/singleRightsApi';
-import type { DialogLookup } from '@/rtk/features/instanceApi';
-
-import type { DelegationRecipient } from '../EditModal';
+import { useGetReporteeQuery, PartyType } from '@/rtk/features/userInfoApi';
+import {
+  type DialogLookup,
+  useDelegateInstanceRightsMutation,
+  useUpdateInstanceRightsMutation,
+  useRemoveInstanceMutation,
+} from '@/rtk/features/instanceApi';
 import { StatusMessageForScreenReader } from '@/components/StatusMessageForScreenReader/StatusMessageForScreenReader';
 import { useIsMobileOrSmaller } from '@/resources/utils/screensizeUtils';
-import { PartyType } from '@/rtk/features/userInfoApi';
+import { createErrorDetails } from '../../TechnicalErrorParagraphs/TechnicalErrorParagraphs';
 
 import { StatusSection } from '../../StatusSection/StatusSection';
 import { LoadingAnimation } from '../../LoadingAnimation/LoadingAnimation';
+import { usePartyRepresentation } from '../../PartyRepresentationContext/PartyRepresentationContext';
+import { getMissingAccessMessage } from '../missingAccessUtils';
+import { useRightsSection } from '../hooks/useRightsSection';
+import type { DelegationRecipient } from '../EditModal';
+import { DelegationAction } from '../EditModal';
 import { RightsSection } from '../SingleRights/RightsSection';
 import { ResourceAlert } from '../SingleRights/ResourceAlert';
 import { ResourceInfoSkeleton } from '../SingleRights/ResourceInfoSkeleton';
-import { usePartyRepresentation } from '../../PartyRepresentationContext/PartyRepresentationContext';
-import { DelegationAction } from '../EditModal';
-import { useInstanceRightsSection } from './useInstanceRightsSection';
+import { useInstanceDelegationRightsData } from './useInstanceDelegationRightsData';
 import { InstanceHeading } from './InstanceHeading';
 
 import classes from './InstanceInfo.module.css';
@@ -42,43 +49,125 @@ export const InstanceInfo = ({
 }: InstanceInfoProps) => {
   const { t } = useTranslation();
   const isSmall = useIsMobileOrSmaller();
-  const { toParty: toPartyContext, fromParty } = usePartyRepresentation();
+  const { toParty: toPartyContext, fromParty, actingParty } = usePartyRepresentation();
 
   const toParty = toPartyProp ?? toPartyContext;
+  const toPartyUuid = toParty?.partyUuid ?? '';
+
+  const hasDelegateAction = availableActions?.includes(DelegationAction.DELEGATE);
+  const canRevoke = availableActions?.includes(DelegationAction.REVOKE) ?? false;
 
   const toName = formatDisplayName({
     fullName: toParty?.name ?? '',
     type: toParty?.partyTypeName === PartyType.Organization ? 'company' : 'person',
   });
 
-  const hasDelegateAction = availableActions?.includes(DelegationAction.DELEGATE);
-  const canRevoke = availableActions?.includes(DelegationAction.REVOKE) ?? false;
-
+  // Rights data: which rights exist, which are delegable, and current access state
   const {
     rights,
     setRights,
-    saveEditedRights,
-    delegateChosenRights,
-    revokeResource,
-    undelegableActions,
-    hasUnsavedChanges,
     hasAccess,
     hasDirectAccess,
+    isLoading,
     isDelegationCheckLoading,
     isDelegationCheckError,
-    delegationError,
-    missingAccess,
-    isLoading,
-    isActionLoading,
-    isActionSuccess,
-    technicalErrorDetails,
-  } = useInstanceRightsSection({
-    resource,
+    delegationCheckError,
+    delegationCheckedRights,
+    rightsMetaTechnicalErrorDetails,
+    instanceRightsErrorDetails,
+  } = useInstanceDelegationRightsData({
+    resourceId: resource.identifier,
     instanceUrn,
-    toPartyUuid: toParty?.partyUuid,
-    onSuccess,
+    fromPartyUuid: fromParty?.partyUuid,
+    toPartyUuid,
     mode: canRevoke ? 'edit' : 'delegate',
   });
+
+  // Instance mutations – called via useRightsSection actions below
+  const [delegateInstance] = useDelegateInstanceRightsMutation();
+  const [updateInstance] = useUpdateInstanceRightsMutation();
+  const [removeInstance] = useRemoveInstanceMutation();
+
+  // Action state: loading/success/error and the three delegation actions.
+  // Each action wraps the corresponding RTK mutation with the current context.
+  const {
+    delegateChosenRights,
+    saveEditedRights,
+    revokeResource,
+    hasUnsavedChanges,
+    undelegableActions,
+    delegationError,
+    isActionLoading,
+    isActionSuccess,
+  } = useRightsSection({
+    rights,
+    onDelegate: onSuccess,
+    actions: {
+      delegate: (actionKeys, onSuccessCb, onError) => {
+        if (!actingParty) return;
+        delegateInstance({
+          party: actingParty.partyUuid,
+          to: toPartyUuid,
+          resource: resource.identifier,
+          instance: instanceUrn,
+          input: { directRightKeys: actionKeys },
+        })
+          .unwrap()
+          .then(onSuccessCb)
+          .catch(onError);
+      },
+      update: (actionKeys, onSuccessCb, onError) => {
+        if (!actingParty) return;
+        updateInstance({
+          party: actingParty.partyUuid,
+          to: toPartyUuid,
+          resource: resource.identifier,
+          instance: instanceUrn,
+          actionKeys,
+        })
+          .unwrap()
+          .then(onSuccessCb)
+          .catch(onError);
+      },
+      revoke: (onSuccessCb, onError) => {
+        if (!actingParty || !fromParty) return;
+        removeInstance({
+          party: actingParty.partyUuid,
+          from: fromParty.partyUuid,
+          to: toPartyUuid,
+          resource: resource.identifier,
+          instance: instanceUrn,
+        })
+          .unwrap()
+          .then(onSuccessCb)
+          .catch(onError);
+      },
+    },
+  });
+
+  // Reportee name is used in the missing access message
+  const { data: reportee } = useGetReporteeQuery();
+
+  // Warning shown when the acting party cannot delegate one or more rights.
+  // Suppressed while an action is running or has just failed (error message takes precedence).
+  const rawMissingAccess = delegationCheckedRights
+    ? getMissingAccessMessage(
+        delegationCheckedRights,
+        t,
+        resource?.resourceOwnerName,
+        reportee?.name,
+      )
+    : null;
+  const missingAccess = isActionLoading || delegationError ? null : rawMissingAccess;
+
+  // Technical error details: prefer rightsMeta error, fall back to instance rights or delegation check errors
+  const delegationCheckErrorDetails = isDelegationCheckError
+    ? createErrorDetails(delegationCheckError)
+    : null;
+  const technicalErrorDetails =
+    rightsMetaTechnicalErrorDetails ??
+    instanceRightsErrorDetails ??
+    (hasAccess ? null : delegationCheckErrorDetails);
 
   const hasDelegableRights = rights.some((r) => r.delegable);
   const showMissingRightsStatus = !hasAccess && rights.length > 0 && !hasDelegableRights;
