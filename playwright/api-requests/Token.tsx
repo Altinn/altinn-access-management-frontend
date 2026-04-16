@@ -32,35 +32,6 @@ export class Token {
     return token;
   }
 
-  public async generateAltinnPersonalToken(): Promise<string> {
-    const url =
-      `https://altinn-testtools-token-generator.azurewebsites.net/api/GetPersonalToken` +
-      `?env=${env('ENV_NAME')}` +
-      `&pid=${env('DAGL_PID')}` +
-      `&userid=${env('DAGL_USER_ID')}` +
-      `&partyid=${env('DAGL_PARTY_ID')}` +
-      `&partyuuid=${env('DAGL_PARTY_UUID')}` +
-      `&authLvl=3&ttl=3000&scopes=altinn:portal/enduser`;
-
-    const authHeader = Buffer.from(`${this.username}:${this.password}`).toString('base64');
-
-    const response = await fetch(url, {
-      headers: { Authorization: `Basic ${authHeader}` },
-    });
-
-    const token = await response.text();
-
-    if (!token || !token.startsWith('ey')) {
-      throw new Error('Invalid token received from Altinn');
-    }
-
-    return token;
-  }
-  catch(err: unknown) {
-    console.error('Error retrieving Altinn token:', err);
-    throw err;
-  }
-
   public async getPersonalCleanupAltinnToken(person: {
     PID?: string;
     UserId?: string;
