@@ -18,6 +18,7 @@ import { usePartyRepresentation } from '../../common/PartyRepresentationContext/
 import { ResourceHeading } from '../../common/DelegationModal/SingleRights/ResourceHeading';
 import { RightsSection } from '../../common/DelegationModal/SingleRights/RightsSection';
 import { useRightsSection } from '../../common/DelegationModal/SingleRights/hooks/useRightsSection';
+import { DelegationAction } from '../../common/DelegationModal/EditModal';
 
 interface DraftRequestPageContentProps {
   request: EnrichedRequestDto;
@@ -126,8 +127,7 @@ export const DraftRequestPageContent = ({ request }: DraftRequestPageContentProp
           undelegableActions={[]}
           isDelegationCheckLoading={false}
           toName={isSelfParty ? t('common.you_uppercase') : fromName}
-          isSingleRightRequest={true}
-          availableActions={[]}
+          availableActions={[DelegationAction.REQUEST]}
           delegationError={null}
           missingAccess={null}
         />
