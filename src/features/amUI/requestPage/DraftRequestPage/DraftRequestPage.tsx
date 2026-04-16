@@ -19,10 +19,12 @@ import { redirectToChangeReporteeAndRedirect } from '@/resources/utils/changeRep
 import { getCookie } from '@/resources/Cookie/CookieMethods';
 import { RequestPageLayout } from '../../common/RequestPageLayout/RequestPageLayout';
 import { DraftRequestBody } from './DraftRequestBody';
+import { useDocumentTitle } from '@/resources/hooks/useDocumentTitle';
 
 export const DraftRequestPage = () => {
   const { t } = useTranslation();
 
+  useDocumentTitle(t('draft_request_page.page_title'));
   const [searchParams] = useSearchParams();
   const partyUuid = getCookie('AltinnPartyUuid') || '';
   const requestId = searchParams.get('requestId') ?? '';
