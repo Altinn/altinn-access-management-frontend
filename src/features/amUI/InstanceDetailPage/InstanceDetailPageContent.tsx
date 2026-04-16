@@ -185,8 +185,7 @@ export const InstanceDetailPageContent = () => {
       {resource && (
         <InstanceDetailHeader
           resource={resource}
-          resourceId={resourceId}
-          instanceUrn={instanceUrn}
+          instance={instanceDelegation?.instance}
           dialogLookup={instanceDelegation?.dialogLookup}
           providerLogoUrl={providerLogoUrl}
           fromPartyName={fromParty?.name}

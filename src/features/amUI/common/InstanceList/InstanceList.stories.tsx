@@ -8,6 +8,11 @@ import type { InstanceDelegation } from '@/rtk/features/instanceApi';
 
 import { InstanceList } from './InstanceList';
 
+window.featureFlags = {
+  ...window.featureFlags,
+  enableDialogportenDialogLookup: true,
+};
+
 const digdirResource = {
   identifier: 'digdir-eksempeltjeneste',
   title: 'Eksempeltjeneste',

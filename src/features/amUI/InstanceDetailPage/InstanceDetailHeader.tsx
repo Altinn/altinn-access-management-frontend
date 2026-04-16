@@ -1,17 +1,16 @@
 import { DsHeading, DsParagraph, Icon, formatDisplayName } from '@altinn/altinn-components';
 import { useTranslation } from 'react-i18next';
 
-import type { DialogLookup } from '@/rtk/features/instanceApi';
+import type { DelegationInstance, DialogLookup } from '@/rtk/features/instanceApi';
 import { PartyType } from '@/rtk/features/userInfoApi';
 import type { ServiceResource } from '@/rtk/features/singleRights/singleRightsApi';
-import { getDialogTitle, resolveInstanceTitle } from '../common/InstanceList/instanceListUtils';
+import { resolveInstanceTitle } from '../common/InstanceList/instanceListUtils';
 
 import classes from './InstanceDetailHeader.module.css';
 
 interface InstanceDetailHeaderProps {
   resource: ServiceResource;
-  resourceId: string;
-  instanceUrn: string;
+  instance?: DelegationInstance;
   dialogLookup?: DialogLookup;
   providerLogoUrl?: string;
   fromPartyName?: string;
@@ -20,8 +19,7 @@ interface InstanceDetailHeaderProps {
 
 export const InstanceDetailHeader = ({
   resource,
-  resourceId,
-  instanceUrn,
+  instance,
   dialogLookup,
   providerLogoUrl,
   fromPartyName,
@@ -29,18 +27,16 @@ export const InstanceDetailHeader = ({
 }: InstanceDetailHeaderProps) => {
   const { t, i18n } = useTranslation();
   const title = resolveInstanceTitle(
-    {
-      instance: {
-        refId: instanceUrn,
-        type: null,
-      },
-      dialogLookup,
-    },
+    instance
+      ? {
+          instance,
+          dialogLookup,
+        }
+      : undefined,
     resource,
     t,
     i18n.language,
   );
-  const dialogTitle = getDialogTitle(dialogLookup, i18n.language);
 
   return (
     <div className={classes.infoHeading}>
@@ -48,11 +44,7 @@ export const InstanceDetailHeader = ({
         level={1}
         data-size='sm'
       >
-        {dialogTitle
-          ? dialogTitle
-          : t('instance_detail_page.resource_title', {
-              title: title || (resource.title ?? resourceId),
-            })}
+        {title}
       </DsHeading>
       <div className={classes.resourceOwner}>
         <Icon

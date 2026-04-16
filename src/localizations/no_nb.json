@@ -957,8 +957,8 @@
     "title_forbidden": "Melding eller skjema du ikke har fullmakt til",
     "title_not_found": "Ukjent melding eller skjema",
     "title_correspondence_not_found": "Melding om tjenesten {{resourceName}}",
-    "service_title_label": "Skjema av tjenesten",
-    "instance_id_label": "Id"
+    "service_title_label": "Tjeneste",
+    "instance_id_label": "ID"
   },
   "instance_detail_page": {
     "document_title": "Delt fra innboks",

@@ -960,8 +960,8 @@
     "title_forbidden": "Message or form you do not have access to",
     "title_not_found": "Unknown message or form",
     "title_correspondence_not_found": "Message about service {{resourceName}}",
-    "service_title_label": "Form for service",
-    "instance_id_label": "Id"
+    "service_title_label": "Service",
+    "instance_id_label": "ID"
   },
   "instance_detail_page": {
     "document_title": "Shared from inbox",
