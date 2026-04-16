@@ -29,6 +29,16 @@ namespace Altinn.AccessManagement.UI.Core.ClientInterfaces
         Task<Result<List<AgentDelegation>>> AddClient(int partyId, Guid systemUserGuid, AgentDelegationRequest delegationRequest, CancellationToken cancellationToken);
 
         /// <summary>
+        /// Add client to system user
+        /// </summary>
+        /// <param name="partyId">The party id of the party owning system user to add customer to</param>
+        /// <param name="systemUserGuid">The system user UUID to add customer to</param>
+        /// <param name="delegationRequest">The party uuid of the customer to add + partyUuid of system user owner party</param>
+        /// <param name="cancellationToken">Cancellation token</param>
+        /// <returns>List of AgentDelegation objects with delegation info</returns>
+        Task<Result<List<AgentDelegation>>> AddClient2(int partyId, Guid systemUserGuid, AgentDelegationRequest delegationRequest, CancellationToken cancellationToken);
+
+        /// <summary>
         /// Remove client from system user
         /// </summary>
         /// <param name="partyId">The party id of the party owning system user to remove customer from</param>

@@ -70,8 +70,10 @@ namespace Altinn.AccessManagement.UI.Core.Services
                 FacilitatorId = partyUuid
             };
 
-            Result<List<AgentDelegation>> newAgentDelegations = await _systemUserAgentDelegationClient.AddClient(partyId, systemUserGuid, delegationRequest, cancellationToken);
-            
+            Result<List<AgentDelegation>> newAgentDelegations = _featureFlags.UseConnectionsForAgentSystemuser
+                ? await _systemUserAgentDelegationClient.AddClient2(partyId, systemUserGuid, delegationRequest, cancellationToken)
+                : await _systemUserAgentDelegationClient.AddClient(partyId, systemUserGuid, delegationRequest, cancellationToken);
+
             if (newAgentDelegations.IsProblem)
             {
                 return new Result<AgentDelegationFE>(newAgentDelegations.Problem);

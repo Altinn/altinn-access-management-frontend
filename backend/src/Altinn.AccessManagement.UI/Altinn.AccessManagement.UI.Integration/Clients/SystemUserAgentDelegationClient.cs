@@ -100,6 +100,33 @@ namespace Altinn.AccessManagement.UI.Integration.Clients
         }
 
         /// <inheritdoc/>
+        public async Task<Result<List<AgentDelegation>>> AddClient2(int partyId, Guid systemUserGuid, AgentDelegationRequest delegationRequest, CancellationToken cancellationToken)
+        {
+            try
+            {
+                string token = JwtTokenUtil.GetTokenFromContext(_httpContextAccessor.HttpContext, _platformSettings.JwtCookieName);
+                string endpointUrl = $"systemuser/agent/{partyId}/{systemUserGuid}?provider={delegationRequest.FacilitatorId}&client={delegationRequest.CustomerId}";
+                StringContent requestBody = new StringContent(JsonSerializer.Serialize(delegationRequest, _serializerOptions), System.Text.Encoding.UTF8, "application/json");
+
+                HttpResponseMessage response = await _client.PostAsync(token, endpointUrl, requestBody);
+                string responseContent = await response.Content.ReadAsStringAsync(cancellationToken);
+
+                if (response.IsSuccessStatusCode)
+                {
+                    return JsonSerializer.Deserialize<List<AgentDelegation>>(responseContent, _serializerOptions);
+                }
+
+                _logger.LogError("AccessManagement.UI // SystemUserAgentDelegationClient // AddClient // Unexpected HttpStatusCode: {StatusCode}\n {responseBody}", response.StatusCode, responseContent);
+                return ProblemMapper.MapToAuthUiError(responseContent, response.StatusCode);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "AccessManagement.UI // SystemUserAgentDelegationClient // AddClient // Exception");
+                throw;
+            }
+        }
+
+        /// <inheritdoc/>
         public async Task<Result<bool>> RemoveClient(int partyId, Guid facilitatorId, Guid delegationId, CancellationToken cancellationToken)
         {
             try
