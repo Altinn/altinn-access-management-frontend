@@ -1,32 +1,31 @@
 import React, { useEffect } from 'react';
-import { useTranslation } from 'react-i18next';
-import { useSearchParams } from 'react-router';
+import { Trans, useTranslation } from 'react-i18next';
 import {
   DsAlert,
-  DsSpinner,
+  DsButton,
+  DsHeading,
+  DsParagraph,
   formatDisplayName,
-  Layout,
-  RootProvider,
 } from '@altinn/altinn-components';
-import { useDocumentTitle } from '@/resources/hooks/useDocumentTitle';
-import { getAltinnStartPageUrl, getLogoutUrl } from '@/resources/utils/pathUtils';
-import { useUpdateSelectedLanguageMutation } from '@/rtk/features/settingsApi';
+import {
+  useConfirmRequestMutation,
+  useGetEnrichedDraftRequestQuery,
+  useWithdrawRequestMutation,
+} from '@/rtk/features/requestApi';
 import classes from './DraftRequestPage.module.css';
-import { useGetEnrichedDraftRequestQuery } from '@/rtk/features/requestApi';
+import { PartyRepresentationProvider } from '../../common/PartyRepresentationContext/PartyRepresentationContext';
+import { useSearchParams } from 'react-router';
 import { redirectToChangeReporteeAndRedirect } from '@/resources/utils/changeReporteeUtils';
 import { getCookie } from '@/resources/Cookie/CookieMethods';
-import { PartyRepresentationProvider } from '../../common/PartyRepresentationContext/PartyRepresentationContext';
-import { useGetUserProfileQuery } from '@/rtk/features/userInfoApi';
-import { DraftRequestPageContent } from './DraftRequestPageContent';
+import { RequestPageLayout } from '../../common/RequestPageLayout/RequestPageLayout';
+import { DraftRequestBody } from './DraftRequestBody';
 
 export const DraftRequestPage = () => {
-  const { t, i18n } = useTranslation();
-  const [updateSelectedLanguage] = useUpdateSelectedLanguageMutation();
+  const { t } = useTranslation();
 
-  useDocumentTitle(t('draft_request_page.page_title'));
   const [searchParams] = useSearchParams();
-  const requestId = searchParams.get('requestId') ?? '';
   const partyUuid = getCookie('AltinnPartyUuid') || '';
+  const requestId = searchParams.get('requestId') ?? '';
 
   const {
     data: request,
@@ -39,7 +38,28 @@ export const DraftRequestPage = () => {
     },
   );
 
-  const { data: userData } = useGetUserProfileQuery();
+  const [
+    confirmRequest,
+    { data: confirmResponse, error: confirmRequestError, isLoading: isConfirmingRequest },
+  ] = useConfirmRequestMutation();
+
+  const [
+    withdrawRequest,
+    { data: withdrawResponse, error: withdrawRequestError, isLoading: isWithdrawingRequest },
+  ] = useWithdrawRequestMutation();
+
+  const isActionButtonDisabled = isConfirmingRequest || isWithdrawingRequest;
+  const onConfirmRequest = () => {
+    if (!isActionButtonDisabled && request) {
+      confirmRequest({ party: request?.from.id, id: request.id });
+    }
+  };
+
+  const onWithdrawRequest = () => {
+    if (!isActionButtonDisabled && request) {
+      withdrawRequest({ party: request.from.id, id: request.id });
+    }
+  };
 
   useEffect(() => {
     // If the request is for a different user than the one currently logged in, redirect to the correct reportee
@@ -48,101 +68,165 @@ export const DraftRequestPage = () => {
     }
   }, [request, partyUuid]);
 
-  const onChangeLocale = (newLocale: string) => {
-    i18n.changeLanguage(newLocale);
-    document.cookie = `selectedLanguage=${newLocale}; path=/; SameSite=Strict`;
-    updateSelectedLanguage(newLocale);
-  };
-
-  const account: { name: string; type: 'person' | 'company' } = {
-    name: request?.from.name ?? '',
+  const toName = formatDisplayName({
+    fullName: request?.to.name ?? '',
+    type: request?.to.type === 'Person' ? 'person' : 'company',
+  });
+  const fromName = formatDisplayName({
+    fullName: request?.from.name ?? '',
     type: request?.from.type === 'Person' ? 'person' : 'company',
-  };
+  });
+
+  let heading: React.ReactNode = null;
+  let body: React.ReactNode = null;
+  let error: React.ReactNode = null;
+
+  if (confirmResponse) {
+    heading = (
+      <DraftRequestHeader
+        headerTextKey='draft_request_page.request_approved'
+        toName={toName}
+      />
+    );
+    body = (
+      <RequestReceiptBody
+        bodyTextKey='draft_request_page.request_approved_info'
+        toName={toName}
+      />
+    );
+  } else if (withdrawResponse) {
+    heading = (
+      <DraftRequestHeader
+        headerTextKey='draft_request_page.request_withdrawn'
+        toName={toName}
+      />
+    );
+    body = (
+      <RequestReceiptBody
+        bodyTextKey='draft_request_page.request_withdrawn_info'
+        toName={toName}
+      />
+    );
+  } else if (request) {
+    heading = (
+      <>
+        <DraftRequestHeader
+          headerTextKey='draft_request_page.heading'
+          toName={toName}
+        />
+        <DsParagraph>
+          <Trans
+            i18nKey={
+              partyUuid === request?.from.id
+                ? 'draft_request_page.intro_person'
+                : 'draft_request_page.intro_company'
+            }
+            components={{ b: <strong /> }}
+            values={{ to_name: toName, from_name: fromName }}
+          />
+        </DsParagraph>
+      </>
+    );
+
+    body = (
+      <>
+        <PartyRepresentationProvider
+          fromPartyUuid={partyUuid}
+          actingPartyUuid={partyUuid}
+          toPartyUuid={''}
+        >
+          <DraftRequestBody
+            request={request}
+            fromName={fromName}
+          />
+        </PartyRepresentationProvider>
+        {confirmRequestError && (
+          <DsAlert data-color='danger'>{t('draft_request_page.approve_request_error')}</DsAlert>
+        )}
+        {withdrawRequestError && (
+          <DsAlert data-color='danger'>{t('draft_request_page.withdraw_request_error')}</DsAlert>
+        )}
+        <div className={classes.buttonRow}>
+          <DsButton
+            variant='primary'
+            aria-disabled={isConfirmingRequest || isWithdrawingRequest}
+            loading={isConfirmingRequest}
+            onClick={onConfirmRequest}
+          >
+            {t('draft_request_page.confirm_request')}
+          </DsButton>
+          <DsButton
+            variant='primary'
+            aria-disabled={isConfirmingRequest || isWithdrawingRequest}
+            loading={isWithdrawingRequest}
+            onClick={onWithdrawRequest}
+          >
+            {t('draft_request_page.withdraw_request')}
+          </DsButton>
+        </div>
+      </>
+    );
+  }
+
+  if (!requestId) {
+    error = <DsAlert data-color='warning'>{t('draft_request_page.missing_request_id')}</DsAlert>;
+  } else if (loadRequestError) {
+    error = <DsAlert data-color='danger'>{t('draft_request_page.load_request_error')}</DsAlert>;
+  }
 
   return (
-    <RootProvider>
-      <Layout
-        color={request?.from.type === 'Person' ? 'person' : 'company'}
-        theme='subtle'
-        header={{
-          locale: {
-            title: t('header.locale_title'),
-            options: [
-              { label: 'Norsk (bokmål)', value: 'no_nb', checked: i18n.language === 'no_nb' },
-              { label: 'Norsk (nynorsk)', value: 'no_nn', checked: i18n.language === 'no_nn' },
-              { label: 'English', value: 'en', checked: i18n.language === 'en' },
-            ],
-            onSelect: onChangeLocale,
-          },
-          logo: {
-            href: getAltinnStartPageUrl(i18n.language),
-            title: 'Altinn',
-          },
-          currentAccount: {
-            ...account,
-            id: '',
-            icon: account,
-          },
-          globalMenu: {
-            logoutButton: {
-              label: t('header.log_out'),
-              onClick: () => {
-                const logoutUrl = getLogoutUrl();
-                window.location.assign(logoutUrl);
-              },
-            },
-            menuLabel: t('header.menu-label'),
-            backLabel: t('header.back-label'),
-            changeLabel: t('header.change-label'),
-            menu: {
-              items: [{ groupId: 'current-user', hidden: true }],
-              groups: {
-                'current-user': {
-                  title: t('header.logged_in_as_name', {
-                    name: formatDisplayName({
-                      fullName: userData?.name || '',
-                      type: 'person',
-                      reverseNameOrder: true,
-                    }),
-                  }),
-                },
-              },
-            },
-          },
-        }}
-      >
-        {!requestId && (
-          <div className={classes.centerBlock}>
-            <DsAlert data-color='warning'>{t('draft_request_page.missing_request_id')}</DsAlert>
-          </div>
-        )}
-        {isLoadingRequest && <LoadingState />}
-        {loadRequestError && (
-          <DsAlert data-color='danger'>{t('draft_request_page.load_request_error')}</DsAlert>
-        )}
-        {request && (
-          <PartyRepresentationProvider
-            fromPartyUuid={partyUuid}
-            actingPartyUuid={partyUuid}
-            toPartyUuid={''}
-            loadingComponent={<LoadingState />}
-          >
-            <DraftRequestPageContent request={request} />
-          </PartyRepresentationProvider>
-        )}
-      </Layout>
-    </RootProvider>
+    <RequestPageLayout
+      account={{
+        name: request?.from.name ?? '',
+        type: request?.from.type === 'Person' ? 'person' : 'company',
+      }}
+      error={error}
+      isLoading={isLoadingRequest}
+      heading={heading}
+      body={body}
+    />
   );
 };
 
-const LoadingState = () => {
-  const { t } = useTranslation();
+interface DraftRequestHeaderProps {
+  headerTextKey: string;
+  toName: string;
+}
+
+const DraftRequestHeader = ({ headerTextKey, toName }: DraftRequestHeaderProps) => {
   return (
-    <div className={classes.centerBlock}>
-      <DsSpinner
-        aria-label={t('draft_request_page.loading_request')}
-        data-size='lg'
+    <DsHeading
+      level={1}
+      data-size='md'
+    >
+      <Trans
+        i18nKey={headerTextKey}
+        components={{ b: <strong /> }}
+        values={{ to_name: toName }}
       />
-    </div>
+    </DsHeading>
+  );
+};
+
+interface RequestReceiptBodyProps {
+  bodyTextKey: string;
+  toName: string;
+}
+const RequestReceiptBody = ({ bodyTextKey, toName }: RequestReceiptBodyProps) => {
+  const { t } = useTranslation();
+
+  return (
+    <>
+      <DsParagraph>
+        <Trans
+          i18nKey={bodyTextKey}
+          components={{ b: <strong /> }}
+          values={{ to_name: toName }}
+        />
+      </DsParagraph>
+      <DsParagraph className={classes.closeWindowInfo}>
+        {t('draft_request_page.close_window_info')}
+      </DsParagraph>
+    </>
   );
 };
