@@ -1,7 +1,7 @@
 import { test, expect } from 'playwright/fixture/pomFixture';
 import { TestdataApi } from 'playwright/util/TestdataApi';
 import { env } from 'playwright/util/helper';
-import { ApiRequests } from '../../../api-requests/ApiRequests';
+import { ApiRequests } from 'playwright/api-requests/SystemUserApiRequests';
 const vendorOrgNumber = '310547891';
 const prebuiltSystemId = '310547891_E2E-Playwright-Authentication';
 const testUserPid = '14824497789';
@@ -22,18 +22,22 @@ test.describe('Systembruker endringsforespørsel', () => {
   let systemUserIds: string[] = [];
 
   test.beforeEach(async () => {
-    api = new ApiRequests(vendorOrgNumber);
+    api = new ApiRequests();
   });
 
   test.afterEach(async () => {
     // Cleanup system users created during tests
     if (systemUserIds.length > 0) {
       try {
-        await api.cleanUpSystemUsers(systemUserIds.map((id) => ({ id })));
+        await api.cleanUpSystemUsers(
+          systemUserIds.map((id) => ({ id })),
+          testUserPid,
+          vendorOrgNumber,
+        );
       } catch (error) {
         console.error('Error during system user cleanup:', error);
       }
-      systemUserIds = []; // Reset the array
+      systemUserIds = [];
     }
   });
 
@@ -42,15 +46,17 @@ test.describe('Systembruker endringsforespørsel', () => {
 
     await test.step('Create and approve system user request', async () => {
       const response = await api.postSystemuserRequest(
+        vendorOrgNumber,
         externalRef,
         prebuiltSystemId,
         vendorOrgNumber,
       );
-      await api.approveSystemuserRequest(response.id);
+      await api.approveSystemuserRequest(response.id, vendorOrgNumber, testUserPid);
     });
 
     const systemUserId = await test.step('Get system user ID', async () => {
       const systemUserId = await api.getSystemUserByQuery(
+        vendorOrgNumber,
         prebuiltSystemId,
         vendorOrgNumber,
         externalRef,
@@ -60,7 +66,7 @@ test.describe('Systembruker endringsforespørsel', () => {
     });
 
     const changeRequestResponse = await test.step('Create change request', async () => {
-      return await api.postSystemuserChangeRequest(systemUserId, changeRequest);
+      return await api.postSystemuserChangeRequest(vendorOrgNumber, systemUserId, changeRequest);
     });
 
     await test.step('Navigate to change request confirmation page and login', async () => {
@@ -76,6 +82,7 @@ test.describe('Systembruker endringsforespørsel', () => {
       await expect(login.loginButton).toBeVisible();
 
       const statusApiRequest = await api.getStatusForSystemUserChangeRequest<{ status: string }>(
+        vendorOrgNumber,
         changeRequestResponse.id,
       );
 
@@ -88,15 +95,17 @@ test.describe('Systembruker endringsforespørsel', () => {
 
     await test.step('Create and approve system user request', async () => {
       const response = await api.postSystemuserRequest(
+        vendorOrgNumber,
         externalRef,
         prebuiltSystemId,
         vendorOrgNumber,
       );
-      await api.approveSystemuserRequest(response.id);
+      await api.approveSystemuserRequest(response.id, vendorOrgNumber, testUserPid);
     });
 
     const systemUserId = await test.step('Get system user ID', async () => {
       const systemUserId = await api.getSystemUserByQuery(
+        vendorOrgNumber,
         prebuiltSystemId,
         vendorOrgNumber,
         externalRef,
@@ -106,7 +115,7 @@ test.describe('Systembruker endringsforespørsel', () => {
     });
 
     const changeRequestResponse = await test.step('Create change request', async () => {
-      return await api.postSystemuserChangeRequest(systemUserId, changeRequest);
+      return await api.postSystemuserChangeRequest(vendorOrgNumber, systemUserId, changeRequest);
     });
 
     await test.step('Navigate to change request confirmation page and login', async () => {
@@ -124,6 +133,7 @@ test.describe('Systembruker endringsforespørsel', () => {
 
       //Read from status api to verify that status is not Accepted after clicking "Avvis"
       const statusApiRequest = await api.getStatusForSystemUserChangeRequest<{ status: string }>(
+        vendorOrgNumber,
         changeRequestResponse.id,
       );
       expect(statusApiRequest.status).toBe('Accepted');

@@ -1,7 +1,7 @@
 import { expect, test } from 'playwright/fixture/pomFixture';
 
 import { TestdataApi } from 'playwright/util/TestdataApi';
-import { ApiRequests } from 'playwright/api-requests/ApiRequests';
+import { ApiRequests } from 'playwright/api-requests/SystemUserApiRequests';
 import { env } from 'playwright/util/helper';
 const vendorOrgNumber = '310547891';
 const testUserPid = '14824497789';
@@ -12,9 +12,9 @@ test.describe('System Register', async () => {
   let system: string;
 
   test.beforeEach(async ({ page, login }) => {
-    const api = new ApiRequests(vendorOrgNumber);
+    const api = new ApiRequests();
     await page.goto(env('BASE_URL'));
-    system = await api.createSystemSystemRegister();
+    system = await api.createSystemSystemRegister(vendorOrgNumber);
     await login.LoginToAccessManagement(testUserPid);
     await login.chooseReportee(testUserName, testOrgName);
   });
@@ -42,7 +42,7 @@ test.describe('System Register', async () => {
 
   test.afterEach(async () => {
     if (system) {
-      await TestdataApi.removeSystem(system);
+      await TestdataApi.removeSystem(vendorOrgNumber, system);
     }
   });
 });

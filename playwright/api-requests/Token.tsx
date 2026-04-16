@@ -10,25 +10,27 @@ export class Token {
   constructor(org?: string) {
     this.username = env('USERNAME_TEST_API');
     this.password = env('PASSWORD_TEST_API');
-    this.org = org || env('ORG');
+    this.org = org || '';
     this.environment = env('ENV_NAME');
     this.platformToken = '';
   }
 
-  public get orgNo(): string {
-    return this.org;
-  }
-
   /**
    * Fetches an enterprise Altinn token for a specific organization and environment.
+   * @param orgNo The organization number to fetch the token for.
    * @param scopes Scopes required for the token.
    * @returns The enterprise Altinn token as a string.
    */
-  public async getEnterpriseAltinnToken(scopes: string): Promise<string> {
+  public async getEnterpriseAltinnToken(orgNo: string, scopes: string): Promise<string>;
+  /** @deprecated Pass orgNo explicitly as the first argument. */
+  public async getEnterpriseAltinnToken(scopes: string): Promise<string>;
+  public async getEnterpriseAltinnToken(orgNoOrScopes: string, scopes?: string): Promise<string> {
+    const resolvedOrgNo = scopes !== undefined ? orgNoOrScopes : this.org;
+    const resolvedScopes = scopes !== undefined ? scopes : orgNoOrScopes;
     // Construct the URL for fetching the enterprise Altinn test token
     const url =
       `https://altinn-testtools-token-generator.azurewebsites.net/api/GetEnterpriseToken` +
-      `?orgNo=${this.org}&env=${this.environment}&scopes=${scopes}`;
+      `?orgNo=${resolvedOrgNo}&env=${this.environment}&scopes=${resolvedScopes}`;
 
     const auth = Buffer.from(`${this.username}:${this.password}`).toString('base64');
     const headers = {

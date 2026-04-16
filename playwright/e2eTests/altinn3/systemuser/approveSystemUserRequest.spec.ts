@@ -1,7 +1,7 @@
 import { test, expect } from 'playwright/fixture/pomFixture';
 
 import { TestdataApi } from 'playwright/util/TestdataApi';
-import { ApiRequests } from 'playwright/api-requests/ApiRequests';
+import { ApiRequests } from 'playwright/api-requests/SystemUserApiRequests';
 const vendorOrgNumber = '310547891';
 const prebuiltSystemId = '310547891_E2E-Playwright-Authentication';
 const testUserPid = '14824497789';
@@ -10,7 +10,7 @@ test.describe('Godkjenn og avvis Systembrukerforespørsel', () => {
   let api: ApiRequests;
 
   test.beforeEach(async () => {
-    api = new ApiRequests(vendorOrgNumber);
+    api = new ApiRequests();
   });
 
   test('Avvis Systembrukerforespørsel', async ({ page, login }): Promise<void> => {
@@ -18,6 +18,7 @@ test.describe('Godkjenn og avvis Systembrukerforespørsel', () => {
 
     const response = await test.step('Create system user request', async () => {
       return await api.postSystemuserRequest(
+        vendorOrgNumber,
         externalRef,
         prebuiltSystemId,
         vendorOrgNumber,
@@ -40,6 +41,7 @@ test.describe('Godkjenn og avvis Systembrukerforespørsel', () => {
 
       //Read from status api to verify that status is not rejected after clicking "Avvis"
       const statusApiRequest = await api.getStatusForSystemUserRequest<{ status: string }>(
+        vendorOrgNumber,
         response.id,
       );
       expect(statusApiRequest.status).toBe('Rejected');
@@ -51,6 +53,7 @@ test.describe('Godkjenn og avvis Systembrukerforespørsel', () => {
 
     const response = await test.step('Create system user request', async () => {
       return await api.postSystemuserRequest(
+        vendorOrgNumber,
         externalRef,
         prebuiltSystemId,
         vendorOrgNumber,
@@ -73,6 +76,7 @@ test.describe('Godkjenn og avvis Systembrukerforespørsel', () => {
 
       //Read from status api to verify that status is not Accepted after clicking "Avvis"
       const statusApiRequest = await api.getStatusForSystemUserRequest<{ status: string }>(
+        vendorOrgNumber,
         response.id,
       );
       expect(statusApiRequest.status).toBe('Accepted');

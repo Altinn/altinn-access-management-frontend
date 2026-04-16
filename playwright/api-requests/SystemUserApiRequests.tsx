@@ -5,17 +5,18 @@ import { env } from 'playwright/util/helper';
 export class ApiRequests {
   private tokenClass: Token;
 
-  constructor(org?: string) {
-    this.tokenClass = new Token(org);
+  constructor() {
+    this.tokenClass = new Token();
   }
 
   public async createSystemInSystemregisterWithAccessPackages(
+    vendorOrgNo: string,
     name: string,
     accessPackages?: { urn: string }[],
     redirectUrl?: string,
     rights?: { resource: { value: string; id: string }[] }[],
   ): Promise<string> {
-    const vendorId = this.tokenClass.orgNo;
+    const vendorId = vendorOrgNo;
     const clientId = `Client_${Date.now()}_${Math.random()}`;
 
     const payload = {
@@ -51,20 +52,25 @@ export class ApiRequests {
     const endpoint = '/authentication/api/v1/systemregister/vendor';
     const scopes = 'altinn:authentication/systemregister.write';
 
-    await this.sendPostRequest<typeof payload, string>(payload, endpoint, scopes);
+    await this.sendPostRequest<typeof payload, string>(payload, endpoint, scopes, vendorOrgNo);
     return `${vendorId}_${name}`;
   }
 
-  public async cleanUpSystemUsers(systemUsers: { id: string }[]): Promise<void> {
-    const token = await this.tokenClass.getPersonalAltinnToken();
-    const partyId = env('ALTINN_PARTY_ID');
+  public async cleanUpSystemUsers(
+    systemUsers: { id: string }[],
+    userPid: string,
+    partyOrgNo: string,
+  ): Promise<void> {
+    const { partyId } = await this.tokenClass.getIds(partyOrgNo);
+    const token = await this.tokenClass.getPersonalTokenByPid(userPid);
     for (const systemuser of systemUsers) {
       await this.deleteSystemUser(token, partyId, systemuser.id);
     }
   }
 
-  public async getSystemUsers(): Promise<string> {
-    const endpoint = `/v1/systemuser/${env('ALTINN_PARTY_ID')}`;
+  public async getSystemUsers(partyOrgNo: string): Promise<string> {
+    const { partyId } = await this.tokenClass.getIds(partyOrgNo);
+    const endpoint = `/v1/systemuser/${partyId}`;
     const url = `${env('API_BASE_URL')}/authentication/api/${endpoint}`;
     const token = await this.tokenClass.getPersonalAltinnToken();
 
@@ -96,14 +102,20 @@ export class ApiRequests {
   }
 
   public async deleteAgentSystemUser(
+    vendorOrgNo: string,
     systemId: string,
     partyOrgNo: string,
     externalRef: string,
-    managerPid: string,
+    userPid: string,
   ): Promise<void> {
     const { partyId, partyUuid } = await this.tokenClass.getIds(partyOrgNo);
-    const systemUserId = await this.getSystemUserByQuery(systemId, partyOrgNo, externalRef);
-    const token = await this.tokenClass.getPersonalTokenByPid(managerPid);
+    const systemUserId = await this.getSystemUserByQuery(
+      vendorOrgNo,
+      systemId,
+      partyOrgNo,
+      externalRef,
+    );
+    const token = await this.tokenClass.getPersonalTokenByPid(userPid);
     const url = `${env('API_BASE_URL')}/authentication/api/v1/systemuser/agent/${partyId}/${systemUserId}?partyuuid=${partyUuid}`;
 
     const response = await fetch(url, {
@@ -121,11 +133,11 @@ export class ApiRequests {
     }
   }
 
-  public async deleteSystemInSystemRegister(systemName: string) {
-    const endpoint = `v1/systemregister/vendor/${this.tokenClass.orgNo}_${systemName}`;
+  public async deleteSystemInSystemRegister(vendorOrgNo: string, systemName: string) {
+    const endpoint = `v1/systemregister/vendor/${vendorOrgNo}_${systemName}`;
     const scopes =
       'altinn:authentication/systemuser.request.write altinn:authentication/systemregister.write altinn:authentication/systemuser.request.read';
-    const token = await this.tokenClass.getEnterpriseAltinnToken(scopes);
+    const token = await this.tokenClass.getEnterpriseAltinnToken(vendorOrgNo, scopes);
     const url = `${env('API_BASE_URL')}/authentication/api/${endpoint}`;
 
     try {
@@ -177,6 +189,7 @@ export class ApiRequests {
   }
 
   public async postClientDelegationAgentRequest(
+    vendorOrgNo: string,
     systemId: string,
     accessPackageUrn: string,
     partyOrgNo: string,
@@ -198,20 +211,22 @@ export class ApiRequests {
       payload,
       endpoint,
       scopes,
+      vendorOrgNo,
     );
   }
 
   public async deleteRegularSystemUser(
     systemUserId: string,
     partyOrgNo: string,
-    managerPid: string,
+    userPid: string,
   ): Promise<void> {
     const { partyId } = await this.tokenClass.getIds(partyOrgNo);
-    const token = await this.tokenClass.getPersonalTokenByPid(managerPid);
+    const token = await this.tokenClass.getPersonalTokenByPid(userPid);
     await this.deleteSystemUser(token, partyId, systemUserId);
   }
 
   public async postSystemuserRequest(
+    vendorOrgNo: string,
     externalRef: string,
     systemId: string,
     partyOrgNo: string,
@@ -229,22 +244,22 @@ export class ApiRequests {
     };
 
     const endpoint = '/authentication/api/v1/systemuser/request/vendor';
-    const url = `${env('API_BASE_URL')}${endpoint}`;
     const scopes =
       'altinn:authentication/systemuser.request.read altinn:authentication/systemuser.request.write';
 
     const apiResponse = await this.sendPostRequest<
       typeof payload,
       { confirmUrl: string; id: string }
-    >(payload, endpoint, scopes);
+    >(payload, endpoint, scopes, vendorOrgNo);
 
     return apiResponse;
   }
 
-  public async approveSystemuserRequest(requestId: string) {
-    const endpoint = `v1/systemuser/request/${env('ALTINN_PARTY_ID')}/${requestId}/approve`;
+  public async approveSystemuserRequest(requestId: string, partyOrgNo: string, userPid: string) {
+    const { partyId } = await this.tokenClass.getIds(partyOrgNo);
+    const endpoint = `v1/systemuser/request/${partyId}/${requestId}/approve`;
     const url = `${env('API_BASE_URL')}/authentication/api/${endpoint}`;
-    const userToken = await this.tokenClass.getPersonalAltinnToken();
+    const userToken = await this.tokenClass.getPersonalTokenByPid(userPid);
 
     try {
       const response = await fetch(url, {
@@ -267,6 +282,7 @@ export class ApiRequests {
   }
 
   public async postSystemuserChangeRequest(
+    vendorOrgNo: string,
     systemUserId: string,
     changes: {
       requiredRights: { resource: { value: string; id: string }[] }[];
@@ -291,12 +307,12 @@ export class ApiRequests {
     const apiResponse = await this.sendPostRequest<
       typeof payload,
       { confirmUrl: string; id: string }
-    >(payload, endpoint, scopes);
+    >(payload, endpoint, scopes, vendorOrgNo);
     return apiResponse;
   }
 
-  public async createSystemSystemRegister(): Promise<string> {
-    const vendorId = env('ORG');
+  public async createSystemSystemRegister(vendorOrgNo: string): Promise<string> {
+    const vendorId = vendorOrgNo;
     const clientId = `Client_${Date.now()}` + Math.random();
     // Generate name with max 10 chars: E2E + last 5 digits of timestamp + 2 random digits
     const randomDigits = Math.floor(Math.random() * 100)
@@ -347,28 +363,35 @@ export class ApiRequests {
     const scopes = 'altinn:authentication/systemregister.write';
 
     // We expect a JSON response, but we'll just return 'any' or the "name" you need.
-    await this.sendPostRequest<typeof payload, string>(payload, endpoint, scopes);
+    await this.sendPostRequest<typeof payload, string>(payload, endpoint, scopes, vendorOrgNo);
     return name;
   }
 
-  public async getStatusForSystemUserRequest<T>(systemRequestId: string): Promise<T> {
+  public async getStatusForSystemUserRequest<T>(
+    vendorOrgNo: string,
+    systemRequestId: string,
+  ): Promise<T> {
     const endpoint = `/authentication/api/v1/systemuser/request/vendor/${systemRequestId}`;
-    return this.sendGetStatusRequest(endpoint);
+    return this.sendGetStatusRequest(endpoint, vendorOrgNo);
   }
 
-  public async getStatusForSystemUserChangeRequest<T>(systemRequestId: string): Promise<T> {
+  public async getStatusForSystemUserChangeRequest<T>(
+    vendorOrgNo: string,
+    systemRequestId: string,
+  ): Promise<T> {
     const endpoint = `/authentication/api/v1/systemuser/changerequest/vendor/${systemRequestId}`;
-    return this.sendGetStatusRequest(endpoint);
+    return this.sendGetStatusRequest(endpoint, vendorOrgNo);
   }
 
   public async getSystemUserByQuery(
+    vendorOrgNo: string,
     systemId: string,
     orgno: string,
     externalRef: string,
   ): Promise<string> {
     const endpoint = `/authentication/api/v1/systemuser/vendor/byquery?system-id=${systemId}&orgno=${orgno}&external-ref=${externalRef}`;
     const scopes = 'altinn:authentication/systemuser.request.write';
-    const token = await this.tokenClass.getEnterpriseAltinnToken(scopes);
+    const token = await this.tokenClass.getEnterpriseAltinnToken(vendorOrgNo, scopes);
 
     const url = `${env('API_BASE_URL')}${endpoint}`;
 
@@ -395,10 +418,10 @@ export class ApiRequests {
     }
   }
 
-  private async sendGetStatusRequest(endpoint: string) {
+  private async sendGetStatusRequest(endpoint: string, vendorOrgNo: string) {
     const scopes =
       'altinn:authentication/systemuser.request.read altinn:authentication/systemuser.request.write';
-    const token = await this.tokenClass.getEnterpriseAltinnToken(scopes);
+    const token = await this.tokenClass.getEnterpriseAltinnToken(vendorOrgNo, scopes);
     const url = `${env('API_BASE_URL')}/${endpoint}`;
 
     const response = await fetch(url, {
@@ -419,11 +442,12 @@ export class ApiRequests {
     payload: TPayload,
     endpoint: string,
     scopes: string,
+    vendorOrgNo: string,
   ): Promise<TResponse> {
     const baseUrl = env('API_BASE_URL');
     let url = baseUrl + endpoint;
 
-    const token = await this.tokenClass.getEnterpriseAltinnToken(scopes);
+    const token = await this.tokenClass.getEnterpriseAltinnToken(vendorOrgNo, scopes);
 
     const response = await fetch(url, {
       method: 'POST',

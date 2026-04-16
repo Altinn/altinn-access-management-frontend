@@ -3,13 +3,13 @@ import { test, expect } from '../../../fixture/pomFixture';
 import { FacilitatorRole, loadCustomers, loadFacilitator } from '../../../util/loadFacilitators';
 import { ClientDelegationPage } from '../../../pages/systemuser/ClientDelegation';
 import { AccessManagementFrontPage } from '../../../pages/AccessManagementFrontPage';
-import { ApiRequests } from '../../../api-requests/ApiRequests';
+import { ApiRequests } from 'playwright/api-requests/SystemUserApiRequests';
 
 test.describe('Delegering av klienter til Systembruker', () => {
   let api: ApiRequests;
 
   test.beforeEach(() => {
-    api = new ApiRequests('310547891');
+    api = new ApiRequests();
   });
 
   test.describe('Ansvarlig revisor', () => {
@@ -28,11 +28,16 @@ test.describe('Delegering av klienter til Systembruker', () => {
       clientDelegationPage = new ClientDelegationPage(page);
 
       const systemId = await test.step('Create system with access packages', async () => {
-        return await api.createSystemInSystemregisterWithAccessPackages(name);
+        return await api.createSystemInSystemregisterWithAccessPackages('310547891', name);
       });
 
       response = await test.step('Create client delegation agent request', async () => {
-        return await api.postClientDelegationAgentRequest(systemId, accessPackageApiName, user.org);
+        return await api.postClientDelegationAgentRequest(
+          '310547891',
+          systemId,
+          accessPackageApiName,
+          user.org,
+        );
       });
     });
 
@@ -86,11 +91,16 @@ test.describe('Delegering av klienter til Systembruker', () => {
       clientDelegationPage = new ClientDelegationPage(page);
 
       const systemId = await test.step('Create system with access packages', async () => {
-        return await api.createSystemInSystemregisterWithAccessPackages(name);
+        return await api.createSystemInSystemregisterWithAccessPackages('310547891', name);
       });
 
       response = await test.step('Create client delegation agent request', async () => {
-        return await api.postClientDelegationAgentRequest(systemId, accessPackageApiName, user.org);
+        return await api.postClientDelegationAgentRequest(
+          '310547891',
+          systemId,
+          accessPackageApiName,
+          user.org,
+        );
       });
     });
 
@@ -150,11 +160,16 @@ test.describe('Delegering av klienter til Systembruker', () => {
       clientDelegationPage = new ClientDelegationPage(page);
 
       const systemId = await test.step('Create system with access packages', async () => {
-        return await api.createSystemInSystemregisterWithAccessPackages(name);
+        return await api.createSystemInSystemregisterWithAccessPackages('310547891', name);
       });
 
       response = await test.step('Create client delegation agent request', async () => {
-        return await api.postClientDelegationAgentRequest(systemId, accessPackageApiName, user.org);
+        return await api.postClientDelegationAgentRequest(
+          '310547891',
+          systemId,
+          accessPackageApiName,
+          user.org,
+        );
       });
     });
 

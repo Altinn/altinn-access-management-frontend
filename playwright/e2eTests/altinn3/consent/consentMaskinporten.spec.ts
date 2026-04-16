@@ -131,6 +131,8 @@ test.describe('Fetch consent token after approval', () => {
   /**
    * Scenario: Displaying the scenario page for a consent request (known bug)
    *
+   * Dokumentasjon: https://docs.altinn.studio/nb/authorization/what-do-you-get/consent/
+   *
    * This test is related to Altinn issue #2094.
    * Kjent bug: https://github.com/Altinn/altinn-authorization-tmp/issues/2094
    *

@@ -1,10 +1,10 @@
 import { test, expect } from 'playwright/fixture/pomFixture';
 
-import { ApiRequests } from 'playwright/api-requests/ApiRequests';
+import { ApiRequests } from 'playwright/api-requests/SystemUserApiRequests';
 import { TestdataApi } from 'playwright/util/TestdataApi';
 import { env } from 'playwright/util/helper';
 
-test.describe('Systembruker - Eskaler systembrukerforespørsel', () => {
+test.describe('Systembruker - Eskaler', () => {
   const systemuserOwnerOrg = '313084167';
   const regularUserPid = '09817897166'; // No accessManager privileges, may escalate requests
   const managerPid = '29849098304';
@@ -17,12 +17,13 @@ test.describe('Systembruker - Eskaler systembrukerforespørsel', () => {
   let systemUserId: string;
 
   test.beforeEach(async () => {
-    api = new ApiRequests('312591332');
+    api = new ApiRequests();
     name = `Playwright-e2e-eskaler-${Date.now()}`;
     externalRef = TestdataApi.generateExternalRef();
 
     systemId = await test.step('Create system', async () => {
       return await api.createSystemInSystemregisterWithAccessPackages(
+        '312591332',
         name,
         [{ urn: 'urn:altinn:accesspackage:baerekraft' }],
         'https://example.com/',
@@ -34,6 +35,7 @@ test.describe('Systembruker - Eskaler systembrukerforespørsel', () => {
     });
     response = await test.step('Create system user request', async () => {
       return await api.postSystemuserRequest(
+        '312591332',
         externalRef,
         systemId,
         systemuserOwnerOrg,
@@ -47,7 +49,7 @@ test.describe('Systembruker - Eskaler systembrukerforespørsel', () => {
     });
   });
 
-  test('Eskaler systembruker', async ({
+  test('Eskaler Systembrukerforespørsel som "vanlig" bruker og godkjenn som daglig leder', async ({
     page,
     login,
     systemUserPage,
@@ -60,7 +62,7 @@ test.describe('Systembruker - Eskaler systembrukerforespørsel', () => {
       await systemUserPage.finish.click();
     });
 
-    await test.step('Login as manager and navigate to system access', async () => {
+    await test.step('Login as manager and choose reportee', async () => {
       await page.goto(env('BASE_URL'));
       await login.LoginToAccessManagement(managerPid);
       await login.chooseReportee(systemuserOwnerOrg, 'Ugjennomsiktig Usnobbet Ape');
@@ -73,7 +75,7 @@ test.describe('Systembruker - Eskaler systembrukerforespørsel', () => {
       await clientDelegationPage.confirmButton.click();
     });
 
-    await test.step('Verify system user was created with correct access package', async () => {
+    await test.step('Verify system user was created with proper rights', async () => {
       await clientDelegationPage.systemUserLink(name).click();
       systemUserId = new URL(page.url()).pathname.split('/').pop()!;
       await expect(page.getByRole('button', { name: 'Bærekraft' })).toBeVisible();
@@ -89,7 +91,7 @@ test.describe('Systembruker - Eskaler systembrukerforespørsel', () => {
       console.error('Cleanup: Failed to delete system user:', error);
     }
     try {
-      await api.deleteSystemInSystemRegister(name);
+      await api.deleteSystemInSystemRegister('312591332', name);
     } catch (error) {
       console.error('Cleanup: Failed to delete system from system register:', error);
     }

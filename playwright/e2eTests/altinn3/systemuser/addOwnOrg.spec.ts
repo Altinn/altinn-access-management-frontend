@@ -1,5 +1,5 @@
 import { test, expect } from 'playwright/fixture/pomFixture';
-import { ApiRequests } from 'playwright/api-requests/ApiRequests';
+import { ApiRequests } from 'playwright/api-requests/SystemUserApiRequests';
 import { EnduserConnection } from 'playwright/api-requests/EnduserConnection';
 import { TestdataApi } from 'playwright/util/TestdataApi';
 import { pickRandom } from 'playwright/util/helper';
@@ -29,18 +29,19 @@ test.describe('Systembruker - Legg til egen organisasjon', () => {
   let response: { confirmUrl: string; id: string };
 
   test.beforeEach(async () => {
-    api = new ApiRequests('310547891');
+    api = new ApiRequests();
     name = `Playwright-e2e-${accessPackageApiName}-${Date.now()}`;
     externalRef = TestdataApi.generateExternalRef();
 
     systemId = await test.step('Create system with access package', async () => {
-      return await api.createSystemInSystemregisterWithAccessPackages(name, [
+      return await api.createSystemInSystemregisterWithAccessPackages('310547891', name, [
         { urn: accessPackageUrn },
       ]);
     });
 
     response = await test.step('Create system user agent request', async () => {
       return await api.postClientDelegationAgentRequest(
+        '310547891',
         systemId,
         accessPackageApiName,
         partyOrgNo,
@@ -64,12 +65,12 @@ test.describe('Systembruker - Legg til egen organisasjon', () => {
     if (testInfo.status === 'passed') return;
 
     try {
-      await api.deleteAgentSystemUser(systemId, partyOrgNo, externalRef, managerPid);
+      await api.deleteAgentSystemUser('310547891', systemId, partyOrgNo, externalRef, managerPid);
     } catch (error) {
       console.error('Cleanup: Failed to delete agent system user:', error);
     }
     try {
-      await api.deleteSystemInSystemRegister(name);
+      await api.deleteSystemInSystemRegister('310547891', name);
     } catch (error) {
       console.error('Cleanup: Failed to delete system from system register:', error);
     }

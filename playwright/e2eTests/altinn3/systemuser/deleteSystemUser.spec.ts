@@ -1,5 +1,5 @@
 import { expect, test } from 'playwright/fixture/pomFixture';
-import { ApiRequests } from 'playwright/api-requests/ApiRequests';
+import { ApiRequests } from 'playwright/api-requests/SystemUserApiRequests';
 import { TestdataApi } from 'playwright/util/TestdataApi';
 import { env } from 'playwright/util/helper';
 const vendorOrgNumber = '310547891';
@@ -13,7 +13,7 @@ test.describe('System user deletion', () => {
 
   test.beforeEach(async ({ page, login, systemUserPage, accessManagementFrontPage }) => {
     await test.step('Setup API client', async () => {
-      api = new ApiRequests(vendorOrgNumber);
+      api = new ApiRequests();
     });
 
     await test.step('Login and navigate to application', async () => {
@@ -23,7 +23,7 @@ test.describe('System user deletion', () => {
     });
 
     await test.step('Create system in system register', async () => {
-      systemId = await api.createSystemSystemRegister();
+      systemId = await api.createSystemSystemRegister(vendorOrgNumber);
     });
 
     await test.step('Navigate to system user page and create system user', async () => {
@@ -57,7 +57,7 @@ test.describe('System user deletion', () => {
   test.afterEach(async () => {
     if (systemId) {
       // Remove system
-      await TestdataApi.removeSystem(systemId);
+      await TestdataApi.removeSystem(vendorOrgNumber, systemId);
     }
   });
 });

@@ -151,4 +151,4 @@ Spec files follow `test.describe` → `test.beforeEach` → `test.afterEach` →
 Use `test.step()` to label logical phases within a test. This makes trace viewer output readable.
 
 ## Git
-Use concention `test/name-of-feature` for branches
+Use convention `test/name-of-feature` for branches
