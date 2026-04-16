@@ -18,7 +18,7 @@ import { StatusSection } from '../../StatusSection/StatusSection';
 import { LoadingAnimation } from '../../LoadingAnimation/LoadingAnimation';
 import { usePartyRepresentation } from '../../PartyRepresentationContext/PartyRepresentationContext';
 import { getMissingAccessMessage } from '../missingAccessUtils';
-import { useRightsSection } from '../hooks/useRightsSection';
+import { useRightsSection } from '../utils/useRightsSection';
 import type { DelegationRecipient } from '../EditModal';
 import { DelegationAction } from '../EditModal';
 import { RightsSection } from '../SingleRights/RightsSection';

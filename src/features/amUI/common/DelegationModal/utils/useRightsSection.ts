@@ -1,9 +1,6 @@
-import { useEffect, useRef, useState } from 'react';
+import { useState } from 'react';
+import { ChipRight } from './rightsUtils';
 
-import type { ChipRight } from './rightsUtils';
-
-// Callback-based actions so callers can use either RTK mutations (.unwrap())
-// or the existing callback-style hooks without wrapping in promises.
 type DelegationActions = {
   delegate: (actionKeys: string[], onSuccess: () => void, onError: () => void) => void;
   update: (actionKeys: string[], onSuccess: () => void, onError: () => void) => void;
@@ -12,15 +9,10 @@ type DelegationActions = {
 
 /**
  * Manages action state for rights delegation: loading, success, and error.
- * Provides delegateChosenRights, saveEditedRights, and revokeResource functions.
- *
- * Called from the component alongside a data hook (useSingleRightsDelegationRightsData
- * or useInstanceDelegationRightsData). The data hook provides `rights`; this hook
- * provides the actions and their state.
- *
- * The `actions` parameter decouples this hook from the specific API (single rights
- * vs. instance), making it reusable across both flows.
+ * Expects the current `rights` state and action callbacks for delegate, update,
+ * and revoke operations.
  */
+
 export const useRightsSection = ({
   rights,
   actions,
@@ -35,14 +27,6 @@ export const useRightsSection = ({
   );
   const [isActionLoading, setIsActionLoading] = useState(false);
   const [isActionSuccess, setIsActionSuccess] = useState(false);
-
-  // Keep a ref to the success timer so we can clear it on unmount
-  const successTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
-  useEffect(() => {
-    return () => {
-      if (successTimerRef.current) clearTimeout(successTimerRef.current);
-    };
-  }, []);
 
   // Derived state from the current rights list
   const hasUnsavedChanges = rights.some((r) => r.checked !== r.delegated);
@@ -59,7 +43,7 @@ export const useRightsSection = ({
   const handleSuccess = () => {
     setIsActionLoading(false);
     setIsActionSuccess(true);
-    successTimerRef.current = setTimeout(() => setIsActionSuccess(false), 2000);
+    setTimeout(() => setIsActionSuccess(false), 2000);
     onDelegate?.();
   };
 

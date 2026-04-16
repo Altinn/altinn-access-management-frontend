@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
 import { DsChip, DsPopover } from '@altinn/altinn-components';
-import { ChipRight } from '../hooks/rightsUtils';
 import { useTranslation } from 'react-i18next';
 import classes from './ResourceInfo.module.css';
+import { ChipRight } from '../utils/rightsUtils';
 
 interface RightChipsProps {
   rights: ChipRight[];

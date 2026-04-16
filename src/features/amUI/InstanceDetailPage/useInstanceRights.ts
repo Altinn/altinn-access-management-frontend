@@ -1,8 +1,7 @@
 import { useTranslation } from 'react-i18next';
-
-import { ChipRight } from '../common/DelegationModal/hooks/rightsUtils';
 import { createErrorDetails } from '../common/TechnicalErrorParagraphs/TechnicalErrorParagraphs';
 import { useInstanceDelegationRightsData } from '../common/DelegationModal/Instance/useInstanceDelegationRightsData';
+import { ChipRight } from '../common/DelegationModal/utils/rightsUtils';
 
 export const getRightsSummaryTitle = (
   rights: ChipRight[],

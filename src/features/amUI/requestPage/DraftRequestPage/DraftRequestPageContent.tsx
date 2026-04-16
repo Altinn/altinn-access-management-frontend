@@ -130,8 +130,7 @@ export const DraftRequestPageContent = ({ request }: DraftRequestPageContentProp
           undelegableActions={[]}
           isDelegationCheckLoading={false}
           toName={isSelfParty ? t('common.you_uppercase') : fromName}
-          isSingleRightRequest={true}
-          availableActions={[]}
+          availableActions={[DelegationAction.REQUEST]}
           delegationError={null}
           missingAccess={null}
         />
