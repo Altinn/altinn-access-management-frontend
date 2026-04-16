@@ -46,33 +46,6 @@ export class Token {
     return token;
   }
 
-  /**
-   * Used for fetching an Altinn test token for a specific role
-   * @returns The Altinn test token as a string
-   */
-  public async getPersonalAltinnToken(): Promise<string> {
-    const url =
-      `https://altinn-testtools-token-generator.azurewebsites.net/api/GetPersonalToken?env=${this.environment}` +
-      `&pid=${env('PID')}` +
-      `&userid=${env('ALTINN_USER_ID')}` +
-      `&partyid=${env('ALTINN_PARTY_ID')}` +
-      `&partyUuid=${env('ALTINN_PARTY_UUID')}` +
-      `&authLvl=3&ttl=3000` +
-      `&scopes=altinn:portal/enduser`;
-
-    // Retrieve the token
-    const auth = Buffer.from(`${this.username}:${this.password}`).toString('base64');
-    const headers = {
-      Authorization: `Basic ${auth}`,
-    };
-
-    const token = await this.getAltinnToken(url, headers);
-    if (!token) {
-      throw new Error('Token retrieval failed for Altinn token');
-    }
-    return token;
-  }
-
   public async generateAltinnPersonalToken(): Promise<string> {
     const url =
       `https://altinn-testtools-token-generator.azurewebsites.net/api/GetPersonalToken` +

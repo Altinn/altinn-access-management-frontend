@@ -68,39 +68,6 @@ export class ApiRequests {
     }
   }
 
-  public async getSystemUsers(partyOrgNo: string): Promise<string> {
-    const { partyId } = await this.tokenClass.getIds(partyOrgNo);
-    const endpoint = `/v1/systemuser/${partyId}`;
-    const url = `${env('API_BASE_URL')}/authentication/api/${endpoint}`;
-    const token = await this.tokenClass.getPersonalAltinnToken();
-
-    try {
-      const response = await fetch(url, {
-        method: 'GET',
-        headers: {
-          Authorization: `Bearer ${token}`, // Use the token for authentication
-          'Content-Type': 'application/json',
-        },
-      });
-
-      if (!response.ok) {
-        if (response.status === 404) {
-          console.warn('System users not found (404).');
-          return '[]'; // Return empty list if no users found
-        }
-        const errorText = await response.text();
-        console.error('Failed to fetch system users:', response.status, errorText);
-        throw new Error(`Failed to fetch system users: ${response.statusText}`);
-      }
-
-      const data = await response.json();
-      return JSON.stringify(data, null, 2);
-    } catch (error) {
-      console.error('Error fetching system users:', error);
-      throw new Error('Error fetching system users. Check logs for details.');
-    }
-  }
-
   public async deleteAgentSystemUser(
     vendorOrgNo: string,
     systemId: string,
