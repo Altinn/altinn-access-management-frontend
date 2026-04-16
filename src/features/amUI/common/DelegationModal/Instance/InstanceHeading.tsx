@@ -1,27 +1,45 @@
 import { useProviderLogoUrl } from '@/resources/hooks';
 import { ServiceResource } from '@/rtk/features/singleRights/singleRightsApi';
+import type { DialogLookup } from '@/rtk/features/instanceApi';
 import { Avatar, DsHeading, DsParagraph, formatDisplayName, Icon } from '@altinn/altinn-components';
 
 import classes from './InstanceHeading.module.css';
 import { PartyType } from '@/rtk/features/userInfoApi';
 import { useTranslation } from 'react-i18next';
+import { resolveInstanceTitle } from '@/features/amUI/common/InstanceList/instanceListUtils';
 
 export const InstanceHeading = ({
   resource,
+  instanceUrn,
+  dialogLookup,
   fromPartyName,
   fromPartyType,
 }: {
   resource: ServiceResource;
+  instanceUrn: string;
+  dialogLookup?: DialogLookup;
   fromPartyName?: string;
   fromPartyType?: PartyType;
 }) => {
   const { getProviderLogoUrl } = useProviderLogoUrl();
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   const emblem = getProviderLogoUrl(resource.resourceOwnerOrgcode ?? '');
   const fromName = formatDisplayName({
     fullName: fromPartyName ?? '',
     type: fromPartyType === PartyType.Person ? 'person' : 'company',
   });
+  const title = resolveInstanceTitle(
+    {
+      instance: {
+        refId: instanceUrn,
+        type: null,
+      },
+      dialogLookup,
+    },
+    resource,
+    t,
+    i18n.language,
+  );
 
   const icon = () => (
     <>
@@ -48,7 +66,7 @@ export const InstanceHeading = ({
             level={3}
             data-size={'sm'}
           >
-            {resource.title}
+            {title}
           </DsHeading>
         </div>
 

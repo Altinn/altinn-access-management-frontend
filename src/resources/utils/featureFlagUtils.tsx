@@ -99,3 +99,7 @@ export const enableAddSelfToSystemuser = () => {
 export const enableRequestSingleRight = () => {
   return window.featureFlags?.enableRequestAccess === true;
 };
+
+export const enableDialogportenDialogLookup = () => {
+  return window.featureFlags?.enableDialogportenDialogLookup === true;
+};

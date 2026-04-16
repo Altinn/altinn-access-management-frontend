@@ -13,7 +13,7 @@ import {
   createErrorDetails,
   TechnicalErrorParagraphs,
 } from '../common/TechnicalErrorParagraphs/TechnicalErrorParagraphs';
-import { useRemoveInstanceMutation } from '@/rtk/features/instanceApi';
+import { useGetInstancesQuery, useRemoveInstanceMutation } from '@/rtk/features/instanceApi';
 import { useGetResourceQuery } from '@/rtk/features/resourceApi';
 import { useProviderLogoUrl } from '@/resources/hooks';
 import {
@@ -21,17 +21,17 @@ import {
   useGetIsAdminQuery,
   useGetIsInstanceAdminQuery,
 } from '@/rtk/features/userInfoApi';
-import { getAfUrl } from '@/resources/utils/pathUtils';
 import { EnvelopeClosedIcon } from '@navikt/aksel-icons';
 import { DelegationAction, EditModal } from '../common/DelegationModal/EditModal';
 import type { ActionError } from '@/resources/hooks/useActionError';
 import type { UserActionTarget } from '../common/UserSearch/types';
 import { AddUserButton } from './AddUserModal';
+import { getInboxLinkData } from '../common/InstanceList/instanceListUtils';
 
 import classes from './InstanceDetailPageContent.module.css';
 
 export const InstanceDetailPageContent = () => {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   const [searchParams] = useSearchParams();
   const { actingParty, fromParty } = usePartyRepresentation();
 
@@ -120,6 +120,18 @@ export const InstanceDetailPageContent = () => {
   } = useGetResourceQuery(resourceId, {
     skip: !resourceId,
   });
+  const { data: instanceDelegations = [] } = useGetInstancesQuery(
+    {
+      party: actingParty?.partyUuid || '',
+      from: fromParty?.partyUuid,
+      resource: resourceId,
+      instance: instanceUrn,
+      language: i18n.language,
+    },
+    {
+      skip: !actingParty?.partyUuid || !fromParty?.partyUuid || !resourceId || !instanceUrn,
+    },
+  );
 
   if (!resourceId || !instanceUrn) {
     return (
@@ -129,12 +141,12 @@ export const InstanceDetailPageContent = () => {
       />
     );
   }
-
-  const isCorrespondenceInstance = instanceUrn.startsWith('urn:altinn:correspondence-id:');
-
-  const inboxUrl = `${getAfUrl()}redirect?instanceUrn=${encodeURIComponent(instanceUrn)}`;
-
-  const showInboxLink = !dialogId && !isCorrespondenceInstance;
+  const instanceDelegation = instanceDelegations[0];
+  const { href: inboxUrl, showInboxLink } = getInboxLinkData({
+    instanceUrn,
+    dialogLookup: instanceDelegation?.dialogLookup,
+    isDialogDeepLink: Boolean(dialogId),
+  });
 
   const inboxLink = showInboxLink ? (
     <div className={classes.inboxLinkContainer}>
@@ -173,7 +185,8 @@ export const InstanceDetailPageContent = () => {
       {resource && (
         <InstanceDetailHeader
           resource={resource}
-          resourceId={resourceId}
+          instance={instanceDelegation?.instance}
+          dialogLookup={instanceDelegation?.dialogLookup}
           providerLogoUrl={providerLogoUrl}
           fromPartyName={fromParty?.name}
           fromPartyTypeName={fromParty?.partyTypeName}
@@ -239,8 +252,9 @@ export const InstanceDetailPageContent = () => {
           toParty={{
             partyUuid: selectedUser.id,
             name: selectedUser.name,
-            partyTypeName:
+            partyTypeName: String(
               selectedUser.type === 'person' ? PartyType.Person : PartyType.Organization,
+            ),
           }}
           openWithError={actionError}
           onSuccess={selectedUserMode === 'delegate' ? () => modalRef.current?.close() : undefined}
