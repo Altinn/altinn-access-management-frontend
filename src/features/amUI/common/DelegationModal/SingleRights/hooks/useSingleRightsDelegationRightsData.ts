@@ -8,29 +8,25 @@ import {
 } from '@/rtk/features/singleRights/singleRightsApi';
 import { usePartyRepresentation } from '../../../PartyRepresentationContext/PartyRepresentationContext';
 import { createErrorDetails } from '@/features/amUI/common/TechnicalErrorParagraphs/TechnicalErrorParagraphs';
-import { mapRightsToChipRights, type ChipRight } from '../../hooks/rightsUtils';
+import { mapRightsToChipRights } from '../../utils/rightsUtils';
+import type { ChipRight } from '../../types/ChipRight';
 import { useHasResourceCheck } from './useHasResourceCheck';
 
 /**
  * Fetches and derives all rights data needed to display a resource's rights in
- * the delegation modal. Mirrors the structure of useInstanceDelegationRightsData.
- *
- * Called from the component alongside useRightsSection (which handles actions).
+ * the delegation modal.
  */
 export const useSingleRightsDelegationRightsData = ({
   resource,
   isRequest = false,
 }: {
   resource: ServiceResource;
-  // When true, all rights are pre-checked (request flow, not delegation flow)
   isRequest?: boolean;
 }) => {
   const { toParty, fromParty, actingParty } = usePartyRepresentation();
   const [rights, setRights] = useState<ChipRight[]>([]);
   const [hasAccess, setHasAccess] = useState(false);
 
-  // Check if the rightholder has any access to this resource at all before
-  // fetching individual rights (avoids unnecessary queries)
   const { hasResourceAccess, isLoading: isResourceAccessLoading } = useHasResourceCheck(
     resource.identifier,
   );
@@ -46,7 +42,6 @@ export const useSingleRightsDelegationRightsData = ({
       to: toParty?.partyUuid || '',
       resourceId: resource.identifier,
     },
-    // Only fetch if the rightholder has access – avoids a 404 for new delegations
     { skip: !toParty || !fromParty || !actingParty || !resource.identifier || !hasResourceAccess },
   );
 
@@ -84,14 +79,13 @@ export const useSingleRightsDelegationRightsData = ({
     rightsMeta.length === 0;
 
   // Error details for the technical error display shown to users
-  const rightsMetaTechnicalErrorDetails =
-    isRightsMetaError || isRightsMetaEmpty
-      ? {
-          status:
-            createErrorDetails(rightsMetaError)?.status ??
-            (isRightsMetaEmpty ? 'empty response' : 'no status'),
-          time: createErrorDetails(rightsMetaError)?.time ?? new Date().toISOString(),
-        }
+  const rightsMetaTechnicalErrorDetails = isRightsMetaEmpty
+    ? {
+        status: 'empty response',
+        time: new Date().toISOString(),
+      }
+    : isRightsMetaError
+      ? createErrorDetails(rightsMetaError)
       : null;
 
   // Determine whether the rightholder currently has access to this resource
@@ -103,17 +97,16 @@ export const useSingleRightsDelegationRightsData = ({
         (resourceRights.directRights.length > 0 || resourceRights.indirectRights.length > 0);
       setHasAccess(!!hasDirectOrIndirectRights);
     }
-  }, [resourceRights, isResourceRightsFetching, resource.identifier, hasResourceAccess]);
+  }, [resourceRights, isResourceRightsFetching, hasResourceAccess]);
 
-  // Build the list of ChipRight objects shown in the UI
+  // Build the list of ChipRight
   useEffect(() => {
     if (!rightsMeta || rightsMeta.length === 0) return;
 
-    // Wait for delegation check unless it errored or this is the request flow
     if (!delegationCheckedActions && !isDelegationCheckError && !isRequest) return;
 
     if (hasAccess && resourceRights) {
-      // Rightholder already has access – reflect the current delegation state
+      // Rightholder has access – reflect the current state
       setRights(
         mapRightsToChipRights(rightsMeta, delegationCheckedActions, {
           isDelegated: (right) =>
@@ -124,7 +117,7 @@ export const useSingleRightsDelegationRightsData = ({
         }),
       );
     } else {
-      // No access yet – pre-check all delegable rights (or all in the request flow)
+      // No access yet – select allowed rights, or all rights in request mode.
       setRights(
         mapRightsToChipRights(rightsMeta, delegationCheckedActions, {
           isChecked: (right) => right.result === true || isRequest === true,

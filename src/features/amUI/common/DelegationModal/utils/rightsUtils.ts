@@ -1,6 +1,5 @@
 import { DelegationCheckedRight, Right } from '@/rtk/features/singleRights/singleRightsApi';
 
-// Represents a single right displayed as a chip in the UI
 export type ChipRight = {
   rightName: string;
   rightKey: string;
@@ -18,8 +17,7 @@ type MapRightsToChipRightsOptions = {
 };
 
 /**
- * Maps raw rights metadata and delegation check results into ChipRight objects
- * suitable for rendering in the UI.
+ * Maps rights metadata and delegation check results into ChipRight objects
  *
  * - isDelegated: returns true if the right is already delegated to the party
  * - isInherited: returns true if the right comes from a role (not directly delegated)

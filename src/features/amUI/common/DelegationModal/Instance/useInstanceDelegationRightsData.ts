@@ -8,7 +8,8 @@ import { useGetResourceRightsMetaQuery } from '@/rtk/features/singleRights/singl
 import { createErrorDetails } from '@/features/amUI/common/TechnicalErrorParagraphs/TechnicalErrorParagraphs';
 
 import { usePartyRepresentation } from '../../PartyRepresentationContext/PartyRepresentationContext';
-import { mapRightsToChipRights, type ChipRight } from '../hooks/rightsUtils';
+import { mapRightsToChipRights } from '../utils/rightsUtils';
+import type { ChipRight } from '../types/ChipRight';
 
 export const useInstanceDelegationRightsData = ({
   resourceId,

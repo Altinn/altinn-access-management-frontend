@@ -20,7 +20,7 @@ import { LoadingAnimation } from '../../LoadingAnimation/LoadingAnimation';
 import { useInheritedStatusInfo } from '../../useInheritedStatus';
 import { usePartyRepresentation } from '../../PartyRepresentationContext/PartyRepresentationContext';
 import { getMissingAccessMessage } from '../missingAccessUtils';
-import { useRightsSection } from '../hooks/useRightsSection';
+import { useRightsSection } from '../utils/useRightsSection';
 import { DelegationAction } from '../EditModal';
 import { ResourceHeading } from './ResourceHeading';
 import { ResourceInfoSkeleton } from './ResourceInfoSkeleton';
@@ -77,7 +77,7 @@ export const ResourceInfo = ({
     rightsMetaTechnicalErrorDetails,
   } = useSingleRightsDelegationRightsData({ resource, isRequest: isSingleRightRequest });
 
-  // Request flow: separate from delegation, only available for single right requests
+  // Request flow: separate from delegation
   const { createRequest, deleteRequest, hasPendingRequest, isLoadingRequest } =
     useSingleRightRequests({
       canRequestRights: isSingleRightRequest,
@@ -85,12 +85,11 @@ export const ResourceInfo = ({
       fromPartyUuid: fromParty?.partyUuid,
     });
 
-  // Action functions – each wraps the corresponding hook result and resource context
   const delegateRights = useDelegateRights();
   const updateResource = useUpdateResource();
   const revokeRight = useRevokeResource();
 
-  // Action state: loading/success/error and the three delegation actions
+  // Action state: loading/success/error and delegation actions
   const {
     delegateChosenRights,
     saveEditedRights,
@@ -112,11 +111,9 @@ export const ResourceInfo = ({
     },
   });
 
-  // Reportee name is used in the missing access message when the acting party lacks rights
   const { data: reportee } = useGetReporteeQuery();
 
   // Warning shown when the acting party cannot delegate one or more rights.
-  // Suppressed while an action is running or has just failed (error message takes precedence).
   const rawMissingAccess = delegationCheckedActions
     ? getMissingAccessMessage(
         delegationCheckedActions,
@@ -125,9 +122,9 @@ export const ResourceInfo = ({
         reportee?.name,
       )
     : null;
+
   const missingAccess = isActionLoading || delegationError ? null : rawMissingAccess;
 
-  // Technical error details used in ResourceAlert (shown instead of the rights list)
   const delegationCheckErrorDetails = isDelegationCheckError
     ? createErrorDetails(delegationCheckError)
     : null;
@@ -249,7 +246,10 @@ export const ResourceInfo = ({
                   data-size='sm'
                   disabled={!!displayResourceAlert || isLoadingSingleRightRequest}
                   loading={isLoadingSingleRightRequest}
-                  onClick={() => createRequest(resource)}
+                  onClick={() => {
+                    if (displayResourceAlert || isLoadingSingleRightRequest) return;
+                    createRequest(resource);
+                  }}
                 >
                   {t('common.request_poa')}
                 </DsButton>
@@ -260,7 +260,16 @@ export const ResourceInfo = ({
                   disabled={isLoadingSingleRightRequest}
                   data-color='danger'
                   loading={isLoadingSingleRightRequest}
-                  onClick={() => deleteRequest(resource)}
+                  onClick={() => {
+                    if (
+                      isLoadingSingleRightRequest ||
+                      !hasPendingRequest(resource.identifier) ||
+                      !isSingleRightRequest
+                    ) {
+                      return;
+                    }
+                    deleteRequest(resource);
+                  }}
                 >
                   {t('delegation_modal.request.delete_request')}
                 </DsButton>
