@@ -131,7 +131,7 @@ test.describe('Systembruker endringsforespørsel', () => {
       //Look for login button
       await expect(login.loginButton).toBeVisible();
 
-      //Read from status api to verify that status is not Accepted after clicking "Avvis"
+      //Read from status api to verify that status is not Accepted after clicking "Approve"
       const statusApiRequest = await api.getStatusForSystemUserChangeRequest<{ status: string }>(
         vendorOrgNumber,
         changeRequestResponse.id,
