@@ -7,6 +7,7 @@ import { useRevokeAccessPackage } from '@/resources/hooks/useRevokeAccessPackage
 import type { AccessPackage } from '@/rtk/features/accessPackageApi';
 import type { Party } from '@/rtk/features/lookupApi';
 import type { ActionError } from '@/resources/hooks/useActionError';
+import { useCreatePackageRequestMutation } from '@/rtk/features/requestApi';
 
 import { usePartyRepresentation } from '../PartyRepresentationContext/PartyRepresentationContext';
 import { PartyType } from '@/rtk/features/userInfoApi';
@@ -26,7 +27,8 @@ export const useAccessPackageActions = ({
 }: useAccessPackageActionsProps) => {
   const { delegatePackage, isLoading: isDelegationLoading } = useDelegateAccessPackage();
   const { revokePackage, isLoading: isRevokeLoading } = useRevokeAccessPackage();
-  const isLoading = isDelegationLoading || isRevokeLoading;
+  const [createPackageRequest, { isLoading: isRequestLoading }] = useCreatePackageRequestMutation();
+  const isLoading = isDelegationLoading || isRevokeLoading || isRequestLoading;
 
   const { t } = useTranslation();
   const { toParty: toPartyFromContext, fromParty, actingParty } = usePartyRepresentation();
@@ -158,7 +160,42 @@ export const useAccessPackageActions = ({
     );
   };
 
-  const onRequest = () => console.error('requestPackage is not implemented');
+  const onRequest = async (accessPackage: AccessPackage) => {
+    if (!fromParty || !actingParty) {
+      return;
+    }
 
-  return { onDelegate, onRevoke, onRequest, isDelegationLoading, isRevokeLoading, isLoading };
+    try {
+      await createPackageRequest({
+        party: actingParty.partyUuid,
+        to: fromParty.partyUuid,
+        package: accessPackage.urn ?? accessPackage.id,
+      }).unwrap();
+
+      openSnackbar({
+        message: t('delegation_modal.request.sent_request_success', {
+          resource: accessPackage.name,
+        }),
+        color: 'success',
+      });
+    } catch {
+      openSnackbar({
+        message: t('delegation_modal.request.sent_request_error', {
+          resource: accessPackage.name,
+        }),
+        color: 'danger',
+        duration: SnackbarDuration.infinite,
+      });
+    }
+  };
+
+  return {
+    onDelegate,
+    onRevoke,
+    onRequest,
+    isDelegationLoading,
+    isRevokeLoading,
+    isRequestLoading,
+    isLoading,
+  };
 };

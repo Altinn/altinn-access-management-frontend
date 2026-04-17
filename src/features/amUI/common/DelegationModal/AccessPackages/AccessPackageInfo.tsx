@@ -40,6 +40,7 @@ export const AccessPackageInfo = ({ accessPackage, availableActions = [] }: Pack
   const {
     onDelegate,
     onRevoke,
+    onRequest,
     isLoading: isActionLoading,
   } = useAccessPackageActions({
     onDelegateSuccess: () => {
@@ -220,9 +221,13 @@ export const AccessPackageInfo = ({ accessPackage, availableActions = [] }: Pack
             )}
             {!userHasPackage &&
               availableActions.includes(DelegationAction.REQUEST) &&
-              // Todo: Implement request access package
               displayPackageRequestsFeature && (
-                <DsButton disabled>{t('common.request_poa')}</DsButton>
+                <DsButton
+                  disabled={accessPackage.isAssignable === false}
+                  onClick={() => onRequest(accessPackage)}
+                >
+                  {t('common.request_poa')}
+                </DsButton>
               )}
           </div>
         </>
