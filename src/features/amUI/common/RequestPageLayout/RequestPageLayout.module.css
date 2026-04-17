@@ -1,5 +1,6 @@
 .centerBlock {
-  display: block;
+  display: flex;
+  flex-direction: column;
   align-self: center;
   margin-top: var(--ds-size-4);
   max-width: 65rem;

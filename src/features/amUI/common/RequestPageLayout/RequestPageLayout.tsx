@@ -101,22 +101,22 @@ export const RequestPageLayout = ({
       >
         {isLoading && <LoadingState />}
         {error && <div className={classes.centerBlock}>{error}</div>}
-        {backToPage && (
-          <DsButton
-            variant='tertiary'
-            data-color='neutral'
-            data-size='sm'
-            className={classes.backButton}
-            asChild
-          >
-            <Link to={backToPage}>
-              <ArrowLeftIcon fontSize={getButtonIconSize(true)} />
-              {t('common.back')}
-            </Link>
-          </DsButton>
-        )}
         {heading && body && (
           <div className={classes.centerBlock}>
+            {backToPage && (
+              <DsButton
+                variant='tertiary'
+                data-color='neutral'
+                data-size='sm'
+                className={classes.backButton}
+                asChild
+              >
+                <Link to={backToPage}>
+                  <ArrowLeftIcon fontSize={getButtonIconSize(true)} />
+                  {t('common.back')}
+                </Link>
+              </DsButton>
+            )}
             <div className={cn(classes.requestBlock, classes.headerBlock)}>{heading}</div>
             <div className={classes.requestBlock}>{body}</div>
           </div>
