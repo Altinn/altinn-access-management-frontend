@@ -1,12 +1,22 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
+import { Link, useSearchParams } from 'react-router';
 import cn from 'classnames';
-import { DsSpinner, formatDisplayName, Layout, RootProvider } from '@altinn/altinn-components';
+import {
+  DsButton,
+  DsSpinner,
+  formatDisplayName,
+  Layout,
+  RootProvider,
+} from '@altinn/altinn-components';
 import { getAltinnStartPageUrl, getLogoutUrl } from '@/resources/utils/pathUtils';
 import { useUpdateSelectedLanguageMutation } from '@/rtk/features/settingsApi';
 import classes from './RequestPageLayout.module.css';
 
 import { useGetUserProfileQuery } from '@/rtk/features/userInfoApi';
+
+import { getButtonIconSize } from '@/resources/utils/iconUtils';
+import { ArrowLeftIcon } from '@navikt/aksel-icons';
 
 interface RequestPageLayoutProps {
   account: { name: string; type: 'person' | 'company' };
@@ -24,6 +34,9 @@ export const RequestPageLayout = ({
   body,
 }: RequestPageLayoutProps) => {
   const { t, i18n } = useTranslation();
+
+  const [searchParams] = useSearchParams();
+  const backToPage = searchParams.get('backtopage');
   const [updateSelectedLanguage] = useUpdateSelectedLanguageMutation();
 
   const { data: userData } = useGetUserProfileQuery();
@@ -88,6 +101,20 @@ export const RequestPageLayout = ({
       >
         {isLoading && <LoadingState />}
         {error && <div className={classes.centerBlock}>{error}</div>}
+        {backToPage && (
+          <DsButton
+            variant='tertiary'
+            data-color='neutral'
+            data-size='sm'
+            className={classes.backButton}
+            asChild
+          >
+            <Link to={backToPage}>
+              <ArrowLeftIcon fontSize={getButtonIconSize(true)} />
+              {t('common.back')}
+            </Link>
+          </DsButton>
+        )}
         {heading && body && (
           <div className={classes.centerBlock}>
             <div className={cn(classes.requestBlock, classes.headerBlock)}>{heading}</div>
