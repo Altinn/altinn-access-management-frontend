@@ -1,4 +1,4 @@
-using Altinn.AccessManagement.UI.Core.Models.AccessPackage;
+using AccessPackageModel = Altinn.AccessManagement.UI.Core.Models.AccessPackage.AccessPackage;
 
 namespace Altinn.AccessManagement.UI.Core.Models.Request.Frontend
 {
@@ -10,6 +10,6 @@ namespace Altinn.AccessManagement.UI.Core.Models.Request.Frontend
         /// <summary>
         /// The full access package object
         /// </summary>
-        public AccessPackage.AccessPackage Package { get; set; }
+        public AccessPackageModel Package { get; set; }
     }
 }
