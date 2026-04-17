@@ -1,22 +1,47 @@
 # AltinnApp ResourceType Pattern Analysis
 
 ## Summary
-This document catalogs all files in the repository that contain patterns related to `AltinnApp` ResourceType handling. This helps identify where `MigratedApp` needs to be added when implementing support for the new resource type.
+This document catalogs all files in the repository that contain patterns related to `AltinnApp` ResourceType handling, and tracks where `MigratedApp` support has been added. This analysis ensures consistent handling across the codebase for app-like resource types.
+
+### Current Status
+✨ **MigratedApp Support Implemented**
+- Backend enum: MigratedApp (1 << 8) ✅
+- Frontend enum: MigratedApp and additional types (BrokerService, CorrespondenceService, Consent) ✅
+- UI components: Updated to treat MigratedApp like AltinnApp ✅
+- Conditional statements: Extended to include MigratedApp in app-specific logic ✅
 
 ---
 
 ## 1. ResourceType Enum Definitions
 
 ### Backend - C# Enum
-- **File**: [backend/src/Altinn.AccessManagement.UI/Altinn.AccessManagement.UI.Core/Enums/ResourceType.cs](backend/src/Altinn.AccessManagement.UI/Altinn.AccessManagement.UI.Core/Enums/ResourceType.cs#L32-L34)
-  - **Line 32-34**: `AltinnApp = 1 << 3`
+- **File**: [backend/src/Altinn.AccessManagement.UI/Altinn.AccessManagement.UI.Core/Enums/ResourceType.cs](backend/src/Altinn.AccessManagement.UI/Altinn.AccessManagement.UI.Core/Enums/ResourceType.cs)
+  - **Line 14**: `Default = 0`
+  - **Line 19**: `Systemresource = 1 << 0`
+  - **Line 24**: `MaskinportenSchema = 1 << 1`
+  - **Line 29**: `Altinn2Service = 1 << 2`
+  - **Line 34**: `AltinnApp = 1 << 3`
+  - **Line 39**: `GenericAccessResource = 1 << 4`
+  - **Line 44**: `BrokerService = 1 << 5`
+  - **Line 49**: `CorrespondenceService = 1 << 6`
+  - **Line 52**: `Consent = 1 << 7`
+  - **Line 56**: `MigratedApp = 1 << 8` ✨ **NEW**
   - Flags-based enum used for bitwise filtering
 
 ### Frontend - TypeScript Enum
-- **File**: [src/rtk/features/resourceApi.ts](src/rtk/features/resourceApi.ts#L17)
-  - **Line 17**: `AltinnApp = 'AltinnApp'`
-  - String-based enum for API communication
-  - Also defines: `Default`, `SystemResource`, `MaskinportenSchema`, `Altinn2Service`, `GenericAccessResource`
+- **File**: [src/rtk/features/resourceApi.ts](src/rtk/features/resourceApi.ts#L11-L19)
+  - **Line 11-19**: String-based enum for API communication
+  - Includes all resource types:
+    - `Default = 'Default'`
+    - `SystemResource = 'SystemResource'`
+    - `MaskinportenSchema = 'MaskinportenSchema'`
+    - `Altinn2Service = 'Altinn2Service'`
+    - `AltinnApp = 'AltinnApp'`
+    - `GenericAccessResource = 'GenericAccessResource'`
+    - `BrokerService = 'BrokerService'`
+    - `CorrespondenceService = 'CorrespondenceService'`
+    - `Consent = 'Consent'`
+    - `MigratedApp = 'MigratedApp'`
 
 ---
 
@@ -26,19 +51,21 @@ This document catalogs all files in the repository that contain patterns related
 
 #### ReceiptActionBarContent Component
 - **File**: [src/features/singleRight/delegate/ReceiptPage/ReceiptActionBarContent/ReceiptActionBarContent.tsx](src/features/singleRight/delegate/ReceiptPage/ReceiptActionBarContent/ReceiptActionBarContent.tsx#L103)
-  - **Line 103**: `{serviceType === 'AltinnApp'` - Conditional rendering based on service type
-  - Used to determine special UI rendering behavior for AltinnApp resources
+  - **Line 103**: `{serviceType === 'AltinnApp' || serviceType === 'MigratedApp'` ✨ **UPDATED**
+  - Conditional rendering to treat MigratedApp like AltinnApp
+  - Shows "action_access" label for both app-like resource types vs individual rights
 
 #### RightsActionBarContent Component  
-- **File**: [src/features/singleRight/delegate/ChooseRightsPage/RightsActionBarContent/RightsActionBarContent.tsx](src/features/singleRight/delegate/ChooseRightsPage/RightsActionBarContent/RightsActionBarContent.tsx#L61)
-  - **Line 61**: `serviceType !== 'AltinnApp'` - Conditional check to exclude AltinnApp
-  - **Line 101**: `serviceType === 'AltinnApp' ?` - Ternary operator for conditional rendering
-  - Used to determine right delegation logic specific to AltinnApp vs other resource types
+- **File**: [src/features/singleRight/delegate/ChooseRightsPage/RightsActionBarContent/RightsActionBarContent.tsx](src/features/singleRight/delegate/ChooseRightsPage/RightsActionBarContent/RightsActionBarContent.tsx)
+  - **Line 61**: `serviceType !== 'AltinnApp' && serviceType !== 'MigratedApp'` ✨ **UPDATED** - Excludes both app types from undelegable rights check
+  - **Line 101**: `serviceType === 'AltinnApp' || serviceType === 'MigratedApp' ?` ✨ **UPDATED** - Ternary operator treats both app types the same
+  - Used to determine right delegation logic: app resources get checkbox UI, others get individual right matching
 
 #### ChooseRightsPage Component
-- **File**: [src/features/singleRight/delegate/ChooseRightsPage/ChooseRightsPage.tsx](src/features/singleRight/delegate/ChooseRightsPage/ChooseRightsPage.tsx#L122)
-  - **Line 122**: `type: service.service?.resourceType ?? ''`
-  - Passes resourceType as service type through component hierarchy
+- **File**: [src/features/singleRight/delegate/ChooseRightsPage/ChooseRightsPage.tsx](src/features/singleRight/delegate/ChooseRightsPage/ChooseRightsPage.tsx#L179)
+  - **Line 179**: `service.status === ServiceStatus.Delegable || service.type === 'AltinnApp' || service.type === 'MigratedApp'` ✨ **UPDATED**
+  - MigratedApp now gets "success" status color like AltinnApp (green indicator)
+  - Other resource types get "warning" color (orange indicator)
 
 ---
 
@@ -382,4 +409,62 @@ Multiple locations exclude certain resource types from results:
 
 ### Test Methods Requiring Parallel: 1
 - `CreateDelegation_AltinnApp_valid()` should have MigratedApp equivalent
+
+---
+
+## Implementation Summary: MigratedApp Support ✨
+
+### Changes Completed
+
+#### Enum Definitions
+- **Backend** [ResourceType.cs](backend/src/Altinn.AccessManagement.UI/Altinn.AccessManagement.UI.Core/Enums/ResourceType.cs#L56)
+  - ✅ Added: `MigratedApp = 1 << 8`
+  
+- **Frontend** [resourceApi.ts](src/rtk/features/resourceApi.ts#L11-L19)
+  - ✅ Added: `MigratedApp = 'MigratedApp'`
+  - ✅ Added: `BrokerService = 'BrokerService'`, `CorrespondenceService = 'CorrespondenceService'`, `Consent = 'Consent'`
+  - Note: Frontend enum now fully synchronized with backend enum
+
+#### UI Components - App-Like Behavior
+All following components now treat MigratedApp identically to AltinnApp:
+
+1. **ReceiptActionBarContent.tsx** [Line 103](src/features/singleRight/delegate/ReceiptPage/ReceiptActionBarContent/ReceiptActionBarContent.tsx#L103)
+   - ✅ Condition: `serviceType === 'AltinnApp' || serviceType === 'MigratedApp'`
+   - Effect: Shows "action_access" label for both app types
+
+2. **RightsActionBarContent.tsx** [Lines 61, 101](src/features/singleRight/delegate/ChooseRightsPage/RightsActionBarContent/RightsActionBarContent.tsx)
+   - ✅ Line 61: Excludes MigratedApp from undelegable rights check: `serviceType !== 'AltinnApp' && serviceType !== 'MigratedApp'`
+   - ✅ Line 101: Ternary renders checkbox UI for both: `serviceType === 'AltinnApp' || serviceType === 'MigratedApp' ?`
+   - Effect: MigratedApp gets same rights delegation UI as AltinnApp
+
+3. **ChooseRightsPage.tsx** [Line 179](src/features/singleRight/delegate/ChooseRightsPage/ChooseRightsPage.tsx#L179)
+   - ✅ Condition: `service.type === 'AltinnApp' || service.type === 'MigratedApp'`
+   - Effect: MigratedApp resources show green success indicator (same as AltinnApp) vs orange warning for other types
+
+### Key Design Principle
+**MigratedApp is treated as an "app-like" resource type:**
+- Shares UI behavior with AltinnApp
+- Shows full app access vs individual rights breakdown
+- Uses green success indicator for status
+- Uses app-based delegation checkbox interface
+
+### Pattern for Future Resource Types  
+When adding new resource types:
+1. Add to both C# enum (bitwise flags) and TypeScript enum
+2. Determine if "app-like" (uses app interface) or "right-based" (individual rights)
+3. Update conditional checks in UI components accordingly
+4. Add test coverage for delegation scenarios
+5. Add mock data examples
+
+### Files Modified in This PR
+- ✅ [ResourceType.cs](backend/src/Altinn.AccessManagement.UI/Altinn.AccessManagement.UI.Core/Enums/ResourceType.cs)
+- ✅ [resourceApi.ts](src/rtk/features/resourceApi.ts)
+- ✅ [ReceiptActionBarContent.tsx](src/features/singleRight/delegate/ReceiptPage/ReceiptActionBarContent/ReceiptActionBarContent.tsx)
+- ✅ [RightsActionBarContent.tsx](src/features/singleRight/delegate/ChooseRightsPage/RightsActionBarContent/RightsActionBarContent.tsx)
+- ✅ [ChooseRightsPage.tsx](src/features/singleRight/delegate/ChooseRightsPage/ChooseRightsPage.tsx)
+
+### Remaining Considerations
+- Test coverage: Consider adding MigratedApp test cases to [SingleRightControllerTest.cs](backend/src/Altinn.AccessManagement.UI/Altinn.AccessManagement.UI.Tests/Controllers/SingleRightControllerTest.cs)
+- Mock data: May need to add MigratedApp examples to resource mock JSON files
+- Backend delegation: Any migration-specific logic should be handled in backend authorization service
 
