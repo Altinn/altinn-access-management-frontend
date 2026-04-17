@@ -136,7 +136,7 @@ export const ConsentRequestPage = () => {
       </DsHeading>
     );
     body = (
-      <>
+      <div className={classes.consentReceipt}>
         <DsParagraph>
           {memoizedRequest?.isPoa
             ? t('consent_request.receipt_body_poa')
@@ -151,7 +151,7 @@ export const ConsentRequestPage = () => {
         >
           {t('consent_request.receipt_back')}
         </DsButton>
-      </>
+      </div>
     );
   } else if (memoizedRequest) {
     heading = (

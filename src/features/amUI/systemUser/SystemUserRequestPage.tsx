@@ -100,26 +100,25 @@ export const SystemUserRequestPage = () => {
     }
   };
 
+  let error: React.ReactNode = null;
+  if (loadReporteeError) {
+    error = <DsAlert data-color='danger'>{t('systemuser_request.load_user_info_error')}</DsAlert>;
+  } else if (loadingRequestError || (request && !request.system)) {
+    error = (
+      <SystemUserRequestLoadError error={(loadingRequestError as { data: ProblemDetail })?.data} />
+    );
+  }
+
   return (
     <RequestPageBase
       system={request?.system}
-      reporteeName={reporteeData?.name}
-      backToPage={backToPage}
+      reportee={reporteeData}
+      isLoading={isLoadingRequest || isLoadingReportee}
+      error={error}
       heading={t('systemuser_request.banner_title')}
     >
       {!requestId && (
         <DsAlert data-color='danger'>{t('systemuser_request.load_creation_request_no_id')}</DsAlert>
-      )}
-      {loadReporteeError && (
-        <DsAlert data-color='danger'>{t('systemuser_request.load_user_info_error')}</DsAlert>
-      )}
-      {(loadingRequestError || (request && !request.system)) && (
-        <SystemUserRequestLoadError
-          error={(loadingRequestError as { data: ProblemDetail })?.data}
-        />
-      )}
-      {(isLoadingRequest || isLoadingReportee) && (
-        <DsSpinner aria-label={t('systemuser_request.loading_creation_request')} />
       )}
       {request?.system && reporteeData && (
         <>

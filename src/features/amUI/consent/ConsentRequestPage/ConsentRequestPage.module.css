@@ -41,9 +41,5 @@
   display: flex;
   flex-direction: column;
   align-items: flex-start;
-  justify-content: center;
   gap: var(--ds-size-8);
-  align-self: center;
-  height: 100%;
-  max-width: 27rem;
 }

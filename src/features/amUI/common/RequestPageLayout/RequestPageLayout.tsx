@@ -24,6 +24,7 @@ interface RequestPageLayoutProps {
   error?: React.ReactNode;
   heading?: React.ReactNode;
   body?: React.ReactNode;
+  footer?: React.ReactNode;
 }
 
 export const RequestPageLayout = ({
@@ -32,6 +33,7 @@ export const RequestPageLayout = ({
   error,
   heading,
   body,
+  footer,
 }: RequestPageLayoutProps) => {
   const { t, i18n } = useTranslation();
 
@@ -119,6 +121,7 @@ export const RequestPageLayout = ({
             )}
             <div className={cn(classes.requestBlock, classes.headerBlock)}>{heading}</div>
             <div className={classes.requestBlock}>{body}</div>
+            {footer}
           </div>
         )}
       </Layout>
