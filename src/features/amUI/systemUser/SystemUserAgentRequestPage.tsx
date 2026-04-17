@@ -1,7 +1,7 @@
 import React from 'react';
 import { useTranslation, Trans } from 'react-i18next';
 import { useNavigate, useSearchParams } from 'react-router';
-import { DsAlert, DsSpinner, DsHeading, DsParagraph, DsButton } from '@altinn/altinn-components';
+import { DsAlert, DsHeading, DsParagraph, DsButton } from '@altinn/altinn-components';
 
 import {
   useGetAgentSystemUserRequestQuery,
@@ -11,7 +11,6 @@ import {
   useGetSystemuserIsAdminQuery,
 } from '@/rtk/features/systemUserApi';
 import { useDocumentTitle } from '@/resources/hooks/useDocumentTitle';
-
 import { RequestPageBase } from './components/RequestPageBase/RequestPageBase';
 import type { ProblemDetail } from './types';
 import { ButtonRow } from './components/ButtonRow/ButtonRow';
@@ -32,7 +31,6 @@ export const SystemUserAgentRequestPage = () => {
   const [searchParams] = useSearchParams();
   const skipLogout = searchParams.get('skiplogout');
   const requestId = searchParams.get('id') ?? '';
-  const backToPage = searchParams.get('backtopage') ?? '';
 
   const {
     data: request,

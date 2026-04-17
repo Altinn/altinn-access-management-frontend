@@ -1,8 +1,7 @@
 import React from 'react';
 import { useTranslation, Trans } from 'react-i18next';
 import { useSearchParams } from 'react-router';
-import { DsAlert, DsSpinner, DsHeading, DsParagraph, DsButton } from '@altinn/altinn-components';
-
+import { DsAlert, DsHeading, DsParagraph, DsButton } from '@altinn/altinn-components';
 import { useDocumentTitle } from '@/resources/hooks/useDocumentTitle';
 import {
   useApproveChangeRequestMutation,
@@ -11,7 +10,6 @@ import {
   useGetSystemUserReporteeQuery,
   useRejectChangeRequestMutation,
 } from '@/rtk/features/systemUserApi';
-
 import { RequestPageBase } from './components/RequestPageBase/RequestPageBase';
 import type { ProblemDetail, SystemUserAccessPackage } from './types';
 import { RightsList } from './components/RightsList/RightsList';
