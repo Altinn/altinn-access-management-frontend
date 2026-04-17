@@ -98,7 +98,11 @@ export const SystemUserRequestPage = () => {
   };
 
   let error: React.ReactNode = null;
-  if (loadReporteeError) {
+  if (!requestId) {
+    error = (
+      <DsAlert data-color='danger'>{t('systemuser_request.load_creation_request_no_id')}</DsAlert>
+    );
+  } else if (loadReporteeError) {
     error = <DsAlert data-color='danger'>{t('systemuser_request.load_user_info_error')}</DsAlert>;
   } else if (loadingRequestError || (request && !request.system)) {
     error = (
@@ -114,9 +118,6 @@ export const SystemUserRequestPage = () => {
       error={error}
       heading={t('systemuser_request.banner_title')}
     >
-      {!requestId && (
-        <DsAlert data-color='danger'>{t('systemuser_request.load_creation_request_no_id')}</DsAlert>
-      )}
       {request?.system && reporteeData && (
         <>
           {request.status === 'Accepted' && (

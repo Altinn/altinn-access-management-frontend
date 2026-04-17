@@ -87,7 +87,11 @@ export const SystemUserChangeRequestPage = () => {
   };
 
   let error: React.ReactNode = null;
-  if (loadReporteeError) {
+  if (!changeRequestId) {
+    error = (
+      <DsAlert data-color='danger'>{t('systemuser_request.load_creation_request_no_id')}</DsAlert>
+    );
+  } else if (loadReporteeError) {
     error = <DsAlert data-color='danger'>{t('systemuser_request.load_user_info_error')}</DsAlert>;
   } else if (loadingChangeRequestError || (changeRequest && !changeRequest.system)) {
     error = (
@@ -105,9 +109,6 @@ export const SystemUserChangeRequestPage = () => {
       error={error}
       heading={t('systemuser_change_request.banner_title')}
     >
-      {!changeRequestId && (
-        <DsAlert data-color='danger'>{t('systemuser_request.load_creation_request_no_id')}</DsAlert>
-      )}
       {changeRequest?.system && reporteeData && (
         <>
           {changeRequest.status === 'Accepted' && (
