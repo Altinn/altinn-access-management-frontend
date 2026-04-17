@@ -79,7 +79,7 @@ namespace Altinn.AccessManagement.UI.Core.Services
         /// <inheritdoc />
         public async Task<RequestFE> CreatePackageRequest(Guid party, Guid to, string package, CancellationToken cancellationToken)
         {
-            RequestResourceDto response = await _requestClient.CreatePackageRequest(party, to, package, cancellationToken);
+            RequestPackageDto response = await _requestClient.CreatePackageRequest(party, to, package, cancellationToken);
             return MapToRequestFE(response);
         }
 
@@ -133,6 +133,19 @@ namespace Altinn.AccessManagement.UI.Core.Services
                 Type = x.Type,
                 Status = x.Status,
                 ResourceId = x.Resource?.ReferenceId,
+                LastUpdated = x.LastUpdated
+            };
+        }
+
+        private static RequestFE MapToRequestFE(RequestPackageDto x)
+        {
+            return new RequestFE()
+            {
+                Id = x.Id,
+                From = x.From,
+                To = x.To,
+                Type = x.Type,
+                Status = x.Status,
                 PackageId = x.Package?.ReferenceId,
                 LastUpdated = x.LastUpdated
             };

@@ -169,7 +169,7 @@ namespace Altinn.AccessManagement.UI.Integration.Clients
         }
 
         /// <inheritdoc />
-        public async Task<RequestResourceDto> CreatePackageRequest(Guid party, Guid to, string package, CancellationToken cancellationToken)
+        public async Task<RequestPackageDto> CreatePackageRequest(Guid party, Guid to, string package, CancellationToken cancellationToken)
         {
             try
             {
@@ -177,7 +177,7 @@ namespace Altinn.AccessManagement.UI.Integration.Clients
                 string token = JwtTokenUtil.GetTokenFromContext(_httpContextAccessor.HttpContext, _platformSettings.JwtCookieName);
 
                 var httpResponse = await _client.PostAsync(token, endpointUrl, null);
-                return await ClientUtils.DeserializeIfSuccessfullStatusCode<RequestResourceDto>(httpResponse);
+                return await ClientUtils.DeserializeIfSuccessfullStatusCode<RequestPackageDto>(httpResponse);
             }
             catch (Exception ex)
             {
