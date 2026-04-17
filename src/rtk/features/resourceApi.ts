@@ -16,6 +16,10 @@ export enum ResourceType {
   Altinn2Service = 'Altinn2Service',
   AltinnApp = 'AltinnApp',
   GenericAccessResource = 'GenericAccessResource',
+  BrokerService = 'BrokerService',
+  CorrespondenceService = 'CorrespondenceService',
+  Consent = 'Consent',
+  MigratedApp = 'MigratedApp',
 }
 
 const baseUrl = import.meta.env.BASE_URL + 'accessmanagement/api/v1/' + 'resources';
