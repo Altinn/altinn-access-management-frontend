@@ -2,6 +2,7 @@ using Altinn.AccessManagement.UI.Core.ClientInterfaces;
 using Altinn.AccessManagement.UI.Core.Enums;
 using Altinn.AccessManagement.UI.Core.Exceptions;
 using Altinn.AccessManagement.UI.Core.Helpers;
+using Altinn.AccessManagement.UI.Core.Models.AccessPackage;
 using Altinn.AccessManagement.UI.Core.Models.Common;
 using Altinn.AccessManagement.UI.Core.Models.Request;
 using Altinn.AccessManagement.UI.Core.Models.Request.Frontend;
@@ -14,16 +15,19 @@ namespace Altinn.AccessManagement.UI.Core.Services
     public class RequestService : IRequestService
     {
         private readonly IRequestClient _requestClient;
+        private readonly IAccessPackageClient _accessPackageClient;
         private readonly ResourceHelper _resourceHelper;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="RequestService"/> class.
         /// </summary>
         /// <param name="requestClient">The request client.</param>
+        /// <param name="accessPackageClient">The access package client.</param>
         /// <param name="resourceHelper">The resource helper.</param>
-        public RequestService(IRequestClient requestClient, ResourceHelper resourceHelper)
+        public RequestService(IRequestClient requestClient, IAccessPackageClient accessPackageClient, ResourceHelper resourceHelper)
         {
             _requestClient = requestClient;
+            _accessPackageClient = accessPackageClient;
             _resourceHelper = resourceHelper;
         }
 
@@ -53,6 +57,20 @@ namespace Altinn.AccessManagement.UI.Core.Services
         {
             PaginatedResult<RequestResourceDto> response = await _requestClient.GetReceivedRequests(party, from, status, "resource", cancellationToken);
             return await MapToEnrichedResourceRequestList(response.Items, languageCode);
+        }
+
+        /// <inheritdoc />
+        public async Task<IEnumerable<EnrichedPackageRequest>> GetEnrichedSentPackageRequests(Guid party, Guid? to, List<RequestStatus> status, string languageCode, CancellationToken cancellationToken)
+        {
+            PaginatedResult<RequestResourceDto> response = await _requestClient.GetSentRequests(party, to, status, "package", cancellationToken);
+            return await MapToEnrichedPackageRequestList(response.Items, languageCode);
+        }
+
+        /// <inheritdoc />
+        public async Task<IEnumerable<EnrichedPackageRequest>> GetEnrichedReceivedPackageRequests(Guid party, Guid? from, List<RequestStatus> status, string languageCode, CancellationToken cancellationToken)
+        {
+            PaginatedResult<RequestResourceDto> response = await _requestClient.GetReceivedRequests(party, from, status, "package", cancellationToken);
+            return await MapToEnrichedPackageRequestList(response.Items, languageCode);
         }
 
         /// <inheritdoc />
@@ -138,16 +156,16 @@ namespace Altinn.AccessManagement.UI.Core.Services
                 .Distinct();
             var resources = await _resourceHelper.EnrichResources(uniqueResourceIds, languageCode);
             resourceDictionary = resources.ToDictionary(r => r.Identifier);
-            
-            return list.Select(x => 
+
+            return list.Select(x =>
             {
                 RequestFE request = MapToRequestFE(x);
-                
+
                 if (!resourceDictionary.TryGetValue(request.ResourceId, out var resource))
                 {
                     throw new ResourceNotFoundException($"Resource not found for ID: {request.ResourceId}");
                 }
-                
+
                 return new EnrichedResourceRequest()
                 {
                     Id = request.Id,
@@ -158,6 +176,48 @@ namespace Altinn.AccessManagement.UI.Core.Services
                     ResourceId = request.ResourceId,
                     LastUpdated = request.LastUpdated,
                     Resource = resource
+                };
+            }).ToList();
+        }
+
+        private async Task<IEnumerable<EnrichedPackageRequest>> MapToEnrichedPackageRequestList(IEnumerable<RequestResourceDto> list, string languageCode)
+        {
+            Dictionary<Guid, AccessPackage> packageDictionary = [];
+            var uniquePackageIds = list
+                .Select(x => Guid.Parse(x.Resource.ReferenceId))
+                .Distinct();
+
+            foreach (var packageId in uniquePackageIds)
+            {
+                var package = await _accessPackageClient.GetAccessPackageById(languageCode, packageId);
+                if (package == null)
+                {
+                    throw new ResourceNotFoundException($"Access package not found for ID: {packageId}");
+                }
+
+                packageDictionary[packageId] = package;
+            }
+
+            return list.Select(x =>
+            {
+                RequestFE request = MapToRequestFE(x);
+                var packageId = Guid.Parse(x.Resource.ReferenceId);
+
+                if (!packageDictionary.TryGetValue(packageId, out var package))
+                {
+                    throw new ResourceNotFoundException($"Access package not found for ID: {packageId}");
+                }
+
+                return new EnrichedPackageRequest()
+                {
+                    Id = request.Id,
+                    From = request.From,
+                    To = request.To,
+                    Type = request.Type,
+                    Status = request.Status,
+                    ResourceId = request.ResourceId,
+                    LastUpdated = request.LastUpdated,
+                    Package = package
                 };
             }).ToList();
         }

@@ -41,11 +41,20 @@ namespace Altinn.AccessManagement.UI.Mocks.Mocks
             ThrowExceptionIfTriggerParty(party.ToString());
             ThrowHttpStatusExceptionIfTriggerParty(party.ToString());
 
-            string dataPath = Path.Combine(dataFolder, "Request", "sentRequests.json");
-            if (party == Guid.Parse("22222222-2222-2222-2222-222222222222"))
+            string dataPath;
+            if (type == "package")
             {
-                dataPath = Path.Combine(dataFolder, "Request", "sentRequestsInvalidResource.json");
+                dataPath = party == Guid.Parse("22222222-2222-2222-2222-222222222222")
+                    ? Path.Combine(dataFolder, "Request", "sentPackageRequestsInvalidPackage.json")
+                    : Path.Combine(dataFolder, "Request", "sentPackageRequests.json");
             }
+            else
+            {
+                dataPath = party == Guid.Parse("22222222-2222-2222-2222-222222222222")
+                    ? Path.Combine(dataFolder, "Request", "sentRequestsInvalidResource.json")
+                    : Path.Combine(dataFolder, "Request", "sentRequests.json");
+            }
+
             return await Task.FromResult(Util.GetMockData<PaginatedResult<RequestResourceDto>>(dataPath));
         }
 
@@ -55,11 +64,20 @@ namespace Altinn.AccessManagement.UI.Mocks.Mocks
             ThrowExceptionIfTriggerParty(party.ToString());
             ThrowHttpStatusExceptionIfTriggerParty(party.ToString());
 
-            string dataPath = Path.Combine(dataFolder, "Request", "receivedRequests.json");
-            if (party == Guid.Parse("22222222-2222-2222-2222-222222222222"))
+            string dataPath;
+            if (type == "package")
             {
-                dataPath = Path.Combine(dataFolder, "Request", "receivedRequestsInvalidResource.json");
+                dataPath = party == Guid.Parse("22222222-2222-2222-2222-222222222222")
+                    ? Path.Combine(dataFolder, "Request", "receivedPackageRequestsInvalidPackage.json")
+                    : Path.Combine(dataFolder, "Request", "receivedPackageRequests.json");
             }
+            else
+            {
+                dataPath = party == Guid.Parse("22222222-2222-2222-2222-222222222222")
+                    ? Path.Combine(dataFolder, "Request", "receivedRequestsInvalidResource.json")
+                    : Path.Combine(dataFolder, "Request", "receivedRequests.json");
+            }
+
             return await Task.FromResult(Util.GetMockData<PaginatedResult<RequestResourceDto>>(dataPath));
         }
 
