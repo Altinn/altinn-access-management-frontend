@@ -36,7 +36,7 @@ namespace Altinn.AccessManagement.UI.Mocks.Mocks
         }
 
         /// <inheritdoc />
-        public async Task<PaginatedResult<RequestResourceDto>> GetSentRequests(Guid party, Guid? to, List<RequestStatus> status, string type, CancellationToken cancellationToken)
+        public async Task<PaginatedResult<Request>> GetSentRequests(Guid party, Guid? to, List<RequestStatus> status, string type, CancellationToken cancellationToken)
         {
             ThrowExceptionIfTriggerParty(party.ToString());
             ThrowHttpStatusExceptionIfTriggerParty(party.ToString());
@@ -55,11 +55,11 @@ namespace Altinn.AccessManagement.UI.Mocks.Mocks
                     : Path.Combine(dataFolder, "Request", "sentRequests.json");
             }
 
-            return await Task.FromResult(Util.GetMockData<PaginatedResult<RequestResourceDto>>(dataPath));
+            return await Task.FromResult(Util.GetMockData<PaginatedResult<Request>>(dataPath));
         }
 
         /// <inheritdoc />
-        public async Task<PaginatedResult<RequestResourceDto>> GetReceivedRequests(Guid party, Guid? from, List<RequestStatus> status, string type, CancellationToken cancellationToken)
+        public async Task<PaginatedResult<Request>> GetReceivedRequests(Guid party, Guid? from, List<RequestStatus> status, string type, CancellationToken cancellationToken)
         {
             ThrowExceptionIfTriggerParty(party.ToString());
             ThrowHttpStatusExceptionIfTriggerParty(party.ToString());
@@ -78,70 +78,70 @@ namespace Altinn.AccessManagement.UI.Mocks.Mocks
                     : Path.Combine(dataFolder, "Request", "receivedRequests.json");
             }
 
-            return await Task.FromResult(Util.GetMockData<PaginatedResult<RequestResourceDto>>(dataPath));
+            return await Task.FromResult(Util.GetMockData<PaginatedResult<Request>>(dataPath));
         }
 
         /// <inheritdoc />
-        public async Task<RequestResourceDto> GetRequest(Guid party, Guid id, CancellationToken cancellationToken)
+        public async Task<Request> GetRequest(Guid party, Guid id, CancellationToken cancellationToken)
         {
             ThrowExceptionIfTriggerParty(party.ToString());
             ThrowHttpStatusExceptionIfTriggerParty(party.ToString());
 
             string dataPath = Path.Combine(dataFolder, "Request", "singleRequest.json");
-            return await Task.FromResult(Util.GetMockData<RequestResourceDto>(dataPath));
+            return await Task.FromResult(Util.GetMockData<Request>(dataPath));
         }
 
         /// <inheritdoc />
-        public async Task<RequestResourceDto> CreateResourceRequest(Guid party, Guid to, string resource, CancellationToken cancellationToken)
+        public async Task<Request> CreateResourceRequest(Guid party, Guid to, string resource, CancellationToken cancellationToken)
         {
             ThrowExceptionIfTriggerParty(party.ToString());
             ThrowHttpStatusExceptionIfTriggerParty(party.ToString());
 
             string dataPath = Path.Combine(dataFolder, "Request", "singleRequest.json");
-            return await Task.FromResult(Util.GetMockData<RequestResourceDto>(dataPath));
+            return await Task.FromResult(Util.GetMockData<Request>(dataPath));
         }
 
         /// <inheritdoc />
-        public async Task<RequestResourceDto> WithdrawRequest(Guid party, Guid id, CancellationToken cancellationToken)
+        public async Task<Request> WithdrawRequest(Guid party, Guid id, CancellationToken cancellationToken)
         {
             ThrowExceptionIfTriggerParty(party.ToString());
             ThrowHttpStatusExceptionIfTriggerParty(party.ToString());
 
             string dataPath = Path.Combine(dataFolder, "Request", "singleRequest.json");
-            return await Task.FromResult(Util.GetMockData<RequestResourceDto>(dataPath));
+            return await Task.FromResult(Util.GetMockData<Request>(dataPath));
         }
 
         /// <inheritdoc />
-        public async Task<RequestResourceDto> ConfirmRequest(Guid party, Guid id, CancellationToken cancellationToken)
+        public async Task<Request> ConfirmRequest(Guid party, Guid id, CancellationToken cancellationToken)
         {
             ThrowExceptionIfTriggerParty(party.ToString());
             ThrowHttpStatusExceptionIfTriggerParty(party.ToString());
 
             string dataPath = Path.Combine(dataFolder, "Request", "singleRequest.json");
-            return await Task.FromResult(Util.GetMockData<RequestResourceDto>(dataPath));
+            return await Task.FromResult(Util.GetMockData<Request>(dataPath));
         }
 
         /// <inheritdoc />
-        public async Task<RequestResourceDto> RejectRequest(Guid party, Guid id, CancellationToken cancellationToken)
+        public async Task<Request> RejectRequest(Guid party, Guid id, CancellationToken cancellationToken)
         {
             ThrowExceptionIfTriggerParty(party.ToString());
             ThrowHttpStatusExceptionIfTriggerParty(party.ToString());
 
             string dataPath = Path.Combine(dataFolder, "Request", "singleRequest.json");
-            return await Task.FromResult(Util.GetMockData<RequestResourceDto>(dataPath));
+            return await Task.FromResult(Util.GetMockData<Request>(dataPath));
         }
 
         /// <inheritdoc />
-        public async Task<RequestResourceDto> ApproveRequest(Guid party, Guid id, CancellationToken cancellationToken)
+        public async Task<Request> ApproveRequest(Guid party, Guid id, CancellationToken cancellationToken)
         {
             ThrowExceptionIfTriggerParty(party.ToString());
             ThrowHttpStatusExceptionIfTriggerParty(party.ToString());
 
             string dataPath = Path.Combine(dataFolder, "Request", "singleRequest.json");
-            return await Task.FromResult(Util.GetMockData<RequestResourceDto>(dataPath));
+            return await Task.FromResult(Util.GetMockData<Request>(dataPath));
         }
 
-        public async Task<RequestResourceDto> GetDraftRequest(Guid id, CancellationToken cancellationToken)
+        public async Task<Request> GetDraftRequest(Guid id, CancellationToken cancellationToken)
         {
             ThrowExceptionIfTriggerParty(id.ToString());
             ThrowHttpStatusExceptionIfTriggerParty(id.ToString());
@@ -152,7 +152,7 @@ namespace Altinn.AccessManagement.UI.Mocks.Mocks
                 dataPath = Path.Combine(dataFolder, "Request", "draftRequestInvalidResource.json");
             }
 
-            return await Task.FromResult(Util.GetMockData<RequestResourceDto>(dataPath));
+            return await Task.FromResult(Util.GetMockData<Request>(dataPath));
         }
 
         /// <inheritdoc />

@@ -8,6 +8,7 @@ import {
   useRejectRequestMutation,
   useGetEnrichedReceivedResourceRequestsQuery,
   type EnrichedRequestDto,
+  useGetEnrichedReceivedPackageRequestsQuery,
 } from '@/rtk/features/requestApi';
 import {
   useLazyDelegationCheckQuery,
@@ -28,6 +29,14 @@ export const useRequestReview = (request: Request | null, onClose: () => void) =
     isLoading: isLoadingRequests,
     isFetching: isFetchingRequests,
   } = useGetEnrichedReceivedResourceRequestsQuery(
+    { party: actingParty?.partyUuid || '', from: request?.partyUuid || '', status: ['Pending'] },
+    { skip: !actingParty?.partyUuid || !request?.partyUuid },
+  );
+  const {
+    data: packageRequests,
+    isLoading: isLoadingPackageRequests,
+    isFetching: isFetchingPackageRequests,
+  } = useGetEnrichedReceivedPackageRequestsQuery(
     { party: actingParty?.partyUuid || '', from: request?.partyUuid || '', status: ['Pending'] },
     { skip: !actingParty?.partyUuid || !request?.partyUuid },
   );

@@ -14,6 +14,7 @@ export interface RequestDto {
   to: Entity;
   lastUpdated: string;
   resourceId?: string;
+  packageId?: string;
 }
 
 export interface EnrichedRequestDto extends RequestDto {

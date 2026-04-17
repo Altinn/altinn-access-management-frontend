@@ -34,91 +34,91 @@ namespace Altinn.AccessManagement.UI.Core.Services
         /// <inheritdoc />
         public async Task<IEnumerable<RequestFE>> GetSentRequests(Guid party, Guid? to, List<RequestStatus> status, string type, CancellationToken cancellationToken)
         {
-            PaginatedResult<RequestResourceDto> response = await _requestClient.GetSentRequests(party, to, status, type, cancellationToken);
+            PaginatedResult<Request> response = await _requestClient.GetSentRequests(party, to, status, type, cancellationToken);
             return response.Items.Select(MapToRequestFE);
         }
 
         /// <inheritdoc />
         public async Task<IEnumerable<EnrichedResourceRequest>> GetEnrichedSentResourceRequests(Guid party, Guid? to, List<RequestStatus> status, string languageCode, CancellationToken cancellationToken)
         {
-            PaginatedResult<RequestResourceDto> response = await _requestClient.GetSentRequests(party, to, status, "resource", cancellationToken);
+            PaginatedResult<Request> response = await _requestClient.GetSentRequests(party, to, status, "resource", cancellationToken);
             return await MapToEnrichedResourceRequestList(response.Items, languageCode);
         }
 
         /// <inheritdoc />
         public async Task<IEnumerable<RequestFE>> GetReceivedRequests(Guid party, Guid? from, List<RequestStatus> status, string type, CancellationToken cancellationToken)
         {
-            PaginatedResult<RequestResourceDto> response = await _requestClient.GetReceivedRequests(party, from, status, type, cancellationToken);
+            PaginatedResult<Request> response = await _requestClient.GetReceivedRequests(party, from, status, type, cancellationToken);
             return response.Items.Select(MapToRequestFE);
         }
 
         /// <inheritdoc />
         public async Task<IEnumerable<EnrichedResourceRequest>> GetEnrichedReceivedResourceRequests(Guid party, Guid? from, List<RequestStatus> status, string languageCode, CancellationToken cancellationToken)
         {
-            PaginatedResult<RequestResourceDto> response = await _requestClient.GetReceivedRequests(party, from, status, "resource", cancellationToken);
+            PaginatedResult<Request> response = await _requestClient.GetReceivedRequests(party, from, status, "resource", cancellationToken);
             return await MapToEnrichedResourceRequestList(response.Items, languageCode);
         }
 
         /// <inheritdoc />
         public async Task<IEnumerable<EnrichedPackageRequest>> GetEnrichedSentPackageRequests(Guid party, Guid? to, List<RequestStatus> status, string languageCode, CancellationToken cancellationToken)
         {
-            PaginatedResult<RequestResourceDto> response = await _requestClient.GetSentRequests(party, to, status, "package", cancellationToken);
+            PaginatedResult<Request> response = await _requestClient.GetSentRequests(party, to, status, "package", cancellationToken);
             return await MapToEnrichedPackageRequestList(response.Items, languageCode);
         }
 
         /// <inheritdoc />
         public async Task<IEnumerable<EnrichedPackageRequest>> GetEnrichedReceivedPackageRequests(Guid party, Guid? from, List<RequestStatus> status, string languageCode, CancellationToken cancellationToken)
         {
-            PaginatedResult<RequestResourceDto> response = await _requestClient.GetReceivedRequests(party, from, status, "package", cancellationToken);
+            PaginatedResult<Request> response = await _requestClient.GetReceivedRequests(party, from, status, "package", cancellationToken);
             return await MapToEnrichedPackageRequestList(response.Items, languageCode);
         }
 
         /// <inheritdoc />
         public async Task<RequestFE> GetRequest(Guid party, Guid id, CancellationToken cancellationToken)
         {
-            RequestResourceDto response = await _requestClient.GetRequest(party, id, cancellationToken);
+            Request response = await _requestClient.GetRequest(party, id, cancellationToken);
             return MapToRequestFE(response);
         }
 
         /// <inheritdoc />
         public async Task<EnrichedResourceRequest> GetDraftRequest(Guid id, string languageCode, CancellationToken cancellationToken)
         {
-            RequestResourceDto response = await _requestClient.GetDraftRequest(id, cancellationToken);
+            Request response = await _requestClient.GetDraftRequest(id, cancellationToken);
             return (await MapToEnrichedResourceRequestList(new[] { response }, languageCode)).First();
         }
 
         /// <inheritdoc />
         public async Task<RequestFE> CreateResourceRequest(Guid party, Guid to, string resource, CancellationToken cancellationToken)
         {
-            RequestResourceDto response = await _requestClient.CreateResourceRequest(party, to, resource, cancellationToken);
+            Request response = await _requestClient.CreateResourceRequest(party, to, resource, cancellationToken);
             return MapToRequestFE(response);
         }
 
         /// <inheritdoc />
         public async Task<RequestFE> WithdrawRequest(Guid party, Guid id, CancellationToken cancellationToken)
         {
-            RequestResourceDto response = await _requestClient.WithdrawRequest(party, id, cancellationToken);
+            Request response = await _requestClient.WithdrawRequest(party, id, cancellationToken);
             return MapToRequestFE(response);
         }
 
         /// <inheritdoc />
         public async Task<RequestFE> ConfirmRequest(Guid party, Guid id, CancellationToken cancellationToken)
         {
-            RequestResourceDto response = await _requestClient.ConfirmRequest(party, id, cancellationToken);
+            Request response = await _requestClient.ConfirmRequest(party, id, cancellationToken);
             return MapToRequestFE(response);
         }
 
         /// <inheritdoc />
         public async Task<RequestFE> RejectRequest(Guid party, Guid id, CancellationToken cancellationToken)
         {
-            RequestResourceDto response = await _requestClient.RejectRequest(party, id, cancellationToken);
+            Request response = await _requestClient.RejectRequest(party, id, cancellationToken);
             return MapToRequestFE(response);
         }
 
         /// <inheritdoc />
         public async Task<RequestFE> ApproveRequest(Guid party, Guid id, CancellationToken cancellationToken)
         {
-            RequestResourceDto response = await _requestClient.ApproveRequest(party, id, cancellationToken);
+            Request response = await _requestClient.ApproveRequest(party, id, cancellationToken);
             return MapToRequestFE(response);
         }
 
@@ -134,7 +134,7 @@ namespace Altinn.AccessManagement.UI.Core.Services
             return await _requestClient.GetReceivedRequestsCount(party, from, status, cancellationToken);
         }
 
-        private static RequestFE MapToRequestFE(RequestResourceDto x)
+        private static RequestFE MapToRequestFE(Request x)
         {
             return new RequestFE()
             {
@@ -144,11 +144,12 @@ namespace Altinn.AccessManagement.UI.Core.Services
                 Type = x.Type,
                 Status = x.Status,
                 ResourceId = x.Resource?.ReferenceId,
+                PackageId = x.Package?.ReferenceId,
                 LastUpdated = x.LastUpdated
             };
         }
 
-        private async Task<IEnumerable<EnrichedResourceRequest>> MapToEnrichedResourceRequestList(IEnumerable<RequestResourceDto> list, string languageCode)
+        private async Task<IEnumerable<EnrichedResourceRequest>> MapToEnrichedResourceRequestList(IEnumerable<Request> list, string languageCode)
         {
             Dictionary<string, ServiceResourceFE> resourceDictionary = [];
             var uniqueResourceIds = list
@@ -180,11 +181,11 @@ namespace Altinn.AccessManagement.UI.Core.Services
             }).ToList();
         }
 
-        private async Task<IEnumerable<EnrichedPackageRequest>> MapToEnrichedPackageRequestList(IEnumerable<RequestResourceDto> list, string languageCode)
+        private async Task<IEnumerable<EnrichedPackageRequest>> MapToEnrichedPackageRequestList(IEnumerable<Request> list, string languageCode)
         {
             Dictionary<Guid, AccessPackage> packageDictionary = [];
             var uniquePackageIds = list
-                .Select(x => Guid.Parse(x.Resource.ReferenceId))
+                .Select(x => Guid.Parse(x.Package.ReferenceId))
                 .Distinct();
 
             foreach (var packageId in uniquePackageIds)
@@ -201,7 +202,7 @@ namespace Altinn.AccessManagement.UI.Core.Services
             return list.Select(x =>
             {
                 RequestFE request = MapToRequestFE(x);
-                var packageId = Guid.Parse(x.Resource.ReferenceId);
+                var packageId = Guid.Parse(x.Package.ReferenceId);
 
                 if (!packageDictionary.TryGetValue(packageId, out var package))
                 {
@@ -215,7 +216,7 @@ namespace Altinn.AccessManagement.UI.Core.Services
                     To = request.To,
                     Type = request.Type,
                     Status = request.Status,
-                    ResourceId = request.ResourceId,
+                    PackageId = request.PackageId,
                     LastUpdated = request.LastUpdated,
                     Package = package
                 };
