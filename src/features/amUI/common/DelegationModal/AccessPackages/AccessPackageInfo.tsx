@@ -41,6 +41,8 @@ export const AccessPackageInfo = ({ accessPackage, availableActions = [] }: Pack
     onDelegate,
     onRevoke,
     onRequest,
+    deleteRequest,
+    hasPendingRequest,
     isLoading: isActionLoading,
   } = useAccessPackageActions({
     onDelegateSuccess: () => {
@@ -91,6 +93,7 @@ export const AccessPackageInfo = ({ accessPackage, availableActions = [] }: Pack
     !userHasPackage &&
     canDelegate?.result === false &&
     availableActions.includes(DelegationAction.DELEGATE);
+  const isPendingRequest = hasPendingRequest(accessPackage);
 
   return (
     <div className={classes.container}>
@@ -162,6 +165,7 @@ export const AccessPackageInfo = ({ accessPackage, availableActions = [] }: Pack
             showDelegationCheckWarning={showMissingRightsMessage}
             cannotDelegateHere={accessPackage.isAssignable === false}
             inheritedStatus={inheritedStatus ?? undefined}
+            isPendingRequest={isPendingRequest}
           />
 
           <DsParagraph
@@ -221,14 +225,22 @@ export const AccessPackageInfo = ({ accessPackage, availableActions = [] }: Pack
             )}
             {!userHasPackage &&
               availableActions.includes(DelegationAction.REQUEST) &&
-              displayPackageRequestsFeature && (
+              displayPackageRequestsFeature &&
+              (isPendingRequest ? (
+                <DsButton
+                  data-color='danger'
+                  onClick={() => deleteRequest(accessPackage)}
+                >
+                  {t('delegation_modal.request.delete_request')}
+                </DsButton>
+              ) : (
                 <DsButton
                   disabled={accessPackage.isAssignable === false}
                   onClick={() => onRequest(accessPackage)}
                 >
                   {t('common.request_poa')}
                 </DsButton>
-              )}
+              ))}
           </div>
         </>
       )}

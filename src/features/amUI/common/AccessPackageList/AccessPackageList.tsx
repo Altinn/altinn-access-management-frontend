@@ -79,6 +79,8 @@ export const AccessPackageList = ({
     onDelegate,
     onRevoke,
     onRequest,
+    deleteRequest,
+    hasPendingRequest,
     isLoading: isActionLoading,
   } = useAccessPackageActions({
     onDelegateSuccess,
@@ -175,6 +177,8 @@ export const AccessPackageList = ({
                   onDelegate={onDelegate}
                   onRevoke={onRevoke}
                   onRequest={onRequest}
+                  onDeleteRequest={deleteRequest}
+                  hasPendingRequest={hasPendingRequest}
                   isActionLoading={isActionLoading}
                   showAvailablePackages={!minimizeAvailablePackages}
                   showAvailableToggle={showAvailableToggle}

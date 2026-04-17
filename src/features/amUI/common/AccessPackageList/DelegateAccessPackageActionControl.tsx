@@ -1,5 +1,5 @@
 import { Button, DsSpinner } from '@altinn/altinn-components';
-import { PlusCircleIcon } from '@navikt/aksel-icons';
+import { MinusCircleIcon, PlusCircleIcon } from '@navikt/aksel-icons';
 import { useTranslation } from 'react-i18next';
 import { DelegationAction } from '../DelegationModal/EditModal';
 import { displayPackageRequests } from '@/resources/utils/featureFlagUtils';
@@ -9,7 +9,9 @@ interface DelegateAccessPackageActionControlsProps {
   availableActions?: DelegationAction[];
   onDelegate: () => void;
   onRequest: () => void;
+  onDeleteRequest: () => void;
   canDelegate: boolean;
+  isPendingRequest: boolean;
   disabled?: boolean;
   accessPackageName?: string;
 }
@@ -19,7 +21,9 @@ export const DelegateAccessPackageActionControl = ({
   availableActions,
   canDelegate,
   onRequest,
+  onDeleteRequest,
   onDelegate,
+  isPendingRequest,
   accessPackageName,
   disabled = false,
 }: DelegateAccessPackageActionControlsProps) => {
@@ -50,6 +54,20 @@ export const DelegateAccessPackageActionControl = ({
     );
   }
   if (availableActions?.includes(DelegationAction.REQUEST) && displayPackageRequestsFeature) {
+    if (isPendingRequest) {
+      return (
+        <Button
+          variant='tertiary'
+          size='sm'
+          onClick={onDeleteRequest}
+          aria-label={t('common.delete_request_for', { poa_object: accessPackageName })}
+        >
+          <MinusCircleIcon />
+          {t('delegation_modal.request.delete_request')}
+        </Button>
+      );
+    }
+
     return (
       <Button
         variant='tertiary'
