@@ -169,6 +169,24 @@ namespace Altinn.AccessManagement.UI.Integration.Clients
         }
 
         /// <inheritdoc />
+        public async Task<RequestResourceDto> CreatePackageRequest(Guid party, Guid to, string package, CancellationToken cancellationToken)
+        {
+            try
+            {
+                string endpointUrl = $"enduser/request/package?party={party}&to={to}&package={package}";
+                string token = JwtTokenUtil.GetTokenFromContext(_httpContextAccessor.HttpContext, _platformSettings.JwtCookieName);
+
+                var httpResponse = await _client.PostAsync(token, endpointUrl, null);
+                return await ClientUtils.DeserializeIfSuccessfullStatusCode<RequestResourceDto>(httpResponse);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "AccessManagement.UI // RequestClient // CreatePackageRequest // Exception");
+                throw;
+            }
+        }
+
+        /// <inheritdoc />
         public async Task<RequestResourceDto> WithdrawRequest(Guid party, Guid id, CancellationToken cancellationToken)
         {
             try

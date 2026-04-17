@@ -81,6 +81,16 @@ namespace Altinn.AccessManagement.UI.Core.Services.Interfaces
         Task<RequestFE> CreateResourceRequest(Guid party, Guid to, string resource, CancellationToken cancellationToken);
 
         /// <summary>
+        /// Creates a new package request
+        /// </summary>
+        /// <param name="party">The acting party creating the request</param>
+        /// <param name="to">The party the request is directed to</param>
+        /// <param name="package">The package to request</param>
+        /// <param name="cancellationToken">Cancellation token</param>
+        /// <returns>The request</returns>
+        Task<RequestFE> CreatePackageRequest(Guid party, Guid to, string package, CancellationToken cancellationToken);
+
+        /// <summary>
         /// Withdraw a request by id
         /// </summary>
         /// <param name="party">The acting party withdrawing the request</param>

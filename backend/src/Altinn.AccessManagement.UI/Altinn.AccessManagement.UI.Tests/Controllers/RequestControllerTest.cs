@@ -337,6 +337,29 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
         }
 
         /// <summary>
+        ///     Test case: CreatePackageRequest creates a package request
+        ///     Expected: CreatePackageRequest returns request
+        /// </summary>
+        [Fact]
+        public async Task CreatePackageRequest_ReturnsRequest()
+        {
+            // Arrange
+            string party = "167536b5-f8ed-4c5a-8f48-0279507e53ae";
+            string toParty = "feb51634-0042-4ab0-a9db-8705300141a6";
+            string packageId = "urn:altinn:accesspackage:agriculture";
+            string path = Path.Combine(_expectedDataPath, "Request", "getPackageRequest.json");
+            RequestFE expectedResponse = Util.GetMockData<RequestFE>(path);
+
+            // Act
+            HttpResponseMessage httpResponse = await _client.PostAsync($"accessmanagement/api/v1/request/package?party={party}&to={toParty}&package={packageId}", null);
+            RequestFE actualResponse = await httpResponse.Content.ReadFromJsonAsync<RequestFE>();
+
+            // Assert
+            Assert.Equal(HttpStatusCode.OK, httpResponse.StatusCode);
+            AssertionUtil.AssertEqual(expectedResponse, actualResponse);
+        }
+
+        /// <summary>
         ///     Test case: WithdrawRequest withdraws a request
         ///     Expected: WithdrawRequest returns request
         /// </summary>
@@ -601,6 +624,44 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
 
             // Act
             HttpResponseMessage httpResponse = await _client.PostAsync($"accessmanagement/api/v1/request/resource?party={party}&to={toParty}&resource={resourceId}", null);
+
+            // Assert
+            Assert.Equal(HttpStatusCode.BadRequest, httpResponse.StatusCode);
+        }
+
+        /// <summary>
+        ///     Test case: CreatePackageRequest encounters an unexpected internal error
+        ///     Expected: Returns 500 Internal Server Error
+        /// </summary>
+        [Fact]
+        public async Task CreatePackageRequest_InternalServerError()
+        {
+            // Arrange - Guid.Empty triggers ThrowExceptionIfTriggerParty in mock
+            string party = "00000000-0000-0000-0000-000000000000";
+            string toParty = "feb51634-0042-4ab0-a9db-8705300141a6";
+            string packageId = "urn:altinn:accesspackage:agriculture";
+
+            // Act
+            HttpResponseMessage httpResponse = await _client.PostAsync($"accessmanagement/api/v1/request/package?party={party}&to={toParty}&package={packageId}", null);
+
+            // Assert
+            Assert.Equal(HttpStatusCode.InternalServerError, httpResponse.StatusCode);
+        }
+
+        /// <summary>
+        ///     Test case: CreatePackageRequest encounters an HttpStatusException from the backend
+        ///     Expected: Returns the status code from the exception (BadRequest)
+        /// </summary>
+        [Fact]
+        public async Task CreatePackageRequest_HttpStatusException()
+        {
+            // Arrange - Triggers ThrowHttpStatusExceptionIfTriggerParty in mock
+            string party = "11111111-1111-1111-1111-111111111111";
+            string toParty = "feb51634-0042-4ab0-a9db-8705300141a6";
+            string packageId = "urn:altinn:accesspackage:agriculture";
+
+            // Act
+            HttpResponseMessage httpResponse = await _client.PostAsync($"accessmanagement/api/v1/request/package?party={party}&to={toParty}&package={packageId}", null);
 
             // Assert
             Assert.Equal(HttpStatusCode.BadRequest, httpResponse.StatusCode);

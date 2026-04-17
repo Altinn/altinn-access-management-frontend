@@ -41,6 +41,11 @@ namespace Altinn.AccessManagement.UI.Core.Models.Request.Frontend
         public string? ResourceId { get; set; }
 
         /// <summary>
+        /// The package id access is requested for
+        /// </summary>
+        public string? PackageId { get; set; }
+
+        /// <summary>
         /// Last updated
         /// </summary>
         public DateTimeOffset LastUpdated { get; set; }

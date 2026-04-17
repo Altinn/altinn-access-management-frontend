@@ -77,6 +77,13 @@ namespace Altinn.AccessManagement.UI.Core.Services
         }
 
         /// <inheritdoc />
+        public async Task<RequestFE> CreatePackageRequest(Guid party, Guid to, string package, CancellationToken cancellationToken)
+        {
+            RequestResourceDto response = await _requestClient.CreatePackageRequest(party, to, package, cancellationToken);
+            return MapToRequestFE(response);
+        }
+
+        /// <inheritdoc />
         public async Task<RequestFE> WithdrawRequest(Guid party, Guid id, CancellationToken cancellationToken)
         {
             RequestResourceDto response = await _requestClient.WithdrawRequest(party, id, cancellationToken);
@@ -126,6 +133,7 @@ namespace Altinn.AccessManagement.UI.Core.Services
                 Type = x.Type,
                 Status = x.Status,
                 ResourceId = x.Resource?.ReferenceId,
+                PackageId = x.Package?.ReferenceId,
                 LastUpdated = x.LastUpdated
             };
         }
