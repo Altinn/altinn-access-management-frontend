@@ -139,7 +139,6 @@ export const requestApi = createApi({
       invalidatesTags: [
         'sentRequests',
         'enrichedSentResourceRequests',
-        'enrichedSentPackageRequests',
       ],
     }),
     withdrawRequest: builder.mutation<RequestDto, { party: string; id: string }>({
