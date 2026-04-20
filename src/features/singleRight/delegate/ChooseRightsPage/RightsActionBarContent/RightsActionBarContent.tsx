@@ -58,7 +58,7 @@ export const RightsActionBarContent = ({
 }: RightsActionBarContentProps) => {
   const { t } = useTranslation();
   const hasUndelegableRights =
-    rights.some((r) => r.delegable === false) && serviceType !== 'AltinnApp';
+    rights.some((r) => r.delegable === false) && serviceType !== 'AltinnApp' && serviceType !== 'MigratedApp';
   const [errorList, setErrorList] = useState<string[]>([]);
   const [altinnAppAccess, setAltinnAppAccess] = useState(true);
 
@@ -98,7 +98,7 @@ export const RightsActionBarContent = ({
       <DsParagraph>{rightDescription}</DsParagraph>
       <DsParagraph>{t('single_rights.action_bar_adjust_rights_text')}</DsParagraph>
       <div className={classes.chipContainer}>
-        {serviceType === 'AltinnApp' ? (
+        {serviceType === 'AltinnApp' || serviceType === 'MigratedApp' ? (
           <div>
             <DsChip.Checkbox
               data-size='sm'
