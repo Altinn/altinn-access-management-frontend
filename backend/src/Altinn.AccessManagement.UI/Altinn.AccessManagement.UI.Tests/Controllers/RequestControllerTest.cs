@@ -1070,6 +1070,94 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
         }
 
         /// <summary>
+        ///     Test case: GetSentRequests with type=package filter returns only package requests
+        ///     Expected: GetSentRequests returns the requests filtered by type
+        /// </summary>
+        [Fact]
+        public async Task GetSentRequests_WithPackageTypeFilter_ReturnsRequests()
+        {
+            // Arrange
+            string party = "167536b5-f8ed-4c5a-8f48-0279507e53ae";
+            string toParty = "feb51634-0042-4ab0-a9db-8705300141a6";
+            string path = Path.Combine(_expectedDataPath, "Request", "getSentRequests.json");
+            IEnumerable<RequestFE> expectedResponse = Util.GetMockData<IEnumerable<RequestFE>>(path);
+
+            // Act
+            HttpResponseMessage httpResponse = await _client.GetAsync($"accessmanagement/api/v1/request/sent?party={party}&to={toParty}&type=package");
+            IEnumerable<RequestFE> actualResponse = await httpResponse.Content.ReadFromJsonAsync<IEnumerable<RequestFE>>();
+
+            // Assert
+            Assert.Equal(HttpStatusCode.OK, httpResponse.StatusCode);
+            AssertionUtil.AssertCollections(expectedResponse.ToList(), actualResponse.ToList(), AssertionUtil.AssertEqual);
+        }
+
+        /// <summary>
+        ///     Test case: GetSentRequests with type=resource filter returns only resource requests
+        ///     Expected: GetSentRequests returns the requests filtered by type
+        /// </summary>
+        [Fact]
+        public async Task GetSentRequests_WithResourceTypeFilter_ReturnsRequests()
+        {
+            // Arrange
+            string party = "167536b5-f8ed-4c5a-8f48-0279507e53ae";
+            string toParty = "feb51634-0042-4ab0-a9db-8705300141a6";
+            string path = Path.Combine(_expectedDataPath, "Request", "getSentRequests.json");
+            IEnumerable<RequestFE> expectedResponse = Util.GetMockData<IEnumerable<RequestFE>>(path);
+
+            // Act
+            HttpResponseMessage httpResponse = await _client.GetAsync($"accessmanagement/api/v1/request/sent?party={party}&to={toParty}&type=resource");
+            IEnumerable<RequestFE> actualResponse = await httpResponse.Content.ReadFromJsonAsync<IEnumerable<RequestFE>>();
+
+            // Assert
+            Assert.Equal(HttpStatusCode.OK, httpResponse.StatusCode);
+            AssertionUtil.AssertCollections(expectedResponse.ToList(), actualResponse.ToList(), AssertionUtil.AssertEqual);
+        }
+
+        /// <summary>
+        ///     Test case: GetSentRequests with status=Pending filter returns pending requests
+        ///     Expected: GetSentRequests returns only requests with status Pending
+        /// </summary>
+        [Fact]
+        public async Task GetSentRequests_WithStatusFilter_ReturnsRequests()
+        {
+            // Arrange
+            string party = "167536b5-f8ed-4c5a-8f48-0279507e53ae";
+            string toParty = "feb51634-0042-4ab0-a9db-8705300141a6";
+            string path = Path.Combine(_expectedDataPath, "Request", "getSentRequests.json");
+            IEnumerable<RequestFE> expectedResponse = Util.GetMockData<IEnumerable<RequestFE>>(path);
+
+            // Act
+            HttpResponseMessage httpResponse = await _client.GetAsync($"accessmanagement/api/v1/request/sent?party={party}&to={toParty}&status=Pending");
+            IEnumerable<RequestFE> actualResponse = await httpResponse.Content.ReadFromJsonAsync<IEnumerable<RequestFE>>();
+
+            // Assert
+            Assert.Equal(HttpStatusCode.OK, httpResponse.StatusCode);
+            AssertionUtil.AssertCollections(expectedResponse.ToList(), actualResponse.ToList(), AssertionUtil.AssertEqual);
+        }
+
+        /// <summary>
+        ///     Test case: GetReceivedRequests with type=package filter returns only package requests
+        ///     Expected: GetReceivedRequests returns the requests filtered by type
+        /// </summary>
+        [Fact]
+        public async Task GetReceivedRequests_WithPackageTypeFilter_ReturnsRequests()
+        {
+            // Arrange
+            string party = "167536b5-f8ed-4c5a-8f48-0279507e53ae";
+            string fromParty = "feb51634-0042-4ab0-a9db-8705300141a6";
+            string path = Path.Combine(_expectedDataPath, "Request", "getReceivedRequests.json");
+            IEnumerable<RequestFE> expectedResponse = Util.GetMockData<IEnumerable<RequestFE>>(path);
+
+            // Act
+            HttpResponseMessage httpResponse = await _client.GetAsync($"accessmanagement/api/v1/request/received?party={party}&from={fromParty}&type=package");
+            IEnumerable<RequestFE> actualResponse = await httpResponse.Content.ReadFromJsonAsync<IEnumerable<RequestFE>>();
+
+            // Assert
+            Assert.Equal(HttpStatusCode.OK, httpResponse.StatusCode);
+            AssertionUtil.AssertCollections(expectedResponse.ToList(), actualResponse.ToList(), AssertionUtil.AssertEqual);
+        }
+
+        /// <summary>
         ///     Test case: CreatePackageRequest returns a package request where the package reference is null
         ///     Expected: CreatePackageRequest maps null package to null packageId in the FE model
         /// </summary>

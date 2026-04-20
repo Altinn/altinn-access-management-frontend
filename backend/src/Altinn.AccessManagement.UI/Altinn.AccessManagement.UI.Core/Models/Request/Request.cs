@@ -22,7 +22,12 @@ public class Request : RequestDto
 public class RequestReferenceDto
 {
     /// <summary>
-    /// Identifying the resource
+    /// Guid of the resource
+    /// </summary>
+    public Guid Id { get; set; }
+
+    /// <summary>
+    /// Identifying the resource as a URN
     /// </summary>
     public string ReferenceId { get; set; }
 }
