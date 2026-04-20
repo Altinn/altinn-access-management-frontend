@@ -46,6 +46,10 @@ namespace Altinn.AccessManagement.UI.Mocks.Mocks
             {
                 dataPath = Path.Combine(dataFolder, "Request", "sentRequestsInvalidResource.json");
             }
+            else if (party == Guid.Parse("33333333-3333-3333-3333-333333333333"))
+            {
+                dataPath = Path.Combine(dataFolder, "Request", "sentRequestsNullResource.json");
+            }
             return await Task.FromResult(Util.GetMockData<PaginatedResult<RequestResourceDto>>(dataPath));
         }
 
@@ -89,7 +93,9 @@ namespace Altinn.AccessManagement.UI.Mocks.Mocks
             ThrowExceptionIfTriggerParty(party.ToString());
             ThrowHttpStatusExceptionIfTriggerParty(party.ToString());
 
-            string dataPath = Path.Combine(dataFolder, "Request", "singlePackageRequest.json");
+            string dataPath = party == Guid.Parse("33333333-3333-3333-3333-333333333333")
+                ? Path.Combine(dataFolder, "Request", "singlePackageRequestNullPackage.json")
+                : Path.Combine(dataFolder, "Request", "singlePackageRequest.json");
             return await Task.FromResult(Util.GetMockData<RequestPackageDto>(dataPath));
         }
 

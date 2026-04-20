@@ -876,5 +876,49 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
             // Assert
             Assert.Equal(HttpStatusCode.BadRequest, httpResponse.StatusCode);
         }
+
+        /// <summary>
+        ///     Test case: GetSentRequests returns requests where the resource reference is null
+        ///     Expected: GetSentRequests maps null resource to null resourceId in the FE model
+        /// </summary>
+        [Fact]
+        public async Task GetSentRequests_NullResource_ReturnsNullResourceId()
+        {
+            // Arrange - 33333333 triggers null-resource mock data path
+            string party = "33333333-3333-3333-3333-333333333333";
+            string path = Path.Combine(_expectedDataPath, "Request", "getSentRequestsNullResource.json");
+            IEnumerable<RequestFE> expectedResponse = Util.GetMockData<IEnumerable<RequestFE>>(path);
+
+            // Act
+            HttpResponseMessage httpResponse = await _client.GetAsync($"accessmanagement/api/v1/request/sent?party={party}");
+            IEnumerable<RequestFE> actualResponse = await httpResponse.Content.ReadFromJsonAsync<IEnumerable<RequestFE>>();
+
+            // Assert
+            Assert.Equal(HttpStatusCode.OK, httpResponse.StatusCode);
+            AssertionUtil.AssertCollections(expectedResponse.ToList(), actualResponse.ToList(), AssertionUtil.AssertEqual);
+        }
+
+        /// <summary>
+        ///     Test case: CreatePackageRequest returns a package request where the package reference is null
+        ///     Expected: CreatePackageRequest maps null package to null packageId in the FE model
+        /// </summary>
+        [Fact]
+        public async Task CreatePackageRequest_NullPackage_ReturnsNullPackageId()
+        {
+            // Arrange - 33333333 triggers null-package mock data path
+            string party = "33333333-3333-3333-3333-333333333333";
+            string toParty = "feb51634-0042-4ab0-a9db-8705300141a6";
+            string packageId = "urn:altinn:accesspackage:agriculture";
+            string path = Path.Combine(_expectedDataPath, "Request", "getPackageRequestNullPackage.json");
+            RequestFE expectedResponse = Util.GetMockData<RequestFE>(path);
+
+            // Act
+            HttpResponseMessage httpResponse = await _client.PostAsync($"accessmanagement/api/v1/request/package?party={party}&to={toParty}&package={packageId}", null);
+            RequestFE actualResponse = await httpResponse.Content.ReadFromJsonAsync<RequestFE>();
+
+            // Assert
+            Assert.Equal(HttpStatusCode.OK, httpResponse.StatusCode);
+            AssertionUtil.AssertEqual(expectedResponse, actualResponse);
+        }
     }
 }
