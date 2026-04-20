@@ -83,39 +83,29 @@ export const DraftRequestPage = () => {
   let body: React.ReactNode = null;
   let error: React.ReactNode = null;
 
+  const generateHeading = (headerTextKey: string) => (
+    <DraftRequestHeader
+      headerTextKey={headerTextKey}
+      toName={toName}
+    />
+  );
+  const generateReceiptBody = (bodyTextKey: string) => (
+    <RequestReceiptBody
+      bodyTextKey={bodyTextKey}
+      toName={toName}
+    />
+  );
+
   if (confirmResponse) {
-    heading = (
-      <DraftRequestHeader
-        headerTextKey='draft_request_page.request_approved'
-        toName={toName}
-      />
-    );
-    body = (
-      <RequestReceiptBody
-        bodyTextKey='draft_request_page.request_approved_info'
-        toName={toName}
-      />
-    );
+    heading = generateHeading('draft_request_page.request_approved');
+    body = generateReceiptBody('draft_request_page.request_approved_info');
   } else if (withdrawResponse) {
-    heading = (
-      <DraftRequestHeader
-        headerTextKey='draft_request_page.request_withdrawn'
-        toName={toName}
-      />
-    );
-    body = (
-      <RequestReceiptBody
-        bodyTextKey='draft_request_page.request_withdrawn_info'
-        toName={toName}
-      />
-    );
+    heading = generateHeading('draft_request_page.request_withdrawn');
+    body = generateReceiptBody('draft_request_page.request_withdrawn_info');
   } else if (request) {
     heading = (
       <>
-        <DraftRequestHeader
-          headerTextKey='draft_request_page.heading'
-          toName={toName}
-        />
+        {generateHeading('draft_request_page.heading')}
         <DsParagraph>
           <Trans
             i18nKey={
