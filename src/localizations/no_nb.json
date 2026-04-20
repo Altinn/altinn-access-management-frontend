@@ -1000,6 +1000,7 @@
     "no_resources_filtered": "Ingen treff på søket \"{{searchTerm}}\".",
     "no_resources": "Denne brukeren har ingen tjenester.",
     "filter_by_serviceowner": "Filtrer på tjenesteeier",
+    "filtered_serviceowners": "{{count}} tjenesteeiere",
     "resource_search_clear": "Tøm søk",
     "remove_filter": "Fjern filter",
     "service_owner_filter": "Søk etter tjenesteeier",
