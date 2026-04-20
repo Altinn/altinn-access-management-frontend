@@ -146,7 +146,7 @@ export const requestApi = createApi({
         url: `package?party=${party}&to=${to}&package=${encodeURIComponent(packageId)}`,
         method: 'POST',
       }),
-      invalidatesTags: ['sentRequests'],
+      invalidatesTags: ['sentRequests', 'enrichedSentPackageRequests'],
     }),
     withdrawRequest: builder.mutation<RequestDto, { party: string; id: string }>({
       query: ({ party, id }) => ({
