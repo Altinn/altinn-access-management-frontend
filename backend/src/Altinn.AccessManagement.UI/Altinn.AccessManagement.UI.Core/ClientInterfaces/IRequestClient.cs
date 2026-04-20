@@ -66,7 +66,7 @@ namespace Altinn.AccessManagement.UI.Core.ClientInterfaces
         /// <param name="package">The package to request</param>
         /// <param name="cancellationToken">Cancellation token</param>
         /// <returns>The request</returns>
-        Task<RequestPackageDto> CreatePackageRequest(Guid party, Guid to, string package, CancellationToken cancellationToken);
+        Task<Request> CreatePackageRequest(Guid party, Guid to, string package, CancellationToken cancellationToken);
 
         /// <summary>
         /// Withdraw a request by id

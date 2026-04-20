@@ -102,6 +102,17 @@ namespace Altinn.AccessManagement.UI.Mocks.Mocks
         }
 
         /// <inheritdoc />
+        public async Task<Request> CreatePackageRequest(Guid party, Guid to, string package, CancellationToken cancellationToken)
+        {
+            ThrowExceptionIfTriggerParty(party.ToString());
+            ThrowHttpStatusExceptionIfTriggerParty(party.ToString());
+
+            string dataPath = Path.Combine(dataFolder, "Request", "sentPackageRequests.json");
+            var result = Util.GetMockData<PaginatedResult<Request>>(dataPath);
+            return await Task.FromResult(result.Items.FirstOrDefault());
+        }
+
+        /// <inheritdoc />
         public async Task<Request> WithdrawRequest(Guid party, Guid id, CancellationToken cancellationToken)
         {
             ThrowExceptionIfTriggerParty(party.ToString());
