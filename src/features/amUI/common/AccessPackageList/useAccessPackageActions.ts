@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { formatDisplayName, SnackbarDuration, useSnackbar } from '@altinn/altinn-components';
 
@@ -48,11 +48,7 @@ export const useAccessPackageActions = ({
     fromParty?.partyUuid,
   );
 
-  const {
-    data: packageRequests,
-    isFetching: isFetchingPackageRequests,
-    isError: isPackageRequestsError,
-  } = useGetSentRequestsQuery(
+  const { data: packageRequests, refetch: refetchPackageRequests } = useGetSentRequestsQuery(
     {
       ...requestQueryParams,
       status: ['Pending'],
@@ -62,12 +58,6 @@ export const useAccessPackageActions = ({
       skip: !requestQueryParams.party || !requestQueryParams.to,
     },
   );
-
-  useEffect(() => {
-    if (!isFetchingPackageRequests || isPackageRequestsError) {
-      setLoadingByPackageId({});
-    }
-  }, [isFetchingPackageRequests, isPackageRequestsError]);
 
   const formatToPartyName = (party: Party) => {
     return formatDisplayName({
@@ -226,6 +216,11 @@ export const useAccessPackageActions = ({
         package: packageId,
       }).unwrap();
 
+      setLoadingByPackageId((prev) => {
+        const copy = { ...prev };
+        delete copy[packageId];
+        return copy;
+      });
       openSnackbar({
         message: t('delegation_modal.request.sent_request_success', {
           resource: accessPackage.name,
@@ -252,12 +247,7 @@ export const useAccessPackageActions = ({
     const packageId = getPackageRequestKey(accessPackage);
 
     if (!requestId) {
-      openSnackbar({
-        message: t('delegation_modal.request.withdraw_request_error', {
-          resource: accessPackage.name,
-        }),
-        color: 'danger',
-      });
+      refetchPackageRequests();
       return;
     }
 
@@ -272,6 +262,11 @@ export const useAccessPackageActions = ({
         id: requestId,
       }).unwrap();
 
+      setLoadingByPackageId((prev) => {
+        const copy = { ...prev };
+        delete copy[packageId];
+        return copy;
+      });
       openSnackbar({
         message: t('delegation_modal.request.withdraw_request_success', {
           resource: accessPackage.name,
