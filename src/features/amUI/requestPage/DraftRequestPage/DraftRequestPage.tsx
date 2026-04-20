@@ -70,6 +70,7 @@ export const DraftRequestPage = () => {
     }
   }, [request, partyUuid]);
 
+  const isInitialLoad = isLoadingRequest || request?.from.id !== partyUuid; // show loading state if the request is for a different user (while we wait for the redirect)
   const toName = formatDisplayName({
     fullName: request?.to.name ?? '',
     type: request?.to.type === 'Person' ? 'person' : 'company',
@@ -173,7 +174,7 @@ export const DraftRequestPage = () => {
         type: request?.from.type === 'Person' ? 'person' : 'company',
       }}
       error={error}
-      isLoading={isLoadingRequest}
+      isLoading={isInitialLoad}
       heading={heading}
       body={body}
     />
