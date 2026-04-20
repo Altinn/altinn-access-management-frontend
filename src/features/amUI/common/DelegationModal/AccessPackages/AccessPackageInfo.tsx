@@ -43,6 +43,7 @@ export const AccessPackageInfo = ({ accessPackage, availableActions = [] }: Pack
     onRequest,
     deleteRequest,
     hasPendingRequest,
+    isLoadingRequest,
     isLoading: isActionLoading,
   } = useAccessPackageActions({
     onDelegateSuccess: () => {
@@ -229,13 +230,14 @@ export const AccessPackageInfo = ({ accessPackage, availableActions = [] }: Pack
               (isPendingRequest ? (
                 <DsButton
                   data-color='danger'
+                  disabled={isLoadingRequest(accessPackage)}
                   onClick={() => deleteRequest(accessPackage)}
                 >
                   {t('delegation_modal.request.delete_request')}
                 </DsButton>
               ) : (
                 <DsButton
-                  disabled={accessPackage.isAssignable === false}
+                  disabled={accessPackage.isAssignable === false || isLoadingRequest(accessPackage)}
                   onClick={() => onRequest(accessPackage)}
                 >
                   {t('common.request_poa')}

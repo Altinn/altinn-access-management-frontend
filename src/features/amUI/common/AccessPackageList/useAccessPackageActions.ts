@@ -36,9 +36,7 @@ export const useAccessPackageActions = ({
   const [createPackageRequest, { isLoading: isRequestLoading }] = useCreatePackageRequestMutation();
   const [withdrawRequest] = useWithdrawRequestMutation();
   const [loadingByPackageId, setLoadingByPackageId] = useState<Record<string, boolean>>({});
-  const isPackageRequestActionLoading = Object.values(loadingByPackageId).some(Boolean);
-  const isLoading =
-    isDelegationLoading || isRevokeLoading || isRequestLoading || isPackageRequestActionLoading;
+  const isLoading = isDelegationLoading || isRevokeLoading;
 
   const { t } = useTranslation();
   const { toParty: toPartyFromContext, fromParty, actingParty } = usePartyRepresentation();
@@ -203,6 +201,7 @@ export const useAccessPackageActions = ({
       return;
     }
     const packageId = getPackageRequestKey(accessPackage);
+    if (loadingByPackageId[packageId]) return;
 
     setLoadingByPackageId((prev) => ({
       ...prev,
@@ -245,6 +244,7 @@ export const useAccessPackageActions = ({
   const deleteRequest = async (accessPackage: AccessPackage) => {
     const requestId = getRequestId(accessPackage);
     const packageId = getPackageRequestKey(accessPackage);
+    if (loadingByPackageId[packageId]) return;
 
     if (!requestId) {
       refetchPackageRequests();
