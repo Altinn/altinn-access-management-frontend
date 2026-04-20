@@ -22,7 +22,7 @@ import { DebouncedSearchField } from '../../common/DebouncedSearchField/Debounce
 import { useCanGiveAccess } from '@/resources/hooks/useCanGiveAccess';
 import { useCanRequestAccess } from '@/resources/hooks/useCanRequestAccess';
 
-export const AccessPackageSection = () => {
+export const AccessPackageSection = ({ isReportee = false }: { isReportee?: boolean }) => {
   const { t } = useTranslation();
   const { id } = useParams();
   const {
@@ -31,8 +31,9 @@ export const AccessPackageSection = () => {
     actingParty,
     isLoading: loadingPartyRepresentation,
   } = usePartyRepresentation();
-  const canGiveAccess = useCanGiveAccess(id ?? '');
-  const canRequestAccess = useCanRequestAccess(id ?? '');
+  const partyId = isReportee ? (toParty?.partyUuid ?? '') : (id ?? '');
+  const canGiveAccess = useCanGiveAccess(partyId, isReportee);
+  const canRequestAccess = useCanRequestAccess(partyId, isReportee);
   const shouldDisplayPrivDelegation = displayPrivDelegation();
 
   const { data: accesses, isLoading: loadingAccesses } = useGetUserDelegationsQuery(
@@ -56,9 +57,11 @@ export const AccessPackageSection = () => {
   return (
     <>
       <AccessPackageInfoAlert />
-      {toParty?.partyTypeName === PartyType.Person && !shouldDisplayPrivDelegation && (
-        <DsAlert data-color='warning'>{t('access_packages.person_info_alert')}</DsAlert>
-      )}
+      {!isReportee &&
+        toParty?.partyTypeName === PartyType.Person &&
+        !shouldDisplayPrivDelegation && (
+          <DsAlert data-color='warning'>{t('access_packages.person_info_alert')}</DsAlert>
+        )}
       {loadingPartyRepresentation || loadingAccesses ? (
         <TabContentSkeleton />
       ) : (
@@ -92,7 +95,9 @@ export const AccessPackageSection = () => {
               </div>
             )}
             <div className={classes.delegateButton}>
-              {(toParty?.partyTypeName === PartyType.Organization || shouldDisplayPrivDelegation) &&
+              {(isReportee ||
+                toParty?.partyTypeName === PartyType.Organization ||
+                shouldDisplayPrivDelegation) &&
                 (canGiveAccess || canRequestAccess) && (
                   <DelegationModal
                     delegationType={DelegationType.AccessPackage}
