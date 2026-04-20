@@ -484,10 +484,10 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
 
         /// <summary>
         ///     Test case: CreatePackageRequest creates a package request
-        ///     Expected: CreatePackageRequest returns request
+        ///     Expected: CreatePackageRequest returns a request where resourceId is null when a package is requested
         /// </summary>
         [Fact]
-        public async Task CreatePackageRequest_ReturnsRequest()
+        public async Task CreatePackageRequest_ReturnsRequestWithNullResourceId()
         {
             // Arrange
             string party = "167536b5-f8ed-4c5a-8f48-0279507e53ae";
@@ -503,6 +503,31 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
             // Assert
             Assert.Equal(HttpStatusCode.OK, httpResponse.StatusCode);
             AssertionUtil.AssertEqual(expectedResponse, actualResponse);
+            Assert.Null(actualResponse.ResourceId);
+        }
+
+        /// <summary>
+        ///     Test case: CreateResourceRequest creates a resource request
+        ///     Expected: CreateResourceRequest returns a request where packageId is null when a resource is requested
+        /// </summary>
+        [Fact]
+        public async Task CreateResourceRequest_ReturnsRequestWithNullPackageId()
+        {
+            // Arrange
+            string party = "167536b5-f8ed-4c5a-8f48-0279507e53ae";
+            string toParty = "feb51634-0042-4ab0-a9db-8705300141a6";
+            string resourceId = "1337";
+            string path = Path.Combine(_expectedDataPath, "Request", "getRequest.json");
+            RequestFE expectedResponse = Util.GetMockData<RequestFE>(path);
+
+            // Act
+            HttpResponseMessage httpResponse = await _client.PostAsync($"accessmanagement/api/v1/request/resource?party={party}&to={toParty}&resource={resourceId}", null);
+            RequestFE actualResponse = await httpResponse.Content.ReadFromJsonAsync<RequestFE>();
+
+            // Assert
+            Assert.Equal(HttpStatusCode.OK, httpResponse.StatusCode);
+            AssertionUtil.AssertEqual(expectedResponse, actualResponse);
+            Assert.Null(actualResponse.PackageId);
         }
 
         /// <summary>
