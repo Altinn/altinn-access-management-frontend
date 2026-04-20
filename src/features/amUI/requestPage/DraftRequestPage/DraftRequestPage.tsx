@@ -53,7 +53,7 @@ export const DraftRequestPage = () => {
   const isActionButtonDisabled = isConfirmingRequest || isWithdrawingRequest;
   const onConfirmRequest = () => {
     if (!isActionButtonDisabled && request) {
-      confirmRequest({ party: request?.from.id, id: request.id });
+      confirmRequest({ party: request.from.id, id: request.id });
     }
   };
 
@@ -119,7 +119,7 @@ export const DraftRequestPage = () => {
         <DsParagraph>
           <Trans
             i18nKey={
-              partyUuid === request?.from.id
+              partyUuid === request.from.id
                 ? 'draft_request_page.intro_person'
                 : 'draft_request_page.intro_company'
             }

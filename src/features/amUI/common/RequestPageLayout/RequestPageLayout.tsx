@@ -52,7 +52,7 @@ export const RequestPageLayout = ({
   return (
     <RootProvider>
       <Layout
-        color={account.type === 'person' ? 'person' : 'company'}
+        color={account.type}
         theme='subtle'
         header={{
           locale: {
@@ -102,7 +102,7 @@ export const RequestPageLayout = ({
         }}
       >
         {isLoading && <LoadingState />}
-        {error && <div className={classes.centerBlock}>{error}</div>}
+        {!isLoading && error && <div className={classes.centerBlock}>{error}</div>}
         {heading && body && (
           <div className={classes.centerBlock}>
             {backToPage && (

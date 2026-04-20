@@ -32,35 +32,33 @@ export const RequestPageBase = ({
   };
 
   return (
-    <>
-      <RequestPageLayout
-        account={account}
-        isLoading={isLoading ?? false}
-        error={error}
-        heading={
-          <DsHeading
-            level={1}
-            data-size='lg'
+    <RequestPageLayout
+      account={account}
+      isLoading={isLoading ?? false}
+      error={error}
+      heading={
+        <DsHeading
+          level={1}
+          data-size='lg'
+        >
+          {heading}
+        </DsHeading>
+      }
+      body={!isLoading && !error && <div className={classes.vendorRequestBlock}>{children}</div>}
+      footer={
+        system && (
+          <DsParagraph
+            data-size='sm'
+            className={classes.vendorInfo}
           >
-            {heading}
-          </DsHeading>
-        }
-        body={!isLoading && !error && <div className={classes.vendorRequestBlock}>{children}</div>}
-        footer={
-          system && (
-            <DsParagraph
-              data-size='sm'
-              className={classes.vendorInfo}
-            >
-              {t('systemuser_request.org_nr', {
-                systemName: system.name,
-                vendorName: system.systemVendorOrgName,
-                vendorOrg: formatOrgNr(system.systemVendorOrgNumber),
-              })}
-            </DsParagraph>
-          )
-        }
-      />
-    </>
+            {t('systemuser_request.org_nr', {
+              systemName: system.name,
+              vendorName: system.systemVendorOrgName,
+              vendorOrg: formatOrgNr(system.systemVendorOrgNumber),
+            })}
+          </DsParagraph>
+        )
+      }
+    />
   );
 };

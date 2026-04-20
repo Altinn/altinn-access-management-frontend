@@ -19,7 +19,7 @@ export const DraftRequestBody = ({ request, fromName }: DraftRequestBodyProps) =
 
   const { rights, setRights } = useRightsSection({ resource: request.resource, isRequest: true });
 
-  const isSelfParty = selfParty?.partyUuid === request?.from.id;
+  const isSelfParty = selfParty?.partyUuid === request.from.id;
 
   return (
     <div>
