@@ -20,6 +20,7 @@ import { isGuardianshipUrn } from '@/resources/utils';
 import { displayPrivDelegation } from '@/resources/utils/featureFlagUtils';
 import { DebouncedSearchField } from '../../common/DebouncedSearchField/DebouncedSearchField';
 import { useCanGiveAccess } from '@/resources/hooks/useCanGiveAccess';
+import { useCanRequestAccess } from '@/resources/hooks/useCanRequestAccess';
 
 export const AccessPackageSection = () => {
   const { t } = useTranslation();
@@ -31,6 +32,7 @@ export const AccessPackageSection = () => {
     isLoading: loadingPartyRepresentation,
   } = usePartyRepresentation();
   const canGiveAccess = useCanGiveAccess(id ?? '');
+  const canRequestAccess = useCanRequestAccess(id ?? '');
   const shouldDisplayPrivDelegation = displayPrivDelegation();
 
   const { data: accesses, isLoading: loadingAccesses } = useGetUserDelegationsQuery(
@@ -90,16 +92,16 @@ export const AccessPackageSection = () => {
               </div>
             )}
             <div className={classes.delegateButton}>
-              {(toParty?.partyTypeName === PartyType.Organization ||
-                shouldDisplayPrivDelegation) && (
-                <DelegationModal
-                  delegationType={DelegationType.AccessPackage}
-                  availableActions={[
-                    DelegationAction.REVOKE,
-                    canGiveAccess ? DelegationAction.DELEGATE : DelegationAction.REQUEST,
-                  ]}
-                />
-              )}
+              {(toParty?.partyTypeName === PartyType.Organization || shouldDisplayPrivDelegation) &&
+                (canGiveAccess || canRequestAccess) && (
+                  <DelegationModal
+                    delegationType={DelegationType.AccessPackage}
+                    availableActions={[
+                      DelegationAction.REVOKE,
+                      canGiveAccess ? DelegationAction.DELEGATE : DelegationAction.REQUEST,
+                    ]}
+                  />
+                )}
             </div>
           </div>
           <ActiveDelegations searchString={debouncedSearchString} />
