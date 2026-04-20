@@ -141,11 +141,8 @@ export const useAccessPackageActions = ({
     }
   };
 
-  const getPackageRequestKey = (accessPackage: AccessPackage) =>
-    accessPackage.urn ?? accessPackage.id;
-
   const getRequestId = (accessPackage: AccessPackage): string | undefined => {
-    const packageId = getPackageRequestKey(accessPackage);
+    const packageId = accessPackage.urn;
     return packageRequests?.find(
       (request) =>
         request.packageId === packageId &&
@@ -211,7 +208,8 @@ export const useAccessPackageActions = ({
     if (!fromParty || !actingParty) {
       return;
     }
-    const packageId = getPackageRequestKey(accessPackage);
+    const packageId = accessPackage.urn;
+    if (!packageId) return;
     if (loadingByPackageId[packageId]) return;
 
     setLoadingByPackageId((prev) => ({
@@ -255,7 +253,8 @@ export const useAccessPackageActions = ({
 
   const deleteRequest = async (accessPackage: AccessPackage) => {
     const requestId = getRequestId(accessPackage);
-    const packageId = getPackageRequestKey(accessPackage);
+    const packageId = accessPackage.urn;
+    if (!packageId) return;
     if (loadingByPackageId[packageId]) return;
 
     if (!requestId) {
@@ -308,7 +307,8 @@ export const useAccessPackageActions = ({
     deleteRequest,
     hasPendingRequest: (accessPackage: AccessPackage) => !!getRequestId(accessPackage),
     isLoadingRequest: (accessPackage: AccessPackage) => {
-      const packageId = getPackageRequestKey(accessPackage);
+      const packageId = accessPackage.urn;
+      if (!packageId) return false;
       return !!loadingByPackageId[packageId] || awaitingRefetch.has(packageId);
     },
     isDelegationLoading,
