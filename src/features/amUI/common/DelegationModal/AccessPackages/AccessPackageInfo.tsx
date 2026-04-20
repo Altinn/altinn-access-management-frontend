@@ -230,6 +230,7 @@ export const AccessPackageInfo = ({ accessPackage, availableActions = [] }: Pack
               (isPendingRequest ? (
                 <DsButton
                   data-color='danger'
+                  loading={isLoadingRequest(accessPackage)}
                   disabled={isLoadingRequest(accessPackage)}
                   onClick={() => deleteRequest(accessPackage)}
                 >
@@ -237,6 +238,7 @@ export const AccessPackageInfo = ({ accessPackage, availableActions = [] }: Pack
                 </DsButton>
               ) : (
                 <DsButton
+                  loading={isLoadingRequest(accessPackage)}
                   disabled={accessPackage.isAssignable === false || isLoadingRequest(accessPackage)}
                   onClick={() => onRequest(accessPackage)}
                 >

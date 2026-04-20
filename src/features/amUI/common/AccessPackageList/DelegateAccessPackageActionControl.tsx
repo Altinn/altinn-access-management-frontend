@@ -6,6 +6,7 @@ import { displayPackageRequests } from '@/resources/utils/featureFlagUtils';
 
 interface DelegateAccessPackageActionControlsProps {
   isLoading: boolean;
+  isPackageLoading?: boolean;
   availableActions?: DelegationAction[];
   onDelegate: () => void;
   onRequest: () => void;
@@ -18,6 +19,7 @@ interface DelegateAccessPackageActionControlsProps {
 
 export const DelegateAccessPackageActionControl = ({
   isLoading,
+  isPackageLoading = false,
   availableActions,
   canDelegate,
   onRequest,
@@ -30,7 +32,7 @@ export const DelegateAccessPackageActionControl = ({
   const { t } = useTranslation();
   const displayPackageRequestsFeature = displayPackageRequests();
 
-  if (isLoading) {
+  if (isLoading || isPackageLoading) {
     return (
       <DsSpinner
         data-size='xs'
@@ -59,6 +61,8 @@ export const DelegateAccessPackageActionControl = ({
         <Button
           variant='tertiary'
           size='sm'
+          loading={isPackageLoading}
+          disabled={disabled || isPackageLoading}
           onClick={onDeleteRequest}
           aria-label={t('common.delete_request_for', { poa_object: accessPackageName })}
         >
@@ -72,7 +76,8 @@ export const DelegateAccessPackageActionControl = ({
       <Button
         variant='tertiary'
         size='sm'
-        disabled={disabled}
+        loading={isPackageLoading}
+        disabled={disabled || isPackageLoading}
         onClick={onRequest}
         aria-label={t('common.request_poa_for', { poa_object: accessPackageName })}
       >

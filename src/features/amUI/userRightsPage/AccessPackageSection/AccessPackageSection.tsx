@@ -91,7 +91,7 @@ export const AccessPackageSection = () => {
             )}
             <div className={classes.delegateButton}>
               {(toParty?.partyTypeName === PartyType.Organization ||
-                (shouldDisplayPrivDelegation && canGiveAccess)) && (
+                shouldDisplayPrivDelegation) && (
                 <DelegationModal
                   delegationType={DelegationType.AccessPackage}
                   availableActions={[

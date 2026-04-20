@@ -28,6 +28,7 @@ interface AreaItemContentProps {
   onRequest?: (accessPackage: AccessPackage) => void;
   onDeleteRequest?: (accessPackage: AccessPackage) => void;
   hasPendingRequest?: (accessPackage: AccessPackage) => boolean;
+  isLoadingRequest?: (accessPackage: AccessPackage) => boolean;
   isActionLoading?: boolean;
   showAvailablePackages?: boolean;
   showAvailableToggle?: boolean;
@@ -45,6 +46,7 @@ export const AreaItemContent = ({
   onRequest,
   onDeleteRequest,
   hasPendingRequest,
+  isLoadingRequest,
   isActionLoading = false,
   showAvailablePackages: showAvailablePackagesExternal = false,
   showAvailableToggle = true,
@@ -164,6 +166,7 @@ export const AreaItemContent = ({
                   !isSm && (
                     <DelegateAccessPackageActionControl
                       isLoading={isActionLoading}
+                      isPackageLoading={isLoadingRequest?.(pkg)}
                       availableActions={availableActions}
                       isPendingRequest={hasPendingRequest?.(pkg) ?? false}
                       disabled={pkg.isAssignable === false}

@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { formatDisplayName, SnackbarDuration, useSnackbar } from '@altinn/altinn-components';
 
@@ -36,6 +36,7 @@ export const useAccessPackageActions = ({
   const [createPackageRequest, { isLoading: isRequestLoading }] = useCreatePackageRequestMutation();
   const [withdrawRequest] = useWithdrawRequestMutation();
   const [loadingByPackageId, setLoadingByPackageId] = useState<Record<string, boolean>>({});
+  const [awaitingRefetch, setAwaitingRefetch] = useState<Set<string>>(new Set());
   const isLoading = isDelegationLoading || isRevokeLoading;
 
   const { t } = useTranslation();
@@ -46,7 +47,11 @@ export const useAccessPackageActions = ({
     fromParty?.partyUuid,
   );
 
-  const { data: packageRequests, refetch: refetchPackageRequests } = useGetSentRequestsQuery(
+  const {
+    data: packageRequests,
+    isFetching: isFetchingPackageRequests,
+    refetch: refetchPackageRequests,
+  } = useGetSentRequestsQuery(
     {
       ...requestQueryParams,
       status: ['Pending'],
@@ -56,6 +61,12 @@ export const useAccessPackageActions = ({
       skip: !requestQueryParams.party || !requestQueryParams.to,
     },
   );
+
+  useEffect(() => {
+    if (!isFetchingPackageRequests && awaitingRefetch.size > 0) {
+      setAwaitingRefetch(new Set());
+    }
+  }, [isFetchingPackageRequests, awaitingRefetch]);
 
   const formatToPartyName = (party: Party) => {
     return formatDisplayName({
@@ -220,6 +231,7 @@ export const useAccessPackageActions = ({
         delete copy[packageId];
         return copy;
       });
+      setAwaitingRefetch((prev) => new Set([...prev, packageId]));
       openSnackbar({
         message: t('delegation_modal.request.sent_request_success', {
           resource: accessPackage.name,
@@ -267,6 +279,7 @@ export const useAccessPackageActions = ({
         delete copy[packageId];
         return copy;
       });
+      setAwaitingRefetch((prev) => new Set([...prev, packageId]));
       openSnackbar({
         message: t('delegation_modal.request.withdraw_request_success', {
           resource: accessPackage.name,
@@ -294,8 +307,10 @@ export const useAccessPackageActions = ({
     onRequest,
     deleteRequest,
     hasPendingRequest: (accessPackage: AccessPackage) => !!getRequestId(accessPackage),
-    isLoadingRequest: (accessPackage: AccessPackage) =>
-      !!loadingByPackageId[getPackageRequestKey(accessPackage)],
+    isLoadingRequest: (accessPackage: AccessPackage) => {
+      const packageId = getPackageRequestKey(accessPackage);
+      return !!loadingByPackageId[packageId] || awaitingRefetch.has(packageId);
+    },
     isDelegationLoading,
     isRevokeLoading,
     isRequestLoading,
