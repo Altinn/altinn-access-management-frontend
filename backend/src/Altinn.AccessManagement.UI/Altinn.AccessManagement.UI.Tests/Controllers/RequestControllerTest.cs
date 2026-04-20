@@ -201,7 +201,7 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
             // Assert
             Assert.Equal(HttpStatusCode.BadRequest, httpResponse.StatusCode);
         }
-        
+
         /// <summary>
         ///     Test case: GetEnrichedReceivedResourceRequests encounters a NotFoundException due to invalid resource reference in request
         ///     Expected: Returns 404 Not Found
@@ -214,6 +214,152 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
 
             // Act
             HttpResponseMessage httpResponse = await _client.GetAsync($"accessmanagement/api/v1/request/received/resource?party={party}");
+
+            // Assert
+            Assert.Equal(HttpStatusCode.NotFound, httpResponse.StatusCode);
+        }
+
+        /// <summary>
+        ///     Test case: GetEnrichedSentPackageRequests returns sent package requests for party with package data included
+        ///     Expected: GetEnrichedSentPackageRequests returns the requests sent by a party with package data included
+        /// </summary>
+        [Fact]
+        public async Task GetEnrichedSentPackageRequests_ReturnsRequestsForParty()
+        {
+            // Arrange
+            string party = "167536b5-f8ed-4c5a-8f48-0279507e53ae";
+            string toParty = "feb51634-0042-4ab0-a9db-8705300141a6";
+            string path = Path.Combine(_expectedDataPath, "Request", "getEnrichedSentPackageRequests.json");
+            IEnumerable<EnrichedPackageRequest> expectedResponse = Util.GetMockData<IEnumerable<EnrichedPackageRequest>>(path);
+
+            // Act
+            HttpResponseMessage httpResponse = await _client.GetAsync($"accessmanagement/api/v1/request/sent/package?party={party}&to={toParty}");
+            IEnumerable<EnrichedPackageRequest> actualResponse = await httpResponse.Content.ReadFromJsonAsync<IEnumerable<EnrichedPackageRequest>>();
+
+            // Assert
+            Assert.Equal(HttpStatusCode.OK, httpResponse.StatusCode);
+            AssertionUtil.AssertCollections(expectedResponse.ToList(), actualResponse.ToList(), AssertionUtil.AssertEqual);
+        }
+
+        /// <summary>
+        ///     Test case: GetEnrichedSentPackageRequests encounters an unexpected internal error
+        ///     Expected: Returns 500 Internal Server Error
+        /// </summary>
+        [Fact]
+        public async Task GetEnrichedSentPackageRequests_InternalServerError()
+        {
+            // Arrange
+            string party = "00000000-0000-0000-0000-000000000000";
+
+            // Act
+            HttpResponseMessage httpResponse = await _client.GetAsync($"accessmanagement/api/v1/request/sent/package?party={party}");
+
+            // Assert
+            Assert.Equal(HttpStatusCode.InternalServerError, httpResponse.StatusCode);
+        }
+
+        /// <summary>
+        ///     Test case: GetEnrichedSentPackageRequests encounters an HttpStatusException
+        ///     Expected: Returns the status code from the exception (BadRequest)
+        /// </summary>
+        [Fact]
+        public async Task GetEnrichedSentPackageRequests_HttpStatusException()
+        {
+            // Arrange
+            string party = "11111111-1111-1111-1111-111111111111";
+
+            // Act
+            HttpResponseMessage httpResponse = await _client.GetAsync($"accessmanagement/api/v1/request/sent/package?party={party}");
+
+            // Assert
+            Assert.Equal(HttpStatusCode.BadRequest, httpResponse.StatusCode);
+        }
+
+        /// <summary>
+        ///     Test case: GetEnrichedSentPackageRequests encounters a NotFoundException due to invalid package reference in request
+        ///     Expected: Returns 404 Not Found
+        /// </summary>
+        [Fact]
+        public async Task GetEnrichedSentPackageRequests_NotFoundException()
+        {
+            // Arrange
+            string party = "22222222-2222-2222-2222-222222222222";
+
+            // Act
+            HttpResponseMessage httpResponse = await _client.GetAsync($"accessmanagement/api/v1/request/sent/package?party={party}");
+
+            // Assert
+            Assert.Equal(HttpStatusCode.NotFound, httpResponse.StatusCode);
+        }
+
+        /// <summary>
+        ///     Test case: GetEnrichedReceivedPackageRequests returns received package requests for party with package data included
+        ///     Expected: GetEnrichedReceivedPackageRequests returns the requests received by a party with package data included
+        /// </summary>
+        [Fact]
+        public async Task GetEnrichedReceivedPackageRequests_ReturnsRequestsForParty()
+        {
+            // Arrange
+            string party = "167536b5-f8ed-4c5a-8f48-0279507e53ae";
+            string fromParty = "feb51634-0042-4ab0-a9db-8705300141a6";
+            string path = Path.Combine(_expectedDataPath, "Request", "getEnrichedReceivedPackageRequests.json");
+            IEnumerable<EnrichedPackageRequest> expectedResponse = Util.GetMockData<IEnumerable<EnrichedPackageRequest>>(path);
+
+            // Act
+            HttpResponseMessage httpResponse = await _client.GetAsync($"accessmanagement/api/v1/request/received/package?party={party}&from={fromParty}");
+            IEnumerable<EnrichedPackageRequest> actualResponse = await httpResponse.Content.ReadFromJsonAsync<IEnumerable<EnrichedPackageRequest>>();
+
+            // Assert
+            Assert.Equal(HttpStatusCode.OK, httpResponse.StatusCode);
+            AssertionUtil.AssertCollections(expectedResponse.ToList(), actualResponse.ToList(), AssertionUtil.AssertEqual);
+        }
+
+        /// <summary>
+        ///     Test case: GetEnrichedReceivedPackageRequests encounters an unexpected internal error
+        ///     Expected: Returns 500 Internal Server Error
+        /// </summary>
+        [Fact]
+        public async Task GetEnrichedReceivedPackageRequests_InternalServerError()
+        {
+            // Arrange
+            string party = "00000000-0000-0000-0000-000000000000";
+
+            // Act
+            HttpResponseMessage httpResponse = await _client.GetAsync($"accessmanagement/api/v1/request/received/package?party={party}");
+
+            // Assert
+            Assert.Equal(HttpStatusCode.InternalServerError, httpResponse.StatusCode);
+        }
+
+        /// <summary>
+        ///     Test case: GetEnrichedReceivedPackageRequests encounters an HttpStatusException
+        ///     Expected: Returns the status code from the exception (BadRequest)
+        /// </summary>
+        [Fact]
+        public async Task GetEnrichedReceivedPackageRequests_HttpStatusException()
+        {
+            // Arrange
+            string party = "11111111-1111-1111-1111-111111111111";
+
+            // Act
+            HttpResponseMessage httpResponse = await _client.GetAsync($"accessmanagement/api/v1/request/received/package?party={party}");
+
+            // Assert
+            Assert.Equal(HttpStatusCode.BadRequest, httpResponse.StatusCode);
+        }
+
+        /// <summary>
+        ///     Test case: GetEnrichedReceivedPackageRequests encounters a NotFoundException due to invalid package reference in request
+        ///     Expected: Returns 404 Not Found
+        /// </summary>
+        [Fact]
+        public async Task GetEnrichedReceivedPackageRequests_NotFoundException()
+        {
+            // Arrange
+            string party = "22222222-2222-2222-2222-222222222222";
+
+            // Act
+            HttpResponseMessage httpResponse = await _client.GetAsync($"accessmanagement/api/v1/request/received/package?party={party}");
 
             // Assert
             Assert.Equal(HttpStatusCode.NotFound, httpResponse.StatusCode);
@@ -295,7 +441,7 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
             // Assert
             Assert.Equal(HttpStatusCode.BadRequest, httpResponse.StatusCode);
         }
-        
+
         /// <summary>
         ///     Test case: GetDraftRequest encounters a NotFoundException from the backend
         ///     Expected: Returns the status code from the exception (NotFound)
