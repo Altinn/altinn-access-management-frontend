@@ -1003,7 +1003,7 @@
     "filtered_serviceowners": "{{count}} tenesteeigare",
     "resource_search_clear": "Tøm søk",
     "remove_filter": "Fjern filter",
-    "service_owner_filter": "Søk etter tjenesteeier",
+    "service_owner_filter": "Søk etter tenesteeigar",
     "service_owner_filter_clear": "Tøm søkefelt"
   },
   "landing_page": {
