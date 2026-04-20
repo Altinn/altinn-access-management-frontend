@@ -70,6 +70,7 @@ export const DraftRequestPage = () => {
     }
   }, [request, partyUuid]);
 
+  const isInitialLoad = isLoadingRequest || !!(request && request.from.id !== partyUuid);
   const toName = formatDisplayName({
     fullName: request?.to.name ?? '',
     type: request?.to.type === 'Person' ? 'person' : 'company',
@@ -102,7 +103,7 @@ export const DraftRequestPage = () => {
   } else if (withdrawResponse) {
     heading = generateHeading('draft_request_page.request_withdrawn');
     body = generateReceiptBody('draft_request_page.request_withdrawn_info');
-  } else if (request) {
+  } else if (request && !isInitialLoad) {
     heading = (
       <>
         {generateHeading('draft_request_page.heading')}
@@ -173,7 +174,7 @@ export const DraftRequestPage = () => {
         type: request?.from.type === 'Person' ? 'person' : 'company',
       }}
       error={error}
-      isLoading={isLoadingRequest}
+      isLoading={isInitialLoad}
       heading={heading}
       body={body}
     />
