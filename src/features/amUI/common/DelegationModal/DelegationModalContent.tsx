@@ -102,7 +102,10 @@ export const DelegationModalContent = ({
           availableActions={availableActions}
         />
       );
-      triggerButtonText = t('access_packages.give_new_button');
+      triggerButtonVariant = hasDelegateAccess ? 'primary' : 'secondary';
+      triggerButtonText = hasDelegateAccess
+        ? t('access_packages.give_new_button')
+        : t('common.request_poa');
       break;
     default:
       searchViewContent = (

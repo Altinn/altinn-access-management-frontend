@@ -400,6 +400,37 @@ namespace Altinn.AccessManagement.UI.Controllers
         }
 
         /// <summary>
+        ///     Endpoint for creating a package request
+        /// </summary>
+        /// <param name="party">The acting party creating the request</param>
+        /// <param name="to">The party the request is directed to</param>
+        /// <param name="package">The package to request</param>
+        /// <param name="cancellationToken">Cancellation token</param>
+        /// <response code="400">Bad Request</response>
+        /// <response code="500">Internal Server Error</response>
+        [HttpPost]
+        [Authorize]
+        [Route("package")]
+        public async Task<ActionResult> CreatePackageRequest([FromQuery] Guid party, [FromQuery] Guid to, [FromQuery] string package, CancellationToken cancellationToken)
+        {
+            try
+            {
+                var returnVal = await _requestService.CreatePackageRequest(party, to, package, cancellationToken);
+                return Ok(returnVal);
+            }
+            catch (HttpStatusException statusEx)
+            {
+                string responseContent = statusEx.Message;
+                return new ObjectResult(ProblemDetailsFactory.CreateProblemDetails(HttpContext, (int?)statusEx.StatusCode, "Unexpected HttpStatus response from backend", detail: responseContent));
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Unexpected exception occurred during CreatePackageRequest: {Message}", ex.Message);
+                return new ObjectResult(ProblemDetailsFactory.CreateProblemDetails(HttpContext));
+            }
+        }
+
+        /// <summary>
         ///     Endpoint for withdrawing a request
         /// </summary>
         /// <param name="party">The acting party withdrawing the request</param>

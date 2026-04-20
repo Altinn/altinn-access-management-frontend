@@ -40,6 +40,10 @@ export const AccessPackageInfo = ({ accessPackage, availableActions = [] }: Pack
   const {
     onDelegate,
     onRevoke,
+    onRequest,
+    deleteRequest,
+    hasPendingRequest,
+    isLoadingRequest,
     isLoading: isActionLoading,
   } = useAccessPackageActions({
     onDelegateSuccess: () => {
@@ -90,6 +94,7 @@ export const AccessPackageInfo = ({ accessPackage, availableActions = [] }: Pack
     !userHasPackage &&
     canDelegate?.result === false &&
     availableActions.includes(DelegationAction.DELEGATE);
+  const isPendingRequest = hasPendingRequest(accessPackage);
 
   return (
     <div className={classes.container}>
@@ -161,6 +166,7 @@ export const AccessPackageInfo = ({ accessPackage, availableActions = [] }: Pack
             showDelegationCheckWarning={showMissingRightsMessage}
             cannotDelegateHere={accessPackage.isAssignable === false}
             inheritedStatus={inheritedStatus ?? undefined}
+            isPendingRequest={isPendingRequest}
           />
 
           <DsParagraph
@@ -220,10 +226,25 @@ export const AccessPackageInfo = ({ accessPackage, availableActions = [] }: Pack
             )}
             {!userHasPackage &&
               availableActions.includes(DelegationAction.REQUEST) &&
-              // Todo: Implement request access package
-              displayPackageRequestsFeature && (
-                <DsButton disabled>{t('common.request_poa')}</DsButton>
-              )}
+              displayPackageRequestsFeature &&
+              (isPendingRequest ? (
+                <DsButton
+                  data-color='danger'
+                  loading={isLoadingRequest(accessPackage)}
+                  disabled={isLoadingRequest(accessPackage)}
+                  onClick={() => deleteRequest(accessPackage)}
+                >
+                  {t('delegation_modal.request.delete_request')}
+                </DsButton>
+              ) : (
+                <DsButton
+                  loading={isLoadingRequest(accessPackage)}
+                  disabled={accessPackage.isAssignable === false || isLoadingRequest(accessPackage)}
+                  onClick={() => onRequest(accessPackage)}
+                >
+                  {t('common.request_poa')}
+                </DsButton>
+              ))}
           </div>
         </>
       )}

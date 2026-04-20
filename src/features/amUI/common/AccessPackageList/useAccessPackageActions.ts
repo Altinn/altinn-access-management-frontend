@@ -1,3 +1,4 @@
+import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { formatDisplayName, SnackbarDuration, useSnackbar } from '@altinn/altinn-components';
 
@@ -7,6 +8,12 @@ import { useRevokeAccessPackage } from '@/resources/hooks/useRevokeAccessPackage
 import type { AccessPackage } from '@/rtk/features/accessPackageApi';
 import type { Party } from '@/rtk/features/lookupApi';
 import type { ActionError } from '@/resources/hooks/useActionError';
+import {
+  useCreatePackageRequestMutation,
+  useGetSentRequestsQuery,
+  useWithdrawRequestMutation,
+} from '@/rtk/features/requestApi';
+import { getRequestPartyQueryParams } from '@/resources/utils/singleRightRequestUtils';
 
 import { usePartyRepresentation } from '../PartyRepresentationContext/PartyRepresentationContext';
 import { PartyType } from '@/rtk/features/userInfoApi';
@@ -26,11 +33,40 @@ export const useAccessPackageActions = ({
 }: useAccessPackageActionsProps) => {
   const { delegatePackage, isLoading: isDelegationLoading } = useDelegateAccessPackage();
   const { revokePackage, isLoading: isRevokeLoading } = useRevokeAccessPackage();
+  const [createPackageRequest, { isLoading: isRequestLoading }] = useCreatePackageRequestMutation();
+  const [withdrawRequest] = useWithdrawRequestMutation();
+  const [loadingByPackageId, setLoadingByPackageId] = useState<Record<string, boolean>>({});
+  const [awaitingRefetch, setAwaitingRefetch] = useState<Set<string>>(new Set());
   const isLoading = isDelegationLoading || isRevokeLoading;
 
   const { t } = useTranslation();
   const { toParty: toPartyFromContext, fromParty, actingParty } = usePartyRepresentation();
   const { openSnackbar } = useSnackbar();
+  const requestQueryParams = getRequestPartyQueryParams(
+    actingParty?.partyUuid,
+    fromParty?.partyUuid,
+  );
+
+  const {
+    data: packageRequests,
+    isFetching: isFetchingPackageRequests,
+    refetch: refetchPackageRequests,
+  } = useGetSentRequestsQuery(
+    {
+      ...requestQueryParams,
+      status: ['Pending'],
+      type: 'package',
+    },
+    {
+      skip: !requestQueryParams.party || !requestQueryParams.to,
+    },
+  );
+
+  useEffect(() => {
+    if (!isFetchingPackageRequests && awaitingRefetch.size > 0) {
+      setAwaitingRefetch(new Set());
+    }
+  }, [isFetchingPackageRequests, awaitingRefetch]);
 
   const formatToPartyName = (party: Party) => {
     return formatDisplayName({
@@ -105,6 +141,16 @@ export const useAccessPackageActions = ({
     }
   };
 
+  const getRequestId = (accessPackage: AccessPackage): string | undefined => {
+    const packageId = accessPackage.urn;
+    return packageRequests?.find(
+      (request) =>
+        request.packageId === packageId &&
+        request.to.id === requestQueryParams.to &&
+        request.status === 'Pending',
+    )?.id;
+  };
+
   const onDelegate = async (accessPackage: AccessPackage, toParty?: Party) => {
     if (!fromParty || !actingParty) {
       return;
@@ -158,7 +204,116 @@ export const useAccessPackageActions = ({
     );
   };
 
-  const onRequest = () => console.error('requestPackage is not implemented');
+  const onRequest = async (accessPackage: AccessPackage) => {
+    if (!fromParty || !actingParty) {
+      return;
+    }
+    const packageId = accessPackage.urn;
+    if (!packageId) return;
+    if (loadingByPackageId[packageId]) return;
 
-  return { onDelegate, onRevoke, onRequest, isDelegationLoading, isRevokeLoading, isLoading };
+    setLoadingByPackageId((prev) => ({
+      ...prev,
+      [packageId]: true,
+    }));
+
+    try {
+      await createPackageRequest({
+        party: actingParty.partyUuid,
+        to: fromParty.partyUuid,
+        package: packageId,
+      }).unwrap();
+
+      setLoadingByPackageId((prev) => {
+        const copy = { ...prev };
+        delete copy[packageId];
+        return copy;
+      });
+      setAwaitingRefetch((prev) => new Set([...prev, packageId]));
+      openSnackbar({
+        message: t('delegation_modal.request.sent_request_success', {
+          resource: accessPackage.name,
+        }),
+        color: 'success',
+      });
+    } catch {
+      setLoadingByPackageId((prev) => ({
+        ...prev,
+        [packageId]: false,
+      }));
+      openSnackbar({
+        message: t('delegation_modal.request.sent_request_error', {
+          resource: accessPackage.name,
+        }),
+        color: 'danger',
+        duration: SnackbarDuration.infinite,
+      });
+    }
+  };
+
+  const deleteRequest = async (accessPackage: AccessPackage) => {
+    const requestId = getRequestId(accessPackage);
+    const packageId = accessPackage.urn;
+    if (!packageId) return;
+    if (loadingByPackageId[packageId]) return;
+
+    if (!requestId) {
+      refetchPackageRequests();
+      return;
+    }
+
+    setLoadingByPackageId((prev) => ({
+      ...prev,
+      [packageId]: true,
+    }));
+
+    try {
+      await withdrawRequest({
+        party: requestQueryParams.party,
+        id: requestId,
+      }).unwrap();
+
+      setLoadingByPackageId((prev) => {
+        const copy = { ...prev };
+        delete copy[packageId];
+        return copy;
+      });
+      setAwaitingRefetch((prev) => new Set([...prev, packageId]));
+      openSnackbar({
+        message: t('delegation_modal.request.withdraw_request_success', {
+          resource: accessPackage.name,
+        }),
+        color: 'success',
+      });
+    } catch {
+      setLoadingByPackageId((prev) => ({
+        ...prev,
+        [packageId]: false,
+      }));
+
+      openSnackbar({
+        message: t('delegation_modal.request.withdraw_request_error', {
+          resource: accessPackage.name,
+        }),
+        color: 'danger',
+      });
+    }
+  };
+
+  return {
+    onDelegate,
+    onRevoke,
+    onRequest,
+    deleteRequest,
+    hasPendingRequest: (accessPackage: AccessPackage) => !!getRequestId(accessPackage),
+    isLoadingRequest: (accessPackage: AccessPackage) => {
+      const packageId = accessPackage.urn;
+      if (!packageId) return false;
+      return !!loadingByPackageId[packageId] || awaitingRefetch.has(packageId);
+    },
+    isDelegationLoading,
+    isRevokeLoading,
+    isRequestLoading,
+    isLoading,
+  };
 };
