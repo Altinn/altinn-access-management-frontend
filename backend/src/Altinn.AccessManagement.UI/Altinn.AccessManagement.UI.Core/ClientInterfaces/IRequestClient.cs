@@ -18,7 +18,7 @@ namespace Altinn.AccessManagement.UI.Core.ClientInterfaces
         /// <param name="type">The type of requests to get. Either "resource" or "package"</param>
         /// <param name="cancellationToken">Cancellation token</param>
         /// <returns>Paginated list of sent requests</returns>
-        Task<PaginatedResult<RequestResourceDto>> GetSentRequests(Guid party, Guid? to, List<RequestStatus> status, string type, CancellationToken cancellationToken);
+        Task<PaginatedResult<Request>> GetSentRequests(Guid party, Guid? to, List<RequestStatus> status, string type, CancellationToken cancellationToken);
 
         /// <summary>
         /// Get requests received by a party
@@ -29,7 +29,7 @@ namespace Altinn.AccessManagement.UI.Core.ClientInterfaces
         /// <param name="type">The type of requests to get. Either "resource" or "package"</param>
         /// <param name="cancellationToken">Cancellation token</param>
         /// <returns>Paginated list of received requests</returns>
-        Task<PaginatedResult<RequestResourceDto>> GetReceivedRequests(Guid party, Guid? from, List<RequestStatus> status, string type, CancellationToken cancellationToken);
+        Task<PaginatedResult<Request>> GetReceivedRequests(Guid party, Guid? from, List<RequestStatus> status, string type, CancellationToken cancellationToken);
 
         /// <summary>
         /// Get a single request by id
@@ -38,7 +38,7 @@ namespace Altinn.AccessManagement.UI.Core.ClientInterfaces
         /// <param name="id">The request id</param>
         /// <param name="cancellationToken">Cancellation token</param>
         /// <returns>The request</returns>
-        Task<RequestResourceDto> GetRequest(Guid party, Guid id, CancellationToken cancellationToken);
+        Task<Request> GetRequest(Guid party, Guid id, CancellationToken cancellationToken);
 
         /// <summary>
         /// Get a single draft request by id
@@ -46,7 +46,7 @@ namespace Altinn.AccessManagement.UI.Core.ClientInterfaces
         /// <param name="id">The request id</param>
         /// <param name="cancellationToken">Cancellation token</param>
         /// <returns>The request</returns>
-        Task<RequestResourceDto> GetDraftRequest(Guid id, CancellationToken cancellationToken);
+        Task<Request> GetDraftRequest(Guid id, CancellationToken cancellationToken);
 
         /// <summary>
         /// Create a new resource request
@@ -56,7 +56,7 @@ namespace Altinn.AccessManagement.UI.Core.ClientInterfaces
         /// <param name="resource">The resource to request</param>
         /// <param name="cancellationToken">Cancellation token</param>
         /// <returns>The request</returns>
-        Task<RequestResourceDto> CreateResourceRequest(Guid party, Guid to, string resource, CancellationToken cancellationToken);
+        Task<Request> CreateResourceRequest(Guid party, Guid to, string resource, CancellationToken cancellationToken);
 
         /// <summary>
         /// Withdraw a request by id
@@ -65,7 +65,7 @@ namespace Altinn.AccessManagement.UI.Core.ClientInterfaces
         /// <param name="id">The request id to withdraw</param>
         /// <param name="cancellationToken">Cancellation token</param>
         /// <returns>The request</returns>
-        Task<RequestResourceDto> WithdrawRequest(Guid party, Guid id, CancellationToken cancellationToken);
+        Task<Request> WithdrawRequest(Guid party, Guid id, CancellationToken cancellationToken);
 
         /// <summary>
         /// Confirm a draft request (transitions Draft → Pending)
@@ -74,7 +74,7 @@ namespace Altinn.AccessManagement.UI.Core.ClientInterfaces
         /// <param name="id">The request id to confirm</param>
         /// <param name="cancellationToken">Cancellation token</param>
         /// <returns>The request</returns>
-        Task<RequestResourceDto> ConfirmRequest(Guid party, Guid id, CancellationToken cancellationToken);
+        Task<Request> ConfirmRequest(Guid party, Guid id, CancellationToken cancellationToken);
 
         /// <summary>
         /// Reject a pending request
@@ -83,7 +83,7 @@ namespace Altinn.AccessManagement.UI.Core.ClientInterfaces
         /// <param name="id">The request id to reject</param>
         /// <param name="cancellationToken">Cancellation token</param>
         /// <returns>The request</returns>
-        Task<RequestResourceDto> RejectRequest(Guid party, Guid id, CancellationToken cancellationToken);
+        Task<Request> RejectRequest(Guid party, Guid id, CancellationToken cancellationToken);
 
         /// <summary>
         /// Approve a pending request
@@ -92,7 +92,7 @@ namespace Altinn.AccessManagement.UI.Core.ClientInterfaces
         /// <param name="id">The request id to approve</param>
         /// <param name="cancellationToken">Cancellation token</param>
         /// <returns>The request</returns>
-        Task<RequestResourceDto> ApproveRequest(Guid party, Guid id, CancellationToken cancellationToken);
+        Task<Request> ApproveRequest(Guid party, Guid id, CancellationToken cancellationToken);
 
         /// <summary>
         /// Get count of requests sent by a party

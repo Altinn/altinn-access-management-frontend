@@ -2,6 +2,7 @@ import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 import { getCookie } from '@/resources/Cookie/CookieMethods';
 import type { Entity } from '@/dataObjects/dtos/Common';
 import { ServiceResource } from './singleRights/singleRightsApi';
+import type { AccessPackage } from './accessPackageApi';
 
 export type RequestStatus = 'None' | 'Draft' | 'Pending' | 'Approved' | 'Rejected' | 'Withdrawn';
 
@@ -13,10 +14,15 @@ export interface RequestDto {
   to: Entity;
   lastUpdated: string;
   resourceId?: string;
+  packageId?: string;
 }
 
 export interface EnrichedRequestDto extends RequestDto {
   resource: ServiceResource;
+}
+
+export interface EnrichedPackageRequestDto extends RequestDto {
+  package: AccessPackage;
 }
 
 const baseUrl = `${import.meta.env.BASE_URL}accessmanagement/api/v1/request`;
@@ -37,6 +43,8 @@ export const requestApi = createApi({
     'request',
     'enrichedSentResourceRequests',
     'enrichedReceivedResourceRequests',
+    'enrichedSentPackageRequests',
+    'enrichedReceivedPackageRequests',
   ],
   endpoints: (builder) => ({
     // requests page queries
@@ -96,6 +104,30 @@ export const requestApi = createApi({
       },
       providesTags: ['enrichedReceivedResourceRequests'],
     }),
+    getEnrichedSentPackageRequests: builder.query<
+      EnrichedPackageRequestDto[],
+      { party: string; to?: string; status?: RequestStatus[] }
+    >({
+      query: ({ party, to, status = [] }) => {
+        let params = `?party=${party}`;
+        if (to) params += `&to=${to}`;
+        for (const s of status) params += `&status=${s}`;
+        return `sent/package${params}`;
+      },
+      providesTags: ['enrichedSentPackageRequests'],
+    }),
+    getEnrichedReceivedPackageRequests: builder.query<
+      EnrichedPackageRequestDto[],
+      { party: string; from?: string; status?: RequestStatus[] }
+    >({
+      query: ({ party, from, status = [] }) => {
+        let params = `?party=${party}`;
+        if (from) params += `&from=${from}`;
+        for (const s of status) params += `&status=${s}`;
+        return `received/package${params}`;
+      },
+      providesTags: ['enrichedReceivedPackageRequests'],
+    }),
     createResourceRequest: builder.mutation<
       RequestDto,
       { party: string; to: string; resource: string }
@@ -104,28 +136,43 @@ export const requestApi = createApi({
         url: `resource?party=${party}&to=${to}&resource=${encodeURIComponent(resource)}`,
         method: 'POST',
       }),
-      invalidatesTags: ['sentRequests', 'enrichedSentResourceRequests'],
+      invalidatesTags: [
+        'sentRequests',
+        'enrichedSentResourceRequests',
+      ],
     }),
     withdrawRequest: builder.mutation<RequestDto, { party: string; id: string }>({
       query: ({ party, id }) => ({
         url: `sent/withdraw?party=${party}&id=${id}`,
         method: 'DELETE',
       }),
-      invalidatesTags: ['sentRequests', 'enrichedSentResourceRequests'],
+      invalidatesTags: [
+        'sentRequests',
+        'enrichedSentResourceRequests',
+        'enrichedSentPackageRequests',
+      ],
     }),
     rejectRequest: builder.mutation<RequestDto, { party: string; id: string }>({
       query: ({ party, id }) => ({
         url: `received/reject?party=${party}&id=${id}`,
         method: 'PUT',
       }),
-      invalidatesTags: ['receivedRequests', 'enrichedReceivedResourceRequests'],
+      invalidatesTags: [
+        'receivedRequests',
+        'enrichedReceivedResourceRequests',
+        'enrichedReceivedPackageRequests',
+      ],
     }),
     approveRequest: builder.mutation<RequestDto, { party: string; id: string }>({
       query: ({ party, id }) => ({
         url: `received/approve?party=${party}&id=${id}`,
         method: 'PUT',
       }),
-      invalidatesTags: ['receivedRequests', 'enrichedReceivedResourceRequests'],
+      invalidatesTags: [
+        'receivedRequests',
+        'enrichedReceivedResourceRequests',
+        'enrichedReceivedPackageRequests',
+      ],
     }),
 
     // count queries
@@ -158,7 +205,11 @@ export const requestApi = createApi({
         url: `draft/confirm?party=${party}&id=${id}`,
         method: 'PUT',
       }),
-      invalidatesTags: ['sentRequests', 'enrichedSentResourceRequests'],
+      invalidatesTags: [
+        'sentRequests',
+        'enrichedSentResourceRequests',
+        'enrichedSentPackageRequests',
+      ],
     }),
   }),
 });
@@ -174,6 +225,8 @@ export const {
   useApproveRequestMutation,
   useGetEnrichedSentResourceRequestsQuery,
   useGetEnrichedReceivedResourceRequestsQuery,
+  useGetEnrichedSentPackageRequestsQuery,
+  useGetEnrichedReceivedPackageRequestsQuery,
   useGetEnrichedDraftRequestQuery,
   useGetSentRequestsCountQuery,
   useGetReceivedRequestsCountQuery,
