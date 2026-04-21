@@ -204,6 +204,24 @@ export class TenorApiClient {
   }
 
   /**
+   * Find a person in Tenor who has samletReskontroinnsyn (krav og betalinger) data.
+   */
+  async findPersonWithSamletReskontroinnsyn(): Promise<string> {
+    const params = new URLSearchParams({
+      kql: 'tenorRelasjoner.samletReskontroinnsyn:{harKrav:*}',
+      size: '5',
+    });
+    const data = (await this.tenorGet(`/soek/freg?${params}`)) as {
+      dokumentListe: Array<{ tenorMetadata: { id: string } }>;
+    };
+    const pid = data.dokumentListe?.[0]?.tenorMetadata?.id;
+    if (!pid) {
+      throw new Error('No person found with samletReskontroinnsyn data');
+    }
+    return pid;
+  }
+
+  /**
    * Find an org in Tenor that has beregnetSkatt data for the given inntektsaar,
    * and resolve a dagligLeder PID who can approve consent on behalf of the org.
    */
@@ -235,5 +253,45 @@ export class TenorApiClient {
     }
 
     throw new Error(`No org found with beregnetSkatt for inntektsaar ${inntektsaar}`);
+  }
+
+  /**
+   * Find an org in Tenor that has samletReskontroinnsyn (krav og betalinger) data,
+   * and resolve a dagligLeder PID who can approve consent on behalf of the org.
+   */
+  async findOrgWithSamletReskontroinnsyn(): Promise<{ orgNr: string; dagligLederPid: string }> {
+    for (let page = 0; page < 10; page++) {
+      const params = new URLSearchParams({
+        kql: 'tenorRelasjoner.samletReskontroinnsyn:{harKrav:*}',
+        size: '50',
+        page: String(page),
+      });
+      const data = (await this.tenorGet(`/soek/brreg-er-fr?${params}`)) as {
+        dokumentListe: Array<{ tenorMetadata: { id: string } }>;
+      };
+
+      for (const doc of data.dokumentListe ?? []) {
+        const orgNr = doc.tenorMetadata.id;
+
+        const rolesRes = await fetch(`${BRREG_PPE_BASE}/enheter/${orgNr}/roller`);
+        if (!rolesRes.ok) continue;
+        const rolesData = (await rolesRes.json()) as { rollegrupper: BrregRollegruppe[] };
+
+        const daglGroup = rolesData.rollegrupper?.find((g) => g.type.kode === 'DAGL');
+        const dagligLeder = daglGroup?.roller?.find((r) => !r.fratraadt && !r.avregistrert)?.person;
+        if (!dagligLeder || dagligLeder.erDoed) continue;
+
+        const pid = await this.resolvePid(
+          dagligLeder.navn.fornavn,
+          dagligLeder.navn.etternavn,
+          dagligLeder.fodselsdato,
+        );
+        if (!pid) continue;
+
+        return { orgNr, dagligLederPid: pid };
+      }
+    }
+
+    throw new Error('No org found with samletReskontroinnsyn data');
   }
 }

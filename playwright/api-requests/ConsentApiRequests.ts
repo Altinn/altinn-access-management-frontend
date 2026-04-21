@@ -89,7 +89,7 @@ export class ConsentApiRequests {
 
     const resourceValue = params.resourceValue || 'enkelt-samtykke';
     const redirectUrl = params.redirectUrl || 'https://altinn.no';
-    const metaData = params.metaData || { simpletag: 'playwright-e2e-metadata' };
+    const metaData = params.metaData;
 
     return {
       id: requestId,
