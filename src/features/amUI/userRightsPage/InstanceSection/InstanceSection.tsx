@@ -11,7 +11,7 @@ import { useCanGiveAccess } from '@/resources/hooks/useCanGiveAccess';
 import { useParams } from 'react-router';
 
 export const InstanceSection = ({ isReportee = false }: { isReportee?: boolean }) => {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   const { toParty, actingParty, fromParty } = usePartyRepresentation();
 
   const modalRef = React.useRef<HTMLDialogElement>(null);
@@ -29,6 +29,7 @@ export const InstanceSection = ({ isReportee = false }: { isReportee?: boolean }
       party: actingParty?.partyUuid || '',
       from: fromParty?.partyUuid,
       to: toParty?.partyUuid,
+      language: i18n.language,
     },
     {
       skip: !actingParty?.partyUuid || !fromParty?.partyUuid || !toParty?.partyUuid,
@@ -68,7 +69,7 @@ export const InstanceSection = ({ isReportee = false }: { isReportee?: boolean }
           selectedInstance
             ? {
                 instanceUrn: selectedInstance.instance.refId,
-                instanceName: selectedInstance.instance.type?.name,
+                dialogLookup: selectedInstance.dialogLookup,
               }
             : undefined
         }

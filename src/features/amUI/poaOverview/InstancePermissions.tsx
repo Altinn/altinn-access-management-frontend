@@ -8,7 +8,7 @@ import { InstanceList } from '../common/InstanceList/InstanceList';
 import { InstanceDelegation, useGetInstancesQuery } from '@/rtk/features/instanceApi';
 
 export const InstancePermissions = () => {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   const { actingParty, fromParty, toParty } = usePartyRepresentation();
   const getItemAs = useCallback(
     (item: InstanceDelegation): ElementType =>
@@ -30,6 +30,7 @@ export const InstancePermissions = () => {
       party: actingParty?.partyUuid || '',
       from: fromParty?.partyUuid,
       to: toParty?.partyUuid,
+      language: i18n.language,
     },
     {
       skip: !actingParty?.partyUuid || !fromParty?.partyUuid,

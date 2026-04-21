@@ -22,6 +22,7 @@ declare global {
       addAllSystemuserCustomers: boolean;
       enableAddSelfToSystemuser: boolean;
       enableRequestAccess: boolean;
+      enableDialogportenDialogLookup: boolean;
     };
   }
 }

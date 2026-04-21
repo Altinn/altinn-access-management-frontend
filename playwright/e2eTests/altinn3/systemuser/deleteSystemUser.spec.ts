@@ -1,7 +1,11 @@
 import { expect, test } from 'playwright/fixture/pomFixture';
-import { ApiRequests } from 'playwright/api-requests/ApiRequests';
+import { ApiRequests } from 'playwright/api-requests/SystemUserApiRequests';
 import { TestdataApi } from 'playwright/util/TestdataApi';
 import { env } from 'playwright/util/helper';
+const vendorOrgNumber = '310547891';
+const testUserPid = '14824497789';
+const testOrgName = 'Aktverdig Retorisk Ape';
+const testUserName = 'Skravlete Blåveis';
 
 test.describe('System user deletion', () => {
   let systemId: string;
@@ -9,18 +13,17 @@ test.describe('System user deletion', () => {
 
   test.beforeEach(async ({ page, login, systemUserPage, accessManagementFrontPage }) => {
     await test.step('Setup API client', async () => {
-      const orgNumber = '310547891';
-      api = new ApiRequests(orgNumber);
+      api = new ApiRequests();
     });
 
     await test.step('Login and navigate to application', async () => {
       await page.goto(env('BASE_URL'));
-      await login.LoginToAccessManagement('14824497789');
-      await login.chooseReportee('Skravlete Blåveis', 'Aktverdig Retorisk Ape');
+      await login.LoginToAccessManagement(testUserPid);
+      await login.chooseReportee(testUserName, testOrgName);
     });
 
     await test.step('Create system in system register', async () => {
-      systemId = await api.createSystemSystemRegister();
+      systemId = await api.createSystemSystemRegister(vendorOrgNumber);
     });
 
     await test.step('Navigate to system user page and create system user', async () => {
@@ -54,7 +57,7 @@ test.describe('System user deletion', () => {
   test.afterEach(async () => {
     if (systemId) {
       // Remove system
-      await TestdataApi.removeSystem(systemId);
+      await TestdataApi.removeSystem(vendorOrgNumber, systemId);
     }
   });
 });

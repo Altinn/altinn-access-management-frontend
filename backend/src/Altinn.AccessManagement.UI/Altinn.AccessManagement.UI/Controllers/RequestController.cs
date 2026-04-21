@@ -103,6 +103,42 @@ namespace Altinn.AccessManagement.UI.Controllers
         }
 
         /// <summary>
+        ///     Endpoint for getting enriched package requests sent by a party
+        /// </summary>
+        /// <param name="party">The acting party</param>
+        /// <param name="to">The party the requests were sent to</param>
+        /// <param name="status">Status filter</param>
+        /// <param name="cancellationToken">Cancellation token</param>
+        /// <response code="400">Bad Request</response>
+        /// <response code="500">Internal Server Error</response>
+        [HttpGet]
+        [Authorize]
+        [Route("sent/package")]
+        public async Task<ActionResult> GetEnrichedSentPackageRequests([FromQuery] Guid party, [FromQuery] Guid? to, [FromQuery] List<RequestStatus> status, CancellationToken cancellationToken)
+        {
+            try
+            {
+                var languageCode = LanguageHelper.GetSelectedLanguageCookieValueBackendStandard(HttpContext);
+                var returnVal = await _requestService.GetEnrichedSentPackageRequests(party, to, status, languageCode, cancellationToken);
+                return Ok(returnVal);
+            }
+            catch (ResourceNotFoundException ex)
+            {
+                return NotFound(ProblemDetailsFactory.CreateProblemDetails(HttpContext, (int?)StatusCodes.Status404NotFound, "Access package not found", detail: ex.Message));
+            }
+            catch (HttpStatusException statusEx)
+            {
+                string responseContent = statusEx.Message;
+                return new ObjectResult(ProblemDetailsFactory.CreateProblemDetails(HttpContext, (int?)statusEx.StatusCode, "Unexpected HttpStatus response from backend", detail: responseContent));
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Unexpected exception occurred during GetEnrichedSentPackageRequests: {Message}", ex.Message);
+                return new ObjectResult(ProblemDetailsFactory.CreateProblemDetails(HttpContext));
+            }
+        }
+
+        /// <summary>
         ///     Endpoint for getting requests received by a party
         /// </summary>
         /// <param name="party">The acting party</param>
@@ -166,6 +202,42 @@ namespace Altinn.AccessManagement.UI.Controllers
             catch (Exception ex)
             {
                 _logger.LogError(ex, "Unexpected exception occurred during GetEnrichedReceivedResourceRequests: {Message}", ex.Message);
+                return new ObjectResult(ProblemDetailsFactory.CreateProblemDetails(HttpContext));
+            }
+        }
+
+        /// <summary>
+        ///     Endpoint for getting enriched package requests received by a party
+        /// </summary>
+        /// <param name="party">The acting party</param>
+        /// <param name="from">The party who sent the requests</param>
+        /// <param name="status">Status filter</param>
+        /// <param name="cancellationToken">Cancellation token</param>
+        /// <response code="400">Bad Request</response>
+        /// <response code="500">Internal Server Error</response>
+        [HttpGet]
+        [Authorize]
+        [Route("received/package")]
+        public async Task<ActionResult> GetEnrichedReceivedPackageRequests([FromQuery] Guid party, [FromQuery] Guid? from, [FromQuery] List<RequestStatus> status, CancellationToken cancellationToken)
+        {
+            try
+            {
+                var languageCode = LanguageHelper.GetSelectedLanguageCookieValueBackendStandard(HttpContext);
+                var returnVal = await _requestService.GetEnrichedReceivedPackageRequests(party, from, status, languageCode, cancellationToken);
+                return Ok(returnVal);
+            }
+            catch (ResourceNotFoundException ex)
+            {
+                return NotFound(ProblemDetailsFactory.CreateProblemDetails(HttpContext, (int?)StatusCodes.Status404NotFound, "Access package not found", detail: ex.Message));
+            }
+            catch (HttpStatusException statusEx)
+            {
+                string responseContent = statusEx.Message;
+                return new ObjectResult(ProblemDetailsFactory.CreateProblemDetails(HttpContext, (int?)statusEx.StatusCode, "Unexpected HttpStatus response from backend", detail: responseContent));
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Unexpected exception occurred during GetEnrichedReceivedPackageRequests: {Message}", ex.Message);
                 return new ObjectResult(ProblemDetailsFactory.CreateProblemDetails(HttpContext));
             }
         }
@@ -323,6 +395,37 @@ namespace Altinn.AccessManagement.UI.Controllers
             catch (Exception ex)
             {
                 _logger.LogError(ex, "Unexpected exception occurred during CreateResourceRequest: {Message}", ex.Message);
+                return new ObjectResult(ProblemDetailsFactory.CreateProblemDetails(HttpContext));
+            }
+        }
+
+        /// <summary>
+        ///     Endpoint for creating a package request
+        /// </summary>
+        /// <param name="party">The acting party creating the request</param>
+        /// <param name="to">The party the request is directed to</param>
+        /// <param name="package">The package to request</param>
+        /// <param name="cancellationToken">Cancellation token</param>
+        /// <response code="400">Bad Request</response>
+        /// <response code="500">Internal Server Error</response>
+        [HttpPost]
+        [Authorize]
+        [Route("package")]
+        public async Task<ActionResult> CreatePackageRequest([FromQuery] Guid party, [FromQuery] Guid to, [FromQuery] string package, CancellationToken cancellationToken)
+        {
+            try
+            {
+                var returnVal = await _requestService.CreatePackageRequest(party, to, package, cancellationToken);
+                return Ok(returnVal);
+            }
+            catch (HttpStatusException statusEx)
+            {
+                string responseContent = statusEx.Message;
+                return new ObjectResult(ProblemDetailsFactory.CreateProblemDetails(HttpContext, (int?)statusEx.StatusCode, "Unexpected HttpStatus response from backend", detail: responseContent));
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Unexpected exception occurred during CreatePackageRequest: {Message}", ex.Message);
                 return new ObjectResult(ProblemDetailsFactory.CreateProblemDetails(HttpContext));
             }
         }

@@ -149,3 +149,6 @@ playwright/
 Spec files follow `test.describe` → `test.beforeEach` → `test.afterEach` → `test()` order.
 
 Use `test.step()` to label logical phases within a test. This makes trace viewer output readable.
+
+## Git
+Use convention `test/name-of-feature` for branches

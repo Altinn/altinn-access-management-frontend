@@ -201,7 +201,7 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
             // Assert
             Assert.Equal(HttpStatusCode.BadRequest, httpResponse.StatusCode);
         }
-        
+
         /// <summary>
         ///     Test case: GetEnrichedReceivedResourceRequests encounters a NotFoundException due to invalid resource reference in request
         ///     Expected: Returns 404 Not Found
@@ -214,6 +214,152 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
 
             // Act
             HttpResponseMessage httpResponse = await _client.GetAsync($"accessmanagement/api/v1/request/received/resource?party={party}");
+
+            // Assert
+            Assert.Equal(HttpStatusCode.NotFound, httpResponse.StatusCode);
+        }
+
+        /// <summary>
+        ///     Test case: GetEnrichedSentPackageRequests returns sent package requests for party with package data included
+        ///     Expected: GetEnrichedSentPackageRequests returns the requests sent by a party with package data included
+        /// </summary>
+        [Fact]
+        public async Task GetEnrichedSentPackageRequests_ReturnsRequestsForParty()
+        {
+            // Arrange
+            string party = "167536b5-f8ed-4c5a-8f48-0279507e53ae";
+            string toParty = "feb51634-0042-4ab0-a9db-8705300141a6";
+            string path = Path.Combine(_expectedDataPath, "Request", "getEnrichedSentPackageRequests.json");
+            IEnumerable<EnrichedPackageRequest> expectedResponse = Util.GetMockData<IEnumerable<EnrichedPackageRequest>>(path);
+
+            // Act
+            HttpResponseMessage httpResponse = await _client.GetAsync($"accessmanagement/api/v1/request/sent/package?party={party}&to={toParty}");
+            IEnumerable<EnrichedPackageRequest> actualResponse = await httpResponse.Content.ReadFromJsonAsync<IEnumerable<EnrichedPackageRequest>>();
+
+            // Assert
+            Assert.Equal(HttpStatusCode.OK, httpResponse.StatusCode);
+            AssertionUtil.AssertCollections(expectedResponse.ToList(), actualResponse.ToList(), AssertionUtil.AssertEqual);
+        }
+
+        /// <summary>
+        ///     Test case: GetEnrichedSentPackageRequests encounters an unexpected internal error
+        ///     Expected: Returns 500 Internal Server Error
+        /// </summary>
+        [Fact]
+        public async Task GetEnrichedSentPackageRequests_InternalServerError()
+        {
+            // Arrange
+            string party = "00000000-0000-0000-0000-000000000000";
+
+            // Act
+            HttpResponseMessage httpResponse = await _client.GetAsync($"accessmanagement/api/v1/request/sent/package?party={party}");
+
+            // Assert
+            Assert.Equal(HttpStatusCode.InternalServerError, httpResponse.StatusCode);
+        }
+
+        /// <summary>
+        ///     Test case: GetEnrichedSentPackageRequests encounters an HttpStatusException
+        ///     Expected: Returns the status code from the exception (BadRequest)
+        /// </summary>
+        [Fact]
+        public async Task GetEnrichedSentPackageRequests_HttpStatusException()
+        {
+            // Arrange
+            string party = "11111111-1111-1111-1111-111111111111";
+
+            // Act
+            HttpResponseMessage httpResponse = await _client.GetAsync($"accessmanagement/api/v1/request/sent/package?party={party}");
+
+            // Assert
+            Assert.Equal(HttpStatusCode.BadRequest, httpResponse.StatusCode);
+        }
+
+        /// <summary>
+        ///     Test case: GetEnrichedSentPackageRequests encounters a NotFoundException due to invalid package reference in request
+        ///     Expected: Returns 404 Not Found
+        /// </summary>
+        [Fact]
+        public async Task GetEnrichedSentPackageRequests_NotFoundException()
+        {
+            // Arrange
+            string party = "22222222-2222-2222-2222-222222222222";
+
+            // Act
+            HttpResponseMessage httpResponse = await _client.GetAsync($"accessmanagement/api/v1/request/sent/package?party={party}");
+
+            // Assert
+            Assert.Equal(HttpStatusCode.NotFound, httpResponse.StatusCode);
+        }
+
+        /// <summary>
+        ///     Test case: GetEnrichedReceivedPackageRequests returns received package requests for party with package data included
+        ///     Expected: GetEnrichedReceivedPackageRequests returns the requests received by a party with package data included
+        /// </summary>
+        [Fact]
+        public async Task GetEnrichedReceivedPackageRequests_ReturnsRequestsForParty()
+        {
+            // Arrange
+            string party = "167536b5-f8ed-4c5a-8f48-0279507e53ae";
+            string fromParty = "feb51634-0042-4ab0-a9db-8705300141a6";
+            string path = Path.Combine(_expectedDataPath, "Request", "getEnrichedReceivedPackageRequests.json");
+            IEnumerable<EnrichedPackageRequest> expectedResponse = Util.GetMockData<IEnumerable<EnrichedPackageRequest>>(path);
+
+            // Act
+            HttpResponseMessage httpResponse = await _client.GetAsync($"accessmanagement/api/v1/request/received/package?party={party}&from={fromParty}");
+            IEnumerable<EnrichedPackageRequest> actualResponse = await httpResponse.Content.ReadFromJsonAsync<IEnumerable<EnrichedPackageRequest>>();
+
+            // Assert
+            Assert.Equal(HttpStatusCode.OK, httpResponse.StatusCode);
+            AssertionUtil.AssertCollections(expectedResponse.ToList(), actualResponse.ToList(), AssertionUtil.AssertEqual);
+        }
+
+        /// <summary>
+        ///     Test case: GetEnrichedReceivedPackageRequests encounters an unexpected internal error
+        ///     Expected: Returns 500 Internal Server Error
+        /// </summary>
+        [Fact]
+        public async Task GetEnrichedReceivedPackageRequests_InternalServerError()
+        {
+            // Arrange
+            string party = "00000000-0000-0000-0000-000000000000";
+
+            // Act
+            HttpResponseMessage httpResponse = await _client.GetAsync($"accessmanagement/api/v1/request/received/package?party={party}");
+
+            // Assert
+            Assert.Equal(HttpStatusCode.InternalServerError, httpResponse.StatusCode);
+        }
+
+        /// <summary>
+        ///     Test case: GetEnrichedReceivedPackageRequests encounters an HttpStatusException
+        ///     Expected: Returns the status code from the exception (BadRequest)
+        /// </summary>
+        [Fact]
+        public async Task GetEnrichedReceivedPackageRequests_HttpStatusException()
+        {
+            // Arrange
+            string party = "11111111-1111-1111-1111-111111111111";
+
+            // Act
+            HttpResponseMessage httpResponse = await _client.GetAsync($"accessmanagement/api/v1/request/received/package?party={party}");
+
+            // Assert
+            Assert.Equal(HttpStatusCode.BadRequest, httpResponse.StatusCode);
+        }
+
+        /// <summary>
+        ///     Test case: GetEnrichedReceivedPackageRequests encounters a NotFoundException due to invalid package reference in request
+        ///     Expected: Returns 404 Not Found
+        /// </summary>
+        [Fact]
+        public async Task GetEnrichedReceivedPackageRequests_NotFoundException()
+        {
+            // Arrange
+            string party = "22222222-2222-2222-2222-222222222222";
+
+            // Act
+            HttpResponseMessage httpResponse = await _client.GetAsync($"accessmanagement/api/v1/request/received/package?party={party}");
 
             // Assert
             Assert.Equal(HttpStatusCode.NotFound, httpResponse.StatusCode);
@@ -295,7 +441,7 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
             // Assert
             Assert.Equal(HttpStatusCode.BadRequest, httpResponse.StatusCode);
         }
-        
+
         /// <summary>
         ///     Test case: GetDraftRequest encounters a NotFoundException from the backend
         ///     Expected: Returns the status code from the exception (NotFound)
@@ -334,6 +480,54 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
             // Assert
             Assert.Equal(HttpStatusCode.OK, httpResponse.StatusCode);
             AssertionUtil.AssertEqual(expectedResponse, actualResponse);
+        }
+
+        /// <summary>
+        ///     Test case: CreatePackageRequest creates a package request
+        ///     Expected: CreatePackageRequest returns a request where resourceId is null when a package is requested
+        /// </summary>
+        [Fact]
+        public async Task CreatePackageRequest_ReturnsRequestWithNullResourceId()
+        {
+            // Arrange
+            string party = "167536b5-f8ed-4c5a-8f48-0279507e53ae";
+            string toParty = "feb51634-0042-4ab0-a9db-8705300141a6";
+            string packageId = "urn:altinn:accesspackage:agriculture";
+            string path = Path.Combine(_expectedDataPath, "Request", "getPackageRequest.json");
+            RequestFE expectedResponse = Util.GetMockData<RequestFE>(path);
+
+            // Act
+            HttpResponseMessage httpResponse = await _client.PostAsync($"accessmanagement/api/v1/request/package?party={party}&to={toParty}&package={packageId}", null);
+            RequestFE actualResponse = await httpResponse.Content.ReadFromJsonAsync<RequestFE>();
+
+            // Assert
+            Assert.Equal(HttpStatusCode.OK, httpResponse.StatusCode);
+            AssertionUtil.AssertEqual(expectedResponse, actualResponse);
+            Assert.Null(actualResponse.ResourceId);
+        }
+
+        /// <summary>
+        ///     Test case: CreateResourceRequest creates a resource request
+        ///     Expected: CreateResourceRequest returns a request where packageId is null when a resource is requested
+        /// </summary>
+        [Fact]
+        public async Task CreateResourceRequest_ReturnsRequestWithNullPackageId()
+        {
+            // Arrange
+            string party = "167536b5-f8ed-4c5a-8f48-0279507e53ae";
+            string toParty = "feb51634-0042-4ab0-a9db-8705300141a6";
+            string resourceId = "1337";
+            string path = Path.Combine(_expectedDataPath, "Request", "getRequest.json");
+            RequestFE expectedResponse = Util.GetMockData<RequestFE>(path);
+
+            // Act
+            HttpResponseMessage httpResponse = await _client.PostAsync($"accessmanagement/api/v1/request/resource?party={party}&to={toParty}&resource={resourceId}", null);
+            RequestFE actualResponse = await httpResponse.Content.ReadFromJsonAsync<RequestFE>();
+
+            // Assert
+            Assert.Equal(HttpStatusCode.OK, httpResponse.StatusCode);
+            AssertionUtil.AssertEqual(expectedResponse, actualResponse);
+            Assert.Null(actualResponse.PackageId);
         }
 
         /// <summary>
@@ -607,6 +801,44 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
         }
 
         /// <summary>
+        ///     Test case: CreatePackageRequest encounters an unexpected internal error
+        ///     Expected: Returns 500 Internal Server Error
+        /// </summary>
+        [Fact]
+        public async Task CreatePackageRequest_InternalServerError()
+        {
+            // Arrange - Guid.Empty triggers ThrowExceptionIfTriggerParty in mock
+            string party = "00000000-0000-0000-0000-000000000000";
+            string toParty = "feb51634-0042-4ab0-a9db-8705300141a6";
+            string packageId = "urn:altinn:accesspackage:agriculture";
+
+            // Act
+            HttpResponseMessage httpResponse = await _client.PostAsync($"accessmanagement/api/v1/request/package?party={party}&to={toParty}&package={packageId}", null);
+
+            // Assert
+            Assert.Equal(HttpStatusCode.InternalServerError, httpResponse.StatusCode);
+        }
+
+        /// <summary>
+        ///     Test case: CreatePackageRequest encounters an HttpStatusException from the backend
+        ///     Expected: Returns the status code from the exception (BadRequest)
+        /// </summary>
+        [Fact]
+        public async Task CreatePackageRequest_HttpStatusException()
+        {
+            // Arrange - Triggers ThrowHttpStatusExceptionIfTriggerParty in mock
+            string party = "11111111-1111-1111-1111-111111111111";
+            string toParty = "feb51634-0042-4ab0-a9db-8705300141a6";
+            string packageId = "urn:altinn:accesspackage:agriculture";
+
+            // Act
+            HttpResponseMessage httpResponse = await _client.PostAsync($"accessmanagement/api/v1/request/package?party={party}&to={toParty}&package={packageId}", null);
+
+            // Assert
+            Assert.Equal(HttpStatusCode.BadRequest, httpResponse.StatusCode);
+        }
+
+        /// <summary>
         ///     Test case: WithdrawRequest encounters an unexpected internal error
         ///     Expected: Returns 500 Internal Server Error
         /// </summary>
@@ -814,6 +1046,50 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
 
             // Assert
             Assert.Equal(HttpStatusCode.BadRequest, httpResponse.StatusCode);
+        }
+
+        /// <summary>
+        ///     Test case: GetSentRequests returns requests where the resource reference is null
+        ///     Expected: GetSentRequests maps null resource to null resourceId in the FE model
+        /// </summary>
+        [Fact]
+        public async Task GetSentRequests_NullResource_ReturnsNullResourceId()
+        {
+            // Arrange - 33333333 triggers null-resource mock data path
+            string party = "33333333-3333-3333-3333-333333333333";
+            string path = Path.Combine(_expectedDataPath, "Request", "getSentRequestsNullResource.json");
+            IEnumerable<RequestFE> expectedResponse = Util.GetMockData<IEnumerable<RequestFE>>(path);
+
+            // Act
+            HttpResponseMessage httpResponse = await _client.GetAsync($"accessmanagement/api/v1/request/sent?party={party}");
+            IEnumerable<RequestFE> actualResponse = await httpResponse.Content.ReadFromJsonAsync<IEnumerable<RequestFE>>();
+
+            // Assert
+            Assert.Equal(HttpStatusCode.OK, httpResponse.StatusCode);
+            AssertionUtil.AssertCollections(expectedResponse.ToList(), actualResponse.ToList(), AssertionUtil.AssertEqual);
+        }
+
+        /// <summary>
+        ///     Test case: CreatePackageRequest returns a package request where the package reference is null
+        ///     Expected: CreatePackageRequest maps null package to null packageId in the FE model
+        /// </summary>
+        [Fact]
+        public async Task CreatePackageRequest_NullPackage_ReturnsNullPackageId()
+        {
+            // Arrange - 33333333 triggers null-package mock data path
+            string party = "33333333-3333-3333-3333-333333333333";
+            string toParty = "feb51634-0042-4ab0-a9db-8705300141a6";
+            string packageId = "urn:altinn:accesspackage:agriculture";
+            string path = Path.Combine(_expectedDataPath, "Request", "getPackageRequestNullPackage.json");
+            RequestFE expectedResponse = Util.GetMockData<RequestFE>(path);
+
+            // Act
+            HttpResponseMessage httpResponse = await _client.PostAsync($"accessmanagement/api/v1/request/package?party={party}&to={toParty}&package={packageId}", null);
+            RequestFE actualResponse = await httpResponse.Content.ReadFromJsonAsync<RequestFE>();
+
+            // Assert
+            Assert.Equal(HttpStatusCode.OK, httpResponse.StatusCode);
+            AssertionUtil.AssertEqual(expectedResponse, actualResponse);
         }
     }
 }

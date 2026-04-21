@@ -1046,6 +1046,7 @@ namespace Altinn.AccessManagement.UI.Tests.Utils
             Assert.Equal(expected.From.Id, actual.From.Id);
             Assert.Equal(expected.To.Id, actual.To.Id);
             Assert.Equal(expected.ResourceId, actual.ResourceId);
+            Assert.Equal(expected.PackageId, actual.PackageId);
             Assert.Equal(expected.Type, actual.Type);
             Assert.Equal(expected.LastUpdated, actual.LastUpdated);
             Assert.Equal(expected.Status, actual.Status);
@@ -1064,6 +1065,24 @@ namespace Altinn.AccessManagement.UI.Tests.Utils
             Assert.Equal(expected.Status, actual.Status);
             Assert.Equal(expected.LastUpdated, actual.LastUpdated);
             AssertEqual(expected.Resource, actual.Resource);
+        }
+
+        public static void AssertEqual(EnrichedPackageRequest expected, EnrichedPackageRequest actual)
+        {
+            Assert.NotNull(actual);
+            Assert.NotNull(expected);
+
+            Assert.Equal(expected.Id, actual.Id);
+            Assert.Equal(expected.From.Id, actual.From.Id);
+            Assert.Equal(expected.To.Id, actual.To.Id);
+            Assert.Equal(expected.PackageId, actual.PackageId);
+            Assert.Equal(expected.Type, actual.Type);
+            Assert.Equal(expected.Status, actual.Status);
+            Assert.Equal(expected.LastUpdated, actual.LastUpdated);
+            Assert.NotNull(actual.Package);
+            Assert.Equal(expected.Package.Id, actual.Package.Id);
+            Assert.Equal(expected.Package.Name, actual.Package.Name);
+            Assert.Equal(expected.Package.Urn, actual.Package.Urn);
         }
 
         private static void AssertEqual(Provider expected, Provider actual)
