@@ -170,6 +170,7 @@ export const useRequestReview = (request: Request | null, onClose: () => void) =
       const id = resourceId ?? packageId ?? '';
       setProcessedRequests((prev) => ({ ...prev, [id]: 'approved' }));
       setSelectedResource(null);
+      setSelectedPackage(null);
       openSnackbar({
         message: t('request_page.request_approved'),
         color: 'success',
@@ -201,6 +202,7 @@ export const useRequestReview = (request: Request | null, onClose: () => void) =
       const id = resourceId ?? packageId ?? '';
       setProcessedRequests((prev) => ({ ...prev, [id]: 'rejected' }));
       setSelectedResource(null);
+      setSelectedPackage(null);
       openSnackbar({
         message: t('request_page.request_rejected'),
         color: 'success',

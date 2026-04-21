@@ -2,6 +2,7 @@ import { DsButton } from '@altinn/altinn-components';
 import { useTranslation } from 'react-i18next';
 import { ArrowLeftIcon } from '@navikt/aksel-icons';
 import type { ProcessedStatus } from '../types';
+import { useAutoFocusRef } from '@/resources/hooks/useAutoFocusRef';
 import type { ServiceResource } from '@/rtk/features/singleRights/singleRightsApi';
 import { ResourceInfo } from '../../common/DelegationModal/SingleRights/ResourceInfo';
 import { DelegationAction } from '../../common/DelegationModal/EditModal';
@@ -29,10 +30,12 @@ export const RequestResourceDetail = ({
   toPartyName,
 }: RequestResourceDetailProps) => {
   const { t } = useTranslation();
+  const backButtonRef = useAutoFocusRef<HTMLButtonElement>();
 
   return (
     <>
       <DsButton
+        ref={backButtonRef}
         variant='tertiary'
         className={classes.backButton}
         onClick={onBack}

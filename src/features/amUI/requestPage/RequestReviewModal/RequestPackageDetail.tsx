@@ -7,6 +7,7 @@ import { AccessPackage } from '@/rtk/features/accessPackageApi';
 import { PackageHeader } from '../../common/DelegationModal/AccessPackages/PackageHeader';
 import { PackageMeta } from '../../common/DelegationModal/AccessPackages/PackageMeta';
 import { StatusSection } from '../../common/StatusSection/StatusSection';
+import { useAutoFocusRef } from '@/resources/hooks/useAutoFocusRef';
 
 interface RequestPackageDetailProps {
   pkg: AccessPackage;
@@ -30,10 +31,12 @@ export const RequestPackageDetail = ({
   toPartyName,
 }: RequestPackageDetailProps) => {
   const { t } = useTranslation();
+  const backButtonRef = useAutoFocusRef<HTMLButtonElement>();
 
   return (
     <>
       <DsButton
+        ref={backButtonRef}
         variant='tertiary'
         className={classes.backButton}
         onClick={onBack}

@@ -22,6 +22,7 @@ import { useRequestReview } from './useRequestReview';
 import classes from './RequestReviewModal.module.css';
 import { amUIPath } from '@/routes/paths';
 import { RequestPackageDetail } from './RequestPackageDetail';
+import { useAutoFocusRef } from '@/resources/hooks/useAutoFocusRef';
 
 interface RequestReviewModalContentProps {
   request: Request | null;
@@ -30,6 +31,7 @@ interface RequestReviewModalContentProps {
 
 export const RequestReviewModalContent = ({ request, onClose }: RequestReviewModalContentProps) => {
   const { t } = useTranslation();
+  const headingFocusRef = useAutoFocusRef<HTMLHeadingElement>();
 
   const {
     isLoadingRequests,
@@ -114,6 +116,8 @@ export const RequestReviewModalContent = ({ request, onClose }: RequestReviewMod
   return (
     <div className={classes.reviewListView}>
       <DsHeading
+        ref={headingFocusRef}
+        tabIndex={-1}
         level={2}
         data-size='xs'
       >
@@ -165,8 +169,7 @@ export const RequestReviewModalContent = ({ request, onClose }: RequestReviewMod
                 })}
                 interactive={true}
                 size='xs'
-                border='solid'
-                variant='default'
+                border='dotted'
                 controls={itemControls(p.id)}
                 onClick={() => handleSelection({ package: p })}
               />
@@ -181,7 +184,7 @@ export const RequestReviewModalContent = ({ request, onClose }: RequestReviewMod
           <List>
             <ResourceList
               size='xs'
-              border='solid'
+              border='dotted'
               enableSearch={false}
               showDetails={false}
               interactive={(resource) => processedRequests[resource.identifier] === undefined}
