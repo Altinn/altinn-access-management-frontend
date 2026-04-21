@@ -334,7 +334,8 @@
     "package_deletion_success": "Power of attorney over {{accessPackage}} has been successfully revoked for {{name}}.",
     "package_deletion_error": "Failed to revoke {{name}}'s power of attorney over {{accessPackage}}.",
     "delegated_packages_count_badge": "{{delegated}} of {{total}}",
-    "package_number_of_resources": "{{count}} services",
+    "package_number_of_resources_one": "{{count}} service",
+    "package_number_of_resources_other": "{{count}} services",
     "user_has_no_packages": "This user has no access packages.",
     "no_packages": "No access packages available.",
     "no_matching_search": "No matches for your search",
@@ -476,7 +477,8 @@
     "success_message": "Power of attorney was successfully given to {{name}}",
     "error_message": "Failed to give power of attorney to {{name}}",
     "edit_success": "The power of attorney was updated",
-    "package_services": "Grants access to {{count}} services",
+    "package_services_one": "Grants access to {{count}} service",
+    "package_services_other": "Grants access to {{count}} services",
     "inherited_role_org_message": "{{user_name}} has access to this through their role in {{org_name}}. Therefore, it cannot be deleted.",
     "actions": {
       "access_to_all": "Access to the full service",
@@ -1065,7 +1067,10 @@
     "request_rejected": "Request rejected",
     "approve_failed": "Approval failed",
     "reject_failed": "Rejection failed",
-    "error_partial_loading_requests": "Could not load all requests"
+    "error_partial_loading_requests": "Could not load all requests",
+    "package_list_title": "Access packages:",
+    "resource_list_title": "Services:",
+    "cannot_approve_package": "You lack this access package yourself and therefore cannot approve the request."
   },
   "draft_request_page": {
     "page_title": "Power of Attorney Request - Altinn",

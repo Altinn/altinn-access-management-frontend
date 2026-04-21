@@ -331,7 +331,8 @@
     "package_deletion_success": "Fullmakta til {{accessPackage}} er fjerna frå {{name}}.",
     "package_deletion_error": "Det var ikkje mogleg å fjerne fullmakta til {{accessPackage}} frå {{name}}.",
     "delegated_packages_count_badge": "{{delegated}} av {{total}}",
-    "package_number_of_resources": "{{count}} tenester",
+    "package_number_of_resources_one": "{{count}} teneste",
+    "package_number_of_resources_other": "{{count}} tenester",
     "user_has_no_packages": "Denne brukeren har ingen tilgangspakkar.",
     "no_packages": "Ingen tilgangspakkar tilgjengelege.",
     "no_matching_search": "Ingen treff på søket",
@@ -473,7 +474,8 @@
     "success_message": "Fullmakt gitt til {{name}}",
     "error_message": "Kunne ikkje gi fullmakt til {{name}}",
     "edit_success": "Fullmakt oppdatert",
-    "package_services": "Gir tilgang til {{count}} tenester",
+    "package_services_one": "Gir tilgang til {{count}} teneste",
+    "package_services_other": "Gir tilgang til {{count}} tenester",
     "inherited_role_org_message": "{{user_name}} har tilgang til denne gjennom rolla si i {{org_name}}. Den kan derfor ikkje slettast.",
     "actions": {
       "access_to_all": "Tilgang til heile tenesten",
@@ -727,7 +729,7 @@
     "right_resource_singular": "1 enkeltteneste",
     "right_resource_plural": "{{resourcesCount}} enkelttenester",
     "right_accesspackage_singular": "1 tilgangspakke",
-    "right_accesspackage_plural": "{{accessPackageCount}} tilgangspakker"
+    "right_accesspackage_plural": "{{accessPackageCount}} tilgangspakkar"
   },
   "systemuser_request": {
     "page_title": "Gi tilgang til system - Altinn",
@@ -1062,7 +1064,10 @@
     "request_rejected": "Førespurnad avvist",
     "approve_failed": "Godkjenning feila",
     "reject_failed": "Avvising feila",
-    "error_partial_loading_requests": "Kunne ikkje laste alle førespurnader"
+    "error_partial_loading_requests": "Kunne ikkje laste alle førespurnader",
+    "package_list_title": "Tilgangspakkar",
+    "resource_list_title": "Tenester",
+    "cannot_approve_package": "Du manglar denne tilgangspakken sjølv og kan derfor ikkje godkjenne førespurnaden."
   },
   "draft_request_page": {
     "page_title": "Førespurnad om fullmakt - Altinn",

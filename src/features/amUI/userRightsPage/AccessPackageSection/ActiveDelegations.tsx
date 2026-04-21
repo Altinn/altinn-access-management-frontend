@@ -53,6 +53,7 @@ export const ActiveDelegations = ({ searchString }: ActiveDelegationsProps) => {
           modalRef.current?.showModal();
         }}
         noPackagesText={t('access_packages.user_has_no_packages')}
+        filterByType={false}
       />
       <AccessPackageInfoModal
         modalRef={modalRef}
