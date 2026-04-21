@@ -220,7 +220,7 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
         }
 
         /// <summary>
-        ///     Test case: Enriched package request endpoints return package requests for a party with package data included
+        ///     Test case: EnrichedPackageRequest endpoints return package requests for a party with package data included
         ///     Expected: The sent and received endpoints return the expected enriched package request collections
         /// </summary>
         [Theory]
@@ -245,7 +245,7 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
         }
 
         /// <summary>
-        ///     Test case: Enriched package request endpoints surface the correct status codes for error scenarios
+        ///     Test case: EnrichedPackageRequest endpoints surface the correct status codes for error scenarios
         ///     Expected: The sent and received endpoints return the expected status for each trigger party
         /// </summary>
         [Theory]
