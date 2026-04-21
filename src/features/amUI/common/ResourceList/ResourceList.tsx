@@ -49,6 +49,8 @@ export interface ResourceListProps<
   getBadge?: (resource: TResource, index: number) => ResourceListItemProps['badge'];
   getHasAccess?: (resource: TResource) => boolean;
   delegationModal?: React.ReactNode;
+  border?: ResourceListItemProps['border'];
+  ariaLabelledBy?: string;
 }
 
 export const ResourceList = <
@@ -70,6 +72,8 @@ export const ResourceList = <
   getBadge,
   getHasAccess,
   delegationModal,
+  border = 'none',
+  ariaLabelledBy,
 }: ResourceListProps<TResource>) => {
   const { t } = useTranslation();
   const [search, setSearch] = React.useState('');
@@ -136,8 +140,8 @@ export const ResourceList = <
 
   return (
     <div className={classes.container}>
-      <div className={classes.searchAndAdd}>
-        {enableSearch && resources.length > 0 && (
+      {enableSearch && (
+        <div className={classes.searchAndAdd}>
           <ResourceFilterToolbar
             search={search}
             setSearch={setSearch}
@@ -145,9 +149,9 @@ export const ResourceList = <
             setFilterState={setFilterState}
             serviceOwnerOptions={serviceOwnerOptions}
           />
-        )}
-        {delegationModal}
-      </div>
+          {delegationModal}
+        </div>
+      )}
       {isSkeletonVisible ? (
         <SkeletonResourceList />
       ) : (
@@ -166,7 +170,7 @@ export const ResourceList = <
             className={cn(classes.resourceListContainer, { [classes.maxHeight]: enableMaxHeight })}
           >
             {filteredResources.length > 0 && (
-              <List>
+              <List aria-labelledby={ariaLabelledBy}>
                 {filteredResources.map((resource, index) => {
                   const derivedId = extractResourceId(resource);
                   const resourceId = derivedId ? String(derivedId) : `resource-${index}`;
@@ -202,6 +206,7 @@ export const ResourceList = <
                       controls={renderControls?.(resource)}
                       loading={false}
                       shadow={itemShadow}
+                      border={border}
                     />
                   );
                 })}

@@ -1,15 +1,16 @@
-import { DsButton } from '@altinn/altinn-components';
+import { DsAlert, DsButton } from '@altinn/altinn-components';
 import { useTranslation } from 'react-i18next';
 import { ArrowLeftIcon } from '@navikt/aksel-icons';
 import type { ProcessedStatus } from '../types';
-import { useAutoFocusRef } from '@/resources/hooks/useAutoFocusRef';
-import type { ServiceResource } from '@/rtk/features/singleRights/singleRightsApi';
-import { ResourceInfo } from '../../common/DelegationModal/SingleRights/ResourceInfo';
-import { DelegationAction } from '../../common/DelegationModal/EditModal';
 import classes from './RequestReviewModal.module.css';
+import { AccessPackage } from '@/rtk/features/accessPackageApi';
+import { PackageHeader } from '../../common/DelegationModal/AccessPackages/PackageHeader';
+import { PackageMeta } from '../../common/DelegationModal/AccessPackages/PackageMeta';
+import { StatusSection } from '../../common/StatusSection/StatusSection';
+import { useAutoFocusRef } from '@/resources/hooks/useAutoFocusRef';
 
-interface RequestResourceDetailProps {
-  resource: ServiceResource;
+interface RequestPackageDetailProps {
+  pkg: AccessPackage;
   processedStatus?: ProcessedStatus;
   actionLoading: 'approve' | 'reject' | null;
   onBack: () => void;
@@ -19,8 +20,8 @@ interface RequestResourceDetailProps {
   toPartyName: string;
 }
 
-export const RequestResourceDetail = ({
-  resource,
+export const RequestPackageDetail = ({
+  pkg,
   processedStatus,
   actionLoading,
   onBack,
@@ -28,7 +29,7 @@ export const RequestResourceDetail = ({
   onReject,
   cannotApprove,
   toPartyName,
-}: RequestResourceDetailProps) => {
+}: RequestPackageDetailProps) => {
   const { t } = useTranslation();
   const backButtonRef = useAutoFocusRef<HTMLButtonElement>();
 
@@ -43,11 +44,20 @@ export const RequestResourceDetail = ({
         <ArrowLeftIcon />
         {t('common.back')}
       </DsButton>
-      <ResourceInfo
-        resource={resource}
+      <PackageHeader name={pkg.name} />
+      <StatusSection
+        userHasAccess={processedStatus === 'approved'}
         toPartyName={toPartyName}
-        availableActions={[DelegationAction.APPROVE]}
       />
+      {cannotApprove && (
+        <DsAlert
+          data-color='warning'
+          data-size={'xs'}
+        >
+          {t('request_page.cannot_approve_package')}
+        </DsAlert>
+      )}
+      <PackageMeta accessPackage={pkg} />
       {!processedStatus && (
         <div className={classes.actionButtons}>
           <DsButton

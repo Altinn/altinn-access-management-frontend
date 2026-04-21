@@ -192,7 +192,7 @@ namespace Altinn.AccessManagement.UI.Core.Services
         {
             Dictionary<Guid, AccessPackage> packageDictionary = [];
             var uniquePackageIds = list
-                .Select(x => Guid.Parse(x.Package.ReferenceId))
+                .Select(x => x.Package.Id)
                 .Distinct();
 
             foreach (var packageId in uniquePackageIds)
@@ -209,7 +209,7 @@ namespace Altinn.AccessManagement.UI.Core.Services
             return list.Select(x =>
             {
                 RequestFE request = MapToRequestFE(x);
-                var packageId = Guid.Parse(x.Package.ReferenceId);
+                var packageId = x.Package.Id;
 
                 if (!packageDictionary.TryGetValue(packageId, out var package))
                 {
