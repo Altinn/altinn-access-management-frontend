@@ -96,7 +96,7 @@ export const AccessPackageInfo = ({ accessPackage, availableActions = [] }: Pack
 
   return (
     <div className={classes.container}>
-      <PackageHeader name={accessPackage?.name} />
+      <PackageHeader name={accessPackage.name} />
 
       {isActionLoading || actionSuccess ? (
         <LoadingAnimation

@@ -474,7 +474,8 @@
     "success_message": "Fullmakt gitt til {{name}}",
     "error_message": "Kunne ikkje gi fullmakt til {{name}}",
     "edit_success": "Fullmakt oppdatert",
-    "package_services": "Gir tilgang til {{count}} tenester",
+    "package_services_one": "Gir tilgang til {{count}} teneste",
+    "package_services_other": "Gir tilgang til {{count}} tenester",
     "inherited_role_org_message": "{{user_name}} har tilgang til denne gjennom rolla si i {{org_name}}. Den kan derfor ikkje slettast.",
     "actions": {
       "access_to_all": "Tilgang til heile tenesten",
@@ -728,7 +729,7 @@
     "right_resource_singular": "1 enkeltteneste",
     "right_resource_plural": "{{resourcesCount}} enkelttenester",
     "right_accesspackage_singular": "1 tilgangspakke",
-    "right_accesspackage_plural": "{{accessPackageCount}} tilgangspakker"
+    "right_accesspackage_plural": "{{accessPackageCount}} tilgangspakkar"
   },
   "systemuser_request": {
     "page_title": "Gi tilgang til system - Altinn",

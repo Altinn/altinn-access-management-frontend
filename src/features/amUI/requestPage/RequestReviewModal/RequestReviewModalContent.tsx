@@ -156,52 +156,54 @@ export const RequestReviewModalContent = ({ request, onClose }: RequestReviewMod
           {snapshotPackages.length > 0 && (
             <>
               <DsHeading
-                level={4}
+                level={3}
                 data-size='2xs'
                 id='package-list-heading'
               >
                 {t('request_page.package_list_title')}
               </DsHeading>
               <List aria-labelledby='package-list-heading'>
-                {snapshotPackages.map((p) => (
-                  <AccessPackageListItem
-                    key={p.id}
-                    id={p.id}
-                    name={p.name}
-                    description={t('access_packages.package_number_of_resources', {
-                      count: p.resources.length,
-                    })}
-                    interactive={true}
-                    size='xs'
-                    border='dotted'
-                    controls={itemControls({ packageId: p.id })}
-                    onClick={() => handleSelection({ package: p })}
-                  />
-                ))}
+                {snapshotPackages.map((p) => {
+                  const isInteractive = processedRequests[p.id] === undefined;
+                  return (
+                    <AccessPackageListItem
+                      key={p.id}
+                      id={p.id}
+                      name={p.name}
+                      description={t('access_packages.package_number_of_resources', {
+                        count: p.resources.length,
+                      })}
+                      interactive={isInteractive}
+                      size='xs'
+                      border='dotted'
+                      controls={itemControls({ packageId: p.id })}
+                      onClick={isInteractive ? () => handleSelection({ package: p }) : undefined}
+                    />
+                  );
+                })}
               </List>
             </>
           )}
           {snapshotResources.length > 0 && (
             <>
               <DsHeading
-                level={4}
+                level={3}
                 data-size='2xs'
                 id='service-list-heading'
               >
                 {t('request_page.resource_list_title')}
               </DsHeading>
-              <List aria-labelledby='service-list-heading'>
-                <ResourceList
-                  size='xs'
-                  border='dotted'
-                  enableSearch={false}
-                  showDetails={false}
-                  interactive={(resource) => processedRequests[resource.identifier] === undefined}
-                  resources={snapshotResources}
-                  onSelect={(resource) => handleSelection({ resource })}
-                  renderControls={(resource) => itemControls({ resourceId: resource.identifier })}
-                />
-              </List>
+              <ResourceList
+                aria-labelledby='service-list-heading'
+                size='xs'
+                border='dotted'
+                enableSearch={false}
+                showDetails={false}
+                interactive={(resource) => processedRequests[resource.identifier] === undefined}
+                resources={snapshotResources}
+                onSelect={(resource) => handleSelection({ resource })}
+                renderControls={(resource) => itemControls({ resourceId: resource.identifier })}
+              />
             </>
           )}
         </>

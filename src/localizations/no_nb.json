@@ -474,7 +474,8 @@
     "success_message": "Fullmakt gitt til {{name}}",
     "error_message": "Kunne ikke gi fullmakt til {{name}}",
     "edit_success": "Fullmakt oppdatert",
-    "package_services": "Gir tilgang til {{count}} tjenester",
+    "package_services_one": "Gir tilgang til {{count}} tjeneste",
+    "package_services_other": "Gir tilgang til {{count}} tjenester",
     "inherited_role_org_message": "{{user_name}} har tilgang til denne gjennom sin rolle i {{org_name}}. Den kan derfor ikke slettes.",
     "actions": {
       "access_to_all": "Tilgang til hele tjenesten",

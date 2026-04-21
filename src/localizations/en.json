@@ -477,7 +477,8 @@
     "success_message": "Power of attorney was successfully given to {{name}}",
     "error_message": "Failed to give power of attorney to {{name}}",
     "edit_success": "The power of attorney was updated",
-    "package_services": "Grants access to {{count}} services",
+    "package_services_one": "Grants access to {{count}} service",
+    "package_services_other": "Grants access to {{count}} services",
     "inherited_role_org_message": "{{user_name}} has access to this through their role in {{org_name}}. Therefore, it cannot be deleted.",
     "actions": {
       "access_to_all": "Access to the full service",

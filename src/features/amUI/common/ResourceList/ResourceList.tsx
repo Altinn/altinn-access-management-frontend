@@ -50,6 +50,7 @@ export interface ResourceListProps<
   getHasAccess?: (resource: TResource) => boolean;
   delegationModal?: React.ReactNode;
   border?: ResourceListItemProps['border'];
+  ariaLabelledBy?: string;
 }
 
 export const ResourceList = <
@@ -72,6 +73,7 @@ export const ResourceList = <
   getHasAccess,
   delegationModal,
   border = 'none',
+  ariaLabelledBy,
 }: ResourceListProps<TResource>) => {
   const { t } = useTranslation();
   const [search, setSearch] = React.useState('');
@@ -168,7 +170,7 @@ export const ResourceList = <
             className={cn(classes.resourceListContainer, { [classes.maxHeight]: enableMaxHeight })}
           >
             {filteredResources.length > 0 && (
-              <List>
+              <List aria-labelledby={ariaLabelledBy}>
                 {filteredResources.map((resource, index) => {
                   const derivedId = extractResourceId(resource);
                   const resourceId = derivedId ? String(derivedId) : `resource-${index}`;
