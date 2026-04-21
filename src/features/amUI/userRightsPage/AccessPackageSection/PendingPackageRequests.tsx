@@ -1,4 +1,4 @@
-import React, { useRef, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { ArrowLeftIcon, HandshakeIcon, MinusCircleIcon } from '@navikt/aksel-icons';
 import {
   Button,
@@ -152,7 +152,13 @@ const PendingPackageRequestsList = ({
   const { actingParty, fromParty } = usePartyRepresentation();
   const { openSnackbar } = useSnackbar();
 
-  const { data: enrichedRequests = [], isLoading } = useGetEnrichedSentPackageRequestsQuery(
+  const [loadingByRequestId, setLoadingByRequestId] = useState<Record<string, boolean>>({});
+
+  const {
+    data: enrichedRequests = [],
+    isLoading,
+    isFetching: isRefetching,
+  } = useGetEnrichedSentPackageRequestsQuery(
     {
       ...getRequestPartyQueryParams(actingParty?.partyUuid, fromParty?.partyUuid),
       status: ['Pending'],
@@ -160,9 +166,16 @@ const PendingPackageRequestsList = ({
     { skip: !actingParty?.partyUuid || !fromParty?.partyUuid },
   );
 
-  const [withdrawRequest, { isLoading: isWithdrawing }] = useWithdrawRequestMutation();
+  useEffect(() => {
+    if (!isRefetching) {
+      setLoadingByRequestId({});
+    }
+  }, [isRefetching]);
+
+  const [withdrawRequest] = useWithdrawRequestMutation();
 
   const handleDelete = async (request: EnrichedPackageRequestDto) => {
+    setLoadingByRequestId((prev) => ({ ...prev, [request.id]: true }));
     try {
       await withdrawRequest({
         party: actingParty?.partyUuid ?? '',
@@ -175,6 +188,7 @@ const PendingPackageRequestsList = ({
         color: 'success',
       });
     } catch {
+      setLoadingByRequestId((prev) => ({ ...prev, [request.id]: false }));
       openSnackbar({
         message: t('delegation_modal.request.withdraw_request_error', {
           resource: request.package?.name,
@@ -233,8 +247,8 @@ const PendingPackageRequestsList = ({
                         e.stopPropagation();
                         handleDelete(req);
                       }}
-                      disabled={isWithdrawing}
-                      loading={isWithdrawing}
+                      disabled={loadingByRequestId[req.id]}
+                      loading={loadingByRequestId[req.id]}
                     >
                       <MinusCircleIcon />
                       {isSmallScreen ? '' : t('common.delete')}
