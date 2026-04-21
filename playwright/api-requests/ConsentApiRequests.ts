@@ -203,6 +203,7 @@ export class ConsentApiRequests {
    * @param clientIdEnv Environment variable name for the Maskinporten client ID
    * @param jwkEnv Environment variable name for the JWK private key
    * @param consumerOrg Optional organization number for "behalf of" scenarios
+   * @param scope The Maskinporten scope for the consent token. Default: 'altinn:consentrequests.write'
    * @returns The consent access token
    */
   async getConsentTokenWithMaskinporten(
@@ -211,10 +212,16 @@ export class ConsentApiRequests {
     clientIdEnv: string,
     jwkEnv: string,
     consumerOrg?: string,
+    scope?: string,
   ): Promise<string> {
-    // Create MaskinportenToken instance to fetch the consent token
     const maskinportenToken = new MaskinportenToken(clientIdEnv, jwkEnv);
-    return await maskinportenToken.getConsentToken(consentRequestId, fromPartyUrn, consumerOrg);
+    console.log('maskinportenToken', maskinportenToken);
+    return await maskinportenToken.getConsentToken(
+      consentRequestId,
+      fromPartyUrn,
+      consumerOrg,
+      scope,
+    );
   }
 }
 
