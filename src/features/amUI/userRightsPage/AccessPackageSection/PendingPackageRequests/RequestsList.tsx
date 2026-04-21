@@ -1,141 +1,31 @@
-import React, { useEffect, useRef, useState } from 'react';
-import { ArrowLeftIcon, HandshakeIcon, MinusCircleIcon } from '@navikt/aksel-icons';
+import { useEffect, useState } from 'react';
+import { ArrowLeftIcon, MinusCircleIcon } from '@navikt/aksel-icons';
 import {
   Button,
   DsButton,
-  DsDialog,
   DsHeading,
-  formatDisplayName,
   List,
-  ListItem,
   Snackbar,
   SnackbarDuration,
   SnackbarProvider,
   useSnackbar,
 } from '@altinn/altinn-components';
 import { useTranslation } from 'react-i18next';
-import { usePartyRepresentation } from '../../common/PartyRepresentationContext/PartyRepresentationContext';
+import { usePartyRepresentation } from '../../../common/PartyRepresentationContext/PartyRepresentationContext';
 import { PartyType } from '@/rtk/features/userInfoApi';
 import {
   useGetEnrichedSentPackageRequestsQuery,
-  useGetSentRequestsQuery,
   useWithdrawRequestMutation,
   type EnrichedPackageRequest,
 } from '@/rtk/features/requestApi';
 import { useAutoFocusRef } from '@/resources/hooks/useAutoFocusRef';
 import { getRequestPartyQueryParams } from '@/resources/utils/singleRightRequestUtils';
 import { useIsTabletOrSmaller } from '@/resources/utils/screensizeUtils';
-import { PackageItem } from '../../common/AccessPackageList/PackageItem';
-import { SkeletonAccessPackageList } from '../../common/AccessPackageList/SkeletonAccessPackageList';
-import { AccessPackageInfo } from '../../common/DelegationModal/AccessPackages/AccessPackageInfo';
-import { DelegationAction } from '../../common/DelegationModal/EditModal';
+import { PackageItem } from '../../../common/AccessPackageList/PackageItem';
+import { SkeletonAccessPackageList } from '../../../common/AccessPackageList/SkeletonAccessPackageList';
+import { AccessPackageInfo } from '../../../common/DelegationModal/AccessPackages/AccessPackageInfo';
+import { DelegationAction } from '../../../common/DelegationModal/EditModal';
 import classes from './PendingPackageRequests.module.css';
-
-export const PendingPackageRequests = () => {
-  const modalRef = useRef<HTMLDialogElement>(null);
-  const { t } = useTranslation();
-  const isSmallScreen = useIsTabletOrSmaller();
-  const { actingParty, fromParty } = usePartyRepresentation();
-  const [isModalOpen, setIsModalOpen] = useState(false);
-
-  const { data: sentPackageRequests = [] } = useGetSentRequestsQuery(
-    {
-      ...getRequestPartyQueryParams(actingParty?.partyUuid, fromParty?.partyUuid),
-      type: 'package',
-      status: ['Pending'],
-    },
-    { skip: !actingParty?.partyUuid || !fromParty?.partyUuid },
-  );
-
-  const heading = t('delegation_modal.request.sent_requests_modal_header', {
-    partyName: formatDisplayName({
-      fullName: fromParty?.name || '',
-      type: fromParty?.partyTypeName === PartyType.Person ? 'person' : 'company',
-    }),
-  });
-
-  return (
-    <>
-      <PendingPackageRequestsModal
-        modalRef={modalRef}
-        isModalOpen={isModalOpen}
-        heading={heading}
-        onClose={() => setIsModalOpen(false)}
-      />
-      {sentPackageRequests.length > 0 && (
-        <ListItem
-          title={t('delegation_modal.request.sent_requests_item')}
-          description={t('delegation_modal.request.active_access_request', {
-            count: sentPackageRequests.length,
-          })}
-          icon={HandshakeIcon}
-          linkIcon
-          color='neutral'
-          variant='tinted'
-          border='solid'
-          interactive
-          as='button'
-          badge={
-            isSmallScreen ? undefined : <div>{t('delegation_modal.request.view_requests')}</div>
-          }
-          onClick={() => {
-            setIsModalOpen(true);
-            modalRef.current?.showModal();
-          }}
-        />
-      )}
-    </>
-  );
-};
-
-interface PendingPackageRequestsModalProps {
-  modalRef: React.RefObject<HTMLDialogElement | null>;
-  isModalOpen: boolean;
-  heading: string;
-  onClose: () => void;
-}
-
-const PendingPackageRequestsModal = ({
-  modalRef,
-  isModalOpen,
-  heading,
-  onClose,
-}: PendingPackageRequestsModalProps) => {
-  const { t } = useTranslation();
-  const [selectedRequest, setSelectedRequest] = useState<EnrichedPackageRequest | null>(null);
-
-  return (
-    <DsDialog
-      ref={modalRef}
-      closedby='any'
-      onClose={() => {
-        setSelectedRequest(null);
-        onClose();
-      }}
-      className={classes.dialog}
-    >
-      <SnackbarProvider>
-        {isModalOpen && (
-          <PendingPackageRequestsList
-            heading={heading}
-            selectedRequest={selectedRequest}
-            setSelectedRequest={setSelectedRequest}
-          />
-        )}
-        <Snackbar />
-      </SnackbarProvider>
-      {!selectedRequest && (
-        <DsButton
-          variant='primary'
-          className={classes.closeButton}
-          onClick={() => modalRef.current?.close()}
-        >
-          {t('common.close')}
-        </DsButton>
-      )}
-    </DsDialog>
-  );
-};
 
 interface PendingPackageRequestsListProps {
   heading: string;
@@ -143,7 +33,7 @@ interface PendingPackageRequestsListProps {
   setSelectedRequest: (request: EnrichedPackageRequest | null) => void;
 }
 
-const PendingPackageRequestsList = ({
+export const PendingPackageRequestsList = ({
   heading,
   selectedRequest,
   setSelectedRequest,
@@ -269,3 +159,13 @@ const PendingPackageRequestsList = ({
     </>
   );
 };
+
+export const PendingPackageRequestsListWithProviders = ({
+  isOpen,
+  ...props
+}: PendingPackageRequestsListProps & { isOpen: boolean }) => (
+  <SnackbarProvider>
+    {isOpen && <PendingPackageRequestsList {...props} />}
+    <Snackbar />
+  </SnackbarProvider>
+);
