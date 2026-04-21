@@ -119,7 +119,7 @@ export const RequestReviewModalContent = ({ request, onClose }: RequestReviewMod
       <DsHeading
         ref={headingFocusRef}
         tabIndex={-1}
-        level={2}
+        level={1}
         data-size='xs'
       >
         {t('request_page.review_modal_title', {
@@ -156,7 +156,7 @@ export const RequestReviewModalContent = ({ request, onClose }: RequestReviewMod
           {snapshotPackages.length > 0 && (
             <>
               <DsHeading
-                level={3}
+                level={2}
                 data-size='2xs'
                 id='package-list-heading'
               >
@@ -187,7 +187,7 @@ export const RequestReviewModalContent = ({ request, onClose }: RequestReviewMod
           {snapshotResources.length > 0 && (
             <>
               <DsHeading
-                level={3}
+                level={2}
                 data-size='2xs'
                 id='service-list-heading'
               >
