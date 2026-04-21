@@ -125,7 +125,7 @@ const PendingPackageRequestsList = ({
             <PackageItem
               key={req.id}
               pkg={req.package}
-              partyType={PartyType.Person}
+              partyType={fromParty?.partyTypeName ?? PartyType.Organization}
               as='button'
               onSelect={() => onSelect(req)}
               controls={

@@ -53,7 +53,7 @@ export function PendingRequestsModal<T>({
     >
       {isModalOpen && (
         <SnackbarProvider>
-          {selectedItem ? (
+          {selectedItem !== null ? (
             <>
               <DsButton
                 variant='tertiary'
@@ -83,7 +83,7 @@ export function PendingRequestsModal<T>({
           <Snackbar />
         </SnackbarProvider>
       )}
-      {!selectedItem && (
+      {selectedItem === null && (
         <DsButton
           variant='primary'
           className={closeButtonClassName}
