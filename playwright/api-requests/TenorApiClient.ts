@@ -77,6 +77,8 @@ export class TenorApiClient {
     const data = (await this.tenorGet(`/soek/brreg-er-fr?${params}`)) as {
       dokumentListe: Array<{ tenorMetadata: { id: string } }>;
     };
+
+    console.log('data', JSON.stringify(data, null, 2));
     return data.dokumentListe.map((d) => d.tenorMetadata.id);
   }
 
@@ -265,6 +267,8 @@ export class TenorApiClient {
       dokumentListe: Array<{ tenorMetadata: { id: string } }>;
     };
 
+    console.log('tenor brreg-er-fr first doc:', JSON.stringify(data.dokumentListe?.[0], null, 2));
+
     for (const doc of data.dokumentListe ?? []) {
       const orgNr = doc.tenorMetadata.id;
 
@@ -277,12 +281,10 @@ export class TenorApiClient {
           const person = rolle.person;
           if (!person) continue;
 
-          // foedselsnummer may be returned directly
           if (person.foedselsnummer) {
             return { orgNr, dagligLederPid: person.foedselsnummer };
           }
 
-          // fall back to Tenor freg lookup by name + birth date
           if (person.navn?.fornavn && person.navn?.etternavn && person.fodselsdato) {
             const pid = await this.resolvePid(
               person.navn.fornavn,
