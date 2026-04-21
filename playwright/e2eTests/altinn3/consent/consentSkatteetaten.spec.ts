@@ -73,7 +73,6 @@ test.describe('Samtykke - Skatteetaten krav og betalinger ende til ende', () => 
 
         const response = await fetchKravOgBetalinger(orgNr, consentToken);
         const responseText = await response.text();
-        console.log(`Skatteetaten API: ${response.status} ${response.statusText}`, responseText);
         expect(response.ok).toBe(true);
         expect(JSON.parse(responseText)).toBeTruthy();
       });

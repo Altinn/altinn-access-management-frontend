@@ -33,11 +33,12 @@ interface BrregPerson {
   fodselsdato: string;
   navn: { fornavn: string; etternavn: string };
   erDoed: boolean;
+  foedselsnummer?: string;
 }
 
 interface BrregRollegruppe {
   type: { kode: string };
-  roller: Array<{ person: BrregPerson; fratraadt: boolean; avregistrert: boolean }>;
+  roller: Array<{ person: BrregPerson; fratraadt: boolean | string; avregistrert: boolean }>;
 }
 
 export class TenorApiClient {
@@ -172,10 +173,6 @@ export class TenorApiClient {
             name: `${kontaktperson.navn.fornavn} ${kontaktperson.navn.etternavn}`,
           },
         });
-
-        console.log(
-          `[${results.length}/${count}] ${orgNr} ${orgName}: DAGL=${daglPid}, KONT=${kontPid}`,
-        );
       }
 
       page++;
@@ -260,35 +257,41 @@ export class TenorApiClient {
    * and resolve a dagligLeder PID who can approve consent on behalf of the org.
    */
   async findOrgWithSamletReskontroinnsyn(): Promise<{ orgNr: string; dagligLederPid: string }> {
-    for (let page = 0; page < 10; page++) {
-      const params = new URLSearchParams({
-        kql: 'tenorRelasjoner.samletReskontroinnsyn:{harKrav:*}',
-        size: '50',
-        page: String(page),
-      });
-      const data = (await this.tenorGet(`/soek/brreg-er-fr?${params}`)) as {
-        dokumentListe: Array<{ tenorMetadata: { id: string } }>;
-      };
+    const params = new URLSearchParams({
+      kql: 'tenorRelasjoner.samletReskontroinnsyn:{harKrav:*}',
+      size: '50',
+    });
+    const data = (await this.tenorGet(`/soek/brreg-er-fr?${params}`)) as {
+      dokumentListe: Array<{ tenorMetadata: { id: string } }>;
+    };
 
-      for (const doc of data.dokumentListe ?? []) {
-        const orgNr = doc.tenorMetadata.id;
+    for (const doc of data.dokumentListe ?? []) {
+      const orgNr = doc.tenorMetadata.id;
 
-        const rolesRes = await fetch(`${BRREG_PPE_BASE}/enheter/${orgNr}/roller`);
-        if (!rolesRes.ok) continue;
-        const rolesData = (await rolesRes.json()) as { rollegrupper: BrregRollegruppe[] };
+      const rolesRes = await fetch(`${BRREG_PPE_BASE}/enheter/${orgNr}/roller`);
+      if (!rolesRes.ok) continue;
+      const rolesData = (await rolesRes.json()) as { rollegrupper: BrregRollegruppe[] };
 
-        const daglGroup = rolesData.rollegrupper?.find((g) => g.type.kode === 'DAGL');
-        const dagligLeder = daglGroup?.roller?.find((r) => !r.fratraadt && !r.avregistrert)?.person;
-        if (!dagligLeder || dagligLeder.erDoed) continue;
+      for (const gruppe of rolesData.rollegrupper ?? []) {
+        for (const rolle of gruppe.roller ?? []) {
+          const person = rolle.person;
+          if (!person) continue;
 
-        const pid = await this.resolvePid(
-          dagligLeder.navn.fornavn,
-          dagligLeder.navn.etternavn,
-          dagligLeder.fodselsdato,
-        );
-        if (!pid) continue;
+          // foedselsnummer may be returned directly
+          if (person.foedselsnummer) {
+            return { orgNr, dagligLederPid: person.foedselsnummer };
+          }
 
-        return { orgNr, dagligLederPid: pid };
+          // fall back to Tenor freg lookup by name + birth date
+          if (person.navn?.fornavn && person.navn?.etternavn && person.fodselsdato) {
+            const pid = await this.resolvePid(
+              person.navn.fornavn,
+              person.navn.etternavn,
+              person.fodselsdato,
+            );
+            if (pid) return { orgNr, dagligLederPid: pid };
+          }
+        }
       }
     }
 
