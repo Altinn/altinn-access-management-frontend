@@ -49,6 +49,7 @@ export interface ResourceListProps<
   getBadge?: (resource: TResource, index: number) => ResourceListItemProps['badge'];
   getHasAccess?: (resource: TResource) => boolean;
   delegationModal?: React.ReactNode;
+  border?: ResourceListItemProps['border'];
 }
 
 export const ResourceList = <
@@ -70,6 +71,7 @@ export const ResourceList = <
   getBadge,
   getHasAccess,
   delegationModal,
+  border = 'none',
 }: ResourceListProps<TResource>) => {
   const { t } = useTranslation();
   const [search, setSearch] = React.useState('');
@@ -136,8 +138,8 @@ export const ResourceList = <
 
   return (
     <div className={classes.container}>
-      <div className={classes.searchAndAdd}>
-        {enableSearch && resources.length > 0 && (
+      {enableSearch && resources.length > 0 && (
+        <div className={classes.searchAndAdd}>
           <ResourceFilterToolbar
             search={search}
             setSearch={setSearch}
@@ -145,9 +147,9 @@ export const ResourceList = <
             setFilterState={setFilterState}
             serviceOwnerOptions={serviceOwnerOptions}
           />
-        )}
-        {delegationModal}
-      </div>
+          {delegationModal}
+        </div>
+      )}
       {isSkeletonVisible ? (
         <SkeletonResourceList />
       ) : (
@@ -202,6 +204,7 @@ export const ResourceList = <
                       controls={renderControls?.(resource)}
                       loading={false}
                       shadow={itemShadow}
+                      border={border}
                     />
                   );
                 })}

@@ -1,7 +1,6 @@
 import * as React from 'react';
-import { Icon, DsAlert, DsHeading, DsParagraph, DsButton } from '@altinn/altinn-components';
+import { DsAlert, DsHeading, DsButton } from '@altinn/altinn-components';
 import { useTranslation } from 'react-i18next';
-import { PackageIcon } from '@navikt/aksel-icons';
 import { useAccessPackageDelegationCheck } from '../../DelegationCheck/AccessPackageDelegationCheckContext';
 
 import type { ActionError } from '@/resources/hooks/useActionError';
@@ -9,7 +8,6 @@ import { useAccessPackageActions } from '@/features/amUI/common/AccessPackageLis
 import { useGetUserDelegationsQuery } from '@/rtk/features/accessPackageApi';
 import { TechnicalErrorParagraphs } from '@/features/amUI/common/TechnicalErrorParagraphs';
 
-import { ResourceList } from '@/features/amUI/common/ResourceList/ResourceList';
 import { useDelegationModalContext } from '../DelegationModalContext';
 import { DelegationAction } from '../EditModal';
 import { usePartyRepresentation } from '../../PartyRepresentationContext/PartyRepresentationContext';
@@ -21,9 +19,10 @@ import { PackageIsPartiallyDeletableAlert } from '../../AccessPackageList/Packag
 
 import { displayPackageRequests } from '@/resources/utils/featureFlagUtils';
 import classes from './AccessPackageInfo.module.css';
+import { PackageHeader } from './PackageHeader';
+import { PackageMeta } from './PackageMeta';
 import { PartyType } from '@/rtk/features/userInfoApi';
 import { StatusSection } from '../../StatusSection/StatusSection';
-import { useIsMobileOrSmaller } from '@/resources/utils/screensizeUtils';
 
 export interface PackageInfoProps {
   accessPackage: ExtendedAccessPackage;
@@ -32,10 +31,9 @@ export interface PackageInfoProps {
 
 export const AccessPackageInfo = ({ accessPackage, availableActions = [] }: PackageInfoProps) => {
   const { t } = useTranslation();
-  const { fromParty, toParty, actingParty } = usePartyRepresentation();
+  const { fromParty, toParty } = usePartyRepresentation();
   const { canDelegatePackage } = useAccessPackageDelegationCheck();
   const displayPackageRequestsFeature = displayPackageRequests();
-  const isSmall = useIsMobileOrSmaller();
 
   const {
     onDelegate,
@@ -93,21 +91,7 @@ export const AccessPackageInfo = ({ accessPackage, availableActions = [] }: Pack
 
   return (
     <div className={classes.container}>
-      <div className={classes.header}>
-        {!isSmall && (
-          <Icon
-            size='md'
-            svgElement={PackageIcon}
-            className={classes.headerIcon}
-          />
-        )}
-        <DsHeading
-          level={1}
-          data-size={isSmall ? 'xs' : 'md'}
-        >
-          {accessPackage?.name}
-        </DsHeading>
-      </div>
+      <PackageHeader name={accessPackage?.name} />
 
       {isActionLoading || actionSuccess ? (
         <LoadingAnimation
@@ -163,33 +147,7 @@ export const AccessPackageInfo = ({ accessPackage, availableActions = [] }: Pack
             inheritedStatus={inheritedStatus ?? undefined}
           />
 
-          <DsParagraph
-            data-size={isSmall ? 'sm' : 'md'}
-            variant='long'
-          >
-            {accessPackage?.description}
-          </DsParagraph>
-          <div className={classes.services}>
-            <DsHeading
-              level={2}
-              data-size={isSmall ? 'xs' : 'sm'}
-            >
-              {t('delegation_modal.package_services', {
-                count: accessPackage.resources.length,
-                name: accessPackage?.name,
-              })}
-            </DsHeading>
-            <div className={classes.service_list}>
-              <ResourceList
-                resources={accessPackage.resources}
-                enableMaxHeight={true}
-                showDetails={false}
-                interactive={false}
-                size='xs'
-                as='div'
-              />
-            </div>
-          </div>
+          <PackageMeta accessPackage={accessPackage} />
 
           <div className={classes.actions}>
             {userHasPackage && availableActions.includes(DelegationAction.REVOKE) ? (

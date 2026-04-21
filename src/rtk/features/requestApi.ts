@@ -17,11 +17,11 @@ export interface RequestDto {
   packageId?: string;
 }
 
-export interface EnrichedRequestDto extends RequestDto {
+export interface EnrichedResourceRequest extends RequestDto {
   resource: ServiceResource;
 }
 
-export interface EnrichedPackageRequestDto extends RequestDto {
+export interface EnrichedPackageRequest extends RequestDto {
   package: AccessPackage;
 }
 
@@ -81,7 +81,7 @@ export const requestApi = createApi({
 
     // delegation modal queries and mutations
     getEnrichedSentResourceRequests: builder.query<
-      EnrichedRequestDto[],
+      EnrichedResourceRequest[],
       { party: string; to?: string; status?: RequestStatus[] }
     >({
       query: ({ party, to, status = [] }) => {
@@ -93,7 +93,7 @@ export const requestApi = createApi({
       providesTags: ['enrichedSentResourceRequests'],
     }),
     getEnrichedReceivedResourceRequests: builder.query<
-      EnrichedRequestDto[],
+      EnrichedResourceRequest[],
       { party: string; from?: string; status?: RequestStatus[] }
     >({
       query: ({ party, from, status = [] }) => {
@@ -105,7 +105,7 @@ export const requestApi = createApi({
       providesTags: ['enrichedReceivedResourceRequests'],
     }),
     getEnrichedSentPackageRequests: builder.query<
-      EnrichedPackageRequestDto[],
+      EnrichedPackageRequest[],
       { party: string; to?: string; status?: RequestStatus[] }
     >({
       query: ({ party, to, status = [] }) => {
@@ -117,7 +117,7 @@ export const requestApi = createApi({
       providesTags: ['enrichedSentPackageRequests'],
     }),
     getEnrichedReceivedPackageRequests: builder.query<
-      EnrichedPackageRequestDto[],
+      EnrichedPackageRequest[],
       { party: string; from?: string; status?: RequestStatus[] }
     >({
       query: ({ party, from, status = [] }) => {
@@ -136,10 +136,7 @@ export const requestApi = createApi({
         url: `resource?party=${party}&to=${to}&resource=${encodeURIComponent(resource)}`,
         method: 'POST',
       }),
-      invalidatesTags: [
-        'sentRequests',
-        'enrichedSentResourceRequests',
-      ],
+      invalidatesTags: ['sentRequests', 'enrichedSentResourceRequests'],
     }),
     withdrawRequest: builder.mutation<RequestDto, { party: string; id: string }>({
       query: ({ party, id }) => ({
@@ -194,7 +191,7 @@ export const requestApi = createApi({
     }),
 
     // draft request page query
-    getEnrichedDraftRequest: builder.query<EnrichedRequestDto, { id: string }>({
+    getEnrichedDraftRequest: builder.query<EnrichedResourceRequest, { id: string }>({
       query: ({ id }) => {
         return `draft/${id}`;
       },

@@ -1,5 +1,6 @@
 import { Link } from 'react-router';
 import {
+  AccessPackageListItem,
   DsButton,
   DsHeading,
   DsLink,
@@ -20,6 +21,7 @@ import { RequestResourceDetail } from './RequestResourceDetail';
 import { useRequestReview } from './useRequestReview';
 import classes from './RequestReviewModal.module.css';
 import { amUIPath } from '@/routes/paths';
+import { RequestPackageDetail } from './RequestPackageDetail';
 
 interface RequestReviewModalContentProps {
   request: Request | null;
@@ -33,8 +35,10 @@ export const RequestReviewModalContent = ({ request, onClose }: RequestReviewMod
     isLoadingRequests,
     isFetchingRequests,
     snapshotResources,
+    snapshotPackages,
     selectedResource,
-    setSelectedResource,
+    selectedPackage,
+    resetSelection,
     processedRequests,
     actionLoading,
     cannotApprove,
@@ -55,13 +59,57 @@ export const RequestReviewModalContent = ({ request, onClose }: RequestReviewMod
         toPartyName={request?.displayPartyName || ''}
         processedStatus={processedRequests[selectedResource.identifier]}
         actionLoading={actionLoading}
-        onBack={() => setSelectedResource(null)}
-        onApprove={() => handleApprove(selectedResource)}
-        onReject={() => handleReject(selectedResource)}
+        onBack={resetSelection}
+        onApprove={() => handleApprove({ resourceId: selectedResource.identifier })}
+        onReject={() => handleReject({ resourceId: selectedResource.identifier })}
         cannotApprove={cannotApprove(selectedResource.identifier)}
       />
     );
   }
+
+  if (selectedPackage) {
+    return (
+      <RequestPackageDetail
+        pkg={selectedPackage}
+        toPartyName={request?.displayPartyName || ''}
+        processedStatus={processedRequests[selectedPackage.id]}
+        actionLoading={actionLoading}
+        onBack={resetSelection}
+        onApprove={() => handleApprove({ packageId: selectedPackage.id })}
+        onReject={() => handleReject({ packageId: selectedPackage.id })}
+        cannotApprove={cannotApprove(selectedPackage.id)}
+      />
+    );
+  }
+
+  const itemControls = (id: string) => {
+    const status = processedRequests[id];
+    if (status === 'approved') {
+      return (
+        <span className={classes.processedStatus}>
+          <DsParagraph data-size='md'>{t('request_page.review_approved')}</DsParagraph>
+          <CheckmarkCircleIcon className={classes.approvedIcon} />
+        </span>
+      );
+    }
+    if (status === 'rejected') {
+      return (
+        <span className={classes.processedStatus}>
+          <DsParagraph data-size='md'>{t('request_page.review_rejected')}</DsParagraph>
+          <CircleSlashIcon className={classes.rejectedIcon} />
+        </span>
+      );
+    }
+    if (cannotApprove(id)) {
+      return (
+        <span className={classes.processedStatus}>
+          <DsParagraph data-size='md'>{t('request_page.review_warning')}</DsParagraph>
+          <ExclamationmarkTriangleFillIcon className={classes.warningIcon} />
+        </span>
+      );
+    }
+    return <ChevronRightIcon className={classes.chevronIcon} />;
+  };
 
   return (
     <div className={classes.reviewListView}>
@@ -83,61 +131,67 @@ export const RequestReviewModalContent = ({ request, onClose }: RequestReviewMod
           })}
         </Link>
       </DsLink>
-      <List>
-        {isLoadingRequests || isFetchingRequests ? (
-          <>
-            {Array.from({ length: request?.numberOfRequests || 2 }).map((_, index) => (
-              <ResourceListItem
-                key={index}
-                id={`placeholder-${index}`}
-                resourceName='xxxxxxxxxxxxxxxxxxxx'
-                ownerName='xxxxxxxxx xxxxxxxxxxx'
-                loading
-                as='div'
-                interactive={false}
-                shadow='none'
+      {isLoadingRequests || isFetchingRequests ? (
+        <List>
+          {Array.from({ length: request?.numberOfRequests || 2 }).map((_, index) => (
+            <ResourceListItem
+              key={index}
+              id={`placeholder-${index}`}
+              resourceName='xxxxxxxxxxxxxxxxxxxx'
+              ownerName='xxxxxxxxx xxxxxxxxxxx'
+              loading
+              as='div'
+              interactive={false}
+              shadow='none'
+            />
+          ))}
+        </List>
+      ) : (
+        <>
+          <DsHeading
+            level={4}
+            data-size='2xs'
+          >
+            Tilgangspakker:{' '}
+          </DsHeading>
+          <List>
+            {snapshotPackages.map((p) => (
+              <AccessPackageListItem
+                key={p.id}
+                id={p.id}
+                name={p.name}
+                description={t('access_packages.package_number_of_resources', {
+                  count: p.resources.length,
+                })}
+                interactive={true}
+                size='xs'
+                border='solid'
+                variant='default'
+                controls={itemControls(p.id)}
+                onClick={() => handleSelection({ package: p })}
               />
             ))}
-          </>
-        ) : (
-          <ResourceList
-            enableSearch={false}
-            showDetails={false}
-            interactive={(resource) => processedRequests[resource.identifier] === undefined}
-            resources={snapshotResources}
-            onSelect={(resource) => handleSelection(resource)}
-            renderControls={(resource) => {
-              const status = processedRequests[resource.identifier];
-              if (status === 'approved') {
-                return (
-                  <span className={classes.processedStatus}>
-                    <DsParagraph data-size='md'>{t('request_page.review_approved')}</DsParagraph>
-                    <CheckmarkCircleIcon className={classes.approvedIcon} />
-                  </span>
-                );
-              }
-              if (status === 'rejected') {
-                return (
-                  <span className={classes.processedStatus}>
-                    <DsParagraph data-size='md'>{t('request_page.review_rejected')}</DsParagraph>
-                    <CircleSlashIcon className={classes.rejectedIcon} />
-                  </span>
-                );
-              }
-              if (cannotApprove(resource.identifier)) {
-                return (
-                  <span className={classes.processedStatus}>
-                    <DsParagraph data-size='md'>{t('request_page.review_warning')}</DsParagraph>
-                    <ExclamationmarkTriangleFillIcon className={classes.warningIcon} />
-                  </span>
-                );
-              }
-              return <ChevronRightIcon className={classes.chevronIcon} />;
-            }}
-          />
-        )}
-      </List>
-
+          </List>
+          <DsHeading
+            level={4}
+            data-size='2xs'
+          >
+            Tjenester:{' '}
+          </DsHeading>
+          <List>
+            <ResourceList
+              size='xs'
+              border='solid'
+              enableSearch={false}
+              showDetails={false}
+              interactive={(resource) => processedRequests[resource.identifier] === undefined}
+              resources={snapshotResources}
+              onSelect={(resource) => handleSelection({ resource })}
+              renderControls={(resource) => itemControls(resource.identifier)}
+            />
+          </List>
+        </>
+      )}
       <DsParagraph data-size='md'>{t('request_page.review_close_info')}</DsParagraph>
       <DsButton
         variant='secondary'

@@ -22,6 +22,11 @@ public class Request : RequestDto
 public class RequestReferenceDto
 {
     /// <summary>
+    /// Unique identifier
+    /// </summary>
+    public Guid Id { get; set; }
+
+    /// <summary>
     /// Identifying the resource
     /// </summary>
     public string ReferenceId { get; set; }
