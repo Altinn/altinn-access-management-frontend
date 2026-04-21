@@ -1,14 +1,6 @@
-import React, { useRef, useState } from 'react';
-import { ArrowLeftIcon, HandshakeIcon, MinusCircleIcon } from '@navikt/aksel-icons';
-import {
-  DsButton,
-  DsDialog,
-  DsHeading,
-  formatDisplayName,
-  ListItem,
-  Snackbar,
-  SnackbarProvider,
-} from '@altinn/altinn-components';
+import React from 'react';
+import { MinusCircleIcon } from '@navikt/aksel-icons';
+import { DsButton, formatDisplayName } from '@altinn/altinn-components';
 import { ResourceList } from '../../common/ResourceList/ResourceList';
 import { useSingleRightRequests } from '../../common/DelegationModal/SingleRights/hooks/useSingleRightRequests';
 import { ServiceResource } from '@/rtk/features/singleRights/singleRightsApi';
@@ -18,18 +10,13 @@ import { DelegationAction } from '../../common/DelegationModal/EditModal';
 import { useTranslation } from 'react-i18next';
 import { usePartyRepresentation } from '../../common/PartyRepresentationContext/PartyRepresentationContext';
 import { PartyType } from '@/rtk/features/userInfoApi';
-import { useIsTabletOrSmaller } from '@/resources/utils/screensizeUtils';
 import { useGetEnrichedSentResourceRequestsQuery } from '@/rtk/features/requestApi';
 import { getRequestPartyQueryParams } from '@/resources/utils/singleRightRequestUtils';
+import { PendingRequestsDialog, PendingRequestsModal } from '../PendingRequestsDialog';
 
 export const PendingRequests = () => {
-  const modalRef = useRef<HTMLDialogElement>(null);
-
   const { t } = useTranslation();
-  const isSmallScreen = useIsTabletOrSmaller();
   const { actingParty, fromParty } = usePartyRepresentation();
-
-  const [isModalOpen, setIsModalOpen] = useState(false);
 
   const { singleRightRequests = [] } = useSingleRightRequests({
     canRequestRights: true,
@@ -38,41 +25,31 @@ export const PendingRequests = () => {
   });
 
   return (
-    <>
-      <SentRequestsModal
-        isModalOpen={isModalOpen}
-        modalRef={modalRef}
-        heading={t('delegation_modal.request.sent_requests_modal_header', {
-          partyName: formatDisplayName({
-            fullName: fromParty?.name || '',
-            type: fromParty?.partyTypeName === PartyType.Person ? 'person' : 'company',
-          }),
-        })}
-        onClose={() => setIsModalOpen(false)}
-      />
-      {singleRightRequests.length > 0 && (
-        <ListItem
-          title={t('delegation_modal.request.sent_requests_item')}
-          description={t('delegation_modal.request.active_access_request', {
-            count: singleRightRequests.length,
-          })}
-          icon={HandshakeIcon}
-          linkIcon
-          color='neutral'
-          variant='tinted'
-          border='solid'
-          interactive
-          as='button'
-          badge={
-            isSmallScreen ? undefined : <div>{t('delegation_modal.request.view_requests')}</div>
-          }
-          onClick={() => {
-            setIsModalOpen(true);
-            modalRef.current?.showModal();
-          }}
+    <PendingRequestsDialog<ServiceResource>
+      count={singleRightRequests.length}
+      heading={t('delegation_modal.request.sent_requests_modal_header', {
+        partyName: formatDisplayName({
+          fullName: fromParty?.name || '',
+          type: fromParty?.partyTypeName === PartyType.Person ? 'person' : 'company',
+        }),
+      })}
+      dialogClassName={classes.pendingRequestsModal}
+      headingClassName={classes.pendingRequestsHeading}
+      closeButtonClassName={classes.closeButton}
+      backButtonClassName={classes.backButton}
+      renderList={({ isSmallScreen, onSelect }) => (
+        <PendingRequestsList
+          onSelect={onSelect}
+          isSmallScreen={isSmallScreen}
         />
       )}
-    </>
+      renderSelected={(selectedResource) => (
+        <ResourceInfo
+          resource={selectedResource}
+          availableActions={[DelegationAction.REQUEST]}
+        />
+      )}
+    />
   );
 };
 
@@ -82,61 +59,46 @@ interface SentRequestsModalProps {
   heading: string;
   onClose: () => void;
 }
+
 export const SentRequestsModal = ({
   modalRef,
   isModalOpen,
-  onClose,
   heading,
+  onClose,
 }: SentRequestsModalProps) => {
-  const { t } = useTranslation();
-  const [selectedResource, setSelectedResource] = useState<ServiceResource | null>(null);
-
   return (
-    <DsDialog
-      ref={modalRef}
-      closedby='any'
-      onClose={() => {
-        setSelectedResource(null);
-        onClose();
-      }}
-      className={classes.pendingRequestsModal}
-    >
-      <SnackbarProvider>
-        {isModalOpen && (
-          <PendingRequestsList
-            heading={heading}
-            selectedResource={selectedResource}
-            setSelectedResource={setSelectedResource}
-          />
-        )}
-        <Snackbar />
-      </SnackbarProvider>
-      {!selectedResource && (
-        <DsButton
-          variant='primary'
-          className={classes.closeButton}
-          onClick={() => modalRef.current?.close()}
-        >
-          {t('common.close')}
-        </DsButton>
+    <PendingRequestsModal<ServiceResource>
+      modalRef={modalRef}
+      isModalOpen={isModalOpen}
+      heading={heading}
+      onClose={onClose}
+      dialogClassName={classes.pendingRequestsModal}
+      headingClassName={classes.pendingRequestsHeading}
+      closeButtonClassName={classes.closeButton}
+      backButtonClassName={classes.backButton}
+      renderList={({ isSmallScreen, onSelect }) => (
+        <PendingRequestsList
+          onSelect={onSelect}
+          isSmallScreen={isSmallScreen}
+        />
       )}
-    </DsDialog>
+      renderSelected={(selectedResource) => (
+        <ResourceInfo
+          resource={selectedResource}
+          availableActions={[DelegationAction.REQUEST]}
+        />
+      )}
+    />
   );
 };
 
 interface PendingRequestsListProps {
-  selectedResource: ServiceResource | null;
-  heading: string;
-  setSelectedResource: (resource: ServiceResource | null) => void;
+  isSmallScreen: boolean;
+  onSelect: (resource: ServiceResource) => void;
 }
 
-const PendingRequestsList = ({
-  selectedResource,
-  heading,
-  setSelectedResource,
-}: PendingRequestsListProps) => {
+const PendingRequestsList = ({ isSmallScreen, onSelect }: PendingRequestsListProps) => {
   const { t } = useTranslation();
-  const isSmallScreen = useIsTabletOrSmaller();
   const { actingParty, fromParty } = usePartyRepresentation();
 
   const { data: singleRightRequests = [], isLoading: isLoadingRequests } =
@@ -157,57 +119,29 @@ const PendingRequestsList = ({
   });
 
   return (
-    <>
-      {selectedResource ? (
-        <>
+    <ResourceList
+      isLoading={isLoadingRequests}
+      size={isSmallScreen ? 'sm' : 'md'}
+      enableSearch={false}
+      resources={singleRightRequests
+        .map((x) => x.resource)
+        .filter((r): r is ServiceResource => !!r)}
+      showDetails={false}
+      onSelect={onSelect}
+      renderControls={(resource) => {
+        return (
           <DsButton
             variant='tertiary'
-            className={classes.backButton}
-            onClick={() => setSelectedResource(null)}
+            aria-label={t('common.delete_request_for', { poa_object: resource.title })}
+            onClick={() => deleteRequest(resource)}
+            disabled={isLoadingRequest(resource.identifier)}
+            loading={isLoadingRequest(resource.identifier)}
           >
-            <ArrowLeftIcon />
-            {t('common.back')}
+            <MinusCircleIcon />
+            {isSmallScreen ? '' : t('common.delete')}
           </DsButton>
-          <ResourceInfo
-            resource={selectedResource}
-            availableActions={[DelegationAction.REQUEST]}
-          />
-        </>
-      ) : (
-        <>
-          <DsHeading
-            data-size='xs'
-            level={1}
-            className={classes.pendingRequestsHeading}
-          >
-            {heading}
-          </DsHeading>
-          <ResourceList
-            isLoading={isLoadingRequests}
-            size={isSmallScreen ? 'sm' : 'md'}
-            enableSearch={false}
-            resources={singleRightRequests
-              .map((x) => x.resource)
-              .filter((r): r is ServiceResource => !!r)}
-            showDetails={false}
-            onSelect={(resource) => setSelectedResource(resource)}
-            renderControls={(resource) => {
-              return (
-                <DsButton
-                  variant='tertiary'
-                  aria-label={t('common.delete_request_for', { poa_object: resource.title })}
-                  onClick={() => deleteRequest(resource)}
-                  disabled={isLoadingRequest(resource.identifier)}
-                  loading={isLoadingRequest(resource.identifier)}
-                >
-                  <MinusCircleIcon />
-                  {isSmallScreen ? '' : t('common.delete')}
-                </DsButton>
-              );
-            }}
-          />
-        </>
-      )}
-    </>
+        );
+      }}
+    />
   );
 };
