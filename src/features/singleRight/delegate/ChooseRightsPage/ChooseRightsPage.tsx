@@ -176,7 +176,9 @@ export const ChooseRightsPage = () => {
       title={service.title}
       subtitle={service.serviceOwner}
       color={
-        service.status === ServiceStatus.Delegable || service.type === 'AltinnApp' || service.type === 'MigratedApp'
+        service.status === ServiceStatus.Delegable ||
+        service.type === 'AltinnApp' ||
+        service.type === 'MigratedApp'
           ? 'success'
           : 'warning'
       }
