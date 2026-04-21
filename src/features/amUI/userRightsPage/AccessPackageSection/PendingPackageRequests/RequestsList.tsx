@@ -25,7 +25,7 @@ import { PackageItem } from '../../../common/AccessPackageList/PackageItem';
 import { SkeletonAccessPackageList } from '../../../common/AccessPackageList/SkeletonAccessPackageList';
 import { AccessPackageInfo } from '../../../common/DelegationModal/AccessPackages/AccessPackageInfo';
 import { DelegationAction } from '../../../common/DelegationModal/EditModal';
-import classes from './PendingPackageRequests.module.css';
+import classes from './Requests.module.css';
 
 interface PendingPackageRequestsListProps {
   heading: string;

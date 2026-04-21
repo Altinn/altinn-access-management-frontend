@@ -3,7 +3,7 @@ import { DsButton, DsDialog } from '@altinn/altinn-components';
 import { useTranslation } from 'react-i18next';
 import { type EnrichedPackageRequest } from '@/rtk/features/requestApi';
 import { PendingPackageRequestsListWithProviders } from './RequestsList';
-import classes from './PendingPackageRequests.module.css';
+import classes from './Requests.module.css';
 
 interface PendingPackageRequestsModalProps {
   modalRef: React.RefObject<HTMLDialogElement | null>;
