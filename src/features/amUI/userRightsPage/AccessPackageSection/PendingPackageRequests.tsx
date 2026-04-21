@@ -1,10 +1,16 @@
-import React from 'react';
-import { MinusCircleIcon } from '@navikt/aksel-icons';
+import React, { useRef, useState } from 'react';
+import { ArrowLeftIcon, HandshakeIcon, MinusCircleIcon } from '@navikt/aksel-icons';
 import {
   Button,
+  DsButton,
+  DsDialog,
+  DsHeading,
   formatDisplayName,
   List,
+  ListItem,
+  Snackbar,
   SnackbarDuration,
+  SnackbarProvider,
   useSnackbar,
 } from '@altinn/altinn-components';
 import { useTranslation } from 'react-i18next';
@@ -17,17 +23,19 @@ import {
   type EnrichedPackageRequestDto,
 } from '@/rtk/features/requestApi';
 import { getRequestPartyQueryParams } from '@/resources/utils/singleRightRequestUtils';
-
-import classes from './PendingRequests.module.css';
+import { useIsTabletOrSmaller } from '@/resources/utils/screensizeUtils';
 import { PackageItem } from '../../common/AccessPackageList/PackageItem';
 import { SkeletonAccessPackageList } from '../../common/AccessPackageList/SkeletonAccessPackageList';
 import { AccessPackageInfo } from '../../common/DelegationModal/AccessPackages/AccessPackageInfo';
 import { DelegationAction } from '../../common/DelegationModal/EditModal';
-import { PendingRequestsDialog } from '../PendingRequestsDialog';
+import classes from './PendingPackageRequests.module.css';
 
 export const PendingPackageRequests = () => {
+  const modalRef = useRef<HTMLDialogElement>(null);
   const { t } = useTranslation();
+  const isSmallScreen = useIsTabletOrSmaller();
   const { actingParty, fromParty } = usePartyRepresentation();
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   const { data: sentPackageRequests = [] } = useGetSentRequestsQuery(
     {
@@ -38,47 +46,109 @@ export const PendingPackageRequests = () => {
     { skip: !actingParty?.partyUuid || !fromParty?.partyUuid },
   );
 
-  const partyName = formatDisplayName({
-    fullName: fromParty?.name || '',
-    type: fromParty?.partyTypeName === PartyType.Person ? 'person' : 'company',
+  const heading = t('delegation_modal.request.sent_requests_modal_header', {
+    partyName: formatDisplayName({
+      fullName: fromParty?.name || '',
+      type: fromParty?.partyTypeName === PartyType.Person ? 'person' : 'company',
+    }),
   });
 
   return (
-    <PendingRequestsDialog<EnrichedPackageRequestDto>
-      count={sentPackageRequests.length}
-      heading={t('delegation_modal.request.sent_requests_modal_header', {
-        partyName,
-      })}
-      dialogClassName={classes.pendingRequestsModal}
-      headingClassName={classes.pendingRequestsHeading}
-      closeButtonClassName={classes.closeButton}
-      backButtonClassName={classes.backButton}
-      renderList={({ isSmallScreen, onSelect }) => (
-        <PendingPackageRequestsList
-          onSelect={onSelect}
-          isSmallScreen={isSmallScreen}
+    <>
+      <PendingPackageRequestsModal
+        modalRef={modalRef}
+        isModalOpen={isModalOpen}
+        heading={heading}
+        onClose={() => setIsModalOpen(false)}
+      />
+      {sentPackageRequests.length > 0 && (
+        <ListItem
+          title={t('delegation_modal.request.sent_requests_item')}
+          description={t('delegation_modal.request.active_access_request', {
+            count: sentPackageRequests.length,
+          })}
+          icon={HandshakeIcon}
+          linkIcon
+          color='neutral'
+          variant='tinted'
+          border='solid'
+          interactive
+          as='button'
+          badge={
+            isSmallScreen ? undefined : <div>{t('delegation_modal.request.view_requests')}</div>
+          }
+          onClick={() => {
+            setIsModalOpen(true);
+            modalRef.current?.showModal();
+          }}
         />
       )}
-      renderSelected={(selectedRequest) => (
-        <AccessPackageInfo
-          accessPackage={selectedRequest.package}
-          availableActions={[DelegationAction.REQUEST]}
-        />
+    </>
+  );
+};
+
+interface PendingPackageRequestsModalProps {
+  modalRef: React.RefObject<HTMLDialogElement | null>;
+  isModalOpen: boolean;
+  heading: string;
+  onClose: () => void;
+}
+
+const PendingPackageRequestsModal = ({
+  modalRef,
+  isModalOpen,
+  heading,
+  onClose,
+}: PendingPackageRequestsModalProps) => {
+  const { t } = useTranslation();
+  const [selectedRequest, setSelectedRequest] = useState<EnrichedPackageRequestDto | null>(null);
+
+  return (
+    <DsDialog
+      ref={modalRef}
+      closedby='any'
+      onClose={() => {
+        setSelectedRequest(null);
+        onClose();
+      }}
+      className={classes.dialog}
+    >
+      <SnackbarProvider>
+        {isModalOpen && (
+          <PendingPackageRequestsList
+            heading={heading}
+            selectedRequest={selectedRequest}
+            setSelectedRequest={setSelectedRequest}
+          />
+        )}
+        <Snackbar />
+      </SnackbarProvider>
+      {!selectedRequest && (
+        <DsButton
+          variant='primary'
+          className={classes.closeButton}
+          onClick={() => modalRef.current?.close()}
+        >
+          {t('common.close')}
+        </DsButton>
       )}
-    />
+    </DsDialog>
   );
 };
 
 interface PendingPackageRequestsListProps {
-  isSmallScreen: boolean;
-  onSelect: (request: EnrichedPackageRequestDto) => void;
+  heading: string;
+  selectedRequest: EnrichedPackageRequestDto | null;
+  setSelectedRequest: (request: EnrichedPackageRequestDto | null) => void;
 }
 
 const PendingPackageRequestsList = ({
-  isSmallScreen,
-  onSelect,
+  heading,
+  selectedRequest,
+  setSelectedRequest,
 }: PendingPackageRequestsListProps) => {
   const { t } = useTranslation();
+  const isSmallScreen = useIsTabletOrSmaller();
   const { actingParty, fromParty } = usePartyRepresentation();
   const { openSnackbar } = useSnackbar();
 
@@ -117,36 +187,64 @@ const PendingPackageRequestsList = ({
 
   return (
     <>
-      {isLoading ? (
-        <SkeletonAccessPackageList />
+      {selectedRequest ? (
+        <>
+          <DsButton
+            variant='tertiary'
+            className={classes.backButton}
+            onClick={() => setSelectedRequest(null)}
+          >
+            <ArrowLeftIcon />
+            {t('common.back')}
+          </DsButton>
+          <AccessPackageInfo
+            accessPackage={selectedRequest.package}
+            availableActions={[DelegationAction.REQUEST]}
+          />
+        </>
       ) : (
-        <List>
-          {enrichedRequests.map((req) => (
-            <PackageItem
-              key={req.id}
-              pkg={req.package}
-              partyType={fromParty?.partyTypeName ?? PartyType.Organization}
-              as='button'
-              onSelect={() => onSelect(req)}
-              controls={
-                <Button
-                  variant='tertiary'
-                  data-size='sm'
-                  aria-label={t('common.delete_request_for', { poa_object: req.package?.name })}
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    handleDelete(req);
-                  }}
-                  disabled={isWithdrawing}
-                  loading={isWithdrawing}
-                >
-                  <MinusCircleIcon />
-                  {isSmallScreen ? '' : t('common.delete')}
-                </Button>
-              }
-            />
-          ))}
-        </List>
+        <>
+          <DsHeading
+            data-size='xs'
+            level={1}
+            className={classes.heading}
+          >
+            {heading}
+          </DsHeading>
+          {isLoading ? (
+            <SkeletonAccessPackageList />
+          ) : (
+            <List>
+              {enrichedRequests.map((req) => (
+                <PackageItem
+                  key={req.id}
+                  pkg={req.package}
+                  partyType={fromParty?.partyTypeName ?? PartyType.Organization}
+                  as='button'
+                  onSelect={() => setSelectedRequest(req)}
+                  controls={
+                    <Button
+                      variant='tertiary'
+                      data-size='sm'
+                      aria-label={t('common.delete_request_for', {
+                        poa_object: req.package?.name,
+                      })}
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        handleDelete(req);
+                      }}
+                      disabled={isWithdrawing}
+                      loading={isWithdrawing}
+                    >
+                      <MinusCircleIcon />
+                      {isSmallScreen ? '' : t('common.delete')}
+                    </Button>
+                  }
+                />
+              ))}
+            </List>
+          )}
+        </>
       )}
     </>
   );
