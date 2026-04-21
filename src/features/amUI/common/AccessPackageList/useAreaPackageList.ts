@@ -34,6 +34,7 @@ interface useAreaPackagesProps {
   showAllPackages?: boolean;
   showOnlyGuardianships?: boolean;
   searchString?: string;
+  filterByType?: boolean;
 }
 
 export enum DeletableStatus {
@@ -47,6 +48,7 @@ export const useAreaPackageList = ({
   showAllAreas,
   showAllPackages,
   showOnlyGuardianships,
+  filterByType = true,
 }: useAreaPackagesProps) => {
   const { i18n } = useTranslation();
   const { fromParty, toParty, actingParty } = usePartyRepresentation();
@@ -65,7 +67,7 @@ export const useAreaPackageList = ({
     {
       searchString: searchString ?? '',
       language: i18n.language,
-      typeName,
+      typeName: filterByType ? typeName : undefined,
     },
     {
       skip: !actingParty,

@@ -10,6 +10,7 @@ export interface AccessArea {
   description: string;
   iconUrl: string;
   accessPackages: AccessPackage[];
+  typeName: string;
 }
 
 // either indentifier or refId contains resource.identifier, the other is undefined

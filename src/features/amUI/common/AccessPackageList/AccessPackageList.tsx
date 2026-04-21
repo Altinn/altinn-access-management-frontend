@@ -16,6 +16,7 @@ import { useAreaExpandedContextOrLocal } from './AccessPackageExpandedContext';
 import { AreaItemContent } from './AreaItemContent';
 import { TechnicalErrorParagraphs } from '../TechnicalErrorParagraphs';
 import { createErrorDetails } from '../TechnicalErrorParagraphs/TechnicalErrorParagraphs';
+import { PartyType } from '@/rtk/features/userInfoApi';
 
 interface AccessPackageListProps {
   showAllPackages?: boolean;
@@ -35,6 +36,7 @@ interface AccessPackageListProps {
   onRevokeError?: (accessPackage: AccessPackage, error: ActionError) => void;
   packageAs?: React.ElementType;
   noPackagesText?: string;
+  filterByType?: boolean;
 }
 
 export const AccessPackageList = ({
@@ -55,6 +57,7 @@ export const AccessPackageList = ({
   showPackagesCount,
   packageAs,
   noPackagesText,
+  filterByType = true,
 }: AccessPackageListProps) => {
   const { t } = useTranslation();
 
@@ -67,12 +70,12 @@ export const AccessPackageList = ({
     allPackageAreas,
     searchError,
     activeDelegationsError,
-    partyType,
   } = useAreaPackageList({
     showAllAreas,
     showAllPackages,
     showOnlyGuardianships,
     searchString,
+    filterByType,
   });
 
   const {
@@ -169,7 +172,7 @@ export const AccessPackageList = ({
                 toggleExpandedArea={toggleExpandedArea}
                 showPackagesCount={showPackagesCount}
                 showPermissions={showPermissions}
-                partyType={partyType}
+                partyType={area.typeName === 'Person' ? PartyType.Person : PartyType.Organization}
               >
                 <AreaItemContent
                   area={area}
@@ -186,7 +189,7 @@ export const AccessPackageList = ({
                   showAvailableToggle={showAvailableToggle}
                   showPermissions={showPermissions}
                   packageAs={packageAs}
-                  partyType={partyType}
+                  partyType={area.typeName === 'Person' ? PartyType.Person : PartyType.Organization}
                 />
               </AreaItem>
             );
