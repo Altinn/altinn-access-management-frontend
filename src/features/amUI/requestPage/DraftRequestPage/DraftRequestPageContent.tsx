@@ -9,7 +9,7 @@ import {
 } from '@altinn/altinn-components';
 import cn from 'classnames';
 import {
-  EnrichedRequestDto,
+  EnrichedResourceRequest,
   useConfirmRequestMutation,
   useWithdrawRequestMutation,
 } from '@/rtk/features/requestApi';
@@ -21,7 +21,7 @@ import { useRightsSection } from '../../common/DelegationModal/SingleRights/hook
 import { DelegationAction } from '../../common/DelegationModal/EditModal';
 
 interface DraftRequestPageContentProps {
-  request: EnrichedRequestDto;
+  request: EnrichedResourceRequest;
 }
 
 export const DraftRequestPageContent = ({ request }: DraftRequestPageContentProps) => {

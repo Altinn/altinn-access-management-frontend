@@ -20,8 +20,9 @@ import {
   useGetEnrichedSentPackageRequestsQuery,
   useGetSentRequestsQuery,
   useWithdrawRequestMutation,
-  type EnrichedPackageRequestDto,
+  type EnrichedPackageRequest,
 } from '@/rtk/features/requestApi';
+import { useAutoFocusRef } from '@/resources/hooks/useAutoFocusRef';
 import { getRequestPartyQueryParams } from '@/resources/utils/singleRightRequestUtils';
 import { useIsTabletOrSmaller } from '@/resources/utils/screensizeUtils';
 import { PackageItem } from '../../common/AccessPackageList/PackageItem';
@@ -101,7 +102,7 @@ const PendingPackageRequestsModal = ({
   onClose,
 }: PendingPackageRequestsModalProps) => {
   const { t } = useTranslation();
-  const [selectedRequest, setSelectedRequest] = useState<EnrichedPackageRequestDto | null>(null);
+  const [selectedRequest, setSelectedRequest] = useState<EnrichedPackageRequest | null>(null);
 
   return (
     <DsDialog
@@ -138,8 +139,8 @@ const PendingPackageRequestsModal = ({
 
 interface PendingPackageRequestsListProps {
   heading: string;
-  selectedRequest: EnrichedPackageRequestDto | null;
-  setSelectedRequest: (request: EnrichedPackageRequestDto | null) => void;
+  selectedRequest: EnrichedPackageRequest | null;
+  setSelectedRequest: (request: EnrichedPackageRequest | null) => void;
 }
 
 const PendingPackageRequestsList = ({
@@ -151,6 +152,8 @@ const PendingPackageRequestsList = ({
   const isSmallScreen = useIsTabletOrSmaller();
   const { actingParty, fromParty } = usePartyRepresentation();
   const { openSnackbar } = useSnackbar();
+  const headingRef = useAutoFocusRef<HTMLHeadingElement>();
+  const backButtonRef = useAutoFocusRef<HTMLButtonElement>();
 
   const [loadingByRequestId, setLoadingByRequestId] = useState<Record<string, boolean>>({});
 
@@ -174,7 +177,7 @@ const PendingPackageRequestsList = ({
 
   const [withdrawRequest] = useWithdrawRequestMutation();
 
-  const handleDelete = async (request: EnrichedPackageRequestDto) => {
+  const handleDelete = async (request: EnrichedPackageRequest) => {
     setLoadingByRequestId((prev) => ({ ...prev, [request.id]: true }));
     try {
       await withdrawRequest({
@@ -204,6 +207,7 @@ const PendingPackageRequestsList = ({
       {selectedRequest ? (
         <>
           <DsButton
+            ref={backButtonRef}
             variant='tertiary'
             className={classes.backButton}
             onClick={() => setSelectedRequest(null)}
@@ -219,6 +223,8 @@ const PendingPackageRequestsList = ({
       ) : (
         <>
           <DsHeading
+            ref={headingRef}
+            tabIndex={-1}
             data-size='xs'
             level={1}
             className={classes.heading}
