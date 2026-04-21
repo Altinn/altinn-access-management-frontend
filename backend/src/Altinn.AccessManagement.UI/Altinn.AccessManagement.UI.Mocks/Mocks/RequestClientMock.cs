@@ -52,7 +52,9 @@ namespace Altinn.AccessManagement.UI.Mocks.Mocks
             {
                 dataPath = party == Guid.Parse("22222222-2222-2222-2222-222222222222")
                     ? Path.Combine(dataFolder, "Request", "sentRequestsInvalidResource.json")
-                    : Path.Combine(dataFolder, "Request", "sentRequests.json");
+                    : party == Guid.Parse("33333333-3333-3333-3333-333333333333")
+                        ? Path.Combine(dataFolder, "Request", "sentRequestsNullResource.json")
+                        : Path.Combine(dataFolder, "Request", "sentRequests.json");
             }
 
             return await Task.FromResult(Util.GetMockData<PaginatedResult<Request>>(dataPath));
@@ -98,6 +100,18 @@ namespace Altinn.AccessManagement.UI.Mocks.Mocks
             ThrowHttpStatusExceptionIfTriggerParty(party.ToString());
 
             string dataPath = Path.Combine(dataFolder, "Request", "singleRequest.json");
+            return await Task.FromResult(Util.GetMockData<Request>(dataPath));
+        }
+
+        /// <inheritdoc />
+        public async Task<Request> CreatePackageRequest(Guid party, Guid to, string package, CancellationToken cancellationToken)
+        {
+            ThrowExceptionIfTriggerParty(party.ToString());
+            ThrowHttpStatusExceptionIfTriggerParty(party.ToString());
+
+            string dataPath = party == Guid.Parse("33333333-3333-3333-3333-333333333333")
+                ? Path.Combine(dataFolder, "Request", "singlePackageRequestNullPackage.json")
+                : Path.Combine(dataFolder, "Request", "singlePackageRequest.json");
             return await Task.FromResult(Util.GetMockData<Request>(dataPath));
         }
 

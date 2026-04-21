@@ -138,6 +138,16 @@ export const requestApi = createApi({
       }),
       invalidatesTags: ['sentRequests', 'enrichedSentResourceRequests'],
     }),
+    createPackageRequest: builder.mutation<
+      RequestDto,
+      { party: string; to: string; package: string }
+    >({
+      query: ({ party, to, package: packageId }) => ({
+        url: `package?party=${party}&to=${to}&package=${encodeURIComponent(packageId)}`,
+        method: 'POST',
+      }),
+      invalidatesTags: ['sentRequests', 'enrichedSentPackageRequests'],
+    }),
     withdrawRequest: builder.mutation<RequestDto, { party: string; id: string }>({
       query: ({ party, id }) => ({
         url: `sent/withdraw?party=${party}&id=${id}`,
@@ -216,6 +226,7 @@ export const {
   useGetReceivedRequestsQuery,
   useGetRequestQuery,
   useCreateResourceRequestMutation,
+  useCreatePackageRequestMutation,
   useWithdrawRequestMutation,
   useConfirmRequestMutation,
   useRejectRequestMutation,

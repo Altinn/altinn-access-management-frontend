@@ -1000,10 +1000,11 @@
     "resource_search_placeholder": "Søk etter tenester",
     "no_resources_filtered": "Ingen treff på søket \"{{searchTerm}}\".",
     "no_resources": "Denne brukaren har ingen tenester.",
-    "filter_by_serviceowner": "Filtrer på tjenesteeier",
+    "filter_by_serviceowner": "Filtrer på tenesteeigar",
+    "filtered_serviceowners": "{{count}} tenesteeigare",
     "resource_search_clear": "Tøm søk",
     "remove_filter": "Fjern filter",
-    "service_owner_filter": "Søk etter tjenesteeier",
+    "service_owner_filter": "Søk etter tenesteeigar",
     "service_owner_filter_clear": "Tøm søkefelt"
   },
   "landing_page": {
