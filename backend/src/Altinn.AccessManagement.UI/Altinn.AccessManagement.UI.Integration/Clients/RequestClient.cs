@@ -68,9 +68,7 @@ namespace Altinn.AccessManagement.UI.Integration.Clients
 
                 string endpointUrl = QueryHelpers.AddQueryString("enduser/request/sent", queryParams.Concat(statusParams));
                 string token = JwtTokenUtil.GetTokenFromContext(_httpContextAccessor.HttpContext, _platformSettings.JwtCookieName);
-
                 var httpResponse = await _client.GetAsync(token, endpointUrl);
-                
                 return await ClientUtils.DeserializeIfSuccessfullStatusCode<PaginatedResult<Request>>(httpResponse);
             }
             catch (Exception ex)

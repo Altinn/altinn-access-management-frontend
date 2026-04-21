@@ -22,7 +22,7 @@ public class Request : RequestDto
 public class RequestReferenceDto
 {
     /// <summary>
-    /// Guid of the resource
+    /// Identifier of the referenced target
     /// </summary>
     public Guid Id { get; set; }
 
