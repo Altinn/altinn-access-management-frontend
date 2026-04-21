@@ -1065,7 +1065,7 @@
     "approve_failed": "Godkjenning feila",
     "reject_failed": "Avvising feila",
     "error_partial_loading_requests": "Kunne ikkje laste alle førespurnader",
-    "package_list_title": "Tilgangspakker",
+    "package_list_title": "Tilgangspakkar",
     "resource_list_title": "Tenester",
     "cannot_approve_package": "Du manglar denne tilgangspakken sjølv og kan derfor ikkje godkjenne førespurnaden."
   },
