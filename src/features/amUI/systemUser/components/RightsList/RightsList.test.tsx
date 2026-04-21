@@ -60,6 +60,7 @@ const accessPackage = {
     description: '',
     iconUrl: '',
     accessPackages: [],
+    typeName: 'Organisasjon',
   },
 };
 const accessPackage2 = {

@@ -100,7 +100,7 @@ export const ReceiptActionBarContent = ({
           {t('single_rights.these_rights_were_delegated')}
         </DsHeading>
         <div className={classes.chipContainer}>
-          {serviceType === 'AltinnApp'
+          {serviceType === 'AltinnApp' || serviceType === 'MigratedApp'
             ? t('common.action_access')
             : successfulDelegations
                 ?.map((right: Right) => {

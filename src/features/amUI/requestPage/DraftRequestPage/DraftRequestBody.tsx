@@ -1,4 +1,4 @@
-import { EnrichedRequestDto } from '@/rtk/features/requestApi';
+import { EnrichedResourceRequest } from '@/rtk/features/requestApi';
 import { useTranslation } from 'react-i18next';
 import { DsParagraph } from '@altinn/altinn-components';
 import { usePartyRepresentation } from '../../common/PartyRepresentationContext/PartyRepresentationContext';
@@ -9,7 +9,7 @@ import { DelegationAction } from '../../common/DelegationModal/EditModal';
 import classes from './DraftRequestPage.module.css';
 
 interface DraftRequestBodyProps {
-  request: EnrichedRequestDto;
+  request: EnrichedResourceRequest;
   fromName: string;
 }
 

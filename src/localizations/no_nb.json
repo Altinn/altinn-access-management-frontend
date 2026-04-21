@@ -331,7 +331,8 @@
     "package_deletion_success": "Fullmakten til {{accessPackage}} er fjernet fra {{name}}.",
     "package_deletion_error": "Det var ikke mulig å fjerne fullmakten til {{accessPackage}} fra {{name}}.",
     "delegated_packages_count_badge": "{{delegated}} av {{total}}",
-    "package_number_of_resources": "{{count}} tjenester",
+    "package_number_of_resources_one": "{{count}} tjeneste",
+    "package_number_of_resources_other": "{{count}} tjenester",
     "user_has_no_packages": "Denne brukeren har ingen tilgangspakker.",
     "no_packages": "Ingen tilgangspakker er tilgjengelige.",
     "no_matching_search": "Ingen treff på søket",
@@ -473,7 +474,8 @@
     "success_message": "Fullmakt gitt til {{name}}",
     "error_message": "Kunne ikke gi fullmakt til {{name}}",
     "edit_success": "Fullmakt oppdatert",
-    "package_services": "Gir tilgang til {{count}} tjenester",
+    "package_services_one": "Gir tilgang til {{count}} tjeneste",
+    "package_services_other": "Gir tilgang til {{count}} tjenester",
     "inherited_role_org_message": "{{user_name}} har tilgang til denne gjennom sin rolle i {{org_name}}. Den kan derfor ikke slettes.",
     "actions": {
       "access_to_all": "Tilgang til hele tjenesten",
@@ -1000,6 +1002,7 @@
     "no_resources_filtered": "Ingen treff på søket \"{{searchTerm}}\".",
     "no_resources": "Denne brukeren har ingen tjenester.",
     "filter_by_serviceowner": "Filtrer på tjenesteeier",
+    "filtered_serviceowners": "{{count}} tjenesteeiere",
     "resource_search_clear": "Tøm søk",
     "remove_filter": "Fjern filter",
     "service_owner_filter": "Søk etter tjenesteeier",
@@ -1061,7 +1064,10 @@
     "request_rejected": "Forespørsel avvist",
     "approve_failed": "Godkjenning feilet",
     "reject_failed": "Avvising feilet",
-    "error_partial_loading_requests": "Kunne ikke laste alle forespørsler"
+    "error_partial_loading_requests": "Kunne ikke laste alle forespørsler",
+    "package_list_title": "Tilgangspakker:",
+    "resource_list_title": "Tjenester:",
+    "cannot_approve_package": "Du mangler denne tilgangspakken selv og kan derfor ikke godkjenne forespørselen."
   },
   "draft_request_page": {
     "page_title": "Forespørsel om fullmakt - Altinn",

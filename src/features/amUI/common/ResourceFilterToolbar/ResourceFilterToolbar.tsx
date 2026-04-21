@@ -44,12 +44,12 @@ export const ResourceFilterToolbar = ({
         filterState: filterStateWithOwner,
         onFilterStateChange: onFilterStateChange,
         getFilterLabel: (_name, value) => {
-          const serviceOwners = serviceOwnerOptions
-            .filter((owner) => value?.includes(owner.value))
-            .map((owner) => owner.label);
-          return serviceOwners.length
-            ? serviceOwners.join(', ')
-            : t('resource_list.filter_by_serviceowner');
+          if (value && value.length > 1) {
+            return t('resource_list.filtered_serviceowners', { count: value?.length });
+          } else if (value && value.length === 1) {
+            return serviceOwnerOptions.find((owner) => owner.value === value[0])?.label;
+          }
+          return t('resource_list.filter_by_serviceowner');
         },
         filters: [
           {

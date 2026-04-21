@@ -3,19 +3,29 @@ namespace Altinn.AccessManagement.UI.Core.Models.Request;
 /// <summary>
 /// Response dto for a resource request
 /// </summary>
-public class RequestResourceDto : RequestDto
+public class Request : RequestDto
 {
     /// <summary>
     /// Resource that is requested
     /// </summary>
-    public ResourceReferenceDto Resource { get; set; }
+    public RequestReferenceDto Resource { get; set; }
+
+    /// <summary>
+    /// Requested package
+    /// </summary>
+    public RequestReferenceDto Package { get; set; }
 }
 
 /// <summary>
 /// Resource reference
 /// </summary>
-public class ResourceReferenceDto
+public class RequestReferenceDto
 {
+    /// <summary>
+    /// Unique identifier
+    /// </summary>
+    public Guid Id { get; set; }
+
     /// <summary>
     /// Identifying the resource
     /// </summary>
