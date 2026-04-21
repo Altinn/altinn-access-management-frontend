@@ -50,25 +50,25 @@
         /// </summary>
         public TypeDto Type { get; set; }
     }
-}
-
-/// <summary>
-/// Type DTO for AccessPackage
-/// </summary>
-public class TypeDto
-{
-    /// <summary>
-    /// Id
-    /// </summary>
-    public Guid Id { get; set; }
 
     /// <summary>
-    /// ProviderId
+    /// Type DTO for AccessPackage
     /// </summary>
-    public Guid ProviderId { get; set; }
+    public class TypeDto
+    {
+        /// <summary>
+        /// Id
+        /// </summary>
+        public Guid Id { get; set; }
 
-    /// <summary>
-    /// Name
-    /// </summary>
-    public string Name { get; set; }
+        /// <summary>
+        /// ProviderId
+        /// </summary>
+        public Guid ProviderId { get; set; }
+
+        /// <summary>
+        /// Name
+        /// </summary>
+        public string Name { get; set; }
+    }
 }

@@ -31,7 +31,7 @@
         public string IconUrl { get; set; }
 
         /// <summary>
-        /// The type of are this is, e.g. "Person"
+        /// The type of area this is, e.g. "Person"
         /// </summary>
         public string TypeName { get; set; }
 
