@@ -140,7 +140,7 @@ export const ResourceList = <
 
   return (
     <div className={classes.container}>
-      {enableSearch && resources.length > 0 && (
+      {enableSearch && (
         <div className={classes.searchAndAdd}>
           <ResourceFilterToolbar
             search={search}
