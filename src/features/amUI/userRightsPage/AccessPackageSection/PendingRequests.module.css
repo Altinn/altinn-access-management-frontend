@@ -9,11 +9,11 @@
 }
 
 .backButton {
-  margin-bottom: var(--ds-spacing-4);
+  margin-bottom: 0;
 }
 
 .pendingRequestsHeading {
-  min-height: var(--ds-spacing-11);
+  margin-bottom: var(--ds-spacing-4);
 }
 
 .packageInfoHeader {

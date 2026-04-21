@@ -1,15 +1,13 @@
 import React, { useRef, useState } from 'react';
 import { ArrowLeftIcon, HandshakeIcon, MinusCircleIcon, PackageIcon } from '@navikt/aksel-icons';
-import { Icon } from '@altinn/altinn-components';
 import {
+  Button,
   DsButton,
   DsDialog,
   DsHeading,
-  DsParagraph,
   formatDisplayName,
   List,
   ListItem,
-  ResourceListItem,
   Snackbar,
   SnackbarDuration,
   SnackbarProvider,
@@ -26,11 +24,12 @@ import {
   type EnrichedPackageRequestDto,
 } from '@/rtk/features/requestApi';
 import { getRequestPartyQueryParams } from '@/resources/utils/singleRightRequestUtils';
-import { ResourceList } from '../../common/ResourceList/ResourceList';
 
 import classes from './PendingRequests.module.css';
 import { PackageItem } from '../../common/AccessPackageList/PackageItem';
 import { SkeletonAccessPackageList } from '../../common/AccessPackageList/SkeletonAccessPackageList';
+import { AccessPackageInfo } from '../../common/DelegationModal/AccessPackages/AccessPackageInfo';
+import { DelegationAction } from '../../common/DelegationModal/EditModal';
 
 export const PendingPackageRequests = () => {
   const modalRef = useRef<HTMLDialogElement>(null);
@@ -48,16 +47,18 @@ export const PendingPackageRequests = () => {
     { skip: !actingParty?.partyUuid || !fromParty?.partyUuid },
   );
 
+  const partyName = formatDisplayName({
+    fullName: fromParty?.name || '',
+    type: fromParty?.partyTypeName === PartyType.Person ? 'person' : 'company',
+  });
+
   return (
     <>
       <SentPackageRequestsModal
         isModalOpen={isModalOpen}
         modalRef={modalRef}
         heading={t('delegation_modal.request.sent_requests_modal_header', {
-          partyName: formatDisplayName({
-            fullName: fromParty?.name || '',
-            type: fromParty?.partyTypeName === PartyType.Person ? 'person' : 'company',
-          }),
+          partyName,
         })}
         onClose={() => setIsModalOpen(false)}
       />
@@ -113,24 +114,24 @@ export const SentPackageRequestsModal = ({
       }}
       className={classes.pendingRequestsModal}
     >
-      <SnackbarProvider>
-        {isModalOpen && (
+      {isModalOpen && (
+        <SnackbarProvider>
           <PendingPackageRequestsList
             heading={heading}
             selectedRequest={selectedRequest}
             setSelectedRequest={setSelectedRequest}
           />
-        )}
-        <Snackbar />
-      </SnackbarProvider>
+          <Snackbar />
+        </SnackbarProvider>
+      )}
       {!selectedRequest && (
-        <DsButton
+        <Button
           variant='primary'
           className={classes.closeButton}
           onClick={() => modalRef.current?.close()}
         >
           {t('common.close')}
-        </DsButton>
+        </Button>
       )}
     </DsDialog>
   );
@@ -189,61 +190,18 @@ const PendingPackageRequestsList = ({
   if (selectedRequest) {
     return (
       <>
-        <DsButton
+        <Button
           variant='tertiary'
-          className={classes.backButton}
           onClick={() => setSelectedRequest(null)}
+          className={classes.backButton}
         >
           <ArrowLeftIcon />
           {t('common.back')}
-        </DsButton>
-        <div className={classes.packageInfoHeader}>
-          <Icon
-            size='md'
-            svgElement={PackageIcon}
-          />
-          <DsHeading
-            data-size='xs'
-            level={1}
-            className={classes.pendingRequestsHeading}
-          >
-            {selectedRequest.package?.name}
-          </DsHeading>
-        </div>
-        {selectedRequest.package?.description && (
-          <DsParagraph
-            data-size={isSmallScreen ? 'sm' : 'md'}
-            variant='long'
-          >
-            {selectedRequest.package.description}
-          </DsParagraph>
-        )}
-        <DsHeading
-          data-size='2xs'
-          level={2}
-        >
-          {t('delegation_modal.package_services', {
-            count: selectedRequest.package?.resources?.length ?? 0,
-            name: selectedRequest.package?.name,
-          })}
-        </DsHeading>
-        <ResourceList
-          resources={selectedRequest.package?.resources ?? []}
-          enableSearch={false}
-          showDetails={false}
-          interactive={false}
-          size={isSmallScreen ? 'sm' : 'md'}
-          as='div'
+        </Button>
+        <AccessPackageInfo
+          accessPackage={selectedRequest.package}
+          availableActions={[DelegationAction.REQUEST]}
         />
-        <DsButton
-          data-color='danger'
-          loading={isWithdrawing}
-          disabled={isWithdrawing}
-          onClick={() => handleDelete(selectedRequest)}
-          className={classes.closeButton}
-        >
-          {t('delegation_modal.request.delete_request')}
-        </DsButton>
       </>
     );
   }
@@ -269,8 +227,9 @@ const PendingPackageRequestsList = ({
               as='button'
               onSelect={() => setSelectedRequest(req)}
               controls={
-                <DsButton
+                <Button
                   variant='tertiary'
+                  data-size='sm'
                   aria-label={t('common.delete_request_for', { poa_object: req.package?.name })}
                   onClick={(e) => {
                     e.stopPropagation();
@@ -281,7 +240,7 @@ const PendingPackageRequestsList = ({
                 >
                   <MinusCircleIcon />
                   {isSmallScreen ? '' : t('common.delete')}
-                </DsButton>
+                </Button>
               }
             />
           ))}
