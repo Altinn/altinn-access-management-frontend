@@ -1063,7 +1063,10 @@
     "request_rejected": "Forespørsel avvist",
     "approve_failed": "Godkjenning feilet",
     "reject_failed": "Avvising feilet",
-    "error_partial_loading_requests": "Kunne ikke laste alle forespørsler"
+    "error_partial_loading_requests": "Kunne ikke laste alle forespørsler",
+    "package_list_title": "Tilgangspakker:",
+    "resource_list_title": "Tjenester:",
+    "cannot_approve_package": "Du mangler denne tilgangspakken selv og kan derfor ikke godkjenne forespørselen."
   },
   "draft_request_page": {
     "page_title": "Forespørsel om fullmakt - Altinn",

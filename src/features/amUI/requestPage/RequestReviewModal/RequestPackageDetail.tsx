@@ -1,4 +1,4 @@
-import { DsButton } from '@altinn/altinn-components';
+import { DsAlert, DsButton } from '@altinn/altinn-components';
 import { useTranslation } from 'react-i18next';
 import { ArrowLeftIcon } from '@navikt/aksel-icons';
 import type { ProcessedStatus } from '../types';
@@ -48,8 +48,15 @@ export const RequestPackageDetail = ({
       <StatusSection
         userHasAccess={processedStatus === 'approved'}
         toPartyName={toPartyName}
-        showDelegationCheckWarning={cannotApprove}
       />
+      {cannotApprove && (
+        <DsAlert
+          data-color='warning'
+          data-size={'xs'}
+        >
+          {t('request_page.cannot_approve_package')}
+        </DsAlert>
+      )}
       <PackageMeta accessPackage={pkg} />
       {!processedStatus && (
         <div className={classes.actionButtons}>

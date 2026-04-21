@@ -112,9 +112,10 @@ export const useRequestReview = (request: Request | null, onClose: () => void) =
   }, [snapshotRequests]); // eslint-disable-line react-hooks/exhaustive-deps
 
   const cannotApprove = useCallback(
-    (resourceId?: string, packageId?: string) => {
+    ({ resourceId, packageId }: { resourceId?: string; packageId?: string }) => {
       if (packageId) {
         const packageCheck = canDelegatePackage(packageId);
+        console.log('Package delegation check for', packageId, ':', packageCheck);
         if (packageCheck === undefined) return false; // allow if no data
         return !packageCheck.result;
       } else if (resourceId) {

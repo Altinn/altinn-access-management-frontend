@@ -64,7 +64,7 @@ export const RequestReviewModalContent = ({ request, onClose }: RequestReviewMod
         onBack={resetSelection}
         onApprove={() => handleApprove({ resourceId: selectedResource.identifier })}
         onReject={() => handleReject({ resourceId: selectedResource.identifier })}
-        cannotApprove={cannotApprove(selectedResource.identifier)}
+        cannotApprove={cannotApprove({ resourceId: selectedResource.identifier })}
       />
     );
   }
@@ -79,12 +79,13 @@ export const RequestReviewModalContent = ({ request, onClose }: RequestReviewMod
         onBack={resetSelection}
         onApprove={() => handleApprove({ packageId: selectedPackage.id })}
         onReject={() => handleReject({ packageId: selectedPackage.id })}
-        cannotApprove={cannotApprove(selectedPackage.id)}
+        cannotApprove={cannotApprove({ packageId: selectedPackage.id })}
       />
     );
   }
 
-  const itemControls = (id: string) => {
+  const itemControls = ({ resourceId, packageId }: { resourceId?: string; packageId?: string }) => {
+    const id = resourceId ?? packageId ?? '';
     const status = processedRequests[id];
     if (status === 'approved') {
       return (
@@ -102,7 +103,7 @@ export const RequestReviewModalContent = ({ request, onClose }: RequestReviewMod
         </span>
       );
     }
-    if (cannotApprove(id)) {
+    if (cannotApprove({ resourceId, packageId })) {
       return (
         <span className={classes.processedStatus}>
           <DsParagraph data-size='md'>{t('request_page.review_warning')}</DsParagraph>
@@ -152,47 +153,57 @@ export const RequestReviewModalContent = ({ request, onClose }: RequestReviewMod
         </List>
       ) : (
         <>
-          <DsHeading
-            level={4}
-            data-size='2xs'
-          >
-            Tilgangspakker:{' '}
-          </DsHeading>
-          <List>
-            {snapshotPackages.map((p) => (
-              <AccessPackageListItem
-                key={p.id}
-                id={p.id}
-                name={p.name}
-                description={t('access_packages.package_number_of_resources', {
-                  count: p.resources.length,
-                })}
-                interactive={true}
-                size='xs'
-                border='dotted'
-                controls={itemControls(p.id)}
-                onClick={() => handleSelection({ package: p })}
-              />
-            ))}
-          </List>
-          <DsHeading
-            level={4}
-            data-size='2xs'
-          >
-            Tjenester:{' '}
-          </DsHeading>
-          <List>
-            <ResourceList
-              size='xs'
-              border='dotted'
-              enableSearch={false}
-              showDetails={false}
-              interactive={(resource) => processedRequests[resource.identifier] === undefined}
-              resources={snapshotResources}
-              onSelect={(resource) => handleSelection({ resource })}
-              renderControls={(resource) => itemControls(resource.identifier)}
-            />
-          </List>
+          {snapshotPackages.length > 0 && (
+            <>
+              <DsHeading
+                level={4}
+                data-size='2xs'
+                id='package-list-heading'
+              >
+                {t('request_page.package_list_title')}
+              </DsHeading>
+              <List aria-labelledby='package-list-heading'>
+                {snapshotPackages.map((p) => (
+                  <AccessPackageListItem
+                    key={p.id}
+                    id={p.id}
+                    name={p.name}
+                    description={t('access_packages.package_number_of_resources', {
+                      count: p.resources.length,
+                    })}
+                    interactive={true}
+                    size='xs'
+                    border='dotted'
+                    controls={itemControls({ packageId: p.id })}
+                    onClick={() => handleSelection({ package: p })}
+                  />
+                ))}
+              </List>
+            </>
+          )}
+          {snapshotResources.length > 0 && (
+            <>
+              <DsHeading
+                level={4}
+                data-size='2xs'
+                id='service-list-heading'
+              >
+                {t('request_page.resource_list_title')}
+              </DsHeading>
+              <List aria-labelledby='service-list-heading'>
+                <ResourceList
+                  size='xs'
+                  border='dotted'
+                  enableSearch={false}
+                  showDetails={false}
+                  interactive={(resource) => processedRequests[resource.identifier] === undefined}
+                  resources={snapshotResources}
+                  onSelect={(resource) => handleSelection({ resource })}
+                  renderControls={(resource) => itemControls({ resourceId: resource.identifier })}
+                />
+              </List>
+            </>
+          )}
         </>
       )}
       <DsParagraph data-size='md'>{t('request_page.review_close_info')}</DsParagraph>
