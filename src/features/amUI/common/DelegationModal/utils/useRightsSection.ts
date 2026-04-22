@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import type { ChipRight } from './rightsUtils';
 
 type DelegationActions = {
@@ -21,6 +21,13 @@ export const useRightsSection = ({
   );
   const [isActionLoading, setIsActionLoading] = useState(false);
   const [isActionSuccess, setIsActionSuccess] = useState(false);
+  const successTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+  useEffect(() => {
+    return () => {
+      if (successTimerRef.current) clearTimeout(successTimerRef.current);
+    };
+  }, []);
 
   const hasUnsavedChanges = rights.some((r) => r.checked !== r.delegated);
   const undelegableActions = rights.filter((r) => !r.delegable).map((r) => r.rightName);
@@ -34,7 +41,8 @@ export const useRightsSection = ({
   const handleSuccess = () => {
     setIsActionLoading(false);
     setIsActionSuccess(true);
-    setTimeout(() => setIsActionSuccess(false), 2000);
+    if (successTimerRef.current) clearTimeout(successTimerRef.current);
+    successTimerRef.current = setTimeout(() => setIsActionSuccess(false), 2000);
     onDelegate?.();
   };
 
