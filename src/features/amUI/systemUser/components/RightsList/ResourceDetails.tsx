@@ -4,19 +4,22 @@ import { Avatar, DsHeading, DsParagraph } from '@altinn/altinn-components';
 import type { ServiceResource } from '@/rtk/features/singleRights/singleRightsApi';
 
 import classes from './RightsList.module.css';
+import { useProviderLogoUrl } from '@/resources/hooks/useProviderLogoUrl';
 
 interface ResourceDetailsProps {
   resource: ServiceResource;
 }
 
 export const ResourceDetails = ({ resource }: ResourceDetailsProps): React.ReactNode => {
+  const { getProviderLogoUrl } = useProviderLogoUrl();
+  const emblem = getProviderLogoUrl(resource.resourceOwnerOrgcode ?? '');
   return (
     <>
       <div className={classes.resourceInfoHeader}>
         <Avatar
           size='lg'
           type='company'
-          imageUrl={resource.resourceOwnerLogoUrl}
+          imageUrl={emblem || resource.resourceOwnerLogoUrl}
           imageUrlAlt={resource.resourceOwnerName}
           name={resource.resourceOwnerName ?? ''}
           className={classes.resourceInfoIcon}
