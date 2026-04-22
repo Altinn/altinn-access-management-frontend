@@ -1,5 +1,4 @@
-import { expect } from '@playwright/test';
-import { test } from 'playwright/fixture/pomFixture';
+import { test, expect } from 'playwright/fixture/pomFixture';
 import { ConsentApiRequests } from 'playwright/api-requests/ConsentApiRequests';
 import { addTimeToNowUtc, env } from 'playwright/util/helper';
 import { getConsentRequestId } from './helper/consentHelper';
