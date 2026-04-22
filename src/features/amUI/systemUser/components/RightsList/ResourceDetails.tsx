@@ -1,40 +1,23 @@
 import React from 'react';
-import { Avatar, DsHeading, DsParagraph } from '@altinn/altinn-components';
-
-import type { ServiceResource } from '@/rtk/features/singleRights/singleRightsApi';
-
+import { DsParagraph } from '@altinn/altinn-components';
 import classes from './RightsList.module.css';
-import { useProviderLogoUrl } from '@/resources/hooks/useProviderLogoUrl';
+import type { ServiceResource } from '@/rtk/features/singleRights/singleRightsApi';
+import { ResourceHeading } from '@/features/amUI/common/DelegationModal/SingleRights/ResourceHeading';
 
 interface ResourceDetailsProps {
   resource: ServiceResource;
 }
 
 export const ResourceDetails = ({ resource }: ResourceDetailsProps): React.ReactNode => {
-  const { getProviderLogoUrl } = useProviderLogoUrl();
-  const emblem = getProviderLogoUrl(resource.resourceOwnerOrgcode ?? '');
   return (
-    <>
-      <div className={classes.resourceInfoHeader}>
-        <Avatar
-          size='lg'
-          type='company'
-          imageUrl={emblem || resource.resourceOwnerLogoUrl}
-          imageUrlAlt={resource.resourceOwnerName}
-          name={resource.resourceOwnerName ?? ''}
-          className={classes.resourceInfoIcon}
-        />
-        <div className={classes.resourceInfoText}>
-          <DsHeading
-            level={1}
-            data-size='xs'
-          >
-            {resource.title}
-          </DsHeading>
-          <DsParagraph data-size='xs'>{resource.resourceOwnerName}</DsParagraph>
-        </div>
-      </div>
-      <DsParagraph data-size='sm'>{resource.description}</DsParagraph>
-    </>
+    <div>
+      <ResourceHeading resource={resource} />
+      <DsParagraph
+        data-size='sm'
+        className={classes.resourceInfoText}
+      >
+        {resource.description}
+      </DsParagraph>
+    </div>
   );
 };

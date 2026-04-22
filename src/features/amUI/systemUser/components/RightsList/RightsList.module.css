@@ -11,15 +11,9 @@
   gap: var(--ds-size-4);
   margin-bottom: var(--ds-size-5);
 }
-.resourceInfoIcon {
-  font-size: var(--ds-font-size-8);
-}
-.resourceInfoText {
-  flex: 1;
-}
 
-.resourceInfoAvatar {
-  font-size: var(--ds-heading-lg-font-size);
+.resourceInfoText {
+  margin-top: var(--ds-size-4);
 }
 
 .accessPackages {
