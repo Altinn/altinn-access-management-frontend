@@ -241,6 +241,7 @@ export const InstanceInfo = ({
                 <Button
                   data-size='sm'
                   disabled={
+                    isActionLoading ||
                     displayResourceAlert ||
                     !rights.some((r) => r.checked === true) ||
                     !hasUnsavedChanges
@@ -255,7 +256,10 @@ export const InstanceInfo = ({
                   data-size='sm'
                   variant={hasDelegateAction ? 'tertiary' : 'primary'}
                   onClick={revokeResource}
-                  disabled={!rights.some((r) => r.delegated === true && r.inherited !== true)}
+                  disabled={
+                    isActionLoading ||
+                    !rights.some((r) => r.delegated === true && r.inherited !== true)
+                  }
                   color='danger'
                 >
                   <MinusCircleIcon aria-hidden='true' />
