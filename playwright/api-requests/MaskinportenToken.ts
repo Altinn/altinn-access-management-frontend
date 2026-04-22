@@ -90,12 +90,14 @@ export class MaskinportenToken {
    * @param consentRequestId The ID of the approved consent request
    * @param fromPartyUrn The consenting party URN (person or org)
    * @param consumerOrg Optional organization number for "behalf of" scenarios
+   * @param scope The Maskinporten scope for the consent token. Default: 'altinn:consentrequests.write'
    * @returns The consent access token as a string
    */
   async getConsentToken(
     consentRequestId: string,
     fromPartyUrn: string,
     consumerOrg?: string,
+    scope?: string,
   ): Promise<string> {
     const assertion = createConsentAuthorizationJWT(
       this.clientId,
@@ -103,6 +105,7 @@ export class MaskinportenToken {
       fromPartyUrn,
       this.jwk,
       consumerOrg,
+      scope,
     );
 
     const response = await fetch(this.tokenEndpoint, {
