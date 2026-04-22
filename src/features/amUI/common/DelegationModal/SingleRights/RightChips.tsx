@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { DsChip, DsPopover } from '@altinn/altinn-components';
-import { ChipRight } from '../utils/rightsUtils';
+import type { ChipRight } from '../utils/rightsUtils';
 import { useTranslation } from 'react-i18next';
 import classes from './ResourceInfo.module.css';
 

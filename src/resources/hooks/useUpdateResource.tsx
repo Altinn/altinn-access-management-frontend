@@ -13,6 +13,7 @@ export const useUpdateResource = () => {
   ) => {
     if (!toParty || !fromParty || !actingParty) {
       console.error('Missing party information for delegation.');
+      onError?.();
       return;
     }
 

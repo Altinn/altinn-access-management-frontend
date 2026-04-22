@@ -71,10 +71,14 @@ export const useSingleRightsDelegationRightsData = ({
     Array.isArray(rightsMeta) &&
     rightsMeta.length === 0;
 
+  const rightsMetaErrorDetails = isRightsMetaError ? createErrorDetails(rightsMetaError) : null;
   const rightsMetaTechnicalErrorDetails = isRightsMetaEmpty
     ? { status: 'empty response', time: new Date().toISOString() }
     : isRightsMetaError
-      ? createErrorDetails(rightsMetaError)
+      ? {
+          status: rightsMetaErrorDetails?.status ?? 'no status',
+          time: rightsMetaErrorDetails?.time ?? new Date().toISOString(),
+        }
       : null;
 
   useEffect(() => {

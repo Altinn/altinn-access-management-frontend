@@ -6,7 +6,7 @@ import { useIsMobileOrSmaller } from '@/resources/utils/screensizeUtils';
 import { RightChips } from './RightChips';
 import { DelegationAction } from '../EditModal';
 import { CheckmarkCircleIcon } from '@navikt/aksel-icons';
-import { ChipRight } from '../utils/rightsUtils';
+import type { ChipRight } from '../utils/rightsUtils';
 
 interface RightsSectionProps {
   rights: ChipRight[];
