@@ -1,9 +1,9 @@
 import { expect } from '@playwright/test';
 import { test } from 'playwright/fixture/pomFixture';
 import { ConsentApiRequests } from 'playwright/api-requests/ConsentApiRequests';
-import { TenorApiClient } from 'playwright/api-requests/TenorApiClient';
 import { addTimeToNowUtc, env } from 'playwright/util/helper';
 import { getConsentRequestId } from './helper/consentHelper';
+import { fetchKrav } from 'playwright/api-requests/SkatteetatenApiRequests';
 
 const DIGDIR_ORG = '991825827';
 const MASKINPORTEN_CLIENT_ID_ENV = 'MASKINPORTEN_CLIENT_ID';
@@ -14,23 +14,11 @@ const REDIRECT_URL = 'https://example.com/';
 const APPROVED_REDIRECT_URL = `${REDIRECT_URL}?Status=OK`;
 const ENV = env('environment')?.toUpperCase();
 
-async function fetchKravOgBetalinger(
-  norskIdentifikator: string,
-  consentToken: string,
-): Promise<Response> {
-  const url = `https://kravogbetalinger.api.skatteetaten-test.no/v1/finans/${norskIdentifikator}/aapnekrav`;
-  return fetch(url, { headers: { Authorization: `Bearer ${consentToken}` } });
-}
-
 test.describe('Samtykke - Skatteetaten krav og betalinger ende til ende', () => {
   test.describe('Org', () => {
-    let orgNr: string;
-    let dagligLederPid: string;
-
-    test.beforeAll(async () => {
-      const tenor = new TenorApiClient();
-      ({ orgNr, dagligLederPid } = await tenor.findOrgWithSamletReskontroinnsyn());
-    });
+    test.skip(ENV !== 'TT02', 'Kun TT02');
+    const orgNr = '313506673'; // Org med krav og betalinger
+    const pid = '02925796975'; // innehaver
 
     test('Godkjenn samtykke og hent skattegrunnlag', async ({ login, consentPage }) => {
       const validTo = addTimeToNowUtc({ days: 5 });
@@ -48,7 +36,7 @@ test.describe('Samtykke - Skatteetaten krav og betalinger ende til ende', () => 
 
       await test.step('Åpne samtykkeside og logg inn som dagligLeder', async () => {
         await consentPage.open(consentResp.viewUri);
-        await login.loginNotChoosingActor(dagligLederPid);
+        await login.loginNotChoosingActor(pid);
         await consentPage.openMenu();
         await consentPage.pickLanguage(consentPage.language);
       });
@@ -57,9 +45,7 @@ test.describe('Samtykke - Skatteetaten krav og betalinger ende til ende', () => 
         await consentPage.approveStandardAndWaitLogout(APPROVED_REDIRECT_URL);
       });
 
-      await test.step('Hent consent-token og verifiser krav-og-betalinger-API (kun TT02)', async () => {
-        if (ENV !== 'TT02') return;
-
+      await test.step('Hent consent-token og verifiser krav-og-betalinger-API', async () => {
         const consentId = getConsentRequestId(consentResp.viewUri);
         const consentToken = await api.getConsentTokenWithMaskinporten(
           consentId,
@@ -71,7 +57,7 @@ test.describe('Samtykke - Skatteetaten krav og betalinger ende til ende', () => 
         );
         expect(consentToken).toBeTruthy();
 
-        const response = await fetchKravOgBetalinger(orgNr, consentToken);
+        const response = await fetchKrav(orgNr, consentToken);
         const responseText = await response.text();
         expect(response.ok).toBe(true);
         expect(JSON.parse(responseText)).toBeTruthy();

@@ -215,7 +215,6 @@ export class ConsentApiRequests {
     scope?: string,
   ): Promise<string> {
     const maskinportenToken = new MaskinportenToken(clientIdEnv, jwkEnv);
-    console.log('maskinportenToken', maskinportenToken);
     return await maskinportenToken.getConsentToken(
       consentRequestId,
       fromPartyUrn,
