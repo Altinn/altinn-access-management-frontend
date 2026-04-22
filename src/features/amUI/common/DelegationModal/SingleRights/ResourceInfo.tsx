@@ -7,7 +7,7 @@ import {
   useGetSingleRightsForRightholderQuery,
   type ServiceResource,
 } from '@/rtk/features/singleRights/singleRightsApi';
-import { useGetReporteeQuery, PartyType } from '@/rtk/features/userInfoApi';
+import { PartyType } from '@/rtk/features/userInfoApi';
 import { useDelegateRights } from '@/resources/hooks/useDelegateRights';
 import { useUpdateResource } from '@/resources/hooks/useUpdateResource';
 import { useRevokeResource } from '@/resources/hooks/useRevokeResource';
@@ -107,14 +107,12 @@ export const ResourceInfo = ({
     },
   });
 
-  const { data: reportee } = useGetReporteeQuery();
-
   const rawMissingAccess = delegationCheckedActions
     ? getMissingAccessMessage(
         delegationCheckedActions,
         t,
         resource?.resourceOwnerName,
-        reportee?.name,
+        actingParty?.name,
       )
     : null;
   const missingAccess = isActionLoading || delegationError ? null : rawMissingAccess;

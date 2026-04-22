@@ -4,7 +4,7 @@ import { useTranslation } from 'react-i18next';
 import { MinusCircleIcon } from '@navikt/aksel-icons';
 
 import type { ServiceResource } from '@/rtk/features/singleRights/singleRightsApi';
-import { useGetReporteeQuery, PartyType } from '@/rtk/features/userInfoApi';
+import { PartyType } from '@/rtk/features/userInfoApi';
 import {
   type DialogLookup,
   useDelegateInstanceRightsMutation,
@@ -50,7 +50,6 @@ export const InstanceInfo = ({
   const { t } = useTranslation();
   const isSmall = useIsMobileOrSmaller();
   const { toParty: toPartyContext, fromParty, actingParty } = usePartyRepresentation();
-
   const toParty = toPartyProp ?? toPartyContext;
   const toPartyUuid = toParty?.partyUuid ?? '';
 
@@ -68,12 +67,9 @@ export const InstanceInfo = ({
     hasAccess,
     hasDirectAccess,
     isLoading,
-    isDelegationCheckLoading,
-    isDelegationCheckError,
-    delegationCheckError,
     delegationCheckedRights,
-    rightsMetaTechnicalErrorDetails,
-    instanceRightsErrorDetails,
+    delegationCheckError,
+    errorDetails,
   } = useInstanceDelegationRightsData({
     resourceId: resource.identifier,
     instanceUrn,
@@ -85,6 +81,52 @@ export const InstanceInfo = ({
   const [delegateInstance] = useDelegateInstanceRightsMutation();
   const [updateInstance] = useUpdateInstanceRightsMutation();
   const [removeInstance] = useRemoveInstanceMutation();
+
+  const onDelegate = (
+    actionKeys: string[],
+    onSuccess: () => void,
+    onError: (error: any) => void,
+  ) => {
+    if (!actingParty) return;
+    delegateInstance({
+      party: actingParty.partyUuid,
+      to: toPartyUuid,
+      resource: resource.identifier,
+      instance: instanceUrn,
+      input: { directRightKeys: actionKeys },
+    })
+      .unwrap()
+      .then(onSuccess)
+      .catch(onError);
+  };
+
+  const onUpdate = (actionKeys: string[], onSuccess: () => void, onError: (error: any) => void) => {
+    if (!actingParty) return;
+    updateInstance({
+      party: actingParty.partyUuid,
+      to: toPartyUuid,
+      resource: resource.identifier,
+      instance: instanceUrn,
+      actionKeys,
+    })
+      .unwrap()
+      .then(onSuccess)
+      .catch(onError);
+  };
+
+  const onRevoke = (onSuccess: () => void, onError: (error: any) => void) => {
+    if (!actingParty || !fromParty) return;
+    removeInstance({
+      party: actingParty.partyUuid,
+      from: fromParty.partyUuid,
+      to: toPartyUuid,
+      resource: resource.identifier,
+      instance: instanceUrn,
+    })
+      .unwrap()
+      .then(onSuccess)
+      .catch(onError);
+  };
 
   const {
     delegateChosenRights,
@@ -99,67 +141,27 @@ export const InstanceInfo = ({
     rights,
     onDelegate: onSuccess,
     actions: {
-      delegate: (actionKeys, onSuccessCb, onError) => {
-        if (!actingParty) return;
-        delegateInstance({
-          party: actingParty.partyUuid,
-          to: toPartyUuid,
-          resource: resource.identifier,
-          instance: instanceUrn,
-          input: { directRightKeys: actionKeys },
-        })
-          .unwrap()
-          .then(onSuccessCb)
-          .catch(onError);
-      },
-      update: (actionKeys, onSuccessCb, onError) => {
-        if (!actingParty) return;
-        updateInstance({
-          party: actingParty.partyUuid,
-          to: toPartyUuid,
-          resource: resource.identifier,
-          instance: instanceUrn,
-          actionKeys,
-        })
-          .unwrap()
-          .then(onSuccessCb)
-          .catch(onError);
-      },
-      revoke: (onSuccessCb, onError) => {
-        if (!actingParty || !fromParty) return;
-        removeInstance({
-          party: actingParty.partyUuid,
-          from: fromParty.partyUuid,
-          to: toPartyUuid,
-          resource: resource.identifier,
-          instance: instanceUrn,
-        })
-          .unwrap()
-          .then(onSuccessCb)
-          .catch(onError);
-      },
+      delegate: onDelegate,
+      update: onUpdate,
+      revoke: onRevoke,
     },
   });
-
-  const { data: reportee } = useGetReporteeQuery();
 
   const rawMissingAccess = delegationCheckedRights
     ? getMissingAccessMessage(
         delegationCheckedRights,
         t,
         resource?.resourceOwnerName,
-        reportee?.name,
+        actingParty?.name,
       )
     : null;
+
   const missingAccess = isActionLoading || delegationError ? null : rawMissingAccess;
 
-  const delegationCheckErrorDetails = isDelegationCheckError
+  const delegationCheckErrorDetails = !!delegationCheckError
     ? createErrorDetails(delegationCheckError)
     : null;
-  const technicalErrorDetails =
-    rightsMetaTechnicalErrorDetails ??
-    instanceRightsErrorDetails ??
-    (hasAccess ? null : delegationCheckErrorDetails);
+  const technicalErrorDetails = errorDetails ?? (hasAccess ? null : delegationCheckErrorDetails);
 
   const hasDelegableRights = rights.some((r) => r.delegable);
   const showMissingRightsStatus = !hasAccess && rights.length > 0 && !hasDelegableRights;
@@ -169,7 +171,7 @@ export const InstanceInfo = ({
     !!technicalErrorDetails ||
     (hasDelegateAction &&
       !hasAccess &&
-      (isDelegationCheckError ||
+      (!!delegationCheckError ||
         resource?.delegable === false ||
         (rights.length > 0 && !rights.some((r) => r.delegable === true))));
 
@@ -224,7 +226,7 @@ export const InstanceInfo = ({
                 rights={rights}
                 setRights={setRights}
                 undelegableActions={undelegableActions}
-                isDelegationCheckLoading={isDelegationCheckLoading}
+                isDelegationCheckLoading={isLoading}
                 toName={toName}
                 availableActions={availableActions}
                 delegationError={delegationError}

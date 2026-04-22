@@ -150,7 +150,6 @@ export const useInstanceDelegationRightsData = ({
   }, [
     rightsMeta,
     delegationCheckedRights,
-    isDelegationCheckError,
     shouldLoadInstanceRights,
     mode,
     instanceRights,
@@ -175,12 +174,10 @@ export const useInstanceDelegationRightsData = ({
     resetRights,
     hasAccess,
     hasDirectAccess,
-    isLoading,
+    isLoading: isLoading || isDelegationCheckLoading,
     isDelegationCheckLoading,
-    isDelegationCheckError,
     delegationCheckError,
     delegationCheckedRights,
-    rightsMetaTechnicalErrorDetails,
-    instanceRightsErrorDetails,
+    errorDetails: rightsMetaTechnicalErrorDetails || instanceRightsErrorDetails,
   };
 };
