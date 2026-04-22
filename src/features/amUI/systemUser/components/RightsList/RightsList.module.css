@@ -9,7 +9,7 @@
   flex-direction: row;
   align-items: center;
   gap: var(--ds-size-4);
-  margin-bottom: var(--ds-size-4);
+  margin-bottom: var(--ds-size-5);
 }
 .resourceInfoIcon {
   font-size: var(--ds-font-size-8);
