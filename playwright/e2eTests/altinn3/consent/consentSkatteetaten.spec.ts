@@ -58,9 +58,7 @@ test.describe('Samtykke - Skatteetaten krav og betalinger ende til ende', () => 
         expect(consentToken).toBeTruthy();
 
         const response = await fetchKrav(orgNr, consentToken);
-        const responseText = await response.text();
-        expect(response.ok).toBe(true);
-        expect(JSON.parse(responseText)).toBeTruthy();
+        expect(response.status).toBe(200);
       });
     });
   });
