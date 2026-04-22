@@ -1,0 +1,17 @@
+.dialog {
+  max-width: 992px;
+  max-height: calc(100vh - var(--ds-spacing-8));
+  overflow-y: auto;
+}
+
+.heading {
+  margin-bottom: var(--ds-spacing-4);
+}
+
+.closeButton {
+  margin-top: var(--ds-spacing-4);
+}
+
+.backButton {
+  margin-bottom: 0;
+}

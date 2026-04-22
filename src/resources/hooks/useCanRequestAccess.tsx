@@ -1,16 +1,20 @@
 import { usePartyRepresentation } from '@/features/amUI/common/PartyRepresentationContext/PartyRepresentationContext';
-import { useGetIsHovedadminQuery } from '@/rtk/features/userInfoApi';
 import { displayPackageRequests } from '@/resources/utils/featureFlagUtils';
 
-/** A hook to determine if the current user can request access to/from the party with the provided uuid */
-export const useCanRequestAccess = (id: string, isReportee: boolean = false) => {
-  const { selfParty } = usePartyRepresentation();
-  const { data: isHovedadmin } = useGetIsHovedadminQuery();
+/** Returns true when the user can request access: always when isReportee, otherwise only when acting as themselves viewing another party's resources */
+export const useCanRequestAccess = (isReportee: boolean = false) => {
+  const { actingParty, toParty, fromParty } = usePartyRepresentation();
 
-  if (isReportee) return true;
+  if (!displayPackageRequests()) {
+    return false;
+  }
 
-  const isCurrentUser = selfParty?.partyUuid === id;
-  const canGiveAccess = !isCurrentUser || (isCurrentUser && isHovedadmin);
+  if (isReportee) {
+    return true;
+  }
 
-  return !canGiveAccess && displayPackageRequests();
+  const partyCheck =
+    actingParty?.partyUuid === toParty?.partyUuid && toParty?.partyUuid !== fromParty?.partyUuid;
+
+  return partyCheck;
 };
