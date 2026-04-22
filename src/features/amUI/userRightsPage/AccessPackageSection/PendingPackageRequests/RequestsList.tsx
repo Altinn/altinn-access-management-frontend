@@ -5,9 +5,7 @@ import {
   DsButton,
   DsHeading,
   List,
-  Snackbar,
   SnackbarDuration,
-  SnackbarProvider,
   useSnackbar,
 } from '@altinn/altinn-components';
 import { useTranslation } from 'react-i18next';
@@ -159,13 +157,3 @@ export const PendingPackageRequestsList = ({
     </>
   );
 };
-
-export const PendingPackageRequestsListWithProviders = ({
-  isOpen,
-  ...props
-}: PendingPackageRequestsListProps & { isOpen: boolean }) => (
-  <SnackbarProvider>
-    {isOpen && <PendingPackageRequestsList {...props} />}
-    <Snackbar />
-  </SnackbarProvider>
-);

@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
-import { DsButton, DsDialog } from '@altinn/altinn-components';
+import { DsButton, DsDialog, Snackbar, SnackbarProvider } from '@altinn/altinn-components';
 import { useTranslation } from 'react-i18next';
 import { type EnrichedPackageRequest } from '@/rtk/features/requestApi';
-import { PendingPackageRequestsListWithProviders } from './RequestsList';
+import { PendingPackageRequestsList } from './RequestsList';
 import classes from './Requests.module.css';
 
 interface PendingPackageRequestsModalProps {
@@ -31,12 +31,16 @@ export const PendingPackageRequestsModal = ({
       }}
       className={classes.dialog}
     >
-      <PendingPackageRequestsListWithProviders
-        isOpen={isModalOpen}
-        heading={heading}
-        selectedRequest={selectedRequest}
-        setSelectedRequest={setSelectedRequest}
-      />
+      <SnackbarProvider>
+        {isModalOpen && (
+          <PendingPackageRequestsList
+            heading={heading}
+            selectedRequest={selectedRequest}
+            setSelectedRequest={setSelectedRequest}
+          />
+        )}
+        <Snackbar />
+      </SnackbarProvider>
       {!selectedRequest && (
         <DsButton
           variant='primary'
