@@ -31,7 +31,7 @@ export interface PackageInfoProps {
 
 export const AccessPackageInfo = ({ accessPackage, availableActions = [] }: PackageInfoProps) => {
   const { t } = useTranslation();
-  const { fromParty, toParty } = usePartyRepresentation();
+  const { fromParty, toParty, actingParty } = usePartyRepresentation();
   const { canDelegatePackage } = useAccessPackageDelegationCheck();
   const displayPackageRequestsFeature = displayPackageRequests();
 
@@ -61,6 +61,7 @@ export const AccessPackageInfo = ({ accessPackage, availableActions = [] }: Pack
   const { data: activeDelegations, isFetching } = useGetUserDelegationsQuery({
     to: toParty?.partyUuid ?? '',
     from: fromParty?.partyUuid ?? '',
+    party: actingParty?.partyUuid ?? '',
   });
 
   const delegationAccess = React.useMemo(() => {
