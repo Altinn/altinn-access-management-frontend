@@ -34,7 +34,7 @@ export const AccessPackageSection = ({ isReportee = false }: { isReportee?: bool
   } = usePartyRepresentation();
   const partyId = isReportee ? (toParty?.partyUuid ?? '') : (id ?? '');
   const canGiveAccess = useCanGiveAccess(partyId, isReportee);
-  const canRequestAccess = !canGiveAccess && useCanRequestAccess(isReportee);
+  const canRequestAccess = useCanRequestAccess(isReportee) && !canGiveAccess;
   const shouldDisplayPrivDelegation = displayPrivDelegation();
 
   const { data: accesses, isLoading: loadingAccesses } = useGetUserDelegationsQuery(
