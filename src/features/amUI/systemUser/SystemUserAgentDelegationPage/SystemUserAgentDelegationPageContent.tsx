@@ -30,6 +30,7 @@ import { useGetIsAdminQuery, useGetIsClientAdminQuery } from '@/rtk/features/use
 import { AddAllCustomers } from './AddAllCustomers';
 import { DelegationCheckError } from '../components/DelegationCheckError/DelegationCheckError';
 import { enableAddSelfToSystemuser } from '@/resources/utils/featureFlagUtils';
+import { useIsMobileOrSmaller } from '@/resources/utils/screensizeUtils';
 
 const getAssignedCustomers = (
   customers: AgentDelegationCustomer[],
@@ -55,6 +56,7 @@ export const SystemUserAgentDelegationPageContent = ({
 
   const { id } = useParams();
   const modalRef = useRef<HTMLDialogElement>(null);
+  const isSmall = useIsMobileOrSmaller();
 
   const [delegations, setDelegations] = useState<AgentDelegation[]>(existingAgentDelegations);
   const [loadingIds, setLoadingIds] = useState<string[]>([]);
@@ -387,7 +389,8 @@ export const SystemUserAgentDelegationPageContent = ({
                     disabled={isLoadingSelf}
                     onClick={assignSelfToSystemUser}
                   >
-                    <PlusCircleIcon /> {t('systemuser_agent_delegation.add_own_organization_list')}
+                    <PlusCircleIcon />
+                    {!isSmall && t('systemuser_agent_delegation.add_own_organization_list')}
                   </DsButton>
                 )}
                 {hasAddSelfPermission && isSelfAdded && (
@@ -399,7 +402,8 @@ export const SystemUserAgentDelegationPageContent = ({
                     disabled={isLoadingSelf}
                     onClick={removeSelfFromSystemuser}
                   >
-                    <MinusCircleIcon /> {t('systemuser_agent_delegation.remove')}
+                    <MinusCircleIcon />
+                    {!isSmall && t('systemuser_agent_delegation.remove')}
                   </DsButton>
                 )}
               </>
