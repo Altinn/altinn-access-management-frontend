@@ -28,7 +28,7 @@ import {
   getInboxLinkData,
   toInstancePresentationData,
 } from '../common/InstanceList/instanceListUtils';
-import { InstanceMetadataDescription } from '../common/InstanceDescription/InstanceDescription';
+import { InstanceDescription } from '../common/InstanceDescription/InstanceDescription';
 
 import classes from './InstanceDetailPageContent.module.css';
 
@@ -189,7 +189,7 @@ export const InstanceDetailPageContent = () => {
   return (
     <>
       {resource && (
-        <InstanceMetadataDescription
+        <InstanceDescription
           resource={resource}
           instanceData={instanceData}
           fromPartyName={fromParty?.name}

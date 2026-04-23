@@ -15,7 +15,7 @@ import {
 
 import classes from './InstanceDescription.module.css';
 
-interface InstanceMetadataDescriptionProps {
+interface InstanceDescriptionProps {
   resource: ServiceResource;
   instanceData?: InstancePresentationData;
   fromPartyName?: string;
@@ -24,14 +24,14 @@ interface InstanceMetadataDescriptionProps {
   statusSection?: ReactNode;
 }
 
-export const InstanceMetadataDescription = ({
+export const InstanceDescription = ({
   resource,
   instanceData,
   fromPartyName,
   fromPartyType,
   titleLevel = 3,
   statusSection,
-}: InstanceMetadataDescriptionProps) => {
+}: InstanceDescriptionProps) => {
   const { getProviderLogoUrl } = useProviderLogoUrl();
   const { t, i18n } = useTranslation();
   const dialogportenLookupEnabled = enableDialogportenDialogLookup();

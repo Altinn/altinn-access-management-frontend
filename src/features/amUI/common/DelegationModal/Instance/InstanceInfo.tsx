@@ -25,7 +25,7 @@ import { DelegationAction } from '../EditModal';
 import { RightsSection } from '../SingleRights/RightsSection';
 import { ResourceAlert } from '../SingleRights/ResourceAlert';
 import { ResourceInfoSkeleton } from '../SingleRights/ResourceInfoSkeleton';
-import { InstanceMetadataDescription } from '../../InstanceDescription/InstanceDescription';
+import { InstanceDescription } from '../../InstanceDescription/InstanceDescription';
 import { useInstanceDelegationRightsData } from './useInstanceDelegationRightsData';
 
 import classes from './InstanceInfo.module.css';
@@ -185,7 +185,7 @@ export const InstanceInfo = ({
           : (missingAccess ?? '')}
       </StatusMessageForScreenReader>
       <div>
-        <InstanceMetadataDescription
+        <InstanceDescription
           resource={resource}
           instanceData={{
             instance: {
