@@ -153,5 +153,29 @@ namespace Altinn.AccessManagement.UI.Mocks.Mocks
 
             return Task.FromResult(new Result<bool>(true));
         }
+
+        public Task<Result<int>> GetConsentRequestCount(Guid partyId, ConsentRequestStatusType status, CancellationToken cancellationToken)
+        {
+            List<ConsentRequestDetails> consentList = [];
+
+            if (partyId != ORG_PARTY_ID && partyId != PERSON_PARTY_ID)
+            {
+                return Task.FromResult(new Result<int>(ConsentProblem.ConsentNotFound));
+            }
+
+            if (partyId == ORG_PARTY_ID)
+            {
+                consentList = Util.GetMockData<List<ConsentRequestDetails>>($"{dataFolder}/Consent/consents_org.json");
+            }
+            else if (partyId == PERSON_PARTY_ID)
+            {
+                consentList = Util.GetMockData<List<ConsentRequestDetails>>($"{dataFolder}/Consent/consents_person.json");
+            }
+
+            int count = consentList.Count(c => c.ConsentRequestEvents.Any(e =>
+                string.Equals(e.EventType, status.ToString(), StringComparison.OrdinalIgnoreCase)));
+
+            return Task.FromResult(new Result<int>(count));
+        }
     }
 }
