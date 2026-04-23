@@ -3,11 +3,10 @@ import React, { useRef, useState } from 'react';
 import type { AccessPackage } from '@/rtk/features/accessPackageApi';
 
 import { AccessPackageList } from '../../common/AccessPackageList/AccessPackageList';
-import { DelegationAction } from '../../common/DelegationModal/EditModal';
+import { DelegationAction, EditModal } from '../../common/DelegationModal/EditModal';
 import { usePartyRepresentation } from '../../common/PartyRepresentationContext/PartyRepresentationContext';
 import { useDelegationModalContext } from '../../common/DelegationModal/DelegationModalContext';
 
-import { AccessPackageInfoModal } from './AccessPackageInfoModal';
 import { useTranslation } from 'react-i18next';
 import { useGetIsHovedadminQuery } from '@/rtk/features/userInfoApi';
 
@@ -55,9 +54,10 @@ export const ActiveDelegations = ({ searchString }: ActiveDelegationsProps) => {
         noPackagesText={t('access_packages.user_has_no_packages')}
         filterByType={false}
       />
-      <AccessPackageInfoModal
-        modalRef={modalRef}
-        modalItem={modalItem}
+      <EditModal
+        ref={modalRef}
+        accessPackage={modalItem}
+        onClose={() => setModalItem(undefined)}
         availableActions={[
           DelegationAction.REVOKE,
           canGiveAccess ? DelegationAction.DELEGATE : DelegationAction.REQUEST,
