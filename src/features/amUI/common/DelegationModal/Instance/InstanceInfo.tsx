@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { Button, DsParagraph, formatDisplayName } from '@altinn/altinn-components';
+import { Button, formatDisplayName } from '@altinn/altinn-components';
 import { useTranslation } from 'react-i18next';
 import { MinusCircleIcon } from '@navikt/aksel-icons';
 
@@ -19,7 +19,7 @@ import { ResourceInfoSkeleton } from '../SingleRights/ResourceInfoSkeleton';
 import { usePartyRepresentation } from '../../PartyRepresentationContext/PartyRepresentationContext';
 import { DelegationAction } from '../EditModal';
 import { useInstanceRightsSection } from './useInstanceRightsSection';
-import { InstanceHeading } from './InstanceHeading';
+import { InstanceMetadataDescription } from '../../InstanceDescription/InstanceDescription';
 
 import classes from './InstanceInfo.module.css';
 
@@ -102,12 +102,30 @@ export const InstanceInfo = ({
           : (missingAccess ?? '')}
       </StatusMessageForScreenReader>
       <div>
-        <InstanceHeading
+        <InstanceMetadataDescription
           resource={resource}
-          instanceUrn={instanceUrn}
-          dialogLookup={dialogLookup}
+          instanceData={{
+            instance: {
+              refId: instanceUrn,
+              type: null,
+            },
+            dialogLookup,
+          }}
           fromPartyName={fromParty?.name}
           fromPartyType={fromParty?.partyTypeName}
+          statusSection={
+            <div
+              className={classes.resourceInfo}
+              data-size={isSmall ? 'xs' : 'md'}
+            >
+              <StatusSection
+                userHasAccess={hasAccess}
+                showDelegationCheckWarning={showMissingRightsStatus}
+                cannotDelegateHere={cannotDelegateHere}
+                toPartyName={toName}
+              />
+            </div>
+          }
         />
 
         {isActionLoading || isActionSuccess ? (
@@ -119,18 +137,6 @@ export const InstanceInfo = ({
           <ResourceInfoSkeleton />
         ) : (
           <>
-            <div
-              className={classes.resourceInfo}
-              data-size={isSmall ? 'xs' : 'md'}
-            >
-              <StatusSection
-                userHasAccess={hasAccess}
-                showDelegationCheckWarning={showMissingRightsStatus}
-                cannotDelegateHere={cannotDelegateHere}
-                toPartyName={toName}
-              />
-              {resource.description && <DsParagraph>{resource.description}</DsParagraph>}
-            </div>
             {displayResourceAlert ? (
               <ResourceAlert
                 error={technicalErrorDetails}

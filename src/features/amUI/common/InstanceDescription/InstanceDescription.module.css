@@ -1,0 +1,62 @@
+.container {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--ds-spacing-3);
+  padding-bottom: var(--ds-spacing-4);
+}
+
+.resourceOwner {
+  display: flex;
+  align-items: center;
+  gap: var(--ds-spacing-2);
+}
+
+.ownerTag {
+  color: var(--ds-color-text-default);
+}
+
+.ownerName {
+  color: var(--ds-color-text-subtle);
+}
+
+.metadataList {
+  display: grid;
+  gap: var(--ds-spacing-3);
+  margin: 0;
+  width: 100%;
+}
+
+.metadataRow {
+  display: grid;
+  grid-template-columns: minmax(0, 8rem) minmax(0, 1fr);
+  gap: var(--ds-spacing-2);
+  width: 100%;
+}
+
+.metadataTerm,
+.metadataValue {
+  margin: 0;
+}
+
+.metadataTerm {
+  color: var(--ds-color-text-subtle);
+}
+
+.metadataValue {
+  word-break: break-word;
+}
+
+.description {
+  margin: 0;
+}
+
+@media (max-width: 600px) {
+  .resourceOwner {
+    padding-top: 4px;
+  }
+
+  .metadataRow {
+    grid-template-columns: 1fr;
+  }
+}
