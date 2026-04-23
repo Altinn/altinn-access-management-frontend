@@ -4,21 +4,28 @@ import { useTranslation } from 'react-i18next';
 import { MinusCircleIcon } from '@navikt/aksel-icons';
 
 import type { ServiceResource } from '@/rtk/features/singleRights/singleRightsApi';
-import type { DialogLookup } from '@/rtk/features/instanceApi';
-
-import type { DelegationRecipient } from '../EditModal';
+import { PartyType } from '@/rtk/features/userInfoApi';
+import {
+  type DialogLookup,
+  useDelegateInstanceRightsMutation,
+  useUpdateInstanceRightsMutation,
+  useRemoveInstanceMutation,
+} from '@/rtk/features/instanceApi';
 import { StatusMessageForScreenReader } from '@/components/StatusMessageForScreenReader/StatusMessageForScreenReader';
 import { useIsMobileOrSmaller } from '@/resources/utils/screensizeUtils';
-import { PartyType } from '@/rtk/features/userInfoApi';
+import { createErrorDetails } from '../../TechnicalErrorParagraphs/TechnicalErrorParagraphs';
 
 import { StatusSection } from '../../StatusSection/StatusSection';
 import { LoadingAnimation } from '../../LoadingAnimation/LoadingAnimation';
+import { usePartyRepresentation } from '../../PartyRepresentationContext/PartyRepresentationContext';
+import { getMissingAccessMessage } from '../missingAccessUtils';
+import { useRightsSection } from '../utils/useRightsSection';
+import type { DelegationRecipient } from '../EditModal';
+import { DelegationAction } from '../EditModal';
 import { RightsSection } from '../SingleRights/RightsSection';
 import { ResourceAlert } from '../SingleRights/ResourceAlert';
 import { ResourceInfoSkeleton } from '../SingleRights/ResourceInfoSkeleton';
-import { usePartyRepresentation } from '../../PartyRepresentationContext/PartyRepresentationContext';
-import { DelegationAction } from '../EditModal';
-import { useInstanceRightsSection } from './useInstanceRightsSection';
+import { useInstanceDelegationRightsData } from './useInstanceDelegationRightsData';
 import { InstanceHeading } from './InstanceHeading';
 
 import classes from './InstanceInfo.module.css';
@@ -42,43 +49,119 @@ export const InstanceInfo = ({
 }: InstanceInfoProps) => {
   const { t } = useTranslation();
   const isSmall = useIsMobileOrSmaller();
-  const { toParty: toPartyContext, fromParty } = usePartyRepresentation();
-
+  const { toParty: toPartyContext, fromParty, actingParty } = usePartyRepresentation();
   const toParty = toPartyProp ?? toPartyContext;
+  const toPartyUuid = toParty?.partyUuid ?? '';
+
+  const hasDelegateAction = availableActions?.includes(DelegationAction.DELEGATE);
+  const canRevoke = availableActions?.includes(DelegationAction.REVOKE) ?? false;
 
   const toName = formatDisplayName({
     fullName: toParty?.name ?? '',
     type: toParty?.partyTypeName === PartyType.Organization ? 'company' : 'person',
   });
 
-  const hasDelegateAction = availableActions?.includes(DelegationAction.DELEGATE);
-  const canRevoke = availableActions?.includes(DelegationAction.REVOKE) ?? false;
-
   const {
     rights,
     setRights,
-    saveEditedRights,
-    delegateChosenRights,
-    revokeResource,
-    undelegableActions,
-    hasUnsavedChanges,
     hasAccess,
     hasDirectAccess,
-    isDelegationCheckLoading,
-    isDelegationCheckError,
-    delegationError,
-    missingAccess,
     isLoading,
-    isActionLoading,
-    isActionSuccess,
-    technicalErrorDetails,
-  } = useInstanceRightsSection({
-    resource,
+    delegationCheckedRights,
+    delegationCheckError,
+    errorDetails,
+  } = useInstanceDelegationRightsData({
+    resourceId: resource.identifier,
     instanceUrn,
-    toPartyUuid: toParty?.partyUuid,
-    onSuccess,
+    fromPartyUuid: fromParty?.partyUuid,
+    toPartyUuid,
     mode: canRevoke ? 'edit' : 'delegate',
   });
+
+  const [delegateInstance] = useDelegateInstanceRightsMutation();
+  const [updateInstance] = useUpdateInstanceRightsMutation();
+  const [removeInstance] = useRemoveInstanceMutation();
+
+  const onDelegate = (
+    actionKeys: string[],
+    onSuccess: () => void,
+    onError: (error: any) => void,
+  ) => {
+    if (!actingParty) return;
+    delegateInstance({
+      party: actingParty.partyUuid,
+      to: toPartyUuid,
+      resource: resource.identifier,
+      instance: instanceUrn,
+      input: { directRightKeys: actionKeys },
+    })
+      .unwrap()
+      .then(onSuccess)
+      .catch(onError);
+  };
+
+  const onUpdate = (actionKeys: string[], onSuccess: () => void, onError: (error: any) => void) => {
+    if (!actingParty) return;
+    updateInstance({
+      party: actingParty.partyUuid,
+      to: toPartyUuid,
+      resource: resource.identifier,
+      instance: instanceUrn,
+      actionKeys,
+    })
+      .unwrap()
+      .then(onSuccess)
+      .catch(onError);
+  };
+
+  const onRevoke = (onSuccess: () => void, onError: (error: any) => void) => {
+    if (!actingParty || !fromParty) return;
+    removeInstance({
+      party: actingParty.partyUuid,
+      from: fromParty.partyUuid,
+      to: toPartyUuid,
+      resource: resource.identifier,
+      instance: instanceUrn,
+    })
+      .unwrap()
+      .then(onSuccess)
+      .catch(onError);
+  };
+
+  const {
+    delegateChosenRights,
+    saveEditedRights,
+    revokeResource,
+    hasUnsavedChanges,
+    undelegableActions,
+    delegationError,
+    isActionLoading,
+    isActionSuccess,
+  } = useRightsSection({
+    rights,
+    onDelegate: onSuccess,
+    actions: {
+      delegate: onDelegate,
+      update: onUpdate,
+      revoke: onRevoke,
+    },
+  });
+
+  const rawMissingAccess = delegationCheckedRights
+    ? getMissingAccessMessage(
+        delegationCheckedRights,
+        t,
+        resource?.resourceOwnerName,
+        actingParty?.name,
+      )
+    : null;
+
+  const missingAccess = isActionLoading || delegationError ? null : rawMissingAccess;
+
+  const delegationCheckErrorDetails = !!delegationCheckError
+    ? createErrorDetails(delegationCheckError)
+    : null;
+  const technicalErrorDetails = errorDetails ?? (hasAccess ? null : delegationCheckErrorDetails);
 
   const hasDelegableRights = rights.some((r) => r.delegable);
   const showMissingRightsStatus = !hasAccess && rights.length > 0 && !hasDelegableRights;
@@ -88,7 +171,7 @@ export const InstanceInfo = ({
     !!technicalErrorDetails ||
     (hasDelegateAction &&
       !hasAccess &&
-      (isDelegationCheckError ||
+      (!!delegationCheckError ||
         resource?.delegable === false ||
         (rights.length > 0 && !rights.some((r) => r.delegable === true))));
 
@@ -143,7 +226,7 @@ export const InstanceInfo = ({
                 rights={rights}
                 setRights={setRights}
                 undelegableActions={undelegableActions}
-                isDelegationCheckLoading={isDelegationCheckLoading}
+                isDelegationCheckLoading={isLoading}
                 toName={toName}
                 availableActions={availableActions}
                 delegationError={delegationError}
@@ -158,6 +241,7 @@ export const InstanceInfo = ({
                 <Button
                   data-size='sm'
                   disabled={
+                    isActionLoading ||
                     displayResourceAlert ||
                     !rights.some((r) => r.checked === true) ||
                     !hasUnsavedChanges
@@ -172,7 +256,10 @@ export const InstanceInfo = ({
                   data-size='sm'
                   variant={hasDelegateAction ? 'tertiary' : 'primary'}
                   onClick={revokeResource}
-                  disabled={!rights.some((r) => r.delegated === true && r.inherited !== true)}
+                  disabled={
+                    isActionLoading ||
+                    !rights.some((r) => r.delegated === true && r.inherited !== true)
+                  }
                   color='danger'
                 >
                   <MinusCircleIcon aria-hidden='true' />
