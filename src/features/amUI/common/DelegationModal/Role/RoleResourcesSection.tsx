@@ -3,7 +3,7 @@ import type { ChangeEvent } from 'react';
 import { useTranslation } from 'react-i18next';
 import { DsHeading, DsParagraph, DsSearch } from '@altinn/altinn-components';
 
-import type { PackageResource } from '@/rtk/features/accessPackageApi';
+import type { ServiceResource } from '@/rtk/features/singleRights/singleRightsApi';
 import type { RoleResourceMetadata } from '@/rtk/features/roleApi';
 
 import { useResourceList } from '../AccessPackages/useResourceList';
@@ -20,7 +20,7 @@ export const RoleResourcesSection = ({ roleResources, isLoading }: RoleResources
   const { t } = useTranslation();
   const [searchValue, setSearchValue] = useState('');
 
-  const roleResourceList = useMemo<PackageResource[]>(() => {
+  const roleResourceList = useMemo<ServiceResource[]>(() => {
     if (!roleResources) {
       return [];
     }

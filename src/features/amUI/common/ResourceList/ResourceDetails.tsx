@@ -2,22 +2,18 @@ import React from 'react';
 import { Avatar, DsDialog, DsHeading, DsParagraph } from '@altinn/altinn-components';
 
 import type { ServiceResource } from '@/rtk/features/singleRights/singleRightsApi';
-import type { ResourceListItemResource } from './types';
 import classes from './ResourceDetails.module.css';
 
 export interface ResourceDetailsContentProps {
-  resource: ResourceListItemResource;
+  resource: ServiceResource;
   providerLogoUrl?: string;
 }
-
-const isServiceResource = (r: ResourceListItemResource): r is ServiceResource =>
-  'rightDescription' in r;
 
 export const ResourceDetailsContent = ({
   resource,
   providerLogoUrl,
 }: ResourceDetailsContentProps) => {
-  const rightDescription = isServiceResource(resource) ? resource.rightDescription : undefined;
+  const { rightDescription } = resource;
 
   return (
     <div className={classes.dialogContentWrapper}>
@@ -50,10 +46,10 @@ export const ResourceDetailsContent = ({
 };
 
 interface ResourceDetailsProps {
-  resource: ResourceListItemResource | null;
+  resource: ServiceResource | null;
   onClose: () => void;
   providerLogoUrl?: string;
-  renderContent?: (resource: ResourceListItemResource, providerLogoUrl?: string) => React.ReactNode;
+  renderContent?: (resource: ServiceResource, providerLogoUrl?: string) => React.ReactNode;
 }
 
 export const ResourceDetails = ({

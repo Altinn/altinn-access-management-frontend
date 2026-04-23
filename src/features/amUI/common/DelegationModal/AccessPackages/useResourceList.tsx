@@ -1,10 +1,10 @@
 import * as React from 'react';
 import { ResourceListItem } from '@altinn/altinn-components';
 
-import type { PackageResource } from '@/rtk/features/accessPackageApi';
+import type { ServiceResource } from '@/rtk/features/singleRights/singleRightsApi';
 import { useProviderLogoUrl } from '@/resources/hooks/useProviderLogoUrl';
 
-export const useResourceList = (list: PackageResource[]) => {
+export const useResourceList = (list: ServiceResource[]) => {
   const { getProviderLogoUrl, isLoading } = useProviderLogoUrl();
 
   const resourceListItems = list.map((resource) => {

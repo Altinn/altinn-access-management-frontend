@@ -2,7 +2,7 @@ import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 
 import { getCookie } from '@/resources/Cookie/CookieMethods';
 import type { CompactPackage, Permissions, Reason } from '@/dataObjects/dtos/accessPackage';
-import type { BaseResource } from '@/dataObjects/dtos/resource';
+import type { ServiceResource } from '@/rtk/features/singleRights/singleRightsApi';
 
 export interface AccessArea {
   id: string;
@@ -14,13 +14,11 @@ export interface AccessArea {
   typeName: string;
 }
 
-export interface PackageResource extends BaseResource {}
-
 export interface AccessPackage {
   id: string;
   name: string;
   description: string;
-  resources: PackageResource[];
+  resources: ServiceResource[];
   isAssignable: boolean;
   isDelegable?: boolean;
   area: AccessArea;

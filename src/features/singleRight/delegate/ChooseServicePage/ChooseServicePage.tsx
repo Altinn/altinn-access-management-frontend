@@ -56,7 +56,7 @@ export const ChooseServicePage = () => {
   const onAdd = (serviceResource: ServiceResource) => {
     const dto: DelegationAccessCheckDto = {
       serviceResource,
-      resourceReference: serviceResource.authorizationReference,
+      resourceReference: serviceResource.authorizationReference ?? [],
     };
 
     void dispatch(delegationAccessCheck(dto));

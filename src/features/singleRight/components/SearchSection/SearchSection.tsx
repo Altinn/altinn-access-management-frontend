@@ -247,7 +247,9 @@ export const SearchSection = ({ onAdd, onUndo }: SearchSectionParams) => {
               </DsAlert>
             )}
             <DsParagraph data-size='sm'>{resource.description}</DsParagraph>
-            <DsParagraph data-size='sm'>{resource.rightDescription}</DsParagraph>
+            {resource.rightDescription && (
+              <DsParagraph data-size='sm'>{resource.rightDescription}</DsParagraph>
+            )}
           </div>
         </ResourceActionBar>
       </li>

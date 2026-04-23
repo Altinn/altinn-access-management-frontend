@@ -14,39 +14,35 @@ import classes from './ResourceList.module.css';
 import { SkeletonResourceList } from './SkeletonResourceList';
 import { useFilteredResources } from './useFilteredResources';
 import { ResourceFilterToolbar } from '../ResourceFilterToolbar/ResourceFilterToolbar';
-import type { ResourceListItemResource } from './types';
+import type { ServiceResource } from '@/rtk/features/singleRights/singleRightsApi';
 
 import cn from 'classnames';
 
-export interface ResourceListProps<
-  TResource extends ResourceListItemResource = ResourceListItemResource,
-> {
-  resources: TResource[];
+export interface ResourceListProps {
+  resources: ServiceResource[];
   isLoading?: boolean;
   noResourcesText?: string;
   enableSearch?: boolean;
   searchPlaceholder?: string;
-  onSelect?: (resource: TResource) => void;
+  onSelect?: (resource: ServiceResource) => void;
   showDetails?: boolean;
   size?: ResourceListItemProps['size'];
   titleAs?: ResourceListItemProps['titleAs'];
-  interactive?: boolean | ((resource: TResource) => boolean);
+  interactive?: boolean | ((resource: ServiceResource) => boolean);
   as?: ResourceListItemProps['as'];
   showMoreButton?: boolean;
   skeletonCount?: number;
   resolveLogos?: boolean;
   enableMaxHeight?: boolean;
-  renderControls?: (resource: TResource) => React.ReactNode;
-  getBadge?: (resource: TResource, index: number) => ResourceListItemProps['badge'];
-  getHasAccess?: (resource: TResource) => boolean;
+  renderControls?: (resource: ServiceResource) => React.ReactNode;
+  getBadge?: (resource: ServiceResource, index: number) => ResourceListItemProps['badge'];
+  getHasAccess?: (resource: ServiceResource) => boolean;
   delegationModal?: React.ReactNode;
   border?: ResourceListItemProps['border'];
   ariaLabelledBy?: string;
 }
 
-export const ResourceList = <
-  TResource extends ResourceListItemResource = ResourceListItemResource,
->({
+export const ResourceList = ({
   resources,
   isLoading,
   noResourcesText,
@@ -65,11 +61,11 @@ export const ResourceList = <
   delegationModal,
   border = 'none',
   ariaLabelledBy,
-}: ResourceListProps<TResource>) => {
+}: ResourceListProps) => {
   const { t } = useTranslation();
   const [search, setSearch] = React.useState('');
   const [filterState, setFilterState] = React.useState<string[]>([]);
-  const [selected, setSelected] = React.useState<TResource | null>(null);
+  const [selected, setSelected] = React.useState<ServiceResource | null>(null);
   const { getProviderLogoUrl, isLoading: orgLoading } = useProviderLogoUrl();
   const logoResolver = React.useMemo(
     () => (resolveLogos ? getProviderLogoUrl : () => undefined),
@@ -77,7 +73,7 @@ export const ResourceList = <
   );
 
   const shouldShowDetails = showDetails ?? !onSelect;
-  const derivedInteractive = (resource: TResource) => {
+  const derivedInteractive = (resource: ServiceResource) => {
     if (typeof interactive === 'function') {
       return interactive(resource);
     }
@@ -85,7 +81,7 @@ export const ResourceList = <
   };
 
   const handleSelect = React.useCallback(
-    (resource: TResource) => {
+    (resource: ServiceResource) => {
       if (onSelect) {
         onSelect(resource);
         return;
@@ -100,14 +96,10 @@ export const ResourceList = <
 
   const closeDetails = React.useCallback(() => setSelected(null), []);
 
-  const { resources: filteredResources } = useFilteredResources<TResource>({
+  const { resources: filteredResources } = useFilteredResources({
     resources,
     serviceOwnerFilter: filterState,
     searchString: enableSearch ? search : '',
-    getResourceName: (r) => r.title,
-    getOwnerName: (r) => r.resourceOwnerName,
-    getOwnerOrgCode: (r) => r.resourceOwnerOrgcode,
-    getDescription: (r) => r.description ?? '',
   });
 
   const isSkeletonVisible = isLoading || (resolveLogos && orgLoading);

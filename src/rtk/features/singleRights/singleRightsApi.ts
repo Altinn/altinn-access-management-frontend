@@ -14,11 +14,11 @@ interface PaginatedListDTO {
 }
 
 export interface ServiceResource extends BaseResource {
-  resourceType: string;
-  rightDescription: string;
-  resourceReferences: resourceReference[];
-  authorizationReference: IdValuePair[];
-  delegable: boolean;
+  resourceType?: string;
+  rightDescription?: string;
+  resourceReferences?: resourceReference[];
+  authorizationReference?: IdValuePair[];
+  delegable?: boolean;
 }
 
 export interface ResourceDelegation {

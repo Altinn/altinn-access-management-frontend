@@ -4,7 +4,7 @@ import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 
 import { ResourceList } from './ResourceList';
-import type { PackageResource } from '@/rtk/features/accessPackageApi';
+import type { ServiceResource } from '@/rtk/features/singleRights/singleRightsApi';
 
 vi.mock('@/resources/hooks/useProviderLogoUrl', () => ({
   useProviderLogoUrl: () => ({
@@ -19,7 +19,7 @@ vi.mock('react-i18next', () => ({
   }),
 }));
 
-const createResource = (overrides: Partial<PackageResource> = {}): PackageResource => {
+const createResource = (overrides: Partial<ServiceResource> = {}): ServiceResource => {
   const id = overrides.identifier ?? `resource-${Math.random().toString(36).slice(2, 8)}`;
 
   return {

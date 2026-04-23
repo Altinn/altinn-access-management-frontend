@@ -1,38 +1,32 @@
 import { useMemo } from 'react';
 
-interface UseFilteredResourcesProps<TResource> {
-  resources?: TResource[];
+import type { ServiceResource } from '@/rtk/features/singleRights/singleRightsApi';
+
+interface UseFilteredResourcesProps {
+  resources?: ServiceResource[];
   searchString: string;
   serviceOwnerFilter?: string[];
-  getResourceName: (resource: TResource) => string;
-  getOwnerName: (resource: TResource) => string;
-  getOwnerOrgCode: (resource: TResource) => string;
-  getDescription?: (resource: TResource) => string;
 }
 
-export const useFilteredResources = <TResource>({
+export const useFilteredResources = ({
   resources,
   searchString,
   serviceOwnerFilter,
-  getResourceName,
-  getOwnerName,
-  getOwnerOrgCode,
-  getDescription,
-}: UseFilteredResourcesProps<TResource>) => {
+}: UseFilteredResourcesProps) => {
   const normalizedSearch = searchString.trim().toLowerCase();
 
   const filteredResources = useMemo(() => {
     const list = resources ?? [];
     if (!normalizedSearch && !serviceOwnerFilter) return list;
     return list.filter((resource) => {
-      const nameOrTitle = getResourceName(resource).toLowerCase();
-      const ownerName = getOwnerName(resource).toLowerCase();
-      const description = getDescription?.(resource)?.toLowerCase() ?? '';
+      const nameOrTitle = resource.title.toLowerCase();
+      const ownerName = resource.resourceOwnerName.toLowerCase();
+      const description = resource.description?.toLowerCase() ?? '';
       const serviceOwnerMatch =
         serviceOwnerFilter && serviceOwnerFilter.length > 0
           ? serviceOwnerFilter
               .map((owner) => owner.toLowerCase())
-              .includes(getOwnerOrgCode(resource).toLowerCase())
+              .includes(resource.resourceOwnerOrgcode.toLowerCase())
           : true;
       return (
         (nameOrTitle.includes(normalizedSearch) ||
@@ -41,14 +35,7 @@ export const useFilteredResources = <TResource>({
         serviceOwnerMatch
       );
     });
-  }, [
-    resources,
-    normalizedSearch,
-    serviceOwnerFilter,
-    getDescription,
-    getOwnerName,
-    getResourceName,
-  ]);
+  }, [resources, normalizedSearch, serviceOwnerFilter]);
 
   return {
     resources: filteredResources,
