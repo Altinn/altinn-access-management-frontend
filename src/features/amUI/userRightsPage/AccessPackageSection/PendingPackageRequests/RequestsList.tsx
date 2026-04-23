@@ -26,7 +26,7 @@ import { DelegationAction } from '../../../common/DelegationModal/EditModal';
 import classes from './Requests.module.css';
 
 interface PendingPackageRequestsListProps {
-  heading: string;
+  heading?: string;
   selectedRequest: EnrichedPackageRequest | null;
   setSelectedRequest: (request: EnrichedPackageRequest | null) => void;
 }
@@ -91,7 +91,7 @@ export const PendingPackageRequestsList = ({
   };
 
   return (
-    <>
+    <div>
       {selectedRequest ? (
         <>
           <DsButton
@@ -110,15 +110,17 @@ export const PendingPackageRequestsList = ({
         </>
       ) : (
         <>
-          <DsHeading
-            ref={headingRef}
-            tabIndex={-1}
-            data-size='xs'
-            level={1}
-            className={classes.heading}
-          >
-            {heading}
-          </DsHeading>
+          {heading && (
+            <DsHeading
+              ref={headingRef}
+              tabIndex={-1}
+              data-size='xs'
+              level={1}
+              className={classes.heading}
+            >
+              {heading}
+            </DsHeading>
+          )}
           {isLoading ? (
             <SkeletonAccessPackageList />
           ) : (
@@ -154,6 +156,6 @@ export const PendingPackageRequestsList = ({
           )}
         </>
       )}
-    </>
+    </div>
   );
 };
