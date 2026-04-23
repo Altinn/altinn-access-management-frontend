@@ -44,7 +44,7 @@
 }
 
 .metadataValue {
-  word-break: break-word;
+  overflow-wrap: anywhere;
 }
 
 .description {

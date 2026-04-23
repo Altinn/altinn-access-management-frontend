@@ -44,7 +44,7 @@ export const InstanceMetadataDescription = ({
     fullName: fromPartyName ?? '',
     type: fromPartyType === PartyType.Person ? 'person' : 'company',
   });
-  console.log('instanceData: ', instanceData);
+
   return (
     <div className={classes.container}>
       <DsHeading
