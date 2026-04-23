@@ -26,6 +26,7 @@ const createResource = (overrides: Partial<ServiceResource> = {}): ServiceResour
     identifier: id,
     title: overrides.title ?? 'Altinn Resource',
     description: overrides.description ?? 'Description',
+    resourceType: overrides.resourceType ?? '',
     resourceOwnerName: overrides.resourceOwnerName ?? 'Altinn',
     resourceOwnerLogoUrl: overrides.resourceOwnerLogoUrl ?? 'logo.png',
     resourceOwnerOrgcode: overrides.resourceOwnerOrgcode ?? 'org',

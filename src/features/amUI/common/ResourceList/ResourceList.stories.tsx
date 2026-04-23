@@ -3,14 +3,16 @@ import { Provider } from 'react-redux';
 import { RootProvider } from '@altinn/altinn-components';
 
 import store from '@/rtk/app/store';
+import type { ServiceResource } from '@/rtk/features/singleRights/singleRightsApi';
 
 import { ResourceList } from './ResourceList';
 
-const sampleResources = [
+const sampleResources: ServiceResource[] = [
   {
     identifier: 'resource-1',
     title: 'Altinn Resource',
     description: 'Access to core Altinn services.',
+    resourceType: 'GenericAccessResource',
     resourceOwnerName: 'Digitaliseringsdirektoratet',
     resourceOwnerLogoUrl: '',
     resourceOwnerOrgcode: 'digdir',
@@ -20,6 +22,7 @@ const sampleResources = [
     identifier: 'resource-2',
     title: 'Tax Reporting',
     description: 'Allows submitting tax data on behalf of an organization.',
+    resourceType: 'GenericAccessResource',
     resourceOwnerName: 'Skatteetaten',
     resourceOwnerLogoUrl: '',
     resourceOwnerOrgcode: 'skd',

@@ -31,6 +31,7 @@ export const RoleResourcesSection = ({ roleResources, isLoading }: RoleResources
         identifier: resource.refId,
         title: resource.name,
         description: resource.description ?? '',
+        resourceType: resource.type?.name ?? '',
         resourceOwnerName: provider?.name ?? '',
         resourceOwnerLogoUrl: provider?.logoUrl ?? '',
         resourceOwnerOrgcode: provider?.code ?? '',
