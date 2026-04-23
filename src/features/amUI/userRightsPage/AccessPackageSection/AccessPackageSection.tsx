@@ -13,6 +13,7 @@ import { TabContentSkeleton } from '../../common/RightsTabs/TabContentSkeleton';
 
 import { ActiveDelegations } from './ActiveDelegations';
 import { AccessPackageInfoAlert } from './AccessPackageInfoAlert';
+import { PendingPackageRequests } from './PendingPackageRequests/Requests';
 import { QuestionmarkCircleIcon } from '@navikt/aksel-icons';
 
 import classes from './AccessPackageSection.module.css';
@@ -33,7 +34,7 @@ export const AccessPackageSection = ({ isReportee = false }: { isReportee?: bool
   } = usePartyRepresentation();
   const partyId = isReportee ? (toParty?.partyUuid ?? '') : (id ?? '');
   const canGiveAccess = useCanGiveAccess(partyId, isReportee);
-  const canRequestAccess = useCanRequestAccess(partyId, isReportee);
+  const canRequestAccess = useCanRequestAccess(isReportee) && !canGiveAccess;
   const shouldDisplayPrivDelegation = displayPrivDelegation();
 
   const { data: accesses, isLoading: loadingAccesses } = useGetUserDelegationsQuery(
@@ -85,6 +86,7 @@ export const AccessPackageSection = ({ isReportee = false }: { isReportee?: bool
               <DsPopover>{t('access_packages.helptext_content')}</DsPopover>
             </DsPopover.TriggerContext>
           </div>
+          {canRequestAccess && <PendingPackageRequests />}
           <div className={classes.inputs}>
             {numberOfAccesses > 0 && (
               <div className={classes.searchField}>

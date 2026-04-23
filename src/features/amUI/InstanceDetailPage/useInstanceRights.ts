@@ -1,6 +1,6 @@
 import { useTranslation } from 'react-i18next';
 
-import { ChipRight } from '../common/DelegationModal/SingleRights/hooks/rightsUtils';
+import type { ChipRight } from '../common/DelegationModal/utils/rightsUtils';
 import { createErrorDetails } from '../common/TechnicalErrorParagraphs/TechnicalErrorParagraphs';
 import { useInstanceDelegationRightsData } from '../common/DelegationModal/Instance/useInstanceDelegationRightsData';
 

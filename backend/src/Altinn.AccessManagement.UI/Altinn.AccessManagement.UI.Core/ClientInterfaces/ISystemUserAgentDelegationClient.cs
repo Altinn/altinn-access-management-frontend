@@ -29,6 +29,16 @@ namespace Altinn.AccessManagement.UI.Core.ClientInterfaces
         Task<Result<List<AgentDelegation>>> AddClient(int partyId, Guid systemUserGuid, AgentDelegationRequest delegationRequest, CancellationToken cancellationToken);
 
         /// <summary>
+        /// Add client to system user
+        /// </summary>
+        /// <param name="partyId">The party id of the party owning system user to add customer to</param>
+        /// <param name="systemUserGuid">The system user UUID to add customer to</param>
+        /// <param name="delegationRequest">The party uuid of the customer to add + partyUuid of system user owner party</param>
+        /// <param name="cancellationToken">Cancellation token</param>
+        /// <returns>List of AgentDelegation objects with delegation info</returns>
+        Task<Result<List<AgentDelegation>>> AddClient2(int partyId, Guid systemUserGuid, AgentDelegationRequest delegationRequest, CancellationToken cancellationToken);
+
+        /// <summary>
         /// Remove client from system user
         /// </summary>
         /// <param name="partyId">The party id of the party owning system user to remove customer from</param>
@@ -37,6 +47,17 @@ namespace Altinn.AccessManagement.UI.Core.ClientInterfaces
         /// <param name="cancellationToken">Cancellation token</param>
         /// <returns>Boolean result of remove</returns>
         Task<Result<bool>> RemoveClient(int partyId, Guid facilitatorId, Guid delegationId, CancellationToken cancellationToken);
+
+        /// <summary>
+        /// Remove client from system user - new implementation
+        /// </summary>
+        /// <param name="partyId">The party id of the party owning system user to remove customer from</param>
+        /// <param name="systemUserGuid">The system user UUID to remove customer from</param>
+        /// <param name="facilitatorId">Facilitator uuid, uuid of partyId</param>
+        /// <param name="clientId">The client id to remove</param>
+        /// <param name="cancellationToken">Cancellation token</param>
+        /// <returns>Boolean result of remove</returns>
+        Task<Result<bool>> RemoveClient2(int partyId, Guid systemUserGuid, Guid facilitatorId, Guid clientId, CancellationToken cancellationToken);
 
         /// <summary>
         /// Add own organization to this systemuser

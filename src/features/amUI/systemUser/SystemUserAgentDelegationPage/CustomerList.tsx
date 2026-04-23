@@ -19,6 +19,7 @@ import type { AgentDelegation, AgentDelegationCustomer } from '../types';
 import classes from './CustomerList.module.css';
 import { formatOrgNr } from '@/resources/utils/reporteeUtils';
 import { addAllSystemuserCustomers } from '@/resources/utils/featureFlagUtils';
+import { useIsMobileOrSmaller } from '@/resources/utils/screensizeUtils';
 
 const filterCustomerList = (
   list: AgentDelegationCustomer[],
@@ -180,6 +181,7 @@ const ListControls = ({
   selfButton,
 }: ListControlsProps): React.ReactNode => {
   const { t } = useTranslation();
+  const isSmall = useIsMobileOrSmaller();
 
   return (
     <div className={classes.listControls}>
@@ -211,7 +213,7 @@ const ListControls = ({
           })}
           onClick={() => onRemoveCustomer(delegation, customer.name)}
         >
-          <MinusCircleIcon /> {t('systemuser_agent_delegation.remove_from_system_user')}
+          <MinusCircleIcon /> {!isSmall && t('systemuser_agent_delegation.remove_from_system_user')}
         </DsButton>
       )}
       {!isLoading && !delegation && onAddCustomer && (
@@ -223,7 +225,7 @@ const ListControls = ({
           })}
           onClick={() => onAddCustomer(customer)}
         >
-          <PlusCircleIcon /> {t('systemuser_agent_delegation.add_to_system_user')}
+          <PlusCircleIcon /> {!isSmall && t('systemuser_agent_delegation.add_to_system_user')}
         </DsButton>
       )}
       {customer.isSelfOrg && (

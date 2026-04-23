@@ -105,5 +105,10 @@ namespace Altinn.AccessManagement.UI.Core.Configuration
         /// Whether to enrich instance delegations with dialogporten lookup data
         /// </summary>
         public bool EnableDialogportenDialogLookup { get; set; }
+        
+        /// <summary>
+        /// Whether to use connections API in backend for agent system users
+        /// </summary>
+        public bool UseConnectionsForAgentSystemuser { get; set; }
     }
 }

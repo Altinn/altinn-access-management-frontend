@@ -1,6 +1,10 @@
 import { getAltinnStartPageUrl } from '@/resources/utils/pathUtils';
-import { HeaderProps, useAccountSelector } from '@altinn/altinn-components';
-import { AccountSelectorProps } from '@altinn/altinn-components/dist/types/lib/components/GlobalHeader/AccountSelector';
+import type {
+  HeaderProps,
+  AccountSelectorProps,
+  GlobalHeaderProps,
+} from '@altinn/altinn-components';
+import { useAccountSelector } from '@altinn/altinn-components';
 import { useGlobalMenu } from './useGlobalMenu';
 import { useTranslation } from 'react-i18next';
 import {
@@ -12,7 +16,6 @@ import {
   useRemoveFavoriteActorUuidMutation,
   useUpdateShowDeletedMutation,
 } from '@/rtk/features/userInfoApi';
-import { GlobalHeaderProps } from '@altinn/altinn-components/dist/types/lib/components/GlobalHeader';
 import { useEffect, useState } from 'react';
 import { useUpdateSelectedLanguageMutation } from '@/rtk/features/settingsApi';
 import { displayDeletedAccountToggle } from '@/resources/utils/featureFlagUtils';
