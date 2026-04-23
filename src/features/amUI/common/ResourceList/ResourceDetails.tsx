@@ -1,6 +1,7 @@
 import React from 'react';
 import { Avatar, DsDialog, DsHeading, DsParagraph } from '@altinn/altinn-components';
 
+import type { ServiceResource } from '@/rtk/features/singleRights/singleRightsApi';
 import type { ResourceListItemResource } from './types';
 import classes from './ResourceDetails.module.css';
 
@@ -9,28 +10,14 @@ export interface ResourceDetailsContentProps {
   providerLogoUrl?: string;
 }
 
+const isServiceResource = (r: ResourceListItemResource): r is ServiceResource =>
+  'rightDescription' in r;
+
 export const ResourceDetailsContent = ({
   resource,
   providerLogoUrl,
 }: ResourceDetailsContentProps) => {
-  const ownerName =
-    ('provider' in resource && resource.provider?.name) ||
-    ('resourceOwnerName' in resource ? resource.resourceOwnerName : undefined);
-
-  const title =
-    ('title' in resource && resource.title) ||
-    ('name' in resource && resource.name) ||
-    ('resourceName' in resource ? (resource as { resourceName?: string }).resourceName : undefined);
-
-  const serviceDescription =
-    'description' in resource && resource.description
-      ? (resource as { description?: string }).description
-      : undefined;
-
-  const rightDescription =
-    'rightDescription' in resource
-      ? (resource as { rightDescription?: string }).rightDescription
-      : undefined;
+  const rightDescription = isServiceResource(resource) ? resource.rightDescription : undefined;
 
   return (
     <div className={classes.dialogContentWrapper}>
@@ -40,7 +27,7 @@ export const ResourceDetailsContent = ({
             <Avatar
               type='company'
               imageUrl={providerLogoUrl ?? resource.resourceOwnerLogoUrl}
-              name={resource.resourceOwnerName ?? ''}
+              name={resource.resourceOwnerName}
             />
           </div>
           <div>
@@ -48,12 +35,14 @@ export const ResourceDetailsContent = ({
               level={2}
               data-size='xs'
             >
-              {title}
+              {resource.title}
             </DsHeading>
-            {ownerName && <DsParagraph data-size='xs'>{ownerName}</DsParagraph>}
+            {resource.resourceOwnerName && (
+              <DsParagraph data-size='xs'>{resource.resourceOwnerName}</DsParagraph>
+            )}
           </div>
         </div>
-        {serviceDescription && <DsParagraph data-size='sm'>{serviceDescription}</DsParagraph>}
+        {resource.description && <DsParagraph data-size='sm'>{resource.description}</DsParagraph>}
         {rightDescription && <DsParagraph data-size='sm'>{rightDescription}</DsParagraph>}
       </div>
     </div>

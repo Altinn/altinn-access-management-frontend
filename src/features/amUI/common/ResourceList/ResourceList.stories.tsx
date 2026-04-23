@@ -8,42 +8,22 @@ import { ResourceList } from './ResourceList';
 
 const sampleResources = [
   {
-    id: 'resource-1',
-    name: 'Altinn Resource',
+    identifier: 'resource-1',
     title: 'Altinn Resource',
     description: 'Access to core Altinn services.',
-    provider: {
-      id: 'digdir',
-      name: 'Digitaliseringsdirektoratet',
-      refId: 'digdir',
-      logoUrl: '',
-      code: 'digdir',
-      typeId: 'agencies',
-    },
     resourceOwnerName: 'Digitaliseringsdirektoratet',
     resourceOwnerLogoUrl: '',
     resourceOwnerOrgcode: 'digdir',
     resourceOwnerOrgNumber: '991825827',
-    resourceOwnerType: 'state',
   },
   {
-    id: 'resource-2',
-    name: 'Tax Reporting',
+    identifier: 'resource-2',
     title: 'Tax Reporting',
     description: 'Allows submitting tax data on behalf of an organization.',
-    provider: {
-      id: 'skd',
-      name: 'Skatteetaten',
-      refId: 'skd',
-      logoUrl: '',
-      code: 'skd',
-      typeId: 'agencies',
-    },
     resourceOwnerName: 'Skatteetaten',
     resourceOwnerLogoUrl: '',
     resourceOwnerOrgcode: 'skd',
     resourceOwnerOrgNumber: '974761076',
-    resourceOwnerType: 'state',
   },
 ];
 

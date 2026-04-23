@@ -8,19 +8,17 @@ export const useResourceList = (list: PackageResource[]) => {
   const { getProviderLogoUrl, isLoading } = useProviderLogoUrl();
 
   const resourceListItems = list.map((resource) => {
-    const emblem = getProviderLogoUrl(
-      resource.provider?.code ?? resource.resourceOwnerOrgcode ?? '',
-    );
+    const emblem = getProviderLogoUrl(resource.resourceOwnerOrgcode ?? '');
 
     return (
       <ResourceListItem
-        key={resource.identifier || resource.refId}
-        id={resource.identifier || resource.refId}
+        key={resource.identifier}
+        id={resource.identifier}
         loading={isLoading}
-        resourceName={resource.name || resource.title}
-        ownerName={resource.provider?.name || resource.resourceOwnerName}
-        ownerLogoUrl={emblem ?? resource.provider?.logoUrl}
-        ownerLogoUrlAlt={resource.provider?.name || resource.resourceOwnerName}
+        resourceName={resource.title}
+        ownerName={resource.resourceOwnerName}
+        ownerLogoUrl={emblem ?? resource.resourceOwnerLogoUrl}
+        ownerLogoUrlAlt={resource.resourceOwnerName}
         as='div'
         size='xs'
         interactive={false}

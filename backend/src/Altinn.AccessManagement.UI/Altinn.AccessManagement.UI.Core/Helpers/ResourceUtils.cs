@@ -62,6 +62,7 @@ namespace Altinn.AccessManagement.UI.Core.Helpers
                     ResourceOwnerName = resource.Provider.Name,
                     ResourceOwnerLogoUrl = resource.Provider.LogoUrl,
                     ResourceOwnerOrgcode = resource.Provider.Code,
+                    ResourceOwnerOrgNumber = resource.Provider.RefId,
                     ResourceType = Enum.TryParse<ResourceType>(resource.Type?.Name, true, out var resourceType) ? resourceType : ResourceType.Default
                 };
             }).ToList();

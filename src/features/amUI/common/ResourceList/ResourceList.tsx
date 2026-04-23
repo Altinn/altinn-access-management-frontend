@@ -17,15 +17,6 @@ import { ResourceFilterToolbar } from '../ResourceFilterToolbar/ResourceFilterTo
 import type { ResourceListItemResource } from './types';
 
 import cn from 'classnames';
-import {
-  extractResourceName,
-  extractOwnerName,
-  extractOrgCode,
-  extractDescription,
-  extractResourceId,
-  extractLogoUrl,
-  extractLogoAlt,
-} from './utils';
 
 export interface ResourceListProps<
   TResource extends ResourceListItemResource = ResourceListItemResource,
@@ -113,10 +104,10 @@ export const ResourceList = <
     resources,
     serviceOwnerFilter: filterState,
     searchString: enableSearch ? search : '',
-    getResourceName: extractResourceName,
-    getOwnerName: extractOwnerName,
-    getOwnerOrgCode: extractOrgCode,
-    getDescription: extractDescription,
+    getResourceName: (r) => r.title,
+    getOwnerName: (r) => r.resourceOwnerName,
+    getOwnerOrgCode: (r) => r.resourceOwnerOrgcode,
+    getDescription: (r) => r.description ?? '',
   });
 
   const isSkeletonVisible = isLoading || (resolveLogos && orgLoading);
@@ -124,8 +115,8 @@ export const ResourceList = <
   const serviceOwnerOptions = React.useMemo(() => {
     const uniqueOwners = new Map<string, { value: string; label: string; count: number }>();
     resources.forEach((res) => {
-      const code = extractOrgCode(res);
-      const name = extractOwnerName(res);
+      const code = res.resourceOwnerOrgcode;
+      const name = res.resourceOwnerName;
       if (code) {
         const existing = uniqueOwners.get(code);
         if (existing) {
@@ -172,15 +163,13 @@ export const ResourceList = <
             {filteredResources.length > 0 && (
               <List aria-labelledby={ariaLabelledBy}>
                 {filteredResources.map((resource, index) => {
-                  const derivedId = extractResourceId(resource);
-                  const resourceId = derivedId ? String(derivedId) : `resource-${index}`;
-                  const resourceName = extractResourceName(resource);
-                  const ownerName = extractOwnerName(resource);
-                  const orgCode = extractOrgCode(resource);
+                  const resourceId = resource.identifier || `resource-${index}`;
+                  const resourceName = resource.title;
+                  const ownerName = resource.resourceOwnerName;
+                  const orgCode = resource.resourceOwnerOrgcode;
                   const providerLogo = resolveLogos && orgCode ? logoResolver(orgCode) : undefined;
-                  const fallbackLogoUrl = extractLogoUrl(resource);
-                  const ownerLogoUrl = providerLogo ?? fallbackLogoUrl;
-                  const ownerLogoAlt = extractLogoAlt(resource) ?? ownerName;
+                  const ownerLogoUrl = providerLogo ?? resource.resourceOwnerLogoUrl;
+                  const ownerLogoAlt = resource.resourceOwnerName;
                   const itemInteractive = derivedInteractive(resource);
                   const itemAs = as ?? (itemInteractive ? 'button' : 'div');
                   const itemSize = size ?? 'xs';
@@ -223,8 +212,8 @@ export const ResourceList = <
           providerLogoUrl={
             selected
               ? resolveLogos
-                ? (logoResolver(extractOrgCode(selected) ?? '') ?? selected.resourceOwnerLogoUrl)
-                : extractLogoUrl(selected)
+                ? (logoResolver(selected.resourceOwnerOrgcode) ?? selected.resourceOwnerLogoUrl)
+                : selected.resourceOwnerLogoUrl
               : undefined
           }
         />

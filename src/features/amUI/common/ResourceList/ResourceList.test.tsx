@@ -4,7 +4,7 @@ import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 
 import { ResourceList } from './ResourceList';
-import type { PackageResource, ResourceProvider } from '@/rtk/features/accessPackageApi';
+import type { PackageResource } from '@/rtk/features/accessPackageApi';
 
 vi.mock('@/resources/hooks/useProviderLogoUrl', () => ({
   useProviderLogoUrl: () => ({
@@ -19,30 +19,17 @@ vi.mock('react-i18next', () => ({
   }),
 }));
 
-const baseProvider: ResourceProvider = {
-  id: 'org',
-  name: 'Altinn',
-  refId: 'org',
-  logoUrl: 'logo.png',
-  code: 'org',
-  typeId: 'type',
-};
-
 const createResource = (overrides: Partial<PackageResource> = {}): PackageResource => {
-  const id = overrides.id ?? `resource-${Math.random().toString(36).slice(2, 8)}`;
-  const provider = overrides.provider ?? baseProvider;
+  const id = overrides.identifier ?? `resource-${Math.random().toString(36).slice(2, 8)}`;
 
   return {
-    id,
-    name: overrides.name ?? 'Altinn Resource',
-    title: overrides.title ?? overrides.name ?? 'Altinn Resource',
+    identifier: id,
+    title: overrides.title ?? 'Altinn Resource',
     description: overrides.description ?? 'Description',
-    provider,
-    resourceOwnerName: overrides.resourceOwnerName ?? provider.name,
-    resourceOwnerLogoUrl: overrides.resourceOwnerLogoUrl ?? provider.logoUrl,
-    resourceOwnerOrgcode: overrides.resourceOwnerOrgcode ?? provider.code,
+    resourceOwnerName: overrides.resourceOwnerName ?? 'Altinn',
+    resourceOwnerLogoUrl: overrides.resourceOwnerLogoUrl ?? 'logo.png',
+    resourceOwnerOrgcode: overrides.resourceOwnerOrgcode ?? 'org',
     resourceOwnerOrgNumber: overrides.resourceOwnerOrgNumber ?? '123456789',
-    resourceOwnerType: overrides.resourceOwnerType ?? 'type',
     ...overrides,
   };
 };
@@ -52,8 +39,8 @@ describe('ResourceList', () => {
     const user = userEvent.setup();
     const handleSelect = vi.fn();
     const resources = [
-      createResource({ name: 'Resource One' }),
-      createResource({ name: 'Resource Two' }),
+      createResource({ title: 'Resource One' }),
+      createResource({ title: 'Resource Two' }),
     ];
 
     render(
@@ -68,7 +55,7 @@ describe('ResourceList', () => {
   });
 
   it('renders custom controls provided via renderControls and getBadge', () => {
-    const resources = [createResource({ name: 'With Controls' })];
+    const resources = [createResource({ title: 'With Controls' })];
 
     render(
       <ResourceList
@@ -86,8 +73,8 @@ describe('ResourceList', () => {
   it('filters resources based on the search input', async () => {
     const user = userEvent.setup();
     const resources = [
-      createResource({ name: 'Alpha Service' }),
-      createResource({ name: 'Beta Service' }),
+      createResource({ title: 'Alpha Service' }),
+      createResource({ title: 'Beta Service' }),
     ];
 
     render(<ResourceList resources={resources} />);

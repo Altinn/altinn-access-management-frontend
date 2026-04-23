@@ -39,6 +39,11 @@ namespace Altinn.AccessManagement.UI.Core.Models.AccessPackage.Frontend
         public string ResourceOwnerOrgcode { get; set; } // provider.code
 
         /// <summary>
+        /// Org number of the resource owner
+        /// </summary>
+        public string ResourceOwnerOrgNumber { get; set; } // provider.refId
+
+        /// <summary>
         /// ResourceType
         /// </summary>
         [JsonConverter(typeof(JsonStringEnumConverter))]

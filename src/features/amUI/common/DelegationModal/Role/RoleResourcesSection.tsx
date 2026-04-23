@@ -28,23 +28,13 @@ export const RoleResourcesSection = ({ roleResources, isLoading }: RoleResources
     return roleResources.map((resource) => {
       const provider = resource.provider;
       return {
-        id: resource.id,
-        name: resource.name,
+        identifier: resource.refId,
         title: resource.name,
         description: resource.description ?? '',
-        provider: {
-          id: provider?.id ?? resource.providerId,
-          name: provider?.name ?? '',
-          refId: provider?.refId ?? resource.refId ?? '',
-          logoUrl: provider?.logoUrl ?? '',
-          code: provider?.code ?? '',
-          typeId: provider?.typeId ?? resource.typeId ?? '',
-        },
         resourceOwnerName: provider?.name ?? '',
         resourceOwnerLogoUrl: provider?.logoUrl ?? '',
         resourceOwnerOrgcode: provider?.code ?? '',
         resourceOwnerOrgNumber: provider?.refId ?? '',
-        resourceOwnerType: provider?.type?.name ?? resource.type?.name ?? '',
       };
     });
   }, [roleResources]);
@@ -57,10 +47,10 @@ export const RoleResourcesSection = ({ roleResources, isLoading }: RoleResources
     }
 
     return roleResourceList.filter((resource) => {
-      const resourceName = (resource.name || resource.title || '').toLowerCase();
-      const providerName = (resource.provider?.name || '').toLowerCase();
+      const resourceName = resource.title.toLowerCase();
+      const ownerName = resource.resourceOwnerName.toLowerCase();
 
-      return resourceName.includes(normalizedSearch) || providerName.includes(normalizedSearch);
+      return resourceName.includes(normalizedSearch) || ownerName.includes(normalizedSearch);
     });
   }, [roleResourceList, trimmedSearchValue]);
 

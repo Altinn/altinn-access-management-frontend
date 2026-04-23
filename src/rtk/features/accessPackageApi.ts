@@ -2,6 +2,7 @@ import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 
 import { getCookie } from '@/resources/Cookie/CookieMethods';
 import type { CompactPackage, Permissions, Reason } from '@/dataObjects/dtos/accessPackage';
+import type { BaseResource } from '@/dataObjects/dtos/resource';
 
 export interface AccessArea {
   id: string;
@@ -13,30 +14,7 @@ export interface AccessArea {
   typeName: string;
 }
 
-// either indentifier or refId contains resource.identifier, the other is undefined
-export interface PackageResource {
-  id: string;
-  identifier: string;
-  name: string;
-  title: string;
-  description: string;
-  refId: string;
-  provider: ResourceProvider;
-  resourceOwnerName: string;
-  resourceOwnerLogoUrl: string;
-  resourceOwnerOrgcode: string;
-  resourceOwnerOrgNumber: string;
-  resourceOwnerType: string;
-}
-
-export interface ResourceProvider {
-  id: string;
-  name: string;
-  refId: string;
-  logoUrl: string;
-  code: string;
-  typeId: string;
-}
+export interface PackageResource extends BaseResource {}
 
 export interface AccessPackage {
   id: string;
