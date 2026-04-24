@@ -81,10 +81,13 @@ test.describe('klientadministrasjon', () => {
     }
   });
 
-  test('legg til bruker', async ({ page, accessManagementFrontPage, klientAdministrasjonPage }) => {
-    const login = new LoginPage(page);
-    const aktorvalgHeader = new AktorvalgHeader(page);
-
+  test('legg til bruker', async ({
+    page,
+    accessManagementFrontPage,
+    klientAdministrasjonPage,
+    login,
+    aktorvalgHeader,
+  }) => {
     await test.step('Logg inn', async () => {
       await page.goto(env('BASE_URL'));
       await login.LoginToAccessManagement('09866598352');
@@ -108,10 +111,13 @@ test.describe('klientadministrasjon', () => {
     });
   });
 
-  test('slett bruker', async ({ page, accessManagementFrontPage, klientAdministrasjonPage }) => {
-    const login = new LoginPage(page);
-    const aktorvalgHeader = new AktorvalgHeader(page);
-
+  test('slett bruker', async ({
+    page,
+    accessManagementFrontPage,
+    klientAdministrasjonPage,
+    login,
+    aktorvalgHeader,
+  }) => {
     await test.step('Logg inn', async () => {
       await page.goto(env('BASE_URL'));
       await login.LoginToAccessManagement('16830197862');
@@ -139,10 +145,9 @@ test.describe('klientadministrasjon', () => {
     page,
     accessManagementFrontPage,
     klientAdministrasjonPage,
+    login,
+    aktorvalgHeader,
   }) => {
-    const login = new LoginPage(page);
-    const aktorvalgHeader = new AktorvalgHeader(page);
-
     await test.step('Logg inn', async () => {
       await page.goto(env('BASE_URL'));
       await login.LoginToAccessManagement('15846199893');
@@ -179,10 +184,9 @@ test.describe('klientadministrasjon', () => {
     page,
     accessManagementFrontPage,
     klientAdministrasjonPage,
+    login,
+    aktorvalgHeader,
   }) => {
-    const login = new LoginPage(page);
-    const aktorvalgHeader = new AktorvalgHeader(page);
-
     await test.step('Logg inn', async () => {
       await page.goto(env('BASE_URL'));
       await login.LoginToAccessManagement('16852749125');
@@ -218,10 +222,9 @@ test.describe('klientadministrasjon', () => {
     page,
     accessManagementFrontPage,
     klientAdministrasjonPage,
+    login,
+    aktorvalgHeader,
   }) => {
-    const login = new LoginPage(page);
-    const aktorvalgHeader = new AktorvalgHeader(page);
-
     await test.step('Logg inn', async () => {
       await page.goto(env('BASE_URL'));
       await login.LoginToAccessManagement('08873349590');
@@ -250,10 +253,9 @@ test.describe('klientadministrasjon', () => {
     page,
     accessManagementFrontPage,
     klientAdministrasjonPage,
+    login,
+    aktorvalgHeader,
   }) => {
-    const login = new LoginPage(page);
-    const aktorvalgHeader = new AktorvalgHeader(page);
-
     await test.step('Logg inn', async () => {
       await page.goto(env('BASE_URL'));
       await login.LoginToAccessManagement('21895699168');
