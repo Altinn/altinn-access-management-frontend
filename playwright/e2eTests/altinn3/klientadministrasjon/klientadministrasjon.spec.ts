@@ -36,7 +36,7 @@ test.describe('klientadministrasjon', () => {
 
     await test.step('Velg org UVANLIG FILOSOFISK TIGER AS og gå til klientadministrasjon', async () => {
       await aktorvalgHeader.selectActorFromHeaderMenu('UVANLIG FILOSOFISK TIGER AS');
-      await accessManagementFrontPage.gotoKlientAdministrasjon();
+      await accessManagementFrontPage.goToKlientAdministrasjon();
     });
 
     await test.step('legg til bruker 29814895546 MUNTER SKO', async () => {
@@ -68,7 +68,7 @@ test.describe('klientadministrasjon', () => {
 
     await test.step('Velg org KLARTENKT UPRESIS ISBJØRN SA og gå til klientadministrasjon', async () => {
       await aktorvalgHeader.selectActorFromHeaderMenu('KLARTENKT UPRESIS ISBJØRN SA');
-      await accessManagementFrontPage.gotoKlientAdministrasjon();
+      await accessManagementFrontPage.goToKlientAdministrasjon();
     });
 
     await test.step('Gå til 30877795760 TROVERDIG JUICE', async () => {
@@ -106,7 +106,7 @@ test.describe('klientadministrasjon', () => {
 
     await test.step('Velg org TRÅDLØS FORNUFTIG KATT LYTE og gå til klientadministrasjon', async () => {
       await aktorvalgHeader.selectActorFromHeaderMenu('TRÅDLØS FORNUFTIG KATT LYTE');
-      await accessManagementFrontPage.gotoKlientAdministrasjon();
+      await accessManagementFrontPage.goToKlientAdministrasjon();
     });
 
     await test.step('Gå til klientfanen og velg PARISK AKADEMISK KATT SITRON', async () => {
@@ -153,7 +153,7 @@ test.describe('klientadministrasjon', () => {
 
     await test.step('Velg org INTERESSERT KONVENSJONELL TIGER AS og gå til klientadministrasjon', async () => {
       await aktorvalgHeader.selectActorFromHeaderMenu('INTERESSERT KONVENSJONELL TIGER AS');
-      await accessManagementFrontPage.gotoKlientAdministrasjon();
+      await accessManagementFrontPage.goToKlientAdministrasjon();
     });
 
     await test.step('velg UVANLIG FREDAG', async () => {
@@ -206,7 +206,7 @@ test.describe('klientadministrasjon', () => {
 
     await test.step('Velg org RØRETE RAKRYGGET TIGER AS og gå til klientadministrasjon', async () => {
       await aktorvalgHeader.selectActorFromHeaderMenu('RØRETE RAKRYGGET TIGER AS');
-      await accessManagementFrontPage.gotoKlientAdministrasjon();
+      await accessManagementFrontPage.goToKlientAdministrasjon();
     });
 
     await test.step('Gå til klienten ROSA UNDERDANIG TIGER AS hos brukeren FORSTÅELSESFULL TRAFIKKORK', async () => {
@@ -252,7 +252,7 @@ test.describe('klientadministrasjon', () => {
 
     await test.step('Velg org UAVHENGIG REALISTISK TIGER AS og gå til klientadministrasjon', async () => {
       await aktorvalgHeader.selectActorFromHeaderMenu('UAVHENGIG REALISTISK TIGER AS');
-      await accessManagementFrontPage.gotoKlientAdministrasjon();
+      await accessManagementFrontPage.goToKlientAdministrasjon();
     });
 
     await test.step('Gå til brukeren ORANSJE TEST hos klienten VENSTRE GENIERKLÆRT KATT SEPARASJON', async () => {
