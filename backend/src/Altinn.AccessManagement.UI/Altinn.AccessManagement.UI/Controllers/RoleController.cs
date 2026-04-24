@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using System.Net;
 using Altinn.AccessManagement.UI.Core.Helpers;
 using Altinn.AccessManagement.UI.Core.Models.AccessPackage;
+using Altinn.AccessManagement.UI.Core.Models.AccessPackage.Frontend;
 using Altinn.AccessManagement.UI.Core.Models.Role;
 using Altinn.AccessManagement.UI.Core.Services.Interfaces;
 using Microsoft.AspNetCore.Authorization;
@@ -104,7 +105,7 @@ namespace Altinn.AccessManagement.UI.Controllers
         /// </remarks>
         [HttpGet("packages")]
         [Authorize]
-        public async Task<ActionResult<IEnumerable<AccessPackage>>> GetRolePackages(
+        public async Task<ActionResult<IEnumerable<AccessPackageFE>>> GetRolePackages(
             [FromQuery(Name = "roleCode")] string roleCode,
             [FromQuery] string variant = null,
             [FromQuery] bool includeResources = false)
@@ -122,7 +123,8 @@ namespace Altinn.AccessManagement.UI.Controllers
             try
             {
                 string languageCode = LanguageHelper.GetSelectedLanguageCookieValueBackendStandard(_httpContextAccessor.HttpContext);
-                IEnumerable<AccessPackage> packages = await _roleService.GetRolePackages(roleCode, variant, includeResources, languageCode);
+                var rolePackages = await _roleService.GetRolePackages(roleCode, variant, includeResources, languageCode);
+                List<AccessPackageFE> packages = rolePackages.Select(MapAccessPackageToAccessPackageFE).ToList();
                 return Ok(packages);
             }
             catch (HttpStatusException ex)
@@ -143,7 +145,7 @@ namespace Altinn.AccessManagement.UI.Controllers
         /// </remarks>
         [HttpGet("resources")]
         [Authorize]
-        public async Task<ActionResult<IEnumerable<ResourceAM>>> GetRoleResources(
+        public async Task<ActionResult<IEnumerable<AccessPackageResourceFE>>> GetRoleResources(
             [FromQuery(Name = "roleCode")] string roleCode,
             [FromQuery] string variant = null,
             [FromQuery(Name = "includePackageResources")] bool includePackageResources = false)
@@ -161,13 +163,29 @@ namespace Altinn.AccessManagement.UI.Controllers
             try
             {
                 string languageCode = LanguageHelper.GetSelectedLanguageCookieValueBackendStandard(_httpContextAccessor.HttpContext);
-                IEnumerable<ResourceAM> resources = await _roleService.GetRoleResources(roleCode, variant, includePackageResources, languageCode);
+                var roleResources = await _roleService.GetRoleResources(roleCode, variant, includePackageResources, languageCode);
+                List<AccessPackageResourceFE> resources = ResourceUtils.MapToAccessPackageResourceFE(roleResources);
                 return Ok(resources);
             }
             catch (HttpStatusException ex)
             {
                 return new ObjectResult(ProblemDetailsFactory.CreateProblemDetails(HttpContext, (int?)ex.StatusCode, "Unexpected HttpStatus response"));
             }
+        }
+
+        private static AccessPackageFE MapAccessPackageToAccessPackageFE(AccessPackage package)
+        {
+            var resources = ResourceUtils.MapToAccessPackageResourceFE(package.Resources);
+            return new AccessPackageFE
+            {
+                Id = package.Id.ToString(),
+                Urn = package.Urn,
+                Name = package.Name,
+                IsAssignable = package.IsAssignable,
+                Description = package.Description,
+                Resources = resources,
+                Permissions = []
+            };
         }
     }
 }

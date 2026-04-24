@@ -4,7 +4,6 @@ import { useTranslation } from 'react-i18next';
 import { DsHeading, DsParagraph, DsSearch } from '@altinn/altinn-components';
 
 import type { ServiceResource } from '@/rtk/features/singleRights/singleRightsApi';
-import type { RoleResourceMetadata } from '@/rtk/features/roleApi';
 
 import { useResourceList } from '../AccessPackages/useResourceList';
 import { List } from '../../List';
@@ -12,7 +11,7 @@ import classes from './RoleInfo.module.css';
 import { SkeletonResourceList } from '../../ResourceList/SkeletonResourceList';
 
 interface RoleResourcesSectionProps {
-  roleResources?: RoleResourceMetadata[];
+  roleResources?: ServiceResource[];
   isLoading: boolean;
 }
 
@@ -20,25 +19,7 @@ export const RoleResourcesSection = ({ roleResources, isLoading }: RoleResources
   const { t } = useTranslation();
   const [searchValue, setSearchValue] = useState('');
 
-  const roleResourceList = useMemo<ServiceResource[]>(() => {
-    if (!roleResources) {
-      return [];
-    }
-
-    return roleResources.map((resource) => {
-      const provider = resource.provider;
-      return {
-        identifier: resource.refId,
-        title: resource.name,
-        description: resource.description ?? '',
-        resourceType: resource.type?.name ?? '',
-        resourceOwnerName: provider?.name ?? '',
-        resourceOwnerLogoUrl: provider?.logoUrl ?? '',
-        resourceOwnerOrgcode: provider?.code ?? '',
-        resourceOwnerOrgNumber: provider?.refId ?? '',
-      };
-    });
-  }, [roleResources]);
+  const roleResourceList = roleResources ?? [];
 
   const trimmedSearchValue = searchValue.trim();
   const filteredRoleResources = useMemo(() => {
