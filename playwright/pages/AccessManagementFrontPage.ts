@@ -28,7 +28,7 @@ export class AccessManagementFrontPage {
     this.tryNewAccessManagementButton = this.page.getByRole('button', {
       name: 'Prøv ny tilgangsstyring',
     });
-    this.klientadministrasjonButton = this.page.locator('#client-admin');
+    this.klientadministrasjonButton = this.page.getByRole('link', { name: 'Klientadministrasjon' });
   }
 
   async goToKlientAdministrasjon() {
