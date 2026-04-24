@@ -126,11 +126,11 @@ export const SentRequestsModal = ({
 
 interface PendingRequestsListProps {
   selectedResource: ServiceResource | null;
-  heading: string;
+  heading?: string;
   setSelectedResource: (resource: ServiceResource | null) => void;
 }
 
-const PendingRequestsList = ({
+export const PendingRequestsList = ({
   selectedResource,
   heading,
   setSelectedResource,
@@ -157,7 +157,7 @@ const PendingRequestsList = ({
   });
 
   return (
-    <>
+    <div>
       {selectedResource ? (
         <>
           <DsButton
@@ -175,13 +175,15 @@ const PendingRequestsList = ({
         </>
       ) : (
         <>
-          <DsHeading
-            data-size='xs'
-            level={1}
-            className={classes.pendingRequestsHeading}
-          >
-            {heading}
-          </DsHeading>
+          {heading && (
+            <DsHeading
+              data-size='xs'
+              level={1}
+              className={classes.pendingRequestsHeading}
+            >
+              {heading}
+            </DsHeading>
+          )}
           <ResourceList
             isLoading={isLoadingRequests}
             size={isSmallScreen ? 'sm' : 'md'}
@@ -208,6 +210,6 @@ const PendingRequestsList = ({
           />
         </>
       )}
-    </>
+    </div>
   );
 };

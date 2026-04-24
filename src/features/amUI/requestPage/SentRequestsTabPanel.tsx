@@ -5,7 +5,7 @@ import { Request } from './types';
 
 import classes from './RequestPage.module.css';
 import { useRef, useState } from 'react';
-import { SentRequestsModal } from '../userRightsPage/SingleRightsSection/PendingRequests';
+import { SentRequestsCombinedModal } from './SentRequestsCombinedModal';
 import { PartyRepresentationProvider } from '../common/PartyRepresentationContext/PartyRepresentationContext';
 import { getCookie } from '@/resources/Cookie/CookieMethods';
 import { PartyType } from '@/rtk/features/userInfoApi';
@@ -64,7 +64,7 @@ export const SentRequestsTabPanel = ({ pendingRequests }: SentRequestsTabPanelPr
         toPartyUuid={getCookie('AltinnPartyUuid')}
         actingPartyUuid={getCookie('AltinnPartyUuid')}
       >
-        <SentRequestsModal
+        <SentRequestsCombinedModal
           modalRef={modalRef}
           heading={t('delegation_modal.request.sent_requests_modal_header', {
             partyName: formatDisplayName({

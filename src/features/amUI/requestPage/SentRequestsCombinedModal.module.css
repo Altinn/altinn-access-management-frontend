@@ -1,0 +1,26 @@
+.dialog {
+  max-width: 992px;
+  max-height: calc(100vh - var(--ds-spacing-8));
+  overflow-y: auto;
+}
+
+.heading {
+  padding-bottom: var(--ds-spacing-2);
+}
+
+.requestList {
+  display: flex;
+  flex-direction: column;
+  gap: var(--ds-spacing-2);
+  margin-bottom: var(--ds-spacing-2);
+}
+
+.container {
+  display: flex;
+  flex-direction: column;
+  gap: var(--ds-spacing-2);
+}
+
+.closeButton {
+  margin-top: var(--ds-spacing-4);
+}
