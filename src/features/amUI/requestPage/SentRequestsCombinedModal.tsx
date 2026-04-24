@@ -71,7 +71,7 @@ export const SentRequestsCombinedModal = ({
                 {heading}
               </DsHeading>
             )}
-            {hasPendingSentPackageRequests && (
+            {(hasPendingSentPackageRequests || selectedPackageRequest) && (
               <div className={classes.requestList}>
                 {!hasDetailView && (
                   <DsHeading
@@ -81,7 +81,7 @@ export const SentRequestsCombinedModal = ({
                     {t('request_page.package_list_title')}
                   </DsHeading>
                 )}
-                {!selectedResource && hasPendingSentPackageRequests && (
+                {!selectedResource && (
                   <DelegationModalProvider>
                     <PendingPackageRequestsList
                       selectedRequest={selectedPackageRequest}
@@ -91,7 +91,7 @@ export const SentRequestsCombinedModal = ({
                 )}
               </div>
             )}
-            {hasPendingSentResourceRequests && (
+            {(hasPendingSentResourceRequests || selectedResource) && (
               <div className={classes.requestList}>
                 {!hasDetailView && (
                   <DsHeading
@@ -101,7 +101,7 @@ export const SentRequestsCombinedModal = ({
                     {t('request_page.resource_list_title')}
                   </DsHeading>
                 )}
-                {!selectedPackageRequest && hasPendingSentResourceRequests && (
+                {!selectedPackageRequest && (
                   <PendingRequestsList
                     selectedResource={selectedResource}
                     setSelectedResource={setSelectedResource}
