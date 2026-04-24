@@ -540,8 +540,6 @@ export class EnduserConnection {
       ],
     };
 
-    console.log(JSON.stringify(payload));
-
     const url = `${env('API_BASE_URL')}/accessmanagement/api/v1/enduser/clientdelegations/agents/accesspackages?party=${fromUuid}&from=${clientUuid}&to=${agentUuid}`;
     const response = await fetch(url, {
       method: 'POST',
