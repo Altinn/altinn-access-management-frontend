@@ -551,8 +551,9 @@ export class EnduserConnection {
     });
 
     if (!response.ok) {
+      const responseBody = await response.text();
       throw new Error(
-        `Failed to fetch status for addClientDelegationAgent request. Status: ${response.status}`,
+        `Failed to fetch status for delegerKlientTilBruker request. Status: ${response.status}. Response body: ${responseBody}`,
       );
     }
 
