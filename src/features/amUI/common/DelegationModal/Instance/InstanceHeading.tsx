@@ -51,7 +51,7 @@ export const InstanceHeading = ({
       ) : (
         <Avatar
           type='company'
-          name={resource.resourceOwnerName}
+          name={resource.resourceOwnerName ?? ''}
           size={'sm'}
         />
       )}

@@ -108,7 +108,7 @@ export const ResourceList = ({
     const uniqueOwners = new Map<string, { value: string; label: string; count: number }>();
     resources.forEach((res) => {
       const code = res.resourceOwnerOrgcode;
-      const name = res.resourceOwnerName;
+      const name = res.resourceOwnerName ?? '';
       if (code) {
         const existing = uniqueOwners.get(code);
         if (existing) {
@@ -157,11 +157,11 @@ export const ResourceList = ({
                 {filteredResources.map((resource, index) => {
                   const resourceId = resource.identifier || `resource-${index}`;
                   const resourceName = resource.title;
-                  const ownerName = resource.resourceOwnerName;
+                  const ownerName = resource.resourceOwnerName ?? '';
                   const orgCode = resource.resourceOwnerOrgcode;
                   const providerLogo = resolveLogos && orgCode ? logoResolver(orgCode) : undefined;
                   const ownerLogoUrl = providerLogo ?? resource.resourceOwnerLogoUrl;
-                  const ownerLogoAlt = resource.resourceOwnerName;
+                  const ownerLogoAlt = resource.resourceOwnerName ?? '';
                   const itemInteractive = derivedInteractive(resource);
                   const itemAs = as ?? (itemInteractive ? 'button' : 'div');
                   const itemSize = size ?? 'xs';

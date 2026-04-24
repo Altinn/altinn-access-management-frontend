@@ -22,7 +22,7 @@ export const ResourceHeading = ({ resource }: { resource: ServiceResource }) => 
       ) : (
         <Avatar
           type='company'
-          name={resource.resourceOwnerName}
+          name={resource.resourceOwnerName ?? ''}
           size={small ? 'sm' : undefined}
           className={!small ? classes.lgAvatar : undefined}
         />

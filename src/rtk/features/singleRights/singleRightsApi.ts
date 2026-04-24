@@ -17,10 +17,10 @@ export interface ServiceResource {
   title: string;
   description?: string;
   resourceType: string;
-  resourceOwnerName: string;
-  resourceOwnerLogoUrl: string;
+  resourceOwnerName?: string;
+  resourceOwnerLogoUrl?: string;
   resourceOwnerOrgcode: string;
-  resourceOwnerOrgNumber: string;
+  resourceOwnerOrgNumber?: string;
   rightDescription?: string;
   resourceReferences?: resourceReference[];
   authorizationReference?: IdValuePair[];

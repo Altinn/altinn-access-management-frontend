@@ -49,7 +49,7 @@ export const RoleResourcesSection = ({ roleResources, isLoading }: RoleResources
 
     return roleResourceList.filter((resource) => {
       const resourceName = resource.title.toLowerCase();
-      const ownerName = resource.resourceOwnerName.toLowerCase();
+      const ownerName = resource.resourceOwnerName?.toLowerCase() ?? '';
 
       return resourceName.includes(normalizedSearch) || ownerName.includes(normalizedSearch);
     });

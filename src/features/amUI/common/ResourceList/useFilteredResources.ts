@@ -19,8 +19,8 @@ export const useFilteredResources = ({
     const list = resources ?? [];
     if (!normalizedSearch && !serviceOwnerFilter) return list;
     return list.filter((resource) => {
-      const nameOrTitle = resource.title.toLowerCase();
-      const ownerName = resource.resourceOwnerName.toLowerCase();
+      const title = resource.title.toLowerCase();
+      const ownerName = resource.resourceOwnerName?.toLowerCase() ?? '';
       const description = resource.description?.toLowerCase() ?? '';
       const serviceOwnerMatch =
         serviceOwnerFilter && serviceOwnerFilter.length > 0
@@ -29,7 +29,7 @@ export const useFilteredResources = ({
               .includes(resource.resourceOwnerOrgcode.toLowerCase())
           : true;
       return (
-        (nameOrTitle.includes(normalizedSearch) ||
+        (title.includes(normalizedSearch) ||
           ownerName.includes(normalizedSearch) ||
           description.includes(normalizedSearch)) &&
         serviceOwnerMatch

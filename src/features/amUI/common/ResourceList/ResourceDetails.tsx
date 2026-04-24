@@ -23,7 +23,7 @@ export const ResourceDetailsContent = ({
             <Avatar
               type='company'
               imageUrl={providerLogoUrl ?? resource.resourceOwnerLogoUrl}
-              name={resource.resourceOwnerName}
+              name={resource.resourceOwnerName ?? ''}
             />
           </div>
           <div>

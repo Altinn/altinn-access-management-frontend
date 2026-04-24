@@ -16,9 +16,9 @@ export const useResourceList = (list: ServiceResource[]) => {
         id={resource.identifier}
         loading={isLoading}
         resourceName={resource.title}
-        ownerName={resource.resourceOwnerName}
+        ownerName={resource.resourceOwnerName ?? ''}
         ownerLogoUrl={emblem ?? resource.resourceOwnerLogoUrl}
-        ownerLogoUrlAlt={resource.resourceOwnerName}
+        ownerLogoUrlAlt={resource.resourceOwnerName ?? ''}
         as='div'
         size='xs'
         interactive={false}
