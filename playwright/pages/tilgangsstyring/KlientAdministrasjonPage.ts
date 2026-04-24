@@ -40,11 +40,11 @@ export class KlientAdministrasjonPage {
   }
 
   async skrivFnr(fnr: string) {
-    await this.page.getByRole('textbox', { name: 'Fødselsnr./brukernavn' }).fill(fnr);
+    await this.fnrFelt.fill(fnr);
   }
 
   async skrivEtternavn(etternavn: string) {
-    await this.page.getByRole('textbox', { name: 'etternavn' }).fill(etternavn);
+    await this.etternavnFelt.fill(etternavn);
   }
 
   async klikkLeggTilPerson() {
