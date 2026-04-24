@@ -488,7 +488,7 @@ export class EnduserConnection {
 
     if (!response.ok) {
       throw new Error(
-        `Failed to fetch status for addClientDelegationAgent request. Status: ${response.status}`,
+        `Failed to fetch status for deleteClientDelegationAgent request. Status: ${response.status}. Response: ${await response.text()}`,
       );
     }
 
