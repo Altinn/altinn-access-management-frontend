@@ -34,7 +34,7 @@ test.describe('klientadministrasjon', () => {
       await login.LoginToAccessManagement('09866598352');
     });
 
-    await test.step('Velg org VANLIG FILOSOFISK TIGER AS og gå til klientadministrasjon', async () => {
+    await test.step('Velg org UVANLIG FILOSOFISK TIGER AS og gå til klientadministrasjon', async () => {
       await aktorvalgHeader.selectActorFromHeaderMenu('UVANLIG FILOSOFISK TIGER AS');
       await accessManagementFrontPage.gotoKlientAdministrasjon();
     });
