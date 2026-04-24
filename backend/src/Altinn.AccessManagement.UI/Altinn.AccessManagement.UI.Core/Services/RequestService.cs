@@ -3,6 +3,7 @@ using Altinn.AccessManagement.UI.Core.Enums;
 using Altinn.AccessManagement.UI.Core.Exceptions;
 using Altinn.AccessManagement.UI.Core.Helpers;
 using Altinn.AccessManagement.UI.Core.Models.AccessPackage;
+using Altinn.AccessManagement.UI.Core.Models.AccessPackage.Frontend;
 using Altinn.AccessManagement.UI.Core.Models.Common;
 using Altinn.AccessManagement.UI.Core.Models.Request;
 using Altinn.AccessManagement.UI.Core.Models.Request.Frontend;
@@ -225,9 +226,24 @@ namespace Altinn.AccessManagement.UI.Core.Services
                     Status = request.Status,
                     PackageId = request.PackageId,
                     LastUpdated = request.LastUpdated,
-                    Package = package
+                    Package = MapAccessPackageToAccessPackageFE(package)
                 };
             }).ToList();
+        }
+
+        private static AccessPackageFE MapAccessPackageToAccessPackageFE(AccessPackage package)
+        {
+            var resources = ResourceUtils.MapToAccessPackageResourceFE(package.Resources);
+            return new AccessPackageFE
+            {
+                Id = package.Id.ToString(),
+                Urn = package.Urn,
+                Name = package.Name,
+                IsAssignable = package.IsAssignable,
+                Description = package.Description,
+                Resources = resources,
+                Permissions = []
+            };
         }
     }
 }
