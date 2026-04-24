@@ -31,7 +31,7 @@ export class AccessManagementFrontPage {
     this.klientadministrasjonButton = this.page.locator('#client-admin');
   }
 
-  async gotoKlientAdministrasjon() {
+  async goToKlientAdministrasjon() {
     await this.klientadministrasjonButton.click();
   }
 
