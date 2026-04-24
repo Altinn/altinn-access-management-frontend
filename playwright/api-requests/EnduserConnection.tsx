@@ -414,4 +414,150 @@ export class EnduserConnection {
 
     return response.json();
   }
+
+  public async addClientDelegationAgent(
+    pid: string,
+    fromParty: string,
+    agentPid: string,
+    fromUuid?: string,
+    agentUuid?: string,
+    agentLastName?: string,
+  ) {
+    let agent;
+    fromUuid = fromUuid || (await this.tokenClass.getPartyUuid(fromParty));
+    if (!agentUuid || !agentLastName) {
+      agent = await this.tokenClass.getIds(agentPid);
+    }
+    agentUuid = agentUuid || agent.partyUuid;
+    agentLastName = agentLastName || agent.lastName;
+    const token = await this.tokenClass.getPersonalTokenByPid(pid);
+    const payload = {
+      personidentifier: agentPid,
+      lastName: agentLastName,
+    };
+
+    const url = `${env('API_BASE_URL')}/accessmanagement/api/v1/enduser/clientdelegations/agents?party=${fromUuid}`;
+    const response = await fetch(url, {
+      method: 'POST',
+      headers: {
+        Authorization: `Bearer ${token}`,
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(payload),
+    });
+
+    if (!response.ok) {
+      throw new Error(
+        `Failed to fetch status for addClientDelegationAgent request. Status: ${response.status}`,
+      );
+    }
+
+    return response;
+  }
+
+  public async deleteClientDelegationAgent(
+    pid: string,
+    fromParty: string,
+    agentPid: string,
+    fromUuid?: string,
+    agentUuid?: string,
+    agentLastName?: string,
+  ) {
+    let agent;
+    fromUuid = fromUuid || (await this.tokenClass.getPartyUuid(fromParty));
+    if (!agentUuid || !agentLastName) {
+      agent = await this.tokenClass.getIds(agentPid);
+    }
+    agentUuid = agentUuid || agent.partyUuid;
+    agentLastName = agentLastName || agent.lastName;
+    const token = await this.tokenClass.getPersonalTokenByPid(pid);
+    const payload = {
+      personidentifier: agentPid,
+      lastName: agentLastName,
+    };
+
+    const url = `${env('API_BASE_URL')}/accessmanagement/api/v1/enduser/clientdelegations/agents?party=${fromUuid}&to=${agentUuid}`;
+    const response = await fetch(url, {
+      method: 'DELETE',
+      headers: {
+        Authorization: `Bearer ${token}`,
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(payload),
+    });
+
+    if (!response.ok) {
+      throw new Error(
+        `Failed to fetch status for addClientDelegationAgent request. Status: ${response.status}`,
+      );
+    }
+
+    return response;
+  }
+
+  public async getClientDelegationAgents(pid: string, fromParty: string) {
+    const token = await this.tokenClass.getPersonalTokenByPid(pid);
+    const fromUuid = await this.tokenClass.getPartyUuid(fromParty);
+
+    const url = `${env('API_BASE_URL')}/accessmanagement/api/v1/enduser/clientdelegations/agents?party=${fromUuid}`;
+    const response = await fetch(url, {
+      method: 'GET',
+      headers: {
+        Authorization: `Bearer ${token}`,
+        'Content-Type': 'application/json',
+      },
+    });
+
+    if (!response.ok) {
+      throw new Error(
+        `Failed to fetch status for getClientDelegationAgents request. Status: ${response.status}`,
+      );
+    }
+
+    return response;
+  }
+
+  public async delegerKlientTilBruker(
+    pid: string,
+    fromParty: string,
+    clientOrgNo: string,
+    agentPid: string,
+    packageName: string,
+    fromUuid?: string,
+    agentUuid?: string,
+    clientUuid?: string,
+  ) {
+    fromUuid = fromUuid || (await this.tokenClass.getPartyUuid(fromParty));
+    clientUuid = clientUuid || (await this.tokenClass.getPartyUuid(clientOrgNo));
+    agentUuid = agentUuid || (await this.tokenClass.getPartyUuid(agentPid));
+    const token = await this.tokenClass.getPersonalTokenByPid(pid);
+    const payload = {
+      values: [
+        {
+          role: 'rettighetshaver',
+          packages: [packageName],
+        },
+      ],
+    };
+
+    console.log(JSON.stringify(payload));
+
+    const url = `${env('API_BASE_URL')}/accessmanagement/api/v1/enduser/clientdelegations/agents/accesspackages?party=${fromUuid}&from=${clientUuid}&to=${agentUuid}`;
+    const response = await fetch(url, {
+      method: 'POST',
+      headers: {
+        Authorization: `Bearer ${token}`,
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(payload),
+    });
+
+    if (!response.ok) {
+      throw new Error(
+        `Failed to fetch status for addClientDelegationAgent request. Status: ${response.status}`,
+      );
+    }
+
+    return response;
+  }
 }
