@@ -13,7 +13,7 @@ export class KlientAdministrasjonPage {
   constructor(page: Page) {
     this.page = page;
     this.leggTilBrukerKnapp = this.page.getByRole('button', {
-      name: 'Legg til Legg til ny bruker',
+      name: 'Legg til ny bruker',
     });
     this.brukerFane = this.page.getByRole('tab', { name: 'Brukere' });
     this.klientFane = this.page.getByRole('tab', { name: 'Klienter' });
