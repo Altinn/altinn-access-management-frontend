@@ -19,7 +19,7 @@ export const useFilteredResources = ({
     const list = resources ?? [];
     if (!normalizedSearch && !serviceOwnerFilter) return list;
     return list.filter((resource) => {
-      const title = resource.title.toLowerCase();
+      const title = resource.title?.toLowerCase() ?? '';
       const ownerName = resource.resourceOwnerName?.toLowerCase() ?? '';
       const description = resource.description?.toLowerCase() ?? '';
       const serviceOwnerMatch =
