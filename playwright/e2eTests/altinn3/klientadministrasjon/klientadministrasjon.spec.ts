@@ -7,22 +7,31 @@ import { EnduserConnection } from '../../../api-requests/EnduserConnection';
 test.describe('klientadministrasjon', () => {
   const api = new EnduserConnection();
 
-  test.afterAll('slett testdata', async () => {
-    await api.deleteClientDelegationAgent('09866598352', '213779702', '29814895546');
-
-    await api.deleteClientDelegationAgent('16830197862', '311164651', '30877795760');
-
-    await api.deleteConnection('28868199808', '314087917', ['310002224']);
-    await api.deleteClientDelegationAgent('15846199893', '310002224', '28822449737');
-
-    await api.deleteConnection('12886999389', '313428435', ['312772655']);
-    await api.deleteClientDelegationAgent('08873349590', '312772655', '04905999376');
-
-    await api.deleteConnection('19876699047', '213836722', ['310781940']);
-    await api.deleteClientDelegationAgent('21895699168', '310781940', '03924296991');
-
-    await api.deleteConnection('23907296857', '313238105', ['313662624']);
-    await api.deleteClientDelegationAgent('16852749125', '313662624', '47822800420');
+  test.afterEach('slett testdata', async ({}, testInfo) => {
+    switch (testInfo.title) {
+      case 'legg til bruker':
+        await api.deleteClientDelegationAgent('09866598352', '213779702', '29814895546');
+        break;
+      case 'slett bruker':
+        await api.deleteClientDelegationAgent('16830197862', '311164651', '30877795760');
+        break;
+      case 'deleger klient til en bruker fra klientfanen':
+        await api.deleteConnection('28868199808', '314087917', ['310002224']);
+        await api.deleteClientDelegationAgent('15846199893', '310002224', '28822449737');
+        break;
+      case 'deleger klient til en bruker fra brukerfanen':
+        await api.deleteConnection('23907296857', '313238105', ['313662624']);
+        await api.deleteClientDelegationAgent('16852749125', '313662624', '47822800420');
+        break;
+      case 'Slett fullmakt for en bruker fra brukerfanen':
+        await api.deleteConnection('12886999389', '313428435', ['312772655']);
+        await api.deleteClientDelegationAgent('08873349590', '312772655', '04905999376');
+        break;
+      case 'Slett fullmakt for en bruker fra klientfanen':
+        await api.deleteConnection('19876699047', '213836722', ['310781940']);
+        await api.deleteClientDelegationAgent('21895699168', '310781940', '03924296991');
+        break;
+    }
   });
 
   test('legg til bruker', async ({ page, accessManagementFrontPage, klientAdministrasjonPage }) => {
