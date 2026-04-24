@@ -71,7 +71,7 @@ export const SentRequestsCombinedModal = ({
                 {heading}
               </DsHeading>
             )}
-            {hasPendingSentPackageRequests && (
+            {(hasPendingSentPackageRequests || selectedPackageRequest) && !selectedResource && (
               <div className={classes.requestList}>
                 {!hasDetailView && (
                   <DsHeading
@@ -81,17 +81,16 @@ export const SentRequestsCombinedModal = ({
                     {t('request_page.package_list_title')}
                   </DsHeading>
                 )}
-                {!selectedResource && hasPendingSentPackageRequests && (
-                  <DelegationModalProvider>
-                    <PendingPackageRequestsList
-                      selectedRequest={selectedPackageRequest}
-                      setSelectedRequest={setSelectedPackageRequest}
-                    />
-                  </DelegationModalProvider>
-                )}
+
+                <DelegationModalProvider>
+                  <PendingPackageRequestsList
+                    selectedRequest={selectedPackageRequest}
+                    setSelectedRequest={setSelectedPackageRequest}
+                  />
+                </DelegationModalProvider>
               </div>
             )}
-            {hasPendingSentResourceRequests && (
+            {(hasPendingSentResourceRequests || selectedResource) && !selectedPackageRequest && (
               <div className={classes.requestList}>
                 {!hasDetailView && (
                   <DsHeading
@@ -101,12 +100,10 @@ export const SentRequestsCombinedModal = ({
                     {t('request_page.resource_list_title')}
                   </DsHeading>
                 )}
-                {!selectedPackageRequest && hasPendingSentResourceRequests && (
-                  <PendingRequestsList
-                    selectedResource={selectedResource}
-                    setSelectedResource={setSelectedResource}
-                  />
-                )}
+                <PendingRequestsList
+                  selectedResource={selectedResource}
+                  setSelectedResource={setSelectedResource}
+                />
               </div>
             )}
           </div>
