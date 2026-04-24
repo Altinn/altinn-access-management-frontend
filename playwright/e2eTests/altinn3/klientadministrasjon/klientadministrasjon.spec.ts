@@ -7,6 +7,53 @@ import { EnduserConnection } from '../../../api-requests/EnduserConnection';
 test.describe('klientadministrasjon', () => {
   const api = new EnduserConnection();
 
+  test.beforeEach('sett opp testdata', async ({}, testInfo) => {
+    switch (testInfo.title) {
+      case 'slett bruker':
+        await api.addClientDelegationAgent('16830197862', '311164651', '30877795760');
+        await api.getClientDelegationAgents('16830197862', '311164651');
+        break;
+      case 'deleger klient til en bruker fra klientfanen':
+        await api.addConnectionAndPackagesToUser('28868199808', '314087917', '310002224', [
+          'urn:altinn:accesspackage:posttjenester',
+        ]);
+        await api.addClientDelegationAgent('15846199893', '310002224', '28822449737');
+        break;
+      case 'deleger klient til en bruker fra brukerfanen':
+        await api.addConnectionAndPackagesToUser('23907296857', '313238105', '313662624', [
+          'urn:altinn:accesspackage:posttjenester',
+        ]);
+        await api.addClientDelegationAgent('16852749125', '313662624', '47822800420');
+        break;
+      case 'Slett fullmakt for en bruker fra brukerfanen':
+        await api.addConnectionAndPackagesToUser('12886999389', '313428435', '312772655', [
+          'urn:altinn:accesspackage:posttjenester',
+        ]);
+        await api.addClientDelegationAgent('08873349590', '312772655', '04905999376');
+        await api.delegerKlientTilBruker(
+          '08873349590',
+          '312772655',
+          '313428435',
+          '04905999376',
+          'urn:altinn:accesspackage:posttjenester',
+        );
+        break;
+      case 'Slett fullmakt for en bruker fra klientfanen':
+        await api.addConnectionAndPackagesToUser('19876699047', '213836722', '310781940', [
+          'urn:altinn:accesspackage:posttjenester',
+        ]);
+        await api.addClientDelegationAgent('21895699168', '310781940', '03924296991');
+        await api.delegerKlientTilBruker(
+          '21895699168',
+          '310781940',
+          '213836722',
+          '03924296991',
+          'urn:altinn:accesspackage:posttjenester',
+        );
+        break;
+    }
+  });
+
   test.afterEach('slett testdata', async ({}, testInfo) => {
     switch (testInfo.title) {
       case 'legg til bruker':
@@ -65,11 +112,6 @@ test.describe('klientadministrasjon', () => {
     const login = new LoginPage(page);
     const aktorvalgHeader = new AktorvalgHeader(page);
 
-    await test.step('sett opp testdata', async () => {
-      await api.addClientDelegationAgent('16830197862', '311164651', '30877795760');
-      await api.getClientDelegationAgents('16830197862', '311164651');
-    });
-
     await test.step('Logg inn', async () => {
       await page.goto(env('BASE_URL'));
       await login.LoginToAccessManagement('16830197862');
@@ -100,13 +142,6 @@ test.describe('klientadministrasjon', () => {
   }) => {
     const login = new LoginPage(page);
     const aktorvalgHeader = new AktorvalgHeader(page);
-
-    await test.step('sett opp testdata', async () => {
-      await api.addConnectionAndPackagesToUser('28868199808', '314087917', '310002224', [
-        'urn:altinn:accesspackage:posttjenester',
-      ]);
-      await api.addClientDelegationAgent('15846199893', '310002224', '28822449737');
-    });
 
     await test.step('Logg inn', async () => {
       await page.goto(env('BASE_URL'));
@@ -148,13 +183,6 @@ test.describe('klientadministrasjon', () => {
     const login = new LoginPage(page);
     const aktorvalgHeader = new AktorvalgHeader(page);
 
-    await test.step('sett opp testdata', async () => {
-      await api.addConnectionAndPackagesToUser('23907296857', '313238105', '313662624', [
-        'urn:altinn:accesspackage:posttjenester',
-      ]);
-      await api.addClientDelegationAgent('16852749125', '313662624', '47822800420');
-    });
-
     await test.step('Logg inn', async () => {
       await page.goto(env('BASE_URL'));
       await login.LoginToAccessManagement('16852749125');
@@ -194,20 +222,6 @@ test.describe('klientadministrasjon', () => {
     const login = new LoginPage(page);
     const aktorvalgHeader = new AktorvalgHeader(page);
 
-    await test.step('sett opp testdata', async () => {
-      await api.addConnectionAndPackagesToUser('12886999389', '313428435', '312772655', [
-        'urn:altinn:accesspackage:posttjenester',
-      ]);
-      await api.addClientDelegationAgent('08873349590', '312772655', '04905999376');
-      await api.delegerKlientTilBruker(
-        '08873349590',
-        '312772655',
-        '313428435',
-        '04905999376',
-        'urn:altinn:accesspackage:posttjenester',
-      );
-    });
-
     await test.step('Logg inn', async () => {
       await page.goto(env('BASE_URL'));
       await login.LoginToAccessManagement('08873349590');
@@ -239,20 +253,6 @@ test.describe('klientadministrasjon', () => {
   }) => {
     const login = new LoginPage(page);
     const aktorvalgHeader = new AktorvalgHeader(page);
-
-    await test.step('sett opp testdata', async () => {
-      await api.addConnectionAndPackagesToUser('19876699047', '213836722', '310781940', [
-        'urn:altinn:accesspackage:posttjenester',
-      ]);
-      await api.addClientDelegationAgent('21895699168', '310781940', '03924296991');
-      await api.delegerKlientTilBruker(
-        '21895699168',
-        '310781940',
-        '213836722',
-        '03924296991',
-        'urn:altinn:accesspackage:posttjenester',
-      );
-    });
 
     await test.step('Logg inn', async () => {
       await page.goto(env('BASE_URL'));
