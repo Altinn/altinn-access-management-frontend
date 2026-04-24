@@ -25,7 +25,8 @@
             "urn": null
           }
         },
-        "resources": []
+        "resources": [],
+        "permissions": []
       }
     ]
   }

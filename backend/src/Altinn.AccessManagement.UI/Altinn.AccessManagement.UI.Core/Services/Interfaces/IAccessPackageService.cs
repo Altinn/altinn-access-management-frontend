@@ -11,14 +11,6 @@ namespace Altinn.AccessManagement.UI.Core.Services.Interfaces
     public interface IAccessPackageService
     {
         /// <summary>
-        /// Fetch a single access package by id
-        /// </summary>
-        /// <param name="languageCode">language code</param>
-        /// <param name="packageId">package id</param>
-        /// <returns>The access package</returns>
-        Task<AccessPackage> GetAccessPackageById(string languageCode, Guid packageId);
-        
-        /// <summary>
         ///     Performs a search for access packages based on the provided parameters and sorts them into a list of areas for frontend to display
         /// </summary>
         /// <param name="languageCode">languageCode.</param>

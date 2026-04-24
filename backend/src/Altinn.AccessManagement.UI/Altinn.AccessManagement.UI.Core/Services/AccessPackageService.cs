@@ -44,18 +44,34 @@ namespace Altinn.AccessManagement.UI.Core.Services
             foreach (SearchObject<AccessPackage> searchMatch in searchMatches)
             {
                 int premadeAreaIndex = sortedAreas.FindIndex(area => area.Id == searchMatch.Object.Area.Id);
+                AccessPackageFE packageFE = MapAccessPackageToAccessPackageFE(searchMatch.Object);
 
                 if (premadeAreaIndex < 0)
                 {
-                    sortedAreas.Add(new AccessAreaFE(searchMatch.Object.Area, new List<AccessPackage> { searchMatch.Object }));
+                    sortedAreas.Add(new AccessAreaFE(searchMatch.Object.Area, new List<AccessPackageFE> { packageFE }, searchMatch.Object?.Type?.Name ?? string.Empty));
                 }
                 else
                 {
-                    sortedAreas[premadeAreaIndex].AccessPackages.Add(searchMatch.Object);
+                    sortedAreas[premadeAreaIndex].AccessPackages.Add(packageFE);
                 }
             }
 
             return sortedAreas;
+        }
+
+        private static AccessPackageFE MapAccessPackageToAccessPackageFE(AccessPackage package)
+        {
+            var resources = ResourceUtils.MapToAccessPackageResourceFE(package.Resources);
+            return new AccessPackageFE
+            {
+                Id = package.Id.ToString(),
+                Urn = package.Urn,
+                Name = package.Name,
+                IsAssignable = package.IsAssignable,
+                Description = package.Description,
+                Resources = resources,
+                Permissions = []
+            };
         }
 
         /// <inheritdoc/>
@@ -85,7 +101,7 @@ namespace Altinn.AccessManagement.UI.Core.Services
         /// <inheritdoc />
         public async Task<AccessPackageFE> GetSinglePackagePermission(Guid party, Guid? to, Guid? from, Guid packageId, string languageCode)
         {
-            var package = await GetAccessPackageById(languageCode, packageId);
+            var package = await _accessPackageClient.GetAccessPackageById(languageCode, packageId);
             if (package == null)
             {
                 return null;
@@ -98,24 +114,11 @@ namespace Altinn.AccessManagement.UI.Core.Services
                 PaginatedResult<PackagePermission> paginatedAccesses = await _accessPackageClient.GetAccessPackageAccesses(party, to, from, languageCode);
                 var packagePermissions = paginatedAccesses.Items.FirstOrDefault(x => x.Package.Id == packageId);
                 {
-                    return new AccessPackageFE
-                    {
-                        Id = package.Id.ToString(),
-                        Urn = package.Urn,
-                        Name = package.Name,
-                        IsAssignable = package.IsAssignable,
-                        Description = package.Description,
-                        Resources = ResourceUtils.MapToAccessPackageResourceFE(package.Resources),
-                        Permissions = packagePermissions?.Permissions?.ToList() ?? new List<Permission>()
-                    };
+                    var accessPackageFE = MapAccessPackageToAccessPackageFE(package);
+                    accessPackageFE.Permissions = packagePermissions?.Permissions?.ToList() ?? new List<Permission>();
+                    return accessPackageFE;
                 }
             }
-        }
-
-        /// <inheritdoc />
-        public async Task<AccessPackage> GetAccessPackageById(string languageCode, Guid packageId)
-        {
-            return await _accessPackageClient.GetAccessPackageById(languageCode, packageId);
         }
 
         /// <inheritdoc />
