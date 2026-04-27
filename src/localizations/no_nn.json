@@ -174,6 +174,12 @@
     "unsynced_connection": "Vi har ein synkroniseringsfeil mellom ny og gammal løysing. Dette er noko vi jobbar med, men for nå kan du dessverre ikkje sjå tilgangane dine her. Vi beklagar ulempa dette medfører!",
     "unsynced_connection_link": "Klikk her for å sjå tilgangane dine i gammal løysing"
   },
+  "reportee_change_error": {
+    "header": "Vi klarte ikkje å byte avgivar",
+    "description": "Den valde avgivaren er ikkje tilgjengeleg for deg, eller lenka du følgde var ugyldig.",
+    "if_persistent_contact_service": "Dersom problemet held fram kan du kontakte Altinn brukarservice på telefon 75 00 60 00.",
+    "go_to_altinn": "Gå til Altinn"
+  },
   "profile": {
     "received": "Mottatt",
     "sent": "Sendt",
