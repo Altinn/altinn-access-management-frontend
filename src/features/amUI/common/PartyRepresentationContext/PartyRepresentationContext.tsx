@@ -98,11 +98,14 @@ export const PartyRepresentationProvider = ({
   const { party: reportee, isLoading: reporteeIsLoading } = useReporteeParty();
   const { data: authorizedPartyReportee } = useGetReporteeQuery();
 
+  const isLoadingInitialState = externalIsLoading || currentUserIsLoading || reporteeIsLoading;
+
   const { party: fromConnectedParty, isLoading: fromPartyIsLoading } = useConnectedParty({
     fromPartyUuid,
     skip:
       !fromPartyUuid ||
       fromPartyUuid === actingPartyUuid ||
+      isLoadingInitialState ||
       fromPartyUuid === currentUser?.partyUuid ||
       fromPartyUuid === reportee?.partyUuid ||
       !!fromPartyOverride, // Skip if fromPartyOverride is provided, since that means the consumer is providing the fromParty data themselves
@@ -113,6 +116,7 @@ export const PartyRepresentationProvider = ({
     skip:
       !toPartyUuid ||
       toPartyUuid === actingPartyUuid ||
+      isLoadingInitialState ||
       toPartyUuid === currentUser?.partyUuid ||
       toPartyUuid === reportee?.partyUuid ||
       !!toPartyOverride, // Skip if toPartyOverride is provided, since that means the consumer is providing the toParty data themselves
