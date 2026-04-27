@@ -39,6 +39,7 @@ namespace Altinn.AccessManagement.UI.Controllers
         /// <param name="generalSettings">general settings</param>
         /// <param name="featureFlags">feature flags</param>
         /// <param name="userService">user service to look up things about the user</param>
+        /// <param name="logger">the logger</param>
         public HomeController(
             IOptions<FrontEndEntryPointOptions> frontEndEntrypoints,
             IAntiforgery antiforgery,
