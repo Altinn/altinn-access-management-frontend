@@ -96,36 +96,30 @@ namespace Altinn.AccessManagement.UI.Controllers
             return Redirect(redirectUrl);
         }
 
-        private Task SetLanguageCookie()
+        private async Task SetLanguageCookie()
         {
-            var httpContext = _httpContextAccessor.HttpContext;
+            string languageCode = "no_nb";
 
-            string languageCode = LanguageHelper.GetAltinnPersistenceCookieValueFrontendStandard(httpContext);
-
-            if (string.IsNullOrEmpty(languageCode))
+            int userId = AuthenticationHelper.GetUserId(HttpContext);
+            if (userId > 0)
             {
-                languageCode = httpContext?.Request.Cookies["selectedLanguage"];
+                var profile = await _userService.GetUserProfile(userId);
+                string profileLanguage = profile?.ProfileSettingPreference?.Language;
+                if (!string.IsNullOrEmpty(profileLanguage))
+                {
+                    string frontendCode = LanguageHelper.GetFrontendStandardLanguage(profileLanguage);
+                    if (!string.IsNullOrEmpty(frontendCode))
+                    {
+                        languageCode = frontendCode;
+                    }
+                }
             }
 
-            if (string.IsNullOrEmpty(languageCode))
-            {
-                languageCode = "no_nb";
-            }
-
-            string frontendLanguage = LanguageHelper.GetFrontendStandardLanguage(languageCode);
-
-            if (string.IsNullOrEmpty(frontendLanguage))
-            {
-                frontendLanguage = "no_nb";
-            }
-
-            HttpContext.Response.Cookies.Append("selectedLanguage", frontendLanguage, new CookieOptions
+            HttpContext.Response.Cookies.Append("selectedLanguage", languageCode, new CookieOptions
             {
                 // Make this cookie readable by Javascript.
                 HttpOnly = false,
             });
-
-            return Task.CompletedTask;
         }
 
         private async Task CheckAndSetPartyRepresentationCookies()
