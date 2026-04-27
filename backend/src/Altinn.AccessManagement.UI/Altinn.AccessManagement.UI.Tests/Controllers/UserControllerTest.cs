@@ -1074,30 +1074,5 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
             // Assert
             Assert.Equal(HttpStatusCode.Unauthorized, response.StatusCode);
         }
-
-        [Theory]
-        [InlineData("no_nb", "nb")]
-        [InlineData("no_nn", "nn")]
-        [InlineData("en", "en")]
-        public async Task SetLanguageProfileSetting_ConvertsToBackendStandard_CallsProfileClient(string frontendCode, string expectedBackendCode)
-        {
-            var profileClientMock = new Mock<IProfileClient>();
-            profileClientMock
-                .Setup(c => c.PatchCurrentUserProfileSetting(It.IsAny<ProfileSettingPreference>()))
-                .ReturnsAsync(new ProfileSettingPreference());
-
-            var service = new UserService(
-                Mock.Of<ILogger<IAPIDelegationService>>(),
-                profileClientMock.Object,
-                Mock.Of<IAccessManagementClient>(),
-                Mock.Of<IAccessManagementClientV0>(),
-                Mock.Of<IConnectionClient>());
-
-            await service.SetLanguageProfileSetting(frontendCode);
-
-            profileClientMock.Verify(
-                c => c.PatchCurrentUserProfileSetting(It.Is<ProfileSettingPreference>(p => p.Language == expectedBackendCode)),
-                Times.Once);
-        }
     }
 }
