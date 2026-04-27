@@ -46,10 +46,7 @@ export class AccessManagementFrontPage {
   }
 
   async sokEtterEnkelttjeneste(tjenesteNavn: string) {
-    await this.page
-      .getByRole('searchbox', { name: 'Søk etter tjenester' })
-      .first()
-      .fill(tjenesteNavn);
+    await this.page.getByPlaceholder('Søk etter tjenester').nth(1).fill(tjenesteNavn);
   }
 
   async clickEnkelttjeneste(tjenesteNavn: string) {
