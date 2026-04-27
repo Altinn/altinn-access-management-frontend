@@ -104,7 +104,10 @@ export const ActiveConsentsPage = () => {
                       : t('active_consents.see_pending_consent'),
                   }))}
                   onClick={(consentId: string) => {
-                    const consentRequestUrl = getConsentRequestUrl(consentId, 'overview');
+                    const consentRequestUrl = getConsentRequestUrl(
+                      consentId,
+                      encodeURIComponent(`/${ConsentPath.Consent}/${ConsentPath.Active}`),
+                    );
                     navigate(consentRequestUrl);
                   }}
                 />

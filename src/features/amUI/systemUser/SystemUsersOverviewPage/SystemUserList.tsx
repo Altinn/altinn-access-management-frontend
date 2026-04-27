@@ -8,6 +8,7 @@ import { TenancyIcon } from '@navikt/aksel-icons';
 import {
   getSystemUserAgentRequestUrl,
   getSystemUserRequestUrl,
+  SystemUserPath,
 } from '@/routes/paths/systemUserPath';
 
 interface SystemUserListProps {
@@ -53,10 +54,16 @@ export const SystemUserList = ({
             href = `/systemuser/${systemUser.id}/agentdelegation`;
           } else if (systemUser.userType === 'standard' && isPendingRequestList) {
             badgeContent = t('systemuser_overviewpage.pending_request_badge');
-            href = getSystemUserRequestUrl(systemUser.id, 'overview');
+            href = getSystemUserRequestUrl(
+              systemUser.id,
+              encodeURIComponent(`/${SystemUserPath.SystemUser}/${SystemUserPath.Overview}`),
+            );
           } else if (systemUser.userType === 'agent' && isPendingRequestList) {
             badgeContent = t('systemuser_overviewpage.pending_agent_request_badge');
-            href = getSystemUserAgentRequestUrl(systemUser.id, 'overview');
+            href = getSystemUserAgentRequestUrl(
+              systemUser.id,
+              encodeURIComponent(`/${SystemUserPath.SystemUser}/${SystemUserPath.Overview}`),
+            );
           }
 
           const badge = (
