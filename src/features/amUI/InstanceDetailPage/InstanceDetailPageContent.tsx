@@ -3,7 +3,6 @@ import { DsAlert, DsButton, DsParagraph } from '@altinn/altinn-components';
 import { Navigate, useSearchParams } from 'react-router';
 import { Trans, useTranslation } from 'react-i18next';
 
-import { InstanceDetailHeader } from './InstanceDetailHeader';
 import { ResourceInfoSkeleton } from '../common/DelegationModal/SingleRights/ResourceInfoSkeleton';
 import { PageDivider } from '../common/PageDivider/PageDivider';
 import { InstanceUsersAsAdmin } from './InstanceUsersAsAdmin';
@@ -15,7 +14,6 @@ import {
 } from '../common/TechnicalErrorParagraphs/TechnicalErrorParagraphs';
 import { useGetInstancesQuery, useRemoveInstanceMutation } from '@/rtk/features/instanceApi';
 import { useGetResourceQuery } from '@/rtk/features/resourceApi';
-import { useProviderLogoUrl } from '@/resources/hooks';
 import {
   PartyType,
   useGetIsAdminQuery,
@@ -26,7 +24,11 @@ import { DelegationAction, EditModal } from '../common/DelegationModal/EditModal
 import type { ActionError } from '@/resources/hooks/useActionError';
 import type { UserActionTarget } from '../common/UserSearch/types';
 import { AddUserButton } from './AddUserModal';
-import { getInboxLinkData } from '../common/InstanceList/instanceListUtils';
+import {
+  getInboxLinkData,
+  toInstancePresentationData,
+} from '../common/InstanceList/instanceListUtils';
+import { InstanceDescription } from '../common/InstanceDescription/InstanceDescription';
 
 import classes from './InstanceDetailPageContent.module.css';
 
@@ -83,7 +85,6 @@ export const InstanceDetailPageContent = () => {
       });
   };
 
-  const { getProviderLogoUrl } = useProviderLogoUrl();
   const instanceUrn = searchParams.get('instanceUrn') ?? '';
   const resourceId = searchParams.get('resourceId') ?? '';
   const dialogId = searchParams.get('dialogId');
@@ -172,9 +173,14 @@ export const InstanceDetailPageContent = () => {
       ? createErrorDetails(isAdminErrorObj || isInstanceAdminErrorObj || resourceError)
       : null;
 
-  const providerLogoUrl = resource?.resourceOwnerOrgcode
-    ? getProviderLogoUrl(resource.resourceOwnerOrgcode)
-    : undefined;
+  const instanceData = instanceDelegation
+    ? toInstancePresentationData(instanceDelegation)
+    : {
+        instance: {
+          refId: instanceUrn,
+          type: null,
+        },
+      };
   const selectedUserAvailableActions =
     selectedUserMode === 'delegate' || isAdmin === false
       ? [DelegationAction.DELEGATE]
@@ -183,13 +189,12 @@ export const InstanceDetailPageContent = () => {
   return (
     <>
       {resource && (
-        <InstanceDetailHeader
+        <InstanceDescription
           resource={resource}
-          instance={instanceDelegation?.instance}
-          dialogLookup={instanceDelegation?.dialogLookup}
-          providerLogoUrl={providerLogoUrl}
+          instanceData={instanceData}
           fromPartyName={fromParty?.name}
-          fromPartyTypeName={fromParty?.partyTypeName}
+          fromPartyType={fromParty?.partyTypeName}
+          titleLevel={1}
         />
       )}
       {inboxLink}
