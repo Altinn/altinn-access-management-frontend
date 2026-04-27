@@ -106,7 +106,7 @@ test.describe('klientadministrasjon', () => {
     });
 
     await test.step('MUNTER SKO har nå blitt lagt til', async () => {
-      await expect(klientAdministrasjonPage.sletteKnapp()).toBeVisible();
+      await expect(klientAdministrasjonPage.slettBrukerKnapp).toBeVisible();
       await expect(klientAdministrasjonPage.brukerKnapp('MUNTER SKO')).toBeVisible();
     });
   });
@@ -137,7 +137,7 @@ test.describe('klientadministrasjon', () => {
     });
 
     await test.step('TROVERDIG JUICE er nå slettet', async () => {
-      await expect(klientAdministrasjonPage.ingenBrukereHarFattTekst()).toBeVisible();
+      await expect(klientAdministrasjonPage.ingenBrukereTekst).toBeVisible();
     });
   });
 
@@ -245,7 +245,7 @@ test.describe('klientadministrasjon', () => {
     });
 
     await test.step('FORSTÅELSESFULL TRAFIKKORK har ingen fullmakter lenger', async () => {
-      await expect(klientAdministrasjonPage.ingenKlienterTekst()).toBeVisible();
+      await expect(klientAdministrasjonPage.ingenKlienterTekst).toBeVisible();
     });
   });
 
@@ -277,7 +277,7 @@ test.describe('klientadministrasjon', () => {
     });
 
     await test.step('FORSTÅELSESFULL TRAFIKKORK har ingen fullmakter lenger', async () => {
-      await expect(klientAdministrasjonPage.ingenBrukereHarFattTekst()).toBeVisible();
+      await expect(klientAdministrasjonPage.ingenBrukereTekst).toBeVisible();
     });
   });
 });

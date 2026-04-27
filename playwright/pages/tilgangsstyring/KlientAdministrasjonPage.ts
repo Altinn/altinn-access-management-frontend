@@ -9,6 +9,10 @@ export class KlientAdministrasjonPage {
   readonly fnrFelt: Locator;
   readonly etternavnFelt: Locator;
   readonly leggTilPersonKnapp: Locator;
+  readonly slettBrukerKnapp: Locator;
+  readonly slettBrukerDialogKnapp: Locator;
+  readonly ingenBrukereTekst: Locator;
+  readonly ingenKlienterTekst: Locator;
 
   constructor(page: Page) {
     this.page = page;
@@ -21,6 +25,12 @@ export class KlientAdministrasjonPage {
     this.fnrFelt = this.page.getByRole('textbox', { name: 'Fødselsnr./brukernavn' });
     this.etternavnFelt = this.page.getByRole('textbox', { name: 'Etternavn' });
     this.leggTilPersonKnapp = this.page.getByRole('button', { name: 'Legg til person' });
+    this.slettBrukerKnapp = this.page.getByRole('button', { name: 'Slett bruker' });
+    this.slettBrukerDialogKnapp = this.page
+      .getByRole('dialog')
+      .getByRole('button', { name: 'Slett bruker' });
+    this.ingenBrukereTekst = this.page.getByText('Ingen brukere har fått');
+    this.ingenKlienterTekst = this.page.getByText('Ingen klienter er tildelt.');
   }
 
   async goToBrukerFane() {
@@ -51,13 +61,9 @@ export class KlientAdministrasjonPage {
     await this.leggTilPersonKnapp.click();
   }
 
-  sletteKnapp(): Locator {
-    return this.page.getByRole('button', { name: 'Slett bruker' });
-  }
-
   async slettBruker() {
-    await this.page.getByRole('button', { name: 'Slett bruker' }).click();
-    await this.page.getByRole('dialog').getByRole('button', { name: 'Slett bruker' }).click();
+    await this.slettBrukerKnapp.click();
+    await this.slettBrukerDialogKnapp.click();
   }
 
   brukerKnapp(brukernavn: string): Locator {
@@ -66,14 +72,6 @@ export class KlientAdministrasjonPage {
 
   async klikkListeElement(brukernavn: string) {
     await this.page.getByRole('link', { name: brukernavn }).click();
-  }
-
-  ingenBrukereHarFattTekst(): Locator {
-    return this.page.getByText('Ingen brukere har fått');
-  }
-
-  ingenKlienterTekst(): Locator {
-    return this.page.getByText('Ingen klienter er tildelt.');
   }
 
   async klikkAlleBrukere() {
