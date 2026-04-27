@@ -103,15 +103,22 @@ namespace Altinn.AccessManagement.UI.Controllers
             int userId = AuthenticationHelper.GetUserId(HttpContext);
             if (userId > 0)
             {
-                var profile = await _userService.GetUserProfile(userId);
-                string profileLanguage = profile?.ProfileSettingPreference?.Language;
-                if (!string.IsNullOrEmpty(profileLanguage))
+                try
                 {
-                    string frontendCode = LanguageHelper.GetFrontendStandardLanguage(profileLanguage);
-                    if (!string.IsNullOrEmpty(frontendCode))
+                    var profile = await _userService.GetUserProfile(userId);
+                    string profileLanguage = profile?.ProfileSettingPreference?.Language;
+                    if (!string.IsNullOrEmpty(profileLanguage))
                     {
-                        languageCode = frontendCode;
+                        string frontendCode = LanguageHelper.GetFrontendStandardLanguage(profileLanguage);
+                        if (!string.IsNullOrEmpty(frontendCode))
+                        {
+                            languageCode = frontendCode;
+                        }
                     }
+                }
+                catch
+                {
+                    // Fall back to default language if profile lookup fails
                 }
             }
 

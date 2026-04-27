@@ -276,5 +276,80 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
             Assert.Single(cookieHeaders, c => c.StartsWith("AltinnPartyId"));
             Assert.Single(cookieHeaders, c => c.StartsWith("AltinnPartyUuid"));
         }
+
+        /// <summary>
+        /// Test case: Profile has Language "nb" → selectedLanguage cookie must be "no_nb"
+        /// Expected: selectedLanguage=no_nb is set from profile, ignoring any legacy cookie
+        /// </summary>
+        [Fact]
+        public async Task Index_ProfileHasNbLanguage_SetsSelectedLanguageCookieToNoNb()
+        {
+            // Arrange — userId 20004938 has Language "nb" in profile fixture
+            string token = PrincipalUtil.GetToken(20004938, 50019992);
+            HttpClient client = SetupUtils.GetTestClient(_factory, false);
+
+            var request = new HttpRequestMessage(HttpMethod.Get, "accessmanagement/");
+            SetupUtils.AddAuthCookie(request, token, "AltinnStudioRuntime");
+            request.Headers.Add("Cookie", "AltinnPartyId=50019992");
+            request.Headers.Add("Cookie", "AltinnPartyUuid=cd772c20-f780-43f6-819f-2d9f23fc0a1a");
+
+            // Act
+            HttpResponseMessage response = await client.SendAsync(request);
+            IEnumerable<string> cookieHeaders = response.Headers.GetValues("Set-Cookie");
+
+            // Assert
+            Assert.Equal(HttpStatusCode.OK, response.StatusCode);
+            Assert.Contains(cookieHeaders, c => c.StartsWith("selectedLanguage=no_nb"));
+        }
+
+        /// <summary>
+        /// Test case: Profile has Language "en" → selectedLanguage cookie must be "en"
+        /// Expected: selectedLanguage=en is set from profile
+        /// </summary>
+        [Fact]
+        public async Task Index_ProfileHasEnLanguage_SetsSelectedLanguageCookieToEn()
+        {
+            // Arrange — userId 20099001 has Language "en" in profile fixture
+            string token = PrincipalUtil.GetToken(20099001, 51000001);
+            HttpClient client = SetupUtils.GetTestClient(_factory, false);
+
+            var request = new HttpRequestMessage(HttpMethod.Get, "accessmanagement/");
+            SetupUtils.AddAuthCookie(request, token, "AltinnStudioRuntime");
+            request.Headers.Add("Cookie", "AltinnPartyId=51000001");
+            request.Headers.Add("Cookie", "AltinnPartyUuid=a1b2c3d4-e5f6-7890-abcd-ef1234567890");
+
+            // Act
+            HttpResponseMessage response = await client.SendAsync(request);
+            IEnumerable<string> cookieHeaders = response.Headers.GetValues("Set-Cookie");
+
+            // Assert
+            Assert.Equal(HttpStatusCode.OK, response.StatusCode);
+            Assert.Contains(cookieHeaders, c => c.StartsWith("selectedLanguage=en"));
+        }
+
+        /// <summary>
+        /// Test case: Profile API returns an error → selectedLanguage cookie defaults to "no_nb"
+        /// Expected: Page still loads with selectedLanguage=no_nb, error does not propagate
+        /// </summary>
+        [Fact]
+        public async Task Index_ProfileApiError_SetsSelectedLanguageCookieToDefaultNoNb()
+        {
+            // Arrange — userId 500 triggers HttpRequestException in ProfileClientMock
+            string token = PrincipalUtil.GetToken(500, 50000500);
+            HttpClient client = SetupUtils.GetTestClient(_factory, false);
+
+            var request = new HttpRequestMessage(HttpMethod.Get, "accessmanagement/");
+            SetupUtils.AddAuthCookie(request, token, "AltinnStudioRuntime");
+            request.Headers.Add("Cookie", "AltinnPartyId=50000500");
+            request.Headers.Add("Cookie", "AltinnPartyUuid=00000000-0000-0000-0000-000000000500");
+
+            // Act
+            HttpResponseMessage response = await client.SendAsync(request);
+            IEnumerable<string> cookieHeaders = response.Headers.GetValues("Set-Cookie");
+
+            // Assert
+            Assert.Equal(HttpStatusCode.OK, response.StatusCode);
+            Assert.Contains(cookieHeaders, c => c.StartsWith("selectedLanguage=no_nb"));
+        }
     }
 }
