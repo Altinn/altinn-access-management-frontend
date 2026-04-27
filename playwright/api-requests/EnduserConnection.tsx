@@ -420,16 +420,11 @@ export class EnduserConnection {
     fromParty: string,
     agentPid: string,
     fromUuid?: string,
-    agentUuid?: string,
     agentLastName?: string,
   ) {
     let agent;
     fromUuid = fromUuid || (await this.tokenClass.getPartyUuid(fromParty));
-    if (!agentUuid || !agentLastName) {
-      agent = await this.tokenClass.getIds(agentPid);
-    }
-    agentUuid = agentUuid || agent.partyUuid;
-    agentLastName = agentLastName || agent.lastName;
+    agentLastName = agentLastName || (await this.tokenClass.getLastName(agentPid));
     const token = await this.tokenClass.getPersonalTokenByPid(pid);
     const payload = {
       personidentifier: agentPid,
