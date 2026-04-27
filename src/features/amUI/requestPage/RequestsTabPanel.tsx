@@ -12,6 +12,7 @@ import { RequestReviewModal } from './RequestReviewModal/RequestReviewModal';
 import { Request } from './types';
 
 import classes from './RequestPage.module.css';
+import { amUIPath } from '@/routes/paths';
 
 interface RequestsTabPanelProps {
   count: number;
@@ -68,11 +69,15 @@ export const PendingRequests = ({ pendingRequests }: PendingRequestsProps) => {
     <>
       {pendingRequests?.map((request) => {
         const getRequestUrl = () => {
-          if (request.type === 'consent') return getConsentRequestUrl(request.id, 'landingpage');
+          if (request.type === 'consent')
+            return getConsentRequestUrl(request.id, encodeURIComponent(`/${amUIPath.Requests}`));
           if (request.type === 'systemuser')
-            return getSystemUserRequestUrl(request.id, 'landingpage');
+            return getSystemUserRequestUrl(request.id, encodeURIComponent(`/${amUIPath.Requests}`));
           if (request.type === 'agentsystemuser')
-            return getSystemUserAgentRequestUrl(request.id, 'landingpage');
+            return getSystemUserAgentRequestUrl(
+              request.id,
+              encodeURIComponent(`/${amUIPath.Requests}`),
+            );
           return null;
         };
         const toUrl = getRequestUrl();
