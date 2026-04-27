@@ -196,6 +196,7 @@ export const InstanceInfo = ({
           }}
           fromPartyName={fromParty?.name}
           fromPartyType={fromParty?.partyTypeName}
+          titleLevel={2}
           statusSection={
             <div
               className={classes.resourceInfo}

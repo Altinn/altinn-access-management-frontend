@@ -29,7 +29,7 @@ export const InstanceDescription = ({
   instanceData,
   fromPartyName,
   fromPartyType,
-  titleLevel = 3,
+  titleLevel = 2,
   statusSection,
 }: InstanceDescriptionProps) => {
   const { getProviderLogoUrl } = useProviderLogoUrl();
@@ -81,20 +81,20 @@ export const InstanceDescription = ({
       {statusSection}
       {dialogportenLookupEnabled
         ? (resource.title || instanceData?.instance.refId) && (
-            <dl className={classes.metadataList}>
+            <>
               {resource.title && (
                 <div className={classes.metadataRow}>
-                  <dt className={classes.metadataTerm}>{t('instance.service_title_label')}</dt>
-                  <dd className={classes.metadataValue}>{resource.title}</dd>
+                  <span className={classes.metadataTerm}>{t('instance.service_title_label')}</span>
+                  <span className={classes.metadataValue}>{resource.title}</span>
                 </div>
               )}
               {instanceData?.instance.refId && (
                 <div className={classes.metadataRow}>
-                  <dt className={classes.metadataTerm}>{t('instance.instance_id_label')}</dt>
-                  <dd className={classes.metadataValue}>{shortId}</dd>
+                  <span className={classes.metadataTerm}>{t('instance.instance_id_label')}</span>
+                  <span className={classes.metadataValue}>{shortId}</span>
                 </div>
               )}
-            </dl>
+            </>
           )
         : resource.description && (
             <DsParagraph
