@@ -68,8 +68,8 @@ export class KlientAdministrasjonPage {
     await this.page.getByRole('link', { name: brukernavn }).click();
   }
 
-  async ingenBrukereFinnes() {
-    await expect(this.page.getByText('Ingen brukere har fått')).toBeVisible();
+  ingenBrukereHarFattTekst(): Locator {
+    return this.page.getByText('Ingen brukere har fått');
   }
 
   async ingenKlienterFinnes() {

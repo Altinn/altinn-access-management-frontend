@@ -1,6 +1,6 @@
 import { env } from 'playwright/util/helper';
 import { LoginPage } from 'playwright/pages/LoginPage';
-import { test } from '../../../fixture/pomFixture';
+import { expect, test } from '../../../fixture/pomFixture';
 import { AktorvalgHeader } from '../../../pages/AktorvalgHeader';
 import { EnduserConnection } from '../../../api-requests/EnduserConnection';
 
@@ -137,7 +137,7 @@ test.describe('klientadministrasjon', () => {
     });
 
     await test.step('TROVERDIG JUICE er nå slettet', async () => {
-      await klientAdministrasjonPage.ingenBrukereFinnes();
+      await expect(klientAdministrasjonPage.ingenBrukereHarFattTekst()).toBeVisible();
     });
   });
 
@@ -277,7 +277,7 @@ test.describe('klientadministrasjon', () => {
     });
 
     await test.step('FORSTÅELSESFULL TRAFIKKORK har ingen fullmakter lenger', async () => {
-      await klientAdministrasjonPage.ingenBrukereFinnes();
+      await expect(klientAdministrasjonPage.ingenBrukereHarFattTekst()).toBeVisible();
     });
   });
 });
