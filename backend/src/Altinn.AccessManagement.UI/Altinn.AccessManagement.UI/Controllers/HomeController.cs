@@ -6,6 +6,7 @@ using Altinn.AccessManagement.UI.Core.Services.Interfaces;
 using Altinn.AccessManagement.UI.Integration.Configuration;
 using Microsoft.AspNetCore.Antiforgery;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 
 namespace Altinn.AccessManagement.UI.Controllers
@@ -25,6 +26,7 @@ namespace Altinn.AccessManagement.UI.Controllers
         private readonly IHttpContextAccessor _httpContextAccessor;
         private readonly PlatformSettings _platformSettings;
         private readonly IUserService _userService;
+        private readonly ILogger<HomeController> _logger;
 
         /// <summary>
         ///     Initializes a new instance of the <see cref="HomeController" /> class.
@@ -45,7 +47,8 @@ namespace Altinn.AccessManagement.UI.Controllers
             IHttpContextAccessor httpContextAccessor,
             IOptions<GeneralSettings> generalSettings,
             IOptions<FeatureFlags> featureFlags,
-            IUserService userService)
+            IUserService userService,
+            ILogger<HomeController> logger)
         {
             _antiforgery = antiforgery;
             _platformSettings = platformSettings.Value;
@@ -54,6 +57,7 @@ namespace Altinn.AccessManagement.UI.Controllers
             _generalSettings = generalSettings.Value;
             _featureFlags = featureFlags.Value;
             _userService = userService;
+            _logger = logger;
         }
 
         /// <summary>
@@ -116,9 +120,9 @@ namespace Altinn.AccessManagement.UI.Controllers
                         }
                     }
                 }
-                catch
+                catch (Exception ex)
                 {
-                    // Fall back to default language if profile lookup fails
+                    _logger.LogWarning(ex, "Failed to read language preference from profile for userId {UserId}. Falling back to default.", userId);
                 }
             }
 
