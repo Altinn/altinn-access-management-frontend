@@ -21,18 +21,9 @@
 }
 
 .metadataRow {
-  display: grid;
-  grid-template-columns: minmax(0, 8rem) minmax(0, 1fr);
-  gap: var(--ds-spacing-2);
   width: 100%;
-}
-
-.metadataTerm {
+  font-size: 0.875rem;
   color: var(--ds-color-text-subtle);
-}
-
-.metadataValue {
-  overflow-wrap: anywhere;
 }
 
 .description {

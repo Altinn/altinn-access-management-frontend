@@ -84,14 +84,13 @@ export const InstanceDescription = ({
             <>
               {resource.title && (
                 <div className={classes.metadataRow}>
-                  <span className={classes.metadataTerm}>{t('instance.service_title_label')}</span>
-                  <span className={classes.metadataValue}>{resource.title}</span>
+                  {t('instance.service_title_label')} {': '} {resource.title}
                 </div>
               )}
               {instanceData?.instance.refId && (
                 <div className={classes.metadataRow}>
-                  <span className={classes.metadataTerm}>{t('instance.instance_id_label')}</span>
-                  <span className={classes.metadataValue}>{shortId}</span>
+                  {t('instance.instance_id_label')} {': '}
+                  {shortId}
                 </div>
               )}
             </>
