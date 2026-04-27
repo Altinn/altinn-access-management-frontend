@@ -106,8 +106,8 @@ test.describe('klientadministrasjon', () => {
     });
 
     await test.step('MUNTER SKO har nå blitt lagt til', async () => {
-      await klientAdministrasjonPage.sletteKnappFinnes();
-      await klientAdministrasjonPage.brukerFinnes('MUNTER SKO');
+      await expect(klientAdministrasjonPage.sletteKnapp()).toBeVisible();
+      await expect(klientAdministrasjonPage.brukerKnapp('MUNTER SKO')).toBeVisible();
     });
   });
 
@@ -171,12 +171,12 @@ test.describe('klientadministrasjon', () => {
 
     await test.step('SINDIG BRUD finnes nå i listen over eksisterende brukere', async () => {
       await klientAdministrasjonPage.klikkBrukereMedFullmakt();
-      await klientAdministrasjonPage.brukerFinnes('SINDIG BRUD');
+      await expect(klientAdministrasjonPage.brukerKnapp('SINDIG BRUD')).toBeVisible();
     });
 
     await test.step('og har tilgangspakken Posttjenester', async () => {
       await klientAdministrasjonPage.klikkKnapp('SINDIG BRUD');
-      await klientAdministrasjonPage.slettFullmaktKnappFinnes('Posttjenester');
+      await expect(klientAdministrasjonPage.slettFullmaktKnapp('Posttjenester')).toBeVisible();
     });
   });
 
@@ -209,12 +209,12 @@ test.describe('klientadministrasjon', () => {
 
     await test.step('UVANLIG FREDAG finnes nå i listen over eksisterende brukere', async () => {
       await klientAdministrasjonPage.klikkHarDisseKlientene();
-      await klientAdministrasjonPage.brukerFinnes('BESTEMT SLAKK TIGER AS');
+      await expect(klientAdministrasjonPage.brukerKnapp('BESTEMT SLAKK TIGER AS')).toBeVisible();
     });
 
     await test.step('og har tilgangspakken Posttjenester', async () => {
       await klientAdministrasjonPage.klikkKnapp('BESTEMT SLAKK TIGER AS');
-      await klientAdministrasjonPage.slettFullmaktKnappFinnes('Posttjenester');
+      await expect(klientAdministrasjonPage.slettFullmaktKnapp('Posttjenester')).toBeVisible();
     });
   });
 
@@ -245,7 +245,7 @@ test.describe('klientadministrasjon', () => {
     });
 
     await test.step('FORSTÅELSESFULL TRAFIKKORK har ingen fullmakter lenger', async () => {
-      await klientAdministrasjonPage.ingenKlienterFinnes();
+      await expect(klientAdministrasjonPage.ingenKlienterTekst()).toBeVisible();
     });
   });
 

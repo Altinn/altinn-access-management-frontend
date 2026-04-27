@@ -51,8 +51,8 @@ export class KlientAdministrasjonPage {
     await this.leggTilPersonKnapp.click();
   }
 
-  async sletteKnappFinnes() {
-    await expect(this.page.getByRole('button', { name: 'Slett bruker' })).toBeVisible();
+  sletteKnapp(): Locator {
+    return this.page.getByRole('button', { name: 'Slett bruker' });
   }
 
   async slettBruker() {
@@ -60,8 +60,8 @@ export class KlientAdministrasjonPage {
     await this.page.getByRole('dialog').getByRole('button', { name: 'Slett bruker' }).click();
   }
 
-  async brukerFinnes(brukernavn: string) {
-    await expect(this.page.getByRole('heading', { name: brukernavn })).toBeVisible();
+  brukerKnapp(brukernavn: string): Locator {
+    return this.page.getByRole('heading', { name: brukernavn });
   }
 
   async klikkListeElement(brukernavn: string) {
@@ -72,8 +72,8 @@ export class KlientAdministrasjonPage {
     return this.page.getByText('Ingen brukere har fått');
   }
 
-  async ingenKlienterFinnes() {
-    await expect(this.page.getByText('Ingen klienter er tildelt.')).toBeVisible();
+  ingenKlienterTekst(): Locator {
+    return this.page.getByText('Ingen klienter er tildelt.');
   }
 
   async klikkAlleBrukere() {
@@ -99,10 +99,10 @@ export class KlientAdministrasjonPage {
       .click();
   }
 
-  async slettFullmaktKnappFinnes(navn: string) {
-    await expect(
-      this.page.getByText(`${navn}Slett fullmakt`).getByRole('button', { name: 'Slett fullmakt' }),
-    ).toBeVisible();
+  slettFullmaktKnapp(navn: string): Locator {
+    return this.page
+      .getByText(`${navn}Slett fullmakt`)
+      .getByRole('button', { name: 'Slett fullmakt' });
   }
 
   async slettFullmakt(navn: string) {
