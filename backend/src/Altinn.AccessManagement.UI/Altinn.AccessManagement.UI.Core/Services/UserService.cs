@@ -63,6 +63,11 @@ namespace Altinn.AccessManagement.UI.Core.Services
         public async Task SetLanguageProfileSetting(string languageCode)
         {
             string backendLanguage = LanguageHelper.GetBackendStandardLanguage(languageCode);
+            if (string.IsNullOrEmpty(backendLanguage))
+            {
+                throw new ArgumentException($"Unsupported language code: {languageCode}", nameof(languageCode));
+            }
+
             ProfileSettingPreference change = new ProfileSettingPreference { Language = backendLanguage };
             await _profileClient.PatchCurrentUserProfileSetting(change);
         }
