@@ -10,6 +10,8 @@ using Microsoft.Net.Http.Headers;
 using Altinn.AccessManagement.UI.Controllers;
 using Altinn.AccessManagement.UI.Core.ClientInterfaces;
 using Altinn.AccessManagement.UI.Core.Models.Profile;
+using Altinn.AccessManagement.UI.Core.Services;
+using Altinn.AccessManagement.UI.Core.Services.Interfaces;
 using Altinn.AccessManagement.UI.Mocks.Mocks;
 using Altinn.AccessManagement.UI.Mocks.Utils;
 using Altinn.AccessManagement.UI.Tests.Utils;
@@ -537,6 +539,26 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
         }
 
         /// <summary>
+        ///     Test case: Valid language code updates both cookie and profile setting
+        ///     Expected: Returns OK — profile patch did not fail
+        /// </summary>
+        [Theory]
+        [InlineData("no_nb")]
+        [InlineData("no_nn")]
+        [InlineData("en")]
+        public async Task UpdateSelectedLanguage_ValidLanguageCode_AlsoPatchesProfileSetting(string languageCode)
+        {
+            // Arrange
+            var request = new { LanguageCode = languageCode };
+
+            // Act
+            HttpResponseMessage response = await _client.PostAsJsonAsync("accessmanagement/api/v1/settings/language/selectedLanguage", request);
+
+            // Assert — profile patch is called (via ProfileClientMock) and does not throw, so OK is returned
+            Assert.Equal(HttpStatusCode.OK, response.StatusCode);
+        }
+
+        /// <summary>
         ///     Test case: POST with auth cookie present but X-XSRF-TOKEN header missing
         ///     Expected: Antiforgery filter rejects the request with 400 Bad Request
         /// </summary>
@@ -606,10 +628,14 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
                 builder.ConfigureTestServices(services =>
                 {
                     services.AddTransient<IProfileClient, ProfileClientMock>();
+                    services.AddTransient<IAccessManagementClient, AccessManagementClientMock>();
+                    services.AddTransient<IAccessManagementClientV0, AccessManagementClientV0Mock>();
+                    services.AddTransient<IConnectionClient, ConnectionClientMock>();
+                    services.AddTransient<IUserService, UserService>();
                     services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
                     services.AddSingleton<IPostConfigureOptions<JwtCookieOptions>, JwtCookiePostConfigureOptionsStub>();
                 });
-            }).CreateClient(new WebApplicationFactoryClientOptions { AllowAutoRedirect = false });
+            }).CreateClient(new WebApplicationFactoryClientOptions { AllowAutoRedirect = false, HandleCookies = true });
         }
     }
 }

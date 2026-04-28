@@ -233,6 +233,10 @@ namespace Altinn.AccessManagement.UI.Tests.Utils
                 builder.ConfigureTestServices(services =>
                 {
                     services.AddTransient<IProfileClient, ProfileClientMock>();
+                    services.AddTransient<IAccessManagementClient, AccessManagementClientMock>();
+                    services.AddTransient<IAccessManagementClientV0, AccessManagementClientV0Mock>();
+                    services.AddTransient<IConnectionClient, ConnectionClientMock>();
+                    services.AddTransient<IUserService, UserService>();
                     services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
                     services.AddSingleton<IPostConfigureOptions<JwtCookieOptions>, JwtCookiePostConfigureOptionsStub>();
                 });

@@ -149,6 +149,32 @@
     }
   },
   {
+    "UserId": 20099001,
+    "UserUuid": "a1b2c3d4-e5f6-7890-abcd-ef1234567890",
+    "UserName": "EnglishUser",
+    "PhoneNumber": "90001234",
+    "Email": "english@altinnstudiotestusers.com",
+    "PartyId": 51000001,
+    "Party": {
+      "PartyId": 51000001,
+      "PartyUuid": "a1b2c3d4-e5f6-7890-abcd-ef1234567890",
+      "PartyTypeName": 1,
+      "OrgNumber": null,
+      "Ssn": "01010112345",
+      "UnitType": null,
+      "Name": "ENGLISH TEST USER",
+      "IsDeleted": false,
+      "OnlyHierarchyElementWithNoAccess": false,
+      "Person": null,
+      "Organisation": null,
+      "ChildParties": null
+    },
+    "UserType": 1,
+    "ProfileSettingPreference": {
+      "Language": "en"
+    }
+  },
+  {
     "UserId": 20012465,
     "UserUuid": "eb0e874b-5f37-44cc-b648-f9a902a82c89",
     "UserName": "FilmLover42",
