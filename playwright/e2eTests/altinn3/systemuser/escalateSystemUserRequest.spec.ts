@@ -84,10 +84,12 @@ test.describe('Systembruker - Eskaler', () => {
   });
 
   test.afterEach(async () => {
-    try {
-      await api.deleteRegularSystemUser(systemUserId, systemuserOwnerOrg, managerPid);
-    } catch (error) {
-      console.error('Cleanup: Failed to delete system user:', error);
+    if (systemUserId) {
+      try {
+        await api.deleteRegularSystemUser(systemUserId, systemuserOwnerOrg, managerPid);
+      } catch (error) {
+        console.error('Cleanup: Failed to delete system user:', error);
+      }
     }
     try {
       await api.deleteSystemInSystemRegister('312591332', name);
