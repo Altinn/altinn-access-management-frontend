@@ -2,6 +2,7 @@ using Altinn.AccessManagement.UI.Core.Configuration;
 using Altinn.AccessManagement.UI.Core.Helpers;
 using Altinn.AccessManagement.UI.Core.Models.AccessManagement;
 using Altinn.AccessManagement.UI.Core.Services.Interfaces;
+using Altinn.AccessManagement.UI.Filters;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
@@ -14,6 +15,7 @@ namespace Altinn.AccessManagement.UI.Controllers
     /// <c>/ui/Reportee/ChangeReporteeAndRedirect</c>.
     /// </summary>
     [Route("accessmanagement/api/v1/reportee")]
+    [AutoValidateAntiforgeryTokenIfAuthCookie]
     public class ReporteeController : Controller
     {
         private const string ErrorPagePath = "/accessmanagement/ui/errorpage/reportee";

@@ -10,7 +10,8 @@
       "PowerShell(Get-Command npm -ErrorAction SilentlyContinue)",
       "PowerShell(Get-Command node -ErrorAction SilentlyContinue)",
       "PowerShell(cd c:/repos/altinn-access-management-frontend; npx --yes -- yarn@4.12.0 install --mode skip-build 2>&1 | Select-Object -Last 10)",
-      "PowerShell(cd c:/repos/altinn-access-management-frontend; node .yarn/releases/yarn-4.12.0.cjs tsc --noEmit 2>&1 | Select-String -Pattern \"^\\(\\\\S+\\)\\\\\\(\\(\\\\d+\\),\\\\d+\\\\\\): error\" | ForEach-Object { \\($_ -split '\\\\\\('\\)[0] } | Sort-Object -Unique)"
+      "PowerShell(cd c:/repos/altinn-access-management-frontend; node .yarn/releases/yarn-4.12.0.cjs tsc --noEmit 2>&1 | Select-String -Pattern \"^\\(\\\\S+\\)\\\\\\(\\(\\\\d+\\),\\\\d+\\\\\\): error\" | ForEach-Object { \\($_ -split '\\\\\\('\\)[0] } | Sort-Object -Unique)",
+      "Bash(gh api *)"
     ]
   }
 }
