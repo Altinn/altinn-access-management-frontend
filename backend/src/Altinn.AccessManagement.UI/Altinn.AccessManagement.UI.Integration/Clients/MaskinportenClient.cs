@@ -1,3 +1,4 @@
+using System.Net;
 using Altinn.AccessManagement.UI.Core.ClientInterfaces;
 using Altinn.AccessManagement.UI.Core.Extensions;
 using Altinn.AccessManagement.UI.Core.Helpers;
@@ -44,24 +45,35 @@ namespace Altinn.AccessManagement.UI.Integration.Clients
         /// <inheritdoc />
         public async Task<IEnumerable<MaskinportenConnection>> GetSuppliers(Guid party, CancellationToken cancellationToken = default)
         {
-            return await GetConnections($"enduser/maskinportensuppliers?party={party}", "MaskinportenClient.GetSuppliers", cancellationToken);
+            var token = JwtTokenUtil.GetTokenFromContext(_httpContextAccessor.HttpContext, _platformSettings.JwtCookieName);
+            var endpointUrl = $"enduser/maskinportensuppliers?party={party}";
+            try
+            {
+                HttpResponseMessage response = await _client.GetAsync(token, endpointUrl, cancellationToken);
+                return await ClientUtils.DeserializeIfSuccessfullStatusCode<IEnumerable<MaskinportenConnection>>(response, _logger, "MaskinportenClient.GetSuppliers");
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error while getting right holders");
+                throw new HttpStatusException("Unexpected http response.", "Unexpected http response.", HttpStatusCode.InternalServerError, null, ex.Message);
+            }
         }
 
         /// <inheritdoc />
         public async Task<IEnumerable<MaskinportenConnection>> GetConsumers(Guid party, CancellationToken cancellationToken = default)
         {
-            return await GetConnections($"enduser/maskinportenconsumers?party={party}", "MaskinportenClient.GetConsumers", cancellationToken);
-        }
-
-        private async Task<IEnumerable<MaskinportenConnection>> GetConnections(string endpointUrl, string clientMethodName, CancellationToken cancellationToken)
-        {
-            string token = JwtTokenUtil.GetTokenFromContext(_httpContextAccessor.HttpContext, _platformSettings.JwtCookieName);
-
-            HttpResponseMessage response = await _client.GetAsync(token, endpointUrl);
-            IEnumerable<MaskinportenConnection> connections =
-                await ClientUtils.DeserializeIfSuccessfullStatusCode<IEnumerable<MaskinportenConnection>>(response, _logger, clientMethodName);
-
-            return connections ?? Enumerable.Empty<MaskinportenConnection>();
+            var token = JwtTokenUtil.GetTokenFromContext(_httpContextAccessor.HttpContext, _platformSettings.JwtCookieName);
+            var endpointUrl = $"enduser/maskinportenconsumers?party={party}";
+            try
+            {
+                HttpResponseMessage response = await _client.GetAsync(token, endpointUrl, cancellationToken);
+                return await ClientUtils.DeserializeIfSuccessfullStatusCode<IEnumerable<MaskinportenConnection>>(response, _logger, "MaskinportenClient.GetConsumers");
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error while getting right holders");
+                throw new HttpStatusException("Unexpected http response.", "Unexpected http response.", HttpStatusCode.InternalServerError, null, ex.Message);
+            }
         }
     }
 }

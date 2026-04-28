@@ -508,6 +508,6 @@ void ConfigureMockableClients(IServiceCollection services, IConfiguration config
     }
     else
     {
-        services.AddSingleton<IMaskinportenClient, MaskinportenClient>();
+        services.AddHttpClient<IMaskinportenClient, MaskinportenClient>();
     }
 }

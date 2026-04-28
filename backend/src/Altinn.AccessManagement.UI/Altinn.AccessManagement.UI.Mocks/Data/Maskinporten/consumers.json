@@ -16,8 +16,8 @@
     "roles": [
       {
         "id": "5f9856ac-35bb-4b7c-8db3-7cb549ec23f4",
-        "code": "supplier",
-        "urn": "altinn:role:maskinporten-supplier",
+        "code": "consumer",
+        "urn": "altinn:role:maskinporten-consumer",
         "legacyUrn": null,
         "children": null
       }
@@ -41,8 +41,8 @@
     "roles": [
       {
         "id": "5f9856ac-35bb-4b7c-8db3-7cb549ec23f4",
-        "code": "supplier",
-        "urn": "altinn:role:maskinporten-supplier",
+        "code": "consumer",
+        "urn": "altinn:role:maskinporten-consumer",
         "legacyUrn": null,
         "children": null
       }

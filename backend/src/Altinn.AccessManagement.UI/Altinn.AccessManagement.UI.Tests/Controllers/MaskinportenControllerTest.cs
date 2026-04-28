@@ -50,9 +50,10 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
             SetAuthHeader();
 
             HttpResponseMessage response = await _client.GetAsync($"accessmanagement/api/v1/maskinporten/suppliers?party={party}");
-            List<MaskinportenConnection> actualResponse = await response.Content.ReadFromJsonAsync<List<MaskinportenConnection>>();
 
             Assert.Equal(HttpStatusCode.OK, response.StatusCode);
+            List<MaskinportenConnection> actualResponse = await response.Content.ReadFromJsonAsync<List<MaskinportenConnection>>();
+
             Assert.NotNull(actualResponse);
             Assert.Equivalent(expectedResponse, actualResponse);
         }
@@ -69,9 +70,10 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
             SetAuthHeader();
 
             HttpResponseMessage response = await _client.GetAsync($"accessmanagement/api/v1/maskinporten/consumers?party={party}");
-            List<MaskinportenConnection> actualResponse = await response.Content.ReadFromJsonAsync<List<MaskinportenConnection>>();
 
             Assert.Equal(HttpStatusCode.OK, response.StatusCode);
+            List<MaskinportenConnection> actualResponse = await response.Content.ReadFromJsonAsync<List<MaskinportenConnection>>();
+
             Assert.NotNull(actualResponse);
             Assert.Equivalent(expectedResponse, actualResponse);
         }
@@ -112,9 +114,10 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
             SetAuthHeader();
 
             HttpResponseMessage response = await _client.GetAsync($"accessmanagement/api/v1/maskinporten/suppliers?party={party}");
-            ProblemDetails problemDetails = await response.Content.ReadFromJsonAsync<ProblemDetails>();
 
             Assert.Equal(HttpStatusCode.NotFound, response.StatusCode);
+            ProblemDetails problemDetails = await response.Content.ReadFromJsonAsync<ProblemDetails>();
+
             Assert.NotNull(problemDetails);
             Assert.Equal((int)HttpStatusCode.NotFound, problemDetails.Status);
             Assert.Equal("Unexpected HttpStatus response", problemDetails.Title);
@@ -145,9 +148,10 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
             SetAuthHeader();
 
             HttpResponseMessage response = await _client.GetAsync($"accessmanagement/api/v1/maskinporten/consumers?party={party}");
-            ProblemDetails problemDetails = await response.Content.ReadFromJsonAsync<ProblemDetails>();
 
             Assert.Equal(HttpStatusCode.NotFound, response.StatusCode);
+            ProblemDetails problemDetails = await response.Content.ReadFromJsonAsync<ProblemDetails>();
+
             Assert.NotNull(problemDetails);
             Assert.Equal((int)HttpStatusCode.NotFound, problemDetails.Status);
             Assert.Equal("Unexpected HttpStatus response", problemDetails.Title);
