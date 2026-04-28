@@ -63,7 +63,6 @@ test.describe('Systembruker - Eskaler', () => {
     });
 
     await test.step('Login as manager and choose reportee', async () => {
-      await page.goto(env('BASE_URL'));
       await login.LoginToAccessManagement(managerPid);
       await login.chooseReportee(systemuserOwnerOrg, 'Ugjennomsiktig Usnobbet Ape');
     });

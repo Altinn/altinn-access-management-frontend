@@ -13,7 +13,6 @@ test.describe('System Register', async () => {
 
   test.beforeEach(async ({ page, login }) => {
     const api = new ApiRequests();
-    await page.goto(env('BASE_URL'));
     system = await api.createSystemSystemRegister(vendorOrgNumber);
     await login.LoginToAccessManagement(testUserPid);
     await login.chooseReportee(testUserName, testOrgName);

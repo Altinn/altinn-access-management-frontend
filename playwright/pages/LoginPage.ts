@@ -70,7 +70,8 @@ export class LoginPage {
   }
 
   private async navigateToLoginPage() {
-    await this.page.goto(env('BASE_URL'));
+    await this.page.goto(env('BASE_URL'), { waitUntil: 'commit' });
+    await expect(this.testIdLink).toBeVisible();
     await this.testIdLink.click();
   }
 
