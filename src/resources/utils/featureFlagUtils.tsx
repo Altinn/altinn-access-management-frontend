@@ -48,15 +48,6 @@ export const availableForUserTypeCheck = (userType?: string) => {
   return false;
 };
 
-export const useRerouteIfMaskinportenAdministrationDisabled = () => {
-  const navigate = useNavigate();
-  useEffect(() => {
-    if (window.featureFlags?.enableMaskinportenAdministration === false) {
-      navigate('/not-found', { replace: true });
-    }
-  }, [navigate]);
-};
-
 export const crossPlatformLinksEnabled = () => {
   return window.featureFlags?.crossPlatformLinks === true;
 };

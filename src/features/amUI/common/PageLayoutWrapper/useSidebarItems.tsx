@@ -65,7 +65,9 @@ export const useSidebarItems = ({ isSmall }: { isSmall?: boolean }) => {
   const { data: isClientAdmin, isLoading: isLoadingIsClientAdmin } = useGetIsClientAdminQuery();
   const { data: canAccessSettings, isLoading: isLoadingCompanyProfileAdmin } =
     useGetIsCompanyProfileAdminQuery();
-  const { data: isMaskinportenAdmin } = useGetIsMaskinportenAdminQuery();
+  const { data: isMaskinportenAdmin } = useGetIsMaskinportenAdminQuery(undefined, {
+    skip: !enableMaskinportenAdministration(),
+  });
 
   const isLoading =
     isLoadingReportee || isLoadingIsAdmin || isLoadingIsClientAdmin || isLoadingCompanyProfileAdmin;
@@ -132,7 +134,7 @@ export const useSidebarItems = ({ isSmall }: { isSmall?: boolean }) => {
     items.push(getSettingsMenuItem(pathname, isLoading, isSmall));
   }
 
-  if (isMaskinportenAdmin && enableMaskinportenAdministration()) {
+  if (isMaskinportenAdmin) {
     items.push(getMaskinportenMenuItem(pathname, isLoading, isSmall));
   }
 
