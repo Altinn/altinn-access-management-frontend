@@ -8,6 +8,7 @@ export class AccessManagementFrontPage {
   readonly ourAccessAtOthersLink: Locator;
   readonly consentAndPowerOfAttorneyAgreementsLink: Locator;
   readonly tryNewAccessManagementButton: Locator;
+  readonly klientadministrasjonButton: Locator;
 
   constructor(page: Page) {
     this.page = page;
@@ -27,6 +28,11 @@ export class AccessManagementFrontPage {
     this.tryNewAccessManagementButton = this.page.getByRole('button', {
       name: 'Prøv ny tilgangsstyring',
     });
+    this.klientadministrasjonButton = this.page.getByRole('link', { name: 'Klientadministrasjon' });
+  }
+
+  async goToKlientAdministrasjon() {
+    await this.klientadministrasjonButton.click();
   }
 
   async goToUsers() {

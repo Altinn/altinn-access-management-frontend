@@ -27,7 +27,6 @@ test.describe('Delegate access pacakge from Org-A(Avgiver) to Org-B(Rettighetsha
     accessManagementFrontPage,
   }) => {
     await test.step('Log in', async () => {
-      await page.goto(env('BASE_URL'));
       await login.LoginToAccessManagement('04856996188');
       await aktorvalgHeader.selectActorFromHeaderMenu('SUBJEKTIV ELASTISK TIGER AS');
       await accessManagementFrontPage.goToUsers();
@@ -82,7 +81,6 @@ test.describe('Delegate access pacakge from Org-A(Avgiver) to Org-B(Rettighetsha
     aktorvalgHeader,
   }) => {
     await test.step('log in', async () => {
-      await page.goto(env('BASE_URL'));
       await login.LoginToAccessManagement('04856996188');
       await aktorvalgHeader.selectActorFromHeaderMenu('SUBJEKTIV ELASTISK TIGER AS');
     });

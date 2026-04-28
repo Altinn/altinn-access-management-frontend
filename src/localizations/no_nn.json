@@ -150,7 +150,8 @@
     "consent": "Samtykke- og fullmaktsavtaler",
     "poa_overview": "Fullmakter",
     "settings": "Innstillingar",
-    "requests": "Forespørsler"
+    "requests": "Forespørsler",
+    "maskinporten": "Maskinporten\u00ADadministrasjon"
   },
   "error_page": {
     "not_found_site_error_type": "Feil 404",
@@ -570,6 +571,10 @@
     "person_identifier_username_format_error": "Brukarnamn må bestå av minst 6 teikn",
     "person_identifier_whitespace_forbidden_error": "Mellomrom er ikkje tillate i fødselsnummer eller brukarnamn",
     "last_name_format_error": "Vennligst fyll inn eit gyldig etternavn"
+  },
+  "maskinporten_page": {
+    "heading": "Maskinporten\u00ADadministrasjon",
+    "document_title": "Maskinportenadministrasjon - Altinn"
   },
   "settings_page": {
     "page_title": "Innstillingar - Altinn",

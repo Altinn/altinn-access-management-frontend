@@ -17,6 +17,7 @@ import {
   instantiateResource,
 } from 'playwright/pages/profile/delegationPage';
 import { runAccessibilityTests } from 'playwright/uuTests/accessibilityHelpers/delegeringHelper';
+import { KlientAdministrasjonPage } from 'playwright/pages/tilgangsstyring/KlientAdministrasjonPage';
 
 const defaultLang = Language.NB;
 
@@ -40,6 +41,7 @@ type Fixtures = {
   consentPage: ConsentPage;
   aktorvalgHeader: AktorvalgHeader;
   clientDelegationPage: ClientDelegationPage;
+  klientAdministrasjonPage: KlientAdministrasjonPage;
 };
 
 const test = baseTest.extend<Fixtures>({
@@ -97,6 +99,10 @@ const test = baseTest.extend<Fixtures>({
 
   clientDelegationPage: async ({ page }, use) => {
     await use(new ClientDelegationPage(page));
+  },
+
+  klientAdministrasjonPage: async ({ page }, use) => {
+    await use(new KlientAdministrasjonPage(page));
   },
 });
 

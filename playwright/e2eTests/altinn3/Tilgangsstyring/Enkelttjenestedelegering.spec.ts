@@ -4,7 +4,7 @@ import { test } from '../../../fixture/pomFixture';
 import { AktorvalgHeader } from '../../../pages/AktorvalgHeader';
 import { EnduserConnection } from '../../../api-requests/EnduserConnection';
 
-test.describe.serial('Enkelttjenestedelegering fra person til person og person til org', () => {
+test.describe('Enkelttjenestedelegering fra person til person og person til org', () => {
   const api = new EnduserConnection();
 
   test.afterAll('slett testdata', async () => {
@@ -22,7 +22,6 @@ test.describe.serial('Enkelttjenestedelegering fra person til person og person t
     });
 
     await test.step('Logg inn', async () => {
-      await page.goto(env('BASE_URL'));
       await login.LoginToAccessManagement('03906197811');
     });
 
@@ -60,7 +59,6 @@ test.describe.serial('Enkelttjenestedelegering fra person til person og person t
     });
 
     await test.step('Logg inn', async () => {
-      await page.goto(env('BASE_URL'));
       await login.LoginToAccessManagement('23813949784');
     });
 
@@ -106,7 +104,6 @@ test.describe.serial('Enkelttjenestedelegering fra person til person og person t
     });
 
     await test.step('Logg inn', async () => {
-      await page.goto(env('BASE_URL'));
       await login.LoginToAccessManagement('13894599892');
     });
 
@@ -148,7 +145,6 @@ test.describe.serial('Enkelttjenestedelegering fra person til person og person t
     });
 
     await test.step('Logg inn', async () => {
-      await page.goto(env('BASE_URL'));
       await login.LoginToAccessManagement('09889499432');
     });
 
@@ -182,7 +178,7 @@ test.describe.serial('Enkelttjenestedelegering fra person til person og person t
   });
 });
 
-test.describe.serial('Enkelttjenestedelegering fra org til person og org til org', () => {
+test.describe('Enkelttjenestedelegering fra org til person og org til org', () => {
   const api = new EnduserConnection();
 
   test.afterAll('slett testdata', async () => {
@@ -200,7 +196,6 @@ test.describe.serial('Enkelttjenestedelegering fra org til person og org til org
     });
 
     await test.step('Logg inn', async () => {
-      await page.goto(env('BASE_URL'));
       await login.LoginToAccessManagement('05916597349');
     });
 
@@ -238,7 +233,6 @@ test.describe.serial('Enkelttjenestedelegering fra org til person og org til org
     });
 
     await test.step('Logg inn', async () => {
-      await page.goto(env('BASE_URL'));
       await login.LoginToAccessManagement('16928599063');
     });
 
@@ -287,7 +281,6 @@ test.describe.serial('Enkelttjenestedelegering fra org til person og org til org
     });
 
     await test.step('Logg inn', async () => {
-      await page.goto(env('BASE_URL'));
       await login.LoginToAccessManagement('18846498989');
     });
 
@@ -329,7 +322,6 @@ test.describe.serial('Enkelttjenestedelegering fra org til person og org til org
     });
 
     await test.step('Logg inn', async () => {
-      await page.goto(env('BASE_URL'));
       await login.LoginToAccessManagement('16815995930');
     });
 

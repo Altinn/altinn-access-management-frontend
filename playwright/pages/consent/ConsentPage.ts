@@ -99,7 +99,7 @@ export class ConsentPage {
 
     // Controls/links
 
-    this.menuButton = page.getByRole('button', { name: 'Meny' });
+    this.menuButton = page.getByRole('button', { name: /^(Menu|Meny)$/ });
     this.languagePicker = page.getByLabel('Språk/language');
     this.norwegian = page.locator('#no_nb');
     this.english = page.locator('#en');

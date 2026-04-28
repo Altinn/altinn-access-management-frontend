@@ -14,6 +14,7 @@ import {
   DatabaseIcon,
   PersonIcon,
 } from '@navikt/aksel-icons';
+import ApiIcon from '@/assets/Api.svg?react';
 import i18next, { t } from 'i18next';
 import { Link } from 'react-router';
 
@@ -227,6 +228,24 @@ export const getRequestsMenuItem = (
     selected: pathname?.includes(`/${amUIPath.Requests}`),
     icon: { svgElement: BellDotIcon, theme: isSmall ? 'surface' : 'default' },
     as: (props) => getMenuLinkAs(props, `/${amUIPath.Requests}`),
+  };
+};
+
+export const getMaskinportenMenuItem = (
+  pathname?: string,
+  isLoading = false,
+  isSmall = false,
+): MenuItemProps => {
+  return {
+    groupId: '14',
+    id: 'maskinporten',
+    size: 'md',
+    loading: isLoading,
+    variant: isSmall ? 'default' : 'tinted',
+    title: t('sidebar.maskinporten'),
+    selected: pathname?.includes(`/${amUIPath.Maskinporten}`),
+    icon: { svgElement: ApiIcon, theme: isSmall ? 'surface' : 'default' },
+    as: (props) => getMenuLinkAs(props, `/${amUIPath.Maskinporten}`),
   };
 };
 
