@@ -34,7 +34,7 @@ export class LoginPage {
   }
 
   async LoginToAccessManagement(pid: string) {
-    await this.clickLoginToAccessManagement();
+    await this.navigateToLoginPage();
     await this.authenticateUser(pid);
   }
 
@@ -69,12 +69,8 @@ export class LoginPage {
     await markedResult.first().click();
   }
 
-  private async clickLoginToAccessManagement() {
-    await this.page.getByRole('button', { name: 'Meny' }).click();
-    await expect(
-      this.page.getByRole('navigation', { name: 'Menu' }).getByLabel('Tilgangsstyring'),
-    ).toBeVisible();
-    await this.page.getByRole('navigation', { name: 'Menu' }).getByLabel('Tilgangsstyring').click();
+  private async navigateToLoginPage() {
+    await this.page.goto(env('BASE_URL'));
     await this.testIdLink.click();
   }
 
