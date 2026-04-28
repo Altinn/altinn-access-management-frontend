@@ -15,3 +15,21 @@
   font-weight: var(--ds-font-weight-semibold);
   margin-top: var(--ds-size-6);
 }
+
+.backButton {
+  margin-bottom: var(--ds-size-2);
+  translate: -1rem 0;
+}
+
+.multipleDraftRequests {
+  display: flex;
+  flex-direction: column;
+  gap: var(--ds-size-2);
+}
+
+.seeDetails {
+  display: flex;
+  align-items: center;
+  gap: var(--ds-size-2);
+  color: var(--ds-color-text-subtle);
+}
