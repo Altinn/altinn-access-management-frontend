@@ -46,7 +46,7 @@ export class LoginPage {
 
   async loginAcActorOrg(pid: string, orgnummer: string) {
     const baseUrl = env('BASE_URL');
-    await this.page.goto(baseUrl);
+    await this.page.goto(baseUrl, { waitUntil: 'commit' });
     await this.loginButton.click();
     await this.testIdLink.click();
     await this.pidInput.fill(pid);
@@ -70,7 +70,7 @@ export class LoginPage {
   }
 
   private async navigateToLoginPage() {
-    await this.page.goto(env('BASE_URL'));
+    await this.page.goto(env('BASE_URL'), { waitUntil: 'commit' });
     await expect(this.testIdLink).toBeVisible();
     await this.testIdLink.click();
   }

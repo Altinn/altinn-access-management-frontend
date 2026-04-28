@@ -126,7 +126,8 @@ export class ClientDelegationPage {
     await expect(this.addAllCustomersButton).toBeVisible();
     await this.addAllCustomersButton.click();
 
-    await expect(this.addAllCustomersSuccessText).toBeVisible();
+    // This may take long since there are 100 clients ++
+    await expect(this.addAllCustomersSuccessText).toBeVisible({ timeout: 30000 });
     await expect(this.confirmAndCloseButton).toBeVisible();
   }
 
