@@ -17,7 +17,7 @@ import {
   instantiateResource,
 } from 'playwright/pages/profile/delegationPage';
 import { runAccessibilityTests } from 'playwright/uuTests/accessibilityHelpers/delegeringHelper';
-import { KlientAdministrasjonPage } from 'playwright/pages/tilgangsstyring/klientAdministrasjonPage';
+import { KlientAdministrasjonPage } from 'playwright/pages/tilgangsstyring/KlientAdministrasjonPage';
 
 const defaultLang = Language.NB;
 
