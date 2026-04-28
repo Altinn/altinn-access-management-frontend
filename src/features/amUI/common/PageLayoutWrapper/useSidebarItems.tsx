@@ -9,6 +9,7 @@ import {
   getConsentMenuItem,
   getHeadingMenuItem,
   getClientAdministrationMenuItem,
+  getMaskinportenMenuItem,
   getPoaOverviewMenuItem,
   getReporteesMenuItem,
   getRequestsMenuItem,
@@ -23,6 +24,7 @@ import {
   useGetIsAdminQuery,
   useGetIsClientAdminQuery,
   useGetIsCompanyProfileAdminQuery,
+  useGetIsMaskinportenAdminQuery,
   useGetReporteeQuery,
 } from '@/rtk/features/userInfoApi';
 import { BadgeVariant, Color, MenuItemProps } from '@altinn/altinn-components';
@@ -60,6 +62,7 @@ export const useSidebarItems = ({ isSmall }: { isSmall?: boolean }) => {
   const { data: isClientAdmin, isLoading: isLoadingIsClientAdmin } = useGetIsClientAdminQuery();
   const { data: canAccessSettings, isLoading: isLoadingCompanyProfileAdmin } =
     useGetIsCompanyProfileAdminQuery();
+  const { data: isMaskinportenAdmin } = useGetIsMaskinportenAdminQuery();
 
   const isLoading =
     isLoadingReportee || isLoadingIsAdmin || isLoadingIsClientAdmin || isLoadingCompanyProfileAdmin;
@@ -124,6 +127,10 @@ export const useSidebarItems = ({ isSmall }: { isSmall?: boolean }) => {
 
   if (canAccessSettings && displaySettingsPage) {
     items.push(getSettingsMenuItem(pathname, isLoading, isSmall));
+  }
+
+  if (isMaskinportenAdmin) {
+    items.push(getMaskinportenMenuItem(pathname, isLoading, isSmall));
   }
 
   if (displayConfettiPackage) {
