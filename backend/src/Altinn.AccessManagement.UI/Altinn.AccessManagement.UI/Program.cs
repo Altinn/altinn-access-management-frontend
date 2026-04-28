@@ -242,6 +242,7 @@ void ConfigureServices(IServiceCollection services, IConfiguration config)
     services.AddSingleton<IConsentService, ConsentService>();
     services.AddSingleton<IEncryptionService, EncryptionService>();
     services.AddSingleton<IRoleService, RoleService>();
+    services.AddSingleton<IMaskinportenService, MaskinportenService>();
     services.AddTransient<ISigningCredentialsResolver, SigningCredentialsResolver>();
     services.AddTransient<ResourceHelper, ResourceHelper>();
     services.AddTransient<IAltinnCdnService, AltinnCdnService>();
@@ -499,5 +500,14 @@ void ConfigureMockableClients(IServiceCollection services, IConfiguration config
     else
     {
         services.AddSingleton<IConsentClient, ConsentClient>();
+    }
+
+    if (mockSettings.Maskinporten)
+    {
+        services.AddSingleton<IMaskinportenClient, MaskinportenClientMock>();
+    }
+    else
+    {
+        services.AddHttpClient<IMaskinportenClient, MaskinportenClient>();
     }
 }

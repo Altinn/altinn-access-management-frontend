@@ -1,0 +1,52 @@
+[
+  {
+    "party": {
+      "id": "63c567e0-bdc8-4136-afc5-2b5065074877",
+      "name": "Kundeorganisasjon AS",
+      "type": "Organization",
+      "variant": "Enterprise",
+      "parent": null,
+      "children": null,
+      "partyId": 500201,
+      "organizationIdentifier": "313261334",
+      "dateOfBirth": null,
+      "isDeleted": false,
+      "deletedAt": null
+    },
+    "roles": [
+      {
+        "id": "5f9856ac-35bb-4b7c-8db3-7cb549ec23f4",
+        "code": "consumer",
+        "urn": "altinn:role:maskinporten-consumer",
+        "legacyUrn": null,
+        "children": null
+      }
+    ],
+    "connections": []
+  },
+  {
+    "party": {
+      "id": "d3f1b6b2-9200-46d0-aae2-8eab463df6b6",
+      "name": "Demo Kunde ANS",
+      "type": "Organization",
+      "variant": "Enterprise",
+      "parent": null,
+      "children": null,
+      "partyId": 500202,
+      "organizationIdentifier": "910258028",
+      "dateOfBirth": null,
+      "isDeleted": false,
+      "deletedAt": null
+    },
+    "roles": [
+      {
+        "id": "5f9856ac-35bb-4b7c-8db3-7cb549ec23f4",
+        "code": "consumer",
+        "urn": "altinn:role:maskinporten-consumer",
+        "legacyUrn": null,
+        "children": null
+      }
+    ],
+    "connections": []
+  }
+]
