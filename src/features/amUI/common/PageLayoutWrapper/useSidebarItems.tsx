@@ -1,5 +1,8 @@
 import { getCookie } from '@/resources/Cookie/CookieMethods';
-import { clientAdministrationPageEnabled } from '@/resources/utils/featureFlagUtils';
+import {
+  clientAdministrationPageEnabled,
+  enableMaskinportenAdministration,
+} from '@/resources/utils/featureFlagUtils';
 import {
   hasConsentPermission,
   hasCreateSystemUserPermission,
@@ -129,7 +132,7 @@ export const useSidebarItems = ({ isSmall }: { isSmall?: boolean }) => {
     items.push(getSettingsMenuItem(pathname, isLoading, isSmall));
   }
 
-  if (isMaskinportenAdmin) {
+  if (isMaskinportenAdmin && enableMaskinportenAdministration()) {
     items.push(getMaskinportenMenuItem(pathname, isLoading, isSmall));
   }
 

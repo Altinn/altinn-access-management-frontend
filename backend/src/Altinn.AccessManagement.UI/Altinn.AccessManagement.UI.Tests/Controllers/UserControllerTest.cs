@@ -969,6 +969,33 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
         }
 
         /// <summary>
+        /// Test case: Directly invoke controller IsMaskinportenAdmin without HttpContext permission item.
+        /// Expected: Returns Ok(false) via fallback path covering missing HasRequestedPermission scenario.
+        /// </summary>
+        [Fact]
+        public void IsMaskinportenAdmin_NoHasRequestedPermissionItem_ReturnsFalse()
+        {
+            // Arrange: create controller instance bypassing auth pipeline so HttpContext.Items lacks HasRequestedPermission
+            var httpContext = new DefaultHttpContext();
+            var httpContextAccessor = new HttpContextAccessor { HttpContext = httpContext };
+            var userServiceMock = new Mock<IUserService>();
+            var loggerMock = new Mock<ILogger<UserController>>();
+            var featureFlags = Options.Create(new FeatureFlags());
+
+            var controller = new UserController(userServiceMock.Object, httpContextAccessor, loggerMock.Object, featureFlags)
+            {
+                ControllerContext = new ControllerContext { HttpContext = httpContext }
+            };
+
+            // Act
+            var result = controller.IsMaskinportenAdmin();
+
+            // Assert
+            var ok = Assert.IsType<OkObjectResult>(result.Result);
+            Assert.False((bool)ok.Value);
+        }
+
+        /// <summary>
         /// Test case: CheckIsInstanceAdmin returns Forbidden when partyId is null or invalid
         /// Expected: Returns Forbidden
         /// </summary>

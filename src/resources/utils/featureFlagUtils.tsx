@@ -48,6 +48,15 @@ export const availableForUserTypeCheck = (userType?: string) => {
   return false;
 };
 
+export const useRerouteIfMaskinportenAdministrationDisabled = () => {
+  const navigate = useNavigate();
+  useEffect(() => {
+    if (window.featureFlags?.enableMaskinportenAdministration === false) {
+      navigate('/not-found', { replace: true });
+    }
+  }, [navigate]);
+};
+
 export const crossPlatformLinksEnabled = () => {
   return window.featureFlags?.crossPlatformLinks === true;
 };
@@ -102,4 +111,8 @@ export const enableRequestSingleRight = () => {
 
 export const enableDialogportenDialogLookup = () => {
   return window.featureFlags?.enableDialogportenDialogLookup === true;
+};
+
+export const enableMaskinportenAdministration = () => {
+  return window.featureFlags?.enableMaskinportenAdministration === true;
 };

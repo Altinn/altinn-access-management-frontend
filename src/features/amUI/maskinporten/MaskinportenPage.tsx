@@ -8,9 +8,11 @@ import { PageLayoutWrapper } from '../common/PageLayoutWrapper';
 import { Breadcrumbs } from '../common/Breadcrumbs/Breadcrumbs';
 import { useGetIsMaskinportenAdminQuery } from '@/rtk/features/userInfoApi';
 import { useDocumentTitle } from '@/resources/hooks/useDocumentTitle';
+import { useRerouteIfMaskinportenAdministrationDisabled } from '@/resources/utils/featureFlagUtils';
 
 export const MaskinportenPage = () => {
   const { t } = useTranslation();
+  useRerouteIfMaskinportenAdministrationDisabled();
   const { data: isMaskinportenAdmin, isLoading } = useGetIsMaskinportenAdminQuery();
   useDocumentTitle(t('maskinporten_page.document_title'));
   if (!isLoading && !isMaskinportenAdmin) {

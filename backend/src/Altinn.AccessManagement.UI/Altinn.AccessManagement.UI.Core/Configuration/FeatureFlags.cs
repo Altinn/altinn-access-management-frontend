@@ -110,5 +110,10 @@ namespace Altinn.AccessManagement.UI.Core.Configuration
         /// Whether to use connections API in backend for agent system users
         /// </summary>
         public bool UseConnectionsForAgentSystemuser { get; set; }
+
+        /// <summary>
+        /// Whether to enable the Maskinporten administration page
+        /// </summary>
+        public bool EnableMaskinportenAdministration { get; set; }
     }
 }
