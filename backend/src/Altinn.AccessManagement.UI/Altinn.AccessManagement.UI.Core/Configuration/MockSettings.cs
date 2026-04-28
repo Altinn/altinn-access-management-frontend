@@ -106,6 +106,11 @@ namespace Altinn.AccessManagement.UI.Core.Configuration
         public bool Dialogporten { get; set; }
 
         /// <summary>
+        /// Set to mock Altinn2UserClient during runtime
+        /// </summary>
+        public bool Altinn2User { get; set; }
+
+        /// <summary>
         /// Default constructor
         /// </summary>
         public MockSettings()

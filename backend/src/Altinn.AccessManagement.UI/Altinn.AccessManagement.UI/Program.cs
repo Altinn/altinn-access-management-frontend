@@ -239,6 +239,7 @@ void ConfigureServices(IServiceCollection services, IConfiguration config)
     services.AddSingleton<ISystemUserAgentRequestService, SystemUserAgentRequestService>();
     services.AddSingleton<ISystemUserAgentDelegationService, SystemUserAgentDelegationService>();
     services.AddSingleton<IConsentService, ConsentService>();
+    services.AddSingleton<IAltinn2UserService, Altinn2UserService>();
     services.AddSingleton<IEncryptionService, EncryptionService>();
     services.AddSingleton<IRoleService, RoleService>();
     services.AddTransient<ISigningCredentialsResolver, SigningCredentialsResolver>();
@@ -498,5 +499,14 @@ void ConfigureMockableClients(IServiceCollection services, IConfiguration config
     else
     {
         services.AddSingleton<IConsentClient, ConsentClient>();
+    }
+
+    if (mockSettings.Altinn2User)
+    {
+        services.AddSingleton<IAltinn2UserClient, Altinn2UserClientMock>();
+    }
+    else
+    {
+        services.AddHttpClient<IAltinn2UserClient, Altinn2UserClient>();
     }
 }
