@@ -20,6 +20,7 @@ import { connectionApi } from '../features/connectionApi';
 import { clientApi } from '../features/clientApi';
 import { instanceApi } from '../features/instanceApi';
 import { requestApi } from '../features/requestApi';
+import { maskinportenApi } from '../features/maskinportenApi';
 
 const store = configureStore({
   reducer: {
@@ -42,6 +43,7 @@ const store = configureStore({
     [altinnCdnApi.reducerPath]: altinnCdnApi.reducer,
     [instanceApi.reducerPath]: instanceApi.reducer,
     [requestApi.reducerPath]: requestApi.reducer,
+    [maskinportenApi.reducerPath]: maskinportenApi.reducer,
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware().concat(
@@ -61,6 +63,7 @@ const store = configureStore({
       instanceApi.middleware,
       settingsApi.middleware,
       requestApi.middleware,
+      maskinportenApi.middleware,
     ),
 });
 
