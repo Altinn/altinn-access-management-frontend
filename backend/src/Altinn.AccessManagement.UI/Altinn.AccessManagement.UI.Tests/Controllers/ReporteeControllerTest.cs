@@ -168,6 +168,63 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
         }
 
         [Fact]
+        public async Task Change_PartyUuid_ValidParty_Returns200AndSetsCookies()
+        {
+            Authenticate();
+
+            HttpResponseMessage response = await _client.PostAsync(
+                $"accessmanagement/api/v1/reportee/change?partyUuid={ValidPartyUuidInList}",
+                content: null);
+
+            Assert.Equal(HttpStatusCode.OK, response.StatusCode);
+            IEnumerable<string> cookies = response.Headers.GetValues("Set-Cookie");
+            Assert.Contains(cookies, c => c.StartsWith($"AltinnPartyId={ValidPartyIdInList}"));
+            Assert.Contains(cookies, c => c.StartsWith($"AltinnPartyUuid={ValidPartyUuidInList}"));
+        }
+
+        [Fact]
+        public async Task Change_PartyId_ValidParty_Returns200AndSetsCookies()
+        {
+            Authenticate();
+
+            HttpResponseMessage response = await _client.PostAsync(
+                $"accessmanagement/api/v1/reportee/change?partyId={ValidLookupPartyId}",
+                content: null);
+
+            Assert.Equal(HttpStatusCode.OK, response.StatusCode);
+            IEnumerable<string> cookies = response.Headers.GetValues("Set-Cookie");
+            Assert.Contains(cookies, c => c.StartsWith($"AltinnPartyId={ValidLookupPartyId}"));
+            Assert.Contains(cookies, c => c.StartsWith($"AltinnPartyUuid={ValidLookupPartyUuid}"));
+        }
+
+        [Fact]
+        public async Task Change_PartyNotInReporteeList_Returns403WithoutCookies()
+        {
+            Authenticate();
+            string unknownUuid = Guid.NewGuid().ToString();
+
+            HttpResponseMessage response = await _client.PostAsync(
+                $"accessmanagement/api/v1/reportee/change?partyUuid={unknownUuid}",
+                content: null);
+
+            Assert.Equal(HttpStatusCode.Forbidden, response.StatusCode);
+            Assert.False(response.Headers.Contains("Set-Cookie") &&
+                         response.Headers.GetValues("Set-Cookie").Any(c => c.StartsWith("AltinnParty")));
+        }
+
+        [Fact]
+        public async Task Change_NoPartyInputs_Returns400()
+        {
+            Authenticate();
+
+            HttpResponseMessage response = await _client.PostAsync(
+                "accessmanagement/api/v1/reportee/change",
+                content: null);
+
+            Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
+        }
+
+        [Fact]
         public async Task ChangeAndRedirect_Unauthenticated_DoesNotRedirectToGoTo()
         {
             HttpResponseMessage response = await _client.GetAsync(

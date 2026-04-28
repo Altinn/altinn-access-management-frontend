@@ -48,7 +48,6 @@ namespace Altinn.AccessManagement.UI.Controllers
         /// <param name="partyId">Numeric PartyId of the desired reportee. Used when <paramref name="partyUuid"/> is not provided.</param>
         /// <param name="goTo">Absolute URL to redirect to after setting cookies. Must point to an allow-listed domain.</param>
         [HttpGet("changeandredirect")]
-        [HttpPost("changeandredirect")]
         [IgnoreAntiforgeryToken]
         [Authorize]
         public async Task<IActionResult> ChangeAndRedirect(
@@ -80,6 +79,46 @@ namespace Altinn.AccessManagement.UI.Controllers
                 _logger.LogError(ex, "ChangeAndRedirect failed");
                 return Redirect(ErrorPagePath);
             }
+        }
+
+        /// <summary>
+        /// In-app variant of <see cref="ChangeAndRedirect"/> intended for same-origin XHR/fetch from the SPA.
+        /// Sets the reportee cookies and returns a status code instead of redirecting.
+        /// </summary>
+        /// <param name="partyUuid">PartyUuid of the desired reportee.</param>
+        /// <param name="partyId">Numeric PartyId of the desired reportee. Used when <paramref name="partyUuid"/> is not provided.</param>
+        /// <returns>200 OK on success, 400 Bad Request if no party is supplied, 403 Forbidden if the party is not on the user's reportee list.</returns>
+        [HttpPost("change")]
+        [Authorize]
+        public async Task<IActionResult> Change(
+            [FromQuery(Name = "partyUuid")] Guid? partyUuid,
+            [FromQuery(Name = "partyId")] int? partyId)
+        {
+            bool hasUuid = partyUuid.HasValue && partyUuid.Value != Guid.Empty;
+            bool hasId = partyId.HasValue && partyId.Value > 0;
+            if (!hasUuid && !hasId)
+            {
+                return BadRequest();
+            }
+
+            AuthorizedParty party;
+            try
+            {
+                party = await ResolveAuthorizedParty(partyUuid, partyId);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Change failed");
+                return StatusCode(500);
+            }
+
+            if (party == null)
+            {
+                return StatusCode(403);
+            }
+
+            PartyCookieHelper.WritePartyCookies(Response, party.PartyId, party.PartyUuid, _generalSettings?.Hostname, !_env.IsDevelopment());
+            return Ok();
         }
 
         private async Task<AuthorizedParty> ResolveAuthorizedParty(Guid? partyUuid, int? partyId)
