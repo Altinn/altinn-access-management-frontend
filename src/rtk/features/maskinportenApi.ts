@@ -1,10 +1,10 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 
-import type { CompactRole, Entity } from '@/dataObjects/dtos/Common';
+import type { CompactRole, CompactEntity } from '@/dataObjects/dtos/Common';
 import { getCookie } from '@/resources/Cookie/CookieMethods';
 
 export interface MaskinportenConnection {
-  party: Entity;
+  party: CompactEntity;
   roles: CompactRole[];
   connections: MaskinportenConnection[];
 }
