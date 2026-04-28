@@ -11,7 +11,6 @@ test.describe('klientadministrasjon', () => {
     switch (testInfo.title) {
       case 'slett bruker':
         await api.addClientDelegationAgent('16830197862', '311164651', '30877795760');
-        await api.getClientDelegationAgents('16830197862', '311164651');
         break;
       case 'deleger klient til en bruker fra klientfanen':
         await api.addConnectionAndPackagesToUser('28868199808', '314087917', '310002224', [
