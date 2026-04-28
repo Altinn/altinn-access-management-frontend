@@ -564,6 +564,34 @@ namespace Altinn.AccessManagement.UI.Tests.Utils
         }
 
         /// <summary>
+        ///     Gets a HttpClient for unittests testing for ReporteeController
+        /// </summary>
+        /// <param name="customFactory">Web app factory to configure test services for ReporteeController tests</param>
+        /// <returns>HttpClient (auto-redirect disabled)</returns>
+        public static HttpClient GetTestClient(CustomWebApplicationFactory<ReporteeController> customFactory)
+        {
+            WebApplicationFactory<ReporteeController> factory = customFactory.WithWebHostBuilder(builder =>
+            {
+                builder.ConfigureTestServices(services =>
+                {
+                    services.AddTransient<IAccessManagementClient, AccessManagementClientMock>();
+                    services.AddTransient<IAccessManagementClientV0, AccessManagementClientV0Mock>();
+                    services.AddTransient<IProfileClient, ProfileClientMock>();
+                    services.AddTransient<IConnectionClient, ConnectionClientMock>();
+                    services.AddTransient<IUserService, UserService>();
+                    services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
+                    services.AddSingleton<IPostConfigureOptions<JwtCookieOptions>, JwtCookiePostConfigureOptionsStub>();
+                });
+            });
+            WebApplicationFactoryClientOptions opts = new WebApplicationFactoryClientOptions
+            {
+                AllowAutoRedirect = false,
+            };
+            factory.Server.AllowSynchronousIO = true;
+            return factory.CreateClient(opts);
+        }
+
+        /// <summary>
         ///     Gets a HttpClient for unittests testing
         /// </summary>
         /// <param name="customFactory">Web app factory to configure test services for RequestController tests</param>
