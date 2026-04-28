@@ -72,7 +72,7 @@ namespace Altinn.AccessManagement.UI.Core.Extensions
         }
 
         /// <summary>
-        /// Extension that add authorization header to request.
+        /// Extension that adds authorization header and cancellation token to request.
         /// </summary>
         /// <param name="httpClient">The HttpClient.</param>
         /// <param name="authorizationToken">the authorization token (jwt).</param>
@@ -86,7 +86,7 @@ namespace Altinn.AccessManagement.UI.Core.Extensions
         }
 
         /// <summary>
-        /// Extension that add authorization header to request.
+        /// Extension that adds authorization header and cancellation token to request.
         /// </summary>
         /// <param name="httpClient">The HttpClient.</param>
         /// <param name="authorizationToken">the authorization token (jwt).</param>
