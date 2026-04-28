@@ -58,7 +58,7 @@ namespace Altinn.AccessManagement.UI.Controllers
         {
             Guid? targetUuid = partyUuid ?? p;
             string fallbackUrl = _generalSettings.FrontendBaseUrl ?? string.Empty;
-            string redirectTarget = IsAllowedRedirectUrl(goTo) ? goTo : fallbackUrl;
+            string redirectTarget = TryGetSafeRedirectUrl(goTo, out string safeUrl) ? safeUrl : fallbackUrl;
 
             try
             {
@@ -137,8 +137,10 @@ namespace Altinn.AccessManagement.UI.Controllers
             return null;
         }
 
-        private bool IsAllowedRedirectUrl(string url)
+        private bool TryGetSafeRedirectUrl(string url, out string safeUrl)
         {
+            safeUrl = null;
+
             if (string.IsNullOrWhiteSpace(url))
             {
                 return false;
@@ -171,6 +173,7 @@ namespace Altinn.AccessManagement.UI.Controllers
                 if (host.Equals(domain, StringComparison.OrdinalIgnoreCase) ||
                     host.EndsWith("." + domain, StringComparison.OrdinalIgnoreCase))
                 {
+                    safeUrl = parsed.AbsoluteUri;
                     return true;
                 }
             }
