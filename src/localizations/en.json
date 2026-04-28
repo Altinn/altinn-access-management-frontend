@@ -577,7 +577,8 @@
   },
   "maskinporten_page": {
     "heading": "Maskinporten administration",
-    "document_title": "Maskinporten administration - Altinn"
+    "document_title": "Maskinporten administration - Altinn",
+    "suppliers_tab": "Suppliers",
     "add_supplier_button": "Add supplier",
     "suppliers_description": "Organizations that have granted Maskinporten scopes to {{name}}.",
     "consumers_tab": "Consumers",

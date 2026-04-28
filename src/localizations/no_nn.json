@@ -574,7 +574,8 @@
   },
   "maskinporten_page": {
     "heading": "Maskinporten\u00ADadministrasjon",
-    "document_title": "Maskinportenadministrasjon - Altinn"
+    "document_title": "Maskinportenadministrasjon - Altinn",
+    "suppliers_tab": "Leverandørar",
     "add_supplier_button": "Legg til leverandør",
     "suppliers_description": "Verksemder som har gitt Maskinporten-scope til {{name}}.",
     "consumers_tab": "Konsumentar",
