@@ -1,28 +1,23 @@
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { Trans, useTranslation } from 'react-i18next';
-import {
-  DsAlert,
-  DsButton,
-  DsHeading,
-  DsParagraph,
-  formatDisplayName,
-} from '@altinn/altinn-components';
+import { DsAlert, DsParagraph, DsSpinner, formatDisplayName } from '@altinn/altinn-components';
 import {
   useConfirmRequestMutation,
   useGetEnrichedDraftRequestQuery,
   useWithdrawRequestMutation,
   type EnrichedResourceRequest,
 } from '@/rtk/features/requestApi';
-import classes from './DraftRequestPage.module.css';
-import { PartyRepresentationProvider } from '../../common/PartyRepresentationContext/PartyRepresentationContext';
 import { useSearchParams } from 'react-router';
 import { redirectToChangeReporteeAndRedirect } from '@/resources/utils/changeReporteeUtils';
 import { getCookie } from '@/resources/Cookie/CookieMethods';
 import { RequestPageLayout } from '../../common/RequestPageLayout/RequestPageLayout';
-import { DraftRequestBody } from './DraftRequestBody';
+import { PartyRepresentationProvider } from '../../common/PartyRepresentationContext/PartyRepresentationContext';
 import { useDocumentTitle } from '@/resources/hooks/useDocumentTitle';
 import { useMultipleDraftRequests } from './useMultipleDraftRequests';
 import { MultipleDraftRequestsView, type BatchActionType } from './MultipleDraftRequestsView';
+import { DraftRequestHeader } from './DraftRequestHeader';
+import { RequestReceiptBody } from './RequestReceiptBody';
+import { SingleDraftRequestView } from './SingleDraftRequestView';
 
 export const DraftRequestPage = () => {
   const { t } = useTranslation();
@@ -33,13 +28,11 @@ export const DraftRequestPage = () => {
   const requestIds = searchParams.getAll('requestId');
   const isMultiMode = requestIds.length > 1;
   const [batchCompleteAction, setBatchCompleteAction] = useState<BatchActionType>(null);
-  let fromError = false;
 
   const onBatchComplete: (actionType: BatchActionType) => void = useCallback((actionType) => {
     setBatchCompleteAction(actionType);
   }, []);
 
-  // Single mode: use the first (only) ID
   const singleRequestId = requestIds[0] ?? '';
 
   const {
@@ -48,15 +41,11 @@ export const DraftRequestPage = () => {
     error: loadRequestError,
   } = useGetEnrichedDraftRequestQuery(
     { id: singleRequestId },
-    {
-      skip: !singleRequestId || isMultiMode,
-    },
+    { skip: !singleRequestId || isMultiMode },
   );
 
-  // Multi mode: fetch all request IDs
   const stableMultiIds = useMemo(
     () => (isMultiMode ? requestIds : []),
-    // eslint-disable-next-line react-hooks/exhaustive-deps
     [isMultiMode, requestIds.join(',')],
   );
   const {
@@ -65,15 +54,12 @@ export const DraftRequestPage = () => {
     loadError: multiLoadError,
   } = useMultipleDraftRequests(stableMultiIds);
 
-  // For multi mode, derive a representative request for account/heading info
   const representativeRequest: EnrichedResourceRequest | undefined = isMultiMode
     ? multiRequests[0]
     : request;
 
-  if (isMultiMode && multiRequests.some((r) => r.from.id !== representativeRequest?.from.id)) {
-    // If the requests are from different users, we can't show them together - show an error instead
-    fromError = true;
-  }
+  const fromError =
+    isMultiMode && multiRequests.some((r) => r.from.id !== representativeRequest?.from.id);
 
   const [
     confirmRequest,
@@ -99,7 +85,6 @@ export const DraftRequestPage = () => {
   };
 
   useEffect(() => {
-    // If the request is for a different user than the one currently logged in, redirect to the correct reportee
     const fromId = representativeRequest?.from.id;
     if (fromId && fromId !== partyUuid) {
       redirectToChangeReporteeAndRedirect(fromId, window.location.href);
@@ -119,49 +104,61 @@ export const DraftRequestPage = () => {
     type: representativeRequest?.from.type === 'Person' ? 'person' : 'company',
   });
 
+  // Normalise the completed action across single and multi modes
+  const receiptAction: 'confirm' | 'withdraw' | null = isMultiMode
+    ? batchCompleteAction
+    : confirmResponse
+      ? 'confirm'
+      : withdrawResponse
+        ? 'withdraw'
+        : null;
+
   let heading: React.ReactNode = null;
   let body: React.ReactNode = null;
   let error: React.ReactNode = null;
 
-  const generateHeading = (headerTextKey: string) => (
-    <DraftRequestHeader
-      headerTextKey={headerTextKey}
-      toName={toName}
-    />
-  );
-  const generateReceiptBody = (bodyTextKey: string) => (
-    <RequestReceiptBody
-      bodyTextKey={bodyTextKey}
-      toName={toName}
-    />
-  );
+  if (receiptAction) {
+    const isConfirm = receiptAction === 'confirm';
+    heading = (
+      <DraftRequestHeader
+        headerTextKey={
+          isConfirm ? 'draft_request_page.request_approved' : 'draft_request_page.request_withdrawn'
+        }
+        toName={toName}
+      />
+    );
+    body = (
+      <RequestReceiptBody
+        bodyTextKey={
+          isConfirm
+            ? 'draft_request_page.request_approved_info'
+            : 'draft_request_page.request_withdrawn_info'
+        }
+        toName={toName}
+      />
+    );
+  } else if (!isInitialLoad && representativeRequest) {
+    heading = (
+      <>
+        <DraftRequestHeader
+          headerTextKey='draft_request_page.heading'
+          toName={toName}
+        />
+        <DsParagraph>
+          <Trans
+            i18nKey={
+              partyUuid === representativeRequest.from.id
+                ? 'draft_request_page.intro_person'
+                : 'draft_request_page.intro_company'
+            }
+            components={{ b: <strong /> }}
+            values={{ to_name: toName, from_name: fromName }}
+          />
+        </DsParagraph>
+      </>
+    );
 
-  if (isMultiMode) {
-    // Multi-request mode
-    if (batchCompleteAction === 'confirm') {
-      heading = generateHeading('draft_request_page.request_approved');
-      body = generateReceiptBody('draft_request_page.request_approved_info');
-    } else if (batchCompleteAction === 'withdraw') {
-      heading = generateHeading('draft_request_page.request_withdrawn');
-      body = generateReceiptBody('draft_request_page.request_withdrawn_info');
-    } else if (!isInitialLoad && multiRequests.length > 0) {
-      heading = (
-        <>
-          {generateHeading('draft_request_page.heading')}
-          <DsParagraph>
-            <Trans
-              i18nKey={
-                partyUuid === multiRequests[0].from.id
-                  ? 'draft_request_page.intro_person'
-                  : 'draft_request_page.intro_company'
-              }
-              components={{ b: <strong /> }}
-              values={{ to_name: toName, from_name: fromName }}
-            />
-          </DsParagraph>
-        </>
-      );
-
+    if (isMultiMode && multiRequests.length > 0) {
       body = (
         <PartyRepresentationProvider
           fromPartyUuid={partyUuid}
@@ -175,89 +172,40 @@ export const DraftRequestPage = () => {
           />
         </PartyRepresentationProvider>
       );
+    } else if (request) {
+      body = (
+        <SingleDraftRequestView
+          request={request}
+          fromName={fromName}
+          partyUuid={partyUuid}
+          onConfirmRequest={onConfirmRequest}
+          onWithdrawRequest={onWithdrawRequest}
+          isConfirmingRequest={isConfirmingRequest}
+          isWithdrawingRequest={isWithdrawingRequest}
+          confirmRequestError={confirmRequestError}
+          withdrawRequestError={withdrawRequestError}
+        />
+      );
     }
+  }
 
-    if (multiLoadError && fromError) {
+  if (isMultiMode) {
+    if (multiLoadError || fromError) {
       error = <DsAlert data-color='danger'>{t('draft_request_page.load_request_error')}</DsAlert>;
-      body = null; // Don't show the page if there was an error loading
+      body = null;
     }
   } else {
-    // Single-request mode
-    if (confirmResponse) {
-      heading = generateHeading('draft_request_page.request_approved');
-      body = generateReceiptBody('draft_request_page.request_approved_info');
-    } else if (withdrawResponse) {
-      heading = generateHeading('draft_request_page.request_withdrawn');
-      body = generateReceiptBody('draft_request_page.request_withdrawn_info');
-    } else if (request && !isInitialLoad) {
-      heading = (
-        <>
-          {generateHeading('draft_request_page.heading')}
-          <DsParagraph>
-            <Trans
-              i18nKey={
-                partyUuid === request.from.id
-                  ? 'draft_request_page.intro_person'
-                  : 'draft_request_page.intro_company'
-              }
-              components={{ b: <strong /> }}
-              values={{ to_name: toName, from_name: fromName }}
-            />
-          </DsParagraph>
-        </>
-      );
-
-      body = (
-        <>
-          {confirmRequestError && (
-            <DsAlert data-color='danger'>{t('draft_request_page.approve_request_error')}</DsAlert>
-          )}
-          {withdrawRequestError && (
-            <DsAlert data-color='danger'>{t('draft_request_page.withdraw_request_error')}</DsAlert>
-          )}
-          <PartyRepresentationProvider
-            fromPartyUuid={partyUuid}
-            actingPartyUuid={partyUuid}
-            toPartyUuid={''}
-          >
-            <DraftRequestBody
-              request={request}
-              fromName={fromName}
-            />
-          </PartyRepresentationProvider>
-          <div className={classes.buttonRow}>
-            <DsButton
-              variant='primary'
-              aria-disabled={isConfirmingRequest || isWithdrawingRequest}
-              loading={isConfirmingRequest}
-              onClick={onConfirmRequest}
-            >
-              {t('draft_request_page.confirm_request')}
-            </DsButton>
-            <DsButton
-              variant='primary'
-              aria-disabled={isConfirmingRequest || isWithdrawingRequest}
-              loading={isWithdrawingRequest}
-              onClick={onWithdrawRequest}
-            >
-              {t('draft_request_page.withdraw_request')}
-            </DsButton>
-          </div>
-        </>
-      );
-    }
-
     if (!singleRequestId) {
       error = <DsAlert data-color='warning'>{t('draft_request_page.missing_request_id')}</DsAlert>;
     } else if (loadRequestError) {
       error = <DsAlert data-color='danger'>{t('draft_request_page.load_request_error')}</DsAlert>;
-      body = null; // Don't show the page if there was an error loading
+      body = null;
     }
   }
 
   if (requestIds.length === 0) {
     error = <DsAlert data-color='warning'>{t('draft_request_page.missing_request_id')}</DsAlert>;
-    body = null; // Don't show the page if there was an error loading
+    body = null;
   }
 
   return (
@@ -271,48 +219,5 @@ export const DraftRequestPage = () => {
       heading={heading}
       body={body}
     />
-  );
-};
-
-interface DraftRequestHeaderProps {
-  headerTextKey: string;
-  toName: string;
-}
-
-const DraftRequestHeader = ({ headerTextKey, toName }: DraftRequestHeaderProps) => {
-  return (
-    <DsHeading
-      level={1}
-      data-size='md'
-    >
-      <Trans
-        i18nKey={headerTextKey}
-        components={{ b: <strong /> }}
-        values={{ to_name: toName }}
-      />
-    </DsHeading>
-  );
-};
-
-interface RequestReceiptBodyProps {
-  bodyTextKey: string;
-  toName: string;
-}
-const RequestReceiptBody = ({ bodyTextKey, toName }: RequestReceiptBodyProps) => {
-  const { t } = useTranslation();
-
-  return (
-    <>
-      <DsParagraph>
-        <Trans
-          i18nKey={bodyTextKey}
-          components={{ b: <strong /> }}
-          values={{ to_name: toName }}
-        />
-      </DsParagraph>
-      <DsParagraph className={classes.closeWindowInfo}>
-        {t('draft_request_page.close_window_info')}
-      </DsParagraph>
-    </>
   );
 };
