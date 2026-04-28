@@ -6,6 +6,7 @@ using Altinn.AccessManagement.UI.Core.Services.Interfaces;
 using Altinn.AccessManagement.UI.Integration.Configuration;
 using Microsoft.AspNetCore.Antiforgery;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 
 namespace Altinn.AccessManagement.UI.Controllers
@@ -25,6 +26,7 @@ namespace Altinn.AccessManagement.UI.Controllers
         private readonly IHttpContextAccessor _httpContextAccessor;
         private readonly PlatformSettings _platformSettings;
         private readonly IUserService _userService;
+        private readonly ILogger<HomeController> _logger;
 
         /// <summary>
         ///     Initializes a new instance of the <see cref="HomeController" /> class.
@@ -37,6 +39,7 @@ namespace Altinn.AccessManagement.UI.Controllers
         /// <param name="generalSettings">general settings</param>
         /// <param name="featureFlags">feature flags</param>
         /// <param name="userService">user service to look up things about the user</param>
+        /// <param name="logger">the logger</param>
         public HomeController(
             IOptions<FrontEndEntryPointOptions> frontEndEntrypoints,
             IAntiforgery antiforgery,
@@ -45,7 +48,8 @@ namespace Altinn.AccessManagement.UI.Controllers
             IHttpContextAccessor httpContextAccessor,
             IOptions<GeneralSettings> generalSettings,
             IOptions<FeatureFlags> featureFlags,
-            IUserService userService)
+            IUserService userService,
+            ILogger<HomeController> logger)
         {
             _antiforgery = antiforgery;
             _platformSettings = platformSettings.Value;
@@ -54,6 +58,7 @@ namespace Altinn.AccessManagement.UI.Controllers
             _generalSettings = generalSettings.Value;
             _featureFlags = featureFlags.Value;
             _userService = userService;
+            _logger = logger;
         }
 
         /// <summary>
@@ -96,36 +101,37 @@ namespace Altinn.AccessManagement.UI.Controllers
             return Redirect(redirectUrl);
         }
 
-        private Task SetLanguageCookie()
+        private async Task SetLanguageCookie()
         {
-            var httpContext = _httpContextAccessor.HttpContext;
+            string languageCode = "no_nb";
 
-            string languageCode = LanguageHelper.GetAltinnPersistenceCookieValueFrontendStandard(httpContext);
-
-            if (string.IsNullOrEmpty(languageCode))
+            int userId = AuthenticationHelper.GetUserId(HttpContext);
+            if (userId > 0)
             {
-                languageCode = httpContext?.Request.Cookies["selectedLanguage"];
+                try
+                {
+                    var profile = await _userService.GetUserProfile(userId);
+                    string profileLanguage = profile?.ProfileSettingPreference?.Language;
+                    if (!string.IsNullOrEmpty(profileLanguage))
+                    {
+                        string frontendCode = LanguageHelper.GetFrontendStandardLanguage(profileLanguage);
+                        if (!string.IsNullOrEmpty(frontendCode))
+                        {
+                            languageCode = frontendCode;
+                        }
+                    }
+                }
+                catch (Exception ex)
+                {
+                    _logger.LogWarning(ex, "Failed to read language preference from profile for userId {UserId}. Falling back to default.", userId);
+                }
             }
 
-            if (string.IsNullOrEmpty(languageCode))
-            {
-                languageCode = "no_nb";
-            }
-
-            string frontendLanguage = LanguageHelper.GetFrontendStandardLanguage(languageCode);
-
-            if (string.IsNullOrEmpty(frontendLanguage))
-            {
-                frontendLanguage = "no_nb";
-            }
-
-            HttpContext.Response.Cookies.Append("selectedLanguage", frontendLanguage, new CookieOptions
+            HttpContext.Response.Cookies.Append("selectedLanguage", languageCode, new CookieOptions
             {
                 // Make this cookie readable by Javascript.
                 HttpOnly = false,
             });
-
-            return Task.CompletedTask;
         }
 
         private async Task CheckAndSetPartyRepresentationCookies()
