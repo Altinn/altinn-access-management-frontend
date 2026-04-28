@@ -46,7 +46,7 @@ export class AccessManagementFrontPage {
   }
 
   async sokEtterEnkelttjeneste(tjenesteNavn: string) {
-    await this.page.getByRole('tabpanel').getByPlaceholder('Søk etter tjenester').fill(tjenesteNavn);
+    await this.page.getByPlaceholder('Søk etter tjenester').nth(1).fill(tjenesteNavn);
   }
 
   async clickEnkelttjeneste(tjenesteNavn: string) {
