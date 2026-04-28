@@ -1,0 +1,7 @@
+{
+  "permissions": {
+    "allow": [
+      "Read(//Users/sondre/workspace/altinn-authorization-tmp/src/apps/Altinn.AccessManagement/src/Altinn.AccessManagement.Api.Enduser/Controllers/**)"
+    ]
+  }
+}

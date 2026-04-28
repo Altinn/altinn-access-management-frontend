@@ -1,10 +1,11 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 
-import type { CompactRole, CompactEntity } from '@/dataObjects/dtos/Common';
+import type { CompactRole, Entity } from '@/dataObjects/dtos/Common';
 import { getCookie } from '@/resources/Cookie/CookieMethods';
+import type { AssignmentDto } from './clientApi';
 
 export interface MaskinportenConnection {
-  party: CompactEntity;
+  party: Entity;
   roles: CompactRole[];
   connections: MaskinportenConnection[];
 }
@@ -31,10 +32,20 @@ export const maskinportenApi = createApi({
       query: (args) => `consumers?party=${args?.party ?? getCookie('AltinnPartyUuid')}`,
       providesTags: ['maskinportenConsumers'],
     }),
+    addMaskinportenSupplier: builder.mutation<AssignmentDto, { party: string; supplier: string }>({
+      query: ({ party, supplier }) => ({
+        url: `suppliers?party=${encodeURIComponent(party)}&supplier=${encodeURIComponent(supplier)}`,
+        method: 'POST',
+      }),
+      invalidatesTags: ['maskinportenSuppliers'],
+    }),
   }),
 });
 
-export const { useGetMaskinportenSuppliersQuery, useGetMaskinportenConsumersQuery } =
-  maskinportenApi;
+export const {
+  useGetMaskinportenSuppliersQuery,
+  useGetMaskinportenConsumersQuery,
+  useAddMaskinportenSupplierMutation,
+} = maskinportenApi;
 
 export const { endpoints, reducerPath, reducer, middleware } = maskinportenApi;

@@ -578,6 +578,13 @@
   "maskinporten_page": {
     "heading": "Maskinporten administration",
     "document_title": "Maskinporten administration - Altinn"
+    "add_supplier_button": "Add supplier",
+    "suppliers_description": "Organizations that have granted Maskinporten scopes to {{name}}.",
+    "consumers_tab": "Consumers",
+    "consumers_description": "Organizations that have received Maskinporten scopes from {{name}}.",
+    "no_suppliers": "No suppliers found.",
+    "no_consumers": "No consumers found.",
+    "load_error": "Could not load Maskinporten connections."
   },
   "settings_page": {
     "page_title": "Settings - Altinn",

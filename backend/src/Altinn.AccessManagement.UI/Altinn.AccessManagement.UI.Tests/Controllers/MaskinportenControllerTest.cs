@@ -2,6 +2,7 @@ using System.Net;
 using System.Net.Http.Headers;
 using System.Net.Http.Json;
 using Altinn.AccessManagement.UI.Controllers;
+using Altinn.AccessManagement.UI.Core.Models.ClientDelegation;
 using Altinn.AccessManagement.UI.Core.Models.Maskinporten;
 using Altinn.AccessManagement.UI.Mocks.Utils;
 using Altinn.AccessManagement.UI.Tests.Utils;
@@ -168,6 +169,97 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
             SetAuthHeader();
 
             HttpResponseMessage response = await _client.GetAsync($"accessmanagement/api/v1/maskinporten/consumers?party={party}");
+
+            Assert.Equal(HttpStatusCode.InternalServerError, response.StatusCode);
+        }
+
+        /// <summary>
+        /// Test case: AddSupplier returns the created assignment for a valid party and supplier.
+        /// </summary>
+        [Fact]
+        public async Task AddSupplier_ReturnsAssignment()
+        {
+            Guid party = Guid.Parse("cd35779b-b174-4ecc-bbef-ece13611be7f");
+            string supplier = "312605031";
+            SetAuthHeader();
+
+            HttpResponseMessage response = await _client.PostAsync(
+                $"accessmanagement/api/v1/maskinporten/suppliers?party={party}&supplier={supplier}",
+                null);
+
+            Assert.Equal(HttpStatusCode.OK, response.StatusCode);
+            AssignmentDto actualResponse = await response.Content.ReadFromJsonAsync<AssignmentDto>();
+
+            Assert.NotNull(actualResponse);
+            Assert.NotEqual(Guid.Empty, actualResponse.Id);
+            Assert.Equal(party, actualResponse.FromId);
+        }
+
+        /// <summary>
+        /// Test case: AddSupplier with invalid party format returns bad request.
+        /// </summary>
+        [Fact]
+        public async Task AddSupplier_InvalidParty_ReturnsBadRequest()
+        {
+            SetAuthHeader();
+
+            HttpResponseMessage response = await _client.PostAsync(
+                "accessmanagement/api/v1/maskinporten/suppliers?party=not-a-guid&supplier=312605031",
+                null);
+
+            Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
+        }
+
+        /// <summary>
+        /// Test case: AddSupplier with missing required supplier parameter returns bad request.
+        /// </summary>
+        [Fact]
+        public async Task AddSupplier_MissingSupplier_ReturnsBadRequest()
+        {
+            Guid party = Guid.Parse("cd35779b-b174-4ecc-bbef-ece13611be7f");
+            SetAuthHeader();
+
+            HttpResponseMessage response = await _client.PostAsync(
+                $"accessmanagement/api/v1/maskinporten/suppliers?party={party}",
+                null);
+
+            Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
+        }
+
+        /// <summary>
+        /// Test case: AddSupplier returns the backend status code and problem details when service throws HttpStatusException.
+        /// </summary>
+        [Fact]
+        public async Task AddSupplier_ServiceThrowsHttpStatusException_ReturnsProblemDetails()
+        {
+            Guid party = Guid.Parse("00000000-0000-0000-0000-000000000404");
+            SetAuthHeader();
+
+            HttpResponseMessage response = await _client.PostAsync(
+                $"accessmanagement/api/v1/maskinporten/suppliers?party={party}&supplier=312605031",
+                null);
+
+            Assert.Equal(HttpStatusCode.NotFound, response.StatusCode);
+            ProblemDetails problemDetails = await response.Content.ReadFromJsonAsync<ProblemDetails>();
+
+            Assert.NotNull(problemDetails);
+            Assert.Equal((int)HttpStatusCode.NotFound, problemDetails.Status);
+            Assert.Equal("Unexpected HttpStatus response", problemDetails.Title);
+            Assert.Equal("Downstream message", problemDetails.Detail);
+        }
+
+        /// <summary>
+        /// Test case: AddSupplier returns internal server error when service throws.
+        /// </summary>
+        [Fact]
+        public async Task AddSupplier_ServiceThrowsException_ReturnsInternalServerError()
+        {
+            Guid party = Guid.Empty;
+            SetAuthHeader();
+
+            HttpResponseMessage response = await _client.PostAsync(
+                $"accessmanagement/api/v1/maskinporten/suppliers?party={party}&supplier=312605031",
+                null);
 
             Assert.Equal(HttpStatusCode.InternalServerError, response.StatusCode);
         }

@@ -1,6 +1,8 @@
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Net;
 using Altinn.AccessManagement.UI.Core.Helpers;
+using Altinn.AccessManagement.UI.Core.Models.ClientDelegation;
 using Altinn.AccessManagement.UI.Core.Models.Maskinporten;
 using Altinn.AccessManagement.UI.Core.Services.Interfaces;
 using Microsoft.AspNetCore.Authorization;
@@ -59,6 +61,40 @@ namespace Altinn.AccessManagement.UI.Controllers
             catch (Exception ex)
             {
                 _logger.LogError(ex, "GetSuppliers failed unexpectedly");
+                return StatusCode((int)HttpStatusCode.InternalServerError);
+            }
+        }
+
+        /// <summary>
+        /// Endpoint for adding a Maskinporten supplier for a party.
+        /// </summary>
+        /// <param name="party">The uuid for the party.</param>
+        /// <param name="supplier">The supplier organization number.</param>
+        /// <param name="cancellationToken">Cancellation token.</param>
+        /// <returns>The created supplier assignment.</returns>
+        [HttpPost]
+        [Authorize]
+        [Route("suppliers")]
+        public async Task<ActionResult<AssignmentDto>> AddSupplier([FromQuery] Guid party, [Required][FromQuery] string supplier, CancellationToken cancellationToken = default)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            try
+            {
+                AssignmentDto assignment = await _maskinportenService.AddSupplier(party, supplier, cancellationToken);
+                return Ok(assignment);
+            }
+            catch (HttpStatusException ex)
+            {
+                string responseContent = ex.Message;
+                return new ObjectResult(ProblemDetailsFactory.CreateProblemDetails(HttpContext, (int?)ex.StatusCode, "Unexpected HttpStatus response", detail: responseContent));
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "AddSupplier failed unexpectedly");
                 return StatusCode((int)HttpStatusCode.InternalServerError);
             }
         }

@@ -1,4 +1,5 @@
 using Altinn.AccessManagement.UI.Core.ClientInterfaces;
+using Altinn.AccessManagement.UI.Core.Models.ClientDelegation;
 using Altinn.AccessManagement.UI.Core.Models.Maskinporten;
 using Altinn.AccessManagement.UI.Core.Services.Interfaces;
 
@@ -24,6 +25,12 @@ namespace Altinn.AccessManagement.UI.Core.Services
         public async Task<IEnumerable<MaskinportenConnection>> GetSuppliers(Guid party, CancellationToken cancellationToken = default)
         {
             return await _maskinportenClient.GetSuppliers(party, cancellationToken);
+        }
+
+        /// <inheritdoc />
+        public async Task<AssignmentDto> AddSupplier(Guid party, string supplier, CancellationToken cancellationToken = default)
+        {
+            return await _maskinportenClient.AddSupplier(party, supplier, cancellationToken);
         }
 
         /// <inheritdoc />

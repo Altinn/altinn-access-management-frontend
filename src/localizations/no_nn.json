@@ -575,6 +575,13 @@
   "maskinporten_page": {
     "heading": "Maskinporten\u00ADadministrasjon",
     "document_title": "Maskinportenadministrasjon - Altinn"
+    "add_supplier_button": "Legg til leverandør",
+    "suppliers_description": "Verksemder som har gitt Maskinporten-scope til {{name}}.",
+    "consumers_tab": "Konsumentar",
+    "consumers_description": "Verksemder som har fått Maskinporten-scope frå {{name}}.",
+    "no_suppliers": "Ingen leverandørar funne.",
+    "no_consumers": "Ingen konsumentar funne.",
+    "load_error": "Kunne ikkje laste Maskinporten-tilknytingar."
   },
   "settings_page": {
     "page_title": "Innstillingar - Altinn",

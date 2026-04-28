@@ -1,7 +1,9 @@
 using System.Net;
+using System.Text.Json;
 using Altinn.AccessManagement.UI.Core.ClientInterfaces;
 using Altinn.AccessManagement.UI.Core.Extensions;
 using Altinn.AccessManagement.UI.Core.Helpers;
+using Altinn.AccessManagement.UI.Core.Models.ClientDelegation;
 using Altinn.AccessManagement.UI.Core.Models.Maskinporten;
 using Altinn.AccessManagement.UI.Integration.Configuration;
 using Altinn.AccessManagement.UI.Integration.Util;
@@ -20,6 +22,7 @@ namespace Altinn.AccessManagement.UI.Integration.Clients
         private readonly HttpClient _client;
         private readonly IHttpContextAccessor _httpContextAccessor;
         private readonly PlatformSettings _platformSettings;
+        private readonly JsonSerializerOptions _serializerOptions = new JsonSerializerOptions { PropertyNameCaseInsensitive = true };
 
         /// <summary>
         /// Initializes a new instance of the <see cref="MaskinportenClient"/> class.
@@ -50,11 +53,42 @@ namespace Altinn.AccessManagement.UI.Integration.Clients
             try
             {
                 HttpResponseMessage response = await _client.GetAsync(token, endpointUrl, cancellationToken);
+                var res = await response.Content.ReadAsStringAsync(cancellationToken);
                 return await ClientUtils.DeserializeIfSuccessfullStatusCode<IEnumerable<MaskinportenConnection>>(response, _logger, "MaskinportenClient.GetSuppliers");
             }
             catch (Exception ex)
             {
                 _logger.LogError(ex, "Error while getting right holders");
+                throw new HttpStatusException("Unexpected http response.", "Unexpected http response.", HttpStatusCode.InternalServerError, null, ex.Message);
+            }
+        }
+
+        /// <inheritdoc />
+        public async Task<AssignmentDto> AddSupplier(Guid party, string supplier, CancellationToken cancellationToken = default)
+        {
+            var token = JwtTokenUtil.GetTokenFromContext(_httpContextAccessor.HttpContext, _platformSettings.JwtCookieName);
+            var endpointUrl = $"enduser/maskinportensuppliers?party={party}&supplier={supplier}";
+
+            try
+            {
+                HttpResponseMessage response = await _client.PostAsync(token, endpointUrl, null, cancellationToken);
+                string responseContent = await response.Content.ReadAsStringAsync(cancellationToken);
+
+                if (!response.IsSuccessStatusCode)
+                {
+                    _logger.LogError("MaskinportenClient.AddSupplier failed with status code {StatusCode}. Response: {ResponseContent}", response.StatusCode, responseContent);
+                    throw new HttpStatusException("Unexpected http response.", "Unexpected http response.", response.StatusCode, null, responseContent);
+                }
+
+                return JsonSerializer.Deserialize<AssignmentDto>(responseContent, _serializerOptions);
+            }
+            catch (HttpStatusException)
+            {
+                throw;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error while adding Maskinporten supplier");
                 throw new HttpStatusException("Unexpected http response.", "Unexpected http response.", HttpStatusCode.InternalServerError, null, ex.Message);
             }
         }
