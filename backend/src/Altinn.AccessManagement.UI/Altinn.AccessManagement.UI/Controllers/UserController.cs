@@ -375,5 +375,22 @@ namespace Altinn.AccessManagement.UI.Controllers
 
             return Ok(false);
         }
+
+        /// <summary>
+        /// Endpoint for checking if the authenticated user has access to the altinn_maskinporten_scope_delegation resource.
+        /// </summary>
+        [HttpGet]
+        [Authorize(Policy = AuthzConstants.POLICY_ACCESS_MANAGEMENT_MASKINPORTEN_SCOPE_DELEGATION_READ_WITH_PASS_THROUGH)]
+        [Route("isMaskinportenAdmin")]
+        public ActionResult<bool> IsMaskinportenAdmin()
+        {
+            if (_httpContextAccessor.HttpContext.Items.TryGetValue("HasRequestedPermission", out object hasPermissionObj) &&
+                hasPermissionObj is bool hasPermission)
+            {
+                return Ok(hasPermission);
+            }
+
+            return Ok(false);
+        }
     }
 }

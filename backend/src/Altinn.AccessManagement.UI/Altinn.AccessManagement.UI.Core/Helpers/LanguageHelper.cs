@@ -42,7 +42,12 @@ namespace Altinn.AccessManagement.UI.Core.Helpers
         /// <returns>The backend standard language code.</returns>
         public static string GetBackendStandardLanguage(string languageCode)
         {
-            return LanguageMappings.Find(m => languageCode.Contains(m.Altinn2Standard) || m.FrontendStandard == languageCode).BackendStandard;
+            if (string.IsNullOrEmpty(languageCode))
+            {
+                return string.Empty;
+            }
+
+            return LanguageMappings.Find(m => languageCode.Contains(m.Altinn2Standard) || m.FrontendStandard == languageCode || m.BackendStandard == languageCode).BackendStandard;
         }
 
         /// <summary>

@@ -17,7 +17,6 @@ test.describe('System user deletion', () => {
     });
 
     await test.step('Login and navigate to application', async () => {
-      await page.goto(env('BASE_URL'));
       await login.LoginToAccessManagement(testUserPid);
       await login.chooseReportee(testUserName, testOrgName);
     });

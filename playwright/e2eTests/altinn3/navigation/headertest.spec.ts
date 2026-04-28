@@ -12,7 +12,6 @@ test.describe('Aktørvalg, valg og visning av avgiver', () => {
 
   const loginAsHeaderTestUser = async (page: Page, aktorvalgHeader: AktorvalgHeader) => {
     const login = new LoginPage(page);
-    await page.goto(env('BASE_URL'));
     await login.LoginToAccessManagement(HEADER_TEST_USER);
     await aktorvalgHeader.selectActorFromHeaderMenu(DEFAULT_ACTOR_NAME);
     await aktorvalgHeader.chooseBokmalLanguage();
@@ -22,7 +21,6 @@ test.describe('Aktørvalg, valg og visning av avgiver', () => {
     test.skip(ENV == 'TT02', 'The "Show Deleted" button is currently feature toggled off in TT02');
     const login = new LoginPage(page);
     await test.step('Log in', async () => {
-      await page.goto(env('BASE_URL'));
       await login.LoginToAccessManagement(SHOW_DELETED_TEST_USER);
     });
 

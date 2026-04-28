@@ -153,7 +153,8 @@
     "consent": "Consent and power of attorney agreements",
     "poa_overview": "Powers of attorney",
     "settings": "Settings",
-    "requests": "Requests"
+    "requests": "Requests",
+    "maskinporten": "Maskinporten administration"
   },
   "error_page": {
     "not_found_site_type": "Error 404",
@@ -579,6 +580,10 @@
     "person_identifier_username_format_error": "Username must be at least 6 characters",
     "person_identifier_whitespace_forbidden_error": "Spaces are not allowed in SSN or username",
     "last_name_format_error": "Please enter a valid last name"
+  },
+  "maskinporten_page": {
+    "heading": "Maskinporten administration",
+    "document_title": "Maskinporten administration - Altinn"
   },
   "settings_page": {
     "page_title": "Settings - Altinn",

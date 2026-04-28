@@ -33,7 +33,6 @@ test.describe.serial('Tilgangsstyring', () => {
     });
 
     await test.step('Log in', async () => {
-      await page.goto(env('BASE_URL'));
       await login.LoginToAccessManagement('70885100226');
     });
 
@@ -76,7 +75,6 @@ test.describe.serial('Tilgangsstyring', () => {
     });
 
     await test.step('Log in', async () => {
-      await page.goto(env('BASE_URL'));
       await login.LoginToAccessManagement('64866402394');
     });
 
@@ -192,7 +190,6 @@ test.describe.serial('Tilgangsstyring', () => {
     });
 
     await test.step('Log in', async () => {
-      await page.goto(env('BASE_URL'));
       await login.LoginToAccessManagement('15843346194');
     });
 
@@ -225,7 +222,6 @@ test.describe.serial('Tilgangsstyring', () => {
     });
 
     await test.step('Log in', async () => {
-      await page.goto(env('BASE_URL'));
       await login.LoginToAccessManagement('22907997719');
     });
 

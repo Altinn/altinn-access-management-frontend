@@ -1,4 +1,5 @@
 ﻿using Altinn.AccessManagement.UI.Core.ClientInterfaces;
+using Altinn.AccessManagement.UI.Core.Helpers;
 using Altinn.AccessManagement.UI.Core.Models;
 using Altinn.AccessManagement.UI.Core.Models.AccessManagement;
 using Altinn.AccessManagement.UI.Core.Models.Profile;
@@ -55,7 +56,20 @@ namespace Altinn.AccessManagement.UI.Core.Services
             {
                 ShouldShowDeletedEntities = shouldShowDeletedEntities
             };
-            return await _profileClient.PatchCurrentUserProfileSetting(change); 
+            return await _profileClient.PatchCurrentUserProfileSetting(change);
+        }
+
+        /// <inheritdoc/>
+        public async Task SetLanguageProfileSetting(string languageCode)
+        {
+            string backendLanguage = LanguageHelper.GetBackendStandardLanguage(languageCode);
+            if (string.IsNullOrEmpty(backendLanguage))
+            {
+                throw new ArgumentException($"Unsupported language code: {languageCode}", nameof(languageCode));
+            }
+
+            ProfileSettingPreference change = new ProfileSettingPreference { Language = backendLanguage };
+            await _profileClient.PatchCurrentUserProfileSetting(change);
         }
 
         /// <inheritdoc/>        

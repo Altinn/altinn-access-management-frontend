@@ -1,8 +1,7 @@
 import React from 'react';
 import { useTranslation, Trans } from 'react-i18next';
 import { useNavigate, useSearchParams } from 'react-router';
-import { DsAlert, DsSpinner, DsHeading, DsParagraph, DsButton } from '@altinn/altinn-components';
-
+import { DsAlert, DsHeading, DsParagraph, DsButton } from '@altinn/altinn-components';
 import { useDocumentTitle } from '@/resources/hooks/useDocumentTitle';
 import {
   useGetSystemUserRequestQuery,
@@ -11,7 +10,6 @@ import {
   useGetSystemUserReporteeQuery,
   useGetSystemuserIsAdminQuery,
 } from '@/rtk/features/systemUserApi';
-
 import { RequestPageBase } from './components/RequestPageBase/RequestPageBase';
 import type { ProblemDetail } from './types';
 import { RightsList } from './components/RightsList/RightsList';
@@ -31,7 +29,6 @@ export const SystemUserRequestPage = () => {
   const [searchParams] = useSearchParams();
   const skipLogout = searchParams.get('skiplogout');
   const requestId = searchParams.get('id') ?? '';
-  const backToPage = searchParams.get('backtopage') ?? '';
 
   const {
     data: request,
@@ -100,27 +97,27 @@ export const SystemUserRequestPage = () => {
     }
   };
 
+  let error: React.ReactNode = null;
+  if (!requestId) {
+    error = (
+      <DsAlert data-color='danger'>{t('systemuser_request.load_creation_request_no_id')}</DsAlert>
+    );
+  } else if (loadReporteeError) {
+    error = <DsAlert data-color='danger'>{t('systemuser_request.load_user_info_error')}</DsAlert>;
+  } else if (loadingRequestError || (request && !request.system)) {
+    error = (
+      <SystemUserRequestLoadError error={(loadingRequestError as { data: ProblemDetail })?.data} />
+    );
+  }
+
   return (
     <RequestPageBase
       system={request?.system}
-      reporteeName={reporteeData?.name}
-      backToPage={backToPage}
+      reportee={reporteeData}
+      isLoading={isLoadingRequest || isLoadingReportee}
+      error={error}
       heading={t('systemuser_request.banner_title')}
     >
-      {!requestId && (
-        <DsAlert data-color='danger'>{t('systemuser_request.load_creation_request_no_id')}</DsAlert>
-      )}
-      {loadReporteeError && (
-        <DsAlert data-color='danger'>{t('systemuser_request.load_user_info_error')}</DsAlert>
-      )}
-      {(loadingRequestError || (request && !request.system)) && (
-        <SystemUserRequestLoadError
-          error={(loadingRequestError as { data: ProblemDetail })?.data}
-        />
-      )}
-      {(isLoadingRequest || isLoadingReportee) && (
-        <DsSpinner aria-label={t('systemuser_request.loading_creation_request')} />
-      )}
       {request?.system && reporteeData && (
         <>
           {request.status === 'Accepted' && (

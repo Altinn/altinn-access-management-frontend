@@ -8,25 +8,10 @@
   }
 }
 
-.requestPage {
-  min-height: 100vh;
-  background-color: var(--ds-color-neutral-background-tinted);
-}
-
-.requestWrapper {
-  margin-left: auto;
-  margin-right: auto;
-  min-width: 280px;
-  max-width: 1056px;
-}
-
-.headerContainer {
+.vendorRequestBlock {
   display: flex;
-  flex-direction: row;
-  justify-content: space-between;
-  align-items: center;
-  text-align: right;
-  padding: var(--vendor-container-padding);
+  flex-direction: column;
+  gap: var(--ds-size-8);
 }
 
 .vendorInfo {
@@ -35,18 +20,4 @@
   padding-bottom: var(--vendor-container-padding);
   text-align: right;
   font-style: italic;
-}
-
-.vendorRequestBlock {
-  display: flex;
-  flex-direction: column;
-  gap: var(--ds-size-8);
-  background-color: var(--ds-color-accent-background-default);
-  padding: var(--vendor-container-padding);
-  margin-bottom: 3px;
-}
-
-.backButton {
-  justify-self: flex-start;
-  margin-bottom: var(--ds-size-2);
 }
