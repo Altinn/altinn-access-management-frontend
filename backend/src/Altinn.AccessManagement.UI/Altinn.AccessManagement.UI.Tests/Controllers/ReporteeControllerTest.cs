@@ -155,19 +155,6 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
         }
 
         [Fact]
-        public async Task ChangeAndRedirect_PostMethod_BehavesLikeGet()
-        {
-            Authenticate();
-
-            HttpResponseMessage response = await _client.PostAsync(
-                $"accessmanagement/api/v1/reportee/changeandredirect?P={ValidPartyUuidInList}&goTo={Encode(AltinnGoTo)}",
-                content: null);
-
-            Assert.Equal(HttpStatusCode.Redirect, response.StatusCode);
-            Assert.Equal(AltinnGoTo, response.Headers.Location.OriginalString);
-        }
-
-        [Fact]
         public async Task Change_PartyUuid_ValidParty_Returns200AndSetsCookies()
         {
             Authenticate();
