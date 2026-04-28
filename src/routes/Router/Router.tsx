@@ -45,6 +45,7 @@ import { AgentDetailsPage } from '@/features/amUI/agentDetails/AgentDetailsPage'
 import { ClientDetailsPage } from '@/features/amUI/clientDetails/ClientDetailsPage';
 import { MyClientsPage } from '@/features/amUI/myClients/MyClientsPage';
 import { DraftRequestPage } from '@/features/amUI/requestPage/DraftRequestPage/DraftRequestPage';
+import { MaskinportenPage } from '@/features/amUI/maskinporten/MaskinportenPage';
 
 export const Router = createBrowserRouter(
   createRoutesFromElements(
@@ -237,6 +238,10 @@ export const Router = createBrowserRouter(
         <Route
           path={amUIPath.DraftRequest}
           element={<DraftRequestPage />}
+        />
+        <Route
+          path={amUIPath.Maskinporten}
+          element={<MaskinportenPage />}
         />
         {/* Catch-all for any unmatched routes under root */}
         <Route
