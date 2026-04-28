@@ -91,6 +91,7 @@ namespace Altinn.AccessManagement.UI.Controllers
         /// <param name="partyId">Numeric PartyId of the desired reportee. Used when <paramref name="partyUuid"/> is not provided.</param>
         /// <returns>200 OK on success, 400 Bad Request if no party is supplied, 403 Forbidden if the party is not on the user's reportee list.</returns>
         [HttpPost("change")]
+        [ValidateAntiForgeryToken]
         [Authorize]
         public async Task<IActionResult> Change(
             [FromQuery(Name = "partyUuid")] Guid? partyUuid,
