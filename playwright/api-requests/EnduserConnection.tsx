@@ -422,7 +422,6 @@ export class EnduserConnection {
     fromUuid?: string,
     agentLastName?: string,
   ) {
-    let agent;
     fromUuid = fromUuid || (await this.tokenClass.getPartyUuid(fromParty));
     agentLastName = agentLastName || (await this.tokenClass.getLastName(agentPid));
     const token = await this.tokenClass.getPersonalTokenByPid(pid);
