@@ -4,7 +4,7 @@ import { test } from '../../../fixture/pomFixture';
 import { AktorvalgHeader } from '../../../pages/AktorvalgHeader';
 import { EnduserConnection } from '../../../api-requests/EnduserConnection';
 
-test.describe.serial('Enkelttjenestedelegering fra person til person og person til org', () => {
+test.describe('Enkelttjenestedelegering fra person til person og person til org', () => {
   const api = new EnduserConnection();
 
   test.afterAll('slett testdata', async () => {
@@ -182,7 +182,7 @@ test.describe.serial('Enkelttjenestedelegering fra person til person og person t
   });
 });
 
-test.describe.serial('Enkelttjenestedelegering fra org til person og org til org', () => {
+test.describe('Enkelttjenestedelegering fra org til person og org til org', () => {
   const api = new EnduserConnection();
 
   test.afterAll('slett testdata', async () => {
