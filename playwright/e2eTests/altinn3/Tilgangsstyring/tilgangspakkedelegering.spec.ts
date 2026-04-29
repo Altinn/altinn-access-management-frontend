@@ -1,8 +1,8 @@
-import { env } from 'playwright/util/helper';
 import { LoginPage } from 'playwright/pages/LoginPage';
 import { test } from '../../../fixture/pomFixture';
 import { AktorvalgHeader } from '../../../pages/AktorvalgHeader';
 import { EnduserConnection } from '../../../api-requests/EnduserConnection';
+import { tenorTestdata } from '../../testdata/tilgangsstyring/testdataHelpers';
 
 test.describe('tilgangspakkedelegering fra person til person og person til org', () => {
   const api = new EnduserConnection();
@@ -13,39 +13,39 @@ test.describe('tilgangspakkedelegering fra person til person og person til org',
   const SAMLIV_AREA = 'Familie og fritid';
 
   const addPerson = {
-    loginPid: '01837396103',
-    actor: 'DRIFTIG KATEGORI',
+    loginPid: tenorTestdata[0].pid,
+    actor: tenorTestdata[0].orgName,
     targetPid: '52858201748',
     targetSearchName: 'KOMPOSISJON',
     targetName: 'MEMORERENDE KOMPOSISJON',
   };
   const addOrg = {
-    loginPid: '29868198034',
-    actor: 'PRESIS KONKLUSJON',
+    loginPid: tenorTestdata[1].pid,
+    actor: tenorTestdata[1].orgName,
     targetOrgNo: '210638962',
     targetName: 'EKTE FANTASIFULL KATT HIMMEL',
   };
   const delegateToPerson = {
-    loginPid: '08857499981',
-    actor: 'UROMANTISK BRINGE',
+    loginPid: tenorTestdata[2].pid,
+    actor: tenorTestdata[2].orgName,
     targetPid: '22911648052',
     targetName: 'LETT ANKEL',
   };
   const delegateToOrg = {
-    loginPid: '15855499484',
-    actor: 'HANDLEKRAFTIG BRØK',
+    loginPid: tenorTestdata[3].pid,
+    actor: tenorTestdata[3].orgName,
     targetOrgNo: '313904490',
     targetName: 'OPPLYST KVART TIGER AS',
   };
   const deleteFromPerson = {
-    loginPid: '26917699703',
-    actor: 'GRÅ BLANDING',
+    loginPid: tenorTestdata[4].pid,
+    actor: tenorTestdata[4].orgName,
     targetPid: '43818900555',
     targetName: 'OPPSTEMT DRAGE',
   };
   const deleteFromOrg = {
-    loginPid: '25928698737',
-    actor: 'KONGE FASTTELEFON',
+    loginPid: tenorTestdata[5].pid,
+    actor: tenorTestdata[5].orgName,
     targetOrgNo: '313435482',
     targetName: 'GILD SPESIELL TIGER AS',
   };
@@ -293,45 +293,45 @@ test.describe('tilgangspakkedelegering fra org til person og org til org', () =>
   const POST_AREA = 'Andre tjenesteytende næringer';
 
   const addPerson = {
-    loginPid: '19858798917',
-    orgNo: '310945552',
-    actor: 'HARDHUDET REDELIG TIGER AS',
+    loginPid: tenorTestdata[6].pid,
+    orgNo: tenorTestdata[6].orgNr,
+    actor: tenorTestdata[6].orgName,
     targetPid: '41926701744',
     targetSearchName: 'APRIKOS',
     targetName: 'OMSORGSFULL APRIKOS',
   };
   const addOrg = {
-    loginPid: '28839195259',
-    orgNo: '312841150',
-    actor: 'UPRESIS DISTINGVERT KATT INNSJØ',
+    loginPid: tenorTestdata[7].pid,
+    orgNo: tenorTestdata[7].orgNr,
+    actor: tenorTestdata[7].orgName,
     targetOrgNo: '212209562',
     targetName: 'ALLSIDIG SIGEN TIGER AS',
   };
   const delegateToPerson = {
-    loginPid: '15857698093',
-    orgNo: '310394955',
-    actor: 'STØYFRI SIVILISERT APE',
+    loginPid: tenorTestdata[8].pid,
+    orgNo: tenorTestdata[8].orgNr,
+    actor: tenorTestdata[8].orgName,
     targetPid: '26832047936',
     targetName: 'UFØLSOM BADERING',
   };
   const delegateToOrg = {
-    loginPid: '08904899020',
-    orgNo: '310977756',
-    actor: 'TREG HELDIG STRUTS LTD',
+    loginPid: tenorTestdata[9].pid,
+    orgNo: tenorTestdata[9].orgNr,
+    actor: tenorTestdata[9].orgName,
     targetOrgNo: '312188198',
     targetName: 'EVENTYRLIG PUSLETE TIGER AS',
   };
   const deleteFromPerson = {
-    loginPid: '20826696746',
-    orgNo: '313500640',
-    actor: 'SKY UKLAR TIGER AS',
+    loginPid: tenorTestdata[10].pid,
+    orgNo: tenorTestdata[10].orgNr,
+    actor: tenorTestdata[10].orgName,
     targetPid: '18894799990',
     targetName: 'UTROLIG KLØVER',
   };
   const deleteFromOrg = {
-    loginPid: '04833348529',
-    orgNo: '312738147',
-    actor: 'RESERVERT RING KATT PERIODE',
+    loginPid: tenorTestdata[11].pid,
+    orgNo: tenorTestdata[11].orgNr,
+    actor: tenorTestdata[11].orgName,
     targetOrgNo: '312861305',
     targetName: 'GRATIS RØD APE',
   };

@@ -1,8 +1,8 @@
-import { env } from 'playwright/util/helper';
 import { LoginPage } from 'playwright/pages/LoginPage';
 import { test } from '../../../fixture/pomFixture';
 import { AktorvalgHeader } from '../../../pages/AktorvalgHeader';
 import { EnduserConnection } from '../../../api-requests/EnduserConnection';
+import { tenorTestdata } from '../../testdata/tilgangsstyring/testdataHelpers';
 
 const SINGLE_SERVICE = 'bruno-correspondence';
 
@@ -10,26 +10,26 @@ test.describe('Enkelttjenestedelegering fra person til person og person til org'
   const api = new EnduserConnection();
 
   const delegateToPerson = {
-    loginPid: '03906197811',
-    actor: 'STRAFFET KOST',
+    loginPid: tenorTestdata[12].pid,
+    actor: tenorTestdata[12].orgName,
     targetPid: '23854897845',
     targetName: 'KONSERVATIV FATTIGMANNSKOST',
   };
   const delegateToOrg = {
-    loginPid: '23813949784',
-    actor: 'ORIENTAL TRAPP',
+    loginPid: tenorTestdata[13].pid,
+    actor: tenorTestdata[13].orgName,
     targetOrgNo: '313642291',
     targetName: 'OVERFLØDIG SOLID TIGER AS',
   };
   const deleteFromPerson = {
-    loginPid: '13894599892',
-    actor: 'SØT KOMPETANSE',
+    loginPid: tenorTestdata[14].pid,
+    actor: tenorTestdata[14].orgName,
     targetPid: '50907400120',
     targetName: 'VASSEN ERT',
   };
   const deleteFromOrg = {
-    loginPid: '09889499432',
-    actor: 'KOMPLEKS BØNNE',
+    loginPid: tenorTestdata[15].pid,
+    actor: tenorTestdata[15].orgName,
     targetOrgNo: '210530932',
     targetName: 'TYDELIG VIS TIGER AS',
   };
@@ -233,30 +233,30 @@ test.describe('Enkelttjenestedelegering fra org til person og org til org', () =
   const api = new EnduserConnection();
 
   const orgToPerson = {
-    loginPid: '05916597349',
-    orgNo: '313189503',
-    actor: 'RYDDIG SUBJEKTIV TIGER AS',
+    loginPid: tenorTestdata[16].pid,
+    orgNo: tenorTestdata[16].orgNr,
+    actor: tenorTestdata[16].orgName,
     targetPid: '17889574100',
     targetName: 'ANSVARSFULL REGLE',
   };
   const orgToOrg = {
-    loginPid: '16928599063',
-    orgNo: '312476932',
-    actor: 'FARLIG GJESTFRI TIGER AS',
+    loginPid: tenorTestdata[17].pid,
+    orgNo: tenorTestdata[17].orgNr,
+    actor: tenorTestdata[17].orgName,
     targetOrgNo: '313233383',
     targetName: 'RIK INNBRINGENDE TIGER AS',
   };
   const deleteOrgToPerson = {
-    loginPid: '18846498989',
-    orgNo: '311716670',
-    actor: 'NÆR REALISTISK TIGER AS',
+    loginPid: tenorTestdata[18].pid,
+    orgNo: tenorTestdata[18].orgNr,
+    actor: tenorTestdata[18].orgName,
     targetPid: '09893049719',
     targetName: 'ANSTENDIG PURRE',
   };
   const deleteOrgToOrg = {
-    loginPid: '16815995930',
-    orgNo: '313707679',
-    actor: 'INNESLUTTET MOTLØS SKILPADDE',
+    loginPid: tenorTestdata[19].pid,
+    orgNo: tenorTestdata[19].orgNr,
+    actor: tenorTestdata[19].orgName,
     targetOrgNo: '314021622',
     targetName: 'SKAMFULL KONKRET TIGER AS',
   };

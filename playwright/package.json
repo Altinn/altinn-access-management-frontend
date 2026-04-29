@@ -10,6 +10,7 @@
     "env:AT23": "cross-env environment=at23 npx playwright test",
     "env:AT24": "cross-env environment=at24 npx playwright test",
     "env:TT02": "cross-env environment=tt02 npx playwright test",
+    "tenor:generate": "npx tsx scripts/generateTestdata.ts",
     "lint": "eslint ."
   },
   "keywords": [],
