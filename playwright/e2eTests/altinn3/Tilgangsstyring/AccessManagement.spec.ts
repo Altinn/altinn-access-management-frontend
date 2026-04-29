@@ -6,15 +6,26 @@ import { EnduserConnection } from '../../../api-requests/EnduserConnection';
 
 test.describe.serial('Tilgangsstyring', () => {
   const api = new EnduserConnection();
+  const MANAGER_PID = '12816699205';
+  const ORG_NO = '314138910';
+  const ORG_NAME = 'UNDERDANIG DYPSINDIG TIGER AS';
+
+  const tilgangsstyrer = { pid: '70885100226', name: 'Iherdig Litteratur' };
+  const hovedadmin = { pid: '64866402394', name: 'TRÅDLØS TELEFONNUMMER' };
+  const vanligBruker = { pid: '15843346194', name: 'DYREBAR MIDDAG' };
+  const standardBruker = { pid: '22907997719' };
+
   test.afterAll(async () => {
-    await api.deleteConnection('12816699205', '314138910', [
-      '70885100226',
-      '64866402394',
-      '15843346194',
-      '22907997719',
-      '313435482',
-      '313904490',
-    ]);
+    try {
+      await api.deleteConnection(MANAGER_PID, ORG_NO, [
+        tilgangsstyrer.pid,
+        hovedadmin.pid,
+        vanligBruker.pid,
+        standardBruker.pid,
+      ]);
+    } catch (e) {
+      console.error('Cleanup: deleteConnection feilet:', e);
+    }
   });
 
   test('Tilgangsstyrer skal kunne delegere tilgangspakker de selv har', async ({
@@ -25,25 +36,25 @@ test.describe.serial('Tilgangsstyring', () => {
     const aktorvalgHeader = new AktorvalgHeader(page);
 
     await test.step('sett opp testdata', async () => {
-      await api.addConnectionAndPackagesToUser('12816699205', '314138910', '70885100226', [
+      await api.addConnectionAndPackagesToUser(MANAGER_PID, ORG_NO, tilgangsstyrer.pid, [
         'urn:altinn:accesspackage:tilgangsstyrer',
         'urn:altinn:accesspackage:posttjenester',
         'urn:altinn:accesspackage:byggesoknad',
       ]);
     });
 
-    await test.step('Log in', async () => {
-      await login.LoginToAccessManagement('70885100226');
+    await test.step('Logg inn', async () => {
+      await login.LoginToAccessManagement(tilgangsstyrer.pid);
     });
 
-    await test.step('Velg org UNDERDANIG DYPSINDIG TIGER AS og gå til tilgangsstyring', async () => {
-      await aktorvalgHeader.selectActorFromHeaderMenu('UNDERDANIG DYPSINDIG TIGER AS');
+    await test.step(`Velg org ${ORG_NAME} og gå til tilgangsstyring`, async () => {
+      await aktorvalgHeader.selectActorFromHeaderMenu(ORG_NAME);
     });
 
     await test.step('Gå til brukere og velg bruker "Iherdig Litteratur"', async () => {
       await accessManagementFrontPage.goToUsers();
       await accessManagementFrontPage.expectOthersWithRightsListToBeVisible();
-      await accessManagementFrontPage.clickUser('Iherdig Litteratur');
+      await accessManagementFrontPage.clickUser(tilgangsstyrer.name);
     });
 
     await test.step('Klikk "Gi fullmakt"', async () => {
@@ -69,23 +80,23 @@ test.describe.serial('Tilgangsstyring', () => {
     const aktorvalgHeader = new AktorvalgHeader(page);
 
     await test.step('sett opp testdata', async () => {
-      await api.addConnectionAndPackagesToUser('12816699205', '314138910', '64866402394', [
+      await api.addConnectionAndPackagesToUser(MANAGER_PID, ORG_NO, hovedadmin.pid, [
         'urn:altinn:accesspackage:hovedadministrator',
       ]);
     });
 
-    await test.step('Log in', async () => {
-      await login.LoginToAccessManagement('64866402394');
+    await test.step('Logg inn', async () => {
+      await login.LoginToAccessManagement(hovedadmin.pid);
     });
 
-    await test.step('Velg org UNDERDANIG DYPSINDIG TIGER AS og gå til tilgangsstyring', async () => {
-      await aktorvalgHeader.selectActorFromHeaderMenu('UNDERDANIG DYPSINDIG TIGER AS');
+    await test.step(`Velg org ${ORG_NAME} og gå til tilgangsstyring`, async () => {
+      await aktorvalgHeader.selectActorFromHeaderMenu(ORG_NAME);
     });
 
     await test.step('Gå til brukere og velg deg selv', async () => {
       await accessManagementFrontPage.goToUsers();
       await accessManagementFrontPage.expectOthersWithRightsListToBeVisible();
-      await accessManagementFrontPage.clickUser('TRÅDLØS TELEFONNUMMER');
+      await accessManagementFrontPage.clickUser(hovedadmin.name);
     });
 
     await test.step('Klikk "Gi fullmakt"', async () => {
@@ -183,27 +194,27 @@ test.describe.serial('Tilgangsstyring', () => {
     const aktorvalgHeader = new AktorvalgHeader(page);
 
     await test.step('sett opp testdata', async () => {
-      await api.addConnectionAndPackagesToUser('12816699205', '314138910', '15843346194', [
+      await api.addConnectionAndPackagesToUser(MANAGER_PID, ORG_NO, vanligBruker.pid, [
         'urn:altinn:accesspackage:tilgangsstyrer',
         'urn:altinn:accesspackage:byggesoknad',
       ]);
     });
 
-    await test.step('Log in', async () => {
-      await login.LoginToAccessManagement('15843346194');
+    await test.step('Logg inn', async () => {
+      await login.LoginToAccessManagement(vanligBruker.pid);
     });
 
-    await test.step('Velg org UNDERDANIG DYPSINDIG TIGER AS og gå til tilgangsstyring', async () => {
-      await aktorvalgHeader.selectActorFromHeaderMenu('UNDERDANIG DYPSINDIG TIGER AS');
+    await test.step(`Velg org ${ORG_NAME} og gå til tilgangsstyring`, async () => {
+      await aktorvalgHeader.selectActorFromHeaderMenu(ORG_NAME);
     });
 
     await test.step('Gå til brukere-siden og velg deg selv', async () => {
       await accessManagementFrontPage.goToUsers();
       await accessManagementFrontPage.expectOthersWithRightsListToBeVisible();
-      await accessManagementFrontPage.clickUser('DYREBAR MIDDAG');
+      await accessManagementFrontPage.clickUser(vanligBruker.name);
     });
 
-    await test.step('User should not be able to give power of attorney to themselves', async () => {
+    await test.step('Brukeren skal ikke kunne gi fullmakt til seg selv', async () => {
       await accessManagementFrontPage.expectPowerOfAttorneyButtonToNotBeVisible();
     });
   });
@@ -216,17 +227,17 @@ test.describe.serial('Tilgangsstyring', () => {
     const aktorvalgHeader = new AktorvalgHeader(page);
 
     await test.step('sett opp testdata', async () => {
-      await api.addConnectionAndPackagesToUser('12816699205', '314138910', '22907997719', [
+      await api.addConnectionAndPackagesToUser(MANAGER_PID, ORG_NO, standardBruker.pid, [
         'urn:altinn:accesspackage:byggesoknad',
       ]);
     });
 
-    await test.step('Log in', async () => {
-      await login.LoginToAccessManagement('22907997719');
+    await test.step('Logg inn', async () => {
+      await login.LoginToAccessManagement(standardBruker.pid);
     });
 
-    await test.step('Velg org UNDERDANIG DYPSINDIG TIGER AS og gå til tilgangsstyring', async () => {
-      await aktorvalgHeader.selectActorFromHeaderMenu('UNDERDANIG DYPSINDIG TIGER AS');
+    await test.step(`Velg org ${ORG_NAME} og gå til tilgangsstyring`, async () => {
+      await aktorvalgHeader.selectActorFromHeaderMenu(ORG_NAME);
     });
 
     await test.step('Gå til brukere-siden', async () => {
