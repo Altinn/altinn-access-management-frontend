@@ -22,9 +22,9 @@ namespace Altinn.AccessManagement.UI.Core.Services
         }
 
         /// <inheritdoc />
-        public async Task<IEnumerable<MaskinportenConnection>> GetSuppliers(Guid party, CancellationToken cancellationToken = default)
+        public async Task<IEnumerable<MaskinportenConnection>> GetSuppliers(Guid party, string? supplier = null, CancellationToken cancellationToken = default)
         {
-            return await _maskinportenClient.GetSuppliers(party, cancellationToken);
+            return await _maskinportenClient.GetSuppliers(party, supplier, cancellationToken);
         }
 
         /// <inheritdoc />
@@ -37,6 +37,18 @@ namespace Altinn.AccessManagement.UI.Core.Services
         public async Task<IEnumerable<MaskinportenConnection>> GetConsumers(Guid party, CancellationToken cancellationToken = default)
         {
             return await _maskinportenClient.GetConsumers(party, cancellationToken);
+        }
+
+        /// <inheritdoc />
+        public async Task RemoveSupplier(Guid party, string supplier, bool cascade = false, CancellationToken cancellationToken = default)
+        {
+            await _maskinportenClient.RemoveSupplier(party, supplier, cascade, cancellationToken);
+        }
+
+        /// <inheritdoc />
+        public async Task RemoveConsumer(Guid party, string consumer, bool cascade = false, CancellationToken cancellationToken = default)
+        {
+            await _maskinportenClient.RemoveConsumer(party, consumer, cascade, cancellationToken);
         }
     }
 }

@@ -46,19 +46,24 @@ namespace Altinn.AccessManagement.UI.Integration.Clients
         }
 
         /// <inheritdoc />
-        public async Task<IEnumerable<MaskinportenConnection>> GetSuppliers(Guid party, CancellationToken cancellationToken = default)
+        public async Task<IEnumerable<MaskinportenConnection>> GetSuppliers(Guid party, string? supplier = null, CancellationToken cancellationToken = default)
         {
             var token = JwtTokenUtil.GetTokenFromContext(_httpContextAccessor.HttpContext, _platformSettings.JwtCookieName);
-            var endpointUrl = $"enduser/maskinportensuppliers?party={party}";
+            var endpointUrl = string.IsNullOrWhiteSpace(supplier)
+                ? $"enduser/maskinportensuppliers?party={party}"
+                : $"enduser/maskinportensuppliers?party={party}&supplier={Uri.EscapeDataString(supplier)}";
             try
             {
                 HttpResponseMessage response = await _client.GetAsync(token, endpointUrl, cancellationToken);
-                var res = await response.Content.ReadAsStringAsync(cancellationToken);
                 return await ClientUtils.DeserializeIfSuccessfullStatusCode<IEnumerable<MaskinportenConnection>>(response, _logger, "MaskinportenClient.GetSuppliers");
+            }
+            catch (HttpStatusException)
+            {
+                throw;
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "Error while getting right holders");
+                _logger.LogError(ex, "Error while getting suppliers");
                 throw new HttpStatusException("Unexpected http response.", "Unexpected http response.", HttpStatusCode.InternalServerError, null, ex.Message);
             }
         }
@@ -106,6 +111,58 @@ namespace Altinn.AccessManagement.UI.Integration.Clients
             catch (Exception ex)
             {
                 _logger.LogError(ex, "Error while getting right holders");
+                throw new HttpStatusException("Unexpected http response.", "Unexpected http response.", HttpStatusCode.InternalServerError, null, ex.Message);
+            }
+        }
+
+        /// <inheritdoc />
+        public async Task RemoveSupplier(Guid party, string supplier, bool cascade = false, CancellationToken cancellationToken = default)
+        {
+            var token = JwtTokenUtil.GetTokenFromContext(_httpContextAccessor.HttpContext, _platformSettings.JwtCookieName);
+            var endpointUrl = $"enduser/maskinportensuppliers?party={party}&supplier={supplier}&cascade={cascade}";
+            try
+            {
+                HttpResponseMessage response = await _client.DeleteAsync(token, endpointUrl);
+                if (!response.IsSuccessStatusCode)
+                {
+                    string responseContent = await response.Content.ReadAsStringAsync(cancellationToken);
+                    _logger.LogError("MaskinportenClient.RemoveSupplier failed with status code {StatusCode}. Response: {ResponseContent}", response.StatusCode, responseContent);
+                    throw new HttpStatusException("Unexpected http response.", "Unexpected http response.", response.StatusCode, null, responseContent);
+                }
+            }
+            catch (HttpStatusException)
+            {
+                throw;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error while removing Maskinporten supplier");
+                throw new HttpStatusException("Unexpected http response.", "Unexpected http response.", HttpStatusCode.InternalServerError, null, ex.Message);
+            }
+        }
+
+        /// <inheritdoc />
+        public async Task RemoveConsumer(Guid party, string consumer, bool cascade = false, CancellationToken cancellationToken = default)
+        {
+            var token = JwtTokenUtil.GetTokenFromContext(_httpContextAccessor.HttpContext, _platformSettings.JwtCookieName);
+            var endpointUrl = $"enduser/maskinportenconsumers?party={party}&consumer={consumer}&cascade={cascade}";
+            try
+            {
+                HttpResponseMessage response = await _client.DeleteAsync(token, endpointUrl);
+                if (!response.IsSuccessStatusCode)
+                {
+                    string responseContent = await response.Content.ReadAsStringAsync(cancellationToken);
+                    _logger.LogError("MaskinportenClient.RemoveConsumer failed with status code {StatusCode}. Response: {ResponseContent}", response.StatusCode, responseContent);
+                    throw new HttpStatusException("Unexpected http response.", "Unexpected http response.", response.StatusCode, null, responseContent);
+                }
+            }
+            catch (HttpStatusException)
+            {
+                throw;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error while removing Maskinporten consumer");
                 throw new HttpStatusException("Unexpected http response.", "Unexpected http response.", HttpStatusCode.InternalServerError, null, ex.Message);
             }
         }

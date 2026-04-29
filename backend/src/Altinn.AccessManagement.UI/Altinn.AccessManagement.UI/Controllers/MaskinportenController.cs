@@ -38,12 +38,13 @@ namespace Altinn.AccessManagement.UI.Controllers
         /// Endpoint for retrieving Maskinporten suppliers for a party.
         /// </summary>
         /// <param name="party">The uuid for the party.</param>
+        /// <param name="supplier">Optional supplier org number to filter results to a single supplier.</param>
         /// <param name="cancellationToken">Cancellation token.</param>
         /// <returns>List of suppliers.</returns>
         [HttpGet]
         [Authorize]
         [Route("suppliers")]
-        public async Task<ActionResult<IEnumerable<MaskinportenConnection>>> GetSuppliers([FromQuery] Guid party, CancellationToken cancellationToken = default)
+        public async Task<ActionResult<IEnumerable<MaskinportenConnection>>> GetSuppliers([FromQuery] Guid party, [FromQuery] string supplier = null, CancellationToken cancellationToken = default)
         {
             if (!ModelState.IsValid)
             {
@@ -52,7 +53,7 @@ namespace Altinn.AccessManagement.UI.Controllers
 
             try
             {
-                IEnumerable<MaskinportenConnection> suppliers = await _maskinportenService.GetSuppliers(party, cancellationToken);
+                IEnumerable<MaskinportenConnection> suppliers = await _maskinportenService.GetSuppliers(party, supplier, cancellationToken);
                 return Ok(suppliers);
             }
             catch (HttpStatusException ex)
@@ -130,6 +131,74 @@ namespace Altinn.AccessManagement.UI.Controllers
             catch (Exception ex)
             {
                 _logger.LogError(ex, "GetConsumers failed unexpectedly");
+                return StatusCode((int)HttpStatusCode.InternalServerError);
+            }
+        }
+
+        /// <summary>
+        /// Endpoint for removing a Maskinporten supplier for a party.
+        /// </summary>
+        /// <param name="party">The uuid for the party.</param>
+        /// <param name="supplier">The supplier organization number.</param>
+        /// <param name="cascade">Whether to also remove all delegated resources.</param>
+        /// <param name="cancellationToken">Cancellation token.</param>
+        [HttpDelete]
+        [Authorize]
+        [Route("suppliers")]
+        public async Task<ActionResult> RemoveSupplier([FromQuery] Guid party, [Required][FromQuery] string supplier, [FromQuery] bool cascade = false, CancellationToken cancellationToken = default)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            try
+            {
+                await _maskinportenService.RemoveSupplier(party, supplier, cascade, cancellationToken);
+                return NoContent();
+            }
+            catch (HttpStatusException ex)
+            {
+                string responseContent = ex.Message;
+                return new ObjectResult(ProblemDetailsFactory.CreateProblemDetails(HttpContext, (int?)ex.StatusCode, "Unexpected HttpStatus response", detail: responseContent));
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "RemoveSupplier failed unexpectedly");
+                return StatusCode((int)HttpStatusCode.InternalServerError);
+            }
+        }
+
+        /// <summary>
+        /// Endpoint for removing a Maskinporten consumer connection (supplier relinquishes access).
+        /// </summary>
+        /// <param name="party">The uuid for the party (the supplier).</param>
+        /// <param name="consumer">The consumer organization number.</param>
+        /// <param name="cascade">Whether to also remove all delegated resources.</param>
+        /// <param name="cancellationToken">Cancellation token.</param>
+        [HttpDelete]
+        [Authorize]
+        [Route("consumers")]
+        public async Task<ActionResult> RemoveConsumer([FromQuery] Guid party, [Required][FromQuery] string consumer, [FromQuery] bool cascade = false, CancellationToken cancellationToken = default)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            try
+            {
+                await _maskinportenService.RemoveConsumer(party, consumer, cascade, cancellationToken);
+                return NoContent();
+            }
+            catch (HttpStatusException ex)
+            {
+                string responseContent = ex.Message;
+                return new ObjectResult(ProblemDetailsFactory.CreateProblemDetails(HttpContext, (int?)ex.StatusCode, "Unexpected HttpStatus response", detail: responseContent));
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "RemoveConsumer failed unexpectedly");
                 return StatusCode((int)HttpStatusCode.InternalServerError);
             }
         }

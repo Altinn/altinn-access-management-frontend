@@ -21,12 +21,18 @@ namespace Altinn.AccessManagement.UI.Mocks.Mocks
         }
 
         /// <inheritdoc />
-        public Task<IEnumerable<MaskinportenConnection>> GetSuppliers(Guid party, CancellationToken cancellationToken = default)
+        public Task<IEnumerable<MaskinportenConnection>> GetSuppliers(Guid party, string supplier = null, CancellationToken cancellationToken = default)
         {
             Util.ThrowExceptionIfTriggerParty(party.ToString());
 
             string dataPath = Path.Combine(dataFolder, "Maskinporten", "suppliers.json");
             IEnumerable<MaskinportenConnection> suppliers = Util.GetMockData<List<MaskinportenConnection>>(dataPath);
+
+            if (!string.IsNullOrWhiteSpace(supplier))
+            {
+                suppliers = suppliers.Where(s => s.Party.OrganizationIdentifier == supplier);
+            }
+
             return Task.FromResult(suppliers);
         }
 
@@ -52,6 +58,20 @@ namespace Altinn.AccessManagement.UI.Mocks.Mocks
             string dataPath = Path.Combine(dataFolder, "Maskinporten", "consumers.json");
             IEnumerable<MaskinportenConnection> consumers = Util.GetMockData<List<MaskinportenConnection>>(dataPath);
             return Task.FromResult(consumers);
+        }
+
+        /// <inheritdoc />
+        public Task RemoveSupplier(Guid party, string supplier, bool cascade = false, CancellationToken cancellationToken = default)
+        {
+            Util.ThrowExceptionIfTriggerParty(party.ToString());
+            return Task.CompletedTask;
+        }
+
+        /// <inheritdoc />
+        public Task RemoveConsumer(Guid party, string consumer, bool cascade = false, CancellationToken cancellationToken = default)
+        {
+            Util.ThrowExceptionIfTriggerParty(party.ToString());
+            return Task.CompletedTask;
         }
     }
 }

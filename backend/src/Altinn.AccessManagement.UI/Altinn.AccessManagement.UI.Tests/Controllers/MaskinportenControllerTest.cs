@@ -263,5 +263,199 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
 
             Assert.Equal(HttpStatusCode.InternalServerError, response.StatusCode);
         }
+
+        /// <summary>
+        /// Test case: RemoveSupplier returns 204 No Content for a valid party and supplier.
+        /// </summary>
+        [Fact]
+        public async Task RemoveSupplier_ReturnsNoContent()
+        {
+            Guid party = Guid.Parse("cd35779b-b174-4ecc-bbef-ece13611be7f");
+            string supplier = "312605031";
+            SetAuthHeader();
+
+            HttpResponseMessage response = await _client.DeleteAsync(
+                $"accessmanagement/api/v1/maskinporten/suppliers?party={party}&supplier={supplier}");
+
+            Assert.Equal(HttpStatusCode.NoContent, response.StatusCode);
+        }
+
+        /// <summary>
+        /// Test case: RemoveSupplier with cascade=true returns 204 No Content.
+        /// </summary>
+        [Fact]
+        public async Task RemoveSupplier_WithCascade_ReturnsNoContent()
+        {
+            Guid party = Guid.Parse("cd35779b-b174-4ecc-bbef-ece13611be7f");
+            string supplier = "312605031";
+            SetAuthHeader();
+
+            HttpResponseMessage response = await _client.DeleteAsync(
+                $"accessmanagement/api/v1/maskinporten/suppliers?party={party}&supplier={supplier}&cascade=true");
+
+            Assert.Equal(HttpStatusCode.NoContent, response.StatusCode);
+        }
+
+        /// <summary>
+        /// Test case: RemoveSupplier with invalid party format returns bad request.
+        /// </summary>
+        [Fact]
+        public async Task RemoveSupplier_InvalidParty_ReturnsBadRequest()
+        {
+            SetAuthHeader();
+
+            HttpResponseMessage response = await _client.DeleteAsync(
+                "accessmanagement/api/v1/maskinporten/suppliers?party=not-a-guid&supplier=312605031");
+
+            Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
+        }
+
+        /// <summary>
+        /// Test case: RemoveSupplier with missing required supplier parameter returns bad request.
+        /// </summary>
+        [Fact]
+        public async Task RemoveSupplier_MissingSupplier_ReturnsBadRequest()
+        {
+            Guid party = Guid.Parse("cd35779b-b174-4ecc-bbef-ece13611be7f");
+            SetAuthHeader();
+
+            HttpResponseMessage response = await _client.DeleteAsync(
+                $"accessmanagement/api/v1/maskinporten/suppliers?party={party}");
+
+            Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
+        }
+
+        /// <summary>
+        /// Test case: RemoveSupplier returns the backend status code and problem details when service throws HttpStatusException.
+        /// </summary>
+        [Fact]
+        public async Task RemoveSupplier_ServiceThrowsHttpStatusException_ReturnsProblemDetails()
+        {
+            Guid party = Guid.Parse("00000000-0000-0000-0000-000000000404");
+            SetAuthHeader();
+
+            HttpResponseMessage response = await _client.DeleteAsync(
+                $"accessmanagement/api/v1/maskinporten/suppliers?party={party}&supplier=312605031");
+
+            Assert.Equal(HttpStatusCode.NotFound, response.StatusCode);
+            ProblemDetails problemDetails = await response.Content.ReadFromJsonAsync<ProblemDetails>();
+
+            Assert.NotNull(problemDetails);
+            Assert.Equal((int)HttpStatusCode.NotFound, problemDetails.Status);
+            Assert.Equal("Unexpected HttpStatus response", problemDetails.Title);
+            Assert.Equal("Downstream message", problemDetails.Detail);
+        }
+
+        /// <summary>
+        /// Test case: RemoveSupplier returns internal server error when service throws.
+        /// </summary>
+        [Fact]
+        public async Task RemoveSupplier_ServiceThrowsException_ReturnsInternalServerError()
+        {
+            Guid party = Guid.Empty;
+            SetAuthHeader();
+
+            HttpResponseMessage response = await _client.DeleteAsync(
+                $"accessmanagement/api/v1/maskinporten/suppliers?party={party}&supplier=312605031");
+
+            Assert.Equal(HttpStatusCode.InternalServerError, response.StatusCode);
+        }
+
+        /// <summary>
+        /// Test case: RemoveConsumer returns 204 No Content for a valid party and consumer.
+        /// </summary>
+        [Fact]
+        public async Task RemoveConsumer_ReturnsNoContent()
+        {
+            Guid party = Guid.Parse("cd35779b-b174-4ecc-bbef-ece13611be7f");
+            string consumer = "312605031";
+            SetAuthHeader();
+
+            HttpResponseMessage response = await _client.DeleteAsync(
+                $"accessmanagement/api/v1/maskinporten/consumers?party={party}&consumer={consumer}");
+
+            Assert.Equal(HttpStatusCode.NoContent, response.StatusCode);
+        }
+
+        /// <summary>
+        /// Test case: RemoveConsumer with cascade=true returns 204 No Content.
+        /// </summary>
+        [Fact]
+        public async Task RemoveConsumer_WithCascade_ReturnsNoContent()
+        {
+            Guid party = Guid.Parse("cd35779b-b174-4ecc-bbef-ece13611be7f");
+            string consumer = "312605031";
+            SetAuthHeader();
+
+            HttpResponseMessage response = await _client.DeleteAsync(
+                $"accessmanagement/api/v1/maskinporten/consumers?party={party}&consumer={consumer}&cascade=true");
+
+            Assert.Equal(HttpStatusCode.NoContent, response.StatusCode);
+        }
+
+        /// <summary>
+        /// Test case: RemoveConsumer with invalid party format returns bad request.
+        /// </summary>
+        [Fact]
+        public async Task RemoveConsumer_InvalidParty_ReturnsBadRequest()
+        {
+            SetAuthHeader();
+
+            HttpResponseMessage response = await _client.DeleteAsync(
+                "accessmanagement/api/v1/maskinporten/consumers?party=not-a-guid&consumer=312605031");
+
+            Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
+        }
+
+        /// <summary>
+        /// Test case: RemoveConsumer with missing required consumer parameter returns bad request.
+        /// </summary>
+        [Fact]
+        public async Task RemoveConsumer_MissingConsumer_ReturnsBadRequest()
+        {
+            Guid party = Guid.Parse("cd35779b-b174-4ecc-bbef-ece13611be7f");
+            SetAuthHeader();
+
+            HttpResponseMessage response = await _client.DeleteAsync(
+                $"accessmanagement/api/v1/maskinporten/consumers?party={party}");
+
+            Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
+        }
+
+        /// <summary>
+        /// Test case: RemoveConsumer returns the backend status code and problem details when service throws HttpStatusException.
+        /// </summary>
+        [Fact]
+        public async Task RemoveConsumer_ServiceThrowsHttpStatusException_ReturnsProblemDetails()
+        {
+            Guid party = Guid.Parse("00000000-0000-0000-0000-000000000404");
+            SetAuthHeader();
+
+            HttpResponseMessage response = await _client.DeleteAsync(
+                $"accessmanagement/api/v1/maskinporten/consumers?party={party}&consumer=312605031");
+
+            Assert.Equal(HttpStatusCode.NotFound, response.StatusCode);
+            ProblemDetails problemDetails = await response.Content.ReadFromJsonAsync<ProblemDetails>();
+
+            Assert.NotNull(problemDetails);
+            Assert.Equal((int)HttpStatusCode.NotFound, problemDetails.Status);
+            Assert.Equal("Unexpected HttpStatus response", problemDetails.Title);
+            Assert.Equal("Downstream message", problemDetails.Detail);
+        }
+
+        /// <summary>
+        /// Test case: RemoveConsumer returns internal server error when service throws.
+        /// </summary>
+        [Fact]
+        public async Task RemoveConsumer_ServiceThrowsException_ReturnsInternalServerError()
+        {
+            Guid party = Guid.Empty;
+            SetAuthHeader();
+
+            HttpResponseMessage response = await _client.DeleteAsync(
+                $"accessmanagement/api/v1/maskinporten/consumers?party={party}&consumer=312605031");
+
+            Assert.Equal(HttpStatusCode.InternalServerError, response.StatusCode);
+        }
     }
 }
