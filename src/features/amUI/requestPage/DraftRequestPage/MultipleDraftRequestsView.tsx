@@ -11,7 +11,6 @@ import { useBatchRequestAction } from './useBatchRequestAction';
 
 import classes from './DraftRequestPage.module.css';
 import { usePartyRepresentation } from '../../common/PartyRepresentationContext/PartyRepresentationContext';
-import common from 'mocha/lib/interfaces/common';
 
 export type BatchActionType = 'confirm' | 'withdraw' | null;
 
