@@ -18,7 +18,7 @@
 
 .backButton {
   margin-bottom: var(--ds-size-2);
-  translate: -1rem 0;
+  transform: translate(-1rem, 0);
 }
 
 .multipleDraftRequests {

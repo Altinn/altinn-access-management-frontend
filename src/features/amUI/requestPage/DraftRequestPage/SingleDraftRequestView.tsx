@@ -34,12 +34,14 @@ export const SingleDraftRequestView = ({
 
   return (
     <>
-      {!!confirmRequestError && (
-        <DsAlert data-color='danger'>{t('draft_request_page.approve_request_error')}</DsAlert>
-      )}
-      {!!withdrawRequestError && (
-        <DsAlert data-color='danger'>{t('draft_request_page.withdraw_request_error')}</DsAlert>
-      )}
+      <div aria-live='polite'>
+        {!!confirmRequestError && (
+          <DsAlert data-color='danger'>{t('draft_request_page.approve_request_error')}</DsAlert>
+        )}
+        {!!withdrawRequestError && (
+          <DsAlert data-color='danger'>{t('draft_request_page.withdraw_request_error')}</DsAlert>
+        )}
+      </div>
       <PartyRepresentationProvider
         fromPartyUuid={partyUuid}
         actingPartyUuid={partyUuid}

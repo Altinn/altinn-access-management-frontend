@@ -50,16 +50,19 @@ export const MultipleDraftRequestsView = ({
   };
 
   const confirmAll = async () => {
+    if (isProcessing) return;
     const succeeded = await rawConfirmAll();
     if (succeeded) onBatchComplete('confirm');
   };
 
   const withdrawAll = async () => {
+    if (isProcessing) return;
     const succeeded = await rawWithdrawAll();
     if (succeeded) onBatchComplete('withdraw');
   };
 
   const retryFailed = async () => {
+    if (isProcessing) return;
     const succeeded = await rawRetryFailed();
     if (succeeded) onBatchComplete(actionType);
   };
@@ -86,13 +89,15 @@ export const MultipleDraftRequestsView = ({
 
   return (
     <div className={classes.multipleDraftRequests}>
-      {failedRequests.length > 0 && (
-        <DsAlert data-color='danger'>
-          {t('draft_request_page.batch_partial_error', {
-            resources: failedRequests.map((f) => f.resourceName).join(', '),
-          })}
-        </DsAlert>
-      )}
+      <div aria-live='polite'>
+        {failedRequests.length > 0 && (
+          <DsAlert data-color='danger'>
+            {t('draft_request_page.batch_partial_error', {
+              resources: failedRequests.map((f) => f.resourceName).join(', '),
+            })}
+          </DsAlert>
+        )}
+      </div>
       <DsHeading
         data-size='sm'
         level={2}
@@ -114,7 +119,9 @@ export const MultipleDraftRequestsView = ({
         showDetails={false}
         resources={
           failedRequests.length > 0
-            ? resources.filter((r) => failedRequests.some((f) => f.resourceName === r.title))
+            ? resources.filter((r) =>
+                failedRequests.some((f) => f.request.resourceId === r.identifier),
+              )
             : resources
         }
         onSelect={handleSelect}

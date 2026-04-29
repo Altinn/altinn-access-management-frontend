@@ -69,20 +69,26 @@ export const useBatchRequestAction = (
       if (failed.length > 0) {
         // Refetch failed requests to check if they are still in Draft status
         const refetchResults = await Promise.allSettled(
-          failed.map((f) =>
-            dispatch(
+          failed.map(async (f) => {
+            const queryResult = dispatch(
               requestApi.endpoints.getEnrichedDraftRequest.initiate(
                 { id: f.request.id },
                 { forceRefetch: true },
               ),
-            ).unwrap(),
-          ),
+            );
+
+            try {
+              return await queryResult.unwrap();
+            } finally {
+              queryResult.unsubscribe();
+            }
+          }),
         );
 
         const stillFailedRequests: FailedRequest[] = [];
         refetchResults.forEach((result, index) => {
-          // Keep as failed if: refetch also failed, or the request is still in Draft
-          if (result.status === 'rejected' || result.value.status === 'Draft') {
+          // Keep as failed if: refetch succeeded and the request is still in Draft
+          if (result.status === 'fulfilled' && result.value.status === 'Draft') {
             stillFailedRequests.push(failed[index]);
           }
         });

@@ -197,15 +197,11 @@ export const DraftRequestPage = () => {
   } else {
     if (!singleRequestId) {
       error = <DsAlert data-color='warning'>{t('draft_request_page.missing_request_id')}</DsAlert>;
+      body = null;
     } else if (loadRequestError) {
       error = <DsAlert data-color='danger'>{t('draft_request_page.load_request_error')}</DsAlert>;
       body = null;
     }
-  }
-
-  if (requestIds.length === 0) {
-    error = <DsAlert data-color='warning'>{t('draft_request_page.missing_request_id')}</DsAlert>;
-    body = null;
   }
 
   return (
