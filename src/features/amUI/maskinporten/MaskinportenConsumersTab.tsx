@@ -1,11 +1,22 @@
+import { useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
+import {
+  DsButton,
+  DsDialog,
+  DsHeading,
+  DsParagraph,
+  formatDisplayName,
+} from '@altinn/altinn-components';
 
-import { useGetMaskinportenConsumersQuery } from '@/rtk/features/maskinportenApi';
+import {
+  useGetMaskinportenConsumersQuery,
+  useRemoveMaskinportenConsumerMutation,
+} from '@/rtk/features/maskinportenApi';
 
+import type { UserActionTarget } from '../common/UserSearch/types';
 import { MaskinportenUserSearch } from './MaskinportenUserSearch';
 import classes from './MaskinportenPage.module.css';
 import { usePartyRepresentation } from '../common/PartyRepresentationContext/PartyRepresentationContext';
-import { DsParagraph, formatDisplayName } from '@altinn/altinn-components';
 
 type MaskinportenConsumersTabProps = {
   party: string;
@@ -25,6 +36,27 @@ export const MaskinportenConsumersTab = ({
     error,
   } = useGetMaskinportenConsumersQuery({ party }, { skip: !isActive || !canFetch || !party });
   const { actingParty } = usePartyRepresentation();
+  const [removeConsumer, { isLoading: isRemoving }] = useRemoveMaskinportenConsumerMutation();
+  const dialogRef = useRef<HTMLDialogElement>(null);
+  const [pendingDelete, setPendingDelete] = useState<{ orgNumber: string; name: string } | null>(
+    null,
+  );
+
+  const handleRevoke = (user: UserActionTarget) => {
+    const connection = consumers?.find((c) => c.party.id === user.id);
+    if (connection?.party.organizationIdentifier) {
+      setPendingDelete({ orgNumber: connection.party.organizationIdentifier, name: user.name });
+      dialogRef.current?.showModal();
+    }
+  };
+
+  const handleConfirmDelete = async () => {
+    if (!pendingDelete) return;
+    await removeConsumer({ party, consumer: pendingDelete.orgNumber, cascade: true }).unwrap();
+    dialogRef.current?.close();
+    setPendingDelete(null);
+  };
+
   return (
     <div className={classes.panelContent}>
       <DsParagraph>
@@ -37,7 +69,36 @@ export const MaskinportenConsumersTab = ({
         isLoading={isLoading}
         error={error}
         emptyText={t('maskinporten_page.no_consumers')}
+        canDelegate={false}
+        onRevoke={handleRevoke}
+        revokeLabel={t('common.delete')}
       />
+      <DsDialog
+        ref={dialogRef}
+        closedby='any'
+        onClose={() => setPendingDelete(null)}
+      >
+        <DsHeading data-size='sm'>{t('maskinporten_page.remove_consumer_heading')}</DsHeading>
+        <DsParagraph>
+          {t('maskinporten_page.remove_consumer_body', { name: pendingDelete?.name ?? '' })}
+        </DsParagraph>
+        <div style={{ display: 'flex', gap: '0.5rem', marginTop: '1rem' }}>
+          <DsButton
+            data-color='danger'
+            onClick={handleConfirmDelete}
+            loading={isRemoving}
+          >
+            {t('maskinporten_page.remove_consumer_confirm')}
+          </DsButton>
+          <DsButton
+            variant='secondary'
+            onClick={() => dialogRef.current?.close()}
+            disabled={isRemoving}
+          >
+            {t('common.cancel')}
+          </DsButton>
+        </div>
+      </DsDialog>
     </div>
   );
 };

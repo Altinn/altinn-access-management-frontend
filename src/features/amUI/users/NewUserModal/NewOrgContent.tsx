@@ -1,4 +1,11 @@
-import { Button, TextField, DsParagraph, DsSpinner } from '@altinn/altinn-components';
+import {
+  Button,
+  TextField,
+  DsAlert,
+  DsParagraph,
+  DsSpinner,
+  DsHeading,
+} from '@altinn/altinn-components';
 import { useState } from 'react';
 import { t } from 'i18next';
 
@@ -14,10 +21,12 @@ export const NewOrgContent = ({
   addOrg,
   errorDetails,
   isLoading,
+  ownOrgNumber,
 }: {
   addOrg?: (orgData: Organization) => void;
   errorDetails?: { status: string; time: string } | null;
   isLoading?: boolean;
+  ownOrgNumber?: string;
 }) => {
   const [orgNumber, setOrgNumber] = useState('');
 
@@ -28,16 +37,37 @@ export const NewOrgContent = ({
     isError: isGetOrgError,
   } = useGetOrganizationQuery(orgNumber, { skip: orgNumber.length !== 9 });
 
+  const isOwnOrg = !!ownOrgNumber && orgNumber.length === 9 && orgNumber === ownOrgNumber;
   const isError = isGetOrgError || !!errorDetails;
 
   return (
     <div className={classes.newOrgContent}>
-      {isError && (
-        <NewUserAlert
-          userType='org'
-          error={isGetOrgError ? createErrorDetails(getOrgError) : errorDetails}
-        />
-      )}
+      <div aria-live='assertive'>
+        {isOwnOrg && (
+          <DsAlert
+            data-size='sm'
+            data-color='warning'
+          >
+            <DsHeading
+              data-size='xs'
+              level={3}
+            >
+              {t('maskinporten_page.own_org_number_warning')}
+            </DsHeading>
+            <DsParagraph data-size='sm'>
+              {t('maskinporten_page.own_org_number_warning_body')}
+            </DsParagraph>
+          </DsAlert>
+        )}
+      </div>
+      <div aria-live='assertive'>
+        {isError && !isOwnOrg && (
+          <NewUserAlert
+            userType='org'
+            error={isGetOrgError ? createErrorDetails(getOrgError) : errorDetails}
+          />
+        )}
+      </div>
       <TextField
         className={classes.textField}
         label={t('common.org_number')}
@@ -59,7 +89,9 @@ export const NewOrgContent = ({
 
       <div className={classes.validationButton}>
         <Button
-          disabled={isGetOrgError || isLoading || !orgData || orgData.orgNumber !== orgNumber}
+          disabled={
+            isOwnOrg || isGetOrgError || isLoading || !orgData || orgData.orgNumber !== orgNumber
+          }
           onClick={() => addOrg && orgData && addOrg(orgData)}
         >
           <span className={classes.addButton}>

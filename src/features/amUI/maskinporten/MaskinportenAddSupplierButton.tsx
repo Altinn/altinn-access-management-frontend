@@ -8,6 +8,7 @@ import { useAddMaskinportenSupplierMutation } from '@/rtk/features/maskinportenA
 import type { User } from '@/rtk/features/userInfoApi';
 
 import { createErrorDetails } from '../common/TechnicalErrorParagraphs/TechnicalErrorParagraphs';
+import { usePartyRepresentation } from '../common/PartyRepresentationContext/PartyRepresentationContext';
 import { NewOrgContent } from '../users/NewUserModal/NewOrgContent';
 import classes from '../users/NewUserModal/NewUserModal.module.css';
 
@@ -23,6 +24,7 @@ export const MaskinportenAddSupplierButton = ({
   onComplete,
 }: MaskinportenAddSupplierButtonProps) => {
   const { t } = useTranslation();
+  const { actingParty } = usePartyRepresentation();
   const modalRef = useRef<HTMLDialogElement>(null);
   const modalHeadingId = useId();
   const [errorDetail, setErrorDetail] = useState<{ status: string; time: string } | null>(null);
@@ -80,6 +82,7 @@ export const MaskinportenAddSupplierButton = ({
           isLoading={isLoading}
           addOrg={handleAddSupplier}
           errorDetails={errorDetail}
+          ownOrgNumber={actingParty?.orgNumber}
         />
       </DsDialog>
     </>

@@ -15,6 +15,9 @@ interface MaskinportenUserSearchProps extends Pick<
   | 'AddUserButton'
   | 'isLoading'
   | 'titleAs'
+  | 'onRevoke'
+  | 'getUserLink'
+  | 'revokeLabel'
 > {
   connections?: MaskinportenConnection[];
   emptyText?: UserSearchProps['noUsersText'];
@@ -25,6 +28,8 @@ export const MaskinportenUserSearch = ({
   connections,
   error,
   emptyText,
+  onRevoke,
+  getUserLink,
   ...props
 }: MaskinportenUserSearchProps) => {
   const { t } = useTranslation();
@@ -44,6 +49,8 @@ export const MaskinportenUserSearch = ({
       titleAs='h2'
       noUsersText={emptyText}
       includeSelfAsChild={false}
+      onRevoke={onRevoke}
+      getUserLink={getUserLink}
       {...props}
     />
   );

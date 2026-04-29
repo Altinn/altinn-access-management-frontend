@@ -582,7 +582,17 @@
     "consumers_description": "Virksomheter som har mottatt Maskinporten-scope fra {{name}}.",
     "no_suppliers": "Ingen leverandører funnet.",
     "no_consumers": "Ingen konsumenter funnet.",
-    "load_error": "Kunne ikke laste Maskinporten-tilknytninger."
+    "load_error": "Kunne ikke laste Maskinporten-tilknytninger.",
+    "supplier_not_found": "Leverandøren ble ikke funnet.",
+    "remove_supplier_heading": "Fjern leverandør",
+    "remove_supplier_body": "Er du sikker på at du vil fjerne {{name}} som leverandør? Alle delegerte ressurser vil også bli fjernet.",
+    "remove_supplier_confirm": "Fjern leverandør",
+    "remove_consumer_heading": "Fjern konsument",
+    "remove_consumer_body": "Er du sikker på at du vil fjerne {{name}} som konsument? Alle delegerte ressurser vil også bli fjernet.",
+    "remove_consumer_confirm": "Fjern konsument",
+    "back_to_list": "Tilbake til oversikten",
+    "own_org_number_warning": "Du kan ikke gi tilgang til eget organisasjonsnummer",
+    "own_org_number_warning_body": "Har ikke din virksomhet tilgang, ta kontakt med tilbyder av apiet du skal gi tilgang til."
   },
   "settings_page": {
     "page_title": "Innstillinger - Altinn",

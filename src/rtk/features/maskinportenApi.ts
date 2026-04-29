@@ -24,8 +24,15 @@ export const maskinportenApi = createApi({
   }),
   tagTypes: ['maskinportenSuppliers', 'maskinportenConsumers'],
   endpoints: (builder) => ({
-    getMaskinportenSuppliers: builder.query<MaskinportenConnection[], { party?: string } | void>({
-      query: (args) => `suppliers?party=${args?.party ?? getCookie('AltinnPartyUuid')}`,
+    getMaskinportenSuppliers: builder.query<
+      MaskinportenConnection[],
+      { party?: string; supplier?: string } | void
+    >({
+      query: (args) => {
+        const party = args?.party ?? getCookie('AltinnPartyUuid');
+        const base = `suppliers?party=${party}`;
+        return args?.supplier ? `${base}&supplier=${encodeURIComponent(args.supplier)}` : base;
+      },
       providesTags: ['maskinportenSuppliers'],
     }),
     getMaskinportenConsumers: builder.query<MaskinportenConnection[], { party?: string } | void>({
@@ -39,6 +46,26 @@ export const maskinportenApi = createApi({
       }),
       invalidatesTags: ['maskinportenSuppliers'],
     }),
+    removeMaskinportenSupplier: builder.mutation<
+      void,
+      { party: string; supplier: string; cascade?: boolean }
+    >({
+      query: ({ party, supplier, cascade = false }) => ({
+        url: `suppliers?party=${encodeURIComponent(party)}&supplier=${encodeURIComponent(supplier)}&cascade=${cascade}`,
+        method: 'DELETE',
+      }),
+      invalidatesTags: ['maskinportenSuppliers'],
+    }),
+    removeMaskinportenConsumer: builder.mutation<
+      void,
+      { party: string; consumer: string; cascade?: boolean }
+    >({
+      query: ({ party, consumer, cascade = false }) => ({
+        url: `consumers?party=${encodeURIComponent(party)}&consumer=${encodeURIComponent(consumer)}&cascade=${cascade}`,
+        method: 'DELETE',
+      }),
+      invalidatesTags: ['maskinportenConsumers'],
+    }),
   }),
 });
 
@@ -46,6 +73,8 @@ export const {
   useGetMaskinportenSuppliersQuery,
   useGetMaskinportenConsumersQuery,
   useAddMaskinportenSupplierMutation,
+  useRemoveMaskinportenSupplierMutation,
+  useRemoveMaskinportenConsumerMutation,
 } = maskinportenApi;
 
 export const { endpoints, reducerPath, reducer, middleware } = maskinportenApi;
