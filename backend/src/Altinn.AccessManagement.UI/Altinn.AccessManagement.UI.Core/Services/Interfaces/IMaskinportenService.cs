@@ -1,5 +1,5 @@
-using Altinn.AccessManagement.UI.Core.Models.Maskinporten;
 using Altinn.AccessManagement.UI.Core.Models.ClientDelegation;
+using Altinn.AccessManagement.UI.Core.Models.Maskinporten;
 
 namespace Altinn.AccessManagement.UI.Core.Services.Interfaces
 {
