@@ -15,7 +15,6 @@ export interface FailedRequest {
 interface UseBatchRequestActionResult {
   confirmAll: () => Promise<boolean>;
   withdrawAll: () => Promise<boolean>;
-  retryFailed: () => Promise<boolean>;
   isProcessing: boolean;
   allSucceeded: boolean;
   actionType: 'confirm' | 'withdraw' | null;
@@ -117,20 +116,9 @@ export const useBatchRequestAction = (
     [performAction, requests],
   );
 
-  const retryFailed = useCallback(async () => {
-    if (failedRequests.length > 0 && lastActionRef.current) {
-      return performAction(
-        failedRequests.map((f) => f.request),
-        lastActionRef.current,
-      );
-    }
-    return false;
-  }, [failedRequests, performAction]);
-
   return {
     confirmAll,
     withdrawAll,
-    retryFailed,
     isProcessing,
     allSucceeded,
     actionType,

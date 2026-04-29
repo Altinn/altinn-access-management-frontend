@@ -32,7 +32,6 @@ export const MultipleDraftRequestsView = ({
   const {
     confirmAll: rawConfirmAll,
     withdrawAll: rawWithdrawAll,
-    retryFailed: rawRetryFailed,
     isProcessing,
     actionType,
     failedRequests,
@@ -59,12 +58,6 @@ export const MultipleDraftRequestsView = ({
     if (isProcessing) return;
     const succeeded = await rawWithdrawAll();
     if (succeeded) onBatchComplete('withdraw');
-  };
-
-  const retryFailed = async () => {
-    if (isProcessing) return;
-    const succeeded = await rawRetryFailed();
-    if (succeeded) onBatchComplete(actionType);
   };
 
   if (selectedRequest) {
@@ -137,7 +130,7 @@ export const MultipleDraftRequestsView = ({
           variant='primary'
           aria-disabled={isProcessing}
           loading={isProcessing && actionType === 'confirm'}
-          onClick={failedRequests.length > 0 ? retryFailed : confirmAll}
+          onClick={confirmAll}
         >
           {t('draft_request_page.confirm_request')}
         </DsButton>
@@ -145,7 +138,7 @@ export const MultipleDraftRequestsView = ({
           variant='primary'
           aria-disabled={isProcessing}
           loading={isProcessing && actionType === 'withdraw'}
-          onClick={failedRequests.length > 0 ? retryFailed : withdrawAll}
+          onClick={withdrawAll}
         >
           {t('draft_request_page.withdraw_request')}
         </DsButton>
