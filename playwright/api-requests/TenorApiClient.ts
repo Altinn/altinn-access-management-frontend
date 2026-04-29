@@ -99,7 +99,7 @@ export class TenorApiClient {
     foedselsdato: string,
   ): Promise<string | null> {
     const params = new URLSearchParams({
-      kql: `fornavn:${fornavn} and etternavn:${etternavn} and foedselsdato:${foedselsdato}`,
+      kql: `fornavn:"${fornavn}" and etternavn:"${etternavn}" and foedselsdato:"${foedselsdato}"`,
       size: '1',
     });
     const data = (await this.tenorGet(`/soek/freg?${params}`)) as {

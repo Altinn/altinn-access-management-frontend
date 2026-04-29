@@ -1,1 +1,602 @@
-[]
+[
+  {
+    "orgNr": "312766671",
+    "orgName": "USJENERT KANTETE KATT KORRIDOR",
+    "pid": "23916899467",
+    "name": "Avansert Gjesterom"
+  },
+  {
+    "orgNr": "310077917",
+    "orgName": "STANDHAFTIG HENSIKTSMESSIG TIGER AS",
+    "pid": "11865799995",
+    "name": "Klassisk Bjørn"
+  },
+  {
+    "orgNr": "311147072",
+    "orgName": "TREKANTET KUL TIGER AS",
+    "pid": "18877197707",
+    "name": "Taktfull Æresmedlem"
+  },
+  {
+    "orgNr": "313361373",
+    "orgName": "ØKOLOGISK PRIKKETE TIGER AS",
+    "pid": "06884699507",
+    "name": "Rastløs Bøtte"
+  },
+  {
+    "orgNr": "313968510",
+    "orgName": "MINIMALISTISK SUBJEKTIV TIGER AS",
+    "pid": "13845198599",
+    "name": "Vrien Albatross"
+  },
+  {
+    "orgNr": "312816067",
+    "orgName": "FIKTIV SANNSYNLIG TIGER AS",
+    "pid": "09904398362",
+    "name": "Nødvendig Pianist"
+  },
+  {
+    "orgNr": "313283399",
+    "orgName": "SIKKER IDIOTSIKKER TIGER AS",
+    "pid": "27825196787",
+    "name": "Proaktiv Grønnfink"
+  },
+  {
+    "orgNr": "311773151",
+    "orgName": "UEMOSJONELL OMTENKSOM TIGER AS",
+    "pid": "16865996784",
+    "name": "Storartet Fyr"
+  },
+  {
+    "orgNr": "310271063",
+    "orgName": "SENTRAL GLOVARM APE",
+    "pid": "16927597962",
+    "name": "Grønn Trafikkork"
+  },
+  {
+    "orgNr": "210726152",
+    "orgName": "SOFISTIKERT HARDHUDET TIGER AS",
+    "pid": "01908098249",
+    "name": "Naturlig Geometri"
+  },
+  {
+    "orgNr": "313002748",
+    "orgName": "FRYKTSOM HUMAN APE",
+    "pid": "20824099740",
+    "name": "Firkantet Klovn"
+  },
+  {
+    "orgNr": "313218503",
+    "orgName": "MUSIKALSK STANDHAFTIG TIGER AS",
+    "pid": "01915297745",
+    "name": "Aritmetisk Onsdag"
+  },
+  {
+    "orgNr": "310068624",
+    "orgName": "IMPULSIV UTYDELIG TIGER AS",
+    "pid": "23925596590",
+    "name": "Hensiktsmessig Barnestol"
+  },
+  {
+    "orgNr": "313098869",
+    "orgName": "REN OVERFØLSOM KATT ALDERDOM",
+    "pid": "24817598397",
+    "name": "Urettferdig Kantarell"
+  },
+  {
+    "orgNr": "312212269",
+    "orgName": "BLID IVRIG TIGER AS",
+    "pid": "07866498363",
+    "name": "Ustabil Masekopp"
+  },
+  {
+    "orgNr": "210634592",
+    "orgName": "OPPRETT ERFAREN TIGER AS",
+    "pid": "02826299684",
+    "name": "Historisk Fredag"
+  },
+  {
+    "orgNr": "310425303",
+    "orgName": "KJÆRLIG UTMERKET TIGER AS",
+    "pid": "05877497277",
+    "name": "Skjønn Masekopp"
+  },
+  {
+    "orgNr": "211141042",
+    "orgName": "KONSENTRISK RØRETE TIGER AS",
+    "pid": "30877799782",
+    "name": "Tilgivende Bly"
+  },
+  {
+    "orgNr": "312208547",
+    "orgName": "ERFAREN OVERFLADISK TIGER AS",
+    "pid": "25866797768",
+    "name": "Økonomisk Rygg"
+  },
+  {
+    "orgNr": "310370878",
+    "orgName": "UPERSONLIG FLAT TIGER AS",
+    "pid": "29868698886",
+    "name": "Lei Kornsirkel"
+  },
+  {
+    "orgNr": "313811867",
+    "orgName": "ROSA FLAT APE",
+    "pid": "15814099765",
+    "name": "Bra Akupunktør"
+  },
+  {
+    "orgNr": "212742252",
+    "orgName": "SINDIG BESTEMT TIGER AS",
+    "pid": "11906895597",
+    "name": "Elegant Kollega"
+  },
+  {
+    "orgNr": "313418006",
+    "orgName": "VENSTRE LIVLIG TIGER AS",
+    "pid": "11816699004",
+    "name": "Tillitsfull Flyplass"
+  },
+  {
+    "orgNr": "310276561",
+    "orgName": "TILFREDSSTILLENDE SART TIGER AS",
+    "pid": "26898198269",
+    "name": "Konsentrisk Onkel"
+  },
+  {
+    "orgNr": "213616382",
+    "orgName": "KALD SKRAVLETE TIGER AS",
+    "pid": "28816596485",
+    "name": "Ren Alpakka"
+  },
+  {
+    "orgNr": "310719838",
+    "orgName": "UFUNKSJONELL PUNKTLIG MUS",
+    "pid": "11836099917",
+    "name": "Presis Galakse"
+  },
+  {
+    "orgNr": "313340929",
+    "orgName": "ULOGISK SAKTE TIGER AS",
+    "pid": "02815097370",
+    "name": "Vaklende Overskrift"
+  },
+  {
+    "orgNr": "214134802",
+    "orgName": "OVERNATURLIG UMODEN KATT GJENBRUKSSTASJON",
+    "pid": "20858596328",
+    "name": "Akademisk Meny"
+  },
+  {
+    "orgNr": "310091006",
+    "orgName": "FRYKTLØS VIDSYNT TIGER AS",
+    "pid": "24876798855",
+    "name": "Impulsiv Bakhjulsdrift"
+  },
+  {
+    "orgNr": "314318285",
+    "orgName": "KVADRATISK PRAGMATISK KATT VULKAN",
+    "pid": "26916197518",
+    "name": "Vissen Klokke"
+  },
+  {
+    "orgNr": "313009033",
+    "orgName": "VARSOM NYSGJERRIG TIGER AS",
+    "pid": "01887099339",
+    "name": "Skapende Tirsdag"
+  },
+  {
+    "orgNr": "311747924",
+    "orgName": "USEDVANLIG ESTETISK TIGER AS",
+    "pid": "23817598943",
+    "name": "Håndfast Bane"
+  },
+  {
+    "orgNr": "310671932",
+    "orgName": "KRY SKAMFULL TIGER AS",
+    "pid": "26889398662",
+    "name": "Fantastisk Nordavind"
+  },
+  {
+    "orgNr": "314117654",
+    "orgName": "OPPJAGET FIOLETT APE",
+    "pid": "01885298520",
+    "name": "Våken Baktanke"
+  },
+  {
+    "orgNr": "310845264",
+    "orgName": "GJENSIDIG MODERNE TIGER AS",
+    "pid": "21830497800",
+    "name": "Possessiv Børste"
+  },
+  {
+    "orgNr": "310721247",
+    "orgName": "IDIOTSIKKER ALLSLAGS TIGER AS",
+    "pid": "12827099560",
+    "name": "Innesluttet Sverm"
+  },
+  {
+    "orgNr": "313555844",
+    "orgName": "FIRKANTET SKRIVEFØR TIGER AS",
+    "pid": "11912649379",
+    "name": "Refleksiv Foldbygg"
+  },
+  {
+    "orgNr": "313238628",
+    "orgName": "LEDENDE UMODEN TIGER AS",
+    "pid": "08836196954",
+    "name": "Demokratisk Fiskekrok"
+  },
+  {
+    "orgNr": "312594021",
+    "orgName": "TEORETISK HEVNGJERRIG TIGER AS",
+    "pid": "22904598554",
+    "name": "Fantasifull Stasjon"
+  },
+  {
+    "orgNr": "310201928",
+    "orgName": "ULLEN MODIG TIGER AS",
+    "pid": "15827094924",
+    "name": "Spettete Legg"
+  },
+  {
+    "orgNr": "310634751",
+    "orgName": "PRAKTISK UFRUKTBAR TIGER AS",
+    "pid": "07865398152",
+    "name": "Tom Postkasse"
+  },
+  {
+    "orgNr": "212909432",
+    "orgName": "SELVHJULPEN SMART TIGER AS",
+    "pid": "16856696336",
+    "name": "Rastløs Trenchcoat"
+  },
+  {
+    "orgNr": "310543535",
+    "orgName": "RETT FATTIG TIGER AS",
+    "pid": "07888897903",
+    "name": "Nøytral Bakgrunnslitteratur"
+  },
+  {
+    "orgNr": "313315819",
+    "orgName": "ANONYM TURKIS KATT GRANDONKEL",
+    "pid": "05927099111",
+    "name": "Memorerende Deig"
+  },
+  {
+    "orgNr": "313001296",
+    "orgName": "MODERNE LITEN TIGER AS",
+    "pid": "02825896190",
+    "name": "Skeptisk Opsjon"
+  },
+  {
+    "orgNr": "314290453",
+    "orgName": "FYLDIG ORIGINAL TIGER AS",
+    "pid": "10888198798",
+    "name": "Forstandig Tyggis"
+  },
+  {
+    "orgNr": "312256371",
+    "orgName": "SPETTETE MEMORERENDE TIGER AS",
+    "pid": "28866297519",
+    "name": "Verdifull Bas"
+  },
+  {
+    "orgNr": "212474932",
+    "orgName": "FAMILIÆR KANTETE APE",
+    "pid": "13879897119",
+    "name": "Relevant Gallupmåling"
+  },
+  {
+    "orgNr": "313946339",
+    "orgName": "KOMPLISERT DEDIKERT TIGER AS",
+    "pid": "06866599724",
+    "name": "Økonomisk Påfunn"
+  },
+  {
+    "orgNr": "310173541",
+    "orgName": "DEILIG RETT TIGER AS",
+    "pid": "01925399686",
+    "name": "Funksjonell Drikke"
+  },
+  {
+    "orgNr": "313569063",
+    "orgName": "LEI ELEKTRONISK GEPARD KS",
+    "pid": "15847097113",
+    "name": "Taktfull Gullmynt"
+  },
+  {
+    "orgNr": "313560465",
+    "orgName": "KLOK OFFISIELL APE",
+    "pid": "27852949339",
+    "name": "Kulturell Bever"
+  },
+  {
+    "orgNr": "313220680",
+    "orgName": "KONVENSJONELL ERFAREN TIGER AS",
+    "pid": "01885296943",
+    "name": "Moderat Direktør"
+  },
+  {
+    "orgNr": "312699656",
+    "orgName": "EMPATISK FESTLIG TIGER AS",
+    "pid": "17925796174",
+    "name": "Tykkhudet Tomt"
+  },
+  {
+    "orgNr": "312595222",
+    "orgName": "MUSIKALSK PARISK APE",
+    "pid": "29837096276",
+    "name": "Intelligent Gjenstand"
+  },
+  {
+    "orgNr": "314091795",
+    "orgName": "LYKKELIG SJELDEN STRUTS AB",
+    "pid": "48815700786",
+    "name": "Taus Grønnsisik"
+  },
+  {
+    "orgNr": "310207861",
+    "orgName": "SMAL TILGIVENDE TIGER AS",
+    "pid": "01816196325",
+    "name": "Typisk Fasttelefoni"
+  },
+  {
+    "orgNr": "312246856",
+    "orgName": "RAFFINERT USYMMETRISK TIGER AS",
+    "pid": "20819899496",
+    "name": "Kreativ Bille"
+  },
+  {
+    "orgNr": "311068113",
+    "orgName": "OVERFLADISK UINSPIRERT TIGER AS",
+    "pid": "21895799421",
+    "name": "Ulydig Hotelldirektør"
+  },
+  {
+    "orgNr": "311151770",
+    "orgName": "SKRIVEFØR MUSIKALSK APE",
+    "pid": "01885298520",
+    "name": "Våken Baktanke"
+  },
+  {
+    "orgNr": "313702561",
+    "orgName": "GÅEN VARM TIGER AS",
+    "pid": "30815997383",
+    "name": "Intuitiv Medisterdeig"
+  },
+  {
+    "orgNr": "312156954",
+    "orgName": "HURTIG HEL TIGER AS",
+    "pid": "19835397923",
+    "name": "Overmodig Ballong"
+  },
+  {
+    "orgNr": "313798240",
+    "orgName": "TOÅRIG UTTRYKKSFULL APE",
+    "pid": "06815197761",
+    "name": "Human Sarv"
+  },
+  {
+    "orgNr": "311193910",
+    "orgName": "KOMPLEKS FULLKOMMEN TIGER AS",
+    "pid": "30857896757",
+    "name": "Jordnær Trakt"
+  },
+  {
+    "orgNr": "313139662",
+    "orgName": "FORSTÅELSESFULL MARITIM TIGER AS",
+    "pid": "02846097964",
+    "name": "Utakknemlig Fell"
+  },
+  {
+    "orgNr": "310820288",
+    "orgName": "EKSPLOSIV SKY KATT GORILLA",
+    "pid": "14898998186",
+    "name": "Ulogisk Bokhandel"
+  },
+  {
+    "orgNr": "310906042",
+    "orgName": "SØVNIG ALFABETISK TIGER AS",
+    "pid": "22876997359",
+    "name": "Oppblåst Dromedar"
+  },
+  {
+    "orgNr": "312939878",
+    "orgName": "SMISKENDE LUN TIGER AS",
+    "pid": "12906596529",
+    "name": "Autentisk Opsjon"
+  },
+  {
+    "orgNr": "313306372",
+    "orgName": "SPETTETE NORMAL TIGER AS",
+    "pid": "04888898366",
+    "name": "Slem Familie"
+  },
+  {
+    "orgNr": "311068148",
+    "orgName": "INTEGRERT TYPISK TIGER AS",
+    "pid": "29927898525",
+    "name": "Kunst Prærieulv"
+  },
+  {
+    "orgNr": "314125673",
+    "orgName": "RØD ALDRENDE KATT ISKREM",
+    "pid": "19886798345",
+    "name": "Dyr Hinne"
+  },
+  {
+    "orgNr": "310869791",
+    "orgName": "VILJESTERK GLAD TIGER AS",
+    "pid": "22818195730",
+    "name": "Uemosjonell Hage"
+  },
+  {
+    "orgNr": "312991047",
+    "orgName": "UTTRYKKSFULL GJESTFRI HUND DA",
+    "pid": "07925397185",
+    "name": "Overbevisende Ord"
+  },
+  {
+    "orgNr": "310731951",
+    "orgName": "TRIST VERDIFULL TIGER AS",
+    "pid": "12854599389",
+    "name": "Tilfredsstillende Folk"
+  },
+  {
+    "orgNr": "313601323",
+    "orgName": "SKRIVEFØR FAMILIÆR TIGER AS",
+    "pid": "27886498719",
+    "name": "Emosjonell Helikopter"
+  },
+  {
+    "orgNr": "310021032",
+    "orgName": "FULLKOMMEN DOGMATISK KATT LINSELUS",
+    "pid": "05915697250",
+    "name": "Memorerende Vegg"
+  },
+  {
+    "orgNr": "312832143",
+    "orgName": "ALTETENDE FREDELIG KATT BART",
+    "pid": "04833449333",
+    "name": "Smal Kattunge"
+  },
+  {
+    "orgNr": "310039217",
+    "orgName": "SNILL SØVNIG TIGER AS",
+    "pid": "22817397402",
+    "name": "Nesnødd Plyndring"
+  },
+  {
+    "orgNr": "313952320",
+    "orgName": "HANDLENDE SVIMMEL KATT DAGELEV",
+    "pid": "04816098918",
+    "name": "Kontrollert Kaiman"
+  },
+  {
+    "orgNr": "313470881",
+    "orgName": "GLEMSOM ESTETISK TIGER AS",
+    "pid": "15864996989",
+    "name": "Sunn Panikk"
+  },
+  {
+    "orgNr": "310573876",
+    "orgName": "UPRESIS SKRAVLETE TIGER AS",
+    "pid": "18917797559",
+    "name": "Artig Indrefilet"
+  },
+  {
+    "orgNr": "312803550",
+    "orgName": "NESNØDD METT TIGER AS",
+    "pid": "28868699207",
+    "name": "Tørst Pappa"
+  },
+  {
+    "orgNr": "313730301",
+    "orgName": "RYDDIG AKSELERERENDE TIGER AS",
+    "pid": "18906898779",
+    "name": "Kritisk Meter"
+  },
+  {
+    "orgNr": "310806463",
+    "orgName": "JUSTERBAR NATURLIG TIGER AS",
+    "pid": "02869499318",
+    "name": "Håndfast Eng"
+  },
+  {
+    "orgNr": "313556395",
+    "orgName": "SPETTETE UNGT TIGER AS",
+    "pid": "01886897509",
+    "name": "Snakkesalig Niese"
+  },
+  {
+    "orgNr": "310546062",
+    "orgName": "TREIG SALT ISBJØRN SA",
+    "pid": "16863949770",
+    "name": "Overeksponert Kile"
+  },
+  {
+    "orgNr": "212679542",
+    "orgName": "HÅRSÅR STORARTET TIGER AS",
+    "pid": "02867996713",
+    "name": "Kursiv Klemme"
+  },
+  {
+    "orgNr": "312827719",
+    "orgName": "ULOGISK LIVLIG TIGER AS",
+    "pid": "31816497941",
+    "name": "Tykkhudet Svigerinne"
+  },
+  {
+    "orgNr": "313043495",
+    "orgName": "FORSKJELLIG SUBJEKTIV TIGER AS",
+    "pid": "13877199570",
+    "name": "Overbevisende Antikvitet"
+  },
+  {
+    "orgNr": "310824690",
+    "orgName": "ULOGISK ENTUSIASTISK TIGER AS",
+    "pid": "09883948308",
+    "name": "Moderat Premie"
+  },
+  {
+    "orgNr": "312627078",
+    "orgName": "ALLMEKTIG TRYGG TIGER AS",
+    "pid": "05864998919",
+    "name": "Human Drue"
+  },
+  {
+    "orgNr": "313623858",
+    "orgName": "EGOISTISK FINTFØLENDE SKILPADDE",
+    "pid": "28864898361",
+    "name": "Deilig Klippfisk"
+  },
+  {
+    "orgNr": "210053352",
+    "orgName": "RØRETE MINKENDE TIGER AS",
+    "pid": "07847396541",
+    "name": "Innbringende Billettluke"
+  },
+  {
+    "orgNr": "313105601",
+    "orgName": "KLARTENKT NESNØDD TIGER AS",
+    "pid": "24892649339",
+    "name": "Ung Ballong"
+  },
+  {
+    "orgNr": "313765040",
+    "orgName": "BLØT IDIOTSIKKER TIGER AS",
+    "pid": "09828398145",
+    "name": "Kursiv Eik"
+  },
+  {
+    "orgNr": "310173541",
+    "orgName": "DEILIG RETT TIGER AS",
+    "pid": "01925399686",
+    "name": "Funksjonell Drikke"
+  },
+  {
+    "orgNr": "313284271",
+    "orgName": "DEMOKRATISK RAKRYGGET TIGER AS",
+    "pid": "22854797704",
+    "name": "Misfornøyd Algoritme"
+  },
+  {
+    "orgNr": "310990361",
+    "orgName": "AKTPÅGIVENDE ORDENTLIG TIGER AS",
+    "pid": "25877799797",
+    "name": "Formbar Globus"
+  },
+  {
+    "orgNr": "310699926",
+    "orgName": "STRAFFET TØRST TIGER AS",
+    "pid": "22858599524",
+    "name": "Usymmetrisk Klage"
+  },
+  {
+    "orgNr": "313106683",
+    "orgName": "PRODUKTIV SITRONGUL TIGER AS",
+    "pid": "07835995989",
+    "name": "Smal Niese"
+  }
+]
