@@ -5,6 +5,7 @@ using Altinn.AccessManagement.UI.Core.Helpers;
 using Altinn.AccessManagement.UI.Core.Models.ClientDelegation;
 using Altinn.AccessManagement.UI.Core.Models.Maskinporten;
 using Altinn.AccessManagement.UI.Core.Services.Interfaces;
+using Altinn.AccessManagement.UI.Filters;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -13,6 +14,7 @@ namespace Altinn.AccessManagement.UI.Controllers
     /// <summary>
     /// The <see cref="MaskinportenController"/> provides API endpoints related to Maskinporten administration.
     /// </summary>
+    [AutoValidateAntiforgeryTokenIfAuthCookie]
     [Route("accessmanagement/api/v1/maskinporten")]
     public class MaskinportenController : ControllerBase
     {
