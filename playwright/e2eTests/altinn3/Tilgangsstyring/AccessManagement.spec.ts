@@ -1,19 +1,19 @@
-import { env } from 'playwright/util/helper';
 import { LoginPage } from 'playwright/pages/LoginPage';
 import { test } from '../../../fixture/pomFixture';
 import { AktorvalgHeader } from '../../../pages/AktorvalgHeader';
 import { EnduserConnection } from '../../../api-requests/EnduserConnection';
+import { tenorTestdata } from '../../testdata/tilgangsstyring/testdataHelpers';
 
 test.describe.serial('Tilgangsstyring', () => {
   const api = new EnduserConnection();
-  const MANAGER_PID = '12816699205';
-  const ORG_NO = '314138910';
-  const ORG_NAME = 'UNDERDANIG DYPSINDIG TIGER AS';
+  const MANAGER_PID = tenorTestdata[20].pid;
+  const ORG_NO = tenorTestdata[20].orgNr;
+  const ORG_NAME = tenorTestdata[20].orgName;
 
-  const tilgangsstyrer = { pid: '70885100226', name: 'Iherdig Litteratur' };
-  const hovedadmin = { pid: '64866402394', name: 'TRÅDLØS TELEFONNUMMER' };
-  const vanligBruker = { pid: '15843346194', name: 'DYREBAR MIDDAG' };
-  const standardBruker = { pid: '22907997719' };
+  const tilgangsstyrer = { pid: tenorTestdata[21].pid, name: tenorTestdata[21].name };
+  const hovedadmin = { pid: tenorTestdata[22].pid, name: tenorTestdata[22].name };
+  const vanligBruker = { pid: tenorTestdata[23].pid, name: tenorTestdata[23].name };
+  const standardBruker = { pid: tenorTestdata[24].pid };
 
   test.afterAll(async () => {
     try {
@@ -51,7 +51,7 @@ test.describe.serial('Tilgangsstyring', () => {
       await aktorvalgHeader.selectActorFromHeaderMenu(ORG_NAME);
     });
 
-    await test.step('Gå til brukere og velg bruker "Iherdig Litteratur"', async () => {
+    await test.step(`Gå til brukere og velg bruker ${tilgangsstyrer.name}`, async () => {
       await accessManagementFrontPage.goToUsers();
       await accessManagementFrontPage.expectOthersWithRightsListToBeVisible();
       await accessManagementFrontPage.clickUser(tilgangsstyrer.name);
@@ -93,7 +93,7 @@ test.describe.serial('Tilgangsstyring', () => {
       await aktorvalgHeader.selectActorFromHeaderMenu(ORG_NAME);
     });
 
-    await test.step('Gå til brukere og velg deg selv', async () => {
+    await test.step(`Gå til brukere og velg ${hovedadmin.name}`, async () => {
       await accessManagementFrontPage.goToUsers();
       await accessManagementFrontPage.expectOthersWithRightsListToBeVisible();
       await accessManagementFrontPage.clickUser(hovedadmin.name);
@@ -208,7 +208,7 @@ test.describe.serial('Tilgangsstyring', () => {
       await aktorvalgHeader.selectActorFromHeaderMenu(ORG_NAME);
     });
 
-    await test.step('Gå til brukere-siden og velg deg selv', async () => {
+    await test.step(`Gå til brukere-siden og velg ${vanligBruker.name}`, async () => {
       await accessManagementFrontPage.goToUsers();
       await accessManagementFrontPage.expectOthersWithRightsListToBeVisible();
       await accessManagementFrontPage.clickUser(vanligBruker.name);
