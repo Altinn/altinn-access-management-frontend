@@ -1,6 +1,6 @@
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { Trans, useTranslation } from 'react-i18next';
-import { DsAlert, DsParagraph, DsSpinner, formatDisplayName } from '@altinn/altinn-components';
+import { DsAlert, DsParagraph, formatDisplayName } from '@altinn/altinn-components';
 import {
   useConfirmRequestMutation,
   useGetEnrichedDraftRequestQuery,
