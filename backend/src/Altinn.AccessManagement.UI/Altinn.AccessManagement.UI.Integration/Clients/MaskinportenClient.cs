@@ -57,10 +57,6 @@ namespace Altinn.AccessManagement.UI.Integration.Clients
                 HttpResponseMessage response = await _client.GetAsync(token, endpointUrl, cancellationToken);
                 return await ClientUtils.DeserializeIfSuccessfullStatusCode<IEnumerable<MaskinportenConnection>>(response, _logger, "MaskinportenClient.GetSuppliers");
             }
-            catch (HttpStatusException)
-            {
-                throw;
-            }
             catch (Exception ex)
             {
                 _logger.LogError(ex, "Error while getting suppliers");
@@ -87,10 +83,6 @@ namespace Altinn.AccessManagement.UI.Integration.Clients
 
                 return JsonSerializer.Deserialize<AssignmentDto>(responseContent, _serializerOptions);
             }
-            catch (HttpStatusException)
-            {
-                throw;
-            }
             catch (Exception ex)
             {
                 _logger.LogError(ex, "Error while adding Maskinporten supplier");
@@ -110,7 +102,7 @@ namespace Altinn.AccessManagement.UI.Integration.Clients
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "Error while getting right holders");
+                _logger.LogError(ex, "Error while getting consumers");
                 throw new HttpStatusException("Unexpected http response.", "Unexpected http response.", HttpStatusCode.InternalServerError, null, ex.Message);
             }
         }
@@ -129,10 +121,6 @@ namespace Altinn.AccessManagement.UI.Integration.Clients
                     _logger.LogError("MaskinportenClient.RemoveSupplier failed with status code {StatusCode}. Response: {ResponseContent}", response.StatusCode, responseContent);
                     throw new HttpStatusException("Unexpected http response.", "Unexpected http response.", response.StatusCode, null, responseContent);
                 }
-            }
-            catch (HttpStatusException)
-            {
-                throw;
             }
             catch (Exception ex)
             {
@@ -155,10 +143,6 @@ namespace Altinn.AccessManagement.UI.Integration.Clients
                     _logger.LogError("MaskinportenClient.RemoveConsumer failed with status code {StatusCode}. Response: {ResponseContent}", response.StatusCode, responseContent);
                     throw new HttpStatusException("Unexpected http response.", "Unexpected http response.", response.StatusCode, null, responseContent);
                 }
-            }
-            catch (HttpStatusException)
-            {
-                throw;
             }
             catch (Exception ex)
             {
