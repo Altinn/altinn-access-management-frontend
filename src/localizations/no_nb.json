@@ -465,8 +465,9 @@
     "heading_subtitle": "fullmakter gitt til {{name}}"
   },
   "delegation_modal": {
-    "request_service": "Hvilken tjeneste ønsker du fullmakt til?",
+    "request_service": "Hvilken tjeneste vil du be om?",
     "give_service_to_name": "Gi <strong>{{name}}</strong> fullmakt til ny tjeneste",
+    "request_package": "Hvilken tilgangspakke vil du be om?",
     "give_package_to_name": "Gi <strong>{{name}}</strong> fullmakt til ny tilgangspakke",
     "name_will_receive": "<strong>{{name}}</strong> vil få:",
     "name_has_the_following": "<strong>{{name}}</strong> har:",
