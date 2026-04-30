@@ -99,7 +99,8 @@
     "none": "no",
     "digdir": "The Norwegian Digitalisation Agency",
     "skiplink": "Skip to main content",
-    "no_access_to_page": "You do not have access to this page for the selected actor"
+    "no_access_to_page": "You do not have access to this page for the selected actor",
+    "see_details": "See details"
   },
   "beta_banner": {
     "info": "This is a beta version of the new access management pages in Altinn.",
@@ -1094,6 +1095,8 @@
     "request_withdrawn": "The request has been rejected",
     "request_withdrawn_info": "You have rejected the request and will therefore not receive power of attorney for <strong>{{to_name}}</strong>.",
     "close_window_info": "You can now close this window.",
-    "missing_request_id": "Cannot load request: requestId-parameter is not set in url"
+    "missing_request_id": "Cannot load request: requestId-parameter is not set in url",
+    "batch_partial_error": "Could not process the following resources: {{resources}}. Please try again.",
+    "multiple_services_title": "<strong>{{name}}</strong> request the following services:"
   }
 }
