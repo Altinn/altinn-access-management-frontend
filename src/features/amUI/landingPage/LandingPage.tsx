@@ -19,6 +19,7 @@ import {
   useGetIsAdminQuery,
   useGetIsClientAdminQuery,
   useGetIsCompanyProfileAdminQuery,
+  useGetIsMaskinportenAdminQuery,
   useGetReporteeQuery,
 } from '@/rtk/features/userInfoApi';
 import { useGetMyClientsQuery } from '@/rtk/features/clientApi';
@@ -32,6 +33,7 @@ import {
 } from '@/resources/utils/permissionUtils';
 import {
   getConsentMenuItem,
+  getMaskinportenMenuItem,
   getPoaOverviewMenuItem,
   getReporteesMenuItem,
   getRequestsMenuItem,
@@ -48,7 +50,10 @@ import { formatOrgNr, isOrganization, isSubUnit } from '@/resources/utils/report
 import { getHostUrl } from '@/resources/utils/pathUtils';
 import { useSidebarRequestCount } from '@/resources/hooks/useSidebarRequestCount';
 import cn from 'classnames';
-import { clientAdministrationPageEnabled } from '@/resources/utils/featureFlagUtils';
+import {
+  clientAdministrationPageEnabled,
+  enableMaskinportenAdministration,
+} from '@/resources/utils/featureFlagUtils';
 import { useSelfConnection } from '../common/PartyRepresentationContext/useSelfConnection';
 import { useGetRolePermissionsQuery } from '@/rtk/features/roleApi';
 
@@ -61,6 +66,9 @@ export const LandingPage = () => {
   const { data: isClientAdmin, isLoading: isLoadingIsClientAdmin } = useGetIsClientAdminQuery();
   const { data: canAccessSettings, isLoading: isLoadingCanAccessSettings } =
     useGetIsCompanyProfileAdminQuery();
+  const { data: isMaskinportenAdmin } = useGetIsMaskinportenAdminQuery(undefined, {
+    skip: !enableMaskinportenAdministration(),
+  });
   const { data: currentUser, isLoading: currentUserIsLoading } = useGetPartyFromLoggedInUserQuery();
   const actingPartyUuid = getCookie('AltinnPartyUuid') ?? '';
   const displayClientAdministrationPage = clientAdministrationPageEnabled();
@@ -179,6 +187,12 @@ export const LandingPage = () => {
       items.push({
         ...getSystemUserMenuItem(),
         description: t('landing_page.systemuser_item_description'),
+      });
+    }
+    if (enableMaskinportenAdministration() && isMaskinportenAdmin) {
+      items.push({
+        ...getMaskinportenMenuItem(),
+        description: t('landing_page.maskinporten_item_description'),
       });
     }
     return items;

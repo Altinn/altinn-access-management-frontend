@@ -46,7 +46,7 @@ namespace Altinn.AccessManagement.UI.Integration.Clients
         }
 
         /// <inheritdoc />
-        public async Task<IEnumerable<MaskinportenConnection>> GetSuppliers(Guid party, string? supplier = null, CancellationToken cancellationToken = default)
+        public async Task<IEnumerable<MaskinportenConnection>> GetSuppliers(Guid party, string supplier = null, CancellationToken cancellationToken = default)
         {
             var token = JwtTokenUtil.GetTokenFromContext(_httpContextAccessor.HttpContext, _platformSettings.JwtCookieName);
             var endpointUrl = string.IsNullOrWhiteSpace(supplier)
