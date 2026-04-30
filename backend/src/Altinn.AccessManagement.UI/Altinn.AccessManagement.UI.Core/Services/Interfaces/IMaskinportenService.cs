@@ -15,7 +15,7 @@ namespace Altinn.AccessManagement.UI.Core.Services.Interfaces
         /// <param name="supplier">Optional supplier org number to filter by.</param>
         /// <param name="cancellationToken">Cancellation token.</param>
         /// <returns>A collection of suppliers.</returns>
-        Task<IEnumerable<MaskinportenConnection>> GetSuppliers(Guid party, string? supplier = null, CancellationToken cancellationToken = default);
+        Task<IEnumerable<MaskinportenConnection>> GetSuppliers(Guid party, string supplier = null, CancellationToken cancellationToken = default);
 
         /// <summary>
         /// Adds a Maskinporten supplier for a party.

@@ -22,7 +22,7 @@ namespace Altinn.AccessManagement.UI.Core.Services
         }
 
         /// <inheritdoc />
-        public async Task<IEnumerable<MaskinportenConnection>> GetSuppliers(Guid party, string? supplier = null, CancellationToken cancellationToken = default)
+        public async Task<IEnumerable<MaskinportenConnection>> GetSuppliers(Guid party, string supplier = null, CancellationToken cancellationToken = default)
         {
             return await _maskinportenClient.GetSuppliers(party, supplier, cancellationToken);
         }
