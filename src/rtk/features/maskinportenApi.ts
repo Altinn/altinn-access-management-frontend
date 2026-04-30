@@ -7,7 +7,6 @@ import type { AssignmentDto } from './clientApi';
 export interface MaskinportenConnection {
   party: Entity;
   roles: CompactRole[];
-  connections: MaskinportenConnection[];
 }
 
 const baseUrl = `${import.meta.env.BASE_URL}accessmanagement/api/v1/maskinporten`;

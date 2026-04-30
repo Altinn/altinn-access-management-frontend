@@ -22,7 +22,6 @@ import {
   useGetIsMaskinportenAdminQuery,
   useGetReporteeQuery,
 } from '@/rtk/features/userInfoApi';
-import { useGetMyClientsQuery } from '@/rtk/features/clientApi';
 import { useTranslation } from 'react-i18next';
 import { LeaveIcon } from '@navikt/aksel-icons';
 import { useSearchParams } from 'react-router';
@@ -67,7 +66,7 @@ export const LandingPage = () => {
   const { data: canAccessSettings, isLoading: isLoadingCanAccessSettings } =
     useGetIsCompanyProfileAdminQuery();
   const { data: isMaskinportenAdmin } = useGetIsMaskinportenAdminQuery(undefined, {
-    skip: !enableMaskinportenAdministration(),
+    skip: !enableMaskinportenAdministration() || !isOrganization(reportee),
   });
   const { data: currentUser, isLoading: currentUserIsLoading } = useGetPartyFromLoggedInUserQuery();
   const actingPartyUuid = getCookie('AltinnPartyUuid') ?? '';

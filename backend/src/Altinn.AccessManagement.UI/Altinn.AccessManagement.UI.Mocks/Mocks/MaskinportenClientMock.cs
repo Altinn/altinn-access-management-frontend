@@ -15,7 +15,7 @@ namespace Altinn.AccessManagement.UI.Mocks.Mocks
         /// <summary>
         /// Initializes a new instance of the <see cref="MaskinportenClientMock"/> class.
         /// </summary>
-        public MaskinportenClientMock(HttpClient httpClient)
+        public MaskinportenClientMock()
         {
             dataFolder = Path.Combine(Path.GetDirectoryName(new Uri(typeof(MaskinportenClientMock).Assembly.Location).LocalPath), "Data");
         }

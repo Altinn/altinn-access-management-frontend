@@ -23,6 +23,7 @@ import {
   getYourClientsMenuItem,
 } from '@/resources/utils/sidebarConfig';
 import { useGetPartyFromLoggedInUserQuery } from '@/rtk/features/lookupApi';
+import { isOrganization } from '@/resources/utils/reporteeUtils';
 import {
   useGetIsAdminQuery,
   useGetIsClientAdminQuery,
@@ -66,7 +67,7 @@ export const useSidebarItems = ({ isSmall }: { isSmall?: boolean }) => {
   const { data: canAccessSettings, isLoading: isLoadingCompanyProfileAdmin } =
     useGetIsCompanyProfileAdminQuery();
   const { data: isMaskinportenAdmin } = useGetIsMaskinportenAdminQuery(undefined, {
-    skip: !enableMaskinportenAdministration(),
+    skip: !enableMaskinportenAdministration() || !isOrganization(reportee),
   });
 
   const isLoading =
