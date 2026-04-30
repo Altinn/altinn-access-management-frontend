@@ -61,14 +61,6 @@ export const MaskinportenSuppliersTab = ({
     setPendingDelete(null);
   };
 
-  const AddSupplierButton: UserSearchProps['AddUserButton'] = (props) => (
-    <MaskinportenAddSupplierButton
-      party={party}
-      onComplete={(user) => navigate(`/maskinporten/supplier/${user.organizationIdentifier}`)}
-      {...props}
-    />
-  );
-
   return (
     <div className={classes.panelContent}>
       <DsParagraph>
@@ -82,7 +74,15 @@ export const MaskinportenSuppliersTab = ({
         error={error}
         emptyText={t('maskinporten_page.no_suppliers')}
         canDelegate={true}
-        AddUserButton={AddSupplierButton}
+        AddUserButton={(props) => (
+          <MaskinportenAddSupplierButton
+            party={party}
+            {...props}
+            onComplete={(user) => {
+              navigate(`/maskinporten/supplier/${user.organizationIdentifier}`);
+            }}
+          />
+        )}
         addUserButtonLabel={t('maskinporten_page.add_supplier_button')}
         onRevoke={handleRevoke}
         revokeLabel={t('common.delete')}

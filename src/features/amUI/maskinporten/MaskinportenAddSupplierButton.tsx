@@ -15,12 +15,12 @@ import classes from '../users/NewUserModal/NewUserModal.module.css';
 interface MaskinportenAddSupplierButtonProps {
   party: string;
   isLarge?: boolean;
-  onComplete?: (user: User) => void;
+  onComplete: (user: User) => void;
 }
 
 export const MaskinportenAddSupplierButton = ({
   party,
-  isLarge,
+  isLarge = false,
   onComplete,
 }: MaskinportenAddSupplierButtonProps) => {
   const { t } = useTranslation();
@@ -41,14 +41,14 @@ export const MaskinportenAddSupplierButton = ({
 
     try {
       await addSupplier({ party, supplier: orgData.orgNumber }).unwrap();
-      onComplete?.({
-        id: orgData.partyUuid,
+      onComplete({
         name: orgData.name,
         type: 'organisasjon',
         children: null,
+        id: orgData.partyUuid,
         organizationIdentifier: orgData.orgNumber,
       });
-      modalRef.current?.close();
+      // modalRef.current?.close();
     } catch {
       // Error details are set from the RTK mutation error.
     }
