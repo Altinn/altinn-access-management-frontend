@@ -1,6 +1,6 @@
-using System.Net;
 using Altinn.AccessManagement.UI.Core.ClientInterfaces;
 using Altinn.AccessManagement.UI.Core.Models.Altinn2User;
+using Altinn.Authorization.ProblemDetails;
 
 namespace Altinn.AccessManagement.UI.Mocks.Mocks
 {
@@ -10,12 +10,12 @@ namespace Altinn.AccessManagement.UI.Mocks.Mocks
     public class Altinn2UserClientMock : IAltinn2UserClient
     {
         /// <inheritdoc />
-        public Task<HttpResponseMessage> AddAltinn2User(Altinn2UserRequest request)
+        public Task<Result<bool>> VerifyAltinn2User(Altinn2UserRequest request, CancellationToken cancellationToken)
         {
             if (!string.IsNullOrEmpty(request?.Username) && !string.IsNullOrEmpty(request?.Password))
-                return Task.FromResult(new HttpResponseMessage(HttpStatusCode.OK));
+                return Task.FromResult(new Result<bool>(true));
 
-            return Task.FromResult(new HttpResponseMessage(HttpStatusCode.BadRequest));
+            return Task.FromResult(new Result<bool>(false));
         }
     }
 }

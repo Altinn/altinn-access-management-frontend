@@ -50,5 +50,13 @@ namespace Altinn.AccessManagement.UI.Core.ClientInterfaces
         /// <param name="party">The party UUID.</param>
         /// <returns>A list of simplified connections.</returns>
         Task<List<SimplifiedConnection>> GetSimplifiedConnections(Guid party);
+
+        /// <summary> Creates a connection between the authenticated user's selected party and the specified target party by assigning them as a right holder, where the target party is a self-identified user that does not have an existing account in the system. The method will first create a new self-identified user account based on the provided information, and then create the right holder connection to that new account.
+        /// </summary> 
+        /// <param name="from">The GUID of the SI-user</param>
+        /// <param name="to">The GUID of the email-user or person logged adding from-party</param>
+        /// <param name="cancellationToken"><see cref="CancellationToken"/></param>
+        /// <returns>The guid of the newly added rightholder</returns>
+        Task<Guid> PostNewSelfIdentifiedUser(Guid from, Guid to, CancellationToken cancellationToken = default);
     }
 }

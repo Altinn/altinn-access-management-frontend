@@ -2,6 +2,7 @@ using Altinn.AccessManagement.UI.Core.Helpers;
 using Altinn.AccessManagement.UI.Core.Models.Altinn2User;
 using Altinn.AccessManagement.UI.Core.Services.Interfaces;
 using Altinn.AccessManagement.UI.Filters;
+using Altinn.Authorization.ProblemDetails;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -34,24 +35,18 @@ namespace Altinn.AccessManagement.UI.Controllers
         /// Adds a legacy Altinn 2 self-identified user account to the current user's account.
         /// </summary>
         /// <param name="request">The legacy account username and password.</param>
+        /// <param name="cancellationToken">Cancellation token.</param>
         /// <returns>Result reflecting the platform response status.</returns>
         [HttpPost("")]
-        public async Task<IActionResult> AddAltinn2User([FromBody] Altinn2UserRequest request)
+        public async Task<ActionResult> AddAltinn2User([FromBody] Altinn2UserRequest request, CancellationToken cancellationToken)
         {
-            try
+            Result<bool> result = await _altinn2UserService.AddAltinn2User(request, cancellationToken);
+            if (result.IsProblem)
             {
-                await _altinn2UserService.AddAltinn2User(request);
-                return Ok();
+                return result.Problem.ToActionResult();
             }
-            catch (HttpStatusException statusEx)
-            {
-                return new ObjectResult(ProblemDetailsFactory.CreateProblemDetails(HttpContext, (int?)statusEx.StatusCode, "Unexpected HttpStatus response from backend", detail: statusEx.Message));
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError(ex, "Unexpected exception occurred during AddAltinn2User: {Message}", ex.Message);
-                return new ObjectResult(ProblemDetailsFactory.CreateProblemDetails(HttpContext));
-            }
+
+            return Ok(result.Value);
         }
     }
 }

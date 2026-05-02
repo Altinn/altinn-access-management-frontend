@@ -143,5 +143,31 @@ namespace Altinn.AccessManagement.UI.Integration.Clients
                     "ConnectionClient // GetSimplifiedConnections");
             return result?.Items?.ToList() ?? [];
         }
+
+        /// <inheritdoc />
+        public async Task<Guid> PostNewSelfIdentifiedUser(Guid from, Guid to, CancellationToken cancellationToken = default)
+        {
+            try
+            {
+                string token = JwtTokenUtil.GetTokenFromContext(_httpContextAccessor.HttpContext, _platformSettings.JwtCookieName);
+                string endpointUrl = $"internal/connections/selfidentifiedusers?from={from}&to={to}";
+
+                HttpResponseMessage response = await _client.PostAsync(token, endpointUrl, null);
+                var responseContent = await response.Content.ReadAsStringAsync(cancellationToken);
+
+                if (response.IsSuccessStatusCode)
+                {
+                    return Guid.Parse(responseContent); 
+                }
+
+                _logger.LogError("AccessManagement.UI // ConnectionClient // PostNewSelfIdentifiedUser // Unexpected HttpStatusCode: {StatusCode}\n {ResponseBody}", response.StatusCode, responseContent);
+                return Guid.Empty;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "AccessManagement.UI // ConnectionClient // PostNewSelfIdentifiedUser // Exception");
+                throw;
+            }
+        }
     }
 }

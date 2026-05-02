@@ -1,4 +1,5 @@
 using Altinn.AccessManagement.UI.Core.Models.Altinn2User;
+using Altinn.Authorization.ProblemDetails;
 
 namespace Altinn.AccessManagement.UI.Core.Services.Interfaces
 {
@@ -8,10 +9,11 @@ namespace Altinn.AccessManagement.UI.Core.Services.Interfaces
     public interface IAltinn2UserService
     {
         /// <summary>
-        /// Adds a legacy Altinn 2 user account to the current user's account.
-        /// Throws <see cref="Altinn.AccessManagement.UI.Core.Helpers.HttpStatusException"/> on failure.
+        /// Verify and adds a legacy Altinn 2 user account to the current user's account.
         /// </summary>
         /// <param name="request">Username and password of the legacy account.</param>
-        Task AddAltinn2User(Altinn2UserRequest request);
+        /// <param name="cancellationToken">Cancellation token.</param>
+        /// <returns>A result indicating whether the account was successfully linked.</returns>
+        Task<Result<bool>> AddAltinn2User(Altinn2UserRequest request, CancellationToken cancellationToken);
     }
 }

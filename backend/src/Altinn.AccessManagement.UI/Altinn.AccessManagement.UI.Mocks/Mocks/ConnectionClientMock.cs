@@ -138,5 +138,10 @@ namespace Altinn.AccessManagement.UI.Mocks.Mocks
             string dataPath = Path.Combine(dataFolder, "RightHolders", "SimplifiedConnections", $"{party}.json");
             return Task.FromResult(Util.GetMockData<List<SimplifiedConnection>>(dataPath));
         }
+
+        public Task<Guid> PostNewSelfIdentifiedUser(Guid from, Guid to, CancellationToken cancellationToken = default)
+        {
+            throw new NotImplementedException();
+        }
     }
 }
