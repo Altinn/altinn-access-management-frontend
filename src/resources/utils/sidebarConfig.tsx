@@ -256,7 +256,7 @@ export const getShortcutsMenuItem = (pathname?: string, isLoading = false): Menu
     {
       groupId: 'shortcuts',
       id: 'beta-about',
-      size: 'md',
+      size: 'sm',
       loading: isLoading,
       variant: 'tinted',
       title: t('header.help_pages'),
@@ -267,7 +267,7 @@ export const getShortcutsMenuItem = (pathname?: string, isLoading = false): Menu
     {
       groupId: 'shortcuts',
       id: 'beta-leave',
-      size: 'md',
+      size: 'sm',
       loading: isLoading,
       variant: 'tinted',
       title: t('header.leave_beta'),
