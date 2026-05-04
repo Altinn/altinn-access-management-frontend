@@ -65,11 +65,11 @@ export const MaskinportenSupplierPage = () => {
           <>
             <Breadcrumbs
               items={['root', 'maskinporten']}
-              lastBreadcrumb={{ label: supplierName ?? t('maskinporten_page.supplier_title') }}
+              lastBreadcrumb={{ label: supplierName || t('maskinporten_page.supplier_title') }}
             />
 
-            {error ? (
-              <DsAlert data-color='error'>
+            {error || (!isLoading && !data?.length) ? (
+              <DsAlert data-color='danger'>
                 <DsParagraph>
                   {t('maskinporten_page.supplier_not_found')}{' '}
                   <Link to={`/${amUIPath.Maskinporten}`}>

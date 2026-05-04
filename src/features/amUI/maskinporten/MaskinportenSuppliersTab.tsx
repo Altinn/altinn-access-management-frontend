@@ -1,11 +1,13 @@
-import { useRef, useState } from 'react';
+import { useCallback, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import {
   DsButton,
   DsDialog,
   DsHeading,
   DsParagraph,
+  SnackbarDuration,
   formatDisplayName,
+  useSnackbar,
 } from '@altinn/altinn-components';
 
 import {
@@ -14,7 +16,6 @@ import {
 } from '@/rtk/features/maskinportenApi';
 
 import type { UserActionTarget } from '../common/UserSearch/types';
-import type { UserSearchProps } from '../common/UserSearch/UserSearch';
 import { usePartyRepresentation } from '../common/PartyRepresentationContext/PartyRepresentationContext';
 import { MaskinportenAddSupplierButton } from './MaskinportenAddSupplierButton';
 import { MaskinportenUserSearch } from './MaskinportenUserSearch';
@@ -40,6 +41,7 @@ export const MaskinportenSuppliersTab = ({
   } = useGetMaskinportenSuppliersQuery({ party }, { skip: !isActive || !canFetch || !party });
   const { actingParty } = usePartyRepresentation();
   const navigate = useNavigate();
+  const { openSnackbar } = useSnackbar();
   const [removeSupplier, { isLoading: isRemoving }] = useRemoveMaskinportenSupplierMutation();
   const dialogRef = useRef<HTMLDialogElement>(null);
   const [pendingDelete, setPendingDelete] = useState<{ orgNumber: string; name: string } | null>(
@@ -56,10 +58,30 @@ export const MaskinportenSuppliersTab = ({
 
   const handleConfirmDelete = async () => {
     if (!pendingDelete) return;
-    await removeSupplier({ party, supplier: pendingDelete.orgNumber, cascade: true }).unwrap();
-    dialogRef.current?.close();
-    setPendingDelete(null);
+    try {
+      await removeSupplier({ party, supplier: pendingDelete.orgNumber, cascade: true }).unwrap();
+      dialogRef.current?.close();
+      setPendingDelete(null);
+    } catch {
+      openSnackbar({
+        message: t('maskinporten_page.remove_supplier_error', { name: pendingDelete.name }),
+        color: 'danger',
+        duration: SnackbarDuration.infinite,
+      });
+    }
   };
+
+  const addUserButton = useCallback(
+    () => (
+      <MaskinportenAddSupplierButton
+        party={party}
+        onComplete={(user) => {
+          navigate(`/maskinporten/supplier/${user.organizationIdentifier}`);
+        }}
+      />
+    ),
+    [party, navigate],
+  );
 
   return (
     <div className={classes.panelContent}>
@@ -74,15 +96,7 @@ export const MaskinportenSuppliersTab = ({
         error={error}
         emptyText={t('maskinporten_page.no_suppliers')}
         canDelegate={true}
-        AddUserButton={(props) => (
-          <MaskinportenAddSupplierButton
-            party={party}
-            {...props}
-            onComplete={(user) => {
-              navigate(`/maskinporten/supplier/${user.organizationIdentifier}`);
-            }}
-          />
-        )}
+        AddUserButton={addUserButton}
         addUserButtonLabel={t('maskinporten_page.add_supplier_button')}
         onRevoke={handleRevoke}
         revokeLabel={t('common.delete')}

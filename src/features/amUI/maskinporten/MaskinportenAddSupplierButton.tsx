@@ -1,4 +1,4 @@
-import React, { useEffect, useId, useRef, useState } from 'react';
+import React, { useId, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { DsButton, DsDialog, DsHeading } from '@altinn/altinn-components';
 import { PlusIcon } from '@navikt/aksel-icons';
@@ -7,6 +7,8 @@ import type { Organization } from '@/rtk/features/lookupApi';
 import { useAddMaskinportenSupplierMutation } from '@/rtk/features/maskinportenApi';
 import type { User } from '@/rtk/features/userInfoApi';
 
+import type { FetchBaseQueryError } from '@reduxjs/toolkit/query';
+import type { SerializedError } from '@reduxjs/toolkit';
 import { createErrorDetails } from '../common/TechnicalErrorParagraphs/TechnicalErrorParagraphs';
 import { usePartyRepresentation } from '../common/PartyRepresentationContext/PartyRepresentationContext';
 import { NewOrgContent } from '../users/NewUserModal/NewOrgContent';
@@ -28,13 +30,7 @@ export const MaskinportenAddSupplierButton = ({
   const modalRef = useRef<HTMLDialogElement>(null);
   const modalHeadingId = useId();
   const [errorDetail, setErrorDetail] = useState<{ status: string; time: string } | null>(null);
-  const [addSupplier, { isLoading, error }] = useAddMaskinportenSupplierMutation();
-
-  useEffect(() => {
-    if (error) {
-      setErrorDetail(createErrorDetails(error));
-    }
-  }, [error]);
+  const [addSupplier, { isLoading }] = useAddMaskinportenSupplierMutation();
 
   const handleAddSupplier = async (orgData: Organization) => {
     setErrorDetail(null);
@@ -48,9 +44,8 @@ export const MaskinportenAddSupplierButton = ({
         id: orgData.partyUuid,
         organizationIdentifier: orgData.orgNumber,
       });
-      // modalRef.current?.close();
-    } catch {
-      // Error details are set from the RTK mutation error.
+    } catch (err) {
+      setErrorDetail(createErrorDetails(err as FetchBaseQueryError | SerializedError));
     }
   };
 

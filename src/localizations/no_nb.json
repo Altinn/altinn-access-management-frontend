@@ -587,12 +587,15 @@
     "remove_supplier_heading": "Fjern leverandør",
     "remove_supplier_body": "Er du sikker på at du vil fjerne {{name}} som leverandør? Alle delegerte ressurser vil også bli fjernet.",
     "remove_supplier_confirm": "Fjern leverandør",
+    "remove_supplier_error": "Kunne ikke fjerne {{name}} som leverandør.",
     "remove_consumer_heading": "Fjern konsument",
     "remove_consumer_body": "Er du sikker på at du vil fjerne {{name}} som konsument? Alle delegerte ressurser vil også bli fjernet.",
     "remove_consumer_confirm": "Fjern konsument",
+    "remove_consumer_error": "Kunne ikke fjerne {{name}} som konsument.",
     "back_to_list": "Tilbake til oversikten",
+    "supplier_title": "Leverandør - Altinn",
     "own_org_number_warning": "Du kan ikke gi tilgang til eget organisasjonsnummer",
-    "own_org_number_warning_body": "Har ikke din virksomhet tilgang, ta kontakt med tilbyder av apiet du skal gi tilgang til."
+    "own_org_number_warning_body": "Har ikke din virksomhet tilgang, ta kontakt med tilbyder av API-et du skal gi tilgang til."
   },
   "settings_page": {
     "page_title": "Innstillinger - Altinn",

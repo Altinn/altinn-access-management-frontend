@@ -1,4 +1,3 @@
-using System.Net;
 using System.Text.Json;
 using Altinn.AccessManagement.UI.Core.ClientInterfaces;
 using Altinn.AccessManagement.UI.Core.Extensions;
@@ -52,16 +51,9 @@ namespace Altinn.AccessManagement.UI.Integration.Clients
             var endpointUrl = string.IsNullOrWhiteSpace(supplier)
                 ? $"enduser/maskinportensuppliers?party={party}"
                 : $"enduser/maskinportensuppliers?party={party}&supplier={Uri.EscapeDataString(supplier)}";
-            try
-            {
-                HttpResponseMessage response = await _client.GetAsync(token, endpointUrl, cancellationToken);
-                return await ClientUtils.DeserializeIfSuccessfullStatusCode<IEnumerable<MaskinportenConnection>>(response, _logger, "MaskinportenClient.GetSuppliers");
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError(ex, "Error while getting suppliers");
-                throw new HttpStatusException("Unexpected http response.", "Unexpected http response.", HttpStatusCode.InternalServerError, null, ex.Message);
-            }
+
+            HttpResponseMessage response = await _client.GetAsync(token, endpointUrl, cancellationToken);
+            return await ClientUtils.DeserializeIfSuccessfullStatusCode<IEnumerable<MaskinportenConnection>>(response, _logger, "MaskinportenClient.GetSuppliers");
         }
 
         /// <inheritdoc />
@@ -70,24 +62,16 @@ namespace Altinn.AccessManagement.UI.Integration.Clients
             var token = JwtTokenUtil.GetTokenFromContext(_httpContextAccessor.HttpContext, _platformSettings.JwtCookieName);
             var endpointUrl = $"enduser/maskinportensuppliers?party={party}&supplier={supplier}";
 
-            try
-            {
-                HttpResponseMessage response = await _client.PostAsync(token, endpointUrl, null, cancellationToken);
-                string responseContent = await response.Content.ReadAsStringAsync(cancellationToken);
+            HttpResponseMessage response = await _client.PostAsync(token, endpointUrl, null, cancellationToken);
+            string responseContent = await response.Content.ReadAsStringAsync(cancellationToken);
 
-                if (!response.IsSuccessStatusCode)
-                {
-                    _logger.LogError("MaskinportenClient.AddSupplier failed with status code {StatusCode}. Response: {ResponseContent}", response.StatusCode, responseContent);
-                    throw new HttpStatusException("Unexpected http response.", "Unexpected http response.", response.StatusCode, null, responseContent);
-                }
-
-                return JsonSerializer.Deserialize<AssignmentDto>(responseContent, _serializerOptions);
-            }
-            catch (Exception ex)
+            if (!response.IsSuccessStatusCode)
             {
-                _logger.LogError(ex, "Error while adding Maskinporten supplier");
-                throw new HttpStatusException("Unexpected http response.", "Unexpected http response.", HttpStatusCode.InternalServerError, null, ex.Message);
+                _logger.LogError("AccessManagement.UI // MaskinportenClient.AddSupplier // Unexpected HttpStatusCode: {StatusCode}\n {responseBody}", response.StatusCode, responseContent);
+                throw new HttpStatusException("StatusError", "Unexpected response status from Access Management", response.StatusCode, _httpContextAccessor.HttpContext?.TraceIdentifier, responseContent);
             }
+
+            return JsonSerializer.Deserialize<AssignmentDto>(responseContent, _serializerOptions);
         }
 
         /// <inheritdoc />
@@ -95,16 +79,9 @@ namespace Altinn.AccessManagement.UI.Integration.Clients
         {
             var token = JwtTokenUtil.GetTokenFromContext(_httpContextAccessor.HttpContext, _platformSettings.JwtCookieName);
             var endpointUrl = $"enduser/maskinportenconsumers?party={party}";
-            try
-            {
-                HttpResponseMessage response = await _client.GetAsync(token, endpointUrl, cancellationToken);
-                return await ClientUtils.DeserializeIfSuccessfullStatusCode<IEnumerable<MaskinportenConnection>>(response, _logger, "MaskinportenClient.GetConsumers");
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError(ex, "Error while getting consumers");
-                throw new HttpStatusException("Unexpected http response.", "Unexpected http response.", HttpStatusCode.InternalServerError, null, ex.Message);
-            }
+
+            HttpResponseMessage response = await _client.GetAsync(token, endpointUrl, cancellationToken);
+            return await ClientUtils.DeserializeIfSuccessfullStatusCode<IEnumerable<MaskinportenConnection>>(response, _logger, "MaskinportenClient.GetConsumers");
         }
 
         /// <inheritdoc />
@@ -112,21 +89,16 @@ namespace Altinn.AccessManagement.UI.Integration.Clients
         {
             var token = JwtTokenUtil.GetTokenFromContext(_httpContextAccessor.HttpContext, _platformSettings.JwtCookieName);
             var endpointUrl = $"enduser/maskinportensuppliers?party={party}&supplier={supplier}&cascade={cascade}";
-            try
+
+            HttpResponseMessage response = await _client.DeleteAsync(token, endpointUrl);
+            if (response.IsSuccessStatusCode)
             {
-                HttpResponseMessage response = await _client.DeleteAsync(token, endpointUrl);
-                if (!response.IsSuccessStatusCode)
-                {
-                    string responseContent = await response.Content.ReadAsStringAsync(cancellationToken);
-                    _logger.LogError("MaskinportenClient.RemoveSupplier failed with status code {StatusCode}. Response: {ResponseContent}", response.StatusCode, responseContent);
-                    throw new HttpStatusException("Unexpected http response.", "Unexpected http response.", response.StatusCode, null, responseContent);
-                }
+                return;
             }
-            catch (Exception ex)
-            {
-                _logger.LogError(ex, "Error while removing Maskinporten supplier");
-                throw new HttpStatusException("Unexpected http response.", "Unexpected http response.", HttpStatusCode.InternalServerError, null, ex.Message);
-            }
+
+            string responseContent = await response.Content.ReadAsStringAsync(cancellationToken);
+            _logger.LogError("AccessManagement.UI // MaskinportenClient.RemoveSupplier // Unexpected HttpStatusCode: {StatusCode}\n {responseBody}", response.StatusCode, responseContent);
+            throw new HttpStatusException("StatusError", "Unexpected response status from Access Management", response.StatusCode, _httpContextAccessor.HttpContext?.TraceIdentifier, responseContent);
         }
 
         /// <inheritdoc />
@@ -134,21 +106,16 @@ namespace Altinn.AccessManagement.UI.Integration.Clients
         {
             var token = JwtTokenUtil.GetTokenFromContext(_httpContextAccessor.HttpContext, _platformSettings.JwtCookieName);
             var endpointUrl = $"enduser/maskinportenconsumers?party={party}&consumer={consumer}&cascade={cascade}";
-            try
+
+            HttpResponseMessage response = await _client.DeleteAsync(token, endpointUrl);
+            if (response.IsSuccessStatusCode)
             {
-                HttpResponseMessage response = await _client.DeleteAsync(token, endpointUrl);
-                if (!response.IsSuccessStatusCode)
-                {
-                    string responseContent = await response.Content.ReadAsStringAsync(cancellationToken);
-                    _logger.LogError("MaskinportenClient.RemoveConsumer failed with status code {StatusCode}. Response: {ResponseContent}", response.StatusCode, responseContent);
-                    throw new HttpStatusException("Unexpected http response.", "Unexpected http response.", response.StatusCode, null, responseContent);
-                }
+                return;
             }
-            catch (Exception ex)
-            {
-                _logger.LogError(ex, "Error while removing Maskinporten consumer");
-                throw new HttpStatusException("Unexpected http response.", "Unexpected http response.", HttpStatusCode.InternalServerError, null, ex.Message);
-            }
+
+            string responseContent = await response.Content.ReadAsStringAsync(cancellationToken);
+            _logger.LogError("AccessManagement.UI // MaskinportenClient.RemoveConsumer // Unexpected HttpStatusCode: {StatusCode}\n {responseBody}", response.StatusCode, responseContent);
+            throw new HttpStatusException("StatusError", "Unexpected response status from Access Management", response.StatusCode, _httpContextAccessor.HttpContext?.TraceIdentifier, responseContent);
         }
     }
 }

@@ -36,7 +36,7 @@ export const MaskinportenPage = () => {
   useDocumentTitle(t('maskinporten_page.document_title'));
 
   if (
-    (!isLoading && isMaskinportenAdmin === false) ||
+    (!isLoading && isMaskinportenAdmin !== true) ||
     !enableMaskinportenAdministration() ||
     !party
   ) {

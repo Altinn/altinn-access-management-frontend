@@ -78,7 +78,5 @@ export const mapMaskinportenConnectionsToUserSearchNodes = (
     isDeleted: connection.party.isDeleted ?? undefined,
     sortKey: buildSortKey(connection.party.name),
     roles: connection.roles.map((role) => ({ id: role.id, code: role.code })),
-    children: connection.connections?.length
-      ? mapMaskinportenConnectionsToUserSearchNodes(connection.connections)
-      : null,
+    children: null,
   })) ?? [];

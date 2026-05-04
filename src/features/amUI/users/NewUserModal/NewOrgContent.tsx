@@ -1,5 +1,5 @@
 import {
-  Button,
+  DsButton,
   TextField,
   DsAlert,
   DsParagraph,
@@ -88,7 +88,7 @@ export const NewOrgContent = ({
       )}
 
       <div className={classes.validationButton}>
-        <Button
+        <DsButton
           disabled={
             isOwnOrg || isGetOrgError || isLoading || !orgData || orgData.orgNumber !== orgNumber
           }
@@ -103,7 +103,7 @@ export const NewOrgContent = ({
             )}
             {isLoading ? <span>{t('common.loading')}</span> : t('new_user_modal.add_org_button')}
           </span>
-        </Button>
+        </DsButton>
       </div>
     </div>
   );

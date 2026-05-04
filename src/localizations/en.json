@@ -590,10 +590,13 @@
     "remove_supplier_heading": "Remove supplier",
     "remove_supplier_body": "Are you sure you want to remove {{name}} as a supplier? All delegated resources will also be removed.",
     "remove_supplier_confirm": "Remove supplier",
+    "remove_supplier_error": "Could not remove {{name}} as a supplier.",
     "remove_consumer_heading": "Remove consumer",
     "remove_consumer_body": "Are you sure you want to remove {{name}} as a consumer? All delegated resources will also be removed.",
     "remove_consumer_confirm": "Remove consumer",
+    "remove_consumer_error": "Could not remove {{name}} as a consumer.",
     "back_to_list": "Back to list",
+    "supplier_title": "Supplier - Altinn",
     "own_org_number_warning": "You cannot grant access to your own organization number",
     "own_org_number_warning_body": "If your organization does not have access, please contact the provider of the API you want to grant access to."
   },

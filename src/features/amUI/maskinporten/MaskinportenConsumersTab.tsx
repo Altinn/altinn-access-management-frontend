@@ -5,7 +5,9 @@ import {
   DsDialog,
   DsHeading,
   DsParagraph,
+  SnackbarDuration,
   formatDisplayName,
+  useSnackbar,
 } from '@altinn/altinn-components';
 
 import {
@@ -36,6 +38,7 @@ export const MaskinportenConsumersTab = ({
     error,
   } = useGetMaskinportenConsumersQuery({ party }, { skip: !isActive || !canFetch || !party });
   const { actingParty } = usePartyRepresentation();
+  const { openSnackbar } = useSnackbar();
   const [removeConsumer, { isLoading: isRemoving }] = useRemoveMaskinportenConsumerMutation();
   const dialogRef = useRef<HTMLDialogElement>(null);
   const [pendingDelete, setPendingDelete] = useState<{ orgNumber: string; name: string } | null>(
@@ -52,9 +55,17 @@ export const MaskinportenConsumersTab = ({
 
   const handleConfirmDelete = async () => {
     if (!pendingDelete) return;
-    await removeConsumer({ party, consumer: pendingDelete.orgNumber, cascade: true }).unwrap();
-    dialogRef.current?.close();
-    setPendingDelete(null);
+    try {
+      await removeConsumer({ party, consumer: pendingDelete.orgNumber, cascade: true }).unwrap();
+      dialogRef.current?.close();
+      setPendingDelete(null);
+    } catch {
+      openSnackbar({
+        message: t('maskinporten_page.remove_consumer_error', { name: pendingDelete.name }),
+        color: 'danger',
+        duration: SnackbarDuration.infinite,
+      });
+    }
   };
 
   return (
