@@ -123,13 +123,13 @@
     "acting_party_data_error": "Det har oppstått en teknisk feil. Vennligst prøv igjen senere. Dersom problemet vedvarer, kontakt Altinn brukerstøtte på telefon 75 00 60 00.",
     "unsynced_connection_title": "Synkroniseringsglipp - vår feil, ikke din",
     "unsynced_connection": "Vi har en synkroniseringsfeil mellom ny og gammel løsning. Dette er noe vi jobber med, men for nå kan du dessverre ikke se tilgangene dine her. Vi beklager ulempen dette medfører!",
-    "unsynced_connection_link": "Klikk her for å se tilgangene dine i gammel løsning"
-  },
-  "reportee_change_error": {
-    "header": "Vi klarte ikke å bytte avgiver",
-    "description": "Den valgte avgiveren er ikke tilgjengelig for deg, eller lenken du fulgte var ugyldig.",
-    "if_persistent_contact_service": "Hvis problemet vedvarer kan du kontakte Altinn brukerstøtte på telefon 75 00 60 00.",
-    "go_to_altinn": "Gå til Altinn"
+    "unsynced_connection_link": "Klikk her for å se tilgangene dine i gammel løsning",
+    "reportee_change_error": {
+      "header": "Vi klarte ikke å bytte avgiver",
+      "description": "Den valgte avgiveren er ikke tilgjengelig for deg, eller lenken du fulgte var ugyldig.",
+      "if_persistent_contact_service": "Hvis problemet vedvarer kan du kontakte Altinn brukerstøtte på telefon 75 00 60 00.",
+      "go_to_altinn": "Gå til startsiden for Altinn"
+    }
   },
   "header": {
     "access_management": "Tilgangsstyring",
