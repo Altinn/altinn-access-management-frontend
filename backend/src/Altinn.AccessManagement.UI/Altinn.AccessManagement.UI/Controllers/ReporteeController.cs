@@ -5,6 +5,7 @@ using Altinn.AccessManagement.UI.Core.Services.Interfaces;
 using Altinn.AccessManagement.UI.Filters;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.WebUtilities;
 using Microsoft.Extensions.Options;
 
 namespace Altinn.AccessManagement.UI.Controllers
@@ -22,6 +23,7 @@ namespace Altinn.AccessManagement.UI.Controllers
 
         private readonly IUserService _userService;
         private readonly GeneralSettings _generalSettings;
+        private readonly FeatureFlags _featureFlags;
         private readonly IWebHostEnvironment _env;
         private readonly ILogger<ReporteeController> _logger;
 
@@ -31,11 +33,13 @@ namespace Altinn.AccessManagement.UI.Controllers
         public ReporteeController(
             IUserService userService,
             IOptions<GeneralSettings> generalSettings,
+            IOptions<FeatureFlags> featureFlags,
             IWebHostEnvironment env,
             ILogger<ReporteeController> logger)
         {
             _userService = userService;
             _generalSettings = generalSettings.Value;
+            _featureFlags = featureFlags.Value;
             _env = env;
             _logger = logger;
         }
@@ -73,6 +77,12 @@ namespace Altinn.AccessManagement.UI.Controllers
                 }
 
                 PartyCookieHelper.WritePartyCookies(Response, party.PartyId, party.PartyUuid, _generalSettings?.Hostname, !_env.IsDevelopment());
+
+                if (TryBuildAltinn2BounceUrl(party.PartyUuid, redirectTarget, out string bounceUrl))
+                {
+                    _logger.LogInformation("ChangeAndRedirect: bouncing via Altinn 2 to set legacy cookies. partyUuid={PartyUuid}", party.PartyUuid);
+                    return Redirect(bounceUrl);
+                }
 
                 return Redirect(redirectTarget);
             }
@@ -137,6 +147,37 @@ namespace Altinn.AccessManagement.UI.Controllers
             }
 
             return null;
+        }
+
+        private bool TryBuildAltinn2BounceUrl(Guid partyUuid, string finalGoTo, out string bounceUrl)
+        {
+            bounceUrl = null;
+
+            if (!_featureFlags.RouteChangeReporteeViaAltinn2)
+            {
+                return false;
+            }
+
+            string hostname = _generalSettings?.Hostname;
+            if (string.IsNullOrWhiteSpace(hostname) || !hostname.Contains("altinn", StringComparison.OrdinalIgnoreCase))
+            {
+                _logger.LogWarning("RouteChangeReporteeViaAltinn2 is enabled but Hostname '{Hostname}' is not a valid Altinn host; skipping bounce.", hostname);
+                return false;
+            }
+
+            string altinn2ChangeUrl = $"https://{hostname}/ui/Reportee/ChangeReporteeAndRedirect/";
+            Dictionary<string, string> queryParams = new()
+            {
+                ["P"] = partyUuid.ToString(),
+            };
+
+            if (!string.IsNullOrWhiteSpace(finalGoTo))
+            {
+                queryParams["goTo"] = finalGoTo;
+            }
+
+            bounceUrl = QueryHelpers.AddQueryString(altinn2ChangeUrl, queryParams);
+            return true;
         }
 
         private bool TryGetSafeRedirectUrl(string url, out string safeUrl)
