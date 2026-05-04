@@ -6,7 +6,7 @@ import { OverviewPage as OfferedOverviewPage } from '@/features/apiDelegation/of
 import { OverviewPage as ReceivedOverviewPage } from '@/features/apiDelegation/received/OverviewPage';
 import { ChooseOrgPage } from '@/features/apiDelegation/offered/ChooseOrgPage';
 import { ConfirmationPage } from '@/features/apiDelegation/offered/ConfirmationPage';
-import { A2ErrorPage, ErrorPage } from '@/sites/ErrorPage';
+import { A2ErrorPage, ErrorPage, ReporteeChangeErrorPage } from '@/sites/ErrorPage';
 import { ChooseServicePage as DelegateChooseServicePage } from '@/features/singleRight/delegate/ChooseServicePage/ChooseServicePage';
 import { ChooseServicePage as RequestChooseServicePage } from '@/features/singleRight/request/ChooseServicePage/ChooseServicePage';
 import { ChooseRightsPage } from '@/features/singleRight/delegate/ChooseRightsPage/ChooseRightsPage';
@@ -242,6 +242,10 @@ export const Router = createBrowserRouter(
         <Route
           path={amUIPath.Maskinporten}
           element={<MaskinportenPage />}
+        />
+        <Route
+          path='errorpage/reportee'
+          element={<ReporteeChangeErrorPage />}
         />
         {/* Catch-all for any unmatched routes under root */}
         <Route

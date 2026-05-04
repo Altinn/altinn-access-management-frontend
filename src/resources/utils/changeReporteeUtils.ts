@@ -1,6 +1,6 @@
 import { GeneralPath } from '@/routes/paths';
 
-import { getHostUrl } from './pathUtils';
+import { getAmBaseUrl } from './pathUtils';
 
 export const getDefaultChangeReporteeRedirectTarget = () =>
   new URL(`${window.location.origin}${GeneralPath.BasePath}`).toString();
@@ -9,8 +9,8 @@ export const getChangeReporteeAndRedirectUrl = (
   accountUuid: string,
   goTo = getDefaultChangeReporteeRedirectTarget(),
 ) => {
-  const changeUrl = new URL(`${getHostUrl()}ui/Reportee/ChangeReporteeAndRedirect/`);
-  changeUrl.searchParams.set('P', accountUuid);
+  const changeUrl = new URL(`${getAmBaseUrl()}api/v1/reportee/changeandredirect/`);
+  changeUrl.searchParams.set('partyUuid', accountUuid);
   changeUrl.searchParams.set('goTo', goTo);
 
   return changeUrl.toString();
