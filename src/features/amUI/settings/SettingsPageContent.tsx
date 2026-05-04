@@ -83,7 +83,7 @@ export const SettingsPageContent = () => {
       <ReporteePageHeading
         title={t('settings_page.page_heading', { name: formattedActingPartyName })}
         reportee={reportee}
-        isLoading={isLoading || actorLoading}
+        isLoading={isLoading}
       />
       <div className={classes.settingsHeaderAndInfo}>
         <DsHeading

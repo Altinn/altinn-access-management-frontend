@@ -29,7 +29,7 @@ const clientAdministrationTabs = ['users', 'clients'] as const;
 export const ClientAdministrationPageContent = () => {
   const { t } = useTranslation();
   const pageIsEnabled = clientAdministrationPageEnabled();
-  const { actingParty } = usePartyRepresentation();
+  const { actingParty, isLoading: actorLoading } = usePartyRepresentation();
 
   const [activeTab, setActiveTab] = useUrlParamState({
     key: 'tab',
@@ -88,7 +88,7 @@ export const ClientAdministrationPageContent = () => {
               }),
             })}
             reportee={reportee}
-            isLoading={isLoadingReportee}
+            isLoading={isLoadingReportee || actorLoading}
           />
         </div>
         <DsParagraph
