@@ -10,7 +10,7 @@ export const getChangeReporteeAndRedirectUrl = (
   goTo = getDefaultChangeReporteeRedirectTarget(),
 ) => {
   const changeUrl = new URL(`${getAmBaseUrl()}api/v1/reportee/changeandredirect/`);
-  changeUrl.searchParams.set('P', accountUuid);
+  changeUrl.searchParams.set('partyUuid', accountUuid);
   changeUrl.searchParams.set('goTo', goTo);
 
   return changeUrl.toString();
