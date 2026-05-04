@@ -61,6 +61,11 @@ export const MaskinportenSuppliersTab = ({
     try {
       await removeSupplier({ party, supplier: pendingDelete.orgNumber, cascade: true }).unwrap();
       dialogRef.current?.close();
+      openSnackbar({
+        message: t('maskinporten_page.remove_supplier_success', { name: pendingDelete.name }),
+        color: 'success',
+        duration: SnackbarDuration.normal,
+      });
       setPendingDelete(null);
     } catch {
       openSnackbar({
