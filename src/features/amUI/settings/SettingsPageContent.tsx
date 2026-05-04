@@ -17,7 +17,12 @@ import { useGetOrgNotificationAddressesQuery } from '@/rtk/features/settingsApi'
 import classes from './SettingsPageContent.module.css';
 import { ChatIcon, PaperplaneIcon, QuestionmarkCircleIcon } from '@navikt/aksel-icons';
 import { SettingsModal } from './SettingsModal';
-import { PartyType, useGetIsCompanyProfileAdminQuery } from '@/rtk/features/userInfoApi';
+import {
+  PartyType,
+  useGetIsCompanyProfileAdminQuery,
+  useGetReporteeQuery,
+} from '@/rtk/features/userInfoApi';
+import { ReporteePageHeading } from '../common/ReporteePageHeading/ReporteePageHeading';
 
 export const SettingsPageContent = () => {
   const { t } = useTranslation();
@@ -26,6 +31,7 @@ export const SettingsPageContent = () => {
   const [openModal, setOpenModal] = React.useState(false);
   const [modalMode, setModalMode] = React.useState<'email' | 'sms' | null>(null);
 
+  const { data: reportee, isLoading: isLoadingReportee } = useGetReporteeQuery();
   const { actingParty, isLoading: actorLoading } = usePartyRepresentation();
   const { data: notificationAddresses, isLoading: notifLoading } =
     useGetOrgNotificationAddressesQuery(actingParty?.orgNumber ?? '', {
@@ -41,7 +47,8 @@ export const SettingsPageContent = () => {
     notificationAddresses
       ?.filter((addr) => addr.phone)
       .map((addr) => `${addr.countryCode} ${addr.phone}`) ?? [];
-  const isLoading = actorLoading || notifLoading || isCompanyProfileAdminLoading;
+  const isLoading =
+    actorLoading || notifLoading || isCompanyProfileAdminLoading || isLoadingReportee;
 
   const onSettingsClick = (mode: 'email' | 'sms') => {
     setModalMode(mode);
@@ -73,14 +80,11 @@ export const SettingsPageContent = () => {
 
   return (
     <div className={classes.pageContent}>
-      <DsHeading
-        level={1}
-        data-size='sm'
-      >
-        {t('settings_page.page_heading', {
-          name: formattedActingPartyName,
-        })}
-      </DsHeading>
+      <ReporteePageHeading
+        title={t('settings_page.page_heading', { name: formattedActingPartyName })}
+        reportee={reportee}
+        isLoading={isLoading}
+      />
       <div className={classes.settingsHeaderAndInfo}>
         <DsHeading
           level={2}
