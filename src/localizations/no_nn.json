@@ -96,7 +96,8 @@
     "none": "ingen",
     "digdir": "Digitaliseringsdirektoratet",
     "skiplink": "Hopp til hovudinnhaldet",
-    "no_access_to_page": "Du har ikkje tilgang til denne sida for vald aktør"
+    "no_access_to_page": "Du har ikkje tilgang til denne sida for vald aktør",
+    "see_details": "Sjå detaljar"
   },
   "beta_banner": {
     "info": "Du ser no på ein betaversjon av dei nye sidene for tilgangsstyring i Altinn.",
@@ -471,8 +472,9 @@
     "heading_subtitle": "fullmakter gitt til {{name}}"
   },
   "delegation_modal": {
-    "request_service": "Kva for enkelttenester ønsker du fullmakt til?",
+    "request_service": "Kva for teneste vil du be om?",
     "give_service_to_name": "Gi <strong>{{name}}</strong> fullmakt til ny teneste",
+    "request_package": "Kva for tilgangspakke vil du be om?",
     "give_package_to_name": "Gi <strong>{{name}}</strong> fullmakt til ny tilgangspakke",
     "name_will_receive": "<strong>{{name}}</strong> vil få:",
     "name_has_the_following": "<strong>{{name}}</strong> har:",
@@ -1096,6 +1098,8 @@
     "request_withdrawn": "Førespurnaden er avslått",
     "request_withdrawn_info": "Du har avslått førespurnaden og vil dermed ikkje få fullmakt til <strong>{{to_name}}</strong>.",
     "close_window_info": "Du kan no lukke dette vinduet.",
-    "missing_request_id": "Kan ikkje laste førespurnaden: requestId-parameter er ikkje sett i url"
+    "missing_request_id": "Kan ikkje laste førespurnaden: requestId-parameter er ikkje sett i url",
+    "batch_partial_error": "Kunne ikkje behandle følgjande ressursar: {{resources}}. Ver venleg og prøv igjen.",
+    "multiple_services_title": "<strong>{{name}}</strong> ber om følgjande tenester:"
   }
 }

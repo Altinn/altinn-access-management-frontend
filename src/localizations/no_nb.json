@@ -96,7 +96,8 @@
     "none": "ingen",
     "digdir": "Digitaliseringsdirektoratet",
     "skiplink": "Hopp til hovedinnholdet",
-    "no_access_to_page": "Du har ikke tilgang til denne siden for valgt aktør"
+    "no_access_to_page": "Du har ikke tilgang til denne siden for valgt aktør",
+    "see_details": "Se detaljer"
   },
   "beta_banner": {
     "info": "Du ser nå på en betaversjon av de nye sidene for tilgangsstyring i Altinn.",
@@ -471,8 +472,9 @@
     "heading_subtitle": "fullmakter gitt til {{name}}"
   },
   "delegation_modal": {
-    "request_service": "Hvilken tjeneste ønsker du fullmakt til?",
+    "request_service": "Hvilken tjeneste vil du be om?",
     "give_service_to_name": "Gi <strong>{{name}}</strong> fullmakt til ny tjeneste",
+    "request_package": "Hvilken tilgangspakke vil du be om?",
     "give_package_to_name": "Gi <strong>{{name}}</strong> fullmakt til ny tilgangspakke",
     "name_will_receive": "<strong>{{name}}</strong> vil få:",
     "name_has_the_following": "<strong>{{name}}</strong> har:",
@@ -1096,6 +1098,8 @@
     "request_withdrawn": "Forespørselen er avvist",
     "request_withdrawn_info": "Du har avvist forespørselen og vil dermed ikke få fullmakt til <strong>{{to_name}}</strong>.",
     "close_window_info": "Du kan nå lukke dette vinduet.",
-    "missing_request_id": "Kan ikke laste forespørsel: requestId-parameter er ikke satt i url"
+    "missing_request_id": "Kan ikke laste forespørsel: requestId-parameter er ikke satt i url",
+    "batch_partial_error": "Kunne ikke behandle følgende ressurser: {{resources}}. Vennligst prøv igjen.",
+    "multiple_services_title": "<strong>{{name}}</strong> ber om følgende tjenester:"
   }
 }
