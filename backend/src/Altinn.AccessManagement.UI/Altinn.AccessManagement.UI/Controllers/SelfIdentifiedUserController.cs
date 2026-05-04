@@ -1,4 +1,3 @@
-using Altinn.AccessManagement.UI.Core.Helpers;
 using Altinn.AccessManagement.UI.Core.Models.Altinn2User;
 using Altinn.AccessManagement.UI.Core.Services.Interfaces;
 using Altinn.AccessManagement.UI.Filters;
@@ -14,33 +13,31 @@ namespace Altinn.AccessManagement.UI.Controllers
     [ApiController]
     [Authorize]
     [AutoValidateAntiforgeryTokenIfAuthCookie]
-    [Route("accessmanagement/api/v1/altinn2user")]
-    public class Altinn2UserController : ControllerBase
+    [Route("accessmanagement/api/v1/selfidentifieduser")]
+    public class SelfIdentifiedUserController : ControllerBase
     {
-        private readonly IAltinn2UserService _altinn2UserService;
-        private readonly ILogger<Altinn2UserController> _logger;
+        private readonly ISelfIdentifiedUserService _selfIdentifiedUserService;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="Altinn2UserController"/> class.
+        /// Initializes a new instance of the <see cref="SelfIdentifiedUserController"/> class.
         /// </summary>
-        public Altinn2UserController(
-            IAltinn2UserService Altinn2UserService,
-            ILogger<Altinn2UserController> logger)
+        public SelfIdentifiedUserController(
+            ISelfIdentifiedUserService selfIdentifiedUserService)
         {
-            _altinn2UserService = Altinn2UserService;
-            _logger = logger;
+            _selfIdentifiedUserService = selfIdentifiedUserService;
         }
 
         /// <summary>
         /// Adds a legacy Altinn 2 self-identified user account to the current user's account.
         /// </summary>
+        /// <param name="to">The user to a account to.</param>
         /// <param name="request">The legacy account username and password.</param>
         /// <param name="cancellationToken">Cancellation token.</param>
         /// <returns>Result reflecting the platform response status.</returns>
-        [HttpPost("")]
-        public async Task<ActionResult> AddAltinn2User([FromBody] Altinn2UserRequest request, CancellationToken cancellationToken)
+        [HttpPost("altinn2user")]
+        public async Task<ActionResult> AddAltinn2User([FromQuery] Guid to, [FromBody] Altinn2UserRequest request, CancellationToken cancellationToken)
         {
-            Result<bool> result = await _altinn2UserService.AddAltinn2User(request, cancellationToken);
+            Result<bool> result = await _selfIdentifiedUserService.AddAltinn2User(to, request, cancellationToken);
             if (result.IsProblem)
             {
                 return result.Problem.ToActionResult();

@@ -5,7 +5,7 @@ import { useDocumentTitle } from '@/resources/hooks/useDocumentTitle';
 import { useGetReporteeQuery } from '@/rtk/features/userInfoApi';
 import classes from './AddAltinn2UserPage.module.css';
 import { RequestPageLayout } from '../common/RequestPageLayout/RequestPageLayout';
-import { useAddAltinn2UserMutation } from '@/rtk/features/altinn2userApi';
+import { useAddAltinn2UserMutation } from '@/rtk/features/selfIdentifiedUserApi';
 import { getAfUrl } from '@/resources/utils/pathUtils';
 
 export const AddAltinn2UserPage = () => {
@@ -25,9 +25,10 @@ export const AddAltinn2UserPage = () => {
 
   const isActionButtonDisabled = !username || !password || isAddingAltinn2User;
   const onAddAltinn2User = async () => {
-    if (!isActionButtonDisabled) {
+    const to = reportee?.partyUuid;
+    if (!isActionButtonDisabled && to) {
       try {
-        await addAltinn2User({ username, password });
+        await addAltinn2User({ to, username, password });
       } catch (error) {
         console.error('Error adding Altinn2 user:', error);
       }

@@ -9,10 +9,10 @@ using Altinn.AccessManagement.UI.Tests.Utils;
 namespace Altinn.AccessManagement.UI.Tests.Controllers
 {
     /// <summary>
-    ///     Test class for <see cref="Altinn2UserController"></see>
+    ///     Test class for <see cref="SelfIdentifiedUserController"></see>
     /// </summary>
-    [Collection("Altinn2UserControllerTests")]
-    public class Altinn2UserControllerTest : IClassFixture<CustomWebApplicationFactory<Altinn2UserController>>
+    [Collection("SelfIdentifiedUserControllerTests")]
+    public class SelfIdentifiedUserControllerTest : IClassFixture<CustomWebApplicationFactory<SelfIdentifiedUserController>>
     {
         private readonly HttpClient _client;
         private readonly string _expectedDataPath = "Data/ExpectedResults";
@@ -21,7 +21,7 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
         ///     Constructor setting up factory, test client and dependencies
         /// </summary>
         /// <param name="factory">CustomWebApplicationFactory</param>
-        public Altinn2UserControllerTest(CustomWebApplicationFactory<Altinn2UserController> factory)
+        public SelfIdentifiedUserControllerTest(CustomWebApplicationFactory<SelfIdentifiedUserController> factory)
         {
             _client = SetupUtils.GetTestClient(factory);
             string token = PrincipalUtil.GetAccessToken("sbl.authorization");
