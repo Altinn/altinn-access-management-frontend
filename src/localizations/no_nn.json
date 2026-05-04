@@ -620,7 +620,7 @@
   },
   "systemuser_overviewpage": {
     "page_title": "Systemtilgangar - Altinn",
-    "banner_title": "Systemtilgangar",
+    "banner_title": "Systemtilgangar for {{name}}",
     "sub_title_text": "Ved å opprette ein systemtilgang gir du eit fagsystem tilgang til å løyse oppgåver i Altinn på vegne av bedrifta di.",
     "systemusers_load_error": "Kunne ikkje laste systemtilgangar",
     "pending_systemusers_load_error": "Kunne ikkje laste ventende systemtilgang-førespurnader",
@@ -886,7 +886,7 @@
   },
   "active_consents": {
     "page_title": "Samtykke- og fullmaktsavtaler - Altinn",
-    "heading": "Samtykke og fullmakter",
+    "heading": "Samtykke og fullmakter for {{name}}",
     "sub_heading": "Aktive avtaler",
     "pending_agreements": "Ventende avtalar",
     "loading_consents": "Laster aktive avtaler...",
@@ -920,7 +920,8 @@
   },
   "consent_log": {
     "page_title": "Avtalelogg - Altinn",
-    "heading": "Avtalelogg",
+    "heading": "Avtalelogg for {{name}}",
+    "breadcrumb": "Avtalelogg",
     "loading_consent_log": "Lastar avtalelogg...",
     "loading_consent_log_error": "Kunne ikkje laste avtalelogg",
     "no_consent_log_permission": "Du har ikkje rettar til å sjå avtaleloggen for denne organisasjonen.",

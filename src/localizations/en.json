@@ -623,7 +623,7 @@
   },
   "systemuser_overviewpage": {
     "page_title": "System accesses - Altinn",
-    "banner_title": "System accesses",
+    "banner_title": "System accesses for {{name}}",
     "sub_title_text": "By creating a system access, you give a vendor system access to solve tasks in Altinn on behalf of your company.",
     "systemusers_load_error": "Failed to load system accesses",
     "pending_systemusers_load_error": "Failed to load pending system access requests",
@@ -889,7 +889,7 @@
   },
   "active_consents": {
     "page_title": "Consent and power of attorney agreements - Altinn",
-    "heading": "Consents and powers of attorney",
+    "heading": "Consent and power of attorney agreements for {{name}}",
     "sub_heading": "Active agreements",
     "pending_agreements": "Pending agreements",
     "loading_consents": "Loading active agreements...",
@@ -923,7 +923,8 @@
   },
   "consent_log": {
     "page_title": "Agreement log - Altinn",
-    "heading": "Agreement log",
+    "heading": "Agreement log for {{name}}",
+    "breadcrumb": "Agreement log",
     "loading_consent_log": "Loading agreement log...",
     "loading_consent_log_error": "Could not load agreement log",
     "no_consent_log_permission": "You do not have permission to view the agreement log for this organization.",

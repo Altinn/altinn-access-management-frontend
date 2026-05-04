@@ -1,7 +1,15 @@
 import React, { useMemo, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Link, useLocation, useNavigate } from 'react-router';
-import { DsAlert, DsDialog, DsHeading, DsLink, DsParagraph, List } from '@altinn/altinn-components';
+import {
+  DsAlert,
+  DsDialog,
+  DsHeading,
+  DsLink,
+  DsParagraph,
+  formatDisplayName,
+  List,
+} from '@altinn/altinn-components';
 import { FolderFileIcon } from '@navikt/aksel-icons';
 
 import { useDocumentTitle } from '@/resources/hooks/useDocumentTitle';
@@ -22,6 +30,7 @@ import { OldConsentAlert } from '../components/OldConsentAlert/OldConsentAlert';
 import { Breadcrumbs } from '../../common/Breadcrumbs/Breadcrumbs';
 import { getConsentRequestUrl } from '@/routes/paths/consentPath';
 import { toDateTimeString } from '../utils';
+import { ReporteePageHeading } from '../../common/ReporteePageHeading';
 
 export const ActiveConsentsPage = () => {
   const { t } = useTranslation();
@@ -63,18 +72,20 @@ export const ActiveConsentsPage = () => {
     modalRef.current?.showModal();
   };
 
+  const reporteeName = formatDisplayName({
+    fullName: reportee?.name || '',
+    type: reportee?.type === 'Person' ? 'person' : 'company',
+  });
+
   return (
     <PageWrapper>
       <PageLayoutWrapper>
         <Breadcrumbs items={['root', 'consent']} />
-        <DsHeading
-          level={1}
-          data-size='sm'
-          className={classes.consentsHeader}
-        >
-          {t('active_consents.heading')}
-        </DsHeading>
-
+        <ReporteePageHeading
+          title={t('active_consents.heading', { name: reporteeName })}
+          reportee={reportee}
+          isLoading={isLoading}
+        />
         <OldConsentAlert
           heading='active_consents.altinn2_consent_alert_header'
           text='active_consents.altinn2_consent_alert_body'
