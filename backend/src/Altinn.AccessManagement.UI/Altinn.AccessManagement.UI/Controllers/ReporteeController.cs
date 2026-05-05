@@ -160,7 +160,24 @@ namespace Altinn.AccessManagement.UI.Controllers
 
             if (partyId.HasValue && partyId.Value > 0)
             {
-                return await _userService.GetPartyFromReporteeListIfExists(partyId.Value);
+               foreach (AuthorizedParty party in await _userService.GetReporteeListForUser())
+                {
+                    if (party.PartyId == partyId.Value)
+                    {
+                        return party;
+                    }
+
+                    if (party.Subunits != null && party.Subunits.Count > 0)
+                    {
+                        foreach (AuthorizedParty subunit in party.Subunits)
+                        {
+                            if (subunit.PartyId == partyId.Value)
+                            {
+                                return subunit;
+                            }
+                        }
+                    }
+                }
             }
 
             return null;
