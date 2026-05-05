@@ -99,7 +99,8 @@
     "none": "no",
     "digdir": "The Norwegian Digitalisation Agency",
     "skiplink": "Skip to main content",
-    "no_access_to_page": "You do not have access to this page for the selected actor"
+    "no_access_to_page": "You do not have access to this page for the selected actor",
+    "see_details": "See details"
   },
   "beta_banner": {
     "info": "This is a beta version of the new access management pages in Altinn.",
@@ -176,7 +177,13 @@
     "acting_party_data_error": "A technical error occurred. Please try again later. If the problem persists, contact Altinn support at 75 00 60 00.",
     "unsynced_connection_title": "Synchronization issue - our fault, not yours",
     "unsynced_connection": "We have a synchronization issue between the new and old solution. This is something we are working on, but for now, you unfortunately cannot see your accesses here. We apologize for any inconvenience this may cause!",
-    "unsynced_connection_link": "Click here to view your accesses in the old solution"
+    "unsynced_connection_link": "Click here to view your accesses in the old solution",
+    "reportee_change_error": {
+      "header": "We couldn't change reportee",
+      "description": "The selected reportee isn't available to you, or the link you followed was invalid.",
+      "if_persistent_contact_service": "If the problem persists, please contact Altinn support at 75 00 60 00.",
+      "go_to_altinn": "Go to Altinn's start page"
+    }
   },
   "profile": {
     "received": "Received",
@@ -468,8 +475,9 @@
     "heading_subtitle": "Power of attorney given to {{name}}"
   },
   "delegation_modal": {
-    "request_service": "Which service do you want to request power of attorney for?",
+    "request_service": "Which service do you need?",
     "give_service_to_name": "Give <strong>{{name}}</strong> power of attorney for new service",
+    "request_package": "Which access package do you need?",
     "give_package_to_name": "Give <strong>{{name}}</strong> power of attorney for new access package",
     "name_will_receive": "<strong>{{name}}</strong> will receive:",
     "name_has_the_following": "<strong>{{name}}</strong> has the following:",
@@ -863,7 +871,8 @@
     "add_own_organization_list_aria": "Add your organization to system access",
     "add_own_organization": "Add your organization",
     "add_own_organization_error": "Could not add your organization",
-    "remove_own_organization_error": "Could not remove your organization"
+    "remove_own_organization_error": "Could not remove your organization",
+    "user_is_not_client_admin": "Only client administrators can manage clients."
   },
   "systemuser_delegation_errors": {
     "01_rights_not_found_or_not_delegable": "One or more services do not exist, or cannot be delegated.",
@@ -1117,6 +1126,8 @@
     "request_withdrawn": "The request has been rejected",
     "request_withdrawn_info": "You have rejected the request and will therefore not receive power of attorney for <strong>{{to_name}}</strong>.",
     "close_window_info": "You can now close this window.",
-    "missing_request_id": "Cannot load request: requestId-parameter is not set in url"
+    "missing_request_id": "Cannot load request: requestId-parameter is not set in url",
+    "batch_partial_error": "Could not process the following resources: {{resources}}. Please try again.",
+    "multiple_services_title": "<strong>{{name}}</strong> request the following services:"
   }
 }

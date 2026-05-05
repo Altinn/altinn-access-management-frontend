@@ -6,7 +6,7 @@ import type { Party } from '@/rtk/features/lookupApi';
 import { AccessPackageList } from '@/features/amUI/common/AccessPackageList/AccessPackageList';
 
 import { useDelegationModalContext } from '../DelegationModalContext';
-import type { DelegationAction } from '../EditModal';
+import { DelegationAction } from '../EditModal';
 
 import classes from './PackageSearch.module.css';
 import { PartyType } from '@/rtk/features/userInfoApi';
@@ -36,7 +36,11 @@ export const PackageSearch = ({
           data-size='sm'
         >
           <Trans
-            i18nKey='delegation_modal.give_package_to_name'
+            i18nKey={
+              availableActions?.includes(DelegationAction.REQUEST)
+                ? 'delegation_modal.request_package'
+                : 'delegation_modal.give_package_to_name'
+            }
             values={{
               name: formatDisplayName({
                 fullName: toParty.name,

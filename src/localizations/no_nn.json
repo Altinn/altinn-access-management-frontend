@@ -96,7 +96,8 @@
     "none": "ingen",
     "digdir": "Digitaliseringsdirektoratet",
     "skiplink": "Hopp til hovudinnhaldet",
-    "no_access_to_page": "Du har ikkje tilgang til denne sida for vald aktør"
+    "no_access_to_page": "Du har ikkje tilgang til denne sida for vald aktør",
+    "see_details": "Sjå detaljar"
   },
   "beta_banner": {
     "info": "Du ser no på ein betaversjon av dei nye sidene for tilgangsstyring i Altinn.",
@@ -173,7 +174,13 @@
     "acting_party_data_error": "Det har oppstått ein teknisk feil. Prøv igjen seinare. Dersom problemet held fram, kontakt Altinn brukarservice på telefon 75 00 60 00.",
     "unsynced_connection_title": "Synkroniseringsglipp - vår feil, ikkje din",
     "unsynced_connection": "Vi har ein synkroniseringsfeil mellom ny og gammal løysing. Dette er noko vi jobbar med, men for nå kan du dessverre ikkje sjå tilgangane dine her. Vi beklagar ulempa dette medfører!",
-    "unsynced_connection_link": "Klikk her for å sjå tilgangane dine i gammal løysing"
+    "unsynced_connection_link": "Klikk her for å sjå tilgangane dine i gammal løysing",
+    "reportee_change_error": {
+      "header": "Vi klarte ikkje å byte avgivar",
+      "description": "Den valde avgivaren er ikkje tilgjengeleg for deg, eller lenka du følgde var ugyldig.",
+      "if_persistent_contact_service": "Dersom problemet held fram kan du kontakte Altinn brukarservice på telefon 75 00 60 00.",
+      "go_to_altinn": "Gå til startsiden for Altinn"
+    }
   },
   "profile": {
     "received": "Mottatt",
@@ -465,8 +472,9 @@
     "heading_subtitle": "fullmakter gitt til {{name}}"
   },
   "delegation_modal": {
-    "request_service": "Kva for enkelttenester ønsker du fullmakt til?",
+    "request_service": "Kva for teneste vil du be om?",
     "give_service_to_name": "Gi <strong>{{name}}</strong> fullmakt til ny teneste",
+    "request_package": "Kva for tilgangspakke vil du be om?",
     "give_package_to_name": "Gi <strong>{{name}}</strong> fullmakt til ny tilgangspakke",
     "name_will_receive": "<strong>{{name}}</strong> vil få:",
     "name_has_the_following": "<strong>{{name}}</strong> har:",
@@ -860,7 +868,8 @@
     "add_own_organization_list_aria": "Legg til di verksemd i systemtilgang",
     "add_own_organization": "Legg til di verksemd",
     "add_own_organization_error": "Kunne ikkje leggja til di verksemd",
-    "remove_own_organization_error": "Kunne ikkje fjerna di verksemd"
+    "remove_own_organization_error": "Kunne ikkje fjerna di verksemd",
+    "user_is_not_client_admin": "Kun klientadministratorer kan administrere klientar."
   },
   "systemuser_delegation_errors": {
     "01_rights_not_found_or_not_delegable": "Ei eller fleire tenester finst ikkje, eller kan ikkje delegerast.",
@@ -1114,6 +1123,8 @@
     "request_withdrawn": "Førespurnaden er avslått",
     "request_withdrawn_info": "Du har avslått førespurnaden og vil dermed ikkje få fullmakt til <strong>{{to_name}}</strong>.",
     "close_window_info": "Du kan no lukke dette vinduet.",
-    "missing_request_id": "Kan ikkje laste førespurnaden: requestId-parameter er ikkje sett i url"
+    "missing_request_id": "Kan ikkje laste førespurnaden: requestId-parameter er ikkje sett i url",
+    "batch_partial_error": "Kunne ikkje behandle følgjande ressursar: {{resources}}. Ver venleg og prøv igjen.",
+    "multiple_services_title": "<strong>{{name}}</strong> ber om følgjande tenester:"
   }
 }

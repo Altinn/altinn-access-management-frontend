@@ -138,8 +138,8 @@ namespace Altinn.AccessManagement.UI.Controllers
         {
             var httpContext = _httpContextAccessor.HttpContext;
 
-            string partyUuid = httpContext?.Request.Cookies["AltinnPartyUuid"];
-            string partyId = httpContext?.Request.Cookies["AltinnPartyId"];
+            string partyUuid = httpContext?.Request.Cookies[PartyCookieHelper.AltinnPartyUuidCookieName];
+            string partyId = httpContext?.Request.Cookies[PartyCookieHelper.AltinnPartyIdCookieName];
 
             if (string.IsNullOrEmpty(partyId))
             {
@@ -157,22 +157,7 @@ namespace Altinn.AccessManagement.UI.Controllers
                     setPartyId = AuthenticationHelper.GetUserPartyId(httpContext);
                 }
 
-                CookieOptions cookieOptions = new CookieOptions
-                {
-                    // Make this cookie readable by Javascript.
-                    HttpOnly = false,
-                    Secure = false,
-                    Path = "/",
-                    SameSite = SameSiteMode.Lax
-                };
-
-                // Set domain only if we have a hostname configured
-                if (!string.IsNullOrWhiteSpace(_generalSettings?.Hostname))
-                {
-                    cookieOptions.Domain = _generalSettings.Hostname;
-                }
-
-                HttpContext.Response.Cookies.Append("AltinnPartyId", setPartyId.ToString(), cookieOptions);
+                PartyCookieHelper.WritePartyIdCookie(HttpContext.Response, setPartyId, _generalSettings?.Hostname, !_env.IsDevelopment());
             }
 
             if (string.IsNullOrEmpty(partyUuid))
@@ -190,22 +175,7 @@ namespace Altinn.AccessManagement.UI.Controllers
                     setPartyUuid = AuthenticationHelper.GetUserPartyUuid(httpContext);
                 }
 
-                CookieOptions cookieOptions = new CookieOptions
-                {
-                    // Make this cookie readable by Javascript.
-                    HttpOnly = false,
-                    Secure = false,
-                    Path = "/",
-                    SameSite = SameSiteMode.Lax
-                };
-
-                // Set domain only if we have a hostname configured
-                if (!string.IsNullOrWhiteSpace(_generalSettings?.Hostname))
-                {
-                    cookieOptions.Domain = _generalSettings.Hostname;
-                }
-
-                HttpContext.Response.Cookies.Append("AltinnPartyUuid", setPartyUuid.ToString(), cookieOptions);
+                PartyCookieHelper.WritePartyUuidCookie(HttpContext.Response, setPartyUuid.ToString(), _generalSettings?.Hostname, !_env.IsDevelopment());
             }
 
             return;

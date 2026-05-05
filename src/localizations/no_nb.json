@@ -96,7 +96,8 @@
     "none": "ingen",
     "digdir": "Digitaliseringsdirektoratet",
     "skiplink": "Hopp til hovedinnholdet",
-    "no_access_to_page": "Du har ikke tilgang til denne siden for valgt aktør"
+    "no_access_to_page": "Du har ikke tilgang til denne siden for valgt aktør",
+    "see_details": "Se detaljer"
   },
   "beta_banner": {
     "info": "Du ser nå på en betaversjon av de nye sidene for tilgangsstyring i Altinn.",
@@ -122,7 +123,13 @@
     "acting_party_data_error": "Det har oppstått en teknisk feil. Vennligst prøv igjen senere. Dersom problemet vedvarer, kontakt Altinn brukerstøtte på telefon 75 00 60 00.",
     "unsynced_connection_title": "Synkroniseringsglipp - vår feil, ikke din",
     "unsynced_connection": "Vi har en synkroniseringsfeil mellom ny og gammel løsning. Dette er noe vi jobber med, men for nå kan du dessverre ikke se tilgangene dine her. Vi beklager ulempen dette medfører!",
-    "unsynced_connection_link": "Klikk her for å se tilgangene dine i gammel løsning"
+    "unsynced_connection_link": "Klikk her for å se tilgangene dine i gammel løsning",
+    "reportee_change_error": {
+      "header": "Vi klarte ikke å bytte avgiver",
+      "description": "Den valgte avgiveren er ikke tilgjengelig for deg, eller lenken du fulgte var ugyldig.",
+      "if_persistent_contact_service": "Hvis problemet vedvarer kan du kontakte Altinn brukerstøtte på telefon 75 00 60 00.",
+      "go_to_altinn": "Gå til startsiden for Altinn"
+    }
   },
   "header": {
     "access_management": "Tilgangsstyring",
@@ -465,8 +472,9 @@
     "heading_subtitle": "fullmakter gitt til {{name}}"
   },
   "delegation_modal": {
-    "request_service": "Hvilken tjeneste ønsker du fullmakt til?",
+    "request_service": "Hvilken tjeneste vil du be om?",
     "give_service_to_name": "Gi <strong>{{name}}</strong> fullmakt til ny tjeneste",
+    "request_package": "Hvilken tilgangspakke vil du be om?",
     "give_package_to_name": "Gi <strong>{{name}}</strong> fullmakt til ny tilgangspakke",
     "name_will_receive": "<strong>{{name}}</strong> vil få:",
     "name_has_the_following": "<strong>{{name}}</strong> har:",
@@ -860,7 +868,8 @@
     "add_own_organization_list_aria": "Legg til din virksomhet i systemtilgang",
     "add_own_organization": "Legg til din virksomhet",
     "add_own_organization_error": "Kunne ikke legge til din virksomhet",
-    "remove_own_organization_error": "Kunne ikke fjerne din virksomhet"
+    "remove_own_organization_error": "Kunne ikke fjerne din virksomhet",
+    "user_is_not_client_admin": "Kun klientadministratorer kan administrere klienter."
   },
   "systemuser_delegation_errors": {
     "01_rights_not_found_or_not_delegable": "En eller flere tjenester eksisterer ikke, eller er ikke delegerbare.",
@@ -1114,6 +1123,8 @@
     "request_withdrawn": "Forespørselen er avvist",
     "request_withdrawn_info": "Du har avvist forespørselen og vil dermed ikke få fullmakt til <strong>{{to_name}}</strong>.",
     "close_window_info": "Du kan nå lukke dette vinduet.",
-    "missing_request_id": "Kan ikke laste forespørsel: requestId-parameter er ikke satt i url"
+    "missing_request_id": "Kan ikke laste forespørsel: requestId-parameter er ikke satt i url",
+    "batch_partial_error": "Kunne ikke behandle følgende ressurser: {{resources}}. Vennligst prøv igjen.",
+    "multiple_services_title": "<strong>{{name}}</strong> ber om følgende tjenester:"
   }
 }

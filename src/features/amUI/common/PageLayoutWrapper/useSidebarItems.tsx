@@ -139,13 +139,9 @@ export const useSidebarItems = ({ isSmall }: { isSmall?: boolean }) => {
     items.push(getMaskinportenMenuItem(pathname, isLoading, isSmall));
   }
 
-  if (displayConfettiPackage) {
-    items.push(...getShortcutsMenuItem(pathname, isLoading));
-  }
-
   const sidebarItems = items.map((item) => {
     return { ...item, description: '' };
   });
 
-  return { sidebarItems };
+  return { sidebarItems, shortcutsMenuItem: getShortcutsMenuItem(pathname, isLoading) };
 };
