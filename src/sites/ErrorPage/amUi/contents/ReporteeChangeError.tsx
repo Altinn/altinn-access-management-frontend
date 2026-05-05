@@ -44,9 +44,7 @@ export const ReporteeChangeError = () => {
 
           <DsListItem>
             <DsParagraph>
-              <DsLink href={getAfUrl()}>
-                {t('error_page.reportee_change_error.go_to_innbox')}
-              </DsLink>
+              <DsLink href={getAfUrl()}>{t('error_page.reportee_change_error.go_to_inbox')}</DsLink>
             </DsParagraph>
           </DsListItem>
 
