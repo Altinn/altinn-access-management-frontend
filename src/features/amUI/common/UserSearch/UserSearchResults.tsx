@@ -24,6 +24,7 @@ export interface UserSearchResultsProps {
   isActionLoading?: boolean;
   includeSelfAsChild?: boolean;
   delegateLabel?: string;
+  revokeLabel?: string;
   getUserLink?: (user: UserActionTarget) => string;
   titleAs?: titleAsType;
 }
@@ -39,6 +40,7 @@ export const UserSearchResults: React.FC<UserSearchResultsProps> = ({
   isActionLoading = false,
   includeSelfAsChild = true,
   delegateLabel,
+  revokeLabel,
   getUserLink,
   titleAs = 'h4',
 }) => {
@@ -73,6 +75,7 @@ export const UserSearchResults: React.FC<UserSearchResultsProps> = ({
                 onRevoke={onRevoke ? () => onRevoke(user as ExtendedUser) : undefined}
                 onDelegate={onDelegate ? () => onDelegate(user as ExtendedUser) : undefined}
                 delegateLabel={delegateLabel}
+                revokeLabel={revokeLabel}
               />
             )}
           />
