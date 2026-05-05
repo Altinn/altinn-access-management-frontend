@@ -179,6 +179,7 @@
       "header": "Vi klarte ikkje å byte avgivar",
       "description": "Den valde avgivaren er ikkje tilgjengeleg for deg, eller lenka du følgde var ugyldig.",
       "if_persistent_contact_service": "Dersom problemet held fram kan du kontakte Altinn brukarservice på telefon 75 00 60 00.",
+      "where_to_now": "Kvar vil du gå no?",
       "go_to_altinn": "Gå til startsiden for Altinn",
       "go_to_inbox": "Gå til innboks",
       "go_to_am": "Gå til tilgangsstyring"
