@@ -485,7 +485,7 @@
     "edit_success": "Fullmakt oppdatert",
     "package_services_one": "Gir tilgang til {{count}} teneste",
     "package_services_other": "Gir tilgang til {{count}} tenester",
-    "no_resources_in_package": "Denne tilgangspakken innehelder foreløpig ingen tenester.",
+    "no_resources_in_package": "Denne tilgangspakken inneheld førebels ingen tenester.",
     "inherited_role_org_message": "{{user_name}} har tilgang til denne gjennom rolla si i {{org_name}}. Den kan derfor ikkje slettast.",
     "actions": {
       "access_to_all": "Tilgang til heile tenesta",
