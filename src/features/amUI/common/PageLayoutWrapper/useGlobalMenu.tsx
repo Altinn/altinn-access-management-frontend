@@ -61,11 +61,11 @@ export const useGlobalMenu = ({
   const { data: reportee } = useGetReporteeQuery();
   const { data: userinfo } = useGetUserProfileQuery();
 
-  const { sidebarItems } = useSidebarItems({ isSmall: true });
+  const { sidebarItems, shortcutsMenuItem } = useSidebarItems({ isSmall: true });
 
   const headerLinks: MenuItemProps[] = [
     {
-      groupId: '1',
+      groupId: 'global',
       icon: { svgElement: InboxFillIcon, theme: 'surface' },
       id: 'inbox',
       size: 'lg',
@@ -79,12 +79,13 @@ export const useGlobalMenu = ({
       badge: { label: t('common.beta'), variant: 'base', color: 'neutral' },
     },
     {
-      groupId: '10',
+      groupId: 'global',
       icon: { svgElement: PadlockLockedFillIcon, theme: 'surface' },
       id: 'access_management',
       size: 'lg',
       title: t('header.access_management'),
       selected: true,
+      expanded: isSm && !hideSidebarItems,
       as: (props) => (
         <Link
           to={'/'}
@@ -92,10 +93,10 @@ export const useGlobalMenu = ({
         />
       ),
       badge: { label: t('common.beta'), variant: 'base', color: 'neutral' },
+      items: sidebarItems,
     },
-    ...(isSm && !hideSidebarItems ? sidebarItems : []),
     {
-      groupId: '100',
+      groupId: 'global',
       icon: { svgElement: MenuGridIcon, theme: 'surface' },
       id: 'all_forms',
       size: 'lg',
@@ -108,7 +109,7 @@ export const useGlobalMenu = ({
       ),
     },
     {
-      groupId: '100',
+      groupId: 'global',
       icon: { svgElement: MagnifyingGlassIcon, theme: 'surface' },
       id: 'search',
       size: 'lg',
@@ -122,7 +123,7 @@ export const useGlobalMenu = ({
     },
     {
       id: 'info',
-      groupId: '1000',
+      groupId: 'links',
       icon: InformationSquareIcon,
       title: t('header.new_altinn_info'),
       size: 'sm',
@@ -135,7 +136,7 @@ export const useGlobalMenu = ({
     },
     {
       id: 'starte-og-drive',
-      groupId: '1000',
+      groupId: 'links',
       icon: Buildings2Icon,
       title: t('header.start_business'),
       size: 'sm',
@@ -148,7 +149,7 @@ export const useGlobalMenu = ({
     },
     {
       id: 'trenger-du-hjelp',
-      groupId: '1000',
+      groupId: 'links',
       icon: ChatExclamationmarkIcon,
       title: t('header.help'),
       size: 'sm',
@@ -172,6 +173,7 @@ export const useGlobalMenu = ({
         />
       ),
     },
+    ...(isSm && !hideSidebarItems ? shortcutsMenuItem : []),
   ];
 
   const globalMenu = {
@@ -195,9 +197,8 @@ export const useGlobalMenu = ({
   };
 
   const groups = {
-    1: { divider: false },
-    10: { divider: false },
-    100: { divider: isSm },
+    global: { divider: true },
+    links: { divider: true },
     'current-user': {
       title: t('header.logged_in_as_name', {
         name: formatDisplayName({
@@ -207,9 +208,8 @@ export const useGlobalMenu = ({
         }),
       }),
     },
-    1000: { divider: true },
     shortcuts: {
-      divider: false,
+      divider: true,
       title: t('header.shortcuts'),
       defaultIconTheme: 'transparent' as Theme,
       defaultItemSize: 'sm' as MenuItemSize,

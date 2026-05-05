@@ -37,7 +37,7 @@ export const PageLayoutWrapper = ({
 
   const { header, languageCode } = useHeader({ openAccountMenu, hideSidebarItems: hideSidebar });
   const footer = useFooter();
-  const { sidebarItems } = useSidebarItems({ isSmall: false });
+  const { sidebarItems, shortcutsMenuItem } = useSidebarItems({ isSmall: false });
 
   return (
     <RootProvider languageCode={languageCode as LanguageCode}>
@@ -61,7 +61,7 @@ export const PageLayoutWrapper = ({
             : {
                 menu: {
                   groups: menuGroups,
-                  items: sidebarItems,
+                  items: [...sidebarItems, ...shortcutsMenuItem],
                 },
                 footer: (
                   <Badge

@@ -350,9 +350,16 @@ export const SystemUserAgentDelegationPageContent = ({
         >
           {t('systemuser_agent_delegation.assigned_customers_header')}
         </DsHeading>
+        {!isClientAdmin && (
+          <DsAlert data-color='info'>
+            {t('systemuser_agent_delegation.user_is_not_client_admin')}
+          </DsAlert>
+        )}
         {assignedCustomersList.length === 0 ? (
           <>
-            <DsParagraph>{t('systemuser_agent_delegation.no_assigned_customers')}</DsParagraph>
+            {isClientAdmin && (
+              <DsParagraph>{t('systemuser_agent_delegation.no_assigned_customers')}</DsParagraph>
+            )}
             <div className={classes.addButtons}>
               {hasAddSelfPermission && !isSelfAdded && (
                 <DsButton

@@ -25,7 +25,7 @@ export const DraftRequestPage = () => {
   useDocumentTitle(t('draft_request_page.page_title'));
   const [searchParams] = useSearchParams();
   const partyUuid = getCookie('AltinnPartyUuid') || '';
-  const requestIds = searchParams.getAll('requestId');
+  const requestIds = Array.from(new Set(searchParams.getAll('requestId'))); // Duplicate IDs are ignored
   const isMultiMode = requestIds.length > 1;
   const [batchCompleteAction, setBatchCompleteAction] = useState<BatchActionType>(null);
 

@@ -31,6 +31,7 @@ export interface UserSearchProps {
   noUsersText?: string;
   searchPlaceholder?: string;
   addUserButtonLabel?: string;
+  revokeLabel?: string;
   directConnectionsHeading?: string;
   indirectConnectionsHeading?: string;
   additionalFilters?: React.ReactNode;
@@ -61,6 +62,7 @@ export const UserSearch: React.FC<UserSearchProps> = ({
   noUsersText,
   searchPlaceholder,
   addUserButtonLabel,
+  revokeLabel,
   directConnectionsHeading,
   indirectConnectionsHeading,
   additionalFilters,
@@ -174,6 +176,7 @@ export const UserSearch: React.FC<UserSearchProps> = ({
             includeSelfAsChild={includeSelfAsChild}
             getUserLink={getUserLink}
             titleAs={titleAs}
+            revokeLabel={revokeLabel}
           />
           {showDirectNoResults && (
             <DsParagraph data-size='md'>

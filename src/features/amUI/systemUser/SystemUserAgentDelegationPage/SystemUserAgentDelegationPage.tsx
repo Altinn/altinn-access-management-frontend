@@ -24,7 +24,7 @@ import { PageContainer } from '../../common/PageContainer/PageContainer';
 import { SystemUserPath } from '@/routes/paths';
 import { hasCreateSystemUserPermission } from '@/resources/utils/permissionUtils';
 import { DeleteSystemUserPopover } from '../components/DeleteSystemUserPopover/DeleteSystemUserPopover';
-import { useGetIsAdminQuery } from '@/rtk/features/userInfoApi';
+import { useGetIsAdminQuery, useGetIsClientAdminQuery } from '@/rtk/features/userInfoApi';
 
 export const SystemUserAgentDelegationPage = (): React.ReactNode => {
   const { id } = useParams();
@@ -36,6 +36,10 @@ export const SystemUserAgentDelegationPage = (): React.ReactNode => {
 
   useDocumentTitle(t('systemuser_agent_delegation.page_title'));
 
+  const { data: reporteeData } = useGetSystemUserReporteeQuery(partyId);
+  const { data: isAdmin } = useGetIsAdminQuery();
+  const { data: isClientAdmin } = useGetIsClientAdminQuery();
+
   const {
     data: systemUser,
     isError: isLoadSystemUserError,
@@ -43,22 +47,26 @@ export const SystemUserAgentDelegationPage = (): React.ReactNode => {
   } = useGetAgentSystemUserQuery({ partyId, systemUserId: id || '' });
 
   const {
-    data: customers,
+    data: customers = [],
     isError: isLoadCustomersError,
     isLoading: isLoadingCustomers,
-  } = useGetCustomersQuery({ partyId, systemUserId: id ?? '', partyUuid });
+  } = useGetCustomersQuery(
+    { partyId, systemUserId: id ?? '', partyUuid },
+    { skip: isClientAdmin !== true },
+  );
 
   const {
-    data: agentDelegations,
+    data: agentDelegations = [],
     isError: isLoadAssignedCustomersError,
     isLoading: isLoadingAssignedCustomers,
-  } = useGetAssignedCustomersQuery({
-    partyId: partyId,
-    systemUserId: id || '',
-    partyUuid,
-  });
-  const { data: reporteeData } = useGetSystemUserReporteeQuery(partyId);
-  const { data: isAdmin } = useGetIsAdminQuery();
+  } = useGetAssignedCustomersQuery(
+    {
+      partyId: partyId,
+      systemUserId: id || '',
+      partyUuid,
+    },
+    { skip: isClientAdmin !== true },
+  );
 
   const [deleteAgentSystemUser, { isError: isDeleteError, isLoading: isDeletingSystemUser }] =
     useDeleteAgentSystemuserMutation();
@@ -128,7 +136,7 @@ export const SystemUserAgentDelegationPage = (): React.ReactNode => {
               {t('systemuser_agent_delegation.load_assigned_customers_error')}
             </DsAlert>
           )}
-          {systemUser && customers && agentDelegations && (
+          {systemUser && customers && agentDelegations && !isLoading && (
             <SnackbarProvider>
               <SystemUserAgentDelegationPageContent
                 systemUser={systemUser}

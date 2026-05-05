@@ -41,12 +41,14 @@ export const NewPersonContent = ({ errorDetails, addPerson, isLoading }: NewPers
 
   return (
     <div className={classes.newPersonContent}>
-      {errorDetails && (
-        <NewUserAlert
-          userType='person'
-          error={errorDetails}
-        />
-      )}
+      <div aria-live='assertive'>
+        {errorDetails && (
+          <NewUserAlert
+            userType='person'
+            error={errorDetails}
+          />
+        )}
+      </div>
       <DsTextfield
         className={classes.textField}
         label={t('new_user_modal.person_identifier')}

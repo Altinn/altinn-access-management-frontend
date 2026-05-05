@@ -16,10 +16,5 @@ namespace Altinn.AccessManagement.UI.Core.Models.Maskinporten
         /// The roles that apply to the connected party.
         /// </summary>
         public List<CompactRole> Roles { get; set; } = new();
-
-        /// <summary>
-        /// Sub-connections for the same access.
-        /// </summary>
-        public List<MaskinportenConnection> Connections { get; set; } = new();
     }
 }

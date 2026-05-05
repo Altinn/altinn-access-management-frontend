@@ -123,7 +123,13 @@
     "acting_party_data_error": "Det har oppstått en teknisk feil. Vennligst prøv igjen senere. Dersom problemet vedvarer, kontakt Altinn brukerstøtte på telefon 75 00 60 00.",
     "unsynced_connection_title": "Synkroniseringsglipp - vår feil, ikke din",
     "unsynced_connection": "Vi har en synkroniseringsfeil mellom ny og gammel løsning. Dette er noe vi jobber med, men for nå kan du dessverre ikke se tilgangene dine her. Vi beklager ulempen dette medfører!",
-    "unsynced_connection_link": "Klikk her for å se tilgangene dine i gammel løsning"
+    "unsynced_connection_link": "Klikk her for å se tilgangene dine i gammel løsning",
+    "reportee_change_error": {
+      "header": "Vi klarte ikke å bytte avgiver",
+      "description": "Den valgte avgiveren er ikke tilgjengelig for deg, eller lenken du fulgte var ugyldig.",
+      "if_persistent_contact_service": "Hvis problemet vedvarer kan du kontakte Altinn brukerstøtte på telefon 75 00 60 00.",
+      "go_to_altinn": "Gå til startsiden for Altinn"
+    }
   },
   "header": {
     "access_management": "Tilgangsstyring",
@@ -576,7 +582,30 @@
   },
   "maskinporten_page": {
     "heading": "Maskinporten\u00ADadministrasjon",
-    "document_title": "Maskinportenadministrasjon - Altinn"
+    "document_title": "Maskinportenadministrasjon - Altinn",
+    "suppliers_tab": "Leverandører",
+    "add_supplier_button": "Legg til leverandør",
+    "suppliers_description": "Virksomheter som har gitt Maskinporten-scope til {{name}}.",
+    "consumers_tab": "Konsumenter",
+    "consumers_description": "Virksomheter som har mottatt Maskinporten-scope fra {{name}}.",
+    "no_suppliers": "Ingen leverandører funnet.",
+    "no_consumers": "Ingen konsumenter funnet.",
+    "load_error": "Kunne ikke laste Maskinporten-tilknytninger.",
+    "supplier_not_found": "Vi fant ikke leverandøren",
+    "remove_supplier_heading": "Fjern leverandør",
+    "remove_supplier_body": "Er du sikker på at du vil fjerne {{name}} som leverandør? Alle delegerte ressurser vil også bli fjernet.",
+    "remove_supplier_confirm": "Fjern leverandør",
+    "remove_supplier_error": "Kunne ikke fjerne {{name}} som leverandør.",
+    "remove_supplier_success": "{{name}} er fjernet som leverandør.",
+    "remove_consumer_heading": "Fjern konsument",
+    "remove_consumer_body": "Er du sikker på at du vil fjerne {{name}} som konsument? Alle delegerte ressurser vil også bli fjernet.",
+    "remove_consumer_confirm": "Fjern konsument",
+    "remove_consumer_error": "Kunne ikke fjerne {{name}} som konsument.",
+    "remove_consumer_success": "{{name}} er fjernet som konsument.",
+    "back_to_list": "Gå tilbake til oversikten",
+    "supplier_title": "Leverandør - Altinn",
+    "own_org_number_warning": "Du kan ikke gi tilgang til eget organisasjonsnummer",
+    "own_org_number_warning_body": "Har ikke din virksomhet tilgang, ta kontakt med tilbyder av API-et du skal gi tilgang til."
   },
   "settings_page": {
     "page_title": "Innstillinger - Altinn",
@@ -839,7 +868,8 @@
     "add_own_organization_list_aria": "Legg til din virksomhet i systemtilgang",
     "add_own_organization": "Legg til din virksomhet",
     "add_own_organization_error": "Kunne ikke legge til din virksomhet",
-    "remove_own_organization_error": "Kunne ikke fjerne din virksomhet"
+    "remove_own_organization_error": "Kunne ikke fjerne din virksomhet",
+    "user_is_not_client_admin": "Kun klientadministratorer kan administrere klienter."
   },
   "systemuser_delegation_errors": {
     "01_rights_not_found_or_not_delegable": "En eller flere tjenester eksisterer ikke, eller er ikke delegerbare.",
@@ -1036,6 +1066,7 @@
     "poa_item_description": "Oversikt over alle tilgangspakker og enkelttjenester",
     "consent_item_description": "Oversikt over alle inngåtte avtaler",
     "systemuser_item_description": "Oversikt over systemtilganger",
+    "maskinporten_item_description": "Administrer tilgang i Maskinporten",
     "client_admin_item_description": "Deleger fullmakter fra klienter til brukere i virksomheten.",
     "new_requests_single": "{{reportee}} har {{requestCount}} ny forespørsel",
     "new_requests_plural": "{{reportee}} har {{requestCount}} nye forespørsler"
