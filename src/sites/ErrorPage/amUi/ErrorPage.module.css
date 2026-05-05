@@ -31,7 +31,7 @@
 
 .secondHeader {
   padding-bottom: 0.5rem;
-  padding-left: var(--ds-spacing-4);
+  padding-left: var(--ds-spacing-2);
 }
 
 .nextSteps {
@@ -48,6 +48,6 @@
     font-size: 20px;
   }
   .secondHeader {
-    font-size: 18px;
+    font-size: 19px;
   }
 }
