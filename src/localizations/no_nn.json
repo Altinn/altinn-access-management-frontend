@@ -845,7 +845,8 @@
     "add_own_organization_list_aria": "Legg til di verksemd i systemtilgang",
     "add_own_organization": "Legg til di verksemd",
     "add_own_organization_error": "Kunne ikkje leggja til di verksemd",
-    "remove_own_organization_error": "Kunne ikkje fjerna di verksemd"
+    "remove_own_organization_error": "Kunne ikkje fjerna di verksemd",
+    "user_is_not_client_admin": "Kun klientadministratorer kan administrere klientar."
   },
   "systemuser_delegation_errors": {
     "01_rights_not_found_or_not_delegable": "Ei eller fleire tenester finst ikkje, eller kan ikkje delegerast.",

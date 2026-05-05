@@ -845,7 +845,8 @@
     "add_own_organization_list_aria": "Legg til din virksomhet i systemtilgang",
     "add_own_organization": "Legg til din virksomhet",
     "add_own_organization_error": "Kunne ikke legge til din virksomhet",
-    "remove_own_organization_error": "Kunne ikke fjerne din virksomhet"
+    "remove_own_organization_error": "Kunne ikke fjerne din virksomhet",
+    "user_is_not_client_admin": "Kun klientadministratorer kan administrere klienter."
   },
   "systemuser_delegation_errors": {
     "01_rights_not_found_or_not_delegable": "En eller flere tjenester eksisterer ikke, eller er ikke delegerbare.",
