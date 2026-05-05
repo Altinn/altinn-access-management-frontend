@@ -1,18 +1,26 @@
-import React, { useMemo } from 'react';
-import { Link, useParams } from 'react-router';
+import React, { useMemo, useRef } from 'react';
+import { Link, useNavigate, useParams } from 'react-router';
 import { useTranslation } from 'react-i18next';
 import {
   DsAlert,
+  DsButton,
   DsHeading,
   DsParagraph,
   DsSkeleton,
+  Snackbar,
+  SnackbarDuration,
+  SnackbarProvider,
   formatDisplayName,
+  useSnackbar,
 } from '@altinn/altinn-components';
 
 import { PageWrapper } from '@/components/PageWrapper/PageWrapper';
 import { getCookie } from '@/resources/Cookie/CookieMethods';
 import { useDocumentTitle } from '@/resources/hooks/useDocumentTitle';
-import { useGetMaskinportenSuppliersQuery } from '@/rtk/features/maskinportenApi';
+import {
+  useGetMaskinportenSuppliersQuery,
+  useRemoveMaskinportenSupplierMutation,
+} from '@/rtk/features/maskinportenApi';
 import { amUIPath } from '@/routes/paths';
 
 import { Breadcrumbs } from '../common/Breadcrumbs/Breadcrumbs';
@@ -20,14 +28,28 @@ import { PageLayoutWrapper } from '../common/PageLayoutWrapper';
 import { PartyRepresentationProvider } from '../common/PartyRepresentationContext/PartyRepresentationContext';
 import { Party } from '@/rtk/features/lookupApi';
 import { PartyType } from '@/rtk/features/userInfoApi';
+import { MaskinportenDeleteDialog } from './MaskinportenDeleteDialog';
 
 export const MaskinportenSupplierPage = () => {
+  return (
+    <SnackbarProvider>
+      <MaskinportenSupplierPageContent />
+      <Snackbar />
+    </SnackbarProvider>
+  );
+};
+
+const MaskinportenSupplierPageContent = () => {
   const { t } = useTranslation();
 
   useDocumentTitle(t('maskinporten_page.supplier_title'));
 
   const { id: orgNr } = useParams<{ id: string }>();
   const party = getCookie('AltinnPartyUuid');
+  const navigate = useNavigate();
+  const { openSnackbar } = useSnackbar();
+  const dialogRef = useRef<HTMLDialogElement>(null);
+  const [removeSupplier, { isLoading: isRemoving }] = useRemoveMaskinportenSupplierMutation();
 
   const { data, isLoading, error } = useGetMaskinportenSuppliersQuery(
     { party, supplier: orgNr },
@@ -46,13 +68,33 @@ export const MaskinportenSupplierPage = () => {
     }
     return {
       partyUuid: party.id,
-      partyId: 0, // Not used in this context
+      partyId: 0,
       name: party.name,
       partyTypeName: PartyType.Organization,
       orgNumber: party.organizationIdentifier ?? '',
       isDeleted: party.isDeleted ?? false,
     };
   }, [supplier]);
+
+  const handleConfirmDelete = async () => {
+    if (!orgNr || !party) return;
+    try {
+      await removeSupplier({ party, supplier: orgNr, cascade: true }).unwrap();
+      dialogRef.current?.close();
+      openSnackbar({
+        message: t('maskinporten_page.remove_supplier_success', { name: supplierName }),
+        color: 'success',
+        duration: SnackbarDuration.normal,
+      });
+      navigate(`/${amUIPath.Maskinporten}`);
+    } catch {
+      openSnackbar({
+        message: t('maskinporten_page.remove_supplier_error', { name: supplierName }),
+        color: 'danger',
+        duration: SnackbarDuration.infinite,
+      });
+    }
+  };
 
   return (
     <PageWrapper>
@@ -83,13 +125,34 @@ export const MaskinportenSupplierPage = () => {
                 height='2.5rem'
               />
             ) : (
-              <DsHeading
-                level={1}
-                data-size='lg'
+              <div
+                style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}
               >
-                {supplierName}
-              </DsHeading>
+                <DsHeading
+                  level={1}
+                  data-size='lg'
+                >
+                  {supplierName}
+                </DsHeading>
+                <DsButton
+                  data-color='danger'
+                  variant='secondary'
+                  onClick={() => dialogRef.current?.showModal()}
+                >
+                  {t('maskinporten_page.remove_supplier_confirm')}
+                </DsButton>
+              </div>
             )}
+
+            <MaskinportenDeleteDialog
+              ref={dialogRef}
+              heading={t('maskinporten_page.remove_supplier_heading')}
+              body={t('maskinporten_page.remove_supplier_body', { name: supplierName })}
+              confirmLabel={t('maskinporten_page.remove_supplier_confirm')}
+              onConfirm={handleConfirmDelete}
+              onClose={() => {}}
+              isLoading={isRemoving}
+            />
           </>
         </PartyRepresentationProvider>
       </PageLayoutWrapper>

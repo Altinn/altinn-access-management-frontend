@@ -1,7 +1,7 @@
 import React from 'react';
 import { Navigate } from 'react-router';
 import { useTranslation } from 'react-i18next';
-import { DsHeading, DsTabs } from '@altinn/altinn-components';
+import { DsHeading, DsTabs, Snackbar, SnackbarProvider } from '@altinn/altinn-components';
 import { DatabaseIcon, PersonGroupIcon } from '@navikt/aksel-icons';
 
 import { PageWrapper } from '@/components/PageWrapper/PageWrapper';
@@ -55,47 +55,50 @@ export const MaskinportenPage = () => {
           fromPartyUuid={party}
           actingPartyUuid={party}
         >
-          <>
-            <Breadcrumbs items={['root', 'maskinporten']} />
-            <div className={classes.headerSection}>
-              <DsHeading
-                level={1}
-                data-size='lg'
+          <SnackbarProvider>
+            <>
+              <Breadcrumbs items={['root', 'maskinporten']} />
+              <div className={classes.headerSection}>
+                <DsHeading
+                  level={1}
+                  data-size='lg'
+                >
+                  {t('maskinporten_page.heading')}
+                </DsHeading>
+              </div>
+              <DsTabs
+                data-size='sm'
+                value={activeTab}
+                onChange={setActiveTab}
               >
-                {t('maskinporten_page.heading')}
-              </DsHeading>
-            </div>
-            <DsTabs
-              data-size='sm'
-              value={activeTab}
-              onChange={setActiveTab}
-            >
-              <DsTabs.List>
-                <DsTabs.Tab value='suppliers'>
-                  <PersonGroupIcon aria-hidden='true' />
-                  {t('maskinporten_page.suppliers_tab')}
-                </DsTabs.Tab>
-                <DsTabs.Tab value='consumers'>
-                  <DatabaseIcon aria-hidden='true' />
-                  {t('maskinporten_page.consumers_tab')}
-                </DsTabs.Tab>
-              </DsTabs.List>
-              <DsTabs.Panel value='suppliers'>
-                <MaskinportenSuppliersTab
-                  party={party}
-                  isActive={activeTab === 'suppliers'}
-                  canFetch={canFetchTabData}
-                />
-              </DsTabs.Panel>
-              <DsTabs.Panel value='consumers'>
-                <MaskinportenConsumersTab
-                  party={party}
-                  isActive={activeTab === 'consumers'}
-                  canFetch={canFetchTabData}
-                />
-              </DsTabs.Panel>
-            </DsTabs>
-          </>
+                <DsTabs.List>
+                  <DsTabs.Tab value='suppliers'>
+                    <PersonGroupIcon aria-hidden='true' />
+                    {t('maskinporten_page.suppliers_tab')}
+                  </DsTabs.Tab>
+                  <DsTabs.Tab value='consumers'>
+                    <DatabaseIcon aria-hidden='true' />
+                    {t('maskinporten_page.consumers_tab')}
+                  </DsTabs.Tab>
+                </DsTabs.List>
+                <DsTabs.Panel value='suppliers'>
+                  <MaskinportenSuppliersTab
+                    party={party}
+                    isActive={activeTab === 'suppliers'}
+                    canFetch={canFetchTabData}
+                  />
+                </DsTabs.Panel>
+                <DsTabs.Panel value='consumers'>
+                  <MaskinportenConsumersTab
+                    party={party}
+                    isActive={activeTab === 'consumers'}
+                    canFetch={canFetchTabData}
+                  />
+                </DsTabs.Panel>
+              </DsTabs>
+              <Snackbar />
+            </>
+          </SnackbarProvider>
         </PartyRepresentationProvider>
       </PageLayoutWrapper>
     </PageWrapper>

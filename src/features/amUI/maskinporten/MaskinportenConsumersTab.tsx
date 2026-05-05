@@ -1,9 +1,6 @@
 import { useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import {
-  DsButton,
-  DsDialog,
-  DsHeading,
   DsParagraph,
   SnackbarDuration,
   formatDisplayName,
@@ -19,6 +16,7 @@ import type { UserActionTarget } from '../common/UserSearch/types';
 import { MaskinportenUserSearch } from './MaskinportenUserSearch';
 import classes from './MaskinportenPage.module.css';
 import { usePartyRepresentation } from '../common/PartyRepresentationContext/PartyRepresentationContext';
+import { MaskinportenDeleteDialog } from './MaskinportenDeleteDialog';
 
 type MaskinportenConsumersTabProps = {
   party: string;
@@ -89,32 +87,15 @@ export const MaskinportenConsumersTab = ({
         onRevoke={handleRevoke}
         revokeLabel={t('common.delete')}
       />
-      <DsDialog
+      <MaskinportenDeleteDialog
         ref={dialogRef}
-        closedby='any'
+        heading={t('maskinporten_page.remove_consumer_heading')}
+        body={t('maskinporten_page.remove_consumer_body', { name: pendingDelete?.name ?? '' })}
+        confirmLabel={t('maskinporten_page.remove_consumer_confirm')}
+        onConfirm={handleConfirmDelete}
         onClose={() => setPendingDelete(null)}
-      >
-        <DsHeading data-size='sm'>{t('maskinporten_page.remove_consumer_heading')}</DsHeading>
-        <DsParagraph>
-          {t('maskinporten_page.remove_consumer_body', { name: pendingDelete?.name ?? '' })}
-        </DsParagraph>
-        <div style={{ display: 'flex', gap: '0.5rem', marginTop: '1rem' }}>
-          <DsButton
-            data-color='danger'
-            onClick={handleConfirmDelete}
-            loading={isRemoving}
-          >
-            {t('maskinporten_page.remove_consumer_confirm')}
-          </DsButton>
-          <DsButton
-            variant='secondary'
-            onClick={() => dialogRef.current?.close()}
-            disabled={isRemoving}
-          >
-            {t('common.cancel')}
-          </DsButton>
-        </div>
-      </DsDialog>
+        isLoading={isRemoving}
+      />
     </div>
   );
 };
