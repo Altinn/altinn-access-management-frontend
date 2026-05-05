@@ -14,10 +14,6 @@
   flex-direction: column;
 }
 
-.systemUserTopHeader {
-  margin-top: 15px;
-}
-
 .systemUserTabs {
   align-self: flex-start;
 }
