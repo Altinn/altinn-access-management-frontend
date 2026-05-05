@@ -29,6 +29,11 @@
   padding-bottom: 0.5rem;
 }
 
+.secondHeader {
+  padding-bottom: 0.5rem;
+  padding-left: var(--ds-spacing-4);
+}
+
 .nextSteps {
   margin: var(--ds-spacing-1) 0;
   padding: var(--ds-spacing-8) var(--ds-spacing-8) var(--ds-spacing-12) var(--ds-spacing-8);
@@ -41,5 +46,8 @@
 @media only screen and (max-width: 576px) {
   .header {
     font-size: 20px;
+  }
+  .secondHeader {
+    font-size: 18px;
   }
 }

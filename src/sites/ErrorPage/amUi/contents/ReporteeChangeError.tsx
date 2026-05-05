@@ -30,7 +30,7 @@ export const ReporteeChangeError = () => {
       <div className={classes.nextSteps}>
         <DsHeading
           id='where-to-header'
-          className={classes.header}
+          className={classes.secondHeader}
           level={2}
           data-size='xs'
         >
