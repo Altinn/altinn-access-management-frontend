@@ -6,7 +6,7 @@ import { ReporteeChangeError } from './contents/ReporteeChangeError';
 
 export const ReporteeChangeErrorPage = () => {
   return (
-    <ErrorLayoutWrapper>
+    <ErrorLayoutWrapper hideAccountSelector={false}>
       <div className={classes.errorPageWrapper}>
         <ReporteeChangeError />
       </div>

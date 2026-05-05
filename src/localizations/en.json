@@ -182,7 +182,9 @@
       "header": "We couldn't change reportee",
       "description": "The selected reportee isn't available to you, or the link you followed was invalid.",
       "if_persistent_contact_service": "If the problem persists, please contact Altinn support at 75 00 60 00.",
-      "go_to_altinn": "Go to Altinn's start page"
+      "go_to_altinn": "Go to Altinn's start page",
+      "go_to_innbox": "Go to inbox",
+      "go_to_am": "Go to access management"
     }
   },
   "profile": {
