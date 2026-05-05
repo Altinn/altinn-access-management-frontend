@@ -135,15 +135,49 @@ namespace Altinn.AccessManagement.UI.Controllers
 
         private async Task<AuthorizedParty> ResolveAuthorizedParty(Guid? partyUuid, int? partyId)
         {
+            List<AuthorizedParty> reporteeList = await _userService.GetReporteeListForUser();
             if (partyUuid.HasValue && partyUuid.Value != Guid.Empty)
             {
-                List<AuthorizedParty> reporteeList = await _userService.GetReporteeListForUser();
-                return reporteeList?.FirstOrDefault(party => party.PartyUuid == partyUuid.Value);
+                foreach (AuthorizedParty party in reporteeList)
+                {
+                    if (party.PartyUuid == partyUuid.Value)
+                    {
+                        return party;
+                    }
+
+                    if (party.Subunits != null && party.Subunits.Count > 0)
+                    {
+                        foreach (AuthorizedParty subunit in party.Subunits)
+                        {
+                            if (subunit.PartyUuid == partyUuid.Value)
+                            {
+                                return subunit;
+                            }
+                        }
+                    }
+                }
             }
 
             if (partyId.HasValue && partyId.Value > 0)
             {
-                return await _userService.GetPartyFromReporteeListIfExists(partyId.Value);
+               foreach (AuthorizedParty party in reporteeList)
+                {
+                    if (party.PartyId == partyId.Value)
+                    {
+                        return party;
+                    }
+
+                    if (party.Subunits != null && party.Subunits.Count > 0)
+                    {
+                        foreach (AuthorizedParty subunit in party.Subunits)
+                        {
+                            if (subunit.PartyId == partyId.Value)
+                            {
+                                return subunit;
+                            }
+                        }
+                    }
+                }
             }
 
             return null;
