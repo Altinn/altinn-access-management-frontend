@@ -7,19 +7,55 @@ import { EnduserConnection } from '../../../api-requests/EnduserConnection';
 test.describe('Enkelttjenestedelegering fra person til person og person til org', () => {
   const api = new EnduserConnection();
 
-  test.afterAll('slett testdata', async () => {
-    await api.deleteConnection('09889499432', '09889499432', ['210530932']);
-    await api.deleteConnection('03906197811', '03906197811', ['23854897845']);
-    await api.deleteConnection('23813949784', '23813949784', ['313642291']);
-    await api.deleteConnection('13894599892', '13894599892', ['50907400120']);
+  test.beforeEach('sett opp testdata', async ({}, testInfo) => {
+    switch (testInfo.title) {
+      case 'Deleger enkelttjeneste til person':
+        await api.addConnection('03906197811', '03906197811', '23854897845');
+        break;
+      case 'Deleger enkelttjeneste til virksomhet':
+        await api.addConnection('23813949784', '23813949784', '313642291');
+        break;
+      case 'Slett enkelttjenestedelegering hos person':
+        await api.addConnection('13894599892', '13894599892', '50907400120');
+        await api.delegateSingleService(
+          '13894599892',
+          '13894599892',
+          '50907400120',
+          'bruno-correspondence',
+        );
+        break;
+      case 'Slett enkelttjeneste hos virksomhet':
+        await api.addConnection('09889499432', '09889499432', '210530932');
+        await api.delegateSingleService(
+          '09889499432',
+          '09889499432',
+          '210530932',
+          'bruno-correspondence',
+        );
+        break;
+    }
+  });
+
+  test.afterEach('slett testdata', async ({}, testInfo) => {
+    switch (testInfo.title) {
+      case 'Deleger enkelttjeneste til person':
+        await api.deleteConnection('03906197811', '03906197811', ['23854897845']);
+        break;
+      case 'Deleger enkelttjeneste til virksomhet':
+        await api.deleteConnection('23813949784', '23813949784', ['313642291']);
+        break;
+      case 'Slett enkelttjenestedelegering hos person':
+        await api.deleteConnection('13894599892', '13894599892', ['50907400120']);
+        break;
+      case 'Slett enkelttjeneste hos virksomhet':
+        await api.deleteConnection('09889499432', '09889499432', ['210530932']);
+        break;
+    }
   });
 
   test('Deleger enkelttjeneste til person', async ({ page, accessManagementFrontPage }) => {
     const login = new LoginPage(page);
     const aktorvalgHeader = new AktorvalgHeader(page);
-    await test.step('sett opp testdata', async () => {
-      await api.addConnection('03906197811', '03906197811', '23854897845');
-    });
 
     await test.step('Logg inn', async () => {
       await login.LoginToAccessManagement('03906197811');
@@ -54,9 +90,6 @@ test.describe('Enkelttjenestedelegering fra person til person og person til org'
   test('Deleger enkelttjeneste til virksomhet', async ({ page, accessManagementFrontPage }) => {
     const login = new LoginPage(page);
     const aktorvalgHeader = new AktorvalgHeader(page);
-    await test.step('sett opp testdata', async () => {
-      await api.addConnection('23813949784', '23813949784', '313642291');
-    });
 
     await test.step('Logg inn', async () => {
       await login.LoginToAccessManagement('23813949784');
@@ -93,15 +126,6 @@ test.describe('Enkelttjenestedelegering fra person til person og person til org'
   test('Slett enkelttjenestedelegering hos person', async ({ page, accessManagementFrontPage }) => {
     const login = new LoginPage(page);
     const aktorvalgHeader = new AktorvalgHeader(page);
-    await test.step('sett opp testdata', async () => {
-      await api.addConnection('13894599892', '13894599892', '50907400120');
-      await api.delegateSingleService(
-        '13894599892',
-        '13894599892',
-        '50907400120',
-        'bruno-correspondence',
-      );
-    });
 
     await test.step('Logg inn', async () => {
       await login.LoginToAccessManagement('13894599892');
@@ -134,15 +158,6 @@ test.describe('Enkelttjenestedelegering fra person til person og person til org'
   test('Slett enkelttjeneste hos virksomhet', async ({ page, accessManagementFrontPage }) => {
     const login = new LoginPage(page);
     const aktorvalgHeader = new AktorvalgHeader(page);
-    await test.step('sett opp testdata', async () => {
-      await api.addConnection('09889499432', '09889499432', '210530932');
-      await api.delegateSingleService(
-        '09889499432',
-        '09889499432',
-        '210530932',
-        'bruno-correspondence',
-      );
-    });
 
     await test.step('Logg inn', async () => {
       await login.LoginToAccessManagement('09889499432');
@@ -181,19 +196,55 @@ test.describe('Enkelttjenestedelegering fra person til person og person til org'
 test.describe('Enkelttjenestedelegering fra org til person og org til org', () => {
   const api = new EnduserConnection();
 
-  test.afterAll('slett testdata', async () => {
-    await api.deleteConnection('05916597349', '313189503', ['17889574100']);
-    await api.deleteConnection('16928599063', '312476932', ['313233383']);
-    await api.deleteConnection('18846498989', '311716670', ['09893049719']);
-    await api.deleteConnection('16815995930', '313707679', ['314021622']);
+  test.beforeEach('sett opp testdata', async ({}, testInfo) => {
+    switch (testInfo.title) {
+      case 'Deleger enkelttjeneste fra org til person':
+        await api.addConnection('05916597349', '313189503', '17889574100');
+        break;
+      case 'Deleger enkelttjeneste fra org til org':
+        await api.addConnection('16928599063', '312476932', '313233383');
+        break;
+      case 'Slett enkelttjenestedelegering fra org til person':
+        await api.addConnection('18846498989', '311716670', '09893049719');
+        await api.delegateSingleService(
+          '18846498989',
+          '311716670',
+          '09893049719',
+          'bruno-correspondence',
+        );
+        break;
+      case 'Slett enkelttjeneste fra org til org':
+        await api.addConnection('16815995930', '313707679', '314021622');
+        await api.delegateSingleService(
+          '16815995930',
+          '313707679',
+          '314021622',
+          'bruno-correspondence',
+        );
+        break;
+    }
+  });
+
+  test.afterEach('slett testdata', async ({}, testInfo) => {
+    switch (testInfo.title) {
+      case 'Deleger enkelttjeneste fra org til person':
+        await api.deleteConnection('05916597349', '313189503', ['17889574100']);
+        break;
+      case 'Deleger enkelttjeneste fra org til org':
+        await api.deleteConnection('16928599063', '312476932', ['313233383']);
+        break;
+      case 'Slett enkelttjenestedelegering fra org til person':
+        await api.deleteConnection('18846498989', '311716670', ['09893049719']);
+        break;
+      case 'Slett enkelttjeneste fra org til org':
+        await api.deleteConnection('16815995930', '313707679', ['314021622']);
+        break;
+    }
   });
 
   test('Deleger enkelttjeneste fra org til person', async ({ page, accessManagementFrontPage }) => {
     const login = new LoginPage(page);
     const aktorvalgHeader = new AktorvalgHeader(page);
-    await test.step('sett opp testdata', async () => {
-      await api.addConnection('05916597349', '313189503', '17889574100');
-    });
 
     await test.step('Logg inn', async () => {
       await login.LoginToAccessManagement('05916597349');
@@ -228,9 +279,6 @@ test.describe('Enkelttjenestedelegering fra org til person og org til org', () =
   test('Deleger enkelttjeneste fra org til org', async ({ page, accessManagementFrontPage }) => {
     const login = new LoginPage(page);
     const aktorvalgHeader = new AktorvalgHeader(page);
-    await test.step('sett opp testdata', async () => {
-      await api.addConnection('16928599063', '312476932', '313233383');
-    });
 
     await test.step('Logg inn', async () => {
       await login.LoginToAccessManagement('16928599063');
@@ -270,15 +318,6 @@ test.describe('Enkelttjenestedelegering fra org til person og org til org', () =
   }) => {
     const login = new LoginPage(page);
     const aktorvalgHeader = new AktorvalgHeader(page);
-    await test.step('sett opp testdata', async () => {
-      await api.addConnection('18846498989', '311716670', '09893049719');
-      await api.delegateSingleService(
-        '18846498989',
-        '311716670',
-        '09893049719',
-        'bruno-correspondence',
-      );
-    });
 
     await test.step('Logg inn', async () => {
       await login.LoginToAccessManagement('18846498989');
@@ -311,15 +350,6 @@ test.describe('Enkelttjenestedelegering fra org til person og org til org', () =
   test('Slett enkelttjeneste fra org til org', async ({ page, accessManagementFrontPage }) => {
     const login = new LoginPage(page);
     const aktorvalgHeader = new AktorvalgHeader(page);
-    await test.step('sett opp testdata', async () => {
-      await api.addConnection('16815995930', '313707679', '314021622');
-      await api.delegateSingleService(
-        '16815995930',
-        '313707679',
-        '314021622',
-        'bruno-correspondence',
-      );
-    });
 
     await test.step('Logg inn', async () => {
       await login.LoginToAccessManagement('16815995930');
