@@ -18,9 +18,13 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
         private const string ValidPartyUuidInList = "1feb089d-6d08-d38a-a85d-6d4fe709ceb0";
         private const int ValidPartyIdInList = 81373770;
 
-        // PartyId backed by a fixture under Data/ReporteeList/GetPartyFromReporteeList/.
+        // Top-level party present in user 1234's reportee list (DISKRET NÆR TIGER AS) — also has a subunit.
         private const int ValidLookupPartyId = 51329012;
         private const string ValidLookupPartyUuid = "cd35779b-b174-4ecc-bbef-ece13611be7f";
+
+        // Subunit of the DISKRET NÆR TIGER AS entry — used to verify subunit resolution.
+        private const int SubunitPartyId = 51433301;
+        private const string SubunitPartyUuid = "b0a79f3d-4cef-430a-9774-301b754e0f6f";
 
         private const string AltinnGoTo = "https://am.ui.tt02.altinn.no/some/page";
         private const string AltinnCloudGoTo = "https://am.ui.at22.altinn.cloud/some/page";
@@ -319,6 +323,121 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
             IEnumerable<string> cookies = response.Headers.GetValues("Set-Cookie");
             Assert.Contains(cookies, c => c.StartsWith($"AltinnPartyId={ValidPartyIdInList}"));
             Assert.Contains(cookies, c => c.StartsWith($"AltinnPartyUuid={ValidPartyUuidInList}"));
+        }
+
+        [Fact]
+        public async Task ChangeAndRedirect_PartyUuid_MatchesSubunit_RedirectsAndSetsSubunitCookies()
+        {
+            Authenticate();
+
+            HttpResponseMessage response = await _client.GetAsync(
+                $"accessmanagement/api/v1/reportee/changeandredirect?partyUuid={SubunitPartyUuid}&goTo={Encode(AltinnGoTo)}");
+
+            Assert.Equal(HttpStatusCode.Redirect, response.StatusCode);
+            Assert.Equal(AltinnGoTo, response.Headers.Location.OriginalString);
+
+            IEnumerable<string> cookies = response.Headers.GetValues("Set-Cookie");
+            Assert.Contains(cookies, c => c.StartsWith($"AltinnPartyId={SubunitPartyId}"));
+            Assert.Contains(cookies, c => c.StartsWith($"AltinnPartyUuid={SubunitPartyUuid}"));
+        }
+
+        [Fact]
+        public async Task ChangeAndRedirect_LegacyP_MatchesSubunit_RedirectsAndSetsSubunitCookies()
+        {
+            Authenticate();
+
+            HttpResponseMessage response = await _client.GetAsync(
+                $"accessmanagement/api/v1/reportee/changeandredirect?P={SubunitPartyUuid}&goTo={Encode(AltinnGoTo)}");
+
+            Assert.Equal(HttpStatusCode.Redirect, response.StatusCode);
+            Assert.Equal(AltinnGoTo, response.Headers.Location.OriginalString);
+
+            IEnumerable<string> cookies = response.Headers.GetValues("Set-Cookie");
+            Assert.Contains(cookies, c => c.StartsWith($"AltinnPartyId={SubunitPartyId}"));
+            Assert.Contains(cookies, c => c.StartsWith($"AltinnPartyUuid={SubunitPartyUuid}"));
+        }
+
+        [Fact]
+        public async Task ChangeAndRedirect_PartyId_MatchesSubunit_RedirectsAndSetsSubunitCookies()
+        {
+            Authenticate();
+
+            HttpResponseMessage response = await _client.GetAsync(
+                $"accessmanagement/api/v1/reportee/changeandredirect?partyId={SubunitPartyId}&goTo={Encode(AltinnGoTo)}");
+
+            Assert.Equal(HttpStatusCode.Redirect, response.StatusCode);
+            Assert.Equal(AltinnGoTo, response.Headers.Location.OriginalString);
+
+            IEnumerable<string> cookies = response.Headers.GetValues("Set-Cookie");
+            Assert.Contains(cookies, c => c.StartsWith($"AltinnPartyId={SubunitPartyId}"));
+            Assert.Contains(cookies, c => c.StartsWith($"AltinnPartyUuid={SubunitPartyUuid}"));
+        }
+
+        [Fact]
+        public async Task ChangeAndRedirect_PartyId_MatchesParentOfSubunit_ResolvesParentNotSubunit()
+        {
+            // The partyId belongs to the parent unit; the lookup must return the parent (not descend into subunits)
+            // so cookies reflect the parent, even though the parent has subunits.
+            Authenticate();
+
+            HttpResponseMessage response = await _client.GetAsync(
+                $"accessmanagement/api/v1/reportee/changeandredirect?partyId={ValidLookupPartyId}&goTo={Encode(AltinnGoTo)}");
+
+            Assert.Equal(HttpStatusCode.Redirect, response.StatusCode);
+
+            IEnumerable<string> cookies = response.Headers.GetValues("Set-Cookie");
+            Assert.Contains(cookies, c => c.StartsWith($"AltinnPartyId={ValidLookupPartyId}"));
+            Assert.Contains(cookies, c => c.StartsWith($"AltinnPartyUuid={ValidLookupPartyUuid}"));
+        }
+
+        [Fact]
+        public async Task Change_PartyUuid_MatchesSubunit_Returns200AndSetsSubunitCookies()
+        {
+            Authenticate();
+
+            HttpResponseMessage response = await _client.PostAsync(
+                $"accessmanagement/api/v1/reportee/change?partyUuid={SubunitPartyUuid}",
+                content: null);
+
+            Assert.Equal(HttpStatusCode.OK, response.StatusCode);
+            IEnumerable<string> cookies = response.Headers.GetValues("Set-Cookie");
+            Assert.Contains(cookies, c => c.StartsWith($"AltinnPartyId={SubunitPartyId}"));
+            Assert.Contains(cookies, c => c.StartsWith($"AltinnPartyUuid={SubunitPartyUuid}"));
+        }
+
+        [Fact]
+        public async Task Change_PartyId_MatchesSubunit_Returns200AndSetsSubunitCookies()
+        {
+            Authenticate();
+
+            HttpResponseMessage response = await _client.PostAsync(
+                $"accessmanagement/api/v1/reportee/change?partyId={SubunitPartyId}",
+                content: null);
+
+            Assert.Equal(HttpStatusCode.OK, response.StatusCode);
+            IEnumerable<string> cookies = response.Headers.GetValues("Set-Cookie");
+            Assert.Contains(cookies, c => c.StartsWith($"AltinnPartyId={SubunitPartyId}"));
+            Assert.Contains(cookies, c => c.StartsWith($"AltinnPartyUuid={SubunitPartyUuid}"));
+        }
+
+        [Fact]
+        public async Task ChangeAndRedirect_FlagOn_SubunitPartyIdLookup_BouncesWithSubunitUuid()
+        {
+            // When the Altinn 2 bounce is enabled and a partyId points to a subunit, the bounce URL must
+            // use the resolved subunit's UUID — not the parent's.
+            HttpClient client = AuthenticatedClientWithFlag(routeViaAltinn2: true, hostname: Altinn2Hostname);
+
+            HttpResponseMessage response = await client.GetAsync(
+                $"accessmanagement/api/v1/reportee/changeandredirect?partyId={SubunitPartyId}&goTo={Encode(AltinnGoTo)}");
+
+            Assert.Equal(HttpStatusCode.Redirect, response.StatusCode);
+
+            Uri location = response.Headers.Location;
+            Assert.Equal(Altinn2Hostname, location.Host);
+
+            System.Collections.Specialized.NameValueCollection query = HttpUtility.ParseQueryString(location.Query);
+            Assert.Equal(SubunitPartyUuid, query["P"]);
+            Assert.Equal(AltinnGoTo, query["goTo"]);
         }
 
         [Fact]
