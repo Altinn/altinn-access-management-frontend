@@ -138,7 +138,24 @@ namespace Altinn.AccessManagement.UI.Controllers
             if (partyUuid.HasValue && partyUuid.Value != Guid.Empty)
             {
                 List<AuthorizedParty> reporteeList = await _userService.GetReporteeListForUser();
-                return reporteeList?.FirstOrDefault(party => party.PartyUuid == partyUuid.Value);
+                foreach (AuthorizedParty party in reporteeList)
+                {
+                    if (party.PartyUuid == partyUuid.Value)
+                    {
+                        return party;
+                    }
+
+                    if (party.Subunits != null && party.Subunits.Count > 0)
+                    {
+                        foreach (AuthorizedParty subunit in party.Subunits)
+                        {
+                            if (subunit.PartyUuid == partyUuid.Value)
+                            {
+                                return subunit;
+                            }
+                        }
+                    }
+                }
             }
 
             if (partyId.HasValue && partyId.Value > 0)
