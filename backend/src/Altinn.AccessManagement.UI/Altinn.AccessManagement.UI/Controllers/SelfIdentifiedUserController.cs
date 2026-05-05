@@ -8,7 +8,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace Altinn.AccessManagement.UI.Controllers
 {
     /// <summary>
-    /// Exposes API endpoints for linking legacy Altinn 2 user accounts.
+    /// Exposes API endpoints for linking self identified user accounts
     /// </summary>
     [ApiController]
     [Authorize]
