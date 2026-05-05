@@ -485,9 +485,10 @@
     "edit_success": "Fullmakt oppdatert",
     "package_services_one": "Gir tilgang til {{count}} teneste",
     "package_services_other": "Gir tilgang til {{count}} tenester",
+    "no_resources_in_package": "Denne tilgangspakken innehelder foreløpig ingen tenester.",
     "inherited_role_org_message": "{{user_name}} har tilgang til denne gjennom rolla si i {{org_name}}. Den kan derfor ikkje slettast.",
     "actions": {
-      "access_to_all": "Tilgang til heile tenesten",
+      "access_to_all": "Tilgang til heile tenesta",
       "partial_access": "Tilgang til {{count}} av {{total}} handlingar",
       "action_description": "Her ser du dei tekniske handlingane som tenesta tilbyr. Du kan gi fullmakt til heile tenesta eller velje spesifikke handlingar.",
       "request_action_description": "Her ser du dei tekniske handlingane som tenesta tilbyr. Du kan berre be om fullmakt til heile tenesta.",
@@ -1037,7 +1038,8 @@
   "resource_list": {
     "resource_search_placeholder": "Søk etter tenester",
     "no_resources_filtered": "Ingen treff på søket \"{{searchTerm}}\".",
-    "no_resources": "Denne brukaren har ingen tenester.",
+    "no_resources": "Ingen tenester.",
+    "no_user_resources": "Denne brukaren har ingen tenester.",
     "filter_by_serviceowner": "Filtrer på tenesteeigar",
     "filtered_serviceowners": "{{count}} tenesteeigare",
     "resource_search_clear": "Tøm søk",

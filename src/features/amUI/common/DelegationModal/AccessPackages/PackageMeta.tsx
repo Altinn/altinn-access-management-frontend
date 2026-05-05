@@ -36,6 +36,7 @@ export const PackageMeta = ({ accessPackage }: PackageMetaProps) => {
         <div className={classes.service_list}>
           <ResourceList
             resources={accessPackage.resources}
+            noResourcesText={t('delegation_modal.no_resources_in_package')}
             enableMaxHeight={true}
             showDetails={false}
             interactive={false}
