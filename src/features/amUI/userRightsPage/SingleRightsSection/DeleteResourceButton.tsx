@@ -53,7 +53,6 @@ export const DeleteResourceButton = ({
         },
       ),
       color,
-      duration: isSuccessful ? SnackbarDuration.normal : SnackbarDuration.infinite,
     };
     openSnackbar(snackbarData);
   };

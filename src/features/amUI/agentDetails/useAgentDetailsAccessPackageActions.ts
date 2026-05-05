@@ -63,7 +63,6 @@ export const useAgentDetailsAccessPackageActions = ({
             accessPackage: accessPackageName,
           }),
           color: 'danger',
-          duration: SnackbarDuration.infinite,
         });
       }
     },
@@ -110,7 +109,6 @@ export const useAgentDetailsAccessPackageActions = ({
             accessPackage: accessPackageName,
           }),
           color: 'danger',
-          duration: SnackbarDuration.infinite,
         });
       }
     },

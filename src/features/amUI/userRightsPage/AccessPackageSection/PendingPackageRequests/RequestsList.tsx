@@ -85,7 +85,6 @@ export const PendingPackageRequestsList = ({
           resource: request.package?.name,
         }),
         color: 'danger',
-        duration: SnackbarDuration.infinite,
       });
     }
   };

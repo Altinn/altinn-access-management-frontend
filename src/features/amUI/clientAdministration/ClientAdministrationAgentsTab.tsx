@@ -81,7 +81,6 @@ export const ClientAdministrationAgentsTab = ({ isActive }: ClientAdministration
         openSnackbar({
           message: t('client_administration_page.add_agent_error'),
           color: 'danger',
-          duration: SnackbarDuration.infinite,
         });
       });
   };

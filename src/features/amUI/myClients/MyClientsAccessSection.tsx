@@ -57,7 +57,6 @@ export const MyClientsAccessSection = ({
             accessPackage: accessPackageName,
           }),
           color: 'danger',
-          duration: SnackbarDuration.infinite,
         });
       }
     },

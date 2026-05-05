@@ -104,7 +104,6 @@ export const useAccessPackageActions = ({
           accessPackage: accessPackage.name,
         }),
         color: 'danger',
-        duration: SnackbarDuration.infinite,
       });
     }
   };
@@ -136,7 +135,6 @@ export const useAccessPackageActions = ({
           accessPackage: accessPackage.name,
         }),
         color: 'danger',
-        duration: SnackbarDuration.infinite,
       });
     }
   };
@@ -246,7 +244,6 @@ export const useAccessPackageActions = ({
           resource: accessPackage.name,
         }),
         color: 'danger',
-        duration: SnackbarDuration.infinite,
       });
     }
   };

@@ -180,7 +180,6 @@ export const useRequestReview = (request: Request | null, onClose: () => void) =
       openSnackbar({
         message: t('request_page.approve_failed'),
         color: 'danger',
-        duration: SnackbarDuration.infinite,
       });
     } finally {
       setActionLoading(null);
@@ -212,7 +211,6 @@ export const useRequestReview = (request: Request | null, onClose: () => void) =
       openSnackbar({
         message: t('request_page.reject_failed'),
         color: 'danger',
-        duration: SnackbarDuration.infinite,
       });
     } finally {
       setActionLoading(null);
