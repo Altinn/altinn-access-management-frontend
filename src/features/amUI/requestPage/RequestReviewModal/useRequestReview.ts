@@ -1,5 +1,5 @@
 import { useState, useEffect, useCallback } from 'react';
-import { SnackbarDuration, useSnackbar } from '@altinn/altinn-components';
+import { useSnackbar } from '@altinn/altinn-components';
 import { useTranslation } from 'react-i18next';
 import type { Request, ProcessedStatus } from '../types';
 import { usePartyRepresentation } from '../../common/PartyRepresentationContext/PartyRepresentationContext';
@@ -174,7 +174,6 @@ export const useRequestReview = (request: Request | null, onClose: () => void) =
       openSnackbar({
         message: t('request_page.request_approved'),
         color: 'success',
-        duration: SnackbarDuration.normal,
       });
     } catch {
       openSnackbar({
@@ -205,7 +204,6 @@ export const useRequestReview = (request: Request | null, onClose: () => void) =
       openSnackbar({
         message: t('request_page.request_rejected'),
         color: 'success',
-        duration: SnackbarDuration.normal,
       });
     } catch {
       openSnackbar({

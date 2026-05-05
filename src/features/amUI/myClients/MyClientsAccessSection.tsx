@@ -1,5 +1,5 @@
 import React, { useCallback } from 'react';
-import { Snackbar, SnackbarDuration, useSnackbar } from '@altinn/altinn-components';
+import { Snackbar, useSnackbar } from '@altinn/altinn-components';
 import { useTranslation } from 'react-i18next';
 
 import {

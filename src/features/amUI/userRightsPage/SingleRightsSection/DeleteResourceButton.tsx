@@ -1,11 +1,6 @@
 import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import {
-  Button,
-  formatDisplayName,
-  SnackbarDuration,
-  useSnackbar,
-} from '@altinn/altinn-components';
+import { Button, formatDisplayName, useSnackbar } from '@altinn/altinn-components';
 
 import type { ServiceResource } from '@/rtk/features/singleRights/singleRightsApi';
 import { useRevokeResource } from '@/resources/hooks/useRevokeResource';

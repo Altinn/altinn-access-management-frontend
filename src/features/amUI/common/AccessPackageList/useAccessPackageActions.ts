@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { formatDisplayName, SnackbarDuration, useSnackbar } from '@altinn/altinn-components';
+import { formatDisplayName, useSnackbar } from '@altinn/altinn-components';
 
 import type { DelegationErrorDetails } from '@/resources/hooks/useDelegateAccessPackage';
 import { useDelegateAccessPackage } from '@/resources/hooks/useDelegateAccessPackage';
