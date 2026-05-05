@@ -1,13 +1,6 @@
 import { useEffect, useState } from 'react';
 import { ArrowLeftIcon, MinusCircleIcon } from '@navikt/aksel-icons';
-import {
-  Button,
-  DsButton,
-  DsHeading,
-  List,
-  SnackbarDuration,
-  useSnackbar,
-} from '@altinn/altinn-components';
+import { Button, DsButton, DsHeading, List, useSnackbar } from '@altinn/altinn-components';
 import { useTranslation } from 'react-i18next';
 import { usePartyRepresentation } from '../../../common/PartyRepresentationContext/PartyRepresentationContext';
 import { PartyType } from '@/rtk/features/userInfoApi';
@@ -85,7 +78,6 @@ export const PendingPackageRequestsList = ({
           resource: request.package?.name,
         }),
         color: 'danger',
-        duration: SnackbarDuration.infinite,
       });
     }
   };

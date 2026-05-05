@@ -1,5 +1,5 @@
 import { useCallback } from 'react';
-import { SnackbarDuration, useSnackbar } from '@altinn/altinn-components';
+import { useSnackbar } from '@altinn/altinn-components';
 import { useTranslation } from 'react-i18next';
 
 import type {
@@ -63,7 +63,6 @@ export const useAgentDetailsAccessPackageActions = ({
             accessPackage: accessPackageName,
           }),
           color: 'danger',
-          duration: SnackbarDuration.infinite,
         });
       }
     },
@@ -110,7 +109,6 @@ export const useAgentDetailsAccessPackageActions = ({
             accessPackage: accessPackageName,
           }),
           color: 'danger',
-          duration: SnackbarDuration.infinite,
         });
       }
     },
