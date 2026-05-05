@@ -135,9 +135,9 @@ namespace Altinn.AccessManagement.UI.Controllers
 
         private async Task<AuthorizedParty> ResolveAuthorizedParty(Guid? partyUuid, int? partyId)
         {
+            List<AuthorizedParty> reporteeList = await _userService.GetReporteeListForUser();
             if (partyUuid.HasValue && partyUuid.Value != Guid.Empty)
             {
-                List<AuthorizedParty> reporteeList = await _userService.GetReporteeListForUser();
                 foreach (AuthorizedParty party in reporteeList)
                 {
                     if (party.PartyUuid == partyUuid.Value)
@@ -160,7 +160,7 @@ namespace Altinn.AccessManagement.UI.Controllers
 
             if (partyId.HasValue && partyId.Value > 0)
             {
-               foreach (AuthorizedParty party in await _userService.GetReporteeListForUser())
+               foreach (AuthorizedParty party in reporteeList)
                 {
                     if (party.PartyId == partyId.Value)
                     {
