@@ -7,13 +7,48 @@ import { EnduserConnection } from '../../../api-requests/EnduserConnection';
 test.describe('tilgangspakkedelegering fra person til person og person til org', () => {
   const api = new EnduserConnection();
 
-  test.afterAll('slett testdata', async () => {
-    await api.deleteConnection('25928698737', '25928698737', ['313435482']);
-    await api.deleteConnection('01837396103', '01837396103', ['52858201748']);
-    await api.deleteConnection('29868198034', '29868198034', ['210638962']);
-    await api.deleteConnection('08857499981', '08857499981', ['22911648052']);
-    await api.deleteConnection('15855499484', '15855499484', ['313904490']);
-    await api.deleteConnection('26917699703', '26917699703', ['43818900555']);
+  test.beforeEach('sett opp testdata', async ({}, testInfo) => {
+    switch (testInfo.title) {
+      case 'Deleger tilgangspakke til person':
+        await api.addConnection('08857499981', '08857499981', '22911648052');
+        break;
+      case 'Deleger tilgangspakke til virksomhet':
+        await api.addConnection('15855499484', '15855499484', '313904490');
+        break;
+      case 'Slett tilgangspakke hos person':
+        await api.addConnectionAndPackagesToUser('26917699703', '26917699703', '43818900555', [
+          'urn:altinn:accesspackage:innbygger-samliv',
+        ]);
+        break;
+      case 'Slett tilgangspakke hos virksomhet':
+        await api.addConnectionAndPackagesToUser('25928698737', '25928698737', '313435482', [
+          'urn:altinn:accesspackage:innbygger-samliv',
+        ]);
+        break;
+    }
+  });
+
+  test.afterEach('slett testdata', async ({}, testInfo) => {
+    switch (testInfo.title) {
+      case 'Legg til ny person hos deg selv':
+        await api.deleteConnection('01837396103', '01837396103', ['52858201748']);
+        break;
+      case 'Legg til ny virksomhet hos deg selv':
+        await api.deleteConnection('29868198034', '29868198034', ['210638962']);
+        break;
+      case 'Deleger tilgangspakke til person':
+        await api.deleteConnection('08857499981', '08857499981', ['22911648052']);
+        break;
+      case 'Deleger tilgangspakke til virksomhet':
+        await api.deleteConnection('15855499484', '15855499484', ['313904490']);
+        break;
+      case 'Slett tilgangspakke hos person':
+        await api.deleteConnection('26917699703', '26917699703', ['43818900555']);
+        break;
+      case 'Slett tilgangspakke hos virksomhet':
+        await api.deleteConnection('25928698737', '25928698737', ['313435482']);
+        break;
+    }
   });
 
   test('Legg til ny person hos deg selv', async ({ page, accessManagementFrontPage }) => {
@@ -74,10 +109,6 @@ test.describe('tilgangspakkedelegering fra person til person og person til org',
   test('Deleger tilgangspakke til person', async ({ page, accessManagementFrontPage }) => {
     const login = new LoginPage(page);
     const aktorvalgHeader = new AktorvalgHeader(page);
-    await test.step('sett opp testdata', async () => {
-      await api.deleteConnection('08857499981', '08857499981', ['22911648052']);
-      await api.addConnection('08857499981', '08857499981', '22911648052');
-    });
 
     await test.step('Logg inn', async () => {
       await login.LoginToAccessManagement('08857499981');
@@ -110,9 +141,6 @@ test.describe('tilgangspakkedelegering fra person til person og person til org',
   test('Deleger tilgangspakke til virksomhet', async ({ page, accessManagementFrontPage }) => {
     const login = new LoginPage(page);
     const aktorvalgHeader = new AktorvalgHeader(page);
-    await test.step('sett opp testdata', async () => {
-      await api.addConnection('15855499484', '15855499484', '313904490');
-    });
 
     await test.step('Logg inn', async () => {
       await login.LoginToAccessManagement('15855499484');
@@ -147,11 +175,6 @@ test.describe('tilgangspakkedelegering fra person til person og person til org',
   test('Slett tilgangspakke hos person', async ({ page, accessManagementFrontPage }) => {
     const login = new LoginPage(page);
     const aktorvalgHeader = new AktorvalgHeader(page);
-    await test.step('sett opp testdata', async () => {
-      await api.addConnectionAndPackagesToUser('26917699703', '26917699703', '43818900555', [
-        'urn:altinn:accesspackage:innbygger-samliv',
-      ]);
-    });
 
     await test.step('Logg inn', async () => {
       await login.LoginToAccessManagement('26917699703');
@@ -183,11 +206,6 @@ test.describe('tilgangspakkedelegering fra person til person og person til org',
   test('Slett tilgangspakke hos virksomhet', async ({ page, accessManagementFrontPage }) => {
     const login = new LoginPage(page);
     const aktorvalgHeader = new AktorvalgHeader(page);
-    await test.step('sett opp testdata', async () => {
-      await api.addConnectionAndPackagesToUser('25928698737', '25928698737', '313435482', [
-        'urn:altinn:accesspackage:innbygger-samliv',
-      ]);
-    });
 
     await test.step('Logg inn', async () => {
       await login.LoginToAccessManagement('25928698737');
@@ -222,13 +240,48 @@ test.describe('tilgangspakkedelegering fra person til person og person til org',
 test.describe('tilgangspakkedelegering fra org til person og org til org', () => {
   const api = new EnduserConnection();
 
-  test.afterAll('slett testdata', async () => {
-    await api.deleteConnection('19858798917', '310945552', ['41926701744']);
-    await api.deleteConnection('28839195259', '312841150', ['212209562']);
-    await api.deleteConnection('15857698093', '310394955', ['26832047936']);
-    await api.deleteConnection('08904899020', '310977756', ['312188198']);
-    await api.deleteConnection('20826696746', '313500640', ['18894799990']);
-    await api.deleteConnection('04833348529', '312738147', ['312861305']);
+  test.beforeEach('sett opp testdata', async ({}, testInfo) => {
+    switch (testInfo.title) {
+      case 'Deleger tilgangspakke til person':
+        await api.addConnection('15857698093', '310394955', '26832047936');
+        break;
+      case 'Deleger tilgangspakke til virksomhet':
+        await api.addConnection('08904899020', '310977756', '312188198');
+        break;
+      case 'Slett tilgangspakke hos person':
+        await api.addConnectionAndPackagesToUser('20826696746', '313500640', '18894799990', [
+          'urn:altinn:accesspackage:posttjenester',
+        ]);
+        break;
+      case 'Slett tilgangspakke hos virksomhet':
+        await api.addConnectionAndPackagesToUser('04833348529', '312738147', '312861305', [
+          'urn:altinn:accesspackage:posttjenester',
+        ]);
+        break;
+    }
+  });
+
+  test.afterEach('slett testdata', async ({}, testInfo) => {
+    switch (testInfo.title) {
+      case 'Legg til ny person hos din org':
+        await api.deleteConnection('19858798917', '310945552', ['41926701744']);
+        break;
+      case 'Legg til ny virksomhet hos din org':
+        await api.deleteConnection('28839195259', '312841150', ['212209562']);
+        break;
+      case 'Deleger tilgangspakke til person':
+        await api.deleteConnection('15857698093', '310394955', ['26832047936']);
+        break;
+      case 'Deleger tilgangspakke til virksomhet':
+        await api.deleteConnection('08904899020', '310977756', ['312188198']);
+        break;
+      case 'Slett tilgangspakke hos person':
+        await api.deleteConnection('20826696746', '313500640', ['18894799990']);
+        break;
+      case 'Slett tilgangspakke hos virksomhet':
+        await api.deleteConnection('04833348529', '312738147', ['312861305']);
+        break;
+    }
   });
 
   test('Legg til ny person hos din org', async ({ page, accessManagementFrontPage }) => {
@@ -289,9 +342,6 @@ test.describe('tilgangspakkedelegering fra org til person og org til org', () =>
   test('Deleger tilgangspakke til person', async ({ page, accessManagementFrontPage }) => {
     const login = new LoginPage(page);
     const aktorvalgHeader = new AktorvalgHeader(page);
-    await test.step('sett opp testdata', async () => {
-      await api.addConnection('15857698093', '310394955', '26832047936');
-    });
 
     await test.step('Logg inn', async () => {
       await login.LoginToAccessManagement('15857698093');
@@ -324,9 +374,6 @@ test.describe('tilgangspakkedelegering fra org til person og org til org', () =>
   test('Deleger tilgangspakke til virksomhet', async ({ page, accessManagementFrontPage }) => {
     const login = new LoginPage(page);
     const aktorvalgHeader = new AktorvalgHeader(page);
-    await test.step('sett opp testdata', async () => {
-      await api.addConnection('08904899020', '310977756', '312188198');
-    });
 
     await test.step('Logg inn', async () => {
       await login.LoginToAccessManagement('08904899020');
@@ -361,11 +408,6 @@ test.describe('tilgangspakkedelegering fra org til person og org til org', () =>
   test('Slett tilgangspakke hos person', async ({ page, accessManagementFrontPage }) => {
     const login = new LoginPage(page);
     const aktorvalgHeader = new AktorvalgHeader(page);
-    await test.step('sett opp testdata', async () => {
-      await api.addConnectionAndPackagesToUser('20826696746', '313500640', '18894799990', [
-        'urn:altinn:accesspackage:posttjenester',
-      ]);
-    });
 
     await test.step('Logg inn', async () => {
       await login.LoginToAccessManagement('20826696746');
@@ -397,11 +439,6 @@ test.describe('tilgangspakkedelegering fra org til person og org til org', () =>
   test('Slett tilgangspakke hos virksomhet', async ({ page, accessManagementFrontPage }) => {
     const login = new LoginPage(page);
     const aktorvalgHeader = new AktorvalgHeader(page);
-    await test.step('sett opp testdata', async () => {
-      await api.addConnectionAndPackagesToUser('04833348529', '312738147', '312861305', [
-        'urn:altinn:accesspackage:posttjenester',
-      ]);
-    });
 
     await test.step('Logg inn', async () => {
       await login.LoginToAccessManagement('04833348529');
