@@ -1,6 +1,12 @@
 import { useTranslation } from 'react-i18next';
 import * as React from 'react';
-import { DsHeading, DsParagraph, DsLink, DsListItem } from '@altinn/altinn-components';
+import {
+  DsHeading,
+  DsParagraph,
+  DsLink,
+  DsListItem,
+  DsListUnordered,
+} from '@altinn/altinn-components';
 
 import classes from '../ErrorPage.module.css';
 import { getAfUrl, getAltinnStartPageUrl, getAmStartPageUrl } from '@/resources/utils/pathUtils';
@@ -30,7 +36,7 @@ export const ReporteeChangeError = () => {
         >
           {t('error_page.reportee_change_error.where_to_now')}
         </DsHeading>
-        <div
+        <DsListUnordered
           className={classes.list}
           aria-labelledby='where-to-header'
         >
@@ -55,7 +61,7 @@ export const ReporteeChangeError = () => {
               </DsLink>
             </DsParagraph>
           </DsListItem>
-        </div>
+        </DsListUnordered>
       </div>
     </div>
   );
