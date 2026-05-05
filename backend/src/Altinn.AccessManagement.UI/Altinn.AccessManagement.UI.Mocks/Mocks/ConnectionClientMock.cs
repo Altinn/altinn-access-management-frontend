@@ -1,5 +1,6 @@
 ﻿using Altinn.AccessManagement.UI.Core.ClientInterfaces;
 using Altinn.AccessManagement.UI.Core.Helpers;
+using Altinn.AccessManagement.UI.Core.Models.ClientDelegation;
 using Altinn.AccessManagement.UI.Core.Models.Connections;
 using Altinn.AccessManagement.UI.Core.Models.User;
 using Altinn.AccessManagement.UI.Mocks.Utils;
@@ -139,7 +140,7 @@ namespace Altinn.AccessManagement.UI.Mocks.Mocks
             return Task.FromResult(Util.GetMockData<List<SimplifiedConnection>>(dataPath));
         }
 
-        public Task<Guid> PostNewSelfIdentifiedUser(Guid from, Guid to, CancellationToken cancellationToken = default)
+        public Task<AssignmentDto> PostNewSelfIdentifiedUser(Guid from, Guid to, CancellationToken cancellationToken = default)
         {
             throw new NotImplementedException();
         }

@@ -1,4 +1,5 @@
-﻿using Altinn.AccessManagement.UI.Core.Models.Connections;
+﻿using Altinn.AccessManagement.UI.Core.Models.ClientDelegation;
+using Altinn.AccessManagement.UI.Core.Models.Connections;
 using Altinn.AccessManagement.UI.Core.Models.User;
 
 namespace Altinn.AccessManagement.UI.Core.ClientInterfaces
@@ -57,6 +58,6 @@ namespace Altinn.AccessManagement.UI.Core.ClientInterfaces
         /// <param name="to">The GUID of the email-user or person logged adding from-party</param>
         /// <param name="cancellationToken"><see cref="CancellationToken"/></param>
         /// <returns>The guid of the newly added rightholder</returns>
-        Task<Guid> PostNewSelfIdentifiedUser(Guid from, Guid to, CancellationToken cancellationToken = default);
+        Task<AssignmentDto> PostNewSelfIdentifiedUser(Guid from, Guid to, CancellationToken cancellationToken = default);
     }
 }

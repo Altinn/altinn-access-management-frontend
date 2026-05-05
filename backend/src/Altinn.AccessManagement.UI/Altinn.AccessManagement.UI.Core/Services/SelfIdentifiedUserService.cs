@@ -1,5 +1,6 @@
 using Altinn.AccessManagement.UI.Core.ClientInterfaces;
 using Altinn.AccessManagement.UI.Core.Models.Altinn2User;
+using Altinn.AccessManagement.UI.Core.Models.ClientDelegation;
 using Altinn.AccessManagement.UI.Core.Services.Interfaces;
 using Altinn.Authorization.ProblemDetails;
 
@@ -31,7 +32,7 @@ namespace Altinn.AccessManagement.UI.Core.Services
             }
 
             // if credentials are valid, call AM to create the Altinn 2 user
-            Guid newUserGuid = await _connectionClient.PostNewSelfIdentifiedUser(from: Guid.Empty, to: to, cancellationToken);
+            AssignmentDto assignment = await _connectionClient.PostNewSelfIdentifiedUser(from: Guid.Empty, to: to, cancellationToken);
 
             return true;
         }
