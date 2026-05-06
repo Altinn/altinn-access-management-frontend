@@ -8,12 +8,7 @@ import classes from './MaskinportenScopeInfo.module.css';
 
 export const MaskinportenScopeInfo = ({ resource }: { resource: ServiceResource }) => {
   const { t } = useTranslation();
-  const scopes =
-    resource.resourceReferences
-      ?.filter(
-        (reference) => reference.referenceType === 'MaskinportenScope' && reference.reference,
-      )
-      .map((reference) => reference.reference) ?? [];
+  const scopes = resource?.resourceReferences?.map((reference) => reference) ?? [];
 
   return (
     <div className={classes.container}>
@@ -31,13 +26,8 @@ export const MaskinportenScopeInfo = ({ resource }: { resource: ServiceResource 
         </DsHeading>
         {scopes.length > 0 ? (
           <ul className={classes.scopeList}>
-            {scopes.map((scope, index) => (
-              <li
-                key={`${scope}-${index}`}
-                className={classes.scopeItem}
-              >
-                {scope}
-              </li>
+            {scopes.map((scope) => (
+              <li key={`${scope.reference}`}>{scope.reference}</li>
             ))}
           </ul>
         ) : (

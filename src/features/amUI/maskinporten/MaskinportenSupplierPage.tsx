@@ -117,7 +117,7 @@ const MaskinportenSupplierPageContent = () => {
             <PageContainer
               backUrl={`/${amUIPath.Maskinporten}`}
               contentActions={[
-                <div className={classes.supplierActions}>
+                <div>
                   <DsButton
                     data-color='danger'
                     data-size='sm'

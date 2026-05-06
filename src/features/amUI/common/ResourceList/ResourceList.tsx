@@ -47,7 +47,6 @@ export interface ResourceListProps<
   enableMaxHeight?: boolean;
   renderControls?: (resource: TResource) => React.ReactNode;
   getBadge?: (resource: TResource, index: number) => ResourceListItemProps['badge'];
-  getOwnerName?: (resource: TResource, index: number) => string;
   getHasAccess?: (resource: TResource) => boolean;
   delegationModal?: React.ReactNode;
   border?: ResourceListItemProps['border'];
@@ -71,7 +70,6 @@ export const ResourceList = <
   enableMaxHeight = false,
   renderControls,
   getBadge,
-  getOwnerName,
   getHasAccess,
   delegationModal,
   border = 'none',
@@ -177,13 +175,12 @@ export const ResourceList = <
                   const derivedId = extractResourceId(resource);
                   const resourceId = derivedId ? String(derivedId) : `resource-${index}`;
                   const resourceName = extractResourceName(resource);
-                  const actualOwnerName = extractOwnerName(resource);
-                  const ownerName = getOwnerName?.(resource, index) ?? actualOwnerName;
+                  const ownerName = extractOwnerName(resource);
                   const orgCode = extractOrgCode(resource);
                   const providerLogo = resolveLogos && orgCode ? logoResolver(orgCode) : undefined;
                   const fallbackLogoUrl = extractLogoUrl(resource);
                   const ownerLogoUrl = providerLogo ?? fallbackLogoUrl;
-                  const ownerLogoAlt = extractLogoAlt(resource) ?? actualOwnerName;
+                  const ownerLogoAlt = extractLogoAlt(resource) ?? ownerName;
                   const itemInteractive = derivedInteractive(resource);
                   const itemAs = as ?? (itemInteractive ? 'button' : 'div');
                   const itemSize = size ?? 'xs';
