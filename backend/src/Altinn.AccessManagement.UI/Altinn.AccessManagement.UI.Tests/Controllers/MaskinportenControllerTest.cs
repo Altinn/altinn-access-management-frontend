@@ -89,6 +89,25 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
         }
 
         /// <summary>
+        /// Test case: SearchScopes ignores non-scope resource references.
+        /// </summary>
+        [Fact]
+        public async Task SearchScopes_SearchStringIgnoresNonScopeReferences()
+        {
+            SetAuthHeader();
+            string searchString = "AppId:400";
+
+            HttpResponseMessage response = await _client.GetAsync($"accessmanagement/api/v1/maskinporten/scopes/search?ResultsPerPage=10&Page=1&SearchString={Uri.EscapeDataString(searchString)}");
+
+            Assert.Equal(HttpStatusCode.OK, response.StatusCode);
+            PaginatedList<ServiceResourceFE> actualResponse = JsonSerializer.Deserialize<PaginatedList<ServiceResourceFE>>(await response.Content.ReadAsStringAsync(), _options);
+
+            Assert.NotNull(actualResponse);
+            Assert.Empty(actualResponse.PageList);
+            Assert.Equal(0, actualResponse.NumEntriesTotal);
+        }
+
+        /// <summary>
         /// Test case: GetSuppliers returns the expected suppliers for a party.
         /// </summary>
         [Fact]

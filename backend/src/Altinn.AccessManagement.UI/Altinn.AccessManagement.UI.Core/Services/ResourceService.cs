@@ -510,12 +510,15 @@ namespace Altinn.AccessManagement.UI.Core.Services
 
         private static bool ResourceReferenceContains(ServiceResourceFE resource, string word)
         {
-            return resource.ResourceReferences?.Exists(reference => StringUtils.NotNullAndContains(reference.Reference, word)) == true;
+            return resource.ResourceReferences?.Exists(reference =>
+                reference.ReferenceType == ReferenceType.MaskinportenScope &&
+                StringUtils.NotNullAndContains(reference.Reference, word)) == true;
         }
 
         private static bool HasExactResourceReferenceMatch(ServiceResourceFE resource, string searchString)
         {
             return resource.ResourceReferences?.Exists(reference =>
+                reference.ReferenceType == ReferenceType.MaskinportenScope &&
                 reference.Reference != null &&
                 string.Equals(searchString, reference.Reference.Trim(), StringComparison.OrdinalIgnoreCase)) == true;
         }
