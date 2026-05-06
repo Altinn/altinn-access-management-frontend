@@ -24,7 +24,7 @@ const searchResultsPerPage = 7;
 
 const getScopeCount = (resource: ServiceResource) =>
   resource.resourceReferences?.filter(
-    (reference) => reference.referenceType === 'MaskinportenScope',
+    (reference) => reference.referenceType === 'MaskinportenScope' && reference.reference?.trim(),
   ).length ?? 0;
 
 export const MaskinportenScopeSearch = ({
