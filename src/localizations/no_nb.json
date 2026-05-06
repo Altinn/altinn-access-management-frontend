@@ -128,7 +128,10 @@
       "header": "Vi klarte ikke å bytte avgiver",
       "description": "Den valgte avgiveren er ikke tilgjengelig for deg, eller lenken du fulgte var ugyldig.",
       "if_persistent_contact_service": "Hvis problemet vedvarer kan du kontakte Altinn brukerstøtte på telefon 75 00 60 00.",
-      "go_to_altinn": "Gå til startsiden for Altinn"
+      "where_to_now": "Hvor vil du gå nå?",
+      "go_to_altinn": "Gå til startsiden for Altinn",
+      "go_to_inbox": "Gå til innboks",
+      "go_to_am": "Gå til tilgangsstyring"
     }
   },
   "header": {
