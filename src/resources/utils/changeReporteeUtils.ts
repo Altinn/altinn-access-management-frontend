@@ -20,5 +20,5 @@ export const redirectToChangeReporteeAndRedirect = (
   accountUuid: string,
   goTo = getDefaultChangeReporteeRedirectTarget(),
 ) => {
-  (window as Window).open(getChangeReporteeAndRedirectUrl(accountUuid, goTo), '_self');
+  window.location.href = getChangeReporteeAndRedirectUrl(accountUuid, goTo);
 };
