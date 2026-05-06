@@ -488,6 +488,7 @@
     "edit_success": "The power of attorney was updated",
     "package_services_one": "Grants access to {{count}} service",
     "package_services_other": "Grants access to {{count}} services",
+    "no_resources_in_package": "This access package currently contains no services.",
     "inherited_role_org_message": "{{user_name}} has access to this through their role in {{org_name}}. Therefore, it cannot be deleted.",
     "actions": {
       "access_to_all": "Access to the full service",
@@ -1040,7 +1041,8 @@
   "resource_list": {
     "resource_search_placeholder": "Search resources",
     "no_resources_filtered": "No matches for the search \"{{searchTerm}}\".",
-    "no_resources": "This user has no services.",
+    "no_resources": "No services.",
+    "no_user_resources": "This user has no services.",
     "filter_by_serviceowner": "Filter by service owner",
     "filtered_serviceowners": "{{count}} service owners",
     "resource_search_clear": "Clear search",

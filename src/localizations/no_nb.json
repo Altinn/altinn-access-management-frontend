@@ -485,6 +485,7 @@
     "edit_success": "Fullmakt oppdatert",
     "package_services_one": "Gir tilgang til {{count}} tjeneste",
     "package_services_other": "Gir tilgang til {{count}} tjenester",
+    "no_resources_in_package": "Denne tilgangspakken inneholder foreløpig ingen tjenester.",
     "inherited_role_org_message": "{{user_name}} har tilgang til denne gjennom sin rolle i {{org_name}}. Den kan derfor ikke slettes.",
     "actions": {
       "access_to_all": "Tilgang til hele tjenesten",
@@ -1037,7 +1038,8 @@
   "resource_list": {
     "resource_search_placeholder": "Søk etter tjenester",
     "no_resources_filtered": "Ingen treff på søket \"{{searchTerm}}\".",
-    "no_resources": "Denne brukeren har ingen tjenester.",
+    "no_resources": "Ingen tjenester.",
+    "no_user_resources": "Denne brukeren har ingen tjenester.",
     "filter_by_serviceowner": "Filtrer på tjenesteeier",
     "filtered_serviceowners": "{{count}} tjenesteeiere",
     "resource_search_clear": "Tøm søk",
