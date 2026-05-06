@@ -124,7 +124,7 @@ const MaskinportenSupplierPageContent = () => {
                     variant='tertiary'
                     onClick={() => dialogRef.current?.showModal()}
                   >
-                    <TrashIcon />
+                    <TrashIcon aria-hidden='true' />
                     {t('maskinporten_page.remove_supplier_confirm')}
                   </DsButton>
                 </div>,
