@@ -46,6 +46,11 @@ namespace Altinn.AccessManagement.UI.Controllers
         [Route("scopes/search")]
         public async Task<ActionResult<PaginatedList<ServiceResourceFE>>> SearchScopes([FromQuery] PaginatedSearchParams parameters)
         {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
             try
             {
                 var languageCode = LanguageHelper.GetSelectedLanguageCookieValueBackendStandard(HttpContext);
