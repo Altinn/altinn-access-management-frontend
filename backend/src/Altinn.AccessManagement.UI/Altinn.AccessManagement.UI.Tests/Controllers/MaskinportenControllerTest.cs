@@ -1,9 +1,13 @@
 using System.Net;
 using System.Net.Http.Headers;
 using System.Net.Http.Json;
+using System.Text.Json;
 using Altinn.AccessManagement.UI.Controllers;
+using Altinn.AccessManagement.UI.Core.Enums;
 using Altinn.AccessManagement.UI.Core.Models.ClientDelegation;
 using Altinn.AccessManagement.UI.Core.Models.Maskinporten;
+using Altinn.AccessManagement.UI.Core.Models.ResourceRegistry;
+using Altinn.AccessManagement.UI.Core.Models.ResourceRegistry.Frontend;
 using Altinn.AccessManagement.UI.Mocks.Utils;
 using Altinn.AccessManagement.UI.Tests.Utils;
 using Microsoft.AspNetCore.Mvc;
@@ -18,6 +22,7 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
     {
         private readonly HttpClient _client;
         private readonly string _testDataFolder;
+        private readonly JsonSerializerOptions _options = new JsonSerializerOptions { PropertyNameCaseInsensitive = true };
 
         /// <summary>
         /// Initializes a new instance of the <see cref="MaskinportenControllerTest"/> class.
@@ -37,6 +42,49 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
         {
             string token = PrincipalUtil.GetToken(1234, 1234, 2);
             _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+        }
+
+        /// <summary>
+        /// Test case: SearchScopes returns only Maskinporten schema resources.
+        /// </summary>
+        [Fact]
+        public async Task SearchScopes_ReturnsOnlyMaskinportenSchemas()
+        {
+            SetAuthHeader();
+            int page = 1;
+            int resultsPerPage = 20;
+            List<ServiceResourceFE> expectedResources = TestDataUtil.GetExpectedResources(ResourceType.MaskinportenSchema);
+
+            HttpResponseMessage response = await _client.GetAsync($"accessmanagement/api/v1/maskinporten/scopes/search?ResultsPerPage={resultsPerPage}&Page={page}");
+
+            Assert.Equal(HttpStatusCode.OK, response.StatusCode);
+            PaginatedList<ServiceResourceFE> actualResponse = JsonSerializer.Deserialize<PaginatedList<ServiceResourceFE>>(await response.Content.ReadAsStringAsync(), _options);
+
+            Assert.NotNull(actualResponse);
+            Assert.Equal(page, actualResponse.Page);
+            Assert.Equal(expectedResources.Count, actualResponse.NumEntriesTotal);
+            Assert.All(actualResponse.PageList, resource => Assert.Equal(ResourceType.MaskinportenSchema, resource.ResourceType));
+        }
+
+        /// <summary>
+        /// Test case: SearchScopes matches scope references and weights exact matches.
+        /// </summary>
+        [Fact]
+        public async Task SearchScopes_SearchStringMatchesScopeReference()
+        {
+            SetAuthHeader();
+            string searchString = "nav:paa/v1/luring";
+
+            HttpResponseMessage response = await _client.GetAsync($"accessmanagement/api/v1/maskinporten/scopes/search?ResultsPerPage=10&Page=1&SearchString={Uri.EscapeDataString(searchString)}");
+
+            Assert.Equal(HttpStatusCode.OK, response.StatusCode);
+            PaginatedList<ServiceResourceFE> actualResponse = JsonSerializer.Deserialize<PaginatedList<ServiceResourceFE>>(await response.Content.ReadAsStringAsync(), _options);
+
+            Assert.NotNull(actualResponse);
+            ServiceResourceFE resource = Assert.Single(actualResponse.PageList);
+            Assert.Equal("appid-400", resource.Identifier);
+            Assert.Equal(3, resource.PriorityCounter);
+            Assert.Contains(resource.ResourceReferences, reference => reference.Reference == searchString);
         }
 
         /// <summary>

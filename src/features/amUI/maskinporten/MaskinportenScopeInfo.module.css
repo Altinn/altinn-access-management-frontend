@@ -1,0 +1,29 @@
+.container {
+  display: flex;
+  flex-direction: column;
+  gap: var(--ds-spacing-4);
+}
+
+.description {
+  display: flex;
+  flex-direction: column;
+  gap: var(--ds-spacing-2);
+}
+
+.scopes {
+  display: flex;
+  flex-direction: column;
+  gap: var(--ds-spacing-2);
+}
+
+.scopeList {
+  display: flex;
+  flex-direction: column;
+  gap: var(--ds-spacing-1);
+  margin: 0;
+  padding-left: var(--ds-spacing-6);
+}
+
+.scopeItem {
+  font-family: monospace;
+}

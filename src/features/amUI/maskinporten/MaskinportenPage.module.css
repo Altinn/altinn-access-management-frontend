@@ -11,3 +11,17 @@
   flex-direction: column;
   gap: var(--ds-size-4);
 }
+
+.supplierHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: var(--ds-size-4);
+  flex-wrap: wrap;
+}
+
+.supplierActions {
+  display: flex;
+  gap: var(--ds-size-2);
+  flex-wrap: wrap;
+}

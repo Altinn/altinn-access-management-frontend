@@ -2,11 +2,25 @@ import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 
 import type { CompactRole, Entity } from '@/dataObjects/dtos/Common';
 import { getCookie } from '@/resources/Cookie/CookieMethods';
+import type { ServiceResource } from './singleRights/singleRightsApi';
 import type { AssignmentDto } from './clientApi';
 
 export interface MaskinportenConnection {
   party: Entity;
   roles: CompactRole[];
+}
+
+interface PaginatedMaskinportenScopeSearchResult {
+  page: number;
+  numEntriesTotal: number;
+  pageList: ServiceResource[];
+}
+
+interface MaskinportenScopeSearchParams {
+  searchString: string;
+  ROfilters: string[];
+  page: number;
+  resultsPerPage: number;
 }
 
 const baseUrl = `${import.meta.env.BASE_URL}accessmanagement/api/v1/maskinporten`;
@@ -37,6 +51,21 @@ export const maskinportenApi = createApi({
     getMaskinportenConsumers: builder.query<MaskinportenConnection[], { party?: string } | void>({
       query: (args) => `consumers?party=${args?.party ?? getCookie('AltinnPartyUuid')}`,
       providesTags: ['maskinportenConsumers'],
+    }),
+    searchMaskinportenScopes: builder.query<
+      PaginatedMaskinportenScopeSearchResult,
+      MaskinportenScopeSearchParams
+    >({
+      query: ({ searchString, ROfilters, page, resultsPerPage }) => {
+        const params = new URLSearchParams({
+          Page: String(page),
+          ResultsPerPage: String(resultsPerPage),
+          SearchString: searchString,
+        });
+        ROfilters.forEach((filter) => params.append('ROFilters', filter));
+
+        return `scopes/search?${params.toString()}`;
+      },
     }),
     addMaskinportenSupplier: builder.mutation<AssignmentDto, { party: string; supplier: string }>({
       query: ({ party, supplier }) => ({
@@ -71,6 +100,7 @@ export const maskinportenApi = createApi({
 export const {
   useGetMaskinportenSuppliersQuery,
   useGetMaskinportenConsumersQuery,
+  useSearchMaskinportenScopesQuery,
   useAddMaskinportenSupplierMutation,
   useRemoveMaskinportenSupplierMutation,
   useRemoveMaskinportenConsumerMutation,

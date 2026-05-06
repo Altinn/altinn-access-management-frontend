@@ -604,6 +604,10 @@
     "remove_consumer_success": "{{name}} er fjerna som konsument.",
     "back_to_list": "Gå tilbake til oversikta",
     "supplier_title": "Leverandør - Altinn",
+    "add_scope_button": "Legg til teneste",
+    "search_scopes_heading": "Kva scope vil du gi {{name}}?",
+    "no_scopes": "Ingen scopes funne for denne tenesta.",
+    "scope_count": "{{count}} scopes",
     "own_org_number_warning": "Du kan ikkje gi tilgang til eige organisasjonsnummer",
     "own_org_number_warning_body": "Har ikkje verksemda di tilgang, ta kontakt med tilbydaren av API-et du skal gi tilgang til."
   },

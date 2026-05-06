@@ -17,18 +17,21 @@ import {
 import { PageWrapper } from '@/components/PageWrapper/PageWrapper';
 import { getCookie } from '@/resources/Cookie/CookieMethods';
 import { useDocumentTitle } from '@/resources/hooks/useDocumentTitle';
+import type { Party } from '@/rtk/features/lookupApi';
 import {
   useGetMaskinportenSuppliersQuery,
   useRemoveMaskinportenSupplierMutation,
 } from '@/rtk/features/maskinportenApi';
+import { PartyType } from '@/rtk/features/userInfoApi';
 import { amUIPath } from '@/routes/paths';
 
 import { Breadcrumbs } from '../common/Breadcrumbs/Breadcrumbs';
 import { PageLayoutWrapper } from '../common/PageLayoutWrapper';
 import { PartyRepresentationProvider } from '../common/PartyRepresentationContext/PartyRepresentationContext';
-import { Party } from '@/rtk/features/lookupApi';
-import { PartyType } from '@/rtk/features/userInfoApi';
 import { MaskinportenDeleteDialog } from './MaskinportenDeleteDialog';
+import { MaskinportenScopeModal } from './MaskinportenScopeModal';
+import classes from './MaskinportenPage.module.css';
+import { TrashIcon } from '@navikt/aksel-icons';
 
 export const MaskinportenSupplierPage = () => {
   return (
@@ -125,24 +128,27 @@ const MaskinportenSupplierPageContent = () => {
                 height='2.5rem'
               />
             ) : (
-              <div
-                style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}
-              >
+              <div className={classes.supplierHeader}>
                 <DsHeading
                   level={1}
                   data-size='lg'
                 >
                   {supplierName}
                 </DsHeading>
-                <DsButton
-                  data-color='danger'
-                  variant='secondary'
-                  onClick={() => dialogRef.current?.showModal()}
-                >
-                  {t('maskinporten_page.remove_supplier_confirm')}
-                </DsButton>
+                <div className={classes.supplierActions}>
+                  <DsButton
+                    data-color='danger'
+                    data-size='sm'
+                    variant='tertiary'
+                    onClick={() => dialogRef.current?.showModal()}
+                  >
+                    <TrashIcon />
+                    {t('maskinporten_page.remove_supplier_confirm')}
+                  </DsButton>
+                </div>
               </div>
             )}
+            <MaskinportenScopeModal />
 
             <MaskinportenDeleteDialog
               ref={dialogRef}

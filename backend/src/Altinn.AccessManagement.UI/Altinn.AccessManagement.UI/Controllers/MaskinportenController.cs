@@ -4,6 +4,8 @@ using System.Net;
 using Altinn.AccessManagement.UI.Core.Helpers;
 using Altinn.AccessManagement.UI.Core.Models.ClientDelegation;
 using Altinn.AccessManagement.UI.Core.Models.Maskinporten;
+using Altinn.AccessManagement.UI.Core.Models.ResourceRegistry;
+using Altinn.AccessManagement.UI.Core.Models.ResourceRegistry.Frontend;
 using Altinn.AccessManagement.UI.Core.Services.Interfaces;
 using Altinn.AccessManagement.UI.Filters;
 using Microsoft.AspNetCore.Authorization;
@@ -32,6 +34,33 @@ namespace Altinn.AccessManagement.UI.Controllers
         {
             _maskinportenService = maskinportenService;
             _logger = logger;
+        }
+
+        /// <summary>
+        /// Endpoint for searching Maskinporten scope resources.
+        /// </summary>
+        /// <param name="parameters">Search parameters.</param>
+        /// <returns>Paginated Maskinporten scope resources.</returns>
+        [HttpGet]
+        [Authorize]
+        [Route("scopes/search")]
+        public async Task<ActionResult<PaginatedList<ServiceResourceFE>>> SearchScopes([FromQuery] PaginatedSearchParams parameters)
+        {
+            try
+            {
+                var languageCode = LanguageHelper.GetSelectedLanguageCookieValueBackendStandard(HttpContext);
+                return await _maskinportenService.SearchScopes(languageCode, parameters);
+            }
+            catch (HttpStatusException ex)
+            {
+                string responseContent = ex.Message;
+                return new ObjectResult(ProblemDetailsFactory.CreateProblemDetails(HttpContext, (int?)ex.StatusCode, "Unexpected HttpStatus response", detail: responseContent));
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "SearchScopes failed unexpectedly");
+                return StatusCode((int)HttpStatusCode.InternalServerError);
+            }
         }
 
         /// <summary>

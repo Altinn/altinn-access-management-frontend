@@ -8,6 +8,12 @@
   width: fit-content;
 }
 
+.content {
+  display: flex;
+  flex-direction: column;
+  gap: var(--ds-spacing-4);
+}
+
 .backButton {
   padding-left: 0;
   padding-top: 0;

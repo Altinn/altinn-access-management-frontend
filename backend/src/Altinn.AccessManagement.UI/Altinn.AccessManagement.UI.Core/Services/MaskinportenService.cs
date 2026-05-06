@@ -1,6 +1,9 @@
 using Altinn.AccessManagement.UI.Core.ClientInterfaces;
+using Altinn.AccessManagement.UI.Core.Enums;
 using Altinn.AccessManagement.UI.Core.Models.ClientDelegation;
 using Altinn.AccessManagement.UI.Core.Models.Maskinporten;
+using Altinn.AccessManagement.UI.Core.Models.ResourceRegistry;
+using Altinn.AccessManagement.UI.Core.Models.ResourceRegistry.Frontend;
 using Altinn.AccessManagement.UI.Core.Services.Interfaces;
 
 namespace Altinn.AccessManagement.UI.Core.Services
@@ -11,20 +14,29 @@ namespace Altinn.AccessManagement.UI.Core.Services
     public class MaskinportenService : IMaskinportenService
     {
         private readonly IMaskinportenClient _maskinportenClient;
+        private readonly IResourceService _resourceService;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="MaskinportenService"/> class.
         /// </summary>
         /// <param name="maskinportenClient">Maskinporten client.</param>
-        public MaskinportenService(IMaskinportenClient maskinportenClient)
+        /// <param name="resourceService">Resource service.</param>
+        public MaskinportenService(IMaskinportenClient maskinportenClient, IResourceService resourceService)
         {
             _maskinportenClient = maskinportenClient;
+            _resourceService = resourceService;
         }
 
         /// <inheritdoc />
         public async Task<IEnumerable<MaskinportenConnection>> GetSuppliers(Guid party, string supplier = null, CancellationToken cancellationToken = default)
         {
             return await _maskinportenClient.GetSuppliers(party, supplier, cancellationToken);
+        }
+
+        /// <inheritdoc />
+        public async Task<PaginatedList<ServiceResourceFE>> SearchScopes(string languageCode, PaginatedSearchParams searchParams)
+        {
+            return await _resourceService.GetPaginatedSearchResults(languageCode, searchParams, new[] { ResourceType.MaskinportenSchema });
         }
 
         /// <inheritdoc />
