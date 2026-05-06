@@ -8,7 +8,13 @@ import classes from './MaskinportenScopeInfo.module.css';
 
 export const MaskinportenScopeInfo = ({ resource }: { resource: ServiceResource }) => {
   const { t } = useTranslation();
-  const scopes = resource?.resourceReferences?.map((reference) => reference) ?? [];
+  const scopes =
+    resource?.resourceReferences
+      ?.filter(
+        (reference) =>
+          reference.referenceType === 'MaskinportenScope' && reference.reference?.trim(),
+      )
+      .map((reference) => reference) ?? [];
 
   return (
     <div className={classes.container}>
