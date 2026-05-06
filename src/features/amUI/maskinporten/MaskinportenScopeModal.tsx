@@ -12,10 +12,12 @@ import { MaskinportenScopeSearch } from './MaskinportenScopeSearch';
 export const MaskinportenScopeModal = () => {
   const { t } = useTranslation();
   const [selectedResource, setSelectedResource] = React.useState<ServiceResource | undefined>();
+  const [searchString, setSearchString] = React.useState('');
   const dialogRef = React.useRef<HTMLDialogElement>(null);
 
   const reset = () => {
     setSelectedResource(undefined);
+    setSearchString('');
   };
 
   return (
@@ -50,7 +52,11 @@ export const MaskinportenScopeModal = () => {
           {selectedResource ? (
             <MaskinportenScopeInfo resource={selectedResource} />
           ) : (
-            <MaskinportenScopeSearch onSelect={setSelectedResource} />
+            <MaskinportenScopeSearch
+              onSelect={setSelectedResource}
+              searchString={searchString}
+              setSearchString={setSearchString}
+            />
           )}
         </div>
       </DsDialog>

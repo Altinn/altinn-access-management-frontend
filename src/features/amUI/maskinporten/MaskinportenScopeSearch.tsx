@@ -29,13 +29,16 @@ const getScopeCount = (resource: ServiceResource) =>
 
 export const MaskinportenScopeSearch = ({
   onSelect,
+  searchString,
+  setSearchString,
 }: {
   onSelect: (resource: ServiceResource) => void;
+  searchString: string;
+  setSearchString: React.Dispatch<React.SetStateAction<string>>;
 }) => {
   const { t } = useTranslation();
   const { toParty } = usePartyRepresentation();
-  const [searchString, setSearchString] = React.useState('');
-  const [debouncedSearchString, setDebouncedSearchString] = React.useState('');
+  const [debouncedSearchString, setDebouncedSearchString] = React.useState(searchString);
   const [filters, setFilters] = React.useState<string[]>([]);
   const [currentPage, setCurrentPage] = React.useState(1);
 
@@ -51,6 +54,14 @@ export const MaskinportenScopeSearch = ({
   React.useEffect(() => {
     return () => debouncedSearch.cancel?.();
   }, [debouncedSearch]);
+
+  React.useEffect(() => {
+    if (!searchString) {
+      debouncedSearch.cancel?.();
+      setDebouncedSearchString('');
+      setCurrentPage(1);
+    }
+  }, [debouncedSearch, searchString]);
 
   const { data, error, isFetching } = useSearchMaskinportenScopesQuery({
     searchString: debouncedSearchString,
