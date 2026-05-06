@@ -16,8 +16,9 @@ namespace Altinn.AccessManagement.UI.Core.Services.Interfaces
         /// <param name="languageCode">The language code.</param>
         /// <param name="searchParams">The parameters that define the search criteria.</param>
         /// <param name="resourceTypes">Optional resource types to include in the search.</param>
+        /// <param name="cancellationToken">Cancellation token.</param>
         /// <returns>The resources that match the filters and search string corresponding to the provided page.</returns>
-        Task<PaginatedList<ServiceResourceFE>> GetPaginatedSearchResults(string languageCode, PaginatedSearchParams searchParams, ResourceType[] resourceTypes = null);
+        Task<PaginatedList<ServiceResourceFE>> GetPaginatedSearchResults(string languageCode, PaginatedSearchParams searchParams, ResourceType[] resourceTypes = null, CancellationToken cancellationToken = default);
 
         /// <summary>
         ///     Searches through all maskinporten schema services and returns matches.

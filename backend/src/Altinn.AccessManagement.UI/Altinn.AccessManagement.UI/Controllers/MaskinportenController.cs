@@ -40,11 +40,12 @@ namespace Altinn.AccessManagement.UI.Controllers
         /// Endpoint for searching Maskinporten scope resources.
         /// </summary>
         /// <param name="parameters">Search parameters.</param>
+        /// <param name="cancellationToken">Cancellation token.</param>
         /// <returns>Paginated Maskinporten scope resources.</returns>
         [HttpGet]
         [Authorize]
         [Route("scopes/search")]
-        public async Task<ActionResult<PaginatedList<ServiceResourceFE>>> SearchScopes([FromQuery] PaginatedSearchParams parameters)
+        public async Task<ActionResult<PaginatedList<ServiceResourceFE>>> SearchScopes([FromQuery] PaginatedSearchParams parameters, CancellationToken cancellationToken = default)
         {
             if (!ModelState.IsValid)
             {
@@ -54,7 +55,7 @@ namespace Altinn.AccessManagement.UI.Controllers
             try
             {
                 var languageCode = LanguageHelper.GetSelectedLanguageCookieValueBackendStandard(HttpContext);
-                return await _maskinportenService.SearchScopes(languageCode, parameters);
+                return Ok(await _maskinportenService.SearchScopes(languageCode, parameters, cancellationToken));
             }
             catch (HttpStatusException ex)
             {

@@ -31,9 +31,9 @@ export const MaskinportenScopeInfo = ({ resource }: { resource: ServiceResource 
         </DsHeading>
         {scopes.length > 0 ? (
           <ul className={classes.scopeList}>
-            {scopes.map((scope) => (
+            {scopes.map((scope, index) => (
               <li
-                key={scope}
+                key={`${scope}-${index}`}
                 className={classes.scopeItem}
               >
                 {scope}

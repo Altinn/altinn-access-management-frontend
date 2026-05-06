@@ -53,11 +53,13 @@ namespace Altinn.AccessManagement.UI.Core.Services
         }
 
         /// <inheritdoc />
-        public async Task<PaginatedList<ServiceResourceFE>> GetPaginatedSearchResults(string languageCode, PaginatedSearchParams searchParams, ResourceType[] resourceTypes = null)
+        public async Task<PaginatedList<ServiceResourceFE>> GetPaginatedSearchResults(string languageCode, PaginatedSearchParams searchParams, ResourceType[] resourceTypes = null, CancellationToken cancellationToken = default)
         {
             try
             {
+                cancellationToken.ThrowIfCancellationRequested();
                 List<ServiceResource> resources = await GetFullResourceList(searchParams.IncludeMigratedApps);
+                cancellationToken.ThrowIfCancellationRequested();
                 List<ServiceResource> resourceList = resources.FindAll(r => IncludeInSearch(r, searchParams, resourceTypes));
                 List<ServiceResourceFE> resourcesFE = MapResourceToFrontendModel(resourceList, languageCode);
 
@@ -78,7 +80,9 @@ namespace Altinn.AccessManagement.UI.Core.Services
                     List<ServiceResourceFE> filteredresources = FilterResourceList(resourcesFE, searchParams.ROFilters);
                     bool includeResourceReferencesInSearch = resourceTypes?.Contains(ResourceType.MaskinportenSchema) == true;
                     List<ServiceResourceFE> searchResults = SearchInResourceList(filteredresources, searchParams.SearchString, includeResourceReferencesInSearch);
+                    cancellationToken.ThrowIfCancellationRequested();
                     OrgList orgList = await _resourceRegistryClient.GetAllResourceOwners();
+                    cancellationToken.ThrowIfCancellationRequested();
 
                     var paginatedResult = PaginationUtils.GetListPage(searchResults, searchParams.Page, searchParams.ResultsPerPage);
 

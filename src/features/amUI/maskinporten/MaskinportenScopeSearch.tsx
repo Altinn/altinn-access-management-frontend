@@ -148,7 +148,9 @@ export const MaskinportenScopeSearch = ({
               />
             ) : (
               <DsParagraph data-size='md'>
-                {t('resource_list.no_resources_filtered', { searchTerm: searchString })}
+                {searchString
+                  ? t('resource_list.no_resources_filtered', { searchTerm: searchString })
+                  : t('maskinporten_page.no_scopes')}
               </DsParagraph>
             )}
             {totalNumberOfResults !== undefined && totalNumberOfResults > searchResultsPerPage && (

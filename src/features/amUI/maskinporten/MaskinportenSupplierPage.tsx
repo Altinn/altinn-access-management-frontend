@@ -13,6 +13,7 @@ import {
   formatDisplayName,
   useSnackbar,
 } from '@altinn/altinn-components';
+import { TrashIcon } from '@navikt/aksel-icons';
 
 import { PageWrapper } from '@/components/PageWrapper/PageWrapper';
 import { getCookie } from '@/resources/Cookie/CookieMethods';
@@ -26,12 +27,12 @@ import { PartyType } from '@/rtk/features/userInfoApi';
 import { amUIPath } from '@/routes/paths';
 
 import { Breadcrumbs } from '../common/Breadcrumbs/Breadcrumbs';
+import { PageContainer } from '../common/PageContainer/PageContainer';
 import { PageLayoutWrapper } from '../common/PageLayoutWrapper';
 import { PartyRepresentationProvider } from '../common/PartyRepresentationContext/PartyRepresentationContext';
 import { MaskinportenDeleteDialog } from './MaskinportenDeleteDialog';
 import { MaskinportenScopeModal } from './MaskinportenScopeModal';
 import classes from './MaskinportenPage.module.css';
-import { TrashIcon } from '@navikt/aksel-icons';
 
 export const MaskinportenSupplierPage = () => {
   return (
@@ -113,28 +114,9 @@ const MaskinportenSupplierPageContent = () => {
               lastBreadcrumb={{ label: supplierName || t('maskinporten_page.supplier_title') }}
             />
 
-            {error || (!isLoading && !data?.length) ? (
-              <DsAlert data-color='danger'>
-                <DsParagraph>
-                  {t('maskinporten_page.supplier_not_found')}{' '}
-                  <Link to={`/${amUIPath.Maskinporten}`}>
-                    {t('maskinporten_page.back_to_list')}
-                  </Link>
-                </DsParagraph>
-              </DsAlert>
-            ) : isLoading ? (
-              <DsSkeleton
-                width='100%'
-                height='2.5rem'
-              />
-            ) : (
-              <div className={classes.supplierHeader}>
-                <DsHeading
-                  level={1}
-                  data-size='lg'
-                >
-                  {supplierName}
-                </DsHeading>
+            <PageContainer
+              backUrl={`/${amUIPath.Maskinporten}`}
+              contentActions={[
                 <div className={classes.supplierActions}>
                   <DsButton
                     data-color='danger'
@@ -145,20 +127,47 @@ const MaskinportenSupplierPageContent = () => {
                     <TrashIcon />
                     {t('maskinporten_page.remove_supplier_confirm')}
                   </DsButton>
-                </div>
-              </div>
-            )}
-            <MaskinportenScopeModal />
+                </div>,
+              ]}
+            >
+              {error || (!isLoading && !data?.length) ? (
+                <DsAlert data-color='danger'>
+                  <DsParagraph>
+                    {t('maskinporten_page.supplier_not_found')}{' '}
+                    <Link to={`/${amUIPath.Maskinporten}`}>
+                      {t('maskinporten_page.back_to_list')}
+                    </Link>
+                  </DsParagraph>
+                </DsAlert>
+              ) : isLoading ? (
+                <DsSkeleton
+                  width='100%'
+                  height='2.5rem'
+                />
+              ) : (
+                <>
+                  <div className={classes.supplierHeader}>
+                    <DsHeading
+                      level={1}
+                      data-size='lg'
+                    >
+                      {supplierName}
+                    </DsHeading>
+                  </div>
+                  <MaskinportenScopeModal />
+                </>
+              )}
 
-            <MaskinportenDeleteDialog
-              ref={dialogRef}
-              heading={t('maskinporten_page.remove_supplier_heading')}
-              body={t('maskinporten_page.remove_supplier_body', { name: supplierName })}
-              confirmLabel={t('maskinporten_page.remove_supplier_confirm')}
-              onConfirm={handleConfirmDelete}
-              onClose={() => {}}
-              isLoading={isRemoving}
-            />
+              <MaskinportenDeleteDialog
+                ref={dialogRef}
+                heading={t('maskinporten_page.remove_supplier_heading')}
+                body={t('maskinporten_page.remove_supplier_body', { name: supplierName })}
+                confirmLabel={t('maskinporten_page.remove_supplier_confirm')}
+                onConfirm={handleConfirmDelete}
+                onClose={() => {}}
+                isLoading={isRemoving}
+              />
+            </PageContainer>
           </>
         </PartyRepresentationProvider>
       </PageLayoutWrapper>

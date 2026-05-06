@@ -13,11 +13,7 @@
 }
 
 .supplierHeader {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  gap: var(--ds-size-4);
-  flex-wrap: wrap;
+  margin-bottom: var(--ds-spacing-6);
 }
 
 .supplierActions {

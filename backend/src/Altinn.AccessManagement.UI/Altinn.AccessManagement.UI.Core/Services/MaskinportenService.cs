@@ -34,9 +34,9 @@ namespace Altinn.AccessManagement.UI.Core.Services
         }
 
         /// <inheritdoc />
-        public async Task<PaginatedList<ServiceResourceFE>> SearchScopes(string languageCode, PaginatedSearchParams searchParams)
+        public async Task<PaginatedList<ServiceResourceFE>> SearchScopes(string languageCode, PaginatedSearchParams searchParams, CancellationToken cancellationToken = default)
         {
-            return await _resourceService.GetPaginatedSearchResults(languageCode, searchParams, new[] { ResourceType.MaskinportenSchema });
+            return await _resourceService.GetPaginatedSearchResults(languageCode, searchParams, new[] { ResourceType.MaskinportenSchema }, cancellationToken);
         }
 
         /// <inheritdoc />

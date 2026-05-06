@@ -24,8 +24,9 @@ namespace Altinn.AccessManagement.UI.Core.Services.Interfaces
         /// </summary>
         /// <param name="languageCode">The language code.</param>
         /// <param name="searchParams">The search parameters.</param>
+        /// <param name="cancellationToken">Cancellation token.</param>
         /// <returns>Paginated Maskinporten scope resources.</returns>
-        Task<PaginatedList<ServiceResourceFE>> SearchScopes(string languageCode, PaginatedSearchParams searchParams);
+        Task<PaginatedList<ServiceResourceFE>> SearchScopes(string languageCode, PaginatedSearchParams searchParams, CancellationToken cancellationToken = default);
 
         /// <summary>
         /// Adds a Maskinporten supplier for a party.
