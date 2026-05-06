@@ -64,6 +64,7 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
             Assert.Equal(page, actualResponse.Page);
             Assert.Equal(expectedResources.Count, actualResponse.NumEntriesTotal);
             Assert.All(actualResponse.PageList, resource => Assert.Equal(ResourceType.MaskinportenSchema, resource.ResourceType));
+            Assert.All(actualResponse.PageList, resource => Assert.True(resource.Visible));
         }
 
         /// <summary>
