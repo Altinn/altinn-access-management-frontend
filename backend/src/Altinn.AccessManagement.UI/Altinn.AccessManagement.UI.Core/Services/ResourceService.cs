@@ -57,9 +57,7 @@ namespace Altinn.AccessManagement.UI.Core.Services
         {
             try
             {
-                cancellationToken.ThrowIfCancellationRequested();
-                List<ServiceResource> resources = await GetFullResourceList(searchParams.IncludeMigratedApps);
-                cancellationToken.ThrowIfCancellationRequested();
+                List<ServiceResource> resources = await GetFullResourceList(searchParams.IncludeMigratedApps, cancellationToken);
                 List<ServiceResource> resourceList = resources.FindAll(r => IncludeInSearch(r, searchParams, resourceTypes));
                 List<ServiceResourceFE> resourcesFE = MapResourceToFrontendModel(resourceList, languageCode);
 
@@ -78,11 +76,8 @@ namespace Altinn.AccessManagement.UI.Core.Services
                 {
                     // Perform search/filtering and return matches
                     List<ServiceResourceFE> filteredresources = FilterResourceList(resourcesFE, searchParams.ROFilters);
-                    bool includeResourceReferencesInSearch = resourceTypes?.Contains(ResourceType.MaskinportenSchema) == true;
-                    List<ServiceResourceFE> searchResults = SearchInResourceList(filteredresources, searchParams.SearchString, includeResourceReferencesInSearch);
-                    cancellationToken.ThrowIfCancellationRequested();
-                    OrgList orgList = await _resourceRegistryClient.GetAllResourceOwners();
-                    cancellationToken.ThrowIfCancellationRequested();
+                    List<ServiceResourceFE> searchResults = SearchInResourceList(filteredresources, searchParams.SearchString, resourceTypes, cancellationToken);
+                    OrgList orgList = await GetResourceOwnerOrgList(cancellationToken);
 
                     var paginatedResult = PaginationUtils.GetListPage(searchResults, searchParams.Page, searchParams.ResultsPerPage);
 
@@ -344,7 +339,7 @@ namespace Altinn.AccessManagement.UI.Core.Services
                 List<ServiceResourceFE> resourcesFE = MapResourceToFrontendModel(resourceList, languageCode);
 
                 List<ServiceResourceFE> filteredresources = FilterResourceList(resourcesFE, resourceOwnerFilters);
-                return SearchInResourceList(filteredresources, searchString, true);
+                return SearchInResourceList(filteredresources, searchString, new[] { ResourceType.MaskinportenSchema });
             }
             catch (Exception ex)
             {
@@ -396,12 +391,13 @@ namespace Altinn.AccessManagement.UI.Core.Services
             return resources;
         }
 
-        private async Task<List<ServiceResource>> GetFullResourceList(bool includeMigratedApps = false)
+        private async Task<List<ServiceResource>> GetFullResourceList(bool includeMigratedApps = false, CancellationToken cancellationToken = default)
         {
             string cacheKey = $"resourcesList:all:{includeMigratedApps}";
 
             if (!_memoryCache.TryGetValue(cacheKey, out List<ServiceResource> resources))
             {
+                cancellationToken.ThrowIfCancellationRequested();
                 resources = await _resourceRegistryClient.GetResourceList(includeMigratedApps);
 
                 MemoryCacheEntryOptions cacheEntryOptions = new MemoryCacheEntryOptions()
@@ -412,6 +408,13 @@ namespace Altinn.AccessManagement.UI.Core.Services
             }
 
             return resources;
+        }
+
+        private async Task<OrgList> GetResourceOwnerOrgList(CancellationToken cancellationToken = default)
+        {
+            cancellationToken.ThrowIfCancellationRequested();
+            OrgList orgList = await _resourceRegistryClient.GetAllResourceOwners();
+            return orgList;
         }
 
         /// <summary>
@@ -446,20 +449,23 @@ namespace Altinn.AccessManagement.UI.Core.Services
         ///     resources where at least one of these words are present.
         ///     <param name="resources">The list of resources to be searched through.</param>
         ///     <param name="searchString">The search string to be used for the search.</param>
-        ///     <param name="includeResourceReferencesInSearch">Whether to include resource references in search matching.</param>
+        ///     <param name="resourceTypes">Optional resource types included in the search.</param>
+        ///     <param name="cancellationToken">Cancellation token.</param>
         /// </summary>
         /// <returns>
         ///     List of resources containing at least one word from the search string, ordered by the number of word
         ///     occurences found. Returns the full list of resources if the search string is null or empty.
         /// </returns>
-        private List<ServiceResourceFE> SearchInResourceList(List<ServiceResourceFE> resources, string searchString, bool includeResourceReferencesInSearch = false)
+        private List<ServiceResourceFE> SearchInResourceList(List<ServiceResourceFE> resources, string searchString, ResourceType[] resourceTypes = null, CancellationToken cancellationToken = default)
         {
+            cancellationToken.ThrowIfCancellationRequested();
             string trimmedSearchString = searchString?.Trim();
             if (string.IsNullOrEmpty(trimmedSearchString))
             {
                 return resources;
             }
 
+            bool includeResourceReferencesInSearch = resourceTypes?.Contains(ResourceType.MaskinportenSchema) == true;
             List<ServiceResourceFE> matchedResources = new List<ServiceResourceFE>();
             string[] searchWords = trimmedSearchString.ToLower().Split();
 

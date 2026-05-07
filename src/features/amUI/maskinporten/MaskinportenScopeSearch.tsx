@@ -18,6 +18,7 @@ import type { ServiceResource } from '@/rtk/features/singleRights/singleRightsAp
 import { PartyType } from '@/rtk/features/userInfoApi';
 
 import classes from '../common/DelegationModal/SingleRights/ResourceSearch.module.css';
+import { useDelegationModalContext } from '../common/DelegationModal/DelegationModalContext';
 import { usePartyRepresentation } from '../common/PartyRepresentationContext/PartyRepresentationContext';
 
 const searchResultsPerPage = 7;
@@ -29,18 +30,14 @@ const getScopeCount = (resource: ServiceResource) =>
 
 export const MaskinportenScopeSearch = ({
   onSelect,
-  searchString,
-  setSearchString,
 }: {
   onSelect: (resource: ServiceResource) => void;
-  searchString: string;
-  setSearchString: React.Dispatch<React.SetStateAction<string>>;
 }) => {
   const { t } = useTranslation();
   const { toParty } = usePartyRepresentation();
+  const { searchString, setSearchString, filters, setFilters, currentPage, setCurrentPage } =
+    useDelegationModalContext();
   const [debouncedSearchString, setDebouncedSearchString] = React.useState(searchString);
-  const [filters, setFilters] = React.useState<string[]>([]);
-  const [currentPage, setCurrentPage] = React.useState(1);
 
   const debouncedSearch = React.useMemo(
     () =>

@@ -605,7 +605,7 @@
     "back_to_list": "Gå tilbake til oversikten",
     "supplier_title": "Leverandør - Altinn",
     "add_scope_button": "Legg til tjeneste",
-    "search_scopes_heading": "Hvilken scope vil du gi {{name}}?",
+    "search_scopes_heading": "Hvilket scope vil du gi {{name}}?",
     "no_scopes": "Ingen scopes funnet for denne tjenesten.",
     "scope_count": "{{count}} scopes",
     "own_org_number_warning": "Du kan ikke gi tilgang til eget organisasjonsnummer",

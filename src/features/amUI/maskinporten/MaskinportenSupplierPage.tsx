@@ -27,11 +27,13 @@ import { PartyType } from '@/rtk/features/userInfoApi';
 import { amUIPath } from '@/routes/paths';
 
 import { Breadcrumbs } from '../common/Breadcrumbs/Breadcrumbs';
+import { DelegationModal, DelegationType } from '../common/DelegationModal/DelegationModal';
+import { DelegationModalProvider } from '../common/DelegationModal/DelegationModalContext';
+import { DelegationAction } from '../common/DelegationModal/EditModal';
 import { PageContainer } from '../common/PageContainer/PageContainer';
 import { PageLayoutWrapper } from '../common/PageLayoutWrapper';
 import { PartyRepresentationProvider } from '../common/PartyRepresentationContext/PartyRepresentationContext';
 import { MaskinportenDeleteDialog } from './MaskinportenDeleteDialog';
-import { MaskinportenScopeModal } from './MaskinportenScopeModal';
 import classes from './MaskinportenPage.module.css';
 
 export const MaskinportenSupplierPage = () => {
@@ -108,7 +110,7 @@ const MaskinportenSupplierPageContent = () => {
           actingPartyUuid={party}
           toPartyOverride={supplierParty}
         >
-          <>
+          <DelegationModalProvider>
             <Breadcrumbs
               items={['root', 'maskinporten']}
               lastBreadcrumb={{ label: supplierName || t('maskinporten_page.supplier_title') }}
@@ -154,7 +156,10 @@ const MaskinportenSupplierPageContent = () => {
                       {supplierName}
                     </DsHeading>
                   </div>
-                  <MaskinportenScopeModal />
+                  <DelegationModal
+                    delegationType={DelegationType.MaskinportenScope}
+                    availableActions={[DelegationAction.DELEGATE]}
+                  />
                 </>
               )}
 
@@ -168,7 +173,7 @@ const MaskinportenSupplierPageContent = () => {
                 isLoading={isRemoving}
               />
             </PageContainer>
-          </>
+          </DelegationModalProvider>
         </PartyRepresentationProvider>
       </PageLayoutWrapper>
     </PageWrapper>
