@@ -81,6 +81,22 @@ export class AktorvalgHeader {
       .first();
   }
 
+  private subUnitOption(actorName: string): Locator {
+    return this.page
+      .getByRole('menuitem')
+      .filter({ hasText: actorName })
+      .filter({ hasText: 'underenhet' })
+      .first();
+  }
+
+  private selectedSubUnitButton(actorName: string): Locator {
+    return this.page
+      .getByRole('button')
+      .filter({ hasText: actorName })
+      .filter({ hasText: 'underenhet' })
+      .first();
+  }
+
   async goToSelectActor(actorName: string) {
     await expect(this.actorOption(actorName)).toBeVisible();
     await this.actorOption(actorName).click();
@@ -93,6 +109,15 @@ export class AktorvalgHeader {
 
   async currentlySelectedActor(actorName: string) {
     await expect(this.selectedActorButton(actorName)).toBeVisible();
+  }
+
+  async selectSubUnitFromHeaderMenu(actorName: string) {
+    await expect(this.subUnitOption(actorName)).toBeVisible();
+    await this.subUnitOption(actorName).click();
+  }
+
+  async currentlySelectedSubUnit(actorName: string) {
+    await expect(this.selectedSubUnitButton(actorName)).toBeVisible();
   }
 
   async goToInfoportal() {

@@ -83,6 +83,24 @@ test.describe('Aktørvalg, valg og visning av avgiver', () => {
     });
   });
 
+  test('Select a subunit (underenhet) of the default actor from the actor menu', async ({
+    page,
+    aktorvalgHeader,
+  }) => {
+    await test.step('Log in', async () => {
+      await loginAsHeaderTestUser(page, aktorvalgHeader);
+    });
+
+    await test.step('Open actor picker and select subunit', async () => {
+      await aktorvalgHeader.goToSelectActor(DEFAULT_ACTOR_NAME);
+      await aktorvalgHeader.selectSubUnitFromHeaderMenu(DEFAULT_ACTOR_NAME);
+    });
+
+    await test.step('Verify that the header shows the selected subunit', async () => {
+      await aktorvalgHeader.currentlySelectedSubUnit(DEFAULT_ACTOR_NAME);
+    });
+  });
+
   test('Search actors by name, birth year, org name and org number', async ({
     page,
     aktorvalgHeader,
