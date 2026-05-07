@@ -69,5 +69,26 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
             // Assert
             Assert.Equal(HttpStatusCode.Unauthorized, httpResponse.StatusCode);
         }
+
+        /// <summary>
+        ///     Test case: Add altinn 2 user with invalid credentials returns Bad Request
+        /// </summary>
+        [Fact]
+        public async Task AddAltinn2Account_CreateConnectionFail_ReturnsBadRequest()
+        {
+            // Arrange
+            Guid to = Guid.NewGuid();
+            Altinn2AccountRequest request = new Altinn2AccountRequest()
+            {
+                Username = "invalid_connection",
+                Password = "invalid_connection"
+            };
+
+            // Act
+            HttpResponseMessage httpResponse = await _client.PostAsync($"accessmanagement/api/v1/selfidentifieduser/altinn2account?to={to}", JsonContent.Create(request));
+
+            // Assert
+            Assert.Equal(HttpStatusCode.BadRequest, httpResponse.StatusCode);
+        }
     }
 }

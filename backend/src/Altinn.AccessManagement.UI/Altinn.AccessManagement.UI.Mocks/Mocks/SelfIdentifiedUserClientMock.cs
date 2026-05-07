@@ -20,6 +20,11 @@ namespace Altinn.AccessManagement.UI.Mocks.Mocks
                 throw new HttpStatusException("Unauthorized", "Invalid credentials", HttpStatusCode.Unauthorized, null);
             }
 
+            if (request?.Username == "invalid_connection" || request?.Password == "invalid_connection")
+            {
+                return Task.FromResult(Guid.Empty);
+            }
+
             return Task.FromResult(_mockPartyUuid);
         }
     }
