@@ -1,111 +1,181 @@
-import React, { useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { DsAlert, DsButton, DsHeading, DsLink, DsTextfield } from '@altinn/altinn-components';
+import {
+  DsAlert,
+  DsButton,
+  DsDialog,
+  DsHeading,
+  DsLink,
+  DsParagraph,
+  DsTextfield,
+} from '@altinn/altinn-components';
+import { PersonCircleIcon } from '@navikt/aksel-icons';
 import { useDocumentTitle } from '@/resources/hooks/useDocumentTitle';
-import { useGetReporteeQuery } from '@/rtk/features/userInfoApi';
-import classes from './AddAltinn2UserPage.module.css';
-import { RequestPageLayout } from '../common/RequestPageLayout/RequestPageLayout';
-import { useAddAltinn2UserMutation } from '@/rtk/features/selfIdentifiedUserApi';
 import { getAfUrl } from '@/resources/utils/pathUtils';
+import { useGetReporteeQuery } from '@/rtk/features/userInfoApi';
+import { useAddAltinn2UserMutation } from '@/rtk/features/selfIdentifiedUserApi';
+import classes from './AddAltinn2UserPage.module.css';
+import { PageLayoutWrapper } from '../common/PageLayoutWrapper';
 
 export const AddAltinn2UserPage = () => {
   const { t } = useTranslation();
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
+  const [step, setStep] = useState<number>(1);
+  const modalRef = useRef<HTMLDialogElement>(null);
 
   useDocumentTitle(t('altinn2_user_page.page_title'));
-  const {
-    data: reportee,
-    isLoading: isLoadingReportee,
-    isError: isReporteeError,
-  } = useGetReporteeQuery();
+
+  const { data: reportee, isError: isReporteeError } = useGetReporteeQuery();
 
   const [addAltinn2User, { isLoading: isAddingAltinn2User, error: addUserError }] =
     useAddAltinn2UserMutation();
 
   const isActionButtonDisabled = !username || !password || isAddingAltinn2User;
+  const afUrl = `${getAfUrl()}inbox`;
+  const profileUrl = `${getAfUrl()}profile`;
+
   const onAddAltinn2User = async () => {
     const to = reportee?.partyUuid;
     if (!isActionButtonDisabled && to) {
-      try {
-        await addAltinn2User({ to, username, password });
-      } catch (error) {
-        console.error('Error adding Altinn2 user:', error);
-      }
+      addAltinn2User({ to, username, password })
+        .unwrap()
+        .then(() => {
+          setStep(3);
+        }); // error is caught and displayed as addUserError
     }
   };
 
-  const account: { name: string; type: 'person' | 'company' } = {
-    name: reportee?.name ?? '',
-    type: reportee?.type === 'Person' ? 'person' : 'company',
-  };
+  useEffect(() => {
+    if (reportee && reportee.type !== 'SelfIdentified') {
+      // TODO: cleanup check
+      modalRef.current?.showModal();
+    }
+  }, [reportee]);
 
-  let heading: React.ReactNode = <DsHeading level={1}>Legg til innboks</DsHeading>;
-  let body: React.ReactNode = (
-    <div className={classes.addAltinn2UserPage}>
-      <DsTextfield
-        label='Brukernavn'
-        data-size='sm'
-        value={username}
-        onChange={(e) => setUsername(e.target.value)}
-      />
-      <DsTextfield
-        label='Passord'
-        data-size='sm'
-        type='password'
-        value={password}
-        onChange={(e) => setPassword(e.target.value)}
-      />
-      <DsLink
-        data-size='sm'
-        href='https://www.altinn.no/ui/Authentication/SelfIdentified'
-      >
-        Glemt passord
-      </DsLink>
-      {addUserError && (
-        <DsAlert
-          data-color='danger'
-          className={classes.errorAlert}
-        >
-          {/** Håndter feilmeldinger; rate-limit, feil brukernavn/passord, feil ved opprettelse av bruker */}
-          Det skjedde en feil ved å legge til gammel innboks. Prøv igjen senere.
-        </DsAlert>
-      )}
+  const step1Component = (
+    <DsDialog.Block className={classes.addAltinn2UserPage}>
+      <DsHeading level={1}>Legg til konto</DsHeading>
+      <DsParagraph>Du har logget inn som {reportee?.name}.</DsParagraph>
+      <DsParagraph>
+        Har du tidligere logget inn med brukernavn og passord kan du legge til den gamle kontoen din
+        her. Da vil du få tilgang til meldingene som er sendt til denne kontoen når du logger inn
+        med e-post.
+      </DsParagraph>
       <div className={classes.buttonRow}>
         <DsButton
           variant='primary'
-          data-size='sm'
-          aria-disabled={isActionButtonDisabled}
-          loading={isAddingAltinn2User}
-          onClick={onAddAltinn2User}
+          onClick={() => setStep(2)}
         >
-          Legg til innboks
+          Gå videre
         </DsButton>
         <DsButton
           variant='secondary'
-          data-size='sm'
           asChild
         >
-          <a href={`${getAfUrl()}inbox`}>Avbryt</a>
+          <a href={afUrl}>Avbryt</a>
         </DsButton>
       </div>
-    </div>
+    </DsDialog.Block>
   );
-  let error: React.ReactNode = null;
-  if (isReporteeError) {
-    error = <DsAlert data-color='danger'>Kunne ikke laste bruker</DsAlert>;
-  }
-  if (reportee && reportee.type !== 'Person') {
-    error = <DsAlert data-color='danger'>Kun personer kan legge til innboks.</DsAlert>;
-  }
+
+  const step2Component = (
+    <>
+      <DsDialog.Block className={classes.addSelfidentifiedUserHeader}>
+        <PersonCircleIcon fontSize={'1.5rem'} />
+        <DsHeading level={1}>Legg til konto</DsHeading>
+      </DsDialog.Block>
+      <DsDialog.Block className={classes.addAltinn2UserPage}>
+        <DsParagraph>
+          Logg inn med brukernavn og passord for å koble kontoen sammen med {reportee?.name}.
+        </DsParagraph>
+        <DsTextfield
+          label='Brukernavn'
+          data-size='sm'
+          value={username}
+          onChange={(e) => setUsername(e.target.value)}
+        />
+        <DsTextfield
+          label='Passord'
+          data-size='sm'
+          type='password'
+          value={password}
+          onChange={(e) => setPassword(e.target.value)}
+        />
+        {addUserError && (
+          <DsAlert data-color='danger'>
+            {(addUserError as { status: number }).status === 401
+              ? 'Ugyldig kombinasjon av brukernavn og passord.'
+              : 'Det skjedde en feil ved å legge til konto.'}
+          </DsAlert>
+        )}
+        <div className={classes.buttonRow}>
+          <DsButton
+            variant='primary'
+            aria-disabled={isActionButtonDisabled}
+            loading={isAddingAltinn2User}
+            onClick={onAddAltinn2User}
+          >
+            Legg til
+          </DsButton>
+          <DsButton
+            variant='secondary'
+            asChild
+          >
+            <a href={afUrl}>Avbryt</a>
+          </DsButton>
+          <DsLink
+            target='_blank'
+            rel='noopener noreferrer'
+            href='https://www.altinn.no/ui/Authentication/SelfIdentified'
+          >
+            Glemt passord
+          </DsLink>
+        </div>
+      </DsDialog.Block>
+    </>
+  );
+
+  const step3Component = (
+    <DsDialog.Block className={classes.addAltinn2UserPage}>
+      <DsHeading>Kontoen er lagt til</DsHeading>
+      <DsParagraph>
+        Du vil nå se dine gamle meldinger i den nye innboksen. Du kan legge til flere kontoer under
+        Din profil om du ønsker det.
+      </DsParagraph>
+      <div className={classes.buttonRow}>
+        <DsButton
+          variant='primary'
+          asChild
+        >
+          <a href={afUrl}>Gå til innboks</a>
+        </DsButton>
+        <DsButton
+          variant='secondary'
+          asChild
+        >
+          <a href={profileUrl}>Gå til profil</a>
+        </DsButton>
+      </div>
+    </DsDialog.Block>
+  );
 
   return (
-    <RequestPageLayout
-      account={account}
-      isLoading={isLoadingReportee}
-      error={error}
-      heading={heading}
-      body={body}
-    />
+    <PageLayoutWrapper hideSidebar>
+      {isReporteeError && <DsAlert data-color='danger'>Kunne ikke laste bruker.</DsAlert>}
+      {reportee && reportee.type !== 'SelfIdentified' && (
+        <DsAlert data-color='danger'>Kun selvidentifiserte brukere kan legge til konto.</DsAlert>
+      )}
+      <DsDialog
+        ref={modalRef}
+        closeButton={step === 2 ? undefined : false}
+        closedby='none'
+        onClose={() => window.location.assign(afUrl)}
+      >
+        {step === 1 && step1Component}
+        {step === 2 && step2Component}
+        {step === 3 && step3Component}
+      </DsDialog>
+    </PageLayoutWrapper>
   );
 };
