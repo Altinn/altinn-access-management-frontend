@@ -14,4 +14,6 @@ export enum amUIPath {
   ClientAdministrationAgent = 'clientadministration/agent/:id',
   ClientAdministrationClient = 'clientadministration/client/:id',
   Altinn2User = 'altinn2user',
+  Maskinporten = 'maskinporten',
+  MaskinportenSupplier = 'maskinporten/supplier/:id',
 }

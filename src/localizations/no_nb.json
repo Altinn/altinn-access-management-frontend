@@ -96,7 +96,8 @@
     "none": "ingen",
     "digdir": "Digitaliseringsdirektoratet",
     "skiplink": "Hopp til hovedinnholdet",
-    "no_access_to_page": "Du har ikke tilgang til denne siden for valgt aktør"
+    "no_access_to_page": "Du har ikke tilgang til denne siden for valgt aktør",
+    "see_details": "Se detaljer"
   },
   "beta_banner": {
     "info": "Du ser nå på en betaversjon av de nye sidene for tilgangsstyring i Altinn.",
@@ -122,7 +123,16 @@
     "acting_party_data_error": "Det har oppstått en teknisk feil. Vennligst prøv igjen senere. Dersom problemet vedvarer, kontakt Altinn brukerstøtte på telefon 75 00 60 00.",
     "unsynced_connection_title": "Synkroniseringsglipp - vår feil, ikke din",
     "unsynced_connection": "Vi har en synkroniseringsfeil mellom ny og gammel løsning. Dette er noe vi jobber med, men for nå kan du dessverre ikke se tilgangene dine her. Vi beklager ulempen dette medfører!",
-    "unsynced_connection_link": "Klikk her for å se tilgangene dine i gammel løsning"
+    "unsynced_connection_link": "Klikk her for å se tilgangene dine i gammel løsning",
+    "reportee_change_error": {
+      "header": "Vi klarte ikke å bytte avgiver",
+      "description": "Den valgte avgiveren er ikke tilgjengelig for deg, eller lenken du fulgte var ugyldig.",
+      "if_persistent_contact_service": "Hvis problemet vedvarer kan du kontakte Altinn brukerstøtte på telefon 75 00 60 00.",
+      "where_to_now": "Hvor vil du gå nå?",
+      "go_to_altinn": "Gå til startsiden for Altinn",
+      "go_to_inbox": "Gå til innboks",
+      "go_to_am": "Gå til tilgangsstyring"
+    }
   },
   "header": {
     "access_management": "Tilgangsstyring",
@@ -172,7 +182,8 @@
     "consent": "Samtykke- og fullmaktsavtaler",
     "poa_overview": "Fullmakter",
     "settings": "Innstillinger",
-    "requests": "Forespørsler"
+    "requests": "Forespørsler",
+    "maskinporten": "Maskinporten\u00ADadministrasjon"
   },
   "profile": {
     "received": "Mottatte",
@@ -464,8 +475,9 @@
     "heading_subtitle": "fullmakter gitt til {{name}}"
   },
   "delegation_modal": {
-    "request_service": "Hvilken tjeneste ønsker du fullmakt til?",
+    "request_service": "Hvilken tjeneste vil du be om?",
     "give_service_to_name": "Gi <strong>{{name}}</strong> fullmakt til ny tjeneste",
+    "request_package": "Hvilken tilgangspakke vil du be om?",
     "give_package_to_name": "Gi <strong>{{name}}</strong> fullmakt til ny tilgangspakke",
     "name_will_receive": "<strong>{{name}}</strong> vil få:",
     "name_has_the_following": "<strong>{{name}}</strong> har:",
@@ -476,6 +488,7 @@
     "edit_success": "Fullmakt oppdatert",
     "package_services_one": "Gir tilgang til {{count}} tjeneste",
     "package_services_other": "Gir tilgang til {{count}} tjenester",
+    "no_resources_in_package": "Denne tilgangspakken inneholder foreløpig ingen tjenester.",
     "inherited_role_org_message": "{{user_name}} har tilgang til denne gjennom sin rolle i {{org_name}}. Den kan derfor ikke slettes.",
     "actions": {
       "access_to_all": "Tilgang til hele tjenesten",
@@ -570,6 +583,33 @@
     "person_identifier_username_format_error": "Brukernavn må bestå av minst 6 tegn",
     "person_identifier_whitespace_forbidden_error": "Mellomrom er ikke tillatt i fødselsnummer eller brukernavn",
     "last_name_format_error": "Vennligst fyll inn et gyldig etternavn"
+  },
+  "maskinporten_page": {
+    "heading": "Maskinporten\u00ADadministrasjon",
+    "document_title": "Maskinportenadministrasjon - Altinn",
+    "suppliers_tab": "Leverandører",
+    "add_supplier_button": "Legg til leverandør",
+    "suppliers_description": "Virksomheter som har gitt Maskinporten-scope til {{name}}.",
+    "consumers_tab": "Konsumenter",
+    "consumers_description": "Virksomheter som har mottatt Maskinporten-scope fra {{name}}.",
+    "no_suppliers": "Ingen leverandører funnet.",
+    "no_consumers": "Ingen konsumenter funnet.",
+    "load_error": "Kunne ikke laste Maskinporten-tilknytninger.",
+    "supplier_not_found": "Vi fant ikke leverandøren",
+    "remove_supplier_heading": "Fjern leverandør",
+    "remove_supplier_body": "Er du sikker på at du vil fjerne {{name}} som leverandør? Alle delegerte ressurser vil også bli fjernet.",
+    "remove_supplier_confirm": "Fjern leverandør",
+    "remove_supplier_error": "Kunne ikke fjerne {{name}} som leverandør.",
+    "remove_supplier_success": "{{name}} er fjernet som leverandør.",
+    "remove_consumer_heading": "Fjern konsument",
+    "remove_consumer_body": "Er du sikker på at du vil fjerne {{name}} som konsument? Alle delegerte ressurser vil også bli fjernet.",
+    "remove_consumer_confirm": "Fjern konsument",
+    "remove_consumer_error": "Kunne ikke fjerne {{name}} som konsument.",
+    "remove_consumer_success": "{{name}} er fjernet som konsument.",
+    "back_to_list": "Gå tilbake til oversikten",
+    "supplier_title": "Leverandør - Altinn",
+    "own_org_number_warning": "Du kan ikke gi tilgang til eget organisasjonsnummer",
+    "own_org_number_warning_body": "Har ikke din virksomhet tilgang, ta kontakt med tilbyder av API-et du skal gi tilgang til."
   },
   "settings_page": {
     "page_title": "Innstillinger - Altinn",
@@ -832,7 +872,8 @@
     "add_own_organization_list_aria": "Legg til din virksomhet i systemtilgang",
     "add_own_organization": "Legg til din virksomhet",
     "add_own_organization_error": "Kunne ikke legge til din virksomhet",
-    "remove_own_organization_error": "Kunne ikke fjerne din virksomhet"
+    "remove_own_organization_error": "Kunne ikke fjerne din virksomhet",
+    "user_is_not_client_admin": "Kun klientadministratorer kan administrere klienter."
   },
   "systemuser_delegation_errors": {
     "01_rights_not_found_or_not_delegable": "En eller flere tjenester eksisterer ikke, eller er ikke delegerbare.",
@@ -1000,7 +1041,8 @@
   "resource_list": {
     "resource_search_placeholder": "Søk etter tjenester",
     "no_resources_filtered": "Ingen treff på søket \"{{searchTerm}}\".",
-    "no_resources": "Denne brukeren har ingen tjenester.",
+    "no_resources": "Ingen tjenester.",
+    "no_user_resources": "Denne brukeren har ingen tjenester.",
     "filter_by_serviceowner": "Filtrer på tjenesteeier",
     "filtered_serviceowners": "{{count}} tjenesteeiere",
     "resource_search_clear": "Tøm søk",
@@ -1029,6 +1071,7 @@
     "poa_item_description": "Oversikt over alle tilgangspakker og enkelttjenester",
     "consent_item_description": "Oversikt over alle inngåtte avtaler",
     "systemuser_item_description": "Oversikt over systemtilganger",
+    "maskinporten_item_description": "Administrer tilgang i Maskinporten",
     "client_admin_item_description": "Deleger fullmakter fra klienter til brukere i virksomheten.",
     "new_requests_single": "{{reportee}} har {{requestCount}} ny forespørsel",
     "new_requests_plural": "{{reportee}} har {{requestCount}} nye forespørsler"
@@ -1085,6 +1128,8 @@
     "request_withdrawn": "Forespørselen er avvist",
     "request_withdrawn_info": "Du har avvist forespørselen og vil dermed ikke få fullmakt til <strong>{{to_name}}</strong>.",
     "close_window_info": "Du kan nå lukke dette vinduet.",
-    "missing_request_id": "Kan ikke laste forespørsel: requestId-parameter er ikke satt i url"
+    "missing_request_id": "Kan ikke laste forespørsel: requestId-parameter er ikke satt i url",
+    "batch_partial_error": "Kunne ikke behandle følgende ressurser: {{resources}}. Vennligst prøv igjen.",
+    "multiple_services_title": "<strong>{{name}}</strong> ber om følgende tjenester:"
   }
 }

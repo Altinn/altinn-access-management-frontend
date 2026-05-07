@@ -110,5 +110,18 @@ namespace Altinn.AccessManagement.UI.Core.Configuration
         /// Whether to use connections API in backend for agent system users
         /// </summary>
         public bool UseConnectionsForAgentSystemuser { get; set; }
+
+        /// <summary>
+        /// Whether to enable the Maskinporten administration page
+        /// </summary>
+        public bool EnableMaskinportenAdministration { get; set; }
+
+        /// <summary>
+        /// When true, <c>ReporteeController.ChangeAndRedirect</c> bounces through Altinn 2's
+        /// <c>/ui/Reportee/ChangeReporteeAndRedirect</c> after setting Altinn 3 cookies, so that
+        /// Altinn 2 can set its own session cookies before forwarding to the final destination.
+        /// Intended for the migration period while some downstream pages still depend on Altinn 2 cookies.
+        /// </summary>
+        public bool RouteChangeReporteeViaAltinn2 { get; set; }
     }
 }

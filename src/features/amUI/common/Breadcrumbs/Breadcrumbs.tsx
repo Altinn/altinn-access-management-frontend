@@ -52,6 +52,10 @@ const BreadcrumbConfig = {
     href: `/${amUIPath.Requests}`,
     label: 'sidebar.requests',
   },
+  maskinporten: {
+    href: `/${amUIPath.Maskinporten}`,
+    label: 'sidebar.maskinporten',
+  },
 };
 
 interface BreadcrumbsProps {

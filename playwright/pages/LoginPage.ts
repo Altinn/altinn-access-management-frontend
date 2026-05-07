@@ -34,7 +34,7 @@ export class LoginPage {
   }
 
   async LoginToAccessManagement(pid: string) {
-    await this.clickLoginToAccessManagement();
+    await this.navigateToLoginPage();
     await this.authenticateUser(pid);
   }
 
@@ -46,7 +46,7 @@ export class LoginPage {
 
   async loginAcActorOrg(pid: string, orgnummer: string) {
     const baseUrl = env('BASE_URL');
-    await this.page.goto(baseUrl);
+    await this.page.goto(baseUrl, { waitUntil: 'commit' });
     await this.loginButton.click();
     await this.testIdLink.click();
     await this.pidInput.fill(pid);
@@ -69,12 +69,9 @@ export class LoginPage {
     await markedResult.first().click();
   }
 
-  private async clickLoginToAccessManagement() {
-    await this.page.getByRole('button', { name: 'Meny' }).click();
-    await expect(
-      this.page.getByRole('navigation', { name: 'Menu' }).getByLabel('Tilgangsstyring'),
-    ).toBeVisible();
-    await this.page.getByRole('navigation', { name: 'Menu' }).getByLabel('Tilgangsstyring').click();
+  private async navigateToLoginPage() {
+    await this.page.goto(env('BASE_URL'), { waitUntil: 'commit' });
+    await expect(this.testIdLink).toBeVisible();
     await this.testIdLink.click();
   }
 

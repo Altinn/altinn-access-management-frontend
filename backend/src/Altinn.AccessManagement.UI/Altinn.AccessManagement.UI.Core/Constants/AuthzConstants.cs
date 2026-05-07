@@ -39,5 +39,10 @@
         /// Policy tag for authorizing if user has read access to the altinn_instance_delegation resource.
         /// </summary>
         public const string POLICY_ACCESS_MANAGEMENT_INSTANCE_DELEGATION_READ_WITH_PASS_THROUGH = "AccessManagementInstanceDelegationReadOrAuthorizedParty";
+
+        /// <summary>
+        /// Policy tag for authorizing if user has read access to the altinn_maskinporten_scope_delegation resource.
+        /// </summary>
+        public const string POLICY_ACCESS_MANAGEMENT_MASKINPORTEN_SCOPE_DELEGATION_READ_WITH_PASS_THROUGH = "AccessManagementMaskinportenScopeDelegationReadOrAuthorizedParty";
     }
 }

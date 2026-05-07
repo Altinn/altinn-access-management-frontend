@@ -68,7 +68,8 @@ builder.Services.AddAuthorizationBuilder()
     .AddPolicy(AuthzConstants.POLICY_ACCESS_MANAGEMENT_CLIENT_ADMINISTRATION_READ_WITH_PASS_THROUGH, policy => policy.Requirements.Add(new EndUserResourceAccessRequirement("read", "altinn_client_administration", true)))
     .AddPolicy(AuthzConstants.POLICY_ACCESS_MANAGEMENT_PROFIL_API_VARSLINGSDARESSER_FOR_VIRKSOMHETER_READ_WITH_PASS_THROUGH, policy => policy.Requirements.Add(new EndUserResourceAccessRequirement("read", "altinn-profil-api-varslingsdaresser-for-virksomheter", true)))
     .AddPolicy(AuthzConstants.POLICY_ACCESS_MANAGEMENT_HOVEDADMIN_READ_WITH_PASS_THROUGH, policy => policy.Requirements.Add(new EndUserResourceAccessRequirement("read", "altinn_access_management_hovedadmin", true)))
-    .AddPolicy(AuthzConstants.POLICY_ACCESS_MANAGEMENT_INSTANCE_DELEGATION_READ_WITH_PASS_THROUGH, policy => policy.Requirements.Add(new EndUserResourceAccessRequirement("read", "altinn_instance_delegation", true)));
+    .AddPolicy(AuthzConstants.POLICY_ACCESS_MANAGEMENT_INSTANCE_DELEGATION_READ_WITH_PASS_THROUGH, policy => policy.Requirements.Add(new EndUserResourceAccessRequirement("read", "altinn_instance_delegation", true)))
+    .AddPolicy(AuthzConstants.POLICY_ACCESS_MANAGEMENT_MASKINPORTEN_SCOPE_DELEGATION_READ_WITH_PASS_THROUGH, policy => policy.Requirements.Add(new EndUserResourceAccessRequirement("read", "altinn_maskinporten_scope_delegation", true)));
 
 builder.Services.AddScoped<IAuthorizationHandler, EndUserResourceAccessHandler>();
 
@@ -242,6 +243,7 @@ void ConfigureServices(IServiceCollection services, IConfiguration config)
     services.AddSingleton<ISelfIdentifiedUserService, SelfIdentifiedUserService>();
     services.AddSingleton<IEncryptionService, EncryptionService>();
     services.AddSingleton<IRoleService, RoleService>();
+    services.AddSingleton<IMaskinportenService, MaskinportenService>();
     services.AddTransient<ISigningCredentialsResolver, SigningCredentialsResolver>();
     services.AddTransient<ResourceHelper, ResourceHelper>();
     services.AddTransient<IAltinnCdnService, AltinnCdnService>();
@@ -508,5 +510,14 @@ void ConfigureMockableClients(IServiceCollection services, IConfiguration config
     else
     {
         services.AddHttpClient<IAltinn2UserClient, Altinn2UserClient>();
+    }
+    
+    if (mockSettings.Maskinporten)
+    {
+        services.AddSingleton<IMaskinportenClient, MaskinportenClientMock>();
+    }
+    else
+    {
+        services.AddHttpClient<IMaskinportenClient, MaskinportenClient>();
     }
 }

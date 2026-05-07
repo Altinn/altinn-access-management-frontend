@@ -1,5 +1,8 @@
 import { getCookie } from '@/resources/Cookie/CookieMethods';
-import { clientAdministrationPageEnabled } from '@/resources/utils/featureFlagUtils';
+import {
+  clientAdministrationPageEnabled,
+  enableMaskinportenAdministration,
+} from '@/resources/utils/featureFlagUtils';
 import {
   hasConsentPermission,
   hasCreateSystemUserPermission,
@@ -9,6 +12,7 @@ import {
   getConsentMenuItem,
   getHeadingMenuItem,
   getClientAdministrationMenuItem,
+  getMaskinportenMenuItem,
   getPoaOverviewMenuItem,
   getReporteesMenuItem,
   getRequestsMenuItem,
@@ -19,10 +23,12 @@ import {
   getYourClientsMenuItem,
 } from '@/resources/utils/sidebarConfig';
 import { useGetPartyFromLoggedInUserQuery } from '@/rtk/features/lookupApi';
+import { isOrganization } from '@/resources/utils/reporteeUtils';
 import {
   useGetIsAdminQuery,
   useGetIsClientAdminQuery,
   useGetIsCompanyProfileAdminQuery,
+  useGetIsMaskinportenAdminQuery,
   useGetReporteeQuery,
 } from '@/rtk/features/userInfoApi';
 import { BadgeVariant, Color, MenuItemProps } from '@altinn/altinn-components';
@@ -60,6 +66,9 @@ export const useSidebarItems = ({ isSmall }: { isSmall?: boolean }) => {
   const { data: isClientAdmin, isLoading: isLoadingIsClientAdmin } = useGetIsClientAdminQuery();
   const { data: canAccessSettings, isLoading: isLoadingCompanyProfileAdmin } =
     useGetIsCompanyProfileAdminQuery();
+  const { data: isMaskinportenAdmin } = useGetIsMaskinportenAdminQuery(undefined, {
+    skip: !enableMaskinportenAdministration() || !isOrganization(reportee),
+  });
 
   const isLoading =
     isLoadingReportee || isLoadingIsAdmin || isLoadingIsClientAdmin || isLoadingCompanyProfileAdmin;
@@ -126,13 +135,13 @@ export const useSidebarItems = ({ isSmall }: { isSmall?: boolean }) => {
     items.push(getSettingsMenuItem(pathname, isLoading, isSmall));
   }
 
-  if (displayConfettiPackage) {
-    items.push(...getShortcutsMenuItem(pathname, isLoading));
+  if (isMaskinportenAdmin) {
+    items.push(getMaskinportenMenuItem(pathname, isLoading, isSmall));
   }
 
   const sidebarItems = items.map((item) => {
     return { ...item, description: '' };
   });
 
-  return { sidebarItems };
+  return { sidebarItems, shortcutsMenuItem: getShortcutsMenuItem(pathname, isLoading) };
 };

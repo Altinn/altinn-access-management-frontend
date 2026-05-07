@@ -14,6 +14,7 @@ import {
   DatabaseIcon,
   PersonIcon,
 } from '@navikt/aksel-icons';
+import ApiIcon from '@/assets/Api.svg?react';
 import i18next, { t } from 'i18next';
 import { Link } from 'react-router';
 
@@ -230,6 +231,24 @@ export const getRequestsMenuItem = (
   };
 };
 
+export const getMaskinportenMenuItem = (
+  pathname?: string,
+  isLoading = false,
+  isSmall = false,
+): MenuItemProps => {
+  return {
+    groupId: '14',
+    id: 'maskinporten',
+    size: 'md',
+    loading: isLoading,
+    variant: isSmall ? 'default' : 'tinted',
+    title: t('sidebar.maskinporten'),
+    selected: pathname?.includes(`/${amUIPath.Maskinporten}`),
+    icon: { svgElement: ApiIcon, theme: isSmall ? 'surface' : 'default' },
+    as: (props) => getMenuLinkAs(props, `/${amUIPath.Maskinporten}`),
+  };
+};
+
 export const getShortcutsMenuItem = (pathname?: string, isLoading = false): MenuItemProps[] => {
   const infoPortalUrl = getAltinnStartPageUrl(i18next.language);
   const helpPageUrl = infoPortalUrl + 'hjelp/ny-tilgangsstyring/';
@@ -237,7 +256,7 @@ export const getShortcutsMenuItem = (pathname?: string, isLoading = false): Menu
     {
       groupId: 'shortcuts',
       id: 'beta-about',
-      size: 'md',
+      size: 'sm',
       loading: isLoading,
       variant: 'tinted',
       title: t('header.help_pages'),
@@ -248,7 +267,7 @@ export const getShortcutsMenuItem = (pathname?: string, isLoading = false): Menu
     {
       groupId: 'shortcuts',
       id: 'beta-leave',
-      size: 'md',
+      size: 'sm',
       loading: isLoading,
       variant: 'tinted',
       title: t('header.leave_beta'),

@@ -96,7 +96,8 @@
     "none": "ingen",
     "digdir": "Digitaliseringsdirektoratet",
     "skiplink": "Hopp til hovudinnhaldet",
-    "no_access_to_page": "Du har ikkje tilgang til denne sida for vald aktør"
+    "no_access_to_page": "Du har ikkje tilgang til denne sida for vald aktør",
+    "see_details": "Sjå detaljar"
   },
   "beta_banner": {
     "info": "Du ser no på ein betaversjon av dei nye sidene for tilgangsstyring i Altinn.",
@@ -150,7 +151,8 @@
     "consent": "Samtykke- og fullmaktsavtaler",
     "poa_overview": "Fullmakter",
     "settings": "Innstillingar",
-    "requests": "Forespørsler"
+    "requests": "Forespørsler",
+    "maskinporten": "Maskinporten\u00ADadministrasjon"
   },
   "error_page": {
     "not_found_site_error_type": "Feil 404",
@@ -172,7 +174,16 @@
     "acting_party_data_error": "Det har oppstått ein teknisk feil. Prøv igjen seinare. Dersom problemet held fram, kontakt Altinn brukarservice på telefon 75 00 60 00.",
     "unsynced_connection_title": "Synkroniseringsglipp - vår feil, ikkje din",
     "unsynced_connection": "Vi har ein synkroniseringsfeil mellom ny og gammal løysing. Dette er noko vi jobbar med, men for nå kan du dessverre ikkje sjå tilgangane dine her. Vi beklagar ulempa dette medfører!",
-    "unsynced_connection_link": "Klikk her for å sjå tilgangane dine i gammal løysing"
+    "unsynced_connection_link": "Klikk her for å sjå tilgangane dine i gammal løysing",
+    "reportee_change_error": {
+      "header": "Vi klarte ikkje å byte avgivar",
+      "description": "Den valde avgivaren er ikkje tilgjengeleg for deg, eller lenka du følgde var ugyldig.",
+      "if_persistent_contact_service": "Dersom problemet held fram kan du kontakte Altinn brukarservice på telefon 75 00 60 00.",
+      "where_to_now": "Kvar vil du gå no?",
+      "go_to_altinn": "Gå til startsiden for Altinn",
+      "go_to_inbox": "Gå til innboks",
+      "go_to_am": "Gå til tilgangsstyring"
+    }
   },
   "profile": {
     "received": "Mottatt",
@@ -464,8 +475,9 @@
     "heading_subtitle": "fullmakter gitt til {{name}}"
   },
   "delegation_modal": {
-    "request_service": "Kva for enkelttenester ønsker du fullmakt til?",
+    "request_service": "Kva for teneste vil du be om?",
     "give_service_to_name": "Gi <strong>{{name}}</strong> fullmakt til ny teneste",
+    "request_package": "Kva for tilgangspakke vil du be om?",
     "give_package_to_name": "Gi <strong>{{name}}</strong> fullmakt til ny tilgangspakke",
     "name_will_receive": "<strong>{{name}}</strong> vil få:",
     "name_has_the_following": "<strong>{{name}}</strong> har:",
@@ -476,9 +488,10 @@
     "edit_success": "Fullmakt oppdatert",
     "package_services_one": "Gir tilgang til {{count}} teneste",
     "package_services_other": "Gir tilgang til {{count}} tenester",
+    "no_resources_in_package": "Denne tilgangspakken inneheld førebels ingen tenester.",
     "inherited_role_org_message": "{{user_name}} har tilgang til denne gjennom rolla si i {{org_name}}. Den kan derfor ikkje slettast.",
     "actions": {
-      "access_to_all": "Tilgang til heile tenesten",
+      "access_to_all": "Tilgang til heile tenesta",
       "partial_access": "Tilgang til {{count}} av {{total}} handlingar",
       "action_description": "Her ser du dei tekniske handlingane som tenesta tilbyr. Du kan gi fullmakt til heile tenesta eller velje spesifikke handlingar.",
       "request_action_description": "Her ser du dei tekniske handlingane som tenesta tilbyr. Du kan berre be om fullmakt til heile tenesta.",
@@ -570,6 +583,33 @@
     "person_identifier_username_format_error": "Brukarnamn må bestå av minst 6 teikn",
     "person_identifier_whitespace_forbidden_error": "Mellomrom er ikkje tillate i fødselsnummer eller brukarnamn",
     "last_name_format_error": "Vennligst fyll inn eit gyldig etternavn"
+  },
+  "maskinporten_page": {
+    "heading": "Maskinporten\u00ADadministrasjon",
+    "document_title": "Maskinportenadministrasjon - Altinn",
+    "suppliers_tab": "Leverandørar",
+    "add_supplier_button": "Legg til leverandør",
+    "suppliers_description": "Verksemder som har gitt Maskinporten-scope til {{name}}.",
+    "consumers_tab": "Konsumentar",
+    "consumers_description": "Verksemder som har fått Maskinporten-scope frå {{name}}.",
+    "no_suppliers": "Ingen leverandørar funne.",
+    "no_consumers": "Ingen konsumentar funne.",
+    "load_error": "Kunne ikkje laste Maskinporten-tilknytingar.",
+    "supplier_not_found": "Vi fann ikkje leverandøren",
+    "remove_supplier_heading": "Fjern leverandør",
+    "remove_supplier_body": "Er du sikker på at du vil fjerne {{name}} som leverandør? Alle delegerte ressursar vil òg bli fjerna.",
+    "remove_supplier_confirm": "Fjern leverandør",
+    "remove_supplier_error": "Kunne ikkje fjerne {{name}} som leverandør.",
+    "remove_supplier_success": "{{name}} er fjerna som leverandør.",
+    "remove_consumer_heading": "Fjern konsument",
+    "remove_consumer_body": "Er du sikker på at du vil fjerne {{name}} som konsument? Alle delegerte ressursar vil òg bli fjerna.",
+    "remove_consumer_confirm": "Fjern konsument",
+    "remove_consumer_error": "Kunne ikkje fjerne {{name}} som konsument.",
+    "remove_consumer_success": "{{name}} er fjerna som konsument.",
+    "back_to_list": "Gå tilbake til oversikta",
+    "supplier_title": "Leverandør - Altinn",
+    "own_org_number_warning": "Du kan ikkje gi tilgang til eige organisasjonsnummer",
+    "own_org_number_warning_body": "Har ikkje verksemda di tilgang, ta kontakt med tilbydaren av API-et du skal gi tilgang til."
   },
   "settings_page": {
     "page_title": "Innstillingar - Altinn",
@@ -832,7 +872,8 @@
     "add_own_organization_list_aria": "Legg til di verksemd i systemtilgang",
     "add_own_organization": "Legg til di verksemd",
     "add_own_organization_error": "Kunne ikkje leggja til di verksemd",
-    "remove_own_organization_error": "Kunne ikkje fjerna di verksemd"
+    "remove_own_organization_error": "Kunne ikkje fjerna di verksemd",
+    "user_is_not_client_admin": "Kun klientadministratorer kan administrere klientar."
   },
   "systemuser_delegation_errors": {
     "01_rights_not_found_or_not_delegable": "Ei eller fleire tenester finst ikkje, eller kan ikkje delegerast.",
@@ -1000,7 +1041,8 @@
   "resource_list": {
     "resource_search_placeholder": "Søk etter tenester",
     "no_resources_filtered": "Ingen treff på søket \"{{searchTerm}}\".",
-    "no_resources": "Denne brukaren har ingen tenester.",
+    "no_resources": "Ingen tenester.",
+    "no_user_resources": "Denne brukaren har ingen tenester.",
     "filter_by_serviceowner": "Filtrer på tenesteeigar",
     "filtered_serviceowners": "{{count}} tenesteeigare",
     "resource_search_clear": "Tøm søk",
@@ -1029,6 +1071,7 @@
     "poa_item_description": "Oversikt over alle tilgangspakkar og enkelttenester",
     "consent_item_description": "Oversikt over alle inngåtte avtalar",
     "systemuser_item_description": "Oversikt over systemtilgangar",
+    "maskinporten_item_description": "Administrer tilgang i Maskinporten",
     "client_admin_item_description": "Deleger fullmakter frå klientar til brukarar i verksemda.",
     "new_requests_single": "{{reportee}} har {{requestCount}} ny førespurnad",
     "new_requests_plural": "{{reportee}} har {{requestCount}} nye førespurnader"
@@ -1085,6 +1128,8 @@
     "request_withdrawn": "Førespurnaden er avslått",
     "request_withdrawn_info": "Du har avslått førespurnaden og vil dermed ikkje få fullmakt til <strong>{{to_name}}</strong>.",
     "close_window_info": "Du kan no lukke dette vinduet.",
-    "missing_request_id": "Kan ikkje laste førespurnaden: requestId-parameter er ikkje sett i url"
+    "missing_request_id": "Kan ikkje laste førespurnaden: requestId-parameter er ikkje sett i url",
+    "batch_partial_error": "Kunne ikkje behandle følgjande ressursar: {{resources}}. Ver venleg og prøv igjen.",
+    "multiple_services_title": "<strong>{{name}}</strong> ber om følgjande tenester:"
   }
 }

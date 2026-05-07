@@ -103,3 +103,7 @@ export const enableRequestSingleRight = () => {
 export const enableDialogportenDialogLookup = () => {
   return window.featureFlags?.enableDialogportenDialogLookup === true;
 };
+
+export const enableMaskinportenAdministration = () => {
+  return window.featureFlags?.enableMaskinportenAdministration === true;
+};

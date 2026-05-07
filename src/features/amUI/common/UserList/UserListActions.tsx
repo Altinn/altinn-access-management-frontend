@@ -13,6 +13,7 @@ export const UserListActions = ({
   availableAction,
   isLoading,
   delegateLabel,
+  revokeLabel,
 }: {
   user: ExtendedUser;
   onDelegate?: (user: ExtendedUser) => void;
@@ -21,6 +22,7 @@ export const UserListActions = ({
   availableAction?: DelegationAction;
   isLoading?: boolean;
   delegateLabel?: string;
+  revokeLabel?: string;
 }) => {
   const { t } = useTranslation();
   const isSmall = useIsMobileOrSmaller();
@@ -74,10 +76,10 @@ export const UserListActions = ({
           variant='tertiary'
           data-size='md'
           onClick={() => onRevoke(user)}
-          aria-label={t('common.delete_poa')}
+          aria-label={revokeLabel ?? t('common.delete_poa')}
         >
           <MinusCircleIcon />
-          {!isSmall && t('common.delete_poa')}
+          {!isSmall && (revokeLabel ?? t('common.delete_poa'))}
         </DsButton>
       )}
     </>

@@ -4,7 +4,7 @@ import { test } from '../../../fixture/pomFixture';
 import { AktorvalgHeader } from '../../../pages/AktorvalgHeader';
 import { EnduserConnection } from '../../../api-requests/EnduserConnection';
 
-test.describe.serial('tilgangspakkedelegering fra person til person og person til org', () => {
+test.describe('tilgangspakkedelegering fra person til person og person til org', () => {
   const api = new EnduserConnection();
 
   test.afterAll('slett testdata', async () => {
@@ -21,7 +21,6 @@ test.describe.serial('tilgangspakkedelegering fra person til person og person ti
     const aktorvalgHeader = new AktorvalgHeader(page);
 
     await test.step('Logg inn', async () => {
-      await page.goto(env('BASE_URL'));
       await login.LoginToAccessManagement('01837396103');
     });
 
@@ -49,7 +48,6 @@ test.describe.serial('tilgangspakkedelegering fra person til person og person ti
     const aktorvalgHeader = new AktorvalgHeader(page);
 
     await test.step('Logg inn', async () => {
-      await page.goto(env('BASE_URL'));
       await login.LoginToAccessManagement('29868198034');
     });
 
@@ -82,7 +80,6 @@ test.describe.serial('tilgangspakkedelegering fra person til person og person ti
     });
 
     await test.step('Logg inn', async () => {
-      await page.goto(env('BASE_URL'));
       await login.LoginToAccessManagement('08857499981');
     });
 
@@ -118,7 +115,6 @@ test.describe.serial('tilgangspakkedelegering fra person til person og person ti
     });
 
     await test.step('Logg inn', async () => {
-      await page.goto(env('BASE_URL'));
       await login.LoginToAccessManagement('15855499484');
     });
 
@@ -158,7 +154,6 @@ test.describe.serial('tilgangspakkedelegering fra person til person og person ti
     });
 
     await test.step('Logg inn', async () => {
-      await page.goto(env('BASE_URL'));
       await login.LoginToAccessManagement('26917699703');
     });
 
@@ -195,7 +190,6 @@ test.describe.serial('tilgangspakkedelegering fra person til person og person ti
     });
 
     await test.step('Logg inn', async () => {
-      await page.goto(env('BASE_URL'));
       await login.LoginToAccessManagement('25928698737');
     });
 
@@ -225,7 +219,7 @@ test.describe.serial('tilgangspakkedelegering fra person til person og person ti
   });
 });
 
-test.describe.serial('tilgangspakkedelegering fra org til person og org til org', () => {
+test.describe('tilgangspakkedelegering fra org til person og org til org', () => {
   const api = new EnduserConnection();
 
   test.afterAll('slett testdata', async () => {
@@ -242,7 +236,6 @@ test.describe.serial('tilgangspakkedelegering fra org til person og org til org'
     const aktorvalgHeader = new AktorvalgHeader(page);
 
     await test.step('Logg inn', async () => {
-      await page.goto(env('BASE_URL'));
       await login.LoginToAccessManagement('19858798917');
     });
 
@@ -270,7 +263,6 @@ test.describe.serial('tilgangspakkedelegering fra org til person og org til org'
     const aktorvalgHeader = new AktorvalgHeader(page);
 
     await test.step('Logg inn', async () => {
-      await page.goto(env('BASE_URL'));
       await login.LoginToAccessManagement('28839195259');
     });
 
@@ -302,7 +294,6 @@ test.describe.serial('tilgangspakkedelegering fra org til person og org til org'
     });
 
     await test.step('Logg inn', async () => {
-      await page.goto(env('BASE_URL'));
       await login.LoginToAccessManagement('15857698093');
     });
 
@@ -338,7 +329,6 @@ test.describe.serial('tilgangspakkedelegering fra org til person og org til org'
     });
 
     await test.step('Logg inn', async () => {
-      await page.goto(env('BASE_URL'));
       await login.LoginToAccessManagement('08904899020');
     });
 
@@ -378,7 +368,6 @@ test.describe.serial('tilgangspakkedelegering fra org til person og org til org'
     });
 
     await test.step('Logg inn', async () => {
-      await page.goto(env('BASE_URL'));
       await login.LoginToAccessManagement('20826696746');
     });
 
@@ -415,7 +404,6 @@ test.describe.serial('tilgangspakkedelegering fra org til person og org til org'
     });
 
     await test.step('Logg inn', async () => {
-      await page.goto(env('BASE_URL'));
       await login.LoginToAccessManagement('04833348529');
     });
 

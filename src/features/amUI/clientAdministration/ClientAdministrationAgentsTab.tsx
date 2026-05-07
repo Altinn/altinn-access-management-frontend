@@ -1,6 +1,6 @@
 import React, { useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
-import { DsAlert, DsParagraph, SnackbarDuration, useSnackbar } from '@altinn/altinn-components';
+import { DsAlert, DsParagraph, useSnackbar } from '@altinn/altinn-components';
 
 import { AddAgentButton } from '../users/NewUserModal/AddAgentModal';
 import { UserSearch } from '../common/UserSearch/UserSearch';
@@ -81,7 +81,6 @@ export const ClientAdministrationAgentsTab = ({ isActive }: ClientAdministration
         openSnackbar({
           message: t('client_administration_page.add_agent_error'),
           color: 'danger',
-          duration: SnackbarDuration.infinite,
         });
       });
   };

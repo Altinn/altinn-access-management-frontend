@@ -99,7 +99,8 @@
     "none": "no",
     "digdir": "The Norwegian Digitalisation Agency",
     "skiplink": "Skip to main content",
-    "no_access_to_page": "You do not have access to this page for the selected actor"
+    "no_access_to_page": "You do not have access to this page for the selected actor",
+    "see_details": "See details"
   },
   "beta_banner": {
     "info": "This is a beta version of the new access management pages in Altinn.",
@@ -153,7 +154,8 @@
     "consent": "Consent and power of attorney agreements",
     "poa_overview": "Powers of attorney",
     "settings": "Settings",
-    "requests": "Requests"
+    "requests": "Requests",
+    "maskinporten": "Maskinporten administration"
   },
   "error_page": {
     "not_found_site_type": "Error 404",
@@ -175,7 +177,16 @@
     "acting_party_data_error": "A technical error occurred. Please try again later. If the problem persists, contact Altinn support at 75 00 60 00.",
     "unsynced_connection_title": "Synchronization issue - our fault, not yours",
     "unsynced_connection": "We have a synchronization issue between the new and old solution. This is something we are working on, but for now, you unfortunately cannot see your accesses here. We apologize for any inconvenience this may cause!",
-    "unsynced_connection_link": "Click here to view your accesses in the old solution"
+    "unsynced_connection_link": "Click here to view your accesses in the old solution",
+    "reportee_change_error": {
+      "header": "We couldn't change reportee",
+      "description": "The selected reportee isn't available to you, or the link you followed was invalid.",
+      "if_persistent_contact_service": "If the problem persists, please contact Altinn support at 75 00 60 00.",
+      "where_to_now": "Where would you like to go now?",
+      "go_to_altinn": "Go to Altinn's start page",
+      "go_to_inbox": "Go to inbox",
+      "go_to_am": "Go to access management"
+    }
   },
   "profile": {
     "received": "Received",
@@ -467,8 +478,9 @@
     "heading_subtitle": "Power of attorney given to {{name}}"
   },
   "delegation_modal": {
-    "request_service": "Which service do you want to request power of attorney for?",
+    "request_service": "Which service do you need?",
     "give_service_to_name": "Give <strong>{{name}}</strong> power of attorney for new service",
+    "request_package": "Which access package do you need?",
     "give_package_to_name": "Give <strong>{{name}}</strong> power of attorney for new access package",
     "name_will_receive": "<strong>{{name}}</strong> will receive:",
     "name_has_the_following": "<strong>{{name}}</strong> has the following:",
@@ -479,6 +491,7 @@
     "edit_success": "The power of attorney was updated",
     "package_services_one": "Grants access to {{count}} service",
     "package_services_other": "Grants access to {{count}} services",
+    "no_resources_in_package": "This access package currently contains no services.",
     "inherited_role_org_message": "{{user_name}} has access to this through their role in {{org_name}}. Therefore, it cannot be deleted.",
     "actions": {
       "access_to_all": "Access to the full service",
@@ -573,6 +586,33 @@
     "person_identifier_username_format_error": "Username must be at least 6 characters",
     "person_identifier_whitespace_forbidden_error": "Spaces are not allowed in SSN or username",
     "last_name_format_error": "Please enter a valid last name"
+  },
+  "maskinporten_page": {
+    "heading": "Maskinporten administration",
+    "document_title": "Maskinporten administration - Altinn",
+    "suppliers_tab": "Suppliers",
+    "add_supplier_button": "Add supplier",
+    "suppliers_description": "Organizations that have granted Maskinporten scopes to {{name}}.",
+    "consumers_tab": "Consumers",
+    "consumers_description": "Organizations that have received Maskinporten scopes from {{name}}.",
+    "no_suppliers": "No suppliers found.",
+    "no_consumers": "No consumers found.",
+    "load_error": "Could not load Maskinporten connections.",
+    "supplier_not_found": "We could not find the supplier",
+    "remove_supplier_heading": "Remove supplier",
+    "remove_supplier_body": "Are you sure you want to remove {{name}} as a supplier? All delegated resources will also be removed.",
+    "remove_supplier_confirm": "Remove supplier",
+    "remove_supplier_error": "Could not remove {{name}} as a supplier.",
+    "remove_supplier_success": "{{name}} has been removed as a supplier.",
+    "remove_consumer_heading": "Remove consumer",
+    "remove_consumer_body": "Are you sure you want to remove {{name}} as a consumer? All delegated resources will also be removed.",
+    "remove_consumer_confirm": "Remove consumer",
+    "remove_consumer_error": "Could not remove {{name}} as a consumer.",
+    "remove_consumer_success": "{{name}} has been removed as a consumer.",
+    "back_to_list": "Go back to the overview",
+    "supplier_title": "Supplier - Altinn",
+    "own_org_number_warning": "You cannot grant access to your own organization number",
+    "own_org_number_warning_body": "If your organization does not have access, please contact the provider of the API you want to grant access to."
   },
   "settings_page": {
     "page_title": "Settings - Altinn",
@@ -835,7 +875,8 @@
     "add_own_organization_list_aria": "Add your organization to system access",
     "add_own_organization": "Add your organization",
     "add_own_organization_error": "Could not add your organization",
-    "remove_own_organization_error": "Could not remove your organization"
+    "remove_own_organization_error": "Could not remove your organization",
+    "user_is_not_client_admin": "Only client administrators can manage clients."
   },
   "systemuser_delegation_errors": {
     "01_rights_not_found_or_not_delegable": "One or more services do not exist, or cannot be delegated.",
@@ -1003,7 +1044,8 @@
   "resource_list": {
     "resource_search_placeholder": "Search resources",
     "no_resources_filtered": "No matches for the search \"{{searchTerm}}\".",
-    "no_resources": "This user has no services.",
+    "no_resources": "No services.",
+    "no_user_resources": "This user has no services.",
     "filter_by_serviceowner": "Filter by service owner",
     "filtered_serviceowners": "{{count}} service owners",
     "resource_search_clear": "Clear search",
@@ -1032,6 +1074,7 @@
     "poa_item_description": "Overview of all access packages and individual services",
     "consent_item_description": "Overview of all concluded agreements",
     "systemuser_item_description": "Overview of system access",
+    "maskinporten_item_description": "Manage access in Maskinporten",
     "client_admin_item_description": "Delegate power of attorney from clients to users in your organization.",
     "new_requests_single": "{{reportee}} has {{requestCount}} new request",
     "new_requests_plural": "{{reportee}} has {{requestCount}} new requests"
@@ -1088,6 +1131,8 @@
     "request_withdrawn": "The request has been rejected",
     "request_withdrawn_info": "You have rejected the request and will therefore not receive power of attorney for <strong>{{to_name}}</strong>.",
     "close_window_info": "You can now close this window.",
-    "missing_request_id": "Cannot load request: requestId-parameter is not set in url"
+    "missing_request_id": "Cannot load request: requestId-parameter is not set in url",
+    "batch_partial_error": "Could not process the following resources: {{resources}}. Please try again.",
+    "multiple_services_title": "<strong>{{name}}</strong> request the following services:"
   }
 }

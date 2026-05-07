@@ -30,7 +30,7 @@ export class AktorvalgHeader {
     this.page = page;
     this.infoportalLogo = this.page.getByRole('link', { name: 'Gå til forsiden' });
     this.searchButton = this.page.getByText('Søk i Altinn', { exact: true });
-    this.menuButton = this.page.getByRole('button', { name: 'Meny', exact: true });
+    this.menuButton = this.page.getByRole('button', { name: /^(Menu|Meny)$/ });
     this.dummy = this.page.getByRole('link', { name: 'Sjekk innboks' });
     this.searchBar = this.page.getByRole('searchbox', { name: 'Søk' });
 
