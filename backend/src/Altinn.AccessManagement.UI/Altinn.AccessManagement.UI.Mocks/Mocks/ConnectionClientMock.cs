@@ -142,7 +142,12 @@ namespace Altinn.AccessManagement.UI.Mocks.Mocks
 
         public Task<AssignmentDto> PostNewSelfIdentifiedUser(Guid from, Guid to, CancellationToken cancellationToken = default)
         {
-            throw new NotImplementedException();
+            if (from == Guid.Empty || to == Guid.Empty)
+            {
+                throw new HttpStatusException("Test", "Mock bad request error", HttpStatusCode.BadRequest, null);
+            }
+
+            return Task.FromResult(new AssignmentDto());
         }
     }
 }

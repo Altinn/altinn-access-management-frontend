@@ -1,5 +1,4 @@
-using Altinn.AccessManagement.UI.Core.Models.Altinn2User;
-using Altinn.Authorization.ProblemDetails;
+using Altinn.AccessManagement.UI.Core.Models.SelfIdentifiedUser;
 
 namespace Altinn.AccessManagement.UI.Core.Services.Interfaces
 {
@@ -9,12 +8,19 @@ namespace Altinn.AccessManagement.UI.Core.Services.Interfaces
     public interface ISelfIdentifiedUserService
     {
         /// <summary>
-        /// Verify and adds a legacy Altinn 2 user account to the current user's account.
+        /// Verifies a legacy Altinn 2 user account and returns the party UUID.
         /// </summary>
-        /// <param name="to">The user to a account to.</param>
         /// <param name="request">Username and password of the legacy account.</param>
         /// <param name="cancellationToken">Cancellation token.</param>
-        /// <returns>A result indicating whether the account was successfully linked.</returns>
-        Task<Result<bool>> AddAltinn2User(Guid to, Altinn2UserRequest request, CancellationToken cancellationToken);
+        /// <returns>The party UUID of the verified Altinn 2 user.</returns>
+        Task<Guid> ValidateCredentials(Altinn2UserRequest request, CancellationToken cancellationToken);
+
+        /// <summary>
+        /// Creates a self-identified user connection between two parties.
+        /// </summary>
+        /// <param name="from">The party UUID of the Altinn 2 user.</param>
+        /// <param name="to">The party UUID to connect to.</param>
+        /// <param name="cancellationToken">Cancellation token.</param>
+        Task PostNewSelfIdentifiedUser(Guid from, Guid to, CancellationToken cancellationToken);
     }
 }

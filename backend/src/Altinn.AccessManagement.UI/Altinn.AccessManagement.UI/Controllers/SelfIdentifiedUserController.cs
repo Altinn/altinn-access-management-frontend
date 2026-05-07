@@ -1,7 +1,8 @@
-using Altinn.AccessManagement.UI.Core.Models.Altinn2User;
+using System.Net;
+using Altinn.AccessManagement.UI.Core.Helpers;
+using Altinn.AccessManagement.UI.Core.Models.SelfIdentifiedUser;
 using Altinn.AccessManagement.UI.Core.Services.Interfaces;
 using Altinn.AccessManagement.UI.Filters;
-using Altinn.Authorization.ProblemDetails;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -17,33 +18,58 @@ namespace Altinn.AccessManagement.UI.Controllers
     public class SelfIdentifiedUserController : ControllerBase
     {
         private readonly ISelfIdentifiedUserService _selfIdentifiedUserService;
+        private readonly ILogger<SelfIdentifiedUserController> _logger;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="SelfIdentifiedUserController"/> class.
         /// </summary>
         public SelfIdentifiedUserController(
-            ISelfIdentifiedUserService selfIdentifiedUserService)
+            ISelfIdentifiedUserService selfIdentifiedUserService,
+            ILogger<SelfIdentifiedUserController> logger)
         {
             _selfIdentifiedUserService = selfIdentifiedUserService;
+            _logger = logger;
         }
 
         /// <summary>
         /// Adds a legacy Altinn 2 self-identified user account to the current user's account.
         /// </summary>
-        /// <param name="to">The user to a account to.</param>
+        /// <param name="to">The party UUID to connect to.</param>
         /// <param name="request">The legacy account username and password.</param>
         /// <param name="cancellationToken">Cancellation token.</param>
-        /// <returns>Result reflecting the platform response status.</returns>
         [HttpPost("altinn2user")]
         public async Task<ActionResult> AddAltinn2User([FromQuery] Guid to, [FromBody] Altinn2UserRequest request, CancellationToken cancellationToken)
         {
-            Result<bool> result = await _selfIdentifiedUserService.AddAltinn2User(to, request, cancellationToken);
-            if (result.IsProblem)
+            Guid altinn2UserPartyUuid;
+            try
             {
-                return result.Problem.ToActionResult();
+                altinn2UserPartyUuid = await _selfIdentifiedUserService.ValidateCredentials(request, cancellationToken);
+            }
+            catch (HttpStatusException ex)
+            {
+                return new ObjectResult(ProblemDetailsFactory.CreateProblemDetails(HttpContext, (int?)ex.StatusCode, "Invalid Altinn 2 credentials", detail: ex.Message));
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "ValidateCredentials failed unexpectedly");
+                return StatusCode((int)HttpStatusCode.InternalServerError);
             }
 
-            return Ok(result.Value);
+            try
+            {
+                await _selfIdentifiedUserService.PostNewSelfIdentifiedUser(from: altinn2UserPartyUuid, to: to, cancellationToken);
+            }
+            catch (HttpStatusException ex)
+            {
+                return new ObjectResult(ProblemDetailsFactory.CreateProblemDetails(HttpContext, (int?)ex.StatusCode, "Failed to create self-identified user connection", detail: ex.Message));
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "PostNewSelfIdentifiedUser failed unexpectedly");
+                return StatusCode((int)HttpStatusCode.InternalServerError);
+            }
+
+            return Ok();
         }
     }
 }

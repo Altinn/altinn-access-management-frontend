@@ -503,15 +503,15 @@ void ConfigureMockableClients(IServiceCollection services, IConfiguration config
         services.AddSingleton<IConsentClient, ConsentClient>();
     }
 
-    if (mockSettings.Altinn2User)
+    if (mockSettings.SelfIdentifiedUser)
     {
-        services.AddSingleton<IAltinn2UserClient, Altinn2UserClientMock>();
+        services.AddSingleton<ISelfIdentifiedUserClient, SelfIdentifiedUserClientMock>();
     }
     else
     {
-        services.AddHttpClient<IAltinn2UserClient, Altinn2UserClient>();
+        services.AddHttpClient<ISelfIdentifiedUserClient, SelfIdentifiedUserClient>();
     }
-    
+
     if (mockSettings.Maskinporten)
     {
         services.AddSingleton<IMaskinportenClient, MaskinportenClientMock>();

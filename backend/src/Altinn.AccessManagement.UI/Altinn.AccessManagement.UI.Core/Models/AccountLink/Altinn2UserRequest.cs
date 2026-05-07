@@ -1,6 +1,6 @@
 using System.ComponentModel.DataAnnotations;
 
-namespace Altinn.AccessManagement.UI.Core.Models.Altinn2User
+namespace Altinn.AccessManagement.UI.Core.Models.SelfIdentifiedUser
 {
     /// <summary>
     /// Request model for connecting a legacy Altinn 2 user account.

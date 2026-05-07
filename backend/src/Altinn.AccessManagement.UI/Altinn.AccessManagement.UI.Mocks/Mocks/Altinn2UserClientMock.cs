@@ -1,23 +1,26 @@
+using System.Net;
 using Altinn.AccessManagement.UI.Core.ClientInterfaces;
-using Altinn.AccessManagement.UI.Core.Models.Altinn2User;
-using Altinn.Authorization.ProblemDetails;
+using Altinn.AccessManagement.UI.Core.Helpers;
+using Altinn.AccessManagement.UI.Core.Models.SelfIdentifiedUser;
 
 namespace Altinn.AccessManagement.UI.Mocks.Mocks
 {
     /// <summary>
-    /// Mock class for <see cref="IAltinn2UserClient"/>.
+    /// Mock class for <see cref="ISelfIdentifiedUserClient"/>.
     /// </summary>
-    public class Altinn2UserClientMock : IAltinn2UserClient
+    public class SelfIdentifiedUserClientMock : ISelfIdentifiedUserClient
     {
-        /// <inheritdoc />
-        public Task<Result<bool>> VerifyAltinn2User(Altinn2UserRequest request, CancellationToken cancellationToken)
-        {
-            if (!string.IsNullOrEmpty(request?.Username) && !string.IsNullOrEmpty(request?.Password))
-                return Task.FromResult(new Result<bool>(true));
+        private static readonly Guid _mockPartyUuid = Guid.Parse("00000000-0000-0000-0000-000000000001");
 
-            return Task.FromResult(new Result<bool>(false));
+        /// <inheritdoc />
+        public Task<Guid> ValidateCredentials(Altinn2UserRequest request, CancellationToken cancellationToken)
+        {
+            if (request?.Username == "invalid" || request?.Password == "invalid")
+            {
+                throw new HttpStatusException("Unauthorized", "Invalid credentials", HttpStatusCode.Unauthorized, null);
+            }
+
+            return Task.FromResult(_mockPartyUuid);
         }
     }
 }
-
-
