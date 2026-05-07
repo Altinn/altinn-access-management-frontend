@@ -1,5 +1,7 @@
 using Altinn.AccessManagement.UI.Core.Models.ClientDelegation;
 using Altinn.AccessManagement.UI.Core.Models.Maskinporten;
+using Altinn.AccessManagement.UI.Core.Models.ResourceRegistry;
+using Altinn.AccessManagement.UI.Core.Models.ResourceRegistry.Frontend;
 
 namespace Altinn.AccessManagement.UI.Core.Services.Interfaces
 {
@@ -16,6 +18,15 @@ namespace Altinn.AccessManagement.UI.Core.Services.Interfaces
         /// <param name="cancellationToken">Cancellation token.</param>
         /// <returns>A collection of suppliers.</returns>
         Task<IEnumerable<MaskinportenConnection>> GetSuppliers(Guid party, string supplier = null, CancellationToken cancellationToken = default);
+
+        /// <summary>
+        /// Searches Maskinporten scope resources.
+        /// </summary>
+        /// <param name="languageCode">The language code.</param>
+        /// <param name="searchParams">The search parameters.</param>
+        /// <param name="cancellationToken">Cancellation token.</param>
+        /// <returns>Paginated Maskinporten scope resources.</returns>
+        Task<PaginatedList<ServiceResourceFE>> SearchScopes(string languageCode, PaginatedSearchParams searchParams, CancellationToken cancellationToken = default);
 
         /// <summary>
         /// Adds a Maskinporten supplier for a party.
