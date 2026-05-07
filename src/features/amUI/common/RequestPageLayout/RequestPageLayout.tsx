@@ -52,7 +52,7 @@ export const RequestPageLayout = ({
   return (
     <RootProvider>
       <Layout
-        color={isLoading ? 'neutral' : account.type}
+        color={account.type}
         theme='subtle'
         header={{
           locale: {
