@@ -99,9 +99,9 @@
     "no_access_to_page": "Du har ikke tilgang til denne siden for valgt aktør",
     "see_details": "Se detaljer"
   },
-  "beta_banner": {
-    "info": "Du ser nå på en betaversjon av de nye sidene for tilgangsstyring i Altinn.",
-    "link": "Klikk her for å gå tilbake til dagens Altinn."
+  "info_banner": {
+    "info": "19. juni skrus gamle Altinn av.",
+    "link": "Dette må du passe på."
   },
   "error_page": {
     "not_found_site_error_type": "Feil 404",

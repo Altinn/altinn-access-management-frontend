@@ -26,7 +26,6 @@ export const ErrorLayoutWrapper = ({
   return (
     <RootProvider languageCode={languageCode as LanguageCode}>
       <Layout
-        useGlobalHeader
         color={'neutral'}
         theme='default'
         header={header}

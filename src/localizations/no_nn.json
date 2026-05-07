@@ -99,9 +99,9 @@
     "no_access_to_page": "Du har ikkje tilgang til denne sida for vald aktør",
     "see_details": "Sjå detaljar"
   },
-  "beta_banner": {
-    "info": "Du ser no på ein betaversjon av dei nye sidene for tilgangsstyring i Altinn.",
-    "link": "Klikk her for å gå tilbake til dagens Altinn."
+  "info_banner": {
+    "info": "19. juni blir gamle Altinn skrudd av.",
+    "link": "Dette må du passe på."
   },
   "header": {
     "access_management": "Tilgangsstyring",
