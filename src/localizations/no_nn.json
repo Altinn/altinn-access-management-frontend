@@ -1151,6 +1151,6 @@
     "go_to_inbox": "Gå til innboks",
     "go_to_profile": "Gå til profil",
     "load_user_error": "Kunne ikkje laste brukar.",
-    "not_self_identified_error": "Berre sjølvidentifiserte brukarar kan leggje til konto."
+    "not_self_identified_error": "Berre epost-brukarar kan leggje til konto."
   }
 }

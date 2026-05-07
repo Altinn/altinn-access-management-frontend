@@ -1154,6 +1154,6 @@
     "go_to_inbox": "Go to inbox",
     "go_to_profile": "Go to profile",
     "load_user_error": "Could not load user.",
-    "not_self_identified_error": "Only self-identified users can add an account."
+    "not_self_identified_error": "Only email-users users can add an account."
   }
 }
