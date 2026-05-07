@@ -54,7 +54,7 @@ export const AddAltinn2AccountPage = () => {
   }, [reportee]);
 
   const step1Component = (
-    <DsDialog.Block className={classes.addAltinn2AccountPage}>
+    <DsDialog.Block className={classes.addAltinn2Account}>
       <DsHeading level={1}>{t('add_altinn2_account_page.add_account_heading')}</DsHeading>
       <DsParagraph>
         {t('add_altinn2_account_page.logged_in_as', { name: reportee?.name })}
@@ -79,11 +79,11 @@ export const AddAltinn2AccountPage = () => {
 
   const step2Component = (
     <>
-      <DsDialog.Block className={classes.addSelfidentifiedUserHeader}>
+      <DsDialog.Block className={classes.addAltinn2AccountHeader}>
         <PersonCircleIcon fontSize={'1.5rem'} />
         <DsHeading level={1}>{t('add_altinn2_account_page.add_account_heading')}</DsHeading>
       </DsDialog.Block>
-      <DsDialog.Block className={classes.addAltinn2AccountPage}>
+      <DsDialog.Block className={classes.addAltinn2Account}>
         <DsParagraph>
           {t('add_altinn2_account_page.login_info', { name: reportee?.name })}
         </DsParagraph>

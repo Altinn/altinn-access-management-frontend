@@ -242,7 +242,7 @@ export const Router = createBrowserRouter(
           element={<DraftRequestPage />}
         />
         <Route
-          path={amUIPath.Altinn2User}
+          path={amUIPath.Altinn2Account}
           element={<AddAltinn2AccountPage />}
         />
         <Route
