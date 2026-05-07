@@ -102,9 +102,9 @@
     "no_access_to_page": "You do not have access to this page for the selected actor",
     "see_details": "See details"
   },
-  "beta_banner": {
-    "info": "This is a beta version of the new access management pages in Altinn.",
-    "link": "Click here to go back to today's Altinn."
+  "info_banner": {
+    "info": "June 19: the old Altinn will be shut down.",
+    "link": "Here's what you need to be aware of."
   },
   "header": {
     "access_management": "Access management",
