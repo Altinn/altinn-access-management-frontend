@@ -13,32 +13,32 @@ import { PersonCircleIcon } from '@navikt/aksel-icons';
 import { useDocumentTitle } from '@/resources/hooks/useDocumentTitle';
 import { getAfUrl } from '@/resources/utils/pathUtils';
 import { useGetReporteeQuery } from '@/rtk/features/userInfoApi';
-import { useAddAltinn2UserMutation } from '@/rtk/features/selfIdentifiedUserApi';
-import classes from './AddAltinn2UserPage.module.css';
+import { useAddAltinn2AccountMutation } from '@/rtk/features/selfIdentifiedUserApi';
+import classes from './AddAltinn2AccountPage.module.css';
 import { PageLayoutWrapper } from '../common/PageLayoutWrapper';
 
-export const AddAltinn2UserPage = () => {
+export const AddAltinn2AccountPage = () => {
   const { t } = useTranslation();
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [step, setStep] = useState<number>(1);
   const modalRef = useRef<HTMLDialogElement>(null);
 
-  useDocumentTitle(t('altinn2_user_page.page_title'));
+  useDocumentTitle(t('add_altinn2_account_page.page_title'));
 
   const { data: reportee, isError: isReporteeError } = useGetReporteeQuery();
 
-  const [addAltinn2User, { isLoading: isAddingAltinn2User, error: addUserError }] =
-    useAddAltinn2UserMutation();
+  const [addAltinn2Account, { isLoading: isAddingAltinn2Account, error: addUserError }] =
+    useAddAltinn2AccountMutation();
 
-  const isActionButtonDisabled = !username || !password || isAddingAltinn2User;
+  const isActionButtonDisabled = !username || !password || isAddingAltinn2Account;
   const afUrl = `${getAfUrl()}inbox`;
   const profileUrl = `${getAfUrl()}profile`;
 
-  const onAddAltinn2User = async () => {
+  const onAddAltinn2Account = async () => {
     const to = reportee?.partyUuid;
     if (!isActionButtonDisabled && to) {
-      addAltinn2User({ to, username, password })
+      addAltinn2Account({ to, username, password })
         .unwrap()
         .then(() => {
           setStep(3);
@@ -54,26 +54,24 @@ export const AddAltinn2UserPage = () => {
   }, [reportee]);
 
   const step1Component = (
-    <DsDialog.Block className={classes.addAltinn2UserPage}>
-      <DsHeading level={1}>Legg til konto</DsHeading>
-      <DsParagraph>Du har logget inn som {reportee?.name}.</DsParagraph>
+    <DsDialog.Block className={classes.addAltinn2AccountPage}>
+      <DsHeading level={1}>{t('add_altinn2_account_page.add_account_heading')}</DsHeading>
       <DsParagraph>
-        Har du tidligere logget inn med brukernavn og passord kan du legge til den gamle kontoen din
-        her. Da vil du få tilgang til meldingene som er sendt til denne kontoen når du logger inn
-        med e-post.
+        {t('add_altinn2_account_page.logged_in_as', { name: reportee?.name })}
       </DsParagraph>
+      <DsParagraph>{t('add_altinn2_account_page.add_account_info')}</DsParagraph>
       <div className={classes.buttonRow}>
         <DsButton
           variant='primary'
           onClick={() => setStep(2)}
         >
-          Gå videre
+          {t('add_altinn2_account_page.continue')}
         </DsButton>
         <DsButton
           variant='secondary'
           asChild
         >
-          <a href={afUrl}>Avbryt</a>
+          <a href={afUrl}>{t('add_altinn2_account_page.cancel')}</a>
         </DsButton>
       </div>
     </DsDialog.Block>
@@ -83,20 +81,20 @@ export const AddAltinn2UserPage = () => {
     <>
       <DsDialog.Block className={classes.addSelfidentifiedUserHeader}>
         <PersonCircleIcon fontSize={'1.5rem'} />
-        <DsHeading level={1}>Legg til konto</DsHeading>
+        <DsHeading level={1}>{t('add_altinn2_account_page.add_account_heading')}</DsHeading>
       </DsDialog.Block>
-      <DsDialog.Block className={classes.addAltinn2UserPage}>
+      <DsDialog.Block className={classes.addAltinn2AccountPage}>
         <DsParagraph>
-          Logg inn med brukernavn og passord for å koble kontoen sammen med {reportee?.name}.
+          {t('add_altinn2_account_page.login_info', { name: reportee?.name })}
         </DsParagraph>
         <DsTextfield
-          label='Brukernavn'
+          label={t('add_altinn2_account_page.username')}
           data-size='sm'
           value={username}
           onChange={(e) => setUsername(e.target.value)}
         />
         <DsTextfield
-          label='Passord'
+          label={t('add_altinn2_account_page.password')}
           data-size='sm'
           type='password'
           value={password}
@@ -105,31 +103,31 @@ export const AddAltinn2UserPage = () => {
         {addUserError && (
           <DsAlert data-color='danger'>
             {(addUserError as { status: number }).status === 401
-              ? 'Ugyldig kombinasjon av brukernavn og passord.'
-              : 'Det skjedde en feil ved å legge til konto.'}
+              ? t('add_altinn2_account_page.invalid_credentials')
+              : t('add_altinn2_account_page.add_account_error')}
           </DsAlert>
         )}
         <div className={classes.buttonRow}>
           <DsButton
             variant='primary'
             aria-disabled={isActionButtonDisabled}
-            loading={isAddingAltinn2User}
-            onClick={onAddAltinn2User}
+            loading={isAddingAltinn2Account}
+            onClick={onAddAltinn2Account}
           >
-            Legg til
+            {t('add_altinn2_account_page.add_account_button')}
           </DsButton>
           <DsButton
             variant='secondary'
             asChild
           >
-            <a href={afUrl}>Avbryt</a>
+            <a href={afUrl}>{t('add_altinn2_account_page.cancel')}</a>
           </DsButton>
           <DsLink
             target='_blank'
             rel='noopener noreferrer'
             href='https://www.altinn.no/ui/Authentication/SelfIdentified'
           >
-            Glemt passord
+            {t('add_altinn2_account_page.forgot_password')}
           </DsLink>
         </div>
       </DsDialog.Block>
@@ -137,24 +135,21 @@ export const AddAltinn2UserPage = () => {
   );
 
   const step3Component = (
-    <DsDialog.Block className={classes.addAltinn2UserPage}>
-      <DsHeading>Kontoen er lagt til</DsHeading>
-      <DsParagraph>
-        Du vil nå se dine gamle meldinger i den nye innboksen. Du kan legge til flere kontoer under
-        Din profil om du ønsker det.
-      </DsParagraph>
+    <DsDialog.Block className={classes.addAltinn2Account}>
+      <DsHeading>{t('add_altinn2_account_page.account_added_heading')}</DsHeading>
+      <DsParagraph>{t('add_altinn2_account_page.account_added_info')}</DsParagraph>
       <div className={classes.buttonRow}>
         <DsButton
           variant='primary'
           asChild
         >
-          <a href={afUrl}>Gå til innboks</a>
+          <a href={afUrl}>{t('add_altinn2_account_page.go_to_inbox')}</a>
         </DsButton>
         <DsButton
           variant='secondary'
           asChild
         >
-          <a href={profileUrl}>Gå til profil</a>
+          <a href={profileUrl}>{t('add_altinn2_account_page.go_to_profile')}</a>
         </DsButton>
       </div>
     </DsDialog.Block>
@@ -162,9 +157,13 @@ export const AddAltinn2UserPage = () => {
 
   return (
     <PageLayoutWrapper hideSidebar>
-      {isReporteeError && <DsAlert data-color='danger'>Kunne ikke laste bruker.</DsAlert>}
+      {isReporteeError && (
+        <DsAlert data-color='danger'>{t('add_altinn2_account_page.load_user_error')}</DsAlert>
+      )}
       {reportee && reportee.type !== 'SelfIdentified' && (
-        <DsAlert data-color='danger'>Kun selvidentifiserte brukere kan legge til konto.</DsAlert>
+        <DsAlert data-color='danger'>
+          {t('add_altinn2_account_page.not_self_identified_error')}
+        </DsAlert>
       )}
       <DsDialog
         ref={modalRef}

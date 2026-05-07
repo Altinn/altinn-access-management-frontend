@@ -13,7 +13,7 @@ namespace Altinn.AccessManagement.UI.Core.Services.Interfaces
         /// <param name="request">Username and password of the legacy account.</param>
         /// <param name="cancellationToken">Cancellation token.</param>
         /// <returns>The party UUID of the verified Altinn 2 user.</returns>
-        Task<Guid> ValidateCredentials(Altinn2UserRequest request, CancellationToken cancellationToken);
+        Task<Guid> ValidateCredentials(Altinn2AccountRequest request, CancellationToken cancellationToken);
 
         /// <summary>
         /// Creates a self-identified user connection between two parties.

@@ -41,7 +41,7 @@ namespace Altinn.AccessManagement.UI.Integration.Clients
         }
 
         /// <inheritdoc />
-        public async Task<Guid> ValidateCredentials(Altinn2UserRequest request, CancellationToken cancellationToken)
+        public async Task<Guid> ValidateCredentials(Altinn2AccountRequest request, CancellationToken cancellationToken)
         {
             string token = JwtTokenUtil.GetTokenFromContext(_httpContextAccessor.HttpContext, _platformSettings.JwtCookieName);
             string endpointUrl = "selfidentifedauthentication/validate-credentials";

@@ -5,7 +5,7 @@ namespace Altinn.AccessManagement.UI.Core.Models.SelfIdentifiedUser
     /// <summary>
     /// Request model for connecting a legacy Altinn 2 user account.
     /// </summary>
-    public class Altinn2UserRequest
+    public class Altinn2AccountRequest
     {
         /// <summary>
         /// The legacy account username.

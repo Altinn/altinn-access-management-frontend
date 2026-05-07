@@ -45,7 +45,7 @@ import { AgentDetailsPage } from '@/features/amUI/agentDetails/AgentDetailsPage'
 import { ClientDetailsPage } from '@/features/amUI/clientDetails/ClientDetailsPage';
 import { MyClientsPage } from '@/features/amUI/myClients/MyClientsPage';
 import { DraftRequestPage } from '@/features/amUI/requestPage/DraftRequestPage/DraftRequestPage';
-import { AddAltinn2UserPage } from '@/features/amUI/altinn2user/AddAltinn2UserPage';
+import { AddAltinn2AccountPage } from '@/features/amUI/altinn2Account/AddAltinn2AccountPage';
 import { MaskinportenPage } from '@/features/amUI/maskinporten/MaskinportenPage';
 import { MaskinportenSupplierPage } from '@/features/amUI/maskinporten/MaskinportenSupplierPage';
 
@@ -243,7 +243,7 @@ export const Router = createBrowserRouter(
         />
         <Route
           path={amUIPath.Altinn2User}
-          element={<AddAltinn2UserPage />}
+          element={<AddAltinn2AccountPage />}
         />
         <Route
           path={amUIPath.Maskinporten}

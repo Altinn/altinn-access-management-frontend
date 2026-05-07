@@ -37,13 +37,13 @@ namespace Altinn.AccessManagement.UI.Controllers
         /// <param name="to">The party UUID to connect to.</param>
         /// <param name="request">The legacy account username and password.</param>
         /// <param name="cancellationToken">Cancellation token.</param>
-        [HttpPost("altinn2user")]
-        public async Task<ActionResult> AddAltinn2User([FromQuery] Guid to, [FromBody] Altinn2UserRequest request, CancellationToken cancellationToken)
+        [HttpPost("altinn2account")]
+        public async Task<ActionResult> AddAltinn2Account([FromQuery] Guid to, [FromBody] Altinn2AccountRequest request, CancellationToken cancellationToken)
         {
-            Guid altinn2UserPartyUuid;
+            Guid altinn2AccountPartyUuid;
             try
             {
-                altinn2UserPartyUuid = await _selfIdentifiedUserService.ValidateCredentials(request, cancellationToken);
+                altinn2AccountPartyUuid = await _selfIdentifiedUserService.ValidateCredentials(request, cancellationToken);
             }
             catch (HttpStatusException ex)
             {
@@ -57,7 +57,7 @@ namespace Altinn.AccessManagement.UI.Controllers
 
             try
             {
-                await _selfIdentifiedUserService.PostNewSelfIdentifiedUser(from: altinn2UserPartyUuid, to: to, cancellationToken);
+                await _selfIdentifiedUserService.PostNewSelfIdentifiedUser(from: altinn2AccountPartyUuid, to: to, cancellationToken);
             }
             catch (HttpStatusException ex)
             {

@@ -32,18 +32,18 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
         ///     Test case: Add altinn 2 user with valid credentials returns OK
         /// </summary>
         [Fact]
-        public async Task AddAltinn2User_ValidCredentials_ReturnsOk()
+        public async Task AddAltinn2Account_ValidCredentials_ReturnsOk()
         {
             // Arrange
             Guid to = Guid.NewGuid();
-            Altinn2UserRequest request = new Altinn2UserRequest()
+            Altinn2AccountRequest request = new Altinn2AccountRequest()
             {
                 Username = "testuser",
                 Password = "testpassword"
             };
 
             // Act
-            HttpResponseMessage httpResponse = await _client.PostAsync($"accessmanagement/api/v1/selfidentifieduser/altinn2user?to={to}", JsonContent.Create(request));
+            HttpResponseMessage httpResponse = await _client.PostAsync($"accessmanagement/api/v1/selfidentifieduser/altinn2account?to={to}", JsonContent.Create(request));
 
             // Assert
             Assert.Equal(HttpStatusCode.OK, httpResponse.StatusCode);
@@ -53,18 +53,18 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
         ///     Test case: Add altinn 2 user with invalid credentials returns Unauthorized
         /// </summary>
         [Fact]
-        public async Task AddAltinn2User_InvalidCredentials_ReturnsUnauthorized()
+        public async Task AddAltinn2Account_InvalidCredentials_ReturnsUnauthorized()
         {
             // Arrange
             Guid to = Guid.NewGuid();
-            Altinn2UserRequest request = new Altinn2UserRequest()
+            Altinn2AccountRequest request = new Altinn2AccountRequest()
             {
                 Username = "invalid",
                 Password = "invalid"
             };
 
             // Act
-            HttpResponseMessage httpResponse = await _client.PostAsync($"accessmanagement/api/v1/selfidentifieduser/altinn2user?to={to}", JsonContent.Create(request));
+            HttpResponseMessage httpResponse = await _client.PostAsync($"accessmanagement/api/v1/selfidentifieduser/altinn2account?to={to}", JsonContent.Create(request));
 
             // Assert
             Assert.Equal(HttpStatusCode.Unauthorized, httpResponse.StatusCode);

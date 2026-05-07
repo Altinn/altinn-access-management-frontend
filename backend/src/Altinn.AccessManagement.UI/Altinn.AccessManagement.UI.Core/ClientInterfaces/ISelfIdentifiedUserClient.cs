@@ -13,6 +13,6 @@ namespace Altinn.AccessManagement.UI.Core.ClientInterfaces
         /// <param name="request">Username and password of the legacy account.</param>
         /// <param name="cancellationToken">Cancellation token.</param>
         /// <returns>The partyUuid of the user</returns>
-        Task<Guid> ValidateCredentials(Altinn2UserRequest request, CancellationToken cancellationToken);
+        Task<Guid> ValidateCredentials(Altinn2AccountRequest request, CancellationToken cancellationToken);
     }
 }
