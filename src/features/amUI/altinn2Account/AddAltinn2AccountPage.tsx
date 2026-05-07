@@ -38,11 +38,12 @@ export const AddAltinn2AccountPage = () => {
   const onAddAltinn2Account = async () => {
     const to = reportee?.partyUuid;
     if (!isActionButtonDisabled && to) {
-      addAltinn2Account({ to, username, password })
-        .unwrap()
-        .then(() => {
-          setStep(3);
-        }); // error is caught and displayed as addUserError
+      try {
+        await addAltinn2Account({ to, username, password }).unwrap();
+        setStep(3);
+      } catch {
+        // error displayed via addUserError RTK Query state
+      }
     }
   };
 

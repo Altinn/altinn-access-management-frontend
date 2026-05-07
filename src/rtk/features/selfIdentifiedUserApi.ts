@@ -15,10 +15,7 @@ export const selfIdentifiedUserApi = createApi({
   }),
   tagTypes: ['clients', 'agents', 'agentAccessPackages', 'clientAccessPackages', 'myClients'],
   endpoints: (builder) => ({
-    addAltinn2Account: builder.mutation<
-      boolean,
-      { to: string; username: string; password: string }
-    >({
+    addAltinn2Account: builder.mutation<void, { to: string; username: string; password: string }>({
       query: ({ to, username, password }) => ({
         url: `altinn2account?to=${to}`,
         method: 'POST',

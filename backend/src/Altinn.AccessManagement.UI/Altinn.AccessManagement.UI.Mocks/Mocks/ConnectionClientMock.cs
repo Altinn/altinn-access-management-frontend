@@ -140,6 +140,7 @@ namespace Altinn.AccessManagement.UI.Mocks.Mocks
             return Task.FromResult(Util.GetMockData<List<SimplifiedConnection>>(dataPath));
         }
 
+        /// <inheritdoc/>
         public Task<AssignmentDto> PostNewSelfIdentifiedUser(Guid from, Guid to, CancellationToken cancellationToken = default)
         {
             if (from == Guid.Empty || to == Guid.Empty)
