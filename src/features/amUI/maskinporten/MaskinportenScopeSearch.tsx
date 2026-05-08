@@ -1,21 +1,32 @@
 import * as React from 'react';
 import {
   DsAlert,
+  DsButton,
   DsHeading,
   DsParagraph,
   DsSpinner,
+  SnackbarDuration,
   formatDisplayName,
+  useSnackbar,
 } from '@altinn/altinn-components';
 import { useTranslation } from 'react-i18next';
+import { MinusCircleIcon, PlusCircleIcon } from '@navikt/aksel-icons';
 
 import { AmPagination } from '@/components/Paginering/AmPaginering';
 import { ResourceFilterToolbar } from '@/features/amUI/common/ResourceFilterToolbar/ResourceFilterToolbar';
 import { ResourceList } from '@/features/amUI/common/ResourceList/ResourceList';
 import { debounce } from '@/resources/utils';
+import type { ActionError } from '@/resources/hooks/useActionError';
 import { ResourceType, useGetResourceOwnersQuery } from '@/rtk/features/resourceApi';
-import { useSearchMaskinportenScopesQuery } from '@/rtk/features/maskinportenApi';
+import {
+  useAddMaskinportenResourceMutation,
+  useGetMaskinportenResourcesQuery,
+  useRemoveMaskinportenResourceMutation,
+  useSearchMaskinportenScopesQuery,
+} from '@/rtk/features/maskinportenApi';
 import type { ServiceResource } from '@/rtk/features/singleRights/singleRightsApi';
 import { PartyType } from '@/rtk/features/userInfoApi';
+import { useIsMobileOrSmaller } from '@/resources/utils/screensizeUtils';
 
 import classes from '../common/DelegationModal/SingleRights/ResourceSearch.module.css';
 import { useDelegationModalContext } from '../common/DelegationModal/DelegationModalContext';
@@ -28,16 +39,48 @@ const getScopeCount = (resource: ServiceResource) =>
     (reference) => reference.referenceType === 'MaskinportenScope' && reference.reference?.trim(),
   ).length ?? 0;
 
+const extractStatus = (error: unknown): string => {
+  if (error && typeof error === 'object' && 'status' in error) {
+    return String((error as { status: unknown }).status);
+  }
+  return String(error);
+};
+
+const extractDetails = (error: unknown): ActionError['details'] | undefined => {
+  if (error && typeof error === 'object' && 'data' in error) {
+    return error.data as ActionError['details'];
+  }
+  return undefined;
+};
+
+const getErrorInfo = (error: unknown): ActionError => ({
+  httpStatus: extractStatus(error),
+  details: extractDetails(error),
+  timestamp: new Date().toISOString(),
+});
+
 export const MaskinportenScopeSearch = ({
   onSelect,
 }: {
-  onSelect: (resource: ServiceResource) => void;
+  onSelect: (resource: ServiceResource, error?: boolean) => void;
 }) => {
   const { t } = useTranslation();
-  const { toParty } = usePartyRepresentation();
-  const { searchString, setSearchString, filters, setFilters, currentPage, setCurrentPage } =
-    useDelegationModalContext();
+  const { openSnackbar } = useSnackbar();
+  const isMobile = useIsMobileOrSmaller();
+  const { fromParty, toParty } = usePartyRepresentation();
+  const {
+    searchString,
+    setSearchString,
+    filters,
+    setFilters,
+    currentPage,
+    setCurrentPage,
+    setActionError,
+  } = useDelegationModalContext();
   const [debouncedSearchString, setDebouncedSearchString] = React.useState(searchString);
+  const [loadingByResourceId, setLoadingByResourceId] = React.useState<Record<string, boolean>>({});
+  const [addResource] = useAddMaskinportenResourceMutation();
+  const [removeResource] = useRemoveMaskinportenResourceMutation();
 
   const debouncedSearch = React.useMemo(
     () =>
@@ -67,6 +110,21 @@ export const MaskinportenScopeSearch = ({
     resultsPerPage: searchResultsPerPage,
   });
   const { data: resourceOwners } = useGetResourceOwnersQuery([ResourceType.MaskinportenSchema]);
+  const supplier = toParty?.orgNumber ?? '';
+  const {
+    data: delegatedResources,
+    isFetching: isDelegatedResourcesFetching,
+    refetch: refetchDelegatedResources,
+  } = useGetMaskinportenResourcesQuery(
+    {
+      party: fromParty?.partyUuid,
+      supplier,
+    },
+    {
+      skip: !fromParty?.partyUuid || !supplier,
+      refetchOnMountOrArgChange: true,
+    },
+  );
 
   const resources = data?.pageList ?? [];
   const totalNumberOfResults = data?.numEntriesTotal;
@@ -79,6 +137,121 @@ export const MaskinportenScopeSearch = ({
     fullName: toParty?.name ?? '',
     type: toParty?.partyTypeName === PartyType.Person ? 'person' : 'company',
   });
+  const isDelegated = (resourceId: string) =>
+    delegatedResources?.some(
+      (delegatedResource) => delegatedResource.resource?.identifier === resourceId,
+    ) ?? false;
+
+  const setResourceLoading = (resourceId: string, isLoading: boolean) => {
+    setLoadingByResourceId((prev) => ({ ...prev, [resourceId]: isLoading }));
+  };
+
+  const handleAddResource = async (resource: ServiceResource) => {
+    if (!fromParty?.partyUuid || !supplier || !resource.identifier) {
+      return;
+    }
+
+    setResourceLoading(resource.identifier, true);
+    try {
+      await addResource({
+        party: fromParty.partyUuid,
+        supplier,
+        resource: resource.identifier,
+      }).unwrap();
+      await refetchDelegatedResources();
+      setActionError(null);
+      openSnackbar({
+        message: t('single_rights.add_singleRight_success_message', {
+          name: toPartyName,
+          resourceTitle: resource.title,
+        }),
+        color: 'success',
+        duration: SnackbarDuration.normal,
+      });
+    } catch (error) {
+      setActionError(getErrorInfo(error));
+      onSelect(resource, true);
+    } finally {
+      setResourceLoading(resource.identifier, false);
+    }
+  };
+
+  const handleRemoveResource = async (resource: ServiceResource) => {
+    if (!fromParty?.partyUuid || !supplier || !resource.identifier) {
+      return;
+    }
+
+    setResourceLoading(resource.identifier, true);
+    try {
+      await removeResource({
+        party: fromParty.partyUuid,
+        supplier,
+        resource: resource.identifier,
+      }).unwrap();
+      await refetchDelegatedResources();
+      setActionError(null);
+      openSnackbar({
+        message: t('single_rights.delete_singleRight_success_message', {
+          name: toPartyName,
+          resourceTitle: resource.title,
+        }),
+        color: 'success',
+        duration: SnackbarDuration.normal,
+      });
+    } catch (error) {
+      setActionError(getErrorInfo(error));
+      onSelect(resource, true);
+    } finally {
+      setResourceLoading(resource.identifier, false);
+    }
+  };
+
+  const renderControls = (resource: ServiceResource) => {
+    const hasDelegatedResource = isDelegated(resource.identifier);
+    const isLoading = loadingByResourceId[resource.identifier] ?? false;
+
+    if (hasDelegatedResource) {
+      return (
+        <DsButton
+          variant='tertiary'
+          data-size='sm'
+          loading={isLoading}
+          disabled={isLoading || isDelegatedResourcesFetching}
+          onClick={(event) => {
+            event.stopPropagation();
+            setActionError(null);
+            handleRemoveResource(resource);
+          }}
+          aria-label={t('common.delete_poa_for', {
+            poa_object: resource.title,
+          })}
+        >
+          <MinusCircleIcon aria-hidden='true' />
+          {!isMobile && t('common.delete_poa')}
+        </DsButton>
+      );
+    }
+
+    return (
+      <DsButton
+        variant='tertiary'
+        data-size='sm'
+        loading={isLoading}
+        disabled={isLoading || isDelegatedResourcesFetching || resource.delegable === false}
+        onClick={(event) => {
+          event.stopPropagation();
+          setActionError(null);
+          handleAddResource(resource);
+        }}
+        aria-label={t('common.give_poa_for', {
+          poa_object: resource.title,
+        })}
+      >
+        <PlusCircleIcon aria-hidden='true' />
+        {!isMobile && t('common.give_poa')}
+      </DsButton>
+    );
+  };
 
   const setSearch = (value: string) => {
     setSearchString(value);
@@ -147,12 +320,11 @@ export const MaskinportenScopeSearch = ({
                 onSelect={onSelect}
                 size='sm'
                 titleAs='h3'
-                getBadge={(resource) => {
-                  return {
-                    label: t('maskinporten_page.scope_count', { count: getScopeCount(resource) }),
-                    color: 'neutral',
-                  };
-                }}
+                getHasAccess={(resource) => isDelegated(resource.identifier)}
+                renderControls={renderControls}
+                getDescriptionText={(resource) =>
+                  t('maskinporten_page.scope_count', { count: getScopeCount(resource) })
+                }
               />
             ) : (
               <DsParagraph data-size='md'>

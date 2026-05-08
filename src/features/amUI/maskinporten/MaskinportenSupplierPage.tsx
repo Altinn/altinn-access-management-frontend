@@ -133,17 +133,16 @@ const MaskinportenSupplierPageContent = () => {
             <PageContainer
               backUrl={`/${amUIPath.Maskinporten}`}
               contentActions={[
-                <div>
-                  <DsButton
-                    data-color='danger'
-                    data-size='sm'
-                    variant='tertiary'
-                    onClick={() => dialogRef.current?.showModal()}
-                  >
-                    <TrashIcon aria-hidden='true' />
-                    {t('maskinporten_page.remove_supplier_confirm')}
-                  </DsButton>
-                </div>,
+                <DsButton
+                  key='delete'
+                  data-color='danger'
+                  data-size='sm'
+                  variant='tertiary'
+                  onClick={() => dialogRef.current?.showModal()}
+                >
+                  <TrashIcon aria-hidden='true' />
+                  {t('maskinporten_page.remove_supplier_confirm')}
+                </DsButton>,
               ]}
             >
               {error || (!isLoading && !data?.length) ? (
