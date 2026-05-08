@@ -2,7 +2,11 @@ import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 
 import type { CompactRole, Entity } from '@/dataObjects/dtos/Common';
 import { getCookie } from '@/resources/Cookie/CookieMethods';
-import type { ServiceResource } from './singleRights/singleRightsApi';
+import type {
+  DelegationCheckedRight,
+  ResourceDelegation,
+  ServiceResource,
+} from './singleRights/singleRightsApi';
 import type { AssignmentDto } from './clientApi';
 
 export interface MaskinportenConnection {
@@ -23,6 +27,14 @@ interface MaskinportenScopeSearchParams {
   resultsPerPage: number;
 }
 
+interface MaskinportenResourceDelegationCheckResult {
+  resource: {
+    name: string;
+    refId: string;
+  };
+  rights: DelegationCheckedRight[];
+}
+
 const baseUrl = `${import.meta.env.BASE_URL}accessmanagement/api/v1/maskinporten`;
 
 export const maskinportenApi = createApi({
@@ -35,7 +47,12 @@ export const maskinportenApi = createApi({
       return headers;
     },
   }),
-  tagTypes: ['maskinportenSuppliers', 'maskinportenConsumers'],
+  tagTypes: [
+    'maskinportenSuppliers',
+    'maskinportenConsumers',
+    'maskinportenResourceDelegationCheck',
+    'maskinportenResources',
+  ],
   endpoints: (builder) => ({
     getMaskinportenSuppliers: builder.query<
       MaskinportenConnection[],
@@ -66,6 +83,55 @@ export const maskinportenApi = createApi({
 
         return `scopes/search?${params.toString()}`;
       },
+    }),
+    maskinportenResourceDelegationCheck: builder.query<
+      MaskinportenResourceDelegationCheckResult,
+      { party?: string; resource: string }
+    >({
+      query: ({ party, resource }) =>
+        `resources/delegationcheck?party=${party ?? getCookie('AltinnPartyUuid')}&resource=${encodeURIComponent(resource)}`,
+      providesTags: ['maskinportenResourceDelegationCheck'],
+    }),
+    addMaskinportenResource: builder.mutation<
+      boolean,
+      { party: string; supplier: string; resource: string }
+    >({
+      query: ({ party, supplier, resource }) => ({
+        url: `resources?party=${encodeURIComponent(party)}&supplier=${encodeURIComponent(supplier)}&resource=${encodeURIComponent(resource)}`,
+        method: 'POST',
+      }),
+      invalidatesTags: ['maskinportenResourceDelegationCheck', 'maskinportenResources'],
+    }),
+    getMaskinportenResources: builder.query<
+      ResourceDelegation[],
+      { party?: string; supplier?: string; resource?: string }
+    >({
+      query: ({ party, supplier, resource }) => {
+        const params = new URLSearchParams({
+          party: party ?? getCookie('AltinnPartyUuid'),
+        });
+
+        if (supplier) {
+          params.append('supplier', supplier);
+        }
+
+        if (resource) {
+          params.append('resource', resource);
+        }
+
+        return `resources?${params.toString()}`;
+      },
+      providesTags: ['maskinportenResources'],
+    }),
+    removeMaskinportenResource: builder.mutation<
+      void,
+      { party: string; supplier: string; resource: string }
+    >({
+      query: ({ party, supplier, resource }) => ({
+        url: `resources?party=${encodeURIComponent(party)}&supplier=${encodeURIComponent(supplier)}&resource=${encodeURIComponent(resource)}`,
+        method: 'DELETE',
+      }),
+      invalidatesTags: ['maskinportenResourceDelegationCheck', 'maskinportenResources'],
     }),
     addMaskinportenSupplier: builder.mutation<AssignmentDto, { party: string; supplier: string }>({
       query: ({ party, supplier }) => ({
@@ -101,6 +167,10 @@ export const {
   useGetMaskinportenSuppliersQuery,
   useGetMaskinportenConsumersQuery,
   useSearchMaskinportenScopesQuery,
+  useMaskinportenResourceDelegationCheckQuery,
+  useAddMaskinportenResourceMutation,
+  useGetMaskinportenResourcesQuery,
+  useRemoveMaskinportenResourceMutation,
   useAddMaskinportenSupplierMutation,
   useRemoveMaskinportenSupplierMutation,
   useRemoveMaskinportenConsumerMutation,

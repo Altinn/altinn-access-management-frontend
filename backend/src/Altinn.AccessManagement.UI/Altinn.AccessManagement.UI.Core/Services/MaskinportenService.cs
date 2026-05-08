@@ -4,6 +4,7 @@ using Altinn.AccessManagement.UI.Core.Models.ClientDelegation;
 using Altinn.AccessManagement.UI.Core.Models.Maskinporten;
 using Altinn.AccessManagement.UI.Core.Models.ResourceRegistry;
 using Altinn.AccessManagement.UI.Core.Models.ResourceRegistry.Frontend;
+using Altinn.AccessManagement.UI.Core.Models.SingleRight;
 using Altinn.AccessManagement.UI.Core.Services.Interfaces;
 
 namespace Altinn.AccessManagement.UI.Core.Services
@@ -37,6 +38,48 @@ namespace Altinn.AccessManagement.UI.Core.Services
         public async Task<PaginatedList<ServiceResourceFE>> SearchScopes(string languageCode, PaginatedSearchParams searchParams, CancellationToken cancellationToken = default)
         {
             return await _resourceService.GetPaginatedSearchResults(languageCode, searchParams, new[] { ResourceType.MaskinportenSchema }, cancellationToken);
+        }
+
+        /// <inheritdoc />
+        public async Task<ResourceCheckDto> ResourceDelegationCheck(Guid party, string resource, string languageCode, CancellationToken cancellationToken = default)
+        {
+            return await _maskinportenClient.ResourceDelegationCheck(party, resource, languageCode, cancellationToken);
+        }
+
+        /// <inheritdoc />
+        public async Task<bool> AddResource(Guid party, string supplier, string resource, CancellationToken cancellationToken = default)
+        {
+            return await _maskinportenClient.AddResource(party, supplier, resource, cancellationToken);
+        }
+
+        /// <inheritdoc />
+        public async Task<List<ResourceDelegation>> GetResources(string languageCode, Guid party, string supplier = null, string resource = null, CancellationToken cancellationToken = default)
+        {
+            IEnumerable<ResourcePermission> resourcePermissions = await _maskinportenClient.GetResources(party, supplier, resource, cancellationToken);
+            List<ResourceDelegation> delegations = new List<ResourceDelegation>();
+
+            foreach (ResourcePermission resourcePermission in resourcePermissions)
+            {
+                string resourceId = resourcePermission.Resource?.RefId;
+                if (string.IsNullOrWhiteSpace(resourceId))
+                {
+                    continue;
+                }
+
+                ServiceResourceFE serviceResource = await _resourceService.GetResource(resourceId, languageCode);
+                if (serviceResource != null)
+                {
+                    delegations.Add(new ResourceDelegation(serviceResource, resourcePermission.Permissions));
+                }
+            }
+
+            return delegations;
+        }
+
+        /// <inheritdoc />
+        public async Task RemoveResource(Guid party, string supplier, string resource, CancellationToken cancellationToken = default)
+        {
+            await _maskinportenClient.RemoveResource(party, supplier, resource, cancellationToken);
         }
 
         /// <inheritdoc />

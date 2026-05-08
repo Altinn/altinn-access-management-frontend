@@ -615,6 +615,11 @@
     "search_scopes_heading": "Which scope do you want to give {{name}}?",
     "no_scopes": "No scopes found for this service.",
     "scope_count": "{{count}} scopes",
+    "delegate_service_button": "Give access",
+    "remove_service_button": "Remove access",
+    "delegated_resources_heading": "Services {{name}} has access to",
+    "no_delegated_resources": "No services have been added yet.",
+    "delegated_resources_error": "Could not load services.",
     "own_org_number_warning": "You cannot grant access to your own organization number",
     "own_org_number_warning_body": "If your organization does not have access, please contact the provider of the API you want to grant access to."
   },

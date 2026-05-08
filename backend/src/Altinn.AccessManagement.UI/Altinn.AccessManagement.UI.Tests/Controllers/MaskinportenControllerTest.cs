@@ -8,6 +8,7 @@ using Altinn.AccessManagement.UI.Core.Models.ClientDelegation;
 using Altinn.AccessManagement.UI.Core.Models.Maskinporten;
 using Altinn.AccessManagement.UI.Core.Models.ResourceRegistry;
 using Altinn.AccessManagement.UI.Core.Models.ResourceRegistry.Frontend;
+using Altinn.AccessManagement.UI.Core.Models.SingleRight;
 using Altinn.AccessManagement.UI.Mocks.Utils;
 using Altinn.AccessManagement.UI.Tests.Utils;
 using Microsoft.AspNetCore.Mvc;
@@ -105,6 +106,81 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
             Assert.NotNull(actualResponse);
             Assert.Empty(actualResponse.PageList);
             Assert.Equal(0, actualResponse.NumEntriesTotal);
+        }
+
+        /// <summary>
+        /// Test case: ResourceDelegationCheck returns delegation check for a Maskinporten scope resource.
+        /// </summary>
+        [Fact]
+        public async Task ResourceDelegationCheck_ReturnsValid()
+        {
+            SetAuthHeader();
+            Guid party = Guid.Parse("cd35779b-b174-4ecc-bbef-ece13611be7f");
+            string resource = "appid-400";
+
+            HttpResponseMessage response = await _client.GetAsync($"accessmanagement/api/v1/maskinporten/resources/delegationcheck?party={party}&resource={resource}");
+            ResourceCheckDto actualResponse = await response.Content.ReadFromJsonAsync<ResourceCheckDto>(_options);
+
+            Assert.Equal(HttpStatusCode.OK, response.StatusCode);
+            Assert.NotNull(actualResponse);
+            Assert.Equal(resource, actualResponse.Resource.RefId);
+            RightCheck right = Assert.Single(actualResponse.Rights);
+            Assert.True(right.Result);
+            Assert.Equal("ScopeAccess", right.Right.Name);
+        }
+
+        /// <summary>
+        /// Test case: AddResource delegates a Maskinporten scope resource to a supplier.
+        /// </summary>
+        [Fact]
+        public async Task AddResource_ReturnsTrue()
+        {
+            SetAuthHeader();
+            Guid party = Guid.Parse("cd35779b-b174-4ecc-bbef-ece13611be7f");
+            string supplier = "312605031";
+            string resource = "appid-400";
+
+            HttpResponseMessage response = await _client.PostAsync($"accessmanagement/api/v1/maskinporten/resources?party={party}&supplier={supplier}&resource={resource}", null);
+            bool actualResponse = await response.Content.ReadFromJsonAsync<bool>(_options);
+
+            Assert.Equal(HttpStatusCode.OK, response.StatusCode);
+            Assert.True(actualResponse);
+        }
+
+        /// <summary>
+        /// Test case: GetResources returns delegated Maskinporten scope resources.
+        /// </summary>
+        [Fact]
+        public async Task GetResources_ReturnsResources()
+        {
+            SetAuthHeader();
+            Guid party = Guid.Parse("cd35779b-b174-4ecc-bbef-ece13611be7f");
+            string supplier = "312605031";
+            string resource = "appid-400";
+
+            HttpResponseMessage response = await _client.GetAsync($"accessmanagement/api/v1/maskinporten/resources?party={party}&supplier={supplier}&resource={resource}");
+            List<ResourceDelegation> actualResponse = await response.Content.ReadFromJsonAsync<List<ResourceDelegation>>(_options);
+
+            Assert.Equal(HttpStatusCode.OK, response.StatusCode);
+            ResourceDelegation resourceDelegation = Assert.Single(actualResponse);
+            Assert.Equal(resource, resourceDelegation.Resource.Identifier);
+            Assert.Equal(ResourceType.MaskinportenSchema, resourceDelegation.Resource.ResourceType);
+        }
+
+        /// <summary>
+        /// Test case: RemoveResource removes a Maskinporten scope resource from a supplier.
+        /// </summary>
+        [Fact]
+        public async Task RemoveResource_ReturnsNoContent()
+        {
+            SetAuthHeader();
+            Guid party = Guid.Parse("cd35779b-b174-4ecc-bbef-ece13611be7f");
+            string supplier = "312605031";
+            string resource = "appid-400";
+
+            HttpResponseMessage response = await _client.DeleteAsync($"accessmanagement/api/v1/maskinporten/resources?party={party}&supplier={supplier}&resource={resource}");
+
+            Assert.Equal(HttpStatusCode.NoContent, response.StatusCode);
         }
 
         /// <summary>

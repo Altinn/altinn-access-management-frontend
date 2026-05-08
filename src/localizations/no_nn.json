@@ -612,6 +612,11 @@
     "search_scopes_heading": "Kva scope vil du gi {{name}}?",
     "no_scopes": "Ingen scopes funne for denne tenesta.",
     "scope_count": "{{count}} scopes",
+    "delegate_service_button": "Gi tilgang",
+    "remove_service_button": "Fjern tilgang",
+    "delegated_resources_heading": "Tenester {{name}} har tilgang til",
+    "no_delegated_resources": "Ingen tenester er lagde til enno.",
+    "delegated_resources_error": "Kunne ikkje laste tenester.",
     "own_org_number_warning": "Du kan ikkje gi tilgang til eige organisasjonsnummer",
     "own_org_number_warning_body": "Har ikkje verksemda di tilgang, ta kontakt med tilbydaren av API-et du skal gi tilgang til."
   },

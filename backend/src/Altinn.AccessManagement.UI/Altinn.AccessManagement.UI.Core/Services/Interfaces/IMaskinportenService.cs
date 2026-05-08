@@ -2,6 +2,7 @@ using Altinn.AccessManagement.UI.Core.Models.ClientDelegation;
 using Altinn.AccessManagement.UI.Core.Models.Maskinporten;
 using Altinn.AccessManagement.UI.Core.Models.ResourceRegistry;
 using Altinn.AccessManagement.UI.Core.Models.ResourceRegistry.Frontend;
+using Altinn.AccessManagement.UI.Core.Models.SingleRight;
 
 namespace Altinn.AccessManagement.UI.Core.Services.Interfaces
 {
@@ -27,6 +28,46 @@ namespace Altinn.AccessManagement.UI.Core.Services.Interfaces
         /// <param name="cancellationToken">Cancellation token.</param>
         /// <returns>Paginated Maskinporten scope resources.</returns>
         Task<PaginatedList<ServiceResourceFE>> SearchScopes(string languageCode, PaginatedSearchParams searchParams, CancellationToken cancellationToken = default);
+
+        /// <summary>
+        /// Performs a delegation check for a Maskinporten scope resource.
+        /// </summary>
+        /// <param name="party">The party uuid.</param>
+        /// <param name="resource">The resource identifier.</param>
+        /// <param name="languageCode">The language code.</param>
+        /// <param name="cancellationToken">Cancellation token.</param>
+        /// <returns>The resource delegation check.</returns>
+        Task<ResourceCheckDto> ResourceDelegationCheck(Guid party, string resource, string languageCode, CancellationToken cancellationToken = default);
+
+        /// <summary>
+        /// Delegates a Maskinporten scope resource to a supplier.
+        /// </summary>
+        /// <param name="party">The party uuid.</param>
+        /// <param name="supplier">The supplier organization number.</param>
+        /// <param name="resource">The resource identifier.</param>
+        /// <param name="cancellationToken">Cancellation token.</param>
+        /// <returns>Whether the resource was delegated.</returns>
+        Task<bool> AddResource(Guid party, string supplier, string resource, CancellationToken cancellationToken = default);
+
+        /// <summary>
+        /// Gets delegated Maskinporten scope resources.
+        /// </summary>
+        /// <param name="languageCode">The language code.</param>
+        /// <param name="party">The party uuid.</param>
+        /// <param name="supplier">Optional supplier organization number.</param>
+        /// <param name="resource">Optional resource identifier.</param>
+        /// <param name="cancellationToken">Cancellation token.</param>
+        /// <returns>A collection of delegated resources.</returns>
+        Task<List<ResourceDelegation>> GetResources(string languageCode, Guid party, string supplier = null, string resource = null, CancellationToken cancellationToken = default);
+
+        /// <summary>
+        /// Removes a delegated Maskinporten scope resource from a supplier.
+        /// </summary>
+        /// <param name="party">The party uuid.</param>
+        /// <param name="supplier">The supplier organization number.</param>
+        /// <param name="resource">The resource identifier.</param>
+        /// <param name="cancellationToken">Cancellation token.</param>
+        Task RemoveResource(Guid party, string supplier, string resource, CancellationToken cancellationToken = default);
 
         /// <summary>
         /// Adds a Maskinporten supplier for a party.
