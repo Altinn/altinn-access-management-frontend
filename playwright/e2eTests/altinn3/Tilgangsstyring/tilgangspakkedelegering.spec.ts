@@ -8,7 +8,7 @@ test.describe('tilgangspakkedelegering fra person til person og person til org',
   const api = new EnduserConnection();
 
   test.afterAll('slett testdata', async () => {
-    await api.deleteConnection('25928698737', '25928698737', ['313435482']);
+    await api.deleteConnection('25928698737', '25928698737', ['313567613']);
     await api.deleteConnection('01837396103', '01837396103', ['52858201748']);
     await api.deleteConnection('29868198034', '29868198034', ['210638962']);
     await api.deleteConnection('08857499981', '08857499981', ['22911648052']);
@@ -184,7 +184,7 @@ test.describe('tilgangspakkedelegering fra person til person og person til org',
     const login = new LoginPage(page);
     const aktorvalgHeader = new AktorvalgHeader(page);
     await test.step('sett opp testdata', async () => {
-      await api.addConnectionAndPackagesToUser('25928698737', '25928698737', '313435482', [
+      await api.addConnectionAndPackagesToUser('25928698737', '25928698737', '313567613', [
         'urn:altinn:accesspackage:innbygger-samliv',
       ]);
     });
@@ -197,21 +197,21 @@ test.describe('tilgangspakkedelegering fra person til person og person til org',
       await aktorvalgHeader.selectActorFromHeaderMenu('KONGE FASTTELEFON');
     });
 
-    await test.step('Gå til brukere-siden og klikk på "GILD SPESIELL TIGER AS"', async () => {
+    await test.step('Gå til brukere-siden og klikk på "SKY MOTSTANDSDYKTIG TIGER AS"', async () => {
       await accessManagementFrontPage.goToUsers();
-      await accessManagementFrontPage.expandOrg('GILD SPESIELL TIGER AS');
-      await accessManagementFrontPage.clickUser('GILD SPESIELL TIGER AS');
+      await accessManagementFrontPage.expandOrg('SKY MOTSTANDSDYKTIG TIGER AS');
+      await accessManagementFrontPage.clickUser('SKY MOTSTANDSDYKTIG TIGER AS');
     });
 
-    await test.step('Slett "Samliv" fullmakten for GILD SPESIELL TIGER AS', async () => {
+    await test.step('Slett "Samliv" fullmakten for SKY MOTSTANDSDYKTIG TIGER AS', async () => {
       await accessManagementFrontPage.goToArea('Familie og fritid');
       await accessManagementFrontPage.clickSlettFullmaktForTilgangspakke('Samliv');
     });
 
-    await test.step('GILD SPESIELL TIGER AS ikke skal ha tilgangspakken "Samliv"', async () => {
+    await test.step('SKY MOTSTANDSDYKTIG TIGER AS ikke skal ha tilgangspakken "Samliv"', async () => {
       await accessManagementFrontPage.goToUsers();
-      await accessManagementFrontPage.expandOrg('GILD SPESIELL TIGER AS');
-      await accessManagementFrontPage.clickUser('GILD SPESIELL TIGER AS');
+      await accessManagementFrontPage.expandOrg('SKY MOTSTANDSDYKTIG TIGER AS');
+      await accessManagementFrontPage.clickUser('SKY MOTSTANDSDYKTIG TIGER AS');
       await accessManagementFrontPage.clickGiFullmakt();
       await accessManagementFrontPage.goToArea('Familie og fritid');
       await accessManagementFrontPage.expectAccessPackageToBeDelegable('Samliv');
