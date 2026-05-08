@@ -32,6 +32,11 @@
   gap: 10px;
 }
 
+.searchResultHeading {
+  margin-bottom: var(--ds-spacing-1);
+  font-size: 0.9em;
+}
+
 .searchResult {
   padding: 10px 0 10px 0;
 }
