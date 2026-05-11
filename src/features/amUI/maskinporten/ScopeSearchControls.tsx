@@ -1,5 +1,5 @@
 import {
-  DsButton,
+  Button,
   SnackbarDuration,
   formatDisplayName,
   useSnackbar,
@@ -106,13 +106,12 @@ export const ScopeSearchControls = ({
 
   if (hasDelegatedResource) {
     return (
-      <DsButton
+      <Button
         variant='tertiary'
-        data-size='sm'
+        size='sm'
         loading={resourceLoading}
         disabled={resourceLoading || isDelegatedResourcesLoading}
-        onClick={(event) => {
-          event.stopPropagation();
+        onClick={() => {
           setActionError(null);
           handleRemoveResource();
         }}
@@ -120,18 +119,17 @@ export const ScopeSearchControls = ({
       >
         <MinusCircleIcon aria-hidden='true' />
         {!isMobile && t('common.delete_poa')}
-      </DsButton>
+      </Button>
     );
   }
 
   return (
-    <DsButton
+    <Button
       variant='tertiary'
-      data-size='sm'
+      size='sm'
       loading={resourceLoading}
       disabled={resourceLoading || isDelegatedResourcesLoading || resource.delegable === false}
-      onClick={(event) => {
-        event.stopPropagation();
+      onClick={() => {
         setActionError(null);
         handleAddResource();
       }}
@@ -139,6 +137,6 @@ export const ScopeSearchControls = ({
     >
       <PlusCircleIcon aria-hidden='true' />
       {!isMobile && t('common.give_poa')}
-    </DsButton>
+    </Button>
   );
 };

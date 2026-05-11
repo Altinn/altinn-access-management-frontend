@@ -190,8 +190,7 @@ export const ScopeInfo = ({ resource }: { resource: ServiceResource }) => {
             <div className={classes.editButtons}>
               {hasDelegatedResource ? (
                 <Button
-                  data-size='sm'
-                  color='danger'
+                  size='sm'
                   disabled={isActionLoading}
                   onClick={handleRemoveResource}
                   variant='tertiary'
@@ -201,7 +200,7 @@ export const ScopeInfo = ({ resource }: { resource: ServiceResource }) => {
                 </Button>
               ) : (
                 <Button
-                  data-size='sm'
+                  size='sm'
                   disabled={
                     isActionLoading ||
                     !!displayResourceAlert ||

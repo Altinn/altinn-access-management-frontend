@@ -18,10 +18,3 @@
   gap: var(--ds-spacing-4);
   margin-top: var(--ds-spacing-8);
 }
-
-.resourceSearchContainer {
-  min-height: 530px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-}

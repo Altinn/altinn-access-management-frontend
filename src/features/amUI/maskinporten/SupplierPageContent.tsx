@@ -1,6 +1,6 @@
 import {
+  Button,
   DsAlert,
-  DsButton,
   DsHeading,
   DsParagraph,
   DsSkeleton,
@@ -137,15 +137,15 @@ export const SupplierPageContent = () => {
     <PageContainer
       backUrl={`/${amUIPath.Maskinporten}`}
       contentActions={[
-        <DsButton
+        <Button
           key='delete'
-          data-size='sm'
+          size='sm'
           variant='tertiary'
           onClick={() => deleteDialogRef.current?.showModal()}
         >
           <TrashIcon aria-hidden='true' />
           {t('maskinporten_page.remove_supplier_confirm')}
-        </DsButton>,
+        </Button>,
       ]}
     >
       <UserPageHeader
@@ -188,22 +188,26 @@ export const SupplierPageContent = () => {
               setSelectedResource(resource);
               scopeModalRef.current?.showModal();
             }}
-            renderControls={(resource) => (
-              <DsButton
-                variant='tertiary'
-                data-size='sm'
-                loading={isLoading(resource.identifier)}
-                disabled={isLoading(resource.identifier)}
-                onClick={(event: React.MouseEvent<HTMLButtonElement>) => {
-                  event.stopPropagation();
-                  handleRemove(resource);
-                }}
-                aria-label={t('common.delete_poa_for', { poa_object: resource.title })}
-              >
-                <MinusCircleIcon aria-hidden='true' />
-                {!isMobile && t('common.delete_poa')}
-              </DsButton>
-            )}
+            renderControls={(resource) => {
+              const resourceLoading = isLoading(resource.identifier);
+              return (
+                <Button
+                  variant='tertiary'
+                  size='sm'
+                  loading={resourceLoading}
+                  aria-disabled={resourceLoading}
+                  onClick={(event: React.MouseEvent<HTMLButtonElement>) => {
+                    if (resourceLoading) return;
+                    event.stopPropagation();
+                    handleRemove(resource);
+                  }}
+                  aria-label={t('common.delete_poa_for', { poa_object: resource.title })}
+                >
+                  <MinusCircleIcon aria-hidden='true' />
+                  {!isMobile && t('common.delete_poa')}
+                </Button>
+              );
+            }}
             emptyState={
               <DsParagraph data-size='md'>
                 {t('resource_list.no_resources_filtered', { searchTerm: search })}
@@ -222,7 +226,6 @@ export const SupplierPageContent = () => {
           body={t('maskinporten_page.remove_supplier_body', { name: supplierName })}
           confirmLabel={t('maskinporten_page.remove_supplier_confirm')}
           onConfirm={handleConfirmDeleteSupplier}
-          onClose={() => {}}
           isLoading={isRemovingSupplier}
         />
       </section>
