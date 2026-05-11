@@ -168,6 +168,7 @@ export const {
   useGetMaskinportenConsumersQuery,
   useSearchMaskinportenScopesQuery,
   useMaskinportenResourceDelegationCheckQuery,
+  useLazyMaskinportenResourceDelegationCheckQuery,
   useAddMaskinportenResourceMutation,
   useGetMaskinportenResourcesQuery,
   useRemoveMaskinportenResourceMutation,

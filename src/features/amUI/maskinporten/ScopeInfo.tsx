@@ -22,7 +22,6 @@ import { StatusSection } from '../common/StatusSection/StatusSection';
 import { ScopeActionAlert } from './ScopeActionAlert';
 import { useMaskinportenResourceActions } from './hooks/useMaskinportenResourceActions';
 import classes from './ScopeInfo.module.css';
-import resourceInfoClasses from '../common/DelegationModal/SingleRights/ResourceInfo.module.css';
 
 const SUCCESS_DISPLAY_MS = 2000;
 
@@ -147,14 +146,8 @@ export const ScopeInfo = ({ resource }: { resource: ServiceResource }) => {
           <ResourceInfoSkeleton />
         ) : (
           <>
-            {!!actionError && (
-              <ScopeActionAlert
-                actionError={actionError}
-                mode={hasDelegatedResource ? 'revoke' : 'delegate'}
-              />
-            )}
             <div
-              className={resourceInfoClasses.resourceInfo}
+              className={classes.resourceInfo}
               data-size={isSmall ? 'xs' : 'md'}
             >
               <StatusSection
@@ -170,7 +163,13 @@ export const ScopeInfo = ({ resource }: { resource: ServiceResource }) => {
                 error={delegationCheckErrorDetails}
                 rightReasons={delegationCheckRightReasons}
                 resource={resource}
-                className={resourceInfoClasses.resourceAlert}
+                className={classes.resourceAlert}
+              />
+            )}
+            {!!actionError && (
+              <ScopeActionAlert
+                actionError={actionError}
+                mode={hasDelegatedResource ? 'revoke' : 'delegate'}
               />
             )}
             <div className={classes.scopes}>
@@ -190,9 +189,10 @@ export const ScopeInfo = ({ resource }: { resource: ServiceResource }) => {
                 <DsParagraph>{t('maskinporten_page.no_scopes')}</DsParagraph>
               )}
             </div>
-            <div className={resourceInfoClasses.editButtons}>
+            <div className={classes.editButtons}>
               {hasDelegatedResource ? (
                 <Button
+                  data-size='sm'
                   color='danger'
                   disabled={isActionLoading}
                   onClick={handleRemoveResource}
