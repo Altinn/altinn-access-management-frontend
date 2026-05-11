@@ -9,7 +9,6 @@ import { useTranslation } from 'react-i18next';
 import { MinusCircleIcon, PlusCircleIcon } from '@navikt/aksel-icons';
 
 import { useIsMobileOrSmaller } from '@/resources/utils/screensizeUtils';
-import { getActionError } from '@/resources/hooks/useActionError';
 import { useLazyMaskinportenResourceDelegationCheckQuery } from '@/rtk/features/maskinportenApi';
 import type { ServiceResource } from '@/rtk/features/singleRights/singleRightsApi';
 import { PartyType } from '@/rtk/features/userInfoApi';
@@ -85,9 +84,8 @@ export const ScopeSearchControls = ({
           onSelect(resource, true);
         },
       });
-    } catch (error) {
-      setActionError(getActionError(error));
-      onSelect(resource, true);
+    } catch {
+      onSelect(resource);
     } finally {
       setIsCheckingDelegation(false);
     }

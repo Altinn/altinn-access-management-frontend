@@ -105,9 +105,12 @@ export const SupplierPageContent = () => {
           color: 'success',
           duration: SnackbarDuration.normal,
         }),
-      onError: () =>
+      onError: (r) =>
         openSnackbar({
-          message: t('maskinporten_page.delegated_resources_error'),
+          message: t('single_rights.delete_singleRight_error_message', {
+            name: supplierName,
+            resourceTitle: r.title,
+          }),
           color: 'danger',
           duration: SnackbarDuration.infinite,
         }),
