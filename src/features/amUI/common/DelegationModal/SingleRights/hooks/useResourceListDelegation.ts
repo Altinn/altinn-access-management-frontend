@@ -1,6 +1,6 @@
 import { useCallback, useState, useEffect, useRef } from 'react';
 
-import type { ActionError } from '@/resources/hooks/useActionError';
+import { getActionError, type ActionError } from '@/resources/hooks/useActionError';
 import { usePartyRepresentation } from '@/features/amUI/common/PartyRepresentationContext/PartyRepresentationContext';
 import {
   useDelegateRightsMutation,
@@ -19,27 +19,10 @@ interface UseResourceListDelegationProps {
   onPartialDelegation?: (resource: ServiceResource) => void;
 }
 
-const extractStatus = (error: unknown): string => {
-  if (error && typeof error === 'object' && 'status' in error) {
-    return String((error as { status: unknown }).status);
-  }
-  return String(error);
-};
-
-const extractDetails = (error: unknown): ActionError['details'] | undefined => {
-  if (error && typeof error === 'object' && 'data' in error) {
-    return error.data as ActionError['details'];
-  }
-  return undefined;
-};
-
-const getErrorInfo = (status: string, details?: ActionError['details']): ActionError => {
-  return {
-    httpStatus: status,
-    details: details,
-    timestamp: new Date().toISOString(),
-  };
-};
+const forbiddenError = (): ActionError => ({
+  httpStatus: '403',
+  timestamp: new Date().toISOString(),
+});
 
 export const useResourceListDelegation = ({
   onActionError,
@@ -90,17 +73,14 @@ export const useResourceListDelegation = ({
   const delegateFromList = useCallback(
     async (resource: ServiceResource) => {
       if (resource.delegable === false) {
-        onActionError?.(resource, getErrorInfo('403'));
+        onActionError?.(resource, forbiddenError());
         return;
       }
 
       setResourceLoading(resource.identifier, true);
       const result = await runDelegationCheck(resource.identifier);
       if (result.isError) {
-        onActionError?.(
-          resource,
-          getErrorInfo(extractStatus(result.error), extractDetails(result.error)),
-        );
+        onActionError?.(resource, getActionError(result.error));
         setResourceLoading(resource.identifier, false);
         return;
       }
@@ -132,7 +112,7 @@ export const useResourceListDelegation = ({
               });
             })
             .catch((error) => {
-              onActionError?.(resource, getErrorInfo(extractStatus(error), extractDetails(error)));
+              onActionError?.(resource, getActionError(error));
               setResourceLoading(resource.identifier, false);
             });
           return;
@@ -143,7 +123,7 @@ export const useResourceListDelegation = ({
       if (canDelegateSomeActions) {
         onPartialDelegation?.(resource);
       } else {
-        onActionError?.(resource, getErrorInfo('403'));
+        onActionError?.(resource, forbiddenError());
       }
       setResourceLoading(resource.identifier, false);
     },
@@ -183,7 +163,7 @@ export const useResourceListDelegation = ({
           });
         })
         .catch((error) => {
-          onActionError?.(resource, getErrorInfo(extractStatus(error), extractDetails(error)));
+          onActionError?.(resource, getActionError(error));
           setResourceLoading(resource.identifier, false);
         });
     },

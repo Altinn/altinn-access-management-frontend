@@ -1,25 +1,17 @@
-import { Button, DsAlert, DsHeading, DsParagraph } from '@altinn/altinn-components';
+import { Button, DsHeading, DsParagraph } from '@altinn/altinn-components';
 import { MinusCircleIcon } from '@navikt/aksel-icons';
 import { useEffect, useRef } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { StatusMessageForScreenReader } from '@/components/StatusMessageForScreenReader/StatusMessageForScreenReader';
-import type { ActionError } from '@/resources/hooks/useActionError';
 import { useIsMobileOrSmaller } from '@/resources/utils/screensizeUtils';
 import {
-  useAddMaskinportenResourceMutation,
   useGetMaskinportenResourcesQuery,
   useMaskinportenResourceDelegationCheckQuery,
-  useRemoveMaskinportenResourceMutation,
 } from '@/rtk/features/maskinportenApi';
 import type { ServiceResource } from '@/rtk/features/singleRights/singleRightsApi';
-import { PartyType } from '@/rtk/features/userInfoApi';
 
-import {
-  createErrorDetails,
-  TechnicalErrorParagraphs,
-} from '../common/TechnicalErrorParagraphs/TechnicalErrorParagraphs';
-import { ValidationErrorMessage } from '../common/ValidationErrorMessage';
+import { createErrorDetails } from '../common/TechnicalErrorParagraphs/TechnicalErrorParagraphs';
 import { useDelegationModalContext } from '../common/DelegationModal/DelegationModalContext';
 import { LoadingAnimation } from '../common/LoadingAnimation/LoadingAnimation';
 import { ResourceAlert } from '../common/DelegationModal/SingleRights/ResourceAlert';
@@ -27,44 +19,30 @@ import { ResourceHeading } from '../common/DelegationModal/SingleRights/Resource
 import { ResourceInfoSkeleton } from '../common/DelegationModal/SingleRights/ResourceInfoSkeleton';
 import { usePartyRepresentation } from '../common/PartyRepresentationContext/PartyRepresentationContext';
 import { StatusSection } from '../common/StatusSection/StatusSection';
-import classes from './MaskinportenScopeInfo.module.css';
+import { ScopeActionAlert } from './ScopeActionAlert';
+import { useMaskinportenResourceActions } from './hooks/useMaskinportenResourceActions';
+import classes from './ScopeInfo.module.css';
 import resourceInfoClasses from '../common/DelegationModal/SingleRights/ResourceInfo.module.css';
 
-const extractStatus = (error: unknown): string => {
-  if (error && typeof error === 'object' && 'status' in error) {
-    return String((error as { status: unknown }).status);
-  }
-  return String(error);
-};
+const SUCCESS_DISPLAY_MS = 2000;
 
-const extractDetails = (error: unknown): ActionError['details'] | undefined => {
-  if (error && typeof error === 'object' && 'data' in error) {
-    return error.data as ActionError['details'];
-  }
-  return undefined;
-};
-
-const getErrorInfo = (error: unknown): ActionError => ({
-  httpStatus: extractStatus(error),
-  details: extractDetails(error),
-  timestamp: new Date().toISOString(),
-});
-
-export const MaskinportenScopeInfo = ({ resource }: { resource: ServiceResource }) => {
+export const ScopeInfo = ({ resource }: { resource: ServiceResource }) => {
   const isSmall = useIsMobileOrSmaller();
   const { t } = useTranslation();
   const { fromParty, toParty } = usePartyRepresentation();
   const { actionError, setActionError, actionSuccess, setActionSuccess } =
     useDelegationModalContext();
   const successTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
-  const [addResource, { isLoading: isAddingResource }] = useAddMaskinportenResourceMutation();
-  const [removeResource, { isLoading: isRemovingResource }] =
-    useRemoveMaskinportenResourceMutation();
+  const supplier = toParty?.orgNumber ?? '';
+  const { delegate, remove, isLoading } = useMaskinportenResourceActions({
+    party: fromParty?.partyUuid,
+    supplier,
+  });
+
   const scopes =
     resource.resourceReferences?.filter(
       (reference) => reference.referenceType === 'MaskinportenScope' && reference.reference?.trim(),
     ) ?? [];
-  const supplier = toParty?.orgNumber ?? '';
 
   const {
     data: delegationCheck,
@@ -93,33 +71,31 @@ export const MaskinportenScopeInfo = ({ resource }: { resource: ServiceResource 
         refetchOnMountOrArgChange: true,
       },
     );
+
   const canDelegateResource = delegationCheck?.rights?.some((right) => right.result) ?? false;
   const hasDelegatedResource =
     delegatedResources?.some(
       (delegatedResource) => delegatedResource.resource?.identifier === resource.identifier,
     ) ?? false;
-  const hasDelegationCheckResult = delegationCheck !== undefined;
   const showDelegationCheckWarning =
     !hasDelegatedResource &&
     !isDelegationCheckLoading &&
-    hasDelegationCheckResult &&
+    delegationCheck !== undefined &&
     !canDelegateResource;
-  const rawDelegationCheckErrorDetails = isDelegationCheckError
-    ? createErrorDetails(delegationCheckError)
-    : null;
+  const rawErrorDetails = isDelegationCheckError ? createErrorDetails(delegationCheckError) : null;
   const delegationCheckErrorDetails = isDelegationCheckError
     ? {
-        status: rawDelegationCheckErrorDetails?.status ?? 'no status',
-        time: rawDelegationCheckErrorDetails?.time ?? new Date().toISOString(),
-        traceId: rawDelegationCheckErrorDetails?.traceId,
+        status: rawErrorDetails?.status ?? 'no status',
+        time: rawErrorDetails?.time ?? new Date().toISOString(),
+        traceId: rawErrorDetails?.traceId,
       }
     : null;
   const delegationCheckRightReasons = showDelegationCheckWarning
-    ? (delegationCheck?.rights?.map((right) => right.reasonCodes[0] ?? '') ?? [''])
+    ? (delegationCheck?.rights?.map((right) => right.reasonCodes?.[0] ?? '') ?? [''])
     : undefined;
   const displayResourceAlert =
     !!delegationCheckErrorDetails || resource.delegable === false || showDelegationCheckWarning;
-  const isActionLoading = isAddingResource || isRemovingResource;
+  const isActionLoading = isLoading(resource.identifier);
   const isInitialLoading =
     (isDelegationCheckLoading && !delegationCheck && !isDelegationCheckError) ||
     (isDelegatedResourcesLoading && !delegatedResources);
@@ -130,47 +106,29 @@ export const MaskinportenScopeInfo = ({ resource }: { resource: ServiceResource 
     };
   }, []);
 
-  const handleActionSuccess = () => {
+  const handleSuccess = () => {
     setActionError(null);
     setActionSuccess(true);
     if (successTimerRef.current) clearTimeout(successTimerRef.current);
-    successTimerRef.current = setTimeout(() => setActionSuccess(false), 2000);
+    successTimerRef.current = setTimeout(() => setActionSuccess(false), SUCCESS_DISPLAY_MS);
   };
 
-  const handleAddResource = async () => {
-    if (!fromParty?.partyUuid || !supplier || !resource.identifier || !canDelegateResource) {
-      return;
-    }
-
+  const handleAddResource = () => {
+    if (!canDelegateResource) return;
     setActionError(null);
-    try {
-      await addResource({
-        party: fromParty.partyUuid,
-        supplier,
-        resource: resource.identifier,
-      }).unwrap();
-      handleActionSuccess();
-    } catch (error) {
-      setActionError(getErrorInfo(error));
-    }
+    delegate(resource, {
+      onSuccess: handleSuccess,
+      onError: (_, error) => setActionError(error),
+    });
   };
 
-  const handleRemoveResource = async () => {
-    if (!fromParty?.partyUuid || !supplier || !resource.identifier || !hasDelegatedResource) {
-      return;
-    }
-
+  const handleRemoveResource = () => {
+    if (!hasDelegatedResource) return;
     setActionError(null);
-    try {
-      await removeResource({
-        party: fromParty.partyUuid,
-        supplier,
-        resource: resource.identifier,
-      }).unwrap();
-      handleActionSuccess();
-    } catch (error) {
-      setActionError(getErrorInfo(error));
-    }
+    remove(resource, {
+      onSuccess: handleSuccess,
+      onError: (_, error) => setActionError(error),
+    });
   };
 
   return (
@@ -190,37 +148,10 @@ export const MaskinportenScopeInfo = ({ resource }: { resource: ServiceResource 
         ) : (
           <>
             {!!actionError && (
-              <DsAlert
-                data-color='danger'
-                data-size='sm'
-              >
-                <DsHeading
-                  level={2}
-                  data-size='2xs'
-                >
-                  {hasDelegatedResource
-                    ? t('delegation_modal.general_error.revoke_heading')
-                    : t('delegation_modal.general_error.delegate_heading')}
-                </DsHeading>
-                {actionError.details?.detail || actionError.details?.errorCode ? (
-                  <ValidationErrorMessage
-                    errorCode={actionError.details?.errorCode ?? actionError.details?.detail ?? ''}
-                    translationValues={{
-                      entity_type:
-                        toParty?.partyTypeName === PartyType.Person
-                          ? t('common.persons_lowercase')
-                          : t('common.organizations_lowercase'),
-                    }}
-                  />
-                ) : (
-                  <TechnicalErrorParagraphs
-                    size='xs'
-                    status={actionError.httpStatus}
-                    time={actionError.timestamp}
-                    traceId={actionError.details?.traceId}
-                  />
-                )}
-              </DsAlert>
+              <ScopeActionAlert
+                actionError={actionError}
+                mode={hasDelegatedResource ? 'revoke' : 'delegate'}
+              />
             )}
             <div
               className={resourceInfoClasses.resourceInfo}
