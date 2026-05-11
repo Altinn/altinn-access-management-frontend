@@ -21,11 +21,6 @@ export const DelegateErrorAlert = ({ error, targetParty, onClose }: DelegateErro
   const { t } = useTranslation();
   if (!error) return null;
 
-  const entityType =
-    targetParty?.partyTypeName === PartyType.Person
-      ? t('common.persons_lowercase')
-      : t('common.organizations_lowercase');
-
   return (
     <DsAlert
       data-color='danger'
@@ -56,7 +51,7 @@ export const DelegateErrorAlert = ({ error, targetParty, onClose }: DelegateErro
           {error.details?.detail || error.details?.errorCode ? (
             <ValidationErrorMessage
               errorCode={error.details?.errorCode ?? error.details?.detail ?? ''}
-              translationValues={{ entity_type: entityType }}
+              translationValues={{ entity_type: t('common.organizations_lowercase') }}
             />
           ) : (
             <TechnicalErrorParagraphs

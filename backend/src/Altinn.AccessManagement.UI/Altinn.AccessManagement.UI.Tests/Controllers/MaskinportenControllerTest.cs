@@ -184,6 +184,134 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
         }
 
         /// <summary>
+        /// Test case: ResourceDelegationCheck returns the backend status code and problem details when service throws HttpStatusException.
+        /// </summary>
+        [Fact]
+        public async Task ResourceDelegationCheck_ServiceThrowsHttpStatusException_ReturnsProblemDetails()
+        {
+            SetAuthHeader();
+            Guid party = Guid.Parse("00000000-0000-0000-0000-000000000404");
+
+            HttpResponseMessage response = await _client.GetAsync($"accessmanagement/api/v1/maskinporten/resources/delegationcheck?party={party}&resource=appid-400");
+
+            Assert.Equal(HttpStatusCode.NotFound, response.StatusCode);
+            ProblemDetails problemDetails = await response.Content.ReadFromJsonAsync<ProblemDetails>();
+            Assert.NotNull(problemDetails);
+            Assert.Equal((int)HttpStatusCode.NotFound, problemDetails.Status);
+            Assert.Equal("Unexpected HttpStatus response", problemDetails.Title);
+        }
+
+        /// <summary>
+        /// Test case: ResourceDelegationCheck returns internal server error when service throws.
+        /// </summary>
+        [Fact]
+        public async Task ResourceDelegationCheck_ServiceThrowsException_ReturnsInternalServerError()
+        {
+            SetAuthHeader();
+            Guid party = Guid.Empty;
+
+            HttpResponseMessage response = await _client.GetAsync($"accessmanagement/api/v1/maskinporten/resources/delegationcheck?party={party}&resource=appid-400");
+
+            Assert.Equal(HttpStatusCode.InternalServerError, response.StatusCode);
+        }
+
+        /// <summary>
+        /// Test case: AddResource returns the backend status code and problem details when service throws HttpStatusException.
+        /// </summary>
+        [Fact]
+        public async Task AddResource_ServiceThrowsHttpStatusException_ReturnsProblemDetails()
+        {
+            SetAuthHeader();
+            Guid party = Guid.Parse("00000000-0000-0000-0000-000000000404");
+
+            HttpResponseMessage response = await _client.PostAsync($"accessmanagement/api/v1/maskinporten/resources?party={party}&supplier=312605031&resource=appid-400", null);
+
+            Assert.Equal(HttpStatusCode.NotFound, response.StatusCode);
+            ProblemDetails problemDetails = await response.Content.ReadFromJsonAsync<ProblemDetails>();
+            Assert.NotNull(problemDetails);
+            Assert.Equal((int)HttpStatusCode.NotFound, problemDetails.Status);
+            Assert.Equal("Unexpected HttpStatus response", problemDetails.Title);
+        }
+
+        /// <summary>
+        /// Test case: AddResource returns internal server error when service throws.
+        /// </summary>
+        [Fact]
+        public async Task AddResource_ServiceThrowsException_ReturnsInternalServerError()
+        {
+            SetAuthHeader();
+            Guid party = Guid.Empty;
+
+            HttpResponseMessage response = await _client.PostAsync($"accessmanagement/api/v1/maskinporten/resources?party={party}&supplier=312605031&resource=appid-400", null);
+
+            Assert.Equal(HttpStatusCode.InternalServerError, response.StatusCode);
+        }
+
+        /// <summary>
+        /// Test case: GetResources returns the backend status code and problem details when service throws HttpStatusException.
+        /// </summary>
+        [Fact]
+        public async Task GetResources_ServiceThrowsHttpStatusException_ReturnsProblemDetails()
+        {
+            SetAuthHeader();
+            Guid party = Guid.Parse("00000000-0000-0000-0000-000000000404");
+
+            HttpResponseMessage response = await _client.GetAsync($"accessmanagement/api/v1/maskinporten/resources?party={party}");
+
+            Assert.Equal(HttpStatusCode.NotFound, response.StatusCode);
+            ProblemDetails problemDetails = await response.Content.ReadFromJsonAsync<ProblemDetails>();
+            Assert.NotNull(problemDetails);
+            Assert.Equal((int)HttpStatusCode.NotFound, problemDetails.Status);
+            Assert.Equal("Unexpected HttpStatus response", problemDetails.Title);
+        }
+
+        /// <summary>
+        /// Test case: GetResources returns internal server error when service throws.
+        /// </summary>
+        [Fact]
+        public async Task GetResources_ServiceThrowsException_ReturnsInternalServerError()
+        {
+            SetAuthHeader();
+            Guid party = Guid.Empty;
+
+            HttpResponseMessage response = await _client.GetAsync($"accessmanagement/api/v1/maskinporten/resources?party={party}");
+
+            Assert.Equal(HttpStatusCode.InternalServerError, response.StatusCode);
+        }
+
+        /// <summary>
+        /// Test case: RemoveResource returns the backend status code and problem details when service throws HttpStatusException.
+        /// </summary>
+        [Fact]
+        public async Task RemoveResource_ServiceThrowsHttpStatusException_ReturnsProblemDetails()
+        {
+            SetAuthHeader();
+            Guid party = Guid.Parse("00000000-0000-0000-0000-000000000404");
+
+            HttpResponseMessage response = await _client.DeleteAsync($"accessmanagement/api/v1/maskinporten/resources?party={party}&supplier=312605031&resource=appid-400");
+
+            Assert.Equal(HttpStatusCode.NotFound, response.StatusCode);
+            ProblemDetails problemDetails = await response.Content.ReadFromJsonAsync<ProblemDetails>();
+            Assert.NotNull(problemDetails);
+            Assert.Equal((int)HttpStatusCode.NotFound, problemDetails.Status);
+            Assert.Equal("Unexpected HttpStatus response", problemDetails.Title);
+        }
+
+        /// <summary>
+        /// Test case: RemoveResource returns internal server error when service throws.
+        /// </summary>
+        [Fact]
+        public async Task RemoveResource_ServiceThrowsException_ReturnsInternalServerError()
+        {
+            SetAuthHeader();
+            Guid party = Guid.Empty;
+
+            HttpResponseMessage response = await _client.DeleteAsync($"accessmanagement/api/v1/maskinporten/resources?party={party}&supplier=312605031&resource=appid-400");
+
+            Assert.Equal(HttpStatusCode.InternalServerError, response.StatusCode);
+        }
+
+        /// <summary>
         /// Test case: GetSuppliers returns the expected suppliers for a party.
         /// </summary>
         [Fact]
