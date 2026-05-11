@@ -9,6 +9,7 @@ import type {
 } from '@/rtk/features/singleRights/singleRightsApi';
 
 import { ScopeSearchControls } from './ScopeSearchControls';
+import { getMaskinportenScopeCount } from './scopeUtils';
 import classes from '../common/DelegationModal/SingleRights/ResourceSearch.module.css';
 
 interface ScopeSearchResultsProps {
@@ -23,11 +24,6 @@ interface ScopeSearchResultsProps {
   onSelect: (resource: ServiceResource, error?: boolean) => void;
   setCurrentPage: (page: number) => void;
 }
-
-const getScopeCount = (resource: ServiceResource) =>
-  resource.resourceReferences?.filter(
-    (reference) => reference.referenceType === 'MaskinportenScope' && reference.reference?.trim(),
-  ).length ?? 0;
 
 export const ScopeSearchResults = ({
   isFetching,
@@ -103,7 +99,7 @@ export const ScopeSearchResults = ({
               />
             )}
             getDescriptionText={(resource) =>
-              t('maskinporten_page.scope_count', { count: getScopeCount(resource) })
+              t('maskinporten_page.scope_count', { count: getMaskinportenScopeCount(resource) })
             }
           />
         </div>

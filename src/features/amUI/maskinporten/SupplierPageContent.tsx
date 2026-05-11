@@ -24,6 +24,7 @@ import { amUIPath } from '@/routes/paths';
 import { PartyType } from '@/rtk/features/userInfoApi';
 
 import { ScopeList } from './ScopeList';
+import { getMaskinportenScopes } from './scopeUtils';
 import { useMaskinportenResourceActions } from './hooks/useMaskinportenResourceActions';
 import classes from './MaskinportenPage.module.css';
 import { DelegationAction, EditModal } from '../common/DelegationModal/EditModal';
@@ -73,11 +74,9 @@ export const SupplierPageContent = () => {
     getOwnerName: (resource) => resource.resourceOwnerName ?? '',
     getOwnerOrgCode: (resource) => resource.resourceOwnerOrgcode ?? '',
     getDescription: (resource) => {
-      const scopes =
-        resource.resourceReferences
-          ?.filter((ref) => ref.referenceType === 'MaskinportenScope' && ref.reference?.trim())
-          .map((ref) => ref.reference)
-          .join(' ') ?? '';
+      const scopes = getMaskinportenScopes(resource)
+        .map((ref) => ref.reference)
+        .join(' ');
       return `${resource.description ?? ''} ${scopes}`.trim();
     },
   });

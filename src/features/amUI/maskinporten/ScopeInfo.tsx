@@ -20,6 +20,7 @@ import { ResourceInfoSkeleton } from '../common/DelegationModal/SingleRights/Res
 import { usePartyRepresentation } from '../common/PartyRepresentationContext/PartyRepresentationContext';
 import { StatusSection } from '../common/StatusSection/StatusSection';
 import { ScopeActionAlert } from './ScopeActionAlert';
+import { getMaskinportenScopes } from './scopeUtils';
 import { useMaskinportenResourceActions } from './hooks/useMaskinportenResourceActions';
 import classes from './ScopeInfo.module.css';
 
@@ -38,10 +39,7 @@ export const ScopeInfo = ({ resource }: { resource: ServiceResource }) => {
     supplier,
   });
 
-  const scopes =
-    resource.resourceReferences?.filter(
-      (reference) => reference.referenceType === 'MaskinportenScope' && reference.reference?.trim(),
-    ) ?? [];
+  const scopes = getMaskinportenScopes(resource);
 
   const {
     data: delegationCheck,

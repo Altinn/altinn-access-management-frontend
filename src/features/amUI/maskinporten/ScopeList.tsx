@@ -1,17 +1,13 @@
 import type { ReactNode } from 'react';
 import { useTranslation } from 'react-i18next';
+import { DsParagraph } from '@altinn/altinn-components';
 
 import { ResourceFilterToolbar } from '@/features/amUI/common/ResourceFilterToolbar/ResourceFilterToolbar';
 import { ResourceList } from '@/features/amUI/common/ResourceList/ResourceList';
 import type { ServiceResource } from '@/rtk/features/singleRights/singleRightsApi';
 
+import { getMaskinportenScopeCount } from './scopeUtils';
 import classes from './ScopeList.module.css';
-import { DsParagraph } from '@altinn/altinn-components';
-
-const getScopeCount = (resource: ServiceResource) =>
-  resource.resourceReferences?.filter(
-    (reference) => reference.referenceType === 'MaskinportenScope' && reference.reference?.trim(),
-  ).length ?? 0;
 
 interface ScopeListProps {
   resources: ServiceResource[];
@@ -83,7 +79,7 @@ export const ScopeList = ({
             getHasAccess={getHasAccess}
             renderControls={renderControls}
             getDescriptionText={(resource) =>
-              t('maskinporten_page.scope_count', { count: getScopeCount(resource) })
+              t('maskinporten_page.scope_count', { count: getMaskinportenScopeCount(resource) })
             }
           />
         </>
