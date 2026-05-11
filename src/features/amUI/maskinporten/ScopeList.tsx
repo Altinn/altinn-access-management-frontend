@@ -51,7 +51,7 @@ export const ScopeList = ({
           setFilterState={setFilterState}
           serviceOwnerOptions={serviceOwnerOptions}
         />
-        {addNewResourceButton && addNewResourceButton}
+        {addNewResourceButton}
       </div>
       {resources.length === 0 && emptyState !== undefined ? (
         emptyState
