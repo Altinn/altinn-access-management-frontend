@@ -99,6 +99,13 @@ namespace Altinn.AccessManagement.UI.Mocks.Mocks
             return Task.FromResult(Util.GetMockData<IEnumerable<ResourceAM>>(dataPath));
         }
 
+        /// <inheritdoc />
+        public Task RemoveRole(Guid party, Guid from, Guid to, string roleCode)
+        {
+            Util.ThrowExceptionIfTriggerParty(from.ToString());
+            return Task.CompletedTask;
+        }
+
         private static string ShortenIdentifier(Guid? id)
         {
             return id.HasValue ? id.Value.ToString("N")[..8] : "none";

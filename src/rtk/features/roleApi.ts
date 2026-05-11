@@ -135,6 +135,16 @@ export const roleApi = createApi({
         return `/resources?${params.toString()}`;
       },
     }),
+    removeRole: builder.mutation<
+      void,
+      { party: string; from: string; to: string; roleCode: string }
+    >({
+      query: ({ party, from, to, roleCode }) => ({
+        url: `/roles?party=${party}&from=${from}&to=${to}&rolecode=${encodeURIComponent(roleCode)}`,
+        method: 'DELETE',
+      }),
+      invalidatesTags: ['role-permissions'],
+    }),
   }),
 });
 
@@ -143,6 +153,7 @@ export const {
   useGetAllRolesQuery,
   useGetRolePackagesQuery,
   useGetRoleResourcesQuery,
+  useRemoveRoleMutation,
 } = roleApi;
 
 export const { endpoints, reducerPath, reducer, middleware } = roleApi;

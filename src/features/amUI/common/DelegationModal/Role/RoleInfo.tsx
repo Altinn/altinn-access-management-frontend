@@ -1,7 +1,12 @@
 import { useTranslation } from 'react-i18next';
 import classes from './RoleInfo.module.css';
-import { Role, useGetRoleResourcesQuery } from '@/rtk/features/roleApi';
-import { DsHeading, DsLink, DsParagraph } from '@altinn/altinn-components';
+import {
+  Role,
+  useGetRolePermissionsQuery,
+  useGetRoleResourcesQuery,
+  useRemoveRoleMutation,
+} from '@/rtk/features/roleApi';
+import { DsButton, DsHeading, DsLink, DsParagraph } from '@altinn/altinn-components';
 import {
   ExclamationmarkTriangleFillIcon,
   InformationSquareFillIcon,
@@ -11,6 +16,7 @@ import { usePartyRepresentation } from '../../PartyRepresentationContext/PartyRe
 import { getRedirectToA2UsersListSectionUrl } from '@/resources/utils';
 import { RoleResourcesSection } from './RoleResourcesSection';
 import { RoleStatusMessage } from './RoleStatusMessages';
+import { enableRoleDeletion } from '@/resources/utils/featureFlagUtils';
 
 export interface PackageInfoProps {
   role: Role;
@@ -21,16 +27,49 @@ export const RoleInfo = ({ role }: PackageInfoProps) => {
 
   const isExternalRole = role?.provider?.code === 'sys-ccr';
   const isLegacyRole = role?.provider?.code === 'sys-altinn2';
+  const enableRoleDeletionFlag = enableRoleDeletion();
 
-  const { fromParty, actingParty } = usePartyRepresentation();
+  const { fromParty, actingParty, toParty } = usePartyRepresentation();
   const shouldSkipRoleRefs = !role?.code || !fromParty?.variant;
   const { data: roleResources, isLoading: isRoleResourcesLoading } = useGetRoleResourcesQuery(
     { roleCode: role.code ?? '', variant: fromParty?.variant || '' },
     { skip: shouldSkipRoleRefs },
   );
+  const { data: permissions } = useGetRolePermissionsQuery(
+    {
+      party: actingParty?.partyUuid ?? '',
+      from: fromParty?.partyUuid,
+      to: toParty?.partyUuid,
+    },
+    {
+      skip: !actingParty?.partyUuid || !fromParty?.partyUuid || !toParty?.partyUuid,
+    },
+  );
+
+  const [removeRole] = useRemoveRoleMutation();
 
   const sectionId = fromParty?.partyUuid === actingParty?.partyUuid ? 9 : 8;
   const oldSolutionUrl = getRedirectToA2UsersListSectionUrl(sectionId);
+  const hasRole = permissions?.some((permission) => permission.role?.code === role.code);
+  const isRoleDeletable = true; // TODO: Update this logic when backend gives more information about deletable roles
+
+  const handleDeleteRole = () => {
+    if (!fromParty || !toParty) {
+      console.error('Missing fromParty or toParty information');
+      return;
+    }
+    removeRole({
+      roleCode: role.code,
+      from: fromParty.partyUuid,
+      to: toParty.partyUuid,
+      party: actingParty?.partyUuid ?? '',
+    })
+      .unwrap()
+      .then(() => {})
+      .catch((error) => {
+        console.error('Failed to remove role:', error);
+      });
+  };
 
   return (
     <div className={classes.container}>
@@ -85,6 +124,17 @@ export const RoleInfo = ({ role }: PackageInfoProps) => {
           roleResources={roleResources}
           isLoading={isRoleResourcesLoading}
         />
+      )}
+      {hasRole && enableRoleDeletionFlag && isRoleDeletable && (
+        <div>
+          <DsButton
+            data-color={'danger'}
+            variant='secondary'
+            onClick={handleDeleteRole}
+          >
+            {t('common.delete_poa')}
+          </DsButton>
+        </div>
       )}
     </div>
   );
