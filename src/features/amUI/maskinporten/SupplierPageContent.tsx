@@ -197,9 +197,8 @@ export const SupplierPageContent = () => {
                   size='sm'
                   loading={resourceLoading}
                   aria-disabled={resourceLoading}
-                  onClick={(event: React.MouseEvent<HTMLButtonElement>) => {
+                  onClick={() => {
                     if (resourceLoading) return;
-                    event.stopPropagation();
                     handleRemove(resource);
                   }}
                   aria-label={t('common.delete_poa_for', { poa_object: resource.title })}

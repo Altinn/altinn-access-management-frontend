@@ -51,19 +51,14 @@ export const ScopeList = ({
           setFilterState={setFilterState}
           serviceOwnerOptions={serviceOwnerOptions}
         />
-        {addNewResourceButton && (
-          <div className={classes.newResourceButton}>{addNewResourceButton}</div>
-        )}
+        {addNewResourceButton && addNewResourceButton}
       </div>
       {resources.length === 0 && emptyState !== undefined ? (
         emptyState
       ) : (
         <>
           {showResultsCount && (
-            <DsParagraph
-              data-size='sm'
-              className={classes.resultsCount}
-            >
+            <DsParagraph data-size='sm'>
               {t('maskinporten_page.search_results_count', {
                 count: totalResultsCount ?? resources.length,
               })}

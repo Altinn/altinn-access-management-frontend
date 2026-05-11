@@ -47,6 +47,8 @@ export interface ResourceListProps<
   enableMaxHeight?: boolean;
   renderControls?: (resource: TResource) => React.ReactNode;
   getBadge?: (resource: TResource, index: number) => ResourceListItemProps['badge'];
+  // TODO: this currently overrides the underlying list item's `ownerName` slot,
+  // which is misleading given the prop name. This will be addressedin `@altinn/altinn-components` in a future PR.
   getDescriptionText?: (resource: TResource, index: number) => string | undefined;
   getHasAccess?: (resource: TResource) => boolean;
   delegationModal?: React.ReactNode;
