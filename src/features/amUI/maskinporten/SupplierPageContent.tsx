@@ -171,8 +171,6 @@ export const SupplierPageContent = () => {
             width='100%'
             height='2.5rem'
           />
-        ) : delegatedResources.length === 0 ? (
-          <DsParagraph>{t('maskinporten_page.no_delegated_resources')}</DsParagraph>
         ) : (
           <ScopeList
             addNewResourceButton={
@@ -213,7 +211,9 @@ export const SupplierPageContent = () => {
             }}
             emptyState={
               <DsParagraph data-size='md'>
-                {t('resource_list.no_resources_filtered', { searchTerm: search })}
+                {delegatedResources.length === 0
+                  ? t('maskinporten_page.no_delegated_resources')
+                  : t('resource_list.no_resources_filtered', { searchTerm: search })}
               </DsParagraph>
             }
           />
