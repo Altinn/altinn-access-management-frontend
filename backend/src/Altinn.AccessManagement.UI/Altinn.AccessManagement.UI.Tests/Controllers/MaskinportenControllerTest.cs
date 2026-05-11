@@ -184,6 +184,58 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
         }
 
         /// <summary>
+        /// Test case: ResourceDelegationCheck with invalid party format returns bad request (ModelState invalid).
+        /// </summary>
+        [Fact]
+        public async Task ResourceDelegationCheck_InvalidParty_ReturnsBadRequest()
+        {
+            SetAuthHeader();
+
+            HttpResponseMessage response = await _client.GetAsync("accessmanagement/api/v1/maskinporten/resources/delegationcheck?party=not-a-guid&resource=appid-400");
+
+            Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
+        }
+
+        /// <summary>
+        /// Test case: GetResources with invalid party format returns bad request (ModelState invalid).
+        /// </summary>
+        [Fact]
+        public async Task GetResources_InvalidParty_ReturnsBadRequest()
+        {
+            SetAuthHeader();
+
+            HttpResponseMessage response = await _client.GetAsync("accessmanagement/api/v1/maskinporten/resources?party=not-a-guid");
+
+            Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
+        }
+
+        /// <summary>
+        /// Test case: AddResource with invalid party format returns bad request (ModelState invalid).
+        /// </summary>
+        [Fact]
+        public async Task AddResource_InvalidParty_ReturnsBadRequest()
+        {
+            SetAuthHeader();
+
+            HttpResponseMessage response = await _client.PostAsync("accessmanagement/api/v1/maskinporten/resources?party=not-a-guid&supplier=312605031&resource=appid-400", null);
+
+            Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
+        }
+
+        /// <summary>
+        /// Test case: RemoveResource with invalid party format returns bad request (ModelState invalid).
+        /// </summary>
+        [Fact]
+        public async Task RemoveResource_InvalidParty_ReturnsBadRequest()
+        {
+            SetAuthHeader();
+
+            HttpResponseMessage response = await _client.DeleteAsync("accessmanagement/api/v1/maskinporten/resources?party=not-a-guid&supplier=312605031&resource=appid-400");
+
+            Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
+        }
+
+        /// <summary>
         /// Test case: ResourceDelegationCheck returns the backend status code and problem details when service throws HttpStatusException.
         /// </summary>
         [Fact]
