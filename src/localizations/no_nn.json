@@ -1056,6 +1056,7 @@
     "service_owner_filter_clear": "Tøm søkefelt"
   },
   "landing_page": {
+    "page_title": "Tilgangsstyring - Altinn",
     "alert_heading": "Du er no i den nye løysinga for tilgangsstyring",
     "alert_body": "Her er dagens Altinn-roller erstatta av tilgangspakkar med tenester.",
     "alert_body_p2": "Ver merksam på at det er nokre tenester du ikkje kan gi tilgang til i den nye løysinga. Visst du ikkje finn tenesta her, kan du gå til den gamle løysinga.",
