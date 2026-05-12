@@ -271,26 +271,21 @@ export const LandingPage = () => {
     <PageWrapper>
       <PageLayoutWrapper openAccountMenu={shouldOpenAccountMenu}>
         <div className={classes.landingPage}>
-          <DsHeading
-            level={1}
-            className={classes.landingPageHeading}
-          >
-            <List>
-              <UserListItem
-                id={reportee?.partyUuid ?? ''}
-                type={isOrganization(reportee) ? 'company' : 'person'}
-                name={reporteeName}
-                description={getReporteeDescription()}
-                subUnit={isReporteeSubUnit}
-                deleted={reportee?.isDeleted}
-                size='lg'
-                titleAs='span'
-                loading={!reportee}
-                interactive={false}
-                shadow='none'
-              />
-            </List>
-          </DsHeading>
+          <List className={classes.landingPageHeading}>
+            <UserListItem
+              id={reportee?.partyUuid ?? ''}
+              type={isOrganization(reportee) ? 'company' : 'person'}
+              name={reporteeName}
+              description={getReporteeDescription()}
+              subUnit={isReporteeSubUnit}
+              deleted={reportee?.isDeleted}
+              size='lg'
+              titleAs='h1'
+              loading={!reportee}
+              interactive={false}
+              shadow='none'
+            />
+          </List>
           <DsAlert data-color='info'>
             {isLoading ? (
               <DsSkeleton
