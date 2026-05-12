@@ -8,10 +8,30 @@ test.describe('Enkelttjenestedelegering fra person til person og person til org'
   const api = new EnduserConnection();
 
   test.afterAll('slett testdata', async () => {
-    await api.deleteConnection('09889499432', '09889499432', ['210530932']);
-    await api.deleteConnection('03906197811', '03906197811', ['23854897845']);
-    await api.deleteConnection('23813949784', '23813949784', ['313642291']);
-    await api.deleteConnection('13894599892', '13894599892', ['50907400120']);
+    await api.deleteSingleServiceDelegation(
+      '03906197811',
+      '03906197811',
+      '23854897845',
+      'bruno-correspondence',
+    );
+    await api.deleteSingleServiceDelegation(
+      '23813949784',
+      '23813949784',
+      '313642291',
+      'bruno-correspondence',
+    );
+    await api.deleteSingleServiceDelegation(
+      '13894599892',
+      '13894599892',
+      '50907400120',
+      'bruno-correspondence',
+    );
+    await api.deleteSingleServiceDelegation(
+      '09889499432',
+      '09889499432',
+      '210530932',
+      'bruno-correspondence',
+    );
   });
 
   test('Deleger enkelttjeneste til person', async ({ page, accessManagementFrontPage }) => {
@@ -182,10 +202,30 @@ test.describe('Enkelttjenestedelegering fra org til person og org til org', () =
   const api = new EnduserConnection();
 
   test.afterAll('slett testdata', async () => {
-    await api.deleteConnection('05916597349', '313189503', ['17889574100']);
-    await api.deleteConnection('16928599063', '312476932', ['313233383']);
-    await api.deleteConnection('18846498989', '311716670', ['09893049719']);
-    await api.deleteConnection('16815995930', '313707679', ['314021622']);
+    await api.deleteSingleServiceDelegation(
+      '05916597349',
+      '313189503',
+      '17889574100',
+      'bruno-correspondence',
+    );
+    await api.deleteSingleServiceDelegation(
+      '16928599063',
+      '312476932',
+      '313233383',
+      'bruno-correspondence',
+    );
+    await api.deleteSingleServiceDelegation(
+      '18846498989',
+      '311716670',
+      '09893049719',
+      'bruno-correspondence',
+    );
+    await api.deleteSingleServiceDelegation(
+      '16815995930',
+      '313707679',
+      '314021622',
+      'bruno-correspondence',
+    );
   });
 
   test('Deleger enkelttjeneste fra org til person', async ({ page, accessManagementFrontPage }) => {
