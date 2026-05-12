@@ -317,7 +317,7 @@ export class EnduserConnection {
 
     if (!response.ok) {
       throw new Error(
-        `Failed to fetch status for deleteConnectionPackagePerson request. Status: ${response.status}`,
+        `Failed to fetch status for deleteAccessPackageDelegation request. Status: ${response.status}`,
       );
     }
 
