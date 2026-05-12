@@ -275,18 +275,21 @@ export const LandingPage = () => {
             level={1}
             className={classes.landingPageHeading}
           >
-            <UserListItem
-              id={reportee?.partyUuid ?? ''}
-              type={isOrganization(reportee) ? 'company' : 'person'}
-              name={reporteeName}
-              description={getReporteeDescription()}
-              subUnit={isReporteeSubUnit}
-              deleted={reportee?.isDeleted}
-              size='lg'
-              loading={!reportee}
-              interactive={false}
-              shadow='none'
-            />
+            <List>
+              <UserListItem
+                id={reportee?.partyUuid ?? ''}
+                type={isOrganization(reportee) ? 'company' : 'person'}
+                name={reporteeName}
+                description={getReporteeDescription()}
+                subUnit={isReporteeSubUnit}
+                deleted={reportee?.isDeleted}
+                size='lg'
+                titleAs='span'
+                loading={!reportee}
+                interactive={false}
+                shadow='none'
+              />
+            </List>
           </DsHeading>
           <DsAlert data-color='info'>
             {isLoading ? (
