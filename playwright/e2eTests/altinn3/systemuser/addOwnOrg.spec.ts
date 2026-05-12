@@ -61,21 +61,6 @@ test.describe('Systembruker - Legg til egen organisasjon', () => {
     });
   });
 
-  test.afterEach(async ({}, testInfo) => {
-    if (testInfo.status === 'passed') return;
-
-    try {
-      await api.deleteAgentSystemUser('310547891', systemId, partyOrgNo, externalRef, managerPid);
-    } catch (error) {
-      console.error('Cleanup: Failed to delete agent system user:', error);
-    }
-    try {
-      await api.deleteSystemInSystemRegister('310547891', name);
-    } catch (error) {
-      console.error('Cleanup: Failed to delete system from system register:', error);
-    }
-  });
-
   test('Legg til din virksomhet', async ({
     page,
     login,
