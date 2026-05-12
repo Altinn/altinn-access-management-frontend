@@ -15,7 +15,7 @@ COPY backend .
 RUN dotnet publish src/Altinn.AccessManagement.UI/Altinn.AccessManagement.UI/Altinn.AccessManagement.UI.csproj -c Release -o /app_output
 
 # Building the final image
-FROM mcr.microsoft.com/dotnet/aspnet:9.0-alpine@sha256:3af07ffc67cf14710da8a6d15f8ce963e0eb7f2e73a57445edd964a505a2557c AS final
+FROM mcr.microsoft.com/dotnet/aspnet:9.0-alpine@sha256:16094fe6451d8f6fe48989915f75cea0ee9d7daddc65931f426140c47ddadcd9 AS final
 
 WORKDIR /app
 EXPOSE 80
