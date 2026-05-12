@@ -149,8 +149,6 @@ export class EnduserConnection {
     const token = await this.tokenClass.getPersonalTokenByPid(pid);
     let responses = new Array<Response>();
 
-    // bruk Promise.all() og .map her
-
     await Promise.all(
       toList.map(async (to) => {
         const toUuid = await this.tokenClass.getPartyUuid(to);
