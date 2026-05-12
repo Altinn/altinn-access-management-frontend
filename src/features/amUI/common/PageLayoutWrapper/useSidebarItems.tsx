@@ -97,10 +97,10 @@ export const useSidebarItems = ({ isSmall }: { isSmall?: boolean }) => {
         : undefined;
     const requestMenuItem = getRequestsMenuItem(pathname, isLoading, isSmall);
     const requestCountAriaLabel =
-      requestsBadgeCount > 0 ? `(${requestsBadgeCount} ${t('sidebar.requests_badge')})` : '';
+      requestsBadgeCount > 0 ? ` (${requestsBadgeCount} ${t('sidebar.requests_badge')})` : '';
     items.push({
       ...requestMenuItem,
-      'aria-label': `${requestMenuItem.title} ${requestCountAriaLabel}`,
+      'aria-label': `${requestMenuItem.title}${requestCountAriaLabel}`,
       badge: requestsBadge,
     });
   }
