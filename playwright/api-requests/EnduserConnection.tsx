@@ -388,7 +388,6 @@ export class EnduserConnection {
    * @param resource - Navnet på tjenesten
    * @param fromUuid - partyUuid på den som skal delegere enkelttjenesten (valgfritt)
    * @param toUuid - partyUuid på den som skal motta enkelttjenestedelegeringen (valgfritt)
-   * @param action - Hvilken handling mottakeren skal få slettet rettighet til (f.eks. 'Read', 'Write', 'Sign', osv). Default verdi er 'Read.'
    * @returns A promise resolving to the API response JSON payload.
    * @throws
    */
@@ -399,7 +398,6 @@ export class EnduserConnection {
     resource: string,
     fromUuid?: string,
     toUuid?: string,
-    action = 'Read',
   ) {
     fromUuid = fromUuid || (await this.tokenClass.getPartyUuid(from));
     toUuid = toUuid || (await this.tokenClass.getPartyUuid(to));
@@ -412,7 +410,6 @@ export class EnduserConnection {
         Authorization: `Bearer ${token}`,
         'Content-Type': 'application/json',
       },
-      //body: JSON.stringify(payload),
     });
 
     if (!response.ok) {
