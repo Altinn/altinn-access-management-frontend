@@ -6,7 +6,15 @@ import {
   useGetRoleResourcesQuery,
   useRemoveRoleMutation,
 } from '@/rtk/features/roleApi';
-import { DsButton, DsHeading, DsLink, DsParagraph } from '@altinn/altinn-components';
+import {
+  DsAlert,
+  DsHeading,
+  DsLink,
+  DsParagraph,
+  DsSpinner,
+  useSnackbar,
+} from '@altinn/altinn-components';
+import { DeletePoaConfirmation } from '@/features/amUI/common/DeletePoaConfirmation/DeletePoaConfirmation';
 import {
   ExclamationmarkTriangleFillIcon,
   InformationSquareFillIcon,
@@ -17,6 +25,9 @@ import { getRedirectToA2UsersListSectionUrl } from '@/resources/utils';
 import { RoleResourcesSection } from './RoleResourcesSection';
 import { RoleStatusMessage } from './RoleStatusMessages';
 import { enableRoleDeletion } from '@/resources/utils/featureFlagUtils';
+import { useState } from 'react';
+import { TechnicalErrorParagraphs } from '../../TechnicalErrorParagraphs';
+import { createErrorDetails } from '../../TechnicalErrorParagraphs/TechnicalErrorParagraphs';
 
 export interface PackageInfoProps {
   role: Role;
@@ -24,10 +35,12 @@ export interface PackageInfoProps {
 
 export const RoleInfo = ({ role }: PackageInfoProps) => {
   const { t } = useTranslation();
+  const [isDeleteError, setDeleteIsError] = useState(false);
 
   const isExternalRole = role?.provider?.code === 'sys-ccr';
   const isLegacyRole = role?.provider?.code === 'sys-altinn2';
   const enableRoleDeletionFlag = enableRoleDeletion();
+  const { openSnackbar } = useSnackbar();
 
   const { fromParty, actingParty, toParty } = usePartyRepresentation();
   const shouldSkipRoleRefs = !role?.code || !fromParty?.variant;
@@ -46,7 +59,8 @@ export const RoleInfo = ({ role }: PackageInfoProps) => {
     },
   );
 
-  const [removeRole] = useRemoveRoleMutation();
+  const [removeRole, { isLoading: isRemoveRoleLoading, error: removeRoleError }] =
+    useRemoveRoleMutation();
 
   const sectionId = fromParty?.partyUuid === actingParty?.partyUuid ? 9 : 8;
   const oldSolutionUrl = getRedirectToA2UsersListSectionUrl(sectionId);
@@ -65,10 +79,34 @@ export const RoleInfo = ({ role }: PackageInfoProps) => {
       party: actingParty?.partyUuid ?? '',
     })
       .unwrap()
-      .then(() => {})
+      .then(() => {
+        openSnackbar({ message: t('role.delete_role_success'), color: 'success' });
+      })
       .catch((error) => {
-        console.error('Failed to remove role:', error);
+        setDeleteIsError(true);
       });
+  };
+
+  const deleteErrorAlert = () => {
+    if (removeRoleError) {
+      const details = createErrorDetails(removeRoleError);
+      return (
+        <>
+          {!!details && (
+            <DsAlert data-color='danger'>
+              <DsParagraph>
+                {t('client_administration_page.load_user_delegations_error')}
+              </DsParagraph>
+              <TechnicalErrorParagraphs
+                status={details.status}
+                time={details.time}
+                traceId={details.traceId}
+              />
+            </DsAlert>
+          )}
+        </>
+      );
+    }
   };
 
   return (
@@ -105,6 +143,7 @@ export const RoleInfo = ({ role }: PackageInfoProps) => {
         )}
         <RoleStatusMessage role={role} />
       </div>
+      <div aria-live='polite'>{isDeleteError && deleteErrorAlert()}</div>
       <DsParagraph>{role?.description}</DsParagraph>
       <DsParagraph className={classes.oldRolesDisclaimer}>
         {t('role.resources_disclaimer')}{' '}
@@ -126,14 +165,13 @@ export const RoleInfo = ({ role }: PackageInfoProps) => {
         />
       )}
       {hasRole && enableRoleDeletionFlag && isRoleDeletable && (
-        <div>
-          <DsButton
-            data-color={'danger'}
-            variant='secondary'
-            onClick={handleDeleteRole}
-          >
-            {t('common.delete_poa')}
-          </DsButton>
+        <div className={classes.deleteRoleButtonContainer}>
+          <DeletePoaConfirmation
+            warningText={t('role.delete_role_confirmation')}
+            handleDeletion={handleDeleteRole}
+            isDeleteLoading={isRemoveRoleLoading}
+            loadingAriaLabel={t('role.deleting_role_loading')}
+          />
         </div>
       )}
     </div>

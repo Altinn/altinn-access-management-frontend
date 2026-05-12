@@ -97,7 +97,9 @@
     "digdir": "Digitaliseringsdirektoratet",
     "skiplink": "Hopp til hovudinnhaldet",
     "no_access_to_page": "Du har ikkje tilgang til denne sida for vald aktør",
-    "see_details": "Sjå detaljar"
+    "see_details": "Sjå detaljar",
+    "yes_delete": "Ja, slett",
+    "confirm_delete_heading": "Er du sikker på at du vil slette denne fullmakta?"
   },
   "info_banner": {
     "info": "19. juni blir gamle Altinn skrudd av.",
@@ -373,6 +375,8 @@
     "resources_empty": "Denne rolla har ingen tenester.",
     "resources_disclaimer": "Denne rolla kan framleis gi tilgang til tenester som berre finst i den gamle løysinga.",
     "resources_disclaimer_link": "Sjå lista i den gamle løysinga",
+    "delete_role_confirmation": "Roller frå gamle Altinn er avvikla, så du vil IKKJE kunne gi fullmakt til denne rollen på nytt.",
+    "deleting_role_loading": "Venter på at rolla skal slettes...",
     "access_status": {
       "via_role": "{{user_name}} har tilgang til dette gjennom rolla dei har i {{via_name}}.",
       "via_connection": "{{user_name}} har tilgang til dette gjennom {{via_name}}.",

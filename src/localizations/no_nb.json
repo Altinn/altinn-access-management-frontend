@@ -97,7 +97,9 @@
     "digdir": "Digitaliseringsdirektoratet",
     "skiplink": "Hopp til hovedinnholdet",
     "no_access_to_page": "Du har ikke tilgang til denne siden for valgt aktør",
-    "see_details": "Se detaljer"
+    "see_details": "Se detaljer",
+    "yes_delete": "Ja, slett",
+    "confirm_delete_heading": "Er du sikker på at du vil slette denne fullmakten?"
   },
   "info_banner": {
     "info": "19. juni skrus gamle Altinn av.",
@@ -373,6 +375,8 @@
     "resources_empty": "Denne rollen inneholder ingen tjenester.",
     "resources_disclaimer": "Denne rollen kan fortsatt gi tilgang til tjenester som kun finnes i den gamle løsningen.",
     "resources_disclaimer_link": "Se listen i den gamle løsningen",
+    "delete_role_confirmation": "Roller fra gamle Altinn er avviklet, så du vil IKKE kunne gi fullmakt til denne rollen på nytt.",
+    "deleting_role_loading": "Venter på at rolle skal slettes...",
     "access_status": {
       "via_role": "{{user_name}} har tilgang til dette gjennom rollen de har i {{via_name}}.",
       "via_connection": "{{user_name}} har tilgang til dette gjennom {{via_name}}.",
