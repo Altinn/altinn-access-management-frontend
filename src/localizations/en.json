@@ -155,6 +155,7 @@
     "poa_overview": "Powers of attorney",
     "settings": "Settings",
     "requests": "Requests",
+    "requests_badge": "received",
     "maskinporten": "Maskinporten administration"
   },
   "error_page": {

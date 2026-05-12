@@ -152,6 +152,7 @@
     "poa_overview": "Fullmakter",
     "settings": "Innstillingar",
     "requests": "Forespørsler",
+    "requests_badge": "mottatt",
     "maskinporten": "Maskinporten\u00ADadministrasjon"
   },
   "error_page": {
