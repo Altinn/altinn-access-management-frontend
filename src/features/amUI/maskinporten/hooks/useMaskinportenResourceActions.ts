@@ -2,8 +2,8 @@ import { useState } from 'react';
 
 import { getActionError, type ActionError } from '@/resources/hooks/useActionError';
 import {
-  useAddMaskinportenResourceMutation,
-  useRemoveMaskinportenResourceMutation,
+  useAddMaskinportenSupplierResourceMutation,
+  useRemoveMaskinportenSupplierResourceMutation,
 } from '@/rtk/features/maskinportenApi';
 import type { ServiceResource } from '@/rtk/features/singleRights/singleRightsApi';
 
@@ -21,8 +21,8 @@ export const useMaskinportenResourceActions = ({
   party,
   supplier,
 }: UseMaskinportenResourceActionsArgs) => {
-  const [addResource] = useAddMaskinportenResourceMutation();
-  const [removeResource] = useRemoveMaskinportenResourceMutation();
+  const [addResource] = useAddMaskinportenSupplierResourceMutation();
+  const [removeResource] = useRemoveMaskinportenSupplierResourceMutation();
   const [loadingByResourceId, setLoadingByResourceId] = useState<Record<string, boolean>>({});
 
   const setLoading = (resourceId: string, isLoading: boolean) => {

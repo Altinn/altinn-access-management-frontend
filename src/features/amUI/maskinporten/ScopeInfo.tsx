@@ -6,7 +6,7 @@ import { useTranslation } from 'react-i18next';
 import { StatusMessageForScreenReader } from '@/components/StatusMessageForScreenReader/StatusMessageForScreenReader';
 import { useIsMobileOrSmaller } from '@/resources/utils/screensizeUtils';
 import {
-  useGetMaskinportenResourcesQuery,
+  useGetMaskinportenSupplierResourcesQuery,
   useMaskinportenResourceDelegationCheckQuery,
 } from '@/rtk/features/maskinportenApi';
 import type { ServiceResource } from '@/rtk/features/singleRights/singleRightsApi';
@@ -57,7 +57,7 @@ export const ScopeInfo = ({ resource }: { resource: ServiceResource }) => {
     },
   );
   const { data: delegatedResources, isFetching: isDelegatedResourcesLoading } =
-    useGetMaskinportenResourcesQuery(
+    useGetMaskinportenSupplierResourcesQuery(
       {
         party: fromParty?.partyUuid,
         supplier,

@@ -117,8 +117,8 @@ namespace Altinn.AccessManagement.UI.Controllers
         /// <returns>List of delegated resources.</returns>
         [HttpGet]
         [Authorize]
-        [Route("resources")]
-        public async Task<ActionResult<List<ResourceDelegation>>> GetResources(
+        [Route("suppliers/resources")]
+        public async Task<ActionResult<List<ResourceDelegation>>> GetSupplierResources(
             [Required][FromQuery] Guid party,
             [FromQuery] string supplier = null,
             [FromQuery] string resource = null,
@@ -132,7 +132,7 @@ namespace Altinn.AccessManagement.UI.Controllers
             try
             {
                 var languageCode = LanguageHelper.GetSelectedLanguageCookieValueBackendStandard(HttpContext);
-                return Ok(await _maskinportenService.GetResources(languageCode, party, supplier, resource, cancellationToken));
+                return Ok(await _maskinportenService.GetSupplierResources(languageCode, party, supplier, resource, cancellationToken));
             }
             catch (HttpStatusException ex)
             {
@@ -141,7 +141,7 @@ namespace Altinn.AccessManagement.UI.Controllers
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "GetResources failed unexpectedly");
+                _logger.LogError(ex, "GetSupplierResources failed unexpectedly");
                 return StatusCode((int)HttpStatusCode.InternalServerError);
             }
         }
@@ -156,8 +156,8 @@ namespace Altinn.AccessManagement.UI.Controllers
         /// <returns>Whether the resource was delegated.</returns>
         [HttpPost]
         [Authorize]
-        [Route("resources")]
-        public async Task<ActionResult<bool>> AddResource(
+        [Route("suppliers/resources")]
+        public async Task<ActionResult<bool>> AddSupplierResource(
             [Required][FromQuery] Guid party,
             [Required][FromQuery] string supplier,
             [Required][FromQuery] string resource,
@@ -170,7 +170,7 @@ namespace Altinn.AccessManagement.UI.Controllers
 
             try
             {
-                return Ok(await _maskinportenService.AddResource(party, supplier, resource, cancellationToken));
+                return Ok(await _maskinportenService.AddSupplierResource(party, supplier, resource, cancellationToken));
             }
             catch (HttpStatusException ex)
             {
@@ -179,7 +179,7 @@ namespace Altinn.AccessManagement.UI.Controllers
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "AddResource failed unexpectedly");
+                _logger.LogError(ex, "AddSupplierResource failed unexpectedly");
                 return StatusCode((int)HttpStatusCode.InternalServerError);
             }
         }
@@ -194,8 +194,8 @@ namespace Altinn.AccessManagement.UI.Controllers
         /// <returns>No content.</returns>
         [HttpDelete]
         [Authorize]
-        [Route("resources")]
-        public async Task<IActionResult> RemoveResource(
+        [Route("suppliers/resources")]
+        public async Task<IActionResult> RemoveSupplierResource(
             [Required][FromQuery] Guid party,
             [Required][FromQuery] string supplier,
             [Required][FromQuery] string resource,
@@ -208,7 +208,7 @@ namespace Altinn.AccessManagement.UI.Controllers
 
             try
             {
-                await _maskinportenService.RemoveResource(party, supplier, resource, cancellationToken);
+                await _maskinportenService.RemoveSupplierResource(party, supplier, resource, cancellationToken);
                 return NoContent();
             }
             catch (HttpStatusException ex)
@@ -218,7 +218,7 @@ namespace Altinn.AccessManagement.UI.Controllers
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "RemoveResource failed unexpectedly");
+                _logger.LogError(ex, "RemoveSupplierResource failed unexpectedly");
                 return StatusCode((int)HttpStatusCode.InternalServerError);
             }
         }
@@ -295,12 +295,13 @@ namespace Altinn.AccessManagement.UI.Controllers
         /// Endpoint for retrieving Maskinporten consumers for a party.
         /// </summary>
         /// <param name="party">The uuid for the party.</param>
+        /// <param name="consumer">Optional consumer org number to filter results to a single consumer.</param>
         /// <param name="cancellationToken">Cancellation token.</param>
         /// <returns>List of consumers.</returns>
         [HttpGet]
         [Authorize]
         [Route("consumers")]
-        public async Task<ActionResult<IEnumerable<MaskinportenConnection>>> GetConsumers([FromQuery] Guid party, CancellationToken cancellationToken = default)
+        public async Task<ActionResult<IEnumerable<MaskinportenConnection>>> GetConsumers([FromQuery] Guid party, [FromQuery] string consumer = null, CancellationToken cancellationToken = default)
         {
             if (!ModelState.IsValid)
             {
@@ -309,7 +310,7 @@ namespace Altinn.AccessManagement.UI.Controllers
 
             try
             {
-                IEnumerable<MaskinportenConnection> consumers = await _maskinportenService.GetConsumers(party, cancellationToken);
+                IEnumerable<MaskinportenConnection> consumers = await _maskinportenService.GetConsumers(party, consumer, cancellationToken);
                 return Ok(consumers);
             }
             catch (HttpStatusException ex)
@@ -388,6 +389,81 @@ namespace Altinn.AccessManagement.UI.Controllers
             catch (Exception ex)
             {
                 _logger.LogError(ex, "RemoveConsumer failed unexpectedly");
+                return StatusCode((int)HttpStatusCode.InternalServerError);
+            }
+        }
+
+        /// <summary>
+        /// Endpoint for retrieving Maskinporten scope resources delegated to the authenticated supplier from consumers.
+        /// </summary>
+        /// <param name="party">The uuid for the party (the supplier).</param>
+        /// <param name="consumer">Optional consumer organization number.</param>
+        /// <param name="cancellationToken">Cancellation token.</param>
+        /// <returns>List of delegated resources.</returns>
+        [HttpGet]
+        [Authorize]
+        [Route("consumers/resources")]
+        public async Task<ActionResult<List<ResourceDelegation>>> GetConsumerResources(
+            [Required][FromQuery] Guid party,
+            [FromQuery] string consumer = null,
+            CancellationToken cancellationToken = default)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            try
+            {
+                var languageCode = LanguageHelper.GetSelectedLanguageCookieValueBackendStandard(HttpContext);
+                return Ok(await _maskinportenService.GetConsumerResources(languageCode, party, consumer, cancellationToken));
+            }
+            catch (HttpStatusException ex)
+            {
+                string responseContent = ex.Message;
+                return new ObjectResult(ProblemDetailsFactory.CreateProblemDetails(HttpContext, (int?)ex.StatusCode, "Unexpected HttpStatus response", detail: responseContent));
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "GetConsumerResources failed unexpectedly");
+                return StatusCode((int)HttpStatusCode.InternalServerError);
+            }
+        }
+
+        /// <summary>
+        /// Endpoint for removing a delegated Maskinporten scope resource from the supplier perspective.
+        /// </summary>
+        /// <param name="party">The uuid for the party (the supplier).</param>
+        /// <param name="consumer">The consumer organization number.</param>
+        /// <param name="resource">The resource identifier.</param>
+        /// <param name="cancellationToken">Cancellation token.</param>
+        [HttpDelete]
+        [Authorize]
+        [Route("consumers/resources")]
+        public async Task<IActionResult> RemoveConsumerResource(
+            [Required][FromQuery] Guid party,
+            [Required][FromQuery] string consumer,
+            [Required][FromQuery] string resource,
+            CancellationToken cancellationToken = default)
+        {
+            if (!ModelState.IsValid || string.IsNullOrWhiteSpace(consumer) || string.IsNullOrWhiteSpace(resource))
+            {
+                return BadRequest(ModelState);
+            }
+
+            try
+            {
+                await _maskinportenService.RemoveConsumerResource(party, consumer, resource, cancellationToken);
+                return NoContent();
+            }
+            catch (HttpStatusException ex)
+            {
+                string responseContent = ex.Message;
+                return new ObjectResult(ProblemDetailsFactory.CreateProblemDetails(HttpContext, (int?)ex.StatusCode, "Unexpected HttpStatus response", detail: responseContent));
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "RemoveConsumerResource failed unexpectedly");
                 return StatusCode((int)HttpStatusCode.InternalServerError);
             }
         }

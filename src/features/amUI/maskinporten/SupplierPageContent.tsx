@@ -15,7 +15,7 @@ import { MinusCircleIcon, TrashIcon } from '@navikt/aksel-icons';
 
 import { useIsMobileOrSmaller } from '@/resources/utils/screensizeUtils';
 import {
-  useGetMaskinportenResourcesQuery,
+  useGetMaskinportenSupplierResourcesQuery,
   useRemoveMaskinportenSupplierMutation,
 } from '@/rtk/features/maskinportenApi';
 import type { ServiceResource } from '@/rtk/features/singleRights/singleRightsApi';
@@ -59,7 +59,7 @@ export const SupplierPageContent = () => {
     data: resourcePermissions,
     error: resourcesError,
     isFetching,
-  } = useGetMaskinportenResourcesQuery({ party, supplier }, { skip: !party || !supplier });
+  } = useGetMaskinportenSupplierResourcesQuery({ party, supplier }, { skip: !party || !supplier });
   const { remove, isLoading } = useMaskinportenResourceActions({ party, supplier });
 
   const delegatedResources = (resourcePermissions ?? [])

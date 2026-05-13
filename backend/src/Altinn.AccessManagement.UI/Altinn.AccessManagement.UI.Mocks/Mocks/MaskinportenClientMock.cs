@@ -68,14 +68,14 @@ namespace Altinn.AccessManagement.UI.Mocks.Mocks
         }
 
         /// <inheritdoc />
-        public Task<bool> AddResource(Guid party, string supplier, string resource, CancellationToken cancellationToken = default)
+        public Task<bool> AddSupplierResource(Guid party, string supplier, string resource, CancellationToken cancellationToken = default)
         {
             Util.ThrowExceptionIfTriggerParty(party.ToString());
             return Task.FromResult(true);
         }
 
         /// <inheritdoc />
-        public Task<IEnumerable<ResourcePermission>> GetResources(Guid party, string languageCode, string supplier = null, string resource = null, CancellationToken cancellationToken = default)
+        public Task<IEnumerable<ResourcePermission>> GetSupplierResources(Guid party, string languageCode, string supplier = null, string resource = null, CancellationToken cancellationToken = default)
         {
             Util.ThrowExceptionIfTriggerParty(party.ToString());
 
@@ -101,7 +101,7 @@ namespace Altinn.AccessManagement.UI.Mocks.Mocks
         }
 
         /// <inheritdoc />
-        public Task RemoveResource(Guid party, string supplier, string resource, CancellationToken cancellationToken = default)
+        public Task RemoveSupplierResource(Guid party, string supplier, string resource, CancellationToken cancellationToken = default)
         {
             Util.ThrowExceptionIfTriggerParty(party.ToString());
             return Task.CompletedTask;
@@ -122,12 +122,18 @@ namespace Altinn.AccessManagement.UI.Mocks.Mocks
         }
 
         /// <inheritdoc />
-        public Task<IEnumerable<MaskinportenConnection>> GetConsumers(Guid party, CancellationToken cancellationToken = default)
+        public Task<IEnumerable<MaskinportenConnection>> GetConsumers(Guid party, string consumer = null, CancellationToken cancellationToken = default)
         {
             Util.ThrowExceptionIfTriggerParty(party.ToString());
 
             string dataPath = Path.Combine(dataFolder, "Maskinporten", "consumers.json");
             IEnumerable<MaskinportenConnection> consumers = Util.GetMockData<List<MaskinportenConnection>>(dataPath);
+
+            if (!string.IsNullOrWhiteSpace(consumer))
+            {
+                consumers = consumers.Where(c => c.Party.OrganizationIdentifier == consumer);
+            }
+
             return Task.FromResult(consumers);
         }
 
@@ -140,6 +146,34 @@ namespace Altinn.AccessManagement.UI.Mocks.Mocks
 
         /// <inheritdoc />
         public Task RemoveConsumer(Guid party, string consumer, bool cascade = false, CancellationToken cancellationToken = default)
+        {
+            Util.ThrowExceptionIfTriggerParty(party.ToString());
+            return Task.CompletedTask;
+        }
+
+        /// <inheritdoc />
+        public Task<IEnumerable<ResourcePermission>> GetConsumerResources(Guid party, string languageCode, string consumer = null, CancellationToken cancellationToken = default)
+        {
+            Util.ThrowExceptionIfTriggerParty(party.ToString());
+
+            IEnumerable<ResourcePermission> resources = new List<ResourcePermission>
+            {
+                new ResourcePermission
+                {
+                    Resource = new ResourceAM
+                    {
+                        Name = "Maskinporten test resource",
+                        RefId = "appid-400"
+                    },
+                    Permissions = new List<Permission>()
+                }
+            };
+
+            return Task.FromResult(resources);
+        }
+
+        /// <inheritdoc />
+        public Task RemoveConsumerResource(Guid party, string consumer, string resource, CancellationToken cancellationToken = default)
         {
             Util.ThrowExceptionIfTriggerParty(party.ToString());
             return Task.CompletedTask;
