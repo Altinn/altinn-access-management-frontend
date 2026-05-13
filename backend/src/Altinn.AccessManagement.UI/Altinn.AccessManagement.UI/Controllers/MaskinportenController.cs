@@ -6,6 +6,7 @@ using Altinn.AccessManagement.UI.Core.Models.ClientDelegation;
 using Altinn.AccessManagement.UI.Core.Models.Maskinporten;
 using Altinn.AccessManagement.UI.Core.Models.ResourceRegistry;
 using Altinn.AccessManagement.UI.Core.Models.ResourceRegistry.Frontend;
+using Altinn.AccessManagement.UI.Core.Models.SingleRight;
 using Altinn.AccessManagement.UI.Core.Services.Interfaces;
 using Altinn.AccessManagement.UI.Filters;
 using Microsoft.AspNetCore.Authorization;
@@ -65,6 +66,159 @@ namespace Altinn.AccessManagement.UI.Controllers
             catch (Exception ex)
             {
                 _logger.LogError(ex, "SearchScopes failed unexpectedly");
+                return StatusCode((int)HttpStatusCode.InternalServerError);
+            }
+        }
+
+        /// <summary>
+        /// Endpoint for checking whether a Maskinporten scope resource can be delegated.
+        /// </summary>
+        /// <param name="party">The uuid for the party.</param>
+        /// <param name="resource">The resource identifier.</param>
+        /// <param name="cancellationToken">Cancellation token.</param>
+        /// <returns>The resource delegation check.</returns>
+        [HttpGet]
+        [Authorize]
+        [Route("resources/delegationcheck")]
+        public async Task<ActionResult<ResourceCheckDto>> ResourceDelegationCheck(
+            [Required][FromQuery] Guid party,
+            [Required][FromQuery] string resource,
+            CancellationToken cancellationToken = default)
+        {
+            if (!ModelState.IsValid || string.IsNullOrWhiteSpace(resource))
+            {
+                return BadRequest(ModelState);
+            }
+
+            try
+            {
+                var languageCode = LanguageHelper.GetSelectedLanguageCookieValueBackendStandard(HttpContext);
+                return Ok(await _maskinportenService.ResourceDelegationCheck(party, resource, languageCode, cancellationToken));
+            }
+            catch (HttpStatusException ex)
+            {
+                string responseContent = ex.Message;
+                return new ObjectResult(ProblemDetailsFactory.CreateProblemDetails(HttpContext, (int?)ex.StatusCode, "Unexpected HttpStatus response", detail: responseContent));
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "ResourceDelegationCheck failed unexpectedly");
+                return StatusCode((int)HttpStatusCode.InternalServerError);
+            }
+        }
+
+        /// <summary>
+        /// Endpoint for retrieving delegated Maskinporten scope resources.
+        /// </summary>
+        /// <param name="party">The uuid for the party.</param>
+        /// <param name="supplier">Optional supplier organization number.</param>
+        /// <param name="resource">Optional resource identifier.</param>
+        /// <param name="cancellationToken">Cancellation token.</param>
+        /// <returns>List of delegated resources.</returns>
+        [HttpGet]
+        [Authorize]
+        [Route("resources")]
+        public async Task<ActionResult<List<ResourceDelegation>>> GetResources(
+            [Required][FromQuery] Guid party,
+            [FromQuery] string supplier = null,
+            [FromQuery] string resource = null,
+            CancellationToken cancellationToken = default)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            try
+            {
+                var languageCode = LanguageHelper.GetSelectedLanguageCookieValueBackendStandard(HttpContext);
+                return Ok(await _maskinportenService.GetResources(languageCode, party, supplier, resource, cancellationToken));
+            }
+            catch (HttpStatusException ex)
+            {
+                string responseContent = ex.Message;
+                return new ObjectResult(ProblemDetailsFactory.CreateProblemDetails(HttpContext, (int?)ex.StatusCode, "Unexpected HttpStatus response", detail: responseContent));
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "GetResources failed unexpectedly");
+                return StatusCode((int)HttpStatusCode.InternalServerError);
+            }
+        }
+
+        /// <summary>
+        /// Endpoint for delegating a Maskinporten scope resource to a supplier.
+        /// </summary>
+        /// <param name="party">The uuid for the party.</param>
+        /// <param name="supplier">The supplier organization number.</param>
+        /// <param name="resource">The resource identifier.</param>
+        /// <param name="cancellationToken">Cancellation token.</param>
+        /// <returns>Whether the resource was delegated.</returns>
+        [HttpPost]
+        [Authorize]
+        [Route("resources")]
+        public async Task<ActionResult<bool>> AddResource(
+            [Required][FromQuery] Guid party,
+            [Required][FromQuery] string supplier,
+            [Required][FromQuery] string resource,
+            CancellationToken cancellationToken = default)
+        {
+            if (!ModelState.IsValid || string.IsNullOrWhiteSpace(supplier) || string.IsNullOrWhiteSpace(resource))
+            {
+                return BadRequest(ModelState);
+            }
+
+            try
+            {
+                return Ok(await _maskinportenService.AddResource(party, supplier, resource, cancellationToken));
+            }
+            catch (HttpStatusException ex)
+            {
+                string responseContent = ex.Message;
+                return new ObjectResult(ProblemDetailsFactory.CreateProblemDetails(HttpContext, (int?)ex.StatusCode, "Unexpected HttpStatus response", detail: responseContent));
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "AddResource failed unexpectedly");
+                return StatusCode((int)HttpStatusCode.InternalServerError);
+            }
+        }
+
+        /// <summary>
+        /// Endpoint for removing a delegated Maskinporten scope resource from a supplier.
+        /// </summary>
+        /// <param name="party">The uuid for the party.</param>
+        /// <param name="supplier">The supplier organization number.</param>
+        /// <param name="resource">The resource identifier.</param>
+        /// <param name="cancellationToken">Cancellation token.</param>
+        /// <returns>No content.</returns>
+        [HttpDelete]
+        [Authorize]
+        [Route("resources")]
+        public async Task<IActionResult> RemoveResource(
+            [Required][FromQuery] Guid party,
+            [Required][FromQuery] string supplier,
+            [Required][FromQuery] string resource,
+            CancellationToken cancellationToken = default)
+        {
+            if (!ModelState.IsValid || string.IsNullOrWhiteSpace(supplier) || string.IsNullOrWhiteSpace(resource))
+            {
+                return BadRequest(ModelState);
+            }
+
+            try
+            {
+                await _maskinportenService.RemoveResource(party, supplier, resource, cancellationToken);
+                return NoContent();
+            }
+            catch (HttpStatusException ex)
+            {
+                string responseContent = ex.Message;
+                return new ObjectResult(ProblemDetailsFactory.CreateProblemDetails(HttpContext, (int?)ex.StatusCode, "Unexpected HttpStatus response", detail: responseContent));
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "RemoveResource failed unexpectedly");
                 return StatusCode((int)HttpStatusCode.InternalServerError);
             }
         }

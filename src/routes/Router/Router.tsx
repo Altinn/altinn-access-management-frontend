@@ -46,7 +46,7 @@ import { ClientDetailsPage } from '@/features/amUI/clientDetails/ClientDetailsPa
 import { MyClientsPage } from '@/features/amUI/myClients/MyClientsPage';
 import { DraftRequestPage } from '@/features/amUI/requestPage/DraftRequestPage/DraftRequestPage';
 import { MaskinportenPage } from '@/features/amUI/maskinporten/MaskinportenPage';
-import { MaskinportenSupplierPage } from '@/features/amUI/maskinporten/MaskinportenSupplierPage';
+import { SupplierPage } from '@/features/amUI/maskinporten/SupplierPage';
 
 export const Router = createBrowserRouter(
   createRoutesFromElements(
@@ -246,7 +246,7 @@ export const Router = createBrowserRouter(
         />
         <Route
           path={amUIPath.MaskinportenSupplier}
-          element={<MaskinportenSupplierPage />}
+          element={<SupplierPage />}
         />
         <Route
           path='errorpage/reportee'

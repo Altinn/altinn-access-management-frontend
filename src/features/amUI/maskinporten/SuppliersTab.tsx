@@ -5,23 +5,19 @@ import { formatDisplayName } from '@altinn/altinn-components';
 import { useGetMaskinportenSuppliersQuery } from '@/rtk/features/maskinportenApi';
 
 import { usePartyRepresentation } from '../common/PartyRepresentationContext/PartyRepresentationContext';
-import { MaskinportenAddSupplierButton } from './MaskinportenAddSupplierButton';
+import { AddSupplierButton } from './AddSupplierButton';
 import { MaskinportenUserSearch } from './MaskinportenUserSearch';
 import classes from './MaskinportenPage.module.css';
 import { useNavigate } from 'react-router';
 import { DsParagraph } from '@altinn/altinn-components';
 
-type MaskinportenSuppliersTabProps = {
+type SuppliersTabProps = {
   party: string;
   isActive: boolean;
   canFetch: boolean;
 };
 
-export const MaskinportenSuppliersTab = ({
-  party,
-  isActive,
-  canFetch,
-}: MaskinportenSuppliersTabProps) => {
+export const SuppliersTab = ({ party, isActive, canFetch }: SuppliersTabProps) => {
   const { t } = useTranslation();
   const {
     data: suppliers,
@@ -33,7 +29,7 @@ export const MaskinportenSuppliersTab = ({
 
   const addUserButton = useCallback(
     () => (
-      <MaskinportenAddSupplierButton
+      <AddSupplierButton
         party={party}
         onComplete={(user) => {
           navigate(`/maskinporten/supplier/${user.organizationIdentifier}`);

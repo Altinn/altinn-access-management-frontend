@@ -55,9 +55,11 @@ import {
 } from '@/resources/utils/featureFlagUtils';
 import { useSelfConnection } from '../common/PartyRepresentationContext/useSelfConnection';
 import { useGetRolePermissionsQuery } from '@/rtk/features/roleApi';
+import { useDocumentTitle } from '@/resources/hooks/useDocumentTitle';
 
 export const LandingPage = () => {
   const { t } = useTranslation();
+  useDocumentTitle(t('landing_page.page_title'));
   const [searchParams, setSearchParams] = useSearchParams();
   const [shouldOpenAccountMenu, setShouldOpenAccountMenu] = useState<boolean>(false);
   const { data: reportee, isLoading: isLoadingReportee } = useGetReporteeQuery();
@@ -271,10 +273,7 @@ export const LandingPage = () => {
     <PageWrapper>
       <PageLayoutWrapper openAccountMenu={shouldOpenAccountMenu}>
         <div className={classes.landingPage}>
-          <DsHeading
-            level={1}
-            className={classes.landingPageHeading}
-          >
+          <List className={classes.landingPageHeading}>
             <UserListItem
               id={reportee?.partyUuid ?? ''}
               type={isOrganization(reportee) ? 'company' : 'person'}
@@ -283,11 +282,12 @@ export const LandingPage = () => {
               subUnit={isReporteeSubUnit}
               deleted={reportee?.isDeleted}
               size='lg'
+              titleAs='h1'
               loading={!reportee}
               interactive={false}
               shadow='none'
             />
-          </DsHeading>
+          </List>
           <DsAlert data-color='info'>
             {isLoading ? (
               <DsSkeleton

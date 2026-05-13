@@ -185,6 +185,7 @@
     "poa_overview": "Fullmakter",
     "settings": "Innstillinger",
     "requests": "Forespørsler",
+    "requests_badge": "mottatt",
     "maskinporten": "Maskinporten\u00ADadministrasjon"
   },
   "profile": {
@@ -588,23 +589,24 @@
     "person_identifier_ssn_format_error": "Fødselsnummer må bestå av 11 siffer",
     "person_identifier_username_format_error": "Brukernavn må bestå av minst 6 tegn",
     "person_identifier_whitespace_forbidden_error": "Mellomrom er ikke tillatt i fødselsnummer eller brukernavn",
-    "last_name_format_error": "Vennligst fyll inn et gyldig etternavn"
+    "last_name_format_error": "Vennligst fyll inn et gyldig etternavn",
+    "org_search_result_label": "Du legger til:"
   },
   "maskinporten_page": {
     "heading": "Maskinporten\u00ADadministrasjon",
     "document_title": "Maskinportenadministrasjon - Altinn",
     "suppliers_tab": "Leverandører",
     "add_supplier_button": "Legg til leverandør",
-    "suppliers_description": "Virksomheter som har mottatt scope fra {{name}}.",
+    "suppliers_description": "Virksomheter som har mottatt fullmakt fra {{name}}.",
     "consumers_tab": "Konsumenter",
-    "consumers_description": "Virksomheter som har gitt scope til {{name}}.",
+    "consumers_description": "Virksomheter som har gitt fullmakt til {{name}}.",
     "no_suppliers": "Ingen leverandører funnet.",
     "no_consumers": "Ingen konsumenter funnet.",
     "load_error": "Kunne ikke laste Maskinporten-tilknytninger.",
     "supplier_not_found": "Vi fant ikke leverandøren",
-    "remove_supplier_heading": "Fjern leverandør",
+    "remove_supplier_heading": "Slett leverandør",
     "remove_supplier_body": "Er du sikker på at du vil fjerne {{name}} som leverandør? Alle delegerte ressurser vil også bli fjernet.",
-    "remove_supplier_confirm": "Fjern leverandør",
+    "remove_supplier_confirm": "Slett leverandør",
     "remove_supplier_error": "Kunne ikke fjerne {{name}} som leverandør.",
     "remove_supplier_success": "{{name}} er fjernet som leverandør.",
     "remove_consumer_heading": "Fjern konsument",
@@ -614,10 +616,14 @@
     "remove_consumer_success": "{{name}} er fjernet som konsument.",
     "back_to_list": "Gå tilbake til oversikten",
     "supplier_title": "Leverandør - Altinn",
-    "add_scope_button": "Legg til tjeneste",
-    "search_scopes_heading": "Hvilket scope vil du gi {{name}}?",
+    "add_scope_button": "Gi fullmakt",
+    "search_scopes_heading": "Hvilken maskinportentjeneste vil du gi {{name}} fullmakt til?",
     "no_scopes": "Ingen scopes funnet for denne tjenesten.",
     "scope_count": "{{count}} scopes",
+    "search_results_count": "{{count}} treff på søket",
+    "delegated_resources_heading": "Fullmakt til {{count}} maskinportentjenester",
+    "no_delegated_resources": "Ingen fullmakter er lagt til ennå.",
+    "delegated_resources_error": "Kunne ikke laste fullmakter.",
     "own_org_number_warning": "Du kan ikke gi tilgang til eget organisasjonsnummer",
     "own_org_number_warning_body": "Har ikke din virksomhet tilgang, ta kontakt med tilbyder av API-et du skal gi tilgang til."
   },
@@ -1061,6 +1067,7 @@
     "service_owner_filter_clear": "Tøm søkefelt"
   },
   "landing_page": {
+    "page_title": "Tilgangsstyring - Altinn",
     "alert_heading": "Du er nå i den nye løsningen for tilgangsstyring",
     "alert_body": "Her er dagens Altinn-roller erstattet av tilgangspakker med tjenester.",
     "alert_body_p2": "Vær oppmerksom på at det er noen tjenester du ikke kan gi tilgang til i den nye løsningen. Hvis du ikke finner tjenesten her, kan du gå til den gamle løsningen.",

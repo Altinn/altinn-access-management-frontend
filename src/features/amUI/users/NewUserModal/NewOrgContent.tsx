@@ -74,18 +74,27 @@ export const NewOrgContent = ({
         size='sm'
         onChange={(e) => setOrgNumber((e.target as HTMLInputElement).value.replace(/ /g, ''))}
       />
-      {!isGetOrgError && !orgDataLoading && orgData && orgData.orgNumber === orgNumber && (
-        <div className={classes.searchResult}>
-          <DsParagraph>
-            <strong>{orgData.name}</strong>
-          </DsParagraph>
-          <DsParagraph data-size='sm'>
-            {t('common.org_nr')} {formatOrgNr(orgData.orgNumber)}
-            {orgData.unitType === 'AAFY' ||
-              (orgData?.unitType === 'BEDR' && ' - ' + t('common.subunit'))}
-          </DsParagraph>
-        </div>
-      )}
+      <div aria-live='polite'>
+        {!isGetOrgError && !orgDataLoading && orgData && orgData.orgNumber === orgNumber && (
+          <div className={classes.searchResult}>
+            <DsHeading
+              data-size='2xs'
+              level={3}
+              className={classes.searchResultHeading}
+            >
+              {t('new_user_modal.org_search_result_label')}
+            </DsHeading>
+            <DsParagraph>
+              <strong>{orgData.name}</strong>
+            </DsParagraph>
+            <DsParagraph data-size='sm'>
+              {t('common.org_nr')} {formatOrgNr(orgData.orgNumber)}
+              {orgData.unitType === 'AAFY' ||
+                (orgData?.unitType === 'BEDR' && ' - ' + t('common.subunit'))}
+            </DsParagraph>
+          </div>
+        )}
+      </div>
 
       <div className={classes.validationButton}>
         <DsButton

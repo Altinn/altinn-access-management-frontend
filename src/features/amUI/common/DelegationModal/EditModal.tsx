@@ -13,6 +13,7 @@ import classes from './DelegationModal.module.css';
 import { AccessPackageInfo } from './AccessPackages/AccessPackageInfo';
 import { RoleInfo } from './Role/RoleInfo';
 import { useDelegationModalContext } from './DelegationModalContext';
+import { ScopeInfo } from '../../maskinporten/ScopeInfo';
 
 export interface DelegationRecipient {
   partyUuid: string;
@@ -34,6 +35,7 @@ export interface InstanceData {
 
 export interface EditModalProps {
   resource?: ServiceResource;
+  maskinportenScope?: ServiceResource;
   accessPackage?: AccessPackage;
   role?: Role;
   instance?: InstanceData;
@@ -48,6 +50,7 @@ export const EditModal = forwardRef<HTMLDialogElement, EditModalProps>(
   (
     {
       resource,
+      maskinportenScope,
       accessPackage,
       role,
       instance,
@@ -100,6 +103,7 @@ export const EditModal = forwardRef<HTMLDialogElement, EditModalProps>(
           <div className={classes.content}>
             {renderModalContent({
               resource,
+              maskinportenScope,
               accessPackage,
               role,
               instance,
@@ -117,6 +121,7 @@ export const EditModal = forwardRef<HTMLDialogElement, EditModalProps>(
 
 const renderModalContent = ({
   resource,
+  maskinportenScope,
   accessPackage,
   role,
   instance,
@@ -125,6 +130,7 @@ const renderModalContent = ({
   onSuccess,
 }: {
   resource?: ServiceResource;
+  maskinportenScope?: ServiceResource;
   accessPackage?: AccessPackage;
   role?: Role;
   instance?: InstanceData;
@@ -132,6 +138,9 @@ const renderModalContent = ({
   availableActions?: DelegationAction[];
   onSuccess?: () => void;
 }) => {
+  if (maskinportenScope) {
+    return <ScopeInfo resource={maskinportenScope} />;
+  }
   if (resource && instance) {
     return (
       <InstanceInfo

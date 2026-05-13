@@ -157,6 +157,7 @@
     "poa_overview": "Powers of attorney",
     "settings": "Settings",
     "requests": "Requests",
+    "requests_badge": "received",
     "maskinporten": "Maskinporten administration"
   },
   "error_page": {
@@ -591,23 +592,24 @@
     "person_identifier_ssn_format_error": "Social security number must consist of 11 digits",
     "person_identifier_username_format_error": "Username must be at least 6 characters",
     "person_identifier_whitespace_forbidden_error": "Spaces are not allowed in SSN or username",
-    "last_name_format_error": "Please enter a valid last name"
+    "last_name_format_error": "Please enter a valid last name",
+    "org_search_result_label": "You will add:"
   },
   "maskinporten_page": {
     "heading": "Maskinporten administration",
     "document_title": "Maskinporten administration - Altinn",
     "suppliers_tab": "Suppliers",
     "add_supplier_button": "Add supplier",
-    "suppliers_description": "Organizations that have received scopes from {{name}}.",
+    "suppliers_description": "Organizations that have received power of attorney from {{name}}.",
     "consumers_tab": "Consumers",
-    "consumers_description": "Organizations that have granted scopes to {{name}}.",
+    "consumers_description": "Organizations that have granted power of attorney to {{name}}.",
     "no_suppliers": "No suppliers found.",
     "no_consumers": "No consumers found.",
     "load_error": "Could not load Maskinporten connections.",
     "supplier_not_found": "We could not find the supplier",
-    "remove_supplier_heading": "Remove supplier",
+    "remove_supplier_heading": "Delete supplier",
     "remove_supplier_body": "Are you sure you want to remove {{name}} as a supplier? All delegated resources will also be removed.",
-    "remove_supplier_confirm": "Remove supplier",
+    "remove_supplier_confirm": "Delete supplier",
     "remove_supplier_error": "Could not remove {{name}} as a supplier.",
     "remove_supplier_success": "{{name}} has been removed as a supplier.",
     "remove_consumer_heading": "Remove consumer",
@@ -617,10 +619,14 @@
     "remove_consumer_success": "{{name}} has been removed as a consumer.",
     "back_to_list": "Go back to the overview",
     "supplier_title": "Supplier - Altinn",
-    "add_scope_button": "Add service",
-    "search_scopes_heading": "Which scope do you want to give {{name}}?",
+    "add_scope_button": "Give power of attorney",
+    "search_scopes_heading": "Which Maskinporten service do you want to give {{name}} power of attorney for?",
     "no_scopes": "No scopes found for this service.",
     "scope_count": "{{count}} scopes",
+    "search_results_count": "{{count}} search matches",
+    "delegated_resources_heading": "Power of attorney for {{count}} Maskinporten services",
+    "no_delegated_resources": "No power of attorney has been added yet.",
+    "delegated_resources_error": "Could not load power of attorney.",
     "own_org_number_warning": "You cannot grant access to your own organization number",
     "own_org_number_warning_body": "If your organization does not have access, please contact the provider of the API you want to grant access to."
   },
@@ -1064,6 +1070,7 @@
     "service_owner_filter_clear": "Clear search field"
   },
   "landing_page": {
+    "page_title": "Access management - Altinn",
     "alert_heading": "You are now in the new access management solution",
     "alert_body": "Today's Altinn roles have been replaced by access packages with services.",
     "alert_body_p2": "Please note that there are some services you cannot grant access to in the new solution. If you cannot find the service here, you can go to the old solution.",
