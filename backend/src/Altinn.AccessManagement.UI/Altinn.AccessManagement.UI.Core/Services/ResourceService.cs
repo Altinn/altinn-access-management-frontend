@@ -53,16 +53,20 @@ namespace Altinn.AccessManagement.UI.Core.Services
         }
 
         /// <inheritdoc />
-        public async Task<PaginatedList<ServiceResourceFE>> GetPaginatedSearchResults(string languageCode, PaginatedSearchParams searchParams)
+        public async Task<PaginatedList<ServiceResourceFE>> GetPaginatedSearchResults(string languageCode, PaginatedSearchParams searchParams, ResourceType[] resourceTypes = null, CancellationToken cancellationToken = default)
         {
             try
             {
-                List<ServiceResource> resources = await GetFullResourceList(searchParams.IncludeMigratedApps);
-                List<ServiceResource> resourceList = resources.FindAll(r => r.ResourceType != ResourceType.MaskinportenSchema && r.ResourceType != ResourceType.Systemresource && r.Visible && (searchParams.IncludeA2Services || r.ResourceType != ResourceType.Altinn2Service));
+                List<ServiceResource> resources = await GetFullResourceList(searchParams.IncludeMigratedApps, cancellationToken);
+                List<ServiceResource> resourceList = resources.FindAll(r => IncludeInSearch(r, searchParams, resourceTypes));
                 List<ServiceResourceFE> resourcesFE = MapResourceToFrontendModel(resourceList, languageCode);
 
                 bool displayPopularServicesOnly = _featureFlags.DisplayPopularSingleRightsServices;
-                if (string.IsNullOrEmpty(searchParams.SearchString) && (searchParams.ROFilters == null || searchParams.ROFilters.Length == 0) && displayPopularServicesOnly && searchParams.IncludeA2Services)
+                if (string.IsNullOrEmpty(searchParams.SearchString) &&
+                    (searchParams.ROFilters == null || searchParams.ROFilters.Length == 0) &&
+                    displayPopularServicesOnly &&
+                    searchParams.IncludeA2Services &&
+                    (resourceTypes == null || resourceTypes.Length == 0))
                 {
                     // Return a selection of popular services (A2 services)
                     List<ServiceResourceFE> popularResources = FilterOutPopularResources(resourcesFE);
@@ -72,8 +76,8 @@ namespace Altinn.AccessManagement.UI.Core.Services
                 {
                     // Perform search/filtering and return matches
                     List<ServiceResourceFE> filteredresources = FilterResourceList(resourcesFE, searchParams.ROFilters);
-                    List<ServiceResourceFE> searchResults = SearchInResourceList(filteredresources, searchParams.SearchString);
-                    OrgList orgList = await _resourceRegistryClient.GetAllResourceOwners();
+                    List<ServiceResourceFE> searchResults = SearchInResourceList(filteredresources, searchParams.SearchString, resourceTypes, cancellationToken);
+                    OrgList orgList = await GetResourceOwnerOrgList(cancellationToken);
 
                     var paginatedResult = PaginationUtils.GetListPage(searchResults, searchParams.Page, searchParams.ResultsPerPage);
 
@@ -95,6 +99,23 @@ namespace Altinn.AccessManagement.UI.Core.Services
                 _logger.LogError("//ResourceAdministrationPoint // GetResources by resourcetype failed to fetch resources {ex}", ex);
                 throw;
             }
+        }
+
+        private static bool IncludeInSearch(ServiceResource resource, PaginatedSearchParams searchParams, ResourceType[] resourceTypes)
+        {
+            if (!resource.Visible)
+            {
+                return false;
+            }
+
+            if (resourceTypes?.Length > 0)
+            {
+                return resourceTypes.Contains(resource.ResourceType);
+            }
+
+            return resource.ResourceType != ResourceType.MaskinportenSchema &&
+                resource.ResourceType != ResourceType.Systemresource &&
+                (searchParams.IncludeA2Services || resource.ResourceType != ResourceType.Altinn2Service);
         }
 
         /// <inheritdoc />
@@ -318,7 +339,7 @@ namespace Altinn.AccessManagement.UI.Core.Services
                 List<ServiceResourceFE> resourcesFE = MapResourceToFrontendModel(resourceList, languageCode);
 
                 List<ServiceResourceFE> filteredresources = FilterResourceList(resourcesFE, resourceOwnerFilters);
-                return SearchInResourceList(filteredresources, searchString);
+                return SearchInResourceList(filteredresources, searchString, new[] { ResourceType.MaskinportenSchema });
             }
             catch (Exception ex)
             {
@@ -370,12 +391,13 @@ namespace Altinn.AccessManagement.UI.Core.Services
             return resources;
         }
 
-        private async Task<List<ServiceResource>> GetFullResourceList(bool includeMigratedApps = false)
+        private async Task<List<ServiceResource>> GetFullResourceList(bool includeMigratedApps = false, CancellationToken cancellationToken = default)
         {
             string cacheKey = $"resourcesList:all:{includeMigratedApps}";
 
             if (!_memoryCache.TryGetValue(cacheKey, out List<ServiceResource> resources))
             {
+                cancellationToken.ThrowIfCancellationRequested();
                 resources = await _resourceRegistryClient.GetResourceList(includeMigratedApps);
 
                 MemoryCacheEntryOptions cacheEntryOptions = new MemoryCacheEntryOptions()
@@ -386,6 +408,13 @@ namespace Altinn.AccessManagement.UI.Core.Services
             }
 
             return resources;
+        }
+
+        private async Task<OrgList> GetResourceOwnerOrgList(CancellationToken cancellationToken = default)
+        {
+            cancellationToken.ThrowIfCancellationRequested();
+            OrgList orgList = await _resourceRegistryClient.GetAllResourceOwners();
+            return orgList;
         }
 
         /// <summary>
@@ -420,19 +449,23 @@ namespace Altinn.AccessManagement.UI.Core.Services
         ///     resources where at least one of these words are present.
         ///     <param name="resources">The list of resources to be searched through.</param>
         ///     <param name="searchString">The search string to be used for the search.</param>
+        ///     <param name="resourceTypes">Optional resource types included in the search.</param>
+        ///     <param name="cancellationToken">Cancellation token.</param>
         /// </summary>
         /// <returns>
         ///     List of resources containing at least one word from the search string, ordered by the number of word
         ///     occurences found. Returns the full list of resources if the search string is null or empty.
         /// </returns>
-        private List<ServiceResourceFE> SearchInResourceList(List<ServiceResourceFE> resources, string searchString)
+        private List<ServiceResourceFE> SearchInResourceList(List<ServiceResourceFE> resources, string searchString, ResourceType[] resourceTypes = null, CancellationToken cancellationToken = default)
         {
+            cancellationToken.ThrowIfCancellationRequested();
             string trimmedSearchString = searchString?.Trim();
             if (string.IsNullOrEmpty(trimmedSearchString))
             {
                 return resources;
             }
 
+            bool includeResourceReferencesInSearch = resourceTypes?.Contains(ResourceType.MaskinportenSchema) == true;
             List<ServiceResourceFE> matchedResources = new List<ServiceResourceFE>();
             string[] searchWords = trimmedSearchString.ToLower().Split();
 
@@ -447,6 +480,7 @@ namespace Altinn.AccessManagement.UI.Core.Services
                     || StringUtils.NotNullAndContains(res.RightDescription, word)
                     || StringUtils.NotNullAndContains(res.ResourceOwnerName, word)
                     || StringUtils.NotNullAndContains(res.Identifier, word)
+                    || (includeResourceReferencesInSearch && ResourceReferenceContains(res, word))
                     || (res.Keywords != null && res.Keywords.Exists((kw) => StringUtils.NotNullAndContains(kw, word))))
                     {
                         numMatches++;
@@ -466,6 +500,11 @@ namespace Altinn.AccessManagement.UI.Core.Services
                         res.PriorityCounter += 2; // Prioritize resources whose title is an exact match
                     }
 
+                    if (includeResourceReferencesInSearch && HasExactResourceReferenceMatch(res, trimmedSearchString))
+                    {
+                        res.PriorityCounter += 2; // Prioritize resources whose scope is an exact match
+                    }
+
                     matchedResources.Add(res);
                 }
             }
@@ -473,6 +512,23 @@ namespace Altinn.AccessManagement.UI.Core.Services
             List<ServiceResourceFE> sortedMatches = matchedResources.OrderByDescending(res => res.PriorityCounter).ToList();
 
             return sortedMatches;
+        }
+
+        private static bool ResourceReferenceContains(ServiceResourceFE resource, string word)
+        {
+            return resource.ResourceReferences?.Exists(reference =>
+                reference != null &&
+                reference.ReferenceType == ReferenceType.MaskinportenScope &&
+                StringUtils.NotNullAndContains(reference.Reference, word)) == true;
+        }
+
+        private static bool HasExactResourceReferenceMatch(ServiceResourceFE resource, string searchString)
+        {
+            return resource.ResourceReferences?.Exists(reference =>
+                reference != null &&
+                reference.ReferenceType == ReferenceType.MaskinportenScope &&
+                reference.Reference != null &&
+                string.Equals(searchString, reference.Reference.Trim(), StringComparison.OrdinalIgnoreCase)) == true;
         }
 
         private List<ServiceResourceFE> FilterOutPopularResources(List<ServiceResourceFE> resources)

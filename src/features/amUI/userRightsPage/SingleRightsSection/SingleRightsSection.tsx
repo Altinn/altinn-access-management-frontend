@@ -140,6 +140,7 @@ export const SingleRightsSection = ({ isReportee = false }: { isReportee?: boole
             }}
             size={isSmallScreen ? 'sm' : 'md'}
             titleAs='h3'
+            noResourcesText={t('resource_list.no_user_resources')}
             delegationModal={
               (availableActions.includes(DelegationAction.DELEGATE) ||
                 availableActions.includes(DelegationAction.REQUEST)) && (

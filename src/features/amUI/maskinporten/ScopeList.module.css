@@ -1,0 +1,12 @@
+.toolbarContainer {
+  margin-bottom: var(--ds-spacing-3);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.resourceSearchResult {
+  margin-bottom: var(--ds-spacing-3);
+  min-height: 420px;
+  width: 100%;
+}

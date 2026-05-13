@@ -6,17 +6,26 @@ import { LanguageCode, Layout, RootProvider, Snackbar } from '@altinn/altinn-com
 import { useTranslation } from 'react-i18next';
 import { useLocation } from 'react-router';
 
-export const ErrorLayoutWrapper = ({ children }: { children: React.ReactNode }) => {
+export const ErrorLayoutWrapper = ({
+  hideAccountSelector = true,
+  children,
+}: {
+  hideAccountSelector?: boolean;
+  children: React.ReactNode;
+}) => {
   const { t } = useTranslation();
   const { pathname, search } = useLocation();
 
-  const { header, languageCode } = useHeader({ openAccountMenu: false, hideAccountSelector: true });
+  const { header, languageCode } = useHeader({
+    openAccountMenu: false,
+    hideAccountSelector,
+    hideSidebarItems: true,
+  });
   const footer = useFooter();
 
   return (
     <RootProvider languageCode={languageCode as LanguageCode}>
       <Layout
-        useGlobalHeader
         color={'neutral'}
         theme='default'
         header={header}

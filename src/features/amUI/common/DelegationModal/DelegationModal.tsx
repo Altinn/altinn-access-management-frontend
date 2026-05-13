@@ -9,6 +9,7 @@ export enum DelegationType {
   SingleRights = 'SingleRights',
   AccessPackage = 'AccessPackage',
   Role = 'Role',
+  MaskinportenScope = 'MaskinportenScope',
 }
 export interface DelegationModalProps {
   delegationType: DelegationType;

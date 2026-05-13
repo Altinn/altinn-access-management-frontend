@@ -1,8 +1,7 @@
 import * as React from 'react';
 import { useTranslation } from 'react-i18next';
 import { PlusIcon, ArrowLeftIcon } from '@navikt/aksel-icons';
-import type { JSX } from 'react';
-import { useEffect, useRef } from 'react';
+import { JSX, useEffect, useRef } from 'react';
 import { Button, DsDialog, Snackbar, SnackbarProvider } from '@altinn/altinn-components';
 
 import type { AccessPackage } from '@/rtk/features/accessPackageApi';
@@ -10,6 +9,8 @@ import type { ServiceResource } from '@/rtk/features/singleRights/singleRightsAp
 
 import { usePartyRepresentation } from '../PartyRepresentationContext/PartyRepresentationContext';
 import { useAreaExpandedContextOrLocal } from '../AccessPackageList/AccessPackageExpandedContext';
+import { ScopeSearch } from '../../maskinporten/ScopeSearch';
+import { ScopeInfo } from '../../maskinporten/ScopeInfo';
 
 import classes from './DelegationModal.module.css';
 import { ResourceSearch } from './SingleRights/ResourceSearch';
@@ -106,6 +107,12 @@ export const DelegationModalContent = ({
       triggerButtonText = hasDelegateAccess
         ? t('access_packages.give_new_button')
         : t('common.request_poa');
+      break;
+    case DelegationType.MaskinportenScope:
+      searchViewContent = <ScopeSearch onSelect={onResourceSelection} />;
+      infoViewContent = resourceToView && <ScopeInfo resource={resourceToView} />;
+      triggerButtonVariant = 'primary';
+      triggerButtonText = t('maskinporten_page.add_scope_button');
       break;
     default:
       searchViewContent = (

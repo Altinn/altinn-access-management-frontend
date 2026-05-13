@@ -19,9 +19,9 @@ import {
   useGetIsAdminQuery,
   useGetIsClientAdminQuery,
   useGetIsCompanyProfileAdminQuery,
+  useGetIsMaskinportenAdminQuery,
   useGetReporteeQuery,
 } from '@/rtk/features/userInfoApi';
-import { useGetMyClientsQuery } from '@/rtk/features/clientApi';
 import { useTranslation } from 'react-i18next';
 import { LeaveIcon } from '@navikt/aksel-icons';
 import { useSearchParams } from 'react-router';
@@ -32,6 +32,7 @@ import {
 } from '@/resources/utils/permissionUtils';
 import {
   getConsentMenuItem,
+  getMaskinportenMenuItem,
   getPoaOverviewMenuItem,
   getReporteesMenuItem,
   getRequestsMenuItem,
@@ -48,12 +49,17 @@ import { formatOrgNr, isOrganization, isSubUnit } from '@/resources/utils/report
 import { getHostUrl } from '@/resources/utils/pathUtils';
 import { useSidebarRequestCount } from '@/resources/hooks/useSidebarRequestCount';
 import cn from 'classnames';
-import { clientAdministrationPageEnabled } from '@/resources/utils/featureFlagUtils';
+import {
+  clientAdministrationPageEnabled,
+  enableMaskinportenAdministration,
+} from '@/resources/utils/featureFlagUtils';
 import { useSelfConnection } from '../common/PartyRepresentationContext/useSelfConnection';
 import { useGetRolePermissionsQuery } from '@/rtk/features/roleApi';
+import { useDocumentTitle } from '@/resources/hooks/useDocumentTitle';
 
 export const LandingPage = () => {
   const { t } = useTranslation();
+  useDocumentTitle(t('landing_page.page_title'));
   const [searchParams, setSearchParams] = useSearchParams();
   const [shouldOpenAccountMenu, setShouldOpenAccountMenu] = useState<boolean>(false);
   const { data: reportee, isLoading: isLoadingReportee } = useGetReporteeQuery();
@@ -61,6 +67,9 @@ export const LandingPage = () => {
   const { data: isClientAdmin, isLoading: isLoadingIsClientAdmin } = useGetIsClientAdminQuery();
   const { data: canAccessSettings, isLoading: isLoadingCanAccessSettings } =
     useGetIsCompanyProfileAdminQuery();
+  const { data: isMaskinportenAdmin } = useGetIsMaskinportenAdminQuery(undefined, {
+    skip: !enableMaskinportenAdministration() || !isOrganization(reportee),
+  });
   const { data: currentUser, isLoading: currentUserIsLoading } = useGetPartyFromLoggedInUserQuery();
   const actingPartyUuid = getCookie('AltinnPartyUuid') ?? '';
   const displayClientAdministrationPage = clientAdministrationPageEnabled();
@@ -181,6 +190,12 @@ export const LandingPage = () => {
         description: t('landing_page.systemuser_item_description'),
       });
     }
+    if (enableMaskinportenAdministration() && isMaskinportenAdmin) {
+      items.push({
+        ...getMaskinportenMenuItem(),
+        description: t('landing_page.maskinporten_item_description'),
+      });
+    }
     return items;
   };
 
@@ -258,10 +273,7 @@ export const LandingPage = () => {
     <PageWrapper>
       <PageLayoutWrapper openAccountMenu={shouldOpenAccountMenu}>
         <div className={classes.landingPage}>
-          <DsHeading
-            level={1}
-            className={classes.landingPageHeading}
-          >
+          <List className={classes.landingPageHeading}>
             <UserListItem
               id={reportee?.partyUuid ?? ''}
               type={isOrganization(reportee) ? 'company' : 'person'}
@@ -270,11 +282,12 @@ export const LandingPage = () => {
               subUnit={isReporteeSubUnit}
               deleted={reportee?.isDeleted}
               size='lg'
+              titleAs='h1'
               loading={!reportee}
               interactive={false}
               shadow='none'
             />
-          </DsHeading>
+          </List>
           <DsAlert data-color='info'>
             {isLoading ? (
               <DsSkeleton

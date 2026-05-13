@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { formatDisplayName, SnackbarDuration, useSnackbar } from '@altinn/altinn-components';
+import { formatDisplayName, useSnackbar } from '@altinn/altinn-components';
 
 import type { DelegationErrorDetails } from '@/resources/hooks/useDelegateAccessPackage';
 import { useDelegateAccessPackage } from '@/resources/hooks/useDelegateAccessPackage';
@@ -104,7 +104,6 @@ export const useAccessPackageActions = ({
           accessPackage: accessPackage.name,
         }),
         color: 'danger',
-        duration: SnackbarDuration.infinite,
       });
     }
   };
@@ -136,7 +135,6 @@ export const useAccessPackageActions = ({
           accessPackage: accessPackage.name,
         }),
         color: 'danger',
-        duration: SnackbarDuration.infinite,
       });
     }
   };
@@ -246,7 +244,6 @@ export const useAccessPackageActions = ({
           resource: accessPackage.name,
         }),
         color: 'danger',
-        duration: SnackbarDuration.infinite,
       });
     }
   };
