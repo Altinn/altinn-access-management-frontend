@@ -174,6 +174,11 @@ export const RoleInfo = ({ role }: PackageInfoProps) => {
           />
         </div>
       )}
+      {!hasRole && enableRoleDeletionFlag && (
+        <div className={classes.deleteRoleButtonContainer}>
+          <DsParagraph data-size='md'>{t('role.cannot_assign_role_poa')}</DsParagraph>
+        </div>
+      )}
     </div>
   );
 };

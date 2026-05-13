@@ -380,6 +380,8 @@
     "resources_disclaimer_link": "See the list of services in the old solution",
     "delete_role_confirmation": "Roles from the old Altinn solution have been discontinued, so you will NOT be able to grant power of attorney to this role again.",
     "deleting_role_loading": "Waiting for the role to be deleted...",
+    "delete_role_success": "The power of attorney for this role has been deleted.",
+    "cannot_assign_role_poa": "This role has been discontinued and can no longer be granted as a power of attorney. To grant access to services, please use access packages or single services.",
     "access_status": {
       "via_role": "{{user_name}} has access to this through the role they hold in {{via_name}}.",
       "via_connection": "{{user_name}} has access to this through {{via_name}}.",
