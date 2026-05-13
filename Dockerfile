@@ -8,7 +8,7 @@ RUN corepack enable && \
     yarn build
 
 # Building the backend
-FROM mcr.microsoft.com/dotnet/sdk:9.0-alpine@sha256:93efcdfe43fb46a2cf7543477c7de0c649e137726a06e90ae35ba655c3d56996 AS generate-accessmanagement-backend
+FROM mcr.microsoft.com/dotnet/sdk:9.0-alpine@sha256:23dc03ba28a2036ef15c35d0e958a560a43e8551e1ee5de404a93c24d3e330ea AS generate-accessmanagement-backend
 
 WORKDIR /build
 COPY backend .
