@@ -1056,6 +1056,7 @@
     "service_owner_filter_clear": "Tøm søkefelt"
   },
   "landing_page": {
+    "page_title": "Tilgangsstyring - Altinn",
     "alert_heading": "Du er nå i den nye løsningen for tilgangsstyring",
     "alert_body": "Her er dagens Altinn-roller erstattet av tilgangspakker med tjenester.",
     "alert_body_p2": "Vær oppmerksom på at det er noen tjenester du ikke kan gi tilgang til i den nye løsningen. Hvis du ikke finner tjenesten her, kan du gå til den gamle løsningen.",
