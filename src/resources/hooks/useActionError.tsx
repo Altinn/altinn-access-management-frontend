@@ -19,3 +19,20 @@ export const useActionError = (initValue?: ActionError) => {
 
   return { isError, error, setError };
 };
+
+/** Build an {@link ActionError} from an unknown thrown value (typically an RTK Query error). */
+export const getActionError = (error: unknown): ActionError => {
+  const httpStatus =
+    error && typeof error === 'object' && 'status' in error
+      ? String((error as { status: unknown }).status)
+      : String(error);
+  const details =
+    error && typeof error === 'object' && 'data' in error
+      ? ((error as { data: unknown }).data as ActionError['details'])
+      : undefined;
+  return {
+    httpStatus,
+    details,
+    timestamp: new Date().toISOString(),
+  };
+};

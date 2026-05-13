@@ -15,9 +15,9 @@ import { PageLayoutWrapper } from '../common/PageLayoutWrapper';
 import { PartyRepresentationProvider } from '../common/PartyRepresentationContext/PartyRepresentationContext';
 import { useUrlParamState } from '../common/useUrlParamState';
 
-import { MaskinportenConsumersTab } from './MaskinportenConsumersTab';
+import { ConsumersTab } from './ConsumersTab';
 import classes from './MaskinportenPage.module.css';
-import { MaskinportenSuppliersTab } from './MaskinportenSuppliersTab';
+import { SuppliersTab } from './SuppliersTab';
 
 const maskinportenTabs = ['suppliers', 'consumers'] as const;
 
@@ -82,14 +82,14 @@ export const MaskinportenPage = () => {
                   </DsTabs.Tab>
                 </DsTabs.List>
                 <DsTabs.Panel value='suppliers'>
-                  <MaskinportenSuppliersTab
+                  <SuppliersTab
                     party={party}
                     isActive={activeTab === 'suppliers'}
                     canFetch={canFetchTabData}
                   />
                 </DsTabs.Panel>
                 <DsTabs.Panel value='consumers'>
-                  <MaskinportenConsumersTab
+                  <ConsumersTab
                     party={party}
                     isActive={activeTab === 'consumers'}
                     canFetch={canFetchTabData}

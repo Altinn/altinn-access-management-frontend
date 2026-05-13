@@ -9,8 +9,8 @@ import type { ServiceResource } from '@/rtk/features/singleRights/singleRightsAp
 
 import { usePartyRepresentation } from '../PartyRepresentationContext/PartyRepresentationContext';
 import { useAreaExpandedContextOrLocal } from '../AccessPackageList/AccessPackageExpandedContext';
-import { MaskinportenScopeSearch } from '../../maskinporten/MaskinportenScopeSearch';
-import { MaskinportenScopeInfo } from '../../maskinporten/MaskinportenScopeInfo';
+import { ScopeSearch } from '../../maskinporten/ScopeSearch';
+import { ScopeInfo } from '../../maskinporten/ScopeInfo';
 
 import classes from './DelegationModal.module.css';
 import { ResourceSearch } from './SingleRights/ResourceSearch';
@@ -109,8 +109,8 @@ export const DelegationModalContent = ({
         : t('common.request_poa');
       break;
     case DelegationType.MaskinportenScope:
-      searchViewContent = <MaskinportenScopeSearch onSelect={onResourceSelection} />;
-      infoViewContent = resourceToView && <MaskinportenScopeInfo resource={resourceToView} />;
+      searchViewContent = <ScopeSearch onSelect={onResourceSelection} />;
+      infoViewContent = resourceToView && <ScopeInfo resource={resourceToView} />;
       triggerButtonVariant = 'primary';
       triggerButtonText = t('maskinporten_page.add_scope_button');
       break;

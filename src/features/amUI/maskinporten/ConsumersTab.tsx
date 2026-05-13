@@ -18,17 +18,13 @@ import classes from './MaskinportenPage.module.css';
 import { usePartyRepresentation } from '../common/PartyRepresentationContext/PartyRepresentationContext';
 import { MaskinportenDeleteDialog } from './MaskinportenDeleteDialog';
 
-type MaskinportenConsumersTabProps = {
+type ConsumersTabProps = {
   party: string;
   isActive: boolean;
   canFetch: boolean;
 };
 
-export const MaskinportenConsumersTab = ({
-  party,
-  isActive,
-  canFetch,
-}: MaskinportenConsumersTabProps) => {
+export const ConsumersTab = ({ party, isActive, canFetch }: ConsumersTabProps) => {
   const { t } = useTranslation();
   const {
     data: consumers,
@@ -66,7 +62,6 @@ export const MaskinportenConsumersTab = ({
       openSnackbar({
         message: t('maskinporten_page.remove_consumer_error', { name: pendingDelete.name }),
         color: 'danger',
-        duration: SnackbarDuration.infinite,
       });
     }
   };
