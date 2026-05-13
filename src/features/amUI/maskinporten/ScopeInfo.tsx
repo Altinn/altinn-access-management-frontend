@@ -189,16 +189,16 @@ export const ScopeInfo = ({ resource }: { resource: ServiceResource }) => {
             </div>
             <div className={classes.editButtons}>
               {hasDelegatedResource ? (
-                <DsButton
+                <Button
                   data-size='sm'
                   data-color='danger'
                   disabled={isActionLoading}
                   onClick={handleRemoveResource}
-                  variant='tertiary'
+                  variant='secondary'
                 >
                   <MinusCircleIcon aria-hidden='true' />
                   {t('common.delete_poa')}
-                </DsButton>
+                </Button>
               ) : (
                 <Button
                   size='sm'

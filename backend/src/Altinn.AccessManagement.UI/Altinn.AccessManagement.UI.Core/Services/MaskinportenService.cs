@@ -55,7 +55,7 @@ namespace Altinn.AccessManagement.UI.Core.Services
         /// <inheritdoc />
         public async Task<List<ResourceDelegation>> GetResources(string languageCode, Guid party, string supplier = null, string resource = null, CancellationToken cancellationToken = default)
         {
-            IEnumerable<ResourcePermission> resourcePermissions = await _maskinportenClient.GetResources(party, supplier, resource, cancellationToken);
+            IEnumerable<ResourcePermission> resourcePermissions = await _maskinportenClient.GetResources(party, languageCode, supplier, resource, cancellationToken);
 
             var lookups = resourcePermissions
                 .Where(rp => !string.IsNullOrWhiteSpace(rp.Resource?.RefId))

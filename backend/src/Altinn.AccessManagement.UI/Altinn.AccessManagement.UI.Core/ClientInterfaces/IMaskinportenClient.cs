@@ -42,11 +42,12 @@ namespace Altinn.AccessManagement.UI.Core.ClientInterfaces
         /// Gets delegated Maskinporten scope resources.
         /// </summary>
         /// <param name="party">The party uuid.</param>
+        /// <param name="languageCode">The language code.</param>
         /// <param name="supplier">Optional supplier organization number.</param>
         /// <param name="resource">Optional resource identifier.</param>
         /// <param name="cancellationToken">Cancellation token.</param>
         /// <returns>A collection of delegated resources.</returns>
-        Task<IEnumerable<ResourcePermission>> GetResources(Guid party, string supplier = null, string resource = null, CancellationToken cancellationToken = default);
+        Task<IEnumerable<ResourcePermission>> GetResources(Guid party, string languageCode, string supplier = null, string resource = null, CancellationToken cancellationToken = default);
 
         /// <summary>
         /// Removes a delegated Maskinporten scope resource from a supplier.

@@ -62,7 +62,6 @@ export const ConsumersTab = ({ party, isActive, canFetch }: ConsumersTabProps) =
       openSnackbar({
         message: t('maskinporten_page.remove_consumer_error', { name: pendingDelete.name }),
         color: 'danger',
-        duration: SnackbarDuration.infinite,
       });
     }
   };

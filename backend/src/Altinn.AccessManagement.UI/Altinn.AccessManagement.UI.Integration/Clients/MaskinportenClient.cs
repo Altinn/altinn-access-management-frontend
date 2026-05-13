@@ -86,7 +86,7 @@ namespace Altinn.AccessManagement.UI.Integration.Clients
         }
 
         /// <inheritdoc />
-        public async Task<IEnumerable<ResourcePermission>> GetResources(Guid party, string supplier = null, string resource = null, CancellationToken cancellationToken = default)
+        public async Task<IEnumerable<ResourcePermission>> GetResources(Guid party, string languageCode, string supplier = null, string resource = null, CancellationToken cancellationToken = default)
         {
             var token = JwtTokenUtil.GetTokenFromContext(_httpContextAccessor.HttpContext, _platformSettings.JwtCookieName);
             var endpointUrl = $"enduser/maskinportensuppliers/resources?party={party}";
@@ -101,7 +101,7 @@ namespace Altinn.AccessManagement.UI.Integration.Clients
                 endpointUrl += $"&resource={Uri.EscapeDataString(resource)}";
             }
 
-            HttpResponseMessage response = await _client.GetAsync(token, endpointUrl, cancellationToken);
+            HttpResponseMessage response = await _client.GetAsync(token, endpointUrl, cancellationToken, languageCode: languageCode);
             return await ClientUtils.DeserializeIfSuccessfullStatusCode<IEnumerable<ResourcePermission>>(response, _logger, "MaskinportenClient.GetResources");
         }
 

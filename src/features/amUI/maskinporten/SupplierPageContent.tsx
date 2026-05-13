@@ -112,7 +112,6 @@ export const SupplierPageContent = () => {
             resourceTitle: r.title,
           }),
           color: 'danger',
-          duration: SnackbarDuration.infinite,
         }),
     });
 
@@ -131,7 +130,6 @@ export const SupplierPageContent = () => {
       openSnackbar({
         message: t('maskinporten_page.remove_supplier_error', { name: supplierName }),
         color: 'danger',
-        duration: SnackbarDuration.infinite,
       });
     }
   };

@@ -75,7 +75,7 @@ namespace Altinn.AccessManagement.UI.Mocks.Mocks
         }
 
         /// <inheritdoc />
-        public Task<IEnumerable<ResourcePermission>> GetResources(Guid party, string supplier = null, string resource = null, CancellationToken cancellationToken = default)
+        public Task<IEnumerable<ResourcePermission>> GetResources(Guid party, string languageCode, string supplier = null, string resource = null, CancellationToken cancellationToken = default)
         {
             Util.ThrowExceptionIfTriggerParty(party.ToString());
 
