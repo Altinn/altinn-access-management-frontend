@@ -273,10 +273,7 @@ export const LandingPage = () => {
     <PageWrapper>
       <PageLayoutWrapper openAccountMenu={shouldOpenAccountMenu}>
         <div className={classes.landingPage}>
-          <DsHeading
-            level={1}
-            className={classes.landingPageHeading}
-          >
+          <List className={classes.landingPageHeading}>
             <UserListItem
               id={reportee?.partyUuid ?? ''}
               type={isOrganization(reportee) ? 'company' : 'person'}
@@ -285,11 +282,12 @@ export const LandingPage = () => {
               subUnit={isReporteeSubUnit}
               deleted={reportee?.isDeleted}
               size='lg'
+              titleAs='h1'
               loading={!reportee}
               interactive={false}
               shadow='none'
             />
-          </DsHeading>
+          </List>
           <DsAlert data-color='info'>
             {isLoading ? (
               <DsSkeleton
