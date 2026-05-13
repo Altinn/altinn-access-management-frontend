@@ -35,8 +35,10 @@ import { BadgeVariant, Color, MenuItemProps } from '@altinn/altinn-components';
 import { useLocation } from 'react-router';
 import { useGetRolePermissionsQuery } from '@/rtk/features/roleApi';
 import { useSidebarRequestCount } from '@/resources/hooks/useSidebarRequestCount';
+import { useTranslation } from 'react-i18next';
 
 export const useSidebarItems = ({ isSmall }: { isSmall?: boolean }) => {
+  const { t } = useTranslation();
   const displayConfettiPackage = window.featureFlags?.displayConfettiPackage;
 
   const displaySettingsPage = window.featureFlags?.displaySettingsPage;
@@ -93,8 +95,12 @@ export const useSidebarItems = ({ isSmall }: { isSmall?: boolean }) => {
             variant: 'base' as BadgeVariant,
           }
         : undefined;
+    const requestMenuItem = getRequestsMenuItem(pathname, isLoading, isSmall);
+    const requestCountAriaLabel =
+      requestsBadgeCount > 0 ? ` (${requestsBadgeCount} ${t('sidebar.requests_badge')})` : '';
     items.push({
-      ...getRequestsMenuItem(pathname, isLoading, isSmall),
+      ...requestMenuItem,
+      'aria-label': `${requestMenuItem.title}${requestCountAriaLabel}`,
       badge: requestsBadge,
     });
   }
