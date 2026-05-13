@@ -2,7 +2,8 @@ import * as React from 'react';
 import { DsHeading, formatDisplayName } from '@altinn/altinn-components';
 import { Trans } from 'react-i18next';
 
-import { arraysEqual, debounce } from '@/resources/utils';
+import { arraysEqual } from '@/resources/utils';
+import { useDebouncedValue } from '@/resources/hooks';
 import { ResourceType, useGetResourceOwnersQuery } from '@/rtk/features/resourceApi';
 import {
   useGetMaskinportenResourcesQuery,
@@ -28,29 +29,9 @@ export const ScopeSearch = ({
   const { fromParty, toParty } = usePartyRepresentation();
   const { searchString, setSearchString, filters, setFilters, currentPage, setCurrentPage } =
     useDelegationModalContext();
-  const [debouncedSearchString, setDebouncedSearchString] = React.useState(searchString);
   const supplier = toParty?.orgNumber ?? '';
 
-  const debouncedSearch = React.useMemo(
-    () =>
-      debounce((value: string) => {
-        setDebouncedSearchString(value);
-        setCurrentPage(1);
-      }, 300),
-    [],
-  );
-
-  React.useEffect(() => {
-    return () => debouncedSearch.cancel?.();
-  }, [debouncedSearch]);
-
-  React.useEffect(() => {
-    if (!searchString) {
-      debouncedSearch.cancel?.();
-      setDebouncedSearchString('');
-      setCurrentPage(1);
-    }
-  }, [debouncedSearch, searchString, setCurrentPage]);
+  const debouncedSearchString = useDebouncedValue(searchString, searchString ? 300 : 0);
 
   const { data, error, isFetching } = useSearchMaskinportenScopesQuery({
     searchString: debouncedSearchString,
@@ -84,13 +65,7 @@ export const ScopeSearch = ({
 
   const setSearch = (value: string) => {
     setSearchString(value);
-    if (!value) {
-      debouncedSearch.cancel?.();
-      setDebouncedSearchString('');
-      setCurrentPage(1);
-      return;
-    }
-    debouncedSearch(value);
+    setCurrentPage(1);
   };
 
   return (
