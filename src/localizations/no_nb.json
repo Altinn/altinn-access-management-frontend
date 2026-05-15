@@ -1000,6 +1000,12 @@
     "page_title": "Fullmaktsoversikt - Altinn",
     "heading": "Fullmaktsoversikt for {{name}}",
     "no_access_title": "Du har ikke tilgang til denne siden",
+    "packages_tab": {
+      "description": "Velg et område for å se tilhørende tilgangspakker og hvem som har fullmakt til dem.",
+      "info_box_icon_label": "Informasjon om tilgangspakker",
+      "info_box_p1": "Tilgangspakker er en samling av skjema og tjenester som handler om samme tema. Disse erstatter dagens Altinn-roller, men det vil ikke være noe én til én forhold. For å finne ut hvilken tilgangspakke du skal tildele, kan det være lurt å tenke på hva mottaker faktisk skal jobbe med.",
+      "info_box_link": "Les mer om tilgangspakker på hjelpesidene."
+    },
     "instances_tab": {
       "search_label": "Søk etter element",
       "no_results": "Ingen elementer fra innboks funnet.",

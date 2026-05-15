@@ -1003,6 +1003,12 @@
     "page_title": "Powers of attorney overview - Altinn",
     "heading": "Powers of attorney overview for {{name}}",
     "no_access_title": "You do not have access to this page",
+    "packages_tab": {
+      "description": "Select an area to view the associated access packages and who has power of attorney for them.",
+      "info_box_icon_label": "Information about access packages",
+      "info_box_p1": "Access packages are a collection of forms and services that deal with the same topic. These replace the current Altinn roles, but there will not be a one-to-one relationship. To find out which access package to assign to someone, it may be helpful to consider what that person will actually be working on.",
+      "info_box_link": "Read more about access packages on the help pages."
+    },
     "instances_tab": {
       "search_label": "Search for inbox items",
       "no_results": "No inbox items found.",
