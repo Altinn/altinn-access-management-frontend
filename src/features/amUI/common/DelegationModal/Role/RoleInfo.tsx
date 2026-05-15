@@ -1,20 +1,8 @@
 import { useTranslation } from 'react-i18next';
 import classes from './RoleInfo.module.css';
-import {
-  Role,
-  useGetRolePermissionsQuery,
-  useGetRoleResourcesQuery,
-  useRemoveRoleMutation,
-} from '@/rtk/features/roleApi';
-import {
-  DsAlert,
-  DsHeading,
-  DsLink,
-  DsParagraph,
-  DsSpinner,
-  useSnackbar,
-} from '@altinn/altinn-components';
-import { DeletePoaConfirmation } from '@/features/amUI/common/DeletePoaConfirmation/DeletePoaConfirmation';
+import { Role, useGetRolePermissionsQuery, useGetRoleResourcesQuery } from '@/rtk/features/roleApi';
+import { DsAlert, DsHeading, DsLink, DsParagraph } from '@altinn/altinn-components';
+import { RoleDeleteButton } from '@/features/amUI/common/RoleList/RoleDeleteButton';
 import {
   ExclamationmarkTriangleFillIcon,
   InformationSquareFillIcon,
@@ -35,12 +23,11 @@ export interface PackageInfoProps {
 
 export const RoleInfo = ({ role }: PackageInfoProps) => {
   const { t } = useTranslation();
-  const [isDeleteError, setDeleteIsError] = useState(false);
+  const [deleteError, setDeleteError] = useState<unknown>(null);
 
   const isExternalRole = role?.provider?.code === 'sys-ccr';
   const isLegacyRole = role?.provider?.code === 'sys-altinn2';
   const enableRoleDeletionFlag = enableRoleDeletion();
-  const { openSnackbar } = useSnackbar();
 
   const { fromParty, actingParty, toParty } = usePartyRepresentation();
   const shouldSkipRoleRefs = !role?.code || !fromParty?.variant;
@@ -59,37 +46,14 @@ export const RoleInfo = ({ role }: PackageInfoProps) => {
     },
   );
 
-  const [removeRole, { isLoading: isRemoveRoleLoading, error: removeRoleError }] =
-    useRemoveRoleMutation();
-
   const sectionId = fromParty?.partyUuid === actingParty?.partyUuid ? 9 : 8;
   const oldSolutionUrl = getRedirectToA2UsersListSectionUrl(sectionId);
   const hasRole = permissions?.some((permission) => permission.role?.code === role.code);
   const isRoleDeletable = true; // TODO: Update this logic when backend gives more information about deletable roles
 
-  const handleDeleteRole = () => {
-    if (!fromParty || !toParty) {
-      console.error('Missing fromParty or toParty information');
-      return;
-    }
-    removeRole({
-      roleCode: role.code,
-      from: fromParty.partyUuid,
-      to: toParty.partyUuid,
-      party: actingParty?.partyUuid ?? '',
-    })
-      .unwrap()
-      .then(() => {
-        openSnackbar({ message: t('role.delete_role_success'), color: 'success' });
-      })
-      .catch((error) => {
-        setDeleteIsError(true);
-      });
-  };
-
   const deleteErrorAlert = () => {
-    if (removeRoleError) {
-      const details = createErrorDetails(removeRoleError);
+    if (deleteError) {
+      const details = createErrorDetails(deleteError as Parameters<typeof createErrorDetails>[0]);
       return (
         <>
           {!!details && (
@@ -143,7 +107,7 @@ export const RoleInfo = ({ role }: PackageInfoProps) => {
         )}
         <RoleStatusMessage role={role} />
       </div>
-      <div aria-live='polite'>{isDeleteError && deleteErrorAlert()}</div>
+      <div aria-live='polite'>{!!deleteError && deleteErrorAlert()}</div>
       <DsParagraph>{role?.description}</DsParagraph>
       <DsParagraph className={classes.oldRolesDisclaimer}>
         {t('role.resources_disclaimer')}{' '}
@@ -166,11 +130,9 @@ export const RoleInfo = ({ role }: PackageInfoProps) => {
       )}
       {hasRole && enableRoleDeletionFlag && isRoleDeletable && (
         <div className={classes.deleteRoleButtonContainer}>
-          <DeletePoaConfirmation
-            warningText={t('role.delete_role_confirmation')}
-            handleDeletion={handleDeleteRole}
-            isDeleteLoading={isRemoveRoleLoading}
-            loadingAriaLabel={t('role.deleting_role_loading')}
+          <RoleDeleteButton
+            role={role}
+            onError={setDeleteError}
           />
         </div>
       )}

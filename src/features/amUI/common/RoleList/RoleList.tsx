@@ -14,6 +14,7 @@ import { RoleListItem } from './RoleListItem';
 import classes from './roleSection.module.css';
 import { useRoleMetadata } from '../UserRoles/useRoleMetadata';
 import { getInheritedStatus } from '../useInheritedStatus';
+import { RoleDeleteButton } from './RoleDeleteButton';
 
 interface RoleListProps {
   onSelect: (role: Role) => void;
@@ -94,7 +95,6 @@ export const RoleList = ({ onSelect, isLoading }: RoleListProps) => {
         <List>
           {mappedRoles.map((role) => {
             const permissionsForRole = permissions?.filter((p) => p.role?.id === role.id) ?? [];
-            console.log('Permissions for role', role.name, permissionsForRole);
             const isInherited =
               getInheritedStatus({
                 permissions: permissionsForRole,
@@ -108,8 +108,14 @@ export const RoleList = ({ onSelect, isLoading }: RoleListProps) => {
                 role={role}
                 onClick={() => onSelect(role)}
                 deleteButton={
-                  enableRoleDeletionFlag && isInherited ? (
-                    <button onClick={() => console.log('Delete role', role.id)}>Delete</button>
+                  enableRoleDeletionFlag && !isInherited ? (
+                    <RoleDeleteButton
+                      role={role}
+                      variant='tertiary'
+                      color='neutral'
+                      size='sm'
+                      icon={true}
+                    />
                   ) : undefined
                 }
               />

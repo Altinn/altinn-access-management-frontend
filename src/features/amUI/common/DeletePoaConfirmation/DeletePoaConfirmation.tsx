@@ -1,12 +1,17 @@
 import { useTranslation } from 'react-i18next';
 import { DsButton, DsDialog, DsHeading, DsParagraph, DsSpinner } from '@altinn/altinn-components';
 import classes from './DeletePoaConfirmation.module.css';
+import { MinusCircleIcon } from '@navikt/aksel-icons';
 
 export interface DeletePoaConfirmationProps {
   warningText: string;
   handleDeletion: () => void;
   isDeleteLoading?: boolean;
   loadingAriaLabel: string;
+  color?: 'danger' | 'neutral';
+  size?: 'xs' | 'sm' | 'md' | 'lg';
+  variant?: 'primary' | 'secondary' | 'tertiary';
+  icon?: boolean;
 }
 
 export const DeletePoaConfirmation = ({
@@ -14,6 +19,10 @@ export const DeletePoaConfirmation = ({
   handleDeletion,
   isDeleteLoading = false,
   loadingAriaLabel,
+  color = 'danger',
+  size = 'sm',
+  variant = 'secondary',
+  icon = false,
 }: DeletePoaConfirmationProps) => {
   const { t } = useTranslation();
   const closeDialog = (event: React.MouseEvent<HTMLButtonElement>) => {
@@ -27,10 +36,12 @@ export const DeletePoaConfirmation = ({
     <div className={classes.container}>
       <DsDialog.TriggerContext>
         <DsDialog.Trigger
-          data-color={'danger'}
-          variant='secondary'
+          data-color={color}
+          data-size={size}
+          variant={variant}
           disabled={isDeleteLoading}
         >
+          {icon && <MinusCircleIcon />}
           {t('common.delete_poa')}
         </DsDialog.Trigger>
         <DsDialog>
