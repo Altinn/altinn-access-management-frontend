@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { PageWrapper } from '@/components';
 import { PageLayoutWrapper } from '../common/PageLayoutWrapper';
 import classes from './LandingPage.module.css';
@@ -59,6 +59,7 @@ import { useDocumentTitle } from '@/resources/hooks/useDocumentTitle';
 
 export const LandingPage = () => {
   const { t } = useTranslation();
+  const headerRef = useRef<HTMLDivElement>(null);
   useDocumentTitle(t('landing_page.page_title'));
   const [searchParams, setSearchParams] = useSearchParams();
   const [shouldOpenAccountMenu, setShouldOpenAccountMenu] = useState<boolean>(false);
@@ -114,6 +115,12 @@ export const LandingPage = () => {
       setSearchParams(newSearchParams, { replace: true });
     }
   }, [searchParams, setSearchParams]);
+
+  useEffect(() => {
+    if (headerRef.current && reportee) {
+      headerRef.current.focus();
+    }
+  }, [reportee]);
 
   const isLoading =
     isLoadingReportee ||
@@ -273,21 +280,26 @@ export const LandingPage = () => {
     <PageWrapper>
       <PageLayoutWrapper openAccountMenu={shouldOpenAccountMenu}>
         <div className={classes.landingPage}>
-          <List className={classes.landingPageHeading}>
-            <UserListItem
-              id={reportee?.partyUuid ?? ''}
-              type={isOrganization(reportee) ? 'company' : 'person'}
-              name={reporteeName}
-              description={getReporteeDescription()}
-              subUnit={isReporteeSubUnit}
-              deleted={reportee?.isDeleted}
-              size='lg'
-              titleAs='h1'
-              loading={!reportee}
-              interactive={false}
-              shadow='none'
-            />
-          </List>
+          <div
+            ref={headerRef}
+            tabIndex={-1}
+          >
+            <List className={classes.landingPageHeading}>
+              <UserListItem
+                id={reportee?.partyUuid ?? ''}
+                type={isOrganization(reportee) ? 'company' : 'person'}
+                name={reporteeName}
+                description={getReporteeDescription()}
+                subUnit={isReporteeSubUnit}
+                deleted={reportee?.isDeleted}
+                size='lg'
+                titleAs='h1'
+                loading={!reportee}
+                interactive={false}
+                shadow='none'
+              />
+            </List>
+          </div>
           <DsAlert data-color='info'>
             {isLoading ? (
               <DsSkeleton
