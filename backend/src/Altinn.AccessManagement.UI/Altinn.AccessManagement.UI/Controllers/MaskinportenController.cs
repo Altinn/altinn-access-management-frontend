@@ -71,15 +71,15 @@ namespace Altinn.AccessManagement.UI.Controllers
         }
 
         /// <summary>
-        /// Endpoint for checking whether a Maskinporten scope resource can be delegated.
+        /// Endpoint for checking whether a consumer party can delegate a Maskinporten scope resource.
         /// </summary>
-        /// <param name="party">The uuid for the party.</param>
+        /// <param name="party">The uuid for the consumer party.</param>
         /// <param name="resource">The resource identifier.</param>
         /// <param name="cancellationToken">Cancellation token.</param>
         /// <returns>The resource delegation check.</returns>
         [HttpGet]
         [Authorize]
-        [Route("resources/delegationcheck")]
+        [Route("suppliers/resources/delegationcheck")]
         public async Task<ActionResult<ResourceCheckDto>> ResourceDelegationCheck(
             [Required][FromQuery] Guid party,
             [Required][FromQuery] string resource,
@@ -108,9 +108,9 @@ namespace Altinn.AccessManagement.UI.Controllers
         }
 
         /// <summary>
-        /// Endpoint for retrieving delegated Maskinporten scope resources.
+        /// Endpoint for retrieving Maskinporten scope resources delegated from a consumer party to suppliers.
         /// </summary>
-        /// <param name="party">The uuid for the party.</param>
+        /// <param name="party">The uuid for the consumer party.</param>
         /// <param name="supplier">Optional supplier organization number.</param>
         /// <param name="resource">Optional resource identifier.</param>
         /// <param name="cancellationToken">Cancellation token.</param>
@@ -147,9 +147,9 @@ namespace Altinn.AccessManagement.UI.Controllers
         }
 
         /// <summary>
-        /// Endpoint for delegating a Maskinporten scope resource to a supplier.
+        /// Endpoint for delegating a Maskinporten scope resource from a consumer party to a supplier.
         /// </summary>
-        /// <param name="party">The uuid for the party.</param>
+        /// <param name="party">The uuid for the consumer party.</param>
         /// <param name="supplier">The supplier organization number.</param>
         /// <param name="resource">The resource identifier.</param>
         /// <param name="cancellationToken">Cancellation token.</param>
@@ -185,9 +185,9 @@ namespace Altinn.AccessManagement.UI.Controllers
         }
 
         /// <summary>
-        /// Endpoint for removing a delegated Maskinporten scope resource from a supplier.
+        /// Endpoint for removing a Maskinporten scope resource delegated from a consumer party to a supplier.
         /// </summary>
-        /// <param name="party">The uuid for the party.</param>
+        /// <param name="party">The uuid for the consumer party.</param>
         /// <param name="supplier">The supplier organization number.</param>
         /// <param name="resource">The resource identifier.</param>
         /// <param name="cancellationToken">Cancellation token.</param>
@@ -224,9 +224,9 @@ namespace Altinn.AccessManagement.UI.Controllers
         }
 
         /// <summary>
-        /// Endpoint for retrieving Maskinporten suppliers for a party.
+        /// Endpoint for retrieving Maskinporten suppliers for a consumer party.
         /// </summary>
-        /// <param name="party">The uuid for the party.</param>
+        /// <param name="party">The uuid for the consumer party.</param>
         /// <param name="supplier">Optional supplier org number to filter results to a single supplier.</param>
         /// <param name="cancellationToken">Cancellation token.</param>
         /// <returns>List of suppliers.</returns>
@@ -258,9 +258,9 @@ namespace Altinn.AccessManagement.UI.Controllers
         }
 
         /// <summary>
-        /// Endpoint for adding a Maskinporten supplier for a party.
+        /// Endpoint for adding a Maskinporten supplier for a consumer party.
         /// </summary>
-        /// <param name="party">The uuid for the party.</param>
+        /// <param name="party">The uuid for the consumer party.</param>
         /// <param name="supplier">The supplier organization number.</param>
         /// <param name="cancellationToken">Cancellation token.</param>
         /// <returns>The created supplier assignment.</returns>
@@ -292,9 +292,9 @@ namespace Altinn.AccessManagement.UI.Controllers
         }
 
         /// <summary>
-        /// Endpoint for retrieving Maskinporten consumers for a party.
+        /// Endpoint for retrieving Maskinporten consumers for a supplier party.
         /// </summary>
-        /// <param name="party">The uuid for the party.</param>
+        /// <param name="party">The uuid for the supplier party.</param>
         /// <param name="consumer">Optional consumer org number to filter results to a single consumer.</param>
         /// <param name="cancellationToken">Cancellation token.</param>
         /// <returns>List of consumers.</returns>
@@ -326,11 +326,11 @@ namespace Altinn.AccessManagement.UI.Controllers
         }
 
         /// <summary>
-        /// Endpoint for removing a Maskinporten supplier for a party.
+        /// Endpoint for removing a Maskinporten supplier from a consumer party.
         /// </summary>
-        /// <param name="party">The uuid for the party.</param>
+        /// <param name="party">The uuid for the consumer party.</param>
         /// <param name="supplier">The supplier organization number.</param>
-        /// <param name="cascade">Whether to also remove all delegated resources.</param>
+        /// <param name="cascade">Whether to also remove resources delegated to the supplier.</param>
         /// <param name="cancellationToken">Cancellation token.</param>
         [HttpDelete]
         [Authorize]
@@ -364,7 +364,7 @@ namespace Altinn.AccessManagement.UI.Controllers
         /// </summary>
         /// <param name="party">The uuid for the party (the supplier).</param>
         /// <param name="consumer">The consumer organization number.</param>
-        /// <param name="cascade">Whether to also remove all delegated resources.</param>
+        /// <param name="cascade">Whether to also remove resources received from the consumer.</param>
         /// <param name="cancellationToken">Cancellation token.</param>
         [HttpDelete]
         [Authorize]
@@ -394,12 +394,12 @@ namespace Altinn.AccessManagement.UI.Controllers
         }
 
         /// <summary>
-        /// Endpoint for retrieving Maskinporten scope resources delegated to the authenticated supplier from consumers.
+        /// Endpoint for retrieving Maskinporten scope resources delegated from consumers to the supplier party.
         /// </summary>
         /// <param name="party">The uuid for the party (the supplier).</param>
         /// <param name="consumer">Optional consumer organization number.</param>
         /// <param name="cancellationToken">Cancellation token.</param>
-        /// <returns>List of delegated resources.</returns>
+        /// <returns>List of resources received by the supplier.</returns>
         [HttpGet]
         [Authorize]
         [Route("consumers/resources")]
@@ -431,7 +431,7 @@ namespace Altinn.AccessManagement.UI.Controllers
         }
 
         /// <summary>
-        /// Endpoint for removing a delegated Maskinporten scope resource from the supplier perspective.
+        /// Endpoint for removing a Maskinporten scope resource received by the supplier from a consumer.
         /// </summary>
         /// <param name="party">The uuid for the party (the supplier).</param>
         /// <param name="consumer">The consumer organization number.</param>

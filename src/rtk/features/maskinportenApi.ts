@@ -97,7 +97,7 @@ export const maskinportenApi = createApi({
       { party?: string; resource: string }
     >({
       query: ({ party, resource }) =>
-        `resources/delegationcheck?party=${party ?? getCookie('AltinnPartyUuid')}&resource=${encodeURIComponent(resource)}`,
+        `suppliers/resources/delegationcheck?party=${party ?? getCookie('AltinnPartyUuid')}&resource=${encodeURIComponent(resource)}`,
       providesTags: ['maskinportenResourceDelegationCheck'],
     }),
     addMaskinportenSupplierResource: builder.mutation<

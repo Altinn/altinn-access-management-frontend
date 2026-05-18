@@ -118,7 +118,7 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
             Guid party = Guid.Parse("cd35779b-b174-4ecc-bbef-ece13611be7f");
             string resource = "appid-400";
 
-            HttpResponseMessage response = await _client.GetAsync($"accessmanagement/api/v1/maskinporten/resources/delegationcheck?party={party}&resource={resource}");
+            HttpResponseMessage response = await _client.GetAsync($"accessmanagement/api/v1/maskinporten/suppliers/resources/delegationcheck?party={party}&resource={resource}");
             ResourceCheckDto actualResponse = await response.Content.ReadFromJsonAsync<ResourceCheckDto>(_options);
 
             Assert.Equal(HttpStatusCode.OK, response.StatusCode);
@@ -148,7 +148,7 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
         }
 
         /// <summary>
-        /// Test case: GetSupplierResources returns delegated Maskinporten scope resources.
+        /// Test case: GetSupplierResources returns Maskinporten scope resources delegated to a supplier.
         /// </summary>
         [Fact]
         public async Task GetSupplierResources_ReturnsResources()
@@ -191,7 +191,7 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
         {
             SetAuthHeader();
 
-            HttpResponseMessage response = await _client.GetAsync("accessmanagement/api/v1/maskinporten/resources/delegationcheck?party=not-a-guid&resource=appid-400");
+            HttpResponseMessage response = await _client.GetAsync("accessmanagement/api/v1/maskinporten/suppliers/resources/delegationcheck?party=not-a-guid&resource=appid-400");
 
             Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
         }
@@ -244,7 +244,7 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
             SetAuthHeader();
             Guid party = Guid.Parse("00000000-0000-0000-0000-000000000404");
 
-            HttpResponseMessage response = await _client.GetAsync($"accessmanagement/api/v1/maskinporten/resources/delegationcheck?party={party}&resource=appid-400");
+            HttpResponseMessage response = await _client.GetAsync($"accessmanagement/api/v1/maskinporten/suppliers/resources/delegationcheck?party={party}&resource=appid-400");
 
             Assert.Equal(HttpStatusCode.NotFound, response.StatusCode);
             ProblemDetails problemDetails = await response.Content.ReadFromJsonAsync<ProblemDetails>();
@@ -262,7 +262,7 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
             SetAuthHeader();
             Guid party = Guid.Empty;
 
-            HttpResponseMessage response = await _client.GetAsync($"accessmanagement/api/v1/maskinporten/resources/delegationcheck?party={party}&resource=appid-400");
+            HttpResponseMessage response = await _client.GetAsync($"accessmanagement/api/v1/maskinporten/suppliers/resources/delegationcheck?party={party}&resource=appid-400");
 
             Assert.Equal(HttpStatusCode.InternalServerError, response.StatusCode);
         }
@@ -364,7 +364,7 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
         }
 
         /// <summary>
-        /// Test case: GetSuppliers returns the expected suppliers for a party.
+        /// Test case: GetSuppliers returns the expected suppliers for a consumer party.
         /// </summary>
         [Fact]
         public async Task GetSuppliers_ReturnsSuppliers()
@@ -384,7 +384,7 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
         }
 
         /// <summary>
-        /// Test case: GetConsumers returns the expected consumers for a party.
+        /// Test case: GetConsumers returns the expected consumers for a supplier party.
         /// </summary>
         [Fact]
         public async Task GetConsumers_ReturnsConsumers()
@@ -783,7 +783,7 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
         }
 
         /// <summary>
-        /// Test case: GetConsumerResources returns delegated Maskinporten scope resources from the supplier perspective.
+        /// Test case: GetConsumerResources returns Maskinporten scope resources received by a supplier from consumers.
         /// </summary>
         [Fact]
         public async Task GetConsumerResources_ReturnsResources()
