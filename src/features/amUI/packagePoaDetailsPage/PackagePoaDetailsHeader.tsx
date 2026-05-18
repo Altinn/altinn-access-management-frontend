@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useRef } from 'react';
 import classes from './PackagePoaDetailsHeader.module.css';
 import { DsHeading, DsParagraph } from '@altinn/altinn-components';
 import { PackageIcon } from '@navikt/aksel-icons';
@@ -17,6 +17,14 @@ export const PackagePoaDetailsHeader: React.FC<PackagePoaDetailsHeaderProps> = (
   isLoading = false,
   statusSection,
 }) => {
+  const headerRef = useRef<HTMLHeadingElement>(null);
+
+  useEffect(() => {
+    if (headerRef.current && !isLoading) {
+      headerRef.current.focus();
+    }
+  }, [isLoading]);
+
   return isLoading ? (
     <PackagePoaDetailsHeaderSkeleton />
   ) : (
@@ -29,6 +37,8 @@ export const PackagePoaDetailsHeader: React.FC<PackagePoaDetailsHeaderProps> = (
         level={1}
         data-size='lg'
         className={classes.pageHeading}
+        ref={headerRef}
+        tabIndex={-1}
       >
         {packageName}
       </DsHeading>

@@ -10,6 +10,7 @@ import classes from './UserPageHeader.module.css';
 import { UserPageHeaderSkeleton } from './UserPageHeaderSkeleton';
 import { isSubUnitByType } from '@/resources/utils/reporteeUtils';
 import { useIsMobileOrSmaller } from '@/resources/utils/screensizeUtils';
+import { useEffect, useRef } from 'react';
 
 interface UserPageHeaderProps {
   direction: 'to' | 'from';
@@ -30,6 +31,7 @@ export const UserPageHeader = ({
   displayDirection = false,
   displayRoles = true,
 }: UserPageHeaderProps) => {
+  const headerRef = useRef<HTMLDivElement>(null);
   const { toParty, fromParty, isLoading: loadingPartyRepresentation } = usePartyRepresentation();
   const toPartyName = formatDisplayName({
     fullName: toParty?.name ?? '',
@@ -40,6 +42,12 @@ export const UserPageHeader = ({
     type: fromParty?.partyTypeName === PartyType.Organization ? 'company' : 'person',
   });
   const isSmall = useIsMobileOrSmaller();
+
+  useEffect(() => {
+    if (headerRef.current && !loadingPartyRepresentation) {
+      headerRef.current.focus();
+    }
+  }, [headerRef.current, loadingPartyRepresentation]);
 
   if (!toParty && !fromParty && !loadingPartyRepresentation) {
     return null;
@@ -89,6 +97,8 @@ export const UserPageHeader = ({
         level={1}
         data-size={isSmall ? '2xs' : 'sm'}
         className={classes.heading}
+        ref={headerRef}
+        tabIndex={-1}
       >
         {userName}
       </DsHeading>

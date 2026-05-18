@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useRef } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Link, useSearchParams } from 'react-router';
 import cn from 'classnames';
@@ -36,6 +36,7 @@ export const RequestPageLayout = ({
   footer,
 }: RequestPageLayoutProps) => {
   const { t, i18n } = useTranslation();
+  const headingRef = useRef<HTMLDivElement>(null);
 
   const [searchParams] = useSearchParams();
   const backToPage = searchParams.get('backtopage');
@@ -49,10 +50,16 @@ export const RequestPageLayout = ({
     updateSelectedLanguage(newLocale);
   };
 
+  useEffect(() => {
+    if (headingRef.current) {
+      headingRef.current.focus();
+    }
+  }, [headingRef, heading]);
+
   return (
     <RootProvider>
       <Layout
-        color={account.type}
+        color={isLoading ? 'neutral' : account.type}
         theme='subtle'
         header={{
           locale: {
@@ -119,7 +126,13 @@ export const RequestPageLayout = ({
                 </Link>
               </DsButton>
             )}
-            <div className={cn(classes.requestBlock, classes.headerBlock)}>{heading}</div>
+            <div
+              className={cn(classes.requestBlock, classes.headerBlock)}
+              ref={headingRef}
+              tabIndex={-1}
+            >
+              {heading}
+            </div>
             <div className={classes.requestBlock}>{body}</div>
             {footer}
           </div>

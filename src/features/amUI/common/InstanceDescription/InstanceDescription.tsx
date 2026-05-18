@@ -1,4 +1,4 @@
-import type { ReactNode } from 'react';
+import { useEffect, useRef, type ReactNode } from 'react';
 import { Avatar, DsHeading, DsParagraph, Icon, formatDisplayName } from '@altinn/altinn-components';
 import { useTranslation } from 'react-i18next';
 
@@ -32,6 +32,7 @@ export const InstanceDescription = ({
   titleLevel = 2,
   statusSection,
 }: InstanceDescriptionProps) => {
+  const headerRef = useRef<HTMLHeadingElement>(null);
   const { getProviderLogoUrl } = useProviderLogoUrl();
   const { t, i18n } = useTranslation();
   const dialogportenLookupEnabled = enableDialogportenDialogLookup();
@@ -45,11 +46,19 @@ export const InstanceDescription = ({
     type: fromPartyType === PartyType.Person ? 'person' : 'company',
   });
 
+  useEffect(() => {
+    if (headerRef.current && titleLevel === 1) {
+      headerRef.current.focus();
+    }
+  }, [titleLevel]);
+
   return (
     <div className={classes.container}>
       <DsHeading
         level={titleLevel}
         data-size='sm'
+        ref={headerRef}
+        tabIndex={-1}
       >
         {title}
       </DsHeading>

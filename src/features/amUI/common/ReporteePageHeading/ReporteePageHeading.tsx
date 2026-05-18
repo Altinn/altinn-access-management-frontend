@@ -5,6 +5,7 @@ import { DsHeading, DsSkeleton } from '@altinn/altinn-components';
 
 import styles from './ReporteePageHeading.module.css';
 import { formatOrgNr, isSubUnit } from '@/resources/utils/reporteeUtils';
+import { useEffect, useRef } from 'react';
 
 type Props = {
   title: string;
@@ -27,10 +28,17 @@ export const ReporteePageHeading: React.FC<Props> = ({
   subHeadingDataSize = '2xs',
   isLoading = false,
 }) => {
+  const headerRef = useRef<HTMLHeadingElement>(null);
   const { t } = useTranslation();
   const orgNumber = reportee?.organizationNumber ?? '';
   const isReporteeMainUnit = (reportee?.subunits?.length ?? 0) > 0;
   const isReporteeSubUnit = isSubUnit(reportee);
+
+  useEffect(() => {
+    if (headerRef.current && !isLoading) {
+      headerRef.current.focus();
+    }
+  }, [isLoading]);
 
   if (isLoading) {
     return (
@@ -55,6 +63,8 @@ export const ReporteePageHeading: React.FC<Props> = ({
       <DsHeading
         level={level}
         data-size={dataSize}
+        tabIndex={-1}
+        ref={headerRef}
       >
         {title}
       </DsHeading>

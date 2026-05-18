@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useRef } from 'react';
 import { Avatar, DsHeading, DsParagraph, DsSkeleton } from '@altinn/altinn-components';
 
 import classes from './SystemUserHeader.module.css';
@@ -16,6 +16,14 @@ export const SystemUserHeader = ({
   subTitle,
   isLoading,
 }: SystemUserHeaderProps): React.ReactNode => {
+  const headerRef = useRef<HTMLHeadingElement>(null);
+
+  useEffect(() => {
+    if (headerRef.current && !isLoading) {
+      headerRef.current.focus();
+    }
+  }, [isLoading]);
+
   return (
     <div className={classes.systemUserDetailsHeader}>
       <Avatar
@@ -27,6 +35,8 @@ export const SystemUserHeader = ({
         <DsHeading
           level={1}
           data-size='sm'
+          ref={headerRef}
+          tabIndex={-1}
         >
           {isLoading ? (
             <DsSkeleton
