@@ -20,7 +20,3 @@
   gap: var(--ds-size-1);
   margin-bottom: var(--ds-size-3);
 }
-
-.consentLogTopHeader {
-  margin-top: 15px;
-}
