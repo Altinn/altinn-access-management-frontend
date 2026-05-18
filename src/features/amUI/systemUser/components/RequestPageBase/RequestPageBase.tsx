@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useRef } from 'react';
 import { useTranslation } from 'react-i18next';
 import { DsHeading, DsParagraph } from '@altinn/altinn-components';
 import { ReporteeInfo } from '@/rtk/features/userInfoApi';
@@ -25,11 +25,18 @@ export const RequestPageBase = ({
   children,
 }: RequestPageBaseProps): React.ReactNode => {
   const { t } = useTranslation();
+  const headerRef = useRef<HTMLHeadingElement>(null);
 
   const account: { name: string; type: 'person' | 'company' } = {
     name: reportee?.name || '',
     type: reportee?.type === 'Person' ? 'person' : 'company',
   };
+
+  useEffect(() => {
+    if (heading && !isLoading) {
+      headerRef.current?.focus();
+    }
+  }, [heading, isLoading]);
 
   return (
     <RequestPageLayout
@@ -40,6 +47,8 @@ export const RequestPageBase = ({
         <DsHeading
           level={1}
           data-size='lg'
+          ref={headerRef}
+          tabIndex={-1}
         >
           {heading}
         </DsHeading>

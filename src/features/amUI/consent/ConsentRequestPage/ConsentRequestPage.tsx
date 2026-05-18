@@ -1,4 +1,4 @@
-import React, { useMemo, useState } from 'react';
+import React, { useEffect, useMemo, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate, useSearchParams } from 'react-router';
 import { DsAlert, DsButton, DsHeading, DsParagraph } from '@altinn/altinn-components';
@@ -20,6 +20,7 @@ import { ConsentRights } from '../components/ConsentRights/ConsentRights';
 
 export const ConsentRequestPage = () => {
   const { t, i18n } = useTranslation();
+  const headerRef = useRef<HTMLHeadingElement>(null);
 
   useDocumentTitle(t('consent_request.page_title'));
   const [searchParams] = useSearchParams();
@@ -49,6 +50,12 @@ export const ConsentRequestPage = () => {
     postRejectConsent,
     { data: rejectResponse, error: rejectConsentError, isLoading: isRejectingConsent },
   ] = useRejectConsentRequestMutation();
+
+  useEffect(() => {
+    if (!isLoadingRequest) {
+      headerRef.current?.focus();
+    }
+  }, [isLoadingRequest]);
 
   const isRequestApproved = isAccepted(request?.consentRequestEvents ?? []);
   const isRequestRejected = isRevoked(request?.consentRequestEvents ?? []);
@@ -159,6 +166,8 @@ export const ConsentRequestPage = () => {
         <DsHeading
           level={1}
           data-size='md'
+          ref={headerRef}
+          tabIndex={-1}
         >
           {memoizedRequest.title[language]}
         </DsHeading>

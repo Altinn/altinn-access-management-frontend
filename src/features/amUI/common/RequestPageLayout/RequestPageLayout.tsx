@@ -36,7 +36,6 @@ export const RequestPageLayout = ({
   footer,
 }: RequestPageLayoutProps) => {
   const { t, i18n } = useTranslation();
-  const headingRef = useRef<HTMLDivElement>(null);
 
   const [searchParams] = useSearchParams();
   const backToPage = searchParams.get('backtopage');
@@ -49,12 +48,6 @@ export const RequestPageLayout = ({
     document.cookie = `selectedLanguage=${newLocale}; path=/; SameSite=Strict`;
     updateSelectedLanguage(newLocale);
   };
-
-  useEffect(() => {
-    if (headingRef.current) {
-      headingRef.current.focus();
-    }
-  }, [headingRef, heading]);
 
   return (
     <RootProvider>
@@ -126,13 +119,7 @@ export const RequestPageLayout = ({
                 </Link>
               </DsButton>
             )}
-            <div
-              className={cn(classes.requestBlock, classes.headerBlock)}
-              ref={headingRef}
-              tabIndex={-1}
-            >
-              {heading}
-            </div>
+            <div className={cn(classes.requestBlock, classes.headerBlock)}>{heading}</div>
             <div className={classes.requestBlock}>{body}</div>
             {footer}
           </div>
