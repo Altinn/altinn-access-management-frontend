@@ -84,7 +84,7 @@ export const ActiveConsentsPage = () => {
         <ReporteePageHeading
           title={t('active_consents.heading', { name: reporteeName })}
           reportee={reportee}
-          isLoading={isLoading}
+          isLoading={isLoadingReportee}
         />
         <OldConsentAlert
           heading='active_consents.altinn2_consent_alert_header'

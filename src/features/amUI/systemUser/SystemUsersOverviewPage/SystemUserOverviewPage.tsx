@@ -89,7 +89,7 @@ export const SystemUserOverviewPage = () => {
         <ReporteePageHeading
           title={t('systemuser_overviewpage.banner_title', { name: reporteeName })}
           reportee={reporteeData}
-          isLoading={isLoading}
+          isLoading={isLoadingReportee}
         />
         <div className={classes.flexContainer}>
           <DsParagraph
