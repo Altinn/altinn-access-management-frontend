@@ -610,6 +610,8 @@
     "remove_consumer_success": "{{name}} er fjerna som konsument.",
     "back_to_list": "Gå tilbake til oversikta",
     "supplier_title": "Leverandør - Altinn",
+    "consumer_title": "Konsument - Altinn",
+    "consumer_not_found": "Vi fann ikkje konsumenten",
     "add_scope_button": "Gi fullmakt",
     "search_scopes_heading": "Kva maskinportenteneste vil du gi {{name}} fullmakt til?",
     "no_scopes": "Ingen scopes funne for denne tenesta.",

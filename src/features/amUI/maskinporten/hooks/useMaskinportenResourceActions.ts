@@ -1,10 +1,6 @@
 import { useState } from 'react';
 
 import { getActionError, type ActionError } from '@/resources/hooks/useActionError';
-import {
-  useAddMaskinportenSupplierResourceMutation,
-  useRemoveMaskinportenSupplierResourceMutation,
-} from '@/rtk/features/maskinportenApi';
 import type { ServiceResource } from '@/rtk/features/singleRights/singleRightsApi';
 
 interface ActionCallbacks {
@@ -12,17 +8,17 @@ interface ActionCallbacks {
   onError?: (resource: ServiceResource, error: ActionError) => void;
 }
 
+type ResourceAction = (resource: ServiceResource) => Promise<unknown>;
+
 interface UseMaskinportenResourceActionsArgs {
-  party: string | undefined;
-  supplier: string | undefined;
+  delegate?: ResourceAction;
+  remove?: ResourceAction;
 }
 
 export const useMaskinportenResourceActions = ({
-  party,
-  supplier,
+  delegate: delegateAction,
+  remove: removeAction,
 }: UseMaskinportenResourceActionsArgs) => {
-  const [addResource] = useAddMaskinportenSupplierResourceMutation();
-  const [removeResource] = useRemoveMaskinportenSupplierResourceMutation();
   const [loadingByResourceId, setLoadingByResourceId] = useState<Record<string, boolean>>({});
 
   const setLoading = (resourceId: string, isLoading: boolean) => {
@@ -33,13 +29,13 @@ export const useMaskinportenResourceActions = ({
 
   const run = async (
     resource: ServiceResource,
-    action: () => Promise<unknown>,
+    action: ResourceAction,
     callbacks: ActionCallbacks,
   ) => {
-    if (!party || !supplier || !resource.identifier) return;
+    if (!resource.identifier) return;
     setLoading(resource.identifier, true);
     try {
-      await action();
+      await action(resource);
       callbacks.onSuccess?.(resource);
     } catch (error) {
       callbacks.onError?.(resource, getActionError(error));
@@ -48,29 +44,15 @@ export const useMaskinportenResourceActions = ({
     }
   };
 
-  const delegate = (resource: ServiceResource, callbacks: ActionCallbacks = {}) =>
-    run(
-      resource,
-      () =>
-        addResource({
-          party: party!,
-          supplier: supplier!,
-          resource: resource.identifier,
-        }).unwrap(),
-      callbacks,
-    );
+  const delegate = (resource: ServiceResource, callbacks: ActionCallbacks = {}) => {
+    if (!delegateAction) return;
+    return run(resource, delegateAction, callbacks);
+  };
 
-  const remove = (resource: ServiceResource, callbacks: ActionCallbacks = {}) =>
-    run(
-      resource,
-      () =>
-        removeResource({
-          party: party!,
-          supplier: supplier!,
-          resource: resource.identifier,
-        }).unwrap(),
-      callbacks,
-    );
+  const remove = (resource: ServiceResource, callbacks: ActionCallbacks = {}) => {
+    if (!removeAction) return;
+    return run(resource, removeAction, callbacks);
+  };
 
   return { delegate, remove, isLoading };
 };

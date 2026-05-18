@@ -613,6 +613,8 @@
     "remove_consumer_success": "{{name}} has been removed as a consumer.",
     "back_to_list": "Go back to the overview",
     "supplier_title": "Supplier - Altinn",
+    "consumer_title": "Consumer - Altinn",
+    "consumer_not_found": "We could not find the consumer",
     "add_scope_button": "Give power of attorney",
     "search_scopes_heading": "Which Maskinporten service do you want to give {{name}} power of attorney for?",
     "no_scopes": "No scopes found for this service.",

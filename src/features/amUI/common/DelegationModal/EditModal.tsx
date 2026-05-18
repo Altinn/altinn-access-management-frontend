@@ -136,7 +136,12 @@ const renderModalContent = ({
   onSuccess?: () => void;
 }) => {
   if (maskinportenScope) {
-    return <ScopeInfo resource={maskinportenScope} />;
+    return (
+      <ScopeInfo
+        resource={maskinportenScope}
+        availableActions={availableActions}
+      />
+    );
   }
   if (resource && instance) {
     return (
