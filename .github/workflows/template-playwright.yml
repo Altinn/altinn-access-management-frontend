@@ -58,7 +58,7 @@ jobs:
           AT23_REGISTER_SUBSCRIPTION_KEY: ${{ secrets.AT23_REGISTER_SUBSCRIPTION_KEY }}
           TT02_REGISTER_SUBSCRIPTION_KEY: ${{ secrets.TT02_REGISTER_SUBSCRIPTION_KEY }}
         run: |
-          yarn run env:${{ inputs.environment }} --project ${{ inputs.project }} --workers=4
+          yarn run env:${{ inputs.environment }} --project ${{ inputs.project }} --workers=3
       - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
         if: always()
         with:
