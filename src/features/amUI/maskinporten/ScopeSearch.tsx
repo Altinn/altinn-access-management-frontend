@@ -6,7 +6,7 @@ import { arraysEqual } from '@/resources/utils';
 import { useDebouncedValue } from '@/resources/hooks';
 import { ResourceType, useGetResourceOwnersQuery } from '@/rtk/features/resourceApi';
 import {
-  useGetMaskinportenResourcesQuery,
+  useGetMaskinportenSupplierResourcesQuery,
   useSearchMaskinportenScopesQuery,
 } from '@/rtk/features/maskinportenApi';
 import type { ServiceResource } from '@/rtk/features/singleRights/singleRightsApi';
@@ -40,7 +40,7 @@ export const ScopeSearch = ({
     resultsPerPage: searchResultsPerPage,
   });
   const { data: resourceOwners } = useGetResourceOwnersQuery([ResourceType.MaskinportenSchema]);
-  const { data: delegatedResources } = useGetMaskinportenResourcesQuery(
+  const { data: delegatedResources } = useGetMaskinportenSupplierResourcesQuery(
     {
       party: fromParty?.partyUuid,
       supplier,

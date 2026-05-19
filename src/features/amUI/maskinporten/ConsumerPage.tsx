@@ -14,7 +14,7 @@ import { PageWrapper } from '@/components/PageWrapper/PageWrapper';
 import { getCookie } from '@/resources/Cookie/CookieMethods';
 import { useDocumentTitle } from '@/resources/hooks/useDocumentTitle';
 import type { Party } from '@/rtk/features/lookupApi';
-import { useGetMaskinportenSuppliersQuery } from '@/rtk/features/maskinportenApi';
+import { useGetMaskinportenConsumersQuery } from '@/rtk/features/maskinportenApi';
 import { PartyType } from '@/rtk/features/userInfoApi';
 import { amUIPath } from '@/routes/paths';
 
@@ -23,29 +23,29 @@ import { DelegationModalProvider } from '../common/DelegationModal/DelegationMod
 import { PageContainer } from '../common/PageContainer/PageContainer';
 import { PageLayoutWrapper } from '../common/PageLayoutWrapper';
 import { PartyRepresentationProvider } from '../common/PartyRepresentationContext/PartyRepresentationContext';
-import { SupplierPageContent } from './SupplierPageContent';
+import { ConsumerPageContent } from './ConsumerPageContent';
 
-export const SupplierPage = () => {
+export const ConsumerPage = () => {
   const { t } = useTranslation();
 
-  useDocumentTitle(t('maskinporten_page.supplier_title'));
+  useDocumentTitle(t('maskinporten_page.consumer_title'));
 
   const { id: orgNr } = useParams<{ id: string }>();
   const party = getCookie('AltinnPartyUuid');
-  const backUrl = `/${amUIPath.Maskinporten}?tab=suppliers`;
+  const backUrl = `/${amUIPath.Maskinporten}?tab=consumers`;
 
-  const { data, isLoading, error } = useGetMaskinportenSuppliersQuery(
-    { party, supplier: orgNr },
+  const { data, isLoading, error } = useGetMaskinportenConsumersQuery(
+    { party, consumer: orgNr },
     { skip: !party || !orgNr },
   );
 
-  const supplier = data?.[0];
-  const supplierName = supplier?.party.name
-    ? formatDisplayName({ fullName: supplier?.party.name, type: 'company' })
+  const consumer = data?.[0];
+  const consumerName = consumer?.party.name
+    ? formatDisplayName({ fullName: consumer?.party.name, type: 'company' })
     : '';
 
-  const supplierParty = useMemo((): Party | undefined => {
-    const party = supplier?.party;
+  const consumerParty = useMemo((): Party | undefined => {
+    const party = consumer?.party;
     if (!party) {
       return undefined;
     }
@@ -57,7 +57,7 @@ export const SupplierPage = () => {
       orgNumber: party.organizationIdentifier ?? '',
       isDeleted: party.isDeleted ?? false,
     };
-  }, [supplier]);
+  }, [consumer]);
 
   const notFound = !!error || (!isLoading && !data?.length);
 
@@ -66,14 +66,14 @@ export const SupplierPage = () => {
       <PageWrapper>
         <PageLayoutWrapper>
           <PartyRepresentationProvider
-            fromPartyUuid={party}
+            toPartyUuid={party}
             actingPartyUuid={party}
-            toPartyOverride={supplierParty}
+            fromPartyOverride={consumerParty}
           >
             <DelegationModalProvider>
               <Breadcrumbs
                 items={['root', 'maskinporten']}
-                lastBreadcrumb={{ label: supplierName || t('maskinporten_page.supplier_title') }}
+                lastBreadcrumb={{ label: consumerName || t('maskinporten_page.consumer_title') }}
               />
               {isLoading ? (
                 <PageContainer backUrl={backUrl}>
@@ -86,13 +86,13 @@ export const SupplierPage = () => {
                 <PageContainer backUrl={backUrl}>
                   <DsAlert data-color='danger'>
                     <DsParagraph>
-                      {t('maskinporten_page.supplier_not_found')}{' '}
+                      {t('maskinporten_page.consumer_not_found')}{' '}
                       <Link to={backUrl}>{t('maskinporten_page.back_to_list')}</Link>
                     </DsParagraph>
                   </DsAlert>
                 </PageContainer>
               ) : (
-                <SupplierPageContent />
+                <ConsumerPageContent />
               )}
             </DelegationModalProvider>
           </PartyRepresentationProvider>

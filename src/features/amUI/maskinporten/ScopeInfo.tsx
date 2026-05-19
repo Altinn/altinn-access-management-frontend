@@ -1,4 +1,4 @@
-import { Button, DsButton, DsHeading, DsParagraph } from '@altinn/altinn-components';
+import { Button, DsHeading, DsParagraph } from '@altinn/altinn-components';
 import { MinusCircleIcon } from '@navikt/aksel-icons';
 import { useEffect, useRef } from 'react';
 import { useTranslation } from 'react-i18next';
@@ -6,13 +6,18 @@ import { useTranslation } from 'react-i18next';
 import { StatusMessageForScreenReader } from '@/components/StatusMessageForScreenReader/StatusMessageForScreenReader';
 import { useIsMobileOrSmaller } from '@/resources/utils/screensizeUtils';
 import {
-  useGetMaskinportenResourcesQuery,
+  useAddMaskinportenSupplierResourceMutation,
+  useGetMaskinportenConsumerResourcesQuery,
+  useGetMaskinportenSupplierResourcesQuery,
   useMaskinportenResourceDelegationCheckQuery,
+  useRemoveMaskinportenConsumerResourceMutation,
+  useRemoveMaskinportenSupplierResourceMutation,
 } from '@/rtk/features/maskinportenApi';
 import type { ServiceResource } from '@/rtk/features/singleRights/singleRightsApi';
 
 import { createErrorDetails } from '../common/TechnicalErrorParagraphs/TechnicalErrorParagraphs';
 import { useDelegationModalContext } from '../common/DelegationModal/DelegationModalContext';
+import { DelegationAction } from '../common/DelegationModal/EditModal';
 import { LoadingAnimation } from '../common/LoadingAnimation/LoadingAnimation';
 import { ResourceAlert } from '../common/DelegationModal/SingleRights/ResourceAlert';
 import { ResourceHeading } from '../common/DelegationModal/SingleRights/ResourceHeading';
@@ -26,20 +31,55 @@ import classes from './ScopeInfo.module.css';
 
 const SUCCESS_DISPLAY_MS = 2000;
 
-export const ScopeInfo = ({ resource }: { resource: ServiceResource }) => {
+interface ScopeInfoProps {
+  resource: ServiceResource;
+  availableActions?: DelegationAction[];
+}
+
+export const ScopeInfo = ({
+  resource,
+  availableActions = [DelegationAction.DELEGATE, DelegationAction.REVOKE],
+}: ScopeInfoProps) => {
+  const canDelegate = availableActions.includes(DelegationAction.DELEGATE);
+  const canRevoke = availableActions.includes(DelegationAction.REVOKE);
+  const isRevokeOnly = canRevoke && !canDelegate;
   const isSmall = useIsMobileOrSmaller();
   const { t } = useTranslation();
   const { fromParty, toParty } = usePartyRepresentation();
   const { actionError, setActionError, actionSuccess, setActionSuccess } =
     useDelegationModalContext();
   const successTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
-  const supplier = toParty?.orgNumber ?? '';
-  const { delegate, remove, isLoading } = useMaskinportenResourceActions({
-    party: fromParty?.partyUuid,
-    supplier,
-  });
 
+  const consumerPartyUuid = fromParty?.partyUuid;
+  const supplierOrgNumber = toParty?.orgNumber ?? '';
   const scopes = getMaskinportenScopes(resource);
+
+  const [addSupplierResource] = useAddMaskinportenSupplierResourceMutation();
+  const [removeSupplierResource] = useRemoveMaskinportenSupplierResourceMutation();
+  const [removeConsumerResource] = useRemoveMaskinportenConsumerResourceMutation();
+  const { delegate, remove, isLoading } = useMaskinportenResourceActions({
+    delegate: canDelegate
+      ? (r) =>
+          addSupplierResource({
+            party: consumerPartyUuid!,
+            supplier: supplierOrgNumber,
+            resource: r.identifier,
+          }).unwrap()
+      : undefined,
+    remove: isRevokeOnly
+      ? (r) =>
+          removeConsumerResource({
+            party: toParty?.partyUuid ?? '',
+            consumer: fromParty?.orgNumber ?? '',
+            resource: r.identifier,
+          }).unwrap()
+      : (r) =>
+          removeSupplierResource({
+            party: consumerPartyUuid!,
+            supplier: supplierOrgNumber,
+            resource: r.identifier,
+          }).unwrap(),
+  });
 
   const {
     data: delegationCheck,
@@ -48,54 +88,74 @@ export const ScopeInfo = ({ resource }: { resource: ServiceResource }) => {
     isFetching: isDelegationCheckLoading,
   } = useMaskinportenResourceDelegationCheckQuery(
     {
-      party: fromParty?.partyUuid,
+      party: consumerPartyUuid,
       resource: resource.identifier,
     },
     {
-      skip: !fromParty?.partyUuid || !resource.identifier,
+      skip: !canDelegate || !consumerPartyUuid || !resource.identifier,
       refetchOnMountOrArgChange: true,
     },
   );
   const { data: delegatedResources, isFetching: isDelegatedResourcesLoading } =
-    useGetMaskinportenResourcesQuery(
+    useGetMaskinportenSupplierResourcesQuery(
       {
-        party: fromParty?.partyUuid,
-        supplier,
+        party: consumerPartyUuid,
+        supplier: supplierOrgNumber,
         resource: resource.identifier,
       },
       {
-        skip: !fromParty?.partyUuid || !supplier || !resource.identifier,
+        skip: !canDelegate || !consumerPartyUuid || !supplierOrgNumber || !resource.identifier,
+        refetchOnMountOrArgChange: true,
+      },
+    );
+  const { data: consumerResources, isFetching: isConsumerResourcesLoading } =
+    useGetMaskinportenConsumerResourcesQuery(
+      {
+        party: toParty?.partyUuid,
+        consumer: fromParty?.orgNumber,
+      },
+      {
+        skip: !isRevokeOnly || !toParty?.partyUuid || !fromParty?.orgNumber,
         refetchOnMountOrArgChange: true,
       },
     );
 
+  const delegatedResourceList = isRevokeOnly ? consumerResources : delegatedResources;
+  const isDelegatedResourceListLoading = isRevokeOnly
+    ? isConsumerResourcesLoading
+    : isDelegatedResourcesLoading;
+
   const canDelegateResource = delegationCheck?.rights?.some((right) => right.result) ?? false;
   const hasDelegatedResource =
-    delegatedResources?.some(
-      (delegatedResource) => delegatedResource.resource?.identifier === resource.identifier,
+    delegatedResourceList?.some(
+      (delegation) => delegation.resource?.identifier === resource.identifier,
     ) ?? false;
   const showDelegationCheckWarning =
+    canDelegate &&
     !hasDelegatedResource &&
     !isDelegationCheckLoading &&
     delegationCheck !== undefined &&
     !canDelegateResource;
   const rawErrorDetails = isDelegationCheckError ? createErrorDetails(delegationCheckError) : null;
-  const delegationCheckErrorDetails = isDelegationCheckError
-    ? {
-        status: rawErrorDetails?.status ?? 'no status',
-        time: rawErrorDetails?.time ?? new Date().toISOString(),
-        traceId: rawErrorDetails?.traceId,
-      }
-    : null;
+  const delegationCheckErrorDetails =
+    canDelegate && isDelegationCheckError
+      ? {
+          status: rawErrorDetails?.status ?? 'no status',
+          time: rawErrorDetails?.time ?? new Date().toISOString(),
+          traceId: rawErrorDetails?.traceId,
+        }
+      : null;
   const delegationCheckRightReasons = showDelegationCheckWarning
     ? (delegationCheck?.rights?.map((right) => right.reasonCodes?.[0] ?? '') ?? [''])
     : undefined;
   const displayResourceAlert =
-    !!delegationCheckErrorDetails || resource.delegable === false || showDelegationCheckWarning;
+    canDelegate &&
+    (!!delegationCheckErrorDetails || resource.delegable === false || showDelegationCheckWarning);
   const isActionLoading = isLoading(resource.identifier);
-  const isInitialLoading =
-    (isDelegationCheckLoading && !delegationCheck && !isDelegationCheckError) ||
-    (isDelegatedResourcesLoading && !delegatedResources);
+  const isDelegationCheckInitialLoading =
+    canDelegate && isDelegationCheckLoading && !delegationCheck && !isDelegationCheckError;
+  const isResourceListInitialLoading = isDelegatedResourceListLoading && !delegatedResourceList;
+  const isInitialLoading = isDelegationCheckInitialLoading || isResourceListInitialLoading;
 
   useEffect(() => {
     return () => {
@@ -151,7 +211,7 @@ export const ScopeInfo = ({ resource }: { resource: ServiceResource }) => {
               <StatusSection
                 userHasAccess={hasDelegatedResource}
                 showDelegationCheckWarning={showDelegationCheckWarning}
-                cannotDelegateHere={resource.delegable === false}
+                cannotDelegateHere={canDelegate && resource.delegable === false}
               />
               {resource.description && <DsParagraph>{resource.description}</DsParagraph>}
               {resource.rightDescription && <DsParagraph>{resource.rightDescription}</DsParagraph>}
@@ -187,34 +247,35 @@ export const ScopeInfo = ({ resource }: { resource: ServiceResource }) => {
                 <DsParagraph>{t('maskinporten_page.no_scopes')}</DsParagraph>
               )}
             </div>
-            <div className={classes.editButtons}>
-              {hasDelegatedResource ? (
-                <Button
-                  data-size='sm'
-                  data-color='danger'
-                  disabled={isActionLoading}
-                  onClick={handleRemoveResource}
-                  variant='secondary'
-                >
-                  <MinusCircleIcon aria-hidden='true' />
-                  {t('common.delete_poa')}
-                </Button>
-              ) : (
-                <Button
-                  size='sm'
-                  disabled={
-                    isActionLoading ||
-                    !!displayResourceAlert ||
-                    !canDelegateResource ||
-                    isDelegationCheckLoading ||
-                    isDelegatedResourcesLoading
-                  }
-                  onClick={handleAddResource}
-                >
-                  {t('common.give_poa')}
-                </Button>
-              )}
-            </div>
+            {(hasDelegatedResource && canRevoke) || (!hasDelegatedResource && canDelegate) ? (
+              <div className={classes.editButtons}>
+                {hasDelegatedResource ? (
+                  <Button
+                    size='sm'
+                    variant='secondary'
+                    disabled={isActionLoading}
+                    onClick={handleRemoveResource}
+                  >
+                    <MinusCircleIcon aria-hidden='true' />
+                    {t('common.delete_poa')}
+                  </Button>
+                ) : (
+                  <Button
+                    size='sm'
+                    disabled={
+                      isActionLoading ||
+                      !!displayResourceAlert ||
+                      !canDelegateResource ||
+                      isDelegationCheckLoading ||
+                      isDelegatedResourceListLoading
+                    }
+                    onClick={handleAddResource}
+                  >
+                    {t('common.give_poa')}
+                  </Button>
+                )}
+              </div>
+            ) : null}
           </>
         )}
       </div>
