@@ -4,7 +4,7 @@ import classes from './NavigationFocus.module.css';
 
 export const NavigationFocus = () => {
   const { pathname } = useLocation();
-  const skipRef = useRef<HTMLElement | null>(null);
+  const skipRef = useRef<HTMLDivElement | null>(null);
 
   useEffect(() => {
     if (skipRef.current) {
@@ -21,7 +21,7 @@ export const NavigationFocus = () => {
     <div
       className={classes.srOnly}
       tabIndex={-1}
-      ref={skipRef as React.RefObject<HTMLDivElement>}
+      ref={skipRef}
     />
   );
 };
