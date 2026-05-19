@@ -1,6 +1,6 @@
 import type { Party } from '@/rtk/features/lookupApi';
 import type { Entity } from '@/dataObjects/dtos/Common';
-import { Permission } from '@/rtk/features/roleApi';
+import type { Permission } from '@/rtk/features/roleApi';
 
 export enum InheritedStatusType {
   ViaRole = 'via_role',
