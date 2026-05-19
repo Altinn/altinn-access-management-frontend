@@ -24,22 +24,6 @@ test.describe('Systembruker endringsforespørsel', () => {
     api = new ApiRequests();
   });
 
-  test.afterEach(async () => {
-    // Cleanup system users created during tests
-    if (systemUserIds.length > 0) {
-      try {
-        await api.cleanUpSystemUsers(
-          systemUserIds.map((id) => ({ id })),
-          testUserPid,
-          vendorOrgNumber,
-        );
-      } catch (error) {
-        console.error('Error during system user cleanup:', error);
-      }
-      systemUserIds = [];
-    }
-  });
-
   test('Avvis endringsforespørsel', async ({ page, login }): Promise<void> => {
     const externalRef = TestdataApi.generateExternalRef();
 
@@ -153,5 +137,21 @@ test.describe('Systembruker endringsforespørsel', () => {
       await expect(page.getByText('authentication-e2e-test')).not.toBeVisible();
       await expect(page.getByText('Baerekraft')).not.toBeVisible();
     });
+  });
+
+  test.afterEach(async () => {
+    // Cleanup system users created during tests
+    if (systemUserIds.length > 0) {
+      try {
+        await api.cleanUpSystemUsers(
+          systemUserIds.map((id) => ({ id })),
+          testUserPid,
+          vendorOrgNumber,
+        );
+      } catch (error) {
+        console.error('Error during system user cleanup:', error);
+      }
+      systemUserIds = [];
+    }
   });
 });

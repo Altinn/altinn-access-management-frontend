@@ -1,7 +1,6 @@
 import { expect, test } from 'playwright/fixture/pomFixture';
 import { ApiRequests } from 'playwright/api-requests/SystemUserApiRequests';
 import { TestdataApi } from 'playwright/util/TestdataApi';
-import { env } from 'playwright/util/helper';
 const vendorOrgNumber = '310736007';
 const testUserPid = '13832749995';
 const testOrgName = 'Initiativrik Fiolett Tiger AS';
@@ -10,7 +9,7 @@ test.describe('System user deletion', () => {
   let systemId: string;
   let api: ApiRequests;
 
-  test.beforeEach(async ({ page, login, systemUserPage, accessManagementFrontPage }) => {
+  test.beforeEach(async ({ login, systemUserPage, accessManagementFrontPage }) => {
     await test.step('Setup API client', async () => {
       api = new ApiRequests();
     });
@@ -33,25 +32,17 @@ test.describe('System user deletion', () => {
 
     await test.step('Verify system user was created successfully', async () => {
       await expect(systemUserPage.SYSTEMUSER_CREATED_HEADING).toBeVisible();
-      await expect(page.getByText(systemId).first()).toBeVisible();
+      await expect(systemUserPage.systemUserLink(systemId)).toBeVisible();
     });
   });
 
-  test('Delete created system user', async ({ page, systemUserPage }) => {
+  test('Delete created system user', async ({ systemUserPage }) => {
     await test.step('Select system user to delete', async () => {
-      await page.getByText(systemId).first().click();
+      await systemUserPage.openSystemUser(systemId);
     });
 
-    await test.step('Delete system user', async () => {
-      await systemUserPage.DELETE_SYSTEMUSER_BUTTON.click();
-      await systemUserPage.FINAL_DELETE_SYSTEMUSER_BUTTON.click();
-    });
-
-    await test.step('Verify deletion and return to overview', async () => {
-      await expect(page).toHaveURL(`${env('SYSTEMUSER_URL')}/overview`);
-
-      // Verify system user is not present
-      await expect(page.getByText(systemId).first()).not.toBeVisible();
+    await test.step('Delete system user and verify removal from overview', async () => {
+      await systemUserPage.deleteSystemUser(systemId);
     });
   });
 

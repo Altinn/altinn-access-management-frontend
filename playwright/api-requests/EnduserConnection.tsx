@@ -264,25 +264,23 @@ export class EnduserConnection {
     const token = await this.tokenClass.getPersonalTokenByPid(pid);
     var responses = new Array<Response>();
 
-    await Promise.all(
-      packageNames.map(async (packageName) => {
-        const url = `${env('API_BASE_URL')}/accessmanagement/api/v1/enduser/connections/accesspackages?party=${fromUuid}&from=${fromUuid}&to=${toUuid}&package=${packageName}`;
-        const response = await fetch(url, {
-          method: 'POST',
-          headers: {
-            Authorization: `Bearer ${token}`,
-            'Content-Type': 'application/json',
-          },
-        });
+    for (const packageName of packageNames) {
+      const url = `${env('API_BASE_URL')}/accessmanagement/api/v1/enduser/connections/accesspackages?party=${fromUuid}&from=${fromUuid}&to=${toUuid}&package=${packageName}`;
+      const response = await fetch(url, {
+        method: 'POST',
+        headers: {
+          Authorization: `Bearer ${token}`,
+          'Content-Type': 'application/json',
+        },
+      });
 
-        if (!response.ok) {
-          throw new Error(
-            `Failed to fetch status for addPackageOrg request. Status: ${response.status}`,
-          );
-        }
-        responses.push(response);
-      }),
-    );
+      if (!response.ok) {
+        throw new Error(
+          `Failed to fetch status for addPackageOrg request. Status: ${response.status}`,
+        );
+      }
+      responses.push(response);
+    }
     return responses;
   }
 
