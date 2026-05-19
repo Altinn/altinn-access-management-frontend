@@ -13,6 +13,7 @@ import { useHeader } from './useHeader';
 import { useTranslation } from 'react-i18next';
 import { GeneralPath } from '@/routes/paths';
 import { useSidebarItems } from './useSidebarItems';
+import { NavigationFocus } from './NavigationFocus';
 
 interface PageLayoutWrapperProps {
   openAccountMenu?: boolean;
@@ -44,6 +45,7 @@ export const PageLayoutWrapper = ({
 
   return (
     <RootProvider languageCode={languageCode as LanguageCode}>
+      <NavigationFocus />
       <Layout
         color={reportee?.type ? getAccountType(reportee.type) : 'neutral'}
         theme='subtle'
