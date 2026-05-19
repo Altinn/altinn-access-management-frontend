@@ -27,13 +27,13 @@ export const ConsumerPageContent = () => {
   const { t } = useTranslation();
   const navigate = useNavigate();
   const { openSnackbar } = useSnackbar();
-  const { fromParty, toParty } = usePartyRepresentation();
+  const { fromParty, actingParty } = usePartyRepresentation();
   const deleteDialogRef = React.useRef<HTMLDialogElement>(null);
   const [removeConsumer, { isLoading: isRemovingConsumer }] =
     useRemoveMaskinportenConsumerMutation();
   const [removeConsumerResource] = useRemoveMaskinportenConsumerResourceMutation();
   const consumerOrgNumber = fromParty?.orgNumber;
-  const actingPartyUuid = toParty?.partyUuid;
+  const actingPartyUuid = actingParty?.partyUuid;
   const { remove, isLoading } = useMaskinportenResourceActions({
     remove: (resource) =>
       removeConsumerResource({

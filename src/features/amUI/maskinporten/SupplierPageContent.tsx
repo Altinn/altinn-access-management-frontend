@@ -31,8 +31,8 @@ export const SupplierPageContent = () => {
     useRemoveMaskinportenSupplierMutation();
   const [removeSupplierResource] = useRemoveMaskinportenSupplierResourceMutation();
 
-  const { fromParty, toParty } = usePartyRepresentation();
-  const party = fromParty?.partyUuid;
+  const { toParty, actingParty } = usePartyRepresentation();
+  const party = actingParty?.partyUuid;
   const supplier = toParty?.orgNumber;
   const supplierName = toParty?.name
     ? formatDisplayName({

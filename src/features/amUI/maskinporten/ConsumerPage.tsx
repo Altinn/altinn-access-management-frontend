@@ -32,7 +32,7 @@ export const ConsumerPage = () => {
 
   const { id: orgNr } = useParams<{ id: string }>();
   const party = getCookie('AltinnPartyUuid');
-  const backUrl = `/${amUIPath.Maskinporten}`;
+  const backUrl = `/${amUIPath.Maskinporten}?tab=consumers`;
 
   const { data, isLoading, error } = useGetMaskinportenConsumersQuery(
     { party, consumer: orgNr },
@@ -59,6 +59,8 @@ export const ConsumerPage = () => {
     };
   }, [consumer]);
 
+  const notFound = !!error || (!isLoading && !data?.length);
+
   return (
     <SnackbarProvider>
       <PageWrapper>
@@ -73,30 +75,25 @@ export const ConsumerPage = () => {
                 items={['root', 'maskinporten']}
                 lastBreadcrumb={{ label: consumerName || t('maskinporten_page.consumer_title') }}
               />
-
-              {(() => {
-                const showNotFound = !!error || (!isLoading && !data?.length);
-                if (showNotFound || isLoading) {
-                  return (
-                    <PageContainer backUrl={backUrl}>
-                      {showNotFound ? (
-                        <DsAlert data-color='danger'>
-                          <DsParagraph>
-                            {t('maskinporten_page.consumer_not_found')}{' '}
-                            <Link to={backUrl}>{t('maskinporten_page.back_to_list')}</Link>
-                          </DsParagraph>
-                        </DsAlert>
-                      ) : (
-                        <DsSkeleton
-                          width='100%'
-                          height='2.5rem'
-                        />
-                      )}
-                    </PageContainer>
-                  );
-                }
-                return party && orgNr && <ConsumerPageContent />;
-              })()}
+              {isLoading ? (
+                <PageContainer backUrl={backUrl}>
+                  <DsSkeleton
+                    width='100%'
+                    height='2.5rem'
+                  />
+                </PageContainer>
+              ) : notFound ? (
+                <PageContainer backUrl={backUrl}>
+                  <DsAlert data-color='danger'>
+                    <DsParagraph>
+                      {t('maskinporten_page.consumer_not_found')}{' '}
+                      <Link to={backUrl}>{t('maskinporten_page.back_to_list')}</Link>
+                    </DsParagraph>
+                  </DsAlert>
+                </PageContainer>
+              ) : (
+                <ConsumerPageContent />
+              )}
             </DelegationModalProvider>
           </PartyRepresentationProvider>
         </PageLayoutWrapper>

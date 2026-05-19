@@ -13,7 +13,7 @@ import type {
 import { DelegationAction, EditModal } from '../common/DelegationModal/EditModal';
 import { ScopeList } from './ScopeList';
 import { getMaskinportenScopes } from './scopeUtils';
-import classes from './MaskinportenPage.module.css';
+import classes from './DelegatedResourcesSection.module.css';
 
 interface DelegatedResourcesSectionProps {
   resourcePermissions: ResourceDelegation[] | undefined;
