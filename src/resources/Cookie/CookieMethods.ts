@@ -28,15 +28,21 @@ export const useCookieListener = (cookieName: string, interval = 2000, delayResp
   const [cookieChanged, setCookieChanged] = useState(false);
 
   useEffect(() => {
+    let delayTimeout: ReturnType<typeof setTimeout> | undefined;
+
     const checkCookie = setInterval(() => {
       const currentCookie = getCookie(cookieName);
       if (currentCookie !== cookieValue) {
         setCookieValue(currentCookie);
-        setTimeout(() => setCookieChanged(true), delayResponse);
+        clearTimeout(delayTimeout);
+        delayTimeout = setTimeout(() => setCookieChanged(true), delayResponse);
       }
     }, interval); // Check every interval
 
-    return () => clearInterval(checkCookie);
+    return () => {
+      clearInterval(checkCookie);
+      clearTimeout(delayTimeout);
+    };
   }, [cookieName, interval, delayResponse]);
 
   return cookieChanged;
