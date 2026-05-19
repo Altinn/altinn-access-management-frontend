@@ -387,7 +387,8 @@
       "via_role": "{{user_name}} has access to this through the role they hold in {{via_name}}.",
       "via_connection": "{{user_name}} has access to this through {{via_name}}.",
       "via_keyrole": "{{user_name}} has access to this through their role in {{via_name}}.",
-      "via_priv": "{{user_name}} has access to this through their role as a private individual."
+      "via_priv": "{{user_name}} has access to this through their role as a private individual.",
+      "via_er": "{{user_name}} has access to this through their role in {{via_name}}. It cannot be deleted."
     }
   },
   "user_roles": {
@@ -570,7 +571,8 @@
       "via_role": "{{user_name}} has access to this access package through the role they hold in {{via_name}}. This access package cannot be deleted.",
       "via_connection": "{{user_name}} has access to this access package through {{via_name}}. This access package cannot be deleted.",
       "via_keyrole": "{{user_name}} has this access package through their role in {{via_name}}. This access package cannot be deleted.",
-      "via_priv": "{{user_name}} has this power of attorney through their role as a private individual. It cannot be deleted."
+      "via_priv": "{{user_name}} has this power of attorney through their role as a private individual. It cannot be deleted.",
+      "via_er": "{{user_name}} has access to this through their role in {{via_name}}. It cannot be deleted."
     },
     "cannot_delegate_here": "This power of attorney cannot be granted here.",
     "delegation_check_not_delegable": "You cannot grant this power of attorney.",

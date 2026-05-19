@@ -48,8 +48,9 @@ export const RoleInfo = ({ role }: PackageInfoProps) => {
 
   const sectionId = fromParty?.partyUuid === actingParty?.partyUuid ? 9 : 8;
   const oldSolutionUrl = getRedirectToA2UsersListSectionUrl(sectionId);
-  const hasRole = permissions?.some((permission) => permission.role?.code === role.code);
-  const isRoleDeletable = true; // TODO: Update this logic when backend gives more information about deletable roles
+  const rolePermissions = permissions?.find((p) => p.role?.id === role.id);
+  const hasRole = rolePermissions !== undefined;
+  const roleIsRevocable = rolePermissions?.role?.isRevocable ?? false;
 
   const deleteErrorAlert = () => {
     if (deleteError) {
@@ -128,11 +129,12 @@ export const RoleInfo = ({ role }: PackageInfoProps) => {
           isLoading={isRoleResourcesLoading}
         />
       )}
-      {hasRole && enableRoleDeletionFlag && isRoleDeletable && (
+      {hasRole && enableRoleDeletionFlag && (
         <div className={classes.deleteRoleButtonContainer}>
           <RoleDeleteButton
             role={role}
             onError={setDeleteError}
+            disabled={!roleIsRevocable}
           />
         </div>
       )}

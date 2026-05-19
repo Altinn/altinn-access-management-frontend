@@ -384,7 +384,8 @@
       "via_role": "{{user_name}} har tilgang til dette gjennom rolla dei har i {{via_name}}.",
       "via_connection": "{{user_name}} har tilgang til dette gjennom {{via_name}}.",
       "via_keyrole": "{{user_name}} har tilgang til dette gjennom rolla dei har i {{via_name}}.",
-      "via_priv": "{{user_name}} har tilgang til dette gjennom sin rolle som privatperson."
+      "via_priv": "{{user_name}} har tilgang til dette gjennom sin rolle som privatperson.",
+      "via_er": "{{user_name}} har tilgang til denne gjennom si einingsregistrerte rolle i {{via_name}}. Den kan ikkje slettast."
     }
   },
   "user_roles": {
@@ -567,7 +568,8 @@
       "via_role": "{{user_name}} har tilgang til denne tilgangspakken gjennom rolla dei har i {{via_name}}. Denne tilgangspakken kan difor ikkje slettast.",
       "via_connection": "{{user_name}} har tilgang til denne tilgangspakken gjennom {{via_name}}. Denne tilgangspakken kan difor ikkje slettast.",
       "via_keyrole": "{{user_name}} har denne tilgangspakken gjennom rolla dei har i {{via_name}}. Denne tilgangspakken kan difor ikkje slettast.",
-      "via_priv": "{{user_name}} har denne fullmakta gjennom sin rolle som privatperson. Den kan difor ikkje slettast."
+      "via_priv": "{{user_name}} har denne fullmakta gjennom sin rolle som privatperson. Den kan difor ikkje slettast.",
+      "via_er": "{{user_name}} har tilgang til denne gjennom si einingsregistrerte rolle i {{via_name}}. Den kan difor ikkje slettast."
     },
     "cannot_delegate_here": "Denne fullmakta kan ikkje bli gitt eller fjerna her.",
     "delegation_check_not_delegable": "Du kan ikkje gi denne fullmakta.",

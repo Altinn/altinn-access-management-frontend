@@ -13,7 +13,6 @@ import { t } from 'i18next';
 import { RoleListItem } from './RoleListItem';
 import classes from './roleSection.module.css';
 import { useRoleMetadata } from '../UserRoles/useRoleMetadata';
-import { getInheritedStatus } from '../useInheritedStatus';
 import { RoleDeleteButton } from './RoleDeleteButton';
 
 interface RoleListProps {
@@ -94,21 +93,15 @@ export const RoleList = ({ onSelect, isLoading }: RoleListProps) => {
       ) : (
         <List>
           {mappedRoles.map((role) => {
-            const permissionsForRole = permissions?.filter((p) => p.role?.id === role.id) ?? [];
-            const isInherited =
-              getInheritedStatus({
-                permissions: permissionsForRole,
-                toParty,
-                fromParty,
-                actingParty,
-              }).length > 0;
+            const rolePermissions = permissions?.find((p) => p.role?.id === role.id);
+            const isRoleDeletable = rolePermissions?.role?.isRevocable ?? false;
             return (
               <RoleListItem
                 key={role.id}
                 role={role}
                 onClick={() => onSelect(role)}
                 deleteButton={
-                  enableRoleDeletionFlag && !isInherited ? (
+                  enableRoleDeletionFlag && isRoleDeletable ? (
                     <RoleDeleteButton
                       role={role}
                       variant='tertiary'

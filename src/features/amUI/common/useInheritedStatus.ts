@@ -1,10 +1,12 @@
 import type { Party } from '@/rtk/features/lookupApi';
 import type { Entity } from '@/dataObjects/dtos/Common';
+import { Permission } from '@/rtk/features/roleApi';
 
 export enum InheritedStatusType {
   ViaRole = 'via_role',
   ViaConnection = 'via_connection',
   ViaKeyRole = 'via_keyrole',
+  ViaER = 'via_er',
 }
 
 export interface InheritedStatusMessageType {
@@ -12,16 +14,8 @@ export interface InheritedStatusMessageType {
   via?: Entity;
 }
 
-export type PermissionWithInheritance = {
-  via?: Entity | null;
-  viaRole?: { id: string } | null;
-  to?: { id: string } | null;
-  from?: Entity | null;
-  role?: { code?: string } | null;
-};
-
 const resolveInheritanceStatus = (
-  permission: PermissionWithInheritance,
+  permission: Permission,
   hasRightholderRole: boolean,
 ): InheritedStatusMessageType | null => {
   if (permission.viaRole && permission.via) {
@@ -36,17 +30,30 @@ const resolveInheritanceStatus = (
       via: permission.via,
     };
   }
-  if (!permission.via && !permission.viaRole && !hasRightholderRole && permission.from) {
+  if (permission.reason?.items.some((r) => r.name === 'rolemap') && permission.from) {
+    return {
+      type: InheritedStatusType.ViaER,
+      via: permission.from,
+    };
+  }
+  if (
+    !permission.via &&
+    !permission.viaRole &&
+    !hasRightholderRole &&
+    permission.from &&
+    permission.reason?.items.some((r) => r.name !== 'direct')
+  ) {
     return {
       type: InheritedStatusType.ViaKeyRole,
       via: permission.from,
     };
   }
+
   return null;
 };
 
 interface GetInheritedStatusParams {
-  permissions?: PermissionWithInheritance[];
+  permissions?: Permission[];
   toParty?: Party;
   fromParty?: Party;
   actingParty?: Party;

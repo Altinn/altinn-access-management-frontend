@@ -7,12 +7,13 @@ export interface ProviderType {
   name: string;
 }
 
-export interface Permissions {
+export interface Permission {
   to: Entity;
   from: Entity;
   via?: Entity;
   role: CompactRole | null;
   viaRole?: CompactRole | null;
+  reason: { items: { name: string; description: string }[] } | null;
 }
 
 export interface Provider {
@@ -37,6 +38,7 @@ export interface Role {
   provider?: Provider;
   area?: Area;
   isDelegable?: boolean;
+  isRevocable?: boolean;
 }
 
 interface Area {
@@ -48,7 +50,7 @@ interface Area {
 
 export interface RolePermission {
   role: Role;
-  permissions: Permissions[];
+  permissions: Permission[];
 }
 
 export interface RoleResourceMetadata {

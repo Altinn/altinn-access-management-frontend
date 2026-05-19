@@ -384,7 +384,8 @@
       "via_role": "{{user_name}} har tilgang til dette gjennom rollen de har i {{via_name}}.",
       "via_connection": "{{user_name}} har tilgang til dette gjennom {{via_name}}.",
       "via_keyrole": "{{user_name}} har tilgang til dette gjennom rollen de har i {{via_name}}.",
-      "via_priv": "{{user_name}} har tilgang til dette gjennom sin rolle som privatperson."
+      "via_priv": "{{user_name}} har tilgang til dette gjennom sin rolle som privatperson.",
+      "via_er": "{{user_name}} har tilgang til denne gjennom sin enhetsregistrerte rolle i {{via_name}}. Den kan ikke slettes."
     }
   },
   "user_roles": {
@@ -567,7 +568,8 @@
       "via_role": "{{user_name}} har fullmakt gjennom rollen de har i {{via_name}}. Den kan derfor ikke slettes.",
       "via_connection": "{{user_name}} har fullmakt gjennom {{via_name}}. Denne kan derfor ikke slettes.",
       "via_keyrole": "{{user_name}} har fullmakt gjennom rollen de har i {{via_name}}. Den kan derfor ikke slettes.",
-      "via_priv": "{{user_name}} har fullmakt gjennom sin rolle som privatperson. Den kan derfor ikke slettes."
+      "via_priv": "{{user_name}} har fullmakt gjennom sin rolle som privatperson. Den kan derfor ikke slettes.",
+      "via_er": "{{user_name}} har tilgang til denne gjennom sin enhetsregistrerte rolle i {{via_name}}. Den kan ikke slettes."
     },
     "cannot_delegate_here": "Denne fullmakten kan ikke gis/fjernes her.",
     "delegation_check_not_delegable": "Du kan ikke gi denne fullmakten.",

@@ -12,6 +12,7 @@ export interface DeletePoaConfirmationProps {
   size?: 'xs' | 'sm' | 'md' | 'lg';
   variant?: 'primary' | 'secondary' | 'tertiary';
   icon?: boolean;
+  disabled?: boolean;
 }
 
 export const DeletePoaConfirmation = ({
@@ -23,6 +24,7 @@ export const DeletePoaConfirmation = ({
   size = 'sm',
   variant = 'secondary',
   icon = false,
+  disabled = false,
 }: DeletePoaConfirmationProps) => {
   const { t } = useTranslation();
   const closeDialog = (event: React.MouseEvent<HTMLButtonElement>) => {
@@ -39,7 +41,7 @@ export const DeletePoaConfirmation = ({
           data-color={color}
           data-size={size}
           variant={variant}
-          disabled={isDeleteLoading}
+          disabled={isDeleteLoading || disabled}
         >
           {icon && <MinusCircleIcon />}
           {t('common.delete_poa')}

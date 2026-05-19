@@ -14,6 +14,7 @@ interface RoleDeleteButtonProps {
   color?: 'danger' | 'neutral';
   variant?: 'primary' | 'secondary' | 'tertiary';
   icon?: boolean;
+  disabled?: boolean;
 }
 
 export const RoleDeleteButton = ({
@@ -23,6 +24,7 @@ export const RoleDeleteButton = ({
   color,
   variant,
   icon = false,
+  disabled = false,
 }: RoleDeleteButtonProps) => {
   const { t } = useTranslation();
   const { fromParty, toParty, actingParty } = usePartyRepresentation();
@@ -52,6 +54,7 @@ export const RoleDeleteButton = ({
       handleDeletion={handleDeleteRole}
       isDeleteLoading={isRemoveRoleLoading}
       loadingAriaLabel={t('role.deleting_role_loading')}
+      disabled={disabled}
       size={size}
       color={color}
       variant={variant}
