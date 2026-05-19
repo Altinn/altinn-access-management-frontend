@@ -1,6 +1,6 @@
 import type { Role } from '@/rtk/features/roleApi';
 import { useGetRolePermissionsQuery } from '@/rtk/features/roleApi';
-import type { ActionError } from '@/resources/hooks/useActionError';
+import { enableRoleDeletion } from '@/resources/utils/featureFlagUtils';
 import { usePartyRepresentation } from '../PartyRepresentationContext/PartyRepresentationContext';
 import { SkeletonRoleList } from './SkeletonRoleList';
 import {
@@ -13,6 +13,7 @@ import { t } from 'i18next';
 import { RoleListItem } from './RoleListItem';
 import classes from './roleSection.module.css';
 import { useRoleMetadata } from '../UserRoles/useRoleMetadata';
+import { RoleDeleteButton } from './RoleDeleteButton';
 
 interface RoleListProps {
   onSelect: (role: Role) => void;
@@ -35,6 +36,8 @@ export const RoleList = ({ onSelect, isLoading }: RoleListProps) => {
       skip: !actingParty?.partyUuid || !fromParty?.partyUuid || !toParty?.partyUuid,
     },
   );
+
+  const enableRoleDeletionFlag = enableRoleDeletion();
 
   const {
     mapRoles,
@@ -90,11 +93,24 @@ export const RoleList = ({ onSelect, isLoading }: RoleListProps) => {
       ) : (
         <List>
           {mappedRoles.map((role) => {
+            const rolePermissions = permissions?.find((p) => p.role?.id === role.id);
+            const isRoleDeletable = rolePermissions?.role?.isRevocable ?? false;
             return (
               <RoleListItem
                 key={role.id}
                 role={role}
                 onClick={() => onSelect(role)}
+                deleteButton={
+                  enableRoleDeletionFlag && isRoleDeletable ? (
+                    <RoleDeleteButton
+                      role={role}
+                      variant='tertiary'
+                      color='neutral'
+                      size='sm'
+                      icon={true}
+                    />
+                  ) : undefined
+                }
               />
             );
           })}
