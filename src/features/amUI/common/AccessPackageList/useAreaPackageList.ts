@@ -132,7 +132,7 @@ export const useAreaPackageList = ({
                     permissions: pkgAccess.permissions ?? [],
                   };
                   pkgAcc.assigned.push(acquiredPkg);
-                } else if (showAllPackages) {
+                } else if (showAllPackages && pkg.isAssignable !== false) {
                   pkgAcc.available.push(pkg);
                 }
 
@@ -146,10 +146,15 @@ export const useAreaPackageList = ({
 
             acc.assignedAreas.push({ ...area, packages: pkgs });
           } else if (showAllAreas) {
-            acc.availableAreas.push({
-              ...area,
-              packages: { assigned: [], available: area.accessPackages },
-            });
+            const assignablePackages = area.accessPackages.filter(
+              (pkg) => pkg.isAssignable !== false,
+            );
+            if (assignablePackages.length > 0) {
+              acc.availableAreas.push({
+                ...area,
+                packages: { assigned: [], available: assignablePackages },
+              });
+            }
           }
 
           return acc;
