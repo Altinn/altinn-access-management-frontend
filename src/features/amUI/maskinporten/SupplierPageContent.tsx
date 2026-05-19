@@ -14,7 +14,7 @@ import { amUIPath } from '@/routes/paths';
 import { PartyType } from '@/rtk/features/userInfoApi';
 
 import { useMaskinportenResourceActions } from './hooks/useMaskinportenResourceActions';
-import { DelegationAction } from '../common/DelegationModal/EditModal';
+import { DelegationAction, EditModal } from '../common/DelegationModal/EditModal';
 import { DelegationModal, DelegationType } from '../common/DelegationModal/DelegationModal';
 import { PageContainer } from '../common/PageContainer/PageContainer';
 import { UserPageHeader } from '../common/UserPageHeader/UserPageHeader';
@@ -42,6 +42,8 @@ export const SupplierPageContent = () => {
     : '';
 
   const deleteDialogRef = React.useRef<HTMLDialogElement>(null);
+  const scopeModalRef = React.useRef<HTMLDialogElement>(null);
+  const [selectedResource, setSelectedResource] = React.useState<ServiceResource | null>(null);
 
   const backUrl = `/${amUIPath.Maskinporten}?tab=suppliers`;
 
@@ -123,6 +125,17 @@ export const SupplierPageContent = () => {
         hasError={!!resourcesError}
         onRemove={handleRemove}
         isResourceLoading={isLoading}
+        onResourceClick={(r) => {
+          setSelectedResource(r);
+          scopeModalRef.current?.showModal();
+        }}
+        editModal={
+          <EditModal
+            ref={scopeModalRef}
+            maskinportenScope={selectedResource ?? undefined}
+            onClose={() => setSelectedResource(null)}
+          />
+        }
         addNewResourceButton={
           <DelegationModal
             delegationType={DelegationType.MaskinportenScope}

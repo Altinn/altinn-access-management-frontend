@@ -21,21 +21,16 @@ export const useMaskinportenResourceActions = ({
 }: UseMaskinportenResourceActionsArgs) => {
   const [loadingByResourceId, setLoadingByResourceId] = useState<Record<string, boolean>>({});
 
-  const setLoading = (resourceId: string, isLoading: boolean) => {
-    setLoadingByResourceId((prev) => ({ ...prev, [resourceId]: isLoading }));
-  };
-
   const isLoading = (resourceId: string) => loadingByResourceId[resourceId] ?? false;
 
-  const run = async (
-    resource: ServiceResource,
-    action: ResourceAction,
-    callbacks: ActionCallbacks,
-  ) => {
-    if (!resource.identifier) return;
+  const setLoading = (resourceId: string, value: boolean) =>
+    setLoadingByResourceId((prev) => ({ ...prev, [resourceId]: value }));
+
+  const delegate = async (resource: ServiceResource, callbacks: ActionCallbacks = {}) => {
+    if (!delegateAction || !resource.identifier) return;
     setLoading(resource.identifier, true);
     try {
-      await action(resource);
+      await delegateAction(resource);
       callbacks.onSuccess?.(resource);
     } catch (error) {
       callbacks.onError?.(resource, getActionError(error));
@@ -44,14 +39,17 @@ export const useMaskinportenResourceActions = ({
     }
   };
 
-  const delegate = (resource: ServiceResource, callbacks: ActionCallbacks = {}) => {
-    if (!delegateAction) return;
-    return run(resource, delegateAction, callbacks);
-  };
-
-  const remove = (resource: ServiceResource, callbacks: ActionCallbacks = {}) => {
-    if (!removeAction) return;
-    return run(resource, removeAction, callbacks);
+  const remove = async (resource: ServiceResource, callbacks: ActionCallbacks = {}) => {
+    if (!removeAction || !resource.identifier) return;
+    setLoading(resource.identifier, true);
+    try {
+      await removeAction(resource);
+      callbacks.onSuccess?.(resource);
+    } catch (error) {
+      callbacks.onError?.(resource, getActionError(error));
+    } finally {
+      setLoading(resource.identifier, false);
+    }
   };
 
   return { delegate, remove, isLoading };

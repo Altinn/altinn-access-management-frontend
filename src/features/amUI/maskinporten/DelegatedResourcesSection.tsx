@@ -10,7 +10,6 @@ import type {
   ServiceResource,
 } from '@/rtk/features/singleRights/singleRightsApi';
 
-import { DelegationAction, EditModal } from '../common/DelegationModal/EditModal';
 import { ScopeList } from './ScopeList';
 import { getMaskinportenScopes } from './scopeUtils';
 import classes from './DelegatedResourcesSection.module.css';
@@ -20,9 +19,10 @@ interface DelegatedResourcesSectionProps {
   isFetching: boolean;
   hasError: boolean;
   onRemove: (resource: ServiceResource) => void;
+  onResourceClick: (resource: ServiceResource) => void;
   isResourceLoading: (resourceId: string) => boolean;
   addNewResourceButton?: React.ReactNode;
-  editModalAvailableActions?: DelegationAction[];
+  editModal?: React.ReactNode;
 }
 
 export const DelegatedResourcesSection = ({
@@ -30,16 +30,15 @@ export const DelegatedResourcesSection = ({
   isFetching,
   hasError,
   onRemove,
+  onResourceClick,
   isResourceLoading,
   addNewResourceButton,
-  editModalAvailableActions,
+  editModal,
 }: DelegatedResourcesSectionProps) => {
   const { t } = useTranslation();
   const isMobile = useIsMobileOrSmaller();
   const [search, setSearch] = React.useState('');
   const [filterState, setFilterState] = React.useState<string[]>([]);
-  const [selectedResource, setSelectedResource] = React.useState<ServiceResource | null>(null);
-  const scopeModalRef = React.useRef<HTMLDialogElement>(null);
 
   const delegatedResources = (resourcePermissions ?? [])
     .map((delegation) => delegation.resource)
@@ -99,10 +98,7 @@ export const DelegatedResourcesSection = ({
           filterState={filterState}
           setFilterState={setFilterState}
           serviceOwnerOptions={serviceOwnerOptions}
-          onSelect={(resource) => {
-            setSelectedResource(resource);
-            scopeModalRef.current?.showModal();
-          }}
+          onSelect={onResourceClick}
           renderControls={(resource) => {
             const resourceLoading = isResourceLoading(resource.identifier);
             return (
@@ -130,12 +126,7 @@ export const DelegatedResourcesSection = ({
           }
         />
       )}
-      <EditModal
-        ref={scopeModalRef}
-        maskinportenScope={selectedResource ?? undefined}
-        availableActions={editModalAvailableActions}
-        onClose={() => setSelectedResource(null)}
-      />
+      {editModal}
     </section>
   );
 };

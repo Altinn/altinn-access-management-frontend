@@ -14,7 +14,7 @@ import { amUIPath } from '@/routes/paths';
 import { PartyType } from '@/rtk/features/userInfoApi';
 
 import { useMaskinportenResourceActions } from './hooks/useMaskinportenResourceActions';
-import { DelegationAction } from '../common/DelegationModal/EditModal';
+import { DelegationAction, EditModal } from '../common/DelegationModal/EditModal';
 import { PageContainer } from '../common/PageContainer/PageContainer';
 import { UserPageHeader } from '../common/UserPageHeader/UserPageHeader';
 import { usePartyRepresentation } from '../common/PartyRepresentationContext/PartyRepresentationContext';
@@ -29,6 +29,8 @@ export const ConsumerPageContent = () => {
   const { openSnackbar } = useSnackbar();
   const { fromParty, actingParty } = usePartyRepresentation();
   const deleteDialogRef = React.useRef<HTMLDialogElement>(null);
+  const scopeModalRef = React.useRef<HTMLDialogElement>(null);
+  const [selectedResource, setSelectedResource] = React.useState<ServiceResource | null>(null);
   const [removeConsumer, { isLoading: isRemovingConsumer }] =
     useRemoveMaskinportenConsumerMutation();
   const [removeConsumerResource] = useRemoveMaskinportenConsumerResourceMutation();
@@ -124,7 +126,18 @@ export const ConsumerPageContent = () => {
         hasError={!!resourcesError}
         onRemove={handleRemove}
         isResourceLoading={isLoading}
-        editModalAvailableActions={[DelegationAction.REVOKE]}
+        onResourceClick={(r) => {
+          setSelectedResource(r);
+          scopeModalRef.current?.showModal();
+        }}
+        editModal={
+          <EditModal
+            ref={scopeModalRef}
+            maskinportenScope={selectedResource ?? undefined}
+            availableActions={[DelegationAction.REVOKE]}
+            onClose={() => setSelectedResource(null)}
+          />
+        }
       />
       <MaskinportenDeleteDialog
         ref={deleteDialogRef}
