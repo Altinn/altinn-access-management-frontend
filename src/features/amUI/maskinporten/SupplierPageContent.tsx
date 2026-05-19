@@ -26,11 +26,12 @@ export const SupplierPageContent = () => {
   const { t } = useTranslation();
   const navigate = useNavigate();
   const { openSnackbar } = useSnackbar();
-  const { fromParty, toParty } = usePartyRepresentation();
-  const deleteDialogRef = React.useRef<HTMLDialogElement>(null);
+
   const [removeSupplier, { isLoading: isRemovingSupplier }] =
     useRemoveMaskinportenSupplierMutation();
   const [removeSupplierResource] = useRemoveMaskinportenSupplierResourceMutation();
+
+  const { fromParty, toParty } = usePartyRepresentation();
   const party = fromParty?.partyUuid;
   const supplier = toParty?.orgNumber;
   const supplierName = toParty?.name
@@ -39,11 +40,17 @@ export const SupplierPageContent = () => {
         type: toParty.partyTypeName === PartyType.Person ? 'person' : 'company',
       })
     : '';
+
+  const deleteDialogRef = React.useRef<HTMLDialogElement>(null);
+
+  const backUrl = `/${amUIPath.Maskinporten}?tab=suppliers`;
+
   const {
     data: resourcePermissions,
     error: resourcesError,
     isFetching,
   } = useGetMaskinportenSupplierResourcesQuery({ party, supplier }, { skip: !party || !supplier });
+
   const { remove, isLoading } = useMaskinportenResourceActions({
     remove: (resource) =>
       removeSupplierResource({
@@ -82,7 +89,7 @@ export const SupplierPageContent = () => {
         message: t('maskinporten_page.remove_supplier_success', { name: supplierName }),
         color: 'success',
       });
-      navigate(`/${amUIPath.Maskinporten}?tab=suppliers`);
+      navigate(backUrl);
     } catch {
       openSnackbar({
         message: t('maskinporten_page.remove_supplier_error', { name: supplierName }),
@@ -93,7 +100,7 @@ export const SupplierPageContent = () => {
 
   return (
     <PageContainer
-      backUrl={`/${amUIPath.Maskinporten}`}
+      backUrl={backUrl}
       contentActions={[
         <Button
           key='delete'
