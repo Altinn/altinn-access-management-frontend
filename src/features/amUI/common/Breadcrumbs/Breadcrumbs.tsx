@@ -42,7 +42,7 @@ const BreadcrumbConfig = {
   },
   consent_log: {
     href: `/${ConsentPath.Consent}/${ConsentPath.Log}`,
-    label: 'consent_log.heading',
+    label: 'consent_log.breadcrumb',
   },
   settings: {
     href: `/${amUIPath.Settings}`,

@@ -20,23 +20,30 @@ export function getCookie(cname: string) {
  * Detects changes in a given cookie by polling it with the given interval
  * @param cookieName The name of the cookie to be checked
  * @param interval The interval in which to poll the cookie (given in milliseconds)
+ * @param delayResponse The delay in milliseconds before signalling that the cookie has changed. Defaults to 0ms (no delay).
  * @returns `true` if the cookie has been changed from it's original value, `false` otherwise.
  */
-export const useCookieListener = (cookieName: string, interval = 2000) => {
+export const useCookieListener = (cookieName: string, interval = 2000, delayResponse = 0) => {
   const [cookieValue, setCookieValue] = useState(getCookie(cookieName));
   const [cookieChanged, setCookieChanged] = useState(false);
 
   useEffect(() => {
+    let delayTimeout: ReturnType<typeof setTimeout> | undefined;
+
     const checkCookie = setInterval(() => {
       const currentCookie = getCookie(cookieName);
       if (currentCookie !== cookieValue) {
         setCookieValue(currentCookie);
-        setCookieChanged(true);
+        clearTimeout(delayTimeout);
+        delayTimeout = setTimeout(() => setCookieChanged(true), delayResponse);
       }
     }, interval); // Check every interval
 
-    return () => clearInterval(checkCookie);
-  }, [cookieName, interval]);
+    return () => {
+      clearInterval(checkCookie);
+      clearTimeout(delayTimeout);
+    };
+  }, [cookieName, interval, delayResponse]);
 
   return cookieChanged;
 };

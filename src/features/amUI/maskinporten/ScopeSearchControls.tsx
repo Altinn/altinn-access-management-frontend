@@ -9,7 +9,11 @@ import { useTranslation } from 'react-i18next';
 import { MinusCircleIcon, PlusCircleIcon } from '@navikt/aksel-icons';
 
 import { useIsMobileOrSmaller } from '@/resources/utils/screensizeUtils';
-import { useLazyMaskinportenResourceDelegationCheckQuery } from '@/rtk/features/maskinportenApi';
+import {
+  useAddMaskinportenSupplierResourceMutation,
+  useLazyMaskinportenResourceDelegationCheckQuery,
+  useRemoveMaskinportenSupplierResourceMutation,
+} from '@/rtk/features/maskinportenApi';
 import type { ServiceResource } from '@/rtk/features/singleRights/singleRightsApi';
 import { PartyType } from '@/rtk/features/userInfoApi';
 
@@ -41,9 +45,21 @@ export const ScopeSearchControls = ({
     fullName: toParty?.name ?? '',
     type: toParty?.partyTypeName === PartyType.Person ? 'person' : 'company',
   });
+  const [addSupplierResource] = useAddMaskinportenSupplierResourceMutation();
+  const [removeSupplierResource] = useRemoveMaskinportenSupplierResourceMutation();
   const { delegate, remove, isLoading } = useMaskinportenResourceActions({
-    party: fromParty?.partyUuid,
-    supplier,
+    delegate: (r) =>
+      addSupplierResource({
+        party: fromParty?.partyUuid ?? '',
+        supplier,
+        resource: r.identifier,
+      }).unwrap(),
+    remove: (r) =>
+      removeSupplierResource({
+        party: fromParty?.partyUuid ?? '',
+        supplier,
+        resource: r.identifier,
+      }).unwrap(),
   });
   const [checkDelegation] = useLazyMaskinportenResourceDelegationCheckQuery();
 

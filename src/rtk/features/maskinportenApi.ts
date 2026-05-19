@@ -51,7 +51,8 @@ export const maskinportenApi = createApi({
     'maskinportenSuppliers',
     'maskinportenConsumers',
     'maskinportenResourceDelegationCheck',
-    'maskinportenResources',
+    'maskinportenSupplierResources',
+    'maskinportenConsumerResources',
   ],
   endpoints: (builder) => ({
     getMaskinportenSuppliers: builder.query<
@@ -65,8 +66,15 @@ export const maskinportenApi = createApi({
       },
       providesTags: ['maskinportenSuppliers'],
     }),
-    getMaskinportenConsumers: builder.query<MaskinportenConnection[], { party?: string } | void>({
-      query: (args) => `consumers?party=${args?.party ?? getCookie('AltinnPartyUuid')}`,
+    getMaskinportenConsumers: builder.query<
+      MaskinportenConnection[],
+      { party?: string; consumer?: string } | void
+    >({
+      query: (args) => {
+        const party = args?.party ?? getCookie('AltinnPartyUuid');
+        const base = `consumers?party=${party}`;
+        return args?.consumer ? `${base}&consumer=${encodeURIComponent(args.consumer)}` : base;
+      },
       providesTags: ['maskinportenConsumers'],
     }),
     searchMaskinportenScopes: builder.query<
@@ -89,20 +97,20 @@ export const maskinportenApi = createApi({
       { party?: string; resource: string }
     >({
       query: ({ party, resource }) =>
-        `resources/delegationcheck?party=${party ?? getCookie('AltinnPartyUuid')}&resource=${encodeURIComponent(resource)}`,
+        `suppliers/resources/delegationcheck?party=${party ?? getCookie('AltinnPartyUuid')}&resource=${encodeURIComponent(resource)}`,
       providesTags: ['maskinportenResourceDelegationCheck'],
     }),
-    addMaskinportenResource: builder.mutation<
+    addMaskinportenSupplierResource: builder.mutation<
       boolean,
       { party: string; supplier: string; resource: string }
     >({
       query: ({ party, supplier, resource }) => ({
-        url: `resources?party=${encodeURIComponent(party)}&supplier=${encodeURIComponent(supplier)}&resource=${encodeURIComponent(resource)}`,
+        url: `suppliers/resources?party=${encodeURIComponent(party)}&supplier=${encodeURIComponent(supplier)}&resource=${encodeURIComponent(resource)}`,
         method: 'POST',
       }),
-      invalidatesTags: ['maskinportenResourceDelegationCheck', 'maskinportenResources'],
+      invalidatesTags: ['maskinportenResourceDelegationCheck', 'maskinportenSupplierResources'],
     }),
-    getMaskinportenResources: builder.query<
+    getMaskinportenSupplierResources: builder.query<
       ResourceDelegation[],
       { party?: string; supplier?: string; resource?: string }
     >({
@@ -119,19 +127,19 @@ export const maskinportenApi = createApi({
           params.append('resource', resource);
         }
 
-        return `resources?${params.toString()}`;
+        return `suppliers/resources?${params.toString()}`;
       },
-      providesTags: ['maskinportenResources'],
+      providesTags: ['maskinportenSupplierResources'],
     }),
-    removeMaskinportenResource: builder.mutation<
+    removeMaskinportenSupplierResource: builder.mutation<
       void,
       { party: string; supplier: string; resource: string }
     >({
       query: ({ party, supplier, resource }) => ({
-        url: `resources?party=${encodeURIComponent(party)}&supplier=${encodeURIComponent(supplier)}&resource=${encodeURIComponent(resource)}`,
+        url: `suppliers/resources?party=${encodeURIComponent(party)}&supplier=${encodeURIComponent(supplier)}&resource=${encodeURIComponent(resource)}`,
         method: 'DELETE',
       }),
-      invalidatesTags: ['maskinportenResourceDelegationCheck', 'maskinportenResources'],
+      invalidatesTags: ['maskinportenResourceDelegationCheck', 'maskinportenSupplierResources'],
     }),
     addMaskinportenSupplier: builder.mutation<AssignmentDto, { party: string; supplier: string }>({
       query: ({ party, supplier }) => ({
@@ -160,6 +168,33 @@ export const maskinportenApi = createApi({
       }),
       invalidatesTags: ['maskinportenConsumers'],
     }),
+    getMaskinportenConsumerResources: builder.query<
+      ResourceDelegation[],
+      { party?: string; consumer?: string }
+    >({
+      query: ({ party, consumer }) => {
+        const params = new URLSearchParams({
+          party: party ?? getCookie('AltinnPartyUuid'),
+        });
+
+        if (consumer) {
+          params.append('consumer', consumer);
+        }
+
+        return `consumers/resources?${params.toString()}`;
+      },
+      providesTags: ['maskinportenConsumerResources'],
+    }),
+    removeMaskinportenConsumerResource: builder.mutation<
+      void,
+      { party: string; consumer: string; resource: string }
+    >({
+      query: ({ party, consumer, resource }) => ({
+        url: `consumers/resources?party=${encodeURIComponent(party)}&consumer=${encodeURIComponent(consumer)}&resource=${encodeURIComponent(resource)}`,
+        method: 'DELETE',
+      }),
+      invalidatesTags: ['maskinportenConsumerResources'],
+    }),
   }),
 });
 
@@ -169,12 +204,14 @@ export const {
   useSearchMaskinportenScopesQuery,
   useMaskinportenResourceDelegationCheckQuery,
   useLazyMaskinportenResourceDelegationCheckQuery,
-  useAddMaskinportenResourceMutation,
-  useGetMaskinportenResourcesQuery,
-  useRemoveMaskinportenResourceMutation,
+  useAddMaskinportenSupplierResourceMutation,
+  useGetMaskinportenSupplierResourcesQuery,
+  useRemoveMaskinportenSupplierResourceMutation,
   useAddMaskinportenSupplierMutation,
   useRemoveMaskinportenSupplierMutation,
   useRemoveMaskinportenConsumerMutation,
+  useGetMaskinportenConsumerResourcesQuery,
+  useRemoveMaskinportenConsumerResourceMutation,
 } = maskinportenApi;
 
 export const { endpoints, reducerPath, reducer, middleware } = maskinportenApi;

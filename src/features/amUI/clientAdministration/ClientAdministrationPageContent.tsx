@@ -11,25 +11,25 @@ import {
 } from '@altinn/altinn-components';
 
 import { clientAdministrationPageEnabled } from '@/resources/utils/featureFlagUtils';
-import { PartyType, useGetIsClientAdminQuery } from '@/rtk/features/userInfoApi';
+import {
+  PartyType,
+  useGetIsClientAdminQuery,
+  useGetReporteeQuery,
+} from '@/rtk/features/userInfoApi';
 import { usePartyRepresentation } from '../common/PartyRepresentationContext/PartyRepresentationContext';
 import { ClientAdministrationAgentsTab } from './ClientAdministrationAgentsTab';
 import { ClientAdministrationClientsTab } from './ClientAdministrationClientsTab';
 import classes from './ClientAdministrationPageContent.module.css';
 import { DatabaseIcon, PersonGroupIcon } from '@navikt/aksel-icons';
-import { isSubUnitByType } from '@/resources/utils/reporteeUtils';
 import { useUrlParamState } from '../common/useUrlParamState';
+import { ReporteePageHeading } from '../common/ReporteePageHeading/ReporteePageHeading';
 
 const clientAdministrationTabs = ['users', 'clients'] as const;
 
 export const ClientAdministrationPageContent = () => {
   const { t } = useTranslation();
   const pageIsEnabled = clientAdministrationPageEnabled();
-  const { actingParty } = usePartyRepresentation();
-
-  const unitType = isSubUnitByType(actingParty?.variant)
-    ? t('common.subunit_lowercase')
-    : t('common.mainunit_lowercase');
+  const { actingParty, isLoading: actorLoading } = usePartyRepresentation();
 
   const [activeTab, setActiveTab] = useUrlParamState({
     key: 'tab',
@@ -37,6 +37,7 @@ export const ClientAdministrationPageContent = () => {
     validValues: clientAdministrationTabs,
   });
 
+  const { data: reportee, isLoading: isLoadingReportee } = useGetReporteeQuery();
   const { data: isClientAdmin, isLoading: isLoadingIsClientAdmin } = useGetIsClientAdminQuery();
 
   if (!pageIsEnabled) {
@@ -79,29 +80,16 @@ export const ClientAdministrationPageContent = () => {
     <>
       <div className={classes.headerSection}>
         <div className={classes.pageHeader}>
-          <DsHeading
-            data-size='sm'
-            level={1}
-          >
-            <Trans
-              i18nKey='client_administration_page.page_heading'
-              values={{
-                name: formatDisplayName({
-                  fullName: actingParty?.name ?? '',
-                  type: actingParty?.partyTypeName === PartyType.Person ? 'person' : 'company',
-                }),
-              }}
-            />
-          </DsHeading>
-          <DsParagraph data-size='md'>
-            <Trans
-              i18nKey='client_administration_page.page_description'
-              values={{
-                organisationidentifier: actingParty?.orgNumber ?? '',
-                unitType,
-              }}
-            />
-          </DsParagraph>
+          <ReporteePageHeading
+            title={t('client_administration_page.page_heading', {
+              name: formatDisplayName({
+                fullName: actingParty?.name ?? '',
+                type: actingParty?.partyTypeName === PartyType.Person ? 'person' : 'company',
+              }),
+            })}
+            reportee={reportee}
+            isLoading={isLoadingReportee || actorLoading}
+          />
         </div>
         <DsParagraph
           data-size='md'

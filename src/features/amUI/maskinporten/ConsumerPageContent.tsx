@@ -5,9 +5,9 @@ import { useNavigate } from 'react-router';
 import { TrashIcon } from '@navikt/aksel-icons';
 
 import {
-  useGetMaskinportenSupplierResourcesQuery,
-  useRemoveMaskinportenSupplierMutation,
-  useRemoveMaskinportenSupplierResourceMutation,
+  useGetMaskinportenConsumerResourcesQuery,
+  useRemoveMaskinportenConsumerMutation,
+  useRemoveMaskinportenConsumerResourceMutation,
 } from '@/rtk/features/maskinportenApi';
 import type { ServiceResource } from '@/rtk/features/singleRights/singleRightsApi';
 import { amUIPath } from '@/routes/paths';
@@ -15,59 +15,56 @@ import { PartyType } from '@/rtk/features/userInfoApi';
 
 import { useMaskinportenResourceActions } from './hooks/useMaskinportenResourceActions';
 import { DelegationAction, EditModal } from '../common/DelegationModal/EditModal';
-import { DelegationModal, DelegationType } from '../common/DelegationModal/DelegationModal';
 import { PageContainer } from '../common/PageContainer/PageContainer';
 import { UserPageHeader } from '../common/UserPageHeader/UserPageHeader';
 import { usePartyRepresentation } from '../common/PartyRepresentationContext/PartyRepresentationContext';
 import { MaskinportenDeleteDialog } from './MaskinportenDeleteDialog';
 import { DelegatedResourcesSection } from './DelegatedResourcesSection';
 
-export const SupplierPageContent = () => {
+const backUrl = `/${amUIPath.Maskinporten}?tab=consumers`;
+
+export const ConsumerPageContent = () => {
   const { t } = useTranslation();
   const navigate = useNavigate();
   const { openSnackbar } = useSnackbar();
-
-  const [removeSupplier, { isLoading: isRemovingSupplier }] =
-    useRemoveMaskinportenSupplierMutation();
-  const [removeSupplierResource] = useRemoveMaskinportenSupplierResourceMutation();
-
-  const { toParty, actingParty } = usePartyRepresentation();
-  const party = actingParty?.partyUuid;
-  const supplier = toParty?.orgNumber;
-  const supplierName = toParty?.name
-    ? formatDisplayName({
-        fullName: toParty.name,
-        type: toParty.partyTypeName === PartyType.Person ? 'person' : 'company',
-      })
-    : '';
-
+  const { fromParty, actingParty } = usePartyRepresentation();
   const deleteDialogRef = React.useRef<HTMLDialogElement>(null);
   const scopeModalRef = React.useRef<HTMLDialogElement>(null);
   const [selectedResource, setSelectedResource] = React.useState<ServiceResource | null>(null);
-
-  const backUrl = `/${amUIPath.Maskinporten}?tab=suppliers`;
-
+  const [removeConsumer, { isLoading: isRemovingConsumer }] =
+    useRemoveMaskinportenConsumerMutation();
+  const [removeConsumerResource] = useRemoveMaskinportenConsumerResourceMutation();
+  const consumerOrgNumber = fromParty?.orgNumber;
+  const actingPartyUuid = actingParty?.partyUuid;
+  const { remove, isLoading } = useMaskinportenResourceActions({
+    remove: (resource) =>
+      removeConsumerResource({
+        party: actingPartyUuid!,
+        consumer: consumerOrgNumber!,
+        resource: resource.identifier,
+      }).unwrap(),
+  });
+  const consumerName = fromParty?.name
+    ? formatDisplayName({
+        fullName: fromParty.name,
+        type: fromParty.partyTypeName === PartyType.Person ? 'person' : 'company',
+      })
+    : '';
   const {
     data: resourcePermissions,
     error: resourcesError,
     isFetching,
-  } = useGetMaskinportenSupplierResourcesQuery({ party, supplier }, { skip: !party || !supplier });
-
-  const { remove, isLoading } = useMaskinportenResourceActions({
-    remove: (resource) =>
-      removeSupplierResource({
-        party: party!,
-        supplier: supplier!,
-        resource: resource.identifier,
-      }).unwrap(),
-  });
+  } = useGetMaskinportenConsumerResourcesQuery(
+    { party: actingPartyUuid, consumer: consumerOrgNumber },
+    { skip: !actingPartyUuid || !consumerOrgNumber },
+  );
 
   const handleRemove = (resource: ServiceResource) =>
     remove(resource, {
       onSuccess: (r) =>
         openSnackbar({
           message: t('single_rights.delete_singleRight_success_message', {
-            name: supplierName,
+            name: consumerName,
             resourceTitle: r.title,
           }),
           color: 'success',
@@ -75,26 +72,30 @@ export const SupplierPageContent = () => {
       onError: (r) =>
         openSnackbar({
           message: t('single_rights.delete_singleRight_error_message', {
-            name: supplierName,
+            name: consumerName,
             resourceTitle: r.title,
           }),
           color: 'danger',
         }),
     });
 
-  const handleConfirmDeleteSupplier = async () => {
-    if (!party || !supplier) return;
+  const handleConfirmDeleteConsumer = async () => {
+    if (!actingPartyUuid || !consumerOrgNumber) return;
     try {
-      await removeSupplier({ party, supplier, cascade: true }).unwrap();
+      await removeConsumer({
+        party: actingPartyUuid,
+        consumer: consumerOrgNumber,
+        cascade: true,
+      }).unwrap();
       deleteDialogRef.current?.close();
       openSnackbar({
-        message: t('maskinporten_page.remove_supplier_success', { name: supplierName }),
+        message: t('maskinporten_page.remove_consumer_success', { name: consumerName }),
         color: 'success',
       });
       navigate(backUrl);
     } catch {
       openSnackbar({
-        message: t('maskinporten_page.remove_supplier_error', { name: supplierName }),
+        message: t('maskinporten_page.remove_consumer_error', { name: consumerName }),
         color: 'danger',
       });
     }
@@ -111,12 +112,12 @@ export const SupplierPageContent = () => {
           onClick={() => deleteDialogRef.current?.showModal()}
         >
           <TrashIcon aria-hidden='true' />
-          {t('maskinporten_page.remove_supplier_confirm')}
+          {t('maskinporten_page.remove_consumer_confirm')}
         </Button>,
       ]}
     >
       <UserPageHeader
-        direction='to'
+        direction='from'
         displayRoles={false}
       />
       <DelegatedResourcesSection
@@ -133,23 +134,18 @@ export const SupplierPageContent = () => {
           <EditModal
             ref={scopeModalRef}
             maskinportenScope={selectedResource ?? undefined}
+            availableActions={[DelegationAction.REVOKE]}
             onClose={() => setSelectedResource(null)}
-          />
-        }
-        addNewResourceButton={
-          <DelegationModal
-            delegationType={DelegationType.MaskinportenScope}
-            availableActions={[DelegationAction.DELEGATE]}
           />
         }
       />
       <MaskinportenDeleteDialog
         ref={deleteDialogRef}
-        heading={t('maskinporten_page.remove_supplier_heading')}
-        body={t('maskinporten_page.remove_supplier_body', { name: supplierName })}
-        confirmLabel={t('maskinporten_page.remove_supplier_confirm')}
-        onConfirm={handleConfirmDeleteSupplier}
-        isLoading={isRemovingSupplier}
+        heading={t('maskinporten_page.remove_consumer_heading')}
+        body={t('maskinporten_page.remove_consumer_body', { name: consumerName })}
+        confirmLabel={t('maskinporten_page.remove_consumer_confirm')}
+        onConfirm={handleConfirmDeleteConsumer}
+        isLoading={isRemovingConsumer}
       />
     </PageContainer>
   );
