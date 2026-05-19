@@ -56,21 +56,7 @@ namespace Altinn.AccessManagement.UI.Core.Services
         public async Task<List<ResourceDelegation>> GetSupplierResources(string languageCode, Guid party, string supplier = null, string resource = null, CancellationToken cancellationToken = default)
         {
             IEnumerable<ResourcePermission> resourcePermissions = await _maskinportenClient.GetSupplierResources(party, languageCode, supplier, resource, cancellationToken);
-
-            var lookups = resourcePermissions
-                .Where(rp => !string.IsNullOrWhiteSpace(rp.Resource?.RefId))
-                .Select(async rp => new
-                {
-                    Permission = rp,
-                    Resource = await _resourceService.GetResource(rp.Resource.RefId, languageCode),
-                });
-
-            var results = await Task.WhenAll(lookups);
-
-            return results
-                .Where(r => r.Resource != null)
-                .Select(r => new ResourceDelegation(r.Resource, r.Permission.Permissions))
-                .ToList();
+            return await EnrichResourcePermissions(resourcePermissions, languageCode);
         }
 
         /// <inheritdoc />
@@ -107,7 +93,17 @@ namespace Altinn.AccessManagement.UI.Core.Services
         public async Task<List<ResourceDelegation>> GetConsumerResources(string languageCode, Guid party, string consumer = null, CancellationToken cancellationToken = default)
         {
             IEnumerable<ResourcePermission> resourcePermissions = await _maskinportenClient.GetConsumerResources(party, languageCode, consumer, cancellationToken);
+            return await EnrichResourcePermissions(resourcePermissions, languageCode);
+        }
 
+        /// <inheritdoc />
+        public async Task RemoveConsumerResource(Guid party, string consumer, string resource, CancellationToken cancellationToken = default)
+        {
+            await _maskinportenClient.RemoveConsumerResource(party, consumer, resource, cancellationToken);
+        }
+
+        private async Task<List<ResourceDelegation>> EnrichResourcePermissions(IEnumerable<ResourcePermission> resourcePermissions, string languageCode)
+        {
             var lookups = resourcePermissions
                 .Where(rp => !string.IsNullOrWhiteSpace(rp.Resource?.RefId))
                 .Select(async rp => new
@@ -122,12 +118,6 @@ namespace Altinn.AccessManagement.UI.Core.Services
                 .Where(r => r.Resource != null)
                 .Select(r => new ResourceDelegation(r.Resource, r.Permission.Permissions))
                 .ToList();
-        }
-
-        /// <inheritdoc />
-        public async Task RemoveConsumerResource(Guid party, string consumer, string resource, CancellationToken cancellationToken = default)
-        {
-            await _maskinportenClient.RemoveConsumerResource(party, consumer, resource, cancellationToken);
         }
     }
 }
