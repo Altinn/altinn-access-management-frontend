@@ -2,10 +2,9 @@ import { expect, test } from 'playwright/fixture/pomFixture';
 import { ApiRequests } from 'playwright/api-requests/SystemUserApiRequests';
 import { TestdataApi } from 'playwright/util/TestdataApi';
 import { env } from 'playwright/util/helper';
-const vendorOrgNumber = '310547891';
-const testUserPid = '14824497789';
-const testOrgName = 'Aktverdig Retorisk Ape';
-const testUserName = 'Skravlete Blåveis';
+const vendorOrgNumber = '310736007';
+const testUserPid = '13832749995';
+const testOrgName = 'Initiativrik Fiolett Tiger AS';
 
 test.describe('System user deletion', () => {
   let systemId: string;
@@ -18,7 +17,7 @@ test.describe('System user deletion', () => {
 
     await test.step('Login and navigate to application', async () => {
       await login.LoginToAccessManagement(testUserPid);
-      await login.chooseReportee(testUserName, testOrgName);
+      await login.chooseReportee(testOrgName);
     });
 
     await test.step('Create system in system register', async () => {
@@ -49,7 +48,10 @@ test.describe('System user deletion', () => {
     });
 
     await test.step('Verify deletion and return to overview', async () => {
-      await expect(systemUserPage.MAIN_HEADER).toBeVisible();
+      await expect(page).toHaveURL(`${env('SYSTEMUSER_URL')}/overview`);
+
+      // Verify system user is not present
+      await expect(page.getByText(systemId).first()).not.toBeVisible();
     });
   });
 

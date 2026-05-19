@@ -8,6 +8,7 @@ test.describe('Systembruker - Eskaler', () => {
   const systemuserOwnerOrg = '313084167';
   const regularUserPid = '09817897166'; // No accessManager privileges, may escalate requests
   const managerPid = '29849098304';
+  const actorName = 'Ugjennomsiktig Usnobbet Ape';
 
   let api: ApiRequests;
   let name: string;
@@ -64,7 +65,7 @@ test.describe('Systembruker - Eskaler', () => {
 
     await test.step('Login as manager and choose reportee', async () => {
       await login.LoginToAccessManagement(managerPid);
-      await login.chooseReportee(systemuserOwnerOrg, 'Ugjennomsiktig Usnobbet Ape');
+      await login.chooseReportee(actorName);
     });
 
     await test.step('Find and approve escalated request', async () => {
