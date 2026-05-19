@@ -240,6 +240,7 @@ void ConfigureServices(IServiceCollection services, IConfiguration config)
     services.AddSingleton<ISystemUserAgentRequestService, SystemUserAgentRequestService>();
     services.AddSingleton<ISystemUserAgentDelegationService, SystemUserAgentDelegationService>();
     services.AddSingleton<IConsentService, ConsentService>();
+    services.AddSingleton<ISelfIdentifiedUserService, SelfIdentifiedUserService>();
     services.AddSingleton<IEncryptionService, EncryptionService>();
     services.AddSingleton<IRoleService, RoleService>();
     services.AddSingleton<IMaskinportenService, MaskinportenService>();
@@ -500,6 +501,15 @@ void ConfigureMockableClients(IServiceCollection services, IConfiguration config
     else
     {
         services.AddSingleton<IConsentClient, ConsentClient>();
+    }
+
+    if (mockSettings.SelfIdentifiedUser)
+    {
+        services.AddSingleton<ISelfIdentifiedUserClient, SelfIdentifiedUserClientMock>();
+    }
+    else
+    {
+        services.AddHttpClient<ISelfIdentifiedUserClient, SelfIdentifiedUserClient>();
     }
 
     if (mockSettings.Maskinporten)

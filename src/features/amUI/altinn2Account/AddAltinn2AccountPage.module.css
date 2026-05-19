@@ -1,0 +1,21 @@
+.addAltinn2Account {
+  display: flex;
+  flex-direction: column;
+  gap: var(--ds-spacing-4);
+}
+
+.addAltinn2AccountHeader {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: var(--ds-spacing-4);
+}
+
+.buttonRow {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--ds-spacing-4);
+  margin-top: var(--ds-spacing-4);
+}
