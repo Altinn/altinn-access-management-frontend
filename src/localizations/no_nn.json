@@ -479,7 +479,8 @@
     "request_service": "Kva for teneste vil du be om?",
     "give_service_to_name": "Gi <strong>{{name}}</strong> fullmakt til ny teneste",
     "request_package": "Kva for tilgangspakke vil du be om?",
-    "give_package_to_name": "Gi <strong>{{name}}</strong> fullmakt til ny tilgangspakke",
+    "give_package_to_name": "Kva skal <strong>{{name}}</strong> jobbe med?",
+    "package_delegation_description": "Åpne eit område for å sjå kva tilgangspakker det inneheld.",
     "name_will_receive": "<strong>{{name}}</strong> vil få:",
     "name_has_the_following": "<strong>{{name}}</strong> har:",
     "name_requests_access_to": "<strong>{{name}}</strong> ber om:",
@@ -1001,6 +1002,12 @@
     "page_title": "Fullmaktsoversikt - Altinn",
     "heading": "Fullmaktsoversikt for {{name}}",
     "no_access_title": "Du har ikkje tilgang til denne sida",
+    "packages_tab": {
+      "description": "Vel eit område for å sjå tilhøyrande tilgangspakkar og kven som har fullmakt til dei.",
+      "info_box_icon_label": "Informasjon om tilgangspakkar",
+      "info_box_p1": "Tilgangspakkar er ei samling av skjema og tenester som handlar om same tema. Desse skal erstatte dagens Altinn-roller, men det vil ikkje vere noko éin til éin-forhold. For å finne ut kva tilgangspakke du skal tildele, kan det vere lurt å tenkje på kva mottakaren faktisk skal jobbe med.",
+      "info_box_link": "Les meir om tilgangspakkar på hjelpesidene."
+    },
     "instances_tab": {
       "search_label": "Søk etter delingar frå innboks",
       "no_results": "Ingen element frå innboks funne.",

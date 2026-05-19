@@ -4,6 +4,9 @@ import { useTranslation } from 'react-i18next';
 import { AccessPackageList } from '../common/AccessPackageList/AccessPackageList';
 import { Link } from 'react-router';
 import { DebouncedSearchField } from '../common/DebouncedSearchField/DebouncedSearchField';
+import { DsParagraph } from '@altinn/altinn-components';
+import classes from './AccessPackagePermissions.module.css';
+import { AccessPackageInfoPopover } from '../common/AccessPackageInfoPopover/AccessPackageInfoPopover';
 
 export const AccessPackagePermissions = () => {
   const { t } = useTranslation();
@@ -12,6 +15,10 @@ export const AccessPackagePermissions = () => {
 
   return (
     <>
+      <DsParagraph className={classes.description}>
+        {t('poa_overview_page.packages_tab.description')}
+        <AccessPackageInfoPopover />
+      </DsParagraph>
       <DebouncedSearchField
         placeholder={t('access_packages.search_label')}
         setDebouncedSearchString={setDebouncedSearchString}

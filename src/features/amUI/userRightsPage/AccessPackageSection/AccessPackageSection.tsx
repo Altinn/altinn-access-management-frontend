@@ -22,6 +22,7 @@ import { displayPrivDelegation } from '@/resources/utils/featureFlagUtils';
 import { DebouncedSearchField } from '../../common/DebouncedSearchField/DebouncedSearchField';
 import { useCanGiveAccess } from '@/resources/hooks/useCanGiveAccess';
 import { useCanRequestAccess } from '@/resources/hooks/useCanRequestAccess';
+import { AccessPackageInfoPopover } from '../../common/AccessPackageInfoPopover/AccessPackageInfoPopover';
 
 export const AccessPackageSection = ({ isReportee = false }: { isReportee?: boolean }) => {
   const { t } = useTranslation();
@@ -75,16 +76,7 @@ export const AccessPackageSection = ({ isReportee = false }: { isReportee?: bool
             >
               {t('access_packages.current_access_packages_title', { count: numberOfAccesses })}
             </DsHeading>
-            <DsPopover.TriggerContext>
-              <DsPopover.Trigger
-                icon
-                variant='tertiary'
-                aria-label={t('access_packages.helptext_button')}
-              >
-                <QuestionmarkCircleIcon />
-              </DsPopover.Trigger>
-              <DsPopover>{t('access_packages.helptext_content')}</DsPopover>
-            </DsPopover.TriggerContext>
+            <AccessPackageInfoPopover />
           </div>
           {canRequestAccess && <PendingPackageRequests />}
           <div className={classes.inputs}>
