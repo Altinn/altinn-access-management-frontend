@@ -1,6 +1,8 @@
 import type { Locator, Page } from '@playwright/test';
+import { expect } from '@playwright/test';
 
 import noNb from '../../../src/localizations/no_nb.json';
+import { env } from 'playwright/util/helper';
 
 export class SystemUserPage {
   public readonly SELECT_VENDOR_LABEL: Locator;
@@ -76,6 +78,23 @@ export class SystemUserPage {
 
   requestLink(requestId: string) {
     return this.page.locator(`a[href*="${requestId}"]`);
+  }
+
+  systemUserLink(integrationTitle: string): Locator {
+    return this.page.getByRole('link', { name: integrationTitle });
+  }
+
+  async openSystemUser(integrationTitle: string): Promise<void> {
+    const link = this.systemUserLink(integrationTitle);
+    await expect(link).toBeVisible();
+    await link.click();
+  }
+
+  async deleteSystemUser(integrationTitle: string): Promise<void> {
+    await this.DELETE_SYSTEMUSER_BUTTON.click();
+    await this.FINAL_DELETE_SYSTEMUSER_BUTTON.click();
+    await expect(this.page).toHaveURL(`${env('SYSTEMUSER_URL')}/overview`);
+    await expect(this.systemUserLink(integrationTitle)).toHaveCount(0);
   }
 
   async selectSystem(system: string) {

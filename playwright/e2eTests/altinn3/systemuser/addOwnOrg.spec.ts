@@ -5,17 +5,15 @@ import { TestdataApi } from 'playwright/util/TestdataApi';
 import { pickRandom } from 'playwright/util/helper';
 
 test.describe('Systembruker - Legg til egen organisasjon', () => {
-  const partyOrgNo = '314240545';
-  const managerPid = '02858098613';
-  const orgName = 'Elegant Lett Tiger AS';
-  const accessPackageApiName = pickRandom([
-    'jordbruk',
-    'motorvognavgift',
-    'innbygger-vapen',
-    'pensjon',
-  ]);
+  const systemUserOwner = {
+    partyOrgNo: '314240545',
+    managerPid: '02858098613',
+    orgName: 'Elegant Lett Tiger AS',
+  };
+  const accessPackageApiName = pickRandom(['jordbruk', 'motorvognavgift', 'pensjon']);
   const accessPackageUrn = `urn:altinn:accesspackage:${accessPackageApiName}`;
 
+  // All these clients must have delegated the accessPackages listed above to the "partyOrgNo" organization
   const clients = [
     { orgNo: '310629499', managerPid: '03878497650', orgName: 'Allslags Kompatibel Tiger AS' },
     { orgNo: '310349070', managerPid: '16926997746', orgName: 'Blomstrete Vrien Tiger AS' },
@@ -44,19 +42,8 @@ test.describe('Systembruker - Legg til egen organisasjon', () => {
         '310547891',
         systemId,
         accessPackageApiName,
-        partyOrgNo,
+        systemUserOwner.partyOrgNo,
         externalRef,
-      );
-    });
-
-    await test.step('Setup client connections via API', async () => {
-      const connection = new EnduserConnection();
-      await Promise.all(
-        clients.map(({ orgNo, managerPid: clientPid }) =>
-          connection.addConnectionAndPackagesToUser(clientPid, orgNo, partyOrgNo, [
-            accessPackageUrn,
-          ]),
-        ),
       );
     });
   });
@@ -69,15 +56,15 @@ test.describe('Systembruker - Legg til egen organisasjon', () => {
   }): Promise<void> => {
     await test.step('Navigate to confirmation page and approve request', async () => {
       await page.goto(response.confirmUrl);
-      await login.loginNotChoosingActor(managerPid);
+      await login.loginNotChoosingActor(systemUserOwner.managerPid);
       await expect(clientDelegationPage.confirmButton).toBeVisible();
       await clientDelegationPage.confirmButton.click();
       await expect(login.loginButton).toBeVisible();
     });
 
     await test.step('Login and navigate to system user', async () => {
-      await login.LoginToAccessManagement(managerPid);
-      await login.chooseReportee(orgName, orgName);
+      await login.LoginToAccessManagement(systemUserOwner.managerPid);
+      await login.chooseReportee(systemUserOwner.orgName);
       await accessManagementFrontPage.systemAccessLink.click();
 
       await expect(clientDelegationPage.systemUserLink(name)).toBeVisible();
@@ -104,11 +91,11 @@ test.describe('Systembruker - Legg til egen organisasjon', () => {
     await test.step('Verify own org is added', async () => {
       await expect(clientDelegationPage.ownOrgBadge).toBeVisible();
       await expect(clientDelegationPage.removeOwnOrgButton).toBeVisible();
-      await expect(clientDelegationPage.ownOrgHeading(orgName)).toBeVisible();
+      await expect(clientDelegationPage.ownOrgHeading(systemUserOwner.orgName)).toBeVisible();
       await expect(
         clientDelegationPage.ownOrgNumber(
-          orgName,
-          `Org.nr. ${partyOrgNo.slice(0, 3)} ${partyOrgNo.slice(3, 6)} ${partyOrgNo.slice(6)}`,
+          systemUserOwner.orgName,
+          `Org.nr. ${systemUserOwner.partyOrgNo.slice(0, 3)} ${systemUserOwner.partyOrgNo.slice(3, 6)} ${systemUserOwner.partyOrgNo.slice(6)}`,
         ),
       ).toBeVisible();
     });
