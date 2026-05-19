@@ -15,10 +15,10 @@ export const AccessPackagePermissions = () => {
 
   return (
     <>
-      <DsParagraph className={classes.description}>
-        {t('poa_overview_page.packages_tab.description')}
+      <div className={classes.description}>
+        <DsParagraph>{t('poa_overview_page.packages_tab.description')}</DsParagraph>
         <AccessPackageInfoPopover />
-      </DsParagraph>
+      </div>
       <DebouncedSearchField
         placeholder={t('access_packages.search_label')}
         setDebouncedSearchString={setDebouncedSearchString}
