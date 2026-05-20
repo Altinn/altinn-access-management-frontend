@@ -145,7 +145,10 @@ export const useAreaPackageList = ({
               },
             );
 
-            acc.assignedAreas.push({ ...area, packages: pkgs });
+            // Skip the area if filtering left it empty (e.g. search hit only a non-assignable package).
+            if (pkgs.assigned.length > 0 || pkgs.available.length > 0) {
+              acc.assignedAreas.push({ ...area, packages: pkgs });
+            }
           } else if (showAllAreas) {
             const assignablePackages = area.accessPackages.filter(
               (pkg) => pkg.isAssignable !== false,
