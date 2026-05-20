@@ -112,7 +112,7 @@ export class AktorvalgHeader {
     if (isDisabled || ariaDisabled === 'true' || pointerEvents === 'none') {
       return;
     }
-    throw new Error(`Forventet å ikke kunne klikke på ${orgName}, men det den var klikkbar.`);
+    throw new Error(`Forventet å ikke kunne klikke på ${orgName}, men den var klikkbar.`);
   }
 
   async subOrgExistsInAktorvalg(orgName: string) {
