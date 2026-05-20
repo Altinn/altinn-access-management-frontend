@@ -324,7 +324,7 @@ test.describe('over- og underenheter', () => {
       await accessManagementFrontPage.clickUser('RIKTIG AUTENTISK APE');
     });
 
-    await test.step('FORMBAR GENIERKLÆRT TIGER AS skal ha tilgangspakken Byggesøknad hos hovedenheten', async () => {
+    await test.step('FORMBAR GENIERKLÆRT TIGER AS skal ha enkelttjenesten bruno-correspondence hos hovedenheten', async () => {
       await accessManagementFrontPage.goToEnkelttjenester();
       await accessManagementFrontPage.userCanDeleteEnkelttjeneste('bruno-correspondence');
     });
@@ -335,7 +335,7 @@ test.describe('over- og underenheter', () => {
       await accessManagementFrontPage.clickUser('RIKTIG AUTENTISK APE', 1);
     });
 
-    await test.step('FORMBAR GENIERKLÆRT TIGER AS skal ha tilgangspakken Byggesøknad hos underenheten', async () => {
+    await test.step('FORMBAR GENIERKLÆRT TIGER AS skal ha enkelttjenesten bruno-correspondence hos underenheten', async () => {
       await accessManagementFrontPage.goToEnkelttjenester();
       await accessManagementFrontPage.expectUserToHaveEnkelttjeneste('bruno-correspondence');
     });
