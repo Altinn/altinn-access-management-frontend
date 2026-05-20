@@ -1,11 +1,12 @@
 import { useTranslation } from 'react-i18next';
-import { DsParagraph, formatDisplayName } from '@altinn/altinn-components';
+import { DsLink, DsParagraph, formatDisplayName } from '@altinn/altinn-components';
 
 import { useGetMaskinportenConsumersQuery } from '@/rtk/features/maskinportenApi';
 
 import { MaskinportenUserSearch } from './MaskinportenUserSearch';
 import classes from './MaskinportenPage.module.css';
 import { usePartyRepresentation } from '../common/PartyRepresentationContext/PartyRepresentationContext';
+import { InfoPopover } from '../common/InfoPopover/InfoPopover';
 
 type ConsumersTabProps = {
   party: string;
@@ -24,11 +25,22 @@ export const ConsumersTab = ({ party, isActive, canFetch }: ConsumersTabProps) =
 
   return (
     <div className={classes.panelContent}>
-      <DsParagraph>
-        {t('maskinporten_page.consumers_description', {
-          name: formatDisplayName({ fullName: actingParty?.name ?? '', type: 'company' }) ?? '',
-        })}
-      </DsParagraph>
+      <div className={classes.description}>
+        <DsParagraph>
+          {t('maskinporten_page.consumers_description', {
+            name: formatDisplayName({ fullName: actingParty?.name ?? '', type: 'company' }) ?? '',
+          })}
+        </DsParagraph>
+        <InfoPopover triggerAriaLabel={t('maskinporten_page.consumers_info_icon_label')}>
+          <DsParagraph>{t('maskinporten_page.consumers_info_body')}</DsParagraph>
+          <DsLink
+            href='https://samarbeid.digdir.no/maskinporten/maskinporten/25'
+            target='_blank'
+          >
+            {t('maskinporten_page.info_box_link')}
+          </DsLink>
+        </InfoPopover>
+      </div>
       <MaskinportenUserSearch
         connections={consumers}
         isLoading={isLoading}

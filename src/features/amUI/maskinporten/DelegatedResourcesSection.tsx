@@ -100,6 +100,7 @@ export const DelegatedResourcesSection = ({
           serviceOwnerOptions={serviceOwnerOptions}
           onSelect={onResourceClick}
           renderControls={(resource) => {
+            if (isMobile) return null;
             const resourceLoading = isResourceLoading(resource.identifier);
             return (
               <Button
@@ -113,7 +114,7 @@ export const DelegatedResourcesSection = ({
                 aria-label={t('common.delete_poa_for', { poa_object: resource.title })}
               >
                 <MinusCircleIcon aria-hidden='true' />
-                {!isMobile && t('common.delete_poa')}
+                {t('common.delete_poa')}
               </Button>
             );
           }}

@@ -72,7 +72,7 @@ export const ConsumerPage = () => {
           >
             <DelegationModalProvider>
               <Breadcrumbs
-                items={['root', 'maskinporten']}
+                items={['root', 'maskinporten_consumers']}
                 lastBreadcrumb={{ label: consumerName || t('maskinporten_page.consumer_title') }}
               />
               {isLoading ? (
