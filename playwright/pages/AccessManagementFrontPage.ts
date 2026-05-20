@@ -52,7 +52,7 @@ export class AccessManagementFrontPage {
   }
 
   async goToFullmakterHosAndre() {
-    await this.page.getByRole('group').getByLabel('Fullmakter hos andre').click();
+    await this.ourAccessAtOthersLink.click();
   }
 
   async sokEtterEnkelttjeneste(tjenesteNavn: string) {
