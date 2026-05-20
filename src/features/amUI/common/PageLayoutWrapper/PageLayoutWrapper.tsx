@@ -1,7 +1,6 @@
 import React from 'react';
 import type { LanguageCode } from '@altinn/altinn-components';
 import { Badge, Layout, RootProvider, Snackbar } from '@altinn/altinn-components';
-import { useLocation } from 'react-router';
 
 import { useGetReporteeQuery } from '@/rtk/features/userInfoApi';
 
@@ -11,7 +10,6 @@ import { useFooter } from './useFooter';
 import { useHeader } from './useHeader';
 
 import { useTranslation } from 'react-i18next';
-import { GeneralPath } from '@/routes/paths';
 import { useSidebarItems } from './useSidebarItems';
 import { NavigationFocus } from './NavigationFocus';
 
@@ -32,7 +30,6 @@ export const PageLayoutWrapper = ({
 }: PageLayoutWrapperProps): React.ReactNode => {
   const { t } = useTranslation();
   const { data: reportee } = useGetReporteeQuery();
-  const { pathname, search } = useLocation();
 
   const { menuGroups } = useGlobalMenu();
 
