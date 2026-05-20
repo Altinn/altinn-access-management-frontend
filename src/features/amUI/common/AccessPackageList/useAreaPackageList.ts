@@ -133,6 +133,7 @@ export const useAreaPackageList = ({
                   };
                   pkgAcc.assigned.push(acquiredPkg);
                 } else if (showAllPackages && pkg.isAssignable !== false) {
+                  // Hide non-assignable packages that no one has
                   pkgAcc.available.push(pkg);
                 }
 
@@ -146,6 +147,7 @@ export const useAreaPackageList = ({
 
             acc.assignedAreas.push({ ...area, packages: pkgs });
           } else if (showAllAreas) {
+            // Hide the area entirely if it only contains non-assignable packages and has no existing delegations.
             const assignablePackages = area.accessPackages.filter(
               (pkg) => pkg.isAssignable !== false,
             );
