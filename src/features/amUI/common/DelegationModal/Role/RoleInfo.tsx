@@ -16,18 +16,21 @@ import { enableRoleDeletion } from '@/resources/utils/featureFlagUtils';
 import { useState } from 'react';
 import { TechnicalErrorParagraphs } from '../../TechnicalErrorParagraphs';
 import { createErrorDetails } from '../../TechnicalErrorParagraphs/TechnicalErrorParagraphs';
+import { useDelegationModalContext } from '../DelegationModalContext';
 
-export interface PackageInfoProps {
+export interface RoleInfoProps {
   role: Role;
 }
 
-export const RoleInfo = ({ role }: PackageInfoProps) => {
+export const RoleInfo = ({ role }: RoleInfoProps) => {
   const { t } = useTranslation();
   const [deleteError, setDeleteError] = useState<unknown>(null);
 
   const isExternalRole = role?.provider?.code === 'sys-ccr';
   const isLegacyRole = role?.provider?.code === 'sys-altinn2';
   const enableRoleDeletionFlag = enableRoleDeletion();
+
+  const { actionError } = useDelegationModalContext();
 
   const { fromParty, actingParty, toParty } = usePartyRepresentation();
   const shouldSkipRoleRefs = !role?.code || !fromParty?.variant;
@@ -53,15 +56,14 @@ export const RoleInfo = ({ role }: PackageInfoProps) => {
   const roleIsRevocable = rolePermissions?.role?.isRevocable ?? false;
 
   const deleteErrorAlert = () => {
-    if (deleteError) {
-      const details = createErrorDetails(deleteError as Parameters<typeof createErrorDetails>[0]);
+    if (deleteError || actionError) {
+      const error = deleteError || actionError;
+      const details = createErrorDetails(error as Parameters<typeof createErrorDetails>[0]);
       return (
         <>
           {!!details && (
             <DsAlert data-color='danger'>
-              <DsParagraph>
-                {t('client_administration_page.load_user_delegations_error')}
-              </DsParagraph>
+              <DsParagraph>{t('role.delete_role_error')}</DsParagraph>
               <TechnicalErrorParagraphs
                 status={details.status}
                 time={details.time}
@@ -108,7 +110,7 @@ export const RoleInfo = ({ role }: PackageInfoProps) => {
         )}
         <RoleStatusMessage role={role} />
       </div>
-      <div aria-live='polite'>{!!deleteError && deleteErrorAlert()}</div>
+      <div aria-live='polite'>{(!!deleteError || !!actionError) && deleteErrorAlert()}</div>
       <DsParagraph>{role?.description}</DsParagraph>
       <DsParagraph className={classes.oldRolesDisclaimer}>
         {t('role.resources_disclaimer')}{' '}

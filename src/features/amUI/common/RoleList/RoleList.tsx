@@ -16,7 +16,7 @@ import { useRoleMetadata } from '../UserRoles/useRoleMetadata';
 import { RoleDeleteButton } from './RoleDeleteButton';
 
 interface RoleListProps {
-  onSelect: (role: Role) => void;
+  onSelect: (role: Role, error?: unknown) => void;
   isLoading?: boolean;
 }
 
@@ -108,6 +108,7 @@ export const RoleList = ({ onSelect, isLoading }: RoleListProps) => {
                       color='neutral'
                       size='sm'
                       icon={true}
+                      onError={(error) => onSelect(role, error)}
                     />
                   ) : undefined
                 }

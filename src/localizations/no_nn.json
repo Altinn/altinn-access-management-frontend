@@ -379,6 +379,7 @@
     "delete_role_confirmation": "Roller frå gamle Altinn er avvikla, så du vil IKKJE kunne gi fullmakt til denne rollen på nytt.",
     "deleting_role_loading": "Venter på at rolla skal slettes...",
     "delete_role_success": "Fullmakt til rolla er sletta.",
+    "delete_role_error": "Kunne ikkje slette rolla.",
     "cannot_assign_role_poa": "Denne rolla er utgådd og kan ikkje lenger givast som fullmakt. For å gje tilgang til tenester, venlegast bruk tilgangspakkar eller enkelttenester.",
     "access_status": {
       "via_role": "{{user_name}} har tilgang til dette gjennom rolla dei har i {{via_name}}.",
