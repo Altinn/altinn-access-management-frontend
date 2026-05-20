@@ -133,7 +133,7 @@ export const useAreaPackageList = ({
                   };
                   pkgAcc.assigned.push(acquiredPkg);
                 } else if (showAllPackages && pkg.isAssignable !== false) {
-                  // Hide non-assignable packages that no one has
+                  // Non-assignable packages cannot be delegated, so omit them from the available list.
                   pkgAcc.available.push(pkg);
                 }
 
@@ -147,10 +147,10 @@ export const useAreaPackageList = ({
 
             acc.assignedAreas.push({ ...area, packages: pkgs });
           } else if (showAllAreas) {
-            // Hide the area entirely if it only contains non-assignable packages and has no existing delegations.
             const assignablePackages = area.accessPackages.filter(
               (pkg) => pkg.isAssignable !== false,
             );
+            // Skip the area when none of its packages can be delegated — otherwise it would render empty.
             if (assignablePackages.length > 0) {
               acc.availableAreas.push({
                 ...area,
