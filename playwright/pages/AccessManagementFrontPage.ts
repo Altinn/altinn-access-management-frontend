@@ -100,9 +100,6 @@ export class AccessManagementFrontPage {
   }
 
   async expectUserToHaveEnkelttjeneste(tjenesteNavn: string) {
-    // await expect(
-    //   this.page.getByRole('button', { name: tjenesteNavn }),
-    // ).toBeVisible();
     await expect(this.page.getByText(tjenesteNavn)).toBeVisible();
   }
 
