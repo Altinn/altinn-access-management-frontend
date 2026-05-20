@@ -57,10 +57,7 @@ export const PageLayoutWrapper = ({
           variant: escalateBannerSeverity ? 'alert' : undefined,
         }}
         skipLink={{
-          href:
-            pathname === '/'
-              ? `${GeneralPath.BasePath}${search}#main-content`
-              : `${GeneralPath.BasePath}${pathname}${search}#main-content`,
+          href: '#main-content',
           color: 'inherit',
           size: 'xs',
           children: t('common.skiplink'),
