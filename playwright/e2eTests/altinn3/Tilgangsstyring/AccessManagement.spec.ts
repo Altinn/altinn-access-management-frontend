@@ -1,9 +1,7 @@
-import { env } from 'playwright/util/helper';
 import { LoginPage } from 'playwright/pages/LoginPage';
 import { test } from '../../../fixture/pomFixture';
 import { AktorvalgHeader } from '../../../pages/AktorvalgHeader';
 import { EnduserConnection } from '../../../api-requests/EnduserConnection';
-import { AccessManagementFrontPage } from '../../../pages/AccessManagementFrontPage';
 
 test.describe.serial('Tilgangsstyring', () => {
   const api = new EnduserConnection();
