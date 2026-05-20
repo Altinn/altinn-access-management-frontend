@@ -103,10 +103,13 @@ export class AktorvalgHeader {
 
   async orgIsNotClickableInAktorvalg(orgName: string) {
     const actor = this.page.getByText(orgName).first();
-    try {
-      await expect(actor).toBeVisible();
-      await actor.click({ timeout: 1000 });
-    } catch {
+    await expect(actor).toBeVisible();
+    const isDisabled = await actor.isDisabled();
+    const ariaDisabled = await actor.getAttribute('aria-disabled');
+    const pointerEvents = await actor.evaluate(
+      (element) => window.getComputedStyle(element).pointerEvents,
+    );
+    if (isDisabled || ariaDisabled === 'true' || pointerEvents === 'none') {
       return;
     }
     throw new Error(`Forventet å ikke kunne klikke på ${orgName}, men det den var klikkbar.`);

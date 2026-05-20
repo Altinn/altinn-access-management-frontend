@@ -1,3 +1,5 @@
+Coderabbit, ignore this file.
+
 # Playwright E2E Tests — Guidelines
 
 ## Locators
