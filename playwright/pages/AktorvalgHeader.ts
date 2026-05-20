@@ -105,7 +105,7 @@ export class AktorvalgHeader {
     const actor = this.page.getByText(orgName).first();
     try {
       await expect(actor).toBeVisible();
-      await actor.click();
+      await actor.click({ timeout: 1000 });
     } catch {
       return;
     }

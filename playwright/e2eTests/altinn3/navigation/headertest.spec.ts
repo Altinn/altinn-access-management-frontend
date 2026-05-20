@@ -137,9 +137,13 @@ test.describe('Aktørvalg, valg og visning av avgiver', () => {
     aktorvalgHeader,
   }) => {
     await test.step('sett opp testdata', async () => {
-      await api.addConnectionAndPackagesToUser('10845998952', '311908421', '311151932', [
-        'urn:altinn:accesspackage:byggesoknad',
-      ]);
+      await api.addConnection('10845998952', '311908421', '311151932');
+      await api.delegateSingleService(
+        '10845998952',
+        '311908421',
+        '311151932',
+        'bruno-correspondence',
+      );
     });
 
     await test.step('Logg inn', async () => {
