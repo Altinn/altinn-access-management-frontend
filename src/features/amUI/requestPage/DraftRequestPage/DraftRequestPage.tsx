@@ -125,6 +125,7 @@ export const DraftRequestPage = () => {
           isConfirm ? 'draft_request_page.request_approved' : 'draft_request_page.request_withdrawn'
         }
         toName={toName}
+        autoFocus
       />
     );
     body = (
