@@ -36,6 +36,7 @@ export const ConsumersTab = ({ party, isActive, canFetch }: ConsumersTabProps) =
           <DsLink
             href='https://samarbeid.digdir.no/maskinporten/maskinporten/25'
             target='_blank'
+            rel='noopener noreferrer'
           >
             {t('maskinporten_page.info_box_link')}
           </DsLink>
