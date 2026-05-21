@@ -76,12 +76,22 @@ export const SettingsModal = ({
     case 'email':
       headingText = t('settings_page.alerts_on_email');
       labelText = t('settings_page.email_label');
-      icon = <PaperplaneIcon fontSize='2rem' />;
+      icon = (
+        <PaperplaneIcon
+          fontSize='2rem'
+          aria-hidden='true'
+        />
+      );
       break;
     case 'sms':
       headingText = t('settings_page.alerts_on_sms');
       labelText = t('settings_page.sms_label');
-      icon = <ChatIcon fontSize='2rem' />;
+      icon = (
+        <ChatIcon
+          fontSize='2rem'
+          aria-hidden='true'
+        />
+      );
       break;
     default:
       return null;
