@@ -1141,7 +1141,7 @@
     "heading": "Do you want to request access to <strong>{{to_name}}</strong>?",
     "intro_person": "A proposal for access to a service on your behalf has been created, but you must approve it for it to take effect. The request will only be sent to <strong>{{to_name}}</strong> if you agree.",
     "intro_company": "A proposal for access to a service on behalf of <strong>{{from_name}}</strong> has been created, but you must approve it for it to take effect. The request will only be sent to <strong>{{to_name}}</strong> if you agree.",
-    "confirm_request": "Yes, request access",
+    "confirm_request": "Yes, request power of attorney",
     "withdraw_request": "No, reject",
     "loading_request": "Loading request",
     "load_request_error": "Could not load request",

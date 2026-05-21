@@ -1138,7 +1138,7 @@
     "heading": "Vil du be om tilgang til <strong>{{to_name}}</strong>?",
     "intro_person": "Det er opprettet eit forslag om tilgang til ei tjeneste på dine vegne, men du må sjølv godkjenne ho for at ho skal tre i kraft. Førespurnaden vil berre sendast til <strong>{{to_name}}</strong> dersom du seier deg einig.",
     "intro_company": "Det er opprettet eit forslag om tilgang til ei tjeneste på vegne av <strong>{{from_name}}</strong>, men du må sjølv godkjenne ho for at ho skal tre i kraft. Førespurnaden vil berre sendast til <strong>{{to_name}}</strong> dersom du seier deg einig.",
-    "confirm_request": "Ja, be om tilgang",
+    "confirm_request": "Ja, be om fullmakt",
     "withdraw_request": "Nei, avslå",
     "loading_request": "Lastar førespurnad",
     "load_request_error": "Kunne ikkje laste førespurnad",
