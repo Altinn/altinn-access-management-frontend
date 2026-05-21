@@ -20,7 +20,7 @@ export const LandingPageInfoCard = ({ isLoading, isOrganization }: LandingPageIn
       {isLoading ? (
         <DsSkeleton
           variant='rectangle'
-          height={150}
+          height={23}
           width='100%'
         />
       ) : (
