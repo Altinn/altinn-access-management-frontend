@@ -255,7 +255,6 @@ test.describe('over- og underenheter', () => {
   });
 
   test('Virksomhet skal kunne se tilgangspakker hos hoved- og underenhet som delegerte dem', async ({
-    page,
     accessManagementFrontPage,
     login,
     aktorvalgHeader,
@@ -297,7 +296,6 @@ test.describe('over- og underenheter', () => {
   });
 
   test('Virksomhet skal kunne se enkelttjenester hos hoved- og underenhet som delegerte dem', async ({
-    page,
     accessManagementFrontPage,
     login,
     aktorvalgHeader,
@@ -339,7 +337,6 @@ test.describe('over- og underenheter', () => {
   });
 
   test('Underenhet A som delegerte tilgangspakke til Virksomhet B skal kunne se Virksomhet B i brukerlista si', async ({
-    page,
     accessManagementFrontPage,
     login,
     aktorvalgHeader,
@@ -381,7 +378,6 @@ test.describe('over- og underenheter', () => {
   });
 
   test('Underenhet A som delegerte enkelttjeneste til Virksomhet B skal kunne se Virksomhet B i brukerlista si', async ({
-    page,
     accessManagementFrontPage,
     login,
     aktorvalgHeader,
