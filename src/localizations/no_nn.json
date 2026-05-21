@@ -623,6 +623,7 @@
     "consumer_not_found": "Vi fann ikkje konsumenten",
     "add_scope_button": "Gi fullmakt",
     "search_scopes_heading": "Kva API vil du gi {{name}} fullmakt til?",
+    "search_api_placeholder": "Søk etter API",
     "no_scopes": "Ingen scopes funne for denne tenesta.",
     "scope_count": "{{count}} scopes",
     "search_results_count": "{{count}} treff på søket",

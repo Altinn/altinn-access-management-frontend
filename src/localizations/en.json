@@ -626,6 +626,7 @@
     "consumer_not_found": "We could not find the consumer",
     "add_scope_button": "Give power of attorney",
     "search_scopes_heading": "Which API do you want to give {{name}} power of attorney for?",
+    "search_api_placeholder": "Search for API",
     "no_scopes": "No scopes found for this service.",
     "scope_count": "{{count}} scopes",
     "search_results_count": "{{count}} search matches",
