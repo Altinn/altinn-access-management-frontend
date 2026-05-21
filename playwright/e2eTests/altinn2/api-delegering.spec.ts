@@ -23,7 +23,7 @@ test.describe.skip('API-Delegations to organization user', () => {
     };
 
     await login.LoginToAccessManagement(userThatDelegates.id);
-    await login.chooseReportee(userThatDelegates.reportee, 'FIXME');
+    await login.chooseReportee(userThatDelegates.reportee);
     await apiDelegations.deleteDelegatedAPIs();
 
     await apiDelegations.delegateAPI(standardApiDetails.name, userToDelegateTo.orgNumber);

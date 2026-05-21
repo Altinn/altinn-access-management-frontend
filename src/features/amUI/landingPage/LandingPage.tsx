@@ -3,11 +3,7 @@ import { PageWrapper } from '@/components';
 import { PageLayoutWrapper } from '../common/PageLayoutWrapper';
 import classes from './LandingPage.module.css';
 import {
-  DsAlert,
-  DsButton,
   DsHeading,
-  DsParagraph,
-  DsSkeleton,
   formatDate,
   formatDisplayName,
   List,
@@ -15,6 +11,7 @@ import {
   MenuItemProps,
   UserListItem,
 } from '@altinn/altinn-components';
+import { LandingPageInfoCard } from './LandingPageInfoCard';
 import {
   useGetIsAdminQuery,
   useGetIsClientAdminQuery,
@@ -23,7 +20,6 @@ import {
   useGetReporteeQuery,
 } from '@/rtk/features/userInfoApi';
 import { useTranslation } from 'react-i18next';
-import { LeaveIcon } from '@navikt/aksel-icons';
 import { useSearchParams } from 'react-router';
 import {
   hasConsentPermission,
@@ -46,7 +42,6 @@ import {
 import { getCookie } from '@/resources/Cookie/CookieMethods';
 import { useGetPartyFromLoggedInUserQuery } from '@/rtk/features/lookupApi';
 import { formatOrgNr, isOrganization, isSubUnit } from '@/resources/utils/reporteeUtils';
-import { getHostUrl } from '@/resources/utils/pathUtils';
 import { useSidebarRequestCount } from '@/resources/hooks/useSidebarRequestCount';
 import cn from 'classnames';
 import {
@@ -288,48 +283,10 @@ export const LandingPage = () => {
               shadow='none'
             />
           </List>
-          <DsAlert data-color='info'>
-            {isLoading ? (
-              <DsSkeleton
-                variant='rectangle'
-                height={150}
-                width='100%'
-              />
-            ) : (
-              <>
-                <DsHeading
-                  level={2}
-                  data-size='xs'
-                  color='info'
-                >
-                  {isOrganization(reportee)
-                    ? t('landing_page.alert_heading')
-                    : t('landing_page.alert_heading_priv')}
-                </DsHeading>
-                <div className={classes.landingPageAlert}>
-                  <DsParagraph>
-                    {isOrganization(reportee)
-                      ? t('landing_page.alert_body')
-                      : t('landing_page.alert_body_priv')}
-                  </DsParagraph>
-                  <DsParagraph>
-                    {isOrganization(reportee)
-                      ? t('landing_page.alert_body_p2')
-                      : t('landing_page.alert_body_p2_priv')}
-                  </DsParagraph>
-                  <DsButton
-                    asChild
-                    variant='secondary'
-                  >
-                    <a href={`${getHostUrl()}ui/profile`}>
-                      <LeaveIcon />
-                      {t('landing_page.alert_link')}
-                    </a>
-                  </DsButton>
-                </div>
-              </>
-            )}
-          </DsAlert>
+          <LandingPageInfoCard
+            isLoading={isLoading}
+            isOrganization={isOrganization(reportee)}
+          />
           <ListItemContainer
             heading={t('landing_page.your_content_heading')}
             items={getYourAccessesItems()}
