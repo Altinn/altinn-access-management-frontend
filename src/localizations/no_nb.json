@@ -1078,6 +1078,7 @@
     "alert_body_p2": "Tilganger du tidligere har gitt i gamle Altinn, må nå erstattes av nye fullmakter.",
     "alert_body_p3": "Velg menypunktet «Brukere», finn ønsket bruker og tildel tilgangspakker eller enkelttjenester.",
     "alert_link": "Steg-for-steg-guide for tildeling av fullmakter",
+    "alert_link_href": "https://info.altinn.no/hjelp/ny-tilgangsstyring/steg-for-steg-guider/",
     "your_content_heading": "Dine tilganger",
     "shortcut_links_heading": "Andre tilganger",
     "other_links_heading": "Annet",

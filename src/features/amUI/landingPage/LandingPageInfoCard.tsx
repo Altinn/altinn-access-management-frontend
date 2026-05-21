@@ -36,7 +36,7 @@ export const LandingPageInfoCard = ({ isLoading, isOrganization }: LandingPageIn
               <DsParagraph data-size='sm'>{t('landing_page.alert_body_p2')}</DsParagraph>
               <DsParagraph data-size='sm'>{t('landing_page.alert_body_p3')}</DsParagraph>
               <DsLink
-                href='https://info.altinn.no/hjelp/ny-tilgangsstyring/steg-for-steg-guider/'
+                href={t('landing_page.alert_link_href')}
                 target='_blank'
                 rel='noreferrer'
                 data-size='sm'
