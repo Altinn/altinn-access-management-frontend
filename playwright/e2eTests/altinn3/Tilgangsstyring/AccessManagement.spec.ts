@@ -241,18 +241,25 @@ test.describe.serial('Tilgangsstyring', () => {
 test.describe('over- og underenheter', () => {
   const api = new EnduserConnection();
 
+  test.beforeAll('sett opp testdata', async () => {
+    await api.addConnectionAndPackagesToUser('25916799929', '313819566', '313244555', [
+      'urn:altinn:accesspackage:byggesoknad',
+    ]);
+    await api.addConnection('26888197213', '310959502', '312791404');
+    await api.delegateSingleService(
+      '26888197213',
+      '310959502',
+      '312791404',
+      'bruno-correspondence',
+    );
+  });
+
   test('Virksomhet skal kunne se tilgangspakker hos hoved- og underenhet som delegerte dem', async ({
     page,
     accessManagementFrontPage,
     login,
     aktorvalgHeader,
   }) => {
-    await test.step('sett opp testdata', async () => {
-      await api.addConnectionAndPackagesToUser('25916799929', '313819566', '313244555', [
-        'urn:altinn:accesspackage:byggesoknad',
-      ]);
-    });
-
     await test.step('Logg inn', async () => {
       await login.LoginToAccessManagement('30847798242');
     });
@@ -295,16 +302,6 @@ test.describe('over- og underenheter', () => {
     login,
     aktorvalgHeader,
   }) => {
-    await test.step('sett opp testdata', async () => {
-      await api.addConnection('26888197213', '310959502', '312791404');
-      await api.delegateSingleService(
-        '26888197213',
-        '310959502',
-        '312791404',
-        'bruno-correspondence',
-      );
-    });
-
     await test.step('Logg inn', async () => {
       await login.LoginToAccessManagement('16906997766');
     });
@@ -338,6 +335,90 @@ test.describe('over- og underenheter', () => {
     await test.step('FORMBAR GENIERKLÆRT TIGER AS skal ha enkelttjenesten bruno-correspondence hos underenheten', async () => {
       await accessManagementFrontPage.goToEnkelttjenester();
       await accessManagementFrontPage.expectUserToHaveEnkelttjeneste('bruno-correspondence');
+    });
+  });
+
+  test('Underenhet A som delegerte tilgangspakke til Virksomhet B skal kunne se Virksomhet B i brukerlista si', async ({
+    page,
+    accessManagementFrontPage,
+    login,
+    aktorvalgHeader,
+  }) => {
+    await test.step('Logg inn', async () => {
+      await login.LoginToAccessManagement('25916799929');
+    });
+
+    await test.step('Velg underenhet SMISKENDE UMODEN TIGER AS og gå til fullmakter hos andre', async () => {
+      await aktorvalgHeader.selectSubOrgFromHeaderMenu('SMISKENDE UMODEN TIGER AS');
+      await accessManagementFrontPage.goToUsers();
+    });
+
+    await test.step('Velg KONSERVATIV USELVISK KATT KLINKEKULE i lista over brukere', async () => {
+      await accessManagementFrontPage.expandOrg('KONSERVATIV USELVISK KATT KLINKEKULE');
+      await accessManagementFrontPage.clickUser('KONSERVATIV USELVISK KATT KLINKEKULE');
+    });
+
+    await test.step('KONSERVATIV USELVISK KATT KLINKEKULE skal ha tilgangspakken Byggesøknad hos underenheten', async () => {
+      await accessManagementFrontPage.goToArea('Bygg, anlegg og eiendom');
+      await accessManagementFrontPage.expectUserToHavePackage('Byggesøknad');
+    });
+
+    await test.step('Velg hovedenhet KONSERVATIV USELVISK KATT KLINKEKULE og gå til fullmakter hos andre', async () => {
+      await aktorvalgHeader.goToSelectActor('SMISKENDE UMODEN TIGER AS');
+      await aktorvalgHeader.selectActorFromHeaderMenu('SMISKENDE UMODEN TIGER AS');
+      await accessManagementFrontPage.goToUsers();
+    });
+
+    await test.step('Velg KONSERVATIV USELVISK KATT KLINKEKULE i lista over brukere', async () => {
+      await accessManagementFrontPage.expandOrg('KONSERVATIV USELVISK KATT KLINKEKULE');
+      await accessManagementFrontPage.clickUser('KONSERVATIV USELVISK KATT KLINKEKULE');
+    });
+
+    await test.step('KONSERVATIV USELVISK KATT KLINKEKULE skal ha tilgangspakken Byggesøknad hos hovedenheten', async () => {
+      await accessManagementFrontPage.goToArea('Bygg, anlegg og eiendom');
+      await accessManagementFrontPage.userCanDeletePackage('Byggesøknad');
+    });
+  });
+
+  test('Underenhet A som delegerte enkelttjeneste til Virksomhet B skal kunne se Virksomhet B i brukerlista si', async ({
+    page,
+    accessManagementFrontPage,
+    login,
+    aktorvalgHeader,
+  }) => {
+    await test.step('Logg inn', async () => {
+      await login.LoginToAccessManagement('26888197213');
+    });
+
+    await test.step('Velg underenhet RIKTIG AUTENTISK APE og gå til fullmakter hos andre', async () => {
+      await aktorvalgHeader.selectSubOrgFromHeaderMenu('RIKTIG AUTENTISK APE');
+      await accessManagementFrontPage.goToUsers();
+    });
+
+    await test.step('Velg FORMBAR GENIERKLÆRT TIGER AS i lista over brukere', async () => {
+      await accessManagementFrontPage.expandOrg('FORMBAR GENIERKLÆRT TIGER AS');
+      await accessManagementFrontPage.clickUser('FORMBAR GENIERKLÆRT TIGER AS');
+    });
+
+    await test.step('FORMBAR GENIERKLÆRT TIGER AS skal ha enkelttjenesten bruno-correspondence hos underenheten', async () => {
+      await accessManagementFrontPage.goToEnkelttjenester();
+      await accessManagementFrontPage.userCanDeleteEnkelttjeneste('bruno-correspondence');
+    });
+
+    await test.step('Velg hovedenhet RIKTIG AUTENTISK APE og gå til fullmakter hos andre', async () => {
+      await aktorvalgHeader.goToSelectActor('RIKTIG AUTENTISK APE');
+      await aktorvalgHeader.selectActorFromHeaderMenu('RIKTIG AUTENTISK APE');
+      await accessManagementFrontPage.goToUsers();
+    });
+
+    await test.step('Velg FORMBAR GENIERKLÆRT TIGER AS i lista over brukere', async () => {
+      await accessManagementFrontPage.expandOrg('FORMBAR GENIERKLÆRT TIGER AS');
+      await accessManagementFrontPage.clickUser('FORMBAR GENIERKLÆRT TIGER AS');
+    });
+
+    await test.step('FORMBAR GENIERKLÆRT TIGER AS skal ha enkelttjenesten bruno-correspondence hos hovedenheten', async () => {
+      await accessManagementFrontPage.goToEnkelttjenester();
+      await accessManagementFrontPage.userCanDeleteEnkelttjeneste('bruno-correspondence');
     });
   });
 });
