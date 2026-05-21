@@ -594,6 +594,8 @@
     "heading": "Maskinporten administration",
     "document_title": "Maskinporten administration - Altinn",
     "suppliers_tab": "Suppliers",
+    "breadcrumb_suppliers": "Maskinporten – Suppliers",
+    "breadcrumb_consumers": "Maskinporten – Consumers",
     "add_supplier_button": "Add supplier",
     "suppliers_description": "Organizations that have received power of attorney from {{name}}.",
     "consumers_tab": "Consumers",

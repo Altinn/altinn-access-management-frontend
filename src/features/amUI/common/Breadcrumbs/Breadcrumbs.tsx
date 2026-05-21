@@ -58,11 +58,11 @@ const BreadcrumbConfig = {
   },
   maskinporten_suppliers: {
     href: `/${amUIPath.Maskinporten}?tab=suppliers`,
-    label: 'sidebar.maskinporten',
+    label: 'maskinporten_page.breadcrumb_suppliers',
   },
   maskinporten_consumers: {
     href: `/${amUIPath.Maskinporten}?tab=consumers`,
-    label: 'sidebar.maskinporten',
+    label: 'maskinporten_page.breadcrumb_consumers',
   },
 };
 

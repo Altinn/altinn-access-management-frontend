@@ -591,6 +591,8 @@
     "heading": "Maskinporten\u00ADadministrasjon",
     "document_title": "Maskinportenadministrasjon - Altinn",
     "suppliers_tab": "Leverandører",
+    "breadcrumb_suppliers": "Maskinporten – Leverandører",
+    "breadcrumb_consumers": "Maskinporten – Konsumenter",
     "add_supplier_button": "Legg til leverandør",
     "suppliers_description": "Virksomheter som har mottatt fullmakt fra {{name}}.",
     "consumers_tab": "Konsumenter",
