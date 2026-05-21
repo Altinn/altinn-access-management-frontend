@@ -56,9 +56,7 @@ export class LoginPage {
     await this.selectActor(this.searchBox, orgnummer);
   }
 
-  async chooseReportee(currentReportee: string, targetReportee: string = '') {
-    let selectReporteeButton = this.page.getByRole('button', { name: currentReportee });
-
+  async chooseReportee(targetReportee: string) {
     // Search for target reportee in the searchbox
     const searchBox = this.page.getByRole('searchbox', { name: 'Søk i aktører' });
     await searchBox.fill(targetReportee);
@@ -70,7 +68,7 @@ export class LoginPage {
   }
 
   private async navigateToLoginPage() {
-    await this.page.goto(env('BASE_URL'), { waitUntil: 'commit' });
+    await this.page.goto(env('BASE_URL'));
     await expect(this.testIdLink).toBeVisible();
     await this.testIdLink.click();
   }
