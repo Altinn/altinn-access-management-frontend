@@ -23,6 +23,7 @@ declare global {
       enableAddSelfToSystemuser: boolean;
       enableRequestAccess: boolean;
       enableDialogportenDialogLookup: boolean;
+      hideA2Links: boolean;
     };
   }
 }

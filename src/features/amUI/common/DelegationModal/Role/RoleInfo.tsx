@@ -9,6 +9,7 @@ import {
 } from '@navikt/aksel-icons';
 import { usePartyRepresentation } from '../../PartyRepresentationContext/PartyRepresentationContext';
 import { getRedirectToA2UsersListSectionUrl } from '@/resources/utils';
+import { hideA2Links } from '@/resources/utils/featureFlagUtils';
 import { RoleResourcesSection } from './RoleResourcesSection';
 import { RoleStatusMessage } from './RoleStatusMessages';
 
@@ -67,19 +68,21 @@ export const RoleInfo = ({ role }: PackageInfoProps) => {
         <RoleStatusMessage role={role} />
       </div>
       <DsParagraph>{role?.description}</DsParagraph>
-      <DsParagraph className={classes.oldRolesDisclaimer}>
-        {t('role.resources_disclaimer')}{' '}
-        <DsLink asChild>
-          <a
-            href={oldSolutionUrl}
-            target='_blank'
-            rel='noopener noreferrer'
-          >
-            {t('role.resources_disclaimer_link')}
-            <ExternalLinkIcon aria-hidden />
-          </a>
-        </DsLink>
-      </DsParagraph>
+      {!hideA2Links() && (
+        <DsParagraph className={classes.oldRolesDisclaimer}>
+          {t('role.resources_disclaimer')}{' '}
+          <DsLink asChild>
+            <a
+              href={oldSolutionUrl}
+              target='_blank'
+              rel='noopener noreferrer'
+            >
+              {t('role.resources_disclaimer_link')}
+              <ExternalLinkIcon aria-hidden />
+            </a>
+          </DsLink>
+        </DsParagraph>
+      )}
       {!shouldSkipRoleRefs && (
         <RoleResourcesSection
           roleResources={roleResources}

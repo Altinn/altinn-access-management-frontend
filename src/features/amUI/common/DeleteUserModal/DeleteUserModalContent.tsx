@@ -14,6 +14,7 @@ import { useDispatch } from 'react-redux';
 import { Link, useNavigate } from 'react-router';
 
 import { getRedirectToA2UsersListSectionUrl } from '@/resources/utils';
+import { hideA2Links } from '@/resources/utils/featureFlagUtils';
 import { amUIPath } from '@/routes/paths';
 import { accessPackageApi } from '@/rtk/features/accessPackageApi';
 import { useRemoveRightHolderMutation } from '@/rtk/features/connectionApi';
@@ -168,7 +169,9 @@ export const DeleteUserModalContent = ({
         rel='noopener noreferrer'
       ></Link>
     ),
-    a2Link: (
+    a2Link: hideA2Links() ? (
+      <span></span>
+    ) : (
       <Link
         to={a2ProfileLink}
         target='_blank'

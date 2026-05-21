@@ -14,6 +14,7 @@ import { DelegationAction, EditModal } from '../../common/DelegationModal/EditMo
 import classes from './SingleRightsSection.module.css';
 import { DeleteResourceButton } from './DeleteResourceButton';
 import { getRedirectToA2UsersListSectionUrl } from '@/resources/utils';
+import { hideA2Links } from '@/resources/utils/featureFlagUtils';
 import { useCanGiveAccess } from '@/resources/hooks/useCanGiveAccess';
 import { useIsTabletOrSmaller } from '@/resources/utils/screensizeUtils';
 import { SingleRightsSectionSkeleton } from './SingleRightsSectionSkeleton';
@@ -87,9 +88,11 @@ export const SingleRightsSection = ({ isReportee = false }: { isReportee?: boole
         </DsHeading>
         <div className={classes.wipMessage}>
           <DsParagraph>{t('single_rights.wip_message')}</DsParagraph>
-          <DsLink asChild>
-            <Link to={A2url}>{t('single_rights.wip_link_text')}</Link>
-          </DsLink>
+          {!hideA2Links() && (
+            <DsLink asChild>
+              <Link to={A2url}>{t('single_rights.wip_link_text')}</Link>
+            </DsLink>
+          )}
         </div>
       </div>
     );

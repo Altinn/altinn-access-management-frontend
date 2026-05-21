@@ -2,6 +2,7 @@ import { FloatingDropdown } from '@altinn/altinn-components';
 import { ExternalLinkIcon, LeaveIcon, QuestionmarkIcon } from '@navikt/aksel-icons';
 
 import { getAltinnStartPageUrl, getHostUrl } from '@/resources/utils/pathUtils';
+import { hideA2Links } from '@/resources/utils/featureFlagUtils';
 import { useTranslation } from 'react-i18next';
 
 export const InfoModal = () => {
@@ -16,23 +17,27 @@ export const InfoModal = () => {
     window.location.assign(`${getAltinnStartPageUrl()}${route}`);
   };
 
+  const items = [
+    {
+      icon: ExternalLinkIcon,
+      title: t('info_modal.help_pages'),
+      onClick: goToHelpPages,
+    },
+  ];
+  if (!hideA2Links()) {
+    items.push({
+      icon: LeaveIcon,
+      title: t('info_modal.back_button'),
+      onClick: goToOldSolution,
+    });
+  }
+
   return (
     <FloatingDropdown
       icon={QuestionmarkIcon}
       iconAltText={t('info_modal.info_button')}
       color='company'
-      items={[
-        {
-          icon: ExternalLinkIcon,
-          title: t('info_modal.help_pages'),
-          onClick: goToHelpPages,
-        },
-        {
-          icon: LeaveIcon,
-          title: t('info_modal.back_button'),
-          onClick: goToOldSolution,
-        },
-      ]}
+      items={items}
     />
   );
 };

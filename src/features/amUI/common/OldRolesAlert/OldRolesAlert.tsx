@@ -4,6 +4,7 @@ import { Link } from 'react-router';
 import { DsAlert, DsParagraph, DsLink } from '@altinn/altinn-components';
 
 import { getRedirectToA2UsersListSectionUrl } from '@/resources/utils';
+import { hideA2Links } from '@/resources/utils/featureFlagUtils';
 
 import { usePartyRepresentation } from '../PartyRepresentationContext/PartyRepresentationContext';
 
@@ -14,6 +15,10 @@ export const OldRolesAlert = () => {
   const { fromParty, actingParty } = usePartyRepresentation();
   const sectionId = fromParty?.partyUuid === actingParty?.partyUuid ? 9 : 8; // Section for "Users (A2)" in Profile is 9, for "Accesses for others (A2)" it is 8
   const url = getRedirectToA2UsersListSectionUrl(sectionId);
+
+  if (hideA2Links()) {
+    return null;
+  }
 
   return (
     <DsAlert data-color='info'>

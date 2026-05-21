@@ -20,6 +20,7 @@ import { Link } from 'react-router';
 
 import { amUIPath, ConsentPath, SystemUserPath } from '@/routes/paths';
 import { getAltinnStartPageUrl, getHostUrl } from '@/resources/utils/pathUtils';
+import { hideA2Links } from '@/resources/utils/featureFlagUtils';
 
 const getMenuLinkAs = (
   props: ComponentProps<typeof Link>,
@@ -252,7 +253,7 @@ export const getMaskinportenMenuItem = (
 export const getShortcutsMenuItem = (pathname?: string, isLoading = false): MenuItemProps[] => {
   const infoPortalUrl = getAltinnStartPageUrl(i18next.language);
   const helpPageUrl = infoPortalUrl + 'hjelp/ny-tilgangsstyring/';
-  return [
+  const items: MenuItemProps[] = [
     {
       groupId: 'shortcuts',
       id: 'beta-about',
@@ -264,7 +265,9 @@ export const getShortcutsMenuItem = (pathname?: string, isLoading = false): Menu
       selected: false,
       as: (props) => getMenuLinkAs(props, helpPageUrl, true),
     },
-    {
+  ];
+  if (!hideA2Links()) {
+    items.push({
       groupId: 'shortcuts',
       id: 'beta-leave',
       size: 'sm',
@@ -274,6 +277,7 @@ export const getShortcutsMenuItem = (pathname?: string, isLoading = false): Menu
       icon: LeaveIcon,
       selected: false,
       as: (props) => getMenuLinkAs(props, getHostUrl() + 'ui/profile'),
-    },
-  ];
+    });
+  }
+  return items;
 };

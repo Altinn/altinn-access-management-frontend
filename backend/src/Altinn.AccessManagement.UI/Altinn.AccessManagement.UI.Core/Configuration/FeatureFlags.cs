@@ -123,5 +123,11 @@ namespace Altinn.AccessManagement.UI.Core.Configuration
         /// Intended for the migration period while some downstream pages still depend on Altinn 2 cookies.
         /// </summary>
         public bool RouteChangeReporteeViaAltinn2 { get; set; }
+
+        /// <summary>
+        /// When true, the AM UI hides all links pointing back to Altinn 2 ("the old Altinn").
+        /// Used to roll out the shutdown of Altinn 2 per environment.
+        /// </summary>
+        public bool HideA2Links { get; set; }
     }
 }

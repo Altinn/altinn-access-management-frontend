@@ -13,7 +13,7 @@ import { Link } from 'react-router';
 import { t } from 'i18next';
 
 import { useGetPartyFromLoggedInUserQuery, type Party } from '@/rtk/features/lookupApi';
-import { availableForUserTypeCheck } from '@/resources/utils/featureFlagUtils';
+import { availableForUserTypeCheck, hideA2Links } from '@/resources/utils/featureFlagUtils';
 
 import { TechnicalErrorParagraphs } from '../TechnicalErrorParagraphs';
 import { createErrorDetails } from '../TechnicalErrorParagraphs/TechnicalErrorParagraphs';
@@ -296,18 +296,20 @@ const UnsyncedConnectionAlert = () => {
           {t('error_page.unsynced_connection_title')}
         </DsHeading>
         <DsParagraph>{t('error_page.unsynced_connection')}</DsParagraph>
-        <DsLink asChild>
-          <Link
-            className={classes.link}
-            to={getHostUrl() + 'ui/profile'}
-          >
-            {t('error_page.unsynced_connection_link')}
-            <ArrowRightIcon
-              aria-hidden={true}
-              fontSize='1.3rem'
-            />
-          </Link>
-        </DsLink>
+        {!hideA2Links() && (
+          <DsLink asChild>
+            <Link
+              className={classes.link}
+              to={getHostUrl() + 'ui/profile'}
+            >
+              {t('error_page.unsynced_connection_link')}
+              <ArrowRightIcon
+                aria-hidden={true}
+                fontSize='1.3rem'
+              />
+            </Link>
+          </DsLink>
+        )}
       </div>
     </DsAlert>
   );
