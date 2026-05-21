@@ -38,7 +38,7 @@ export const RoleInfo = ({ role }: RoleInfoProps) => {
     { roleCode: role.code ?? '', variant: fromParty?.variant || '' },
     { skip: shouldSkipRoleRefs },
   );
-  const { data: permissions } = useGetRolePermissionsQuery(
+  const { data: permissions, isLoading: isPermissionsLoading } = useGetRolePermissionsQuery(
     {
       party: actingParty?.partyUuid ?? '',
       from: fromParty?.partyUuid,
@@ -140,7 +140,7 @@ export const RoleInfo = ({ role }: RoleInfoProps) => {
           />
         </div>
       )}
-      {!hasRole && enableRoleDeletionFlag && (
+      {!hasRole && enableRoleDeletionFlag && !isPermissionsLoading && (
         <div className={classes.deleteRoleButtonContainer}>
           <DsParagraph data-size='md'>{t('role.cannot_assign_role_poa')}</DsParagraph>
         </div>

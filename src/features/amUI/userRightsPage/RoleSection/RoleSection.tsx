@@ -19,9 +19,7 @@ export const RoleSection = () => {
       <RoleList
         onSelect={(role, error) => {
           setModalItem(role);
-          if (error) {
-            setDeleteError(error);
-          }
+          setDeleteError(error ?? null);
           modalRef.current?.showModal();
         }}
         isLoading={isLoading}
@@ -30,7 +28,10 @@ export const RoleSection = () => {
         <RoleInfoModal
           modalRef={modalRef}
           role={modalItem}
-          onClose={() => setModalItem(undefined)}
+          onClose={() => {
+            setModalItem(undefined);
+            setDeleteError(null);
+          }}
           openWithError={deleteError as ActionError}
         />
       )}
