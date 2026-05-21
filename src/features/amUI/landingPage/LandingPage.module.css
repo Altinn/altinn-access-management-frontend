@@ -60,10 +60,6 @@
   box-shadow: var(--ds-shadow-xs);
 }
 
-.landingPageDetails {
-  border-radius: 1px !important;
-}
-
 .landingPageAlertSummary {
   font-weight: var(--ds-body-md-font-weight);
 }
