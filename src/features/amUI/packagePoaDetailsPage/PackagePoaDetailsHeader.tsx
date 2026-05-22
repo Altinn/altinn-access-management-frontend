@@ -23,7 +23,7 @@ export const PackagePoaDetailsHeader: React.FC<PackagePoaDetailsHeaderProps> = (
     <>
       <PackageIcon
         className={classes.packageIcon}
-        aria-hidden={true}
+        aria-hidden='true'
       />
       <DsHeading
         level={1}

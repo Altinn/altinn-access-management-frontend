@@ -303,7 +303,7 @@ const UnsyncedConnectionAlert = () => {
           >
             {t('error_page.unsynced_connection_link')}
             <ArrowRightIcon
-              aria-hidden={true}
+              aria-hidden='true'
               fontSize='1.3rem'
             />
           </Link>

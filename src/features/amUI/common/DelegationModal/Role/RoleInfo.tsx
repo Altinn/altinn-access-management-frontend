@@ -92,6 +92,7 @@ export const RoleInfo = ({ role }: RoleInfoProps) => {
             <ExclamationmarkTriangleFillIcon
               fontSize='1.5rem'
               className={classes.warningIcon}
+              aria-hidden='true'
             />
             <DsParagraph data-size='xs'>{t('a2Alerts.legacyRoleContent')}</DsParagraph>
           </div>
@@ -101,6 +102,7 @@ export const RoleInfo = ({ role }: RoleInfoProps) => {
             <InformationSquareFillIcon
               fontSize='1.5rem'
               className={classes.inheritedInfoIcon}
+              aria-hidden='true'
             />
             <DsParagraph data-size='xs'>
               {t('role.provider_status')}
@@ -121,7 +123,7 @@ export const RoleInfo = ({ role }: RoleInfoProps) => {
             rel='noopener noreferrer'
           >
             {t('role.resources_disclaimer_link')}
-            <ExternalLinkIcon aria-hidden />
+            <ExternalLinkIcon aria-hidden='true' />
           </a>
         </DsLink>
       </DsParagraph>

@@ -160,7 +160,7 @@ export const DelegationModalContent = ({
                 data-color='neutral'
                 onClick={() => setInfoView(false)}
               >
-                <ArrowLeftIcon />
+                <ArrowLeftIcon aria-hidden='true' />
                 {t('common.back')}
               </Button>
             )}

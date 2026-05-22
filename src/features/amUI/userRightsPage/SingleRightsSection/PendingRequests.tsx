@@ -63,6 +63,7 @@ export const PendingRequests = () => {
           border='solid'
           interactive
           as='button'
+          containerAs='div'
           badge={
             isSmallScreen ? undefined : <div>{t('delegation_modal.request.view_requests')}</div>
           }
@@ -165,7 +166,7 @@ export const PendingRequestsList = ({
             className={classes.backButton}
             onClick={() => setSelectedResource(null)}
           >
-            <ArrowLeftIcon />
+            <ArrowLeftIcon aria-hidden='true' />
             {t('common.back')}
           </DsButton>
           <ResourceInfo
@@ -202,7 +203,7 @@ export const PendingRequestsList = ({
                   disabled={isLoadingRequest(resource.identifier)}
                   loading={isLoadingRequest(resource.identifier)}
                 >
-                  <MinusCircleIcon />
+                  <MinusCircleIcon aria-hidden='true' />
                   {isSmallScreen ? '' : t('common.delete')}
                 </DsButton>
               );

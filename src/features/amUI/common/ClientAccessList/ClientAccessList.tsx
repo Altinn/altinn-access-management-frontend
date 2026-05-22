@@ -100,7 +100,7 @@ export const ClientAccessList = ({
                 });
               }}
             >
-              <MinusCircleIcon />
+              <MinusCircleIcon aria-hidden='true' />
               {t('client_administration_page.remove_package_button')}
             </Button>
           );
@@ -118,7 +118,7 @@ export const ClientAccessList = ({
                 });
               }}
             >
-              <PlusCircleIcon />
+              <PlusCircleIcon aria-hidden='true' />
               {t('client_administration_page.delegate_package_button')}
             </Button>
           );

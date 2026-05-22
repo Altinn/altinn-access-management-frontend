@@ -14,7 +14,6 @@ import { TabContentSkeleton } from '../../common/RightsTabs/TabContentSkeleton';
 import { ActiveDelegations } from './ActiveDelegations';
 import { AccessPackageInfoAlert } from './AccessPackageInfoAlert';
 import { PendingPackageRequests } from './PendingPackageRequests/Requests';
-import { QuestionmarkCircleIcon } from '@navikt/aksel-icons';
 
 import classes from './AccessPackageSection.module.css';
 import { isGuardianshipUrn } from '@/resources/utils';

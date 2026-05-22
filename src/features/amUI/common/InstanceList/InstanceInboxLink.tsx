@@ -29,7 +29,7 @@ export const InstanceInboxLink = ({ instance, isLarge = false }: InstanceInboxLi
         variant='secondary'
       >
         <a href={href}>
-          <EnvelopeClosedIcon aria-hidden />
+          <EnvelopeClosedIcon aria-hidden='true' />
           {t('instance_detail_page.see_in_inbox')}
         </a>
       </DsButton>
@@ -44,7 +44,7 @@ export const InstanceInboxLink = ({ instance, isLarge = false }: InstanceInboxLi
       as='a'
       href={href}
     >
-      <EnvelopeClosedIcon aria-hidden /> {t('instance_detail_page.see_in_inbox')}
+      <EnvelopeClosedIcon aria-hidden='true' /> {t('instance_detail_page.see_in_inbox')}
     </Button>
   );
 };

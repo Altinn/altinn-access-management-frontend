@@ -80,6 +80,7 @@ export const RoleStatusMessage = ({ role }: RoleStatusMessageProps) => {
             <InformationSquareFillIcon
               fontSize='1.5rem'
               className={classes.inheritedInfoIcon}
+              aria-hidden='true'
             />
             <DsParagraph data-size='xs'>
               <Trans

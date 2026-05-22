@@ -4,7 +4,6 @@ import { useTranslation } from 'react-i18next';
 import { Link, useLocation } from 'react-router';
 import classes from './SystemUserOverviewPage.module.css';
 import { Badge, DsHeading, List, ListItem } from '@altinn/altinn-components';
-import { TenancyIcon } from '@navikt/aksel-icons';
 import {
   getSystemUserAgentRequestUrl,
   getSystemUserRequestUrl,

@@ -41,7 +41,7 @@ export const RequestPackageDetail = ({
         className={classes.backButton}
         onClick={onBack}
       >
-        <ArrowLeftIcon />
+        <ArrowLeftIcon aria-hidden='true' />
         {t('common.back')}
       </DsButton>
       <PackageHeader name={pkg.name} />
