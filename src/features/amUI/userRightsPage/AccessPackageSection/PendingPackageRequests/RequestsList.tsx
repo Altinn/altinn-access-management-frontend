@@ -92,7 +92,7 @@ export const PendingPackageRequestsList = ({
             className={classes.backButton}
             onClick={() => setSelectedRequest(null)}
           >
-            <ArrowLeftIcon />
+            <ArrowLeftIcon aria-hidden='true' />
             {t('common.back')}
           </DsButton>
           <AccessPackageInfo
@@ -138,7 +138,7 @@ export const PendingPackageRequestsList = ({
                       disabled={loadingByRequestId[req.id]}
                       loading={loadingByRequestId[req.id]}
                     >
-                      <MinusCircleIcon />
+                      <MinusCircleIcon aria-hidden='true' />
                       {isSmallScreen ? '' : t('common.delete')}
                     </Button>
                   }

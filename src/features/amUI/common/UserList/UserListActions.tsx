@@ -56,7 +56,7 @@ export const UserListActions = ({
           onClick={() => onDelegate(user)}
           aria-label={t('common.give_poa')}
         >
-          <PlusCircleIcon />
+          <PlusCircleIcon aria-hidden='true' />
           {!isSmall && (delegateLabel ?? t('common.give_poa'))}
         </DsButton>
       )}
@@ -67,7 +67,7 @@ export const UserListActions = ({
           onClick={() => onRequest(user)}
           aria-label={t('common.request_poa')}
         >
-          <PlusCircleIcon />
+          <PlusCircleIcon aria-hidden='true' />
           {!isSmall && t('common.request_poa')}
         </DsButton>
       )}
@@ -78,7 +78,7 @@ export const UserListActions = ({
           onClick={() => onRevoke(user)}
           aria-label={revokeLabel ?? t('common.delete_poa')}
         >
-          <MinusCircleIcon />
+          <MinusCircleIcon aria-hidden='true' />
           {!isSmall && (revokeLabel ?? t('common.delete_poa'))}
         </DsButton>
       )}

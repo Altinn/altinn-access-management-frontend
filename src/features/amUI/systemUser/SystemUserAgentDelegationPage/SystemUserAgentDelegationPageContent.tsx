@@ -368,7 +368,7 @@ export const SystemUserAgentDelegationPageContent = ({
                   disabled={isLoadingSelf}
                   onClick={assignSelfToSystemUser}
                 >
-                  <PlusIcon />
+                  <PlusIcon aria-hidden='true' />
                   {t('systemuser_agent_delegation.add_own_organization')}
                 </DsButton>
               )}
@@ -396,7 +396,7 @@ export const SystemUserAgentDelegationPageContent = ({
                     disabled={isLoadingSelf}
                     onClick={assignSelfToSystemUser}
                   >
-                    <PlusCircleIcon />
+                    <PlusCircleIcon aria-hidden='true' />
                     {!isSmall && t('systemuser_agent_delegation.add_own_organization_list')}
                   </DsButton>
                 )}
@@ -409,7 +409,7 @@ export const SystemUserAgentDelegationPageContent = ({
                     disabled={isLoadingSelf}
                     onClick={removeSelfFromSystemuser}
                   >
-                    <MinusCircleIcon />
+                    <MinusCircleIcon aria-hidden='true' />
                     {!isSmall && t('systemuser_agent_delegation.remove')}
                   </DsButton>
                 )}
@@ -423,7 +423,7 @@ export const SystemUserAgentDelegationPageContent = ({
                   data-size='sm'
                   onClick={enableAddCustomers}
                 >
-                  <PencilIcon />
+                  <PencilIcon aria-hidden='true' />
                   {t('systemuser_agent_delegation.edit_customers')}
                 </DsButton>
               )}

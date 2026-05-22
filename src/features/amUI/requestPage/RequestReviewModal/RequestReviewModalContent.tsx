@@ -91,7 +91,10 @@ export const RequestReviewModalContent = ({ request, onClose }: RequestReviewMod
       return (
         <span className={classes.processedStatus}>
           <DsParagraph data-size='md'>{t('request_page.review_approved')}</DsParagraph>
-          <CheckmarkCircleIcon className={classes.approvedIcon} />
+          <CheckmarkCircleIcon
+            className={classes.approvedIcon}
+            aria-hidden='true'
+          />
         </span>
       );
     }
@@ -99,7 +102,10 @@ export const RequestReviewModalContent = ({ request, onClose }: RequestReviewMod
       return (
         <span className={classes.processedStatus}>
           <DsParagraph data-size='md'>{t('request_page.review_rejected')}</DsParagraph>
-          <CircleSlashIcon className={classes.rejectedIcon} />
+          <CircleSlashIcon
+            className={classes.rejectedIcon}
+            aria-hidden='true'
+          />
         </span>
       );
     }
@@ -107,11 +113,19 @@ export const RequestReviewModalContent = ({ request, onClose }: RequestReviewMod
       return (
         <span className={classes.processedStatus}>
           <DsParagraph data-size='md'>{t('request_page.review_warning')}</DsParagraph>
-          <ExclamationmarkTriangleFillIcon className={classes.warningIcon} />
+          <ExclamationmarkTriangleFillIcon
+            className={classes.warningIcon}
+            aria-hidden='true'
+          />
         </span>
       );
     }
-    return <ChevronRightIcon className={classes.chevronIcon} />;
+    return (
+      <ChevronRightIcon
+        className={classes.chevronIcon}
+        aria-hidden='true'
+      />
+    );
   };
 
   return (

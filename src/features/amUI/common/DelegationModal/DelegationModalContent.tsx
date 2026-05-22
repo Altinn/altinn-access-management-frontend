@@ -142,7 +142,7 @@ export const DelegationModalContent = ({
         className={classes.triggerButton}
       >
         {triggerButtonText}
-        <PlusIcon />
+        <PlusIcon aria-hidden='true' />
       </DsDialog.Trigger>
       <DsDialog
         className={classes.modalDialog}
@@ -160,7 +160,7 @@ export const DelegationModalContent = ({
                 data-color='neutral'
                 onClick={() => setInfoView(false)}
               >
-                <ArrowLeftIcon />
+                <ArrowLeftIcon aria-hidden='true' />
                 {t('common.back')}
               </Button>
             )}

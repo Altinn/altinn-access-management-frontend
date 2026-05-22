@@ -157,7 +157,7 @@ export const InstanceDetailPageContent = () => {
         className={classes.inboxButton}
       >
         <a href={inboxUrl}>
-          {<EnvelopeClosedIcon aria-hidden />}
+          {<EnvelopeClosedIcon aria-hidden='true' />}
           {t('instance_detail_page.see_in_inbox')}
         </a>
       </DsButton>

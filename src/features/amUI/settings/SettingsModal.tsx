@@ -14,8 +14,7 @@ import {
   useGetOrgNotificationAddressesQuery,
 } from '@/rtk/features/settingsApi';
 import { usePartyRepresentation } from '../common/PartyRepresentationContext/PartyRepresentationContext';
-import { ChatIcon, PaperplaneIcon } from '@navikt/aksel-icons';
-import { PlusIcon } from '@navikt/aksel-icons';
+import { ChatIcon, PaperplaneIcon, PlusIcon } from '@navikt/aksel-icons';
 
 import classes from './SettingsModal.module.css';
 import { EmailAddressFields } from './EmailAddressFields';
@@ -76,12 +75,22 @@ export const SettingsModal = ({
     case 'email':
       headingText = t('settings_page.alerts_on_email');
       labelText = t('settings_page.email_label');
-      icon = <PaperplaneIcon fontSize='2rem' />;
+      icon = (
+        <PaperplaneIcon
+          fontSize='2rem'
+          aria-hidden='true'
+        />
+      );
       break;
     case 'sms':
       headingText = t('settings_page.alerts_on_sms');
       labelText = t('settings_page.sms_label');
-      icon = <ChatIcon fontSize='2rem' />;
+      icon = (
+        <ChatIcon
+          fontSize='2rem'
+          aria-hidden='true'
+        />
+      );
       break;
     default:
       return null;
@@ -159,7 +168,7 @@ export const SettingsModal = ({
           }}
           disabled={isLoading || addressList.length >= 10}
         >
-          <PlusIcon />
+          <PlusIcon aria-hidden='true' />
           {t('settings_page.add_more')}
         </DsButton>
         <DsParagraph className={classes.infoText}>

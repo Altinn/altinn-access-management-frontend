@@ -77,7 +77,7 @@ export const DeleteResourceButton = ({
           );
         }}
       >
-        <MinusCircleIcon />
+        <MinusCircleIcon aria-hidden='true' />
         {fullText && t('common.delete_poa')}
       </Button>
     )

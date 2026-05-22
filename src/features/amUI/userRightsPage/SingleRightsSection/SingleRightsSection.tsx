@@ -122,7 +122,7 @@ export const SingleRightsSection = ({ isReportee = false }: { isReportee?: boole
               variant='tertiary'
               aria-label={t('single_rights.helptext_button')}
             >
-              <QuestionmarkCircleIcon />
+              <QuestionmarkCircleIcon aria-hidden='true' />
             </DsPopover.Trigger>
             <DsPopover>{t('single_rights.helptext_content')}</DsPopover>
           </DsPopover.TriggerContext>

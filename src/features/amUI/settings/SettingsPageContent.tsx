@@ -97,7 +97,7 @@ export const SettingsPageContent = () => {
             variant='tertiary'
             icon
           >
-            <QuestionmarkCircleIcon />
+            <QuestionmarkCircleIcon aria-hidden='true' />
           </DsPopover.Trigger>
           <DsPopover placement='right'>
             <Trans
@@ -121,7 +121,7 @@ export const SettingsPageContent = () => {
             id='settings-email-alerts'
             title={t('settings_page.alerts_on_email')}
             value={emailAddresses.join(', ')}
-            icon={<PaperplaneIcon />}
+            icon={<PaperplaneIcon aria-hidden='true' />}
             badge={
               emailAddresses.length > 0 && {
                 label:
@@ -141,7 +141,7 @@ export const SettingsPageContent = () => {
             id='settings-sms-alerts'
             title={t('settings_page.alerts_on_sms')}
             value={phoneNumbers.join(', ')}
-            icon={<ChatIcon />}
+            icon={<ChatIcon aria-hidden='true' />}
             badge={
               phoneNumbers.length > 0 && {
                 label:

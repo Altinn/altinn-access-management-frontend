@@ -139,7 +139,7 @@ export const ActiveConsentsPage = () => {
           >
             <Link to={`/${ConsentPath.Consent}/${ConsentPath.Log}`}>
               <FolderFileIcon
-                aria-hidden
+                aria-hidden='true'
                 fontSize={24}
               />
               <span>{t('active_consents.consent_log')}</span>

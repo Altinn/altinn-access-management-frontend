@@ -50,7 +50,7 @@ export const DelegateAccessPackageActionControl = ({
         disabled={disabled}
         aria-label={t('common.give_poa_for', { poa_object: accessPackageName })}
       >
-        <PlusCircleIcon />
+        <PlusCircleIcon aria-hidden='true' />
         {t('common.give_poa')}
       </Button>
     );
@@ -66,7 +66,7 @@ export const DelegateAccessPackageActionControl = ({
           onClick={onDeleteRequest}
           aria-label={t('common.delete_request_for', { poa_object: accessPackageName })}
         >
-          <MinusCircleIcon />
+          <MinusCircleIcon aria-hidden='true' />
           {t('delegation_modal.request.delete_request')}
         </Button>
       );
@@ -81,7 +81,7 @@ export const DelegateAccessPackageActionControl = ({
         onClick={onRequest}
         aria-label={t('common.request_poa_for', { poa_object: accessPackageName })}
       >
-        <PlusCircleIcon />
+        <PlusCircleIcon aria-hidden='true' />
         {t('common.request_poa')}
       </Button>
     );
