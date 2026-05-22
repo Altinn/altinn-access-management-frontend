@@ -1,15 +1,15 @@
 import { useCallback } from 'react';
 import { useTranslation } from 'react-i18next';
-import { formatDisplayName } from '@altinn/altinn-components';
+import { DsParagraph, formatDisplayName } from '@altinn/altinn-components';
 
 import { useGetMaskinportenSuppliersQuery } from '@/rtk/features/maskinportenApi';
 
 import { usePartyRepresentation } from '../common/PartyRepresentationContext/PartyRepresentationContext';
 import { AddSupplierButton } from './AddSupplierButton';
 import { MaskinportenUserSearch } from './MaskinportenUserSearch';
+import { MaskinportenInfoPopover } from './MaskinportenInfoPopover';
 import classes from './MaskinportenPage.module.css';
 import { useNavigate } from 'react-router';
-import { DsParagraph } from '@altinn/altinn-components';
 
 type SuppliersTabProps = {
   party: string;
@@ -41,11 +41,18 @@ export const SuppliersTab = ({ party, isActive, canFetch }: SuppliersTabProps) =
 
   return (
     <div className={classes.panelContent}>
-      <DsParagraph>
-        {t('maskinporten_page.suppliers_description', {
-          name: formatDisplayName({ fullName: actingParty?.name ?? '', type: 'company' }) ?? '',
-        })}
-      </DsParagraph>
+      <div className={classes.description}>
+        <DsParagraph>
+          {t('maskinporten_page.suppliers_description', {
+            name: formatDisplayName({ fullName: actingParty?.name ?? '', type: 'company' }) ?? '',
+          })}
+        </DsParagraph>
+        <MaskinportenInfoPopover
+          triggerAriaLabel={t('maskinporten_page.suppliers_info_icon_label')}
+          paragraph1={t('maskinporten_page.suppliers_info_body1')}
+          paragraph2={t('maskinporten_page.suppliers_info_body2')}
+        />
+      </div>
       <MaskinportenUserSearch
         connections={suppliers}
         isLoading={isLoading}
