@@ -23,6 +23,8 @@ declare global {
       enableAddSelfToSystemuser: boolean;
       enableRequestAccess: boolean;
       enableDialogportenDialogLookup: boolean;
+      enableMaskinportenAdministration: boolean;
+      enableRoleDeletion: boolean;
     };
   }
 }

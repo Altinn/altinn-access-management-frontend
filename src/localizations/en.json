@@ -100,7 +100,9 @@
     "digdir": "The Norwegian Digitalisation Agency",
     "skiplink": "Skip to main content",
     "no_access_to_page": "You do not have access to this page for the selected actor",
-    "see_details": "See details"
+    "see_details": "See details",
+    "yes_delete": "Yes, delete",
+    "confirm_delete_heading": "Are you sure you want to delete this power of attorney?"
   },
   "info_banner": {
     "info": "June 19: the old Altinn will be shut down.",
@@ -377,11 +379,17 @@
     "resources_empty": "This role has no services.",
     "resources_disclaimer": "This role might still grant access to services that only exist in the old solution.",
     "resources_disclaimer_link": "See the list of services in the old solution",
+    "delete_role_confirmation": "Roles from the old Altinn solution have been discontinued, so you will NOT be able to grant power of attorney to this role again.",
+    "deleting_role_loading": "Waiting for the role to be deleted...",
+    "delete_role_success": "The power of attorney for this role has been deleted.",
+    "delete_role_error": "Could not delete the role.",
+    "cannot_assign_role_poa": "This role has been discontinued and can no longer be granted as a power of attorney. To grant access to services, please use access packages or single services.",
     "access_status": {
       "via_role": "{{user_name}} has access to this through the role they hold in {{via_name}}.",
       "via_connection": "{{user_name}} has access to this through {{via_name}}.",
       "via_keyrole": "{{user_name}} has access to this through their role in {{via_name}}.",
-      "via_priv": "{{user_name}} has access to this through their role as a private individual."
+      "via_priv": "{{user_name}} has access to this through their role as a private individual.",
+      "via_er": "{{user_name}} has access to this through their role in {{via_name}}. It cannot be deleted."
     }
   },
   "user_roles": {
@@ -565,7 +573,8 @@
       "via_role": "{{user_name}} has access to this access package through the role they hold in {{via_name}}. This access package cannot be deleted.",
       "via_connection": "{{user_name}} has access to this access package through {{via_name}}. This access package cannot be deleted.",
       "via_keyrole": "{{user_name}} has this access package through their role in {{via_name}}. This access package cannot be deleted.",
-      "via_priv": "{{user_name}} has this power of attorney through their role as a private individual. It cannot be deleted."
+      "via_priv": "{{user_name}} has this power of attorney through their role as a private individual. It cannot be deleted.",
+      "via_er": "{{user_name}} has access to this through their role in {{via_name}}. It cannot be deleted."
     },
     "cannot_delegate_here": "This power of attorney cannot be granted here.",
     "delegation_check_not_delegable": "You cannot grant this power of attorney.",
@@ -1084,13 +1093,13 @@
   },
   "landing_page": {
     "page_title": "Access management - Altinn",
-    "alert_heading": "You are now in the new access management solution",
-    "alert_body": "Today's Altinn roles have been replaced by access packages with services.",
-    "alert_body_p2": "Please note that there are some services you cannot grant access to in the new solution. If you cannot find the service here, you can go to the old solution.",
-    "alert_heading_priv": "This is the new access management solution for private individuals",
-    "alert_body_priv": "Here, the current Altinn roles are replaced with access packages that contain forms and services. You can give these to others if you want someone to help you in Altinn.",
-    "alert_body_p2_priv": "Please note that there are some services you cannot grant access to in the new Altinn yet. These are still found in the old solution.",
-    "alert_link": "Go to old Altinn",
+    "alert_heading": "New solution for access management. Here's what you need to do!",
+    "alert_heading_priv": "New solution for access management",
+    "alert_body": "The current Altinn roles have been replaced by access packages. An access package contains authorization for various forms and services within the same category.",
+    "alert_body_p2": "Access rights you have previously granted in the old Altinn must now be replaced with new authorizations.",
+    "alert_body_p3": "Select the \"Users\" menu item, find the desired user, and assign access packages or individual services.",
+    "alert_link": "Step-by-step guide for assigning authorizations",
+    "alert_link_href": "https://info.altinn.no/en/help/ny-tilgangsstyring/steg-for-steg-guider/",
     "your_content_heading": "Your accesses",
     "shortcut_links_heading": "Other accesses",
     "other_links_heading": "Other",

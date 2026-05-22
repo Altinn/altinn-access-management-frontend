@@ -1,4 +1,4 @@
-import React, { useMemo, useState } from 'react';
+import React, { useEffect, useMemo, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate, useSearchParams } from 'react-router';
 import { DsAlert, DsButton, DsHeading, DsParagraph } from '@altinn/altinn-components';
@@ -26,8 +26,15 @@ export const ConsentRequestPage = () => {
   const requestId = searchParams.get('id') ?? '';
   const language = getLanguage(i18n.language);
   const skipLogout = searchParams.get('skiplogout');
+  const receiptHeadingRef = useRef<HTMLHeadingElement>(null);
   const navigate = useNavigate();
   const [isReceiptVisible, setIsReceiptVisible] = useState<boolean>(false);
+
+  useEffect(() => {
+    if (isReceiptVisible) {
+      receiptHeadingRef.current?.focus();
+    }
+  }, [isReceiptVisible]);
 
   const {
     data: request,
@@ -129,6 +136,8 @@ export const ConsentRequestPage = () => {
       <DsHeading
         level={1}
         data-size='md'
+        tabIndex={-1}
+        ref={receiptHeadingRef}
       >
         {memoizedRequest?.isPoa
           ? t('consent_request.receipt_header_poa')

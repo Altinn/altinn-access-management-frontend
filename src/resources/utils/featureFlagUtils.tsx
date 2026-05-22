@@ -107,3 +107,7 @@ export const enableDialogportenDialogLookup = () => {
 export const enableMaskinportenAdministration = () => {
   return window.featureFlags?.enableMaskinportenAdministration === true;
 };
+
+export const enableRoleDeletion = () => {
+  return window.featureFlags?.enableRoleDeletion === true;
+};

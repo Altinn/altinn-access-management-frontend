@@ -6,8 +6,8 @@ using RoleMetadata = Altinn.AccessManagement.UI.Core.Models.Common.Role;
 namespace Altinn.AccessManagement.UI.Core.Services.Interfaces
 {
     /// <summary>
-        /// Service for access package logic
-        /// </summary>
+    /// Service for access package logic
+    /// </summary>
     public interface IRoleService
     {
         /// <summary>
@@ -42,5 +42,14 @@ namespace Altinn.AccessManagement.UI.Core.Services.Interfaces
         /// <param name="includePackageResources">Whether to include resources assigned via packages.</param>
         /// <param name="languageCode">Language code for localization.</param>
         Task<IEnumerable<ResourceAM>> GetRoleResources(string roleCode, string variant, bool includePackageResources, string languageCode);
+
+        /// <summary>
+        /// Removes an Altinn 2 role assignment between two parties.
+        /// </summary>
+        /// <param name="party">The party performing the action.</param>
+        /// <param name="from">The right owner (the party that has the role).</param>
+        /// <param name="to">The right holder (the party the role is assigned to).</param>
+        /// <param name="roleCode">The role code to remove.</param>
+        Task RemoveRole(Guid party, Guid from, Guid to, string roleCode);
     }
 }
