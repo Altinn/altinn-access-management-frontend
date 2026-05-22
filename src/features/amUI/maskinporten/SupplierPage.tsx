@@ -72,7 +72,7 @@ export const SupplierPage = () => {
           >
             <DelegationModalProvider>
               <Breadcrumbs
-                items={['root', 'maskinporten']}
+                items={['root', 'maskinporten_suppliers']}
                 lastBreadcrumb={{ label: supplierName || t('maskinporten_page.supplier_title') }}
               />
               {isLoading ? (

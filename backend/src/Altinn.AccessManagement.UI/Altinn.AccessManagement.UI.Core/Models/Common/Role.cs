@@ -56,6 +56,11 @@ public class Role
     public Provider Provider { get; set; }
 
     /// <summary>
+    /// This flag is true if the role assignment can be revoked
+    /// </summary>
+    public bool IsRevocable { get; set; }
+
+    /// <summary>
     /// Construct from Role
     /// </summary>
     public Role()

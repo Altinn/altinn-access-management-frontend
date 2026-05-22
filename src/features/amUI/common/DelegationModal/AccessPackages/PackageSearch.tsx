@@ -51,10 +51,10 @@ export const PackageSearch = ({
             components={{ strong: <strong /> }}
           />
         </DsHeading>
-        <DsParagraph className={classes.description}>
-          {t('delegation_modal.package_delegation_description')}
+        <div className={classes.description}>
+          <DsParagraph>{t('delegation_modal.package_delegation_description')}</DsParagraph>
           <AccessPackageInfoPopover />
-        </DsParagraph>
+        </div>
         <search>
           <div className={classes.searchInputs}>
             <DebouncedSearchField

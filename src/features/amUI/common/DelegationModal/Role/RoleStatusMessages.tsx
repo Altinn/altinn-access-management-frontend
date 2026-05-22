@@ -11,6 +11,7 @@ const STATUS_TRANSLATION_KEYS: Record<InheritedStatusType, string> = {
   [InheritedStatusType.ViaRole]: 'role.access_status.via_role',
   [InheritedStatusType.ViaConnection]: 'role.access_status.via_connection',
   [InheritedStatusType.ViaKeyRole]: 'role.access_status.via_keyrole',
+  [InheritedStatusType.ViaER]: 'role.access_status.via_er',
 };
 
 export interface RoleStatusMessageProps {

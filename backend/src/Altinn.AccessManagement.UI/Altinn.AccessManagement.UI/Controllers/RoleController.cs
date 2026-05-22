@@ -132,6 +132,43 @@ namespace Altinn.AccessManagement.UI.Controllers
         }
 
         /// <summary>
+        /// Removes an Altinn 2 role assignment from a connection between two parties.
+        /// </summary>
+        /// <param name="party">The party performing the action.</param>
+        /// <param name="from">The right owner (the party that has the role).</param>
+        /// <param name="to">The right holder (the party the role is assigned to).</param>
+        /// <param name="roleCode">The role code to remove.</param>
+        [HttpDelete("roles")]
+        [Authorize]
+        public async Task<IActionResult> DeleteRole(
+            [FromQuery] Guid party,
+            [FromQuery] Guid from,
+            [FromQuery] Guid to,
+            [FromQuery(Name = "rolecode")] string roleCode)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            if (string.IsNullOrWhiteSpace(roleCode))
+            {
+                return BadRequest("rolecode query parameter must be provided.");
+            }
+
+            try
+            {
+                await _roleService.RemoveRole(party, from, to, roleCode);
+                return NoContent();
+            }
+            catch (HttpStatusException ex)
+            {
+                string responseContent = ex.Message;
+                return new ObjectResult(ProblemDetailsFactory.CreateProblemDetails(HttpContext, (int?)ex.StatusCode, "Unexpected HttpStatus response from backend", detail: responseContent));
+            }
+        }
+
+        /// <summary>
         /// Gets the resources available for the specified role.
         /// </summary>
         /// <param name="roleCode">The role code.</param>

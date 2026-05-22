@@ -141,8 +141,8 @@ export const DelegationModalContent = ({
         variant={triggerButtonVariant}
         className={classes.triggerButton}
       >
-        {triggerButtonText}
         <PlusIcon aria-hidden='true' />
+        {triggerButtonText}
       </DsDialog.Trigger>
       <DsDialog
         className={classes.modalDialog}

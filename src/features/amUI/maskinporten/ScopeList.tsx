@@ -50,6 +50,7 @@ export const ScopeList = ({
           filterState={filterState}
           setFilterState={setFilterState}
           serviceOwnerOptions={serviceOwnerOptions}
+          searchPlaceholder={t('maskinporten_page.search_api_placeholder')}
         />
         {addNewResourceButton}
       </div>
