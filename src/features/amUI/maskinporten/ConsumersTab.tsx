@@ -33,7 +33,7 @@ export const ConsumersTab = ({ party, isActive, canFetch }: ConsumersTabProps) =
         </DsParagraph>
         <MaskinportenInfoPopover
           triggerAriaLabel={t('maskinporten_page.consumers_info_icon_label')}
-          bodyBefore={t('maskinporten_page.consumers_info_body')}
+          paragraph1={t('maskinporten_page.consumers_info_body')}
         />
       </div>
       <MaskinportenUserSearch

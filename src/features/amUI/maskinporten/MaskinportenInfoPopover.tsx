@@ -6,14 +6,14 @@ import classes from './MaskinportenInfoPopover.module.css';
 
 type MaskinportenInfoPopoverProps = {
   triggerAriaLabel: string;
-  bodyBefore: string;
-  bodyAfter?: string;
+  paragraph1: string;
+  paragraph2?: string;
 };
 
 export const MaskinportenInfoPopover = ({
   triggerAriaLabel,
-  bodyBefore,
-  bodyAfter,
+  paragraph1,
+  paragraph2,
 }: MaskinportenInfoPopoverProps) => {
   const { t } = useTranslation();
   return (
@@ -28,7 +28,7 @@ export const MaskinportenInfoPopover = ({
         </DsPopover.Trigger>
         <DsPopover className={classes.popover}>
           <div className={classes.infoBox}>
-            <DsParagraph>{bodyBefore}</DsParagraph>
+            <DsParagraph>{paragraph1}</DsParagraph>
             <DsLink
               href='https://samarbeid.digdir.no/maskinporten/maskinporten/25'
               target='_blank'
@@ -36,7 +36,7 @@ export const MaskinportenInfoPopover = ({
             >
               {t('maskinporten_page.info_box_link')}
             </DsLink>
-            {bodyAfter && <DsParagraph>{bodyAfter}</DsParagraph>}
+            {paragraph2 && <DsParagraph>{paragraph2}</DsParagraph>}
           </div>
         </DsPopover>
       </DsPopover.TriggerContext>

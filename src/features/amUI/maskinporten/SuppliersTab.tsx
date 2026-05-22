@@ -49,8 +49,8 @@ export const SuppliersTab = ({ party, isActive, canFetch }: SuppliersTabProps) =
         </DsParagraph>
         <MaskinportenInfoPopover
           triggerAriaLabel={t('maskinporten_page.suppliers_info_icon_label')}
-          bodyBefore={t('maskinporten_page.suppliers_info_body1')}
-          bodyAfter={t('maskinporten_page.suppliers_info_body2')}
+          paragraph1={t('maskinporten_page.suppliers_info_body1')}
+          paragraph2={t('maskinporten_page.suppliers_info_body2')}
         />
       </div>
       <MaskinportenUserSearch

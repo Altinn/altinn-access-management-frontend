@@ -610,7 +610,7 @@
     "consumers_info_icon_label": "Informasjon om konsumenter",
     "info_box_link": "Les mer om bruk av Maskinporten",
     "suppliers_info_body1": "Her kan du gi dine leverandører tilgang til API. Leverandørene kan da hente ut data på virksomheten sin vegne. Husk at virksomheten din må selv ha tilgang til et API før det kan gis videre til andre.",
-    "suppliers_info_body2": "Du må ha tilgangspakken «Maskinporten administrator», samt minst en av tilgangspakkene under området «Integrasjoner».",
+    "suppliers_info_body2": "Du må ha tilgangspakken «Maskinporten administrator», samt minst én av tilgangspakkene under området «Integrasjoner».",
     "consumers_info_body": "Her kan du se hvilke API din virksomhet har mottatt fra andre. Virksomheten din kan da hente ut data på vegne av konsumentene.",
     "no_suppliers": "Ingen leverandører funnet.",
     "no_consumers": "Ingen konsumenter funnet.",
