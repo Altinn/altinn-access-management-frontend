@@ -93,5 +93,22 @@ namespace Altinn.AccessManagement.UI.Integration.Clients
             HttpResponseMessage response = await _client.GetAsync(token, endpointUrl, languageCode: languageCode);
             return await ClientUtils.DeserializeIfSuccessfullStatusCode<IEnumerable<ResourceAM>>(response, _logger, "RoleClient // GetRoleResources");
         }
+
+        /// <inheritdoc />
+        public async Task RemoveRole(Guid party, Guid from, Guid to, string roleCode)
+        {
+            string endpointUrl = $"enduser/connections/roles?party={party}&from={from}&to={to}&rolecode={Uri.EscapeDataString(roleCode ?? string.Empty)}";
+            string token = JwtTokenUtil.GetTokenFromContext(_httpContextAccessor.HttpContext, _platformSettings.JwtCookieName);
+
+            HttpResponseMessage response = await _client.DeleteAsync(token, endpointUrl);
+            if (response.IsSuccessStatusCode)
+            {
+                return;
+            }
+
+            string responseContent = await response.Content.ReadAsStringAsync();
+            _logger.LogError("AccessManagement.UI // RoleClient.RemoveRole // Unexpected HttpStatusCode: {StatusCode}\n {responseBody}", response.StatusCode, responseContent);
+            throw new HttpStatusException("StatusError", "Unexpected response status from Access Management", response.StatusCode, _httpContextAccessor.HttpContext?.TraceIdentifier, responseContent);
+        }
     }
 }

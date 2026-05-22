@@ -73,5 +73,9 @@ namespace Altinn.AccessManagement.UI.Core.Services
         /// <inheritdoc />
         public Task<IEnumerable<ResourceAM>> GetRoleResources(string roleCode, string variant, bool includePackageResources, string languageCode)
             => _roleClient.GetRoleResources(roleCode, variant, includePackageResources, languageCode);
+
+        /// <inheritdoc />
+        public Task RemoveRole(Guid party, Guid from, Guid to, string roleCode)
+            => _roleClient.RemoveRole(party, from, to, roleCode);
     }
 }
