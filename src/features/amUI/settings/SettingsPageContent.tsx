@@ -95,6 +95,7 @@ export const SettingsPageContent = () => {
         <DsPopover.TriggerContext>
           <DsPopover.Trigger
             variant='tertiary'
+            aria-label={t('settings_page.info_button')}
             icon
           >
             <QuestionmarkCircleIcon aria-hidden='true' />

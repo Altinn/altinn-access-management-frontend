@@ -377,7 +377,7 @@ export const SystemUserAgentDelegationPageContent = ({
                   variant='secondary'
                   onClick={enableAddCustomers}
                 >
-                  <PlusIcon />
+                  <PlusIcon aria-hidden='true' />
                   {t('systemuser_agent_delegation.add_customers')}
                 </DsButton>
               )}
