@@ -122,7 +122,7 @@ test.describe('tilgangspakkedelegering fra person til person og person til org',
       await accessManagementFrontPage.goToUsers();
       await accessManagementFrontPage.clickUser('LETT ANKEL');
       await accessManagementFrontPage.goToArea('Arbeidsliv, skole og utdanning');
-      await accessManagementFrontPage.expectUserToHavePackage('Utdanning');
+      await accessManagementFrontPage.userCanDeletePackage('Utdanning');
     });
   });
 
@@ -159,7 +159,7 @@ test.describe('tilgangspakkedelegering fra person til person og person til org',
       await accessManagementFrontPage.expandOrg('OPPLYST KVART TIGER AS');
       await accessManagementFrontPage.clickUser('OPPLYST KVART TIGER AS');
       await accessManagementFrontPage.goToArea('Arbeidsliv, skole og utdanning');
-      await accessManagementFrontPage.expectUserToHavePackage('Utdanning');
+      await accessManagementFrontPage.userCanDeletePackage('Utdanning');
     });
   });
 
@@ -356,7 +356,7 @@ test.describe('tilgangspakkedelegering fra org til person og org til org', () =>
       await accessManagementFrontPage.goToUsers();
       await accessManagementFrontPage.clickUser('UFØLSOM BADERING');
       await accessManagementFrontPage.goToArea('Andre tjenesteytende næringer');
-      await accessManagementFrontPage.expectUserToHavePackage('Posttjenester');
+      await accessManagementFrontPage.userCanDeletePackage('Posttjenester');
     });
   });
 
@@ -393,7 +393,7 @@ test.describe('tilgangspakkedelegering fra org til person og org til org', () =>
       await accessManagementFrontPage.expandOrg('EVENTYRLIG PUSLETE TIGER AS');
       await accessManagementFrontPage.clickUser('EVENTYRLIG PUSLETE TIGER AS');
       await accessManagementFrontPage.goToArea('Andre tjenesteytende næringer');
-      await accessManagementFrontPage.expectUserToHavePackage('Posttjenester');
+      await accessManagementFrontPage.userCanDeletePackage('Posttjenester');
     });
   });
 

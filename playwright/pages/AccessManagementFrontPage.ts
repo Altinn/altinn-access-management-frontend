@@ -43,12 +43,16 @@ export class AccessManagementFrontPage {
     await this.page.getByRole('button', { name: org }).click();
   }
 
-  async clickUser(userName: string) {
-    await this.page.getByRole('link', { name: userName }).click();
+  async clickUser(userName: string, num = 0) {
+    await this.page.getByRole('link', { name: userName }).nth(num).click();
   }
 
   async goToEnkelttjenester() {
     await this.page.getByRole('tab', { name: 'Enkelttjenester' }).click();
+  }
+
+  async goToFullmakterHosAndre() {
+    await this.ourAccessAtOthersLink.click();
   }
 
   async sokEtterEnkelttjeneste(tjenesteNavn: string) {
@@ -81,14 +85,22 @@ export class AccessManagementFrontPage {
     ).toBeVisible();
   }
 
-  async expectUserToHavePackage(packageName: string) {
+  async userCanDeletePackage(packageName: string) {
     await expect(
       this.page.getByRole('button', { name: 'Slett fullmakt for ' + packageName }),
     ).toBeVisible();
   }
 
-  async expectUserToHaveEnkelttjeneste(resourceName: string) {
+  async expectUserToHavePackage(packageName: string) {
+    await expect(this.page.getByRole('button', { name: packageName })).toBeVisible();
+  }
+
+  async userCanDeleteEnkelttjeneste(resourceName: string) {
     await expect(this.page.getByRole('button', { name: 'Slett ' + resourceName })).toBeVisible();
+  }
+
+  async expectUserToHaveEnkelttjeneste(tjenesteNavn: string) {
+    await expect(this.page.getByText(tjenesteNavn)).toBeVisible();
   }
 
   async clickSlettFullmaktForTilgangspakke(packageName: string) {
@@ -108,7 +120,7 @@ export class AccessManagementFrontPage {
     });
     await expect(giFullmaktKnapp).toBeVisible();
     await giFullmaktKnapp.click();
-    await this.expectUserToHavePackage(packageName);
+    await this.userCanDeletePackage(packageName);
   }
 
   async clickAccessPackageToDelegateIfVisible(packageName: string) {

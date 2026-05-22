@@ -67,7 +67,7 @@ test.describe('Enkelttjenestedelegering fra person til person og person til org'
       await accessManagementFrontPage.goToUsers();
       await accessManagementFrontPage.clickUser('KONSERVATIV FATTIGMANNSKOST');
       await accessManagementFrontPage.goToEnkelttjenester();
-      await accessManagementFrontPage.expectUserToHaveEnkelttjeneste('bruno-correspondence');
+      await accessManagementFrontPage.userCanDeleteEnkelttjeneste('bruno-correspondence');
     });
   });
 
@@ -106,7 +106,7 @@ test.describe('Enkelttjenestedelegering fra person til person og person til org'
       await accessManagementFrontPage.expandOrg('OVERFLØDIG SOLID TIGER AS');
       await accessManagementFrontPage.clickUser('OVERFLØDIG SOLID TIGER AS');
       await accessManagementFrontPage.goToEnkelttjenester();
-      await accessManagementFrontPage.expectUserToHaveEnkelttjeneste('bruno-correspondence');
+      await accessManagementFrontPage.userCanDeleteEnkelttjeneste('bruno-correspondence');
     });
   });
 
@@ -261,7 +261,7 @@ test.describe('Enkelttjenestedelegering fra org til person og org til org', () =
       await accessManagementFrontPage.goToUsers();
       await accessManagementFrontPage.clickUser('ANSVARSFULL REGLE');
       await accessManagementFrontPage.goToEnkelttjenester();
-      await accessManagementFrontPage.expectUserToHaveEnkelttjeneste('bruno-correspondence');
+      await accessManagementFrontPage.userCanDeleteEnkelttjeneste('bruno-correspondence');
     });
   });
 
@@ -300,7 +300,7 @@ test.describe('Enkelttjenestedelegering fra org til person og org til org', () =
       await accessManagementFrontPage.expandOrg('RIK INNBRINGENDE TIGER AS');
       await accessManagementFrontPage.clickUser('RIK INNBRINGENDE TIGER AS');
       await accessManagementFrontPage.goToEnkelttjenester();
-      await accessManagementFrontPage.expectUserToHaveEnkelttjeneste('bruno-correspondence');
+      await accessManagementFrontPage.userCanDeleteEnkelttjeneste('bruno-correspondence');
     });
   });
 
