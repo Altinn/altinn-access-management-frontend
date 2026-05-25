@@ -5,14 +5,17 @@ import {
   Button,
   DsParagraph,
   type Color,
-  formatDate,
   type UserListItemProps,
 } from '@altinn/altinn-components';
 import { MinusCircleIcon, PlusCircleIcon } from '@navikt/aksel-icons';
 
 import type { Client } from '@/rtk/features/clientApi';
 import { useAccessPackageLookup } from '@/resources/hooks/useAccessPackageLookup';
-import { formatOrgNr, isSubUnitByType } from '@/resources/utils/reporteeUtils';
+import {
+  getFormattedDateOfBirthLabel,
+  formatOrgNr,
+  isSubUnitByType,
+} from '@/resources/utils/reporteeUtils';
 
 import { buildClientParentNameById, buildClientSortKey } from '../clientSortUtils';
 import { useRoleMetadata } from '../UserRoles/useRoleMetadata';
@@ -171,7 +174,7 @@ export const ClientAccessList = ({
               orgnr: formatOrgNr(client.client.organizationIdentifier),
             })
           : userType === 'person'
-            ? `${t('common.date_of_birth')} ${formatDate(client.client.dateOfBirth ?? '')}`
+            ? getFormattedDateOfBirthLabel(client.client.dateOfBirth)
             : undefined,
     };
   });
