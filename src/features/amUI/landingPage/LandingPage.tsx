@@ -268,7 +268,7 @@ export const LandingPage = () => {
     <PageWrapper>
       <PageLayoutWrapper openAccountMenu={shouldOpenAccountMenu}>
         <div className={classes.landingPage}>
-          <List className={classes.landingPageHeading}>
+          <div className={classes.landingPageHeading}>
             <UserListItem
               id={reportee?.partyUuid ?? ''}
               type={isOrganization(reportee) ? 'company' : 'person'}
@@ -281,8 +281,9 @@ export const LandingPage = () => {
               loading={!reportee}
               interactive={false}
               shadow='none'
+              containerAs='div'
             />
-          </List>
+          </div>
           <LandingPageInfoCard
             isLoading={isLoading}
             isOrganization={isOrganization(reportee)}
