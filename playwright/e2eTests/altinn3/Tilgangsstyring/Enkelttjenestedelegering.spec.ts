@@ -1,6 +1,4 @@
-import { LoginPage } from 'playwright/pages/LoginPage';
 import { test } from '../../../fixture/pomFixture';
-import { AktorvalgHeader } from '../../../pages/AktorvalgHeader';
 import { EnduserConnection } from '../../../api-requests/EnduserConnection';
 
 const service = 'bruno-correspondence';
@@ -27,12 +25,18 @@ test.describe('Enkelttjenestedelegering fra person til person og person til org'
       } catch (error) {
         console.error('Cleanup: Failed to delete single service delegation:', error);
       }
+      try {
+        await api.deleteConnection(delegator.pid, delegator.pid, [recipient.pid]);
+      } catch (error) {
+        console.error('Cleanup: Failed to delete connection:', error);
+      }
     });
 
-    test('Deleger enkelttjeneste til person', async ({ page, accessManagementFrontPage }) => {
-      const login = new LoginPage(page);
-      const aktorvalgHeader = new AktorvalgHeader(page);
-
+    test('Deleger enkelttjeneste til person', async ({
+      login,
+      aktorvalgHeader,
+      accessManagementFrontPage,
+    }) => {
       await test.step('Logg inn', async () => {
         await login.LoginToAccessManagement(delegator.pid);
       });
@@ -83,12 +87,18 @@ test.describe('Enkelttjenestedelegering fra person til person og person til org'
       } catch (error) {
         console.error('Cleanup: Failed to delete single service delegation:', error);
       }
+      try {
+        await api.deleteConnection(delegator.pid, delegator.pid, [recipient.orgNo]);
+      } catch (error) {
+        console.error('Cleanup: Failed to delete connection:', error);
+      }
     });
 
-    test('Deleger enkelttjeneste til virksomhet', async ({ page, accessManagementFrontPage }) => {
-      const login = new LoginPage(page);
-      const aktorvalgHeader = new AktorvalgHeader(page);
-
+    test('Deleger enkelttjeneste til virksomhet', async ({
+      login,
+      aktorvalgHeader,
+      accessManagementFrontPage,
+    }) => {
       await test.step('Logg inn', async () => {
         await login.LoginToAccessManagement(delegator.pid);
       });
@@ -132,26 +142,30 @@ test.describe('Enkelttjenestedelegering fra person til person og person til org'
     });
 
     test.afterEach(async ({}, testInfo) => {
-      if (testInfo.status === 'passed') return;
+      if (testInfo.status !== 'passed') {
+        try {
+          await api.deleteSingleServiceDelegation(
+            delegator.pid,
+            delegator.pid,
+            recipient.pid,
+            service,
+          );
+        } catch (error) {
+          console.error('Cleanup: Failed to delete single service delegation:', error);
+        }
+      }
       try {
-        await api.deleteSingleServiceDelegation(
-          delegator.pid,
-          delegator.pid,
-          recipient.pid,
-          service,
-        );
+        await api.deleteConnection(delegator.pid, delegator.pid, [recipient.pid]);
       } catch (error) {
-        console.error('Cleanup: Failed to delete single service delegation:', error);
+        console.error('Cleanup: Failed to delete connection:', error);
       }
     });
 
     test('Slett enkelttjenestedelegering hos person', async ({
-      page,
+      login,
+      aktorvalgHeader,
       accessManagementFrontPage,
     }) => {
-      const login = new LoginPage(page);
-      const aktorvalgHeader = new AktorvalgHeader(page);
-
       await test.step('Logg inn', async () => {
         await login.LoginToAccessManagement(delegator.pid);
       });
@@ -191,23 +205,30 @@ test.describe('Enkelttjenestedelegering fra person til person og person til org'
     });
 
     test.afterEach(async ({}, testInfo) => {
-      if (testInfo.status === 'passed') return;
+      if (testInfo.status !== 'passed') {
+        try {
+          await api.deleteSingleServiceDelegation(
+            delegator.pid,
+            delegator.pid,
+            recipient.orgNo,
+            service,
+          );
+        } catch (error) {
+          console.error('Cleanup: Failed to delete single service delegation:', error);
+        }
+      }
       try {
-        await api.deleteSingleServiceDelegation(
-          delegator.pid,
-          delegator.pid,
-          recipient.orgNo,
-          service,
-        );
+        await api.deleteConnection(delegator.pid, delegator.pid, [recipient.orgNo]);
       } catch (error) {
-        console.error('Cleanup: Failed to delete single service delegation:', error);
+        console.error('Cleanup: Failed to delete connection:', error);
       }
     });
 
-    test('Slett enkelttjeneste hos virksomhet', async ({ page, accessManagementFrontPage }) => {
-      const login = new LoginPage(page);
-      const aktorvalgHeader = new AktorvalgHeader(page);
-
+    test('Slett enkelttjeneste hos virksomhet', async ({
+      login,
+      aktorvalgHeader,
+      accessManagementFrontPage,
+    }) => {
       await test.step('Logg inn', async () => {
         await login.LoginToAccessManagement(delegator.pid);
       });
@@ -265,15 +286,18 @@ test.describe('Enkelttjenestedelegering fra org til person og org til org', () =
       } catch (error) {
         console.error('Cleanup: Failed to delete single service delegation:', error);
       }
+      try {
+        await api.deleteConnection(delegator.pid, delegator.orgNo, [recipient.pid]);
+      } catch (error) {
+        console.error('Cleanup: Failed to delete connection:', error);
+      }
     });
 
     test('Deleger enkelttjeneste fra org til person', async ({
-      page,
+      login,
+      aktorvalgHeader,
       accessManagementFrontPage,
     }) => {
-      const login = new LoginPage(page);
-      const aktorvalgHeader = new AktorvalgHeader(page);
-
       await test.step('Logg inn', async () => {
         await login.LoginToAccessManagement(delegator.pid);
       });
@@ -328,12 +352,18 @@ test.describe('Enkelttjenestedelegering fra org til person og org til org', () =
       } catch (error) {
         console.error('Cleanup: Failed to delete single service delegation:', error);
       }
+      try {
+        await api.deleteConnection(delegator.pid, delegator.orgNo, [recipient.orgNo]);
+      } catch (error) {
+        console.error('Cleanup: Failed to delete connection:', error);
+      }
     });
 
-    test('Deleger enkelttjeneste fra org til org', async ({ page, accessManagementFrontPage }) => {
-      const login = new LoginPage(page);
-      const aktorvalgHeader = new AktorvalgHeader(page);
-
+    test('Deleger enkelttjeneste fra org til org', async ({
+      login,
+      aktorvalgHeader,
+      accessManagementFrontPage,
+    }) => {
       await test.step('Logg inn', async () => {
         await login.LoginToAccessManagement(delegator.pid);
       });
@@ -381,26 +411,30 @@ test.describe('Enkelttjenestedelegering fra org til person og org til org', () =
     });
 
     test.afterEach(async ({}, testInfo) => {
-      if (testInfo.status === 'passed') return;
+      if (testInfo.status !== 'passed') {
+        try {
+          await api.deleteSingleServiceDelegation(
+            delegator.pid,
+            delegator.orgNo,
+            recipient.pid,
+            service,
+          );
+        } catch (error) {
+          console.error('Cleanup: Failed to delete single service delegation:', error);
+        }
+      }
       try {
-        await api.deleteSingleServiceDelegation(
-          delegator.pid,
-          delegator.orgNo,
-          recipient.pid,
-          service,
-        );
+        await api.deleteConnection(delegator.pid, delegator.orgNo, [recipient.pid]);
       } catch (error) {
-        console.error('Cleanup: Failed to delete single service delegation:', error);
+        console.error('Cleanup: Failed to delete connection:', error);
       }
     });
 
     test('Slett enkelttjenestedelegering fra org til person', async ({
-      page,
+      login,
+      aktorvalgHeader,
       accessManagementFrontPage,
     }) => {
-      const login = new LoginPage(page);
-      const aktorvalgHeader = new AktorvalgHeader(page);
-
       await test.step('Logg inn', async () => {
         await login.LoginToAccessManagement(delegator.pid);
       });
@@ -444,23 +478,30 @@ test.describe('Enkelttjenestedelegering fra org til person og org til org', () =
     });
 
     test.afterEach(async ({}, testInfo) => {
-      if (testInfo.status === 'passed') return;
+      if (testInfo.status !== 'passed') {
+        try {
+          await api.deleteSingleServiceDelegation(
+            delegator.pid,
+            delegator.orgNo,
+            recipient.orgNo,
+            service,
+          );
+        } catch (error) {
+          console.error('Cleanup: Failed to delete single service delegation:', error);
+        }
+      }
       try {
-        await api.deleteSingleServiceDelegation(
-          delegator.pid,
-          delegator.orgNo,
-          recipient.orgNo,
-          service,
-        );
+        await api.deleteConnection(delegator.pid, delegator.orgNo, [recipient.orgNo]);
       } catch (error) {
-        console.error('Cleanup: Failed to delete single service delegation:', error);
+        console.error('Cleanup: Failed to delete connection:', error);
       }
     });
 
-    test('Slett enkelttjeneste fra org til org', async ({ page, accessManagementFrontPage }) => {
-      const login = new LoginPage(page);
-      const aktorvalgHeader = new AktorvalgHeader(page);
-
+    test('Slett enkelttjeneste fra org til org', async ({
+      login,
+      aktorvalgHeader,
+      accessManagementFrontPage,
+    }) => {
       await test.step('Logg inn', async () => {
         await login.LoginToAccessManagement(delegator.pid);
       });
