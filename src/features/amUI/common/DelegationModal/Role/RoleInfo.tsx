@@ -10,7 +10,6 @@ import {
 } from '@navikt/aksel-icons';
 import { usePartyRepresentation } from '../../PartyRepresentationContext/PartyRepresentationContext';
 import { getRedirectToA2UsersListSectionUrl } from '@/resources/utils';
-import { hideA2Links } from '@/resources/utils/featureFlagUtils';
 import { RoleResourcesSection } from './RoleResourcesSection';
 import { RoleStatusMessage } from './RoleStatusMessages';
 import { enableRoleDeletion } from '@/resources/utils/featureFlagUtils';
@@ -115,21 +114,19 @@ export const RoleInfo = ({ role }: RoleInfoProps) => {
       </div>
       <div aria-live='polite'>{(!!deleteError || !!actionError) && deleteErrorAlert()}</div>
       <DsParagraph>{role?.description}</DsParagraph>
-      {!hideA2Links() && (
-        <DsParagraph className={classes.oldRolesDisclaimer}>
-          {t('role.resources_disclaimer')}{' '}
-          <DsLink asChild>
-            <a
-              href={oldSolutionUrl}
-              target='_blank'
-              rel='noopener noreferrer'
-            >
-              {t('role.resources_disclaimer_link')}
-              <ExternalLinkIcon aria-hidden='true' />
-            </a>
-          </DsLink>
-        </DsParagraph>
-      )}
+      <DsParagraph className={classes.oldRolesDisclaimer}>
+        {t('role.resources_disclaimer')}{' '}
+        <DsLink asChild>
+          <a
+            href={oldSolutionUrl}
+            target='_blank'
+            rel='noopener noreferrer'
+          >
+            {t('role.resources_disclaimer_link')}
+            <ExternalLinkIcon aria-hidden='true' />
+          </a>
+        </DsLink>
+      </DsParagraph>
       {!shouldSkipRoleRefs && (
         <RoleResourcesSection
           roleResources={roleResources}

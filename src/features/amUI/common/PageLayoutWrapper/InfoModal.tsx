@@ -8,6 +8,10 @@ import { useTranslation } from 'react-i18next';
 export const InfoModal = () => {
   const { t, i18n } = useTranslation();
 
+  if (hideA2Links()) {
+    return null;
+  }
+
   const goToOldSolution = () => {
     window.location.assign(`${getHostUrl()}ui/profile`);
   };
@@ -17,27 +21,23 @@ export const InfoModal = () => {
     window.location.assign(`${getAltinnStartPageUrl()}${route}`);
   };
 
-  const items = [
-    {
-      icon: ExternalLinkIcon,
-      title: t('info_modal.help_pages'),
-      onClick: goToHelpPages,
-    },
-  ];
-  if (!hideA2Links()) {
-    items.push({
-      icon: LeaveIcon,
-      title: t('info_modal.back_button'),
-      onClick: goToOldSolution,
-    });
-  }
-
   return (
     <FloatingDropdown
       icon={QuestionmarkIcon}
       iconAltText={t('info_modal.info_button')}
       color='company'
-      items={items}
+      items={[
+        {
+          icon: ExternalLinkIcon,
+          title: t('info_modal.help_pages'),
+          onClick: goToHelpPages,
+        },
+        {
+          icon: LeaveIcon,
+          title: t('info_modal.back_button'),
+          onClick: goToOldSolution,
+        },
+      ]}
     />
   );
 };

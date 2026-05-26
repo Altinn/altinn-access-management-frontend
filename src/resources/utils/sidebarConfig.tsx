@@ -12,7 +12,6 @@ import {
   KeyVerticalIcon,
   ExternalLinkIcon,
   DatabaseIcon,
-  PersonIcon,
 } from '@navikt/aksel-icons';
 import ApiIcon from '@/assets/Api.svg?react';
 import i18next, { t } from 'i18next';
