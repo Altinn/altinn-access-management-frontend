@@ -22,11 +22,6 @@ namespace Altinn.AccessManagement.UI.Core.Configuration
         public bool DisplayRoles { get; set; }
 
         /// <summary>
-        /// Whether or not to only display the service/resource delegation feature in the UI
-        /// </summary>
-        public bool DisplayResourceDelegation { get; set; }
-
-        /// <summary>
         /// Whether to enable cross platform links
         /// </summary>
         public bool CrossPlatformLinks { get; set; }

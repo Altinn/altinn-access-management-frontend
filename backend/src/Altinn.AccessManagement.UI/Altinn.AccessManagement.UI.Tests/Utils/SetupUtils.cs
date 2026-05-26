@@ -129,7 +129,6 @@ namespace Altinn.AccessManagement.UI.Tests.Utils
                     services.Configure<FeatureFlags>(options =>
                     {
                         options.DisplayPopularSingleRightsServices = flags?.DisplayPopularSingleRightsServices ?? true;
-                        options.DisplayResourceDelegation = flags?.DisplayResourceDelegation ?? true;
                         options.DisplayConfettiPackage = flags?.DisplayConfettiPackage ?? true;
                         options.DisplayRoles = flags?.DisplayRoles ?? true;
                     });
@@ -158,7 +157,6 @@ namespace Altinn.AccessManagement.UI.Tests.Utils
                     services.Configure<FeatureFlags>(options =>
                     {
                         options.DisplayPopularSingleRightsServices = flags?.DisplayPopularSingleRightsServices ?? true;
-                        options.DisplayResourceDelegation = flags?.DisplayResourceDelegation ?? true;
                         options.DisplayConfettiPackage = flags?.DisplayConfettiPackage ?? true;
                         options.DisplayRoles = flags?.DisplayRoles ?? true;
                         options.UseNewActorsList = flags?.UseNewActorsList ?? false;
@@ -188,7 +186,6 @@ namespace Altinn.AccessManagement.UI.Tests.Utils
                    services.Configure<FeatureFlags>(options =>
                    {
                        options.DisplayPopularSingleRightsServices = flags?.DisplayPopularSingleRightsServices ?? true;
-                       options.DisplayResourceDelegation = flags?.DisplayResourceDelegation ?? true;
                        options.DisplayConfettiPackage = flags?.DisplayConfettiPackage ?? true;
                        options.DisplayRoles = flags?.DisplayRoles ?? true;
                        options.CrossPlatformLinks = flags?.CrossPlatformLinks ?? false;
