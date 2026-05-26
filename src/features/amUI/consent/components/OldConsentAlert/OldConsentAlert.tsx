@@ -1,5 +1,4 @@
 import { getHostUrl } from '@/resources/utils/pathUtils';
-import { hideA2Links } from '@/resources/utils/featureFlagUtils';
 import { DsAlert, DsHeading, DsLink, DsParagraph } from '@altinn/altinn-components';
 import { Trans, useTranslation } from 'react-i18next';
 import classes from './OldConsentAlert.module.css';
@@ -11,9 +10,6 @@ interface OldConsentAlertProps {
 
 export const OldConsentAlert = ({ heading, text }: OldConsentAlertProps) => {
   const { t } = useTranslation();
-  if (hideA2Links()) {
-    return null;
-  }
   return (
     <DsAlert className={classes.consentAlert}>
       <DsHeading

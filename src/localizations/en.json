@@ -926,11 +926,6 @@
     "55_accesspackage_failed_to_get_delegated_packages": "Unable to retrieve delegated access packages.",
     "57_systemuser_failed_to_delete_accesspackage": "Could not delete access package delegation for the system access."
   },
-  "page_not_available": {
-    "title": "Access management for private individuals is still under development",
-    "text": "More content will be added to this page over time. You can still manage access on behalf of yourself as a private individual in the old solution.",
-    "link_text": "Go to old Altinn"
-  },
   "consent_request": {
     "page_title": "Approve consent/power of attorney - Altinn",
     "loading_consent": "Loading request...",

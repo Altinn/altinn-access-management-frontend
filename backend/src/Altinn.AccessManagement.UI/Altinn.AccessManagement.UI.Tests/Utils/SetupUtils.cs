@@ -191,7 +191,6 @@ namespace Altinn.AccessManagement.UI.Tests.Utils
                        options.DisplayResourceDelegation = flags?.DisplayResourceDelegation ?? true;
                        options.DisplayConfettiPackage = flags?.DisplayConfettiPackage ?? true;
                        options.DisplayRoles = flags?.DisplayRoles ?? true;
-                       options.RestrictPrivUse = flags?.RestrictPrivUse ?? false;
                        options.CrossPlatformLinks = flags?.CrossPlatformLinks ?? false;
                    });
                });

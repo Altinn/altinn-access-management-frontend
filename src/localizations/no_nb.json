@@ -923,11 +923,6 @@
     "55_accesspackage_failed_to_get_delegated_packages": "Kunne ikke hente delegerte tilgangspakker.",
     "57_systemuser_failed_to_delete_accesspackage": "Kunne ikke fjerne tilgangspakke-delegering for systemtilgang."
   },
-  "page_not_available": {
-    "title": "Tilgangsstyring for privatpersoner er fortsatt under arbeid",
-    "text": "På denne siden vil det komme mer etterhvert. Du kan fortsatt tilgangsstyre på vegne av deg selv som privatperson i gammel løsning.",
-    "link_text": "Gå til gamle Altinn"
-  },
   "consent_request": {
     "page_title": "Godkjenn samtykke/fullmakt - Altinn",
     "loading_consent": "Laster forespørsel...",
