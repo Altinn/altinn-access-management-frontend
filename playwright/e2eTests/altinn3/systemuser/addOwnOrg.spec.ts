@@ -1,6 +1,5 @@
 import { test, expect } from 'playwright/fixture/pomFixture';
 import { ApiRequests } from 'playwright/api-requests/SystemUserApiRequests';
-import { EnduserConnection } from 'playwright/api-requests/EnduserConnection';
 import { TestdataApi } from 'playwright/util/TestdataApi';
 import { pickRandom } from 'playwright/util/helper';
 
