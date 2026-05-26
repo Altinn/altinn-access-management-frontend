@@ -71,13 +71,6 @@ export const PageLayoutWrapper = ({
                   groups: menuGroups,
                   items: [...sidebarItems, ...shortcutsMenuItem],
                 },
-                footer: (
-                  <Badge
-                    label={t('common.beta')}
-                    variant='base'
-                    color='neutral'
-                  />
-                ),
               }
         }
         content={{ color: reportee?.type ? getAccountType(reportee.type) : 'neutral' }}
