@@ -46,18 +46,6 @@ export class LoginPage {
     await this.autentiserButton.click();
   }
 
-  async loginAcActorOrg(pid: string, orgnummer: string) {
-    const baseUrl = env('BASE_URL');
-    await this.page.goto(baseUrl, { waitUntil: 'commit' });
-    await this.loginButton.click();
-    await this.testIdLink.click();
-    await this.pidInput.fill(pid);
-    await this.autentiserButton.click();
-
-    await expect(this.velgAktoerHeading).toBeVisible();
-    await this.selectActor(this.searchBox, orgnummer);
-  }
-
   async chooseReportee(targetReportee: string) {
     // Search for target reportee in the searchbox
     await expect(this.reporteeSearchBox).toBeVisible();
@@ -78,25 +66,6 @@ export class LoginPage {
   private async authenticateUser(pid: string) {
     await this.pidInput.fill(pid);
     await this.autentiserButton.click();
-  }
-
-  async selectActor(input: Locator, orgnummer: string) {
-    const page = input.page();
-    const aktorPartial = `${orgnummer.slice(0, 3)} ${orgnummer.slice(3, 6)}`;
-    aktorPartial; // For better logging when test fails, as this is the value used in the selector. The full orgnummer is not visible in the UI, so we can't log that.
-    const button = page.getByRole('button', { name: new RegExp(`Org\\.nr\\. ${aktorPartial}`) });
-
-    try {
-      await this.tryTypingInSearchbox(input, orgnummer);
-      if (button.isVisible()) {
-      }
-      await expect(button).toBeVisible({ timeout: 2000 }); // No need to wait long to figure out if this failed
-    } catch (error: unknown) {
-      console.log(`Retrying input after reload due to: ${error}`);
-      await this.tryTypingInSearchbox(input, orgnummer);
-    }
-
-    await button.click();
   }
 
   async tryTypingInSearchbox(input: Locator, party: string) {
