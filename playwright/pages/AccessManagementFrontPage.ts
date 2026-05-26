@@ -79,14 +79,7 @@ export class AccessManagementFrontPage {
 
   async goToArea(areaName: string) {
     const area = this.page.getByRole('button', { name: areaName }).first();
-    for (let attempt = 0; attempt < 3; attempt++) {
-      try {
-        await expect(area).toBeVisible({ timeout: 3000 });
-        break;
-      } catch {
-        await this.page.reload();
-      }
-    }
+    await expect(area).toBeVisible();
     await area.click();
   }
 
