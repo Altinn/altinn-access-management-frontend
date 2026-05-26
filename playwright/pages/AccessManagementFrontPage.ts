@@ -9,6 +9,7 @@ export class AccessManagementFrontPage {
   readonly consentAndPowerOfAttorneyAgreementsLink: Locator;
   readonly tryNewAccessManagementButton: Locator;
   readonly klientadministrasjonButton: Locator;
+  readonly newUserButton: Locator;
 
   constructor(page: Page) {
     this.page = page;
@@ -29,6 +30,7 @@ export class AccessManagementFrontPage {
       name: 'Prøv ny tilgangsstyring',
     });
     this.klientadministrasjonButton = this.page.getByRole('link', { name: 'Klientadministrasjon' });
+    this.newUserButton = this.page.getByRole('button', { name: 'Ny bruker' });
   }
 
   async goToKlientAdministrasjon() {
@@ -76,7 +78,16 @@ export class AccessManagementFrontPage {
   }
 
   async goToArea(areaName: string) {
-    await this.page.getByRole('button', { name: areaName }).first().click();
+    const area = this.page.getByRole('button', { name: areaName }).first();
+    for (let attempt = 0; attempt < 3; attempt++) {
+      try {
+        await expect(area).toBeVisible({ timeout: 3000 });
+        break;
+      } catch {
+        await this.page.reload();
+      }
+    }
+    await area.click();
   }
 
   async expectAccessPackageToBeDelegable(packageName: string) {
@@ -123,16 +134,6 @@ export class AccessManagementFrontPage {
     await this.userCanDeletePackage(packageName);
   }
 
-  async clickAccessPackageToDelegateIfVisible(packageName: string) {
-    await expect(this.page.locator('.ds-spinner')).toHaveCount(0);
-    const accessPackage = await this.page.getByRole('button', {
-      name: 'Gi fullmakt for ' + packageName,
-    });
-    if (await accessPackage.isVisible()) {
-      await accessPackage.click();
-    }
-  }
-
   async clickAccessAreaInPopup(areaName: string) {
     await this.page.getByRole('search').getByRole('button', { name: areaName }).click();
   }
@@ -157,7 +158,7 @@ export class AccessManagementFrontPage {
 
   async clickLeggTilBruker() {
     await this.page.waitForLoadState('domcontentloaded');
-    await this.page.getByRole('button', { name: 'Legg til Ny bruker' }).click();
+    await this.newUserButton.click();
   }
 
   async LukkGiFullmaktVindu() {

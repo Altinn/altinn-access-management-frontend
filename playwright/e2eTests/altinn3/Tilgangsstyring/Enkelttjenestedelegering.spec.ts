@@ -4,6 +4,8 @@ import { test } from '../../../fixture/pomFixture';
 import { AktorvalgHeader } from '../../../pages/AktorvalgHeader';
 import { EnduserConnection } from '../../../api-requests/EnduserConnection';
 
+test.describe.configure({ mode: 'serial' });
+
 test.describe('Enkelttjenestedelegering fra person til person og person til org', () => {
   const api = new EnduserConnection();
 
@@ -203,8 +205,8 @@ test.describe('Enkelttjenestedelegering fra org til person og org til org', () =
 
   test.afterAll('slett testdata', async () => {
     await api.deleteSingleServiceDelegation(
-      '05916597349',
-      '313189503',
+      '30818599567',
+      '313025853',
       '17889574100',
       'bruno-correspondence',
     );
@@ -232,15 +234,15 @@ test.describe('Enkelttjenestedelegering fra org til person og org til org', () =
     const login = new LoginPage(page);
     const aktorvalgHeader = new AktorvalgHeader(page);
     await test.step('sett opp testdata', async () => {
-      await api.addConnection('05916597349', '313189503', '17889574100');
+      await api.addConnection('30818599567', '313025853', '17889574100');
     });
 
     await test.step('Logg inn', async () => {
-      await login.LoginToAccessManagement('05916597349');
+      await login.LoginToAccessManagement('30818599567');
     });
 
-    await test.step('Velg org RYDDIG SUBJEKTIV TIGER AS og gå til tilgangsstyring', async () => {
-      await aktorvalgHeader.selectActorFromHeaderMenu('RYDDIG SUBJEKTIV TIGER AS');
+    await test.step('Velg org LYDIG REDELIG TIGER AS og gå til tilgangsstyring', async () => {
+      await aktorvalgHeader.selectActorFromHeaderMenu('LYDIG REDELIG TIGER AS');
     });
 
     await test.step('Gå til brukere-siden og klikk på "ANSVARSFULL REGLE"', async () => {

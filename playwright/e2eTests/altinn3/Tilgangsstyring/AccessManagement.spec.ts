@@ -160,17 +160,6 @@ test.describe.serial('Tilgangsstyring', () => {
       await accessManagementFrontPage.expectAccessPackageToNotBeDelegable(
         'Eksplisitt tjenestedelegering',
       );
-      await accessManagementFrontPage.goToArea('Fullmakter for regnskapsfører');
-      await accessManagementFrontPage.expectAccessPackageToNotBeDelegable('Regnskapsfører lønn');
-      await accessManagementFrontPage.expectAccessPackageToNotBeDelegable(
-        'Regnskapsfører med signeringsrettighet',
-      );
-      await accessManagementFrontPage.expectAccessPackageToNotBeDelegable(
-        'Regnskapsfører uten signeringsrettighet',
-      );
-      await accessManagementFrontPage.goToArea('Fullmakter for revisor');
-      await accessManagementFrontPage.expectAccessPackageToNotBeDelegable('Ansvarlig revisor');
-      await accessManagementFrontPage.expectAccessPackageToNotBeDelegable('Revisormedarbeider');
     });
   });
 

@@ -14,10 +14,12 @@ export class LoginPage {
   readonly tilgangsstyringLink: Locator;
   readonly testIdLinkText: Locator;
   readonly newSolutionHeading: Locator;
+  readonly reporteeSearchBox: Locator;
 
   constructor(page: Page) {
     this.page = page;
     this.searchBox = this.page.getByRole('searchbox', { name: 'Søk etter aktør' });
+    this.reporteeSearchBox = this.page.getByRole('searchbox');
     this.pidInput = this.page.locator("input[name='pid']");
     this.testIdLink = this.page.getByRole('link', { name: 'TestID Lag din egen' });
     this.loginButton = this.page.getByRole('button', { name: 'Logg inn', exact: true });
@@ -58,8 +60,8 @@ export class LoginPage {
 
   async chooseReportee(targetReportee: string) {
     // Search for target reportee in the searchbox
-    const searchBox = this.page.getByRole('searchbox', { name: 'Søk i aktører' });
-    await searchBox.fill(targetReportee);
+    await expect(this.reporteeSearchBox).toBeVisible();
+    await this.reporteeSearchBox.fill(targetReportee);
 
     const markedResult = this.page
       .locator('mark')
@@ -81,10 +83,13 @@ export class LoginPage {
   async selectActor(input: Locator, orgnummer: string) {
     const page = input.page();
     const aktorPartial = `${orgnummer.slice(0, 3)} ${orgnummer.slice(3, 6)}`;
+    aktorPartial; // For better logging when test fails, as this is the value used in the selector. The full orgnummer is not visible in the UI, so we can't log that.
     const button = page.getByRole('button', { name: new RegExp(`Org\\.nr\\. ${aktorPartial}`) });
 
     try {
       await this.tryTypingInSearchbox(input, orgnummer);
+      if (button.isVisible()) {
+      }
       await expect(button).toBeVisible({ timeout: 2000 }); // No need to wait long to figure out if this failed
     } catch (error: unknown) {
       console.log(`Retrying input after reload due to: ${error}`);
