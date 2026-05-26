@@ -4,6 +4,7 @@ import {
   CRA_PROVIDER_CODE,
   ECC_PROVIDER_CODE,
 } from '../UserRoles/useRoleMetadata';
+import { enableRoleDeletion } from '@/resources/utils/featureFlagUtils';
 
 export const RIGHTHOLDER_ROLE = 'rettighetshaver';
 export const AGENT_ROLE = 'agent';
@@ -96,7 +97,7 @@ export const getNonDeletableReasons = (
   );
 
   const reasons: NonDeletableReason[] = [];
-  if (hasOldAltinnAccess) {
+  if (hasOldAltinnAccess && !enableRoleDeletion()) {
     reasons.push(OLD_ALTINN_REASON);
   }
   if (hasERRoles) {

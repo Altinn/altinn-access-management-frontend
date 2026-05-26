@@ -24,7 +24,7 @@ export const ConsentRights = ({ rights, language }: ConsentRightsProps) => {
         >
           <CheckmarkIcon
             className={classes.consentRightIcon}
-            aria-hidden
+            aria-hidden='true'
           />
           <div className={classes.consentRightContent}>
             <DsParagraph className={classes.consentRightTitle}>{right.title[language]}</DsParagraph>

@@ -30,7 +30,7 @@ export const OldRolesAlert = () => {
         >
           <Link to={url}>
             {t('a2Alerts.oldRolesLinkText')}
-            <ExternalLinkIcon aria-hidden />
+            <ExternalLinkIcon aria-hidden='true' />
           </Link>
         </DsLink>
       </div>

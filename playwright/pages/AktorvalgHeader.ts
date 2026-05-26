@@ -91,6 +91,34 @@ export class AktorvalgHeader {
     await this.actorOption(actorName).click();
   }
 
+  async selectSubOrgFromHeaderMenu(orgName: string) {
+    const subOrg = this.page.getByText(orgName).nth(1);
+    await expect(subOrg).toBeVisible();
+    await subOrg.click();
+  }
+
+  async orgExistsInAktorvalg(orgName: string) {
+    await expect(this.page.getByText(orgName).first()).toBeVisible();
+  }
+
+  async orgIsNotClickableInAktorvalg(orgName: string) {
+    const actor = this.page.getByText(orgName).first();
+    await expect(actor).toBeVisible();
+    const isDisabled = await actor.isDisabled();
+    const ariaDisabled = await actor.getAttribute('aria-disabled');
+    const pointerEvents = await actor.evaluate(
+      (element) => window.getComputedStyle(element).pointerEvents,
+    );
+    if (isDisabled || ariaDisabled === 'true' || pointerEvents === 'none') {
+      return;
+    }
+    throw new Error(`Forventet å ikke kunne klikke på ${orgName}, men den var klikkbar.`);
+  }
+
+  async subOrgExistsInAktorvalg(orgName: string) {
+    await expect(this.page.getByText(orgName).nth(1)).toBeVisible();
+  }
+
   async currentlySelectedActor(actorName: string) {
     await expect(this.selectedActorButton(actorName)).toBeVisible();
   }
@@ -131,6 +159,7 @@ export class AktorvalgHeader {
   }
 
   async checkAllMenuButtons() {
+    await this.page.waitForTimeout(1000);
     await this.menuButton.click();
     await expect(this.menuInbox).toBeVisible();
     await expect(this.menuAccessManagement).toBeVisible();

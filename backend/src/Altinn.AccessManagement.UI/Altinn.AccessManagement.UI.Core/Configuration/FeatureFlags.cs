@@ -105,7 +105,7 @@ namespace Altinn.AccessManagement.UI.Core.Configuration
         /// Whether to enrich instance delegations with dialogporten lookup data
         /// </summary>
         public bool EnableDialogportenDialogLookup { get; set; }
-        
+
         /// <summary>
         /// Whether to use connections API in backend for agent system users
         /// </summary>
@@ -115,6 +115,11 @@ namespace Altinn.AccessManagement.UI.Core.Configuration
         /// Whether to enable the Maskinporten administration page
         /// </summary>
         public bool EnableMaskinportenAdministration { get; set; }
+
+        /// <summary>
+        /// Whether to enable deletion of Altinn 2 roles
+        /// </summary>
+        public bool EnableRoleDeletion { get; set; }
 
         /// <summary>
         /// When true, <c>ReporteeController.ChangeAndRedirect</c> bounces through Altinn 2's

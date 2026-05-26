@@ -114,7 +114,10 @@ export const RequestPageLayout = ({
                 asChild
               >
                 <Link to={backToPage}>
-                  <ArrowLeftIcon fontSize={getButtonIconSize(true)} />
+                  <ArrowLeftIcon
+                    fontSize={getButtonIconSize(true)}
+                    aria-hidden='true'
+                  />
                   {t('common.back')}
                 </Link>
               </DsButton>

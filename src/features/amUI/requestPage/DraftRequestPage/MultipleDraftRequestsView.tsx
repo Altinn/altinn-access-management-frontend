@@ -69,7 +69,7 @@ export const MultipleDraftRequestsView = ({
           className={classes.backButton}
           onClick={() => setSelectedRequest(null)}
         >
-          <ArrowLeftIcon />
+          <ArrowLeftIcon aria-hidden='true' />
           {t('common.back')}
         </DsButton>
         <DraftRequestBody
@@ -121,7 +121,11 @@ export const MultipleDraftRequestsView = ({
         ariaLabelledBy='multiple-services-title'
         renderControls={(resource) => (
           <div className={classes.seeDetails}>
-            {t('common.see_details')} <ChevronRightIcon fontSize={'1.2rem'} />
+            {t('common.see_details')}{' '}
+            <ChevronRightIcon
+              fontSize={'1.2rem'}
+              aria-hidden='true'
+            />
           </div>
         )}
       />

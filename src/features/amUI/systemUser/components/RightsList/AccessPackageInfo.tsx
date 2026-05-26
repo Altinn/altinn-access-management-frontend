@@ -24,7 +24,10 @@ export const AccessPackageInfo = ({
   return (
     <>
       <div className={classes.resourceInfoHeader}>
-        <PackageIcon fontSize={28} />
+        <PackageIcon
+          fontSize={28}
+          aria-hidden='true'
+        />
         <DsHeading
           level={1}
           data-size='xs'

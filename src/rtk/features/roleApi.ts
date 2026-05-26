@@ -7,12 +7,13 @@ export interface ProviderType {
   name: string;
 }
 
-export interface Permissions {
+export interface Permission {
   to: Entity;
   from: Entity;
   via?: Entity;
   role: CompactRole | null;
   viaRole?: CompactRole | null;
+  reason: { items: { name: string; description: string }[] } | null;
 }
 
 export interface Provider {
@@ -37,6 +38,7 @@ export interface Role {
   provider?: Provider;
   area?: Area;
   isDelegable?: boolean;
+  isRevocable?: boolean;
 }
 
 interface Area {
@@ -48,7 +50,7 @@ interface Area {
 
 export interface RolePermission {
   role: Role;
-  permissions: Permissions[];
+  permissions: Permission[];
 }
 
 export interface RoleResourceMetadata {
@@ -135,6 +137,16 @@ export const roleApi = createApi({
         return `/resources?${params.toString()}`;
       },
     }),
+    removeRole: builder.mutation<
+      void,
+      { party: string; from: string; to: string; roleCode: string }
+    >({
+      query: ({ party, from, to, roleCode }) => ({
+        url: `/roles?party=${party}&from=${from}&to=${to}&rolecode=${encodeURIComponent(roleCode)}`,
+        method: 'DELETE',
+      }),
+      invalidatesTags: ['role-permissions'],
+    }),
   }),
 });
 
@@ -143,6 +155,7 @@ export const {
   useGetAllRolesQuery,
   useGetRolePackagesQuery,
   useGetRoleResourcesQuery,
+  useRemoveRoleMutation,
 } = roleApi;
 
 export const { endpoints, reducerPath, reducer, middleware } = roleApi;

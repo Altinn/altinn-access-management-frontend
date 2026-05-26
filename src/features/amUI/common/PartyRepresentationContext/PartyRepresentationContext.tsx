@@ -296,20 +296,18 @@ const UnsyncedConnectionAlert = () => {
           {t('error_page.unsynced_connection_title')}
         </DsHeading>
         <DsParagraph>{t('error_page.unsynced_connection')}</DsParagraph>
-        {!hideA2Links() && (
-          <DsLink asChild>
-            <Link
-              className={classes.link}
-              to={getHostUrl() + 'ui/profile'}
-            >
-              {t('error_page.unsynced_connection_link')}
-              <ArrowRightIcon
-                aria-hidden={true}
-                fontSize='1.3rem'
-              />
-            </Link>
-          </DsLink>
-        )}
+        <DsLink asChild>
+          <Link
+            className={classes.link}
+            to={getHostUrl() + 'ui/profile'}
+          >
+            {t('error_page.unsynced_connection_link')}
+            <ArrowRightIcon
+              aria-hidden='true'
+              fontSize='1.3rem'
+            />
+          </Link>
+        </DsLink>
       </div>
     </DsAlert>
   );

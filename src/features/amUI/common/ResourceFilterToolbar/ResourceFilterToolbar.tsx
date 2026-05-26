@@ -8,6 +8,7 @@ interface ResourceFilterToolbarProps {
   filterState: string[];
   setFilterState: (newValue: string[]) => void;
   serviceOwnerOptions: { value: string; label: string; count?: number }[];
+  searchPlaceholder?: string;
 }
 const OWNER_FILTER_KEY = 'owner';
 
@@ -17,8 +18,10 @@ export const ResourceFilterToolbar = ({
   filterState,
   setFilterState,
   serviceOwnerOptions,
+  searchPlaceholder,
 }: ResourceFilterToolbarProps) => {
   const { t } = useTranslation();
+  const placeholder = searchPlaceholder ?? t('resource_list.resource_search_placeholder');
 
   const filterStateWithOwner = React.useMemo(
     () => ({ [OWNER_FILTER_KEY]: filterState }),
@@ -35,8 +38,8 @@ export const ResourceFilterToolbar = ({
         name: 'search',
         value: search,
         onChange: (e: React.ChangeEvent<HTMLInputElement>) => setSearch(e.target.value),
-        label: t('resource_list.resource_search_placeholder'),
-        placeholder: t('resource_list.resource_search_placeholder'),
+        label: placeholder,
+        placeholder: placeholder,
         clearButtonAltText: t('resource_list.resource_search_clear'),
         onClear: () => setSearch(''),
       }}

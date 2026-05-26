@@ -26,7 +26,7 @@ export const AddAgentButton: React.FC<AddAgentButtonProps> = ({ isLarge, onCompl
         onClick={() => modalRef.current?.showModal()}
         className={isLarge ? classes.largeButton : undefined}
       >
-        <PlusIcon aria-label={t('common.add')} />
+        <PlusIcon aria-hidden='true' />
         {t('client_administration_page.add_agent_button')}
       </DsButton>
       <AddAgentModal

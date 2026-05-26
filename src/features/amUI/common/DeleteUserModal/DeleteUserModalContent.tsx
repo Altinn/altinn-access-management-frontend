@@ -197,7 +197,10 @@ export const DeleteUserModalContent = ({
         variant='tertiary'
         disabled={!!isPartyRepresentationLoading}
       >
-        <TrashIcon style={{ fontSize: '1.4rem' }} />
+        <TrashIcon
+          style={{ fontSize: '1.4rem' }}
+          aria-hidden='true'
+        />
         {t(dialogModel.textKeys.triggerButtonKey)}
       </DsDialog.Trigger>
       <DsDialog
@@ -238,6 +241,7 @@ export const DeleteUserModalContent = ({
                     <XMarkOctagonFillIcon
                       fontSize='1.5rem'
                       className={classes.dangerIcon}
+                      aria-hidden='true'
                     />
                     <DsParagraph data-size='sm'>
                       {t(nonDeletableReasonsIntroKeys[dialogModel.status.target], {

@@ -1,7 +1,8 @@
 import { useTranslation } from 'react-i18next';
 import classes from './RoleInfo.module.css';
-import { Role, useGetRoleResourcesQuery } from '@/rtk/features/roleApi';
-import { DsHeading, DsLink, DsParagraph } from '@altinn/altinn-components';
+import { Role, useGetRolePermissionsQuery, useGetRoleResourcesQuery } from '@/rtk/features/roleApi';
+import { DsAlert, DsHeading, DsLink, DsParagraph } from '@altinn/altinn-components';
+import { RoleDeleteButton } from '@/features/amUI/common/RoleList/RoleDeleteButton';
 import {
   ExclamationmarkTriangleFillIcon,
   InformationSquareFillIcon,
@@ -12,26 +13,69 @@ import { getRedirectToA2UsersListSectionUrl } from '@/resources/utils';
 import { hideA2Links } from '@/resources/utils/featureFlagUtils';
 import { RoleResourcesSection } from './RoleResourcesSection';
 import { RoleStatusMessage } from './RoleStatusMessages';
+import { enableRoleDeletion } from '@/resources/utils/featureFlagUtils';
+import { useState } from 'react';
+import { TechnicalErrorParagraphs } from '../../TechnicalErrorParagraphs';
+import { createErrorDetails } from '../../TechnicalErrorParagraphs/TechnicalErrorParagraphs';
+import { useDelegationModalContext } from '../DelegationModalContext';
 
-export interface PackageInfoProps {
+export interface RoleInfoProps {
   role: Role;
 }
 
-export const RoleInfo = ({ role }: PackageInfoProps) => {
+export const RoleInfo = ({ role }: RoleInfoProps) => {
   const { t } = useTranslation();
+  const [deleteError, setDeleteError] = useState<unknown>(null);
 
   const isExternalRole = role?.provider?.code === 'sys-ccr';
   const isLegacyRole = role?.provider?.code === 'sys-altinn2';
+  const enableRoleDeletionFlag = enableRoleDeletion();
 
-  const { fromParty, actingParty } = usePartyRepresentation();
+  const { actionError } = useDelegationModalContext();
+
+  const { fromParty, actingParty, toParty } = usePartyRepresentation();
   const shouldSkipRoleRefs = !role?.code || !fromParty?.variant;
   const { data: roleResources, isLoading: isRoleResourcesLoading } = useGetRoleResourcesQuery(
     { roleCode: role.code ?? '', variant: fromParty?.variant || '' },
     { skip: shouldSkipRoleRefs },
   );
+  const { data: permissions, isLoading: isPermissionsLoading } = useGetRolePermissionsQuery(
+    {
+      party: actingParty?.partyUuid ?? '',
+      from: fromParty?.partyUuid,
+      to: toParty?.partyUuid,
+    },
+    {
+      skip: !actingParty?.partyUuid || !fromParty?.partyUuid || !toParty?.partyUuid,
+    },
+  );
 
   const sectionId = fromParty?.partyUuid === actingParty?.partyUuid ? 9 : 8;
   const oldSolutionUrl = getRedirectToA2UsersListSectionUrl(sectionId);
+  const rolePermissions = permissions?.find((p) => p.role?.id === role.id);
+  const hasRole = rolePermissions !== undefined;
+  const roleIsRevocable = rolePermissions?.role?.isRevocable ?? false;
+
+  const deleteErrorAlert = () => {
+    if (deleteError || actionError) {
+      const error = deleteError || actionError;
+      const details = createErrorDetails(error as Parameters<typeof createErrorDetails>[0]);
+      return (
+        <>
+          {!!details && (
+            <DsAlert data-color='danger'>
+              <DsParagraph>{t('role.delete_role_error')}</DsParagraph>
+              <TechnicalErrorParagraphs
+                status={details.status}
+                time={details.time}
+                traceId={details.traceId}
+              />
+            </DsAlert>
+          )}
+        </>
+      );
+    }
+  };
 
   return (
     <div className={classes.container}>
@@ -49,6 +93,7 @@ export const RoleInfo = ({ role }: PackageInfoProps) => {
             <ExclamationmarkTriangleFillIcon
               fontSize='1.5rem'
               className={classes.warningIcon}
+              aria-hidden='true'
             />
             <DsParagraph data-size='xs'>{t('a2Alerts.legacyRoleContent')}</DsParagraph>
           </div>
@@ -58,6 +103,7 @@ export const RoleInfo = ({ role }: PackageInfoProps) => {
             <InformationSquareFillIcon
               fontSize='1.5rem'
               className={classes.inheritedInfoIcon}
+              aria-hidden='true'
             />
             <DsParagraph data-size='xs'>
               {t('role.provider_status')}
@@ -67,6 +113,7 @@ export const RoleInfo = ({ role }: PackageInfoProps) => {
         )}
         <RoleStatusMessage role={role} />
       </div>
+      <div aria-live='polite'>{(!!deleteError || !!actionError) && deleteErrorAlert()}</div>
       <DsParagraph>{role?.description}</DsParagraph>
       {!hideA2Links() && (
         <DsParagraph className={classes.oldRolesDisclaimer}>
@@ -78,7 +125,7 @@ export const RoleInfo = ({ role }: PackageInfoProps) => {
               rel='noopener noreferrer'
             >
               {t('role.resources_disclaimer_link')}
-              <ExternalLinkIcon aria-hidden />
+              <ExternalLinkIcon aria-hidden='true' />
             </a>
           </DsLink>
         </DsParagraph>
@@ -88,6 +135,20 @@ export const RoleInfo = ({ role }: PackageInfoProps) => {
           roleResources={roleResources}
           isLoading={isRoleResourcesLoading}
         />
+      )}
+      {hasRole && enableRoleDeletionFlag && (
+        <div className={classes.deleteRoleButtonContainer}>
+          <RoleDeleteButton
+            role={role}
+            onError={setDeleteError}
+            disabled={!roleIsRevocable}
+          />
+        </div>
+      )}
+      {!hasRole && enableRoleDeletionFlag && !isPermissionsLoading && (
+        <div className={classes.deleteRoleButtonContainer}>
+          <DsParagraph data-size='md'>{t('role.cannot_assign_role_poa')}</DsParagraph>
+        </div>
       )}
     </div>
   );

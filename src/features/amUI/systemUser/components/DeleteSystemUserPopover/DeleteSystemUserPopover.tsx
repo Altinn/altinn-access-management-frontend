@@ -33,7 +33,7 @@ export const DeleteSystemUserPopover = ({
           data-size='sm'
           onClick={() => setIsPopoverOpen(true)}
         >
-          <TrashIcon aria-hidden />
+          <TrashIcon aria-hidden='true' />
           {t('systemuser_detailpage.delete_systemuser')}
         </DsPopover.Trigger>
         <DsPopover
