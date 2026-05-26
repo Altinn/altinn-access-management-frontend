@@ -179,6 +179,7 @@ export const PartyRepresentationProvider = ({
 
   const shouldShowUnsyncedConnectionAlert =
     !isLoading &&
+    !hideA2Links() &&
     authorizedPartyReportee &&
     (invalidConnection || isError) &&
     fromPartyUuid &&
@@ -285,6 +286,8 @@ const connectionErrorAlert = (
   );
 };
 
+// Når `hideA2Links` aktiveres permanent forekommer ikke synkroniseringsglipp lenger, og
+// hele `UnsyncedConnectionAlert` + tilhørende `shouldShowUnsyncedConnectionAlert` kan fjernes.
 const UnsyncedConnectionAlert = () => {
   return (
     <DsAlert data-color='warning'>
