@@ -2,6 +2,8 @@ import { useTranslation } from 'react-i18next';
 import { DsButton, DsDialog, DsHeading, DsParagraph, DsSpinner } from '@altinn/altinn-components';
 import classes from './DeletePoaConfirmation.module.css';
 import { MinusCircleIcon } from '@navikt/aksel-icons';
+import { useRef, useState } from 'react';
+import { createPortal } from 'react-dom';
 
 export interface DeletePoaConfirmationProps {
   warningText: string;
@@ -27,49 +29,59 @@ export const DeletePoaConfirmation = ({
   disabled = false,
 }: DeletePoaConfirmationProps) => {
   const { t } = useTranslation();
-  const closeDialog = (event: React.MouseEvent<HTMLButtonElement>) => {
-    event.stopPropagation();
-    event.preventDefault();
-    const dialog = (event.currentTarget as HTMLElement).closest('dialog');
-    dialog?.close();
+  const dialogRef = useRef<HTMLDialogElement>(null);
+  const [open, setOpen] = useState(false);
+
+  const closeDialog = () => {
+    dialogRef.current?.close();
+    setOpen(false);
   };
 
   return (
     <div className={classes.container}>
-      <DsDialog.TriggerContext>
-        <DsDialog.Trigger
-          data-color={color}
-          data-size={size}
-          variant={variant}
-          disabled={isDeleteLoading || disabled}
-        >
-          {icon && <MinusCircleIcon />}
-          {t('common.delete_poa')}
-        </DsDialog.Trigger>
-        <DsDialog>
-          <div className={classes.dialogContent}>
-            <DsHeading level={3}>{t('common.confirm_delete_heading')}</DsHeading>
-            <DsParagraph>{warningText}</DsParagraph>
-            <div className={classes.dialogButtons}>
-              <DsButton
-                data-color='danger'
-                onClick={(event) => {
-                  handleDeletion();
-                  closeDialog(event);
-                }}
-              >
-                {t('common.yes_delete')}
-              </DsButton>
-              <DsButton
-                variant='secondary'
-                onClick={closeDialog}
-              >
-                {t('common.cancel')}
-              </DsButton>
+      <DsDialog.Trigger
+        data-color={color}
+        data-size={size}
+        variant={variant}
+        disabled={isDeleteLoading || disabled}
+        onClick={() => {
+          setOpen(true);
+          requestAnimationFrame(() => dialogRef.current?.showModal());
+        }}
+      >
+        {icon && <MinusCircleIcon />}
+        {t('common.delete_poa')}
+      </DsDialog.Trigger>
+      {open &&
+        createPortal(
+          <DsDialog
+            ref={dialogRef}
+            onClose={() => setOpen(false)}
+          >
+            <div className={classes.dialogContent}>
+              <DsHeading level={3}>{t('common.confirm_delete_heading')}</DsHeading>
+              <DsParagraph>{warningText}</DsParagraph>
+              <div className={classes.dialogButtons}>
+                <DsButton
+                  data-color='danger'
+                  onClick={() => {
+                    handleDeletion();
+                    closeDialog();
+                  }}
+                >
+                  {t('common.yes_delete')}
+                </DsButton>
+                <DsButton
+                  variant='secondary'
+                  onClick={closeDialog}
+                >
+                  {t('common.cancel')}
+                </DsButton>
+              </div>
             </div>
-          </div>
-        </DsDialog>
-      </DsDialog.TriggerContext>
+          </DsDialog>,
+          document.body,
+        )}
       {isDeleteLoading && (
         <DsSpinner
           aria-label={loadingAriaLabel}
