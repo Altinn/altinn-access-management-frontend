@@ -21,10 +21,11 @@ interface RequestModalBodyProps {
 export const RequestModalBody = ({ dialogRef }: RequestModalBodyProps) => {
   const { t } = useTranslation();
   const { openSnackbar, dismissSnackbar } = useSnackbar();
-  const { actingParty, selfParty, pendingRequest, hasPendingRequest } =
+  const { actingParty, selfParty, pendingRequest, hasPendingRequest, isLoading } =
     useInstanceAdminPackageRequest();
+
   const [requestError, setRequestError] = useState(false);
-  // Only one of the two headings is mounted at a time, so they can share one ref.
+
   const headingRef = useRef<HTMLHeadingElement>(null);
   const shouldFocusHeadingRef = useRef(false);
 
@@ -45,13 +46,14 @@ export const RequestModalBody = ({ dialogRef }: RequestModalBodyProps) => {
     return () => dialog.removeEventListener('close', handleClose);
   }, [dialogRef, dismissSnackbar]);
 
-  // After requesting or withdrawing, the modal content switches between the pending
-  // and initial state. Move focus to the heading that is now shown so keyboard and
-  // screen reader users keep context.
+  // Focus heading on modal content change
   useEffect(() => {
     if (!shouldFocusHeadingRef.current) return;
-    headingRef.current?.focus();
-    shouldFocusHeadingRef.current = false;
+    const raf = requestAnimationFrame(() => {
+      headingRef.current?.focus();
+      shouldFocusHeadingRef.current = false;
+    });
+    return () => cancelAnimationFrame(raf);
   }, [hasPendingRequest]);
 
   const handleConfirm = async () => {
@@ -63,8 +65,7 @@ export const RequestModalBody = ({ dialogRef }: RequestModalBodyProps) => {
         to: actingParty.partyUuid,
         package: ORG_INSTANCE_ADMIN_PACKAGE_URN,
       }).unwrap();
-      // modal re-renders into pending state via getSentRequests invalidation;
-      // focus moves to the pending heading once it renders (see effect above)
+      // Move focus to heading
       shouldFocusHeadingRef.current = true;
       openSnackbar({ message: t('instance.request_modal.request_success'), color: 'success' });
     } catch {
@@ -80,8 +81,7 @@ export const RequestModalBody = ({ dialogRef }: RequestModalBodyProps) => {
         party: selfParty.partyUuid,
         id: pendingRequest.id,
       }).unwrap();
-      // modal re-renders into initial state via getSentRequests invalidation;
-      // focus moves to the initial heading once it renders (see effect above)
+      // Move focus to heading
       shouldFocusHeadingRef.current = true;
       openSnackbar({
         message: t('instance.request_modal.delete_request_success'),
@@ -152,7 +152,7 @@ export const RequestModalBody = ({ dialogRef }: RequestModalBodyProps) => {
               data-size='sm'
               variant='primary'
               loading={isCreating}
-              disabled={isCreating}
+              disabled={isCreating || isLoading}
               onClick={handleConfirm}
             >
               {t('instance.request_modal.confirm')}
