@@ -13,11 +13,10 @@ import { Link } from 'react-router';
 import { t } from 'i18next';
 
 import { useGetPartyFromLoggedInUserQuery, type Party } from '@/rtk/features/lookupApi';
-import { availableForUserTypeCheck } from '@/resources/utils/featureFlagUtils';
+import { hideA2Links } from '@/resources/utils/featureFlagUtils';
 
 import { TechnicalErrorParagraphs } from '../TechnicalErrorParagraphs';
 import { createErrorDetails } from '../TechnicalErrorParagraphs/TechnicalErrorParagraphs';
-import { NotAvailableForUserTypeAlert } from '../NotAvailableForUserTypeAlert/NotAvailableForUserTypeAlert';
 import { AccessPackageDelegationCheckProvider } from '../DelegationCheck/AccessPackageDelegationCheckContext';
 import { useGetRightHoldersQuery } from '@/rtk/features/connectionApi';
 import { useReporteeParty } from './useReporteeParty';
@@ -40,8 +39,6 @@ interface PartyRepresentationProviderProps {
   loadingComponent?: JSX.Element;
   /** Optional override for loading state */
   isLoading?: boolean;
-  /** If true, an error alert will be shown if the acting party has 'person' user type */
-  errorOnPriv?: boolean;
   /** Optional override of the back URL in case of an error - defaults to '/' */
   noConnectionBackUrl?: string;
   /** Optional override of the toParty - only use this if absolutely necessary */
@@ -79,7 +76,6 @@ export const PartyRepresentationProvider = ({
   actingPartyUuid,
   loadingComponent,
   isLoading: externalIsLoading,
-  errorOnPriv = false,
   toPartyOverride,
   fromPartyOverride,
   noConnectionBackUrl,
@@ -156,11 +152,6 @@ export const PartyRepresentationProvider = ({
     { skip: !fromPartyUuid || !toPartyUuid },
   );
 
-  const notAvailableForUserType =
-    !reporteeIsLoading &&
-    !!actingParty &&
-    !availableForUserTypeCheck(actingParty?.partyTypeName?.toString());
-
   const isLoading =
     externalIsLoading ||
     isConnectionLoading ||
@@ -179,6 +170,7 @@ export const PartyRepresentationProvider = ({
 
   const shouldShowUnsyncedConnectionAlert =
     !isLoading &&
+    !hideA2Links() &&
     authorizedPartyReportee &&
     (invalidConnection || isError) &&
     fromPartyUuid &&
@@ -190,18 +182,10 @@ export const PartyRepresentationProvider = ({
   const shouldShowConnectionErrorAlert =
     !isLoading && invalidConnection && !shouldShowUnsyncedConnectionAlert;
 
-  const shouldShowUserTypeRestrictionAlert =
-    !shouldShowConnectionErrorAlert &&
-    !isError &&
-    !isLoading &&
-    notAvailableForUserType &&
-    errorOnPriv;
-
   const shouldShowTechnicalErrorAlert =
     isError &&
     !isLoading &&
     !invalidConnection &&
-    !shouldShowUserTypeRestrictionAlert &&
     !shouldShowConnectionErrorAlert &&
     !shouldShowUnsyncedConnectionAlert;
 
@@ -210,7 +194,6 @@ export const PartyRepresentationProvider = ({
     !invalidConnection &&
     !shouldShowUnsyncedConnectionAlert &&
     !shouldShowConnectionErrorAlert &&
-    !shouldShowUserTypeRestrictionAlert &&
     !shouldShowTechnicalErrorAlert;
 
   if (isLoading && loadingComponent) {
@@ -231,7 +214,6 @@ export const PartyRepresentationProvider = ({
       {shouldShowUnsyncedConnectionAlert && <UnsyncedConnectionAlert />}
       {shouldShowConnectionErrorAlert &&
         connectionErrorAlert(error, noConnectionBackUrl ?? '/', formattedReporteeName(reportee))}
-      {shouldShowUserTypeRestrictionAlert && <NotAvailableForUserTypeAlert />}
       {shouldShowTechnicalErrorAlert && (
         <DsAlert data-color='warning'>
           <DsParagraph>{t('error_page.acting_party_data_error')}</DsParagraph>
@@ -285,6 +267,8 @@ const connectionErrorAlert = (
   );
 };
 
+// Når `hideA2Links` aktiveres permanent forekommer ikke synkroniseringsglipp lenger, og
+// hele `UnsyncedConnectionAlert` + tilhørende `shouldShowUnsyncedConnectionAlert` kan fjernes.
 const UnsyncedConnectionAlert = () => {
   return (
     <DsAlert data-color='warning'>

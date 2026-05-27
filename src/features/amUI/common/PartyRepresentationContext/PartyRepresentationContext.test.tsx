@@ -64,10 +64,6 @@ vi.mock('@/resources/Cookie/CookieMethods', () => ({
   }),
 }));
 
-vi.mock('@/resources/utils/featureFlagUtils', () => ({
-  availableForUserTypeCheck: vi.fn(() => true),
-}));
-
 // Test component that uses the context
 const TestConsumer = () => {
   const context = usePartyRepresentation();

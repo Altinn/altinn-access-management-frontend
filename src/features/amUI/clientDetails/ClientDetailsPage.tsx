@@ -34,7 +34,6 @@ export const ClientDetailsPage = () => {
           fromPartyUuid={id}
           actingPartyUuid={getCookie('AltinnPartyUuid')}
           toPartyUuid={getCookie('AltinnPartyUuid')}
-          errorOnPriv={true}
         >
           <ClientDetails />
         </PartyRepresentationProvider>

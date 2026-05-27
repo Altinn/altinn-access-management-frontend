@@ -320,9 +320,6 @@
     "delete_singleRight_success_message": "Fullmakten til {{resourceTitle}} er fjernet fra {{name}}.",
     "delete_singleRight_error_message": "Kunne ikke slette fullmakt til {{resourceTitle}}.",
     "add_singleRight_success_message": "{{name}} har nå fått fullmakt til {{resourceTitle}}.",
-    "wip_title": "Fullmakter til enkelttjenester",
-    "wip_message": "Denne siden jobber vi fremdeles med! For å administrere enkelttjenester, må du gå til den gamle løsningen.",
-    "wip_link_text": "Gå til gamle Altinn",
     "helptext_button": "Hva er enkelttjenester?",
     "helptext_content": "En enkelttjeneste er en fullmakt gitt til én spesifikk tjeneste. Tjenester man har tilgang til gjennom tilgangspakker eller roller vil ikke vises her.",
     "action_popover": {
@@ -922,11 +919,6 @@
     "53_accesspackage_delegation_missing_required_access": "Du har ikke tilstrekkelige tilganger for å delegere disse tilgangspakkene.",
     "55_accesspackage_failed_to_get_delegated_packages": "Kunne ikke hente delegerte tilgangspakker.",
     "57_systemuser_failed_to_delete_accesspackage": "Kunne ikke fjerne tilgangspakke-delegering for systemtilgang."
-  },
-  "page_not_available": {
-    "title": "Tilgangsstyring for privatpersoner er fortsatt under arbeid",
-    "text": "På denne siden vil det komme mer etterhvert. Du kan fortsatt tilgangsstyre på vegne av deg selv som privatperson i gammel løsning.",
-    "link_text": "Gå til gamle Altinn"
   },
   "consent_request": {
     "page_title": "Godkjenn samtykke/fullmakt - Altinn",

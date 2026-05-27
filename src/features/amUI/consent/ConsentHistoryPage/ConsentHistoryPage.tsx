@@ -21,6 +21,7 @@ import { getCookie } from '@/resources/Cookie/CookieMethods';
 import { ConsentTimeline } from './ConsentTimeline';
 import { useGetIsAdminQuery, useGetReporteeQuery } from '@/rtk/features/userInfoApi';
 import { hasConsentPermission } from '@/resources/utils/permissionUtils';
+import { hideA2Links } from '@/resources/utils/featureFlagUtils';
 import { OldConsentAlert } from '../components/OldConsentAlert/OldConsentAlert';
 import { Breadcrumbs } from '../../common/Breadcrumbs/Breadcrumbs';
 import { ReporteePageHeading } from '../../common/ReporteePageHeading';
@@ -64,10 +65,12 @@ export const ConsentHistoryPage = () => {
           reportee={reportee}
           isLoading={isLoadingReportee}
         />
-        <OldConsentAlert
-          heading='consent_log.altinn2_consent_alert_header'
-          text='consent_log.altinn2_consent_alert_body'
-        />
+        {!hideA2Links() && (
+          <OldConsentAlert
+            heading='consent_log.altinn2_consent_alert_header'
+            text='consent_log.altinn2_consent_alert_body'
+          />
+        )}
         <div className={classes.consentHistoryPage}>
           {!isLoading && !hasPermission && <div>{t('consent_log.no_consent_log_permission')}</div>}
           {isLoading && <LoadingTimeline />}

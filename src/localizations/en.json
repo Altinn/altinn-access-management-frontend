@@ -323,9 +323,6 @@
     "delete_singleRight_success_message": "Power of attorney over {{resourceTitle}} has been successfully revoked for {{name}}.",
     "delete_singleRight_error_message": "Failed to revoke power of attorney over {{resourceTitle}}.",
     "add_singleRight_success_message": "{{name}} has been successfully granted power of attorney over {{resourceTitle}}.",
-    "wip_title": "Power of attorney to services",
-    "wip_message": "We are still working on this page! To manage services, please go to the old solution.",
-    "wip_link_text": "Go to old Altinn",
     "helptext_button": "What are single services?",
     "helptext_content": "Single services are powers of attorney granted to a single service. Services a user has access to through access packages or roles will not appear here.",
     "action_popover": {
@@ -925,11 +922,6 @@
     "53_accesspackage_delegation_missing_required_access": "You do not have sufficient access rights to delegate the requested access packages.",
     "55_accesspackage_failed_to_get_delegated_packages": "Unable to retrieve delegated access packages.",
     "57_systemuser_failed_to_delete_accesspackage": "Could not delete access package delegation for the system access."
-  },
-  "page_not_available": {
-    "title": "Access management for private individuals is still under development",
-    "text": "More content will be added to this page over time. You can still manage access on behalf of yourself as a private individual in the old solution.",
-    "link_text": "Go to old Altinn"
   },
   "consent_request": {
     "page_title": "Approve consent/power of attorney - Altinn",

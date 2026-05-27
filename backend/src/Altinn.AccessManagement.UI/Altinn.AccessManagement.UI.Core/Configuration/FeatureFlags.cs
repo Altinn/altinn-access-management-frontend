@@ -22,16 +22,6 @@ namespace Altinn.AccessManagement.UI.Core.Configuration
         public bool DisplayRoles { get; set; }
 
         /// <summary>
-        /// Whether or not to only display the service/resource delegation feature in the UI
-        /// </summary>
-        public bool DisplayResourceDelegation { get; set; }
-
-        /// <summary>
-        /// Whether to show the new AMUI to PRIV users
-        /// </summary>
-        public bool RestrictPrivUse { get; set; }
-
-        /// <summary>
         /// Whether to enable cross platform links
         /// </summary>
         public bool CrossPlatformLinks { get; set; }
@@ -128,5 +118,11 @@ namespace Altinn.AccessManagement.UI.Core.Configuration
         /// Intended for the migration period while some downstream pages still depend on Altinn 2 cookies.
         /// </summary>
         public bool RouteChangeReporteeViaAltinn2 { get; set; }
+
+        /// <summary>
+        /// When true, the AM UI hides all links pointing back to Altinn 2 ("the old Altinn").
+        /// Used to roll out the shutdown of Altinn 2 per environment.
+        /// </summary>
+        public bool HideA2Links { get; set; }
     }
 }

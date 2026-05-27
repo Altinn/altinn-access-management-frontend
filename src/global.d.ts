@@ -4,9 +4,7 @@ declare global {
   interface Window {
     featureFlags: {
       displayPopularSingleRightsServices: boolean;
-      displayResourceDelegation: boolean;
       displayConfettiPackage: boolean;
-      restrictPrivUse: boolean;
       crossPlatformLinks: boolean;
       displaySettingsPage: boolean;
       displayClientAdministrationPage: boolean;
@@ -25,6 +23,7 @@ declare global {
       enableDialogportenDialogLookup: boolean;
       enableMaskinportenAdministration: boolean;
       enableRoleDeletion: boolean;
+      hideA2Links: boolean;
     };
   }
 }

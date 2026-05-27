@@ -2,10 +2,15 @@ import { FloatingDropdown } from '@altinn/altinn-components';
 import { ExternalLinkIcon, LeaveIcon, QuestionmarkIcon } from '@navikt/aksel-icons';
 
 import { getAltinnStartPageUrl, getHostUrl } from '@/resources/utils/pathUtils';
+import { hideA2Links } from '@/resources/utils/featureFlagUtils';
 import { useTranslation } from 'react-i18next';
 
 export const InfoModal = () => {
   const { t, i18n } = useTranslation();
+
+  if (hideA2Links()) {
+    return null;
+  }
 
   const goToOldSolution = () => {
     window.location.assign(`${getHostUrl()}ui/profile`);
