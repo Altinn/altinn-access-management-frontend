@@ -72,23 +72,6 @@ export const EditModal = forwardRef<HTMLDialogElement, EditModalProps>(
       }
     }, [openWithError, setActionError]);
 
-    /* handle closing */
-    useEffect(() => {
-      const handleClose = () => {
-        onClose?.();
-        reset();
-      };
-
-      if (ref && 'current' in ref && ref.current) {
-        ref.current.addEventListener('close', handleClose);
-      }
-      return () => {
-        if (ref && 'current' in ref && ref.current) {
-          ref.current.removeEventListener('close', handleClose);
-        }
-      };
-    }, [onClose, reset, ref]);
-
     return (
       <DsDialog
         ref={ref}
