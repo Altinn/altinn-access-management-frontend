@@ -177,7 +177,6 @@ namespace Altinn.AccessManagement.UI.Integration.Clients
                 string token = JwtTokenUtil.GetTokenFromContext(_httpContextAccessor.HttpContext, _platformSettings.JwtCookieName);
 
                 var httpResponse = await _client.PostAsync(token, endpointUrl, null);
-                var resContent = await httpResponse.Content.ReadAsStringAsync();
                 return await ClientUtils.DeserializeIfSuccessfullStatusCode<Request>(httpResponse);
             }
             catch (Exception ex)

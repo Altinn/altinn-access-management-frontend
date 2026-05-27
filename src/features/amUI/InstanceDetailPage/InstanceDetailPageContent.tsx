@@ -36,10 +36,7 @@ import { RequestInstanceAdminPackage } from './RequestInstanceAdminPackage';
 export const InstanceDetailPageContent = () => {
   const { t, i18n } = useTranslation();
   const [searchParams] = useSearchParams();
-  const { actingParty, fromParty, selfParty } = usePartyRepresentation();
-  console.log('fromParty: ', fromParty);
-  console.log('actingParty: ', actingParty);
-  console.log('selfParty: ', selfParty);
+  const { actingParty, fromParty } = usePartyRepresentation();
 
   const isActingPartyOrg = actingParty?.partyTypeName === PartyType.Organization;
   const instanceAdminPackageNameKey = isActingPartyOrg
@@ -227,22 +224,19 @@ export const InstanceDetailPageContent = () => {
             {isInstanceAdmin ? (
               t('instance_detail_page.description')
             ) : (
-              <>
-                <Trans
-                  i18nKey='instance_detail_page.no_access_description'
-                  values={{ packageName: t(instanceAdminPackageNameKey) }}
-                  components={{ b: <strong /> }}
-                />
-                {isActingPartyOrg && <RequestInstanceAdminPackage />}
-              </>
+              <Trans
+                i18nKey='instance_detail_page.no_access_description'
+                values={{ packageName: t(instanceAdminPackageNameKey) }}
+                components={{ b: <strong /> }}
+              />
             )}
           </DsParagraph>
+          {!isInstanceAdmin && isActingPartyOrg && <RequestInstanceAdminPackage />}
           {isInstanceAdmin && isAdmin === false && (
             <>
               <DsParagraph data-size='sm'>
                 {t('instance_detail_page.instance_admin_edit_disclaimer')}
               </DsParagraph>
-              {isActingPartyOrg && <RequestInstanceAdminPackage />}
             </>
           )}
           {isAdmin ? (

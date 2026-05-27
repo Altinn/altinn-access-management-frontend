@@ -12,7 +12,7 @@ import {
 
 import classes from './RequestInstanceAdminPackage.module.css';
 
-const INSTANCE_ADMIN_PACKAGE_URN = 'urn:altinn:accesspackage:tilgangsstyring-enkeltinstanser';
+const ORG_INSTANCE_ADMIN_PACKAGE_URN = 'urn:altinn:accesspackage:tilgangsstyring-enkeltinstanser';
 
 export const RequestInstanceAdminPackage = () => {
   const { t } = useTranslation();
@@ -34,7 +34,7 @@ export const RequestInstanceAdminPackage = () => {
   const [withdrawRequest, { isLoading: isWithdrawing }] = useWithdrawRequestMutation();
 
   const pendingRequest = packageRequests?.find(
-    (r) => r.packageId === INSTANCE_ADMIN_PACKAGE_URN && r.to.id === actingParty?.partyUuid,
+    (r) => r.packageId === ORG_INSTANCE_ADMIN_PACKAGE_URN && r.to.id === actingParty?.partyUuid,
   );
   const hasPendingRequest = !!pendingRequest;
 
@@ -52,7 +52,7 @@ export const RequestInstanceAdminPackage = () => {
       await createPackageRequest({
         party: selfParty.partyUuid,
         to: actingParty.partyUuid,
-        package: INSTANCE_ADMIN_PACKAGE_URN,
+        package: ORG_INSTANCE_ADMIN_PACKAGE_URN,
       }).unwrap();
       // modal re-renders into pending state via getSentRequests invalidation
     } catch {
