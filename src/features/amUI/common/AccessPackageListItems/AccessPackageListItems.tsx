@@ -14,8 +14,8 @@ export const AccessPackageListItems = ({ items }: AccessPackageListItemsProps) =
       {items.map((item) => (
         <AccessPackageListItem
           key={item.id}
-          {...item}
           interactive={false}
+          {...item}
         />
       ))}
     </List>

@@ -1,0 +1,21 @@
+.modalDialog {
+  max-width: 480px;
+  max-height: calc(100vh - var(--ds-spacing-8));
+  overflow-y: auto;
+}
+
+.content {
+  display: flex;
+  flex-direction: column;
+  gap: var(--ds-spacing-4);
+}
+
+.actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--ds-spacing-2);
+}
+
+.closeButton {
+  width: fit-content;
+}

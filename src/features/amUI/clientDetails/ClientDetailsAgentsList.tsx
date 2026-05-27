@@ -2,14 +2,11 @@ import React, { useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 import {
   AccessPackageListItemProps,
-  Button,
-  DsParagraph,
   type UserListItemProps,
   type Color,
   formatDate,
   formatDisplayName,
 } from '@altinn/altinn-components';
-import { MinusCircleIcon, PlusCircleIcon } from '@navikt/aksel-icons';
 
 import type {
   AddAgentAccessPackagesFn,
@@ -24,8 +21,8 @@ import { isNewUser } from '../common/isNewUser';
 
 import { AccessPackageListItems } from '../common/AccessPackageListItems/AccessPackageListItems';
 import { UserListItems, type UserListItemData } from '../common/UserListItems/UserListItems';
+import { usePackageAccessControls } from '../common/AccessInfoModal/usePackageAccessControls';
 import { useClientDetailsAccessPackageActions } from './useClientDetailsAccessPackageActions';
-import { useIsMobileOrSmaller } from '@/resources/utils/screensizeUtils';
 
 type ClientDetailsAgentsListProps = {
   agents: Agent[];
@@ -62,7 +59,7 @@ export const ClientDetailsAgentsList = ({
   const { t } = useTranslation();
   const { getAccessPackageById } = useAccessPackageLookup();
   const { getRoleMetadata } = useRoleMetadata();
-  const isMobileOrSmaller = useIsMobileOrSmaller();
+  const { getItemActionProps, modal } = usePackageAccessControls();
 
   const delegateDisabled = isLoading || !fromPartyUuid || !actingPartyUuid;
   const removeDisabled = isLoading || !fromPartyUuid || !actingPartyUuid;
@@ -118,66 +115,45 @@ export const ClientDetailsAgentsList = ({
         const hasAccess = packageIdsByAgentId.get(agentId)?.has(pkg.id) ?? false;
         const accessPackage = getAccessPackageById(pkg.id);
         const delegable = accessPackage?.isDelegable ?? false;
+        const packageName = accessPackage?.name || pkg.name;
+        const isViaRole = access.role.code !== 'rettighetshaver';
         return {
           id: pkg.id,
-          name: accessPackage?.name || pkg.name,
+          name: packageName,
           type: packageType,
           isSubUnit: clientIsSubUnit,
-          interactive: false,
           titleAs: 'h3',
-          description:
-            access.role.code !== 'rettighetshaver'
-              ? t('client_administration_page.via_role', { role: roleName })
-              : '',
-          as: 'div',
+          description: isViaRole
+            ? t('client_administration_page.via_role', { role: roleName })
+            : '',
           color: (hasAccess ? 'company' : 'neutral') as Color,
-          controls:
-            delegable &&
-            (hasAccess ? (
-              <Button
-                variant='tertiary'
-                disabled={removeDisabled}
-                aria-label={
-                  isMobileOrSmaller
-                    ? t('client_administration_page.remove_package_button')
-                    : undefined
-                }
-                onClick={() => {
-                  removeClientAccessPackage(
-                    agentId,
-                    access.role.code,
-                    pkg.urn ?? '',
-                    agentName,
-                    accessPackage?.name || pkg.name,
-                  );
-                }}
-              >
-                <MinusCircleIcon aria-hidden='true' />
-                {!isMobileOrSmaller && t('client_administration_page.remove_package_button')}
-              </Button>
-            ) : (
-              <Button
-                variant='tertiary'
-                disabled={delegateDisabled}
-                aria-label={
-                  isMobileOrSmaller
-                    ? t('client_administration_page.delegate_package_button')
-                    : undefined
-                }
-                onClick={() => {
-                  addClientAccessPackage(
-                    agentId,
-                    access.role.code,
-                    pkg.urn ?? '',
-                    agentName,
-                    accessPackage?.name || pkg.name,
-                  );
-                }}
-              >
-                <PlusCircleIcon aria-hidden='true' />
-                {!isMobileOrSmaller && t('client_administration_page.delegate_package_button')}
-              </Button>
-            )),
+          ...getItemActionProps({
+            packageName,
+            accessPackage,
+            toPartyName: agentName,
+            hasAccess,
+            canAct: delegable,
+            isViaRole,
+            roleName,
+            addDisabled: delegateDisabled,
+            removeDisabled,
+            onAdd: () =>
+              addClientAccessPackage(
+                agentId,
+                access.role.code,
+                pkg.urn ?? '',
+                agentName,
+                packageName,
+              ),
+            onRemove: () =>
+              removeClientAccessPackage(
+                agentId,
+                access.role.code,
+                pkg.urn ?? '',
+                agentName,
+                packageName,
+              ),
+          }),
         };
       });
 
@@ -218,11 +194,14 @@ export const ClientDetailsAgentsList = ({
   });
 
   return (
-    <UserListItems
-      items={userListItems}
-      searchPlaceholder={t('client_administration_page.agent_search_placeholder')}
-      addUserButton={addUserButton}
-      emptyText={emptyText}
-    />
+    <>
+      <UserListItems
+        items={userListItems}
+        searchPlaceholder={t('client_administration_page.agent_search_placeholder')}
+        addUserButton={addUserButton}
+        emptyText={emptyText}
+      />
+      {modal}
+    </>
   );
 };

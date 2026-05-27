@@ -126,11 +126,14 @@ export const SingleRightsSection = ({ isReportee = false }: { isReportee?: boole
               )
             }
             renderControls={(resource) => {
+              if (isSmallScreen) {
+                return null;
+              }
               const isInherited = isResourceInherited(resource.identifier);
               return (
                 <DeleteResourceButton
                   resource={resource}
-                  fullText={!isSmallScreen}
+                  fullText
                   disabled={isInherited}
                 />
               );

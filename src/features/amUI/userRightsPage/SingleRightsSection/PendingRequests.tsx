@@ -195,6 +195,9 @@ export const PendingRequestsList = ({
             showDetails={false}
             onSelect={(resource) => setSelectedResource(resource)}
             renderControls={(resource) => {
+              if (isSmallScreen) {
+                return null;
+              }
               return (
                 <DsButton
                   variant='tertiary'
@@ -204,7 +207,7 @@ export const PendingRequestsList = ({
                   loading={isLoadingRequest(resource.identifier)}
                 >
                   <MinusCircleIcon aria-hidden='true' />
-                  {isSmallScreen ? '' : t('common.delete')}
+                  {t('common.delete')}
                 </DsButton>
               );
             }}

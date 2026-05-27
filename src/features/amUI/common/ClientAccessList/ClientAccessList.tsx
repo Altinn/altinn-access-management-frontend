@@ -2,13 +2,11 @@ import React from 'react';
 import { useTranslation } from 'react-i18next';
 import {
   AccessPackageListItemProps,
-  Button,
   DsParagraph,
   type Color,
   formatDate,
   type UserListItemProps,
 } from '@altinn/altinn-components';
-import { MinusCircleIcon, PlusCircleIcon } from '@navikt/aksel-icons';
 
 import type { Client } from '@/rtk/features/clientApi';
 import { useAccessPackageLookup } from '@/resources/hooks/useAccessPackageLookup';
@@ -18,6 +16,7 @@ import { buildClientParentNameById, buildClientSortKey } from '../clientSortUtil
 import { useRoleMetadata } from '../UserRoles/useRoleMetadata';
 import { AccessPackageListItems } from '../AccessPackageListItems/AccessPackageListItems';
 import { UserListItems, type UserListItemData } from '../UserListItems/UserListItems';
+import { usePackageAccessControls } from '../AccessInfoModal/usePackageAccessControls';
 
 export type ClientAccessPackageAction = {
   clientId: string;
@@ -61,12 +60,14 @@ export const ClientAccessList = ({
   const { t } = useTranslation();
   const { getAccessPackageById } = useAccessPackageLookup();
   const { getRoleMetadata } = useRoleMetadata();
+  const { getItemActionProps, modal } = usePackageAccessControls();
   const clientsForAccessState = accessStateClients ?? clients;
   const parentNameById = buildClientParentNameById(clients);
   const sortedClients = sortClientsByKey(clients, parentNameById);
 
   const userListItems: UserListItemData[] = sortedClients.map((client) => {
     const clientId = client.client.id;
+    const clientName = client.client.name;
     const isSubUnit = isSubUnitByType(client.client.variant);
     const userType = getUserListItemType(client.client.type);
 
@@ -84,60 +85,41 @@ export const ClientAccessList = ({
         const accessPackage = getAccessPackageById(pkg.id);
         const actionIsDelegable = accessPackage?.isDelegable ?? false;
         const showAction = !requireDelegableForActions || actionIsDelegable;
-
-        let controls: React.ReactNode;
-        if (showAction && hasAccess && onRemoveAccessPackage) {
-          controls = (
-            <Button
-              variant='tertiary'
-              disabled={removeDisabled}
-              onClick={() => {
-                onRemoveAccessPackage({
-                  clientId,
-                  roleCode: access.role.code,
-                  packageId: pkg.urn ?? '',
-                  accessPackageName: accessPackage?.name || pkg.name,
-                });
-              }}
-            >
-              <MinusCircleIcon aria-hidden='true' />
-              {t('client_administration_page.remove_package_button')}
-            </Button>
-          );
-        } else if (showAction && !hasAccess && onAddAccessPackage) {
-          controls = (
-            <Button
-              variant='tertiary'
-              disabled={addDisabled}
-              onClick={() => {
-                onAddAccessPackage({
-                  clientId,
-                  roleCode: access.role.code,
-                  packageId: pkg.urn ?? '',
-                  accessPackageName: accessPackage?.name || pkg.name,
-                });
-              }}
-            >
-              <PlusCircleIcon aria-hidden='true' />
-              {t('client_administration_page.delegate_package_button')}
-            </Button>
-          );
-        }
+        const packageName = accessPackage?.name || pkg.name;
+        const isViaRole = access.role.code !== 'rettighetshaver';
+        const canAct =
+          showAction &&
+          ((hasAccess && !!onRemoveAccessPackage) || (!hasAccess && !!onAddAccessPackage));
+        const action: ClientAccessPackageAction = {
+          clientId,
+          roleCode: access.role.code,
+          packageId: pkg.urn ?? '',
+          accessPackageName: packageName,
+        };
 
         return {
           id: pkg.id,
-          name: accessPackage?.name || pkg.name,
+          name: packageName,
           type: userType,
           isSubUnit,
-          interactive: false,
-          as: 'div',
           titleAs: 'h3',
-          description:
-            access.role.code !== 'rettighetshaver'
-              ? t('client_administration_page.via_role', { role: roleName })
-              : '',
+          description: isViaRole
+            ? t('client_administration_page.via_role', { role: roleName })
+            : '',
           color: (hasAccess ? 'company' : 'neutral') as Color,
-          controls,
+          ...getItemActionProps({
+            packageName,
+            accessPackage,
+            toPartyName: clientName,
+            hasAccess,
+            canAct,
+            isViaRole,
+            roleName,
+            addDisabled,
+            removeDisabled,
+            onAdd: () => onAddAccessPackage?.(action),
+            onRemove: () => onRemoveAccessPackage?.(action),
+          }),
         };
       });
 
@@ -150,7 +132,7 @@ export const ClientAccessList = ({
 
     return {
       id: clientId,
-      name: client.client.name,
+      name: clientName,
       organizationIdentifier: client.client.organizationIdentifier,
       type: userType,
       subUnit: isSubUnit,
@@ -177,9 +159,12 @@ export const ClientAccessList = ({
   });
 
   return (
-    <UserListItems
-      items={userListItems}
-      searchPlaceholder={searchPlaceholder}
-    />
+    <>
+      <UserListItems
+        items={userListItems}
+        searchPlaceholder={searchPlaceholder}
+      />
+      {modal}
+    </>
   );
 };

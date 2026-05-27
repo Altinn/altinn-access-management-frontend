@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { List, Button } from '@altinn/altinn-components';
 import { useTranslation } from 'react-i18next';
 
@@ -6,6 +6,9 @@ import type { ExtendedUser } from '@/rtk/features/userInfoApi';
 import { UserItem } from '@/features/amUI/common/UserList/UserItem';
 import { UserListActions } from '../UserList/UserListActions';
 import { DelegationAction } from '../DelegationModal/EditModal';
+import { useIsMobileOrSmaller } from '@/resources/utils/screensizeUtils';
+import { AccessInfoModal } from '../AccessInfoModal/AccessInfoModal';
+import { InheritedStatusType, type InheritedStatusMessageType } from '../useInheritedStatus';
 
 import classes from './UserSearch.module.css';
 import { isSubUnitByType } from '@/resources/utils/reporteeUtils';
@@ -27,7 +30,18 @@ export interface UserSearchResultsProps {
   revokeLabel?: string;
   getUserLink?: (user: UserActionTarget) => string;
   titleAs?: titleAsType;
+  /**
+   * On small screens, hide the inline action button and instead let the user
+   * tap a row to open a modal with the access status and a labelled action.
+   */
+  useInfoModalOnSmallScreen?: boolean;
 }
+
+/** Build StatusSection inheritance entries from the parties a user inherits access through. */
+const deriveInheritedStatus = (node: UserSearchNode): InheritedStatusMessageType[] =>
+  (node.roles ?? [])
+    .filter((role) => role.viaParty)
+    .map((role) => ({ type: InheritedStatusType.ViaRole, via: role.viaParty }));
 
 export const UserSearchResults: React.FC<UserSearchResultsProps> = ({
   users,
@@ -43,9 +57,13 @@ export const UserSearchResults: React.FC<UserSearchResultsProps> = ({
   revokeLabel,
   getUserLink,
   titleAs = 'h4',
+  useInfoModalOnSmallScreen = false,
 }) => {
   const { t } = useTranslation();
+  const isSmall = useIsMobileOrSmaller();
+  const useInfoModal = useInfoModalOnSmallScreen && isSmall;
   const isInteractive = !!getUserLink;
+  const [selectedUser, setSelectedUser] = useState<UserSearchNode | null>(null);
 
   return (
     <>
@@ -61,9 +79,11 @@ export const UserSearchResults: React.FC<UserSearchResultsProps> = ({
             interactive={isInteractive}
             linkTo={getUserLink ? getUserLink(user) : undefined}
             onSelect={
-              onSelect
-                ? () => onSelect({ id: user.id, name: user.name, type: user.type })
-                : undefined
+              useInfoModal
+                ? () => setSelectedUser(user)
+                : onSelect
+                  ? () => onSelect({ id: user.id, name: user.name, type: user.type })
+                  : undefined
             }
             roleDirection='toUser'
             disableLinks={!isInteractive}
@@ -76,6 +96,7 @@ export const UserSearchResults: React.FC<UserSearchResultsProps> = ({
                 onDelegate={onDelegate ? () => onDelegate(user as ExtendedUser) : undefined}
                 delegateLabel={delegateLabel}
                 revokeLabel={revokeLabel}
+                hideOnSmallScreen={useInfoModalOnSmallScreen}
               />
             )}
           />
@@ -92,6 +113,44 @@ export const UserSearchResults: React.FC<UserSearchResultsProps> = ({
             {t('common.show_more')}
           </Button>
         </div>
+      )}
+      {useInfoModalOnSmallScreen && (
+        <AccessInfoModal
+          open={selectedUser !== null}
+          onClose={() => setSelectedUser(null)}
+          name={selectedUser?.name ?? ''}
+          userHasAccess={availableAction === DelegationAction.REVOKE}
+          inheritedStatus={selectedUser ? deriveInheritedStatus(selectedUser) : undefined}
+          toPartyName={selectedUser?.name}
+          actions={
+            selectedUser ? (
+              <UserListActions
+                forceFullText
+                isLoading={isActionLoading}
+                user={selectedUser as ExtendedUser}
+                availableAction={availableAction}
+                onRevoke={
+                  onRevoke
+                    ? () => {
+                        onRevoke(selectedUser as ExtendedUser);
+                        setSelectedUser(null);
+                      }
+                    : undefined
+                }
+                onDelegate={
+                  onDelegate
+                    ? () => {
+                        onDelegate(selectedUser as ExtendedUser);
+                        setSelectedUser(null);
+                      }
+                    : undefined
+                }
+                delegateLabel={delegateLabel}
+                revokeLabel={revokeLabel}
+              />
+            ) : null
+          }
+        />
       )}
     </>
   );

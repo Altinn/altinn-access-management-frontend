@@ -3,12 +3,14 @@ import { useTranslation } from 'react-i18next';
 
 import { ResourceList } from '@/features/amUI/common/ResourceList/ResourceList';
 import { useIsMobileOrSmaller } from '@/resources/utils/screensizeUtils';
-import type { ExtendedAccessPackage } from '../../AccessPackageList/useAreaPackageList';
+import type { AccessPackage } from '@/rtk/features/accessPackageApi';
 
 import classes from './AccessPackageInfo.module.css';
 
 interface PackageMetaProps {
-  accessPackage: ExtendedAccessPackage;
+  // Accepts a plain AccessPackage so it can be reused outside the delegation flow
+  // (e.g. the client-admin package modal). ExtendedAccessPackage is assignable here.
+  accessPackage: AccessPackage;
 }
 
 export const PackageMeta = ({ accessPackage }: PackageMetaProps) => {

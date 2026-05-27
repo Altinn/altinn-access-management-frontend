@@ -14,6 +14,8 @@ export const UserListActions = ({
   isLoading,
   delegateLabel,
   revokeLabel,
+  hideOnSmallScreen = false,
+  forceFullText = false,
 }: {
   user: ExtendedUser;
   onDelegate?: (user: ExtendedUser) => void;
@@ -23,11 +25,21 @@ export const UserListActions = ({
   isLoading?: boolean;
   delegateLabel?: string;
   revokeLabel?: string;
+  /** Hide the inline action entirely on small screens (caller provides a modal fallback). */
+  hideOnSmallScreen?: boolean;
+  /** Always render the button label, even on small screens (e.g. inside a modal). */
+  forceFullText?: boolean;
 }) => {
   const { t } = useTranslation();
   const isSmall = useIsMobileOrSmaller();
+  const showLabel = forceFullText || !isSmall;
 
   if (!availableAction) {
+    return null;
+  }
+  // On small screens the inline control is hidden; the caller shows a modal
+  // with a clearly labelled action instead.
+  if (hideOnSmallScreen && isSmall) {
     return null;
   }
   if (isLoading) {
@@ -57,7 +69,7 @@ export const UserListActions = ({
           aria-label={t('common.give_poa')}
         >
           <PlusCircleIcon aria-hidden='true' />
-          {!isSmall && (delegateLabel ?? t('common.give_poa'))}
+          {showLabel && (delegateLabel ?? t('common.give_poa'))}
         </DsButton>
       )}
       {availableAction === DelegationAction.REQUEST && onRequest && !user.isInherited && (
@@ -68,7 +80,7 @@ export const UserListActions = ({
           aria-label={t('common.request_poa')}
         >
           <PlusCircleIcon aria-hidden='true' />
-          {!isSmall && t('common.request_poa')}
+          {showLabel && t('common.request_poa')}
         </DsButton>
       )}
       {availableAction === DelegationAction.REVOKE && onRevoke && !user.isInherited && (
@@ -79,7 +91,7 @@ export const UserListActions = ({
           aria-label={revokeLabel ?? t('common.delete_poa')}
         >
           <MinusCircleIcon aria-hidden='true' />
-          {!isSmall && (revokeLabel ?? t('common.delete_poa'))}
+          {showLabel && (revokeLabel ?? t('common.delete_poa'))}
         </DsButton>
       )}
     </>

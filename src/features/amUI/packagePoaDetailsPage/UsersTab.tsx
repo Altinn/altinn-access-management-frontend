@@ -170,6 +170,7 @@ export const UsersTab = ({ accessPackage, isLoading, isFetching }: UsersTabProps
         onDelegate={canDelegate ? handleOnDelegate : undefined}
         onAddNewUser={canDelegate ? handleOnDelegate : undefined}
         onRevoke={handleOnRevoke}
+        useInfoModalOnSmallScreen
         isActionLoading={
           isActionLoading ||
           isLoading ||
