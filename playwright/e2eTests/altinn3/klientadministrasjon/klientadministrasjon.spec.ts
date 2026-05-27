@@ -54,6 +54,15 @@ test.describe('klientadministrasjon', () => {
     const actor = { pid: '16830197862', org: '311164651', orgName: 'KLARTENKT UPRESIS ISBJØRN SA' };
     const agent = { pid: '30877795760', name: 'TROVERDIG JUICE' };
 
+    test.beforeEach(async () => {
+      try {
+        await api.deleteClientDelegationAgent(actor.pid, actor.org, agent.pid);
+      } catch {
+        /* ignore if nothing to clean */
+      }
+      await api.addClientDelegationAgent(actor.pid, actor.org, agent.pid);
+    });
+
     test('slett bruker', async ({
       page,
       accessManagementFrontPage,
@@ -61,8 +70,6 @@ test.describe('klientadministrasjon', () => {
       login,
       aktorvalgHeader,
     }) => {
-      await api.addClientDelegationAgent(actor.pid, actor.org, agent.pid);
-
       await test.step('Logg inn', async () => {
         await page.goto(env('BASE_URL'));
         await login.LoginToAccessManagement(actor.pid);
@@ -86,7 +93,9 @@ test.describe('klientadministrasjon', () => {
       });
     });
 
-    test.afterEach(async () => {
+    test.afterEach(async ({}, testInfo) => {
+      if (testInfo.status === 'passed') return;
+
       try {
         await api.deleteClientDelegationAgent(actor.pid, actor.org, agent.pid);
       } catch (error) {
@@ -104,13 +113,7 @@ test.describe('klientadministrasjon', () => {
     };
     const agent = { pid: '28822449737', name: 'SINDIG BRUD' };
 
-    test('deleger klient til en bruker fra klientfanen', async ({
-      page,
-      accessManagementFrontPage,
-      klientAdministrasjonPage,
-      login,
-      aktorvalgHeader,
-    }) => {
+    test.beforeEach(async () => {
       try {
         await api.deleteConnection(client.connectionPid, client.org, [actor.org]);
       } catch {
@@ -126,7 +129,15 @@ test.describe('klientadministrasjon', () => {
         posttjenester,
       ]);
       await api.addClientDelegationAgent(actor.pid, actor.org, agent.pid);
+    });
 
+    test('deleger klient til en bruker fra klientfanen', async ({
+      page,
+      accessManagementFrontPage,
+      klientAdministrasjonPage,
+      login,
+      aktorvalgHeader,
+    }) => {
       await test.step('Logg inn', async () => {
         await page.goto(env('BASE_URL'));
         await login.LoginToAccessManagement(actor.pid);
@@ -186,13 +197,7 @@ test.describe('klientadministrasjon', () => {
     };
     const agent = { pid: '47822800420', name: 'UVANLIG FREDAG' };
 
-    test('deleger klient til en bruker fra brukerfanen', async ({
-      page,
-      accessManagementFrontPage,
-      klientAdministrasjonPage,
-      login,
-      aktorvalgHeader,
-    }) => {
+    test.beforeEach(async () => {
       try {
         await api.deleteConnection(client.connectionPid, client.org, [actor.org]);
       } catch {
@@ -208,7 +213,15 @@ test.describe('klientadministrasjon', () => {
         posttjenester,
       ]);
       await api.addClientDelegationAgent(actor.pid, actor.org, agent.pid);
+    });
 
+    test('deleger klient til en bruker fra brukerfanen', async ({
+      page,
+      accessManagementFrontPage,
+      klientAdministrasjonPage,
+      login,
+      aktorvalgHeader,
+    }) => {
       await test.step('Logg inn', async () => {
         await page.goto(env('BASE_URL'));
         await login.LoginToAccessManagement(actor.pid);
@@ -263,6 +276,14 @@ test.describe('klientadministrasjon', () => {
     };
     const agent = { pid: '04905999376', name: 'FORSTÅELSESFULL TRAFIKKORK' };
 
+    test.beforeEach(async () => {
+      await api.addConnectionAndPackagesToUser(client.connectionPid, client.org, actor.org, [
+        posttjenester,
+      ]);
+      await api.addClientDelegationAgent(actor.pid, actor.org, agent.pid);
+      await api.delegerKlientTilBruker(actor.pid, actor.org, client.org, agent.pid, posttjenester);
+    });
+
     test('Slett fullmakt for en bruker fra brukerfanen', async ({
       page,
       accessManagementFrontPage,
@@ -270,12 +291,6 @@ test.describe('klientadministrasjon', () => {
       login,
       aktorvalgHeader,
     }) => {
-      await api.addConnectionAndPackagesToUser(client.connectionPid, client.org, actor.org, [
-        posttjenester,
-      ]);
-      await api.addClientDelegationAgent(actor.pid, actor.org, agent.pid);
-      await api.delegerKlientTilBruker(actor.pid, actor.org, client.org, agent.pid, posttjenester);
-
       await test.step('Logg inn', async () => {
         await page.goto(env('BASE_URL'));
         await login.LoginToAccessManagement(actor.pid);
@@ -327,6 +342,14 @@ test.describe('klientadministrasjon', () => {
     };
     const agent = { pid: '03924296991', name: 'ORANSJE TEST' };
 
+    test.beforeEach(async () => {
+      await api.addConnectionAndPackagesToUser(client.connectionPid, client.org, actor.org, [
+        posttjenester,
+      ]);
+      await api.addClientDelegationAgent(actor.pid, actor.org, agent.pid);
+      await api.delegerKlientTilBruker(actor.pid, actor.org, client.org, agent.pid, posttjenester);
+    });
+
     test('Slett fullmakt for en bruker fra klientfanen', async ({
       page,
       accessManagementFrontPage,
@@ -334,12 +357,6 @@ test.describe('klientadministrasjon', () => {
       login,
       aktorvalgHeader,
     }) => {
-      await api.addConnectionAndPackagesToUser(client.connectionPid, client.org, actor.org, [
-        posttjenester,
-      ]);
-      await api.addClientDelegationAgent(actor.pid, actor.org, agent.pid);
-      await api.delegerKlientTilBruker(actor.pid, actor.org, client.org, agent.pid, posttjenester);
-
       await test.step('Logg inn', async () => {
         await page.goto(env('BASE_URL'));
         await login.LoginToAccessManagement(actor.pid);

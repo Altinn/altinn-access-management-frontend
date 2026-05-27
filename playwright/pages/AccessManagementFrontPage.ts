@@ -80,8 +80,9 @@ export class AccessManagementFrontPage {
   async goToArea(areaName: string) {
     const area = this.page.getByRole('button', { name: areaName }).first();
     await expect(area).toBeVisible();
-    // force: true — decorative focus ring (aria-hidden) from altinn-components intercepts pointer events
-    await area.click({ force: true });
+    await area.click();
+
+    await expect(area).toHaveAttribute('aria-expanded', 'true');
   }
 
   async expectAccessPackageToBeDelegable(packageName: string) {

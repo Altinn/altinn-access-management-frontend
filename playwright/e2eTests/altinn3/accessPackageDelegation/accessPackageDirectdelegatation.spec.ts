@@ -3,6 +3,15 @@ import { DelegationApiUtil } from 'playwright/util/delegationApiUtil';
 import { withTimeout } from 'playwright/util/asyncUtils';
 
 test.describe('Delegate access pacakge from Org-A(Avgiver) to Org-B(Rettighetshaver) ', () => {
+  test.beforeEach(async ({}, testInfo) => {
+    const title = testInfo.title || 'unknown-test';
+    try {
+      await DelegationApiUtil.cleanupAllDelegations(title);
+    } catch {
+      /* ignore if nothing to clean */
+    }
+  });
+
   test.afterEach(async ({}, testInfo) => {
     const title = testInfo.title || 'unknown-test';
 
@@ -25,14 +34,6 @@ test.describe('Delegate access pacakge from Org-A(Avgiver) to Org-B(Rettighetsha
     aktorvalgHeader,
     accessManagementFrontPage,
   }) => {
-    await test.step('Clean up stale state from previous runs', async () => {
-      try {
-        await DelegationApiUtil.cleanupAllDelegations('Org-A delegates access package to Org-B');
-      } catch {
-        /* ignore if nothing to clean */
-      }
-    });
-
     await test.step('Log in', async () => {
       await login.LoginToAccessManagement('04856996188');
       await aktorvalgHeader.selectActorFromHeaderMenu('SUBJEKTIV ELASTISK TIGER AS');

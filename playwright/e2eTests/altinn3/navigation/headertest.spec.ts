@@ -109,53 +109,86 @@ test.describe('Aktørvalg, valg og visning av avgiver', () => {
     });
   });
 
-  test('Virksomhet A skal ikke kunne velge hovedenhet B når underenhet B har delegert en tilgangspakke', async ({
-    login,
-    aktorvalgHeader,
-  }) => {
-    await test.step('sett opp testdata', async () => {
-      await api.addConnectionAndPackagesToUser('10845998952', '311908421', '311151932', [
-        'urn:altinn:accesspackage:byggesoknad',
-      ]);
+  test.describe('Virksomhet A skal ikke kunne velge hovedenhet B', () => {
+    const actor = { pid: '10845998952', loginPid: '08868199785' };
+    const mainUnit = { org: '311908421', name: 'UVITENDE TOM TIGER AS' };
+    const subUnit = { org: '311151932' };
+
+    test.describe('når underenhet B har delegert en tilgangspakke', () => {
+      test.beforeEach(async () => {
+        try {
+          await api.deleteConnection(actor.pid, mainUnit.org, [subUnit.org]);
+        } catch {
+          /* ignore if nothing to clean */
+        }
+        await api.addConnectionAndPackagesToUser(actor.pid, mainUnit.org, subUnit.org, [
+          'urn:altinn:accesspackage:byggesoknad',
+        ]);
+      });
+
+      test('når underenhet B har delegert en tilgangspakke', async ({ login, aktorvalgHeader }) => {
+        await test.step('Logg inn', async () => {
+          await login.LoginToAccessManagement(actor.loginPid);
+        });
+
+        await test.step(`Hovedenhet ${mainUnit.name} skal ikke være klikkbar`, async () => {
+          await aktorvalgHeader.orgIsNotClickableInAktorvalg(mainUnit.name);
+        });
+
+        await test.step(`Se at underenheten for ${mainUnit.name} er klikkbare i aktørlista`, async () => {
+          await aktorvalgHeader.subOrgExistsInAktorvalg(mainUnit.name);
+        });
+      });
+
+      test.afterEach(async () => {
+        try {
+          await api.deleteConnection(actor.pid, mainUnit.org, [subUnit.org]);
+        } catch (error) {
+          console.error('Cleanup: Failed to delete connection:', error);
+        }
+      });
     });
 
-    await test.step('Logg inn', async () => {
-      await login.LoginToAccessManagement('08868199785');
-    });
+    test.describe('når underenhet B har delegert en enkelttjeneste', () => {
+      test.beforeEach(async () => {
+        try {
+          // await api.deleteConnection(actor.pid, mainUnit.org, [subUnit.org]);
+        } catch {
+          /* ignore if nothing to clean */
+        }
+        await api.addConnection(actor.pid, mainUnit.org, subUnit.org);
+        await api.delegateSingleService(
+          actor.pid,
+          mainUnit.org,
+          subUnit.org,
+          'bruno-correspondence',
+        );
+      });
 
-    await test.step('Hovedenhet UVITENDE TOM TIGER AS skal ikke være klikkbar', async () => {
-      await aktorvalgHeader.orgIsNotClickableInAktorvalg('UVITENDE TOM TIGER AS');
-    });
+      test('når underenhet B har delegert en enkelttjeneste', async ({
+        login,
+        aktorvalgHeader,
+      }) => {
+        await test.step('Logg inn', async () => {
+          await login.LoginToAccessManagement(actor.loginPid);
+        });
 
-    await test.step('Se at underenheten for UVITENDE TOM TIGER AS er klikkbare i aktørlista', async () => {
-      await aktorvalgHeader.subOrgExistsInAktorvalg('UVITENDE TOM TIGER AS');
-    });
-  });
+        await test.step(`Hovedenhet ${mainUnit.name} skal ikke være klikkbar`, async () => {
+          await aktorvalgHeader.orgIsNotClickableInAktorvalg(mainUnit.name);
+        });
 
-  test('Virksomhet A skal ikke kunne velge hovedenhet B når underenhet B har delegert en enkelttjeneste', async ({
-    login,
-    aktorvalgHeader,
-  }) => {
-    await test.step('sett opp testdata', async () => {
-      await api.addConnection('10845998952', '311908421', '311151932');
-      await api.delegateSingleService(
-        '10845998952',
-        '311908421',
-        '311151932',
-        'bruno-correspondence',
-      );
-    });
+        await test.step(`Se at underenheten for ${mainUnit.name} er klikkbare i aktørlista`, async () => {
+          await aktorvalgHeader.subOrgExistsInAktorvalg(mainUnit.name);
+        });
+      });
 
-    await test.step('Logg inn', async () => {
-      await login.LoginToAccessManagement('08868199785');
-    });
-
-    await test.step('Hovedenhet UVITENDE TOM TIGER AS skal ikke være klikkbar', async () => {
-      await aktorvalgHeader.orgIsNotClickableInAktorvalg('UVITENDE TOM TIGER AS');
-    });
-
-    await test.step('Se at underenheten for UVITENDE TOM TIGER AS er klikkbare i aktørlista', async () => {
-      await aktorvalgHeader.subOrgExistsInAktorvalg('UVITENDE TOM TIGER AS');
+      test.afterEach(async () => {
+        try {
+          await api.deleteConnection(actor.pid, mainUnit.org, [subUnit.org]);
+        } catch (error) {
+          console.error('Cleanup: Failed to delete connection:', error);
+        }
+      });
     });
   });
 });
