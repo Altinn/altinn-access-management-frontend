@@ -4,8 +4,6 @@ import { useGetSentRequestsQuery } from '@/rtk/features/requestApi';
 export const ORG_INSTANCE_ADMIN_PACKAGE_URN =
   'urn:altinn:accesspackage:tilgangsstyring-enkeltinstanser';
 
-// Shared by the trigger button (for its label) and the modal body. Both subscribe
-// to the same RTK Query cache entry, so this does not cause a duplicate request.
 export const useInstanceAdminPackageRequest = () => {
   const { actingParty, selfParty } = usePartyRepresentation();
   const { data: packageRequests, isLoading } = useGetSentRequestsQuery(

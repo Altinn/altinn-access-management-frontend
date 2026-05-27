@@ -27,7 +27,6 @@ export const RequestModalBody = ({ dialogRef }: RequestModalBodyProps) => {
   const [requestError, setRequestError] = useState(false);
 
   const headingRef = useRef<HTMLHeadingElement>(null);
-  const shouldFocusHeadingRef = useRef(false);
 
   const [createPackageRequest, { isLoading: isCreating }] = useCreatePackageRequestMutation();
   const [withdrawRequest, { isLoading: isWithdrawing }] = useWithdrawRequestMutation();
@@ -46,16 +45,6 @@ export const RequestModalBody = ({ dialogRef }: RequestModalBodyProps) => {
     return () => dialog.removeEventListener('close', handleClose);
   }, [dialogRef, dismissSnackbar]);
 
-  // Focus heading on modal content change
-  useEffect(() => {
-    if (!shouldFocusHeadingRef.current) return;
-    const raf = requestAnimationFrame(() => {
-      headingRef.current?.focus();
-      shouldFocusHeadingRef.current = false;
-    });
-    return () => cancelAnimationFrame(raf);
-  }, [hasPendingRequest]);
-
   const handleConfirm = async () => {
     if (!actingParty || !selfParty) return;
     setRequestError(false);
@@ -66,7 +55,7 @@ export const RequestModalBody = ({ dialogRef }: RequestModalBodyProps) => {
         package: ORG_INSTANCE_ADMIN_PACKAGE_URN,
       }).unwrap();
       // Move focus to heading
-      shouldFocusHeadingRef.current = true;
+      headingRef.current?.focus();
       openSnackbar({ message: t('instance.request_modal.request_success'), color: 'success' });
     } catch {
       setRequestError(true);
@@ -82,7 +71,7 @@ export const RequestModalBody = ({ dialogRef }: RequestModalBodyProps) => {
         id: pendingRequest.id,
       }).unwrap();
       // Move focus to heading
-      shouldFocusHeadingRef.current = true;
+      headingRef.current?.focus();
       openSnackbar({
         message: t('instance.request_modal.delete_request_success'),
         color: 'success',
