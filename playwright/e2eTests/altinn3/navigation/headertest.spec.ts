@@ -110,11 +110,11 @@ test.describe('Aktørvalg, valg og visning av avgiver', () => {
   });
 
   test.describe('Virksomhet A skal ikke kunne velge hovedenhet B', () => {
-    const actor = { pid: '10845998952', loginPid: '08868199785' };
-    const mainUnit = { org: '311908421', name: 'UVITENDE TOM TIGER AS' };
-    const subUnit = { org: '311151932' };
-
     test.describe('når underenhet B har delegert en tilgangspakke', () => {
+      const actor = { pid: '10845998952', loginPid: '08868199785' };
+      const mainUnit = { org: '311908421', name: 'UVITENDE TOM TIGER AS' };
+      const subUnit = { org: '311151932' };
+
       test.beforeEach(async () => {
         try {
           await api.deleteConnection(actor.pid, mainUnit.org, [subUnit.org]);
@@ -150,9 +150,13 @@ test.describe('Aktørvalg, valg og visning av avgiver', () => {
     });
 
     test.describe('når underenhet B har delegert en enkelttjeneste', () => {
+      const actor = { pid: '03817194078', loginPid: '12866199351' };
+      const mainUnit = { org: '312382229', name: 'Trekantet Akselererende Tiger AS' };
+      const subUnit = { org: '311272594' };
+
       test.beforeEach(async () => {
         try {
-          // await api.deleteConnection(actor.pid, mainUnit.org, [subUnit.org]);
+          await api.deleteConnection(actor.pid, mainUnit.org, [subUnit.org]);
         } catch {
           /* ignore if nothing to clean */
         }
