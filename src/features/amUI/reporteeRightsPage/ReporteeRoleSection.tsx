@@ -1,12 +1,12 @@
 import { useRef, useState } from 'react';
 
 import type { Role } from '@/rtk/features/roleApi';
+import type { ActionError } from '@/resources/hooks/useActionError';
 
 import { RoleInfoModal } from '../common/DelegationModal/RoleInfoModal';
 import { RoleList } from '../common/RoleList/RoleList';
 import { OldRolesAlert } from '../common/OldRolesAlert/OldRolesAlert';
 import { usePartyRepresentation } from '../common/PartyRepresentationContext/PartyRepresentationContext';
-import { ActionError } from '@/resources/hooks/useActionError';
 
 interface ReporteeRoleSectionProps {
   numberOfAccesses?: number;
