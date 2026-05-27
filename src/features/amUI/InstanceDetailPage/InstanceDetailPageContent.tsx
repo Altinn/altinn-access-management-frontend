@@ -38,8 +38,9 @@ export const InstanceDetailPageContent = () => {
   const [searchParams] = useSearchParams();
   const { actingParty, fromParty } = usePartyRepresentation();
 
-  const isActingPartyOrg = actingParty?.partyTypeName === PartyType.Organization;
-  const instanceAdminPackageNameKey = isActingPartyOrg
+  const actingPartyIsOrg = actingParty?.partyTypeName === PartyType.Organization;
+
+  const instanceAdminPackageNameKey = actingPartyIsOrg
     ? 'instance_detail_page.instance_admin_package_name_org'
     : 'instance_detail_page.instance_admin_package_name_person';
 
@@ -231,7 +232,7 @@ export const InstanceDetailPageContent = () => {
               />
             )}
           </DsParagraph>
-          {!isInstanceAdmin && isActingPartyOrg && <RequestInstanceAdminPackage />}
+          {!isInstanceAdmin && actingPartyIsOrg && <RequestInstanceAdminPackage />}
           {isInstanceAdmin && isAdmin === false && (
             <>
               <DsParagraph data-size='sm'>
