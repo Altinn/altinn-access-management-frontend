@@ -111,6 +111,17 @@ test.describe('klientadministrasjon', () => {
       login,
       aktorvalgHeader,
     }) => {
+      try {
+        await api.deleteConnection(client.connectionPid, client.org, [actor.org]);
+      } catch {
+        /* ignore if nothing to clean */
+      }
+      try {
+        await api.deleteClientDelegationAgent(actor.pid, actor.org, agent.pid);
+      } catch {
+        /* ignore if nothing to clean */
+      }
+
       await api.addConnectionAndPackagesToUser(client.connectionPid, client.org, actor.org, [
         posttjenester,
       ]);
@@ -182,6 +193,17 @@ test.describe('klientadministrasjon', () => {
       login,
       aktorvalgHeader,
     }) => {
+      try {
+        await api.deleteConnection(client.connectionPid, client.org, [actor.org]);
+      } catch {
+        /* ignore if nothing to clean */
+      }
+      try {
+        await api.deleteClientDelegationAgent(actor.pid, actor.org, agent.pid);
+      } catch {
+        /* ignore if nothing to clean */
+      }
+
       await api.addConnectionAndPackagesToUser(client.connectionPid, client.org, actor.org, [
         posttjenester,
       ]);

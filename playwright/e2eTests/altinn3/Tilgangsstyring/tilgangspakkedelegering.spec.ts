@@ -102,6 +102,11 @@ test.describe('tilgangspakkedelegering fra person til person og person til org',
       accessManagementFrontPage,
     }) => {
       await test.step('sett opp testdata', async () => {
+        try {
+          await api.deleteConnection(actor.pid, actor.pid, [target.pid]);
+        } catch {
+          /* ignore if nothing to clean */
+        }
         await api.addConnection(actor.pid, actor.pid, target.pid);
       });
 
@@ -157,6 +162,11 @@ test.describe('tilgangspakkedelegering fra person til person og person til org',
       accessManagementFrontPage,
     }) => {
       await test.step('sett opp testdata', async () => {
+        try {
+          await api.deleteConnection(actor.pid, actor.pid, [target.org]);
+        } catch {
+          /* ignore if nothing to clean */
+        }
         await api.addConnection(actor.pid, actor.pid, target.org);
       });
 
@@ -429,6 +439,11 @@ test.describe('tilgangspakkedelegering fra org til person og org til org', () =>
       accessManagementFrontPage,
     }) => {
       await test.step('sett opp testdata', async () => {
+        try {
+          await api.deleteConnection(actor.pid, actor.org, [target.pid]);
+        } catch {
+          /* ignore if nothing to clean */
+        }
         await api.addConnection(actor.pid, actor.org, target.pid);
       });
 
@@ -484,6 +499,11 @@ test.describe('tilgangspakkedelegering fra org til person og org til org', () =>
       accessManagementFrontPage,
     }) => {
       await test.step('sett opp testdata', async () => {
+        try {
+          await api.deleteConnection(actor.pid, actor.org, [target.org]);
+        } catch {
+          /* ignore if nothing to clean */
+        }
         await api.addConnection(actor.pid, actor.org, target.org);
       });
 

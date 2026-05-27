@@ -21,6 +21,7 @@ dotenv.config({
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 const config: PlaywrightTestConfig = {
   fullyParallel: true,
+  retries: 1,
   use: {
     trace: 'on',
     screenshot: { mode: 'only-on-failure', fullPage: true },
