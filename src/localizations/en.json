@@ -1071,7 +1071,7 @@
     "search_placeholder": "Search for person",
     "description": "Here you can share a message or form from the inbox or get an overview of who already has access. Use the search field to search for people or add them as a new user.",
     "no_users": "No users have access.",
-    "no_access_description": "<b>You do not have the authority to share this with others.</b> To share and grant power of attorney from the inbox, you must have the access package: {{packageName}}",
+    "no_access_description": "<b>You do not have the authority to share this with others.</b> To share and grant power of attorney from the inbox, you must have the access package: ",
     "instance_admin_package_name_org": "Access manager for single messages, forms and dialogs",
     "instance_admin_package_name_person": "Access management for private individuals",
     "instance_admin_edit_disclaimer": "Only Access Managers or Main Administrators can edit an access grant after it has been given to a user.",

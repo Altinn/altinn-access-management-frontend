@@ -1068,7 +1068,7 @@
     "search_placeholder": "Søk etter person",
     "description": "Her kan du dele en melding eller et skjema fra innboksen eller få en oversikt over hvem som allerede har tilgang. Bruk søkefeltet til å søke etter personer eller legg dem til som ny bruker.",
     "no_users": "Ingen brukere har tilgang.",
-    "no_access_description": "<b>Du har ikke fullmakt til å gi denne videre til andre.</b> For å kunne dele og gi fullmakt fra innboks må man ha tilgangspakken: {{packageName}}",
+    "no_access_description": "<b>Du har ikke fullmakt til å gi denne videre til andre.</b> For å kunne dele og gi fullmakt fra innboks må man ha tilgangspakken: ",
     "instance_admin_package_name_org": "Tilgangsstyrer for enkeltmeldinger, -skjema og -dialoger",
     "instance_admin_package_name_person": "Tilgangsstyring for privatperson",
     "instance_admin_edit_disclaimer": "Kun Tilgangsstyrere eller Hovedadministratorer kan redigere en fullmakt etter den er gitt til en bruker.",

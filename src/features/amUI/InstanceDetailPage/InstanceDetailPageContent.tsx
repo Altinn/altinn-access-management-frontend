@@ -40,10 +40,6 @@ export const InstanceDetailPageContent = () => {
 
   const actingPartyIsOrg = actingParty?.partyTypeName === PartyType.Organization;
 
-  const instanceAdminPackageNameKey = actingPartyIsOrg
-    ? 'instance_detail_page.instance_admin_package_name_org'
-    : 'instance_detail_page.instance_admin_package_name_person';
-
   const modalRef = useRef<HTMLDialogElement>(null);
   const [selectedUser, setSelectedUser] = useState<UserActionTarget | null>(null);
   const [selectedUserMode, setSelectedUserMode] = useState<'edit' | 'delegate'>('edit');
@@ -225,11 +221,19 @@ export const InstanceDetailPageContent = () => {
             {isInstanceAdmin ? (
               t('instance_detail_page.description')
             ) : (
-              <Trans
-                i18nKey='instance_detail_page.no_access_description'
-                values={{ packageName: t(instanceAdminPackageNameKey) }}
-                components={{ b: <strong /> }}
-              />
+              <>
+                <Trans
+                  i18nKey='instance_detail_page.no_access_description'
+                  components={{ b: <strong /> }}
+                />
+                <Trans
+                  i18nKey={
+                    actingPartyIsOrg
+                      ? 'instance_detail_page.instance_admin_package_name_org'
+                      : 'instance_detail_page.instance_admin_package_name_person'
+                  }
+                />
+              </>
             )}
           </DsParagraph>
           {!isInstanceAdmin && actingPartyIsOrg && <RequestInstanceAdminPackage />}
