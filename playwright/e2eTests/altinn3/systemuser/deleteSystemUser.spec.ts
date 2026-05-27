@@ -16,7 +16,7 @@ test.describe('System user deletion', () => {
 
     await test.step('Login and navigate to application', async () => {
       await login.LoginToAccessManagement(testUserPid);
-      await login.chooseReportee(testOrgName);
+      await login.selectMainUnitBySearching(testOrgName);
     });
 
     await test.step('Create system in system register', async () => {

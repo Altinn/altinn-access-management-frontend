@@ -52,7 +52,7 @@ test.describe('Delegering av klienter til Systembruker', () => {
       await test.step('Login and navigate to system user', async () => {
         await login.LoginToAccessManagement(user.pid);
         const reporteeName = user.name;
-        await login.chooseReportee(reporteeName);
+        await login.selectMainUnitBySearching(reporteeName);
 
         const frontPage = new AccessManagementFrontPage(page);
         await frontPage.systemAccessLink.click();
@@ -115,7 +115,7 @@ test.describe('Delegering av klienter til Systembruker', () => {
       await test.step('Login and navigate to system user', async () => {
         await login.LoginToAccessManagement(user.pid);
         const reporteeName = user.name;
-        await login.chooseReportee(reporteeName);
+        await login.selectMainUnitBySearching(reporteeName);
 
         const frontPage = new AccessManagementFrontPage(page);
         await frontPage.systemAccessLink.click();
@@ -184,7 +184,7 @@ test.describe('Delegering av klienter til Systembruker', () => {
       await test.step('Login and navigate to system user', async () => {
         await login.LoginToAccessManagement(user.pid);
         const reporteeName = user.name;
-        await login.chooseReportee(reporteeName);
+        await login.selectMainUnitBySearching(reporteeName);
 
         const frontPage = new AccessManagementFrontPage(page);
         await frontPage.systemAccessLink.click();

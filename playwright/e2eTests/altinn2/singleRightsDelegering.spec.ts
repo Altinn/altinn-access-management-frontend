@@ -17,7 +17,7 @@ test.describe.skip('User with DAGL/HADM role without having resource access them
     test.setTimeout(400000);
 
     await login.LoginToAccessManagement('04885299593');
-    await login.chooseReportee('ULIK FLAT TIGER AS');
+    await login.selectMainUnitBySearching('ULIK FLAT TIGER AS');
 
     //To delete rights - setup
     // GIVEN user without delegated rights to ROMANTISK ESKE
@@ -41,7 +41,7 @@ test.describe.skip('User with DAGL/HADM role without having resource access them
     //Login with covereby User
 
     await login.LoginToAccessManagement('19856097121');
-    await login.chooseReportee('ULIK FLAT TIGER AS');
+    await login.selectMainUnitBySearching('ULIK FLAT TIGER AS');
     await coverebyRights.checkCoverebyRights();
 
     //Instantiate app to which user had got rights
@@ -57,7 +57,7 @@ test.describe.skip('User with DAGL/HADM role without having resource access them
 
     //Instantiate app to which user had got rights
     await login.LoginToAccessManagement('04880748144');
-    await login.chooseReportee('ULIK FLAT TIGER AS');
+    await login.selectMainUnitBySearching('ULIK FLAT TIGER AS');
     await coverebyRights.checkCoverebyRights();
     await instantiateResources.instantiateApp('ULIK FLAT TIGER AS');
     await logoutUser.gotoLogoutPage('ULIK FLAT TIGER AS');
@@ -77,7 +77,7 @@ test.describe.skip('User with DAGL/HADM role without having resource access them
     test.setTimeout(400000);
 
     await login.LoginToAccessManagement('04885299593');
-    await login.chooseReportee('ULIK FLAT TIGER AS');
+    await login.selectMainUnitBySearching('ULIK FLAT TIGER AS');
 
     //To delete rights - setup
     // GIVEN user without delegated rights to OPPKLARENDE OMKOMMEN TIGER AS
@@ -102,7 +102,7 @@ test.describe.skip('User with DAGL/HADM role without having resource access them
     //Login with covereby User
 
     await login.LoginToAccessManagement('21908498426');
-    await login.chooseReportee('ULIK FLAT TIGER AS');
+    await login.selectMainUnitBySearching('ULIK FLAT TIGER AS');
     await coverebyRights.checkCoverebyRights();
 
     //Instantiate app to which user had got rights
@@ -120,7 +120,7 @@ test.describe.skip('User with DAGL/HADM role without having resource access them
 
     //Instantiate app to which user had got rights
     await login.LoginToAccessManagement('20860898609');
-    await login.chooseReportee('ULIK FLAT TIGER AS');
+    await login.selectMainUnitBySearching('ULIK FLAT TIGER AS');
     await coverebyRights.checkCoverebyRights();
     await instantiateResources.instantiateApp('ULIK FLAT TIGER AS');
     await logoutUser.gotoLogoutPage('ULIK FLAT TIGER AS');
@@ -140,7 +140,7 @@ test.describe.skip('User with DAGL/HADM role without having resource access them
 
     //Login with user who has tilgangstyrring rolle
     await login.LoginToAccessManagement('04885299593');
-    await login.chooseReportee('ULIK FLAT TIGER AS');
+    await login.selectMainUnitBySearching('ULIK FLAT TIGER AS');
 
     //To delete rights - setup
     // GIVEN user without delegated rights to UINTERESSERT LØVEFLOKK
@@ -155,7 +155,7 @@ test.describe.skip('User with DAGL/HADM role without having resource access them
 
     //Login with another user who has SENS role
     await login.LoginToAccessManagement('07922148605');
-    await login.chooseReportee('ULIK FLAT TIGER AS');
+    await login.selectMainUnitBySearching('ULIK FLAT TIGER AS');
     await deleteRights.revokeRightsSSN('STORARTET KORGSTOL');
     await new Promise((resolve) =>
       setTimeout(() => {
@@ -172,7 +172,7 @@ test.describe.skip('User with DAGL/HADM role without having resource access them
 
     //Login with covereby User
     await login.LoginToAccessManagement('07885798378');
-    await login.chooseReportee('ULIK FLAT TIGER AS');
+    await login.selectMainUnitBySearching('ULIK FLAT TIGER AS');
     await coverebyRights.checkCoverebyRights();
   });
 
@@ -183,7 +183,7 @@ test.describe.skip('User with DAGL/HADM role without having resource access them
   }) => {
     test.setTimeout(60000 * 2);
     await login.LoginToAccessManagement('04885299593');
-    await login.chooseReportee('ULIK FLAT TIGER AS');
+    await login.selectMainUnitBySearching('ULIK FLAT TIGER AS');
 
     await delegate.delegateToSSN('19856097121', 'GATE');
     await delegateRights.nonDelegatebleRightsToSSN('Altinn2 non-delegable');
