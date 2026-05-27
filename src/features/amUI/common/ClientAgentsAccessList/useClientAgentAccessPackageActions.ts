@@ -7,19 +7,19 @@ import type {
   RemoveAgentAccessPackagesFn,
 } from '@/rtk/features/clientApi';
 
-type UseClientDetailsAccessPackageActionsParams = {
+type UseClientAgentAccessPackageActionsParams = {
   fromPartyUuid?: string;
   actingPartyUuid?: string;
   addAgentAccessPackages: AddAgentAccessPackagesFn;
   removeAgentAccessPackages: RemoveAgentAccessPackagesFn;
 };
 
-export const useClientDetailsAccessPackageActions = ({
+export const useClientAgentAccessPackageActions = ({
   fromPartyUuid,
   actingPartyUuid,
   addAgentAccessPackages,
   removeAgentAccessPackages,
-}: UseClientDetailsAccessPackageActionsParams) => {
+}: UseClientAgentAccessPackageActionsParams) => {
   const { t } = useTranslation();
   const { openSnackbar } = useSnackbar();
 

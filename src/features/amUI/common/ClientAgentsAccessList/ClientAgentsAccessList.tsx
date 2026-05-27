@@ -2,11 +2,10 @@ import React, { useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 import {
   AccessPackageListItemProps,
-  Button,
-  type UserListItemProps,
   type Color,
   formatDate,
   formatDisplayName,
+  type UserListItemProps,
 } from '@altinn/altinn-components';
 
 import type {
@@ -17,15 +16,15 @@ import type {
 } from '@/rtk/features/clientApi';
 import { useAccessPackageLookup } from '@/resources/hooks/useAccessPackageLookup';
 import { isSubUnitByType } from '@/resources/utils/reporteeUtils';
-import { useRoleMetadata } from '../common/UserRoles/useRoleMetadata';
-import { isNewUser } from '../common/isNewUser';
 
-import { AccessPackageListItems } from '../common/AccessPackageListItems/AccessPackageListItems';
-import { UserListItems, type UserListItemData } from '../common/UserListItems/UserListItems';
-import { usePackageAccessControls } from '../common/AccessInfoModal/usePackageAccessControls';
-import { useClientAccessPackageActions } from './useClientAccessPackageActions';
+import { AccessPackageListItems } from '../AccessPackageListItems/AccessPackageListItems';
+import { usePackageAccessControls } from '../AccessInfoModal/usePackageAccessControls';
+import { isNewUser } from '../isNewUser';
+import { UserListItems, type UserListItemData } from '../UserListItems/UserListItems';
+import { useRoleMetadata } from '../UserRoles/useRoleMetadata';
+import { useClientAgentAccessPackageActions } from './useClientAgentAccessPackageActions';
 
-type ClientAdministrationClientAgentsListProps = {
+export type ClientAgentsAccessListProps = {
   agents: Agent[];
   clientAccessPackages: Agent[];
   client?: Client;
@@ -45,7 +44,21 @@ const getUserListItemType = (agentType: string): UserListItemProps['type'] => {
 const getAgentSortKey = (agent: Agent): string =>
   `${isNewUser(agent.agentAddedAt) ? '0' : '1'}:${agent.agent.name.toLowerCase()}`;
 
-export const ClientAdministrationClientAgentsList = ({
+const buildPackageIdsByAgentId = (clientAccessPackages: Agent[]) => {
+  const map = new Map<string, Set<string>>();
+  clientAccessPackages.forEach((agent) => {
+    const packageIds = new Set<string>();
+    agent.access.forEach((access) => {
+      access.packages.forEach((pkg) => {
+        packageIds.add(pkg.id);
+      });
+    });
+    map.set(agent.agent.id, packageIds);
+  });
+  return map;
+};
+
+export const ClientAgentsAccessList = ({
   agents,
   clientAccessPackages,
   client,
@@ -56,7 +69,7 @@ export const ClientAdministrationClientAgentsList = ({
   removeAgentAccessPackages,
   emptyText,
   addUserButton,
-}: ClientAdministrationClientAgentsListProps) => {
+}: ClientAgentsAccessListProps) => {
   const { t } = useTranslation();
   const { getAccessPackageById } = useAccessPackageLookup();
   const { getRoleMetadata } = useRoleMetadata();
@@ -65,7 +78,7 @@ export const ClientAdministrationClientAgentsList = ({
   const delegateDisabled = isLoading || !fromPartyUuid || !actingPartyUuid;
   const removeDisabled = isLoading || !fromPartyUuid || !actingPartyUuid;
 
-  const { addClientAccessPackage, removeClientAccessPackage } = useClientAccessPackageActions({
+  const { addClientAccessPackage, removeClientAccessPackage } = useClientAgentAccessPackageActions({
     fromPartyUuid,
     actingPartyUuid,
     addAgentAccessPackages,
@@ -77,19 +90,10 @@ export const ClientAdministrationClientAgentsList = ({
   const clientIsSubUnit = isSubUnitByType(client?.client.variant);
   const packageType = clientType.toLowerCase() === 'organisasjon' ? 'company' : 'person';
 
-  const packageIdsByAgentId = useMemo(() => {
-    const map = new Map<string, Set<string>>();
-    (clientAccessPackages ?? []).forEach((agent) => {
-      const packageIds = new Set<string>();
-      agent.access.forEach((access) => {
-        access.packages.forEach((pkg) => {
-          packageIds.add(pkg.id);
-        });
-      });
-      map.set(agent.agent.id, packageIds);
-    });
-    return map;
-  }, [clientAccessPackages]);
+  const packageIdsByAgentId = useMemo(
+    () => buildPackageIdsByAgentId(clientAccessPackages),
+    [clientAccessPackages],
+  );
 
   const sortedAgents = useMemo(() => {
     return [...agents].sort((a, b) => {
@@ -111,17 +115,20 @@ export const ClientAdministrationClientAgentsList = ({
         fullName: agent.agent.name,
         type: agent.agent.type === 'Person' ? 'person' : 'company',
       });
+
       const packages = access.packages?.map<AccessPackageListItemProps>((pkg) => {
         const hasAccess = packageIdsByAgentId.get(agentId)?.has(pkg.id) ?? false;
         const accessPackage = getAccessPackageById(pkg.id);
         const delegable = accessPackage?.isDelegable ?? false;
         const packageName = accessPackage?.name || pkg.name;
         const isViaRole = access.role.code !== 'rettighetshaver';
+
         return {
           id: pkg.id,
           name: packageName,
           type: packageType,
           isSubUnit: clientIsSubUnit,
+          titleAs: 'h3',
           description: isViaRole
             ? t('client_administration_page.via_role', { role: roleName })
             : '',
@@ -170,7 +177,9 @@ export const ClientAdministrationClientAgentsList = ({
       subUnit: isSubUnit,
       deleted: agent.agent.isDeleted ?? undefined,
       collapsible: true,
-      as: Button,
+      interactive: true,
+      titleAs: 'h2',
+      as: 'button',
       children: <AccessPackageListItems items={nodes} />,
       description:
         userType === 'company'

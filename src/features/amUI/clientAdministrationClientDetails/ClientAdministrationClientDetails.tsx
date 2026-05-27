@@ -26,8 +26,8 @@ import {
   createErrorDetails,
   TechnicalErrorParagraphs,
 } from '../common/TechnicalErrorParagraphs/TechnicalErrorParagraphs';
+import { ClientAgentsAccessList } from '../common/ClientAgentsAccessList/ClientAgentsAccessList';
 import { ClientAdministrationClientTabs } from './ClientAdministrationClientTabs';
-import { ClientAdministrationClientAgentsList } from './ClientAdministrationClientAgentsList';
 import { useClientAccessAgentLists } from './useClientAccessAgentLists';
 import { UserPageHeader } from '../common/UserPageHeader/UserPageHeader';
 import { UserPageHeaderSkeleton } from '../common/UserPageHeader/UserPageHeaderSkeleton';
@@ -150,7 +150,7 @@ export const ClientAdministrationClientDetails = () => {
                   activeTab={activeTab}
                   onChange={setActiveTab}
                   hasUsersContent={
-                    <ClientAdministrationClientAgentsList
+                    <ClientAgentsAccessList
                       agents={agentsWithClientAccess}
                       clientAccessPackages={clientAccessPackages ?? []}
                       client={selectedClient}
@@ -163,7 +163,7 @@ export const ClientAdministrationClientDetails = () => {
                     />
                   }
                   allUsersContent={
-                    <ClientAdministrationClientAgentsList
+                    <ClientAgentsAccessList
                       agents={allAgents}
                       clientAccessPackages={clientAccessPackages ?? []}
                       client={selectedClient}
