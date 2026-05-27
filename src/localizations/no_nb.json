@@ -1040,7 +1040,22 @@
     "title_not_found": "Ukjent melding eller skjema",
     "title_correspondence_not_found": "Melding om tjenesten {{resourceName}}",
     "service_title_label": "Tjeneste",
-    "instance_id_label": "ID"
+    "instance_id_label": "ID",
+    "request_instance_admin_package": "Jeg vil dele fra innboks",
+    "withdraw_instance_admin_package": "Slett forespørsel om fullmakt",
+    "request_modal": {
+      "heading": "Ønsker du å be om fullmakt til å kunne dele fra innboksen?",
+      "description_1": "For å kunne dele og gi fullmakt fra innboks må man ha tilgangsspakken: «Tilgangsstyrer for enkeltmeldinger, skjema og dialoger»",
+      "description_2": "Denne tilgangspakken gir deg fullmakt til å kunne gi andre brukere tilgang til enkeltmeldinger, -skjema og -dialoger, som du selv har tilgang til. Ønsker du å be om denne tilgangspakken?",
+      "confirm": "Ja, be om fullmakt",
+      "cancel": "Avbryt",
+      "pending_heading": "Du har bedt om tilgangspakken «Tilgangsstyrer for enkeltmeldinger, skjema og dialoger»",
+      "pending_description": "Venter på at {{fromParty}} behandler din forespørsel. Når forespørselen er godkjent vil du kunne se og slette fullmakten din under «Tilgangsstyring» i hovedmenyen.",
+      "delete_request": "Slett forespørsel",
+      "close": "Lukk",
+      "request_error": "Kunne ikke be om tilgangspakken. Vennligst prøv igjen.",
+      "delete_request_error": "Kunne ikke slette forespørselen. Vennligst prøv igjen."
+    }
   },
   "instance_detail_page": {
     "document_title": "Delt fra innboks",
@@ -1051,7 +1066,9 @@
     "search_placeholder": "Søk etter person",
     "description": "Her kan du dele en melding eller et skjema fra innboksen eller få en oversikt over hvem som allerede har tilgang. Bruk søkefeltet til å søke etter personer eller legg dem til som ny bruker.",
     "no_users": "Ingen brukere har tilgang.",
-    "no_access_description": "<b>Du har ikke fullmakt til å gi videre denne meldingen eller dette skjemaet.</b> For å kunne dele og gi tilgang fra innboksen må du ha tilgangspakken: Tilgangsstyrer for enkeltmeldinger, skjema og dialoger.",
+    "no_access_description": "<b>Du har ikke fullmakt til å gi denne videre til andre.</b> For å kunne dele og gi fullmakt fra innboks må man ha tilgangsspakken: {{packageName}}",
+    "instance_admin_package_name_org": "Tilgangsstyrer for enkeltmeldinger, -skjema og -dialoger",
+    "instance_admin_package_name_person": "Tilgangsstyring for privatperson",
     "instance_admin_edit_disclaimer": "Kun Tilgangsstyrere eller Hovedadministratorer kan redigere en fullmakt etter den er gitt til en bruker.",
     "add_user_modal": {
       "heading": "Gi fullmakt til ny bruker",

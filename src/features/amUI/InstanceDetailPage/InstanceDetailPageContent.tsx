@@ -31,11 +31,20 @@ import {
 import { InstanceDescription } from '../common/InstanceDescription/InstanceDescription';
 
 import classes from './InstanceDetailPageContent.module.css';
+import { RequestInstanceAdminPackage } from './RequestInstanceAdminPackage';
 
 export const InstanceDetailPageContent = () => {
   const { t, i18n } = useTranslation();
   const [searchParams] = useSearchParams();
-  const { actingParty, fromParty } = usePartyRepresentation();
+  const { actingParty, fromParty, selfParty } = usePartyRepresentation();
+  console.log('fromParty: ', fromParty);
+  console.log('actingParty: ', actingParty);
+  console.log('selfParty: ', selfParty);
+
+  const isActingPartyOrg = actingParty?.partyTypeName === PartyType.Organization;
+  const instanceAdminPackageNameKey = isActingPartyOrg
+    ? 'instance_detail_page.instance_admin_package_name_org'
+    : 'instance_detail_page.instance_admin_package_name_person';
 
   const modalRef = useRef<HTMLDialogElement>(null);
   const [selectedUser, setSelectedUser] = useState<UserActionTarget | null>(null);
@@ -218,16 +227,23 @@ export const InstanceDetailPageContent = () => {
             {isInstanceAdmin ? (
               t('instance_detail_page.description')
             ) : (
-              <Trans
-                i18nKey='instance_detail_page.no_access_description'
-                components={{ b: <strong /> }}
-              />
+              <>
+                <Trans
+                  i18nKey='instance_detail_page.no_access_description'
+                  values={{ packageName: t(instanceAdminPackageNameKey) }}
+                  components={{ b: <strong /> }}
+                />
+                {isActingPartyOrg && <RequestInstanceAdminPackage />}
+              </>
             )}
           </DsParagraph>
           {isInstanceAdmin && isAdmin === false && (
-            <DsParagraph data-size='sm'>
-              {t('instance_detail_page.instance_admin_edit_disclaimer')}
-            </DsParagraph>
+            <>
+              <DsParagraph data-size='sm'>
+                {t('instance_detail_page.instance_admin_edit_disclaimer')}
+              </DsParagraph>
+              {isActingPartyOrg && <RequestInstanceAdminPackage />}
+            </>
           )}
           {isAdmin ? (
             <InstanceUsersAsAdmin
