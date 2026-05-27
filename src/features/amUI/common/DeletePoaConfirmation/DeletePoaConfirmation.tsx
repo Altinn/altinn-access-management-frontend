@@ -1,9 +1,9 @@
 import { useTranslation } from 'react-i18next';
-import { DsButton, DsDialog, DsHeading, DsParagraph, DsSpinner } from '@altinn/altinn-components';
-import classes from './DeletePoaConfirmation.module.css';
 import { MinusCircleIcon } from '@navikt/aksel-icons';
 import { useRef, useState } from 'react';
 import { createPortal } from 'react-dom';
+import { DsButton, DsDialog, DsHeading, DsParagraph, DsSpinner } from '@altinn/altinn-components';
+import classes from './DeletePoaConfirmation.module.css';
 
 export interface DeletePoaConfirmationProps {
   warningText: string;
@@ -45,8 +45,10 @@ export const DeletePoaConfirmation = ({
         variant={variant}
         disabled={isDeleteLoading || disabled}
         onClick={() => {
-          setOpen(true);
-          requestAnimationFrame(() => dialogRef.current?.showModal());
+          if (!open) {
+            setOpen(true);
+            requestAnimationFrame(() => dialogRef.current?.showModal());
+          }
         }}
       >
         {icon && <MinusCircleIcon />}
