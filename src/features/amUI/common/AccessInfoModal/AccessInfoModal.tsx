@@ -95,7 +95,7 @@ export const AccessInfoModal = ({
 
         {children}
 
-        <div className={classes.actions}>{actions}</div>
+        {actions && <div className={classes.actions}>{actions}</div>}
 
         <DsButton
           variant='secondary'

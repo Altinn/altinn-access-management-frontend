@@ -47,16 +47,23 @@ export const usePackageAccessControls = () => {
   const isMobileOrSmaller = useIsMobileOrSmaller();
   const [selected, setSelected] = useState<PackageAccessAction | null>(null);
 
+  const runAction = (item: PackageAccessAction) => {
+    if (item.hasAccess) {
+      item.onRemove();
+    } else {
+      item.onAdd();
+    }
+  };
+
   const renderActionButton = (item: PackageAccessAction, onComplete?: () => void) => (
     <Button
       variant='tertiary'
       disabled={item.hasAccess ? item.removeDisabled : item.addDisabled}
-      onClick={() => {
-        if (item.hasAccess) {
-          item.onRemove();
-        } else {
-          item.onAdd();
-        }
+      onClick={(e) => {
+        // Prevent the row's click handler (which opens the modal) from firing
+        // when the inline action button is used directly.
+        e.stopPropagation();
+        runAction(item);
         onComplete?.();
       }}
     >
@@ -71,16 +78,17 @@ export const usePackageAccessControls = () => {
     </Button>
   );
 
-  /** Spread onto an AccessPackageListItem to wire up the inline action / modal toggle. */
-  const getItemActionProps = (item: PackageAccessAction): ItemActionProps => {
-    const useModal = item.canAct && isMobileOrSmaller;
-    return {
-      interactive: useModal,
-      as: useModal ? 'button' : 'div',
-      onClick: useModal ? () => setSelected(item) : undefined,
-      controls: item.canAct && !isMobileOrSmaller ? renderActionButton(item) : undefined,
-    };
-  };
+  /**
+   * Spread onto an AccessPackageListItem. The row is always clickable to open
+   * the package info modal; the inline action button is shown on larger screens
+   * (and hidden on small screens, where the modal is the way to act).
+   */
+  const getItemActionProps = (item: PackageAccessAction): ItemActionProps => ({
+    interactive: true,
+    as: 'button',
+    onClick: () => setSelected(item),
+    controls: item.canAct && !isMobileOrSmaller ? renderActionButton(item) : undefined,
+  });
 
   const modal = (
     <AccessInfoModal
@@ -95,7 +103,7 @@ export const usePackageAccessControls = () => {
       }
       userHasAccess={selected?.hasAccess}
       toPartyName={selected?.toPartyName}
-      actions={selected ? renderActionButton(selected, () => setSelected(null)) : null}
+      actions={selected?.canAct ? renderActionButton(selected, () => setSelected(null)) : null}
     >
       {selected?.accessPackage && <PackageMeta accessPackage={selected.accessPackage} />}
     </AccessInfoModal>

@@ -6,7 +6,6 @@ import type { ExtendedUser } from '@/rtk/features/userInfoApi';
 import { UserItem } from '@/features/amUI/common/UserList/UserItem';
 import { UserListActions } from '../UserList/UserListActions';
 import { DelegationAction } from '../DelegationModal/EditModal';
-import { useIsMobileOrSmaller } from '@/resources/utils/screensizeUtils';
 import { AccessInfoModal } from '../AccessInfoModal/AccessInfoModal';
 import { InheritedStatusType, type InheritedStatusMessageType } from '../useInheritedStatus';
 
@@ -31,10 +30,10 @@ export interface UserSearchResultsProps {
   getUserLink?: (user: UserActionTarget) => string;
   titleAs?: titleAsType;
   /**
-   * On small screens, hide the inline action button and instead let the user
-   * tap a row to open a modal with the access status and a labelled action.
+   * Make each row open a modal with the access status and a clearly labelled
+   * action. The inline action button is then shown only on larger screens.
    */
-  useInfoModalOnSmallScreen?: boolean;
+  enableInfoModal?: boolean;
 }
 
 /** Build StatusSection inheritance entries from the parties a user inherits access through. */
@@ -57,11 +56,9 @@ export const UserSearchResults: React.FC<UserSearchResultsProps> = ({
   revokeLabel,
   getUserLink,
   titleAs = 'h4',
-  useInfoModalOnSmallScreen = false,
+  enableInfoModal = false,
 }) => {
   const { t } = useTranslation();
-  const isSmall = useIsMobileOrSmaller();
-  const useInfoModal = useInfoModalOnSmallScreen && isSmall;
   const isInteractive = !!getUserLink;
   const [selectedUser, setSelectedUser] = useState<UserSearchNode | null>(null);
 
@@ -79,7 +76,7 @@ export const UserSearchResults: React.FC<UserSearchResultsProps> = ({
             interactive={isInteractive}
             linkTo={getUserLink ? getUserLink(user) : undefined}
             onSelect={
-              useInfoModal
+              enableInfoModal
                 ? () => setSelectedUser(user)
                 : onSelect
                   ? () => onSelect({ id: user.id, name: user.name, type: user.type })
@@ -96,7 +93,7 @@ export const UserSearchResults: React.FC<UserSearchResultsProps> = ({
                 onDelegate={onDelegate ? () => onDelegate(user as ExtendedUser) : undefined}
                 delegateLabel={delegateLabel}
                 revokeLabel={revokeLabel}
-                hideOnSmallScreen={useInfoModalOnSmallScreen}
+                hideOnSmallScreen={enableInfoModal}
               />
             )}
           />
@@ -114,7 +111,7 @@ export const UserSearchResults: React.FC<UserSearchResultsProps> = ({
           </Button>
         </div>
       )}
-      {useInfoModalOnSmallScreen && (
+      {enableInfoModal && (
         <AccessInfoModal
           open={selectedUser !== null}
           onClose={() => setSelectedUser(null)}

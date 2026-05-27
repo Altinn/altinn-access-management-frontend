@@ -37,8 +37,8 @@ export interface UserSearchProps {
   additionalFilters?: React.ReactNode;
   hasActiveAdditionalFilters?: boolean;
   titleAs?: titleAsType;
-  /** On small screens, hide inline actions and open a modal with a labelled action instead. */
-  useInfoModalOnSmallScreen?: boolean;
+  /** Make each row open a modal with a labelled action (inline action shown only on larger screens). */
+  enableInfoModal?: boolean;
 }
 
 const filterAvailableUserTypes = (items?: UserSearchNode[]) =>
@@ -70,7 +70,7 @@ export const UserSearch: React.FC<UserSearchProps> = ({
   additionalFilters,
   hasActiveAdditionalFilters = false,
   titleAs = 'h4',
-  useInfoModalOnSmallScreen = false,
+  enableInfoModal = false,
 }) => {
   const { t } = useTranslation();
   const [query, setQuery] = useState('');
@@ -180,7 +180,7 @@ export const UserSearch: React.FC<UserSearchProps> = ({
             getUserLink={getUserLink}
             titleAs={titleAs}
             revokeLabel={revokeLabel}
-            useInfoModalOnSmallScreen={useInfoModalOnSmallScreen}
+            enableInfoModal={enableInfoModal}
           />
           {showDirectNoResults && (
             <DsParagraph data-size='md'>
@@ -208,7 +208,7 @@ export const UserSearch: React.FC<UserSearchProps> = ({
               isActionLoading={isActionLoading}
               includeSelfAsChild={includeSelfAsChildOnIndirect}
               delegateLabel={addUserButtonLabel}
-              useInfoModalOnSmallScreen={useInfoModalOnSmallScreen}
+              enableInfoModal={enableInfoModal}
             />
           </>
         )}

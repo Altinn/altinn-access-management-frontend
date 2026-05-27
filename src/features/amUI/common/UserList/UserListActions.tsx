@@ -65,7 +65,10 @@ export const UserListActions = ({
         <DsButton
           variant='tertiary'
           data-size='md'
-          onClick={() => onDelegate(user)}
+          onClick={(e) => {
+            e.stopPropagation();
+            onDelegate(user);
+          }}
           aria-label={t('common.give_poa')}
         >
           <PlusCircleIcon aria-hidden='true' />
@@ -76,7 +79,10 @@ export const UserListActions = ({
         <DsButton
           variant='tertiary'
           data-size='md'
-          onClick={() => onRequest(user)}
+          onClick={(e) => {
+            e.stopPropagation();
+            onRequest(user);
+          }}
           aria-label={t('common.request_poa')}
         >
           <PlusCircleIcon aria-hidden='true' />
@@ -87,7 +93,10 @@ export const UserListActions = ({
         <DsButton
           variant='tertiary'
           data-size='md'
-          onClick={() => onRevoke(user)}
+          onClick={(e) => {
+            e.stopPropagation();
+            onRevoke(user);
+          }}
           aria-label={revokeLabel ?? t('common.delete_poa')}
         >
           <MinusCircleIcon aria-hidden='true' />
