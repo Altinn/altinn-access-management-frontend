@@ -67,14 +67,6 @@ export class LoginPage {
     await this.pidInput.fill(pid);
     await this.autentiserButton.click();
   }
-
-  async tryTypingInSearchbox(input: Locator, party: string) {
-    await expect(input).toBeVisible();
-    await expect(input).toBeEnabled();
-    await input.click();
-    await input.clear();
-    await input.pressSequentially(party);
-  }
 }
 
 export class logoutWithUser {

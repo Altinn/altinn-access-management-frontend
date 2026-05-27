@@ -81,6 +81,8 @@ export class AccessManagementFrontPage {
     const area = this.page.getByRole('button', { name: areaName }).first();
     await expect(area).toBeVisible();
     await area.click();
+
+    await expect(area).toHaveAttribute('aria-expanded', 'true');
   }
 
   async expectAccessPackageToBeDelegable(packageName: string) {

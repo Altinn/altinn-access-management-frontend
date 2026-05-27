@@ -45,7 +45,7 @@ export class AktorvalgHeader {
     this.menuProfile = this.menuItem('Din profil');
 
     this.menuLogout = this.page.getByRole('button', { name: 'Logg ut' });
-    this.aktorvalgSearch = this.page.getByRole('searchbox', { name: 'Søk i aktører' });
+    this.aktorvalgSearch = this.page.getByRole('searchbox');
     this.showDeletedSwitch = this.page.getByRole('switch', { name: 'Vis slettede' });
     this.bokmalLanguageOption = this.page.locator('#no_nb');
     this.addFavoriteButtons = this.page.getByRole('button', { name: 'Legg til i favorittar' });

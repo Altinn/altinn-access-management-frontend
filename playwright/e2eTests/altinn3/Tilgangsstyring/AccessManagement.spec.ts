@@ -74,14 +74,6 @@ test.describe('Tilgangsstyring', () => {
       await api.addConnectionAndPackagesToUser(org.managerPid, org.orgNo, user.pid, packages);
     });
 
-    test.afterEach(async () => {
-      try {
-        await api.deleteConnection(org.managerPid, org.orgNo, [user.pid]);
-      } catch (error) {
-        console.error('Cleanup: Failed to delete connection:', error);
-      }
-    });
-
     test('Hovedadministrator skal kunne delegere nesten alle tilgangspakker', async ({
       login,
       aktorvalgHeader,
@@ -191,14 +183,6 @@ test.describe('Tilgangsstyring', () => {
 
     test.beforeEach(async () => {
       await api.addConnectionAndPackagesToUser(org.managerPid, org.orgNo, user.pid, packages);
-    });
-
-    test.afterEach(async () => {
-      try {
-        await api.deleteConnection(org.managerPid, org.orgNo, [user.pid]);
-      } catch (error) {
-        console.error('Cleanup: Failed to delete connection:', error);
-      }
     });
 
     test('Vanlig bruker skal ikke kunne delegere pakker de selv ikke har tilgang til', async ({

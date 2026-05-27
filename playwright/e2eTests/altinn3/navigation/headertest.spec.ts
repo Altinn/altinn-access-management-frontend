@@ -20,7 +20,6 @@ test.describe('Aktørvalg, valg og visning av avgiver', () => {
   };
 
   test('Sjekk at slettede enheter kan vises/skjules', async ({ page, aktorvalgHeader }) => {
-    test.skip(ENV == 'TT02', 'The "Show Deleted" button is currently feature toggled off in TT02');
     const login = new LoginPage(page);
     await test.step('Log in', async () => {
       await login.LoginToAccessManagement(SHOW_DELETED_TEST_USER);
