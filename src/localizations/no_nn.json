@@ -1054,7 +1054,9 @@
       "delete_request": "Slett førespurnad",
       "close": "Lukk",
       "request_error": "Kunne ikkje be om tilgangspakka. Ver venleg og prøv igjen.",
-      "delete_request_error": "Kunne ikkje slette førespurnaden. Ver venleg og prøv igjen."
+      "delete_request_error": "Kunne ikkje slette førespurnaden. Ver venleg og prøv igjen.",
+      "request_success": "Førespurnad om fullmakt sendt",
+      "delete_request_success": "Førespurnad sletta"
     }
   },
   "instance_detail_page": {

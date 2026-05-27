@@ -1057,7 +1057,9 @@
       "delete_request": "Delete request",
       "close": "Close",
       "request_error": "Could not request the access package. Please try again.",
-      "delete_request_error": "Could not delete the request. Please try again."
+      "delete_request_error": "Could not delete the request. Please try again.",
+      "request_success": "Request for power of attorney sent",
+      "delete_request_success": "Request deleted"
     }
   },
   "instance_detail_page": {

@@ -1054,7 +1054,9 @@
       "delete_request": "Slett forespørsel",
       "close": "Lukk",
       "request_error": "Kunne ikke be om tilgangspakken. Vennligst prøv igjen.",
-      "delete_request_error": "Kunne ikke slette forespørselen. Vennligst prøv igjen."
+      "delete_request_error": "Kunne ikke slette forespørselen. Vennligst prøv igjen.",
+      "request_success": "Forespørsel om fullmakt sendt",
+      "delete_request_success": "Forespørsel slettet"
     }
   },
   "instance_detail_page": {

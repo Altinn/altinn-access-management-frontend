@@ -234,11 +234,9 @@ export const InstanceDetailPageContent = () => {
           </DsParagraph>
           {!isInstanceAdmin && actingPartyIsOrg && <RequestInstanceAdminPackage />}
           {isInstanceAdmin && isAdmin === false && (
-            <>
-              <DsParagraph data-size='sm'>
-                {t('instance_detail_page.instance_admin_edit_disclaimer')}
-              </DsParagraph>
-            </>
+            <DsParagraph data-size='sm'>
+              {t('instance_detail_page.instance_admin_edit_disclaimer')}
+            </DsParagraph>
           )}
           {isAdmin ? (
             <InstanceUsersAsAdmin
