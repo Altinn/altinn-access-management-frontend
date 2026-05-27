@@ -23,7 +23,7 @@ test.describe.skip('API-Delegations to organization user', () => {
     };
 
     await login.LoginToAccessManagement(userThatDelegates.id);
-    await login.chooseReportee(userThatDelegates.reportee);
+    await login.selectMainUnitBySearching(userThatDelegates.reportee);
     await apiDelegations.deleteDelegatedAPIs();
 
     await apiDelegations.delegateAPI(standardApiDetails.name, userToDelegateTo.orgNumber);
@@ -49,7 +49,7 @@ test.describe.skip('API-Delegations to organization user', () => {
     };
 
     await login.LoginToAccessManagement(userThatDelegates.id);
-    await login.chooseReportee(userThatDelegates.reportee);
+    await login.selectMainUnitBySearching(userThatDelegates.reportee);
     await apiDelegations.deleteDelegatedAPIs();
 
     //API-delegations
@@ -66,7 +66,7 @@ test.describe.skip('API-Delegations to organization user', () => {
     await context.clearCookies();
 
     await login.LoginToAccessManagement(userThatReceivesDelegation.id);
-    await login.chooseReportee(userThatReceivesDelegation.reportee);
+    await login.selectMainUnitBySearching(userThatReceivesDelegation.reportee);
     await apiDelegations.verifyAPIOverviewPage(userThatDelegates.reportee, standardApiDetails.name);
   });
 
@@ -87,7 +87,7 @@ test.describe.skip('API-Delegations to organization user', () => {
     };
 
     await login.LoginToAccessManagement(userThatDelegates.id);
-    await login.chooseReportee(userThatDelegates.reportee);
+    await login.selectMainUnitBySearching(userThatDelegates.reportee);
     await apiDelegations.deleteDelegatedAPIs();
 
     //API-delegations
@@ -116,7 +116,7 @@ test.describe.skip('API-Delegations to organization user', () => {
     };
 
     await login.LoginToAccessManagement(userThatDelegates.id);
-    await login.chooseReportee(userThatDelegates.reportee);
+    await login.selectMainUnitBySearching(userThatDelegates.reportee);
     await apiDelegations.deleteDelegatedAPIs();
 
     await apiDelegations.delegateAPI(standardApiDetails.name, userThatReceivesDelegation.orgNumber);
@@ -146,7 +146,7 @@ test.describe.skip('API-Delegations to organization user', () => {
     };
 
     await login.LoginToAccessManagement(userThatDelegates.id);
-    await login.chooseReportee(userThatDelegates.reportee);
+    await login.selectMainUnitBySearching(userThatDelegates.reportee);
     await apiDelegations.deleteDelegatedAPIs();
     await apiDelegations.delegateAPI(standardApiDetails.name, userThatReceivesDelegation.orgNumber);
 
@@ -177,7 +177,7 @@ test.describe.skip('API-Delegations to organization user', () => {
     };
 
     await login.LoginToAccessManagement(userThatDelegates.id);
-    await login.chooseReportee(userThatDelegates.reportee);
+    await login.selectMainUnitBySearching(userThatDelegates.reportee);
     await apiDelegations.deleteDelegatedAPIs();
 
     await apiDelegations.goToAccessToApiPageFromFrontPage();
@@ -217,7 +217,7 @@ test.describe.skip('API Delegation Access Control Tests', () => {
   }) => {
     const reporteeWithoutAccess = 'AMBASSADERÅD HUMORISTISK';
     await login.LoginToAccessManagement('02828698497');
-    await login.chooseReportee(reporteeWithoutAccess);
+    await login.selectMainUnitBySearching(reporteeWithoutAccess);
 
     await page.goto(env('BASE_URL') + '/ui/profile');
 
@@ -239,7 +239,7 @@ test.describe.skip('API Delegation Access Control Tests', () => {
     const user = '14824497789';
     const reporteeWithAPIRole = 'AKTVERDIG RETORISK APE';
     await login.LoginToAccessManagement(user);
-    await login.chooseReportee(reporteeWithAPIRole);
+    await login.selectMainUnitBySearching(reporteeWithAPIRole);
 
     await page.goto(env('BASE_URL') + '/ui/profile');
 
@@ -263,7 +263,7 @@ test.describe.skip('API Delegation Access Control Tests', () => {
     };
 
     await login.LoginToAccessManagement(userThatDelegates.id);
-    await login.chooseReportee(userThatDelegates.reportee);
+    await login.selectMainUnitBySearching(userThatDelegates.reportee);
 
     await page.goto(env('BASE_URL') + '/ui/profile');
     //Make sure the user is on the correct page

@@ -46,15 +46,15 @@ export class LoginPage {
     await this.autentiserButton.click();
   }
 
-  async chooseReportee(targetReportee: string) {
-    // Search for target reportee in the searchbox
+  async selectMainUnitBySearching(targetReportee: string) {
     await expect(this.reporteeSearchBox).toBeVisible();
     await this.reporteeSearchBox.fill(targetReportee);
 
-    const markedResult = this.page
-      .locator('mark')
-      .filter({ hasText: new RegExp(targetReportee, 'i') });
-    await markedResult.first().click();
+    const menuItem = this.page.getByRole('menuitem', { name: targetReportee }).first();
+    await expect(menuItem).toBeVisible();
+    await menuItem.click();
+
+    await expect(this.page.getByRole('menuitem', { name: targetReportee })).not.toBeVisible();
   }
 
   private async navigateToLoginPage() {

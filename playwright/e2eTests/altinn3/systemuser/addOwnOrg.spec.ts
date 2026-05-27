@@ -63,7 +63,7 @@ test.describe('Systembruker - Legg til egen organisasjon', () => {
 
     await test.step('Login and navigate to system user', async () => {
       await login.LoginToAccessManagement(systemUserOwner.managerPid);
-      await login.chooseReportee(systemUserOwner.orgName);
+      await login.selectMainUnitBySearching(systemUserOwner.orgName);
       await accessManagementFrontPage.systemAccessLink.click();
 
       await expect(clientDelegationPage.systemUserLink(name)).toBeVisible();
