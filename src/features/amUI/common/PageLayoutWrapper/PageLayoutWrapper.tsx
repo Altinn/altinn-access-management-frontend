@@ -1,7 +1,6 @@
 import React from 'react';
 import type { LanguageCode } from '@altinn/altinn-components';
 import { Layout, RootProvider, Snackbar } from '@altinn/altinn-components';
-import { useLocation } from 'react-router';
 
 import { useGetReporteeQuery } from '@/rtk/features/userInfoApi';
 
@@ -11,8 +10,8 @@ import { useFooter } from './useFooter';
 import { useHeader } from './useHeader';
 
 import { useTranslation } from 'react-i18next';
-import { GeneralPath } from '@/routes/paths';
 import { useSidebarItems } from './useSidebarItems';
+import { NavigationFocus } from './NavigationFocus';
 
 interface PageLayoutWrapperProps {
   openAccountMenu?: boolean;
@@ -31,7 +30,6 @@ export const PageLayoutWrapper = ({
 }: PageLayoutWrapperProps): React.ReactNode => {
   const { t } = useTranslation();
   const { data: reportee } = useGetReporteeQuery();
-  const { pathname, search } = useLocation();
 
   const { menuGroups } = useGlobalMenu();
 
@@ -44,6 +42,7 @@ export const PageLayoutWrapper = ({
 
   return (
     <RootProvider languageCode={languageCode as LanguageCode}>
+      <NavigationFocus />
       <Layout
         color={reportee?.type ? getAccountType(reportee.type) : 'neutral'}
         theme='subtle'
@@ -55,10 +54,7 @@ export const PageLayoutWrapper = ({
           variant: escalateBannerSeverity ? 'alert' : undefined,
         }}
         skipLink={{
-          href:
-            pathname === '/'
-              ? `${GeneralPath.BasePath}${search}#main-content`
-              : `${GeneralPath.BasePath}${pathname}${search}#main-content`,
+          href: '#main-content',
           color: 'inherit',
           size: 'xs',
           children: t('common.skiplink'),
