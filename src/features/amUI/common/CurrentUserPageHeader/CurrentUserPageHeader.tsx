@@ -41,6 +41,7 @@ export const CurrentUserPageHeader = ({
         titleAs='h2'
         size='lg'
         loading={loading}
+        containerAs='div'
       />
     </div>
   );
