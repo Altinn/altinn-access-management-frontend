@@ -1,3 +1,5 @@
+Coderabbit, ignore this file.
+
 # Playwright E2E Tests — Guidelines
 
 ## Locators
@@ -75,7 +77,7 @@ All locators and page interactions live in page objects under `playwright/pages/
 - One file per page/feature area
 - Constructor defines all fixed locators as `readonly` properties
 - Dynamic locators (parameterized by name, org number, etc.) are methods that return `Locator`
-- Page objects do not make assertions — that belongs in the test
+- Page objects should generally avoid assertions — prefer keeping assertions in the test. But it's fine when it improves readability or aids debugging (e.g., asserting visibility before a multi-step interaction)
 
 ## Test isolation
 

@@ -1,12 +1,12 @@
 import * as React from 'react';
 import { DsHeading, formatDisplayName } from '@altinn/altinn-components';
-import { Trans } from 'react-i18next';
+import { Trans, useTranslation } from 'react-i18next';
 
 import { arraysEqual } from '@/resources/utils';
 import { useDebouncedValue } from '@/resources/hooks';
 import { ResourceType, useGetResourceOwnersQuery } from '@/rtk/features/resourceApi';
 import {
-  useGetMaskinportenResourcesQuery,
+  useGetMaskinportenSupplierResourcesQuery,
   useSearchMaskinportenScopesQuery,
 } from '@/rtk/features/maskinportenApi';
 import type { ServiceResource } from '@/rtk/features/singleRights/singleRightsApi';
@@ -26,6 +26,7 @@ export const ScopeSearch = ({
 }: {
   onSelect: (resource: ServiceResource, error?: boolean) => void;
 }) => {
+  const { t } = useTranslation();
   const { fromParty, toParty } = usePartyRepresentation();
   const { searchString, setSearchString, filters, setFilters, currentPage, setCurrentPage } =
     useDelegationModalContext();
@@ -40,7 +41,7 @@ export const ScopeSearch = ({
     resultsPerPage: searchResultsPerPage,
   });
   const { data: resourceOwners } = useGetResourceOwnersQuery([ResourceType.MaskinportenSchema]);
-  const { data: delegatedResources } = useGetMaskinportenResourcesQuery(
+  const { data: delegatedResources } = useGetMaskinportenSupplierResourcesQuery(
     {
       party: fromParty?.partyUuid,
       supplier,
@@ -92,6 +93,7 @@ export const ScopeSearch = ({
             }
           }}
           serviceOwnerOptions={filterOptions}
+          searchPlaceholder={t('maskinporten_page.search_api_placeholder')}
         />
       </div>
       <div className={classes.searchResults}>

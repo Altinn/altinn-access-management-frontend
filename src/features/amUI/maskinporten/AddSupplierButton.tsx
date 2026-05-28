@@ -56,7 +56,7 @@ export const AddSupplierButton = ({
         onClick={() => modalRef.current?.showModal()}
         className={isLarge ? classes.largeButton : undefined}
       >
-        <PlusIcon aria-label={t('common.add')} />
+        <PlusIcon aria-hidden='true' />
         {t('maskinporten_page.add_supplier_button')}
       </DsButton>
       <DsDialog

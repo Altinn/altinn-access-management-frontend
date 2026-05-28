@@ -15,7 +15,7 @@ test.describe('System Register', async () => {
     const api = new ApiRequests();
     system = await api.createSystemSystemRegister(vendorOrgNumber);
     await login.LoginToAccessManagement(testUserPid);
-    await login.chooseReportee(testUserName, testOrgName);
+    await login.selectMainUnitBySearching(testOrgName);
   });
 
   test('Create system user and verify landing page', async ({

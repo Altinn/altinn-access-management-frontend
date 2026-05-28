@@ -1,199 +1,265 @@
-import { env } from 'playwright/util/helper';
-import { LoginPage } from 'playwright/pages/LoginPage';
 import { test } from '../../../fixture/pomFixture';
-import { AktorvalgHeader } from '../../../pages/AktorvalgHeader';
 import { EnduserConnection } from '../../../api-requests/EnduserConnection';
+
+const service = 'bruno-correspondence';
 
 test.describe('Enkelttjenestedelegering fra person til person og person til org', () => {
   const api = new EnduserConnection();
 
-  test.afterAll('slett testdata', async () => {
-    await api.deleteSingleServiceDelegation(
-      '03906197811',
-      '03906197811',
-      '23854897845',
-      'bruno-correspondence',
-    );
-    await api.deleteSingleServiceDelegation(
-      '23813949784',
-      '23813949784',
-      '313642291',
-      'bruno-correspondence',
-    );
-    await api.deleteSingleServiceDelegation(
-      '13894599892',
-      '13894599892',
-      '50907400120',
-      'bruno-correspondence',
-    );
-    await api.deleteSingleServiceDelegation(
-      '09889499432',
-      '09889499432',
-      '210530932',
-      'bruno-correspondence',
-    );
-  });
+  test.describe('Deleger enkelttjeneste til person', () => {
+    const delegator = { pid: '03906197811', name: 'STRAFFET KOST' };
+    const recipient = { pid: '23854897845', name: 'KONSERVATIV FATTIGMANNSKOST' };
 
-  test('Deleger enkelttjeneste til person', async ({ page, accessManagementFrontPage }) => {
-    const login = new LoginPage(page);
-    const aktorvalgHeader = new AktorvalgHeader(page);
-    await test.step('sett opp testdata', async () => {
-      await api.addConnection('03906197811', '03906197811', '23854897845');
+    test.beforeEach(async () => {
+      await api.addConnection(delegator.pid, delegator.pid, recipient.pid);
     });
 
-    await test.step('Logg inn', async () => {
-      await login.LoginToAccessManagement('03906197811');
+    test.afterEach(async () => {
+      try {
+        await api.deleteSingleServiceDelegation(
+          delegator.pid,
+          delegator.pid,
+          recipient.pid,
+          service,
+        );
+      } catch (error) {
+        console.error('Cleanup: Failed to delete single service delegation:', error);
+      }
+      try {
+        await api.deleteConnection(delegator.pid, delegator.pid, [recipient.pid]);
+      } catch (error) {
+        console.error('Cleanup: Failed to delete connection:', error);
+      }
     });
 
-    await test.step('Velg deg selv (STRAFFET KOST) og gå til tilgangsstyring', async () => {
-      await aktorvalgHeader.selectActorFromHeaderMenu('STRAFFET KOST');
-    });
+    test('Deleger enkelttjeneste til person', async ({
+      login,
+      aktorvalgHeader,
+      accessManagementFrontPage,
+    }) => {
+      await test.step('Logg inn', async () => {
+        await login.LoginToAccessManagement(delegator.pid);
+      });
 
-    await test.step('Gå til brukere-siden og klikk på "KONSERVATIV FATTIGMANNSKOST"', async () => {
-      await accessManagementFrontPage.goToUsers();
-      await accessManagementFrontPage.clickUser('KONSERVATIV FATTIGMANNSKOST');
-    });
+      await test.step(`Velg deg selv (${delegator.name}) og gå til tilgangsstyring`, async () => {
+        await aktorvalgHeader.selectActorFromHeaderMenu(delegator.name);
+      });
 
-    await test.step('Gi KONSERVATIV FATTIGMANNSKOST fullmakt til enkelttjenesten "bruno-correspondence"', async () => {
-      await accessManagementFrontPage.goToEnkelttjenester();
-      await accessManagementFrontPage.clickGiFullmakt();
-      await accessManagementFrontPage.sokEtterEnkelttjeneste('bruno-correspondence');
-      await accessManagementFrontPage.clickEnkelttjeneste('bruno-correspondence');
-      await accessManagementFrontPage.clickGiFullmaktEnkelttjeneste();
-      await accessManagementFrontPage.LukkGiFullmaktVindu();
-    });
+      await test.step(`Gå til brukere-siden og klikk på "${recipient.name}"`, async () => {
+        await accessManagementFrontPage.goToUsers();
+        await accessManagementFrontPage.clickUser(recipient.name);
+      });
 
-    await test.step('KONSERVATIV FATTIGMANNSKOST skal ha enkelttjenesten "bruno-correspondence"', async () => {
-      await accessManagementFrontPage.goToUsers();
-      await accessManagementFrontPage.clickUser('KONSERVATIV FATTIGMANNSKOST');
-      await accessManagementFrontPage.goToEnkelttjenester();
-      await accessManagementFrontPage.expectUserToHaveEnkelttjeneste('bruno-correspondence');
+      await test.step(`Gi ${recipient.name} fullmakt til enkelttjenesten "${service}"`, async () => {
+        await accessManagementFrontPage.goToEnkelttjenester();
+        await accessManagementFrontPage.clickGiFullmakt();
+        await accessManagementFrontPage.sokEtterEnkelttjeneste(service);
+        await accessManagementFrontPage.clickEnkelttjeneste(service);
+        await accessManagementFrontPage.clickGiFullmaktEnkelttjeneste();
+        await accessManagementFrontPage.LukkGiFullmaktVindu();
+      });
+
+      await test.step(`${recipient.name} skal ha enkelttjenesten "${service}"`, async () => {
+        await accessManagementFrontPage.goToUsers();
+        await accessManagementFrontPage.clickUser(recipient.name);
+        await accessManagementFrontPage.goToEnkelttjenester();
+        await accessManagementFrontPage.userCanDeleteEnkelttjeneste(service);
+      });
     });
   });
 
-  test('Deleger enkelttjeneste til virksomhet', async ({ page, accessManagementFrontPage }) => {
-    const login = new LoginPage(page);
-    const aktorvalgHeader = new AktorvalgHeader(page);
-    await test.step('sett opp testdata', async () => {
-      await api.addConnection('23813949784', '23813949784', '313642291');
+  test.describe('Deleger enkelttjeneste til virksomhet', () => {
+    const delegator = { pid: '23813949784', name: 'ORIENTAL TRAPP' };
+    const recipient = { orgNo: '313642291', name: 'OVERFLØDIG SOLID TIGER AS' };
+
+    test.beforeEach(async () => {
+      await api.addConnection(delegator.pid, delegator.pid, recipient.orgNo);
     });
 
-    await test.step('Logg inn', async () => {
-      await login.LoginToAccessManagement('23813949784');
+    test.afterEach(async () => {
+      try {
+        await api.deleteSingleServiceDelegation(
+          delegator.pid,
+          delegator.pid,
+          recipient.orgNo,
+          service,
+        );
+      } catch (error) {
+        console.error('Cleanup: Failed to delete single service delegation:', error);
+      }
+      try {
+        await api.deleteConnection(delegator.pid, delegator.pid, [recipient.orgNo]);
+      } catch (error) {
+        console.error('Cleanup: Failed to delete connection:', error);
+      }
     });
 
-    await test.step('Velg org ORIENTAL TRAPP og gå til tilgangsstyring', async () => {
-      await aktorvalgHeader.selectActorFromHeaderMenu('ORIENTAL TRAPP');
-    });
+    test('Deleger enkelttjeneste til virksomhet', async ({
+      login,
+      aktorvalgHeader,
+      accessManagementFrontPage,
+    }) => {
+      await test.step('Logg inn', async () => {
+        await login.LoginToAccessManagement(delegator.pid);
+      });
 
-    await test.step('Gå til brukere-siden og klikk på "OVERFLØDIG SOLID TIGER AS"', async () => {
-      await accessManagementFrontPage.goToUsers();
-      await accessManagementFrontPage.expandOrg('OVERFLØDIG SOLID TIGER AS');
-      await accessManagementFrontPage.clickUser('OVERFLØDIG SOLID TIGER AS');
-    });
+      await test.step(`Velg org ${delegator.name} og gå til tilgangsstyring`, async () => {
+        await aktorvalgHeader.selectActorFromHeaderMenu(delegator.name);
+      });
 
-    await test.step('Gi OVERFLØDIG SOLID TIGER AS fullmakt til enkelttjenesten "bruno-correspondence"', async () => {
-      await accessManagementFrontPage.goToEnkelttjenester();
-      await accessManagementFrontPage.clickGiFullmakt();
-      await accessManagementFrontPage.sokEtterEnkelttjeneste('bruno-correspondence');
-      await accessManagementFrontPage.clickEnkelttjeneste('bruno-correspondence');
-      await accessManagementFrontPage.clickGiFullmaktEnkelttjeneste();
-      await accessManagementFrontPage.LukkGiFullmaktVindu();
-    });
+      await test.step(`Gå til brukere-siden og klikk på "${recipient.name}"`, async () => {
+        await accessManagementFrontPage.goToUsers();
+        await accessManagementFrontPage.expandOrg(recipient.name);
+        await accessManagementFrontPage.clickUser(recipient.name);
+      });
 
-    await test.step('OVERFLØDIG SOLID TIGER AS skal ha enkelttjenesten "bruno-correspondence"', async () => {
-      await accessManagementFrontPage.goToUsers();
-      await accessManagementFrontPage.expandOrg('OVERFLØDIG SOLID TIGER AS');
-      await accessManagementFrontPage.clickUser('OVERFLØDIG SOLID TIGER AS');
-      await accessManagementFrontPage.goToEnkelttjenester();
-      await accessManagementFrontPage.expectUserToHaveEnkelttjeneste('bruno-correspondence');
-    });
-  });
+      await test.step(`Gi ${recipient.name} fullmakt til enkelttjenesten "${service}"`, async () => {
+        await accessManagementFrontPage.goToEnkelttjenester();
+        await accessManagementFrontPage.clickGiFullmakt();
+        await accessManagementFrontPage.sokEtterEnkelttjeneste(service);
+        await accessManagementFrontPage.clickEnkelttjeneste(service);
+        await accessManagementFrontPage.clickGiFullmaktEnkelttjeneste();
+        await accessManagementFrontPage.LukkGiFullmaktVindu();
+      });
 
-  test('Slett enkelttjenestedelegering hos person', async ({ page, accessManagementFrontPage }) => {
-    const login = new LoginPage(page);
-    const aktorvalgHeader = new AktorvalgHeader(page);
-    await test.step('sett opp testdata', async () => {
-      await api.addConnection('13894599892', '13894599892', '50907400120');
-      await api.delegateSingleService(
-        '13894599892',
-        '13894599892',
-        '50907400120',
-        'bruno-correspondence',
-      );
-    });
-
-    await test.step('Logg inn', async () => {
-      await login.LoginToAccessManagement('13894599892');
-    });
-
-    await test.step('Velg deg selv (SØT KOMPETANSE) og gå til tilgangsstyring', async () => {
-      await aktorvalgHeader.selectActorFromHeaderMenu('SØT KOMPETANSE');
-    });
-
-    await test.step('Gå til brukere-siden og klikk på "VASSEN ERT"', async () => {
-      await accessManagementFrontPage.goToUsers();
-      await accessManagementFrontPage.clickUser('VASSEN ERT');
-    });
-
-    await test.step('slett "bruno-correspondence" for VASSEN ERT', async () => {
-      await accessManagementFrontPage.goToEnkelttjenester();
-      await accessManagementFrontPage.clickSlettEnkelttjeneste('bruno-correspondence');
-    });
-
-    await test.step('VASSEN ERT ikke skal ha enkelttjenesten "bruno-correspondence"', async () => {
-      await accessManagementFrontPage.goToUsers();
-      await accessManagementFrontPage.clickUser('VASSEN ERT');
-      await accessManagementFrontPage.goToEnkelttjenester();
-      await accessManagementFrontPage.clickGiFullmakt();
-      await accessManagementFrontPage.sokEtterEnkelttjeneste('bruno-correspondence');
-      await accessManagementFrontPage.expectEnkelttjenesteToBeDelegable('bruno-correspondence');
+      await test.step(`${recipient.name} skal ha enkelttjenesten "${service}"`, async () => {
+        await accessManagementFrontPage.goToUsers();
+        await accessManagementFrontPage.expandOrg(recipient.name);
+        await accessManagementFrontPage.clickUser(recipient.name);
+        await accessManagementFrontPage.goToEnkelttjenester();
+        await accessManagementFrontPage.userCanDeleteEnkelttjeneste(service);
+      });
     });
   });
 
-  test('Slett enkelttjeneste hos virksomhet', async ({ page, accessManagementFrontPage }) => {
-    const login = new LoginPage(page);
-    const aktorvalgHeader = new AktorvalgHeader(page);
-    await test.step('sett opp testdata', async () => {
-      await api.addConnection('09889499432', '09889499432', '210530932');
-      await api.delegateSingleService(
-        '09889499432',
-        '09889499432',
-        '210530932',
-        'bruno-correspondence',
-      );
+  test.describe('Slett enkelttjenestedelegering hos person', () => {
+    const delegator = { pid: '13894599892', name: 'SØT KOMPETANSE' };
+    const recipient = { pid: '50907400120', name: 'VASSEN ERT' };
+
+    test.beforeEach(async () => {
+      await api.addConnection(delegator.pid, delegator.pid, recipient.pid);
+      await api.delegateSingleService(delegator.pid, delegator.pid, recipient.pid, service);
     });
 
-    await test.step('Logg inn', async () => {
-      await login.LoginToAccessManagement('09889499432');
+    test.afterEach(async ({}, testInfo) => {
+      if (testInfo.status !== 'passed') {
+        try {
+          await api.deleteSingleServiceDelegation(
+            delegator.pid,
+            delegator.pid,
+            recipient.pid,
+            service,
+          );
+        } catch (error) {
+          console.error('Cleanup: Failed to delete single service delegation:', error);
+        }
+      }
+      try {
+        await api.deleteConnection(delegator.pid, delegator.pid, [recipient.pid]);
+      } catch (error) {
+        console.error('Cleanup: Failed to delete connection:', error);
+      }
     });
 
-    await test.step('Velg deg selv (KOMPLEKS BØNNE) og gå til tilgangsstyring', async () => {
-      await aktorvalgHeader.selectActorFromHeaderMenu('KOMPLEKS BØNNE');
+    test('Slett enkelttjenestedelegering hos person', async ({
+      login,
+      aktorvalgHeader,
+      accessManagementFrontPage,
+    }) => {
+      await test.step('Logg inn', async () => {
+        await login.LoginToAccessManagement(delegator.pid);
+      });
+
+      await test.step(`Velg deg selv (${delegator.name}) og gå til tilgangsstyring`, async () => {
+        await aktorvalgHeader.selectActorFromHeaderMenu(delegator.name);
+      });
+
+      await test.step(`Gå til brukere-siden og klikk på "${recipient.name}"`, async () => {
+        await accessManagementFrontPage.goToUsers();
+        await accessManagementFrontPage.clickUser(recipient.name);
+      });
+
+      await test.step(`Slett "${service}" for ${recipient.name}`, async () => {
+        await accessManagementFrontPage.goToEnkelttjenester();
+        await accessManagementFrontPage.clickSlettEnkelttjeneste(service);
+      });
+
+      await test.step(`${recipient.name} skal ikke ha enkelttjenesten "${service}"`, async () => {
+        await accessManagementFrontPage.goToUsers();
+        await accessManagementFrontPage.clickUser(recipient.name);
+        await accessManagementFrontPage.goToEnkelttjenester();
+        await accessManagementFrontPage.clickGiFullmakt();
+        await accessManagementFrontPage.sokEtterEnkelttjeneste(service);
+        await accessManagementFrontPage.expectEnkelttjenesteToBeDelegable(service);
+      });
+    });
+  });
+
+  test.describe('Slett enkelttjeneste hos virksomhet', () => {
+    const delegator = { pid: '09889499432', name: 'KOMPLEKS BØNNE' };
+    const recipient = { orgNo: '210530932', name: 'TYDELIG VIS TIGER AS' };
+
+    test.beforeEach(async () => {
+      await api.addConnection(delegator.pid, delegator.pid, recipient.orgNo);
+      await api.delegateSingleService(delegator.pid, delegator.pid, recipient.orgNo, service);
     });
 
-    await test.step('Gå til brukere-siden og klikk på "TYDELIG VIS TIGER AS"', async () => {
-      await accessManagementFrontPage.goToUsers();
-      await accessManagementFrontPage.expandOrg('TYDELIG VIS TIGER AS');
-      await accessManagementFrontPage.clickUser('TYDELIG VIS TIGER AS');
+    test.afterEach(async ({}, testInfo) => {
+      if (testInfo.status !== 'passed') {
+        try {
+          await api.deleteSingleServiceDelegation(
+            delegator.pid,
+            delegator.pid,
+            recipient.orgNo,
+            service,
+          );
+        } catch (error) {
+          console.error('Cleanup: Failed to delete single service delegation:', error);
+        }
+      }
+      try {
+        await api.deleteConnection(delegator.pid, delegator.pid, [recipient.orgNo]);
+      } catch (error) {
+        console.error('Cleanup: Failed to delete connection:', error);
+      }
     });
 
-    await test.step('slett "bruno-correspondence" for TYDELIG VIS TIGER AS', async () => {
-      await accessManagementFrontPage.goToUsers();
-      await accessManagementFrontPage.expandOrg('TYDELIG VIS TIGER AS');
-      await accessManagementFrontPage.clickUser('TYDELIG VIS TIGER AS');
-      await accessManagementFrontPage.goToEnkelttjenester();
-      await accessManagementFrontPage.clickSlettEnkelttjeneste('bruno-correspondence');
-    });
+    test('Slett enkelttjeneste hos virksomhet', async ({
+      login,
+      aktorvalgHeader,
+      accessManagementFrontPage,
+    }) => {
+      await test.step('Logg inn', async () => {
+        await login.LoginToAccessManagement(delegator.pid);
+      });
 
-    await test.step('TYDELIG VIS TIGER AS ikke skal ha enkelttjenesten "bruno-correspondence"', async () => {
-      await accessManagementFrontPage.goToUsers();
-      await accessManagementFrontPage.expandOrg('TYDELIG VIS TIGER AS');
-      await accessManagementFrontPage.clickUser('TYDELIG VIS TIGER AS');
-      await accessManagementFrontPage.goToEnkelttjenester();
-      await accessManagementFrontPage.clickGiFullmakt();
-      await accessManagementFrontPage.sokEtterEnkelttjeneste('bruno-correspondence');
-      await accessManagementFrontPage.expectEnkelttjenesteToBeDelegable('bruno-correspondence');
+      await test.step(`Velg deg selv (${delegator.name}) og gå til tilgangsstyring`, async () => {
+        await aktorvalgHeader.selectActorFromHeaderMenu(delegator.name);
+      });
+
+      await test.step(`Gå til brukere-siden og klikk på "${recipient.name}"`, async () => {
+        await accessManagementFrontPage.goToUsers();
+        await accessManagementFrontPage.expandOrg(recipient.name);
+        await accessManagementFrontPage.clickUser(recipient.name);
+      });
+
+      await test.step(`Slett "${service}" for ${recipient.name}`, async () => {
+        await accessManagementFrontPage.goToUsers();
+        await accessManagementFrontPage.expandOrg(recipient.name);
+        await accessManagementFrontPage.clickUser(recipient.name);
+        await accessManagementFrontPage.goToEnkelttjenester();
+        await accessManagementFrontPage.clickSlettEnkelttjeneste(service);
+      });
+
+      await test.step(`${recipient.name} skal ikke ha enkelttjenesten "${service}"`, async () => {
+        await accessManagementFrontPage.goToUsers();
+        await accessManagementFrontPage.expandOrg(recipient.name);
+        await accessManagementFrontPage.clickUser(recipient.name);
+        await accessManagementFrontPage.goToEnkelttjenester();
+        await accessManagementFrontPage.clickGiFullmakt();
+        await accessManagementFrontPage.sokEtterEnkelttjeneste(service);
+        await accessManagementFrontPage.expectEnkelttjenesteToBeDelegable(service);
+      });
     });
   });
 });
@@ -201,196 +267,272 @@ test.describe('Enkelttjenestedelegering fra person til person og person til org'
 test.describe('Enkelttjenestedelegering fra org til person og org til org', () => {
   const api = new EnduserConnection();
 
-  test.afterAll('slett testdata', async () => {
-    await api.deleteSingleServiceDelegation(
-      '05916597349',
-      '313189503',
-      '17889574100',
-      'bruno-correspondence',
-    );
-    await api.deleteSingleServiceDelegation(
-      '16928599063',
-      '312476932',
-      '313233383',
-      'bruno-correspondence',
-    );
-    await api.deleteSingleServiceDelegation(
-      '18846498989',
-      '311716670',
-      '09893049719',
-      'bruno-correspondence',
-    );
-    await api.deleteSingleServiceDelegation(
-      '16815995930',
-      '313707679',
-      '314021622',
-      'bruno-correspondence',
-    );
-  });
+  test.describe('Deleger enkelttjeneste fra org til person', () => {
+    const delegator = { pid: '30818599567', orgNo: '313025853', name: 'LYDIG REDELIG TIGER AS' };
+    const recipient = { pid: '17889574100', name: 'ANSVARSFULL REGLE' };
 
-  test('Deleger enkelttjeneste fra org til person', async ({ page, accessManagementFrontPage }) => {
-    const login = new LoginPage(page);
-    const aktorvalgHeader = new AktorvalgHeader(page);
-    await test.step('sett opp testdata', async () => {
-      await api.addConnection('05916597349', '313189503', '17889574100');
+    test.beforeEach(async () => {
+      await api.addConnection(delegator.pid, delegator.orgNo, recipient.pid);
     });
 
-    await test.step('Logg inn', async () => {
-      await login.LoginToAccessManagement('05916597349');
+    test.afterEach(async () => {
+      try {
+        await api.deleteSingleServiceDelegation(
+          delegator.pid,
+          delegator.orgNo,
+          recipient.pid,
+          service,
+        );
+      } catch (error) {
+        console.error('Cleanup: Failed to delete single service delegation:', error);
+      }
+      try {
+        await api.deleteConnection(delegator.pid, delegator.orgNo, [recipient.pid]);
+      } catch (error) {
+        console.error('Cleanup: Failed to delete connection:', error);
+      }
     });
 
-    await test.step('Velg org RYDDIG SUBJEKTIV TIGER AS og gå til tilgangsstyring', async () => {
-      await aktorvalgHeader.selectActorFromHeaderMenu('RYDDIG SUBJEKTIV TIGER AS');
-    });
+    test('Deleger enkelttjeneste fra org til person', async ({
+      login,
+      aktorvalgHeader,
+      accessManagementFrontPage,
+    }) => {
+      await test.step('Logg inn', async () => {
+        await login.LoginToAccessManagement(delegator.pid);
+      });
 
-    await test.step('Gå til brukere-siden og klikk på "ANSVARSFULL REGLE"', async () => {
-      await accessManagementFrontPage.goToUsers();
-      await accessManagementFrontPage.clickUser('ANSVARSFULL REGLE');
-    });
+      await test.step(`Velg org ${delegator.name} og gå til tilgangsstyring`, async () => {
+        await aktorvalgHeader.selectActorFromHeaderMenu(delegator.name);
+      });
 
-    await test.step('Gi ANSVARSFULL REGLE fullmakt til enkelttjenesten "bruno-correspondence"', async () => {
-      await accessManagementFrontPage.goToEnkelttjenester();
-      await accessManagementFrontPage.clickGiFullmakt();
-      await accessManagementFrontPage.sokEtterEnkelttjeneste('bruno-correspondence');
-      await accessManagementFrontPage.clickEnkelttjeneste('bruno-correspondence');
-      await accessManagementFrontPage.clickGiFullmaktEnkelttjeneste();
-      await accessManagementFrontPage.LukkGiFullmaktVindu();
-    });
+      await test.step(`Gå til brukere-siden og klikk på "${recipient.name}"`, async () => {
+        await accessManagementFrontPage.goToUsers();
+        await accessManagementFrontPage.clickUser(recipient.name);
+      });
 
-    await test.step('ANSVARSFULL REGLE skal ha enkelttjenesten "bruno-correspondence"', async () => {
-      await accessManagementFrontPage.goToUsers();
-      await accessManagementFrontPage.clickUser('ANSVARSFULL REGLE');
-      await accessManagementFrontPage.goToEnkelttjenester();
-      await accessManagementFrontPage.expectUserToHaveEnkelttjeneste('bruno-correspondence');
+      await test.step(`Gi ${recipient.name} fullmakt til enkelttjenesten "${service}"`, async () => {
+        await accessManagementFrontPage.goToEnkelttjenester();
+        await accessManagementFrontPage.clickGiFullmakt();
+        await accessManagementFrontPage.sokEtterEnkelttjeneste(service);
+        await accessManagementFrontPage.clickEnkelttjeneste(service);
+        await accessManagementFrontPage.clickGiFullmaktEnkelttjeneste();
+        await accessManagementFrontPage.LukkGiFullmaktVindu();
+      });
+
+      await test.step(`${recipient.name} skal ha enkelttjenesten "${service}"`, async () => {
+        await accessManagementFrontPage.goToUsers();
+        await accessManagementFrontPage.clickUser(recipient.name);
+        await accessManagementFrontPage.goToEnkelttjenester();
+        await accessManagementFrontPage.userCanDeleteEnkelttjeneste(service);
+      });
     });
   });
 
-  test('Deleger enkelttjeneste fra org til org', async ({ page, accessManagementFrontPage }) => {
-    const login = new LoginPage(page);
-    const aktorvalgHeader = new AktorvalgHeader(page);
-    await test.step('sett opp testdata', async () => {
-      await api.addConnection('16928599063', '312476932', '313233383');
+  test.describe('Deleger enkelttjeneste fra org til org', () => {
+    const delegator = {
+      pid: '16928599063',
+      orgNo: '312476932',
+      name: 'FARLIG GJESTFRI TIGER AS',
+    };
+    const recipient = { orgNo: '313233383', name: 'RIK INNBRINGENDE TIGER AS' };
+
+    test.beforeEach(async () => {
+      await api.addConnection(delegator.pid, delegator.orgNo, recipient.orgNo);
     });
 
-    await test.step('Logg inn', async () => {
-      await login.LoginToAccessManagement('16928599063');
+    test.afterEach(async () => {
+      try {
+        await api.deleteSingleServiceDelegation(
+          delegator.pid,
+          delegator.orgNo,
+          recipient.orgNo,
+          service,
+        );
+      } catch (error) {
+        console.error('Cleanup: Failed to delete single service delegation:', error);
+      }
+      try {
+        await api.deleteConnection(delegator.pid, delegator.orgNo, [recipient.orgNo]);
+      } catch (error) {
+        console.error('Cleanup: Failed to delete connection:', error);
+      }
     });
 
-    await test.step('Velg org FARLIG GJESTFRI TIGER AS og gå til tilgangsstyring', async () => {
-      await aktorvalgHeader.selectActorFromHeaderMenu('FARLIG GJESTFRI TIGER AS');
-    });
+    test('Deleger enkelttjeneste fra org til org', async ({
+      login,
+      aktorvalgHeader,
+      accessManagementFrontPage,
+    }) => {
+      await test.step('Logg inn', async () => {
+        await login.LoginToAccessManagement(delegator.pid);
+      });
 
-    await test.step('Gå til brukere-siden og klikk på "RIK INNBRINGENDE TIGER AS"', async () => {
-      await accessManagementFrontPage.goToUsers();
-      await accessManagementFrontPage.expandOrg('RIK INNBRINGENDE TIGER AS');
-      await accessManagementFrontPage.clickUser('RIK INNBRINGENDE TIGER AS');
-    });
+      await test.step(`Velg org ${delegator.name} og gå til tilgangsstyring`, async () => {
+        await aktorvalgHeader.selectActorFromHeaderMenu(delegator.name);
+      });
 
-    await test.step('Gi RIK INNBRINGENDE TIGER AS fullmakt til enkelttjenesten "bruno-correspondence"', async () => {
-      await accessManagementFrontPage.goToEnkelttjenester();
-      await accessManagementFrontPage.clickGiFullmakt();
-      await accessManagementFrontPage.sokEtterEnkelttjeneste('bruno-correspondence');
-      await accessManagementFrontPage.clickEnkelttjeneste('bruno-correspondence');
-      await accessManagementFrontPage.clickGiFullmaktEnkelttjeneste();
-      await accessManagementFrontPage.LukkGiFullmaktVindu();
-    });
+      await test.step(`Gå til brukere-siden og klikk på "${recipient.name}"`, async () => {
+        await accessManagementFrontPage.goToUsers();
+        await accessManagementFrontPage.expandOrg(recipient.name);
+        await accessManagementFrontPage.clickUser(recipient.name);
+      });
 
-    await test.step('RIK INNBRINGENDE TIGER AS skal ha enkelttjenesten "bruno-correspondence"', async () => {
-      await accessManagementFrontPage.goToUsers();
-      await accessManagementFrontPage.expandOrg('RIK INNBRINGENDE TIGER AS');
-      await accessManagementFrontPage.clickUser('RIK INNBRINGENDE TIGER AS');
-      await accessManagementFrontPage.goToEnkelttjenester();
-      await accessManagementFrontPage.expectUserToHaveEnkelttjeneste('bruno-correspondence');
-    });
-  });
+      await test.step(`Gi ${recipient.name} fullmakt til enkelttjenesten "${service}"`, async () => {
+        await accessManagementFrontPage.goToEnkelttjenester();
+        await accessManagementFrontPage.clickGiFullmakt();
+        await accessManagementFrontPage.sokEtterEnkelttjeneste(service);
+        await accessManagementFrontPage.clickEnkelttjeneste(service);
+        await accessManagementFrontPage.clickGiFullmaktEnkelttjeneste();
+        await accessManagementFrontPage.LukkGiFullmaktVindu();
+      });
 
-  test('Slett enkelttjenestedelegering fra org til person', async ({
-    page,
-    accessManagementFrontPage,
-  }) => {
-    const login = new LoginPage(page);
-    const aktorvalgHeader = new AktorvalgHeader(page);
-    await test.step('sett opp testdata', async () => {
-      await api.addConnection('18846498989', '311716670', '09893049719');
-      await api.delegateSingleService(
-        '18846498989',
-        '311716670',
-        '09893049719',
-        'bruno-correspondence',
-      );
-    });
-
-    await test.step('Logg inn', async () => {
-      await login.LoginToAccessManagement('18846498989');
-    });
-
-    await test.step('Velg deg selv (NÆR REALISTISK TIGER AS) og gå til tilgangsstyring', async () => {
-      await aktorvalgHeader.selectActorFromHeaderMenu('NÆR REALISTISK TIGER AS');
-    });
-
-    await test.step('Gå til brukere-siden og klikk på "ANSTENDIG PURRE"', async () => {
-      await accessManagementFrontPage.goToUsers();
-      await accessManagementFrontPage.clickUser('ANSTENDIG PURRE');
-    });
-
-    await test.step('slett "bruno-correspondence" for ANSTENDIG PURRE', async () => {
-      await accessManagementFrontPage.goToEnkelttjenester();
-      await accessManagementFrontPage.clickSlettEnkelttjeneste('bruno-correspondence');
-    });
-
-    await test.step('ANSTENDIG PURRE ikke skal ha enkelttjenesten "bruno-correspondence"', async () => {
-      await accessManagementFrontPage.goToUsers();
-      await accessManagementFrontPage.clickUser('ANSTENDIG PURRE');
-      await accessManagementFrontPage.goToEnkelttjenester();
-      await accessManagementFrontPage.clickGiFullmakt();
-      await accessManagementFrontPage.sokEtterEnkelttjeneste('bruno-correspondence');
-      await accessManagementFrontPage.expectEnkelttjenesteToBeDelegable('bruno-correspondence');
+      await test.step(`${recipient.name} skal ha enkelttjenesten "${service}"`, async () => {
+        await accessManagementFrontPage.goToUsers();
+        await accessManagementFrontPage.expandOrg(recipient.name);
+        await accessManagementFrontPage.clickUser(recipient.name);
+        await accessManagementFrontPage.goToEnkelttjenester();
+        await accessManagementFrontPage.userCanDeleteEnkelttjeneste(service);
+      });
     });
   });
 
-  test('Slett enkelttjeneste fra org til org', async ({ page, accessManagementFrontPage }) => {
-    const login = new LoginPage(page);
-    const aktorvalgHeader = new AktorvalgHeader(page);
-    await test.step('sett opp testdata', async () => {
-      await api.addConnection('16815995930', '313707679', '314021622');
-      await api.delegateSingleService(
-        '16815995930',
-        '313707679',
-        '314021622',
-        'bruno-correspondence',
-      );
+  test.describe('Slett enkelttjenestedelegering fra org til person', () => {
+    const delegator = {
+      pid: '18846498989',
+      orgNo: '311716670',
+      name: 'NÆR REALISTISK TIGER AS',
+    };
+    const recipient = { pid: '09893049719', name: 'ANSTENDIG PURRE' };
+
+    test.beforeEach(async () => {
+      await api.addConnection(delegator.pid, delegator.orgNo, recipient.pid);
+      await api.delegateSingleService(delegator.pid, delegator.orgNo, recipient.pid, service);
     });
 
-    await test.step('Logg inn', async () => {
-      await login.LoginToAccessManagement('16815995930');
+    test.afterEach(async ({}, testInfo) => {
+      if (testInfo.status !== 'passed') {
+        try {
+          await api.deleteSingleServiceDelegation(
+            delegator.pid,
+            delegator.orgNo,
+            recipient.pid,
+            service,
+          );
+        } catch (error) {
+          console.error('Cleanup: Failed to delete single service delegation:', error);
+        }
+      }
+      try {
+        await api.deleteConnection(delegator.pid, delegator.orgNo, [recipient.pid]);
+      } catch (error) {
+        console.error('Cleanup: Failed to delete connection:', error);
+      }
     });
 
-    await test.step('Velg deg org INNESLUTTET MOTLØS SKILPADDE og gå til tilgangsstyring', async () => {
-      await aktorvalgHeader.selectActorFromHeaderMenu('INNESLUTTET MOTLØS SKILPADDE');
+    test('Slett enkelttjenestedelegering fra org til person', async ({
+      login,
+      aktorvalgHeader,
+      accessManagementFrontPage,
+    }) => {
+      await test.step('Logg inn', async () => {
+        await login.LoginToAccessManagement(delegator.pid);
+      });
+
+      await test.step(`Velg org ${delegator.name} og gå til tilgangsstyring`, async () => {
+        await aktorvalgHeader.selectActorFromHeaderMenu(delegator.name);
+      });
+
+      await test.step(`Gå til brukere-siden og klikk på "${recipient.name}"`, async () => {
+        await accessManagementFrontPage.goToUsers();
+        await accessManagementFrontPage.clickUser(recipient.name);
+      });
+
+      await test.step(`Slett "${service}" for ${recipient.name}`, async () => {
+        await accessManagementFrontPage.goToEnkelttjenester();
+        await accessManagementFrontPage.clickSlettEnkelttjeneste(service);
+      });
+
+      await test.step(`${recipient.name} skal ikke ha enkelttjenesten "${service}"`, async () => {
+        await accessManagementFrontPage.goToUsers();
+        await accessManagementFrontPage.clickUser(recipient.name);
+        await accessManagementFrontPage.goToEnkelttjenester();
+        await accessManagementFrontPage.clickGiFullmakt();
+        await accessManagementFrontPage.sokEtterEnkelttjeneste(service);
+        await accessManagementFrontPage.expectEnkelttjenesteToBeDelegable(service);
+      });
+    });
+  });
+
+  test.describe('Slett enkelttjeneste fra org til org', () => {
+    const delegator = {
+      pid: '16815995930',
+      orgNo: '313707679',
+      name: 'INNESLUTTET MOTLØS SKILPADDE',
+    };
+    const recipient = { orgNo: '314021622', name: 'SKAMFULL KONKRET TIGER AS' };
+
+    test.beforeEach(async () => {
+      await api.addConnection(delegator.pid, delegator.orgNo, recipient.orgNo);
+      await api.delegateSingleService(delegator.pid, delegator.orgNo, recipient.orgNo, service);
     });
 
-    await test.step('Gå til brukere-siden og klikk på "SKAMFULL KONKRET TIGER AS"', async () => {
-      await accessManagementFrontPage.goToUsers();
-      await accessManagementFrontPage.expandOrg('SKAMFULL KONKRET TIGER AS');
-      await accessManagementFrontPage.clickUser('SKAMFULL KONKRET TIGER AS');
+    test.afterEach(async ({}, testInfo) => {
+      if (testInfo.status !== 'passed') {
+        try {
+          await api.deleteSingleServiceDelegation(
+            delegator.pid,
+            delegator.orgNo,
+            recipient.orgNo,
+            service,
+          );
+        } catch (error) {
+          console.error('Cleanup: Failed to delete single service delegation:', error);
+        }
+      }
+      try {
+        await api.deleteConnection(delegator.pid, delegator.orgNo, [recipient.orgNo]);
+      } catch (error) {
+        console.error('Cleanup: Failed to delete connection:', error);
+      }
     });
 
-    await test.step('slett "bruno-correspondence" for SKAMFULL KONKRET TIGER AS', async () => {
-      await accessManagementFrontPage.goToUsers();
-      await accessManagementFrontPage.expandOrg('SKAMFULL KONKRET TIGER AS');
-      await accessManagementFrontPage.clickUser('SKAMFULL KONKRET TIGER AS');
-      await accessManagementFrontPage.goToEnkelttjenester();
-      await accessManagementFrontPage.clickSlettEnkelttjeneste('bruno-correspondence');
-    });
+    test('Slett enkelttjeneste fra org til org', async ({
+      login,
+      aktorvalgHeader,
+      accessManagementFrontPage,
+    }) => {
+      await test.step('Logg inn', async () => {
+        await login.LoginToAccessManagement(delegator.pid);
+      });
 
-    await test.step('SKAMFULL KONKRET TIGER AS ikke skal ha enkelttjenesten "bruno-correspondence"', async () => {
-      await accessManagementFrontPage.goToUsers();
-      await accessManagementFrontPage.expandOrg('SKAMFULL KONKRET TIGER AS');
-      await accessManagementFrontPage.clickUser('SKAMFULL KONKRET TIGER AS');
-      await accessManagementFrontPage.goToEnkelttjenester();
-      await accessManagementFrontPage.clickGiFullmakt();
-      await accessManagementFrontPage.sokEtterEnkelttjeneste('bruno-correspondence');
-      await accessManagementFrontPage.expectEnkelttjenesteToBeDelegable('bruno-correspondence');
+      await test.step(`Velg org ${delegator.name} og gå til tilgangsstyring`, async () => {
+        await aktorvalgHeader.selectActorFromHeaderMenu(delegator.name);
+      });
+
+      await test.step(`Gå til brukere-siden og klikk på "${recipient.name}"`, async () => {
+        await accessManagementFrontPage.goToUsers();
+        await accessManagementFrontPage.expandOrg(recipient.name);
+        await accessManagementFrontPage.clickUser(recipient.name);
+      });
+
+      await test.step(`Slett "${service}" for ${recipient.name}`, async () => {
+        await accessManagementFrontPage.goToUsers();
+        await accessManagementFrontPage.expandOrg(recipient.name);
+        await accessManagementFrontPage.clickUser(recipient.name);
+        await accessManagementFrontPage.goToEnkelttjenester();
+        await accessManagementFrontPage.clickSlettEnkelttjeneste(service);
+      });
+
+      await test.step(`${recipient.name} skal ikke ha enkelttjenesten "${service}"`, async () => {
+        await accessManagementFrontPage.goToUsers();
+        await accessManagementFrontPage.expandOrg(recipient.name);
+        await accessManagementFrontPage.clickUser(recipient.name);
+        await accessManagementFrontPage.goToEnkelttjenester();
+        await accessManagementFrontPage.clickGiFullmakt();
+        await accessManagementFrontPage.sokEtterEnkelttjeneste(service);
+        await accessManagementFrontPage.expectEnkelttjenesteToBeDelegable(service);
+      });
     });
   });
 });

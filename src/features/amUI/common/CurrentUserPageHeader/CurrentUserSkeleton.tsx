@@ -10,6 +10,7 @@ export const CurrentUserSkeleton = () => {
       description='xxxxxxx, xxxxxxx'
       type='person'
       id='xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx'
+      containerAs='div'
     />
   );
 };

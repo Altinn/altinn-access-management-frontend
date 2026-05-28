@@ -53,7 +53,7 @@ export const PageContainer = ({
             >
               <Link to={backUrl}>
                 <ArrowLeftIcon
-                  aria-hidden={true}
+                  aria-hidden='true'
                   fontSize='1.3rem'
                 />
                 {t('common.back')}
@@ -65,7 +65,7 @@ export const PageContainer = ({
               variant='tertiary'
               data-color='neutral'
             >
-              <ArrowLeftIcon aria-hidden={true} />
+              <ArrowLeftIcon aria-hidden='true' />
               {t('common.back')}
             </Button>
           ) : undefined}

@@ -6,7 +6,7 @@ test.describe.skip('New brukerflate - EnkelttjenesteDelegering', () => {
     runAccessibilityTest,
   }) => {
     await login.LoginToAccessManagement('20838198385');
-    await login.chooseReportee('Diskret Nær Tiger As');
+    await login.selectMainUnitBySearching('Diskret Nær Tiger As');
 
     //await runAccessibilityTest.brukerflateEnkelttjenesteDelegering();
   });
@@ -16,7 +16,7 @@ test.describe.skip('New brukerflate - EnkelttjenesteDelegering', () => {
     runAccessibilityTest,
   }) => {
     await login.LoginToAccessManagement('20838198385');
-    await login.chooseReportee('Diskret Nær Tiger As');
+    await login.selectMainUnitBySearching('Diskret Nær Tiger As');
 
     //await runAccessibilityTest.brukerflateEnkelttjenesteDelegering();
   });

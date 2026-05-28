@@ -97,7 +97,9 @@
     "digdir": "Digitaliseringsdirektoratet",
     "skiplink": "Hopp til hovudinnhaldet",
     "no_access_to_page": "Du har ikkje tilgang til denne sida for vald aktør",
-    "see_details": "Sjå detaljar"
+    "see_details": "Sjå detaljar",
+    "yes_delete": "Ja, slett",
+    "confirm_delete_heading": "Er du sikker på at du vil slette denne fullmakta?"
   },
   "info_banner": {
     "info": "19. juni blir gamle Altinn skrudd av.",
@@ -318,9 +320,6 @@
     "delete_singleRight_success_message": "Fullmakta til {{resourceTitle}} er fjerna frå {{name}}.",
     "delete_singleRight_error_message": "Kunne ikkje slette fullmakt til {{resourceTitle}}.",
     "add_singleRight_success_message": "{{name}} har no fått fullmakt til {{resourceTitle}}.",
-    "wip_title": "Fullmakter til enkelttenester",
-    "wip_message": "Denne sida jobbar vi framleis med! For å administrere enkelttenester, må du gå til den gamle løysinga.",
-    "wip_link_text": "Gå til gamle Altinn",
     "helptext_button": "Kva er enkelttenester?",
     "helptext_content": "Ein enkeltteneste er ein fullmakt gitt til éin spesifikk teneste. Tenester ein har tilgang til gjennom tilgangspakker eller roller vil ikkje visast her.",
     "action_popover": {
@@ -348,7 +347,7 @@
     "user_has_no_packages": "Denne brukeren har ingen tilgangspakkar.",
     "no_packages": "Ingen tilgangspakkar tilgjengelege.",
     "no_matching_search": "Ingen treff på søket",
-    "info_alert_text": "Tilgangspakkar skal erstatte dagens Altinn-roller. Dei vil bli fylt med fleire tenester etter kvart. Les meir om dette på <a href='https://info.altinn.no/nn/hjelp/ny-tilgangsstyring/'>hjelpesidene</a>.",
+    "info_alert_text": "Tilgangspakkar erstattar dagens Altinn-roller. Les meir om dette på <a href='https://info.altinn.no/nn/hjelp/ny-tilgangsstyring/'>hjelpesidene</a>.",
     "person_info_alert": "Det er ikkje mogleg å gi og fjerne fullmakter til personar heilt enno. Dette vil komme seinare.",
     "delegation_check": {
       "delegation_check_error_heading": "Teknisk feil",
@@ -374,11 +373,17 @@
     "resources_empty": "Denne rolla har ingen tenester.",
     "resources_disclaimer": "Denne rolla kan framleis gi tilgang til tenester som berre finst i den gamle løysinga.",
     "resources_disclaimer_link": "Sjå lista i den gamle løysinga",
+    "delete_role_confirmation": "Roller frå gamle Altinn er avvikla, så du vil IKKJE kunne gi fullmakt til denne rollen på nytt.",
+    "deleting_role_loading": "Venter på at rolla skal slettast...",
+    "delete_role_success": "Fullmakt til rolla er sletta.",
+    "delete_role_error": "Kunne ikkje slette rolla.",
+    "cannot_assign_role_poa": "Denne rolla er utgådd og kan ikkje lenger givast som fullmakt. For å gje tilgang til tenester, venlegast bruk tilgangspakkar eller enkelttenester.",
     "access_status": {
       "via_role": "{{user_name}} har tilgang til dette gjennom rolla dei har i {{via_name}}.",
       "via_connection": "{{user_name}} har tilgang til dette gjennom {{via_name}}.",
       "via_keyrole": "{{user_name}} har tilgang til dette gjennom rolla dei har i {{via_name}}.",
-      "via_priv": "{{user_name}} har tilgang til dette gjennom sin rolle som privatperson."
+      "via_priv": "{{user_name}} har tilgang til dette gjennom sin rolle som privatperson.",
+      "via_er": "{{user_name}} har tilgang til denne gjennom si einingsregistrerte rolle i {{via_name}}. Den kan ikkje slettast."
     }
   },
   "user_roles": {
@@ -562,7 +567,8 @@
       "via_role": "{{user_name}} har tilgang til denne tilgangspakken gjennom rolla dei har i {{via_name}}. Denne tilgangspakken kan difor ikkje slettast.",
       "via_connection": "{{user_name}} har tilgang til denne tilgangspakken gjennom {{via_name}}. Denne tilgangspakken kan difor ikkje slettast.",
       "via_keyrole": "{{user_name}} har denne tilgangspakken gjennom rolla dei har i {{via_name}}. Denne tilgangspakken kan difor ikkje slettast.",
-      "via_priv": "{{user_name}} har denne fullmakta gjennom sin rolle som privatperson. Den kan difor ikkje slettast."
+      "via_priv": "{{user_name}} har denne fullmakta gjennom sin rolle som privatperson. Den kan difor ikkje slettast.",
+      "via_er": "{{user_name}} har tilgang til denne gjennom si einingsregistrerte rolle i {{via_name}}. Den kan difor ikkje slettast."
     },
     "cannot_delegate_here": "Denne fullmakta kan ikkje bli gitt eller fjerna her.",
     "delegation_check_not_delegable": "Du kan ikkje gi denne fullmakta.",
@@ -591,10 +597,18 @@
     "heading": "Maskinporten\u00ADadministrasjon",
     "document_title": "Maskinportenadministrasjon - Altinn",
     "suppliers_tab": "Leverandørar",
+    "breadcrumb_suppliers": "Maskinporten – Leverandørar",
+    "breadcrumb_consumers": "Maskinporten – Konsumentar",
     "add_supplier_button": "Legg til leverandør",
     "suppliers_description": "Verksemder som har motteke fullmakt frå {{name}}.",
     "consumers_tab": "Konsumentar",
     "consumers_description": "Verksemder som har gitt fullmakt til {{name}}.",
+    "suppliers_info_icon_label": "Informasjon om leverandørar",
+    "consumers_info_icon_label": "Informasjon om konsumentar",
+    "info_box_link": "Les meir om bruk av Maskinporten",
+    "suppliers_info_body1": "Her kan du gi leverandørane dine tilgang til API. Leverandørane kan då hente ut data på vegner av verksemda. Hugs at verksemda di sjølv må ha tilgang til eit API før det kan gjevast vidare til andre.",
+    "suppliers_info_body2": "Du må ha tilgangspakka «Maskinporten administrator», saman med minst éi av tilgangspakkene under området «Integrasjonar».",
+    "consumers_info_body": "Her kan du sjå kva API verksemda di har motteke frå andre. Verksemda di kan då hente ut data på vegner av konsumentane.",
     "no_suppliers": "Ingen leverandørar funne.",
     "no_consumers": "Ingen konsumentar funne.",
     "load_error": "Kunne ikkje laste Maskinporten-tilknytingar.",
@@ -604,19 +618,22 @@
     "remove_supplier_confirm": "Slett leverandør",
     "remove_supplier_error": "Kunne ikkje fjerne {{name}} som leverandør.",
     "remove_supplier_success": "{{name}} er fjerna som leverandør.",
-    "remove_consumer_heading": "Fjern konsument",
-    "remove_consumer_body": "Er du sikker på at du vil fjerne {{name}} som konsument? Alle delegerte ressursar vil òg bli fjerna.",
-    "remove_consumer_confirm": "Fjern konsument",
-    "remove_consumer_error": "Kunne ikkje fjerne {{name}} som konsument.",
-    "remove_consumer_success": "{{name}} er fjerna som konsument.",
+    "remove_consumer_heading": "Slett konsument",
+    "remove_consumer_body": "Er du sikker på at du vil slette {{name}} som konsument? Alle delegerte ressursar vil òg bli sletta.",
+    "remove_consumer_confirm": "Slett konsument",
+    "remove_consumer_error": "Kunne ikkje slette {{name}} som konsument.",
+    "remove_consumer_success": "{{name}} er sletta som konsument.",
     "back_to_list": "Gå tilbake til oversikta",
-    "supplier_title": "Leverandør - Altinn",
+    "supplier_title": "Vald leverandør - Altinn",
+    "consumer_title": "Vald konsument - Altinn",
+    "consumer_not_found": "Vi fann ikkje konsumenten",
     "add_scope_button": "Gi fullmakt",
-    "search_scopes_heading": "Kva maskinportenteneste vil du gi {{name}} fullmakt til?",
+    "search_scopes_heading": "Kva API vil du gi {{name}} fullmakt til?",
+    "search_api_placeholder": "Søk etter API",
     "no_scopes": "Ingen scopes funne for denne tenesta.",
     "scope_count": "{{count}} scopes",
     "search_results_count": "{{count}} treff på søket",
-    "delegated_resources_heading": "Fullmakt til {{count}} maskinportentenester",
+    "delegated_resources_heading": "Fullmakt til {{count}} API",
     "no_delegated_resources": "Ingen fullmakter er lagde til enno.",
     "delegated_resources_error": "Kunne ikkje laste fullmakter.",
     "own_org_number_warning": "Du kan ikkje gi tilgang til eige organisasjonsnummer",
@@ -642,7 +659,8 @@
     "remove_sms": "Fjern telefonnummer",
     "error_saving_addresses": "Noko gjekk gale. Ver venleg å prøv igjen.",
     "no_addresses_error": "Verksemda må ha minst ei e-postadresse eller sms-adresse for varslingar.",
-    "alert_settings_info": "Varsla som sendast ut til registrerte varslingsadresser sendast uavhengig av om mottakar har rett til å sjå innhaldet i Altinn. Dersom de har ei felles e-postadresse er det naturleg å legge den inn her. <a>Les meir</a>"
+    "alert_settings_info": "Varsla som sendast ut til registrerte varslingsadresser sendast uavhengig av om mottakar har rett til å sjå innhaldet i Altinn. Dersom de har ei felles e-postadresse er det naturleg å legge den inn her. <a>Les meir</a>",
+    "info_button": "Informasjon om varslingsadresser"
   },
   "text_field_errors": {
     "required": "Feltet er påkrevd",
@@ -902,11 +920,6 @@
     "55_accesspackage_failed_to_get_delegated_packages": "Kunne ikkje hente delegerte tilgangspakkar.",
     "57_systemuser_failed_to_delete_accesspackage": "Kunne ikkje fjerne tilgangspakke-delegering for systemtilgangen."
   },
-  "page_not_available": {
-    "title": "Tilgangsstyring for privatpersonar er framleis under arbeid",
-    "text": "På denne sida vil det komme meir etter kvart. Du kan framleis tilgangsstyre på vegne av deg sjølv som privatperson i gammal løysing.",
-    "link_text": "Gå til gamle Altinn"
-  },
   "consent_request": {
     "page_title": "Godkjenn samtykke/fullmakt - Altinn",
     "loading_consent": "Laster førespurnad...",
@@ -1070,13 +1083,13 @@
   },
   "landing_page": {
     "page_title": "Tilgangsstyring - Altinn",
-    "alert_heading": "Du er no i den nye løysinga for tilgangsstyring",
-    "alert_body": "Her er dagens Altinn-roller erstatta av tilgangspakkar med tenester.",
-    "alert_body_p2": "Ver merksam på at det er nokre tenester du ikkje kan gi tilgang til i den nye løysinga. Visst du ikkje finn tenesta her, kan du gå til den gamle løysinga.",
-    "alert_heading_priv": "Dette er den nye løysinga for tilgangsstyring til privatperson",
-    "alert_body_priv": "Her er dagens Altinn-roller erstatta av tilgangspakkar som inneheld skjema og tenester. Desse kan du gi vidare til andre dersom du ønsker at nokon skal hjelpe deg i Altinn.",
-    "alert_body_p2_priv": "Ver merksam på at det er nokre tenester du ikkje kan gi tilgang til i den nye løysinga. Visst du ikkje finn tenesta her, kan du gå til den gamle løysinga.",
-    "alert_link": "Gå til gamle Altinn",
+    "alert_heading": "Ny løysing for tilgangsstyring. Dette må du gjere!",
+    "alert_heading_priv": "Ny løysing for tilgangsstyring",
+    "alert_body": "Dagens Altinn-roller er erstatta av tilgangspakkar. Ein tilgangspakke inneheld fullmakt til ulike skjema og tenester innanfor same kategori.",
+    "alert_body_p2": "Tilgangar du tidlegare har gitt i gamle Altinn, må no erstattast av nye fullmakter.",
+    "alert_body_p3": "Vel menypunktet «Brukarar», finn ønskt brukar og tildel tilgangspakkar eller enkelttenester.",
+    "alert_link": "Steg-for-steg-guide for tildeling av fullmakter",
+    "alert_link_href": "https://info.altinn.no/nn/hjelp/ny-tilgangsstyring/steg-for-steg-guider/",
     "your_content_heading": "Dine tilganger",
     "shortcut_links_heading": "Andre tilganger",
     "other_links_heading": "Anna",

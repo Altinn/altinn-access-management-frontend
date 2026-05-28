@@ -6,7 +6,6 @@ const vendorOrgNumber = '310547891';
 const prebuiltSystemId = '310547891_E2E-Playwright-Authentication';
 const testUserPid = '14824497789';
 const testOrgName = 'Aktverdig Retorisk Ape';
-const testUserName = 'Skravlete Blåveis';
 
 const testUser = testUserPid;
 
@@ -23,22 +22,6 @@ test.describe('Systembruker endringsforespørsel', () => {
 
   test.beforeEach(async () => {
     api = new ApiRequests();
-  });
-
-  test.afterEach(async () => {
-    // Cleanup system users created during tests
-    if (systemUserIds.length > 0) {
-      try {
-        await api.cleanUpSystemUsers(
-          systemUserIds.map((id) => ({ id })),
-          testUserPid,
-          vendorOrgNumber,
-        );
-      } catch (error) {
-        console.error('Error during system user cleanup:', error);
-      }
-      systemUserIds = [];
-    }
   });
 
   test('Avvis endringsforespørsel', async ({ page, login }): Promise<void> => {
@@ -141,7 +124,7 @@ test.describe('Systembruker endringsforespørsel', () => {
 
     await test.step('Verify rights changes are reflected', async () => {
       await login.LoginToAccessManagement(testUser);
-      await login.chooseReportee(testUserName, testOrgName);
+      await login.selectMainUnitBySearching(testOrgName);
 
       const systemUserUrl = `${env('SYSTEMUSER_URL')}`;
       await page.goto(systemUserUrl + '/' + systemUserId);
@@ -154,5 +137,21 @@ test.describe('Systembruker endringsforespørsel', () => {
       await expect(page.getByText('authentication-e2e-test')).not.toBeVisible();
       await expect(page.getByText('Baerekraft')).not.toBeVisible();
     });
+  });
+
+  test.afterEach(async () => {
+    // Cleanup system users created during tests
+    if (systemUserIds.length > 0) {
+      try {
+        await api.cleanUpSystemUsers(
+          systemUserIds.map((id) => ({ id })),
+          testUserPid,
+          vendorOrgNumber,
+        );
+      } catch (error) {
+        console.error('Error during system user cleanup:', error);
+      }
+      systemUserIds = [];
+    }
   });
 });

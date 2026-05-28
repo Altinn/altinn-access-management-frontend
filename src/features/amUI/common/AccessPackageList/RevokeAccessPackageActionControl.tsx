@@ -48,7 +48,7 @@ export const RevokeAccessPackageActionControl = ({
           />
         ) : (
           <>
-            <MinusCircleIcon />
+            <MinusCircleIcon aria-hidden='true' />
             {t('common.delete_poa')}
           </>
         )}

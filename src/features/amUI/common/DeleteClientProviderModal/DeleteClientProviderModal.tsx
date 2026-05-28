@@ -54,7 +54,7 @@ export const DeleteClientProviderModal = ({
           dialogRef.current?.showModal();
         }}
       >
-        <TrashIcon />
+        <TrashIcon aria-hidden='true' />
         {triggerLabel}
       </DsDialog.Trigger>
       <DsDialog

@@ -43,11 +43,21 @@ export const TechnicalErrorParagraphs = ({
       >
         {message ?? t('common.technical_error')}
       </DsParagraph>
-      <DsParagraph data-size={size}>
+      <DsParagraph
+        data-size={size}
+        className={classes.additionalContext}
+      >
         {t('common.time_of_error', { time: formattedTime })}
         {' - '} {t('common.error_status', { status: status })}
       </DsParagraph>
-      {traceId && <DsParagraph data-size={size}>{t('common.trace_id', { traceId })}</DsParagraph>}
+      {traceId && (
+        <DsParagraph
+          className={classes.additionalContext}
+          data-size={size}
+        >
+          {t('common.trace_id', { traceId })}
+        </DsParagraph>
+      )}
       {additionalContext && (
         <DsParagraph
           data-size={size}

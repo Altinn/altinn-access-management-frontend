@@ -9,6 +9,7 @@ export class AccessManagementFrontPage {
   readonly consentAndPowerOfAttorneyAgreementsLink: Locator;
   readonly tryNewAccessManagementButton: Locator;
   readonly klientadministrasjonButton: Locator;
+  readonly newUserButton: Locator;
 
   constructor(page: Page) {
     this.page = page;
@@ -29,6 +30,7 @@ export class AccessManagementFrontPage {
       name: 'Prøv ny tilgangsstyring',
     });
     this.klientadministrasjonButton = this.page.getByRole('link', { name: 'Klientadministrasjon' });
+    this.newUserButton = this.page.getByRole('button', { name: 'Ny bruker' });
   }
 
   async goToKlientAdministrasjon() {
@@ -43,12 +45,16 @@ export class AccessManagementFrontPage {
     await this.page.getByRole('button', { name: org }).click();
   }
 
-  async clickUser(userName: string) {
-    await this.page.getByRole('link', { name: userName }).click();
+  async clickUser(userName: string, num = 0) {
+    await this.page.getByRole('link', { name: userName }).nth(num).click();
   }
 
   async goToEnkelttjenester() {
     await this.page.getByRole('tab', { name: 'Enkelttjenester' }).click();
+  }
+
+  async goToFullmakterHosAndre() {
+    await this.ourAccessAtOthersLink.click();
   }
 
   async sokEtterEnkelttjeneste(tjenesteNavn: string) {
@@ -72,7 +78,11 @@ export class AccessManagementFrontPage {
   }
 
   async goToArea(areaName: string) {
-    await this.page.getByRole('button', { name: areaName }).first().click();
+    const area = this.page.getByRole('button', { name: areaName }).first();
+    await expect(area).toBeVisible();
+    await area.click();
+
+    await expect(area).toHaveAttribute('aria-expanded', 'true');
   }
 
   async expectAccessPackageToBeDelegable(packageName: string) {
@@ -81,14 +91,22 @@ export class AccessManagementFrontPage {
     ).toBeVisible();
   }
 
-  async expectUserToHavePackage(packageName: string) {
+  async userCanDeletePackage(packageName: string) {
     await expect(
       this.page.getByRole('button', { name: 'Slett fullmakt for ' + packageName }),
     ).toBeVisible();
   }
 
-  async expectUserToHaveEnkelttjeneste(resourceName: string) {
+  async expectUserToHavePackage(packageName: string) {
+    await expect(this.page.getByRole('button', { name: packageName })).toBeVisible();
+  }
+
+  async userCanDeleteEnkelttjeneste(resourceName: string) {
     await expect(this.page.getByRole('button', { name: 'Slett ' + resourceName })).toBeVisible();
+  }
+
+  async expectUserToHaveEnkelttjeneste(tjenesteNavn: string) {
+    await expect(this.page.getByText(tjenesteNavn)).toBeVisible();
   }
 
   async clickSlettFullmaktForTilgangspakke(packageName: string) {
@@ -108,17 +126,7 @@ export class AccessManagementFrontPage {
     });
     await expect(giFullmaktKnapp).toBeVisible();
     await giFullmaktKnapp.click();
-    await this.expectUserToHavePackage(packageName);
-  }
-
-  async clickAccessPackageToDelegateIfVisible(packageName: string) {
-    await expect(this.page.locator('.ds-spinner')).toHaveCount(0);
-    const accessPackage = await this.page.getByRole('button', {
-      name: 'Gi fullmakt for ' + packageName,
-    });
-    if (await accessPackage.isVisible()) {
-      await accessPackage.click();
-    }
+    await this.userCanDeletePackage(packageName);
   }
 
   async clickAccessAreaInPopup(areaName: string) {
@@ -145,7 +153,7 @@ export class AccessManagementFrontPage {
 
   async clickLeggTilBruker() {
     await this.page.waitForLoadState('domcontentloaded');
-    await this.page.getByRole('button', { name: 'Legg til Ny bruker' }).click();
+    await this.newUserButton.click();
   }
 
   async LukkGiFullmaktVindu() {

@@ -53,6 +53,7 @@ export const PendingPackageRequests = () => {
           border='solid'
           interactive
           as='button'
+          containerAs='div'
           badge={
             isSmallScreen ? undefined : <div>{t('delegation_modal.request.view_requests')}</div>
           }

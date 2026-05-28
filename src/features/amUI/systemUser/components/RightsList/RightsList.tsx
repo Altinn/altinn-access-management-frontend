@@ -179,7 +179,10 @@ export const RightsList = ({
             className={classes.backButton}
             onClick={() => setSelectedResource(null)}
           >
-            <ArrowLeftIcon fontSize={getButtonIconSize(true)} />
+            <ArrowLeftIcon
+              fontSize={getButtonIconSize(true)}
+              aria-hidden='true'
+            />
             {t('common.back')}
           </DsButton>
         )}

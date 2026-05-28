@@ -1,6 +1,6 @@
 import React from 'react';
 import type { LanguageCode } from '@altinn/altinn-components';
-import { Badge, Layout, RootProvider, Snackbar } from '@altinn/altinn-components';
+import { Layout, RootProvider, Snackbar } from '@altinn/altinn-components';
 
 import { useGetReporteeQuery } from '@/rtk/features/userInfoApi';
 
@@ -67,13 +67,6 @@ export const PageLayoutWrapper = ({
                   groups: menuGroups,
                   items: [...sidebarItems, ...shortcutsMenuItem],
                 },
-                footer: (
-                  <Badge
-                    label={t('common.beta')}
-                    variant='base'
-                    color='neutral'
-                  />
-                ),
               }
         }
         content={{ color: reportee?.type ? getAccountType(reportee.type) : 'neutral' }}

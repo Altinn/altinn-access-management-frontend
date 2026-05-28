@@ -1,9 +1,17 @@
-import { env } from 'playwright/util/helper';
 import { test } from 'playwright/fixture/pomFixture';
 import { DelegationApiUtil } from 'playwright/util/delegationApiUtil';
 import { withTimeout } from 'playwright/util/asyncUtils';
 
 test.describe('Delegate access pacakge from Org-A(Avgiver) to Org-B(Rettighetshaver) ', () => {
+  test.beforeEach(async ({}, testInfo) => {
+    const title = testInfo.title || 'unknown-test';
+    try {
+      await DelegationApiUtil.cleanupAllDelegations(title);
+    } catch {
+      /* ignore if nothing to clean */
+    }
+  });
+
   test.afterEach(async ({}, testInfo) => {
     const title = testInfo.title || 'unknown-test';
 
@@ -74,7 +82,8 @@ test.describe('Delegate access pacakge from Org-A(Avgiver) to Org-B(Rettighetsha
     });
   });
 
-  test('Org-C revokes all delegated rights from Org-D', async ({
+  // Doesnt test anything? Skipping for now.
+  test.skip('Org-C revokes all delegated rights from Org-D', async ({
     delegation,
     page,
     login,

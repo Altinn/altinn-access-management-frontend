@@ -31,7 +31,7 @@ export const NewUserButton: React.FC<NewUserButtonProps> = ({ isLarge, onComplet
         onClick={() => modalRef.current?.showModal()}
         className={isLarge ? classes.largeButton : undefined}
       >
-        <PlusIcon aria-label={t('common.add')} />
+        <PlusIcon aria-hidden='true' />
         {isLarge ? t('new_user_modal.trigger_button_large') : t('new_user_modal.trigger_button')}
       </DsButton>
       <NewUserModal
