@@ -35,7 +35,7 @@ export const ReporteeRightsPage = () => {
   const { t } = useTranslation();
   const { id: reporteeUuid } = useParams();
 
-  useDocumentTitle(t('user_rights_page.page_title'));
+  useDocumentTitle(t('reportee_rights_page.page_title'));
 
   useRerouteIfNotConfetti();
 

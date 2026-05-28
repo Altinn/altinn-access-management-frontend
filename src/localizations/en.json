@@ -161,6 +161,7 @@
     "maskinporten": "Maskinporten administration"
   },
   "error_page": {
+    "page_title": "Error page - Altinn",
     "not_found_site_type": "Error 404",
     "not_found_site_header": "Oops! The page you're trying to find is unknown to us.",
     "not_found_site_upper_text": "We do not know where you really intended to go, but perhaps you can find what you are looking for on some of these pages:",
@@ -182,6 +183,7 @@
     "unsynced_connection": "We have a synchronization issue between the new and old solution. This is something we are working on, but for now, you unfortunately cannot see your accesses here. We apologize for any inconvenience this may cause!",
     "unsynced_connection_link": "Click here to view your accesses in the old solution",
     "reportee_change_error": {
+      "page_title": "Feilside - Altinn",
       "header": "We couldn't change reportee",
       "description": "The selected reportee isn't available to you, or the link you followed was invalid.",
       "if_persistent_contact_service": "If the problem persists, please contact Altinn support at 75 00 60 00.",
@@ -399,7 +401,7 @@
     "has_client_access_description_self": "You have access to one or more of the organization's clients. This does not necessarily mean you have access to the organization's own content, but you can perform work on behalf of one or more of their clients/customers. Which clients you have access to can be managed under <a>your clients</a>."
   },
   "users_page": {
-    "page_title": "Users and groups - Altinn",
+    "page_title": "Users - Altinn",
     "main_page_heading": "Users with power of attorney in {{name}}",
     "user_list_heading": "Other users with power of attorney",
     "direct_connections": "Users with power of attorney",
@@ -443,7 +445,7 @@
     "delete_provider_confirm": "Delete client access"
   },
   "user_rights_page": {
-    "page_title": "User access - Altinn",
+    "page_title": "Powers of attorney granted to chosen user - Altinn",
     "access_packages_title": "Access packages",
     "single_rights_title": "Single services",
     "instances_title": "Shared from inbox",
@@ -483,7 +485,7 @@
     "reportee_partial_confirmation_message": "<p>{{to_name}} also has other authorizations, and you can delete them here. Do you want to proceed? <i>This action cannot be undone.</i></p>"
   },
   "reportee_rights_page": {
-    "page_title": "Powers of attorney from others - Altinn",
+    "page_title": "Powers of attorney received from chosen party - Altinn",
     "heading_subtitle": "Power of attorney given to {{name}}"
   },
   "delegation_modal": {
@@ -712,6 +714,8 @@
   },
   "client_administration_page": {
     "page_title": "Client administration - Altinn",
+    "agent_page_title": "User with client access - Altinn",
+    "client_page_title": "Chosen client - Altinn",
     "no_access_title": "You do not have access to client administration",
     "page_heading": "Client administration for {{name}}",
     "page_description": "Org.no. {{organisationidentifier}} ({{unitType}})",
@@ -783,6 +787,7 @@
     "creating_systemuser": "Creating system access..."
   },
   "systemuser_detailpage": {
+    "page_title": "Chosen system access - Altinn",
     "edit_systemuser": "Edit system access",
     "load_systemuser_error": "Could not load system access",
     "loading_systemuser": "loading system access",
@@ -871,7 +876,7 @@
     "add_self_possible": "You can also connect your own organization to the system access."
   },
   "systemuser_agent_delegation": {
-    "page_title": "System access for client relations - Altinn",
+    "page_title": "Chosen system access for clients - Altinn",
     "banner_title": "System access for {{integrationTitle}}",
     "load_customers_error": "Could not load clients",
     "load_assigned_customers_error": "Could not load clients for system access",
@@ -932,7 +937,7 @@
     "link_text": "Go to old Altinn"
   },
   "consent_request": {
-    "page_title": "Approve consent/power of attorney - Altinn",
+    "page_title": "Approve agreement - Altinn",
     "loading_consent": "Loading request...",
     "load_consent_error": "Could not load consent/power of attorney",
     "approve_consent": "Yes, I give consent",
@@ -1046,7 +1051,8 @@
     "instance_id_label": "ID"
   },
   "instance_detail_page": {
-    "document_title": "Shared from inbox",
+    "document_title": "Shared from inbox - Altinn",
+    "document_title_from_inbox": "Share and give power of attorney - Altinn",
     "resource_title": "Message or form: {{title}}",
     "provider_name": "to {{name}}",
     "back_to_inbox": "Go to inbox",
@@ -1065,7 +1071,8 @@
     "no_permissions": "You have to give power of attorney"
   },
   "package_poa_details_page": {
-    "page_title": "Power of attorney details - Altinn",
+    "page_title": "Access package - Altinn",
+    "page_title_access_package": "{{accessPackage}} access package - Altinn",
     "users_tab_title": "Users",
     "services_tab_title": "Services",
     "load_error": "Oops! Something went wrong.",

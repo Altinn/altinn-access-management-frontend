@@ -28,7 +28,7 @@ export const SystemUserDetailsPage = (): React.ReactNode => {
   const { t } = useTranslation();
   const { id } = useParams();
   const navigate = useNavigate();
-  useDocumentTitle(t('systemuser_overviewpage.page_title'));
+  useDocumentTitle(t('systemuser_detailpage.page_title'));
   const partyId = getCookie('AltinnPartyId');
   const backUrl = `/${SystemUserPath.SystemUser}/${SystemUserPath.Overview}`;
 
