@@ -4,7 +4,6 @@ import { PageLayoutWrapper } from '../common/PageLayoutWrapper';
 import classes from './LandingPage.module.css';
 import {
   DsHeading,
-  formatDate,
   formatDisplayName,
   List,
   ListItem,
@@ -41,7 +40,12 @@ import {
 } from '@/resources/utils/sidebarConfig';
 import { getCookie } from '@/resources/Cookie/CookieMethods';
 import { useGetPartyFromLoggedInUserQuery } from '@/rtk/features/lookupApi';
-import { formatOrgNr, isOrganization, isSubUnit } from '@/resources/utils/reporteeUtils';
+import {
+  getFormattedDateOfBirthLabel,
+  formatOrgNr,
+  isOrganization,
+  isSubUnit,
+} from '@/resources/utils/reporteeUtils';
 import { useSidebarRequestCount } from '@/resources/hooks/useSidebarRequestCount';
 import cn from 'classnames';
 import {
@@ -259,7 +263,7 @@ export const LandingPage = () => {
       }
       return orgNrString;
     } else if (reportee?.dateOfBirth) {
-      return `${t('common.date_of_birth')} ${formatDate(reportee?.dateOfBirth)}`;
+      return getFormattedDateOfBirthLabel(reportee?.dateOfBirth);
     }
     return '';
   };

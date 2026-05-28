@@ -6,7 +6,6 @@ import {
   DsParagraph,
   type UserListItemProps,
   type Color,
-  formatDate,
   formatDisplayName,
 } from '@altinn/altinn-components';
 import { MinusCircleIcon, PlusCircleIcon } from '@navikt/aksel-icons';
@@ -18,7 +17,7 @@ import type {
   RemoveAgentAccessPackagesFn,
 } from '@/rtk/features/clientApi';
 import { useAccessPackageLookup } from '@/resources/hooks/useAccessPackageLookup';
-import { isSubUnitByType } from '@/resources/utils/reporteeUtils';
+import { getFormattedDateOfBirthLabel, isSubUnitByType } from '@/resources/utils/reporteeUtils';
 import { useRoleMetadata } from '../common/UserRoles/useRoleMetadata';
 import { isNewUser } from '../common/isNewUser';
 
@@ -205,7 +204,7 @@ export const ClientDetailsAgentsList = ({
               orgnr: agent.agent.organizationIdentifier,
             })
           : userType === 'person'
-            ? `${t('common.date_of_birth')} ${formatDate(agent.agent.dateOfBirth ?? '')}`
+            ? getFormattedDateOfBirthLabel(agent.agent.dateOfBirth)
             : undefined,
       badge: isRecentlyAdded
         ? {
