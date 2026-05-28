@@ -170,9 +170,7 @@ test.describe('Fetch consent token after approval', () => {
       });
 
     await test.step('Verify Digdir on-behalf-of text is displayed', async () => {
-      await expect(
-        consentPage.page.getByText('Digitaliseringsdirektoratet foretar dette oppslaget på'),
-      ).toBeVisible();
+      await expect(consentPage.textBehalfOfDigdir).toBeVisible();
     });
 
     await test.step('Approve consent', async () => {
@@ -245,8 +243,9 @@ test.describe('Fetch consent token after approval', () => {
 
     await test.step('Verify behalf of text is displayed', async () => {
       await expect(
-        consentPage.page.getByText(
-          'Jovial Konservativ Tiger AS foretar dette oppslaget på vegne av Nyttig Fredfull Struts Ltd.',
+        consentPage.textBehalfOfRelation(
+          'Jovial Konservativ Tiger AS',
+          'Nyttig Fredfull Struts Ltd',
         ),
       ).toBeVisible();
     });

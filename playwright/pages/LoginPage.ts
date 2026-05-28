@@ -5,6 +5,7 @@ import { env } from 'playwright/util/helper';
 export class LoginPage {
   readonly page: Page;
   readonly searchBox: Locator;
+  readonly reporteeSearchBox: Locator;
   readonly pidInput: Locator;
   readonly testIdLink: Locator;
   readonly loginButton: Locator;
@@ -14,13 +15,14 @@ export class LoginPage {
   readonly tilgangsstyringLink: Locator;
   readonly testIdLinkText: Locator;
   readonly newSolutionHeading: Locator;
-  readonly reporteeSearchBox: Locator;
 
   constructor(page: Page) {
     this.page = page;
     this.searchBox = this.page.getByRole('searchbox', { name: 'Søk etter aktør' });
+    // Post-login "Velg aktør" page has a different (unnamed) searchbox — there is
+    // only one searchbox role on that page, so a name is not needed to disambiguate.
     this.reporteeSearchBox = this.page.getByRole('searchbox');
-    this.pidInput = this.page.locator("input[name='pid']");
+    this.pidInput = this.page.getByRole('textbox', { name: 'Personidentifikator' });
     this.testIdLink = this.page.getByRole('link', { name: 'TestID Lag din egen' });
     this.loginButton = this.page.getByRole('button', { name: 'Logg inn', exact: true });
     this.profileLink = this.page.getByRole('link', { name: 'profil' });
@@ -50,11 +52,9 @@ export class LoginPage {
     await expect(this.reporteeSearchBox).toBeVisible();
     await this.reporteeSearchBox.fill(targetReportee);
 
-    const menuItem = this.page.getByRole('menuitem', { name: targetReportee }).first();
-    await expect(menuItem).toBeVisible();
-    await menuItem.click();
-
-    await expect(this.page.getByRole('menuitem', { name: targetReportee })).not.toBeVisible();
+    const dialog = this.page.getByRole('dialog');
+    await dialog.getByRole('menuitem', { name: targetReportee }).first().click();
+    await expect(dialog).not.toBeVisible();
   }
 
   private async navigateToLoginPage() {
@@ -75,8 +75,13 @@ export class logoutWithUser {
   async gotoLogoutPage(logoutReportee: string) {
     await this.page.goto(`${env('BASE_URL')}/ui/profile`);
 
-    if (await this.page.getByText('Oida, denne siden kjenner vi ikke til...').isVisible()) {
+    try {
+      await expect(this.page.getByText('Oida, denne siden kjenner vi ikke til...')).toBeVisible({
+        timeout: 1000,
+      });
       await this.page.getByRole('link', { name: 'profil' }).click();
+    } catch {
+      // Profile page loaded directly, no fallback navigation needed
     }
 
     await this.page.getByRole('button', { name: logoutReportee }).click();

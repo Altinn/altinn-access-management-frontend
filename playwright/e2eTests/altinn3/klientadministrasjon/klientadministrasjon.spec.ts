@@ -1,4 +1,3 @@
-import { env } from 'playwright/util/helper';
 import { expect, test } from '../../../fixture/pomFixture';
 import { EnduserConnection } from '../../../api-requests/EnduserConnection';
 
@@ -12,18 +11,13 @@ test.describe('klientadministrasjon', () => {
     const agent = { pid: '29814895546', name: 'MUNTER SKO', lastName: 'Sko' };
 
     test('legg til bruker', async ({
-      page,
       accessManagementFrontPage,
       klientAdministrasjonPage,
       login,
       aktorvalgHeader,
     }) => {
-      await test.step('Logg inn', async () => {
-        await page.goto(env('BASE_URL'));
+      await test.step(`Logg inn som ${actor.orgName} og åpne klientadministrasjon`, async () => {
         await login.LoginToAccessManagement(actor.pid);
-      });
-
-      await test.step(`Velg org ${actor.orgName} og gå til klientadministrasjon`, async () => {
         await aktorvalgHeader.selectActorFromHeaderMenu(actor.orgName);
         await accessManagementFrontPage.goToKlientAdministrasjon();
       });
@@ -64,18 +58,13 @@ test.describe('klientadministrasjon', () => {
     });
 
     test('slett bruker', async ({
-      page,
       accessManagementFrontPage,
       klientAdministrasjonPage,
       login,
       aktorvalgHeader,
     }) => {
-      await test.step('Logg inn', async () => {
-        await page.goto(env('BASE_URL'));
+      await test.step(`Logg inn som ${actor.orgName} og åpne klientadministrasjon`, async () => {
         await login.LoginToAccessManagement(actor.pid);
-      });
-
-      await test.step(`Velg org ${actor.orgName} og gå til klientadministrasjon`, async () => {
         await aktorvalgHeader.selectActorFromHeaderMenu(actor.orgName);
         await accessManagementFrontPage.goToKlientAdministrasjon();
       });
@@ -132,18 +121,13 @@ test.describe('klientadministrasjon', () => {
     });
 
     test('deleger klient til en bruker fra klientfanen', async ({
-      page,
       accessManagementFrontPage,
       klientAdministrasjonPage,
       login,
       aktorvalgHeader,
     }) => {
-      await test.step('Logg inn', async () => {
-        await page.goto(env('BASE_URL'));
+      await test.step(`Logg inn som ${actor.orgName} og åpne klientadministrasjon`, async () => {
         await login.LoginToAccessManagement(actor.pid);
-      });
-
-      await test.step(`Velg org ${actor.orgName} og gå til klientadministrasjon`, async () => {
         await aktorvalgHeader.selectActorFromHeaderMenu(actor.orgName);
         await accessManagementFrontPage.goToKlientAdministrasjon();
       });
@@ -216,18 +200,13 @@ test.describe('klientadministrasjon', () => {
     });
 
     test('deleger klient til en bruker fra brukerfanen', async ({
-      page,
       accessManagementFrontPage,
       klientAdministrasjonPage,
       login,
       aktorvalgHeader,
     }) => {
-      await test.step('Logg inn', async () => {
-        await page.goto(env('BASE_URL'));
+      await test.step(`Logg inn som ${actor.orgName} og åpne klientadministrasjon`, async () => {
         await login.LoginToAccessManagement(actor.pid);
-      });
-
-      await test.step(`Velg org ${actor.orgName} og gå til klientadministrasjon`, async () => {
         await aktorvalgHeader.selectActorFromHeaderMenu(actor.orgName);
         await accessManagementFrontPage.goToKlientAdministrasjon();
       });
@@ -285,18 +264,13 @@ test.describe('klientadministrasjon', () => {
     });
 
     test('Slett fullmakt for en bruker fra brukerfanen', async ({
-      page,
       accessManagementFrontPage,
       klientAdministrasjonPage,
       login,
       aktorvalgHeader,
     }) => {
-      await test.step('Logg inn', async () => {
-        await page.goto(env('BASE_URL'));
+      await test.step(`Logg inn som ${actor.orgName} og åpne klientadministrasjon`, async () => {
         await login.LoginToAccessManagement(actor.pid);
-      });
-
-      await test.step(`Velg org ${actor.orgName} og gå til klientadministrasjon`, async () => {
         await aktorvalgHeader.selectActorFromHeaderMenu(actor.orgName);
         await accessManagementFrontPage.goToKlientAdministrasjon();
       });
@@ -351,18 +325,13 @@ test.describe('klientadministrasjon', () => {
     });
 
     test('Slett fullmakt for en bruker fra klientfanen', async ({
-      page,
       accessManagementFrontPage,
       klientAdministrasjonPage,
       login,
       aktorvalgHeader,
     }) => {
-      await test.step('Logg inn', async () => {
-        await page.goto(env('BASE_URL'));
+      await test.step(`Logg inn som ${actor.orgName} og åpne klientadministrasjon`, async () => {
         await login.LoginToAccessManagement(actor.pid);
-      });
-
-      await test.step(`Velg org ${actor.orgName} og gå til klientadministrasjon`, async () => {
         await aktorvalgHeader.selectActorFromHeaderMenu(actor.orgName);
         await accessManagementFrontPage.goToKlientAdministrasjon();
       });
