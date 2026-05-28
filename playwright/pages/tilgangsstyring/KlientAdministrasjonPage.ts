@@ -22,7 +22,7 @@ export class KlientAdministrasjonPage {
     this.brukerFane = this.page.getByRole('tab', { name: 'Brukere' });
     this.klientFane = this.page.getByRole('tab', { name: 'Klienter' });
     this.brukerSok = this.page.getByRole('searchbox', { name: 'Søk' });
-    this.fnrFelt = this.page.getByRole('textbox', { name: 'Fødselsnr./brukernavn' });
+    this.fnrFelt = this.page.getByRole('textbox', { name: 'Fødselsnummer/brukernavn' });
     this.etternavnFelt = this.page.getByRole('textbox', { name: 'Etternavn' });
     this.leggTilPersonKnapp = this.page.getByRole('button', { name: 'Legg til person' });
     this.slettBrukerKnapp = this.page.getByRole('button', { name: 'Slett bruker' });
