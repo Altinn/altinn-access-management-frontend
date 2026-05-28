@@ -711,8 +711,8 @@
   },
   "client_administration_page": {
     "page_title": "Klientadministrasjon - Altinn",
-    "agent_page_title": "Brukar med klient tilgang - Altinn",
-    "client_page_title": "Valgt klient - Altinn",
+    "agent_page_title": "Brukar med klienttilgang - Altinn",
+    "client_page_title": "Vald klient - Altinn",
     "no_access_title": "Du har ikkje tilgang til klientadministrasjon",
     "page_heading": "Klientadministrasjon for {{name}}",
     "page_description": "org.nr. {{organisationidentifier}} ({{unitType}})",
