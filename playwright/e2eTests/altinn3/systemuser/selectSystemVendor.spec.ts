@@ -19,7 +19,6 @@ test.describe('System Register', async () => {
   });
 
   test('Create system user and verify landing page', async ({
-    page,
     systemUserPage,
     accessManagementFrontPage,
   }): Promise<void> => {
@@ -35,7 +34,7 @@ test.describe('System Register', async () => {
 
     await test.step('Verify system user created', async () => {
       await expect(systemUserPage.SYSTEMUSER_CREATED_HEADING).toBeVisible();
-      await expect(page.getByText(system).first()).toBeVisible();
+      await expect(systemUserPage.systemUserLink(system)).toBeVisible();
     });
   });
 
