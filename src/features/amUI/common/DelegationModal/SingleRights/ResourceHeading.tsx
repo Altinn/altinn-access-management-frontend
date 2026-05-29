@@ -1,5 +1,5 @@
 import { useProviderLogoUrl } from '@/resources/hooks';
-import { ServiceResource } from '@/rtk/features/singleRights/singleRightsApi';
+import type { ServiceResource } from '@/rtk/features/singleRights/singleRightsApi';
 import { Avatar, Badge, Color, DsHeading, DsParagraph, Icon } from '@altinn/altinn-components';
 
 import classes from './ResourceInfo.module.css';
