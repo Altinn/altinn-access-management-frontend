@@ -24,6 +24,19 @@ jobs:
         with:
           path: ~/.cache/ms-playwright
           key: playwright-${{ runner.os }}-${{ hashFiles('yarn.lock') }}
-      - name: Install Playwright Browsers
-        run: yarn playwright install --with-deps
-        timeout-minutes: 3
+      - name: Install Playwright system dependencies
+        run: yarn playwright install-deps
+      - name: Install Playwright browsers (retry on stall)
+        timeout-minutes: 8
+        run: |
+          for attempt in 1 2 3; do
+            echo "::group::Playwright browser install attempt $attempt"
+            if timeout 120 yarn playwright install; then
+              echo "::endgroup::"
+              exit 0
+            fi
+            echo "::endgroup::"
+            echo "::warning::Playwright browser install attempt $attempt stalled or failed; retrying"
+          done
+          echo "::error::Playwright browser install failed after 3 attempts"
+          exit 1
