@@ -41,7 +41,10 @@ jobs:
       - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6
       - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4
         with:
-          node-version: lts/*
+          # Pinned: Node 24.16.0 hangs `playwright install` at 100% (extraction
+          # worker dies silently). Fixed upstream in Playwright 1.60.0 — once we
+          # bump @playwright/test to >=1.60.0 this can return to lts/*.
+          node-version: 24.15.0
       - name: Install dependencies
         run: yarn --immutable
       - name: Cache Playwright browsers
