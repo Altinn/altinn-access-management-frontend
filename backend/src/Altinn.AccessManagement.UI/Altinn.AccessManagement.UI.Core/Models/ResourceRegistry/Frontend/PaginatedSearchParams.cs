@@ -27,7 +27,7 @@ namespace Altinn.AccessManagement.UI.Core.Models.ResourceRegistry.Frontend
         public bool IncludeA2Services { get; set; } = true;
 
         /// <summary>
-        /// Flag indicating whether to include migrated/archived apps and correspondances in the search results. Default is false.
+        /// Flag indicating whether to include migrated/archived apps and correspondences in the search results. Default is false.
         /// </summary>
         public bool IncludeMigrated { get; set; } = false;
 
