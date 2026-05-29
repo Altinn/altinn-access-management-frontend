@@ -1101,7 +1101,11 @@
     "resource_search_clear": "Clear search",
     "remove_filter": "Remove filter",
     "service_owner_filter": "Search for service owner",
-    "service_owner_filter_clear": "Clear search field"
+    "service_owner_filter_clear": "Clear search field",
+    "show_archived_services": "Show archived services",
+    "show_archived_services_helptext": "Some services are archived and will not let you submit/receive new data. You can still grant others access to them, but they will only be able to view old submissions/messages on that service.",
+    "show_archived_services_helptext_button": "What are archived services?",
+    "archived_badge": "Archived"
   },
   "landing_page": {
     "page_title": "Access management - Altinn",

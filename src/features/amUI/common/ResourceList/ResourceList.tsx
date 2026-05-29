@@ -15,6 +15,7 @@ import { SkeletonResourceList } from './SkeletonResourceList';
 import { useFilteredResources } from './useFilteredResources';
 import { ResourceFilterToolbar } from '../ResourceFilterToolbar/ResourceFilterToolbar';
 import type { ResourceListItemResource } from './types';
+import { isArchivedResource } from '@/features/amUI/common/ResourceList/utils';
 
 import cn from 'classnames';
 import {
@@ -192,6 +193,9 @@ export const ResourceList = <
                   const itemTitleAs = titleAs ?? 'h3';
                   const handleClick = itemInteractive ? () => handleSelect(resource) : undefined;
                   const itemShadow = itemInteractive ? undefined : 'none';
+                  const titleBadge = isArchivedResource(resource)
+                    ? { label: t('resource_list.archived_badge'), color: 'neutral' as const }
+                    : undefined;
 
                   return (
                     <ResourceListItem
@@ -207,6 +211,7 @@ export const ResourceList = <
                       interactive={itemInteractive}
                       onClick={handleClick}
                       badge={getBadge?.(resource, index)}
+                      titleBadge={titleBadge}
                       variant={getHasAccess?.(resource) ? 'tinted' : 'default'}
                       controls={renderControls?.(resource)}
                       loading={false}

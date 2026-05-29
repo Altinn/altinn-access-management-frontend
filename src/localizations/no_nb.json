@@ -1098,7 +1098,11 @@
     "resource_search_clear": "Tøm søk",
     "remove_filter": "Fjern filter",
     "service_owner_filter": "Søk etter tjenesteeier",
-    "service_owner_filter_clear": "Tøm søkefelt"
+    "service_owner_filter_clear": "Tøm søkefelt",
+    "show_archived_services": "Vis arkiverte tjenester",
+    "show_archived_services_helptext": "Noen tjenester er arkivert og vil ikke la deg sende inn/motta ny data. Du kan likevel gi andre fullmakter til dem, men de vil da bare kunne se gamle innsendinger/meldinger på tjenesten.",
+    "show_archived_services_helptext_button": "Hva er arkiverte tjenester?",
+    "archived_badge": "Arkivert"
   },
   "landing_page": {
     "page_title": "Tilgangsstyring - Altinn",

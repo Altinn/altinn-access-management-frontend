@@ -77,3 +77,12 @@ export const extractResourceId = (resource: ResourceListItemResource): string | 
 
   return undefined;
 };
+
+export const isArchivedResource = (resource: ResourceListItemResource): boolean => {
+  const resourceType = (resource as { resourceType?: string }).resourceType;
+  const identifier = (resource as { identifier?: string }).identifier;
+  return (
+    resourceType === 'MigratedApp' ||
+    (identifier?.toLowerCase().includes('migratedcorrespondence') ?? false)
+  );
+};

@@ -105,7 +105,7 @@ export const singleRightsApi = createApi({
         }
         if (includeMigratedApps) {
           // Default is to not include migrated apps, so only add param if true
-          searchParams = searchParams + `&includeMigratedApps=true`;
+          searchParams = searchParams + `&includeMigrated=true`;
         }
         return `resources/search?Page=${page}&ResultsPerPage=${resultsPerPage}&SearchString=${encodeURIComponent(searchString)}${searchParams}`;
       },

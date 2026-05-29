@@ -63,10 +63,9 @@ namespace Altinn.AccessManagement.UI.Tests.Utils
             return filteredResources;
         }
 
-        public static List<ServiceResourceFE> GetSingleRightsResources()
+        public static List<ServiceResourceFE> GetSingleRightsResources(bool includeMigrated = false)
         {
             List<ServiceResourceFE> resources = new List<ServiceResourceFE>();
-            List<ServiceResourceFE> filteredResources = null;
 
             string path = GetResourcesPath("resourcesfe");
 
@@ -80,10 +79,11 @@ namespace Altinn.AccessManagement.UI.Tests.Utils
                 resources = JsonSerializer.Deserialize<List<ServiceResourceFE>>(content, options);
             }
 
-            filteredResources = resources.FindAll(r => r.ResourceType != ResourceType.MaskinportenSchema);
-
-
-            return filteredResources;
+            return resources.FindAll(r =>
+                r.ResourceType != ResourceType.MaskinportenSchema &&
+                (includeMigrated ||
+                    (r.ResourceType != ResourceType.MigratedApp &&
+                     !(r.Identifier?.IndexOf("migratedcorrespondence", StringComparison.OrdinalIgnoreCase) >= 0))));
         }
 
         /// <summary>

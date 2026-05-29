@@ -187,7 +187,7 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
             Assert.Equal(expectedResult.NumEntriesTotal, actualResources.NumEntriesTotal);
             AssertionUtil.AssertCollections(expectedResult.PageList, actualResources.PageList, AssertionUtil.AssertEqual);
         }
-        
+
 
         /// <summary>
         ///     Test case: PaginatedSearch with pagination and search string
@@ -316,7 +316,7 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
             List<ServiceResourceFE> allExpectedResources = TestDataUtil.GetSingleRightsResources().FindAll(r => roFilters.Contains(r.ResourceOwnerOrgcode?.ToLower()));
             // The most relevant resource to our search will be the Brannvesenet service, which is stored last
             // Thus we rearrange the resources until they match expected output of the search
-            var mostRelevantResourceIndex = allExpectedResources.FindIndex(r => r.ResourceOwnerOrgcode?.ToLower() == "fd" );
+            var mostRelevantResourceIndex = allExpectedResources.FindIndex(r => r.ResourceOwnerOrgcode?.ToLower() == "fd");
             var mostRelevantResource = allExpectedResources[mostRelevantResourceIndex];
             allExpectedResources.RemoveAt(mostRelevantResourceIndex);
             allExpectedResources.Insert(0, mostRelevantResource);
@@ -546,6 +546,56 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
 
             List<ServiceResourceFE> actualResources = JsonSerializer.Deserialize<List<ServiceResourceFE>>(await response.Content.ReadAsStringAsync(), options);
             AssertionUtil.AssertCollections(filteredExpectedResult, actualResources, AssertionUtil.AssertEqual);
+        }
+
+        /// <summary>
+        ///     Test case: PaginatedSearch with IncludeMigrated not set (defaults to false)
+        ///     Expected: Archived resources (MigratedApp type and migratedcorrespondence identifier) are excluded from results
+        /// </summary>
+        [Fact]
+        public async Task GetSingleRightsSearch_IncludeMigratedNotSet_ExcludesArchivedResources()
+        {
+            // Arrange
+            string token = PrincipalUtil.GetToken(1337, 501337);
+            _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+
+            List<ServiceResourceFE> expectedResources = TestDataUtil.GetSingleRightsResources();
+
+            // Act
+            HttpResponseMessage response = await _client.GetAsync("accessmanagement/api/v1/resources/search?ResultsPerPage=100&Page=1");
+
+            // Assert
+            Assert.Equal(HttpStatusCode.OK, response.StatusCode);
+
+            PaginatedList<ServiceResourceFE> actualResult = JsonSerializer.Deserialize<PaginatedList<ServiceResourceFE>>(await response.Content.ReadAsStringAsync(), options);
+            Assert.Equal(expectedResources.Count, actualResult.NumEntriesTotal);
+            Assert.DoesNotContain(actualResult.PageList, r => r.ResourceType == ResourceType.MigratedApp);
+            Assert.DoesNotContain(actualResult.PageList, r => r.Identifier.Contains("migratedcorrespondence", StringComparison.OrdinalIgnoreCase));
+        }
+
+        /// <summary>
+        ///     Test case: PaginatedSearch with IncludeMigrated=true
+        ///     Expected: Archived resources (MigratedApp type and migratedcorrespondence identifier) are included in results
+        /// </summary>
+        [Fact]
+        public async Task GetSingleRightsSearch_IncludeMigratedTrue_IncludesArchivedResources()
+        {
+            // Arrange
+            string token = PrincipalUtil.GetToken(1337, 501337);
+            _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+
+            List<ServiceResourceFE> expectedResources = TestDataUtil.GetSingleRightsResources(includeMigrated: true);
+
+            // Act
+            HttpResponseMessage response = await _client.GetAsync("accessmanagement/api/v1/resources/search?ResultsPerPage=100&Page=1&includeMigrated=true");
+
+            // Assert
+            Assert.Equal(HttpStatusCode.OK, response.StatusCode);
+
+            PaginatedList<ServiceResourceFE> actualResult = JsonSerializer.Deserialize<PaginatedList<ServiceResourceFE>>(await response.Content.ReadAsStringAsync(), options);
+            Assert.Equal(expectedResources.Count, actualResult.NumEntriesTotal);
+            Assert.Contains(actualResult.PageList, r => r.ResourceType == ResourceType.MigratedApp);
+            Assert.Contains(actualResult.PageList, r => r.Identifier.Contains("migratedcorrespondence", StringComparison.OrdinalIgnoreCase));
         }
 
         private static IHttpContextAccessor GetHttpContextAccessorMock(string partytype, string id)

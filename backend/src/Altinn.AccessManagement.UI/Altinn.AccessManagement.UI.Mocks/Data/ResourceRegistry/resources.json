@@ -1241,5 +1241,79 @@
         "value": "appid-520"
       }
     ]
+  },
+  {
+    "title": {
+      "en": "Archived Service - MigratedApp",
+      "nb": "Arkivert tjeneste - MigratedApp",
+      "nn": "Arkivert teneste - MigratedApp"
+    },
+    "identifier": "migratedapp-test-resource",
+    "visible": true,
+    "delegable": true,
+    "description": {
+      "en": "An archived MigratedApp resource",
+      "nb": "En arkivert MigratedApp-ressurs",
+      "nn": "Ein arkivert MigratedApp-ressurs"
+    },
+    "rightDescription": {
+      "en": "Grants access to archived data",
+      "nb": "Gir tilgang til arkiverte data",
+      "nn": "Gir tilgang til arkiverte data"
+    },
+    "resourceType": "MigratedApp",
+    "resourceReferences": [],
+    "authorizationReference": [
+      {
+        "id": "urn:altinn:resource",
+        "value": "migratedapp-test-resource"
+      }
+    ],
+    "hasCompetentAuthority": {
+      "orgcode": "TTD",
+      "organization": "974760746",
+      "name": {
+        "en": "Testdepartementet",
+        "nb": "Testdepartementet",
+        "nn": "Testdepartementet"
+      }
+    }
+  },
+  {
+    "title": {
+      "en": "Archived Service - MigratedCorrespondence",
+      "nb": "Arkivert tjeneste - MigratedCorrespondence",
+      "nn": "Arkivert teneste - MigratedCorrespondence"
+    },
+    "identifier": "migratedcorrespondence-test-resource",
+    "visible": true,
+    "delegable": true,
+    "description": {
+      "en": "An archived correspondence resource",
+      "nb": "En arkivert korrespondanseressurs",
+      "nn": "Ein arkivert korrespondanseressurs"
+    },
+    "rightDescription": {
+      "en": "Grants access to archived correspondence data",
+      "nb": "Gir tilgang til arkiverte korrespondansedata",
+      "nn": "Gir tilgang til arkiverte korrespondansedata"
+    },
+    "resourceType": "GenericAccessResource",
+    "resourceReferences": [],
+    "authorizationReference": [
+      {
+        "id": "urn:altinn:resource",
+        "value": "migratedcorrespondence-test-resource"
+      }
+    ],
+    "hasCompetentAuthority": {
+      "orgcode": "TTD",
+      "organization": "974760746",
+      "name": {
+        "en": "Testdepartementet",
+        "nb": "Testdepartementet",
+        "nn": "Testdepartementet"
+      }
+    }
   }
 ]
