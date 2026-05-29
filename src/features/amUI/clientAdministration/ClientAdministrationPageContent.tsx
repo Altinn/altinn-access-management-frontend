@@ -78,17 +78,19 @@ export const ClientAdministrationPageContent = () => {
 
   return (
     <>
-      <div>
-        <ReporteePageHeading
-          title={t('client_administration_page.page_heading', {
-            name: formatDisplayName({
-              fullName: actingParty?.name ?? '',
-              type: actingParty?.partyTypeName === PartyType.Person ? 'person' : 'company',
-            }),
-          })}
-          reportee={reportee}
-          isLoading={isLoadingReportee || actorLoading}
-        />
+      <div className={classes.headerSection}>
+        <div className={classes.pageHeader}>
+          <ReporteePageHeading
+            title={t('client_administration_page.page_heading', {
+              name: formatDisplayName({
+                fullName: actingParty?.name ?? '',
+                type: actingParty?.partyTypeName === PartyType.Person ? 'person' : 'company',
+              }),
+            })}
+            reportee={reportee}
+            isLoading={isLoadingReportee || actorLoading}
+          />
+        </div>
         <DsParagraph
           data-size='md'
           className={classes.pageDescription}

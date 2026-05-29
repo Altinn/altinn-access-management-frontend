@@ -1,7 +1,18 @@
+.headerSection {
+  display: flex;
+  flex-direction: column;
+  gap: var(--ds-size-6);
+  margin-bottom: var(--ds-size-6);
+}
+
+.pageHeader {
+  display: flex;
+  flex-direction: column;
+  gap: var(--ds-size-1);
+}
+
 .pageDescription {
   max-width: 80ch;
-  margin-bottom: var(--ds-size-6);
-  margin-top: var(--ds-size-6);
 }
 
 .tab {

@@ -1,9 +1,11 @@
-.notAdminAlert {
+.pageContent {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
   margin-top: 1rem;
 }
 
 .settingsListContainer {
-  margin-top: 1.5rem;
   padding: 1rem;
   background-color: white;
   box-shadow:
@@ -12,7 +14,6 @@
 }
 
 .settingsHeaderAndInfo {
-  margin-top: 1.5rem;
   display: flex;
   align-items: center;
   gap: 0.5rem;

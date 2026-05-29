@@ -68,7 +68,7 @@ export const SettingsPageContent = () => {
   // Show not-admin alert when loaded and user lacks permission
   if (!isCompanyProfileAdmin && !isCompanyProfileAdminLoading) {
     return (
-      <div className={classes.notAdminAlert}>
+      <div className={classes.pageContent}>
         <DsAlert data-color='warning'>
           {t('settings_page.not_admin_alert', {
             name: formattedActingPartyName,
@@ -79,7 +79,7 @@ export const SettingsPageContent = () => {
   }
 
   return (
-    <div>
+    <div className={classes.pageContent}>
       <ReporteePageHeading
         title={t('settings_page.page_heading', { name: formattedActingPartyName })}
         reportee={reportee}
