@@ -1,0 +1,27 @@
+name: TEMP - Verify Playwright 1.60 install
+
+# Throwaway workflow: verifies that bumping @playwright/test to 1.60.0 fixes the
+# install hang on Node 24.16.0 (lts/*), so we don't need to pin Node.
+# No environment gate. Delete before merge.
+
+on:
+  push:
+    branches:
+      - test/bump-playwright-1.60
+
+jobs:
+  install-only:
+    name: Install Playwright on lts/* (no env gate)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4
+        with:
+          node-version: lts/*
+      - name: Print node version
+        run: node --version
+      - name: Install dependencies
+        run: yarn --immutable
+      - name: Install Playwright Browsers
+        run: yarn playwright install --with-deps
+        timeout-minutes: 3
