@@ -56,7 +56,7 @@ interface searchParams {
   page: number;
   resultsPerPage: number;
   includeA2Services?: boolean;
-  includeMigratedApps?: boolean;
+  includeMigrated?: boolean;
 }
 
 export interface DelegationCheckedRight {
@@ -93,7 +93,7 @@ export const singleRightsApi = createApi({
           page,
           resultsPerPage,
           includeA2Services,
-          includeMigratedApps,
+          includeMigrated,
         } = args;
         let searchParams = '';
         for (const filter of ROfilters) {
@@ -103,7 +103,7 @@ export const singleRightsApi = createApi({
           // Default is to include A2 services, so only add param if false
           searchParams = searchParams + `&includeA2Services=false`;
         }
-        if (includeMigratedApps) {
+        if (includeMigrated) {
           // Default is to not include migrated apps, so only add param if true
           searchParams = searchParams + `&includeMigrated=true`;
         }

@@ -1,11 +1,14 @@
 import { useProviderLogoUrl } from '@/resources/hooks';
 import { ServiceResource } from '@/rtk/features/singleRights/singleRightsApi';
-import { Avatar, DsHeading, DsParagraph, Icon } from '@altinn/altinn-components';
+import { Avatar, Badge, Color, DsHeading, DsParagraph, Icon } from '@altinn/altinn-components';
 
 import classes from './ResourceInfo.module.css';
 import { useIsMobileOrSmaller } from '@/resources/utils/screensizeUtils';
+import { isArchivedResource } from '../../ResourceList/utils';
+import { useTranslation } from 'react-i18next';
 
 export const ResourceHeading = ({ resource }: { resource: ServiceResource }) => {
+  const { t } = useTranslation();
   const { getProviderLogoUrl } = useProviderLogoUrl();
   const isSmall = useIsMobileOrSmaller();
 
@@ -30,6 +33,10 @@ export const ResourceHeading = ({ resource }: { resource: ServiceResource }) => 
     </>
   );
 
+  const titleBadge = isArchivedResource(resource)
+    ? { label: t('resource_list.archived_badge'), color: 'neutral' as Color }
+    : undefined;
+
   return (
     <div className={classes.infoHeading}>
       {!isSmall && <div>{icon(false)}</div>}
@@ -42,6 +49,12 @@ export const ResourceHeading = ({ resource }: { resource: ServiceResource }) => 
           >
             {resource.title}
           </DsHeading>
+          {titleBadge && (
+            <Badge
+              label={titleBadge.label}
+              color={titleBadge.color}
+            />
+          )}
         </div>
 
         <div className={classes.resourceOwner}>

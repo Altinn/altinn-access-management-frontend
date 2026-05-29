@@ -500,6 +500,8 @@
     "package_services_other": "Grants access to {{count}} services",
     "no_resources_in_package": "This access package currently contains no services.",
     "inherited_role_org_message": "{{user_name}} has access to this through their role in {{org_name}}. Therefore, it cannot be deleted.",
+    "archived_resource_description": "This service is archived. If you grant power of attorney for this service, {{name}} will only have access to view old submissions/messages. They will not be able to submit new data.",
+    "archived_resource_request_description": "This service is archived. If you request power of attorney for this service, you will only have access to view old submissions/messages. You will not be able to submit new data.",
     "actions": {
       "access_to_all": "Access to the full service",
       "partial_access": "Access to {{count}} of {{total}} actions",

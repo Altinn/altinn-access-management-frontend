@@ -38,7 +38,7 @@ export const ResourceSearch = ({ onSelect, availableActions }: ResourceSearchPro
   const { searchString, setSearchString, filters, setFilters, currentPage, setCurrentPage } =
     useDelegationModalContext();
   const [debouncedSearchString, setDebouncedSearchString] = React.useState(searchString);
-  const [includeMigratedApps, setIncludeMigratedApps] = React.useState(false);
+  const { includeArchivedResources, setIncludeArchivedResources } = useDelegationModalContext();
 
   useEffect(() => {
     if (!searchString) {
@@ -46,10 +46,6 @@ export const ResourceSearch = ({ onSelect, availableActions }: ResourceSearchPro
       setDebouncedSearchString('');
     }
   }, [searchString]);
-
-  useEffect(() => {
-    setCurrentPage(1);
-  }, [filters, includeMigratedApps]);
 
   const {
     data: searchData,
@@ -61,7 +57,7 @@ export const ResourceSearch = ({ onSelect, availableActions }: ResourceSearchPro
     page: currentPage,
     resultsPerPage: searchResultsPerPage,
     includeA2Services: false,
-    includeMigratedApps,
+    includeMigrated: includeArchivedResources,
   });
   const { data: delegatedResources } = useGetSingleRightsForRightholderQuery(
     {
@@ -140,8 +136,8 @@ export const ResourceSearch = ({ onSelect, availableActions }: ResourceSearchPro
         <div className={classes.toggleContainer}>
           <DsSwitch
             data-size='sm'
-            checked={includeMigratedApps}
-            onChange={(e) => setIncludeMigratedApps(e.target.checked)}
+            checked={includeArchivedResources}
+            onChange={(e) => setIncludeArchivedResources(e.target.checked)}
             label={t('resource_list.show_archived_services')}
           />
           <DsPopover.TriggerContext>
