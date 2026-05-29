@@ -594,7 +594,7 @@
     "org_search_result_label": "Du legg til:"
   },
   "maskinporten_page": {
-    "heading": "Maskinporten\u00ADadministrasjon",
+    "heading": "Maskinporten\u00ADadministrasjon for {{name}}",
     "document_title": "Maskinportenadministrasjon - Altinn",
     "suppliers_tab": "Leverandørar",
     "breadcrumb_suppliers": "Maskinporten – Leverandørar",
