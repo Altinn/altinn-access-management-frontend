@@ -35,10 +35,17 @@ export const ResourceSearch = ({ onSelect, availableActions }: ResourceSearchPro
   const { t } = useTranslation();
 
   const { actingParty, fromParty, toParty } = usePartyRepresentation();
-  const { searchString, setSearchString, filters, setFilters, currentPage, setCurrentPage } =
-    useDelegationModalContext();
+  const {
+    searchString,
+    setSearchString,
+    filters,
+    setFilters,
+    currentPage,
+    setCurrentPage,
+    includeArchivedResources,
+    setIncludeArchivedResources,
+  } = useDelegationModalContext();
   const [debouncedSearchString, setDebouncedSearchString] = React.useState(searchString);
-  const { includeArchivedResources, setIncludeArchivedResources } = useDelegationModalContext();
 
   useEffect(() => {
     if (!searchString) {
@@ -137,7 +144,10 @@ export const ResourceSearch = ({ onSelect, availableActions }: ResourceSearchPro
           <DsSwitch
             data-size='sm'
             checked={includeArchivedResources}
-            onChange={(e) => setIncludeArchivedResources(e.target.checked)}
+            onChange={(e) => {
+              setCurrentPage(1);
+              setIncludeArchivedResources(e.target.checked);
+            }}
             label={t('resource_list.show_archived_services')}
           />
           <DsPopover.TriggerContext>

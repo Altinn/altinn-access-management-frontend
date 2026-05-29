@@ -15,9 +15,6 @@ import { SkeletonResourceList } from './SkeletonResourceList';
 import { useFilteredResources } from './useFilteredResources';
 import { ResourceFilterToolbar } from '../ResourceFilterToolbar/ResourceFilterToolbar';
 import type { ResourceListItemResource } from './types';
-import { isArchivedResource } from '@/features/amUI/common/ResourceList/utils';
-
-import cn from 'classnames';
 import {
   extractResourceName,
   extractOwnerName,
@@ -26,7 +23,10 @@ import {
   extractResourceId,
   extractLogoUrl,
   extractLogoAlt,
+  isArchivedResource,
 } from './utils';
+
+import cn from 'classnames';
 
 export interface ResourceListProps<
   TResource extends ResourceListItemResource = ResourceListItemResource,

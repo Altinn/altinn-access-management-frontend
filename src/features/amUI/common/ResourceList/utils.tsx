@@ -79,10 +79,10 @@ export const extractResourceId = (resource: ResourceListItemResource): string | 
 };
 
 export const isArchivedResource = (resource: ResourceListItemResource): boolean => {
-  const resourceType = (resource as { resourceType?: string }).resourceType;
-  const identifier = (resource as { identifier?: string }).identifier;
+  const resourceType = 'resourceType' in resource ? resource.resourceType : undefined;
+  const identifier = 'identifier' in resource ? resource.identifier : undefined;
   return (
     resourceType === 'MigratedApp' ||
-    (identifier?.toLowerCase().includes('migratedcorrespondence') ?? false)
+    (typeof identifier === 'string' && identifier.toLowerCase().includes('migratedcorrespondence'))
   );
 };

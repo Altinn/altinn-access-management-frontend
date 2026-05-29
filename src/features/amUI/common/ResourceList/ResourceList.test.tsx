@@ -5,6 +5,7 @@ import userEvent from '@testing-library/user-event';
 
 import { ResourceList } from './ResourceList';
 import type { PackageResource, ResourceProvider } from '@/rtk/features/accessPackageApi';
+import type { ResourceListItemResource } from './types';
 
 vi.mock('@/resources/hooks/useProviderLogoUrl', () => ({
   useProviderLogoUrl: () => ({
@@ -110,5 +111,50 @@ describe('ResourceList', () => {
 
     expect(screen.queryByRole('button', { name: /Alpha Service/i })).not.toBeInTheDocument();
     expect(screen.getByRole('button', { name: /Beta Service/i })).toBeInTheDocument();
+  });
+
+  it('renders the archived badge for a resource with resourceType MigratedApp', () => {
+    const archivedResource = {
+      ...createResource({ name: 'Archived Service' }),
+      resourceType: 'MigratedApp',
+    } as ResourceListItemResource;
+
+    render(
+      <ResourceList
+        resources={[archivedResource]}
+        enableSearch={false}
+      />,
+    );
+
+    expect(screen.getByText('resource_list.archived_badge')).toBeInTheDocument();
+  });
+
+  it('renders the archived badge for a resource whose identifier includes migratedcorrespondence', () => {
+    const archivedResource = {
+      ...createResource({ name: 'Migrated Correspondence Service' }),
+      identifier: 'some-migratedcorrespondence-service',
+    } as ResourceListItemResource;
+
+    render(
+      <ResourceList
+        resources={[archivedResource]}
+        enableSearch={false}
+      />,
+    );
+
+    expect(screen.getByText('resource_list.archived_badge')).toBeInTheDocument();
+  });
+
+  it('does not render the archived badge for a non-archived resource', () => {
+    const normalResource = createResource({ name: 'Normal Service' });
+
+    render(
+      <ResourceList
+        resources={[normalResource]}
+        enableSearch={false}
+      />,
+    );
+
+    expect(screen.queryByText('resource_list.archived_badge')).not.toBeInTheDocument();
   });
 });
