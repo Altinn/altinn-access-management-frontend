@@ -4,7 +4,9 @@ name: TEMP - Test Playwright install
 # (cache + timeout) in isolation, with no environment gate. Delete after testing.
 
 on:
-  workflow_dispatch:
+  push:
+    branches:
+      - test/playwright-install-timeout-cache
 
 jobs:
   install-only:
