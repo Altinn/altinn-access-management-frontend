@@ -1,0 +1,27 @@
+name: TEMP - Test Playwright install
+
+# Throwaway workflow to validate the Playwright browser install step
+# (cache + timeout) in isolation, with no environment gate. Delete after testing.
+
+on:
+  workflow_dispatch:
+
+jobs:
+  install-only:
+    name: Install Playwright (no env gate)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4
+        with:
+          node-version: lts/*
+      - name: Install dependencies
+        run: yarn --immutable
+      - name: Cache Playwright browsers
+        uses: actions/cache@v4
+        with:
+          path: ~/.cache/ms-playwright
+          key: playwright-${{ runner.os }}-${{ hashFiles('yarn.lock') }}
+      - name: Install Playwright Browsers
+        run: yarn playwright install --with-deps
+        timeout-minutes: 3
