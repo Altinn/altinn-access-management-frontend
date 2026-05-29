@@ -497,8 +497,8 @@
     "package_services_other": "Gir tilgang til {{count}} tenester",
     "no_resources_in_package": "Denne tilgangspakken inneheld førebels ingen tenester.",
     "inherited_role_org_message": "{{user_name}} har tilgang til denne gjennom rolla si i {{org_name}}. Den kan derfor ikkje slettast.",
-    "archived_resource_description": "Denne tenesten er arkivert. Dersom du gir fullmakt til denne tenesten, vil {{name}} kun få tilgong til å sjå gamle innsendinger/meldinger. Dei vil ikkje kunne sende inn ny data.",
-    "archived_resource_request_description": "Denne tenesten er arkivert. Dersom du ber om fullmakt til denne tenesten, vil du kun få tilgong til å sjå gamle innsendinger/meldinger. Du vil ikkje kunne sende inn ny data.",
+    "archived_resource_description": "Denne tenesten er arkivert. Dersom du gir fullmakt til denne tenesten, vil {{name}} kun få tilgong til å sjå gamle innsendingar/meldingar. Dei vil ikkje kunne sende inn nye data.",
+    "archived_resource_request_description": "Denne tenesten er arkivert. Dersom du ber om fullmakt til denne tenesten, vil du kun få tilgong til å sjå gamle innsendingar/meldingar. Du vil ikkje kunne sende inn nye data.",
     "actions": {
       "access_to_all": "Tilgang til heile tenesta",
       "partial_access": "Tilgang til {{count}} av {{total}} handlingar",
