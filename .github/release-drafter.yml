@@ -15,13 +15,13 @@ categories:
   - title: '🧪 Test Coverage'
     labels:
       - 'Test'
+  - title: '📝 Text improvements'
+    labels:
+      - 'Text'
   - title: '🧰 Maintenance'
     labels:
       - 'kind/documentation'
       - 'dependencies'
       - 'enhancement'
       - 'kind/chore'
-  - title: '📝 Text improvements'
-    labels:
-      - 'Text'
 change-template: '- $TITLE @$AUTHOR (#$NUMBER)'
