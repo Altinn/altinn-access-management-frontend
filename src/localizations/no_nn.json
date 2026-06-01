@@ -158,6 +158,7 @@
     "maskinporten": "Maskinporten\u00ADadministrasjon"
   },
   "error_page": {
+    "page_title": "Feilside - Altinn",
     "not_found_site_error_type": "Feil 404",
     "not_found_site_header": "Oi! Du har prøvd å kome til ei side vi ikkje veit om.",
     "not_found_site_upper_text": "Vi veit ikkje kvar du eigentleg skulle, men kanskje du kan finne det du leitar etter på nokre av desse sidene:",
@@ -179,8 +180,9 @@
     "unsynced_connection": "Vi har ein synkroniseringsfeil mellom ny og gammal løysing. Dette er noko vi jobbar med, men for nå kan du dessverre ikkje sjå tilgangane dine her. Vi beklagar ulempa dette medfører!",
     "unsynced_connection_link": "Klikk her for å sjå tilgangane dine i gammal løysing",
     "reportee_change_error": {
-      "header": "Vi klarte ikkje å byte avgivar",
-      "description": "Den valde avgivaren er ikkje tilgjengeleg for deg, eller lenka du følgde var ugyldig.",
+      "page_title": "Feilside - Altinn",
+      "header": "Vi klarte ikkje å byte aktør",
+      "description": "Den valde aktøren er ikkje tilgjengeleg for deg, eller lenka du følgde var ugyldig.",
       "if_persistent_contact_service": "Dersom problemet held fram kan du kontakte Altinn brukarservice på telefon 75 00 60 00.",
       "where_to_now": "Kvar vil du gå no?",
       "go_to_altinn": "Gå til startsiden for Altinn",
@@ -393,7 +395,7 @@
     "has_client_access_description_self": "Du har tilgang til ein eller fleire av verksemda sine klientar. Dette betyr ikkje nødvendigvis at du har tilgang til verksemda sitt eige innhald, men kan utføre arbeid på vegner av ein eller fleire av kundane deira. Kva klientar du har tilgang til kan administrerast under <a>dine klientar</a>."
   },
   "users_page": {
-    "page_title": "Brukarar og grupper - Altinn",
+    "page_title": "Brukarar - Altinn",
     "main_page_heading": "Brukarar med fullmakter i {{name}}",
     "user_list_heading": "Andre med fullmakt",
     "direct_connections": "Brukarar med fullmakt",
@@ -437,7 +439,7 @@
     "delete_provider_confirm": "Slett klienttilgang"
   },
   "user_rights_page": {
-    "page_title": "Brukertilgang - Altinn",
+    "page_title": "Fullmakter gitt til valgt brukar - Altinn",
     "access_packages_title": "Tilgangspakkar",
     "single_rights_title": "Enkelttenester",
     "instances_title": "Delt frå innboks",
@@ -477,7 +479,7 @@
     "reportee_partial_confirmation_message": "<p>{{to_name}} har òg andre fullmakter, og desse kan du slette her. Vil du slette desse tilgangane? <i>Denne handlinga kan ikkje gjerast om.</i></p>"
   },
   "reportee_rights_page": {
-    "page_title": "Fullmakter hos andre - Altinn",
+    "page_title": "Fullmakter motteke frå valgt brukar - Altinn",
     "heading_subtitle": "fullmakter gitt til {{name}}"
   },
   "delegation_modal": {
@@ -708,6 +710,8 @@
   },
   "client_administration_page": {
     "page_title": "Klientadministrasjon - Altinn",
+    "agent_page_title": "Brukar med klienttilgang - Altinn",
+    "client_page_title": "Vald klient - Altinn",
     "no_access_title": "Du har ikkje tilgang til klientadministrasjon",
     "page_heading": "Klientadministrasjon for {{name}}",
     "page_description": "org.nr. {{organisationidentifier}} ({{unitType}})",
@@ -779,6 +783,7 @@
     "creating_systemuser": "Opprettar systemtilgang..."
   },
   "systemuser_detailpage": {
+    "page_title": "Valgt systemtilgang - Altinn",
     "edit_systemuser": "Rediger systemtilgang",
     "load_systemuser_error": "Kunne ikkje laste systemtilgang",
     "loading_systemuser": "lastar systemtilgang",
@@ -867,7 +872,7 @@
     "add_self_possible": "Du kan også knytte eiga verksemd til systemtilgangen."
   },
   "systemuser_agent_delegation": {
-    "page_title": "Systemtilgang for klientar - Altinn",
+    "page_title": "Valgt systemtilgang for klientar - Altinn",
     "banner_title": "Systemtilgang for {{integrationTitle}}",
     "load_customers_error": "Kunne ikkje laste klientar",
     "load_assigned_customers_error": "Kunne ikkje laste tilknytta klientar",
@@ -923,7 +928,7 @@
     "57_systemuser_failed_to_delete_accesspackage": "Kunne ikkje fjerne tilgangspakke-delegering for systemtilgangen."
   },
   "consent_request": {
-    "page_title": "Godkjenn samtykke/fullmakt - Altinn",
+    "page_title": "Godkjenn avtale - Altinn",
     "loading_consent": "Laster førespurnad...",
     "load_consent_error": "Kunne ikkje laste samtykke/fullmakt",
     "approve_consent": "Ja, eg gir samtykke",
@@ -1054,7 +1059,8 @@
     }
   },
   "instance_detail_page": {
-    "document_title": "Delt frå innboks",
+    "document_title": "Delt frå innboks - Altinn",
+    "document_title_from_inbox": "Del og gi fullmakt - Altinn",
     "resource_title": "Melding eller skjema: {{title}}",
     "provider_name": "til {{name}}",
     "back_to_inbox": "Gå til innboks",
@@ -1075,7 +1081,8 @@
     "no_permissions": "Du må gi fullmakt"
   },
   "package_poa_details_page": {
-    "page_title": "Fullmaktsdetaljar - Altinn",
+    "page_title": "Tilgangspakke - Altinn",
+    "page_title_access_package": "{{accessPackage}} tilgangspakke - Altinn",
     "users_tab_title": "Brukarar",
     "services_tab_title": "Tenester",
     "load_error": "Oi! Noko gjekk gale.",

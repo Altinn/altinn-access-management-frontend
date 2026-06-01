@@ -14,6 +14,7 @@ import { useAccessPackageDelegationCheck } from '../common/DelegationCheck/Acces
 import { isCriticalAndUndelegated } from '../common/AccessPackageList/UndelegatedPackageWarning';
 import { FilesIcon, PersonGroupIcon } from '@navikt/aksel-icons';
 import { amUIPath } from '@/routes/paths/amUIPath';
+import { useDocumentTitle } from '@/resources/hooks/useDocumentTitle';
 
 export const PackagePoaDetails = () => {
   const { id } = useParams<{ id: string }>();
@@ -34,6 +35,12 @@ export const PackagePoaDetails = () => {
       language: i18n.language,
     },
     { skip: !id || !fromParty?.partyUuid },
+  );
+
+  useDocumentTitle(
+    t('package_poa_details_page.page_title_access_package', {
+      accessPackage: accessPackage?.name,
+    }),
   );
 
   const [chosenTab, setChosenTab] = useState('users');
