@@ -106,11 +106,8 @@ export const AccessPackageList = ({
 
   if (fetchingSearch && searchString && searchString.length > 0) {
     return (
-      <div className={classes.accessAreaList}>
-        <DsSpinner
-          aria-label={t('common.loading')}
-          className={classes.noAccessPackages}
-        />
+      <div className={classes.loadingSpinner}>
+        <DsSpinner aria-label={t('common.loading')} />
       </div>
     );
   }
