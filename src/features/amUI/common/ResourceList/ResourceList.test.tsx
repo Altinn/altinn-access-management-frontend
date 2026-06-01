@@ -113,39 +113,39 @@ describe('ResourceList', () => {
     expect(screen.getByRole('button', { name: /Beta Service/i })).toBeInTheDocument();
   });
 
-  it('renders the archived badge for a resource with resourceType MigratedApp', () => {
-    const archivedResource = {
-      ...createResource({ name: 'Archived Service' }),
+  it('renders the expired badge for a resource with resourceType MigratedApp', () => {
+    const expiredResource = {
+      ...createResource({ name: 'Expired Service' }),
       resourceType: 'MigratedApp',
     } as ResourceListItemResource;
 
     render(
       <ResourceList
-        resources={[archivedResource]}
+        resources={[expiredResource]}
         enableSearch={false}
       />,
     );
 
-    expect(screen.getByText('resource_list.archived_badge')).toBeInTheDocument();
+    expect(screen.getByText('resource_list.expired_badge')).toBeInTheDocument();
   });
 
-  it('renders the archived badge for a resource whose identifier includes migratedcorrespondence', () => {
-    const archivedResource = {
+  it('renders the expired badge for a resource whose identifier includes migratedcorrespondence', () => {
+    const expiredResource = {
       ...createResource({ name: 'Migrated Correspondence Service' }),
       identifier: 'some-migratedcorrespondence-service',
     } as ResourceListItemResource;
 
     render(
       <ResourceList
-        resources={[archivedResource]}
+        resources={[expiredResource]}
         enableSearch={false}
       />,
     );
 
-    expect(screen.getByText('resource_list.archived_badge')).toBeInTheDocument();
+    expect(screen.getByText('resource_list.expired_badge')).toBeInTheDocument();
   });
 
-  it('does not render the archived badge for a non-archived resource', () => {
+  it('does not render the expired badge for a non-expired resource', () => {
     const normalResource = createResource({ name: 'Normal Service' });
 
     render(
@@ -155,6 +155,6 @@ describe('ResourceList', () => {
       />,
     );
 
-    expect(screen.queryByText('resource_list.archived_badge')).not.toBeInTheDocument();
+    expect(screen.queryByText('resource_list.expired_badge')).not.toBeInTheDocument();
   });
 });

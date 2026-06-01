@@ -549,11 +549,11 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
         }
 
         /// <summary>
-        ///     Test case: PaginatedSearch with IncludeMigrated not set (defaults to false)
+        ///     Test case: PaginatedSearch with includeExpired not set (defaults to false)
         ///     Expected: Archived resources (MigratedApp type and migratedcorrespondence identifier) are excluded from results
         /// </summary>
         [Fact]
-        public async Task GetSingleRightsSearch_IncludeMigratedNotSet_ExcludesArchivedResources()
+        public async Task GetSingleRightsSearch_IncludeExpiredNotSet_ExcludesArchivedResources()
         {
             // Arrange
             string token = PrincipalUtil.GetToken(1337, 501337);
@@ -574,20 +574,20 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
         }
 
         /// <summary>
-        ///     Test case: PaginatedSearch with IncludeMigrated=true
+        ///     Test case: PaginatedSearch with includeExpired=true
         ///     Expected: Archived resources (MigratedApp type and migratedcorrespondence identifier) are included in results
         /// </summary>
         [Fact]
-        public async Task GetSingleRightsSearch_IncludeMigratedTrue_IncludesArchivedResources()
+        public async Task GetSingleRightsSearch_IncludeExpiredTrue_IncludesExpiredResources()
         {
             // Arrange
             string token = PrincipalUtil.GetToken(1337, 501337);
             _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
 
-            List<ServiceResourceFE> expectedResources = TestDataUtil.GetSingleRightsResources(includeMigrated: true);
+            List<ServiceResourceFE> expectedResources = TestDataUtil.GetSingleRightsResources(includeExpired: true);
 
             // Act
-            HttpResponseMessage response = await _client.GetAsync("accessmanagement/api/v1/resources/search?ResultsPerPage=100&Page=1&includeMigrated=true");
+            HttpResponseMessage response = await _client.GetAsync("accessmanagement/api/v1/resources/search?ResultsPerPage=100&Page=1&includeExpired=true");
 
             // Assert
             Assert.Equal(HttpStatusCode.OK, response.StatusCode);

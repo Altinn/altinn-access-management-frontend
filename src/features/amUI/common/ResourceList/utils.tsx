@@ -78,11 +78,14 @@ export const extractResourceId = (resource: ResourceListItemResource): string | 
   return undefined;
 };
 
-export const isArchivedResource = (resource: ResourceListItemResource): boolean => {
+export const isExpiredResource = (resource: ResourceListItemResource): boolean => {
   const resourceType = 'resourceType' in resource ? resource.resourceType : undefined;
   const identifier = 'identifier' in resource ? resource.identifier : undefined;
+  const status = 'status' in resource ? resource.status : undefined;
   return (
     resourceType === 'MigratedApp' ||
-    (typeof identifier === 'string' && identifier.toLowerCase().includes('migratedcorrespondence'))
+    (typeof identifier === 'string' &&
+      identifier.toLowerCase().includes('migratedcorrespondence')) ||
+    (typeof status === 'string' && status?.toLowerCase() === 'expired')
   );
 };

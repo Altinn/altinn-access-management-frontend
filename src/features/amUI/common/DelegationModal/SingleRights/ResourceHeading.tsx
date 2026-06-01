@@ -4,7 +4,7 @@ import { Avatar, Badge, Color, DsHeading, DsParagraph, Icon } from '@altinn/alti
 
 import classes from './ResourceInfo.module.css';
 import { useIsMobileOrSmaller } from '@/resources/utils/screensizeUtils';
-import { isArchivedResource } from '../../ResourceList/utils';
+import { isExpiredResource } from '../../ResourceList/utils';
 import { useTranslation } from 'react-i18next';
 
 export const ResourceHeading = ({ resource }: { resource: ServiceResource }) => {
@@ -33,8 +33,8 @@ export const ResourceHeading = ({ resource }: { resource: ServiceResource }) => 
     </>
   );
 
-  const titleBadge = isArchivedResource(resource)
-    ? { label: t('resource_list.archived_badge'), color: 'neutral' as Color }
+  const titleBadge = isExpiredResource(resource)
+    ? { label: t('resource_list.expired_badge'), color: 'neutral' as Color }
     : undefined;
 
   return (

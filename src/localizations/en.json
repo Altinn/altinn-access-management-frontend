@@ -500,8 +500,8 @@
     "package_services_other": "Grants access to {{count}} services",
     "no_resources_in_package": "This access package currently contains no services.",
     "inherited_role_org_message": "{{user_name}} has access to this through their role in {{org_name}}. Therefore, it cannot be deleted.",
-    "archived_resource_description": "This service is archived. If you grant power of attorney for this service, {{name}} will only have access to view old submissions/messages. They will not be able to submit new data.",
-    "archived_resource_request_description": "This service is archived. If you request power of attorney for this service, you will only have access to view old submissions/messages. You will not be able to submit new data.",
+    "expired_resource_description": "This service is expired. If you grant power of attorney for this service, {{name}} will only have access to view old submissions/messages. They will not be able to submit new data.",
+    "expired_resource_request_description": "This service is expired. If you request power of attorney for this service, you will only have access to view old submissions/messages. You will not be able to submit new data.",
     "actions": {
       "access_to_all": "Access to the full service",
       "partial_access": "Access to {{count}} of {{total}} actions",
@@ -1104,10 +1104,10 @@
     "remove_filter": "Remove filter",
     "service_owner_filter": "Search for service owner",
     "service_owner_filter_clear": "Clear search field",
-    "show_archived_services": "Show archived services",
-    "show_archived_services_helptext": "Some services are archived and will not let you submit/receive new data. You can still grant others access to them, but they will only be able to view old submissions/messages on that service.",
-    "show_archived_services_helptext_button": "What are archived services?",
-    "archived_badge": "Archived"
+    "show_expired_services": "Show expired services",
+    "show_expired_services_helptext": "Some services are expired and will not let you submit/receive new data. You can still grant others access to them, but they will only be able to view old submissions/messages on that service.",
+    "show_expired_services_helptext_button": "What are expired services?",
+    "expired_badge": "Expired"
   },
   "landing_page": {
     "page_title": "Access management - Altinn",

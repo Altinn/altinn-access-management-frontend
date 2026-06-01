@@ -497,8 +497,8 @@
     "package_services_other": "Gir tilgang til {{count}} tjenester",
     "no_resources_in_package": "Denne tilgangspakken inneholder foreløpig ingen tjenester.",
     "inherited_role_org_message": "{{user_name}} har tilgang til denne gjennom sin rolle i {{org_name}}. Den kan derfor ikke slettes.",
-    "archived_resource_description": "Denne tjenesten er arkivert. Dersom du gir fullmakt til denne tjenesten, vil {{name}} kun få tilgang til å se gamle innsendinger/meldinger. De vil ikke kunne sende inn ny data.",
-    "archived_resource_request_description": "Denne tjenesten er arkivert. Dersom du ber om fullmakt til denne tjenesten, vil du kun få tilgang til å se gamle innsendinger/meldinger. Du vil ikke kunne sende inn ny data.",
+    "expired_resource_description": "Denne tjenesten er utgått. Dersom du gir fullmakt til denne tjenesten, vil {{name}} kun få tilgang til å se gamle innsendinger/meldinger. De vil ikke kunne sende inn ny data.",
+    "expired_resource_request_description": "Denne tjenesten er utgått. Dersom du ber om fullmakt til denne tjenesten, vil du kun få tilgang til å se gamle innsendinger/meldinger. Du vil ikke kunne sende inn ny data.",
     "actions": {
       "access_to_all": "Tilgang til hele tjenesten",
       "partial_access": "Tilgang til {{count}} av {{total}} handlinger",
@@ -1101,10 +1101,10 @@
     "remove_filter": "Fjern filter",
     "service_owner_filter": "Søk etter tjenesteeier",
     "service_owner_filter_clear": "Tøm søkefelt",
-    "show_archived_services": "Vis arkiverte tjenester",
-    "show_archived_services_helptext": "Noen tjenester er arkivert og vil ikke la deg sende inn/motta ny data. Du kan likevel gi andre fullmakter til dem, men de vil da bare kunne se gamle innsendinger/meldinger på tjenesten.",
-    "show_archived_services_helptext_button": "Hva er arkiverte tjenester?",
-    "archived_badge": "Arkivert"
+    "show_expired_services": "Vis utgåtte tjenester",
+    "show_expired_services_helptext": "Noen tjenester er utgått og vil ikke la deg sende inn/motta ny data. Du kan likevel gi andre fullmakter til dem, men de vil da bare kunne se gamle innsendinger/meldinger på tjenesten.",
+    "show_expired_services_helptext_button": "Hva er utgåtte tjenester?",
+    "expired_badge": "Utgått"
   },
   "landing_page": {
     "page_title": "Tilgangsstyring - Altinn",

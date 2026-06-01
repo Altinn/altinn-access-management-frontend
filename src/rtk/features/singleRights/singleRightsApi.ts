@@ -21,6 +21,7 @@ export interface ServiceResource {
   resourceOwnerOrgcode: string;
   rightDescription: string;
   description?: string;
+  status?: string;
   resourceReferences: resourceReference[];
   authorizationReference: IdValuePair[];
   resourceType: string;
@@ -56,7 +57,7 @@ interface searchParams {
   page: number;
   resultsPerPage: number;
   includeA2Services?: boolean;
-  includeMigrated?: boolean;
+  includeExpired?: boolean;
 }
 
 export interface DelegationCheckedRight {
@@ -87,14 +88,8 @@ export const singleRightsApi = createApi({
     // TODO: Move to resourceApi
     getPaginatedSearch: builder.query<PaginatedListDTO, searchParams>({
       query: (args) => {
-        const {
-          searchString,
-          ROfilters,
-          page,
-          resultsPerPage,
-          includeA2Services,
-          includeMigrated,
-        } = args;
+        const { searchString, ROfilters, page, resultsPerPage, includeA2Services, includeExpired } =
+          args;
         let searchParams = '';
         for (const filter of ROfilters) {
           searchParams = searchParams + `&ROFilters=${filter}`;
@@ -103,9 +98,9 @@ export const singleRightsApi = createApi({
           // Default is to include A2 services, so only add param if false
           searchParams = searchParams + `&includeA2Services=false`;
         }
-        if (includeMigrated) {
-          // Default is to not include migrated apps, so only add param if true
-          searchParams = searchParams + `&includeMigrated=true`;
+        if (includeExpired) {
+          // Default is to not include expired apps, so only add param if true
+          searchParams = searchParams + `&includeExpired=true`;
         }
         return `resources/search?Page=${page}&ResultsPerPage=${resultsPerPage}&SearchString=${encodeURIComponent(searchString)}${searchParams}`;
       },

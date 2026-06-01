@@ -23,7 +23,7 @@ import {
   extractResourceId,
   extractLogoUrl,
   extractLogoAlt,
-  isArchivedResource,
+  isExpiredResource,
 } from './utils';
 
 import cn from 'classnames';
@@ -193,8 +193,8 @@ export const ResourceList = <
                   const itemTitleAs = titleAs ?? 'h3';
                   const handleClick = itemInteractive ? () => handleSelect(resource) : undefined;
                   const itemShadow = itemInteractive ? undefined : 'none';
-                  const titleBadge = isArchivedResource(resource)
-                    ? { label: t('resource_list.archived_badge'), color: 'neutral' as const }
+                  const titleBadge = isExpiredResource(resource)
+                    ? { label: t('resource_list.expired_badge'), color: 'neutral' as const }
                     : undefined;
 
                   return (

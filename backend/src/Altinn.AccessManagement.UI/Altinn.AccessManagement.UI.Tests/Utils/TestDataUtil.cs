@@ -63,7 +63,7 @@ namespace Altinn.AccessManagement.UI.Tests.Utils
             return filteredResources;
         }
 
-        public static List<ServiceResourceFE> GetSingleRightsResources(bool includeMigrated = false)
+        public static List<ServiceResourceFE> GetSingleRightsResources(bool includeExpired = false)
         {
             List<ServiceResourceFE> resources = new List<ServiceResourceFE>();
 
@@ -81,9 +81,9 @@ namespace Altinn.AccessManagement.UI.Tests.Utils
 
             return resources.FindAll(r =>
                 r.ResourceType != ResourceType.MaskinportenSchema &&
-                (includeMigrated ||
+                (includeExpired ||
                     (r.ResourceType != ResourceType.MigratedApp &&
-                     !(r.Identifier?.IndexOf("migratedcorrespondence", StringComparison.OrdinalIgnoreCase) >= 0))));
+                     !(r.Identifier?.IndexOf("migratedcorrespondence", StringComparison.OrdinalIgnoreCase) >= 0))) && r.Status != "Depricated");
         }
 
         /// <summary>

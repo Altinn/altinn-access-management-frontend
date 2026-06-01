@@ -26,8 +26,8 @@ interface DelegationModalContextProps {
   toggleExpanded: (value: boolean, id: string) => void;
   actionError: ActionError | null;
   setActionError: (error: ActionError | null) => void;
-  includeArchivedResources: boolean;
-  setIncludeArchivedResources: React.Dispatch<React.SetStateAction<boolean>>;
+  includeExpiredResources: boolean;
+  setIncludeExpiredResources: React.Dispatch<React.SetStateAction<boolean>>;
   actionSuccess: boolean;
   setActionSuccess: (value: boolean) => void;
   reset: () => void;
@@ -44,12 +44,12 @@ export const DelegationModalProvider = ({ children }: DelegationModalProps) => {
   const [infoView, setInfoView] = useState(false);
   const [expandedAreas, setExpandedAreas] = useState<string[]>([]);
   const [actionSuccess, setActionSuccess] = useState(false);
-  const [includeArchivedResources, setIncludeArchivedResources] = useState(false);
+  const [includeExpiredResources, setIncludeExpiredResources] = useState(false);
   const { error: actionError, setError: setActionError } = useActionError();
 
   useEffect(() => {
     setCurrentPage(1);
-  }, [filters, includeArchivedResources]);
+  }, [filters, includeExpiredResources]);
 
   const toggleExpanded = (value: boolean, id: string) => {
     if (value) {
@@ -79,7 +79,7 @@ export const DelegationModalProvider = ({ children }: DelegationModalProps) => {
     setInfoView(false);
     setFilters([]);
     setSearchString('');
-    setIncludeArchivedResources(false);
+    setIncludeExpiredResources(false);
   };
 
   return (
@@ -102,8 +102,8 @@ export const DelegationModalProvider = ({ children }: DelegationModalProps) => {
         toggleExpanded,
         actionError,
         setActionError,
-        includeArchivedResources,
-        setIncludeArchivedResources,
+        includeExpiredResources,
+        setIncludeExpiredResources,
         actionSuccess,
         setActionSuccess,
         reset,

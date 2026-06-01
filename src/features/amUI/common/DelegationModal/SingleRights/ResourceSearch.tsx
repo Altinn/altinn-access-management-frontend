@@ -42,8 +42,8 @@ export const ResourceSearch = ({ onSelect, availableActions }: ResourceSearchPro
     setFilters,
     currentPage,
     setCurrentPage,
-    includeArchivedResources,
-    setIncludeArchivedResources,
+    includeExpiredResources,
+    setIncludeExpiredResources,
   } = useDelegationModalContext();
   const [debouncedSearchString, setDebouncedSearchString] = React.useState(searchString);
 
@@ -64,7 +64,7 @@ export const ResourceSearch = ({ onSelect, availableActions }: ResourceSearchPro
     page: currentPage,
     resultsPerPage: searchResultsPerPage,
     includeA2Services: false,
-    includeMigrated: includeArchivedResources,
+    includeExpired: includeExpiredResources,
   });
   const { data: delegatedResources } = useGetSingleRightsForRightholderQuery(
     {
@@ -143,23 +143,23 @@ export const ResourceSearch = ({ onSelect, availableActions }: ResourceSearchPro
         <div className={classes.toggleContainer}>
           <DsSwitch
             data-size='sm'
-            checked={includeArchivedResources}
+            checked={includeExpiredResources}
             onChange={(e) => {
               setCurrentPage(1);
-              setIncludeArchivedResources(e.target.checked);
+              setIncludeExpiredResources(e.target.checked);
             }}
-            label={t('resource_list.show_archived_services')}
+            label={t('resource_list.show_expired_services')}
           />
           <DsPopover.TriggerContext>
             <DsPopover.Trigger
               icon
               variant='tertiary'
               data-size='sm'
-              aria-label={t('resource_list.show_archived_services_helptext_button')}
+              aria-label={t('resource_list.show_expired_services_helptext_button')}
             >
               <QuestionmarkCircleIcon aria-hidden='true' />
             </DsPopover.Trigger>
-            <DsPopover>{t('resource_list.show_archived_services_helptext')}</DsPopover>
+            <DsPopover>{t('resource_list.show_expired_services_helptext')}</DsPopover>
           </DsPopover.TriggerContext>
         </div>
       </div>

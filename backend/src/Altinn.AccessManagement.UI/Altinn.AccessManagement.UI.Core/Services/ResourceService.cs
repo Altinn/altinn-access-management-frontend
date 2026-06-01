@@ -57,7 +57,7 @@ namespace Altinn.AccessManagement.UI.Core.Services
         {
             try
             {
-                List<ServiceResource> resources = await GetFullResourceList(searchParams.IncludeMigrated, cancellationToken);
+                List<ServiceResource> resources = await GetFullResourceList(searchParams.IncludeExpired, cancellationToken);
                 List<ServiceResource> resourceList = resources.FindAll(r => IncludeInSearch(r, searchParams, resourceTypes));
                 List<ServiceResourceFE> resourcesFE = MapResourceToFrontendModel(resourceList, languageCode);
 
@@ -108,7 +108,7 @@ namespace Altinn.AccessManagement.UI.Core.Services
                 return false;
             }
 
-            if (!searchParams.IncludeMigrated && IsMigratedResource(resource))
+            if (!searchParams.IncludeExpired && IsExpiredResource(resource))
             {
                 return false;
             }
@@ -123,10 +123,11 @@ namespace Altinn.AccessManagement.UI.Core.Services
                 (searchParams.IncludeA2Services || resource.ResourceType != ResourceType.Altinn2Service);
         }
 
-        private static bool IsMigratedResource(ServiceResource resource)
+        private static bool IsExpiredResource(ServiceResource resource)
         {
             return resource.ResourceType == ResourceType.MigratedApp ||
-                (resource.Identifier?.Contains("migratedcorrespondence", StringComparison.OrdinalIgnoreCase) == true);
+                (resource.Identifier?.Contains("migratedcorrespondence", StringComparison.OrdinalIgnoreCase) == true) ||
+                resource.Status?.ToLower() == "deprecated";
         }
 
         /// <inheritdoc />
