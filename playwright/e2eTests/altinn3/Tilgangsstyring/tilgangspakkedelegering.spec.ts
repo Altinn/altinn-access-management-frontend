@@ -96,15 +96,20 @@ test.describe('tilgangspakkedelegering fra person til person og person til org',
       area: 'Arbeidsliv, skole og utdanning',
     };
 
+    test.beforeEach(async () => {
+      try {
+        await api.deleteConnection(actor.pid, actor.pid, [target.pid]);
+      } catch {
+        /* ignore if nothing to clean */
+      }
+      await api.addConnection(actor.pid, actor.pid, target.pid);
+    });
+
     test('Deleger tilgangspakke til person', async ({
       login,
       aktorvalgHeader,
       accessManagementFrontPage,
     }) => {
-      await test.step('sett opp testdata', async () => {
-        await api.addConnection(actor.pid, actor.pid, target.pid);
-      });
-
       await test.step('Logg inn', async () => {
         await login.LoginToAccessManagement(actor.pid);
       });
@@ -151,15 +156,20 @@ test.describe('tilgangspakkedelegering fra person til person og person til org',
       area: 'Arbeidsliv, skole og utdanning',
     };
 
+    test.beforeEach(async () => {
+      try {
+        await api.deleteConnection(actor.pid, actor.pid, [target.org]);
+      } catch {
+        /* ignore if nothing to clean */
+      }
+      await api.addConnection(actor.pid, actor.pid, target.org);
+    });
+
     test('Deleger tilgangspakke til virksomhet', async ({
       login,
       aktorvalgHeader,
       accessManagementFrontPage,
     }) => {
-      await test.step('sett opp testdata', async () => {
-        await api.addConnection(actor.pid, actor.pid, target.org);
-      });
-
       await test.step('Logg inn', async () => {
         await login.LoginToAccessManagement(actor.pid);
       });
@@ -208,15 +218,15 @@ test.describe('tilgangspakkedelegering fra person til person og person til org',
       area: 'Familie og fritid',
     };
 
+    test.beforeEach(async () => {
+      await api.addConnectionAndPackagesToUser(actor.pid, actor.pid, target.pid, [pkg.urn]);
+    });
+
     test('Slett tilgangspakke hos person', async ({
       login,
       aktorvalgHeader,
       accessManagementFrontPage,
     }) => {
-      await test.step('sett opp testdata', async () => {
-        await api.addConnectionAndPackagesToUser(actor.pid, actor.pid, target.pid, [pkg.urn]);
-      });
-
       await test.step('Logg inn', async () => {
         await login.LoginToAccessManagement(actor.pid);
       });
@@ -269,15 +279,15 @@ test.describe('tilgangspakkedelegering fra person til person og person til org',
       area: 'Familie og fritid',
     };
 
+    test.beforeEach(async () => {
+      await api.addConnectionAndPackagesToUser(actor.pid, actor.pid, target.org, [pkg.urn]);
+    });
+
     test('Slett tilgangspakke hos virksomhet', async ({
       login,
       aktorvalgHeader,
       accessManagementFrontPage,
     }) => {
-      await test.step('sett opp testdata', async () => {
-        await api.addConnectionAndPackagesToUser(actor.pid, actor.pid, target.org, [pkg.urn]);
-      });
-
       await test.step('Logg inn', async () => {
         await login.LoginToAccessManagement(actor.pid);
       });
@@ -423,15 +433,20 @@ test.describe('tilgangspakkedelegering fra org til person og org til org', () =>
       area: 'Andre tjenesteytende næringer',
     };
 
+    test.beforeEach(async () => {
+      try {
+        await api.deleteConnection(actor.pid, actor.org, [target.pid]);
+      } catch {
+        /* ignore if nothing to clean */
+      }
+      await api.addConnection(actor.pid, actor.org, target.pid);
+    });
+
     test('Deleger tilgangspakke til person', async ({
       login,
       aktorvalgHeader,
       accessManagementFrontPage,
     }) => {
-      await test.step('sett opp testdata', async () => {
-        await api.addConnection(actor.pid, actor.org, target.pid);
-      });
-
       await test.step('Logg inn', async () => {
         await login.LoginToAccessManagement(actor.pid);
       });
@@ -478,15 +493,20 @@ test.describe('tilgangspakkedelegering fra org til person og org til org', () =>
       area: 'Andre tjenesteytende næringer',
     };
 
+    test.beforeEach(async () => {
+      try {
+        await api.deleteConnection(actor.pid, actor.org, [target.org]);
+      } catch {
+        /* ignore if nothing to clean */
+      }
+      await api.addConnection(actor.pid, actor.org, target.org);
+    });
+
     test('Deleger tilgangspakke til virksomhet', async ({
       login,
       aktorvalgHeader,
       accessManagementFrontPage,
     }) => {
-      await test.step('sett opp testdata', async () => {
-        await api.addConnection(actor.pid, actor.org, target.org);
-      });
-
       await test.step('Logg inn', async () => {
         await login.LoginToAccessManagement(actor.pid);
       });
@@ -535,15 +555,15 @@ test.describe('tilgangspakkedelegering fra org til person og org til org', () =>
       area: 'Andre tjenesteytende næringer',
     };
 
+    test.beforeEach(async () => {
+      await api.addConnectionAndPackagesToUser(actor.pid, actor.org, target.pid, [pkg.urn]);
+    });
+
     test('Slett tilgangspakke hos person', async ({
       login,
       aktorvalgHeader,
       accessManagementFrontPage,
     }) => {
-      await test.step('sett opp testdata', async () => {
-        await api.addConnectionAndPackagesToUser(actor.pid, actor.org, target.pid, [pkg.urn]);
-      });
-
       await test.step('Logg inn', async () => {
         await login.LoginToAccessManagement(actor.pid);
       });
@@ -596,15 +616,15 @@ test.describe('tilgangspakkedelegering fra org til person og org til org', () =>
       area: 'Andre tjenesteytende næringer',
     };
 
+    test.beforeEach(async () => {
+      await api.addConnectionAndPackagesToUser(actor.pid, actor.org, target.org, [pkg.urn]);
+    });
+
     test('Slett tilgangspakke hos virksomhet', async ({
       login,
       aktorvalgHeader,
       accessManagementFrontPage,
     }) => {
-      await test.step('sett opp testdata', async () => {
-        await api.addConnectionAndPackagesToUser(actor.pid, actor.org, target.org, [pkg.urn]);
-      });
-
       await test.step('Logg inn', async () => {
         await login.LoginToAccessManagement(actor.pid);
       });

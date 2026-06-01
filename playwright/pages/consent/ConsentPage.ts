@@ -88,6 +88,9 @@ export class ConsentPage {
   // Consent request heading
   readonly textConsentRequestHeading: Locator;
 
+  // "På vegne av" text — Digdir as data consumer
+  readonly textBehalfOfDigdir: Locator;
+
   // Used for selecting language files
   private languageDictionary: any;
 
@@ -98,7 +101,6 @@ export class ConsentPage {
     this.language = language; // now the fixture value wins
 
     // Controls/links
-
     this.menuButton = page.getByRole('button', { name: /^(Menu|Meny)$/ });
     this.languagePicker = page.getByLabel('Språk/language');
     this.norwegian = page.locator('#no_nb');
@@ -316,6 +318,16 @@ export class ConsentPage {
     this.textConsentRequestHeading = page.getByRole('heading', {
       name: consentRequestHeadingTexts[language],
     });
+
+    // "På vegne av" — Digdir performs the lookup on behalf of another org
+    this.textBehalfOfDigdir = page.getByText(
+      /Digitaliseringsdirektoratet foretar dette oppslaget på/i,
+    );
+  }
+
+  // "X foretar dette oppslaget på vegne av Y." — relation between two orgs
+  textBehalfOfRelation(behalfOrg: string, fromOrg: string): Locator {
+    return this.page.getByText(`${behalfOrg} foretar dette oppslaget på vegne av ${fromOrg}.`);
   }
 
   // Dynamic helpers

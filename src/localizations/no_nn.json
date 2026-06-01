@@ -497,6 +497,8 @@
     "package_services_other": "Gir tilgang til {{count}} tenester",
     "no_resources_in_package": "Denne tilgangspakken inneheld førebels ingen tenester.",
     "inherited_role_org_message": "{{user_name}} har tilgang til denne gjennom rolla si i {{org_name}}. Den kan derfor ikkje slettast.",
+    "expired_resource_description": "Denne tenesten er utgått. Dersom du gir fullmakt til denne tenesten, vil {{name}} kun få tilgong til å sjå gamle innsendingar/meldingar. Dei vil ikkje kunne sende inn nye data.",
+    "expired_resource_request_description": "Denne tenesten er utgått. Dersom du ber om fullmakt til denne tenesten, vil du kun få tilgong til å sjå gamle innsendingar/meldingar. Du vil ikkje kunne sende inn nye data.",
     "actions": {
       "access_to_all": "Tilgang til heile tenesta",
       "partial_access": "Tilgang til {{count}} av {{total}} handlingar",
@@ -575,7 +577,7 @@
     "no_permissions_fulltext": "Virksemden kan ha innhald som ingen ser. Du må gi tilgang til {{packageName}} for at slike meldingar og tenester skal bli synlege."
   },
   "new_user_modal": {
-    "not_found_error_person": "Fann ingen brukar med dette fødselsnr./brukarnamnet og namnet. Sjekk at informasjonen er korrekt.",
+    "not_found_error_person": "Fann ingen brukar med dette fødselsnummeret/brukarnamnet og namnet. Sjekk at informasjonen er korrekt.",
     "not_found_error_org": "Fant ingen organisasjon med dette organisasjonsnummeret. Sjekk at informasjonen er korrekt.",
     "too_many_requests_error": "Du er blitt sperra pga. for mange feilande forsøk. Du kan prøve igjen om ein time.",
     "person": "Person",
@@ -586,7 +588,7 @@
     "add_person_button": "Legg til person",
     "add_org_button": "Legg til verksemd",
     "limited_preview_message": "Du kan diverre ikkje legge til personar heilt endå. Dette vil komme seinare.",
-    "person_identifier": "Fødselsnr./brukarnamn",
+    "person_identifier": "Fødselsnummer/brukarnamn",
     "person_identifier_ssn_format_error": "Fødselsnummer må bestå av 11 siffer",
     "person_identifier_username_format_error": "Brukarnamn må bestå av minst 6 teikn",
     "person_identifier_whitespace_forbidden_error": "Mellomrom er ikkje tillate i fødselsnummer eller brukarnamn",
@@ -594,7 +596,7 @@
     "org_search_result_label": "Du legg til:"
   },
   "maskinporten_page": {
-    "heading": "Maskinporten\u00ADadministrasjon",
+    "heading": "Maskinporten\u00ADadministrasjon for {{name}}",
     "document_title": "Maskinportenadministrasjon - Altinn",
     "suppliers_tab": "Leverandørar",
     "breadcrumb_suppliers": "Maskinporten – Leverandørar",
@@ -1032,7 +1034,24 @@
     "title_not_found": "Ukjent melding eller skjema",
     "title_correspondence_not_found": "Melding om tenesta {{resourceName}}",
     "service_title_label": "Teneste",
-    "instance_id_label": "ID"
+    "instance_id_label": "ID",
+    "request_instance_admin_package": "Eg vil dele frå innboks",
+    "withdraw_instance_admin_package": "Slett førespurnad om fullmakt",
+    "request_modal": {
+      "heading": "Ønskjer du å be om fullmakt til å kunne dele frå innboksen?",
+      "description_1": "For å kunne dele og gi fullmakt frå innboks må ein ha tilgangspakka: «Tilgangsstyrar for enkeltmeldingar, skjema og dialogar»",
+      "description_2": "Denne tilgangspakka gir deg fullmakt til å kunne gi andre brukarar tilgang til enkeltmeldingar, -skjema og -dialogar, som du sjølv har tilgang til. Ønskjer du å be om denne tilgangspakka?",
+      "confirm": "Ja, be om fullmakt",
+      "cancel": "Avbryt",
+      "pending_heading": "Du har bedt om tilgangspakka «Tilgangsstyrar for enkeltmeldingar, skjema og dialogar»",
+      "pending_description": "Ventar på at {{fromParty}} handsamar førespurnaden din. Når førespurnaden er godkjent vil du kunne sjå og slette fullmakta di under «Tilgangsstyring» i hovudmenyen.",
+      "delete_request": "Slett førespurnad",
+      "close": "Lukk",
+      "request_error": "Kunne ikkje be om tilgangspakka. Ver venleg og prøv igjen.",
+      "delete_request_error": "Kunne ikkje slette førespurnaden. Ver venleg og prøv igjen.",
+      "request_success": "Førespurnad om fullmakt sendt",
+      "delete_request_success": "Førespurnad sletta"
+    }
   },
   "instance_detail_page": {
     "document_title": "Delt frå innboks",
@@ -1043,7 +1062,9 @@
     "search_placeholder": "Søk etter person",
     "description": "Her kan du dele ei melding eller eit skjema frå innboksen eller få oversikt over kven som allereie har tilgang. Bruk søkjefeltet til å søkje etter personar eller legg dei til som ny brukar.",
     "no_users": "Ingen brukarar har tilgang.",
-    "no_access_description": "<b>Du har ikkje fullmakt til å gi vidare denne meldinga eller dette skjemaet.</b> For å kunne dele og gi tilgang frå innboksen må du ha tilgangspakka: Tilgangsstyrar for enkeltmeldingar, skjema og dialogar.",
+    "no_access_description": "<b>Du har ikkje fullmakt til å gi denne vidare til andre.</b> For å kunne dele og gi fullmakt frå innboks må ein ha tilgangspakka: ",
+    "instance_admin_package_name_org": "Tilgangsstyrar for enkeltmeldingar, -skjema og -dialogar",
+    "instance_admin_package_name_person": "Tilgangsstyring for privatperson",
     "instance_admin_edit_disclaimer": "Berre Tilgangsstyrarar eller Hovudadministratorar kan redigere ei fullmakt etter ho er gitt til ein brukar.",
     "add_user_modal": {
       "heading": "Gi fullmakt til ny brukar",
@@ -1079,7 +1100,11 @@
     "resource_search_clear": "Tøm søk",
     "remove_filter": "Fjern filter",
     "service_owner_filter": "Søk etter tenesteeigar",
-    "service_owner_filter_clear": "Tøm søkefelt"
+    "service_owner_filter_clear": "Tøm søkefelt",
+    "show_expired_services": "Vis utgåtte tenester",
+    "show_expired_services_helptext": "Nokre tenester er utgåtte og vil ikkje la deg sende inn/motta nye data. Du kan likevel gi andre fullmakter til dei, men dei vil då berre kunne sjå gamle innsendingar/meldingar på tenesta.",
+    "show_expired_services_helptext_button": "Kva er utgåtte tenester?",
+    "expired_badge": "Utgått"
   },
   "landing_page": {
     "page_title": "Tilgangsstyring - Altinn",
@@ -1103,7 +1128,7 @@
     "poa_item_description": "Oversikt over alle tilgangspakkar og enkelttenester",
     "consent_item_description": "Oversikt over alle inngåtte avtalar",
     "systemuser_item_description": "Oversikt over systemtilgangar",
-    "maskinporten_item_description": "Administrer tilgang i Maskinporten",
+    "maskinporten_item_description": "Administrer fullmakter til API som ligg i Maskinporten",
     "client_admin_item_description": "Deleger fullmakter frå klientar til brukarar i verksemda.",
     "new_requests_single": "{{reportee}} har {{requestCount}} ny førespurnad",
     "new_requests_plural": "{{reportee}} har {{requestCount}} nye førespurnader"

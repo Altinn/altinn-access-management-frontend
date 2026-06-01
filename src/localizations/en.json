@@ -500,6 +500,8 @@
     "package_services_other": "Grants access to {{count}} services",
     "no_resources_in_package": "This access package currently contains no services.",
     "inherited_role_org_message": "{{user_name}} has access to this through their role in {{org_name}}. Therefore, it cannot be deleted.",
+    "expired_resource_description": "This service is expired. If you grant power of attorney for this service, {{name}} will only have access to view old submissions/messages. They will not be able to submit new data.",
+    "expired_resource_request_description": "This service is expired. If you request power of attorney for this service, you will only have access to view old submissions/messages. You will not be able to submit new data.",
     "actions": {
       "access_to_all": "Access to the full service",
       "partial_access": "Access to {{count}} of {{total}} actions",
@@ -597,7 +599,7 @@
     "org_search_result_label": "You will add:"
   },
   "maskinporten_page": {
-    "heading": "Maskinporten administration",
+    "heading": "Maskinporten administration for {{name}}",
     "document_title": "Maskinporten administration - Altinn",
     "suppliers_tab": "Suppliers",
     "breadcrumb_suppliers": "Maskinporten – Suppliers",
@@ -1035,7 +1037,24 @@
     "title_not_found": "Unknown message or form",
     "title_correspondence_not_found": "Message about service {{resourceName}}",
     "service_title_label": "Service",
-    "instance_id_label": "ID"
+    "instance_id_label": "ID",
+    "request_instance_admin_package": "I want to share from the inbox",
+    "withdraw_instance_admin_package": "Delete request for power of attorney",
+    "request_modal": {
+      "heading": "Do you want to request power of attorney to share from the inbox?",
+      "description_1": "To share and grant power of attorney from the inbox you must have the access package: «Access manager for single messages, forms and dialogs»",
+      "description_2": "This access package gives you the authority to grant other users access to single messages, forms and dialogs that you yourself have access to. Do you want to request this access package?",
+      "confirm": "Yes, request power of attorney",
+      "cancel": "Cancel",
+      "pending_heading": "You have requested the access package «Access manager for single messages, forms and dialogs»",
+      "pending_description": "Waiting for {{fromParty}} to process your request. Once approved, you will be able to see and delete your power of attorney under «Access management» in the main menu.",
+      "delete_request": "Delete request",
+      "close": "Close",
+      "request_error": "Could not request the access package. Please try again.",
+      "delete_request_error": "Could not delete the request. Please try again.",
+      "request_success": "Request for power of attorney sent",
+      "delete_request_success": "Request deleted"
+    }
   },
   "instance_detail_page": {
     "document_title": "Shared from inbox",
@@ -1046,7 +1065,9 @@
     "search_placeholder": "Search for person",
     "description": "Here you can share a message or form from the inbox or get an overview of who already has access. Use the search field to search for people or add them as a new user.",
     "no_users": "No users have access.",
-    "no_access_description": "<b>You do not have the authority to share this message or form with others.</b> To share and grant access from the inbox, you must have the access package: Access manager for single messages, forms and dialogs.",
+    "no_access_description": "<b>You do not have the authority to share this with others.</b> To share and grant power of attorney from the inbox, you must have the access package: ",
+    "instance_admin_package_name_org": "Access manager for single messages, forms and dialogs",
+    "instance_admin_package_name_person": "Access management for private individuals",
     "instance_admin_edit_disclaimer": "Only Access Managers or Main Administrators can edit an access grant after it has been given to a user.",
     "add_user_modal": {
       "heading": "Grant access to new user",
@@ -1082,7 +1103,11 @@
     "resource_search_clear": "Clear search",
     "remove_filter": "Remove filter",
     "service_owner_filter": "Search for service owner",
-    "service_owner_filter_clear": "Clear search field"
+    "service_owner_filter_clear": "Clear search field",
+    "show_expired_services": "Show expired services",
+    "show_expired_services_helptext": "Some services are expired and will not let you submit/receive new data. You can still grant others access to them, but they will only be able to view old submissions/messages on that service.",
+    "show_expired_services_helptext_button": "What are expired services?",
+    "expired_badge": "Expired"
   },
   "landing_page": {
     "page_title": "Access management - Altinn",
@@ -1106,7 +1131,7 @@
     "poa_item_description": "Overview of all access packages and individual services",
     "consent_item_description": "Overview of all concluded agreements",
     "systemuser_item_description": "Overview of system access",
-    "maskinporten_item_description": "Manage access in Maskinporten",
+    "maskinporten_item_description": "Manage powers of attorney for APIs in Maskinporten",
     "client_admin_item_description": "Delegate power of attorney from clients to users in your organization.",
     "new_requests_single": "{{reportee}} has {{requestCount}} new request",
     "new_requests_plural": "{{reportee}} has {{requestCount}} new requests"

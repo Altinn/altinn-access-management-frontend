@@ -1,4 +1,4 @@
-import { createContext, useContext, useState } from 'react';
+import { createContext, useContext, useEffect, useState } from 'react';
 
 import type { ServiceResource } from '@/rtk/features/singleRights/singleRightsApi';
 import type { AccessPackage } from '@/rtk/features/accessPackageApi';
@@ -26,6 +26,8 @@ interface DelegationModalContextProps {
   toggleExpanded: (value: boolean, id: string) => void;
   actionError: ActionError | null;
   setActionError: (error: ActionError | null) => void;
+  includeExpiredResources: boolean;
+  setIncludeExpiredResources: React.Dispatch<React.SetStateAction<boolean>>;
   actionSuccess: boolean;
   setActionSuccess: (value: boolean) => void;
   reset: () => void;
@@ -42,7 +44,12 @@ export const DelegationModalProvider = ({ children }: DelegationModalProps) => {
   const [infoView, setInfoView] = useState(false);
   const [expandedAreas, setExpandedAreas] = useState<string[]>([]);
   const [actionSuccess, setActionSuccess] = useState(false);
+  const [includeExpiredResources, setIncludeExpiredResources] = useState(false);
   const { error: actionError, setError: setActionError } = useActionError();
+
+  useEffect(() => {
+    setCurrentPage(1);
+  }, [filters, includeExpiredResources]);
 
   const toggleExpanded = (value: boolean, id: string) => {
     if (value) {
@@ -72,6 +79,7 @@ export const DelegationModalProvider = ({ children }: DelegationModalProps) => {
     setInfoView(false);
     setFilters([]);
     setSearchString('');
+    setIncludeExpiredResources(false);
   };
 
   return (
@@ -94,6 +102,8 @@ export const DelegationModalProvider = ({ children }: DelegationModalProps) => {
         toggleExpanded,
         actionError,
         setActionError,
+        includeExpiredResources,
+        setIncludeExpiredResources,
         actionSuccess,
         setActionSuccess,
         reset,

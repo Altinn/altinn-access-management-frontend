@@ -497,6 +497,8 @@
     "package_services_other": "Gir tilgang til {{count}} tjenester",
     "no_resources_in_package": "Denne tilgangspakken inneholder foreløpig ingen tjenester.",
     "inherited_role_org_message": "{{user_name}} har tilgang til denne gjennom sin rolle i {{org_name}}. Den kan derfor ikke slettes.",
+    "expired_resource_description": "Denne tjenesten er utgått. Dersom du gir fullmakt til denne tjenesten, vil {{name}} kun få tilgang til å se gamle innsendinger/meldinger. De vil ikke kunne sende inn ny data.",
+    "expired_resource_request_description": "Denne tjenesten er utgått. Dersom du ber om fullmakt til denne tjenesten, vil du kun få tilgang til å se gamle innsendinger/meldinger. Du vil ikke kunne sende inn ny data.",
     "actions": {
       "access_to_all": "Tilgang til hele tjenesten",
       "partial_access": "Tilgang til {{count}} av {{total}} handlinger",
@@ -575,7 +577,7 @@
     "no_permissions_fulltext": "Virksomheten kan ha innhold som ingen ser. Du må gi tilgang til {{packageName}} for at slike meldinger og tjenester skal bli synlige."
   },
   "new_user_modal": {
-    "not_found_error_person": "Fant ingen bruker med dette fødselsnr./brukernavnet og navnet. Vennligst sjekk at informasjonen er korrekt.",
+    "not_found_error_person": "Fant ingen bruker med dette fødselsnummeret/brukernavnet og navnet. Vennligst sjekk at informasjonen er korrekt.",
     "not_found_error_org": "Fant ingen organisasjon med dette organisasjonsnummeret. Vennligst sjekk at informasjonen er korrekt.",
     "too_many_requests_error": "Du er blitt sperret pga for mange feilende forsøk. Du kan prøve igjen om en time.",
     "person": "Person",
@@ -586,7 +588,7 @@
     "add_person_button": "Legg til person",
     "add_org_button": "Legg til virksomhet",
     "limited_preview_message": "Du kan dessverre ikke legge til personer helt enda. Dette vil komme senere.",
-    "person_identifier": "Fødselsnr./brukernavn",
+    "person_identifier": "Fødselsnummer/brukernavn",
     "person_identifier_ssn_format_error": "Fødselsnummer må bestå av 11 siffer",
     "person_identifier_username_format_error": "Brukernavn må bestå av minst 6 tegn",
     "person_identifier_whitespace_forbidden_error": "Mellomrom er ikke tillatt i fødselsnummer eller brukernavn",
@@ -594,7 +596,7 @@
     "org_search_result_label": "Du legger til:"
   },
   "maskinporten_page": {
-    "heading": "Maskinporten\u00ADadministrasjon",
+    "heading": "Maskinporten\u00ADadministrasjon for {{name}}",
     "document_title": "Maskinportenadministrasjon - Altinn",
     "suppliers_tab": "Leverandører",
     "breadcrumb_suppliers": "Maskinporten – Leverandører",
@@ -1032,7 +1034,24 @@
     "title_not_found": "Ukjent melding eller skjema",
     "title_correspondence_not_found": "Melding om tjenesten {{resourceName}}",
     "service_title_label": "Tjeneste",
-    "instance_id_label": "ID"
+    "instance_id_label": "ID",
+    "request_instance_admin_package": "Jeg vil dele fra innboks",
+    "withdraw_instance_admin_package": "Slett forespørsel om fullmakt",
+    "request_modal": {
+      "heading": "Ønsker du å be om fullmakt til å kunne dele fra innboksen?",
+      "description_1": "For å kunne dele og gi fullmakt fra innboks må man ha tilgangspakken: «Tilgangsstyrer for enkeltmeldinger, skjema og dialoger»",
+      "description_2": "Denne tilgangspakken gir deg fullmakt til å kunne gi andre brukere tilgang til enkeltmeldinger, -skjema og -dialoger, som du selv har tilgang til. Ønsker du å be om denne tilgangspakken?",
+      "confirm": "Ja, be om fullmakt",
+      "cancel": "Avbryt",
+      "pending_heading": "Du har bedt om tilgangspakken «Tilgangsstyrer for enkeltmeldinger, skjema og dialoger»",
+      "pending_description": "Venter på at {{fromParty}} behandler din forespørsel. Når forespørselen er godkjent vil du kunne se og slette fullmakten din under «Tilgangsstyring» i hovedmenyen.",
+      "delete_request": "Slett forespørsel",
+      "close": "Lukk",
+      "request_error": "Kunne ikke be om tilgangspakken. Vennligst prøv igjen.",
+      "delete_request_error": "Kunne ikke slette forespørselen. Vennligst prøv igjen.",
+      "request_success": "Forespørsel om fullmakt sendt",
+      "delete_request_success": "Forespørsel slettet"
+    }
   },
   "instance_detail_page": {
     "document_title": "Delt fra innboks",
@@ -1043,7 +1062,9 @@
     "search_placeholder": "Søk etter person",
     "description": "Her kan du dele en melding eller et skjema fra innboksen eller få en oversikt over hvem som allerede har tilgang. Bruk søkefeltet til å søke etter personer eller legg dem til som ny bruker.",
     "no_users": "Ingen brukere har tilgang.",
-    "no_access_description": "<b>Du har ikke fullmakt til å gi videre denne meldingen eller dette skjemaet.</b> For å kunne dele og gi tilgang fra innboksen må du ha tilgangspakken: Tilgangsstyrer for enkeltmeldinger, skjema og dialoger.",
+    "no_access_description": "<b>Du har ikke fullmakt til å gi denne videre til andre.</b> For å kunne dele og gi fullmakt fra innboks må man ha tilgangspakken: ",
+    "instance_admin_package_name_org": "Tilgangsstyrer for enkeltmeldinger, -skjema og -dialoger",
+    "instance_admin_package_name_person": "Tilgangsstyring for privatperson",
     "instance_admin_edit_disclaimer": "Kun Tilgangsstyrere eller Hovedadministratorer kan redigere en fullmakt etter den er gitt til en bruker.",
     "add_user_modal": {
       "heading": "Gi fullmakt til ny bruker",
@@ -1079,7 +1100,11 @@
     "resource_search_clear": "Tøm søk",
     "remove_filter": "Fjern filter",
     "service_owner_filter": "Søk etter tjenesteeier",
-    "service_owner_filter_clear": "Tøm søkefelt"
+    "service_owner_filter_clear": "Tøm søkefelt",
+    "show_expired_services": "Vis utgåtte tjenester",
+    "show_expired_services_helptext": "Noen tjenester er utgått og vil ikke la deg sende inn/motta ny data. Du kan likevel gi andre fullmakter til dem, men de vil da bare kunne se gamle innsendinger/meldinger på tjenesten.",
+    "show_expired_services_helptext_button": "Hva er utgåtte tjenester?",
+    "expired_badge": "Utgått"
   },
   "landing_page": {
     "page_title": "Tilgangsstyring - Altinn",
@@ -1103,7 +1128,7 @@
     "poa_item_description": "Oversikt over alle tilgangspakker og enkelttjenester",
     "consent_item_description": "Oversikt over alle inngåtte avtaler",
     "systemuser_item_description": "Oversikt over systemtilganger",
-    "maskinporten_item_description": "Administrer tilgang i Maskinporten",
+    "maskinporten_item_description": "Administrer fullmakter til API som ligger i Maskinporten",
     "client_admin_item_description": "Deleger fullmakter fra klienter til brukere i virksomheten.",
     "new_requests_single": "{{reportee}} har {{requestCount}} ny forespørsel",
     "new_requests_plural": "{{reportee}} har {{requestCount}} nye forespørsler"

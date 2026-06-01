@@ -26,6 +26,7 @@ import { ResourceHeading } from './ResourceHeading';
 import { ResourceInfoSkeleton } from './ResourceInfoSkeleton';
 import { ResourceAlert } from './ResourceAlert';
 import { RightsSection } from './RightsSection';
+import { isExpiredResource } from '../../ResourceList/utils';
 import { useSingleRightsDelegationRightsData } from './hooks/useSingleRightsDelegationRightsData';
 import { useSingleRightRequests } from './hooks/useSingleRightRequests';
 
@@ -156,6 +157,11 @@ export const ResourceInfo = ({
 
   const isLoadingSingleRightRequest = isLoadingRequest(resource.identifier);
 
+  const isExpired = isExpiredResource(resource);
+  const isExpiredDescription = !isSingleRightRequest
+    ? t('delegation_modal.expired_resource_description', { name: toName })
+    : t('delegation_modal.expired_resource_request_description');
+
   return (
     <>
       <StatusMessageForScreenReader politenessSetting='assertive'>
@@ -186,6 +192,7 @@ export const ResourceInfo = ({
               />
               {resource.description && <DsParagraph>{resource.description}</DsParagraph>}
               {resource.rightDescription && <DsParagraph>{resource.rightDescription}</DsParagraph>}
+              {isExpired && <DsParagraph>{isExpiredDescription}</DsParagraph>}
             </div>
             {displayResourceAlert ? (
               <ResourceAlert

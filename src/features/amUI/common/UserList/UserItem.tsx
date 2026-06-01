@@ -1,5 +1,5 @@
 import type { UserListItemProps } from '@altinn/altinn-components';
-import { formatDate, formatDisplayName, List, UserListItem } from '@altinn/altinn-components';
+import { formatDisplayName, List, UserListItem } from '@altinn/altinn-components';
 import type { ElementType, ReactNode } from 'react';
 import { useEffect, useState } from 'react';
 import { Link } from 'react-router';
@@ -10,7 +10,11 @@ import { ConnectionUserType } from '@/rtk/features/connectionApi';
 
 import classes from './UserList.module.css';
 import { displaySubConnections } from '@/resources/utils/featureFlagUtils';
-import { formatOrgNr, isSubUnitByType } from '@/resources/utils/reporteeUtils';
+import {
+  getFormattedDateOfBirthLabel,
+  formatOrgNr,
+  isSubUnitByType,
+} from '@/resources/utils/reporteeUtils';
 import { ECC_PROVIDER_CODE, useRoleMetadata } from '../UserRoles/useRoleMetadata';
 import { isNewUser } from '../isNewUser';
 
@@ -115,10 +119,7 @@ export const UserItem = ({
   const description = (user: ExtendedUser | User) => {
     let descriptionString = subUnit ? '↳ ' : '';
     if (user.type === ConnectionUserType.Person) {
-      const formattedDate = formatDate(user.dateOfBirth || undefined);
-      if (formattedDate) {
-        descriptionString += t('common.date_of_birth') + ' ' + formattedDate;
-      }
+      descriptionString += getFormattedDateOfBirthLabel(user.dateOfBirth);
     } else if (user.type === ConnectionUserType.Organization) {
       descriptionString +=
         t('common.org_nr') +

@@ -15,8 +15,6 @@ import { SkeletonResourceList } from './SkeletonResourceList';
 import { useFilteredResources } from './useFilteredResources';
 import { ResourceFilterToolbar } from '../ResourceFilterToolbar/ResourceFilterToolbar';
 import type { ResourceListItemResource } from './types';
-
-import cn from 'classnames';
 import {
   extractResourceName,
   extractOwnerName,
@@ -25,7 +23,10 @@ import {
   extractResourceId,
   extractLogoUrl,
   extractLogoAlt,
+  isExpiredResource,
 } from './utils';
+
+import cn from 'classnames';
 
 export interface ResourceListProps<
   TResource extends ResourceListItemResource = ResourceListItemResource,
@@ -192,6 +193,9 @@ export const ResourceList = <
                   const itemTitleAs = titleAs ?? 'h3';
                   const handleClick = itemInteractive ? () => handleSelect(resource) : undefined;
                   const itemShadow = itemInteractive ? undefined : 'none';
+                  const titleBadge = isExpiredResource(resource)
+                    ? { label: t('resource_list.expired_badge'), color: 'neutral' as const }
+                    : undefined;
 
                   return (
                     <ResourceListItem
@@ -207,6 +211,7 @@ export const ResourceList = <
                       interactive={itemInteractive}
                       onClick={handleClick}
                       badge={getBadge?.(resource, index)}
+                      titleBadge={titleBadge}
                       variant={getHasAccess?.(resource) ? 'tinted' : 'default'}
                       controls={renderControls?.(resource)}
                       loading={false}

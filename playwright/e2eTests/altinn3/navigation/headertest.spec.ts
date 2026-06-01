@@ -1,27 +1,14 @@
-import type { Page } from '@playwright/test';
-import { env } from 'playwright/util/helper';
-import { LoginPage } from 'playwright/pages/LoginPage';
-import type { AktorvalgHeader } from 'playwright/pages/AktorvalgHeader';
 import { test } from 'playwright/fixture/pomFixture';
 import { EnduserConnection } from '../../../api-requests/EnduserConnection';
 
 test.describe('Aktørvalg, valg og visning av avgiver', () => {
-  const ENV = env('environment')?.toUpperCase();
   const HEADER_TEST_USER = '11886599619';
   const SHOW_DELETED_TEST_USER = '19846999968';
   const DEFAULT_ACTOR_NAME = 'Kunnskapsrik Kry Ape';
+
   const api = new EnduserConnection();
 
-  const loginAsHeaderTestUser = async (page: Page, aktorvalgHeader: AktorvalgHeader) => {
-    const login = new LoginPage(page);
-    await login.LoginToAccessManagement(HEADER_TEST_USER);
-    await aktorvalgHeader.selectActorFromHeaderMenu(DEFAULT_ACTOR_NAME);
-    await aktorvalgHeader.chooseBokmalLanguage();
-  };
-
-  test('Sjekk at slettede enheter kan vises/skjules', async ({ page, aktorvalgHeader }) => {
-    test.skip(ENV == 'TT02', 'The "Show Deleted" button is currently feature toggled off in TT02');
-    const login = new LoginPage(page);
+  test('Sjekk at slettede enheter kan vises/skjules', async ({ login, aktorvalgHeader }) => {
     await test.step('Log in', async () => {
       await login.LoginToAccessManagement(SHOW_DELETED_TEST_USER);
     });
@@ -45,11 +32,13 @@ test.describe('Aktørvalg, valg og visning av avgiver', () => {
   });
 
   test('Check that all header buttons are visible and clickable', async ({
-    page,
+    login,
     aktorvalgHeader,
   }) => {
     await test.step('Log in', async () => {
-      await loginAsHeaderTestUser(page, aktorvalgHeader);
+      await login.LoginToAccessManagement(HEADER_TEST_USER);
+      await aktorvalgHeader.selectActorFromHeaderMenu(DEFAULT_ACTOR_NAME);
+      await aktorvalgHeader.chooseBokmalLanguage();
     });
 
     await test.step('Click Search button', async () => {
@@ -62,9 +51,11 @@ test.describe('Aktørvalg, valg og visning av avgiver', () => {
     });
   });
 
-  test('Add and remove favorite actor from actor menu', async ({ page, aktorvalgHeader }) => {
+  test('Add and remove favorite actor from actor menu', async ({ login, aktorvalgHeader }) => {
     await test.step('Log in', async () => {
-      await loginAsHeaderTestUser(page, aktorvalgHeader);
+      await login.LoginToAccessManagement(HEADER_TEST_USER);
+      await aktorvalgHeader.selectActorFromHeaderMenu(DEFAULT_ACTOR_NAME);
+      await aktorvalgHeader.chooseBokmalLanguage();
     });
 
     await test.step('Reset favorites and select default actor', async () => {
@@ -86,11 +77,13 @@ test.describe('Aktørvalg, valg og visning av avgiver', () => {
   });
 
   test('Search actors by name, birth year, org name and org number', async ({
-    page,
+    login,
     aktorvalgHeader,
   }) => {
     await test.step('Log in and select default actor', async () => {
-      await loginAsHeaderTestUser(page, aktorvalgHeader);
+      await login.LoginToAccessManagement(HEADER_TEST_USER);
+      await aktorvalgHeader.selectActorFromHeaderMenu(DEFAULT_ACTOR_NAME);
+      await aktorvalgHeader.chooseBokmalLanguage();
       await aktorvalgHeader.selectActorFromHeaderMenu(DEFAULT_ACTOR_NAME);
     });
 

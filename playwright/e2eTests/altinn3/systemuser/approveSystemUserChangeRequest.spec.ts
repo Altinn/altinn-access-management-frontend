@@ -19,46 +19,48 @@ const changeRequest = {
 test.describe('Systembruker endringsforespørsel', () => {
   let api: ApiRequests;
   let systemUserIds: string[] = [];
+  let systemUserId: string;
+  let changeRequestResponse: Awaited<ReturnType<ApiRequests['postSystemuserChangeRequest']>>;
 
   test.beforeEach(async () => {
     api = new ApiRequests();
-  });
-
-  test('Avvis endringsforespørsel', async ({ page, login }): Promise<void> => {
     const externalRef = TestdataApi.generateExternalRef();
 
-    await test.step('Create and approve system user request', async () => {
-      const response = await api.postSystemuserRequest(
-        vendorOrgNumber,
-        externalRef,
-        prebuiltSystemId,
-        vendorOrgNumber,
-      );
-      await api.approveSystemuserRequest(response.id, vendorOrgNumber, testUserPid);
-    });
+    const response = await api.postSystemuserRequest(
+      vendorOrgNumber,
+      externalRef,
+      prebuiltSystemId,
+      vendorOrgNumber,
+    );
+    await api.approveSystemuserRequest(response.id, vendorOrgNumber, testUserPid);
 
-    const systemUserId = await test.step('Get system user ID', async () => {
-      const systemUserId = await api.getSystemUserByQuery(
-        vendorOrgNumber,
-        prebuiltSystemId,
-        vendorOrgNumber,
-        externalRef,
-      );
-      systemUserIds.push(systemUserId);
-      return systemUserId;
-    });
+    systemUserId = await api.getSystemUserByQuery(
+      vendorOrgNumber,
+      prebuiltSystemId,
+      vendorOrgNumber,
+      externalRef,
+    );
+    systemUserIds.push(systemUserId);
 
-    const changeRequestResponse = await test.step('Create change request', async () => {
-      return await api.postSystemuserChangeRequest(vendorOrgNumber, systemUserId, changeRequest);
-    });
+    changeRequestResponse = await api.postSystemuserChangeRequest(
+      vendorOrgNumber,
+      systemUserId,
+      changeRequest,
+    );
+  });
 
+  test('Avvis endringsforespørsel', async ({
+    page,
+    login,
+    systemUserConfirmPage,
+  }): Promise<void> => {
     await test.step('Navigate to change request confirmation page and login', async () => {
       await page.goto(changeRequestResponse.confirmUrl);
       await login.loginNotChoosingActor(testUser);
     });
 
     await test.step('Reject change request', async () => {
-      await page.getByRole('button', { name: 'Avvis' }).click();
+      await systemUserConfirmPage.reject();
     });
 
     await test.step('Verify rejection status', async () => {
@@ -73,41 +75,18 @@ test.describe('Systembruker endringsforespørsel', () => {
     });
   });
 
-  test('Godkjenn endringsforespørsel', async ({ page, login }): Promise<void> => {
-    const externalRef = TestdataApi.generateExternalRef();
-
-    await test.step('Create and approve system user request', async () => {
-      const response = await api.postSystemuserRequest(
-        vendorOrgNumber,
-        externalRef,
-        prebuiltSystemId,
-        vendorOrgNumber,
-      );
-      await api.approveSystemuserRequest(response.id, vendorOrgNumber, testUserPid);
-    });
-
-    const systemUserId = await test.step('Get system user ID', async () => {
-      const systemUserId = await api.getSystemUserByQuery(
-        vendorOrgNumber,
-        prebuiltSystemId,
-        vendorOrgNumber,
-        externalRef,
-      );
-      systemUserIds.push(systemUserId); // Track for cleanup
-      return systemUserId;
-    });
-
-    const changeRequestResponse = await test.step('Create change request', async () => {
-      return await api.postSystemuserChangeRequest(vendorOrgNumber, systemUserId, changeRequest);
-    });
-
+  test('Godkjenn endringsforespørsel', async ({
+    page,
+    login,
+    systemUserConfirmPage,
+  }): Promise<void> => {
     await test.step('Navigate to change request confirmation page and login', async () => {
       await page.goto(changeRequestResponse.confirmUrl);
       await login.loginNotChoosingActor(testUser);
     });
 
     await test.step('Approve change request', async () => {
-      await page.getByRole('button', { name: 'Godkjenn' }).click();
+      await systemUserConfirmPage.approve();
     });
 
     await test.step('Verify acceptance status', async () => {

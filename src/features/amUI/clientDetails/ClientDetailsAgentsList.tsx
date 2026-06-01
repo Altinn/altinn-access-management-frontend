@@ -2,10 +2,13 @@ import React, { useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 import {
   AccessPackageListItemProps,
+  Button,
+  DsParagraph,
+  type UserListItemProps,
   type Color,
   formatDisplayName,
-  type UserListItemProps,
 } from '@altinn/altinn-components';
+import { MinusCircleIcon, PlusCircleIcon } from '@navikt/aksel-icons';
 
 import type {
   AddAgentAccessPackagesFn,
@@ -20,9 +23,10 @@ import { isNewUser } from '../common/isNewUser';
 
 import { AccessPackageListItems } from '../common/AccessPackageListItems/AccessPackageListItems';
 import { UserListItems, type UserListItemData } from '../common/UserListItems/UserListItems';
-import { useClientAccessPackageActions } from './useClientAccessPackageActions';
+import { useClientDetailsAccessPackageActions } from './useClientDetailsAccessPackageActions';
+import { useIsMobileOrSmaller } from '@/resources/utils/screensizeUtils';
 
-export type ClientAgentsAccessListProps = {
+type ClientDetailsAgentsListProps = {
   agents: Agent[];
   clientAccessPackages: Agent[];
   client?: Client;
@@ -42,21 +46,7 @@ const getUserListItemType = (agentType: string): UserListItemProps['type'] => {
 const getAgentSortKey = (agent: Agent): string =>
   `${isNewUser(agent.agentAddedAt) ? '0' : '1'}:${agent.agent.name.toLowerCase()}`;
 
-const buildPackageIdsByAgentId = (clientAccessPackages: Agent[]) => {
-  const map = new Map<string, Set<string>>();
-  clientAccessPackages.forEach((agent) => {
-    const packageIds = new Set<string>();
-    agent.access.forEach((access) => {
-      access.packages.forEach((pkg) => {
-        packageIds.add(pkg.id);
-      });
-    });
-    map.set(agent.agent.id, packageIds);
-  });
-  return map;
-};
-
-export const ClientAgentsAccessList = ({
+export const ClientDetailsAgentsList = ({
   agents,
   clientAccessPackages,
   client,
@@ -67,31 +57,41 @@ export const ClientAgentsAccessList = ({
   removeAgentAccessPackages,
   emptyText,
   addUserButton,
-}: ClientAgentsAccessListProps) => {
+}: ClientDetailsAgentsListProps) => {
   const { t } = useTranslation();
   const { getAccessPackageById } = useAccessPackageLookup();
   const { getRoleMetadata } = useRoleMetadata();
-  const { getItemActionProps, modal } = usePackageAccessControls();
+  const isMobileOrSmaller = useIsMobileOrSmaller();
 
   const delegateDisabled = isLoading || !fromPartyUuid || !actingPartyUuid;
   const removeDisabled = isLoading || !fromPartyUuid || !actingPartyUuid;
 
-  const { addClientAccessPackage, removeClientAccessPackage } = useClientAgentAccessPackageActions({
-    fromPartyUuid,
-    actingPartyUuid,
-    addAgentAccessPackages,
-    removeAgentAccessPackages,
-  });
+  const { addClientAccessPackage, removeClientAccessPackage } =
+    useClientDetailsAccessPackageActions({
+      fromPartyUuid,
+      actingPartyUuid,
+      addAgentAccessPackages,
+      removeAgentAccessPackages,
+    });
 
   const clientAccess = client?.access ?? [];
   const clientType = client?.client.type ?? '';
   const clientIsSubUnit = isSubUnitByType(client?.client.variant);
   const packageType = clientType.toLowerCase() === 'organisasjon' ? 'company' : 'person';
 
-  const packageIdsByAgentId = useMemo(
-    () => buildPackageIdsByAgentId(clientAccessPackages),
-    [clientAccessPackages],
-  );
+  const packageIdsByAgentId = useMemo(() => {
+    const map = new Map<string, Set<string>>();
+    (clientAccessPackages ?? []).forEach((agent) => {
+      const packageIds = new Set<string>();
+      agent.access.forEach((access) => {
+        access.packages.forEach((pkg) => {
+          packageIds.add(pkg.id);
+        });
+      });
+      map.set(agent.agent.id, packageIds);
+    });
+    return map;
+  }, [clientAccessPackages]);
 
   const sortedAgents = useMemo(() => {
     return [...agents].sort((a, b) => {
@@ -104,7 +104,6 @@ export const ClientAgentsAccessList = ({
     const isRecentlyAdded = isNewUser(agent.agentAddedAt);
     const isSubUnit = isSubUnitByType(agent.agent.variant);
     const userType = getUserListItemType(agent.agent.type);
-
     const nodes = clientAccess.reduce((acc, access) => {
       if (access.packages.length === 0) return acc;
 
@@ -118,46 +117,66 @@ export const ClientAgentsAccessList = ({
         const hasAccess = packageIdsByAgentId.get(agentId)?.has(pkg.id) ?? false;
         const accessPackage = getAccessPackageById(pkg.id);
         const delegable = accessPackage?.isDelegable ?? false;
-        const packageName = accessPackage?.name || pkg.name;
-        const isViaRole = access.role.code !== 'rettighetshaver';
-
         return {
           id: pkg.id,
-          name: packageName,
+          name: accessPackage?.name || pkg.name,
           type: packageType,
           isSubUnit: clientIsSubUnit,
+          interactive: false,
           titleAs: 'h3',
-          description: isViaRole
-            ? t('client_administration_page.via_role', { role: roleName })
-            : '',
+          description:
+            access.role.code !== 'rettighetshaver'
+              ? t('client_administration_page.via_role', { role: roleName })
+              : '',
+          as: 'div',
           color: (hasAccess ? 'company' : 'neutral') as Color,
-          ...getItemActionProps({
-            packageName,
-            accessPackage,
-            toPartyName: agentName,
-            hasAccess,
-            canAct: delegable,
-            isViaRole,
-            roleName,
-            addDisabled: delegateDisabled,
-            removeDisabled,
-            onAdd: () =>
-              addClientAccessPackage(
-                agentId,
-                access.role.code,
-                pkg.urn ?? '',
-                agentName,
-                packageName,
-              ),
-            onRemove: () =>
-              removeClientAccessPackage(
-                agentId,
-                access.role.code,
-                pkg.urn ?? '',
-                agentName,
-                packageName,
-              ),
-          }),
+          controls:
+            delegable &&
+            (hasAccess ? (
+              <Button
+                variant='tertiary'
+                disabled={removeDisabled}
+                aria-label={
+                  isMobileOrSmaller
+                    ? t('client_administration_page.remove_package_button')
+                    : undefined
+                }
+                onClick={() => {
+                  removeClientAccessPackage(
+                    agentId,
+                    access.role.code,
+                    pkg.urn ?? '',
+                    agentName,
+                    accessPackage?.name || pkg.name,
+                  );
+                }}
+              >
+                <MinusCircleIcon aria-hidden='true' />
+                {!isMobileOrSmaller && t('client_administration_page.remove_package_button')}
+              </Button>
+            ) : (
+              <Button
+                variant='tertiary'
+                disabled={delegateDisabled}
+                aria-label={
+                  isMobileOrSmaller
+                    ? t('client_administration_page.delegate_package_button')
+                    : undefined
+                }
+                onClick={() => {
+                  addClientAccessPackage(
+                    agentId,
+                    access.role.code,
+                    pkg.urn ?? '',
+                    agentName,
+                    accessPackage?.name || pkg.name,
+                  );
+                }}
+              >
+                <PlusCircleIcon aria-hidden='true' />
+                {!isMobileOrSmaller && t('client_administration_page.delegate_package_button')}
+              </Button>
+            )),
         };
       });
 
@@ -198,14 +217,11 @@ export const ClientAgentsAccessList = ({
   });
 
   return (
-    <>
-      <UserListItems
-        items={userListItems}
-        searchPlaceholder={t('client_administration_page.agent_search_placeholder')}
-        addUserButton={addUserButton}
-        emptyText={emptyText}
-      />
-      {modal}
-    </>
+    <UserListItems
+      items={userListItems}
+      searchPlaceholder={t('client_administration_page.agent_search_placeholder')}
+      addUserButton={addUserButton}
+      emptyText={emptyText}
+    />
   );
 };

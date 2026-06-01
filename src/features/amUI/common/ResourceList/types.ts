@@ -10,6 +10,7 @@ export type ResourceListItemResource =
       title?: string;
       name?: string;
       description?: string;
+      status?: string;
       provider?: {
         name?: string;
         code?: string;
