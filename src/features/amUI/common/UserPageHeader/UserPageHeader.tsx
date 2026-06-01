@@ -39,6 +39,7 @@ export const UserPageHeader = ({
     fullName: fromParty?.name ?? '',
     type: fromParty?.partyTypeName === PartyType.Organization ? 'company' : 'person',
   });
+
   const isSmall = useIsMobileOrSmaller();
 
   if (!toParty && !fromParty && !loadingPartyRepresentation) {

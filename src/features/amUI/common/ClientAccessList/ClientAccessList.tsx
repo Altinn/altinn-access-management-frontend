@@ -21,6 +21,10 @@ import { buildClientParentNameById, buildClientSortKey } from '../clientSortUtil
 import { useRoleMetadata } from '../UserRoles/useRoleMetadata';
 import { AccessPackageListItems } from '../AccessPackageListItems/AccessPackageListItems';
 import { UserListItems, type UserListItemData } from '../UserListItems/UserListItems';
+import { usePersonAccessModal } from '../DelegationModal/Person/usePersonAccessModal';
+import { useIsMobileOrSmaller } from '@/resources/utils/screensizeUtils';
+import { PartyType } from '@/rtk/features/userInfoApi';
+import type { Party } from '@/rtk/features/lookupApi';
 
 export type ClientAccessPackageAction = {
   clientId: string;
@@ -64,6 +68,8 @@ export const ClientAccessList = ({
   const { t } = useTranslation();
   const { getAccessPackageById } = useAccessPackageLookup();
   const { getRoleMetadata } = useRoleMetadata();
+  const isMobileOrSmaller = useIsMobileOrSmaller();
+  const { modal, open } = usePersonAccessModal();
   const clientsForAccessState = accessStateClients ?? clients;
   const parentNameById = buildClientParentNameById(clients);
   const sortedClients = sortClientsByKey(clients, parentNameById);
@@ -72,6 +78,15 @@ export const ClientAccessList = ({
     const clientId = client.client.id;
     const isSubUnit = isSubUnitByType(client.client.variant);
     const userType = getUserListItemType(client.client.type);
+    const clientParty: Party = {
+      partyId: 0,
+      partyUuid: clientId,
+      orgNumber: client.client.organizationIdentifier ?? undefined,
+      name: client.client.name,
+      partyTypeName: userType === 'company' ? PartyType.Organization : PartyType.Person,
+      dateOfBirth: client.client.dateOfBirth ?? undefined,
+      variant: client.client.variant ?? undefined,
+    };
 
     const nodes = client.access.reduce((acc, access) => {
       if (access.packages.length === 0) return acc;
@@ -87,39 +102,54 @@ export const ClientAccessList = ({
         const accessPackage = getAccessPackageById(pkg.id);
         const actionIsDelegable = accessPackage?.isDelegable ?? false;
         const showAction = !requireDelegableForActions || actionIsDelegable;
+        const packageName = accessPackage?.name || pkg.name;
+        const roleDescription =
+          access.role.code !== 'rettighetshaver'
+            ? t('client_administration_page.via_role', { role: roleName })
+            : undefined;
+
+        const onDelegate = onAddAccessPackage
+          ? () =>
+              onAddAccessPackage({
+                clientId,
+                roleCode: access.role.code,
+                packageId: pkg.urn ?? '',
+                accessPackageName: packageName,
+              })
+          : undefined;
+        const onRevoke = onRemoveAccessPackage
+          ? () =>
+              onRemoveAccessPackage({
+                clientId,
+                roleCode: access.role.code,
+                packageId: pkg.urn ?? '',
+                accessPackageName: packageName,
+              })
+          : undefined;
+
+        const action = hasAccess ? onRevoke : onDelegate;
+        // The row opens a modal on all screen sizes; the inline controls are an extra
+        // desktop-only affordance (matching the access package list pattern).
+        const showModalTrigger = showAction && !!accessPackage && !!action;
 
         let controls: React.ReactNode;
-        if (showAction && hasAccess && onRemoveAccessPackage) {
+        if (!isMobileOrSmaller && showAction && hasAccess && onRevoke) {
           controls = (
             <Button
               variant='tertiary'
               disabled={removeDisabled}
-              onClick={() => {
-                onRemoveAccessPackage({
-                  clientId,
-                  roleCode: access.role.code,
-                  packageId: pkg.urn ?? '',
-                  accessPackageName: accessPackage?.name || pkg.name,
-                });
-              }}
+              onClick={onRevoke}
             >
               <MinusCircleIcon aria-hidden='true' />
               {t('client_administration_page.remove_package_button')}
             </Button>
           );
-        } else if (showAction && !hasAccess && onAddAccessPackage) {
+        } else if (!isMobileOrSmaller && showAction && !hasAccess && onDelegate) {
           controls = (
             <Button
               variant='tertiary'
               disabled={addDisabled}
-              onClick={() => {
-                onAddAccessPackage({
-                  clientId,
-                  roleCode: access.role.code,
-                  packageId: pkg.urn ?? '',
-                  accessPackageName: accessPackage?.name || pkg.name,
-                });
-              }}
+              onClick={onDelegate}
             >
               <PlusCircleIcon aria-hidden='true' />
               {t('client_administration_page.delegate_package_button')}
@@ -129,17 +159,26 @@ export const ClientAccessList = ({
 
         return {
           id: pkg.id,
-          name: accessPackage?.name || pkg.name,
+          name: packageName,
           type: userType,
           isSubUnit,
-          interactive: false,
-          as: 'div',
+          interactive: showModalTrigger,
+          as: showModalTrigger ? 'button' : 'div',
           titleAs: 'h3',
-          description:
-            access.role.code !== 'rettighetshaver'
-              ? t('client_administration_page.via_role', { role: roleName })
-              : '',
+          description: roleDescription ?? '',
           color: (hasAccess ? 'company' : 'neutral') as Color,
+          onClick:
+            showModalTrigger && accessPackage
+              ? () =>
+                  open({
+                    party: clientParty,
+                    accessPackage,
+                    userHasAccess: hasAccess,
+                    roleDescription,
+                    onDelegate: onDelegate ?? (() => {}),
+                    onRevoke: onRevoke ?? (() => {}),
+                  })
+              : undefined,
           controls,
         };
       });
@@ -154,7 +193,7 @@ export const ClientAccessList = ({
     return {
       id: clientId,
       name: client.client.name,
-      organizationIdentifier: client.client.organizationIdentifier,
+      organizationIdentifier: client.client.organizationIdentifier ?? undefined,
       type: userType,
       subUnit: isSubUnit,
       deleted: client.client.isDeleted ?? undefined,
@@ -180,9 +219,12 @@ export const ClientAccessList = ({
   });
 
   return (
-    <UserListItems
-      items={userListItems}
-      searchPlaceholder={searchPlaceholder}
-    />
+    <>
+      <UserListItems
+        items={userListItems}
+        searchPlaceholder={searchPlaceholder}
+      />
+      {modal}
+    </>
   );
 };

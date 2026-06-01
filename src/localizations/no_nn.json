@@ -1074,6 +1074,10 @@
   "poa_status": {
     "no_permissions": "Du må gi fullmakt"
   },
+  "party_info": {
+    "delegate_confirmation": "Ønskjer du å gi {{partyName}} fullmakt til {{packageName}}? Brukaren vil få tilgang til alle tenestene i pakken.",
+    "revoke_confirmation": "Ønskjer du å slette fullmakta til {{packageName}} for {{partyName}}? Brukaren vil miste tilgang til alle tenestene i pakken."
+  },
   "package_poa_details_page": {
     "page_title": "Fullmaktsdetaljar - Altinn",
     "users_tab_title": "Brukarar",

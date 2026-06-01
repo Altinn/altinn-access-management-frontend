@@ -24,6 +24,9 @@ import { isNewUser } from '../common/isNewUser';
 import { AccessPackageListItems } from '../common/AccessPackageListItems/AccessPackageListItems';
 import { UserListItems, type UserListItemData } from '../common/UserListItems/UserListItems';
 import { useClientAccessPackageActions } from './useClientAccessPackageActions';
+import { useIsMobileOrSmaller } from '@/resources/utils/screensizeUtils';
+import { usePersonAccessModal } from '../common/DelegationModal/Person/usePersonAccessModal';
+import { PartyType } from '@/rtk/features/userInfoApi';
 
 type ClientAdministrationClientAgentsListProps = {
   agents: Agent[];
@@ -60,6 +63,8 @@ export const ClientAdministrationClientAgentsList = ({
   const { t } = useTranslation();
   const { getAccessPackageById } = useAccessPackageLookup();
   const { getRoleMetadata } = useRoleMetadata();
+  const isMobileOrSmaller = useIsMobileOrSmaller();
+  const { modal, open } = usePersonAccessModal();
 
   const delegateDisabled = isLoading || !fromPartyUuid || !actingPartyUuid;
   const removeDisabled = isLoading || !fromPartyUuid || !actingPartyUuid;
@@ -114,33 +119,64 @@ export const ClientAdministrationClientAgentsList = ({
         const hasAccess = packageIdsByAgentId.get(agentId)?.has(pkg.id) ?? false;
         const accessPackage = getAccessPackageById(pkg.id);
         const delegable = accessPackage?.isDelegable ?? false;
+        const packageName = accessPackage?.name || pkg.name;
+        const roleDescription =
+          access.role.code !== 'rettighetshaver'
+            ? t('client_administration_page.via_role', { role: roleName })
+            : undefined;
+        const onDelegate = () =>
+          addClientAccessPackage(agentId, access.role.code, pkg.urn ?? '', agentName, packageName);
+        const onRevoke = () =>
+          removeClientAccessPackage(
+            agentId,
+            access.role.code,
+            pkg.urn ?? '',
+            agentName,
+            packageName,
+          );
+        const openModal =
+          accessPackage && delegable
+            ? () =>
+                open({
+                  party: {
+                    partyId: 0,
+                    partyUuid: agentId,
+                    name: agent.agent.name,
+                    orgNumber: agent.agent.organizationIdentifier ?? undefined,
+                    partyTypeName:
+                      agent.agent.type.toLowerCase() === 'person'
+                        ? PartyType.Person
+                        : PartyType.Organization,
+                    dateOfBirth: agent.agent.dateOfBirth ?? undefined,
+                    variant: agent.agent.variant ?? undefined,
+                  },
+                  accessPackage,
+                  userHasAccess: hasAccess,
+                  roleDescription,
+                  onDelegate,
+                  onRevoke,
+                })
+            : undefined;
+        const showModalTrigger = !!openModal;
+
         return {
           id: pkg.id,
-          name: accessPackage?.name || pkg.name,
+          name: packageName,
           type: packageType,
           isSubUnit: clientIsSubUnit,
-          interactive: false,
-          description:
-            access.role.code !== 'rettighetshaver'
-              ? t('client_administration_page.via_role', { role: roleName })
-              : '',
-          as: 'div',
+          interactive: showModalTrigger,
+          description: roleDescription ?? '',
+          as: showModalTrigger ? 'button' : 'div',
           color: (hasAccess ? 'company' : 'neutral') as Color,
+          onClick: showModalTrigger ? openModal : undefined,
           controls:
+            !isMobileOrSmaller &&
             delegable &&
             (hasAccess ? (
               <Button
                 variant='tertiary'
                 disabled={removeDisabled}
-                onClick={() => {
-                  removeClientAccessPackage(
-                    agentId,
-                    access.role.code,
-                    pkg.urn ?? '',
-                    agentName,
-                    accessPackage?.name || pkg.name,
-                  );
-                }}
+                onClick={onRevoke}
               >
                 <MinusCircleIcon aria-hidden='true' />
                 {t('client_administration_page.remove_package_button')}
@@ -149,15 +185,7 @@ export const ClientAdministrationClientAgentsList = ({
               <Button
                 variant='tertiary'
                 disabled={delegateDisabled}
-                onClick={() => {
-                  addClientAccessPackage(
-                    agentId,
-                    access.role.code,
-                    pkg.urn ?? '',
-                    agentName,
-                    accessPackage?.name || pkg.name,
-                  );
-                }}
+                onClick={onDelegate}
               >
                 <PlusCircleIcon aria-hidden='true' />
                 {t('client_administration_page.delegate_package_button')}
@@ -201,11 +229,14 @@ export const ClientAdministrationClientAgentsList = ({
   });
 
   return (
-    <UserListItems
-      items={userListItems}
-      searchPlaceholder={t('client_administration_page.agent_search_placeholder')}
-      addUserButton={addUserButton}
-      emptyText={emptyText}
-    />
+    <>
+      <UserListItems
+        items={userListItems}
+        searchPlaceholder={t('client_administration_page.agent_search_placeholder')}
+        addUserButton={addUserButton}
+        emptyText={emptyText}
+      />
+      {modal}
+    </>
   );
 };

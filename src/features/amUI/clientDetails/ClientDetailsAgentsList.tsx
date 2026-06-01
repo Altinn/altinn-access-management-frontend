@@ -25,6 +25,8 @@ import { AccessPackageListItems } from '../common/AccessPackageListItems/AccessP
 import { UserListItems, type UserListItemData } from '../common/UserListItems/UserListItems';
 import { useClientDetailsAccessPackageActions } from './useClientDetailsAccessPackageActions';
 import { useIsMobileOrSmaller } from '@/resources/utils/screensizeUtils';
+import { usePersonAccessModal } from '../common/DelegationModal/Person/usePersonAccessModal';
+import { PartyType } from '@/rtk/features/userInfoApi';
 
 type ClientDetailsAgentsListProps = {
   agents: Agent[];
@@ -74,6 +76,8 @@ export const ClientDetailsAgentsList = ({
       removeAgentAccessPackages,
     });
 
+  const { modal, open } = usePersonAccessModal();
+
   const clientAccess = client?.access ?? [];
   const clientType = client?.client.type ?? '';
   const clientIsSubUnit = isSubUnitByType(client?.client.variant);
@@ -117,64 +121,82 @@ export const ClientDetailsAgentsList = ({
         const hasAccess = packageIdsByAgentId.get(agentId)?.has(pkg.id) ?? false;
         const accessPackage = getAccessPackageById(pkg.id);
         const delegable = accessPackage?.isDelegable ?? false;
+        const packageName = accessPackage?.name || pkg.name;
+        const roleDescription =
+          access.role.code !== 'rettighetshaver'
+            ? t('client_administration_page.via_role', { role: roleName })
+            : undefined;
+
+        const onDelegate = () =>
+          addClientAccessPackage(agentId, access.role.code, pkg.urn ?? '', agentName, packageName);
+        const onRevoke = () =>
+          removeClientAccessPackage(
+            agentId,
+            access.role.code,
+            pkg.urn ?? '',
+            agentName,
+            packageName,
+          );
+
+        // The row opens a modal on all screen sizes; the inline controls are an extra
+        // desktop-only affordance (matching the access package list pattern).
+        const openModal =
+          accessPackage && delegable
+            ? () =>
+                open({
+                  party: {
+                    partyId: 0,
+                    partyUuid: agentId,
+                    name: agent.agent.name,
+                    orgNumber: agent.agent.organizationIdentifier ?? undefined,
+                    partyTypeName:
+                      agent.agent.type.toLowerCase() === 'person'
+                        ? PartyType.Person
+                        : PartyType.Organization,
+                    dateOfBirth: agent.agent.dateOfBirth ?? undefined,
+                    variant: agent.agent.variant ?? undefined,
+                  },
+                  accessPackage,
+                  userHasAccess: hasAccess,
+                  roleDescription,
+                  onDelegate,
+                  onRevoke,
+                })
+            : undefined;
+
+        const showModalTrigger = !!openModal;
+
         return {
           id: pkg.id,
-          name: accessPackage?.name || pkg.name,
+          name: packageName,
           type: packageType,
           isSubUnit: clientIsSubUnit,
-          interactive: false,
+          interactive: showModalTrigger,
           titleAs: 'h3',
-          description:
-            access.role.code !== 'rettighetshaver'
-              ? t('client_administration_page.via_role', { role: roleName })
-              : '',
-          as: 'div',
+          description: roleDescription ?? '',
+          as: showModalTrigger ? 'button' : 'div',
           color: (hasAccess ? 'company' : 'neutral') as Color,
+          onClick: showModalTrigger ? openModal : undefined,
           controls:
+            !isMobileOrSmaller &&
             delegable &&
             (hasAccess ? (
               <Button
                 variant='tertiary'
                 disabled={removeDisabled}
-                aria-label={
-                  isMobileOrSmaller
-                    ? t('client_administration_page.remove_package_button')
-                    : undefined
-                }
-                onClick={() => {
-                  removeClientAccessPackage(
-                    agentId,
-                    access.role.code,
-                    pkg.urn ?? '',
-                    agentName,
-                    accessPackage?.name || pkg.name,
-                  );
-                }}
+                onClick={onRevoke}
               >
                 <MinusCircleIcon aria-hidden='true' />
-                {!isMobileOrSmaller && t('client_administration_page.remove_package_button')}
+                {t('client_administration_page.remove_package_button')}
               </Button>
             ) : (
               <Button
                 variant='tertiary'
                 disabled={delegateDisabled}
-                aria-label={
-                  isMobileOrSmaller
-                    ? t('client_administration_page.delegate_package_button')
-                    : undefined
-                }
-                onClick={() => {
-                  addClientAccessPackage(
-                    agentId,
-                    access.role.code,
-                    pkg.urn ?? '',
-                    agentName,
-                    accessPackage?.name || pkg.name,
-                  );
-                }}
+                onClick={onDelegate}
               >
                 <PlusCircleIcon aria-hidden='true' />
-                {!isMobileOrSmaller && t('client_administration_page.delegate_package_button')}
+                {t('client_administration_page.delegate_package_button')}
               </Button>
             )),
         };
@@ -217,11 +239,14 @@ export const ClientDetailsAgentsList = ({
   });
 
   return (
-    <UserListItems
-      items={userListItems}
-      searchPlaceholder={t('client_administration_page.agent_search_placeholder')}
-      addUserButton={addUserButton}
-      emptyText={emptyText}
-    />
+    <>
+      <UserListItems
+        items={userListItems}
+        searchPlaceholder={t('client_administration_page.agent_search_placeholder')}
+        addUserButton={addUserButton}
+        emptyText={emptyText}
+      />
+      {modal}
+    </>
   );
 };

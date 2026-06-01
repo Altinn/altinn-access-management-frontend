@@ -62,7 +62,15 @@ export const UserSearchResults: React.FC<UserSearchResultsProps> = ({
             linkTo={getUserLink ? getUserLink(user) : undefined}
             onSelect={
               onSelect
-                ? () => onSelect({ id: user.id, name: user.name, type: user.type })
+                ? () =>
+                    onSelect({
+                      id: user.id,
+                      name: user.name,
+                      type: user.type,
+                      variant: user.variant,
+                      organizationIdentifier: user.organizationIdentifier,
+                      dateOfBirth: user.dateOfBirth,
+                    })
                 : undefined
             }
             roleDirection='toUser'

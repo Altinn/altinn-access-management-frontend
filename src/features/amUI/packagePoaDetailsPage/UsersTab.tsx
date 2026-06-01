@@ -1,4 +1,4 @@
-import { useMemo, useState } from 'react';
+import { useMemo, useRef, useState } from 'react';
 
 import pageClasses from './PackagePoaDetailsPage.module.css';
 import { DsParagraph, formatDisplayName } from '@altinn/altinn-components';
@@ -18,13 +18,19 @@ import { mapConnectionsToUserSearchNodes } from '../common/UserSearch/connection
 import { mapPermissionsToUserSearchNodes } from '../common/UserSearch/permissionMapper';
 import type { UserActionTarget } from '../common/UserSearch/types';
 import { usePartyRepresentation } from '../common/PartyRepresentationContext/PartyRepresentationContext';
+import { DelegationAction } from '../common/DelegationModal/EditModal';
+import { getInheritedStatus, isPermissionInherited } from '../common/useInheritedStatus';
+import { PartyInfoModal } from '../common/DelegationModal/Person/PartyInfoModal';
 
 const mapUserToParty = (user: UserActionTarget): Party => ({
   partyId: 0,
   partyUuid: user.id,
+  orgNumber: user.organizationIdentifier ?? undefined,
   name: user.name,
   partyTypeName:
     user.type?.toLowerCase() === 'organisasjon' ? PartyType.Organization : PartyType.Person,
+  dateOfBirth: user.dateOfBirth ?? undefined,
+  variant: user.variant ?? undefined,
 });
 
 interface UsersTabProps {
@@ -37,6 +43,8 @@ interface UsersTabProps {
 export const UsersTab = ({ accessPackage, isLoading, isFetching }: UsersTabProps) => {
   const { t } = useTranslation();
   const { fromParty, toParty } = usePartyRepresentation();
+  const modalRef = useRef<HTMLDialogElement>(null);
+  const [selectedUser, setSelectedUser] = useState<UserActionTarget | null>(null);
   const { queueSnackbar } = useSnackbarOnIdle({ isBusy: isFetching, showPendingOnUnmount: true });
   const { canDelegatePackage, isLoading: isDelegationCheckLoading } =
     useAccessPackageDelegationCheck();
@@ -138,6 +146,37 @@ export const UsersTab = ({ accessPackage, isLoading, isFetching }: UsersTabProps
     }
   };
 
+  const availableActions = [
+    DelegationAction.REVOKE,
+    ...(canDelegate ? [DelegationAction.DELEGATE] : []),
+  ];
+
+  const selectedUserPermissions = useMemo(
+    () =>
+      accessPackage?.permissions?.filter((permission) => permission.to?.id === selectedUser?.id) ??
+      [],
+    [accessPackage?.permissions, selectedUser?.id],
+  );
+
+  const selectedUserHasDirectAccess = selectedUserPermissions.some(
+    (permission) => !isPermissionInherited(permission),
+  );
+
+  const selectedUserInheritedStatus = useMemo(
+    () =>
+      getInheritedStatus({
+        permissions: selectedUserPermissions,
+        toParty: selectedUser ? mapUserToParty(selectedUser) : undefined,
+        fromParty,
+      }),
+    [selectedUserPermissions, selectedUser, fromParty],
+  );
+
+  const handleSelectUser = (user: UserActionTarget) => {
+    setSelectedUser(user);
+    modalRef.current?.showModal();
+  };
+
   return (
     <>
       {!isLoading && (
@@ -170,6 +209,7 @@ export const UsersTab = ({ accessPackage, isLoading, isFetching }: UsersTabProps
         onDelegate={canDelegate ? handleOnDelegate : undefined}
         onAddNewUser={canDelegate ? handleOnDelegate : undefined}
         onRevoke={handleOnRevoke}
+        onSelect={handleSelectUser}
         isActionLoading={
           isActionLoading ||
           isLoading ||
@@ -180,6 +220,30 @@ export const UsersTab = ({ accessPackage, isLoading, isFetching }: UsersTabProps
           isDelegationCheckLoading
         }
         canDelegate={canDelegate}
+      />
+
+      <PartyInfoModal
+        ref={modalRef}
+        availableActions={availableActions}
+        partyInfo={
+          selectedUser && accessPackage
+            ? {
+                party: mapUserToParty(selectedUser),
+                accessPackage,
+                userHasAccess: selectedUserHasDirectAccess,
+                inheritedStatus: selectedUserInheritedStatus,
+                onDelegate: () => {
+                  handleOnDelegate(selectedUser);
+                  modalRef.current?.close();
+                },
+                onRevoke: () => {
+                  handleOnRevoke(selectedUser);
+                  modalRef.current?.close();
+                },
+              }
+            : undefined
+        }
+        onClose={() => setSelectedUser(null)}
       />
     </>
   );

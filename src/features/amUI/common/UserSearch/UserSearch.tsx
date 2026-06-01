@@ -201,6 +201,7 @@ export const UserSearch: React.FC<UserSearchProps> = ({
               goNextPage={goNextIndirectPage}
               availableAction={DelegationAction.DELEGATE}
               onDelegate={canDelegate ? onDelegate : undefined}
+              onSelect={onSelect}
               isActionLoading={isActionLoading}
               includeSelfAsChild={includeSelfAsChildOnIndirect}
               delegateLabel={addUserButtonLabel}

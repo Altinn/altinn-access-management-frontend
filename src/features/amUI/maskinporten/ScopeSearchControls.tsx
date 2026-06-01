@@ -118,6 +118,9 @@ export const ScopeSearchControls = ({
 
   const resourceLoading = isLoading(resource.identifier) || isCheckingDelegation;
 
+  // On small screens the row opens the detail view, where the action is performed instead.
+  if (isMobile) return null;
+
   if (hasDelegatedResource) {
     return (
       <Button
@@ -132,7 +135,7 @@ export const ScopeSearchControls = ({
         aria-label={t('common.delete_poa_for', { poa_object: resource.title })}
       >
         <MinusCircleIcon aria-hidden='true' />
-        {!isMobile && t('common.delete_poa')}
+        {t('common.delete_poa')}
       </Button>
     );
   }
@@ -150,7 +153,7 @@ export const ScopeSearchControls = ({
       aria-label={t('common.give_poa_for', { poa_object: resource.title })}
     >
       <PlusCircleIcon aria-hidden='true' />
-      {!isMobile && t('common.give_poa')}
+      {t('common.give_poa')}
     </Button>
   );
 };
