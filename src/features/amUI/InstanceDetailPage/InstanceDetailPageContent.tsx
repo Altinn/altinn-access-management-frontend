@@ -31,11 +31,14 @@ import {
 import { InstanceDescription } from '../common/InstanceDescription/InstanceDescription';
 
 import classes from './InstanceDetailPageContent.module.css';
+import { RequestInstanceAdminPackage } from './RequestInstanceAdminPackage';
 
 export const InstanceDetailPageContent = () => {
   const { t, i18n } = useTranslation();
   const [searchParams] = useSearchParams();
   const { actingParty, fromParty } = usePartyRepresentation();
+
+  const actingPartyIsOrg = actingParty?.partyTypeName === PartyType.Organization;
 
   const modalRef = useRef<HTMLDialogElement>(null);
   const [selectedUser, setSelectedUser] = useState<UserActionTarget | null>(null);
@@ -157,7 +160,7 @@ export const InstanceDetailPageContent = () => {
         className={classes.inboxButton}
       >
         <a href={inboxUrl}>
-          {<EnvelopeClosedIcon aria-hidden />}
+          {<EnvelopeClosedIcon aria-hidden='true' />}
           {t('instance_detail_page.see_in_inbox')}
         </a>
       </DsButton>
@@ -218,12 +221,22 @@ export const InstanceDetailPageContent = () => {
             {isInstanceAdmin ? (
               t('instance_detail_page.description')
             ) : (
-              <Trans
-                i18nKey='instance_detail_page.no_access_description'
-                components={{ b: <strong /> }}
-              />
+              <>
+                <Trans
+                  i18nKey='instance_detail_page.no_access_description'
+                  components={{ b: <strong /> }}
+                />
+                <Trans
+                  i18nKey={
+                    actingPartyIsOrg
+                      ? 'instance_detail_page.instance_admin_package_name_org'
+                      : 'instance_detail_page.instance_admin_package_name_person'
+                  }
+                />
+              </>
             )}
           </DsParagraph>
+          {!isInstanceAdmin && actingPartyIsOrg && <RequestInstanceAdminPackage />}
           {isInstanceAdmin && isAdmin === false && (
             <DsParagraph data-size='sm'>
               {t('instance_detail_page.instance_admin_edit_disclaimer')}

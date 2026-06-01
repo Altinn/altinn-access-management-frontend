@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next';
 import {
   DsAlert,
   DsDialog,
-  DsHeading,
+  formatDisplayName,
   Timeline,
   TimelineActivity,
   TimelineSegment,
@@ -19,10 +19,12 @@ import classes from './ConsentHistoryPage.module.css';
 import { useGetConsentLogQuery } from '@/rtk/features/consentApi';
 import { getCookie } from '@/resources/Cookie/CookieMethods';
 import { ConsentTimeline } from './ConsentTimeline';
-import { useGetIsAdminQuery } from '@/rtk/features/userInfoApi';
+import { useGetIsAdminQuery, useGetReporteeQuery } from '@/rtk/features/userInfoApi';
 import { hasConsentPermission } from '@/resources/utils/permissionUtils';
+import { hideA2Links } from '@/resources/utils/featureFlagUtils';
 import { OldConsentAlert } from '../components/OldConsentAlert/OldConsentAlert';
 import { Breadcrumbs } from '../../common/Breadcrumbs/Breadcrumbs';
+import { ReporteePageHeading } from '../../common/ReporteePageHeading';
 
 export const ConsentHistoryPage = () => {
   const { t } = useTranslation();
@@ -32,6 +34,7 @@ export const ConsentHistoryPage = () => {
   useDocumentTitle(t('consent_log.page_title'));
   const partyUuid = getCookie('AltinnPartyUuid');
 
+  const { data: reportee, isLoading: isLoadingReportee } = useGetReporteeQuery();
   const { data: isAdmin, isLoading: isLoadingIsAdmin } = useGetIsAdminQuery();
   const hasPermission = hasConsentPermission(isAdmin);
 
@@ -41,28 +44,33 @@ export const ConsentHistoryPage = () => {
     error: loadConsentLogError,
   } = useGetConsentLogQuery({ partyId: partyUuid }, { skip: !partyUuid || !hasPermission });
 
-  const isLoading = isLoadingIsAdmin || isLoadingConsentLog;
+  const isLoading = isLoadingIsAdmin || isLoadingConsentLog || isLoadingReportee;
 
   const showConsentDetails = (consentId: string): void => {
     setSelectedConsentId(consentId);
     modalRef.current?.showModal();
   };
 
+  const reporteeName = formatDisplayName({
+    fullName: reportee?.name || '',
+    type: reportee?.type === 'Person' ? 'person' : 'company',
+  });
+
   return (
     <PageWrapper>
       <PageLayoutWrapper>
         <Breadcrumbs items={['root', 'consent', 'consent_log']} />
-        <DsHeading
-          level={1}
-          data-size='sm'
-          className={classes.consentLogTopHeader}
-        >
-          {t('consent_log.heading')}
-        </DsHeading>
-        <OldConsentAlert
-          heading='consent_log.altinn2_consent_alert_header'
-          text='consent_log.altinn2_consent_alert_body'
+        <ReporteePageHeading
+          title={t('consent_log.heading', { name: reporteeName })}
+          reportee={reportee}
+          isLoading={isLoadingReportee}
         />
+        {!hideA2Links() && (
+          <OldConsentAlert
+            heading='consent_log.altinn2_consent_alert_header'
+            text='consent_log.altinn2_consent_alert_body'
+          />
+        )}
         <div className={classes.consentHistoryPage}>
           {!isLoading && !hasPermission && <div>{t('consent_log.no_consent_log_permission')}</div>}
           {isLoading && <LoadingTimeline />}

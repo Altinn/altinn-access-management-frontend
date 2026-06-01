@@ -55,7 +55,7 @@ export const AddUserButton = ({ resourceId, instanceUrn, isLarge }: AddUserButto
         }}
         className={isLarge ? classes.largeButton : undefined}
       >
-        <PlusIcon aria-label={t('common.add')} />
+        <PlusIcon aria-hidden='true' />
         {isLarge ? t('new_user_modal.trigger_button_large') : t('new_user_modal.trigger_button')}
       </DsButton>
       <AddUserModal
@@ -253,6 +253,7 @@ const AddUserModal = ({
               onClick={() => setRightsExpanded(!rightsExpanded)}
               expanded={rightsExpanded}
               as='button'
+              containerAs='div'
               border='solid'
               shadow='none'
             >

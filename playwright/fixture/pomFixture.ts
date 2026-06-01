@@ -4,6 +4,7 @@ import { ConsentPage, Language } from 'playwright/pages/consent/ConsentPage';
 import { LoginPage, logoutWithUser } from 'playwright/pages/LoginPage';
 import { AccessManagementFrontPage } from 'playwright/pages/AccessManagementFrontPage';
 import { SystemUserPage } from 'playwright/pages/systemuser/SystemUserPage';
+import { SystemUserConfirmPage } from 'playwright/pages/systemuser/SystemUserConfirmPage';
 import { DelegationPage } from 'playwright/pages/profile/accessPkgDelegationPage';
 import { apiDelegation } from 'playwright/pages/profile/apidelegeringPage';
 import { AktorvalgHeader } from 'playwright/pages/AktorvalgHeader';
@@ -22,12 +23,14 @@ import { KlientAdministrasjonPage } from 'playwright/pages/tilgangsstyring/Klien
 const defaultLang = Language.NB;
 
 type Fixtures = {
+  slowNetwork: void;
   // NEW: make language an overridable option
   language: Language;
 
   login: LoginPage;
   accessManagementFrontPage: AccessManagementFrontPage;
   systemUserPage: SystemUserPage;
+  systemUserConfirmPage: SystemUserConfirmPage;
   delegate: delegateToUser;
   delegateRights: delegateRightsToUser;
   deleteRights: revokeRights;
@@ -45,6 +48,23 @@ type Fixtures = {
 };
 
 const test = baseTest.extend<Fixtures>({
+  // Simulate slow CI runner network: SLOW_NETWORK=1 yarn run env:TT02 <path>
+  slowNetwork: [
+    async ({ page }, use) => {
+      if (process.env.SLOW_NETWORK) {
+        const client = await page.context().newCDPSession(page);
+        await client.send('Network.emulateNetworkConditions', {
+          offline: false,
+          downloadThroughput: (4 * 1024 * 1024) / 8,
+          uploadThroughput: (2 * 1024 * 1024) / 8,
+          latency: 50,
+        });
+      }
+      await use();
+    },
+    { auto: true },
+  ],
+
   // NEW: language fixture (default NB, overridable via test.use or project/use)
   language: [defaultLang, { option: true }],
 
@@ -56,6 +76,9 @@ const test = baseTest.extend<Fixtures>({
   },
   systemUserPage: async ({ page }, use) => {
     await use(new SystemUserPage(page));
+  },
+  systemUserConfirmPage: async ({ page }, use) => {
+    await use(new SystemUserConfirmPage(page));
   },
   delegate: async ({ page }, use) => {
     await use(new delegateToUser(page));

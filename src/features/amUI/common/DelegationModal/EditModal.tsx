@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { forwardRef, useEffect } from 'react';
-import { DsDialog } from '@altinn/altinn-components';
+import { DsDialog, Snackbar, SnackbarProvider } from '@altinn/altinn-components';
 
 import type { ActionError } from '@/resources/hooks/useActionError';
 import type { ServiceResource } from '@/rtk/features/singleRights/singleRightsApi';
@@ -13,6 +13,7 @@ import classes from './DelegationModal.module.css';
 import { AccessPackageInfo } from './AccessPackages/AccessPackageInfo';
 import { RoleInfo } from './Role/RoleInfo';
 import { useDelegationModalContext } from './DelegationModalContext';
+import { ScopeInfo } from '../../maskinporten/ScopeInfo';
 
 export interface DelegationRecipient {
   partyUuid: string;
@@ -34,6 +35,7 @@ export interface InstanceData {
 
 export interface EditModalProps {
   resource?: ServiceResource;
+  maskinportenScope?: ServiceResource;
   accessPackage?: AccessPackage;
   role?: Role;
   instance?: InstanceData;
@@ -48,6 +50,7 @@ export const EditModal = forwardRef<HTMLDialogElement, EditModalProps>(
   (
     {
       resource,
+      maskinportenScope,
       accessPackage,
       role,
       instance,
@@ -69,23 +72,6 @@ export const EditModal = forwardRef<HTMLDialogElement, EditModalProps>(
       }
     }, [openWithError, setActionError]);
 
-    /* handle closing */
-    useEffect(() => {
-      const handleClose = () => {
-        onClose?.();
-        reset();
-      };
-
-      if (ref && 'current' in ref && ref.current) {
-        ref.current.addEventListener('close', handleClose);
-      }
-      return () => {
-        if (ref && 'current' in ref && ref.current) {
-          ref.current.removeEventListener('close', handleClose);
-        }
-      };
-    }, [onClose, reset, ref]);
-
     return (
       <DsDialog
         ref={ref}
@@ -96,17 +82,21 @@ export const EditModal = forwardRef<HTMLDialogElement, EditModalProps>(
           reset();
         }}
       >
-        <div className={classes.content}>
-          {renderModalContent({
-            resource,
-            accessPackage,
-            role,
-            instance,
-            toParty,
-            availableActions,
-            onSuccess,
-          })}
-        </div>
+        <SnackbarProvider>
+          <div className={classes.content}>
+            {renderModalContent({
+              resource,
+              maskinportenScope,
+              accessPackage,
+              role,
+              instance,
+              toParty,
+              availableActions,
+              onSuccess,
+            })}
+          </div>
+          <Snackbar />
+        </SnackbarProvider>
       </DsDialog>
     );
   },
@@ -114,6 +104,7 @@ export const EditModal = forwardRef<HTMLDialogElement, EditModalProps>(
 
 const renderModalContent = ({
   resource,
+  maskinportenScope,
   accessPackage,
   role,
   instance,
@@ -122,6 +113,7 @@ const renderModalContent = ({
   onSuccess,
 }: {
   resource?: ServiceResource;
+  maskinportenScope?: ServiceResource;
   accessPackage?: AccessPackage;
   role?: Role;
   instance?: InstanceData;
@@ -129,6 +121,14 @@ const renderModalContent = ({
   availableActions?: DelegationAction[];
   onSuccess?: () => void;
 }) => {
+  if (maskinportenScope) {
+    return (
+      <ScopeInfo
+        resource={maskinportenScope}
+        availableActions={availableActions}
+      />
+    );
+  }
   if (resource && instance) {
     return (
       <InstanceInfo

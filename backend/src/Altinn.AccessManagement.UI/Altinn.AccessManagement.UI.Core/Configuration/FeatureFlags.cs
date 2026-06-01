@@ -22,16 +22,6 @@ namespace Altinn.AccessManagement.UI.Core.Configuration
         public bool DisplayRoles { get; set; }
 
         /// <summary>
-        /// Whether or not to only display the service/resource delegation feature in the UI
-        /// </summary>
-        public bool DisplayResourceDelegation { get; set; }
-
-        /// <summary>
-        /// Whether to show the new AMUI to PRIV users
-        /// </summary>
-        public bool RestrictPrivUse { get; set; }
-
-        /// <summary>
         /// Whether to enable cross platform links
         /// </summary>
         public bool CrossPlatformLinks { get; set; }
@@ -105,7 +95,7 @@ namespace Altinn.AccessManagement.UI.Core.Configuration
         /// Whether to enrich instance delegations with dialogporten lookup data
         /// </summary>
         public bool EnableDialogportenDialogLookup { get; set; }
-        
+
         /// <summary>
         /// Whether to use connections API in backend for agent system users
         /// </summary>
@@ -117,11 +107,22 @@ namespace Altinn.AccessManagement.UI.Core.Configuration
         public bool EnableMaskinportenAdministration { get; set; }
 
         /// <summary>
+        /// Whether to enable deletion of Altinn 2 roles
+        /// </summary>
+        public bool EnableRoleDeletion { get; set; }
+
+        /// <summary>
         /// When true, <c>ReporteeController.ChangeAndRedirect</c> bounces through Altinn 2's
         /// <c>/ui/Reportee/ChangeReporteeAndRedirect</c> after setting Altinn 3 cookies, so that
         /// Altinn 2 can set its own session cookies before forwarding to the final destination.
         /// Intended for the migration period while some downstream pages still depend on Altinn 2 cookies.
         /// </summary>
         public bool RouteChangeReporteeViaAltinn2 { get; set; }
+
+        /// <summary>
+        /// When true, the AM UI hides all links pointing back to Altinn 2 ("the old Altinn").
+        /// Used to roll out the shutdown of Altinn 2 per environment.
+        /// </summary>
+        public bool HideA2Links { get; set; }
     }
 }

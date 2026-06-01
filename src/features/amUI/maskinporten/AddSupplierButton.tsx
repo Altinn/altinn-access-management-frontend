@@ -14,17 +14,17 @@ import { usePartyRepresentation } from '../common/PartyRepresentationContext/Par
 import { NewOrgContent } from '../users/NewUserModal/NewOrgContent';
 import classes from '../users/NewUserModal/NewUserModal.module.css';
 
-interface MaskinportenAddSupplierButtonProps {
+interface AddSupplierButtonProps {
   party: string;
   isLarge?: boolean;
   onComplete: (user: User) => void;
 }
 
-export const MaskinportenAddSupplierButton = ({
+export const AddSupplierButton = ({
   party,
   isLarge = false,
   onComplete,
-}: MaskinportenAddSupplierButtonProps) => {
+}: AddSupplierButtonProps) => {
   const { t } = useTranslation();
   const { actingParty } = usePartyRepresentation();
   const modalRef = useRef<HTMLDialogElement>(null);
@@ -56,7 +56,7 @@ export const MaskinportenAddSupplierButton = ({
         onClick={() => modalRef.current?.showModal()}
         className={isLarge ? classes.largeButton : undefined}
       >
-        <PlusIcon aria-label={t('common.add')} />
+        <PlusIcon aria-hidden='true' />
         {t('maskinporten_page.add_supplier_button')}
       </DsButton>
       <DsDialog

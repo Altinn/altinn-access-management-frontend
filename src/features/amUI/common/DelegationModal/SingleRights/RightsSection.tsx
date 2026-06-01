@@ -114,6 +114,7 @@ export const RightsSection = ({
           onClick={() => setRightsExpanded(!rightsExpanded)}
           expanded={rightsExpanded}
           as='button'
+          containerAs='div'
           border='solid'
           shadow='none'
         >

@@ -7,7 +7,7 @@ interface MaskinportenDeleteDialogProps {
   body: string;
   confirmLabel: string;
   onConfirm: () => void;
-  onClose: () => void;
+  onClose?: () => void;
   isLoading: boolean;
 }
 

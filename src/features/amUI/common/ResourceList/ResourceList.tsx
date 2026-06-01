@@ -47,6 +47,9 @@ export interface ResourceListProps<
   enableMaxHeight?: boolean;
   renderControls?: (resource: TResource) => React.ReactNode;
   getBadge?: (resource: TResource, index: number) => ResourceListItemProps['badge'];
+  // TODO: this currently overrides the underlying list item's `ownerName` slot,
+  // which is misleading given the prop name. This will be addressedin `@altinn/altinn-components` in a future PR.
+  getDescriptionText?: (resource: TResource, index: number) => string | undefined;
   getHasAccess?: (resource: TResource) => boolean;
   delegationModal?: React.ReactNode;
   border?: ResourceListItemProps['border'];
@@ -70,6 +73,7 @@ export const ResourceList = <
   enableMaxHeight = false,
   renderControls,
   getBadge,
+  getDescriptionText,
   getHasAccess,
   delegationModal,
   border = 'none',
@@ -175,12 +179,13 @@ export const ResourceList = <
                   const derivedId = extractResourceId(resource);
                   const resourceId = derivedId ? String(derivedId) : `resource-${index}`;
                   const resourceName = extractResourceName(resource);
-                  const ownerName = extractOwnerName(resource);
+                  const defaultOwnerName = extractOwnerName(resource);
+                  const ownerName = getDescriptionText?.(resource, index) ?? defaultOwnerName;
                   const orgCode = extractOrgCode(resource);
                   const providerLogo = resolveLogos && orgCode ? logoResolver(orgCode) : undefined;
                   const fallbackLogoUrl = extractLogoUrl(resource);
                   const ownerLogoUrl = providerLogo ?? fallbackLogoUrl;
-                  const ownerLogoAlt = extractLogoAlt(resource) ?? ownerName;
+                  const ownerLogoAlt = extractLogoAlt(resource) ?? defaultOwnerName;
                   const itemInteractive = derivedInteractive(resource);
                   const itemAs = as ?? (itemInteractive ? 'button' : 'div');
                   const itemSize = size ?? 'xs';

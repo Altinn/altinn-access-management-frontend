@@ -16,4 +16,5 @@ export enum amUIPath {
   Altinn2Account = 'altinn2account',
   Maskinporten = 'maskinporten',
   MaskinportenSupplier = 'maskinporten/supplier/:id',
+  MaskinportenConsumer = 'maskinporten/consumer/:id',
 }

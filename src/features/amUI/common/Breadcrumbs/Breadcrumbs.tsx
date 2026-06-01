@@ -42,7 +42,7 @@ const BreadcrumbConfig = {
   },
   consent_log: {
     href: `/${ConsentPath.Consent}/${ConsentPath.Log}`,
-    label: 'consent_log.heading',
+    label: 'consent_log.breadcrumb',
   },
   settings: {
     href: `/${amUIPath.Settings}`,
@@ -55,6 +55,14 @@ const BreadcrumbConfig = {
   maskinporten: {
     href: `/${amUIPath.Maskinporten}`,
     label: 'sidebar.maskinporten',
+  },
+  maskinporten_suppliers: {
+    href: `/${amUIPath.Maskinporten}?tab=suppliers`,
+    label: 'maskinporten_page.breadcrumb_suppliers',
+  },
+  maskinporten_consumers: {
+    href: `/${amUIPath.Maskinporten}?tab=consumers`,
+    label: 'maskinporten_page.breadcrumb_consumers',
   },
 };
 

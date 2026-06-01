@@ -131,10 +131,11 @@ export const AreaItemContent = ({
         >
           {t('access_packages.other_available')} {`(${packages.available.length})`}{' '}
           {showAvailablePackages ? (
-            <ChevronUpIcon aria-label={t('common.close')} />
+            <ChevronUpIcon aria-hidden='true' />
           ) : (
-            <ChevronDownIcon aria-label={t('common.open')} />
+            <ChevronDownIcon aria-hidden='true' />
           )}
+          {/* TODO: add aria-expanded to available packages button */}
         </DsButton>
       )}
 

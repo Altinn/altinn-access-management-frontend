@@ -213,7 +213,8 @@ const ListControls = ({
           })}
           onClick={() => onRemoveCustomer(delegation, customer.name)}
         >
-          <MinusCircleIcon /> {!isSmall && t('systemuser_agent_delegation.remove_from_system_user')}
+          <MinusCircleIcon aria-hidden='true' />{' '}
+          {!isSmall && t('systemuser_agent_delegation.remove_from_system_user')}
         </DsButton>
       )}
       {!isLoading && !delegation && onAddCustomer && (
@@ -225,7 +226,8 @@ const ListControls = ({
           })}
           onClick={() => onAddCustomer(customer)}
         >
-          <PlusCircleIcon /> {!isSmall && t('systemuser_agent_delegation.add_to_system_user')}
+          <PlusCircleIcon aria-hidden='true' />{' '}
+          {!isSmall && t('systemuser_agent_delegation.add_to_system_user')}
         </DsButton>
       )}
       {customer.isSelfOrg && (

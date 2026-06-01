@@ -5,9 +5,10 @@ interface RoleLIstItemProps {
   role: Role;
   onClick: () => void;
   loading?: boolean;
+  deleteButton?: React.ReactNode;
 }
 
-export const RoleListItem = ({ role, onClick, loading }: RoleLIstItemProps) => {
+export const RoleListItem = ({ role, onClick, loading, deleteButton }: RoleLIstItemProps) => {
   return (
     <ListItem
       id={role.id}
@@ -16,6 +17,7 @@ export const RoleListItem = ({ role, onClick, loading }: RoleLIstItemProps) => {
       title={{ as: 'h3', children: role.name }}
       size='sm'
       loading={loading}
+      controls={deleteButton ? deleteButton : undefined}
     />
   );
 };

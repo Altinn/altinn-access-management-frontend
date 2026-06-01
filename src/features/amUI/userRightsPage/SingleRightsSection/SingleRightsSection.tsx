@@ -1,7 +1,7 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
-import { Link, useParams } from 'react-router';
-import { DsHeading, DsLink, DsParagraph, DsPopover } from '@altinn/altinn-components';
+import { useParams } from 'react-router';
+import { DsHeading, DsPopover } from '@altinn/altinn-components';
 
 import type { ServiceResource } from '@/rtk/features/singleRights/singleRightsApi';
 import { useGetSingleRightsForRightholderQuery } from '@/rtk/features/singleRights/singleRightsApi';
@@ -13,7 +13,6 @@ import { DelegationAction, EditModal } from '../../common/DelegationModal/EditMo
 
 import classes from './SingleRightsSection.module.css';
 import { DeleteResourceButton } from './DeleteResourceButton';
-import { getRedirectToA2UsersListSectionUrl } from '@/resources/utils';
 import { useCanGiveAccess } from '@/resources/hooks/useCanGiveAccess';
 import { useIsTabletOrSmaller } from '@/resources/utils/screensizeUtils';
 import { SingleRightsSectionSkeleton } from './SingleRightsSectionSkeleton';
@@ -25,7 +24,6 @@ export const SingleRightsSection = ({ isReportee = false }: { isReportee?: boole
   const { id } = useParams();
   const { t } = useTranslation();
   const isSmallScreen = useIsTabletOrSmaller();
-  const { displayResourceDelegation } = window.featureFlags;
   const { toParty, fromParty, actingParty, isLoading: isPartyLoading } = usePartyRepresentation();
 
   const canGiveAccess = useCanGiveAccess(id ?? '', isReportee);
@@ -46,7 +44,7 @@ export const SingleRightsSection = ({ isReportee = false }: { isReportee?: boole
       to: toParty?.partyUuid || '',
     },
     {
-      skip: !displayResourceDelegation || !actingParty || !fromParty || !toParty,
+      skip: !actingParty || !fromParty || !toParty,
     },
   );
 
@@ -71,29 +69,6 @@ export const SingleRightsSection = ({ isReportee = false }: { isReportee?: boole
     });
     return inheritanceStatus.length > 0;
   };
-
-  const sectionId = fromParty?.partyUuid === actingParty?.partyUuid ? 9 : 8; // Section for "Users (A2)" in Profile is 9, for "Accesses for others (A2)" it is 8
-  const A2url = getRedirectToA2UsersListSectionUrl(sectionId);
-
-  if (!displayResourceDelegation) {
-    return (
-      <div className={classes.singleRightsSectionContainer}>
-        <DsHeading
-          level={2}
-          data-size='xs'
-          id='single_rights_title'
-        >
-          {t('single_rights.wip_title')}
-        </DsHeading>
-        <div className={classes.wipMessage}>
-          <DsParagraph>{t('single_rights.wip_message')}</DsParagraph>
-          <DsLink asChild>
-            <Link to={A2url}>{t('single_rights.wip_link_text')}</Link>
-          </DsLink>
-        </div>
-      </div>
-    );
-  }
 
   if (isLoading || isPartyLoading) {
     return <SingleRightsSectionSkeleton />;
@@ -122,7 +97,7 @@ export const SingleRightsSection = ({ isReportee = false }: { isReportee?: boole
               variant='tertiary'
               aria-label={t('single_rights.helptext_button')}
             >
-              <QuestionmarkCircleIcon />
+              <QuestionmarkCircleIcon aria-hidden='true' />
             </DsPopover.Trigger>
             <DsPopover>{t('single_rights.helptext_content')}</DsPopover>
           </DsPopover.TriggerContext>

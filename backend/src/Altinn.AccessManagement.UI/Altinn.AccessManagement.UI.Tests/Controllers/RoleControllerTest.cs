@@ -214,6 +214,45 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
             roleClientMock.Verify(rc => rc.GetAllRoles(It.IsAny<string>()), Times.Once);
         }
 
+        [Fact]
+        public async Task DeleteRole_ReturnsNoContent()
+        {
+            Guid party = new("cd35779b-b174-4ecc-bbef-ece13611be7f");
+            Guid from = new("cd35779b-b174-4ecc-bbef-ece13611be7f");
+            Guid to = new("167536b5-f8ed-4c5a-8f48-0279507e53ae");
+
+            HttpResponseMessage response = await _client.DeleteAsync($"accessmanagement/api/v1/role/roles?party={party}&from={from}&to={to}&rolecode=daglig-leder");
+
+            Assert.Equal(HttpStatusCode.NoContent, response.StatusCode);
+        }
+
+        [Fact]
+        public async Task DeleteRole_WhenRoleCodeMissing_ReturnsBadRequest()
+        {
+            Guid party = new("cd35779b-b174-4ecc-bbef-ece13611be7f");
+            Guid from = new("cd35779b-b174-4ecc-bbef-ece13611be7f");
+            Guid to = new("167536b5-f8ed-4c5a-8f48-0279507e53ae");
+
+            HttpResponseMessage response = await _client.DeleteAsync($"accessmanagement/api/v1/role/roles?party={party}&from={from}&to={to}");
+
+            Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
+
+            string message = await response.Content.ReadAsStringAsync();
+            Assert.Contains("rolecode query parameter must be provided", message, StringComparison.OrdinalIgnoreCase);
+        }
+
+        [Fact]
+        public async Task DeleteRole_WhenClientReturnsError_ProvidesStatusFromException()
+        {
+            Guid party = new("cd35779b-b174-4ecc-bbef-ece13611be7f");
+            Guid from = new("00000000-0000-0000-0000-000000000404");
+            Guid to = new("167536b5-f8ed-4c5a-8f48-0279507e53ae");
+
+            HttpResponseMessage response = await _client.DeleteAsync($"accessmanagement/api/v1/role/roles?party={party}&from={from}&to={to}&rolecode=daglig-leder");
+
+            Assert.Equal(HttpStatusCode.NotFound, response.StatusCode);
+        }
+
         private static string ShortenIdentifier(Guid id) => id.ToString("N")[..8];
     }
 }

@@ -51,7 +51,7 @@ export const InstanceDetailPage = () => {
         className={classes.inboxButton}
       >
         <a href={getInboxUrl(dialogId)}>
-          <EnvelopeClosedIcon />
+          <EnvelopeClosedIcon aria-hidden='true' />
           {t('instance_detail_page.back_to_inbox')}
         </a>
       </DsButton>

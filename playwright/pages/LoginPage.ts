@@ -5,6 +5,7 @@ import { env } from 'playwright/util/helper';
 export class LoginPage {
   readonly page: Page;
   readonly searchBox: Locator;
+  readonly reporteeSearchBox: Locator;
   readonly pidInput: Locator;
   readonly testIdLink: Locator;
   readonly loginButton: Locator;
@@ -18,7 +19,10 @@ export class LoginPage {
   constructor(page: Page) {
     this.page = page;
     this.searchBox = this.page.getByRole('searchbox', { name: 'Søk etter aktør' });
-    this.pidInput = this.page.locator("input[name='pid']");
+    // Post-login "Velg aktør" page has a different (unnamed) searchbox — there is
+    // only one searchbox role on that page, so a name is not needed to disambiguate.
+    this.reporteeSearchBox = this.page.getByRole('searchbox');
+    this.pidInput = this.page.getByRole('textbox', { name: 'Personidentifikator' });
     this.testIdLink = this.page.getByRole('link', { name: 'TestID Lag din egen' });
     this.loginButton = this.page.getByRole('button', { name: 'Logg inn', exact: true });
     this.profileLink = this.page.getByRole('link', { name: 'profil' });
@@ -44,33 +48,17 @@ export class LoginPage {
     await this.autentiserButton.click();
   }
 
-  async loginAcActorOrg(pid: string, orgnummer: string) {
-    const baseUrl = env('BASE_URL');
-    await this.page.goto(baseUrl, { waitUntil: 'commit' });
-    await this.loginButton.click();
-    await this.testIdLink.click();
-    await this.pidInput.fill(pid);
-    await this.autentiserButton.click();
+  async selectMainUnitBySearching(targetReportee: string) {
+    await expect(this.reporteeSearchBox).toBeVisible();
+    await this.reporteeSearchBox.fill(targetReportee);
 
-    await expect(this.velgAktoerHeading).toBeVisible();
-    await this.selectActor(this.searchBox, orgnummer);
-  }
-
-  async chooseReportee(currentReportee: string, targetReportee: string = '') {
-    let selectReporteeButton = this.page.getByRole('button', { name: currentReportee });
-
-    // Search for target reportee in the searchbox
-    const searchBox = this.page.getByRole('searchbox', { name: 'Søk i aktører' });
-    await searchBox.fill(targetReportee);
-
-    const markedResult = this.page
-      .locator('mark')
-      .filter({ hasText: new RegExp(targetReportee, 'i') });
-    await markedResult.first().click();
+    const dialog = this.page.getByRole('dialog');
+    await dialog.getByRole('menuitem', { name: targetReportee }).first().click();
+    await expect(dialog).not.toBeVisible();
   }
 
   private async navigateToLoginPage() {
-    await this.page.goto(env('BASE_URL'), { waitUntil: 'commit' });
+    await this.page.goto(env('BASE_URL'));
     await expect(this.testIdLink).toBeVisible();
     await this.testIdLink.click();
   }
@@ -78,30 +66,6 @@ export class LoginPage {
   private async authenticateUser(pid: string) {
     await this.pidInput.fill(pid);
     await this.autentiserButton.click();
-  }
-
-  async selectActor(input: Locator, orgnummer: string) {
-    const page = input.page();
-    const aktorPartial = `${orgnummer.slice(0, 3)} ${orgnummer.slice(3, 6)}`;
-    const button = page.getByRole('button', { name: new RegExp(`Org\\.nr\\. ${aktorPartial}`) });
-
-    try {
-      await this.tryTypingInSearchbox(input, orgnummer);
-      await expect(button).toBeVisible({ timeout: 2000 }); // No need to wait long to figure out if this failed
-    } catch (error: unknown) {
-      console.log(`Retrying input after reload due to: ${error}`);
-      await this.tryTypingInSearchbox(input, orgnummer);
-    }
-
-    await button.click();
-  }
-
-  async tryTypingInSearchbox(input: Locator, party: string) {
-    await expect(input).toBeVisible();
-    await expect(input).toBeEnabled();
-    await input.click();
-    await input.clear();
-    await input.pressSequentially(party);
   }
 }
 
@@ -111,8 +75,13 @@ export class logoutWithUser {
   async gotoLogoutPage(logoutReportee: string) {
     await this.page.goto(`${env('BASE_URL')}/ui/profile`);
 
-    if (await this.page.getByText('Oida, denne siden kjenner vi ikke til...').isVisible()) {
+    try {
+      await expect(this.page.getByText('Oida, denne siden kjenner vi ikke til...')).toBeVisible({
+        timeout: 1000,
+      });
       await this.page.getByRole('link', { name: 'profil' }).click();
+    } catch {
+      // Profile page loaded directly, no fallback navigation needed
     }
 
     await this.page.getByRole('button', { name: logoutReportee }).click();

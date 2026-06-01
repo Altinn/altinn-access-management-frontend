@@ -1,5 +1,5 @@
 import { Trans, useTranslation } from 'react-i18next';
-import { DsHeading, formatDisplayName } from '@altinn/altinn-components';
+import { DsHeading, DsParagraph, formatDisplayName } from '@altinn/altinn-components';
 
 import type { AccessPackage } from '@/rtk/features/accessPackageApi';
 import type { Party } from '@/rtk/features/lookupApi';
@@ -11,6 +11,7 @@ import { DelegationAction } from '../EditModal';
 import classes from './PackageSearch.module.css';
 import { PartyType } from '@/rtk/features/userInfoApi';
 import { DebouncedSearchField } from '../../DebouncedSearchField/DebouncedSearchField';
+import { AccessPackageInfoPopover } from '../../AccessPackageInfoPopover/AccessPackageInfoPopover';
 
 export interface PackageSearchProps {
   onSelection: (pack: AccessPackage) => void;
@@ -30,7 +31,7 @@ export const PackageSearch = ({
 
   return (
     toParty && (
-      <>
+      <div className={classes.container}>
         <DsHeading
           level={2}
           data-size='sm'
@@ -50,6 +51,10 @@ export const PackageSearch = ({
             components={{ strong: <strong /> }}
           />
         </DsHeading>
+        <div className={classes.description}>
+          <DsParagraph>{t('delegation_modal.package_delegation_description')}</DsParagraph>
+          <AccessPackageInfoPopover />
+        </div>
         <search>
           <div className={classes.searchInputs}>
             <DebouncedSearchField
@@ -77,7 +82,7 @@ export const PackageSearch = ({
             />
           </div>
         </search>
-      </>
+      </div>
     )
   );
 };

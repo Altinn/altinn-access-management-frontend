@@ -1,282 +1,367 @@
-import { env } from 'playwright/util/helper';
-import { LoginPage } from 'playwright/pages/LoginPage';
 import { expect, test } from '../../../fixture/pomFixture';
-import { AktorvalgHeader } from '../../../pages/AktorvalgHeader';
 import { EnduserConnection } from '../../../api-requests/EnduserConnection';
+
+const posttjenester = 'urn:altinn:accesspackage:posttjenester';
 
 test.describe('klientadministrasjon', () => {
   const api = new EnduserConnection();
 
-  test.beforeEach('sett opp testdata', async ({}, testInfo) => {
-    switch (testInfo.title) {
-      case 'slett bruker':
-        await api.addClientDelegationAgent('16830197862', '311164651', '30877795760');
-        break;
-      case 'deleger klient til en bruker fra klientfanen':
-        await api.addConnectionAndPackagesToUser('28868199808', '314087917', '310002224', [
-          'urn:altinn:accesspackage:posttjenester',
-        ]);
-        await api.addClientDelegationAgent('15846199893', '310002224', '28822449737');
-        break;
-      case 'deleger klient til en bruker fra brukerfanen':
-        await api.addConnectionAndPackagesToUser('23907296857', '313238105', '313662624', [
-          'urn:altinn:accesspackage:posttjenester',
-        ]);
-        await api.addClientDelegationAgent('16852749125', '313662624', '47822800420');
-        break;
-      case 'Slett fullmakt for en bruker fra brukerfanen':
-        await api.addConnectionAndPackagesToUser('12886999389', '313428435', '312772655', [
-          'urn:altinn:accesspackage:posttjenester',
-        ]);
-        await api.addClientDelegationAgent('08873349590', '312772655', '04905999376');
-        await api.delegerKlientTilBruker(
-          '08873349590',
-          '312772655',
-          '313428435',
-          '04905999376',
-          'urn:altinn:accesspackage:posttjenester',
-        );
-        break;
-      case 'Slett fullmakt for en bruker fra klientfanen':
-        await api.addConnectionAndPackagesToUser('19876699047', '213836722', '310781940', [
-          'urn:altinn:accesspackage:posttjenester',
-        ]);
-        await api.addClientDelegationAgent('21895699168', '310781940', '03924296991');
-        await api.delegerKlientTilBruker(
-          '21895699168',
-          '310781940',
-          '213836722',
-          '03924296991',
-          'urn:altinn:accesspackage:posttjenester',
-        );
-        break;
-    }
-  });
+  test.describe('legg til bruker', () => {
+    const actor = { pid: '09866598352', org: '213779702', orgName: 'UVANLIG FILOSOFISK TIGER AS' };
+    const agent = { pid: '29814895546', name: 'MUNTER SKO', lastName: 'Sko' };
 
-  test.afterEach('slett testdata', async ({}, testInfo) => {
-    switch (testInfo.title) {
-      case 'legg til bruker':
-        await api.deleteClientDelegationAgent('09866598352', '213779702', '29814895546');
-        break;
-      case 'slett bruker':
-        await api.deleteClientDelegationAgent('16830197862', '311164651', '30877795760');
-        break;
-      case 'deleger klient til en bruker fra klientfanen':
-        await api.deleteConnection('28868199808', '314087917', ['310002224']);
-        await api.deleteClientDelegationAgent('15846199893', '310002224', '28822449737');
-        break;
-      case 'deleger klient til en bruker fra brukerfanen':
-        await api.deleteConnection('23907296857', '313238105', ['313662624']);
-        await api.deleteClientDelegationAgent('16852749125', '313662624', '47822800420');
-        break;
-      case 'Slett fullmakt for en bruker fra brukerfanen':
-        await api.deleteConnection('12886999389', '313428435', ['312772655']);
-        await api.deleteClientDelegationAgent('08873349590', '312772655', '04905999376');
-        break;
-      case 'Slett fullmakt for en bruker fra klientfanen':
-        await api.deleteConnection('19876699047', '213836722', ['310781940']);
-        await api.deleteClientDelegationAgent('21895699168', '310781940', '03924296991');
-        break;
-    }
-  });
+    test('legg til bruker', async ({
+      accessManagementFrontPage,
+      klientAdministrasjonPage,
+      login,
+      aktorvalgHeader,
+    }) => {
+      await test.step(`Logg inn som ${actor.orgName} og åpne klientadministrasjon`, async () => {
+        await login.LoginToAccessManagement(actor.pid);
+        await aktorvalgHeader.selectActorFromHeaderMenu(actor.orgName);
+        await accessManagementFrontPage.goToKlientAdministrasjon();
+      });
 
-  test('legg til bruker', async ({
-    page,
-    accessManagementFrontPage,
-    klientAdministrasjonPage,
-    login,
-    aktorvalgHeader,
-  }) => {
-    await test.step('Logg inn', async () => {
-      await page.goto(env('BASE_URL'));
-      await login.LoginToAccessManagement('09866598352');
+      await test.step(`legg til bruker ${agent.pid} ${agent.name}`, async () => {
+        await klientAdministrasjonPage.clickLeggTilBrukerKnapp();
+        await klientAdministrasjonPage.skrivFnr(agent.pid);
+        await klientAdministrasjonPage.skrivEtternavn(agent.lastName);
+        await klientAdministrasjonPage.klikkLeggTilPerson();
+      });
+
+      await test.step(`${agent.name} har nå blitt lagt til`, async () => {
+        await expect(klientAdministrasjonPage.slettBrukerKnapp).toBeVisible();
+        await expect(klientAdministrasjonPage.brukerKnapp(agent.name)).toBeVisible();
+      });
     });
 
-    await test.step('Velg org UVANLIG FILOSOFISK TIGER AS og gå til klientadministrasjon', async () => {
-      await aktorvalgHeader.selectActorFromHeaderMenu('UVANLIG FILOSOFISK TIGER AS');
-      await accessManagementFrontPage.goToKlientAdministrasjon();
-    });
-
-    await test.step('legg til bruker 29814895546 MUNTER SKO', async () => {
-      await klientAdministrasjonPage.clickLeggTilBrukerKnapp();
-      await klientAdministrasjonPage.skrivFnr('29814895546');
-      await klientAdministrasjonPage.skrivEtternavn('Sko');
-      await klientAdministrasjonPage.klikkLeggTilPerson();
-    });
-
-    await test.step('MUNTER SKO har nå blitt lagt til', async () => {
-      await expect(klientAdministrasjonPage.slettBrukerKnapp).toBeVisible();
-      await expect(klientAdministrasjonPage.brukerKnapp('MUNTER SKO')).toBeVisible();
+    test.afterEach(async () => {
+      try {
+        await api.deleteClientDelegationAgent(actor.pid, actor.org, agent.pid);
+      } catch (error) {
+        console.error('Cleanup: Failed to delete client delegation agent:', error);
+      }
     });
   });
 
-  test('slett bruker', async ({
-    page,
-    accessManagementFrontPage,
-    klientAdministrasjonPage,
-    login,
-    aktorvalgHeader,
-  }) => {
-    await test.step('Logg inn', async () => {
-      await page.goto(env('BASE_URL'));
-      await login.LoginToAccessManagement('16830197862');
+  test.describe('slett bruker', () => {
+    const actor = { pid: '16830197862', org: '311164651', orgName: 'KLARTENKT UPRESIS ISBJØRN SA' };
+    const agent = { pid: '30877795760', name: 'TROVERDIG JUICE' };
+
+    test.beforeEach(async () => {
+      try {
+        await api.deleteClientDelegationAgent(actor.pid, actor.org, agent.pid);
+      } catch {
+        /* ignore if nothing to clean */
+      }
+      await api.addClientDelegationAgent(actor.pid, actor.org, agent.pid);
     });
 
-    await test.step('Velg org KLARTENKT UPRESIS ISBJØRN SA og gå til klientadministrasjon', async () => {
-      await aktorvalgHeader.selectActorFromHeaderMenu('KLARTENKT UPRESIS ISBJØRN SA');
-      await accessManagementFrontPage.goToKlientAdministrasjon();
+    test('slett bruker', async ({
+      accessManagementFrontPage,
+      klientAdministrasjonPage,
+      login,
+      aktorvalgHeader,
+    }) => {
+      await test.step(`Logg inn som ${actor.orgName} og åpne klientadministrasjon`, async () => {
+        await login.LoginToAccessManagement(actor.pid);
+        await aktorvalgHeader.selectActorFromHeaderMenu(actor.orgName);
+        await accessManagementFrontPage.goToKlientAdministrasjon();
+      });
+
+      await test.step(`Gå til ${agent.pid} ${agent.name}`, async () => {
+        await klientAdministrasjonPage.klikkListeElement(agent.name);
+      });
+
+      await test.step(`slett ${agent.name}`, async () => {
+        await klientAdministrasjonPage.slettBruker();
+      });
+
+      await test.step(`${agent.name} er nå slettet`, async () => {
+        await expect(klientAdministrasjonPage.ingenBrukereTekst).toBeVisible();
+      });
     });
 
-    await test.step('Gå til 30877795760 TROVERDIG JUICE', async () => {
-      await klientAdministrasjonPage.klikkListeElement('TROVERDIG JUICE');
-    });
+    test.afterEach(async ({}, testInfo) => {
+      if (testInfo.status === 'passed') return;
 
-    await test.step('slett TROVERDIG JUICE', async () => {
-      await klientAdministrasjonPage.slettBruker();
-    });
-
-    await test.step('TROVERDIG JUICE er nå slettet', async () => {
-      await expect(klientAdministrasjonPage.ingenBrukereTekst).toBeVisible();
-    });
-  });
-
-  test('deleger klient til en bruker fra klientfanen', async ({
-    page,
-    accessManagementFrontPage,
-    klientAdministrasjonPage,
-    login,
-    aktorvalgHeader,
-  }) => {
-    await test.step('Logg inn', async () => {
-      await page.goto(env('BASE_URL'));
-      await login.LoginToAccessManagement('15846199893');
-    });
-
-    await test.step('Velg org TRÅDLØS FORNUFTIG KATT LYTE og gå til klientadministrasjon', async () => {
-      await aktorvalgHeader.selectActorFromHeaderMenu('TRÅDLØS FORNUFTIG KATT LYTE');
-      await accessManagementFrontPage.goToKlientAdministrasjon();
-    });
-
-    await test.step('Gå til klientfanen og velg PARISK AKADEMISK KATT SITRON', async () => {
-      await klientAdministrasjonPage.goToKlientFane();
-      await klientAdministrasjonPage.klikkListeElement('PARISK AKADEMISK KATT SITRON');
-    });
-
-    await test.step('Gi SINDIG BRUD fullmakt til Posttjenester', async () => {
-      await klientAdministrasjonPage.klikkAlleBrukere();
-      await klientAdministrasjonPage.klikkKnapp('SINDIG BRUD');
-      await klientAdministrasjonPage.klikkGiFullmakt('Posttjenester');
-    });
-
-    await test.step('SINDIG BRUD finnes nå i listen over eksisterende brukere', async () => {
-      await klientAdministrasjonPage.klikkBrukereMedFullmakt();
-      await expect(klientAdministrasjonPage.brukerKnapp('SINDIG BRUD')).toBeVisible();
-    });
-
-    await test.step('og har tilgangspakken Posttjenester', async () => {
-      await klientAdministrasjonPage.klikkKnapp('SINDIG BRUD');
-      await expect(klientAdministrasjonPage.slettFullmaktKnapp('Posttjenester')).toBeVisible();
+      try {
+        await api.deleteClientDelegationAgent(actor.pid, actor.org, agent.pid);
+      } catch (error) {
+        console.error('Cleanup: Failed to delete client delegation agent:', error);
+      }
     });
   });
 
-  test('deleger klient til en bruker fra brukerfanen', async ({
-    page,
-    accessManagementFrontPage,
-    klientAdministrasjonPage,
-    login,
-    aktorvalgHeader,
-  }) => {
-    await test.step('Logg inn', async () => {
-      await page.goto(env('BASE_URL'));
-      await login.LoginToAccessManagement('16852749125');
+  test.describe('deleger klient til en bruker fra klientfanen', () => {
+    const actor = { pid: '15846199893', org: '310002224', orgName: 'TRÅDLØS FORNUFTIG KATT LYTE' };
+    const client = {
+      connectionPid: '28868199808',
+      org: '314087917',
+      orgName: 'PARISK AKADEMISK KATT SITRON',
+    };
+    const agent = { pid: '28822449737', name: 'SINDIG BRUD' };
+
+    test.beforeEach(async () => {
+      try {
+        await api.deleteConnection(client.connectionPid, client.org, [actor.org]);
+      } catch {
+        /* ignore if nothing to clean */
+      }
+      try {
+        await api.deleteClientDelegationAgent(actor.pid, actor.org, agent.pid);
+      } catch {
+        /* ignore if nothing to clean */
+      }
+
+      await api.addConnectionAndPackagesToUser(client.connectionPid, client.org, actor.org, [
+        posttjenester,
+      ]);
+      await api.addClientDelegationAgent(actor.pid, actor.org, agent.pid);
     });
 
-    await test.step('Velg org INTERESSERT KONVENSJONELL TIGER AS og gå til klientadministrasjon', async () => {
-      await aktorvalgHeader.selectActorFromHeaderMenu('INTERESSERT KONVENSJONELL TIGER AS');
-      await accessManagementFrontPage.goToKlientAdministrasjon();
+    test('deleger klient til en bruker fra klientfanen', async ({
+      accessManagementFrontPage,
+      klientAdministrasjonPage,
+      login,
+      aktorvalgHeader,
+    }) => {
+      await test.step(`Logg inn som ${actor.orgName} og åpne klientadministrasjon`, async () => {
+        await login.LoginToAccessManagement(actor.pid);
+        await aktorvalgHeader.selectActorFromHeaderMenu(actor.orgName);
+        await accessManagementFrontPage.goToKlientAdministrasjon();
+      });
+
+      await test.step(`Gå til klientfanen og velg ${client.orgName}`, async () => {
+        await klientAdministrasjonPage.goToKlientFane();
+        await klientAdministrasjonPage.klikkListeElement(client.orgName);
+      });
+
+      await test.step(`Gi ${agent.name} fullmakt til Posttjenester`, async () => {
+        await klientAdministrasjonPage.klikkAlleBrukere();
+        await klientAdministrasjonPage.klikkKnapp(agent.name);
+        await klientAdministrasjonPage.klikkGiFullmakt('Posttjenester');
+      });
+
+      await test.step(`${agent.name} finnes nå i listen over eksisterende brukere`, async () => {
+        await klientAdministrasjonPage.klikkBrukereMedFullmakt();
+        await expect(klientAdministrasjonPage.brukerKnapp(agent.name)).toBeVisible();
+      });
+
+      await test.step('og har tilgangspakken Posttjenester', async () => {
+        await klientAdministrasjonPage.klikkKnapp(agent.name);
+        await expect(klientAdministrasjonPage.slettFullmaktKnapp('Posttjenester')).toBeVisible();
+      });
     });
 
-    await test.step('velg UVANLIG FREDAG', async () => {
-      await klientAdministrasjonPage.klikkListeElement('UVANLIG FREDAG');
-    });
-
-    await test.step('Gi UVANLIG FREDAG fullmakt til Posttjenester for BESTEMT SLAKK TIGER AS', async () => {
-      await klientAdministrasjonPage.klikkAlleKlienter();
-      await klientAdministrasjonPage.klikkKnapp('BESTEMT SLAKK TIGER AS');
-      await klientAdministrasjonPage.klikkGiFullmakt('Posttjenester');
-    });
-
-    await test.step('UVANLIG FREDAG finnes nå i listen over eksisterende brukere', async () => {
-      await klientAdministrasjonPage.klikkHarDisseKlientene();
-      await expect(klientAdministrasjonPage.brukerKnapp('BESTEMT SLAKK TIGER AS')).toBeVisible();
-    });
-
-    await test.step('og har tilgangspakken Posttjenester', async () => {
-      await klientAdministrasjonPage.klikkKnapp('BESTEMT SLAKK TIGER AS');
-      await expect(klientAdministrasjonPage.slettFullmaktKnapp('Posttjenester')).toBeVisible();
+    test.afterEach(async () => {
+      try {
+        await api.deleteConnection(client.connectionPid, client.org, [actor.org]);
+      } catch (error) {
+        console.error('Cleanup: Failed to delete connection:', error);
+      }
+      try {
+        await api.deleteClientDelegationAgent(actor.pid, actor.org, agent.pid);
+      } catch (error) {
+        console.error('Cleanup: Failed to delete client delegation agent:', error);
+      }
     });
   });
 
-  test('Slett fullmakt for en bruker fra brukerfanen', async ({
-    page,
-    accessManagementFrontPage,
-    klientAdministrasjonPage,
-    login,
-    aktorvalgHeader,
-  }) => {
-    await test.step('Logg inn', async () => {
-      await page.goto(env('BASE_URL'));
-      await login.LoginToAccessManagement('08873349590');
+  test.describe('deleger klient til en bruker fra brukerfanen', () => {
+    const actor = {
+      pid: '16852749125',
+      org: '313662624',
+      orgName: 'INTERESSERT KONVENSJONELL TIGER AS',
+    };
+    const client = {
+      connectionPid: '23907296857',
+      org: '313238105',
+      orgName: 'BESTEMT SLAKK TIGER AS',
+    };
+    const agent = { pid: '47822800420', name: 'UVANLIG FREDAG' };
+
+    test.beforeEach(async () => {
+      try {
+        await api.deleteConnection(client.connectionPid, client.org, [actor.org]);
+      } catch {
+        /* ignore if nothing to clean */
+      }
+      try {
+        await api.deleteClientDelegationAgent(actor.pid, actor.org, agent.pid);
+      } catch {
+        /* ignore if nothing to clean */
+      }
+
+      await api.addConnectionAndPackagesToUser(client.connectionPid, client.org, actor.org, [
+        posttjenester,
+      ]);
+      await api.addClientDelegationAgent(actor.pid, actor.org, agent.pid);
     });
 
-    await test.step('Velg org RØRETE RAKRYGGET TIGER AS og gå til klientadministrasjon', async () => {
-      await aktorvalgHeader.selectActorFromHeaderMenu('RØRETE RAKRYGGET TIGER AS');
-      await accessManagementFrontPage.goToKlientAdministrasjon();
+    test('deleger klient til en bruker fra brukerfanen', async ({
+      accessManagementFrontPage,
+      klientAdministrasjonPage,
+      login,
+      aktorvalgHeader,
+    }) => {
+      await test.step(`Logg inn som ${actor.orgName} og åpne klientadministrasjon`, async () => {
+        await login.LoginToAccessManagement(actor.pid);
+        await aktorvalgHeader.selectActorFromHeaderMenu(actor.orgName);
+        await accessManagementFrontPage.goToKlientAdministrasjon();
+      });
+
+      await test.step(`velg ${agent.name}`, async () => {
+        await klientAdministrasjonPage.klikkListeElement(agent.name);
+      });
+
+      await test.step(`Gi ${agent.name} fullmakt til Posttjenester for ${client.orgName}`, async () => {
+        await klientAdministrasjonPage.klikkAlleKlienter();
+        await klientAdministrasjonPage.klikkKnapp(client.orgName);
+        await klientAdministrasjonPage.klikkGiFullmakt('Posttjenester');
+      });
+
+      await test.step(`${agent.name} finnes nå i listen over eksisterende brukere`, async () => {
+        await klientAdministrasjonPage.klikkHarDisseKlientene();
+        await expect(klientAdministrasjonPage.brukerKnapp(client.orgName)).toBeVisible();
+      });
+
+      await test.step('og har tilgangspakken Posttjenester', async () => {
+        await klientAdministrasjonPage.klikkKnapp(client.orgName);
+        await expect(klientAdministrasjonPage.slettFullmaktKnapp('Posttjenester')).toBeVisible();
+      });
     });
 
-    await test.step('Gå til klienten ROSA UNDERDANIG TIGER AS hos brukeren FORSTÅELSESFULL TRAFIKKORK', async () => {
-      await klientAdministrasjonPage.klikkBruker('FORSTÅELSESFULL TRAFIKKORK');
-      await klientAdministrasjonPage.klikkKnapp('ROSA UNDERDANIG TIGER AS');
-    });
-
-    await test.step('Slett fullmakt for Posttjenester', async () => {
-      await klientAdministrasjonPage.slettFullmakt('Posttjenester');
-    });
-
-    await test.step('FORSTÅELSESFULL TRAFIKKORK har ingen fullmakter lenger', async () => {
-      await expect(klientAdministrasjonPage.ingenKlienterTekst).toBeVisible();
+    test.afterEach(async () => {
+      try {
+        await api.deleteConnection(client.connectionPid, client.org, [actor.org]);
+      } catch (error) {
+        console.error('Cleanup: Failed to delete connection:', error);
+      }
+      try {
+        await api.deleteClientDelegationAgent(actor.pid, actor.org, agent.pid);
+      } catch (error) {
+        console.error('Cleanup: Failed to delete client delegation agent:', error);
+      }
     });
   });
 
-  test('Slett fullmakt for en bruker fra klientfanen', async ({
-    page,
-    accessManagementFrontPage,
-    klientAdministrasjonPage,
-    login,
-    aktorvalgHeader,
-  }) => {
-    await test.step('Logg inn', async () => {
-      await page.goto(env('BASE_URL'));
-      await login.LoginToAccessManagement('21895699168');
+  test.describe('Slett fullmakt for en bruker fra brukerfanen', () => {
+    const actor = { pid: '08873349590', org: '312772655', orgName: 'RØRETE RAKRYGGET TIGER AS' };
+    const client = {
+      connectionPid: '12886999389',
+      org: '313428435',
+      orgName: 'ROSA UNDERDANIG TIGER AS',
+    };
+    const agent = { pid: '04905999376', name: 'FORSTÅELSESFULL TRAFIKKORK' };
+
+    test.beforeEach(async () => {
+      await api.addConnectionAndPackagesToUser(client.connectionPid, client.org, actor.org, [
+        posttjenester,
+      ]);
+      await api.addClientDelegationAgent(actor.pid, actor.org, agent.pid);
+      await api.delegerKlientTilBruker(actor.pid, actor.org, client.org, agent.pid, posttjenester);
     });
 
-    await test.step('Velg org UAVHENGIG REALISTISK TIGER AS og gå til klientadministrasjon', async () => {
-      await aktorvalgHeader.selectActorFromHeaderMenu('UAVHENGIG REALISTISK TIGER AS');
-      await accessManagementFrontPage.goToKlientAdministrasjon();
+    test('Slett fullmakt for en bruker fra brukerfanen', async ({
+      accessManagementFrontPage,
+      klientAdministrasjonPage,
+      login,
+      aktorvalgHeader,
+    }) => {
+      await test.step(`Logg inn som ${actor.orgName} og åpne klientadministrasjon`, async () => {
+        await login.LoginToAccessManagement(actor.pid);
+        await aktorvalgHeader.selectActorFromHeaderMenu(actor.orgName);
+        await accessManagementFrontPage.goToKlientAdministrasjon();
+      });
+
+      await test.step(`Gå til klienten ${client.orgName} hos brukeren ${agent.name}`, async () => {
+        await klientAdministrasjonPage.klikkBruker(agent.name);
+        await klientAdministrasjonPage.klikkKnapp(client.orgName);
+      });
+
+      await test.step('Slett fullmakt for Posttjenester', async () => {
+        await klientAdministrasjonPage.slettFullmakt('Posttjenester');
+      });
+
+      await test.step(`${agent.name} har ingen fullmakter lenger`, async () => {
+        await expect(klientAdministrasjonPage.ingenKlienterTekst).toBeVisible();
+      });
     });
 
-    await test.step('Gå til brukeren ORANSJE TEST hos klienten VENSTRE GENIERKLÆRT KATT SEPARASJON', async () => {
-      await klientAdministrasjonPage.goToKlientFane();
-      await klientAdministrasjonPage.klikkListeElement('VENSTRE GENIERKLÆRT KATT SEPARASJON');
-      await klientAdministrasjonPage.klikkKnapp('ORANSJE TEST');
+    test.afterEach(async () => {
+      try {
+        await api.deleteConnection(client.connectionPid, client.org, [actor.org]);
+      } catch (error) {
+        console.error('Cleanup: Failed to delete connection:', error);
+      }
+      try {
+        await api.deleteClientDelegationAgent(actor.pid, actor.org, agent.pid);
+      } catch (error) {
+        console.error('Cleanup: Failed to delete client delegation agent:', error);
+      }
+    });
+  });
+
+  test.describe('Slett fullmakt for en bruker fra klientfanen', () => {
+    const actor = {
+      pid: '21895699168',
+      org: '310781940',
+      orgName: 'UAVHENGIG REALISTISK TIGER AS',
+    };
+    const client = {
+      connectionPid: '19876699047',
+      org: '213836722',
+      orgName: 'VENSTRE GENIERKLÆRT KATT SEPARASJON',
+    };
+    const agent = { pid: '03924296991', name: 'ORANSJE TEST' };
+
+    test.beforeEach(async () => {
+      await api.addConnectionAndPackagesToUser(client.connectionPid, client.org, actor.org, [
+        posttjenester,
+      ]);
+      await api.addClientDelegationAgent(actor.pid, actor.org, agent.pid);
+      await api.delegerKlientTilBruker(actor.pid, actor.org, client.org, agent.pid, posttjenester);
     });
 
-    await test.step('Slett fullmakt for Posttjenester', async () => {
-      await klientAdministrasjonPage.slettFullmakt('Posttjenester');
+    test('Slett fullmakt for en bruker fra klientfanen', async ({
+      accessManagementFrontPage,
+      klientAdministrasjonPage,
+      login,
+      aktorvalgHeader,
+    }) => {
+      await test.step(`Logg inn som ${actor.orgName} og åpne klientadministrasjon`, async () => {
+        await login.LoginToAccessManagement(actor.pid);
+        await aktorvalgHeader.selectActorFromHeaderMenu(actor.orgName);
+        await accessManagementFrontPage.goToKlientAdministrasjon();
+      });
+
+      await test.step(`Gå til brukeren ${agent.name} hos klienten ${client.orgName}`, async () => {
+        await klientAdministrasjonPage.goToKlientFane();
+        await klientAdministrasjonPage.klikkListeElement(client.orgName);
+        await klientAdministrasjonPage.klikkKnapp(agent.name);
+      });
+
+      await test.step('Slett fullmakt for Posttjenester', async () => {
+        await klientAdministrasjonPage.slettFullmakt('Posttjenester');
+      });
+
+      await test.step(`${agent.name} har ingen fullmakter lenger`, async () => {
+        await expect(klientAdministrasjonPage.ingenBrukereTekst).toBeVisible();
+      });
     });
 
-    await test.step('FORSTÅELSESFULL TRAFIKKORK har ingen fullmakter lenger', async () => {
-      await expect(klientAdministrasjonPage.ingenBrukereTekst).toBeVisible();
+    test.afterEach(async () => {
+      try {
+        await api.deleteConnection(client.connectionPid, client.org, [actor.org]);
+      } catch (error) {
+        console.error('Cleanup: Failed to delete connection:', error);
+      }
+      try {
+        await api.deleteClientDelegationAgent(actor.pid, actor.org, agent.pid);
+      } catch (error) {
+        console.error('Cleanup: Failed to delete client delegation agent:', error);
+      }
     });
   });
 });

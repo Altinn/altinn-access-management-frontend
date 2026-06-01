@@ -15,11 +15,10 @@ test.describe('System Register', async () => {
     const api = new ApiRequests();
     system = await api.createSystemSystemRegister(vendorOrgNumber);
     await login.LoginToAccessManagement(testUserPid);
-    await login.chooseReportee(testUserName, testOrgName);
+    await login.selectMainUnitBySearching(testOrgName);
   });
 
   test('Create system user and verify landing page', async ({
-    page,
     systemUserPage,
     accessManagementFrontPage,
   }): Promise<void> => {
@@ -35,7 +34,7 @@ test.describe('System Register', async () => {
 
     await test.step('Verify system user created', async () => {
       await expect(systemUserPage.SYSTEMUSER_CREATED_HEADING).toBeVisible();
-      await expect(page.getByText(system).first()).toBeVisible();
+      await expect(systemUserPage.systemUserLink(system)).toBeVisible();
     });
   });
 
