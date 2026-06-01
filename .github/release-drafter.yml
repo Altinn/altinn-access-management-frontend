@@ -1,9 +1,9 @@
 template: |
   # Changelog
   $CHANGES
-  
-  See details of [all code changes](https://github.com/altinn/altinn-access-management-frontend/compare/$PREVIOUS_TAG...v$RESOLVED_VERSION) since previous release 
-  
+
+  See details of [all code changes](https://github.com/altinn/altinn-access-management-frontend/compare/$PREVIOUS_TAG...v$RESOLVED_VERSION) since previous release
+
 categories:
   - title: '🚀 Features'
     labels:
@@ -21,4 +21,7 @@ categories:
       - 'dependencies'
       - 'enhancement'
       - 'kind/chore'
+  - title: '📝 Text improvements'
+    labels:
+      - 'Text'
 change-template: '- $TITLE @$AUTHOR (#$NUMBER)'
