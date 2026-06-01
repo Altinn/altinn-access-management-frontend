@@ -16,4 +16,5 @@ export interface CompactRole {
   code: string;
   children: CompactRole[];
   roleCodes: string[];
+  urn?: string;
 }
