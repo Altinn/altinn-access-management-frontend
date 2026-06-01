@@ -15,7 +15,6 @@
     "isPartOf": null,
     "keywords": null,
     "identifier": "appid-136",
-
     "description": null,
     "resourceType": "MaskinportenSchema",
     "thematicArea": null,
@@ -73,9 +72,7 @@
     "homepage": null,
     "isPartOf": null,
     "keywords": null,
-
     "identifier": "appid-400",
-
     "description": "Tulleregisteret",
     "resourceType": "MaskinportenSchema",
     "thematicArea": null,
@@ -128,9 +125,7 @@
     "homepage": null,
     "isPartOf": null,
     "keywords": null,
-
     "identifier": "appid-401",
-
     "description": "Blomsterhagen",
     "resourceType": "MaskinportenSchema",
     "thematicArea": null,
@@ -188,9 +183,7 @@
     "homepage": null,
     "isPartOf": null,
     "keywords": null,
-
     "identifier": "appid-402",
-
     "description": "Det magiske klesskapet",
     "resourceType": "MaskinportenSchema",
     "thematicArea": null,
@@ -231,7 +224,7 @@
     ],
     "resourceOwnerName": "NARNIA",
     "resourceOwnerOrgNumber": "777777777",
-    "resourceOwnerOrgcode":  "NRNA"
+    "resourceOwnerOrgcode": "NRNA"
   },
   {
     "title": "Snarveien",
@@ -248,9 +241,7 @@
     "homepage": null,
     "isPartOf": null,
     "keywords": null,
-
     "identifier": "appid-403",
-
     "description": "Snarveien",
     "resourceType": "MaskinportenSchema",
     "thematicArea": null,
@@ -302,10 +293,10 @@
     ],
     "homepage": null,
     "isPartOf": null,
-    "keywords": [ "klesskapet_kw" ],
-
+    "keywords": [
+      "klesskapet_kw"
+    ],
     "identifier": "appid-502",
-
     "visible": true,
     "delegable": true,
     "description": "Det magiske klesskapet",
@@ -339,9 +330,7 @@
     "homepage": null,
     "isPartOf": null,
     "keywords": null,
-
     "identifier": "appid-503",
-
     "visible": true,
     "delegable": true,
     "description": "Snarveien som lenketjeneste",
@@ -375,9 +364,7 @@
     "homepage": null,
     "isPartOf": null,
     "keywords": null,
-
     "identifier": "app_ttd_a3-app",
-
     "visible": true,
     "delegable": true,
     "description": "En Altinn 3 app",
@@ -421,9 +408,7 @@
     "homepage": null,
     "isPartOf": null,
     "keywords": null,
-
     "identifier": "se_3225_1596",
-
     "visible": true,
     "delegable": true,
     "description": "Et Altinn 2 skjema",
@@ -472,9 +457,7 @@
     "homepage": null,
     "isPartOf": null,
     "keywords": null,
-
     "identifier": "app_ttd_a3-app2",
-
     "visible": true,
     "delegable": true,
     "description": "En Altinn 3 app",
@@ -518,9 +501,7 @@
     "homepage": null,
     "isPartOf": null,
     "keywords": null,
-
     "identifier": "se_322a_159b",
-
     "visible": true,
     "delegable": true,
     "description": "Et Altinn 2 skjema",
@@ -569,9 +550,7 @@
     "homepage": null,
     "isPartOf": null,
     "keywords": null,
-
     "identifier": "appid-508",
-
     "visible": true,
     "delegable": true,
     "description": "Brannbilen - det er bare én ja",
@@ -605,9 +584,7 @@
     "homepage": null,
     "isPartOf": null,
     "keywords": null,
-
     "identifier": "appid-509",
-
     "visible": true,
     "delegable": true,
     "description": "Barista, mazagran and sit barista mazagran, trifecta roast sweet single origin froth. French press, and cinnamon, eu beans ristretto, viennese, and crema roast decaffeinated whipped. Extraction sweet as trifecta java half and half crema rich arabica. Rich, instant, to go sugar macchiato froth, mug macchiato wings iced pumpkin spice.",
@@ -641,9 +618,7 @@
     "homepage": null,
     "isPartOf": null,
     "keywords": null,
-
     "identifier": "appid-510",
-
     "visible": true,
     "delegable": true,
     "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vivamus orci turpis, vehicula a dignissim eget, condimentum at diam. Etiam iaculis, purus vel venenatis condimentum, lectus arcu tempor est, et tempor lorem elit ut nunc. Donec eu bibendum leo. Ut ac dolor erat. Vestibulum posuere fringilla iaculis",
@@ -677,9 +652,7 @@
     "homepage": null,
     "isPartOf": null,
     "keywords": null,
-
     "identifier": "appid-511",
-
     "visible": true,
     "delegable": false,
     "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vivamus orci turpis, vehicula a dignissim eget, condimentum at diam. Etiam iaculis, purus vel venenatis condimentum, lectus arcu tempor est, et tempor lorem elit ut nunc. Donec eu bibendum leo. Ut ac dolor erat. Vestibulum posuere fringilla iaculis",
@@ -713,9 +686,7 @@
     "homepage": null,
     "isPartOf": null,
     "keywords": null,
-
     "identifier": "appid-512",
-
     "visible": true,
     "delegable": true,
     "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vivamus orci turpis, vehicula a dignissim eget, condimentum at diam. Etiam iaculis, purus vel venenatis condimentum, lectus arcu tempor est, et tempor lorem elit ut nunc. Donec eu bibendum leo. Ut ac dolor erat. Vestibulum posuere fringilla iaculis",
@@ -749,9 +720,7 @@
     "homepage": null,
     "isPartOf": null,
     "keywords": null,
-
     "identifier": "appid-513",
-
     "visible": true,
     "delegable": true,
     "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vivamus orci turpis, vehicula a dignissim eget, condimentum at diam. Etiam iaculis, purus vel venenatis condimentum, lectus arcu tempor est, et tempor lorem elit ut nunc. Donec eu bibendum leo. Ut ac dolor erat. Vestibulum posuere fringilla iaculis",
@@ -827,7 +796,10 @@
         "value": "ske-innrapportering-boligsameie"
       }
     ],
-    "keywords": [ "Boligsameie", "innrapportering" ]
+    "keywords": [
+      "Boligsameie",
+      "innrapportering"
+    ]
   },
   {
     "identifier": "appid-520",
@@ -843,16 +815,56 @@
     "resourceOwnerName": null,
     "resourceOwnerOrgNumber": "123456789",
     "resourceOwnerLogoUrl": null,
-  "resourceOwnerOrgcode": "zzzdemo",
+    "resourceOwnerOrgcode": "zzzdemo",
     "resourceReferences": [],
     "priorityCounter": null,
-  "resourceType": "MaskinportenSchema",
+    "resourceType": "MaskinportenSchema",
     "authorizationReference": [
       {
         "id": "urn:altinn:resource",
         "value": "appid-520"
       }
     ],
+    "keywords": []
+  },
+  {
+    "title": "Arkivert tjeneste - MigratedApp",
+    "identifier": "migratedapp-test-resource",
+    "visible": true,
+    "delegable": true,
+    "description": "En arkivert MigratedApp-ressurs",
+    "rightDescription": "Gir tilgang til arkiverte data",
+    "resourceType": "MigratedApp",
+    "resourceReferences": [],
+    "authorizationReference": [
+      {
+        "id": "urn:altinn:resource",
+        "value": "migratedapp-test-resource"
+      }
+    ],
+    "resourceOwnerName": "Testdepartementet",
+    "resourceOwnerOrgcode": "TTD",
+    "resourceOwnerOrgNumber": "974760746",
+    "keywords": []
+  },
+  {
+    "title": "Arkivert tjeneste - MigratedCorrespondence",
+    "identifier": "migratedcorrespondence-test-resource",
+    "visible": true,
+    "delegable": true,
+    "description": "En arkivert korrespondanseressurs",
+    "rightDescription": "Gir tilgang til arkiverte korrespondansedata",
+    "resourceType": "GenericAccessResource",
+    "resourceReferences": [],
+    "authorizationReference": [
+      {
+        "id": "urn:altinn:resource",
+        "value": "migratedcorrespondence-test-resource"
+      }
+    ],
+    "resourceOwnerName": "Testdepartementet",
+    "resourceOwnerOrgcode": "TTD",
+    "resourceOwnerOrgNumber": "974760746",
     "keywords": []
   }
 ]
