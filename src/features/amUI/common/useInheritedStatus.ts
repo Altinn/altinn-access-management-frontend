@@ -41,7 +41,8 @@ const resolveInheritanceStatus = (
     !permission.viaRole &&
     !hasRightholderRole &&
     permission.from &&
-    permission.reason?.items.some((r) => r.name !== 'direct')
+    (permission.reason?.items.some((r) => r.name !== 'direct') ||
+      permission?.role?.urn?.includes('external-role'))
   ) {
     return {
       type: InheritedStatusType.ViaKeyRole,
