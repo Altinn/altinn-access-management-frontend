@@ -29,6 +29,12 @@ interface UserItemProps extends Pick<
   includeSelfAsChild?: boolean;
   linkTo?: string;
   onSelect?: () => void;
+  /**
+   * Per-user select handler. Unlike `onSelect`, this is also forwarded to the
+   * nested (inherited) child rows so clicking them opens the same flow (e.g. an
+   * info modal explaining why their access is inherited).
+   */
+  onSelectUser?: (user: ExtendedUser | User) => void;
   controls?: (user: ExtendedUser | User) => ReactNode;
 }
 
@@ -59,6 +65,7 @@ export const UserItem = ({
   includeSelfAsChild = true,
   linkTo,
   onSelect,
+  onSelectUser,
   shadow,
   controls,
   ...props
@@ -163,11 +170,12 @@ export const UserItem = ({
       type={type}
       expanded={isExpanded}
       collapsible={!!hasInheritingUsers}
-      interactive={!!hasInheritingUsers || !!onSelect || interactive}
+      interactive={!!hasInheritingUsers || !!onSelect || !!onSelectUser || interactive}
       shadow={shadow}
       linkIcon={!hasInheritingUsers && !disableLinks}
       onClick={() => {
         if (hasInheritingUsers) setExpanded(!isExpanded);
+        else if (onSelectUser) onSelectUser(user);
         else if (onSelect) onSelect();
       }}
       as={
@@ -178,7 +186,7 @@ export const UserItem = ({
                 to={linkTo ?? user.id}
               />
             )
-          : hasInheritingUsers || onSelect
+          : hasInheritingUsers || onSelect || onSelectUser
             ? 'button'
             : 'div'
       }
@@ -208,6 +216,7 @@ export const UserItem = ({
               interactive={interactive}
               disableLinks={disableLinks}
               shadow='none'
+              onSelectUser={onSelectUser}
               controls={controls}
             />
           ))}

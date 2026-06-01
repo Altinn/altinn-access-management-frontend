@@ -77,10 +77,15 @@ export const UserSearchResults: React.FC<UserSearchResultsProps> = ({
             linkTo={getUserLink ? getUserLink(user) : undefined}
             onSelect={
               enableInfoModal
-                ? () => setSelectedUser(user)
+                ? undefined
                 : onSelect
                   ? () => onSelect({ id: user.id, name: user.name, type: user.type })
                   : undefined
+            }
+            onSelectUser={
+              enableInfoModal
+                ? (selected) => setSelectedUser(selected as UserSearchNode)
+                : undefined
             }
             roleDirection='toUser'
             disableLinks={!isInteractive}
