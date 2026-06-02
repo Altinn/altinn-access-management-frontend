@@ -11,7 +11,7 @@ import {
 } from '@altinn/altinn-components';
 import { PersonCircleIcon } from '@navikt/aksel-icons';
 import { useDocumentTitle } from '@/resources/hooks/useDocumentTitle';
-import { getAfUrl } from '@/resources/utils/pathUtils';
+import { getAfUrl, getEnv } from '@/resources/utils/pathUtils';
 import { useGetReporteeQuery } from '@/rtk/features/userInfoApi';
 import { useAddAltinn2AccountMutation } from '@/rtk/features/selfIdentifiedUserApi';
 import classes from './AddAltinn2AccountPage.module.css';
@@ -135,13 +135,15 @@ export const AddAltinn2AccountPage = () => {
           >
             <a href={afUrl}>{t('add_altinn2_account_page.cancel')}</a>
           </DsButton>
-          <DsLink
-            target='_blank'
-            rel='noopener noreferrer'
-            href='https://www.altinn.no/ui/Authentication/SelfIdentified'
-          >
-            {t('add_altinn2_account_page.forgot_password')}
-          </DsLink>
+          {getEnv() === 'prod' && new Date() < new Date(2026, 5, 20) && (
+            <DsLink
+              target='_blank'
+              rel='noopener noreferrer'
+              href='https://www.altinn.no/ui/Authentication/SelfIdentified'
+            >
+              {t('add_altinn2_account_page.forgot_password')}
+            </DsLink>
+          )}
         </div>
       </DsDialog.Block>
     </>
