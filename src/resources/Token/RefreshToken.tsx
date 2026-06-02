@@ -2,7 +2,7 @@
 /* eslint-disable @typescript-eslint/no-misused-promises */
 import axios from 'axios';
 import * as React from 'react';
-import { getAmStartPageUrl } from '../utils/pathUtils';
+import { getAmBaseUrl, getAmStartPageUrl } from '../utils/pathUtils';
 
 export const RefreshToken = () => {
   const lastRefreshTokenTimestamp = React.useRef(0);
@@ -14,11 +14,11 @@ export const RefreshToken = () => {
     if (timeNow - lastRefreshTokenTimestamp.current > TEN_MINUTES_IN_MILLISECONDS) {
       lastRefreshTokenTimestamp.current = timeNow;
       const instance = axios.create({
-        baseURL: '../../../',
+        baseURL: getAmBaseUrl(),
       });
 
       return await instance
-        .get('accessmanagement/api/v1/authentication/refresh')
+        .get('api/v1/authentication/refresh')
         .then((response) => response.data)
         .catch((refreshError) => {
           // Most likely due to expired token so we redirect to login
