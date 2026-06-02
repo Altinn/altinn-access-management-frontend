@@ -13,7 +13,7 @@ import { LoadingAnimation } from '../../LoadingAnimation/LoadingAnimation';
 import { StatusSection } from '../../StatusSection/StatusSection';
 import { TechnicalErrorParagraphs } from '../../TechnicalErrorParagraphs';
 import { ValidationErrorMessage } from '../../ValidationErrorMessage';
-import type { PartyInfoProps } from '../Person/PartyInfo';
+import type { PartyInfoProps } from '../Party/PartyInfo';
 
 import classes from './AccessPackageInfo.module.css';
 import { PackageHeader } from './PackageHeader';

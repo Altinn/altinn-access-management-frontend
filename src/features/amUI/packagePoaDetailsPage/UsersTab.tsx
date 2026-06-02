@@ -20,7 +20,7 @@ import type { UserActionTarget } from '../common/UserSearch/types';
 import { usePartyRepresentation } from '../common/PartyRepresentationContext/PartyRepresentationContext';
 import { DelegationAction } from '../common/DelegationModal/EditModal';
 import { getInheritedStatus, isPermissionInherited } from '../common/useInheritedStatus';
-import { PartyInfoModal } from '../common/DelegationModal/Person/PartyInfoModal';
+import { PartyInfoModal } from './PartyInfoModal';
 
 const mapUserToParty = (user: UserActionTarget): Party => ({
   partyId: 0,
