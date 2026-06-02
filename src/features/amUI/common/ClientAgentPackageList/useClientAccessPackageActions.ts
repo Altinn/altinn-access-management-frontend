@@ -64,6 +64,7 @@ export const useClientAccessPackageActions = ({
           }),
           color: 'danger',
         });
+        throw error;
       }
     },
     [actingPartyUuid, addAgentAccessPackages, fromPartyUuid, openSnackbar, t],
@@ -110,6 +111,7 @@ export const useClientAccessPackageActions = ({
           }),
           color: 'danger',
         });
+        throw error;
       }
     },
     [actingPartyUuid, fromPartyUuid, openSnackbar, removeAgentAccessPackages, t],

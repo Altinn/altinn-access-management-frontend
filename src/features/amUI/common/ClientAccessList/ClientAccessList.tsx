@@ -38,8 +38,8 @@ type ClientAccessListProps = {
   accessStateClients?: Client[];
   addDisabled?: boolean;
   removeDisabled?: boolean;
-  onAddAccessPackage?: (action: ClientAccessPackageAction) => void;
-  onRemoveAccessPackage?: (action: ClientAccessPackageAction) => void;
+  onAddAccessPackage?: (action: ClientAccessPackageAction) => void | Promise<void>;
+  onRemoveAccessPackage?: (action: ClientAccessPackageAction) => void | Promise<void>;
   searchPlaceholder?: string;
   requireDelegableForActions?: boolean;
   emptyAccessText?: string;

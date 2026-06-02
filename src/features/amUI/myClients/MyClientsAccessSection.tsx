@@ -50,7 +50,7 @@ export const MyClientsAccessSection = ({
           }),
           color: 'success',
         });
-      } catch {
+      } catch (error) {
         openSnackbar({
           message: t('my_clients_page.remove_package_error', {
             name: currentUserName,
@@ -58,6 +58,7 @@ export const MyClientsAccessSection = ({
           }),
           color: 'danger',
         });
+        throw error;
       }
     },
     [actingPartyUuid, currentUserName, openSnackbar, removeMyClientAccessPackages, t],

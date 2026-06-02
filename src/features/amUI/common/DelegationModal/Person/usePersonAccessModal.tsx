@@ -65,15 +65,23 @@ export const usePersonAccessModal = () => {
     closeAfter: boolean,
   ) => {
     setIsLoading(true);
-    await action();
-    setIsLoading(false);
-    setIsSuccess(true);
-    if (closeAfter) {
-      // Re-delegation isn't possible here, so close once the success animation has shown.
-      setTimeout(close, 2000);
-    } else {
-      setHasAccessOverride(resultingHasAccess);
-      setTimeout(() => setIsSuccess(false), 2000);
+    setIsSuccess(false);
+
+    try {
+      await action();
+      setIsSuccess(true);
+
+      if (closeAfter) {
+        // Re-delegation isn't possible here, so close once the success animation has shown.
+        setTimeout(close, 2000);
+      } else {
+        setHasAccessOverride(resultingHasAccess);
+        setTimeout(() => setIsSuccess(false), 2000);
+      }
+    } catch {
+      setIsSuccess(false);
+    } finally {
+      setIsLoading(false);
     }
   };
 
