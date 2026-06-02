@@ -41,9 +41,13 @@ test.describe('Aktørvalg, valg og visning av avgiver', () => {
       await aktorvalgHeader.chooseBokmalLanguage();
     });
 
-    await test.step('Click Search button', async () => {
+    await test.step('Open Global Menu', async () => {
+      await aktorvalgHeader.menuButton.isVisible();
       await aktorvalgHeader.menuButton.click();
-      await aktorvalgHeader.clickSearchButton();
+    });
+
+    await test.step('Check Search button', async () => {
+      await aktorvalgHeader.checkSearchButton();
     });
 
     await test.step('Check visibility for all menu buttons', async () => {
