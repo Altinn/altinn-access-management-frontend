@@ -24,6 +24,7 @@ declare global {
       enableMaskinportenAdministration: boolean;
       enableRoleDeletion: boolean;
       hideA2Links: boolean;
+      addAltinn2Account: boolean;
     };
   }
 }
