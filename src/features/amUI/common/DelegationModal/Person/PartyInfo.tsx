@@ -23,9 +23,9 @@ import { StatusSection } from '../../StatusSection/StatusSection';
 import { TechnicalErrorParagraphs } from '../../TechnicalErrorParagraphs';
 import { ValidationErrorMessage } from '../../ValidationErrorMessage';
 import type { InheritedStatusMessageType } from '../../useInheritedStatus';
-import { DelegationAction } from '../delegationAction';
 
 import classes from './PartyInfo.module.css';
+import { DelegationAction } from '../EditModal';
 
 export interface PartyInfoProps {
   /** The party (person/organization) that receives or holds the access */

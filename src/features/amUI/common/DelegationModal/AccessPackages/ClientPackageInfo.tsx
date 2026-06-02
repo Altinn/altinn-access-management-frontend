@@ -13,12 +13,12 @@ import { LoadingAnimation } from '../../LoadingAnimation/LoadingAnimation';
 import { StatusSection } from '../../StatusSection/StatusSection';
 import { TechnicalErrorParagraphs } from '../../TechnicalErrorParagraphs';
 import { ValidationErrorMessage } from '../../ValidationErrorMessage';
-import { DelegationAction } from '../delegationAction';
 import type { PartyInfoProps } from '../Person/PartyInfo';
 
 import classes from './AccessPackageInfo.module.css';
 import { PackageHeader } from './PackageHeader';
 import { PackageMeta } from './PackageMeta';
+import { DelegationAction } from '../EditModal';
 
 /**
  * Package-led modal content for client administration: shown when an access package row is clicked.

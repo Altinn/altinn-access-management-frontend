@@ -13,7 +13,6 @@ import classes from './DelegationModal.module.css';
 import { AccessPackageInfo } from './AccessPackages/AccessPackageInfo';
 import { RoleInfo } from './Role/RoleInfo';
 import { useDelegationModalContext } from './DelegationModalContext';
-import { DelegationAction } from './delegationAction';
 import { ScopeInfo } from '../../maskinporten/ScopeInfo';
 
 export interface DelegationRecipient {
@@ -22,7 +21,12 @@ export interface DelegationRecipient {
   partyTypeName: string;
 }
 
-export { DelegationAction };
+export enum DelegationAction {
+  DELEGATE = 'DELEGATE',
+  REQUEST = 'REQUEST',
+  REVOKE = 'REVOKE',
+  APPROVE = 'APPROVE',
+}
 
 export interface InstanceData {
   instanceUrn: string;
