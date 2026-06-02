@@ -25,7 +25,7 @@ import { AccessPackageListItems } from '../AccessPackageListItems/AccessPackageL
 import { UserListItems, type UserListItemData } from '../UserListItems/UserListItems';
 import { useClientAccessPackageActions } from './useClientAccessPackageActions';
 import { useIsMobileOrSmaller } from '@/resources/utils/screensizeUtils';
-import { usePersonAccessModal } from '../DelegationModal/Person/usePersonAccessModal';
+import { useClientPackageAccessModal } from '../DelegationModal/Person/useClientPackageAccessModal';
 import { PartyType } from '@/rtk/features/userInfoApi';
 
 type ClientAgentPackageListProps = {
@@ -75,7 +75,7 @@ export const ClientAgentPackageList = ({
     removeAgentAccessPackages,
   });
 
-  const { modal, open } = usePersonAccessModal();
+  const { open, openData, renderModal } = useClientPackageAccessModal();
 
   const clientAccess = client?.access ?? [];
   const clientType = client?.client.type ?? '';
@@ -245,6 +245,12 @@ export const ClientAgentPackageList = ({
     };
   });
 
+  // Resolve the open item's access live from the unfiltered access state, so the modal stays
+  // correct after a mutation even when its row leaves the filtered ("has access" / "all") tab.
+  const liveHasAccess = openData
+    ? (packageIdsByAgentId.get(openData.party.partyUuid)?.has(openData.accessPackage.id) ?? false)
+    : undefined;
+
   return (
     <>
       <UserListItems
@@ -253,7 +259,7 @@ export const ClientAgentPackageList = ({
         addUserButton={addUserButton}
         emptyText={emptyText}
       />
-      {modal}
+      {renderModal(liveHasAccess)}
     </>
   );
 };

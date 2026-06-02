@@ -21,7 +21,7 @@ import { buildClientParentNameById, buildClientSortKey } from '../clientSortUtil
 import { useRoleMetadata } from '../UserRoles/useRoleMetadata';
 import { AccessPackageListItems } from '../AccessPackageListItems/AccessPackageListItems';
 import { UserListItems, type UserListItemData } from '../UserListItems/UserListItems';
-import { usePersonAccessModal } from '../DelegationModal/Person/usePersonAccessModal';
+import { useClientPackageAccessModal } from '../DelegationModal/Person/useClientPackageAccessModal';
 import { useIsMobileOrSmaller } from '@/resources/utils/screensizeUtils';
 import { PartyType } from '@/rtk/features/userInfoApi';
 import type { Party } from '@/rtk/features/lookupApi';
@@ -77,7 +77,7 @@ export const ClientAccessList = ({
   const { getAccessPackageById } = useAccessPackageLookup();
   const { getRoleMetadata } = useRoleMetadata();
   const isMobileOrSmaller = useIsMobileOrSmaller();
-  const { modal, open } = usePersonAccessModal();
+  const { open, openData, renderModal } = useClientPackageAccessModal();
   const clientsForAccessState = accessStateClients ?? clients;
   const parentNameById = buildClientParentNameById(clients);
   const sortedClients = sortClientsByKey(clients, parentNameById);
@@ -234,13 +234,23 @@ export const ClientAccessList = ({
     };
   });
 
+  // Resolve the open item's access live from the unfiltered access state, so the modal stays
+  // correct after a mutation even when its row leaves the rendered (filtered) list.
+  const liveHasAccess = openData
+    ? clientsForAccessState.some(
+        (aap) =>
+          aap.client.id === openData.party.partyUuid &&
+          aap.access.some((p) => p.packages.some((ap) => ap.id === openData.accessPackage.id)),
+      )
+    : undefined;
+
   return (
     <>
       <UserListItems
         items={userListItems}
         searchPlaceholder={searchPlaceholder}
       />
-      {modal}
+      {renderModal(liveHasAccess)}
     </>
   );
 };

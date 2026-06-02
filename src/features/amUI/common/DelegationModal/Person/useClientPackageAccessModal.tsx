@@ -9,43 +9,44 @@ import type { InheritedStatusMessageType } from '../../useInheritedStatus';
 
 import dialogClasses from '../DelegationModal.module.css';
 
-export interface PersonAccessModalData {
+export interface ClientPackageAccessModalData {
   /** The party (person/organization) the access concerns */
   party: Party;
   /** The access package the action concerns */
   accessPackage: AccessPackage;
-  /** Whether the party already has the access package */
+  /** Whether the party already has the access package (fallback before live data resolves) */
   userHasAccess: boolean;
   /** Inherited-access status messages, when available */
   inheritedStatus?: InheritedStatusMessageType[];
   /** Optional role description, e.g. "Via role X" */
   roleDescription?: string;
   /** Give-access handler. Omit when re-delegation isn't possible (e.g. "My clients"); the modal
-   *  then closes after a revoke instead of flipping to a give state. */
+   *  then closes after a revoke instead of showing a give state. */
   onDelegate?: (onSuccess?: () => void, onError?: () => void) => void | Promise<void>;
   onRevoke: (onSuccess?: () => void, onError?: () => void) => void | Promise<void>;
 }
 
 /**
  * Provides a standalone access-package action modal (give/revoke) and an `open` callback.
- * The modal stays open after an action, showing a loading then success state. The displayed access
- * is flipped to reflect the action taken (revoke -> no access, delegate -> has access).
+ * The modal stays open after an action, showing a loading then success state.
  *
- * Note: kept intentionally simple — the flipped access is optimistic and not re-derived from live
- * data.
- *
- * Render `modal` once in the component tree and call `open(data)` to show it for a given party.
+ * The displayed access is NOT snapshotted: the static fields (party, package, handlers) are kept,
+ * but `userHasAccess` is resolved live by the caller via `renderModal(liveHasAccess)`. This keeps
+ * the modal correct after a mutation even when the row it was opened from leaves the filtered list
+ * (e.g. the "has access" / "all" tabs in client administration). `openData` exposes the open item's
+ * data (party + access package) so the caller can look its access state up in its unfiltered source.
  */
-export const usePersonAccessModal = () => {
+
+const animationDuration = 2000;
+
+export const useClientPackageAccessModal = () => {
   const modalRef = useRef<HTMLDialogElement>(null);
-  const [data, setData] = useState<PersonAccessModalData | null>(null);
+  const [data, setData] = useState<ClientPackageAccessModalData | null>(null);
   const [isLoading, setIsLoading] = useState(false);
   const [isSuccess, setIsSuccess] = useState(false);
-  const [hasAccessOverride, setHasAccessOverride] = useState<boolean | null>(null);
 
-  const open = (modalData: PersonAccessModalData) => {
+  const open = (modalData: ClientPackageAccessModalData) => {
     setData(modalData);
-    setHasAccessOverride(null);
     setIsSuccess(false);
     setIsLoading(false);
   };
@@ -75,8 +76,7 @@ export const usePersonAccessModal = () => {
       actionHandled = true;
       setIsLoading(false);
       setIsSuccess(true);
-      setHasAccessOverride(true);
-      setTimeout(() => setIsSuccess(false), 2000);
+      setTimeout(() => setIsSuccess(false), animationDuration);
     };
 
     const handleActionError = () => {
@@ -108,11 +108,10 @@ export const usePersonAccessModal = () => {
       setIsSuccess(true);
 
       if (data.onDelegate) {
-        setHasAccessOverride(false);
-        setTimeout(() => setIsSuccess(false), 2000);
+        setTimeout(() => setIsSuccess(false), animationDuration);
       } else {
         // Re-delegation isn't possible here, so close once the success animation has shown.
-        setTimeout(close, 2000);
+        setTimeout(close, animationDuration);
       }
     };
 
@@ -132,7 +131,7 @@ export const usePersonAccessModal = () => {
     }
   };
 
-  const modal = (
+  const renderModal = (liveHasAccess?: boolean) => (
     <DsDialog
       ref={modalRef}
       className={dialogClasses.modalDialog}
@@ -144,7 +143,7 @@ export const usePersonAccessModal = () => {
           <ClientPackageInfo
             party={data.party}
             accessPackage={data.accessPackage}
-            userHasAccess={hasAccessOverride ?? data.userHasAccess}
+            userHasAccess={liveHasAccess ?? data.userHasAccess}
             inheritedStatus={data.inheritedStatus}
             roleDescription={data.roleDescription}
             isLoading={isLoading}
@@ -157,5 +156,5 @@ export const usePersonAccessModal = () => {
     </DsDialog>
   );
 
-  return { modal, open };
+  return { open, openData: data, renderModal };
 };
