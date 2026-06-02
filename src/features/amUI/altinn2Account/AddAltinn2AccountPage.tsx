@@ -19,7 +19,7 @@ import { PageLayoutWrapper } from '../common/PageLayoutWrapper';
 
 export const AddAltinn2AccountPage = () => {
   const { t } = useTranslation();
-  const [username, setUsername] = useState('');
+  const [userName, setUserName] = useState('');
   const [password, setPassword] = useState('');
   const [step, setStep] = useState<number>(1);
   const modalRef = useRef<HTMLDialogElement>(null);
@@ -31,7 +31,7 @@ export const AddAltinn2AccountPage = () => {
   const [addAltinn2Account, { isLoading: isAddingAltinn2Account, error: addUserError }] =
     useAddAltinn2AccountMutation();
 
-  const isActionButtonDisabled = !username || !password || isAddingAltinn2Account;
+  const isActionButtonDisabled = !userName || !password || isAddingAltinn2Account;
   const afUrl = `${getAfUrl()}inbox`;
   const profileUrl = `${getAfUrl()}profile`;
 
@@ -39,7 +39,7 @@ export const AddAltinn2AccountPage = () => {
     const to = reportee?.partyUuid;
     if (!isActionButtonDisabled && to) {
       try {
-        await addAltinn2Account({ to, username, password }).unwrap();
+        await addAltinn2Account({ to, userName, password }).unwrap();
         setStep(3);
       } catch {
         // error displayed via addUserError RTK Query state
@@ -52,6 +52,13 @@ export const AddAltinn2AccountPage = () => {
       modalRef.current?.showModal();
     }
   }, [reportee]);
+
+  const handleInputFieldKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === 'Enter') {
+      e.preventDefault();
+      onAddAltinn2Account();
+    }
+  };
 
   const step1Component = (
     <DsDialog.Block className={classes.addAltinn2Account}>
@@ -90,8 +97,9 @@ export const AddAltinn2AccountPage = () => {
         <DsTextfield
           label={t('add_altinn2_account_page.username')}
           data-size='sm'
-          value={username}
-          onChange={(e) => setUsername(e.target.value)}
+          value={userName}
+          onChange={(e) => setUserName(e.target.value)}
+          onKeyDown={handleInputFieldKeyDown}
         />
         <DsTextfield
           label={t('add_altinn2_account_page.password')}
@@ -99,6 +107,7 @@ export const AddAltinn2AccountPage = () => {
           type='password'
           value={password}
           onChange={(e) => setPassword(e.target.value)}
+          onKeyDown={handleInputFieldKeyDown}
         />
         {addUserError && (
           <DsAlert data-color='danger'>
