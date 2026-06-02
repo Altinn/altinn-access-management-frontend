@@ -48,7 +48,7 @@ export const AddAltinn2AccountPage = () => {
   };
 
   useEffect(() => {
-    if (reportee && reportee.type === 'SelfIdentified') {
+    if (reportee?.type === 'SelfIdentified') {
       modalRef.current?.showModal();
     }
   }, [reportee]);
