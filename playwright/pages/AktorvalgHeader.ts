@@ -145,10 +145,6 @@ export class AktorvalgHeader {
     await this.closePopups();
   }
 
-  async checkSearchButton() {
-    await expect(this.searchButton).toBeVisible();
-  }
-
   async typeInSearchField(text: string) {
     await this.aktorvalgSearch.fill(text);
   }
@@ -158,6 +154,8 @@ export class AktorvalgHeader {
   }
 
   async checkAllMenuButtons() {
+    await this.menuButton.click();
+    await expect(this.searchButton).toBeVisible();
     await expect(this.menuInbox).toBeVisible();
     await expect(this.menuAccessManagement).toBeVisible();
     await expect(this.menuApps).toBeVisible();

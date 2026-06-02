@@ -1,4 +1,4 @@
-import { test, expect } from 'playwright/fixture/pomFixture';
+import { test } from 'playwright/fixture/pomFixture';
 import { EnduserConnection } from '../../../api-requests/EnduserConnection';
 
 test.describe('Aktørvalg, valg og visning av avgiver', () => {
@@ -39,15 +39,6 @@ test.describe('Aktørvalg, valg og visning av avgiver', () => {
       await login.LoginToAccessManagement(HEADER_TEST_USER);
       await aktorvalgHeader.selectActorFromHeaderMenu(DEFAULT_ACTOR_NAME);
       await aktorvalgHeader.chooseBokmalLanguage();
-    });
-
-    await test.step('Open Global Menu', async () => {
-      await expect(aktorvalgHeader.menuButton).toBeVisible();
-      await aktorvalgHeader.menuButton.click();
-    });
-
-    await test.step('Check Search button', async () => {
-      await aktorvalgHeader.checkSearchButton();
     });
 
     await test.step('Check visibility for all menu buttons', async () => {
