@@ -13,8 +13,7 @@
     'avatar title'
     'avatar subtitle';
   align-items: center;
-  gap: 12px;
-  margin-bottom: 8px;
+  column-gap: var(--ds-spacing-2);
 }
 
 .avatar {
@@ -25,10 +24,6 @@
 }
 
 .headerText {
-  display: flex;
-  flex-direction: column;
-  gap: 2px;
-  min-width: 0;
   grid-area: title;
 }
 

@@ -81,6 +81,7 @@ export const UsersTab = ({ accessPackage, isLoading, isFetching }: UsersTabProps
       }),
     [accessPackage?.permissions, toParty?.partyUuid, fromParty?.partyUuid],
   );
+
   const indirectUsers = useMemo(
     () => mapConnectionsToUserSearchNodes(indirectConnections),
     [indirectConnections],
@@ -158,9 +159,14 @@ export const UsersTab = ({ accessPackage, isLoading, isFetching }: UsersTabProps
     [accessPackage?.permissions, selectedUser?.id],
   );
 
+  // Like the access package modal: the user "has access" if they have any permission for the
+  // package (direct or inherited), so we don't offer "give" when access already exists. A purely
+  // inherited access can't be revoked here, so the revoke action is disabled in that case.
+  const selectedUserHasAccess = selectedUserPermissions.length > 0;
   const selectedUserHasDirectAccess = selectedUserPermissions.some(
     (permission) => !isPermissionInherited(permission),
   );
+  const selectedUserAccessIsInherited = selectedUserHasAccess && !selectedUserHasDirectAccess;
 
   const selectedUserInheritedStatus = useMemo(
     () =>
@@ -230,8 +236,9 @@ export const UsersTab = ({ accessPackage, isLoading, isFetching }: UsersTabProps
             ? {
                 party: mapUserToParty(selectedUser),
                 accessPackage,
-                userHasAccess: selectedUserHasDirectAccess,
+                userHasAccess: selectedUserHasAccess,
                 inheritedStatus: selectedUserInheritedStatus,
+                disabled: selectedUserAccessIsInherited,
                 onDelegate: () => {
                   handleOnDelegate(selectedUser);
                   modalRef.current?.close();

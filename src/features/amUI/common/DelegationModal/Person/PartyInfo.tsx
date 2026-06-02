@@ -6,7 +6,7 @@ import {
   DsParagraph,
   formatDisplayName,
 } from '@altinn/altinn-components';
-import { useTranslation } from 'react-i18next';
+import { Trans, useTranslation } from 'react-i18next';
 
 import type { ActionError } from '@/resources/hooks/useActionError';
 import type { AccessPackage } from '@/rtk/features/accessPackageApi';
@@ -78,23 +78,17 @@ export const PartyInfo = ({
 
   const canRevoke = userHasAccess && availableActions.includes(DelegationAction.REVOKE);
   const canDelegate = !userHasAccess && availableActions.includes(DelegationAction.DELEGATE);
+
   const partySubtitle =
     party.partyTypeName === PartyType.Person
       ? getFormattedDateOfBirthLabel(party.dateOfBirth)
       : party.orgNumber
         ? `${t('common.org_nr')} ${formatOrgNr(party.orgNumber)}`
         : undefined;
-  const actionDescription = userHasAccess
-    ? (revokeDescription ??
-      t('party_info.revoke_confirmation', {
-        partyName: userName,
-        packageName: accessPackage.name,
-      }))
-    : (delegateDescription ??
-      t('party_info.delegate_confirmation', {
-        partyName: userName,
-        packageName: accessPackage.name,
-      }));
+
+  const actionDescriptionKey = userHasAccess
+    ? 'party_info.revoke_confirmation'
+    : 'party_info.delegate_confirmation';
 
   return (
     <div className={classes.container}>
@@ -107,28 +101,35 @@ export const PartyInfo = ({
           isParent={!isSubUnitByType(party.variant?.toString())}
           className={classes.avatar}
         />
-        <div className={classes.headerText}>
-          <DsHeading
-            level={1}
-            data-size='md'
+        <DsHeading
+          level={1}
+          data-size='md'
+          className={classes.headerText}
+        >
+          {userName}
+        </DsHeading>
+        {partySubtitle && (
+          <DsParagraph
+            data-size='sm'
+            className={classes.subheading}
           >
-            {userName}
-          </DsHeading>
-          {partySubtitle && (
-            <DsParagraph
-              data-size='sm'
-              className={classes.subheading}
-            >
-              {partySubtitle}
-            </DsParagraph>
-          )}
-        </div>
+            {partySubtitle}
+          </DsParagraph>
+        )}
       </div>
-      <DsParagraph data-size='sm'>
-        {accessPackage.name}
-        {roleDescription ? ` · ${roleDescription}` : ''}
+      <StatusSection
+        userHasAccess={userHasAccess}
+        inheritedStatus={inheritedStatus}
+        cannotDelegateHere={accessPackage.isAssignable === false}
+        toPartyName={userName}
+      />
+      <DsParagraph data-size='md'>
+        <Trans
+          i18nKey={actionDescriptionKey}
+          values={{ partyName: userName, packageName: accessPackage.name }}
+          components={{ b: <b /> }}
+        />
       </DsParagraph>
-      <DsParagraph data-size='md'>{actionDescription}</DsParagraph>
 
       {isLoading || isSuccess ? (
         <LoadingAnimation
@@ -169,12 +170,6 @@ export const PartyInfo = ({
               )}
             </DsAlert>
           )}
-
-          <StatusSection
-            userHasAccess={userHasAccess}
-            inheritedStatus={inheritedStatus}
-            toPartyName={userName}
-          />
 
           <div className={classes.actions}>
             {canRevoke && (

@@ -50,6 +50,7 @@ export const ClientPackageInfo = ({
 
   const canRevoke = userHasAccess && availableActions.includes(DelegationAction.REVOKE);
   const canDelegate = !userHasAccess && availableActions.includes(DelegationAction.DELEGATE);
+  const cannotChangeAccess = accessPackage.isAssignable === false;
 
   return (
     <div className={classes.container}>
@@ -98,6 +99,7 @@ export const ClientPackageInfo = ({
           <StatusSection
             userHasAccess={userHasAccess}
             inheritedStatus={inheritedStatus}
+            cannotDelegateHere={cannotChangeAccess}
             toPartyName={userName}
           />
 
@@ -109,7 +111,7 @@ export const ClientPackageInfo = ({
             {canRevoke && (
               <DsButton
                 data-color='danger'
-                disabled={disabled}
+                disabled={disabled || cannotChangeAccess}
                 onClick={onRevoke}
               >
                 {t('common.delete_poa')}
@@ -117,7 +119,7 @@ export const ClientPackageInfo = ({
             )}
             {canDelegate && (
               <DsButton
-                disabled={disabled}
+                disabled={disabled || cannotChangeAccess}
                 onClick={onDelegate}
               >
                 {t('common.give_poa')}

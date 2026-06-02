@@ -1078,8 +1078,8 @@
     "no_permissions": "You have to give power of attorney"
   },
   "party_info": {
-    "delegate_confirmation": "Do you want to grant {{partyName}} power of attorney for {{packageName}}? The user will get access to all services in the package.",
-    "revoke_confirmation": "Do you want to revoke {{partyName}}'s power of attorney for {{packageName}}? The user will lose access to all services in the package."
+    "delegate_confirmation": "Do you want to grant <b>{{partyName}}</b> power of attorney for <b>{{packageName}}</b>? The user will get access to all services in the package.",
+    "revoke_confirmation": "Do you want to revoke <b>{{partyName}}</b>'s power of attorney for <b>{{packageName}}</b>? The user will lose access to all services in the package."
   },
   "package_poa_details_page": {
     "page_title": "Power of attorney details - Altinn",
