@@ -47,7 +47,7 @@ namespace Altinn.AccessManagement.UI.Controllers
             }
             catch (HttpStatusException ex)
             {
-                return new ObjectResult(ProblemDetailsFactory.CreateProblemDetails(HttpContext, (int?)ex.StatusCode, "Invalid Altinn 2 credentials", detail: ex.Message));
+                return new ObjectResult(ProblemDetailsFactory.CreateProblemDetails(HttpContext, (int?)ex.StatusCode, "Failed to validate credentials", detail: ex.Message));
             }
             catch (Exception ex)
             {
