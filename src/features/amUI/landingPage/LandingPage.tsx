@@ -155,16 +155,18 @@ export const LandingPage = () => {
     if (displayPoaOverviewPage && isAdmin) {
       items.push({
         ...getPoaOverviewMenuItem(),
-        description: t('landing_page.poa_item_description'),
+        description: isCurrentUserReportee
+          ? t('landing_page.poa_item_description_yourself')
+          : t('landing_page.poa_item_description', { reportee: reporteeName }),
       });
     }
 
     if (displayConfettiPackage && isAdmin) {
       items.push({
         ...getReporteesMenuItem(),
-        description: isOrganization(reportee)
-          ? t('landing_page.reportees_item_description_org')
-          : t('landing_page.reportees_item_description_person'),
+        description: isCurrentUserReportee
+          ? t('landing_page.reportees_item_description_yourself')
+          : t('landing_page.reportees_item_description_org', { reportee: reporteeName }),
       });
     }
 
@@ -177,7 +179,7 @@ export const LandingPage = () => {
     if (isClientAdmin && displayClientAdministrationPage) {
       items.push({
         ...getClientAdministrationMenuItem(),
-        description: t('landing_page.client_admin_item_description'),
+        description: t('landing_page.client_admin_item_description', { reportee: reporteeName }),
       });
     }
     if (
@@ -186,7 +188,7 @@ export const LandingPage = () => {
     ) {
       items.push({
         ...getSystemUserMenuItem(),
-        description: t('landing_page.systemuser_item_description'),
+        description: t('landing_page.systemuser_item_description', { reportee: reporteeName }),
       });
     }
     if (enableMaskinportenAdministration() && isMaskinportenAdmin) {
