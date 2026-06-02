@@ -8,11 +8,14 @@ import { PageNotFound } from './contents/PageNotFound';
 import { UnknownError } from './contents/UnknownError';
 import classes from './ErrorPage.module.css';
 import { ErrorLayoutWrapper } from './ErrorLayoutWrapper';
+import { useDocumentTitle } from '@/resources/hooks/useDocumentTitle';
 
 export const ErrorPage = () => {
   const { t } = useTranslation();
   const error: any = useRouteError();
   const timestamp = new Date();
+
+  useDocumentTitle(t('error_page.page_title'));
 
   const renderContent = () => {
     if (error === null || error?.status === 404) return <PageNotFound />;

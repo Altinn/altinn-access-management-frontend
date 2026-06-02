@@ -32,7 +32,11 @@ export const InstanceDetailPage = () => {
   const instanceDelegationEnabled = displayInstanceDelegation();
   const poaOverviewUrl = `/${amUIPath.PoaOverview}?tab=instances`;
 
-  useDocumentTitle(t('instance_detail_page.document_title'));
+  useDocumentTitle(
+    isInboxDeeplink
+      ? t('instance_detail_page.document_title_from_inbox')
+      : t('instance_detail_page.document_title'),
+  );
 
   if (!instanceDelegationEnabled) {
     return (

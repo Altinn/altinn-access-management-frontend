@@ -8,31 +8,32 @@ const testUserPid = '14824497789';
 
 test.describe('Godkjenn og avvis Systembrukerforespørsel', () => {
   let api: ApiRequests;
+  let response: Awaited<ReturnType<ApiRequests['postSystemuserRequest']>>;
 
   test.beforeEach(async () => {
     api = new ApiRequests();
+    const externalRef = TestdataApi.generateExternalRef();
+    response = await api.postSystemuserRequest(
+      vendorOrgNumber,
+      externalRef,
+      prebuiltSystemId,
+      vendorOrgNumber,
+      'https://altinn.no/',
+    );
   });
 
-  test('Avvis Systembrukerforespørsel', async ({ page, login }): Promise<void> => {
-    const externalRef = TestdataApi.generateExternalRef();
-
-    const response = await test.step('Create system user request', async () => {
-      return await api.postSystemuserRequest(
-        vendorOrgNumber,
-        externalRef,
-        prebuiltSystemId,
-        vendorOrgNumber,
-        'https://altinn.no/',
-      );
-    });
-
+  test('Avvis Systembrukerforespørsel', async ({
+    page,
+    login,
+    systemUserConfirmPage,
+  }): Promise<void> => {
     await test.step('Navigate to confirmation page and login', async () => {
       await page.goto(response.confirmUrl);
       await login.loginNotChoosingActor(testUserPid);
     });
 
     await test.step('Reject system user request', async () => {
-      await page.getByRole('button', { name: 'Avvis' }).click();
+      await systemUserConfirmPage.reject();
     });
 
     await test.step('Verify logout and rejection status', async () => {
@@ -48,26 +49,18 @@ test.describe('Godkjenn og avvis Systembrukerforespørsel', () => {
     });
   });
 
-  test('Godkjenn Systembrukerforespørsel', async ({ page, login }): Promise<void> => {
-    const externalRef = TestdataApi.generateExternalRef();
-
-    const response = await test.step('Create system user request', async () => {
-      return await api.postSystemuserRequest(
-        vendorOrgNumber,
-        externalRef,
-        prebuiltSystemId,
-        vendorOrgNumber,
-        'https://altinn.no/',
-      );
-    });
-
+  test('Godkjenn Systembrukerforespørsel', async ({
+    page,
+    login,
+    systemUserConfirmPage,
+  }): Promise<void> => {
     await test.step('Navigate to confirmation page and login', async () => {
       await page.goto(response.confirmUrl);
       await login.loginNotChoosingActor(testUserPid);
     });
 
     await test.step('Approve system user request', async () => {
-      await page.getByRole('button', { name: 'Godkjenn' }).click();
+      await systemUserConfirmPage.approve();
     });
 
     await test.step('Verify logout and acceptance status', async () => {

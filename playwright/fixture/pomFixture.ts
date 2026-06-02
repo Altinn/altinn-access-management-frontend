@@ -4,6 +4,7 @@ import { ConsentPage, Language } from 'playwright/pages/consent/ConsentPage';
 import { LoginPage, logoutWithUser } from 'playwright/pages/LoginPage';
 import { AccessManagementFrontPage } from 'playwright/pages/AccessManagementFrontPage';
 import { SystemUserPage } from 'playwright/pages/systemuser/SystemUserPage';
+import { SystemUserConfirmPage } from 'playwright/pages/systemuser/SystemUserConfirmPage';
 import { DelegationPage } from 'playwright/pages/profile/accessPkgDelegationPage';
 import { apiDelegation } from 'playwright/pages/profile/apidelegeringPage';
 import { AktorvalgHeader } from 'playwright/pages/AktorvalgHeader';
@@ -29,6 +30,7 @@ type Fixtures = {
   login: LoginPage;
   accessManagementFrontPage: AccessManagementFrontPage;
   systemUserPage: SystemUserPage;
+  systemUserConfirmPage: SystemUserConfirmPage;
   delegate: delegateToUser;
   delegateRights: delegateRightsToUser;
   deleteRights: revokeRights;
@@ -74,6 +76,9 @@ const test = baseTest.extend<Fixtures>({
   },
   systemUserPage: async ({ page }, use) => {
     await use(new SystemUserPage(page));
+  },
+  systemUserConfirmPage: async ({ page }, use) => {
+    await use(new SystemUserConfirmPage(page));
   },
   delegate: async ({ page }, use) => {
     await use(new delegateToUser(page));

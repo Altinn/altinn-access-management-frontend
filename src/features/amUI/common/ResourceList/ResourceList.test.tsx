@@ -5,6 +5,7 @@ import userEvent from '@testing-library/user-event';
 
 import { ResourceList } from './ResourceList';
 import type { PackageResource, ResourceProvider } from '@/rtk/features/accessPackageApi';
+import type { ResourceListItemResource } from './types';
 
 vi.mock('@/resources/hooks/useProviderLogoUrl', () => ({
   useProviderLogoUrl: () => ({
@@ -110,5 +111,50 @@ describe('ResourceList', () => {
 
     expect(screen.queryByRole('button', { name: /Alpha Service/i })).not.toBeInTheDocument();
     expect(screen.getByRole('button', { name: /Beta Service/i })).toBeInTheDocument();
+  });
+
+  it('renders the expired badge for a resource with resourceType MigratedApp', () => {
+    const expiredResource = {
+      ...createResource({ name: 'Expired Service' }),
+      resourceType: 'MigratedApp',
+    } as ResourceListItemResource;
+
+    render(
+      <ResourceList
+        resources={[expiredResource]}
+        enableSearch={false}
+      />,
+    );
+
+    expect(screen.getByText('resource_list.expired_badge')).toBeInTheDocument();
+  });
+
+  it('renders the expired badge for a resource whose identifier includes migratedcorrespondence', () => {
+    const expiredResource = {
+      ...createResource({ name: 'Migrated Correspondence Service' }),
+      identifier: 'some-migratedcorrespondence-service',
+    } as ResourceListItemResource;
+
+    render(
+      <ResourceList
+        resources={[expiredResource]}
+        enableSearch={false}
+      />,
+    );
+
+    expect(screen.getByText('resource_list.expired_badge')).toBeInTheDocument();
+  });
+
+  it('does not render the expired badge for a non-expired resource', () => {
+    const normalResource = createResource({ name: 'Normal Service' });
+
+    render(
+      <ResourceList
+        resources={[normalResource]}
+        enableSearch={false}
+      />,
+    );
+
+    expect(screen.queryByText('resource_list.expired_badge')).not.toBeInTheDocument();
   });
 });

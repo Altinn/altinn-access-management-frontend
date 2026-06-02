@@ -14,7 +14,7 @@ export const ClientDetailsPage = () => {
   const { t } = useTranslation();
   const { id } = useParams();
 
-  useDocumentTitle(t('client_administration_page.page_title'));
+  useDocumentTitle(t('client_administration_page.client_page_title'));
 
   const pageIsEnabled = clientAdministrationPageEnabled();
 
