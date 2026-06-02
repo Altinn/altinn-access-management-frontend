@@ -1,4 +1,4 @@
-import { test } from 'playwright/fixture/pomFixture';
+import { test, expect } from 'playwright/fixture/pomFixture';
 import { EnduserConnection } from '../../../api-requests/EnduserConnection';
 
 test.describe('Aktørvalg, valg og visning av avgiver', () => {
@@ -42,7 +42,7 @@ test.describe('Aktørvalg, valg og visning av avgiver', () => {
     });
 
     await test.step('Open Global Menu', async () => {
-      await aktorvalgHeader.menuButton.isVisible();
+      await expect(aktorvalgHeader.menuButton).toBeVisible();
       await aktorvalgHeader.menuButton.click();
     });
 
