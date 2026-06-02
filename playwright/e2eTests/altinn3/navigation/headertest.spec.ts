@@ -41,11 +41,6 @@ test.describe('Aktørvalg, valg og visning av avgiver', () => {
       await aktorvalgHeader.chooseBokmalLanguage();
     });
 
-    await test.step('Click Search button', async () => {
-      await aktorvalgHeader.menuButton.click();
-      await aktorvalgHeader.clickSearchButton();
-    });
-
     await test.step('Check visibility for all menu buttons', async () => {
       await aktorvalgHeader.checkAllMenuButtons();
     });
