@@ -1197,6 +1197,7 @@
     "username": "Username",
     "password": "Password",
     "invalid_credentials": "Invalid combination of username and password.",
+    "too_many_requests_error": "Account is temporarily locked",
     "add_account_error": "An error occurred while adding the account.",
     "add_account_button": "Add",
     "forgot_password": "Forgot password",

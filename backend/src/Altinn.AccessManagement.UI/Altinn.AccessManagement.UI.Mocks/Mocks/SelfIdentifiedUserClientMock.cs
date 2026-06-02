@@ -15,12 +15,12 @@ namespace Altinn.AccessManagement.UI.Mocks.Mocks
         /// <inheritdoc />
         public Task<Guid> ValidateCredentials(Altinn2AccountRequest request, CancellationToken cancellationToken)
         {
-            if (request?.Username == "invalid" || request?.Password == "invalid")
+            if (request?.UserName == "invalid" || request?.Password == "invalid")
             {
                 throw new HttpStatusException("Unauthorized", "Invalid credentials", HttpStatusCode.Unauthorized, null);
             }
 
-            if (request?.Username == "invalid_connection" || request?.Password == "invalid_connection")
+            if (request?.UserName == "invalid_connection" || request?.Password == "invalid_connection")
             {
                 return Task.FromResult(Guid.Empty);
             }

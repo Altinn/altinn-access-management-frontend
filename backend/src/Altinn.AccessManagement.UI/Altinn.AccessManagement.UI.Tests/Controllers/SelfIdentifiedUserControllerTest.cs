@@ -38,7 +38,7 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
             Guid to = Guid.NewGuid();
             Altinn2AccountRequest request = new Altinn2AccountRequest()
             {
-                Username = "testuser",
+                UserName = "testuser",
                 Password = "testpassword"
             };
 
@@ -59,7 +59,7 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
             Guid to = Guid.NewGuid();
             Altinn2AccountRequest request = new Altinn2AccountRequest()
             {
-                Username = "invalid",
+                UserName = "invalid",
                 Password = "invalid"
             };
 
@@ -80,7 +80,7 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
             Guid to = Guid.NewGuid();
             Altinn2AccountRequest request = new Altinn2AccountRequest()
             {
-                Username = "invalid_connection",
+                UserName = "invalid_connection",
                 Password = "invalid_connection"
             };
 

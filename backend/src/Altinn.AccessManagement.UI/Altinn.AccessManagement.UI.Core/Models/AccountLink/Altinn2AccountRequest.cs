@@ -11,7 +11,7 @@ namespace Altinn.AccessManagement.UI.Core.Models.SelfIdentifiedUser
         /// The legacy account username.
         /// </summary>
         [Required]
-        public string Username { get; set; }
+        public string UserName { get; set; }
 
         /// <summary>
         /// The legacy account password.

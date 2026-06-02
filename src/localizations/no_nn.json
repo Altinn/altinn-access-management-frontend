@@ -1194,6 +1194,7 @@
     "username": "Brukarnamn",
     "password": "Passord",
     "invalid_credentials": "Ugyldig kombinasjon av brukarnamn og passord.",
+    "too_many_requests_error": "Kontoen er midlertidig låst",
     "add_account_error": "Det skjedde ein feil ved å leggje til konto.",
     "add_account_button": "Legg til",
     "forgot_password": "Gløymt passord",

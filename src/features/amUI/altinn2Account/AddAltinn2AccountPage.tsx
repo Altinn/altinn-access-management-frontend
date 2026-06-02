@@ -60,6 +60,15 @@ export const AddAltinn2AccountPage = () => {
     }
   };
 
+  const getAddUserErrorMessage = () => {
+    if ((addUserError as { status: number }).status === 401) {
+      return t('add_altinn2_account_page.invalid_credentials');
+    } else if ((addUserError as { status: number }).status === 429) {
+      return t('add_altinn2_account_page.too_many_requests_error');
+    }
+    return t('add_altinn2_account_page.add_account_error');
+  };
+
   const step1Component = (
     <DsDialog.Block className={classes.addAltinn2Account}>
       <DsHeading level={1}>{t('add_altinn2_account_page.add_account_heading')}</DsHeading>
@@ -105,17 +114,12 @@ export const AddAltinn2AccountPage = () => {
           label={t('add_altinn2_account_page.password')}
           data-size='sm'
           type='password'
+          autoComplete='off'
           value={password}
           onChange={(e) => setPassword(e.target.value)}
           onKeyDown={handleInputFieldKeyDown}
         />
-        {addUserError && (
-          <DsAlert data-color='danger'>
-            {(addUserError as { status: number }).status === 401
-              ? t('add_altinn2_account_page.invalid_credentials')
-              : t('add_altinn2_account_page.add_account_error')}
-          </DsAlert>
-        )}
+        {addUserError && <DsAlert data-color='danger'>{getAddUserErrorMessage()}</DsAlert>}
         <div className={classes.buttonRow}>
           <DsButton
             variant='primary'
