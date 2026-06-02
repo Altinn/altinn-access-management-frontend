@@ -126,15 +126,25 @@ export const ClientAgentPackageList = ({
             ? t('client_administration_page.via_role', { role: roleName })
             : undefined;
 
-        const onDelegate = () =>
-          addClientAccessPackage(agentId, access.role.code, pkg.urn ?? '', agentName, packageName);
-        const onRevoke = () =>
+        const onDelegate = (onSuccess?: () => void, onError?: () => void) =>
+          addClientAccessPackage(
+            agentId,
+            access.role.code,
+            pkg.urn ?? '',
+            agentName,
+            packageName,
+            onSuccess,
+            onError,
+          );
+        const onRevoke = (onSuccess?: () => void, onError?: () => void) =>
           removeClientAccessPackage(
             agentId,
             access.role.code,
             pkg.urn ?? '',
             agentName,
             packageName,
+            onSuccess,
+            onError,
           );
 
         const openModal =
@@ -181,7 +191,7 @@ export const ClientAgentPackageList = ({
               <Button
                 variant='tertiary'
                 disabled={removeDisabled}
-                onClick={onRevoke}
+                onClick={() => onRevoke()}
               >
                 <MinusCircleIcon aria-hidden='true' />
                 {t('client_administration_page.remove_package_button')}
@@ -190,7 +200,7 @@ export const ClientAgentPackageList = ({
               <Button
                 variant='tertiary'
                 disabled={delegateDisabled}
-                onClick={onDelegate}
+                onClick={() => onDelegate()}
               >
                 <PlusCircleIcon aria-hidden='true' />
                 {t('client_administration_page.delegate_package_button')}

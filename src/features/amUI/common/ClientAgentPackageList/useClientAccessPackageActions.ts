@@ -30,8 +30,11 @@ export const useClientAccessPackageActions = ({
       packageId: string,
       agentName: string,
       accessPackageName: string,
+      onSuccess?: () => void,
+      onError?: () => void,
     ) => {
       if (!fromPartyUuid || !actingPartyUuid) {
+        onError?.();
         return;
       }
 
@@ -56,7 +59,8 @@ export const useClientAccessPackageActions = ({
           }),
           color: 'success',
         });
-      } catch (error) {
+        onSuccess?.();
+      } catch {
         openSnackbar({
           message: t('client_administration_page.delegate_package_error', {
             name: agentName,
@@ -64,7 +68,7 @@ export const useClientAccessPackageActions = ({
           }),
           color: 'danger',
         });
-        throw error;
+        onError?.();
       }
     },
     [actingPartyUuid, addAgentAccessPackages, fromPartyUuid, openSnackbar, t],
@@ -77,8 +81,11 @@ export const useClientAccessPackageActions = ({
       packageId: string,
       agentName: string,
       accessPackageName: string,
+      onSuccess?: () => void,
+      onError?: () => void,
     ) => {
       if (!fromPartyUuid || !actingPartyUuid) {
+        onError?.();
         return;
       }
 
@@ -103,7 +110,8 @@ export const useClientAccessPackageActions = ({
           }),
           color: 'success',
         });
-      } catch (error) {
+        onSuccess?.();
+      } catch {
         openSnackbar({
           message: t('client_administration_page.remove_package_error', {
             name: agentName,
@@ -111,7 +119,7 @@ export const useClientAccessPackageActions = ({
           }),
           color: 'danger',
         });
-        throw error;
+        onError?.();
       }
     },
     [actingPartyUuid, fromPartyUuid, openSnackbar, removeAgentAccessPackages, t],

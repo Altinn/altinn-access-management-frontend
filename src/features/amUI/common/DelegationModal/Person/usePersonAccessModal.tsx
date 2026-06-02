@@ -22,8 +22,8 @@ export interface PersonAccessModalData {
   roleDescription?: string;
   /** Give-access handler. Omit when re-delegation isn't possible (e.g. "My clients"); the modal
    *  then closes after a revoke instead of flipping to a give state. */
-  onDelegate?: () => void | Promise<void>;
-  onRevoke: () => void | Promise<void>;
+  onDelegate?: (onSuccess?: () => void, onError?: () => void) => void | Promise<void>;
+  onRevoke: (onSuccess?: () => void, onError?: () => void) => void | Promise<void>;
 }
 
 /**
@@ -32,7 +32,7 @@ export interface PersonAccessModalData {
  * is flipped to reflect the action taken (revoke -> no access, delegate -> has access).
  *
  * Note: kept intentionally simple — the flipped access is optimistic and not re-derived from live
- * data. This can be improved later.
+ * data.
  *
  * Render `modal` once in the component tree and call `open(data)` to show it for a given party.
  */
@@ -59,29 +59,76 @@ export const usePersonAccessModal = () => {
     }
   }, [data]);
 
-  const runAction = async (
-    action: () => void | Promise<void>,
-    resultingHasAccess: boolean,
-    closeAfter: boolean,
-  ) => {
+  const handleError = () => {
+    setIsLoading(false);
+    setIsSuccess(false);
+  };
+
+  const handleDelegate = async () => {
+    if (!data?.onDelegate) return;
+
     setIsLoading(true);
     setIsSuccess(false);
+    let actionHandled = false;
+
+    const handleSuccess = () => {
+      actionHandled = true;
+      setIsLoading(false);
+      setIsSuccess(true);
+      setHasAccessOverride(true);
+      setTimeout(() => setIsSuccess(false), 2000);
+    };
+
+    const handleActionError = () => {
+      actionHandled = true;
+      handleError();
+    };
 
     try {
-      await action();
-      setIsSuccess(true);
+      await data.onDelegate(handleSuccess, handleActionError);
 
-      if (closeAfter) {
-        // Re-delegation isn't possible here, so close once the success animation has shown.
-        setTimeout(close, 2000);
-      } else {
-        setHasAccessOverride(resultingHasAccess);
-        setTimeout(() => setIsSuccess(false), 2000);
+      if (!actionHandled) {
+        handleSuccess();
       }
     } catch {
-      setIsSuccess(false);
-    } finally {
+      handleActionError();
+    }
+  };
+
+  const handleRevoke = async () => {
+    if (!data) return;
+
+    setIsLoading(true);
+    setIsSuccess(false);
+    let actionHandled = false;
+
+    const handleSuccess = () => {
+      actionHandled = true;
       setIsLoading(false);
+      setIsSuccess(true);
+
+      if (data.onDelegate) {
+        setHasAccessOverride(false);
+        setTimeout(() => setIsSuccess(false), 2000);
+      } else {
+        // Re-delegation isn't possible here, so close once the success animation has shown.
+        setTimeout(close, 2000);
+      }
+    };
+
+    const handleActionError = () => {
+      actionHandled = true;
+      handleError();
+    };
+
+    try {
+      await data.onRevoke(handleSuccess, handleActionError);
+
+      if (!actionHandled) {
+        handleSuccess();
+      }
+    } catch {
+      handleActionError();
     }
   };
 
@@ -102,10 +149,8 @@ export const usePersonAccessModal = () => {
             roleDescription={data.roleDescription}
             isLoading={isLoading}
             isSuccess={isSuccess}
-            onDelegate={
-              data.onDelegate ? () => runAction(data.onDelegate!, true, false) : undefined
-            }
-            onRevoke={() => runAction(data.onRevoke, false, !data.onDelegate)}
+            onDelegate={data.onDelegate ? handleDelegate : undefined}
+            onRevoke={handleRevoke}
           />
         )}
       </div>

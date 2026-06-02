@@ -38,8 +38,16 @@ type ClientAccessListProps = {
   accessStateClients?: Client[];
   addDisabled?: boolean;
   removeDisabled?: boolean;
-  onAddAccessPackage?: (action: ClientAccessPackageAction) => void | Promise<void>;
-  onRemoveAccessPackage?: (action: ClientAccessPackageAction) => void | Promise<void>;
+  onAddAccessPackage?: (
+    action: ClientAccessPackageAction,
+    onSuccess?: () => void,
+    onError?: () => void,
+  ) => void | Promise<void>;
+  onRemoveAccessPackage?: (
+    action: ClientAccessPackageAction,
+    onSuccess?: () => void,
+    onError?: () => void,
+  ) => void | Promise<void>;
   searchPlaceholder?: string;
   requireDelegableForActions?: boolean;
   emptyAccessText?: string;
@@ -109,22 +117,30 @@ export const ClientAccessList = ({
             : undefined;
 
         const onDelegate = onAddAccessPackage
-          ? () =>
-              onAddAccessPackage({
-                clientId,
-                roleCode: access.role.code,
-                packageId: pkg.urn ?? '',
-                accessPackageName: packageName,
-              })
+          ? (onSuccess?: () => void, onError?: () => void) =>
+              onAddAccessPackage(
+                {
+                  clientId,
+                  roleCode: access.role.code,
+                  packageId: pkg.urn ?? '',
+                  accessPackageName: packageName,
+                },
+                onSuccess,
+                onError,
+              )
           : undefined;
         const onRevoke = onRemoveAccessPackage
-          ? () =>
-              onRemoveAccessPackage({
-                clientId,
-                roleCode: access.role.code,
-                packageId: pkg.urn ?? '',
-                accessPackageName: packageName,
-              })
+          ? (onSuccess?: () => void, onError?: () => void) =>
+              onRemoveAccessPackage(
+                {
+                  clientId,
+                  roleCode: access.role.code,
+                  packageId: pkg.urn ?? '',
+                  accessPackageName: packageName,
+                },
+                onSuccess,
+                onError,
+              )
           : undefined;
 
         const action = hasAccess ? onRevoke : onDelegate;
@@ -138,7 +154,7 @@ export const ClientAccessList = ({
             <Button
               variant='tertiary'
               disabled={removeDisabled}
-              onClick={onRevoke}
+              onClick={() => onRevoke()}
             >
               <MinusCircleIcon aria-hidden='true' />
               {t('client_administration_page.remove_package_button')}
@@ -149,7 +165,7 @@ export const ClientAccessList = ({
             <Button
               variant='tertiary'
               disabled={addDisabled}
-              onClick={onDelegate}
+              onClick={() => onDelegate()}
             >
               <PlusCircleIcon aria-hidden='true' />
               {t('client_administration_page.delegate_package_button')}

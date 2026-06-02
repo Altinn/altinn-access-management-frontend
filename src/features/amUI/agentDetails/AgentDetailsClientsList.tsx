@@ -55,11 +55,35 @@ export const AgentDetailsClientsList = ({
       accessStateClients={agentAccessPackages}
       addDisabled={delegateDisabled}
       removeDisabled={removeDisabled}
-      onAddAccessPackage={({ clientId, roleCode, packageId, accessPackageName }) =>
-        addAgentAccessPackage(clientId, roleCode, packageId, agentName, accessPackageName)
+      onAddAccessPackage={(
+        { clientId, roleCode, packageId, accessPackageName },
+        onSuccess?: () => void,
+        onError?: () => void,
+      ) =>
+        addAgentAccessPackage(
+          clientId,
+          roleCode,
+          packageId,
+          agentName,
+          accessPackageName,
+          onSuccess,
+          onError,
+        )
       }
-      onRemoveAccessPackage={({ clientId, roleCode, packageId, accessPackageName }) =>
-        removeAgentAccessPackage(clientId, roleCode, packageId, agentName, accessPackageName)
+      onRemoveAccessPackage={(
+        { clientId, roleCode, packageId, accessPackageName },
+        onSuccess?: () => void,
+        onError?: () => void,
+      ) =>
+        removeAgentAccessPackage(
+          clientId,
+          roleCode,
+          packageId,
+          agentName,
+          accessPackageName,
+          onSuccess,
+          onError,
+        )
       }
       searchPlaceholder={t('client_administration_page.client_search_placeholder')}
     />

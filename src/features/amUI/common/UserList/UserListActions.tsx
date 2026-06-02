@@ -27,7 +27,7 @@ export const UserListActions = ({
   const { t } = useTranslation();
   const isSmall = useIsMobileOrSmaller();
 
-  // On small screens the action is performed by opening the user's modal instead.
+  // On small screens the action is performed by opening a modal instead.
   if (!availableAction || isSmall) {
     return null;
   }
@@ -40,7 +40,7 @@ export const UserListActions = ({
       >
         <DsSkeleton
           variant='text'
-          width='20'
+          width={20}
           aria-label={t('common.loading')}
         />
       </DsButton>
