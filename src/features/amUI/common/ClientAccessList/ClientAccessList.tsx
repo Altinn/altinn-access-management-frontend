@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import {
   AccessPackageListItemProps,
@@ -21,7 +21,10 @@ import { buildClientParentNameById, buildClientSortKey } from '../clientSortUtil
 import { useRoleMetadata } from '../UserRoles/useRoleMetadata';
 import { AccessPackageListItems } from '../AccessPackageListItems/AccessPackageListItems';
 import { UserListItems, type UserListItemData } from '../UserListItems/UserListItems';
-import { useClientPackageAccessModal } from '../DelegationModal/Person/useClientPackageAccessModal';
+import {
+  ClientPackageInfoModal,
+  type ClientPackageModalData,
+} from '../DelegationModal/AccessPackages/ClientPackageInfoModal';
 import { useIsMobileOrSmaller } from '@/resources/utils/screensizeUtils';
 import { PartyType } from '@/rtk/features/userInfoApi';
 import type { Party } from '@/rtk/features/lookupApi';
@@ -77,7 +80,8 @@ export const ClientAccessList = ({
   const { getAccessPackageById } = useAccessPackageLookup();
   const { getRoleMetadata } = useRoleMetadata();
   const isMobileOrSmaller = useIsMobileOrSmaller();
-  const { open, openData, renderModal } = useClientPackageAccessModal();
+  const modalRef = useRef<HTMLDialogElement>(null);
+  const [selected, setSelected] = useState<ClientPackageModalData | null>(null);
   const clientsForAccessState = accessStateClients ?? clients;
   const parentNameById = buildClientParentNameById(clients);
   const sortedClients = sortClientsByKey(clients, parentNameById);
@@ -185,15 +189,17 @@ export const ClientAccessList = ({
           color: (hasAccess ? 'company' : 'neutral') as Color,
           onClick:
             showModalTrigger && accessPackage
-              ? () =>
-                  open({
+              ? () => {
+                  setSelected({
                     party: clientParty,
                     accessPackage,
                     userHasAccess: hasAccess,
                     roleDescription,
                     onDelegate,
                     onRevoke: onRevoke ?? (() => {}),
-                  })
+                  });
+                  modalRef.current?.showModal();
+                }
               : undefined,
           controls,
         };
@@ -234,14 +240,17 @@ export const ClientAccessList = ({
     };
   });
 
-  // Resolve the open item's access live from the unfiltered access state, so the modal stays
+  // Resolve the selected item's access live from the unfiltered access state, so the modal stays
   // correct after a mutation even when its row leaves the rendered (filtered) list.
-  const liveHasAccess = openData
-    ? clientsForAccessState.some(
-        (aap) =>
-          aap.client.id === openData.party.partyUuid &&
-          aap.access.some((p) => p.packages.some((ap) => ap.id === openData.accessPackage.id)),
-      )
+  const modalData: ClientPackageModalData | undefined = selected
+    ? {
+        ...selected,
+        userHasAccess: clientsForAccessState.some(
+          (aap) =>
+            aap.client.id === selected.party.partyUuid &&
+            aap.access.some((p) => p.packages.some((ap) => ap.id === selected.accessPackage.id)),
+        ),
+      }
     : undefined;
 
   return (
@@ -250,7 +259,11 @@ export const ClientAccessList = ({
         items={userListItems}
         searchPlaceholder={searchPlaceholder}
       />
-      {renderModal(liveHasAccess)}
+      <ClientPackageInfoModal
+        ref={modalRef}
+        data={modalData}
+        onClose={() => setSelected(null)}
+      />
     </>
   );
 };

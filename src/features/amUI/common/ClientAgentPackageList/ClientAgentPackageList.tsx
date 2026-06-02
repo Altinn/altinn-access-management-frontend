@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react';
+import React, { useMemo, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import {
   AccessPackageListItemProps,
@@ -25,7 +25,10 @@ import { AccessPackageListItems } from '../AccessPackageListItems/AccessPackageL
 import { UserListItems, type UserListItemData } from '../UserListItems/UserListItems';
 import { useClientAccessPackageActions } from './useClientAccessPackageActions';
 import { useIsMobileOrSmaller } from '@/resources/utils/screensizeUtils';
-import { useClientPackageAccessModal } from '../DelegationModal/Person/useClientPackageAccessModal';
+import {
+  ClientPackageInfoModal,
+  type ClientPackageModalData,
+} from '../DelegationModal/AccessPackages/ClientPackageInfoModal';
 import { PartyType } from '@/rtk/features/userInfoApi';
 
 type ClientAgentPackageListProps = {
@@ -75,7 +78,8 @@ export const ClientAgentPackageList = ({
     removeAgentAccessPackages,
   });
 
-  const { open, openData, renderModal } = useClientPackageAccessModal();
+  const modalRef = useRef<HTMLDialogElement>(null);
+  const [selected, setSelected] = useState<ClientPackageModalData | null>(null);
 
   const clientAccess = client?.access ?? [];
   const clientType = client?.client.type ?? '';
@@ -149,8 +153,8 @@ export const ClientAgentPackageList = ({
 
         const openModal =
           accessPackage && delegable
-            ? () =>
-                open({
+            ? () => {
+                setSelected({
                   party: {
                     partyId: 0,
                     partyUuid: agentId,
@@ -168,7 +172,9 @@ export const ClientAgentPackageList = ({
                   roleDescription,
                   onDelegate,
                   onRevoke,
-                })
+                });
+                modalRef.current?.showModal();
+              }
             : undefined;
 
         const showModalTrigger = !!openModal;
@@ -245,10 +251,15 @@ export const ClientAgentPackageList = ({
     };
   });
 
-  // Resolve the open item's access live from the unfiltered access state, so the modal stays
+  // Resolve the selected item's access live from the unfiltered access state, so the modal stays
   // correct after a mutation even when its row leaves the filtered ("has access" / "all") tab.
-  const liveHasAccess = openData
-    ? (packageIdsByAgentId.get(openData.party.partyUuid)?.has(openData.accessPackage.id) ?? false)
+  const modalData: ClientPackageModalData | undefined = selected
+    ? {
+        ...selected,
+        userHasAccess:
+          packageIdsByAgentId.get(selected.party.partyUuid)?.has(selected.accessPackage.id) ??
+          false,
+      }
     : undefined;
 
   return (
@@ -259,7 +270,11 @@ export const ClientAgentPackageList = ({
         addUserButton={addUserButton}
         emptyText={emptyText}
       />
-      {renderModal(liveHasAccess)}
+      <ClientPackageInfoModal
+        ref={modalRef}
+        data={modalData}
+        onClose={() => setSelected(null)}
+      />
     </>
   );
 };
