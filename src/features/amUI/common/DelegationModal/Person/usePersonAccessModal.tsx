@@ -20,23 +20,35 @@ export interface PersonAccessModalData {
   inheritedStatus?: InheritedStatusMessageType[];
   /** Optional role description, e.g. "Via role X" */
   roleDescription?: string;
-  onDelegate: () => void;
-  onRevoke: () => void;
+  /** Give-access handler. Omit when re-delegation isn't possible (e.g. "My clients"); the modal
+   *  then closes after a revoke instead of flipping to a give state. */
+  onDelegate?: () => void | Promise<void>;
+  onRevoke: () => void | Promise<void>;
 }
 
 /**
  * Provides a standalone access-package action modal (give/revoke) and an `open` callback.
- * The modal is fully controlled — it renders `ClientPackageInfo` directly in a dialog (no shared
- * EditModal / DelegationModalContext), opening and closing from the `data` state. It closes itself
- * after an action.
+ * The modal stays open after an action, showing a loading then success state. The displayed access
+ * is flipped to reflect the action taken (revoke -> no access, delegate -> has access).
+ *
+ * Note: kept intentionally simple — the flipped access is optimistic and not re-derived from live
+ * data. This can be improved later.
  *
  * Render `modal` once in the component tree and call `open(data)` to show it for a given party.
  */
 export const usePersonAccessModal = () => {
   const modalRef = useRef<HTMLDialogElement>(null);
   const [data, setData] = useState<PersonAccessModalData | null>(null);
+  const [isLoading, setIsLoading] = useState(false);
+  const [isSuccess, setIsSuccess] = useState(false);
+  const [hasAccessOverride, setHasAccessOverride] = useState<boolean | null>(null);
 
-  const open = (modalData: PersonAccessModalData) => setData(modalData);
+  const open = (modalData: PersonAccessModalData) => {
+    setData(modalData);
+    setHasAccessOverride(null);
+    setIsSuccess(false);
+    setIsLoading(false);
+  };
   const close = () => setData(null);
 
   useEffect(() => {
@@ -46,6 +58,24 @@ export const usePersonAccessModal = () => {
       modalRef.current?.close();
     }
   }, [data]);
+
+  const runAction = async (
+    action: () => void | Promise<void>,
+    resultingHasAccess: boolean,
+    closeAfter: boolean,
+  ) => {
+    setIsLoading(true);
+    await action();
+    setIsLoading(false);
+    setIsSuccess(true);
+    if (closeAfter) {
+      // Re-delegation isn't possible here, so close once the success animation has shown.
+      setTimeout(close, 2000);
+    } else {
+      setHasAccessOverride(resultingHasAccess);
+      setTimeout(() => setIsSuccess(false), 2000);
+    }
+  };
 
   const modal = (
     <DsDialog
@@ -59,17 +89,15 @@ export const usePersonAccessModal = () => {
           <ClientPackageInfo
             party={data.party}
             accessPackage={data.accessPackage}
-            userHasAccess={data.userHasAccess}
+            userHasAccess={hasAccessOverride ?? data.userHasAccess}
             inheritedStatus={data.inheritedStatus}
             roleDescription={data.roleDescription}
-            onDelegate={() => {
-              data.onDelegate();
-              close();
-            }}
-            onRevoke={() => {
-              data.onRevoke();
-              close();
-            }}
+            isLoading={isLoading}
+            isSuccess={isSuccess}
+            onDelegate={
+              data.onDelegate ? () => runAction(data.onDelegate!, true, false) : undefined
+            }
+            onRevoke={() => runAction(data.onRevoke, false, !data.onDelegate)}
           />
         )}
       </div>

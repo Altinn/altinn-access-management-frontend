@@ -175,7 +175,7 @@ export const ClientAccessList = ({
                     accessPackage,
                     userHasAccess: hasAccess,
                     roleDescription,
-                    onDelegate: onDelegate ?? (() => {}),
+                    onDelegate,
                     onRevoke: onRevoke ?? (() => {}),
                   })
               : undefined,

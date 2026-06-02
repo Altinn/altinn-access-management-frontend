@@ -39,7 +39,8 @@ export interface PartyInfoProps {
   /** Optional role description, e.g. "Via role X" */
   roleDescription?: string;
   availableActions?: DelegationAction[];
-  onDelegate: () => void;
+  /** Give-access handler. Omit when re-delegation isn't possible on this surface (hides the button). */
+  onDelegate?: () => void;
   onRevoke: () => void;
   isLoading?: boolean;
   isSuccess?: boolean;
@@ -77,7 +78,8 @@ export const PartyInfo = ({
   const partyAvatarType = party.partyTypeName === PartyType.Person ? 'person' : 'company';
 
   const canRevoke = userHasAccess && availableActions.includes(DelegationAction.REVOKE);
-  const canDelegate = !userHasAccess && availableActions.includes(DelegationAction.DELEGATE);
+  const canDelegate =
+    !userHasAccess && availableActions.includes(DelegationAction.DELEGATE) && !!onDelegate;
 
   const partySubtitle =
     party.partyTypeName === PartyType.Person
