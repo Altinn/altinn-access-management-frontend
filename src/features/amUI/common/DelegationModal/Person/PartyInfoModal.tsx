@@ -2,8 +2,8 @@ import { forwardRef } from 'react';
 import { DsDialog, Snackbar, SnackbarProvider } from '@altinn/altinn-components';
 
 import classes from '../DelegationModal.module.css';
-import { DelegationAction } from '../delegationAction';
 import { PartyInfo, type PartyInfoProps } from './PartyInfo';
+import { DelegationAction } from '../EditModal';
 
 interface PartyInfoModalProps {
   partyInfo?: PartyInfoProps;

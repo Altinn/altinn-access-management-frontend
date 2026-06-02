@@ -50,8 +50,8 @@ export const StatusSection = ({
   toPartyName,
 }: StatusSectionProps) => {
   const { t } = useTranslation();
-  // Read the context null-safely: PartyInfo/ClientPackageInfo reuse this section in places (e.g. client
-  // administration) that are not wrapped in a PartyRepresentationProvider.
+
+  // Safe to use if no PartyRepresentationContext is provided
   const partyContext = useContext(PartyRepresentationContext);
   const fromParty = partyContext?.fromParty;
   const toParty = partyContext?.toParty;

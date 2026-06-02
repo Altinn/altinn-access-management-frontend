@@ -18,17 +18,17 @@ import type {
 } from '@/rtk/features/clientApi';
 import { useAccessPackageLookup } from '@/resources/hooks/useAccessPackageLookup';
 import { getFormattedDateOfBirthLabel, isSubUnitByType } from '@/resources/utils/reporteeUtils';
-import { useRoleMetadata } from '../common/UserRoles/useRoleMetadata';
-import { isNewUser } from '../common/isNewUser';
+import { useRoleMetadata } from '../UserRoles/useRoleMetadata';
+import { isNewUser } from '../isNewUser';
 
-import { AccessPackageListItems } from '../common/AccessPackageListItems/AccessPackageListItems';
-import { UserListItems, type UserListItemData } from '../common/UserListItems/UserListItems';
+import { AccessPackageListItems } from '../AccessPackageListItems/AccessPackageListItems';
+import { UserListItems, type UserListItemData } from '../UserListItems/UserListItems';
 import { useClientAccessPackageActions } from './useClientAccessPackageActions';
 import { useIsMobileOrSmaller } from '@/resources/utils/screensizeUtils';
-import { usePersonAccessModal } from '../common/DelegationModal/Person/usePersonAccessModal';
+import { usePersonAccessModal } from '../DelegationModal/Person/usePersonAccessModal';
 import { PartyType } from '@/rtk/features/userInfoApi';
 
-type ClientAdministrationClientAgentsListProps = {
+type ClientAgentPackageListProps = {
   agents: Agent[];
   clientAccessPackages: Agent[];
   client?: Client;
@@ -48,7 +48,7 @@ const getUserListItemType = (agentType: string): UserListItemProps['type'] => {
 const getAgentSortKey = (agent: Agent): string =>
   `${isNewUser(agent.agentAddedAt) ? '0' : '1'}:${agent.agent.name.toLowerCase()}`;
 
-export const ClientAdministrationClientAgentsList = ({
+export const ClientAgentPackageList = ({
   agents,
   clientAccessPackages,
   client,
@@ -59,12 +59,11 @@ export const ClientAdministrationClientAgentsList = ({
   removeAgentAccessPackages,
   emptyText,
   addUserButton,
-}: ClientAdministrationClientAgentsListProps) => {
+}: ClientAgentPackageListProps) => {
   const { t } = useTranslation();
   const { getAccessPackageById } = useAccessPackageLookup();
   const { getRoleMetadata } = useRoleMetadata();
   const isMobileOrSmaller = useIsMobileOrSmaller();
-  const { modal, open } = usePersonAccessModal();
 
   const delegateDisabled = isLoading || !fromPartyUuid || !actingPartyUuid;
   const removeDisabled = isLoading || !fromPartyUuid || !actingPartyUuid;
@@ -75,6 +74,8 @@ export const ClientAdministrationClientAgentsList = ({
     addAgentAccessPackages,
     removeAgentAccessPackages,
   });
+
+  const { modal, open } = usePersonAccessModal();
 
   const clientAccess = client?.access ?? [];
   const clientType = client?.client.type ?? '';
@@ -106,7 +107,6 @@ export const ClientAdministrationClientAgentsList = ({
     const isRecentlyAdded = isNewUser(agent.agentAddedAt);
     const isSubUnit = isSubUnitByType(agent.agent.variant);
     const userType = getUserListItemType(agent.agent.type);
-
     const nodes = clientAccess.reduce((acc, access) => {
       if (access.packages.length === 0) return acc;
 
@@ -115,6 +115,7 @@ export const ClientAdministrationClientAgentsList = ({
         fullName: agent.agent.name,
         type: agent.agent.type === 'Person' ? 'person' : 'company',
       });
+
       const packages = access.packages?.map<AccessPackageListItemProps>((pkg) => {
         const hasAccess = packageIdsByAgentId.get(agentId)?.has(pkg.id) ?? false;
         const accessPackage = getAccessPackageById(pkg.id);
@@ -124,6 +125,7 @@ export const ClientAdministrationClientAgentsList = ({
           access.role.code !== 'rettighetshaver'
             ? t('client_administration_page.via_role', { role: roleName })
             : undefined;
+
         const onDelegate = () =>
           addClientAccessPackage(agentId, access.role.code, pkg.urn ?? '', agentName, packageName);
         const onRevoke = () =>
@@ -134,6 +136,7 @@ export const ClientAdministrationClientAgentsList = ({
             agentName,
             packageName,
           );
+
         const openModal =
           accessPackage && delegable
             ? () =>
@@ -157,6 +160,7 @@ export const ClientAdministrationClientAgentsList = ({
                   onRevoke,
                 })
             : undefined;
+
         const showModalTrigger = !!openModal;
 
         return {
@@ -165,6 +169,7 @@ export const ClientAdministrationClientAgentsList = ({
           type: packageType,
           isSubUnit: clientIsSubUnit,
           interactive: showModalTrigger,
+          titleAs: 'h3',
           description: roleDescription ?? '',
           as: showModalTrigger ? 'button' : 'div',
           color: (hasAccess ? 'company' : 'neutral') as Color,
@@ -208,7 +213,9 @@ export const ClientAdministrationClientAgentsList = ({
       subUnit: isSubUnit,
       deleted: agent.agent.isDeleted ?? undefined,
       collapsible: true,
-      as: Button,
+      interactive: true,
+      titleAs: 'h2',
+      as: 'button',
       children: <AccessPackageListItems items={nodes} />,
       description:
         userType === 'company'
