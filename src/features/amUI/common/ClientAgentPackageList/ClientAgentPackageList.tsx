@@ -100,6 +100,9 @@ export const ClientAgentPackageList = ({
     return map;
   }, [clientAccessPackages]);
 
+  const agentHasPackage = (agentId: string, packageId: string) =>
+    packageIdsByAgentId.get(agentId)?.has(packageId) ?? false;
+
   const sortedAgents = useMemo(() => {
     return [...agents].sort((a, b) => {
       return getAgentSortKey(a).localeCompare(getAgentSortKey(b));
@@ -121,7 +124,7 @@ export const ClientAgentPackageList = ({
       });
 
       const packages = access.packages?.map<AccessPackageListItemProps>((pkg) => {
-        const hasAccess = packageIdsByAgentId.get(agentId)?.has(pkg.id) ?? false;
+        const hasAccess = agentHasPackage(agentId, pkg.id);
         const accessPackage = getAccessPackageById(pkg.id);
         const delegable = accessPackage?.isDelegable ?? false;
         const packageName = accessPackage?.name || pkg.name;
@@ -256,9 +259,7 @@ export const ClientAgentPackageList = ({
   const modalData: ClientPackageModalData | undefined = selected
     ? {
         ...selected,
-        userHasAccess:
-          packageIdsByAgentId.get(selected.party.partyUuid)?.has(selected.accessPackage.id) ??
-          false,
+        userHasAccess: agentHasPackage(selected.party.partyUuid, selected.accessPackage.id),
       }
     : undefined;
 

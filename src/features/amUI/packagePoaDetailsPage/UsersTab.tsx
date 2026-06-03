@@ -19,19 +19,7 @@ import { mapPermissionsToUserSearchNodes } from '../common/UserSearch/permission
 import type { UserActionTarget } from '../common/UserSearch/types';
 import { usePartyRepresentation } from '../common/PartyRepresentationContext/PartyRepresentationContext';
 import { DelegationAction } from '../common/DelegationModal/EditModal';
-import { getInheritedStatus } from '../common/useInheritedStatus';
-import { PartyInfoModal } from './PartyInfoModal';
-
-const mapUserToParty = (user: UserActionTarget): Party => ({
-  partyId: 0,
-  partyUuid: user.id,
-  orgNumber: user.organizationIdentifier ?? undefined,
-  name: user.name,
-  partyTypeName:
-    user.type?.toLowerCase() === 'organisasjon' ? PartyType.Organization : PartyType.Person,
-  dateOfBirth: user.dateOfBirth ?? undefined,
-  variant: user.variant ?? undefined,
-});
+import { PackageUserModal, mapUserToParty, type PackageUserModalHandle } from './PackageUserModal';
 
 interface UsersTabProps {
   accessPackage?: AccessPackage;
@@ -43,9 +31,7 @@ interface UsersTabProps {
 export const UsersTab = ({ accessPackage, isLoading, isFetching }: UsersTabProps) => {
   const { t } = useTranslation();
   const { fromParty, toParty } = usePartyRepresentation();
-  const modalRef = useRef<HTMLDialogElement>(null);
-  const [selectedUser, setSelectedUser] = useState<UserActionTarget | null>(null);
-  const [actionSuccess, setActionSuccess] = useState(false);
+  const modalRef = useRef<PackageUserModalHandle>(null);
   const { queueSnackbar } = useSnackbarOnIdle({ isBusy: isFetching, showPendingOnUnmount: true });
   const { canDelegatePackage, isLoading: isDelegationCheckLoading } =
     useAccessPackageDelegationCheck();
@@ -95,14 +81,9 @@ export const UsersTab = ({ accessPackage, isLoading, isFetching }: UsersTabProps
     });
   };
 
-  const showActionSuccess = () => {
-    setActionSuccess(true);
-    setTimeout(() => setActionSuccess(false), 2000);
-  };
-
   const onDelegateSuccess = (p: AccessPackage, toParty: Party) => {
     setDelegateActionError(null);
-    showActionSuccess();
+    modalRef.current?.showSuccess();
     queueSnackbar(
       t('package_poa_details_page.package_delegation_success', {
         name: formatToPartyName(toParty),
@@ -113,7 +94,7 @@ export const UsersTab = ({ accessPackage, isLoading, isFetching }: UsersTabProps
   };
 
   const onRevokeSuccess = (p: AccessPackage, toParty: Party) => {
-    showActionSuccess();
+    modalRef.current?.showSuccess();
     queueSnackbar(
       t('package_poa_details_page.package_revocation_success', {
         name: formatToPartyName(toParty),
@@ -161,31 +142,6 @@ export const UsersTab = ({ accessPackage, isLoading, isFetching }: UsersTabProps
     ...(canDelegate ? [DelegationAction.DELEGATE] : []),
   ];
 
-  const selectedUserPermissions = useMemo(
-    () =>
-      accessPackage?.permissions?.filter((permission) => permission.to?.id === selectedUser?.id) ??
-      [],
-    [accessPackage?.permissions, selectedUser?.id],
-  );
-
-  const selectedUserHasAccess = selectedUserPermissions.length > 0;
-  const selectedUserAccessIsInherited = selectedUser?.isInherited ?? false;
-
-  const selectedUserInheritedStatus = useMemo(
-    () =>
-      getInheritedStatus({
-        permissions: selectedUserPermissions,
-        toParty: selectedUser ? mapUserToParty(selectedUser) : undefined,
-        fromParty,
-      }),
-    [selectedUserPermissions, selectedUser, fromParty],
-  );
-
-  const handleSelectUser = (user: UserActionTarget) => {
-    setSelectedUser(user);
-    modalRef.current?.showModal();
-  };
-
   return (
     <>
       {!isLoading && (
@@ -218,7 +174,7 @@ export const UsersTab = ({ accessPackage, isLoading, isFetching }: UsersTabProps
         onDelegate={canDelegate ? handleOnDelegate : undefined}
         onAddNewUser={canDelegate ? handleOnDelegate : undefined}
         onRevoke={handleOnRevoke}
-        onSelect={handleSelectUser}
+        onSelect={(user) => modalRef.current?.open(user)}
         isActionLoading={
           isActionLoading ||
           isLoading ||
@@ -231,31 +187,13 @@ export const UsersTab = ({ accessPackage, isLoading, isFetching }: UsersTabProps
         canDelegate={canDelegate}
       />
 
-      <PartyInfoModal
+      <PackageUserModal
         ref={modalRef}
-        partyInfo={
-          selectedUser && accessPackage
-            ? {
-                party: mapUserToParty(selectedUser),
-                accessPackage,
-                userHasAccess: selectedUserHasAccess,
-                inheritedStatus: selectedUserInheritedStatus,
-                // Purely inherited access can't be revoked here, so hide the revoke button
-                // (mirrors the list item, which hides it for inherited access).
-                availableActions: selectedUserAccessIsInherited
-                  ? availableActions.filter((action) => action !== DelegationAction.REVOKE)
-                  : availableActions,
-                isLoading: isActionLoading,
-                isSuccess: actionSuccess,
-                onDelegate: () => handleOnDelegate(selectedUser),
-                onRevoke: () => handleOnRevoke(selectedUser),
-              }
-            : undefined
-        }
-        onClose={() => {
-          setSelectedUser(null);
-          setActionSuccess(false);
-        }}
+        accessPackage={accessPackage}
+        availableActions={availableActions}
+        isActionLoading={isActionLoading}
+        onDelegate={handleOnDelegate}
+        onRevoke={handleOnRevoke}
       />
     </>
   );
