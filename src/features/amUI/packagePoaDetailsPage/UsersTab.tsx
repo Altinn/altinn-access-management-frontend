@@ -230,7 +230,6 @@ export const UsersTab = ({ accessPackage, isLoading, isFetching }: UsersTabProps
 
       <PartyInfoModal
         ref={modalRef}
-        availableActions={availableActions}
         partyInfo={
           selectedUser && accessPackage
             ? {
@@ -238,7 +237,11 @@ export const UsersTab = ({ accessPackage, isLoading, isFetching }: UsersTabProps
                 accessPackage,
                 userHasAccess: selectedUserHasAccess,
                 inheritedStatus: selectedUserInheritedStatus,
-                disabled: selectedUserAccessIsInherited,
+                // Purely inherited access can't be revoked here, so hide the revoke button
+                // (mirrors the list item, which hides it for inherited access).
+                availableActions: selectedUserAccessIsInherited
+                  ? availableActions.filter((action) => action !== DelegationAction.REVOKE)
+                  : availableActions,
                 onDelegate: () => {
                   handleOnDelegate(selectedUser);
                   modalRef.current?.close();

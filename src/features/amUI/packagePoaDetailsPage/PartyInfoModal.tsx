@@ -3,16 +3,14 @@ import { DsDialog, Snackbar, SnackbarProvider } from '@altinn/altinn-components'
 
 import classes from '../common/DelegationModal/DelegationModal.module.css';
 import { PartyInfo, type PartyInfoProps } from '../common/DelegationModal/Party/PartyInfo';
-import { DelegationAction } from '../common/DelegationModal/EditModal';
 
 interface PartyInfoModalProps {
   partyInfo?: PartyInfoProps;
-  availableActions?: DelegationAction[];
   onClose?: () => void;
 }
 
 export const PartyInfoModal = forwardRef<HTMLDialogElement, PartyInfoModalProps>(
-  ({ partyInfo, availableActions, onClose }, ref) => {
+  ({ partyInfo, onClose }, ref) => {
     return (
       <DsDialog
         ref={ref}
@@ -21,14 +19,7 @@ export const PartyInfoModal = forwardRef<HTMLDialogElement, PartyInfoModalProps>
         onClose={onClose}
       >
         <SnackbarProvider>
-          <div className={classes.content}>
-            {partyInfo && (
-              <PartyInfo
-                {...partyInfo}
-                availableActions={partyInfo.availableActions ?? availableActions}
-              />
-            )}
-          </div>
+          <div className={classes.content}>{partyInfo && <PartyInfo {...partyInfo} />}</div>
           <Snackbar />
         </SnackbarProvider>
       </DsDialog>

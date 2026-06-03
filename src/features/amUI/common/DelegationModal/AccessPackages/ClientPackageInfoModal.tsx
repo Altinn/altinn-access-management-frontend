@@ -1,4 +1,4 @@
-import { forwardRef, useRef, useState } from 'react';
+import { forwardRef, useState } from 'react';
 import { DsDialog } from '@altinn/altinn-components';
 
 import type { AccessPackage } from '@/rtk/features/accessPackageApi';
@@ -24,7 +24,7 @@ export interface ClientPackageModalData {
   /** Optional role description, e.g. "Via role X" */
   roleDescription?: string;
   /** Give-access handler. Omit when re-delegation isn't possible (e.g. "My clients"); the modal
-   *  then closes after a revoke instead of staying open in a give state. */
+   *  then simply shows no give button after a revoke. */
   onDelegate?: (onSuccess?: () => void, onError?: () => void) => void | Promise<void>;
   onRevoke: (onSuccess?: () => void, onError?: () => void) => void | Promise<void>;
 }
@@ -41,23 +41,13 @@ interface ClientPackageInfoModalProps {
  * Controlled from the outside like the other modals: the parent owns the `ref` (open via
  * `ref.current?.showModal()`) and the selected item, and rebuilds `data` each render so the
  * displayed access stays live after a mutation. This component owns only the action lifecycle
- * (loading -> success), keeping the modal open through it and auto-closing after a revoke when
- * re-delegation isn't possible.
+ * (loading -> success), keeping the modal open through it; the available buttons are derived from
+ * the live access state and the presence of `onDelegate`.
  */
 export const ClientPackageInfoModal = forwardRef<HTMLDialogElement, ClientPackageInfoModalProps>(
   ({ data, onClose }, ref) => {
-    const innerRef = useRef<HTMLDialogElement>(null);
     const [isLoading, setIsLoading] = useState(false);
     const [isSuccess, setIsSuccess] = useState(false);
-
-    const setRefs = (node: HTMLDialogElement | null) => {
-      innerRef.current = node;
-      if (typeof ref === 'function') {
-        ref(node);
-      } else if (ref) {
-        ref.current = node;
-      }
-    };
 
     const handleError = () => {
       setIsLoading(false);
@@ -72,7 +62,6 @@ export const ClientPackageInfoModal = forwardRef<HTMLDialogElement, ClientPackag
 
     const runAction = async (
       action: (onSuccess?: () => void, onError?: () => void) => void | Promise<void>,
-      closeAfter: boolean,
     ) => {
       setIsLoading(true);
       setIsSuccess(false);
@@ -82,13 +71,7 @@ export const ClientPackageInfoModal = forwardRef<HTMLDialogElement, ClientPackag
         actionHandled = true;
         setIsLoading(false);
         setIsSuccess(true);
-
-        if (closeAfter) {
-          // Re-delegation isn't possible here, so close once the success animation has shown.
-          setTimeout(() => innerRef.current?.close(), animationDuration);
-        } else {
-          setTimeout(() => setIsSuccess(false), animationDuration);
-        }
+        setTimeout(() => setIsSuccess(false), animationDuration);
       };
 
       const handleActionError = () => {
@@ -109,7 +92,7 @@ export const ClientPackageInfoModal = forwardRef<HTMLDialogElement, ClientPackag
 
     return (
       <DsDialog
-        ref={setRefs}
+        ref={ref}
         className={dialogClasses.modalDialog}
         closedby='any'
         onClose={handleClose}
@@ -124,8 +107,8 @@ export const ClientPackageInfoModal = forwardRef<HTMLDialogElement, ClientPackag
               roleDescription={data.roleDescription}
               isLoading={isLoading}
               isSuccess={isSuccess}
-              onDelegate={data.onDelegate ? () => runAction(data.onDelegate!, false) : undefined}
-              onRevoke={() => runAction(data.onRevoke, !data.onDelegate)}
+              onDelegate={data.onDelegate ? () => runAction(data.onDelegate!) : undefined}
+              onRevoke={() => runAction(data.onRevoke)}
             />
           )}
         </div>
