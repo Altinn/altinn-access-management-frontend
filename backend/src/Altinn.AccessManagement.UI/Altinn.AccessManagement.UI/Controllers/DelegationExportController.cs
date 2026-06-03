@@ -57,6 +57,11 @@ namespace Altinn.AccessManagement.UI.Controllers
             [FromQuery] string types = null,
             [FromQuery] string languageCode = null)
         {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
             try
             {
                 ISet<string> typeSet = ParseTypes(types);
