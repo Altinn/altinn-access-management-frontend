@@ -1135,7 +1135,7 @@
     "poa_item_description": "Alle tilgangspakker og enkelttjenester som {{reportee}} har gitt fullmakt til",
     "poa_item_description_yourself": "Alle tilgangspakker og enkelttjenester som du har gitt fullmakt til",
     "consent_item_description": "Alle inngåtte avtaler",
-    "systemuser_item_description": "Alle {{reportee}}'s systemtilganger",
+    "systemuser_item_description": "Alle {{reportee}} sine systemtilganger",
     "maskinporten_item_description": "Administrer fullmakter til API som ligger i Maskinporten",
     "client_admin_item_description": "Gi fullmakter fra klienter til brukere i {{reportee}}.",
     "new_requests_single": "{{reportee}} har {{requestCount}} ny forespørsel",
