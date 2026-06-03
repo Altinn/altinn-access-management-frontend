@@ -1,3 +1,5 @@
+using System.Globalization;
+
 namespace Altinn.AccessManagement.UI.Core.Helpers
 {
     /// <summary>
@@ -5,6 +7,29 @@ namespace Altinn.AccessManagement.UI.Core.Helpers
     /// </summary>
     public static class PersonIdentifierUtils
     {
+        /// <summary>
+        /// Builds a masked recipient identifier from a person's date of birth, on the form
+        /// <c>ddMMyy*****</c> (e.g. "1966-12-25" =&gt; "251266*****"). The personal-number part
+        /// is never included. Used for the delegated-rights export where the full national
+        /// identity number is not available (and must not be exposed).
+        /// </summary>
+        /// <param name="dateOfBirth">The date of birth in ISO format (yyyy-MM-dd).</param>
+        /// <returns>The masked identifier, or <see cref="string.Empty"/> when the date cannot be parsed.</returns>
+        public static string MaskedIdFromDateOfBirth(string dateOfBirth)
+        {
+            if (string.IsNullOrWhiteSpace(dateOfBirth))
+            {
+                return string.Empty;
+            }
+
+            if (DateTime.TryParse(dateOfBirth, CultureInfo.InvariantCulture, DateTimeStyles.None, out DateTime parsed))
+            {
+                return parsed.ToString("ddMMyy", CultureInfo.InvariantCulture) + "*****";
+            }
+
+            return string.Empty;
+        }
+
         /// <summary>
         /// Checks whether a person identifier is a valid SSN (11 digits).
         /// </summary>
