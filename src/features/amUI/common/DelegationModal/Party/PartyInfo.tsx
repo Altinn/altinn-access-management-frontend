@@ -46,8 +46,6 @@ export interface PartyInfoProps {
   isSuccess?: boolean;
   disabled?: boolean;
   error?: ActionError | null;
-  delegateDescription?: string;
-  revokeDescription?: string;
 }
 
 const defaultActions = [DelegationAction.DELEGATE, DelegationAction.REVOKE];
@@ -65,8 +63,6 @@ export const PartyInfo = ({
   isSuccess = false,
   disabled = false,
   error,
-  delegateDescription,
-  revokeDescription,
 }: PartyInfoProps) => {
   const { t } = useTranslation();
 

@@ -52,9 +52,6 @@ const resolveInheritanceStatus = (
   return null;
 };
 
-export const isPermissionInherited = (permission: Permission): boolean =>
-  resolveInheritanceStatus(permission, permission.role?.code === 'rettighetshaver') !== null;
-
 interface GetInheritedStatusParams {
   permissions?: Permission[];
   toParty?: Party;
