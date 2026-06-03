@@ -36,6 +36,7 @@ const mapUserToActionTarget = (user: UserSearchNode | ExtendedUser | User): User
   variant: user.variant,
   organizationIdentifier: user.organizationIdentifier,
   dateOfBirth: user.dateOfBirth,
+  isInherited: 'isInherited' in user ? user.isInherited : undefined,
 });
 
 export const UserSearchResults: React.FC<UserSearchResultsProps> = ({

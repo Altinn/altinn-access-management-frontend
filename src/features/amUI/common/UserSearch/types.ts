@@ -20,5 +20,5 @@ export interface UserSearchNode {
 
 export type UserActionTarget = Pick<
   UserSearchNode,
-  'id' | 'name' | 'type' | 'variant' | 'organizationIdentifier' | 'dateOfBirth'
+  'id' | 'name' | 'type' | 'variant' | 'organizationIdentifier' | 'dateOfBirth' | 'isInherited'
 >;
