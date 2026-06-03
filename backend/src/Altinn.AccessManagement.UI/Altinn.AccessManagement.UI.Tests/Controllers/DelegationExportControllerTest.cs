@@ -25,6 +25,7 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
         private const string UnknownPartyUuid = "11111111-1111-1111-1111-111111111111";
 
         private const string InstanceFile = "enkeltrettigheter-instans.csv";
+        private const string SingleRightFile = "enkeltrettigheter.csv";
         private const string BaseUrl = "accessmanagement/api/v1/delegationexport/reportee";
 
         private readonly HttpClient _client;
@@ -64,6 +65,26 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
 
             // includeSubunits=false: no rows from the subunit giver.
             Assert.DoesNotContain(SubunitOrgNumber, csv);
+        }
+
+        [Fact]
+        public async Task Export_SingleRightsType_ReturnsPopulatedCsv()
+        {
+            HttpResponseMessage response = await _client.GetAsync($"{BaseUrl}/{OrgPartyUuid}?types=singlerights&includeSubunits=false");
+
+            Assert.Equal(HttpStatusCode.OK, response.StatusCode);
+
+            Dictionary<string, string> entries = await ReadZipEntries(response);
+            Assert.Equal(new[] { SingleRightFile }, entries.Keys);
+
+            string csv = entries[SingleRightFile];
+            Assert.Contains("giver_orgnr;giver_navn;mottaker_id;mottaker_navn;mottaker_type;tjeneste_navn;resource_id", csv);
+
+            // The single-right delegations mock has direct (non-via) permissions to this recipient.
+            Assert.Contains("SITRONGUL MEDALJONG", csv);
+
+            // More than just the header row.
+            Assert.True(csv.Split('\n', StringSplitOptions.RemoveEmptyEntries).Length > 1);
         }
 
         [Fact]
