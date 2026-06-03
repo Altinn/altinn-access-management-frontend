@@ -51,7 +51,8 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
 
             Dictionary<string, string> entries = await ReadZipEntries(response);
 
-            Assert.True(entries.ContainsKey(InstanceFile));
+            // Only the requested type is exported.
+            Assert.Equal(new[] { InstanceFile }, entries.Keys);
             string csv = entries[InstanceFile];
 
             // Header present (UTF-8 BOM is allowed before it).
@@ -60,6 +61,17 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
             // Data from the instance mock: recipient is a person -> masked id from date of birth (1981-03-20).
             Assert.Contains("200381*****", csv);
             Assert.Contains(OrgNumber, csv);
+
+            // includeSubunits=false: no rows from the subunit giver.
+            Assert.DoesNotContain(SubunitOrgNumber, csv);
+        }
+
+        [Fact]
+        public async Task Export_UnknownType_ReturnsBadRequest()
+        {
+            HttpResponseMessage response = await _client.GetAsync($"{BaseUrl}/{OrgPartyUuid}?types=foo");
+
+            Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
         }
 
         [Fact]

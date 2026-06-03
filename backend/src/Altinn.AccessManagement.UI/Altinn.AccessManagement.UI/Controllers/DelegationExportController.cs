@@ -14,6 +14,11 @@ namespace Altinn.AccessManagement.UI.Controllers
     [Route("accessmanagement/api/v1/delegationexport")]
     public class DelegationExportController : Controller
     {
+        private static readonly HashSet<string> AllowedTypes = new(StringComparer.OrdinalIgnoreCase)
+        {
+            "roles", "accesspackages", "singlerights", "instances",
+        };
+
         private readonly IHttpContextAccessor _httpContextAccessor;
         private readonly ILogger _logger;
         private readonly IDelegationExportService _delegationExportService;
@@ -55,6 +60,15 @@ namespace Altinn.AccessManagement.UI.Controllers
             try
             {
                 ISet<string> typeSet = ParseTypes(types);
+                if (typeSet != null)
+                {
+                    List<string> unknown = typeSet.Where(t => !AllowedTypes.Contains(t)).ToList();
+                    if (unknown.Count > 0)
+                    {
+                        return BadRequest($"Unknown type(s): {string.Join(", ", unknown)}. Allowed: {string.Join(", ", AllowedTypes)}.");
+                    }
+                }
+
                 string language = string.IsNullOrWhiteSpace(languageCode)
                     ? LanguageHelper.GetSelectedLanguageCookieValueBackendStandard(_httpContextAccessor.HttpContext)
                     : languageCode;

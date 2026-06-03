@@ -324,7 +324,9 @@ csv.WriteRecords(rows);   // rows = typed rad-modeller per fil (ClassMap styrer 
 **Detaljer:**
 - **UTF-8 med BOM** er bevisst (Excel på Windows antar ellers ANSI for `;`-separerte filer).
 - **Én `ClassMap` per filtype** gir eksplisitt og stabil kolonnerekkefølge.
-- Skriv direkte inn i hver `ZipArchive`-entry sin stream (ingen mellomlagring av hele filen i minne).
+- Hver CSV serialiseres til `byte[]` (UTF-8 m/BOM) og skrives deretter inn i sin `ZipArchive`-entry.
+  (Eksportfilene er små, så enkel `byte[]`-bygging er greit; ved svært store filer kan man
+  vurdere å streame direkte inn i entry-strømmen.)
 - Alternativ til `InjectionOptions.Escape`: `InjectionOptions.Strip` (fjerner ledetegnet). Velg
   `Escape` for å bevare verdien mest mulig.
 
