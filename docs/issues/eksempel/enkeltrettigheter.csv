@@ -1,6 +1,6 @@
 giver_orgnr;giver_navn;mottaker_id;mottaker_navn;mottaker_type;tjeneste_navn;resource_id
-899513762;PRAT, SPIS OG REIS LITT;030362*****;HARVEY ERIK DAHLE;Person;Sykmelding;urn:altinn:resource:ske-sykmelding
-899513762;PRAT, SPIS OG REIS LITT;020974*****;ARNESEN MONICA;Person;Avløpsslam;urn:altinn:resource:miljodir-avlopsslam
-899513762;PRAT, SPIS OG REIS LITT;020974*****;ARNESEN MONICA;Person;Privat Forsendelse;urn:altinn:resource:altinn-privat-forsendelse
+899513762;PRAT, SPIS OG REIS LITT;03.03.1962;HARVEY ERIK DAHLE;Person;Sykmelding;urn:altinn:resource:ske-sykmelding
+899513762;PRAT, SPIS OG REIS LITT;02.09.1974;ARNESEN MONICA;Person;Avløpsslam;urn:altinn:resource:miljodir-avlopsslam
+899513762;PRAT, SPIS OG REIS LITT;02.09.1974;ARNESEN MONICA;Person;Privat Forsendelse;urn:altinn:resource:altinn-privat-forsendelse
 899513762;PRAT, SPIS OG REIS LITT;498665381;ALTINN1 ANS;Organization;Inntektsmelding;app_skd_inntektsmelding
 912345678;PRAT, SPIS OG REIS LITT AVD OSLO;811076732;REGNSKAP NORD AS;Organization;RF-1030 Skattemelding næringsdrivende;urn:altinn:resource:ske-skattemelding-naering

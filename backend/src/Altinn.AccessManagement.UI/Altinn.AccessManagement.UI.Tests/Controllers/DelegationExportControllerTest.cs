@@ -58,8 +58,8 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
             // Header present (UTF-8 BOM is allowed before it).
             Assert.Contains("giver_orgnr;giver_navn;mottaker_id;mottaker_navn;mottaker_type;tjeneste_navn;resource_id;instans_id", csv);
 
-            // Data from the instance mock: recipient is a person -> masked id from date of birth (1981-03-20).
-            Assert.Contains("200381*****", csv);
+            // Data from the instance mock: recipient is a person -> birth date as dd.MM.yyyy (1981-03-20).
+            Assert.Contains("20.03.1981", csv);
             Assert.Contains(OrgNumber, csv);
 
             // includeSubunits=false: no rows from the subunit giver.

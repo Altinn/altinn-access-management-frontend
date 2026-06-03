@@ -8,14 +8,14 @@ namespace Altinn.AccessManagement.UI.Core.Helpers
     public static class PersonIdentifierUtils
     {
         /// <summary>
-        /// Builds a masked recipient identifier from a person's date of birth, on the form
-        /// <c>ddMMyy*****</c> (e.g. "1966-12-25" =&gt; "251266*****"). The personal-number part
-        /// is never included. Used for the delegated-rights export where the full national
-        /// identity number is not available (and must not be exposed).
+        /// Formats a person's date of birth as <c>dd.MM.yyyy</c> (e.g. "1966-12-25" =&gt;
+        /// "25.12.1966"). Used as the recipient identifier for persons in the delegated-rights
+        /// export, where the full national identity number is not available (and must not be
+        /// exposed). The personal-number part is never included.
         /// </summary>
         /// <param name="dateOfBirth">The date of birth in ISO format (yyyy-MM-dd).</param>
-        /// <returns>The masked identifier, or <see cref="string.Empty"/> when the date cannot be parsed.</returns>
-        public static string MaskedIdFromDateOfBirth(string dateOfBirth)
+        /// <returns>The formatted birth date, or <see cref="string.Empty"/> when the date cannot be parsed.</returns>
+        public static string FormatDateOfBirth(string dateOfBirth)
         {
             if (string.IsNullOrWhiteSpace(dateOfBirth))
             {
@@ -24,7 +24,7 @@ namespace Altinn.AccessManagement.UI.Core.Helpers
 
             if (DateTime.TryParse(dateOfBirth, CultureInfo.InvariantCulture, DateTimeStyles.None, out DateTime parsed))
             {
-                return parsed.ToString("ddMMyy", CultureInfo.InvariantCulture) + "*****";
+                return parsed.ToString("dd.MM.yyyy", CultureInfo.InvariantCulture);
             }
 
             return string.Empty;

@@ -27,9 +27,9 @@ returnerer en `.zip` med CSV-filer som lister alle aktive delegeringer ut fra vi
 med følgende felter (der de er relevante for typen):
 
 - Navn på mottaker (person/virksomhet)
-- **Mottaker-id:** orgnr for virksomheter, og for personer en **maskert** id bygget fra
-  fødselsdato (`To.DateOfBirth`) på formen `ddMMyy*****` (f.eks. `251266*****`) – personnummer-
-  delen tas aldri med. Tilsvarer maskeringen i Altinn 2.
+- **Mottaker-id:** orgnr for virksomheter, og for personer **fødselsdatoen** fra
+  `To.DateOfBirth` formatert som `dd.MM.yyyy` (f.eks. `25.12.1966`). Fødselsnummer/personnummer
+  tas aldri med. (Avklart med brukere – fødselsdato er tilstrekkelig for å identifisere mottaker.)
 - Navn på tilgangspakken + `code`/urn på tilgangspakken (**pakkenavn hentes fra metadata-API**)
 - Navn på rollen + `code` på rollen
 - `resourceId` (ressursidentifikator) for enkeltrettigheter
@@ -147,33 +147,29 @@ eksporten over hovedenheten **og** alle underenheter og kjører uthentingen per 
 - **Operasjoner tas ikke med** – det ville krevd ekstra `GetInstanceRights(...)`
   (`GET /instances/delegation/instances/rights`) per instans. Utelates bevisst.
 
-### Mottakeridentitet (`CompactEntity`) – og henting/maskering av fødselsnummer
+### Mottakeridentitet (`CompactEntity`) – fødselsdato for personer
 Mottaker hentes fra `Permission.To`
 ([Entity.cs](../../backend/src/Altinn.AccessManagement.UI/Altinn.AccessManagement.UI.Core/Models/Common/Entity.cs)):
 `Name`, `Type` (Person/Organization), `OrganizationIdentifier` (orgnr), `PartyId`, `Id` (uuid),
 `DateOfBirth`.
 
-**Viktig:** `CompactEntity` inneholder **ikke** fødselsnummer for personer. I stedet for å slå
-opp og maskere fullt fnr bygger vi `mottaker_id` direkte fra `To.DateOfBirth`:
+**Viktig:** `CompactEntity` inneholder **ikke** fødselsnummer for personer. Vi bygger derfor
+`mottaker_id` slik:
 
-- **Virksomhet:** bruk `To.OrganizationIdentifier` (orgnr) direkte – ingen maskering.
-- **Person:** bruk `To.DateOfBirth` (ISO-format `yyyy-MM-dd`, f.eks. `1966-12-25`) og formatér
-  som `ddMMyy` + `*****`, dvs. `251266*****`. Da trengs **ingen** register-oppslag, og fullt
-  fnr forekommer aldri i BFF.
+- **Virksomhet:** bruk `To.OrganizationIdentifier` (orgnr) direkte.
+- **Person:** bruk `To.DateOfBirth` (ISO-format `yyyy-MM-dd`, f.eks. `1966-12-25`) formatert som
+  `dd.MM.yyyy`, dvs. `25.12.1966`. Da trengs **ingen** register-oppslag, og fnr forekommer aldri
+  i BFF. (Avklart med brukere – fødselsdato er nok for å identifisere mottaker.)
 
 Hjelpemetode i `PersonIdentifierUtils`
 ([PersonIdentifierUtils.cs](../../backend/src/Altinn.AccessManagement.UI/Altinn.AccessManagement.UI.Core/Helpers/PersonIdentifierUtils.cs)),
 f.eks.:
 
 ```csharp
-// "1966-12-25" -> "251266*****"
-public static string MaskedIdFromDateOfBirth(string dateOfBirth) =>
-    DateOnly.TryParse(dateOfBirth, out var d) ? d.ToString("ddMMyy") + "*****" : string.Empty;
+// "1966-12-25" -> "25.12.1966"
+public static string FormatDateOfBirth(string dateOfBirth) =>
+    DateTime.TryParse(dateOfBirth, out var d) ? d.ToString("dd.MM.yyyy") : string.Empty;
 ```
-
-> **Merk (D-nummer):** for personer med D-nummer er de 6 første fnr-sifrene = fødselsdag + 40,
-> så `mottaker_id` bygget fra fødselsdato vil avvike fra de faktiske fnr-prefikset. Dette er
-> akseptert; verdien er uansett kun en maskert indikator og inneholder ikke personnummer-delen.
 
 ---
 
@@ -223,8 +219,7 @@ Felles for alle filer:
 > `giver_orgnr` + `giver_navn` identifiserer giveren. Tilgangsstyrer kan se av orgnr/navn om
 > rettigheten er gitt fra hovedenheten eller fra en underenhet – egen «underenhet»-kolonne trengs ikke.
 >
-> `mottaker_id` = orgnr for virksomheter, maskert id fra fødselsdato (`ddMMyy*****`, f.eks.
-> `251266*****`) for personer.
+> `mottaker_id` = orgnr for virksomheter, fødselsdato `dd.MM.yyyy` (f.eks. `25.12.1966`) for personer.
 
 `roller.csv` i tillegg:
 `rolle_navn;rolle_code`
@@ -252,7 +247,7 @@ Escaping og injection-beskyttelse: se «[CSV-format og escaping](#csv-format-og-
 | Tjeneste id | `resourceId` / pakke-urn / rolle-code | ✅ |
 | Tjeneste type | ressurstype / «Tilgangspakke» / «Rolle» | ✅ |
 | ElementId / Instance | `DelegationInstance.RefId` | ✅ (instans) |
-| Mottaker id | orgnr (`To.OrganizationIdentifier`) / maskert id fra `To.DateOfBirth` (`ddMMyy*****`) | ✅ |
+| Mottaker id | orgnr (`To.OrganizationIdentifier`) / fødselsdato `dd.MM.yyyy` fra `To.DateOfBirth` | ✅ |
 | Mottaker navn | `Permission.To.Name` | ✅ |
 | **Delegert tidspunkt** | — | ❌ ikke i datagrunnlaget |
 | **Delegert av id** | — | ❌ ikke i datagrunnlaget |
@@ -277,14 +272,14 @@ Escaping og injection-beskyttelse: se «[CSV-format og escaping](#csv-format-og-
    med tom `searchString` **én gang** for å få alle pakker (→ `meta/info/accesspackages/search/`),
    flat ut til `Dictionary<Guid,string>` (`Id` → `Name`) og slå opp navn derfra. Unngår N+1
    (`GetAccessPackageById` per pakke). Speiler frontend-hooken `useAccessPackageLookup`.
-5. **Mottaker-id (maskering):**
-   - Person: bygg maskert id fra `To.DateOfBirth` via
-     `PersonIdentifierUtils.MaskedIdFromDateOfBirth` (`ddMMyy*****`). Ingen register-oppslag.
+5. **Mottaker-id:**
+   - Person: formater `To.DateOfBirth` via `PersonIdentifierUtils.FormatDateOfBirth`
+     (`dd.MM.yyyy`). Ingen register-oppslag.
    - Virksomhet: bruk `To.OrganizationIdentifier` direkte.
 6. **Tester:**
    - Mocks i `Altinn.AccessManagement.UI.Mocks` for de fire tjenestene.
    - Integrasjonstest som verifiserer ZIP-struktur, filnavn, kolonner og at underenheter er med.
-   - Enhetstest for `MaskedIdFromDateOfBirth` (`1966-12-25` → `251266*****`, samt edge-cases/tom verdi).
+   - Enhetstest for `FormatDateOfBirth` (`1966-12-25` → `25.12.1966`, samt edge-cases/tom verdi).
    - Enhetstest for CSV-escaping/injection (verdier med `;`, `"`, linjeskift og `=`/`+`/`-`/`@`-prefiks).
 
 ---
@@ -361,8 +356,8 @@ csv.WriteRecords(rows);   // rows = typed rad-modeller per fil (ClassMap styrer 
 - [ ] Maskinporten/API-delegering er **ikke** med i v1.
 - [ ] Endepunktet støtter valgfri `languageCode` med **bokmål (`nb`) som default**.
 - [ ] Hver rad inneholder mottakernavn + -id, samt relevant navn/kode/resourceId/instans-id.
-- [ ] `mottaker_id` viser orgnr for virksomheter og **maskert** id fra fødselsdato
-      (`ddMMyy*****`) for personer; fullt fnr forekommer aldri i fila eller i logg.
+- [ ] `mottaker_id` viser orgnr for virksomheter og **fødselsdato** `dd.MM.yyyy` for personer;
+      fnr forekommer aldri i fila eller i logg.
 - [ ] Tilgangspakkenavn hentes via **ett** tomt pakkesøk og oppslag `Id → Name` (ikke per-pakke-kall).
 - [ ] Funksjonen er **kun tilgjengelig når parten er en virksomhet/organisasjon**; person-part avvises.
 - [ ] Autorisasjon: bare reportees i brukerens egen liste (inkl. underenheter) kan eksporteres.

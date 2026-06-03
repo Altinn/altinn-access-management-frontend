@@ -291,7 +291,7 @@ namespace Altinn.AccessManagement.UI.Core.Services
                 return recipient.OrganizationIdentifier;
             }
 
-            return PersonIdentifierUtils.MaskedIdFromDateOfBirth(recipient.DateOfBirth);
+            return PersonIdentifierUtils.FormatDateOfBirth(recipient.DateOfBirth);
         }
     }
 }

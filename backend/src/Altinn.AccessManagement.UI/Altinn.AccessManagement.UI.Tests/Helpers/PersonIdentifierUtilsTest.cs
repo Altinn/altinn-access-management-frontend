@@ -8,12 +8,12 @@ namespace Altinn.AccessManagement.UI.Tests.Helpers
     public class PersonIdentifierUtilsTest
     {
         [Theory]
-        [InlineData("1966-12-25", "251266*****")]
-        [InlineData("1980-11-07", "071180*****")]
-        [InlineData("2001-01-01", "010101*****")]
-        public void MaskedIdFromDateOfBirth_ValidIsoDate_ReturnsMaskedDdMmYy(string dateOfBirth, string expected)
+        [InlineData("1966-12-25", "25.12.1966")]
+        [InlineData("1980-11-07", "07.11.1980")]
+        [InlineData("2001-01-01", "01.01.2001")]
+        public void FormatDateOfBirth_ValidIsoDate_ReturnsDdMmYyyy(string dateOfBirth, string expected)
         {
-            string actual = PersonIdentifierUtils.MaskedIdFromDateOfBirth(dateOfBirth);
+            string actual = PersonIdentifierUtils.FormatDateOfBirth(dateOfBirth);
 
             Assert.Equal(expected, actual);
         }
@@ -23,20 +23,21 @@ namespace Altinn.AccessManagement.UI.Tests.Helpers
         [InlineData("")]
         [InlineData("   ")]
         [InlineData("not-a-date")]
-        public void MaskedIdFromDateOfBirth_MissingOrInvalid_ReturnsEmpty(string dateOfBirth)
+        public void FormatDateOfBirth_MissingOrInvalid_ReturnsEmpty(string dateOfBirth)
         {
-            string actual = PersonIdentifierUtils.MaskedIdFromDateOfBirth(dateOfBirth);
+            string actual = PersonIdentifierUtils.FormatDateOfBirth(dateOfBirth);
 
             Assert.Equal(string.Empty, actual);
         }
 
         [Fact]
-        public void MaskedIdFromDateOfBirth_NeverContainsPersonalNumberPart()
+        public void FormatDateOfBirth_NeverContainsPersonalNumberPart()
         {
-            string actual = PersonIdentifierUtils.MaskedIdFromDateOfBirth("1966-12-25");
+            string actual = PersonIdentifierUtils.FormatDateOfBirth("1966-12-25");
 
-            Assert.EndsWith("*****", actual);
-            Assert.Equal(11, actual.Length);
+            // Only the birth date, no personal-number digits or masking.
+            Assert.Equal("25.12.1966", actual);
+            Assert.DoesNotContain("*", actual);
         }
     }
 }
