@@ -16,11 +16,11 @@ namespace Altinn.AccessManagement.UI.Core.Helpers
         // UTF-8 WITH BOM so Excel on Windows renders æ/ø/å correctly for ';'-separated files.
         private static readonly Encoding Utf8WithBom = new UTF8Encoding(encoderShouldEmitUTF8Identifier: true);
 
+        // Neutralize values that start with =, +, -, @, TAB or CR so spreadsheet apps
+        // do not interpret externally supplied names as formulas.
         private static CsvConfiguration CreateConfig() => new CsvConfiguration(CultureInfo.InvariantCulture)
         {
             Delimiter = ";",
-            // Neutralize values that start with =, +, -, @, TAB or CR so spreadsheet apps
-            // do not interpret externally supplied names as formulas.
             InjectionOptions = InjectionOptions.Escape,
             HasHeaderRecord = true,
         };
