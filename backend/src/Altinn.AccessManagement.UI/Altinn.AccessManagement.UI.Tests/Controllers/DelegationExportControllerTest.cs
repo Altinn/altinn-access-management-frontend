@@ -24,8 +24,10 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
         // A uuid that is not in the reportee list.
         private const string UnknownPartyUuid = "11111111-1111-1111-1111-111111111111";
 
-        private const string InstanceFile = "enkeltrettigheter-instans.csv";
+        private const string RoleFile = "roller.csv";
+        private const string AccessPackageFile = "tilgangspakker.csv";
         private const string SingleRightFile = "enkeltrettigheter.csv";
+        private const string InstanceFile = "enkeltrettigheter-instans.csv";
         private const string BaseUrl = "accessmanagement/api/v1/delegationexport/reportee";
 
         private readonly HttpClient _client;
@@ -85,6 +87,28 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
 
             // More than just the header row.
             Assert.True(csv.Split('\n', StringSplitOptions.RemoveEmptyEntries).Length > 1);
+        }
+
+        [Fact]
+        public async Task Export_AllTypes_ReturnsAllFourPopulatedCsvFiles()
+        {
+            // Default types (= all). Main org only, since the role/package mocks have to=null
+            // fixtures for cd35779b but not for its subunit.
+            HttpResponseMessage response = await _client.GetAsync($"{BaseUrl}/{OrgPartyUuid}?includeSubunits=false");
+
+            Assert.Equal(HttpStatusCode.OK, response.StatusCode);
+            Dictionary<string, string> entries = await ReadZipEntries(response);
+
+            string[] expectedFiles = { RoleFile, AccessPackageFile, SingleRightFile, InstanceFile };
+            Assert.Equal(expectedFiles.OrderBy(f => f), entries.Keys.OrderBy(f => f));
+
+            // Each CSV has a header plus at least one data row.
+            foreach (string file in expectedFiles)
+            {
+                Assert.True(
+                    entries[file].Split('\n', StringSplitOptions.RemoveEmptyEntries).Length > 1,
+                    $"{file} had no data rows");
+            }
         }
 
         [Fact]
