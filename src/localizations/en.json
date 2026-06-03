@@ -1199,5 +1199,28 @@
     "missing_request_id": "Cannot load request: requestId-parameter is not set in url",
     "batch_partial_error": "Could not process the following resources: {{resources}}. Please try again.",
     "multiple_services_title": "<strong>{{name}}</strong> request the following services:"
+  },
+  "add_altinn2_account_page": {
+    "page_title": "Add account - Altinn",
+    "add_account_heading": "Add account",
+    "logged_in_as": "You are logged in as {{name}}.",
+    "add_account_info": "If you have previously logged in with a username and password, you can add your old account here. You will then have access to the messages sent to this account when you log in with email.",
+    "continue": "Continue",
+    "cancel": "Cancel",
+    "login_info": "Log in with username and password to connect the account with {{name}}.",
+    "username": "Username",
+    "password": "Password",
+    "invalid_credentials": "Invalid combination of username and password.",
+    "too_many_requests_error": "Account is temporarily locked",
+    "add_account_error": "An error occurred while adding the account.",
+    "add_account_button": "Add",
+    "forgot_password": "Forgot password",
+    "account_added_heading": "Account added",
+    "account_added_info": "You will now see your old messages in the new inbox. You can add more accounts under Your profile if you wish.",
+    "go_to_inbox": "Go to inbox",
+    "go_to_profile": "Go to profile",
+    "load_user_error": "Could not load user.",
+    "not_self_identified_error": "Only email-users can add an account.",
+    "feature_toggled_off": "The option to add an account is turned off."
   }
 }

@@ -1,0 +1,94 @@
+using System.Net;
+using System.Net.Http.Headers;
+using System.Net.Http.Json;
+using Altinn.AccessManagement.UI.Controllers;
+using Altinn.AccessManagement.UI.Core.Models.SelfIdentifiedUser;
+using Altinn.AccessManagement.UI.Mocks.Utils;
+using Altinn.AccessManagement.UI.Tests.Utils;
+
+namespace Altinn.AccessManagement.UI.Tests.Controllers
+{
+    /// <summary>
+    ///     Test class for <see cref="SelfIdentifiedUserController"></see>
+    /// </summary>
+    [Collection("SelfIdentifiedUserControllerTests")]
+    public class SelfIdentifiedUserControllerTest : IClassFixture<CustomWebApplicationFactory<SelfIdentifiedUserController>>
+    {
+        private readonly HttpClient _client;
+
+        /// <summary>
+        ///     Constructor setting up factory, test client and dependencies
+        /// </summary>
+        /// <param name="factory">CustomWebApplicationFactory</param>
+        public SelfIdentifiedUserControllerTest(CustomWebApplicationFactory<SelfIdentifiedUserController> factory)
+        {
+            _client = SetupUtils.GetTestClient(factory);
+            string token = PrincipalUtil.GetAccessToken("sbl.authorization");
+            _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+            _client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+        }
+
+        /// <summary>
+        ///     Test case: Add altinn 2 user with valid credentials returns OK
+        /// </summary>
+        [Fact]
+        public async Task AddAltinn2Account_ValidCredentials_ReturnsOk()
+        {
+            // Arrange
+            Guid to = Guid.NewGuid();
+            Altinn2AccountRequest request = new Altinn2AccountRequest()
+            {
+                UserName = "testuser",
+                Password = "testpassword"
+            };
+
+            // Act
+            HttpResponseMessage httpResponse = await _client.PostAsync($"accessmanagement/api/v1/selfidentifieduser/altinn2account?to={to}", JsonContent.Create(request));
+
+            // Assert
+            Assert.Equal(HttpStatusCode.OK, httpResponse.StatusCode);
+        }
+
+        /// <summary>
+        ///     Test case: Add altinn 2 user with invalid credentials returns Unauthorized
+        /// </summary>
+        [Fact]
+        public async Task AddAltinn2Account_InvalidCredentials_ReturnsUnauthorized()
+        {
+            // Arrange
+            Guid to = Guid.NewGuid();
+            Altinn2AccountRequest request = new Altinn2AccountRequest()
+            {
+                UserName = "invalid",
+                Password = "invalid"
+            };
+
+            // Act
+            HttpResponseMessage httpResponse = await _client.PostAsync($"accessmanagement/api/v1/selfidentifieduser/altinn2account?to={to}", JsonContent.Create(request));
+
+            // Assert
+            Assert.Equal(HttpStatusCode.Unauthorized, httpResponse.StatusCode);
+        }
+
+        /// <summary>
+        ///     Test case: Add altinn 2 user with invalid credentials returns Bad Request
+        /// </summary>
+        [Fact]
+        public async Task AddAltinn2Account_CreateConnectionFail_ReturnsBadRequest()
+        {
+            // Arrange
+            Guid to = Guid.NewGuid();
+            Altinn2AccountRequest request = new Altinn2AccountRequest()
+            {
+                UserName = "invalid_connection",
+                Password = "invalid_connection"
+            };
+
+            // Act
+            HttpResponseMessage httpResponse = await _client.PostAsync($"accessmanagement/api/v1/selfidentifieduser/altinn2account?to={to}", JsonContent.Create(request));
+
+            // Assert
+            Assert.Equal(HttpStatusCode.BadRequest, httpResponse.StatusCode);
+        }
+    }
+}

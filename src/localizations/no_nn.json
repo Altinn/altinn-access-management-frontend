@@ -1196,5 +1196,28 @@
     "missing_request_id": "Kan ikkje laste førespurnaden: requestId-parameter er ikkje sett i url",
     "batch_partial_error": "Kunne ikkje behandle følgjande ressursar: {{resources}}. Ver venleg og prøv igjen.",
     "multiple_services_title": "<strong>{{name}}</strong> ber om følgjande tenester:"
+  },
+  "add_altinn2_account_page": {
+    "page_title": "Legg til konto - Altinn",
+    "add_account_heading": "Legg til konto",
+    "logged_in_as": "Du har logga inn som {{name}}.",
+    "add_account_info": "Har du tidlegare logga inn med brukarnamn og passord, kan du leggje til den gamle kontoen din her. Du vil då få tilgang til meldingane som er sende til denne kontoen når du loggar inn med e-post.",
+    "continue": "Gå vidare",
+    "cancel": "Avbryt",
+    "login_info": "Logg inn med brukarnamn og passord for å kople kontoen saman med {{name}}.",
+    "username": "Brukarnamn",
+    "password": "Passord",
+    "invalid_credentials": "Ugyldig kombinasjon av brukarnamn og passord.",
+    "too_many_requests_error": "Kontoen er midlertidig låst",
+    "add_account_error": "Det skjedde ein feil ved å leggje til konto.",
+    "add_account_button": "Legg til",
+    "forgot_password": "Gløymt passord",
+    "account_added_heading": "Kontoen er lagd til",
+    "account_added_info": "Du vil no sjå dei gamle meldingane dine i den nye innboksen. Du kan leggje til fleire kontoar under Din profil om du ønskjer det.",
+    "go_to_inbox": "Gå til innboks",
+    "go_to_profile": "Gå til profil",
+    "load_user_error": "Kunne ikkje laste brukar.",
+    "not_self_identified_error": "Berre epost-brukarar kan leggje til konto.",
+    "feature_toggled_off": "Moglegheit for å leggja til konto er skrudd av."
   }
 }

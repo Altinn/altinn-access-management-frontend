@@ -4,6 +4,7 @@ using System.Text.Json;
 using Altinn.AccessManagement.UI.Core.ClientInterfaces;
 using Altinn.AccessManagement.UI.Core.Extensions;
 using Altinn.AccessManagement.UI.Core.Helpers;
+using Altinn.AccessManagement.UI.Core.Models.ClientDelegation;
 using Altinn.AccessManagement.UI.Core.Models.Common;
 using Altinn.AccessManagement.UI.Core.Models.Connections;
 using Altinn.AccessManagement.UI.Core.Models.User;
@@ -142,6 +143,29 @@ namespace Altinn.AccessManagement.UI.Integration.Clients
                     _logger,
                     "ConnectionClient // GetSimplifiedConnections");
             return result?.Items?.ToList() ?? [];
+        }
+
+        /// <inheritdoc />
+        public async Task<AssignmentDto> PostNewSelfIdentifiedUser(Guid from, Guid to, CancellationToken cancellationToken = default)
+        {
+            try
+            {
+                string token = JwtTokenUtil.GetTokenFromContext(_httpContextAccessor.HttpContext, _platformSettings.JwtCookieName);
+                var accessToken = await _accessTokenProvider.GetAccessToken();
+                string endpointUrl = $"internal/connections/selfidentifiedusers?from={from}&to={to}";
+
+                HttpResponseMessage response = await _client.PostAsync(token, endpointUrl, null, accessToken);
+                return await ClientUtils.DeserializeIfSuccessfullStatusCode<AssignmentDto>(response, _logger, "ConnectionClient // PostNewSelfIdentifiedUser");
+            }
+            catch (HttpStatusException)
+            {
+                throw;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "AccessManagement.UI // ConnectionClient // PostNewSelfIdentifiedUser // Exception");
+                throw;
+            }
         }
     }
 }
