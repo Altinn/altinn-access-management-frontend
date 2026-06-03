@@ -125,22 +125,24 @@ export const PendingPackageRequestsList = ({
                   as='button'
                   onSelect={() => setSelectedRequest(req)}
                   controls={
-                    <Button
-                      variant='tertiary'
-                      data-size='sm'
-                      aria-label={t('common.delete_request_for', {
-                        poa_object: req.package?.name,
-                      })}
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        handleDelete(req);
-                      }}
-                      disabled={loadingByRequestId[req.id]}
-                      loading={loadingByRequestId[req.id]}
-                    >
-                      <MinusCircleIcon aria-hidden='true' />
-                      {isSmallScreen ? '' : t('common.delete')}
-                    </Button>
+                    isSmallScreen ? undefined : (
+                      <Button
+                        variant='tertiary'
+                        data-size='sm'
+                        aria-label={t('common.delete_request_for', {
+                          poa_object: req.package?.name,
+                        })}
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          handleDelete(req);
+                        }}
+                        disabled={loadingByRequestId[req.id]}
+                        loading={loadingByRequestId[req.id]}
+                      >
+                        <MinusCircleIcon aria-hidden='true' />
+                        {t('common.delete')}
+                      </Button>
+                    )
                   }
                 />
               ))}
