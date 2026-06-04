@@ -1076,7 +1076,7 @@
   },
   "party_info": {
     "delegate_confirmation": "Ønskjer du å gi <b>{{partyName}}</b> fullmakt til <b>{{packageName}}</b>? Brukaren vil få tilgang til alle tenestene i pakken.",
-    "revoke_confirmation": "Ønskjer du å slette fullmakta til <b>{{packageName}}</b> for <b>{{partyName}}</b>? Brukaren vil miste tilgang til alle tenestene i pakken."
+    "revoke_confirmation": "Ønskjer du å slette fullmakta til <b>{{partyName}}</b> for <b>{{packageName}}</b>? Brukaren vil miste tilgang til alle tenestene i pakken."
   },
   "package_poa_details_page": {
     "page_title": "Fullmaktsdetaljar - Altinn",
