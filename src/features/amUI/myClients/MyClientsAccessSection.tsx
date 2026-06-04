@@ -64,15 +64,13 @@ export const MyClientsAccessSection = ({
   );
 
   return (
-    <>
-      <ClientAccessList
-        clients={clients}
-        accessStateClients={clients}
-        removeDisabled={isRemovingMyClientAccessPackages || !actingPartyUuid}
-        onRemoveAccessPackage={onRemoveAccessPackage}
-        requireDelegableForActions={false}
-        searchPlaceholder={t('my_clients_page.search_placeholder')}
-      />
-    </>
+    <ClientAccessList
+      clients={clients}
+      accessStateClients={clients}
+      removeDisabled={isRemovingMyClientAccessPackages || !actingPartyUuid}
+      onRemoveAccessPackage={onRemoveAccessPackage}
+      requireDelegableForActions={false}
+      searchPlaceholder={t('my_clients_page.search_placeholder')}
+    />
   );
 };

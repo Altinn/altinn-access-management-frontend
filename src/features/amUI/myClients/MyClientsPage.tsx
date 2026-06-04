@@ -1,5 +1,11 @@
 import React, { useMemo } from 'react';
-import { DsAlert, DsParagraph, DsSkeleton, formatDisplayName } from '@altinn/altinn-components';
+import {
+  DsAlert,
+  DsParagraph,
+  DsSkeleton,
+  formatDisplayName,
+  SnackbarProvider,
+} from '@altinn/altinn-components';
 import { useTranslation } from 'react-i18next';
 
 import { PageContainer } from '../common/PageContainer/PageContainer';
@@ -18,6 +24,7 @@ import {
 } from '../common/TechnicalErrorParagraphs/TechnicalErrorParagraphs';
 import { MyClientsAccessSection } from './MyClientsAccessSection';
 import { MyClientsDeleteClientProviderModal } from './MyClientsDeleteClientProviderModal';
+import { SnackbarDialogWrapper } from '../common/SnackbarDialogWrapper';
 
 import classes from './MyClientsPage.module.css';
 import { useBackUrl } from '@/resources/hooks/useBackUrl';
@@ -92,44 +99,43 @@ export const MyClientsPage = () => {
             />
           }
         >
-          <>
-            <ReporteePageHeading
-              title={t('my_clients_page.main_page_heading', { actingParty: actingPartyName })}
-              reportee={reportee}
-              isLoading={isLoadingReportee}
-            />
-            <div className={classes.content}>
-              {isActingOnBehalfOfSelf ? (
-                <DsAlert data-color='info'>
-                  {t('my_clients_page.not_acting_on_behalf_info')}
-                </DsAlert>
-              ) : errorDetails ? (
-                <DsAlert data-color='danger'>
-                  <TechnicalErrorParagraphs
-                    status={errorDetails.status}
-                    time={errorDetails.time}
-                    traceId={errorDetails.traceId}
-                  />
-                </DsAlert>
-              ) : isLoadingCurrentUser || isLoadingMyClients ? (
-                <DsSkeleton
-                  variant='rectangle'
-                  width='100%'
-                  height='220px'
+          <ReporteePageHeading
+            title={t('my_clients_page.main_page_heading', { actingParty: actingPartyName })}
+            reportee={reportee}
+            isLoading={isLoadingReportee}
+          />
+          <div className={classes.content}>
+            {isActingOnBehalfOfSelf ? (
+              <DsAlert data-color='info'>{t('my_clients_page.not_acting_on_behalf_info')}</DsAlert>
+            ) : errorDetails ? (
+              <DsAlert data-color='danger'>
+                <TechnicalErrorParagraphs
+                  status={errorDetails.status}
+                  time={errorDetails.time}
+                  traceId={errorDetails.traceId}
                 />
-              ) : clients.length > 0 ? (
+              </DsAlert>
+            ) : isLoadingCurrentUser || isLoadingMyClients ? (
+              <DsSkeleton
+                variant='rectangle'
+                width='100%'
+                height='220px'
+              />
+            ) : clients.length > 0 ? (
+              <SnackbarProvider>
                 <MyClientsAccessSection
                   clients={clients}
                   actingPartyUuid={actingPartyUuid}
                   currentUserName={currentUserName}
                 />
-              ) : (
-                <DsParagraph>
-                  {t('my_clients_page.no_clients', { actingParty: actingPartyName })}
-                </DsParagraph>
-              )}
-            </div>
-          </>
+                <SnackbarDialogWrapper />
+              </SnackbarProvider>
+            ) : (
+              <DsParagraph>
+                {t('my_clients_page.no_clients', { actingParty: actingPartyName })}
+              </DsParagraph>
+            )}
+          </div>
         </PageContainer>
       </PageLayoutWrapper>
     </PageWrapper>

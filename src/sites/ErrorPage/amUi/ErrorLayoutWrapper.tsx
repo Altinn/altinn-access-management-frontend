@@ -45,7 +45,6 @@ export const ErrorLayoutWrapper = ({
         {children}
         <InfoModal />
       </Layout>
-      <Snackbar />
     </RootProvider>
   );
 };
