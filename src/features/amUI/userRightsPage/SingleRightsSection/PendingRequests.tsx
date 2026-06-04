@@ -6,7 +6,6 @@ import {
   DsHeading,
   formatDisplayName,
   ListItem,
-  Snackbar,
   SnackbarProvider,
 } from '@altinn/altinn-components';
 import { ResourceList } from '../../common/ResourceList/ResourceList';
