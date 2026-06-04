@@ -61,8 +61,6 @@ export const AreaItemContent = ({
   );
 
   const isSm = useIsMobileOrSmaller();
-  const hasPackages = packages.assigned.length > 0 || packages.available.length > 0;
-
   const { canDelegatePackage } = useAccessPackageDelegationCheck();
 
   const revokeActionControl = (pkg: AccessPackage) => {
@@ -86,14 +84,12 @@ export const AreaItemContent = ({
 
   return (
     <div className={cn(classes.accessAreaContent, !isSm && classes.accessAreaContentMargin)}>
-      {hasPackages && (
-        <DsHeading
-          level={4}
-          className={classes.packagesTitle}
-        >
-          {t('access_packages.access_packages_in_area_title')}
-        </DsHeading>
-      )}
+      <DsHeading
+        level={4}
+        className={classes.packagesTitle}
+      >
+        {t('access_packages.access_packages_in_area_title')}
+      </DsHeading>
       {packages.assigned.length > 0 && (
         <List aria-label={t('access_packages.given_packages_title')}>
           {packages.assigned.map((pkg) => {
