@@ -1,9 +1,10 @@
 import React, { useState } from 'react';
-import { DsButton, DsDialog, Snackbar, SnackbarProvider } from '@altinn/altinn-components';
+import { DsButton, DsDialog, SnackbarProvider } from '@altinn/altinn-components';
 import { useTranslation } from 'react-i18next';
 import { type EnrichedPackageRequest } from '@/rtk/features/requestApi';
 import { PendingPackageRequestsList } from './RequestsList';
 import classes from './Requests.module.css';
+import { SnackbarDialogWrapper } from '../../../common/SnackbarDialogWrapper';
 
 interface PendingPackageRequestsModalProps {
   modalRef: React.RefObject<HTMLDialogElement | null>;
@@ -39,7 +40,7 @@ export const PendingPackageRequestsModal = ({
             setSelectedRequest={setSelectedRequest}
           />
         )}
-        <Snackbar />
+        <SnackbarDialogWrapper />
       </SnackbarProvider>
       {!selectedRequest && (
         <DsButton

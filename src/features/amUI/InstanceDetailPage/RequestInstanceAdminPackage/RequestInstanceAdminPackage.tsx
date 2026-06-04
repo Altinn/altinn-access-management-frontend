@@ -7,6 +7,7 @@ import { RequestModalBody } from './RequestModalBody';
 import { useInstanceAdminPackageRequest } from './useInstanceAdminPackageRequest';
 
 import classes from './RequestInstanceAdminPackage.module.css';
+import { SnackbarDialogWrapper } from '../../common/SnackbarDialogWrapper';
 
 export const RequestInstanceAdminPackage = () => {
   const { t } = useTranslation();
@@ -43,7 +44,7 @@ export const RequestInstanceAdminPackage = () => {
       >
         <SnackbarProvider>
           <RequestModalBody dialogRef={dialogRef} />
-          <Snackbar />
+          <SnackbarDialogWrapper />
         </SnackbarProvider>
       </DsDialog>
     </>

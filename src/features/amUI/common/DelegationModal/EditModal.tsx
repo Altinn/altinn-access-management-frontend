@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { forwardRef, useEffect } from 'react';
-import { DsDialog, Snackbar, SnackbarProvider } from '@altinn/altinn-components';
+import { DsDialog, SnackbarProvider } from '@altinn/altinn-components';
 
 import type { ActionError } from '@/resources/hooks/useActionError';
 import type { ServiceResource } from '@/rtk/features/singleRights/singleRightsApi';
@@ -14,6 +14,7 @@ import { AccessPackageInfo } from './AccessPackages/AccessPackageInfo';
 import { RoleInfo } from './Role/RoleInfo';
 import { useDelegationModalContext } from './DelegationModalContext';
 import { ScopeInfo } from '../../maskinporten/ScopeInfo';
+import { SnackbarDialogWrapper } from '../SnackbarDialogWrapper';
 
 export interface DelegationRecipient {
   partyUuid: string;
@@ -95,7 +96,7 @@ export const EditModal = forwardRef<HTMLDialogElement, EditModalProps>(
               onSuccess,
             })}
           </div>
-          <Snackbar />
+          <SnackbarDialogWrapper />
         </SnackbarProvider>
       </DsDialog>
     );

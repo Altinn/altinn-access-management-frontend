@@ -21,6 +21,7 @@ import { PartyType } from '@/rtk/features/userInfoApi';
 import { useIsTabletOrSmaller } from '@/resources/utils/screensizeUtils';
 import { useGetEnrichedSentResourceRequestsQuery } from '@/rtk/features/requestApi';
 import { getRequestPartyQueryParams } from '@/resources/utils/singleRightRequestUtils';
+import { SnackbarDialogWrapper } from '../../common/SnackbarDialogWrapper';
 
 export const PendingRequests = () => {
   const modalRef = useRef<HTMLDialogElement>(null);
@@ -110,7 +111,7 @@ export const SentRequestsModal = ({
             setSelectedResource={setSelectedResource}
           />
         )}
-        <Snackbar />
+        <SnackbarDialogWrapper />
       </SnackbarProvider>
       {!selectedResource && (
         <DsButton

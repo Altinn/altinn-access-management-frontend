@@ -1,5 +1,5 @@
 import React, { useCallback } from 'react';
-import { Snackbar, useSnackbar } from '@altinn/altinn-components';
+import { useSnackbar } from '@altinn/altinn-components';
 import { useTranslation } from 'react-i18next';
 
 import {
@@ -73,7 +73,6 @@ export const MyClientsAccessSection = ({
         requireDelegableForActions={false}
         searchPlaceholder={t('my_clients_page.search_placeholder')}
       />
-      <Snackbar />
     </>
   );
 };

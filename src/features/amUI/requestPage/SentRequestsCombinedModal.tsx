@@ -1,11 +1,5 @@
 import React, { useState } from 'react';
-import {
-  DsButton,
-  DsDialog,
-  DsHeading,
-  Snackbar,
-  SnackbarProvider,
-} from '@altinn/altinn-components';
+import { DsButton, DsDialog, DsHeading, SnackbarProvider } from '@altinn/altinn-components';
 import { useTranslation } from 'react-i18next';
 import { ServiceResource } from '@/rtk/features/singleRights/singleRightsApi';
 import { useGetSentRequestsQuery, type EnrichedPackageRequest } from '@/rtk/features/requestApi';
@@ -14,6 +8,7 @@ import { PendingPackageRequestsList } from '../userRightsPage/AccessPackageSecti
 import { DelegationModalProvider } from '../common/DelegationModal/DelegationModalContext';
 import classes from './SentRequestsCombinedModal.module.css';
 import { usePartyRepresentation } from '../common/PartyRepresentationContext/PartyRepresentationContext';
+import { SnackbarDialogWrapper } from '../common/SnackbarDialogWrapper';
 
 interface SentRequestsCombinedModalProps {
   modalRef: React.RefObject<HTMLDialogElement | null>;
@@ -108,7 +103,7 @@ export const SentRequestsCombinedModal = ({
             )}
           </div>
         )}
-        <Snackbar />
+        <SnackbarDialogWrapper />
       </SnackbarProvider>
       {!hasDetailView && (
         <DsButton

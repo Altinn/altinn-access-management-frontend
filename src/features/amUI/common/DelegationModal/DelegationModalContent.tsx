@@ -2,7 +2,7 @@ import * as React from 'react';
 import { useTranslation } from 'react-i18next';
 import { PlusIcon, ArrowLeftIcon } from '@navikt/aksel-icons';
 import { JSX, useEffect, useRef } from 'react';
-import { Button, DsDialog, Snackbar, SnackbarProvider } from '@altinn/altinn-components';
+import { Button, DsDialog, SnackbarProvider } from '@altinn/altinn-components';
 
 import type { AccessPackage } from '@/rtk/features/accessPackageApi';
 import type { ServiceResource } from '@/rtk/features/singleRights/singleRightsApi';
@@ -20,6 +20,7 @@ import { DelegationType } from './DelegationModal';
 import { PackageSearch } from './AccessPackages/PackageSearch';
 import { AccessPackageInfo } from './AccessPackages/AccessPackageInfo';
 import { DelegationAction } from './EditModal';
+import { SnackbarDialogWrapper } from '../SnackbarDialogWrapper';
 
 export interface DelegationModalProps {
   delegationType: DelegationType;
@@ -166,7 +167,7 @@ export const DelegationModalContent = ({
             )}
             <div className={classes.content}>
               {infoView ? infoViewContent : searchViewContent}
-              <Snackbar />
+              <SnackbarDialogWrapper />
             </div>
           </SnackbarProvider>
         </>

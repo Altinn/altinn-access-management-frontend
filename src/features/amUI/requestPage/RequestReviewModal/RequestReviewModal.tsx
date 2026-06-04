@@ -1,9 +1,10 @@
 import { useRef, useEffect } from 'react';
-import { DsDialog, Snackbar, SnackbarProvider } from '@altinn/altinn-components';
+import { DsDialog, SnackbarProvider } from '@altinn/altinn-components';
 import { useTranslation } from 'react-i18next';
 import type { Request } from '../types';
 import { RequestReviewModalContent } from './RequestReviewModalContent';
 import classes from './RequestReviewModal.module.css';
+import { SnackbarDialogWrapper } from '../../common/SnackbarDialogWrapper';
 
 interface RequestReviewModalProps {
   request: Request | null;
@@ -36,7 +37,7 @@ export const RequestReviewModal = ({ request, onClose }: RequestReviewModalProps
           request={request}
           onClose={onClose}
         />
-        <Snackbar />
+        <SnackbarDialogWrapper />
       </SnackbarProvider>
     </DsDialog>
   );
