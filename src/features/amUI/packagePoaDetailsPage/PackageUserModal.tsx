@@ -86,7 +86,7 @@ export const PackageUserModal = forwardRef<PackageUserModalHandle, PackageUserMo
                 accessPackage,
                 userHasAccess: selectedUserHasAccess,
                 inheritedStatus: selectedUserInheritedStatus,
-                availableActions: selectedUserAccessIsInherited ? undefined : availableActions,
+                availableActions: selectedUserAccessIsInherited ? [] : availableActions,
                 isLoading: isActionLoading,
                 isSuccess: actionSuccess,
                 onDelegate: () => onDelegate(selectedUser),
