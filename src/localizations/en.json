@@ -886,7 +886,7 @@
     "assigned_customers_header": "Clients connected to system access",
     "no_assigned_customers": "This system access has no clients",
     "access_package_single": "Power of attorney for 1 access package",
-    "access_package_plural": "Power of attorney for {{accessPackageCount}} access packages`",
+    "access_package_plural": "Power of attorney for {{accessPackageCount}} access packages",
     "add_customers": "Add clients",
     "edit_customers": "Add or remove clients",
     "customer_search": "Search in clients",
