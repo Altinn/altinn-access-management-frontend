@@ -1,4 +1,4 @@
-import { List, DsParagraph, DsButton, DsSpinner } from '@altinn/altinn-components';
+import { List, DsHeading, DsButton, DsSpinner } from '@altinn/altinn-components';
 import { useTranslation } from 'react-i18next';
 import React, { useMemo, useState } from 'react';
 import cn from 'classnames';
@@ -61,6 +61,7 @@ export const AreaItemContent = ({
   );
 
   const isSm = useIsMobileOrSmaller();
+  const hasPackages = packages.assigned.length > 0 || packages.available.length > 0;
 
   const { canDelegatePackage } = useAccessPackageDelegationCheck();
 
@@ -85,7 +86,14 @@ export const AreaItemContent = ({
 
   return (
     <div className={cn(classes.accessAreaContent, !isSm && classes.accessAreaContentMargin)}>
-      <DsParagraph>{area.description}</DsParagraph>
+      {hasPackages && (
+        <DsHeading
+          level={4}
+          className={classes.packagesTitle}
+        >
+          {t('access_packages.access_packages_in_area_title')}
+        </DsHeading>
+      )}
       {packages.assigned.length > 0 && (
         <List aria-label={t('access_packages.given_packages_title')}>
           {packages.assigned.map((pkg) => {

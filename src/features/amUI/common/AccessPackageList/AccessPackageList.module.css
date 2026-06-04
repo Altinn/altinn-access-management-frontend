@@ -24,6 +24,10 @@
   width: fit-content;
 }
 
+.packagesTitle {
+  font-size: var(--ds-font-size-2);
+}
+
 .noAccessPackages {
   display: flex;
   align-items: center;

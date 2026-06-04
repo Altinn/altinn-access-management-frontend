@@ -332,6 +332,7 @@
   "access_packages": {
     "helptext_button": "Kva er tilgangspakkar?",
     "helptext_content": "Tilgangspakkar er ei samling av skjema og tenester som handlar om same tema. Desse skal erstatte Altinn-roller og vil bli fylte med fleire tenester etter kvart.",
+    "access_packages_in_area_title": "Tilgangspakkar i området",
     "given_packages_title": "Mottatte tilgangspakkar",
     "available_packages_title": "Tilgjengelege tilgangspakkar",
     "other_available": "Andre tilgjengelege",
