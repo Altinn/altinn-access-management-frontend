@@ -1,6 +1,6 @@
 import { List, DsHeading, DsButton, DsSpinner } from '@altinn/altinn-components';
 import { useTranslation } from 'react-i18next';
-import React, { useMemo, useState } from 'react';
+import React, { useState } from 'react';
 import cn from 'classnames';
 import { ChevronDownIcon, ChevronUpIcon } from '@navikt/aksel-icons';
 
@@ -102,6 +102,7 @@ export const AreaItemContent = ({
                     {...props}
                   />
                 )}
+                titleAs='span'
                 key={pkg.id}
                 pkg={pkg}
                 onSelect={onSelect}

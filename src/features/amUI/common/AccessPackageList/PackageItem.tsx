@@ -1,4 +1,4 @@
-import { AccessPackageListItem, AccessPackageListItemProps } from '@altinn/altinn-components';
+import { AccessPackageListItem, type AccessPackageListItemProps } from '@altinn/altinn-components';
 import { useTranslation } from 'react-i18next';
 
 import type { AccessPackage } from '@/rtk/features/accessPackageApi';
@@ -32,7 +32,7 @@ export const PackageItem = ({
     <AccessPackageListItem
       id={pkg.id}
       name={pkg.name}
-      titleAs={titleAs || 'span'}
+      titleAs={titleAs || 'h4'}
       description={t('access_packages.package_number_of_resources', {
         count: pkg.resources.length,
       })}
