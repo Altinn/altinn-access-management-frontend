@@ -118,7 +118,6 @@ export const ScopeSearchControls = ({
 
   const resourceLoading = isLoading(resource.identifier) || isCheckingDelegation;
 
-  // On small screens the row opens the detail view, where the action is performed instead.
   if (isMobile) return null;
 
   if (hasDelegatedResource) {

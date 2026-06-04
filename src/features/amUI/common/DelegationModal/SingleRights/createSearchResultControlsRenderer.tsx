@@ -37,7 +37,6 @@ export const useRenderSearchResultControl = ({
   const isMobile = useIsMobileOrSmaller();
 
   return (resource: ServiceResource) => {
-    // On small screens the row opens the detail view, where the action is performed instead.
     if (isMobile) return null;
 
     const isAlreadyDelegated = isDelegated(resource.identifier);
