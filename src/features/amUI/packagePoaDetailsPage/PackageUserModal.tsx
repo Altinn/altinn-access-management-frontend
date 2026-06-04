@@ -25,29 +25,18 @@ export const mapUserToParty = (user: UserActionTarget): Party => ({
 });
 
 export interface PackageUserModalHandle {
-  /** Open the modal for the given user. */
   open: (user: UserActionTarget) => void;
-  /** Play the success animation; called by the caller once an action resolves. */
   showSuccess: () => void;
 }
 
 interface PackageUserModalProps {
   accessPackage?: AccessPackage;
-  /** Base actions for the package; REVOKE is dropped automatically for inherited access. */
   availableActions: DelegationAction[];
   isActionLoading: boolean;
   onDelegate: (user: UserActionTarget) => void;
   onRevoke: (user: UserActionTarget) => void;
 }
 
-/**
- * Give/revoke modal for a single user's access to a package on the package details page.
- *
- * Owns its own selection and success-animation state so the page can stay lean: open it
- * imperatively via the ref (`open(user)`) and trigger the success animation (`showSuccess()`)
- * once the shared action resolves. The displayed buttons follow the live access state — after a
- * revoke the modal stays open and offers "give" again.
- */
 export const PackageUserModal = forwardRef<PackageUserModalHandle, PackageUserModalProps>(
   ({ accessPackage, availableActions, isActionLoading, onDelegate, onRevoke }, ref) => {
     const { fromParty } = usePartyRepresentation();
@@ -97,11 +86,7 @@ export const PackageUserModal = forwardRef<PackageUserModalHandle, PackageUserMo
                 accessPackage,
                 userHasAccess: selectedUserHasAccess,
                 inheritedStatus: selectedUserInheritedStatus,
-                // Inherited access can't be revoked here, so hide the revoke button (mirrors the
-                // list item, which hides it for inherited access).
-                availableActions: selectedUserAccessIsInherited
-                  ? availableActions.filter((action) => action !== DelegationAction.REVOKE)
-                  : availableActions,
+                availableActions: selectedUserAccessIsInherited ? undefined : availableActions,
                 isLoading: isActionLoading,
                 isSuccess: actionSuccess,
                 onDelegate: () => onDelegate(selectedUser),

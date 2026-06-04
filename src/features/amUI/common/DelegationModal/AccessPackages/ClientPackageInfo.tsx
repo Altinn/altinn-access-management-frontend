@@ -20,12 +20,6 @@ import { PackageHeader } from './PackageHeader';
 import { PackageMeta } from './PackageMeta';
 import { DelegationAction } from '../EditModal';
 
-/**
- * Package-led modal content for client administration: shown when an access package row is clicked.
- * It shows the package details (header + services) like the standard package modal, but keeps the
- * give/revoke action controlled so callers can route it through their own role-scoped client
- * mutations.
- */
 export const ClientPackageInfo = ({
   party,
   accessPackage,

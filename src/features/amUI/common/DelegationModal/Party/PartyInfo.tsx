@@ -28,18 +28,11 @@ import classes from './PartyInfo.module.css';
 import { DelegationAction } from '../EditModal';
 
 export interface PartyInfoProps {
-  /** The party (person/organization) that receives or holds the access */
   party: Party;
-  /** The access package the action concerns */
   accessPackage: AccessPackage;
-  /** Whether the party already has the access package */
   userHasAccess: boolean;
-  /** Inherited-access status messages, same shape as in the package modal */
   inheritedStatus?: InheritedStatusMessageType[];
-  /** Optional role description, e.g. "Via role X" */
-  roleDescription?: string;
   availableActions?: DelegationAction[];
-  /** Give-access handler. Omit when re-delegation isn't possible on this surface (hides the button). */
   onDelegate?: () => void;
   onRevoke: () => void;
   isLoading?: boolean;
@@ -55,7 +48,6 @@ export const PartyInfo = ({
   accessPackage,
   userHasAccess,
   inheritedStatus,
-  roleDescription,
   availableActions = defaultActions,
   onDelegate,
   onRevoke,

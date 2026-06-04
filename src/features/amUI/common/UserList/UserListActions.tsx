@@ -27,7 +27,6 @@ export const UserListActions = ({
   const { t } = useTranslation();
   const isSmall = useIsMobileOrSmaller();
 
-  // On small screens the action is performed by opening a modal instead.
   if (!availableAction || isSmall) {
     return null;
   }

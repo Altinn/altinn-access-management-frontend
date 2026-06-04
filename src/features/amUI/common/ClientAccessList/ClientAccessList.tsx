@@ -148,8 +148,6 @@ export const ClientAccessList = ({
           : undefined;
 
         const action = hasAccess ? onRevoke : onDelegate;
-        // The row opens a modal on all screen sizes; the inline controls are an extra
-        // desktop-only affordance (matching the access package list pattern).
         const showModalTrigger = showAction && !!accessPackage && !!action;
 
         let controls: React.ReactNode;
