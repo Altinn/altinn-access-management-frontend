@@ -41,10 +41,10 @@ namespace Altinn.AccessManagement.UI.Controllers
 
         /// <summary>
         /// Downloads a zip of CSV files describing the rights delegated from the given reportee
-        /// (and optionally its underenheter) to persons and organizations.
+        /// (and optionally its subunits) to persons and organizations.
         /// </summary>
         /// <param name="partyUuid">The reportee (virksomhet) to export for.</param>
-        /// <param name="includeSubunits">Whether to include delegations from the reportee's underenheter (default true).</param>
+        /// <param name="includeSubunits">Whether to include delegations from the reportee's subunits (default false).</param>
         /// <param name="types">Optional comma-separated list of types to include (roles,accesspackages,singlerights,instances). Default all.</param>
         /// <param name="languageCode">Optional language code for resolved names. Falls back to the selected-language cookie, then bokmål.</param>
         /// <returns>A zip file, or an error status.</returns>
@@ -53,7 +53,7 @@ namespace Altinn.AccessManagement.UI.Controllers
         [Route("reportee/{partyUuid}")]
         public async Task<ActionResult> ExportReporteeDelegations(
             [FromRoute] Guid partyUuid,
-            [FromQuery] bool includeSubunits = true,
+            [FromQuery] bool includeSubunits = false,
             [FromQuery] string types = null,
             [FromQuery] string languageCode = null)
         {
@@ -90,6 +90,11 @@ namespace Altinn.AccessManagement.UI.Controllers
                     default:
                         return StatusCode(StatusCodes.Status403Forbidden, "The party was not found in your list of reportees.");
                 }
+            }
+            catch (HttpStatusException ex)
+            {
+                _logger.LogError(ex, "Unexpected HTTP status from backend when exporting delegated rights for party {PartyUuid}", partyUuid);
+                return StatusCode((int)ex.StatusCode, $"Unexpected httpStatus returned from backend ({ex.Title})");
             }
             catch (Exception ex)
             {

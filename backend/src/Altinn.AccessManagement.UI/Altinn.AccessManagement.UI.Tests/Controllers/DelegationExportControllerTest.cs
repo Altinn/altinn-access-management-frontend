@@ -24,6 +24,10 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
         // A uuid that is not in the reportee list.
         private const string UnknownPartyUuid = "11111111-1111-1111-1111-111111111111";
 
+        // A party UUID that is in the reportee list as an organization and acts as the standard
+        // HttpStatusException trigger in all four backend client mocks.
+        private const string BackendErrorPartyUuid = "00000000-0000-0000-0000-000000000404";
+
         private const string RoleFile = "roller.csv";
         private const string AccessPackageFile = "tilgangspakker.csv";
         private const string SingleRightFile = "enkeltrettigheter.csv";
@@ -59,7 +63,7 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
             string csv = entries[InstanceFile];
 
             // Header present (UTF-8 BOM is allowed before it).
-            Assert.Contains("giver_orgnr;giver_navn;mottaker_id;mottaker_navn;mottaker_type;tjeneste_navn;resource_id;instans_id", csv);
+            Assert.Contains("Organisasjonsnummer;Organisasjonsnavn;Fødselsdato/Organisasjonsnummer;Mottakernavn;Mottakertype;Tjenestenavn;Ressurs-ID;Instans-ID", csv);
 
             // Data from the instance mock: recipient is a person -> birth date as dd.MM.yyyy (1981-03-20).
             Assert.Contains("20.03.1981", csv);
@@ -80,7 +84,7 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
             Assert.Equal(new[] { SingleRightFile }, entries.Keys);
 
             string csv = entries[SingleRightFile];
-            Assert.Contains("giver_orgnr;giver_navn;mottaker_id;mottaker_navn;mottaker_type;tjeneste_navn;resource_id", csv);
+            Assert.Contains("Organisasjonsnummer;Organisasjonsnavn;Fødselsdato/Organisasjonsnummer;Mottakernavn;Mottakertype;Tjenestenavn;Ressurs-ID", csv);
 
             // The single-right delegations mock has direct (non-via) permissions to this recipient.
             Assert.Contains("SITRONGUL MEDALJONG", csv);
@@ -146,6 +150,46 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
             HttpResponseMessage response = await _client.GetAsync($"{BaseUrl}/{UnknownPartyUuid}");
 
             Assert.Equal(HttpStatusCode.Forbidden, response.StatusCode);
+        }
+
+        [Fact]
+        public async Task Export_BackendHttpErrorInRoleService_ReturnsBackendStatusWithOrigin()
+        {
+            HttpResponseMessage response = await _client.GetAsync($"{BaseUrl}/{BackendErrorPartyUuid}?types=roles");
+
+            Assert.Equal(HttpStatusCode.NotFound, response.StatusCode);
+            string body = await response.Content.ReadAsStringAsync();
+            Assert.Contains("Unexpected httpStatus returned from backend (Role)", body);
+        }
+
+        [Fact]
+        public async Task Export_BackendHttpErrorInAccessPackageService_ReturnsBackendStatusWithOrigin()
+        {
+            HttpResponseMessage response = await _client.GetAsync($"{BaseUrl}/{BackendErrorPartyUuid}?types=accesspackages");
+
+            Assert.Equal(HttpStatusCode.NotFound, response.StatusCode);
+            string body = await response.Content.ReadAsStringAsync();
+            Assert.Contains("Unexpected httpStatus returned from backend (AccessPackage)", body);
+        }
+
+        [Fact]
+        public async Task Export_BackendHttpErrorInSingleRightService_ReturnsBackendStatusWithOrigin()
+        {
+            HttpResponseMessage response = await _client.GetAsync($"{BaseUrl}/{BackendErrorPartyUuid}?types=singlerights");
+
+            Assert.Equal(HttpStatusCode.NotFound, response.StatusCode);
+            string body = await response.Content.ReadAsStringAsync();
+            Assert.Contains("Unexpected httpStatus returned from backend (SingleRights)", body);
+        }
+
+        [Fact]
+        public async Task Export_BackendHttpErrorInInstanceService_ReturnsBackendStatusWithOrigin()
+        {
+            HttpResponseMessage response = await _client.GetAsync($"{BaseUrl}/{BackendErrorPartyUuid}?types=instances");
+
+            Assert.Equal(HttpStatusCode.NotFound, response.StatusCode);
+            string body = await response.Content.ReadAsStringAsync();
+            Assert.Contains("Unexpected httpStatus returned from backend (Instances)", body);
         }
 
         private static async Task<Dictionary<string, string>> ReadZipEntries(HttpResponseMessage response)

@@ -75,26 +75,54 @@ namespace Altinn.AccessManagement.UI.Core.Services
 
             if (IncludeType(TypeRoles))
             {
-                List<RoleExportRow> rows = await BuildRoleRows(givers, language);
-                files["roller.csv"] = DelegationExportCsvBuilder.WriteCsv<RoleExportRow, RoleExportRowMap>(rows);
+                try
+                {
+                    List<RoleExportRow> rows = await BuildRoleRows(givers, language);
+                    files["roller.csv"] = DelegationExportCsvBuilder.WriteCsv(rows, new RoleExportRowMap(language));
+                }
+                catch (HttpStatusException ex)
+                {
+                    throw new HttpStatusException(ex.Type, "Role", ex.StatusCode, ex.TraceId, ex.Message);
+                }
             }
 
             if (IncludeType(TypeAccessPackages))
             {
-                List<AccessPackageExportRow> rows = await BuildAccessPackageRows(givers, language);
-                files["tilgangspakker.csv"] = DelegationExportCsvBuilder.WriteCsv<AccessPackageExportRow, AccessPackageExportRowMap>(rows);
+                try
+                {
+                    List<AccessPackageExportRow> rows = await BuildAccessPackageRows(givers, language);
+                    files["tilgangspakker.csv"] = DelegationExportCsvBuilder.WriteCsv(rows, new AccessPackageExportRowMap(language));
+                }
+                catch (HttpStatusException ex)
+                {
+                    throw new HttpStatusException(ex.Type, "AccessPackage", ex.StatusCode, ex.TraceId, ex.Message);
+                }
             }
 
             if (IncludeType(TypeSingleRights))
             {
-                List<SingleRightExportRow> rows = await BuildSingleRightRows(givers, language);
-                files["enkeltrettigheter.csv"] = DelegationExportCsvBuilder.WriteCsv<SingleRightExportRow, SingleRightExportRowMap>(rows);
+                try
+                {
+                    List<SingleRightExportRow> rows = await BuildSingleRightRows(givers, language);
+                    files["enkeltrettigheter.csv"] = DelegationExportCsvBuilder.WriteCsv(rows, new SingleRightExportRowMap(language));
+                }
+                catch (HttpStatusException ex)
+                {
+                    throw new HttpStatusException(ex.Type, "SingleRights", ex.StatusCode, ex.TraceId, ex.Message);
+                }
             }
 
             if (IncludeType(TypeInstances))
             {
-                List<InstanceRightExportRow> rows = await BuildInstanceRows(givers, language);
-                files["enkeltrettigheter-instans.csv"] = DelegationExportCsvBuilder.WriteCsv<InstanceRightExportRow, InstanceRightExportRowMap>(rows);
+                try
+                {
+                    List<InstanceRightExportRow> rows = await BuildInstanceRows(givers, language);
+                    files["enkeltrettigheter-instans.csv"] = DelegationExportCsvBuilder.WriteCsv(rows, new InstanceRightExportRowMap(language));
+                }
+                catch (HttpStatusException ex)
+                {
+                    throw new HttpStatusException(ex.Type, "Instances", ex.StatusCode, ex.TraceId, ex.Message);
+                }
             }
 
             byte[] zip = DelegationExportCsvBuilder.BuildZip(files);
@@ -234,7 +262,7 @@ namespace Altinn.AccessManagement.UI.Core.Services
             foreach (AuthorizedParty giver in givers)
             {
                 List<ResourceDelegation> delegations =
-                    await _singleRightService.GetDelegatedResources(language, giver.PartyUuid, giver.PartyUuid, Guid.Empty);
+                    await _singleRightService.GetDelegatedResources(language, giver.PartyUuid, giver.PartyUuid, null);
 
                 foreach (ResourceDelegation delegation in delegations ?? new List<ResourceDelegation>())
                 {

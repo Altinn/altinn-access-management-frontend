@@ -10,7 +10,9 @@
     "isDeleted": false,
     "onlyHierarchyElementWithNoAccess": false,
     "authorizedResources": [],
-    "authorizedRoles": ["REGN"],
+    "authorizedRoles": [
+      "REGN"
+    ],
     "subunits": []
   },
   {
@@ -38,7 +40,31 @@
     "isDeleted": false,
     "onlyHierarchyElementWithNoAccess": false,
     "authorizedResources": [],
-    "authorizedRoles": [ "LEDE", "LOPER", "ADMAI", "REGNA", "SISKD", "UILUF", "UTINN", "UTOMR", "KLADM", "ATTST", "HVASK", "PAVAD", "SIGNE", "UIHTL", "KOMAB", "ECKEYROLE", "HADM", "PASIG", "A0278", "A0236", "A0212", "APIADM", "A0298" ],
+    "authorizedRoles": [
+      "LEDE",
+      "LOPER",
+      "ADMAI",
+      "REGNA",
+      "SISKD",
+      "UILUF",
+      "UTINN",
+      "UTOMR",
+      "KLADM",
+      "ATTST",
+      "HVASK",
+      "PAVAD",
+      "SIGNE",
+      "UIHTL",
+      "KOMAB",
+      "ECKEYROLE",
+      "HADM",
+      "PASIG",
+      "A0278",
+      "A0236",
+      "A0212",
+      "APIADM",
+      "A0298"
+    ],
     "subunits": []
   },
   {
@@ -52,7 +78,12 @@
     "isDeleted": false,
     "onlyHierarchyElementWithNoAccess": false,
     "authorizedResources": [],
-    "authorizedRoles": [ "LEDE", "LOPER", "ADMAI", "REGNA" ],
+    "authorizedRoles": [
+      "LEDE",
+      "LOPER",
+      "ADMAI",
+      "REGNA"
+    ],
     "subunits": [
       {
         "partyUuid": "b0a79f3d-4cef-430a-9774-301b754e0f6f",
@@ -65,9 +96,28 @@
         "isDeleted": false,
         "onlyHierarchyElementWithNoAccess": false,
         "authorizedResources": [],
-        "authorizedRoles": [ "LEDE", "LOPER", "ADMAI", "REGNA" ],
+        "authorizedRoles": [
+          "LEDE",
+          "LOPER",
+          "ADMAI",
+          "REGNA"
+        ],
         "subunits": []
       }
     ]
+  },
+  {
+    "partyUuid": "00000000-0000-0000-0000-000000000404",
+    "name": "HTTP Error Trigger AS",
+    "organizationNumber": "404404404",
+    "personId": null,
+    "partyId": 404,
+    "type": "Organization",
+    "unitType": "AS",
+    "isDeleted": false,
+    "onlyHierarchyElementWithNoAccess": false,
+    "authorizedResources": [],
+    "authorizedRoles": [],
+    "subunits": []
   }
 ]

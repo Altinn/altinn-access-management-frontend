@@ -34,13 +34,26 @@ namespace Altinn.AccessManagement.UI.Core.Helpers
         /// <param name="rows">The rows to write.</param>
         /// <returns>The CSV content as UTF-8 (with BOM) bytes.</returns>
         public static byte[] WriteCsv<TRow, TMap>(IEnumerable<TRow> rows)
-            where TMap : ClassMap<TRow>
+            where TMap : ClassMap<TRow>, new()
+        {
+            return WriteCsv(rows, new TMap());
+        }
+
+        /// <summary>
+        /// Serializes a set of typed rows to a single CSV file (as bytes), with a pre-constructed class map instance.
+        /// Use this overload when the map requires constructor arguments (e.g. a language code).
+        /// </summary>
+        /// <typeparam name="TRow">The row type.</typeparam>
+        /// <param name="rows">The rows to write.</param>
+        /// <param name="map">The CsvHelper class map instance to use.</param>
+        /// <returns>The CSV content as UTF-8 (with BOM) bytes.</returns>
+        public static byte[] WriteCsv<TRow>(IEnumerable<TRow> rows, ClassMap<TRow> map)
         {
             using var memory = new MemoryStream();
             using (var writer = new StreamWriter(memory, Utf8WithBom))
             using (var csv = new CsvWriter(writer, CreateConfig()))
             {
-                csv.Context.RegisterClassMap<TMap>();
+                csv.Context.RegisterClassMap(map);
                 csv.WriteHeader<TRow>();
                 csv.NextRecord();
 

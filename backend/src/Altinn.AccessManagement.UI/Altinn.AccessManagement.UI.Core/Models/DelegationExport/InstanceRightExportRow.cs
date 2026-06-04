@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using CsvHelper.Configuration;
 
 namespace Altinn.AccessManagement.UI.Core.Models.DelegationExport
@@ -38,18 +39,24 @@ namespace Altinn.AccessManagement.UI.Core.Models.DelegationExport
     public sealed class InstanceRightExportRowMap : ClassMap<InstanceRightExportRow>
     {
         /// <summary>
-        /// Initializes a new instance of the <see cref="InstanceRightExportRowMap"/> class.
+        /// Initializes a new instance of the <see cref="InstanceRightExportRowMap"/> class using the default language (Norwegian bokmål).
         /// </summary>
-        public InstanceRightExportRowMap()
+        public InstanceRightExportRowMap() : this(null) { }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="InstanceRightExportRowMap"/> class with the specified language code.
+        /// </summary>
+        public InstanceRightExportRowMap(string languageCode)
         {
-            Map(m => m.GiverOrgnr).Index(0).Name("giver_orgnr");
-            Map(m => m.GiverNavn).Index(1).Name("giver_navn");
-            Map(m => m.MottakerId).Index(2).Name("mottaker_id");
-            Map(m => m.MottakerNavn).Index(3).Name("mottaker_navn");
-            Map(m => m.MottakerType).Index(4).Name("mottaker_type");
-            Map(m => m.TjenesteNavn).Index(5).Name("tjeneste_navn");
-            Map(m => m.ResourceId).Index(6).Name("resource_id");
-            Map(m => m.InstansId).Index(7).Name("instans_id");
+            Dictionary<string, string> n = DelegationExportColumnNames.GetTranslatedColumnNames(languageCode);
+            Map(m => m.GiverOrgnr).Index(0).Name(n["giver_orgnr"]);
+            Map(m => m.GiverNavn).Index(1).Name(n["giver_navn"]);
+            Map(m => m.TjenesteNavn).Index(2).Name(n["tjeneste_navn"]);
+            Map(m => m.MottakerNavn).Index(3).Name(n["mottaker_navn"]);
+            Map(m => m.MottakerId).Index(4).Name(n["mottaker_id"]);
+            Map(m => m.MottakerType).Index(5).Name(n["mottaker_type"]);
+            Map(m => m.ResourceId).Index(6).Name(n["resource_id"]);
+            Map(m => m.InstansId).Index(7).Name(n["instans_id"]);
         }
     }
 }

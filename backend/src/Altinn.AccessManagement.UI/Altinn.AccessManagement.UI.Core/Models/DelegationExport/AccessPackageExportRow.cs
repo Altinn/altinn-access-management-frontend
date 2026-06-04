@@ -35,17 +35,23 @@ namespace Altinn.AccessManagement.UI.Core.Models.DelegationExport
     public sealed class AccessPackageExportRowMap : ClassMap<AccessPackageExportRow>
     {
         /// <summary>
-        /// Initializes a new instance of the <see cref="AccessPackageExportRowMap"/> class.
+        /// Initializes a new instance of the <see cref="AccessPackageExportRowMap"/> class using the default language (Norwegian bokmål).
         /// </summary>
-        public AccessPackageExportRowMap()
+        public AccessPackageExportRowMap() : this(null) { }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="AccessPackageExportRowMap"/> class with the specified language code.
+        /// </summary>
+        public AccessPackageExportRowMap(string languageCode)
         {
-            Map(m => m.GiverOrgnr).Index(0).Name("giver_orgnr");
-            Map(m => m.GiverNavn).Index(1).Name("giver_navn");
-            Map(m => m.MottakerId).Index(2).Name("mottaker_id");
-            Map(m => m.MottakerNavn).Index(3).Name("mottaker_navn");
-            Map(m => m.MottakerType).Index(4).Name("mottaker_type");
-            Map(m => m.TilgangspakkeNavn).Index(5).Name("tilgangspakke_navn");
-            Map(m => m.TilgangspakkeCode).Index(6).Name("tilgangspakke_code");
+            Dictionary<string, string> n = DelegationExportColumnNames.GetTranslatedColumnNames(languageCode);
+            Map(m => m.GiverOrgnr).Index(0).Name(n["giver_orgnr"]);
+            Map(m => m.GiverNavn).Index(1).Name(n["giver_navn"]);
+            Map(m => m.TilgangspakkeNavn).Index(2).Name(n["tilgangspakke_navn"]);
+            Map(m => m.MottakerNavn).Index(3).Name(n["mottaker_navn"]);
+            Map(m => m.MottakerId).Index(4).Name(n["mottaker_id"]);
+            Map(m => m.MottakerType).Index(5).Name(n["mottaker_type"]);
+            Map(m => m.TilgangspakkeCode).Index(6).Name(n["tilgangspakke_code"]);
         }
     }
 }
