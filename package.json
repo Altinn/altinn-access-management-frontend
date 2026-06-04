@@ -21,8 +21,8 @@
     "vitest:ci": "vitest --coverage"
   },
   "dependencies": {
-    "@altinn/altinn-components": "0.64.2",
-    "@navikt/aksel-icons": "^8.9.0",
+    "@altinn/altinn-components": "0.66.1",
+    "@navikt/aksel-icons": "^8.11.1",
     "@reduxjs/toolkit": "^2.11.2",
     "@tanstack/react-query": "^5.95.2",
     "axios": "^1.14.0",

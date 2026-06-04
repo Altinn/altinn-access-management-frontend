@@ -114,6 +114,10 @@ export const useHeader = ({
   const languageCode =
     languageFromi18n === 'no_nn' ? 'nn' : languageFromi18n === 'en' ? 'en' : 'nb';
 
+  useEffect(() => {
+    document.documentElement.lang = languageCode;
+  }, [languageCode]);
+
   let header: GlobalHeaderProps | HeaderProps;
 
   // For new header
