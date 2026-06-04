@@ -41,7 +41,7 @@ export interface PartyInfoProps {
   error?: ActionError | null;
 }
 
-const defaultActions = [DelegationAction.DELEGATE, DelegationAction.REVOKE];
+const defaultActions: DelegationAction[] = [];
 
 export const PartyInfo = ({
   party,
