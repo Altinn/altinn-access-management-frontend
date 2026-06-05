@@ -1,4 +1,4 @@
-import { AccessPackageListItem } from '@altinn/altinn-components';
+import { AccessPackageListItem, type AccessPackageListItemProps } from '@altinn/altinn-components';
 import { useTranslation } from 'react-i18next';
 
 import type { AccessPackage } from '@/rtk/features/accessPackageApi';
@@ -12,6 +12,7 @@ interface PackageItemProps {
   badge?: React.ReactNode;
   as?: React.ElementType;
   partyType: PartyType;
+  titleAs?: AccessPackageListItemProps['titleAs'];
 }
 
 export const PackageItem = ({
@@ -22,6 +23,7 @@ export const PackageItem = ({
   badge,
   as,
   partyType,
+  titleAs,
 }: PackageItemProps) => {
   const { t } = useTranslation();
   const partyTypeColor = partyType === PartyType.Person ? 'person' : 'company';
@@ -30,7 +32,7 @@ export const PackageItem = ({
     <AccessPackageListItem
       id={pkg.id}
       name={pkg.name}
-      titleAs='h4'
+      titleAs={titleAs || 'h4'}
       description={t('access_packages.package_number_of_resources', {
         count: pkg.resources.length,
       })}
