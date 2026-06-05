@@ -30,8 +30,8 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
 
         private const string RoleFile = "roller.csv";
         private const string AccessPackageFile = "tilgangspakker.csv";
-        private const string SingleRightFile = "enkeltrettigheter.csv";
-        private const string InstanceFile = "enkeltrettigheter-instans.csv";
+        private const string SingleRightFile = "enkelttjenester.csv";
+        private const string InstanceFile = "enkelttjenester-instans.csv";
         private const string BaseUrl = "accessmanagement/api/v1/delegationexport/reportee";
 
         private readonly HttpClient _client;
@@ -63,7 +63,7 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
             string csv = entries[InstanceFile];
 
             // Header present (UTF-8 BOM is allowed before it).
-            Assert.Contains("Organisasjonsnummer;Organisasjonsnavn;Fødselsdato/Organisasjonsnummer;Mottakernavn;Mottakertype;Tjenestenavn;Ressurs-ID;Instans-ID", csv);
+            Assert.Contains("Organisasjonsnummer;Organisasjonsnavn;Tjenestenavn;Mottakernavn;Fødselsdato/Organisasjonsnummer;Mottakertype;Ressurs-ID;Instans-ID", csv);
 
             // Data from the instance mock: recipient is a person -> birth date as dd.MM.yyyy (1981-03-20).
             Assert.Contains("20.03.1981", csv);
@@ -84,7 +84,7 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
             Assert.Equal(new[] { SingleRightFile }, entries.Keys);
 
             string csv = entries[SingleRightFile];
-            Assert.Contains("Organisasjonsnummer;Organisasjonsnavn;Fødselsdato/Organisasjonsnummer;Mottakernavn;Mottakertype;Tjenestenavn;Ressurs-ID", csv);
+            Assert.Contains("Organisasjonsnummer;Organisasjonsnavn;Tjenestenavn;Mottakernavn;Fødselsdato/Organisasjonsnummer;Mottakertype;Ressurs-ID", csv);
 
             // The single-right delegations mock has direct (non-via) permissions to this recipient.
             Assert.Contains("SITRONGUL MEDALJONG", csv);

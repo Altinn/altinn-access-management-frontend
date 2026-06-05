@@ -27,7 +27,7 @@ namespace Altinn.AccessManagement.UI.Tests.Helpers
         {
             string content = Decode(DelegationExportCsvBuilder.WriteCsv<RoleExportRow, RoleExportRowMap>(new List<RoleExportRow>()));
 
-            Assert.Contains("giver_orgnr;giver_navn;rolle_navn;mottaker_navn;mottaker_id;mottaker_type;rolle_code", content);
+            Assert.Contains("Organisasjonsnummer;Organisasjonsnavn;Rollenavn;Mottakernavn;Fødselsdato/Organisasjonsnummer;Mottakertype;Rollekode", content);
             // Only the header line (plus trailing newline) should be present.
             Assert.Single(content.Split('\n', StringSplitOptions.RemoveEmptyEntries));
         }
