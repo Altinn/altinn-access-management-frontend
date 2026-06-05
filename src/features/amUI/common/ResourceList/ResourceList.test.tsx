@@ -84,7 +84,7 @@ describe('ResourceList', () => {
     expect(screen.getByText('Badge')).toBeInTheDocument();
   });
 
-  it('uses custom description text as ownerName when provided', () => {
+  it('uses custom description text while preserving ownerName', () => {
     const resources = [createResource({ name: 'With Description Text' })];
 
     render(
@@ -96,6 +96,7 @@ describe('ResourceList', () => {
     );
 
     expect(screen.getByText('3 scopes')).toBeInTheDocument();
+    expect(screen.getByAltText('Altinn')).toBeInTheDocument();
   });
 
   it('filters resources based on the search input', async () => {

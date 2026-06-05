@@ -14,6 +14,7 @@ import { RoleListItem } from './RoleListItem';
 import classes from './roleSection.module.css';
 import { useRoleMetadata } from '../UserRoles/useRoleMetadata';
 import { RoleDeleteButton } from './RoleDeleteButton';
+import { useIsMobileOrSmaller } from '@/resources/utils/screensizeUtils';
 
 interface RoleListProps {
   onSelect: (role: Role, error?: unknown) => void;
@@ -38,6 +39,7 @@ export const RoleList = ({ onSelect, isLoading }: RoleListProps) => {
   );
 
   const enableRoleDeletionFlag = enableRoleDeletion();
+  const isMobileOrSmaller = useIsMobileOrSmaller();
 
   const {
     mapRoles,
@@ -101,7 +103,7 @@ export const RoleList = ({ onSelect, isLoading }: RoleListProps) => {
                 role={role}
                 onClick={() => onSelect(role)}
                 deleteButton={
-                  enableRoleDeletionFlag && isRoleDeletable ? (
+                  enableRoleDeletionFlag && isRoleDeletable && !isMobileOrSmaller ? (
                     <RoleDeleteButton
                       role={role}
                       variant='tertiary'

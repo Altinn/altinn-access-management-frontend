@@ -2,7 +2,7 @@ import React from 'react';
 import { List, Button } from '@altinn/altinn-components';
 import { useTranslation } from 'react-i18next';
 
-import type { ExtendedUser } from '@/rtk/features/userInfoApi';
+import type { ExtendedUser, User } from '@/rtk/features/userInfoApi';
 import { UserItem } from '@/features/amUI/common/UserList/UserItem';
 import { UserListActions } from '../UserList/UserListActions';
 import { DelegationAction } from '../DelegationModal/EditModal';
@@ -28,6 +28,16 @@ export interface UserSearchResultsProps {
   getUserLink?: (user: UserActionTarget) => string;
   titleAs?: titleAsType;
 }
+
+const mapUserToActionTarget = (user: UserSearchNode | ExtendedUser | User): UserActionTarget => ({
+  id: user.id,
+  name: user.name,
+  type: user.type,
+  variant: user.variant,
+  organizationIdentifier: user.organizationIdentifier,
+  dateOfBirth: user.dateOfBirth,
+  isInherited: 'isInherited' in user ? user.isInherited : undefined,
+});
 
 export const UserSearchResults: React.FC<UserSearchResultsProps> = ({
   users,
@@ -60,11 +70,7 @@ export const UserSearchResults: React.FC<UserSearchResultsProps> = ({
             titleAs={titleAs}
             interactive={isInteractive}
             linkTo={getUserLink ? getUserLink(user) : undefined}
-            onSelect={
-              onSelect
-                ? () => onSelect({ id: user.id, name: user.name, type: user.type })
-                : undefined
-            }
+            onSelect={onSelect ? (user) => onSelect(mapUserToActionTarget(user)) : undefined}
             roleDirection='toUser'
             disableLinks={!isInteractive}
             controls={(user) => (

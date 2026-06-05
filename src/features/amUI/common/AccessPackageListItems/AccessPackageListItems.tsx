@@ -15,7 +15,7 @@ export const AccessPackageListItems = ({ items }: AccessPackageListItemsProps) =
         <AccessPackageListItem
           key={item.id}
           {...item}
-          interactive={false}
+          interactive={item.interactive ?? false}
         />
       ))}
     </List>

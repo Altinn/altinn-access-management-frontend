@@ -6,9 +6,10 @@ import {
   XMarkOctagonFillIcon,
 } from '@navikt/aksel-icons';
 import { DsParagraph, formatDisplayName } from '@altinn/altinn-components';
+import { useContext } from 'react';
 import { Trans, useTranslation } from 'react-i18next';
 
-import { usePartyRepresentation } from '../PartyRepresentationContext/PartyRepresentationContext';
+import { PartyRepresentationContext } from '../PartyRepresentationContext/PartyRepresentationContext';
 import { InheritedStatusType, type InheritedStatusMessageType } from '../useInheritedStatus';
 import { PartyType } from '@/rtk/features/userInfoApi';
 
@@ -18,6 +19,7 @@ const STATUS_TRANSLATION_KEYS: Record<InheritedStatusType, string> = {
   [InheritedStatusType.ViaRole]: 'status_section.access_status.via_role',
   [InheritedStatusType.ViaConnection]: 'status_section.access_status.via_connection',
   [InheritedStatusType.ViaKeyRole]: 'status_section.access_status.via_keyrole',
+  [InheritedStatusType.ViaER]: 'status_section.access_status.via_er',
 };
 
 export interface StatusSectionProps {
@@ -48,7 +50,11 @@ export const StatusSection = ({
   toPartyName,
 }: StatusSectionProps) => {
   const { t } = useTranslation();
-  const { fromParty, toParty } = usePartyRepresentation();
+
+  // Safe to use if no PartyRepresentationContext is provided
+  const partyContext = useContext(PartyRepresentationContext);
+  const fromParty = partyContext?.fromParty;
+  const toParty = partyContext?.toParty;
 
   if (
     !userHasAccess &&

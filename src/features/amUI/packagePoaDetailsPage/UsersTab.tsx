@@ -1,4 +1,4 @@
-import { useMemo, useState } from 'react';
+import { useMemo, useRef, useState } from 'react';
 
 import pageClasses from './PackagePoaDetailsPage.module.css';
 import { DsParagraph, formatDisplayName } from '@altinn/altinn-components';
@@ -18,14 +18,8 @@ import { mapConnectionsToUserSearchNodes } from '../common/UserSearch/connection
 import { mapPermissionsToUserSearchNodes } from '../common/UserSearch/permissionMapper';
 import type { UserActionTarget } from '../common/UserSearch/types';
 import { usePartyRepresentation } from '../common/PartyRepresentationContext/PartyRepresentationContext';
-
-const mapUserToParty = (user: UserActionTarget): Party => ({
-  partyId: 0,
-  partyUuid: user.id,
-  name: user.name,
-  partyTypeName:
-    user.type?.toLowerCase() === 'organisasjon' ? PartyType.Organization : PartyType.Person,
-});
+import { DelegationAction } from '../common/DelegationModal/EditModal';
+import { PackageUserModal, mapUserToParty, type PackageUserModalHandle } from './PackageUserModal';
 
 interface UsersTabProps {
   accessPackage?: AccessPackage;
@@ -37,6 +31,7 @@ interface UsersTabProps {
 export const UsersTab = ({ accessPackage, isLoading, isFetching }: UsersTabProps) => {
   const { t } = useTranslation();
   const { fromParty, toParty } = usePartyRepresentation();
+  const modalRef = useRef<PackageUserModalHandle>(null);
   const { queueSnackbar } = useSnackbarOnIdle({ isBusy: isFetching, showPendingOnUnmount: true });
   const { canDelegatePackage, isLoading: isDelegationCheckLoading } =
     useAccessPackageDelegationCheck();
@@ -73,6 +68,7 @@ export const UsersTab = ({ accessPackage, isLoading, isFetching }: UsersTabProps
       }),
     [accessPackage?.permissions, toParty?.partyUuid, fromParty?.partyUuid],
   );
+
   const indirectUsers = useMemo(
     () => mapConnectionsToUserSearchNodes(indirectConnections),
     [indirectConnections],
@@ -84,8 +80,10 @@ export const UsersTab = ({ accessPackage, isLoading, isFetching }: UsersTabProps
       type: party?.partyTypeName === PartyType.Person ? 'person' : 'company',
     });
   };
+
   const onDelegateSuccess = (p: AccessPackage, toParty: Party) => {
     setDelegateActionError(null);
+    modalRef.current?.showSuccess();
     queueSnackbar(
       t('package_poa_details_page.package_delegation_success', {
         name: formatToPartyName(toParty),
@@ -96,6 +94,7 @@ export const UsersTab = ({ accessPackage, isLoading, isFetching }: UsersTabProps
   };
 
   const onRevokeSuccess = (p: AccessPackage, toParty: Party) => {
+    modalRef.current?.showSuccess();
     queueSnackbar(
       t('package_poa_details_page.package_revocation_success', {
         name: formatToPartyName(toParty),
@@ -138,6 +137,11 @@ export const UsersTab = ({ accessPackage, isLoading, isFetching }: UsersTabProps
     }
   };
 
+  const availableActions = [
+    DelegationAction.REVOKE,
+    ...(canDelegate ? [DelegationAction.DELEGATE] : []),
+  ];
+
   return (
     <>
       {!isLoading && (
@@ -170,6 +174,7 @@ export const UsersTab = ({ accessPackage, isLoading, isFetching }: UsersTabProps
         onDelegate={canDelegate ? handleOnDelegate : undefined}
         onAddNewUser={canDelegate ? handleOnDelegate : undefined}
         onRevoke={handleOnRevoke}
+        onSelect={(user) => modalRef.current?.open(user)}
         isActionLoading={
           isActionLoading ||
           isLoading ||
@@ -180,6 +185,15 @@ export const UsersTab = ({ accessPackage, isLoading, isFetching }: UsersTabProps
           isDelegationCheckLoading
         }
         canDelegate={canDelegate}
+      />
+
+      <PackageUserModal
+        ref={modalRef}
+        accessPackage={accessPackage}
+        availableActions={availableActions}
+        isActionLoading={isActionLoading}
+        onDelegate={handleOnDelegate}
+        onRevoke={handleOnRevoke}
       />
     </>
   );

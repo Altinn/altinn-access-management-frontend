@@ -13,7 +13,6 @@ import { PartyType } from '@/rtk/features/userInfoApi';
 
 interface DeleteResourceButton {
   resource: ServiceResource;
-  fullText?: boolean;
   disabled?: boolean;
   onSuccess?: () => void;
   onError?: () => void;
@@ -21,7 +20,6 @@ interface DeleteResourceButton {
 
 export const DeleteResourceButton = ({
   resource,
-  fullText = false,
   disabled = false,
   onSuccess,
   onError,
@@ -78,7 +76,7 @@ export const DeleteResourceButton = ({
         }}
       >
         <MinusCircleIcon aria-hidden='true' />
-        {fullText && t('common.delete_poa')}
+        {t('common.delete_poa')}
       </Button>
     )
   );

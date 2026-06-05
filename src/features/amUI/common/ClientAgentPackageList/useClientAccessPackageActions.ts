@@ -7,19 +7,19 @@ import type {
   RemoveAgentAccessPackagesFn,
 } from '@/rtk/features/clientApi';
 
-type UseClientDetailsAccessPackageActionsParams = {
+type UseClientAccessPackageActionsParams = {
   fromPartyUuid?: string;
   actingPartyUuid?: string;
   addAgentAccessPackages: AddAgentAccessPackagesFn;
   removeAgentAccessPackages: RemoveAgentAccessPackagesFn;
 };
 
-export const useClientDetailsAccessPackageActions = ({
+export const useClientAccessPackageActions = ({
   fromPartyUuid,
   actingPartyUuid,
   addAgentAccessPackages,
   removeAgentAccessPackages,
-}: UseClientDetailsAccessPackageActionsParams) => {
+}: UseClientAccessPackageActionsParams) => {
   const { t } = useTranslation();
   const { openSnackbar } = useSnackbar();
 
@@ -30,8 +30,11 @@ export const useClientDetailsAccessPackageActions = ({
       packageId: string,
       agentName: string,
       accessPackageName: string,
+      onSuccess?: () => void,
+      onError?: () => void,
     ) => {
       if (!fromPartyUuid || !actingPartyUuid) {
+        onError?.();
         return;
       }
 
@@ -56,7 +59,8 @@ export const useClientDetailsAccessPackageActions = ({
           }),
           color: 'success',
         });
-      } catch (error) {
+        onSuccess?.();
+      } catch {
         openSnackbar({
           message: t('client_administration_page.delegate_package_error', {
             name: agentName,
@@ -64,6 +68,7 @@ export const useClientDetailsAccessPackageActions = ({
           }),
           color: 'danger',
         });
+        onError?.();
       }
     },
     [actingPartyUuid, addAgentAccessPackages, fromPartyUuid, openSnackbar, t],
@@ -76,8 +81,11 @@ export const useClientDetailsAccessPackageActions = ({
       packageId: string,
       agentName: string,
       accessPackageName: string,
+      onSuccess?: () => void,
+      onError?: () => void,
     ) => {
       if (!fromPartyUuid || !actingPartyUuid) {
+        onError?.();
         return;
       }
 
@@ -102,7 +110,8 @@ export const useClientDetailsAccessPackageActions = ({
           }),
           color: 'success',
         });
-      } catch (error) {
+        onSuccess?.();
+      } catch {
         openSnackbar({
           message: t('client_administration_page.remove_package_error', {
             name: agentName,
@@ -110,6 +119,7 @@ export const useClientDetailsAccessPackageActions = ({
           }),
           color: 'danger',
         });
+        onError?.();
       }
     },
     [actingPartyUuid, fromPartyUuid, openSnackbar, removeAgentAccessPackages, t],

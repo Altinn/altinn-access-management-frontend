@@ -27,7 +27,7 @@ export const UserListActions = ({
   const { t } = useTranslation();
   const isSmall = useIsMobileOrSmaller();
 
-  if (!availableAction) {
+  if (!availableAction || isSmall) {
     return null;
   }
   if (isLoading) {
@@ -37,13 +37,11 @@ export const UserListActions = ({
         data-size='md'
         loading
       >
-        {!isSmall && (
-          <DsSkeleton
-            variant='text'
-            width='20'
-            aria-label={t('common.loading')}
-          />
-        )}
+        <DsSkeleton
+          variant='text'
+          width={20}
+          aria-label={t('common.loading')}
+        />
       </DsButton>
     );
   }
@@ -57,7 +55,7 @@ export const UserListActions = ({
           aria-label={t('common.give_poa')}
         >
           <PlusCircleIcon aria-hidden='true' />
-          {!isSmall && (delegateLabel ?? t('common.give_poa'))}
+          {delegateLabel ?? t('common.give_poa')}
         </DsButton>
       )}
       {availableAction === DelegationAction.REQUEST && onRequest && !user.isInherited && (
@@ -68,7 +66,7 @@ export const UserListActions = ({
           aria-label={t('common.request_poa')}
         >
           <PlusCircleIcon aria-hidden='true' />
-          {!isSmall && t('common.request_poa')}
+          {t('common.request_poa')}
         </DsButton>
       )}
       {availableAction === DelegationAction.REVOKE && onRevoke && !user.isInherited && (
@@ -79,7 +77,7 @@ export const UserListActions = ({
           aria-label={revokeLabel ?? t('common.delete_poa')}
         >
           <MinusCircleIcon aria-hidden='true' />
-          {!isSmall && (revokeLabel ?? t('common.delete_poa'))}
+          {revokeLabel ?? t('common.delete_poa')}
         </DsButton>
       )}
     </>

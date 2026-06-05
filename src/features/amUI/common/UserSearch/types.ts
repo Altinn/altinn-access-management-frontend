@@ -18,4 +18,7 @@ export interface UserSearchNode {
   matchInChildren?: boolean;
 }
 
-export type UserActionTarget = Pick<UserSearchNode, 'id' | 'name' | 'type'>;
+export type UserActionTarget = Pick<
+  UserSearchNode,
+  'id' | 'name' | 'type' | 'variant' | 'organizationIdentifier' | 'dateOfBirth' | 'isInherited'
+>;

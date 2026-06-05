@@ -25,8 +25,13 @@ export const MyClientsAccessSection = ({
     useRemoveMyClientAccessPackagesMutation();
 
   const onRemoveAccessPackage = useCallback(
-    async ({ clientId, roleCode, packageId, accessPackageName }: ClientAccessPackageAction) => {
+    async (
+      { clientId, roleCode, packageId, accessPackageName }: ClientAccessPackageAction,
+      onSuccess?: () => void,
+      onError?: () => void,
+    ) => {
       if (!actingPartyUuid) {
+        onError?.();
         return;
       }
 
@@ -50,6 +55,7 @@ export const MyClientsAccessSection = ({
           }),
           color: 'success',
         });
+        onSuccess?.();
       } catch {
         openSnackbar({
           message: t('my_clients_page.remove_package_error', {
@@ -58,6 +64,7 @@ export const MyClientsAccessSection = ({
           }),
           color: 'danger',
         });
+        onError?.();
       }
     },
     [actingPartyUuid, currentUserName, openSnackbar, removeMyClientAccessPackages, t],
