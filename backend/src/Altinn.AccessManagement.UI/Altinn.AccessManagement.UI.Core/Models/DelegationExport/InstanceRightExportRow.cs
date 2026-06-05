@@ -41,7 +41,9 @@ namespace Altinn.AccessManagement.UI.Core.Models.DelegationExport
         /// <summary>
         /// Initializes a new instance of the <see cref="InstanceRightExportRowMap"/> class using the default language (Norwegian bokmål).
         /// </summary>
-        public InstanceRightExportRowMap() : this(null) { }
+        public InstanceRightExportRowMap() : this(null)
+        {
+        }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="InstanceRightExportRowMap"/> class with the specified language code.

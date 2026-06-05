@@ -77,8 +77,9 @@ namespace Altinn.AccessManagement.UI.Core.Services
             {
                 try
                 {
+                    string filename = language == "en" ? "roles.csv" : "roller.csv";
                     List<RoleExportRow> rows = await BuildRoleRows(givers, language);
-                    files["roller.csv"] = DelegationExportCsvBuilder.WriteCsv(rows, new RoleExportRowMap(language));
+                    files[filename] = DelegationExportCsvBuilder.WriteCsv(rows, new RoleExportRowMap(language));
                 }
                 catch (HttpStatusException ex)
                 {
@@ -91,7 +92,8 @@ namespace Altinn.AccessManagement.UI.Core.Services
                 try
                 {
                     List<AccessPackageExportRow> rows = await BuildAccessPackageRows(givers, language);
-                    files["tilgangspakker.csv"] = DelegationExportCsvBuilder.WriteCsv(rows, new AccessPackageExportRowMap(language));
+                    string filename = language == "en" ? "access_packages.csv" : language == "nn" ? "tilgangspakkar.csv" : "tilgangspakker.csv";
+                    files[filename] = DelegationExportCsvBuilder.WriteCsv(rows, new AccessPackageExportRowMap(language));
                 }
                 catch (HttpStatusException ex)
                 {
@@ -104,7 +106,8 @@ namespace Altinn.AccessManagement.UI.Core.Services
                 try
                 {
                     List<SingleRightExportRow> rows = await BuildSingleRightRows(givers, language);
-                    files["enkeltrettigheter.csv"] = DelegationExportCsvBuilder.WriteCsv(rows, new SingleRightExportRowMap(language));
+                    string filename = language == "en" ? "single_rights.csv" : language == "nn" ? "enkelttenester.csv" : "enkelttjenester.csv";
+                    files[filename] = DelegationExportCsvBuilder.WriteCsv(rows, new SingleRightExportRowMap(language));
                 }
                 catch (HttpStatusException ex)
                 {
@@ -117,7 +120,8 @@ namespace Altinn.AccessManagement.UI.Core.Services
                 try
                 {
                     List<InstanceRightExportRow> rows = await BuildInstanceRows(givers, language);
-                    files["enkeltrettigheter-instans.csv"] = DelegationExportCsvBuilder.WriteCsv(rows, new InstanceRightExportRowMap(language));
+                    string filename = language == "en" ? "instance_rights.csv" : language == "nn" ? "enkelttenester-instans.csv" : "enkelttjenester-instans.csv";
+                    files[filename] = DelegationExportCsvBuilder.WriteCsv(rows, new InstanceRightExportRowMap(language));
                 }
                 catch (HttpStatusException ex)
                 {
@@ -158,6 +162,7 @@ namespace Altinn.AccessManagement.UI.Core.Services
         private async Task<List<RoleExportRow>> BuildRoleRows(List<AuthorizedParty> givers, string language)
         {
             var rows = new List<RoleExportRow>();
+            Dictionary<Guid, string> roleNameLookup = await BuildRoleNameLookup(language);
 
             foreach (AuthorizedParty giver in givers)
             {
@@ -166,6 +171,10 @@ namespace Altinn.AccessManagement.UI.Core.Services
                 {
                     foreach (Permission permission in DirectPermissions(rolePermission.Permissions))
                     {
+                        string roleName = rolePermission.Role != null && roleNameLookup.TryGetValue(rolePermission.Role.Id, out string name)
+                            ? name
+                            : rolePermission.Role?.Name;
+
                         rows.Add(new RoleExportRow
                         {
                             GiverOrgnr = giver.OrganizationNumber,
@@ -173,7 +182,7 @@ namespace Altinn.AccessManagement.UI.Core.Services
                             MottakerId = RecipientId(permission.To),
                             MottakerNavn = permission.To?.Name,
                             MottakerType = permission.To?.Type,
-                            RolleNavn = rolePermission.Role?.Name,
+                            RolleNavn = roleName,
                             RolleCode = rolePermission.Role?.Code,
                         });
                     }
@@ -181,6 +190,18 @@ namespace Altinn.AccessManagement.UI.Core.Services
             }
 
             return rows;
+        }
+
+        private async Task<Dictionary<Guid, string>> BuildRoleNameLookup(string language)
+        {
+            var map = new Dictionary<Guid, string>();
+            var allRoles = await _roleService.GetAllRoles(language);
+            foreach (var role in allRoles ?? Enumerable.Empty<Altinn.AccessManagement.UI.Core.Models.Common.Role>())
+            {
+                map[role.Id] = role.Name;
+            }
+
+            return map;
         }
 
         private async Task<List<AccessPackageExportRow>> BuildAccessPackageRows(List<AuthorizedParty> givers, string language)

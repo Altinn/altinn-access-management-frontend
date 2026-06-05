@@ -43,7 +43,7 @@ namespace Altinn.AccessManagement.UI.Core.Models.DelegationExport
                         { "rolle_code", "Rollekode" },
                         { "tilgangspakke_navn", "Tilgangspakkenavn" },
                         { "tilgangspakke_code", "Tilgangspakkekode" },
-                        { "tjeneste_navn", "Tjenestenavn" },
+                        { "tjeneste_navn", "Tenestenavn" },
                         { "resource_id", "Ressurs-ID" },
                         { "instans_id", "Instans-ID" },
                     };
