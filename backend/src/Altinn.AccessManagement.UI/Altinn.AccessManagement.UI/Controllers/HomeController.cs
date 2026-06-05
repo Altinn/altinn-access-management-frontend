@@ -101,7 +101,14 @@ namespace Altinn.AccessManagement.UI.Controllers
             return Redirect(redirectUrl);
         }
 
-        private async Task SetLanguageCookie()
+        private static string ToHtmlLang(string frontendCode) => frontendCode switch
+        {
+            "no_nn" => "nn",
+            "en" => "en",
+            _ => "nb"
+        };
+
+        private async Task<string> SetLanguageCookie()
         {
             string languageCode = "no_nb";
 
@@ -132,6 +139,8 @@ namespace Altinn.AccessManagement.UI.Controllers
                 // Make this cookie readable by Javascript.
                 HttpOnly = false,
             });
+
+            return languageCode;
         }
 
         private async Task CheckAndSetPartyRepresentationCookies()
@@ -185,7 +194,8 @@ namespace Altinn.AccessManagement.UI.Controllers
         {
             if (User.Identity.IsAuthenticated)
             {
-                await SetLanguageCookie();
+                string languageCode = await SetLanguageCookie();
+                ViewBag.HtmlLang = ToHtmlLang(languageCode);
                 await CheckAndSetPartyRepresentationCookies();
                 return true;
             }
