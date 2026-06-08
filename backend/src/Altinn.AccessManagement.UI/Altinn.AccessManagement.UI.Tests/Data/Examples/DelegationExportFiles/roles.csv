@@ -1,0 +1,6 @@
+giver_orgnr;giver_navn;rolle_navn;mottaker_navn;mottaker_id;mottaker_type;rolle_code
+899513762;PRAT, SPIS OG REIS LITT;Daglig leder;HARVEY ERIK DAHLE;03.03.1962;Person;daglig-leder
+899513762;PRAT, SPIS OG REIS LITT;Regnskapsmedarbeider;ARNESEN MONICA;02.09.1974;Person;regnskapsmedarbeider
+899513762;PRAT, SPIS OG REIS LITT;Revisor;ALTINN1 ANS;498665381;Organization;revisor
+912345678;PRAT, SPIS OG REIS LITT AVD OSLO;Tilgangsstyrer;ARNESEN MONICA;02.09.1974;Person;tilgangsstyrer
+912345678;PRAT, SPIS OG REIS LITT AVD OSLO;Regnskapsfører med signeringsrettighet;REGNSKAP NORD AS;811076732;Organization;regnskapsforer-med-signeringsrettighet

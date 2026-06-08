@@ -1,0 +1,6 @@
+giver_orgnr;giver_navn;tilgangspakke_navn;mottaker_navn;mottaker_id;mottaker_type;tilgangspakke_code
+899513762;PRAT, SPIS OG REIS LITT;Skatt næring;HARVEY ERIK DAHLE;03.03.1962;Person;urn:altinn:accesspackage:skatt-naering
+899513762;PRAT, SPIS OG REIS LITT;Regnskap og økonomirapportering;ARNESEN MONICA;02.09.1974;Person;urn:altinn:accesspackage:regnskap-okonomi-rapportering
+899513762;PRAT, SPIS OG REIS LITT;Ansvarlig revisor;REGNSKAP NORD AS;811076732;Organization;urn:altinn:accesspackage:ansvarlig-revisor
+912345678;PRAT, SPIS OG REIS LITT AVD OSLO;Personale;HARVEY ERIK DAHLE;03.03.1962;Person;urn:altinn:accesspackage:personale
+912345678;PRAT, SPIS OG REIS LITT AVD OSLO;Post og arkiv;ALTINN1 ANS;498665381;Organization;urn:altinn:accesspackage:post-og-arkiv

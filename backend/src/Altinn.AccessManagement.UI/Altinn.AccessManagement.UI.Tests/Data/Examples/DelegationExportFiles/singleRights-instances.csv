@@ -1,0 +1,4 @@
+giver_orgnr;giver_navn;tjeneste_navn;mottaker_navn;mottaker_id;mottaker_type;resource_id;instans_id
+899513762;PRAT, SPIS OG REIS LITT;Søknad om produksjonstilskudd;HARVEY ERIK DAHLE;03.03.1962;Person;urn:altinn:resource:lmd-produksjonstilskudd;01934abc-7f2e-7c41-9a3d-2b6f8e1d4c90
+899513762;PRAT, SPIS OG REIS LITT;Søknad om produksjonstilskudd;ARNESEN MONICA;02.09.1974;Person;urn:altinn:resource:lmd-produksjonstilskudd;01934abc-7f2e-7c41-9a3d-2b6f8e1d4c90
+912345678;PRAT, SPIS OG REIS LITT AVD OSLO;Tilskudd til avløsning;REGNSKAP NORD AS;811076732;Organization;urn:altinn:resource:lmd-avlosningstilskudd;01934f10-3c8a-7b22-8e74-9d1a5f0b6e3c

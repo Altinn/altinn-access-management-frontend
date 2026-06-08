@@ -243,6 +243,7 @@ void ConfigureServices(IServiceCollection services, IConfiguration config)
     services.AddSingleton<ISelfIdentifiedUserService, SelfIdentifiedUserService>();
     services.AddSingleton<IEncryptionService, EncryptionService>();
     services.AddSingleton<IRoleService, RoleService>();
+    services.AddSingleton<IDelegationExportService, DelegationExportService>();
     services.AddSingleton<IMaskinportenService, MaskinportenService>();
     services.AddTransient<ISigningCredentialsResolver, SigningCredentialsResolver>();
     services.AddTransient<ResourceHelper, ResourceHelper>();

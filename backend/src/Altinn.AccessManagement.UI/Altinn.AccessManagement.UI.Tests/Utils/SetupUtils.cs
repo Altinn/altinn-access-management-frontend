@@ -650,6 +650,52 @@ namespace Altinn.AccessManagement.UI.Tests.Utils
         }
 
         /// <summary>
+        ///     Gets a HttpClient for unittests testing for DelegationExportController
+        /// </summary>
+        /// <param name="customFactory">Web app factory to configure test services for DelegationExportController tests</param>
+        /// <returns>HttpClient</returns>
+        public static HttpClient GetTestClient(CustomWebApplicationFactory<DelegationExportController> customFactory)
+        {
+            WebApplicationFactory<DelegationExportController> factory = customFactory.WithWebHostBuilder(builder =>
+            {
+                builder.ConfigureTestServices(services =>
+                {
+                    // Reportee resolution (UserService -> these clients).
+                    services.AddTransient<IAccessManagementClient, AccessManagementClientMock>();
+                    services.AddTransient<IAccessManagementClientV0, AccessManagementClientV0Mock>();
+                    services.AddTransient<IConnectionClient, ConnectionClientMock>();
+                    services.AddTransient<IProfileClient, ProfileClientMock>();
+
+                    // Right-type sources.
+                    services.AddTransient<IRoleClient, RoleClientMock>();
+                    services.AddTransient<IAccessPackageClient, AccessPackageClientMock>();
+                    services.AddTransient<ISingleRightClient, SingleRightClientMock>();
+                    services.AddTransient<IInstanceClient, InstanceClientMock>();
+                    services.AddTransient<IAuthenticationClient, AuthenticationMock>();
+                    services.AddTransient<IDialogportClient, DialogportClientMock>();
+                    services.AddTransient<IResourceRegistryClient, ResourceRegistryClientMock>();
+
+                    services.Configure<FeatureFlags>(options =>
+                    {
+                        options.EnableDialogportenDialogLookup = true;
+                    });
+                    services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
+                    services.AddSingleton<IPostConfigureOptions<JwtCookieOptions>, JwtCookiePostConfigureOptionsStub>();
+                });
+            });
+            WebApplicationFactoryClientOptions opts = new WebApplicationFactoryClientOptions
+            {
+                HandleCookies = true,
+            };
+            factory.Server.AllowSynchronousIO = true;
+            var client = factory.CreateClient(opts);
+            client.DefaultRequestHeaders.Add("Cookie", "altinnPersistentContext=UL=1044");
+            client.DefaultRequestHeaders.Add("Cookie", "selectedLanguage=no_nb");
+
+            return client;
+        }
+
+        /// <summary>
         ///     Gets a HttpClient for unittests testing
         /// </summary>
         /// <param name="customFactory">Web app factory to configure test services for RequestController tests</param>

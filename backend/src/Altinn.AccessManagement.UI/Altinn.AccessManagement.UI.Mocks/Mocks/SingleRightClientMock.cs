@@ -59,7 +59,7 @@ namespace Altinn.AccessManagement.UI.Mocks.Mocks
         }
 
         /// <inheritdoc />
-        public Task<List<ResourcePermission>> GetDelegatedResources(string languageCode, Guid party, Guid from, Guid to)
+        public Task<List<ResourcePermission>> GetDelegatedResources(string languageCode, Guid party, Guid from, Guid? to)
         {
             ThrowExceptionIfTriggerParty(party.ToString());
             ThrowHttpStatusExceptionIfTriggerParty(from.ToString());
@@ -151,6 +151,11 @@ namespace Altinn.AccessManagement.UI.Mocks.Mocks
             if (id == "11111111-1111-1111-1111-111111111111")
             {
                 throw new HttpStatusException("StatusError", "Simulated backend error", HttpStatusCode.BadRequest, "");
+            }
+
+            if (id == "00000000-0000-0000-0000-000000000404")
+            {
+                throw new HttpStatusException("Status Error", "Downstream message", HttpStatusCode.NotFound, null, "Downstream message");
             }
         }
     }
