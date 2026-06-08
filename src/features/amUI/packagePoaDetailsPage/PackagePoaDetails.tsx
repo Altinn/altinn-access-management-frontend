@@ -1,4 +1,3 @@
-import { useState } from 'react';
 import pageClasses from './PackagePoaDetailsPage.module.css';
 import headerClasses from './PackagePoaDetailsHeader.module.css';
 import { DsAlert, DsTabs } from '@altinn/altinn-components';
@@ -15,6 +14,7 @@ import { isCriticalAndUndelegated } from '../common/AccessPackageList/Undelegate
 import { FilesIcon, PersonGroupIcon } from '@navikt/aksel-icons';
 import { amUIPath } from '@/routes/paths/amUIPath';
 import { useDocumentTitle } from '@/resources/hooks/useDocumentTitle';
+import { useTabState } from '@/resources/hooks';
 
 export const PackagePoaDetails = () => {
   const { id } = useParams<{ id: string }>();
@@ -43,9 +43,12 @@ export const PackagePoaDetails = () => {
     }),
   );
 
-  const [chosenTab, setChosenTab] = useState('users');
+  const [chosenTab, setChosenTab] = useTabState({
+    tabs: ['users', 'services'],
+    defaultTab: 'users',
+  });
   const tab = searchParams.get('tab');
-  const poaOverviewUrl = `/${amUIPath.PoaOverview}${tab ? `?tab=${encodeURIComponent(tab)}` : ''}`;
+  const poaOverviewUrl = `/${amUIPath.PoaOverview}${tab ? `#${encodeURIComponent(tab)}` : ''}`;
 
   const cannotDelegateHere = !!(accessPackage && accessPackage.isAssignable === false);
   const showUndelegatedWarning = !!(accessPackage && isCriticalAndUndelegated(accessPackage));

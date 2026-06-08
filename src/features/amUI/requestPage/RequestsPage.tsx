@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { useTranslation } from 'react-i18next';
 import {
   Badge,
@@ -26,6 +26,7 @@ import { SentRequestsTabPanel } from './SentRequestsTabPanel';
 import { PartyRepresentationProvider } from '../common/PartyRepresentationContext/PartyRepresentationContext';
 import { getCookie } from '@/resources/Cookie/CookieMethods';
 import { useSidebarRequestCount } from '@/resources/hooks/useSidebarRequestCount';
+import { useTabState } from '@/resources/hooks';
 
 const selectedTabProps = {
   'data-size': 'sm',
@@ -41,7 +42,10 @@ const SENT_REQUESTS_TAB = 'sentRequests';
 
 export const RequestPage = () => {
   const { t } = useTranslation();
-  const [selectedTab, setSelectedTab] = useState<string>(INCOMING_REQUESTS_TAB);
+  const [selectedTab, setSelectedTab] = useTabState({
+    tabs: [INCOMING_REQUESTS_TAB, SENT_REQUESTS_TAB],
+    defaultTab: INCOMING_REQUESTS_TAB,
+  });
 
   useRerouteIfRequestPageDisabled();
 

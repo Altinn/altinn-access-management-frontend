@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { useTranslation } from 'react-i18next';
 import {
   DsAlert,
@@ -10,6 +10,7 @@ import {
 import { useParams } from 'react-router';
 
 import { amUIPath } from '@/routes/paths';
+import { useTabState } from '@/resources/hooks';
 import { PartyType, useGetIsClientAdminQuery } from '@/rtk/features/userInfoApi';
 import {
   useAddAgentAccessPackagesMutation,
@@ -38,7 +39,10 @@ export const ClientDetails = () => {
   const { openSnackbar } = useSnackbar();
   const { id } = useParams();
   const { fromParty, actingParty } = usePartyRepresentation();
-  const [activeTab, setActiveTab] = useState('has-users');
+  const [activeTab, setActiveTab] = useTabState({
+    tabs: ['has-users', 'all-users'],
+    defaultTab: 'has-users',
+  });
   const { data: isClientAdmin, isLoading: isLoadingIsClientAdmin } = useGetIsClientAdminQuery();
   const {
     data: clientAccessPackages,
@@ -87,7 +91,7 @@ export const ClientDetails = () => {
     );
   }
 
-  const backUrl = `/${amUIPath.ClientAdministration}?tab=clients`;
+  const backUrl = `/${amUIPath.ClientAdministration}#clients`;
   const clientName = formatDisplayName({
     fullName: fromParty?.name || '',
     type: fromParty?.partyTypeName === PartyType.Person ? 'person' : 'company',

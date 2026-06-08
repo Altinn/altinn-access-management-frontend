@@ -25,7 +25,7 @@ export const PackagePoaDetailsPage = () => {
   const { t } = useTranslation();
   const [searchParams] = useSearchParams();
   const tab = searchParams.get('tab');
-  const poaOverviewUrl = `/${amUIPath.PoaOverview}${tab ? `?tab=${encodeURIComponent(tab)}` : ''}`;
+  const poaOverviewUrl = `/${amUIPath.PoaOverview}${tab ? `#${encodeURIComponent(tab)}` : ''}`;
 
   useDocumentTitle(t('package_poa_details_page.page_title'));
 

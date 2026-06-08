@@ -21,7 +21,7 @@ import { usePartyRepresentation } from '../common/PartyRepresentationContext/Par
 import { MaskinportenDeleteDialog } from './MaskinportenDeleteDialog';
 import { DelegatedResourcesSection } from './DelegatedResourcesSection';
 
-const backUrl = `/${amUIPath.Maskinporten}?tab=consumers`;
+const backUrl = `/${amUIPath.Maskinporten}#consumers`;
 
 export const ConsumerPageContent = () => {
   const { t } = useTranslation();
