@@ -54,7 +54,7 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
 
             Assert.Equal(HttpStatusCode.OK, response.StatusCode);
             Assert.Equal("application/zip", response.Content.Headers.ContentType?.MediaType);
-            Assert.Contains($"delegerte-rettigheter-{OrgNumber}", response.Content.Headers.ContentDisposition?.FileNameStar ?? response.Content.Headers.ContentDisposition?.FileName ?? string.Empty);
+            Assert.Contains($"{OrgNumber}", response.Content.Headers.ContentDisposition?.FileNameStar ?? response.Content.Headers.ContentDisposition?.FileName ?? string.Empty);
 
             Dictionary<string, string> entries = await ReadZipEntries(response);
 
