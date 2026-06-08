@@ -130,7 +130,7 @@ namespace Altinn.AccessManagement.UI.Core.Services
             }
 
             byte[] zip = DelegationExportCsvBuilder.BuildZip(files);
-            string fileName = $"delegerte-rettigheter-{reportee.OrganizationNumber}-{DateTime.UtcNow:yyyyMMdd}.zip";
+            string fileName = $"{reportee.OrganizationNumber}_{DateTime.UtcNow:yyyy-MM-dd}.zip";
             return DelegationExportResult.Success(zip, fileName);
         }
 
