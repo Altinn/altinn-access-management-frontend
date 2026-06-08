@@ -116,7 +116,6 @@ export const SystemUserAgentDelegationPageContent = ({
       message: message,
       color: color,
       dismissable: false,
-      className: classes.customerListSnackbar,
     });
   };
 
@@ -316,7 +315,6 @@ export const SystemUserAgentDelegationPageContent = ({
                   <DsButton onClick={onCloseModal}>
                     {t('systemuser_agent_delegation.confirm_close')}
                   </DsButton>
-                  <Snackbar className={classes.customerListSnackbar} />
                 </div>
               </div>
             </>
@@ -365,8 +363,12 @@ export const SystemUserAgentDelegationPageContent = ({
                 <DsButton
                   variant='secondary'
                   loading={isLoadingSelf}
-                  disabled={isLoadingSelf}
-                  onClick={assignSelfToSystemUser}
+                  aria-disabled={isLoadingSelf}
+                  onClick={() => {
+                    if (!isLoadingSelf) {
+                      assignSelfToSystemUser();
+                    }
+                  }}
                 >
                   <PlusIcon aria-hidden='true' />
                   {t('systemuser_agent_delegation.add_own_organization')}
@@ -387,33 +389,36 @@ export const SystemUserAgentDelegationPageContent = ({
           <CustomerList
             list={assignedCustomersList}
             selfButton={
-              <>
-                {hasAddSelfPermission && !isSelfAdded && (
-                  <DsButton
-                    variant='tertiary'
-                    aria-label={t('systemuser_agent_delegation.add_own_organization_list_aria')}
-                    loading={isLoadingSelf}
-                    disabled={isLoadingSelf}
-                    onClick={assignSelfToSystemUser}
-                  >
-                    <PlusCircleIcon aria-hidden='true' />
-                    {!isSmall && t('systemuser_agent_delegation.add_own_organization_list')}
-                  </DsButton>
-                )}
-                {hasAddSelfPermission && isSelfAdded && (
-                  <DsButton
-                    data-color='danger'
-                    variant='tertiary'
-                    aria-label={t('systemuser_agent_delegation.remove_own_organization')}
-                    loading={isLoadingSelf}
-                    disabled={isLoadingSelf}
-                    onClick={removeSelfFromSystemuser}
-                  >
-                    <MinusCircleIcon aria-hidden='true' />
-                    {!isSmall && t('systemuser_agent_delegation.remove')}
-                  </DsButton>
-                )}
-              </>
+              hasAddSelfPermission ? (
+                <DsButton
+                  variant='tertiary'
+                  data-color={isSelfAdded ? 'danger' : undefined}
+                  aria-label={t(
+                    isSelfAdded
+                      ? 'systemuser_agent_delegation.remove_own_organization'
+                      : 'systemuser_agent_delegation.add_own_organization_list_aria',
+                  )}
+                  loading={isLoadingSelf}
+                  aria-disabled={isLoadingSelf}
+                  onClick={() => {
+                    if (!isLoadingSelf) {
+                      isSelfAdded ? removeSelfFromSystemuser() : assignSelfToSystemUser();
+                    }
+                  }}
+                >
+                  {isSelfAdded ? (
+                    <>
+                      <MinusCircleIcon aria-hidden='true' />
+                      {!isSmall && t('systemuser_agent_delegation.remove')}
+                    </>
+                  ) : (
+                    <>
+                      <PlusCircleIcon aria-hidden='true' />
+                      {!isSmall && t('systemuser_agent_delegation.add_own_organization_list')}
+                    </>
+                  )}
+                </DsButton>
+              ) : null
             }
           >
             <div className={classes.addButtons}>
