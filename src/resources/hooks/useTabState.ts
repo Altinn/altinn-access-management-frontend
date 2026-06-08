@@ -13,15 +13,12 @@ export const useTabState = ({
   const { hash, search } = useLocation();
   const navigate = useNavigate();
 
-  const current = decodeURIComponent(hash.replace('#', ''));
+  const current = hash.replace('#', '');
   const chosenTab = tabs.includes(current) ? current : defaultTab;
 
   const setChosenTab = useCallback(
     (value: string) => {
-      navigate(
-        { search, hash: value === defaultTab ? '' : `#${encodeURIComponent(value)}` },
-        { replace: true },
-      );
+      navigate({ search, hash: value === defaultTab ? '' : `#${value}` }, { replace: true });
     },
     [navigate, defaultTab, search],
   );
