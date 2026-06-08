@@ -22,15 +22,6 @@ jobs:
       environment: TT02
       tag: ${{ github.ref_name }}
 
-  deploy-release-to-yt01:
-    name: 'Environment (YT01)'
-    needs: containerize
-    uses: './.github/workflows/template-deploy-container.yml'
-    secrets: inherit
-    with:
-      environment: YT01
-      tag: ${{ github.ref_name }}
-
   playwright-release-to-tt02:
     name: 'Playwright'
     needs: deploy-release-to-tt02
