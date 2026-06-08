@@ -47,8 +47,8 @@ export const PackagePoaDetails = () => {
     tabs: ['users', 'services'],
     defaultTab: 'users',
   });
-  const tab = searchParams.get('tab');
-  const poaOverviewUrl = `/${amUIPath.PoaOverview}${tab ? `#${encodeURIComponent(tab)}` : ''}`;
+  const parentTab = searchParams.get('parentTab') ?? 'packages';
+  const poaOverviewUrl = `/${amUIPath.PoaOverview}#${parentTab}`;
 
   const cannotDelegateHere = !!(accessPackage && accessPackage.isAssignable === false);
   const showUndelegatedWarning = !!(accessPackage && isCriticalAndUndelegated(accessPackage));
