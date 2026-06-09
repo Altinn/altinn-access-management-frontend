@@ -62,6 +62,11 @@ namespace Altinn.AccessManagement.UI.Controllers
                 return BadRequest(ModelState);
             }
 
+            if (partyUuid == Guid.Empty)
+            {
+                return BadRequest("partyUuid must be provided.");
+            }
+
             try
             {
                 ISet<string> typeSet = ParseTypes(types);

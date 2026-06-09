@@ -77,7 +77,6 @@ export const ReporteePageHeading: React.FC<Props> = ({
       </div>
       {downloadable && (
         <DownloadFileButton
-          partyUuid={reportee?.partyUuid}
           className={styles.downloadButton}
           iconOnly={isSmallScreen}
         />

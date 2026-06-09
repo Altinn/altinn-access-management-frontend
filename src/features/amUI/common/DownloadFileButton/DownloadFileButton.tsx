@@ -15,14 +15,12 @@ import { PartyType, useGetIsAdminQuery } from '@/rtk/features/userInfoApi';
 import classes from './DownloadFileButton.module.css';
 
 export interface DownloadFileButtonProps {
-  partyUuid?: string;
   size?: 'xs' | 'sm' | 'md' | 'lg';
   iconOnly?: boolean;
   className?: string;
 }
 
 export const DownloadFileButton = ({
-  partyUuid,
   size = 'sm',
   iconOnly = false,
   className,
@@ -37,10 +35,10 @@ export const DownloadFileButton = ({
   const reporteeName = formatDisplayName({ fullName: fromParty?.name || '', type: 'company' });
 
   const handleDownload = () => {
-    if (!partyUuid) return;
+    if (!fromParty) return;
 
     const params = new URLSearchParams({
-      partyUuid,
+      partyUuid: fromParty.partyUuid,
       includeSubunits: String(includeSubunits),
     });
 
