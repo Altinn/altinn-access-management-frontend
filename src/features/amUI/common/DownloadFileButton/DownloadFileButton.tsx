@@ -93,7 +93,6 @@ export const DownloadFileButton = ({
                 variant='primary'
                 onClick={handleDownload}
               >
-                <DownloadIcon aria-hidden />
                 {t('download_file.start_download')}
               </Button>
               <Button
