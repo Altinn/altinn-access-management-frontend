@@ -37,11 +37,17 @@ export const DownloadFileButton = ({
   const reporteeName = formatDisplayName({ fullName: fromParty?.name || '', type: 'company' });
 
   const handleDownload = () => {
-    if (partyUuid) {
-      const url = `/accessmanagement/api/v1/delegationexport?partyUuid=${partyUuid}&includeSubunits=${includeSubunits}`;
-      window.open(url, '_blank');
-      dialogRef.current?.close();
-    }
+    if (!partyUuid) return;
+
+    const params = new URLSearchParams({
+      partyUuid,
+      includeSubunits: String(includeSubunits),
+    });
+
+    const url = `/accessmanagement/api/v1/delegationexport?${params.toString()}`;
+    window.open(url, '_blank', 'noopener,noreferrer');
+    dialogRef.current?.close();
+    setIsDialogOpen(false);
   };
 
   const openDialog = () => {
