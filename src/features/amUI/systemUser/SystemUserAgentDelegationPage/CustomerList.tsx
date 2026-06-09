@@ -150,13 +150,16 @@ export const CustomerList = ({
         ))}
       </List>
       {totalPages > 1 && (
-        <AmPagination
-          totalPages={totalPages}
-          showPages={showPages}
-          currentPage={currentPage}
-          setCurrentPage={setCurrentPage}
-          className={classes.pagingContainer}
-        />
+        <div className={classes.pagingContainer}>
+          <AmPagination
+            totalPages={totalPages}
+            showPages={showPages}
+            currentPage={currentPage}
+            setCurrentPage={setCurrentPage}
+            size='sm'
+            hideLabels
+          />
+        </div>
       )}
     </div>
   );
