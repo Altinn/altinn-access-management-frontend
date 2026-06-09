@@ -33,7 +33,7 @@ export const mapErrorCodeToErrorMessage = (errorCode?: string) => {
     case 'AMUI-00066':
       return 'systemuser_request.load_request_missing_permissions';
     case 'AMUI-00068':
-      return 'systemuser_delegation_errors.68_delegation_right_missing_delegation_access_package';      
+      return 'systemuser_delegation_errors.68_delegation_right_missing_delegation_accesspackage';
     default:
       return '';
   }

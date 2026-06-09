@@ -930,7 +930,7 @@
     "53_accesspackage_delegation_missing_required_access": "You do not have sufficient access rights to delegate the requested access packages.",
     "55_accesspackage_failed_to_get_delegated_packages": "Unable to retrieve delegated access packages.",
     "57_systemuser_failed_to_delete_accesspackage": "Could not delete access package delegation for the system access.",
-    "68_delegation_right_missing_delegation_access_package": "Delegation of services failed: you lack the necessary access packages for delegation."
+    "68_delegation_right_missing_delegation_accesspackage": "Delegation of services failed: you lack the necessary access packages for delegation."
   },
   "consent_request": {
     "page_title": "Approve agreement - Altinn",
