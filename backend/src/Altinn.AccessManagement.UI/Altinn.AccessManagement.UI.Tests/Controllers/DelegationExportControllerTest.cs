@@ -124,6 +124,16 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
         }
 
         [Fact]
+        public async Task Export_MissingPartyUuid_ReturnsBadRequest()
+        {
+            HttpResponseMessage response = await _client.GetAsync(BaseUrl);
+
+            Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
+            string body = await response.Content.ReadAsStringAsync();
+            Assert.Contains("partyUuid must be provided.", body);
+        }
+
+        [Fact]
         public async Task Export_IncludeSubunits_IncludesSubunitGiverRows()
         {
             HttpResponseMessage withSubunits = await _client.GetAsync($"{BaseUrl}?partyUuid={OrgPartyUuid}&types=instances&includeSubunits=true");
