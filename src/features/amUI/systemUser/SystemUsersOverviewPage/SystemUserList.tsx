@@ -87,7 +87,7 @@ export const SystemUserList = ({
             <ListItem
               key={systemUser.id}
               size='lg'
-              title={{ children: `${systemUser.integrationTitle} ${refText}`, as: 'h3' }}
+              title={{ children: `${systemUser.integrationTitle} ${refText}`, as: 'div' }}
               description={systemUser.system.systemVendorOrgName}
               as={(props) => (
                 <Link

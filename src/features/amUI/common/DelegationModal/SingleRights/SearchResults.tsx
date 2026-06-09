@@ -168,7 +168,6 @@ export const SearchResults = ({
             showDetails={false}
             onSelect={onSelect}
             size='sm'
-            titleAs='h3'
             getHasAccess={(resource) => isDelegated(resource.identifier)}
             renderControls={renderControls}
           />
