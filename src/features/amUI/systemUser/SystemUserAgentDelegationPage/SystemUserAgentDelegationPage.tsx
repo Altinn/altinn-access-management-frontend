@@ -1,7 +1,7 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate, useParams } from 'react-router';
-import { SnackbarProvider, DsAlert, DsHeading, DsSkeleton } from '@altinn/altinn-components';
+import { DsAlert, DsHeading, DsSkeleton } from '@altinn/altinn-components';
 
 import {
   useGetAssignedCustomersQuery,
@@ -137,13 +137,11 @@ export const SystemUserAgentDelegationPage = (): React.ReactNode => {
             </DsAlert>
           )}
           {systemUser && customers && agentDelegations && !isLoading && (
-            <SnackbarProvider>
-              <SystemUserAgentDelegationPageContent
-                systemUser={systemUser}
-                customers={customers}
-                existingAgentDelegations={agentDelegations}
-              />
-            </SnackbarProvider>
+            <SystemUserAgentDelegationPageContent
+              systemUser={systemUser}
+              customers={customers}
+              existingAgentDelegations={agentDelegations}
+            />
           )}
         </PageContainer>
       </PageLayoutWrapper>

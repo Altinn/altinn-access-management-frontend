@@ -1,5 +1,5 @@
 import { forwardRef } from 'react';
-import { DsDialog, Snackbar, SnackbarProvider } from '@altinn/altinn-components';
+import { DsDialog } from '@altinn/altinn-components';
 
 import classes from '../common/DelegationModal/DelegationModal.module.css';
 import { PartyInfo, type PartyInfoProps } from '../common/DelegationModal/Party/PartyInfo';
@@ -18,10 +18,7 @@ export const PartyInfoModal = forwardRef<HTMLDialogElement, PartyInfoModalProps>
         closedby='any'
         onClose={onClose}
       >
-        <SnackbarProvider>
-          <div className={classes.content}>{partyInfo && <PartyInfo {...partyInfo} />}</div>
-          <Snackbar />
-        </SnackbarProvider>
+        <div className={classes.content}>{partyInfo && <PartyInfo {...partyInfo} />}</div>
       </DsDialog>
     );
   },
