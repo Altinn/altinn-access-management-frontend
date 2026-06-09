@@ -45,6 +45,7 @@ export const DownloadFileButton = ({
   };
 
   const openDialog = () => {
+    if (isDialogOpen) return;
     setIsDialogOpen(true);
     requestAnimationFrame(() => dialogRef.current?.showModal());
   };
