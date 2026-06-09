@@ -80,7 +80,7 @@ export const DownloadFileButton = ({
       {isDialogOpen && (
         <DsDialog
           ref={dialogRef}
-          onClose={closeDialog}
+          onClose={() => setIsDialogOpen(false)}
           closedby={'any'}
           className={classes.dialog}
         >
