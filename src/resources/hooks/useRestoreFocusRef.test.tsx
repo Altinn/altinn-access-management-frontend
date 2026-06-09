@@ -2,7 +2,7 @@ import React from 'react';
 import { render, screen, waitFor } from '@testing-library/react';
 import { describe, expect, it, vi } from 'vitest';
 
-import { useFocusTarget } from './useFocusTarget';
+import { useRestoreFocusRef } from './useRestoreFocusRef';
 
 interface FocusTargetTestProps {
   children: React.ReactNode;
@@ -17,7 +17,7 @@ const FocusTargetTest = ({
   onFocusRestored,
   shouldRestoreFocus = true,
 }: FocusTargetTestProps) => {
-  const containerRef = useFocusTarget<HTMLDivElement>(focusTargetId, {
+  const containerRef = useRestoreFocusRef<HTMLDivElement>(focusTargetId, {
     shouldRestoreFocus,
     onFocusRestored,
   });
@@ -25,7 +25,7 @@ const FocusTargetTest = ({
   return <div ref={containerRef}>{children}</div>;
 };
 
-describe('useFocusTarget', () => {
+describe('useRestoreFocusRef', () => {
   it('focuses the first focusable descendant of the target element', async () => {
     const onFocusRestored = vi.fn();
 

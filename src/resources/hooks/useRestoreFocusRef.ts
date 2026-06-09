@@ -42,7 +42,7 @@ interface UseFocusTargetOptions {
 }
 
 // Returns a callback ref that focuses focusTargetId, or waits for it to appear, once enabled.
-export const useFocusTarget = <T extends HTMLElement = HTMLElement>(
+export const useRestoreFocusRef = <T extends HTMLElement = HTMLElement>(
   focusTargetId?: string | null,
   { shouldRestoreFocus = true, onFocusRestored }: UseFocusTargetOptions = {},
 ) => {

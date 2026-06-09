@@ -23,7 +23,7 @@ import { useRequestReview } from './useRequestReview';
 import classes from './RequestReviewModal.module.css';
 import { amUIPath } from '@/routes/paths';
 import { RequestPackageDetail } from './RequestPackageDetail';
-import { useFocusTarget } from '@/resources/hooks/useFocusTarget';
+import { useRestoreFocusRef } from '@/resources/hooks/useRestoreFocusRef';
 
 interface RequestReviewModalContentProps {
   request: Request | null;
@@ -55,7 +55,7 @@ export const RequestReviewModalContent = ({ request, onClose }: RequestReviewMod
   const [focusTargetId, setFocusTargetId] = useState<string | null>(null);
   const clearFocusTargetId = useCallback(() => setFocusTargetId(null), []);
   const isRequestListReady = !isLoadingRequests && !isFetchingRequests;
-  const listFocusRef = useFocusTarget<HTMLDivElement>(focusTargetId, {
+  const listFocusRef = useRestoreFocusRef<HTMLDivElement>(focusTargetId, {
     shouldRestoreFocus: isRequestListReady,
     onFocusRestored: clearFocusTargetId,
   });

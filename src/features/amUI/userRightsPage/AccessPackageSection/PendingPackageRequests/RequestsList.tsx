@@ -17,7 +17,7 @@ import { SkeletonAccessPackageList } from '../../../common/AccessPackageList/Ske
 import { AccessPackageInfo } from '../../../common/DelegationModal/AccessPackages/AccessPackageInfo';
 import { DelegationAction } from '../../../common/DelegationModal/EditModal';
 import classes from './Requests.module.css';
-import { useFocusTarget } from '@/resources/hooks/useFocusTarget';
+import { useRestoreFocusRef } from '@/resources/hooks/useRestoreFocusRef';
 
 interface PendingPackageRequestsListProps {
   heading?: string;
@@ -59,7 +59,7 @@ export const PendingPackageRequestsList = ({
 
   const [withdrawRequest] = useWithdrawRequestMutation();
   const clearFocusTargetId = useCallback(() => setFocusTargetId(null), []);
-  const listFocusRef = useFocusTarget<HTMLDivElement>(focusTargetId, {
+  const listFocusRef = useRestoreFocusRef<HTMLDivElement>(focusTargetId, {
     shouldRestoreFocus: !isLoading && !isRefetching,
     onFocusRestored: clearFocusTargetId,
   });

@@ -7,7 +7,7 @@ import { Button, DsDialog, Snackbar, SnackbarProvider } from '@altinn/altinn-com
 import type { AccessPackage } from '@/rtk/features/accessPackageApi';
 import type { ServiceResource } from '@/rtk/features/singleRights/singleRightsApi';
 import { useAutoFocusRef } from '@/resources/hooks/useAutoFocusRef';
-import { useFocusTarget } from '@/resources/hooks/useFocusTarget';
+import { useRestoreFocusRef } from '@/resources/hooks/useRestoreFocusRef';
 
 import { usePartyRepresentation } from '../PartyRepresentationContext/PartyRepresentationContext';
 import { useAreaExpandedContextOrLocal } from '../AccessPackageList/AccessPackageExpandedContext';
@@ -49,7 +49,7 @@ export const DelegationModalContent = ({
   const backButtonRef = useAutoFocusRef<HTMLButtonElement>();
   const [focusTargetId, setFocusTargetId] = useState<string | null>(null);
   const clearFocusTargetId = useCallback(() => setFocusTargetId(null), []);
-  const searchViewFocusRef = useFocusTarget<HTMLDivElement>(focusTargetId, {
+  const searchViewFocusRef = useRestoreFocusRef<HTMLDivElement>(focusTargetId, {
     onFocusRestored: clearFocusTargetId,
   });
 

@@ -9,7 +9,7 @@ import { useDelegationModalContext } from '../../common/DelegationModal/Delegati
 
 import { useTranslation } from 'react-i18next';
 import { useGetIsHovedadminQuery } from '@/rtk/features/userInfoApi';
-import { useFocusTarget } from '@/resources/hooks/useFocusTarget';
+import { useRestoreFocusRef } from '@/resources/hooks/useRestoreFocusRef';
 
 interface ActiveDelegationsProps {
   searchString?: string;
@@ -28,7 +28,7 @@ export const ActiveDelegations = ({ searchString }: ActiveDelegationsProps) => {
   const { t } = useTranslation();
   // Restore focus to the package item that opened the modal when the modal closes.
   const clearFocusTargetId = useCallback(() => setFocusTargetId(null), []);
-  const listFocusRef = useFocusTarget<HTMLDivElement>(focusTargetId, {
+  const listFocusRef = useRestoreFocusRef<HTMLDivElement>(focusTargetId, {
     shouldRestoreFocus: modalItem === undefined,
     onFocusRestored: clearFocusTargetId,
   });

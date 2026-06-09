@@ -22,7 +22,7 @@ import { useIsTabletOrSmaller } from '@/resources/utils/screensizeUtils';
 import { useGetEnrichedSentResourceRequestsQuery } from '@/rtk/features/requestApi';
 import { getRequestPartyQueryParams } from '@/resources/utils/singleRightRequestUtils';
 import { useAutoFocusRef } from '@/resources/hooks/useAutoFocusRef';
-import { useFocusTarget } from '@/resources/hooks/useFocusTarget';
+import { useRestoreFocusRef } from '@/resources/hooks/useRestoreFocusRef';
 
 export const PendingRequests = () => {
   const modalRef = useRef<HTMLDialogElement>(null);
@@ -164,7 +164,7 @@ export const PendingRequestsList = ({
     fromPartyUuid: fromParty?.partyUuid,
   });
   const clearFocusTargetId = useCallback(() => setFocusTargetId(null), []);
-  const listFocusRef = useFocusTarget<HTMLDivElement>(focusTargetId, {
+  const listFocusRef = useRestoreFocusRef<HTMLDivElement>(focusTargetId, {
     shouldRestoreFocus: !isLoadingRequests && !isFetchingRequests,
     onFocusRestored: clearFocusTargetId,
   });
