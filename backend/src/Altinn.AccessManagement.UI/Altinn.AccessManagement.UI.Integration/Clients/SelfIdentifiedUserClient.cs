@@ -55,7 +55,7 @@ namespace Altinn.AccessManagement.UI.Integration.Clients
         public async Task<string> SendForgotPasswordEmail(Altinn2ForgotPasswordRequest request, CancellationToken cancellationToken)
         {
             string token = JwtTokenUtil.GetTokenFromContext(_httpContextAccessor.HttpContext, _platformSettings.JwtCookieName);
-            string endpointUrl = "enduser/selfidentified/forgot-password";
+            string endpointUrl = "enduser/selfidentified/link-request";
 
             var content = JsonContent.Create(request);
             HttpResponseMessage response = await _httpClient.PostAsync(token, endpointUrl, content);
@@ -66,7 +66,7 @@ namespace Altinn.AccessManagement.UI.Integration.Clients
         public async Task<Guid> AddAltinn2AccountFromToken(Altinn2AccountFromTokenRequest request, CancellationToken cancellationToken)
         {
             string token = JwtTokenUtil.GetTokenFromContext(_httpContextAccessor.HttpContext, _platformSettings.JwtCookieName);
-            string endpointUrl = "enduser/selfidentified/validate-token";
+            string endpointUrl = "enduser/selfidentified/validate-link-token";
 
             var content = JsonContent.Create(request);
             HttpResponseMessage response = await _httpClient.PostAsync(token, endpointUrl, content);
