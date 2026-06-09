@@ -90,9 +90,9 @@ export const AddAltinn2AccountPage = () => {
   };
 
   useEffect(() => {
-    if (reportee && token) {
+    if (reportee?.type === 'SelfIdentified' && token) {
       onAddAccountFromToken(reportee.partyUuid, token);
-    } else if (reportee && !token) {
+    } else if (reportee?.type === 'SelfIdentified' && !token) {
       modalRef.current?.showModal();
     }
   }, [reportee, token]);
