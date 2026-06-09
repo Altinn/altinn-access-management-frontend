@@ -72,6 +72,7 @@ export const DownloadFileButton = ({
         onClick={openDialog}
         size={size}
         className={classes.triggerButton}
+        aria-label={iconOnly ? t('download_file.trigger_button') : undefined}
       >
         <DownloadIcon aria-hidden />
         {!iconOnly && t('download_file.trigger_button')}
