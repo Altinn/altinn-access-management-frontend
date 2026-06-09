@@ -6,8 +6,6 @@ import {
   DsHeading,
   formatDisplayName,
   ListItem,
-  Snackbar,
-  SnackbarProvider,
 } from '@altinn/altinn-components';
 import { ResourceList } from '../../common/ResourceList/ResourceList';
 import { useSingleRightRequests } from '../../common/DelegationModal/SingleRights/hooks/useSingleRightRequests';
@@ -102,16 +100,14 @@ export const SentRequestsModal = ({
       }}
       className={classes.pendingRequestsModal}
     >
-      <SnackbarProvider>
-        {isModalOpen && (
-          <PendingRequestsList
-            heading={heading}
-            selectedResource={selectedResource}
-            setSelectedResource={setSelectedResource}
-          />
-        )}
-        <Snackbar />
-      </SnackbarProvider>
+      {isModalOpen && (
+        <PendingRequestsList
+          heading={heading}
+          selectedResource={selectedResource}
+          setSelectedResource={setSelectedResource}
+        />
+      )}
+
       {!selectedResource && (
         <DsButton
           variant='primary'

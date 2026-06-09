@@ -1,11 +1,5 @@
 import React, { useState } from 'react';
-import {
-  DsButton,
-  DsDialog,
-  DsHeading,
-  Snackbar,
-  SnackbarProvider,
-} from '@altinn/altinn-components';
+import { DsButton, DsDialog, DsHeading } from '@altinn/altinn-components';
 import { useTranslation } from 'react-i18next';
 import { ServiceResource } from '@/rtk/features/singleRights/singleRightsApi';
 import { useGetSentRequestsQuery, type EnrichedPackageRequest } from '@/rtk/features/requestApi';
@@ -59,57 +53,54 @@ export const SentRequestsCombinedModal = ({
       }}
       className={classes.dialog}
     >
-      <SnackbarProvider>
-        {isModalOpen && (
-          <div className={classes.container}>
-            {!hasDetailView && (
-              <DsHeading
-                data-size='xs'
-                level={1}
-                className={classes.heading}
-              >
-                {heading}
-              </DsHeading>
-            )}
-            {(hasPendingSentPackageRequests || selectedPackageRequest) && !selectedResource && (
-              <div className={classes.requestList}>
-                {!hasDetailView && (
-                  <DsHeading
-                    data-size='2xs'
-                    level={2}
-                  >
-                    {t('request_page.package_list_title')}
-                  </DsHeading>
-                )}
+      {isModalOpen && (
+        <div className={classes.container}>
+          {!hasDetailView && (
+            <DsHeading
+              data-size='xs'
+              level={1}
+              className={classes.heading}
+            >
+              {heading}
+            </DsHeading>
+          )}
+          {(hasPendingSentPackageRequests || selectedPackageRequest) && !selectedResource && (
+            <div className={classes.requestList}>
+              {!hasDetailView && (
+                <DsHeading
+                  data-size='2xs'
+                  level={2}
+                >
+                  {t('request_page.package_list_title')}
+                </DsHeading>
+              )}
 
-                <DelegationModalProvider>
-                  <PendingPackageRequestsList
-                    selectedRequest={selectedPackageRequest}
-                    setSelectedRequest={setSelectedPackageRequest}
-                  />
-                </DelegationModalProvider>
-              </div>
-            )}
-            {(hasPendingSentResourceRequests || selectedResource) && !selectedPackageRequest && (
-              <div className={classes.requestList}>
-                {!hasDetailView && (
-                  <DsHeading
-                    data-size='2xs'
-                    level={2}
-                  >
-                    {t('request_page.resource_list_title')}
-                  </DsHeading>
-                )}
-                <PendingRequestsList
-                  selectedResource={selectedResource}
-                  setSelectedResource={setSelectedResource}
+              <DelegationModalProvider>
+                <PendingPackageRequestsList
+                  selectedRequest={selectedPackageRequest}
+                  setSelectedRequest={setSelectedPackageRequest}
                 />
-              </div>
-            )}
-          </div>
-        )}
-        <Snackbar />
-      </SnackbarProvider>
+              </DelegationModalProvider>
+            </div>
+          )}
+          {(hasPendingSentResourceRequests || selectedResource) && !selectedPackageRequest && (
+            <div className={classes.requestList}>
+              {!hasDetailView && (
+                <DsHeading
+                  data-size='2xs'
+                  level={2}
+                >
+                  {t('request_page.resource_list_title')}
+                </DsHeading>
+              )}
+              <PendingRequestsList
+                selectedResource={selectedResource}
+                setSelectedResource={setSelectedResource}
+              />
+            </div>
+          )}
+        </div>
+      )}
       {!hasDetailView && (
         <DsButton
           variant='primary'

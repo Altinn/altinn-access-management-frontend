@@ -1,5 +1,5 @@
 import { useRef } from 'react';
-import { Button, DsDialog, Snackbar, SnackbarProvider } from '@altinn/altinn-components';
+import { Button, DsDialog } from '@altinn/altinn-components';
 import { MinusCircleIcon, PlusCircleIcon } from '@navikt/aksel-icons';
 import { useTranslation } from 'react-i18next';
 
@@ -41,10 +41,7 @@ export const RequestInstanceAdminPackage = () => {
         closedby='any'
         closeButton={t('common.close')}
       >
-        <SnackbarProvider>
-          <RequestModalBody dialogRef={dialogRef} />
-          <Snackbar />
-        </SnackbarProvider>
+        <RequestModalBody dialogRef={dialogRef} />
       </DsDialog>
     </>
   );

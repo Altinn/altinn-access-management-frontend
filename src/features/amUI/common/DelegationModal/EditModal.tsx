@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { forwardRef, useEffect } from 'react';
-import { DsDialog, Snackbar, SnackbarProvider } from '@altinn/altinn-components';
+import { DsDialog } from '@altinn/altinn-components';
 
 import type { ActionError } from '@/resources/hooks/useActionError';
 import type { ServiceResource } from '@/rtk/features/singleRights/singleRightsApi';
@@ -82,21 +82,18 @@ export const EditModal = forwardRef<HTMLDialogElement, EditModalProps>(
           reset();
         }}
       >
-        <SnackbarProvider>
-          <div className={classes.content}>
-            {renderModalContent({
-              resource,
-              maskinportenScope,
-              accessPackage,
-              role,
-              instance,
-              toParty,
-              availableActions,
-              onSuccess,
-            })}
-          </div>
-          <Snackbar />
-        </SnackbarProvider>
+        <div className={classes.content}>
+          {renderModalContent({
+            resource,
+            maskinportenScope,
+            accessPackage,
+            role,
+            instance,
+            toParty,
+            availableActions,
+            onSuccess,
+          })}
+        </div>
       </DsDialog>
     );
   },
