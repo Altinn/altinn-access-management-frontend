@@ -52,13 +52,14 @@ export const AddAltinn2AccountPage = () => {
     { isLoading: isAddingAltinn2AccountFromToken, error: addUserFromTokenError },
   ] = useAddAltinn2AccountFromTokenMutation();
 
-  const isActionButtonDisabled = !userName || !password || isAddingAltinn2Account;
+  const isValidateCrentialsButtonDisabled = !userName || !password || isAddingAltinn2Account;
+  const isSendEmailButtonDisabled = !userName || isSendingForgotPasswordEmail;
   const afUrl = `${getAfUrl()}inbox`;
   const profileUrl = `${getAfUrl()}profile`;
 
   const onAddAltinn2Account = async () => {
     const to = reportee?.partyUuid;
-    if (!isActionButtonDisabled && to) {
+    if (!isValidateCrentialsButtonDisabled && to) {
       try {
         await addAltinn2Account({ to, userName, password }).unwrap();
         setStep(3);
@@ -69,11 +70,13 @@ export const AddAltinn2AccountPage = () => {
   };
 
   const onSendForgotPasswordEmail = async () => {
-    try {
-      await sendForgotPasswordEmail({ userName }).unwrap();
-      setStep(5);
-    } catch {
-      // error displayed via forgotPasswordError RTK Query state
+    if (!isSendEmailButtonDisabled) {
+      try {
+        await sendForgotPasswordEmail({ userName }).unwrap();
+        setStep(5);
+      } catch {
+        // error displayed via forgotPasswordError RTK Query state
+      }
     }
   };
 
@@ -87,9 +90,9 @@ export const AddAltinn2AccountPage = () => {
   };
 
   useEffect(() => {
-    if (reportee?.type === 'SelfIdentified' && token) {
+    if (reportee && token) {
       onAddAccountFromToken(reportee.partyUuid, token);
-    } else if (reportee?.type === 'SelfIdentified' && !token) {
+    } else if (reportee && !token) {
       modalRef.current?.showModal();
     }
   }, [reportee, token]);
@@ -128,7 +131,7 @@ export const AddAltinn2AccountPage = () => {
           variant='secondary'
           asChild
         >
-          <a href={afUrl}>{t('add_altinn2_account_page.cancel')}</a>
+          <a href={afUrl}>{t('common.cancel')}</a>
         </DsButton>
       </div>
     </DsDialog.Block>
@@ -164,7 +167,7 @@ export const AddAltinn2AccountPage = () => {
         <div className={classes.buttonRow}>
           <DsButton
             variant='primary'
-            aria-disabled={isActionButtonDisabled}
+            aria-disabled={isValidateCrentialsButtonDisabled}
             loading={isAddingAltinn2Account}
             onClick={onAddAltinn2Account}
           >
@@ -174,12 +177,13 @@ export const AddAltinn2AccountPage = () => {
             variant='secondary'
             asChild
           >
-            <a href={afUrl}>{t('add_altinn2_account_page.cancel')}</a>
+            <a href={afUrl}>{t('common.cancel')}</a>
           </DsButton>
           <DsButton
             variant='tertiary'
             onClick={() => {
               setUserName('');
+              setPassword('');
               setStep(4);
             }}
           >
@@ -223,7 +227,12 @@ export const AddAltinn2AccountPage = () => {
         data-size='sm'
         value={userName}
         onChange={(e) => setUserName(e.target.value)}
-        onKeyDown={handleInputFieldKeyDown}
+        onKeyDown={(e: React.KeyboardEvent<HTMLInputElement>) => {
+          if (e.key === 'Enter') {
+            e.preventDefault();
+            onSendForgotPasswordEmail();
+          }
+        }}
       />
       {forgotPasswordError && (
         <DsAlert data-color='danger'>
@@ -233,7 +242,7 @@ export const AddAltinn2AccountPage = () => {
       <div className={classes.buttonRow}>
         <DsButton
           variant='primary'
-          aria-disabled={isSendingForgotPasswordEmail || !userName}
+          aria-disabled={isSendEmailButtonDisabled}
           loading={isSendingForgotPasswordEmail}
           onClick={onSendForgotPasswordEmail}
         >
@@ -246,7 +255,7 @@ export const AddAltinn2AccountPage = () => {
             setUserName('');
           }}
         >
-          {t('add_altinn2_account_page.cancel')}
+          {t('common.cancel')}
         </DsButton>
       </div>
     </DsDialog.Block>
