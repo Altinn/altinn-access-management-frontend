@@ -1,4 +1,4 @@
-import React, { useRef, useState } from 'react';
+import React, { useCallback, useRef, useState } from 'react';
 import { ArrowLeftIcon, HandshakeIcon, MinusCircleIcon } from '@navikt/aksel-icons';
 import {
   DsButton,
@@ -21,6 +21,8 @@ import { PartyType } from '@/rtk/features/userInfoApi';
 import { useIsTabletOrSmaller } from '@/resources/utils/screensizeUtils';
 import { useGetEnrichedSentResourceRequestsQuery } from '@/rtk/features/requestApi';
 import { getRequestPartyQueryParams } from '@/resources/utils/singleRightRequestUtils';
+import { useAutoFocusRef } from '@/resources/hooks/useAutoFocusRef';
+import { useFocusTarget } from '@/resources/hooks/useFocusTarget';
 
 export const PendingRequests = () => {
   const modalRef = useRef<HTMLDialogElement>(null);
@@ -139,22 +141,32 @@ export const PendingRequestsList = ({
   const { t } = useTranslation();
   const isSmallScreen = useIsTabletOrSmaller();
   const { actingParty, fromParty } = usePartyRepresentation();
+  const backButtonRef = useAutoFocusRef<HTMLButtonElement>();
+  const [focusTargetId, setFocusTargetId] = useState<string | null>(null);
 
-  const { data: singleRightRequests = [], isLoading: isLoadingRequests } =
-    useGetEnrichedSentResourceRequestsQuery(
-      {
-        ...getRequestPartyQueryParams(actingParty?.partyUuid, fromParty?.partyUuid),
-        status: ['Pending'],
-      },
-      {
-        skip: !actingParty?.partyUuid || !fromParty?.partyUuid,
-      },
-    );
+  const {
+    data: singleRightRequests = [],
+    isLoading: isLoadingRequests,
+    isFetching: isFetchingRequests,
+  } = useGetEnrichedSentResourceRequestsQuery(
+    {
+      ...getRequestPartyQueryParams(actingParty?.partyUuid, fromParty?.partyUuid),
+      status: ['Pending'],
+    },
+    {
+      skip: !actingParty?.partyUuid || !fromParty?.partyUuid,
+    },
+  );
 
   const { deleteRequest, isLoadingRequest } = useSingleRightRequests({
     canRequestRights: true,
     actingPartyUuid: actingParty?.partyUuid,
     fromPartyUuid: fromParty?.partyUuid,
+  });
+  const clearFocusTargetId = useCallback(() => setFocusTargetId(null), []);
+  const listFocusRef = useFocusTarget<HTMLDivElement>(focusTargetId, {
+    shouldRestoreFocus: !isLoadingRequests && !isFetchingRequests,
+    onFocusRestored: clearFocusTargetId,
   });
 
   return (
@@ -162,6 +174,7 @@ export const PendingRequestsList = ({
       {selectedResource ? (
         <>
           <DsButton
+            ref={backButtonRef}
             variant='tertiary'
             className={classes.backButton}
             onClick={() => setSelectedResource(null)}
@@ -179,37 +192,42 @@ export const PendingRequestsList = ({
           {heading && (
             <DsHeading
               data-size='xs'
-              level={1}
+              level={2}
               className={classes.pendingRequestsHeading}
             >
               {heading}
             </DsHeading>
           )}
-          <ResourceList
-            isLoading={isLoadingRequests}
-            size={isSmallScreen ? 'sm' : 'md'}
-            enableSearch={false}
-            resources={singleRightRequests
-              .map((x) => x.resource)
-              .filter((r): r is ServiceResource => !!r)}
-            showDetails={false}
-            onSelect={(resource) => setSelectedResource(resource)}
-            renderControls={(resource) => {
-              if (isSmallScreen) return undefined;
-              return (
-                <DsButton
-                  variant='tertiary'
-                  aria-label={t('common.delete_request_for', { poa_object: resource.title })}
-                  onClick={() => deleteRequest(resource)}
-                  disabled={isLoadingRequest(resource.identifier)}
-                  loading={isLoadingRequest(resource.identifier)}
-                >
-                  <MinusCircleIcon aria-hidden='true' />
-                  {t('common.delete')}
-                </DsButton>
-              );
-            }}
-          />
+          <div ref={listFocusRef}>
+            <ResourceList
+              isLoading={isLoadingRequests}
+              size={isSmallScreen ? 'sm' : 'md'}
+              enableSearch={false}
+              resources={singleRightRequests
+                .map((x) => x.resource)
+                .filter((r): r is ServiceResource => !!r)}
+              showDetails={false}
+              onSelect={(resource) => {
+                setFocusTargetId(resource.identifier);
+                setSelectedResource(resource);
+              }}
+              renderControls={(resource) => {
+                if (isSmallScreen) return undefined;
+                return (
+                  <DsButton
+                    variant='tertiary'
+                    aria-label={t('common.delete_request_for', { poa_object: resource.title })}
+                    onClick={() => deleteRequest(resource)}
+                    disabled={isLoadingRequest(resource.identifier)}
+                    loading={isLoadingRequest(resource.identifier)}
+                  >
+                    <MinusCircleIcon aria-hidden='true' />
+                    {t('common.delete')}
+                  </DsButton>
+                );
+              }}
+            />
+          </div>
         </>
       )}
     </div>

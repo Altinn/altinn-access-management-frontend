@@ -1,3 +1,4 @@
+import { useCallback, useState } from 'react';
 import { Link } from 'react-router';
 import {
   AccessPackageListItem,
@@ -22,7 +23,7 @@ import { useRequestReview } from './useRequestReview';
 import classes from './RequestReviewModal.module.css';
 import { amUIPath } from '@/routes/paths';
 import { RequestPackageDetail } from './RequestPackageDetail';
-import { useAutoFocusRef } from '@/resources/hooks/useAutoFocusRef';
+import { useFocusTarget } from '@/resources/hooks/useFocusTarget';
 
 interface RequestReviewModalContentProps {
   request: Request | null;
@@ -31,7 +32,6 @@ interface RequestReviewModalContentProps {
 
 export const RequestReviewModalContent = ({ request, onClose }: RequestReviewModalContentProps) => {
   const { t } = useTranslation();
-  const headingFocusRef = useAutoFocusRef<HTMLHeadingElement>();
 
   const {
     isLoadingRequests,
@@ -49,6 +49,16 @@ export const RequestReviewModalContent = ({ request, onClose }: RequestReviewMod
     handleReject,
     handleSelection,
   } = useRequestReview(request, onClose);
+
+  // Restore focus to the request item when navigating back from a detail view, so
+  // screen reader users don't lose their place when the content changes.
+  const [focusTargetId, setFocusTargetId] = useState<string | null>(null);
+  const clearFocusTargetId = useCallback(() => setFocusTargetId(null), []);
+  const isRequestListReady = !isLoadingRequests && !isFetchingRequests;
+  const listFocusRef = useFocusTarget<HTMLDivElement>(focusTargetId, {
+    shouldRestoreFocus: isRequestListReady,
+    onFocusRestored: clearFocusTargetId,
+  });
 
   if (request === null) {
     return null;
@@ -129,10 +139,11 @@ export const RequestReviewModalContent = ({ request, onClose }: RequestReviewMod
   };
 
   return (
-    <div className={classes.reviewListView}>
+    <div
+      className={classes.reviewListView}
+      ref={listFocusRef}
+    >
       <DsHeading
-        ref={headingFocusRef}
-        tabIndex={-1}
         level={1}
         data-size='xs'
       >
@@ -191,7 +202,14 @@ export const RequestReviewModalContent = ({ request, onClose }: RequestReviewMod
                       size='xs'
                       border='dotted'
                       controls={itemControls({ packageId: p.id })}
-                      onClick={isInteractive ? () => handleSelection({ package: p }) : undefined}
+                      onClick={
+                        isInteractive
+                          ? () => {
+                              setFocusTargetId(p.id);
+                              handleSelection({ package: p });
+                            }
+                          : undefined
+                      }
                     />
                   );
                 })}
@@ -215,7 +233,10 @@ export const RequestReviewModalContent = ({ request, onClose }: RequestReviewMod
                 showDetails={false}
                 interactive={(resource) => processedRequests[resource.identifier] === undefined}
                 resources={snapshotResources}
-                onSelect={(resource) => handleSelection({ resource })}
+                onSelect={(resource) => {
+                  setFocusTargetId(resource.identifier);
+                  handleSelection({ resource });
+                }}
                 renderControls={(resource) => itemControls({ resourceId: resource.identifier })}
               />
             </>

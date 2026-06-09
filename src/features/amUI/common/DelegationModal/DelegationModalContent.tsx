@@ -1,11 +1,13 @@
 import * as React from 'react';
 import { useTranslation } from 'react-i18next';
 import { PlusIcon, ArrowLeftIcon } from '@navikt/aksel-icons';
-import { JSX, useEffect, useRef } from 'react';
+import { JSX, useCallback, useEffect, useRef, useState } from 'react';
 import { Button, DsDialog, Snackbar, SnackbarProvider } from '@altinn/altinn-components';
 
 import type { AccessPackage } from '@/rtk/features/accessPackageApi';
 import type { ServiceResource } from '@/rtk/features/singleRights/singleRightsApi';
+import { useAutoFocusRef } from '@/resources/hooks/useAutoFocusRef';
+import { useFocusTarget } from '@/resources/hooks/useFocusTarget';
 
 import { usePartyRepresentation } from '../PartyRepresentationContext/PartyRepresentationContext';
 import { useAreaExpandedContextOrLocal } from '../AccessPackageList/AccessPackageExpandedContext';
@@ -43,7 +45,16 @@ export const DelegationModalContent = ({
   } = useDelegationModalContext();
   const { toParty } = usePartyRepresentation();
   const { closeAllAreas } = useAreaExpandedContextOrLocal();
+  const modalRef = useRef<HTMLDialogElement>(null);
+  const backButtonRef = useAutoFocusRef<HTMLButtonElement>();
+  const [focusTargetId, setFocusTargetId] = useState<string | null>(null);
+  const clearFocusTargetId = useCallback(() => setFocusTargetId(null), []);
+  const searchViewFocusRef = useFocusTarget<HTMLDivElement>(focusTargetId, {
+    onFocusRestored: clearFocusTargetId,
+  });
+
   const onResourceSelection = (resource?: ServiceResource, error = false) => {
+    setFocusTargetId(resource?.identifier ?? null);
     if (!error) {
       setActionError(null);
     }
@@ -52,14 +63,13 @@ export const DelegationModalContent = ({
   };
 
   const onPackageSelection = (accessPackage?: AccessPackage, error = false) => {
+    setFocusTargetId(accessPackage?.id ?? null);
     if (!error) {
       setActionError(null);
     }
     setInfoView(true);
     setPackageToView(accessPackage);
   };
-
-  const modalRef = useRef<HTMLDialogElement>(null);
 
   const onClosing = () => {
     reset();
@@ -155,6 +165,7 @@ export const DelegationModalContent = ({
           <SnackbarProvider>
             {infoView && (
               <Button
+                ref={backButtonRef}
                 className={classes.backButton}
                 variant='tertiary'
                 data-color='neutral'
@@ -165,7 +176,7 @@ export const DelegationModalContent = ({
               </Button>
             )}
             <div className={classes.content}>
-              {infoView ? infoViewContent : searchViewContent}
+              {infoView ? infoViewContent : <div ref={searchViewFocusRef}>{searchViewContent}</div>}
               <Snackbar />
             </div>
           </SnackbarProvider>
