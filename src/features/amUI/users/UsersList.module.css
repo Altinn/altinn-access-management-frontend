@@ -17,6 +17,16 @@
   max-width: 23rem;
 }
 
+.searchAndNewUserContainer {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: var(--ds-spacing-2);
+  width: 100%;
+}
+
 .searchAndAddUser {
   display: flex;
   flex-direction: column;
@@ -30,14 +40,8 @@
   flex-direction: row;
   align-items: center;
   gap: 1rem;
-  width: 100%;
-}
-
-.addUserContainer {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  width: 100%;
+  flex: 1 1 auto;
+  min-width: 0;
 }
 
 .noAccessContainer {
@@ -64,5 +68,6 @@
   .filtersContainer {
     flex-direction: column;
     align-items: stretch;
+    width: 100%;
   }
 }

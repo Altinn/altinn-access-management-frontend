@@ -13,3 +13,7 @@
   flex-direction: column;
   gap: 1.5rem;
 }
+
+.downloadButton {
+  margin-left: auto;
+}

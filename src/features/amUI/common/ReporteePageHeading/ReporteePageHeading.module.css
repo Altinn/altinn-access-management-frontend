@@ -7,3 +7,14 @@
   max-width: 100%;
   margin-bottom: 0.5rem;
 }
+
+.pageHeadingContainer {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  width: 100%;
+}
+
+.downloadButton {
+  margin-top: var(--ds-spacing-2);
+}

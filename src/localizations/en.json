@@ -104,6 +104,14 @@
     "yes_delete": "Yes, delete",
     "confirm_delete_heading": "Are you sure you want to delete this power of attorney?"
   },
+  "download_file": {
+    "trigger_button": "Download to file",
+    "title": "Download to file",
+    "description_p1": "Here you can download an overview of all powers of attorney that {{reportee}} has given to others and those who have received them.",
+    "description_p2": "The content will be downloaded as CSV files in a ZIP container. \nThe files are not intended for machine reading and we reserve the right to change the format.",
+    "start_download": "Start download",
+    "include_subunits_label": "Include powers of attorney in {{reportee}}'s subunits"
+  },
   "info_banner": {
     "info": "June 19: the old Altinn will be shut down.",
     "link": "Here's what you need to be aware of."

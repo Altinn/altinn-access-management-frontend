@@ -50,9 +50,9 @@ namespace Altinn.AccessManagement.UI.Controllers
         /// <returns>A zip file, or an error status.</returns>
         [HttpGet]
         [Authorize]
-        [Route("reportee/{partyUuid}")]
+        [Route("")]
         public async Task<ActionResult> ExportReporteeDelegations(
-            [FromRoute] Guid partyUuid,
+            [FromQuery] Guid partyUuid,
             [FromQuery] bool includeSubunits = false,
             [FromQuery] string types = null,
             [FromQuery] string languageCode = null)

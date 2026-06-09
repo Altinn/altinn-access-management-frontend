@@ -61,6 +61,7 @@ export const PoaOverviewPage = () => {
               title={t('poa_overview_page.heading', { name })}
               reportee={reportee}
               isLoading={isLoading || isLoadingIsAdmin}
+              downloadable
             />
             <RightsTabs
               packagesPanel={<AccessPackagePermissions />}

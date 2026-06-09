@@ -101,6 +101,14 @@
     "yes_delete": "Ja, slett",
     "confirm_delete_heading": "Er du sikker på at du vil slette denne fullmakten?"
   },
+  "download_file": {
+    "trigger_button": "Last ned til fil",
+    "title": "Last ned til fil",
+    "description_p1": "Her kan du laste ned en oversikt over alle fullmakter som {{reportee}} har gitt til andre og hvem som har fått dem.",
+    "description_p2": "Innholdet lastes ned som csv-filer i en zip konteiner. \nFilen er ikke ment til maskinell innlesning og vi tar forbehold om at formatet kan endre seg.",
+    "start_download": "Start nedlastning",
+    "include_subunits_label": "Inkluder fullmakter i {{reportee}} sine underenheter"
+  },
   "info_banner": {
     "info": "19. juni skrus gamle Altinn av.",
     "link": "Dette må du passe på."
