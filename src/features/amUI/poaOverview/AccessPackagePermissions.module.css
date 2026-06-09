@@ -4,7 +4,7 @@
 }
 
 .infoPopover {
-  padding-top: -var(--ds-spacing-1);
+  margin-top: calc(-1 * var(--ds-spacing-1));
   display: inline-flex;
   white-space: nowrap;
   vertical-align: middle;
