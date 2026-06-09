@@ -104,7 +104,7 @@
   "download_file": {
     "trigger_button": "Last ned til fil",
     "title": "Last ned til fil",
-    "description_p1": "Her kan du laste ned ei oversikt over alle fullmakter som {{reportee}} har gitt til andre og kven som har fått dem.",
+    "description_p1": "Her kan du laste ned ei oversikt over alle fullmakter som {{reportee}} har gitt til andre og kven som har fått dei.",
     "description_p2": "Innhaldet lastes ned som csv-filer i ein zip-konteiner. \nFila er ikkje meint til maskinell innlesing og vi tek forbehald om at formatet kan endre seg.",
     "start_download": "Start nedlastninga",
     "include_subunits_label": "Inkluder fullmakter i {{reportee}} sine undereiningar"
