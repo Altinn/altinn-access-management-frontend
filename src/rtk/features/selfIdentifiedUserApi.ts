@@ -22,9 +22,27 @@ export const selfIdentifiedUserApi = createApi({
         body: { userName: userName, password: password },
       }),
     }),
+    sendForgotPasswordEmail: builder.mutation<string, { userName: string }>({
+      query: ({ userName }) => ({
+        url: `altinn2account/forgotpassword`,
+        method: 'POST',
+        body: { userName: userName },
+      }),
+    }),
+    addAltinn2AccountFromToken: builder.mutation<string, { to: string; token: string }>({
+      query: ({ to, token }) => ({
+        url: `altinn2account/token?to=${to}`,
+        method: 'POST',
+        body: { token: token },
+      }),
+    }),
   }),
 });
 
-export const { useAddAltinn2AccountMutation } = selfIdentifiedUserApi;
+export const {
+  useAddAltinn2AccountMutation,
+  useSendForgotPasswordEmailMutation,
+  useAddAltinn2AccountFromTokenMutation,
+} = selfIdentifiedUserApi;
 
 export const { endpoints, reducerPath, reducer, middleware } = selfIdentifiedUserApi;

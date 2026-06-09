@@ -90,5 +90,107 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
             // Assert
             Assert.Equal(HttpStatusCode.BadRequest, httpResponse.StatusCode);
         }
+
+        /// <summary>
+        ///     Test case: Add altinn 2 user from valid token returns OK
+        /// </summary>
+        [Fact]
+        public async Task AddAltinn2AccountFromToken_ValidToken_ReturnsOk()
+        {
+            // Arrange
+            Guid to = Guid.NewGuid();
+            Altinn2AccountFromTokenRequest request = new Altinn2AccountFromTokenRequest()
+            {
+                Token = "validtoken"
+            };
+
+            // Act
+            HttpResponseMessage httpResponse = await _client.PostAsync($"accessmanagement/api/v1/selfidentifieduser/altinn2account/token?to={to}", JsonContent.Create(request));
+
+            // Assert
+            Assert.Equal(HttpStatusCode.OK, httpResponse.StatusCode);
+        }
+
+        /// <summary>
+        ///     Test case: Add altinn 2 user from invalid token returns Unauthorized
+        /// </summary>
+        [Fact]
+        public async Task AddAltinn2AccountFromToken_InvalidToken_ReturnsUnauthorized()
+        {
+            // Arrange
+            Guid to = Guid.NewGuid();
+            Altinn2AccountFromTokenRequest request = new Altinn2AccountFromTokenRequest()
+            {
+                Token = "invalid"
+            };
+
+            // Act
+            HttpResponseMessage httpResponse = await _client.PostAsync($"accessmanagement/api/v1/selfidentifieduser/altinn2account/token?to={to}", JsonContent.Create(request));
+
+            // Assert
+            Assert.Equal(HttpStatusCode.Unauthorized, httpResponse.StatusCode);
+        }
+
+        /// <summary>
+        ///     Test case: Add altinn 2 user from token when connection creation fails returns Bad Request
+        /// </summary>
+        [Fact]
+        public async Task AddAltinn2AccountFromToken_CreateConnectionFail_ReturnsBadRequest()
+        {
+            // Arrange
+            Guid to = Guid.NewGuid();
+            Altinn2AccountFromTokenRequest request = new Altinn2AccountFromTokenRequest()
+            {
+                Token = "invalid_connection"
+            };
+
+            // Act
+            HttpResponseMessage httpResponse = await _client.PostAsync($"accessmanagement/api/v1/selfidentifieduser/altinn2account/token?to={to}", JsonContent.Create(request));
+
+            // Assert
+            Assert.Equal(HttpStatusCode.BadRequest, httpResponse.StatusCode);
+        }
+
+        /// <summary>
+        ///     Test case: Send forgot password email for valid username returns OK with masked email address
+        /// </summary>
+        [Fact]
+        public async Task SendForgotPasswordEmail_ValidUsername_ReturnsOkWithEmailAddress()
+        {
+            // Arrange
+            Altinn2ForgotPasswordRequest request = new Altinn2ForgotPasswordRequest()
+            {
+                UserName = "testuser"
+            };
+
+            // Act
+            HttpResponseMessage httpResponse = await _client.PostAsync("accessmanagement/api/v1/selfidentifieduser/altinn2account/forgotpassword", JsonContent.Create(request));
+
+            // Assert
+            Assert.Equal(HttpStatusCode.OK, httpResponse.StatusCode);
+            var response = await httpResponse.Content.ReadFromJsonAsync<ForgotPasswordResponse>();
+            Assert.NotNull(response?.EmailAddress);
+        }
+
+        /// <summary>
+        ///     Test case: Send forgot password email for invalid username returns Unauthorized
+        /// </summary>
+        [Fact]
+        public async Task SendForgotPasswordEmail_InvalidUsername_ReturnsUnauthorized()
+        {
+            // Arrange
+            Altinn2ForgotPasswordRequest request = new Altinn2ForgotPasswordRequest()
+            {
+                UserName = "invalid"
+            };
+
+            // Act
+            HttpResponseMessage httpResponse = await _client.PostAsync("accessmanagement/api/v1/selfidentifieduser/altinn2account/forgotpassword", JsonContent.Create(request));
+
+            // Assert
+            Assert.Equal(HttpStatusCode.Unauthorized, httpResponse.StatusCode);
+        }
+
+        private record ForgotPasswordResponse(string EmailAddress);
     }
 }

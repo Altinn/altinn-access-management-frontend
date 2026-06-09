@@ -30,5 +30,48 @@ namespace Altinn.AccessManagement.UI.Core.Services
         {
             await _connectionClient.PostNewSelfIdentifiedUser(from, to, cancellationToken);
         }
+
+        /// <inheritdoc />
+        public async Task<string> SendForgotPasswordEmail(Altinn2ForgotPasswordRequest request, CancellationToken cancellationToken)
+        {
+            string result = await _selfIdentifiedUserClient.SendForgotPasswordEmail(request, cancellationToken);
+            return MaskEmail(result);
+        }
+
+        /// <inheritdoc />
+        public async Task<Guid> AddAltinn2AccountFromToken(Altinn2AccountFromTokenRequest request, CancellationToken cancellationToken)
+        {
+            return await _selfIdentifiedUserClient.AddAltinn2AccountFromToken(request, cancellationToken);
+        }
+
+        private static string MaskEmail(string email)
+        {
+            if (string.IsNullOrWhiteSpace(email))
+            {
+                return email;
+            }
+
+            var atIndex = email.IndexOf('@');
+            if (atIndex < 0)
+            {
+                return email;
+            }
+
+            var localPart = email[..atIndex];
+            var domainPart = email[atIndex..];
+
+            // If local part is short (less than 5 characters), show full email
+            if (localPart.Length < 5)
+            {
+                return email;
+            }
+
+            // Keep first 2 and last 2 characters, mask the rest
+            var firstTwo = localPart[..2];
+            var lastTwo = localPart[^2..];
+            var maskedMiddle = new string('*', localPart.Length - 4);
+
+            return $"{firstTwo}{maskedMiddle}{lastTwo}{domainPart}";
+        }
     }
 }

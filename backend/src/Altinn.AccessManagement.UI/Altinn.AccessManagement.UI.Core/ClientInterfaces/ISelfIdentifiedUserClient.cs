@@ -14,5 +14,21 @@ namespace Altinn.AccessManagement.UI.Core.ClientInterfaces
         /// <param name="cancellationToken">Cancellation token.</param>
         /// <returns>The partyUuid of the user</returns>
         Task<Guid> ValidateCredentials(Altinn2AccountRequest request, CancellationToken cancellationToken);
+
+        /// <summary>
+        /// Sends a forgot password email for a legacy Altinn 2 user account.
+        /// </summary>
+        /// <param name="request">Username of the legacy account.</param>
+        /// <param name="cancellationToken">Cancellation token.</param>
+        /// <returns>The email address of the user</returns>
+        Task<string> SendForgotPasswordEmail(Altinn2ForgotPasswordRequest request, CancellationToken cancellationToken);
+        
+        /// <summary>
+        /// Validates a token user has received by email.
+        /// </summary>
+        /// <param name="request">Object with token.</param>
+        /// <param name="cancellationToken">Cancellation token.</param>
+        /// <returns>The partyUuid of the user</returns>
+        Task<Guid> AddAltinn2AccountFromToken(Altinn2AccountFromTokenRequest request, CancellationToken cancellationToken);
     }
 }

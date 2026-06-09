@@ -27,5 +27,32 @@ namespace Altinn.AccessManagement.UI.Mocks.Mocks
 
             return Task.FromResult(_mockPartyUuid);
         }
+
+        /// <inheritdoc />
+        public Task<Guid> AddAltinn2AccountFromToken(Altinn2AccountFromTokenRequest request, CancellationToken cancellationToken)
+        {
+            if (request?.Token == "invalid")
+            {
+                throw new HttpStatusException("Unauthorized", "Invalid token", HttpStatusCode.Unauthorized, null);
+            }
+
+            if (request?.Token == "invalid_connection")
+            {
+                return Task.FromResult(Guid.Empty);
+            }
+
+            return Task.FromResult(_mockPartyUuid);
+        }
+
+        /// <inheritdoc />
+        public Task<string> SendForgotPasswordEmail(Altinn2ForgotPasswordRequest request, CancellationToken cancellationToken)
+        {
+            if (request?.UserName == "invalid")
+            {
+                throw new HttpStatusException("Unauthorized", "User not found", HttpStatusCode.Unauthorized, null);
+            }
+
+            return Task.FromResult("testuser@example.com");
+        }
     }
 }

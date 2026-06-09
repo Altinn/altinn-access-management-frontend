@@ -50,5 +50,27 @@ namespace Altinn.AccessManagement.UI.Integration.Clients
             HttpResponseMessage response = await _httpClient.PostAsync(token, endpointUrl, content);
             return await ClientUtils.DeserializeIfSuccessfullStatusCode<Guid>(response, _logger, "SelfIdentifiedUserClient.ValidateCredentials");
         }
+
+        /// <inheritdoc />
+        public async Task<string> SendForgotPasswordEmail(Altinn2ForgotPasswordRequest request, CancellationToken cancellationToken)
+        {
+            string token = JwtTokenUtil.GetTokenFromContext(_httpContextAccessor.HttpContext, _platformSettings.JwtCookieName);
+            string endpointUrl = "enduser/selfidentified/forgot-password";
+
+            var content = JsonContent.Create(request);
+            HttpResponseMessage response = await _httpClient.PostAsync(token, endpointUrl, content);
+            return await ClientUtils.DeserializeIfSuccessfullStatusCode<string>(response, _logger, "SelfIdentifiedUserClient.SendForgotPasswordEmail");
+        }
+
+        /// <inheritdoc />
+        public async Task<Guid> AddAltinn2AccountFromToken(Altinn2AccountFromTokenRequest request, CancellationToken cancellationToken)
+        {
+            string token = JwtTokenUtil.GetTokenFromContext(_httpContextAccessor.HttpContext, _platformSettings.JwtCookieName);
+            string endpointUrl = "enduser/selfidentified/validate-token";
+
+            var content = JsonContent.Create(request);
+            HttpResponseMessage response = await _httpClient.PostAsync(token, endpointUrl, content);
+            return await ClientUtils.DeserializeIfSuccessfullStatusCode<Guid>(response, _logger, "SelfIdentifiedUserClient.AddAltinn2AccountFromToken");
+        }
     }
 }
