@@ -32,7 +32,7 @@ export const SupplierPage = () => {
 
   const { id: orgNr } = useParams<{ id: string }>();
   const party = getCookie('AltinnPartyUuid');
-  const backUrl = `/${amUIPath.Maskinporten}?tab=suppliers`;
+  const backUrl = `/${amUIPath.Maskinporten}#suppliers`;
 
   const { data, isLoading, error } = useGetMaskinportenSuppliersQuery(
     { party, supplier: orgNr },

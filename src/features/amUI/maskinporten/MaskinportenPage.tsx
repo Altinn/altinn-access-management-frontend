@@ -13,7 +13,7 @@ import { useGetIsMaskinportenAdminQuery, useGetReporteeQuery } from '@/rtk/featu
 import { Breadcrumbs } from '../common/Breadcrumbs/Breadcrumbs';
 import { PageLayoutWrapper } from '../common/PageLayoutWrapper';
 import { PartyRepresentationProvider } from '../common/PartyRepresentationContext/PartyRepresentationContext';
-import { useUrlParamState } from '../common/useUrlParamState';
+import { useTabState } from '@/resources/hooks';
 
 import { ConsumersTab } from './ConsumersTab';
 import { SuppliersTab } from './SuppliersTab';
@@ -24,10 +24,9 @@ const maskinportenTabs = ['suppliers', 'consumers'] as const;
 export const MaskinportenPage = () => {
   const { t } = useTranslation();
   const party = getCookie('AltinnPartyUuid');
-  const [activeTab, setActiveTab] = useUrlParamState({
-    key: 'tab',
-    defaultValue: 'suppliers',
-    validValues: maskinportenTabs,
+  const [activeTab, setActiveTab] = useTabState({
+    tabs: maskinportenTabs,
+    defaultTab: 'suppliers',
   });
   const { data: isMaskinportenAdmin, isLoading } = useGetIsMaskinportenAdminQuery(undefined, {
     skip: !enableMaskinportenAdministration(),

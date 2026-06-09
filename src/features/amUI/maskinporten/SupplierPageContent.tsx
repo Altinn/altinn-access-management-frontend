@@ -45,7 +45,7 @@ export const SupplierPageContent = () => {
   const scopeModalRef = React.useRef<HTMLDialogElement>(null);
   const [selectedResource, setSelectedResource] = React.useState<ServiceResource | null>(null);
 
-  const backUrl = `/${amUIPath.Maskinporten}?tab=suppliers`;
+  const backUrl = `/${amUIPath.Maskinporten}#suppliers`;
 
   const {
     data: resourcePermissions,

@@ -32,7 +32,7 @@ export const ConsumerPage = () => {
 
   const { id: orgNr } = useParams<{ id: string }>();
   const party = getCookie('AltinnPartyUuid');
-  const backUrl = `/${amUIPath.Maskinporten}?tab=consumers`;
+  const backUrl = `/${amUIPath.Maskinporten}#consumers`;
 
   const { data, isLoading, error } = useGetMaskinportenConsumersQuery(
     { party, consumer: orgNr },

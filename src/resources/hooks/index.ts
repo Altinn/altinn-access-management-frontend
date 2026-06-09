@@ -6,3 +6,4 @@ export { useProviderLogoUrl } from './useProviderLogoUrl';
 export { useProviderName } from './useProviderName';
 export { useAccessPackageLookup } from './useAccessPackageLookup';
 export { useDebouncedValue } from './useDebouncedValue';
+export { useTabState } from './useTabState';
