@@ -1,5 +1,5 @@
 import React, { useCallback } from 'react';
-import { Snackbar, useSnackbar } from '@altinn/altinn-components';
+import { useSnackbar } from '@altinn/altinn-components';
 import { useTranslation } from 'react-i18next';
 
 import {
@@ -71,16 +71,13 @@ export const MyClientsAccessSection = ({
   );
 
   return (
-    <>
-      <ClientAccessList
-        clients={clients}
-        accessStateClients={clients}
-        removeDisabled={isRemovingMyClientAccessPackages || !actingPartyUuid}
-        onRemoveAccessPackage={onRemoveAccessPackage}
-        requireDelegableForActions={false}
-        searchPlaceholder={t('my_clients_page.search_placeholder')}
-      />
-      <Snackbar />
-    </>
+    <ClientAccessList
+      clients={clients}
+      accessStateClients={clients}
+      removeDisabled={isRemovingMyClientAccessPackages || !actingPartyUuid}
+      onRemoveAccessPackage={onRemoveAccessPackage}
+      requireDelegableForActions={false}
+      searchPlaceholder={t('my_clients_page.search_placeholder')}
+    />
   );
 };

@@ -6,6 +6,10 @@
   width: 100%;
 }
 
+.smallButton {
+  white-space: nowrap;
+}
+
 .textField {
   max-width: 22rem;
 }

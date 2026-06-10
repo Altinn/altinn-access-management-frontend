@@ -1,6 +1,6 @@
 import React from 'react';
 import type { LanguageCode } from '@altinn/altinn-components';
-import { Layout, RootProvider, Snackbar } from '@altinn/altinn-components';
+import { Layout, RootProvider, Snackbar, SnackbarProvider } from '@altinn/altinn-components';
 
 import { useGetReporteeQuery } from '@/rtk/features/userInfoApi';
 
@@ -43,39 +43,41 @@ export const PageLayoutWrapper = ({
   return (
     <RootProvider languageCode={languageCode as LanguageCode}>
       <NavigationFocus />
-      <Layout
-        color={reportee?.type ? getAccountType(reportee.type) : 'neutral'}
-        theme='subtle'
-        header={header}
-        banner={{
-          title: t('info_banner.info'),
-          link: { label: t('info_banner.link'), href: bannerLink },
-          color: escalateBannerSeverity ? 'warning' : undefined,
-          variant: escalateBannerSeverity ? 'alert' : undefined,
-        }}
-        skipLink={{
-          href: '#main-content',
-          color: 'inherit',
-          size: 'xs',
-          children: t('common.skiplink'),
-        }}
-        sidebar={
-          hideSidebar
-            ? undefined
-            : {
-                menu: {
-                  groups: menuGroups,
-                  items: [...sidebarItems, ...shortcutsMenuItem],
-                },
-              }
-        }
-        content={{ color: reportee?.type ? getAccountType(reportee.type) : 'neutral' }}
-        footer={footer}
-      >
-        <div>{children}</div>
-        <InfoModal />
-      </Layout>
-      <Snackbar />
+      <SnackbarProvider>
+        <Layout
+          color={reportee?.type ? getAccountType(reportee.type) : 'neutral'}
+          theme='subtle'
+          header={header}
+          banner={{
+            title: t('info_banner.info'),
+            link: { label: t('info_banner.link'), href: bannerLink },
+            color: escalateBannerSeverity ? 'warning' : undefined,
+            variant: escalateBannerSeverity ? 'alert' : undefined,
+          }}
+          skipLink={{
+            href: '#main-content',
+            color: 'inherit',
+            size: 'xs',
+            children: t('common.skiplink'),
+          }}
+          sidebar={
+            hideSidebar
+              ? undefined
+              : {
+                  menu: {
+                    groups: menuGroups,
+                    items: [...sidebarItems, ...shortcutsMenuItem],
+                  },
+                }
+          }
+          content={{ color: reportee?.type ? getAccountType(reportee.type) : 'neutral' }}
+          footer={footer}
+        >
+          <div>{children}</div>
+          <InfoModal />
+        </Layout>
+        <Snackbar />
+      </SnackbarProvider>
     </RootProvider>
   );
 };

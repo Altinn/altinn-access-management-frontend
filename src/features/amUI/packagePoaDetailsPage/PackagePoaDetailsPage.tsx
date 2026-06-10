@@ -24,12 +24,11 @@ import { amUIPath } from '@/routes/paths/amUIPath';
 export const PackagePoaDetailsPage = () => {
   const { t } = useTranslation();
   const [searchParams] = useSearchParams();
-  const tab = searchParams.get('tab');
-  const poaOverviewUrl = `/${amUIPath.PoaOverview}${tab ? `?tab=${encodeURIComponent(tab)}` : ''}`;
+  const parentTab = searchParams.get('parentTab') ?? 'packages';
+  const poaOverviewUrl = `/${amUIPath.PoaOverview}#${parentTab}`;
+  const partyUuid = getCookie('AltinnPartyUuid') || '';
 
   useDocumentTitle(t('package_poa_details_page.page_title'));
-
-  const partyUuid = getCookie('AltinnPartyUuid') || '';
 
   const pageIsEnabled = poaOverviewPageEnabled();
   if (!pageIsEnabled) {

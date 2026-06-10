@@ -21,7 +21,7 @@ import { ClientAdministrationAgentsTab } from './ClientAdministrationAgentsTab';
 import { ClientAdministrationClientsTab } from './ClientAdministrationClientsTab';
 import classes from './ClientAdministrationPageContent.module.css';
 import { DatabaseIcon, PersonGroupIcon } from '@navikt/aksel-icons';
-import { useUrlParamState } from '../common/useUrlParamState';
+import { useTabState } from '@/resources/hooks';
 import { ReporteePageHeading } from '../common/ReporteePageHeading/ReporteePageHeading';
 
 const clientAdministrationTabs = ['users', 'clients'] as const;
@@ -31,10 +31,9 @@ export const ClientAdministrationPageContent = () => {
   const pageIsEnabled = clientAdministrationPageEnabled();
   const { actingParty, isLoading: actorLoading } = usePartyRepresentation();
 
-  const [activeTab, setActiveTab] = useUrlParamState({
-    key: 'tab',
-    defaultValue: 'users',
-    validValues: clientAdministrationTabs,
+  const [activeTab, setActiveTab] = useTabState({
+    tabs: clientAdministrationTabs,
+    defaultTab: 'users',
   });
 
   const { data: reportee, isLoading: isLoadingReportee } = useGetReporteeQuery();

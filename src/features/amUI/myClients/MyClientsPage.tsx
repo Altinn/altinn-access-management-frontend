@@ -1,11 +1,5 @@
 import React, { useMemo } from 'react';
-import {
-  DsAlert,
-  DsParagraph,
-  DsSkeleton,
-  formatDisplayName,
-  SnackbarProvider,
-} from '@altinn/altinn-components';
+import { DsAlert, DsParagraph, DsSkeleton, formatDisplayName } from '@altinn/altinn-components';
 import { useTranslation } from 'react-i18next';
 
 import { PageContainer } from '../common/PageContainer/PageContainer';
@@ -124,13 +118,11 @@ export const MyClientsPage = () => {
                   height='220px'
                 />
               ) : clients.length > 0 ? (
-                <SnackbarProvider>
-                  <MyClientsAccessSection
-                    clients={clients}
-                    actingPartyUuid={actingPartyUuid}
-                    currentUserName={currentUserName}
-                  />
-                </SnackbarProvider>
+                <MyClientsAccessSection
+                  clients={clients}
+                  actingPartyUuid={actingPartyUuid}
+                  currentUserName={currentUserName}
+                />
               ) : (
                 <DsParagraph>
                   {t('my_clients_page.no_clients', { actingParty: actingPartyName })}

@@ -140,44 +140,44 @@ export const UsersList = () => {
       {isAdmin ? (
         <>
           <div className={classes.searchAndAddUser}>
-            <div className={classes.filtersContainer}>
-              <DsSearch
-                className={classes.searchBar}
-                data-size='sm'
-              >
-                <DsSearch.Input
-                  aria-label={t('users_page.user_search_placeholder')}
-                  placeholder={t('users_page.user_search_placeholder')}
-                  onChange={(event: React.ChangeEvent<HTMLInputElement>) =>
-                    onSearch(event.target.value)
-                  }
-                />
-                <DsSearch.Clear
-                  onClick={() => {
-                    setSearchString('');
-                  }}
-                />
-              </DsSearch>
-              {fromParty?.partyTypeName === PartyType.Organization && (
-                <DsSwitch
-                  data-size={'sm'}
-                  checked={includeAgentConnections}
-                  onChange={(event) => setIncludeAgentConnections(event.target.checked)}
-                  label={t('users_page.show_users_with_client_access')}
-                />
-              )}
-            </div>
-            <div className={classes.addUserContainer}>
-              <DsHeading
-                level={2}
-                data-size='sm'
-                id='user_list_heading_id'
-                className={classes.usersListHeading}
-              >
-                {t('users_page.user_list_heading')}
-              </DsHeading>
+            <div className={classes.searchAndNewUserContainer}>
+              <div className={classes.filtersContainer}>
+                <DsSearch
+                  className={classes.searchBar}
+                  data-size='sm'
+                >
+                  <DsSearch.Input
+                    aria-label={t('users_page.user_search_placeholder')}
+                    placeholder={t('users_page.user_search_placeholder')}
+                    onChange={(event: React.ChangeEvent<HTMLInputElement>) =>
+                      onSearch(event.target.value)
+                    }
+                  />
+                  <DsSearch.Clear
+                    onClick={() => {
+                      setSearchString('');
+                    }}
+                  />
+                </DsSearch>
+                {fromParty?.partyTypeName === PartyType.Organization && (
+                  <DsSwitch
+                    data-size={'sm'}
+                    checked={includeAgentConnections}
+                    onChange={(event) => setIncludeAgentConnections(event.target.checked)}
+                    label={t('users_page.show_users_with_client_access')}
+                  />
+                )}
+              </div>
               <NewUserButton onComplete={handleNewUser} />
             </div>
+            <DsHeading
+              level={2}
+              data-size='sm'
+              id='user_list_heading_id'
+              className={classes.usersListHeading}
+            >
+              {t('users_page.user_list_heading')}
+            </DsHeading>
           </div>
           <UserList
             connections={connectionsWithRoles}

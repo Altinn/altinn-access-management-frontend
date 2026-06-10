@@ -1,14 +1,7 @@
 import { useMemo } from 'react';
 import { Link, useParams } from 'react-router';
 import { useTranslation } from 'react-i18next';
-import {
-  DsAlert,
-  DsParagraph,
-  DsSkeleton,
-  Snackbar,
-  SnackbarProvider,
-  formatDisplayName,
-} from '@altinn/altinn-components';
+import { DsAlert, DsParagraph, DsSkeleton, formatDisplayName } from '@altinn/altinn-components';
 
 import { PageWrapper } from '@/components/PageWrapper/PageWrapper';
 import { getCookie } from '@/resources/Cookie/CookieMethods';
@@ -32,7 +25,7 @@ export const SupplierPage = () => {
 
   const { id: orgNr } = useParams<{ id: string }>();
   const party = getCookie('AltinnPartyUuid');
-  const backUrl = `/${amUIPath.Maskinporten}?tab=suppliers`;
+  const backUrl = `/${amUIPath.Maskinporten}#suppliers`;
 
   const { data, isLoading, error } = useGetMaskinportenSuppliersQuery(
     { party, supplier: orgNr },
@@ -62,43 +55,40 @@ export const SupplierPage = () => {
   const notFound = !!error || (!isLoading && !data?.length);
 
   return (
-    <SnackbarProvider>
-      <PageWrapper>
-        <PageLayoutWrapper>
-          <PartyRepresentationProvider
-            fromPartyUuid={party}
-            actingPartyUuid={party}
-            toPartyOverride={supplierParty}
-          >
-            <DelegationModalProvider>
-              <Breadcrumbs
-                items={['root', 'maskinporten_suppliers']}
-                lastBreadcrumb={{ label: supplierName || t('maskinporten_page.supplier_title') }}
-              />
-              {isLoading ? (
-                <PageContainer backUrl={backUrl}>
-                  <DsSkeleton
-                    width='100%'
-                    height='2.5rem'
-                  />
-                </PageContainer>
-              ) : notFound ? (
-                <PageContainer backUrl={backUrl}>
-                  <DsAlert data-color='danger'>
-                    <DsParagraph>
-                      {t('maskinporten_page.supplier_not_found')}{' '}
-                      <Link to={backUrl}>{t('maskinporten_page.back_to_list')}</Link>
-                    </DsParagraph>
-                  </DsAlert>
-                </PageContainer>
-              ) : (
-                <SupplierPageContent />
-              )}
-            </DelegationModalProvider>
-          </PartyRepresentationProvider>
-        </PageLayoutWrapper>
-      </PageWrapper>
-      <Snackbar />
-    </SnackbarProvider>
+    <PageWrapper>
+      <PageLayoutWrapper>
+        <PartyRepresentationProvider
+          fromPartyUuid={party}
+          actingPartyUuid={party}
+          toPartyOverride={supplierParty}
+        >
+          <DelegationModalProvider>
+            <Breadcrumbs
+              items={['root', 'maskinporten_suppliers']}
+              lastBreadcrumb={{ label: supplierName || t('maskinporten_page.supplier_title') }}
+            />
+            {isLoading ? (
+              <PageContainer backUrl={backUrl}>
+                <DsSkeleton
+                  width='100%'
+                  height='2.5rem'
+                />
+              </PageContainer>
+            ) : notFound ? (
+              <PageContainer backUrl={backUrl}>
+                <DsAlert data-color='danger'>
+                  <DsParagraph>
+                    {t('maskinporten_page.supplier_not_found')}{' '}
+                    <Link to={backUrl}>{t('maskinporten_page.back_to_list')}</Link>
+                  </DsParagraph>
+                </DsAlert>
+              </PageContainer>
+            ) : (
+              <SupplierPageContent />
+            )}
+          </DelegationModalProvider>
+        </PartyRepresentationProvider>
+      </PageLayoutWrapper>
+    </PageWrapper>
   );
 };
