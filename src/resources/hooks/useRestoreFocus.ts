@@ -1,29 +1,6 @@
 import { type RefCallback, useEffect, useState } from 'react';
 
-// Matches the interactive descendants we can safely move focus back to after UI changes.
-const FOCUSABLE_SELECTOR = [
-  'button:not([disabled])',
-  'a[href]',
-  'input:not([disabled])',
-  'select:not([disabled])',
-  'textarea:not([disabled])',
-  '[tabindex]:not([tabindex="-1"])',
-].join(',');
-
-const focusElement = (element: HTMLElement) => {
-  const shouldRestoreTabIndex =
-    !element.matches(FOCUSABLE_SELECTOR) && !element.hasAttribute('tabindex');
-
-  if (shouldRestoreTabIndex) {
-    element.tabIndex = -1;
-  }
-
-  element.focus();
-
-  if (shouldRestoreTabIndex) {
-    element.removeAttribute('tabindex');
-  }
-};
+const RESTORE_FOCUS_SELECTOR = 'button:not([disabled])';
 
 interface UseRestoreFocusOptions {
   shouldRestoreFocus?: boolean;
@@ -37,8 +14,6 @@ export const useRestoreFocus = ({
   shouldRestoreFocus = true,
   focusNonInteractiveTarget = false,
 }: UseRestoreFocusOptions = {}) => {
-  // Tracking the container as state (rather than a ref) lets the effect below re-run when the
-  // container mounts/remounts, which is the trigger for views that unmount while a detail is open.
   const [containerElement, setContainerElement] = useState<HTMLElement | null>(null);
   const [focusTargetId, setFocusTargetId] = useState<string | null>(null);
 
@@ -52,25 +27,28 @@ export const useRestoreFocus = ({
       return;
     }
 
-    const focusableTarget = target.matches(FOCUSABLE_SELECTOR)
+    const focusableTarget = target.matches(RESTORE_FOCUS_SELECTOR)
       ? target
-      : target.querySelector<HTMLElement>(FOCUSABLE_SELECTOR);
+      : target.querySelector<HTMLElement>(RESTORE_FOCUS_SELECTOR);
 
-    if (focusableTarget) {
-      focusElement(focusableTarget);
-      setFocusTargetId(null);
-      return;
+    const elementToFocus = focusableTarget ?? (focusNonInteractiveTarget ? target : null);
+    if (elementToFocus) {
+      const shouldRestoreTabIndex =
+        !elementToFocus.matches(RESTORE_FOCUS_SELECTOR) && !elementToFocus.hasAttribute('tabindex');
+
+      if (shouldRestoreTabIndex) {
+        // Non-interactive fallback targets get tabindex=-1 temporarily so they can be focused
+        // programmatically without being added to the normal tab order.
+        elementToFocus.tabIndex = -1;
+      }
+
+      elementToFocus.focus();
+
+      if (shouldRestoreTabIndex) {
+        elementToFocus.removeAttribute('tabindex');
+      }
     }
 
-    if (!focusNonInteractiveTarget) {
-      setFocusTargetId(null);
-      return;
-    }
-
-    // Processed request rows can become non-interactive after approve/reject, but focus should
-    // still return to the row once so users keep their place. focusElement only adds tabindex=-1
-    // temporarily, so the row is not added to the normal tab order.
-    focusElement(target);
     setFocusTargetId(null);
   }, [containerElement, focusNonInteractiveTarget, focusTargetId, shouldRestoreFocus]);
 

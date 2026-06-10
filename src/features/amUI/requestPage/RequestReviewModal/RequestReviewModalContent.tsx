@@ -49,13 +49,11 @@ export const RequestReviewModalContent = ({ request, onClose }: RequestReviewMod
     handleSelection,
   } = useRequestReview(request, onClose);
 
-  // Restore focus to the request item when navigating back from a detail view, so
-  // screen reader users don't lose their place when the content changes.
+  // Restore focus to the request item when navigating back from a detail view even if
+  // the item has been processed and is no longer interactive.
   const isRequestListReady = !isLoadingRequests && !isFetchingRequests;
   const { ref: listFocusRef, setFocusTargetId } = useRestoreFocus({
     shouldRestoreFocus: isRequestListReady,
-    // After approve/reject the item becomes a non-interactive status row. Focus it once when
-    // returning from detail so keyboard and screen reader users keep their place in the list.
     focusNonInteractiveTarget: true,
   });
 
