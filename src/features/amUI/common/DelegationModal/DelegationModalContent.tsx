@@ -1,7 +1,6 @@
-import * as React from 'react';
 import { useTranslation } from 'react-i18next';
 import { PlusIcon, ArrowLeftIcon } from '@navikt/aksel-icons';
-import { JSX, useCallback, useEffect, useRef, useState } from 'react';
+import { type JSX, useEffect, useRef } from 'react';
 import { Button, DsDialog, Snackbar, SnackbarProvider } from '@altinn/altinn-components';
 
 import type { AccessPackage } from '@/rtk/features/accessPackageApi';
@@ -47,11 +46,7 @@ export const DelegationModalContent = ({
   const { closeAllAreas } = useAreaExpandedContextOrLocal();
   const modalRef = useRef<HTMLDialogElement>(null);
   const backButtonRef = useAutoFocusRef<HTMLButtonElement>();
-  const [focusTargetId, setFocusTargetId] = useState<string | null>(null);
-  const clearFocusTargetId = useCallback(() => setFocusTargetId(null), []);
-  const searchViewFocusRef = useRestoreFocusRef<HTMLDivElement>(focusTargetId, {
-    onFocusRestored: clearFocusTargetId,
-  });
+  const { ref: searchViewFocusRef, setFocusTargetId } = useRestoreFocusRef<HTMLDivElement>();
 
   const onResourceSelection = (resource?: ServiceResource, error = false) => {
     setFocusTargetId(resource?.identifier ?? null);

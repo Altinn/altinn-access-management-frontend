@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { ArrowLeftIcon, MinusCircleIcon } from '@navikt/aksel-icons';
 import { Button, DsButton, DsHeading, List, useSnackbar } from '@altinn/altinn-components';
 import { useTranslation } from 'react-i18next';
@@ -35,7 +35,6 @@ export const PendingPackageRequestsList = ({
   const { actingParty, fromParty } = usePartyRepresentation();
   const { openSnackbar } = useSnackbar();
   const backButtonRef = useAutoFocusRef<HTMLButtonElement>();
-  const [focusTargetId, setFocusTargetId] = useState<string | null>(null);
 
   const [loadingByRequestId, setLoadingByRequestId] = useState<Record<string, boolean>>({});
 
@@ -58,10 +57,8 @@ export const PendingPackageRequestsList = ({
   }, [isRefetching]);
 
   const [withdrawRequest] = useWithdrawRequestMutation();
-  const clearFocusTargetId = useCallback(() => setFocusTargetId(null), []);
-  const listFocusRef = useRestoreFocusRef<HTMLDivElement>(focusTargetId, {
+  const { ref: listFocusRef, setFocusTargetId } = useRestoreFocusRef<HTMLDivElement>({
     shouldRestoreFocus: !isLoading && !isRefetching,
-    onFocusRestored: clearFocusTargetId,
   });
 
   const handleDelete = async (request: EnrichedPackageRequest) => {

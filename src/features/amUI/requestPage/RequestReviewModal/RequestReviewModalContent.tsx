@@ -1,4 +1,3 @@
-import { useCallback, useState } from 'react';
 import { Link } from 'react-router';
 import {
   AccessPackageListItem,
@@ -52,12 +51,9 @@ export const RequestReviewModalContent = ({ request, onClose }: RequestReviewMod
 
   // Restore focus to the request item when navigating back from a detail view, so
   // screen reader users don't lose their place when the content changes.
-  const [focusTargetId, setFocusTargetId] = useState<string | null>(null);
-  const clearFocusTargetId = useCallback(() => setFocusTargetId(null), []);
   const isRequestListReady = !isLoadingRequests && !isFetchingRequests;
-  const listFocusRef = useRestoreFocusRef<HTMLDivElement>(focusTargetId, {
+  const { ref: listFocusRef, setFocusTargetId } = useRestoreFocusRef<HTMLDivElement>({
     shouldRestoreFocus: isRequestListReady,
-    onFocusRestored: clearFocusTargetId,
   });
 
   if (request === null) {

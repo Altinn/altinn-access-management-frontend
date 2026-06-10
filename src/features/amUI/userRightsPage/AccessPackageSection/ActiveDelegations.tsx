@@ -1,4 +1,4 @@
-import React, { useCallback, useRef, useState } from 'react';
+import { useRef, useState } from 'react';
 
 import type { AccessPackage } from '@/rtk/features/accessPackageApi';
 
@@ -18,7 +18,6 @@ interface ActiveDelegationsProps {
 export const ActiveDelegations = ({ searchString }: ActiveDelegationsProps) => {
   const modalRef = useRef<HTMLDialogElement>(null);
   const [modalItem, setModalItem] = useState<AccessPackage | undefined>(undefined);
-  const [focusTargetId, setFocusTargetId] = useState<string | null>(null);
   const { setActionError } = useDelegationModalContext();
   const { toParty, selfParty, actingParty, isLoading } = usePartyRepresentation();
   const { data: isHovedadmin } = useGetIsHovedadminQuery();
@@ -27,10 +26,8 @@ export const ActiveDelegations = ({ searchString }: ActiveDelegationsProps) => {
     (toParty?.partyUuid !== selfParty?.partyUuid || isHovedadmin); // Only hovedadmin can give access to themselves
   const { t } = useTranslation();
   // Restore focus to the package item that opened the modal when the modal closes.
-  const clearFocusTargetId = useCallback(() => setFocusTargetId(null), []);
-  const listFocusRef = useRestoreFocusRef<HTMLDivElement>(focusTargetId, {
+  const { ref: listFocusRef, setFocusTargetId } = useRestoreFocusRef<HTMLDivElement>({
     shouldRestoreFocus: modalItem === undefined,
-    onFocusRestored: clearFocusTargetId,
   });
 
   return (

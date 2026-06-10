@@ -1,4 +1,4 @@
-import React, { useCallback, useRef, useState } from 'react';
+import React, { useRef, useState } from 'react';
 import { ArrowLeftIcon, HandshakeIcon, MinusCircleIcon } from '@navikt/aksel-icons';
 import {
   DsButton,
@@ -142,7 +142,6 @@ export const PendingRequestsList = ({
   const isSmallScreen = useIsTabletOrSmaller();
   const { actingParty, fromParty } = usePartyRepresentation();
   const backButtonRef = useAutoFocusRef<HTMLButtonElement>();
-  const [focusTargetId, setFocusTargetId] = useState<string | null>(null);
 
   const {
     data: singleRightRequests = [],
@@ -163,10 +162,8 @@ export const PendingRequestsList = ({
     actingPartyUuid: actingParty?.partyUuid,
     fromPartyUuid: fromParty?.partyUuid,
   });
-  const clearFocusTargetId = useCallback(() => setFocusTargetId(null), []);
-  const listFocusRef = useRestoreFocusRef<HTMLDivElement>(focusTargetId, {
+  const { ref: listFocusRef, setFocusTargetId } = useRestoreFocusRef<HTMLDivElement>({
     shouldRestoreFocus: !isLoadingRequests && !isFetchingRequests,
-    onFocusRestored: clearFocusTargetId,
   });
 
   return (

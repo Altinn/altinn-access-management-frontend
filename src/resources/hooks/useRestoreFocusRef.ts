@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from 'react';
+import { type RefCallback, useEffect, useState } from 'react';
 
 // Matches the interactive descendants we can safely move focus back to after UI changes.
 const FOCUSABLE_SELECTOR = [
@@ -9,15 +9,6 @@ const FOCUSABLE_SELECTOR = [
   'textarea:not([disabled])',
   '[tabindex]:not([tabindex="-1"])',
 ].join(',');
-
-const findElementByIdInContainer = (containerElement: HTMLElement, focusTargetId: string) => {
-  if (containerElement.id === focusTargetId) {
-    return containerElement;
-  }
-
-  const target = containerElement.ownerDocument.getElementById(focusTargetId);
-  return target instanceof HTMLElement && containerElement.contains(target) ? target : null;
-};
 
 const focusElement = (element: HTMLElement) => {
   const shouldRestoreTabIndex =
@@ -36,37 +27,39 @@ const focusElement = (element: HTMLElement) => {
 
 interface UseRestoreFocusOptions {
   shouldRestoreFocus?: boolean;
-  onFocusRestored?: () => void;
 }
 
-// Returns a callback ref for a container; focuses the element matching focusTargetId once enabled.
+// Returns a container ref and a setter for the element id to focus once enabled.
 // The target must already be in the DOM when focus is restored, so callers should gate
 // shouldRestoreFocus until the relevant content has rendered.
-export const useRestoreFocusRef = <T extends HTMLElement = HTMLElement>(
-  focusTargetId?: string | null,
-  { shouldRestoreFocus = true, onFocusRestored }: UseRestoreFocusOptions = {},
-) => {
+export const useRestoreFocusRef = <T extends HTMLElement = HTMLElement>({
+  shouldRestoreFocus = true,
+}: UseRestoreFocusOptions = {}) => {
   // Tracking the container as state (rather than a ref) lets the effect below re-run when the
   // container mounts/remounts, which is the trigger for views that unmount while a detail is open.
   const [containerElement, setContainerElement] = useState<T | null>(null);
+  const [focusTargetId, setFocusTargetId] = useState<string | null>(null);
 
   useEffect(() => {
     if (!containerElement || !focusTargetId || !shouldRestoreFocus) {
       return;
     }
 
-    const target = findElementByIdInContainer(containerElement, focusTargetId);
-    if (!target) {
+    const target = containerElement.ownerDocument.getElementById(focusTargetId);
+    if (!(target instanceof HTMLElement) || !containerElement.contains(target)) {
       return;
     }
 
-    const targetElement = target.matches(FOCUSABLE_SELECTOR)
-      ? target
-      : (target.querySelector<HTMLElement>(FOCUSABLE_SELECTOR) ?? target);
+    focusElement(
+      target.matches(FOCUSABLE_SELECTOR)
+        ? target
+        : (target.querySelector<HTMLElement>(FOCUSABLE_SELECTOR) ?? target),
+    );
+    setFocusTargetId(null);
+  }, [containerElement, focusTargetId, shouldRestoreFocus]);
 
-    focusElement(targetElement);
-    onFocusRestored?.();
-  }, [containerElement, focusTargetId, shouldRestoreFocus, onFocusRestored]);
-
-  return useCallback((node: T | null) => setContainerElement(node), []);
+  return {
+    ref: setContainerElement as RefCallback<T>,
+    setFocusTargetId,
+  };
 };
