@@ -17,7 +17,7 @@ const FocusTargetTest = ({
   focusNonInteractiveTarget = false,
   shouldRestoreFocus = true,
 }: FocusTargetTestProps) => {
-  const { ref, setFocusTargetId } = useRestoreFocus({
+  const { containerRef, setFocusTargetId } = useRestoreFocus({
     focusNonInteractiveTarget,
     shouldRestoreFocus,
   });
@@ -26,7 +26,7 @@ const FocusTargetTest = ({
     setFocusTargetId(focusTargetId ?? null);
   }, [focusTargetId, setFocusTargetId]);
 
-  return <div ref={ref}>{children}</div>;
+  return <div ref={containerRef}>{children}</div>;
 };
 
 describe('useRestoreFocus', () => {

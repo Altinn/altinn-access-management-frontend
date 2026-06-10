@@ -162,7 +162,7 @@ export const PendingRequestsList = ({
     actingPartyUuid: actingParty?.partyUuid,
     fromPartyUuid: fromParty?.partyUuid,
   });
-  const { ref: listFocusRef, setFocusTargetId } = useRestoreFocus({
+  const { containerRef, setFocusTargetId } = useRestoreFocus({
     shouldRestoreFocus: !isLoadingRequests && !isFetchingRequests,
   });
 
@@ -195,7 +195,7 @@ export const PendingRequestsList = ({
               {heading}
             </DsHeading>
           )}
-          <div ref={listFocusRef}>
+          <div ref={containerRef}>
             <ResourceList
               isLoading={isLoadingRequests}
               size={isSmallScreen ? 'sm' : 'md'}

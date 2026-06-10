@@ -26,13 +26,13 @@ export const ActiveDelegations = ({ searchString }: ActiveDelegationsProps) => {
     (toParty?.partyUuid !== selfParty?.partyUuid || isHovedadmin); // Only hovedadmin can give access to themselves
   const { t } = useTranslation();
   // Restore focus to the package item that opened the modal when the modal closes.
-  const { ref: listFocusRef, setFocusTargetId } = useRestoreFocus({
+  const { containerRef, setFocusTargetId } = useRestoreFocus({
     shouldRestoreFocus: modalItem === undefined,
   });
 
   return (
     <>
-      <div ref={listFocusRef}>
+      <div ref={containerRef}>
         <AccessPackageList
           isLoading={isLoading}
           showPackagesCount

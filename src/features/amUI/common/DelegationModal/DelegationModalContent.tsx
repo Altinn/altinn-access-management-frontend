@@ -46,7 +46,7 @@ export const DelegationModalContent = ({
   const { closeAllAreas } = useAreaExpandedContextOrLocal();
   const modalRef = useRef<HTMLDialogElement>(null);
   const backButtonRef = useAutoFocusRef<HTMLButtonElement>();
-  const { ref: searchViewFocusRef, setFocusTargetId } = useRestoreFocus();
+  const { containerRef, setFocusTargetId } = useRestoreFocus();
 
   const onResourceSelection = (resource?: ServiceResource, error = false) => {
     setFocusTargetId(resource?.identifier ?? null);
@@ -171,7 +171,7 @@ export const DelegationModalContent = ({
               </Button>
             )}
             <div className={classes.content}>
-              {infoView ? infoViewContent : <div ref={searchViewFocusRef}>{searchViewContent}</div>}
+              {infoView ? infoViewContent : <div ref={containerRef}>{searchViewContent}</div>}
               <Snackbar />
             </div>
           </SnackbarProvider>

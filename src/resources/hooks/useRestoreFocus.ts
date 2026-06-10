@@ -53,7 +53,7 @@ export const useRestoreFocus = ({
   }, [containerElement, focusNonInteractiveTarget, focusTargetId, shouldRestoreFocus]);
 
   return {
-    ref: setContainerElement as RefCallback<HTMLElement>,
+    containerRef: setContainerElement as RefCallback<HTMLElement>,
     setFocusTargetId,
   };
 };

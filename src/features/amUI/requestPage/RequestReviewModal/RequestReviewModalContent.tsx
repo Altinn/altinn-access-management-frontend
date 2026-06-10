@@ -52,7 +52,7 @@ export const RequestReviewModalContent = ({ request, onClose }: RequestReviewMod
   // Restore focus to the request item when navigating back from a detail view even if
   // the item has been processed and is no longer interactive.
   const isRequestListReady = !isLoadingRequests && !isFetchingRequests;
-  const { ref: listFocusRef, setFocusTargetId } = useRestoreFocus({
+  const { containerRef, setFocusTargetId } = useRestoreFocus({
     shouldRestoreFocus: isRequestListReady,
     focusNonInteractiveTarget: true,
   });
@@ -138,7 +138,7 @@ export const RequestReviewModalContent = ({ request, onClose }: RequestReviewMod
   return (
     <div
       className={classes.reviewListView}
-      ref={listFocusRef}
+      ref={containerRef}
     >
       <DsHeading
         level={1}

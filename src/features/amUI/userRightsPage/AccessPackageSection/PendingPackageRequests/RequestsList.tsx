@@ -57,7 +57,7 @@ export const PendingPackageRequestsList = ({
   }, [isRefetching]);
 
   const [withdrawRequest] = useWithdrawRequestMutation();
-  const { ref: listFocusRef, setFocusTargetId } = useRestoreFocus({
+  const { containerRef, setFocusTargetId } = useRestoreFocus({
     shouldRestoreFocus: !isLoading && !isRefetching,
   });
 
@@ -117,7 +117,7 @@ export const PendingPackageRequestsList = ({
           {isLoading ? (
             <SkeletonAccessPackageList />
           ) : (
-            <div ref={listFocusRef}>
+            <div ref={containerRef}>
               <List>
                 {enrichedRequests.map((req) => (
                   <PackageItem
