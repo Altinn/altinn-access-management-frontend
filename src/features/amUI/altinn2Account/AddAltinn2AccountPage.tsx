@@ -89,9 +89,10 @@ export const AddAltinn2AccountPage = () => {
   };
 
   useEffect(() => {
-    if (reportee?.type === 'SelfIdentified' && token) {
+    const isEnabled = reportee?.type === 'SelfIdentified' && window.featureFlags?.addAltinn2Account;
+    if (isEnabled && token) {
       onAddAccountFromToken(token);
-    } else if (reportee?.type === 'SelfIdentified' && !token) {
+    } else if (isEnabled && !token) {
       modalRef.current?.showModal();
     }
   }, [reportee, token]);
