@@ -1109,7 +1109,7 @@
     "service_owner_filter": "Søk etter tjenesteeier",
     "service_owner_filter_clear": "Tøm søkefelt",
     "show_expired_services": "Vis utgåtte tjenester",
-    "show_expired_services_helptext": "Noen tjenester er utgått og vil ikke la deg sende inne eller motta ny data. Du kan likevel gi andre fullmakter til dem, men de vil da bare kunne se gamle innsendinger eller meldinger på tjenesten.",
+    "show_expired_services_helptext": "Noen tjenester er utgått og vil ikke la deg sende inn eller motta ny data. Du kan likevel gi andre fullmakter til dem, men de vil da bare kunne se gamle innsendinger eller meldinger på tjenesten.",
     "show_expired_services_helptext_button": "Hva er utgåtte tjenester?",
     "expired_badge": "Utgått"
   },
