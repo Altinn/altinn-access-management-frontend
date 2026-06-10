@@ -9,7 +9,7 @@ import { useDelegationModalContext } from '../../common/DelegationModal/Delegati
 
 import { useTranslation } from 'react-i18next';
 import { useGetIsHovedadminQuery } from '@/rtk/features/userInfoApi';
-import { useRestoreFocusRef } from '@/resources/hooks/useRestoreFocusRef';
+import { useRestoreFocus } from '@/resources/hooks/useRestoreFocus';
 
 interface ActiveDelegationsProps {
   searchString?: string;
@@ -26,7 +26,7 @@ export const ActiveDelegations = ({ searchString }: ActiveDelegationsProps) => {
     (toParty?.partyUuid !== selfParty?.partyUuid || isHovedadmin); // Only hovedadmin can give access to themselves
   const { t } = useTranslation();
   // Restore focus to the package item that opened the modal when the modal closes.
-  const { ref: listFocusRef, setFocusTargetId } = useRestoreFocusRef<HTMLDivElement>({
+  const { ref: listFocusRef, setFocusTargetId } = useRestoreFocus({
     shouldRestoreFocus: modalItem === undefined,
   });
 

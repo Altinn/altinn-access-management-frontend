@@ -22,7 +22,7 @@ import { useRequestReview } from './useRequestReview';
 import classes from './RequestReviewModal.module.css';
 import { amUIPath } from '@/routes/paths';
 import { RequestPackageDetail } from './RequestPackageDetail';
-import { useRestoreFocusRef } from '@/resources/hooks/useRestoreFocusRef';
+import { useRestoreFocus } from '@/resources/hooks/useRestoreFocus';
 
 interface RequestReviewModalContentProps {
   request: Request | null;
@@ -52,7 +52,7 @@ export const RequestReviewModalContent = ({ request, onClose }: RequestReviewMod
   // Restore focus to the request item when navigating back from a detail view, so
   // screen reader users don't lose their place when the content changes.
   const isRequestListReady = !isLoadingRequests && !isFetchingRequests;
-  const { ref: listFocusRef, setFocusTargetId } = useRestoreFocusRef<HTMLDivElement>({
+  const { ref: listFocusRef, setFocusTargetId } = useRestoreFocus({
     shouldRestoreFocus: isRequestListReady,
     // After approve/reject the item becomes a non-interactive status row. Focus it once when
     // returning from detail so keyboard and screen reader users keep their place in the list.

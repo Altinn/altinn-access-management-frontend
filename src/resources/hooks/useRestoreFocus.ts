@@ -33,13 +33,13 @@ interface UseRestoreFocusOptions {
 // Returns a container ref and a setter for the element id to focus once enabled.
 // The target must already be in the DOM when focus is restored, so callers should gate
 // shouldRestoreFocus until the relevant content has rendered.
-export const useRestoreFocusRef = <T extends HTMLElement = HTMLElement>({
+export const useRestoreFocus = ({
   shouldRestoreFocus = true,
   focusNonInteractiveTarget = false,
 }: UseRestoreFocusOptions = {}) => {
   // Tracking the container as state (rather than a ref) lets the effect below re-run when the
   // container mounts/remounts, which is the trigger for views that unmount while a detail is open.
-  const [containerElement, setContainerElement] = useState<T | null>(null);
+  const [containerElement, setContainerElement] = useState<HTMLElement | null>(null);
   const [focusTargetId, setFocusTargetId] = useState<string | null>(null);
 
   useEffect(() => {
@@ -75,7 +75,7 @@ export const useRestoreFocusRef = <T extends HTMLElement = HTMLElement>({
   }, [containerElement, focusNonInteractiveTarget, focusTargetId, shouldRestoreFocus]);
 
   return {
-    ref: setContainerElement as RefCallback<T>,
+    ref: setContainerElement as RefCallback<HTMLElement>,
     setFocusTargetId,
   };
 };

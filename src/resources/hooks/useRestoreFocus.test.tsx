@@ -2,7 +2,7 @@ import React, { useEffect } from 'react';
 import { render, screen, waitFor } from '@testing-library/react';
 import { describe, expect, it } from 'vitest';
 
-import { useRestoreFocusRef } from './useRestoreFocusRef';
+import { useRestoreFocus } from './useRestoreFocus';
 
 interface FocusTargetTestProps {
   children: React.ReactNode;
@@ -17,7 +17,7 @@ const FocusTargetTest = ({
   focusNonInteractiveTarget = false,
   shouldRestoreFocus = true,
 }: FocusTargetTestProps) => {
-  const { ref, setFocusTargetId } = useRestoreFocusRef<HTMLDivElement>({
+  const { ref, setFocusTargetId } = useRestoreFocus({
     focusNonInteractiveTarget,
     shouldRestoreFocus,
   });
@@ -29,7 +29,7 @@ const FocusTargetTest = ({
   return <div ref={ref}>{children}</div>;
 };
 
-describe('useRestoreFocusRef', () => {
+describe('useRestoreFocus', () => {
   it('focuses the first focusable descendant of the target element', async () => {
     render(
       <FocusTargetTest focusTargetId='target'>
