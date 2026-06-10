@@ -35,7 +35,9 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
         public async Task AddAltinn2Account_ValidCredentials_ReturnsOk()
         {
             // Arrange
-            Guid to = Guid.NewGuid();
+            Guid userPartyUuid = new Guid("167536b5-f8ed-4c5a-8f48-0279507e53ae");
+            string token = PrincipalUtil.GetToken(1337, 50789533, userPartyUuid, 2);
+            _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
             Altinn2AccountRequest request = new Altinn2AccountRequest()
             {
                 UserName = "testuser",
@@ -43,7 +45,7 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
             };
 
             // Act
-            HttpResponseMessage httpResponse = await _client.PostAsync($"accessmanagement/api/v1/selfidentifieduser/altinn2account?to={to}", JsonContent.Create(request));
+            HttpResponseMessage httpResponse = await _client.PostAsync($"accessmanagement/api/v1/selfidentifieduser/altinn2account", JsonContent.Create(request));
 
             // Assert
             Assert.Equal(HttpStatusCode.OK, httpResponse.StatusCode);
@@ -56,7 +58,6 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
         public async Task AddAltinn2Account_InvalidCredentials_ReturnsUnauthorized()
         {
             // Arrange
-            Guid to = Guid.NewGuid();
             Altinn2AccountRequest request = new Altinn2AccountRequest()
             {
                 UserName = "invalid",
@@ -64,7 +65,7 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
             };
 
             // Act
-            HttpResponseMessage httpResponse = await _client.PostAsync($"accessmanagement/api/v1/selfidentifieduser/altinn2account?to={to}", JsonContent.Create(request));
+            HttpResponseMessage httpResponse = await _client.PostAsync($"accessmanagement/api/v1/selfidentifieduser/altinn2account", JsonContent.Create(request));
 
             // Assert
             Assert.Equal(HttpStatusCode.Unauthorized, httpResponse.StatusCode);
@@ -77,7 +78,9 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
         public async Task AddAltinn2Account_CreateConnectionFail_ReturnsBadRequest()
         {
             // Arrange
-            Guid to = Guid.NewGuid();
+            Guid userPartyUuid = new Guid("167536b5-f8ed-4c5a-8f48-0279507e53ae");
+            string token = PrincipalUtil.GetToken(1337, 50789533, userPartyUuid, 2);
+            _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
             Altinn2AccountRequest request = new Altinn2AccountRequest()
             {
                 UserName = "invalid_connection",
@@ -85,7 +88,7 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
             };
 
             // Act
-            HttpResponseMessage httpResponse = await _client.PostAsync($"accessmanagement/api/v1/selfidentifieduser/altinn2account?to={to}", JsonContent.Create(request));
+            HttpResponseMessage httpResponse = await _client.PostAsync($"accessmanagement/api/v1/selfidentifieduser/altinn2account", JsonContent.Create(request));
 
             // Assert
             Assert.Equal(HttpStatusCode.BadRequest, httpResponse.StatusCode);
@@ -98,14 +101,16 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
         public async Task AddAltinn2AccountFromToken_ValidToken_ReturnsOk()
         {
             // Arrange
-            Guid to = Guid.NewGuid();
+            Guid userPartyUuid = new Guid("167536b5-f8ed-4c5a-8f48-0279507e53ae");
+            string token = PrincipalUtil.GetToken(1337, 50789533, userPartyUuid, 2);
+            _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
             Altinn2AccountFromTokenRequest request = new Altinn2AccountFromTokenRequest()
             {
                 Token = "validtoken"
             };
 
             // Act
-            HttpResponseMessage httpResponse = await _client.PostAsync($"accessmanagement/api/v1/selfidentifieduser/altinn2account/token?to={to}", JsonContent.Create(request));
+            HttpResponseMessage httpResponse = await _client.PostAsync($"accessmanagement/api/v1/selfidentifieduser/altinn2account/token", JsonContent.Create(request));
 
             // Assert
             Assert.Equal(HttpStatusCode.OK, httpResponse.StatusCode);
@@ -118,14 +123,13 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
         public async Task AddAltinn2AccountFromToken_InvalidToken_ReturnsUnauthorized()
         {
             // Arrange
-            Guid to = Guid.NewGuid();
             Altinn2AccountFromTokenRequest request = new Altinn2AccountFromTokenRequest()
             {
                 Token = "invalid"
             };
 
             // Act
-            HttpResponseMessage httpResponse = await _client.PostAsync($"accessmanagement/api/v1/selfidentifieduser/altinn2account/token?to={to}", JsonContent.Create(request));
+            HttpResponseMessage httpResponse = await _client.PostAsync($"accessmanagement/api/v1/selfidentifieduser/altinn2account/token", JsonContent.Create(request));
 
             // Assert
             Assert.Equal(HttpStatusCode.Unauthorized, httpResponse.StatusCode);
@@ -138,14 +142,13 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
         public async Task AddAltinn2AccountFromToken_CreateConnectionFail_ReturnsBadRequest()
         {
             // Arrange
-            Guid to = Guid.NewGuid();
             Altinn2AccountFromTokenRequest request = new Altinn2AccountFromTokenRequest()
             {
                 Token = "invalid_connection"
             };
 
             // Act
-            HttpResponseMessage httpResponse = await _client.PostAsync($"accessmanagement/api/v1/selfidentifieduser/altinn2account/token?to={to}", JsonContent.Create(request));
+            HttpResponseMessage httpResponse = await _client.PostAsync($"accessmanagement/api/v1/selfidentifieduser/altinn2account/token", JsonContent.Create(request));
 
             // Assert
             Assert.Equal(HttpStatusCode.BadRequest, httpResponse.StatusCode);
