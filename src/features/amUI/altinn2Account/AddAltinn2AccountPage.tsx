@@ -58,10 +58,9 @@ export const AddAltinn2AccountPage = () => {
   const profileUrl = `${getAfUrl()}profile`;
 
   const onAddAltinn2Account = async () => {
-    const to = reportee?.partyUuid;
-    if (!isValidateCrentialsButtonDisabled && to) {
+    if (!isValidateCrentialsButtonDisabled) {
       try {
-        await addAltinn2Account({ to, userName, password }).unwrap();
+        await addAltinn2Account({ userName, password }).unwrap();
         setStep(3);
       } catch {
         // error displayed via addUserError RTK Query state
@@ -80,9 +79,9 @@ export const AddAltinn2AccountPage = () => {
     }
   };
 
-  const onAddAccountFromToken = async (to: string, token: string) => {
+  const onAddAccountFromToken = async (token: string) => {
     try {
-      await addAltinn2AccountFromToken({ to, token });
+      await addAltinn2AccountFromToken({ token });
       setStep(3);
     } catch {
       // error displayed via addUserFromTokenError RTK Query state
@@ -91,7 +90,7 @@ export const AddAltinn2AccountPage = () => {
 
   useEffect(() => {
     if (reportee?.type === 'SelfIdentified' && token) {
-      onAddAccountFromToken(reportee.partyUuid, token);
+      onAddAccountFromToken(token);
     } else if (reportee?.type === 'SelfIdentified' && !token) {
       modalRef.current?.showModal();
     }

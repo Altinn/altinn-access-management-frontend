@@ -34,11 +34,10 @@ namespace Altinn.AccessManagement.UI.Controllers
         /// <summary>
         /// Adds a legacy Altinn 2 self-identified user account to the current user's account.
         /// </summary>
-        /// <param name="to">The party UUID to connect to.</param>
         /// <param name="request">The legacy account username and password.</param>
         /// <param name="cancellationToken">Cancellation token.</param>
         [HttpPost("altinn2account")]
-        public async Task<ActionResult> AddAltinn2Account([FromQuery] Guid to, [FromBody] Altinn2AccountRequest request, CancellationToken cancellationToken)
+        public async Task<ActionResult> AddAltinn2Account([FromBody] Altinn2AccountRequest request, CancellationToken cancellationToken)
         {
             Guid altinn2AccountPartyUuid;
             try
@@ -55,7 +54,7 @@ namespace Altinn.AccessManagement.UI.Controllers
                 return StatusCode((int)HttpStatusCode.InternalServerError);
             }
 
-            return await PostSelfIdentifiedUserConnection(to, altinn2AccountPartyUuid, cancellationToken);
+            return await PostSelfIdentifiedUserConnection(altinn2AccountPartyUuid, cancellationToken);
         }
 
         /// <summary>
@@ -85,11 +84,10 @@ namespace Altinn.AccessManagement.UI.Controllers
         /// <summary>
         /// Adds a legacy Altinn 2 self-identified user account from token to the current user's account.
         /// </summary>
-        /// <param name="to">The party UUID to connect to.</param>
         /// <param name="request">The token from email.</param>
         /// <param name="cancellationToken">Cancellation token.</param>
         [HttpPost("altinn2account/token")]
-        public async Task<ActionResult> AddAltinn2AccountFromToken([FromQuery] Guid to, [FromBody] Altinn2AccountFromTokenRequest request, CancellationToken cancellationToken)
+        public async Task<ActionResult> AddAltinn2AccountFromToken([FromBody] Altinn2AccountFromTokenRequest request, CancellationToken cancellationToken)
         {
             Guid altinn2AccountPartyUuid;
             try
@@ -106,13 +104,14 @@ namespace Altinn.AccessManagement.UI.Controllers
                 return StatusCode((int)HttpStatusCode.InternalServerError);
             }
 
-            return await PostSelfIdentifiedUserConnection(to, altinn2AccountPartyUuid, cancellationToken);
+            return await PostSelfIdentifiedUserConnection(altinn2AccountPartyUuid, cancellationToken);
         }
 
-        private async Task<ActionResult> PostSelfIdentifiedUserConnection(Guid from, Guid to, CancellationToken cancellationToken)
+        private async Task<ActionResult> PostSelfIdentifiedUserConnection(Guid from, CancellationToken cancellationToken)
         {
             try
             {
+                Guid to = AuthenticationHelper.GetUserPartyUuid(HttpContext);
                 await _selfIdentifiedUserService.PostNewSelfIdentifiedUser(from: from, to: to, cancellationToken);
             }
             catch (HttpStatusException ex)
