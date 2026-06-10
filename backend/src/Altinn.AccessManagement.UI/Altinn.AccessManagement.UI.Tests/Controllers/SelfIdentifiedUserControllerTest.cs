@@ -58,6 +58,9 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
         public async Task AddAltinn2Account_InvalidCredentials_ReturnsUnauthorized()
         {
             // Arrange
+            Guid userPartyUuid = new Guid("167536b5-f8ed-4c5a-8f48-0279507e53ae");
+            string token = PrincipalUtil.GetToken(1337, 50789533, userPartyUuid, 2);
+            _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
             Altinn2AccountRequest request = new Altinn2AccountRequest()
             {
                 UserName = "invalid",
@@ -123,6 +126,9 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
         public async Task AddAltinn2AccountFromToken_InvalidToken_ReturnsUnauthorized()
         {
             // Arrange
+            Guid userPartyUuid = new Guid("167536b5-f8ed-4c5a-8f48-0279507e53ae");
+            string token = PrincipalUtil.GetToken(1337, 50789533, userPartyUuid, 2);
+            _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
             Altinn2AccountFromTokenRequest request = new Altinn2AccountFromTokenRequest()
             {
                 Token = "invalid"
@@ -142,6 +148,9 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
         public async Task AddAltinn2AccountFromToken_CreateConnectionFail_ReturnsBadRequest()
         {
             // Arrange
+            Guid userPartyUuid = new Guid("167536b5-f8ed-4c5a-8f48-0279507e53ae");
+            string token = PrincipalUtil.GetToken(1337, 50789533, userPartyUuid, 2);
+            _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
             Altinn2AccountFromTokenRequest request = new Altinn2AccountFromTokenRequest()
             {
                 Token = "invalid_connection"

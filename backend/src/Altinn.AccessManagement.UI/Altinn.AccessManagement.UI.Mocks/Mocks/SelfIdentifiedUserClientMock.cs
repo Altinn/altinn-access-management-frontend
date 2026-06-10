@@ -52,7 +52,7 @@ namespace Altinn.AccessManagement.UI.Mocks.Mocks
                 throw new HttpStatusException("Unauthorized", "User not found", HttpStatusCode.Unauthorized, null);
             }
 
-            return Task.FromResult(new Altinn2ForgotPasswordResponse() { MaskedEmail = "testuser@example.com" });
+            return Task.FromResult(new Altinn2ForgotPasswordResponse() { MaskedEmail = "t******`@e`******.com" });
         }
     }
 }

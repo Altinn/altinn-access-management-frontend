@@ -82,6 +82,7 @@ export const AddAltinn2AccountPage = () => {
   const onAddAccountFromToken = async (token: string) => {
     try {
       await addAltinn2AccountFromToken({ token });
+      modalRef.current?.showModal();
       setStep(3);
     } catch {
       // error displayed via addUserFromTokenError RTK Query state
