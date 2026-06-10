@@ -67,8 +67,8 @@ namespace Altinn.AccessManagement.UI.Controllers
         {
             try
             {
-                string emailAddress = await _selfIdentifiedUserService.SendForgotPasswordEmail(request, cancellationToken);
-                return Ok(new { EmailAddress = emailAddress });
+                Altinn2ForgotPasswordResponse response = await _selfIdentifiedUserService.SendForgotPasswordEmail(request, cancellationToken);
+                return Ok(response);
             }
             catch (HttpStatusException ex)
             {

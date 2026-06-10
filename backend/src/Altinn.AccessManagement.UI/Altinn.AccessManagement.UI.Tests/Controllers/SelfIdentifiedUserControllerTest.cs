@@ -168,8 +168,8 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
 
             // Assert
             Assert.Equal(HttpStatusCode.OK, httpResponse.StatusCode);
-            var response = await httpResponse.Content.ReadFromJsonAsync<ForgotPasswordResponse>();
-            Assert.NotNull(response?.EmailAddress);
+            var response = await httpResponse.Content.ReadFromJsonAsync<Altinn2ForgotPasswordResponse>();
+            Assert.NotNull(response?.MaskedEmail);
         }
 
         /// <summary>
@@ -190,7 +190,5 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
             // Assert
             Assert.Equal(HttpStatusCode.Unauthorized, httpResponse.StatusCode);
         }
-
-        private record ForgotPasswordResponse(string EmailAddress);
     }
 }

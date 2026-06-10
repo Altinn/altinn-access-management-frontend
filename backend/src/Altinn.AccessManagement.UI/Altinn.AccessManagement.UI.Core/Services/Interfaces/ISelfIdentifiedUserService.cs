@@ -28,7 +28,7 @@ namespace Altinn.AccessManagement.UI.Core.Services.Interfaces
         /// </summary>
         /// <param name="request">Username of the legacy account.</param>
         /// <param name="cancellationToken">Cancellation token.</param>
-        Task<string> SendForgotPasswordEmail(Altinn2ForgotPasswordRequest request, CancellationToken cancellationToken);
+        Task<Altinn2ForgotPasswordResponse> SendForgotPasswordEmail(Altinn2ForgotPasswordRequest request, CancellationToken cancellationToken);
 
         /// <summary>
         ///  Verifies a token user has received by email.

@@ -45,14 +45,14 @@ namespace Altinn.AccessManagement.UI.Mocks.Mocks
         }
 
         /// <inheritdoc />
-        public Task<string> SendForgotPasswordEmail(Altinn2ForgotPasswordRequest request, CancellationToken cancellationToken)
+        public Task<Altinn2ForgotPasswordResponse> SendForgotPasswordEmail(Altinn2ForgotPasswordRequest request, CancellationToken cancellationToken)
         {
             if (request?.UserName == "invalid")
             {
                 throw new HttpStatusException("Unauthorized", "User not found", HttpStatusCode.Unauthorized, null);
             }
 
-            return Task.FromResult("testuser@example.com");
+            return Task.FromResult(new Altinn2ForgotPasswordResponse() { MaskedEmail = "testuser@example.com" });
         }
     }
 }

@@ -263,7 +263,7 @@ export const AddAltinn2AccountPage = () => {
   const forgotPasswordReceiptComponent = (
     <DsDialog.Block className={classes.addAltinn2Account}>
       <DsHeading>Glemt passord</DsHeading>
-      <DsParagraph>Vi har sendt en e-post til {forgotPasswordEmail}.</DsParagraph>
+      <DsParagraph>Vi har sendt en e-post til {forgotPasswordEmail?.maskedEmail}.</DsParagraph>
     </DsDialog.Block>
   );
 
