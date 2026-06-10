@@ -27,6 +27,7 @@ const focusElement = (element: HTMLElement) => {
 
 interface UseRestoreFocusOptions {
   shouldRestoreFocus?: boolean;
+  focusNonInteractiveTarget?: boolean;
 }
 
 // Returns a container ref and a setter for the element id to focus once enabled.
@@ -34,6 +35,7 @@ interface UseRestoreFocusOptions {
 // shouldRestoreFocus until the relevant content has rendered.
 export const useRestoreFocusRef = <T extends HTMLElement = HTMLElement>({
   shouldRestoreFocus = true,
+  focusNonInteractiveTarget = false,
 }: UseRestoreFocusOptions = {}) => {
   // Tracking the container as state (rather than a ref) lets the effect below re-run when the
   // container mounts/remounts, which is the trigger for views that unmount while a detail is open.
@@ -50,13 +52,27 @@ export const useRestoreFocusRef = <T extends HTMLElement = HTMLElement>({
       return;
     }
 
-    focusElement(
-      target.matches(FOCUSABLE_SELECTOR)
-        ? target
-        : (target.querySelector<HTMLElement>(FOCUSABLE_SELECTOR) ?? target),
-    );
+    const focusableTarget = target.matches(FOCUSABLE_SELECTOR)
+      ? target
+      : target.querySelector<HTMLElement>(FOCUSABLE_SELECTOR);
+
+    if (focusableTarget) {
+      focusElement(focusableTarget);
+      setFocusTargetId(null);
+      return;
+    }
+
+    if (!focusNonInteractiveTarget) {
+      setFocusTargetId(null);
+      return;
+    }
+
+    // Processed request rows can become non-interactive after approve/reject, but focus should
+    // still return to the row once so users keep their place. focusElement only adds tabindex=-1
+    // temporarily, so the row is not added to the normal tab order.
+    focusElement(target);
     setFocusTargetId(null);
-  }, [containerElement, focusTargetId, shouldRestoreFocus]);
+  }, [containerElement, focusNonInteractiveTarget, focusTargetId, shouldRestoreFocus]);
 
   return {
     ref: setContainerElement as RefCallback<T>,

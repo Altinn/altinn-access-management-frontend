@@ -54,6 +54,9 @@ export const RequestReviewModalContent = ({ request, onClose }: RequestReviewMod
   const isRequestListReady = !isLoadingRequests && !isFetchingRequests;
   const { ref: listFocusRef, setFocusTargetId } = useRestoreFocusRef<HTMLDivElement>({
     shouldRestoreFocus: isRequestListReady,
+    // After approve/reject the item becomes a non-interactive status row. Focus it once when
+    // returning from detail so keyboard and screen reader users keep their place in the list.
+    focusNonInteractiveTarget: true,
   });
 
   if (request === null) {

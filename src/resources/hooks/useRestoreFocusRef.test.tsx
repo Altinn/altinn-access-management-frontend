@@ -7,15 +7,18 @@ import { useRestoreFocusRef } from './useRestoreFocusRef';
 interface FocusTargetTestProps {
   children: React.ReactNode;
   focusTargetId?: string | null;
+  focusNonInteractiveTarget?: boolean;
   shouldRestoreFocus?: boolean;
 }
 
 const FocusTargetTest = ({
   children,
   focusTargetId,
+  focusNonInteractiveTarget = false,
   shouldRestoreFocus = true,
 }: FocusTargetTestProps) => {
   const { ref, setFocusTargetId } = useRestoreFocusRef<HTMLDivElement>({
+    focusNonInteractiveTarget,
     shouldRestoreFocus,
   });
 
@@ -41,9 +44,22 @@ describe('useRestoreFocusRef', () => {
     );
   });
 
-  it('focuses the target element itself when it has no focusable descendants', async () => {
+  it('does not focus a target without focusable descendants by default', async () => {
     render(
       <FocusTargetTest focusTargetId='target'>
+        <div id='target'>Target content</div>
+      </FocusTargetTest>,
+    );
+
+    await waitFor(() => expect(screen.getByText('Target content')).not.toHaveFocus());
+  });
+
+  it('focuses the target element itself when non-interactive focus is enabled', async () => {
+    render(
+      <FocusTargetTest
+        focusTargetId='target'
+        focusNonInteractiveTarget
+      >
         <div id='target'>Target content</div>
       </FocusTargetTest>,
     );
