@@ -81,7 +81,7 @@ export const AddAltinn2AccountPage = () => {
 
   const onAddAccountFromToken = async (token: string) => {
     try {
-      await addAltinn2AccountFromToken({ token });
+      await addAltinn2AccountFromToken({ token }).unwrap();
       modalRef.current?.showModal();
       setStep(3);
     } catch {
