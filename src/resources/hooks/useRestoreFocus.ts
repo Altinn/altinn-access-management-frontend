@@ -1,4 +1,4 @@
-import { type RefCallback, useEffect, useState } from 'react';
+import { type RefCallback, useCallback, useEffect, useRef, useState } from 'react';
 
 const RESTORE_FOCUS_SELECTOR = 'button:not([disabled])';
 
@@ -15,9 +15,21 @@ export const useRestoreFocus = ({
   focusNonInteractiveTarget = false,
 }: UseRestoreFocusOptions = {}) => {
   const [containerElement, setContainerElement] = useState<HTMLElement | null>(null);
-  const [focusTargetId, setFocusTargetId] = useState<string | null>(null);
+  const focusTargetIdRef = useRef<string | null>(null);
+  const [restoreRequest, setRestoreRequest] = useState(0);
+
+  const containerRef = useCallback<RefCallback<HTMLElement>>((node) => {
+    setContainerElement(node);
+  }, []);
+
+  const setFocusTargetId = useCallback((targetId: string | null) => {
+    focusTargetIdRef.current = targetId;
+    setRestoreRequest((previous) => previous + 1);
+  }, []);
 
   useEffect(() => {
+    const focusTargetId = focusTargetIdRef.current;
+
     if (!containerElement || !focusTargetId || !shouldRestoreFocus) {
       return;
     }
@@ -32,28 +44,32 @@ export const useRestoreFocus = ({
       : target.querySelector<HTMLElement>(RESTORE_FOCUS_SELECTOR);
 
     const elementToFocus = focusableTarget ?? (focusNonInteractiveTarget ? target : null);
-    if (elementToFocus) {
-      const shouldRestoreTabIndex =
-        !elementToFocus.matches(RESTORE_FOCUS_SELECTOR) && !elementToFocus.hasAttribute('tabindex');
 
-      if (shouldRestoreTabIndex) {
-        // Non-interactive fallback targets get tabindex=-1 temporarily so they can be focused
-        // programmatically without being added to the normal tab order.
-        elementToFocus.tabIndex = -1;
-      }
-
-      elementToFocus.focus();
-
-      if (shouldRestoreTabIndex) {
-        elementToFocus.removeAttribute('tabindex');
-      }
+    if (!elementToFocus) {
+      focusTargetIdRef.current = null;
+      return;
     }
 
-    setFocusTargetId(null);
-  }, [containerElement, focusNonInteractiveTarget, focusTargetId, shouldRestoreFocus]);
+    const shouldRestoreTabIndex =
+      !elementToFocus.matches(RESTORE_FOCUS_SELECTOR) && !elementToFocus.hasAttribute('tabindex');
+
+    if (shouldRestoreTabIndex) {
+      // Non-interactive fallback targets get tabindex=-1 temporarily so they can be focused
+      // programmatically without being added to the normal tab order.
+      elementToFocus.tabIndex = -1;
+    }
+
+    elementToFocus.focus();
+
+    if (shouldRestoreTabIndex) {
+      elementToFocus.removeAttribute('tabindex');
+    }
+
+    focusTargetIdRef.current = null;
+  }, [containerElement, focusNonInteractiveTarget, restoreRequest, shouldRestoreFocus]);
 
   return {
-    containerRef: setContainerElement as RefCallback<HTMLElement>,
+    containerRef,
     setFocusTargetId,
   };
 };

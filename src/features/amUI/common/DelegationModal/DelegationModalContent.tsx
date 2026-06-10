@@ -46,7 +46,9 @@ export const DelegationModalContent = ({
   const { closeAllAreas } = useAreaExpandedContextOrLocal();
   const modalRef = useRef<HTMLDialogElement>(null);
   const backButtonRef = useAutoFocusRef<HTMLButtonElement>();
-  const { containerRef, setFocusTargetId } = useRestoreFocus();
+  const { containerRef, setFocusTargetId } = useRestoreFocus({
+    shouldRestoreFocus: !infoView,
+  });
 
   const onResourceSelection = (resource?: ServiceResource, error = false) => {
     setFocusTargetId(resource?.identifier ?? null);
