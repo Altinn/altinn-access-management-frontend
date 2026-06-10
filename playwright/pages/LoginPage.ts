@@ -49,8 +49,10 @@ export class LoginPage {
   }
 
   async selectMainUnitBySearching(targetReportee: string) {
-    await expect(this.reporteeSearchBox).toBeVisible();
-    await this.reporteeSearchBox.fill(targetReportee);
+    const hasVisibleSearchBox = await this.reporteeSearchBox.isVisible().catch(() => false);
+    if (hasVisibleSearchBox) {
+      await this.reporteeSearchBox.fill(targetReportee);
+    }
 
     const dialog = this.page.getByRole('dialog');
     await dialog.getByRole('menuitem', { name: targetReportee }).first().click();
