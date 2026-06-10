@@ -1,10 +1,11 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { DsAlert, DsParagraph, DsSkeleton, formatDisplayName } from '@altinn/altinn-components';
 import { useParams } from 'react-router';
 import { skipToken } from '@reduxjs/toolkit/query';
 
 import { amUIPath } from '@/routes/paths';
+import { useTabState } from '@/resources/hooks';
 
 import { PageContainer } from '../common/PageContainer/PageContainer';
 import { usePartyRepresentation } from '../common/PartyRepresentationContext/PartyRepresentationContext';
@@ -31,7 +32,10 @@ export const AgentDetails = () => {
   const { t } = useTranslation();
   const { id } = useParams();
   const { toParty, actingParty } = usePartyRepresentation();
-  const [activeTab, setActiveTab] = useState('has-clients');
+  const [activeTab, setActiveTab] = useTabState({
+    tabs: ['has-clients', 'all-clients'],
+    defaultTab: 'has-clients',
+  });
   const { data: isClientAdmin, isLoading: isLoadingIsClientAdmin } = useGetIsClientAdminQuery();
   const {
     data: agentAccessPackages,
@@ -49,7 +53,7 @@ export const AgentDetails = () => {
     agentAccessPackages,
     clients,
   });
-  const backUrl = `/${amUIPath.ClientAdministration}?tab=users`;
+  const backUrl = `/${amUIPath.ClientAdministration}#users`;
   const userName = formatDisplayName({
     fullName: toParty?.name || '',
     type: toParty?.partyTypeName === PartyType.Person ? 'person' : 'company',

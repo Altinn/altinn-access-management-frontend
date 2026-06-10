@@ -104,6 +104,14 @@
     "yes_delete": "Yes, delete",
     "confirm_delete_heading": "Are you sure you want to delete this power of attorney?"
   },
+  "download_file": {
+    "trigger_button": "Download to file",
+    "title": "Download to file",
+    "description_p1": "Here you can download an overview of all powers of attorney that {{reportee}} has given to others and those who have received them.",
+    "description_p2": "The content will be downloaded as CSV files in a ZIP container. \nThe files are not intended for machine reading and we reserve the right to change the format.",
+    "start_download": "Start download",
+    "include_subunits_label": "Include powers of attorney in {{reportee}}'s subunits"
+  },
   "info_banner": {
     "info": "June 19: the old Altinn will be shut down.",
     "link": "Here's what you need to be aware of."
@@ -929,7 +937,8 @@
     "51_accesspackage_delegation_failed": "Delegation of access packages to the system access failed.",
     "53_accesspackage_delegation_missing_required_access": "You do not have sufficient access rights to delegate the requested access packages.",
     "55_accesspackage_failed_to_get_delegated_packages": "Unable to retrieve delegated access packages.",
-    "57_systemuser_failed_to_delete_accesspackage": "Could not delete access package delegation for the system access."
+    "57_systemuser_failed_to_delete_accesspackage": "Could not delete access package delegation for the system access.",
+    "68_delegation_right_missing_delegation_accesspackage": "Delegation of services failed: you lack the necessary access packages for delegation."
   },
   "consent_request": {
     "page_title": "Approve agreement - Altinn",

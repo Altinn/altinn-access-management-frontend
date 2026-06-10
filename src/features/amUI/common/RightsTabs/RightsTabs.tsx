@@ -1,6 +1,5 @@
 import type { ReactNode } from 'react';
-import { useEffect, useMemo, useState } from 'react';
-import { useLocation, useNavigate } from 'react-router';
+import { useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 import { DsBadge, DsTabs } from '@altinn/altinn-components';
 
@@ -16,6 +15,7 @@ import { usePartyRepresentation } from '../PartyRepresentationContext/PartyRepre
 import { PartyType } from '@/rtk/features/userInfoApi';
 import { useGetUserDelegationsQuery } from '@/rtk/features/accessPackageApi';
 import { isGuardianshipUrn } from '@/resources/utils';
+import { useTabState } from '@/resources/hooks';
 
 interface RightsTabsProps {
   tabBadge?: {
@@ -31,8 +31,6 @@ interface RightsTabsProps {
   roleAssignmentsPanel: ReactNode;
   guardianshipsPanel?: ReactNode;
   tabProps?: Partial<React.ComponentProps<typeof DsTabs.Tab>>;
-  value?: string;
-  onChange?: (value: string) => void;
 }
 
 export const RightsTabs = ({
@@ -43,13 +41,8 @@ export const RightsTabs = ({
   roleAssignmentsPanel,
   guardianshipsPanel,
   tabProps,
-  value,
-  onChange,
 }: RightsTabsProps) => {
   const { t } = useTranslation();
-  const { hash } = useLocation();
-  const navigate = useNavigate();
-  const [internalChosenTab, setInternalChosenTab] = useState('packages');
 
   const { displayRoles } = window.featureFlags;
   const { toParty, fromParty, actingParty } = usePartyRepresentation();
@@ -72,9 +65,6 @@ export const RightsTabs = ({
 
   const showGuardianshipsTab =
     guardianshipsPanel && fromParty?.partyTypeName === PartyType.Person && hasGuardianPermission;
-  // Support both URL-controlled tabs and the existing internal tab state.
-  const chosenTab = value ?? internalChosenTab;
-  const setChosenTab = onChange ?? setInternalChosenTab;
   const availableTabs = useMemo(
     () => [
       'packages',
@@ -86,21 +76,7 @@ export const RightsTabs = ({
     [singleRightsPanel, instancesPanel, displayRoles, roleAssignmentsPanel, showGuardianshipsTab],
   );
 
-  useEffect(() => {
-    if (hash) {
-      const tab = hash.replace('#', '');
-      if (tab === 'guardianships' && showGuardianshipsTab) {
-        setChosenTab(tab);
-        navigate('', { replace: true }); // clear hash fragment from URL after navigating to correct tab
-      }
-    }
-  }, [hash, showGuardianshipsTab, navigate, setChosenTab]);
-
-  useEffect(() => {
-    if (!availableTabs.includes(chosenTab)) {
-      setChosenTab('packages');
-    }
-  }, [availableTabs, chosenTab, setChosenTab]);
+  const [chosenTab, setChosenTab] = useTabState({ tabs: availableTabs, defaultTab: 'packages' });
 
   return (
     <DsTabs

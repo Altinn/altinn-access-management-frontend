@@ -50,9 +50,9 @@ namespace Altinn.AccessManagement.UI.Controllers
         /// <returns>A zip file, or an error status.</returns>
         [HttpGet]
         [Authorize]
-        [Route("reportee/{partyUuid}")]
+        [Route("")]
         public async Task<ActionResult> ExportReporteeDelegations(
-            [FromRoute] Guid partyUuid,
+            [FromQuery] Guid partyUuid,
             [FromQuery] bool includeSubunits = false,
             [FromQuery] string types = null,
             [FromQuery] string languageCode = null)
@@ -60,6 +60,11 @@ namespace Altinn.AccessManagement.UI.Controllers
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
+            }
+
+            if (partyUuid == Guid.Empty)
+            {
+                return BadRequest("partyUuid must be provided.");
             }
 
             try

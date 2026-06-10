@@ -16,8 +16,14 @@ export const AccessPackagePermissions = () => {
   return (
     <>
       <div className={classes.description}>
-        <DsParagraph>{t('poa_overview_page.packages_tab.description')}</DsParagraph>
-        <AccessPackageInfoPopover />
+        <DsParagraph asChild>
+          <div>
+            {t('poa_overview_page.packages_tab.description')}
+            <span className={classes.infoPopover}>
+              <AccessPackageInfoPopover />
+            </span>
+          </div>
+        </DsParagraph>
       </div>
       <DebouncedSearchField
         placeholder={t('access_packages.search_label')}
@@ -33,7 +39,7 @@ export const AccessPackagePermissions = () => {
         showPackagesCount={false}
         packageAs={(props) => (
           <Link
-            to={`/poa-overview/access-package/${props.packageId}?tab=packages`}
+            to={`/poa-overview/access-package/${props.packageId}?parentTab=packages`}
             {...props}
           />
         )}

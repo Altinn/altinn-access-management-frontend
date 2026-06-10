@@ -30,7 +30,7 @@ export const InstanceDetailPage = () => {
   const dialogId = searchParams.get('dialogId');
   const isInboxDeeplink = !!dialogId;
   const instanceDelegationEnabled = displayInstanceDelegation();
-  const poaOverviewUrl = `/${amUIPath.PoaOverview}?tab=instances`;
+  const poaOverviewUrl = `/${amUIPath.PoaOverview}#instances`;
 
   useDocumentTitle(
     isInboxDeeplink

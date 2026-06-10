@@ -32,7 +32,7 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
         private const string AccessPackageFile = "tilgangspakker.csv";
         private const string SingleRightFile = "enkelttjenester.csv";
         private const string InstanceFile = "enkelttjenester-instans.csv";
-        private const string BaseUrl = "accessmanagement/api/v1/delegationexport/reportee";
+        private const string BaseUrl = "accessmanagement/api/v1/delegationexport";
 
         private readonly HttpClient _client;
 
@@ -50,7 +50,7 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
         [Fact]
         public async Task Export_OrganizationParty_ReturnsZipWithCsvEntries()
         {
-            HttpResponseMessage response = await _client.GetAsync($"{BaseUrl}/{OrgPartyUuid}?types=instances&includeSubunits=false");
+            HttpResponseMessage response = await _client.GetAsync($"{BaseUrl}?partyUuid={OrgPartyUuid}&types=instances&includeSubunits=false");
 
             Assert.Equal(HttpStatusCode.OK, response.StatusCode);
             Assert.Equal("application/zip", response.Content.Headers.ContentType?.MediaType);
@@ -76,7 +76,7 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
         [Fact]
         public async Task Export_SingleRightsType_ReturnsPopulatedCsv()
         {
-            HttpResponseMessage response = await _client.GetAsync($"{BaseUrl}/{OrgPartyUuid}?types=singlerights&includeSubunits=false");
+            HttpResponseMessage response = await _client.GetAsync($"{BaseUrl}?partyUuid={OrgPartyUuid}&types=singlerights&includeSubunits=false");
 
             Assert.Equal(HttpStatusCode.OK, response.StatusCode);
 
@@ -98,7 +98,7 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
         {
             // Default types (= all). Main org only, since the role/package mocks have to=null
             // fixtures for cd35779b but not for its subunit.
-            HttpResponseMessage response = await _client.GetAsync($"{BaseUrl}/{OrgPartyUuid}?includeSubunits=false");
+            HttpResponseMessage response = await _client.GetAsync($"{BaseUrl}?partyUuid={OrgPartyUuid}&includeSubunits=false");
 
             Assert.Equal(HttpStatusCode.OK, response.StatusCode);
             Dictionary<string, string> entries = await ReadZipEntries(response);
@@ -118,15 +118,25 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
         [Fact]
         public async Task Export_UnknownType_ReturnsBadRequest()
         {
-            HttpResponseMessage response = await _client.GetAsync($"{BaseUrl}/{OrgPartyUuid}?types=foo");
+            HttpResponseMessage response = await _client.GetAsync($"{BaseUrl}?partyUuid={OrgPartyUuid}&types=foo");
 
             Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
         }
 
         [Fact]
+        public async Task Export_MissingPartyUuid_ReturnsBadRequest()
+        {
+            HttpResponseMessage response = await _client.GetAsync(BaseUrl);
+
+            Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
+            string body = await response.Content.ReadAsStringAsync();
+            Assert.Contains("partyUuid must be provided.", body);
+        }
+
+        [Fact]
         public async Task Export_IncludeSubunits_IncludesSubunitGiverRows()
         {
-            HttpResponseMessage withSubunits = await _client.GetAsync($"{BaseUrl}/{OrgPartyUuid}?types=instances&includeSubunits=true");
+            HttpResponseMessage withSubunits = await _client.GetAsync($"{BaseUrl}?partyUuid={OrgPartyUuid}&types=instances&includeSubunits=true");
             Assert.Equal(HttpStatusCode.OK, withSubunits.StatusCode);
 
             string csv = (await ReadZipEntries(withSubunits))[InstanceFile];
@@ -139,7 +149,7 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
         [Fact]
         public async Task Export_PersonParty_ReturnsBadRequest()
         {
-            HttpResponseMessage response = await _client.GetAsync($"{BaseUrl}/{PersonPartyUuid}");
+            HttpResponseMessage response = await _client.GetAsync($"{BaseUrl}?partyUuid={PersonPartyUuid}");
 
             Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
         }
@@ -147,7 +157,7 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
         [Fact]
         public async Task Export_UnknownParty_ReturnsForbidden()
         {
-            HttpResponseMessage response = await _client.GetAsync($"{BaseUrl}/{UnknownPartyUuid}");
+            HttpResponseMessage response = await _client.GetAsync($"{BaseUrl}?partyUuid={UnknownPartyUuid}");
 
             Assert.Equal(HttpStatusCode.Forbidden, response.StatusCode);
         }
@@ -155,7 +165,7 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
         [Fact]
         public async Task Export_BackendHttpErrorInRoleService_ReturnsBackendStatusWithOrigin()
         {
-            HttpResponseMessage response = await _client.GetAsync($"{BaseUrl}/{BackendErrorPartyUuid}?types=roles");
+            HttpResponseMessage response = await _client.GetAsync($"{BaseUrl}?partyUuid={BackendErrorPartyUuid}&types=roles");
 
             Assert.Equal(HttpStatusCode.NotFound, response.StatusCode);
             string body = await response.Content.ReadAsStringAsync();
@@ -165,7 +175,7 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
         [Fact]
         public async Task Export_BackendHttpErrorInAccessPackageService_ReturnsBackendStatusWithOrigin()
         {
-            HttpResponseMessage response = await _client.GetAsync($"{BaseUrl}/{BackendErrorPartyUuid}?types=accesspackages");
+            HttpResponseMessage response = await _client.GetAsync($"{BaseUrl}?partyUuid={BackendErrorPartyUuid}&types=accesspackages");
 
             Assert.Equal(HttpStatusCode.NotFound, response.StatusCode);
             string body = await response.Content.ReadAsStringAsync();
@@ -175,7 +185,7 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
         [Fact]
         public async Task Export_BackendHttpErrorInSingleRightService_ReturnsBackendStatusWithOrigin()
         {
-            HttpResponseMessage response = await _client.GetAsync($"{BaseUrl}/{BackendErrorPartyUuid}?types=singlerights");
+            HttpResponseMessage response = await _client.GetAsync($"{BaseUrl}?partyUuid={BackendErrorPartyUuid}&types=singlerights");
 
             Assert.Equal(HttpStatusCode.NotFound, response.StatusCode);
             string body = await response.Content.ReadAsStringAsync();
@@ -185,7 +195,7 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
         [Fact]
         public async Task Export_BackendHttpErrorInInstanceService_ReturnsBackendStatusWithOrigin()
         {
-            HttpResponseMessage response = await _client.GetAsync($"{BaseUrl}/{BackendErrorPartyUuid}?types=instances");
+            HttpResponseMessage response = await _client.GetAsync($"{BaseUrl}?partyUuid={BackendErrorPartyUuid}&types=instances");
 
             Assert.Equal(HttpStatusCode.NotFound, response.StatusCode);
             string body = await response.Content.ReadAsStringAsync();

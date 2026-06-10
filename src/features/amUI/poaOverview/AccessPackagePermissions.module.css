@@ -2,3 +2,9 @@
   display: flex;
   align-items: center;
 }
+
+.infoPopover {
+  margin-top: calc(-1 * var(--ds-spacing-1));
+  display: inline-flex;
+  vertical-align: middle;
+}

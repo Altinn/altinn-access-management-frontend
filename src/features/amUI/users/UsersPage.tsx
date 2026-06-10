@@ -39,6 +39,7 @@ export const UsersPage = () => {
             title={t('users_page.main_page_heading', { name })}
             reportee={reportee}
             isLoading={isLoading}
+            downloadable
           />
           <UsersList />
         </PartyRepresentationProvider>
