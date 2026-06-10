@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useRef } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 
 // Matches the interactive descendants we can safely move focus back to after UI changes.
 const FOCUSABLE_SELECTOR = [
@@ -9,8 +9,6 @@ const FOCUSABLE_SELECTOR = [
   'textarea:not([disabled])',
   '[tabindex]:not([tabindex="-1"])',
 ].join(',');
-
-const FOCUS_RESTORE_TIMEOUT_MS = 1000;
 
 const findElementByIdInContainer = (containerElement: HTMLElement, focusTargetId: string) => {
   if (containerElement.id === focusTargetId) {
@@ -36,96 +34,39 @@ const focusElement = (element: HTMLElement) => {
   }
 };
 
-interface UseFocusTargetOptions {
+interface UseRestoreFocusOptions {
   shouldRestoreFocus?: boolean;
   onFocusRestored?: () => void;
 }
 
-// Returns a callback ref that focuses focusTargetId, or waits for it to appear, once enabled.
+// Returns a callback ref for a container; focuses the element matching focusTargetId once enabled.
+// The target must already be in the DOM when focus is restored, so callers should gate
+// shouldRestoreFocus until the relevant content has rendered.
 export const useRestoreFocusRef = <T extends HTMLElement = HTMLElement>(
   focusTargetId?: string | null,
-  { shouldRestoreFocus = true, onFocusRestored }: UseFocusTargetOptions = {},
+  { shouldRestoreFocus = true, onFocusRestored }: UseRestoreFocusOptions = {},
 ) => {
-  const containerRef = useRef<T | null>(null);
-  const animationFrameIdRef = useRef<number | null>(null);
-  const timeoutIdRef = useRef<number | null>(null);
-  const observerRef = useRef<MutationObserver | null>(null);
-  // Captured when we schedule work, so cleanup can cancel it even after the container ref is detached.
-  const viewRef = useRef<Window | null>(null);
-
-  const cancelPendingFocusRestore = useCallback(() => {
-    if (animationFrameIdRef.current !== null) {
-      viewRef.current?.cancelAnimationFrame(animationFrameIdRef.current);
-    }
-    if (timeoutIdRef.current !== null) {
-      viewRef.current?.clearTimeout(timeoutIdRef.current);
-    }
-    animationFrameIdRef.current = null;
-    timeoutIdRef.current = null;
-    observerRef.current?.disconnect();
-    observerRef.current = null;
-  }, []);
-
-  const scheduleFocusRestore = useCallback(() => {
-    const containerElement = containerRef.current;
-    if (!containerElement || !focusTargetId || !shouldRestoreFocus) {
-      cancelPendingFocusRestore();
-      return;
-    }
-
-    const tryFocusTarget = () => {
-      if (!containerElement.isConnected) {
-        return true;
-      }
-
-      const target = findElementByIdInContainer(containerElement, focusTargetId);
-      if (!target) {
-        return false;
-      }
-
-      const targetElement = target.matches(FOCUSABLE_SELECTOR)
-        ? target
-        : (target.querySelector<HTMLElement>(FOCUSABLE_SELECTOR) ?? target);
-
-      focusElement(targetElement);
-      onFocusRestored?.();
-      return true;
-    };
-
-    const view = containerElement.ownerDocument.defaultView;
-    if (!view) {
-      tryFocusTarget();
-      return;
-    }
-
-    cancelPendingFocusRestore();
-    viewRef.current = view;
-    animationFrameIdRef.current = view.requestAnimationFrame(() => {
-      animationFrameIdRef.current = null;
-      if (tryFocusTarget()) {
-        return;
-      }
-
-      observerRef.current = new view.MutationObserver(() => {
-        if (tryFocusTarget()) {
-          cancelPendingFocusRestore();
-        }
-      });
-      observerRef.current.observe(containerElement, { childList: true, subtree: true });
-      timeoutIdRef.current = view.setTimeout(cancelPendingFocusRestore, FOCUS_RESTORE_TIMEOUT_MS);
-    });
-  }, [cancelPendingFocusRestore, focusTargetId, onFocusRestored, shouldRestoreFocus]);
+  // Tracking the container as state (rather than a ref) lets the effect below re-run when the
+  // container mounts/remounts, which is the trigger for views that unmount while a detail is open.
+  const [containerElement, setContainerElement] = useState<T | null>(null);
 
   useEffect(() => {
-    scheduleFocusRestore();
-    return cancelPendingFocusRestore;
-  }, [cancelPendingFocusRestore, scheduleFocusRestore]);
+    if (!containerElement || !focusTargetId || !shouldRestoreFocus) {
+      return;
+    }
 
-  return useCallback(
-    (containerElement: T | null) => {
-      containerRef.current = containerElement;
-      scheduleFocusRestore();
-    },
-    [scheduleFocusRestore],
-  );
+    const target = findElementByIdInContainer(containerElement, focusTargetId);
+    if (!target) {
+      return;
+    }
+
+    const targetElement = target.matches(FOCUSABLE_SELECTOR)
+      ? target
+      : (target.querySelector<HTMLElement>(FOCUSABLE_SELECTOR) ?? target);
+
+    focusElement(targetElement);
+    onFocusRestored?.();
+  }, [containerElement, focusTargetId, shouldRestoreFocus, onFocusRestored]);
+
+  return useCallback((node: T | null) => setContainerElement(node), []);
 };

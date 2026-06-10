@@ -64,28 +64,32 @@ describe('useRestoreFocusRef', () => {
     expect(onFocusRestored).toHaveBeenCalledTimes(1);
   });
 
-  it('waits for the target element to appear', async () => {
+  it('restores focus once shouldRestoreFocus becomes true', async () => {
     const onFocusRestored = vi.fn();
     const { rerender } = render(
       <FocusTargetTest
         focusTargetId='target'
+        shouldRestoreFocus={false}
         onFocusRestored={onFocusRestored}
       >
-        <span>Loading</span>
+        <button id='target'>Target action</button>
       </FocusTargetTest>,
     );
+
+    expect(screen.getByRole('button', { name: 'Target action' })).not.toHaveFocus();
 
     rerender(
       <FocusTargetTest
         focusTargetId='target'
+        shouldRestoreFocus
         onFocusRestored={onFocusRestored}
       >
-        <button id='target'>Loaded target</button>
+        <button id='target'>Target action</button>
       </FocusTargetTest>,
     );
 
     await waitFor(() =>
-      expect(screen.getByRole('button', { name: 'Loaded target' })).toHaveFocus(),
+      expect(screen.getByRole('button', { name: 'Target action' })).toHaveFocus(),
     );
     expect(onFocusRestored).toHaveBeenCalledTimes(1);
   });
