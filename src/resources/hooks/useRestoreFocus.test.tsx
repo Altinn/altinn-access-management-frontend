@@ -44,6 +44,25 @@ describe('useRestoreFocus', () => {
     );
   });
 
+  it('focuses the target inside the container when the same id exists earlier in the document', async () => {
+    render(
+      <>
+        <div id='target'>
+          <button>Outside action</button>
+        </div>
+        <FocusTargetTest focusTargetId='target'>
+          <div id='target'>
+            <button>Inside action</button>
+          </div>
+        </FocusTargetTest>
+      </>,
+    );
+
+    await waitFor(() =>
+      expect(screen.getByRole('button', { name: 'Inside action' })).toHaveFocus(),
+    );
+  });
+
   it('does not focus a target without focusable descendants by default', async () => {
     render(
       <FocusTargetTest focusTargetId='target'>

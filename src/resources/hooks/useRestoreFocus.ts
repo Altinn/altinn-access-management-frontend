@@ -34,8 +34,8 @@ export const useRestoreFocus = ({
       return;
     }
 
-    const target = containerElement.ownerDocument.getElementById(focusTargetId);
-    if (!(target instanceof HTMLElement) || !containerElement.contains(target)) {
+    const target = containerElement.querySelector(`[id="${CSS.escape(focusTargetId)}"]`);
+    if (!(target instanceof HTMLElement)) {
       return;
     }
 
