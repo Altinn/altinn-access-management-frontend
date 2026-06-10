@@ -219,11 +219,11 @@
     "save": "Lagre",
     "api_delegations": "Delegerte tilganger til programmerings\u00adgrensesnitt - API",
     "api_delegations_received": "Mottatte tilganger til programmerings\u00adgrensesnitt - API",
-    "you_have_delegated_accesses": "Du har tidligere delegert disse tilgangene:",
+    "you_have_delegated_accesses": "Du har tidligere gitt disse tilgangene:",
     "you_have_received_accesses": "Du har mottatt disse tilgangene:",
     "api_panel_content": "Her kan du styre tilgang til APIer sikret gjennom",
     "edit_accesses": "Rediger tilganger",
-    "api_overview_text": "Her finner du oversikt over de API-tilganger din virksomhet har delegert til andre virksomheter.",
+    "api_overview_text": "Her finner du oversikt over de API-tilganger din virksomhet har gitt til andre virksomheter.",
     "api_received_overview_text": "Her finner du oversikt over de API-tilganger din virksomhet har blitt tildelt av andre virksomheter.",
     "give_access_to_new_api": "Gi tilgang til nytt API",
     "new_org_content_text": "Velg hvilke brukere som skal få tilgang ved å klikke pluss-tegnet. Du kan også legge til ny virksomhet ved å benytte søkefeltet.",
@@ -277,7 +277,7 @@
     "search_hits": "treff på søket:",
     "missing_role_access": "{{you}} har ikke de nødvendige rettighetene til å gjennomføre denne delegeringen. Daglig leder eller hovedadministrator kan hjelpe deg med dette.",
     "missing_delegation_access": "{{you}} har ikke de nødvendige delegeringsrettighetene til å gjennomføre denne delegeringen. Daglig leder eller hovedadministrator kan hjelpe deg med dette.",
-    "missing_srr_right_access": "Hvem som får benytte denne tjenesten bestemmes av {{serviceowner}}, og {{reporteeorg}} er ikke gitt den muligheten. Vi anbefaler dere å ta kontakt med {{serviceowner}}",
+    "missing_srr_right_access": "Hvem som får benytte denne tjenesten bestemmes av {{serviceowner}}, og {{reporteeorg}} har ikke fått den muligheten. Vi anbefaler å ta kontakt med {{serviceowner}}",
     "unknown": "Uvisst",
     "new_error": "Dette er en ny feil vi ikke har fått før. Vennligst rapporter til Altinn ved å sende inn et skjermbilde",
     "missing_role_access_title": "Mangler rolle",
@@ -309,7 +309,7 @@
     "woops_something_went_wrong_ingress": "Oi, her var det noe som gikk galt med en eller flere tjenester. Du kan se mer informasjon i de røde kolonnene under. Du kan prøve igjen senere",
     "all_failed_techncal_problem_paragraph": "Et teknisk problem har oppstått ved delegering av tjenestene. Vi anbefaler at du starter delegeringsprosessen på nytt ved å gå til delegeringsside. Hvis problemet vedvarer ber vi deg kontakte brukerservice på telefon 75 00 60 00. Vi beklager!",
     "woops_something_went_wrong_alert": "Oi! Noe gikk galt.",
-    "some_failed_technical_problem": "Pga. Av en teknisk feil ble ikke alle rettighetene på tjenesten delegert. Vi anbefaler at du forsøker å delegere tjenesten på nytt.",
+    "some_failed_technical_problem": "På grunn av en teknisk feil ble ikke alle rettighetene på tjenesten delegert. Vi anbefaler at du forsøker å delegere tjenesten på nytt.",
     "these_rights_were_not_delegated": "Disse rettighetene kunne ikke delegeres:",
     "these_rights_were_delegated": "Disse rettighetene ble delegert til mottaker:",
     "cancel_popover_text": "Valgte tjenester vil ikke bli delegert. Er du sikker på at du vil avslutte?",
@@ -362,8 +362,8 @@
     "person_info_alert": "Det er ikke mulig å gi og fjerne fullmakter til personer helt enda. Dette vil komme senere.",
     "delegation_check": {
       "delegation_check_error_heading": "Teknisk feil",
-      "delegation_check_error_message_singular": "En teknisk feil sperrer deg fra å gi fullmakt til tilgangspakken. Vennligst kontakt Altinn brukerservice hvis problemet vedvarer.",
-      "delegation_check_error_message_plural": "En teknisk feil sperrer deg fra å gi fullmakt til en eller flere tilgangspakker. Vennligst kontakt Altinn brukerservice hvis problemet vedvarer."
+      "delegation_check_error_message_singular": "En teknisk feil hindrer deg i å gi fullmakt til tilgangspakken. Vennligst kontakt Altinn brukerservice hvis problemet vedvarer.",
+      "delegation_check_error_message_plural": "En teknisk feil hindrer deg i å gi fullmakt til en eller flere tilgangspakker. Vennligst kontakt Altinn brukerservice hvis problemet vedvarer."
     }
   },
   "guardianships": {
@@ -555,7 +555,7 @@
       "time_of_error": "Tidspunkt feilen inntraff: {{time}}",
       "error_status": "Status: {{status}}",
       "access_list_service": "Hvem som får benytte denne tjenesten bestemmes av {{resourceOwner}}, og {{reportee}} er ikke gitt den muligheten. Vi anbefaler dere å ta kontakt med {{resourceOwner}}.",
-      "missing_approve_rights": "Du mangler fullmakt til hele eller deler av denne tjenesten og kan derfor ikke godkjenne forespørsler fra andre. Dersom du kun ønsker å gi deler av tjenesten, kan du gjøre dette ved å gi fullmakt på vanlig vis.",
+      "missing_approve_rights": "Du mangler fullmakt til hele eller deler av denne tjenesten og kan derfor ikke godkjenne forespørsler fra andre. Dersom du kun ønsker å gi deler av tjenesten, kan du gjøre dette ved å gi fullmakt på vanlig måte.",
       "missing_rights": "Du får ikke gitt denne fullmakten til andre fordi du mangler tilgang til den selv."
     },
     "request": {
@@ -590,7 +590,7 @@
   "new_user_modal": {
     "not_found_error_person": "Fant ingen bruker med dette fødselsnummeret/brukernavnet og navnet. Vennligst sjekk at informasjonen er korrekt.",
     "not_found_error_org": "Fant ingen organisasjon med dette organisasjonsnummeret. Vennligst sjekk at informasjonen er korrekt.",
-    "too_many_requests_error": "Du er blitt sperret pga for mange feilende forsøk. Du kan prøve igjen om en time.",
+    "too_many_requests_error": "Du er blitt sperret på grunn av for mange feil forsøk. Du kan prøve igjen om en time.",
     "person": "Person",
     "organization": "Virksomhet",
     "modal_title": "Legg til ny person eller virksomhet",
@@ -788,7 +788,7 @@
     "confirm_button": "Opprett systemtilgang",
     "create_systemuser_error": "Kunne ikke opprette systemtilgang",
     "loading_rights": "Laster forhåndsvalgte tjenester for fagsystemet",
-    "load_rights_error": "Kunne ikke laste forhåndsvalgte tjenester, eller du har ikke rettigheter til å delegere alle disse tjenestene.",
+    "load_rights_error": "Kunne ikke laste forhåndsvalgte tjenester, eller du har ikke fullmakter til å delegere alle disse tjenestene.",
     "creating_systemuser": "Oppretter systemtilgang..."
   },
   "systemuser_detailpage": {
@@ -830,7 +830,7 @@
     "loading_creation_request": "Laster forespørsel",
     "load_request_error_notfound": "Systemtilgang-forespørsel for valgt aktør finnes ikke. Er du sikker på at du har valgt riktig aktør?",
     "load_request_error": "Kunne ikke laste systemtilgang-forespørsel",
-    "load_request_missing_permissions": "Du har ikke tilstrekkelige tilganger til å godkjenne denne systemtilgang-forespørselen",
+    "load_request_missing_permissions": "Du har ikke tilstrekkelige fullmakter til å godkjenne denne systemtilgang-forespørselen",
     "load_user_info_error": "Kunne ikke laste brukerinfo",
     "load_creation_request_no_id": "id må være med som query-parameter i url",
     "accept_error": "Kunne ikke godkjenne systemtilgang",
@@ -865,14 +865,14 @@
     "remove_accesspackages": "Disse tilgangspakkene vil fjernes",
     "accept": "Godkjenn oppdatert systemtilgang",
     "reject": "Avvis",
-    "loading_change_request": "Laster oppdaterings-forespørsel",
+    "loading_change_request": "Laster forespørsel om oppdatering",
     "accept_error": "Kunne ikke godkjenne oppdatert systemtilgang",
     "reject_error": "Kunne ikke avvise oppdatert systemtilgang",
     "accept_loading": "Godkjenner oppdatert systemtilgang...",
     "reject_loading": "Avviser oppdatert systemtilgang...",
-    "request_accepted": "Denne oppdaterings-forespørselen er allerede godkjent",
-    "request_rejected": "Denne oppdaterings-forespørselen er allerede avvist",
-    "request_expired": "Denne oppdaterings-forespørselen har utløpt"
+    "request_accepted": "Denne forespørselen om oppdatering er allerede godkjent",
+    "request_rejected": "Denne forespørselen om oppdatering er allerede avvist",
+    "request_expired": "Denne forespørselen om oppdatering har utløpt"
   },
   "systemuser_agent_request": {
     "page_title": "Godkjenn systemtilgang for klientene dine - Altinn",
@@ -1123,7 +1123,7 @@
     "service_owner_filter": "Søk etter tjenesteeier",
     "service_owner_filter_clear": "Tøm søkefelt",
     "show_expired_services": "Vis utgåtte tjenester",
-    "show_expired_services_helptext": "Noen tjenester er utgått og vil ikke la deg sende inn/motta ny data. Du kan likevel gi andre fullmakter til dem, men de vil da bare kunne se gamle innsendinger/meldinger på tjenesten.",
+    "show_expired_services_helptext": "Noen tjenester er utgått og vil ikke la deg sende inn eller motta ny data. Du kan likevel gi andre fullmakter til dem, men de vil da bare kunne se gamle innsendinger eller meldinger på tjenesten.",
     "show_expired_services_helptext_button": "Hva er utgåtte tjenester?",
     "expired_badge": "Utgått"
   },
@@ -1223,7 +1223,7 @@
     "password": "Passord",
     "invalid_credentials": "Ugyldig kombinasjon av brukernavn og passord.",
     "too_many_requests_error": "Kontoen er midlertidig låst",
-    "add_account_error": "Det skjedde en feil ved å legge til konto.",
+    "add_account_error": "Det skjedde en feil når du skulle legge til konto.",
     "add_account_button": "Legg til",
     "forgot_password": "Glemt passord",
     "account_added_heading": "Kontoen er lagt til",
