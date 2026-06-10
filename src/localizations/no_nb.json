@@ -934,7 +934,8 @@
     "51_accesspackage_delegation_failed": "Delegering av tilgangspakker til systemtilgang feilet.",
     "53_accesspackage_delegation_missing_required_access": "Du har ikke tilstrekkelige tilganger for å delegere disse tilgangspakkene.",
     "55_accesspackage_failed_to_get_delegated_packages": "Kunne ikke hente delegerte tilgangspakker.",
-    "57_systemuser_failed_to_delete_accesspackage": "Kunne ikke fjerne tilgangspakke-delegering for systemtilgang."
+    "57_systemuser_failed_to_delete_accesspackage": "Kunne ikke fjerne tilgangspakke-delegering for systemtilgang.",
+    "68_delegation_right_missing_delegation_accesspackage": "Delegering av tjenester feilet: du mangler nødvendige tilgangspakker for delegasjon."
   },
   "consent_request": {
     "page_title": "Godkjenn avtale - Altinn",

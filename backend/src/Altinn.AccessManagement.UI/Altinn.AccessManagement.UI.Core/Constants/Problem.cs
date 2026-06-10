@@ -164,6 +164,12 @@ namespace Altinn.AccessManagement.UI.Core.Constants
         /// <summary>
         /// Gets a <see cref="ProblemDescriptor"/>.
         /// </summary>
+        public static ProblemDescriptor DelegationRightMissingPackageAccess { get; }
+            = _factory.Create(68, HttpStatusCode.Forbidden, "DelegationCheck failed with error: missing required access package for delegation.");
+
+        /// <summary>
+        /// Gets a <see cref="ProblemDescriptor"/>.
+        /// </summary>
         public static ProblemDescriptor CreateGenericProblem(HttpStatusCode statusCode, string detail)
         {
             return _factory.Create(999, statusCode, detail);
