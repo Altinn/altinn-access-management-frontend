@@ -11,6 +11,6 @@
 
 @media (max-width: 768px) {
   .popover {
-    min-width: auto;
+    min-width: 90%;
   }
 }
