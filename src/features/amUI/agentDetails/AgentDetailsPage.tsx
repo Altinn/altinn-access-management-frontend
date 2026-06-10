@@ -37,7 +37,7 @@ export const AgentDetailsPage = () => {
         name: selectedAgent.agent.name,
         partyUuid: selectedAgent.agent.id,
         partyTypeName: PartyType.Person,
-        partyId: Number(selectedAgent.agent.partyId),
+        partyId: Number(selectedAgent.agent.partyId ?? 0),
       }
     : undefined;
 
