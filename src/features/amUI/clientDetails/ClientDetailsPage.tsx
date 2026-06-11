@@ -9,6 +9,9 @@ import { useDocumentTitle } from '@/resources/hooks/useDocumentTitle';
 import { PartyRepresentationProvider } from '../common/PartyRepresentationContext/PartyRepresentationContext';
 import { PageLayoutWrapper } from '../common/PageLayoutWrapper';
 import { ClientDetails } from './ClientDetails';
+import { useGetClientsQuery } from '@/rtk/features/clientApi';
+import { PartyType } from '@/rtk/features/userInfoApi';
+import { Party } from '@/rtk/features/lookupApi';
 
 export const ClientDetailsPage = () => {
   const { t } = useTranslation();
@@ -17,6 +20,9 @@ export const ClientDetailsPage = () => {
   useDocumentTitle(t('client_administration_page.client_page_title'));
 
   const pageIsEnabled = clientAdministrationPageEnabled();
+
+  const { data: clients } = useGetClientsQuery();
+  const selectedClient = clients?.find((item) => item.client.id === id);
 
   if (!pageIsEnabled) {
     return (
@@ -27,13 +33,23 @@ export const ClientDetailsPage = () => {
     );
   }
 
+  const clientParty: Party | undefined = selectedClient
+    ? {
+        name: selectedClient.client.name,
+        partyUuid: selectedClient.client.id,
+        partyTypeName: PartyType.Organization,
+        partyId: Number(selectedClient.client.partyId ?? 0),
+      }
+    : undefined;
+
   return (
     <PageWrapper>
       <PageLayoutWrapper>
         <PartyRepresentationProvider
-          fromPartyUuid={id}
+          fromPartyOverride={clientParty}
           actingPartyUuid={getCookie('AltinnPartyUuid')}
           toPartyUuid={getCookie('AltinnPartyUuid')}
+          isLoading={!selectedClient}
         >
           <ClientDetails />
         </PartyRepresentationProvider>

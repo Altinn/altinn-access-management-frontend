@@ -6,6 +6,9 @@ test.describe('Aktørvalg, valg og visning av avgiver', () => {
   const SHOW_DELETED_TEST_USER = '19846999968';
   const DEFAULT_ACTOR_NAME = 'Kunnskapsrik Kry Ape';
 
+  const ACTOR_SEARCH_TEST_USER = '05826397782'; // Need a user with a decent number of actors to properly test the search functionality
+  const ACTOR_SEARCH_DEFAULT_ACTOR_NAME = 'Usikker Ringdue';
+
   const api = new EnduserConnection();
 
   test('Sjekk at slettede enheter kan vises/skjules', async ({ login, aktorvalgHeader }) => {
@@ -76,24 +79,24 @@ test.describe('Aktørvalg, valg og visning av avgiver', () => {
     aktorvalgHeader,
   }) => {
     await test.step('Log in and select default actor', async () => {
-      await login.LoginToAccessManagement(HEADER_TEST_USER);
-      await aktorvalgHeader.selectActorFromHeaderMenu(DEFAULT_ACTOR_NAME);
+      await login.LoginToAccessManagement(ACTOR_SEARCH_TEST_USER);
+      await aktorvalgHeader.selectActorFromHeaderMenu(ACTOR_SEARCH_DEFAULT_ACTOR_NAME);
       await aktorvalgHeader.chooseBokmalLanguage();
-      await aktorvalgHeader.selectActorFromHeaderMenu(DEFAULT_ACTOR_NAME);
+      await aktorvalgHeader.selectActorFromHeaderMenu(ACTOR_SEARCH_DEFAULT_ACTOR_NAME);
     });
 
     await test.step('Search for actor using several fields', async () => {
-      await aktorvalgHeader.typeInSearchField('hånd');
-      await aktorvalgHeader.actorIsListed('Håndfast Plasma');
+      await aktorvalgHeader.typeInSearchField('Usikk');
+      await aktorvalgHeader.actorIsListed('Usikker Ringdue');
 
-      await aktorvalgHeader.typeInSearchField('1965');
-      await aktorvalgHeader.actorIsListed('Håndfast Plasma');
+      await aktorvalgHeader.typeInSearchField('1963');
+      await aktorvalgHeader.actorIsListed('Usikker Ringdue');
 
-      await aktorvalgHeader.typeInSearchField('kunnskap');
-      await aktorvalgHeader.actorIsListed('Kunnskapsrik Kry Ape');
+      await aktorvalgHeader.typeInSearchField('Hensynsfull');
+      await aktorvalgHeader.actorIsListed('Hensynsfull Rik Tiger');
 
-      await aktorvalgHeader.typeInSearchField('310470422');
-      await aktorvalgHeader.actorIsListed('Kunnskapsrik Kry Ape');
+      await aktorvalgHeader.typeInSearchField('310111872');
+      await aktorvalgHeader.actorIsListed('Hensynsfull Rik Tiger');
     });
   });
 
