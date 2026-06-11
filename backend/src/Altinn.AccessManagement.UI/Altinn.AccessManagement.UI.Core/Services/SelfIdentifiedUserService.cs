@@ -18,9 +18,9 @@ namespace Altinn.AccessManagement.UI.Core.Services
         }
 
         /// <inheritdoc />
-        public async Task<Guid> ValidateCredentials(Altinn2AccountRequest request, CancellationToken cancellationToken)
+        public async Task<Guid> AddAltinn2Account(Altinn2AccountRequest request, CancellationToken cancellationToken)
         {
-            return await _selfIdentifiedUserClient.ValidateCredentials(request, cancellationToken);
+            return await _selfIdentifiedUserClient.AddAltinn2Account(request, cancellationToken);
         }
 
         /// <inheritdoc />

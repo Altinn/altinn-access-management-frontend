@@ -8,12 +8,12 @@ namespace Altinn.AccessManagement.UI.Core.ClientInterfaces
     public interface ISelfIdentifiedUserClient
     {
         /// <summary>
-        /// Validates the credentials of a legacy Altinn 2 user account.
+        /// Links a legacy Altinn 2 user account to logged in users account.
         /// </summary>
         /// <param name="request">Username and password of the legacy account.</param>
         /// <param name="cancellationToken">Cancellation token.</param>
         /// <returns>The partyUuid of the user</returns>
-        Task<Guid> ValidateCredentials(Altinn2AccountRequest request, CancellationToken cancellationToken);
+        Task<Guid> AddAltinn2Account(Altinn2AccountRequest request, CancellationToken cancellationToken);
 
         /// <summary>
         /// Sends a forgot password email for a legacy Altinn 2 user account.

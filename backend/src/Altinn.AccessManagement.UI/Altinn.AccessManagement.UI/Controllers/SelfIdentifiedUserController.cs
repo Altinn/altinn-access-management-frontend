@@ -41,7 +41,7 @@ namespace Altinn.AccessManagement.UI.Controllers
         {
             try
             {
-                await _selfIdentifiedUserService.ValidateCredentials(request, cancellationToken);
+                await _selfIdentifiedUserService.AddAltinn2Account(request, cancellationToken);
             }
             catch (HttpStatusException ex)
             {
@@ -49,7 +49,7 @@ namespace Altinn.AccessManagement.UI.Controllers
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "ValidateCredentials failed unexpectedly");
+                _logger.LogError(ex, "AddAltinn2Account failed unexpectedly");
                 return StatusCode((int)HttpStatusCode.InternalServerError);
             }
 

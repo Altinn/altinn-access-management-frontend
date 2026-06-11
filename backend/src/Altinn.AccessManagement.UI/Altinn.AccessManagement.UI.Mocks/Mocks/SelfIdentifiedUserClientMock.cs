@@ -13,7 +13,7 @@ namespace Altinn.AccessManagement.UI.Mocks.Mocks
         private static readonly Guid _mockPartyUuid = Guid.Parse("00000000-0000-0000-0000-000000000001");
 
         /// <inheritdoc />
-        public Task<Guid> ValidateCredentials(Altinn2AccountRequest request, CancellationToken cancellationToken)
+        public Task<Guid> AddAltinn2Account(Altinn2AccountRequest request, CancellationToken cancellationToken)
         {
             if (request?.UserName == "invalid" || request?.Password == "invalid")
             {
