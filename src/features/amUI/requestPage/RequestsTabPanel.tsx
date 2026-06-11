@@ -88,7 +88,7 @@ export const PendingRequests = ({ pendingRequests }: PendingRequestsProps) => {
             name={request.displayPartyName}
             type={request.displayPartyType}
             subUnit={request.isSubUnit}
-            titleAs='h2'
+            titleAs='div'
             linkIcon
             description={`${request.description ? t(request.description) : t('request_page.asks_for_number', { count: request.numberOfRequests })} (${formatDateToNorwegian(request.createdDate)})`}
             as={(props) =>

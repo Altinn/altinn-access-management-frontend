@@ -10,7 +10,7 @@ import classes from './UserSearch.module.css';
 import { useFilteredUsers } from '../UserList/useFilteredUsers';
 import { DelegationAction } from '../DelegationModal/EditModal';
 import { UserList } from '../UserList/UserList';
-import { UserSearchResults, titleAsType } from './UserSearchResults';
+import { UserSearchResults } from './UserSearchResults';
 import { usePartyRepresentation } from '../PartyRepresentationContext/PartyRepresentationContext';
 import type { UserActionTarget, UserSearchNode } from './types';
 
@@ -36,7 +36,6 @@ export interface UserSearchProps {
   indirectConnectionsHeading?: string;
   additionalFilters?: React.ReactNode;
   hasActiveAdditionalFilters?: boolean;
-  titleAs?: titleAsType;
 }
 
 const filterAvailableUserTypes = (items?: UserSearchNode[]) =>
@@ -67,7 +66,6 @@ export const UserSearch: React.FC<UserSearchProps> = ({
   indirectConnectionsHeading,
   additionalFilters,
   hasActiveAdditionalFilters = false,
-  titleAs = 'h4',
 }) => {
   const { t } = useTranslation();
   const [query, setQuery] = useState('');
@@ -175,7 +173,6 @@ export const UserSearch: React.FC<UserSearchProps> = ({
             onSelect={onSelect}
             includeSelfAsChild={includeSelfAsChild}
             getUserLink={getUserLink}
-            titleAs={titleAs}
             revokeLabel={revokeLabel}
           />
           {showDirectNoResults && (

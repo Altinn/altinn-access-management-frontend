@@ -14,7 +14,6 @@ interface MaskinportenUserSearchProps extends Pick<
   | 'addUserButtonLabel'
   | 'AddUserButton'
   | 'isLoading'
-  | 'titleAs'
   | 'onRevoke'
   | 'getUserLink'
   | 'revokeLabel'
@@ -46,7 +45,6 @@ export const MaskinportenUserSearch = ({
     <UserSearch
       users={users}
       searchPlaceholder={t('common.search')}
-      titleAs='h2'
       noUsersText={emptyText}
       includeSelfAsChild={false}
       onRevoke={onRevoke}

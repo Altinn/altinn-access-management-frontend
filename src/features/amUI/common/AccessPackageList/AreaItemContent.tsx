@@ -85,10 +85,10 @@ export const AreaItemContent = ({
   return (
     <div className={cn(classes.accessAreaContent, !isSm && classes.accessAreaContentMargin)}>
       <DsHeading
-        level={4}
         className={classes.packagesTitle}
+        asChild
       >
-        {t('access_packages.access_packages_in_area_title')}
+        <div>{t('access_packages.access_packages_in_area_title')}</div>
       </DsHeading>
       {packages.assigned.length > 0 && (
         <List aria-label={t('access_packages.given_packages_title')}>

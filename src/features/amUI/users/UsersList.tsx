@@ -188,7 +188,6 @@ export const UsersList = () => {
               loadingPartyRepresentation ||
               loadingRoleMetadata
             }
-            listItemTitleAs='h2'
             interactive={isAdmin}
           />
         </>

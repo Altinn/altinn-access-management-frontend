@@ -52,7 +52,7 @@ export const ConsentListItem = ({
           <ListItem
             key={item.id}
             icon={{ svgElement: HandshakeIcon }}
-            title={{ as: 'h4', children: item.title }}
+            title={{ as: 'div', children: item.title }}
             description={item.description}
             as='button'
             loading={isLoading}
