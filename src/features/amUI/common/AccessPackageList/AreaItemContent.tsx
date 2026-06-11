@@ -51,7 +51,7 @@ export const AreaItemContent = ({
   showAvailablePackages: showAvailablePackagesExternal = false,
   showAvailableToggle = true,
   showPermissions = false,
-  packageAs: PackageAs,
+  packageAs: PackageComponent,
   partyType,
 }: AreaItemContentProps) => {
   const { packages } = area;
@@ -96,9 +96,9 @@ export const AreaItemContent = ({
             return (
               <PackageItem
                 as={
-                  PackageAs
+                  PackageComponent
                     ? (props) => (
-                        <PackageAs
+                        <PackageComponent
                           packageId={pkg.id}
                           {...props}
                         />
@@ -153,7 +153,6 @@ export const AreaItemContent = ({
             const canDelegate = canDelegatePackage(pkg.id);
             return (
               <PackageItem
-                // Stable string `as` so focus survives re-renders; custom packageAs needs the id.
                 as={
                   PackageAs
                     ? (props) => (
