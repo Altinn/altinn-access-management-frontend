@@ -208,10 +208,12 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
         public async Task Export_ConcurrentRequestBySameUser_ReturnsTooManyRequests()
         {
             // Simulate an already-active export by the same user (userId=1234) via the static dictionary.
-            var field = typeof(DelegationExportController)
-                .GetField("_activeExports", BindingFlags.NonPublic | BindingFlags.Static);
-            var activeExports = (ConcurrentDictionary<int, byte>)field.GetValue(null);
-            activeExports.TryAdd(1234, 0);
+var field = typeof(DelegationExportController)
+    .GetField("_activeExports", BindingFlags.NonPublic | BindingFlags.Static);
+Assert.NotNull(field);
+
+var activeExports = (ConcurrentDictionary<int, byte>)field.GetValue(null)!;
+activeExports.TryAdd(1234, 0);
 
             try
             {
