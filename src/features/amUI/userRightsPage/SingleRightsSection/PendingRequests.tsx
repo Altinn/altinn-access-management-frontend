@@ -142,19 +142,16 @@ export const PendingRequestsList = ({
   const { actingParty, fromParty } = usePartyRepresentation();
   const backButtonRef = useAutoFocusRef<HTMLButtonElement>();
 
-  const {
-    data: singleRightRequests = [],
-    isLoading: isLoadingRequests,
-    isFetching: isFetchingRequests,
-  } = useGetEnrichedSentResourceRequestsQuery(
-    {
-      ...getRequestPartyQueryParams(actingParty?.partyUuid, fromParty?.partyUuid),
-      status: ['Pending'],
-    },
-    {
-      skip: !actingParty?.partyUuid || !fromParty?.partyUuid,
-    },
-  );
+  const { data: singleRightRequests = [], isLoading: isLoadingRequests } =
+    useGetEnrichedSentResourceRequestsQuery(
+      {
+        ...getRequestPartyQueryParams(actingParty?.partyUuid, fromParty?.partyUuid),
+        status: ['Pending'],
+      },
+      {
+        skip: !actingParty?.partyUuid || !fromParty?.partyUuid,
+      },
+    );
 
   const { deleteRequest, isLoadingRequest } = useSingleRightRequests({
     canRequestRights: true,

@@ -154,9 +154,9 @@ export const AreaItemContent = ({
             return (
               <PackageItem
                 as={
-                  PackageAs
+                  PackageComponent
                     ? (props) => (
-                        <PackageAs
+                        <PackageComponent
                           packageId={pkg.id}
                           {...props}
                         />
