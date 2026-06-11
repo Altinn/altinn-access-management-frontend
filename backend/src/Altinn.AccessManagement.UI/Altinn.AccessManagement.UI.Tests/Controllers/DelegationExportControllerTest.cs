@@ -1,6 +1,8 @@
+using System.Collections.Concurrent;
 using System.IO.Compression;
 using System.Net;
 using System.Net.Http.Headers;
+using System.Reflection;
 using Altinn.AccessManagement.UI.Controllers;
 using Altinn.AccessManagement.UI.Mocks.Utils;
 using Altinn.AccessManagement.UI.Tests.Utils;
@@ -200,6 +202,29 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
             Assert.Equal(HttpStatusCode.NotFound, response.StatusCode);
             string body = await response.Content.ReadAsStringAsync();
             Assert.Contains("Unexpected httpStatus returned from backend (Instances)", body);
+        }
+
+        [Fact]
+        public async Task Export_ConcurrentRequestBySameUser_ReturnsTooManyRequests()
+        {
+            // Simulate an already-active export by the same user (userId=1234) via the static dictionary.
+            var field = typeof(DelegationExportController)
+                .GetField("_activeExports", BindingFlags.NonPublic | BindingFlags.Static);
+            var activeExports = (ConcurrentDictionary<int, byte>)field.GetValue(null);
+            activeExports.TryAdd(1234, 0);
+
+            try
+            {
+                HttpResponseMessage response = await _client.GetAsync($"{BaseUrl}?partyUuid={OrgPartyUuid}&types=roles");
+
+                Assert.Equal(HttpStatusCode.TooManyRequests, response.StatusCode);
+                string body = await response.Content.ReadAsStringAsync();
+                Assert.Contains("An export is already in progress", body);
+            }
+            finally
+            {
+                activeExports.TryRemove(1234, out _);
+            }
         }
 
         private static async Task<Dictionary<string, string>> ReadZipEntries(HttpResponseMessage response)

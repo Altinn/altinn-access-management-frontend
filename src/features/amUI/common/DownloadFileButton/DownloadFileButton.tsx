@@ -13,6 +13,7 @@ import { usePartyRepresentation } from '../PartyRepresentationContext/PartyRepre
 import { PartyType, useGetIsAdminQuery } from '@/rtk/features/userInfoApi';
 
 import classes from './DownloadFileButton.module.css';
+import { isSubUnitByType } from '@/resources/utils/reporteeUtils';
 
 export interface DownloadFileButtonProps {
   size?: 'xs' | 'sm' | 'md' | 'lg';
@@ -89,11 +90,13 @@ export const DownloadFileButton = ({
               {t('download_file.description_p1', { reportee: reporteeName })}
             </DsParagraph>
             <DsParagraph>{t('download_file.description_p2')}</DsParagraph>
-            <DsSwitch
-              checked={includeSubunits}
-              onChange={(event) => setIncludeSubunits(event.target.checked)}
-              label={t('download_file.include_subunits_label', { reportee: reporteeName })}
-            />
+            {!isSubUnitByType(fromParty?.variant) && (
+              <DsSwitch
+                checked={includeSubunits}
+                onChange={(event) => setIncludeSubunits(event.target.checked)}
+                label={t('download_file.include_subunits_label', { reportee: reporteeName })}
+              />
+            )}
             <div className={classes.buttons}>
               <Button
                 variant='primary'
