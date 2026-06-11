@@ -41,14 +41,36 @@ namespace Altinn.AccessManagement.UI.Integration.Clients
         }
 
         /// <inheritdoc />
-        public async Task<Guid> ValidateCredentials(Altinn2AccountRequest request, CancellationToken cancellationToken)
+        public async Task<Guid> AddAltinn2Account(Altinn2AccountRequest request, CancellationToken cancellationToken)
         {
             string token = JwtTokenUtil.GetTokenFromContext(_httpContextAccessor.HttpContext, _platformSettings.JwtCookieName);
-            string endpointUrl = "enduser/selfidentified/validate-credentials";
+            string endpointUrl = "enduser/selfidentified/link";
 
             var content = JsonContent.Create(request);
-            HttpResponseMessage response = await _httpClient.PostAsync(token, endpointUrl, content);
-            return await ClientUtils.DeserializeIfSuccessfullStatusCode<Guid>(response, _logger, "SelfIdentifiedUserClient.ValidateCredentials");
+            HttpResponseMessage response = await _httpClient.PostAsync(token, endpointUrl, content, cancellationToken);
+            return await ClientUtils.DeserializeIfSuccessfullStatusCode<Guid>(response, _logger, "SelfIdentifiedUserClient.AddAltinn2Account");
+        }
+
+        /// <inheritdoc />
+        public async Task<Altinn2ForgotPasswordResponse> SendForgotPasswordEmail(Altinn2ForgotPasswordRequest request, CancellationToken cancellationToken)
+        {
+            string token = JwtTokenUtil.GetTokenFromContext(_httpContextAccessor.HttpContext, _platformSettings.JwtCookieName);
+            string endpointUrl = "enduser/selfidentified/link-request";
+
+            var content = JsonContent.Create(request);
+            HttpResponseMessage response = await _httpClient.PostAsync(token, endpointUrl, content, cancellationToken);
+            return await ClientUtils.DeserializeIfSuccessfullStatusCode<Altinn2ForgotPasswordResponse>(response, _logger, "SelfIdentifiedUserClient.SendForgotPasswordEmail");
+        }
+
+        /// <inheritdoc />
+        public async Task<Guid> AddAltinn2AccountFromToken(Altinn2AccountFromTokenRequest request, CancellationToken cancellationToken)
+        {
+            string token = JwtTokenUtil.GetTokenFromContext(_httpContextAccessor.HttpContext, _platformSettings.JwtCookieName);
+            string endpointUrl = "enduser/selfidentified/redeem-link";
+
+            var content = JsonContent.Create(request);
+            HttpResponseMessage response = await _httpClient.PostAsync(token, endpointUrl, content, cancellationToken);
+            return await ClientUtils.DeserializeIfSuccessfullStatusCode<Guid>(response, _logger, "SelfIdentifiedUserClient.AddAltinn2AccountFromToken");
         }
     }
 }

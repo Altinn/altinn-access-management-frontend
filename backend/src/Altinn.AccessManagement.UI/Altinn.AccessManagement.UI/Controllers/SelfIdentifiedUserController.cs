@@ -34,16 +34,14 @@ namespace Altinn.AccessManagement.UI.Controllers
         /// <summary>
         /// Adds a legacy Altinn 2 self-identified user account to the current user's account.
         /// </summary>
-        /// <param name="to">The party UUID to connect to.</param>
         /// <param name="request">The legacy account username and password.</param>
         /// <param name="cancellationToken">Cancellation token.</param>
         [HttpPost("altinn2account")]
-        public async Task<ActionResult> AddAltinn2Account([FromQuery] Guid to, [FromBody] Altinn2AccountRequest request, CancellationToken cancellationToken)
+        public async Task<ActionResult> AddAltinn2Account([FromBody] Altinn2AccountRequest request, CancellationToken cancellationToken)
         {
-            Guid altinn2AccountPartyUuid;
             try
             {
-                altinn2AccountPartyUuid = await _selfIdentifiedUserService.ValidateCredentials(request, cancellationToken);
+                await _selfIdentifiedUserService.AddAltinn2Account(request, cancellationToken);
             }
             catch (HttpStatusException ex)
             {
@@ -51,21 +49,56 @@ namespace Altinn.AccessManagement.UI.Controllers
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "ValidateCredentials failed unexpectedly");
+                _logger.LogError(ex, "AddAltinn2Account failed unexpectedly");
                 return StatusCode((int)HttpStatusCode.InternalServerError);
             }
 
+            return Ok();
+        }
+
+        /// <summary>
+        /// Send forgot password email for a legacy Altinn 2 self-identified user account.
+        /// </summary>
+        /// <param name="request">The legacy account username</param>
+        /// <param name="cancellationToken">Cancellation token.</param>
+        [HttpPost("altinn2account/forgotpassword")]
+        public async Task<ActionResult> SendForgotPasswordEmail([FromBody] Altinn2ForgotPasswordRequest request, CancellationToken cancellationToken)
+        {
             try
             {
-                await _selfIdentifiedUserService.PostNewSelfIdentifiedUser(from: altinn2AccountPartyUuid, to: to, cancellationToken);
+                Altinn2ForgotPasswordResponse response = await _selfIdentifiedUserService.SendForgotPasswordEmail(request, cancellationToken);
+                return Ok(response);
             }
             catch (HttpStatusException ex)
             {
-                return new ObjectResult(ProblemDetailsFactory.CreateProblemDetails(HttpContext, (int?)ex.StatusCode, "Failed to create self-identified user connection", detail: ex.Message));
+                return new ObjectResult(ProblemDetailsFactory.CreateProblemDetails(HttpContext, (int?)ex.StatusCode, "Failed to send forgot password email", detail: ex.Message));
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "PostNewSelfIdentifiedUser failed unexpectedly");
+                _logger.LogError(ex, "SendForgotPasswordEmail failed unexpectedly");
+                return StatusCode((int)HttpStatusCode.InternalServerError);
+            }
+        }
+
+        /// <summary>
+        /// Adds a legacy Altinn 2 self-identified user account from token to the current user's account.
+        /// </summary>
+        /// <param name="request">The token from email.</param>
+        /// <param name="cancellationToken">Cancellation token.</param>
+        [HttpPost("altinn2account/token")]
+        public async Task<ActionResult> AddAltinn2AccountFromToken([FromBody] Altinn2AccountFromTokenRequest request, CancellationToken cancellationToken)
+        {
+            try
+            {
+                await _selfIdentifiedUserService.AddAltinn2AccountFromToken(request, cancellationToken);
+            }
+            catch (HttpStatusException ex)
+            {
+                return new ObjectResult(ProblemDetailsFactory.CreateProblemDetails(HttpContext, (int?)ex.StatusCode, "Failed to validate token", detail: ex.Message));
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "AddAltinn2AccountFromToken failed unexpectedly");
                 return StatusCode((int)HttpStatusCode.InternalServerError);
             }
 

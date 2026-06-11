@@ -1,24 +1,31 @@
 import React, { useEffect, useRef, useState } from 'react';
+import { useSearchParams } from 'react-router';
 import { useTranslation } from 'react-i18next';
 import {
   DsAlert,
   DsButton,
   DsDialog,
   DsHeading,
-  DsLink,
   DsParagraph,
+  DsSpinner,
   DsTextfield,
 } from '@altinn/altinn-components';
 import { PersonCircleIcon } from '@navikt/aksel-icons';
 import { useDocumentTitle } from '@/resources/hooks/useDocumentTitle';
-import { getAfUrl, getEnv } from '@/resources/utils/pathUtils';
+import { getAfUrl } from '@/resources/utils/pathUtils';
 import { useGetReporteeQuery } from '@/rtk/features/userInfoApi';
-import { useAddAltinn2AccountMutation } from '@/rtk/features/selfIdentifiedUserApi';
+import {
+  useAddAltinn2AccountFromTokenMutation,
+  useAddAltinn2AccountMutation,
+  useSendForgotPasswordEmailMutation,
+} from '@/rtk/features/selfIdentifiedUserApi';
 import classes from './AddAltinn2AccountPage.module.css';
 import { PageLayoutWrapper } from '../common/PageLayoutWrapper';
 
 export const AddAltinn2AccountPage = () => {
   const { t } = useTranslation();
+  const [searchParams] = useSearchParams();
+  const token = searchParams.get('token') ?? '';
   const [userName, setUserName] = useState('');
   const [password, setPassword] = useState('');
   const [step, setStep] = useState<number>(1);
@@ -31,15 +38,29 @@ export const AddAltinn2AccountPage = () => {
   const [addAltinn2Account, { isLoading: isAddingAltinn2Account, error: addUserError }] =
     useAddAltinn2AccountMutation();
 
-  const isActionButtonDisabled = !userName || !password || isAddingAltinn2Account;
+  const [
+    sendForgotPasswordEmail,
+    {
+      data: forgotPasswordEmail,
+      isLoading: isSendingForgotPasswordEmail,
+      error: forgotPasswordError,
+    },
+  ] = useSendForgotPasswordEmailMutation();
+
+  const [
+    addAltinn2AccountFromToken,
+    { isLoading: isAddingAltinn2AccountFromToken, error: addUserFromTokenError },
+  ] = useAddAltinn2AccountFromTokenMutation();
+
+  const isValidateCrentialsButtonDisabled = !userName || !password || isAddingAltinn2Account;
+  const isSendEmailButtonDisabled = !userName || isSendingForgotPasswordEmail;
   const afUrl = `${getAfUrl()}inbox`;
   const profileUrl = `${getAfUrl()}profile`;
 
   const onAddAltinn2Account = async () => {
-    const to = reportee?.partyUuid;
-    if (!isActionButtonDisabled && to) {
+    if (!isValidateCrentialsButtonDisabled) {
       try {
-        await addAltinn2Account({ to, userName, password }).unwrap();
+        await addAltinn2Account({ userName, password }).unwrap();
         setStep(3);
       } catch {
         // error displayed via addUserError RTK Query state
@@ -47,11 +68,35 @@ export const AddAltinn2AccountPage = () => {
     }
   };
 
+  const onSendForgotPasswordEmail = async () => {
+    if (!isSendEmailButtonDisabled) {
+      try {
+        await sendForgotPasswordEmail({ userName }).unwrap();
+        setStep(5);
+      } catch {
+        // error displayed via forgotPasswordError RTK Query state
+      }
+    }
+  };
+
+  const onAddAccountFromToken = async (token: string) => {
+    try {
+      await addAltinn2AccountFromToken({ token }).unwrap();
+      modalRef.current?.showModal();
+      setStep(3);
+    } catch {
+      // error displayed via addUserFromTokenError RTK Query state
+    }
+  };
+
   useEffect(() => {
-    if (reportee?.type === 'SelfIdentified') {
+    const isEnabled = reportee?.type === 'SelfIdentified' && window.featureFlags?.addAltinn2Account;
+    if (isEnabled && token) {
+      onAddAccountFromToken(token);
+    } else if (isEnabled && !token) {
       modalRef.current?.showModal();
     }
-  }, [reportee]);
+  }, [reportee, token]);
 
   const handleInputFieldKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (e.key === 'Enter') {
@@ -87,7 +132,7 @@ export const AddAltinn2AccountPage = () => {
           variant='secondary'
           asChild
         >
-          <a href={afUrl}>{t('add_altinn2_account_page.cancel')}</a>
+          <a href={afUrl}>{t('common.cancel')}</a>
         </DsButton>
       </div>
     </DsDialog.Block>
@@ -123,7 +168,7 @@ export const AddAltinn2AccountPage = () => {
         <div className={classes.buttonRow}>
           <DsButton
             variant='primary'
-            aria-disabled={isActionButtonDisabled}
+            aria-disabled={isValidateCrentialsButtonDisabled}
             loading={isAddingAltinn2Account}
             onClick={onAddAltinn2Account}
           >
@@ -133,17 +178,18 @@ export const AddAltinn2AccountPage = () => {
             variant='secondary'
             asChild
           >
-            <a href={afUrl}>{t('add_altinn2_account_page.cancel')}</a>
+            <a href={afUrl}>{t('common.cancel')}</a>
           </DsButton>
-          {getEnv() === 'prod' && new Date() < new Date(2026, 5, 20) && (
-            <DsLink
-              target='_blank'
-              rel='noopener noreferrer'
-              href='https://www.altinn.no/ui/Authentication/SelfIdentified'
-            >
-              {t('add_altinn2_account_page.forgot_password')}
-            </DsLink>
-          )}
+          <DsButton
+            variant='tertiary'
+            onClick={() => {
+              setUserName('');
+              setPassword('');
+              setStep(4);
+            }}
+          >
+            {t('add_altinn2_account_page.forgot_password')}
+          </DsButton>
         </div>
       </DsDialog.Block>
     </>
@@ -170,6 +216,58 @@ export const AddAltinn2AccountPage = () => {
     </DsDialog.Block>
   );
 
+  const forgotPasswordStepComponent = (
+    <DsDialog.Block className={classes.addAltinn2Account}>
+      <DsHeading>{t('add_altinn2_account_page.forgot_password')}</DsHeading>
+      <DsParagraph>{t('add_altinn2_account_page.forgot_password_info')}</DsParagraph>
+      <DsTextfield
+        label={t('add_altinn2_account_page.username')}
+        data-size='sm'
+        value={userName}
+        onChange={(e) => setUserName(e.target.value)}
+        onKeyDown={(e: React.KeyboardEvent<HTMLInputElement>) => {
+          if (e.key === 'Enter') {
+            e.preventDefault();
+            onSendForgotPasswordEmail();
+          }
+        }}
+      />
+      {forgotPasswordError && (
+        <DsAlert data-color='danger'>{t('add_altinn2_account_page.forgot_password_error')}</DsAlert>
+      )}
+      <div className={classes.buttonRow}>
+        <DsButton
+          variant='primary'
+          aria-disabled={isSendEmailButtonDisabled}
+          loading={isSendingForgotPasswordEmail}
+          onClick={onSendForgotPasswordEmail}
+        >
+          {t('add_altinn2_account_page.send_link')}
+        </DsButton>
+        <DsButton
+          variant='secondary'
+          onClick={() => {
+            setStep(2);
+            setUserName('');
+          }}
+        >
+          {t('common.cancel')}
+        </DsButton>
+      </div>
+    </DsDialog.Block>
+  );
+
+  const forgotPasswordReceiptComponent = (
+    <DsDialog.Block className={classes.addAltinn2Account}>
+      <DsHeading>{t('add_altinn2_account_page.forgot_password')}</DsHeading>
+      <DsParagraph>
+        {t('add_altinn2_account_page.forgot_password_sent', {
+          email: forgotPasswordEmail?.maskedEmail,
+        })}
+      </DsParagraph>
+    </DsDialog.Block>
+  );
+
   return (
     <PageLayoutWrapper hideSidebar>
       {isReporteeError && (
@@ -183,6 +281,17 @@ export const AddAltinn2AccountPage = () => {
       {window.featureFlags && !window.featureFlags.addAltinn2Account && (
         <DsAlert data-color='danger'>{t('add_altinn2_account_page.feature_toggled_off')}</DsAlert>
       )}
+      {isAddingAltinn2AccountFromToken && (
+        <DsSpinner
+          data-size='lg'
+          aria-label={t('common.loading')}
+        />
+      )}
+      {addUserFromTokenError && (
+        <DsAlert data-color='danger'>
+          {t('add_altinn2_account_page.add_account_from_token_error')}
+        </DsAlert>
+      )}
       <DsDialog
         ref={modalRef}
         closeButton={step === 2 ? undefined : false}
@@ -192,6 +301,8 @@ export const AddAltinn2AccountPage = () => {
         {step === 1 && step1Component}
         {step === 2 && step2Component}
         {step === 3 && step3Component}
+        {step === 4 && forgotPasswordStepComponent}
+        {step === 5 && forgotPasswordReceiptComponent}
       </DsDialog>
     </PageLayoutWrapper>
   );
