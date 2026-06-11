@@ -1233,7 +1233,7 @@
     "load_user_error": "Kunne ikke laste bruker.",
     "not_self_identified_error": "Kun epost-brukere kan legge til konto.",
     "feature_toggled_off": "Mulighet for å legge til konto er skrudd av.",
-    "forgot_password_info": "Skriv inn brukernavnet ditt, så vi sender en lenke for å legge til konto til e-postadressen som er registrert på dette brukernavnet.",
+    "forgot_password_info": "Skriv inn brukernavnet ditt, så sender vi en lenke til e-postadressen knyttet til kontoen.",
     "forgot_password_error": "Kunne ikke sende e-post. Sjekk at brukernavnet er riktig.",
     "send_link": "Send lenke",
     "forgot_password_sent": "Vi har sendt en e-post til {{email}}.",
