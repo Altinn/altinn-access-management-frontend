@@ -188,7 +188,7 @@ export const AddAltinn2AccountPage = () => {
               setStep(4);
             }}
           >
-            Glemt passord
+            {t('add_altinn2_account_page.forgot_password')}
           </DsButton>
         </div>
       </DsDialog.Block>
@@ -218,11 +218,8 @@ export const AddAltinn2AccountPage = () => {
 
   const forgotPasswordStepComponent = (
     <DsDialog.Block className={classes.addAltinn2Account}>
-      <DsHeading>Glemt passord</DsHeading>
-      <DsParagraph>
-        Skriv inn brukernavnet ditt, så vi sender en lenke for å legge til konto til e-postadressen
-        som er registrert på dette brukernavnet.
-      </DsParagraph>
+      <DsHeading>{t('add_altinn2_account_page.forgot_password')}</DsHeading>
+      <DsParagraph>{t('add_altinn2_account_page.forgot_password_info')}</DsParagraph>
       <DsTextfield
         label={t('add_altinn2_account_page.username')}
         data-size='sm'
@@ -236,9 +233,7 @@ export const AddAltinn2AccountPage = () => {
         }}
       />
       {forgotPasswordError && (
-        <DsAlert data-color='danger'>
-          Kunne ikke sende e-post. Sjekk at brukernavnet er riktig.
-        </DsAlert>
+        <DsAlert data-color='danger'>{t('add_altinn2_account_page.forgot_password_error')}</DsAlert>
       )}
       <div className={classes.buttonRow}>
         <DsButton
@@ -247,7 +242,7 @@ export const AddAltinn2AccountPage = () => {
           loading={isSendingForgotPasswordEmail}
           onClick={onSendForgotPasswordEmail}
         >
-          Send lenke
+          {t('add_altinn2_account_page.send_link')}
         </DsButton>
         <DsButton
           variant='secondary'
@@ -264,8 +259,12 @@ export const AddAltinn2AccountPage = () => {
 
   const forgotPasswordReceiptComponent = (
     <DsDialog.Block className={classes.addAltinn2Account}>
-      <DsHeading>Glemt passord</DsHeading>
-      <DsParagraph>Vi har sendt en e-post til {forgotPasswordEmail?.maskedEmail}.</DsParagraph>
+      <DsHeading>{t('add_altinn2_account_page.forgot_password')}</DsHeading>
+      <DsParagraph>
+        {t('add_altinn2_account_page.forgot_password_sent', {
+          email: forgotPasswordEmail?.maskedEmail,
+        })}
+      </DsParagraph>
     </DsDialog.Block>
   );
 
@@ -288,7 +287,11 @@ export const AddAltinn2AccountPage = () => {
           aria-label={t('common.loading')}
         />
       )}
-      {addUserFromTokenError && <DsAlert data-color='danger'>Kunne ikke legge til konto</DsAlert>}
+      {addUserFromTokenError && (
+        <DsAlert data-color='danger'>
+          {t('add_altinn2_account_page.add_account_from_token_error')}
+        </DsAlert>
+      )}
       <DsDialog
         ref={modalRef}
         closeButton={step === 2 ? undefined : false}
