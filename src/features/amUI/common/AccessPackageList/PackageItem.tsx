@@ -4,6 +4,8 @@ import { useTranslation } from 'react-i18next';
 import type { AccessPackage } from '@/rtk/features/accessPackageApi';
 import { PartyType } from '@/rtk/features/userInfoApi';
 
+import { useRestoreFocusTarget } from '../RestoreFocus/RestoreFocusContext';
+
 interface PackageItemProps {
   pkg: AccessPackage;
   onSelect?: (pkg: AccessPackage) => void;
@@ -27,6 +29,7 @@ export const PackageItem = ({
 }: PackageItemProps) => {
   const { t } = useTranslation();
   const partyTypeColor = partyType === PartyType.Person ? 'person' : 'company';
+  useRestoreFocusTarget(pkg.id);
 
   return (
     <AccessPackageListItem

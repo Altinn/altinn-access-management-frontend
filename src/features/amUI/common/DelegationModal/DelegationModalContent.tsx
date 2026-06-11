@@ -6,10 +6,10 @@ import { Button, DsDialog } from '@altinn/altinn-components';
 import type { AccessPackage } from '@/rtk/features/accessPackageApi';
 import type { ServiceResource } from '@/rtk/features/singleRights/singleRightsApi';
 import { useAutoFocusRef } from '@/resources/hooks/useAutoFocusRef';
-import { useRestoreFocus } from '@/resources/hooks/useRestoreFocus';
 
 import { usePartyRepresentation } from '../PartyRepresentationContext/PartyRepresentationContext';
 import { useAreaExpandedContextOrLocal } from '../AccessPackageList/AccessPackageExpandedContext';
+import { RestoreFocusProvider, useRestoreFocus } from '../RestoreFocus/RestoreFocusContext';
 import { ScopeSearch } from '../../maskinporten/ScopeSearch';
 import { ScopeInfo } from '../../maskinporten/ScopeInfo';
 
@@ -46,12 +46,9 @@ export const DelegationModalContent = ({
   const { closeAllAreas } = useAreaExpandedContextOrLocal();
   const modalRef = useRef<HTMLDialogElement>(null);
   const backButtonRef = useAutoFocusRef<HTMLButtonElement>();
-  const { containerRef, setFocusTargetId } = useRestoreFocus({
-    shouldRestoreFocus: !infoView,
-  });
+  const { containerRef, requestFocus, contextValue } = useRestoreFocus();
 
   const onResourceSelection = (resource?: ServiceResource, error = false) => {
-    setFocusTargetId(resource?.identifier ?? null);
     if (!error) {
       setActionError(null);
     }
@@ -60,7 +57,6 @@ export const DelegationModalContent = ({
   };
 
   const onPackageSelection = (accessPackage?: AccessPackage, error = false) => {
-    setFocusTargetId(accessPackage?.id ?? null);
     if (!error) {
       setActionError(null);
     }
@@ -142,38 +138,46 @@ export const DelegationModalContent = ({
   }
 
   return (
-    <DsDialog.TriggerContext>
-      <DsDialog.Trigger
-        data-size='sm'
-        variant={triggerButtonVariant}
-        className={classes.triggerButton}
-      >
-        <PlusIcon aria-hidden='true' />
-        {triggerButtonText}
-      </DsDialog.Trigger>
-      <DsDialog
-        className={classes.modalDialog}
-        closedby='any'
-        closeButton={t('common.close')}
-        onClose={reset}
-        ref={modalRef}
-      >
-        {infoView && (
-          <Button
-            ref={backButtonRef}
-            className={classes.backButton}
-            variant='tertiary'
-            data-color='neutral'
-            onClick={() => setInfoView(false)}
-          >
-            <ArrowLeftIcon aria-hidden='true' />
-            {t('common.back')}
-          </Button>
-        )}
-        <div className={classes.content}>
-          {infoView ? infoViewContent : <div ref={containerRef}>{searchViewContent}</div>}
-        </div>
-      </DsDialog>
-    </DsDialog.TriggerContext>
+    <RestoreFocusProvider value={contextValue}>
+      <DsDialog.TriggerContext>
+        <DsDialog.Trigger
+          data-size='sm'
+          variant={triggerButtonVariant}
+          className={classes.triggerButton}
+        >
+          <PlusIcon aria-hidden='true' />
+          {triggerButtonText}
+        </DsDialog.Trigger>
+        <DsDialog
+          className={classes.modalDialog}
+          closedby='any'
+          closeButton={t('common.close')}
+          onClose={reset}
+          ref={modalRef}
+        >
+          {infoView && (
+            <Button
+              ref={backButtonRef}
+              className={classes.backButton}
+              variant='tertiary'
+              data-color='neutral'
+              onClick={() => {
+                const focusTargetId = packageToView?.id ?? resourceToView?.identifier;
+                if (focusTargetId) {
+                  requestFocus(focusTargetId);
+                }
+                setInfoView(false);
+              }}
+            >
+              <ArrowLeftIcon aria-hidden='true' />
+              {t('common.back')}
+            </Button>
+          )}
+          <div className={classes.content}>
+            {infoView ? infoViewContent : <div ref={containerRef}>{searchViewContent}</div>}
+          </div>
+        </DsDialog>
+      </DsDialog.TriggerContext>
+    </RestoreFocusProvider>
   );
 };

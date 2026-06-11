@@ -14,6 +14,7 @@ import classes from './ResourceList.module.css';
 import { SkeletonResourceList } from './SkeletonResourceList';
 import { useFilteredResources } from './useFilteredResources';
 import { ResourceFilterToolbar } from '../ResourceFilterToolbar/ResourceFilterToolbar';
+import { RestoreFocusTarget } from '../RestoreFocus/RestoreFocusContext';
 import type { ResourceListItemResource } from './types';
 import {
   extractResourceName,
@@ -196,27 +197,31 @@ export const ResourceList = <
                     : undefined;
 
                   return (
-                    <ResourceListItem
+                    <RestoreFocusTarget
                       key={resourceId}
                       id={resourceId}
-                      resourceName={resourceName}
-                      ownerName={defaultOwnerName}
-                      description={description}
-                      ownerLogoUrl={ownerLogoUrl}
-                      ownerLogoUrlAlt={ownerLogoAlt}
-                      as={itemAs}
-                      size={itemSize}
-                      titleAs={itemTitleAs}
-                      interactive={itemInteractive}
-                      onClick={handleClick}
-                      badge={getBadge?.(resource, index)}
-                      titleBadge={titleBadge}
-                      variant={getHasAccess?.(resource) ? 'tinted' : 'default'}
-                      controls={renderControls?.(resource)}
-                      loading={false}
-                      shadow={itemShadow}
-                      border={border}
-                    />
+                    >
+                      <ResourceListItem
+                        id={resourceId}
+                        resourceName={resourceName}
+                        ownerName={defaultOwnerName}
+                        description={description}
+                        ownerLogoUrl={ownerLogoUrl}
+                        ownerLogoUrlAlt={ownerLogoAlt}
+                        as={itemAs}
+                        size={itemSize}
+                        titleAs={itemTitleAs}
+                        interactive={itemInteractive}
+                        onClick={handleClick}
+                        badge={getBadge?.(resource, index)}
+                        titleBadge={titleBadge}
+                        variant={getHasAccess?.(resource) ? 'tinted' : 'default'}
+                        controls={renderControls?.(resource)}
+                        loading={false}
+                        shadow={itemShadow}
+                        border={border}
+                      />
+                    </RestoreFocusTarget>
                   );
                 })}
               </List>
