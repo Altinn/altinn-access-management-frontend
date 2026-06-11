@@ -47,7 +47,7 @@ namespace Altinn.AccessManagement.UI.Integration.Clients
             string endpointUrl = "enduser/selfidentified/link";
 
             var content = JsonContent.Create(request);
-            HttpResponseMessage response = await _httpClient.PostAsync(token, endpointUrl, content);
+            HttpResponseMessage response = await _httpClient.PostAsync(token, endpointUrl, content, cancellationToken);
             return await ClientUtils.DeserializeIfSuccessfullStatusCode<Guid>(response, _logger, "SelfIdentifiedUserClient.AddAltinn2Account");
         }
 
@@ -58,7 +58,7 @@ namespace Altinn.AccessManagement.UI.Integration.Clients
             string endpointUrl = "enduser/selfidentified/link-request";
 
             var content = JsonContent.Create(request);
-            HttpResponseMessage response = await _httpClient.PostAsync(token, endpointUrl, content);
+            HttpResponseMessage response = await _httpClient.PostAsync(token, endpointUrl, content, cancellationToken);
             return await ClientUtils.DeserializeIfSuccessfullStatusCode<Altinn2ForgotPasswordResponse>(response, _logger, "SelfIdentifiedUserClient.SendForgotPasswordEmail");
         }
 
@@ -69,7 +69,7 @@ namespace Altinn.AccessManagement.UI.Integration.Clients
             string endpointUrl = "enduser/selfidentified/redeem-link";
 
             var content = JsonContent.Create(request);
-            HttpResponseMessage response = await _httpClient.PostAsync(token, endpointUrl, content);
+            HttpResponseMessage response = await _httpClient.PostAsync(token, endpointUrl, content, cancellationToken);
             return await ClientUtils.DeserializeIfSuccessfullStatusCode<Guid>(response, _logger, "SelfIdentifiedUserClient.AddAltinn2AccountFromToken");
         }
     }
