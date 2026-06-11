@@ -75,29 +75,6 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
         }
 
         /// <summary>
-        ///     Test case: Add altinn 2 user with invalid credentials returns Bad Request
-        /// </summary>
-        [Fact]
-        public async Task AddAltinn2Account_CreateConnectionFail_ReturnsBadRequest()
-        {
-            // Arrange
-            Guid userPartyUuid = new Guid("167536b5-f8ed-4c5a-8f48-0279507e53ae");
-            string token = PrincipalUtil.GetToken(1337, 50789533, userPartyUuid, 2);
-            _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
-            Altinn2AccountRequest request = new Altinn2AccountRequest()
-            {
-                UserName = "invalid_connection",
-                Password = "invalid_connection"
-            };
-
-            // Act
-            HttpResponseMessage httpResponse = await _client.PostAsync($"accessmanagement/api/v1/selfidentifieduser/altinn2account", JsonContent.Create(request));
-
-            // Assert
-            Assert.Equal(HttpStatusCode.BadRequest, httpResponse.StatusCode);
-        }
-
-        /// <summary>
         ///     Test case: Add altinn 2 user from valid token returns OK
         /// </summary>
         [Fact]
@@ -139,28 +116,6 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
 
             // Assert
             Assert.Equal(HttpStatusCode.Unauthorized, httpResponse.StatusCode);
-        }
-
-        /// <summary>
-        ///     Test case: Add altinn 2 user from token when connection creation fails returns Bad Request
-        /// </summary>
-        [Fact]
-        public async Task AddAltinn2AccountFromToken_CreateConnectionFail_ReturnsBadRequest()
-        {
-            // Arrange
-            Guid userPartyUuid = new Guid("167536b5-f8ed-4c5a-8f48-0279507e53ae");
-            string token = PrincipalUtil.GetToken(1337, 50789533, userPartyUuid, 2);
-            _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
-            Altinn2AccountFromTokenRequest request = new Altinn2AccountFromTokenRequest()
-            {
-                Token = "invalid_connection"
-            };
-
-            // Act
-            HttpResponseMessage httpResponse = await _client.PostAsync($"accessmanagement/api/v1/selfidentifieduser/altinn2account/token", JsonContent.Create(request));
-
-            // Assert
-            Assert.Equal(HttpStatusCode.BadRequest, httpResponse.StatusCode);
         }
 
         /// <summary>

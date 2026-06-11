@@ -1,6 +1,5 @@
 ﻿using Altinn.AccessManagement.UI.Core.ClientInterfaces;
 using Altinn.AccessManagement.UI.Core.Helpers;
-using Altinn.AccessManagement.UI.Core.Models.ClientDelegation;
 using Altinn.AccessManagement.UI.Core.Models.Connections;
 using Altinn.AccessManagement.UI.Core.Models.User;
 using Altinn.AccessManagement.UI.Mocks.Utils;
@@ -140,15 +139,5 @@ namespace Altinn.AccessManagement.UI.Mocks.Mocks
             return Task.FromResult(Util.GetMockData<List<SimplifiedConnection>>(dataPath));
         }
 
-        /// <inheritdoc/>
-        public Task<AssignmentDto> PostNewSelfIdentifiedUser(Guid from, Guid to, CancellationToken cancellationToken = default)
-        {
-            if (from == Guid.Empty || to == Guid.Empty)
-            {
-                throw new HttpStatusException("Test", "Mock bad request error", HttpStatusCode.BadRequest, null);
-            }
-
-            return Task.FromResult(new AssignmentDto());
-        }
     }
 }

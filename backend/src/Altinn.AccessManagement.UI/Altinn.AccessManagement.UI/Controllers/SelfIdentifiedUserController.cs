@@ -39,10 +39,9 @@ namespace Altinn.AccessManagement.UI.Controllers
         [HttpPost("altinn2account")]
         public async Task<ActionResult> AddAltinn2Account([FromBody] Altinn2AccountRequest request, CancellationToken cancellationToken)
         {
-            Guid altinn2AccountPartyUuid;
             try
             {
-                altinn2AccountPartyUuid = await _selfIdentifiedUserService.ValidateCredentials(request, cancellationToken);
+                await _selfIdentifiedUserService.ValidateCredentials(request, cancellationToken);
             }
             catch (HttpStatusException ex)
             {
@@ -54,7 +53,7 @@ namespace Altinn.AccessManagement.UI.Controllers
                 return StatusCode((int)HttpStatusCode.InternalServerError);
             }
 
-            return await PostSelfIdentifiedUserConnection(altinn2AccountPartyUuid, cancellationToken);
+            return Ok();
         }
 
         /// <summary>
@@ -89,10 +88,9 @@ namespace Altinn.AccessManagement.UI.Controllers
         [HttpPost("altinn2account/token")]
         public async Task<ActionResult> AddAltinn2AccountFromToken([FromBody] Altinn2AccountFromTokenRequest request, CancellationToken cancellationToken)
         {
-            Guid altinn2AccountPartyUuid;
             try
             {
-                altinn2AccountPartyUuid = await _selfIdentifiedUserService.AddAltinn2AccountFromToken(request, cancellationToken);
+                await _selfIdentifiedUserService.AddAltinn2AccountFromToken(request, cancellationToken);
             }
             catch (HttpStatusException ex)
             {
@@ -101,26 +99,6 @@ namespace Altinn.AccessManagement.UI.Controllers
             catch (Exception ex)
             {
                 _logger.LogError(ex, "AddAltinn2AccountFromToken failed unexpectedly");
-                return StatusCode((int)HttpStatusCode.InternalServerError);
-            }
-
-            return await PostSelfIdentifiedUserConnection(altinn2AccountPartyUuid, cancellationToken);
-        }
-
-        private async Task<ActionResult> PostSelfIdentifiedUserConnection(Guid from, CancellationToken cancellationToken)
-        {
-            try
-            {
-                Guid to = AuthenticationHelper.GetUserPartyUuid(HttpContext);
-                await _selfIdentifiedUserService.PostNewSelfIdentifiedUser(from: from, to: to, cancellationToken);
-            }
-            catch (HttpStatusException ex)
-            {
-                return new ObjectResult(ProblemDetailsFactory.CreateProblemDetails(HttpContext, (int?)ex.StatusCode, "Failed to create self-identified user connection", detail: ex.Message));
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError(ex, "PostNewSelfIdentifiedUser failed unexpectedly");
                 return StatusCode((int)HttpStatusCode.InternalServerError);
             }
 
