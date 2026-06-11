@@ -70,11 +70,16 @@ namespace Altinn.AccessManagement.UI.Controllers
                 return BadRequest("partyUuid must be provided.");
             }
 
-            int userId = AuthenticationHelper.GetUserId(_httpContextAccessor.HttpContext);
-            if (!_activeExports.TryAdd(userId, 0))
-            {
-                return StatusCode(StatusCodes.Status429TooManyRequests, "An export is already in progress. Please wait for it to complete.");
-            }
+int userId = AuthenticationHelper.GetUserId(_httpContextAccessor.HttpContext);
+if (userId == 0)
+{
+    return BadRequest("The userId is not provided in the context.");
+}
+
+if (!_activeExports.TryAdd(userId, 0))
+{
+    return StatusCode(StatusCodes.Status429TooManyRequests, "An export is already in progress. Please wait for it to complete.");
+}
 
             try
             {
