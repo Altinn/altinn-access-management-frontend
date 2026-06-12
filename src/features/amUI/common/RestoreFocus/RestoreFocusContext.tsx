@@ -9,9 +9,10 @@ import {
   useState,
 } from 'react';
 
-const RESTORE_FOCUS_SELECTOR = 'button:not([disabled])';
+const RESTORE_FOCUS_SELECTOR = 'button:not([disabled]), a[href]';
 
-interface RestoreFocusContextValue {
+// Opaque value connecting a useRestoreFocus owner to its provider and targets.
+interface RestoreFocusController {
   focusRequestId: string | null;
   clearRequest: () => void;
   containerElement: HTMLElement | null;
@@ -22,16 +23,16 @@ interface UseRestoreFocusOptions {
   focusNonInteractiveTarget?: boolean;
 }
 
-export interface RestoreFocusController {
+export interface UseRestoreFocusResult {
   // Attach to the element that contains the focusable list items.
   containerRef: RefCallback<HTMLElement>;
   // Call when navigating back to request focus on the item with the given id.
   requestFocus: (id: string) => void;
-  // Feed to <RestoreFocusProvider value> so list items can focus themselves on mount.
-  contextValue: RestoreFocusContextValue;
+  // Hand to <RestoreFocusProvider controller> so list items can focus themselves on mount.
+  controller: RestoreFocusController;
 }
 
-const RestoreFocusContext = createContext<RestoreFocusContextValue | undefined>(undefined);
+const RestoreFocusContext = createContext<RestoreFocusController | undefined>(undefined);
 
 const escapeCssIdentifier = (id: string) => {
   if (typeof CSS !== 'undefined' && CSS.escape) {
@@ -42,10 +43,10 @@ const escapeCssIdentifier = (id: string) => {
 };
 
 // Owns the focus-restore state. The owner uses containerRef/requestFocus directly and renders
-// <RestoreFocusProvider value={contextValue}> around its list so nested items can self-focus.
+// <RestoreFocusProvider controller={...}> around its list so nested items can self-focus.
 export const useRestoreFocus = ({
   focusNonInteractiveTarget = false,
-}: UseRestoreFocusOptions = {}): RestoreFocusController => {
+}: UseRestoreFocusOptions = {}): UseRestoreFocusResult => {
   const [containerElement, setContainerElement] = useState<HTMLElement | null>(null);
   const [focusRequestId, setFocusRequestId] = useState<string | null>(null);
 
@@ -61,7 +62,7 @@ export const useRestoreFocus = ({
     setFocusRequestId(null);
   }, []);
 
-  const contextValue = useMemo<RestoreFocusContextValue>(
+  const controller = useMemo<RestoreFocusController>(
     () => ({
       focusRequestId,
       clearRequest,
@@ -71,16 +72,16 @@ export const useRestoreFocus = ({
     [clearRequest, containerElement, focusNonInteractiveTarget, focusRequestId],
   );
 
-  return { containerRef, requestFocus, contextValue };
+  return { containerRef, requestFocus, controller };
 };
 
 export const RestoreFocusProvider = ({
-  value,
+  controller,
   children,
 }: {
-  value: RestoreFocusContextValue;
+  controller: RestoreFocusController;
   children: ReactNode;
-}) => <RestoreFocusContext.Provider value={value}>{children}</RestoreFocusContext.Provider>;
+}) => <RestoreFocusContext.Provider value={controller}>{children}</RestoreFocusContext.Provider>;
 
 export const useRestoreFocusTarget = (id: string) => {
   const context = useContext(RestoreFocusContext);

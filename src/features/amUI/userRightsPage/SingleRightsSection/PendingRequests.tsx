@@ -158,10 +158,10 @@ export const PendingRequestsList = ({
     actingPartyUuid: actingParty?.partyUuid,
     fromPartyUuid: fromParty?.partyUuid,
   });
-  const { containerRef, requestFocus, contextValue } = useRestoreFocus();
+  const { containerRef, requestFocus, controller } = useRestoreFocus();
 
   return (
-    <RestoreFocusProvider value={contextValue}>
+    <RestoreFocusProvider controller={controller}>
       <div>
         {selectedResource ? (
           <>

@@ -38,7 +38,7 @@ export const RequestReviewModalContent = ({ request, onClose }: RequestReviewMod
 
   // Restore focus to the request item when navigating back from a detail view, even if the item
   // has been processed and is no longer interactive.
-  const { containerRef, requestFocus, contextValue } = useRestoreFocus({
+  const { containerRef, requestFocus, controller } = useRestoreFocus({
     focusNonInteractiveTarget: true,
   });
 
@@ -138,7 +138,7 @@ export const RequestReviewModalContent = ({ request, onClose }: RequestReviewMod
   };
 
   return (
-    <RestoreFocusProvider value={contextValue}>
+    <RestoreFocusProvider controller={controller}>
       <div
         className={classes.reviewListView}
         ref={containerRef}

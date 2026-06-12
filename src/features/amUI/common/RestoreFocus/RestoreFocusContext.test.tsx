@@ -20,7 +20,7 @@ const FocusTargetTest = ({
   focusTargetId,
   focusNonInteractiveTarget = false,
 }: FocusTargetTestProps) => {
-  const { containerRef, requestFocus, contextValue } = useRestoreFocus({
+  const { containerRef, requestFocus, controller } = useRestoreFocus({
     focusNonInteractiveTarget,
   });
 
@@ -31,7 +31,7 @@ const FocusTargetTest = ({
   }, [focusTargetId, requestFocus]);
 
   return (
-    <RestoreFocusProvider value={contextValue}>
+    <RestoreFocusProvider controller={controller}>
       <div ref={containerRef}>{children}</div>
     </RestoreFocusProvider>
   );
@@ -39,10 +39,10 @@ const FocusTargetTest = ({
 
 const DelayedMountTest = () => {
   const [isTargetMounted, setIsTargetMounted] = useState(false);
-  const { containerRef, requestFocus, contextValue } = useRestoreFocus();
+  const { containerRef, requestFocus, controller } = useRestoreFocus();
 
   return (
-    <RestoreFocusProvider value={contextValue}>
+    <RestoreFocusProvider controller={controller}>
       <button onClick={() => requestFocus('target')}>Request focus</button>
       <button onClick={() => setIsTargetMounted(true)}>Mount target</button>
       <div ref={containerRef}>
@@ -58,10 +58,10 @@ const DelayedMountTest = () => {
 };
 
 const RepeatRestoreTest = () => {
-  const { containerRef, requestFocus, contextValue } = useRestoreFocus();
+  const { containerRef, requestFocus, controller } = useRestoreFocus();
 
   return (
-    <RestoreFocusProvider value={contextValue}>
+    <RestoreFocusProvider controller={controller}>
       <button onClick={() => requestFocus('target')}>Restore</button>
       <div ref={containerRef}>
         <RestoreFocusTarget id='target' />
@@ -73,10 +73,10 @@ const RepeatRestoreTest = () => {
 
 const ConsumedRequestTest = () => {
   const [isTargetMounted, setIsTargetMounted] = useState(true);
-  const { containerRef, requestFocus, contextValue } = useRestoreFocus();
+  const { containerRef, requestFocus, controller } = useRestoreFocus();
 
   return (
-    <RestoreFocusProvider value={contextValue}>
+    <RestoreFocusProvider controller={controller}>
       <button onClick={() => requestFocus('target')}>Restore</button>
       <button onClick={() => setIsTargetMounted(false)}>Unmount target</button>
       <button onClick={() => setIsTargetMounted(true)}>Remount target</button>
@@ -112,6 +112,19 @@ describe('RestoreFocusContext', () => {
     await waitFor(() =>
       expect(screen.getByRole('button', { name: 'Target action' })).toHaveFocus(),
     );
+  });
+
+  it('focuses a link descendant of the requested target element', async () => {
+    render(
+      <FocusTargetTest focusTargetId='target'>
+        <RestoreFocusTarget id='target' />
+        <div id='target'>
+          <a href='/details'>Target link</a>
+        </div>
+      </FocusTargetTest>,
+    );
+
+    await waitFor(() => expect(screen.getByRole('link', { name: 'Target link' })).toHaveFocus());
   });
 
   it('focuses the target inside the container when the same id exists earlier in the document', async () => {

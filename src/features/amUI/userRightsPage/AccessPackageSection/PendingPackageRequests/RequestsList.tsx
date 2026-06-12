@@ -60,7 +60,7 @@ export const PendingPackageRequestsList = ({
   }, [isRefetching]);
 
   const [withdrawRequest] = useWithdrawRequestMutation();
-  const { containerRef, requestFocus, contextValue } = useRestoreFocus();
+  const { containerRef, requestFocus, controller } = useRestoreFocus();
 
   const handleDelete = async (request: EnrichedPackageRequest) => {
     setLoadingByRequestId((prev) => ({ ...prev, [request.id]: true }));
@@ -87,7 +87,7 @@ export const PendingPackageRequestsList = ({
   };
 
   return (
-    <RestoreFocusProvider value={contextValue}>
+    <RestoreFocusProvider controller={controller}>
       <div>
         {selectedRequest ? (
           <>

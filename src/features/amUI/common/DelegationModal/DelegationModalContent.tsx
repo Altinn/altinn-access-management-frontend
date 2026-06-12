@@ -46,7 +46,7 @@ export const DelegationModalContent = ({
   const { closeAllAreas } = useAreaExpandedContextOrLocal();
   const modalRef = useRef<HTMLDialogElement>(null);
   const backButtonRef = useAutoFocusRef<HTMLButtonElement>();
-  const { containerRef, requestFocus, contextValue } = useRestoreFocus();
+  const { containerRef, requestFocus, controller } = useRestoreFocus();
 
   const onResourceSelection = (resource?: ServiceResource, error = false) => {
     if (!error) {
@@ -138,7 +138,7 @@ export const DelegationModalContent = ({
   }
 
   return (
-    <RestoreFocusProvider value={contextValue}>
+    <RestoreFocusProvider controller={controller}>
       <DsDialog.TriggerContext>
         <DsDialog.Trigger
           data-size='sm'
