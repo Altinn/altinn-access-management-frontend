@@ -1,9 +1,20 @@
 import { test, expect } from '../../../fixture/pomFixture';
 
-import { FacilitatorRole, loadCustomers, loadFacilitator } from '../../../util/loadFacilitators';
 import { ClientDelegationPage } from '../../../pages/systemuser/ClientDelegation';
 import { AccessManagementFrontPage } from '../../../pages/AccessManagementFrontPage';
 import { ApiRequests } from 'playwright/api-requests/SystemUserApiRequests';
+
+interface Facilitator {
+  pid: string;
+  org: string;
+  name: string;
+}
+
+interface Customer {
+  label: string;
+  confirmation: string;
+  orgnummer: string;
+}
 
 test.describe('Delegering av klienter til Systembruker', () => {
   let api: ApiRequests;
@@ -13,17 +24,21 @@ test.describe('Delegering av klienter til Systembruker', () => {
   });
 
   test.describe('Ansvarlig revisor', () => {
-    const role = FacilitatorRole.Revisor;
+    const role = 'revisor';
     const accessPackageApiName = 'ansvarlig-revisor';
     const accessPackageDisplayName = 'Ansvarlig revisor';
 
-    let user: ReturnType<typeof loadFacilitator>;
+    const user: Facilitator = {
+      pid: '06857897380',
+      org: '314250052',
+      name: 'Tilbakeholden Usymmetrisk Tiger AS',
+    };
+
     let name: string;
     let clientDelegationPage: ClientDelegationPage;
     let response: { confirmUrl: string };
 
     test.beforeEach(async ({ page }) => {
-      user = loadFacilitator(role);
       name = `Playwright-e2e-${role}-${Date.now()}-${Math.random()}`;
       clientDelegationPage = new ClientDelegationPage(page);
 
@@ -51,8 +66,7 @@ test.describe('Delegering av klienter til Systembruker', () => {
 
       await test.step('Login and navigate to system user', async () => {
         await login.LoginToAccessManagement(user.pid);
-        const reporteeName = user.name;
-        await login.selectMainUnitBySearching(reporteeName);
+        await login.selectMainUnitBySearching(user.name);
 
         const frontPage = new AccessManagementFrontPage(page);
         await frontPage.systemAccessLink.click();
@@ -74,19 +88,29 @@ test.describe('Delegering av klienter til Systembruker', () => {
   });
 
   test.describe('Regnskapsfører', () => {
-    const role = FacilitatorRole.Regnskapsfoerer;
+    const role = 'regnskapsfoerer';
     const accessPackageApiName = 'regnskapsforer-lonn';
     const accessPackageDisplayName = 'Regnskapsfører lønn';
 
-    let user: ReturnType<typeof loadFacilitator>;
-    let customers: ReturnType<typeof loadCustomers>;
+    const user: Facilitator = {
+      pid: '06857897380',
+      org: '314250052',
+      name: 'Tilbakeholden Usymmetrisk Tiger AS',
+    };
+
+    const customers: Customer[] = [
+      {
+        label: 'FINTFØLENDE GJESTFRI HAMSTER',
+        confirmation: 'FINTFØLENDE GJESTFRI HAMSTER KF',
+        orgnummer: '313334333',
+      },
+    ];
+
     let name: string;
     let clientDelegationPage: ClientDelegationPage;
     let response: { confirmUrl: string };
 
     test.beforeEach(async ({ page }) => {
-      user = loadFacilitator(role);
-      customers = loadCustomers(role);
       name = `Playwright-e2e-${role}-${Date.now()}-${Math.random()}`;
       clientDelegationPage = new ClientDelegationPage(page);
 
@@ -114,8 +138,7 @@ test.describe('Delegering av klienter til Systembruker', () => {
 
       await test.step('Login and navigate to system user', async () => {
         await login.LoginToAccessManagement(user.pid);
-        const reporteeName = user.name;
-        await login.selectMainUnitBySearching(reporteeName);
+        await login.selectMainUnitBySearching(user.name);
 
         const frontPage = new AccessManagementFrontPage(page);
         await frontPage.systemAccessLink.click();
@@ -143,19 +166,29 @@ test.describe('Delegering av klienter til Systembruker', () => {
   });
 
   test.describe('Forretningsfører', () => {
-    const role = FacilitatorRole.Forretningsfoerer;
+    const role = 'forretningsfoerer';
     const accessPackageApiName = 'forretningsforer-eiendom';
     const accessPackageDisplayName = 'Forretningsforer eiendom';
 
-    let user: ReturnType<typeof loadFacilitator>;
-    let customers: ReturnType<typeof loadCustomers>;
+    const user: Facilitator = {
+      pid: '08817696563',
+      org: '313760243',
+      name: 'NONFIGURATIV EMOSJONELL PUMA',
+    };
+
+    const customers: Customer[] = [
+      {
+        label: 'ring livsglad hest borettslag',
+        confirmation: 'ring livsglad hest borettslag',
+        orgnummer: '312424940',
+      },
+    ];
+
     let name: string;
     let clientDelegationPage: ClientDelegationPage;
     let response: { confirmUrl: string };
 
     test.beforeEach(async ({ page }) => {
-      user = loadFacilitator(role);
-      customers = loadCustomers(role);
       name = `Playwright-e2e-${role}-${Date.now()}-${Math.random()}`;
       clientDelegationPage = new ClientDelegationPage(page);
 
@@ -183,8 +216,7 @@ test.describe('Delegering av klienter til Systembruker', () => {
 
       await test.step('Login and navigate to system user', async () => {
         await login.LoginToAccessManagement(user.pid);
-        const reporteeName = user.name;
-        await login.selectMainUnitBySearching(reporteeName);
+        await login.selectMainUnitBySearching(user.name);
 
         const frontPage = new AccessManagementFrontPage(page);
         await frontPage.systemAccessLink.click();
