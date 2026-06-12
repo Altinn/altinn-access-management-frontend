@@ -17,6 +17,10 @@ import { SkeletonAccessPackageList } from '../../../common/AccessPackageList/Ske
 import { AccessPackageInfo } from '../../../common/DelegationModal/AccessPackages/AccessPackageInfo';
 import { DelegationAction } from '../../../common/DelegationModal/EditModal';
 import classes from './Requests.module.css';
+import {
+  RestoreFocusProvider,
+  useRestoreFocus,
+} from '../../../common/RestoreFocus/RestoreFocusContext';
 
 interface PendingPackageRequestsListProps {
   heading?: string;
@@ -33,7 +37,6 @@ export const PendingPackageRequestsList = ({
   const isSmallScreen = useIsTabletOrSmaller();
   const { actingParty, fromParty } = usePartyRepresentation();
   const { openSnackbar } = useSnackbar();
-  const headingRef = useAutoFocusRef<HTMLHeadingElement>();
   const backButtonRef = useAutoFocusRef<HTMLButtonElement>();
 
   const [loadingByRequestId, setLoadingByRequestId] = useState<Record<string, boolean>>({});
@@ -57,6 +60,7 @@ export const PendingPackageRequestsList = ({
   }, [isRefetching]);
 
   const [withdrawRequest] = useWithdrawRequestMutation();
+  const restoreFocus = useRestoreFocus();
 
   const handleDelete = async (request: EnrichedPackageRequest) => {
     setLoadingByRequestId((prev) => ({ ...prev, [request.id]: true }));
@@ -83,73 +87,78 @@ export const PendingPackageRequestsList = ({
   };
 
   return (
-    <div>
-      {selectedRequest ? (
-        <>
-          <DsButton
-            ref={backButtonRef}
-            variant='tertiary'
-            className={classes.backButton}
-            onClick={() => setSelectedRequest(null)}
-          >
-            <ArrowLeftIcon aria-hidden='true' />
-            {t('common.back')}
-          </DsButton>
-          <AccessPackageInfo
-            accessPackage={selectedRequest.package}
-            availableActions={[DelegationAction.REQUEST]}
-          />
-        </>
-      ) : (
-        <>
-          {heading && (
-            <DsHeading
-              ref={headingRef}
-              tabIndex={-1}
-              data-size='xs'
-              level={1}
-              className={classes.heading}
+    <RestoreFocusProvider restoreFocus={restoreFocus}>
+      <div>
+        {selectedRequest ? (
+          <>
+            <DsButton
+              ref={backButtonRef}
+              variant='tertiary'
+              className={classes.backButton}
+              onClick={() => {
+                restoreFocus.requestFocus(selectedRequest.package.id);
+                setSelectedRequest(null);
+              }}
             >
-              {heading}
-            </DsHeading>
-          )}
-          {isLoading ? (
-            <SkeletonAccessPackageList />
-          ) : (
-            <List>
-              {enrichedRequests.map((req) => (
-                <PackageItem
-                  key={req.id}
-                  pkg={req.package}
-                  partyType={fromParty?.partyTypeName ?? PartyType.Organization}
-                  as='button'
-                  onSelect={() => setSelectedRequest(req)}
-                  controls={
-                    isSmallScreen ? undefined : (
-                      <Button
-                        variant='tertiary'
-                        data-size='sm'
-                        aria-label={t('common.delete_request_for', {
-                          poa_object: req.package?.name,
-                        })}
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          handleDelete(req);
-                        }}
-                        disabled={loadingByRequestId[req.id]}
-                        loading={loadingByRequestId[req.id]}
-                      >
-                        <MinusCircleIcon aria-hidden='true' />
-                        {t('common.delete')}
-                      </Button>
-                    )
-                  }
-                />
-              ))}
-            </List>
-          )}
-        </>
-      )}
-    </div>
+              <ArrowLeftIcon aria-hidden='true' />
+              {t('common.back')}
+            </DsButton>
+            <AccessPackageInfo
+              accessPackage={selectedRequest.package}
+              availableActions={[DelegationAction.REQUEST]}
+            />
+          </>
+        ) : (
+          <>
+            {heading && (
+              <DsHeading
+                data-size='xs'
+                level={1}
+                className={classes.heading}
+              >
+                {heading}
+              </DsHeading>
+            )}
+            {isLoading ? (
+              <SkeletonAccessPackageList />
+            ) : (
+              <List>
+                {enrichedRequests.map((req) => (
+                  <PackageItem
+                    key={req.id}
+                    pkg={req.package}
+                    partyType={fromParty?.partyTypeName ?? PartyType.Organization}
+                    as='button'
+                    onSelect={() => {
+                      setSelectedRequest(req);
+                    }}
+                    controls={
+                      isSmallScreen ? undefined : (
+                        <Button
+                          variant='tertiary'
+                          data-size='sm'
+                          aria-label={t('common.delete_request_for', {
+                            poa_object: req.package?.name,
+                          })}
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            handleDelete(req);
+                          }}
+                          disabled={loadingByRequestId[req.id]}
+                          loading={loadingByRequestId[req.id]}
+                        >
+                          <MinusCircleIcon aria-hidden='true' />
+                          {t('common.delete')}
+                        </Button>
+                      )
+                    }
+                  />
+                ))}
+              </List>
+            )}
+          </>
+        )}
+      </div>
+    </RestoreFocusProvider>
   );
 };

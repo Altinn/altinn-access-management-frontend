@@ -24,7 +24,11 @@ type SnapshotRequests = {
   packageRequests: EnrichedPackageRequest[];
 };
 
-export const useRequestReview = (request: Request | null, onClose: () => void) => {
+export const useRequestReview = (
+  request: Request | null,
+  onClose: () => void,
+  requestFocus: (id: string) => void,
+) => {
   const { t } = useTranslation();
   const { actingParty } = usePartyRepresentation();
   const [approveRequest] = useApproveRequestMutation();
@@ -151,6 +155,16 @@ export const useRequestReview = (request: Request | null, onClose: () => void) =
     return undefined;
   };
 
+  const resetSelection = () => {
+    const focusTargetId = selectedResource?.identifier ?? selectedPackage?.id;
+    if (focusTargetId) {
+      requestFocus(focusTargetId);
+    }
+
+    setSelectedResource(null);
+    setSelectedPackage(null);
+  };
+
   const handleApprove = async ({
     resourceId,
     packageId,
@@ -169,8 +183,7 @@ export const useRequestReview = (request: Request | null, onClose: () => void) =
       await approveRequest({ party: actingParty.partyUuid, id: requestId }).unwrap();
       const id = resourceId ?? packageId ?? '';
       setProcessedRequests((prev) => ({ ...prev, [id]: 'approved' }));
-      setSelectedResource(null);
-      setSelectedPackage(null);
+      resetSelection();
       openSnackbar({
         message: t('request_page.request_approved'),
         color: 'success',
@@ -199,8 +212,7 @@ export const useRequestReview = (request: Request | null, onClose: () => void) =
       await rejectRequest({ party: actingParty.partyUuid, id: requestId }).unwrap();
       const id = resourceId ?? packageId ?? '';
       setProcessedRequests((prev) => ({ ...prev, [id]: 'rejected' }));
-      setSelectedResource(null);
-      setSelectedPackage(null);
+      resetSelection();
       openSnackbar({
         message: t('request_page.request_rejected'),
         color: 'success',
@@ -233,11 +245,6 @@ export const useRequestReview = (request: Request | null, onClose: () => void) =
       setSelectedPackage(pkg);
       setSelectedResource(null);
     }
-  };
-
-  const resetSelection = () => {
-    setSelectedResource(null);
-    setSelectedPackage(null);
   };
 
   const snapshotResources = snapshotRequests.resourceRequests.map((r) => r.resource);

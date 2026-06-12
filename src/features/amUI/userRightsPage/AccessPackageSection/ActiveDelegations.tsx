@@ -1,4 +1,4 @@
-import React, { useRef, useState } from 'react';
+import { useRef, useState } from 'react';
 
 import type { AccessPackage } from '@/rtk/features/accessPackageApi';
 
@@ -9,6 +9,10 @@ import { useDelegationModalContext } from '../../common/DelegationModal/Delegati
 
 import { useTranslation } from 'react-i18next';
 import { useGetIsHovedadminQuery } from '@/rtk/features/userInfoApi';
+import {
+  RestoreFocusProvider,
+  useRestoreFocus,
+} from '../../common/RestoreFocus/RestoreFocusContext';
 
 interface ActiveDelegationsProps {
   searchString?: string;
@@ -24,9 +28,11 @@ export const ActiveDelegations = ({ searchString }: ActiveDelegationsProps) => {
     actingParty?.partyUuid !== toParty?.partyUuid && // Acting party cannot grant access to itself
     (toParty?.partyUuid !== selfParty?.partyUuid || isHovedadmin); // Only hovedadmin can give access to themselves
   const { t } = useTranslation();
+  // Restore focus to the package item that opened the modal when the modal closes.
+  const restoreFocus = useRestoreFocus();
 
   return (
-    <>
+    <RestoreFocusProvider restoreFocus={restoreFocus}>
       <AccessPackageList
         isLoading={isLoading}
         showPackagesCount
@@ -57,12 +63,17 @@ export const ActiveDelegations = ({ searchString }: ActiveDelegationsProps) => {
       <EditModal
         ref={modalRef}
         accessPackage={modalItem}
-        onClose={() => setModalItem(undefined)}
+        onClose={() => {
+          if (modalItem) {
+            restoreFocus.requestFocus(modalItem.id);
+          }
+          setModalItem(undefined);
+        }}
         availableActions={[
           DelegationAction.REVOKE,
           canGiveAccess ? DelegationAction.DELEGATE : DelegationAction.REQUEST,
         ]}
       />
-    </>
+    </RestoreFocusProvider>
   );
 };
