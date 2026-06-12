@@ -55,9 +55,11 @@ export class AccessManagementFrontPage {
 
   async goToEnkelttjenester() {
     await this.singleServicesTab.click();
-    // Vent til fanen faktisk er valgt og panelet er synlig før vi gjør noe der.
+    // Vent til fanen er valgt og innholdet er lastet før vi gjør noe i panelet.
+    // Overskriften matcher både entall og flertall («Fullmakt til N enkelttjeneste(r)»).
     await expect(this.singleServicesTab).toHaveAttribute('aria-selected', 'true');
     await expect(this.singleServicesPanel).toBeVisible();
+    await expect(this.page.getByText(/Fullmakt til \d+ enkelttjeneste/)).toBeVisible();
   }
 
   async goToFullmakterHosAndre() {
