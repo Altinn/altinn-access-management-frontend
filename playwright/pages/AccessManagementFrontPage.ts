@@ -51,7 +51,7 @@ export class AccessManagementFrontPage {
 
   async goToEnkelttjenester() {
     await this.page.getByRole('tab', { name: 'Enkelttjenester' }).click();
-    await expect(this.page.getByText(/Fullmakt til \d+ enkelttjeneste/)).toBeVisible();
+    await expect(this.page.getByText(/Fullmakt til \d+ enkelttjeneste/)).toBeVisible(); // Use only partial text to match both singular and plural forms
   }
 
   async goToFullmakterHosAndre() {
