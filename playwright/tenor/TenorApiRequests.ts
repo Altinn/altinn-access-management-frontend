@@ -5,7 +5,8 @@ import { addTimeToNowUtc } from 'playwright/util/helper';
  * Klient mot Tenor testdatasøk (Skatteetaten).
  *
  * Søk gjøres med Kibana Query Language (KQL) mot syntetisk Folkeregister
- * (kilde `freg`). Autentisering skjer via Maskinporten med scope
+ * (kilde `freg`) og Enhets-/Foretaksregister (kilde `brreg-er-fr`).
+ * Autentisering skjer via Maskinporten med scope
  * `skatteetaten:testnorge/testdata.read` — vi gjenbruker playwright-
  * prosjektets `MaskinportenToken` for å hente token.
  *
@@ -13,11 +14,40 @@ import { addTimeToNowUtc } from 'playwright/util/helper';
  * https://github.com/Nyeng/tenor-testdata (lib/tenor.ts).
  */
 const TENOR_BASE_URL = 'https://testdata.api.skatteetaten.no';
-const TENOR_FREG_PATH = '/api/testnorge/v2/soek/freg';
+const TENOR_SOEK_PATH = '/api/testnorge/v2/soek';
 const TENOR_SCOPE = 'skatteetaten:testnorge/testdata.read';
 
 /** Antall år en person må være for å regnes som myndig. */
 const MYNDIGHETSALDER = 18;
+
+/** Roller en virksomhet kan ha som tilrettelegger (facilitator) for klienter. */
+export type FacilitatorRolle = 'revisor' | 'regnskapsfoerer' | 'forretningsfoerer';
+
+/**
+ * Tenor-søkefeltet og rollegruppe-koden per facilitator-rolle.
+ * `<felt>:*` finner klienter som har rollen; `<felt>:<orgnr>` finner klientene
+ * til en bestemt facilitator. Facilitatorens orgnr leses fra klientens
+ * rollegruppe med tilhørende `rolleKode`.
+ */
+const FACILITATOR_ROLLER: Record<FacilitatorRolle, { felt: string; rolleKode: string }> = {
+  revisor: { felt: 'revisorerOrgnr', rolleKode: 'REVI' },
+  regnskapsfoerer: { felt: 'regnskapsfoerereOrgnr', rolleKode: 'REGN' },
+  forretningsfoerer: { felt: 'forretningsfoerereOrgnr', rolleKode: 'FFØR' },
+};
+
+/** En virksomhet (klient) hentet fra Tenor. */
+export interface TenorVirksomhet {
+  organisasjonsnummer: string;
+  navn: string;
+}
+
+/** En facilitator-virksomhet med daglig leder og klienter. */
+export interface TenorFacilitator extends TenorVirksomhet {
+  rolle: FacilitatorRolle;
+  /** Fødselsnummer til daglig leder (eller innehaver), eller null. */
+  dagligLeder: string | null;
+  klienter: TenorVirksomhet[];
+}
 
 interface TenorDocument {
   tenorMetadata?: {
@@ -53,6 +83,14 @@ interface FregNavn {
   erGjeldende?: boolean;
 }
 
+interface RolleGruppe {
+  type?: { kode?: string };
+  roller?: Array<{
+    virksomhet?: { organisasjonsnummer?: string };
+    person?: { foedselsnummer?: string };
+  }>;
+}
+
 export class TenorApiRequests {
   private readonly maskinporten: MaskinportenToken;
 
@@ -65,15 +103,16 @@ export class TenorApiRequests {
   }
 
   /**
-   * Kjører et KQL-søk mot Folkeregister-kilden i Tenor.
+   * Kjører et KQL-søk mot en Tenor-kilde.
+   * @param kilde Tenor-kilde, f.eks. `freg` eller `brreg-er-fr`.
    * @param kql Søkestreng i Kibana Query Language.
    * @param antall Antall dokumenter som returneres. Default: 1.
    */
-  async sokFreg(kql: string, antall = 1): Promise<TenorDocument[]> {
+  async sok(kilde: string, kql: string, antall = 1): Promise<TenorDocument[]> {
     const token = await this.maskinporten.getMaskinportenToken(TENOR_SCOPE);
 
     const url =
-      `${TENOR_BASE_URL}${TENOR_FREG_PATH}` +
+      `${TENOR_BASE_URL}${TENOR_SOEK_PATH}/${kilde}` +
       `?kql=${encodeURIComponent(kql)}&vis=tenorMetadata&antall=${antall}`;
 
     const response = await fetch(url, {
@@ -90,6 +129,133 @@ export class TenorApiRequests {
 
     const json = (await response.json()) as TenorResponse;
     return json.dokumentListe ?? [];
+  }
+
+  /** Kjører et KQL-søk mot Folkeregister-kilden (`freg`). */
+  async sokFreg(kql: string, antall = 1): Promise<TenorDocument[]> {
+    return this.sok('freg', kql, antall);
+  }
+
+  /** Kjører et KQL-søk mot Enhets-/Foretaksregister-kilden (`brreg-er-fr`). */
+  async sokBrreg(kql: string, antall = 1): Promise<TenorDocument[]> {
+    return this.sok('brreg-er-fr', kql, antall);
+  }
+
+  /** Returnerer antall treff for et KQL-søk uten å hente dokumentene. */
+  async tellTreff(kilde: string, kql: string): Promise<number> {
+    const token = await this.maskinporten.getMaskinportenToken(TENOR_SCOPE);
+    const url = `${TENOR_BASE_URL}${TENOR_SOEK_PATH}/${kilde}?kql=${encodeURIComponent(kql)}&antall=0`;
+    const response = await fetch(url, {
+      headers: { Authorization: `Bearer ${token}`, Accept: 'application/json' },
+    });
+    if (!response.ok) {
+      const body = await response.text().catch(() => 'Ukjent feil');
+      throw new Error(`Tenor-telling feilet (HTTP ${response.status}): ${body}\nKQL: ${kql}`);
+    }
+    const json = (await response.json()) as { treff?: number };
+    return json.treff ?? 0;
+  }
+
+  /**
+   * Henter en facilitator-virksomhet (revisor/regnskapsfører/forretningsfører)
+   * med daglig leder og klientliste fra Tenor.
+   *
+   * Flyt:
+   * 1. `<felt>:*` finner en klient som har rollen.
+   * 2. Facilitatorens orgnr leses fra klientens rollegruppe (REVI/REGN/FFØR).
+   * 3. Daglig leder hentes fra facilitator-virksomheten.
+   * 4. `<felt>:<facilitatorOrg>` gir facilitatorens klienter.
+   *
+   * @param rolle Hvilken facilitator-rolle.
+   * @param antallKlienter Maks antall klienter som hentes. Default: 5.
+   */
+  async hentFacilitatorMedKlienter(
+    rolle: FacilitatorRolle,
+    antallKlienter = 5,
+  ): Promise<TenorFacilitator> {
+    const { felt, rolleKode } = FACILITATOR_ROLLER[rolle];
+
+    const [klient] = await this.sokBrreg(`${felt}:*`, 1);
+    const facilitatorOrg = klient ? this.hentRolleVirksomhet(klient, rolleKode) : null;
+    if (!facilitatorOrg) {
+      throw new Error(`Fant ingen ${rolle}-virksomhet i Tenor (felt: ${felt}).`);
+    }
+
+    return this.byggFacilitator(rolle, facilitatorOrg, antallKlienter);
+  }
+
+  /**
+   * Henter en facilitator-virksomhet som har få klienter — nyttig for tester
+   * der man vil delegere alle klienter uten å treffe tusenvis.
+   *
+   * Skanner et utvalg klient-kandidater, teller klientene til hver unike
+   * facilitator, og velger den med færrest klienter (så lenge den har minst 1
+   * og høyst `maksKlienter`).
+   *
+   * @param rolle Hvilken facilitator-rolle.
+   * @param maksKlienter Øvre grense for antall klienter. Default: 50.
+   * @param antallKandidater Hvor mange klient-kandidater som skannes. Default: 100.
+   */
+  async hentFacilitatorMedFaaKlienter(
+    rolle: FacilitatorRolle,
+    maksKlienter = 50,
+    antallKandidater = 100,
+  ): Promise<TenorFacilitator> {
+    const { felt, rolleKode } = FACILITATOR_ROLLER[rolle];
+
+    const kandidater = await this.sokBrreg(`${felt}:*`, antallKandidater);
+    const facilitatorOrg = new Set<string>();
+    for (const klient of kandidater) {
+      const org = this.hentRolleVirksomhet(klient, rolleKode);
+      if (org) facilitatorOrg.add(org);
+    }
+    if (facilitatorOrg.size === 0) {
+      throw new Error(`Fant ingen ${rolle}-virksomhet i Tenor (felt: ${felt}).`);
+    }
+
+    let beste: { org: string; antall: number } | null = null;
+    for (const org of facilitatorOrg) {
+      const antall = await this.tellTreff('brreg-er-fr', `${felt}:${org}`);
+      if (antall < 1 || antall > maksKlienter) continue;
+      if (!beste || antall < beste.antall) beste = { org, antall };
+    }
+
+    if (!beste) {
+      throw new Error(
+        `Fant ingen ${rolle}-virksomhet med 1–${maksKlienter} klienter blant ${facilitatorOrg.size} kandidater. ` +
+          `Prøv en høyere --maks-klienter eller flere kandidater.`,
+      );
+    }
+
+    return this.byggFacilitator(rolle, beste.org, beste.antall);
+  }
+
+  /** Bygger en facilitator med daglig leder og klientliste fra et orgnr. */
+  private async byggFacilitator(
+    rolle: FacilitatorRolle,
+    facilitatorOrg: string,
+    antallKlienter: number,
+  ): Promise<TenorFacilitator> {
+    const { felt } = FACILITATOR_ROLLER[rolle];
+
+    const [facilitator] = await this.sokBrreg(`organisasjonsnummer:${facilitatorOrg}`, 1);
+    if (!facilitator) {
+      throw new Error(`Fant ikke facilitator-virksomhet ${facilitatorOrg} i Tenor.`);
+    }
+    const facilitatorData = this.parseKildedata(facilitator);
+
+    const klientDokumenter = await this.sokBrreg(`${felt}:${facilitatorOrg}`, antallKlienter);
+    const klienter = klientDokumenter
+      .map((d) => this.hentVirksomhet(d))
+      .filter((v): v is TenorVirksomhet => v !== null);
+
+    return {
+      rolle,
+      organisasjonsnummer: facilitatorOrg,
+      navn: typeof facilitatorData.navn === 'string' ? facilitatorData.navn : '',
+      dagligLeder: this.hentDagligLeder(facilitatorData),
+      klienter,
+    };
   }
 
   /**
@@ -168,6 +334,46 @@ export class TenorApiRequests {
     // Fallback: let etter et 11-sifret nummer i kildedata.
     const match = dokument.tenorMetadata?.kildedata?.match(/\b\d{11}\b/);
     return match ? match[0] : null;
+  }
+
+  /** Leser virksomhetsnummeret i en gitt rollegruppe (f.eks. REVI) fra en klient. */
+  private hentRolleVirksomhet(klientDokument: TenorDocument, rolleKode: string): string | null {
+    const data = this.parseKildedata(klientDokument);
+    const rollegrupper = Array.isArray(data.rollegrupper)
+      ? (data.rollegrupper as RolleGruppe[])
+      : [];
+    for (const gruppe of rollegrupper) {
+      if (gruppe.type?.kode !== rolleKode) continue;
+      for (const rolle of gruppe.roller ?? []) {
+        const orgnr = rolle.virksomhet?.organisasjonsnummer;
+        if (orgnr) return orgnr;
+      }
+    }
+    return null;
+  }
+
+  /** Leser fødselsnummeret til daglig leder (eller innehaver) fra en virksomhet. */
+  private hentDagligLeder(virksomhetData: Record<string, unknown>): string | null {
+    const rollegrupper = Array.isArray(virksomhetData.rollegrupper)
+      ? (virksomhetData.rollegrupper as RolleGruppe[])
+      : [];
+    for (const gruppe of rollegrupper) {
+      if (gruppe.type?.kode !== 'DAGL' && gruppe.type?.kode !== 'INNH') continue;
+      for (const rolle of gruppe.roller ?? []) {
+        const fnr = rolle.person?.foedselsnummer;
+        if (fnr) return fnr;
+      }
+    }
+    return null;
+  }
+
+  /** Trekker ut organisasjonsnummer + navn fra et brreg-dokument. */
+  private hentVirksomhet(dokument: TenorDocument): TenorVirksomhet | null {
+    const data = this.parseKildedata(dokument);
+    const organisasjonsnummer = data.organisasjonsnummer;
+    const navn = data.navn;
+    if (typeof organisasjonsnummer !== 'string' || typeof navn !== 'string') return null;
+    return { organisasjonsnummer, navn };
   }
 
   /** Parser kildedata-JSON, eller returnerer tomt objekt ved feil. */
