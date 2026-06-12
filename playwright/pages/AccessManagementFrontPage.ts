@@ -10,8 +10,8 @@ export class AccessManagementFrontPage {
   readonly tryNewAccessManagementButton: Locator;
   readonly klientadministrasjonButton: Locator;
   readonly newUserButton: Locator;
-  readonly enkelttjenesterTab: Locator;
-  readonly enkelttjenesterPanel: Locator;
+  readonly singleServicesTab: Locator;
+  readonly singleServicesPanel: Locator;
 
   constructor(page: Page) {
     this.page = page;
@@ -33,8 +33,8 @@ export class AccessManagementFrontPage {
     });
     this.klientadministrasjonButton = this.page.getByRole('link', { name: 'Klientadministrasjon' });
     this.newUserButton = this.page.getByRole('button', { name: 'Ny bruker' });
-    this.enkelttjenesterTab = this.page.getByRole('tab', { name: 'Enkelttjenester' });
-    this.enkelttjenesterPanel = this.page.getByRole('tabpanel', { name: 'Enkelttjenester' });
+    this.singleServicesTab = this.page.getByRole('tab', { name: 'Enkelttjenester' });
+    this.singleServicesPanel = this.page.getByRole('tabpanel', { name: 'Enkelttjenester' });
   }
 
   async goToKlientAdministrasjon() {
@@ -54,10 +54,10 @@ export class AccessManagementFrontPage {
   }
 
   async goToEnkelttjenester() {
-    await this.enkelttjenesterTab.click();
+    await this.singleServicesTab.click();
     // Vent til fanen faktisk er valgt og panelet er synlig før vi gjør noe der.
-    await expect(this.enkelttjenesterTab).toHaveAttribute('aria-selected', 'true');
-    await expect(this.enkelttjenesterPanel).toBeVisible();
+    await expect(this.singleServicesTab).toHaveAttribute('aria-selected', 'true');
+    await expect(this.singleServicesPanel).toBeVisible();
   }
 
   async goToFullmakterHosAndre() {
@@ -77,9 +77,9 @@ export class AccessManagementFrontPage {
   }
 
   async clickGiFullmakt() {
-    // Skop til det aktive tab-panelet og bruk eksakt navn, slik at vi ikke
-    // treffer skjulte "Gi fullmakt"- eller "Gi fullmakt for ..."-knapper i
-    // det inaktive panelet (som ligger først i DOM-en).
+    // Begrens til det aktive fanepanelet og bruk eksakt navn, slik at vi ikke
+    // treffer skjulte «Gi fullmakt»- eller «Gi fullmakt for …»-knapper i det
+    // inaktive panelet (som ligger først i DOM-en).
     await this.page
       .getByRole('tabpanel')
       .getByRole('button', { name: 'Gi fullmakt', exact: true })
