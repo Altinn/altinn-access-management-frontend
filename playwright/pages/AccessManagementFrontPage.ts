@@ -51,6 +51,7 @@ export class AccessManagementFrontPage {
 
   async goToEnkelttjenester() {
     await this.page.getByRole('tab', { name: 'Enkelttjenester' }).click();
+    await expect(this.page.getByText(/Fullmakt til \d+ enkelttjeneste/)).toBeVisible();
   }
 
   async goToFullmakterHosAndre() {
