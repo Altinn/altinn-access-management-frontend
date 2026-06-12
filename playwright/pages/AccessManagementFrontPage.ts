@@ -10,6 +10,8 @@ export class AccessManagementFrontPage {
   readonly tryNewAccessManagementButton: Locator;
   readonly klientadministrasjonButton: Locator;
   readonly newUserButton: Locator;
+  readonly singleServicesTab: Locator;
+  readonly singleServicesPanel: Locator;
 
   constructor(page: Page) {
     this.page = page;
@@ -31,6 +33,8 @@ export class AccessManagementFrontPage {
     });
     this.klientadministrasjonButton = this.page.getByRole('link', { name: 'Klientadministrasjon' });
     this.newUserButton = this.page.getByRole('button', { name: 'Ny bruker' });
+    this.singleServicesTab = this.page.getByRole('tab', { name: 'Enkelttjenester' });
+    this.singleServicesPanel = this.page.getByRole('tabpanel', { name: 'Enkelttjenester' });
   }
 
   async goToKlientAdministrasjon() {
@@ -50,8 +54,12 @@ export class AccessManagementFrontPage {
   }
 
   async goToEnkelttjenester() {
-    await this.page.getByRole('tab', { name: 'Enkelttjenester' }).click();
-    await expect(this.page.getByText(/Fullmakt til \d+ enkelttjeneste/)).toBeVisible(); // Use only partial text to match both singular and plural forms
+    await this.singleServicesTab.click();
+    // Vent til fanen er valgt og innholdet er lastet før vi gjør noe i panelet.
+    // Overskriften matcher både entall og flertall («Fullmakt til N enkelttjeneste(r)»).
+    await expect(this.singleServicesTab).toHaveAttribute('aria-selected', 'true');
+    await expect(this.singleServicesPanel).toBeVisible();
+    await expect(this.page.getByText(/Fullmakt til \d+ enkelttjeneste/)).toBeVisible();
   }
 
   async goToFullmakterHosAndre() {
@@ -71,7 +79,13 @@ export class AccessManagementFrontPage {
   }
 
   async clickGiFullmakt() {
-    await this.page.getByRole('button', { name: 'Gi fullmakt' }).click();
+    // Begrens til det aktive fanepanelet og bruk eksakt navn, slik at vi ikke
+    // treffer skjulte «Gi fullmakt»- eller «Gi fullmakt for …»-knapper i det
+    // inaktive panelet (som ligger først i DOM-en).
+    await this.page
+      .getByRole('tabpanel')
+      .getByRole('button', { name: 'Gi fullmakt', exact: true })
+      .click();
   }
 
   async clickGiFullmaktEnkelttjeneste() {
@@ -175,11 +189,10 @@ export class AccessManagementFrontPage {
     await this.page.getByRole('button', { name: 'Legg til person' }).click();
   }
   async addOrg(orgNo: string) {
-    const virksomhetTab = await this.page.getByRole('tab', { name: 'Virksomhet' });
+    const virksomhetTab = this.page.getByRole('tab', { name: 'Virksomhet' });
     await expect(virksomhetTab).toBeVisible();
     await virksomhetTab.click();
-    // await this.page.getByRole('tab', { name: 'Virksomhet' }).click();
-    const orgNoField = await this.page.getByRole('textbox', { name: 'Organisasjonsnummer' });
+    const orgNoField = this.page.getByRole('textbox', { name: 'Organisasjonsnummer' });
     await orgNoField.fill(orgNo);
     await this.page.getByRole('button', { name: 'Legg til virksomhet' }).click();
   }

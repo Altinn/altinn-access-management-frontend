@@ -1,8 +1,5 @@
 import { test, expect } from '../../../fixture/pomFixture';
 
-import { FacilitatorRole, loadCustomers, loadFacilitator } from '../../../util/loadFacilitators';
-import { ClientDelegationPage } from '../../../pages/systemuser/ClientDelegation';
-import { AccessManagementFrontPage } from '../../../pages/AccessManagementFrontPage';
 import { ApiRequests } from 'playwright/api-requests/SystemUserApiRequests';
 
 test.describe('Delegering av klienter til Systembruker', () => {
@@ -13,19 +10,21 @@ test.describe('Delegering av klienter til Systembruker', () => {
   });
 
   test.describe('Ansvarlig revisor', () => {
-    const role = FacilitatorRole.Revisor;
+    const role = 'revisor';
     const accessPackageApiName = 'ansvarlig-revisor';
     const accessPackageDisplayName = 'Ansvarlig revisor';
 
-    let user: ReturnType<typeof loadFacilitator>;
+    const user = {
+      pid: '07875898560',
+      org: '314251768',
+      name: 'KUNST STERK MINK ANS',
+    };
+
     let name: string;
-    let clientDelegationPage: ClientDelegationPage;
     let response: { confirmUrl: string };
 
-    test.beforeEach(async ({ page }) => {
-      user = loadFacilitator(role);
-      name = `Playwright-e2e-${role}-${Date.now()}-${Math.random()}`;
-      clientDelegationPage = new ClientDelegationPage(page);
+    test.beforeEach(async () => {
+      name = `Playwright-e2e-${role}-${Date.now()}`;
 
       const systemId = await test.step('Create system with access packages', async () => {
         return await api.createSystemInSystemregisterWithAccessPackages('310547891', name);
@@ -41,7 +40,12 @@ test.describe('Delegering av klienter til Systembruker', () => {
       });
     });
 
-    test('Ansvarlig revisor - add all customers with one click', async ({ page, login }) => {
+    test('Ansvarlig revisor - add all customers with one click', async ({
+      page,
+      login,
+      accessManagementFrontPage,
+      clientDelegationPage,
+    }) => {
       await test.step('Approve system user request', async () => {
         await page.goto(response.confirmUrl);
         await login.loginNotChoosingActor(user.pid);
@@ -51,11 +55,9 @@ test.describe('Delegering av klienter til Systembruker', () => {
 
       await test.step('Login and navigate to system user', async () => {
         await login.LoginToAccessManagement(user.pid);
-        const reporteeName = user.name;
-        await login.selectMainUnitBySearching(reporteeName);
+        await login.selectMainUnitBySearching(user.name);
 
-        const frontPage = new AccessManagementFrontPage(page);
-        await frontPage.systemAccessLink.click();
+        await accessManagementFrontPage.systemAccessLink.click();
 
         await expect(clientDelegationPage.systemUserLink(name)).toBeVisible();
         await clientDelegationPage.systemUserLink(name).click();
@@ -74,21 +76,29 @@ test.describe('Delegering av klienter til Systembruker', () => {
   });
 
   test.describe('Regnskapsfører', () => {
-    const role = FacilitatorRole.Regnskapsfoerer;
+    const role = 'regnskapsfoerer';
     const accessPackageApiName = 'regnskapsforer-lonn';
     const accessPackageDisplayName = 'Regnskapsfører lønn';
 
-    let user: ReturnType<typeof loadFacilitator>;
-    let customers: ReturnType<typeof loadCustomers>;
+    const user = {
+      pid: '25872549881',
+      org: '312433834',
+      name: 'TILFELDIG RAKRYGGET KATT MALSTRØM',
+    };
+
+    const customers = [
+      {
+        label: 'DYP VERD TIGER AS',
+        confirmation: 'DYP VERD TIGER AS',
+        orgnummer: '214172542',
+      },
+    ];
+
     let name: string;
-    let clientDelegationPage: ClientDelegationPage;
     let response: { confirmUrl: string };
 
-    test.beforeEach(async ({ page }) => {
-      user = loadFacilitator(role);
-      customers = loadCustomers(role);
-      name = `Playwright-e2e-${role}-${Date.now()}-${Math.random()}`;
-      clientDelegationPage = new ClientDelegationPage(page);
+    test.beforeEach(async () => {
+      name = `Playwright-e2e-${role}-${Date.now()}`;
 
       const systemId = await test.step('Create system with access packages', async () => {
         return await api.createSystemInSystemregisterWithAccessPackages('310547891', name);
@@ -104,7 +114,12 @@ test.describe('Delegering av klienter til Systembruker', () => {
       });
     });
 
-    test('Regnskapsfører', async ({ page, login }) => {
+    test('Regnskapsfører', async ({
+      page,
+      login,
+      accessManagementFrontPage,
+      clientDelegationPage,
+    }) => {
       await test.step('Approve system user request', async () => {
         await page.goto(response.confirmUrl);
         await login.loginNotChoosingActor(user.pid);
@@ -114,11 +129,9 @@ test.describe('Delegering av klienter til Systembruker', () => {
 
       await test.step('Login and navigate to system user', async () => {
         await login.LoginToAccessManagement(user.pid);
-        const reporteeName = user.name;
-        await login.selectMainUnitBySearching(reporteeName);
+        await login.selectMainUnitBySearching(user.name);
 
-        const frontPage = new AccessManagementFrontPage(page);
-        await frontPage.systemAccessLink.click();
+        await accessManagementFrontPage.systemAccessLink.click();
 
         await expect(clientDelegationPage.systemUserLink(name)).toBeVisible();
         await clientDelegationPage.systemUserLink(name).click();
@@ -143,21 +156,29 @@ test.describe('Delegering av klienter til Systembruker', () => {
   });
 
   test.describe('Forretningsfører', () => {
-    const role = FacilitatorRole.Forretningsfoerer;
+    const role = 'forretningsfoerer';
     const accessPackageApiName = 'forretningsforer-eiendom';
     const accessPackageDisplayName = 'Forretningsforer eiendom';
 
-    let user: ReturnType<typeof loadFacilitator>;
-    let customers: ReturnType<typeof loadCustomers>;
+    const user = {
+      pid: '12826697375',
+      org: '312158019',
+      name: 'MOMENTAN VENNLIG TIGER AS',
+    };
+
+    const customers = [
+      {
+        label: 'SAMEIET ARTIG SKRIVEFØR LØVE',
+        confirmation: 'SAMEIET ARTIG SKRIVEFØR LØVE',
+        orgnummer: '213461532',
+      },
+    ];
+
     let name: string;
-    let clientDelegationPage: ClientDelegationPage;
     let response: { confirmUrl: string };
 
-    test.beforeEach(async ({ page }) => {
-      user = loadFacilitator(role);
-      customers = loadCustomers(role);
-      name = `Playwright-e2e-${role}-${Date.now()}-${Math.random()}`;
-      clientDelegationPage = new ClientDelegationPage(page);
+    test.beforeEach(async () => {
+      name = `Playwright-e2e-${role}-${Date.now()}`;
 
       const systemId = await test.step('Create system with access packages', async () => {
         return await api.createSystemInSystemregisterWithAccessPackages('310547891', name);
@@ -173,7 +194,12 @@ test.describe('Delegering av klienter til Systembruker', () => {
       });
     });
 
-    test('Forretningsfører', async ({ page, login }) => {
+    test('Forretningsfører', async ({
+      page,
+      login,
+      accessManagementFrontPage,
+      clientDelegationPage,
+    }) => {
       await test.step('Approve system user request', async () => {
         await page.goto(response.confirmUrl);
         await login.loginNotChoosingActor(user.pid);
@@ -183,11 +209,9 @@ test.describe('Delegering av klienter til Systembruker', () => {
 
       await test.step('Login and navigate to system user', async () => {
         await login.LoginToAccessManagement(user.pid);
-        const reporteeName = user.name;
-        await login.selectMainUnitBySearching(reporteeName);
+        await login.selectMainUnitBySearching(user.name);
 
-        const frontPage = new AccessManagementFrontPage(page);
-        await frontPage.systemAccessLink.click();
+        await accessManagementFrontPage.systemAccessLink.click();
 
         await expect(clientDelegationPage.systemUserLink(name)).toBeVisible();
         await clientDelegationPage.systemUserLink(name).click();

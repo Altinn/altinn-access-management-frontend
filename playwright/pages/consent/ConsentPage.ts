@@ -101,7 +101,10 @@ export class ConsentPage {
     this.language = language; // now the fixture value wins
 
     // Controls/links
-    this.menuButton = page.getByRole('button', { name: /^(Menu|Meny)$/ });
+    // På mobil (consent kjører i MOBILE_VIEWPORT) er menyknappen en hamburger
+    // uten tilgjengelig navn «Meny», så vi skoper til hovednavigasjonen og tar
+    // knappen der.
+    this.menuButton = page.getByRole('navigation', { name: 'hovednavigasjon' }).getByRole('button');
     this.languagePicker = page.getByLabel('Språk/language');
     this.norwegian = page.locator('#no_nb');
     this.english = page.locator('#en');

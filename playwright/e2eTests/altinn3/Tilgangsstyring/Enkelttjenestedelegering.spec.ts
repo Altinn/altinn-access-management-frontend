@@ -244,9 +244,6 @@ test.describe('Enkelttjenestedelegering fra person til person og person til org'
       });
 
       await test.step(`Slett "${service}" for ${recipient.name}`, async () => {
-        await accessManagementFrontPage.goToUsers();
-        await accessManagementFrontPage.expandOrg(recipient.name);
-        await accessManagementFrontPage.clickUser(recipient.name);
         await accessManagementFrontPage.goToEnkelttjenester();
         await accessManagementFrontPage.clickSlettEnkelttjeneste(service);
       });
@@ -517,9 +514,6 @@ test.describe('Enkelttjenestedelegering fra org til person og org til org', () =
       });
 
       await test.step(`Slett "${service}" for ${recipient.name}`, async () => {
-        await accessManagementFrontPage.goToUsers();
-        await accessManagementFrontPage.expandOrg(recipient.name);
-        await accessManagementFrontPage.clickUser(recipient.name);
         await accessManagementFrontPage.goToEnkelttjenester();
         await accessManagementFrontPage.clickSlettEnkelttjeneste(service);
       });
