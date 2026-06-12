@@ -9,7 +9,6 @@ export class delegateToUser {
   async delegateToSSN(ssnUser: string, ssnUserName: string) {
     await this.page.getByRole('link', { name: 'Andre med rettigheter til' }).click();
     await this.page.getByRole('button', { name: 'Legge til ny person eller' }).click();
-    await this.page.getByRole('button', { name: 'person' });
     await this.page.getByPlaceholder('siffer').click();
     await this.page.getByPlaceholder('siffer').fill(ssnUser);
     await this.page.getByLabel('Etternavn').click();
@@ -44,7 +43,6 @@ export class delegateRightsToUser {
     await this.page.getByRole('button', { name: resourceName }).first().click();
     await this.page.getByRole('button', { name: 'Legg til add' }).first().click();
     await this.page.getByRole('button', { name: 'Valgte tjenester' }).click();
-    await this.page.getByLabel('Valgte tjenester').getByText(resourceName);
     await this.page
       .locator('button')
       .filter({ hasText: /^Gå videre$/ })

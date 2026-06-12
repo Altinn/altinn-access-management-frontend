@@ -187,11 +187,10 @@ export class AccessManagementFrontPage {
     await this.page.getByRole('button', { name: 'Legg til person' }).click();
   }
   async addOrg(orgNo: string) {
-    const virksomhetTab = await this.page.getByRole('tab', { name: 'Virksomhet' });
+    const virksomhetTab = this.page.getByRole('tab', { name: 'Virksomhet' });
     await expect(virksomhetTab).toBeVisible();
     await virksomhetTab.click();
-    // await this.page.getByRole('tab', { name: 'Virksomhet' }).click();
-    const orgNoField = await this.page.getByRole('textbox', { name: 'Organisasjonsnummer' });
+    const orgNoField = this.page.getByRole('textbox', { name: 'Organisasjonsnummer' });
     await orgNoField.fill(orgNo);
     await this.page.getByRole('button', { name: 'Legg til virksomhet' }).click();
   }
