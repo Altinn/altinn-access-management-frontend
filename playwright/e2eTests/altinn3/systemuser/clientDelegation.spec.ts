@@ -4,18 +4,6 @@ import { ClientDelegationPage } from '../../../pages/systemuser/ClientDelegation
 import { AccessManagementFrontPage } from '../../../pages/AccessManagementFrontPage';
 import { ApiRequests } from 'playwright/api-requests/SystemUserApiRequests';
 
-interface Facilitator {
-  pid: string;
-  org: string;
-  name: string;
-}
-
-interface Customer {
-  label: string;
-  confirmation: string;
-  orgnummer: string;
-}
-
 test.describe('Delegering av klienter til Systembruker', () => {
   let api: ApiRequests;
 
@@ -28,7 +16,7 @@ test.describe('Delegering av klienter til Systembruker', () => {
     const accessPackageApiName = 'ansvarlig-revisor';
     const accessPackageDisplayName = 'Ansvarlig revisor';
 
-    const user: Facilitator = {
+    const user = {
       pid: '07875898560',
       org: '314251768',
       name: 'KUNST STERK MINK ANS',
@@ -92,13 +80,13 @@ test.describe('Delegering av klienter til Systembruker', () => {
     const accessPackageApiName = 'regnskapsforer-lonn';
     const accessPackageDisplayName = 'Regnskapsfører lønn';
 
-    const user: Facilitator = {
+    const user = {
       pid: '25872549881',
       org: '312433834',
       name: 'TILFELDIG RAKRYGGET KATT MALSTRØM',
     };
 
-    const customers: Customer[] = [
+    const customers = [
       {
         label: 'DYP VERD TIGER AS',
         confirmation: 'DYP VERD TIGER AS',
@@ -170,13 +158,13 @@ test.describe('Delegering av klienter til Systembruker', () => {
     const accessPackageApiName = 'forretningsforer-eiendom';
     const accessPackageDisplayName = 'Forretningsforer eiendom';
 
-    const user: Facilitator = {
+    const user = {
       pid: '12826697375',
       org: '312158019',
       name: 'MOMENTAN VENNLIG TIGER AS',
     };
 
-    const customers: Customer[] = [
+    const customers = [
       {
         label: 'SAMEIET ARTIG SKRIVEFØR LØVE',
         confirmation: 'SAMEIET ARTIG SKRIVEFØR LØVE',
