@@ -37,8 +37,10 @@ export const PageLayoutWrapper = ({
   const footer = useFooter();
   const { sidebarItems, shortcutsMenuItem } = useSidebarItems({ isSmall: false });
 
-  const escalateBannerSeverity = new Date() >= new Date(2026, 5, 2); // Escalate to warning on June 2nd, 2026
-  const bannerLink = getBannerLink(languageCode as LanguageCode);
+  const isNewBanner = new Date() >= new Date(2026, 5, 20); // Change to new banner on June 20th, 2026
+  const bannerLink = isNewBanner
+    ? getBannerLink_new(languageCode as LanguageCode)
+    : getBannerLink(languageCode as LanguageCode);
 
   return (
     <RootProvider languageCode={languageCode as LanguageCode}>
@@ -49,10 +51,13 @@ export const PageLayoutWrapper = ({
           theme='subtle'
           header={header}
           banner={{
-            title: t('info_banner.info'),
-            link: { label: t('info_banner.link'), href: bannerLink },
-            color: escalateBannerSeverity ? 'warning' : undefined,
-            variant: escalateBannerSeverity ? 'alert' : undefined,
+            title: !isNewBanner ? t('info_banner.info') : t('info_banner.info_new'),
+            link: {
+              label: !isNewBanner ? t('info_banner.link') : t('info_banner.link_new'),
+              href: bannerLink,
+            },
+            color: !isNewBanner ? 'warning' : undefined,
+            variant: !isNewBanner ? 'alert' : undefined,
           }}
           skipLink={{
             href: '#main-content',
@@ -90,5 +95,16 @@ const getBannerLink = (languageCode: LanguageCode) => {
       return 'https://info.altinn.no/nn/nyheiter/sjekk-om-du-ma-gjere-noko-for-vi-slar-av-gamle-altinn/';
     default:
       return 'https://info.altinn.no/nyheter/sjekk-om-du-ma-gjore-noe-for-vi-slar-av-gamle-altinn/';
+  }
+};
+
+const getBannerLink_new = (languageCode: LanguageCode) => {
+  switch (languageCode) {
+    case 'en':
+      return 'https://info.altinn.no/en/news/new-power-of-attorney-solution/';
+    case 'nn':
+      return 'https://info.altinn.no/nn/nyheiter/ny-fullmaktsloesning/';
+    default:
+      return 'https://info.altinn.no/nyheter/ny-fullmaktsloesning/';
   }
 };

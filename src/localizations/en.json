@@ -114,7 +114,9 @@
   },
   "info_banner": {
     "info": "June 19: the old Altinn will be shut down.",
-    "link": "Here's what you need to be aware of."
+    "info_new": "Altinn has been renewed.",
+    "link": "Here's what you need to be aware of.",
+    "link_new": "This is how you grant new powers of attorney and accesses."
   },
   "header": {
     "access_management": "Access management",

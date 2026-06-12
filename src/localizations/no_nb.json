@@ -111,7 +111,9 @@
   },
   "info_banner": {
     "info": "19. juni skrus gamle Altinn av.",
-    "link": "Dette må du passe på."
+    "info_new": "Altinn er fornyet.",
+    "link": "Dette må du passe på.",
+    "link_new": "Slik gir du nye fullmakter og tilganger."
   },
   "error_page": {
     "page_title": "Feilside - Altinn",
