@@ -67,7 +67,7 @@ function parseArgs(argv: string[]): CliArgs {
       case '--help':
         printHelp();
         process.exit(0);
-        break;
+      // eslint-disable-next-line no-fallthrough
       default:
         console.error(`Ukjent argument: ${arg}`);
         printHelp();

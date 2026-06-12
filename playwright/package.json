@@ -10,8 +10,8 @@
     "env:AT23": "cross-env environment=at23 npx playwright test",
     "env:AT24": "cross-env environment=at24 npx playwright test",
     "env:TT02": "cross-env environment=tt02 npx playwright test",
-    "tenor": "tsx tenor/hentTestpersoner.ts",
-    "tenor:virksomhet": "tsx tenor/hentVirksomhet.ts",
+    "tenor": "npx tsx tenor/hentTestpersoner.ts",
+    "tenor:virksomhet": "npx tsx tenor/hentVirksomhet.ts",
     "lint": "eslint ."
   },
   "keywords": [],
@@ -21,8 +21,7 @@
     "@azure/microsoft-playwright-testing": "^1.0.0-beta.7",
     "@playwright/test": "^1.60.0",
     "@types/node": "^22.18.0",
-    "dotenv": "^16.6.1",
-    "tsx": "^4.22.4"
+    "dotenv": "^16.6.1"
   },
   "dependencies": {
     "@types/jsonwebtoken": "^9.0.10",
