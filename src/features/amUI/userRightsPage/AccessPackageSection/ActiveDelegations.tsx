@@ -29,45 +29,43 @@ export const ActiveDelegations = ({ searchString }: ActiveDelegationsProps) => {
     (toParty?.partyUuid !== selfParty?.partyUuid || isHovedadmin); // Only hovedadmin can give access to themselves
   const { t } = useTranslation();
   // Restore focus to the package item that opened the modal when the modal closes.
-  const { containerRef, requestFocus, controller } = useRestoreFocus();
+  const restoreFocus = useRestoreFocus();
 
   return (
-    <RestoreFocusProvider controller={controller}>
-      <div ref={containerRef}>
-        <AccessPackageList
-          isLoading={isLoading}
-          showPackagesCount
-          showAllPackages
-          minimizeAvailablePackages={!searchString}
-          searchString={searchString}
-          onSelect={(accessPackage) => {
-            setModalItem(accessPackage);
-            modalRef.current?.showModal();
-          }}
-          availableActions={[
-            DelegationAction.REVOKE,
-            canGiveAccess ? DelegationAction.DELEGATE : DelegationAction.REQUEST,
-          ]}
-          onDelegateError={(accessPackage, error) => {
-            setActionError(error);
-            setModalItem(accessPackage);
-            modalRef.current?.showModal();
-          }}
-          onRevokeError={(accessPackage, error) => {
-            setActionError(error);
-            setModalItem(accessPackage);
-            modalRef.current?.showModal();
-          }}
-          noPackagesText={t('access_packages.user_has_no_packages')}
-          filterByType={false}
-        />
-      </div>
+    <RestoreFocusProvider restoreFocus={restoreFocus}>
+      <AccessPackageList
+        isLoading={isLoading}
+        showPackagesCount
+        showAllPackages
+        minimizeAvailablePackages={!searchString}
+        searchString={searchString}
+        onSelect={(accessPackage) => {
+          setModalItem(accessPackage);
+          modalRef.current?.showModal();
+        }}
+        availableActions={[
+          DelegationAction.REVOKE,
+          canGiveAccess ? DelegationAction.DELEGATE : DelegationAction.REQUEST,
+        ]}
+        onDelegateError={(accessPackage, error) => {
+          setActionError(error);
+          setModalItem(accessPackage);
+          modalRef.current?.showModal();
+        }}
+        onRevokeError={(accessPackage, error) => {
+          setActionError(error);
+          setModalItem(accessPackage);
+          modalRef.current?.showModal();
+        }}
+        noPackagesText={t('access_packages.user_has_no_packages')}
+        filterByType={false}
+      />
       <EditModal
         ref={modalRef}
         accessPackage={modalItem}
         onClose={() => {
           if (modalItem) {
-            requestFocus(modalItem.id);
+            restoreFocus.requestFocus(modalItem.id);
           }
           setModalItem(undefined);
         }}

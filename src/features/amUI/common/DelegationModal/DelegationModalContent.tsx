@@ -46,7 +46,7 @@ export const DelegationModalContent = ({
   const { closeAllAreas } = useAreaExpandedContextOrLocal();
   const modalRef = useRef<HTMLDialogElement>(null);
   const backButtonRef = useAutoFocusRef<HTMLButtonElement>();
-  const { containerRef, requestFocus, controller } = useRestoreFocus();
+  const restoreFocus = useRestoreFocus();
 
   const onResourceSelection = (resource?: ServiceResource, error = false) => {
     if (!error) {
@@ -138,7 +138,7 @@ export const DelegationModalContent = ({
   }
 
   return (
-    <RestoreFocusProvider controller={controller}>
+    <RestoreFocusProvider restoreFocus={restoreFocus}>
       <DsDialog.TriggerContext>
         <DsDialog.Trigger
           data-size='sm'
@@ -164,7 +164,7 @@ export const DelegationModalContent = ({
               onClick={() => {
                 const focusTargetId = packageToView?.id ?? resourceToView?.identifier;
                 if (focusTargetId) {
-                  requestFocus(focusTargetId);
+                  restoreFocus.requestFocus(focusTargetId);
                 }
                 setInfoView(false);
               }}
@@ -173,9 +173,7 @@ export const DelegationModalContent = ({
               {t('common.back')}
             </Button>
           )}
-          <div className={classes.content}>
-            {infoView ? infoViewContent : <div ref={containerRef}>{searchViewContent}</div>}
-          </div>
+          <div className={classes.content}>{infoView ? infoViewContent : searchViewContent}</div>
         </DsDialog>
       </DsDialog.TriggerContext>
     </RestoreFocusProvider>

@@ -60,7 +60,7 @@ export const PendingPackageRequestsList = ({
   }, [isRefetching]);
 
   const [withdrawRequest] = useWithdrawRequestMutation();
-  const { containerRef, requestFocus, controller } = useRestoreFocus();
+  const restoreFocus = useRestoreFocus();
 
   const handleDelete = async (request: EnrichedPackageRequest) => {
     setLoadingByRequestId((prev) => ({ ...prev, [request.id]: true }));
@@ -87,7 +87,7 @@ export const PendingPackageRequestsList = ({
   };
 
   return (
-    <RestoreFocusProvider controller={controller}>
+    <RestoreFocusProvider restoreFocus={restoreFocus}>
       <div>
         {selectedRequest ? (
           <>
@@ -96,7 +96,7 @@ export const PendingPackageRequestsList = ({
               variant='tertiary'
               className={classes.backButton}
               onClick={() => {
-                requestFocus(selectedRequest.package.id);
+                restoreFocus.requestFocus(selectedRequest.package.id);
                 setSelectedRequest(null);
               }}
             >
@@ -122,41 +122,39 @@ export const PendingPackageRequestsList = ({
             {isLoading ? (
               <SkeletonAccessPackageList />
             ) : (
-              <div ref={containerRef}>
-                <List>
-                  {enrichedRequests.map((req) => (
-                    <PackageItem
-                      key={req.id}
-                      pkg={req.package}
-                      partyType={fromParty?.partyTypeName ?? PartyType.Organization}
-                      as='button'
-                      onSelect={() => {
-                        setSelectedRequest(req);
-                      }}
-                      controls={
-                        isSmallScreen ? undefined : (
-                          <Button
-                            variant='tertiary'
-                            data-size='sm'
-                            aria-label={t('common.delete_request_for', {
-                              poa_object: req.package?.name,
-                            })}
-                            onClick={(e) => {
-                              e.stopPropagation();
-                              handleDelete(req);
-                            }}
-                            disabled={loadingByRequestId[req.id]}
-                            loading={loadingByRequestId[req.id]}
-                          >
-                            <MinusCircleIcon aria-hidden='true' />
-                            {t('common.delete')}
-                          </Button>
-                        )
-                      }
-                    />
-                  ))}
-                </List>
-              </div>
+              <List>
+                {enrichedRequests.map((req) => (
+                  <PackageItem
+                    key={req.id}
+                    pkg={req.package}
+                    partyType={fromParty?.partyTypeName ?? PartyType.Organization}
+                    as='button'
+                    onSelect={() => {
+                      setSelectedRequest(req);
+                    }}
+                    controls={
+                      isSmallScreen ? undefined : (
+                        <Button
+                          variant='tertiary'
+                          data-size='sm'
+                          aria-label={t('common.delete_request_for', {
+                            poa_object: req.package?.name,
+                          })}
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            handleDelete(req);
+                          }}
+                          disabled={loadingByRequestId[req.id]}
+                          loading={loadingByRequestId[req.id]}
+                        >
+                          <MinusCircleIcon aria-hidden='true' />
+                          {t('common.delete')}
+                        </Button>
+                      )
+                    }
+                  />
+                ))}
+              </List>
             )}
           </>
         )}

@@ -1,6 +1,5 @@
 import {
   createContext,
-  type RefCallback,
   type ReactNode,
   useCallback,
   useContext,
@@ -9,124 +8,100 @@ import {
   useState,
 } from 'react';
 
-const RESTORE_FOCUS_SELECTOR = 'button:not([disabled]), a[href]';
+const FOCUSABLE_SELECTOR = 'button:not([disabled]), a[href]';
 
-// Opaque value connecting a useRestoreFocus owner to its provider and targets.
-interface RestoreFocusController {
-  focusRequestId: string | null;
-  clearRequest: () => void;
-  containerElement: HTMLElement | null;
-  focusNonInteractiveTarget: boolean;
-}
-
-interface UseRestoreFocusOptions {
-  focusNonInteractiveTarget?: boolean;
-}
-
-export interface UseRestoreFocusResult {
-  // Attach to the element that contains the focusable list items.
-  containerRef: RefCallback<HTMLElement>;
+export interface RestoreFocus {
   // Call when navigating back to request focus on the item with the given id.
   requestFocus: (id: string) => void;
-  // Hand to <RestoreFocusProvider controller> so list items can focus themselves on mount.
-  controller: RestoreFocusController;
+  focusRequestId: string | null;
+  clearRequest: () => void;
 }
 
-const RestoreFocusContext = createContext<RestoreFocusController | undefined>(undefined);
+const RestoreFocusContext = createContext<
+  (RestoreFocus & { containerElement: HTMLElement | null }) | undefined
+>(undefined);
 
-const escapeCssIdentifier = (id: string) => {
-  if (typeof CSS !== 'undefined' && CSS.escape) {
-    return CSS.escape(id);
-  }
-
-  return id.replace(/["\\]/g, '\\$&');
-};
-
-// Owns the focus-restore state. The owner uses containerRef/requestFocus directly and renders
-// <RestoreFocusProvider controller={...}> around its list so nested items can self-focus.
-export const useRestoreFocus = ({
-  focusNonInteractiveTarget = false,
-}: UseRestoreFocusOptions = {}): UseRestoreFocusResult => {
-  const [containerElement, setContainerElement] = useState<HTMLElement | null>(null);
+// Owns the "which id should receive focus" state. Pass the result to <RestoreFocusProvider>
+// and call requestFocus(id) when navigating back to the view containing the target.
+export const useRestoreFocus = (): RestoreFocus => {
   const [focusRequestId, setFocusRequestId] = useState<string | null>(null);
 
-  const containerRef = useCallback<RefCallback<HTMLElement>>((node) => {
-    setContainerElement(node);
-  }, []);
+  const requestFocus = useCallback((id: string) => setFocusRequestId(id), []);
+  const clearRequest = useCallback(() => setFocusRequestId(null), []);
 
-  const requestFocus = useCallback((id: string) => {
-    setFocusRequestId(id);
-  }, []);
-
-  const clearRequest = useCallback(() => {
-    setFocusRequestId(null);
-  }, []);
-
-  const controller = useMemo<RestoreFocusController>(
-    () => ({
-      focusRequestId,
-      clearRequest,
-      containerElement,
-      focusNonInteractiveTarget,
-    }),
-    [clearRequest, containerElement, focusNonInteractiveTarget, focusRequestId],
+  return useMemo(
+    () => ({ focusRequestId, requestFocus, clearRequest }),
+    [clearRequest, focusRequestId, requestFocus],
   );
-
-  return { containerRef, requestFocus, controller };
 };
 
+// Wraps the area containing the focus targets. Target lookups are scoped to this subtree,
+// so a duplicate id elsewhere on the page (e.g. the same list behind a modal) is never focused.
 export const RestoreFocusProvider = ({
-  controller,
+  restoreFocus,
   children,
 }: {
-  controller: RestoreFocusController;
+  restoreFocus: RestoreFocus;
   children: ReactNode;
-}) => <RestoreFocusContext.Provider value={controller}>{children}</RestoreFocusContext.Provider>;
+}) => {
+  const [containerElement, setContainerElement] = useState<HTMLElement | null>(null);
 
+  const value = useMemo(
+    () => ({ ...restoreFocus, containerElement }),
+    [containerElement, restoreFocus],
+  );
+
+  return (
+    <RestoreFocusContext.Provider value={value}>
+      <div
+        style={{ display: 'contents' }}
+        ref={setContainerElement}
+      >
+        {children}
+      </div>
+    </RestoreFocusContext.Provider>
+  );
+};
+
+// Focuses the first focusable element inside the element with the given id once focus has been
+// requested for that id. No-op when rendered outside a RestoreFocusProvider.
 export const useRestoreFocusTarget = (id: string) => {
   const context = useContext(RestoreFocusContext);
-
+  const isRequested = context?.focusRequestId === id;
   const containerElement = context?.containerElement;
-  const focusRequestId = context?.focusRequestId;
   const clearRequest = context?.clearRequest;
-  const focusNonInteractiveTarget = context?.focusNonInteractiveTarget ?? false;
 
   useEffect(() => {
-    if (!containerElement || !clearRequest || focusRequestId !== id) {
+    if (!isRequested || !containerElement || !clearRequest) {
       return;
     }
 
-    const target = containerElement.querySelector(`[id="${escapeCssIdentifier(id)}"]`);
+    const target = containerElement.querySelector(`[id="${CSS.escape(id)}"]`);
     if (!(target instanceof HTMLElement)) {
       return;
     }
 
-    const focusableTarget = target.matches(RESTORE_FOCUS_SELECTOR)
+    const focusable = target.matches(FOCUSABLE_SELECTOR)
       ? target
-      : target.querySelector<HTMLElement>(RESTORE_FOCUS_SELECTOR);
-    const elementToFocus = focusableTarget ?? (focusNonInteractiveTarget ? target : null);
+      : target.querySelector<HTMLElement>(FOCUSABLE_SELECTOR);
 
-    if (!elementToFocus) {
-      clearRequest();
-      return;
-    }
-
-    const shouldRestoreTabIndex =
-      !elementToFocus.matches(RESTORE_FOCUS_SELECTOR) && !elementToFocus.hasAttribute('tabindex');
-
-    if (shouldRestoreTabIndex) {
-      // Non-interactive fallback targets should be programmatically focusable only for this call.
-      elementToFocus.tabIndex = -1;
-    }
-
-    elementToFocus.focus();
-
-    if (shouldRestoreTabIndex) {
-      elementToFocus.removeAttribute('tabindex');
+    if (focusable) {
+      focusable.focus();
+    } else {
+      // Targets without anything focusable (e.g. a processed, non-interactive row) are made
+      // programmatically focusable for this call only, so the user lands on the row itself.
+      const hadTabIndex = target.hasAttribute('tabindex');
+      if (!hadTabIndex) {
+        target.tabIndex = -1;
+      }
+      target.focus();
+      if (!hadTabIndex) {
+        target.removeAttribute('tabindex');
+      }
     }
 
     clearRequest();
-  }, [clearRequest, containerElement, focusNonInteractiveTarget, focusRequestId, id]);
+  }, [clearRequest, containerElement, id, isRequested]);
 };
 
 export const RestoreFocusTarget = ({ id, children }: { id: string; children?: ReactNode }) => {

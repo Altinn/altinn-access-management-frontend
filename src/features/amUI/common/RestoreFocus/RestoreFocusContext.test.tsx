@@ -11,18 +11,12 @@ import {
 
 interface FocusTargetTestProps {
   children: React.ReactNode;
-  focusTargetId?: string | null;
-  focusNonInteractiveTarget?: boolean;
+  focusTargetId?: string;
 }
 
-const FocusTargetTest = ({
-  children,
-  focusTargetId,
-  focusNonInteractiveTarget = false,
-}: FocusTargetTestProps) => {
-  const { containerRef, requestFocus, controller } = useRestoreFocus({
-    focusNonInteractiveTarget,
-  });
+const FocusTargetTest = ({ children, focusTargetId }: FocusTargetTestProps) => {
+  const restoreFocus = useRestoreFocus();
+  const { requestFocus } = restoreFocus;
 
   useEffect(() => {
     if (focusTargetId) {
@@ -30,66 +24,62 @@ const FocusTargetTest = ({
     }
   }, [focusTargetId, requestFocus]);
 
-  return (
-    <RestoreFocusProvider controller={controller}>
-      <div ref={containerRef}>{children}</div>
-    </RestoreFocusProvider>
-  );
+  return <RestoreFocusProvider restoreFocus={restoreFocus}>{children}</RestoreFocusProvider>;
 };
 
 const DelayedMountTest = () => {
   const [isTargetMounted, setIsTargetMounted] = useState(false);
-  const { containerRef, requestFocus, controller } = useRestoreFocus();
+  const restoreFocus = useRestoreFocus();
 
   return (
-    <RestoreFocusProvider controller={controller}>
-      <button onClick={() => requestFocus('target')}>Request focus</button>
+    <>
+      <button onClick={() => restoreFocus.requestFocus('target')}>Request focus</button>
       <button onClick={() => setIsTargetMounted(true)}>Mount target</button>
-      <div ref={containerRef}>
+      <RestoreFocusProvider restoreFocus={restoreFocus}>
         {isTargetMounted && (
           <>
             <RestoreFocusTarget id='target' />
             <button id='target'>Target action</button>
           </>
         )}
-      </div>
-    </RestoreFocusProvider>
+      </RestoreFocusProvider>
+    </>
   );
 };
 
 const RepeatRestoreTest = () => {
-  const { containerRef, requestFocus, controller } = useRestoreFocus();
+  const restoreFocus = useRestoreFocus();
 
   return (
-    <RestoreFocusProvider controller={controller}>
-      <button onClick={() => requestFocus('target')}>Restore</button>
-      <div ref={containerRef}>
+    <>
+      <button onClick={() => restoreFocus.requestFocus('target')}>Restore</button>
+      <RestoreFocusProvider restoreFocus={restoreFocus}>
         <RestoreFocusTarget id='target' />
         <button id='target'>Target action</button>
-      </div>
-    </RestoreFocusProvider>
+      </RestoreFocusProvider>
+    </>
   );
 };
 
 const ConsumedRequestTest = () => {
   const [isTargetMounted, setIsTargetMounted] = useState(true);
-  const { containerRef, requestFocus, controller } = useRestoreFocus();
+  const restoreFocus = useRestoreFocus();
 
   return (
-    <RestoreFocusProvider controller={controller}>
-      <button onClick={() => requestFocus('target')}>Restore</button>
+    <>
+      <button onClick={() => restoreFocus.requestFocus('target')}>Restore</button>
       <button onClick={() => setIsTargetMounted(false)}>Unmount target</button>
       <button onClick={() => setIsTargetMounted(true)}>Remount target</button>
       <button>Other action</button>
-      <div ref={containerRef}>
+      <RestoreFocusProvider restoreFocus={restoreFocus}>
         {isTargetMounted && (
           <>
             <RestoreFocusTarget id='target' />
             <button id='target'>Target action</button>
           </>
         )}
-      </div>
-    </RestoreFocusProvider>
+      </RestoreFocusProvider>
+    </>
   );
 };
 
@@ -127,7 +117,7 @@ describe('RestoreFocusContext', () => {
     await waitFor(() => expect(screen.getByRole('link', { name: 'Target link' })).toHaveFocus());
   });
 
-  it('focuses the target inside the container when the same id exists earlier in the document', async () => {
+  it('focuses the target inside the provider when the same id exists earlier in the document', async () => {
     render(
       <>
         <div id='target'>
@@ -147,29 +137,16 @@ describe('RestoreFocusContext', () => {
     );
   });
 
-  it('does not focus a target without focusable descendants by default', async () => {
+  it('focuses the target element itself when it has no focusable descendants', async () => {
     render(
       <FocusTargetTest focusTargetId='target'>
         <RestoreFocusTarget id='target' />
-        <div id='target'>Target content</div>
+        <div id='target'>Processed row</div>
+        <button>Next action</button>
       </FocusTargetTest>,
     );
 
-    await waitFor(() => expect(screen.getByText('Target content')).not.toHaveFocus());
-  });
-
-  it('focuses the target element itself when non-interactive focus is enabled', async () => {
-    render(
-      <FocusTargetTest
-        focusTargetId='target'
-        focusNonInteractiveTarget
-      >
-        <RestoreFocusTarget id='target' />
-        <div id='target'>Target content</div>
-      </FocusTargetTest>,
-    );
-
-    const target = screen.getByText('Target content');
+    const target = screen.getByText('Processed row');
     await waitFor(() => expect(target).toHaveFocus());
     expect(target).not.toHaveAttribute('tabindex');
   });

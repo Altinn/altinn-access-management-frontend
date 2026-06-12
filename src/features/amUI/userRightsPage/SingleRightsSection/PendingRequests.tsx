@@ -158,10 +158,10 @@ export const PendingRequestsList = ({
     actingPartyUuid: actingParty?.partyUuid,
     fromPartyUuid: fromParty?.partyUuid,
   });
-  const { containerRef, requestFocus, controller } = useRestoreFocus();
+  const restoreFocus = useRestoreFocus();
 
   return (
-    <RestoreFocusProvider controller={controller}>
+    <RestoreFocusProvider restoreFocus={restoreFocus}>
       <div>
         {selectedResource ? (
           <>
@@ -170,7 +170,7 @@ export const PendingRequestsList = ({
               variant='tertiary'
               className={classes.backButton}
               onClick={() => {
-                requestFocus(selectedResource.identifier);
+                restoreFocus.requestFocus(selectedResource.identifier);
                 setSelectedResource(null);
               }}
             >
@@ -193,35 +193,33 @@ export const PendingRequestsList = ({
                 {heading}
               </DsHeading>
             )}
-            <div ref={containerRef}>
-              <ResourceList
-                isLoading={isLoadingRequests}
-                size={isSmallScreen ? 'sm' : 'md'}
-                enableSearch={false}
-                resources={singleRightRequests
-                  .map((x) => x.resource)
-                  .filter((r): r is ServiceResource => !!r)}
-                showDetails={false}
-                onSelect={(resource) => {
-                  setSelectedResource(resource);
-                }}
-                renderControls={(resource) => {
-                  if (isSmallScreen) return undefined;
-                  return (
-                    <DsButton
-                      variant='tertiary'
-                      aria-label={t('common.delete_request_for', { poa_object: resource.title })}
-                      onClick={() => deleteRequest(resource)}
-                      disabled={isLoadingRequest(resource.identifier)}
-                      loading={isLoadingRequest(resource.identifier)}
-                    >
-                      <MinusCircleIcon aria-hidden='true' />
-                      {t('common.delete')}
-                    </DsButton>
-                  );
-                }}
-              />
-            </div>
+            <ResourceList
+              isLoading={isLoadingRequests}
+              size={isSmallScreen ? 'sm' : 'md'}
+              enableSearch={false}
+              resources={singleRightRequests
+                .map((x) => x.resource)
+                .filter((r): r is ServiceResource => !!r)}
+              showDetails={false}
+              onSelect={(resource) => {
+                setSelectedResource(resource);
+              }}
+              renderControls={(resource) => {
+                if (isSmallScreen) return undefined;
+                return (
+                  <DsButton
+                    variant='tertiary'
+                    aria-label={t('common.delete_request_for', { poa_object: resource.title })}
+                    onClick={() => deleteRequest(resource)}
+                    disabled={isLoadingRequest(resource.identifier)}
+                    loading={isLoadingRequest(resource.identifier)}
+                  >
+                    <MinusCircleIcon aria-hidden='true' />
+                    {t('common.delete')}
+                  </DsButton>
+                );
+              }}
+            />
           </>
         )}
       </div>
