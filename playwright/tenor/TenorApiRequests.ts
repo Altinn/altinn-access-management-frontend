@@ -93,6 +93,7 @@ interface RolleGruppe {
 
 export class TenorApiRequests {
   private readonly maskinporten: MaskinportenToken;
+  private tokenPromise?: Promise<string>;
 
   /**
    * @param clientIdEnv Navn på env-variabel med Maskinporten client ID.
@@ -103,13 +104,23 @@ export class TenorApiRequests {
   }
 
   /**
+   * Henter Maskinporten-token én gang per instans og gjenbruker det. Uten dette
+   * gjør hvert `sok`/`tellTreff`-kall en ny token-POST, som ved skanning av mange
+   * kandidater gir unødvendig mange auth-rundturer og økt throttling-risiko.
+   */
+  private getToken(): Promise<string> {
+    this.tokenPromise ??= this.maskinporten.getMaskinportenToken(TENOR_SCOPE);
+    return this.tokenPromise;
+  }
+
+  /**
    * Kjører et KQL-søk mot en Tenor-kilde.
    * @param kilde Tenor-kilde, f.eks. `freg` eller `brreg-er-fr`.
    * @param kql Søkestreng i Kibana Query Language.
    * @param antall Antall dokumenter som returneres. Default: 1.
    */
   async sok(kilde: string, kql: string, antall = 1): Promise<TenorDocument[]> {
-    const token = await this.maskinporten.getMaskinportenToken(TENOR_SCOPE);
+    const token = await this.getToken();
 
     const url =
       `${TENOR_BASE_URL}${TENOR_SOEK_PATH}/${kilde}` +
@@ -143,7 +154,7 @@ export class TenorApiRequests {
 
   /** Returnerer antall treff for et KQL-søk uten å hente dokumentene. */
   async tellTreff(kilde: string, kql: string): Promise<number> {
-    const token = await this.maskinporten.getMaskinportenToken(TENOR_SCOPE);
+    const token = await this.getToken();
     const url = `${TENOR_BASE_URL}${TENOR_SOEK_PATH}/${kilde}?kql=${encodeURIComponent(kql)}&antall=0`;
     const response = await fetch(url, {
       headers: { Authorization: `Bearer ${token}`, Accept: 'application/json' },
@@ -175,8 +186,13 @@ export class TenorApiRequests {
   ): Promise<TenorFacilitator> {
     const { felt, rolleKode } = FACILITATOR_ROLLER[rolle];
 
-    const [klient] = await this.sokBrreg(`${felt}:*`, 1);
-    const facilitatorOrg = klient ? this.hentRolleVirksomhet(klient, rolleKode) : null;
+    // Skann en liten batch og bruk første klient som faktisk gir en facilitator,
+    // slik at ett ufullstendig dokument ikke feiler hele oppslaget.
+    const kandidater = await this.sokBrreg(`${felt}:*`, 10);
+    const facilitatorOrg =
+      kandidater
+        .map((klient) => this.hentRolleVirksomhet(klient, rolleKode))
+        .find((org): org is string => org !== null) ?? null;
     if (!facilitatorOrg) {
       throw new Error(`Fant ingen ${rolle}-virksomhet i Tenor (felt: ${felt}).`);
     }

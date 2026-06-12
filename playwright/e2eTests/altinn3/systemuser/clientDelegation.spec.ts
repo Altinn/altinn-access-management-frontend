@@ -24,7 +24,7 @@ test.describe('Delegering av klienter til Systembruker', () => {
     let response: { confirmUrl: string };
 
     test.beforeEach(async () => {
-      name = `Playwright-e2e-${role}-${Date.now()}-${Math.random()}`;
+      name = `Playwright-e2e-${role}-${Date.now()}`;
 
       const systemId = await test.step('Create system with access packages', async () => {
         return await api.createSystemInSystemregisterWithAccessPackages('310547891', name);
@@ -98,7 +98,7 @@ test.describe('Delegering av klienter til Systembruker', () => {
     let response: { confirmUrl: string };
 
     test.beforeEach(async () => {
-      name = `Playwright-e2e-${role}-${Date.now()}-${Math.random()}`;
+      name = `Playwright-e2e-${role}-${Date.now()}`;
 
       const systemId = await test.step('Create system with access packages', async () => {
         return await api.createSystemInSystemregisterWithAccessPackages('310547891', name);
@@ -178,7 +178,7 @@ test.describe('Delegering av klienter til Systembruker', () => {
     let response: { confirmUrl: string };
 
     test.beforeEach(async () => {
-      name = `Playwright-e2e-${role}-${Date.now()}-${Math.random()}`;
+      name = `Playwright-e2e-${role}-${Date.now()}`;
 
       const systemId = await test.step('Create system with access packages', async () => {
         return await api.createSystemInSystemregisterWithAccessPackages('310547891', name);

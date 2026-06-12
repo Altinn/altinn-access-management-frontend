@@ -36,7 +36,15 @@ function parseArgs(argv: string[]): CliArgs {
 
   for (let i = 0; i < argv.length; i++) {
     const arg = argv[i];
-    const next = () => argv[++i];
+    const next = () => {
+      const value = argv[++i];
+      if (value === undefined) {
+        console.error(`Mangler verdi for ${arg}.`);
+        printHelp();
+        process.exit(1);
+      }
+      return value;
+    };
 
     switch (arg) {
       case '-n':
