@@ -50,7 +50,11 @@ export class AccessManagementFrontPage {
   }
 
   async goToEnkelttjenester() {
-    await this.page.getByRole('tab', { name: 'Enkelttjenester' }).click();
+    const tab = this.page.getByRole('tab', { name: 'Enkelttjenester' });
+    await tab.click();
+    // Vent til fanen faktisk er valgt og panelet er synlig før vi gjør noe der.
+    await expect(tab).toHaveAttribute('aria-selected', 'true');
+    await expect(this.page.getByRole('tabpanel', { name: 'Enkelttjenester' })).toBeVisible();
   }
 
   async goToFullmakterHosAndre() {
@@ -70,7 +74,13 @@ export class AccessManagementFrontPage {
   }
 
   async clickGiFullmakt() {
-    await this.page.getByRole('button', { name: 'Gi fullmakt' }).click();
+    // Skop til det aktive tab-panelet og bruk eksakt navn, slik at vi ikke
+    // treffer skjulte "Gi fullmakt"- eller "Gi fullmakt for ..."-knapper i
+    // det inaktive panelet (som ligger først i DOM-en).
+    await this.page
+      .getByRole('tabpanel')
+      .getByRole('button', { name: 'Gi fullmakt', exact: true })
+      .click();
   }
 
   async clickGiFullmaktEnkelttjeneste() {
