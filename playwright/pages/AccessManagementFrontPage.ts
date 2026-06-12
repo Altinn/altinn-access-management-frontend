@@ -10,6 +10,8 @@ export class AccessManagementFrontPage {
   readonly tryNewAccessManagementButton: Locator;
   readonly klientadministrasjonButton: Locator;
   readonly newUserButton: Locator;
+  readonly enkelttjenesterTab: Locator;
+  readonly enkelttjenesterPanel: Locator;
 
   constructor(page: Page) {
     this.page = page;
@@ -31,6 +33,8 @@ export class AccessManagementFrontPage {
     });
     this.klientadministrasjonButton = this.page.getByRole('link', { name: 'Klientadministrasjon' });
     this.newUserButton = this.page.getByRole('button', { name: 'Ny bruker' });
+    this.enkelttjenesterTab = this.page.getByRole('tab', { name: 'Enkelttjenester' });
+    this.enkelttjenesterPanel = this.page.getByRole('tabpanel', { name: 'Enkelttjenester' });
   }
 
   async goToKlientAdministrasjon() {
@@ -50,11 +54,10 @@ export class AccessManagementFrontPage {
   }
 
   async goToEnkelttjenester() {
-    const tab = this.page.getByRole('tab', { name: 'Enkelttjenester' });
-    await tab.click();
+    await this.enkelttjenesterTab.click();
     // Vent til fanen faktisk er valgt og panelet er synlig før vi gjør noe der.
-    await expect(tab).toHaveAttribute('aria-selected', 'true');
-    await expect(this.page.getByRole('tabpanel', { name: 'Enkelttjenester' })).toBeVisible();
+    await expect(this.enkelttjenesterTab).toHaveAttribute('aria-selected', 'true');
+    await expect(this.enkelttjenesterPanel).toBeVisible();
   }
 
   async goToFullmakterHosAndre() {
