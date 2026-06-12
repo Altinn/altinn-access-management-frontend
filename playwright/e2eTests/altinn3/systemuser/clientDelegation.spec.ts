@@ -29,9 +29,9 @@ test.describe('Delegering av klienter til Systembruker', () => {
     const accessPackageDisplayName = 'Ansvarlig revisor';
 
     const user: Facilitator = {
-      pid: '06857897380',
-      org: '314250052',
-      name: 'Tilbakeholden Usymmetrisk Tiger AS',
+      pid: '07875898560',
+      org: '314251768',
+      name: 'KUNST STERK MINK ANS',
     };
 
     let name: string;
@@ -93,16 +93,16 @@ test.describe('Delegering av klienter til Systembruker', () => {
     const accessPackageDisplayName = 'Regnskapsfører lønn';
 
     const user: Facilitator = {
-      pid: '06857897380',
-      org: '314250052',
-      name: 'Tilbakeholden Usymmetrisk Tiger AS',
+      pid: '25872549881',
+      org: '312433834',
+      name: 'TILFELDIG RAKRYGGET KATT MALSTRØM',
     };
 
     const customers: Customer[] = [
       {
-        label: 'FINTFØLENDE GJESTFRI HAMSTER',
-        confirmation: 'FINTFØLENDE GJESTFRI HAMSTER KF',
-        orgnummer: '313334333',
+        label: 'DYP VERD TIGER AS',
+        confirmation: 'DYP VERD TIGER AS',
+        orgnummer: '214172542',
       },
     ];
 
@@ -171,16 +171,16 @@ test.describe('Delegering av klienter til Systembruker', () => {
     const accessPackageDisplayName = 'Forretningsforer eiendom';
 
     const user: Facilitator = {
-      pid: '08817696563',
-      org: '313760243',
-      name: 'NONFIGURATIV EMOSJONELL PUMA',
+      pid: '12826697375',
+      org: '312158019',
+      name: 'MOMENTAN VENNLIG TIGER AS',
     };
 
     const customers: Customer[] = [
       {
-        label: 'ring livsglad hest borettslag',
-        confirmation: 'ring livsglad hest borettslag',
-        orgnummer: '312424940',
+        label: 'SAMEIET ARTIG SKRIVEFØR LØVE',
+        confirmation: 'SAMEIET ARTIG SKRIVEFØR LØVE',
+        orgnummer: '213461532',
       },
     ];
 
