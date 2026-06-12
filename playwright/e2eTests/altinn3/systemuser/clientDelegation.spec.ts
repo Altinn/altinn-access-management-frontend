@@ -1,7 +1,5 @@
 import { test, expect } from '../../../fixture/pomFixture';
 
-import { ClientDelegationPage } from '../../../pages/systemuser/ClientDelegation';
-import { AccessManagementFrontPage } from '../../../pages/AccessManagementFrontPage';
 import { ApiRequests } from 'playwright/api-requests/SystemUserApiRequests';
 
 test.describe('Delegering av klienter til Systembruker', () => {
@@ -23,12 +21,10 @@ test.describe('Delegering av klienter til Systembruker', () => {
     };
 
     let name: string;
-    let clientDelegationPage: ClientDelegationPage;
     let response: { confirmUrl: string };
 
-    test.beforeEach(async ({ page }) => {
+    test.beforeEach(async () => {
       name = `Playwright-e2e-${role}-${Date.now()}-${Math.random()}`;
-      clientDelegationPage = new ClientDelegationPage(page);
 
       const systemId = await test.step('Create system with access packages', async () => {
         return await api.createSystemInSystemregisterWithAccessPackages('310547891', name);
@@ -44,7 +40,12 @@ test.describe('Delegering av klienter til Systembruker', () => {
       });
     });
 
-    test('Ansvarlig revisor - add all customers with one click', async ({ page, login }) => {
+    test('Ansvarlig revisor - add all customers with one click', async ({
+      page,
+      login,
+      accessManagementFrontPage,
+      clientDelegationPage,
+    }) => {
       await test.step('Approve system user request', async () => {
         await page.goto(response.confirmUrl);
         await login.loginNotChoosingActor(user.pid);
@@ -56,8 +57,7 @@ test.describe('Delegering av klienter til Systembruker', () => {
         await login.LoginToAccessManagement(user.pid);
         await login.selectMainUnitBySearching(user.name);
 
-        const frontPage = new AccessManagementFrontPage(page);
-        await frontPage.systemAccessLink.click();
+        await accessManagementFrontPage.systemAccessLink.click();
 
         await expect(clientDelegationPage.systemUserLink(name)).toBeVisible();
         await clientDelegationPage.systemUserLink(name).click();
@@ -95,12 +95,10 @@ test.describe('Delegering av klienter til Systembruker', () => {
     ];
 
     let name: string;
-    let clientDelegationPage: ClientDelegationPage;
     let response: { confirmUrl: string };
 
-    test.beforeEach(async ({ page }) => {
+    test.beforeEach(async () => {
       name = `Playwright-e2e-${role}-${Date.now()}-${Math.random()}`;
-      clientDelegationPage = new ClientDelegationPage(page);
 
       const systemId = await test.step('Create system with access packages', async () => {
         return await api.createSystemInSystemregisterWithAccessPackages('310547891', name);
@@ -116,7 +114,12 @@ test.describe('Delegering av klienter til Systembruker', () => {
       });
     });
 
-    test('Regnskapsfører', async ({ page, login }) => {
+    test('Regnskapsfører', async ({
+      page,
+      login,
+      accessManagementFrontPage,
+      clientDelegationPage,
+    }) => {
       await test.step('Approve system user request', async () => {
         await page.goto(response.confirmUrl);
         await login.loginNotChoosingActor(user.pid);
@@ -128,8 +131,7 @@ test.describe('Delegering av klienter til Systembruker', () => {
         await login.LoginToAccessManagement(user.pid);
         await login.selectMainUnitBySearching(user.name);
 
-        const frontPage = new AccessManagementFrontPage(page);
-        await frontPage.systemAccessLink.click();
+        await accessManagementFrontPage.systemAccessLink.click();
 
         await expect(clientDelegationPage.systemUserLink(name)).toBeVisible();
         await clientDelegationPage.systemUserLink(name).click();
@@ -173,12 +175,10 @@ test.describe('Delegering av klienter til Systembruker', () => {
     ];
 
     let name: string;
-    let clientDelegationPage: ClientDelegationPage;
     let response: { confirmUrl: string };
 
-    test.beforeEach(async ({ page }) => {
+    test.beforeEach(async () => {
       name = `Playwright-e2e-${role}-${Date.now()}-${Math.random()}`;
-      clientDelegationPage = new ClientDelegationPage(page);
 
       const systemId = await test.step('Create system with access packages', async () => {
         return await api.createSystemInSystemregisterWithAccessPackages('310547891', name);
@@ -194,7 +194,12 @@ test.describe('Delegering av klienter til Systembruker', () => {
       });
     });
 
-    test('Forretningsfører', async ({ page, login }) => {
+    test('Forretningsfører', async ({
+      page,
+      login,
+      accessManagementFrontPage,
+      clientDelegationPage,
+    }) => {
       await test.step('Approve system user request', async () => {
         await page.goto(response.confirmUrl);
         await login.loginNotChoosingActor(user.pid);
@@ -206,8 +211,7 @@ test.describe('Delegering av klienter til Systembruker', () => {
         await login.LoginToAccessManagement(user.pid);
         await login.selectMainUnitBySearching(user.name);
 
-        const frontPage = new AccessManagementFrontPage(page);
-        await frontPage.systemAccessLink.click();
+        await accessManagementFrontPage.systemAccessLink.click();
 
         await expect(clientDelegationPage.systemUserLink(name)).toBeVisible();
         await clientDelegationPage.systemUserLink(name).click();
