@@ -52,9 +52,15 @@ export class LoginPage {
     const dialog = this.page.getByRole('dialog');
     await expect(dialog).toBeVisible();
 
+    // Vent til aktørlista faktisk er rendret før vi vurderer søkefeltet.
+    // Uten dette kan isVisible() returnere false fordi dialogen ikke er ferdig
+    // lastet ennå, slik at søket hoppes over og klikket nedenfor bommer.
+    await expect(dialog.getByRole('menuitem').first()).toBeVisible();
+
+    // Søkefeltet skjules når brukeren har få aktører (#2299). Når det finnes må
+    // vi fortsatt søke for å få den relevante aktøren frem i lista.
     const dialogSearchBox = dialog.getByRole('searchbox');
-    const hasVisibleSearchBox = await dialogSearchBox.isVisible();
-    if (hasVisibleSearchBox) {
+    if (await dialogSearchBox.isVisible()) {
       await dialogSearchBox.fill(targetReportee);
     }
 
