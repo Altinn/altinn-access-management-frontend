@@ -22,11 +22,17 @@ interface CliArgs {
   antall: number;
   kql?: string;
   json: boolean;
+  navn: boolean;
   env: string;
 }
 
 function parseArgs(argv: string[]): CliArgs {
-  const args: CliArgs = { antall: 1, json: false, env: process.env.environment ?? 'tt02' };
+  const args: CliArgs = {
+    antall: 1,
+    json: false,
+    navn: false,
+    env: process.env.environment ?? 'tt02',
+  };
 
   for (let i = 0; i < argv.length; i++) {
     const arg = argv[i];
@@ -45,6 +51,9 @@ function parseArgs(argv: string[]): CliArgs {
         break;
       case '--json':
         args.json = true;
+        break;
+      case '--navn':
+        args.navn = true;
         break;
       case '-h':
       case '--help':
@@ -75,6 +84,7 @@ function printHelp(): void {
       '',
       '  -n, --antall <tall>   Antall personer som hentes (default: 1)',
       '      --kql <streng>    Egendefinert KQL (default: bosatt + myndig)',
+      '      --navn            Skriv ut navn (fornavn etternavn) ved siden av fnr',
       '      --json            Skriv ut full kildedata som JSON',
       '      --env <miljø>     Miljø for env-fil: tt02, at22, at23, at24 (default: tt02)',
       '  -h, --help            Vis denne hjelpeteksten',
@@ -119,7 +129,10 @@ async function main(): Promise<void> {
     console.log(JSON.stringify(personer, null, 2));
   } else {
     for (const person of personer) {
-      console.log(person.foedselsnummer);
+      const linje = args.navn
+        ? `${person.foedselsnummer}\t${person.navn ?? ''}`
+        : person.foedselsnummer;
+      console.log(linje);
     }
   }
 }

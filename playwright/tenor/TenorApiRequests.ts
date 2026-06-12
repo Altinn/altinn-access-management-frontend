@@ -34,8 +34,23 @@ interface TenorResponse {
 export interface TenorTestperson {
   /** Fødselsnummer (11 siffer). */
   foedselsnummer: string;
+  /** Fornavn fra gjeldende navn i Folkeregisteret. */
+  fornavn?: string;
+  /** Mellomnavn fra gjeldende navn i Folkeregisteret. */
+  mellomnavn?: string;
+  /** Etternavn fra gjeldende navn i Folkeregisteret. */
+  etternavn?: string;
+  /** Fullt navn (fornavn [mellomnavn] etternavn). */
+  navn?: string;
   /** Rå kildedata fra Folkeregisteret (parset JSON). */
   kildedata: Record<string, unknown>;
+}
+
+interface FregNavn {
+  fornavn?: string;
+  mellomnavn?: string;
+  etternavn?: string;
+  erGjeldende?: boolean;
 }
 
 export class TenorApiRequests {
@@ -121,7 +136,28 @@ export class TenorApiRequests {
   private dokumentTilPerson(dokument: TenorDocument): TenorTestperson | null {
     const foedselsnummer = this.hentFoedselsnummer(dokument);
     if (!foedselsnummer) return null;
-    return { foedselsnummer, kildedata: this.parseKildedata(dokument) };
+
+    const kildedata = this.parseKildedata(dokument);
+    const navn = this.hentNavn(kildedata);
+
+    return {
+      foedselsnummer,
+      ...navn,
+      navn: [navn.fornavn, navn.mellomnavn, navn.etternavn].filter(Boolean).join(' ') || undefined,
+      kildedata,
+    };
+  }
+
+  /** Trekker ut gjeldende navn fra kildedata (faller tilbake til første oppføring). */
+  private hentNavn(kildedata: Record<string, unknown>): FregNavn {
+    const navnListe = Array.isArray(kildedata.navn) ? (kildedata.navn as FregNavn[]) : [];
+    const gjeldende = navnListe.find((n) => n.erGjeldende) ?? navnListe[0];
+    if (!gjeldende) return {};
+    return {
+      fornavn: gjeldende.fornavn,
+      mellomnavn: gjeldende.mellomnavn,
+      etternavn: gjeldende.etternavn,
+    };
   }
 
   /** Trekker ut fødselsnummeret fra et Tenor-dokument. */
