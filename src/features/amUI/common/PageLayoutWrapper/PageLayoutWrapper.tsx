@@ -103,7 +103,7 @@ const getBannerLink_new = (languageCode: LanguageCode) => {
     case 'en':
       return 'https://info.altinn.no/en/news/new-power-of-attorney-solution/';
     case 'nn':
-      return 'https://info.altinn.no/nn/nyheiter/ny-fullmaktsloesning/';
+      return 'https://info.altinn.no/nn/nyheiter/ny-fullmaktsloeysing/';
     default:
       return 'https://info.altinn.no/nyheter/ny-fullmaktsloesning/';
   }
