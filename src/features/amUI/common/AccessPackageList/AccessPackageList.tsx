@@ -18,7 +18,7 @@ import { AreaItemContent } from './AreaItemContent';
 import { TechnicalErrorParagraphs } from '../TechnicalErrorParagraphs';
 import { createErrorDetails } from '../TechnicalErrorParagraphs/TechnicalErrorParagraphs';
 import { PartyType } from '@/rtk/features/userInfoApi';
-import { RestoreFocusFallback, useRestoreFocusContext } from '../RestoreFocus';
+import { useRestoreFocusContext } from '../RestoreFocus';
 
 type PackageFocusTargetList = 'assigned' | 'available';
 
@@ -201,45 +201,41 @@ export const AccessPackageList = ({
           {noPackagesText || t('access_packages.no_packages')}
         </DsParagraph>
       ) : (
-        <RestoreFocusFallback>
-          <List>
-            {displayAreas.map((area) => {
-              const expanded = (searchString && searchString.length > 2) || isExpanded(area.id);
+        <List>
+          {displayAreas.map((area) => {
+            const expanded = (searchString && searchString.length > 2) || isExpanded(area.id);
 
-              return (
-                <AreaItem
-                  key={area.id}
+            return (
+              <AreaItem
+                key={area.id}
+                area={area}
+                expanded={expanded}
+                toggleExpandedArea={toggleExpandedArea}
+                showPackagesCount={showPackagesCount}
+                showPermissions={showPermissions}
+                partyType={area.typeName === 'Person' ? PartyType.Person : PartyType.Organization}
+              >
+                <AreaItemContent
                   area={area}
-                  expanded={expanded}
-                  toggleExpandedArea={toggleExpandedArea}
-                  showPackagesCount={showPackagesCount}
+                  availableActions={availableActions}
+                  onSelect={onSelect}
+                  onDelegate={onDelegate}
+                  onRevoke={onRevoke}
+                  onRequest={onRequest}
+                  onDeleteRequest={deleteRequest}
+                  hasPendingRequest={hasPendingRequest}
+                  isLoadingRequest={isLoadingRequest}
+                  isActionLoading={isActionLoading}
+                  showAvailablePackages={!minimizeAvailablePackages}
+                  showAvailableToggle={showAvailableToggle}
                   showPermissions={showPermissions}
+                  packageAs={packageAs}
                   partyType={area.typeName === 'Person' ? PartyType.Person : PartyType.Organization}
-                >
-                  <AreaItemContent
-                    area={area}
-                    availableActions={availableActions}
-                    onSelect={onSelect}
-                    onDelegate={onDelegate}
-                    onRevoke={onRevoke}
-                    onRequest={onRequest}
-                    onDeleteRequest={deleteRequest}
-                    hasPendingRequest={hasPendingRequest}
-                    isLoadingRequest={isLoadingRequest}
-                    isActionLoading={isActionLoading}
-                    showAvailablePackages={!minimizeAvailablePackages}
-                    showAvailableToggle={showAvailableToggle}
-                    showPermissions={showPermissions}
-                    packageAs={packageAs}
-                    partyType={
-                      area.typeName === 'Person' ? PartyType.Person : PartyType.Organization
-                    }
-                  />
-                </AreaItem>
-              );
-            })}
-          </List>
-        </RestoreFocusFallback>
+                />
+              </AreaItem>
+            );
+          })}
+        </List>
       )}
     </div>
   );
