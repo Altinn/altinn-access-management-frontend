@@ -18,9 +18,9 @@ interface Altinn2AccountFormProps {
   onAddAltinn2Account: (username: string, password: string) => Promise<void>;
   isAddingAltinn2Account: boolean;
   addUserError: FetchBaseQueryError | SerializedError | undefined;
-  onSendForgotPasswordEmail: (username: string) => Promise<void>;
+  onSendForgotPasswordEmail: (username: string) => void;
   isSendingForgotPasswordEmail: boolean;
-  forgotPasswordError: FetchBaseQueryError | SerializedError | undefined;
+  forgotPasswordError: string;
   reporteeName?: string;
 }
 
@@ -87,11 +87,7 @@ export const Altinn2AccountForm = ({
             }
           }}
         />
-        {forgotPasswordError && (
-          <DsAlert data-color='danger'>
-            {t('add_altinn2_account_page.forgot_password_error')}
-          </DsAlert>
-        )}
+        {forgotPasswordError && <DsAlert data-color='danger'>{forgotPasswordError}</DsAlert>}
         <div className={classes.buttonRow}>
           <DsButton
             variant='primary'

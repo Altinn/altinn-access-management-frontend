@@ -27,6 +27,7 @@ export const AddAltinn2AccountPage = () => {
   const token = searchParams.get('token') ?? '';
 
   const [step, setStep] = useState<1 | 2 | 3 | 4>(1);
+  const [forgotPasswordError, setForgotPasswordError] = useState<string>('');
   const modalRef = useRef<HTMLDialogElement>(null);
 
   useDocumentTitle(t('add_altinn2_account_page.page_title'));
@@ -38,11 +39,7 @@ export const AddAltinn2AccountPage = () => {
 
   const [
     sendForgotPasswordEmail,
-    {
-      data: forgotPasswordEmail,
-      isLoading: isSendingForgotPasswordEmail,
-      error: forgotPasswordError,
-    },
+    { data: forgotPasswordEmail, isLoading: isSendingForgotPasswordEmail },
   ] = useSendForgotPasswordEmailMutation();
 
   const [
@@ -62,13 +59,19 @@ export const AddAltinn2AccountPage = () => {
     }
   };
 
-  const onSendForgotPasswordEmail = async (userName: string) => {
-    try {
-      await sendForgotPasswordEmail({ userName }).unwrap();
-      setStep(4);
-    } catch {
-      // error displayed via forgotPasswordError RTK Query state
-    }
+  const onSendForgotPasswordEmail = (userName: string) => {
+    sendForgotPasswordEmail({ userName })
+      .unwrap()
+      .then((payload) => {
+        if (payload.maskedEmail) {
+          setStep(4);
+        } else {
+          setForgotPasswordError(t('add_altinn2_account_page.no_email_for_username'));
+        }
+      })
+      .catch(() => {
+        setForgotPasswordError(t('add_altinn2_account_page.forgot_password_error'));
+      });
   };
 
   const onAddAccountFromToken = async (token: string) => {
