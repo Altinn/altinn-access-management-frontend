@@ -111,7 +111,9 @@
   },
   "info_banner": {
     "info": "19. juni blir gamle Altinn skrudd av.",
-    "link": "Dette må du passe på."
+    "info_new": "Altinn er fornya.",
+    "link": "Dette må du passe på.",
+    "link_new": "Slik gir du nye fullmakter og tilgangar."
   },
   "header": {
     "access_management": "Tilgangsstyring",
