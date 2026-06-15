@@ -162,6 +162,53 @@ export const ResourceInfo = ({
     ? t('delegation_modal.expired_resource_description', { name: toName })
     : t('delegation_modal.expired_resource_request_description');
 
+  // Delegate/revoke replaces the action buttons in place (via the loading/success animation).
+  // Move focus to the resulting button once it settles, but don't steal focus if the user moved
+  // it elsewhere during the animation.
+  const actionsRef = React.useRef<HTMLDivElement>(null);
+  const pendingActionFocusRef = React.useRef(false);
+
+  React.useEffect(() => {
+    if (isActionLoading) {
+      pendingActionFocusRef.current = true;
+    }
+  }, [isActionLoading]);
+
+  React.useEffect(() => {
+    if (
+      !pendingActionFocusRef.current ||
+      isActionLoading ||
+      isActionSuccess ||
+      isRightsSectionLoading ||
+      isResourceDelegationsLoading
+    ) {
+      return;
+    }
+    const focusTarget =
+      actionsRef.current?.querySelector<HTMLButtonElement>('button:not([disabled])');
+    if (!focusTarget) {
+      pendingActionFocusRef.current = false;
+      return;
+    }
+
+    const activeElement = focusTarget.ownerDocument.activeElement;
+    const userMovedFocus =
+      activeElement instanceof HTMLElement &&
+      activeElement !== focusTarget.ownerDocument.body &&
+      !actionsRef.current?.contains(activeElement);
+    pendingActionFocusRef.current = false;
+    if (userMovedFocus) {
+      return;
+    }
+    focusTarget.focus();
+  }, [
+    hasAccess,
+    isActionLoading,
+    isActionSuccess,
+    isRightsSectionLoading,
+    isResourceDelegationsLoading,
+  ]);
+
   return (
     <>
       <StatusMessageForScreenReader politenessSetting='assertive'>
@@ -215,7 +262,10 @@ export const ResourceInfo = ({
                 hasAccessAndNoChanges={hasAccess && !hasUnsavedChanges}
               />
             )}
-            <div className={classes.editButtons}>
+            <div
+              ref={actionsRef}
+              className={classes.editButtons}
+            >
               {hasDelegateAction && (
                 <Button
                   data-size='sm'

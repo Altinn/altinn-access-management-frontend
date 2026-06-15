@@ -1,7 +1,7 @@
 import { useState, useEffect, useCallback } from 'react';
 import { useSnackbar } from '@altinn/altinn-components';
 import { useTranslation } from 'react-i18next';
-import type { Request, ProcessedStatus } from '../types';
+import type { Request, ProcessedStatus, RequestReviewModalCloseOptions } from '../types';
 import { usePartyRepresentation } from '../../common/PartyRepresentationContext/PartyRepresentationContext';
 import {
   useApproveRequestMutation,
@@ -26,7 +26,7 @@ type SnapshotRequests = {
 
 export const useRequestReview = (
   request: Request | null,
-  onClose: () => void,
+  onClose: (options?: RequestReviewModalCloseOptions) => void,
   requestFocus: (id: string) => void,
 ) => {
   const { t } = useTranslation();
@@ -131,13 +131,14 @@ export const useRequestReview = (
   );
 
   const handleClose = () => {
+    const shouldWaitForRequestRemoval = allRequestsProcessed;
     setSnapshotRequests({ resourceRequests: [], packageRequests: [] });
     setSelectedResource(null);
     setSelectedPackage(null);
     setProcessedRequests({});
     setDelegationChecks({});
     setActionLoading(null);
-    onClose();
+    onClose({ waitForRequestRemoval: shouldWaitForRequestRemoval });
   };
 
   const findRequestId = (
@@ -249,6 +250,10 @@ export const useRequestReview = (
 
   const snapshotResources = snapshotRequests.resourceRequests.map((r) => r.resource);
   const snapshotPackages = snapshotRequests.packageRequests.map((p) => p.package);
+  const snapshotRequestCount =
+    snapshotRequests.resourceRequests.length + snapshotRequests.packageRequests.length;
+  const allRequestsProcessed =
+    snapshotRequestCount > 0 && Object.keys(processedRequests).length >= snapshotRequestCount;
 
   const isLoadingRequests = isLoadingResourceRequests || isLoadingPackageRequests;
   const isFetchingRequests = isFetchingResourceRequests || isFetchingPackageRequests;
@@ -263,6 +268,7 @@ export const useRequestReview = (
     resetSelection,
     processedRequests,
     actionLoading,
+    allRequestsProcessed,
     cannotApprove,
     handleClose,
     handleApprove,

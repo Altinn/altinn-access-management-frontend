@@ -1,4 +1,5 @@
 import { DsAlert, DsParagraph, DsSpinner, List } from '@altinn/altinn-components';
+import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import type { Party } from '@/rtk/features/lookupApi';
@@ -17,6 +18,9 @@ import { AreaItemContent } from './AreaItemContent';
 import { TechnicalErrorParagraphs } from '../TechnicalErrorParagraphs';
 import { createErrorDetails } from '../TechnicalErrorParagraphs/TechnicalErrorParagraphs';
 import { PartyType } from '@/rtk/features/userInfoApi';
+import { RestoreFocusFallback, useRestoreFocusContext } from '../RestoreFocus';
+
+type PackageFocusTargetList = 'assigned' | 'available';
 
 interface AccessPackageListProps {
   showAllPackages?: boolean;
@@ -60,6 +64,11 @@ export const AccessPackageList = ({
   filterByType = true,
 }: AccessPackageListProps) => {
   const { t } = useTranslation();
+  const restoreFocus = useRestoreFocusContext();
+  const [pendingPackageFocus, setPendingPackageFocus] = useState<{
+    id: string;
+    targetList: PackageFocusTargetList;
+  } | null>(null);
 
   const {
     loadingPackageAreas,
@@ -87,14 +96,49 @@ export const AccessPackageList = ({
     isLoadingRequest,
     isLoading: isActionLoading,
   } = useAccessPackageActions({
-    onDelegateSuccess,
+    onDelegateSuccess: (accessPackage, toParty) => {
+      if (restoreFocus) {
+        setPendingPackageFocus({ id: accessPackage.id, targetList: 'assigned' });
+      }
+      onDelegateSuccess?.(accessPackage, toParty);
+    },
     onDelegateError,
-    onRevokeSuccess,
+    onRevokeSuccess: (accessPackage, toParty) => {
+      if (restoreFocus) {
+        setPendingPackageFocus({ id: accessPackage.id, targetList: 'available' });
+      }
+      onRevokeSuccess?.(accessPackage, toParty);
+    },
     onRevokeError,
   });
 
   const combinedAreas = [...assignedAreas, ...availableAreas];
   const { toggleExpandedArea, isExpanded } = useAreaExpandedContextOrLocal();
+
+  useEffect(() => {
+    if (!pendingPackageFocus || !restoreFocus) {
+      return;
+    }
+
+    const targetAreas =
+      pendingPackageFocus.targetList === 'assigned' ? assignedAreas : availableAreas;
+    const targetIsInUpdatedList = targetAreas.some((area) =>
+      area.packages[pendingPackageFocus.targetList].some(
+        (accessPackage) => accessPackage.id === pendingPackageFocus.id,
+      ),
+    );
+
+    if (!targetIsInUpdatedList) {
+      return;
+    }
+
+    const frame = requestAnimationFrame(() => {
+      restoreFocus.requestFocus(pendingPackageFocus.id);
+      setPendingPackageFocus(null);
+    });
+
+    return () => cancelAnimationFrame(frame);
+  }, [assignedAreas, availableAreas, pendingPackageFocus, restoreFocus]);
 
   if (loadingDelegations || loadingPackageAreas || isLoading) {
     return (
@@ -157,41 +201,45 @@ export const AccessPackageList = ({
           {noPackagesText || t('access_packages.no_packages')}
         </DsParagraph>
       ) : (
-        <List>
-          {displayAreas.map((area) => {
-            const expanded = (searchString && searchString.length > 2) || isExpanded(area.id);
+        <RestoreFocusFallback>
+          <List>
+            {displayAreas.map((area) => {
+              const expanded = (searchString && searchString.length > 2) || isExpanded(area.id);
 
-            return (
-              <AreaItem
-                key={area.id}
-                area={area}
-                expanded={expanded}
-                toggleExpandedArea={toggleExpandedArea}
-                showPackagesCount={showPackagesCount}
-                showPermissions={showPermissions}
-                partyType={area.typeName === 'Person' ? PartyType.Person : PartyType.Organization}
-              >
-                <AreaItemContent
+              return (
+                <AreaItem
+                  key={area.id}
                   area={area}
-                  availableActions={availableActions}
-                  onSelect={onSelect}
-                  onDelegate={onDelegate}
-                  onRevoke={onRevoke}
-                  onRequest={onRequest}
-                  onDeleteRequest={deleteRequest}
-                  hasPendingRequest={hasPendingRequest}
-                  isLoadingRequest={isLoadingRequest}
-                  isActionLoading={isActionLoading}
-                  showAvailablePackages={!minimizeAvailablePackages}
-                  showAvailableToggle={showAvailableToggle}
+                  expanded={expanded}
+                  toggleExpandedArea={toggleExpandedArea}
+                  showPackagesCount={showPackagesCount}
                   showPermissions={showPermissions}
-                  packageAs={packageAs}
                   partyType={area.typeName === 'Person' ? PartyType.Person : PartyType.Organization}
-                />
-              </AreaItem>
-            );
-          })}
-        </List>
+                >
+                  <AreaItemContent
+                    area={area}
+                    availableActions={availableActions}
+                    onSelect={onSelect}
+                    onDelegate={onDelegate}
+                    onRevoke={onRevoke}
+                    onRequest={onRequest}
+                    onDeleteRequest={deleteRequest}
+                    hasPendingRequest={hasPendingRequest}
+                    isLoadingRequest={isLoadingRequest}
+                    isActionLoading={isActionLoading}
+                    showAvailablePackages={!minimizeAvailablePackages}
+                    showAvailableToggle={showAvailableToggle}
+                    showPermissions={showPermissions}
+                    packageAs={packageAs}
+                    partyType={
+                      area.typeName === 'Person' ? PartyType.Person : PartyType.Organization
+                    }
+                  />
+                </AreaItem>
+              );
+            })}
+          </List>
+        </RestoreFocusFallback>
       )}
     </div>
   );

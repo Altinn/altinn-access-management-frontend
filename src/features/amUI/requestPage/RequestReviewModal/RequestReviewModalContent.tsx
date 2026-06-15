@@ -1,3 +1,4 @@
+import { useEffect } from 'react';
 import { Link } from 'react-router';
 import {
   AccessPackageListItem,
@@ -27,13 +28,19 @@ import {
   RestoreFocusTarget,
   useRestoreFocus,
 } from '../../common/RestoreFocus';
+import type { RequestReviewModalCloseOptions } from '../types';
 
 interface RequestReviewModalContentProps {
   request: Request | null;
-  onClose: () => void;
+  onClose: (options?: RequestReviewModalCloseOptions) => void;
+  onAllRequestsProcessedChange?: (allRequestsProcessed: boolean) => void;
 }
 
-export const RequestReviewModalContent = ({ request, onClose }: RequestReviewModalContentProps) => {
+export const RequestReviewModalContent = ({
+  request,
+  onClose,
+  onAllRequestsProcessedChange,
+}: RequestReviewModalContentProps) => {
   const { t } = useTranslation();
 
   // Restore focus to the request item when navigating back from a detail view, even if the item
@@ -50,12 +57,17 @@ export const RequestReviewModalContent = ({ request, onClose }: RequestReviewMod
     resetSelection,
     processedRequests,
     actionLoading,
+    allRequestsProcessed,
     cannotApprove,
     handleClose,
     handleApprove,
     handleReject,
     handleSelection,
   } = useRequestReview(request, onClose, restoreFocus.requestFocus);
+
+  useEffect(() => {
+    onAllRequestsProcessedChange?.(allRequestsProcessed);
+  }, [allRequestsProcessed, onAllRequestsProcessedChange]);
 
   if (request === null) {
     return null;

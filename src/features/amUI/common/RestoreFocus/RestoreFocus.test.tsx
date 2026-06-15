@@ -119,6 +119,45 @@ const FallbackTest = ({
   );
 };
 
+const FallbackWithNestedDialogTest = () => {
+  const restoreFocus = useRestoreFocus();
+  const { requestFocus } = restoreFocus;
+
+  useEffect(() => {
+    requestFocus('deleted-item');
+  }, [requestFocus]);
+
+  return (
+    <RestoreFocusProvider restoreFocus={restoreFocus}>
+      <RestoreFocusFallback>
+        <dialog>
+          <button>Dialog close</button>
+        </dialog>
+        <button>List action</button>
+      </RestoreFocusFallback>
+    </RestoreFocusProvider>
+  );
+};
+
+const FallbackWithPreferredTargetTest = () => {
+  const restoreFocus = useRestoreFocus();
+  const { requestFocus } = restoreFocus;
+
+  useEffect(() => {
+    requestFocus('deleted-item');
+  }, [requestFocus]);
+
+  return (
+    <RestoreFocusProvider restoreFocus={restoreFocus}>
+      <RestoreFocusFallback>
+        <section>
+          <p data-restore-focus-fallback>No requests</p>
+        </section>
+      </RestoreFocusFallback>
+    </RestoreFocusProvider>
+  );
+};
+
 describe('RestoreFocus', () => {
   it('focuses the first focusable descendant of the requested target element', async () => {
     render(
@@ -235,6 +274,19 @@ describe('RestoreFocus', () => {
     await waitFor(() =>
       expect(screen.getByRole('heading', { name: 'List heading' })).toHaveFocus(),
     );
+  });
+
+  it('does not use focusable controls from nested dialogs as fallback targets', async () => {
+    render(<FallbackWithNestedDialogTest />);
+
+    await waitFor(() => expect(screen.getByRole('button', { name: 'List action' })).toHaveFocus());
+    expect(screen.getByText('Dialog close')).not.toHaveFocus();
+  });
+
+  it('focuses a preferred fallback target when one is marked', async () => {
+    render(<FallbackWithPreferredTargetTest />);
+
+    await waitFor(() => expect(screen.getByText('No requests')).toHaveFocus());
   });
 
   it('does not use the fallback when a requested id is present', async () => {

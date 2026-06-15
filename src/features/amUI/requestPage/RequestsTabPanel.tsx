@@ -5,14 +5,21 @@ import {
   getSystemUserAgentRequestUrl,
 } from '@/routes/paths/systemUserPath';
 import { DsAlert, List, UserListItem } from '@altinn/altinn-components';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Link } from 'react-router';
 import { RequestReviewModal } from './RequestReviewModal/RequestReviewModal';
-import { Request } from './types';
+import type { Request, RequestReviewModalCloseOptions } from './types';
 
 import classes from './RequestPage.module.css';
 import { amUIPath } from '@/routes/paths';
+import {
+  RestoreFocusFallback,
+  RestoreFocusProvider,
+  RestoreFocusTarget,
+  useRestoreFocus,
+  useRestoreFocusContext,
+} from '../common/RestoreFocus';
 
 interface RequestsTabPanelProps {
   count: number;
@@ -30,8 +37,10 @@ export const RequestsTabPanel = ({
   children,
 }: RequestsTabPanelProps) => {
   const { t } = useTranslation();
+  const restoreFocus = useRestoreFocus();
+
   return (
-    <>
+    <RestoreFocusProvider restoreFocus={restoreFocus}>
       {isError && (
         <div className={classes.errorWrapper}>
           <DsAlert data-color='danger'>
@@ -41,20 +50,24 @@ export const RequestsTabPanel = ({
           </DsAlert>
         </div>
       )}
-      <List>
-        {isLoading ? (
-          <>
-            <LoadingRequestListItem />
-            <LoadingRequestListItem />
-            <LoadingRequestListItem />
-            <LoadingRequestListItem />
-          </>
-        ) : (
-          <>{children}</>
-        )}
-        {!isError && !isLoading && count === 0 && <div>{t(emptyMessageKey)}</div>}
-      </List>
-    </>
+      <RestoreFocusFallback>
+        <List>
+          {isLoading ? (
+            <>
+              <LoadingRequestListItem />
+              <LoadingRequestListItem />
+              <LoadingRequestListItem />
+              <LoadingRequestListItem />
+            </>
+          ) : (
+            <>{children}</>
+          )}
+          {!isError && !isLoading && count === 0 && (
+            <div data-restore-focus-fallback>{t(emptyMessageKey)}</div>
+          )}
+        </List>
+      </RestoreFocusFallback>
+    </RestoreFocusProvider>
   );
 };
 
@@ -65,6 +78,42 @@ interface PendingRequestsProps {
 export const PendingRequests = ({ pendingRequests }: PendingRequestsProps) => {
   const { t } = useTranslation();
   const [openAccessRequest, setOpenAccessRequest] = useState<Request | null>(null);
+  const [closedRequestFocus, setClosedRequestFocus] = useState<{
+    id: string;
+    waitForRequestRemoval: boolean;
+  } | null>(null);
+  const restoreFocus = useRestoreFocusContext();
+
+  useEffect(() => {
+    if (!closedRequestFocus || !restoreFocus) {
+      return;
+    }
+
+    const requestStillPresent = pendingRequests?.some(
+      (request) => request.id === closedRequestFocus.id,
+    );
+    if (closedRequestFocus.waitForRequestRemoval && requestStillPresent) {
+      return;
+    }
+
+    const frame = requestAnimationFrame(() => {
+      restoreFocus.requestFocus(closedRequestFocus.id);
+      setClosedRequestFocus(null);
+    });
+
+    return () => cancelAnimationFrame(frame);
+  }, [closedRequestFocus, pendingRequests, restoreFocus]);
+
+  const handleReviewModalClose = (options?: RequestReviewModalCloseOptions) => {
+    if (openAccessRequest) {
+      setClosedRequestFocus({
+        id: openAccessRequest.id,
+        waitForRequestRemoval: options?.waitForRequestRemoval ?? false,
+      });
+    }
+    setOpenAccessRequest(null);
+  };
+
   return (
     <>
       {pendingRequests?.map((request) => {
@@ -82,39 +131,43 @@ export const PendingRequests = ({ pendingRequests }: PendingRequestsProps) => {
         };
         const toUrl = getRequestUrl();
         return (
-          <UserListItem
+          <RestoreFocusTarget
             key={request.id}
             id={request.id}
-            name={request.displayPartyName}
-            type={request.displayPartyType}
-            subUnit={request.isSubUnit}
-            titleAs='h2'
-            linkIcon
-            description={`${request.description ? t(request.description) : t('request_page.asks_for_number', { count: request.numberOfRequests })} (${formatDateToNorwegian(request.createdDate)})`}
-            as={(props) =>
-              toUrl ? (
-                <Link
-                  {...props}
-                  to={toUrl}
-                />
-              ) : (
-                <button
-                  {...props}
-                  onClick={() => setOpenAccessRequest(request)}
-                />
-              )
-            }
-            controls={
-              <div className={classes.requestItemBadge}>
-                {t('request_page.process_request', { count: request.numberOfRequests || 1 })}
-              </div>
-            }
-          />
+          >
+            <UserListItem
+              id={request.id}
+              name={request.displayPartyName}
+              type={request.displayPartyType}
+              subUnit={request.isSubUnit}
+              titleAs='h2'
+              linkIcon
+              description={`${request.description ? t(request.description) : t('request_page.asks_for_number', { count: request.numberOfRequests })} (${formatDateToNorwegian(request.createdDate)})`}
+              as={(props) =>
+                toUrl ? (
+                  <Link
+                    {...props}
+                    to={toUrl}
+                  />
+                ) : (
+                  <button
+                    {...props}
+                    onClick={() => setOpenAccessRequest(request)}
+                  />
+                )
+              }
+              controls={
+                <div className={classes.requestItemBadge}>
+                  {t('request_page.process_request', { count: request.numberOfRequests || 1 })}
+                </div>
+              }
+            />
+          </RestoreFocusTarget>
         );
       })}
       <RequestReviewModal
         request={openAccessRequest}
-        onClose={() => setOpenAccessRequest(null)}
+        onClose={handleReviewModalClose}
       />
     </>
   );

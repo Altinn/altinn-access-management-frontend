@@ -3,6 +3,26 @@ import { type ReactNode, useContext, useEffect, useRef } from 'react';
 import { RestoreFocusContext } from './RestoreFocus';
 
 const FOCUSABLE_SELECTOR = 'button:not([disabled]), a[href]';
+const FALLBACK_TARGET_SELECTOR = '[data-restore-focus-fallback]';
+
+const isOutsideScopeDialog = (element: HTMLElement, scope: HTMLElement) => {
+  const elementDialog = element.closest('dialog');
+  return elementDialog !== null && elementDialog !== scope.closest('dialog');
+};
+
+const isUnavailableForFocus = (element: HTMLElement, scope: HTMLElement) =>
+  isOutsideScopeDialog(element, scope) ||
+  Boolean(element.closest('dialog:not([open]), [hidden], [aria-hidden="true"], [inert]'));
+
+const findFocusableElement = (element: HTMLElement, scope: HTMLElement) => {
+  if (element.matches(FOCUSABLE_SELECTOR) && !isUnavailableForFocus(element, scope)) {
+    return element;
+  }
+
+  return Array.from(element.querySelectorAll<HTMLElement>(FOCUSABLE_SELECTOR)).find(
+    (candidate) => !isUnavailableForFocus(candidate, scope),
+  );
+};
 
 // Focuses the element, making it programmatically focusable for this call only when it is not
 // natively focusable (e.g. a heading or a processed, non-interactive row).
@@ -40,9 +60,7 @@ export const useRestoreFocusTarget = (id: string) => {
       return;
     }
 
-    const focusable = target.matches(FOCUSABLE_SELECTOR)
-      ? target
-      : target.querySelector<HTMLElement>(FOCUSABLE_SELECTOR);
+    const focusable = findFocusableElement(target, target);
     focusElement(focusable ?? target);
 
     clearRequest();
@@ -76,9 +94,17 @@ export const RestoreFocusFallback = ({ children }: { children: ReactNode }) => {
     }
 
     const wrapper = wrapperRef.current;
-    const elementToFocus =
-      wrapper?.querySelector<HTMLElement>(FOCUSABLE_SELECTOR) ??
-      (wrapper?.firstElementChild as HTMLElement | null);
+    const elementToFocus = wrapper
+      ? (findFocusableElement(wrapper, wrapper) ??
+        Array.from(wrapper.querySelectorAll<HTMLElement>(FALLBACK_TARGET_SELECTOR)).find(
+          (candidate) => !isUnavailableForFocus(candidate, wrapper),
+        ) ??
+        (Array.from(wrapper.children).find(
+          (child): child is HTMLElement =>
+            child instanceof HTMLElement && !isUnavailableForFocus(child, wrapper),
+        ) ||
+          null))
+      : null;
     if (!elementToFocus) {
       return;
     }

@@ -1,4 +1,4 @@
-import { createContext, type ReactNode, useCallback, useMemo, useState } from 'react';
+import { createContext, type ReactNode, useCallback, useContext, useMemo, useState } from 'react';
 
 export interface RestoreFocus {
   // Call when navigating back (or after deleting) to request focus on the item with the given id.
@@ -27,6 +27,8 @@ export const useRestoreFocus = (): RestoreFocus => {
     [clearRequest, focusRequestId, requestFocus],
   );
 };
+
+export const useRestoreFocusContext = () => useContext(RestoreFocusContext);
 
 // Wraps the area containing the focus targets. Target lookups are scoped to this subtree,
 // so a duplicate id elsewhere on the page (e.g. the same list behind a modal) is never focused.
