@@ -10,7 +10,11 @@ import { DownloadIcon } from '@navikt/aksel-icons';
 import { useTranslation } from 'react-i18next';
 import { useRef, useState } from 'react';
 import { usePartyRepresentation } from '../PartyRepresentationContext/PartyRepresentationContext';
-import { PartyType, useGetIsAdminQuery } from '@/rtk/features/userInfoApi';
+import {
+  PartyType,
+  useGetIsAdminQuery,
+  useGetReporteeListForAuthorizedUserQuery,
+} from '@/rtk/features/userInfoApi';
 
 import classes from './DownloadFileButton.module.css';
 import { isSubUnitByType } from '@/resources/utils/reporteeUtils';
@@ -34,6 +38,14 @@ export const DownloadFileButton = ({
   const { data: isAdmin } = useGetIsAdminQuery();
   const { fromParty } = usePartyRepresentation();
   const reporteeName = formatDisplayName({ fullName: fromParty?.name || '', type: 'company' });
+  const { data: accountList } = useGetReporteeListForAuthorizedUserQuery();
+  const fromAccountSubunitsNumber =
+    accountList?.find((account) => account.partyUuid === fromParty?.partyUuid)?.subunits?.length ||
+    0;
+  const allowSubunitDownload =
+    !isSubUnitByType(fromParty?.variant) &&
+    fromAccountSubunitsNumber > 0 &&
+    fromAccountSubunitsNumber < 500;
 
   const handleDownload = () => {
     if (!fromParty) return;
@@ -90,7 +102,7 @@ export const DownloadFileButton = ({
               {t('download_file.description_p1', { reportee: reporteeName })}
             </DsParagraph>
             <DsParagraph>{t('download_file.description_p2')}</DsParagraph>
-            {!isSubUnitByType(fromParty?.variant) && (
+            {allowSubunitDownload && (
               <DsSwitch
                 checked={includeSubunits}
                 onChange={(event) => setIncludeSubunits(event.target.checked)}
