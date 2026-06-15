@@ -175,6 +175,7 @@ export const UsersTab = ({ accessPackage, isLoading, isFetching }: UsersTabProps
         onAddNewUser={canDelegate ? handleOnDelegate : undefined}
         onRevoke={handleOnRevoke}
         onSelect={(user) => modalRef.current?.open(user)}
+        isPrimaryAddUserButton
         isActionLoading={
           isActionLoading ||
           isLoading ||

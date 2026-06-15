@@ -139,7 +139,10 @@ export const UserSearch: React.FC<UserSearchProps> = ({
         </div>
         {canDelegate && AddUserButton && (
           <div className={classes.buttonRow}>
-            <AddUserButton onComplete={handleAddNewUser} />
+            <AddUserButton
+              onComplete={handleAddNewUser}
+              isLarge
+            />
           </div>
         )}
       </div>
