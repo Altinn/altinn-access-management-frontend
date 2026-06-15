@@ -28,6 +28,7 @@ export interface UserSearchProps {
   isActionLoading?: boolean;
   canDelegate?: boolean;
   AddUserButton?: React.ComponentType<{ isLarge?: boolean; onComplete?: (user: User) => void }>;
+  isPrimaryAddUserButton?: boolean;
   noUsersText?: string;
   searchPlaceholder?: string;
   addUserButtonLabel?: string;
@@ -59,6 +60,7 @@ export const UserSearch: React.FC<UserSearchProps> = ({
   isActionLoading = false,
   canDelegate = true,
   AddUserButton = NewUserButton,
+  isPrimaryAddUserButton = false,
   noUsersText,
   searchPlaceholder,
   addUserButtonLabel,
@@ -141,7 +143,7 @@ export const UserSearch: React.FC<UserSearchProps> = ({
           <div className={classes.buttonRow}>
             <AddUserButton
               onComplete={handleAddNewUser}
-              isLarge
+              isLarge={isPrimaryAddUserButton}
             />
           </div>
         )}
