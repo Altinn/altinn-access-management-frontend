@@ -40,7 +40,9 @@ export const DownloadFileButton = ({
   const { data: isAdmin } = useGetIsAdminQuery();
   const { fromParty } = usePartyRepresentation();
   const reporteeName = formatDisplayName({ fullName: fromParty?.name || '', type: 'company' });
-  const { data: accountList } = useGetReporteeListForAuthorizedUserQuery();
+  const { data: accountList } = useGetReporteeListForAuthorizedUserQuery(undefined, {
+    skip: !isAdmin || fromParty?.partyTypeName !== PartyType.Organization,
+  });
   const fromAccountSubunitsNumber =
     accountList?.find((account) => account.partyUuid === fromParty?.partyUuid)?.subunits?.length ||
     0;
