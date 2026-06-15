@@ -35,6 +35,7 @@ interface AreaItemContentProps {
   showPermissions?: boolean;
   packageAs?: React.ElementType;
   partyType: PartyType;
+  headingLevel: 3 | 4;
 }
 
 export const AreaItemContent = ({
@@ -53,6 +54,7 @@ export const AreaItemContent = ({
   showPermissions = false,
   packageAs,
   partyType,
+  headingLevel,
 }: AreaItemContentProps) => {
   const { packages } = area;
   const { t } = useTranslation();
@@ -86,9 +88,9 @@ export const AreaItemContent = ({
     <div className={cn(classes.accessAreaContent, !isSm && classes.accessAreaContentMargin)}>
       <DsHeading
         className={classes.packagesTitle}
-        asChild
+        level={headingLevel}
       >
-        <div>{t('access_packages.access_packages_in_area_title')}</div>
+        {t('access_packages.access_packages_in_area_title')}
       </DsHeading>
       {packages.assigned.length > 0 && (
         <List aria-label={t('access_packages.given_packages_title')}>
