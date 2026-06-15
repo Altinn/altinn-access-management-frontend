@@ -1235,6 +1235,12 @@
     "go_to_profile": "Go to profile",
     "load_user_error": "Could not load user.",
     "not_self_identified_error": "Only email-users can add an account.",
-    "feature_toggled_off": "The option to add an account is turned off."
+    "feature_toggled_off": "Ability to add account is disabled.",
+    "forgot_password_info": "Enter your username, and we will send a link to add account to the email address registered for this username.",
+    "forgot_password_error": "Could not send email. Check that the username is correct.",
+    "no_email_for_username": "We found no email for this username. Check that the username is correct.",
+    "send_link": "Send link",
+    "forgot_password_sent": "We have sent an email to {{email}}.",
+    "add_account_from_token_error": "Could not add account"
   }
 }

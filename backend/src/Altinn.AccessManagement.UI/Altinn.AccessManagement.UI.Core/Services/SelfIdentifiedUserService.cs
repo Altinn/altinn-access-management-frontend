@@ -8,27 +8,31 @@ namespace Altinn.AccessManagement.UI.Core.Services
     public class SelfIdentifiedUserService : ISelfIdentifiedUserService
     {
         private readonly ISelfIdentifiedUserClient _selfIdentifiedUserClient;
-        private readonly IConnectionClient _connectionClient;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="SelfIdentifiedUserService"/> class.
         /// </summary>
-        public SelfIdentifiedUserService(ISelfIdentifiedUserClient selfIdentifiedUserClient, IConnectionClient connectionClient)
+        public SelfIdentifiedUserService(ISelfIdentifiedUserClient selfIdentifiedUserClient)
         {
             _selfIdentifiedUserClient = selfIdentifiedUserClient;
-            _connectionClient = connectionClient;
         }
 
         /// <inheritdoc />
-        public async Task<Guid> ValidateCredentials(Altinn2AccountRequest request, CancellationToken cancellationToken)
+        public async Task<Guid> AddAltinn2Account(Altinn2AccountRequest request, CancellationToken cancellationToken)
         {
-            return await _selfIdentifiedUserClient.ValidateCredentials(request, cancellationToken);
+            return await _selfIdentifiedUserClient.AddAltinn2Account(request, cancellationToken);
         }
 
         /// <inheritdoc />
-        public async Task PostNewSelfIdentifiedUser(Guid from, Guid to, CancellationToken cancellationToken)
+        public async Task<Altinn2ForgotPasswordResponse> SendForgotPasswordEmail(Altinn2ForgotPasswordRequest request, CancellationToken cancellationToken)
         {
-            await _connectionClient.PostNewSelfIdentifiedUser(from, to, cancellationToken);
+            return await _selfIdentifiedUserClient.SendForgotPasswordEmail(request, cancellationToken);
+        }
+
+        /// <inheritdoc />
+        public async Task<Guid> AddAltinn2AccountFromToken(Altinn2AccountFromTokenRequest request, CancellationToken cancellationToken)
+        {
+            return await _selfIdentifiedUserClient.AddAltinn2AccountFromToken(request, cancellationToken);
         }
     }
 }

@@ -35,7 +35,9 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
         public async Task AddAltinn2Account_ValidCredentials_ReturnsOk()
         {
             // Arrange
-            Guid to = Guid.NewGuid();
+            Guid userPartyUuid = new Guid("167536b5-f8ed-4c5a-8f48-0279507e53ae");
+            string token = PrincipalUtil.GetToken(1337, 50789533, userPartyUuid, 2);
+            _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
             Altinn2AccountRequest request = new Altinn2AccountRequest()
             {
                 UserName = "testuser",
@@ -43,7 +45,7 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
             };
 
             // Act
-            HttpResponseMessage httpResponse = await _client.PostAsync($"accessmanagement/api/v1/selfidentifieduser/altinn2account?to={to}", JsonContent.Create(request));
+            HttpResponseMessage httpResponse = await _client.PostAsync($"accessmanagement/api/v1/selfidentifieduser/altinn2account", JsonContent.Create(request));
 
             // Assert
             Assert.Equal(HttpStatusCode.OK, httpResponse.StatusCode);
@@ -56,7 +58,9 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
         public async Task AddAltinn2Account_InvalidCredentials_ReturnsUnauthorized()
         {
             // Arrange
-            Guid to = Guid.NewGuid();
+            Guid userPartyUuid = new Guid("167536b5-f8ed-4c5a-8f48-0279507e53ae");
+            string token = PrincipalUtil.GetToken(1337, 50789533, userPartyUuid, 2);
+            _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
             Altinn2AccountRequest request = new Altinn2AccountRequest()
             {
                 UserName = "invalid",
@@ -64,31 +68,94 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
             };
 
             // Act
-            HttpResponseMessage httpResponse = await _client.PostAsync($"accessmanagement/api/v1/selfidentifieduser/altinn2account?to={to}", JsonContent.Create(request));
+            HttpResponseMessage httpResponse = await _client.PostAsync($"accessmanagement/api/v1/selfidentifieduser/altinn2account", JsonContent.Create(request));
 
             // Assert
             Assert.Equal(HttpStatusCode.Unauthorized, httpResponse.StatusCode);
         }
 
         /// <summary>
-        ///     Test case: Add altinn 2 user with invalid credentials returns Bad Request
+        ///     Test case: Add altinn 2 user from valid token returns OK
         /// </summary>
         [Fact]
-        public async Task AddAltinn2Account_CreateConnectionFail_ReturnsBadRequest()
+        public async Task AddAltinn2AccountFromToken_ValidToken_ReturnsOk()
         {
             // Arrange
-            Guid to = Guid.NewGuid();
-            Altinn2AccountRequest request = new Altinn2AccountRequest()
+            Guid userPartyUuid = new Guid("167536b5-f8ed-4c5a-8f48-0279507e53ae");
+            string token = PrincipalUtil.GetToken(1337, 50789533, userPartyUuid, 2);
+            _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+            Altinn2AccountFromTokenRequest request = new Altinn2AccountFromTokenRequest()
             {
-                UserName = "invalid_connection",
-                Password = "invalid_connection"
+                Token = "validtoken"
             };
 
             // Act
-            HttpResponseMessage httpResponse = await _client.PostAsync($"accessmanagement/api/v1/selfidentifieduser/altinn2account?to={to}", JsonContent.Create(request));
+            HttpResponseMessage httpResponse = await _client.PostAsync($"accessmanagement/api/v1/selfidentifieduser/altinn2account/token", JsonContent.Create(request));
 
             // Assert
-            Assert.Equal(HttpStatusCode.BadRequest, httpResponse.StatusCode);
+            Assert.Equal(HttpStatusCode.OK, httpResponse.StatusCode);
+        }
+
+        /// <summary>
+        ///     Test case: Add altinn 2 user from invalid token returns Unauthorized
+        /// </summary>
+        [Fact]
+        public async Task AddAltinn2AccountFromToken_InvalidToken_ReturnsUnauthorized()
+        {
+            // Arrange
+            Guid userPartyUuid = new Guid("167536b5-f8ed-4c5a-8f48-0279507e53ae");
+            string token = PrincipalUtil.GetToken(1337, 50789533, userPartyUuid, 2);
+            _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+            Altinn2AccountFromTokenRequest request = new Altinn2AccountFromTokenRequest()
+            {
+                Token = "invalid"
+            };
+
+            // Act
+            HttpResponseMessage httpResponse = await _client.PostAsync($"accessmanagement/api/v1/selfidentifieduser/altinn2account/token", JsonContent.Create(request));
+
+            // Assert
+            Assert.Equal(HttpStatusCode.Unauthorized, httpResponse.StatusCode);
+        }
+
+        /// <summary>
+        ///     Test case: Send forgot password email for valid username returns OK with masked email address
+        /// </summary>
+        [Fact]
+        public async Task SendForgotPasswordEmail_ValidUsername_ReturnsOkWithEmailAddress()
+        {
+            // Arrange
+            Altinn2ForgotPasswordRequest request = new Altinn2ForgotPasswordRequest()
+            {
+                UserName = "testuser"
+            };
+
+            // Act
+            HttpResponseMessage httpResponse = await _client.PostAsync("accessmanagement/api/v1/selfidentifieduser/altinn2account/forgotpassword", JsonContent.Create(request));
+
+            // Assert
+            Assert.Equal(HttpStatusCode.OK, httpResponse.StatusCode);
+            var response = await httpResponse.Content.ReadFromJsonAsync<Altinn2ForgotPasswordResponse>();
+            Assert.NotNull(response?.MaskedEmail);
+        }
+
+        /// <summary>
+        ///     Test case: Send forgot password email for invalid username returns Unauthorized
+        /// </summary>
+        [Fact]
+        public async Task SendForgotPasswordEmail_InvalidUsername_ReturnsUnauthorized()
+        {
+            // Arrange
+            Altinn2ForgotPasswordRequest request = new Altinn2ForgotPasswordRequest()
+            {
+                UserName = "invalid"
+            };
+
+            // Act
+            HttpResponseMessage httpResponse = await _client.PostAsync("accessmanagement/api/v1/selfidentifieduser/altinn2account/forgotpassword", JsonContent.Create(request));
+
+            // Assert
+            Assert.Equal(HttpStatusCode.Unauthorized, httpResponse.StatusCode);
         }
     }
 }
