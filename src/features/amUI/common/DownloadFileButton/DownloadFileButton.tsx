@@ -19,6 +19,8 @@ import {
 import classes from './DownloadFileButton.module.css';
 import { isSubUnitByType } from '@/resources/utils/reporteeUtils';
 
+const MAX_SUBUNITS_FOR_DOWNLOAD_OPTION = 500;
+
 export interface DownloadFileButtonProps {
   size?: 'xs' | 'sm' | 'md' | 'lg';
   iconOnly?: boolean;
@@ -45,7 +47,7 @@ export const DownloadFileButton = ({
   const allowSubunitDownload =
     !isSubUnitByType(fromParty?.variant) &&
     fromAccountSubunitsNumber > 0 &&
-    fromAccountSubunitsNumber < 500;
+    fromAccountSubunitsNumber < MAX_SUBUNITS_FOR_DOWNLOAD_OPTION;
 
   const handleDownload = () => {
     if (!fromParty) return;
