@@ -35,6 +35,12 @@ export const AccessPackageInfo = ({ accessPackage, availableActions = [] }: Pack
   const { canDelegatePackage } = useAccessPackageDelegationCheck();
   const displayPackageRequestsFeature = displayPackageRequests();
 
+  // Delegating or revoking swaps the action button in place (e.g. "Slett fullmakt" becomes
+  // "Gi fullmakt"). Move focus to the new button once the refetch lands so keyboard and screen
+  // reader users aren't dropped to the page body.
+  const actionsRef = React.useRef<HTMLDivElement>(null);
+  const pendingActionFocusRef = React.useRef(false);
+
   const {
     onDelegate,
     onRevoke,
@@ -45,10 +51,12 @@ export const AccessPackageInfo = ({ accessPackage, availableActions = [] }: Pack
     isLoading: isActionLoading,
   } = useAccessPackageActions({
     onDelegateSuccess: () => {
+      pendingActionFocusRef.current = true;
       setActionSuccess(true);
       setTimeout(() => setActionSuccess(false), 2000);
     },
     onRevokeSuccess: () => {
+      pendingActionFocusRef.current = true;
       setActionSuccess(true);
       setTimeout(() => setActionSuccess(false), 2000);
     },
@@ -94,6 +102,30 @@ export const AccessPackageInfo = ({ accessPackage, availableActions = [] }: Pack
     canDelegate?.result === false &&
     availableActions.includes(DelegationAction.DELEGATE);
   const isPendingRequest = hasPendingRequest(accessPackage);
+
+  React.useEffect(() => {
+    if (!pendingActionFocusRef.current || isFetching || isActionLoading || actionSuccess) {
+      return;
+    }
+    const focusTarget =
+      actionsRef.current?.querySelector<HTMLButtonElement>('button:not([disabled])');
+    if (!focusTarget) {
+      return;
+    }
+
+    const activeElement = focusTarget.ownerDocument.activeElement;
+    const userMovedFocus =
+      activeElement instanceof HTMLElement &&
+      activeElement !== focusTarget.ownerDocument.body &&
+      !actionsRef.current?.contains(activeElement);
+    if (userMovedFocus) {
+      pendingActionFocusRef.current = false;
+      return;
+    }
+
+    pendingActionFocusRef.current = false;
+    focusTarget.focus();
+  }, [actionSuccess, isActionLoading, isFetching, userHasPackage]);
 
   return (
     <div className={classes.container}>
@@ -156,7 +188,10 @@ export const AccessPackageInfo = ({ accessPackage, availableActions = [] }: Pack
 
           <PackageMeta accessPackage={accessPackage} />
 
-          <div className={classes.actions}>
+          <div
+            ref={actionsRef}
+            className={classes.actions}
+          >
             {userHasPackage && availableActions.includes(DelegationAction.REVOKE) ? (
               deletableStatus !== DeletableStatus.PartiallyDeletable ? (
                 <DsButton

@@ -4,7 +4,7 @@ import { useTranslation } from 'react-i18next';
 import type { AccessPackage } from '@/rtk/features/accessPackageApi';
 import { PartyType } from '@/rtk/features/userInfoApi';
 
-import { useRestoreFocusTarget } from '../RestoreFocus/RestoreFocusContext';
+import { useRestoreFocusTarget } from '../RestoreFocus';
 
 interface PackageItemProps {
   pkg: AccessPackage;

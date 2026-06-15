@@ -1,4 +1,4 @@
-import React, { useRef, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { ArrowLeftIcon, HandshakeIcon, MinusCircleIcon } from '@navikt/aksel-icons';
 import {
   DsButton,
@@ -21,9 +21,10 @@ import { useGetEnrichedSentResourceRequestsQuery } from '@/rtk/features/requestA
 import { getRequestPartyQueryParams } from '@/resources/utils/singleRightRequestUtils';
 import { useAutoFocusRef } from '@/resources/hooks/useAutoFocusRef';
 import {
+  RestoreFocusFallback,
   RestoreFocusProvider,
   useRestoreFocus,
-} from '../../common/RestoreFocus/RestoreFocusContext';
+} from '../../common/RestoreFocus';
 
 export const PendingRequests = () => {
   const modalRef = useRef<HTMLDialogElement>(null);
@@ -129,12 +130,14 @@ export const SentRequestsModal = ({
 interface PendingRequestsListProps {
   selectedResource: ServiceResource | null;
   heading?: string;
+  headingSize?: '2xs' | 'xs';
   setSelectedResource: (resource: ServiceResource | null) => void;
 }
 
 export const PendingRequestsList = ({
   selectedResource,
   heading,
+  headingSize = 'xs',
   setSelectedResource,
 }: PendingRequestsListProps) => {
   const { t } = useTranslation();
@@ -142,23 +145,49 @@ export const PendingRequestsList = ({
   const { actingParty, fromParty } = usePartyRepresentation();
   const backButtonRef = useAutoFocusRef<HTMLButtonElement>();
 
-  const { data: singleRightRequests = [], isLoading: isLoadingRequests } =
-    useGetEnrichedSentResourceRequestsQuery(
-      {
-        ...getRequestPartyQueryParams(actingParty?.partyUuid, fromParty?.partyUuid),
-        status: ['Pending'],
-      },
-      {
-        skip: !actingParty?.partyUuid || !fromParty?.partyUuid,
-      },
-    );
+  const {
+    data: singleRightRequests = [],
+    isLoading: isLoadingRequests,
+    isFetching: isRefetchingRequests,
+  } = useGetEnrichedSentResourceRequestsQuery(
+    {
+      ...getRequestPartyQueryParams(actingParty?.partyUuid, fromParty?.partyUuid),
+      status: ['Pending'],
+    },
+    {
+      skip: !actingParty?.partyUuid || !fromParty?.partyUuid,
+    },
+  );
+
+  const restoreFocus = useRestoreFocus();
+  const [pendingDeletedFocusId, setPendingDeletedFocusId] = useState<string | null>(null);
+
+  const resources = singleRightRequests
+    .map((x) => x.resource)
+    .filter((r): r is ServiceResource => !!r);
 
   const { deleteRequest, isLoadingRequest } = useSingleRightRequests({
     canRequestRights: true,
     actingPartyUuid: actingParty?.partyUuid,
     fromPartyUuid: fromParty?.partyUuid,
+    onDeleteRequestSuccess: (resource) => setPendingDeletedFocusId(resource.identifier),
   });
-  const restoreFocus = useRestoreFocus();
+
+  useEffect(() => {
+    if (!pendingDeletedFocusId || isRefetchingRequests) {
+      return;
+    }
+
+    const deletedItemStillPresent = resources.some(
+      (resource) => resource.identifier === pendingDeletedFocusId,
+    );
+    if (deletedItemStillPresent) {
+      return;
+    }
+
+    restoreFocus.requestFocus(pendingDeletedFocusId);
+    setPendingDeletedFocusId(null);
+  }, [isRefetchingRequests, pendingDeletedFocusId, resources, restoreFocus]);
 
   return (
     <RestoreFocusProvider restoreFocus={restoreFocus}>
@@ -185,25 +214,23 @@ export const PendingRequestsList = ({
         ) : (
           <>
             {heading && (
-              <DsHeading
-                data-size='xs'
-                level={2}
-                className={classes.pendingRequestsHeading}
-              >
-                {heading}
-              </DsHeading>
+              <RestoreFocusFallback>
+                <DsHeading
+                  data-size={headingSize}
+                  level={2}
+                  className={classes.pendingRequestsHeading}
+                >
+                  {heading}
+                </DsHeading>
+              </RestoreFocusFallback>
             )}
             <ResourceList
               isLoading={isLoadingRequests}
               size={isSmallScreen ? 'sm' : 'md'}
               enableSearch={false}
-              resources={singleRightRequests
-                .map((x) => x.resource)
-                .filter((r): r is ServiceResource => !!r)}
+              resources={resources}
               showDetails={false}
-              onSelect={(resource) => {
-                setSelectedResource(resource);
-              }}
+              onSelect={(resource) => setSelectedResource(resource)}
               renderControls={(resource) => {
                 if (isSmallScreen) return undefined;
                 return (

@@ -26,7 +26,7 @@ import {
   RestoreFocusProvider,
   RestoreFocusTarget,
   useRestoreFocus,
-} from '../../common/RestoreFocus/RestoreFocusContext';
+} from '../../common/RestoreFocus';
 
 interface RequestReviewModalContentProps {
   request: Request | null;

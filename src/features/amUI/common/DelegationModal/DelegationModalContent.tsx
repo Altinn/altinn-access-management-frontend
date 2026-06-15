@@ -9,7 +9,7 @@ import { useAutoFocusRef } from '@/resources/hooks/useAutoFocusRef';
 
 import { usePartyRepresentation } from '../PartyRepresentationContext/PartyRepresentationContext';
 import { useAreaExpandedContextOrLocal } from '../AccessPackageList/AccessPackageExpandedContext';
-import { RestoreFocusProvider, useRestoreFocus } from '../RestoreFocus/RestoreFocusContext';
+import { RestoreFocusProvider, useRestoreFocus } from '../RestoreFocus';
 import { ScopeSearch } from '../../maskinporten/ScopeSearch';
 import { ScopeInfo } from '../../maskinporten/ScopeInfo';
 

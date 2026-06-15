@@ -14,7 +14,7 @@ import classes from './ResourceList.module.css';
 import { SkeletonResourceList } from './SkeletonResourceList';
 import { useFilteredResources } from './useFilteredResources';
 import { ResourceFilterToolbar } from '../ResourceFilterToolbar/ResourceFilterToolbar';
-import { RestoreFocusTarget } from '../RestoreFocus/RestoreFocusContext';
+import { RestoreFocusTarget } from '../RestoreFocus';
 import type { ResourceListItemResource } from './types';
 import {
   extractResourceName,

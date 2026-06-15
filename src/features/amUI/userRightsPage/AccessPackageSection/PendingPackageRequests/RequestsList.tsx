@@ -18,18 +18,23 @@ import { AccessPackageInfo } from '../../../common/DelegationModal/AccessPackage
 import { DelegationAction } from '../../../common/DelegationModal/EditModal';
 import classes from './Requests.module.css';
 import {
+  RestoreFocusFallback,
   RestoreFocusProvider,
   useRestoreFocus,
-} from '../../../common/RestoreFocus/RestoreFocusContext';
+} from '../../../common/RestoreFocus';
 
 interface PendingPackageRequestsListProps {
   heading?: string;
+  headingLevel?: 1 | 2 | 3 | 4 | 5 | 6;
+  headingSize?: '2xs' | 'xs';
   selectedRequest: EnrichedPackageRequest | null;
   setSelectedRequest: (request: EnrichedPackageRequest | null) => void;
 }
 
 export const PendingPackageRequestsList = ({
   heading,
+  headingLevel = 1,
+  headingSize = 'xs',
   selectedRequest,
   setSelectedRequest,
 }: PendingPackageRequestsListProps) => {
@@ -61,6 +66,23 @@ export const PendingPackageRequestsList = ({
 
   const [withdrawRequest] = useWithdrawRequestMutation();
   const restoreFocus = useRestoreFocus();
+  const [pendingDeletedFocusId, setPendingDeletedFocusId] = useState<string | null>(null);
+
+  useEffect(() => {
+    if (!pendingDeletedFocusId || isRefetching) {
+      return;
+    }
+
+    const deletedItemStillPresent = enrichedRequests.some(
+      (request) => request.package.id === pendingDeletedFocusId,
+    );
+    if (deletedItemStillPresent) {
+      return;
+    }
+
+    restoreFocus.requestFocus(pendingDeletedFocusId);
+    setPendingDeletedFocusId(null);
+  }, [enrichedRequests, isRefetching, pendingDeletedFocusId, restoreFocus]);
 
   const handleDelete = async (request: EnrichedPackageRequest) => {
     setLoadingByRequestId((prev) => ({ ...prev, [request.id]: true }));
@@ -69,6 +91,7 @@ export const PendingPackageRequestsList = ({
         party: actingParty?.partyUuid ?? '',
         id: request.id,
       }).unwrap();
+      setPendingDeletedFocusId(request.package.id);
       openSnackbar({
         message: t('delegation_modal.request.withdraw_request_success', {
           resource: request.package?.name,
@@ -111,13 +134,15 @@ export const PendingPackageRequestsList = ({
         ) : (
           <>
             {heading && (
-              <DsHeading
-                data-size='xs'
-                level={1}
-                className={classes.heading}
-              >
-                {heading}
-              </DsHeading>
+              <RestoreFocusFallback>
+                <DsHeading
+                  data-size={headingSize}
+                  level={headingLevel}
+                  className={classes.heading}
+                >
+                  {heading}
+                </DsHeading>
+              </RestoreFocusFallback>
             )}
             {isLoading ? (
               <SkeletonAccessPackageList />
@@ -129,9 +154,7 @@ export const PendingPackageRequestsList = ({
                     pkg={req.package}
                     partyType={fromParty?.partyTypeName ?? PartyType.Organization}
                     as='button'
-                    onSelect={() => {
-                      setSelectedRequest(req);
-                    }}
+                    onSelect={() => setSelectedRequest(req)}
                     controls={
                       isSmallScreen ? undefined : (
                         <Button

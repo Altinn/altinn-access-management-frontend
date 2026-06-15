@@ -9,10 +9,7 @@ import { useDelegationModalContext } from '../../common/DelegationModal/Delegati
 
 import { useTranslation } from 'react-i18next';
 import { useGetIsHovedadminQuery } from '@/rtk/features/userInfoApi';
-import {
-  RestoreFocusProvider,
-  useRestoreFocus,
-} from '../../common/RestoreFocus/RestoreFocusContext';
+import { RestoreFocusProvider, useRestoreFocus } from '../../common/RestoreFocus';
 
 interface ActiveDelegationsProps {
   searchString?: string;

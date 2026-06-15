@@ -2,12 +2,12 @@ import React, { useEffect, useState } from 'react';
 import { fireEvent, render, screen, waitFor } from '@testing-library/react';
 import { describe, expect, it } from 'vitest';
 
+import { RestoreFocusProvider, useRestoreFocus } from './RestoreFocus';
 import {
-  RestoreFocusProvider,
+  RestoreFocusFallback,
   RestoreFocusTarget,
-  useRestoreFocus,
   useRestoreFocusTarget,
-} from './RestoreFocusContext';
+} from './RestoreFocusTarget';
 
 interface FocusTargetTestProps {
   children: React.ReactNode;
@@ -88,7 +88,38 @@ const NoProviderTarget = () => {
   return <button id='target'>Target action</button>;
 };
 
-describe('RestoreFocusContext', () => {
+const FallbackTest = ({
+  focusTargetId,
+  includeItem,
+}: {
+  focusTargetId: string;
+  includeItem: boolean;
+}) => {
+  const restoreFocus = useRestoreFocus();
+  const { requestFocus } = restoreFocus;
+
+  useEffect(() => {
+    requestFocus(focusTargetId);
+  }, [focusTargetId, requestFocus]);
+
+  return (
+    <RestoreFocusProvider restoreFocus={restoreFocus}>
+      <RestoreFocusFallback>
+        <h2>List heading</h2>
+      </RestoreFocusFallback>
+      {includeItem && (
+        <>
+          <RestoreFocusTarget id='item' />
+          <div id='item'>
+            <button>Item action</button>
+          </div>
+        </>
+      )}
+    </RestoreFocusProvider>
+  );
+};
+
+describe('RestoreFocus', () => {
   it('focuses the first focusable descendant of the requested target element', async () => {
     render(
       <FocusTargetTest focusTargetId='target'>
@@ -191,6 +222,31 @@ describe('RestoreFocusContext', () => {
 
     expect(screen.getByRole('button', { name: 'Target action' })).toBeInTheDocument();
     expect(otherAction).toHaveFocus();
+  });
+
+  it('focuses the fallback when no requested id is present in the container', async () => {
+    render(
+      <FallbackTest
+        focusTargetId='deleted-item'
+        includeItem={false}
+      />,
+    );
+
+    await waitFor(() =>
+      expect(screen.getByRole('heading', { name: 'List heading' })).toHaveFocus(),
+    );
+  });
+
+  it('does not use the fallback when a requested id is present', async () => {
+    render(
+      <FallbackTest
+        focusTargetId='item'
+        includeItem
+      />,
+    );
+
+    await waitFor(() => expect(screen.getByRole('button', { name: 'Item action' })).toHaveFocus());
+    expect(screen.getByRole('heading', { name: 'List heading' })).not.toHaveFocus();
   });
 
   it('allows restore targets to render without a provider', () => {

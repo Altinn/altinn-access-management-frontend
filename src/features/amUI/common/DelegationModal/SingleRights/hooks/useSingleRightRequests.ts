@@ -18,6 +18,7 @@ interface UseSingleRightRequestsProps {
   fromPartyUuid?: string;
   onCreateRequestError?: (resource: ServiceResource) => void;
   onDeleteRequestError?: (resource: ServiceResource) => void;
+  onDeleteRequestSuccess?: (resource: ServiceResource) => void;
 }
 
 export const useSingleRightRequests = ({
@@ -26,6 +27,7 @@ export const useSingleRightRequests = ({
   fromPartyUuid,
   onCreateRequestError,
   onDeleteRequestError,
+  onDeleteRequestSuccess,
 }: UseSingleRightRequestsProps) => {
   const [loadingByResourceId, setLoadingByResourceId] = useState<Record<string, boolean>>({});
 
@@ -124,6 +126,7 @@ export const useSingleRightRequests = ({
     })
       .unwrap()
       .then(() => {
+        onDeleteRequestSuccess?.(resource);
         openSnackbar({
           message: t('delegation_modal.request.withdraw_request_success', {
             resource: resource.title,
