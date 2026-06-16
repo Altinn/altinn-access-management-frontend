@@ -66,7 +66,10 @@ export const SystemUserList = ({
           }
 
           const badge = (
-            <div className={classes.systemUserBadge}>
+            <div
+              className={classes.systemUserBadge}
+              aria-hidden
+            >
               {newlyCreatedId === systemUser.id && (
                 <Badge
                   label={t('systemuser_overviewpage.new_system_user')}
@@ -88,6 +91,7 @@ export const SystemUserList = ({
               key={systemUser.id}
               size='lg'
               title={{ children: `${systemUser.integrationTitle} ${refText}`, as: 'div' }}
+              ariaLabel={`${systemUser.integrationTitle} ${refText} ${systemUser.system.systemVendorOrgName} ${badgeContent}`}
               description={systemUser.system.systemVendorOrgName}
               as={(props) => (
                 <Link

@@ -55,11 +55,15 @@ export const ConsentListItem = ({
             title={{ as: 'div', children: item.title }}
             description={item.description}
             as='button'
+            ariaLabel={`${item.title} ${item.description} ${item.badgeText}`}
             loading={isLoading}
             interactive={!!onClick}
             onClick={onClick ? () => onClick(item.id) : undefined}
             badge={
-              <div className={classes.consentBadge}>
+              <div
+                className={classes.consentBadge}
+                aria-hidden
+              >
                 {item.isNew && <Badge label={t('active_consents.newly_consented')} />}
                 <div className={classes.consentBadgeAction}>
                   {isLoading ? (
