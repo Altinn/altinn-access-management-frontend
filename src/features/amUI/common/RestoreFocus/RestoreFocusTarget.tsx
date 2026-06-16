@@ -24,6 +24,12 @@ const findFocusableElement = (element: HTMLElement, scope: HTMLElement) => {
   );
 };
 
+// Restore focus only when it has been lost to the document body (e.g. the acted-on element was
+// disabled during an async action, or removed). If the user has since moved focus to a real
+// element, leave it alone so we never steal focus after the action settles.
+const focusHasBeenLost = () =>
+  document.activeElement === null || document.activeElement === document.body;
+
 // Focuses the element, making it programmatically focusable for this call only when it is not
 // natively focusable (e.g. a heading or a processed, non-interactive row).
 const focusElement = (element: HTMLElement) => {
@@ -60,8 +66,10 @@ export const useRestoreFocusTarget = (id: string) => {
       return;
     }
 
-    const focusable = findFocusableElement(target, target);
-    focusElement(focusable ?? target);
+    if (focusHasBeenLost()) {
+      const focusable = findFocusableElement(target, target);
+      focusElement(focusable ?? target);
+    }
 
     clearRequest();
   }, [clearRequest, containerElement, id, isRequested]);
@@ -109,7 +117,9 @@ export const RestoreFocusFallback = ({ children }: { children: ReactNode }) => {
       return;
     }
 
-    focusElement(elementToFocus);
+    if (focusHasBeenLost()) {
+      focusElement(elementToFocus);
+    }
     clearRequest();
   }, [clearRequest, containerElement, focusRequestId]);
 

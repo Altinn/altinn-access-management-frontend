@@ -53,6 +53,7 @@ const RepeatRestoreTest = () => {
   return (
     <>
       <button onClick={() => restoreFocus.requestFocus('target')}>Restore</button>
+      <button>Elsewhere</button>
       <RestoreFocusProvider restoreFocus={restoreFocus}>
         <RestoreFocusTarget id='target' />
         <button id='target'>Target action</button>
@@ -241,9 +242,29 @@ describe('RestoreFocus', () => {
     fireEvent.click(restoreButton);
     await waitFor(() => expect(target).toHaveFocus());
 
-    restoreButton.focus();
+    // Focus is lost again (e.g. the swapped button was disabled and blurred), so a second request
+    // restores it.
+    target.blur();
     fireEvent.click(restoreButton);
     await waitFor(() => expect(target).toHaveFocus());
+  });
+
+  it('does not steal focus when the user has already moved it elsewhere', async () => {
+    render(<RepeatRestoreTest />);
+
+    const restoreButton = screen.getByRole('button', { name: 'Restore' });
+    const elsewhere = screen.getByRole('button', { name: 'Elsewhere' });
+    const target = screen.getByRole('button', { name: 'Target action' });
+
+    elsewhere.focus();
+    expect(elsewhere).toHaveFocus();
+
+    fireEvent.click(restoreButton);
+
+    // The request resolves but focus is owned by a real element, so it is left alone.
+    await waitFor(() => expect(target).toBeInTheDocument());
+    expect(elsewhere).toHaveFocus();
+    expect(target).not.toHaveFocus();
   });
 
   it('does not refocus a consumed request when the target remounts later', async () => {
