@@ -70,6 +70,12 @@ export class KlientAdministrasjonPage {
     return this.page.getByRole('heading', { name: brukernavn });
   }
 
+  // Klient/brukerraden i en liste rendres som en knapp (med navn og org.nr.).
+  // Brukes der raden er en knapp og ikke en heading.
+  klientKnapp(navn: string): Locator {
+    return this.page.getByRole('button', { name: navn });
+  }
+
   async klikkListeElement(brukernavn: string) {
     await this.page.getByRole('link', { name: brukernavn }).click();
   }
