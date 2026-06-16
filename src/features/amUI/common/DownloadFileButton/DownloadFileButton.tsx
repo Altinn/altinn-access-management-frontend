@@ -1,5 +1,6 @@
 import {
   Button,
+  DsAlert,
   DsDialog,
   DsHeading,
   DsParagraph,
@@ -49,7 +50,7 @@ export const DownloadFileButton = ({
   const allowSubunitDownload =
     !isSubUnitByType(fromParty?.variant) &&
     fromAccountSubunitsNumber > 0 &&
-    fromAccountSubunitsNumber < MAX_SUBUNITS_FOR_DOWNLOAD_OPTION;
+    fromAccountSubunitsNumber <= MAX_SUBUNITS_FOR_DOWNLOAD_OPTION;
 
   const handleDownload = () => {
     if (!fromParty) return;
@@ -112,6 +113,15 @@ export const DownloadFileButton = ({
                 onChange={(event) => setIncludeSubunits(event.target.checked)}
                 label={t('download_file.include_subunits_label', { reportee: reporteeName })}
               />
+            )}
+            {fromAccountSubunitsNumber > MAX_SUBUNITS_FOR_DOWNLOAD_OPTION && (
+              <DsAlert
+                data-color='warning'
+                data-size='sm'
+                className={classes.warning}
+              >
+                <DsParagraph>{t('download_file.too_many_subunits_warning')}</DsParagraph>
+              </DsAlert>
             )}
             <div className={classes.buttons}>
               <Button

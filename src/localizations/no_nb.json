@@ -107,7 +107,8 @@
     "description_p1": "Her kan du laste ned en oversikt over alle fullmakter som {{reportee}} har gitt til andre og hvem som har fått dem.",
     "description_p2": "Innholdet lastes ned som csv-filer i en zip-konteiner. \nFilen er ikke ment til maskinell innlesning og vi tar forbehold om at formatet kan endre seg.",
     "start_download": "Start nedlasting",
-    "include_subunits_label": "Inkluder fullmakter i {{reportee}} sine underenheter"
+    "include_subunits_label": "Inkluder fullmakter i {{reportee}} sine underenheter",
+    "too_many_subunits_warning": "Denne virksomheten har for mange underenheter til å inkludere dem i nedlastingen. Dette er noe vi jobber med å løse, men for nå må du laste ned hver underenhet for seg hvis du ønsker denne informasjonen."
   },
   "info_banner": {
     "info": "19. juni skrus gamle Altinn av.",
