@@ -1,6 +1,6 @@
 import type { UserListItemProps } from '@altinn/altinn-components';
 import { formatDisplayName, List, UserListItem } from '@altinn/altinn-components';
-import type { ElementType, ReactNode } from 'react';
+import type { ReactNode } from 'react';
 import { useEffect, useState } from 'react';
 import { Link } from 'react-router';
 import { useTranslation } from 'react-i18next';
@@ -24,7 +24,7 @@ function isExtendedUser(item: ExtendedUser | User): item is ExtendedUser {
 
 interface UserItemProps extends Pick<
   UserListItemProps,
-  'size' | 'titleAs' | 'subUnit' | 'interactive' | 'shadow'
+  'size' | 'subUnit' | 'interactive' | 'shadow'
 > {
   user: ExtendedUser | User;
   showRoles?: boolean;
@@ -36,25 +36,9 @@ interface UserItemProps extends Pick<
   controls?: (user: ExtendedUser | User) => ReactNode;
 }
 
-const userHeadingLevelForMapper = (level?: ElementType) => {
-  switch (level) {
-    case 'h2':
-      return 'h3';
-    case 'h3':
-      return 'h4';
-    case 'h4':
-      return 'h5';
-    case 'h5':
-      return 'h6';
-    default:
-      return 'h6';
-  }
-};
-
 export const UserItem = ({
   user,
   size = 'lg',
-  titleAs,
   interactive = false,
   showRoles = true,
   roleDirection = 'toUser',
@@ -184,7 +168,7 @@ export const UserItem = ({
             : 'div'
       }
       controls={!hasInheritingUsers && controls && controls(user)}
-      titleAs={titleAs}
+      titleAs='div'
       subUnit={subUnit || hasSubUnitRole || isSubUnitByType(user.variant?.toString())}
       deleted={user.isDeleted}
     >
@@ -198,7 +182,6 @@ export const UserItem = ({
               key={child.id}
               user={{ ...child, children: null }} // do not allow further expansion of inheriting users
               size='xs'
-              titleAs={userHeadingLevelForMapper(titleAs)}
               subUnit={
                 (includeSelfAsChild ? index !== 0 : true) &&
                 child.type === ConnectionUserType.Organization &&

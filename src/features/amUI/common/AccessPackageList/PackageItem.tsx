@@ -32,7 +32,7 @@ export const PackageItem = ({
     <AccessPackageListItem
       id={pkg.id}
       name={pkg.name}
-      titleAs={titleAs || 'h4'}
+      titleAs={titleAs || 'div'}
       description={t('access_packages.package_number_of_resources', {
         count: pkg.resources.length,
       })}

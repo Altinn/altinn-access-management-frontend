@@ -37,6 +37,7 @@ interface AccessPackageListProps {
   packageAs?: React.ElementType;
   noPackagesText?: string;
   filterByType?: boolean;
+  areaHeadingLevel?: 2 | 3;
 }
 
 export const AccessPackageList = ({
@@ -58,6 +59,7 @@ export const AccessPackageList = ({
   packageAs,
   noPackagesText,
   filterByType = true,
+  areaHeadingLevel = 3,
 }: AccessPackageListProps) => {
   const { t } = useTranslation();
 
@@ -170,6 +172,7 @@ export const AccessPackageList = ({
                 showPackagesCount={showPackagesCount}
                 showPermissions={showPermissions}
                 partyType={area.typeName === 'Person' ? PartyType.Person : PartyType.Organization}
+                headingLevel={areaHeadingLevel}
               >
                 <AreaItemContent
                   area={area}
@@ -187,6 +190,7 @@ export const AccessPackageList = ({
                   showPermissions={showPermissions}
                   packageAs={packageAs}
                   partyType={area.typeName === 'Person' ? PartyType.Person : PartyType.Organization}
+                  headingLevel={areaHeadingLevel === 2 ? 3 : 4}
                 />
               </AreaItem>
             );

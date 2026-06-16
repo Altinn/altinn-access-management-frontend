@@ -14,7 +14,6 @@ type Props = {
   className?: string;
   level?: 1 | 2 | 3 | 4 | 5 | 6;
   dataSize?: 'sm' | 'md' | 'lg';
-  subHeadingLevel?: 1 | 2 | 3 | 4 | 5 | 6;
   subHeadingDataSize?: '2xs' | 'xs' | 'sm' | 'md' | 'lg';
   isLoading?: boolean;
   downloadable?: boolean;
@@ -26,7 +25,6 @@ export const ReporteePageHeading: React.FC<Props> = ({
   className,
   level = 1,
   dataSize = 'sm',
-  subHeadingLevel = 2,
   subHeadingDataSize = '2xs',
   isLoading = false,
   downloadable = false,
@@ -66,12 +64,14 @@ export const ReporteePageHeading: React.FC<Props> = ({
         </DsHeading>
         {orgNumber && (
           <DsHeading
-            level={subHeadingLevel}
             data-size={subHeadingDataSize}
+            asChild
           >
-            {t('common.org_nr_lowercase', { org_number: formatOrgNr(orgNumber) })}{' '}
-            {isReporteeMainUnit ? `(${t('common.mainunit_lowercase')})` : ''}
-            {isReporteeSubUnit ? `(${t('common.subunit_lowercase')})` : ''}
+            <div>
+              {t('common.org_nr_lowercase', { org_number: formatOrgNr(orgNumber) })}{' '}
+              {isReporteeMainUnit ? `(${t('common.mainunit_lowercase')})` : ''}
+              {isReporteeSubUnit ? `(${t('common.subunit_lowercase')})` : ''}
+            </div>
           </DsHeading>
         )}
       </div>

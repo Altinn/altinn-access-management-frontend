@@ -39,7 +39,6 @@ export interface ResourceListProps<
   onSelect?: (resource: TResource) => void;
   showDetails?: boolean;
   size?: ResourceListItemProps['size'];
-  titleAs?: ResourceListItemProps['titleAs'];
   interactive?: boolean | ((resource: TResource) => boolean);
   as?: ResourceListItemProps['as'];
   showMoreButton?: boolean;
@@ -65,7 +64,6 @@ export const ResourceList = <
   onSelect,
   showDetails,
   size,
-  titleAs,
   interactive,
   as,
   resolveLogos = true,
@@ -188,7 +186,6 @@ export const ResourceList = <
                   const itemInteractive = derivedInteractive(resource);
                   const itemAs = as ?? (itemInteractive ? 'button' : 'div');
                   const itemSize = size ?? 'xs';
-                  const itemTitleAs = titleAs ?? 'h3';
                   const handleClick = itemInteractive ? () => handleSelect(resource) : undefined;
                   const itemShadow = itemInteractive ? undefined : 'none';
                   const titleBadge = isExpiredResource(resource)
@@ -206,7 +203,7 @@ export const ResourceList = <
                       ownerLogoUrlAlt={ownerLogoAlt}
                       as={itemAs}
                       size={itemSize}
-                      titleAs={itemTitleAs}
+                      titleAs='div'
                       interactive={itemInteractive}
                       onClick={handleClick}
                       badge={getBadge?.(resource, index)}
