@@ -6,6 +6,11 @@ import { PartyType } from '@/rtk/features/userInfoApi';
 
 import { useRestoreFocusTarget } from '../RestoreFocus';
 
+// Distinct id set on the inline action button (the "Gi"/"Slett" button) by the action controls.
+// Lets us restore focus to the button itself instead of the surrounding row after a delegate/revoke,
+// since the row is itself focusable and would otherwise win as the first focusable for the package id.
+export const packageActionControlId = (packageId: string) => `list-action-${packageId}`;
+
 interface PackageItemProps {
   pkg: AccessPackage;
   onSelect?: (pkg: AccessPackage) => void;
@@ -30,7 +35,7 @@ export const PackageItem = ({
   const { t } = useTranslation();
   const partyTypeColor = partyType === PartyType.Person ? 'person' : 'company';
   useRestoreFocusTarget(pkg.id);
-
+  useRestoreFocusTarget(packageActionControlId(pkg.id));
   return (
     <AccessPackageListItem
       id={pkg.id}

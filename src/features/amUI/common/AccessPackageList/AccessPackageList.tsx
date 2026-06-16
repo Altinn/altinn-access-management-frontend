@@ -15,6 +15,7 @@ import { SkeletonAccessPackageList } from './SkeletonAccessPackageList';
 import { AreaItem } from './AreaItem';
 import { useAreaExpandedContextOrLocal } from './AccessPackageExpandedContext';
 import { AreaItemContent } from './AreaItemContent';
+import { packageActionControlId } from './PackageItem';
 import { TechnicalErrorParagraphs } from '../TechnicalErrorParagraphs';
 import { createErrorDetails } from '../TechnicalErrorParagraphs/TechnicalErrorParagraphs';
 import { PartyType } from '@/rtk/features/userInfoApi';
@@ -120,20 +121,23 @@ export const AccessPackageList = ({
       return;
     }
 
-    const targetAreas =
-      pendingPackageFocus.targetList === 'assigned' ? assignedAreas : availableAreas;
-    const targetIsInUpdatedList = targetAreas.some((area) =>
-      area.packages[pendingPackageFocus.targetList].some(
+    // Wait until the delegate/revoke has settled — i.e. the package has left the list it was acted
+    // on from (assigned for a revoke, available for a delegate). Then request focus on its action
+    // button at the new location. If that button isn't rendered (the package moved into a collapsed
+    // list, or its area disappeared), the RestoreFocusFallback around the list takes over.
+    const originList = pendingPackageFocus.targetList === 'assigned' ? 'available' : 'assigned';
+    const stillInOriginList = [...assignedAreas, ...availableAreas].some((area) =>
+      area.packages[originList].some(
         (accessPackage) => accessPackage.id === pendingPackageFocus.id,
       ),
     );
 
-    if (!targetIsInUpdatedList) {
+    if (stillInOriginList) {
       return;
     }
 
     const frame = requestAnimationFrame(() => {
-      restoreFocus.requestFocus(pendingPackageFocus.id);
+      restoreFocus.requestFocus(packageActionControlId(pendingPackageFocus.id));
       setPendingPackageFocus(null);
     });
 

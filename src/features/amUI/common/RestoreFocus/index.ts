@@ -5,3 +5,4 @@ export {
   RestoreFocusTarget,
   RestoreFocusFallback,
 } from './RestoreFocusTarget';
+export { useRestoreFocusOnRemoval } from './useRestoreFocusOnRemoval';

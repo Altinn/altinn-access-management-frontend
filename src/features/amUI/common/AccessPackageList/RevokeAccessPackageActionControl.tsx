@@ -7,6 +7,7 @@ import { DelegationAction } from '../DelegationModal/EditModal';
 
 import { DeletableStatus, type ExtendedAccessPackage } from './useAreaPackageList';
 import { PackageIsPartiallyDeletableAlert } from './PackageIsPartiallyDeletableAlert/PackageIsPartiallyDeletableAlert';
+import { packageActionControlId } from './PackageItem';
 
 interface RevokeAccessPackageActionControlsProps {
   availableActions?: DelegationAction[];
@@ -36,6 +37,7 @@ export const RevokeAccessPackageActionControl = ({
     }
     return (
       <Button
+        id={packageActionControlId(pkg.id)}
         variant='tertiary'
         size='sm'
         onClick={onRevoke}

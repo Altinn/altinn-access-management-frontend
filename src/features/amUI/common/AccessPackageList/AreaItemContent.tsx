@@ -177,6 +177,7 @@ export const AreaItemContent = ({
                 controls={
                   !isSm && (
                     <DelegateAccessPackageActionControl
+                      packageId={pkg.id}
                       isLoading={isActionLoading}
                       isPackageLoading={isLoadingRequest?.(pkg)}
                       availableActions={availableActions}

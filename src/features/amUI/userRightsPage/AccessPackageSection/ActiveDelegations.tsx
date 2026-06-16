@@ -9,7 +9,11 @@ import { useDelegationModalContext } from '../../common/DelegationModal/Delegati
 
 import { useTranslation } from 'react-i18next';
 import { useGetIsHovedadminQuery } from '@/rtk/features/userInfoApi';
-import { RestoreFocusProvider, useRestoreFocus } from '../../common/RestoreFocus';
+import {
+  RestoreFocusFallback,
+  RestoreFocusProvider,
+  useRestoreFocus,
+} from '../../common/RestoreFocus';
 
 interface ActiveDelegationsProps {
   searchString?: string;
@@ -30,33 +34,35 @@ export const ActiveDelegations = ({ searchString }: ActiveDelegationsProps) => {
 
   return (
     <RestoreFocusProvider restoreFocus={restoreFocus}>
-      <AccessPackageList
-        isLoading={isLoading}
-        showPackagesCount
-        showAllPackages
-        minimizeAvailablePackages={!searchString}
-        searchString={searchString}
-        onSelect={(accessPackage) => {
-          setModalItem(accessPackage);
-          modalRef.current?.showModal();
-        }}
-        availableActions={[
-          DelegationAction.REVOKE,
-          canGiveAccess ? DelegationAction.DELEGATE : DelegationAction.REQUEST,
-        ]}
-        onDelegateError={(accessPackage, error) => {
-          setActionError(error);
-          setModalItem(accessPackage);
-          modalRef.current?.showModal();
-        }}
-        onRevokeError={(accessPackage, error) => {
-          setActionError(error);
-          setModalItem(accessPackage);
-          modalRef.current?.showModal();
-        }}
-        noPackagesText={t('access_packages.user_has_no_packages')}
-        filterByType={false}
-      />
+      <RestoreFocusFallback>
+        <AccessPackageList
+          isLoading={isLoading}
+          showPackagesCount
+          showAllPackages
+          minimizeAvailablePackages={!searchString}
+          searchString={searchString}
+          onSelect={(accessPackage) => {
+            setModalItem(accessPackage);
+            modalRef.current?.showModal();
+          }}
+          availableActions={[
+            DelegationAction.REVOKE,
+            canGiveAccess ? DelegationAction.DELEGATE : DelegationAction.REQUEST,
+          ]}
+          onDelegateError={(accessPackage, error) => {
+            setActionError(error);
+            setModalItem(accessPackage);
+            modalRef.current?.showModal();
+          }}
+          onRevokeError={(accessPackage, error) => {
+            setActionError(error);
+            setModalItem(accessPackage);
+            modalRef.current?.showModal();
+          }}
+          noPackagesText={t('access_packages.user_has_no_packages')}
+          filterByType={false}
+        />
+      </RestoreFocusFallback>
       <EditModal
         ref={modalRef}
         accessPackage={modalItem}

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { DsAlert, DsHeading, DsParagraph, DsSpinner } from '@altinn/altinn-components';
 
@@ -14,9 +14,13 @@ import classes from './ResourceSearch.module.css';
 import { DelegationAction } from '../EditModal';
 import { useResourceListDelegation } from './hooks/useResourceListDelegation';
 import { useDelegationModalContext } from '../DelegationModalContext';
-import { useRenderSearchResultControl } from './createSearchResultControlsRenderer';
+import {
+  resourceActionControlId,
+  useRenderSearchResultControl,
+} from './createSearchResultControlsRenderer';
 import { usePartyRepresentation } from '../../PartyRepresentationContext/PartyRepresentationContext';
 import { useSingleRightRequests } from './hooks/useSingleRightRequests';
+import { useRestoreFocusContext } from '../../RestoreFocus';
 
 interface SearchResultsProps {
   isFetching: boolean;
@@ -51,6 +55,11 @@ export const SearchResults = ({
   const { setActionError } = useDelegationModalContext();
   const { actingParty, fromParty, toParty } = usePartyRepresentation();
 
+  // Restore focus to the inline action button after it swaps in place (e.g. "Gi" -> "Slett")
+  // following a delegate/revoke from the list.
+  const restoreFocus = useRestoreFocusContext();
+  const [pendingActionFocusId, setPendingActionFocusId] = useState<string | null>(null);
+
   const { createRequest, deleteRequest, hasPendingRequest, isLoadingRequest } =
     useSingleRightRequests({
       canRequestRights: availableActions?.includes(DelegationAction.REQUEST) ?? false,
@@ -71,6 +80,7 @@ export const SearchResults = ({
     },
     onSuccess: (resource) => {
       setActionError(null);
+      setPendingActionFocusId(resource.identifier);
     },
     onPartialDelegation: (resource) => {
       setActionError(null);
@@ -106,6 +116,17 @@ export const SearchResults = ({
   const isLoading = (resourceId: string) => {
     return isResourceLoading(resourceId) || isLoadingRequest(resourceId);
   };
+
+  // Once the action has settled (loading cleared after the refetch), the button has swapped and is
+  // rendered again, so request focus on it. The RestoreFocusTarget in the control then focuses it.
+  const pendingFocusIsLoading = pendingActionFocusId ? isLoading(pendingActionFocusId) : false;
+  useEffect(() => {
+    if (!pendingActionFocusId || !restoreFocus || pendingFocusIsLoading) {
+      return;
+    }
+    restoreFocus.requestFocus(resourceActionControlId(pendingActionFocusId));
+    setPendingActionFocusId(null);
+  }, [pendingActionFocusId, pendingFocusIsLoading, restoreFocus]);
 
   const renderControls = useRenderSearchResultControl({
     isDelegated,
