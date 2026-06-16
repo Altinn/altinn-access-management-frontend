@@ -110,7 +110,8 @@
     "description_p1": "Here you can download an overview of all powers of attorney that {{reportee}} has given to others and those who have received them.",
     "description_p2": "The content will be downloaded as CSV files in a ZIP container. \nThe files are not intended for machine reading and we reserve the right to change the format.",
     "start_download": "Start download",
-    "include_subunits_label": "Include powers of attorney in {{reportee}}'s subunits"
+    "include_subunits_label": "Include powers of attorney in {{reportee}}'s subunits",
+    "too_many_subunits_warning": "This organization has too many subunits to include them in the download. We are working on a solution for this, but for now, you must download each subunit separately if you want their information."
   },
   "info_banner": {
     "info": "June 19: the old Altinn will be shut down.",
