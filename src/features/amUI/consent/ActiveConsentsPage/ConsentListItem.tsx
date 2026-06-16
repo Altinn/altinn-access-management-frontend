@@ -55,7 +55,7 @@ export const ConsentListItem = ({
             title={{ as: 'div', children: item.title }}
             description={item.description}
             as='button'
-            ariaLabel={`${item.title} ${item.description} ${item.badgeText}`}
+            ariaLabel={`${item.title} ${item.isNew ? t('active_consents.newly_consented') : ''} ${item.description} ${item.badgeText}`}
             loading={isLoading}
             interactive={!!onClick}
             onClick={onClick ? () => onClick(item.id) : undefined}
