@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useRef, useState } from 'react';
+import React, { useCallback, useMemo, useState } from 'react';
 import { DsSearch, DsParagraph, formatDisplayName } from '@altinn/altinn-components';
 import { useTranslation } from 'react-i18next';
 
@@ -14,7 +14,12 @@ import { UserSearchResults } from './UserSearchResults';
 import { usePartyRepresentation } from '../PartyRepresentationContext/PartyRepresentationContext';
 import type { UserActionTarget, UserSearchNode } from './types';
 import type { RestoreFocus } from '../RestoreFocus';
-import { RestoreFocusFallback, RestoreFocusProvider, useRestoreFocus } from '../RestoreFocus';
+import {
+  RestoreFocusFallback,
+  RestoreFocusProvider,
+  useRestoreFocus,
+  useRestoreFocusAfterSettled,
+} from '../RestoreFocus';
 import { userActionFocusId } from '../UserList/userFocusIds';
 
 type UserSearchAction = (user: UserActionTarget) => void;
@@ -79,8 +84,14 @@ export const UserSearch: React.FC<UserSearchProps> = ({
   const { fromParty } = usePartyRepresentation();
   const localRestoreFocus = useRestoreFocus();
   const activeRestoreFocus = restoreFocus ?? localRestoreFocus;
-  const [pendingFocusId, setPendingFocusId] = useState<string | null>(null);
-  const wasActionLoading = useRef(false);
+  const requestUserActionFocus = useCallback(
+    (userId: string) => activeRestoreFocus.requestFocus(userActionFocusId(userId)),
+    [activeRestoreFocus],
+  );
+  const restoreFocusAfterAction = useRestoreFocusAfterSettled<string>({
+    isSettling: isActionLoading,
+    onRestore: requestUserActionFocus,
+  });
   const directUsers = useMemo(() => filterAvailableUserTypes(initialUsers), [initialUsers]);
 
   const indirectUsers = useMemo(
@@ -113,26 +124,8 @@ export const UserSearch: React.FC<UserSearchProps> = ({
   const showIndirectList = isQuery && indirectHasResults && canDelegate;
   const showEmptyState = isQuery && !directHasResults && !indirectHasResults;
 
-  // After an inline delegate/revoke settles (isActionLoading falls true -> false), restore focus to
-  // the acted-on row's action button (its own id, since the row itself is a button and would
-  // otherwise win). If the row is gone (e.g. revoked), RestoreFocusFallback picks it up instead.
-  useEffect(() => {
-    const settled = wasActionLoading.current && !isActionLoading;
-    wasActionLoading.current = isActionLoading;
-    if (!pendingFocusId || !settled) {
-      return;
-    }
-
-    const frame = requestAnimationFrame(() => {
-      activeRestoreFocus.requestFocus(userActionFocusId(pendingFocusId));
-      setPendingFocusId(null);
-    });
-
-    return () => cancelAnimationFrame(frame);
-  }, [activeRestoreFocus, isActionLoading, pendingFocusId]);
-
   const runInlineAction = (action: UserSearchAction, user: UserActionTarget) => {
-    setPendingFocusId(user.id);
+    restoreFocusAfterAction(user.id);
     action(user);
   };
 

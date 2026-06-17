@@ -52,7 +52,7 @@ export const AreaItemContent = ({
   showAvailablePackages: showAvailablePackagesExternal = false,
   showAvailableToggle = true,
   showPermissions = false,
-  packageAs: PackageComponent,
+  packageAs,
   partyType,
   headingLevel,
 }: AreaItemContentProps) => {
@@ -98,13 +98,16 @@ export const AreaItemContent = ({
             return (
               <PackageItem
                 as={
-                  PackageComponent
-                    ? (props) => (
-                        <PackageComponent
-                          packageId={pkg.id}
-                          {...props}
-                        />
-                      )
+                  packageAs
+                    ? (props) => {
+                        const Component = packageAs;
+                        return (
+                          <Component
+                            packageId={pkg.id}
+                            {...props}
+                          />
+                        );
+                      }
                     : 'button'
                 }
                 titleAs='span'
@@ -156,13 +159,16 @@ export const AreaItemContent = ({
             return (
               <PackageItem
                 as={
-                  PackageComponent
-                    ? (props) => (
-                        <PackageComponent
-                          packageId={pkg.id}
-                          {...props}
-                        />
-                      )
+                  packageAs
+                    ? (props) => {
+                        const Component = packageAs;
+                        return (
+                          <Component
+                            packageId={pkg.id}
+                            {...props}
+                          />
+                        );
+                      }
                     : 'button'
                 }
                 key={pkg.id}
