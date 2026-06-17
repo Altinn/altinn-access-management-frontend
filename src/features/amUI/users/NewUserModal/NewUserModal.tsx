@@ -17,7 +17,6 @@ import { createErrorDetails } from '../../common/TechnicalErrorParagraphs/Techni
  * @component
  */
 interface NewUserButtonProps {
-  /*** Render a larger version of the trigger button */
   variant: 'primary' | 'secondary';
   onComplete?: (user: User) => void;
 }

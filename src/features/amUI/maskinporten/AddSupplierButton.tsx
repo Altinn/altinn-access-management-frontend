@@ -47,7 +47,7 @@ export const AddSupplierButton = ({ party, onComplete }: AddSupplierButtonProps)
   return (
     <>
       <DsButton
-        variant={'secondary'}
+        variant='secondary'
         onClick={() => modalRef.current?.showModal()}
       >
         <PlusIcon aria-hidden='true' />

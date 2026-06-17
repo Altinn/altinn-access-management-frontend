@@ -143,7 +143,7 @@ export const InstanceDetailPageContent = () => {
     <div className={classes.inboxLinkContainer}>
       <DsButton
         asChild
-        variant={'secondary'}
+        variant='secondary'
         className={classes.inboxButton}
       >
         <a href={inboxUrl}>
