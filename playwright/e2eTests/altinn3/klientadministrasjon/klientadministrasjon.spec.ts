@@ -223,7 +223,7 @@ test.describe('klientadministrasjon', () => {
 
       await test.step(`${agent.name} finnes nå i listen over eksisterende brukere`, async () => {
         await klientAdministrasjonPage.klikkHarDisseKlientene();
-        await expect(klientAdministrasjonPage.brukerKnapp(client.orgName)).toBeVisible();
+        await expect(klientAdministrasjonPage.klientKnapp(client.orgName)).toBeVisible();
       });
 
       await test.step('og har tilgangspakken Posttjenester', async () => {
