@@ -19,6 +19,7 @@ import { DelegationModal, DelegationType } from '../common/DelegationModal/Deleg
 import { PageContainer } from '../common/PageContainer/PageContainer';
 import { UserPageHeader } from '../common/UserPageHeader/UserPageHeader';
 import { usePartyRepresentation } from '../common/PartyRepresentationContext/PartyRepresentationContext';
+import { useRestoreFocus, useRestoreFocusAfterSettled } from '../common/RestoreFocus';
 import { MaskinportenDeleteDialog } from './MaskinportenDeleteDialog';
 import { DelegatedResourcesSection } from './DelegatedResourcesSection';
 
@@ -26,6 +27,7 @@ export const SupplierPageContent = () => {
   const { t } = useTranslation();
   const navigate = useNavigate();
   const { openSnackbar } = useSnackbar();
+  const restoreFocus = useRestoreFocus();
 
   const [removeSupplier, { isLoading: isRemovingSupplier }] =
     useRemoveMaskinportenSupplierMutation();
@@ -52,6 +54,10 @@ export const SupplierPageContent = () => {
     error: resourcesError,
     isFetching,
   } = useGetMaskinportenSupplierResourcesQuery({ party, supplier }, { skip: !party || !supplier });
+  const restoreFocusAfterDelete = useRestoreFocusAfterSettled<string>({
+    isSettling: isFetching,
+    onRestore: restoreFocus.requestFocus,
+  });
 
   const { remove, isLoading } = useMaskinportenResourceActions({
     remove: (resource) =>
@@ -64,14 +70,16 @@ export const SupplierPageContent = () => {
 
   const handleRemove = (resource: ServiceResource) =>
     remove(resource, {
-      onSuccess: (r) =>
+      onSuccess: (r) => {
         openSnackbar({
           message: t('single_rights.delete_singleRight_success_message', {
             name: supplierName,
             resourceTitle: r.title,
           }),
           color: 'success',
-        }),
+        });
+        restoreFocusAfterDelete(r.identifier);
+      },
       onError: (r) =>
         openSnackbar({
           message: t('single_rights.delete_singleRight_error_message', {
@@ -125,6 +133,7 @@ export const SupplierPageContent = () => {
         hasError={!!resourcesError}
         onRemove={handleRemove}
         isResourceLoading={isLoading}
+        restoreFocus={restoreFocus}
         onResourceClick={(r) => {
           setSelectedResource(r);
           scopeModalRef.current?.showModal();
@@ -133,7 +142,12 @@ export const SupplierPageContent = () => {
           <EditModal
             ref={scopeModalRef}
             maskinportenScope={selectedResource ?? undefined}
-            onClose={() => setSelectedResource(null)}
+            onClose={() => {
+              if (selectedResource) {
+                restoreFocus.requestFocus(selectedResource.identifier);
+              }
+              setSelectedResource(null);
+            }}
           />
         }
         addNewResourceButton={

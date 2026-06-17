@@ -22,7 +22,7 @@ namespace Altinn.AccessManagement.UI.Core.ClientInterfaces
         /// <param name="cancellationToken">Cancellation token.</param>
         /// <returns>The email address of the user</returns>
         Task<Altinn2ForgotPasswordResponse> SendForgotPasswordEmail(Altinn2ForgotPasswordRequest request, CancellationToken cancellationToken);
-        
+
         /// <summary>
         /// Validates a token user has received by email.
         /// </summary>

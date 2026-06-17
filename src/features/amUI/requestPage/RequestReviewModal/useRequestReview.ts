@@ -1,7 +1,7 @@
 import { useState, useEffect, useCallback } from 'react';
 import { useSnackbar } from '@altinn/altinn-components';
 import { useTranslation } from 'react-i18next';
-import type { Request, ProcessedStatus } from '../types';
+import type { Request, ProcessedStatus, RequestReviewModalCloseOptions } from '../types';
 import { usePartyRepresentation } from '../../common/PartyRepresentationContext/PartyRepresentationContext';
 import {
   useApproveRequestMutation,
@@ -24,7 +24,11 @@ type SnapshotRequests = {
   packageRequests: EnrichedPackageRequest[];
 };
 
-export const useRequestReview = (request: Request | null, onClose: () => void) => {
+export const useRequestReview = (
+  request: Request | null,
+  onClose: (options?: RequestReviewModalCloseOptions) => void,
+  requestFocus: (id: string) => void,
+) => {
   const { t } = useTranslation();
   const { actingParty } = usePartyRepresentation();
   const [approveRequest] = useApproveRequestMutation();
@@ -127,13 +131,14 @@ export const useRequestReview = (request: Request | null, onClose: () => void) =
   );
 
   const handleClose = () => {
+    const shouldWaitForRequestRemoval = allRequestsProcessed;
     setSnapshotRequests({ resourceRequests: [], packageRequests: [] });
     setSelectedResource(null);
     setSelectedPackage(null);
     setProcessedRequests({});
     setDelegationChecks({});
     setActionLoading(null);
-    onClose();
+    onClose({ waitForRequestRemoval: shouldWaitForRequestRemoval });
   };
 
   const findRequestId = (
@@ -149,6 +154,16 @@ export const useRequestReview = (request: Request | null, onClose: () => void) =
       return snapshotRequests.packageRequests.find((p) => p.package.id === packageIdentifier)?.id;
     }
     return undefined;
+  };
+
+  const resetSelection = () => {
+    const focusTargetId = selectedResource?.identifier ?? selectedPackage?.id;
+    if (focusTargetId) {
+      requestFocus(focusTargetId);
+    }
+
+    setSelectedResource(null);
+    setSelectedPackage(null);
   };
 
   const handleApprove = async ({
@@ -169,8 +184,7 @@ export const useRequestReview = (request: Request | null, onClose: () => void) =
       await approveRequest({ party: actingParty.partyUuid, id: requestId }).unwrap();
       const id = resourceId ?? packageId ?? '';
       setProcessedRequests((prev) => ({ ...prev, [id]: 'approved' }));
-      setSelectedResource(null);
-      setSelectedPackage(null);
+      resetSelection();
       openSnackbar({
         message: t('request_page.request_approved'),
         color: 'success',
@@ -199,8 +213,7 @@ export const useRequestReview = (request: Request | null, onClose: () => void) =
       await rejectRequest({ party: actingParty.partyUuid, id: requestId }).unwrap();
       const id = resourceId ?? packageId ?? '';
       setProcessedRequests((prev) => ({ ...prev, [id]: 'rejected' }));
-      setSelectedResource(null);
-      setSelectedPackage(null);
+      resetSelection();
       openSnackbar({
         message: t('request_page.request_rejected'),
         color: 'success',
@@ -235,13 +248,12 @@ export const useRequestReview = (request: Request | null, onClose: () => void) =
     }
   };
 
-  const resetSelection = () => {
-    setSelectedResource(null);
-    setSelectedPackage(null);
-  };
-
   const snapshotResources = snapshotRequests.resourceRequests.map((r) => r.resource);
   const snapshotPackages = snapshotRequests.packageRequests.map((p) => p.package);
+  const snapshotRequestCount =
+    snapshotRequests.resourceRequests.length + snapshotRequests.packageRequests.length;
+  const allRequestsProcessed =
+    snapshotRequestCount > 0 && Object.keys(processedRequests).length >= snapshotRequestCount;
 
   const isLoadingRequests = isLoadingResourceRequests || isLoadingPackageRequests;
   const isFetchingRequests = isFetchingResourceRequests || isFetchingPackageRequests;
@@ -256,6 +268,7 @@ export const useRequestReview = (request: Request | null, onClose: () => void) =
     resetSelection,
     processedRequests,
     actionLoading,
+    allRequestsProcessed,
     cannotApprove,
     handleClose,
     handleApprove,

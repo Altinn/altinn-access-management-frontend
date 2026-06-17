@@ -24,6 +24,7 @@ import { ResourceHeading } from '../common/DelegationModal/SingleRights/Resource
 import { ResourceInfoSkeleton } from '../common/DelegationModal/SingleRights/ResourceInfoSkeleton';
 import { usePartyRepresentation } from '../common/PartyRepresentationContext/PartyRepresentationContext';
 import { StatusSection } from '../common/StatusSection/StatusSection';
+import { focusFirstEnabledButton, useRestoreFocusAfterSettled } from '../common/RestoreFocus';
 import { ScopeActionAlert } from './ScopeActionAlert';
 import { getMaskinportenScopes } from './scopeUtils';
 import { useMaskinportenResourceActions } from './hooks/useMaskinportenResourceActions';
@@ -163,6 +164,17 @@ export const ScopeInfo = ({
     };
   }, []);
 
+  const actionsRef = useRef<HTMLDivElement>(null);
+  useRestoreFocusAfterSettled({
+    isSettling:
+      isActionLoading ||
+      actionSuccess ||
+      isDelegatedResourceListLoading ||
+      isDelegationCheckLoading,
+    requestWhen: isActionLoading,
+    onRestore: () => focusFirstEnabledButton(actionsRef.current),
+  });
+
   const handleSuccess = () => {
     setActionError(null);
     setActionSuccess(true);
@@ -248,7 +260,10 @@ export const ScopeInfo = ({
               )}
             </div>
             {(hasDelegatedResource && canRevoke) || (!hasDelegatedResource && canDelegate) ? (
-              <div className={classes.editButtons}>
+              <div
+                ref={actionsRef}
+                className={classes.editButtons}
+              >
                 {hasDelegatedResource ? (
                   <Button
                     size='sm'

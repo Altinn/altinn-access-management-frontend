@@ -35,10 +35,11 @@ interface PackageUserModalProps {
   isActionLoading: boolean;
   onDelegate: (user: UserActionTarget) => void;
   onRevoke: (user: UserActionTarget) => void;
+  onClose?: (user: UserActionTarget) => void;
 }
 
 export const PackageUserModal = forwardRef<PackageUserModalHandle, PackageUserModalProps>(
-  ({ accessPackage, availableActions, isActionLoading, onDelegate, onRevoke }, ref) => {
+  ({ accessPackage, availableActions, isActionLoading, onDelegate, onRevoke, onClose }, ref) => {
     const { fromParty } = usePartyRepresentation();
     const dialogRef = useRef<HTMLDialogElement>(null);
     const [selectedUser, setSelectedUser] = useState<UserActionTarget | null>(null);
@@ -95,6 +96,9 @@ export const PackageUserModal = forwardRef<PackageUserModalHandle, PackageUserMo
             : undefined
         }
         onClose={() => {
+          if (selectedUser) {
+            onClose?.(selectedUser);
+          }
           setSelectedUser(null);
           setActionSuccess(false);
         }}

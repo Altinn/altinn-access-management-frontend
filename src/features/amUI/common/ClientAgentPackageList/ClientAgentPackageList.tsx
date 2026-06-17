@@ -1,9 +1,8 @@
-import React, { useMemo, useRef, useState } from 'react';
+import React, { useEffect, useMemo, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import {
   AccessPackageListItemProps,
   Button,
-  DsParagraph,
   type UserListItemProps,
   type Color,
   formatDisplayName,
@@ -22,6 +21,10 @@ import { useRoleMetadata } from '../UserRoles/useRoleMetadata';
 import { isNewUser } from '../isNewUser';
 
 import { AccessPackageListItems } from '../AccessPackageListItems/AccessPackageListItems';
+import {
+  clientPackageActionFocusId,
+  clientPackageRowFocusId,
+} from '../AccessPackageListItems/clientPackageFocusIds';
 import { UserListItems, type UserListItemData } from '../UserListItems/UserListItems';
 import { useClientAccessPackageActions } from './useClientAccessPackageActions';
 import { useIsMobileOrSmaller } from '@/resources/utils/screensizeUtils';
@@ -29,7 +32,17 @@ import {
   ClientPackageInfoModal,
   type ClientPackageModalData,
 } from '../DelegationModal/AccessPackages/ClientPackageInfoModal';
+import { RestoreFocusProvider, useRestoreFocus } from '../RestoreFocus';
 import { PartyType } from '@/rtk/features/userInfoApi';
+
+// Tracks an inline delegate/revoke awaiting settle, so focus can be restored to the action button
+// once its row's access has flipped (the "Gi"/"Slett" button swapped in place).
+interface PendingSwapFocus {
+  focusId: string;
+  agentId: string;
+  packageId: string;
+  expectedHasAccess: boolean;
+}
 
 type ClientAgentPackageListProps = {
   agents: Agent[];
@@ -80,6 +93,8 @@ export const ClientAgentPackageList = ({
 
   const modalRef = useRef<HTMLDialogElement>(null);
   const [selected, setSelected] = useState<ClientPackageModalData | null>(null);
+  const restoreFocus = useRestoreFocus();
+  const [pendingSwapFocus, setPendingSwapFocus] = useState<PendingSwapFocus | null>(null);
 
   const clientAccess = client?.access ?? [];
   const clientType = client?.client.type ?? '';
@@ -102,6 +117,24 @@ export const ClientAgentPackageList = ({
 
   const agentHasPackage = (agentId: string, packageId: string) =>
     packageIdsByAgentId.get(agentId)?.has(packageId) ?? false;
+
+  // Once an inline delegate/revoke has settled (the row's access flipped to the expected value and
+  // the "Gi"/"Slett" button re-rendered in place), restore focus to that button.
+  useEffect(() => {
+    if (!pendingSwapFocus) {
+      return;
+    }
+    const hasAccess =
+      packageIdsByAgentId.get(pendingSwapFocus.agentId)?.has(pendingSwapFocus.packageId) ?? false;
+    if (hasAccess !== pendingSwapFocus.expectedHasAccess) {
+      return;
+    }
+    const frame = requestAnimationFrame(() => {
+      restoreFocus.requestFocus(pendingSwapFocus.focusId);
+      setPendingSwapFocus(null);
+    });
+    return () => cancelAnimationFrame(frame);
+  }, [packageIdsByAgentId, pendingSwapFocus, restoreFocus]);
 
   const sortedAgents = useMemo(() => {
     return [...agents].sort((a, b) => {
@@ -181,9 +214,11 @@ export const ClientAgentPackageList = ({
             : undefined;
 
         const showModalTrigger = !!openModal;
+        const rowFocusId = clientPackageRowFocusId(agentId, pkg.id);
+        const actionFocusId = clientPackageActionFocusId(rowFocusId);
 
         return {
-          id: pkg.id,
+          id: rowFocusId,
           name: packageName,
           type: packageType,
           isSubUnit: clientIsSubUnit,
@@ -198,18 +233,36 @@ export const ClientAgentPackageList = ({
             delegable &&
             (hasAccess ? (
               <Button
+                id={actionFocusId}
                 variant='tertiary'
                 disabled={removeDisabled}
-                onClick={() => onRevoke()}
+                onClick={() => {
+                  setPendingSwapFocus({
+                    focusId: actionFocusId,
+                    agentId,
+                    packageId: pkg.id,
+                    expectedHasAccess: false,
+                  });
+                  onRevoke();
+                }}
               >
                 <MinusCircleIcon aria-hidden='true' />
                 {t('client_administration_page.remove_package_button')}
               </Button>
             ) : (
               <Button
+                id={actionFocusId}
                 variant='tertiary'
                 disabled={delegateDisabled}
-                onClick={() => onDelegate()}
+                onClick={() => {
+                  setPendingSwapFocus({
+                    focusId: actionFocusId,
+                    agentId,
+                    packageId: pkg.id,
+                    expectedHasAccess: true,
+                  });
+                  onDelegate();
+                }}
               >
                 <PlusCircleIcon aria-hidden='true' />
                 {t('client_administration_page.delegate_package_button')}
@@ -264,7 +317,7 @@ export const ClientAgentPackageList = ({
     : undefined;
 
   return (
-    <>
+    <RestoreFocusProvider restoreFocus={restoreFocus}>
       <UserListItems
         items={userListItems}
         searchPlaceholder={t('client_administration_page.agent_search_placeholder')}
@@ -274,8 +327,16 @@ export const ClientAgentPackageList = ({
       <ClientPackageInfoModal
         ref={modalRef}
         data={modalData}
-        onClose={() => setSelected(null)}
+        onClose={() => {
+          // Return focus to the package row that opened the modal.
+          if (selected) {
+            restoreFocus.requestFocus(
+              clientPackageRowFocusId(selected.party.partyUuid, selected.accessPackage.id),
+            );
+          }
+          setSelected(null);
+        }}
       />
-    </>
+    </RestoreFocusProvider>
   );
 };

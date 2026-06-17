@@ -1,4 +1,5 @@
 import { DsAlert, DsParagraph, DsSpinner, List } from '@altinn/altinn-components';
+import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import type { Party } from '@/rtk/features/lookupApi';
@@ -14,9 +15,13 @@ import { SkeletonAccessPackageList } from './SkeletonAccessPackageList';
 import { AreaItem } from './AreaItem';
 import { useAreaExpandedContextOrLocal } from './AccessPackageExpandedContext';
 import { AreaItemContent } from './AreaItemContent';
+import { packageActionControlId } from './PackageItem';
 import { TechnicalErrorParagraphs } from '../TechnicalErrorParagraphs';
 import { createErrorDetails } from '../TechnicalErrorParagraphs/TechnicalErrorParagraphs';
 import { PartyType } from '@/rtk/features/userInfoApi';
+import { useRestoreFocusContext } from '../RestoreFocus';
+
+type PackageFocusTargetList = 'assigned' | 'available';
 
 interface AccessPackageListProps {
   showAllPackages?: boolean;
@@ -62,6 +67,11 @@ export const AccessPackageList = ({
   areaHeadingLevel = 3,
 }: AccessPackageListProps) => {
   const { t } = useTranslation();
+  const restoreFocus = useRestoreFocusContext();
+  const [pendingPackageFocus, setPendingPackageFocus] = useState<{
+    id: string;
+    targetList: PackageFocusTargetList;
+  } | null>(null);
 
   const {
     loadingPackageAreas,
@@ -89,14 +99,52 @@ export const AccessPackageList = ({
     isLoadingRequest,
     isLoading: isActionLoading,
   } = useAccessPackageActions({
-    onDelegateSuccess,
+    onDelegateSuccess: (accessPackage, toParty) => {
+      if (restoreFocus) {
+        setPendingPackageFocus({ id: accessPackage.id, targetList: 'assigned' });
+      }
+      onDelegateSuccess?.(accessPackage, toParty);
+    },
     onDelegateError,
-    onRevokeSuccess,
+    onRevokeSuccess: (accessPackage, toParty) => {
+      if (restoreFocus) {
+        setPendingPackageFocus({ id: accessPackage.id, targetList: 'available' });
+      }
+      onRevokeSuccess?.(accessPackage, toParty);
+    },
     onRevokeError,
   });
 
   const combinedAreas = [...assignedAreas, ...availableAreas];
   const { toggleExpandedArea, isExpanded } = useAreaExpandedContextOrLocal();
+
+  useEffect(() => {
+    if (!pendingPackageFocus || !restoreFocus) {
+      return;
+    }
+
+    // Wait until the delegate/revoke has settled — i.e. the package has left the list it was acted
+    // on from (assigned for a revoke, available for a delegate). Then request focus on its action
+    // button at the new location. If that button isn't rendered (the package moved into a collapsed
+    // list, or its area disappeared), the RestoreFocusFallback around the list takes over.
+    const originList = pendingPackageFocus.targetList === 'assigned' ? 'available' : 'assigned';
+    const stillInOriginList = [...assignedAreas, ...availableAreas].some((area) =>
+      area.packages[originList].some(
+        (accessPackage) => accessPackage.id === pendingPackageFocus.id,
+      ),
+    );
+
+    if (stillInOriginList) {
+      return;
+    }
+
+    const frame = requestAnimationFrame(() => {
+      restoreFocus.requestFocus(packageActionControlId(pendingPackageFocus.id));
+      setPendingPackageFocus(null);
+    });
+
+    return () => cancelAnimationFrame(frame);
+  }, [assignedAreas, availableAreas, pendingPackageFocus, restoreFocus]);
 
   if (loadingDelegations || loadingPackageAreas || isLoading) {
     return (

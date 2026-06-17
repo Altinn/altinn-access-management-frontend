@@ -1,3 +1,4 @@
+import { useEffect } from 'react';
 import { Link } from 'react-router';
 import {
   AccessPackageListItem,
@@ -22,16 +23,29 @@ import { useRequestReview } from './useRequestReview';
 import classes from './RequestReviewModal.module.css';
 import { amUIPath } from '@/routes/paths';
 import { RequestPackageDetail } from './RequestPackageDetail';
-import { useAutoFocusRef } from '@/resources/hooks/useAutoFocusRef';
+import {
+  RestoreFocusProvider,
+  RestoreFocusTarget,
+  useRestoreFocus,
+} from '../../common/RestoreFocus';
+import type { RequestReviewModalCloseOptions } from '../types';
 
 interface RequestReviewModalContentProps {
   request: Request | null;
-  onClose: () => void;
+  onClose: (options?: RequestReviewModalCloseOptions) => void;
+  onAllRequestsProcessedChange?: (allRequestsProcessed: boolean) => void;
 }
 
-export const RequestReviewModalContent = ({ request, onClose }: RequestReviewModalContentProps) => {
+export const RequestReviewModalContent = ({
+  request,
+  onClose,
+  onAllRequestsProcessedChange,
+}: RequestReviewModalContentProps) => {
   const { t } = useTranslation();
-  const headingFocusRef = useAutoFocusRef<HTMLHeadingElement>();
+
+  // Restore focus to the request item when navigating back from a detail view, even if the item
+  // has been processed and is no longer interactive.
+  const restoreFocus = useRestoreFocus();
 
   const {
     isLoadingRequests,
@@ -43,12 +57,17 @@ export const RequestReviewModalContent = ({ request, onClose }: RequestReviewMod
     resetSelection,
     processedRequests,
     actionLoading,
+    allRequestsProcessed,
     cannotApprove,
     handleClose,
     handleApprove,
     handleReject,
     handleSelection,
-  } = useRequestReview(request, onClose);
+  } = useRequestReview(request, onClose, restoreFocus.requestFocus);
+
+  useEffect(() => {
+    onAllRequestsProcessedChange?.(allRequestsProcessed);
+  }, [allRequestsProcessed, onAllRequestsProcessedChange]);
 
   if (request === null) {
     return null;
@@ -129,107 +148,113 @@ export const RequestReviewModalContent = ({ request, onClose }: RequestReviewMod
   };
 
   return (
-    <div className={classes.reviewListView}>
-      <DsHeading
-        ref={headingFocusRef}
-        tabIndex={-1}
-        level={1}
-        data-size='xs'
-      >
-        {t('request_page.review_modal_title', {
-          fromPartyName: request?.displayPartyName,
-        })}
-      </DsHeading>
-      <DsLink
-        asChild
-        className={classes.userLink}
-      >
-        <Link to={`/${amUIPath.Users}/${request?.partyUuid}?returnTo=/${amUIPath.Requests}`}>
-          {t('request_page.review_user_link', {
-            name: request?.displayPartyName,
+    <RestoreFocusProvider restoreFocus={restoreFocus}>
+      <div className={classes.reviewListView}>
+        <DsHeading
+          level={1}
+          data-size='xs'
+        >
+          {t('request_page.review_modal_title', {
+            fromPartyName: request?.displayPartyName,
           })}
-        </Link>
-      </DsLink>
-      {isLoadingRequests || isFetchingRequests ? (
-        <List>
-          {Array.from({ length: request?.numberOfRequests || 2 }).map((_, index) => (
-            <ResourceListItem
-              key={index}
-              id={`placeholder-${index}`}
-              resourceName='xxxxxxxxxxxxxxxxxxxx'
-              ownerName='xxxxxxxxx xxxxxxxxxxx'
-              loading
-              as='div'
-              interactive={false}
-              shadow='none'
-            />
-          ))}
-        </List>
-      ) : (
-        <>
-          {snapshotPackages.length > 0 && (
-            <>
-              <DsHeading
-                level={2}
-                data-size='2xs'
-                id='package-list-heading'
-              >
-                {t('request_page.package_list_title')}
-              </DsHeading>
-              <List aria-labelledby='package-list-heading'>
-                {snapshotPackages.map((p) => {
-                  const isInteractive = processedRequests[p.id] === undefined;
-                  return (
-                    <AccessPackageListItem
-                      key={p.id}
-                      id={p.id}
-                      name={p.name}
-                      description={t('access_packages.package_number_of_resources', {
-                        count: p.resources.length,
-                      })}
-                      interactive={isInteractive}
-                      size='xs'
-                      border='dotted'
-                      controls={itemControls({ packageId: p.id })}
-                      onClick={isInteractive ? () => handleSelection({ package: p }) : undefined}
-                    />
-                  );
-                })}
-              </List>
-            </>
-          )}
-          {snapshotResources.length > 0 && (
-            <>
-              <DsHeading
-                level={2}
-                data-size='2xs'
-                id='service-list-heading'
-              >
-                {t('request_page.resource_list_title')}
-              </DsHeading>
-              <ResourceList
-                aria-labelledby='service-list-heading'
-                size='xs'
-                border='dotted'
-                enableSearch={false}
-                showDetails={false}
-                interactive={(resource) => processedRequests[resource.identifier] === undefined}
-                resources={snapshotResources}
-                onSelect={(resource) => handleSelection({ resource })}
-                renderControls={(resource) => itemControls({ resourceId: resource.identifier })}
+        </DsHeading>
+        <DsLink
+          asChild
+          className={classes.userLink}
+        >
+          <Link to={`/${amUIPath.Users}/${request?.partyUuid}?returnTo=/${amUIPath.Requests}`}>
+            {t('request_page.review_user_link', {
+              name: request?.displayPartyName,
+            })}
+          </Link>
+        </DsLink>
+        {isLoadingRequests || isFetchingRequests ? (
+          <List>
+            {Array.from({ length: request?.numberOfRequests || 2 }).map((_, index) => (
+              <ResourceListItem
+                key={index}
+                id={`placeholder-${index}`}
+                resourceName='xxxxxxxxxxxxxxxxxxxx'
+                ownerName='xxxxxxxxx xxxxxxxxxxx'
+                loading
+                as='div'
+                interactive={false}
+                shadow='none'
               />
-            </>
-          )}
-        </>
-      )}
-      <DsParagraph data-size='md'>{t('request_page.review_close_info')}</DsParagraph>
-      <DsButton
-        variant='secondary'
-        onClick={handleClose}
-        className={classes.closeButton}
-      >
-        {t('common.close')}
-      </DsButton>
-    </div>
+            ))}
+          </List>
+        ) : (
+          <>
+            {snapshotPackages.length > 0 && (
+              <>
+                <DsHeading
+                  level={2}
+                  data-size='2xs'
+                  id='package-list-heading'
+                >
+                  {t('request_page.package_list_title')}
+                </DsHeading>
+                <List aria-labelledby='package-list-heading'>
+                  {snapshotPackages.map((p) => {
+                    const isInteractive = processedRequests[p.id] === undefined;
+                    return (
+                      <RestoreFocusTarget
+                        key={p.id}
+                        id={p.id}
+                      >
+                        <AccessPackageListItem
+                          id={p.id}
+                          name={p.name}
+                          description={t('access_packages.package_number_of_resources', {
+                            count: p.resources.length,
+                          })}
+                          interactive={isInteractive}
+                          size='xs'
+                          border='dotted'
+                          controls={itemControls({ packageId: p.id })}
+                          onClick={
+                            isInteractive ? () => handleSelection({ package: p }) : undefined
+                          }
+                        />
+                      </RestoreFocusTarget>
+                    );
+                  })}
+                </List>
+              </>
+            )}
+            {snapshotResources.length > 0 && (
+              <>
+                <DsHeading
+                  level={2}
+                  data-size='2xs'
+                  id='service-list-heading'
+                >
+                  {t('request_page.resource_list_title')}
+                </DsHeading>
+                <ResourceList
+                  aria-labelledby='service-list-heading'
+                  size='xs'
+                  border='dotted'
+                  enableSearch={false}
+                  showDetails={false}
+                  interactive={(resource) => processedRequests[resource.identifier] === undefined}
+                  resources={snapshotResources}
+                  onSelect={(resource) => handleSelection({ resource })}
+                  renderControls={(resource) => itemControls({ resourceId: resource.identifier })}
+                />
+              </>
+            )}
+          </>
+        )}
+        <DsParagraph data-size='md'>{t('request_page.review_close_info')}</DsParagraph>
+        <DsButton
+          variant='secondary'
+          onClick={handleClose}
+          className={classes.closeButton}
+        >
+          {t('common.close')}
+        </DsButton>
+      </div>
+    </RestoreFocusProvider>
   );
 };

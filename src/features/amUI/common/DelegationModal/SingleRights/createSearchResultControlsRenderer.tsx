@@ -1,3 +1,4 @@
+import type { ReactNode } from 'react';
 import { DsButton } from '@altinn/altinn-components';
 import { MinusCircleIcon, PlusCircleIcon } from '@navikt/aksel-icons';
 import { useTranslation } from 'react-i18next';
@@ -7,6 +8,12 @@ import type { ServiceResource } from '@/rtk/features/singleRights/singleRightsAp
 import { useIsMobileOrSmaller } from '@/resources/utils/screensizeUtils';
 
 import { DelegationAction } from '../EditModal';
+import { RestoreFocusTarget } from '../../RestoreFocus';
+
+// Distinct id set on the inline action button (the "Gi"/"Slett" button). Lets focus be restored to
+// the button itself after a delegate/revoke swaps it in place, rather than the surrounding row,
+// which is itself focusable and would otherwise win as the first focusable for the resource id.
+export const resourceActionControlId = (resourceId: string) => `resource-action-${resourceId}`;
 
 type UseRenderSearchResultControlProps = {
   isDelegated: (resourceId: string) => boolean;
@@ -46,10 +53,14 @@ export const useRenderSearchResultControl = ({
     const canRequest = availableActions?.includes(DelegationAction.REQUEST);
     const isAlreadyRequested = isRequested(resource.identifier);
     const isLoading = isResourceLoading(resource.identifier);
+    const id = resourceActionControlId(resource.identifier);
+
+    let control: ReactNode = null;
 
     if (isAlreadyDelegated && canRevoke) {
-      return (
+      control = (
         <DsButton
+          id={id}
           variant='tertiary'
           data-size='sm'
           loading={isLoading}
@@ -64,11 +75,10 @@ export const useRenderSearchResultControl = ({
           {t('common.delete_poa')}
         </DsButton>
       );
-    }
-
-    if (!isAlreadyDelegated && canDelegate) {
-      return (
+    } else if (!isAlreadyDelegated && canDelegate) {
+      control = (
         <DsButton
+          id={id}
           variant='tertiary'
           data-size='sm'
           loading={isLoading}
@@ -83,11 +93,10 @@ export const useRenderSearchResultControl = ({
           {t('common.give_poa')}
         </DsButton>
       );
-    }
-
-    if (isAlreadyRequested) {
-      return (
+    } else if (isAlreadyRequested) {
+      control = (
         <DsButton
+          id={id}
           variant='tertiary'
           data-size='sm'
           loading={isLoading}
@@ -101,11 +110,10 @@ export const useRenderSearchResultControl = ({
           {t('delegation_modal.request.delete_request')}
         </DsButton>
       );
-    }
-
-    if (resource.delegable && !isAlreadyDelegated && canRequest) {
-      return (
+    } else if (resource.delegable && !isAlreadyDelegated && canRequest) {
+      control = (
         <DsButton
+          id={id}
           variant='tertiary'
           data-size='sm'
           loading={isLoading}
@@ -121,6 +129,10 @@ export const useRenderSearchResultControl = ({
       );
     }
 
-    return null;
+    if (!control) {
+      return null;
+    }
+
+    return <RestoreFocusTarget id={id}>{control}</RestoreFocusTarget>;
   };
 };

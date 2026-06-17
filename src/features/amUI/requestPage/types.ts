@@ -11,3 +11,7 @@ export interface Request {
 }
 
 export type ProcessedStatus = 'approved' | 'rejected';
+
+export interface RequestReviewModalCloseOptions {
+  waitForRequestRemoval?: boolean;
+}
