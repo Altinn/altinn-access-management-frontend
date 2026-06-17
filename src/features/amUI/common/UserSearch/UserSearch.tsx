@@ -2,9 +2,8 @@ import React, { useMemo, useState } from 'react';
 import { DsSearch, DsParagraph, formatDisplayName } from '@altinn/altinn-components';
 import { useTranslation } from 'react-i18next';
 
-import { PartyType, User } from '@/rtk/features/userInfoApi';
+import { PartyType } from '@/rtk/features/userInfoApi';
 import { ConnectionUserType } from '@/rtk/features/connectionApi';
-import { NewUserButton } from '@/features/amUI/users/NewUserModal/NewUserModal';
 
 import classes from './UserSearch.module.css';
 import { useFilteredUsers } from '../UserList/useFilteredUsers';
@@ -21,14 +20,12 @@ export interface UserSearchProps {
   indirectUsers?: UserSearchNode[];
   getUserLink?: (user: UserActionTarget) => string;
   onDelegate?: (user: UserActionTarget) => void;
-  onAddNewUser?: (user: User) => void;
   onRevoke?: (user: UserActionTarget) => void;
   onSelect?: (user: UserActionTarget) => void;
   isLoading?: boolean;
   isActionLoading?: boolean;
   canDelegate?: boolean;
-  AddUserButton?: React.ComponentType<{ isLarge?: boolean; onComplete?: (user: User) => void }>;
-  isPrimaryAddUserButton?: boolean;
+  AddUserButton?: React.ReactNode;
   noUsersText?: string;
   searchPlaceholder?: string;
   addUserButtonLabel?: string;
@@ -53,14 +50,12 @@ export const UserSearch: React.FC<UserSearchProps> = ({
   indirectUsers: initialIndirectUsers,
   getUserLink,
   onDelegate,
-  onAddNewUser,
   onRevoke,
   onSelect,
   isLoading = false,
   isActionLoading = false,
   canDelegate = true,
-  AddUserButton = NewUserButton,
-  isPrimaryAddUserButton = false,
+  AddUserButton,
   noUsersText,
   searchPlaceholder,
   addUserButtonLabel,
@@ -106,14 +101,6 @@ export const UserSearch: React.FC<UserSearchProps> = ({
   const showIndirectList = isQuery && indirectHasResults && canDelegate;
   const showEmptyState = isQuery && !directHasResults && !indirectHasResults;
 
-  const handleAddNewUser = async (user: User) => {
-    if (onAddNewUser) {
-      if (user?.id && user?.name) {
-        onAddNewUser(user);
-      }
-    }
-  };
-
   if (isLoading) {
     return (
       <UserList
@@ -139,14 +126,7 @@ export const UserSearch: React.FC<UserSearchProps> = ({
           </DsSearch>
           {additionalFilters}
         </div>
-        {canDelegate && AddUserButton && (
-          <div className={classes.buttonRow}>
-            <AddUserButton
-              onComplete={handleAddNewUser}
-              isLarge={isPrimaryAddUserButton}
-            />
-          </div>
-        )}
+        {canDelegate && AddUserButton && <div className={classes.buttonRow}>{AddUserButton}</div>}
       </div>
 
       <div className={classes.results}>
@@ -228,12 +208,7 @@ export const UserSearch: React.FC<UserSearchProps> = ({
                 { searchTerm: trimmedQuery || '' },
               )}
             </DsParagraph>
-            {canDelegate && AddUserButton && (
-              <AddUserButton
-                isLarge
-                onComplete={handleAddNewUser}
-              />
-            )}
+            {canDelegate && AddUserButton && <div>{AddUserButton}</div>}
           </div>
         )}
       </div>

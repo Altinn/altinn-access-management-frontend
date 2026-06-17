@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { DsAlert, DsButton, DsParagraph } from '@altinn/altinn-components';
 import { Navigate, useSearchParams } from 'react-router';
 import { Trans, useTranslation } from 'react-i18next';
@@ -91,18 +91,6 @@ export const InstanceDetailPageContent = () => {
   const instanceUrn = searchParams.get('instanceUrn') ?? '';
   const resourceId = searchParams.get('resourceId') ?? '';
   const dialogId = searchParams.get('dialogId');
-
-  const InstanceAddUserButton = useMemo(
-    () =>
-      ({ isLarge }: { isLarge?: boolean }) => (
-        <AddUserButton
-          isLarge={isLarge}
-          resourceId={resourceId}
-          instanceUrn={instanceUrn}
-        />
-      ),
-    [resourceId, instanceUrn],
-  );
 
   const {
     data: isAdmin,
@@ -246,7 +234,13 @@ export const InstanceDetailPageContent = () => {
             <InstanceUsersAsAdmin
               resourceId={resourceId}
               instanceUrn={instanceUrn}
-              AddUserButton={InstanceAddUserButton}
+              AddUserButton={
+                <AddUserButton
+                  isLarge={true}
+                  resourceId={resourceId}
+                  instanceUrn={instanceUrn}
+                />
+              }
               onSelect={handleUserSelect}
               onDelegate={handleIndirectUserDelegate}
               onRevoke={handleRevoke}
@@ -256,7 +250,13 @@ export const InstanceDetailPageContent = () => {
             <InstanceUsersAsInstanceAdmin
               resourceId={resourceId}
               instanceUrn={instanceUrn}
-              AddUserButton={InstanceAddUserButton}
+              AddUserButton={
+                <AddUserButton
+                  isLarge={true}
+                  resourceId={resourceId}
+                  instanceUrn={instanceUrn}
+                />
+              }
               onDelegate={handleIndirectUserDelegate}
             />
           ) : null}
