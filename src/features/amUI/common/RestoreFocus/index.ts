@@ -5,3 +5,7 @@ export {
   RestoreFocusTarget,
   RestoreFocusFallback,
 } from './RestoreFocusTarget';
+export {
+  focusFirstEnabledButton,
+  useRestoreFocusAfterSettled,
+} from './useRestoreFocusAfterSettled';

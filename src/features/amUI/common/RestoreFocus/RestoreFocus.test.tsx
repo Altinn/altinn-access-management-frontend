@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { fireEvent, render, screen, waitFor } from '@testing-library/react';
 import { describe, expect, it } from 'vitest';
 
@@ -8,6 +8,10 @@ import {
   RestoreFocusTarget,
   useRestoreFocusTarget,
 } from './RestoreFocusTarget';
+import {
+  focusFirstEnabledButton,
+  useRestoreFocusAfterSettled,
+} from './useRestoreFocusAfterSettled';
 
 interface FocusTargetTestProps {
   children: React.ReactNode;
@@ -151,6 +155,7 @@ const FallbackWithPreferredTargetTest = () => {
   return (
     <RestoreFocusProvider restoreFocus={restoreFocus}>
       <RestoreFocusFallback>
+        <button>List action</button>
         <section>
           <p data-restore-focus-fallback>No requests</p>
         </section>
@@ -159,17 +164,91 @@ const FallbackWithPreferredTargetTest = () => {
   );
 };
 
-const DirectFallbackFocusTest = () => {
+const RemovalHookTest = () => {
+  const restoreFocus = useRestoreFocus();
+  const [items, setItems] = useState(['item']);
+  const [isSettling, setIsSettling] = useState(false);
+  const restoreFocusAfterDelete = useRestoreFocusAfterSettled<string>({
+    isSettling,
+    onRestore: restoreFocus.requestFocus,
+  });
+
+  return (
+    <>
+      <button
+        onClick={() => {
+          setItems([]);
+          setIsSettling(false);
+        }}
+      >
+        Finish removal
+      </button>
+      <RestoreFocusProvider restoreFocus={restoreFocus}>
+        <RestoreFocusFallback>
+          <h2>List heading</h2>
+        </RestoreFocusFallback>
+        {items.includes('item') && (
+          <>
+            <RestoreFocusTarget id='item' />
+            <button
+              id='item'
+              onClick={() => {
+                setIsSettling(true);
+                restoreFocusAfterDelete('item');
+              }}
+            >
+              Delete item
+            </button>
+          </>
+        )}
+      </RestoreFocusProvider>
+    </>
+  );
+};
+
+const FallbackDoesNotStealFocusTest = () => {
   const restoreFocus = useRestoreFocus();
 
   return (
     <>
-      <button onClick={() => restoreFocus.requestFallbackFocus()}>Delete succeeded</button>
+      <button onClick={() => restoreFocus.requestFocus('deleted-item')}>Restore deleted</button>
+      <button>Elsewhere</button>
       <RestoreFocusProvider restoreFocus={restoreFocus}>
         <RestoreFocusFallback>
           <h2>List heading</h2>
         </RestoreFocusFallback>
       </RestoreFocusProvider>
+    </>
+  );
+};
+
+const ActionSettleFocusTest = () => {
+  const [isLoading, setIsLoading] = useState(false);
+  const [isSettling, setIsSettling] = useState(false);
+  const [actionLabel, setActionLabel] = useState('Initial action');
+  const actionsRef = useRef<HTMLDivElement>(null);
+  useRestoreFocusAfterSettled({
+    isSettling: isLoading || isSettling,
+    requestWhen: isLoading,
+    onRestore: () => focusFirstEnabledButton(actionsRef.current),
+  });
+
+  return (
+    <>
+      <button onClick={() => setIsLoading(true)}>Start action</button>
+      <button
+        onClick={() => {
+          setActionLabel('Next action');
+          setIsLoading(false);
+          setIsSettling(false);
+        }}
+      >
+        Finish action
+      </button>
+      <button>Elsewhere</button>
+      <div ref={actionsRef}>
+        {isLoading || isSettling ? <span>Loading</span> : <button>{actionLabel}</button>}
+      </div>
     </>
   );
 };
@@ -312,14 +391,30 @@ describe('RestoreFocus', () => {
     );
   });
 
-  it('focuses the fallback directly when fallback focus is requested', async () => {
-    render(<DirectFallbackFocusTest />);
+  it('focuses the fallback when a removed target is gone after settling', async () => {
+    render(<RemovalHookTest />);
 
-    fireEvent.click(screen.getByRole('button', { name: 'Delete succeeded' }));
+    const deleteButton = screen.getByRole('button', { name: 'Delete item' });
+    deleteButton.focus();
+    fireEvent.click(deleteButton);
+    fireEvent.click(screen.getByRole('button', { name: 'Finish removal' }));
 
     await waitFor(() =>
       expect(screen.getByRole('heading', { name: 'List heading' })).toHaveFocus(),
     );
+  });
+
+  it('does not focus the fallback when the user has already moved focus elsewhere', async () => {
+    render(<FallbackDoesNotStealFocusTest />);
+
+    const elsewhere = screen.getByRole('button', { name: 'Elsewhere' });
+    elsewhere.focus();
+    fireEvent.click(screen.getByRole('button', { name: 'Restore deleted' }));
+
+    await waitFor(() =>
+      expect(screen.getByRole('heading', { name: 'List heading' })).toBeInTheDocument(),
+    );
+    expect(elsewhere).toHaveFocus();
   });
 
   it('does not use focusable controls from nested dialogs as fallback targets', async () => {
@@ -333,6 +428,7 @@ describe('RestoreFocus', () => {
     render(<FallbackWithPreferredTargetTest />);
 
     await waitFor(() => expect(screen.getByText('No requests')).toHaveFocus());
+    expect(screen.getByRole('button', { name: 'List action' })).not.toHaveFocus();
   });
 
   it('does not use the fallback when a requested id is present', async () => {
@@ -351,5 +447,28 @@ describe('RestoreFocus', () => {
     render(<NoProviderTarget />);
 
     expect(screen.getByRole('button', { name: 'Target action' })).toBeInTheDocument();
+  });
+
+  it('focuses the next action button after an action settles', async () => {
+    render(<ActionSettleFocusTest />);
+
+    fireEvent.click(screen.getByRole('button', { name: 'Start action' }));
+    fireEvent.click(screen.getByRole('button', { name: 'Finish action' }));
+
+    await waitFor(() => expect(screen.getByRole('button', { name: 'Next action' })).toHaveFocus());
+  });
+
+  it('does not focus the next action button when focus moved elsewhere while settling', async () => {
+    render(<ActionSettleFocusTest />);
+
+    fireEvent.click(screen.getByRole('button', { name: 'Start action' }));
+    const elsewhere = screen.getByRole('button', { name: 'Elsewhere' });
+    elsewhere.focus();
+    fireEvent.click(screen.getByRole('button', { name: 'Finish action' }));
+
+    await waitFor(() =>
+      expect(screen.getByRole('button', { name: 'Next action' })).toBeInTheDocument(),
+    );
+    expect(elsewhere).toHaveFocus();
   });
 });

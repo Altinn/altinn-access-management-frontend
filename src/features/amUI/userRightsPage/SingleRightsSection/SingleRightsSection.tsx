@@ -14,6 +14,7 @@ import {
   RestoreFocusFallback,
   RestoreFocusProvider,
   useRestoreFocus,
+  useRestoreFocusAfterSettled,
 } from '../../common/RestoreFocus';
 
 import classes from './SingleRightsSection.module.css';
@@ -41,6 +42,7 @@ export const SingleRightsSection = ({ isReportee = false }: { isReportee?: boole
   const {
     data: delegatedResources,
     isError,
+    isFetching,
     isLoading,
   } = useGetSingleRightsForRightholderQuery(
     {
@@ -57,13 +59,17 @@ export const SingleRightsSection = ({ isReportee = false }: { isReportee?: boole
   const [selectedResource, setSelectedResource] = React.useState<ServiceResource | null>(null);
 
   const resources = React.useMemo(
-    () => delegatedResources?.map((delegation) => delegation.resource).filter(Boolean),
+    () => delegatedResources?.map((delegation) => delegation.resource).filter(Boolean) ?? [],
     [delegatedResources],
   ) as ServiceResource[];
 
   // Restore focus to the service item that opened the modal when it closes, and fall back to the
   // heading when an inline delete removes the item entirely.
   const restoreFocus = useRestoreFocus();
+  const restoreFocusAfterDelete = useRestoreFocusAfterSettled<string>({
+    isSettling: isFetching,
+    onRestore: restoreFocus.requestFocus,
+  });
   const isResourceInherited = (resourceId: string) => {
     const resource = delegatedResources?.find(
       (delegation) => delegation.resource.identifier === resourceId,
@@ -145,7 +151,7 @@ export const SingleRightsSection = ({ isReportee = false }: { isReportee?: boole
                   <DeleteResourceButton
                     resource={resource}
                     disabled={isInherited}
-                    onSuccess={() => restoreFocus.requestFallbackFocus()}
+                    onSuccess={() => restoreFocusAfterDelete(resource.identifier)}
                   />
                 );
               }}

@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useRef, useState } from 'react';
 import { ArrowLeftIcon, HandshakeIcon, MinusCircleIcon } from '@navikt/aksel-icons';
 import {
   DsButton,
@@ -9,7 +9,7 @@ import {
 } from '@altinn/altinn-components';
 import { ResourceList } from '../../common/ResourceList/ResourceList';
 import { useSingleRightRequests } from '../../common/DelegationModal/SingleRights/hooks/useSingleRightRequests';
-import { ServiceResource } from '@/rtk/features/singleRights/singleRightsApi';
+import type { ServiceResource } from '@/rtk/features/singleRights/singleRightsApi';
 import classes from './PendingRequests.module.css';
 import { ResourceInfo } from '../../common/DelegationModal/SingleRights/ResourceInfo';
 import { DelegationAction } from '../../common/DelegationModal/EditModal';
@@ -24,6 +24,7 @@ import {
   RestoreFocusFallback,
   RestoreFocusProvider,
   useRestoreFocus,
+  useRestoreFocusAfterSettled,
 } from '../../common/RestoreFocus';
 
 export const PendingRequests = () => {
@@ -160,34 +161,21 @@ export const PendingRequestsList = ({
   );
 
   const restoreFocus = useRestoreFocus();
-  const [pendingDeletedFocusId, setPendingDeletedFocusId] = useState<string | null>(null);
 
   const resources = singleRightRequests
     .map((x) => x.resource)
     .filter((r): r is ServiceResource => !!r);
+  const restoreFocusAfterDelete = useRestoreFocusAfterSettled<string>({
+    isSettling: isRefetchingRequests,
+    onRestore: restoreFocus.requestFocus,
+  });
 
   const { deleteRequest, isLoadingRequest } = useSingleRightRequests({
     canRequestRights: true,
     actingPartyUuid: actingParty?.partyUuid,
     fromPartyUuid: fromParty?.partyUuid,
-    onDeleteRequestSuccess: (resource) => setPendingDeletedFocusId(resource.identifier),
+    onDeleteRequestSuccess: (resource) => restoreFocusAfterDelete(resource.identifier),
   });
-
-  useEffect(() => {
-    if (!pendingDeletedFocusId || isRefetchingRequests) {
-      return;
-    }
-
-    const deletedItemStillPresent = resources.some(
-      (resource) => resource.identifier === pendingDeletedFocusId,
-    );
-    if (deletedItemStillPresent) {
-      return;
-    }
-
-    restoreFocus.requestFocus(pendingDeletedFocusId);
-    setPendingDeletedFocusId(null);
-  }, [isRefetchingRequests, pendingDeletedFocusId, resources, restoreFocus]);
 
   return (
     <RestoreFocusProvider restoreFocus={restoreFocus}>

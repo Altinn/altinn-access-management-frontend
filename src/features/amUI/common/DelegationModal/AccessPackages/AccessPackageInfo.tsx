@@ -23,6 +23,7 @@ import { PackageHeader } from './PackageHeader';
 import { PackageMeta } from './PackageMeta';
 import { PartyType } from '@/rtk/features/userInfoApi';
 import { StatusSection } from '../../StatusSection/StatusSection';
+import { focusFirstEnabledButton, useRestoreFocusAfterSettled } from '../../RestoreFocus';
 
 export interface PackageInfoProps {
   accessPackage: ExtendedAccessPackage;
@@ -35,12 +36,6 @@ export const AccessPackageInfo = ({ accessPackage, availableActions = [] }: Pack
   const { canDelegatePackage } = useAccessPackageDelegationCheck();
   const displayPackageRequestsFeature = displayPackageRequests();
 
-  // Delegating or revoking swaps the action button in place (e.g. "Slett fullmakt" becomes
-  // "Gi fullmakt"). Move focus to the new button once the refetch lands so keyboard and screen
-  // reader users aren't dropped to the page body.
-  const actionsRef = React.useRef<HTMLDivElement>(null);
-  const pendingActionFocusRef = React.useRef(false);
-
   const {
     onDelegate,
     onRevoke,
@@ -51,12 +46,10 @@ export const AccessPackageInfo = ({ accessPackage, availableActions = [] }: Pack
     isLoading: isActionLoading,
   } = useAccessPackageActions({
     onDelegateSuccess: () => {
-      pendingActionFocusRef.current = true;
       setActionSuccess(true);
       setTimeout(() => setActionSuccess(false), 2000);
     },
     onRevokeSuccess: () => {
-      pendingActionFocusRef.current = true;
       setActionSuccess(true);
       setTimeout(() => setActionSuccess(false), 2000);
     },
@@ -70,6 +63,12 @@ export const AccessPackageInfo = ({ accessPackage, availableActions = [] }: Pack
     to: toParty?.partyUuid ?? '',
     from: fromParty?.partyUuid ?? '',
     party: actingParty?.partyUuid ?? '',
+  });
+  const actionsRef = React.useRef<HTMLDivElement>(null);
+  useRestoreFocusAfterSettled({
+    isSettling: isActionLoading || isFetching || actionSuccess,
+    requestWhen: isActionLoading,
+    onRestore: () => focusFirstEnabledButton(actionsRef.current),
   });
 
   const delegationAccess = React.useMemo(() => {
@@ -102,30 +101,6 @@ export const AccessPackageInfo = ({ accessPackage, availableActions = [] }: Pack
     canDelegate?.result === false &&
     availableActions.includes(DelegationAction.DELEGATE);
   const isPendingRequest = hasPendingRequest(accessPackage);
-
-  React.useEffect(() => {
-    if (!pendingActionFocusRef.current || isFetching || isActionLoading || actionSuccess) {
-      return;
-    }
-    const focusTarget =
-      actionsRef.current?.querySelector<HTMLButtonElement>('button:not([disabled])');
-    if (!focusTarget) {
-      return;
-    }
-
-    const activeElement = focusTarget.ownerDocument.activeElement;
-    const userMovedFocus =
-      activeElement instanceof HTMLElement &&
-      activeElement !== focusTarget.ownerDocument.body &&
-      !actionsRef.current?.contains(activeElement);
-    if (userMovedFocus) {
-      pendingActionFocusRef.current = false;
-      return;
-    }
-
-    pendingActionFocusRef.current = false;
-    focusTarget.focus();
-  }, [actionSuccess, isActionLoading, isFetching, userHasPackage]);
 
   return (
     <div className={classes.container}>

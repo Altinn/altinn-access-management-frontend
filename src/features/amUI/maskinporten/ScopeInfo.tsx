@@ -24,6 +24,7 @@ import { ResourceHeading } from '../common/DelegationModal/SingleRights/Resource
 import { ResourceInfoSkeleton } from '../common/DelegationModal/SingleRights/ResourceInfoSkeleton';
 import { usePartyRepresentation } from '../common/PartyRepresentationContext/PartyRepresentationContext';
 import { StatusSection } from '../common/StatusSection/StatusSection';
+import { focusFirstEnabledButton, useRestoreFocusAfterSettled } from '../common/RestoreFocus';
 import { ScopeActionAlert } from './ScopeActionAlert';
 import { getMaskinportenScopes } from './scopeUtils';
 import { useMaskinportenResourceActions } from './hooks/useMaskinportenResourceActions';
@@ -163,52 +164,16 @@ export const ScopeInfo = ({
     };
   }, []);
 
-  // Delegate/revoke replaces the action button in place (via the loading/success animation).
-  // Move focus to the resulting button once it settles, but don't steal focus if the user moved
-  // it elsewhere during the animation.
   const actionsRef = useRef<HTMLDivElement>(null);
-  const pendingActionFocusRef = useRef(false);
-
-  useEffect(() => {
-    if (isActionLoading) {
-      pendingActionFocusRef.current = true;
-    }
-  }, [isActionLoading]);
-
-  useEffect(() => {
-    if (
-      !pendingActionFocusRef.current ||
+  useRestoreFocusAfterSettled({
+    isSettling:
       isActionLoading ||
       actionSuccess ||
       isDelegatedResourceListLoading ||
-      isDelegationCheckLoading
-    ) {
-      return;
-    }
-    const focusTarget =
-      actionsRef.current?.querySelector<HTMLButtonElement>('button:not([disabled])');
-    if (!focusTarget) {
-      pendingActionFocusRef.current = false;
-      return;
-    }
-
-    const activeElement = focusTarget.ownerDocument.activeElement;
-    const userMovedFocus =
-      activeElement instanceof HTMLElement &&
-      activeElement !== focusTarget.ownerDocument.body &&
-      !actionsRef.current?.contains(activeElement);
-    pendingActionFocusRef.current = false;
-    if (userMovedFocus) {
-      return;
-    }
-    focusTarget.focus();
-  }, [
-    hasDelegatedResource,
-    isActionLoading,
-    actionSuccess,
-    isDelegatedResourceListLoading,
-    isDelegationCheckLoading,
-  ]);
+      isDelegationCheckLoading,
+    requestWhen: isActionLoading,
+    onRestore: () => focusFirstEnabledButton(actionsRef.current),
+  });
 
   const handleSuccess = () => {
     setActionError(null);

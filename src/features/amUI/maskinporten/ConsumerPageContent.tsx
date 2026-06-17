@@ -18,7 +18,7 @@ import { DelegationAction, EditModal } from '../common/DelegationModal/EditModal
 import { PageContainer } from '../common/PageContainer/PageContainer';
 import { UserPageHeader } from '../common/UserPageHeader/UserPageHeader';
 import { usePartyRepresentation } from '../common/PartyRepresentationContext/PartyRepresentationContext';
-import { useRestoreFocus } from '../common/RestoreFocus';
+import { useRestoreFocus, useRestoreFocusAfterSettled } from '../common/RestoreFocus';
 import { MaskinportenDeleteDialog } from './MaskinportenDeleteDialog';
 import { DelegatedResourcesSection } from './DelegatedResourcesSection';
 
@@ -60,6 +60,10 @@ export const ConsumerPageContent = () => {
     { party: actingPartyUuid, consumer: consumerOrgNumber },
     { skip: !actingPartyUuid || !consumerOrgNumber },
   );
+  const restoreFocusAfterDelete = useRestoreFocusAfterSettled<string>({
+    isSettling: isFetching,
+    onRestore: restoreFocus.requestFocus,
+  });
 
   const handleRemove = (resource: ServiceResource) =>
     remove(resource, {
@@ -71,7 +75,7 @@ export const ConsumerPageContent = () => {
           }),
           color: 'success',
         });
-        restoreFocus.requestFallbackFocus();
+        restoreFocusAfterDelete(r.identifier);
       },
       onError: (r) =>
         openSnackbar({

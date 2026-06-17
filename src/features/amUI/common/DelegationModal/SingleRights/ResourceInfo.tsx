@@ -1,5 +1,5 @@
-import * as React from 'react';
 import { Button, DsButton, DsParagraph, formatDisplayName } from '@altinn/altinn-components';
+import { useRef } from 'react';
 import { useTranslation } from 'react-i18next';
 import { MinusCircleIcon } from '@navikt/aksel-icons';
 
@@ -29,6 +29,7 @@ import { RightsSection } from './RightsSection';
 import { isExpiredResource } from '../../ResourceList/utils';
 import { useSingleRightsDelegationRightsData } from './hooks/useSingleRightsDelegationRightsData';
 import { useSingleRightRequests } from './hooks/useSingleRightRequests';
+import { focusFirstEnabledButton, useRestoreFocusAfterSettled } from '../../RestoreFocus';
 
 import classes from './ResourceInfo.module.css';
 
@@ -162,52 +163,13 @@ export const ResourceInfo = ({
     ? t('delegation_modal.expired_resource_description', { name: toName })
     : t('delegation_modal.expired_resource_request_description');
 
-  // Delegate/revoke replaces the action buttons in place (via the loading/success animation).
-  // Move focus to the resulting button once it settles, but don't steal focus if the user moved
-  // it elsewhere during the animation.
-  const actionsRef = React.useRef<HTMLDivElement>(null);
-  const pendingActionFocusRef = React.useRef(false);
-
-  React.useEffect(() => {
-    if (isActionLoading) {
-      pendingActionFocusRef.current = true;
-    }
-  }, [isActionLoading]);
-
-  React.useEffect(() => {
-    if (
-      !pendingActionFocusRef.current ||
-      isActionLoading ||
-      isActionSuccess ||
-      isRightsSectionLoading ||
-      isResourceDelegationsLoading
-    ) {
-      return;
-    }
-    const focusTarget =
-      actionsRef.current?.querySelector<HTMLButtonElement>('button:not([disabled])');
-    if (!focusTarget) {
-      pendingActionFocusRef.current = false;
-      return;
-    }
-
-    const activeElement = focusTarget.ownerDocument.activeElement;
-    const userMovedFocus =
-      activeElement instanceof HTMLElement &&
-      activeElement !== focusTarget.ownerDocument.body &&
-      !actionsRef.current?.contains(activeElement);
-    pendingActionFocusRef.current = false;
-    if (userMovedFocus) {
-      return;
-    }
-    focusTarget.focus();
-  }, [
-    hasAccess,
-    isActionLoading,
-    isActionSuccess,
-    isRightsSectionLoading,
-    isResourceDelegationsLoading,
-  ]);
+  const actionsRef = useRef<HTMLDivElement>(null);
+  useRestoreFocusAfterSettled({
+    isSettling:
+      isActionLoading || isActionSuccess || isRightsSectionLoading || isResourceDelegationsLoading,
+    requestWhen: isActionLoading,
+    onRestore: () => focusFirstEnabledButton(actionsRef.current),
+  });
 
   return (
     <>

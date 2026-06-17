@@ -29,6 +29,7 @@ export const RevokeAccessPackageActionControl = ({
         <PackageIsPartiallyDeletableAlert
           confirmAction={onRevoke}
           triggerButtonProps={{
+            id: packageActionControlId(pkg.id),
             'data-size': 'sm',
             variant: 'tertiary',
           }}

@@ -21,6 +21,7 @@ import {
   RestoreFocusFallback,
   RestoreFocusProvider,
   useRestoreFocus,
+  useRestoreFocusAfterSettled,
 } from '../../../common/RestoreFocus';
 
 interface PendingPackageRequestsListProps {
@@ -66,23 +67,10 @@ export const PendingPackageRequestsList = ({
 
   const [withdrawRequest] = useWithdrawRequestMutation();
   const restoreFocus = useRestoreFocus();
-  const [pendingDeletedFocusId, setPendingDeletedFocusId] = useState<string | null>(null);
-
-  useEffect(() => {
-    if (!pendingDeletedFocusId || isRefetching) {
-      return;
-    }
-
-    const deletedItemStillPresent = enrichedRequests.some(
-      (request) => request.package.id === pendingDeletedFocusId,
-    );
-    if (deletedItemStillPresent) {
-      return;
-    }
-
-    restoreFocus.requestFocus(pendingDeletedFocusId);
-    setPendingDeletedFocusId(null);
-  }, [enrichedRequests, isRefetching, pendingDeletedFocusId, restoreFocus]);
+  const restoreFocusAfterDelete = useRestoreFocusAfterSettled<string>({
+    isSettling: isRefetching,
+    onRestore: restoreFocus.requestFocus,
+  });
 
   const handleDelete = async (request: EnrichedPackageRequest) => {
     setLoadingByRequestId((prev) => ({ ...prev, [request.id]: true }));
@@ -91,7 +79,7 @@ export const PendingPackageRequestsList = ({
         party: actingParty?.partyUuid ?? '',
         id: request.id,
       }).unwrap();
-      setPendingDeletedFocusId(request.package.id);
+      restoreFocusAfterDelete(request.package.id);
       openSnackbar({
         message: t('delegation_modal.request.withdraw_request_success', {
           resource: request.package?.name,

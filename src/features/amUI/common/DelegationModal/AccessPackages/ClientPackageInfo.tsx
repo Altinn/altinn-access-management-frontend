@@ -5,7 +5,7 @@ import {
   DsParagraph,
   formatDisplayName,
 } from '@altinn/altinn-components';
-import { useEffect, useRef } from 'react';
+import { useRef } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { PartyType } from '@/rtk/features/userInfoApi';
@@ -20,6 +20,7 @@ import classes from './AccessPackageInfo.module.css';
 import { PackageHeader } from './PackageHeader';
 import { PackageMeta } from './PackageMeta';
 import { DelegationAction } from '../EditModal';
+import { focusFirstEnabledButton, useRestoreFocusAfterSettled } from '../../RestoreFocus';
 
 export const ClientPackageInfo = ({
   party,
@@ -48,40 +49,12 @@ export const ClientPackageInfo = ({
     !userHasAccess && availableActions.includes(DelegationAction.DELEGATE) && !!onDelegate;
   const cannotChangeAccess = accessPackage.isAssignable === false;
 
-  // Delegate/revoke replaces the action button in place (via the loading/success animation).
-  // Move focus to the resulting button once it settles, but don't steal focus if the user moved
-  // it elsewhere during the animation.
   const actionsRef = useRef<HTMLDivElement>(null);
-  const pendingActionFocusRef = useRef(false);
-
-  useEffect(() => {
-    if (isLoading) {
-      pendingActionFocusRef.current = true;
-    }
-  }, [isLoading]);
-
-  useEffect(() => {
-    if (!pendingActionFocusRef.current || isLoading || isSuccess) {
-      return;
-    }
-    const focusTarget =
-      actionsRef.current?.querySelector<HTMLButtonElement>('button:not([disabled])');
-    if (!focusTarget) {
-      pendingActionFocusRef.current = false;
-      return;
-    }
-
-    const activeElement = focusTarget.ownerDocument.activeElement;
-    const userMovedFocus =
-      activeElement instanceof HTMLElement &&
-      activeElement !== focusTarget.ownerDocument.body &&
-      !actionsRef.current?.contains(activeElement);
-    pendingActionFocusRef.current = false;
-    if (userMovedFocus) {
-      return;
-    }
-    focusTarget.focus();
-  }, [userHasAccess, isLoading, isSuccess]);
+  useRestoreFocusAfterSettled({
+    isSettling: isLoading || isSuccess,
+    requestWhen: isLoading,
+    onRestore: () => focusFirstEnabledButton(actionsRef.current),
+  });
 
   return (
     <div className={classes.container}>

@@ -1,14 +1,15 @@
 import { formatDateToNorwegian } from '@/resources/utils';
 import { formatDisplayName, UserListItem } from '@altinn/altinn-components';
 import { useTranslation } from 'react-i18next';
-import { Request } from './types';
+import type { Request, RequestReviewModalCloseOptions } from './types';
 
 import classes from './RequestPage.module.css';
-import { useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { SentRequestsCombinedModal } from './SentRequestsCombinedModal';
 import { PartyRepresentationProvider } from '../common/PartyRepresentationContext/PartyRepresentationContext';
 import { getCookie } from '@/resources/Cookie/CookieMethods';
 import { PartyType } from '@/rtk/features/userInfoApi';
+import { RestoreFocusTarget, useRestoreFocusContext } from '../common/RestoreFocus';
 
 interface SentRequestsTabPanelProps {
   pendingRequests: Request[] | undefined;
@@ -18,37 +19,78 @@ export const SentRequestsTabPanel = ({ pendingRequests }: SentRequestsTabPanelPr
   const modalRef = useRef<HTMLDialogElement>(null);
   const [openAccessRequest, setOpenAccessRequest] = useState<Request | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [closedRequestFocus, setClosedRequestFocus] = useState<{
+    id: string;
+    waitForRequestRemoval: boolean;
+  } | null>(null);
+  const restoreFocus = useRestoreFocusContext();
 
   const { t } = useTranslation();
+
+  useEffect(() => {
+    if (!closedRequestFocus || !restoreFocus) {
+      return;
+    }
+
+    const requestStillPresent = pendingRequests?.some(
+      (request) => request.id === closedRequestFocus.id,
+    );
+    if (closedRequestFocus.waitForRequestRemoval && requestStillPresent) {
+      return;
+    }
+
+    const frame = requestAnimationFrame(() => {
+      restoreFocus.requestFocus(closedRequestFocus.id);
+      setClosedRequestFocus(null);
+    });
+
+    return () => cancelAnimationFrame(frame);
+  }, [closedRequestFocus, pendingRequests, restoreFocus]);
+
+  const handleModalClose = (options?: RequestReviewModalCloseOptions) => {
+    if (openAccessRequest) {
+      setClosedRequestFocus({
+        id: openAccessRequest.id,
+        waitForRequestRemoval: options?.waitForRequestRemoval ?? false,
+      });
+    }
+    setIsModalOpen(false);
+    setOpenAccessRequest(null);
+  };
+
   return (
     <>
       {pendingRequests?.map((request) => {
         return (
-          <UserListItem
+          <RestoreFocusTarget
             key={request.id}
             id={request.id}
-            name={request.displayPartyName}
-            type={request.displayPartyType}
-            subUnit={request.isSubUnit}
-            titleAs='h2'
-            linkIcon
-            description={`${request.description ? t(request.description) : t('request_page.waiting_for_number', { count: request.numberOfRequests })} (${formatDateToNorwegian(request.createdDate)})`}
-            as={(props) => (
-              <button
-                {...props}
-                onClick={() => {
-                  setOpenAccessRequest(request);
-                  setIsModalOpen(true);
-                  modalRef.current?.showModal();
-                }}
-              />
-            )}
-            controls={
-              <div className={classes.requestItemBadge}>
-                {t('request_page.view_request', { count: request.numberOfRequests })}
-              </div>
-            }
-          />
+          >
+            <UserListItem
+              id={request.id}
+              name={request.displayPartyName}
+              type={request.displayPartyType}
+              subUnit={request.isSubUnit}
+              titleAs='h2'
+              linkIcon
+              description={`${request.description ? t(request.description) : t('request_page.waiting_for_number', { count: request.numberOfRequests })} (${formatDateToNorwegian(request.createdDate)})`}
+              as={(props) => (
+                <button
+                  {...props}
+                  onClick={() => {
+                    setOpenAccessRequest(request);
+                    setIsModalOpen(true);
+                    modalRef.current?.showModal();
+                  }}
+                />
+              )}
+              controls={
+                <div className={classes.requestItemBadge}>
+                  {t('request_page.view_request', { count: request.numberOfRequests })}
+                </div>
+              }
+            />
+          </RestoreFocusTarget>
         );
       })}
       <PartyRepresentationProvider
@@ -73,7 +115,7 @@ export const SentRequestsTabPanel = ({ pendingRequests }: SentRequestsTabPanelPr
             }),
           })}
           isModalOpen={isModalOpen}
-          onClose={() => setIsModalOpen(false)}
+          onClose={handleModalClose}
         />
       </PartyRepresentationProvider>
     </>

@@ -1,5 +1,5 @@
-import * as React from 'react';
 import { Button, formatDisplayName } from '@altinn/altinn-components';
+import { useRef } from 'react';
 import { useTranslation } from 'react-i18next';
 import { MinusCircleIcon } from '@navikt/aksel-icons';
 
@@ -26,6 +26,7 @@ import { RightsSection } from '../SingleRights/RightsSection';
 import { ResourceAlert } from '../SingleRights/ResourceAlert';
 import { ResourceInfoSkeleton } from '../SingleRights/ResourceInfoSkeleton';
 import { InstanceDescription } from '../../InstanceDescription/InstanceDescription';
+import { focusFirstEnabledButton, useRestoreFocusAfterSettled } from '../../RestoreFocus';
 import { useInstanceDelegationRightsData } from './useInstanceDelegationRightsData';
 
 import classes from './InstanceInfo.module.css';
@@ -146,6 +147,12 @@ export const InstanceInfo = ({
       revoke: onRevoke,
     },
   });
+  const actionsRef = useRef<HTMLDivElement>(null);
+  useRestoreFocusAfterSettled({
+    isSettling: isActionLoading || isActionSuccess || isLoading,
+    requestWhen: isActionLoading,
+    onRestore: () => focusFirstEnabledButton(actionsRef.current),
+  });
 
   const rawMissingAccess = delegationCheckedRights
     ? getMissingAccessMessage(
@@ -243,7 +250,10 @@ export const InstanceInfo = ({
                 actionDescription={t('delegation_modal.instance_actions.action_description')}
               />
             )}
-            <div className={classes.editButtons}>
+            <div
+              ref={actionsRef}
+              className={classes.editButtons}
+            >
               {hasDelegateAction && (
                 <Button
                   data-size='sm'

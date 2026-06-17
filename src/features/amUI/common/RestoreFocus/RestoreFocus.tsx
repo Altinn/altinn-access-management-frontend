@@ -4,10 +4,7 @@ export interface RestoreFocus {
   // Call when navigating back to request focus on the item with the given id.
   // When that id is gone, a <RestoreFocusFallback> in the provider catches it instead.
   requestFocus: (id: string) => void;
-  // Call when the fallback is the intended next focus target, e.g. after an inline delete succeeds.
-  requestFallbackFocus: () => void;
   focusRequestId: string | null;
-  isFallbackFocusRequested: boolean;
   clearRequest: () => void;
 }
 
@@ -21,30 +18,17 @@ export const RestoreFocusContext = createContext<RestoreFocusContextValue | unde
 // and call requestFocus(id) when navigating back to the view containing the target.
 export const useRestoreFocus = (): RestoreFocus => {
   const [focusRequestId, setFocusRequestId] = useState<string | null>(null);
-  const [isFallbackFocusRequested, setIsFallbackFocusRequested] = useState(false);
 
-  const requestFocus = useCallback((id: string) => {
-    setIsFallbackFocusRequested(false);
-    setFocusRequestId(id);
-  }, []);
-  const requestFallbackFocus = useCallback(() => {
-    setFocusRequestId(null);
-    setIsFallbackFocusRequested(true);
-  }, []);
-  const clearRequest = useCallback(() => {
-    setFocusRequestId(null);
-    setIsFallbackFocusRequested(false);
-  }, []);
+  const requestFocus = useCallback((id: string) => setFocusRequestId(id), []);
+  const clearRequest = useCallback(() => setFocusRequestId(null), []);
 
   return useMemo(
     () => ({
       focusRequestId,
-      isFallbackFocusRequested,
       requestFocus,
-      requestFallbackFocus,
       clearRequest,
     }),
-    [clearRequest, focusRequestId, isFallbackFocusRequested, requestFallbackFocus, requestFocus],
+    [clearRequest, focusRequestId, requestFocus],
   );
 };
 
