@@ -29,7 +29,6 @@ import classes from './AddUserModal.module.css';
 interface AddUserButtonProps {
   resourceId: string;
   instanceUrn: string;
-  variant: 'primary' | 'secondary';
 }
 
 interface AddUserModalProps {
@@ -40,7 +39,7 @@ interface AddUserModalProps {
   onClose: () => void;
 }
 
-export const AddUserButton = ({ resourceId, instanceUrn, variant }: AddUserButtonProps) => {
+export const AddUserButton = ({ resourceId, instanceUrn }: AddUserButtonProps) => {
   const modalRef = useRef<HTMLDialogElement>(null);
   const [isOpen, setIsOpen] = useState(false);
   const { t } = useTranslation();
@@ -48,7 +47,7 @@ export const AddUserButton = ({ resourceId, instanceUrn, variant }: AddUserButto
   return (
     <>
       <DsButton
-        variant={variant}
+        variant='primary'
         onClick={() => {
           setIsOpen(true);
           modalRef.current?.showModal();

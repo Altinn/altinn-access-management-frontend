@@ -117,7 +117,6 @@ export const InstanceUsersAsAdmin = ({
         includeSelfAsChildOnIndirect={false}
         AddUserButton={
           <AddUserButton
-            variant='primary'
             resourceId={resourceId}
             instanceUrn={instanceUrn}
           />
