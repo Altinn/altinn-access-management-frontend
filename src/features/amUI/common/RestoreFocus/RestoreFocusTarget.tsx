@@ -28,7 +28,10 @@ const findFocusableElement = (element: HTMLElement, scope: HTMLElement) => {
 // disabled during an async action, or removed). If the user has since moved focus to a real
 // element, leave it alone so we never steal focus after the action settles.
 const focusHasBeenLost = () =>
-  document.activeElement === null || document.activeElement === document.body;
+  document.activeElement === null ||
+  document.activeElement === document.body ||
+  (document.activeElement instanceof HTMLElement &&
+    isUnavailableForFocus(document.activeElement, document.activeElement));
 
 // Focuses the element, making it programmatically focusable for this call only when it is not
 // natively focusable (e.g. a heading or a processed, non-interactive row).

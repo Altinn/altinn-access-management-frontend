@@ -4,6 +4,7 @@ import { DelegationAction } from '../DelegationModal/EditModal';
 import { MinusCircleIcon, PlusCircleIcon } from '@navikt/aksel-icons';
 import { ExtendedUser } from '@/rtk/features/userInfoApi';
 import { useIsMobileOrSmaller } from '@/resources/utils/screensizeUtils';
+import { userActionFocusId } from './userFocusIds';
 
 export const UserListActions = ({
   user,
@@ -26,6 +27,7 @@ export const UserListActions = ({
 }) => {
   const { t } = useTranslation();
   const isSmall = useIsMobileOrSmaller();
+  const actionId = userActionFocusId(user.id);
 
   if (!availableAction || isSmall) {
     return null;
@@ -49,6 +51,7 @@ export const UserListActions = ({
     <>
       {availableAction === DelegationAction.DELEGATE && onDelegate && !user.isInherited && (
         <DsButton
+          id={actionId}
           variant='tertiary'
           data-size='md'
           onClick={() => onDelegate(user)}
@@ -60,6 +63,7 @@ export const UserListActions = ({
       )}
       {availableAction === DelegationAction.REQUEST && onRequest && !user.isInherited && (
         <DsButton
+          id={actionId}
           variant='tertiary'
           data-size='md'
           onClick={() => onRequest(user)}
@@ -71,6 +75,7 @@ export const UserListActions = ({
       )}
       {availableAction === DelegationAction.REVOKE && onRevoke && !user.isInherited && (
         <DsButton
+          id={actionId}
           variant='tertiary'
           data-size='md'
           onClick={() => onRevoke(user)}

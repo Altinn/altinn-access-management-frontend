@@ -1,4 +1,4 @@
-import React, { useMemo, useState } from 'react';
+import React, { useEffect, useMemo, useRef, useState } from 'react';
 import { DsSearch, DsParagraph, formatDisplayName } from '@altinn/altinn-components';
 import { useTranslation } from 'react-i18next';
 
@@ -13,6 +13,11 @@ import { UserList } from '../UserList/UserList';
 import { UserSearchResults, titleAsType } from './UserSearchResults';
 import { usePartyRepresentation } from '../PartyRepresentationContext/PartyRepresentationContext';
 import type { UserActionTarget, UserSearchNode } from './types';
+import type { RestoreFocus } from '../RestoreFocus';
+import { RestoreFocusFallback, RestoreFocusProvider, useRestoreFocus } from '../RestoreFocus';
+import { userRowFocusId } from '../UserList/userFocusIds';
+
+type UserSearchAction = (user: UserActionTarget) => void;
 
 export interface UserSearchProps {
   includeSelfAsChild: boolean;
@@ -20,9 +25,9 @@ export interface UserSearchProps {
   users?: UserSearchNode[];
   indirectUsers?: UserSearchNode[];
   getUserLink?: (user: UserActionTarget) => string;
-  onDelegate?: (user: UserActionTarget) => void;
+  onDelegate?: UserSearchAction;
   onAddNewUser?: (user: User) => void;
-  onRevoke?: (user: UserActionTarget) => void;
+  onRevoke?: UserSearchAction;
   onSelect?: (user: UserActionTarget) => void;
   isLoading?: boolean;
   isActionLoading?: boolean;
@@ -37,6 +42,7 @@ export interface UserSearchProps {
   additionalFilters?: React.ReactNode;
   hasActiveAdditionalFilters?: boolean;
   titleAs?: titleAsType;
+  restoreFocus?: RestoreFocus;
 }
 
 const filterAvailableUserTypes = (items?: UserSearchNode[]) =>
@@ -68,10 +74,15 @@ export const UserSearch: React.FC<UserSearchProps> = ({
   additionalFilters,
   hasActiveAdditionalFilters = false,
   titleAs = 'h4',
+  restoreFocus,
 }) => {
   const { t } = useTranslation();
   const [query, setQuery] = useState('');
   const { fromParty } = usePartyRepresentation();
+  const localRestoreFocus = useRestoreFocus();
+  const activeRestoreFocus = restoreFocus ?? localRestoreFocus;
+  const [pendingFocusId, setPendingFocusId] = useState<string | null>(null);
+  const wasActionLoading = useRef(false);
   const directUsers = useMemo(() => filterAvailableUserTypes(initialUsers), [initialUsers]);
 
   const indirectUsers = useMemo(
@@ -104,6 +115,28 @@ export const UserSearch: React.FC<UserSearchProps> = ({
   const showIndirectList = isQuery && indirectHasResults && canDelegate;
   const showEmptyState = isQuery && !directHasResults && !indirectHasResults;
 
+  // After an inline delegate/revoke settles (isActionLoading falls true -> false), restore focus to
+  // the acted-on row. If the row is gone (e.g. revoked), RestoreFocusFallback picks it up instead.
+  useEffect(() => {
+    const settled = wasActionLoading.current && !isActionLoading;
+    wasActionLoading.current = isActionLoading;
+    if (!pendingFocusId || !settled) {
+      return;
+    }
+
+    const frame = requestAnimationFrame(() => {
+      activeRestoreFocus.requestFocus(userRowFocusId(pendingFocusId));
+      setPendingFocusId(null);
+    });
+
+    return () => cancelAnimationFrame(frame);
+  }, [activeRestoreFocus, isActionLoading, pendingFocusId]);
+
+  const runInlineAction = (action: UserSearchAction, user: UserActionTarget) => {
+    setPendingFocusId(user.id);
+    action(user);
+  };
+
   const handleAddNewUser = async (user: User) => {
     if (onAddNewUser) {
       if (user?.id && user?.name) {
@@ -114,125 +147,135 @@ export const UserSearch: React.FC<UserSearchProps> = ({
 
   if (isLoading) {
     return (
-      <UserList
-        isLoading={true}
-        searchString={query}
-      />
+      <RestoreFocusProvider restoreFocus={activeRestoreFocus}>
+        <UserList
+          isLoading={true}
+          searchString={query}
+        />
+      </RestoreFocusProvider>
     );
   }
   return (
-    <div className={classes.container}>
-      <div className={classes.controls}>
-        <div className={classes.searchAndFilters}>
-          <DsSearch className={classes.searchBar}>
-            <DsSearch.Input
-              aria-label={t('common.search')}
-              placeholder={searchPlaceholder ?? t('advanced_user_search.user_search_placeholder')}
-              value={query}
-              onChange={(event: React.ChangeEvent<HTMLInputElement>) =>
-                setQuery(event.target.value)
-              }
-            />
-            {query && <DsSearch.Clear onClick={() => setQuery('')} />}
-          </DsSearch>
-          {additionalFilters}
-        </div>
-        {canDelegate && AddUserButton && (
-          <div className={classes.buttonRow}>
-            <AddUserButton onComplete={handleAddNewUser} />
-          </div>
-        )}
-      </div>
-
-      <div className={classes.results}>
-        <>
-          {!hasDirectUsers && !isLoading && !isQuery && (
-            <DsParagraph
-              data-size='md'
-              className={classes.tabDescription}
-            >
-              {noUsersText ??
-                t('package_poa_details_page.users_tab.no_users', {
-                  fromparty: formatDisplayName({
-                    fullName: fromParty?.name ?? '',
-                    type: fromParty?.partyTypeName === PartyType.Person ? 'person' : 'company',
-                  }),
-                })}
-            </DsParagraph>
-          )}
-          {isQuery && showIndirectList && (
-            <h3 className={classes.subHeader}>
-              {directConnectionsHeading ?? t('advanced_user_search.direct_connections')}
-            </h3>
-          )}
-          <UserSearchResults
-            users={filteredDirectUsers}
-            hasNextPage={hasNextPage}
-            goNextPage={goNextPage}
-            availableAction={DelegationAction.REVOKE}
-            isActionLoading={isActionLoading}
-            onRevoke={onRevoke}
-            onSelect={onSelect}
-            includeSelfAsChild={includeSelfAsChild}
-            getUserLink={getUserLink}
-            titleAs={titleAs}
-            revokeLabel={revokeLabel}
-          />
-          {showDirectNoResults && (
-            <DsParagraph data-size='md'>
-              {t(
-                hasFiltersOnly
-                  ? 'advanced_user_search.user_no_filter_result'
-                  : 'advanced_user_search.user_no_search_result',
-                { searchTerm: trimmedQuery },
-              )}
-            </DsParagraph>
-          )}
-        </>
-
-        {showIndirectList && (
-          <>
-            <h3 className={classes.subHeader}>
-              {indirectConnectionsHeading ?? t('advanced_user_search.indirect_connections')}
-            </h3>
-            <UserSearchResults
-              users={filteredIndirectUsers}
-              hasNextPage={!!hasNextIndirectPage}
-              goNextPage={goNextIndirectPage}
-              availableAction={DelegationAction.DELEGATE}
-              onDelegate={canDelegate ? onDelegate : undefined}
-              onSelect={onSelect}
-              isActionLoading={isActionLoading}
-              includeSelfAsChild={includeSelfAsChildOnIndirect}
-              delegateLabel={addUserButtonLabel}
-            />
-          </>
-        )}
-
-        {showEmptyState && (
-          <div className={classes.emptyState}>
-            <DsParagraph data-size='md'>
-              {t(
-                canDelegate
-                  ? hasFiltersOnly
-                    ? 'advanced_user_search.user_no_filter_result_with_add_suggestion'
-                    : 'advanced_user_search.user_no_search_result_with_add_suggestion'
-                  : hasFiltersOnly
-                    ? 'advanced_user_search.user_no_filter_result'
-                    : 'advanced_user_search.user_no_search_result',
-                { searchTerm: trimmedQuery || '' },
-              )}
-            </DsParagraph>
-            {canDelegate && AddUserButton && (
-              <AddUserButton
-                isLarge
-                onComplete={handleAddNewUser}
+    <RestoreFocusProvider restoreFocus={activeRestoreFocus}>
+      <div className={classes.container}>
+        <div className={classes.controls}>
+          <div className={classes.searchAndFilters}>
+            <DsSearch className={classes.searchBar}>
+              <DsSearch.Input
+                aria-label={t('common.search')}
+                placeholder={searchPlaceholder ?? t('advanced_user_search.user_search_placeholder')}
+                value={query}
+                onChange={(event: React.ChangeEvent<HTMLInputElement>) =>
+                  setQuery(event.target.value)
+                }
               />
-            )}
+              {query && <DsSearch.Clear onClick={() => setQuery('')} />}
+            </DsSearch>
+            {additionalFilters}
           </div>
-        )}
+          {canDelegate && AddUserButton && (
+            <div className={classes.buttonRow}>
+              <AddUserButton onComplete={handleAddNewUser} />
+            </div>
+          )}
+        </div>
+
+        <div className={classes.results}>
+          <RestoreFocusFallback>
+            <>
+              {!hasDirectUsers && !isLoading && !isQuery && (
+                <DsParagraph
+                  data-size='md'
+                  className={classes.tabDescription}
+                >
+                  {noUsersText ??
+                    t('package_poa_details_page.users_tab.no_users', {
+                      fromparty: formatDisplayName({
+                        fullName: fromParty?.name ?? '',
+                        type: fromParty?.partyTypeName === PartyType.Person ? 'person' : 'company',
+                      }),
+                    })}
+                </DsParagraph>
+              )}
+              {isQuery && showIndirectList && (
+                <h3 className={classes.subHeader}>
+                  {directConnectionsHeading ?? t('advanced_user_search.direct_connections')}
+                </h3>
+              )}
+              <UserSearchResults
+                users={filteredDirectUsers}
+                hasNextPage={hasNextPage}
+                goNextPage={goNextPage}
+                availableAction={DelegationAction.REVOKE}
+                isActionLoading={isActionLoading}
+                onRevoke={onRevoke ? (user) => runInlineAction(onRevoke, user) : undefined}
+                onSelect={onSelect}
+                includeSelfAsChild={includeSelfAsChild}
+                getUserLink={getUserLink}
+                titleAs={titleAs}
+                revokeLabel={revokeLabel}
+              />
+              {showDirectNoResults && (
+                <DsParagraph data-size='md'>
+                  {t(
+                    hasFiltersOnly
+                      ? 'advanced_user_search.user_no_filter_result'
+                      : 'advanced_user_search.user_no_search_result',
+                    { searchTerm: trimmedQuery },
+                  )}
+                </DsParagraph>
+              )}
+            </>
+
+            {showIndirectList && (
+              <>
+                <h3 className={classes.subHeader}>
+                  {indirectConnectionsHeading ?? t('advanced_user_search.indirect_connections')}
+                </h3>
+                <UserSearchResults
+                  users={filteredIndirectUsers}
+                  hasNextPage={!!hasNextIndirectPage}
+                  goNextPage={goNextIndirectPage}
+                  availableAction={DelegationAction.DELEGATE}
+                  onDelegate={
+                    canDelegate && onDelegate
+                      ? (user) => runInlineAction(onDelegate, user)
+                      : undefined
+                  }
+                  onSelect={onSelect}
+                  isActionLoading={isActionLoading}
+                  includeSelfAsChild={includeSelfAsChildOnIndirect}
+                  delegateLabel={addUserButtonLabel}
+                />
+              </>
+            )}
+
+            {showEmptyState && (
+              <div className={classes.emptyState}>
+                <DsParagraph data-size='md'>
+                  {t(
+                    canDelegate
+                      ? hasFiltersOnly
+                        ? 'advanced_user_search.user_no_filter_result_with_add_suggestion'
+                        : 'advanced_user_search.user_no_search_result_with_add_suggestion'
+                      : hasFiltersOnly
+                        ? 'advanced_user_search.user_no_filter_result'
+                        : 'advanced_user_search.user_no_search_result',
+                    { searchTerm: trimmedQuery || '' },
+                  )}
+                </DsParagraph>
+                {canDelegate && AddUserButton && (
+                  <AddUserButton
+                    isLarge
+                    onComplete={handleAddNewUser}
+                  />
+                )}
+              </div>
+            )}
+          </RestoreFocusFallback>
+        </div>
       </div>
-    </div>
+    </RestoreFocusProvider>
   );
 };
 

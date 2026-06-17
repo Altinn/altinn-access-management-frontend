@@ -20,6 +20,8 @@ import type { UserActionTarget } from '../common/UserSearch/types';
 import { usePartyRepresentation } from '../common/PartyRepresentationContext/PartyRepresentationContext';
 import { DelegationAction } from '../common/DelegationModal/EditModal';
 import { PackageUserModal, mapUserToParty, type PackageUserModalHandle } from './PackageUserModal';
+import { useRestoreFocus } from '../common/RestoreFocus';
+import { userRowFocusId } from '../common/UserList/userFocusIds';
 
 interface UsersTabProps {
   accessPackage?: AccessPackage;
@@ -32,6 +34,7 @@ export const UsersTab = ({ accessPackage, isLoading, isFetching }: UsersTabProps
   const { t } = useTranslation();
   const { fromParty, toParty } = usePartyRepresentation();
   const modalRef = useRef<PackageUserModalHandle>(null);
+  const restoreFocus = useRestoreFocus();
   const { queueSnackbar } = useSnackbarOnIdle({ isBusy: isFetching, showPendingOnUnmount: true });
   const { canDelegatePackage, isLoading: isDelegationCheckLoading } =
     useAccessPackageDelegationCheck();
@@ -185,6 +188,7 @@ export const UsersTab = ({ accessPackage, isLoading, isFetching }: UsersTabProps
           isDelegationCheckLoading
         }
         canDelegate={canDelegate}
+        restoreFocus={restoreFocus}
       />
 
       <PackageUserModal
@@ -194,6 +198,7 @@ export const UsersTab = ({ accessPackage, isLoading, isFetching }: UsersTabProps
         isActionLoading={isActionLoading}
         onDelegate={handleOnDelegate}
         onRevoke={handleOnRevoke}
+        onClose={(user) => restoreFocus.requestFocus(userRowFocusId(user.id))}
       />
     </>
   );

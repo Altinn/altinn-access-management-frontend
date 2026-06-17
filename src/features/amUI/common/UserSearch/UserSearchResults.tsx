@@ -78,8 +78,8 @@ export const UserSearchResults: React.FC<UserSearchResultsProps> = ({
                 isLoading={isActionLoading}
                 user={user as ExtendedUser}
                 availableAction={availableAction}
-                onRevoke={onRevoke ? () => onRevoke(user as ExtendedUser) : undefined}
-                onDelegate={onDelegate ? () => onDelegate(user as ExtendedUser) : undefined}
+                onRevoke={onRevoke ? () => onRevoke(mapUserToActionTarget(user)) : undefined}
+                onDelegate={onDelegate ? () => onDelegate(mapUserToActionTarget(user)) : undefined}
                 delegateLabel={delegateLabel}
                 revokeLabel={revokeLabel}
               />
