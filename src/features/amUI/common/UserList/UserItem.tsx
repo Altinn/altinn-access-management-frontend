@@ -18,7 +18,7 @@ import {
 import { ECC_PROVIDER_CODE, useRoleMetadata } from '../UserRoles/useRoleMetadata';
 import { isNewUser } from '../isNewUser';
 import { useRestoreFocusTarget } from '../RestoreFocus';
-import { userRowFocusId } from './userFocusIds';
+import { userActionFocusId, userRowFocusId } from './userFocusIds';
 
 function isExtendedUser(item: ExtendedUser | User): item is ExtendedUser {
   return (item as ExtendedUser).roles !== undefined && Array.isArray((item as ExtendedUser).roles);
@@ -81,6 +81,7 @@ export const UserItem = ({
   const { mapRoles } = useRoleMetadata();
 
   useRestoreFocusTarget(userRowFocusId(user.id));
+  useRestoreFocusTarget(userActionFocusId(user.id));
 
   useEffect(
     () =>

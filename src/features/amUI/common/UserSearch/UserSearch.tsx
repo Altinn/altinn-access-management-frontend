@@ -15,7 +15,7 @@ import { usePartyRepresentation } from '../PartyRepresentationContext/PartyRepre
 import type { UserActionTarget, UserSearchNode } from './types';
 import type { RestoreFocus } from '../RestoreFocus';
 import { RestoreFocusFallback, RestoreFocusProvider, useRestoreFocus } from '../RestoreFocus';
-import { userRowFocusId } from '../UserList/userFocusIds';
+import { userActionFocusId } from '../UserList/userFocusIds';
 
 type UserSearchAction = (user: UserActionTarget) => void;
 
@@ -116,7 +116,8 @@ export const UserSearch: React.FC<UserSearchProps> = ({
   const showEmptyState = isQuery && !directHasResults && !indirectHasResults;
 
   // After an inline delegate/revoke settles (isActionLoading falls true -> false), restore focus to
-  // the acted-on row. If the row is gone (e.g. revoked), RestoreFocusFallback picks it up instead.
+  // the acted-on row's action button (its own id, since the row itself is a button and would
+  // otherwise win). If the row is gone (e.g. revoked), RestoreFocusFallback picks it up instead.
   useEffect(() => {
     const settled = wasActionLoading.current && !isActionLoading;
     wasActionLoading.current = isActionLoading;
@@ -125,7 +126,7 @@ export const UserSearch: React.FC<UserSearchProps> = ({
     }
 
     const frame = requestAnimationFrame(() => {
-      activeRestoreFocus.requestFocus(userRowFocusId(pendingFocusId));
+      activeRestoreFocus.requestFocus(userActionFocusId(pendingFocusId));
       setPendingFocusId(null);
     });
 
