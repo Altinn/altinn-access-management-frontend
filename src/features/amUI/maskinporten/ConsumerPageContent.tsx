@@ -63,14 +63,16 @@ export const ConsumerPageContent = () => {
 
   const handleRemove = (resource: ServiceResource) =>
     remove(resource, {
-      onSuccess: (r) =>
+      onSuccess: (r) => {
         openSnackbar({
           message: t('single_rights.delete_singleRight_success_message', {
             name: consumerName,
             resourceTitle: r.title,
           }),
           color: 'success',
-        }),
+        });
+        restoreFocus.requestFallbackFocus();
+      },
       onError: (r) =>
         openSnackbar({
           message: t('single_rights.delete_singleRight_error_message', {

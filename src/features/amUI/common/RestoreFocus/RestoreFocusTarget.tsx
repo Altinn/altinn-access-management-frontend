@@ -90,18 +90,21 @@ export const RestoreFocusFallback = ({ children }: { children: ReactNode }) => {
   const context = useContext(RestoreFocusContext);
   const wrapperRef = useRef<HTMLDivElement>(null);
   const focusRequestId = context?.focusRequestId;
+  const isFallbackFocusRequested = context?.isFallbackFocusRequested ?? false;
   const containerElement = context?.containerElement;
   const clearRequest = context?.clearRequest;
 
   useEffect(() => {
-    if (!focusRequestId || !containerElement || !clearRequest) {
+    if ((!focusRequestId && !isFallbackFocusRequested) || !containerElement || !clearRequest) {
       return;
     }
 
-    // A target will handle it if the requested id is present in the container.
-    const targetPresent = containerElement.querySelector(`[id="${CSS.escape(focusRequestId)}"]`);
-    if (targetPresent) {
-      return;
+    if (!isFallbackFocusRequested && focusRequestId) {
+      // A target will handle it if the requested id is present in the container.
+      const targetPresent = containerElement.querySelector(`[id="${CSS.escape(focusRequestId)}"]`);
+      if (targetPresent) {
+        return;
+      }
     }
 
     const wrapper = wrapperRef.current;
@@ -120,11 +123,11 @@ export const RestoreFocusFallback = ({ children }: { children: ReactNode }) => {
       return;
     }
 
-    if (focusHasBeenLost()) {
+    if (isFallbackFocusRequested || focusHasBeenLost()) {
       focusElement(elementToFocus);
     }
     clearRequest();
-  }, [clearRequest, containerElement, focusRequestId]);
+  }, [clearRequest, containerElement, focusRequestId, isFallbackFocusRequested]);
 
   return (
     <div

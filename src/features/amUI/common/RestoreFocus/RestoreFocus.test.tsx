@@ -159,6 +159,21 @@ const FallbackWithPreferredTargetTest = () => {
   );
 };
 
+const DirectFallbackFocusTest = () => {
+  const restoreFocus = useRestoreFocus();
+
+  return (
+    <>
+      <button onClick={() => restoreFocus.requestFallbackFocus()}>Delete succeeded</button>
+      <RestoreFocusProvider restoreFocus={restoreFocus}>
+        <RestoreFocusFallback>
+          <h2>List heading</h2>
+        </RestoreFocusFallback>
+      </RestoreFocusProvider>
+    </>
+  );
+};
+
 describe('RestoreFocus', () => {
   it('focuses the first focusable descendant of the requested target element', async () => {
     render(
@@ -291,6 +306,16 @@ describe('RestoreFocus', () => {
         includeItem={false}
       />,
     );
+
+    await waitFor(() =>
+      expect(screen.getByRole('heading', { name: 'List heading' })).toHaveFocus(),
+    );
+  });
+
+  it('focuses the fallback directly when fallback focus is requested', async () => {
+    render(<DirectFallbackFocusTest />);
+
+    fireEvent.click(screen.getByRole('button', { name: 'Delete succeeded' }));
 
     await waitFor(() =>
       expect(screen.getByRole('heading', { name: 'List heading' })).toHaveFocus(),

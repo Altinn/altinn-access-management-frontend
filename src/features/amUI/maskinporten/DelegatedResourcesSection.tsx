@@ -7,7 +7,6 @@ import { useFilteredResources } from '@/features/amUI/common/ResourceList/useFil
 import {
   RestoreFocusFallback,
   RestoreFocusProvider,
-  useRestoreFocusOnRemoval,
   type RestoreFocus,
 } from '@/features/amUI/common/RestoreFocus';
 import { useIsMobileOrSmaller } from '@/resources/utils/screensizeUtils';
@@ -51,13 +50,6 @@ export const DelegatedResourcesSection = ({
   const delegatedResources = (resourcePermissions ?? [])
     .map((delegation) => delegation.resource)
     .filter((resource) => resource.identifier);
-
-  // Restore focus to the heading when an inline delete removes a resource from the list.
-  const requestFocusOnRemoval = useRestoreFocusOnRemoval(
-    restoreFocus,
-    delegatedResources.map((resource) => resource.identifier),
-    isFetching,
-  );
 
   const { resources: filteredResources } = useFilteredResources<ServiceResource>({
     resources: delegatedResources,
@@ -129,7 +121,6 @@ export const DelegatedResourcesSection = ({
                   loading={resourceLoading}
                   disabled={resourceLoading}
                   onClick={() => {
-                    requestFocusOnRemoval(resource.identifier);
                     onRemove(resource);
                   }}
                   aria-label={t('common.delete_poa_for', { poa_object: resource.title })}
