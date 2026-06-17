@@ -16,6 +16,7 @@ interface AreaItemProps {
   showPackagesCount?: boolean;
   showPermissions?: boolean;
   partyType: PartyType;
+  headingLevel?: 2 | 3;
 }
 
 export const AreaItem = ({
@@ -26,6 +27,7 @@ export const AreaItem = ({
   showPackagesCount,
   showPermissions,
   partyType,
+  headingLevel,
 }: AreaItemProps) => {
   const { t } = useTranslation();
   const isSm = useIsMobileOrSmaller();
@@ -65,7 +67,7 @@ export const AreaItem = ({
         ) : undefined
       }
       expanded={expanded}
-      titleAs='h3'
+      titleAs={headingLevel === 2 ? 'h2' : 'h3'}
       onClick={() => toggleExpandedArea(area.id)}
       size='lg'
       border='solid'

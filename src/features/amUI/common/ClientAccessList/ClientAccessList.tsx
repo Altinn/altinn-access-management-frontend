@@ -241,7 +241,7 @@ export const ClientAccessList = ({
           isSubUnit,
           interactive: showModalTrigger,
           as: showModalTrigger ? 'button' : 'div',
-          titleAs: 'h3',
+          titleAs: 'div',
           description: roleDescription ?? '',
           color: (hasAccess ? 'company' : 'neutral') as Color,
           onClick:
@@ -279,7 +279,7 @@ export const ClientAccessList = ({
       collapsible: true,
       interactive: true,
       as: 'button',
-      titleAs: 'h2',
+      titleAs: 'div',
       children:
         nodes.length === 0 && emptyAccessText ? (
           <DsParagraph>{emptyAccessText}</DsParagraph>

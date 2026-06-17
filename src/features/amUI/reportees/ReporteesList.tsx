@@ -80,7 +80,6 @@ export const ReporteesList = () => {
         connections={filterRightHolders || []}
         searchString={searchString}
         isLoading={loadingRightHolders || loadingPartyRepresentation}
-        listItemTitleAs='h2'
         interactive
         canAdd={false} // Cannot add new reportees
         showRoles={false} // Roles are not shown for reportees

@@ -110,11 +110,14 @@
     "description_p1": "Here you can download an overview of all powers of attorney that {{reportee}} has given to others and those who have received them.",
     "description_p2": "The content will be downloaded as CSV files in a ZIP container. \nThe files are not intended for machine reading and we reserve the right to change the format.",
     "start_download": "Start download",
-    "include_subunits_label": "Include powers of attorney in {{reportee}}'s subunits"
+    "include_subunits_label": "Include powers of attorney in {{reportee}}'s subunits",
+    "too_many_subunits_warning": "This organization has too many subunits to include them in the download. We are working on a solution for this, but for now, you must download each subunit separately if you want their information."
   },
   "info_banner": {
     "info": "June 19: the old Altinn will be shut down.",
-    "link": "Here's what you need to be aware of."
+    "info_new": "Altinn has been renewed.",
+    "link": "Here's what you need to be aware of.",
+    "link_new": "This is how you grant new powers of attorney and accesses."
   },
   "header": {
     "access_management": "Access management",
@@ -727,7 +730,7 @@
     "no_access_title": "You do not have access to client administration",
     "page_heading": "Client administration for {{name}}",
     "page_description": "Org.no. {{organisationidentifier}} ({{unitType}})",
-    "forwarding_accesses_info": "New! You can now forward accesses that your business has received from others. These can only be given to private individuals. <a href='https://info.altinn.no/en/help/ny-tilgangsstyring/klientadministrasjon/'>Read more about client administration on the help pages.</a>",
+    "forwarding_accesses_info": "New! You can now forward accesses that your business has received from others. These can only be given to private individuals. <a href='https://info.altinn.no/en/hjelp/klientadministrasjon/'>Read more about client administration on the help pages.</a>",
     "clients_tab_title": "Clients",
     "agents_tab_title": "Users",
     "add_agent_button": "Add new user",
@@ -1138,7 +1141,7 @@
     "alert_body_p2": "Access rights you have previously granted in the old Altinn must now be replaced with new authorizations.",
     "alert_body_p3": "Select the \"Users\" menu item, find the desired user, and assign access packages or individual services.",
     "alert_link": "Step-by-step guide for assigning authorizations",
-    "alert_link_href": "https://info.altinn.no/en/help/ny-tilgangsstyring/steg-for-steg-guider/",
+    "alert_link_href": "https://info.altinn.no/en/hjelp/ny-tilgangsstyring/steg-for-steg-guider/",
     "your_content_heading": "Your powers of attorney",
     "shortcut_links_heading": "Other powers of attorney",
     "other_links_heading": "Other",
@@ -1235,6 +1238,12 @@
     "go_to_profile": "Go to profile",
     "load_user_error": "Could not load user.",
     "not_self_identified_error": "Only email-users can add an account.",
-    "feature_toggled_off": "The option to add an account is turned off."
+    "feature_toggled_off": "Ability to add account is disabled.",
+    "forgot_password_info": "Enter your username, and we will send a link to add account to the email address registered for this username.",
+    "forgot_password_error": "Could not send email. Check that the username is correct.",
+    "no_email_for_username": "We found no email for this username. Check that the username is correct.",
+    "send_link": "Send link",
+    "forgot_password_sent": "We have sent an email to {{email}}.",
+    "add_account_from_token_error": "Could not add account"
   }
 }

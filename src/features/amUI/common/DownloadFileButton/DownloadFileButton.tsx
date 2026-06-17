@@ -1,5 +1,6 @@
 import {
   Button,
+  DsAlert,
   DsDialog,
   DsHeading,
   DsParagraph,
@@ -10,9 +11,16 @@ import { DownloadIcon } from '@navikt/aksel-icons';
 import { useTranslation } from 'react-i18next';
 import { useRef, useState } from 'react';
 import { usePartyRepresentation } from '../PartyRepresentationContext/PartyRepresentationContext';
-import { PartyType, useGetIsAdminQuery } from '@/rtk/features/userInfoApi';
+import {
+  PartyType,
+  useGetIsAdminQuery,
+  useGetReporteeListForAuthorizedUserQuery,
+} from '@/rtk/features/userInfoApi';
 
 import classes from './DownloadFileButton.module.css';
+import { isSubUnitByType } from '@/resources/utils/reporteeUtils';
+
+const MAX_SUBUNITS_FOR_DOWNLOAD_OPTION = 500;
 
 export interface DownloadFileButtonProps {
   size?: 'xs' | 'sm' | 'md' | 'lg';
@@ -33,6 +41,16 @@ export const DownloadFileButton = ({
   const { data: isAdmin } = useGetIsAdminQuery();
   const { fromParty } = usePartyRepresentation();
   const reporteeName = formatDisplayName({ fullName: fromParty?.name || '', type: 'company' });
+  const { data: accountList } = useGetReporteeListForAuthorizedUserQuery(undefined, {
+    skip: !isAdmin || fromParty?.partyTypeName !== PartyType.Organization,
+  });
+  const fromAccountSubunitsNumber =
+    accountList?.find((account) => account.partyUuid === fromParty?.partyUuid)?.subunits?.length ||
+    0;
+  const allowSubunitDownload =
+    !isSubUnitByType(fromParty?.variant) &&
+    fromAccountSubunitsNumber > 0 &&
+    fromAccountSubunitsNumber <= MAX_SUBUNITS_FOR_DOWNLOAD_OPTION;
 
   const handleDownload = () => {
     if (!fromParty) return;
@@ -89,11 +107,22 @@ export const DownloadFileButton = ({
               {t('download_file.description_p1', { reportee: reporteeName })}
             </DsParagraph>
             <DsParagraph>{t('download_file.description_p2')}</DsParagraph>
-            <DsSwitch
-              checked={includeSubunits}
-              onChange={(event) => setIncludeSubunits(event.target.checked)}
-              label={t('download_file.include_subunits_label', { reportee: reporteeName })}
-            />
+            {allowSubunitDownload && (
+              <DsSwitch
+                checked={includeSubunits}
+                onChange={(event) => setIncludeSubunits(event.target.checked)}
+                label={t('download_file.include_subunits_label', { reportee: reporteeName })}
+              />
+            )}
+            {fromAccountSubunitsNumber > MAX_SUBUNITS_FOR_DOWNLOAD_OPTION && (
+              <DsAlert
+                data-color='warning'
+                data-size='sm'
+                className={classes.warning}
+              >
+                <DsParagraph>{t('download_file.too_many_subunits_warning')}</DsParagraph>
+              </DsAlert>
+            )}
             <div className={classes.buttons}>
               <Button
                 variant='primary'

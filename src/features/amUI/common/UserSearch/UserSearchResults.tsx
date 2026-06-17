@@ -11,8 +11,6 @@ import classes from './UserSearch.module.css';
 import { isSubUnitByType } from '@/resources/utils/reporteeUtils';
 import type { UserActionTarget, UserSearchNode } from './types';
 
-export type titleAsType = 'h1' | 'h2' | 'h3' | 'h4' | 'h5' | 'h6' | 'p' | 'div' | 'span';
-
 export interface UserSearchResultsProps {
   users: UserSearchNode[];
   hasNextPage: boolean;
@@ -26,7 +24,6 @@ export interface UserSearchResultsProps {
   delegateLabel?: string;
   revokeLabel?: string;
   getUserLink?: (user: UserActionTarget) => string;
-  titleAs?: titleAsType;
 }
 
 const mapUserToActionTarget = (user: UserSearchNode | ExtendedUser | User): UserActionTarget => ({
@@ -52,7 +49,6 @@ export const UserSearchResults: React.FC<UserSearchResultsProps> = ({
   delegateLabel,
   revokeLabel,
   getUserLink,
-  titleAs = 'h4',
 }) => {
   const { t } = useTranslation();
   const isInteractive = !!getUserLink;
@@ -67,7 +63,6 @@ export const UserSearchResults: React.FC<UserSearchResultsProps> = ({
             key={user.id}
             user={user}
             size='md'
-            titleAs={titleAs}
             interactive={isInteractive}
             linkTo={getUserLink ? getUserLink(user) : undefined}
             onSelect={onSelect ? (user) => onSelect(mapUserToActionTarget(user)) : undefined}

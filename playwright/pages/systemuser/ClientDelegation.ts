@@ -49,22 +49,23 @@ export class ClientDelegationPage {
     return this.page.getByRole('link', { name });
   }
 
+  // Klientraden i listen. I noen miljøer rendres klientnavnet som heading
+  // (level 3), i andre som ren tekst i listeelementet. Vi scoper derfor til
+  // selve listeelementet via navnetekst i stedet for å kreve heading-rollen.
+  clientRow(orgName: string): Locator {
+    return this.page.getByRole('listitem').filter({ hasText: orgName });
+  }
+
   ownOrgHeading(orgName: string): Locator {
-    return this.page.getByRole('heading', { name: orgName, level: 3 });
+    return this.clientRow(orgName);
   }
 
   ownOrgNumber(orgName: string, formattedOrgNo: string): Locator {
-    return this.page
-      .getByRole('listitem')
-      .filter({ has: this.page.getByRole('heading', { name: orgName, level: 3 }) })
-      .getByText(formattedOrgNo, { exact: true });
+    return this.clientRow(orgName).getByText(formattedOrgNo);
   }
 
   clientOrgNumber(orgName: string, formattedOrgNo: string): Locator {
-    return this.page
-      .getByRole('listitem')
-      .filter({ has: this.page.getByRole('heading', { name: orgName, level: 3 }) })
-      .getByText(formattedOrgNo, { exact: true });
+    return this.clientRow(orgName).getByText(formattedOrgNo);
   }
 
   addCustomerButtonByName(name: string): Locator {
