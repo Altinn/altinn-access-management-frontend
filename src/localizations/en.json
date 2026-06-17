@@ -1141,7 +1141,7 @@
     "alert_body_p2": "Access rights you have previously granted in the old Altinn must now be replaced with new authorizations.",
     "alert_body_p3": "Select the \"Users\" menu item, find the desired user, and assign access packages or individual services.",
     "alert_link": "Step-by-step guide for assigning authorizations",
-    "alert_link_href": "https://info.altinn.no/en/help/ny-tilgangsstyring/steg-for-steg-guider/",
+    "alert_link_href": "https://info.altinn.no/en/hjelp/ny-tilgangsstyring/steg-for-steg-guider/",
     "your_content_heading": "Your powers of attorney",
     "shortcut_links_heading": "Other powers of attorney",
     "other_links_heading": "Other",
