@@ -14,6 +14,7 @@ import { usePartyRepresentation } from '../common/PartyRepresentationContext/Par
 import { useGetInstancesQuery } from '@/rtk/features/instanceApi';
 import type { UserActionTarget } from '../common/UserSearch/types';
 import type { UserSearchProps } from '../common/UserSearch/UserSearch';
+import type { RestoreFocus } from '../common/RestoreFocus';
 
 interface InstanceUsersAsAdminProps {
   resourceId: string;
@@ -23,6 +24,7 @@ interface InstanceUsersAsAdminProps {
   onDelegate: (user: UserActionTarget) => void;
   onRevoke: (user: UserActionTarget) => void;
   isRevoking: boolean;
+  restoreFocus?: RestoreFocus;
 }
 
 export const InstanceUsersAsAdmin = ({
@@ -33,6 +35,7 @@ export const InstanceUsersAsAdmin = ({
   onDelegate,
   onRevoke,
   isRevoking,
+  restoreFocus,
 }: InstanceUsersAsAdminProps) => {
   const { t, i18n } = useTranslation();
   const { actingParty, fromParty } = usePartyRepresentation();
@@ -128,6 +131,7 @@ export const InstanceUsersAsAdmin = ({
         onDelegate={onDelegate}
         onSelect={onSelect}
         onRevoke={onRevoke}
+        restoreFocus={restoreFocus}
       />
     </>
   );

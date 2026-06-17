@@ -4,6 +4,12 @@ import * as React from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { useFilteredResources } from '@/features/amUI/common/ResourceList/useFilteredResources';
+import {
+  RestoreFocusFallback,
+  RestoreFocusProvider,
+  useRestoreFocusOnRemoval,
+  type RestoreFocus,
+} from '@/features/amUI/common/RestoreFocus';
 import { useIsMobileOrSmaller } from '@/resources/utils/screensizeUtils';
 import type {
   ResourceDelegation,
@@ -21,6 +27,7 @@ interface DelegatedResourcesSectionProps {
   onRemove: (resource: ServiceResource) => void;
   onResourceClick: (resource: ServiceResource) => void;
   isResourceLoading: (resourceId: string) => boolean;
+  restoreFocus: RestoreFocus;
   addNewResourceButton?: React.ReactNode;
   editModal?: React.ReactNode;
 }
@@ -32,6 +39,7 @@ export const DelegatedResourcesSection = ({
   onRemove,
   onResourceClick,
   isResourceLoading,
+  restoreFocus,
   addNewResourceButton,
   editModal,
 }: DelegatedResourcesSectionProps) => {
@@ -43,6 +51,13 @@ export const DelegatedResourcesSection = ({
   const delegatedResources = (resourcePermissions ?? [])
     .map((delegation) => delegation.resource)
     .filter((resource) => resource.identifier);
+
+  // Restore focus to the heading when an inline delete removes a resource from the list.
+  const requestFocusOnRemoval = useRestoreFocusOnRemoval(
+    restoreFocus,
+    delegatedResources.map((resource) => resource.identifier),
+    isFetching,
+  );
 
   const { resources: filteredResources } = useFilteredResources<ServiceResource>({
     resources: delegatedResources,
@@ -73,61 +88,68 @@ export const DelegatedResourcesSection = ({
   }, [delegatedResources]);
 
   return (
-    <section className={classes.resourceSection}>
-      <DsHeading
-        level={2}
-        data-size='xs'
-      >
-        {t('maskinporten_page.delegated_resources_heading', { count: delegatedResources.length })}
-      </DsHeading>
-      {hasError ? (
-        <DsAlert data-color='danger'>
-          <DsParagraph>{t('maskinporten_page.delegated_resources_error')}</DsParagraph>
-        </DsAlert>
-      ) : isFetching && !resourcePermissions ? (
-        <DsSkeleton
-          width='100%'
-          height='2.5rem'
-        />
-      ) : (
-        <ScopeList
-          addNewResourceButton={addNewResourceButton}
-          resources={filteredResources}
-          search={search}
-          setSearch={setSearch}
-          filterState={filterState}
-          setFilterState={setFilterState}
-          serviceOwnerOptions={serviceOwnerOptions}
-          onSelect={onResourceClick}
-          renderControls={(resource) => {
-            if (isMobile) return null;
-            const resourceLoading = isResourceLoading(resource.identifier);
-            return (
-              <Button
-                variant='tertiary'
-                size='sm'
-                loading={resourceLoading}
-                disabled={resourceLoading}
-                onClick={() => {
-                  onRemove(resource);
-                }}
-                aria-label={t('common.delete_poa_for', { poa_object: resource.title })}
-              >
-                <MinusCircleIcon aria-hidden='true' />
-                {t('common.delete_poa')}
-              </Button>
-            );
-          }}
-          emptyState={
-            <DsParagraph data-size='md'>
-              {delegatedResources.length === 0
-                ? t('maskinporten_page.no_delegated_resources')
-                : t('resource_list.no_resources_filtered', { searchTerm: search })}
-            </DsParagraph>
-          }
-        />
-      )}
-      {editModal}
-    </section>
+    <RestoreFocusProvider restoreFocus={restoreFocus}>
+      <section className={classes.resourceSection}>
+        <RestoreFocusFallback>
+          <DsHeading
+            level={2}
+            data-size='xs'
+          >
+            {t('maskinporten_page.delegated_resources_heading', {
+              count: delegatedResources.length,
+            })}
+          </DsHeading>
+        </RestoreFocusFallback>
+        {hasError ? (
+          <DsAlert data-color='danger'>
+            <DsParagraph>{t('maskinporten_page.delegated_resources_error')}</DsParagraph>
+          </DsAlert>
+        ) : isFetching && !resourcePermissions ? (
+          <DsSkeleton
+            width='100%'
+            height='2.5rem'
+          />
+        ) : (
+          <ScopeList
+            addNewResourceButton={addNewResourceButton}
+            resources={filteredResources}
+            search={search}
+            setSearch={setSearch}
+            filterState={filterState}
+            setFilterState={setFilterState}
+            serviceOwnerOptions={serviceOwnerOptions}
+            onSelect={onResourceClick}
+            renderControls={(resource) => {
+              if (isMobile) return null;
+              const resourceLoading = isResourceLoading(resource.identifier);
+              return (
+                <Button
+                  variant='tertiary'
+                  size='sm'
+                  loading={resourceLoading}
+                  disabled={resourceLoading}
+                  onClick={() => {
+                    requestFocusOnRemoval(resource.identifier);
+                    onRemove(resource);
+                  }}
+                  aria-label={t('common.delete_poa_for', { poa_object: resource.title })}
+                >
+                  <MinusCircleIcon aria-hidden='true' />
+                  {t('common.delete_poa')}
+                </Button>
+              );
+            }}
+            emptyState={
+              <DsParagraph data-size='md'>
+                {delegatedResources.length === 0
+                  ? t('maskinporten_page.no_delegated_resources')
+                  : t('resource_list.no_resources_filtered', { searchTerm: search })}
+              </DsParagraph>
+            }
+          />
+        )}
+        {editModal}
+      </section>
+    </RestoreFocusProvider>
   );
 };

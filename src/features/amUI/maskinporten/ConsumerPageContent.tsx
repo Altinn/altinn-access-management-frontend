@@ -18,6 +18,7 @@ import { DelegationAction, EditModal } from '../common/DelegationModal/EditModal
 import { PageContainer } from '../common/PageContainer/PageContainer';
 import { UserPageHeader } from '../common/UserPageHeader/UserPageHeader';
 import { usePartyRepresentation } from '../common/PartyRepresentationContext/PartyRepresentationContext';
+import { useRestoreFocus } from '../common/RestoreFocus';
 import { MaskinportenDeleteDialog } from './MaskinportenDeleteDialog';
 import { DelegatedResourcesSection } from './DelegatedResourcesSection';
 
@@ -28,6 +29,7 @@ export const ConsumerPageContent = () => {
   const navigate = useNavigate();
   const { openSnackbar } = useSnackbar();
   const { fromParty, actingParty } = usePartyRepresentation();
+  const restoreFocus = useRestoreFocus();
   const deleteDialogRef = React.useRef<HTMLDialogElement>(null);
   const scopeModalRef = React.useRef<HTMLDialogElement>(null);
   const [selectedResource, setSelectedResource] = React.useState<ServiceResource | null>(null);
@@ -126,6 +128,7 @@ export const ConsumerPageContent = () => {
         hasError={!!resourcesError}
         onRemove={handleRemove}
         isResourceLoading={isLoading}
+        restoreFocus={restoreFocus}
         onResourceClick={(r) => {
           setSelectedResource(r);
           scopeModalRef.current?.showModal();
@@ -135,7 +138,12 @@ export const ConsumerPageContent = () => {
             ref={scopeModalRef}
             maskinportenScope={selectedResource ?? undefined}
             availableActions={[DelegationAction.REVOKE]}
-            onClose={() => setSelectedResource(null)}
+            onClose={() => {
+              if (selectedResource) {
+                restoreFocus.requestFocus(selectedResource.identifier);
+              }
+              setSelectedResource(null);
+            }}
           />
         }
       />

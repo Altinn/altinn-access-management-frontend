@@ -71,6 +71,10 @@ export const SearchResults = ({
       onDeleteRequestError: (resource) => {
         onSelect(resource);
       },
+      // Restore focus to the inline button after the request/delete-request swap settles, mirroring
+      // the delegate/revoke path above.
+      onCreateRequestSuccess: (resource) => setPendingActionFocusId(resource.identifier),
+      onDeleteRequestSuccess: (resource) => setPendingActionFocusId(resource.identifier),
     });
 
   const { delegateFromList, revokeFromList, isResourceLoading } = useResourceListDelegation({

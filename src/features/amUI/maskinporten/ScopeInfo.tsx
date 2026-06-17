@@ -163,6 +163,53 @@ export const ScopeInfo = ({
     };
   }, []);
 
+  // Delegate/revoke replaces the action button in place (via the loading/success animation).
+  // Move focus to the resulting button once it settles, but don't steal focus if the user moved
+  // it elsewhere during the animation.
+  const actionsRef = useRef<HTMLDivElement>(null);
+  const pendingActionFocusRef = useRef(false);
+
+  useEffect(() => {
+    if (isActionLoading) {
+      pendingActionFocusRef.current = true;
+    }
+  }, [isActionLoading]);
+
+  useEffect(() => {
+    if (
+      !pendingActionFocusRef.current ||
+      isActionLoading ||
+      actionSuccess ||
+      isDelegatedResourceListLoading ||
+      isDelegationCheckLoading
+    ) {
+      return;
+    }
+    const focusTarget =
+      actionsRef.current?.querySelector<HTMLButtonElement>('button:not([disabled])');
+    if (!focusTarget) {
+      pendingActionFocusRef.current = false;
+      return;
+    }
+
+    const activeElement = focusTarget.ownerDocument.activeElement;
+    const userMovedFocus =
+      activeElement instanceof HTMLElement &&
+      activeElement !== focusTarget.ownerDocument.body &&
+      !actionsRef.current?.contains(activeElement);
+    pendingActionFocusRef.current = false;
+    if (userMovedFocus) {
+      return;
+    }
+    focusTarget.focus();
+  }, [
+    hasDelegatedResource,
+    isActionLoading,
+    actionSuccess,
+    isDelegatedResourceListLoading,
+    isDelegationCheckLoading,
+  ]);
+
   const handleSuccess = () => {
     setActionError(null);
     setActionSuccess(true);
@@ -248,7 +295,10 @@ export const ScopeInfo = ({
               )}
             </div>
             {(hasDelegatedResource && canRevoke) || (!hasDelegatedResource && canDelegate) ? (
-              <div className={classes.editButtons}>
+              <div
+                ref={actionsRef}
+                className={classes.editButtons}
+              >
                 {hasDelegatedResource ? (
                   <Button
                     size='sm'

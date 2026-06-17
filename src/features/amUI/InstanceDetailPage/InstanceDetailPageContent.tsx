@@ -29,6 +29,8 @@ import {
   toInstancePresentationData,
 } from '../common/InstanceList/instanceListUtils';
 import { InstanceDescription } from '../common/InstanceDescription/InstanceDescription';
+import { useRestoreFocus } from '../common/RestoreFocus';
+import { userRowFocusId } from '../common/UserList/userFocusIds';
 
 import classes from './InstanceDetailPageContent.module.css';
 import { RequestInstanceAdminPackage } from './RequestInstanceAdminPackage';
@@ -41,6 +43,7 @@ export const InstanceDetailPageContent = () => {
   const actingPartyIsOrg = actingParty?.partyTypeName === PartyType.Organization;
 
   const modalRef = useRef<HTMLDialogElement>(null);
+  const restoreFocus = useRestoreFocus();
   const [selectedUser, setSelectedUser] = useState<UserActionTarget | null>(null);
   const [selectedUserMode, setSelectedUserMode] = useState<'edit' | 'delegate'>('edit');
   const [actionError, setActionError] = useState<ActionError | null>(null);
@@ -251,6 +254,7 @@ export const InstanceDetailPageContent = () => {
               onDelegate={handleIndirectUserDelegate}
               onRevoke={handleRevoke}
               isRevoking={isRevoking}
+              restoreFocus={restoreFocus}
             />
           ) : isInstanceAdmin ? (
             <InstanceUsersAsInstanceAdmin
@@ -258,6 +262,7 @@ export const InstanceDetailPageContent = () => {
               instanceUrn={instanceUrn}
               AddUserButton={InstanceAddUserButton}
               onDelegate={handleIndirectUserDelegate}
+              restoreFocus={restoreFocus}
             />
           ) : null}
         </div>
@@ -277,6 +282,9 @@ export const InstanceDetailPageContent = () => {
           openWithError={actionError}
           onSuccess={selectedUserMode === 'delegate' ? () => modalRef.current?.close() : undefined}
           onClose={() => {
+            // Return focus to the row that opened the modal; if it was removed (e.g. revoked in
+            // the modal) RestoreFocusFallback in UserSearch catches it.
+            restoreFocus.requestFocus(userRowFocusId(selectedUser.id));
             setSelectedUser(null);
             setActionError(null);
           }}

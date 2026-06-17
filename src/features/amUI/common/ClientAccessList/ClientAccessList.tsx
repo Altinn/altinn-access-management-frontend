@@ -1,4 +1,4 @@
-import React, { useRef, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import {
   AccessPackageListItemProps,
@@ -20,14 +20,28 @@ import {
 import { buildClientParentNameById, buildClientSortKey } from '../clientSortUtils';
 import { useRoleMetadata } from '../UserRoles/useRoleMetadata';
 import { AccessPackageListItems } from '../AccessPackageListItems/AccessPackageListItems';
+import {
+  clientPackageActionFocusId,
+  clientPackageRowFocusId,
+} from '../AccessPackageListItems/clientPackageFocusIds';
 import { UserListItems, type UserListItemData } from '../UserListItems/UserListItems';
 import {
   ClientPackageInfoModal,
   type ClientPackageModalData,
 } from '../DelegationModal/AccessPackages/ClientPackageInfoModal';
+import { RestoreFocusProvider, useRestoreFocus } from '../RestoreFocus';
 import { useIsMobileOrSmaller } from '@/resources/utils/screensizeUtils';
 import { PartyType } from '@/rtk/features/userInfoApi';
 import type { Party } from '@/rtk/features/lookupApi';
+
+// Tracks an inline delegate/revoke awaiting settle, so focus can be restored to the action button
+// once its row's access has flipped (the "Gi"/"Slett" button swapped in place).
+interface PendingSwapFocus {
+  focusId: string;
+  clientId: string;
+  packageId: string;
+  expectedHasAccess: boolean;
+}
 
 export type ClientAccessPackageAction = {
   clientId: string;
@@ -82,9 +96,39 @@ export const ClientAccessList = ({
   const isMobileOrSmaller = useIsMobileOrSmaller();
   const modalRef = useRef<HTMLDialogElement>(null);
   const [selected, setSelected] = useState<ClientPackageModalData | null>(null);
+  const restoreFocus = useRestoreFocus();
+  const [pendingSwapFocus, setPendingSwapFocus] = useState<PendingSwapFocus | null>(null);
   const clientsForAccessState = accessStateClients ?? clients;
   const parentNameById = buildClientParentNameById(clients);
   const sortedClients = sortClientsByKey(clients, parentNameById);
+
+  const clientHasPackage = (clientId: string, packageId: string) =>
+    clientsForAccessState.some(
+      (aap) =>
+        aap.client.id === clientId &&
+        aap.access.some((p) => p.packages.some((ap) => ap.id === packageId)),
+    );
+
+  // Once an inline delegate/revoke has settled (the row's access flipped to the expected value and
+  // the "Gi"/"Slett" button re-rendered in place), restore focus to that button.
+  useEffect(() => {
+    if (!pendingSwapFocus) {
+      return;
+    }
+    const hasAccess = clientsForAccessState.some(
+      (aap) =>
+        aap.client.id === pendingSwapFocus.clientId &&
+        aap.access.some((p) => p.packages.some((ap) => ap.id === pendingSwapFocus.packageId)),
+    );
+    if (hasAccess !== pendingSwapFocus.expectedHasAccess) {
+      return;
+    }
+    const frame = requestAnimationFrame(() => {
+      restoreFocus.requestFocus(pendingSwapFocus.focusId);
+      setPendingSwapFocus(null);
+    });
+    return () => cancelAnimationFrame(frame);
+  }, [clientsForAccessState, pendingSwapFocus, restoreFocus]);
 
   const userListItems: UserListItemData[] = sortedClients.map((client) => {
     const clientId = client.client.id;
@@ -105,12 +149,7 @@ export const ClientAccessList = ({
 
       const roleName = getRoleMetadata(access.role.id)?.name ?? access.role.name;
       const packages = access.packages?.map<AccessPackageListItemProps>((pkg) => {
-        const hasAccess = clientsForAccessState.some((aap) => {
-          return (
-            aap.client.id === clientId &&
-            aap.access.some((p) => p.packages.some((ap) => ap.id === pkg.id))
-          );
-        });
+        const hasAccess = clientHasPackage(clientId, pkg.id);
         const accessPackage = getAccessPackageById(pkg.id);
         const actionIsDelegable = accessPackage?.isDelegable ?? false;
         const showAction = !requireDelegableForActions || actionIsDelegable;
@@ -149,14 +188,25 @@ export const ClientAccessList = ({
 
         const action = hasAccess ? onRevoke : onDelegate;
         const showModalTrigger = showAction && !!accessPackage && !!action;
+        const rowFocusId = clientPackageRowFocusId(clientId, pkg.id);
+        const actionFocusId = clientPackageActionFocusId(rowFocusId);
 
         let controls: React.ReactNode;
         if (!isMobileOrSmaller && showAction && hasAccess && onRevoke) {
           controls = (
             <Button
+              id={actionFocusId}
               variant='tertiary'
               disabled={removeDisabled}
-              onClick={() => onRevoke()}
+              onClick={() => {
+                setPendingSwapFocus({
+                  focusId: actionFocusId,
+                  clientId,
+                  packageId: pkg.id,
+                  expectedHasAccess: false,
+                });
+                onRevoke();
+              }}
             >
               <MinusCircleIcon aria-hidden='true' />
               {t('client_administration_page.remove_package_button')}
@@ -165,9 +215,18 @@ export const ClientAccessList = ({
         } else if (!isMobileOrSmaller && showAction && !hasAccess && onDelegate) {
           controls = (
             <Button
+              id={actionFocusId}
               variant='tertiary'
               disabled={addDisabled}
-              onClick={() => onDelegate()}
+              onClick={() => {
+                setPendingSwapFocus({
+                  focusId: actionFocusId,
+                  clientId,
+                  packageId: pkg.id,
+                  expectedHasAccess: true,
+                });
+                onDelegate();
+              }}
             >
               <PlusCircleIcon aria-hidden='true' />
               {t('client_administration_page.delegate_package_button')}
@@ -176,7 +235,7 @@ export const ClientAccessList = ({
         }
 
         return {
-          id: pkg.id,
+          id: rowFocusId,
           name: packageName,
           type: userType,
           isSubUnit,
@@ -243,16 +302,12 @@ export const ClientAccessList = ({
   const modalData: ClientPackageModalData | undefined = selected
     ? {
         ...selected,
-        userHasAccess: clientsForAccessState.some(
-          (aap) =>
-            aap.client.id === selected.party.partyUuid &&
-            aap.access.some((p) => p.packages.some((ap) => ap.id === selected.accessPackage.id)),
-        ),
+        userHasAccess: clientHasPackage(selected.party.partyUuid, selected.accessPackage.id),
       }
     : undefined;
 
   return (
-    <>
+    <RestoreFocusProvider restoreFocus={restoreFocus}>
       <UserListItems
         items={userListItems}
         searchPlaceholder={searchPlaceholder}
@@ -260,8 +315,16 @@ export const ClientAccessList = ({
       <ClientPackageInfoModal
         ref={modalRef}
         data={modalData}
-        onClose={() => setSelected(null)}
+        onClose={() => {
+          // Return focus to the package row that opened the modal.
+          if (selected) {
+            restoreFocus.requestFocus(
+              clientPackageRowFocusId(selected.party.partyUuid, selected.accessPackage.id),
+            );
+          }
+          setSelected(null);
+        }}
       />
-    </>
+    </RestoreFocusProvider>
   );
 };
