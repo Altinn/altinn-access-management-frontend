@@ -26,6 +26,7 @@ export interface UserSearchProps {
   isActionLoading?: boolean;
   canDelegate?: boolean;
   AddUserButton?: React.ReactNode;
+  EmptyStateAddUserButton?: React.ReactNode;
   noUsersText?: string;
   searchPlaceholder?: string;
   addUserButtonLabel?: string;
@@ -56,6 +57,7 @@ export const UserSearch: React.FC<UserSearchProps> = ({
   isActionLoading = false,
   canDelegate = true,
   AddUserButton,
+  EmptyStateAddUserButton,
   noUsersText,
   searchPlaceholder,
   addUserButtonLabel,
@@ -208,7 +210,7 @@ export const UserSearch: React.FC<UserSearchProps> = ({
                 { searchTerm: trimmedQuery || '' },
               )}
             </DsParagraph>
-            {canDelegate && AddUserButton && <div>{AddUserButton}</div>}
+            {canDelegate && EmptyStateAddUserButton}
           </div>
         )}
       </div>

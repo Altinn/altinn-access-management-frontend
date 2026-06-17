@@ -23,7 +23,6 @@ import { EnvelopeClosedIcon } from '@navikt/aksel-icons';
 import { DelegationAction, EditModal } from '../common/DelegationModal/EditModal';
 import type { ActionError } from '@/resources/hooks/useActionError';
 import type { UserActionTarget } from '../common/UserSearch/types';
-import { AddUserButton } from './AddUserModal';
 import {
   getInboxLinkData,
   toInstancePresentationData,
@@ -234,13 +233,6 @@ export const InstanceDetailPageContent = () => {
             <InstanceUsersAsAdmin
               resourceId={resourceId}
               instanceUrn={instanceUrn}
-              AddUserButton={
-                <AddUserButton
-                  isLarge={true}
-                  resourceId={resourceId}
-                  instanceUrn={instanceUrn}
-                />
-              }
               onSelect={handleUserSelect}
               onDelegate={handleIndirectUserDelegate}
               onRevoke={handleRevoke}
@@ -250,13 +242,6 @@ export const InstanceDetailPageContent = () => {
             <InstanceUsersAsInstanceAdmin
               resourceId={resourceId}
               instanceUrn={instanceUrn}
-              AddUserButton={
-                <AddUserButton
-                  isLarge={true}
-                  resourceId={resourceId}
-                  instanceUrn={instanceUrn}
-                />
-              }
               onDelegate={handleIndirectUserDelegate}
             />
           ) : null}

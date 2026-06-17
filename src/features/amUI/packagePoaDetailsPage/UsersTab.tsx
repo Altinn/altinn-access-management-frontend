@@ -179,6 +179,12 @@ export const UsersTab = ({ accessPackage, isLoading, isFetching }: UsersTabProps
             onComplete={handleOnDelegate}
           />
         }
+        EmptyStateAddUserButton={
+          <NewUserButton
+            isLarge={true}
+            onComplete={handleOnDelegate}
+          />
+        }
         onRevoke={handleOnRevoke}
         onSelect={(user) => modalRef.current?.open(user)}
         isActionLoading={

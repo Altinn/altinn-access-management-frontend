@@ -108,7 +108,14 @@ export const ClientAdministrationAgentsTab = ({ isActive }: ClientAdministration
         isActionLoading={isIndirectFetching || isAdding}
         AddUserButton={
           <AddAgentButton
-            isLarge={false}
+            variant='secondary'
+            onComplete={(user) => navigate(`/clientadministration/agent/${user.id}`)}
+          />
+        }
+        EmptyStateAddUserButton={
+          <AddAgentButton
+            variant='primary'
+            isLarge
             onComplete={(user) => navigate(`/clientadministration/agent/${user.id}`)}
           />
         }

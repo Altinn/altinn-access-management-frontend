@@ -180,7 +180,7 @@ export const ClientDetails = () => {
                       addUserButton={
                         <AddAgentButton
                           onComplete={onUserAdded}
-                          isLarge
+                          variant='primary'
                         />
                       }
                     />
