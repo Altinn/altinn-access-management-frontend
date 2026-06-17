@@ -11,11 +11,10 @@ import { User } from '@/rtk/features/userInfoApi';
 
 interface AddAgentButtonProps {
   variant: 'primary' | 'secondary';
-  isLarge?: boolean;
   onComplete?: (user: User) => void;
 }
 
-export const AddAgentButton: React.FC<AddAgentButtonProps> = ({ variant, isLarge, onComplete }) => {
+export const AddAgentButton: React.FC<AddAgentButtonProps> = ({ variant, onComplete }) => {
   const modalRef = useRef<HTMLDialogElement>(null);
   const { t } = useTranslation();
 
@@ -24,7 +23,6 @@ export const AddAgentButton: React.FC<AddAgentButtonProps> = ({ variant, isLarge
       <DsButton
         variant={variant}
         onClick={() => modalRef.current?.showModal()}
-        className={isLarge ? classes.largeButton : undefined}
       >
         <PlusIcon aria-hidden='true' />
         {t('client_administration_page.add_agent_button')}

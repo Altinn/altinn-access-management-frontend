@@ -26,7 +26,6 @@ export interface UserSearchProps {
   isActionLoading?: boolean;
   canDelegate?: boolean;
   AddUserButton?: React.ReactNode;
-  EmptyStateAddUserButton?: React.ReactNode;
   noUsersText?: string;
   searchPlaceholder?: string;
   addUserButtonLabel?: string;
@@ -57,7 +56,6 @@ export const UserSearch: React.FC<UserSearchProps> = ({
   isActionLoading = false,
   canDelegate = true,
   AddUserButton,
-  EmptyStateAddUserButton,
   noUsersText,
   searchPlaceholder,
   addUserButtonLabel,
@@ -200,17 +198,12 @@ export const UserSearch: React.FC<UserSearchProps> = ({
           <div className={classes.emptyState}>
             <DsParagraph data-size='md'>
               {t(
-                canDelegate
-                  ? hasFiltersOnly
-                    ? 'advanced_user_search.user_no_filter_result_with_add_suggestion'
-                    : 'advanced_user_search.user_no_search_result_with_add_suggestion'
-                  : hasFiltersOnly
-                    ? 'advanced_user_search.user_no_filter_result'
-                    : 'advanced_user_search.user_no_search_result',
+                hasFiltersOnly
+                  ? 'advanced_user_search.user_no_filter_result'
+                  : 'advanced_user_search.user_no_search_result',
                 { searchTerm: trimmedQuery || '' },
               )}
             </DsParagraph>
-            {canDelegate && EmptyStateAddUserButton}
           </div>
         )}
       </div>

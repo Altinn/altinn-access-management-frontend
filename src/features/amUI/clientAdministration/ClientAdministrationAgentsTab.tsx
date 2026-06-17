@@ -112,13 +112,6 @@ export const ClientAdministrationAgentsTab = ({ isActive }: ClientAdministration
             onComplete={(user) => navigate(`/clientadministration/agent/${user.id}`)}
           />
         }
-        EmptyStateAddUserButton={
-          <AddAgentButton
-            variant='primary'
-            isLarge
-            onComplete={(user) => navigate(`/clientadministration/agent/${user.id}`)}
-          />
-        }
         addUserButtonLabel={t('client_administration_page.add_agent_button_short')}
         onDelegate={(user) => {
           handleAddAgent(user.id);

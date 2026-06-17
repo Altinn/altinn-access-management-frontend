@@ -175,13 +175,7 @@ export const UsersTab = ({ accessPackage, isLoading, isFetching }: UsersTabProps
         onDelegate={canDelegate ? handleOnDelegate : undefined}
         AddUserButton={
           <NewUserButton
-            isLarge={true}
-            onComplete={handleOnDelegate}
-          />
-        }
-        EmptyStateAddUserButton={
-          <NewUserButton
-            isLarge={true}
+            variant='primary'
             onComplete={handleOnDelegate}
           />
         }
