@@ -177,7 +177,12 @@ export const ClientDetails = () => {
                       addAgentAccessPackages={addAgentAccessPackages}
                       removeAgentAccessPackages={removeAgentAccessPackages}
                       emptyText={`${t('client_administration_page.no_agents')} ${t('client_administration_page.addUserPrompt')}`}
-                      addUserButton={<AddAgentButton onComplete={onUserAdded} />}
+                      addUserButton={
+                        <AddAgentButton
+                          onComplete={onUserAdded}
+                          variant='primary'
+                        />
+                      }
                     />
                   }
                 />

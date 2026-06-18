@@ -15,19 +15,17 @@ import { ConnectionUserType, useGetSimplifiedConnectionsQuery } from '@/rtk/feat
 import { usePartyRepresentation } from '../common/PartyRepresentationContext/PartyRepresentationContext';
 import { useGetInstanceUsersQuery } from '@/rtk/features/instanceApi';
 import type { UserActionTarget } from '../common/UserSearch/types';
-import type { UserSearchProps } from '../common/UserSearch/UserSearch';
+import { AddUserButton } from './AddUserModal';
 
 interface InstanceUsersAsInstanceAdminProps {
   resourceId: string;
   instanceUrn: string;
-  AddUserButton: UserSearchProps['AddUserButton'];
   onDelegate: (user: UserActionTarget) => void;
 }
 
 export const InstanceUsersAsInstanceAdmin = ({
   resourceId,
   instanceUrn,
-  AddUserButton,
   onDelegate,
 }: InstanceUsersAsInstanceAdminProps) => {
   const { t } = useTranslation();
@@ -101,7 +99,12 @@ export const InstanceUsersAsInstanceAdmin = ({
       <UserSearch
         includeSelfAsChild={false}
         includeSelfAsChildOnIndirect={false}
-        AddUserButton={AddUserButton}
+        AddUserButton={
+          <AddUserButton
+            resourceId={resourceId}
+            instanceUrn={instanceUrn}
+          />
+        }
         users={users}
         indirectUsers={indirectUsers}
         isLoading={isLoadingInstanceUsers || isLoadingSimplifiedConnections}

@@ -104,10 +104,14 @@ export const ClientAdministrationAgentsTab = ({ isActive }: ClientAdministration
         users={users}
         indirectUsers={indirectUsers}
         getUserLink={(user) => `/clientadministration/agent/${user.id}`}
-        onAddNewUser={(user) => navigate(`/clientadministration/agent/${user.id}`)}
         isLoading={isAgentsLoading || isIndirectLoading}
         isActionLoading={isIndirectFetching || isAdding}
-        AddUserButton={AddAgentButton}
+        AddUserButton={
+          <AddAgentButton
+            variant='secondary'
+            onComplete={(user) => navigate(`/clientadministration/agent/${user.id}`)}
+          />
+        }
         addUserButtonLabel={t('client_administration_page.add_agent_button_short')}
         onDelegate={(user) => {
           handleAddAgent(user.id);

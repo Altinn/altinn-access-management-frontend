@@ -17,22 +17,20 @@ import { createErrorDetails } from '../../common/TechnicalErrorParagraphs/Techni
  * @component
  */
 interface NewUserButtonProps {
-  /*** Render a larger version of the trigger button */
-  isLarge?: boolean;
+  variant: 'primary' | 'secondary';
   onComplete?: (user: User) => void;
 }
 
-export const NewUserButton: React.FC<NewUserButtonProps> = ({ isLarge, onComplete }) => {
+export const NewUserButton: React.FC<NewUserButtonProps> = ({ variant, onComplete }) => {
   const modalRef = useRef<HTMLDialogElement>(null);
   return (
     <>
       <DsButton
-        variant={isLarge ? 'primary' : 'secondary'}
+        variant={variant}
         onClick={() => modalRef.current?.showModal()}
-        className={isLarge ? classes.largeButton : classes.smallButton}
       >
         <PlusIcon aria-hidden='true' />
-        {isLarge ? t('new_user_modal.trigger_button_large') : t('new_user_modal.trigger_button')}
+        {t('new_user_modal.trigger_button')}
       </DsButton>
       <NewUserModal
         modalRef={modalRef}

@@ -20,6 +20,7 @@ import type { UserActionTarget } from '../common/UserSearch/types';
 import { usePartyRepresentation } from '../common/PartyRepresentationContext/PartyRepresentationContext';
 import { DelegationAction } from '../common/DelegationModal/EditModal';
 import { PackageUserModal, mapUserToParty, type PackageUserModalHandle } from './PackageUserModal';
+import { NewUserButton } from '../users/NewUserModal/NewUserModal';
 
 interface UsersTabProps {
   accessPackage?: AccessPackage;
@@ -172,7 +173,12 @@ export const UsersTab = ({ accessPackage, isLoading, isFetching }: UsersTabProps
           isDelegationCheckLoading
         }
         onDelegate={canDelegate ? handleOnDelegate : undefined}
-        onAddNewUser={canDelegate ? handleOnDelegate : undefined}
+        AddUserButton={
+          <NewUserButton
+            variant='primary'
+            onComplete={handleOnDelegate}
+          />
+        }
         onRevoke={handleOnRevoke}
         onSelect={(user) => modalRef.current?.open(user)}
         isActionLoading={

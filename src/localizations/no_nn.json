@@ -426,9 +426,7 @@
     "direct_connections": "Brukarar med fullmakt",
     "user_search_placeholder": "Søk etter brukarar eller verksemder",
     "user_no_search_result": "Ingen treff på søket \"{{searchTerm}}\".",
-    "user_no_search_result_with_add_suggestion": "Ingen treff på søket \"{{searchTerm}}\". Er dette ein ny brukar du ønsker å gi fullmakt til?",
     "user_no_filter_result": "Ingen brukarar passar dei valde filtra.",
-    "user_no_filter_result_with_add_suggestion": "Ingen brukarar passar dei valde filtra. Er dette ein ny brukar du ønsker å gi fullmakt til?",
     "indirect_connections": "Brukarar utan fullmakt"
   },
   "reportees_page": {
@@ -598,7 +596,6 @@
     "organization": "Verksemd",
     "modal_title": "Legg til ny person eller verksemd",
     "trigger_button": "Ny brukar",
-    "trigger_button_large": "Gi fullmakt til ny brukar",
     "add_person_button": "Legg til person",
     "add_org_button": "Legg til verksemd",
     "limited_preview_message": "Du kan dessverre ikkje legge til personar heilt endå. Dette vil komme seinare.",
