@@ -168,7 +168,10 @@ export const UsersList = () => {
                   />
                 )}
               </div>
-              <NewUserButton onComplete={handleNewUser} />
+              <NewUserButton
+                onComplete={handleNewUser}
+                variant='secondary'
+              />
             </div>
             <DsHeading
               level={2}

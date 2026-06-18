@@ -85,7 +85,6 @@ export const DelegationModalContent = ({
   let searchViewContent: JSX.Element | undefined;
   let infoViewContent: JSX.Element | undefined;
   let triggerButtonText: string | undefined;
-  let triggerButtonVariant: 'primary' | 'secondary' = 'primary';
   const hasDelegateAccess = (availableActions ?? []).includes(DelegationAction.DELEGATE);
 
   switch (delegationType) {
@@ -106,7 +105,6 @@ export const DelegationModalContent = ({
           availableActions={availableActions}
         />
       );
-      triggerButtonVariant = hasDelegateAccess ? 'primary' : 'secondary';
       triggerButtonText = hasDelegateAccess
         ? t('access_packages.give_new_button')
         : t('common.request_poa');
@@ -114,7 +112,6 @@ export const DelegationModalContent = ({
     case DelegationType.MaskinportenScope:
       searchViewContent = <ScopeSearch onSelect={onResourceSelection} />;
       infoViewContent = resourceToView && <ScopeInfo resource={resourceToView} />;
-      triggerButtonVariant = 'primary';
       triggerButtonText = t('maskinporten_page.add_scope_button');
       break;
     default:
@@ -131,7 +128,6 @@ export const DelegationModalContent = ({
           availableActions={availableActions}
         />
       );
-      triggerButtonVariant = hasDelegateAccess ? 'primary' : 'secondary';
       triggerButtonText = hasDelegateAccess
         ? t('single_rights.give_new_single_right')
         : t('delegation_modal.request.request_service');
@@ -179,5 +175,35 @@ export const DelegationModalContent = ({
         </DsDialog>
       </DsDialog.TriggerContext>
     </RestoreFocusProvider>
+    <DsDialog.TriggerContext>
+      <DsDialog.Trigger
+        data-size='sm'
+        variant='primary'
+        className={classes.triggerButton}
+      >
+        <PlusIcon aria-hidden='true' />
+        {triggerButtonText}
+      </DsDialog.Trigger>
+      <DsDialog
+        className={classes.modalDialog}
+        closedby='any'
+        closeButton={t('common.close')}
+        onClose={reset}
+        ref={modalRef}
+      >
+        {infoView && (
+          <Button
+            className={classes.backButton}
+            variant='tertiary'
+            data-color='neutral'
+            onClick={() => setInfoView(false)}
+          >
+            <ArrowLeftIcon aria-hidden='true' />
+            {t('common.back')}
+          </Button>
+        )}
+        <div className={classes.content}>{infoView ? infoViewContent : searchViewContent}</div>
+      </DsDialog>
+    </DsDialog.TriggerContext>
   );
 };

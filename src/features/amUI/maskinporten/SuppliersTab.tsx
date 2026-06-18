@@ -1,4 +1,4 @@
-import { useCallback } from 'react';
+import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { DsParagraph, formatDisplayName } from '@altinn/altinn-components';
 
@@ -27,18 +27,6 @@ export const SuppliersTab = ({ party, isActive, canFetch }: SuppliersTabProps) =
   const { actingParty } = usePartyRepresentation();
   const navigate = useNavigate();
 
-  const addUserButton = useCallback(
-    () => (
-      <AddSupplierButton
-        party={party}
-        onComplete={(user) => {
-          navigate(`/maskinporten/supplier/${user.organizationIdentifier}`);
-        }}
-      />
-    ),
-    [party, navigate],
-  );
-
   return (
     <div className={classes.panelContent}>
       <div className={classes.description}>
@@ -59,7 +47,14 @@ export const SuppliersTab = ({ party, isActive, canFetch }: SuppliersTabProps) =
         error={error}
         emptyText={t('maskinporten_page.no_suppliers')}
         canDelegate={true}
-        AddUserButton={addUserButton}
+        AddUserButton={
+          <AddSupplierButton
+            party={party}
+            onComplete={(user) => {
+              navigate(`/maskinporten/supplier/${user.organizationIdentifier}`);
+            }}
+          />
+        }
         addUserButtonLabel={t('maskinporten_page.add_supplier_button')}
         getUserLink={(user) => {
           const orgNr = suppliers?.find((c) => c.party.id === user.id)?.party

@@ -10,21 +10,19 @@ import { useAddAgentMutation } from '@/rtk/features/clientApi';
 import { User } from '@/rtk/features/userInfoApi';
 
 interface AddAgentButtonProps {
-  /*** Render a larger version of the trigger button */
-  isLarge?: boolean;
+  variant: 'primary' | 'secondary';
   onComplete?: (user: User) => void;
 }
 
-export const AddAgentButton: React.FC<AddAgentButtonProps> = ({ isLarge, onComplete }) => {
+export const AddAgentButton: React.FC<AddAgentButtonProps> = ({ variant, onComplete }) => {
   const modalRef = useRef<HTMLDialogElement>(null);
   const { t } = useTranslation();
 
   return (
     <>
       <DsButton
-        variant={isLarge ? 'primary' : 'secondary'}
+        variant={variant}
         onClick={() => modalRef.current?.showModal()}
-        className={isLarge ? classes.largeButton : undefined}
       >
         <PlusIcon aria-hidden='true' />
         {t('client_administration_page.add_agent_button')}

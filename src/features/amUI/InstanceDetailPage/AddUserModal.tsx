@@ -29,7 +29,6 @@ import classes from './AddUserModal.module.css';
 interface AddUserButtonProps {
   resourceId: string;
   instanceUrn: string;
-  isLarge?: boolean;
 }
 
 interface AddUserModalProps {
@@ -40,7 +39,7 @@ interface AddUserModalProps {
   onClose: () => void;
 }
 
-export const AddUserButton = ({ resourceId, instanceUrn, isLarge }: AddUserButtonProps) => {
+export const AddUserButton = ({ resourceId, instanceUrn }: AddUserButtonProps) => {
   const modalRef = useRef<HTMLDialogElement>(null);
   const [isOpen, setIsOpen] = useState(false);
   const { t } = useTranslation();
@@ -48,15 +47,14 @@ export const AddUserButton = ({ resourceId, instanceUrn, isLarge }: AddUserButto
   return (
     <>
       <DsButton
-        variant={isLarge ? 'secondary' : 'primary'}
+        variant='primary'
         onClick={() => {
           setIsOpen(true);
           modalRef.current?.showModal();
         }}
-        className={isLarge ? classes.largeButton : undefined}
       >
         <PlusIcon aria-hidden='true' />
-        {isLarge ? t('new_user_modal.trigger_button_large') : t('new_user_modal.trigger_button')}
+        {t('new_user_modal.trigger_button')}
       </DsButton>
       <AddUserModal
         modalRef={modalRef}

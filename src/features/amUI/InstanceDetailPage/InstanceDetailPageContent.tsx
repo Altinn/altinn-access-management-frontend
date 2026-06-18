@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { DsAlert, DsButton, DsParagraph } from '@altinn/altinn-components';
 import { Navigate, useSearchParams } from 'react-router';
 import { Trans, useTranslation } from 'react-i18next';
@@ -23,7 +23,6 @@ import { EnvelopeClosedIcon } from '@navikt/aksel-icons';
 import { DelegationAction, EditModal } from '../common/DelegationModal/EditModal';
 import type { ActionError } from '@/resources/hooks/useActionError';
 import type { UserActionTarget } from '../common/UserSearch/types';
-import { AddUserButton } from './AddUserModal';
 import {
   getInboxLinkData,
   toInstancePresentationData,
@@ -92,18 +91,6 @@ export const InstanceDetailPageContent = () => {
   const resourceId = searchParams.get('resourceId') ?? '';
   const dialogId = searchParams.get('dialogId');
 
-  const InstanceAddUserButton = useMemo(
-    () =>
-      ({ isLarge }: { isLarge?: boolean }) => (
-        <AddUserButton
-          isLarge={isLarge}
-          resourceId={resourceId}
-          instanceUrn={instanceUrn}
-        />
-      ),
-    [resourceId, instanceUrn],
-  );
-
   const {
     data: isAdmin,
     isLoading: isAdminLoading,
@@ -156,7 +143,7 @@ export const InstanceDetailPageContent = () => {
     <div className={classes.inboxLinkContainer}>
       <DsButton
         asChild
-        variant={'secondary'}
+        variant='secondary'
         className={classes.inboxButton}
       >
         <a href={inboxUrl}>
@@ -246,7 +233,6 @@ export const InstanceDetailPageContent = () => {
             <InstanceUsersAsAdmin
               resourceId={resourceId}
               instanceUrn={instanceUrn}
-              AddUserButton={InstanceAddUserButton}
               onSelect={handleUserSelect}
               onDelegate={handleIndirectUserDelegate}
               onRevoke={handleRevoke}
@@ -256,7 +242,6 @@ export const InstanceDetailPageContent = () => {
             <InstanceUsersAsInstanceAdmin
               resourceId={resourceId}
               instanceUrn={instanceUrn}
-              AddUserButton={InstanceAddUserButton}
               onDelegate={handleIndirectUserDelegate}
             />
           ) : null}
