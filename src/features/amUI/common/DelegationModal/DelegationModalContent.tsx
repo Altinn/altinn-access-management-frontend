@@ -138,7 +138,7 @@ export const DelegationModalContent = ({
       <DsDialog.TriggerContext>
         <DsDialog.Trigger
           data-size='sm'
-          variant={triggerButtonVariant}
+          variant='primary'
           className={classes.triggerButton}
         >
           <PlusIcon aria-hidden='true' />
@@ -148,7 +148,7 @@ export const DelegationModalContent = ({
           className={classes.modalDialog}
           closedby='any'
           closeButton={t('common.close')}
-          onClose={reset}
+          onClose={onClosing}
           ref={modalRef}
         >
           {infoView && (
@@ -175,35 +175,5 @@ export const DelegationModalContent = ({
         </DsDialog>
       </DsDialog.TriggerContext>
     </RestoreFocusProvider>
-    <DsDialog.TriggerContext>
-      <DsDialog.Trigger
-        data-size='sm'
-        variant='primary'
-        className={classes.triggerButton}
-      >
-        <PlusIcon aria-hidden='true' />
-        {triggerButtonText}
-      </DsDialog.Trigger>
-      <DsDialog
-        className={classes.modalDialog}
-        closedby='any'
-        closeButton={t('common.close')}
-        onClose={reset}
-        ref={modalRef}
-      >
-        {infoView && (
-          <Button
-            className={classes.backButton}
-            variant='tertiary'
-            data-color='neutral'
-            onClick={() => setInfoView(false)}
-          >
-            <ArrowLeftIcon aria-hidden='true' />
-            {t('common.back')}
-          </Button>
-        )}
-        <div className={classes.content}>{infoView ? infoViewContent : searchViewContent}</div>
-      </DsDialog>
-    </DsDialog.TriggerContext>
   );
 };
