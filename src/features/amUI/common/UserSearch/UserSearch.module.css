@@ -41,10 +41,7 @@
 }
 
 .emptyState {
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  gap: var(--ds-spacing-3);
+  padding-top: var(--ds-spacing-1);
 }
 
 @media only screen and (max-width: 768px) {

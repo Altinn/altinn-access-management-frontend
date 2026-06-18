@@ -48,6 +48,7 @@ export const UserList = ({
   });
 
   const promptForNoResults = !isLoading && users?.length === 0;
+  const isSearchTermSSN = /^\d{11}$/.test(searchString.trim());
 
   if (isLoading) {
     return (
@@ -68,8 +69,19 @@ export const UserList = ({
             {canAdd && searchString.length === 0 && t('users_page.only_you_have_access')}
             {!canAdd && searchString.length === 0 && t('users_page.no_users')}
             {searchString.length > 0 &&
-              t('users_page.user_no_search_result', { searchTerm: searchString })}
+              t('advanced_user_search.user_no_search_result', { searchTerm: searchString })}
           </DsParagraph>
+          {isSearchTermSSN ? (
+            <DsParagraph data-size='md'>
+              {t('advanced_user_search.no_result_help_line_ssn')}
+            </DsParagraph>
+          ) : (
+            canAdd && (
+              <DsParagraph data-size='md'>
+                {t('advanced_user_search.no_result_help_line_add_user')}
+              </DsParagraph>
+            )
+          )}
         </div>
       )}
       <List spacing={2}>
