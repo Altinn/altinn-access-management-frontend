@@ -139,7 +139,7 @@ const FallbackWithNestedDialogTest = () => {
   return (
     <RestoreFocusProvider restoreFocus={restoreFocus}>
       <RestoreFocusFallback>
-        <dialog>
+        <dialog open>
           <button>Dialog close</button>
         </dialog>
         <button>List action</button>
