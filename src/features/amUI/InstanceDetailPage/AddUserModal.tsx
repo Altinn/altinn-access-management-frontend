@@ -208,6 +208,11 @@ const AddUserModal = ({
             }
             error={personIdentifierError}
             disabled={isSubmitting}
+            onKeyDown={(event) => {
+              if (event.key === 'Enter' && !event.repeat && !isSubmitting && isFormValid) {
+                handleSubmit();
+              }
+            }}
           />
           <DsTextfield
             className={classes.textField}
@@ -220,6 +225,11 @@ const AddUserModal = ({
             }
             error={lastNameError}
             disabled={isSubmitting}
+            onKeyDown={(event) => {
+              if (event.key === 'Enter' && !event.repeat && !isSubmitting && isFormValid) {
+                handleSubmit();
+              }
+            }}
           />
         </div>
 

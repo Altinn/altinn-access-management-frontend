@@ -39,6 +39,8 @@ export const NewOrgContent = ({
 
   const isOwnOrg = !!ownOrgNumber && orgNumber.length === 9 && orgNumber === ownOrgNumber;
   const isError = isGetOrgError || !!errorDetails;
+  const isAddButtonDisabled =
+    isOwnOrg || isGetOrgError || isLoading || !orgData || orgData.orgNumber !== orgNumber;
 
   return (
     <div className={classes.newOrgContent}>
@@ -73,6 +75,11 @@ export const NewOrgContent = ({
         label={t('common.org_number')}
         size='sm'
         onChange={(e) => setOrgNumber((e.target as HTMLInputElement).value.replace(/ /g, ''))}
+        onKeyDown={(event) => {
+          if (event.key === 'Enter' && !event.repeat && !isAddButtonDisabled && orgData && addOrg) {
+            addOrg(orgData);
+          }
+        }}
       />
       <div aria-live='polite'>
         {!isGetOrgError && !orgDataLoading && orgData && orgData.orgNumber === orgNumber && (
@@ -98,9 +105,7 @@ export const NewOrgContent = ({
 
       <div className={classes.validationButton}>
         <DsButton
-          disabled={
-            isOwnOrg || isGetOrgError || isLoading || !orgData || orgData.orgNumber !== orgNumber
-          }
+          disabled={isAddButtonDisabled}
           onClick={() => addOrg && orgData && addOrg(orgData)}
         >
           <span className={classes.addButton}>
