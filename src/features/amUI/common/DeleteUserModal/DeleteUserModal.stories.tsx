@@ -13,7 +13,6 @@ import {
   DeletionTarget,
   ER_ROLE_REASON,
   GUARDIANSHIP_ROLE_REASON,
-  OLD_ALTINN_REASON,
   type DeletionStatus,
   type NonDeletableReason,
 } from './deletionModalUtils';
@@ -26,7 +25,6 @@ type DeleteUserModalStoryArgs = {
 };
 
 const allReasons: NonDeletableReason[] = [
-  OLD_ALTINN_REASON,
   ER_ROLE_REASON,
   AGENT_ROLE_REASON,
   GUARDIANSHIP_ROLE_REASON,
