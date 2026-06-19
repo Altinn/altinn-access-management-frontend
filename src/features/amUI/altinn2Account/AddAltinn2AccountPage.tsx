@@ -93,6 +93,15 @@ export const AddAltinn2AccountPage = () => {
     }
   }, [reportee, token]);
 
+  const getAddUserFromTokenErrorMessage = () => {
+    if ((addUserFromTokenError as { status: number }).status === 401) {
+      return 'Invalid or expired link token.';
+    } else if ((addUserFromTokenError as { status: number }).status === 403) {
+      return 'Link token does not belong to the authenticated user.';
+    }
+    return t('add_altinn2_account_page.add_account_from_token_error');
+  };
+
   const step1Component = (
     <DsDialog.Block className={classes.addAltinn2Account}>
       <DsHeading level={1}>{t('add_altinn2_account_page.add_account_heading')}</DsHeading>
@@ -181,9 +190,7 @@ export const AddAltinn2AccountPage = () => {
         />
       )}
       {addUserFromTokenError && (
-        <DsAlert data-color='danger'>
-          {t('add_altinn2_account_page.add_account_from_token_error')}
-        </DsAlert>
+        <DsAlert data-color='danger'>{getAddUserFromTokenErrorMessage()}</DsAlert>
       )}
       <DsDialog
         ref={modalRef}
