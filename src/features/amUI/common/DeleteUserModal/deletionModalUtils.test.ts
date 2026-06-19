@@ -241,7 +241,7 @@ describe('getNonDeletableReasons', () => {
     expect(getNonDeletableReasons(rolePermissions)).toEqual([]);
   });
 
-  it('does not return old Altinn reason when access is inherited without old Altinn provider', () => {
+  it('returns no reasons when all access is inherited', () => {
     const rolePermissions = mockRolePermissions([{ code: RIGHTHOLDER_ROLE, via: ['via-org'] }]);
     expect(getNonDeletableReasons(rolePermissions)).toEqual([]);
   });
