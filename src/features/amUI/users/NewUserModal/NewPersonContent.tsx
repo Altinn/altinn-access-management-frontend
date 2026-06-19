@@ -72,7 +72,7 @@ export const NewPersonContent = ({ errorDetails, addPerson, isLoading }: NewPers
           setPersonIdentifierFormatErrorKey(getPersonIdentifierErrorKey(personIdentifier));
         }}
         onKeyDown={(event) => {
-          if (event.key === 'Enter' && !isAddPersonButtonDisabled) {
+          if (event.key === 'Enter' && !event.repeat && !isAddPersonButtonDisabled) {
             navigateIfValidPerson();
           }
         }}
@@ -89,7 +89,7 @@ export const NewPersonContent = ({ errorDetails, addPerson, isLoading }: NewPers
           setLastNameFormatError(error);
         }}
         onKeyDown={(event) => {
-          if (event.key === 'Enter' && !isAddPersonButtonDisabled) {
+          if (event.key === 'Enter' && !event.repeat && !isAddPersonButtonDisabled) {
             navigateIfValidPerson();
           }
         }}

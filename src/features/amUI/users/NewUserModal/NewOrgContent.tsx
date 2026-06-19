@@ -76,7 +76,7 @@ export const NewOrgContent = ({
         size='sm'
         onChange={(e) => setOrgNumber((e.target as HTMLInputElement).value.replace(/ /g, ''))}
         onKeyDown={(event) => {
-          if (event.key === 'Enter' && !isAddButtonDisabled && orgData && addOrg) {
+          if (event.key === 'Enter' && !event.repeat && !isAddButtonDisabled && orgData && addOrg) {
             addOrg(orgData);
           }
         }}

@@ -209,7 +209,7 @@ const AddUserModal = ({
             error={personIdentifierError}
             disabled={isSubmitting}
             onKeyDown={(event) => {
-              if (event.key === 'Enter' && !isSubmitting && isFormValid) {
+              if (event.key === 'Enter' && !event.repeat && !isSubmitting && isFormValid) {
                 handleSubmit();
               }
             }}
@@ -226,7 +226,7 @@ const AddUserModal = ({
             error={lastNameError}
             disabled={isSubmitting}
             onKeyDown={(event) => {
-              if (event.key === 'Enter' && !isSubmitting && isFormValid) {
+              if (event.key === 'Enter' && !event.repeat && !isSubmitting && isFormValid) {
                 handleSubmit();
               }
             }}
