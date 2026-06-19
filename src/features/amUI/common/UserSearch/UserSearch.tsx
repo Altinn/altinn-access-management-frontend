@@ -207,7 +207,9 @@ export const UserSearch: React.FC<UserSearchProps> = ({
                 {t('advanced_user_search.no_result_help_line_ssn')}
               </DsParagraph>
             ) : (
-              AddUserButton && (
+              AddUserButton &&
+              canDelegate &&
+              !hasFiltersOnly && (
                 <DsParagraph data-size='md'>
                   {t('advanced_user_search.no_result_help_line_add_user')}
                 </DsParagraph>

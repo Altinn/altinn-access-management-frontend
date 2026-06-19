@@ -42,13 +42,14 @@ export const UserList = ({
 }: UserListProps) => {
   const { t } = useTranslation();
   const mappedUsers = useMemo(() => mapConnectionsToUserSearchNodes(connections), [connections]);
+  const trimmedQuery = searchString.trim();
   const { users, hasNextPage, goNextPage } = useFilteredUsers({
     users: mappedUsers,
-    searchString,
+    searchString: trimmedQuery,
   });
 
   const promptForNoResults = !isLoading && users?.length === 0;
-  const isSearchTermSSN = /^\d{11}$/.test(searchString.trim());
+  const isSearchTermSSN = /^\d{11}$/.test(trimmedQuery);
 
   if (isLoading) {
     return (
@@ -66,10 +67,10 @@ export const UserList = ({
           className={classes.noResultsContent}
         >
           <DsParagraph data-size='md'>
-            {canAdd && searchString.length === 0 && t('users_page.only_you_have_access')}
-            {!canAdd && searchString.length === 0 && t('users_page.no_users')}
-            {searchString.length > 0 &&
-              t('advanced_user_search.user_no_search_result', { searchTerm: searchString })}
+            {canAdd && trimmedQuery.length === 0 && t('users_page.only_you_have_access')}
+            {!canAdd && trimmedQuery.length === 0 && t('users_page.no_users')}
+            {trimmedQuery.length > 0 &&
+              t('advanced_user_search.user_no_search_result', { searchTerm: trimmedQuery })}
           </DsParagraph>
           {isSearchTermSSN ? (
             <DsParagraph data-size='md'>
