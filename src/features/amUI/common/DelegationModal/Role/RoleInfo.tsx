@@ -12,7 +12,7 @@ import { usePartyRepresentation } from '../../PartyRepresentationContext/PartyRe
 import { getRedirectToA2UsersListSectionUrl } from '@/resources/utils';
 import { RoleResourcesSection } from './RoleResourcesSection';
 import { RoleStatusMessage } from './RoleStatusMessages';
-import { enableRoleDeletion, hideA2Links } from '@/resources/utils/featureFlagUtils';
+import { enableRoleDeletion } from '@/resources/utils/featureFlagUtils';
 import { useState } from 'react';
 import { TechnicalErrorParagraphs } from '../../TechnicalErrorParagraphs';
 import { createErrorDetails } from '../../TechnicalErrorParagraphs/TechnicalErrorParagraphs';
@@ -114,24 +114,7 @@ export const RoleInfo = ({ role }: RoleInfoProps) => {
       </div>
       <div aria-live='polite'>{(!!deleteError || !!actionError) && deleteErrorAlert()}</div>
       <DsParagraph>{role?.description}</DsParagraph>
-      <DsParagraph className={classes.oldRolesDisclaimer}>
-        {t('role.resources_disclaimer')}
-        {!hideA2Links() && (
-          <>
-            {' '}
-            <DsLink asChild>
-              <a
-                href={oldSolutionUrl}
-                target='_blank'
-                rel='noopener noreferrer'
-              >
-                {t('role.resources_disclaimer_link')}
-                <ExternalLinkIcon aria-hidden='true' />
-              </a>
-            </DsLink>
-          </>
-        )}
-      </DsParagraph>
+      <DsParagraph className={classes.oldRolesDisclaimer}></DsParagraph>
       {!shouldSkipRoleRefs && (
         <RoleResourcesSection
           roleResources={roleResources}

@@ -388,8 +388,6 @@
     "no_roles_message": "This user has no roles.",
     "resources_title": "Gives access to {{count}} services",
     "resources_empty": "This role has no services.",
-    "resources_disclaimer": "This role might still grant access to services that only exist in the old solution.",
-    "resources_disclaimer_link": "See the list of services in the old solution",
     "delete_role_confirmation": "Roles from the old Altinn solution have been discontinued, so you will NOT be able to grant power of attorney to this role again.",
     "deleting_role_loading": "Waiting for the role to be deleted...",
     "delete_role_success": "The power of attorney for this role has been deleted.",

@@ -385,8 +385,6 @@
     "no_roles_message": "Denne brukeren har ingen roller.",
     "resources_title": "Gir tilgang til {{count}} tjenester",
     "resources_empty": "Denne rollen inneholder ingen tjenester.",
-    "resources_disclaimer": "Denne rollen kan fortsatt gi tilgang til tjenester som kun finnes i den gamle løsningen.",
-    "resources_disclaimer_link": "Se listen i den gamle løsningen",
     "delete_role_confirmation": "Roller fra gamle Altinn er avviklet, så du vil IKKE kunne gi fullmakt til denne rollen på nytt.",
     "deleting_role_loading": "Venter på at rolle skal slettes...",
     "delete_role_success": "Fullmakt til rollen er slettet.",

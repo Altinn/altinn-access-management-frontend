@@ -282,7 +282,7 @@ describe('PartyRepresentationProvider - Acting Party Logic', () => {
     });
   });
 
-  test('Case 2: Unsynced connection alert shown when reportee is valid but connection is unsynced', async () => {
+  test('Case 2: empty connections are handled by regular error handling', async () => {
     const mockReporteeInfo = {
       partyUuid: mockReporteeParty.partyUuid,
       name: mockReporteeParty.name,
@@ -339,9 +339,9 @@ describe('PartyRepresentationProvider - Acting Party Logic', () => {
     });
 
     await waitFor(() => {
-      // The unsynced connection alert should be shown instead of the content
       expect(screen.queryByTestId('from-party')).not.toBeInTheDocument();
       expect(screen.queryByTestId('to-party')).not.toBeInTheDocument();
+      expect(screen.getByRole('link')).toHaveAttribute('href', '/');
     });
   });
 
@@ -577,7 +577,7 @@ describe('PartyRepresentationProvider - Acting Party Logic', () => {
     consoleSpy.mockRestore();
   });
 
-  test('should handle invalid connection (empty connections array)', async () => {
+  test('should handle empty connections through regular error handling', async () => {
     vi.mocked(lookupApi.useGetPartyFromLoggedInUserQuery).mockReturnValue({
       data: mockCurrentUser,
       isLoading: false,
@@ -612,16 +612,11 @@ describe('PartyRepresentationProvider - Acting Party Logic', () => {
       actingPartyUuid: 'invalid-from-uuid',
     });
 
-    await waitFor(
-      () => {
-        // When there's an invalid connection, the alert is shown
-        // instead of the content
-        expect(screen.queryByTestId('from-party')).not.toBeInTheDocument();
-        expect(screen.queryByTestId('to-party')).not.toBeInTheDocument();
-        expect(screen.queryByTestId('acting-party')).not.toBeInTheDocument();
-        expect(screen.queryByTestId('is-loading')).not.toBeInTheDocument();
-      },
-      { timeout: 2000 },
-    );
+    await waitFor(() => {
+      expect(screen.queryByTestId('from-party')).not.toBeInTheDocument();
+      expect(screen.queryByTestId('to-party')).not.toBeInTheDocument();
+      expect(screen.queryByTestId('acting-party')).not.toBeInTheDocument();
+      expect(screen.getByRole('link')).toHaveAttribute('href', '/');
+    });
   });
 });

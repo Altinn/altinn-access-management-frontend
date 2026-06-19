@@ -19,7 +19,6 @@ import { Link } from 'react-router';
 
 import { amUIPath, ConsentPath, SystemUserPath } from '@/routes/paths';
 import { getAltinnStartPageUrl, getHostUrl } from '@/resources/utils/pathUtils';
-import { hideA2Links } from '@/resources/utils/featureFlagUtils';
 
 const getMenuLinkAs = (
   props: ComponentProps<typeof Link>,
@@ -265,18 +264,5 @@ export const getShortcutsMenuItem = (pathname?: string, isLoading = false): Menu
       as: (props) => getMenuLinkAs(props, helpPageUrl, true),
     },
   ];
-  if (!hideA2Links()) {
-    items.push({
-      groupId: 'shortcuts',
-      id: 'beta-leave',
-      size: 'sm',
-      loading: isLoading,
-      variant: 'tinted',
-      title: t('header.leave_beta'),
-      icon: LeaveIcon,
-      selected: false,
-      as: (props) => getMenuLinkAs(props, getHostUrl() + 'ui/profile'),
-    });
-  }
   return items;
 };

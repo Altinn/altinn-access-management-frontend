@@ -1,19 +1,12 @@
 import type { JSX } from 'react';
 import { createContext, useContext } from 'react';
-import {
-  DsAlert,
-  DsHeading,
-  DsLink,
-  DsParagraph,
-  formatDisplayName,
-} from '@altinn/altinn-components';
+import { DsAlert, DsParagraph, formatDisplayName } from '@altinn/altinn-components';
 import { type SerializedError } from '@reduxjs/toolkit';
 import type { FetchBaseQueryError } from '@reduxjs/toolkit/query';
 import { Link } from 'react-router';
 import { t } from 'i18next';
 
 import { useGetPartyFromLoggedInUserQuery, type Party } from '@/rtk/features/lookupApi';
-import { hideA2Links } from '@/resources/utils/featureFlagUtils';
 
 import { TechnicalErrorParagraphs } from '../TechnicalErrorParagraphs';
 import { createErrorDetails } from '../TechnicalErrorParagraphs/TechnicalErrorParagraphs';
@@ -22,9 +15,6 @@ import { useGetRightHoldersQuery } from '@/rtk/features/connectionApi';
 import { useReporteeParty } from './useReporteeParty';
 import { useConnectedParty } from './useConnectedParty';
 import { PartyType, useGetReporteeQuery } from '@/rtk/features/userInfoApi';
-import { getHostUrl } from '@/resources/utils/pathUtils';
-import { ArrowRightIcon } from '@navikt/aksel-icons';
-import classes from './PartyRepresentationContext.module.css';
 
 interface PartyRepresentationProviderProps {
   /** The children to be rendered with the provided party-representation data */
@@ -168,31 +158,14 @@ export const PartyRepresentationProvider = ({
 
   const isError = !fromParty && !toParty;
 
-  const shouldShowUnsyncedConnectionAlert =
-    !isLoading &&
-    !hideA2Links() &&
-    authorizedPartyReportee &&
-    (invalidConnection || isError) &&
-    fromPartyUuid &&
-    toPartyUuid &&
-    authorizedPartyReportee?.partyUuid === fromPartyUuid &&
-    toPartyUuid === currentUser?.partyUuid;
-  // The reportee is valid but the connection is unsynced (the user is on their own page for the reportee)
-
-  const shouldShowConnectionErrorAlert =
-    !isLoading && invalidConnection && !shouldShowUnsyncedConnectionAlert;
+  const shouldShowConnectionErrorAlert = !isLoading && invalidConnection;
 
   const shouldShowTechnicalErrorAlert =
-    isError &&
-    !isLoading &&
-    !invalidConnection &&
-    !shouldShowConnectionErrorAlert &&
-    !shouldShowUnsyncedConnectionAlert;
+    isError && !isLoading && !invalidConnection && !shouldShowConnectionErrorAlert;
 
   const shouldShowChildren =
     !isError &&
     !invalidConnection &&
-    !shouldShowUnsyncedConnectionAlert &&
     !shouldShowConnectionErrorAlert &&
     !shouldShowTechnicalErrorAlert;
 
@@ -211,7 +184,6 @@ export const PartyRepresentationProvider = ({
         isError: isError,
       }}
     >
-      {shouldShowUnsyncedConnectionAlert && <UnsyncedConnectionAlert />}
       {shouldShowConnectionErrorAlert &&
         connectionErrorAlert(error, noConnectionBackUrl ?? '/', formattedReporteeName(reportee))}
       {shouldShowTechnicalErrorAlert && (
@@ -263,36 +235,6 @@ const connectionErrorAlert = (
         {t('error_page.no_user_connection', { reportee: reporteeName })}{' '}
         {returnToUrl && <Link to={returnToUrl}>{t('common.go_back')}</Link>}
       </DsParagraph>
-    </DsAlert>
-  );
-};
-
-// Når `hideA2Links` aktiveres permanent forekommer ikke synkroniseringsglipp lenger, og
-// hele `UnsyncedConnectionAlert` + tilhørende `shouldShowUnsyncedConnectionAlert` kan fjernes.
-const UnsyncedConnectionAlert = () => {
-  return (
-    <DsAlert data-color='warning'>
-      <div className={classes.unsyncedAlert}>
-        <DsHeading
-          level={3}
-          data-size='xs'
-        >
-          {t('error_page.unsynced_connection_title')}
-        </DsHeading>
-        <DsParagraph>{t('error_page.unsynced_connection')}</DsParagraph>
-        <DsLink asChild>
-          <Link
-            className={classes.link}
-            to={getHostUrl() + 'ui/profile'}
-          >
-            {t('error_page.unsynced_connection_link')}
-            <ArrowRightIcon
-              aria-hidden='true'
-              fontSize='1.3rem'
-            />
-          </Link>
-        </DsLink>
-      </div>
     </DsAlert>
   );
 };

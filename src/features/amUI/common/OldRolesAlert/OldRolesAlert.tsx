@@ -4,7 +4,6 @@ import { Link } from 'react-router';
 import { DsAlert, DsParagraph, DsLink } from '@altinn/altinn-components';
 
 import { getRedirectToA2UsersListSectionUrl } from '@/resources/utils';
-import { hideA2Links } from '@/resources/utils/featureFlagUtils';
 
 import { usePartyRepresentation } from '../PartyRepresentationContext/PartyRepresentationContext';
 
@@ -20,17 +19,6 @@ export const OldRolesAlert = () => {
     <DsAlert data-color='info'>
       <div className={styles.container}>
         <DsParagraph>{t('a2Alerts.oldRolesContent')}</DsParagraph>
-        {!hideA2Links() && (
-          <DsLink
-            asChild
-            className={styles.link}
-          >
-            <Link to={url}>
-              {t('a2Alerts.oldRolesLinkText')}
-              <ExternalLinkIcon aria-hidden='true' />
-            </Link>
-          </DsLink>
-        )}
       </div>
     </DsAlert>
   );

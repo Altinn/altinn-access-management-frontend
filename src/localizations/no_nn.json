@@ -385,8 +385,6 @@
     "no_roles_message": "Denne brukaren har ingen roller.",
     "resources_title": "Gjev tilgang til {{count}} tenester",
     "resources_empty": "Denne rolla har ingen tenester.",
-    "resources_disclaimer": "Denne rolla kan framleis gi tilgang til tenester som berre finst i den gamle løysinga.",
-    "resources_disclaimer_link": "Sjå lista i den gamle løysinga",
     "delete_role_confirmation": "Roller frå gamle Altinn er avvikla, så du vil IKKJE kunne gi fullmakt til denne rollen på nytt.",
     "deleting_role_loading": "Venter på at rolla skal slettast...",
     "delete_role_success": "Fullmakt til rolla er sletta.",
