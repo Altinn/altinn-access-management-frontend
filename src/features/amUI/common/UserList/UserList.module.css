@@ -9,7 +9,7 @@
   gap: 0.3rem;
   flex-direction: column;
   height: 100%;
-  padding-top: 1rem;
+  padding-top: var(--ds-spacing-1);
 }
 
 .showMoreButtonContainer {

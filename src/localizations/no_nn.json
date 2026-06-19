@@ -414,7 +414,6 @@
     "user_search_placeholder": "Søk etter brukarar eller verksemder",
     "only_you_have_access": "Det er berre du som har fullmakt. Legg til ny brukar for å gi fullmakt til andre.",
     "no_users": "Du har ikkje motteke nokon fullmakter frå andre.",
-    "user_no_search_result": "Ingen treff på søket \"{{searchTerm}}\".",
     "show_users_with_client_access": "Vis brukarar med klienttilgang",
     "indirect_connections": "Brukarar utan fullmakt",
     "no_access_to_users_header": "Denne sida jobbar vi framleis med!",
@@ -426,6 +425,8 @@
     "direct_connections": "Brukarar med fullmakt",
     "user_search_placeholder": "Søk etter brukarar eller verksemder",
     "user_no_search_result": "Ingen treff på søket \"{{searchTerm}}\".",
+    "no_result_help_line_add_user": "Om dette er nokon du ønsker å gi fullmakt til, kan du legge dei til som ny brukar.",
+    "no_result_help_line_ssn": "Tips: Det er ikkje mogleg å søke etter personar med fødselsnummer. Søk heller på namn.",
     "user_no_filter_result": "Ingen brukarar passar dei valde filtra.",
     "indirect_connections": "Brukarar utan fullmakt"
   },
