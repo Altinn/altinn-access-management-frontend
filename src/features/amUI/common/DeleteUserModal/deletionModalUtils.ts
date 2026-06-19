@@ -1,22 +1,15 @@
 import { RolePermission } from '@/rtk/features/roleApi';
-import {
-  A2_PROVIDER_CODE,
-  CRA_PROVIDER_CODE,
-  ECC_PROVIDER_CODE,
-} from '../UserRoles/useRoleMetadata';
-import { enableRoleDeletion } from '@/resources/utils/featureFlagUtils';
+import { CRA_PROVIDER_CODE, ECC_PROVIDER_CODE } from '../UserRoles/useRoleMetadata';
 
 export const RIGHTHOLDER_ROLE = 'rettighetshaver';
 export const AGENT_ROLE = 'agent';
 
 export const ER_ROLE_REASON = 'er_roles';
-export const OLD_ALTINN_REASON = 'old_altinn';
 export const AGENT_ROLE_REASON = 'agent_role';
 export const GUARDIANSHIP_ROLE_REASON = 'guardianship_role';
 
 export type NonDeletableReason =
   | typeof ER_ROLE_REASON
-  | typeof OLD_ALTINN_REASON
   | typeof AGENT_ROLE_REASON
   | typeof GUARDIANSHIP_ROLE_REASON;
 
@@ -80,10 +73,6 @@ export const getNonDeletableReasons = (
     return [];
   }
 
-  const hasOldAltinnAccess = rolePermissions.some(
-    (rolePermission) => rolePermission?.role?.provider?.code === A2_PROVIDER_CODE,
-  );
-
   const hasERRoles = rolePermissions.some(
     (rolePermission) => rolePermission?.role?.provider?.code === ECC_PROVIDER_CODE,
   );
@@ -97,9 +86,6 @@ export const getNonDeletableReasons = (
   );
 
   const reasons: NonDeletableReason[] = [];
-  if (hasOldAltinnAccess && !enableRoleDeletion()) {
-    reasons.push(OLD_ALTINN_REASON);
-  }
   if (hasERRoles) {
     reasons.push(ER_ROLE_REASON);
   }
