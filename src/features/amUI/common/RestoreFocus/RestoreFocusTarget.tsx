@@ -50,8 +50,14 @@ export const focusElement = (element: HTMLElement) => {
   }
 };
 
-// Focuses the first focusable element inside the element with the given id once focus has been
-// requested for that id. No-op when rendered outside a RestoreFocusProvider.
+// Use this in any component that could be the destination of a requestFocus(id) call. Typical
+// examples:
+// - a list row
+// - an inline action control with its own distinct id
+//
+// Focuses the first focusable element inside the matching DOM id once that id is requested. The
+// request persists until it's consumed, so a target that mounts after the request (for example, a
+// skeleton replaced by real data) still picks it up. Must be used within a RestoreFocusProvider.
 export const useRestoreFocusTarget = (id: string) => {
   const context = useContext(RestoreFocusContext);
   const isRequested = context?.focusRequestId === id;
@@ -77,9 +83,11 @@ export const useRestoreFocusTarget = (id: string) => {
   }, [clearRequest, containerElement, id, isRequested]);
 };
 
-// Catches focus when the requested id does not exist in the container, e.g. when the originating
-// item was removed. Render one of these inside a provider, typically around the list heading.
-// Focuses its first focusable descendant, otherwise its first child element.
+// Use this to wrap something durable (a list heading, a modal's content area) that should catch
+// focus when the requested id isn't present. This can happen if the originating item was removed,
+// or sits in a currently-collapsed section. It tries fallbackId next, if one was given to
+// requestFocus, then falls back to its own first focusable descendant. Render exactly one per
+// zone.
 export const RestoreFocusFallback = ({ children }: { children: ReactNode }) => {
   const context = useContext(RestoreFocusContext);
   const wrapperRef = useRef<HTMLDivElement>(null);

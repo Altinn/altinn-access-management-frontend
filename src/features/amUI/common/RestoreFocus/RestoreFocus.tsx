@@ -15,8 +15,14 @@ export interface RestoreFocusContextValue extends RestoreFocus {
 
 export const RestoreFocusContext = createContext<RestoreFocusContextValue | undefined>(undefined);
 
-// Owns the "which id should receive focus" state. Pass the result to <RestoreFocusProvider>
-// and call requestFocus(id) when navigating back to the view containing the target.
+// Use this when you own a zone (a list, a modal, a section) and need to send focus somewhere
+// specific later, for example:
+// - a sub-view closes
+// - an action settles
+// - an item is removed
+//
+// Pass the result to <RestoreFocusProvider>. Call requestFocus(id, fallbackId?) once you know the
+// destination. One per zone.
 export const useRestoreFocus = (): RestoreFocus => {
   const [focusRequestId, setFocusRequestId] = useState<string | null>(null);
   const [focusFallbackId, setFocusFallbackId] = useState<string | null>(null);
@@ -41,9 +47,14 @@ export const useRestoreFocus = (): RestoreFocus => {
   );
 };
 
+// Use this when a descendant needs to call requestFocus, for example from a button's onClick,
+// without owning the controller itself. There should be exactly one useRestoreFocus() per zone,
+// created by whichever component renders <RestoreFocusProvider>.
 export const useRestoreFocusContext = () => useContext(RestoreFocusContext);
 
-// Wraps the area containing the focus targets. Target lookups are scoped to this container.
+// Use this once per zone. Wrap the subtree that contains both the triggering elements and the
+// RestoreFocusTarget/RestoreFocusFallback descendants. This scopes id lookups to that subtree, so
+// a duplicate id elsewhere on the page (for example, a row hidden behind a modal) is never matched.
 export const RestoreFocusProvider = ({
   restoreFocus,
   children,

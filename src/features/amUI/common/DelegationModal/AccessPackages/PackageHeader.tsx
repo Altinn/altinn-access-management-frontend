@@ -3,6 +3,8 @@ import { PackageIcon } from '@navikt/aksel-icons';
 
 import { useIsMobileOrSmaller } from '@/resources/utils/screensizeUtils';
 
+import { delegationModalTitleId } from '../DelegationModalContext';
+
 import classes from './AccessPackageInfo.module.css';
 
 interface PackageHeaderProps {
@@ -22,6 +24,7 @@ export const PackageHeader = ({ name }: PackageHeaderProps) => {
         />
       )}
       <DsHeading
+        id={delegationModalTitleId}
         level={1}
         data-size={isSmall ? 'xs' : 'md'}
       >

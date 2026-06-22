@@ -5,7 +5,7 @@ import type { AccessPackage } from '@/rtk/features/accessPackageApi';
 import type { Party } from '@/rtk/features/lookupApi';
 import { AccessPackageList } from '@/features/amUI/common/AccessPackageList/AccessPackageList';
 
-import { useDelegationModalContext } from '../DelegationModalContext';
+import { delegationModalTitleId, useDelegationModalContext } from '../DelegationModalContext';
 import { DelegationAction } from '../EditModal';
 
 import classes from './PackageSearch.module.css';
@@ -33,6 +33,7 @@ export const PackageSearch = ({
     toParty && (
       <div className={classes.container}>
         <DsHeading
+          id={delegationModalTitleId}
           level={2}
           data-size='sm'
         >

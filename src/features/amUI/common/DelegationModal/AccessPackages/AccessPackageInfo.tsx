@@ -66,7 +66,7 @@ export const AccessPackageInfo = ({ accessPackage, availableActions = [] }: Pack
   });
   const actionsRef = React.useRef<HTMLDivElement>(null);
   useRestoreFocusAfterSettled({
-    isSettling: isActionLoading || isFetching || actionSuccess,
+    isSettled: !isActionLoading && !isFetching && !actionSuccess,
     requestWhen: isActionLoading,
     onRestore: () => focusFirstEnabledButton(actionsRef.current),
   });

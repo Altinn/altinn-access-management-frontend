@@ -177,10 +177,10 @@ const FallbackWithFallbackIdTest = ({
 const RemovalHookTest = () => {
   const restoreFocus = useRestoreFocus();
   const [items, setItems] = useState(['item']);
-  const [isSettling, setIsSettling] = useState(false);
+  const [isPending, setIsPending] = useState(false);
   useRestoreFocusAfterSettled({
-    isSettling,
-    requestWhen: isSettling,
+    isSettled: !isPending,
+    requestWhen: isPending,
     onRestore: () => restoreFocus.requestFocus('item'),
   });
 
@@ -189,7 +189,7 @@ const RemovalHookTest = () => {
       <button
         onClick={() => {
           setItems([]);
-          setIsSettling(false);
+          setIsPending(false);
         }}
       >
         Finish removal
@@ -203,7 +203,7 @@ const RemovalHookTest = () => {
             <TargetMarker id='item' />
             <button
               id='item'
-              onClick={() => setIsSettling(true)}
+              onClick={() => setIsPending(true)}
             >
               Delete item
             </button>
@@ -219,7 +219,7 @@ const InstantSettleTest = () => {
   const [items, setItems] = useState(['item']);
   const [isDeleting, setIsDeleting] = useState(false);
   useRestoreFocusAfterSettled({
-    isSettling: false,
+    isSettled: true,
     requestWhen: isDeleting,
     onRestore: () => restoreFocus.requestFocus('item'),
   });
@@ -235,7 +235,7 @@ const InstantSettleTest = () => {
           <button
             id='item'
             onClick={() => {
-              // A cached/instant mutation: isSettling never observably becomes true.
+              // A cached/instant mutation: isSettled never observably becomes false.
               setItems([]);
               setIsDeleting(true);
             }}
@@ -266,11 +266,11 @@ const FallbackDoesNotStealFocusTest = () => {
 
 const ActionSettleFocusTest = () => {
   const [isLoading, setIsLoading] = useState(false);
-  const [isSettling, setIsSettling] = useState(false);
+  const [isExtraBusy, setIsExtraBusy] = useState(false);
   const [actionLabel, setActionLabel] = useState('Initial action');
   const actionsRef = useRef<HTMLDivElement>(null);
   useRestoreFocusAfterSettled({
-    isSettling: isLoading || isSettling,
+    isSettled: !isLoading && !isExtraBusy,
     requestWhen: isLoading,
     onRestore: () => focusFirstEnabledButton(actionsRef.current),
   });
@@ -282,14 +282,14 @@ const ActionSettleFocusTest = () => {
         onClick={() => {
           setActionLabel('Next action');
           setIsLoading(false);
-          setIsSettling(false);
+          setIsExtraBusy(false);
         }}
       >
         Finish action
       </button>
       <button>Elsewhere</button>
       <div ref={actionsRef}>
-        {isLoading || isSettling ? <span>Loading</span> : <button>{actionLabel}</button>}
+        {isLoading || isExtraBusy ? <span>Loading</span> : <button>{actionLabel}</button>}
       </div>
     </>
   );

@@ -8,10 +8,15 @@ interface PendingFocus<T> {
   dataAtRequest: T;
 }
 
-// Defers a focus request until `data` is a different reference than it was when the request was
-// made — i.e. until a query cache has actually refetched and React has committed the new DOM.
-// Use this when focusing immediately could match a stale/outgoing element sharing an id with the
-// one that's about to replace it.
+// Use this when an action moves an item between two lists backed by the same query cache. For
+// example, revoke moves a package from an "assigned" bucket to an "available" one, and the focus
+// target only exists once that refetch lands.
+//
+// Call the returned requestFocusOnDataChange(id, fallbackId?) right after the action succeeds. It
+// defers the actual requestFocus until `data` is a different reference than it was at request
+// time. In other words, it waits until the query has refetched and React has committed the new
+// DOM. This way it never matches a stale or outgoing element that shares an id with the one about
+// to replace it.
 export const useRestoreFocusOnDataChange = <T>(data: T) => {
   const restoreFocus = useRestoreFocusContext();
   const pendingRef = useRef<PendingFocus<T> | null>(null);

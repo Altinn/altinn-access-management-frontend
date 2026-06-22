@@ -16,7 +16,7 @@ import { ScopeInfo } from '../../maskinporten/ScopeInfo';
 import classes from './DelegationModal.module.css';
 import { ResourceSearch } from './SingleRights/ResourceSearch';
 import { ResourceInfo } from './SingleRights/ResourceInfo';
-import { useDelegationModalContext } from './DelegationModalContext';
+import { delegationModalTitleId, useDelegationModalContext } from './DelegationModalContext';
 import { DelegationType } from './DelegationModal';
 import { PackageSearch } from './AccessPackages/PackageSearch';
 import { AccessPackageInfo } from './AccessPackages/AccessPackageInfo';
@@ -150,6 +150,7 @@ export const DelegationModalContent = ({
           closeButton={t('common.close')}
           onClose={onClosing}
           ref={modalRef}
+          aria-labelledby={delegationModalTitleId}
         >
           {infoView && (
             <Button
