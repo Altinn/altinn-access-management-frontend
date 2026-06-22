@@ -349,7 +349,8 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
             List<ServiceResourceFE> allExpectedResources = TestDataUtil.GetSingleRightsResources();
 
             int totalPages = (int)Math.Ceiling((double)allExpectedResources.Count / resultsPerPage);
-            int resultsFinalPage = allExpectedResources.Count % resultsPerPage;
+            int bleedoverLastPage = allExpectedResources.Count % resultsPerPage;
+            int resultsFinalPage = bleedoverLastPage == 0 ? resultsPerPage : bleedoverLastPage;
 
             List<PaginatedList<ServiceResourceFE>> allActualPages = new List<PaginatedList<ServiceResourceFE>>();
 
@@ -550,7 +551,8 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
 
         /// <summary>
         ///     Test case: PaginatedSearch with includeExpired not set (defaults to false)
-        ///     Expected: Archived resources (MigratedApp type and migratedcorrespondence identifier) are excluded from results
+        ///     Expected: Archived resources (MigratedApp type and deprecated status) are excluded from results.
+        ///     MigratedCorrespondence resources that are not deprecated should be included.
         /// </summary>
         [Fact]
         public async Task GetSingleRightsSearch_IncludeExpiredNotSet_ExcludesArchivedResources()
@@ -570,12 +572,14 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
             PaginatedList<ServiceResourceFE> actualResult = JsonSerializer.Deserialize<PaginatedList<ServiceResourceFE>>(await response.Content.ReadAsStringAsync(), options);
             Assert.Equal(expectedResources.Count, actualResult.NumEntriesTotal);
             Assert.DoesNotContain(actualResult.PageList, r => r.ResourceType == ResourceType.MigratedApp);
-            Assert.DoesNotContain(actualResult.PageList, r => r.Identifier.Contains("migratedcorrespondence", StringComparison.OrdinalIgnoreCase));
+            Assert.DoesNotContain(actualResult.PageList, r => r.Identifier == "migratedcorrespondence-test-resource");
+            Assert.Contains(actualResult.PageList, r => r.Identifier == "migratedcorrespondence-active-resource");
         }
 
         /// <summary>
         ///     Test case: PaginatedSearch with includeExpired=true
-        ///     Expected: Archived resources (MigratedApp type and migratedcorrespondence identifier) are included in results
+        ///     Expected: Archived resources (MigratedApp type and deprecated status) are included in results.
+        ///     MigratedCorrespondence resources with deprecated status should be included.
         /// </summary>
         [Fact]
         public async Task GetSingleRightsSearch_IncludeExpiredTrue_IncludesExpiredResources()
@@ -595,7 +599,7 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
             PaginatedList<ServiceResourceFE> actualResult = JsonSerializer.Deserialize<PaginatedList<ServiceResourceFE>>(await response.Content.ReadAsStringAsync(), options);
             Assert.Equal(expectedResources.Count, actualResult.NumEntriesTotal);
             Assert.Contains(actualResult.PageList, r => r.ResourceType == ResourceType.MigratedApp);
-            Assert.Contains(actualResult.PageList, r => r.Identifier.Contains("migratedcorrespondence", StringComparison.OrdinalIgnoreCase));
+            Assert.Contains(actualResult.PageList, r => r.Identifier == "migratedcorrespondence-test-resource");
         }
 
         private static IHttpContextAccessor GetHttpContextAccessorMock(string partytype, string id)

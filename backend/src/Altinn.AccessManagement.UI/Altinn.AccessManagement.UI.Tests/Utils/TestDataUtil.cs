@@ -83,7 +83,7 @@ namespace Altinn.AccessManagement.UI.Tests.Utils
                 r.ResourceType != ResourceType.MaskinportenSchema &&
                 (includeExpired ||
                     (r.ResourceType != ResourceType.MigratedApp &&
-                     !(r.Identifier?.IndexOf("migratedcorrespondence", StringComparison.OrdinalIgnoreCase) >= 0) && r.Status?.ToLower() != "deprecated")));
+                     r.Status?.ToLower() != "deprecated")));
         }
 
         /// <summary>

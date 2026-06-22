@@ -126,7 +126,6 @@ namespace Altinn.AccessManagement.UI.Core.Services
         private static bool IsExpiredResource(ServiceResource resource)
         {
             return resource.ResourceType == ResourceType.MigratedApp ||
-                (resource.Identifier?.Contains("migratedcorrespondence", StringComparison.OrdinalIgnoreCase) == true) ||
                 resource.Status?.ToLower() == "deprecated";
         }
 

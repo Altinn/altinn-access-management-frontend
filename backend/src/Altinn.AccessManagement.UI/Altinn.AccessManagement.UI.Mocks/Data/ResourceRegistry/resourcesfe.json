@@ -850,6 +850,7 @@
   {
     "title": "Arkivert tjeneste - MigratedCorrespondence",
     "identifier": "migratedcorrespondence-test-resource",
+    "status": "Deprecated",
     "visible": true,
     "delegable": true,
     "description": "En arkivert korrespondanseressurs",
@@ -860,6 +861,27 @@
       {
         "id": "urn:altinn:resource",
         "value": "migratedcorrespondence-test-resource"
+      }
+    ],
+    "resourceOwnerName": "Testdepartementet",
+    "resourceOwnerOrgcode": "TTD",
+    "resourceOwnerOrgNumber": "974760746",
+    "keywords": []
+  },
+  {
+    "title": "Aktiv tjeneste - MigratedCorrespondence",
+    "identifier": "migratedcorrespondence-active-resource",
+    "status": "Active",
+    "visible": true,
+    "delegable": true,
+    "description": "En aktiv korrespondanseressurs",
+    "rightDescription": "Gir tilgang til korrespondansedata",
+    "resourceType": "GenericAccessResource",
+    "resourceReferences": [],
+    "authorizationReference": [
+      {
+        "id": "urn:altinn:resource",
+        "value": "migratedcorrespondence-active-resource"
       }
     ],
     "resourceOwnerName": "Testdepartementet",
