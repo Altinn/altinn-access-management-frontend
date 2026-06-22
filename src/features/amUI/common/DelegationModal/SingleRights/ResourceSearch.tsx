@@ -14,7 +14,7 @@ import { useGetResourceOwnersQuery } from '@/rtk/features/resourceApi';
 import { arraysEqual, debounce } from '@/resources/utils';
 import type { Party } from '@/rtk/features/lookupApi';
 
-import { useDelegationModalContext } from '../DelegationModalContext';
+import { delegationModalTitleId, useDelegationModalContext } from '../DelegationModalContext';
 import { SearchResults } from './SearchResults';
 import { ResourceFilterToolbar } from '../../ResourceFilterToolbar/ResourceFilterToolbar';
 import { usePartyRepresentation } from '../../PartyRepresentationContext/PartyRepresentationContext';
@@ -106,6 +106,7 @@ export const ResourceSearch = ({ onSelect, availableActions }: ResourceSearchPro
   return (
     <>
       <DsHeading
+        id={delegationModalTitleId}
         level={2}
         data-size='sm'
       >

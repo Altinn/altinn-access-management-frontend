@@ -13,7 +13,10 @@ import type { ServiceResource } from '@/rtk/features/singleRights/singleRightsAp
 import { PartyType } from '@/rtk/features/userInfoApi';
 import { ResourceFilterToolbar } from '@/features/amUI/common/ResourceFilterToolbar/ResourceFilterToolbar';
 
-import { useDelegationModalContext } from '../common/DelegationModal/DelegationModalContext';
+import {
+  delegationModalTitleId,
+  useDelegationModalContext,
+} from '../common/DelegationModal/DelegationModalContext';
 import { usePartyRepresentation } from '../common/PartyRepresentationContext/PartyRepresentationContext';
 import { ScopeSearchResults } from './ScopeSearchResults';
 
@@ -72,6 +75,7 @@ export const ScopeSearch = ({
   return (
     <>
       <DsHeading
+        id={delegationModalTitleId}
         level={2}
         data-size='sm'
       >

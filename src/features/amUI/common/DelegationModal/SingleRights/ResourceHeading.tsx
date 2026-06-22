@@ -7,7 +7,7 @@ import { useIsMobileOrSmaller } from '@/resources/utils/screensizeUtils';
 import { isExpiredResource } from '../../ResourceList/utils';
 import { useTranslation } from 'react-i18next';
 
-export const ResourceHeading = ({ resource }: { resource: ServiceResource }) => {
+export const ResourceHeading = ({ resource, id }: { resource: ServiceResource; id?: string }) => {
   const { t } = useTranslation();
   const { getProviderLogoUrl } = useProviderLogoUrl();
   const isSmall = useIsMobileOrSmaller();
@@ -44,6 +44,7 @@ export const ResourceHeading = ({ resource }: { resource: ServiceResource }) => 
       <div className={classes.resource}>
         <div className={classes.infoHeading}>
           <DsHeading
+            id={id}
             level={3}
             data-size={isSmall ? '2xs' : 'sm'}
           >

@@ -22,6 +22,7 @@ import { usePartyRepresentation } from '../../PartyRepresentationContext/PartyRe
 import { getMissingAccessMessage } from '../missingAccessUtils';
 import { useRightsSection } from '../utils/useRightsSection';
 import { DelegationAction } from '../EditModal';
+import { delegationModalTitleId } from '../DelegationModalContext';
 import { ResourceHeading } from './ResourceHeading';
 import { ResourceInfoSkeleton } from './ResourceInfoSkeleton';
 import { ResourceAlert } from './ResourceAlert';
@@ -168,7 +169,10 @@ export const ResourceInfo = ({
         {delegationError ?? missingAccess ?? ''}
       </StatusMessageForScreenReader>
       <div>
-        <ResourceHeading resource={resource} />
+        <ResourceHeading
+          resource={resource}
+          id={delegationModalTitleId}
+        />
         {isActionLoading || isActionSuccess ? (
           <LoadingAnimation
             isLoading={isActionLoading}
