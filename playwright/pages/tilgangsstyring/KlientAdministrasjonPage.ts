@@ -13,6 +13,11 @@ export class KlientAdministrasjonPage {
   readonly slettBrukerDialogKnapp: Locator;
   readonly ingenBrukereTekst: Locator;
   readonly ingenKlienterTekst: Locator;
+  readonly sideOverskrift: Locator;
+  readonly harDisseKlienteneFane: Locator;
+  readonly alleKlienterFane: Locator;
+  readonly brukereMedFullmaktFane: Locator;
+  readonly alleBrukereFane: Locator;
 
   constructor(page: Page) {
     this.page = page;
@@ -21,6 +26,11 @@ export class KlientAdministrasjonPage {
     });
     this.brukerFane = this.page.getByRole('tab', { name: 'Brukere' });
     this.klientFane = this.page.getByRole('tab', { name: 'Klienter' });
+    this.sideOverskrift = this.page.getByRole('heading', { name: /Klientadministrasjon for/ });
+    this.harDisseKlienteneFane = this.page.getByRole('tab', { name: 'Har disse klientene' });
+    this.alleKlienterFane = this.page.getByRole('tab', { name: 'Alle klienter' });
+    this.brukereMedFullmaktFane = this.page.getByRole('tab', { name: 'Brukere med fullmakt' });
+    this.alleBrukereFane = this.page.getByRole('tab', { name: 'Alle brukere' });
     this.brukerSok = this.page.getByRole('searchbox', { name: 'Søk' });
     this.fnrFelt = this.page.getByRole('textbox', { name: 'Fødselsnummer/brukernavn' });
     this.etternavnFelt = this.page.getByRole('textbox', { name: 'Etternavn' });
@@ -33,12 +43,33 @@ export class KlientAdministrasjonPage {
     this.ingenKlienterTekst = this.page.getByText('Ingen klienter er tildelt.');
   }
 
+  // Verifiser at klientadministrasjonssiden (oversikten) er lastet før vi klikker oss videre.
+  async verifyPaaKlientadministrasjon() {
+    await expect(this.sideOverskrift).toBeVisible();
+    await expect(this.brukerFane).toBeVisible();
+    await expect(this.klientFane).toBeVisible();
+  }
+
+  // Verifiser at vi er på brukerdetaljsiden (agent) før vi klikker oss videre.
+  async verifyPaaBrukerDetaljer() {
+    await expect(this.harDisseKlienteneFane).toBeVisible();
+    await expect(this.alleKlienterFane).toBeVisible();
+  }
+
+  // Verifiser at vi er på klientdetaljsiden før vi klikker oss videre.
+  async verifyPaaKlientDetaljer() {
+    await expect(this.brukereMedFullmaktFane).toBeVisible();
+    await expect(this.alleBrukereFane).toBeVisible();
+  }
+
   async goToBrukerFane() {
     await this.brukerFane.click();
+    await expect(this.brukerFane).toHaveAttribute('aria-selected', 'true');
   }
 
   async goToKlientFane() {
     await this.klientFane.click();
+    await expect(this.klientFane).toHaveAttribute('aria-selected', 'true');
   }
 
   async clickLeggTilBrukerKnapp() {
@@ -81,11 +112,13 @@ export class KlientAdministrasjonPage {
   }
 
   async klikkAlleBrukere() {
-    await this.page.getByRole('tab', { name: 'Alle brukere' }).click();
+    await this.alleBrukereFane.click();
+    await expect(this.alleBrukereFane).toHaveAttribute('aria-selected', 'true');
   }
 
   async klikkAlleKlienter() {
-    await this.page.getByRole('tab', { name: 'Alle klienter' }).click();
+    await this.alleKlienterFane.click();
+    await expect(this.alleKlienterFane).toHaveAttribute('aria-selected', 'true');
   }
 
   async klikkKnapp(navn: string) {
@@ -117,10 +150,12 @@ export class KlientAdministrasjonPage {
   }
 
   async klikkBrukereMedFullmakt() {
-    await this.page.getByRole('tab', { name: 'Brukere med fullmakt' }).click();
+    await this.brukereMedFullmaktFane.click();
+    await expect(this.brukereMedFullmaktFane).toHaveAttribute('aria-selected', 'true');
   }
 
   async klikkHarDisseKlientene() {
-    await this.page.getByRole('tab', { name: 'Har disse klientene' }).click();
+    await this.harDisseKlienteneFane.click();
+    await expect(this.harDisseKlienteneFane).toHaveAttribute('aria-selected', 'true');
   }
 }
