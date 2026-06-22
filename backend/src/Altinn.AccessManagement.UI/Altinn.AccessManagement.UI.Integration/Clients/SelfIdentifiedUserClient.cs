@@ -55,7 +55,8 @@ namespace Altinn.AccessManagement.UI.Integration.Clients
         public async Task<Altinn2ForgotPasswordResponse> SendForgotPasswordEmail(Altinn2ForgotPasswordRequest request, CancellationToken cancellationToken)
         {
             string token = JwtTokenUtil.GetTokenFromContext(_httpContextAccessor.HttpContext, _platformSettings.JwtCookieName);
-            string endpointUrl = "enduser/selfidentified/link-request";
+            string languageQueryParam = string.IsNullOrEmpty(request.Language) ? string.Empty : $"?lang={request.Language}";
+            string endpointUrl = $"enduser/selfidentified/link-request{languageQueryParam}";
 
             var content = JsonContent.Create(request);
             HttpResponseMessage response = await _httpClient.PostAsync(token, endpointUrl, content, cancellationToken);

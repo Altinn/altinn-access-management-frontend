@@ -22,7 +22,7 @@ import { PageLayoutWrapper } from '../common/PageLayoutWrapper';
 import { Altinn2AccountForm } from './Altinn2AccountForm';
 
 export const AddAltinn2AccountPage = () => {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   const [searchParams] = useSearchParams();
   const token = searchParams.get('token') ?? '';
 
@@ -60,7 +60,8 @@ export const AddAltinn2AccountPage = () => {
   };
 
   const onSendForgotPasswordEmail = (userName: string) => {
-    sendForgotPasswordEmail({ userName })
+    const lang = i18n.language as 'no_nb' | 'no_nn' | 'en';
+    sendForgotPasswordEmail({ userName, lang })
       .unwrap()
       .then((payload) => {
         if (payload.maskedEmail) {
