@@ -150,7 +150,7 @@ describe('ResourceList', () => {
     const expiredResource = {
       ...createResource({ name: 'Migrated Correspondence Service' }),
       identifier: 'some-migratedcorrespondence-service',
-      status: 'deprecated',
+      status: 'Deprecated',
     } as ResourceListItemResource;
 
     render(
