@@ -1,5 +1,5 @@
-import React from 'react';
-import { Link } from 'react-router';
+import React, { useEffect } from 'react';
+import { Link, useSearchParams } from 'react-router';
 import { useTranslation } from 'react-i18next';
 import { PlusIcon } from '@navikt/aksel-icons';
 import {
@@ -25,15 +25,21 @@ import { SystemUserPath } from '@/routes/paths';
 import { PageLayoutWrapper } from '@/features/amUI/common/PageLayoutWrapper';
 
 import classes from './SystemUserOverviewPage.module.css';
-import { useGetIsAdminQuery, useGetIsClientAdminQuery } from '@/rtk/features/userInfoApi';
+import {
+  useGetIsAdminQuery,
+  useGetIsClientAdminQuery,
+  useGetReporteeListForAuthorizedUserQuery,
+} from '@/rtk/features/userInfoApi';
 import { hasCreateSystemUserPermission } from '@/resources/utils/permissionUtils';
 import { SystemUserList } from './SystemUserList';
 import { Breadcrumbs } from '../../common/Breadcrumbs/Breadcrumbs';
 import ReporteePageHeading from '../../common/ReporteePageHeading';
+import { redirectToChangeReporteeAndRedirect } from '@/resources/utils/changeReporteeUtils';
 
 export const SystemUserOverviewPage = () => {
   const { t } = useTranslation();
   useDocumentTitle(t('systemuser_overviewpage.page_title'));
+  const [searchParams, setSearchParams] = useSearchParams();
 
   const partyId = getCookie('AltinnPartyId');
   const partyUuid = getCookie('AltinnPartyUuid') || '';
@@ -68,6 +74,28 @@ export const SystemUserOverviewPage = () => {
   } = useGetPendingSystemUserRequestsQuery(partyUuid, {
     skip: !hasCreateSystemUserPermission(reporteeData, isAdmin),
   });
+
+  const { data: reporteeList } = useGetReporteeListForAuthorizedUserQuery(undefined, {
+    skip: !searchParams.get('org'),
+  });
+
+  useEffect(() => {
+    const org = searchParams.get('org');
+    if (org && reporteeData?.partyUuid && reporteeList) {
+      const matchingReportee = reporteeList?.find((r) => r.organizationNumber === org);
+      setSearchParams((prev) => {
+        const next = new URLSearchParams(prev);
+        next.delete('org');
+        return next;
+      });
+      if (matchingReportee && reporteeData?.organizationNumber !== org) {
+        redirectToChangeReporteeAndRedirect(
+          matchingReportee.partyUuid,
+          window.location.origin + window.location.pathname,
+        );
+      }
+    }
+  }, [searchParams, setSearchParams, reporteeData, reporteeList]);
 
   const isLoading =
     isLoadingSystemUsers ||
