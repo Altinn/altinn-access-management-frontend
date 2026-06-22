@@ -349,7 +349,8 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
             List<ServiceResourceFE> allExpectedResources = TestDataUtil.GetSingleRightsResources();
 
             int totalPages = (int)Math.Ceiling((double)allExpectedResources.Count / resultsPerPage);
-            int resultsFinalPage = allExpectedResources.Count % resultsPerPage;
+            int bleedoverLastPage = allExpectedResources.Count % resultsPerPage;
+            int resultsFinalPage = bleedoverLastPage == 0 ? resultsPerPage : bleedoverLastPage;
 
             List<PaginatedList<ServiceResourceFE>> allActualPages = new List<PaginatedList<ServiceResourceFE>>();
 
