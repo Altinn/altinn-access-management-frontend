@@ -83,6 +83,6 @@ export const isExpiredResource = (resource: ResourceListItemResource): boolean =
   const status = 'status' in resource ? resource.status : undefined;
   return (
     resourceType === 'MigratedApp' ||
-    (typeof status === 'string' && status?.toLowerCase() === 'deprecated')
+    (typeof status === 'string' && status.toLowerCase() === 'deprecated')
   );
 };
