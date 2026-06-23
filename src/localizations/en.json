@@ -1128,7 +1128,8 @@
     "show_expired_services": "Show expired services",
     "show_expired_services_helptext": "Some services are expired and will not let you submit/receive new data. You can still grant others access to them, but they will only be able to view old submissions/messages on that service.",
     "show_expired_services_helptext_button": "What are expired services?",
-    "expired_badge": "Expired"
+    "expired_badge": "Expired",
+    "service_owner": "Service owner"
   },
   "landing_page": {
     "page_title": "Access management - Altinn",

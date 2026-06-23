@@ -1125,7 +1125,8 @@
     "show_expired_services": "Vis utgåtte tenester",
     "show_expired_services_helptext": "Nokre tenester er utgåtte og vil ikkje la deg sende inn eller motta nye data. Du kan likevel gi andre fullmakter til dei, men dei vil då berre kunne sjå gamle innsendingar eller meldingar på tenesta.",
     "show_expired_services_helptext_button": "Kva er utgåtte tenester?",
-    "expired_badge": "Utgått"
+    "expired_badge": "Utgått",
+    "service_owner": "Tenesteeigar"
   },
   "landing_page": {
     "page_title": "Tilgangsstyring - Altinn",
