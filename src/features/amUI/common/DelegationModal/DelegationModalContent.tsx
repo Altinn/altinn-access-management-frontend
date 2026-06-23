@@ -85,6 +85,7 @@ export const DelegationModalContent = ({
   let searchViewContent: JSX.Element | undefined;
   let infoViewContent: JSX.Element | undefined;
   let triggerButtonText: string | undefined;
+  let dialogLabel: string | undefined;
   const hasDelegateAccess = (availableActions ?? []).includes(DelegationAction.DELEGATE);
 
   switch (delegationType) {
@@ -108,11 +109,13 @@ export const DelegationModalContent = ({
       triggerButtonText = hasDelegateAccess
         ? t('access_packages.give_new_button')
         : t('common.request_poa');
+      dialogLabel = t('delegation_modal.aria_label.access_package');
       break;
     case DelegationType.MaskinportenScope:
       searchViewContent = <ScopeSearch onSelect={onResourceSelection} />;
       infoViewContent = resourceToView && <ScopeInfo resource={resourceToView} />;
       triggerButtonText = t('maskinporten_page.add_scope_button');
+      dialogLabel = t('delegation_modal.aria_label.maskinporten');
       break;
     default:
       searchViewContent = (
@@ -131,6 +134,7 @@ export const DelegationModalContent = ({
       triggerButtonText = hasDelegateAccess
         ? t('single_rights.give_new_single_right')
         : t('delegation_modal.request.request_service');
+      dialogLabel = t('delegation_modal.aria_label.single_rights');
   }
 
   return (
@@ -150,6 +154,7 @@ export const DelegationModalContent = ({
           closeButton={t('common.close')}
           onClose={onClosing}
           ref={modalRef}
+          aria-label={dialogLabel}
           aria-description={t('delegation_modal.aria_description')}
         >
           {infoView && (

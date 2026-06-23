@@ -494,6 +494,13 @@
   },
   "delegation_modal": {
     "aria_description": "Sjå og rediger fullmakter",
+    "aria_label": {
+      "access_package": "Tilgangspakkar",
+      "single_rights": "Enkelttenester",
+      "instance": "Delt frå innboks",
+      "role": "Roller",
+      "maskinporten": "Maskinporten"
+    },
     "request_service": "Kva for teneste vil du be om?",
     "give_service_to_name": "Gi <strong>{{name}}</strong> fullmakt til ny teneste",
     "request_package": "Kva for tilgangspakke vil du be om?",
