@@ -70,7 +70,9 @@ test.describe('klientadministrasjon', () => {
       });
 
       await test.step(`Gå til ${agent.pid} ${agent.name}`, async () => {
+        await klientAdministrasjonPage.verifyPaaKlientadministrasjon();
         await klientAdministrasjonPage.klikkListeElement(agent.name);
+        await klientAdministrasjonPage.verifyPaaBrukerDetaljer();
       });
 
       await test.step(`slett ${agent.name}`, async () => {
@@ -212,7 +214,9 @@ test.describe('klientadministrasjon', () => {
       });
 
       await test.step(`velg ${agent.name}`, async () => {
+        await klientAdministrasjonPage.verifyPaaKlientadministrasjon();
         await klientAdministrasjonPage.klikkListeElement(agent.name);
+        await klientAdministrasjonPage.verifyPaaBrukerDetaljer();
       });
 
       await test.step(`Gi ${agent.name} fullmakt til Posttjenester for ${client.orgName}`, async () => {
@@ -337,8 +341,10 @@ test.describe('klientadministrasjon', () => {
       });
 
       await test.step(`Gå til brukeren ${agent.name} hos klienten ${client.orgName}`, async () => {
+        await klientAdministrasjonPage.verifyPaaKlientadministrasjon();
         await klientAdministrasjonPage.goToKlientFane();
         await klientAdministrasjonPage.klikkListeElement(client.orgName);
+        await klientAdministrasjonPage.verifyPaaKlientDetaljer();
         await klientAdministrasjonPage.klikkKnapp(agent.name);
       });
 
