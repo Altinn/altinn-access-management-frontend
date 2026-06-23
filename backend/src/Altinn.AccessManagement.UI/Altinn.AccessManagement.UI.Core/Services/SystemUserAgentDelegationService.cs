@@ -1,11 +1,9 @@
 using Altinn.AccessManagement.UI.Core.ClientInterfaces;
-using Altinn.AccessManagement.UI.Core.Configuration;
 using Altinn.AccessManagement.UI.Core.Constants;
 using Altinn.AccessManagement.UI.Core.Models.SystemUser;
 using Altinn.AccessManagement.UI.Core.Models.SystemUser.Frontend;
 using Altinn.AccessManagement.UI.Core.Services.Interfaces;
 using Altinn.Authorization.ProblemDetails;
-using Microsoft.Extensions.Options;
 
 namespace Altinn.AccessManagement.UI.Core.Services
 {
@@ -14,22 +12,18 @@ namespace Altinn.AccessManagement.UI.Core.Services
     {
         private readonly ISystemUserAgentDelegationClient _systemUserAgentDelegationClient;
         private readonly ISystemUserClient _systemUserClient;
-        private readonly FeatureFlags _featureFlags;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="SystemUserAgentDelegationService"/> class.
         /// </summary>
         /// <param name="systemUserAgentDelegationClient">The system user client administration client.</param>
         /// <param name="systemUserClient">The system user client</param>
-        /// <param name="featureFlags">Feature flags</param>
         public SystemUserAgentDelegationService(
             ISystemUserAgentDelegationClient systemUserAgentDelegationClient,
-            ISystemUserClient systemUserClient,
-            IOptions<FeatureFlags> featureFlags)
+            ISystemUserClient systemUserClient)
         {
             _systemUserAgentDelegationClient = systemUserAgentDelegationClient;
             _systemUserClient = systemUserClient;
-            _featureFlags = featureFlags.Value;
         }
         
         /// <inheritdoc /> 
@@ -70,9 +64,7 @@ namespace Altinn.AccessManagement.UI.Core.Services
                 FacilitatorId = partyUuid
             };
 
-            Result<List<AgentDelegation>> newAgentDelegations = _featureFlags.UseConnectionsForAgentSystemuser
-                ? await _systemUserAgentDelegationClient.AddClient2(partyId, systemUserGuid, delegationRequest, cancellationToken)
-                : await _systemUserAgentDelegationClient.AddClient(partyId, systemUserGuid, delegationRequest, cancellationToken);
+            Result<List<AgentDelegation>> newAgentDelegations = await _systemUserAgentDelegationClient.AddClient(partyId, systemUserGuid, delegationRequest, cancellationToken);
 
             if (newAgentDelegations.IsProblem)
             {
@@ -91,9 +83,7 @@ namespace Altinn.AccessManagement.UI.Core.Services
         /// <inheritdoc />
         public async Task<Result<bool>> RemoveClient(int partyId, Guid delegationId, Guid partyUuid, Guid systemUserGuid, CancellationToken cancellationToken)
         {
-            Result<bool> response = _featureFlags.UseConnectionsForAgentSystemuser
-                ? await _systemUserAgentDelegationClient.RemoveClient2(partyId, systemUserGuid, partyUuid, delegationId, cancellationToken)
-                : await _systemUserAgentDelegationClient.RemoveClient(partyId, partyUuid, delegationId, cancellationToken);
+            Result<bool> response = await _systemUserAgentDelegationClient.RemoveClient(partyId, systemUserGuid, partyUuid, delegationId, cancellationToken);
             if (response.IsProblem)
             {
                 return new Result<bool>(response.Problem);
@@ -144,7 +134,7 @@ namespace Altinn.AccessManagement.UI.Core.Services
             {
                 AgentSystemUserId = delegation.AgentSystemUserId,
                 CustomerId = delegation.CustomerId,
-                DelegationId = _featureFlags.UseConnectionsForAgentSystemuser ? delegation.CustomerId : delegation.DelegationId
+                DelegationId = delegation.CustomerId
             };
         }
 
