@@ -1,10 +1,15 @@
 import { useTranslation } from 'react-i18next';
 import classes from './RoleInfo.module.css';
 import { Role, useGetRolePermissionsQuery, useGetRoleResourcesQuery } from '@/rtk/features/roleApi';
-import { DsAlert, DsHeading, DsParagraph } from '@altinn/altinn-components';
+import { DsAlert, DsHeading, DsLink, DsParagraph } from '@altinn/altinn-components';
 import { RoleDeleteButton } from '@/features/amUI/common/RoleList/RoleDeleteButton';
-import { ExclamationmarkTriangleFillIcon, InformationSquareFillIcon } from '@navikt/aksel-icons';
+import {
+  ExclamationmarkTriangleFillIcon,
+  InformationSquareFillIcon,
+  ExternalLinkIcon,
+} from '@navikt/aksel-icons';
 import { usePartyRepresentation } from '../../PartyRepresentationContext/PartyRepresentationContext';
+import { getRedirectToA2UsersListSectionUrl } from '@/resources/utils';
 import { RoleResourcesSection } from './RoleResourcesSection';
 import { RoleStatusMessage } from './RoleStatusMessages';
 import { enableRoleDeletion } from '@/resources/utils/featureFlagUtils';
@@ -45,6 +50,7 @@ export const RoleInfo = ({ role }: RoleInfoProps) => {
   );
 
   const sectionId = fromParty?.partyUuid === actingParty?.partyUuid ? 9 : 8;
+  const oldSolutionUrl = getRedirectToA2UsersListSectionUrl(sectionId);
   const rolePermissions = permissions?.find((p) => p.role?.id === role.id);
   const hasRole = rolePermissions !== undefined;
   const roleIsRevocable = rolePermissions?.role?.isRevocable ?? false;
@@ -108,6 +114,7 @@ export const RoleInfo = ({ role }: RoleInfoProps) => {
       </div>
       <div aria-live='polite'>{(!!deleteError || !!actionError) && deleteErrorAlert()}</div>
       <DsParagraph>{role?.description}</DsParagraph>
+      <DsParagraph className={classes.oldRolesDisclaimer}></DsParagraph>
       {!shouldSkipRoleRefs && (
         <RoleResourcesSection
           roleResources={roleResources}
