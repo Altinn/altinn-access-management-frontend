@@ -209,9 +209,6 @@
     "clients": "Klientar",
     "change_rights": "Endre rettar"
   },
-  "api_delegation": {
-    "scopes": "Scopes"
-  },
   "single_rights": {
     "search_hits": "treff på søket:",
     "popular_services": "Populære tenester:",
@@ -494,6 +491,7 @@
     "org_search_result_label": "Du legg til:"
   },
   "maskinporten_page": {
+    "scopes": "Scopes",
     "heading": "Maskinporten\u00ADadministrasjon for {{name}}",
     "document_title": "Maskinportenadministrasjon - Altinn",
     "suppliers_tab": "Leverandørar",

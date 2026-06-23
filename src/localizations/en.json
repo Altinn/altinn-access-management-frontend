@@ -213,9 +213,6 @@
     "clients": "Clients",
     "change_rights": "Edit client rights"
   },
-  "api_delegation": {
-    "scopes": "Scopes"
-  },
   "single_rights": {
     "search_hits": "matches found:",
     "popular_services": "Popular services",
@@ -498,6 +495,7 @@
     "org_search_result_label": "You will add:"
   },
   "maskinporten_page": {
+    "scopes": "Scopes",
     "heading": "Maskinporten administration for {{name}}",
     "document_title": "Maskinporten administration - Altinn",
     "suppliers_tab": "Suppliers",
