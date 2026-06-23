@@ -96,9 +96,9 @@ export const AddAltinn2AccountPage = () => {
 
   const getAddUserFromTokenErrorMessage = () => {
     if ((addUserFromTokenError as { status: number }).status === 401) {
-      return 'Invalid or expired link token.';
+      return t('add_altinn2_account_page.add_account_from_token_invalid_token');
     } else if ((addUserFromTokenError as { status: number }).status === 403) {
-      return 'Link token does not belong to the authenticated user.';
+      return t('add_altinn2_account_page.add_account_from_token_not_from_caller');
     }
     return t('add_altinn2_account_page.add_account_from_token_error');
   };

@@ -1239,7 +1239,7 @@
     "send_link": "Send lenke",
     "forgot_password_sent": "Vi har sendt ein e-post til {{email}}.",
     "add_account_from_token_error": "Kunne ikkje legge til konto",
-    "add_account_from_token_invalid_token": "Lenka er uyldig eller utgått",
+    "add_account_from_token_invalid_token": "Lenka er ugyldig eller utgått",
     "add_account_from_token_not_from_caller": "Lenka blei ikkje forespurt av pålogga brukar"
   }
 }
