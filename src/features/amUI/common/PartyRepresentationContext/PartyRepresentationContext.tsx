@@ -14,7 +14,7 @@ import { AccessPackageDelegationCheckProvider } from '../DelegationCheck/AccessP
 import { useGetRightHoldersQuery } from '@/rtk/features/connectionApi';
 import { useReporteeParty } from './useReporteeParty';
 import { useConnectedParty } from './useConnectedParty';
-import { PartyType, useGetReporteeQuery } from '@/rtk/features/userInfoApi';
+import { PartyType } from '@/rtk/features/userInfoApi';
 
 interface PartyRepresentationProviderProps {
   /** The children to be rendered with the provided party-representation data */
