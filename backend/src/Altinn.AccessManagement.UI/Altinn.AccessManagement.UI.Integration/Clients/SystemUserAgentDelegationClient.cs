@@ -79,9 +79,8 @@ namespace Altinn.AccessManagement.UI.Integration.Clients
             {
                 string token = JwtTokenUtil.GetTokenFromContext(_httpContextAccessor.HttpContext, _platformSettings.JwtCookieName);
                 string endpointUrl = $"systemuser/agent/{partyId}/{systemUserGuid}?provider={delegationRequest.FacilitatorId}&client={delegationRequest.CustomerId}";
-                StringContent requestBody = new StringContent(JsonSerializer.Serialize(delegationRequest, _serializerOptions), System.Text.Encoding.UTF8, "application/json");
 
-                HttpResponseMessage response = await _client.PostAsync(token, endpointUrl, requestBody);
+                HttpResponseMessage response = await _client.PostAsync(token, endpointUrl, null);
                 string responseContent = await response.Content.ReadAsStringAsync(cancellationToken);
 
                 if (response.IsSuccessStatusCode)
