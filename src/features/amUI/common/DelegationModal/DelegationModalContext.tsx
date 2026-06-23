@@ -8,11 +8,6 @@ export interface DelegationModalProps {
   children: React.ReactNode;
 }
 
-// Shared id for whichever heading is currently the modal's title (search view or info view).
-// Referenced by the dialog's aria-labelledby so it has a stable accessible name, instead of
-// screen readers falling back to nearby text (e.g. the package description) on every focus change.
-export const delegationModalTitleId = 'delegation-modal-title';
-
 interface DelegationModalContextProps {
   resourceToView: ServiceResource | undefined;
   packageToView: AccessPackage | undefined;

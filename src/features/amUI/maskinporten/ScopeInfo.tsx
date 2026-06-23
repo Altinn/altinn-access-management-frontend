@@ -16,10 +16,7 @@ import {
 import type { ServiceResource } from '@/rtk/features/singleRights/singleRightsApi';
 
 import { createErrorDetails } from '../common/TechnicalErrorParagraphs/TechnicalErrorParagraphs';
-import {
-  delegationModalTitleId,
-  useDelegationModalContext,
-} from '../common/DelegationModal/DelegationModalContext';
+import { useDelegationModalContext } from '../common/DelegationModal/DelegationModalContext';
 import { DelegationAction } from '../common/DelegationModal/EditModal';
 import { LoadingAnimation } from '../common/LoadingAnimation/LoadingAnimation';
 import { ResourceAlert } from '../common/DelegationModal/SingleRights/ResourceAlert';
@@ -197,10 +194,7 @@ export const ScopeInfo = ({
         {actionError ? t('delegation_modal.technical_error_message.heading') : ''}
       </StatusMessageForScreenReader>
       <div>
-        <ResourceHeading
-          resource={resource}
-          id={delegationModalTitleId}
-        />
+        <ResourceHeading resource={resource} />
         {isActionLoading || actionSuccess ? (
           <LoadingAnimation
             isLoading={isActionLoading}

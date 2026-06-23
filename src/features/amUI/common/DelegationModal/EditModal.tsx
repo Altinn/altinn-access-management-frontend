@@ -1,5 +1,6 @@
 import * as React from 'react';
 import { forwardRef, useEffect } from 'react';
+import { useTranslation } from 'react-i18next';
 import { DsDialog } from '@altinn/altinn-components';
 
 import type { ActionError } from '@/resources/hooks/useActionError';
@@ -62,6 +63,7 @@ export const EditModal = forwardRef<HTMLDialogElement, EditModalProps>(
     },
     ref,
   ) => {
+    const { t } = useTranslation();
     const { setActionError, reset } = useDelegationModalContext();
 
     useEffect(() => {
@@ -81,6 +83,7 @@ export const EditModal = forwardRef<HTMLDialogElement, EditModalProps>(
           onClose?.();
           reset();
         }}
+        aria-description={t('delegation_modal.aria_description')}
       >
         <div className={classes.content}>
           {renderModalContent({

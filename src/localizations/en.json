@@ -496,6 +496,7 @@
     "heading_subtitle": "Power of attorney given to {{name}}"
   },
   "delegation_modal": {
+    "aria_description": "View and edit authorizations",
     "request_service": "Which service do you need?",
     "give_service_to_name": "Give <strong>{{name}}</strong> power of attorney for new service",
     "request_package": "Which access package do you need?",

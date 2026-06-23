@@ -37,7 +37,7 @@ export const DelegateAccessPackageActionControl = ({
   const displayPackageRequestsFeature = displayPackageRequests();
   const actionId = packageActionControlId(packageId);
 
-  if (isLoading || isPackageLoading) {
+  if (isLoading) {
     return (
       <DsSpinner
         data-size='xs'
@@ -69,7 +69,7 @@ export const DelegateAccessPackageActionControl = ({
           variant='tertiary'
           size='sm'
           loading={isPackageLoading}
-          disabled={disabled || isPackageLoading}
+          disabled={disabled}
           onClick={onDeleteRequest}
           aria-label={t('common.delete_request_for', { poa_object: accessPackageName })}
         >
@@ -85,7 +85,7 @@ export const DelegateAccessPackageActionControl = ({
         variant='tertiary'
         size='sm'
         loading={isPackageLoading}
-        disabled={disabled || isPackageLoading}
+        disabled={disabled}
         onClick={onRequest}
         aria-label={t('common.request_poa_for', { poa_object: accessPackageName })}
       >
