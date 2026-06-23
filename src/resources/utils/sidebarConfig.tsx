@@ -5,7 +5,6 @@ import {
   TenancyIcon,
   PadlockUnlockedIcon,
   HandshakeIcon,
-  LeaveIcon,
   CogIcon,
   BellDotIcon,
   PadlockLockedFillIcon,
@@ -18,7 +17,7 @@ import i18next, { t } from 'i18next';
 import { Link } from 'react-router';
 
 import { amUIPath, ConsentPath, SystemUserPath } from '@/routes/paths';
-import { getAltinnStartPageUrl, getHostUrl } from '@/resources/utils/pathUtils';
+import { getAltinnStartPageUrl } from '@/resources/utils/pathUtils';
 
 const getMenuLinkAs = (
   props: ComponentProps<typeof Link>,

@@ -82,7 +82,6 @@ export const PartyRepresentationProvider = ({
 
   const { data: currentUser, isLoading: currentUserIsLoading } = useGetPartyFromLoggedInUserQuery();
   const { party: reportee, isLoading: reporteeIsLoading } = useReporteeParty();
-  const { data: authorizedPartyReportee } = useGetReporteeQuery();
 
   const isLoadingInitialState = externalIsLoading || currentUserIsLoading || reporteeIsLoading;
 
