@@ -4,6 +4,8 @@ import { useTranslation } from 'react-i18next';
 import { DelegationAction } from '../DelegationModal/EditModal';
 import { displayPackageRequests } from '@/resources/utils/featureFlagUtils';
 
+import { packageActionControlId } from './PackageItem';
+
 interface DelegateAccessPackageActionControlsProps {
   isLoading: boolean;
   isPackageLoading?: boolean;
@@ -15,6 +17,7 @@ interface DelegateAccessPackageActionControlsProps {
   isPendingRequest: boolean;
   disabled?: boolean;
   accessPackageName?: string;
+  packageId: string;
 }
 
 export const DelegateAccessPackageActionControl = ({
@@ -28,11 +31,13 @@ export const DelegateAccessPackageActionControl = ({
   isPendingRequest,
   accessPackageName,
   disabled = false,
+  packageId,
 }: DelegateAccessPackageActionControlsProps) => {
   const { t } = useTranslation();
   const displayPackageRequestsFeature = displayPackageRequests();
+  const actionId = packageActionControlId(packageId);
 
-  if (isLoading || isPackageLoading) {
+  if (isLoading) {
     return (
       <DsSpinner
         data-size='xs'
@@ -44,6 +49,7 @@ export const DelegateAccessPackageActionControl = ({
   if (availableActions?.includes(DelegationAction.DELEGATE) && canDelegate) {
     return (
       <Button
+        id={actionId}
         variant='tertiary'
         size='sm'
         onClick={onDelegate}
@@ -59,10 +65,11 @@ export const DelegateAccessPackageActionControl = ({
     if (isPendingRequest) {
       return (
         <Button
+          id={actionId}
           variant='tertiary'
           size='sm'
           loading={isPackageLoading}
-          disabled={disabled || isPackageLoading}
+          disabled={disabled}
           onClick={onDeleteRequest}
           aria-label={t('common.delete_request_for', { poa_object: accessPackageName })}
         >
@@ -74,10 +81,11 @@ export const DelegateAccessPackageActionControl = ({
 
     return (
       <Button
+        id={actionId}
         variant='tertiary'
         size='sm'
         loading={isPackageLoading}
-        disabled={disabled || isPackageLoading}
+        disabled={disabled}
         onClick={onRequest}
         aria-label={t('common.request_poa_for', { poa_object: accessPackageName })}
       >

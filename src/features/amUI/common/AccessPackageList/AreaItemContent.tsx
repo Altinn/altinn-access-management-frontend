@@ -19,6 +19,9 @@ import { isCriticalAndUndelegated, UndelegatedPackageWarning } from './Undelegat
 import { useAccessPackageDelegationCheck } from '../DelegationCheck/AccessPackageDelegationCheckContext';
 import { PartyType } from '@/rtk/features/userInfoApi';
 
+// DOM id for the area's content wrapper, usable as a RestoreFocus fallback target.
+export const areaContentId = (areaId: string) => `area-content-${areaId}`;
+
 interface AreaItemContentProps {
   area: ExtendedAccessArea;
   availableActions?: DelegationAction[];
@@ -85,7 +88,10 @@ export const AreaItemContent = ({
   };
 
   return (
-    <div className={cn(classes.accessAreaContent, !isSm && classes.accessAreaContentMargin)}>
+    <div
+      id={areaContentId(area.id)}
+      className={cn(classes.accessAreaContent, !isSm && classes.accessAreaContentMargin)}
+    >
       <DsHeading
         className={classes.packagesTitle}
         level={headingLevel}
@@ -95,15 +101,21 @@ export const AreaItemContent = ({
       {packages.assigned.length > 0 && (
         <List aria-label={t('access_packages.given_packages_title')}>
           {packages.assigned.map((pkg) => {
-            const Component = packageAs || 'button';
             return (
               <PackageItem
-                as={(props) => (
-                  <Component
-                    packageId={pkg.id}
-                    {...props}
-                  />
-                )}
+                as={
+                  packageAs
+                    ? (props) => {
+                        const Component = packageAs;
+                        return (
+                          <Component
+                            packageId={pkg.id}
+                            {...props}
+                          />
+                        );
+                      }
+                    : 'button'
+                }
                 titleAs='span'
                 key={pkg.id}
                 pkg={pkg}
@@ -150,15 +162,21 @@ export const AreaItemContent = ({
         <List aria-label={t('access_packages.available_packages_title')}>
           {packages.available.map((pkg) => {
             const canDelegate = canDelegatePackage(pkg.id);
-            const Component = packageAs || 'button';
             return (
               <PackageItem
-                as={(props) => (
-                  <Component
-                    packageId={pkg.id}
-                    {...props}
-                  />
-                )}
+                as={
+                  packageAs
+                    ? (props) => {
+                        const Component = packageAs;
+                        return (
+                          <Component
+                            packageId={pkg.id}
+                            {...props}
+                          />
+                        );
+                      }
+                    : 'button'
+                }
                 key={pkg.id}
                 pkg={pkg}
                 onSelect={onSelect}
@@ -173,6 +191,7 @@ export const AreaItemContent = ({
                 controls={
                   !isSm && (
                     <DelegateAccessPackageActionControl
+                      packageId={pkg.id}
                       isLoading={isActionLoading}
                       isPackageLoading={isLoadingRequest?.(pkg)}
                       availableActions={availableActions}

@@ -13,10 +13,12 @@ import { useAccessPackageActions } from './useAccessPackageActions';
 import { SkeletonAccessPackageList } from './SkeletonAccessPackageList';
 import { AreaItem } from './AreaItem';
 import { useAreaExpandedContextOrLocal } from './AccessPackageExpandedContext';
-import { AreaItemContent } from './AreaItemContent';
+import { AreaItemContent, areaContentId } from './AreaItemContent';
+import { packageActionControlId } from './PackageItem';
 import { TechnicalErrorParagraphs } from '../TechnicalErrorParagraphs';
 import { createErrorDetails } from '../TechnicalErrorParagraphs/TechnicalErrorParagraphs';
 import { PartyType } from '@/rtk/features/userInfoApi';
+import { useRestoreFocusOnDataChange } from '../RestoreFocus';
 
 interface AccessPackageListProps {
   showAllPackages?: boolean;
@@ -70,6 +72,7 @@ export const AccessPackageList = ({
     assignedAreas,
     availableAreas,
     allPackageAreas,
+    activeDelegations,
     searchError,
     activeDelegationsError,
   } = useAreaPackageList({
@@ -80,6 +83,8 @@ export const AccessPackageList = ({
     filterByType,
   });
 
+  const requestFocusOnDataChange = useRestoreFocusOnDataChange(activeDelegations);
+
   const {
     onDelegate,
     onRevoke,
@@ -89,9 +94,18 @@ export const AccessPackageList = ({
     isLoadingRequest,
     isLoading: isActionLoading,
   } = useAccessPackageActions({
-    onDelegateSuccess,
+    onDelegateSuccess: (accessPackage, toParty) => {
+      requestFocusOnDataChange(packageActionControlId(accessPackage.id));
+      onDelegateSuccess?.(accessPackage, toParty);
+    },
     onDelegateError,
-    onRevokeSuccess,
+    onRevokeSuccess: (accessPackage, toParty) => {
+      requestFocusOnDataChange(
+        packageActionControlId(accessPackage.id),
+        areaContentId(accessPackage.area.id),
+      );
+      onRevokeSuccess?.(accessPackage, toParty);
+    },
     onRevokeError,
   });
 

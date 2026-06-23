@@ -23,6 +23,7 @@ import { PackageHeader } from './PackageHeader';
 import { PackageMeta } from './PackageMeta';
 import { PartyType } from '@/rtk/features/userInfoApi';
 import { StatusSection } from '../../StatusSection/StatusSection';
+import { focusFirstEnabledButton, useRestoreFocusAfterSettled } from '../../RestoreFocus';
 
 export interface PackageInfoProps {
   accessPackage: ExtendedAccessPackage;
@@ -62,6 +63,12 @@ export const AccessPackageInfo = ({ accessPackage, availableActions = [] }: Pack
     to: toParty?.partyUuid ?? '',
     from: fromParty?.partyUuid ?? '',
     party: actingParty?.partyUuid ?? '',
+  });
+  const actionsRef = React.useRef<HTMLDivElement>(null);
+  useRestoreFocusAfterSettled({
+    isSettled: !isActionLoading && !isFetching && !actionSuccess,
+    requestWhen: isActionLoading,
+    onRestore: () => focusFirstEnabledButton(actionsRef.current),
   });
 
   const delegationAccess = React.useMemo(() => {
@@ -156,7 +163,10 @@ export const AccessPackageInfo = ({ accessPackage, availableActions = [] }: Pack
 
           <PackageMeta accessPackage={accessPackage} />
 
-          <div className={classes.actions}>
+          <div
+            ref={actionsRef}
+            className={classes.actions}
+          >
             {userHasPackage && availableActions.includes(DelegationAction.REVOKE) ? (
               deletableStatus !== DeletableStatus.PartiallyDeletable ? (
                 <DsButton
