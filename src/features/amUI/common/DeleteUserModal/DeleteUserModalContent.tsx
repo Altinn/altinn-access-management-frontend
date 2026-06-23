@@ -11,7 +11,7 @@ import { TrashIcon, XMarkOctagonFillIcon } from '@navikt/aksel-icons';
 import { useEffect, useMemo, useState } from 'react';
 import { Trans, useTranslation } from 'react-i18next';
 import { useDispatch } from 'react-redux';
-import { Link, useNavigate } from 'react-router';
+import { Link, useLocation, useNavigate } from 'react-router';
 
 import { amUIPath } from '@/routes/paths';
 import { accessPackageApi } from '@/rtk/features/accessPackageApi';
@@ -69,6 +69,7 @@ export const DeleteUserModalContent = ({
   const { t } = useTranslation();
   const navigate = useNavigate();
   const dispatch = useDispatch();
+  const { pathname } = useLocation();
   const [isSuccess, setIsSuccess] = useState(false);
   const [dialogVisible, setDialogVisible] = useState(false);
 
@@ -142,7 +143,11 @@ export const DeleteUserModalContent = ({
 
   const onDeleteComplete = () => {
     if (shouldNavigateOnDeleteComplete) {
-      navigate(`/${amUIPath.Users}`);
+      if (pathname?.includes(`/${amUIPath.Reportees}`)) {
+        navigate(`/${amUIPath.Reportees}`);
+      } else {
+        navigate(`/${amUIPath.Users}`);
+      }
       return;
     }
 
