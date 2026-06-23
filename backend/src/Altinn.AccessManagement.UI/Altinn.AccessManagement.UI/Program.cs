@@ -220,7 +220,6 @@ void ConfigureServices(IServiceCollection services, IConfiguration config)
     ConfigureMockableClients(services, config);
 
     services.TryAddSingleton<IHttpContextAccessor, HttpContextAccessor>();
-    services.AddSingleton<IAPIDelegationService, APIDelegationService>();
     services.AddSingleton<ILookupService, LookupService>();
     services.AddSingleton<ISettingsService, SettingsService>();
     services.AddSingleton<IResourceService, ResourceService>();

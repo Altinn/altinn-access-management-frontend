@@ -104,31 +104,5 @@ namespace Altinn.AccessManagement.UI.Controllers
                 return new ObjectResult(ProblemDetailsFactory.CreateProblemDetails(HttpContext, (int?)ex.StatusCode, "Unexpected HttpStatus response", detail: responseContent));
             }
         }
-
-        /// <summary>
-        ///     Searches through all delegable maskinportenschema services and returns matches based on the provided search string and filters
-        /// </summary>
-        /// <returns>list of maskinportenschemas matching search params</returns>
-        [HttpGet]
-        [Authorize]
-        [Route("maskinportenapi/search")]
-        public async Task<ActionResult<List<ServiceResourceFE>>> MaskinportenSearch([FromQuery] ApiSearchParams parameters)
-        {
-            var languageCode = LanguageHelper.GetSelectedLanguageCookieValueBackendStandard(_httpContextAccessor.HttpContext);
-            try
-            {
-                return await _resourceService.MaskinportenschemaSearch(languageCode, parameters.ROFilters, parameters.SearchString);
-            }
-            catch (HttpStatusException ex)
-            {
-                if (ex.StatusCode == HttpStatusCode.NoContent)
-                {
-                    return NoContent();
-                }
-
-                string responseContent = ex.Message;
-                return new ObjectResult(ProblemDetailsFactory.CreateProblemDetails(HttpContext, (int?)ex.StatusCode, "Unexpected HttpStatus response", detail: responseContent));
-            }
-        }
     }
 }

@@ -1,1 +1,0 @@
-export { ResourceActionBar } from './ResourceActionBar';

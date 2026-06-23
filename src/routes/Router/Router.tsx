@@ -1,16 +1,7 @@
 import { createBrowserRouter, createRoutesFromElements, Route } from 'react-router';
 import * as React from 'react';
 
-import { ChooseApiPage } from '@/features/apiDelegation/offered/ChooseApiPage';
-import { OverviewPage as OfferedOverviewPage } from '@/features/apiDelegation/offered/OverviewPage';
-import { OverviewPage as ReceivedOverviewPage } from '@/features/apiDelegation/received/OverviewPage';
-import { ChooseOrgPage } from '@/features/apiDelegation/offered/ChooseOrgPage';
-import { ConfirmationPage } from '@/features/apiDelegation/offered/ConfirmationPage';
-import { A2ErrorPage, ErrorPage, ReporteeChangeErrorPage } from '@/sites/ErrorPage';
-import { ChooseServicePage as DelegateChooseServicePage } from '@/features/singleRight/delegate/ChooseServicePage/ChooseServicePage';
-import { ChooseServicePage as RequestChooseServicePage } from '@/features/singleRight/request/ChooseServicePage/ChooseServicePage';
-import { ChooseRightsPage } from '@/features/singleRight/delegate/ChooseRightsPage/ChooseRightsPage';
-import { ReceiptPage as SingleRightReceiptPage } from '@/features/singleRight/delegate/ReceiptPage/ReceiptPage';
+import { ErrorPage, ReporteeChangeErrorPage } from '@/sites/ErrorPage';
 import { UserRightsPage } from '@/features/amUI/userRightsPage/UserRightsPage';
 import { UsersPage } from '@/features/amUI/users/UsersPage';
 import { SystemUserRequestPage } from '@/features/amUI/systemUser/SystemUserRequestPage';
@@ -28,14 +19,7 @@ import { ConsentHistoryPage } from '@/features/amUI/consent/ConsentHistoryPage/C
 import { PoaOverviewPage } from '@/features/amUI/poaOverview/PoaOverviewPage';
 import { InstanceDetailPage } from '@/features/amUI/InstanceDetailPage/InstanceDetailPage';
 
-import {
-  GeneralPath,
-  SingleRightPath,
-  ApiDelegationPath,
-  amUIPath,
-  SystemUserPath,
-  ConsentPath,
-} from '../paths';
+import { GeneralPath, amUIPath, SystemUserPath, ConsentPath } from '../paths';
 import { PackagePoaDetailsPage } from '@/features/amUI/packagePoaDetailsPage/PackagePoaDetailsPage';
 import { SettingsPage } from '@/features/amUI/settings/SettingsPage';
 import { LandingPage } from '@/features/amUI/landingPage/LandingPage';
@@ -53,86 +37,6 @@ import { ConsumerPage } from '@/features/amUI/maskinporten/ConsumerPage';
 export const Router = createBrowserRouter(
   createRoutesFromElements(
     <>
-      {/* API Delegation routes */}
-      <Route
-        path={ApiDelegationPath.OfferedApiDelegations}
-        errorElement={<A2ErrorPage />}
-      >
-        <Route
-          path={ApiDelegationPath.Overview}
-          element={<OfferedOverviewPage />}
-        />
-        <Route
-          path={ApiDelegationPath.ChooseOrg}
-          element={<ChooseOrgPage />}
-        />
-        <Route
-          path={ApiDelegationPath.ChooseApi}
-          element={<ChooseApiPage />}
-        />
-        <Route
-          path={ApiDelegationPath.Confirmation}
-          element={<ConfirmationPage />}
-        />
-        {/* Catch-all for any unmatched routes under offered-api-delegations */}
-        <Route
-          path='*'
-          element={<A2ErrorPage />}
-        />
-      </Route>
-      <Route
-        path={ApiDelegationPath.ReceivedApiDelegations}
-        errorElement={<A2ErrorPage />}
-      >
-        <Route
-          path={ApiDelegationPath.Overview}
-          element={<ReceivedOverviewPage />}
-        />
-        {/* Catch-all for any unmatched routes under received-api-delegations */}
-        <Route
-          path='*'
-          element={<A2ErrorPage />}
-        />
-      </Route>
-
-      {/* Single Rights routes */}
-      <Route
-        path={SingleRightPath.DelegateSingleRights}
-        errorElement={<A2ErrorPage />}
-      >
-        <Route
-          path={SingleRightPath.ChooseService}
-          element={<DelegateChooseServicePage />}
-        />
-        <Route
-          path={SingleRightPath.ChooseRights}
-          element={<ChooseRightsPage />}
-        />
-        <Route
-          path={SingleRightPath.Receipt}
-          element={<SingleRightReceiptPage />}
-        />
-        {/* Catch-all for any unmatched routes under delegate-single-rights */}
-        <Route
-          path='*'
-          element={<A2ErrorPage />}
-        />
-      </Route>
-      <Route
-        path={SingleRightPath.RequestSingleRights}
-        errorElement={<A2ErrorPage />}
-      >
-        <Route
-          path={SingleRightPath.ChooseService}
-          element={<RequestChooseServicePage />}
-        />
-        {/* Catch-all for any unmatched routes under request-single-rights */}
-        <Route
-          path='*'
-          element={<A2ErrorPage />}
-        />
-      </Route>
-
       {/* A3 user interface routes */}
       <Route
         path='/'

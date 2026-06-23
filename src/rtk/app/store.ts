@@ -1,12 +1,7 @@
 import { configureStore } from '@reduxjs/toolkit';
 import { setupListeners } from '@reduxjs/toolkit/query/react';
 
-import delegableApiReducer from '../features/apiDelegation/delegableApi/delegableApiSlice';
-import apiDelegationReducer from '../features/apiDelegation/apiDelegationSlice';
 import { singleRightsApi } from '../features/singleRights/singleRightsApi';
-import singleRightsReducer from '../features/singleRights/singleRightsSlice';
-import { apiDelegationApi } from '../features/apiDelegation/apiDelegationApi';
-import { overviewOrgApi } from '../features/apiDelegation/overviewOrg/overviewOrgApi';
 import { resourceApi } from '../features/resourceApi';
 import { accessPackageApi } from '../features/accessPackageApi';
 import { lookupApi } from '../features/lookupApi';
@@ -25,16 +20,11 @@ import { maskinportenApi } from '../features/maskinportenApi';
 
 const store = configureStore({
   reducer: {
-    delegableApi: delegableApiReducer,
-    apiDelegation: apiDelegationReducer,
-    singleRightsSlice: singleRightsReducer,
     [userInfoApi.reducerPath]: userInfoApi.reducer,
     [connectionApi.reducerPath]: connectionApi.reducer,
     [lookupApi.reducerPath]: lookupApi.reducer,
     [settingsApi.reducerPath]: settingsApi.reducer,
     [singleRightsApi.reducerPath]: singleRightsApi.reducer,
-    [apiDelegationApi.reducerPath]: apiDelegationApi.reducer,
-    [overviewOrgApi.reducerPath]: overviewOrgApi.reducer,
     [resourceApi.reducerPath]: resourceApi.reducer,
     [accessPackageApi.reducerPath]: accessPackageApi.reducer,
     [roleApi.reducerPath]: roleApi.reducer,
@@ -51,8 +41,6 @@ const store = configureStore({
     getDefaultMiddleware().concat(
       lookupApi.middleware,
       singleRightsApi.middleware,
-      apiDelegationApi.middleware,
-      overviewOrgApi.middleware,
       resourceApi.middleware,
       userInfoApi.middleware,
       connectionApi.middleware,

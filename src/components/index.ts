@@ -1,5 +1,3 @@
-export { CompactDeletableListItem, ListColor } from './CompactDeletableListItem';
-export { DeletableListItem } from './DeletableListItem';
 export { List, ListItem } from '../features/amUI/common/List';
 export { PageContainer } from './PageContainer';
 export { PageWrapper } from './PageWrapper/PageWrapper';
