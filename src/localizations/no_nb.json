@@ -687,7 +687,7 @@
     "launchAlertHeading": "Vi fornyer Altinn",
     "launchAlertContent": "Denne brukeren kan også ha fullmakter fra tidligere Altinn.",
     "launchAlertLinkText": "Se fullmakter fra tidligere Altinn",
-    "oldRolesContent": "Disse Altinn-rollene kan inneholde tjenester som allerede finnes i den nye Altinn-løsningen. Tjenestene blir flyttet inn i de nye tilgangspakkene. Brukeren har de samme rollene i den gamle løsningen, men der inneholder de flere og andre tjenester.",
+    "oldRolesContent": "Disse Altinn-rollene kan inneholde tjenester som finnes i den nye Altinn-løsningen. Tjenestene blir flyttet inn i de nye tilgangspakkene.",
     "oldRolesLinkText": "Gå til gamle Altinn",
     "legacyRoleContent": "Denne rollen vil snart fjernes. Bruk heller tilgangspakker."
   },

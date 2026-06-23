@@ -687,7 +687,7 @@
     "launchAlertHeading": "Vi fornyar Altinn",
     "launchAlertContent": "Denne brukaren kan også ha fullmakter frå tidlegare Altinn.",
     "launchAlertLinkText": "Sjå fullmakter frå tidlegare Altinn",
-    "oldRolesContent": "Desse Altinn-rollene kan innehalde tenester som allereie finst i den nye Altinn-løysinga. Tenestene blir flytta inn i dei nye tilgangspakkane. Brukaren har dei same rollene i den gamle løysinga, men der inneheld dei fleire og andre tenester.",
+    "oldRolesContent": "Desse Altinn-rollene kan innehalde tenester som finst i den nye Altinn-løysinga. Tenestene blir flytta inn i dei nye tilgangspakkane.",
     "oldRolesLinkText": "Gå til gamle Altinn",
     "legacyRoleContent": "Denne rolla vil snart bli fjerna. Bruk heller tilgangspakkar."
   },

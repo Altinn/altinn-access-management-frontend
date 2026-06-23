@@ -1,13 +1,9 @@
 import { useTranslation } from 'react-i18next';
 import classes from './RoleInfo.module.css';
 import { Role, useGetRolePermissionsQuery, useGetRoleResourcesQuery } from '@/rtk/features/roleApi';
-import { DsAlert, DsHeading, DsLink, DsParagraph } from '@altinn/altinn-components';
+import { DsAlert, DsHeading, DsParagraph } from '@altinn/altinn-components';
 import { RoleDeleteButton } from '@/features/amUI/common/RoleList/RoleDeleteButton';
-import {
-  ExclamationmarkTriangleFillIcon,
-  InformationSquareFillIcon,
-  ExternalLinkIcon,
-} from '@navikt/aksel-icons';
+import { ExclamationmarkTriangleFillIcon, InformationSquareFillIcon } from '@navikt/aksel-icons';
 import { usePartyRepresentation } from '../../PartyRepresentationContext/PartyRepresentationContext';
 import { getRedirectToA2UsersListSectionUrl } from '@/resources/utils';
 import { RoleResourcesSection } from './RoleResourcesSection';
@@ -50,7 +46,6 @@ export const RoleInfo = ({ role }: RoleInfoProps) => {
   );
 
   const sectionId = fromParty?.partyUuid === actingParty?.partyUuid ? 9 : 8;
-  const oldSolutionUrl = getRedirectToA2UsersListSectionUrl(sectionId);
   const rolePermissions = permissions?.find((p) => p.role?.id === role.id);
   const hasRole = rolePermissions !== undefined;
   const roleIsRevocable = rolePermissions?.role?.isRevocable ?? false;
