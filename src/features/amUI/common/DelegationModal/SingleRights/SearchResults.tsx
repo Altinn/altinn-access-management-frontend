@@ -14,9 +14,13 @@ import classes from './ResourceSearch.module.css';
 import { DelegationAction } from '../EditModal';
 import { useResourceListDelegation } from './hooks/useResourceListDelegation';
 import { useDelegationModalContext } from '../DelegationModalContext';
-import { useRenderSearchResultControl } from './createSearchResultControlsRenderer';
+import {
+  useRenderSearchResultControl,
+  resourceActionControlId,
+} from './createSearchResultControlsRenderer';
 import { usePartyRepresentation } from '../../PartyRepresentationContext/PartyRepresentationContext';
 import { useSingleRightRequests } from './hooks/useSingleRightRequests';
+import { useRestoreFocusOnDataChange } from '../../RestoreFocus';
 
 interface SearchResultsProps {
   isFetching: boolean;
@@ -50,6 +54,7 @@ export const SearchResults = ({
   const { t } = useTranslation();
   const { setActionError } = useDelegationModalContext();
   const { actingParty, fromParty, toParty } = usePartyRepresentation();
+  const requestFocusOnDataChange = useRestoreFocusOnDataChange(delegatedResources);
 
   const { createRequest, deleteRequest, hasPendingRequest, isLoadingRequest } =
     useSingleRightRequests({
@@ -71,6 +76,7 @@ export const SearchResults = ({
     },
     onSuccess: (resource) => {
       setActionError(null);
+      requestFocusOnDataChange(resourceActionControlId(resource.identifier));
     },
     onPartialDelegation: (resource) => {
       setActionError(null);
@@ -169,6 +175,7 @@ export const SearchResults = ({
             onSelect={onSelect}
             size='sm'
             getHasAccess={(resource) => isDelegated(resource.identifier)}
+            getActionControlId={(resource) => resourceActionControlId(resource.identifier)}
             renderControls={renderControls}
           />
         </div>
