@@ -26,7 +26,6 @@ import { ConsentPath } from '@/routes/paths';
 import { useGetIsAdminQuery, useGetReporteeQuery } from '@/rtk/features/userInfoApi';
 import { hasConsentPermission } from '@/resources/utils/permissionUtils';
 import { ConsentListItem } from './ConsentListItem';
-import { OldConsentAlert } from '../components/OldConsentAlert/OldConsentAlert';
 import { Breadcrumbs } from '../../common/Breadcrumbs/Breadcrumbs';
 import { getConsentRequestUrl } from '@/routes/paths/consentPath';
 import { toDateTimeString } from '../utils';
