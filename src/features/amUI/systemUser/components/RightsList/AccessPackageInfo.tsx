@@ -20,7 +20,6 @@ export const AccessPackageInfo = ({
   onSelectResource,
 }: AccessPackageInfoProps): React.ReactElement => {
   const { t } = useTranslation();
-  const { getProviderLogoUrl } = useProviderLogoUrl();
 
   return (
     <>
@@ -50,25 +49,42 @@ export const AccessPackageInfo = ({
         </DsHeading>
         <List>
           {accessPackage.resources.map((resource) => {
-            const emblem = getProviderLogoUrl(resource.resourceOwnerOrgcode ?? '');
-            useRestoreFocusTarget(resource.identifier);
             return (
-              <ResourceListItem
+              <PackageResourceItem
                 key={resource.identifier}
-                id={resource.identifier}
-                as='button'
-                titleAs='div'
-                size='xs'
-                ownerLogoUrl={emblem ?? resource.resourceOwnerLogoUrl}
-                ownerLogoUrlAlt={resource.resourceOwnerName ?? ''}
-                ownerName={resource.resourceOwnerName ?? ''}
-                resourceName={resource.title}
-                onClick={() => onSelectResource(resource)}
+                resource={resource}
+                onSelectResource={onSelectResource}
               />
             );
           })}
         </List>
       </div>
     </>
+  );
+};
+
+interface PackageResourceItemProps {
+  resource: ServiceResource;
+  onSelectResource: (resource: ServiceResource) => void;
+}
+
+const PackageResourceItem = ({ resource, onSelectResource }: PackageResourceItemProps) => {
+  const { getProviderLogoUrl } = useProviderLogoUrl();
+
+  useRestoreFocusTarget(resource.identifier);
+  const emblem = getProviderLogoUrl(resource.resourceOwnerOrgcode ?? '');
+
+  return (
+    <ResourceListItem
+      id={resource.identifier}
+      as='button'
+      titleAs='div'
+      size='xs'
+      ownerLogoUrl={emblem ?? resource.resourceOwnerLogoUrl}
+      ownerLogoUrlAlt={resource.resourceOwnerName ?? ''}
+      ownerName={resource.resourceOwnerName ?? ''}
+      resourceName={resource.title}
+      onClick={() => onSelectResource(resource)}
+    />
   );
 };
