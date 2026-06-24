@@ -144,7 +144,9 @@ const SingleRightsSectionContent = ({ isReportee }: { isReportee: boolean }) => 
                   <DeleteResourceButton
                     resource={resource}
                     disabled={isInherited}
-                    onSuccess={() => requestFocusOnDataChange(resource.identifier)}
+                    onSuccess={() =>
+                      requestFocusOnDataChange(resource.identifier, 'single_rights_title')
+                    }
                   />
                 );
               }}
@@ -155,8 +157,11 @@ const SingleRightsSectionContent = ({ isReportee }: { isReportee: boolean }) => 
           ref={modalRef}
           resource={selectedResource ?? undefined}
           onClose={() => {
+            // Same pattern as the access-package modal: request focus synchronously before clearing
+            // state. If the resource was revoked inside the modal its row is gone, so fall back to
+            // the section heading instead of dropping to <body>.
             if (selectedResource) {
-              restoreFocusContext?.requestFocus(selectedResource.identifier);
+              restoreFocusContext?.requestFocus(selectedResource.identifier, 'single_rights_title');
             }
             setSelectedResource(null);
           }}

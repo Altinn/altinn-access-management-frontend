@@ -107,20 +107,22 @@ export const RestoreFocusFallback = ({ children }: { children: ReactNode }) => {
       return;
     }
 
-    // Before the generic catch-all below, try the request's own fallback id.
+    // Before the generic catch-all below, try the request's own fallback id. The fallback target
+    // does not have to be interactive itself (e.g. a section heading): like useRestoreFocusTarget,
+    // we focus its first focusable descendant if it has one, otherwise the element itself.
     if (focusFallbackId) {
       const fallbackTarget = containerElement.querySelector(
         `[id="${CSS.escape(focusFallbackId)}"]`,
       );
-      if (fallbackTarget instanceof HTMLElement) {
-        const focusable = findFocusableElement(fallbackTarget, fallbackTarget);
-        if (focusable) {
-          if (focusHasBeenLost()) {
-            focusElement(focusable);
-          }
-          clearRequest();
-          return;
+      if (
+        fallbackTarget instanceof HTMLElement &&
+        !isUnavailableForFocus(fallbackTarget, fallbackTarget)
+      ) {
+        if (focusHasBeenLost()) {
+          focusElement(findFocusableElement(fallbackTarget, fallbackTarget) ?? fallbackTarget);
         }
+        clearRequest();
+        return;
       }
     }
 
