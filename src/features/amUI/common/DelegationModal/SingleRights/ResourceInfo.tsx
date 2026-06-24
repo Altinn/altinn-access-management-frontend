@@ -29,6 +29,7 @@ import { RightsSection } from './RightsSection';
 import { isExpiredResource } from '../../ResourceList/utils';
 import { useSingleRightsDelegationRightsData } from './hooks/useSingleRightsDelegationRightsData';
 import { useSingleRightRequests } from './hooks/useSingleRightRequests';
+import { focusFirstEnabledButton, useRestoreFocusAfterSettled } from '../../RestoreFocus';
 
 import classes from './ResourceInfo.module.css';
 
@@ -162,6 +163,17 @@ export const ResourceInfo = ({
     ? t('delegation_modal.expired_resource_description', { name: toName })
     : t('delegation_modal.expired_resource_request_description');
 
+  const actionsRef = React.useRef<HTMLDivElement>(null);
+  useRestoreFocusAfterSettled({
+    isSettled:
+      !isActionLoading &&
+      !isActionSuccess &&
+      !isRightsSectionLoading &&
+      !isResourceDelegationsLoading,
+    requestWhen: isActionLoading,
+    onRestore: () => focusFirstEnabledButton(actionsRef.current),
+  });
+
   return (
     <>
       <StatusMessageForScreenReader politenessSetting='assertive'>
@@ -215,7 +227,10 @@ export const ResourceInfo = ({
                 hasAccessAndNoChanges={hasAccess && !hasUnsavedChanges}
               />
             )}
-            <div className={classes.editButtons}>
+            <div
+              ref={actionsRef}
+              className={classes.editButtons}
+            >
               {hasDelegateAction && (
                 <Button
                   data-size='sm'

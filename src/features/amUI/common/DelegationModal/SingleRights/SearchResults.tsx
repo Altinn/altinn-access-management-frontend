@@ -1,6 +1,6 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
-import { DsAlert, DsHeading, DsParagraph, DsSpinner } from '@altinn/altinn-components';
+import { DsAlert, DsHeading, DsParagraph } from '@altinn/altinn-components';
 
 import {
   type ResourceDelegation,
@@ -8,15 +8,20 @@ import {
 } from '@/rtk/features/singleRights/singleRightsApi';
 import { AmPagination } from '@/components/Paginering/AmPaginering';
 import { ResourceList } from '@/features/amUI/common/ResourceList/ResourceList';
+import { SkeletonResourceList } from '@/features/amUI/common/ResourceList/SkeletonResourceList';
 import { getInheritedStatus } from '@/features/amUI/common/useInheritedStatus';
 
 import classes from './ResourceSearch.module.css';
 import { DelegationAction } from '../EditModal';
 import { useResourceListDelegation } from './hooks/useResourceListDelegation';
 import { useDelegationModalContext } from '../DelegationModalContext';
-import { useRenderSearchResultControl } from './createSearchResultControlsRenderer';
+import {
+  useRenderSearchResultControl,
+  resourceActionControlId,
+} from './createSearchResultControlsRenderer';
 import { usePartyRepresentation } from '../../PartyRepresentationContext/PartyRepresentationContext';
 import { useSingleRightRequests } from './hooks/useSingleRightRequests';
+import { useRestoreFocusOnDataChange } from '../../RestoreFocus';
 
 interface SearchResultsProps {
   isFetching: boolean;
@@ -50,6 +55,7 @@ export const SearchResults = ({
   const { t } = useTranslation();
   const { setActionError } = useDelegationModalContext();
   const { actingParty, fromParty, toParty } = usePartyRepresentation();
+  const requestFocusOnDataChange = useRestoreFocusOnDataChange(delegatedResources);
 
   const { createRequest, deleteRequest, hasPendingRequest, isLoadingRequest } =
     useSingleRightRequests({
@@ -71,6 +77,7 @@ export const SearchResults = ({
     },
     onSuccess: (resource) => {
       setActionError(null);
+      requestFocusOnDataChange(resourceActionControlId(resource.identifier));
     },
     onPartialDelegation: (resource) => {
       setActionError(null);
@@ -120,17 +127,6 @@ export const SearchResults = ({
     deleteRequestFromList,
   });
 
-  if (isFetching) {
-    return (
-      <div className={classes.spinner}>
-        <DsSpinner
-          aria-label={t('common.loading')}
-          data-size='md'
-        />
-      </div>
-    );
-  }
-
   if (error) {
     return (
       <DsAlert
@@ -152,7 +148,7 @@ export const SearchResults = ({
   return (
     <>
       <div className={classes.resultCount}>
-        {totalNumberOfResults !== undefined && (
+        {!isFetching && totalNumberOfResults !== undefined && (
           <DsParagraph>
             {displayPopularResources
               ? t('single_rights.popular_services')
@@ -160,23 +156,32 @@ export const SearchResults = ({
           </DsParagraph>
         )}
       </div>
-      {resources && resources.length > 0 && (
+      {isFetching ? (
         <div className={classes.resourceList}>
-          <ResourceList
-            resources={resources}
-            enableSearch={false}
-            showDetails={false}
-            onSelect={onSelect}
-            size='sm'
-            getHasAccess={(resource) => isDelegated(resource.identifier)}
-            renderControls={renderControls}
-          />
+          <SkeletonResourceList count={searchResultsPerPage} />
         </div>
-      )}
-      {resources && resources.length === 0 && (
-        <DsParagraph data-size='md'>
-          {t('resource_list.no_resources_filtered', { searchTerm: searchString })}
-        </DsParagraph>
+      ) : (
+        <>
+          {resources && resources.length > 0 && (
+            <div className={classes.resourceList}>
+              <ResourceList
+                resources={resources}
+                enableSearch={false}
+                showDetails={false}
+                onSelect={onSelect}
+                size='sm'
+                getHasAccess={(resource) => isDelegated(resource.identifier)}
+                getActionControlId={(resource) => resourceActionControlId(resource.identifier)}
+                renderControls={renderControls}
+              />
+            </div>
+          )}
+          {resources && resources.length === 0 && (
+            <DsParagraph data-size='md'>
+              {t('resource_list.no_resources_filtered', { searchTerm: searchString })}
+            </DsParagraph>
+          )}
+        </>
       )}
       {totalNumberOfResults !== undefined &&
         totalNumberOfResults > searchResultsPerPage &&
