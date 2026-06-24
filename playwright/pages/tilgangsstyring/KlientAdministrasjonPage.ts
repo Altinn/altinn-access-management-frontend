@@ -73,6 +73,7 @@ export class KlientAdministrasjonPage {
         (resp) => resp.url().includes('api/v1/clientdelegations/clients') && resp.ok(),
       ),
       await this.klientFane.click(),
+      await expect(this.klientFane).toHaveAttribute('aria-selected', 'true'),
     ]);
   }
 
