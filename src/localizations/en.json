@@ -1249,6 +1249,8 @@
     "no_email_for_username": "We found no email for this username. Check that the username is correct.",
     "send_link": "Send link",
     "forgot_password_sent": "We have sent an email to {{email}}.",
-    "add_account_from_token_error": "Could not add account"
+    "add_account_from_token_error": "Could not add account",
+    "add_account_from_token_invalid_token": "Invalid or expired link",
+    "add_account_from_token_not_from_caller": "Link does not belong to the logged-in user"
   }
 }

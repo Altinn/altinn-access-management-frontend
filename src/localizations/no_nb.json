@@ -1246,6 +1246,8 @@
     "no_email_for_username": "Vi fant ingen e-post for dette brukernavnet. Sjekk at brukernavnet er riktig.",
     "send_link": "Send lenke",
     "forgot_password_sent": "Vi har sendt en e-post til {{email}}.",
-    "add_account_from_token_error": "Kunne ikke legge til konto"
+    "add_account_from_token_error": "Kunne ikke legge til konto",
+    "add_account_from_token_invalid_token": "Lenken er ugyldig eller utløpt",
+    "add_account_from_token_not_from_caller": "Lenken ble ikke forespurt av pålogget bruker"
   }
 }

@@ -12,5 +12,10 @@ namespace Altinn.AccessManagement.UI.Core.Models.SelfIdentifiedUser
         /// </summary>
         [Required]
         public string UserName { get; set; }
+
+        /// <summary>
+        /// The requested email language
+        /// </summary>
+        public string Language { get; set; }
     }
 }

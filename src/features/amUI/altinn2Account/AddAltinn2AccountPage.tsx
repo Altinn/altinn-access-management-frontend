@@ -22,7 +22,7 @@ import { PageLayoutWrapper } from '../common/PageLayoutWrapper';
 import { Altinn2AccountForm } from './Altinn2AccountForm';
 
 export const AddAltinn2AccountPage = () => {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   const [searchParams] = useSearchParams();
   const token = searchParams.get('token') ?? '';
 
@@ -60,7 +60,8 @@ export const AddAltinn2AccountPage = () => {
   };
 
   const onSendForgotPasswordEmail = (userName: string) => {
-    sendForgotPasswordEmail({ userName })
+    const lang = i18n.language as 'no_nb' | 'no_nn' | 'en';
+    sendForgotPasswordEmail({ userName, lang })
       .unwrap()
       .then((payload) => {
         if (payload.maskedEmail) {
@@ -92,6 +93,15 @@ export const AddAltinn2AccountPage = () => {
       modalRef.current?.showModal();
     }
   }, [reportee, token]);
+
+  const getAddUserFromTokenErrorMessage = () => {
+    if ((addUserFromTokenError as { status: number }).status === 401) {
+      return t('add_altinn2_account_page.add_account_from_token_invalid_token');
+    } else if ((addUserFromTokenError as { status: number }).status === 403) {
+      return t('add_altinn2_account_page.add_account_from_token_not_from_caller');
+    }
+    return t('add_altinn2_account_page.add_account_from_token_error');
+  };
 
   const step1Component = (
     <DsDialog.Block className={classes.addAltinn2Account}>
@@ -181,9 +191,7 @@ export const AddAltinn2AccountPage = () => {
         />
       )}
       {addUserFromTokenError && (
-        <DsAlert data-color='danger'>
-          {t('add_altinn2_account_page.add_account_from_token_error')}
-        </DsAlert>
+        <DsAlert data-color='danger'>{getAddUserFromTokenErrorMessage()}</DsAlert>
       )}
       <DsDialog
         ref={modalRef}
