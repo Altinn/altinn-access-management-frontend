@@ -38,7 +38,13 @@ export class AccessManagementFrontPage {
   }
 
   async goToKlientAdministrasjon() {
+    const rightholdersResponsePromise = this.page.waitForResponse(
+      '**api/v1/connection/rightholders**',
+    );
+    const agentsResponsePromise = this.page.waitForResponse('**api/v1/clientdelegations/agents**');
     await this.klientadministrasjonButton.click();
+    const rightholdersResponse = await rightholdersResponsePromise;
+    const agentsResponse = await agentsResponsePromise;
   }
 
   async goToUsers() {

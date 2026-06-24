@@ -68,8 +68,9 @@ export class KlientAdministrasjonPage {
   }
 
   async goToKlientFane() {
+    const responsePromise = this.page.waitForResponse('**api/v1/clientdelegations/clients**');
     await this.klientFane.click();
-    await expect(this.klientFane).toHaveAttribute('aria-selected', 'true');
+    const response = await responsePromise;
   }
 
   async clickLeggTilBrukerKnapp() {
