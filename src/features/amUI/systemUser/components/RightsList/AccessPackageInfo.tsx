@@ -9,6 +9,7 @@ import { useProviderLogoUrl } from '@/resources/hooks/useProviderLogoUrl';
 import type { SystemUserAccessPackage } from '../../types';
 
 import classes from './RightsList.module.css';
+import { useRestoreFocusTarget } from '@/features/amUI/common/RestoreFocus';
 
 interface AccessPackageInfoProps {
   accessPackage: SystemUserAccessPackage;
@@ -50,6 +51,7 @@ export const AccessPackageInfo = ({
         <List>
           {accessPackage.resources.map((resource) => {
             const emblem = getProviderLogoUrl(resource.resourceOwnerOrgcode ?? '');
+            useRestoreFocusTarget(resource.identifier);
             return (
               <ResourceListItem
                 key={resource.identifier}
