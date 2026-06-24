@@ -4,7 +4,6 @@ using System.Net.Http.Headers;
 using System.Text.Json;
 using Altinn.AccessManagement.UI.Core.ClientInterfaces;
 using Altinn.AccessManagement.UI.Core.Configuration;
-using Altinn.AccessManagement.UI.Core.Enums;
 using Altinn.AccessManagement.UI.Core.Extensions;
 using Altinn.AccessManagement.UI.Core.Helpers;
 using Altinn.AccessManagement.UI.Core.Models.ResourceRegistry;
@@ -197,31 +196,6 @@ namespace Altinn.AccessManagement.UI.Integration.Clients
                 _logger.LogError(ex, "AccessManagement.UI // ResourceRegistryClient // ResourceList // Exception");
                 throw;
             }
-        }
-
-        /// <summary>
-        ///     Gets all MaskinportenSchemas
-        /// </summary>
-        /// <returns>MaskinportenSchemas</returns>
-        public async Task<List<ServiceResource>> GetMaskinportenSchemas()
-        {
-            List<ServiceResource> resources = new List<ServiceResource>();
-
-            // Weird enough it's not possible to filter on AltinnApp or Altinn2Service for this endpoint
-            string endpointUrl = $"v1/resource/search?ResourceType={(int)ResourceType.MaskinportenSchema}";
-
-            HttpResponseMessage response = await _httpClient.GetAsync(endpointUrl);
-            if (response.StatusCode == HttpStatusCode.OK)
-            {
-                JsonSerializerOptions options = new JsonSerializerOptions
-                {
-                    PropertyNameCaseInsensitive = true,
-                };
-                string content = await response.Content.ReadAsStringAsync();
-                resources = JsonSerializer.Deserialize<List<ServiceResource>>(content, options);
-            }
-
-            return resources;
         }
 
         /// <inheritdoc />

@@ -1,1 +1,0 @@
-export { ResourceCollectionBar } from './ResourceCollectionBar';

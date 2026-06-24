@@ -1,6 +1,5 @@
 using System.Text.Json;
 using Altinn.AccessManagement.UI.Core.ClientInterfaces;
-using Altinn.AccessManagement.UI.Core.Models;
 using Altinn.AccessManagement.UI.Core.Models.ResourceRegistry.Frontend;
 using Altinn.AccessManagement.UI.Core.Models.ResourceRegistry.ResourceOwner;
 using Altinn.AccessManagement.UI.Core.Models.SingleRight;
@@ -13,7 +12,6 @@ namespace Altinn.AccessManagement.UI.Core.Services
     public class SingleRightService : ISingleRightService
     {
         private readonly IAccessManagementClient _accessManagementClient;
-        private readonly IAccessManagementClientV0 _accessManagementClientV0;
         private readonly IResourceService _resourceService;
         private readonly IResourceRegistryClient _resourceRegistryClient;
         private readonly ISingleRightClient _singleRightClient;
@@ -27,40 +25,16 @@ namespace Altinn.AccessManagement.UI.Core.Services
         /// Initializes a new instance of the <see cref="SingleRightService"/> class.
         /// </summary>
         /// <param name="accessManagementClient">The access management client.</param>
-        /// <param name="accessManagementClientV0">The old access management client, used to access the old am endpoints.</param>
         /// <param name="resourceService">The resource service.</param>
         /// <param name="resourceRegistryClient">The resource registry client.</param>
         /// <param name="singleRightClient">The single rights client.</param>
-        public SingleRightService(IAccessManagementClient accessManagementClient, IAccessManagementClientV0 accessManagementClientV0, IResourceService resourceService, IResourceRegistryClient resourceRegistryClient, ISingleRightClient singleRightClient)
+        public SingleRightService(IAccessManagementClient accessManagementClient, IResourceService resourceService, IResourceRegistryClient resourceRegistryClient, ISingleRightClient singleRightClient)
         {
             _accessManagementClient = accessManagementClient;
-            _accessManagementClientV0 = accessManagementClientV0;
             _resourceService = resourceService;
             _resourceRegistryClient = resourceRegistryClient;
             _singleRightClient = singleRightClient;
         }
-
-        /// <inheritdoc />
-        public async Task<HttpResponseMessage> CheckDelegationAccess(string partyId, Models.Right request)
-        {
-            return await _accessManagementClientV0.CheckSingleRightsDelegationAccess(partyId, request);
-        }
-
-        /// <inheritdoc />
-        public async Task<HttpResponseMessage> CreateDelegation(string party, DelegationInput delegation)
-        {
-            return await _accessManagementClientV0.CreateSingleRightsDelegation(party, delegation);
-        }
-
-        /// <inheritdoc />
-        public async Task<HttpResponseMessage> ClearAccessCacheOnRecipient(string party, BaseAttribute recipient)
-        {
-            return await _accessManagementClientV0.ClearAccessCacheOnRecipient(party, recipient);
-        }
-
-        // ----------------------------
-        //// New GUI
-        // ----------------------------
 
         /// <inheritdoc />
         public async Task<List<RightCheck>> DelegationCheck(Guid from, string resource)
