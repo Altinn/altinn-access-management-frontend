@@ -1,4 +1,3 @@
-import { InfoModal } from '@/features/amUI/common/PageLayoutWrapper/InfoModal';
 import { useFooter } from '@/features/amUI/common/PageLayoutWrapper/useFooter';
 import { useHeader } from '@/features/amUI/common/PageLayoutWrapper/useHeader';
 import { GeneralPath } from '@/routes/paths';
@@ -43,7 +42,6 @@ export const ErrorLayoutWrapper = ({
         sidebar={{ hidden: true }}
       >
         {children}
-        <InfoModal />
       </Layout>
     </RootProvider>
   );

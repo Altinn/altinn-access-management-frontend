@@ -25,9 +25,7 @@ import classes from './ActiveConsentsPage.module.css';
 import { ConsentPath } from '@/routes/paths';
 import { useGetIsAdminQuery, useGetReporteeQuery } from '@/rtk/features/userInfoApi';
 import { hasConsentPermission } from '@/resources/utils/permissionUtils';
-import { hideA2Links } from '@/resources/utils/featureFlagUtils';
 import { ConsentListItem } from './ConsentListItem';
-import { OldConsentAlert } from '../components/OldConsentAlert/OldConsentAlert';
 import { Breadcrumbs } from '../../common/Breadcrumbs/Breadcrumbs';
 import { getConsentRequestUrl } from '@/routes/paths/consentPath';
 import { toDateTimeString } from '../utils';
@@ -87,12 +85,6 @@ export const ActiveConsentsPage = () => {
           reportee={reportee}
           isLoading={isLoadingReportee}
         />
-        {!hideA2Links() && (
-          <OldConsentAlert
-            heading='active_consents.altinn2_consent_alert_header'
-            text='active_consents.altinn2_consent_alert_body'
-          />
-        )}
         {groupedPendingActiveConsents && Object.keys(groupedPendingActiveConsents).length > 0 && (
           <>
             <div className={classes.activeConsentsSubHeading}>
