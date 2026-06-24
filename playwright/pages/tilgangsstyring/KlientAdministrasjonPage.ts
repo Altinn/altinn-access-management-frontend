@@ -68,9 +68,12 @@ export class KlientAdministrasjonPage {
   }
 
   async goToKlientFane() {
-    const responsePromise = this.page.waitForResponse('**api/v1/clientdelegations/clients**');
-    await this.klientFane.click();
-    const response = await responsePromise;
+    await Promise.all([
+      this.page.waitForResponse(
+        (resp) => resp.url().includes('api/v1/clientdelegations/clients') && resp.ok(),
+      ),
+      await this.klientFane.click(),
+    ]);
   }
 
   async clickLeggTilBrukerKnapp() {
