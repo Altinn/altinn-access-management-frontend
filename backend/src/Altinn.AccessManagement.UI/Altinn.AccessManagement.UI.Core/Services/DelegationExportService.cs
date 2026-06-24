@@ -22,6 +22,10 @@ namespace Altinn.AccessManagement.UI.Core.Services
         private const string TypeInstances = "instances";
         private const string DefaultLanguage = "nb";
 
+        // Upper bound on concurrent downstream calls when fanning out over givers (parent + subunits),
+        // so exports for orgs with many subunits stay fast without overwhelming the downstream API.
+        private const int MaxGiverConcurrency = 10;
+
         private readonly IUserService _userService;
         private readonly IRoleService _roleService;
         private readonly IAccessPackageService _accessPackageService;
@@ -162,12 +166,20 @@ namespace Altinn.AccessManagement.UI.Core.Services
         private async Task<List<RoleExportRow>> BuildRoleRows(List<AuthorizedParty> givers, string language)
         {
             var rows = new List<RoleExportRow>();
-            Dictionary<Guid, string> roleNameLookup = await BuildRoleNameLookup(language);
 
-            foreach (AuthorizedParty giver in givers)
+            // Overlap the role-name lookup with the per-giver fetches.
+            Task<Dictionary<Guid, string>> roleNameLookupTask = BuildRoleNameLookup(language);
+            Task<List<RolePermission>[]> permissionsTask = FetchPerGiver(
+                givers, giver => _roleService.GetRolePermissions(giver.PartyUuid, giver.PartyUuid, null, language));
+            await Task.WhenAll(roleNameLookupTask, permissionsTask);
+
+            Dictionary<Guid, string> roleNameLookup = roleNameLookupTask.Result;
+            List<RolePermission>[] permissionsPerGiver = permissionsTask.Result;
+
+            for (int i = 0; i < givers.Count; i++)
             {
-                List<RolePermission> permissions = await _roleService.GetRolePermissions(giver.PartyUuid, giver.PartyUuid, null, language);
-                foreach (RolePermission rolePermission in permissions ?? new List<RolePermission>())
+                AuthorizedParty giver = givers[i];
+                foreach (RolePermission rolePermission in permissionsPerGiver[i] ?? new List<RolePermission>())
                 {
                     foreach (Permission permission in DirectPermissions(rolePermission.Permissions))
                     {
@@ -207,12 +219,20 @@ namespace Altinn.AccessManagement.UI.Core.Services
         private async Task<List<AccessPackageExportRow>> BuildAccessPackageRows(List<AuthorizedParty> givers, string language)
         {
             var rows = new List<AccessPackageExportRow>();
-            Dictionary<Guid, string> packageNames = await BuildPackageNameLookup(language);
 
-            foreach (AuthorizedParty giver in givers)
+            // Overlap the package-name lookup with the per-giver fetches.
+            Task<Dictionary<Guid, string>> packageNamesTask = BuildPackageNameLookup(language);
+            Task<Dictionary<Guid, List<PackagePermission>>[]> delegationsTask = FetchPerGiver(
+                givers, giver => _accessPackageService.GetDelegations(giver.PartyUuid, null, giver.PartyUuid, language));
+            await Task.WhenAll(packageNamesTask, delegationsTask);
+
+            Dictionary<Guid, string> packageNames = packageNamesTask.Result;
+            Dictionary<Guid, List<PackagePermission>>[] delegationsPerGiver = delegationsTask.Result;
+
+            for (int i = 0; i < givers.Count; i++)
             {
-                Dictionary<Guid, List<PackagePermission>> delegations =
-                    await _accessPackageService.GetDelegations(giver.PartyUuid, null, giver.PartyUuid, language);
+                AuthorizedParty giver = givers[i];
+                Dictionary<Guid, List<PackagePermission>> delegations = delegationsPerGiver[i];
 
                 foreach (List<PackagePermission> packagePermissions in (delegations ?? new Dictionary<Guid, List<PackagePermission>>()).Values)
                 {
@@ -246,12 +266,14 @@ namespace Altinn.AccessManagement.UI.Core.Services
         {
             var rows = new List<InstanceRightExportRow>();
 
-            foreach (AuthorizedParty giver in givers)
-            {
-                List<InstanceDelegation> delegations =
-                    await _instanceService.GetDelegatedInstances(language, giver.PartyUuid, giver.PartyUuid, null, null, null);
+            List<InstanceDelegation>[] delegationsPerGiver = await FetchPerGiver(
+                givers, giver => _instanceService.GetDelegatedInstances(language, giver.PartyUuid, giver.PartyUuid, null, null, null));
 
-                foreach (InstanceDelegation delegation in delegations ?? new List<InstanceDelegation>())
+            for (int i = 0; i < givers.Count; i++)
+            {
+                AuthorizedParty giver = givers[i];
+
+                foreach (InstanceDelegation delegation in delegationsPerGiver[i] ?? new List<InstanceDelegation>())
                 {
                     foreach (Permission permission in DirectPermissions(delegation.Permissions))
                     {
@@ -280,12 +302,14 @@ namespace Altinn.AccessManagement.UI.Core.Services
         {
             var rows = new List<SingleRightExportRow>();
 
-            foreach (AuthorizedParty giver in givers)
-            {
-                List<ResourceDelegation> delegations =
-                    await _singleRightService.GetDelegatedResources(language, giver.PartyUuid, giver.PartyUuid, null);
+            List<ResourceDelegation>[] delegationsPerGiver = await FetchPerGiver(
+                givers, giver => _singleRightService.GetDelegatedResources(language, giver.PartyUuid, giver.PartyUuid, null));
 
-                foreach (ResourceDelegation delegation in delegations ?? new List<ResourceDelegation>())
+            for (int i = 0; i < givers.Count; i++)
+            {
+                AuthorizedParty giver = givers[i];
+
+                foreach (ResourceDelegation delegation in delegationsPerGiver[i] ?? new List<ResourceDelegation>())
                 {
                     foreach (Permission permission in DirectPermissions(delegation.Permissions))
                     {
@@ -319,6 +343,30 @@ namespace Altinn.AccessManagement.UI.Core.Services
             }
 
             return map;
+        }
+
+        // Fans out a per-giver fetch over all givers (parent org + subunits) concurrently, with a
+        // bounded degree of parallelism. Results are returned in giver order so callers can keep a
+        // deterministic, stable export ordering.
+        private static async Task<TResult[]> FetchPerGiver<TResult>(
+            IReadOnlyList<AuthorizedParty> givers,
+            Func<AuthorizedParty, Task<TResult>> fetch)
+        {
+            using var gate = new SemaphoreSlim(MaxGiverConcurrency);
+            IEnumerable<Task<TResult>> tasks = givers.Select(async giver =>
+            {
+                await gate.WaitAsync();
+                try
+                {
+                    return await fetch(giver);
+                }
+                finally
+                {
+                    gate.Release();
+                }
+            });
+
+            return await Task.WhenAll(tasks);
         }
 
         // Only direct delegations are included (v1 scope): permissions routed via an
