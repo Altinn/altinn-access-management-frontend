@@ -158,7 +158,7 @@ namespace Altinn.AccessManagement.UI.Controllers
                 if (!string.IsNullOrEmpty(partyUuid) && Guid.TryParse(partyUuid, out Guid partyGuid))
                 {
                     var actorList = await _userService.GetReporteeListForUser();
-                    var reporteeParty = actorList.FirstOrDefault(party => party.PartyUuid == partyGuid);
+                    var reporteeParty = actorList?.FirstOrDefault(party => party.PartyUuid == partyGuid);
                     setPartyId = reporteeParty?.PartyId > 0 ? reporteeParty.PartyId.ToString() : AuthenticationHelper.GetUserPartyId(httpContext);
                 }
                 else
