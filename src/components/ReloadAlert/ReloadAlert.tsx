@@ -9,7 +9,6 @@ export const ReloadAlert = () => {
   const { t } = useTranslation();
 
   const displayAlert = useCookieListener('AltinnPartyUuid', 2000, 1000);
-  console.log('displayAlert', displayAlert);
 
   return (
     displayAlert && (

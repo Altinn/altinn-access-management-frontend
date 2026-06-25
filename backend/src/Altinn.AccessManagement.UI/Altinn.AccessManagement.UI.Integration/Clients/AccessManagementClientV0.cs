@@ -88,7 +88,7 @@ namespace Altinn.AccessManagement.UI.Integration.Clients
                 {
                     string responseContent = await response.Content.ReadAsStringAsync();
                     var result = JsonSerializer.Deserialize<PaginatedResult<AuthorizedParty>>(responseContent, _serializerOptions);
-                    return result?.Items?.ToList();
+                    return result?.Items?.ToList() ?? new List<AuthorizedParty>();
                 }
 
                 _logger.LogError("GetReporteeListForUser from accessmanagement failed with {StatusCode}", response.StatusCode);
