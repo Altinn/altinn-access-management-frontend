@@ -6,9 +6,6 @@
   "scripts": {
     "start": "vite",
     "build": "vite build",
-    "test": "vite & wait-on http://localhost:5173 & cypress open",
-    "coverage": "cypress run --component",
-    "coverage:e2e": "vite & wait-on http://localhost:5173 & cypress run",
     "preview": "vite preview",
     "lint": "eslint .",
     "format": "prettier --write './**/*.{js,jsx,ts,tsx,css}' --config ./.prettierrc.cjs",
@@ -29,7 +26,6 @@
     "classnames": "^2.5.1",
     "cross-env": "^10.1.0",
     "csv-parser": "^3.2.0",
-    "cypress-real-events": "^1.15.0",
     "dompurify": "^3.2.6",
     "html-react-parser": "^5.2.5",
     "i18next": "^25.10.10",
@@ -47,7 +43,6 @@
     "@storybook/addon-a11y": "^9.1.3",
     "@storybook/addon-docs": "^9.1.3",
     "@storybook/react-vite": "^9.1.3",
-    "@testing-library/cypress": "^10.0.3",
     "@testing-library/dom": "^10.4.1",
     "@testing-library/react": "^16.3.0",
     "@types/node": "^22.18.0",
@@ -58,13 +53,10 @@
     "@typescript-eslint/parser": "^8.40.0",
     "@vitejs/plugin-react": "^4.7.0",
     "@vitest/coverage-istanbul": "^4.0.5",
-    "cypress": "^15.0.0",
-    "cypress-recurse": "^1.37.1",
     "dotenv": "^17.2.1",
     "eslint": "^9.34.0",
     "eslint-config-prettier": "^10.1.8",
     "eslint-import-resolver-typescript": "^4.4.4",
-    "eslint-plugin-cypress": "^4.3.0",
     "eslint-plugin-import": "^2.27.5",
     "eslint-plugin-jsx-a11y": "^6.10.2",
     "eslint-plugin-n": "^17.21.3",
@@ -90,7 +82,6 @@
     "redux": "^5.0.0"
   },
   "workspaces": [
-    "cypress",
     "playwright"
   ],
   "packageManager": "yarn@4.15.0",

@@ -21,29 +21,13 @@ jobs:
       - name: clear yarn cache
         run: yarn cache clean
 
-      - name: cache cypress binary
-        uses: actions/cache@27d5ce7f107fe9357f9df03efb73ab90386fccae # v5
-        with:
-          path: ~/.cache/Cypress
-          key: ${{ runner.os }}-cypress-${{ hashFiles('yarn.lock') }}
-          restore-keys: |
-            ${{ runner.os }}-cypress-
-
       - name: install dependencies
         working-directory: ./
         run: yarn --immutable
 
-      - name: install cypress binary
-        working-directory: ./
-        run: yarn cypress install
-
       - name: run eslint
         working-directory: ./
         run: yarn lint
-
-      - name: run test coverage components
-        working-directory: ./
-        run: yarn coverage
 
       - name: run unit-test
         working-directory: ./
