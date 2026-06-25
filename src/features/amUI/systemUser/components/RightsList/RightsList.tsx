@@ -20,6 +20,12 @@ import type { SystemUserAccessPackage } from '../../types';
 import classes from './RightsList.module.css';
 import { AccessPackageInfo } from './AccessPackageInfo';
 import { ResourceDetails } from './ResourceDetails';
+import {
+  RestoreFocusFallback,
+  RestoreFocusProvider,
+  useRestoreFocus,
+} from '@/features/amUI/common/RestoreFocus';
+import { useAutoFocusRef } from '@/resources/hooks/useAutoFocusRef';
 
 interface RightsListProps {
   resources: ServiceResource[];
@@ -39,6 +45,9 @@ export const RightsList = ({
   const { t } = useTranslation();
   const { getProviderLogoUrl } = useProviderLogoUrl();
   const modalRef = React.useRef<HTMLDialogElement>(null);
+  const restoreFocus = useRestoreFocus();
+  const backButtonRef = useAutoFocusRef<HTMLButtonElement>();
+
   const [selectedResource, setSelectedResource] = React.useState<ServiceResource | null>(null);
   const [selectedAccessPackage, setSelectedAccessPackage] =
     React.useState<SystemUserAccessPackage | null>(null);
@@ -164,34 +173,45 @@ export const RightsList = ({
           </List>
         </div>
       )}
-      <DsDialog
-        ref={modalRef}
-        onClose={closeModal}
-        closedby='any'
-      >
-        {selectedAccessPackage && selectedResource && (
-          <DsButton
-            variant='tertiary'
-            data-color='neutral'
-            data-size='sm'
-            className={classes.backButton}
-            onClick={() => setSelectedResource(null)}
-          >
-            <ArrowLeftIcon
-              fontSize={getButtonIconSize(true)}
-              aria-hidden='true'
-            />
-            {t('common.back')}
-          </DsButton>
-        )}
-        {selectedAccessPackage && !selectedResource && (
-          <AccessPackageInfo
-            accessPackage={selectedAccessPackage}
-            onSelectResource={(resource: ServiceResource) => setSelectedResource(resource)}
-          />
-        )}
-        {selectedResource && <ResourceDetails resource={selectedResource} />}
-      </DsDialog>
+      <RestoreFocusProvider restoreFocus={restoreFocus}>
+        <DsDialog
+          ref={modalRef}
+          onClose={closeModal}
+          closedby='any'
+        >
+          {selectedAccessPackage && selectedResource && (
+            <DsButton
+              ref={backButtonRef}
+              variant='tertiary'
+              data-color='neutral'
+              data-size='sm'
+              className={classes.backButton}
+              onClick={() => {
+                const focusTargetId = selectedResource.identifier;
+                if (focusTargetId) {
+                  restoreFocus.requestFocus(focusTargetId);
+                }
+                setSelectedResource(null);
+              }}
+            >
+              <ArrowLeftIcon
+                fontSize={getButtonIconSize(true)}
+                aria-hidden='true'
+              />
+              {t('common.back')}
+            </DsButton>
+          )}
+          <RestoreFocusFallback>
+            {selectedAccessPackage && !selectedResource && (
+              <AccessPackageInfo
+                accessPackage={selectedAccessPackage}
+                onSelectResource={(resource: ServiceResource) => setSelectedResource(resource)}
+              />
+            )}
+          </RestoreFocusFallback>
+          {selectedResource && <ResourceDetails resource={selectedResource} />}
+        </DsDialog>
+      </RestoreFocusProvider>
     </div>
   );
 };
