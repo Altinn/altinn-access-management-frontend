@@ -117,7 +117,7 @@ export const userInfoApi = createApi({
       invalidatesTags: ['UserProfile'],
     }),
     getReportee: builder.query<ReporteeInfo, void>({
-      query: () => `reportee/${getCookie('AltinnPartyId')}`,
+      query: () => `reportee/${getCookie('AltinnPartyUuid')}`,
       keepUnusedDataFor: 300,
     }),
     getReporteeListForParty: builder.query<User[], void>({

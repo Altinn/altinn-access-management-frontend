@@ -73,9 +73,9 @@ namespace Altinn.AccessManagement.UI.Core.Services
         }
 
         /// <inheritdoc/>        
-        public async Task<AuthorizedParty> GetPartyFromReporteeListIfExists(int partyId)
+        public async Task<AuthorizedParty> GetPartyFromReporteeListIfExists(Guid partyUuid)
         {
-            AuthorizedParty partyInfo = await _accessManagementClientV0.GetPartyFromReporteeListIfExists(partyId);
+            AuthorizedParty partyInfo = await _accessManagementClientV0.GetPartyFromReporteeListIfExists(partyUuid);
             return partyInfo;
         }
 

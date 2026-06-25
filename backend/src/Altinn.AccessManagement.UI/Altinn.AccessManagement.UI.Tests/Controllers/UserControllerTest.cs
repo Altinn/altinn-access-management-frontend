@@ -125,13 +125,13 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
             const int userId = 1234;
             var token = PrincipalUtil.GetToken(userId, 1234, 2);
             _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
-            string reporteePartyID = "51329012";
+            string reporteePartyUuid = "cd35779b-b174-4ecc-bbef-ece13611be7f";
 
-            string path = Path.Combine(_testDataFolder, "Data", "ExpectedResults", "ReporteeList", "GetPartyFromReporteeList", $"{reporteePartyID}.json");
+            string path = Path.Combine(_testDataFolder, "Data", "ExpectedResults", "ReporteeList", "GetPartyFromReporteeList", $"{reporteePartyUuid}.json");
             AuthorizedParty expectedResponse = Util.GetMockData<AuthorizedParty>(path);
 
 
-            var response = await _client.GetAsync($"accessmanagement/api/v1/user/reportee/{reporteePartyID}");
+            var response = await _client.GetAsync($"accessmanagement/api/v1/user/reportee/{reporteePartyUuid}");
             AuthorizedParty actualResponse = await response.Content.ReadFromJsonAsync<AuthorizedParty>();
 
             Assert.Equal(HttpStatusCode.OK, response.StatusCode);
@@ -147,9 +147,9 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
             const int userId = 1234;
             var token = PrincipalUtil.GetToken(userId, 1234, 2);
             _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
-            string reporteePartyID = "51320000";
+            string reporteePartyUuid = "00000000-0000-0000-0000-000000000000";
 
-            var response = await _client.GetAsync($"accessmanagement/api/v1/user/reportee/{reporteePartyID}");
+            var response = await _client.GetAsync($"accessmanagement/api/v1/user/reportee/{reporteePartyUuid}");
 
             Assert.Equal(HttpStatusCode.NotFound, response.StatusCode);
         }
