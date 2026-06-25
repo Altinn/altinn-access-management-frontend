@@ -174,6 +174,24 @@ const FallbackWithFallbackIdTest = ({
   );
 };
 
+const FallbackWithNonInteractiveFallbackIdTest = () => {
+  const restoreFocus = useRestoreFocus();
+  const { requestFocus } = restoreFocus;
+
+  useEffect(() => {
+    requestFocus('deleted-item', 'section-heading');
+  }, [requestFocus]);
+
+  return (
+    <RestoreFocusProvider restoreFocus={restoreFocus}>
+      <h2 id='section-heading'>Section heading</h2>
+      <RestoreFocusFallback>
+        <button>List action</button>
+      </RestoreFocusFallback>
+    </RestoreFocusProvider>
+  );
+};
+
 const RemovalHookTest = () => {
   const restoreFocus = useRestoreFocus();
   const [items, setItems] = useState(['item']);
@@ -512,6 +530,15 @@ describe('RestoreFocus', () => {
 
     await waitFor(() => expect(screen.getByRole('button', { name: 'Area action' })).toHaveFocus());
     expect(screen.getByRole('heading', { name: 'List heading' })).not.toHaveFocus();
+  });
+
+  it('focuses a non-interactive fallback id element itself when it has no focusable descendant', async () => {
+    render(<FallbackWithNonInteractiveFallbackIdTest />);
+
+    await waitFor(() =>
+      expect(screen.getByRole('heading', { name: 'Section heading' })).toHaveFocus(),
+    );
+    expect(screen.getByRole('button', { name: 'List action' })).not.toHaveFocus();
   });
 
   it('falls through to the generic fallback when the fallback id is also absent', async () => {

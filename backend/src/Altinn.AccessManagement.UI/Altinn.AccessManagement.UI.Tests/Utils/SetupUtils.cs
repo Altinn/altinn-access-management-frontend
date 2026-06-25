@@ -23,36 +23,6 @@ namespace Altinn.AccessManagement.UI.Tests.Utils
         /// </summary>
         /// <param name="customFactory">Web app factory to configure test services for</param>
         /// <returns>HttpClient</returns>
-        public static HttpClient GetTestClient(CustomWebApplicationFactory<APIDelegationController> customFactory)
-        {
-            WebApplicationFactory<APIDelegationController> factory = customFactory.WithWebHostBuilder(builder =>
-            {
-                builder.ConfigureTestServices(services =>
-                {
-                    services.AddTransient<IResourceRegistryClient, ResourceRegistryClientMock>();
-                    services.AddTransient<IAccessManagementClient, AccessManagementClientMock>();
-                    services.AddTransient<IProfileClient, ProfileClientMock>();
-                    services.AddSingleton<IPostConfigureOptions<JwtCookieOptions>, JwtCookiePostConfigureOptionsStub>();
-                });
-            });
-            WebApplicationFactoryClientOptions opts = new WebApplicationFactoryClientOptions
-            {
-                HandleCookies = true,
-            };
-            factory.Server.AllowSynchronousIO = true;
-            var client = factory.CreateClient(opts);
-            client.DefaultRequestHeaders.Add("Cookie", "altinnPersistentContext=UL=1044");
-            client.DefaultRequestHeaders.Add("Cookie", "selectedLanguage=no_nb");
-
-            return client;
-        }
-
-
-        /// <summary>
-        ///     Gets a HttpClient for unittests testing
-        /// </summary>
-        /// <param name="customFactory">Web app factory to configure test services for</param>
-        /// <returns>HttpClient</returns>
         public static HttpClient GetSingleRightTestClient(CustomWebApplicationFactory<SingleRightController> customFactory)
         {
             WebApplicationFactory<SingleRightController> factory = customFactory.WithWebHostBuilder(builder =>

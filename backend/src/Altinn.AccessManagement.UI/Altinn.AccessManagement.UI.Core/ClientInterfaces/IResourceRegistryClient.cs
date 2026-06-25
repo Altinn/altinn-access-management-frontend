@@ -25,12 +25,6 @@ namespace Altinn.AccessManagement.UI.Core.ClientInterfaces
         Task<List<ServiceResource>> GetResources();
 
         /// <summary>
-        ///     Integration point for retrieving the list of resources for the given.
-        /// </summary>
-        /// <returns>The resource list if exists</returns>
-        Task<List<ServiceResource>> GetMaskinportenSchemas();
-
-        /// <summary>
         ///     Integration point for retrieving the full list of resources
         /// </summary>
         /// <param name="includeMigratedApps">Indicates whether to include migrated applications in the list</param>

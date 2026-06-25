@@ -24,6 +24,7 @@ const buildClientConnections = (clients?: Client[]): Connection[] => {
         parent: null,
         roles: [],
         isDeleted: client.client.isDeleted ?? undefined,
+        variant: client.client.variant ?? undefined,
       },
       sortKey,
       roles: [],

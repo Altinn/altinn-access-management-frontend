@@ -50,6 +50,7 @@ export const ClientAdministrationAgentsTab = ({ isActive }: ClientAdministration
             parent: null,
             addedAt: agent.agentAddedAt,
             isDeleted: agent.agent.isDeleted ?? undefined,
+            variant: agent.agent.variant ?? undefined,
             roles: [],
           },
           roles: [],
