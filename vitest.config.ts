@@ -18,7 +18,6 @@ export default defineConfig({
     setupFiles: './tests/setupTests.ts',
     exclude: [
       '**/node_modules/**',
-      '**/cypress/**',
       '**/playwright/**',
       '**/*.spec.ts',
       '**/*.test.cy.tsx',

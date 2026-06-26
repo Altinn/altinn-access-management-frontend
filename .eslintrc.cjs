@@ -11,7 +11,6 @@ module.exports = {
   env: {
     browser: true,
     es2021: true,
-    'cypress/globals': true,
   },
   extends: [
     'plugin:react/recommended',
@@ -22,12 +21,11 @@ module.exports = {
     'plugin:jsx-a11y/recommended',
     'plugin:react/recommended',
     'plugin:prettier/recommended',
-    'plugin:cypress/recommended',
     'plugin:prettier/recommended',
     'plugin:storybook/recommended',
   ],
   overrides: [],
-  plugins: ['react', 'cypress', 'import'],
+  plugins: ['react', 'import'],
   rules: {
     'react/react-in-jsx-scope': 'off',
     'react/jsx-no-bind': 'off',
