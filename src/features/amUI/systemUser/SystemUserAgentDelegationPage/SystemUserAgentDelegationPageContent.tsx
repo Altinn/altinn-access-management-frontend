@@ -261,6 +261,7 @@ export const SystemUserAgentDelegationPageContent = ({
             id: reporteeData.partyUuid,
             name: reporteeData.name,
             orgNo: reporteeData.organizationNumber || '',
+            unitType: reporteeData.unitType,
             access: [],
             isSelfOrg: true,
           },

@@ -21,6 +21,11 @@ namespace Altinn.AccessManagement.UI.Core.Models.SystemUser
         public required string OrganizationIdentifier { get; set; }
 
         /// <summary>
+        /// Gets or sets the unit type if the party is an organization
+        /// </summary>
+        public string UnitType { get; set; }
+
+        /// <summary>
         /// Gets or sets a collection of all access information for the client 
         /// </summary>
         public List<ClientRoleAccessPackages> Access { get; set; } = [];

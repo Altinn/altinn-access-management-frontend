@@ -147,6 +147,7 @@ namespace Altinn.AccessManagement.UI.Core.Services
                     Id = x.PartyUuid,
                     Name = x.DisplayName,
                     OrgNo = x.OrganizationIdentifier,
+                    UnitType = x.UnitType,
                     Access = x.Access
                 };
             }).ToList();
