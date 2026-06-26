@@ -9,6 +9,7 @@ import { usePartyRepresentation } from '../PartyRepresentationContext/PartyRepre
 
 interface RoleDeleteButtonProps {
   role: Role;
+  onSuccess?: () => void;
   onError?: (error: FetchBaseQueryError | SerializedError) => void;
   size?: 'xs' | 'sm' | 'md' | 'lg';
   color?: 'danger' | 'neutral';
@@ -19,6 +20,7 @@ interface RoleDeleteButtonProps {
 
 export const RoleDeleteButton = ({
   role,
+  onSuccess,
   onError,
   size,
   color,
@@ -42,6 +44,7 @@ export const RoleDeleteButton = ({
       .unwrap()
       .then(() => {
         openSnackbar({ message: t('role.delete_role_success'), color: 'success' });
+        onSuccess?.();
       })
       .catch((error: FetchBaseQueryError | SerializedError) => {
         onError?.(error);
