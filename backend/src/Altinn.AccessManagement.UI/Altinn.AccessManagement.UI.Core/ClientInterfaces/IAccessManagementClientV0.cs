@@ -16,8 +16,8 @@ namespace Altinn.AccessManagement.UI.Core.ClientInterfaces
                 /// <summary>
                 /// Retrieve party if party exists in the authenticated users reporteelist
                 /// </summary>
-                /// <param name="partyId">party id</param>
+                /// <param name="partyUuid">party uuid</param>
                 /// <returns></returns>
-                Task<AuthorizedParty> GetPartyFromReporteeListIfExists(int partyId);
+                Task<AuthorizedParty> GetPartyFromReporteeListIfExists(Guid partyUuid);
         }
 }

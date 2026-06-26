@@ -6,6 +6,7 @@ using Altinn.AccessManagement.UI.Core.ClientInterfaces;
 using Altinn.AccessManagement.UI.Core.Extensions;
 using Altinn.AccessManagement.UI.Core.Helpers;
 using Altinn.AccessManagement.UI.Core.Models.AccessManagement;
+using Altinn.AccessManagement.UI.Core.Models.Common;
 using Altinn.AccessManagement.UI.Integration.Configuration;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
@@ -47,11 +48,11 @@ namespace Altinn.AccessManagement.UI.Integration.Clients
         }
 
         /// <inheritdoc />
-        public async Task<AuthorizedParty> GetPartyFromReporteeListIfExists(int partyId)
+        public async Task<AuthorizedParty> GetPartyFromReporteeListIfExists(Guid partyUuid)
         {
             try
             {
-                string endpointUrl = $"authorizedparty/{partyId}?includeAltinn2=true";
+                string endpointUrl = $"enduser/authorizedparties?partyFilter={partyUuid}&includeSubParties=true&includeInactiveParties=true";
                 string token = JwtTokenUtil.GetTokenFromContext(_httpContextAccessor.HttpContext, _platformSettings.JwtCookieName);
 
                 HttpResponseMessage response = await _client.GetAsync(token, endpointUrl);
@@ -59,7 +60,8 @@ namespace Altinn.AccessManagement.UI.Integration.Clients
                 if (response.StatusCode == HttpStatusCode.OK)
                 {
                     string responseContent = await response.Content.ReadAsStringAsync();
-                    return JsonSerializer.Deserialize<AuthorizedParty>(responseContent, _serializerOptions);
+                    var result = JsonSerializer.Deserialize<PaginatedResult<AuthorizedParty>>(responseContent, _serializerOptions);
+                    return result?.Items?.FirstOrDefault();
                 }
 
                 _logger.LogError("GetPartyFromReporteeListIfExists from accessmanagement failed with {StatusCode}", response.StatusCode);
@@ -77,7 +79,7 @@ namespace Altinn.AccessManagement.UI.Integration.Clients
         {
             try
             {
-                string endpointUrl = $"authorizedparties?includeAltinn2=true&includeRoles=false&includeAccessPackages=false&includeResources=false&includeInstances=false";
+                string endpointUrl = $"enduser/authorizedparties?includeSubParties=true&includeInactiveParties=true";
                 string token = JwtTokenUtil.GetTokenFromContext(_httpContextAccessor.HttpContext, _platformSettings.JwtCookieName);
 
                 HttpResponseMessage response = await _client.GetAsync(token, endpointUrl);
@@ -85,15 +87,16 @@ namespace Altinn.AccessManagement.UI.Integration.Clients
                 if (response.StatusCode == HttpStatusCode.OK)
                 {
                     string responseContent = await response.Content.ReadAsStringAsync();
-                    return JsonSerializer.Deserialize<List<AuthorizedParty>>(responseContent, _serializerOptions);
+                    var result = JsonSerializer.Deserialize<PaginatedResult<AuthorizedParty>>(responseContent, _serializerOptions);
+                    return result?.Items?.ToList() ?? new List<AuthorizedParty>();
                 }
 
-                _logger.LogError("GetPartyFromReporteeListIfExists from accessmanagement failed with {StatusCode}", response.StatusCode);
+                _logger.LogError("GetReporteeListForUser from accessmanagement failed with {StatusCode}", response.StatusCode);
                 return null;
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "AccessManagement.UI // AccessManagementClient // GetPartyFromReporteeListIfExists // Exception");
+                _logger.LogError(ex, "AccessManagement.UI // AccessManagementClient // GetReporteeListForUser // Exception");
                 throw;
             }
         }

@@ -29,18 +29,16 @@ namespace Altinn.AccessManagement.UI.Mocks.Mocks
         }
 
         /// <inheritdoc />
-        public Task<AuthorizedParty> GetPartyFromReporteeListIfExists(int partyId)
+        public Task<AuthorizedParty> GetPartyFromReporteeListIfExists(Guid partyUuid)
         {
             try
             {
-                return Task.FromResult(Util.GetMockData<AuthorizedParty>(Path.Combine(dataFolder, "ReporteeList", "GetPartyFromReporteeList", partyId + ".json")));
+                return Task.FromResult(Util.GetMockData<AuthorizedParty>(Path.Combine(dataFolder, "ReporteeList", "GetPartyFromReporteeList", partyUuid + ".json")));
             }
             catch (FileNotFoundException)
             {
-
                 return Task.FromResult<AuthorizedParty>(null);
             }
-
         }
 
         /// <inheritdoc />
@@ -56,7 +54,7 @@ namespace Altinn.AccessManagement.UI.Mocks.Mocks
                 {
                     throw new Exception("Internal Server Error");
                 }
-                return Task.FromResult(Util.GetMockData<List<AuthorizedParty>>(Path.Combine(dataFolder, "ReporteeList", $"{partyId}.json"))); 
+                return Task.FromResult(Util.GetMockData<List<AuthorizedParty>>(Path.Combine(dataFolder, "ReporteeList", $"{partyId}.json")));
             }
             catch (FileNotFoundException)
             {
