@@ -33,9 +33,6 @@ export const PackagePoaDetailsHeader: React.FC<PackagePoaDetailsHeaderProps> = (
         data-size='lg'
         className={classes.pageHeading}
         id={PACKAGE_POA_HEADING_ID}
-        // -1 keeps it out of the tab order but lets focusElement focus it without adding then
-        // removing tabindex, which would blur a non-focusable anchor to <body> in real browsers.
-        tabIndex={-1}
       >
         {packageName}
       </DsHeading>
