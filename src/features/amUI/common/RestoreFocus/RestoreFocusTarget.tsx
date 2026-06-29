@@ -32,8 +32,8 @@ export const focusHasBeenLost = () =>
   (document.activeElement instanceof HTMLElement &&
     isUnavailableForFocus(document.activeElement, document.activeElement));
 
-// Focuses the element, making it programmatically focusable when it is not natively focusable (e.g.
-// a heading or a processed, non-interactive row).
+// Moves focus to the element, including non-natively-focusable ones (e.g. a heading or a processed,
+// non-interactive row).
 export const focusElement = (element: HTMLElement) => {
   if (element.matches(FOCUSABLE_SELECTOR)) {
     element.focus();
