@@ -21,6 +21,12 @@ import { usePartyRepresentation } from '../common/PartyRepresentationContext/Par
 import { DelegationAction } from '../common/DelegationModal/EditModal';
 import { PackageUserModal, mapUserToParty, type PackageUserModalHandle } from './PackageUserModal';
 import { NewUserButton } from '../users/NewUserModal/NewUserModal';
+import {
+  RestoreFocusFallback,
+  useRestoreFocusContext,
+  useRestoreFocusOnDataChange,
+} from '../common/RestoreFocus';
+import { PACKAGE_POA_HEADING_ID } from './PackagePoaDetailsHeader';
 
 interface UsersTabProps {
   accessPackage?: AccessPackage;
@@ -29,10 +35,14 @@ interface UsersTabProps {
   onDelegateError?: (errorInfo: ActionError) => void;
 }
 
+// The RestoreFocusProvider zone is owned by PackagePoaDetails (so the page heading, rendered outside
+// the tabs, is reachable as the focus fallback after a revoke).
 export const UsersTab = ({ accessPackage, isLoading, isFetching }: UsersTabProps) => {
   const { t } = useTranslation();
   const { fromParty, toParty } = usePartyRepresentation();
   const modalRef = useRef<PackageUserModalHandle>(null);
+  const restoreFocus = useRestoreFocusContext();
+  const requestFocusOnRevoke = useRestoreFocusOnDataChange(accessPackage?.permissions);
   const { queueSnackbar } = useSnackbarOnIdle({ isBusy: isFetching, showPendingOnUnmount: true });
   const { canDelegatePackage, isLoading: isDelegationCheckLoading } =
     useAccessPackageDelegationCheck();
@@ -138,6 +148,13 @@ export const UsersTab = ({ accessPackage, isLoading, isFetching }: UsersTabProps
     }
   };
 
+  // Revoking from the list (not the modal) removes the row, so arm focus restoration here only. The
+  // modal path keeps focus in the dialog and restores to the list on close instead.
+  const handleInlineRevoke = (user: UserActionTarget) => {
+    requestFocusOnRevoke(user.id, PACKAGE_POA_HEADING_ID);
+    handleOnRevoke(user);
+  };
+
   const availableActions = [
     DelegationAction.REVOKE,
     ...(canDelegate ? [DelegationAction.DELEGATE] : []),
@@ -145,61 +162,65 @@ export const UsersTab = ({ accessPackage, isLoading, isFetching }: UsersTabProps
 
   return (
     <>
-      {!isLoading && (
-        <DsParagraph
-          data-size='md'
-          className={pageClasses.tabDescription}
-        >
-          {t('package_poa_details_page.users_tab.description')}
-        </DsParagraph>
-      )}
+      <RestoreFocusFallback>
+        {!isLoading && (
+          <DsParagraph
+            data-size='md'
+            className={pageClasses.tabDescription}
+          >
+            {t('package_poa_details_page.users_tab.description')}
+          </DsParagraph>
+        )}
 
-      {delegateActionError?.error && delegateActionError?.targetParty && (
-        <DelegateErrorAlert
-          error={delegateActionError?.error}
-          targetParty={delegateActionError?.targetParty}
-          onClose={() => setDelegateActionError(null)}
-        />
-      )}
-
-      <UserSearch
-        includeSelfAsChild={false}
-        users={users}
-        indirectUsers={indirectUsers}
-        isLoading={
-          isLoading ||
-          loadingIndirectConnections ||
-          roleMetadataIsLoading ||
-          isDelegationCheckLoading
-        }
-        onDelegate={canDelegate ? handleOnDelegate : undefined}
-        AddUserButton={
-          <NewUserButton
-            variant='primary'
-            onComplete={handleOnDelegate}
+        {delegateActionError?.error && delegateActionError?.targetParty && (
+          <DelegateErrorAlert
+            error={delegateActionError?.error}
+            targetParty={delegateActionError?.targetParty}
+            onClose={() => setDelegateActionError(null)}
           />
-        }
-        onRevoke={handleOnRevoke}
-        onSelect={(user) => modalRef.current?.open(user)}
-        isActionLoading={
-          isActionLoading ||
-          isLoading ||
-          loadingIndirectConnections ||
-          isFetching ||
-          isFetchingIndirectConnections ||
-          roleMetadataIsLoading ||
-          isDelegationCheckLoading
-        }
-        canDelegate={canDelegate}
-      />
+        )}
+
+        <UserSearch
+          includeSelfAsChild={false}
+          users={users}
+          indirectUsers={indirectUsers}
+          isLoading={
+            isLoading ||
+            loadingIndirectConnections ||
+            roleMetadataIsLoading ||
+            isDelegationCheckLoading
+          }
+          onDelegate={canDelegate ? handleOnDelegate : undefined}
+          AddUserButton={
+            <NewUserButton
+              variant='primary'
+              onComplete={handleOnDelegate}
+            />
+          }
+          onRevoke={handleInlineRevoke}
+          onSelect={(user) => modalRef.current?.open(user)}
+          isActionLoading={
+            isActionLoading ||
+            isLoading ||
+            loadingIndirectConnections ||
+            isFetching ||
+            isFetchingIndirectConnections ||
+            roleMetadataIsLoading ||
+            isDelegationCheckLoading
+          }
+          canDelegate={canDelegate}
+        />
+      </RestoreFocusFallback>
 
       <PackageUserModal
         ref={modalRef}
         accessPackage={accessPackage}
         availableActions={availableActions}
         isActionLoading={isActionLoading}
+        isFetching={isFetching}
         onDelegate={handleOnDelegate}
         onRevoke={handleOnRevoke}
+        onClosed={(user) => restoreFocus?.requestFocus(user.id, PACKAGE_POA_HEADING_ID)}
       />
     </>
   );

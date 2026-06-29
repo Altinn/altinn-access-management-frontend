@@ -26,6 +26,7 @@ import { RightsSection } from '../SingleRights/RightsSection';
 import { ResourceAlert } from '../SingleRights/ResourceAlert';
 import { ResourceInfoSkeleton } from '../SingleRights/ResourceInfoSkeleton';
 import { InstanceDescription } from '../../InstanceDescription/InstanceDescription';
+import { focusFirstEnabledButton, useRestoreFocusAfterSettled } from '../../RestoreFocus';
 import { useInstanceDelegationRightsData } from './useInstanceDelegationRightsData';
 
 import classes from './InstanceInfo.module.css';
@@ -163,6 +164,15 @@ export const InstanceInfo = ({
     : null;
   const technicalErrorDetails = errorDetails ?? (hasAccess ? null : delegationCheckErrorDetails);
 
+  // Delegate/update/revoke swap the edit buttons for a loading then success animation in place,
+  // dropping focus to the dialog body. Once it settles, return focus to whichever button remains.
+  const actionsRef = React.useRef<HTMLDivElement>(null);
+  useRestoreFocusAfterSettled({
+    isSettled: !isActionLoading && !isActionSuccess,
+    requestWhen: isActionLoading,
+    onRestore: () => focusFirstEnabledButton(actionsRef.current),
+  });
+
   const hasDelegableRights = rights.some((r) => r.delegable);
   const showMissingRightsStatus = !hasAccess && rights.length > 0 && !hasDelegableRights;
   const cannotDelegateHere = resource?.delegable === false;
@@ -243,7 +253,10 @@ export const InstanceInfo = ({
                 actionDescription={t('delegation_modal.instance_actions.action_description')}
               />
             )}
-            <div className={classes.editButtons}>
+            <div
+              ref={actionsRef}
+              className={classes.editButtons}
+            >
               {hasDelegateAction && (
                 <Button
                   data-size='sm'

@@ -14,6 +14,7 @@ import { PageContainer } from '../common/PageContainer/PageContainer';
 import { PageLayoutWrapper } from '../common/PageLayoutWrapper';
 import { PartyRepresentationProvider } from '../common/PartyRepresentationContext/PartyRepresentationContext';
 import { DelegationModalProvider } from '../common/DelegationModal/DelegationModalContext';
+import { RestoreFocusProvider, useRestoreFocus } from '../common/RestoreFocus';
 
 import { InstanceDetailPageContent } from './InstanceDetailPageContent';
 import classes from './InstanceDetailPageContent.module.css';
@@ -31,6 +32,7 @@ export const InstanceDetailPage = () => {
   const isInboxDeeplink = !!dialogId;
   const instanceDelegationEnabled = displayInstanceDelegation();
   const poaOverviewUrl = `/${amUIPath.PoaOverview}#instances`;
+  const restoreFocus = useRestoreFocus();
 
   useDocumentTitle(
     isInboxDeeplink
@@ -73,7 +75,9 @@ export const InstanceDetailPage = () => {
               actingPartyUuid={partyUuid}
             >
               <DelegationModalProvider>
-                <InstanceDetailPageContent />
+                <RestoreFocusProvider restoreFocus={restoreFocus}>
+                  <InstanceDetailPageContent />
+                </RestoreFocusProvider>
               </DelegationModalProvider>
             </PartyRepresentationProvider>
           </DeeplinkReporteeGuard>

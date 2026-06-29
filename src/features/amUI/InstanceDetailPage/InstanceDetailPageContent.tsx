@@ -28,9 +28,17 @@ import {
   toInstancePresentationData,
 } from '../common/InstanceList/instanceListUtils';
 import { InstanceDescription } from '../common/InstanceDescription/InstanceDescription';
+import {
+  RestoreFocusFallback,
+  useRestoreFocusContext,
+  useRestoreFocusOnDataChange,
+} from '../common/RestoreFocus';
 
 import classes from './InstanceDetailPageContent.module.css';
 import { RequestInstanceAdminPackage } from './RequestInstanceAdminPackage';
+
+// Durable anchor focus falls back to when the row a user acted on is gone (e.g. just revoked).
+const INSTANCE_DETAIL_HEADING_ID = 'instance_detail_heading';
 
 export const InstanceDetailPageContent = () => {
   const { t, i18n } = useTranslation();
@@ -39,6 +47,7 @@ export const InstanceDetailPageContent = () => {
 
   const actingPartyIsOrg = actingParty?.partyTypeName === PartyType.Organization;
 
+  const restoreFocus = useRestoreFocusContext();
   const modalRef = useRef<HTMLDialogElement>(null);
   const [selectedUser, setSelectedUser] = useState<UserActionTarget | null>(null);
   const [selectedUserMode, setSelectedUserMode] = useState<'edit' | 'delegate'>('edit');
@@ -74,6 +83,9 @@ export const InstanceDetailPageContent = () => {
     })
       .unwrap()
       .then(() => {
+        // Revoking from the list removes the row once the instances query refetches; defer focus
+        // restoration until then. (Modal revoke keeps focus in the dialog and restores on close.)
+        requestFocusOnRevoke(user.id, INSTANCE_DETAIL_HEADING_ID);
         setSelectedUser(null);
         setActionError(null);
       })
@@ -123,6 +135,7 @@ export const InstanceDetailPageContent = () => {
       skip: !actingParty?.partyUuid || !fromParty?.partyUuid || !resourceId || !instanceUrn,
     },
   );
+  const requestFocusOnRevoke = useRestoreFocusOnDataChange(instanceDelegations);
 
   if (!resourceId || !instanceUrn) {
     return (
@@ -185,6 +198,7 @@ export const InstanceDetailPageContent = () => {
           fromPartyName={fromParty?.name}
           fromPartyType={fromParty?.partyTypeName}
           titleLevel={1}
+          headingId={INSTANCE_DETAIL_HEADING_ID}
         />
       )}
       {inboxLink}
@@ -229,22 +243,24 @@ export const InstanceDetailPageContent = () => {
               {t('instance_detail_page.instance_admin_edit_disclaimer')}
             </DsParagraph>
           )}
-          {isAdmin ? (
-            <InstanceUsersAsAdmin
-              resourceId={resourceId}
-              instanceUrn={instanceUrn}
-              onSelect={handleUserSelect}
-              onDelegate={handleIndirectUserDelegate}
-              onRevoke={handleRevoke}
-              isRevoking={isRevoking}
-            />
-          ) : isInstanceAdmin ? (
-            <InstanceUsersAsInstanceAdmin
-              resourceId={resourceId}
-              instanceUrn={instanceUrn}
-              onDelegate={handleIndirectUserDelegate}
-            />
-          ) : null}
+          <RestoreFocusFallback>
+            {isAdmin ? (
+              <InstanceUsersAsAdmin
+                resourceId={resourceId}
+                instanceUrn={instanceUrn}
+                onSelect={handleUserSelect}
+                onDelegate={handleIndirectUserDelegate}
+                onRevoke={handleRevoke}
+                isRevoking={isRevoking}
+              />
+            ) : isInstanceAdmin ? (
+              <InstanceUsersAsInstanceAdmin
+                resourceId={resourceId}
+                instanceUrn={instanceUrn}
+                onDelegate={handleIndirectUserDelegate}
+              />
+            ) : null}
+          </RestoreFocusFallback>
         </div>
       )}
       {resource && selectedUser && (
@@ -262,6 +278,11 @@ export const InstanceDetailPageContent = () => {
           openWithError={actionError}
           onSuccess={selectedUserMode === 'delegate' ? () => modalRef.current?.close() : undefined}
           onClose={() => {
+            // Restore focus synchronously to the row that opened the modal before clearing state.
+            // If the user was revoked inside the modal their row is gone, so the fallback catches it.
+            if (selectedUser) {
+              restoreFocus?.requestFocus(selectedUser.id, INSTANCE_DETAIL_HEADING_ID);
+            }
             setSelectedUser(null);
             setActionError(null);
           }}

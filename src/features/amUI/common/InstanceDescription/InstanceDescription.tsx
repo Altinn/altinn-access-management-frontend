@@ -22,6 +22,9 @@ interface InstanceDescriptionProps {
   fromPartyType?: PartyType;
   titleLevel?: 1 | 2 | 3 | 4 | 5 | 6;
   statusSection?: ReactNode;
+  // When set, the heading becomes a focus target (e.g. a RestoreFocus fallback anchor). -1 keeps it
+  // out of the tab order; see common/RestoreFocus.
+  headingId?: string;
 }
 
 export const InstanceDescription = ({
@@ -31,6 +34,7 @@ export const InstanceDescription = ({
   fromPartyType,
   titleLevel = 2,
   statusSection,
+  headingId,
 }: InstanceDescriptionProps) => {
   const { getProviderLogoUrl } = useProviderLogoUrl();
   const { t, i18n } = useTranslation();
@@ -50,6 +54,8 @@ export const InstanceDescription = ({
       <DsHeading
         level={titleLevel}
         data-size='sm'
+        id={headingId}
+        tabIndex={headingId ? -1 : undefined}
       >
         {title}
       </DsHeading>
