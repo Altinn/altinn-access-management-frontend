@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useRef } from 'react';
 import { useTranslation } from 'react-i18next';
 import { DsAlert, DsButton, DsListItem, DsListUnordered } from '@altinn/altinn-components';
 import type { AgentDelegationCustomer } from '../types';
@@ -14,7 +14,17 @@ interface AddAllCustomersProps {
 }
 
 const CompletionState = ({ addAllState, onCloseModal }: AddAllCustomersProps) => {
+  const errorRef = useRef<HTMLDivElement>(null);
+  const successRef = useRef<HTMLDivElement>(null);
   const { t } = useTranslation();
+
+  useEffect(() => {
+    if (addAllState.errors.length > 0) {
+      errorRef.current?.focus();
+    } else {
+      successRef.current?.focus();
+    }
+  }, [addAllState.errors.length]);
 
   const closeButton = (
     <div>
@@ -25,7 +35,11 @@ const CompletionState = ({ addAllState, onCloseModal }: AddAllCustomersProps) =>
   if (addAllState.errors.length > 0) {
     return (
       <div className={classes.addAllContainer}>
-        <DsAlert data-color='warning'>
+        <DsAlert
+          data-color='warning'
+          ref={errorRef}
+          tabIndex={-1}
+        >
           {t('systemuser_agent_delegation.add_all_customers_partial', {
             successCount: addAllState.progress - addAllState.errors.length,
             totalCount: addAllState.maxCount,
@@ -47,6 +61,8 @@ const CompletionState = ({ addAllState, onCloseModal }: AddAllCustomersProps) =>
       <DsAlert
         data-color='success'
         data-size='sm'
+        ref={successRef}
+        tabIndex={-1}
       >
         {t('systemuser_agent_delegation.add_all_customers_success')}
       </DsAlert>
