@@ -41,6 +41,12 @@ export const ReporteeRoleSection = ({ numberOfAccesses }: ReporteeRoleSectionPro
         modalRef={modalRef}
         role={modalItem}
         onClose={() => {
+          // The confirm-deletion dialog is a nested <dialog>. Closing it can fire a spurious close
+          // on this modal while it is still open. Ignore those: only treat it as a real close when
+          // this dialog is actually closed.
+          if (modalRef.current?.open) {
+            return;
+          }
           // Request focus synchronously before clearing state. If the role was deleted inside the
           // modal its row is gone, so fall back to the list heading instead of <body>.
           if (modalItem) {

@@ -53,7 +53,7 @@ export const RoleInfo = ({ role }: RoleInfoProps) => {
     },
   );
 
-  // restore focus on only when the permissions query refetches
+  // restore focus only when the permissions query refetches
   const requestFocusOnDataChange = useRestoreFocusOnDataChange(permissions);
 
   const sectionId = fromParty?.partyUuid === actingParty?.partyUuid ? 9 : 8;
