@@ -1,7 +1,13 @@
 import React, { useEffect } from 'react';
 import { useTranslation, Trans } from 'react-i18next';
 import { useSearchParams } from 'react-router';
-import { DsAlert, DsHeading, DsParagraph, DsButton } from '@altinn/altinn-components';
+import {
+  DsAlert,
+  DsHeading,
+  DsParagraph,
+  DsButton,
+  formatDisplayName,
+} from '@altinn/altinn-components';
 import { useDocumentTitle } from '@/resources/hooks/useDocumentTitle';
 import {
   useApproveChangeRequestMutation,
@@ -139,7 +145,7 @@ export const SystemUserChangeRequestPage = () => {
               i18nKey={'systemuser_request.system_description'}
               values={{
                 systemName: changeRequest.system.name,
-                partyName: reporteeData?.name,
+                partyName: formatDisplayName({ fullName: reporteeData?.name, type: 'company' }),
               }}
             ></Trans>
           </DsParagraph>

@@ -1,7 +1,13 @@
 import React, { useEffect } from 'react';
 import { useTranslation, Trans } from 'react-i18next';
 import { useNavigate, useSearchParams } from 'react-router';
-import { DsAlert, DsHeading, DsParagraph, DsButton } from '@altinn/altinn-components';
+import {
+  DsAlert,
+  DsHeading,
+  DsParagraph,
+  DsButton,
+  formatDisplayName,
+} from '@altinn/altinn-components';
 
 import {
   useGetAgentSystemUserRequestQuery,
@@ -148,7 +154,7 @@ export const SystemUserAgentRequestPage = () => {
               i18nKey={'systemuser_agent_request.system_description'}
               values={{
                 vendorName: request.system.name,
-                companyName: reporteeData?.name,
+                companyName: formatDisplayName({ fullName: reporteeData?.name, type: 'company' }),
                 addSelfInfo:
                   request.accessPackages.every((p) => p.isAssignable) && enableAddSelfToSystemuser()
                     ? t('systemuser_agent_request.add_self_possible')

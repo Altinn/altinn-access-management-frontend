@@ -1,7 +1,7 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate, useParams } from 'react-router';
-import { DsAlert, DsParagraph } from '@altinn/altinn-components';
+import { DsAlert, DsParagraph, formatDisplayName } from '@altinn/altinn-components';
 
 import { useDeleteSystemuserMutation, useGetSystemUserQuery } from '@/rtk/features/systemUserApi';
 import { getCookie } from '@/resources/Cookie/CookieMethods';
@@ -78,7 +78,10 @@ export const SystemUserDetailsPage = (): React.ReactNode => {
             <div className={classes.systemUserDetails}>
               <SystemUserHeader
                 title={systemUser?.integrationTitle ?? ''}
-                subTitle={reporteeData?.name}
+                subTitle={formatDisplayName({
+                  fullName: reporteeData?.name || '',
+                  type: 'company',
+                })}
                 isLoading={isLoadingSystemUser}
               />
               <RightsList

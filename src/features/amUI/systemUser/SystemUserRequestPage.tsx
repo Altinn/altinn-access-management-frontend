@@ -1,7 +1,13 @@
 import React, { useEffect } from 'react';
 import { useTranslation, Trans } from 'react-i18next';
 import { useNavigate, useSearchParams } from 'react-router';
-import { DsAlert, DsHeading, DsParagraph, DsButton } from '@altinn/altinn-components';
+import {
+  DsAlert,
+  DsHeading,
+  DsParagraph,
+  DsButton,
+  formatDisplayName,
+} from '@altinn/altinn-components';
 import { useDocumentTitle } from '@/resources/hooks/useDocumentTitle';
 import {
   useGetSystemUserRequestQuery,
@@ -146,7 +152,7 @@ export const SystemUserRequestPage = () => {
               i18nKey={'systemuser_request.system_description'}
               values={{
                 systemName: request.system.name,
-                partyName: reporteeData?.name,
+                partyName: formatDisplayName({ fullName: reporteeData?.name, type: 'company' }),
               }}
             ></Trans>
           </DsParagraph>

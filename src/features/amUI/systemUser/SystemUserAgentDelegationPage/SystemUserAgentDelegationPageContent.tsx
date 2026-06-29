@@ -8,6 +8,7 @@ import {
   DsDialog,
   DsHeading,
   DsParagraph,
+  formatDisplayName,
   useSnackbar,
 } from '@altinn/altinn-components';
 
@@ -99,6 +100,7 @@ export const SystemUserAgentDelegationPageContent = ({
   );
 
   const isAddingAllCustomers = addAllState.maxCount > -1;
+  const reporteeName = formatDisplayName({ fullName: reporteeData?.name || '', type: 'company' });
 
   const resetLoadingId = (customerId: string): void => {
     setLoadingIds((oldLoadingIds) => oldLoadingIds.filter((id) => id !== customerId));
@@ -261,7 +263,7 @@ export const SystemUserAgentDelegationPageContent = ({
       ? [
           {
             id: reporteeData.partyUuid,
-            name: reporteeData.name,
+            name: reporteeName,
             orgNo: reporteeData.organizationNumber || '',
             unitType: reporteeData.unitType,
             access: [],
@@ -306,10 +308,10 @@ export const SystemUserAgentDelegationPageContent = ({
                 onRemoveCustomer={onRemoveCustomer}
                 onAddAllCustomers={onAddAllCustomers}
               />
-              {customers.length === 0 && reporteeData?.name && (
+              {customers.length === 0 && reporteeName && (
                 <DsAlert data-color='warning'>
                   {t('systemuser_agent_delegation.no_customers_warning', {
-                    companyName: reporteeData?.name,
+                    companyName: reporteeName,
                   })}
                 </DsAlert>
               )}
@@ -327,7 +329,7 @@ export const SystemUserAgentDelegationPageContent = ({
       <div className={classes.flexContainer}>
         <SystemUserHeader
           title={systemUser.integrationTitle}
-          subTitle={reporteeData?.name}
+          subTitle={reporteeName}
         />
         <DsHeading
           level={2}

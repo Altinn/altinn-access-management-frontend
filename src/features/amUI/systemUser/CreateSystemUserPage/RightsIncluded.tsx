@@ -1,7 +1,7 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { Link, useNavigate } from 'react-router';
-import { DsSpinner, DsAlert, DsButton } from '@altinn/altinn-components';
+import { DsSpinner, DsAlert, DsButton, formatDisplayName } from '@altinn/altinn-components';
 
 import {
   useCreateSystemUserMutation,
@@ -75,7 +75,10 @@ export const RightsIncluded = ({ selectedSystem, onNavigateBack }: RightsInclude
                 : 'systemuser_includedrightspage.header',
               {
                 integrationTitle: selectedSystem.name,
-                companyName: reporteeData?.name,
+                companyName: formatDisplayName({
+                  fullName: reporteeData?.name || '',
+                  type: 'company',
+                }),
               },
             )}
             avatarTitle={selectedSystem.name}
