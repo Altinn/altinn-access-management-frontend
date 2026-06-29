@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import { useTranslation, Trans } from 'react-i18next';
 import { useNavigate, useSearchParams } from 'react-router';
 import {
@@ -26,14 +26,12 @@ import { getApiBaseUrl } from './requestUtils';
 import { getLogoutUrl } from '@/resources/utils/pathUtils';
 import { SystemUserRequestLoadError } from './components/SystemUserRequestLoadError/SystemUserRequestLoadError';
 import { useGetIsAdminQuery, useGetReporteeQuery } from '@/rtk/features/userInfoApi';
-import { getCookie } from '@/resources/Cookie/CookieMethods';
-import { redirectToChangeReporteeAndRedirect } from '@/resources/utils/changeReporteeUtils';
+import { useRedirectToRequestParty } from '@/resources/hooks/useRedirectToRequestParty';
 
 export const SystemUserRequestPage = () => {
   const { t } = useTranslation();
   const navigate = useNavigate();
   useDocumentTitle(t('systemuser_request.page_title'));
-  const partyUuid = getCookie('AltinnPartyUuid');
   const [searchParams] = useSearchParams();
   const skipLogout = searchParams.get('skiplogout');
   const requestId = searchParams.get('id') ?? '';
@@ -55,11 +53,7 @@ export const SystemUserRequestPage = () => {
   } = useGetReporteeQuery();
   const { data: isAdmin } = useGetIsAdminQuery();
 
-  useEffect(() => {
-    if (request?.partyUuid && request?.partyUuid !== partyUuid) {
-      redirectToChangeReporteeAndRedirect(request.partyUuid, window.location.href);
-    }
-  }, [request?.partyUuid, partyUuid]);
+  const partyUuid = useRedirectToRequestParty(request?.partyUuid);
 
   const [
     postAcceptCreationRequest,
