@@ -8,14 +8,12 @@ import {
   DsDialog,
   DsHeading,
   DsParagraph,
-  Snackbar,
   useSnackbar,
 } from '@altinn/altinn-components';
 
 import {
   useAssignCustomerMutation,
   useAssignSelfCustomerMutation,
-  useGetSystemUserReporteeQuery,
   useIsSelfAddedQuery,
   useRemoveCustomerMutation,
   useRemoveSelfCustomerMutation,
@@ -26,7 +24,11 @@ import type { AgentDelegation, AgentDelegationCustomer, ProblemDetail, SystemUse
 import { RightsList } from '../components/RightsList/RightsList';
 import classes from './SystemUserAgentDelegationPage.module.css';
 import { CustomerList } from './CustomerList';
-import { useGetIsAdminQuery, useGetIsClientAdminQuery } from '@/rtk/features/userInfoApi';
+import {
+  useGetIsAdminQuery,
+  useGetIsClientAdminQuery,
+  useGetReporteeQuery,
+} from '@/rtk/features/userInfoApi';
 import { AddAllCustomers } from './AddAllCustomers';
 import { DelegationCheckError } from '../components/DelegationCheckError/DelegationCheckError';
 import { enableAddSelfToSystemuser } from '@/resources/utils/featureFlagUtils';
@@ -73,7 +75,7 @@ export const SystemUserAgentDelegationPageContent = ({
 
   const { data: isClientAdmin } = useGetIsClientAdminQuery();
   const { data: isAdmin } = useGetIsAdminQuery();
-  const { data: reporteeData } = useGetSystemUserReporteeQuery(partyUuid);
+  const { data: reporteeData } = useGetReporteeQuery();
 
   const [assignCustomer] = useAssignCustomerMutation();
   const [removeCustomer] = useRemoveCustomerMutation();

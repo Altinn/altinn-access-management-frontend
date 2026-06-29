@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useTranslation, Trans } from 'react-i18next';
 import { useSearchParams } from 'react-router';
 import { DsAlert, DsHeading, DsParagraph, DsButton } from '@altinn/altinn-components';
@@ -6,8 +6,6 @@ import { useDocumentTitle } from '@/resources/hooks/useDocumentTitle';
 import {
   useApproveChangeRequestMutation,
   useGetChangeRequestQuery,
-  useGetSystemuserIsAdminQuery,
-  useGetSystemUserReporteeQuery,
   useRejectChangeRequestMutation,
 } from '@/rtk/features/systemUserApi';
 import { RequestPageBase } from './components/RequestPageBase/RequestPageBase';
@@ -20,10 +18,14 @@ import { CreateSystemUserCheck } from './components/CreateSystemUserCheck/Create
 import type { ServiceResource } from '@/rtk/features/singleRights/singleRightsApi';
 import { getLogoutUrl } from '@/resources/utils/pathUtils';
 import { SystemUserRequestLoadError } from './components/SystemUserRequestLoadError/SystemUserRequestLoadError';
+import { redirectToChangeReporteeAndRedirect } from '@/resources/utils/changeReporteeUtils';
+import { useGetIsAdminQuery, useGetReporteeQuery } from '@/rtk/features/userInfoApi';
+import { getCookie } from '@/resources/Cookie/CookieMethods';
 
 export const SystemUserChangeRequestPage = () => {
   const { t } = useTranslation();
   useDocumentTitle(t('systemuser_change_request.page_title'));
+  const partyUuid = getCookie('AltinnPartyUuid');
   const [searchParams] = useSearchParams();
   const changeRequestId = searchParams.get('id') ?? '';
 
@@ -41,12 +43,14 @@ export const SystemUserChangeRequestPage = () => {
     data: reporteeData,
     isLoading: isLoadingReportee,
     error: loadReporteeError,
-  } = useGetSystemUserReporteeQuery(changeRequest?.partyUuid ?? '', {
-    skip: !changeRequest?.partyUuid,
-  });
-  const { data: isAdmin } = useGetSystemuserIsAdminQuery(changeRequest?.partyUuid ?? '', {
-    skip: !changeRequest?.partyUuid,
-  });
+  } = useGetReporteeQuery();
+  const { data: isAdmin } = useGetIsAdminQuery();
+
+  useEffect(() => {
+    if (changeRequest?.partyUuid && changeRequest?.partyUuid !== partyUuid) {
+      redirectToChangeReporteeAndRedirect(changeRequest.partyUuid, window.location.href);
+    }
+  }, [changeRequest?.partyUuid, partyUuid]);
 
   const [
     postAcceptChangeRequest,
@@ -105,7 +109,9 @@ export const SystemUserChangeRequestPage = () => {
     <RequestPageBase
       system={changeRequest?.system}
       reportee={reporteeData}
-      isLoading={isLoadingChangeRequest || isLoadingReportee}
+      isLoading={
+        isLoadingChangeRequest || isLoadingReportee || changeRequest?.partyUuid !== partyUuid
+      }
       error={error}
       heading={t('systemuser_change_request.banner_title')}
     >

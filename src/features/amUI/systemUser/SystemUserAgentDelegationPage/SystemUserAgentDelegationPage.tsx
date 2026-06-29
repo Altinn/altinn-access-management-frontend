@@ -8,7 +8,6 @@ import {
   useGetAgentSystemUserQuery,
   useGetCustomersQuery,
   useDeleteAgentSystemuserMutation,
-  useGetSystemUserReporteeQuery,
 } from '@/rtk/features/systemUserApi';
 import { getCookie } from '@/resources/Cookie/CookieMethods';
 import { PageWrapper } from '@/components';
@@ -24,7 +23,11 @@ import { PageContainer } from '../../common/PageContainer/PageContainer';
 import { SystemUserPath } from '@/routes/paths';
 import { hasCreateSystemUserPermission } from '@/resources/utils/permissionUtils';
 import { DeleteSystemUserPopover } from '../components/DeleteSystemUserPopover/DeleteSystemUserPopover';
-import { useGetIsAdminQuery, useGetIsClientAdminQuery } from '@/rtk/features/userInfoApi';
+import {
+  useGetIsAdminQuery,
+  useGetIsClientAdminQuery,
+  useGetReporteeQuery,
+} from '@/rtk/features/userInfoApi';
 
 export const SystemUserAgentDelegationPage = (): React.ReactNode => {
   const { id } = useParams();
@@ -36,7 +39,7 @@ export const SystemUserAgentDelegationPage = (): React.ReactNode => {
 
   useDocumentTitle(t('systemuser_agent_delegation.page_title'));
 
-  const { data: reporteeData } = useGetSystemUserReporteeQuery(partyUuid);
+  const { data: reporteeData } = useGetReporteeQuery();
   const { data: isAdmin } = useGetIsAdminQuery();
   const { data: isClientAdmin } = useGetIsClientAdminQuery();
 
