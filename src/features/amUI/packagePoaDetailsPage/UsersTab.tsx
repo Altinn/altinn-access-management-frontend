@@ -42,7 +42,7 @@ export const UsersTab = ({ accessPackage, isLoading, isFetching }: UsersTabProps
   const { fromParty, toParty } = usePartyRepresentation();
   const modalRef = useRef<PackageUserModalHandle>(null);
   const restoreFocus = useRestoreFocusContext();
-  const requestFocusOnRevoke = useRestoreFocusOnDataChange(accessPackage?.permissions);
+  const requestFocusAfterListChange = useRestoreFocusOnDataChange(accessPackage?.permissions);
   const { queueSnackbar } = useSnackbarOnIdle({ isBusy: isFetching, showPendingOnUnmount: true });
   const { canDelegatePackage, isLoading: isDelegationCheckLoading } =
     useAccessPackageDelegationCheck();
@@ -148,11 +148,17 @@ export const UsersTab = ({ accessPackage, isLoading, isFetching }: UsersTabProps
     }
   };
 
-  // Revoking from the list (not the modal) removes the row, so arm focus restoration here only. The
-  // modal path keeps focus in the dialog and restores to the list on close instead.
+  // Inline list actions move the row between the "with"/"without access" buckets (or remove it), so
+  // arm focus restoration here only — once the data settles, focus follows the row by its id (or the
+  // heading fallback). The modal path keeps focus in the dialog and restores to the list on close.
   const handleInlineRevoke = (user: UserActionTarget) => {
-    requestFocusOnRevoke(user.id, PACKAGE_POA_HEADING_ID);
+    requestFocusAfterListChange(user.id, PACKAGE_POA_HEADING_ID);
     handleOnRevoke(user);
+  };
+
+  const handleInlineDelegate = (user: UserActionTarget) => {
+    requestFocusAfterListChange(user.id, PACKAGE_POA_HEADING_ID);
+    handleOnDelegate(user);
   };
 
   const availableActions = [
@@ -190,7 +196,7 @@ export const UsersTab = ({ accessPackage, isLoading, isFetching }: UsersTabProps
             roleMetadataIsLoading ||
             isDelegationCheckLoading
           }
-          onDelegate={canDelegate ? handleOnDelegate : undefined}
+          onDelegate={canDelegate ? handleInlineDelegate : undefined}
           AddUserButton={
             <NewUserButton
               variant='primary'

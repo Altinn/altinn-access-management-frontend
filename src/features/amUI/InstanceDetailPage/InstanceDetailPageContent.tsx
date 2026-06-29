@@ -37,7 +37,7 @@ import {
 import classes from './InstanceDetailPageContent.module.css';
 import { RequestInstanceAdminPackage } from './RequestInstanceAdminPackage';
 
-// Durable anchor focus falls back to when the row a user acted on is gone (e.g. just revoked).
+// Durable anchor that focus falls back to when the acted-on row is gone (e.g. after a revoke).
 const INSTANCE_DETAIL_HEADING_ID = 'instance_detail_heading';
 
 export const InstanceDetailPageContent = () => {

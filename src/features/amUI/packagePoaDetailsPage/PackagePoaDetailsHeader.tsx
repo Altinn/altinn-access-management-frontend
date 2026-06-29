@@ -4,7 +4,7 @@ import { DsHeading, DsParagraph } from '@altinn/altinn-components';
 import { PackageIcon } from '@navikt/aksel-icons';
 import { PackagePoaDetailsHeaderSkeleton } from './PackagePoaDetailsHeaderSkeleton';
 
-// Durable anchor focus falls back to when a user row is gone (e.g. just revoked) in the users tab.
+// Durable anchor that focus falls back to when a user row is gone (e.g. after a revoke in the users tab).
 export const PACKAGE_POA_HEADING_ID = 'package_poa_heading';
 
 interface PackagePoaDetailsHeaderProps {
