@@ -33,7 +33,17 @@ namespace Altinn.AccessManagement.UI.Mocks.Mocks
         {
             try
             {
-                return Task.FromResult(Util.GetMockData<AuthorizedParty>(Path.Combine(dataFolder, "ReporteeList", "GetPartyFromReporteeList", partyUuid + ".json")));
+                var returnedParty = Util.GetMockData<AuthorizedParty>(Path.Combine(dataFolder, "ReporteeList", "GetPartyFromReporteeList", partyUuid + ".json"));
+                if (returnedParty != null && returnedParty.PartyUuid == partyUuid)
+                {
+                    return Task.FromResult(returnedParty);
+                }
+                else if (returnedParty != null)
+                {
+                    return Task.FromResult(returnedParty.Subunits?.FirstOrDefault(subunit => subunit.PartyUuid == partyUuid));
+                }
+
+                return Task.FromResult<AuthorizedParty>(null);
             }
             catch (FileNotFoundException)
             {
