@@ -43,8 +43,6 @@ export const RoleSection = () => {
             if (modalRef.current?.open) {
               return;
             }
-            // Request focus synchronously before clearing state. If the role was deleted inside the
-            // modal its row is gone, so fall back to the list heading instead of <body>.
             if (modalItem) {
               restoreFocus.requestFocus(modalItem.id, ROLE_LIST_HEADING_ID);
             }

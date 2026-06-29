@@ -23,8 +23,6 @@ import {
 } from './instanceListUtils';
 import classes from './InstanceList.module.css';
 
-// `interactive` is accepted by DialogListItem at runtime but missing from its prop types (same as
-// the original inline usage); keep it on the wrapper so the call site stays clean.
 const InstanceListItemRow = ({
   id,
   ...props
