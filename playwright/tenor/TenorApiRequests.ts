@@ -58,7 +58,14 @@ interface TenorDocument {
 
 interface TenorResponse {
   dokumentListe?: TenorDocument[];
+  /** Neste side-indeks (null/undefined når det ikke er flere sider). */
+  nesteSide?: number | null;
+  /** Seed for stabil rekkefølge – må sendes med på påfølgende sider. */
+  seed?: number;
 }
+
+/** Tenor returnerer maks 200 dokumenter per kall. */
+const TENOR_MAX_PER_PAGE = 200;
 
 /** En testperson hentet fra Tenor. */
 export interface TenorTestperson {
@@ -301,6 +308,52 @@ export class TenorApiRequests {
     return dokumenter
       .map((dokument) => this.dokumentTilPerson(dokument))
       .filter((person): person is TenorTestperson => person !== null);
+  }
+
+  /**
+   * Henter mange unike personer forbi Tenor sin grense. Dyp paginering er
+   * begrenset til de første 200 treffene per søk (`nesteSide` blir null når
+   * `offset + antall >= 200`), så vi kan ikke bla oss gjennom hele trefflista.
+   * I stedet henter vi flere batcher à 200 med ulik `seed`: hver seed gir en
+   * egen tilfeldig rekkefølge, og de første 200 fra hver seed er i praksis
+   * disjunkte (trefflista er på hundretusener). Vi unioner til vi har nok.
+   * @param kql Søkestreng i Kibana Query Language.
+   * @param antall Totalt antall unike personer som ønskes.
+   */
+  async hentPersonerPaginert(kql: string, antall: number): Promise<TenorTestperson[]> {
+    const token = await this.getToken();
+    const personer = new Map<string, TenorTestperson>(); // dedup på fødselsnummer
+    // Tillat noen ekstra batcher i tilfelle overlapp mellom seeds.
+    const maksBatcher = Math.ceil(antall / TENOR_MAX_PER_PAGE) + 5;
+
+    for (let seed = 1; personer.size < antall && seed <= maksBatcher; seed++) {
+      const params = new URLSearchParams({
+        kql,
+        vis: 'tenorMetadata',
+        antall: String(TENOR_MAX_PER_PAGE),
+        side: '0',
+        seed: String(seed),
+      });
+
+      const url = `${TENOR_BASE_URL}${TENOR_SOEK_PATH}/freg?${params.toString()}`;
+      const response = await fetch(url, {
+        headers: { Authorization: `Bearer ${token}`, Accept: 'application/json' },
+      });
+      if (!response.ok) {
+        const body = await response.text().catch(() => 'Ukjent feil');
+        throw new Error(`Tenor-søk feilet (HTTP ${response.status}): ${body}\nKQL: ${kql}`);
+      }
+
+      const json = (await response.json()) as TenorResponse;
+      const docs = json.dokumentListe ?? [];
+      if (docs.length === 0) break; // ikke flere treff å hente
+      for (const d of docs) {
+        const person = this.dokumentTilPerson(d);
+        if (person) personer.set(person.foedselsnummer, person);
+      }
+    }
+
+    return [...personer.values()].slice(0, antall);
   }
 
   /**
