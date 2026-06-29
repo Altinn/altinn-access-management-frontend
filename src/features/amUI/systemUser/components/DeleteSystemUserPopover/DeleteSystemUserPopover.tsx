@@ -64,8 +64,12 @@ export const DeleteSystemUserPopover = ({
           <ButtonRow smallMarginTop>
             <DsButton
               data-color='danger'
-              disabled={isDeletingSystemUser}
-              onClick={handleDeleteSystemUser}
+              aria-disabled={isDeletingSystemUser}
+              onClick={() => {
+                if (!isDeletingSystemUser) {
+                  handleDeleteSystemUser();
+                }
+              }}
             >
               {t('systemuser_detailpage.delete_systemuser')}
             </DsButton>
