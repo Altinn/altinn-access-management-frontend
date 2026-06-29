@@ -52,7 +52,7 @@ export const systemUserApi = createApi({
     // system user reportee
     getSystemUserReportee: builder.query<ReporteeInfo, string>({
       keepUnusedDataFor: 300,
-      query: (partyId) => `user/reportee/${partyId}`,
+      query: (partyUuid) => `user/reportee/${partyUuid}`,
       transformResponse: (response: ReporteeInfo) => {
         return {
           ...response,

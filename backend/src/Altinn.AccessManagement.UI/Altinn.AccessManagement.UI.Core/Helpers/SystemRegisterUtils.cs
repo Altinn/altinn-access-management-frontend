@@ -18,10 +18,11 @@ namespace Altinn.AccessManagement.UI.Core.Helpers
         /// <returns>Frontend system object <see cref="RegisteredSystemFE"/></returns>
         public static RegisteredSystemFE MapToRegisteredSystemFE(string languageCode, RegisteredSystem system, List<PartyName> orgNames)
         {
+            string lang = string.IsNullOrWhiteSpace(languageCode) ? "nb" : languageCode;
             return new RegisteredSystemFE() 
             {
                 SystemId = system.SystemId,
-                Name = system.Name.TryGetValue(languageCode, out string name) ? name : "N/A",
+                Name = system.Name.TryGetValue(lang, out string name) ? name : "N/A",
                 SystemVendorOrgNumber = system.SystemVendorOrgNumber,
                 SystemVendorOrgName = orgNames.Find(x => x.OrgNo == system.SystemVendorOrgNumber)?.Name ?? "N/A"
             };

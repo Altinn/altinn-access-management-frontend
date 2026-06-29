@@ -73,7 +73,7 @@ export const SystemUserAgentDelegationPageContent = ({
 
   const { data: isClientAdmin } = useGetIsClientAdminQuery();
   const { data: isAdmin } = useGetIsAdminQuery();
-  const { data: reporteeData } = useGetSystemUserReporteeQuery(partyId);
+  const { data: reporteeData } = useGetSystemUserReporteeQuery(partyUuid);
 
   const [assignCustomer] = useAssignCustomerMutation();
   const [removeCustomer] = useRemoveCustomerMutation();

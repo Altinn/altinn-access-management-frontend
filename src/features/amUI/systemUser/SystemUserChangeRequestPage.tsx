@@ -41,8 +41,8 @@ export const SystemUserChangeRequestPage = () => {
     data: reporteeData,
     isLoading: isLoadingReportee,
     error: loadReporteeError,
-  } = useGetSystemUserReporteeQuery(changeRequest?.partyId ?? '', {
-    skip: !changeRequest?.partyId,
+  } = useGetSystemUserReporteeQuery(changeRequest?.partyUuid ?? '', {
+    skip: !changeRequest?.partyUuid,
   });
   const { data: isAdmin } = useGetSystemuserIsAdminQuery(changeRequest?.partyUuid ?? '', {
     skip: !changeRequest?.partyUuid,
