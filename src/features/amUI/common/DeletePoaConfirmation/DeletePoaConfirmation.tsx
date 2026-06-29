@@ -1,7 +1,6 @@
 import { useTranslation } from 'react-i18next';
 import { MinusCircleIcon } from '@navikt/aksel-icons';
 import { useRef, useState } from 'react';
-import { createPortal } from 'react-dom';
 import { DsButton, DsDialog, DsHeading, DsParagraph, DsSpinner } from '@altinn/altinn-components';
 import classes from './DeletePoaConfirmation.module.css';
 
@@ -54,36 +53,34 @@ export const DeletePoaConfirmation = ({
         {icon && <MinusCircleIcon />}
         {t('common.delete_poa')}
       </DsDialog.Trigger>
-      {open &&
-        createPortal(
-          <DsDialog
-            ref={dialogRef}
-            onClose={() => setOpen(false)}
-          >
-            <div className={classes.dialogContent}>
-              <DsHeading level={3}>{t('common.confirm_delete_heading')}</DsHeading>
-              <DsParagraph>{warningText}</DsParagraph>
-              <div className={classes.dialogButtons}>
-                <DsButton
-                  data-color='danger'
-                  onClick={() => {
-                    handleDeletion();
-                    closeDialog();
-                  }}
-                >
-                  {t('common.yes_delete')}
-                </DsButton>
-                <DsButton
-                  variant='secondary'
-                  onClick={closeDialog}
-                >
-                  {t('common.cancel')}
-                </DsButton>
-              </div>
+      {open && (
+        <DsDialog
+          ref={dialogRef}
+          onClose={() => setOpen(false)}
+        >
+          <div className={classes.dialogContent}>
+            <DsHeading level={3}>{t('common.confirm_delete_heading')}</DsHeading>
+            <DsParagraph>{warningText}</DsParagraph>
+            <div className={classes.dialogButtons}>
+              <DsButton
+                data-color='danger'
+                onClick={() => {
+                  handleDeletion();
+                  closeDialog();
+                }}
+              >
+                {t('common.yes_delete')}
+              </DsButton>
+              <DsButton
+                variant='secondary'
+                onClick={closeDialog}
+              >
+                {t('common.cancel')}
+              </DsButton>
             </div>
-          </DsDialog>,
-          document.body,
-        )}
+          </div>
+        </DsDialog>
+      )}
       {isDeleteLoading && (
         <DsSpinner
           aria-label={loadingAriaLabel}
