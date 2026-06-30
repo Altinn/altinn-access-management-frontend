@@ -108,6 +108,7 @@ const SingleRightsSectionContent = ({ isReportee }: { isReportee: boolean }) => 
               icon
               variant='tertiary'
               aria-label={t('single_rights.helptext_button')}
+              data-size='xs'
             >
               <QuestionmarkCircleIcon aria-hidden='true' />
             </DsPopover.Trigger>

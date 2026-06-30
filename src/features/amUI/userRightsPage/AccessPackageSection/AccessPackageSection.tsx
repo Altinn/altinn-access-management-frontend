@@ -12,7 +12,6 @@ import { usePartyRepresentation } from '../../common/PartyRepresentationContext/
 import { TabContentSkeleton } from '../../common/RightsTabs/TabContentSkeleton';
 
 import { ActiveDelegations } from './ActiveDelegations';
-import { AccessPackageInfoAlert } from './AccessPackageInfoAlert';
 import { PendingPackageRequests } from './PendingPackageRequests/Requests';
 
 import classes from './AccessPackageSection.module.css';
@@ -57,7 +56,6 @@ export const AccessPackageSection = ({ isReportee = false }: { isReportee?: bool
 
   return (
     <>
-      <AccessPackageInfoAlert />
       {!isReportee &&
         toParty?.partyTypeName === PartyType.Person &&
         !shouldDisplayPrivDelegation && (

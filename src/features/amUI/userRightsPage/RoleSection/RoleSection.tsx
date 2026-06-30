@@ -3,7 +3,6 @@ import type { Role } from '@/rtk/features/roleApi';
 
 import { RoleList, ROLE_LIST_HEADING_ID } from '../../common/RoleList/RoleList';
 import { RoleInfoModal } from '../../common/DelegationModal/RoleInfoModal';
-import { OldRolesAlert } from '../../common/OldRolesAlert/OldRolesAlert';
 import { usePartyRepresentation } from '../../common/PartyRepresentationContext/PartyRepresentationContext';
 import { ActionError } from '@/resources/hooks/useActionError';
 import {
@@ -21,7 +20,6 @@ export const RoleSection = () => {
 
   return (
     <RestoreFocusProvider restoreFocus={restoreFocus}>
-      <OldRolesAlert />
       <RestoreFocusFallback>
         <RoleList
           onSelect={(role, error) => {

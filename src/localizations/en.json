@@ -266,6 +266,8 @@
     "modal_info_info_2": "To see what this power of attorney covers, you can go to the <a>guardianship tab</a> in the overview."
   },
   "role": {
+    "header_info": "Information about roles in Altinn",
+    "header_info_content": "These roles have been transferred from the old Altinn and will gradually be phased out. Please note that the roles may be incomplete and that you cannot grant/request new powers of attorney for roles. Use access packages or single services instead.",
     "provider_status": "This role is fetched from ",
     "current_roles_title": "Power of attorney for {{count}} roles",
     "fetch_error_heading": "Unable to show roles for this user",

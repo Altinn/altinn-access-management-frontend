@@ -263,6 +263,8 @@
     "modal_info_info_2": "For å se hva denne fullmakten gjelder, kan du gå til <a>fanen for vergemål</a> i oversikten."
   },
   "role": {
+    "header_info": "Informasjon om roller i Altinn",
+    "header_info_content": "Disse rollene er overført fra gamle Altinn og vil gradvis fases ut. Vær oppmerksom på at rollene kan være ufullstendige og at du ikke kan gi/be om nye fullmakter til roller. Bruk heller tilgangspakker eller enkelttjenester.",
     "provider_status": "Denne rollen er hentet fra ",
     "current_roles_title": "Fullmakt til {{count}} roller",
     "fetch_error_heading": "Kan ikke vise roller for denne brukeren",
@@ -299,8 +301,8 @@
     "no_users": "Du har ikke mottatt noen fullmakter fra andre.",
     "show_users_with_client_access": "Vis brukere med klienttilgang",
     "indirect_connections": "Brukere uten fullmakt",
-    "no_access_to_users_header": "Denne siden jobber vi fremdeles med!",
-    "no_access_to_users_message": "Kun tilgangsstyrerere kan se full liste av brukere med fullmakter i denne virksomheten. <br /> Liste over nøkkelpersoner (styret) vil være tilgjengelig for brukere uten tilgangsstyring etterhvert."
+    "no_access_to_users_header": "Kun tilgangsstyrere kan se andre brukere med fullmakter",
+    "no_access_to_users_message": "Du er ikke tilgangsstyrer for {{name}} og kan kun se dine egne fullmakter."
   },
   "advanced_user_search": {
     "add_user_button": "Ny bruker",

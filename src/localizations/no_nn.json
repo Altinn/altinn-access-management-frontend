@@ -262,6 +262,8 @@
     "modal_info_info_2": "For å sjå kva denne fullmakta gjeld, kan du gå til <a>fana for verjemål</a> i oversikta."
   },
   "role": {
+    "header_info": "Informasjon om roller i Altinn",
+    "header_info_content": "Desse rollene er overført frå gamle Altinn og vil gradvis fases ut. Ver merksam på at rollene kan vere ufullstendige og at du ikkje kan gi/be om nye fullmakter til roller. Bruk heller tilgangspakkar eller enkelttenester.",
     "provider_status": "Denne rolla er henta frå ",
     "current_roles_title": "Fullmakt til {{count}} roller",
     "fetch_error_heading": "Kan ikkje vise roller for denne brukaren",

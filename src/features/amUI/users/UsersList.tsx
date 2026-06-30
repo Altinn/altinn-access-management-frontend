@@ -1,7 +1,13 @@
 import { useCallback, useMemo, useState } from 'react';
 import { Trans, useTranslation } from 'react-i18next';
 import { Link, useNavigate } from 'react-router';
-import { DsHeading, DsParagraph, DsSearch, DsSwitch } from '@altinn/altinn-components';
+import {
+  DsHeading,
+  DsParagraph,
+  DsSearch,
+  DsSwitch,
+  formatDisplayName,
+} from '@altinn/altinn-components';
 
 import type { User } from '@/rtk/features/userInfoApi';
 import { PartyType, useGetIsAdminQuery } from '@/rtk/features/userInfoApi';
@@ -43,6 +49,10 @@ export const UsersList = () => {
     },
   );
   const { partyConnection: currentUser, isLoading: currentUserLoading } = useSelfConnection();
+  const fromPartyName = formatDisplayName({
+    fullName: fromParty?.name ?? '',
+    type: fromParty?.partyTypeName === PartyType.Person ? 'person' : 'company',
+  });
 
   const handleNewUser = (user: User) => {
     navigate(`/users/${user.id}`);
@@ -207,6 +217,7 @@ export const UsersList = () => {
             <Trans
               i18nKey='users_page.no_access_to_users_message'
               components={{ br: <br /> }}
+              values={{ name: fromPartyName }}
             />
           </DsParagraph>
         </div>
