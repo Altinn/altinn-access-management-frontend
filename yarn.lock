@@ -19,22 +19,22 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@altinn/altinn-components@npm:^0.67.12":
-  version: 0.67.12
-  resolution: "@altinn/altinn-components@npm:0.67.12"
+"@altinn/altinn-components@npm:^0.68.9":
+  version: 0.68.9
+  resolution: "@altinn/altinn-components@npm:0.68.9"
   dependencies:
     "@digdir/designsystemet-css": "npm:^1.14.0"
     "@digdir/designsystemet-react": "npm:^1.14.0"
     "@digdir/designsystemet-theme": "npm:^1.11.0"
     "@navikt/aksel-icons": "npm:^8.9.0"
-    "@tanstack/react-virtual": "npm:^3.13.9"
+    "@tanstack/react-virtual": "npm:^3.14.2"
     classnames: "npm:^2.5.1"
     react: "npm:^19.1.0"
     react-dom: "npm:^19.1.0"
   peerDependencies:
     react: ">=18.3.1 || ^19.0.0"
     react-dom: ">=18.3.1 || ^19.0.0"
-  checksum: 10/e94823edb49821ece93215b00d6afbe867f6dbd44ce7e4b5bcac718cd81edc1bcba3b2fa5c8c620a2163a8f5ff882305f894527b96d77bc000ce1af6d3717906
+  checksum: 10/fbb2495cbe95ab91f9aa945c6237445290d0420c50c5a339ae41c1e5c3a4847b0d7f8e3e0786140b45add7a605aca558d6273d91bb96ddf323f1f59b83d824d8
   languageName: node
   linkType: hard
 
@@ -2257,7 +2257,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@tanstack/react-virtual@npm:^3.13.24, @tanstack/react-virtual@npm:^3.13.9":
+"@tanstack/react-virtual@npm:^3.13.24":
   version: 3.14.2
   resolution: "@tanstack/react-virtual@npm:3.14.2"
   dependencies:
@@ -2269,10 +2269,29 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@tanstack/react-virtual@npm:^3.14.2":
+  version: 3.14.4
+  resolution: "@tanstack/react-virtual@npm:3.14.4"
+  dependencies:
+    "@tanstack/virtual-core": "npm:3.17.2"
+  peerDependencies:
+    react: ^16.8.0 || ^17.0.0 || ^18.0.0 || ^19.0.0
+    react-dom: ^16.8.0 || ^17.0.0 || ^18.0.0 || ^19.0.0
+  checksum: 10/a904a0468a4497bde090073f2d19438541d41ec8f5e68e7f2ed01504d2033033f4be9642833c4af031dd1df4a222320c1d8fd1bc883c780062c35fd09dce1918
+  languageName: node
+  linkType: hard
+
 "@tanstack/virtual-core@npm:3.17.0":
   version: 3.17.0
   resolution: "@tanstack/virtual-core@npm:3.17.0"
   checksum: 10/0f6bdd491ef49fe50fca17857ceee2f0c482cf5d5b3df4a4fa0164ed5194ea486a44b12acc10eae3863cfda7c9e8bb563059e5061211ef22c4970f67f4dec020
+  languageName: node
+  linkType: hard
+
+"@tanstack/virtual-core@npm:3.17.2":
+  version: 3.17.2
+  resolution: "@tanstack/virtual-core@npm:3.17.2"
+  checksum: 10/68fdf797f193a9fee60193b22bf197b48f684abee8e48dd14999e318f25a669f20aeb01b52e73320a40d20185b2543f8cbed777f3f27e589b473ed0c6958f06e
   languageName: node
   linkType: hard
 
@@ -3175,7 +3194,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "access-management@workspace:."
   dependencies:
-    "@altinn/altinn-components": "npm:^0.67.12"
+    "@altinn/altinn-components": "npm:^0.68.9"
     "@axe-core/playwright": "npm:^4.10.2"
     "@navikt/aksel-icons": "npm:^8.11.1"
     "@playwright/test": "npm:^1.60.0"

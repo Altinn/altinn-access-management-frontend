@@ -61,7 +61,17 @@ namespace Altinn.AccessManagement.UI.Integration.Clients
                 {
                     string responseContent = await response.Content.ReadAsStringAsync();
                     var result = JsonSerializer.Deserialize<PaginatedResult<AuthorizedParty>>(responseContent, _serializerOptions);
-                    return result?.Items?.FirstOrDefault();
+                    var returnedParty = result?.Items?.FirstOrDefault();
+                    if (returnedParty != null && returnedParty.PartyUuid == partyUuid)
+                    {
+                        return returnedParty;
+                    }
+                    else if (returnedParty != null)
+                    {
+                        return returnedParty.Subunits?.FirstOrDefault(subunit => subunit.PartyUuid == partyUuid);
+                    }
+
+                    return null;
                 }
 
                 _logger.LogError("GetPartyFromReporteeListIfExists from accessmanagement failed with {StatusCode}", response.StatusCode);

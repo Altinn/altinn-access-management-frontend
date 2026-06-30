@@ -17,7 +17,6 @@ export const AmPagination = ({
   showPages = 5,
   currentPage,
   setCurrentPage,
-  onChange,
   hideLabels = false,
   className,
   size,
@@ -26,7 +25,6 @@ export const AmPagination = ({
   const { pages, prevButtonProps, nextButtonProps } = useDsPagination({
     currentPage,
     setCurrentPage,
-    onChange,
     totalPages,
     showPages: showPages > totalPages ? totalPages : showPages,
   });

@@ -1,9 +1,5 @@
 import { getAltinnStartPageUrl } from '@/resources/utils/pathUtils';
-import type {
-  HeaderProps,
-  AccountSelectorProps,
-  GlobalHeaderProps,
-} from '@altinn/altinn-components';
+import type { AccountSelectorProps, GlobalHeaderProps } from '@altinn/altinn-components';
 import { useAccountSelector } from '@altinn/altinn-components';
 import { useGlobalMenu } from './useGlobalMenu';
 import { useTranslation } from 'react-i18next';
@@ -118,7 +114,7 @@ export const useHeader = ({
     document.documentElement.lang = languageCode;
   }, [languageCode]);
 
-  let header: GlobalHeaderProps | HeaderProps;
+  let header: GlobalHeaderProps;
 
   // For new header
   const accountSelectorData = useAccountSelector({
@@ -162,7 +158,7 @@ export const useHeader = ({
       ],
       onSelect: onChangeLocale,
     },
-    logo: { href: getAltinnStartPageUrl(i18n.language), title: 'Altinn' },
+    logo: { href: getAltinnStartPageUrl(i18n.language) },
     globalMenu: globalMenu,
     desktopMenu: desktopMenu,
     mobileMenu: mobileMenu,
