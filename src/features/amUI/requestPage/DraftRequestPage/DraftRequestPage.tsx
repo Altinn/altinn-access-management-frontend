@@ -83,9 +83,10 @@ export const DraftRequestPage = () => {
     }
   };
 
-  const isInitialLoad = isMultiMode
-    ? isLoadingMultiRequests || !!(multiRequests[0] && multiRequests[0].from.id !== partyUuid)
-    : isLoadingRequest || !!(request && request.from.id !== partyUuid);
+  // The pending reportee-switch ("changing party") state is handled centrally by
+  // RequestPageLayout via the requestPartyUuid prop, so it's intentionally not
+  // duplicated here.
+  const isInitialLoad = isMultiMode ? isLoadingMultiRequests : isLoadingRequest;
 
   const toName = formatDisplayName({
     fullName: representativeRequest?.to.name ?? '',
