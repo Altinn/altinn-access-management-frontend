@@ -36,7 +36,10 @@ import {
 
 import classes from './InstanceDetailPageContent.module.css';
 import { RequestInstanceAdminPackage } from './RequestInstanceAdminPackage';
-import { USER_SEARCH_FOCUS_FALLBACK_ID } from '../common/UserSearch/UserSearch';
+
+// Focus-restore fallback for this zone: when a revoked row is gone, focus lands on the search field
+// above the list instead of the page heading. Unique within this provider zone.
+const USER_SEARCH_FALLBACK_ID = 'instance_detail_user_search';
 
 export const InstanceDetailPageContent = () => {
   const { t, i18n } = useTranslation();
@@ -83,7 +86,7 @@ export const InstanceDetailPageContent = () => {
       .then(() => {
         // Revoking from the list removes the row once the instances query refetches; defer focus
         // restoration until then. (Modal revoke keeps focus in the dialog and restores on close.)
-        requestFocusOnRevoke(user.id, USER_SEARCH_FOCUS_FALLBACK_ID);
+        requestFocusOnRevoke(user.id, USER_SEARCH_FALLBACK_ID);
         setSelectedUser(null);
         setActionError(null);
       })
@@ -249,12 +252,14 @@ export const InstanceDetailPageContent = () => {
                 onDelegate={handleIndirectUserDelegate}
                 onRevoke={handleRevoke}
                 isRevoking={isRevoking}
+                restoreFocusFallbackId={USER_SEARCH_FALLBACK_ID}
               />
             ) : isInstanceAdmin ? (
               <InstanceUsersAsInstanceAdmin
                 resourceId={resourceId}
                 instanceUrn={instanceUrn}
                 onDelegate={handleIndirectUserDelegate}
+                restoreFocusFallbackId={USER_SEARCH_FALLBACK_ID}
               />
             ) : null}
           </RestoreFocusFallback>
@@ -278,7 +283,7 @@ export const InstanceDetailPageContent = () => {
             // Restore focus synchronously to the row that opened the modal before clearing state.
             // If the user was revoked inside the modal their row is gone, so the fallback catches it.
             if (selectedUser) {
-              restoreFocus?.requestFocus(selectedUser.id, USER_SEARCH_FOCUS_FALLBACK_ID);
+              restoreFocus?.requestFocus(selectedUser.id, USER_SEARCH_FALLBACK_ID);
             }
             setSelectedUser(null);
             setActionError(null);

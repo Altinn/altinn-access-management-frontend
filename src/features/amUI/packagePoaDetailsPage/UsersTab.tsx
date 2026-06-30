@@ -6,7 +6,7 @@ import { useTranslation } from 'react-i18next';
 import { PartyType } from '@/rtk/features/userInfoApi';
 import { useGetRightHoldersQuery } from '@/rtk/features/connectionApi';
 import { Party } from '@/rtk/features/lookupApi';
-import UserSearch, { USER_SEARCH_FOCUS_FALLBACK_ID } from '../common/UserSearch/UserSearch';
+import UserSearch from '../common/UserSearch/UserSearch';
 import { useAccessPackageActions } from '../common/AccessPackageList/useAccessPackageActions';
 import { AccessPackage } from '@/rtk/features/accessPackageApi';
 import { useSnackbarOnIdle } from '@/resources/hooks/useSnackbarOnIdle';
@@ -33,6 +33,10 @@ interface UsersTabProps {
   isFetching: boolean;
   onDelegateError?: (errorInfo: ActionError) => void;
 }
+
+// Focus-restore fallback for this zone: when a revoked row is gone, focus lands on the search field
+// (right above the list) instead of the page heading far above. Unique within this provider zone.
+const USER_SEARCH_FALLBACK_ID = 'package_poa_user_search';
 
 export const UsersTab = ({ accessPackage, isLoading, isFetching }: UsersTabProps) => {
   const { t } = useTranslation();
@@ -149,12 +153,12 @@ export const UsersTab = ({ accessPackage, isLoading, isFetching }: UsersTabProps
   // arm focus restoration here only — once the data settles, focus follows the row by its id (or the
   // search field fallback). The modal path keeps focus in the dialog and restores to the list on close.
   const handleInlineRevoke = (user: UserActionTarget) => {
-    requestFocusAfterListChange(user.id, USER_SEARCH_FOCUS_FALLBACK_ID);
+    requestFocusAfterListChange(user.id, USER_SEARCH_FALLBACK_ID);
     handleOnRevoke(user);
   };
 
   const handleInlineDelegate = (user: UserActionTarget) => {
-    requestFocusAfterListChange(user.id, USER_SEARCH_FOCUS_FALLBACK_ID);
+    requestFocusAfterListChange(user.id, USER_SEARCH_FALLBACK_ID);
     handleOnDelegate(user);
   };
 
@@ -185,6 +189,7 @@ export const UsersTab = ({ accessPackage, isLoading, isFetching }: UsersTabProps
 
         <UserSearch
           includeSelfAsChild={false}
+          restoreFocusFallbackId={USER_SEARCH_FALLBACK_ID}
           users={users}
           indirectUsers={indirectUsers}
           isLoading={
@@ -223,7 +228,7 @@ export const UsersTab = ({ accessPackage, isLoading, isFetching }: UsersTabProps
         isFetching={isFetching}
         onDelegate={handleOnDelegate}
         onRevoke={handleOnRevoke}
-        onClosed={(user) => restoreFocus?.requestFocus(user.id, USER_SEARCH_FOCUS_FALLBACK_ID)}
+        onClosed={(user) => restoreFocus?.requestFocus(user.id, USER_SEARCH_FALLBACK_ID)}
       />
     </>
   );
