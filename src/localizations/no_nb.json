@@ -580,7 +580,6 @@
     "info_button": "Informasjon om ny løsning"
   },
   "a2Alerts": {
-    "oldRolesContent": "Disse Altinn-rollene kan inneholde tjenester som finnes i den nye Altinn-løsningen. Tjenestene blir flyttet inn i de nye tilgangspakkene.",
     "oldRolesLinkText": "Gå til gamle Altinn",
     "legacyRoleContent": "Denne rollen vil snart fjernes. Bruk heller tilgangspakker."
   },

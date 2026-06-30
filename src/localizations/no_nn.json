@@ -579,7 +579,6 @@
     "info_button": "Informasjon om ny løysing"
   },
   "a2Alerts": {
-    "oldRolesContent": "Desse Altinn-rollene kan innehalde tenester som finst i den nye Altinn-løysinga. Tenestene blir flytta inn i dei nye tilgangspakkane",
     "oldRolesLinkText": "Gå til gamle Altinn",
     "legacyRoleContent": "Denne rolla vil snart bli fjerna. Bruk heller tilgangspakkar."
   },

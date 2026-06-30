@@ -583,7 +583,6 @@
     "info_button": "Information about the new solution"
   },
   "a2Alerts": {
-    "oldRolesContent": "These Altinn roles may include services that exist in the new Altinn solution. The services are being moved into the new access packages.",
     "oldRolesLinkText": "Go to old Altinn",
     "legacyRoleContent": "This role will soon be removed. Use access packages instead."
   },
