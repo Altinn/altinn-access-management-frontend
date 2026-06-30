@@ -15,6 +15,9 @@ import classes from './roleSection.module.css';
 import { useRoleMetadata } from '../UserRoles/useRoleMetadata';
 import { RoleDeleteButton } from './RoleDeleteButton';
 import { useIsMobileOrSmaller } from '@/resources/utils/screensizeUtils';
+import { useRestoreFocusOnDataChange } from '../RestoreFocus';
+
+export const ROLE_LIST_HEADING_ID = 'role_list_heading';
 
 interface RoleListProps {
   onSelect: (role: Role, error?: unknown) => void;
@@ -50,6 +53,8 @@ export const RoleList = ({ onSelect, isLoading }: RoleListProps) => {
   const { altinn2Roles } = useGroupedRoleListEntries({
     permissions,
   });
+
+  const requestFocusOnDataChange = useRestoreFocusOnDataChange(permissions);
 
   const mappedRoles = mapRoles(altinn2Roles?.map(({ role }) => role ?? ([] as Role[])));
 
@@ -87,6 +92,7 @@ export const RoleList = ({ onSelect, isLoading }: RoleListProps) => {
       <DsHeading
         level={2}
         data-size='xs'
+        id={ROLE_LIST_HEADING_ID}
       >
         {t('role.current_roles_title', { count: mappedRoles.length })}
       </DsHeading>
@@ -110,6 +116,7 @@ export const RoleList = ({ onSelect, isLoading }: RoleListProps) => {
                       color='neutral'
                       size='sm'
                       icon={true}
+                      onSuccess={() => requestFocusOnDataChange(role.id, ROLE_LIST_HEADING_ID)}
                       onError={(error) => onSelect(role, error)}
                     />
                   ) : undefined

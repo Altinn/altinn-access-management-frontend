@@ -1,8 +1,9 @@
-import { DsAlert, DsHeading, DsParagraph, DsSpinner } from '@altinn/altinn-components';
+import { DsAlert, DsHeading, DsParagraph } from '@altinn/altinn-components';
 import { useTranslation } from 'react-i18next';
 
 import { AmPagination } from '@/components/Paginering/AmPaginering';
 import { ResourceList } from '@/features/amUI/common/ResourceList/ResourceList';
+import { SkeletonResourceList } from '@/features/amUI/common/ResourceList/SkeletonResourceList';
 import type {
   ResourceDelegation,
   ServiceResource,
@@ -44,17 +45,6 @@ export const ScopeSearchResults = ({
       (delegatedResource) => delegatedResource.resource?.identifier === resourceId,
     ) ?? false;
 
-  if (isFetching) {
-    return (
-      <div className={classes.spinner}>
-        <DsSpinner
-          aria-label={t('common.loading')}
-          data-size='md'
-        />
-      </div>
-    );
-  }
-
   if (error) {
     return (
       <DsAlert
@@ -76,39 +66,47 @@ export const ScopeSearchResults = ({
   return (
     <>
       <div className={classes.resultCount}>
-        {totalNumberOfResults !== undefined && (
+        {!isFetching && totalNumberOfResults !== undefined && (
           <DsParagraph>{`${String(totalNumberOfResults)} ${t('single_rights.search_hits')}`}</DsParagraph>
         )}
       </div>
-      {resources && resources.length > 0 && (
+      {isFetching ? (
         <div className={classes.resourceList}>
-          <ResourceList
-            resources={resources}
-            enableSearch={false}
-            showDetails={false}
-            onSelect={onSelect}
-            size='sm'
-            getHasAccess={(resource) => isDelegated(resource.identifier)}
-            renderControls={(resource) => (
-              <ScopeSearchControls
-                resource={resource}
-                hasDelegatedResource={isDelegated(resource.identifier)}
-                isDelegatedResourcesLoading={delegatedResources === undefined}
-                onSelect={onSelect}
-              />
-            )}
-            getDescriptionText={(resource) =>
-              t('maskinporten_page.scope_count', { count: getMaskinportenScopeCount(resource) })
-            }
-          />
+          <SkeletonResourceList count={searchResultsPerPage} />
         </div>
-      )}
-      {resources && resources.length === 0 && (
-        <DsParagraph data-size='md'>
-          {searchString
-            ? t('resource_list.no_resources_filtered', { searchTerm: searchString })
-            : t('maskinporten_page.no_scopes')}
-        </DsParagraph>
+      ) : (
+        <>
+          {resources && resources.length > 0 && (
+            <div className={classes.resourceList}>
+              <ResourceList
+                resources={resources}
+                enableSearch={false}
+                showDetails={false}
+                onSelect={onSelect}
+                size='sm'
+                getHasAccess={(resource) => isDelegated(resource.identifier)}
+                renderControls={(resource) => (
+                  <ScopeSearchControls
+                    resource={resource}
+                    hasDelegatedResource={isDelegated(resource.identifier)}
+                    isDelegatedResourcesLoading={delegatedResources === undefined}
+                    onSelect={onSelect}
+                  />
+                )}
+                getDescriptionText={(resource) =>
+                  t('maskinporten_page.scope_count', { count: getMaskinportenScopeCount(resource) })
+                }
+              />
+            </div>
+          )}
+          {resources && resources.length === 0 && (
+            <DsParagraph data-size='md'>
+              {searchString
+                ? t('resource_list.no_resources_filtered', { searchTerm: searchString })
+                : t('maskinporten_page.no_scopes')}
+            </DsParagraph>
+          )}
+        </>
       )}
       {totalNumberOfResults !== undefined && totalNumberOfResults > searchResultsPerPage && (
         <AmPagination

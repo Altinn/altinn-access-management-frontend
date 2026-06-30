@@ -130,10 +130,27 @@ describe('ResourceList', () => {
     expect(screen.getByText('resource_list.expired_badge')).toBeInTheDocument();
   });
 
-  it('renders the expired badge for a resource whose identifier includes migratedcorrespondence', () => {
+  it('does not render the expired badge for a migratedcorrespondence resource that is not deprecated', () => {
+    const nonExpiredResource = {
+      ...createResource({ name: 'Migrated Correspondence Service' }),
+      identifier: 'some-migratedcorrespondence-service',
+    } as ResourceListItemResource;
+
+    render(
+      <ResourceList
+        resources={[nonExpiredResource]}
+        enableSearch={false}
+      />,
+    );
+
+    expect(screen.queryByText('resource_list.expired_badge')).not.toBeInTheDocument();
+  });
+
+  it('renders the expired badge for a migratedcorrespondence resource with deprecated status', () => {
     const expiredResource = {
       ...createResource({ name: 'Migrated Correspondence Service' }),
       identifier: 'some-migratedcorrespondence-service',
+      status: 'Deprecated',
     } as ResourceListItemResource;
 
     render(

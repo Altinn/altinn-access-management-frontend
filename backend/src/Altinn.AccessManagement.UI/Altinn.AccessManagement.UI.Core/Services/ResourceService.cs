@@ -126,7 +126,6 @@ namespace Altinn.AccessManagement.UI.Core.Services
         private static bool IsExpiredResource(ServiceResource resource)
         {
             return resource.ResourceType == ResourceType.MigratedApp ||
-                (resource.Identifier?.Contains("migratedcorrespondence", StringComparison.OrdinalIgnoreCase) == true) ||
                 resource.Status?.ToLower() == "deprecated";
         }
 
@@ -339,25 +338,6 @@ namespace Altinn.AccessManagement.UI.Core.Services
             return MapOrgListToResourceOwnerFe(orgList, languageCode)
                 .OrderBy(resorceOwner => resorceOwner.OrganisationName) // Order alphabetically
                 .ToList();
-        }
-
-        /// <inheritdoc />
-        public async Task<List<ServiceResourceFE>> MaskinportenschemaSearch(string languageCode, string[] resourceOwnerFilters, string searchString)
-        {
-            try
-            {
-                List<ServiceResource> resources = await _resourceRegistryClient.GetMaskinportenSchemas();
-                List<ServiceResource> resourceList = resources.FindAll(r => r.ResourceType == ResourceType.MaskinportenSchema && r.Visible && r.Delegable);
-                List<ServiceResourceFE> resourcesFE = MapResourceToFrontendModel(resourceList, languageCode);
-
-                List<ServiceResourceFE> filteredresources = FilterResourceList(resourcesFE, resourceOwnerFilters);
-                return SearchInResourceList(filteredresources, searchString, new[] { ResourceType.MaskinportenSchema });
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError("//ResourceService // MaskinportenschemaSearch failed {ex}", ex);
-                throw;
-            }
         }
 
         private List<ResourceOwnerFE> MapOrgListToResourceOwnerFe(OrgList orgList, string languageCode)

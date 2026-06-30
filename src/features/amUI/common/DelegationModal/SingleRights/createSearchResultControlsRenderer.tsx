@@ -8,6 +8,9 @@ import { useIsMobileOrSmaller } from '@/resources/utils/screensizeUtils';
 
 import { DelegationAction } from '../EditModal';
 
+// DOM id for a resource's inline action button; used as a RestoreFocus target after delegate/revoke.
+export const resourceActionControlId = (resourceId: string) => `list-action-${resourceId}`;
+
 type UseRenderSearchResultControlProps = {
   isDelegated: (resourceId: string) => boolean;
   isInherited: (resourceId: string) => boolean;
@@ -50,6 +53,7 @@ export const useRenderSearchResultControl = ({
     if (isAlreadyDelegated && canRevoke) {
       return (
         <DsButton
+          id={resourceActionControlId(resource.identifier)}
           variant='tertiary'
           data-size='sm'
           loading={isLoading}
@@ -69,6 +73,7 @@ export const useRenderSearchResultControl = ({
     if (!isAlreadyDelegated && canDelegate) {
       return (
         <DsButton
+          id={resourceActionControlId(resource.identifier)}
           variant='tertiary'
           data-size='sm'
           loading={isLoading}

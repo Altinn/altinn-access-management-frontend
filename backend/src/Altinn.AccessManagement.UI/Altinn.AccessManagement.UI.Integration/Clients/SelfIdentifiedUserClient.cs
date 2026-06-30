@@ -56,6 +56,10 @@ namespace Altinn.AccessManagement.UI.Integration.Clients
         {
             string token = JwtTokenUtil.GetTokenFromContext(_httpContextAccessor.HttpContext, _platformSettings.JwtCookieName);
             string endpointUrl = "enduser/selfidentified/link-request";
+            if (!string.IsNullOrWhiteSpace(request.Language))
+            {
+                endpointUrl = $"{endpointUrl}?lang={Uri.EscapeDataString(request.Language)}";
+            }
 
             var content = JsonContent.Create(request);
             HttpResponseMessage response = await _httpClient.PostAsync(token, endpointUrl, content, cancellationToken);

@@ -235,7 +235,7 @@ export const ScopeInfo = ({
                 level={4}
                 data-size='2xs'
               >
-                {t('api_delegation.scopes')}
+                {t('maskinporten_page.scopes')}
               </DsHeading>
               {scopes.length > 0 ? (
                 <ul className={classes.scopeList}>

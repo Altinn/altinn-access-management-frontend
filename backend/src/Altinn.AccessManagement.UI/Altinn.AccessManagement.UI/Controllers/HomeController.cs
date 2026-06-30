@@ -158,7 +158,7 @@ namespace Altinn.AccessManagement.UI.Controllers
                 if (!string.IsNullOrEmpty(partyUuid) && Guid.TryParse(partyUuid, out Guid partyGuid))
                 {
                     var actorList = await _userService.GetReporteeListForUser();
-                    var reporteeParty = actorList.FirstOrDefault(party => party.PartyUuid == partyGuid);
+                    var reporteeParty = actorList?.FirstOrDefault(party => party.PartyUuid == partyGuid);
                     setPartyId = reporteeParty?.PartyId > 0 ? reporteeParty.PartyId.ToString() : AuthenticationHelper.GetUserPartyId(httpContext);
                 }
                 else
@@ -176,7 +176,8 @@ namespace Altinn.AccessManagement.UI.Controllers
 
                 if (!string.IsNullOrEmpty(partyId) && int.TryParse(partyId, out int partyIdInt))
                 {
-                    var reporteeParty = await _userService.GetPartyFromReporteeListIfExists(partyIdInt);
+                    var actorList = await _userService.GetReporteeListForUser();
+                    var reporteeParty = actorList?.FirstOrDefault(party => party.PartyId == partyIdInt);
                     setPartyUuid = reporteeParty?.PartyUuid ?? AuthenticationHelper.GetUserPartyUuid(httpContext);
                 }
                 else

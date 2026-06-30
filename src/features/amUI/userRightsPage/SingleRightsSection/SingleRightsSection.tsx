@@ -6,6 +6,13 @@ import { DsHeading, DsPopover } from '@altinn/altinn-components';
 import type { ServiceResource } from '@/rtk/features/singleRights/singleRightsApi';
 import { useGetSingleRightsForRightholderQuery } from '@/rtk/features/singleRights/singleRightsApi';
 import { ResourceList } from '@/features/amUI/common/ResourceList/ResourceList';
+import {
+  RestoreFocusFallback,
+  RestoreFocusProvider,
+  useRestoreFocus,
+  useRestoreFocusContext,
+  useRestoreFocusOnDataChange,
+} from '@/features/amUI/common/RestoreFocus';
 
 import { DelegationModal, DelegationType } from '../../common/DelegationModal/DelegationModal';
 import { usePartyRepresentation } from '../../common/PartyRepresentationContext/PartyRepresentationContext';
@@ -20,7 +27,7 @@ import { getInheritedStatus } from '../../common/useInheritedStatus';
 import { QuestionmarkCircleIcon } from '@navikt/aksel-icons';
 import { PendingRequests } from './PendingRequests';
 
-export const SingleRightsSection = ({ isReportee = false }: { isReportee?: boolean }) => {
+const SingleRightsSectionContent = ({ isReportee }: { isReportee: boolean }) => {
   const { id } = useParams();
   const { t } = useTranslation();
   const isSmallScreen = useIsTabletOrSmaller();
@@ -50,6 +57,9 @@ export const SingleRightsSection = ({ isReportee = false }: { isReportee?: boole
 
   const modalRef = React.useRef<HTMLDialogElement>(null);
   const [selectedResource, setSelectedResource] = React.useState<ServiceResource | null>(null);
+
+  const requestFocusOnDataChange = useRestoreFocusOnDataChange(delegatedResources);
+  const restoreFocusContext = useRestoreFocusContext();
 
   const resources = React.useMemo(
     () => delegatedResources?.map((delegation) => delegation.resource).filter(Boolean),
@@ -89,7 +99,9 @@ export const SingleRightsSection = ({ isReportee = false }: { isReportee?: boole
             data-size='xs'
             id='single_rights_title'
           >
-            {t('single_rights.current_services_title', { count: delegatedResources?.length ?? 0 })}
+            {t('single_rights.current_services_title', {
+              count: delegatedResources?.length ?? 0,
+            })}
           </DsHeading>
           <DsPopover.TriggerContext>
             <DsPopover.Trigger
@@ -104,45 +116,67 @@ export const SingleRightsSection = ({ isReportee = false }: { isReportee?: boole
         </div>
         {isError && <div>{t('user_rights_page.error')}</div>}
         {availableActions.includes(DelegationAction.REQUEST) && <PendingRequests />}
-        <div className={classes.singleRightsList}>
-          <ResourceList
-            resources={resources ?? []}
-            enableSearch={true}
-            showDetails={false}
-            onSelect={(resource) => {
-              setSelectedResource(resource);
-              modalRef.current?.showModal();
-            }}
-            size={isSmallScreen ? 'sm' : 'md'}
-            noResourcesText={t('resource_list.no_user_resources')}
-            delegationModal={
-              (availableActions.includes(DelegationAction.DELEGATE) ||
-                availableActions.includes(DelegationAction.REQUEST)) && (
-                <DelegationModal
-                  delegationType={DelegationType.SingleRights}
-                  availableActions={availableActions}
-                />
-              )
-            }
-            renderControls={(resource) => {
-              if (isSmallScreen) return null;
-              const isInherited = isResourceInherited(resource.identifier);
-              return (
-                <DeleteResourceButton
-                  resource={resource}
-                  disabled={isInherited}
-                />
-              );
-            }}
-          />
-        </div>
+        <RestoreFocusFallback>
+          <div className={classes.singleRightsList}>
+            <ResourceList
+              resources={resources ?? []}
+              enableSearch={true}
+              showDetails={false}
+              onSelect={(resource) => {
+                setSelectedResource(resource);
+                modalRef.current?.showModal();
+              }}
+              size={isSmallScreen ? 'sm' : 'md'}
+              noResourcesText={t('resource_list.no_user_resources')}
+              delegationModal={
+                (availableActions.includes(DelegationAction.DELEGATE) ||
+                  availableActions.includes(DelegationAction.REQUEST)) && (
+                  <DelegationModal
+                    delegationType={DelegationType.SingleRights}
+                    availableActions={availableActions}
+                  />
+                )
+              }
+              renderControls={(resource) => {
+                if (isSmallScreen) return null;
+                const isInherited = isResourceInherited(resource.identifier);
+                return (
+                  <DeleteResourceButton
+                    resource={resource}
+                    disabled={isInherited}
+                    onSuccess={() =>
+                      requestFocusOnDataChange(resource.identifier, 'single_rights_title')
+                    }
+                  />
+                );
+              }}
+            />
+          </div>
+        </RestoreFocusFallback>
         <EditModal
           ref={modalRef}
           resource={selectedResource ?? undefined}
-          onClose={() => setSelectedResource(null)}
+          onClose={() => {
+            // Request focus synchronously before clearing state.
+            // If the resource was revoked inside the modal its row is gone, so fall back to
+            // the section heading instead of dropping to <body>.
+            if (selectedResource) {
+              restoreFocusContext?.requestFocus(selectedResource.identifier, 'single_rights_title');
+            }
+            setSelectedResource(null);
+          }}
           availableActions={availableActions}
         />
       </div>
     )
+  );
+};
+
+export const SingleRightsSection = ({ isReportee = false }: { isReportee?: boolean }) => {
+  const restoreFocus = useRestoreFocus();
+  return (
+    <RestoreFocusProvider restoreFocus={restoreFocus}>
+      <SingleRightsSectionContent isReportee={isReportee} />
+    </RestoreFocusProvider>
   );
 };

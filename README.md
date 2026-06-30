@@ -283,10 +283,6 @@ Run `yarn` to setup code.
 
 Run `yarn build` to create a build file.
 
-Run `yarn test` to run cypress tests in browser.
-
-Run `yarn coverage` to see test coverage stats.
-
 Run `yarn lint` to run lint checks
 
 Run `yarn format` to format most of the codebase to set standard in config file

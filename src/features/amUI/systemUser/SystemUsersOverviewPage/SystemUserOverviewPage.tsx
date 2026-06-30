@@ -41,7 +41,7 @@ export const SystemUserOverviewPage = () => {
   const { data: isAdmin, isLoading: isLoadingIsAdmin } = useGetIsAdminQuery();
   const { data: isClientAdmin, isLoading: isLoadingClientAdmin } = useGetIsClientAdminQuery();
   const { data: reporteeData, isLoading: isLoadingReportee } =
-    useGetSystemUserReporteeQuery(partyId);
+    useGetSystemUserReporteeQuery(partyUuid);
 
   // load only for isAdmin
   const {

@@ -44,8 +44,8 @@ export const SystemUserRequestPage = () => {
     data: reporteeData,
     isLoading: isLoadingReportee,
     error: loadReporteeError,
-  } = useGetSystemUserReporteeQuery(request?.partyId ?? '', {
-    skip: !request?.partyId,
+  } = useGetSystemUserReporteeQuery(request?.partyUuid ?? '', {
+    skip: !request?.partyUuid,
   });
   const { data: isAdmin } = useGetSystemuserIsAdminQuery(request?.partyUuid ?? '', {
     skip: !request?.partyUuid,

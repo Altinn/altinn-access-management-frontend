@@ -36,7 +36,7 @@ export const SystemUserAgentDelegationPage = (): React.ReactNode => {
 
   useDocumentTitle(t('systemuser_agent_delegation.page_title'));
 
-  const { data: reporteeData } = useGetSystemUserReporteeQuery(partyId);
+  const { data: reporteeData } = useGetSystemUserReporteeQuery(partyUuid);
   const { data: isAdmin } = useGetIsAdminQuery();
   const { data: isClientAdmin } = useGetIsClientAdminQuery();
 

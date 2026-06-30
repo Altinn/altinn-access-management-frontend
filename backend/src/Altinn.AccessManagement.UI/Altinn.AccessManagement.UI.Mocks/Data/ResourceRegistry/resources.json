@@ -1286,6 +1286,7 @@
       "nn": "Arkivert teneste - MigratedCorrespondence"
     },
     "identifier": "migratedcorrespondence-test-resource",
+    "status": "Deprecated",
     "visible": true,
     "delegable": true,
     "description": {
@@ -1304,6 +1305,44 @@
       {
         "id": "urn:altinn:resource",
         "value": "migratedcorrespondence-test-resource"
+      }
+    ],
+    "hasCompetentAuthority": {
+      "orgcode": "TTD",
+      "organization": "974760746",
+      "name": {
+        "en": "Testdepartementet",
+        "nb": "Testdepartementet",
+        "nn": "Testdepartementet"
+      }
+    }
+  },
+  {
+    "title": {
+      "en": "Active Service - MigratedCorrespondence",
+      "nb": "Aktiv tjeneste - MigratedCorrespondence",
+      "nn": "Aktiv teneste - MigratedCorrespondence"
+    },
+    "identifier": "migratedcorrespondence-active-resource",
+    "status": "Active",
+    "visible": true,
+    "delegable": true,
+    "description": {
+      "en": "An active correspondence resource",
+      "nb": "En aktiv korrespondanseressurs",
+      "nn": "Ein aktiv korrespondanseressurs"
+    },
+    "rightDescription": {
+      "en": "Grants access to correspondence data",
+      "nb": "Gir tilgang til korrespondansedata",
+      "nn": "Gir tilgang til korrespondansedata"
+    },
+    "resourceType": "GenericAccessResource",
+    "resourceReferences": [],
+    "authorizationReference": [
+      {
+        "id": "urn:altinn:resource",
+        "value": "migratedcorrespondence-active-resource"
       }
     ],
     "hasCompetentAuthority": {

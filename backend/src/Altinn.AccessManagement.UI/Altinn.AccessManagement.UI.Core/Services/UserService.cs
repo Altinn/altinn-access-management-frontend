@@ -21,15 +21,15 @@ namespace Altinn.AccessManagement.UI.Core.Services
         private readonly IConnectionClient _connectionClient;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="APIDelegationService"/> class.
+        /// Initializes a new instance of the <see cref="UserService"/> class.
         /// </summary>
         /// <param name="logger">handler for logger</param>
         /// <param name="profileClient">handler for profile client</param>
         /// <param name="accessManagementClient">handler for AM client</param>
         /// <param name="accessManagementClientV0">handler for old AM client</param>
-        /// <param name="connectionClient">handler for right holder client</param>  
+        /// <param name="connectionClient">handler for right holder client</param>
         public UserService(
-            ILogger<IAPIDelegationService> logger,
+            ILogger<UserService> logger,
             IProfileClient profileClient,
             IAccessManagementClient accessManagementClient,
             IAccessManagementClientV0 accessManagementClientV0,
@@ -73,9 +73,9 @@ namespace Altinn.AccessManagement.UI.Core.Services
         }
 
         /// <inheritdoc/>        
-        public async Task<AuthorizedParty> GetPartyFromReporteeListIfExists(int partyId)
+        public async Task<AuthorizedParty> GetPartyFromReporteeListIfExists(Guid partyUuid)
         {
-            AuthorizedParty partyInfo = await _accessManagementClientV0.GetPartyFromReporteeListIfExists(partyId);
+            AuthorizedParty partyInfo = await _accessManagementClientV0.GetPartyFromReporteeListIfExists(partyUuid);
             return partyInfo;
         }
 

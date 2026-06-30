@@ -21,15 +21,6 @@ namespace Altinn.AccessManagement.UI.Core.Services.Interfaces
         Task<PaginatedList<ServiceResourceFE>> GetPaginatedSearchResults(string languageCode, PaginatedSearchParams searchParams, ResourceType[] resourceTypes = null, CancellationToken cancellationToken = default);
 
         /// <summary>
-        ///     Searches through all maskinporten schema services and returns matches.
-        /// </summary>
-        /// <param name="languageCode">The language code.</param>
-        /// <param name="resourceOwnerFilters">The filters for resource owners.</param>
-        /// <param name="searchString">The search string.</param>
-        /// <returns>List of resource owners.</returns>
-        public Task<List<ServiceResourceFE>> MaskinportenschemaSearch(string languageCode, string[] resourceOwnerFilters, string searchString);
-
-        /// <summary>
         ///     Gets a list of Resources from ResourceRegister.
         /// </summary>
         /// <param name="resourceType">The type of resource to be filtered.</param>

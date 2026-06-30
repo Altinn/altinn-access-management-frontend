@@ -8,6 +8,7 @@ import {
 import { useTranslation } from 'react-i18next';
 
 import { useProviderLogoUrl } from '@/resources/hooks/useProviderLogoUrl';
+import { useRestoreFocusTarget } from '@/features/amUI/common/RestoreFocus';
 
 import { ResourceDetails } from './ResourceDetails';
 import classes from './ResourceList.module.css';
@@ -27,6 +28,21 @@ import {
 } from './utils';
 
 import cn from 'classnames';
+
+interface ResourceListItemRowProps extends React.ComponentProps<typeof ResourceListItem> {
+  resourceId: string;
+  actionControlId?: string;
+}
+
+const ResourceListItemRow = ({
+  resourceId,
+  actionControlId,
+  ...props
+}: ResourceListItemRowProps) => {
+  useRestoreFocusTarget(resourceId);
+  useRestoreFocusTarget(actionControlId ?? '');
+  return <ResourceListItem {...props} />;
+};
 
 export interface ResourceListProps<
   TResource extends ResourceListItemResource = ResourceListItemResource,
@@ -49,6 +65,7 @@ export interface ResourceListProps<
   getBadge?: (resource: TResource, index: number) => ResourceListItemProps['badge'];
   getDescriptionText?: (resource: TResource, index: number) => string | undefined;
   getHasAccess?: (resource: TResource) => boolean;
+  getActionControlId?: (resource: TResource) => string;
   delegationModal?: React.ReactNode;
   border?: ResourceListItemProps['border'];
   ariaLabelledBy?: string;
@@ -72,6 +89,7 @@ export const ResourceList = <
   getBadge,
   getDescriptionText,
   getHasAccess,
+  getActionControlId,
   delegationModal,
   border = 'none',
   ariaLabelledBy,
@@ -192,9 +210,12 @@ export const ResourceList = <
                     ? { label: t('resource_list.expired_badge'), color: 'neutral' as const }
                     : undefined;
 
+                  const actionControlId = getActionControlId?.(resource);
                   return (
-                    <ResourceListItem
+                    <ResourceListItemRow
                       key={resourceId}
+                      resourceId={resourceId}
+                      actionControlId={actionControlId}
                       id={resourceId}
                       resourceName={resourceName}
                       ownerName={defaultOwnerName}

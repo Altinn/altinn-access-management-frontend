@@ -30,9 +30,10 @@ export const SystemUserDetailsPage = (): React.ReactNode => {
   const navigate = useNavigate();
   useDocumentTitle(t('systemuser_detailpage.page_title'));
   const partyId = getCookie('AltinnPartyId');
+  const partyUuid = getCookie('AltinnPartyUuid');
   const backUrl = `/${SystemUserPath.SystemUser}/${SystemUserPath.Overview}`;
 
-  const { data: reporteeData } = useGetSystemUserReporteeQuery(partyId);
+  const { data: reporteeData } = useGetSystemUserReporteeQuery(partyUuid);
   const { data: isAdmin } = useGetIsAdminQuery();
 
   const {

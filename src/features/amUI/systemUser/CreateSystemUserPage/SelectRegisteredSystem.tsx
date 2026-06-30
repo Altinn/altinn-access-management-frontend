@@ -1,6 +1,6 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
-import { Link, useNavigate } from 'react-router';
+import { Link } from 'react-router';
 import {
   DsHeading,
   DsParagraph,
@@ -41,10 +41,9 @@ export const SelectRegisteredSystem = ({
   handleConfirm,
 }: SelectRegisteredSystemProps) => {
   const { t } = useTranslation();
-  const navigate = useNavigate();
-  const partyId = getCookie('AltinnPartyId');
+  const partyUuid = getCookie('AltinnPartyUuid');
   const { data: reporteeData, isLoading: isLoadingReportee } =
-    useGetSystemUserReporteeQuery(partyId);
+    useGetSystemUserReporteeQuery(partyUuid);
 
   const {
     data: registeredSystems,

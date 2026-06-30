@@ -238,16 +238,16 @@ namespace Altinn.AccessManagement.UI.Controllers
         /// <summary>
         /// Endpoint for retrieving party if party exists in the authenticated users reporteelist.
         /// </summary>
-        /// <param name="partyId">The partyId for the reportee to look up.</param>
+        /// <param name="partyUuid">The partyUuid for the reportee to look up.</param>
         /// <returns>Reportee if party is in authenticated users reporteelist.</returns>
         [HttpGet]
         [Authorize]
-        [Route("reportee/{partyId}")]
-        public async Task<ActionResult<AuthorizedParty>> GetPartyFromReporteeListIfExists(int partyId)
+        [Route("reportee/{partyUuid}")]
+        public async Task<ActionResult<AuthorizedParty>> GetPartyFromReporteeListIfExists(Guid partyUuid)
         {
             try
             {
-                AuthorizedParty party = await _userService.GetPartyFromReporteeListIfExists(partyId);
+                AuthorizedParty party = await _userService.GetPartyFromReporteeListIfExists(partyUuid);
 
                 if (party != null)
                 {

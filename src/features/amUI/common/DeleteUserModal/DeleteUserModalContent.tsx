@@ -11,9 +11,8 @@ import { TrashIcon, XMarkOctagonFillIcon } from '@navikt/aksel-icons';
 import { useEffect, useMemo, useState } from 'react';
 import { Trans, useTranslation } from 'react-i18next';
 import { useDispatch } from 'react-redux';
-import { Link, useNavigate } from 'react-router';
+import { Link, useLocation, useNavigate } from 'react-router';
 
-import { getRedirectToA2UsersListSectionUrl } from '@/resources/utils';
 import { amUIPath } from '@/routes/paths';
 import { accessPackageApi } from '@/rtk/features/accessPackageApi';
 import { useRemoveRightHolderMutation } from '@/rtk/features/connectionApi';
@@ -37,7 +36,6 @@ import {
   GUARDIANSHIP_ROLE_REASON,
   getDeleteUserDialogModelFromStatus,
   ER_ROLE_REASON,
-  OLD_ALTINN_REASON,
   type NonDeletableReason,
 } from './deletionModalUtils';
 
@@ -52,7 +50,6 @@ const srmLink =
 const guardianshipInfoLink = 'https://www.vergemal.no/';
 
 const nonDeletableReasonKeys: Record<NonDeletableReason, string> = {
-  [OLD_ALTINN_REASON]: 'delete_user.non_deletable_reason_old_altinn',
   [ER_ROLE_REASON]: 'delete_user.non_deletable_reason_er_roles',
   [AGENT_ROLE_REASON]: 'delete_user.non_deletable_reason_agent_role',
   [GUARDIANSHIP_ROLE_REASON]: 'delete_user.non_deletable_reason_guardianship',
@@ -72,6 +69,7 @@ export const DeleteUserModalContent = ({
   const { t } = useTranslation();
   const navigate = useNavigate();
   const dispatch = useDispatch();
+  const { pathname } = useLocation();
   const [isSuccess, setIsSuccess] = useState(false);
   const [dialogVisible, setDialogVisible] = useState(false);
 
@@ -97,7 +95,6 @@ export const DeleteUserModalContent = ({
     () => getDeleteUserDialogModelFromStatus({ status, nonDeletableReasons }),
     [nonDeletableReasons, status],
   );
-  const a2ProfileLink = getRedirectToA2UsersListSectionUrl(9);
 
   const formattedToPartyName = formatDisplayName({
     fullName: toParty?.name || '',
@@ -146,7 +143,11 @@ export const DeleteUserModalContent = ({
 
   const onDeleteComplete = () => {
     if (shouldNavigateOnDeleteComplete) {
-      navigate(`/${amUIPath.Users}`);
+      if (pathname?.includes(`/${amUIPath.Reportees}`)) {
+        navigate(`/${amUIPath.Reportees}`);
+      } else {
+        navigate(`/${amUIPath.Users}`);
+      }
       return;
     }
 
@@ -164,13 +165,6 @@ export const DeleteUserModalContent = ({
     erLink: (
       <Link
         to={srmLink}
-        target='_blank'
-        rel='noopener noreferrer'
-      ></Link>
-    ),
-    a2Link: (
-      <Link
-        to={a2ProfileLink}
         target='_blank'
         rel='noopener noreferrer'
       ></Link>

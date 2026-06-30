@@ -1,5 +1,6 @@
 import * as React from 'react';
 import { forwardRef, useEffect } from 'react';
+import { useTranslation } from 'react-i18next';
 import { DsDialog } from '@altinn/altinn-components';
 
 import type { ActionError } from '@/resources/hooks/useActionError';
@@ -62,7 +63,16 @@ export const EditModal = forwardRef<HTMLDialogElement, EditModalProps>(
     },
     ref,
   ) => {
+    const { t } = useTranslation();
     const { setActionError, reset } = useDelegationModalContext();
+
+    const getDialogLabel = () => {
+      if (maskinportenScope) return t('delegation_modal.aria_label.maskinporten');
+      if (instance) return t('delegation_modal.aria_label.instance');
+      if (accessPackage) return t('delegation_modal.aria_label.access_package');
+      if (role) return t('delegation_modal.aria_label.role');
+      return t('delegation_modal.aria_label.single_rights');
+    };
 
     useEffect(() => {
       if (openWithError) {
@@ -81,6 +91,8 @@ export const EditModal = forwardRef<HTMLDialogElement, EditModalProps>(
           onClose?.();
           reset();
         }}
+        aria-label={getDialogLabel()}
+        aria-description={t('delegation_modal.aria_description')}
       >
         <div className={classes.content}>
           {renderModalContent({

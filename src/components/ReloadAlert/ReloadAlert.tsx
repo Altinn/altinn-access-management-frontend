@@ -8,7 +8,7 @@ import classes from './ReloadAlert.module.css';
 export const ReloadAlert = () => {
   const { t } = useTranslation();
 
-  const displayAlert = useCookieListener('AltinnPartyId', 2000, 2000);
+  const displayAlert = useCookieListener('AltinnPartyUuid', 2000, 1000);
 
   return (
     displayAlert && (

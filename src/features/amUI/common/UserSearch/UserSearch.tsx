@@ -94,6 +94,7 @@ export const UserSearch: React.FC<UserSearchProps> = ({
   const hasDirectUsers = (directUsers?.length ?? 0) > 0;
   const directHasResults = (filteredDirectUsers?.length ?? 0) > 0;
   const indirectHasResults = (filteredIndirectUsers?.length ?? 0) > 0;
+  const queryIsSSN = /^\d{11}$/.test(trimmedQuery);
 
   const showDirectNoResults = isQuery && !directHasResults && indirectHasResults;
   const showIndirectList = isQuery && indirectHasResults && canDelegate;
@@ -201,6 +202,19 @@ export const UserSearch: React.FC<UserSearchProps> = ({
                 { searchTerm: trimmedQuery || '' },
               )}
             </DsParagraph>
+            {queryIsSSN ? (
+              <DsParagraph data-size='md'>
+                {t('advanced_user_search.no_result_help_line_ssn')}
+              </DsParagraph>
+            ) : (
+              AddUserButton &&
+              canDelegate &&
+              !hasFiltersOnly && (
+                <DsParagraph data-size='md'>
+                  {t('advanced_user_search.no_result_help_line_add_user')}
+                </DsParagraph>
+              )
+            )}
           </div>
         )}
       </div>

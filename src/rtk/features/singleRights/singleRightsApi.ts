@@ -2,7 +2,6 @@ import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 
 import type { IdValuePair } from '@/dataObjects/dtos/IdValuePair';
 import { getCookie } from '@/resources/Cookie/CookieMethods';
-import type { BaseAttribute } from '@/dataObjects/dtos/BaseAttribute';
 import type { DelegationResult } from '@/dataObjects/dtos/resourceDelegation';
 import type { Permissions, Reason } from '@/dataObjects/dtos/accessPackage';
 
@@ -143,15 +142,6 @@ export const singleRightsApi = createApi({
       },
       providesTags: ['delegationCheck'],
     }),
-    clearAccessCache: builder.mutation<void, { party: string; user: BaseAttribute }>({
-      query({ party, user }) {
-        return {
-          url: `singleright/${party}/accesscache/clear`,
-          method: 'PUT',
-          body: JSON.stringify(user),
-        };
-      },
-    }),
     delegateRights: builder.mutation<
       DelegationResult,
       {
@@ -205,7 +195,6 @@ export const {
   useGetSingleRightsForRightholderQuery,
   useGetResourceRightsQuery,
   useGetResourceRightsMetaQuery,
-  useClearAccessCacheMutation,
   useDelegationCheckQuery,
   useLazyDelegationCheckQuery,
   useDelegateRightsMutation,

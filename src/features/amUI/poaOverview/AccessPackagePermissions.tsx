@@ -37,12 +37,15 @@ export const AccessPackagePermissions = () => {
         showAllPackages
         showAllAreas
         showPackagesCount={false}
-        packageAs={(props) => (
-          <Link
-            to={`/poa-overview/access-package/${props.packageId}?parentTab=packages`}
-            {...props}
-          />
-        )}
+        packageAs={(props) => {
+          const { packageId, ...rest } = props;
+          return (
+            <Link
+              to={`/poa-overview/access-package/${packageId}?parentTab=packages`}
+              {...rest}
+            />
+          );
+        }}
         noPackagesText={t('access_packages.no_packages')}
         areaHeadingLevel={2}
       />

@@ -10,7 +10,6 @@ import {
   getNonDeletableReasons,
   getDeletionStatus,
   getTextKeysForDeletionStatus,
-  OLD_ALTINN_REASON,
   DeletionTarget,
   DeletionLevel,
   RIGHTHOLDER_ROLE,
@@ -19,11 +18,7 @@ import {
 } from './deletionModalUtils';
 import { RolePermission } from '@/rtk/features/roleApi';
 import { Entity } from '@/dataObjects/dtos/Common';
-import {
-  A2_PROVIDER_CODE,
-  CRA_PROVIDER_CODE,
-  ECC_PROVIDER_CODE,
-} from '../UserRoles/useRoleMetadata';
+import { CRA_PROVIDER_CODE, ECC_PROVIDER_CODE } from '../UserRoles/useRoleMetadata';
 
 type rolePermissionSetting = {
   code: string;
@@ -246,14 +241,7 @@ describe('getNonDeletableReasons', () => {
     expect(getNonDeletableReasons(rolePermissions)).toEqual([]);
   });
 
-  it('returns old Altinn reason when at least one role has the old Altinn provider', () => {
-    const rolePermissions = mockRolePermissions([
-      { code: RIGHTHOLDER_ROLE, via: [null], providerCode: A2_PROVIDER_CODE },
-    ]);
-    expect(getNonDeletableReasons(rolePermissions)).toEqual([OLD_ALTINN_REASON]);
-  });
-
-  it('does not return old Altinn reason when access is inherited without old Altinn provider', () => {
+  it('returns no reasons when all access is inherited', () => {
     const rolePermissions = mockRolePermissions([{ code: RIGHTHOLDER_ROLE, via: ['via-org'] }]);
     expect(getNonDeletableReasons(rolePermissions)).toEqual([]);
   });
@@ -279,13 +267,11 @@ describe('getNonDeletableReasons', () => {
 
   it('returns all matching reasons in stable order', () => {
     const rolePermissions = mockRolePermissions([
-      { code: RIGHTHOLDER_ROLE, via: ['via-org'], providerCode: A2_PROVIDER_CODE },
       { code: 'dagl', via: ['via-org'], providerCode: ECC_PROVIDER_CODE },
       { code: AGENT_ROLE, via: ['via-org'] },
       { code: 'role-code', via: ['via-org'], providerCode: CRA_PROVIDER_CODE },
     ]);
     expect(getNonDeletableReasons(rolePermissions)).toEqual([
-      OLD_ALTINN_REASON,
       ER_ROLE_REASON,
       AGENT_ROLE_REASON,
       GUARDIANSHIP_ROLE_REASON,
@@ -413,7 +399,7 @@ describe('getDeleteUserDialogModel', () => {
 
   it('returns partially deletable state with reasons and partial confirmation key', () => {
     const rolePermissions = mockRolePermissions([
-      { code: RIGHTHOLDER_ROLE, via: [null, 'via-org'], providerCode: A2_PROVIDER_CODE },
+      { code: RIGHTHOLDER_ROLE, via: [null, 'via-org'] },
       { code: AGENT_ROLE, via: ['via-org'] },
       { code: 'dagl', via: ['via-org'], providerCode: ECC_PROVIDER_CODE },
     ]);
@@ -427,11 +413,7 @@ describe('getDeleteUserDialogModel', () => {
     expect(model.partialConfirmationMessageKey).toBe(
       'delete_user.yourself_partial_confirmation_message',
     );
-    expect(model.nonDeletableReasons).toEqual([
-      OLD_ALTINN_REASON,
-      ER_ROLE_REASON,
-      AGENT_ROLE_REASON,
-    ]);
+    expect(model.nonDeletableReasons).toEqual([ER_ROLE_REASON, AGENT_ROLE_REASON]);
     expect(model.textKeys.headingKey).toBe('delete_user.yourself_limited_deletion_heading');
   });
 

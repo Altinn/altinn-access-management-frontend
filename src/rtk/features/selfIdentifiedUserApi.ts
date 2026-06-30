@@ -22,11 +22,14 @@ export const selfIdentifiedUserApi = createApi({
         body: { userName: userName, password: password },
       }),
     }),
-    sendForgotPasswordEmail: builder.mutation<{ maskedEmail: string }, { userName: string }>({
-      query: ({ userName }) => ({
+    sendForgotPasswordEmail: builder.mutation<
+      { maskedEmail: string },
+      { userName: string; lang: string }
+    >({
+      query: ({ userName, lang }) => ({
         url: `altinn2account/forgotpassword`,
         method: 'POST',
-        body: { userName: userName },
+        body: { userName: userName, language: lang },
       }),
     }),
     addAltinn2AccountFromToken: builder.mutation<string, { token: string }>({

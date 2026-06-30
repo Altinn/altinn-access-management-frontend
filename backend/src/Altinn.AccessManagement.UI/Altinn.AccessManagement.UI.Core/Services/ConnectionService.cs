@@ -20,14 +20,14 @@ namespace Altinn.AccessManagement.UI.Core.Services
         private readonly IRegisterClient _registerClient;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="APIDelegationService"/> class.
+        /// Initializes a new instance of the <see cref="ConnectionService"/> class.
         /// </summary>
         /// <param name="logger">handler for logger</param>
         /// <param name="accessManagementClient">handler for AM client</param>
         /// <param name="registerClient">handler for register client</param>
-        /// <param name="connectionClient">handler for right holder client</param>  
+        /// <param name="connectionClient">handler for right holder client</param>
         public ConnectionService(
-            ILogger<IAPIDelegationService> logger,
+            ILogger<ConnectionService> logger,
             IAccessManagementClient accessManagementClient,
             IRegisterClient registerClient,
             IConnectionClient connectionClient)

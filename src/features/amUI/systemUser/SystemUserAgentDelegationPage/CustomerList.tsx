@@ -16,7 +16,7 @@ import { AmPagination } from '@/components/Paginering';
 import type { AgentDelegation, AgentDelegationCustomer } from '../types';
 
 import classes from './CustomerList.module.css';
-import { formatOrgNr } from '@/resources/utils/reporteeUtils';
+import { formatOrgNr, isSubUnitByType } from '@/resources/utils/reporteeUtils';
 import { addAllSystemuserCustomers } from '@/resources/utils/featureFlagUtils';
 import { useIsMobileOrSmaller } from '@/resources/utils/screensizeUtils';
 
@@ -129,7 +129,11 @@ export const CustomerList = ({
           <ListItem
             key={customer.id}
             id={customer.id}
-            icon={{ type: 'company', name: customer.name }}
+            icon={{
+              type: 'company',
+              name: customer.name,
+              isParent: !isSubUnitByType(customer.unitType),
+            }}
             title={{ children: customer.name, as: 'div' }}
             description={`${t('common.org_nr')} ${formatOrgNr(customer.orgNo)}`}
             interactive={false}
