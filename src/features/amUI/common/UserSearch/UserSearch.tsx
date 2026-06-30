@@ -36,6 +36,11 @@ export interface UserSearchProps {
   hasActiveAdditionalFilters?: boolean;
 }
 
+// Stable id on the search input, used as the focus-restore fallback when an acted-on row is gone
+// (removed, or in a collapsed section). Pass it as the fallbackId to requestFocus(id, fallbackId)
+// from the parent. Assumes one UserSearch per RestoreFocusProvider zone, so the id stays unique.
+export const USER_SEARCH_FOCUS_FALLBACK_ID = 'user-search-focus-fallback';
+
 const filterAvailableUserTypes = (items?: UserSearchNode[]) =>
   items?.filter(
     (item) =>
@@ -114,6 +119,7 @@ export const UserSearch: React.FC<UserSearchProps> = ({
         <div className={classes.searchAndFilters}>
           <DsSearch className={classes.searchBar}>
             <DsSearch.Input
+              id={USER_SEARCH_FOCUS_FALLBACK_ID}
               aria-label={t('common.search')}
               placeholder={searchPlaceholder ?? t('advanced_user_search.user_search_placeholder')}
               value={query}

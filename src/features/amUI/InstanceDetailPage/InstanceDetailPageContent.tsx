@@ -36,9 +36,7 @@ import {
 
 import classes from './InstanceDetailPageContent.module.css';
 import { RequestInstanceAdminPackage } from './RequestInstanceAdminPackage';
-
-// Durable anchor that focus falls back to when the acted-on row is gone (e.g. after a revoke).
-const INSTANCE_DETAIL_HEADING_ID = 'instance_detail_heading';
+import { USER_SEARCH_FOCUS_FALLBACK_ID } from '../common/UserSearch/UserSearch';
 
 export const InstanceDetailPageContent = () => {
   const { t, i18n } = useTranslation();
@@ -85,7 +83,7 @@ export const InstanceDetailPageContent = () => {
       .then(() => {
         // Revoking from the list removes the row once the instances query refetches; defer focus
         // restoration until then. (Modal revoke keeps focus in the dialog and restores on close.)
-        requestFocusOnRevoke(user.id, INSTANCE_DETAIL_HEADING_ID);
+        requestFocusOnRevoke(user.id, USER_SEARCH_FOCUS_FALLBACK_ID);
         setSelectedUser(null);
         setActionError(null);
       })
@@ -198,7 +196,6 @@ export const InstanceDetailPageContent = () => {
           fromPartyName={fromParty?.name}
           fromPartyType={fromParty?.partyTypeName}
           titleLevel={1}
-          headingId={INSTANCE_DETAIL_HEADING_ID}
         />
       )}
       {inboxLink}
@@ -281,7 +278,7 @@ export const InstanceDetailPageContent = () => {
             // Restore focus synchronously to the row that opened the modal before clearing state.
             // If the user was revoked inside the modal their row is gone, so the fallback catches it.
             if (selectedUser) {
-              restoreFocus?.requestFocus(selectedUser.id, INSTANCE_DETAIL_HEADING_ID);
+              restoreFocus?.requestFocus(selectedUser.id, USER_SEARCH_FOCUS_FALLBACK_ID);
             }
             setSelectedUser(null);
             setActionError(null);

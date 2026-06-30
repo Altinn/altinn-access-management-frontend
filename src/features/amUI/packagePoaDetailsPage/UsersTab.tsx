@@ -6,7 +6,7 @@ import { useTranslation } from 'react-i18next';
 import { PartyType } from '@/rtk/features/userInfoApi';
 import { useGetRightHoldersQuery } from '@/rtk/features/connectionApi';
 import { Party } from '@/rtk/features/lookupApi';
-import UserSearch from '../common/UserSearch/UserSearch';
+import UserSearch, { USER_SEARCH_FOCUS_FALLBACK_ID } from '../common/UserSearch/UserSearch';
 import { useAccessPackageActions } from '../common/AccessPackageList/useAccessPackageActions';
 import { AccessPackage } from '@/rtk/features/accessPackageApi';
 import { useSnackbarOnIdle } from '@/resources/hooks/useSnackbarOnIdle';
@@ -26,7 +26,6 @@ import {
   useRestoreFocusContext,
   useRestoreFocusOnDataChange,
 } from '../common/RestoreFocus';
-import { PACKAGE_POA_HEADING_ID } from './PackagePoaDetailsHeader';
 
 interface UsersTabProps {
   accessPackage?: AccessPackage;
@@ -35,8 +34,6 @@ interface UsersTabProps {
   onDelegateError?: (errorInfo: ActionError) => void;
 }
 
-// The RestoreFocusProvider zone is owned by PackagePoaDetails (so the page heading, rendered outside
-// the tabs, is reachable as the focus fallback after a revoke).
 export const UsersTab = ({ accessPackage, isLoading, isFetching }: UsersTabProps) => {
   const { t } = useTranslation();
   const { fromParty, toParty } = usePartyRepresentation();
@@ -150,14 +147,14 @@ export const UsersTab = ({ accessPackage, isLoading, isFetching }: UsersTabProps
 
   // Inline list actions move the row between the "with"/"without access" buckets (or remove it), so
   // arm focus restoration here only — once the data settles, focus follows the row by its id (or the
-  // heading fallback). The modal path keeps focus in the dialog and restores to the list on close.
+  // search field fallback). The modal path keeps focus in the dialog and restores to the list on close.
   const handleInlineRevoke = (user: UserActionTarget) => {
-    requestFocusAfterListChange(user.id, PACKAGE_POA_HEADING_ID);
+    requestFocusAfterListChange(user.id, USER_SEARCH_FOCUS_FALLBACK_ID);
     handleOnRevoke(user);
   };
 
   const handleInlineDelegate = (user: UserActionTarget) => {
-    requestFocusAfterListChange(user.id, PACKAGE_POA_HEADING_ID);
+    requestFocusAfterListChange(user.id, USER_SEARCH_FOCUS_FALLBACK_ID);
     handleOnDelegate(user);
   };
 
@@ -226,7 +223,7 @@ export const UsersTab = ({ accessPackage, isLoading, isFetching }: UsersTabProps
         isFetching={isFetching}
         onDelegate={handleOnDelegate}
         onRevoke={handleOnRevoke}
-        onClosed={(user) => restoreFocus?.requestFocus(user.id, PACKAGE_POA_HEADING_ID)}
+        onClosed={(user) => restoreFocus?.requestFocus(user.id, USER_SEARCH_FOCUS_FALLBACK_ID)}
       />
     </>
   );

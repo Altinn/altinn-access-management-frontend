@@ -22,8 +22,6 @@ interface InstanceDescriptionProps {
   fromPartyType?: PartyType;
   titleLevel?: 1 | 2 | 3 | 4 | 5 | 6;
   statusSection?: ReactNode;
-  // When set, the heading carries this id so RestoreFocus can use it as a fallback focus anchor.
-  headingId?: string;
 }
 
 export const InstanceDescription = ({
@@ -33,7 +31,6 @@ export const InstanceDescription = ({
   fromPartyType,
   titleLevel = 2,
   statusSection,
-  headingId,
 }: InstanceDescriptionProps) => {
   const { getProviderLogoUrl } = useProviderLogoUrl();
   const { t, i18n } = useTranslation();
@@ -53,7 +50,6 @@ export const InstanceDescription = ({
       <DsHeading
         level={titleLevel}
         data-size='sm'
-        id={headingId}
       >
         {title}
       </DsHeading>
