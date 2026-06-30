@@ -1,4 +1,4 @@
-import { ElementType, useMemo, useState } from 'react';
+import { type ComponentProps, ElementType, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import {
   DialogListItem,
@@ -11,15 +11,30 @@ import type { TFunction } from 'i18next';
 import { DebouncedSearchField } from '../DebouncedSearchField/DebouncedSearchField';
 import { InstanceDelegation } from '@/rtk/features/instanceApi';
 import { useProviderLogoUrl } from '@/resources/hooks';
+import { useRestoreFocusTarget } from '@/features/amUI/common/RestoreFocus';
 
 import { InstanceListSkeleton } from './InstanceListSkeleton';
 import { InstanceInboxLink } from './InstanceInboxLink';
 import {
   getInstanceShortId,
+  instanceRowId,
   resolveInstanceTitle,
   toInstancePresentationData,
 } from './instanceListUtils';
 import classes from './InstanceList.module.css';
+
+const InstanceListItemRow = ({
+  id,
+  ...props
+}: ComponentProps<typeof DialogListItem> & { interactive?: boolean }) => {
+  useRestoreFocusTarget(id ?? '');
+  return (
+    <DialogListItem
+      id={id}
+      {...props}
+    />
+  );
+};
 
 interface InstanceListProps {
   instances: InstanceDelegation[];
@@ -93,7 +108,7 @@ export const InstanceList = ({
               const title = getResolvedInstanceTitle(instanceDelegation, t, i18n.language);
               const serviceTitle = resource.title ?? resource.identifier;
               const item: DialogListItemProps = {
-                id: `${resource.identifier}-${instance.refId}`,
+                id: instanceRowId(instanceDelegation),
                 title,
                 description: `${instance.refId} ${title}`,
                 sender: {
@@ -113,7 +128,7 @@ export const InstanceList = ({
                 dialogLookup && dialogLookup.status !== 'Success' ? classes.subtleTitle : undefined;
 
               return (
-                <DialogListItem
+                <InstanceListItemRow
                   key={item.id}
                   size='md'
                   as={Component ?? (onSelect ? 'button' : undefined)}

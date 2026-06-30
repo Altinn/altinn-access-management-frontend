@@ -4,18 +4,28 @@ import { DsAlert, DsHeading, DsParagraph } from '@altinn/altinn-components';
 
 import { usePartyRepresentation } from '../../common/PartyRepresentationContext/PartyRepresentationContext';
 import { InstanceList } from '@/features/amUI/common/InstanceList/InstanceList';
+import { instanceRowId } from '@/features/amUI/common/InstanceList/instanceListUtils';
 import { DelegationAction, EditModal } from '@/features/amUI/common/DelegationModal/EditModal';
 import { type InstanceDelegation, useGetInstancesQuery } from '@/rtk/features/instanceApi';
+import {
+  RestoreFocusFallback,
+  RestoreFocusProvider,
+  useRestoreFocus,
+  useRestoreFocusContext,
+} from '@/features/amUI/common/RestoreFocus';
 import classes from './InstanceSection.module.css';
 import { useCanGiveAccess } from '@/resources/hooks/useCanGiveAccess';
 import { useParams } from 'react-router';
 
-export const InstanceSection = ({ isReportee = false }: { isReportee?: boolean }) => {
+const INSTANCES_HEADING_ID = 'instances_title';
+
+const InstanceSectionContent = ({ isReportee = false }: { isReportee?: boolean }) => {
   const { t, i18n } = useTranslation();
   const { toParty, actingParty, fromParty } = usePartyRepresentation();
 
   const modalRef = React.useRef<HTMLDialogElement>(null);
   const [selectedInstance, setSelectedInstance] = React.useState<InstanceDelegation | null>(null);
+  const restoreFocusContext = useRestoreFocusContext();
 
   const { id } = useParams();
   const canGiveAccess = useCanGiveAccess(id ?? '', isReportee);
@@ -41,6 +51,7 @@ export const InstanceSection = ({ isReportee = false }: { isReportee?: boolean }
       <DsHeading
         level={2}
         data-size='xs'
+        id={INSTANCES_HEADING_ID}
       >
         {t('user_rights_page.instances_title')}
       </DsHeading>
@@ -53,14 +64,16 @@ export const InstanceSection = ({ isReportee = false }: { isReportee?: boolean }
         </DsAlert>
       )}
       {!isError && (
-        <InstanceList
-          instances={instances}
-          isLoading={isLoading}
-          onSelect={(instance) => {
-            setSelectedInstance(instance);
-            modalRef.current?.showModal();
-          }}
-        />
+        <RestoreFocusFallback>
+          <InstanceList
+            instances={instances}
+            isLoading={isLoading}
+            onSelect={(instance) => {
+              setSelectedInstance(instance);
+              modalRef.current?.showModal();
+            }}
+          />
+        </RestoreFocusFallback>
       )}
       <EditModal
         ref={modalRef}
@@ -73,12 +86,31 @@ export const InstanceSection = ({ isReportee = false }: { isReportee?: boolean }
               }
             : undefined
         }
-        onClose={() => setSelectedInstance(null)}
+        onClose={() => {
+          // Request focus synchronously before clearing state. If the instance was revoked inside
+          // the modal its row is gone, so fall back to the section heading instead of <body>.
+          if (selectedInstance) {
+            restoreFocusContext?.requestFocus(
+              instanceRowId(selectedInstance),
+              INSTANCES_HEADING_ID,
+            );
+          }
+          setSelectedInstance(null);
+        }}
         availableActions={[
           ...(canGiveAccess ? [DelegationAction.DELEGATE] : []),
           DelegationAction.REVOKE,
         ]}
       />
     </div>
+  );
+};
+
+export const InstanceSection = ({ isReportee = false }: { isReportee?: boolean }) => {
+  const restoreFocus = useRestoreFocus();
+  return (
+    <RestoreFocusProvider restoreFocus={restoreFocus}>
+      <InstanceSectionContent isReportee={isReportee} />
+    </RestoreFocusProvider>
   );
 };

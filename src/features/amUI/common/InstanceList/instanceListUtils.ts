@@ -14,6 +14,10 @@ export interface InstancePresentationData {
   dialogLookup?: DialogLookup;
 }
 
+// DOM id used both for the list row and for restoring focus to it when the modal closes.
+export const instanceRowId = (instanceDelegation: InstanceDelegation): string =>
+  `${instanceDelegation.resource.identifier}-${instanceDelegation.instance.refId}`;
+
 export const isCorrespondenceInstanceUrn = (instanceUrn?: string): boolean =>
   instanceUrn?.startsWith('urn:altinn:correspondence-id:') ?? false;
 

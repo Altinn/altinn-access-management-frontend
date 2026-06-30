@@ -1,5 +1,6 @@
 import { ListItem } from '@altinn/altinn-components';
 import type { Role } from '@/rtk/features/roleApi';
+import { useRestoreFocusTarget } from '@/features/amUI/common/RestoreFocus';
 
 interface RoleLIstItemProps {
   role: Role;
@@ -9,6 +10,7 @@ interface RoleLIstItemProps {
 }
 
 export const RoleListItem = ({ role, onClick, loading, deleteButton }: RoleLIstItemProps) => {
+  useRestoreFocusTarget(role.id);
   return (
     <ListItem
       id={role.id}

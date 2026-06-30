@@ -17,6 +17,9 @@ import { useState } from 'react';
 import { TechnicalErrorParagraphs } from '../../TechnicalErrorParagraphs';
 import { createErrorDetails } from '../../TechnicalErrorParagraphs/TechnicalErrorParagraphs';
 import { useDelegationModalContext } from '../DelegationModalContext';
+import { useRestoreFocusOnDataChange, useRestoreFocusTarget } from '../../RestoreFocus';
+
+export const ROLE_MODAL_HEADING_ID = 'role_modal_heading';
 
 export interface RoleInfoProps {
   role: Role;
@@ -25,6 +28,7 @@ export interface RoleInfoProps {
 export const RoleInfo = ({ role }: RoleInfoProps) => {
   const { t } = useTranslation();
   const [deleteError, setDeleteError] = useState<unknown>(null);
+  useRestoreFocusTarget(ROLE_MODAL_HEADING_ID);
 
   const isExternalRole = role?.provider?.code === 'sys-ccr';
   const isLegacyRole = role?.provider?.code === 'sys-altinn2';
@@ -48,6 +52,9 @@ export const RoleInfo = ({ role }: RoleInfoProps) => {
       skip: !actingParty?.partyUuid || !fromParty?.partyUuid || !toParty?.partyUuid,
     },
   );
+
+  // restore focus only when the permissions query refetches
+  const requestFocusOnDataChange = useRestoreFocusOnDataChange(permissions);
 
   const sectionId = fromParty?.partyUuid === actingParty?.partyUuid ? 9 : 8;
   const oldSolutionUrl = getRedirectToA2UsersListSectionUrl(sectionId);
@@ -80,8 +87,11 @@ export const RoleInfo = ({ role }: RoleInfoProps) => {
     <div className={classes.container}>
       <div className={classes.header}>
         <DsHeading
+          id={ROLE_MODAL_HEADING_ID}
           level={2}
           data-size='sm'
+          // Programmatically focusable so it can hold focus when the delete button is removed.
+          tabIndex={-1}
         >
           {role?.name}
         </DsHeading>
@@ -142,6 +152,7 @@ export const RoleInfo = ({ role }: RoleInfoProps) => {
         <div className={classes.deleteRoleButtonContainer}>
           <RoleDeleteButton
             role={role}
+            onSuccess={() => requestFocusOnDataChange(ROLE_MODAL_HEADING_ID)}
             onError={setDeleteError}
             disabled={!roleIsRevocable}
           />
