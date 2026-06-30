@@ -18,12 +18,22 @@ import { DelegationAction, EditModal } from '../common/DelegationModal/EditModal
 import { PageContainer } from '../common/PageContainer/PageContainer';
 import { UserPageHeader } from '../common/UserPageHeader/UserPageHeader';
 import { usePartyRepresentation } from '../common/PartyRepresentationContext/PartyRepresentationContext';
+import {
+  RestoreFocusFallback,
+  RestoreFocusProvider,
+  useRestoreFocus,
+  useRestoreFocusContext,
+  useRestoreFocusOnDataChange,
+} from '../common/RestoreFocus';
 import { MaskinportenDeleteDialog } from './MaskinportenDeleteDialog';
-import { DelegatedResourcesSection } from './DelegatedResourcesSection';
+import {
+  DelegatedResourcesSection,
+  MASKINPORTEN_RESOURCES_HEADING_ID,
+} from './DelegatedResourcesSection';
 
 const backUrl = `/${amUIPath.Maskinporten}#consumers`;
 
-export const ConsumerPageContent = () => {
+const ConsumerPageContentInner = () => {
   const { t } = useTranslation();
   const navigate = useNavigate();
   const { openSnackbar } = useSnackbar();
@@ -59,16 +69,24 @@ export const ConsumerPageContent = () => {
     { skip: !actingPartyUuid || !consumerOrgNumber },
   );
 
+  // Removing a resource refetches the list and drops the row; restore focus once that lands. The
+  // edit modal restores synchronously on close. Both fall back to the section heading if the row is
+  // gone (e.g. revoked from inside the modal).
+  const requestFocusOnDataChange = useRestoreFocusOnDataChange(resourcePermissions);
+  const restoreFocusContext = useRestoreFocusContext();
+
   const handleRemove = (resource: ServiceResource) =>
     remove(resource, {
-      onSuccess: (r) =>
+      onSuccess: (r) => {
+        requestFocusOnDataChange(r.identifier, MASKINPORTEN_RESOURCES_HEADING_ID);
         openSnackbar({
           message: t('single_rights.delete_singleRight_success_message', {
             name: consumerName,
             resourceTitle: r.title,
           }),
           color: 'success',
-        }),
+        });
+      },
       onError: (r) =>
         openSnackbar({
           message: t('single_rights.delete_singleRight_error_message', {
@@ -120,25 +138,37 @@ export const ConsumerPageContent = () => {
         direction='from'
         displayRoles={false}
       />
-      <DelegatedResourcesSection
-        resourcePermissions={resourcePermissions}
-        isFetching={isFetching}
-        hasError={!!resourcesError}
-        onRemove={handleRemove}
-        isResourceLoading={isLoading}
-        onResourceClick={(r) => {
-          setSelectedResource(r);
-          scopeModalRef.current?.showModal();
-        }}
-        editModal={
-          <EditModal
-            ref={scopeModalRef}
-            maskinportenScope={selectedResource ?? undefined}
-            availableActions={[DelegationAction.REVOKE]}
-            onClose={() => setSelectedResource(null)}
-          />
-        }
-      />
+      <RestoreFocusFallback>
+        <DelegatedResourcesSection
+          resourcePermissions={resourcePermissions}
+          isFetching={isFetching}
+          hasError={!!resourcesError}
+          onRemove={handleRemove}
+          isResourceLoading={isLoading}
+          onResourceClick={(r) => {
+            setSelectedResource(r);
+            scopeModalRef.current?.showModal();
+          }}
+          editModal={
+            <EditModal
+              ref={scopeModalRef}
+              maskinportenScope={selectedResource ?? undefined}
+              availableActions={[DelegationAction.REVOKE]}
+              onClose={() => {
+                // Restore focus to the row that opened the modal before clearing state. If the
+                // resource was revoked inside the modal its row is gone, so the heading catches it.
+                if (selectedResource) {
+                  restoreFocusContext?.requestFocus(
+                    selectedResource.identifier,
+                    MASKINPORTEN_RESOURCES_HEADING_ID,
+                  );
+                }
+                setSelectedResource(null);
+              }}
+            />
+          }
+        />
+      </RestoreFocusFallback>
       <MaskinportenDeleteDialog
         ref={deleteDialogRef}
         heading={t('maskinporten_page.remove_consumer_heading')}
@@ -148,5 +178,14 @@ export const ConsumerPageContent = () => {
         isLoading={isRemovingConsumer}
       />
     </PageContainer>
+  );
+};
+
+export const ConsumerPageContent = () => {
+  const restoreFocus = useRestoreFocus();
+  return (
+    <RestoreFocusProvider restoreFocus={restoreFocus}>
+      <ConsumerPageContentInner />
+    </RestoreFocusProvider>
   );
 };
