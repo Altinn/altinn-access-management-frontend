@@ -16,7 +16,7 @@ import { useRoleMetadata } from '../UserRoles/useRoleMetadata';
 import { RoleDeleteButton } from './RoleDeleteButton';
 import { useIsMobileOrSmaller } from '@/resources/utils/screensizeUtils';
 import { useRestoreFocusOnDataChange } from '../RestoreFocus';
-import { QuestionmarkCircleIcon } from '@navikt/aksel-icons';
+import { HelpText } from '../HelpText/HelpText';
 
 export const ROLE_LIST_HEADING_ID = 'role_list_heading';
 
@@ -98,17 +98,7 @@ export const RoleList = ({ onSelect, isLoading }: RoleListProps) => {
         >
           {t('role.current_roles_title', { count: mappedRoles.length })}
         </DsHeading>
-        <DsPopover.TriggerContext>
-          <DsPopover.Trigger
-            icon
-            variant='tertiary'
-            aria-label={t('role.header_info')}
-            data-size='xs'
-          >
-            <QuestionmarkCircleIcon aria-hidden='true' />
-          </DsPopover.Trigger>
-          <DsPopover>{t('role.header_info_content')}</DsPopover>
-        </DsPopover.TriggerContext>
+        <HelpText aria-label={t('role.header_info')}>{t('role.header_info_content')}</HelpText>
       </div>
       {mappedRoles.length === 0 ? (
         <DsParagraph>{t('role.no_roles_message')}</DsParagraph>
