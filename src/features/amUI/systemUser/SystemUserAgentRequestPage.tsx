@@ -27,7 +27,6 @@ import { RightsList } from './components/RightsList/RightsList';
 import { getLogoutUrl } from '@/resources/utils/pathUtils';
 import { SystemUserRequestLoadError } from './components/SystemUserRequestLoadError/SystemUserRequestLoadError';
 import { enableAddSelfToSystemuser } from '@/resources/utils/featureFlagUtils';
-import { useRedirectToRequestParty } from '@/resources/hooks/useRedirectToRequestParty';
 import { useGetIsAdminQuery, useGetReporteeQuery } from '@/rtk/features/userInfoApi';
 
 export const SystemUserAgentRequestPage = () => {
@@ -54,8 +53,6 @@ export const SystemUserAgentRequestPage = () => {
     error: loadReporteeError,
   } = useGetReporteeQuery();
   const { data: isAdmin } = useGetIsAdminQuery();
-
-  const partyUuid = useRedirectToRequestParty(request?.partyUuid);
 
   const [
     postAcceptCreationRequest,
@@ -120,7 +117,8 @@ export const SystemUserAgentRequestPage = () => {
     <RequestPageBase
       system={request?.system}
       reportee={reporteeData}
-      isLoading={isLoadingRequest || isLoadingReportee || request?.partyUuid !== partyUuid}
+      isLoading={isLoadingRequest || isLoadingReportee}
+      requestPartyUuid={request?.partyUuid}
       error={error}
       heading={t('systemuser_agent_request.banner_title')}
     >

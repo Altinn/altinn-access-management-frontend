@@ -12,6 +12,7 @@ interface RequestPageBaseProps {
   heading: string;
   reportee?: ReporteeInfo;
   isLoading?: boolean;
+  requestPartyUuid?: string;
   error?: React.ReactNode;
   children: React.ReactNode | React.ReactNode[];
 }
@@ -21,6 +22,7 @@ export const RequestPageBase = ({
   heading,
   reportee,
   isLoading,
+  requestPartyUuid,
   error,
   children,
 }: RequestPageBaseProps): React.ReactNode => {
@@ -35,6 +37,7 @@ export const RequestPageBase = ({
     <RequestPageLayout
       account={account}
       isLoading={isLoading ?? false}
+      requestPartyUuid={requestPartyUuid}
       error={error}
       heading={
         <DsHeading

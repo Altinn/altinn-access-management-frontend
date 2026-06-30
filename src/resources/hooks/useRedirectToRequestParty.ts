@@ -4,9 +4,9 @@ import { getCookie } from '@/resources/Cookie/CookieMethods';
 import { redirectToChangeReporteeAndRedirect } from '@/resources/utils/changeReporteeUtils';
 
 /**
- * Redirects the user to change their active reportee when a system user request
- * belongs to a different party than the one currently selected, then returns to
- * the current page once the reportee has been switched.
+ * Redirects the user to change their active reportee when a request belongs to a
+ * different party than the one currently selected, then returns to the current
+ * page once the reportee has been switched.
  *
  * @param requestPartyUuid the party the request belongs to (from the loaded request)
  * @returns the currently selected party uuid (from the `AltinnPartyUuid` cookie)

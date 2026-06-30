@@ -17,10 +17,16 @@ import { useGetUserProfileQuery } from '@/rtk/features/userInfoApi';
 
 import { getButtonIconSize } from '@/resources/utils/iconUtils';
 import { ArrowLeftIcon } from '@navikt/aksel-icons';
+import { useRedirectToRequestParty } from '@/resources/hooks/useRedirectToRequestParty';
 
 interface RequestPageLayoutProps {
   account: { name: string; type: 'person' | 'company' };
   isLoading: boolean;
+  /**
+   * The party the request belongs to. When it differs from the active reportee,
+   * the user is redirected to switch reportee before the page is shown.
+   */
+  requestPartyUuid?: string;
   error?: React.ReactNode;
   heading?: React.ReactNode;
   body?: React.ReactNode;
@@ -30,6 +36,7 @@ interface RequestPageLayoutProps {
 export const RequestPageLayout = ({
   account,
   isLoading,
+  requestPartyUuid,
   error,
   heading,
   body,
@@ -42,6 +49,12 @@ export const RequestPageLayout = ({
   const [updateSelectedLanguage] = useUpdateSelectedLanguageMutation();
 
   const { data: userData } = useGetUserProfileQuery();
+
+  const partyUuid = useRedirectToRequestParty(requestPartyUuid);
+  // While a reportee switch is pending, keep showing the loading state so the
+  // page content isn't shown for the wrong party before the redirect happens.
+  const isChangingParty = !!requestPartyUuid && requestPartyUuid !== partyUuid;
+  const showLoading = isLoading || isChangingParty;
 
   const onChangeLocale = (newLocale: string) => {
     i18n.changeLanguage(newLocale);
@@ -101,9 +114,9 @@ export const RequestPageLayout = ({
           },
         }}
       >
-        {isLoading && <LoadingState />}
-        {!isLoading && error && <div className={classes.centerBlock}>{error}</div>}
-        {heading && body && (
+        {showLoading && <LoadingState />}
+        {!showLoading && error && <div className={classes.centerBlock}>{error}</div>}
+        {!showLoading && heading && body && (
           <div className={classes.centerBlock}>
             {backToPage && (
               <DsButton

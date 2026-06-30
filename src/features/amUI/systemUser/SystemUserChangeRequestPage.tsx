@@ -24,7 +24,6 @@ import { CreateSystemUserCheck } from './components/CreateSystemUserCheck/Create
 import type { ServiceResource } from '@/rtk/features/singleRights/singleRightsApi';
 import { getLogoutUrl } from '@/resources/utils/pathUtils';
 import { SystemUserRequestLoadError } from './components/SystemUserRequestLoadError/SystemUserRequestLoadError';
-import { useRedirectToRequestParty } from '@/resources/hooks/useRedirectToRequestParty';
 import { useGetIsAdminQuery, useGetReporteeQuery } from '@/rtk/features/userInfoApi';
 
 export const SystemUserChangeRequestPage = () => {
@@ -49,8 +48,6 @@ export const SystemUserChangeRequestPage = () => {
     error: loadReporteeError,
   } = useGetReporteeQuery();
   const { data: isAdmin } = useGetIsAdminQuery();
-
-  const partyUuid = useRedirectToRequestParty(changeRequest?.partyUuid);
 
   const [
     postAcceptChangeRequest,
@@ -109,9 +106,8 @@ export const SystemUserChangeRequestPage = () => {
     <RequestPageBase
       system={changeRequest?.system}
       reportee={reporteeData}
-      isLoading={
-        isLoadingChangeRequest || isLoadingReportee || changeRequest?.partyUuid !== partyUuid
-      }
+      isLoading={isLoadingChangeRequest || isLoadingReportee}
+      requestPartyUuid={changeRequest?.partyUuid}
       error={error}
       heading={t('systemuser_change_request.banner_title')}
     >

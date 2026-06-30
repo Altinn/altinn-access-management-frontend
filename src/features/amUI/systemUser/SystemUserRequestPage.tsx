@@ -26,7 +26,6 @@ import { getApiBaseUrl } from './requestUtils';
 import { getLogoutUrl } from '@/resources/utils/pathUtils';
 import { SystemUserRequestLoadError } from './components/SystemUserRequestLoadError/SystemUserRequestLoadError';
 import { useGetIsAdminQuery, useGetReporteeQuery } from '@/rtk/features/userInfoApi';
-import { useRedirectToRequestParty } from '@/resources/hooks/useRedirectToRequestParty';
 
 export const SystemUserRequestPage = () => {
   const { t } = useTranslation();
@@ -52,8 +51,6 @@ export const SystemUserRequestPage = () => {
     error: loadReporteeError,
   } = useGetReporteeQuery();
   const { data: isAdmin } = useGetIsAdminQuery();
-
-  const partyUuid = useRedirectToRequestParty(request?.partyUuid);
 
   const [
     postAcceptCreationRequest,
@@ -118,7 +115,8 @@ export const SystemUserRequestPage = () => {
     <RequestPageBase
       system={request?.system}
       reportee={reporteeData}
-      isLoading={isLoadingRequest || isLoadingReportee || request?.partyUuid !== partyUuid}
+      isLoading={isLoadingRequest || isLoadingReportee}
+      requestPartyUuid={request?.partyUuid}
       error={error}
       heading={t('systemuser_request.banner_title')}
     >
