@@ -16,12 +16,7 @@ export default defineConfig({
     globals: true,
     environment: 'jsdom',
     setupFiles: './tests/setupTests.ts',
-    exclude: [
-      '**/node_modules/**',
-      '**/playwright/**',
-      '**/*.spec.ts',
-      '**/*.test.cy.tsx',
-    ],
+    exclude: ['**/node_modules/**', '**/playwright/**', '**/*.spec.ts', '**/*.test.cy.tsx'],
     coverage: {
       provider: 'istanbul', // or 'v8'
     },

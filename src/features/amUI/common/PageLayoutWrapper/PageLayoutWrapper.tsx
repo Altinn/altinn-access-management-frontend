@@ -4,7 +4,6 @@ import { Layout, RootProvider, Snackbar, SnackbarProvider } from '@altinn/altinn
 
 import { useGetReporteeQuery } from '@/rtk/features/userInfoApi';
 
-import { InfoModal } from './InfoModal';
 import { useGlobalMenu } from './useGlobalMenu';
 import { useFooter } from './useFooter';
 import { useHeader } from './useHeader';
@@ -79,7 +78,6 @@ export const PageLayoutWrapper = ({
           footer={footer}
         >
           <div>{children}</div>
-          <InfoModal />
         </Layout>
         <Snackbar />
       </SnackbarProvider>

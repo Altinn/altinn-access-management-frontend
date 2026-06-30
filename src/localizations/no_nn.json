@@ -269,8 +269,6 @@
     "no_roles_message": "Denne brukaren har ingen roller.",
     "resources_title": "Gjev tilgang til {{count}} tenester",
     "resources_empty": "Denne rolla har ingen tenester.",
-    "resources_disclaimer": "Denne rolla kan framleis gi tilgang til tenester som berre finst i den gamle løysinga.",
-    "resources_disclaimer_link": "Sjå lista i den gamle løysinga",
     "delete_role_confirmation": "Roller frå gamle Altinn er avvikla, så du vil IKKJE kunne gi fullmakt til denne rollen på nytt.",
     "deleting_role_loading": "Venter på at rolla skal slettast...",
     "delete_role_success": "Fullmakt til rolla er sletta.",
@@ -579,7 +577,7 @@
     "info_button": "Informasjon om ny løysing"
   },
   "a2Alerts": {
-    "oldRolesContent": "Desse Altinn-rollene kan innehalde tenester som allereie finst i den nye Altinn-løysinga. Tenestene blir flytta inn i dei nye tilgangspakkane. Brukaren har dei same rollene i den gamle løysinga, men der inneheld dei fleire og andre tenester.",
+    "oldRolesContent": "Desse Altinn-rollene kan innehalde tenester som finst i den nye Altinn-løysinga. Tenestene blir flytta inn i dei nye tilgangspakkane",
     "oldRolesLinkText": "Gå til gamle Altinn",
     "legacyRoleContent": "Denne rolla vil snart bli fjerna. Bruk heller tilgangspakkar."
   },

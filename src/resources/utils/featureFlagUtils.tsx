@@ -97,10 +97,6 @@ export const enableMaskinportenAdministration = () => {
   return window.featureFlags?.enableMaskinportenAdministration === true;
 };
 
-export const hideA2Links = () => {
-  return window.featureFlags?.hideA2Links === true;
-};
-
 export const enableRoleDeletion = () => {
   return window.featureFlags?.enableRoleDeletion === true;
 };

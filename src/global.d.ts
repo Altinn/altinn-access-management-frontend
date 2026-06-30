@@ -23,7 +23,6 @@ declare global {
       enableDialogportenDialogLookup: boolean;
       enableMaskinportenAdministration: boolean;
       enableRoleDeletion: boolean;
-      hideA2Links: boolean;
       addAltinn2Account: boolean;
     };
   }

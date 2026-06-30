@@ -270,8 +270,6 @@
     "no_roles_message": "Denne brukeren har ingen roller.",
     "resources_title": "Gir tilgang til {{count}} tjenester",
     "resources_empty": "Denne rollen inneholder ingen tjenester.",
-    "resources_disclaimer": "Denne rollen kan fortsatt gi tilgang til tjenester som kun finnes i den gamle løsningen.",
-    "resources_disclaimer_link": "Se listen i den gamle løsningen",
     "delete_role_confirmation": "Roller fra gamle Altinn er avviklet, så du vil IKKE kunne gi fullmakt til denne rollen på nytt.",
     "deleting_role_loading": "Venter på at rolle skal slettes...",
     "delete_role_success": "Fullmakt til rollen er slettet.",
@@ -580,7 +578,7 @@
     "info_button": "Informasjon om ny løsning"
   },
   "a2Alerts": {
-    "oldRolesContent": "Disse Altinn-rollene kan inneholde tjenester som allerede finnes i den nye Altinn-løsningen. Tjenestene blir flyttet inn i de nye tilgangspakkene. Brukeren har de samme rollene i den gamle løsningen, men der inneholder de flere og andre tjenester.",
+    "oldRolesContent": "Disse Altinn-rollene kan inneholde tjenester som finnes i den nye Altinn-løsningen. Tjenestene blir flyttet inn i de nye tilgangspakkene.",
     "oldRolesLinkText": "Gå til gamle Altinn",
     "legacyRoleContent": "Denne rollen vil snart fjernes. Bruk heller tilgangspakker."
   },

@@ -115,12 +115,6 @@ namespace Altinn.AccessManagement.UI.Core.Configuration
         public bool RouteChangeReporteeViaAltinn2 { get; set; }
 
         /// <summary>
-        /// When true, the AM UI hides all links pointing back to Altinn 2 ("the old Altinn").
-        /// Used to roll out the shutdown of Altinn 2 per environment.
-        /// </summary>
-        public bool HideA2Links { get; set; }
-
-        /// <summary>
         /// Whether to enable adding Altinn 2 account to email user
         /// </summary>
         public bool AddAltinn2Account { get; set; }
