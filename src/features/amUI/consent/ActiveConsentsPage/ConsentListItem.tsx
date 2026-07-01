@@ -14,10 +14,11 @@ interface ConsentListItemProps {
     description: string;
     badgeText: string;
     isNew?: boolean;
+    consentType: 'altinn' | 'idporten';
   }[];
   partyType?: string;
   isLoading?: boolean;
-  onClick?: (consentId: string) => void;
+  onClick?: (consentId: string, consentType: 'altinn' | 'idporten') => void;
 }
 export const ConsentListItem = ({
   title,
@@ -58,7 +59,7 @@ export const ConsentListItem = ({
             ariaLabel={`${item.title} ${item.isNew ? t('active_consents.newly_consented') : ''} ${item.description} ${item.badgeText}`}
             loading={isLoading}
             interactive={!!onClick}
-            onClick={onClick ? () => onClick(item.id) : undefined}
+            onClick={onClick ? () => onClick(item.id, item.consentType) : undefined}
             badge={
               <div
                 className={classes.consentBadge}
@@ -82,5 +83,30 @@ export const ConsentListItem = ({
         ))}
       </List>
     </ListItem>
+  );
+};
+
+export const LoadingListItem = () => {
+  return (
+    <ConsentListItem
+      isLoading
+      title={'xxxxxxxxxxx'}
+      subItems={[
+        {
+          id: '1',
+          title: 'xxxxxxxxxxx',
+          badgeText: 'xxxxxxxxxxx',
+          description: 'xxxxxxxxxxxxxxxxxxxxxx',
+          consentType: 'altinn',
+        },
+        {
+          id: '2',
+          title: 'xxxxxxxxxxx',
+          badgeText: 'xxxxxxxxxxx',
+          description: 'xxxxxxxxxxxxxxxxxxxxxx',
+          consentType: 'altinn',
+        },
+      ]}
+    />
   );
 };

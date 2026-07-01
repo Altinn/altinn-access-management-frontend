@@ -18,13 +18,13 @@ import { ConsentRights } from '../ConsentRights/ConsentRights';
 import classes from './ConsentDetails.module.css';
 import { ConsentStatus } from '../ConsentStatus/ConsentStatus';
 import { Consent } from '../../types';
+import { RevokeConsentPopover } from '../RevokeConsentPopover/RevokeConsentPopover';
 
 interface ConsentDetailsProps {
   consentId: string;
 }
 export const ConsentDetails = ({ consentId }: ConsentDetailsProps) => {
   const { t, i18n } = useTranslation();
-  const [isPopoverOpen, setIsPopoverOpen] = useState<boolean>(false);
 
   const language = getLanguage(i18n.language);
 
@@ -43,10 +43,8 @@ export const ConsentDetails = ({ consentId }: ConsentDetailsProps) => {
     try {
       await revokeConsent({ consentId }).unwrap();
       await refetchConsent();
-      setIsPopoverOpen(false);
     } catch {
       // Error is already tracked via revokeConsentError
-      setIsPopoverOpen(false);
     }
   };
 
@@ -95,49 +93,11 @@ export const ConsentDetails = ({ consentId }: ConsentDetailsProps) => {
           </div>
           <div className={classes.consentBlock}>
             {canBeRevoked && (
-              <DsPopover.TriggerContext>
-                <DsPopover.Trigger
-                  variant='tertiary'
-                  disabled={isRevoking}
-                  onClick={() => setIsPopoverOpen(true)}
-                >
-                  <EraserIcon aria-hidden='true' />
-                  {consent.isPoa
-                    ? t('active_consents.revoke_poa')
-                    : t('active_consents.revoke_consent')}
-                </DsPopover.Trigger>
-                <DsPopover
-                  open={isPopoverOpen}
-                  placement='bottom'
-                  className={classes.revokePopover}
-                  data-color='danger'
-                  onClose={() => setIsPopoverOpen(false)}
-                >
-                  <DsParagraph className={classes.popoverText}>
-                    {consent.isPoa
-                      ? t('active_consents.revoke_poa_text')
-                      : t('active_consents.revoke_consent_text')}
-                  </DsParagraph>
-                  <div className={classes.popoverButtonRow}>
-                    <DsButton
-                      data-color='danger'
-                      disabled={isRevoking}
-                      loading={isRevoking}
-                      onClick={handleRevokeConsent}
-                    >
-                      {consent.isPoa
-                        ? t('active_consents.confirm_revoke_poa')
-                        : t('active_consents.confirm_revoke_consent')}
-                    </DsButton>
-                    <DsButton
-                      variant='tertiary'
-                      onClick={() => setIsPopoverOpen(false)}
-                    >
-                      {t('common.cancel')}
-                    </DsButton>
-                  </div>
-                </DsPopover>
-              </DsPopover.TriggerContext>
+              <RevokeConsentPopover
+                isRevoking={isRevoking}
+                consentIsPoa={consent.isPoa}
+                onRevokeConsent={handleRevokeConsent}
+              />
             )}
             {revokeConsentError && (
               <DsAlert

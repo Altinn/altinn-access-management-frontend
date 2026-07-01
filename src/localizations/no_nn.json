@@ -854,6 +854,7 @@
     "pending_agreements": "Ventende avtalar",
     "loading_consents": "Laster aktive avtalar...",
     "load_consents_error": "Kunne ikkje laste aktive avtalar",
+    "load_idporten_authorizations_error": "Kunne ikkje laste avtalar frå ID-porten",
     "no_active_consents_permission": "Du har ikkje rettar til å sjå aktive avtalar for denne organisasjonen.",
     "consent_log": "Sjå avtalelogg",
     "no_active_consents": "Ingen aktive avtalar",
@@ -879,7 +880,16 @@
     "confirm_revoke_poa": "Ja, trekk fullmakt",
     "altinn2_consent_alert_header": "Du er no i ein ny versjon av Samtykke- og fullmaktsoversikta",
     "altinn2_consent_alert_body": "Etter kvart vil du finne oversikt over alle aktive samtykke- og fullmaktsavtalar her. Finn du ikkje det du ser etter, kan du gå til dei <a>gamle Altinn-sidene</a> og velje “Samtykker og fullmakter” i oversikta.",
-    "newly_consented": "Nyleg samtykka"
+    "newly_consented": "Nyleg samtykka",
+    "consent_given_on_device": "Tilgangar gitt i {{browser}} på ei {{os}}-eining",
+    "consent_given_on_browser": "Tilgangar gitt i {{browser}}",
+    "consent_given_on_os": "Tilgangar gitt på ei {{os}}-eining",
+    "consent_given_on_unknown_device": "Tilgangar gitt på ei ukjend eining",
+    "accesses_given": "Følgande tilgangar blei gitt:",
+    "idporten_access_given_on_device": "Tilgang blei gitt via ID-porten på følgjande eining:",
+    "consent_information": "Samtykkeinformasjon:",
+    "consent_given_at": "Samtykket blei gitt {{date}}",
+    "consent_time_limited": "Samtykket er tidsavgrensa og vil gå ut {{date}}"
   },
   "consent_log": {
     "page_title": "Avtalelogg - Altinn",

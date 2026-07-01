@@ -858,6 +858,7 @@
     "pending_agreements": "Pending agreements",
     "loading_consents": "Loading active agreements...",
     "load_consents_error": "Could not load active agreements",
+    "load_idporten_authorizations_error": "Could not load agreements from ID-porten",
     "no_active_consents_permission": "You do not have permission to view the active agreements for this organization.",
     "consent_log": "View agreement log",
     "no_active_consents": "No active agreements",
@@ -883,7 +884,16 @@
     "confirm_revoke_poa": "Yes, revoke power of attorney",
     "altinn2_consent_alert_header": "You are now in a new version of the Consent- and power of attorney overview",
     "altinn2_consent_alert_body": "Soon you will find an overview of all active consents and powers of attorney here. If you cannot find what you are looking for, you can go to the <a>old Altinn-pages</a> and choose “Consents and Authorizations” in the overview.",
-    "newly_consented": "Newly consented"
+    "newly_consented": "Newly consented",
+    "consent_given_on_device": "Access granted in {{browser}} on a {{os}} device",
+    "consent_given_on_browser": "Access granted in {{browser}}",
+    "consent_given_on_os": "Access granted on a {{os}} device",
+    "consent_given_on_unknown_device": "Access granted on an unknown device",
+    "accesses_given": "The following accesses were given:",
+    "idporten_access_given_on_device": "Access was granted via ID-porten on the following device:",
+    "consent_information": "Consent information:",
+    "consent_given_at": "The consent was given {{date}}",
+    "consent_time_limited": "The consent is time-limited and will expire {{date}}"
   },
   "consent_log": {
     "page_title": "Agreement log - Altinn",

@@ -7,6 +7,7 @@ export interface ConsentParty {
   id: string;
   name: string;
   type: PartyType;
+  orgNo: string;
 }
 
 export interface ConsentRight {

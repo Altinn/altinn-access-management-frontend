@@ -14,13 +14,12 @@
   display: inline-block;
 }
 
-.consentDetailsSpinner {
-  display: block;
-  margin: var(--ds-size-6) auto;
+.userAgentDetails {
+  align-self: stretch;
 }
 
-.expiration {
-  font-weight: 500;
+.userAgentDetailsHeading {
+  margin-bottom: var(--ds-size-4);
 }
 
 @media only screen and (max-width: 769px) {
