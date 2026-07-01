@@ -19,6 +19,12 @@ import { PartyType } from '@/rtk/features/userInfoApi';
 import { useIsTabletOrSmaller } from '@/resources/utils/screensizeUtils';
 import { useGetEnrichedSentResourceRequestsQuery } from '@/rtk/features/requestApi';
 import { getRequestPartyQueryParams } from '@/resources/utils/singleRightRequestUtils';
+import {
+  RestoreFocusFallback,
+  RestoreFocusProvider,
+  useRestoreFocus,
+  useRestoreFocusContext,
+} from '../../common/RestoreFocus';
 
 export const PendingRequests = () => {
   const modalRef = useRef<HTMLDialogElement>(null);
@@ -89,6 +95,7 @@ export const SentRequestsModal = ({
 }: SentRequestsModalProps) => {
   const { t } = useTranslation();
   const [selectedResource, setSelectedResource] = useState<ServiceResource | null>(null);
+  const restoreFocus = useRestoreFocus();
 
   return (
     <DsDialog
@@ -100,13 +107,17 @@ export const SentRequestsModal = ({
       }}
       className={classes.pendingRequestsModal}
     >
-      {isModalOpen && (
-        <PendingRequestsList
-          heading={heading}
-          selectedResource={selectedResource}
-          setSelectedResource={setSelectedResource}
-        />
-      )}
+      <RestoreFocusProvider restoreFocus={restoreFocus}>
+        <RestoreFocusFallback>
+          {isModalOpen && (
+            <PendingRequestsList
+              heading={heading}
+              selectedResource={selectedResource}
+              setSelectedResource={setSelectedResource}
+            />
+          )}
+        </RestoreFocusFallback>
+      </RestoreFocusProvider>
 
       {!selectedResource && (
         <DsButton
@@ -135,6 +146,7 @@ export const PendingRequestsList = ({
   const { t } = useTranslation();
   const isSmallScreen = useIsTabletOrSmaller();
   const { actingParty, fromParty } = usePartyRepresentation();
+  const restoreFocus = useRestoreFocusContext();
 
   const { data: singleRightRequests = [], isLoading: isLoadingRequests } =
     useGetEnrichedSentResourceRequestsQuery(
@@ -160,7 +172,10 @@ export const PendingRequestsList = ({
           <DsButton
             variant='tertiary'
             className={classes.backButton}
-            onClick={() => setSelectedResource(null)}
+            onClick={() => {
+              restoreFocus?.requestFocus(selectedResource.identifier);
+              setSelectedResource(null);
+            }}
           >
             <ArrowLeftIcon aria-hidden='true' />
             {t('common.back')}

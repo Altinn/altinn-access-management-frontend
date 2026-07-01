@@ -3,6 +3,11 @@ import { DsButton, DsDialog } from '@altinn/altinn-components';
 import { useTranslation } from 'react-i18next';
 import { type EnrichedPackageRequest } from '@/rtk/features/requestApi';
 import { PendingPackageRequestsList } from './RequestsList';
+import {
+  RestoreFocusFallback,
+  RestoreFocusProvider,
+  useRestoreFocus,
+} from '../../../common/RestoreFocus';
 import classes from './Requests.module.css';
 
 interface PendingPackageRequestsModalProps {
@@ -20,6 +25,7 @@ export const PendingPackageRequestsModal = ({
 }: PendingPackageRequestsModalProps) => {
   const { t } = useTranslation();
   const [selectedRequest, setSelectedRequest] = useState<EnrichedPackageRequest | null>(null);
+  const restoreFocus = useRestoreFocus();
 
   return (
     <DsDialog
@@ -31,13 +37,17 @@ export const PendingPackageRequestsModal = ({
       }}
       className={classes.dialog}
     >
-      {isModalOpen && (
-        <PendingPackageRequestsList
-          heading={heading}
-          selectedRequest={selectedRequest}
-          setSelectedRequest={setSelectedRequest}
-        />
-      )}
+      <RestoreFocusProvider restoreFocus={restoreFocus}>
+        <RestoreFocusFallback>
+          {isModalOpen && (
+            <PendingPackageRequestsList
+              heading={heading}
+              selectedRequest={selectedRequest}
+              setSelectedRequest={setSelectedRequest}
+            />
+          )}
+        </RestoreFocusFallback>
+      </RestoreFocusProvider>
 
       {!selectedRequest && (
         <DsButton

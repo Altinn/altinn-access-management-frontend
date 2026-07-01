@@ -38,6 +38,14 @@
   color: var(--ds-color-text-subtle);
 }
 
+.detailStatus {
+  display: flex;
+  align-items: center;
+  gap: var(--ds-spacing-2);
+  margin-bottom: var(--ds-spacing-2);
+  color: var(--ds-color-text-subtle);
+}
+
 .approvedIcon {
   color: var(--ds-color-success-base-default);
   font-size: var(--ds-font-size-7);

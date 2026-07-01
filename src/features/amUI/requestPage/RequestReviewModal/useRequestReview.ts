@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback, useRef } from 'react';
 import { useSnackbar } from '@altinn/altinn-components';
 import { useTranslation } from 'react-i18next';
 import type { Request, ProcessedStatus } from '../types';
@@ -24,7 +24,16 @@ type SnapshotRequests = {
   packageRequests: EnrichedPackageRequest[];
 };
 
-export const useRequestReview = (request: Request | null, onClose: () => void) => {
+export type ProcessedRequest = {
+  status: ProcessedStatus;
+  handledAt: string;
+};
+
+export const useRequestReview = (
+  request: Request | null,
+  onClose: () => void,
+  requestFocus?: (id: string) => void,
+) => {
   const { t } = useTranslation();
   const { actingParty } = usePartyRepresentation();
   const [approveRequest] = useApproveRequestMutation();
@@ -56,12 +65,39 @@ export const useRequestReview = (request: Request | null, onClose: () => void) =
   });
   const [selectedResource, setSelectedResource] = useState<ServiceResource | null>(null);
   const [selectedPackage, setSelectedPackage] = useState<AccessPackage | null>(null);
-  const [processedRequests, setProcessedRequests] = useState<Record<string, ProcessedStatus>>({});
+  const [processedRequests, setProcessedRequests] = useState<Record<string, ProcessedRequest>>({});
   const [delegationChecks, setDelegationChecks] = useState<
     Record<string, DelegationCheckedRight[]>
   >({});
   const [actionLoading, setActionLoading] = useState<'approve' | 'reject' | null>(null);
   const { canDelegatePackage } = useAccessPackageDelegationCheck();
+
+  // Approving/rejecting invalidates the received-requests queries, so the list briefly re-renders as
+  // skeletons while it refetches. Defer restoring focus to the handled row until that refetch has
+  // settled, otherwise the focus request resolves against the skeletons and is lost.
+  const pendingFocusRef = useRef<{
+    id: string;
+    resourceDataAtRequest: typeof resourceRequests;
+    packageDataAtRequest: typeof packageRequests;
+  } | null>(null);
+
+  useEffect(() => {
+    const pending = pendingFocusRef.current;
+    if (!pending || !requestFocus) return;
+    if (isFetchingResourceRequests || isFetchingPackageRequests) return;
+    const dataChanged =
+      resourceRequests !== pending.resourceDataAtRequest ||
+      packageRequests !== pending.packageDataAtRequest;
+    if (!dataChanged) return;
+    pendingFocusRef.current = null;
+    requestFocus(pending.id);
+  }, [
+    resourceRequests,
+    packageRequests,
+    isFetchingResourceRequests,
+    isFetchingPackageRequests,
+    requestFocus,
+  ]);
 
   // Reset state only when switching to a different party (not on every object reference change)
   const requestPartyUuid = request?.partyUuid;
@@ -166,11 +202,22 @@ export const useRequestReview = (request: Request | null, onClose: () => void) =
     setActionLoading('approve');
 
     try {
-      await approveRequest({ party: actingParty.partyUuid, id: requestId }).unwrap();
+      const result = await approveRequest({
+        party: actingParty.partyUuid,
+        id: requestId,
+      }).unwrap();
       const id = resourceId ?? packageId ?? '';
-      setProcessedRequests((prev) => ({ ...prev, [id]: 'approved' }));
+      setProcessedRequests((prev) => ({
+        ...prev,
+        [id]: { status: 'approved', handledAt: result.lastUpdated },
+      }));
       setSelectedResource(null);
       setSelectedPackage(null);
+      pendingFocusRef.current = {
+        id,
+        resourceDataAtRequest: resourceRequests,
+        packageDataAtRequest: packageRequests,
+      };
       openSnackbar({
         message: t('request_page.request_approved'),
         color: 'success',
@@ -196,11 +243,22 @@ export const useRequestReview = (request: Request | null, onClose: () => void) =
     if (!requestId || !actingParty?.partyUuid) return;
     setActionLoading('reject');
     try {
-      await rejectRequest({ party: actingParty.partyUuid, id: requestId }).unwrap();
+      const result = await rejectRequest({
+        party: actingParty.partyUuid,
+        id: requestId,
+      }).unwrap();
       const id = resourceId ?? packageId ?? '';
-      setProcessedRequests((prev) => ({ ...prev, [id]: 'rejected' }));
+      setProcessedRequests((prev) => ({
+        ...prev,
+        [id]: { status: 'rejected', handledAt: result.lastUpdated },
+      }));
       setSelectedResource(null);
       setSelectedPackage(null);
+      pendingFocusRef.current = {
+        id,
+        resourceDataAtRequest: resourceRequests,
+        packageDataAtRequest: packageRequests,
+      };
       openSnackbar({
         message: t('request_page.request_rejected'),
         color: 'success',
@@ -223,13 +281,10 @@ export const useRequestReview = (request: Request | null, onClose: () => void) =
     package?: AccessPackage;
   }) => {
     if (resource) {
-      const status = processedRequests[resource.identifier];
-      if (status) return; // Don't allow selecting already processed requests
+      // Processed requests are still selectable, opening a read-only status view
       setSelectedResource(resource);
       setSelectedPackage(null);
     } else if (pkg) {
-      const status = processedRequests[pkg.id];
-      if (status) return; // Don't allow selecting already processed requests
       setSelectedPackage(pkg);
       setSelectedResource(null);
     }
