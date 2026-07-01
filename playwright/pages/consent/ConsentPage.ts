@@ -1,18 +1,9 @@
 import type { Page, Locator } from '@playwright/test';
 
 import { expect } from '@playwright/test';
-import en from '../../../src/localizations/en.json';
-import nn from '../../../src/localizations/no_nn.json';
-import no_nb from '@/localizations/no_nb.json';
-import { Language, LanguageMenu } from '../LanguageMenu';
+import { DICTIONARIES, Language, LanguageMenu } from '../LanguageMenu';
 
 export { Language };
-
-const DICTIONARIES = {
-  [Language.NB]: no_nb,
-  [Language.EN]: en,
-  [Language.NN]: nn,
-} as const satisfies Record<Language, any>;
 
 export class ConsentPage {
   readonly page: Page;

@@ -1,7 +1,7 @@
 import type { Locator, Page } from '@playwright/test';
 import { expect } from '@playwright/test';
 
-import { Language, LanguageMenu } from './LanguageMenu';
+import { HTML_LANG, Language, LanguageMenu } from './LanguageMenu';
 
 export class AktorvalgHeader {
   readonly page: Page;
@@ -200,10 +200,21 @@ export class AktorvalgHeader {
     }
   }
 
-  async chooseBokmalLanguage() {
+  /**
+   * Selects the app language through the real header menu (simulating a user),
+   * then asserts the switch actually applied via `<html lang>`. Call this once
+   * after login so the app language is deterministic regardless of the test
+   * user's profile language.
+   */
+  async selectLanguage(language: Language) {
     await this.menuButton.click();
     await this.menuLanguage.click();
-    await this.languageMenu.select(Language.NB);
+    await this.languageMenu.select(language);
+    await expect(this.page.locator('html')).toHaveAttribute('lang', HTML_LANG[language]);
+  }
+
+  async chooseBokmalLanguage() {
+    await this.selectLanguage(Language.NB);
   }
 
   async expectedNumberOfActors(number: number) {

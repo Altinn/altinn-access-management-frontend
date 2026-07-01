@@ -39,6 +39,14 @@ export function pickRandom<T>(arr: T[]): T {
 }
 
 /**
+ * Fills the {{poa_object}} placeholder in a localization string,
+ * e.g. "Gi fullmakt for {{poa_object}}" -> "Gi fullmakt for Veitransport".
+ */
+export function withPoaObject(template: string, poaObject: string): string {
+  return template.replace('{{poa_object}}', poaObject);
+}
+
+/**
  * Adds time to the current UTC date and returns ISO string
  */
 export function addTimeToNowUtc(opts: {

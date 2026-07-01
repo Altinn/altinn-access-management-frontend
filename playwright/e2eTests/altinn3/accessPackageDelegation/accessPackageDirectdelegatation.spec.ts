@@ -28,15 +28,24 @@ test.describe('Delegate access pacakge from Org-A(Avgiver) to Org-B(Rettighetsha
   });
 
   test('Org-A delegates access package to Org-B', async ({
-    page,
     delegation,
     login,
     aktorvalgHeader,
     accessManagementFrontPage,
+    language,
   }) => {
     await test.step('Log in', async () => {
       await login.LoginToAccessManagement('04856996188');
       await aktorvalgHeader.selectActorFromHeaderMenu('SUBJEKTIV ELASTISK TIGER AS');
+    });
+
+    // Pin the app language through the real header menu (not the profile), so
+    // selectors match regardless of which test user we logged in as.
+    await test.step('Set language', async () => {
+      await aktorvalgHeader.selectLanguage(language);
+    });
+
+    await test.step('Go to users', async () => {
       await accessManagementFrontPage.goToUsers();
     });
 

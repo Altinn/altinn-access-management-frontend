@@ -1,6 +1,6 @@
 import { type Locator, type Page } from '@playwright/test';
 
-import noNb from '../../src/localizations/no_nb.json';
+import { DICTIONARIES, Language, type Dict } from './LanguageMenu';
 
 /**
  * The left-hand sidebar navigation that is present on every authenticated
@@ -9,6 +9,9 @@ import noNb from '../../src/localizations/no_nb.json';
  * Because it is a cross-cutting component rather than a page of its own, it is
  * composed into AccessManagementFrontPage as `.sidebar`, but can also be used
  * standalone via the `sidebarNav` fixture.
+ *
+ * Text selectors read from the `dict` for the test's language, so the labels
+ * always match whatever language the app was switched to (default: bokmål).
  */
 export class SidebarNav {
   readonly page: Page;
@@ -20,17 +23,17 @@ export class SidebarNav {
   readonly consent: Locator;
   readonly clientAdministration: Locator;
 
-  constructor(page: Page) {
+  constructor(page: Page, dict: Dict = DICTIONARIES[Language.NB]) {
     this.page = page;
 
     this.nav = page.getByRole('navigation', { name: 'Sidebar' });
 
-    this.systemAccess = this.nav.getByLabel(noNb.sidebar.systemaccess);
-    this.users = this.nav.getByLabel(noNb.sidebar.users);
-    this.powersOfAttorney = this.nav.getByLabel(noNb.sidebar.poa_overview);
-    this.reportees = this.nav.getByLabel(noNb.sidebar.reportees);
-    this.consent = this.nav.getByLabel(noNb.sidebar.consent);
-    this.clientAdministration = this.nav.getByLabel(noNb.sidebar.client_administration);
+    this.systemAccess = this.nav.getByLabel(dict.sidebar.systemaccess);
+    this.users = this.nav.getByLabel(dict.sidebar.users);
+    this.powersOfAttorney = this.nav.getByLabel(dict.sidebar.poa_overview);
+    this.reportees = this.nav.getByLabel(dict.sidebar.reportees);
+    this.consent = this.nav.getByLabel(dict.sidebar.consent);
+    this.clientAdministration = this.nav.getByLabel(dict.sidebar.client_administration);
   }
 
   async goToUsers() {

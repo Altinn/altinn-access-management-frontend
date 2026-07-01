@@ -16,7 +16,6 @@ export class SystemUserPage {
   public readonly CREATE_NEW_SYSTEMUSER_HEADER: Locator;
   public readonly MAIN_HEADER: Locator;
   public readonly NEW_SYSTEMUSER_LABEL: Locator;
-  public readonly TRY_NEW_ACCESS_MANAGEMENT_BUTTON: Locator;
   public readonly escalateConfirmButton: Locator;
   public readonly finish: Locator;
   public readonly requestsMenuItem: Locator;
@@ -30,7 +29,9 @@ export class SystemUserPage {
       hasText: noNb.systemuser_overviewpage.new_system_user,
     });
 
-    this.CREATE_SYSTEM_USER_LINK = page.getByRole('link', { name: 'Lag ny systemtilgang' });
+    this.CREATE_SYSTEM_USER_LINK = page.getByRole('link', {
+      name: noNb.systemuser_overviewpage.new_system_user_button,
+    });
 
     this.CONTINUE_BUTTON = this.page.getByRole('button', {
       name: noNb.systemuser_creationpage.confirm_button,
@@ -65,15 +66,15 @@ export class SystemUserPage {
       level: 1,
     });
 
-    this.TRY_NEW_ACCESS_MANAGEMENT_BUTTON = this.page.getByRole('button', {
-      name: 'Prøv ny tilgangsstyring',
+    this.escalateConfirmButton = this.page.getByRole('button', {
+      name: noNb.systemuser_request.escalate_confirm_button,
     });
 
-    this.escalateConfirmButton = this.page.getByRole('button', { name: 'Ja, send videre' });
+    this.finish = this.page.getByRole('button', {
+      name: noNb.systemuser_request.escalate_close_button,
+    });
 
-    this.finish = this.page.getByRole('button', { name: 'Avslutt' });
-
-    this.requestsMenuItem = this.page.getByText('Forespørsler', { exact: true });
+    this.requestsMenuItem = this.page.getByText(noNb.sidebar.requests, { exact: true });
   }
 
   requestLink(requestId: string) {

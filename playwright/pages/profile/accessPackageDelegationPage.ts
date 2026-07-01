@@ -1,8 +1,12 @@
 import type { Page, Locator } from '@playwright/test';
 import { expect } from '@playwright/test';
 
+import { DICTIONARIES, Language, type Dict } from '../LanguageMenu';
+import { withPoaObject } from '../../util/helper';
+
 export class DelegationPage {
   readonly page: Page;
+  readonly dict: Dict;
 
   readonly accessRightsLink: Locator;
   readonly newBrukerflateLink: Locator;
@@ -21,25 +25,35 @@ export class DelegationPage {
   readonly packageSearchBox: Locator;
   readonly clearSearchButton: Locator;
 
-  constructor(page: Page) {
+  constructor(page: Page, dict: Dict = DICTIONARIES[Language.NB]) {
     this.page = page;
+    this.dict = dict;
+    // NB: no matching frontend localization key found for these three (old
+    // brukerflate entry points) — kept as literals.
     this.accessRightsLink = page.getByRole('link', { name: 'Andre med rettigheter til' });
     this.newBrukerflateLink = page.getByRole('link', { name: 'Klikk her' });
-    this.addUserBtn = page.getByRole('button', { name: 'Legg til Ny bruker' });
-    this.addOrgBtn = page.getByRole('button', { name: 'Legg til virksomhet' });
-    this.grantAccessBtn = page.getByRole('button', { name: 'Gi fullmakt' });
-    this.deleteAccessBtn = page.getByRole('button', { name: 'Slett fullmakt' });
-    this.deleteUserBtn = page.getByRole('button', { name: 'Slett bruker' });
-    this.confirmDeleteBtn = page.getByRole('button', { name: 'Ja, slett' });
-    this.closeModalBtn = page.getByRole('button', { name: 'Lukk' });
-    this.backBtn = page.getByRole('button', { name: 'Tilbake' });
     this.ourAcessButton = page.getByRole('button', { name: 'Våre tilganger hos andre' });
-    this.rightsAccessLink = page.getByRole('link', {
-      name: 'Våre tilganger hos andre',
+    this.rightsAccessLink = page.getByRole('link', { name: 'Våre tilganger hos andre' });
+
+    this.addUserBtn = page.getByRole('button', { name: this.dict.new_user_modal.trigger_button });
+    this.addOrgBtn = page.getByRole('button', { name: this.dict.new_user_modal.add_org_button });
+    this.grantAccessBtn = page.getByRole('button', {
+      name: this.dict.access_packages.give_new_button,
     });
-    this.menubtn = page.getByRole('button', { name: 'Meny' });
-    this.logoutBtn = page.getByRole('button', { name: 'Logg ut' });
-    this.packageSearchBox = page.locator('role=search >> input[type="search"]').first();
+    this.deleteAccessBtn = page.getByRole('button', { name: this.dict.common.delete_poa });
+    this.deleteUserBtn = page.getByRole('button', {
+      name: this.dict.delete_user.user_trigger_button,
+    });
+    this.confirmDeleteBtn = page.getByRole('button', { name: this.dict.common.yes_delete });
+    this.closeModalBtn = page.getByRole('button', { name: this.dict.common.close });
+    this.backBtn = page.getByRole('button', { name: this.dict.common.back });
+    this.menubtn = page.getByRole('button', { name: this.dict.header['menu-label'] });
+    this.logoutBtn = page.getByRole('button', { name: this.dict.header.log_out });
+    // Scoped to the access-package delegation dialog: the same searchbox name
+    // also exists on the page behind the modal, so an unscoped locator matches two.
+    this.packageSearchBox = page
+      .getByRole('dialog', { name: this.dict.delegation_modal.aria_label.access_package })
+      .getByRole('searchbox', { name: this.dict.access_packages.search_label });
     this.clearSearchButton = page.getByRole('button', { name: /Tøm/ });
   }
 
@@ -52,20 +66,26 @@ export class DelegationPage {
   }
 
   async addUser() {
-    const addUserBtn = this.page.getByRole('button', { name: 'Ny bruker' });
+    const addUserBtn = this.page.getByRole('button', {
+      name: this.dict.new_user_modal.trigger_button,
+    });
     await expect(addUserBtn).toBeVisible();
     await addUserBtn.click();
   }
 
   async addOrganization(orgNumber: string) {
-    await this.page.getByRole('tab', { name: 'Virksomhet' }).click();
-    const orgInput = this.page.getByRole('textbox', { name: 'Organisasjonsnummer' });
+    await this.page.getByRole('tab', { name: this.dict.new_user_modal.organization }).click();
+    const orgInput = this.page.getByRole('textbox', { name: this.dict.common.org_number });
     await orgInput.fill(orgNumber);
-    const addOrgBtn = this.page.getByRole('button', { name: 'Legg til virksomhet' });
+    const addOrgBtn = this.page.getByRole('button', {
+      name: this.dict.new_user_modal.add_org_button,
+    });
     await expect(addOrgBtn).toBeVisible();
     await addOrgBtn.click();
 
-    const openModalButton = this.page.getByRole('button', { name: 'Gi fullmakt' });
+    const openModalButton = this.page.getByRole('button', {
+      name: this.dict.access_packages.give_new_button,
+    });
     await expect(openModalButton).toBeVisible();
     await openModalButton.click();
   }
@@ -76,7 +96,9 @@ export class DelegationPage {
     await searchBox.click();
     await searchBox.fill(packageName);
 
-    const grantButton = this.page.getByRole('button', { name: `Gi fullmakt for ${packageName}` });
+    const grantButton = this.page.getByRole('button', {
+      name: withPoaObject(this.dict.common.give_poa_for, packageName),
+    });
 
     await expect(grantButton).toBeVisible({ timeout: 10000 });
     await grantButton.click();
@@ -101,12 +123,15 @@ export class DelegationPage {
     const modal = this.page.getByRole('dialog').first();
     await expect(modal).toBeVisible({ timeout: 10000 });
 
-    const grantBtn = modal.getByRole('button', { name: 'Gi fullmakt' });
+    const grantBtn = modal.getByRole('button', { name: this.dict.access_packages.give_new_button });
     await expect(grantBtn).toBeVisible({ timeout: 10000 });
     await grantBtn.click();
 
     // "Tilbake" from the result screen
-    const tilbakeButton = this.page.getByRole('button', { name: 'Tilbake', exact: true });
+    const tilbakeButton = this.page.getByRole('button', {
+      name: this.dict.common.back,
+      exact: true,
+    });
     await expect(tilbakeButton).toBeVisible({ timeout: 10000 });
     await tilbakeButton.click();
   }
@@ -117,12 +142,12 @@ export class DelegationPage {
   }
 
   async logoutFromBrukerflate() {
-    const menuBtn = this.page.getByRole('button', { name: 'Meny' });
+    const menuBtn = this.page.getByRole('button', { name: this.dict.header['menu-label'] });
     await expect(menuBtn).toBeVisible();
     await menuBtn.click();
 
     // Click logout
-    const logoutBtn = this.page.getByRole('button', { name: 'Logg ut' });
+    const logoutBtn = this.page.getByRole('button', { name: this.dict.header.log_out });
     await expect(logoutBtn).toBeVisible();
     await logoutBtn.click();
 
@@ -136,7 +161,7 @@ export class DelegationPage {
     await areaButton.click();
 
     const deleteButton = this.page.getByRole('button', {
-      name: `Slett fullmakt for ${packageName}`,
+      name: withPoaObject(this.dict.common.delete_poa_for, packageName),
     });
     await expect(deleteButton).toBeVisible();
     await deleteButton.click();
@@ -157,11 +182,14 @@ export class DelegationPage {
     await expect(modal).toBeVisible({ timeout: 10000 });
 
     // Click the "Slett fullmakt" button inside that specific package row
-    const deleteButton = modal.getByRole('button', { name: 'Slett fullmakt', exact: true });
+    const deleteButton = modal.getByRole('button', {
+      name: this.dict.common.delete_poa,
+      exact: true,
+    });
     await expect(deleteButton).toBeVisible({ timeout: 10000 });
     await deleteButton.click();
 
-    // Close the modal
+    // Close the modal ("Lukk dialogvindu" has no matching localization key — kept literal)
     const closeButton = this.page.getByRole('button', { name: 'Lukk dialogvindu', exact: true });
     await expect(closeButton).toBeVisible();
     await closeButton.click();
@@ -169,12 +197,18 @@ export class DelegationPage {
 
   async deleteDelegatedUser() {
     // Click "Slett bruker" button
-    const deleteUserBtn = this.page.getByRole('button', { name: 'Slett bruker', exact: true });
+    const deleteUserBtn = this.page.getByRole('button', {
+      name: this.dict.delete_user.user_trigger_button,
+      exact: true,
+    });
     await expect(deleteUserBtn).toBeVisible({ timeout: 10000 });
     await deleteUserBtn.click();
 
     // Confirm deletion
-    const confirmBtn = this.page.getByRole('button', { name: 'Ja, slett', exact: true });
+    const confirmBtn = this.page.getByRole('button', {
+      name: this.dict.delete_user.yes_button,
+      exact: true,
+    });
     await expect(confirmBtn).toBeVisible({ timeout: 10000 });
     await confirmBtn.click();
   }
@@ -257,7 +291,7 @@ export class DelegationPage {
     expectations: { areaName: string; packageName: string }[],
   ) {
     // 1. Back to brukerpanel
-    const backLink = this.page.getByRole('link', { name: 'Tilbake' });
+    const backLink = this.page.getByRole('link', { name: this.dict.common.back });
     await expect(backLink).toBeVisible();
     await backLink.click();
 

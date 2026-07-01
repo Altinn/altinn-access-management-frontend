@@ -1,26 +1,37 @@
 import { expect, type Locator, type Page } from '@playwright/test';
 
 import { SidebarNav } from './SidebarNav';
+import { DICTIONARIES, Language, type Dict } from './LanguageMenu';
+import { withPoaObject } from '../util/helper';
 
 export class AccessManagementFrontPage {
   readonly page: Page;
+  readonly dict: Dict;
   readonly sidebar: SidebarNav;
   readonly tryNewAccessManagementButton: Locator;
   readonly newUserButton: Locator;
   readonly singleServicesTab: Locator;
   readonly singleServicesPanel: Locator;
 
-  constructor(page: Page) {
+  constructor(page: Page, dict: Dict = DICTIONARIES[Language.NB]) {
     this.page = page;
+    this.dict = dict;
 
-    this.sidebar = new SidebarNav(page);
+    this.sidebar = new SidebarNav(page, dict);
 
+    // No localization key for this one — kept literal.
     this.tryNewAccessManagementButton = this.page.getByRole('button', {
       name: 'Prøv ny tilgangsstyring',
     });
-    this.newUserButton = this.page.getByRole('button', { name: 'Ny bruker' });
-    this.singleServicesTab = this.page.getByRole('tab', { name: 'Enkelttjenester' });
-    this.singleServicesPanel = this.page.getByRole('tabpanel', { name: 'Enkelttjenester' });
+    this.newUserButton = this.page.getByRole('button', {
+      name: dict.new_user_modal.trigger_button,
+    });
+    this.singleServicesTab = this.page.getByRole('tab', {
+      name: dict.user_rights_page.single_rights_title,
+    });
+    this.singleServicesPanel = this.page.getByRole('tabpanel', {
+      name: dict.user_rights_page.single_rights_title,
+    });
   }
 
   // --- Sidebar facade: delegate to the SidebarNav component ---------------
@@ -78,7 +89,10 @@ export class AccessManagementFrontPage {
   }
 
   async sokEtterEnkelttjeneste(tjenesteNavn: string) {
-    await this.page.getByPlaceholder('Søk etter tjenester').nth(1).fill(tjenesteNavn);
+    await this.page
+      .getByPlaceholder(this.dict.resource_list.resource_search_placeholder)
+      .nth(1)
+      .fill(tjenesteNavn);
   }
 
   async clickEnkelttjeneste(tjenesteNavn: string) {
@@ -95,31 +109,60 @@ export class AccessManagementFrontPage {
     // inaktive panelet (som ligger først i DOM-en).
     await this.page
       .getByRole('tabpanel')
-      .getByRole('button', { name: 'Gi fullmakt', exact: true })
+      .getByRole('button', { name: this.dict.access_packages.give_new_button, exact: true })
       .click();
   }
 
   async clickGiFullmaktEnkelttjeneste() {
-    await this.page.getByRole('dialog').getByRole('button', { name: 'Gi fullmakt' }).click();
+    await this.page
+      .getByRole('dialog')
+      .getByRole('button', { name: this.dict.access_packages.give_new_button })
+      .click();
   }
 
   async goToArea(areaName: string) {
-    const area = this.page.getByRole('button', { name: areaName }).first();
+    // The area list renders either inside the delegation dialog (when giving a
+    // new fullmakt) or inline on the user-detail page (when viewing/deleting
+    // existing ones). When the dialog is open the same-named area button also
+    // exists on the page behind it, and the modal overlay intercepts the click —
+    // so scope to the dialog when present, otherwise use the page.
+    const scope = await this.currentScope();
+    const area = scope.getByRole('button', { name: areaName });
     await expect(area).toBeVisible();
     await area.click();
 
     await expect(area).toHaveAttribute('aria-expanded', 'true');
   }
 
+  /**
+   * The locator scope for delegation controls: the open dialog if there is one,
+   * otherwise the whole page. Keeps selectors unambiguous whether the flow runs
+   * in the delegation modal or inline on the user-detail page.
+   */
+  private async currentScope(): Promise<Locator | Page> {
+    const dialog = this.page.getByRole('dialog');
+    return (await dialog.count()) > 0 ? dialog : this.page;
+  }
+
   async expectAccessPackageToBeDelegable(packageName: string) {
+    // Scoped to the open dialog (when present) so we don't assert against the
+    // identically-named button on the page behind the modal. `exact` so
+    // "...Tilgangsstyrer" doesn't also match "...Tilgangsstyrer for enkeltmeldinger...".
+    const scope = await this.currentScope();
     await expect(
-      this.page.getByRole('button', { name: 'Gi fullmakt for ' + packageName }).first(),
+      scope.getByRole('button', {
+        name: withPoaObject(this.dict.common.give_poa_for, packageName),
+        exact: true,
+      }),
     ).toBeVisible();
   }
 
   async userCanDeletePackage(packageName: string) {
     await expect(
-      this.page.getByRole('button', { name: 'Slett fullmakt for ' + packageName }),
+      this.page.getByRole('button', {
+        name: withPoaObject(this.dict.common.delete_poa_for, packageName),
+        exact: true,
+      }),
     ).toBeVisible();
   }
 
@@ -136,7 +179,9 @@ export class AccessManagementFrontPage {
   }
 
   async clickSlettFullmaktForTilgangspakke(packageName: string) {
-    await this.page.getByRole('button', { name: 'Slett fullmakt for ' + packageName }).click();
+    await this.page
+      .getByRole('button', { name: withPoaObject(this.dict.common.delete_poa_for, packageName) })
+      .click();
   }
 
   async clickSlettEnkelttjeneste(resourceName: string) {
@@ -148,7 +193,7 @@ export class AccessManagementFrontPage {
 
   async clickGiFullmaktForTilgangspakke(packageName: string) {
     const giFullmaktKnapp = this.page.getByRole('button', {
-      name: 'Gi fullmakt for ' + packageName,
+      name: withPoaObject(this.dict.common.give_poa_for, packageName),
     });
     await expect(giFullmaktKnapp).toBeVisible();
     await giFullmaktKnapp.click();
@@ -161,20 +206,29 @@ export class AccessManagementFrontPage {
 
   async expectAccessPackageToNotBeDelegable(packageName: string) {
     await expect(
-      this.page.getByRole('button', { name: 'Gi fullmakt for ' + packageName }),
+      this.page.getByRole('button', {
+        name: withPoaObject(this.dict.common.give_poa_for, packageName),
+        exact: true,
+      }),
     ).not.toBeVisible();
   }
 
   async expectPowerOfAttorneyButtonToNotBeVisible() {
-    await expect(this.page.getByRole('button', { name: 'Gi fullmakt' })).not.toBeVisible();
+    await expect(
+      this.page.getByRole('button', { name: this.dict.access_packages.give_new_button }),
+    ).not.toBeVisible();
   }
 
   async expectOthersWithRightsListToBeVisible() {
-    await expect(this.page.getByRole('heading', { name: 'Andre med fullmakt' })).toBeVisible();
+    await expect(
+      this.page.getByRole('heading', { name: this.dict.users_page.user_list_heading }),
+    ).toBeVisible();
   }
 
   async expectOthersWithRightsListToNotBeVisible() {
-    await expect(this.page.getByRole('heading', { name: 'Andre med fullmakt' })).not.toBeVisible();
+    await expect(
+      this.page.getByRole('heading', { name: this.dict.users_page.user_list_heading }),
+    ).not.toBeVisible();
   }
 
   async clickLeggTilBruker() {
@@ -183,11 +237,12 @@ export class AccessManagementFrontPage {
   }
 
   async LukkGiFullmaktVindu() {
-    await this.page.getByRole('button', { name: 'Lukk' }).click();
+    await this.page.getByRole('button', { name: this.dict.common.close }).click();
   }
 
   async addPerson(fnr: string, lastName: string) {
-    const fnrField1 = this.page.getByRole('textbox', { name: 'Fødselsnummer' }); // AT22 og AT23
+    const fnrField1 = this.page.getByRole('textbox', { name: this.dict.common.ssn }); // AT22 og AT23
+    // No localization key for the TT02 variant label — kept literal.
     const fnrField2 = this.page.getByRole('textbox', { name: 'Fødselsnr./brukernavn' }); //TT02
 
     if (await fnrField1.isVisible()) {
@@ -196,15 +251,19 @@ export class AccessManagementFrontPage {
       await fnrField2.fill(fnr);
     }
 
-    await this.page.getByRole('textbox', { name: 'Etternavn' }).fill(lastName);
-    await this.page.getByRole('button', { name: 'Legg til person' }).click();
+    await this.page.getByRole('textbox', { name: this.dict.common.last_name }).fill(lastName);
+    await this.page
+      .getByRole('button', { name: this.dict.new_user_modal.add_person_button })
+      .click();
   }
   async addOrg(orgNo: string) {
-    const virksomhetTab = this.page.getByRole('tab', { name: 'Virksomhet' });
+    const virksomhetTab = this.page.getByRole('tab', {
+      name: this.dict.new_user_modal.organization,
+    });
     await expect(virksomhetTab).toBeVisible();
     await virksomhetTab.click();
-    const orgNoField = this.page.getByRole('textbox', { name: 'Organisasjonsnummer' });
+    const orgNoField = this.page.getByRole('textbox', { name: this.dict.common.org_number });
     await orgNoField.fill(orgNo);
-    await this.page.getByRole('button', { name: 'Legg til virksomhet' }).click();
+    await this.page.getByRole('button', { name: this.dict.new_user_modal.add_org_button }).click();
   }
 }
