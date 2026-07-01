@@ -1,14 +1,18 @@
 import React from 'react';
 import { useTranslation, Trans } from 'react-i18next';
 import { useNavigate, useSearchParams } from 'react-router';
-import { DsAlert, DsHeading, DsParagraph, DsButton } from '@altinn/altinn-components';
+import {
+  DsAlert,
+  DsHeading,
+  DsParagraph,
+  DsButton,
+  formatDisplayName,
+} from '@altinn/altinn-components';
 
 import {
   useGetAgentSystemUserRequestQuery,
   useApproveAgentSystemUserRequestMutation,
   useRejectAgentSystemUserRequestMutation,
-  useGetSystemUserReporteeQuery,
-  useGetSystemuserIsAdminQuery,
 } from '@/rtk/features/systemUserApi';
 import { useDocumentTitle } from '@/resources/hooks/useDocumentTitle';
 import { RequestPageBase } from './components/RequestPageBase/RequestPageBase';
@@ -23,6 +27,7 @@ import { RightsList } from './components/RightsList/RightsList';
 import { getLogoutUrl } from '@/resources/utils/pathUtils';
 import { SystemUserRequestLoadError } from './components/SystemUserRequestLoadError/SystemUserRequestLoadError';
 import { enableAddSelfToSystemuser } from '@/resources/utils/featureFlagUtils';
+import { useGetIsAdminQuery, useGetReporteeQuery } from '@/rtk/features/userInfoApi';
 
 export const SystemUserAgentRequestPage = () => {
   const { t } = useTranslation();
@@ -46,12 +51,8 @@ export const SystemUserAgentRequestPage = () => {
     data: reporteeData,
     isLoading: isLoadingReportee,
     error: loadReporteeError,
-  } = useGetSystemUserReporteeQuery(request?.partyUuid ?? '', {
-    skip: !request?.partyUuid,
-  });
-  const { data: isAdmin } = useGetSystemuserIsAdminQuery(request?.partyUuid ?? '', {
-    skip: !request?.partyUuid,
-  });
+  } = useGetReporteeQuery();
+  const { data: isAdmin } = useGetIsAdminQuery();
 
   const [
     postAcceptCreationRequest,
@@ -117,6 +118,7 @@ export const SystemUserAgentRequestPage = () => {
       system={request?.system}
       reportee={reporteeData}
       isLoading={isLoadingRequest || isLoadingReportee}
+      requestPartyUuid={request?.partyUuid}
       error={error}
       heading={t('systemuser_agent_request.banner_title')}
     >
@@ -144,7 +146,7 @@ export const SystemUserAgentRequestPage = () => {
               i18nKey={'systemuser_agent_request.system_description'}
               values={{
                 vendorName: request.system.name,
-                companyName: reporteeData?.name,
+                companyName: formatDisplayName({ fullName: reporteeData?.name, type: 'company' }),
                 addSelfInfo:
                   request.accessPackages.every((p) => p.isAssignable) && enableAddSelfToSystemuser()
                     ? t('systemuser_agent_request.add_self_possible')

@@ -1,13 +1,17 @@
 import React from 'react';
 import { useTranslation, Trans } from 'react-i18next';
 import { useSearchParams } from 'react-router';
-import { DsAlert, DsHeading, DsParagraph, DsButton } from '@altinn/altinn-components';
+import {
+  DsAlert,
+  DsHeading,
+  DsParagraph,
+  DsButton,
+  formatDisplayName,
+} from '@altinn/altinn-components';
 import { useDocumentTitle } from '@/resources/hooks/useDocumentTitle';
 import {
   useApproveChangeRequestMutation,
   useGetChangeRequestQuery,
-  useGetSystemuserIsAdminQuery,
-  useGetSystemUserReporteeQuery,
   useRejectChangeRequestMutation,
 } from '@/rtk/features/systemUserApi';
 import { RequestPageBase } from './components/RequestPageBase/RequestPageBase';
@@ -20,6 +24,7 @@ import { CreateSystemUserCheck } from './components/CreateSystemUserCheck/Create
 import type { ServiceResource } from '@/rtk/features/singleRights/singleRightsApi';
 import { getLogoutUrl } from '@/resources/utils/pathUtils';
 import { SystemUserRequestLoadError } from './components/SystemUserRequestLoadError/SystemUserRequestLoadError';
+import { useGetIsAdminQuery, useGetReporteeQuery } from '@/rtk/features/userInfoApi';
 
 export const SystemUserChangeRequestPage = () => {
   const { t } = useTranslation();
@@ -41,12 +46,8 @@ export const SystemUserChangeRequestPage = () => {
     data: reporteeData,
     isLoading: isLoadingReportee,
     error: loadReporteeError,
-  } = useGetSystemUserReporteeQuery(changeRequest?.partyUuid ?? '', {
-    skip: !changeRequest?.partyUuid,
-  });
-  const { data: isAdmin } = useGetSystemuserIsAdminQuery(changeRequest?.partyUuid ?? '', {
-    skip: !changeRequest?.partyUuid,
-  });
+  } = useGetReporteeQuery();
+  const { data: isAdmin } = useGetIsAdminQuery();
 
   const [
     postAcceptChangeRequest,
@@ -106,6 +107,7 @@ export const SystemUserChangeRequestPage = () => {
       system={changeRequest?.system}
       reportee={reporteeData}
       isLoading={isLoadingChangeRequest || isLoadingReportee}
+      requestPartyUuid={changeRequest?.partyUuid}
       error={error}
       heading={t('systemuser_change_request.banner_title')}
     >
@@ -133,7 +135,7 @@ export const SystemUserChangeRequestPage = () => {
               i18nKey={'systemuser_request.system_description'}
               values={{
                 systemName: changeRequest.system.name,
-                partyName: reporteeData?.name,
+                partyName: formatDisplayName({ fullName: reporteeData?.name, type: 'company' }),
               }}
             ></Trans>
           </DsParagraph>

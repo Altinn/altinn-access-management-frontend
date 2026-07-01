@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useMemo, useState } from 'react';
+import React, { useCallback, useMemo, useState } from 'react';
 import { Trans, useTranslation } from 'react-i18next';
 import { DsAlert, DsParagraph, formatDisplayName } from '@altinn/altinn-components';
 import {
@@ -8,7 +8,6 @@ import {
   type EnrichedResourceRequest,
 } from '@/rtk/features/requestApi';
 import { useSearchParams } from 'react-router';
-import { redirectToChangeReporteeAndRedirect } from '@/resources/utils/changeReporteeUtils';
 import { getCookie } from '@/resources/Cookie/CookieMethods';
 import { RequestPageLayout } from '../../common/RequestPageLayout/RequestPageLayout';
 import { PartyRepresentationProvider } from '../../common/PartyRepresentationContext/PartyRepresentationContext';
@@ -84,16 +83,10 @@ export const DraftRequestPage = () => {
     }
   };
 
-  useEffect(() => {
-    const fromId = representativeRequest?.from.id;
-    if (fromId && fromId !== partyUuid) {
-      redirectToChangeReporteeAndRedirect(fromId, window.location.href);
-    }
-  }, [representativeRequest, partyUuid]);
-
-  const isInitialLoad = isMultiMode
-    ? isLoadingMultiRequests || !!(multiRequests[0] && multiRequests[0].from.id !== partyUuid)
-    : isLoadingRequest || !!(request && request.from.id !== partyUuid);
+  // The pending reportee-switch ("changing party") state is handled centrally by
+  // RequestPageLayout via the requestPartyUuid prop, so it's intentionally not
+  // duplicated here.
+  const isInitialLoad = isMultiMode ? isLoadingMultiRequests : isLoadingRequest;
 
   const toName = formatDisplayName({
     fullName: representativeRequest?.to.name ?? '',
@@ -213,6 +206,7 @@ export const DraftRequestPage = () => {
       }}
       error={error}
       isLoading={isInitialLoad}
+      requestPartyUuid={representativeRequest?.from.id}
       heading={heading}
       body={body}
     />
