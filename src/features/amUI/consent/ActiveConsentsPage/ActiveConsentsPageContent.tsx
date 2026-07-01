@@ -1,7 +1,14 @@
 import React, { useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Link, useNavigate } from 'react-router';
-import { DsAlert, DsHeading, DsLink, DsParagraph, List } from '@altinn/altinn-components';
+import {
+  DsAlert,
+  DsHeading,
+  DsLink,
+  DsParagraph,
+  formatDisplayName,
+  List,
+} from '@altinn/altinn-components';
 import { FolderFileIcon } from '@navikt/aksel-icons';
 import classes from './ActiveConsentsPage.module.css';
 import { ConsentPath } from '@/routes/paths';
@@ -198,7 +205,10 @@ const groupConsents = (
     acc[key].push({
       id: idPortenAuthorization.authorization_id,
       title: idPortenAuthorization.client_name,
-      ownerName: idPortenAuthorization.consumer.name,
+      ownerName: formatDisplayName({
+        fullName: idPortenAuthorization.consumer.name,
+        type: 'company',
+      }),
       createdDate: '',
       consentedDate: idPortenAuthorization.authorized_at
         ? new Date(idPortenAuthorization.authorized_at * 1000).toISOString()
