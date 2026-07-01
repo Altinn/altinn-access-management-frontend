@@ -2,11 +2,11 @@ import type { Page, Locator } from '@playwright/test';
 import { expect } from '@playwright/test';
 
 import { env, withCustomerName } from 'playwright/util/helper';
-import { DICTIONARIES, Language, type Dict } from '../LanguageMenu';
+import { LANGUAGE_DICTIONARIES, Language, type Dict } from '../LanguageMenu';
 
 export class ClientDelegationPage {
   readonly page: Page;
-  readonly dict: Dict;
+  readonly texts: Dict;
 
   readonly confirmButton: Locator;
   readonly customersButton: Locator;
@@ -19,12 +19,14 @@ export class ClientDelegationPage {
   readonly ownOrgBadge: Locator;
   readonly removeOwnOrgButton: Locator;
 
-  constructor(page: Page, dict: Dict = DICTIONARIES[Language.NB]) {
+  constructor(page: Page, language: Language = Language.NB) {
     this.page = page;
-    this.dict = dict;
-    const agent = dict.systemuser_agent_delegation;
+    this.texts = LANGUAGE_DICTIONARIES[language];
+    const agent = this.texts.systemuser_agent_delegation;
 
-    this.confirmButton = page.getByRole('button', { name: dict.request_page.approve_request });
+    this.confirmButton = page.getByRole('button', {
+      name: this.texts.request_page.approve_request,
+    });
     // The button reads "Legg til klienter" on first delegation and "Legg til
     // eller fjern klienter" afterwards — match either.
     this.customersButton = page
@@ -38,7 +40,7 @@ export class ClientDelegationPage {
     this.confirmAndCloseButton = page.getByRole('button', { name: agent.confirm_close });
 
     this.deleteSystemAccessButtons = page.getByRole('button', {
-      name: dict.systemuser_detailpage.delete_systemuser,
+      name: this.texts.systemuser_detailpage.delete_systemuser,
     });
 
     this.clientSearchBox = page
@@ -77,14 +79,14 @@ export class ClientDelegationPage {
 
   addCustomerButtonByName(name: string): Locator {
     return this.page.getByRole('dialog').getByRole('button', {
-      name: withCustomerName(this.dict.systemuser_agent_delegation.add_to_system_user_aria, name),
+      name: withCustomerName(this.texts.systemuser_agent_delegation.add_to_system_user_aria, name),
     });
   }
 
   removeCustomerButtonByName(name: string): Locator {
     return this.page.getByRole('dialog').getByRole('button', {
       name: withCustomerName(
-        this.dict.systemuser_agent_delegation.remove_from_system_user_aria,
+        this.texts.systemuser_agent_delegation.remove_from_system_user_aria,
         name,
       ),
     });
@@ -127,7 +129,7 @@ export class ClientDelegationPage {
 
     // Verify customer was added
     const confirmation = this.confirmationText(
-      withCustomerName(this.dict.systemuser_agent_delegation.customer_added, confirmationText),
+      withCustomerName(this.texts.systemuser_agent_delegation.customer_added, confirmationText),
     );
     await expect(confirmation).toBeVisible();
 
@@ -160,7 +162,7 @@ export class ClientDelegationPage {
 
     // Verify the customer removal confirmation text is visible
     const confirmation = this.confirmationText(
-      withCustomerName(this.dict.systemuser_agent_delegation.customer_removed, name),
+      withCustomerName(this.texts.systemuser_agent_delegation.customer_removed, name),
     );
     await expect(confirmation).toBeVisible();
 

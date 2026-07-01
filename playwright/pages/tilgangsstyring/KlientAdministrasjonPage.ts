@@ -1,7 +1,10 @@
 import { expect, type Locator, type Page } from '@playwright/test';
 
+import { LANGUAGE_DICTIONARIES, Language, type Dict } from '../LanguageMenu';
+
 export class KlientAdministrasjonPage {
   readonly page: Page;
+  readonly texts: Dict;
   readonly leggTilBrukerKnapp: Locator;
   readonly brukerFane: Locator;
   readonly klientFane: Locator;
@@ -19,28 +22,39 @@ export class KlientAdministrasjonPage {
   readonly brukereMedFullmaktFane: Locator;
   readonly alleBrukereFane: Locator;
 
-  constructor(page: Page) {
+  constructor(page: Page, language: Language = Language.NB) {
     this.page = page;
-    this.leggTilBrukerKnapp = this.page.getByRole('button', {
-      name: 'Legg til ny bruker',
+    this.texts = LANGUAGE_DICTIONARIES[language];
+    const client = this.texts.client_administration_page;
+
+    this.leggTilBrukerKnapp = this.page.getByRole('button', { name: client.add_agent_button });
+    this.brukerFane = this.page.getByRole('tab', { name: client.agents_tab_title });
+    this.klientFane = this.page.getByRole('tab', { name: client.clients_tab_title });
+    // page_heading is "Klientadministrasjon for {{name}}" — match the static prefix.
+    this.sideOverskrift = this.page.getByRole('heading', {
+      name: client.page_heading.split('{{name}}')[0].trim(),
     });
-    this.brukerFane = this.page.getByRole('tab', { name: 'Brukere' });
-    this.klientFane = this.page.getByRole('tab', { name: 'Klienter' });
-    this.sideOverskrift = this.page.getByRole('heading', { name: /Klientadministrasjon for/ });
-    this.harDisseKlienteneFane = this.page.getByRole('tab', { name: 'Har disse klientene' });
-    this.alleKlienterFane = this.page.getByRole('tab', { name: 'Alle klienter' });
-    this.brukereMedFullmaktFane = this.page.getByRole('tab', { name: 'Brukere med fullmakt' });
-    this.alleBrukereFane = this.page.getByRole('tab', { name: 'Alle brukere' });
+    this.harDisseKlienteneFane = this.page.getByRole('tab', { name: client.agent_has_clients_tab });
+    this.alleKlienterFane = this.page.getByRole('tab', { name: client.agent_can_get_clients_tab });
+    this.brukereMedFullmaktFane = this.page.getByRole('tab', {
+      name: client.client_has_agents_tab,
+    });
+    this.alleBrukereFane = this.page.getByRole('tab', { name: client.client_can_get_agents_tab });
+    // "Søk" is a design-system searchbox placeholder, not in our localization files.
     this.brukerSok = this.page.getByRole('searchbox', { name: 'Søk' });
-    this.fnrFelt = this.page.getByRole('textbox', { name: 'Fødselsnummer/brukernavn' });
-    this.etternavnFelt = this.page.getByRole('textbox', { name: 'Etternavn' });
-    this.leggTilPersonKnapp = this.page.getByRole('button', { name: 'Legg til person' });
-    this.slettBrukerKnapp = this.page.getByRole('button', { name: 'Slett bruker' });
+    this.fnrFelt = this.page.getByRole('textbox', {
+      name: this.texts.new_user_modal.person_identifier,
+    });
+    this.etternavnFelt = this.page.getByRole('textbox', { name: this.texts.common.last_name });
+    this.leggTilPersonKnapp = this.page.getByRole('button', {
+      name: this.texts.new_user_modal.add_person_button,
+    });
+    this.slettBrukerKnapp = this.page.getByRole('button', { name: client.agent_delete_button });
     this.slettBrukerDialogKnapp = this.page
       .getByRole('dialog')
-      .getByRole('button', { name: 'Slett bruker' });
-    this.ingenBrukereTekst = this.page.getByText('Ingen brukere har fått');
-    this.ingenKlienterTekst = this.page.getByText('Ingen klienter er tildelt.');
+      .getByRole('button', { name: client.agent_delete_confirm });
+    this.ingenBrukereTekst = this.page.getByText(client.no_agents);
+    this.ingenKlienterTekst = this.page.getByText(client.no_delegations);
   }
 
   // Verifiser at klientadministrasjonssiden (oversikten) er lastet før vi klikker oss videre.
@@ -135,23 +149,22 @@ export class KlientAdministrasjonPage {
   }
 
   async klikkGiFullmakt(navn: string) {
+    const giFullmakt = this.texts.client_administration_page.delegate_package_button;
     await this.page
-      .getByText(`${navn}Gi fullmakt`)
-      .getByRole('button', { name: 'Gi fullmakt' })
+      .getByText(`${navn}${giFullmakt}`)
+      .getByRole('button', { name: giFullmakt })
       .click();
   }
 
   slettFullmaktKnapp(navn: string): Locator {
+    const slettFullmakt = this.texts.client_administration_page.remove_package_button;
     return this.page
-      .getByText(`${navn}Slett fullmakt`)
-      .getByRole('button', { name: 'Slett fullmakt' });
+      .getByText(`${navn}${slettFullmakt}`)
+      .getByRole('button', { name: slettFullmakt });
   }
 
   async slettFullmakt(navn: string) {
-    await this.page
-      .getByText(`${navn}Slett fullmakt`)
-      .getByRole('button', { name: 'Slett fullmakt' })
-      .click();
+    await this.slettFullmaktKnapp(navn).click();
   }
 
   async klikkBrukereMedFullmakt() {

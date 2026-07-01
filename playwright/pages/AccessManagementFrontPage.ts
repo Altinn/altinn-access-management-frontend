@@ -1,30 +1,30 @@
 import { expect, type Locator, type Page } from '@playwright/test';
 
 import { SidebarNav } from './SidebarNav';
-import { DICTIONARIES, Language, type Dict } from './LanguageMenu';
+import { LANGUAGE_DICTIONARIES, Language, type Dict } from './LanguageMenu';
 import { withPoaObject } from '../util/helper';
 
 export class AccessManagementFrontPage {
   readonly page: Page;
-  readonly dict: Dict;
+  readonly texts: Dict;
   readonly sidebar: SidebarNav;
   readonly newUserButton: Locator;
   readonly singleServicesTab: Locator;
   readonly singleServicesPanel: Locator;
 
-  constructor(page: Page, dict: Dict = DICTIONARIES[Language.NB]) {
+  constructor(page: Page, language: Language = Language.NB) {
     this.page = page;
-    this.dict = dict;
+    this.texts = LANGUAGE_DICTIONARIES[language];
 
-    this.sidebar = new SidebarNav(page, dict);
+    this.sidebar = new SidebarNav(page, language);
     this.newUserButton = this.page.getByRole('button', {
-      name: dict.new_user_modal.trigger_button,
+      name: this.texts.new_user_modal.trigger_button,
     });
     this.singleServicesTab = this.page.getByRole('tab', {
-      name: dict.user_rights_page.single_rights_title,
+      name: this.texts.user_rights_page.single_rights_title,
     });
     this.singleServicesPanel = this.page.getByRole('tabpanel', {
-      name: dict.user_rights_page.single_rights_title,
+      name: this.texts.user_rights_page.single_rights_title,
     });
   }
 
@@ -83,7 +83,7 @@ export class AccessManagementFrontPage {
 
   async sokEtterEnkelttjeneste(tjenesteNavn: string) {
     await this.page
-      .getByPlaceholder(this.dict.resource_list.resource_search_placeholder)
+      .getByPlaceholder(this.texts.resource_list.resource_search_placeholder)
       .nth(1)
       .fill(tjenesteNavn);
   }
@@ -102,14 +102,14 @@ export class AccessManagementFrontPage {
     // inaktive panelet (som ligger først i DOM-en).
     await this.page
       .getByRole('tabpanel')
-      .getByRole('button', { name: this.dict.access_packages.give_new_button, exact: true })
+      .getByRole('button', { name: this.texts.access_packages.give_new_button, exact: true })
       .click();
   }
 
   async clickGiFullmaktEnkelttjeneste() {
     await this.page
       .getByRole('dialog')
-      .getByRole('button', { name: this.dict.access_packages.give_new_button })
+      .getByRole('button', { name: this.texts.access_packages.give_new_button })
       .click();
   }
 
@@ -144,7 +144,7 @@ export class AccessManagementFrontPage {
     const scope = await this.currentScope();
     await expect(
       scope.getByRole('button', {
-        name: withPoaObject(this.dict.common.give_poa_for, packageName),
+        name: withPoaObject(this.texts.common.give_poa_for, packageName),
         exact: true,
       }),
     ).toBeVisible();
@@ -153,7 +153,7 @@ export class AccessManagementFrontPage {
   async userCanDeletePackage(packageName: string) {
     await expect(
       this.page.getByRole('button', {
-        name: withPoaObject(this.dict.common.delete_poa_for, packageName),
+        name: withPoaObject(this.texts.common.delete_poa_for, packageName),
         exact: true,
       }),
     ).toBeVisible();
@@ -173,7 +173,7 @@ export class AccessManagementFrontPage {
 
   async clickSlettFullmaktForTilgangspakke(packageName: string) {
     await this.page
-      .getByRole('button', { name: withPoaObject(this.dict.common.delete_poa_for, packageName) })
+      .getByRole('button', { name: withPoaObject(this.texts.common.delete_poa_for, packageName) })
       .click();
   }
 
@@ -186,7 +186,7 @@ export class AccessManagementFrontPage {
 
   async clickGiFullmaktForTilgangspakke(packageName: string) {
     const giFullmaktKnapp = this.page.getByRole('button', {
-      name: withPoaObject(this.dict.common.give_poa_for, packageName),
+      name: withPoaObject(this.texts.common.give_poa_for, packageName),
     });
     await expect(giFullmaktKnapp).toBeVisible();
     await giFullmaktKnapp.click();
@@ -200,7 +200,7 @@ export class AccessManagementFrontPage {
   async expectAccessPackageToNotBeDelegable(packageName: string) {
     await expect(
       this.page.getByRole('button', {
-        name: withPoaObject(this.dict.common.give_poa_for, packageName),
+        name: withPoaObject(this.texts.common.give_poa_for, packageName),
         exact: true,
       }),
     ).not.toBeVisible();
@@ -208,19 +208,19 @@ export class AccessManagementFrontPage {
 
   async expectPowerOfAttorneyButtonToNotBeVisible() {
     await expect(
-      this.page.getByRole('button', { name: this.dict.access_packages.give_new_button }),
+      this.page.getByRole('button', { name: this.texts.access_packages.give_new_button }),
     ).not.toBeVisible();
   }
 
   async expectOthersWithRightsListToBeVisible() {
     await expect(
-      this.page.getByRole('heading', { name: this.dict.users_page.user_list_heading }),
+      this.page.getByRole('heading', { name: this.texts.users_page.user_list_heading }),
     ).toBeVisible();
   }
 
   async expectOthersWithRightsListToNotBeVisible() {
     await expect(
-      this.page.getByRole('heading', { name: this.dict.users_page.user_list_heading }),
+      this.page.getByRole('heading', { name: this.texts.users_page.user_list_heading }),
     ).not.toBeVisible();
   }
 
@@ -230,11 +230,11 @@ export class AccessManagementFrontPage {
   }
 
   async LukkGiFullmaktVindu() {
-    await this.page.getByRole('button', { name: this.dict.common.close }).click();
+    await this.page.getByRole('button', { name: this.texts.common.close }).click();
   }
 
   async addPerson(fnr: string, lastName: string) {
-    const fnrField1 = this.page.getByRole('textbox', { name: this.dict.common.ssn }); // AT22 og AT23
+    const fnrField1 = this.page.getByRole('textbox', { name: this.texts.common.ssn }); // AT22 og AT23
     // No localization key for the TT02 variant label — kept literal.
     const fnrField2 = this.page.getByRole('textbox', { name: 'Fødselsnr./brukernavn' }); //TT02
 
@@ -244,19 +244,19 @@ export class AccessManagementFrontPage {
       await fnrField2.fill(fnr);
     }
 
-    await this.page.getByRole('textbox', { name: this.dict.common.last_name }).fill(lastName);
+    await this.page.getByRole('textbox', { name: this.texts.common.last_name }).fill(lastName);
     await this.page
-      .getByRole('button', { name: this.dict.new_user_modal.add_person_button })
+      .getByRole('button', { name: this.texts.new_user_modal.add_person_button })
       .click();
   }
   async addOrg(orgNo: string) {
     const virksomhetTab = this.page.getByRole('tab', {
-      name: this.dict.new_user_modal.organization,
+      name: this.texts.new_user_modal.organization,
     });
     await expect(virksomhetTab).toBeVisible();
     await virksomhetTab.click();
-    const orgNoField = this.page.getByRole('textbox', { name: this.dict.common.org_number });
+    const orgNoField = this.page.getByRole('textbox', { name: this.texts.common.org_number });
     await orgNoField.fill(orgNo);
-    await this.page.getByRole('button', { name: this.dict.new_user_modal.add_org_button }).click();
+    await this.page.getByRole('button', { name: this.texts.new_user_modal.add_org_button }).click();
   }
 }

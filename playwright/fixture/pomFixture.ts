@@ -1,7 +1,7 @@
 // pomFixtures.ts
 import { test as baseTest, expect } from '@playwright/test';
 import { ConsentPage, Language } from 'playwright/pages/consent/ConsentPage';
-import { DICTIONARIES, LanguageMenu, type Dict } from 'playwright/pages/LanguageMenu';
+import { LanguageMenu } from 'playwright/pages/LanguageMenu';
 import { LoginPage, logoutWithUser } from 'playwright/pages/LoginPage';
 import { AccessManagementFrontPage } from 'playwright/pages/AccessManagementFrontPage';
 import { SidebarNav } from 'playwright/pages/SidebarNav';
@@ -17,11 +17,9 @@ const defaultLang = Language.NB;
 
 type Fixtures = {
   slowNetwork: void;
+  // The app language for the run (default NB). Page objects take this and read
+  // their text selectors from the matching localization dictionary.
   language: Language;
-  // Frontend localization dictionary for the current language — page objects
-  // read text selectors from this so they match whatever language the app was
-  // switched to.
-  dict: Dict;
 
   login: LoginPage;
   accessManagementFrontPage: AccessManagementFrontPage;
@@ -59,28 +57,23 @@ const test = baseTest.extend<Fixtures>({
   // NEW: language fixture (default NB, overridable via test.use or project/use)
   language: [defaultLang, { option: true }],
 
-  // Derived from `language`: the localization dictionary page objects read from.
-  dict: async ({ language }, use) => {
-    await use(DICTIONARIES[language]);
-  },
-
   login: async ({ page, language }, use) => {
     await use(new LoginPage(page, language));
   },
-  accessManagementFrontPage: async ({ page, dict }, use) => {
-    await use(new AccessManagementFrontPage(page, dict));
+  accessManagementFrontPage: async ({ page, language }, use) => {
+    await use(new AccessManagementFrontPage(page, language));
   },
-  sidebarNav: async ({ page, dict }, use) => {
-    await use(new SidebarNav(page, dict));
+  sidebarNav: async ({ page, language }, use) => {
+    await use(new SidebarNav(page, language));
   },
   languageMenu: async ({ page }, use) => {
     await use(new LanguageMenu(page));
   },
-  systemUserPage: async ({ page, dict }, use) => {
-    await use(new SystemUserPage(page, dict));
+  systemUserPage: async ({ page, language }, use) => {
+    await use(new SystemUserPage(page, language));
   },
-  systemUserConfirmPage: async ({ page, dict }, use) => {
-    await use(new SystemUserConfirmPage(page, dict));
+  systemUserConfirmPage: async ({ page, language }, use) => {
+    await use(new SystemUserConfirmPage(page, language));
   },
   logoutUser: async ({ page }, use) => {
     await use(new logoutWithUser(page));
@@ -88,11 +81,10 @@ const test = baseTest.extend<Fixtures>({
   runAccessibilityTest: async ({ page }, use) => {
     await use(new runAccessibilityTests(page));
   },
-  delegation: async ({ page, dict }, use) => {
-    await use(new DelegationPage(page, dict));
+  delegation: async ({ page, language }, use) => {
+    await use(new DelegationPage(page, language));
   },
 
-  // UPDATED: inject language into ConsentPage constructor
   consentPage: async ({ page, language }, use) => {
     await use(new ConsentPage(page, language));
   },
@@ -101,12 +93,12 @@ const test = baseTest.extend<Fixtures>({
     await use(new AktorvalgHeader(page));
   },
 
-  clientDelegationPage: async ({ page, dict }, use) => {
-    await use(new ClientDelegationPage(page, dict));
+  clientDelegationPage: async ({ page, language }, use) => {
+    await use(new ClientDelegationPage(page, language));
   },
 
-  klientAdministrasjonPage: async ({ page }, use) => {
-    await use(new KlientAdministrasjonPage(page));
+  klientAdministrasjonPage: async ({ page, language }, use) => {
+    await use(new KlientAdministrasjonPage(page, language));
   },
 });
 

@@ -1,7 +1,7 @@
 import type { Page, Locator } from '@playwright/test';
 
 import { expect } from '@playwright/test';
-import { DICTIONARIES, Language, LanguageMenu, type Dict } from '../LanguageMenu';
+import { LANGUAGE_DICTIONARIES, Language, LanguageMenu, type Dict } from '../LanguageMenu';
 
 export { Language };
 
@@ -83,7 +83,7 @@ export class ConsentPage {
   //Default language to Norwegian
   constructor(page: Page, language: Language) {
     this.page = page;
-    this.languageDictionary = DICTIONARIES[language];
+    this.languageDictionary = LANGUAGE_DICTIONARIES[language];
     this.language = language; // now the fixture value wins
 
     // Controls/links

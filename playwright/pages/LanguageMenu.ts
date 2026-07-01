@@ -10,18 +10,23 @@ export enum Language {
   NN = 'NN',
 }
 
-/** Localization dictionary shape (bokmål is the canonical/complete one). */
+/** Localization dictionary shape — bokmål is the canonical, complete file. */
 export type Dict = typeof no_nb;
 
 /**
- * The frontend localization file for each language, keyed by the test's language.
- * nn/en are cast to the bokmål shape (the canonical/complete one); the keys the
- * tests reference exist in all three files.
+ * no_nn/en are partially untranslated: they miss some keys that no_nb has, so
+ * TS won't accept them as `Dict` directly. We treat bokmål as the schema and
+ * assert the others conform for the keys the tests actually use. (A key that
+ * exists in no_nb but not no_nn/en would be a runtime `undefined` here — add the
+ * translation in the frontend if that ever bites.)
  */
-export const DICTIONARIES: Record<Language, Dict> = {
+const asDict = (localization: unknown): Dict => localization as Dict;
+
+/** The frontend localization file for each language, keyed by the test's language. */
+export const LANGUAGE_DICTIONARIES: Record<Language, Dict> = {
   [Language.NB]: no_nb,
-  [Language.NN]: no_nn as unknown as Dict,
-  [Language.EN]: en as unknown as Dict,
+  [Language.NN]: asDict(no_nn),
+  [Language.EN]: asDict(en),
 };
 
 /**
