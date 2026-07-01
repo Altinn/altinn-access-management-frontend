@@ -1,7 +1,7 @@
 import type { Page, Locator } from '@playwright/test';
 
 import { expect } from '@playwright/test';
-import { DICTIONARIES, Language, LanguageMenu } from '../LanguageMenu';
+import { DICTIONARIES, Language, LanguageMenu, type Dict } from '../LanguageMenu';
 
 export { Language };
 
@@ -78,7 +78,7 @@ export class ConsentPage {
   readonly textBehalfOfDigdir: Locator;
 
   // Used for selecting language files
-  private languageDictionary: any;
+  private languageDictionary: Dict;
 
   //Default language to Norwegian
   constructor(page: Page, language: Language) {

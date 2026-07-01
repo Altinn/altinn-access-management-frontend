@@ -1,7 +1,13 @@
 import { expect, test } from 'playwright/fixture/pomFixture';
+import { Language } from 'playwright/pages/LanguageMenu';
 
 import { TestdataApi } from 'playwright/util/TestdataApi';
 import { ApiRequests } from 'playwright/api-requests/SystemUserApiRequests';
+
+// Runs in nynorsk on purpose: exercises the before-login language pinning
+// (settings API) and proves the dict-driven selectors work in a non-default
+// language. The rest of the suites run in the default bokmål.
+test.use({ language: Language.NN });
 const vendorOrgNumber = '310547891';
 const testUserPid = '14824497789';
 const testOrgName = 'Aktverdig Retorisk Ape';

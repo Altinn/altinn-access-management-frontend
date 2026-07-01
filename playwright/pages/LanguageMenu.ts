@@ -35,6 +35,17 @@ export const HTML_LANG: Record<Language, string> = {
 };
 
 /**
+ * The `languageCode` the backend settings API expects
+ * (PUT /accessmanagement/api/v1/settings/language/selectedLanguage), matching
+ * the i18n resource keys in src/localizations.
+ */
+export const LANGUAGE_CODE: Record<Language, string> = {
+  [Language.NB]: 'no_nb',
+  [Language.NN]: 'no_nn',
+  [Language.EN]: 'en',
+};
+
+/**
  * The locale picker in the Altinn header / page menu. The three language
  * choices render as `menuitemradio` items labelled with their own
  * (untranslated) language names. Shared across the header components that

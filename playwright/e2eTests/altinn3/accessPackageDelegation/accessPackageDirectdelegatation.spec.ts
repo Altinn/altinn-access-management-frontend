@@ -32,22 +32,12 @@ test.describe('Delegate access pacakge from Org-A(Avgiver) to Org-B(Rettighetsha
     login,
     aktorvalgHeader,
     accessManagementFrontPage,
-    language,
   }) => {
     await test.step('Log in', async () => {
+      // LoginToAccessManagement pins the app language (before login, via the
+      // settings API) so selectors match regardless of the user's profile.
       await login.LoginToAccessManagement('04856996188');
       await aktorvalgHeader.selectActorFromHeaderMenu('SUBJEKTIV ELASTISK TIGER AS');
-    });
-
-    // Pin the app language through the real header menu (not the profile), so
-    // selectors match regardless of the test user's profile language. Must run
-    // after actor selection — the brukerflate header/language menu only exists
-    // once an actor is chosen (verified: setting it inside login fails).
-    await test.step('Set language', async () => {
-      await aktorvalgHeader.selectLanguage(language);
-    });
-
-    await test.step('Go to users', async () => {
       await accessManagementFrontPage.goToUsers();
     });
 

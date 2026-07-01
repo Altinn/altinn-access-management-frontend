@@ -47,6 +47,14 @@ export function withPoaObject(template: string, poaObject: string): string {
 }
 
 /**
+ * Fills the {{customerName}} placeholder in a localization string,
+ * e.g. "Legg til {{customerName}} i systemtilgang" -> "Legg til Ola i systemtilgang".
+ */
+export function withCustomerName(template: string, customerName: string): string {
+  return template.replace('{{customerName}}', customerName);
+}
+
+/**
  * Adds time to the current UTC date and returns ISO string
  */
 export function addTimeToNowUtc(opts: {

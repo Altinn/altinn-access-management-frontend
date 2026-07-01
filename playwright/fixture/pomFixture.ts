@@ -64,8 +64,8 @@ const test = baseTest.extend<Fixtures>({
     await use(DICTIONARIES[language]);
   },
 
-  login: async ({ page }, use) => {
-    await use(new LoginPage(page));
+  login: async ({ page, language }, use) => {
+    await use(new LoginPage(page, language));
   },
   accessManagementFrontPage: async ({ page, dict }, use) => {
     await use(new AccessManagementFrontPage(page, dict));
@@ -79,8 +79,8 @@ const test = baseTest.extend<Fixtures>({
   systemUserPage: async ({ page, dict }, use) => {
     await use(new SystemUserPage(page, dict));
   },
-  systemUserConfirmPage: async ({ page }, use) => {
-    await use(new SystemUserConfirmPage(page));
+  systemUserConfirmPage: async ({ page, dict }, use) => {
+    await use(new SystemUserConfirmPage(page, dict));
   },
   logoutUser: async ({ page }, use) => {
     await use(new logoutWithUser(page));
@@ -101,8 +101,8 @@ const test = baseTest.extend<Fixtures>({
     await use(new AktorvalgHeader(page));
   },
 
-  clientDelegationPage: async ({ page }, use) => {
-    await use(new ClientDelegationPage(page));
+  clientDelegationPage: async ({ page, dict }, use) => {
+    await use(new ClientDelegationPage(page, dict));
   },
 
   klientAdministrasjonPage: async ({ page }, use) => {
