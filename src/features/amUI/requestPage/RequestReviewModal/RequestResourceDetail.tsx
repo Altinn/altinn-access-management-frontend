@@ -6,11 +6,13 @@ import { useAutoFocusRef } from '@/resources/hooks/useAutoFocusRef';
 import type { ServiceResource } from '@/rtk/features/singleRights/singleRightsApi';
 import { ResourceInfo } from '../../common/DelegationModal/SingleRights/ResourceInfo';
 import { DelegationAction } from '../../common/DelegationModal/EditModal';
+import { ProcessedStatusInfo } from './ProcessedStatusInfo';
 import classes from './RequestReviewModal.module.css';
 
 interface RequestResourceDetailProps {
   resource: ServiceResource;
   processedStatus?: ProcessedStatus;
+  handledAt?: string;
   actionLoading: 'approve' | 'reject' | null;
   onBack: () => void;
   onApprove: () => void;
@@ -22,6 +24,7 @@ interface RequestResourceDetailProps {
 export const RequestResourceDetail = ({
   resource,
   processedStatus,
+  handledAt,
   actionLoading,
   onBack,
   onApprove,
@@ -43,6 +46,12 @@ export const RequestResourceDetail = ({
         <ArrowLeftIcon aria-hidden='true' />
         {t('common.back')}
       </DsButton>
+      {processedStatus && (
+        <ProcessedStatusInfo
+          status={processedStatus}
+          handledAt={handledAt}
+        />
+      )}
       <ResourceInfo
         resource={resource}
         toPartyName={toPartyName}

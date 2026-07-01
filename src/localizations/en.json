@@ -1071,6 +1071,7 @@
     "reject_request": "Reject request",
     "review_approved": "Approved",
     "review_rejected": "Rejected",
+    "review_handled_on": "{{status}} on {{date}}",
     "review_warning": "You cannot approve",
     "review_user_link": "See the powers of attorney {{name}} has now",
     "review_close_info": "If you do not choose to approve or reject a request, it will remain as an active request.",

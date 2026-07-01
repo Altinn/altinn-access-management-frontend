@@ -8,10 +8,12 @@ import { PackageHeader } from '../../common/DelegationModal/AccessPackages/Packa
 import { PackageMeta } from '../../common/DelegationModal/AccessPackages/PackageMeta';
 import { StatusSection } from '../../common/StatusSection/StatusSection';
 import { useAutoFocusRef } from '@/resources/hooks/useAutoFocusRef';
+import { ProcessedStatusInfo } from './ProcessedStatusInfo';
 
 interface RequestPackageDetailProps {
   pkg: AccessPackage;
   processedStatus?: ProcessedStatus;
+  handledAt?: string;
   actionLoading: 'approve' | 'reject' | null;
   onBack: () => void;
   onApprove: () => void;
@@ -23,6 +25,7 @@ interface RequestPackageDetailProps {
 export const RequestPackageDetail = ({
   pkg,
   processedStatus,
+  handledAt,
   actionLoading,
   onBack,
   onApprove,
@@ -45,6 +48,12 @@ export const RequestPackageDetail = ({
         {t('common.back')}
       </DsButton>
       <PackageHeader name={pkg.name} />
+      {processedStatus && (
+        <ProcessedStatusInfo
+          status={processedStatus}
+          handledAt={handledAt}
+        />
+      )}
       <StatusSection
         userHasAccess={processedStatus === 'approved'}
         toPartyName={toPartyName}
