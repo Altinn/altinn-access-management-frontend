@@ -506,7 +506,8 @@ namespace Altinn.AccessManagement.UI.Core.Services
             {
                 Id = partyId,
                 Name = party?.Name ?? string.Empty,
-                Type = isSubUnit ? PartyType.SubUnit : party?.PartyTypeName ?? PartyType.Organisation
+                Type = isSubUnit ? PartyType.SubUnit : party?.PartyTypeName ?? PartyType.Organisation,
+                OrgNo = party.OrgNumber
             };
         }
     }

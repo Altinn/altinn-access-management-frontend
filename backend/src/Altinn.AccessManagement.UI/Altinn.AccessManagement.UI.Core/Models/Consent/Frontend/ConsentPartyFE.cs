@@ -21,5 +21,10 @@ namespace Altinn.AccessManagement.UI.Core.Models.Consent.Frontend
         /// Consent party Type, Person or Organization
         /// </summary>
         public PartyType Type { get; set; }
+
+        /// <summary>
+        /// Organization number of party, if party is an Organization
+        /// </summary>
+        public string OrgNo { get; set; }
     }
 }
