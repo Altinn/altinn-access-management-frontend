@@ -110,47 +110,48 @@ export const ActiveConsentsPageContent = ({
         </DsLink>
       </div>
       <div>
-        {!isLoading && !hasPermission && (
-          <div>{t('active_consents.no_active_consents_permission')}</div>
-        )}
-        {isLoading && (
+        {isLoading ? (
           <List>
             <LoadingListItem />
             <LoadingListItem />
           </List>
-        )}
-        {loadActiveConsentsError && (
-          <DsAlert data-color='danger'>{t('active_consents.load_consents_error')}</DsAlert>
-        )}
-        {loadIdPortenAuthorizationsError && (
-          <DsAlert data-color='danger'>
-            {t('active_consents.load_idporten_authorizations_error')}
-          </DsAlert>
-        )}
-        {groupedActiveConsents && Object.keys(groupedActiveConsents).length === 0 && (
-          <DsParagraph>{t('active_consents.no_active_consents')}</DsParagraph>
-        )}
-        {groupedActiveConsents && (
-          <List>
-            {Object.keys(groupedActiveConsents).map((partyId) => (
-              <ConsentListItem
-                key={partyId}
-                title={groupedActiveConsents[partyId][0].title}
-                partyType={reportee?.type}
-                subItems={groupedActiveConsents[partyId].map((item) => ({
-                  id: item.id,
-                  title: item.title,
-                  description: item.consentedDate ? toDateTimeString(item.consentedDate) : '',
-                  isNew: newlyCreatedId === item.id,
-                  consentType: item.consentType,
-                  badgeText: item.isPoa
-                    ? t('active_consents.see_poa')
-                    : t('active_consents.see_consent'),
-                }))}
-                onClick={showConsentDetails}
-              />
-            ))}
-          </List>
+        ) : (
+          <>
+            {!hasPermission && <div>{t('active_consents.no_active_consents_permission')}</div>}
+            {loadActiveConsentsError && (
+              <DsAlert data-color='danger'>{t('active_consents.load_consents_error')}</DsAlert>
+            )}
+            {loadIdPortenAuthorizationsError && (
+              <DsAlert data-color='danger'>
+                {t('active_consents.load_idporten_authorizations_error')}
+              </DsAlert>
+            )}
+            {groupedActiveConsents && Object.keys(groupedActiveConsents).length === 0 && (
+              <DsParagraph>{t('active_consents.no_active_consents')}</DsParagraph>
+            )}
+            {groupedActiveConsents && (
+              <List>
+                {Object.keys(groupedActiveConsents).map((partyId) => (
+                  <ConsentListItem
+                    key={partyId}
+                    title={groupedActiveConsents[partyId][0].title}
+                    partyType={reportee?.type}
+                    subItems={groupedActiveConsents[partyId].map((item) => ({
+                      id: item.id,
+                      title: item.title,
+                      description: item.consentedDate ? toDateTimeString(item.consentedDate) : '',
+                      isNew: newlyCreatedId === item.id,
+                      consentType: item.consentType,
+                      badgeText: item.isPoa
+                        ? t('active_consents.see_poa')
+                        : t('active_consents.see_consent'),
+                    }))}
+                    onClick={showConsentDetails}
+                  />
+                ))}
+              </List>
+            )}
+          </>
         )}
       </div>
     </>
