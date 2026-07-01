@@ -8,8 +8,6 @@ export class DelegationPage {
   readonly page: Page;
   readonly dict: Dict;
 
-  readonly accessRightsLink: Locator;
-  readonly newBrukerflateLink: Locator;
   readonly addUserBtn: Locator;
   readonly addOrgBtn: Locator;
   readonly grantAccessBtn: Locator;
@@ -18,8 +16,6 @@ export class DelegationPage {
   readonly confirmDeleteBtn: Locator;
   readonly closeModalBtn: Locator;
   readonly backBtn: Locator;
-  readonly ourAcessButton: Locator;
-  readonly rightsAccessLink: Locator;
   readonly menubtn: Locator;
   readonly logoutBtn: Locator;
   readonly packageSearchBox: Locator;
@@ -28,12 +24,6 @@ export class DelegationPage {
   constructor(page: Page, dict: Dict = DICTIONARIES[Language.NB]) {
     this.page = page;
     this.dict = dict;
-    // NB: no matching frontend localization key found for these three (old
-    // brukerflate entry points) — kept as literals.
-    this.accessRightsLink = page.getByRole('link', { name: 'Andre med rettigheter til' });
-    this.newBrukerflateLink = page.getByRole('link', { name: 'Klikk her' });
-    this.ourAcessButton = page.getByRole('button', { name: 'Våre tilganger hos andre' });
-    this.rightsAccessLink = page.getByRole('link', { name: 'Våre tilganger hos andre' });
 
     this.addUserBtn = page.getByRole('button', { name: this.dict.new_user_modal.trigger_button });
     this.addOrgBtn = page.getByRole('button', { name: this.dict.new_user_modal.add_org_button });
@@ -55,14 +45,6 @@ export class DelegationPage {
       .getByRole('dialog', { name: this.dict.delegation_modal.aria_label.access_package })
       .getByRole('searchbox', { name: this.dict.access_packages.search_label });
     this.clearSearchButton = page.getByRole('button', { name: /Tøm/ });
-  }
-
-  async openDelegationFlow() {
-    await expect(this.accessRightsLink).toBeVisible();
-    await this.accessRightsLink.click();
-
-    await expect(this.newBrukerflateLink).toBeVisible();
-    await this.newBrukerflateLink.click();
   }
 
   async addUser() {
@@ -212,64 +194,6 @@ export class DelegationPage {
     await expect(confirmBtn).toBeVisible({ timeout: 10000 });
     await confirmBtn.click();
   }
-  async newAccessRights(orgName: string) {
-    await this.rightsAccessLink.click();
-
-    //Click on Orgnization
-    const orgbButton = this.page.getByRole('button', { name: orgName }).first();
-    await expect(orgbButton).toBeVisible();
-    await orgbButton.click();
-
-    // TODO FIX THIS
-    await this.page.getByText('UUtgått Fleksibel Tiger ASOrg.nr. 312973367').click();
-  }
-
-  async chooseOrg(chooseorgName: string) {
-    const nameRegex = new RegExp(chooseorgName, 'i');
-
-    const orgButton = this.page.getByRole('button', { name: nameRegex }).first();
-    const orgLink = this.page.getByRole('link', { name: nameRegex }).first();
-
-    // 1) Wait until either button is visible
-    await expect
-      .poll(
-        async () => ({
-          button: await orgButton.isVisible().catch(() => false),
-          link: await orgLink.isVisible().catch(() => false),
-        }),
-        {
-          timeout: 30_000,
-          message: `Org "${chooseorgName}" not visible as button or link`,
-        },
-      )
-      .toMatchObject({});
-
-    // 2) If link is visible, click it directly
-    if (await orgLink.isVisible().catch(() => false)) {
-      await orgLink.click();
-      return;
-    }
-
-    // 3) Otherwise click button, then wait for link and click it
-    await orgButton.click();
-
-    if (await orgLink.isVisible().catch(() => false)) {
-      await orgLink.click();
-      return;
-    }
-
-    await this.page.waitForLoadState('domcontentloaded');
-
-    if (await orgLink.isVisible().catch(() => false)) {
-      await orgLink.click();
-      return;
-    }
-
-    throw new Error(
-      `Org "${chooseorgName}" found but could not be activated (button/link flow failed).`,
-    );
-  }
-
   async verifyDelegatedPackage(areaName: string, pacakageName: string) {
     const areaBtn = this.page.getByRole('list').getByRole('button', { name: areaName }).first();
     await expect(areaBtn).toBeVisible();

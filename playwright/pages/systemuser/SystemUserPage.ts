@@ -1,8 +1,8 @@
 import type { Locator, Page } from '@playwright/test';
 import { expect } from '@playwright/test';
 
-import noNb from '../../../src/localizations/no_nb.json';
 import { env } from 'playwright/util/helper';
+import { DICTIONARIES, Language, type Dict } from '../LanguageMenu';
 
 export class SystemUserPage {
   public readonly selectVendorLabel: Locator;
@@ -20,61 +20,64 @@ export class SystemUserPage {
   public readonly finish: Locator;
   public readonly requestsMenuItem: Locator;
 
-  constructor(public page: Page) {
+  constructor(
+    public page: Page,
+    dict: Dict = DICTIONARIES[Language.NB],
+  ) {
     this.selectVendorLabel = this.page.getByLabel(
-      noNb.systemuser_overviewpage.new_system_user_button,
+      dict.systemuser_overviewpage.new_system_user_button,
     );
 
     this.newSystemUserLabel = page.locator('span', {
-      hasText: noNb.systemuser_overviewpage.new_system_user,
+      hasText: dict.systemuser_overviewpage.new_system_user,
     });
 
     this.createSystemUserLink = page.getByRole('link', {
-      name: noNb.systemuser_overviewpage.new_system_user_button,
+      name: dict.systemuser_overviewpage.new_system_user_button,
     });
 
     this.continueButton = this.page.getByRole('button', {
-      name: noNb.systemuser_creationpage.confirm_button,
+      name: dict.systemuser_creationpage.confirm_button,
     });
     this.createSystemUserButton = this.page.getByRole('button', {
-      name: noNb.systemuser_overviewpage.new_system_user_button,
+      name: dict.systemuser_overviewpage.new_system_user_button,
     });
     this.systemUserCreatedHeading = this.page.getByRole('heading', {
-      name: noNb.systemuser_overviewpage.existing_system_users_title,
+      name: dict.systemuser_overviewpage.existing_system_users_title,
     });
 
     this.editSystemUserLink = this.page.getByRole('link', {
-      name: noNb.systemuser_overviewpage.edit_system_user,
+      name: dict.systemuser_overviewpage.edit_system_user,
     });
 
     this.deleteSystemUserButton = this.page.getByRole('button', {
-      name: noNb.systemuser_detailpage.delete_systemuser,
+      name: dict.systemuser_detailpage.delete_systemuser,
     });
 
     this.finalDeleteSystemUserButton = this.page
       .getByRole('button', {
-        name: noNb.systemuser_detailpage.delete_systemuser,
+        name: dict.systemuser_detailpage.delete_systemuser,
       })
       .nth(1);
 
     this.createNewSystemUserHeader = this.page.getByRole('heading', {
-      name: noNb.systemuser_overviewpage.sub_title_text,
+      name: dict.systemuser_overviewpage.sub_title_text,
     });
 
     this.mainHeader = this.page.getByRole('heading', {
-      name: noNb.systemuser_overviewpage.banner_title,
+      name: dict.systemuser_overviewpage.banner_title,
       level: 1,
     });
 
     this.escalateConfirmButton = this.page.getByRole('button', {
-      name: noNb.systemuser_request.escalate_confirm_button,
+      name: dict.systemuser_request.escalate_confirm_button,
     });
 
     this.finish = this.page.getByRole('button', {
-      name: noNb.systemuser_request.escalate_close_button,
+      name: dict.systemuser_request.escalate_close_button,
     });
 
-    this.requestsMenuItem = this.page.getByText(noNb.sidebar.requests, { exact: true });
+    this.requestsMenuItem = this.page.getByText(dict.sidebar.requests, { exact: true });
   }
 
   requestLink(requestId: string) {

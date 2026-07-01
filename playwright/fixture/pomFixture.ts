@@ -76,8 +76,8 @@ const test = baseTest.extend<Fixtures>({
   languageMenu: async ({ page }, use) => {
     await use(new LanguageMenu(page));
   },
-  systemUserPage: async ({ page }, use) => {
-    await use(new SystemUserPage(page));
+  systemUserPage: async ({ page, dict }, use) => {
+    await use(new SystemUserPage(page, dict));
   },
   systemUserConfirmPage: async ({ page }, use) => {
     await use(new SystemUserConfirmPage(page));
