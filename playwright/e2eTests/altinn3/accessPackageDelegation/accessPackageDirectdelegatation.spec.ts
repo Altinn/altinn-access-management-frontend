@@ -40,7 +40,9 @@ test.describe('Delegate access pacakge from Org-A(Avgiver) to Org-B(Rettighetsha
     });
 
     // Pin the app language through the real header menu (not the profile), so
-    // selectors match regardless of which test user we logged in as.
+    // selectors match regardless of the test user's profile language. Must run
+    // after actor selection — the brukerflate header/language menu only exists
+    // once an actor is chosen (verified: setting it inside login fails).
     await test.step('Set language', async () => {
       await aktorvalgHeader.selectLanguage(language);
     });
