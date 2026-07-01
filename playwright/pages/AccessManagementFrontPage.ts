@@ -8,7 +8,6 @@ export class AccessManagementFrontPage {
   readonly page: Page;
   readonly dict: Dict;
   readonly sidebar: SidebarNav;
-  readonly tryNewAccessManagementButton: Locator;
   readonly newUserButton: Locator;
   readonly singleServicesTab: Locator;
   readonly singleServicesPanel: Locator;
@@ -18,11 +17,6 @@ export class AccessManagementFrontPage {
     this.dict = dict;
 
     this.sidebar = new SidebarNav(page, dict);
-
-    // No localization key for this one — kept literal.
-    this.tryNewAccessManagementButton = this.page.getByRole('button', {
-      name: 'Prøv ny tilgangsstyring',
-    });
     this.newUserButton = this.page.getByRole('button', {
       name: dict.new_user_modal.trigger_button,
     });
@@ -34,7 +28,6 @@ export class AccessManagementFrontPage {
     });
   }
 
-  // --- Sidebar facade: delegate to the SidebarNav component ---------------
   get systemUserMenuLink(): Locator {
     return this.sidebar.systemAccess;
   }
