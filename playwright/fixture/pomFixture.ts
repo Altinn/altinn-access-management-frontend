@@ -1,7 +1,7 @@
 // pomFixtures.ts
 import { test as baseTest, expect } from '@playwright/test';
 import { ConsentPage, Language } from 'playwright/pages/consent/ConsentPage';
-import { DICTIONARIES, type Dict } from 'playwright/pages/LanguageMenu';
+import { DICTIONARIES, LanguageMenu, type Dict } from 'playwright/pages/LanguageMenu';
 import { LoginPage, logoutWithUser } from 'playwright/pages/LoginPage';
 import { AccessManagementFrontPage } from 'playwright/pages/AccessManagementFrontPage';
 import { SidebarNav } from 'playwright/pages/SidebarNav';
@@ -26,6 +26,7 @@ type Fixtures = {
   login: LoginPage;
   accessManagementFrontPage: AccessManagementFrontPage;
   sidebarNav: SidebarNav;
+  languageMenu: LanguageMenu;
   systemUserPage: SystemUserPage;
   systemUserConfirmPage: SystemUserConfirmPage;
   logoutUser: logoutWithUser;
@@ -71,6 +72,9 @@ const test = baseTest.extend<Fixtures>({
   },
   sidebarNav: async ({ page, dict }, use) => {
     await use(new SidebarNav(page, dict));
+  },
+  languageMenu: async ({ page }, use) => {
+    await use(new LanguageMenu(page));
   },
   systemUserPage: async ({ page }, use) => {
     await use(new SystemUserPage(page));

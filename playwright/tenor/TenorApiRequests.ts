@@ -333,7 +333,6 @@ export class TenorApiRequests {
   ): Promise<TenorDocument[]> {
     const token = await this.getToken();
     const dokumenter = new Map<string, TenorDocument>(); // dedup på tenorMetadata.id
-    let utenId = 0; // dokumenter uten id beholdes med egen nøkkel
     // Tillat noen ekstra batcher i tilfelle overlapp mellom seeds.
     const maksBatcher = Math.ceil(antall / TENOR_MAX_PER_PAGE) + 5;
 
@@ -359,7 +358,8 @@ export class TenorApiRequests {
       const docs = json.dokumentListe ?? [];
       if (docs.length === 0) break; // ikke flere treff å hente
       for (const d of docs) {
-        const key = d.tenorMetadata?.id ?? `__utenId_${utenId++}`;
+        const key = d.tenorMetadata?.id;
+        if (!key) continue; // uten id kan vi ikke garantere unikhet – hopp over
         if (!dokumenter.has(key)) dokumenter.set(key, d);
       }
     }

@@ -27,12 +27,12 @@ test.describe('System Register', async () => {
 
     await test.step('Create system user', async () => {
       // this is assigned as a text in code base, will just add more confusion to import that than hardcoding this here
-      await systemUserPage.CREATE_SYSTEM_USER_LINK.click();
+      await systemUserPage.createSystemUserLink.click();
       await systemUserPage.selectSystem(system);
     });
 
     await test.step('Verify system user created', async () => {
-      await expect(systemUserPage.SYSTEMUSER_CREATED_HEADING).toBeVisible();
+      await expect(systemUserPage.systemUserCreatedHeading).toBeVisible();
       await expect(systemUserPage.systemUserLink(system)).toBeVisible();
     });
   });
