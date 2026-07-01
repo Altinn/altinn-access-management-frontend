@@ -4,12 +4,9 @@ import { expect } from '@playwright/test';
 import en from '../../../src/localizations/en.json';
 import nn from '../../../src/localizations/no_nn.json';
 import no_nb from '@/localizations/no_nb.json';
+import { Language, LanguageMenu } from '../LanguageMenu';
 
-export enum Language {
-  NB = 'NB',
-  EN = 'EN',
-  NN = 'NN',
-}
+export { Language };
 
 const DICTIONARIES = {
   [Language.NB]: no_nb,
@@ -29,9 +26,7 @@ export class ConsentPage {
   readonly buttonFullmaktReject: Locator;
   readonly menuButton: Locator;
   readonly languagePicker: Locator;
-  readonly norwegian: Locator;
-  readonly nynorsk: Locator;
-  readonly english: Locator;
+  readonly languageMenu: LanguageMenu;
 
   // Headings
   readonly standardHeading: Locator;
@@ -106,9 +101,7 @@ export class ConsentPage {
     // knappen der.
     this.menuButton = page.getByRole('navigation', { name: 'hovednavigasjon' }).getByRole('button');
     this.languagePicker = page.getByLabel('Språk/language');
-    this.norwegian = page.locator('#no_nb');
-    this.english = page.locator('#en');
-    this.nynorsk = page.locator('#no_nn');
+    this.languageMenu = new LanguageMenu(page);
     this.linkAltinn = page.getByRole('link', { name: /altinn\.no/i });
     // Language-specific button selectors
     const buttonTexts = {
@@ -478,21 +471,7 @@ export class ConsentPage {
 
   async pickLanguage(lang: Language): Promise<void> {
     await this.languagePicker.click();
-
-    switch (lang) {
-      case Language.NB:
-        await this.norwegian.click();
-        break;
-      case Language.NN:
-        await this.nynorsk.click();
-        break;
-      case Language.EN:
-        await this.english.click();
-        break;
-      default:
-        await this.norwegian.click();
-        break;
-    }
+    await this.languageMenu.select(lang);
   }
 
   async waitForLogout(redirectUrl: string, timeout = 30000): Promise<void> {

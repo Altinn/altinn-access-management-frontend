@@ -1,10 +1,9 @@
 /* eslint-disable no-console */
 import fs from 'fs';
 import path from 'path';
-// eslint-disable-next-line import/default
-import dotenv from 'dotenv';
 
 import { Token } from 'playwright/api-requests/Token';
+import { loadEnv } from 'playwright/util/helper';
 import { TenorApiRequests } from './TenorApiRequests';
 
 /**
@@ -19,7 +18,7 @@ import { TenorApiRequests } from './TenorApiRequests';
  * K6/testdata/authentication/consent/{consenter-persons,consentee-orgs}, slik at
  * disse 100 personene starter uten consent-historikk.
  *
- * Flyt (samme som fetchConsentEventTestdata.ts):
+ * Flyt:
  *   1. Hent en pool fra Tenor (freg: bosatt+myndig, brreg: AS).
  *   2. Filtrer bort dem som finnes i den delte poolen.
  *   3. Slå opp partyUuid i Altinn Register (bulk, 100 av gangen) per miljø.
@@ -58,19 +57,6 @@ const ENVS: EnvConfig[] = [
     subKeyEnv: 'YT01_REGISTER_SUBSCRIPTION_KEY',
   },
 ];
-
-function lastEnv(envName: string): void {
-  const configDir = path.join(__dirname, '..', 'config');
-  dotenv.config({
-    path: [
-      path.join(configDir, '.env'),
-      path.join(configDir, `.env.${envName}`),
-      path.join(configDir, '.env.local'),
-      path.join(configDir, `.env.${envName}.local`),
-    ],
-    override: true,
-  });
-}
 
 interface RegisterParty {
   partyType?: string;
@@ -150,7 +136,7 @@ function writeCsv(filePath: string, lines: string[]): void {
 }
 
 async function main(): Promise<void> {
-  lastEnv('tt02');
+  loadEnv('tt02');
 
   const availableEnvs = ENVS.filter((e) => {
     if (process.env[e.subKeyEnv]) return true;
@@ -203,7 +189,7 @@ async function main(): Promise<void> {
   const orgByEnv: Record<string, Map<string, string>> = {};
 
   for (const envCfg of availableEnvs) {
-    lastEnv(envCfg.name);
+    loadEnv(envCfg.name);
     process.env.ENV_NAME = envCfg.name;
     const token = new Token();
     const platformToken = await token.getPlatformToken();

@@ -3,6 +3,7 @@ import { test as baseTest, expect } from '@playwright/test';
 import { ConsentPage, Language } from 'playwright/pages/consent/ConsentPage';
 import { LoginPage, logoutWithUser } from 'playwright/pages/LoginPage';
 import { AccessManagementFrontPage } from 'playwright/pages/AccessManagementFrontPage';
+import { SidebarNav } from 'playwright/pages/SidebarNav';
 import { SystemUserPage } from 'playwright/pages/systemuser/SystemUserPage';
 import { SystemUserConfirmPage } from 'playwright/pages/systemuser/SystemUserConfirmPage';
 import { DelegationPage } from 'playwright/pages/profile/accessPkgDelegationPage';
@@ -24,11 +25,11 @@ const defaultLang = Language.NB;
 
 type Fixtures = {
   slowNetwork: void;
-  // NEW: make language an overridable option
   language: Language;
 
   login: LoginPage;
   accessManagementFrontPage: AccessManagementFrontPage;
+  sidebarNav: SidebarNav;
   systemUserPage: SystemUserPage;
   systemUserConfirmPage: SystemUserConfirmPage;
   delegate: delegateToUser;
@@ -74,6 +75,9 @@ const test = baseTest.extend<Fixtures>({
   accessManagementFrontPage: async ({ page }, use) => {
     await use(new AccessManagementFrontPage(page));
   },
+  sidebarNav: async ({ page }, use) => {
+    await use(new SidebarNav(page));
+  },
   systemUserPage: async ({ page }, use) => {
     await use(new SystemUserPage(page));
   },
@@ -116,7 +120,7 @@ const test = baseTest.extend<Fixtures>({
     await use(new ConsentPage(page, language));
   },
 
-  aktorvalgHeader: async ({ page, language }, use) => {
+  aktorvalgHeader: async ({ page }, use) => {
     await use(new AktorvalgHeader(page));
   },
 

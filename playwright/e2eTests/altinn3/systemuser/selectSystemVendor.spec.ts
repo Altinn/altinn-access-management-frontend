@@ -2,7 +2,6 @@ import { expect, test } from 'playwright/fixture/pomFixture';
 
 import { TestdataApi } from 'playwright/util/TestdataApi';
 import { ApiRequests } from 'playwright/api-requests/SystemUserApiRequests';
-import { env } from 'playwright/util/helper';
 const vendorOrgNumber = '310547891';
 const testUserPid = '14824497789';
 const testOrgName = 'Aktverdig Retorisk Ape';
@@ -23,7 +22,7 @@ test.describe('System Register', async () => {
     accessManagementFrontPage,
   }): Promise<void> => {
     await test.step('Navigate to system user page', async () => {
-      await accessManagementFrontPage.systemAccessLink.click();
+      await accessManagementFrontPage.systemUserMenuLink.click();
     });
 
     await test.step('Create system user', async () => {

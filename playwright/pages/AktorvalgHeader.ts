@@ -1,6 +1,8 @@
 import type { Locator, Page } from '@playwright/test';
 import { expect } from '@playwright/test';
 
+import { Language, LanguageMenu } from './LanguageMenu';
+
 export class AktorvalgHeader {
   readonly page: Page;
   readonly infoportalLogo: Locator;
@@ -19,7 +21,7 @@ export class AktorvalgHeader {
   readonly menuLogout: Locator;
   readonly aktorvalgSearch: Locator;
   readonly showDeletedSwitch: Locator;
-  readonly bokmalLanguageOption: Locator;
+  readonly languageMenu: LanguageMenu;
   readonly VisibleActors: Locator;
   readonly addFavoriteButtons: Locator;
   readonly removeFavoriteButtons: Locator;
@@ -47,7 +49,7 @@ export class AktorvalgHeader {
     this.menuLogout = this.page.getByRole('button', { name: 'Logg ut' });
     this.aktorvalgSearch = this.page.getByRole('searchbox');
     this.showDeletedSwitch = this.page.getByRole('switch', { name: 'Vis slettede' });
-    this.bokmalLanguageOption = this.page.locator('#no_nb');
+    this.languageMenu = new LanguageMenu(page);
     this.addFavoriteButtons = this.page.getByRole('button', { name: 'Legg til i favorittar' });
     this.removeFavoriteButtons = this.page.getByRole('button', { name: 'Fjern frå favorittar' });
     this.closeMenuButton = this.page.locator('span', { hasText: 'Meny' });
@@ -201,7 +203,7 @@ export class AktorvalgHeader {
   async chooseBokmalLanguage() {
     await this.menuButton.click();
     await this.menuLanguage.click();
-    await this.bokmalLanguageOption.click();
+    await this.languageMenu.select(Language.NB);
   }
 
   async expectedNumberOfActors(number: number) {

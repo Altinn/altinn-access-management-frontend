@@ -1,8 +1,34 @@
+// eslint-disable-next-line import/default
+import dotenv from 'dotenv';
+import path from 'path';
+
 export function env(name: string): string {
   const value = process.env[name];
   if (value === undefined)
     throw new Error(`Missing required env variable read from config with name: ${name}`);
   return value;
+}
+
+/**
+ * Loads the playwright/config .env files for a given environment, in the same
+ * order and with the same override semantics as playwright.config.ts:
+ *   .env -> .env.<env> -> .env.local -> .env.<env>.local
+ *
+ * Shared by the standalone Tenor CLIs (run via tsx) so they don't each re-declare
+ * their own loader. Pass `override: false` to keep already-set process.env values
+ * (used when re-loading per environment in multi-env scripts).
+ */
+export function loadEnv(envName: string, { override = true }: { override?: boolean } = {}): void {
+  const configDir = path.join(__dirname, '..', 'config');
+  dotenv.config({
+    path: [
+      path.join(configDir, '.env'),
+      path.join(configDir, `.env.${envName}`),
+      path.join(configDir, '.env.local'),
+      path.join(configDir, `.env.${envName}.local`),
+    ],
+    override,
+  });
 }
 
 /**

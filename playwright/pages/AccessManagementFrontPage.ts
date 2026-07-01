@@ -1,14 +1,11 @@
 import { expect, type Locator, type Page } from '@playwright/test';
 
+import { SidebarNav } from './SidebarNav';
+
 export class AccessManagementFrontPage {
   readonly page: Page;
-  readonly systemAccessLink: Locator;
-  readonly usersLink: Locator;
-  readonly powersOfAttorneyLink: Locator;
-  readonly ourAccessAtOthersLink: Locator;
-  readonly consentAndPowerOfAttorneyAgreementsLink: Locator;
+  readonly sidebar: SidebarNav;
   readonly tryNewAccessManagementButton: Locator;
-  readonly klientadministrasjonButton: Locator;
   readonly newUserButton: Locator;
   readonly singleServicesTab: Locator;
   readonly singleServicesPanel: Locator;
@@ -16,41 +13,47 @@ export class AccessManagementFrontPage {
   constructor(page: Page) {
     this.page = page;
 
-    this.systemAccessLink = this.page.getByRole('link', { name: 'Systemtilganger' });
+    this.sidebar = new SidebarNav(page);
 
-    this.usersLink = this.page.getByRole('link', { name: 'Brukere' });
-
-    this.powersOfAttorneyLink = this.page.getByRole('link', { name: 'Fullmakter' });
-
-    this.ourAccessAtOthersLink = this.page.getByRole('link', {
-      name: 'Fullmakter hos andre',
-    });
-    this.consentAndPowerOfAttorneyAgreementsLink = this.page.getByRole('link', {
-      name: 'Samtykke- og fullmaktsavtaler',
-    });
     this.tryNewAccessManagementButton = this.page.getByRole('button', {
       name: 'Prøv ny tilgangsstyring',
     });
-    this.klientadministrasjonButton = this.page.getByRole('link', { name: 'Klientadministrasjon' });
     this.newUserButton = this.page.getByRole('button', { name: 'Ny bruker' });
     this.singleServicesTab = this.page.getByRole('tab', { name: 'Enkelttjenester' });
     this.singleServicesPanel = this.page.getByRole('tabpanel', { name: 'Enkelttjenester' });
   }
 
+  // --- Sidebar facade: delegate to the SidebarNav component ---------------
+  get systemUserMenuLink(): Locator {
+    return this.sidebar.systemAccess;
+  }
+
+  get usersLink(): Locator {
+    return this.sidebar.users;
+  }
+
+  get powersOfAttorneyLink(): Locator {
+    return this.sidebar.powersOfAttorney;
+  }
+
+  get ourAccessAtOthersLink(): Locator {
+    return this.sidebar.reportees;
+  }
+
+  get consentAndPowerOfAttorneyAgreementsLink(): Locator {
+    return this.sidebar.consent;
+  }
+
+  get klientadministrasjonButton(): Locator {
+    return this.sidebar.clientAdministration;
+  }
+
   async goToKlientAdministrasjon() {
-    await Promise.all([
-      this.page.waitForResponse(
-        (resp) => resp.url().includes('/api/v1/connection/rightholders') && resp.ok(),
-      ),
-      this.page.waitForResponse(
-        (resp) => resp.url().includes('/api/v1/clientdelegations/agents') && resp.ok(),
-      ),
-      this.klientadministrasjonButton.click(),
-    ]);
+    await this.sidebar.goToKlientAdministrasjon();
   }
 
   async goToUsers() {
-    await this.usersLink.click();
+    await this.sidebar.goToUsers();
   }
 
   async expandOrg(org: string) {
@@ -71,7 +74,7 @@ export class AccessManagementFrontPage {
   }
 
   async goToFullmakterHosAndre() {
-    await this.ourAccessAtOthersLink.click();
+    await this.sidebar.goToFullmakterHosAndre();
   }
 
   async sokEtterEnkelttjeneste(tjenesteNavn: string) {

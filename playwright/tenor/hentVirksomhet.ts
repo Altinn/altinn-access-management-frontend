@@ -1,7 +1,5 @@
 /* eslint-disable no-console */
-import path from 'path';
-// eslint-disable-next-line import/default
-import dotenv from 'dotenv';
+import { loadEnv } from 'playwright/util/helper';
 
 import { TenorApiRequests, type FacilitatorRolle } from './TenorApiRequests';
 
@@ -16,7 +14,6 @@ import { TenorApiRequests, type FacilitatorRolle } from './TenorApiRequests';
  *   yarn tenor:virksomhet --rolle forretningsfoerer -n 10
  *   yarn tenor:virksomhet --maks-klienter 10       # finn facilitator med <= 10 klienter (færrest)
  *   yarn tenor:virksomhet --json                   # full struktur som JSON
- *   yarn tenor:virksomhet --env at22               # mot et annet miljø
  */
 
 const ROLLER: FacilitatorRolle[] = ['revisor', 'regnskapsfoerer', 'forretningsfoerer'];
@@ -119,23 +116,9 @@ function printHelp(): void {
   );
 }
 
-/** Laster env-filer fra playwright/config, på samme måte som playwright.config.ts. */
-function lastEnv(envName: string): void {
-  const configDir = path.join(__dirname, '..', 'config');
-  dotenv.config({
-    path: [
-      path.join(configDir, '.env'),
-      path.join(configDir, `.env.${envName}`),
-      path.join(configDir, '.env.local'),
-      path.join(configDir, `.env.${envName}.local`),
-    ],
-    override: true,
-  });
-}
-
 async function main(): Promise<void> {
   const args = parseArgs(process.argv.slice(2));
-  lastEnv(args.env);
+  loadEnv(args.env);
 
   const tenor = new TenorApiRequests();
 
