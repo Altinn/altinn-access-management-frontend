@@ -103,44 +103,29 @@ export class ConsentPage {
     this.languagePicker = page.getByLabel('Språk/language');
     this.languageMenu = new LanguageMenu(page);
     this.linkAltinn = page.getByRole('link', { name: /altinn\.no/i });
-    // Language-specific button selectors
-    const buttonTexts = {
-      [Language.EN]: {
-        approve: /yes, i give consent/i,
-        reject: /no, i do not give consent/i,
-      },
-      [Language.NB]: {
-        approve: /jeg gir samtykke/i,
-        reject: /jeg gir ikke samtykke/i,
-      },
-      [Language.NN]: {
-        approve: /Ja, eg gir samtykke/i,
-        reject: /Nei, eg gir ikkje samtykke/i,
-      },
-    };
 
-    const texts = buttonTexts[language];
-    this.buttonApprove = page.getByRole('button', { name: texts.approve });
-    this.buttonReject = page.getByRole('button', { name: texts.reject });
-
+    // Button labels come from the frontend localization files (consent_request.*),
+    // same principle as the Systembruker tests.
+    this.buttonApprove = page.getByRole('button', {
+      name: this.languageDictionary.consent_request.approve_consent,
+    });
+    this.buttonReject = page.getByRole('button', {
+      name: this.languageDictionary.consent_request.reject_consent,
+    });
     this.buttonFullmaktApprove = page.getByRole('button', {
       name: this.languageDictionary.consent_request.approve_poa,
     });
-
-    // Fullmakt reject button - language specific
-    const fullmaktRejectTexts = {
-      [Language.NN]: /jeg gir ikkje fullmakt/i,
-      [Language.NB]: /jeg gir ikke fullmakt/i,
-      [Language.EN]: /I do not give power of attorney/i,
-    };
     this.buttonFullmaktReject = page.getByRole('button', {
-      name: fullmaktRejectTexts[language] || fullmaktRejectTexts[Language.NB],
+      name: this.languageDictionary.consent_request.reject_poa,
     });
 
-    // Headings (use exact text when stable, regex when copy may drift)
-    this.standardHeading = page.getByRole('heading', {
-      name: this.languageDictionary.consent_requests,
-    });
+    // The consent title is API-provided (request.title[language]) and rendered
+    // as the single level-1 heading on the request page. We assert that heading
+    // is present rather than matching the exact title string, which lives in the
+    // resource registry, not the frontend localization files.
+    // (Previously matched `languageDictionary.consent_requests`, a key that does
+    // not exist — so `name: undefined` matched any heading and asserted nothing.)
+    this.standardHeading = page.getByRole('heading', { level: 1 });
 
     // Headings - language specific
     const headingKravTexts = {
