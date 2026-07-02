@@ -2,13 +2,18 @@
 
 Tilgangsstyrings-testene henter testdata dynamisk fra **Tenor** (Skatteetatens
 Test-Norge) i stedet for hardkodede fødselsnummer/orgnr. Grunnen er
-[Altinn/altinn-authentication#2086](https://github.com/Altinn/altinn-authentication/issues/2086):
+[Altinn/altinn-authentication#2086](https://github.com/Altinn/altinn-authentication/issues/2086)
 delte, hardkodede testbrukere kolliderer når testene kjører parallelt (samme
 aktør/koblinger mutéres samtidig). Ferske Tenor-aktører per kjøring fjerner det.
 
 **Denne fila er «forsikringen»:** hvis Tenor er nede eller datamodellen endrer
 seg, forklarer den nøyaktig hvilke egenskaper hver test trenger, og gir
 kjente-gode eksempelverdier du kan bruke manuelt.
+
+> **Tips:** Fila er skrevet for å kunne gis rett til en AI (f.eks. Claude).
+> «Tenor-integrasjonen funker ikke lenger – bytt ut Tenor-kallene med de
+> hardkodede eksempeldataene i denne fila» er en jobb på et par minutter for
+> Claude, siden både metodekontraktene og reserveverdiene står her.
 
 Alt hentes via `TenorTestData` (`playwright/tenor/TenorTestData.ts`), som er et
 tynt lag over `TenorApiRequests` (rå KQL-søk mot Tenor).
