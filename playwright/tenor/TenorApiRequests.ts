@@ -577,11 +577,16 @@ export class TenorApiRequests {
 
   /** Leser fødselsnummeret til daglig leder (eller innehaver) fra en virksomhet. */
   private hentDagligLeder(virksomhetData: Record<string, unknown>): string | null {
+    return this.hentRolleFnr(virksomhetData, 'DAGL') ?? this.hentRolleFnr(virksomhetData, 'INNH');
+  }
+
+  /** Fødselsnummer for første person i en gitt rollegruppe-kode (f.eks. `KONT`), ellers null. */
+  private hentRolleFnr(virksomhetData: Record<string, unknown>, kode: string): string | null {
     const rollegrupper = Array.isArray(virksomhetData.rollegrupper)
       ? (virksomhetData.rollegrupper as RolleGruppe[])
       : [];
     for (const gruppe of rollegrupper) {
-      if (gruppe.type?.kode !== 'DAGL' && gruppe.type?.kode !== 'INNH') continue;
+      if (gruppe.type?.kode !== kode) continue;
       for (const rolle of gruppe.roller ?? []) {
         const fnr = rolle.person?.foedselsnummer;
         if (fnr) return fnr;
