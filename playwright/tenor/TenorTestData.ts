@@ -1,4 +1,4 @@
-import { TenorApiRequests } from './TenorApiRequests';
+import { TenorApiRequests, type FacilitatorRolle } from './TenorApiRequests';
 import { pickRandom } from '../util/helper';
 
 export interface TenorPerson {
@@ -20,6 +20,21 @@ export interface TenorHovedenhetMedUnderenhet {
   dagligLeder: TenorPerson;
   hovedenhet: { orgnr: string; navn: string };
   underenhet: { orgnr: string; navn: string };
+}
+
+/** En virksomhet (orgnr + navn) i brukerflaten. */
+export interface TenorOrgRef {
+  orgnr: string;
+  navn: string;
+}
+
+export interface TenorFacilitatorMedKlienter {
+  /** Daglig leder — logger inn og representerer facilitator-virksomheten. */
+  dagligLeder: TenorPerson;
+  /** Facilitator-virksomheten (revisor/regnskapsfører/forretningsfører). */
+  org: TenorOrgRef;
+  /** Facilitatorens klienter (virksomheter den har oppdrag for). */
+  klienter: TenorOrgRef[];
 }
 
 /** Organisasjonsform brukt som standard når ingen annen er oppgitt. */
@@ -139,6 +154,52 @@ export class TenorTestData {
     throw new Error(
       `Fant ingen ${organisasjonsform}-hovedenhet med underenhet og bosatt daglig leder blant ${underenheter.length} kandidater i Tenor.`,
     );
+  }
+
+  /**
+   * En FACILITATOR (revisor/regnskapsfører/forretningsfører) med bosatt daglig
+   * leder og FÅ klienter. Facilitatorens klienter er reelle brreg-klienter.
+   * Brukes til klientdelegerings-testene. Få klienter gjør at «deleger alle
+   * klienter» ikke treffer tusenvis.
+   *
+   * @param rolle Facilitator-rolle.
+   */
+  async facilitatorMedKlienter(rolle: FacilitatorRolle): Promise<TenorFacilitatorMedKlienter> {
+    const f = await this.tenor.hentFacilitatorMedBosattLeder(rolle);
+    return {
+      dagligLeder: await this.dagligLederFraFnr(f.dagligLeder),
+      org: { orgnr: f.organisasjonsnummer, navn: f.navn },
+      klienter: f.klienter.map((k) => ({ orgnr: k.organisasjonsnummer, navn: k.navn })),
+    };
+  }
+
+  /**
+   * En FORRETNINGSFØRER med bosatt daglig leder og én EIENDOMSKLIENT (borettslag
+   * BRL / sameie ESEK) — den eneste klienttypen `forretningsforer-eiendom` kan
+   * delegeres for.
+   */
+  async forretningsfoererMedEiendomsklient(): Promise<{
+    dagligLeder: TenorPerson;
+    org: TenorOrgRef;
+    klient: TenorOrgRef;
+  }> {
+    const { facilitator, klient } = await this.tenor.hentForretningsfoererMedEiendomsklient();
+    return {
+      dagligLeder: await this.dagligLederFraFnr(facilitator.dagligLeder),
+      org: { orgnr: facilitator.organisasjonsnummer, navn: facilitator.navn },
+      klient: { orgnr: klient.organisasjonsnummer, navn: klient.navn },
+    };
+  }
+
+  /** Slår opp navnet til en (bosatt) daglig leder fra fødselsnummer. */
+  private async dagligLederFraFnr(fnr: string | null): Promise<TenorPerson> {
+    if (!fnr) throw new Error('Facilitator mangler daglig leder.');
+    const [person] = await this.tenor.hentPersoner(
+      `identifikator:${fnr} AND ${TenorApiRequests.bosattMyndigKql()}`,
+      1,
+    );
+    if (!person) throw new Error(`Daglig leder ${fnr} er ikke en bosatt, myndig person.`);
+    return tilTenorPerson(person);
   }
 
   /**

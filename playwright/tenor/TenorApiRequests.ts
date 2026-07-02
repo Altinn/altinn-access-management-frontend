@@ -259,6 +259,85 @@ export class TenorApiRequests {
     return this.byggFacilitator(rolle, beste.org, beste.antall);
   }
 
+  /**
+   * Facilitator (rolle) med BOSATT daglig leder og minst én klient. Kandidatene
+   * gås gjennom i TILFELDIG rekkefølge, så ulike tester får ulike facilitatorer.
+   * Antall klienter begrenses ikke (til «deleger én klient»-testene holder det
+   * med én); vi henter bare opptil `maksHentedeKlienter` av dem.
+   * @param rolle Facilitator-rolle.
+   * @param maksHentedeKlienter Hvor mange klienter som hentes for den valgte. Default 5.
+   * @param antallKandidater Hvor mange klient-kandidater som skannes. Default 100.
+   */
+  async hentFacilitatorMedBosattLeder(
+    rolle: FacilitatorRolle,
+    maksHentedeKlienter = 5,
+    antallKandidater = 100,
+  ): Promise<TenorFacilitator> {
+    const { felt, rolleKode } = FACILITATOR_ROLLER[rolle];
+    const kandidater = await this.sokBrreg(`${felt}:*`, antallKandidater);
+    const facilitatorOrg = new Set<string>();
+    for (const klient of kandidater) {
+      const org = this.hentRolleVirksomhet(klient, rolleKode);
+      if (org) facilitatorOrg.add(org);
+    }
+    for (const org of this.stokk([...facilitatorOrg])) {
+      const dagligLeder = await this.hentDagligLederForOrg(org);
+      if (!dagligLeder || !(await this.erBosattMyndig(dagligLeder))) continue;
+      const facilitator = await this.byggFacilitator(rolle, org, maksHentedeKlienter);
+      if (facilitator.klienter.length < 1) continue;
+      return facilitator;
+    }
+    throw new Error(
+      `Fant ingen ${rolle}-facilitator med bosatt daglig leder og minst én klient blant ${facilitatorOrg.size} kandidater i Tenor.`,
+    );
+  }
+
+  /**
+   * En FORRETNINGSFØRER med en EIENDOMSKLIENT (borettslag `BRL` / sameie `ESEK`).
+   * `forretningsforer-eiendom` er kun delegerbar for eiendomsklienter, så vi
+   * søker klienter av disse formene som har en forretningsfører, og velger en der
+   * forretningsføreren har en bosatt daglig leder.
+   */
+  async hentForretningsfoererMedEiendomsklient(
+    antallKandidater = 30,
+  ): Promise<{ facilitator: TenorFacilitator; klient: TenorVirksomhet }> {
+    const klientDokumenter = await this.sokBrreg(
+      `forretningsfoerereOrgnr:* AND (organisasjonsform.kode:BRL OR organisasjonsform.kode:ESEK)`,
+      antallKandidater,
+    );
+    for (const dokument of this.stokk(klientDokumenter)) {
+      const klient = this.hentVirksomhet(dokument);
+      const forretningsfoererOrg = this.hentRolleVirksomhet(dokument, 'FFØR');
+      if (!klient || !forretningsfoererOrg) continue;
+      const dagligLeder = await this.hentDagligLederForOrg(forretningsfoererOrg);
+      if (!dagligLeder || !(await this.erBosattMyndig(dagligLeder))) continue;
+      const facilitator = await this.byggFacilitator('forretningsfoerer', forretningsfoererOrg, 5);
+      return { facilitator, klient };
+    }
+    throw new Error(
+      `Fant ingen forretningsfører med bosatt daglig leder og eiendomsklient (BRL/ESEK) blant ${klientDokumenter.length} kandidater i Tenor.`,
+    );
+  }
+
+  /** Sjekker om et fødselsnummer tilhører en bosatt, myndig person i freg. */
+  private async erBosattMyndig(fnr: string): Promise<boolean> {
+    const [person] = await this.hentPersoner(
+      `identifikator:${fnr} AND ${TenorApiRequests.bosattMyndigKql()}`,
+      1,
+    );
+    return !!person;
+  }
+
+  /** Fisher–Yates-stokk (unngår at samme kandidat velges hver gang). */
+  private stokk<T>(arr: T[]): T[] {
+    const kopi = [...arr];
+    for (let i = kopi.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [kopi[i], kopi[j]] = [kopi[j], kopi[i]];
+    }
+    return kopi;
+  }
+
   /** Bygger en facilitator med daglig leder og klientliste fra et orgnr. */
   private async byggFacilitator(
     rolle: FacilitatorRolle,
