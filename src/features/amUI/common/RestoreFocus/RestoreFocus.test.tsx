@@ -192,6 +192,30 @@ const FallbackWithNonInteractiveFallbackIdTest = () => {
   );
 };
 
+const FallbackWithStaleDuplicateInClosedDialogTest = () => {
+  const restoreFocus = useRestoreFocus();
+  const { requestFocus } = restoreFocus;
+
+  useEffect(() => {
+    requestFocus('deleted-item', 'section-heading');
+  }, [requestFocus]);
+
+  return (
+    <RestoreFocusProvider restoreFocus={restoreFocus}>
+      <h2 id='section-heading'>Section heading</h2>
+      <RestoreFocusFallback>
+        {/* The requested id exists only as a stale copy inside a closed dialog; the real row is gone. */}
+        <dialog>
+          <div id='deleted-item'>
+            <button>Stale modal row</button>
+          </div>
+        </dialog>
+        <button>List action</button>
+      </RestoreFocusFallback>
+    </RestoreFocusProvider>
+  );
+};
+
 const RemovalHookTest = () => {
   const restoreFocus = useRestoreFocus();
   const [items, setItems] = useState(['item']);
@@ -553,6 +577,15 @@ describe('RestoreFocus', () => {
     await waitFor(() =>
       expect(screen.getByRole('heading', { name: 'List heading' })).toHaveFocus(),
     );
+  });
+
+  it('ignores a stale duplicate of the requested id inside a closed dialog and uses the fallback', async () => {
+    render(<FallbackWithStaleDuplicateInClosedDialogTest />);
+
+    await waitFor(() =>
+      expect(screen.getByRole('heading', { name: 'Section heading' })).toHaveFocus(),
+    );
+    expect(screen.getByRole('button', { name: 'List action' })).not.toHaveFocus();
   });
 
   it('does not use the fallback when a requested id is present', async () => {
