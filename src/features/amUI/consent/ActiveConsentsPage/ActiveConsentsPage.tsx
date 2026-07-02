@@ -19,6 +19,7 @@ import {
 } from '@/rtk/features/idPortenAuthorizationApi';
 import { IdPortenAutorizationDetails } from '../components/IdPortenAutorizationDetails/IdPortenAutorizationDetails';
 import { ActiveConsentsPageContent } from './ActiveConsentsPageContent';
+import { useGetPartyFromLoggedInUserQuery } from '@/rtk/features/lookupApi';
 
 export const ActiveConsentsPage = () => {
   const { t } = useTranslation();
@@ -36,6 +37,7 @@ export const ActiveConsentsPage = () => {
   const newlyCreatedId = routerLocation?.state?.createdId;
 
   const { data: reportee, isLoading: isLoadingReportee } = useGetReporteeQuery();
+  const { data: currentUser, isLoading: isCurrentUserLoading } = useGetPartyFromLoggedInUserQuery();
   const { data: isAdmin, isLoading: isLoadingIsAdmin } = useGetIsAdminQuery();
   const hasPermission = hasConsentPermission(isAdmin);
 
@@ -49,10 +51,14 @@ export const ActiveConsentsPage = () => {
     data: idPortenAuthorizations,
     isLoading: isLoadingIdPortenAuthorizations,
     error: loadIdPortenAuthorizationsError,
-  } = useGetIdPortenAuthorizationsQuery();
+  } = useGetIdPortenAuthorizationsQuery(undefined, {
+    // ID-porten authorizations are only relevant for the logged in user
+    skip: !partyUuid || reportee?.type !== 'Person' || currentUser?.partyUuid !== partyUuid,
+  });
 
   const isLoading =
     isLoadingReportee ||
+    isCurrentUserLoading ||
     isLoadingIsAdmin ||
     isLoadingActiveConsents ||
     isLoadingIdPortenAuthorizations;
