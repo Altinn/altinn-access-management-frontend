@@ -53,7 +53,11 @@ export const ActiveConsentsPage = () => {
     error: loadIdPortenAuthorizationsError,
   } = useGetIdPortenAuthorizationsQuery(undefined, {
     // ID-porten authorizations are only relevant for the logged in user
-    skip: !partyUuid || reportee?.type !== 'Person' || currentUser?.partyUuid !== partyUuid,
+    skip:
+      !partyUuid ||
+      reportee?.type !== 'Person' ||
+      currentUser?.partyUuid !== partyUuid ||
+      window.featureFlags?.idPortenAuthorization !== true,
   });
 
   const isLoading =

@@ -24,6 +24,7 @@ declare global {
       enableMaskinportenAdministration: boolean;
       enableRoleDeletion: boolean;
       addAltinn2Account: boolean;
+      idPortenAuthorization: boolean;
     };
   }
 }
