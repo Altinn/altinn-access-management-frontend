@@ -15,6 +15,13 @@ export interface TenorDagligLederMedOrg {
   org: { orgnr: string; navn: string };
 }
 
+export interface TenorHovedenhetMedUnderenhet {
+  /** Daglig leder for hovedenheten — representerer BÅDE hovedenhet og underenhet. */
+  dagligLeder: TenorPerson;
+  hovedenhet: { orgnr: string; navn: string };
+  underenhet: { orgnr: string; navn: string };
+}
+
 /** Organisasjonsform brukt som standard når ingen annen er oppgitt. */
 const DEFAULT_ORG_TYPE = 'AS';
 
@@ -91,6 +98,46 @@ export class TenorTestData {
     }
     throw new Error(
       `Fant ingen ${organisasjonsform}-virksomhet med bosatt daglig leder blant ${orgs.length} kandidater i Tenor.`,
+    );
+  }
+
+  /**
+   * En HOVEDENHET som har en UNDERENHET, samt daglig leder. Daglig leder for
+   * hovedenheten representerer også underenheten i aktørvalget (Altinn arver
+   * DAGL-tilgang nedover). Brukes til hoved-/underenhet-testene.
+   *
+   * Relasjonen finnes bare på underenheten (`underenhet.hovedenhet`), så vi
+   * henter en pool underenheter (BEDR), går gjennom dem i tilfeldig rekkefølge
+   * og velger den første hvis hovedenhet har ønsket organisasjonsform og en
+   * bosatt daglig leder.
+   *
+   * @param organisasjonsform Hovedenhetens organisasjonsform. Default `AS`.
+   */
+  async hovedenhetMedUnderenhet(
+    organisasjonsform: string = DEFAULT_ORG_TYPE,
+  ): Promise<TenorHovedenhetMedUnderenhet> {
+    const underenheter = await this.tenor.hentUnderenheter(ORG_POOL);
+    for (const under of shuffle(underenheter)) {
+      const hovedenhet = await this.tenor.hentVirksomhetMedForm(under.hovedenhetOrgnr);
+      if (!hovedenhet || hovedenhet.organisasjonsform !== organisasjonsform) continue;
+      // Testene forventer at hoved- og underenhet vises med SAMME navn (velges
+      // via nth(0)/nth(1) i aktørvalget), så vi krever at navnene er like.
+      if (hovedenhet.navn !== under.navn) continue;
+      const pid = await this.tenor.hentDagligLederForOrg(hovedenhet.organisasjonsnummer);
+      if (!pid) continue;
+      const [leder] = await this.tenor.hentPersoner(
+        `identifikator:${pid} AND ${TenorApiRequests.bosattMyndigKql()}`,
+        1,
+      );
+      if (!leder) continue;
+      return {
+        dagligLeder: tilTenorPerson(leder),
+        hovedenhet: { orgnr: hovedenhet.organisasjonsnummer, navn: hovedenhet.navn },
+        underenhet: { orgnr: under.organisasjonsnummer, navn: under.navn },
+      };
+    }
+    throw new Error(
+      `Fant ingen ${organisasjonsform}-hovedenhet med underenhet og bosatt daglig leder blant ${underenheter.length} kandidater i Tenor.`,
     );
   }
 

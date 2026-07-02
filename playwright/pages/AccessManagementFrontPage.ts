@@ -235,7 +235,9 @@ export class AccessManagementFrontPage {
   }
 
   async expectUserToHavePackage(packageName: string) {
-    await expect(this.page.getByRole('button', { name: packageName })).toBeVisible();
+    // `exact` unngår at f.eks. «Byggesøknad» også matcher «Slett fullmakt for
+    // Byggesøknad» (begge er knapper) når raden også har en slett-knapp.
+    await expect(this.page.getByRole('button', { name: packageName, exact: true })).toBeVisible();
   }
 
   async userCanDeleteEnkelttjeneste(resourceName: string) {

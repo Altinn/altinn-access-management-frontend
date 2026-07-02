@@ -41,6 +41,12 @@ export interface TenorVirksomhet {
   navn: string;
 }
 
+/** En underenhet (BEDR) med lenke til sin hovedenhet. */
+export interface TenorUnderenhet extends TenorVirksomhet {
+  /** Organisasjonsnummeret til hovedenheten (`underenhet.hovedenhet`). */
+  hovedenhetOrgnr: string;
+}
+
 /** En facilitator-virksomhet med daglig leder og klienter. */
 export interface TenorFacilitator extends TenorVirksomhet {
   rolle: FacilitatorRolle;
@@ -391,6 +397,52 @@ export class TenorApiRequests {
       .map((d) => this.hentVirksomhet(d))
       .filter((v): v is TenorVirksomhet => v !== null)
       .slice(0, antall);
+  }
+
+  /**
+   * Henter underenheter (`organisasjonsform.kode:BEDR`) med lenke til hovedenhet.
+   * Underenheten peker på hovedenheten via feltet `underenhet.hovedenhet`
+   * (hovedenheten lister ikke barna sine, så relasjonen leses barn → forelder).
+   * Bare underenheter som faktisk har en hovedenhet-lenke returneres.
+   */
+  async hentUnderenheter(antall: number): Promise<TenorUnderenhet[]> {
+    const dokumenter = await this.hentDokumenterPaginert(
+      'brreg-er-fr',
+      'organisasjonsform.kode:BEDR',
+      antall,
+    );
+    return dokumenter
+      .map((d) => {
+        const data = this.parseKildedata(d);
+        const under = data.underenhet as { hovedenhet?: string } | undefined;
+        const { organisasjonsnummer, navn } = data;
+        if (
+          typeof organisasjonsnummer !== 'string' ||
+          typeof navn !== 'string' ||
+          !under?.hovedenhet
+        ) {
+          return null;
+        }
+        return { organisasjonsnummer, navn, hovedenhetOrgnr: under.hovedenhet };
+      })
+      .filter((u): u is TenorUnderenhet => u !== null)
+      .slice(0, antall);
+  }
+
+  /**
+   * Slår opp én virksomhet på orgnr og returnerer orgnr, navn og
+   * organisasjonsform-kode (f.eks. `AS`, `ENK`). Null hvis den ikke finnes.
+   */
+  async hentVirksomhetMedForm(
+    orgnr: string,
+  ): Promise<{ organisasjonsnummer: string; navn: string; organisasjonsform: string } | null> {
+    const [dokument] = await this.sokBrreg(`organisasjonsnummer:${orgnr}`, 1);
+    if (!dokument) return null;
+    const data = this.parseKildedata(dokument);
+    const navn = data.navn;
+    const form = (data.organisasjonsform as { kode?: string } | undefined)?.kode;
+    if (typeof navn !== 'string' || !form) return null;
+    return { organisasjonsnummer: orgnr, navn, organisasjonsform: form };
   }
 
   /**

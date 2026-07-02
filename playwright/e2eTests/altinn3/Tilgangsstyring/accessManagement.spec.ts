@@ -4,7 +4,10 @@ import {
   TenorTestData,
   type TenorPerson,
   type TenorDagligLederMedOrg,
+  type TenorHovedenhetMedUnderenhet,
 } from '../../../tenor/TenorTestData';
+
+type TenorOrg = { orgnr: string; navn: string };
 
 const service = 'bruno-correspondence';
 
@@ -303,167 +306,166 @@ test.describe('Tilgangsstyring', () => {
 
 test.describe('over- og underenheter', () => {
   const api = new EnduserConnection();
+  const tenor = new TenorTestData();
 
-  test.describe('Virksomhet skal kunne se tilgangspakker hos hoved- og underenhet som delegerte dem', () => {
-    const delegatorOrg = {
-      managerPid: '25916799929',
-      orgNo: '313819566',
-      name: 'SMISKENDE UMODEN TIGER AS',
-    };
-    const recipientOrg = {
-      managerPid: '30847798242',
-      orgNo: '313244555',
-      name: 'KONSERVATIV USELVISK KATT KLINKEKULE',
-    };
+  test.describe('Virksomhet skal se tilgangspakke fra hoved- og underenhet under «fullmakter hos andre»', () => {
+    let delegator: TenorHovedenhetMedUnderenhet;
+    let recipient: TenorDagligLederMedOrg;
 
     test.beforeEach(async () => {
+      [delegator, recipient] = await Promise.all([
+        tenor.hovedenhetMedUnderenhet(),
+        tenor.dagligLederMedOrg(),
+      ]);
+      // Hovedenheten delegerer Byggesøknad til mottakervirksomheten; delegasjonen
+      // vises hos både hoved- og underenheten i mottakerens «fullmakter hos andre».
       await api.addConnectionAndPackagesToUser(
-        delegatorOrg.managerPid,
-        delegatorOrg.orgNo,
-        recipientOrg.orgNo,
+        delegator.dagligLeder.pid,
+        delegator.hovedenhet.orgnr,
+        recipient.org.orgnr,
         ['urn:altinn:accesspackage:byggesoknad'],
       );
     });
 
     test.afterEach(async () => {
       try {
-        await api.deleteConnection(delegatorOrg.managerPid, delegatorOrg.orgNo, [
-          recipientOrg.orgNo,
+        await api.deleteConnection(delegator.dagligLeder.pid, delegator.hovedenhet.orgnr, [
+          recipient.org.orgnr,
         ]);
       } catch (error) {
         console.error('Cleanup: Failed to delete connection:', error);
       }
     });
 
-    test('Virksomhet skal kunne se tilgangspakker hos hoved- og underenhet som delegerte dem', async ({
+    test('Virksomhet skal se tilgangspakke fra hoved- og underenhet under «fullmakter hos andre»', async ({
       accessManagementFrontPage,
       login,
-      aktorvalgHeader,
     }) => {
       await test.step('Logg inn', async () => {
-        await login.LoginToAccessManagement(recipientOrg.managerPid);
+        await login.LoginToAccessManagement(recipient.dagligLeder.pid);
       });
 
-      await test.step(`Se at hovedenhet og underenhet for ${delegatorOrg.name} er klikkbare i aktørlista`, async () => {
-        await aktorvalgHeader.orgExistsInAktorvalg(delegatorOrg.name);
-        await aktorvalgHeader.subOrgExistsInAktorvalg(delegatorOrg.name);
-      });
-
-      await test.step(`Velg hovedenhet ${recipientOrg.name} og gå til fullmakter hos andre`, async () => {
-        await aktorvalgHeader.selectActorFromHeaderMenu(recipientOrg.name);
+      await test.step(`Velg ${recipient.org.navn} og gå til fullmakter hos andre`, async () => {
+        await login.selectMainUnitBySearching(recipient.org.navn);
         await accessManagementFrontPage.goToFullmakterHosAndre();
       });
 
-      await test.step(`Velg hovedenhet ${delegatorOrg.name} i lista over fullmakter hos andre`, async () => {
-        await accessManagementFrontPage.expandOrg(delegatorOrg.name);
-        await accessManagementFrontPage.clickUser(delegatorOrg.name);
+      await test.step(`Velg hovedenhet ${delegator.hovedenhet.navn} i lista over fullmakter hos andre`, async () => {
+        await accessManagementFrontPage.expandOrg(delegator.hovedenhet.navn);
+        await accessManagementFrontPage.clickUser(delegator.hovedenhet.navn);
       });
 
-      await test.step(`${recipientOrg.name} skal ha tilgangspakken Byggesøknad hos hovedenheten`, async () => {
+      await test.step(`Skal ha tilgangspakken Byggesøknad hos hovedenheten`, async () => {
         await accessManagementFrontPage.goToArea('Bygg, anlegg og eiendom');
         await accessManagementFrontPage.userCanDeletePackage('Byggesøknad');
       });
 
-      await test.step(`Gå tilbake til fullmakter hos andre og velg underenhet ${delegatorOrg.name}`, async () => {
+      await test.step(`Gå tilbake til fullmakter hos andre og velg underenhet ${delegator.underenhet.navn}`, async () => {
         await accessManagementFrontPage.goToFullmakterHosAndre();
-        await accessManagementFrontPage.expandOrg(delegatorOrg.name);
-        await accessManagementFrontPage.clickUser(delegatorOrg.name, 1);
+        await accessManagementFrontPage.expandOrg(delegator.underenhet.navn);
+        await accessManagementFrontPage.clickUser(delegator.underenhet.navn, 1);
       });
 
-      await test.step(`${recipientOrg.name} skal ha tilgangspakken Byggesøknad hos underenheten`, async () => {
+      await test.step(`Skal ha tilgangspakken Byggesøknad hos underenheten`, async () => {
         await accessManagementFrontPage.goToArea('Bygg, anlegg og eiendom');
         await accessManagementFrontPage.expectUserToHavePackage('Byggesøknad');
       });
     });
   });
 
-  test.describe('Underenhet A som delegerte tilgangspakke til Virksomhet B skal kunne se Virksomhet B i brukerlista si', () => {
-    const delegatorOrg = {
-      managerPid: '12828099912',
-      orgNo: '312160862',
-      name: 'INITIATIVRIK TOM TIGER AS',
-    };
-    const recipientOrg = { orgNo: '313244555', name: 'KONSERVATIV USELVISK KATT KLINKEKULE' };
+  test.describe('Hoved- og underenhet skal kunne se virksomhet de har delegert tilgangspakke til', () => {
+    let delegator: TenorHovedenhetMedUnderenhet;
+    let recipientOrg: TenorOrg;
 
     test.beforeEach(async () => {
+      [delegator, recipientOrg] = await Promise.all([
+        tenor.hovedenhetMedUnderenhet(),
+        tenor.hentTilfeldigVirksomhet(),
+      ]);
+      // Hovedenheten delegerer Byggesøknad til virksomhet B. Delegasjonen er
+      // synlig både hos hovedenheten (direkte, slettbar) og hos underenheten
+      // (arvet). En delegasjon gjort FRA underenheten vises derimot ikke hos
+      // hovedenheten, så vi delegerer fra hovedenheten.
       await api.addConnectionAndPackagesToUser(
-        delegatorOrg.managerPid,
-        delegatorOrg.orgNo,
-        recipientOrg.orgNo,
+        delegator.dagligLeder.pid,
+        delegator.hovedenhet.orgnr,
+        recipientOrg.orgnr,
         ['urn:altinn:accesspackage:byggesoknad'],
       );
     });
 
     test.afterEach(async () => {
       try {
-        await api.deleteConnection(delegatorOrg.managerPid, delegatorOrg.orgNo, [
-          recipientOrg.orgNo,
+        await api.deleteConnection(delegator.dagligLeder.pid, delegator.hovedenhet.orgnr, [
+          recipientOrg.orgnr,
         ]);
       } catch (error) {
         console.error('Cleanup: Failed to delete connection:', error);
       }
     });
 
-    test('Underenhet A som delegerte tilgangspakke til Virksomhet B skal kunne se Virksomhet B i brukerlista si', async ({
+    test('Hoved- og underenhet skal kunne se virksomhet de har delegert tilgangspakke til', async ({
       accessManagementFrontPage,
       login,
       aktorvalgHeader,
     }) => {
       await test.step('Logg inn', async () => {
-        await login.LoginToAccessManagement(delegatorOrg.managerPid);
+        await login.LoginToAccessManagement(delegator.dagligLeder.pid);
       });
 
-      await test.step(`Velg underenhet ${delegatorOrg.name} og gå til brukere`, async () => {
-        await aktorvalgHeader.selectSubOrgFromHeaderMenu(delegatorOrg.name);
+      await test.step(`Velg underenhet ${delegator.underenhet.navn} og gå til brukere`, async () => {
+        await aktorvalgHeader.selectSubOrgFromHeaderMenu(delegator.underenhet.navn);
         await accessManagementFrontPage.goToUsers();
       });
 
-      await test.step(`Velg ${recipientOrg.name} i lista over brukere`, async () => {
-        await accessManagementFrontPage.expandOrg(recipientOrg.name);
-        await accessManagementFrontPage.clickUser(recipientOrg.name);
+      await test.step(`Velg ${recipientOrg.navn} i lista over brukere`, async () => {
+        await accessManagementFrontPage.expandOrg(recipientOrg.navn);
+        await accessManagementFrontPage.clickUser(recipientOrg.navn);
       });
 
-      await test.step(`${recipientOrg.name} skal ha tilgangspakken Byggesøknad hos underenheten`, async () => {
+      await test.step(`${recipientOrg.navn} skal ha tilgangspakken Byggesøknad hos underenheten`, async () => {
         await accessManagementFrontPage.goToArea('Bygg, anlegg og eiendom');
         await accessManagementFrontPage.expectUserToHavePackage('Byggesøknad');
       });
 
-      await test.step(`Velg hovedenhet ${delegatorOrg.name} og gå til brukere`, async () => {
-        await aktorvalgHeader.goToSelectActor(delegatorOrg.name);
-        await aktorvalgHeader.selectActorFromHeaderMenu(delegatorOrg.name);
+      await test.step(`Velg hovedenhet ${delegator.hovedenhet.navn} og gå til brukere`, async () => {
+        await aktorvalgHeader.goToSelectActor(delegator.hovedenhet.navn);
+        await aktorvalgHeader.selectActorFromHeaderMenu(delegator.hovedenhet.navn);
         await accessManagementFrontPage.goToUsers();
       });
 
-      await test.step(`Velg ${recipientOrg.name} i lista over brukere`, async () => {
-        await accessManagementFrontPage.expandOrg(recipientOrg.name);
-        await accessManagementFrontPage.clickUser(recipientOrg.name);
+      await test.step(`Velg ${recipientOrg.navn} i lista over brukere`, async () => {
+        await accessManagementFrontPage.expandOrg(recipientOrg.navn);
+        await accessManagementFrontPage.clickUser(recipientOrg.navn);
       });
 
-      await test.step(`${recipientOrg.name} skal ha tilgangspakken Byggesøknad hos hovedenheten`, async () => {
+      await test.step(`${recipientOrg.navn} skal ha tilgangspakken Byggesøknad hos hovedenheten`, async () => {
         await accessManagementFrontPage.goToArea('Bygg, anlegg og eiendom');
         await accessManagementFrontPage.userCanDeletePackage('Byggesøknad');
       });
     });
   });
 
-  test.describe('Virksomhet skal kunne se enkelttjenester hos hoved- og underenhet som delegerte dem', () => {
-    const delegatorOrg = {
-      managerPid: '26888197213',
-      orgNo: '310959502',
-      name: 'RIKTIG AUTENTISK APE',
-    };
-    const recipientOrg = {
-      managerPid: '16906997766',
-      orgNo: '312791404',
-      name: 'FORMBAR GENIERKLÆRT TIGER AS',
-    };
+  test.describe('Virksomhet skal se enkelttjeneste fra hoved- og underenhet under «fullmakter hos andre»', () => {
+    let delegator: TenorHovedenhetMedUnderenhet;
+    let recipient: TenorDagligLederMedOrg;
 
     test.beforeEach(async () => {
-      await api.addConnection(delegatorOrg.managerPid, delegatorOrg.orgNo, recipientOrg.orgNo);
+      [delegator, recipient] = await Promise.all([
+        tenor.hovedenhetMedUnderenhet(),
+        tenor.dagligLederMedOrg(),
+      ]);
+      // Hovedenheten delegerer enkelttjenesten til mottakervirksomheten; vises hos
+      // både hoved- og underenheten i mottakerens «fullmakter hos andre».
+      await api.addConnection(
+        delegator.dagligLeder.pid,
+        delegator.hovedenhet.orgnr,
+        recipient.org.orgnr,
+      );
       await api.delegateSingleService(
-        delegatorOrg.managerPid,
-        delegatorOrg.orgNo,
-        recipientOrg.orgNo,
+        delegator.dagligLeder.pid,
+        delegator.hovedenhet.orgnr,
+        recipient.org.orgnr,
         service,
       );
     });
@@ -471,79 +473,78 @@ test.describe('over- og underenheter', () => {
     test.afterEach(async () => {
       try {
         await api.deleteSingleServiceDelegation(
-          delegatorOrg.managerPid,
-          delegatorOrg.orgNo,
-          recipientOrg.orgNo,
+          delegator.dagligLeder.pid,
+          delegator.hovedenhet.orgnr,
+          recipient.org.orgnr,
           service,
         );
       } catch (error) {
         console.error('Cleanup: Failed to delete single service delegation:', error);
       }
       try {
-        await api.deleteConnection(delegatorOrg.managerPid, delegatorOrg.orgNo, [
-          recipientOrg.orgNo,
+        await api.deleteConnection(delegator.dagligLeder.pid, delegator.hovedenhet.orgnr, [
+          recipient.org.orgnr,
         ]);
       } catch (error) {
         console.error('Cleanup: Failed to delete connection:', error);
       }
     });
 
-    test('Virksomhet skal kunne se enkelttjenester hos hoved- og underenhet som delegerte dem', async ({
+    test('Virksomhet skal se enkelttjeneste fra hoved- og underenhet under «fullmakter hos andre»', async ({
       accessManagementFrontPage,
       login,
-      aktorvalgHeader,
     }) => {
       await test.step('Logg inn', async () => {
-        await login.LoginToAccessManagement(recipientOrg.managerPid);
+        await login.LoginToAccessManagement(recipient.dagligLeder.pid);
       });
 
-      await test.step(`Se at hovedenhet og underenhet for ${delegatorOrg.name} er klikkbare i aktørlista`, async () => {
-        await aktorvalgHeader.orgExistsInAktorvalg(delegatorOrg.name);
-        await aktorvalgHeader.subOrgExistsInAktorvalg(delegatorOrg.name);
-      });
-
-      await test.step(`Velg hovedenhet ${recipientOrg.name} og gå til fullmakter hos andre`, async () => {
-        await aktorvalgHeader.selectActorFromHeaderMenu(recipientOrg.name);
+      await test.step(`Velg ${recipient.org.navn} og gå til fullmakter hos andre`, async () => {
+        await login.selectMainUnitBySearching(recipient.org.navn);
         await accessManagementFrontPage.goToFullmakterHosAndre();
       });
 
-      await test.step(`Velg hovedenhet ${delegatorOrg.name} i lista over fullmakter hos andre`, async () => {
-        await accessManagementFrontPage.expandOrg(delegatorOrg.name);
-        await accessManagementFrontPage.clickUser(delegatorOrg.name);
+      await test.step(`Velg hovedenhet ${delegator.hovedenhet.navn} i lista over fullmakter hos andre`, async () => {
+        await accessManagementFrontPage.expandOrg(delegator.hovedenhet.navn);
+        await accessManagementFrontPage.clickUser(delegator.hovedenhet.navn);
       });
 
-      await test.step(`${recipientOrg.name} skal ha enkelttjenesten ${service} hos hovedenheten`, async () => {
+      await test.step(`Skal ha enkelttjenesten ${service} hos hovedenheten`, async () => {
         await accessManagementFrontPage.goToEnkelttjenester();
         await accessManagementFrontPage.userCanDeleteEnkelttjeneste(service);
       });
 
-      await test.step(`Gå tilbake til fullmakter hos andre og velg underenhet ${delegatorOrg.name}`, async () => {
+      await test.step(`Gå tilbake til fullmakter hos andre og velg underenhet ${delegator.underenhet.navn}`, async () => {
         await accessManagementFrontPage.goToFullmakterHosAndre();
-        await accessManagementFrontPage.expandOrg(delegatorOrg.name);
-        await accessManagementFrontPage.clickUser(delegatorOrg.name, 1);
+        await accessManagementFrontPage.expandOrg(delegator.underenhet.navn);
+        await accessManagementFrontPage.clickUser(delegator.underenhet.navn, 1);
       });
 
-      await test.step(`${recipientOrg.name} skal ha enkelttjenesten ${service} hos underenheten`, async () => {
+      await test.step(`Skal ha enkelttjenesten ${service} hos underenheten`, async () => {
         await accessManagementFrontPage.goToEnkelttjenester();
         await accessManagementFrontPage.expectUserToHaveEnkelttjeneste(service);
       });
     });
   });
 
-  test.describe('Underenhet A som delegerte enkelttjeneste til Virksomhet B skal kunne se Virksomhet B i brukerlista si', () => {
-    const delegatorOrg = {
-      managerPid: '15817195900',
-      orgNo: '313019020',
-      name: 'KLOK VÅRLIG TIGER AS',
-    };
-    const recipientOrg = { orgNo: '312791404', name: 'FORMBAR GENIERKLÆRT TIGER AS' };
+  test.describe('Hoved- og underenhet skal kunne se virksomhet de har delegert enkelttjeneste til', () => {
+    let delegator: TenorHovedenhetMedUnderenhet;
+    let recipientOrg: TenorOrg;
 
     test.beforeEach(async () => {
-      await api.addConnection(delegatorOrg.managerPid, delegatorOrg.orgNo, recipientOrg.orgNo);
+      [delegator, recipientOrg] = await Promise.all([
+        tenor.hovedenhetMedUnderenhet(),
+        tenor.hentTilfeldigVirksomhet(),
+      ]);
+      // Hovedenheten delegerer enkelttjenesten til B; synlig både hos hoved- og underenhet.
+      await api.addConnection(
+        delegator.dagligLeder.pid,
+        delegator.hovedenhet.orgnr,
+        recipientOrg.orgnr,
+      );
       await api.delegateSingleService(
-        delegatorOrg.managerPid,
-        delegatorOrg.orgNo,
-        recipientOrg.orgNo,
+        delegator.dagligLeder.pid,
+        delegator.hovedenhet.orgnr,
+        recipientOrg.orgnr,
         service,
       );
     });
@@ -551,59 +552,59 @@ test.describe('over- og underenheter', () => {
     test.afterEach(async () => {
       try {
         await api.deleteSingleServiceDelegation(
-          delegatorOrg.managerPid,
-          delegatorOrg.orgNo,
-          recipientOrg.orgNo,
+          delegator.dagligLeder.pid,
+          delegator.hovedenhet.orgnr,
+          recipientOrg.orgnr,
           service,
         );
       } catch (error) {
         console.error('Cleanup: Failed to delete single service delegation:', error);
       }
       try {
-        await api.deleteConnection(delegatorOrg.managerPid, delegatorOrg.orgNo, [
-          recipientOrg.orgNo,
+        await api.deleteConnection(delegator.dagligLeder.pid, delegator.hovedenhet.orgnr, [
+          recipientOrg.orgnr,
         ]);
       } catch (error) {
         console.error('Cleanup: Failed to delete connection:', error);
       }
     });
 
-    test('Underenhet A som delegerte enkelttjeneste til Virksomhet B skal kunne se Virksomhet B i brukerlista si', async ({
+    test('Hoved- og underenhet skal kunne se virksomhet de har delegert enkelttjeneste til', async ({
       accessManagementFrontPage,
       login,
       aktorvalgHeader,
     }) => {
       await test.step('Logg inn', async () => {
-        await login.LoginToAccessManagement(delegatorOrg.managerPid);
+        await login.LoginToAccessManagement(delegator.dagligLeder.pid);
       });
 
-      await test.step(`Velg underenhet ${delegatorOrg.name} og gå til brukere`, async () => {
-        await aktorvalgHeader.selectSubOrgFromHeaderMenu(delegatorOrg.name);
+      await test.step(`Velg underenhet ${delegator.underenhet.navn} og gå til brukere`, async () => {
+        await aktorvalgHeader.selectSubOrgFromHeaderMenu(delegator.underenhet.navn);
         await accessManagementFrontPage.goToUsers();
       });
 
-      await test.step(`Velg ${recipientOrg.name} i lista over brukere`, async () => {
-        await accessManagementFrontPage.expandOrg(recipientOrg.name);
-        await accessManagementFrontPage.clickUser(recipientOrg.name);
+      await test.step(`Velg ${recipientOrg.navn} i lista over brukere`, async () => {
+        await accessManagementFrontPage.expandOrg(recipientOrg.navn);
+        await accessManagementFrontPage.clickUser(recipientOrg.navn);
       });
 
-      await test.step(`${recipientOrg.name} skal ha enkelttjenesten ${service} hos underenheten`, async () => {
+      await test.step(`${recipientOrg.navn} skal ha enkelttjenesten ${service} hos underenheten`, async () => {
         await accessManagementFrontPage.goToEnkelttjenester();
         await accessManagementFrontPage.userCanDeleteEnkelttjeneste(service);
       });
 
-      await test.step(`Velg hovedenhet ${delegatorOrg.name} og gå til brukere`, async () => {
-        await aktorvalgHeader.goToSelectActor(delegatorOrg.name);
-        await aktorvalgHeader.selectActorFromHeaderMenu(delegatorOrg.name);
+      await test.step(`Velg hovedenhet ${delegator.hovedenhet.navn} og gå til brukere`, async () => {
+        await aktorvalgHeader.goToSelectActor(delegator.hovedenhet.navn);
+        await aktorvalgHeader.selectActorFromHeaderMenu(delegator.hovedenhet.navn);
         await accessManagementFrontPage.goToUsers();
       });
 
-      await test.step(`Velg ${recipientOrg.name} i lista over brukere`, async () => {
-        await accessManagementFrontPage.expandOrg(recipientOrg.name);
-        await accessManagementFrontPage.clickUser(recipientOrg.name);
+      await test.step(`Velg ${recipientOrg.navn} i lista over brukere`, async () => {
+        await accessManagementFrontPage.expandOrg(recipientOrg.navn);
+        await accessManagementFrontPage.clickUser(recipientOrg.navn);
       });
 
-      await test.step(`${recipientOrg.name} skal ha enkelttjenesten ${service} hos hovedenheten`, async () => {
+      await test.step(`${recipientOrg.navn} skal ha enkelttjenesten ${service} hos hovedenheten`, async () => {
         await accessManagementFrontPage.goToEnkelttjenester();
         await accessManagementFrontPage.userCanDeleteEnkelttjeneste(service);
       });
