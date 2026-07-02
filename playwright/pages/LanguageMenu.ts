@@ -14,11 +14,11 @@ export enum Language {
 export type Dict = typeof no_nb;
 
 /**
- * no_nn/en are partially untranslated: they miss some keys that no_nb has, so
- * TS won't accept them as `Dict` directly. We treat bokmål as the schema and
- * assert the others conform for the keys the tests actually use. (A key that
- * exists in no_nb but not no_nn/en would be a runtime `undefined` here — add the
- * translation in the frontend if that ever bites.)
+ * no_nn/en are partially untranslated, so TS won't accept them as `Dict` without
+ * a cast. We treat bokmål as the schema. The nn/en text a test actually depends
+ * on is covered by the tests that run in those languages (consent runs NB/NN/EN,
+ * selectSystemVendor runs NN) — a missing key there fails loudly. Almost all
+ * other tests run in bokmål, so a broader guard isn't worth the complexity.
  */
 const asDict = (localization: unknown): Dict => localization as Dict;
 

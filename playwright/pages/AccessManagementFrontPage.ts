@@ -109,7 +109,7 @@ export class AccessManagementFrontPage {
   async clickGiFullmaktEnkelttjeneste() {
     await this.page
       .getByRole('dialog')
-      .getByRole('button', { name: this.texts.access_packages.give_new_button })
+      .getByRole('button', { name: this.texts.access_packages.give_new_button, exact: true })
       .click();
   }
 
@@ -133,8 +133,16 @@ export class AccessManagementFrontPage {
    * in the delegation modal or inline on the user-detail page.
    */
   private async currentScope(): Promise<Locator | Page> {
-    const dialog = this.page.getByRole('dialog');
-    return (await dialog.count()) > 0 ? dialog : this.page;
+    // Wait briefly for a dialog rather than taking an instant snapshot: a call
+    // right after opening a modal could otherwise fall back to the page and hit
+    // the covered background controls. No dialog within the window → inline flow.
+    const dialog = this.page.getByRole('dialog').first();
+    try {
+      await expect(dialog).toBeVisible({ timeout: 1000 });
+      return dialog;
+    } catch {
+      return this.page;
+    }
   }
 
   async expectAccessPackageToBeDelegable(packageName: string) {
@@ -173,7 +181,10 @@ export class AccessManagementFrontPage {
 
   async clickSlettFullmaktForTilgangspakke(packageName: string) {
     await this.page
-      .getByRole('button', { name: withPoaObject(this.texts.common.delete_poa_for, packageName) })
+      .getByRole('button', {
+        name: withPoaObject(this.texts.common.delete_poa_for, packageName),
+        exact: true,
+      })
       .click();
   }
 
@@ -187,6 +198,7 @@ export class AccessManagementFrontPage {
   async clickGiFullmaktForTilgangspakke(packageName: string) {
     const giFullmaktKnapp = this.page.getByRole('button', {
       name: withPoaObject(this.texts.common.give_poa_for, packageName),
+      exact: true,
     });
     await expect(giFullmaktKnapp).toBeVisible();
     await giFullmaktKnapp.click();
@@ -198,8 +210,11 @@ export class AccessManagementFrontPage {
   }
 
   async expectAccessPackageToNotBeDelegable(packageName: string) {
+    // Scope to the dialog (when open) like the positive check, so we don't match
+    // a control behind an open modal.
+    const scope = await this.currentScope();
     await expect(
-      this.page.getByRole('button', {
+      scope.getByRole('button', {
         name: withPoaObject(this.texts.common.give_poa_for, packageName),
         exact: true,
       }),
@@ -208,7 +223,10 @@ export class AccessManagementFrontPage {
 
   async expectPowerOfAttorneyButtonToNotBeVisible() {
     await expect(
-      this.page.getByRole('button', { name: this.texts.access_packages.give_new_button }),
+      this.page.getByRole('button', {
+        name: this.texts.access_packages.give_new_button,
+        exact: true,
+      }),
     ).not.toBeVisible();
   }
 
