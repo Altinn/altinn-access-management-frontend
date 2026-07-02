@@ -116,6 +116,11 @@ namespace Altinn.AccessManagement.UI.Core.Configuration
         public bool Maskinporten { get; set; }
 
         /// <summary>
+        /// Set to mock IdPortenAuthorization during runtime
+        /// </summary>
+        public bool IdPortenAuthorization { get; set; }
+
+        /// <summary>
         /// Default constructor
         /// </summary>
         public MockSettings()

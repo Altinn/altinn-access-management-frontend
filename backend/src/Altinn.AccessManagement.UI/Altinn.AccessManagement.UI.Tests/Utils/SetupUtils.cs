@@ -620,6 +620,27 @@ namespace Altinn.AccessManagement.UI.Tests.Utils
         }
 
         /// <summary>
+        ///     Gets a HttpClient for unittests testing for IdPortenAuthorizationController
+        /// </summary>
+        /// <param name="customFactory">Web app factory to configure test services for IdPortenAuthorizationController tests</param>
+        /// <returns>HttpClient</returns>
+        public static HttpClient GetTestClient(CustomWebApplicationFactory<IdPortenAuthorizationController> customFactory)
+        {
+            WebApplicationFactory<IdPortenAuthorizationController> factory = customFactory.WithWebHostBuilder(builder =>
+            {
+                builder.ConfigureTestServices(services =>
+                {
+                    services.AddHttpClient<IIdPortenAuthorizationClient, IdPortenAuthorizationClientMock>();
+                    services.AddTransient<IRegisterClient, RegisterClientMock>();
+                    services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
+                    services.AddSingleton<IPostConfigureOptions<JwtCookieOptions>, JwtCookiePostConfigureOptionsStub>();
+                });
+            });
+            factory.Server.AllowSynchronousIO = true;
+            return factory.CreateClient();
+        }
+
+        /// <summary>
         ///     Gets a HttpClient for unittests testing for DelegationExportController
         /// </summary>
         /// <param name="customFactory">Web app factory to configure test services for DelegationExportController tests</param>
