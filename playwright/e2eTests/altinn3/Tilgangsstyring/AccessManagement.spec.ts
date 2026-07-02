@@ -1,17 +1,28 @@
 import { test } from '../../../fixture/pomFixture';
 import { EnduserConnection } from '../../../api-requests/EnduserConnection';
+import {
+  TenorTestData,
+  type TenorPerson,
+  type TenorDagligLederMedOrg,
+} from '../../../tenor/TenorTestData';
 
 const service = 'bruno-correspondence';
 
 test.describe('Tilgangsstyring', () => {
   const api = new EnduserConnection();
-  const org = {
-    managerPid: '12816699205',
-    orgNo: '314138910',
-    name: 'UNDERDANIG DYPSINDIG TIGER AS',
-  };
+  const tenor = new TenorTestData();
 
+  // NB: Bevisst hardkodet testdata (ikke Tenor). Testen åpner brukeren SEG SELV
+  // og forventer «Gi fullmakt». En fersk tilgangsstyrer fra Tenor ser i stedet
+  // «Be om fullmakt» (man kan ikke gi fullmakt til seg selv) — den hardkodede
+  // brukeren passerer bare fordi den har ekstra/akkumulerte rettigheter. For å
+  // bruke Tenor-data må testen redesignes til å delegere til en SEPARAT mottaker.
   test.describe('Tilgangsstyrer skal kunne delegere tilgangspakker de selv har', () => {
+    const org = {
+      managerPid: '12816699205',
+      orgNo: '314138910',
+      name: 'UNDERDANIG DYPSINDIG TIGER AS',
+    };
     const user = { pid: '70885100226', name: 'Iherdig Litteratur' };
     const packages = [
       'urn:altinn:accesspackage:tilgangsstyrer',
@@ -33,7 +44,6 @@ test.describe('Tilgangsstyring', () => {
 
     test('Tilgangsstyrer skal kunne delegere tilgangspakker de selv har', async ({
       login,
-      aktorvalgHeader,
       accessManagementFrontPage,
     }) => {
       await test.step('Log in', async () => {
@@ -41,7 +51,7 @@ test.describe('Tilgangsstyring', () => {
       });
 
       await test.step(`Velg org ${org.name} og gå til tilgangsstyring`, async () => {
-        await aktorvalgHeader.selectActorFromHeaderMenu(org.name);
+        await login.selectMainUnitBySearching(org.name);
       });
 
       await test.step(`Gå til brukere og velg bruker "${user.name}"`, async () => {
@@ -67,30 +77,44 @@ test.describe('Tilgangsstyring', () => {
   });
 
   test.describe('Hovedadministrator skal kunne delegere nesten alle tilgangspakker', () => {
-    const user = { pid: '64866402394', name: 'TRÅDLØS TELEFONNUMMER' };
+    let org: TenorDagligLederMedOrg;
+    let user: TenorPerson;
     const packages = ['urn:altinn:accesspackage:hovedadministrator'];
 
     test.beforeEach(async () => {
-      await api.addConnectionAndPackagesToUser(org.managerPid, org.orgNo, user.pid, packages);
+      [org, user] = await Promise.all([tenor.dagligLederMedOrg(), tenor.bosattMyndigPerson()]);
+      await api.addConnectionAndPackagesToUser(
+        org.dagligLeder.pid,
+        org.org.orgnr,
+        user.pid,
+        packages,
+      );
+    });
+
+    test.afterEach(async () => {
+      try {
+        await api.deleteConnection(org.dagligLeder.pid, org.org.orgnr, [user.pid]);
+      } catch (error) {
+        console.error('Cleanup: Failed to delete connection:', error);
+      }
     });
 
     test('Hovedadministrator skal kunne delegere nesten alle tilgangspakker', async ({
       login,
-      aktorvalgHeader,
       accessManagementFrontPage,
     }) => {
       await test.step('Log in', async () => {
         await login.LoginToAccessManagement(user.pid);
       });
 
-      await test.step(`Velg org ${org.name} og gå til tilgangsstyring`, async () => {
-        await aktorvalgHeader.selectActorFromHeaderMenu(org.name);
+      await test.step(`Velg org ${org.org.navn} og gå til tilgangsstyring`, async () => {
+        await login.selectMainUnitBySearching(org.org.navn);
       });
 
       await test.step('Gå til brukere og velg deg selv', async () => {
         await accessManagementFrontPage.goToUsers();
         await accessManagementFrontPage.expectOthersWithRightsListToBeVisible();
-        await accessManagementFrontPage.clickUser(user.name);
+        await accessManagementFrontPage.clickUser(user.navn);
       });
 
       await test.step('Klikk "Gi fullmakt"', async () => {
@@ -175,33 +199,47 @@ test.describe('Tilgangsstyring', () => {
   });
 
   test.describe('Vanlig bruker skal ikke kunne delegere pakker de selv ikke har tilgang til', () => {
-    const user = { pid: '15843346194', name: 'DYREBAR MIDDAG' };
+    let org: TenorDagligLederMedOrg;
+    let user: TenorPerson;
     const packages = [
       'urn:altinn:accesspackage:tilgangsstyrer',
       'urn:altinn:accesspackage:byggesoknad',
     ];
 
     test.beforeEach(async () => {
-      await api.addConnectionAndPackagesToUser(org.managerPid, org.orgNo, user.pid, packages);
+      [org, user] = await Promise.all([tenor.dagligLederMedOrg(), tenor.bosattMyndigPerson()]);
+      await api.addConnectionAndPackagesToUser(
+        org.dagligLeder.pid,
+        org.org.orgnr,
+        user.pid,
+        packages,
+      );
+    });
+
+    test.afterEach(async () => {
+      try {
+        await api.deleteConnection(org.dagligLeder.pid, org.org.orgnr, [user.pid]);
+      } catch (error) {
+        console.error('Cleanup: Failed to delete connection:', error);
+      }
     });
 
     test('Vanlig bruker skal ikke kunne delegere pakker de selv ikke har tilgang til', async ({
       login,
-      aktorvalgHeader,
       accessManagementFrontPage,
     }) => {
       await test.step('Log in', async () => {
         await login.LoginToAccessManagement(user.pid);
       });
 
-      await test.step(`Velg org ${org.name} og gå til tilgangsstyring`, async () => {
-        await aktorvalgHeader.selectActorFromHeaderMenu(org.name);
+      await test.step(`Velg org ${org.org.navn} og gå til tilgangsstyring`, async () => {
+        await login.selectMainUnitBySearching(org.org.navn);
       });
 
       await test.step('Gå til brukere-siden og velg deg selv', async () => {
         await accessManagementFrontPage.goToUsers();
         await accessManagementFrontPage.expectOthersWithRightsListToBeVisible();
-        await accessManagementFrontPage.clickUser(user.name);
+        await accessManagementFrontPage.clickUser(user.navn);
       });
 
       await test.step('User should not be able to give power of attorney to themselves', async () => {
@@ -211,16 +249,23 @@ test.describe('Tilgangsstyring', () => {
   });
 
   test.describe('Standard bruker skal kun kunne se deg selv på brukere-siden', () => {
-    const user = { pid: '22907997719' };
+    let org: TenorDagligLederMedOrg;
+    let user: TenorPerson;
     const packages = ['urn:altinn:accesspackage:byggesoknad'];
 
     test.beforeEach(async () => {
-      await api.addConnectionAndPackagesToUser(org.managerPid, org.orgNo, user.pid, packages);
+      [org, user] = await Promise.all([tenor.dagligLederMedOrg(), tenor.bosattMyndigPerson()]);
+      await api.addConnectionAndPackagesToUser(
+        org.dagligLeder.pid,
+        org.org.orgnr,
+        user.pid,
+        packages,
+      );
     });
 
     test.afterEach(async () => {
       try {
-        await api.deleteConnection(org.managerPid, org.orgNo, [user.pid]);
+        await api.deleteConnection(org.dagligLeder.pid, org.org.orgnr, [user.pid]);
       } catch (error) {
         console.error('Cleanup: Failed to delete connection:', error);
       }
@@ -228,15 +273,14 @@ test.describe('Tilgangsstyring', () => {
 
     test('Standard bruker skal kun kunne se deg selv på brukere-siden', async ({
       login,
-      aktorvalgHeader,
       accessManagementFrontPage,
     }) => {
       await test.step('Log in', async () => {
         await login.LoginToAccessManagement(user.pid);
       });
 
-      await test.step(`Velg org ${org.name} og gå til tilgangsstyring`, async () => {
-        await aktorvalgHeader.selectActorFromHeaderMenu(org.name);
+      await test.step(`Velg org ${org.org.navn} og gå til tilgangsstyring`, async () => {
+        await login.selectMainUnitBySearching(org.org.navn);
       });
 
       await test.step('Gå til brukere-siden', async () => {
