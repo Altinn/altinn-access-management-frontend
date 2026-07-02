@@ -32,22 +32,23 @@ export const focusHasBeenLost = () =>
   (document.activeElement instanceof HTMLElement &&
     isUnavailableForFocus(document.activeElement, document.activeElement));
 
-// Focuses the element, making it programmatically focusable for this call only when it is not
-// natively focusable (e.g. a heading or a processed, non-interactive row).
+// Moves focus to the element, including non-natively-focusable ones (e.g. a heading or a processed,
+// non-interactive row).
 export const focusElement = (element: HTMLElement) => {
   if (element.matches(FOCUSABLE_SELECTOR)) {
     element.focus();
     return;
   }
 
-  const hadTabIndex = element.hasAttribute('tabindex');
-  if (!hadTabIndex) {
+  // Give a non-natively-focusable element a temporary tabindex so it can take focus. It must stay set
+  // while the element is focused: removing tabindex from the active element blurs it straight to
+  // <body> in real browsers (jsdom does not, which masked this in tests). Defer removal until focus
+  // actually leaves, via a one-shot blur listener.
+  if (!element.hasAttribute('tabindex')) {
     element.tabIndex = -1;
+    element.addEventListener('blur', () => element.removeAttribute('tabindex'), { once: true });
   }
   element.focus();
-  if (!hadTabIndex) {
-    element.removeAttribute('tabindex');
-  }
 };
 
 // Use this in any component that could be the destination of a requestFocus(id) call. Typical

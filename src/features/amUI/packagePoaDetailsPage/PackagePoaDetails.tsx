@@ -15,6 +15,7 @@ import { FilesIcon, PersonGroupIcon } from '@navikt/aksel-icons';
 import { amUIPath } from '@/routes/paths/amUIPath';
 import { useDocumentTitle } from '@/resources/hooks/useDocumentTitle';
 import { useTabState } from '@/resources/hooks';
+import { RestoreFocusProvider, useRestoreFocus } from '../common/RestoreFocus';
 
 export const PackagePoaDetails = () => {
   const { id } = useParams<{ id: string }>();
@@ -22,6 +23,9 @@ export const PackagePoaDetails = () => {
   const { t, i18n } = useTranslation();
   const { fromParty } = usePartyRepresentation();
   const { canDelegatePackage } = useAccessPackageDelegationCheck();
+  // One zone for the whole page so the users tab can restore focus to the page heading (rendered in
+  // the header, outside the tabs) after a revoke. The services tab only registers passive targets.
+  const restoreFocus = useRestoreFocus();
 
   const {
     data: accessPackage,
@@ -66,7 +70,7 @@ export const PackagePoaDetails = () => {
   }
 
   return (
-    <>
+    <RestoreFocusProvider restoreFocus={restoreFocus}>
       <div className={headerClasses.headingContainer}>
         <PackagePoaDetailsHeader
           isLoading={isLoading}
@@ -123,6 +127,6 @@ export const PackagePoaDetails = () => {
           </div>
         </DsTabs.Panel>
       </DsTabs>
-    </>
+    </RestoreFocusProvider>
   );
 };

@@ -21,12 +21,14 @@ interface InstanceUsersAsInstanceAdminProps {
   resourceId: string;
   instanceUrn: string;
   onDelegate: (user: UserActionTarget) => void;
+  restoreFocusFallbackId?: string;
 }
 
 export const InstanceUsersAsInstanceAdmin = ({
   resourceId,
   instanceUrn,
   onDelegate,
+  restoreFocusFallbackId,
 }: InstanceUsersAsInstanceAdminProps) => {
   const { t } = useTranslation();
   const { actingParty, fromParty } = usePartyRepresentation();
@@ -99,6 +101,7 @@ export const InstanceUsersAsInstanceAdmin = ({
       <UserSearch
         includeSelfAsChild={false}
         includeSelfAsChildOnIndirect={false}
+        restoreFocusFallbackId={restoreFocusFallbackId}
         AddUserButton={
           <AddUserButton
             resourceId={resourceId}

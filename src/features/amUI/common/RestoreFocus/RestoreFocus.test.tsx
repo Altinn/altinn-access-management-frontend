@@ -414,7 +414,13 @@ describe('RestoreFocus', () => {
 
     const target = screen.getByText('Processed row');
     await waitFor(() => expect(target).toHaveFocus());
-    expect(target).not.toHaveAttribute('tabindex');
+    // The temporary tabindex must stay while the element is focused; removing it from the active
+    // element would blur it straight to <body> in real browsers.
+    expect(target).toHaveAttribute('tabindex', '-1');
+
+    // It is cleaned up once focus moves elsewhere.
+    screen.getByRole('button', { name: 'Next action' }).focus();
+    await waitFor(() => expect(target).not.toHaveAttribute('tabindex'));
   });
 
   it('focuses the target when it mounts after the request', async () => {
