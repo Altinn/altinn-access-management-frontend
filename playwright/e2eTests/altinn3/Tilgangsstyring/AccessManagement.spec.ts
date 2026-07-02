@@ -12,18 +12,10 @@ test.describe('Tilgangsstyring', () => {
   const api = new EnduserConnection();
   const tenor = new TenorTestData();
 
-  // NB: Bevisst hardkodet testdata (ikke Tenor). Testen åpner brukeren SEG SELV
-  // og forventer «Gi fullmakt». En fersk tilgangsstyrer fra Tenor ser i stedet
-  // «Be om fullmakt» (man kan ikke gi fullmakt til seg selv) — den hardkodede
-  // brukeren passerer bare fordi den har ekstra/akkumulerte rettigheter. For å
-  // bruke Tenor-data må testen redesignes til å delegere til en SEPARAT mottaker.
   test.describe('Tilgangsstyrer skal kunne delegere tilgangspakker de selv har', () => {
-    const org = {
-      managerPid: '12816699205',
-      orgNo: '314138910',
-      name: 'UNDERDANIG DYPSINDIG TIGER AS',
-    };
-    const user = { pid: '70885100226', name: 'Iherdig Litteratur' };
+    let org: TenorDagligLederMedOrg;
+    let tilgangsstyrer: TenorPerson;
+    let recipient: TenorPerson;
     const packages = [
       'urn:altinn:accesspackage:tilgangsstyrer',
       'urn:altinn:accesspackage:posttjenester',
@@ -31,12 +23,27 @@ test.describe('Tilgangsstyring', () => {
     ];
 
     test.beforeEach(async () => {
-      await api.addConnectionAndPackagesToUser(org.managerPid, org.orgNo, user.pid, packages);
+      // Daglig leder gir `tilgangsstyrer` rollen + pakkene, og kobler en egen
+      // `recipient` til virksomheten. `tilgangsstyrer` logger inn, representerer
+      // virksomheten og skal kunne delegere pakkene sine videre til `recipient`
+      // (man kan ikke gi fullmakt til seg selv, derfor en separat mottaker).
+      org = await tenor.dagligLederMedOrg();
+      [tilgangsstyrer, recipient] = await tenor.bosatteMyndigePersoner(2);
+      await api.addConnectionAndPackagesToUser(
+        org.dagligLeder.pid,
+        org.org.orgnr,
+        tilgangsstyrer.pid,
+        packages,
+      );
+      await api.addConnection(org.dagligLeder.pid, org.org.orgnr, recipient.pid);
     });
 
     test.afterEach(async () => {
       try {
-        await api.deleteConnection(org.managerPid, org.orgNo, [user.pid]);
+        await api.deleteConnection(org.dagligLeder.pid, org.org.orgnr, [
+          tilgangsstyrer.pid,
+          recipient.pid,
+        ]);
       } catch (error) {
         console.error('Cleanup: Failed to delete connection:', error);
       }
@@ -47,29 +54,29 @@ test.describe('Tilgangsstyring', () => {
       accessManagementFrontPage,
     }) => {
       await test.step('Log in', async () => {
-        await login.LoginToAccessManagement(user.pid);
+        await login.LoginToAccessManagement(tilgangsstyrer.pid);
       });
 
-      await test.step(`Velg org ${org.name} og gå til tilgangsstyring`, async () => {
-        await login.selectMainUnitBySearching(org.name);
+      await test.step(`Velg org ${org.org.navn} og gå til tilgangsstyring`, async () => {
+        await login.selectMainUnitBySearching(org.org.navn);
       });
 
-      await test.step(`Gå til brukere og velg bruker "${user.name}"`, async () => {
+      await test.step(`Gå til brukere og velg mottaker "${recipient.navn}"`, async () => {
         await accessManagementFrontPage.goToUsers();
         await accessManagementFrontPage.expectOthersWithRightsListToBeVisible();
-        await accessManagementFrontPage.clickUser(user.name);
+        await accessManagementFrontPage.clickUser(recipient.navn);
       });
 
       await test.step('Klikk "Gi fullmakt"', async () => {
         await accessManagementFrontPage.clickGiFullmakt();
       });
 
-      await test.step('Brukeren skal kunne til å gi fullmakt til "Tilgangsstyrer"', async () => {
+      await test.step('Skal kunne gi fullmakt til "Tilgangsstyrer"', async () => {
         await accessManagementFrontPage.goToArea('Administrere tilganger');
         await accessManagementFrontPage.expectAccessPackageToBeDelegable('Tilgangsstyrer');
       });
 
-      await test.step('Brukeren skal kunne til å gi fullmakt til "Posttjenester"', async () => {
+      await test.step('Skal kunne gi fullmakt til "Posttjenester"', async () => {
         await accessManagementFrontPage.goToArea('Andre tjenesteytende næringer');
         await accessManagementFrontPage.expectAccessPackageToBeDelegable('Posttjenester');
       });
