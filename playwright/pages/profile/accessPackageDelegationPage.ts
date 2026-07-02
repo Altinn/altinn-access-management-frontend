@@ -221,14 +221,26 @@ export class DelegationPage {
     await expect(backLink).toBeVisible();
     await backLink.click();
 
-    // 2. Click org button
-    const orgButton = this.page.getByRole('button', { name: orgButtonName });
-    await expect(orgButton).toBeVisible({ timeout: 10_000 });
-    await orgButton.click();
+    // 2. Filtrer brukerlista på virksomheten. Lista er paginert («Se mer»), og
+    // en tilfeldig avgiver-org kan ha mange rettighetshavere, så mottakeren
+    // ligger ofte forbi første side hvis vi ikke søker den fram.
+    const search = this.page.getByPlaceholder(this.texts.users_page.user_search_placeholder);
+    await expect(search).toBeVisible();
+    await search.fill(orgButtonName);
+    await this.page.waitForLoadState('networkidle').catch(() => {});
 
-    // 3. Click key role user
-    const keyUserLink = this.page.getByRole('link', { name: keyRoleUserName });
-    await expect(keyUserLink).toBeVisible({ timeout: 10_000 });
+    // 3. Utvid virksomhetsraden (en knapp med arvende nøkkelrolle-brukere) og
+    // klikk nøkkelrolle-brukeren. Søke-re-renderet kan kollapse raden, så vi
+    // prøver til nøkkelrolle-lenken faktisk er synlig.
+    const orgButton = this.page.getByRole('button', { name: orgButtonName }).first();
+    const keyUserLink = this.page.getByRole('link', { name: keyRoleUserName }).first();
+    await expect(async () => {
+      if (!(await keyUserLink.isVisible().catch(() => false))) {
+        await expect(orgButton).toBeVisible({ timeout: 5_000 });
+        await orgButton.click();
+      }
+      await expect(keyUserLink).toBeVisible({ timeout: 3_000 });
+    }).toPass({ timeout: 20_000 });
     await keyUserLink.click();
 
     // 4. Verify all expected packages
