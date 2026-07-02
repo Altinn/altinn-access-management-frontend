@@ -115,7 +115,10 @@ export const ActiveConsentsPage = () => {
         >
           {selectedConsentId && <ConsentDetails consentId={selectedConsentId} />}
           {selectedIdPortenAuthorization && (
-            <IdPortenAutorizationDetails idPortenAuthorization={selectedIdPortenAuthorization} />
+            <IdPortenAutorizationDetails
+              idPortenAuthorization={selectedIdPortenAuthorization}
+              onRevoked={() => consentModalRef.current?.close()}
+            />
           )}
         </DsDialog>
       </PageLayoutWrapper>

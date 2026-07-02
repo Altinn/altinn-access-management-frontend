@@ -4,7 +4,7 @@ import {
   IdPortenAuthorization,
   useWithdrawIdPortenAuthorizationMutation,
 } from '@/rtk/features/idPortenAuthorizationApi';
-import { DsAlert, DsDetails, DsHeading } from '@altinn/altinn-components';
+import { DsAlert, DsDetails, DsHeading, useSnackbar } from '@altinn/altinn-components';
 import { ConsentRights } from '../ConsentRights/ConsentRights';
 import { parseUserAgent, toDateTimeString } from '../../utils';
 import { ConsentStatus } from '../ConsentStatus/ConsentStatus';
@@ -13,12 +13,15 @@ import classes from './IdPortenAutorizationDetails.module.css';
 
 interface IdPortenAutorizationDetailsProps {
   idPortenAuthorization: IdPortenAuthorization;
+  onRevoked: () => void;
 }
 
 export const IdPortenAutorizationDetails = ({
   idPortenAuthorization,
+  onRevoked,
 }: IdPortenAutorizationDetailsProps) => {
   const { t } = useTranslation();
+  const { openSnackbar } = useSnackbar();
 
   const [withdrawIdPortenAuthorization, { isLoading: isWithdrawing, error: isWithdrawError }] =
     useWithdrawIdPortenAuthorizationMutation();
@@ -28,6 +31,13 @@ export const IdPortenAutorizationDetails = ({
       await withdrawIdPortenAuthorization({
         id: idPortenAuthorization.authorization_id,
       }).unwrap();
+      openSnackbar({
+        message: t('active_consents.revoke_consent_success', {
+          consentName: idPortenAuthorization.client_name,
+        }),
+        color: 'success',
+      });
+      onRevoked();
     } catch {
       // Error is already tracked via revokeConsentError
     }

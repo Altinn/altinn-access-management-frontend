@@ -873,6 +873,7 @@
     "status_poa_active": "Fullmakten er aktiv",
     "status_poa_revoked": "Fullmakten er ikke aktiv",
     "status_poa_expired": "Fullmakten er utløpt",
+    "revoke_consent_success": "Samtykket {{consentName}} er trukket",
     "revoke_consent_error": "Kunne ikke trekke samtykke",
     "revoke_poa_error": "Kunne ikke trekke fullmakt",
     "revoke_consent_text": "Er du sikker på at du vil trekke dette samtykket?",
