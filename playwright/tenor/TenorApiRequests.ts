@@ -58,7 +58,14 @@ interface TenorDocument {
 
 interface TenorResponse {
   dokumentListe?: TenorDocument[];
+  /** Neste side-indeks (null/undefined når det ikke er flere sider). */
+  nesteSide?: number | null;
+  /** Seed for stabil rekkefølge – må sendes med på påfølgende sider. */
+  seed?: number;
 }
+
+/** Tenor returnerer maks 200 dokumenter per kall. */
+const TENOR_MAX_PER_PAGE = 200;
 
 /** En testperson hentet fra Tenor. */
 export interface TenorTestperson {
@@ -301,6 +308,153 @@ export class TenorApiRequests {
     return dokumenter
       .map((dokument) => this.dokumentTilPerson(dokument))
       .filter((person): person is TenorTestperson => person !== null);
+  }
+
+  /**
+   * Henter mange unike dokumenter fra en Tenor-kilde forbi 200-grensen. Dyp
+   * paginering er begrenset til de første 200 treffene per søk (`nesteSide` blir
+   * null når `offset + antall >= 200`), så vi kan ikke bla oss gjennom hele
+   * trefflista. I stedet henter vi flere batcher à 200 med ulik `seed`: hver
+   * seed gir en egen tilfeldig rekkefølge, og de første 200 fra hver seed er i
+   * praksis disjunkte (trefflistene er på hundretusener). Vi unioner (dedup på
+   * `tenorMetadata.id` – fødselsnummer for freg, orgnr for brreg) til vi har nok.
+   *
+   * Dette er den generelle bulk-byggesteinen; bruk `hentPersonerPaginert` /
+   * `hentVirksomheterPaginert` for typede resultater.
+   *
+   * @param kilde Tenor-kilde, f.eks. `freg` eller `brreg-er-fr`.
+   * @param kql Søkestreng i Kibana Query Language.
+   * @param antall Totalt antall unike dokumenter som ønskes.
+   */
+  async hentDokumenterPaginert(
+    kilde: string,
+    kql: string,
+    antall: number,
+  ): Promise<TenorDocument[]> {
+    const token = await this.getToken();
+    const dokumenter = new Map<string, TenorDocument>(); // dedup på tenorMetadata.id
+    // Tillat noen ekstra batcher i tilfelle overlapp mellom seeds.
+    const maksBatcher = Math.ceil(antall / TENOR_MAX_PER_PAGE) + 5;
+
+    for (let seed = 1; dokumenter.size < antall && seed <= maksBatcher; seed++) {
+      const params = new URLSearchParams({
+        kql,
+        vis: 'tenorMetadata',
+        antall: String(TENOR_MAX_PER_PAGE),
+        side: '0',
+        seed: String(seed),
+      });
+
+      const url = `${TENOR_BASE_URL}${TENOR_SOEK_PATH}/${kilde}?${params.toString()}`;
+      const response = await fetch(url, {
+        headers: { Authorization: `Bearer ${token}`, Accept: 'application/json' },
+      });
+      if (!response.ok) {
+        const body = await response.text().catch(() => 'Ukjent feil');
+        throw new Error(`Tenor-søk feilet (HTTP ${response.status}): ${body}\nKQL: ${kql}`);
+      }
+
+      const json = (await response.json()) as TenorResponse;
+      const docs = json.dokumentListe ?? [];
+      if (docs.length === 0) break; // ikke flere treff å hente
+      for (const d of docs) {
+        const key = d.tenorMetadata?.id;
+        if (!key) continue; // uten id kan vi ikke garantere unikhet – hopp over
+        if (!dokumenter.has(key)) dokumenter.set(key, d);
+      }
+    }
+
+    return [...dokumenter.values()].slice(0, antall);
+  }
+
+  /**
+   * Henter mange unike personer (freg) forbi Tenor sin 200-grense.
+   * @param kql Søkestreng i Kibana Query Language.
+   * @param antall Totalt antall unike personer som ønskes.
+   */
+  async hentPersonerPaginert(kql: string, antall: number): Promise<TenorTestperson[]> {
+    const dokumenter = await this.hentDokumenterPaginert('freg', kql, antall);
+    return dokumenter
+      .map((d) => this.dokumentTilPerson(d))
+      .filter((person): person is TenorTestperson => person !== null)
+      .slice(0, antall);
+  }
+
+  /**
+   * Henter mange unike virksomheter (brreg) forbi Tenor sin 200-grense.
+   * @param kql Søkestreng i Kibana Query Language, f.eks. `organisasjonsform.kode:AS`.
+   * @param antall Totalt antall unike virksomheter som ønskes.
+   */
+  async hentVirksomheterPaginert(kql: string, antall: number): Promise<TenorVirksomhet[]> {
+    const dokumenter = await this.hentDokumenterPaginert('brreg-er-fr', kql, antall);
+    return dokumenter
+      .map((d) => this.hentVirksomhet(d))
+      .filter((v): v is TenorVirksomhet => v !== null)
+      .slice(0, antall);
+  }
+
+  /**
+   * Henter mange unike facilitator-orgnr (revisor/regnskapsfører/forretningsfører)
+   * i bulk – f.eks. «100 revisor-virksomheter».
+   *
+   * Tenor har ingen direkte «er revisor»-flagg på virksomheten selv, så vi
+   * skanner klient-virksomheter (`<felt>:*`) i bulk og plukker ut facilitatorens
+   * orgnr fra hver klients rollegruppe (REVI/REGN/FFØR), deduplisert. Flere
+   * klienter deler ofte samme facilitator, så `maksKandidater` settes romslig
+   * over `antall`.
+   *
+   * @param rolle Hvilken facilitator-rolle.
+   * @param antall Antall unike facilitator-orgnr som ønskes.
+   * @param maksKandidater Hvor mange klient-kandidater som skannes. Default: `antall * 20`.
+   */
+  async hentFacilitatorOrgnr(
+    rolle: FacilitatorRolle,
+    antall: number,
+    maksKandidater = antall * 20,
+  ): Promise<string[]> {
+    const { felt, rolleKode } = FACILITATOR_ROLLER[rolle];
+    const kandidater = await this.hentDokumenterPaginert(
+      'brreg-er-fr',
+      `${felt}:*`,
+      maksKandidater,
+    );
+
+    const orgnr = new Set<string>();
+    for (const klient of kandidater) {
+      const org = this.hentRolleVirksomhet(klient, rolleKode);
+      if (org) orgnr.add(org);
+      if (orgnr.size >= antall) break;
+    }
+    return [...orgnr].slice(0, antall);
+  }
+
+  /**
+   * Henter fødselsnummeret til daglig leder (eller innehaver) for en virksomhet.
+   * @returns fnr, eller null hvis virksomheten mangler DAGL/INNH-rolle.
+   */
+  async hentDagligLederForOrg(orgnr: string): Promise<string | null> {
+    const [virksomhet] = await this.sokBrreg(`organisasjonsnummer:${orgnr}`, 1);
+    if (!virksomhet) return null;
+    return this.hentDagligLeder(this.parseKildedata(virksomhet));
+  }
+
+  /**
+   * Slår opp daglig leder for mange virksomheter – f.eks. «personene som er DAGL
+   * for disse revisor-virksomhetene». Hver virksomhet krever ett oppslag, så
+   * dette gjøres sekvensielt for å holde token-/throttling-presset lavt.
+   * @param orgnrListe Orgnr å slå opp daglig leder for.
+   */
+  async hentDagligLedere(
+    orgnrListe: string[],
+  ): Promise<Array<{ organisasjonsnummer: string; dagligLeder: string | null }>> {
+    const resultat: Array<{ organisasjonsnummer: string; dagligLeder: string | null }> = [];
+    for (const orgnr of orgnrListe) {
+      resultat.push({
+        organisasjonsnummer: orgnr,
+        dagligLeder: await this.hentDagligLederForOrg(orgnr),
+      });
+    }
+    return resultat;
   }
 
   /**

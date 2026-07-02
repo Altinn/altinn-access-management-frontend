@@ -12,6 +12,7 @@
     "env:TT02": "cross-env environment=tt02 npx playwright test",
     "tenor": "npx tsx tenor/hentTestpersoner.ts",
     "tenor:virksomhet": "npx tsx tenor/hentVirksomhet.ts",
+    "tenor:bulk": "npx tsx tenor/hentBulk.ts",
     "lint": "eslint ."
   },
   "keywords": [],
