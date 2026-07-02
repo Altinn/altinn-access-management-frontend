@@ -252,16 +252,9 @@ export class AccessManagementFrontPage {
   }
 
   async addPerson(fnr: string, lastName: string) {
-    const fnrField1 = this.page.getByRole('textbox', { name: this.texts.common.ssn }); // AT22 og AT23
-    // No localization key for the TT02 variant label — kept literal.
-    const fnrField2 = this.page.getByRole('textbox', { name: 'Fødselsnr./brukernavn' }); //TT02
-
-    if (await fnrField1.isVisible()) {
-      await fnrField1.fill(fnr);
-    } else if (await fnrField2.isVisible()) {
-      await fnrField2.fill(fnr);
-    }
-
+    await this.page
+      .getByRole('textbox', { name: this.texts.new_user_modal.person_identifier })
+      .fill(fnr);
     await this.page.getByRole('textbox', { name: this.texts.common.last_name }).fill(lastName);
     await this.page
       .getByRole('button', { name: this.texts.new_user_modal.add_person_button })

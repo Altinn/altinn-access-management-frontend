@@ -46,14 +46,6 @@ export class SidebarNav {
   }
 
   async goToKlientAdministrasjon() {
-    await Promise.all([
-      this.page.waitForResponse(
-        (resp) => resp.url().includes('/api/v1/connection/rightholders') && resp.ok(),
-      ),
-      this.page.waitForResponse(
-        (resp) => resp.url().includes('/api/v1/clientdelegations/agents') && resp.ok(),
-      ),
-      this.clientAdministration.click(),
-    ]);
+    await this.clientAdministration.click();
   }
 }
