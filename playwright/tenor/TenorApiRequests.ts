@@ -460,7 +460,8 @@ export class TenorApiRequests {
   /**
    * KQL for å finne privatpersoner som er bosatt og myndige (fyllt 18 år).
    * `foedselsdato` er søkbar i Tenor, så myndighet uttrykkes som et
-   * datointervall (født senest for 18 år siden).
+   * datointervall (født senest for 18 år siden). `personstatus:bosatt` matcher
+   * gjeldende status, så døde treffes ikke.
    */
   static bosattMyndigKql(): string {
     // Født senest denne datoen ⇒ har fyllt 18 år i dag.

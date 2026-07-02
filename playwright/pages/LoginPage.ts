@@ -54,22 +54,29 @@ export class LoginPage {
 
   async selectMainUnitBySearching(targetReportee: string) {
     const dialog = this.page.getByRole('dialog');
-    await expect(dialog).toBeVisible();
-
-    // Søkefeltet vises bare når brukeren har mange aktører (#2299). Vent en kort
-    // stund på at det dukker opp — finnes det, filtrer på navnet. Dukker det ikke
-    // opp (få aktører) ligger aktøren allerede i en kort liste, og vi klikker den
-    // direkte. waitFor retryer, så vi unngår race på et øyeblikks-snapshot.
     const searchBox = dialog.getByRole('searchbox');
-    try {
-      await searchBox.waitFor({ state: 'visible', timeout: 3000 });
-      await searchBox.fill(targetReportee);
-    } catch {
-      // Ingen søkefelt – brukeren har få aktører.
-    }
+    const menuitem = dialog.getByRole('menuitem', { name: targetReportee }).first();
+    // Forsiden viser den aktive aktørens navn som H1. Det er et pålitelig signal
+    // på at riktig aktør er valgt – enten automatisk (kun én aktør ⇒ ingen
+    // dialog) eller etter at vi har valgt i kontovelgeren.
+    const frontPage = this.page.getByRole('heading', { level: 1, name: targetReportee });
 
-    await dialog.getByRole('menuitem', { name: targetReportee }).first().click();
-    await expect(dialog).not.toBeVisible();
+    // Etter «Autentiser» sendes en bruker med bare én aktør rett til forsiden
+    // (ingen «Velg aktør»-dialog – som kan blinke innom og forsvinne igjen),
+    // mens en bruker med flere aktører må velge i kontovelgeren. Vi prøver derfor
+    // til vi står på forsiden: er vi ikke der, velger vi aktøren i dialogen.
+    // Kontovelgeren re-rendrer mens aktørene lastes, så vi prøver på nytt om
+    // klikket bommer (menyelementet detacher).
+    await expect(async () => {
+      if (await frontPage.isVisible().catch(() => false)) return; // aktør allerede aktiv
+      // Søkefeltet vises bare når brukeren har mange aktører (#2299).
+      if (await searchBox.isVisible().catch(() => false)) {
+        await searchBox.fill(targetReportee);
+      }
+      await expect(menuitem).toBeVisible({ timeout: 5000 });
+      await menuitem.click();
+      await expect(frontPage).toBeVisible({ timeout: 5000 });
+    }).toPass({ timeout: 30000 });
   }
 
   private async navigateToLoginPage() {
