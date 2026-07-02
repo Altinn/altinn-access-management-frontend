@@ -3,24 +3,28 @@ import { Language } from 'playwright/pages/LanguageMenu';
 
 import { TestdataApi } from 'playwright/util/TestdataApi';
 import { ApiRequests } from 'playwright/api-requests/SystemUserApiRequests';
+import { TenorTestData, type TenorDagligLederMedOrg } from 'playwright/tenor/TenorTestData';
 
 // Runs in nynorsk on purpose: exercises the before-login language pinning
 // (settings API) and proves the dict-driven selectors work in a non-default
 // language. The rest of the suites run in the default bokmål.
 test.use({ language: Language.NN });
+// Systemleverandøren er en registrert leverandør i systemregisteret (fast
+// infrastruktur, ikke Tenor). Eier-virksomheten som oppretter systembrukeren
+// hentes derimot fra Tenor, så parallelle kjøringer ikke deler samme aktør.
 const vendorOrgNumber = '310547891';
-const testUserPid = '14824497789';
-const testOrgName = 'Aktverdig Retorisk Ape';
-const testUserName = 'Skravlete Blåveis';
 
 test.describe('System Register', async () => {
+  const tenor = new TenorTestData();
   let system: string;
+  let owner: TenorDagligLederMedOrg;
 
-  test.beforeEach(async ({ page, login }) => {
+  test.beforeEach(async ({ login }) => {
     const api = new ApiRequests();
     system = await api.createSystemSystemRegister(vendorOrgNumber);
-    await login.LoginToAccessManagement(testUserPid);
-    await login.selectMainUnitBySearching(testOrgName);
+    owner = await tenor.dagligLederMedOrg();
+    await login.LoginToAccessManagement(owner.dagligLeder.pid);
+    await login.selectMainUnitBySearching(owner.org.navn);
   });
 
   test('Create system user and verify landing page', async ({

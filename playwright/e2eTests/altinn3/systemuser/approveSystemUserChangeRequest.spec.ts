@@ -2,12 +2,12 @@ import { test, expect } from 'playwright/fixture/pomFixture';
 import { TestdataApi } from 'playwright/util/TestdataApi';
 import { env } from 'playwright/util/helper';
 import { ApiRequests } from 'playwright/api-requests/SystemUserApiRequests';
+import { TenorTestData, type TenorDagligLederMedOrg } from 'playwright/tenor/TenorTestData';
+
+// Leverandør + prebygd system er registrert infrastruktur (ikke Tenor). Kunde-
+// virksomheten som forespørselen gjelder – og som logger inn/godkjenner – er Tenor.
 const vendorOrgNumber = '310547891';
 const prebuiltSystemId = '310547891_E2E-Playwright-Authentication';
-const testUserPid = '14824497789';
-const testOrgName = 'Aktverdig Retorisk Ape';
-
-const testUser = testUserPid;
 
 const changeRequest = {
   requiredRights: [{ resource: [{ value: 'vegardtestressurs', id: 'urn:altinn:resource' }] }],
@@ -17,27 +17,30 @@ const changeRequest = {
 };
 
 test.describe('Systembruker endringsforespørsel', () => {
+  const tenor = new TenorTestData();
   let api: ApiRequests;
+  let owner: TenorDagligLederMedOrg;
   let systemUserIds: string[] = [];
   let systemUserId: string;
   let changeRequestResponse: Awaited<ReturnType<ApiRequests['postSystemuserChangeRequest']>>;
 
   test.beforeEach(async () => {
     api = new ApiRequests();
+    owner = await tenor.dagligLederMedOrg();
     const externalRef = TestdataApi.generateExternalRef();
 
     const response = await api.postSystemuserRequest(
       vendorOrgNumber,
       externalRef,
       prebuiltSystemId,
-      vendorOrgNumber,
+      owner.org.orgnr,
     );
-    await api.approveSystemuserRequest(response.id, vendorOrgNumber, testUserPid);
+    await api.approveSystemuserRequest(response.id, owner.org.orgnr, owner.dagligLeder.pid);
 
     systemUserId = await api.getSystemUserByQuery(
       vendorOrgNumber,
       prebuiltSystemId,
-      vendorOrgNumber,
+      owner.org.orgnr,
       externalRef,
     );
     systemUserIds.push(systemUserId);
@@ -56,7 +59,7 @@ test.describe('Systembruker endringsforespørsel', () => {
   }): Promise<void> => {
     await test.step('Navigate to change request confirmation page and login', async () => {
       await page.goto(changeRequestResponse.confirmUrl);
-      await login.loginNotChoosingActor(testUser);
+      await login.loginNotChoosingActor(owner.dagligLeder.pid);
     });
 
     await test.step('Reject change request', async () => {
@@ -82,7 +85,7 @@ test.describe('Systembruker endringsforespørsel', () => {
   }): Promise<void> => {
     await test.step('Navigate to change request confirmation page and login', async () => {
       await page.goto(changeRequestResponse.confirmUrl);
-      await login.loginNotChoosingActor(testUser);
+      await login.loginNotChoosingActor(owner.dagligLeder.pid);
     });
 
     await test.step('Approve change request', async () => {
@@ -102,8 +105,8 @@ test.describe('Systembruker endringsforespørsel', () => {
     });
 
     await test.step('Verify rights changes are reflected', async () => {
-      await login.LoginToAccessManagement(testUser);
-      await login.selectMainUnitBySearching(testOrgName);
+      await login.LoginToAccessManagement(owner.dagligLeder.pid);
+      await login.selectMainUnitBySearching(owner.org.navn);
 
       const systemUserUrl = `${env('SYSTEMUSER_URL')}`;
       await page.goto(systemUserUrl + '/' + systemUserId);
@@ -124,8 +127,8 @@ test.describe('Systembruker endringsforespørsel', () => {
       try {
         await api.cleanUpSystemUsers(
           systemUserIds.map((id) => ({ id })),
-          testUserPid,
-          vendorOrgNumber,
+          owner.dagligLeder.pid,
+          owner.org.orgnr,
         );
       } catch (error) {
         console.error('Error during system user cleanup:', error);

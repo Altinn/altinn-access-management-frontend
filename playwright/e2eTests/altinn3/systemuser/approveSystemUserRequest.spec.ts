@@ -2,22 +2,29 @@ import { test, expect } from 'playwright/fixture/pomFixture';
 
 import { TestdataApi } from 'playwright/util/TestdataApi';
 import { ApiRequests } from 'playwright/api-requests/SystemUserApiRequests';
+import { TenorTestData, type TenorDagligLederMedOrg } from 'playwright/tenor/TenorTestData';
+
+// Leverandør + prebygd system er registrert infrastruktur (ikke Tenor). Kunde-
+// virksomheten som forespørselen gjelder – og som logger inn for å godkjenne –
+// hentes fra Tenor.
 const vendorOrgNumber = '310547891';
 const prebuiltSystemId = '310547891_E2E-Playwright-Authentication';
-const testUserPid = '14824497789';
 
 test.describe('Godkjenn og avvis Systembrukerforespørsel', () => {
+  const tenor = new TenorTestData();
   let api: ApiRequests;
+  let owner: TenorDagligLederMedOrg;
   let response: Awaited<ReturnType<ApiRequests['postSystemuserRequest']>>;
 
   test.beforeEach(async () => {
     api = new ApiRequests();
+    owner = await tenor.dagligLederMedOrg();
     const externalRef = TestdataApi.generateExternalRef();
     response = await api.postSystemuserRequest(
       vendorOrgNumber,
       externalRef,
       prebuiltSystemId,
-      vendorOrgNumber,
+      owner.org.orgnr,
       'https://altinn.no/',
     );
   });
@@ -29,7 +36,7 @@ test.describe('Godkjenn og avvis Systembrukerforespørsel', () => {
   }): Promise<void> => {
     await test.step('Navigate to confirmation page and login', async () => {
       await page.goto(response.confirmUrl);
-      await login.loginNotChoosingActor(testUserPid);
+      await login.loginNotChoosingActor(owner.dagligLeder.pid);
     });
 
     await test.step('Reject system user request', async () => {
@@ -56,7 +63,7 @@ test.describe('Godkjenn og avvis Systembrukerforespørsel', () => {
   }): Promise<void> => {
     await test.step('Navigate to confirmation page and login', async () => {
       await page.goto(response.confirmUrl);
-      await login.loginNotChoosingActor(testUserPid);
+      await login.loginNotChoosingActor(owner.dagligLeder.pid);
     });
 
     await test.step('Approve system user request', async () => {
