@@ -8,14 +8,13 @@ import {
   DsDialog,
   DsHeading,
   DsParagraph,
-  Snackbar,
+  formatDisplayName,
   useSnackbar,
 } from '@altinn/altinn-components';
 
 import {
   useAssignCustomerMutation,
   useAssignSelfCustomerMutation,
-  useGetSystemUserReporteeQuery,
   useIsSelfAddedQuery,
   useRemoveCustomerMutation,
   useRemoveSelfCustomerMutation,
@@ -26,7 +25,11 @@ import type { AgentDelegation, AgentDelegationCustomer, ProblemDetail, SystemUse
 import { RightsList } from '../components/RightsList/RightsList';
 import classes from './SystemUserAgentDelegationPage.module.css';
 import { CustomerList } from './CustomerList';
-import { useGetIsAdminQuery, useGetIsClientAdminQuery } from '@/rtk/features/userInfoApi';
+import {
+  useGetIsAdminQuery,
+  useGetIsClientAdminQuery,
+  useGetReporteeQuery,
+} from '@/rtk/features/userInfoApi';
 import { AddAllCustomers } from './AddAllCustomers';
 import { DelegationCheckError } from '../components/DelegationCheckError/DelegationCheckError';
 import { enableAddSelfToSystemuser } from '@/resources/utils/featureFlagUtils';
@@ -73,7 +76,7 @@ export const SystemUserAgentDelegationPageContent = ({
 
   const { data: isClientAdmin } = useGetIsClientAdminQuery();
   const { data: isAdmin } = useGetIsAdminQuery();
-  const { data: reporteeData } = useGetSystemUserReporteeQuery(partyUuid);
+  const { data: reporteeData } = useGetReporteeQuery();
 
   const [assignCustomer] = useAssignCustomerMutation();
   const [removeCustomer] = useRemoveCustomerMutation();
@@ -97,6 +100,7 @@ export const SystemUserAgentDelegationPageContent = ({
   );
 
   const isAddingAllCustomers = addAllState.maxCount > -1;
+  const reporteeName = formatDisplayName({ fullName: reporteeData?.name || '', type: 'company' });
 
   const resetLoadingId = (customerId: string): void => {
     setLoadingIds((oldLoadingIds) => oldLoadingIds.filter((id) => id !== customerId));
@@ -259,7 +263,7 @@ export const SystemUserAgentDelegationPageContent = ({
       ? [
           {
             id: reporteeData.partyUuid,
-            name: reporteeData.name,
+            name: reporteeName,
             orgNo: reporteeData.organizationNumber || '',
             unitType: reporteeData.unitType,
             access: [],
@@ -304,10 +308,10 @@ export const SystemUserAgentDelegationPageContent = ({
                 onRemoveCustomer={onRemoveCustomer}
                 onAddAllCustomers={onAddAllCustomers}
               />
-              {customers.length === 0 && reporteeData?.name && (
+              {customers.length === 0 && reporteeName && (
                 <DsAlert data-color='warning'>
                   {t('systemuser_agent_delegation.no_customers_warning', {
-                    companyName: reporteeData?.name,
+                    companyName: reporteeName,
                   })}
                 </DsAlert>
               )}
@@ -325,7 +329,7 @@ export const SystemUserAgentDelegationPageContent = ({
       <div className={classes.flexContainer}>
         <SystemUserHeader
           title={systemUser.integrationTitle}
-          subTitle={reporteeData?.name}
+          subTitle={reporteeName}
         />
         <DsHeading
           level={2}

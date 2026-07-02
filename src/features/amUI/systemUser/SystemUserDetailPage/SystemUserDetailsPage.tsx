@@ -1,13 +1,9 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate, useParams } from 'react-router';
-import { DsAlert, DsParagraph } from '@altinn/altinn-components';
+import { DsAlert, DsParagraph, formatDisplayName } from '@altinn/altinn-components';
 
-import {
-  useDeleteSystemuserMutation,
-  useGetSystemUserQuery,
-  useGetSystemUserReporteeQuery,
-} from '@/rtk/features/systemUserApi';
+import { useDeleteSystemuserMutation, useGetSystemUserQuery } from '@/rtk/features/systemUserApi';
 import { getCookie } from '@/resources/Cookie/CookieMethods';
 import { PageLayoutWrapper } from '@/features/amUI/common/PageLayoutWrapper';
 import { PageWrapper } from '@/components';
@@ -22,7 +18,7 @@ import { RightsList } from '../components/RightsList/RightsList';
 import classes from './SystemUserDetailsPage.module.css';
 import { hasCreateSystemUserPermission } from '@/resources/utils/permissionUtils';
 import { Breadcrumbs } from '../../common/Breadcrumbs/Breadcrumbs';
-import { useGetIsAdminQuery } from '@/rtk/features/userInfoApi';
+import { useGetIsAdminQuery, useGetReporteeQuery } from '@/rtk/features/userInfoApi';
 
 export const SystemUserDetailsPage = (): React.ReactNode => {
   const { t } = useTranslation();
@@ -30,10 +26,9 @@ export const SystemUserDetailsPage = (): React.ReactNode => {
   const navigate = useNavigate();
   useDocumentTitle(t('systemuser_detailpage.page_title'));
   const partyId = getCookie('AltinnPartyId');
-  const partyUuid = getCookie('AltinnPartyUuid');
   const backUrl = `/${SystemUserPath.SystemUser}/${SystemUserPath.Overview}`;
 
-  const { data: reporteeData } = useGetSystemUserReporteeQuery(partyUuid);
+  const { data: reporteeData } = useGetReporteeQuery();
   const { data: isAdmin } = useGetIsAdminQuery();
 
   const {
@@ -83,7 +78,10 @@ export const SystemUserDetailsPage = (): React.ReactNode => {
             <div className={classes.systemUserDetails}>
               <SystemUserHeader
                 title={systemUser?.integrationTitle ?? ''}
-                subTitle={reporteeData?.name}
+                subTitle={formatDisplayName({
+                  fullName: reporteeData?.name || '',
+                  type: 'company',
+                })}
                 isLoading={isLoadingSystemUser}
               />
               <RightsList

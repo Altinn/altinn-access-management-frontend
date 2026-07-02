@@ -11,7 +11,6 @@ import type {
   SystemUserChangeRequest,
 } from '@/features/amUI/systemUser/types';
 
-import type { ReporteeInfo } from './userInfoApi';
 import { formatDisplayName } from '@altinn/altinn-components';
 
 const baseUrl = `${import.meta.env.BASE_URL}accessmanagement/api/v1/`;
@@ -49,21 +48,6 @@ export const systemUserApi = createApi({
   }),
   tagTypes: [Tags.SystemUsers, Tags.PendingSystemUsers],
   endpoints: (builder) => ({
-    // system user reportee
-    getSystemUserReportee: builder.query<ReporteeInfo, string>({
-      keepUnusedDataFor: 300,
-      query: (partyUuid) => `user/reportee/${partyUuid}`,
-      transformResponse: (response: ReporteeInfo) => {
-        return {
-          ...response,
-          name: formatDisplayName({ fullName: response.name, type: 'company' }),
-        };
-      },
-    }),
-    getSystemuserIsAdmin: builder.query<boolean, string>({
-      query: (partyUuid) => `user/isAdmin?party=${partyUuid}`,
-    }),
-
     // systemregister
     getRegisteredSystems: builder.query<RegisteredSystem[], void>({
       query: () => `/systemregister`,
@@ -354,8 +338,6 @@ const apiWithTag = systemUserApi.enhanceEndpoints({
 });
 
 export const {
-  useGetSystemUserReporteeQuery,
-  useGetSystemuserIsAdminQuery,
   useCreateSystemUserMutation,
   useDeleteSystemuserMutation,
   useGetSystemUserQuery,

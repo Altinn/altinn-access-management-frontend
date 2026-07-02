@@ -1,14 +1,18 @@
 import React from 'react';
 import { useTranslation, Trans } from 'react-i18next';
 import { useNavigate, useSearchParams } from 'react-router';
-import { DsAlert, DsHeading, DsParagraph, DsButton } from '@altinn/altinn-components';
+import {
+  DsAlert,
+  DsHeading,
+  DsParagraph,
+  DsButton,
+  formatDisplayName,
+} from '@altinn/altinn-components';
 import { useDocumentTitle } from '@/resources/hooks/useDocumentTitle';
 import {
   useGetSystemUserRequestQuery,
   useApproveSystemUserRequestMutation,
   useRejectSystemUserRequestMutation,
-  useGetSystemUserReporteeQuery,
-  useGetSystemuserIsAdminQuery,
 } from '@/rtk/features/systemUserApi';
 import { RequestPageBase } from './components/RequestPageBase/RequestPageBase';
 import type { ProblemDetail } from './types';
@@ -21,6 +25,7 @@ import { SystemUserPath } from '@/routes/paths';
 import { getApiBaseUrl } from './requestUtils';
 import { getLogoutUrl } from '@/resources/utils/pathUtils';
 import { SystemUserRequestLoadError } from './components/SystemUserRequestLoadError/SystemUserRequestLoadError';
+import { useGetIsAdminQuery, useGetReporteeQuery } from '@/rtk/features/userInfoApi';
 
 export const SystemUserRequestPage = () => {
   const { t } = useTranslation();
@@ -44,12 +49,8 @@ export const SystemUserRequestPage = () => {
     data: reporteeData,
     isLoading: isLoadingReportee,
     error: loadReporteeError,
-  } = useGetSystemUserReporteeQuery(request?.partyUuid ?? '', {
-    skip: !request?.partyUuid,
-  });
-  const { data: isAdmin } = useGetSystemuserIsAdminQuery(request?.partyUuid ?? '', {
-    skip: !request?.partyUuid,
-  });
+  } = useGetReporteeQuery();
+  const { data: isAdmin } = useGetIsAdminQuery();
 
   const [
     postAcceptCreationRequest,
@@ -115,6 +116,7 @@ export const SystemUserRequestPage = () => {
       system={request?.system}
       reportee={reporteeData}
       isLoading={isLoadingRequest || isLoadingReportee}
+      requestPartyUuid={request?.partyUuid}
       error={error}
       heading={t('systemuser_request.banner_title')}
     >
@@ -142,7 +144,7 @@ export const SystemUserRequestPage = () => {
               i18nKey={'systemuser_request.system_description'}
               values={{
                 systemName: request.system.name,
-                partyName: reporteeData?.name,
+                partyName: formatDisplayName({ fullName: reporteeData?.name, type: 'company' }),
               }}
             ></Trans>
           </DsParagraph>

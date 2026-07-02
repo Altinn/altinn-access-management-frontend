@@ -17,7 +17,6 @@ import { PageWrapper } from '@/components';
 import {
   useGetAgentSystemUsersQuery,
   useGetPendingSystemUserRequestsQuery,
-  useGetSystemUserReporteeQuery,
   useGetSystemUsersQuery,
 } from '@/rtk/features/systemUserApi';
 import { getCookie } from '@/resources/Cookie/CookieMethods';
@@ -25,7 +24,11 @@ import { SystemUserPath } from '@/routes/paths';
 import { PageLayoutWrapper } from '@/features/amUI/common/PageLayoutWrapper';
 
 import classes from './SystemUserOverviewPage.module.css';
-import { useGetIsAdminQuery, useGetIsClientAdminQuery } from '@/rtk/features/userInfoApi';
+import {
+  useGetIsAdminQuery,
+  useGetIsClientAdminQuery,
+  useGetReporteeQuery,
+} from '@/rtk/features/userInfoApi';
 import { hasCreateSystemUserPermission } from '@/resources/utils/permissionUtils';
 import { SystemUserList } from './SystemUserList';
 import { Breadcrumbs } from '../../common/Breadcrumbs/Breadcrumbs';
@@ -40,8 +43,7 @@ export const SystemUserOverviewPage = () => {
 
   const { data: isAdmin, isLoading: isLoadingIsAdmin } = useGetIsAdminQuery();
   const { data: isClientAdmin, isLoading: isLoadingClientAdmin } = useGetIsClientAdminQuery();
-  const { data: reporteeData, isLoading: isLoadingReportee } =
-    useGetSystemUserReporteeQuery(partyUuid);
+  const { data: reporteeData, isLoading: isLoadingReportee } = useGetReporteeQuery();
 
   // load only for isAdmin
   const {

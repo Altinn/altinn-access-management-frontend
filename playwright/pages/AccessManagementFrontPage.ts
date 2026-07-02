@@ -1,56 +1,63 @@
 import { expect, type Locator, type Page } from '@playwright/test';
 
+import { SidebarNav } from './SidebarNav';
+import { LANGUAGE_DICTIONARIES, Language, type Dict } from './LanguageMenu';
+import { withPoaObject } from '../util/helper';
+
 export class AccessManagementFrontPage {
   readonly page: Page;
-  readonly systemAccessLink: Locator;
-  readonly usersLink: Locator;
-  readonly powersOfAttorneyLink: Locator;
-  readonly ourAccessAtOthersLink: Locator;
-  readonly consentAndPowerOfAttorneyAgreementsLink: Locator;
-  readonly tryNewAccessManagementButton: Locator;
-  readonly klientadministrasjonButton: Locator;
+  readonly texts: Dict;
+  readonly sidebar: SidebarNav;
   readonly newUserButton: Locator;
   readonly singleServicesTab: Locator;
   readonly singleServicesPanel: Locator;
 
-  constructor(page: Page) {
+  constructor(page: Page, language: Language = Language.NB) {
     this.page = page;
+    this.texts = LANGUAGE_DICTIONARIES[language];
 
-    this.systemAccessLink = this.page.getByRole('link', { name: 'Systemtilganger' });
-
-    this.usersLink = this.page.getByRole('link', { name: 'Brukere' });
-
-    this.powersOfAttorneyLink = this.page.getByRole('link', { name: 'Fullmakter' });
-
-    this.ourAccessAtOthersLink = this.page.getByRole('link', {
-      name: 'Fullmakter hos andre',
+    this.sidebar = new SidebarNav(page, language);
+    this.newUserButton = this.page.getByRole('button', {
+      name: this.texts.new_user_modal.trigger_button,
     });
-    this.consentAndPowerOfAttorneyAgreementsLink = this.page.getByRole('link', {
-      name: 'Samtykke- og fullmaktsavtaler',
+    this.singleServicesTab = this.page.getByRole('tab', {
+      name: this.texts.user_rights_page.single_rights_title,
     });
-    this.tryNewAccessManagementButton = this.page.getByRole('button', {
-      name: 'Prøv ny tilgangsstyring',
+    this.singleServicesPanel = this.page.getByRole('tabpanel', {
+      name: this.texts.user_rights_page.single_rights_title,
     });
-    this.klientadministrasjonButton = this.page.getByRole('link', { name: 'Klientadministrasjon' });
-    this.newUserButton = this.page.getByRole('button', { name: 'Ny bruker' });
-    this.singleServicesTab = this.page.getByRole('tab', { name: 'Enkelttjenester' });
-    this.singleServicesPanel = this.page.getByRole('tabpanel', { name: 'Enkelttjenester' });
+  }
+
+  get systemUserMenuLink(): Locator {
+    return this.sidebar.systemAccess;
+  }
+
+  get usersLink(): Locator {
+    return this.sidebar.users;
+  }
+
+  get powersOfAttorneyLink(): Locator {
+    return this.sidebar.powersOfAttorney;
+  }
+
+  get ourAccessAtOthersLink(): Locator {
+    return this.sidebar.reportees;
+  }
+
+  get consentAndPowerOfAttorneyAgreementsLink(): Locator {
+    return this.sidebar.consent;
+  }
+
+  get klientadministrasjonButton(): Locator {
+    return this.sidebar.clientAdministration;
   }
 
   async goToKlientAdministrasjon() {
-    await Promise.all([
-      this.page.waitForResponse(
-        (resp) => resp.url().includes('/api/v1/connection/rightholders') && resp.ok(),
-      ),
-      this.page.waitForResponse(
-        (resp) => resp.url().includes('/api/v1/clientdelegations/agents') && resp.ok(),
-      ),
-      this.klientadministrasjonButton.click(),
-    ]);
+    await this.sidebar.goToKlientAdministrasjon();
   }
 
   async goToUsers() {
-    await this.usersLink.click();
+    await this.sidebar.goToUsers();
   }
 
   async expandOrg(org: string) {
@@ -71,11 +78,14 @@ export class AccessManagementFrontPage {
   }
 
   async goToFullmakterHosAndre() {
-    await this.ourAccessAtOthersLink.click();
+    await this.sidebar.goToFullmakterHosAndre();
   }
 
   async sokEtterEnkelttjeneste(tjenesteNavn: string) {
-    await this.page.getByPlaceholder('Søk etter tjenester').nth(1).fill(tjenesteNavn);
+    await this.page
+      .getByPlaceholder(this.texts.resource_list.resource_search_placeholder)
+      .nth(1)
+      .fill(tjenesteNavn);
   }
 
   async clickEnkelttjeneste(tjenesteNavn: string) {
@@ -92,31 +102,68 @@ export class AccessManagementFrontPage {
     // inaktive panelet (som ligger først i DOM-en).
     await this.page
       .getByRole('tabpanel')
-      .getByRole('button', { name: 'Gi fullmakt', exact: true })
+      .getByRole('button', { name: this.texts.access_packages.give_new_button, exact: true })
       .click();
   }
 
   async clickGiFullmaktEnkelttjeneste() {
-    await this.page.getByRole('dialog').getByRole('button', { name: 'Gi fullmakt' }).click();
+    await this.page
+      .getByRole('dialog')
+      .getByRole('button', { name: this.texts.access_packages.give_new_button, exact: true })
+      .click();
   }
 
   async goToArea(areaName: string) {
-    const area = this.page.getByRole('button', { name: areaName }).first();
+    // The area list renders either inside the delegation dialog (when giving a
+    // new fullmakt) or inline on the user-detail page (when viewing/deleting
+    // existing ones). When the dialog is open the same-named area button also
+    // exists on the page behind it, and the modal overlay intercepts the click —
+    // so scope to the dialog when present, otherwise use the page.
+    const scope = await this.currentScope();
+    const area = scope.getByRole('button', { name: areaName });
     await expect(area).toBeVisible();
     await area.click();
 
     await expect(area).toHaveAttribute('aria-expanded', 'true');
   }
 
+  /**
+   * The locator scope for delegation controls: the open dialog if there is one,
+   * otherwise the whole page. Keeps selectors unambiguous whether the flow runs
+   * in the delegation modal or inline on the user-detail page.
+   */
+  private async currentScope(): Promise<Locator | Page> {
+    // Wait briefly for a dialog rather than taking an instant snapshot: a call
+    // right after opening a modal could otherwise fall back to the page and hit
+    // the covered background controls. No dialog within the window → inline flow.
+    const dialog = this.page.getByRole('dialog').first();
+    try {
+      await expect(dialog).toBeVisible({ timeout: 1000 });
+      return dialog;
+    } catch {
+      return this.page;
+    }
+  }
+
   async expectAccessPackageToBeDelegable(packageName: string) {
+    // Scoped to the open dialog (when present) so we don't assert against the
+    // identically-named button on the page behind the modal. `exact` so
+    // "...Tilgangsstyrer" doesn't also match "...Tilgangsstyrer for enkeltmeldinger...".
+    const scope = await this.currentScope();
     await expect(
-      this.page.getByRole('button', { name: 'Gi fullmakt for ' + packageName }).first(),
+      scope.getByRole('button', {
+        name: withPoaObject(this.texts.common.give_poa_for, packageName),
+        exact: true,
+      }),
     ).toBeVisible();
   }
 
   async userCanDeletePackage(packageName: string) {
     await expect(
-      this.page.getByRole('button', { name: 'Slett fullmakt for ' + packageName }),
+      this.page.getByRole('button', {
+        name: withPoaObject(this.texts.common.delete_poa_for, packageName),
+        exact: true,
+      }),
     ).toBeVisible();
   }
 
@@ -133,7 +180,12 @@ export class AccessManagementFrontPage {
   }
 
   async clickSlettFullmaktForTilgangspakke(packageName: string) {
-    await this.page.getByRole('button', { name: 'Slett fullmakt for ' + packageName }).click();
+    await this.page
+      .getByRole('button', {
+        name: withPoaObject(this.texts.common.delete_poa_for, packageName),
+        exact: true,
+      })
+      .click();
   }
 
   async clickSlettEnkelttjeneste(resourceName: string) {
@@ -145,7 +197,8 @@ export class AccessManagementFrontPage {
 
   async clickGiFullmaktForTilgangspakke(packageName: string) {
     const giFullmaktKnapp = this.page.getByRole('button', {
-      name: 'Gi fullmakt for ' + packageName,
+      name: withPoaObject(this.texts.common.give_poa_for, packageName),
+      exact: true,
     });
     await expect(giFullmaktKnapp).toBeVisible();
     await giFullmaktKnapp.click();
@@ -157,21 +210,36 @@ export class AccessManagementFrontPage {
   }
 
   async expectAccessPackageToNotBeDelegable(packageName: string) {
+    // Scope to the dialog (when open) like the positive check, so we don't match
+    // a control behind an open modal.
+    const scope = await this.currentScope();
     await expect(
-      this.page.getByRole('button', { name: 'Gi fullmakt for ' + packageName }),
+      scope.getByRole('button', {
+        name: withPoaObject(this.texts.common.give_poa_for, packageName),
+        exact: true,
+      }),
     ).not.toBeVisible();
   }
 
   async expectPowerOfAttorneyButtonToNotBeVisible() {
-    await expect(this.page.getByRole('button', { name: 'Gi fullmakt' })).not.toBeVisible();
+    await expect(
+      this.page.getByRole('button', {
+        name: this.texts.access_packages.give_new_button,
+        exact: true,
+      }),
+    ).not.toBeVisible();
   }
 
   async expectOthersWithRightsListToBeVisible() {
-    await expect(this.page.getByRole('heading', { name: 'Andre med fullmakt' })).toBeVisible();
+    await expect(
+      this.page.getByRole('heading', { name: this.texts.users_page.user_list_heading }),
+    ).toBeVisible();
   }
 
   async expectOthersWithRightsListToNotBeVisible() {
-    await expect(this.page.getByRole('heading', { name: 'Andre med fullmakt' })).not.toBeVisible();
+    await expect(
+      this.page.getByRole('heading', { name: this.texts.users_page.user_list_heading }),
+    ).not.toBeVisible();
   }
 
   async clickLeggTilBruker() {
@@ -180,28 +248,26 @@ export class AccessManagementFrontPage {
   }
 
   async LukkGiFullmaktVindu() {
-    await this.page.getByRole('button', { name: 'Lukk' }).click();
+    await this.page.getByRole('button', { name: this.texts.common.close }).click();
   }
 
   async addPerson(fnr: string, lastName: string) {
-    const fnrField1 = this.page.getByRole('textbox', { name: 'Fødselsnummer' }); // AT22 og AT23
-    const fnrField2 = this.page.getByRole('textbox', { name: 'Fødselsnr./brukernavn' }); //TT02
-
-    if (await fnrField1.isVisible()) {
-      await fnrField1.fill(fnr);
-    } else if (await fnrField2.isVisible()) {
-      await fnrField2.fill(fnr);
-    }
-
-    await this.page.getByRole('textbox', { name: 'Etternavn' }).fill(lastName);
-    await this.page.getByRole('button', { name: 'Legg til person' }).click();
+    await this.page
+      .getByRole('textbox', { name: this.texts.new_user_modal.person_identifier })
+      .fill(fnr);
+    await this.page.getByRole('textbox', { name: this.texts.common.last_name }).fill(lastName);
+    await this.page
+      .getByRole('button', { name: this.texts.new_user_modal.add_person_button })
+      .click();
   }
   async addOrg(orgNo: string) {
-    const virksomhetTab = this.page.getByRole('tab', { name: 'Virksomhet' });
+    const virksomhetTab = this.page.getByRole('tab', {
+      name: this.texts.new_user_modal.organization,
+    });
     await expect(virksomhetTab).toBeVisible();
     await virksomhetTab.click();
-    const orgNoField = this.page.getByRole('textbox', { name: 'Organisasjonsnummer' });
+    const orgNoField = this.page.getByRole('textbox', { name: this.texts.common.org_number });
     await orgNoField.fill(orgNo);
-    await this.page.getByRole('button', { name: 'Legg til virksomhet' }).click();
+    await this.page.getByRole('button', { name: this.texts.new_user_modal.add_org_button }).click();
   }
 }
