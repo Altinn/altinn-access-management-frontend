@@ -10,6 +10,28 @@ export interface ConnectionRef {
   to: string;
 }
 
+/* -------------------------------------------------------------------------- */
+/* Oppsett (beforeEach)                                                        */
+/* -------------------------------------------------------------------------- */
+
+/**
+ * Oppretter kobling + enkelttjeneste-delegering — utgangspunktet «slett»-testene
+ * trenger (noe å slette). (En enkel kobling settes opp direkte med
+ * `api.addConnection`, som allerede er kortfattet.)
+ */
+export async function setupServiceDelegation(
+  api: EnduserConnection,
+  ref: ConnectionRef,
+  service: string,
+): Promise<void> {
+  await api.addConnection(ref.pid, ref.from, ref.to);
+  await api.delegateSingleService(ref.pid, ref.from, ref.to, service);
+}
+
+/* -------------------------------------------------------------------------- */
+/* Opprydding (afterEach)                                                      */
+/* -------------------------------------------------------------------------- */
+
 /**
  * Best-effort opprydding for delegerings-tester. Alle funksjonene svelger og
  * logger feil, så opprydding aldri velter en test, og holder `afterEach` små.

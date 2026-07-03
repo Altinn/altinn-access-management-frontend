@@ -1,6 +1,6 @@
 import { expect, test } from '../../../fixture/pomFixture';
 import { EnduserConnection } from '../../../api-requests/EnduserConnection';
-import { cleanupConnection, cleanupClientDelegationAgent } from '../../../util/delegationCleanup';
+import { cleanupConnection, cleanupClientDelegationAgent } from '../../../util/delegationHelpers';
 import {
   TenorTestData,
   type TenorPerson,
@@ -97,9 +97,7 @@ test.describe('klientadministrasjon', () => {
 
     test.beforeEach(async () => {
       [actor, agent] = await Promise.all([tenor.dagligLederMedOrg(), tenor.bosattMyndigPerson()]);
-      do {
-        client = await tenor.dagligLederMedOrg();
-      } while (client.org.orgnr === actor.org.orgnr);
+      client = await tenor.dagligLederMedOrg({ ekskluder: [actor.org.orgnr] });
 
       // Klienten gir `actor` posttjenester (oppdrag), og `agent` legges til som bruker.
       await api.addConnectionAndPackagesToUser(
@@ -161,9 +159,7 @@ test.describe('klientadministrasjon', () => {
 
     test.beforeEach(async () => {
       [actor, agent] = await Promise.all([tenor.dagligLederMedOrg(), tenor.bosattMyndigPerson()]);
-      do {
-        client = await tenor.dagligLederMedOrg();
-      } while (client.org.orgnr === actor.org.orgnr);
+      client = await tenor.dagligLederMedOrg({ ekskluder: [actor.org.orgnr] });
 
       await api.addConnectionAndPackagesToUser(
         client.dagligLeder.pid,
@@ -225,9 +221,7 @@ test.describe('klientadministrasjon', () => {
 
     test.beforeEach(async () => {
       [actor, agent] = await Promise.all([tenor.dagligLederMedOrg(), tenor.bosattMyndigPerson()]);
-      do {
-        client = await tenor.dagligLederMedOrg();
-      } while (client.org.orgnr === actor.org.orgnr);
+      client = await tenor.dagligLederMedOrg({ ekskluder: [actor.org.orgnr] });
 
       await api.addConnectionAndPackagesToUser(
         client.dagligLeder.pid,
@@ -287,9 +281,7 @@ test.describe('klientadministrasjon', () => {
 
     test.beforeEach(async () => {
       [actor, agent] = await Promise.all([tenor.dagligLederMedOrg(), tenor.bosattMyndigPerson()]);
-      do {
-        client = await tenor.dagligLederMedOrg();
-      } while (client.org.orgnr === actor.org.orgnr);
+      client = await tenor.dagligLederMedOrg({ ekskluder: [actor.org.orgnr] });
 
       await api.addConnectionAndPackagesToUser(
         client.dagligLeder.pid,

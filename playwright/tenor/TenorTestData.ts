@@ -87,16 +87,19 @@ export class TenorTestData {
    * rekkefølge gjør at ulike tester får ulike aktører (Tenor gir ellers alltid
    * samme rekkefølge).
    *
-   * @param organisasjonsform Virksomhetstype å søke etter. Default `AS`.
+   * @param opts.organisasjonsform Virksomhetstype å søke etter. Default `AS`.
+   * @param opts.ekskluder Orgnr som ikke skal velges (f.eks. en annen aktør i samme test).
    */
   async dagligLederMedOrg(
-    organisasjonsform: string = DEFAULT_ORG_TYPE,
+    opts: { organisasjonsform?: string; ekskluder?: string[] } = {},
   ): Promise<TenorDagligLederMedOrg> {
+    const { organisasjonsform = DEFAULT_ORG_TYPE, ekskluder = [] } = opts;
     const orgs = await this.tenor.hentVirksomheterPaginert(
       `organisasjonsform.kode:${organisasjonsform}`,
       ORG_POOL,
     );
     for (const org of shuffle(orgs)) {
+      if (ekskluder.includes(org.organisasjonsnummer)) continue;
       const pid = await this.tenor.hentDagligLederForOrg(org.organisasjonsnummer);
       if (!pid) continue;
       // Leder må være bosatt (og dermed levende) for å kunne logge inn. Navnet

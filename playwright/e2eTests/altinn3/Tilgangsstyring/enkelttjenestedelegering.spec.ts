@@ -5,7 +5,7 @@ import {
   type TenorPerson,
   type TenorDagligLederMedOrg,
 } from '../../../tenor/TenorTestData';
-import { cleanupServiceDelegation } from '../../../util/delegationCleanup';
+import { cleanupServiceDelegation, setupServiceDelegation } from '../../../util/delegationHelpers';
 
 type TenorOrg = { orgnr: string; navn: string };
 
@@ -123,8 +123,11 @@ test.describe('Enkelttjenestedelegering fra person til person og person til org'
 
     test.beforeEach(async () => {
       [delegator, recipient] = await tenor.bosatteMyndigePersoner(2);
-      await api.addConnection(delegator.pid, delegator.pid, recipient.pid);
-      await api.delegateSingleService(delegator.pid, delegator.pid, recipient.pid, service);
+      await setupServiceDelegation(
+        api,
+        { pid: delegator.pid, from: delegator.pid, to: recipient.pid },
+        service,
+      );
     });
 
     test.afterEach(async ({}, testInfo) => {
@@ -178,8 +181,11 @@ test.describe('Enkelttjenestedelegering fra person til person og person til org'
         tenor.bosattMyndigPerson(),
         tenor.hentTilfeldigVirksomhet(),
       ]);
-      await api.addConnection(delegator.pid, delegator.pid, recipient.orgnr);
-      await api.delegateSingleService(delegator.pid, delegator.pid, recipient.orgnr, service);
+      await setupServiceDelegation(
+        api,
+        { pid: delegator.pid, from: delegator.pid, to: recipient.orgnr },
+        service,
+      );
     });
 
     test.afterEach(async ({}, testInfo) => {
@@ -341,11 +347,9 @@ test.describe('Enkelttjenestedelegering fra org til person og org til org', () =
         tenor.dagligLederMedOrg(),
         tenor.bosattMyndigPerson(),
       ]);
-      await api.addConnection(delegator.dagligLeder.pid, delegator.org.orgnr, recipient.pid);
-      await api.delegateSingleService(
-        delegator.dagligLeder.pid,
-        delegator.org.orgnr,
-        recipient.pid,
+      await setupServiceDelegation(
+        api,
+        { pid: delegator.dagligLeder.pid, from: delegator.org.orgnr, to: recipient.pid },
         service,
       );
     });
@@ -399,11 +403,9 @@ test.describe('Enkelttjenestedelegering fra org til person og org til org', () =
     test.beforeEach(async () => {
       delegator = await tenor.dagligLederMedOrg();
       recipient = await tenor.hentTilfeldigVirksomhet({ ekskluder: [delegator.org.orgnr] });
-      await api.addConnection(delegator.dagligLeder.pid, delegator.org.orgnr, recipient.orgnr);
-      await api.delegateSingleService(
-        delegator.dagligLeder.pid,
-        delegator.org.orgnr,
-        recipient.orgnr,
+      await setupServiceDelegation(
+        api,
+        { pid: delegator.dagligLeder.pid, from: delegator.org.orgnr, to: recipient.orgnr },
         service,
       );
     });

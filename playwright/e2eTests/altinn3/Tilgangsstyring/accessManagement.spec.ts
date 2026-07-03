@@ -6,7 +6,7 @@ import {
   type TenorDagligLederMedOrg,
   type TenorHovedenhetMedUnderenhet,
 } from '../../../tenor/TenorTestData';
-import { cleanupConnection, cleanupServiceDelegation } from '../../../util/delegationCleanup';
+import { cleanupConnection, cleanupServiceDelegation } from '../../../util/delegationHelpers';
 
 type TenorOrg = { orgnr: string; navn: string };
 

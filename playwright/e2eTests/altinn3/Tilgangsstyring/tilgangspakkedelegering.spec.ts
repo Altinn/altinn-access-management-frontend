@@ -5,7 +5,7 @@ import {
   type TenorPerson,
   type TenorDagligLederMedOrg,
 } from '../../../tenor/TenorTestData';
-import { cleanupConnection, cleanupPackageDelegation } from '../../../util/delegationCleanup';
+import { cleanupConnection, cleanupPackageDelegation } from '../../../util/delegationHelpers';
 
 type TenorOrg = { orgnr: string; navn: string };
 
