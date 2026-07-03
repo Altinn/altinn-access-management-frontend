@@ -57,6 +57,7 @@ blitt endret/slettet siden; verifiser i [Tenor](https://www.skatteetaten.no/skje
 eller Altinns testdata-verktøy.)
 
 ### Bosatte, myndige personer (`bosattMyndigPerson` / `bosatteMyndigePersoner`)
+
 | pid | navn |
 |---|---|
 | 03906197811 | Straffet Kost |
@@ -67,15 +68,17 @@ eller Altinns testdata-verktøy.)
 | 09893049719 | Anstendig Purre |
 
 ### Virksomhet med daglig leder (`dagligLederMedOrg`)
+
 | dagligLeder pid | orgnr | orgnavn |
 |---|---|---|
 | 30818599567 | 313025853 | Lydig Redelig Tiger AS |
 | 16928599063 | 312476932 | Farlig Gjestfri Tiger AS |
 | 18846498989 | 311716670 | Nær Realistisk Tiger AS |
 | 16815995930 | 313707679 | Innesluttet Motløs Skilpadde |
-| 04856996188 | (SUBJEKTIV ELASTISK TIGER AS) | brukt i accessPackageDirect som avgiver |
+| 04856996188 | – | SUBJEKTIV ELASTISK TIGER AS (accessPackageDirect-avgiver) |
 
 ### Tilfeldig virksomhet / mottaker (`hentTilfeldigVirksomhet`)
+
 | orgnr | navn |
 |---|---|
 | 313642291 | Overflødig Solid Tiger AS |
@@ -85,9 +88,11 @@ eller Altinns testdata-verktøy.)
 | 213091492 | Sivilisert Trygg Tiger AS (daglig leder / nøkkelrolle: Moderne Analyse) |
 
 ### Hovedenhet med underenhet (`hovedenhetMedUnderenhet`)
+
 Krever at hoved- og underenhet vises med **samme navn** (testene velger dem via
 `nth(0)`=hovedenhet / `nth(1)`=underenhet i aktørvelgeren). Kjente eksempler
 (hovedenhet-orgnr + daglig leder):
+
 | managerPid | hovedenhet orgnr | navn (hoved = under) |
 |---|---|---|
 | 25916799929 | 313819566 | Smiskende Umoden Tiger AS |
