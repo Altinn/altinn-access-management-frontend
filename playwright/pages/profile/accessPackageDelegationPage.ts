@@ -182,8 +182,6 @@ export class DelegationPage {
   }
   async verifyDelegatedPackage(areaName: string, packageName: string) {
     const areaBtn = this.page.getByRole('list').getByRole('button', { name: areaName }).first();
-    await expect(areaBtn).toBeVisible();
-    await areaBtn.click();
 
     // En pakke vises enten som direkte delegert (egen «Slett fullmakt for
     // {pakke}»-knapp, og pakkeraden er da ikke en egen knapp) eller som arvet
@@ -195,7 +193,19 @@ export class DelegationPage {
       exact: true,
     });
     const inherited = this.page.getByRole('button', { name: packageName, exact: true });
-    await expect(deletable.or(inherited).first()).toBeVisible({ timeout: 10000 });
+    const packageBtn = deletable.or(inherited).first();
+
+    // Området må være utvidet for at pakken skal vises. Klikk bare når det ikke
+    // allerede er åpent (et klikk på et åpent område kollapser det og skjuler
+    // pakken), og prøv på nytt til pakken er synlig — pakkeinnholdet lastes
+    // asynkront, så første klikk kan komme før lista er ferdig.
+    await expect(async () => {
+      await expect(areaBtn).toBeVisible();
+      if ((await areaBtn.getAttribute('aria-expanded')) !== 'true') {
+        await areaBtn.click();
+      }
+      await expect(packageBtn).toBeVisible({ timeout: 3000 });
+    }).toPass({ timeout: 20000 });
   }
 
   async verifyDelegatedPackages(expectations: { areaName: string; packageName: string }[]) {
