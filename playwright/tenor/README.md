@@ -25,7 +25,7 @@ tynt lag over `TenorApiRequests` (rå KQL-søk mot Tenor).
 | Metode | Krav til dataene (klartekst) | KQL / relasjon i Tenor | Returnerer |
 |---|---|---|---|
 | `bosattMyndigPerson()` / `bosatteMyndigePersoner(n)` | Én / N **bosatte, myndige** privatpersoner (fylt 18 år, ikke døde) | `personstatus:bosatt AND foedselsdato:[* to <18 år siden>]` (freg) | `{ pid, navn, etternavn }` |
-| `dagligLederMedOrg(form='AS')` | En **virksomhet** (default `AS`) med en **bosatt daglig leder**. Leder logger inn og representerer virksomheten. | Pool av `organisasjonsform.kode:AS` (brreg); DAGL/INNH-rolle → slår opp leder i freg med `identifikator:<fnr> AND personstatus:bosatt` | `{ dagligLeder:{pid,navn,etternavn}, org:{orgnr,navn} }` |
+| `dagligLederMedOrg({ organisasjonsform?, ekskluder? })` | En **virksomhet** (default `AS`) med en **bosatt daglig leder**. Leder logger inn og representerer virksomheten. | Pool av `organisasjonsform.kode:AS` (brreg); DAGL/INNH-rolle → slår opp leder i freg med `identifikator:<fnr> AND personstatus:bosatt` | `{ dagligLeder:{pid,navn,etternavn}, org:{orgnr,navn} }` |
 | `hentTilfeldigVirksomhet({organisasjonsform?, ekskluder?})` | En **hvilken som helst virksomhet** (mottaker; trenger ikke innlogging) | Pool av `organisasjonsform.kode:AS`, filtrert på `ekskluder` | `{ orgnr, navn }` |
 | `hovedenhetMedUnderenhet(form='AS')` | En **hovedenhet med en underenhet** (samme navn) + bosatt daglig leder. Leder representerer BÅDE hoved- og underenhet. | Pool av underenheter `organisasjonsform.kode:BEDR` → forelder via `underenhet.hovedenhet` → krever forelder = `AS` + samme navn + bosatt DAGL | `{ dagligLeder, hovedenhet:{orgnr,navn}, underenhet:{orgnr,navn} }` |
 
