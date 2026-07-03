@@ -1,5 +1,6 @@
 import { MaskinportenToken } from 'playwright/api-requests/MaskinportenToken';
 import { addTimeToNowUtc } from 'playwright/util/helper';
+import { randomInt } from 'crypto';
 
 /**
  * Klient mot Tenor testdatasøk (Skatteetaten).
@@ -332,7 +333,7 @@ export class TenorApiRequests {
   private stokk<T>(arr: T[]): T[] {
     const kopi = [...arr];
     for (let i = kopi.length - 1; i > 0; i--) {
-      const j = Math.floor(Math.random() * (i + 1));
+      const j = randomInt(i + 1);
       [kopi[i], kopi[j]] = [kopi[j], kopi[i]];
     }
     return kopi;
