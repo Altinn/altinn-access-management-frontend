@@ -180,13 +180,22 @@ export class DelegationPage {
     await expect(confirmBtn).toBeVisible({ timeout: 10000 });
     await confirmBtn.click();
   }
-  async verifyDelegatedPackage(areaName: string, pacakageName: string) {
+  async verifyDelegatedPackage(areaName: string, packageName: string) {
     const areaBtn = this.page.getByRole('list').getByRole('button', { name: areaName }).first();
     await expect(areaBtn).toBeVisible();
     await areaBtn.click();
 
-    const packageBtn = this.page.getByRole('button', { name: pacakageName, exact: true });
-    await expect(packageBtn).toBeVisible();
+    // En pakke vises enten som direkte delegert (egen «Slett fullmakt for
+    // {pakke}»-knapp, og pakkeraden er da ikke en egen knapp) eller som arvet
+    // (bare en knapp med pakkenavnet, uten slett-kontroll). Godta begge, så
+    // metoden funker både i avgivers egen liste og hos nøkkelrolle-brukeren
+    // som har arvet pakken.
+    const deletable = this.page.getByRole('button', {
+      name: withPoaObject(this.texts.common.delete_poa_for, packageName),
+      exact: true,
+    });
+    const inherited = this.page.getByRole('button', { name: packageName, exact: true });
+    await expect(deletable.or(inherited).first()).toBeVisible({ timeout: 10000 });
   }
 
   async verifyDelegatedPackages(expectations: { areaName: string; packageName: string }[]) {
