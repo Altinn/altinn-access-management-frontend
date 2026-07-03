@@ -293,7 +293,7 @@
   },
   "users_page": {
     "page_title": "Brukere - Altinn",
-    "main_page_heading": "Brukere med fullmakter i {{name}}",
+    "main_page_heading": "Brukere med fullmakter for {{name}}",
     "user_list_heading": "Andre med fullmakt",
     "direct_connections": "Brukere med fullmakt",
     "user_search_placeholder": "Søk etter person eller virksomhet",

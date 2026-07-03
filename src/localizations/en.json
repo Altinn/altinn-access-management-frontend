@@ -296,7 +296,7 @@
   },
   "users_page": {
     "page_title": "Users - Altinn",
-    "main_page_heading": "Users with power of attorney in {{name}}",
+    "main_page_heading": "Users with power of attorney for {{name}}",
     "user_list_heading": "Other users with power of attorney",
     "direct_connections": "Users with power of attorney",
     "user_search_placeholder": "Search for users",
@@ -304,8 +304,8 @@
     "no_users": "You have not received any power of attorney from others.",
     "show_users_with_client_access": "Show users with client access",
     "indirect_connections": "Users without power of attorney",
-    "no_access_to_users_header": "We are still working on this page!",
-    "no_access_to_users_message": "Only access managers can see the full list of users with powers of attorney in this organization. <br /> A list of key personnel (the board) will eventually be made available to users without access management."
+    "no_access_to_users_header": "Only access managers can see other users with powers of attorney",
+    "no_access_to_users_message": "You are not an access manager for {{name}} and can only see your own powers of attorney."
   },
   "advanced_user_search": {
     "add_user_button": "Add user",

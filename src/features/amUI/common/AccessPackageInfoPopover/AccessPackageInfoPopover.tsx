@@ -17,6 +17,7 @@ export const AccessPackageInfoPopover = () => {
           <DsLink
             href={getHelpPagesUrl(i18n.language)}
             target='_blank'
+            rel='noopener noreferrer'
           >
             {t('poa_overview_page.packages_tab.info_box_link')}
           </DsLink>
