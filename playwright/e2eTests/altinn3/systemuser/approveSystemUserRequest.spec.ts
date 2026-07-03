@@ -17,15 +17,11 @@ test.describe('Godkjenn og avvis Systembrukerforespørsel', () => {
   let owner: TenorDagligLederMedOrg;
   let externalRef: string;
   let response: Awaited<ReturnType<ApiRequests['postSystemuserRequest']>>;
-  // Bare godkjenning oppretter en systembruker. Avvis-testen gjør ikke det, så vi
-  // hopper over opprydding der (ellers gir get-by-query en støyende 404).
-  let systembrukerOpprettet = false;
 
   test.beforeEach(async () => {
     api = new ApiRequests();
     owner = await tenor.dagligLederMedOrg();
     externalRef = TestdataApi.generateExternalRef();
-    systembrukerOpprettet = false;
     response = await api.postSystemuserRequest(
       vendorOrgNumber,
       externalRef,
@@ -33,17 +29,6 @@ test.describe('Godkjenn og avvis Systembrukerforespørsel', () => {
       owner.org.orgnr,
       'https://altinn.no/',
     );
-  });
-
-  test.afterEach(async () => {
-    if (!systembrukerOpprettet) return;
-    await cleanupSystemUser({
-      vendorOrgNumber,
-      systemId: prebuiltSystemId,
-      ownerOrg: owner.org.orgnr,
-      ownerPid: owner.dagligLeder.pid,
-      externalRef,
-    });
   });
 
   test('Avvis Systembrukerforespørsel', async ({
@@ -85,7 +70,6 @@ test.describe('Godkjenn og avvis Systembrukerforespørsel', () => {
 
     await test.step('Approve system user request', async () => {
       await systemUserConfirmPage.approve();
-      systembrukerOpprettet = true; // nå finnes en systembruker som må ryddes
     });
 
     await test.step('Verify logout and acceptance status', async () => {
@@ -98,6 +82,15 @@ test.describe('Godkjenn og avvis Systembrukerforespørsel', () => {
         response.id,
       );
       expect(statusApiRequest.status).toBe('Accepted');
+    });
+
+    // Kun godkjenning oppretter en systembruker, så bare denne testen rydder.
+    await cleanupSystemUser({
+      vendorOrgNumber,
+      systemId: prebuiltSystemId,
+      ownerOrg: owner.org.orgnr,
+      ownerPid: owner.dagligLeder.pid,
+      externalRef,
     });
   });
 });
