@@ -182,30 +182,22 @@ export class DelegationPage {
   }
   async verifyDelegatedPackage(areaName: string, packageName: string) {
     const areaBtn = this.page.getByRole('list').getByRole('button', { name: areaName }).first();
-
-    // En pakke vises enten som direkte delegert (egen «Slett fullmakt for
-    // {pakke}»-knapp, og pakkeraden er da ikke en egen knapp) eller som arvet
-    // (bare en knapp med pakkenavnet, uten slett-kontroll). Godta begge, så
-    // metoden funker både i avgivers egen liste og hos nøkkelrolle-brukeren
-    // som har arvet pakken.
-    const deletable = this.page.getByRole('button', {
-      name: withPoaObject(this.texts.common.delete_poa_for, packageName),
-      exact: true,
-    });
-    const inherited = this.page.getByRole('button', { name: packageName, exact: true });
-    const packageBtn = deletable.or(inherited).first();
+    await expect(areaBtn).toBeVisible();
 
     // Området må være utvidet for at pakken skal vises. Klikk bare når det ikke
-    // allerede er åpent (et klikk på et åpent område kollapser det og skjuler
-    // pakken), og prøv på nytt til pakken er synlig — pakkeinnholdet lastes
-    // asynkront, så første klikk kan komme før lista er ferdig.
-    await expect(async () => {
-      await expect(areaBtn).toBeVisible();
-      if ((await areaBtn.getAttribute('aria-expanded')) !== 'true') {
-        await areaBtn.click();
-      }
-      await expect(packageBtn).toBeVisible({ timeout: 3000 });
-    }).toPass({ timeout: 20000 });
+    // allerede er åpent (et klikk på et åpent område kollapser det).
+    if ((await areaBtn.getAttribute('aria-expanded')) !== 'true') {
+      await areaBtn.click();
+      await expect(areaBtn).toHaveAttribute('aria-expanded', 'true');
+    }
+
+    // Pakkeknappen har navnet «{pakkenavn} {n} tjenester» (arvet pakke) eller
+    // «Slett fullmakt for {pakkenavn}» (direkte delegert, med slett-kontroll).
+    // Begge inneholder pakkenavnet, så et ikke-eksakt navnetreff dekker begge
+    // uten spesialtilfeller.
+    await expect(this.page.getByRole('button', { name: packageName }).first()).toBeVisible({
+      timeout: 10000,
+    });
   }
 
   async verifyDelegatedPackages(expectations: { areaName: string; packageName: string }[]) {
@@ -233,18 +225,23 @@ export class DelegationPage {
     await this.page.waitForLoadState('networkidle').catch(() => {});
 
     // 3. Utvid virksomhetsraden (en knapp med arvende nøkkelrolle-brukere) og
-    // klikk nøkkelrolle-brukeren. Søke-re-renderet kan kollapse raden, så vi
-    // prøver til nøkkelrolle-lenken faktisk er synlig.
+    // gå til nøkkelrolle-brukeren. Søke-re-renderet kan kollapse raden og
+    // detache lenka midt i et klikk ("element detached"), så vi navigerer via
+    // lenkas href i stedet — utvid→les href→naviger som én atomær operasjon.
     const orgButton = this.page.getByRole('button', { name: orgButtonName }).first();
-    const keyUserLink = this.page.getByRole('link', { name: keyRoleUserName }).first();
+    const keyUserLink = this.page.getByRole('link', { name: keyRoleUserName });
     await expect(async () => {
-      if (!(await keyUserLink.isVisible().catch(() => false))) {
+      if ((await keyUserLink.count()) === 0) {
         await expect(orgButton).toBeVisible({ timeout: 5_000 });
         await orgButton.click();
+        await expect(keyUserLink.first()).toBeVisible({ timeout: 3_000 });
       }
-      await expect(keyUserLink).toBeVisible({ timeout: 3_000 });
-    }).toPass({ timeout: 20_000 });
-    await keyUserLink.click();
+      const href = await keyUserLink.first().getAttribute('href');
+      if (!href) {
+        throw new Error(`Fant ingen href på lenka for "${keyRoleUserName}" (raden re-rendrer).`);
+      }
+      await this.page.goto(new URL(href, this.page.url()).toString());
+    }).toPass({ timeout: 25_000 });
 
     // 4. Verify all expected packages
     await this.verifyDelegatedPackages(expectations);
