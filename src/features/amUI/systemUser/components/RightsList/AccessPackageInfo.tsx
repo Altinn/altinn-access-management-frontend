@@ -78,7 +78,7 @@ const PackageResourceItem = ({ resource, onSelectResource }: PackageResourceItem
     <ResourceListItem
       id={resource.identifier}
       as='button'
-      titleAs='div'
+      titleAs='span'
       size='xs'
       ownerLogoUrl={emblem ?? resource.resourceOwnerLogoUrl}
       ownerLogoUrlAlt={resource.resourceOwnerName ?? ''}
