@@ -5,6 +5,7 @@ import {
   type TenorPerson,
   type TenorDagligLederMedOrg,
 } from '../../../tenor/TenorTestData';
+import { cleanupServiceDelegation } from '../../../util/delegationCleanup';
 
 type TenorOrg = { orgnr: string; navn: string };
 
@@ -25,21 +26,11 @@ test.describe('Enkelttjenestedelegering fra person til person og person til org'
     });
 
     test.afterEach(async () => {
-      try {
-        await api.deleteSingleServiceDelegation(
-          delegator.pid,
-          delegator.pid,
-          recipient.pid,
-          service,
-        );
-      } catch (error) {
-        console.error('Cleanup: Failed to delete single service delegation:', error);
-      }
-      try {
-        await api.deleteConnection(delegator.pid, delegator.pid, [recipient.pid]);
-      } catch (error) {
-        console.error('Cleanup: Failed to delete connection:', error);
-      }
+      await cleanupServiceDelegation(
+        api,
+        { pid: delegator.pid, from: delegator.pid, to: recipient.pid },
+        service,
+      );
     });
 
     test('Deleger enkelttjeneste til person', async ({ login, accessManagementFrontPage }) => {
@@ -87,21 +78,11 @@ test.describe('Enkelttjenestedelegering fra person til person og person til org'
     });
 
     test.afterEach(async () => {
-      try {
-        await api.deleteSingleServiceDelegation(
-          delegator.pid,
-          delegator.pid,
-          recipient.orgnr,
-          service,
-        );
-      } catch (error) {
-        console.error('Cleanup: Failed to delete single service delegation:', error);
-      }
-      try {
-        await api.deleteConnection(delegator.pid, delegator.pid, [recipient.orgnr]);
-      } catch (error) {
-        console.error('Cleanup: Failed to delete connection:', error);
-      }
+      await cleanupServiceDelegation(
+        api,
+        { pid: delegator.pid, from: delegator.pid, to: recipient.orgnr },
+        service,
+      );
     });
 
     test('Deleger enkelttjeneste til virksomhet', async ({ login, accessManagementFrontPage }) => {
@@ -147,23 +128,12 @@ test.describe('Enkelttjenestedelegering fra person til person og person til org'
     });
 
     test.afterEach(async ({}, testInfo) => {
-      if (testInfo.status !== 'passed') {
-        try {
-          await api.deleteSingleServiceDelegation(
-            delegator.pid,
-            delegator.pid,
-            recipient.pid,
-            service,
-          );
-        } catch (error) {
-          console.error('Cleanup: Failed to delete single service delegation:', error);
-        }
-      }
-      try {
-        await api.deleteConnection(delegator.pid, delegator.pid, [recipient.pid]);
-      } catch (error) {
-        console.error('Cleanup: Failed to delete connection:', error);
-      }
+      await cleanupServiceDelegation(
+        api,
+        { pid: delegator.pid, from: delegator.pid, to: recipient.pid },
+        service,
+        { skipService: testInfo.status === 'passed' },
+      );
     });
 
     test('Slett enkelttjenestedelegering hos person', async ({
@@ -213,23 +183,12 @@ test.describe('Enkelttjenestedelegering fra person til person og person til org'
     });
 
     test.afterEach(async ({}, testInfo) => {
-      if (testInfo.status !== 'passed') {
-        try {
-          await api.deleteSingleServiceDelegation(
-            delegator.pid,
-            delegator.pid,
-            recipient.orgnr,
-            service,
-          );
-        } catch (error) {
-          console.error('Cleanup: Failed to delete single service delegation:', error);
-        }
-      }
-      try {
-        await api.deleteConnection(delegator.pid, delegator.pid, [recipient.orgnr]);
-      } catch (error) {
-        console.error('Cleanup: Failed to delete connection:', error);
-      }
+      await cleanupServiceDelegation(
+        api,
+        { pid: delegator.pid, from: delegator.pid, to: recipient.orgnr },
+        service,
+        { skipService: testInfo.status === 'passed' },
+      );
     });
 
     test('Slett enkelttjeneste hos virksomhet', async ({ login, accessManagementFrontPage }) => {
@@ -280,21 +239,11 @@ test.describe('Enkelttjenestedelegering fra org til person og org til org', () =
     });
 
     test.afterEach(async () => {
-      try {
-        await api.deleteSingleServiceDelegation(
-          delegator.dagligLeder.pid,
-          delegator.org.orgnr,
-          recipient.pid,
-          service,
-        );
-      } catch (error) {
-        console.error('Cleanup: Failed to delete single service delegation:', error);
-      }
-      try {
-        await api.deleteConnection(delegator.dagligLeder.pid, delegator.org.orgnr, [recipient.pid]);
-      } catch (error) {
-        console.error('Cleanup: Failed to delete connection:', error);
-      }
+      await cleanupServiceDelegation(
+        api,
+        { pid: delegator.dagligLeder.pid, from: delegator.org.orgnr, to: recipient.pid },
+        service,
+      );
     });
 
     test('Deleger enkelttjeneste fra org til person', async ({
@@ -344,23 +293,11 @@ test.describe('Enkelttjenestedelegering fra org til person og org til org', () =
     });
 
     test.afterEach(async () => {
-      try {
-        await api.deleteSingleServiceDelegation(
-          delegator.dagligLeder.pid,
-          delegator.org.orgnr,
-          recipient.orgnr,
-          service,
-        );
-      } catch (error) {
-        console.error('Cleanup: Failed to delete single service delegation:', error);
-      }
-      try {
-        await api.deleteConnection(delegator.dagligLeder.pid, delegator.org.orgnr, [
-          recipient.orgnr,
-        ]);
-      } catch (error) {
-        console.error('Cleanup: Failed to delete connection:', error);
-      }
+      await cleanupServiceDelegation(
+        api,
+        { pid: delegator.dagligLeder.pid, from: delegator.org.orgnr, to: recipient.orgnr },
+        service,
+      );
     });
 
     test('Deleger enkelttjeneste fra org til org', async ({ login, accessManagementFrontPage }) => {
@@ -414,23 +351,12 @@ test.describe('Enkelttjenestedelegering fra org til person og org til org', () =
     });
 
     test.afterEach(async ({}, testInfo) => {
-      if (testInfo.status !== 'passed') {
-        try {
-          await api.deleteSingleServiceDelegation(
-            delegator.dagligLeder.pid,
-            delegator.org.orgnr,
-            recipient.pid,
-            service,
-          );
-        } catch (error) {
-          console.error('Cleanup: Failed to delete single service delegation:', error);
-        }
-      }
-      try {
-        await api.deleteConnection(delegator.dagligLeder.pid, delegator.org.orgnr, [recipient.pid]);
-      } catch (error) {
-        console.error('Cleanup: Failed to delete connection:', error);
-      }
+      await cleanupServiceDelegation(
+        api,
+        { pid: delegator.dagligLeder.pid, from: delegator.org.orgnr, to: recipient.pid },
+        service,
+        { skipService: testInfo.status === 'passed' },
+      );
     });
 
     test('Slett enkelttjenestedelegering fra org til person', async ({
@@ -483,25 +409,12 @@ test.describe('Enkelttjenestedelegering fra org til person og org til org', () =
     });
 
     test.afterEach(async ({}, testInfo) => {
-      if (testInfo.status !== 'passed') {
-        try {
-          await api.deleteSingleServiceDelegation(
-            delegator.dagligLeder.pid,
-            delegator.org.orgnr,
-            recipient.orgnr,
-            service,
-          );
-        } catch (error) {
-          console.error('Cleanup: Failed to delete single service delegation:', error);
-        }
-      }
-      try {
-        await api.deleteConnection(delegator.dagligLeder.pid, delegator.org.orgnr, [
-          recipient.orgnr,
-        ]);
-      } catch (error) {
-        console.error('Cleanup: Failed to delete connection:', error);
-      }
+      await cleanupServiceDelegation(
+        api,
+        { pid: delegator.dagligLeder.pid, from: delegator.org.orgnr, to: recipient.orgnr },
+        service,
+        { skipService: testInfo.status === 'passed' },
+      );
     });
 
     test('Slett enkelttjeneste fra org til org', async ({ login, accessManagementFrontPage }) => {
