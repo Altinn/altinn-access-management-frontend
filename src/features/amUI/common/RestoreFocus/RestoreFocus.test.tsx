@@ -216,6 +216,30 @@ const FallbackWithStaleDuplicateInClosedDialogTest = () => {
   );
 };
 
+const FallbackWithDuplicateInOpenDialogTest = () => {
+  const restoreFocus = useRestoreFocus();
+  const { requestFocus } = restoreFocus;
+
+  useEffect(() => {
+    requestFocus('deleted-item', 'section-heading');
+  }, [requestFocus]);
+
+  return (
+    <RestoreFocusProvider restoreFocus={restoreFocus}>
+      <h2 id='section-heading'>Section heading</h2>
+      <RestoreFocusFallback>
+        {/* The requested id exists only inside an open dialog, outside the page's focus scope. */}
+        <dialog open>
+          <div id='deleted-item'>
+            <button>Modal row</button>
+          </div>
+        </dialog>
+        <button>List action</button>
+      </RestoreFocusFallback>
+    </RestoreFocusProvider>
+  );
+};
+
 const RemovalHookTest = () => {
   const restoreFocus = useRestoreFocus();
   const [items, setItems] = useState(['item']);
@@ -586,6 +610,15 @@ describe('RestoreFocus', () => {
       expect(screen.getByRole('heading', { name: 'Section heading' })).toHaveFocus(),
     );
     expect(screen.getByRole('button', { name: 'List action' })).not.toHaveFocus();
+  });
+
+  it('ignores a duplicate of the requested id inside a different open dialog and uses the fallback', async () => {
+    render(<FallbackWithDuplicateInOpenDialogTest />);
+
+    await waitFor(() =>
+      expect(screen.getByRole('heading', { name: 'Section heading' })).toHaveFocus(),
+    );
+    expect(screen.getByRole('button', { name: 'Modal row' })).not.toHaveFocus();
   });
 
   it('does not use the fallback when a requested id is present', async () => {

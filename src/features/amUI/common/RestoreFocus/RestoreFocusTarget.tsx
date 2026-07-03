@@ -27,7 +27,7 @@ export const findFocusableElement = (element: HTMLElement, scope: HTMLElement) =
 // for focus (closed dialog, hidden, aria-hidden, inert). See isUnavailableForFocus.
 export const findAvailableElementById = (container: HTMLElement, id: string) =>
   Array.from(container.querySelectorAll<HTMLElement>(`[id="${CSS.escape(id)}"]`)).find(
-    (element) => !isUnavailableForFocus(element, element),
+    (element) => !isUnavailableForFocus(element, container),
   ) ?? null;
 
 // Restore focus only when it has been lost to the document body (e.g. the acted-on element was
