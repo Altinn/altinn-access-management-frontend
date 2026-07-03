@@ -204,7 +204,6 @@ const FallbackWithStaleDuplicateInClosedDialogTest = () => {
     <RestoreFocusProvider restoreFocus={restoreFocus}>
       <h2 id='section-heading'>Section heading</h2>
       <RestoreFocusFallback>
-        {/* The requested id exists only as a stale copy inside a closed dialog; the real row is gone. */}
         <dialog>
           <div id='deleted-item'>
             <button>Stale modal row</button>

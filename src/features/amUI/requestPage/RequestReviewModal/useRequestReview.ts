@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback, useRef } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { useSnackbar } from '@altinn/altinn-components';
 import { useTranslation } from 'react-i18next';
 import type { Request, ProcessedStatus } from '../types';
@@ -29,11 +29,7 @@ export type ProcessedRequest = {
   handledAt: string;
 };
 
-export const useRequestReview = (
-  request: Request | null,
-  onClose: () => void,
-  requestFocus?: (id: string) => void,
-) => {
+export const useRequestReview = (request: Request | null, onClose: () => void) => {
   const { t } = useTranslation();
   const { actingParty } = usePartyRepresentation();
   const [approveRequest] = useApproveRequestMutation();
@@ -72,32 +68,6 @@ export const useRequestReview = (
   const [actionLoading, setActionLoading] = useState<'approve' | 'reject' | null>(null);
   const { canDelegatePackage } = useAccessPackageDelegationCheck();
 
-  // Focus restore must wait until the invalidated request queries have refetched;
-  // otherwise it resolves against the loading skeletons and is lost.
-  const pendingFocusRef = useRef<{
-    id: string;
-    resourceDataAtRequest: typeof resourceRequests;
-    packageDataAtRequest: typeof packageRequests;
-  } | null>(null);
-
-  useEffect(() => {
-    const pending = pendingFocusRef.current;
-    if (!pending || !requestFocus) return;
-    if (isFetchingResourceRequests || isFetchingPackageRequests) return;
-    const dataChanged =
-      resourceRequests !== pending.resourceDataAtRequest ||
-      packageRequests !== pending.packageDataAtRequest;
-    if (!dataChanged) return;
-    pendingFocusRef.current = null;
-    requestFocus(pending.id);
-  }, [
-    resourceRequests,
-    packageRequests,
-    isFetchingResourceRequests,
-    isFetchingPackageRequests,
-    requestFocus,
-  ]);
-
   // Reset state only when switching to a different party (not on every object reference change)
   const requestPartyUuid = request?.partyUuid;
   useEffect(() => {
@@ -107,7 +77,6 @@ export const useRequestReview = (
     setProcessedRequests({});
     setDelegationChecks({});
     setActionLoading(null);
-    pendingFocusRef.current = null;
   }, [requestPartyUuid]);
 
   useEffect(() => {
@@ -167,7 +136,6 @@ export const useRequestReview = (
     setProcessedRequests({});
     setDelegationChecks({});
     setActionLoading(null);
-    pendingFocusRef.current = null;
     onClose();
   };
 
@@ -210,13 +178,6 @@ export const useRequestReview = (
         ...prev,
         [id]: { status: 'approved', handledAt: result.lastUpdated },
       }));
-      setSelectedResource(null);
-      setSelectedPackage(null);
-      pendingFocusRef.current = {
-        id,
-        resourceDataAtRequest: resourceRequests,
-        packageDataAtRequest: packageRequests,
-      };
       openSnackbar({
         message: t('request_page.request_approved'),
         color: 'success',
@@ -251,13 +212,6 @@ export const useRequestReview = (
         ...prev,
         [id]: { status: 'rejected', handledAt: result.lastUpdated },
       }));
-      setSelectedResource(null);
-      setSelectedPackage(null);
-      pendingFocusRef.current = {
-        id,
-        resourceDataAtRequest: resourceRequests,
-        packageDataAtRequest: packageRequests,
-      };
       openSnackbar({
         message: t('request_page.request_rejected'),
         color: 'success',

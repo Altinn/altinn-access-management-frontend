@@ -55,7 +55,7 @@ export const RequestReviewModalContent = ({ request, onClose }: RequestReviewMod
     handleApprove,
     handleReject,
     handleSelection,
-  } = useRequestReview(request, onClose, restoreFocus.requestFocus);
+  } = useRequestReview(request, onClose);
 
   if (request === null) {
     return null;
