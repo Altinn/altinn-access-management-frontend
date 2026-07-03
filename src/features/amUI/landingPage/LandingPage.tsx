@@ -22,6 +22,7 @@ import { useTranslation } from 'react-i18next';
 import { useSearchParams } from 'react-router';
 import {
   hasConsentPermission,
+  hasReporteesPermission,
   hasSystemUserClientAdminPermission,
   hasCreateSystemUserPermission,
 } from '@/resources/utils/permissionUtils';
@@ -161,7 +162,10 @@ export const LandingPage = () => {
       });
     }
 
-    if (displayConfettiPackage && isAdmin) {
+    if (
+      displayConfettiPackage &&
+      hasReporteesPermission(reportee, isAdmin, isCurrentUserReportee)
+    ) {
       items.push({
         ...getReporteesMenuItem(),
         description: isCurrentUserReportee
