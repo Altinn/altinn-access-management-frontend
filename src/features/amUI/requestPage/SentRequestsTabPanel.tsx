@@ -1,10 +1,12 @@
 import { formatDateToNorwegian } from '@/resources/utils';
-import { formatDisplayName, UserListItem } from '@altinn/altinn-components';
+import { formatDisplayName } from '@altinn/altinn-components';
 import { useTranslation } from 'react-i18next';
 import { Request } from './types';
 
 import classes from './RequestPage.module.css';
 import { useRef, useState } from 'react';
+import { useRestoreFocusContext } from '../common/RestoreFocus';
+import { RequestListItem } from './RequestsTabPanel';
 import { SentRequestsCombinedModal } from './SentRequestsCombinedModal';
 import { PartyRepresentationProvider } from '../common/PartyRepresentationContext/PartyRepresentationContext';
 import { getCookie } from '@/resources/Cookie/CookieMethods';
@@ -18,13 +20,24 @@ export const SentRequestsTabPanel = ({ pendingRequests }: SentRequestsTabPanelPr
   const modalRef = useRef<HTMLDialogElement>(null);
   const [openAccessRequest, setOpenAccessRequest] = useState<Request | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const restoreFocus = useRestoreFocusContext();
+
+  // Native <dialog> restore handles focus when the modal closes and the originating row still
+  // exists; the focus request is then skipped by the focusHasBeenLost guard. It only takes effect
+  // when the row is gone (all its requests withdrawn) and lands focus on the page fallback instead.
+  const handleClose = () => {
+    if (openAccessRequest) {
+      restoreFocus?.requestFocus(openAccessRequest.id);
+    }
+    setIsModalOpen(false);
+  };
 
   const { t } = useTranslation();
   return (
     <>
       {pendingRequests?.map((request) => {
         return (
-          <UserListItem
+          <RequestListItem
             key={request.id}
             id={request.id}
             name={request.displayPartyName}
@@ -33,16 +46,15 @@ export const SentRequestsTabPanel = ({ pendingRequests }: SentRequestsTabPanelPr
             titleAs='div'
             linkIcon
             description={`${request.description ? t(request.description) : t('request_page.waiting_for_number', { count: request.numberOfRequests })} (${formatDateToNorwegian(request.createdDate)})`}
-            as={(props) => (
-              <button
-                {...props}
-                onClick={() => {
-                  setOpenAccessRequest(request);
-                  setIsModalOpen(true);
-                  modalRef.current?.showModal();
-                }}
-              />
-            )}
+            // A stable `as` keeps the button's DOM node alive across re-renders, so the native
+            // <dialog> focus restore can return focus to it when the modal closes. An inline
+            // component here would remount the node on every render and break that.
+            as='button'
+            onClick={() => {
+              setOpenAccessRequest(request);
+              setIsModalOpen(true);
+              modalRef.current?.showModal();
+            }}
             controls={
               <div className={classes.requestItemBadge}>
                 {t('request_page.view_request', { count: request.numberOfRequests })}
@@ -73,7 +85,7 @@ export const SentRequestsTabPanel = ({ pendingRequests }: SentRequestsTabPanelPr
             }),
           })}
           isModalOpen={isModalOpen}
-          onClose={() => setIsModalOpen(false)}
+          onClose={handleClose}
         />
       </PartyRepresentationProvider>
     </>

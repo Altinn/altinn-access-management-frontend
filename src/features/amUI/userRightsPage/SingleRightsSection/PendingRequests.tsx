@@ -18,6 +18,7 @@ import { usePartyRepresentation } from '../../common/PartyRepresentationContext/
 import { PartyType } from '@/rtk/features/userInfoApi';
 import { useIsTabletOrSmaller } from '@/resources/utils/screensizeUtils';
 import { useGetEnrichedSentResourceRequestsQuery } from '@/rtk/features/requestApi';
+import { useAutoFocusRef } from '@/resources/hooks/useAutoFocusRef';
 import { getRequestPartyQueryParams } from '@/resources/utils/singleRightRequestUtils';
 import {
   RestoreFocusFallback,
@@ -146,6 +147,7 @@ export const PendingRequestsList = ({
   const { t } = useTranslation();
   const isSmallScreen = useIsTabletOrSmaller();
   const { actingParty, fromParty } = usePartyRepresentation();
+  const backButtonRef = useAutoFocusRef<HTMLButtonElement>();
   const restoreFocus = useRestoreFocusContext();
 
   const { data: singleRightRequests = [], isLoading: isLoadingRequests } =
@@ -170,6 +172,7 @@ export const PendingRequestsList = ({
       {selectedResource ? (
         <>
           <DsButton
+            ref={backButtonRef}
             variant='tertiary'
             className={classes.backButton}
             onClick={() => {

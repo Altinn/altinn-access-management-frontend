@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useRef, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { ArrowLeftIcon, MinusCircleIcon } from '@navikt/aksel-icons';
 import { Button, DsButton, DsHeading, List, useSnackbar } from '@altinn/altinn-components';
 import { useTranslation } from 'react-i18next';
@@ -36,16 +36,6 @@ export const PendingPackageRequestsList = ({
   const { openSnackbar } = useSnackbar();
   const backButtonRef = useAutoFocusRef<HTMLButtonElement>();
   const restoreFocus = useRestoreFocusContext();
-
-  // Autofocus the heading on open, but not when returning from a detail view: a focus request is
-  // then pending and RestoreFocus should land focus on the originating row instead.
-  const pendingFocusRequestRef = useRef(restoreFocus?.focusRequestId);
-  pendingFocusRequestRef.current = restoreFocus?.focusRequestId;
-  const headingRef = useCallback((node: HTMLHeadingElement | null) => {
-    if (node && !pendingFocusRequestRef.current) {
-      node.focus();
-    }
-  }, []);
 
   const [loadingByRequestId, setLoadingByRequestId] = useState<Record<string, boolean>>({});
 
@@ -120,8 +110,6 @@ export const PendingPackageRequestsList = ({
         <>
           {heading && (
             <DsHeading
-              ref={headingRef}
-              tabIndex={-1}
               data-size='xs'
               level={1}
               className={classes.heading}

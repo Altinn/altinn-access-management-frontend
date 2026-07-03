@@ -1,4 +1,4 @@
-import { type ReactNode, useCallback, useRef } from 'react';
+import { type ReactNode } from 'react';
 import { Link } from 'react-router';
 import {
   AccessPackageListItem,
@@ -39,16 +39,6 @@ interface RequestReviewModalContentProps {
 export const RequestReviewModalContent = ({ request, onClose }: RequestReviewModalContentProps) => {
   const { t } = useTranslation();
   const restoreFocus = useRestoreFocus();
-
-  // Autofocus the modal title on open, but not when returning from a detail view: in that case a
-  // focus request is pending and RestoreFocus should land focus on the originating row instead.
-  const pendingFocusRequestRef = useRef(restoreFocus.focusRequestId);
-  pendingFocusRequestRef.current = restoreFocus.focusRequestId;
-  const headingFocusRef = useCallback((node: HTMLHeadingElement | null) => {
-    if (node && !pendingFocusRequestRef.current) {
-      node.focus();
-    }
-  }, []);
 
   const {
     isLoadingRequests,
@@ -163,8 +153,6 @@ export const RequestReviewModalContent = ({ request, onClose }: RequestReviewMod
       <RestoreFocusFallback>
         <div className={classes.reviewListView}>
           <DsHeading
-            ref={headingFocusRef}
-            tabIndex={-1}
             level={1}
             data-size='xs'
           >
