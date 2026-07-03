@@ -235,9 +235,11 @@ export class AccessManagementFrontPage {
   }
 
   async expectUserToHavePackage(packageName: string) {
-    // `exact` unngår at f.eks. «Byggesøknad» også matcher «Slett fullmakt for
-    // Byggesøknad» (begge er knapper) når raden også har en slett-knapp.
-    await expect(this.page.getByRole('button', { name: packageName, exact: true })).toBeVisible();
+    // Delnavn (ikke `exact`): i «fullmakter hos andre»/mottatte-visningen får
+    // pakkeknappen med antall tjenester i navnet («Byggesøknad 4 tjenester»),
+    // mens den på brukere-siden heter bare «Byggesøknad». Denne visningen (arvede/
+    // mottatte pakker) har ingen «Slett fullmakt for …»-knapp, så delnavn er trygt.
+    await expect(this.page.getByRole('button', { name: packageName }).first()).toBeVisible();
   }
 
   async userCanDeleteEnkelttjeneste(resourceName: string) {
