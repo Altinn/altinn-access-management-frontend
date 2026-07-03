@@ -51,9 +51,9 @@ test.describe('Delegate access pacakge from Org-A(Avgiver) to Org-B(Rettighetsha
 
     // Step 5: Grant access to multiple packages
     await test.step('Grant access to multiple packages', async () => {
-      await delegation.grantAccessPkgNameDirect('Veitransport');
+      await delegation.grantAccessPkgName('Veitransport');
       await delegation.grantAccessPkgName('Byggesøknad');
-      await delegation.grantAccessPkgNameDirect('Godkjenning av personell');
+      await delegation.grantAccessPkgName('Godkjenning av personell');
       await delegation.closeAccessModal();
     });
 

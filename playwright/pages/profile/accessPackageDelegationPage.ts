@@ -72,65 +72,39 @@ export class DelegationPage {
     await openModalButton.click();
   }
 
-  async grantAccessPkgNameDirect(packageName: string) {
-    const searchBox = this.packageSearchBox;
-
-    await searchBox.click();
-    await searchBox.fill(packageName);
-
-    const grantButton = this.page.getByRole('button', {
-      name: withPoaObject(this.texts.common.give_poa_for, packageName),
-    });
-
-    await expect(grantButton).toBeVisible({ timeout: 10000 });
-    await grantButton.click();
-
-    // Clear search so the next package starts fresh
-    await expect(this.clearSearchButton).toBeVisible();
-    await this.clearSearchButton.click();
-  }
-
+  /**
+   * Delegerer en tilgangspakke fra søket i delegeringsmodalen. Klikker den
+   * innebygde «Gi fullmakt for {pakke}»-knappen på pakkeraden (samme knapp for
+   * alle pakker — pakkenavnet ligger i knappens `aria-label`, ikke som egen
+   * knapp), og tømmer søket så neste pakke starter rent.
+   */
   async grantAccessPkgName(packageName: string) {
     const searchBox = this.packageSearchBox;
     await searchBox.waitFor({ state: 'visible', timeout: 15000 });
 
-    // Pakkeknappen ligger inne i delegeringsmodalen — hold søket i samme dialog
-    // så vi ikke treffer en knapp på siden bak.
-    const dialog = this.page.getByRole('dialog', {
-      name: this.texts.delegation_modal.aria_label.access_package,
+    const grantButton = this.page.getByRole('button', {
+      name: withPoaObject(this.texts.common.give_poa_for, packageName),
+      exact: true,
     });
-    const packageButton = dialog.getByRole('button', { name: packageName, exact: true });
 
-    // Søkefeltet kan re-rendre rett etter forrige delegering/tømming (React), så
-    // et enkelt `fill` kan bli forkastet før lista rekker å filtrere. Fyll på nytt
-    // til pakkeknappen dukker opp, i stedet for å stole på at første forsøk «tar».
+    // Søkefeltet gjenbrukes mellom pakkene og kan re-rendre rett etter forrige
+    // tømming (React), så et enkelt `fill` kan bli forkastet før lista filtreres.
+    // Fyll på nytt til «Gi fullmakt»-knappen dukker opp, i stedet for å stole på
+    // at første tastetrykk «tar».
     await expect(async () => {
       await searchBox.fill('');
       await searchBox.fill(packageName);
-      await expect(packageButton).toBeVisible({ timeout: 3000 });
+      await expect(grantButton).toBeVisible({ timeout: 3000 });
     }).toPass({ timeout: 15000 });
 
-    await packageButton.click();
+    await grantButton.click();
 
-    const modal = this.page.getByRole('dialog').first();
-    await expect(modal).toBeVisible({ timeout: 10000 });
-
-    const grantBtn = modal.getByRole('button', {
-      name: this.texts.access_packages.give_new_button,
-    });
-    await expect(grantBtn).toBeVisible({ timeout: 10000 });
-    await grantBtn.click();
-
-    // "Tilbake" from the result screen
-    const tilbakeButton = this.page.getByRole('button', {
-      name: this.texts.common.back,
-      exact: true,
-    });
-    await expect(tilbakeButton).toBeVisible({ timeout: 10000 });
-    await tilbakeButton.click();
+    // Tøm søket så neste pakke starter rent.
+    await expect(this.clearSearchButton).toBeVisible();
+    await this.clearSearchButton.click();
   }
 
-  async closeAccessModal(buttonName: string = 'Lukk') {
+  async closeAccessModal() {
     await expect(this.closeModalBtn).toBeVisible();
     await this.closeModalBtn.click();
   }
