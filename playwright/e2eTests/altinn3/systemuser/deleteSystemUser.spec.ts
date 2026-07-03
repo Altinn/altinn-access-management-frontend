@@ -1,11 +1,12 @@
 import { expect, test } from 'playwright/fixture/pomFixture';
 import { ApiRequests } from 'playwright/api-requests/SystemUserApiRequests';
+import { pickVendorOrg } from 'playwright/util/systemVendors';
 import { TestdataApi } from 'playwright/util/TestdataApi';
 import { TenorTestData, type TenorDagligLederMedOrg } from 'playwright/tenor/TenorTestData';
 
 // Leverandør er registrert infrastruktur (ikke Tenor). Eier-virksomheten som
 // oppretter og sletter systembrukeren hentes fra Tenor.
-const vendorOrgNumber = '310736007';
+const vendorOrgNumber = pickVendorOrg();
 
 test.describe('System user deletion', () => {
   const tenor = new TenorTestData();

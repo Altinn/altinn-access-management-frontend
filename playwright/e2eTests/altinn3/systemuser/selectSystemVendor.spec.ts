@@ -3,6 +3,7 @@ import { Language } from 'playwright/pages/LanguageMenu';
 
 import { TestdataApi } from 'playwright/util/TestdataApi';
 import { ApiRequests } from 'playwright/api-requests/SystemUserApiRequests';
+import { pickVendorOrg } from 'playwright/util/systemVendors';
 import { TenorTestData, type TenorDagligLederMedOrg } from 'playwright/tenor/TenorTestData';
 import { cleanupSystemUser } from 'playwright/util/systemUserCleanup';
 
@@ -13,7 +14,7 @@ test.use({ language: Language.NN });
 // Systemleverandøren er en registrert leverandør i systemregisteret (fast
 // infrastruktur, ikke Tenor). Eier-virksomheten som oppretter systembrukeren
 // hentes derimot fra Tenor, så parallelle kjøringer ikke deler samme aktør.
-const vendorOrgNumber = '310547891';
+const vendorOrgNumber = pickVendorOrg();
 
 test.describe('System Register', async () => {
   const tenor = new TenorTestData();

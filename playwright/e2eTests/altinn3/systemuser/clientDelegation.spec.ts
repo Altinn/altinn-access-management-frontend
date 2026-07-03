@@ -1,6 +1,7 @@
 import { test, expect } from '../../../fixture/pomFixture';
 
 import { ApiRequests } from 'playwright/api-requests/SystemUserApiRequests';
+import { pickVendorOrg } from 'playwright/util/systemVendors';
 import { TestdataApi } from 'playwright/util/TestdataApi';
 import { cleanupSystemUser } from 'playwright/util/systemUserCleanup';
 import {
@@ -9,9 +10,10 @@ import {
   type TenorOrgRef,
 } from 'playwright/tenor/TenorTestData';
 
-// Leverandøren (310547891) er en registrert systemleverandør (fast infrastruktur,
-// ikke Tenor). Facilitator-virksomheten og dens klienter hentes fra Tenor.
-const vendorOrgNumber = '310547891';
+// Leverandøren roteres over en liste (pickVendorOrg) — en hvilken som helst
+// virksomhet kan opptre som systemleverandør. Facilitator-virksomheten og dens
+// klienter hentes fra Tenor.
+const vendorOrgNumber = pickVendorOrg();
 
 test.describe('Delegering av klienter til Systembruker', () => {
   const tenor = new TenorTestData();

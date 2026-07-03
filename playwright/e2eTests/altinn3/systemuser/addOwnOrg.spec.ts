@@ -1,15 +1,16 @@
 import { test, expect } from 'playwright/fixture/pomFixture';
 import { ApiRequests } from 'playwright/api-requests/SystemUserApiRequests';
+import { pickVendorOrg } from 'playwright/util/systemVendors';
 import { TestdataApi } from 'playwright/util/TestdataApi';
 import { pickRandom } from 'playwright/util/helper';
 import { EnduserConnection } from 'playwright/api-requests/EnduserConnection';
 import { TenorTestData, type TenorDagligLederMedOrg } from 'playwright/tenor/TenorTestData';
 import { cleanupSystemUser } from 'playwright/util/systemUserCleanup';
 
-// Leverandøren (310547891) er registrert infrastruktur (ikke Tenor). Eier-org og
-// klientene hentes fra Tenor: en fersk eier har ingen klienter, så vi setter opp
-// akkurat noen få via API — da blir «legg til alle klienter» raskt.
-const vendorOrgNumber = '310547891';
+// Leverandøren roteres over en liste (pickVendorOrg). Eier-org og klientene
+// hentes fra Tenor: en fersk eier har ingen klienter, så vi setter opp akkurat
+// noen få via API — da blir «legg til alle klienter» raskt.
+const vendorOrgNumber = pickVendorOrg();
 const ANTALL_KLIENTER = 2;
 
 test.describe('Systembruker - Legg til egen organisasjon', () => {

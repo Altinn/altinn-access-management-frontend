@@ -1,6 +1,7 @@
 import { test, expect } from 'playwright/fixture/pomFixture';
 
 import { ApiRequests } from 'playwright/api-requests/SystemUserApiRequests';
+import { pickVendorOrg } from 'playwright/util/systemVendors';
 import { TestdataApi } from 'playwright/util/TestdataApi';
 import { LoginPage } from 'playwright/pages/LoginPage';
 import { SystemUserPage } from 'playwright/pages/systemuser/SystemUserPage';
@@ -20,7 +21,7 @@ import {
 // NB: I Tenor har en AS enten en daglig leder ELLER en kontaktperson (KONT),
 // aldri begge. Vi henter derfor en virksomhet med daglig leder og kobler en egen
 // person til som kontaktperson via API.
-const vendorOrgNumber = '312591332';
+const vendorOrgNumber = pickVendorOrg();
 
 test.describe('Systembruker - Eskaler', () => {
   const tenor = new TenorTestData();
