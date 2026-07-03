@@ -92,14 +92,24 @@ export class DelegationPage {
 
   async grantAccessPkgName(packageName: string) {
     const searchBox = this.packageSearchBox;
-
     await searchBox.waitFor({ state: 'visible', timeout: 15000 });
-    await searchBox.click();
-    await searchBox.fill(packageName);
 
-    const packageButton = this.page.getByRole('button', { name: packageName, exact: true });
+    // Pakkeknappen ligger inne i delegeringsmodalen — hold søket i samme dialog
+    // så vi ikke treffer en knapp på siden bak.
+    const dialog = this.page.getByRole('dialog', {
+      name: this.texts.delegation_modal.aria_label.access_package,
+    });
+    const packageButton = dialog.getByRole('button', { name: packageName, exact: true });
 
-    await expect(packageButton).toBeVisible({ timeout: 10000 });
+    // Søkefeltet kan re-rendre rett etter forrige delegering/tømming (React), så
+    // et enkelt `fill` kan bli forkastet før lista rekker å filtrere. Fyll på nytt
+    // til pakkeknappen dukker opp, i stedet for å stole på at første forsøk «tar».
+    await expect(async () => {
+      await searchBox.fill('');
+      await searchBox.fill(packageName);
+      await expect(packageButton).toBeVisible({ timeout: 3000 });
+    }).toPass({ timeout: 15000 });
+
     await packageButton.click();
 
     const modal = this.page.getByRole('dialog').first();
