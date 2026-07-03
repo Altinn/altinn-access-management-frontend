@@ -141,7 +141,24 @@ export class KlientAdministrasjonPage {
   }
 
   async klikkKnapp(navn: string) {
-    await this.page.getByRole('button', { name: navn }).click();
+    await this.surfaceViaSeMer(this.page.getByRole('button', { name: navn }).first());
+    await this.page.getByRole('button', { name: navn }).first().click();
+  }
+
+  /**
+   * Klient-/bruker-listene er paginert med en «Se mer»-knapp. Med Tenor-aktører
+   * kan raden ligge forbi første side, så vi laster flere sider til `target`
+   * dukker opp (eller det ikke finnes flere sider).
+   */
+  private async surfaceViaSeMer(target: Locator) {
+    const seMer = this.page.getByRole('button', { name: this.texts.common.show_more });
+    await expect(async () => {
+      if (await target.isVisible().catch(() => false)) return;
+      if (await seMer.isVisible().catch(() => false)) {
+        await seMer.click();
+      }
+      await expect(target).toBeVisible({ timeout: 2000 });
+    }).toPass({ timeout: 30000 });
   }
 
   async klikkBruker(navn: string) {
