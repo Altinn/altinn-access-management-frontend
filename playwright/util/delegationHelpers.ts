@@ -28,6 +28,18 @@ export async function setupServiceDelegation(
   await api.delegateSingleService(ref.pid, ref.from, ref.to, service);
 }
 
+/**
+ * Oppretter kobling + delegerer tilgangspakker fra `from` til `to` — utgangspunkt
+ * for tester som trenger at mottakeren allerede har pakker/rolle.
+ */
+export async function setupPackagesForUser(
+  api: EnduserConnection,
+  ref: ConnectionRef,
+  packages: string[],
+): Promise<void> {
+  await api.addConnectionAndPackagesToUser(ref.pid, ref.from, ref.to, packages);
+}
+
 /* -------------------------------------------------------------------------- */
 /* Opprydding (afterEach)                                                      */
 /* -------------------------------------------------------------------------- */

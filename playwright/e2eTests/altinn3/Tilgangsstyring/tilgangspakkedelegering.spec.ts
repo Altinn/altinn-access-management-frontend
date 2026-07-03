@@ -5,7 +5,11 @@ import {
   type TenorPerson,
   type TenorDagligLederMedOrg,
 } from '../../../tenor/TenorTestData';
-import { cleanupConnection, cleanupPackageDelegation } from '../../../util/delegationHelpers';
+import {
+  cleanupConnection,
+  cleanupPackageDelegation,
+  setupPackagesForUser,
+} from '../../../util/delegationHelpers';
 
 type TenorOrg = { orgnr: string; navn: string };
 
@@ -202,7 +206,7 @@ test.describe('tilgangspakkedelegering fra person til person og person til org',
 
     test.beforeEach(async () => {
       [actor, target] = await tenor.bosatteMyndigePersoner(2);
-      await api.addConnectionAndPackagesToUser(actor.pid, actor.pid, target.pid, [
+      await setupPackagesForUser(api, { pid: actor.pid, from: actor.pid, to: target.pid }, [
         accessPackage.urn,
       ]);
     });
@@ -259,7 +263,7 @@ test.describe('tilgangspakkedelegering fra person til person og person til org',
         tenor.bosattMyndigPerson(),
         tenor.hentTilfeldigVirksomhet(),
       ]);
-      await api.addConnectionAndPackagesToUser(actor.pid, actor.pid, target.orgnr, [
+      await setupPackagesForUser(api, { pid: actor.pid, from: actor.pid, to: target.orgnr }, [
         accessPackage.urn,
       ]);
     });
@@ -509,9 +513,11 @@ test.describe('tilgangspakkedelegering fra org til person og org til org', () =>
 
     test.beforeEach(async () => {
       [actor, target] = await Promise.all([tenor.dagligLederMedOrg(), tenor.bosattMyndigPerson()]);
-      await api.addConnectionAndPackagesToUser(actor.dagligLeder.pid, actor.org.orgnr, target.pid, [
-        pkg.urn,
-      ]);
+      await setupPackagesForUser(
+        api,
+        { pid: actor.dagligLeder.pid, from: actor.org.orgnr, to: target.pid },
+        [pkg.urn],
+      );
     });
 
     test('Slett tilgangspakke hos person', async ({ login, accessManagementFrontPage }) => {
@@ -565,10 +571,9 @@ test.describe('tilgangspakkedelegering fra org til person og org til org', () =>
       actor = await tenor.dagligLederMedOrg();
       // Ekskluder aktørens egen org så vi ikke delegerer til oss selv.
       target = await tenor.hentTilfeldigVirksomhet({ ekskluder: [actor.org.orgnr] });
-      await api.addConnectionAndPackagesToUser(
-        actor.dagligLeder.pid,
-        actor.org.orgnr,
-        target.orgnr,
+      await setupPackagesForUser(
+        api,
+        { pid: actor.dagligLeder.pid, from: actor.org.orgnr, to: target.orgnr },
         [pkg.urn],
       );
     });

@@ -6,7 +6,11 @@ import {
   type TenorDagligLederMedOrg,
   type TenorHovedenhetMedUnderenhet,
 } from '../../../tenor/TenorTestData';
-import { cleanupConnection, cleanupServiceDelegation } from '../../../util/delegationHelpers';
+import {
+  cleanupConnection,
+  cleanupServiceDelegation,
+  setupPackagesForUser,
+} from '../../../util/delegationHelpers';
 
 type TenorOrg = { orgnr: string; navn: string };
 
@@ -33,10 +37,9 @@ test.describe('Tilgangsstyring', () => {
       // (man kan ikke gi fullmakt til seg selv, derfor en separat mottaker).
       org = await tenor.dagligLederMedOrg();
       [tilgangsstyrer, recipient] = await tenor.bosatteMyndigePersoner(2);
-      await api.addConnectionAndPackagesToUser(
-        org.dagligLeder.pid,
-        org.org.orgnr,
-        tilgangsstyrer.pid,
+      await setupPackagesForUser(
+        api,
+        { pid: org.dagligLeder.pid, from: org.org.orgnr, to: tilgangsstyrer.pid },
         packages,
       );
       await api.addConnection(org.dagligLeder.pid, org.org.orgnr, recipient.pid);
@@ -96,10 +99,9 @@ test.describe('Tilgangsstyring', () => {
 
     test.beforeEach(async () => {
       [org, user] = await Promise.all([tenor.dagligLederMedOrg(), tenor.bosattMyndigPerson()]);
-      await api.addConnectionAndPackagesToUser(
-        org.dagligLeder.pid,
-        org.org.orgnr,
-        user.pid,
+      await setupPackagesForUser(
+        api,
+        { pid: org.dagligLeder.pid, from: org.org.orgnr, to: user.pid },
         packages,
       );
     });
@@ -217,10 +219,9 @@ test.describe('Tilgangsstyring', () => {
 
     test.beforeEach(async () => {
       [org, user] = await Promise.all([tenor.dagligLederMedOrg(), tenor.bosattMyndigPerson()]);
-      await api.addConnectionAndPackagesToUser(
-        org.dagligLeder.pid,
-        org.org.orgnr,
-        user.pid,
+      await setupPackagesForUser(
+        api,
+        { pid: org.dagligLeder.pid, from: org.org.orgnr, to: user.pid },
         packages,
       );
     });
@@ -260,10 +261,9 @@ test.describe('Tilgangsstyring', () => {
 
     test.beforeEach(async () => {
       [org, user] = await Promise.all([tenor.dagligLederMedOrg(), tenor.bosattMyndigPerson()]);
-      await api.addConnectionAndPackagesToUser(
-        org.dagligLeder.pid,
-        org.org.orgnr,
-        user.pid,
+      await setupPackagesForUser(
+        api,
+        { pid: org.dagligLeder.pid, from: org.org.orgnr, to: user.pid },
         packages,
       );
     });
@@ -310,10 +310,13 @@ test.describe('over- og underenheter', () => {
       ]);
       // Hovedenheten delegerer Byggesøknad til mottakervirksomheten; delegasjonen
       // vises hos både hoved- og underenheten i mottakerens «fullmakter hos andre».
-      await api.addConnectionAndPackagesToUser(
-        delegator.dagligLeder.pid,
-        delegator.hovedenhet.orgnr,
-        recipient.org.orgnr,
+      await setupPackagesForUser(
+        api,
+        {
+          pid: delegator.dagligLeder.pid,
+          from: delegator.hovedenhet.orgnr,
+          to: recipient.org.orgnr,
+        },
         ['urn:altinn:accesspackage:byggesoknad'],
       );
     });
@@ -375,10 +378,13 @@ test.describe('over- og underenheter', () => {
       // synlig både hos hovedenheten (direkte, slettbar) og hos underenheten
       // (arvet). En delegasjon gjort FRA underenheten vises derimot ikke hos
       // hovedenheten, så vi delegerer fra hovedenheten.
-      await api.addConnectionAndPackagesToUser(
-        delegator.dagligLeder.pid,
-        delegator.hovedenhet.orgnr,
-        recipientOrg.orgnr,
+      await setupPackagesForUser(
+        api,
+        {
+          pid: delegator.dagligLeder.pid,
+          from: delegator.hovedenhet.orgnr,
+          to: recipientOrg.orgnr,
+        },
         ['urn:altinn:accesspackage:byggesoknad'],
       );
     });
