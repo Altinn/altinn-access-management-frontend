@@ -266,6 +266,8 @@
     "modal_info_info_2": "To see what this power of attorney covers, you can go to the <a>guardianship tab</a> in the overview."
   },
   "role": {
+    "header_info": "Information about roles in Altinn",
+    "header_info_content": "These roles have been transferred from the old Altinn and will gradually be phased out. Please note that the roles may be incomplete and that you cannot grant/request new powers of attorney for roles. Use access packages or single services instead.",
     "provider_status": "This role is fetched from ",
     "current_roles_title": "Power of attorney for {{count}} roles",
     "fetch_error_heading": "Unable to show roles for this user",
@@ -294,7 +296,7 @@
   },
   "users_page": {
     "page_title": "Users - Altinn",
-    "main_page_heading": "Users with power of attorney in {{name}}",
+    "main_page_heading": "Users with power of attorney for {{name}}",
     "user_list_heading": "Other users with power of attorney",
     "direct_connections": "Users with power of attorney",
     "user_search_placeholder": "Search for users",
@@ -302,8 +304,8 @@
     "no_users": "You have not received any power of attorney from others.",
     "show_users_with_client_access": "Show users with client access",
     "indirect_connections": "Users without power of attorney",
-    "no_access_to_users_header": "We are still working on this page!",
-    "no_access_to_users_message": "Only access managers can see the full list of users with powers of attorney in this organization. <br /> A list of key personnel (the board) will eventually be made available to users without access management."
+    "no_access_to_users_header": "Only access managers can see other users with powers of attorney",
+    "no_access_to_users_message": "You are not an access manager for {{name}} and can only see your own powers of attorney."
   },
   "advanced_user_search": {
     "add_user_button": "Add user",
@@ -581,7 +583,6 @@
     "info_button": "Information about the new solution"
   },
   "a2Alerts": {
-    "oldRolesContent": "These Altinn roles may include services that exist in the new Altinn solution. The services are being moved into the new access packages.",
     "oldRolesLinkText": "Go to old Altinn",
     "legacyRoleContent": "This role will soon be removed. Use access packages instead."
   },

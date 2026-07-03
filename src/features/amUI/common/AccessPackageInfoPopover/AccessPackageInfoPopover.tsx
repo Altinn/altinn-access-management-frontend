@@ -1,6 +1,6 @@
 import { useTranslation } from 'react-i18next';
-import { DsLink, DsParagraph, DsPopover } from '@altinn/altinn-components';
-import { QuestionmarkCircleIcon } from '@navikt/aksel-icons';
+import { DsLink, DsParagraph } from '@altinn/altinn-components';
+import { HelpText } from '../HelpText/HelpText';
 import classes from './AccessPackageInfoPopover.module.css';
 
 export const AccessPackageInfoPopover = () => {
@@ -8,28 +8,21 @@ export const AccessPackageInfoPopover = () => {
 
   return (
     <span>
-      <DsPopover.TriggerContext>
-        <DsPopover.Trigger
-          icon
-          variant='tertiary'
-          data-size={'xs'}
-        >
-          <QuestionmarkCircleIcon
-            aria-label={t('poa_overview_page.packages_tab.info_box_icon_label')}
-          />
-        </DsPopover.Trigger>
-        <DsPopover className={classes.popover}>
-          <div className={classes.infoBox}>
-            <DsParagraph>{t('poa_overview_page.packages_tab.info_box_p1')}</DsParagraph>
-            <DsLink
-              href={getHelpPagesUrl(i18n.language)}
-              target='_blank'
-            >
-              {t('poa_overview_page.packages_tab.info_box_link')}
-            </DsLink>
-          </div>
-        </DsPopover>
-      </DsPopover.TriggerContext>
+      <HelpText
+        aria-label={t('poa_overview_page.packages_tab.info_box_icon_label')}
+        className={classes.popover}
+      >
+        <div className={classes.infoBox}>
+          <DsParagraph>{t('poa_overview_page.packages_tab.info_box_p1')}</DsParagraph>
+          <DsLink
+            href={getHelpPagesUrl(i18n.language)}
+            target='_blank'
+            rel='noopener noreferrer'
+          >
+            {t('poa_overview_page.packages_tab.info_box_link')}
+          </DsLink>
+        </div>
+      </HelpText>
     </span>
   );
 };

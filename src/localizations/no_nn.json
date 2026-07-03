@@ -262,6 +262,8 @@
     "modal_info_info_2": "For å sjå kva denne fullmakta gjeld, kan du gå til <a>fana for verjemål</a> i oversikta."
   },
   "role": {
+    "header_info": "Informasjon om roller i Altinn",
+    "header_info_content": "Desse rollene er overført frå gamle Altinn og vil gradvis fases ut. Ver merksam på at rollene kan vere ufullstendige og at du ikkje kan gi/be om nye fullmakter til roller. Bruk heller tilgangspakkar eller enkelttenester.",
     "provider_status": "Denne rolla er henta frå ",
     "current_roles_title": "Fullmakt til {{count}} roller",
     "fetch_error_heading": "Kan ikkje vise roller for denne brukaren",
@@ -290,7 +292,7 @@
   },
   "users_page": {
     "page_title": "Brukarar - Altinn",
-    "main_page_heading": "Brukarar med fullmakter i {{name}}",
+    "main_page_heading": "Brukarar med fullmakter for {{name}}",
     "user_list_heading": "Andre med fullmakt",
     "direct_connections": "Brukarar med fullmakt",
     "user_search_placeholder": "Søk etter brukarar eller verksemder",
@@ -298,8 +300,8 @@
     "no_users": "Du har ikkje motteke nokon fullmakter frå andre.",
     "show_users_with_client_access": "Vis brukarar med klienttilgang",
     "indirect_connections": "Brukarar utan fullmakt",
-    "no_access_to_users_header": "Denne sida jobbar vi framleis med!",
-    "no_access_to_users_message": "Kun tilgangsstyrarar kan sjå full liste over brukarar med fullmakter i denne verksemda. <br /> Liste over nøkkelpersonar (styret) vil bli tilgjengeleg for brukarar utan tilgangsstyring etterkvart."
+    "no_access_to_users_header": "Kun tilgangsstyrare kan sjå andre brukarar med fullmakter",
+    "no_access_to_users_message": "Du er ikkje tilgangsstyrer for {{name}} og kan kun sjå dine eigne fullmakter."
   },
   "advanced_user_search": {
     "add_user_button": "Ny brukar",
@@ -577,7 +579,6 @@
     "info_button": "Informasjon om ny løysing"
   },
   "a2Alerts": {
-    "oldRolesContent": "Desse Altinn-rollene kan innehalde tenester som finst i den nye Altinn-løysinga. Tenestene blir flytta inn i dei nye tilgangspakkane",
     "oldRolesLinkText": "Gå til gamle Altinn",
     "legacyRoleContent": "Denne rolla vil snart bli fjerna. Bruk heller tilgangspakkar."
   },

@@ -5,7 +5,6 @@ import type { ActionError } from '@/resources/hooks/useActionError';
 
 import { RoleInfoModal } from '../common/DelegationModal/RoleInfoModal';
 import { RoleList, ROLE_LIST_HEADING_ID } from '../common/RoleList/RoleList';
-import { OldRolesAlert } from '../common/OldRolesAlert/OldRolesAlert';
 import { usePartyRepresentation } from '../common/PartyRepresentationContext/PartyRepresentationContext';
 import {
   RestoreFocusFallback,
@@ -26,7 +25,6 @@ export const ReporteeRoleSection = ({ numberOfAccesses }: ReporteeRoleSectionPro
 
   return (
     <RestoreFocusProvider restoreFocus={restoreFocus}>
-      <OldRolesAlert />
       <RestoreFocusFallback>
         <RoleList
           onSelect={(role, error) => {
