@@ -6,6 +6,7 @@ import {
   type TenorDagligLederMedOrg,
   type TenorHovedenhetMedUnderenhet,
 } from '../../../tenor/TenorTestData';
+import { cleanupConnection, cleanupServiceDelegation } from '../../../util/delegationCleanup';
 
 type TenorOrg = { orgnr: string; navn: string };
 
@@ -42,14 +43,16 @@ test.describe('Tilgangsstyring', () => {
     });
 
     test.afterEach(async () => {
-      try {
-        await api.deleteConnection(org.dagligLeder.pid, org.org.orgnr, [
-          tilgangsstyrer.pid,
-          recipient.pid,
-        ]);
-      } catch (error) {
-        console.error('Cleanup: Failed to delete connection:', error);
-      }
+      await cleanupConnection(api, {
+        pid: org.dagligLeder.pid,
+        from: org.org.orgnr,
+        to: tilgangsstyrer.pid,
+      });
+      await cleanupConnection(api, {
+        pid: org.dagligLeder.pid,
+        from: org.org.orgnr,
+        to: recipient.pid,
+      });
     });
 
     test('Tilgangsstyrer skal kunne delegere tilgangspakker de selv har', async ({
@@ -102,11 +105,7 @@ test.describe('Tilgangsstyring', () => {
     });
 
     test.afterEach(async () => {
-      try {
-        await api.deleteConnection(org.dagligLeder.pid, org.org.orgnr, [user.pid]);
-      } catch (error) {
-        console.error('Cleanup: Failed to delete connection:', error);
-      }
+      await cleanupConnection(api, { pid: org.dagligLeder.pid, from: org.org.orgnr, to: user.pid });
     });
 
     test('Hovedadministrator skal kunne delegere nesten alle tilgangspakker', async ({
@@ -227,11 +226,7 @@ test.describe('Tilgangsstyring', () => {
     });
 
     test.afterEach(async () => {
-      try {
-        await api.deleteConnection(org.dagligLeder.pid, org.org.orgnr, [user.pid]);
-      } catch (error) {
-        console.error('Cleanup: Failed to delete connection:', error);
-      }
+      await cleanupConnection(api, { pid: org.dagligLeder.pid, from: org.org.orgnr, to: user.pid });
     });
 
     test('Vanlig bruker skal ikke kunne delegere pakker de selv ikke har tilgang til', async ({
@@ -274,11 +269,7 @@ test.describe('Tilgangsstyring', () => {
     });
 
     test.afterEach(async () => {
-      try {
-        await api.deleteConnection(org.dagligLeder.pid, org.org.orgnr, [user.pid]);
-      } catch (error) {
-        console.error('Cleanup: Failed to delete connection:', error);
-      }
+      await cleanupConnection(api, { pid: org.dagligLeder.pid, from: org.org.orgnr, to: user.pid });
     });
 
     test('Standard bruker skal kun kunne se deg selv på brukere-siden', async ({
@@ -328,13 +319,11 @@ test.describe('over- og underenheter', () => {
     });
 
     test.afterEach(async () => {
-      try {
-        await api.deleteConnection(delegator.dagligLeder.pid, delegator.hovedenhet.orgnr, [
-          recipient.org.orgnr,
-        ]);
-      } catch (error) {
-        console.error('Cleanup: Failed to delete connection:', error);
-      }
+      await cleanupConnection(api, {
+        pid: delegator.dagligLeder.pid,
+        from: delegator.hovedenhet.orgnr,
+        to: recipient.org.orgnr,
+      });
     });
 
     test('Virksomhet skal se tilgangspakke fra hoved- og underenhet under «fullmakter hos andre»', async ({
@@ -395,13 +384,11 @@ test.describe('over- og underenheter', () => {
     });
 
     test.afterEach(async () => {
-      try {
-        await api.deleteConnection(delegator.dagligLeder.pid, delegator.hovedenhet.orgnr, [
-          recipientOrg.orgnr,
-        ]);
-      } catch (error) {
-        console.error('Cleanup: Failed to delete connection:', error);
-      }
+      await cleanupConnection(api, {
+        pid: delegator.dagligLeder.pid,
+        from: delegator.hovedenhet.orgnr,
+        to: recipientOrg.orgnr,
+      });
     });
 
     test('Hoved- og underenhet skal kunne se virksomhet de har delegert tilgangspakke til', async ({
@@ -471,23 +458,15 @@ test.describe('over- og underenheter', () => {
     });
 
     test.afterEach(async () => {
-      try {
-        await api.deleteSingleServiceDelegation(
-          delegator.dagligLeder.pid,
-          delegator.hovedenhet.orgnr,
-          recipient.org.orgnr,
-          service,
-        );
-      } catch (error) {
-        console.error('Cleanup: Failed to delete single service delegation:', error);
-      }
-      try {
-        await api.deleteConnection(delegator.dagligLeder.pid, delegator.hovedenhet.orgnr, [
-          recipient.org.orgnr,
-        ]);
-      } catch (error) {
-        console.error('Cleanup: Failed to delete connection:', error);
-      }
+      await cleanupServiceDelegation(
+        api,
+        {
+          pid: delegator.dagligLeder.pid,
+          from: delegator.hovedenhet.orgnr,
+          to: recipient.org.orgnr,
+        },
+        service,
+      );
     });
 
     test('Virksomhet skal se enkelttjeneste fra hoved- og underenhet under «fullmakter hos andre»', async ({
@@ -550,23 +529,15 @@ test.describe('over- og underenheter', () => {
     });
 
     test.afterEach(async () => {
-      try {
-        await api.deleteSingleServiceDelegation(
-          delegator.dagligLeder.pid,
-          delegator.hovedenhet.orgnr,
-          recipientOrg.orgnr,
-          service,
-        );
-      } catch (error) {
-        console.error('Cleanup: Failed to delete single service delegation:', error);
-      }
-      try {
-        await api.deleteConnection(delegator.dagligLeder.pid, delegator.hovedenhet.orgnr, [
-          recipientOrg.orgnr,
-        ]);
-      } catch (error) {
-        console.error('Cleanup: Failed to delete connection:', error);
-      }
+      await cleanupServiceDelegation(
+        api,
+        {
+          pid: delegator.dagligLeder.pid,
+          from: delegator.hovedenhet.orgnr,
+          to: recipientOrg.orgnr,
+        },
+        service,
+      );
     });
 
     test('Hoved- og underenhet skal kunne se virksomhet de har delegert enkelttjeneste til', async ({

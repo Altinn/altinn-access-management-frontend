@@ -1,6 +1,7 @@
 import { test } from 'playwright/fixture/pomFixture';
 import { DelegationApiUtil } from 'playwright/util/delegationApiUtil';
 import { EnduserConnection } from 'playwright/api-requests/EnduserConnection';
+import { cleanupConnection } from 'playwright/util/delegationCleanup';
 import { TenorTestData, type TenorDagligLederMedOrg } from 'playwright/tenor/TenorTestData';
 
 test.describe('Delegate access pacakge from Org-A(Avgiver) to Org-B(Rettighetshaver) ', () => {
@@ -20,11 +21,11 @@ test.describe('Delegate access pacakge from Org-A(Avgiver) to Org-B(Rettighetsha
   });
 
   test.afterEach(async () => {
-    try {
-      await api.deleteConnection(orgA.dagligLeder.pid, orgA.org.orgnr, [orgB.org.orgnr]);
-    } catch (error) {
-      console.error('Cleanup: Failed to delete connection:', error);
-    }
+    await cleanupConnection(api, {
+      pid: orgA.dagligLeder.pid,
+      from: orgA.org.orgnr,
+      to: orgB.org.orgnr,
+    });
   });
 
   test('Org-A delegates access package to Org-B', async ({

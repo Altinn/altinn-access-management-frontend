@@ -1,5 +1,6 @@
 import { expect, test } from '../../../fixture/pomFixture';
 import { EnduserConnection } from '../../../api-requests/EnduserConnection';
+import { cleanupConnection, cleanupClientDelegationAgent } from '../../../util/delegationCleanup';
 import {
   TenorTestData,
   type TenorPerson,
@@ -48,11 +49,7 @@ test.describe('klientadministrasjon', () => {
     });
 
     test.afterEach(async () => {
-      try {
-        await api.deleteClientDelegationAgent(actor.dagligLeder.pid, actor.org.orgnr, agent.pid);
-      } catch (error) {
-        console.error('Cleanup: Failed to delete client delegation agent:', error);
-      }
+      await cleanupClientDelegationAgent(api, actor.dagligLeder.pid, actor.org.orgnr, agent.pid);
     });
   });
 
@@ -89,12 +86,7 @@ test.describe('klientadministrasjon', () => {
 
     test.afterEach(async ({}, testInfo) => {
       if (testInfo.status === 'passed') return;
-
-      try {
-        await api.deleteClientDelegationAgent(actor.dagligLeder.pid, actor.org.orgnr, agent.pid);
-      } catch (error) {
-        console.error('Cleanup: Failed to delete client delegation agent:', error);
-      }
+      await cleanupClientDelegationAgent(api, actor.dagligLeder.pid, actor.org.orgnr, agent.pid);
     });
   });
 
@@ -153,16 +145,12 @@ test.describe('klientadministrasjon', () => {
     });
 
     test.afterEach(async () => {
-      try {
-        await api.deleteConnection(client.dagligLeder.pid, client.org.orgnr, [actor.org.orgnr]);
-      } catch (error) {
-        console.error('Cleanup: Failed to delete connection:', error);
-      }
-      try {
-        await api.deleteClientDelegationAgent(actor.dagligLeder.pid, actor.org.orgnr, agent.pid);
-      } catch (error) {
-        console.error('Cleanup: Failed to delete client delegation agent:', error);
-      }
+      await cleanupConnection(api, {
+        pid: client.dagligLeder.pid,
+        from: client.org.orgnr,
+        to: actor.org.orgnr,
+      });
+      await cleanupClientDelegationAgent(api, actor.dagligLeder.pid, actor.org.orgnr, agent.pid);
     });
   });
 
@@ -221,16 +209,12 @@ test.describe('klientadministrasjon', () => {
     });
 
     test.afterEach(async () => {
-      try {
-        await api.deleteConnection(client.dagligLeder.pid, client.org.orgnr, [actor.org.orgnr]);
-      } catch (error) {
-        console.error('Cleanup: Failed to delete connection:', error);
-      }
-      try {
-        await api.deleteClientDelegationAgent(actor.dagligLeder.pid, actor.org.orgnr, agent.pid);
-      } catch (error) {
-        console.error('Cleanup: Failed to delete client delegation agent:', error);
-      }
+      await cleanupConnection(api, {
+        pid: client.dagligLeder.pid,
+        from: client.org.orgnr,
+        to: actor.org.orgnr,
+      });
+      await cleanupClientDelegationAgent(api, actor.dagligLeder.pid, actor.org.orgnr, agent.pid);
     });
   });
 
@@ -287,16 +271,12 @@ test.describe('klientadministrasjon', () => {
     });
 
     test.afterEach(async () => {
-      try {
-        await api.deleteConnection(client.dagligLeder.pid, client.org.orgnr, [actor.org.orgnr]);
-      } catch (error) {
-        console.error('Cleanup: Failed to delete connection:', error);
-      }
-      try {
-        await api.deleteClientDelegationAgent(actor.dagligLeder.pid, actor.org.orgnr, agent.pid);
-      } catch (error) {
-        console.error('Cleanup: Failed to delete client delegation agent:', error);
-      }
+      await cleanupConnection(api, {
+        pid: client.dagligLeder.pid,
+        from: client.org.orgnr,
+        to: actor.org.orgnr,
+      });
+      await cleanupClientDelegationAgent(api, actor.dagligLeder.pid, actor.org.orgnr, agent.pid);
     });
   });
 
@@ -356,16 +336,12 @@ test.describe('klientadministrasjon', () => {
     });
 
     test.afterEach(async () => {
-      try {
-        await api.deleteConnection(client.dagligLeder.pid, client.org.orgnr, [actor.org.orgnr]);
-      } catch (error) {
-        console.error('Cleanup: Failed to delete connection:', error);
-      }
-      try {
-        await api.deleteClientDelegationAgent(actor.dagligLeder.pid, actor.org.orgnr, agent.pid);
-      } catch (error) {
-        console.error('Cleanup: Failed to delete client delegation agent:', error);
-      }
+      await cleanupConnection(api, {
+        pid: client.dagligLeder.pid,
+        from: client.org.orgnr,
+        to: actor.org.orgnr,
+      });
+      await cleanupClientDelegationAgent(api, actor.dagligLeder.pid, actor.org.orgnr, agent.pid);
     });
   });
 });
