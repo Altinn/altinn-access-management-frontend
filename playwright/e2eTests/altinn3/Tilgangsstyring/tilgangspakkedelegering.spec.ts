@@ -1,29 +1,26 @@
 import { test } from '../../../fixture/pomFixture';
 import { EnduserConnection } from '../../../api-requests/EnduserConnection';
-import {
-  TenorTestData,
-  type TenorPerson,
-  type TenorDagligLederMedOrg,
-} from '../../../tenor/TenorTestData';
+import type { Testperson, DagligLederMedOrg } from '../../../tenor/TenorTestData';
 import {
   cleanupConnection,
   cleanupPackageDelegation,
   setupPackagesForUser,
 } from '../../../util/delegationHelpers';
 
-type TenorOrg = { orgnr: string; navn: string };
+type Testorganisasjon = { orgnr: string; navn: string };
 
 test.describe('tilgangspakkedelegering fra person til person og person til org', () => {
   const api = new EnduserConnection();
-  const tenor = new TenorTestData();
 
   test.describe('Legg til ny person hos deg selv', () => {
-    let actor: TenorPerson;
-    let target: TenorPerson;
+    let actor: Testperson;
+    let target: Testperson;
 
-    test.beforeEach(async () => {
+    test.beforeEach(async ({ testData }) => {
       // To bosatte, myndige personer fra Tenor: `actor` logger inn og legger til `target`.
-      [actor, target] = await tenor.bosatteMyndigePersoner(2);
+      [actor, target] = await testData.bosatteMyndigePersoner(2);
+
+      testData.hovedenhetMedUnderenhet();
     });
 
     test('Legg til ny person hos deg selv', async ({ login, accessManagementFrontPage }) => {
@@ -56,13 +53,13 @@ test.describe('tilgangspakkedelegering fra person til person og person til org',
   });
 
   test.describe('Legg til ny virksomhet hos deg selv', () => {
-    let actor: TenorPerson;
-    let target: TenorOrg;
+    let actor: Testperson;
+    let target: Testorganisasjon;
 
-    test.beforeEach(async () => {
+    test.beforeEach(async ({ testData }) => {
       [actor, target] = await Promise.all([
-        tenor.bosattMyndigPerson(),
-        tenor.hentTilfeldigVirksomhet(),
+        testData.bosattMyndigPerson(),
+        testData.hentTilfeldigVirksomhet(),
       ]);
     });
 
@@ -96,17 +93,17 @@ test.describe('tilgangspakkedelegering fra person til person og person til org',
   });
 
   test.describe('Deleger tilgangspakke til person', () => {
-    let actor: TenorPerson;
-    let target: TenorPerson;
+    let actor: Testperson;
+    let target: Testperson;
     const pkg = {
       urn: 'urn:altinn:accesspackage:innbygger-utdanning',
       name: 'Utdanning',
       area: 'Arbeidsliv, skole og utdanning',
     };
 
-    test.beforeEach(async () => {
+    test.beforeEach(async ({ testData: testData }) => {
       // `actor` delegerer (logger inn og representerer seg selv), `target` mottar.
-      [actor, target] = await tenor.bosatteMyndigePersoner(2);
+      [actor, target] = await testData.bosatteMyndigePersoner(2);
       await api.addConnection(actor.pid, actor.pid, target.pid);
     });
 
@@ -145,18 +142,18 @@ test.describe('tilgangspakkedelegering fra person til person og person til org',
   });
 
   test.describe('Deleger tilgangspakke til virksomhet', () => {
-    let actor: TenorPerson;
-    let target: TenorOrg;
+    let actor: Testperson;
+    let target: Testorganisasjon;
     const accessPackage = {
       urn: 'urn:altinn:accesspackage:innbygger-utdanning',
       name: 'Utdanning',
       area: 'Arbeidsliv, skole og utdanning',
     };
 
-    test.beforeEach(async () => {
+    test.beforeEach(async ({ testData }) => {
       [actor, target] = await Promise.all([
-        tenor.bosattMyndigPerson(),
-        tenor.hentTilfeldigVirksomhet(),
+        testData.bosattMyndigPerson(),
+        testData.hentTilfeldigVirksomhet(),
       ]);
       await api.addConnection(actor.pid, actor.pid, target.orgnr);
     });
@@ -196,16 +193,16 @@ test.describe('tilgangspakkedelegering fra person til person og person til org',
   });
 
   test.describe('Slett tilgangspakke hos person', () => {
-    let actor: TenorPerson;
-    let target: TenorPerson;
+    let actor: Testperson;
+    let target: Testperson;
     const accessPackage = {
       urn: 'urn:altinn:accesspackage:innbygger-samliv',
       name: 'Samliv',
       area: 'Familie og fritid',
     };
 
-    test.beforeEach(async () => {
-      [actor, target] = await tenor.bosatteMyndigePersoner(2);
+    test.beforeEach(async ({ testData }) => {
+      [actor, target] = await testData.bosatteMyndigePersoner(2);
       await setupPackagesForUser(api, { pid: actor.pid, from: actor.pid, to: target.pid }, [
         accessPackage.urn,
       ]);
@@ -250,18 +247,18 @@ test.describe('tilgangspakkedelegering fra person til person og person til org',
   });
 
   test.describe('Slett tilgangspakke hos virksomhet', () => {
-    let actor: TenorPerson;
-    let target: TenorOrg;
+    let actor: Testperson;
+    let target: Testorganisasjon;
     const accessPackage = {
       urn: 'urn:altinn:accesspackage:innbygger-samliv',
       name: 'Samliv',
       area: 'Familie og fritid',
     };
 
-    test.beforeEach(async () => {
+    test.beforeEach(async ({ testData }) => {
       [actor, target] = await Promise.all([
-        tenor.bosattMyndigPerson(),
-        tenor.hentTilfeldigVirksomhet(),
+        testData.bosattMyndigPerson(),
+        testData.hentTilfeldigVirksomhet(),
       ]);
       await setupPackagesForUser(api, { pid: actor.pid, from: actor.pid, to: target.orgnr }, [
         accessPackage.urn,
@@ -309,15 +306,17 @@ test.describe('tilgangspakkedelegering fra person til person og person til org',
 
 test.describe('tilgangspakkedelegering fra org til person og org til org', () => {
   const api = new EnduserConnection();
-  const tenor = new TenorTestData();
 
   test.describe('Legg til ny person hos din org', () => {
-    let actor: TenorDagligLederMedOrg;
-    let target: TenorPerson;
+    let actor: DagligLederMedOrg;
+    let target: Testperson;
 
-    test.beforeEach(async () => {
+    test.beforeEach(async ({ testData }) => {
       // `actor` er daglig leder som representerer sin virksomhet; `target` legges til som bruker.
-      [actor, target] = await Promise.all([tenor.dagligLederMedOrg(), tenor.bosattMyndigPerson()]);
+      [actor, target] = await Promise.all([
+        testData.dagligLederMedOrg(),
+        testData.bosattMyndigPerson(),
+      ]);
     });
 
     test('Legg til ny person hos din org', async ({ login, accessManagementFrontPage }) => {
@@ -354,13 +353,13 @@ test.describe('tilgangspakkedelegering fra org til person og org til org', () =>
   });
 
   test.describe('Legg til ny virksomhet hos din org', () => {
-    let actor: TenorDagligLederMedOrg;
-    let target: TenorOrg;
+    let actor: DagligLederMedOrg;
+    let target: Testorganisasjon;
 
-    test.beforeEach(async () => {
-      actor = await tenor.dagligLederMedOrg();
+    test.beforeEach(async ({ testData }) => {
+      actor = await testData.dagligLederMedOrg();
       // Ekskluder aktørens egen org så vi ikke delegerer til oss selv.
-      target = await tenor.hentTilfeldigVirksomhet({ ekskluder: [actor.org.orgnr] });
+      target = await testData.hentTilfeldigVirksomhet({ ekskluder: [actor.org.orgnr] });
     });
 
     test('Legg til ny virksomhet hos din org', async ({ login, accessManagementFrontPage }) => {
@@ -397,16 +396,19 @@ test.describe('tilgangspakkedelegering fra org til person og org til org', () =>
   });
 
   test.describe('Deleger tilgangspakke til person', () => {
-    let actor: TenorDagligLederMedOrg;
-    let target: TenorPerson;
+    let actor: DagligLederMedOrg;
+    let target: Testperson;
     const pkg = {
       urn: 'urn:altinn:accesspackage:posttjenester',
       name: 'Posttjenester',
       area: 'Andre tjenesteytende næringer',
     };
 
-    test.beforeEach(async () => {
-      [actor, target] = await Promise.all([tenor.dagligLederMedOrg(), tenor.bosattMyndigPerson()]);
+    test.beforeEach(async ({ testData }) => {
+      [actor, target] = await Promise.all([
+        testData.dagligLederMedOrg(),
+        testData.bosattMyndigPerson(),
+      ]);
       await api.addConnection(actor.dagligLeder.pid, actor.org.orgnr, target.pid);
     });
 
@@ -449,18 +451,18 @@ test.describe('tilgangspakkedelegering fra org til person og org til org', () =>
   });
 
   test.describe('Deleger tilgangspakke til virksomhet', () => {
-    let actor: TenorDagligLederMedOrg;
-    let target: TenorOrg;
+    let actor: DagligLederMedOrg;
+    let target: Testorganisasjon;
     const pkg = {
       urn: 'urn:altinn:accesspackage:posttjenester',
       name: 'Posttjenester',
       area: 'Andre tjenesteytende næringer',
     };
 
-    test.beforeEach(async () => {
-      actor = await tenor.dagligLederMedOrg();
+    test.beforeEach(async ({ testData }) => {
+      actor = await testData.dagligLederMedOrg();
       // Ekskluder aktørens egen org så vi ikke delegerer til oss selv.
-      target = await tenor.hentTilfeldigVirksomhet({ ekskluder: [actor.org.orgnr] });
+      target = await testData.hentTilfeldigVirksomhet({ ekskluder: [actor.org.orgnr] });
       await api.addConnection(actor.dagligLeder.pid, actor.org.orgnr, target.orgnr);
     });
 
@@ -503,16 +505,19 @@ test.describe('tilgangspakkedelegering fra org til person og org til org', () =>
   });
 
   test.describe('Slett tilgangspakke hos person', () => {
-    let actor: TenorDagligLederMedOrg;
-    let target: TenorPerson;
+    let actor: DagligLederMedOrg;
+    let target: Testperson;
     const pkg = {
       urn: 'urn:altinn:accesspackage:posttjenester',
       name: 'Posttjenester',
       area: 'Andre tjenesteytende næringer',
     };
 
-    test.beforeEach(async () => {
-      [actor, target] = await Promise.all([tenor.dagligLederMedOrg(), tenor.bosattMyndigPerson()]);
+    test.beforeEach(async ({ testData }) => {
+      [actor, target] = await Promise.all([
+        testData.dagligLederMedOrg(),
+        testData.bosattMyndigPerson(),
+      ]);
       await setupPackagesForUser(
         api,
         { pid: actor.dagligLeder.pid, from: actor.org.orgnr, to: target.pid },
@@ -559,18 +564,18 @@ test.describe('tilgangspakkedelegering fra org til person og org til org', () =>
   });
 
   test.describe('Slett tilgangspakke hos virksomhet', () => {
-    let actor: TenorDagligLederMedOrg;
-    let target: TenorOrg;
+    let actor: DagligLederMedOrg;
+    let target: Testorganisasjon;
     const pkg = {
       urn: 'urn:altinn:accesspackage:posttjenester',
       name: 'Posttjenester',
       area: 'Andre tjenesteytende næringer',
     };
 
-    test.beforeEach(async () => {
-      actor = await tenor.dagligLederMedOrg();
+    test.beforeEach(async ({ testData }) => {
+      actor = await testData.dagligLederMedOrg();
       // Ekskluder aktørens egen org så vi ikke delegerer til oss selv.
-      target = await tenor.hentTilfeldigVirksomhet({ ekskluder: [actor.org.orgnr] });
+      target = await testData.hentTilfeldigVirksomhet({ ekskluder: [actor.org.orgnr] });
       await setupPackagesForUser(
         api,
         { pid: actor.dagligLeder.pid, from: actor.org.orgnr, to: target.orgnr },

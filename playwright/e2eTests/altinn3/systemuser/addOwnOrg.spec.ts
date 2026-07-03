@@ -4,7 +4,7 @@ import { pickVendorOrg } from 'playwright/util/systemVendors';
 import { TestdataApi } from 'playwright/util/TestdataApi';
 import { pickRandom } from 'playwright/util/helper';
 import { EnduserConnection } from 'playwright/api-requests/EnduserConnection';
-import { TenorTestData, type TenorDagligLederMedOrg } from 'playwright/tenor/TenorTestData';
+import type { DagligLederMedOrg } from 'playwright/tenor/TenorTestData';
 import { cleanupSystemUser } from 'playwright/util/systemUserCleanup';
 
 // Leverandøren roteres over en liste (pickVendorOrg). Eier-org og klientene
@@ -14,26 +14,25 @@ const vendorOrgNumber = pickVendorOrg();
 const ANTALL_KLIENTER = 2;
 
 test.describe('Systembruker - Legg til egen organisasjon', () => {
-  const tenor = new TenorTestData();
   const enduser = new EnduserConnection();
   const accessPackageApiName = pickRandom(['jordbruk', 'motorvognavgift', 'pensjon']);
   const accessPackageUrn = `urn:altinn:accesspackage:${accessPackageApiName}`;
 
   let api: ApiRequests;
-  let owner: TenorDagligLederMedOrg;
-  let clients: TenorDagligLederMedOrg[];
+  let owner: DagligLederMedOrg;
+  let clients: DagligLederMedOrg[];
   let name: string;
   let systemId: string;
   let externalRef: string;
   let response: { confirmUrl: string; id: string };
 
-  test.beforeEach(async () => {
+  test.beforeEach(async ({ testData }) => {
     api = new ApiRequests();
 
-    owner = await tenor.dagligLederMedOrg();
+    owner = await testData.dagligLederMedOrg();
     clients = [];
     while (clients.length < ANTALL_KLIENTER) {
-      const kandidat = await tenor.dagligLederMedOrg();
+      const kandidat = await testData.dagligLederMedOrg();
       const brukt = [owner, ...clients].some((o) => o.org.orgnr === kandidat.org.orgnr);
       if (!brukt) clients.push(kandidat);
     }

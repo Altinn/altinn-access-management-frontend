@@ -1,45 +1,58 @@
 import { TenorApiRequests, type FacilitatorRolle } from './TenorApiRequests';
 import { pickRandom } from '../util/helper';
 import { randomInt } from 'crypto';
+import type { TestDataProvider } from './TestDataProvider';
 
-export interface TenorPerson {
+export interface Testperson {
   pid: string;
   /** Fullt navn (fornavn [mellomnavn] etternavn) slik det vises i brukerflaten. */
   navn: string;
   etternavn: string;
 }
 
-export interface TenorDagligLederMedOrg {
+export interface DagligLederMedOrg {
   /** Daglig leder — logger inn og representerer virksomheten (allerede registrert i brreg). */
-  dagligLeder: TenorPerson;
+  dagligLeder: Testperson;
   /** Virksomheten vedkommende er daglig leder for. */
   org: { orgnr: string; navn: string };
 }
 
-export interface TenorHovedenhetMedUnderenhet {
+export interface HovedenhetMedUnderenhet {
   /** Daglig leder for hovedenheten — representerer BÅDE hovedenhet og underenhet. */
-  dagligLeder: TenorPerson;
+  dagligLeder: Testperson;
   hovedenhet: { orgnr: string; navn: string };
   underenhet: { orgnr: string; navn: string };
 }
 
 /** En virksomhet (orgnr + navn) i brukerflaten. */
-export interface TenorOrgRef {
+export interface Organisasjon {
   orgnr: string;
   navn: string;
 }
 
-export interface TenorFacilitatorMedKlienter {
+export interface OrganisasjonMedKlienter {
   /** Daglig leder — logger inn og representerer facilitator-virksomheten. */
-  dagligLeder: TenorPerson;
+  dagligLeder: Testperson;
   /** Facilitator-virksomheten (revisor/regnskapsfører/forretningsfører). */
-  org: TenorOrgRef;
+  org: Organisasjon;
   /** Facilitatorens klienter (virksomheter den har oppdrag for). */
-  klienter: TenorOrgRef[];
+  klienter: Organisasjon[];
 }
 
 /** Organisasjonsform brukt som standard når ingen annen er oppgitt. */
 const DEFAULT_ORG_TYPE = 'AS';
+
+/**
+ * Revisor er BEVISST en fast, kjent facilitator med FÅ klienter — også i
+ * Tenor-modus. Revisor-testen delegerer ALLE klienter (addAllCustomers), og en
+ * tilfeldig Tenor-revisor har typisk hundrevis → tregt/ustabilt. Deles av både
+ * TenorTestData og StaticTestData (importeres der).
+ */
+export const FAST_REVISOR: OrganisasjonMedKlienter = {
+  dagligLeder: { pid: '07875898560', navn: 'Fiktiv Svamp', etternavn: 'Svamp' },
+  org: { orgnr: '314251768', navn: 'KUNST STERK MINK ANS' },
+  klienter: [], // testen bruker addAllCustomers → trenger ikke spesifikke klienter
+};
 
 /**
  * Tenor brreg-søk returnerer en STABIL rekkefølge (samme `seed`), så «første
@@ -54,7 +67,7 @@ const ORG_POOL = 100;
  * ikke deler hardkodede PID-er/orgnr. Det unngår kollisjoner ved parallell
  * kjøring (jf. Altinn/altinn-authentication#2086).
  */
-export class TenorTestData {
+export class TenorTestData implements TestDataProvider {
   private readonly tenor = new TenorApiRequests();
 
   /**
@@ -62,7 +75,7 @@ export class TenorTestData {
    * syntetiske Folkeregisteret — KQL: `personstatus:bosatt AND foedselsdato:[* to <18 år siden>]`.
    * Returnerer PID + navn/etternavn (navnet vises i brukerflaten).
    */
-  async bosatteMyndigePersoner(antall: number): Promise<TenorPerson[]> {
+  async bosatteMyndigePersoner(antall: number): Promise<Testperson[]> {
     const personer = await this.tenor.hentPersoner(TenorApiRequests.bosattMyndigKql(), antall);
     if (personer.length < antall) {
       throw new Error(`Tenor ga bare ${personer.length} av ${antall} etterspurte personer.`);
@@ -71,7 +84,7 @@ export class TenorTestData {
   }
 
   /** Én bosatt, myndig privatperson (se {@link bosatteMyndigePersoner}). */
-  async bosattMyndigPerson(): Promise<TenorPerson> {
+  async bosattMyndigPerson(): Promise<Testperson> {
     const [person] = await this.bosatteMyndigePersoner(1);
     return person;
   }
@@ -93,7 +106,7 @@ export class TenorTestData {
    */
   async dagligLederMedOrg(
     opts: { organisasjonsform?: string; ekskluder?: string[] } = {},
-  ): Promise<TenorDagligLederMedOrg> {
+  ): Promise<DagligLederMedOrg> {
     const { organisasjonsform = DEFAULT_ORG_TYPE, ekskluder = [] } = opts;
     const orgs = await this.tenor.hentVirksomheterPaginert(
       `organisasjonsform.kode:${organisasjonsform}`,
@@ -134,7 +147,7 @@ export class TenorTestData {
    */
   async hovedenhetMedUnderenhet(
     organisasjonsform: string = DEFAULT_ORG_TYPE,
-  ): Promise<TenorHovedenhetMedUnderenhet> {
+  ): Promise<HovedenhetMedUnderenhet> {
     const underenheter = await this.tenor.hentUnderenheter(ORG_POOL);
     for (const under of shuffle(underenheter)) {
       const hovedenhet = await this.tenor.hentVirksomhetMedForm(under.hovedenhetOrgnr);
@@ -168,7 +181,10 @@ export class TenorTestData {
    *
    * @param rolle Facilitator-rolle.
    */
-  async facilitatorMedKlienter(rolle: FacilitatorRolle): Promise<TenorFacilitatorMedKlienter> {
+  async facilitatorMedKlienter(rolle: FacilitatorRolle): Promise<OrganisasjonMedKlienter> {
+    // Revisor er fast (se FAST_REVISOR) — ellers ville «deleger alle klienter»
+    // truffet hundrevis av klienter og blitt tregt.
+    if (rolle === 'revisor') return FAST_REVISOR;
     const f = await this.tenor.hentFacilitatorMedBosattLeder(rolle);
     return {
       dagligLeder: await this.dagligLederFraFnr(f.dagligLeder),
@@ -183,9 +199,9 @@ export class TenorTestData {
    * delegeres for.
    */
   async forretningsfoererMedEiendomsklient(): Promise<{
-    dagligLeder: TenorPerson;
-    org: TenorOrgRef;
-    klient: TenorOrgRef;
+    dagligLeder: Testperson;
+    org: Organisasjon;
+    klient: Organisasjon;
   }> {
     const { facilitator, klient } = await this.tenor.hentForretningsfoererMedEiendomsklient();
     return {
@@ -196,7 +212,7 @@ export class TenorTestData {
   }
 
   /** Slår opp navnet til en (bosatt) daglig leder fra fødselsnummer. */
-  private async dagligLederFraFnr(fnr: string | null): Promise<TenorPerson> {
+  private async dagligLederFraFnr(fnr: string | null): Promise<Testperson> {
     if (!fnr) throw new Error('Facilitator mangler daglig leder.');
     const [person] = await this.tenor.hentPersoner(
       `identifikator:${fnr} AND ${TenorApiRequests.bosattMyndigKql()}`,
@@ -243,6 +259,6 @@ function tilTenorPerson(p: {
   foedselsnummer: string;
   navn?: string;
   etternavn?: string;
-}): TenorPerson {
+}): Testperson {
   return { pid: p.foedselsnummer, navn: p.navn ?? '', etternavn: p.etternavn ?? '' };
 }

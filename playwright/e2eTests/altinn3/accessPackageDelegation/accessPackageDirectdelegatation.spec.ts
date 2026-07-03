@@ -2,20 +2,19 @@ import { test } from 'playwright/fixture/pomFixture';
 import { DelegationApiUtil } from 'playwright/util/delegationApiUtil';
 import { EnduserConnection } from 'playwright/api-requests/EnduserConnection';
 import { cleanupConnection } from 'playwright/util/delegationHelpers';
-import { TenorTestData, type TenorDagligLederMedOrg } from 'playwright/tenor/TenorTestData';
+import type { DagligLederMedOrg } from 'playwright/tenor/TenorTestData';
 
 test.describe('Delegate access pacakge from Org-A(Avgiver) to Org-B(Rettighetshaver) ', () => {
   const api = new EnduserConnection();
-  const tenor = new TenorTestData();
-  let orgA: TenorDagligLederMedOrg;
-  let orgB: TenorDagligLederMedOrg;
+  let orgA: DagligLederMedOrg;
+  let orgB: DagligLederMedOrg;
 
-  test.beforeEach(async () => {
+  test.beforeEach(async ({ testData }) => {
     // Org-A (avgiver) delegerer til Org-B (rettighetshaver). Org-B hentes som en
     // dagligLederMedOrg fordi vi trenger BÅDE virksomheten og dens daglige leder
     // (nøkkelrolle-brukeren som arver de delegerte pakkene).
-    orgA = await tenor.dagligLederMedOrg();
-    orgB = await tenor.dagligLederMedOrg({ ekskluder: [orgA.org.orgnr] }); // ikke deleger til seg selv
+    orgA = await testData.dagligLederMedOrg();
+    orgB = await testData.dagligLederMedOrg({ ekskluder: [orgA.org.orgnr] }); // ikke deleger til seg selv
   });
 
   test.afterEach(async () => {

@@ -1,10 +1,9 @@
 import { test } from '../../../fixture/pomFixture';
 import { EnduserConnection } from '../../../api-requests/EnduserConnection';
-import {
-  TenorTestData,
-  type TenorPerson,
-  type TenorDagligLederMedOrg,
-  type TenorHovedenhetMedUnderenhet,
+import type {
+  Testperson,
+  DagligLederMedOrg,
+  HovedenhetMedUnderenhet,
 } from '../../../tenor/TenorTestData';
 import {
   cleanupConnection,
@@ -18,25 +17,24 @@ const service = 'bruno-correspondence';
 
 test.describe('Tilgangsstyring', () => {
   const api = new EnduserConnection();
-  const tenor = new TenorTestData();
 
   test.describe('Tilgangsstyrer skal kunne delegere tilgangspakker de selv har', () => {
-    let org: TenorDagligLederMedOrg;
-    let tilgangsstyrer: TenorPerson;
-    let recipient: TenorPerson;
+    let org: DagligLederMedOrg;
+    let tilgangsstyrer: Testperson;
+    let recipient: Testperson;
     const packages = [
       'urn:altinn:accesspackage:tilgangsstyrer',
       'urn:altinn:accesspackage:posttjenester',
       'urn:altinn:accesspackage:byggesoknad',
     ];
 
-    test.beforeEach(async () => {
+    test.beforeEach(async ({ testData }) => {
       // Daglig leder gir `tilgangsstyrer` rollen + pakkene, og kobler en egen
       // `recipient` til virksomheten. `tilgangsstyrer` logger inn, representerer
       // virksomheten og skal kunne delegere pakkene sine videre til `recipient`
       // (man kan ikke gi fullmakt til seg selv, derfor en separat mottaker).
-      org = await tenor.dagligLederMedOrg();
-      [tilgangsstyrer, recipient] = await tenor.bosatteMyndigePersoner(2);
+      org = await testData.dagligLederMedOrg();
+      [tilgangsstyrer, recipient] = await testData.bosatteMyndigePersoner(2);
       await setupPackagesForUser(
         api,
         { pid: org.dagligLeder.pid, from: org.org.orgnr, to: tilgangsstyrer.pid },
@@ -93,12 +91,15 @@ test.describe('Tilgangsstyring', () => {
   });
 
   test.describe('Hovedadministrator skal kunne delegere nesten alle tilgangspakker', () => {
-    let org: TenorDagligLederMedOrg;
-    let user: TenorPerson;
+    let org: DagligLederMedOrg;
+    let user: Testperson;
     const packages = ['urn:altinn:accesspackage:hovedadministrator'];
 
-    test.beforeEach(async () => {
-      [org, user] = await Promise.all([tenor.dagligLederMedOrg(), tenor.bosattMyndigPerson()]);
+    test.beforeEach(async ({ testData }) => {
+      [org, user] = await Promise.all([
+        testData.dagligLederMedOrg(),
+        testData.bosattMyndigPerson(),
+      ]);
       await setupPackagesForUser(
         api,
         { pid: org.dagligLeder.pid, from: org.org.orgnr, to: user.pid },
@@ -210,15 +211,18 @@ test.describe('Tilgangsstyring', () => {
   });
 
   test.describe('Vanlig bruker skal ikke kunne delegere pakker de selv ikke har tilgang til', () => {
-    let org: TenorDagligLederMedOrg;
-    let user: TenorPerson;
+    let org: DagligLederMedOrg;
+    let user: Testperson;
     const packages = [
       'urn:altinn:accesspackage:tilgangsstyrer',
       'urn:altinn:accesspackage:byggesoknad',
     ];
 
-    test.beforeEach(async () => {
-      [org, user] = await Promise.all([tenor.dagligLederMedOrg(), tenor.bosattMyndigPerson()]);
+    test.beforeEach(async ({ testData }) => {
+      [org, user] = await Promise.all([
+        testData.dagligLederMedOrg(),
+        testData.bosattMyndigPerson(),
+      ]);
       await setupPackagesForUser(
         api,
         { pid: org.dagligLeder.pid, from: org.org.orgnr, to: user.pid },
@@ -255,12 +259,15 @@ test.describe('Tilgangsstyring', () => {
   });
 
   test.describe('Standard bruker skal kun kunne se deg selv på brukere-siden', () => {
-    let org: TenorDagligLederMedOrg;
-    let user: TenorPerson;
+    let org: DagligLederMedOrg;
+    let user: Testperson;
     const packages = ['urn:altinn:accesspackage:byggesoknad'];
 
-    test.beforeEach(async () => {
-      [org, user] = await Promise.all([tenor.dagligLederMedOrg(), tenor.bosattMyndigPerson()]);
+    test.beforeEach(async ({ testData }) => {
+      [org, user] = await Promise.all([
+        testData.dagligLederMedOrg(),
+        testData.bosattMyndigPerson(),
+      ]);
       await setupPackagesForUser(
         api,
         { pid: org.dagligLeder.pid, from: org.org.orgnr, to: user.pid },
@@ -297,16 +304,15 @@ test.describe('Tilgangsstyring', () => {
 
 test.describe('over- og underenheter', () => {
   const api = new EnduserConnection();
-  const tenor = new TenorTestData();
 
   test.describe('Virksomhet skal se tilgangspakke fra hoved- og underenhet under «fullmakter hos andre»', () => {
-    let delegator: TenorHovedenhetMedUnderenhet;
-    let recipient: TenorDagligLederMedOrg;
+    let delegator: HovedenhetMedUnderenhet;
+    let recipient: DagligLederMedOrg;
 
-    test.beforeEach(async () => {
+    test.beforeEach(async ({ testData }) => {
       [delegator, recipient] = await Promise.all([
-        tenor.hovedenhetMedUnderenhet(),
-        tenor.dagligLederMedOrg(),
+        testData.hovedenhetMedUnderenhet(),
+        testData.dagligLederMedOrg(),
       ]);
       // Hovedenheten delegerer Byggesøknad til mottakervirksomheten; delegasjonen
       // vises hos både hoved- og underenheten i mottakerens «fullmakter hos andre».
@@ -366,13 +372,13 @@ test.describe('over- og underenheter', () => {
   });
 
   test.describe('Hoved- og underenhet skal kunne se virksomhet de har delegert tilgangspakke til', () => {
-    let delegator: TenorHovedenhetMedUnderenhet;
+    let delegator: HovedenhetMedUnderenhet;
     let recipientOrg: TenorOrg;
 
-    test.beforeEach(async () => {
+    test.beforeEach(async ({ testData }) => {
       [delegator, recipientOrg] = await Promise.all([
-        tenor.hovedenhetMedUnderenhet(),
-        tenor.hentTilfeldigVirksomhet(),
+        testData.hovedenhetMedUnderenhet(),
+        testData.hentTilfeldigVirksomhet(),
       ]);
       // Hovedenheten delegerer Byggesøknad til virksomhet B. Delegasjonen er
       // synlig både hos hovedenheten (direkte, slettbar) og hos underenheten
@@ -440,13 +446,13 @@ test.describe('over- og underenheter', () => {
   });
 
   test.describe('Virksomhet skal se enkelttjeneste fra hoved- og underenhet under «fullmakter hos andre»', () => {
-    let delegator: TenorHovedenhetMedUnderenhet;
-    let recipient: TenorDagligLederMedOrg;
+    let delegator: HovedenhetMedUnderenhet;
+    let recipient: DagligLederMedOrg;
 
-    test.beforeEach(async () => {
+    test.beforeEach(async ({ testData }) => {
       [delegator, recipient] = await Promise.all([
-        tenor.hovedenhetMedUnderenhet(),
-        tenor.dagligLederMedOrg(),
+        testData.hovedenhetMedUnderenhet(),
+        testData.dagligLederMedOrg(),
       ]);
       // Hovedenheten delegerer enkelttjenesten til mottakervirksomheten; vises hos
       // både hoved- og underenheten i mottakerens «fullmakter hos andre».
@@ -512,13 +518,13 @@ test.describe('over- og underenheter', () => {
   });
 
   test.describe('Hoved- og underenhet skal kunne se virksomhet de har delegert enkelttjeneste til', () => {
-    let delegator: TenorHovedenhetMedUnderenhet;
+    let delegator: HovedenhetMedUnderenhet;
     let recipientOrg: TenorOrg;
 
-    test.beforeEach(async () => {
+    test.beforeEach(async ({ testData }) => {
       [delegator, recipientOrg] = await Promise.all([
-        tenor.hovedenhetMedUnderenhet(),
-        tenor.hentTilfeldigVirksomhet(),
+        testData.hovedenhetMedUnderenhet(),
+        testData.hentTilfeldigVirksomhet(),
       ]);
       // Hovedenheten delegerer enkelttjenesten til B; synlig både hos hoved- og underenhet.
       await api.addConnection(

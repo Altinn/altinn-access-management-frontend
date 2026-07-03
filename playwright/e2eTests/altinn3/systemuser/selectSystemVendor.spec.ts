@@ -3,7 +3,7 @@ import { Language } from 'playwright/pages/LanguageMenu';
 
 import { ApiRequests } from 'playwright/api-requests/SystemUserApiRequests';
 import { pickVendorOrg } from 'playwright/util/systemVendors';
-import { TenorTestData, type TenorDagligLederMedOrg } from 'playwright/tenor/TenorTestData';
+import type { DagligLederMedOrg } from 'playwright/tenor/TenorTestData';
 import { cleanupSystemUser } from 'playwright/util/systemUserCleanup';
 
 // Runs in nynorsk on purpose: exercises the before-login language pinning
@@ -16,15 +16,14 @@ test.use({ language: Language.NN });
 const vendorOrgNumber = pickVendorOrg();
 
 test.describe('System Register', async () => {
-  const tenor = new TenorTestData();
   let system: string;
-  let owner: TenorDagligLederMedOrg;
+  let owner: DagligLederMedOrg;
   let systemUserId: string;
 
-  test.beforeEach(async ({ login }) => {
+  test.beforeEach(async ({ login, testData }) => {
     const api = new ApiRequests();
     system = await api.createSystemSystemRegister(vendorOrgNumber);
-    owner = await tenor.dagligLederMedOrg();
+    owner = await testData.dagligLederMedOrg();
     await login.LoginToAccessManagement(owner.dagligLeder.pid);
     await login.selectMainUnitBySearching(owner.org.navn);
   });

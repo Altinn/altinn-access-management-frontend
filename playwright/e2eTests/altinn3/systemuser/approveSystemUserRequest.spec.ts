@@ -2,7 +2,7 @@ import { test, expect } from 'playwright/fixture/pomFixture';
 
 import { TestdataApi } from 'playwright/util/TestdataApi';
 import { ApiRequests } from 'playwright/api-requests/SystemUserApiRequests';
-import { TenorTestData, type TenorDagligLederMedOrg } from 'playwright/tenor/TenorTestData';
+import type { DagligLederMedOrg } from 'playwright/tenor/TenorTestData';
 import { cleanupSystemUser } from 'playwright/util/systemUserCleanup';
 
 // Leverandør + prebygd system er registrert infrastruktur (ikke Tenor). Kunde-
@@ -12,15 +12,14 @@ const vendorOrgNumber = '310547891';
 const prebuiltSystemId = '310547891_E2E-Playwright-Authentication';
 
 test.describe('Godkjenn og avvis Systembrukerforespørsel', () => {
-  const tenor = new TenorTestData();
   let api: ApiRequests;
-  let owner: TenorDagligLederMedOrg;
+  let owner: DagligLederMedOrg;
   let externalRef: string;
   let response: Awaited<ReturnType<ApiRequests['postSystemuserRequest']>>;
 
-  test.beforeEach(async () => {
+  test.beforeEach(async ({ testData }) => {
     api = new ApiRequests();
-    owner = await tenor.dagligLederMedOrg();
+    owner = await testData.dagligLederMedOrg();
     externalRef = TestdataApi.generateExternalRef();
     response = await api.postSystemuserRequest(
       vendorOrgNumber,

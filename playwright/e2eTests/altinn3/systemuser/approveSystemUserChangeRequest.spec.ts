@@ -2,7 +2,7 @@ import { test, expect } from 'playwright/fixture/pomFixture';
 import { TestdataApi } from 'playwright/util/TestdataApi';
 import { env } from 'playwright/util/helper';
 import { ApiRequests } from 'playwright/api-requests/SystemUserApiRequests';
-import { TenorTestData, type TenorDagligLederMedOrg } from 'playwright/tenor/TenorTestData';
+import type { DagligLederMedOrg } from 'playwright/tenor/TenorTestData';
 import { cleanupSystemUser } from 'playwright/util/systemUserCleanup';
 
 // Leverandør + prebygd system er registrert infrastruktur (ikke Tenor). Kunde-
@@ -18,15 +18,14 @@ const changeRequest = {
 };
 
 test.describe('Systembruker endringsforespørsel', () => {
-  const tenor = new TenorTestData();
   let api: ApiRequests;
-  let owner: TenorDagligLederMedOrg;
+  let owner: DagligLederMedOrg;
   let systemUserId: string;
   let changeRequestResponse: Awaited<ReturnType<ApiRequests['postSystemuserChangeRequest']>>;
 
-  test.beforeEach(async () => {
+  test.beforeEach(async ({ testData }) => {
     api = new ApiRequests();
-    owner = await tenor.dagligLederMedOrg();
+    owner = await testData.dagligLederMedOrg();
     const externalRef = TestdataApi.generateExternalRef();
 
     const response = await api.postSystemuserRequest(

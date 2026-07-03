@@ -4,11 +4,7 @@ import { ApiRequests } from 'playwright/api-requests/SystemUserApiRequests';
 import { pickVendorOrg } from 'playwright/util/systemVendors';
 import { TestdataApi } from 'playwright/util/TestdataApi';
 import { cleanupSystemUser } from 'playwright/util/systemUserCleanup';
-import {
-  TenorTestData,
-  type TenorFacilitatorMedKlienter,
-  type TenorOrgRef,
-} from 'playwright/tenor/TenorTestData';
+import type { OrganisasjonMedKlienter, Organisasjon } from 'playwright/tenor/TenorTestData';
 
 // Leverandøren roteres over en liste (pickVendorOrg) — en hvilken som helst
 // virksomhet kan opptre som systemleverandør. Facilitator-virksomheten og dens
@@ -16,7 +12,6 @@ import {
 const vendorOrgNumber = pickVendorOrg();
 
 test.describe('Delegering av klienter til Systembruker', () => {
-  const tenor = new TenorTestData();
   let api: ApiRequests;
 
   test.beforeEach(() => {
@@ -33,18 +28,16 @@ test.describe('Delegering av klienter til Systembruker', () => {
     const accessPackageApiName = 'ansvarlig-revisor';
     const accessPackageDisplayName = 'Ansvarlig revisor';
 
-    const user = {
-      pid: '07875898560',
-      org: '314251768',
-      name: 'KUNST STERK MINK ANS',
-    };
-
+    let facilitator: OrganisasjonMedKlienter;
     let name: string;
     let systemId: string;
     let externalRef: string;
     let response: { confirmUrl: string };
 
-    test.beforeEach(async () => {
+    test.beforeEach(async ({ testData }) => {
+      // Revisor er en fast, kjent facilitator med få klienter (se FAST_REVISOR)
+      // — «deleger alle klienter» krever få klienter.
+      facilitator = await testData.facilitatorMedKlienter('revisor');
       name = `Playwright-e2e-${role}-${Date.now()}`;
       externalRef = TestdataApi.generateExternalRef();
 
@@ -57,7 +50,7 @@ test.describe('Delegering av klienter til Systembruker', () => {
           vendorOrgNumber,
           systemId,
           accessPackageApiName,
-          user.org,
+          facilitator.org.orgnr,
           externalRef,
         );
       });
@@ -71,14 +64,14 @@ test.describe('Delegering av klienter til Systembruker', () => {
     }) => {
       await test.step('Approve system user request', async () => {
         await page.goto(response.confirmUrl);
-        await login.loginNotChoosingActor(user.pid);
+        await login.loginNotChoosingActor(facilitator.dagligLeder.pid);
         await clientDelegationPage.confirmAndCreateSystemUser(accessPackageDisplayName);
         await expect(login.loginButton).toBeVisible();
       });
 
       await test.step('Login and navigate to system user', async () => {
-        await login.LoginToAccessManagement(user.pid);
-        await login.selectMainUnitBySearching(user.name);
+        await login.LoginToAccessManagement(facilitator.dagligLeder.pid);
+        await login.selectMainUnitBySearching(facilitator.org.navn);
 
         await accessManagementFrontPage.systemUserMenuLink.click();
 
@@ -101,8 +94,8 @@ test.describe('Delegering av klienter til Systembruker', () => {
     test.afterEach(async () => {
       await cleanupSystemUser({
         vendorOrgNumber,
-        ownerOrg: user.org,
-        ownerPid: user.pid,
+        ownerOrg: facilitator.org.orgnr,
+        ownerPid: facilitator.dagligLeder.pid,
         systemName: name,
       });
     });
@@ -113,15 +106,15 @@ test.describe('Delegering av klienter til Systembruker', () => {
     const accessPackageApiName = 'regnskapsforer-lonn';
     const accessPackageDisplayName = 'Regnskapsfører lønn';
 
-    let facilitator: TenorFacilitatorMedKlienter;
-    let customer: TenorOrgRef;
+    let facilitator: OrganisasjonMedKlienter;
+    let customer: Organisasjon;
     let name: string;
     let systemId: string;
     let externalRef: string;
     let response: { confirmUrl: string };
 
-    test.beforeEach(async () => {
-      facilitator = await tenor.facilitatorMedKlienter(role);
+    test.beforeEach(async ({ testData }) => {
+      facilitator = await testData.facilitatorMedKlienter(role);
       customer = facilitator.klienter[0];
       name = `Playwright-e2e-${role}-${Date.now()}`;
       externalRef = TestdataApi.generateExternalRef();
@@ -191,14 +184,14 @@ test.describe('Delegering av klienter til Systembruker', () => {
 
     // forretningsforer-eiendom kan kun delegeres for eiendomsklienter (BRL/ESEK),
     // så vi henter en forretningsfører med en slik klient.
-    let facilitator: { dagligLeder: { pid: string }; org: TenorOrgRef; klient: TenorOrgRef };
+    let facilitator: { dagligLeder: { pid: string }; org: Organisasjon; klient: Organisasjon };
     let name: string;
     let systemId: string;
     let externalRef: string;
     let response: { confirmUrl: string };
 
-    test.beforeEach(async () => {
-      facilitator = await tenor.forretningsfoererMedEiendomsklient();
+    test.beforeEach(async ({ testData }) => {
+      facilitator = await testData.forretningsfoererMedEiendomsklient();
       name = `Playwright-e2e-${role}-${Date.now()}`;
       externalRef = TestdataApi.generateExternalRef();
 

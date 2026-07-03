@@ -1,27 +1,25 @@
 import { expect, test } from '../../../fixture/pomFixture';
 import { EnduserConnection } from '../../../api-requests/EnduserConnection';
 import { cleanupConnection, cleanupClientDelegationAgent } from '../../../util/delegationHelpers';
-import {
-  TenorTestData,
-  type TenorPerson,
-  type TenorDagligLederMedOrg,
-} from '../../../tenor/TenorTestData';
+import type { Testperson, DagligLederMedOrg } from '../../../tenor/TenorTestData';
 
 const posttjenester = 'urn:altinn:accesspackage:posttjenester';
 
 test.describe('klientadministrasjon', () => {
   const api = new EnduserConnection();
-  const tenor = new TenorTestData();
 
   test.describe('legg til bruker', () => {
-    let actor: TenorDagligLederMedOrg;
-    let agent: TenorPerson;
+    let actor: DagligLederMedOrg;
+    let agent: Testperson;
 
-    test.beforeEach(async () => {
+    test.beforeEach(async ({ testData }) => {
       // `actor` er virksomheten som administrerer klienter; `agent` er personen
       // som legges til som bruker. Klient-relasjonen opprettes via API i testene
       // som trenger den, så `actor` trenger ikke være en registrert facilitator.
-      [actor, agent] = await Promise.all([tenor.dagligLederMedOrg(), tenor.bosattMyndigPerson()]);
+      [actor, agent] = await Promise.all([
+        testData.dagligLederMedOrg(),
+        testData.bosattMyndigPerson(),
+      ]);
     });
 
     test('legg til bruker', async ({
@@ -54,11 +52,14 @@ test.describe('klientadministrasjon', () => {
   });
 
   test.describe('slett bruker', () => {
-    let actor: TenorDagligLederMedOrg;
-    let agent: TenorPerson;
+    let actor: DagligLederMedOrg;
+    let agent: Testperson;
 
-    test.beforeEach(async () => {
-      [actor, agent] = await Promise.all([tenor.dagligLederMedOrg(), tenor.bosattMyndigPerson()]);
+    test.beforeEach(async ({ testData }) => {
+      [actor, agent] = await Promise.all([
+        testData.dagligLederMedOrg(),
+        testData.bosattMyndigPerson(),
+      ]);
       await api.addClientDelegationAgent(actor.dagligLeder.pid, actor.org.orgnr, agent.pid);
     });
 
@@ -91,13 +92,16 @@ test.describe('klientadministrasjon', () => {
   });
 
   test.describe('deleger klient til en bruker fra klientfanen', () => {
-    let actor: TenorDagligLederMedOrg;
-    let client: TenorDagligLederMedOrg;
-    let agent: TenorPerson;
+    let actor: DagligLederMedOrg;
+    let client: DagligLederMedOrg;
+    let agent: Testperson;
 
-    test.beforeEach(async () => {
-      [actor, agent] = await Promise.all([tenor.dagligLederMedOrg(), tenor.bosattMyndigPerson()]);
-      client = await tenor.dagligLederMedOrg({ ekskluder: [actor.org.orgnr] });
+    test.beforeEach(async ({ testData }) => {
+      [actor, agent] = await Promise.all([
+        testData.dagligLederMedOrg(),
+        testData.bosattMyndigPerson(),
+      ]);
+      client = await testData.dagligLederMedOrg({ ekskluder: [actor.org.orgnr] });
 
       // Klienten gir `actor` posttjenester (oppdrag), og `agent` legges til som bruker.
       await api.addConnectionAndPackagesToUser(
@@ -153,13 +157,16 @@ test.describe('klientadministrasjon', () => {
   });
 
   test.describe('deleger klient til en bruker fra brukerfanen', () => {
-    let actor: TenorDagligLederMedOrg;
-    let client: TenorDagligLederMedOrg;
-    let agent: TenorPerson;
+    let actor: DagligLederMedOrg;
+    let client: DagligLederMedOrg;
+    let agent: Testperson;
 
-    test.beforeEach(async () => {
-      [actor, agent] = await Promise.all([tenor.dagligLederMedOrg(), tenor.bosattMyndigPerson()]);
-      client = await tenor.dagligLederMedOrg({ ekskluder: [actor.org.orgnr] });
+    test.beforeEach(async ({ testData }) => {
+      [actor, agent] = await Promise.all([
+        testData.dagligLederMedOrg(),
+        testData.bosattMyndigPerson(),
+      ]);
+      client = await testData.dagligLederMedOrg({ ekskluder: [actor.org.orgnr] });
 
       await api.addConnectionAndPackagesToUser(
         client.dagligLeder.pid,
@@ -215,13 +222,16 @@ test.describe('klientadministrasjon', () => {
   });
 
   test.describe('Slett fullmakt for en bruker fra brukerfanen', () => {
-    let actor: TenorDagligLederMedOrg;
-    let client: TenorDagligLederMedOrg;
-    let agent: TenorPerson;
+    let actor: DagligLederMedOrg;
+    let client: DagligLederMedOrg;
+    let agent: Testperson;
 
-    test.beforeEach(async () => {
-      [actor, agent] = await Promise.all([tenor.dagligLederMedOrg(), tenor.bosattMyndigPerson()]);
-      client = await tenor.dagligLederMedOrg({ ekskluder: [actor.org.orgnr] });
+    test.beforeEach(async ({ testData }) => {
+      [actor, agent] = await Promise.all([
+        testData.dagligLederMedOrg(),
+        testData.bosattMyndigPerson(),
+      ]);
+      client = await testData.dagligLederMedOrg({ ekskluder: [actor.org.orgnr] });
 
       await api.addConnectionAndPackagesToUser(
         client.dagligLeder.pid,
@@ -275,13 +285,16 @@ test.describe('klientadministrasjon', () => {
   });
 
   test.describe('Slett fullmakt for en bruker fra klientfanen', () => {
-    let actor: TenorDagligLederMedOrg;
-    let client: TenorDagligLederMedOrg;
-    let agent: TenorPerson;
+    let actor: DagligLederMedOrg;
+    let client: DagligLederMedOrg;
+    let agent: Testperson;
 
-    test.beforeEach(async () => {
-      [actor, agent] = await Promise.all([tenor.dagligLederMedOrg(), tenor.bosattMyndigPerson()]);
-      client = await tenor.dagligLederMedOrg({ ekskluder: [actor.org.orgnr] });
+    test.beforeEach(async ({ testData }) => {
+      [actor, agent] = await Promise.all([
+        testData.dagligLederMedOrg(),
+        testData.bosattMyndigPerson(),
+      ]);
+      client = await testData.dagligLederMedOrg({ ekskluder: [actor.org.orgnr] });
 
       await api.addConnectionAndPackagesToUser(
         client.dagligLeder.pid,

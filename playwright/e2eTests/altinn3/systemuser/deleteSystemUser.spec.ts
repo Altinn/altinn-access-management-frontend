@@ -2,25 +2,24 @@ import { expect, test } from 'playwright/fixture/pomFixture';
 import { ApiRequests } from 'playwright/api-requests/SystemUserApiRequests';
 import { pickVendorOrg } from 'playwright/util/systemVendors';
 import { TestdataApi } from 'playwright/util/TestdataApi';
-import { TenorTestData, type TenorDagligLederMedOrg } from 'playwright/tenor/TenorTestData';
+import type { DagligLederMedOrg } from 'playwright/tenor/TenorTestData';
 
 // Leverandør er registrert infrastruktur (ikke Tenor). Eier-virksomheten som
 // oppretter og sletter systembrukeren hentes fra Tenor.
 const vendorOrgNumber = pickVendorOrg();
 
 test.describe('System user deletion', () => {
-  const tenor = new TenorTestData();
   let systemId: string;
   let api: ApiRequests;
-  let owner: TenorDagligLederMedOrg;
+  let owner: DagligLederMedOrg;
 
-  test.beforeEach(async ({ login, systemUserPage, accessManagementFrontPage }) => {
+  test.beforeEach(async ({ login, systemUserPage, accessManagementFrontPage, testData }) => {
     await test.step('Setup API client', async () => {
       api = new ApiRequests();
     });
 
     await test.step('Login and navigate to application', async () => {
-      owner = await tenor.dagligLederMedOrg();
+      owner = await testData.dagligLederMedOrg();
       await login.LoginToAccessManagement(owner.dagligLeder.pid);
       await login.selectMainUnitBySearching(owner.org.navn);
     });

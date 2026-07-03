@@ -8,11 +8,7 @@ import { SystemUserPage } from 'playwright/pages/systemuser/SystemUserPage';
 import { ClientDelegationPage } from 'playwright/pages/systemuser/ClientDelegation';
 import { EnduserConnection } from 'playwright/api-requests/EnduserConnection';
 import { cleanupSystemUser } from 'playwright/util/systemUserCleanup';
-import {
-  TenorTestData,
-  type TenorPerson,
-  type TenorDagligLederMedOrg,
-} from 'playwright/tenor/TenorTestData';
+import type { Testperson, DagligLederMedOrg } from 'playwright/tenor/TenorTestData';
 
 // Leverandør er registrert infrastruktur (ikke Tenor). Eier-virksomheten hentes
 // fra Tenor: daglig leder godkjenner, mens en kontaktperson (en vanlig
@@ -24,13 +20,12 @@ import {
 const vendorOrgNumber = pickVendorOrg();
 
 test.describe('Systembruker - Eskaler', () => {
-  const tenor = new TenorTestData();
   const enduser = new EnduserConnection();
 
   let api: ApiRequests;
   let owner: {
-    dagligLeder: TenorPerson;
-    kontaktperson: TenorPerson;
+    dagligLeder: Testperson;
+    kontaktperson: Testperson;
     org: { orgnr: string; navn: string };
   };
   let name: string;
@@ -39,11 +34,11 @@ test.describe('Systembruker - Eskaler', () => {
   let response: { confirmUrl: string; id: string };
   let systemUserId: string;
 
-  test.beforeEach(async () => {
+  test.beforeEach(async ({ testData }) => {
     api = new ApiRequests();
-    const [virksomhet, kontaktperson]: [TenorDagligLederMedOrg, TenorPerson] = await Promise.all([
-      tenor.dagligLederMedOrg(),
-      tenor.bosattMyndigPerson(),
+    const [virksomhet, kontaktperson]: [DagligLederMedOrg, Testperson] = await Promise.all([
+      testData.dagligLederMedOrg(),
+      testData.bosattMyndigPerson(),
     ]);
     owner = { dagligLeder: virksomhet.dagligLeder, kontaktperson, org: virksomhet.org };
     name = `Playwright-e2e-eskaler-${Date.now()}`;
