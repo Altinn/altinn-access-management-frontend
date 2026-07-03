@@ -1,7 +1,6 @@
 import { expect, test } from 'playwright/fixture/pomFixture';
 import { Language } from 'playwright/pages/LanguageMenu';
 
-import { TestdataApi } from 'playwright/util/TestdataApi';
 import { ApiRequests } from 'playwright/api-requests/SystemUserApiRequests';
 import { pickVendorOrg } from 'playwright/util/systemVendors';
 import { TenorTestData, type TenorDagligLederMedOrg } from 'playwright/tenor/TenorTestData';
@@ -56,14 +55,14 @@ test.describe('System Register', async () => {
   });
 
   test.afterEach(async () => {
+    // `cleanupSystemUser` rydder både systembrukeren og systemet fra registeret
+    // (via `systemName`), så vi slipper en egen `removeSystem`-jobb.
     await cleanupSystemUser({
       vendorOrgNumber,
       ownerOrg: owner.org.orgnr,
       ownerPid: owner.dagligLeder.pid,
       systemUserId,
+      systemName: system,
     });
-    if (system) {
-      await TestdataApi.removeSystem(vendorOrgNumber, system);
-    }
   });
 });
