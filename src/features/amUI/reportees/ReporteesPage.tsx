@@ -20,7 +20,7 @@ export const ReporteesPage = () => {
   const { t } = useTranslation();
   const { data: isAdmin, isLoading } = useGetIsAdminQuery();
   const { data: reportee, isLoading: reporteeLoading } = useGetReporteeQuery();
-  const { data: currentUser } = useGetPartyFromLoggedInUserQuery();
+  const { data: currentUser, isLoading: currentUserIsLoading } = useGetPartyFromLoggedInUserQuery();
   const isCurrentUserReportee = reportee?.partyUuid === currentUser?.partyUuid;
   const name = formatDisplayName({
     fullName: reportee?.name || '',
@@ -34,6 +34,7 @@ export const ReporteesPage = () => {
       <PageLayoutWrapper>
         {!isLoading &&
         !reporteeLoading &&
+        !currentUserIsLoading &&
         !hasReporteesPermission(reportee, isAdmin, isCurrentUserReportee) ? (
           <DsAlert data-color='warning'>
             {t('reportees_page.not_admin_alert', { name: name || '' })}
