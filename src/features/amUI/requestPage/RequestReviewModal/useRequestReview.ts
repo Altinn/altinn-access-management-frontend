@@ -108,6 +108,7 @@ export const useRequestReview = (
     setProcessedRequests({});
     setDelegationChecks({});
     setActionLoading(null);
+    pendingFocusRef.current = null;
   }, [requestPartyUuid]);
 
   // Capture snapshot on first successful load (only when fetch has settled for current params)
@@ -169,6 +170,7 @@ export const useRequestReview = (
     setProcessedRequests({});
     setDelegationChecks({});
     setActionLoading(null);
+    pendingFocusRef.current = null;
     onClose();
   };
 
