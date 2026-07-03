@@ -72,9 +72,8 @@ export const useRequestReview = (
   const [actionLoading, setActionLoading] = useState<'approve' | 'reject' | null>(null);
   const { canDelegatePackage } = useAccessPackageDelegationCheck();
 
-  // Approving/rejecting invalidates the received-requests queries, so the list briefly re-renders as
-  // skeletons while it refetches. Defer restoring focus to the handled row until that refetch has
-  // settled, otherwise the focus request resolves against the skeletons and is lost.
+  // Focus restore must wait until the invalidated request queries have refetched;
+  // otherwise it resolves against the loading skeletons and is lost.
   const pendingFocusRef = useRef<{
     id: string;
     resourceDataAtRequest: typeof resourceRequests;
@@ -111,7 +110,6 @@ export const useRequestReview = (
     pendingFocusRef.current = null;
   }, [requestPartyUuid]);
 
-  // Capture snapshot on first successful load (only when fetch has settled for current params)
   useEffect(() => {
     if (
       !isFetchingResourceRequests &&
@@ -133,7 +131,6 @@ export const useRequestReview = (
     snapshotRequests.packageRequests.length,
   ]); // eslint-disable-line react-hooks/exhaustive-deps
 
-  // Run delegation checks for all snapshotted resources
   useEffect(() => {
     if (snapshotRequests.resourceRequests.length === 0) return;
     snapshotRequests.resourceRequests.forEach(async (req) => {
@@ -283,7 +280,6 @@ export const useRequestReview = (
     package?: AccessPackage;
   }) => {
     if (resource) {
-      // Processed requests are still selectable, opening a read-only status view
       setSelectedResource(resource);
       setSelectedPackage(null);
     } else if (pkg) {

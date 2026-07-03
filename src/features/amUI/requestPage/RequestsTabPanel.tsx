@@ -59,8 +59,6 @@ export const RequestsTabPanel = ({
   );
 };
 
-// List row registered as a RestoreFocus target, so focus can be sent back to it after the modal
-// it opened closes (or to the page fallback if the row is gone).
 export const RequestListItem = (props: React.ComponentProps<typeof UserListItem>) => {
   useRestoreFocusTarget(props.id);
   return <UserListItem {...props} />;
@@ -75,9 +73,6 @@ export const PendingRequests = ({ pendingRequests }: PendingRequestsProps) => {
   const [openAccessRequest, setOpenAccessRequest] = useState<Request | null>(null);
   const restoreFocus = useRestoreFocusContext();
 
-  // Native <dialog> restore handles focus when the modal closes and the originating row still
-  // exists; the focus request is then skipped by the focusHasBeenLost guard. It only takes effect
-  // when the row is gone (all its requests handled) and lands focus on the page fallback instead.
   const handleClose = () => {
     if (openAccessRequest) {
       restoreFocus?.requestFocus(openAccessRequest.id);
@@ -110,9 +105,6 @@ export const PendingRequests = ({ pendingRequests }: PendingRequestsProps) => {
             titleAs='div'
             linkIcon
             description={`${request.description ? t(request.description) : t('request_page.asks_for_number', { count: request.numberOfRequests })} (${formatDateToNorwegian(request.createdDate)})`}
-            // A stable `as` keeps the button's DOM node alive across re-renders, so the native
-            // <dialog> focus restore can return focus to it when the review modal closes. An
-            // inline component here would remount the node on every render and break that.
             as={
               toUrl
                 ? (props) => (

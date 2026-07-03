@@ -61,7 +61,6 @@ export const RequestReviewModalContent = ({ request, onClose }: RequestReviewMod
     return null;
   }
 
-  // Return focus to the originating list row when leaving a detail view
   const handleBack = () => {
     const focusTargetId = selectedResource?.identifier ?? selectedPackage?.id;
     if (focusTargetId) {
