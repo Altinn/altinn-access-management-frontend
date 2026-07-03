@@ -4,6 +4,7 @@ import { Language } from 'playwright/pages/LanguageMenu';
 import { TestdataApi } from 'playwright/util/TestdataApi';
 import { ApiRequests } from 'playwright/api-requests/SystemUserApiRequests';
 import { TenorTestData, type TenorDagligLederMedOrg } from 'playwright/tenor/TenorTestData';
+import { cleanupSystemUser } from 'playwright/util/systemUserCleanup';
 
 // Runs in nynorsk on purpose: exercises the before-login language pinning
 // (settings API) and proves the dict-driven selectors work in a non-default
@@ -18,6 +19,7 @@ test.describe('System Register', async () => {
   const tenor = new TenorTestData();
   let system: string;
   let owner: TenorDagligLederMedOrg;
+  let systemUserId: string;
 
   test.beforeEach(async ({ login }) => {
     const api = new ApiRequests();
@@ -43,11 +45,22 @@ test.describe('System Register', async () => {
 
     await test.step('Verify system user created', async () => {
       await expect(systemUserPage.systemUserCreatedHeading).toBeVisible();
-      await expect(systemUserPage.systemUserLink(system)).toBeVisible();
+      const link = systemUserPage.systemUserLink(system);
+      await expect(link).toBeVisible();
+      // Fang system-bruker-IDen fra lenka (…/systemuser/<id>) så vi kan slette
+      // den via API etterpå (UI-opprettet, så ingen external-ref å søke på).
+      const href = await link.getAttribute('href');
+      systemUserId = href?.split('/').filter(Boolean).pop() ?? '';
     });
   });
 
   test.afterEach(async () => {
+    await cleanupSystemUser({
+      vendorOrgNumber,
+      ownerOrg: owner.org.orgnr,
+      ownerPid: owner.dagligLeder.pid,
+      systemUserId,
+    });
     if (system) {
       await TestdataApi.removeSystem(vendorOrgNumber, system);
     }

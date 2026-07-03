@@ -3,6 +3,7 @@ import { TestdataApi } from 'playwright/util/TestdataApi';
 import { env } from 'playwright/util/helper';
 import { ApiRequests } from 'playwright/api-requests/SystemUserApiRequests';
 import { TenorTestData, type TenorDagligLederMedOrg } from 'playwright/tenor/TenorTestData';
+import { cleanupSystemUser } from 'playwright/util/systemUserCleanup';
 
 // Leverandør + prebygd system er registrert infrastruktur (ikke Tenor). Kunde-
 // virksomheten som forespørselen gjelder – og som logger inn/godkjenner – er Tenor.
@@ -20,7 +21,6 @@ test.describe('Systembruker endringsforespørsel', () => {
   const tenor = new TenorTestData();
   let api: ApiRequests;
   let owner: TenorDagligLederMedOrg;
-  let systemUserIds: string[] = [];
   let systemUserId: string;
   let changeRequestResponse: Awaited<ReturnType<ApiRequests['postSystemuserChangeRequest']>>;
 
@@ -43,7 +43,6 @@ test.describe('Systembruker endringsforespørsel', () => {
       owner.org.orgnr,
       externalRef,
     );
-    systemUserIds.push(systemUserId);
 
     changeRequestResponse = await api.postSystemuserChangeRequest(
       vendorOrgNumber,
@@ -93,10 +92,9 @@ test.describe('Systembruker endringsforespørsel', () => {
     });
 
     await test.step('Verify acceptance status', async () => {
-      //Look for login button
       await expect(login.loginButton).toBeVisible();
 
-      //Read from status api to verify that status is not Accepted after clicking "Approve"
+      //Read from status api to verify that status is Accepted after clicking "Approve"
       const statusApiRequest = await api.getStatusForSystemUserChangeRequest<{ status: string }>(
         vendorOrgNumber,
         changeRequestResponse.id,
@@ -122,18 +120,11 @@ test.describe('Systembruker endringsforespørsel', () => {
   });
 
   test.afterEach(async () => {
-    // Cleanup system users created during tests
-    if (systemUserIds.length > 0) {
-      try {
-        await api.cleanUpSystemUsers(
-          systemUserIds.map((id) => ({ id })),
-          owner.dagligLeder.pid,
-          owner.org.orgnr,
-        );
-      } catch (error) {
-        console.error('Error during system user cleanup:', error);
-      }
-      systemUserIds = [];
-    }
+    await cleanupSystemUser({
+      vendorOrgNumber,
+      ownerOrg: owner.org.orgnr,
+      ownerPid: owner.dagligLeder.pid,
+      systemUserId,
+    });
   });
 });

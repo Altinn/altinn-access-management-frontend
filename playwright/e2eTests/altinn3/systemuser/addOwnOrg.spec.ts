@@ -4,6 +4,7 @@ import { TestdataApi } from 'playwright/util/TestdataApi';
 import { pickRandom } from 'playwright/util/helper';
 import { EnduserConnection } from 'playwright/api-requests/EnduserConnection';
 import { TenorTestData, type TenorDagligLederMedOrg } from 'playwright/tenor/TenorTestData';
+import { cleanupSystemUser } from 'playwright/util/systemUserCleanup';
 
 // Leverandøren (310547891) er registrert infrastruktur (ikke Tenor). Eier-org og
 // klientene hentes fra Tenor: en fersk eier har ingen klienter, så vi setter opp
@@ -37,7 +38,7 @@ test.describe('Systembruker - Legg til egen organisasjon', () => {
     }
 
     // Hver klient delegerer tilgangspakken til eier-org, slik at eier får dem som
-    // klienter i klientadministrasjonen.
+    // klienter
     await test.step('Klientene delegerer tilgangspakken til eier-org', async () => {
       for (const klient of clients) {
         await enduser.addConnectionAndPackagesToUser(
@@ -136,34 +137,15 @@ test.describe('Systembruker - Legg til egen organisasjon', () => {
     });
   });
 
-  test.afterEach(async ({}, testInfo) => {
-    // På suksess har testen allerede slettet systembrukeren i UI. Feiler testen
-    // før det, rydder vi den via API så ingen systembruker lekker.
-    if (testInfo.status !== 'passed') {
-      try {
-        const systemUserId = await api.getSystemUserByQuery(
-          vendorOrgNumber,
-          systemId,
-          owner.org.orgnr,
-          externalRef,
-        );
-        if (systemUserId) {
-          await api.cleanUpSystemUsers(
-            [{ id: systemUserId }],
-            owner.dagligLeder.pid,
-            owner.org.orgnr,
-          );
-        }
-      } catch (error) {
-        console.error('Cleanup: Failed to delete system user:', error);
-      }
-    }
-    // Systemet og klient-koblingene ryddes alltid (finnes ikke UI-sletting for dem).
-    try {
-      await api.deleteSystemInSystemRegister(vendorOrgNumber, name);
-    } catch (error) {
-      console.error('Cleanup: Failed to delete system from system register:', error);
-    }
+  test.afterEach(async () => {
+    // Agent-systembrukeren slettes i UI-steget i testen (API-sletting av en agent
+    // med tilordnede klienter feiler). Her fjerner vi systemet og klient-koblingene.
+    await cleanupSystemUser({
+      vendorOrgNumber,
+      ownerOrg: owner.org.orgnr,
+      ownerPid: owner.dagligLeder.pid,
+      systemName: name,
+    });
     for (const klient of clients) {
       try {
         await enduser.deleteConnection(klient.dagligLeder.pid, klient.org.orgnr, [owner.org.orgnr]);

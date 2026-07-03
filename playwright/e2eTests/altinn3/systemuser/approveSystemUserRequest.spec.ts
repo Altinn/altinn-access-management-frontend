@@ -3,6 +3,7 @@ import { test, expect } from 'playwright/fixture/pomFixture';
 import { TestdataApi } from 'playwright/util/TestdataApi';
 import { ApiRequests } from 'playwright/api-requests/SystemUserApiRequests';
 import { TenorTestData, type TenorDagligLederMedOrg } from 'playwright/tenor/TenorTestData';
+import { cleanupSystemUser } from 'playwright/util/systemUserCleanup';
 
 // Leverandør + prebygd system er registrert infrastruktur (ikke Tenor). Kunde-
 // virksomheten som forespørselen gjelder – og som logger inn for å godkjenne –
@@ -14,12 +15,13 @@ test.describe('Godkjenn og avvis Systembrukerforespørsel', () => {
   const tenor = new TenorTestData();
   let api: ApiRequests;
   let owner: TenorDagligLederMedOrg;
+  let externalRef: string;
   let response: Awaited<ReturnType<ApiRequests['postSystemuserRequest']>>;
 
   test.beforeEach(async () => {
     api = new ApiRequests();
     owner = await tenor.dagligLederMedOrg();
-    const externalRef = TestdataApi.generateExternalRef();
+    externalRef = TestdataApi.generateExternalRef();
     response = await api.postSystemuserRequest(
       vendorOrgNumber,
       externalRef,
@@ -27,6 +29,18 @@ test.describe('Godkjenn og avvis Systembrukerforespørsel', () => {
       owner.org.orgnr,
       'https://altinn.no/',
     );
+  });
+
+  // Godkjenning oppretter en systembruker; slett den via API etter hver test.
+  // (Avvis-testen oppretter ingen — da finner opprydding ingenting, som er ok.)
+  test.afterEach(async () => {
+    await cleanupSystemUser({
+      vendorOrgNumber,
+      systemId: prebuiltSystemId,
+      ownerOrg: owner.org.orgnr,
+      ownerPid: owner.dagligLeder.pid,
+      externalRef,
+    });
   });
 
   test('Avvis Systembrukerforespørsel', async ({

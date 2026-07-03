@@ -6,6 +6,7 @@ import { LoginPage } from 'playwright/pages/LoginPage';
 import { SystemUserPage } from 'playwright/pages/systemuser/SystemUserPage';
 import { ClientDelegationPage } from 'playwright/pages/systemuser/ClientDelegation';
 import { EnduserConnection } from 'playwright/api-requests/EnduserConnection';
+import { cleanupSystemUser } from 'playwright/util/systemUserCleanup';
 import {
   TenorTestData,
   type TenorPerson,
@@ -126,18 +127,15 @@ test.describe('Systembruker - Eskaler', () => {
   });
 
   test.afterEach(async () => {
-    if (systemUserId) {
-      try {
-        await api.deleteRegularSystemUser(systemUserId, owner.org.orgnr, owner.dagligLeder.pid);
-      } catch (error) {
-        console.error('Cleanup: Failed to delete system user:', error);
-      }
-    }
-    try {
-      await api.deleteSystemInSystemRegister(vendorOrgNumber, name);
-    } catch (error) {
-      console.error('Cleanup: Failed to delete system from system register:', error);
-    }
+    await cleanupSystemUser({
+      vendorOrgNumber,
+      ownerOrg: owner.org.orgnr,
+      ownerPid: owner.dagligLeder.pid,
+      systemUserId, // kan være undefined hvis testen feilet før den ble fanget
+      systemId,
+      externalRef,
+      systemName: name,
+    });
     try {
       await enduser.deleteConnection(owner.dagligLeder.pid, owner.org.orgnr, [
         owner.kontaktperson.pid,

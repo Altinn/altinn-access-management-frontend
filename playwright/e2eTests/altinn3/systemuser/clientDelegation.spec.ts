@@ -1,6 +1,8 @@
 import { test, expect } from '../../../fixture/pomFixture';
 
 import { ApiRequests } from 'playwright/api-requests/SystemUserApiRequests';
+import { TestdataApi } from 'playwright/util/TestdataApi';
+import { cleanupSystemUser } from 'playwright/util/systemUserCleanup';
 import {
   TenorTestData,
   type TenorFacilitatorMedKlienter,
@@ -36,12 +38,15 @@ test.describe('Delegering av klienter til Systembruker', () => {
     };
 
     let name: string;
+    let systemId: string;
+    let externalRef: string;
     let response: { confirmUrl: string };
 
     test.beforeEach(async () => {
       name = `Playwright-e2e-${role}-${Date.now()}`;
+      externalRef = TestdataApi.generateExternalRef();
 
-      const systemId = await test.step('Create system with access packages', async () => {
+      systemId = await test.step('Create system with access packages', async () => {
         return await api.createSystemInSystemregisterWithAccessPackages(vendorOrgNumber, name);
       });
 
@@ -51,6 +56,7 @@ test.describe('Delegering av klienter til Systembruker', () => {
           systemId,
           accessPackageApiName,
           user.org,
+          externalRef,
         );
       });
     });
@@ -84,8 +90,18 @@ test.describe('Delegering av klienter til Systembruker', () => {
         await clientDelegationPage.confirmAndCloseButton.click();
       });
 
+      // Agent-systembruker med tilordnede klienter må slettes i UI (API-sletting feiler).
       await test.step('Cleanup: Delete system user', async () => {
         await clientDelegationPage.deleteSystemUser(name);
+      });
+    });
+
+    test.afterEach(async () => {
+      await cleanupSystemUser({
+        vendorOrgNumber,
+        ownerOrg: user.org,
+        ownerPid: user.pid,
+        systemName: name,
       });
     });
   });
@@ -98,14 +114,17 @@ test.describe('Delegering av klienter til Systembruker', () => {
     let facilitator: TenorFacilitatorMedKlienter;
     let customer: TenorOrgRef;
     let name: string;
+    let systemId: string;
+    let externalRef: string;
     let response: { confirmUrl: string };
 
     test.beforeEach(async () => {
       facilitator = await tenor.facilitatorMedKlienter(role);
       customer = facilitator.klienter[0];
       name = `Playwright-e2e-${role}-${Date.now()}`;
+      externalRef = TestdataApi.generateExternalRef();
 
-      const systemId = await test.step('Create system with access packages', async () => {
+      systemId = await test.step('Create system with access packages', async () => {
         return await api.createSystemInSystemregisterWithAccessPackages(vendorOrgNumber, name);
       });
 
@@ -115,6 +134,7 @@ test.describe('Delegering av klienter til Systembruker', () => {
           systemId,
           accessPackageApiName,
           facilitator.org.orgnr,
+          externalRef,
         );
       });
     });
@@ -151,6 +171,15 @@ test.describe('Delegering av klienter til Systembruker', () => {
         await clientDelegationPage.deleteSystemUser(name);
       });
     });
+
+    test.afterEach(async () => {
+      await cleanupSystemUser({
+        vendorOrgNumber,
+        ownerOrg: facilitator.org.orgnr,
+        ownerPid: facilitator.dagligLeder.pid,
+        systemName: name,
+      });
+    });
   });
 
   test.describe('Forretningsfører', () => {
@@ -162,14 +191,16 @@ test.describe('Delegering av klienter til Systembruker', () => {
     // så vi henter en forretningsfører med en slik klient.
     let facilitator: { dagligLeder: { pid: string }; org: TenorOrgRef; klient: TenorOrgRef };
     let name: string;
-
+    let systemId: string;
+    let externalRef: string;
     let response: { confirmUrl: string };
 
     test.beforeEach(async () => {
       facilitator = await tenor.forretningsfoererMedEiendomsklient();
       name = `Playwright-e2e-${role}-${Date.now()}`;
+      externalRef = TestdataApi.generateExternalRef();
 
-      const systemId = await test.step('Create system with access packages', async () => {
+      systemId = await test.step('Create system with access packages', async () => {
         return await api.createSystemInSystemregisterWithAccessPackages(vendorOrgNumber, name);
       });
 
@@ -179,6 +210,7 @@ test.describe('Delegering av klienter til Systembruker', () => {
           systemId,
           accessPackageApiName,
           facilitator.org.orgnr,
+          externalRef,
         );
       });
     });
@@ -217,6 +249,15 @@ test.describe('Delegering av klienter til Systembruker', () => {
 
       await test.step('Cleanup: Delete system user', async () => {
         await clientDelegationPage.deleteSystemUser(name);
+      });
+    });
+
+    test.afterEach(async () => {
+      await cleanupSystemUser({
+        vendorOrgNumber,
+        ownerOrg: facilitator.org.orgnr,
+        ownerPid: facilitator.dagligLeder.pid,
+        systemName: name,
       });
     });
   });
