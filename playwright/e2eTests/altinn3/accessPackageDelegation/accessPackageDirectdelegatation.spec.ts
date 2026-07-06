@@ -1,43 +1,40 @@
 import { test } from 'playwright/fixture/pomFixture';
 import { DelegationApiUtil } from 'playwright/util/delegationApiUtil';
-import { withTimeout } from 'playwright/util/asyncUtils';
+import { EnduserConnection } from 'playwright/api-requests/EnduserConnection';
+import { cleanupConnection } from 'playwright/util/delegationHelpers';
+import type { DagligLederMedOrg } from 'playwright/tenor/TenorTestData';
 
 test.describe('Delegate access pacakge from Org-A(Avgiver) to Org-B(Rettighetshaver) ', () => {
-  test.beforeEach(async ({}, testInfo) => {
-    const title = testInfo.title || 'unknown-test';
-    try {
-      await DelegationApiUtil.cleanupAllDelegations(title);
-    } catch {
-      /* ignore if nothing to clean */
-    }
+  const api = new EnduserConnection();
+  let orgA: DagligLederMedOrg;
+  let orgB: DagligLederMedOrg;
+
+  test.beforeEach(async ({ testData }) => {
+    // Org-A (avgiver) delegerer til Org-B (rettighetshaver). Org-B hentes som en
+    // dagligLederMedOrg fordi vi trenger BÅDE virksomheten og dens daglige leder
+    // (nøkkelrolle-brukeren som arver de delegerte pakkene).
+    orgA = await testData.dagligLederMedOrg();
+    orgB = await testData.dagligLederMedOrg({ ekskluder: [orgA.org.orgnr] }); // ikke deleger til seg selv
   });
 
-  test.afterEach(async ({}, testInfo) => {
-    const title = testInfo.title || 'unknown-test';
-
-    try {
-      await withTimeout(
-        DelegationApiUtil.cleanupAllDelegations(title),
-        15_000, // cleanup budget
-        `cleanupAllDelegations(${title})`,
-      );
-    } catch (err) {
-      // Don't fail tests if cleanup is flaky or slow
-      console.warn(`[afterEach] Cleanup failed or timed out for: ${title}`, err);
-    }
+  test.afterEach(async () => {
+    await cleanupConnection(api, {
+      pid: orgA.dagligLeder.pid,
+      from: orgA.org.orgnr,
+      to: orgB.org.orgnr,
+    });
   });
 
   test('Org-A delegates access package to Org-B', async ({
     delegation,
     login,
-    aktorvalgHeader,
     accessManagementFrontPage,
   }) => {
     await test.step('Log in', async () => {
       // LoginToAccessManagement pins the app language (before login, via the
       // settings API) so selectors match regardless of the user's profile.
-      await login.LoginToAccessManagement('04856996188');
-      await aktorvalgHeader.selectActorFromHeaderMenu('SUBJEKTIV ELASTISK TIGER AS');
+      await login.LoginToAccessManagement(orgA.dagligLeder.pid);
+      await login.selectMainUnitBySearching(orgA.org.navn);
       await accessManagementFrontPage.goToUsers();
     });
 
@@ -48,14 +45,14 @@ test.describe('Delegate access pacakge from Org-A(Avgiver) to Org-B(Rettighetsha
 
     // Step 4: Add organization
     await test.step('Add organization', async () => {
-      await delegation.addOrganization('213091492');
+      await delegation.addOrganization(orgB.org.orgnr);
     });
 
     // Step 5: Grant access to multiple packages
     await test.step('Grant access to multiple packages', async () => {
-      await delegation.grantAccessPkgNameDirect('Veitransport');
+      await delegation.grantAccessPkgName('Veitransport');
       await delegation.grantAccessPkgName('Byggesøknad');
-      await delegation.grantAccessPkgNameDirect('Godkjenning av personell');
+      await delegation.grantAccessPkgName('Godkjenning av personell');
       await delegation.closeAccessModal();
     });
 
@@ -67,15 +64,12 @@ test.describe('Delegate access pacakge from Org-A(Avgiver) to Org-B(Rettighetsha
         { areaName: 'Transport og lagring', packageName: 'Veitransport' },
       ]);
 
-      await delegation.verifyKeyRoleUserHasDelegatedPackages(
-        'Sivilisert Trygg Tiger AS',
-        'Moderne Analyse',
-        [
-          { areaName: 'Bygg, anlegg og eiendom', packageName: 'Byggesøknad' },
-          { areaName: 'Oppvekst og utdanning', packageName: 'Godkjenning av personell' },
-          { areaName: 'Transport og lagring', packageName: 'Veitransport' },
-        ],
-      );
+      // Org-B sin daglige leder (nøkkelrolle) skal ha arvet pakkene.
+      await delegation.verifyKeyRoleUserHasDelegatedPackages(orgB.org.navn, orgB.dagligLeder.navn, [
+        { areaName: 'Bygg, anlegg og eiendom', packageName: 'Byggesøknad' },
+        { areaName: 'Oppvekst og utdanning', packageName: 'Godkjenning av personell' },
+        { areaName: 'Transport og lagring', packageName: 'Veitransport' },
+      ]);
     });
 
     await test.step('log out', async () => {
@@ -85,7 +79,6 @@ test.describe('Delegate access pacakge from Org-A(Avgiver) to Org-B(Rettighetsha
 
   // Doesnt test anything? Skipping for now.
   test.skip('Org-C revokes all delegated rights from Org-D', async ({
-    delegation,
     page,
     login,
     aktorvalgHeader,

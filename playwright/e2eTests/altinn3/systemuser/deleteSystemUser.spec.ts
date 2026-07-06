@@ -1,22 +1,27 @@
 import { expect, test } from 'playwright/fixture/pomFixture';
 import { ApiRequests } from 'playwright/api-requests/SystemUserApiRequests';
+import { pickVendorOrg } from 'playwright/util/systemVendors';
 import { TestdataApi } from 'playwright/util/TestdataApi';
-const vendorOrgNumber = '310736007';
-const testUserPid = '13832749995';
-const testOrgName = 'Initiativrik Fiolett Tiger AS';
+import type { DagligLederMedOrg } from 'playwright/tenor/TenorTestData';
+
+// Leverandør er registrert infrastruktur (ikke Tenor). Eier-virksomheten som
+// oppretter og sletter systembrukeren hentes fra Tenor.
+const vendorOrgNumber = pickVendorOrg();
 
 test.describe('System user deletion', () => {
   let systemId: string;
   let api: ApiRequests;
+  let owner: DagligLederMedOrg;
 
-  test.beforeEach(async ({ login, systemUserPage, accessManagementFrontPage }) => {
+  test.beforeEach(async ({ login, systemUserPage, accessManagementFrontPage, testData }) => {
     await test.step('Setup API client', async () => {
       api = new ApiRequests();
     });
 
     await test.step('Login and navigate to application', async () => {
-      await login.LoginToAccessManagement(testUserPid);
-      await login.selectMainUnitBySearching(testOrgName);
+      owner = await testData.dagligLederMedOrg();
+      await login.LoginToAccessManagement(owner.dagligLeder.pid);
+      await login.selectMainUnitBySearching(owner.org.navn);
     });
 
     await test.step('Create system in system register', async () => {

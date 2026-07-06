@@ -1,6 +1,15 @@
 import { test, expect } from '../../../fixture/pomFixture';
 
 import { ApiRequests } from 'playwright/api-requests/SystemUserApiRequests';
+import { pickVendorOrg } from 'playwright/util/systemVendors';
+import { TestdataApi } from 'playwright/util/TestdataApi';
+import { cleanupSystemUser } from 'playwright/util/systemUserCleanup';
+import type { OrganisasjonMedKlienter, Organisasjon } from 'playwright/tenor/TenorTestData';
+
+// Leverandøren roteres over en liste (pickVendorOrg) — en hvilken som helst
+// virksomhet kan opptre som systemleverandør. Facilitator-virksomheten og dens
+// klienter hentes fra Tenor.
+const vendorOrgNumber = pickVendorOrg();
 
 test.describe('Delegering av klienter til Systembruker', () => {
   let api: ApiRequests;
@@ -9,33 +18,40 @@ test.describe('Delegering av klienter til Systembruker', () => {
     api = new ApiRequests();
   });
 
+  // NB: Bevisst hardkodet facilitator. Denne testen delegerer ALLE klienter med
+  // ett klikk (addAllCustomers), så facilitatoren må ha få klienter. En revisor
+  // fra Tenor har typisk svært mange klienter (ingen med <=10 blant kandidatene),
+  // og «deleger alle» ville da blitt tregt. Vi beholder derfor en kjent revisor
+  // med få klienter her. De to andre rollene bruker Tenor.
   test.describe('Ansvarlig revisor', () => {
     const role = 'revisor';
     const accessPackageApiName = 'ansvarlig-revisor';
     const accessPackageDisplayName = 'Ansvarlig revisor';
 
-    const user = {
-      pid: '07875898560',
-      org: '314251768',
-      name: 'KUNST STERK MINK ANS',
-    };
-
+    let facilitator: OrganisasjonMedKlienter;
     let name: string;
+    let systemId: string;
+    let externalRef: string;
     let response: { confirmUrl: string };
 
-    test.beforeEach(async () => {
+    test.beforeEach(async ({ testData }) => {
+      // Revisor er en fast, kjent facilitator med få klienter (se FAST_REVISOR)
+      // — «deleger alle klienter» krever få klienter.
+      facilitator = await testData.facilitatorMedKlienter('revisor');
       name = `Playwright-e2e-${role}-${Date.now()}`;
+      externalRef = TestdataApi.generateExternalRef();
 
-      const systemId = await test.step('Create system with access packages', async () => {
-        return await api.createSystemInSystemregisterWithAccessPackages('310547891', name);
+      systemId = await test.step('Create system with access packages', async () => {
+        return await api.createSystemInSystemregisterWithAccessPackages(vendorOrgNumber, name);
       });
 
       response = await test.step('Create client delegation agent request', async () => {
         return await api.postClientDelegationAgentRequest(
-          '310547891',
+          vendorOrgNumber,
           systemId,
           accessPackageApiName,
-          user.org,
+          facilitator.org.orgnr,
+          externalRef,
         );
       });
     });
@@ -48,14 +64,14 @@ test.describe('Delegering av klienter til Systembruker', () => {
     }) => {
       await test.step('Approve system user request', async () => {
         await page.goto(response.confirmUrl);
-        await login.loginNotChoosingActor(user.pid);
+        await login.loginNotChoosingActor(facilitator.dagligLeder.pid);
         await clientDelegationPage.confirmAndCreateSystemUser(accessPackageDisplayName);
         await expect(login.loginButton).toBeVisible();
       });
 
       await test.step('Login and navigate to system user', async () => {
-        await login.LoginToAccessManagement(user.pid);
-        await login.selectMainUnitBySearching(user.name);
+        await login.LoginToAccessManagement(facilitator.dagligLeder.pid);
+        await login.selectMainUnitBySearching(facilitator.org.navn);
 
         await accessManagementFrontPage.systemUserMenuLink.click();
 
@@ -69,8 +85,18 @@ test.describe('Delegering av klienter til Systembruker', () => {
         await clientDelegationPage.confirmAndCloseButton.click();
       });
 
+      // Agent-systembruker med tilordnede klienter må slettes i UI (API-sletting feiler).
       await test.step('Cleanup: Delete system user', async () => {
         await clientDelegationPage.deleteSystemUser(name);
+      });
+    });
+
+    test.afterEach(async () => {
+      await cleanupSystemUser({
+        vendorOrgNumber,
+        ownerOrg: facilitator.org.orgnr,
+        ownerPid: facilitator.dagligLeder.pid,
+        systemName: name,
       });
     });
   });
@@ -80,36 +106,30 @@ test.describe('Delegering av klienter til Systembruker', () => {
     const accessPackageApiName = 'regnskapsforer-lonn';
     const accessPackageDisplayName = 'Regnskapsfører lønn';
 
-    const user = {
-      pid: '25872549881',
-      org: '312433834',
-      name: 'TILFELDIG RAKRYGGET KATT MALSTRØM',
-    };
-
-    const customers = [
-      {
-        label: 'DYP VERD TIGER AS',
-        confirmation: 'DYP VERD TIGER AS',
-        orgnummer: '214172542',
-      },
-    ];
-
+    let facilitator: OrganisasjonMedKlienter;
+    let customer: Organisasjon;
     let name: string;
+    let systemId: string;
+    let externalRef: string;
     let response: { confirmUrl: string };
 
-    test.beforeEach(async () => {
+    test.beforeEach(async ({ testData }) => {
+      facilitator = await testData.facilitatorMedKlienter(role);
+      customer = facilitator.klienter[0];
       name = `Playwright-e2e-${role}-${Date.now()}`;
+      externalRef = TestdataApi.generateExternalRef();
 
-      const systemId = await test.step('Create system with access packages', async () => {
-        return await api.createSystemInSystemregisterWithAccessPackages('310547891', name);
+      systemId = await test.step('Create system with access packages', async () => {
+        return await api.createSystemInSystemregisterWithAccessPackages(vendorOrgNumber, name);
       });
 
       response = await test.step('Create client delegation agent request', async () => {
         return await api.postClientDelegationAgentRequest(
-          '310547891',
+          vendorOrgNumber,
           systemId,
           accessPackageApiName,
-          user.org,
+          facilitator.org.orgnr,
+          externalRef,
         );
       });
     });
@@ -122,14 +142,14 @@ test.describe('Delegering av klienter til Systembruker', () => {
     }) => {
       await test.step('Approve system user request', async () => {
         await page.goto(response.confirmUrl);
-        await login.loginNotChoosingActor(user.pid);
+        await login.loginNotChoosingActor(facilitator.dagligLeder.pid);
         await clientDelegationPage.confirmAndCreateSystemUser(accessPackageDisplayName);
         await expect(login.loginButton).toBeVisible();
       });
 
       await test.step('Login and navigate to system user', async () => {
-        await login.LoginToAccessManagement(user.pid);
-        await login.selectMainUnitBySearching(user.name);
+        await login.LoginToAccessManagement(facilitator.dagligLeder.pid);
+        await login.selectMainUnitBySearching(facilitator.org.navn);
 
         await accessManagementFrontPage.systemUserMenuLink.click();
 
@@ -137,20 +157,22 @@ test.describe('Delegering av klienter til Systembruker', () => {
         await clientDelegationPage.systemUserLink(name).click();
       });
 
-      await test.step('Open system user and delegate customers', async () => {
+      await test.step(`Open system user and delegate customer ${customer.navn}`, async () => {
         await clientDelegationPage.openSystemUser(accessPackageDisplayName);
-
-        for (const customer of customers) {
-          await clientDelegationPage.addCustomer(
-            customer.label,
-            customer.confirmation,
-            customer.orgnummer,
-          );
-        }
+        await clientDelegationPage.addCustomer(customer.navn, customer.navn, customer.orgnr);
       });
 
       await test.step('Cleanup: Delete system user', async () => {
         await clientDelegationPage.deleteSystemUser(name);
+      });
+    });
+
+    test.afterEach(async () => {
+      await cleanupSystemUser({
+        vendorOrgNumber,
+        ownerOrg: facilitator.org.orgnr,
+        ownerPid: facilitator.dagligLeder.pid,
+        systemName: name,
       });
     });
   });
@@ -160,36 +182,30 @@ test.describe('Delegering av klienter til Systembruker', () => {
     const accessPackageApiName = 'forretningsforer-eiendom';
     const accessPackageDisplayName = 'Forretningsforer eiendom';
 
-    const user = {
-      pid: '12826697375',
-      org: '312158019',
-      name: 'MOMENTAN VENNLIG TIGER AS',
-    };
-
-    const customers = [
-      {
-        label: 'SAMEIET ARTIG SKRIVEFØR LØVE',
-        confirmation: 'SAMEIET ARTIG SKRIVEFØR LØVE',
-        orgnummer: '213461532',
-      },
-    ];
-
+    // forretningsforer-eiendom kan kun delegeres for eiendomsklienter (BRL/ESEK),
+    // så vi henter en forretningsfører med en slik klient.
+    let facilitator: { dagligLeder: { pid: string }; org: Organisasjon; klient: Organisasjon };
     let name: string;
+    let systemId: string;
+    let externalRef: string;
     let response: { confirmUrl: string };
 
-    test.beforeEach(async () => {
+    test.beforeEach(async ({ testData }) => {
+      facilitator = await testData.forretningsfoererMedEiendomsklient();
       name = `Playwright-e2e-${role}-${Date.now()}`;
+      externalRef = TestdataApi.generateExternalRef();
 
-      const systemId = await test.step('Create system with access packages', async () => {
-        return await api.createSystemInSystemregisterWithAccessPackages('310547891', name);
+      systemId = await test.step('Create system with access packages', async () => {
+        return await api.createSystemInSystemregisterWithAccessPackages(vendorOrgNumber, name);
       });
 
       response = await test.step('Create client delegation agent request', async () => {
         return await api.postClientDelegationAgentRequest(
-          '310547891',
+          vendorOrgNumber,
           systemId,
           accessPackageApiName,
-          user.org,
+          facilitator.org.orgnr,
+          externalRef,
         );
       });
     });
@@ -202,14 +218,14 @@ test.describe('Delegering av klienter til Systembruker', () => {
     }) => {
       await test.step('Approve system user request', async () => {
         await page.goto(response.confirmUrl);
-        await login.loginNotChoosingActor(user.pid);
+        await login.loginNotChoosingActor(facilitator.dagligLeder.pid);
         await clientDelegationPage.confirmAndCreateSystemUser(accessPackageDisplayName);
         await expect(login.loginButton).toBeVisible();
       });
 
       await test.step('Login and navigate to system user', async () => {
-        await login.LoginToAccessManagement(user.pid);
-        await login.selectMainUnitBySearching(user.name);
+        await login.LoginToAccessManagement(facilitator.dagligLeder.pid);
+        await login.selectMainUnitBySearching(facilitator.org.navn);
 
         await accessManagementFrontPage.systemUserMenuLink.click();
 
@@ -217,20 +233,26 @@ test.describe('Delegering av klienter til Systembruker', () => {
         await clientDelegationPage.systemUserLink(name).click();
       });
 
-      await test.step('Open system user and delegate customers', async () => {
+      await test.step(`Open system user and delegate customer ${facilitator.klient.navn}`, async () => {
         await clientDelegationPage.openSystemUser(accessPackageDisplayName);
-
-        for (const customer of customers) {
-          await clientDelegationPage.addCustomer(
-            customer.label,
-            customer.confirmation,
-            customer.orgnummer,
-          );
-        }
+        await clientDelegationPage.addCustomer(
+          facilitator.klient.navn,
+          facilitator.klient.navn,
+          facilitator.klient.orgnr,
+        );
       });
 
       await test.step('Cleanup: Delete system user', async () => {
         await clientDelegationPage.deleteSystemUser(name);
+      });
+    });
+
+    test.afterEach(async () => {
+      await cleanupSystemUser({
+        vendorOrgNumber,
+        ownerOrg: facilitator.org.orgnr,
+        ownerPid: facilitator.dagligLeder.pid,
+        systemName: name,
       });
     });
   });

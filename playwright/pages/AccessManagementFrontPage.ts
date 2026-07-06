@@ -61,11 +61,78 @@ export class AccessManagementFrontPage {
   }
 
   async expandOrg(org: string) {
-    await this.page.getByRole('button', { name: org }).click();
+    await this.filterUserList(org);
+    await this.ensureRowExpanded(org);
   }
 
   async clickUser(userName: string, num = 0) {
-    await this.page.getByRole('link', { name: userName }).nth(num).click();
+    await this.filterUserList(userName);
+    // Brukerlista rendrer en rad enten som en navigerbar LENKE (personer og
+    // virksomheter uten arvende brukere) eller som en utvidbar KNAPP når raden
+    // har arvende underbrukere (`collapsible` i UserItem). Knappen navigerer
+    // ikke – den utvider raden, og virksomheten selv dukker da opp som en
+    // navigerbar selv-lenke (`includeSelfAsChild`).
+    //
+    // Den debouncede søke-re-renderingen (UserItems `useEffect` som nullstiller
+    // `expanded`) kan kollapse raden igjen akkurat idet vi klikker, så et klikk
+    // på lenka bommer ("element detached"/klikk-timeout). Vi navigerer derfor via
+    // lenkas href i stedet — samme detaljside — og prøver utvid→les-href→naviger
+    // som én atomær operasjon til navigeringen faktisk skjer.
+    const main = this.page.getByRole('main');
+    const link = main.getByRole('link', { name: userName });
+    const collapsibleRow = main.getByRole('button', { name: userName }).first();
+
+    await expect(async () => {
+      if ((await link.count()) === 0) {
+        await expect(collapsibleRow).toBeVisible({ timeout: 5000 });
+        await collapsibleRow.click(); // utvid for å avdekke selv-lenken
+        await expect(link.first()).toBeVisible({ timeout: 3000 });
+      }
+      const href = await link.nth(num).getAttribute('href');
+      if (!href) throw new Error(`Fant ingen href på lenka for "${userName}" (raden re-rendrer).`);
+      await this.page.goto(new URL(href, this.page.url()).toString());
+    }).toPass({ timeout: 25000 });
+  }
+
+  /**
+   * Ensures a collapsible org row is expanded so the row surfaces itself as a
+   * navigable self-link (`includeSelfAsChild`). Leaf rows are already links and
+   * need no expansion. The debounced search re-render can collapse the row right
+   * after we expand it, so we retry until the link is actually present.
+   */
+  private async ensureRowExpanded(userName: string) {
+    const main = this.page.getByRole('main');
+    const link = main.getByRole('link', { name: userName });
+    const collapsibleRow = main.getByRole('button', { name: userName }).first();
+
+    await expect(async () => {
+      if ((await link.count()) === 0) {
+        await expect(collapsibleRow).toBeVisible({ timeout: 5000 });
+        await collapsibleRow.click();
+      }
+      await expect(link.first()).toBeVisible({ timeout: 3000 });
+    }).toPass({ timeout: 20000 });
+  }
+
+  /**
+   * Filters the "Brukere med fullmakter" list to `name` so the target surfaces
+   * regardless of list size (the list is otherwise paginated with "Se mer").
+   * Waits for the search box to render before filling — `isVisible()` alone is an
+   * instant check that races the list load and would skip the search entirely.
+   */
+  private async filterUserList(name: string) {
+    const search = this.page.getByPlaceholder(this.texts.users_page.user_search_placeholder);
+    await expect(search).toBeVisible();
+    // Idempotent: don't re-fill if already filtered to this name. Re-filling
+    // re-renders the list (e.g. expandOrg + clickUser both filter the same target)
+    // and can detach the element we're about to click mid-render.
+    if ((await search.inputValue()) === name) {
+      return;
+    }
+    await search.fill(name);
+    // The search is debounced and re-renders the list after it resolves; let it
+    // settle so we don't click a result that detaches mid-render.
+    await this.page.waitForLoadState('networkidle').catch(() => {});
   }
 
   async goToEnkelttjenester() {
@@ -168,7 +235,11 @@ export class AccessManagementFrontPage {
   }
 
   async expectUserToHavePackage(packageName: string) {
-    await expect(this.page.getByRole('button', { name: packageName })).toBeVisible();
+    // Delnavn (ikke `exact`): i «fullmakter hos andre»/mottatte-visningen får
+    // pakkeknappen med antall tjenester i navnet («Byggesøknad 4 tjenester»),
+    // mens den på brukere-siden heter bare «Byggesøknad». Denne visningen (arvede/
+    // mottatte pakker) har ingen «Slett fullmakt for …»-knapp, så delnavn er trygt.
+    await expect(this.page.getByRole('button', { name: packageName }).first()).toBeVisible();
   }
 
   async userCanDeleteEnkelttjeneste(resourceName: string) {

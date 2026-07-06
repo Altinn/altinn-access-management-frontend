@@ -72,55 +72,39 @@ export class DelegationPage {
     await openModalButton.click();
   }
 
-  async grantAccessPkgNameDirect(packageName: string) {
+  /**
+   * Delegerer en tilgangspakke fra søket i delegeringsmodalen. Klikker den
+   * innebygde «Gi fullmakt for {pakke}»-knappen på pakkeraden (samme knapp for
+   * alle pakker — pakkenavnet ligger i knappens `aria-label`, ikke som egen
+   * knapp), og tømmer søket så neste pakke starter rent.
+   */
+  async grantAccessPkgName(packageName: string) {
     const searchBox = this.packageSearchBox;
-
-    await searchBox.click();
-    await searchBox.fill(packageName);
+    await searchBox.waitFor({ state: 'visible', timeout: 15000 });
 
     const grantButton = this.page.getByRole('button', {
       name: withPoaObject(this.texts.common.give_poa_for, packageName),
+      exact: true,
     });
 
-    await expect(grantButton).toBeVisible({ timeout: 10000 });
+    // Søkefeltet gjenbrukes mellom pakkene og kan re-rendre rett etter forrige
+    // tømming (React), så et enkelt `fill` kan bli forkastet før lista filtreres.
+    // Fyll på nytt til «Gi fullmakt»-knappen dukker opp, i stedet for å stole på
+    // at første tastetrykk «tar».
+    await expect(async () => {
+      await searchBox.fill('');
+      await searchBox.fill(packageName);
+      await expect(grantButton).toBeVisible({ timeout: 3000 });
+    }).toPass({ timeout: 15000 });
+
     await grantButton.click();
 
-    // Clear search so the next package starts fresh
+    // Tøm søket så neste pakke starter rent.
     await expect(this.clearSearchButton).toBeVisible();
     await this.clearSearchButton.click();
   }
 
-  async grantAccessPkgName(packageName: string) {
-    const searchBox = this.packageSearchBox;
-
-    await searchBox.waitFor({ state: 'visible', timeout: 15000 });
-    await searchBox.click();
-    await searchBox.fill(packageName);
-
-    const packageButton = this.page.getByRole('button', { name: packageName, exact: true });
-
-    await expect(packageButton).toBeVisible({ timeout: 10000 });
-    await packageButton.click();
-
-    const modal = this.page.getByRole('dialog').first();
-    await expect(modal).toBeVisible({ timeout: 10000 });
-
-    const grantBtn = modal.getByRole('button', {
-      name: this.texts.access_packages.give_new_button,
-    });
-    await expect(grantBtn).toBeVisible({ timeout: 10000 });
-    await grantBtn.click();
-
-    // "Tilbake" from the result screen
-    const tilbakeButton = this.page.getByRole('button', {
-      name: this.texts.common.back,
-      exact: true,
-    });
-    await expect(tilbakeButton).toBeVisible({ timeout: 10000 });
-    await tilbakeButton.click();
-  }
-
-  async closeAccessModal(buttonName: string = 'Lukk') {
+  async closeAccessModal() {
     await expect(this.closeModalBtn).toBeVisible();
     await this.closeModalBtn.click();
   }
@@ -196,13 +180,24 @@ export class DelegationPage {
     await expect(confirmBtn).toBeVisible({ timeout: 10000 });
     await confirmBtn.click();
   }
-  async verifyDelegatedPackage(areaName: string, pacakageName: string) {
+  async verifyDelegatedPackage(areaName: string, packageName: string) {
     const areaBtn = this.page.getByRole('list').getByRole('button', { name: areaName }).first();
     await expect(areaBtn).toBeVisible();
-    await areaBtn.click();
 
-    const packageBtn = this.page.getByRole('button', { name: pacakageName, exact: true });
-    await expect(packageBtn).toBeVisible();
+    // Området må være utvidet for at pakken skal vises. Klikk bare når det ikke
+    // allerede er åpent (et klikk på et åpent område kollapser det).
+    if ((await areaBtn.getAttribute('aria-expanded')) !== 'true') {
+      await areaBtn.click();
+      await expect(areaBtn).toHaveAttribute('aria-expanded', 'true');
+    }
+
+    // Pakkeknappen har navnet «{pakkenavn} {n} tjenester» (arvet pakke) eller
+    // «Slett fullmakt for {pakkenavn}» (direkte delegert, med slett-kontroll).
+    // Begge inneholder pakkenavnet, så et ikke-eksakt navnetreff dekker begge
+    // uten spesialtilfeller.
+    await expect(this.page.getByRole('button', { name: packageName }).first()).toBeVisible({
+      timeout: 10000,
+    });
   }
 
   async verifyDelegatedPackages(expectations: { areaName: string; packageName: string }[]) {
@@ -221,15 +216,32 @@ export class DelegationPage {
     await expect(backLink).toBeVisible();
     await backLink.click();
 
-    // 2. Click org button
-    const orgButton = this.page.getByRole('button', { name: orgButtonName });
-    await expect(orgButton).toBeVisible({ timeout: 10_000 });
-    await orgButton.click();
+    // 2. Filtrer brukerlista på virksomheten. Lista er paginert («Se mer»), og
+    // en tilfeldig avgiver-org kan ha mange rettighetshavere, så mottakeren
+    // ligger ofte forbi første side hvis vi ikke søker den fram.
+    const search = this.page.getByPlaceholder(this.texts.users_page.user_search_placeholder);
+    await expect(search).toBeVisible();
+    await search.fill(orgButtonName);
+    await this.page.waitForLoadState('networkidle').catch(() => {});
 
-    // 3. Click key role user
+    // 3. Utvid virksomhetsraden (en knapp med arvende nøkkelrolle-brukere) og
+    // gå til nøkkelrolle-brukeren. Søke-re-renderet kan kollapse raden og
+    // detache lenka midt i et klikk ("element detached"), så vi navigerer via
+    // lenkas href i stedet — utvid→les href→naviger som én atomær operasjon.
+    const orgButton = this.page.getByRole('button', { name: orgButtonName }).first();
     const keyUserLink = this.page.getByRole('link', { name: keyRoleUserName });
-    await expect(keyUserLink).toBeVisible({ timeout: 10_000 });
-    await keyUserLink.click();
+    await expect(async () => {
+      if ((await keyUserLink.count()) === 0) {
+        await expect(orgButton).toBeVisible({ timeout: 5_000 });
+        await orgButton.click();
+        await expect(keyUserLink.first()).toBeVisible({ timeout: 3_000 });
+      }
+      const href = await keyUserLink.first().getAttribute('href');
+      if (!href) {
+        throw new Error(`Fant ingen href på lenka for "${keyRoleUserName}" (raden re-rendrer).`);
+      }
+      await this.page.goto(new URL(href, this.page.url()).toString());
+    }).toPass({ timeout: 25_000 });
 
     // 4. Verify all expected packages
     await this.verifyDelegatedPackages(expectations);

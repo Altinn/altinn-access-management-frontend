@@ -1,26 +1,31 @@
 import { expect, test } from 'playwright/fixture/pomFixture';
 import { Language } from 'playwright/pages/LanguageMenu';
 
-import { TestdataApi } from 'playwright/util/TestdataApi';
 import { ApiRequests } from 'playwright/api-requests/SystemUserApiRequests';
+import { pickVendorOrg } from 'playwright/util/systemVendors';
+import type { DagligLederMedOrg } from 'playwright/tenor/TenorTestData';
+import { cleanupSystemUser } from 'playwright/util/systemUserCleanup';
 
 // Runs in nynorsk on purpose: exercises the before-login language pinning
 // (settings API) and proves the dict-driven selectors work in a non-default
 // language. The rest of the suites run in the default bokmål.
 test.use({ language: Language.NN });
-const vendorOrgNumber = '310547891';
-const testUserPid = '14824497789';
-const testOrgName = 'Aktverdig Retorisk Ape';
-const testUserName = 'Skravlete Blåveis';
+// Systemleverandøren er en registrert leverandør i systemregisteret (fast
+// infrastruktur, ikke Tenor). Eier-virksomheten som oppretter systembrukeren
+// hentes derimot fra Tenor, så parallelle kjøringer ikke deler samme aktør.
+const vendorOrgNumber = pickVendorOrg();
 
 test.describe('System Register', async () => {
   let system: string;
+  let owner: DagligLederMedOrg;
+  let systemUserId: string;
 
-  test.beforeEach(async ({ page, login }) => {
+  test.beforeEach(async ({ login, testData }) => {
     const api = new ApiRequests();
     system = await api.createSystemSystemRegister(vendorOrgNumber);
-    await login.LoginToAccessManagement(testUserPid);
-    await login.selectMainUnitBySearching(testOrgName);
+    owner = await testData.dagligLederMedOrg();
+    await login.LoginToAccessManagement(owner.dagligLeder.pid);
+    await login.selectMainUnitBySearching(owner.org.navn);
   });
 
   test('Create system user and verify landing page', async ({
@@ -39,13 +44,24 @@ test.describe('System Register', async () => {
 
     await test.step('Verify system user created', async () => {
       await expect(systemUserPage.systemUserCreatedHeading).toBeVisible();
-      await expect(systemUserPage.systemUserLink(system)).toBeVisible();
+      const link = systemUserPage.systemUserLink(system);
+      await expect(link).toBeVisible();
+      // Fang system-bruker-IDen fra lenka (…/systemuser/<id>) så vi kan slette
+      // den via API etterpå (UI-opprettet, så ingen external-ref å søke på).
+      const href = await link.getAttribute('href');
+      systemUserId = href?.split('/').filter(Boolean).pop() ?? '';
     });
   });
 
   test.afterEach(async () => {
-    if (system) {
-      await TestdataApi.removeSystem(vendorOrgNumber, system);
-    }
+    // `cleanupSystemUser` rydder både systembrukeren og systemet fra registeret
+    // (via `systemName`), så vi slipper en egen `removeSystem`-jobb.
+    await cleanupSystemUser({
+      vendorOrgNumber,
+      ownerOrg: owner.org.orgnr,
+      ownerPid: owner.dagligLeder.pid,
+      systemUserId,
+      systemName: system,
+    });
   });
 });

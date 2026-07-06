@@ -1,24 +1,35 @@
 import { test } from '../../../fixture/pomFixture';
 import { EnduserConnection } from '../../../api-requests/EnduserConnection';
+import type { Testperson, DagligLederMedOrg } from '../../../tenor/TenorTestData';
+import {
+  cleanupConnection,
+  cleanupPackageDelegation,
+  setupPackagesForUser,
+} from '../../../util/delegationHelpers';
+
+type Testorganisasjon = { orgnr: string; navn: string };
 
 test.describe('tilgangspakkedelegering fra person til person og person til org', () => {
   const api = new EnduserConnection();
 
   test.describe('Legg til ny person hos deg selv', () => {
-    const actor = { pid: '01837396103', name: 'DRIFTIG KATEGORI' };
-    const target = { pid: '52858201748', lastName: 'KOMPOSISJON', name: 'MEMORERENDE KOMPOSISJON' };
+    let actor: Testperson;
+    let target: Testperson;
 
-    test('Legg til ny person hos deg selv', async ({
-      login,
-      aktorvalgHeader,
-      accessManagementFrontPage,
-    }) => {
+    test.beforeEach(async ({ testData }) => {
+      // To bosatte, myndige personer fra Tenor: `actor` logger inn og legger til `target`.
+      [actor, target] = await testData.bosatteMyndigePersoner(2);
+
+      testData.hovedenhetMedUnderenhet();
+    });
+
+    test('Legg til ny person hos deg selv', async ({ login, accessManagementFrontPage }) => {
       await test.step('Logg inn', async () => {
         await login.LoginToAccessManagement(actor.pid);
       });
 
-      await test.step(`Velg ${actor.name} og gå til tilgangsstyring`, async () => {
-        await aktorvalgHeader.selectActorFromHeaderMenu(actor.name);
+      await test.step(`Velg ${actor.navn} og gå til tilgangsstyring`, async () => {
+        await login.selectMainUnitBySearching(actor.navn);
       });
 
       await test.step('Gå til brukere-siden og klikk "legg til bruker"', async () => {
@@ -26,40 +37,39 @@ test.describe('tilgangspakkedelegering fra person til person og person til org',
         await accessManagementFrontPage.clickLeggTilBruker();
       });
 
-      await test.step(`Legg til personen ${target.pid} ${target.name}`, async () => {
-        await accessManagementFrontPage.addPerson(target.pid, target.lastName);
+      await test.step(`Legg til personen ${target.navn}`, async () => {
+        await accessManagementFrontPage.addPerson(target.pid, target.etternavn);
       });
 
-      await test.step(`${target.name} finnes i listen over brukere`, async () => {
+      await test.step(`${target.navn} finnes i listen over brukere`, async () => {
         await accessManagementFrontPage.goToUsers();
-        await accessManagementFrontPage.clickUser(target.name);
+        await accessManagementFrontPage.clickUser(target.navn);
       });
     });
 
     test.afterEach(async () => {
-      try {
-        await api.deleteConnection(actor.pid, actor.pid, [target.pid]);
-      } catch (error) {
-        console.error('Cleanup: Failed to delete connection:', error);
-      }
+      await cleanupConnection(api, { pid: actor.pid, from: actor.pid, to: target.pid });
     });
   });
 
   test.describe('Legg til ny virksomhet hos deg selv', () => {
-    const actor = { pid: '29868198034', name: 'PRESIS KONKLUSJON' };
-    const target = { org: '210638962', name: 'EKTE FANTASIFULL KATT HIMMEL' };
+    let actor: Testperson;
+    let target: Testorganisasjon;
 
-    test('Legg til ny virksomhet hos deg selv', async ({
-      login,
-      aktorvalgHeader,
-      accessManagementFrontPage,
-    }) => {
+    test.beforeEach(async ({ testData }) => {
+      [actor, target] = await Promise.all([
+        testData.bosattMyndigPerson(),
+        testData.hentTilfeldigVirksomhet(),
+      ]);
+    });
+
+    test('Legg til ny virksomhet hos deg selv', async ({ login, accessManagementFrontPage }) => {
       await test.step('Logg inn', async () => {
         await login.LoginToAccessManagement(actor.pid);
       });
 
-      await test.step(`Velg ${actor.name} og gå til tilgangsstyring`, async () => {
-        await aktorvalgHeader.selectActorFromHeaderMenu(actor.name);
+      await test.step(`Velg ${actor.navn} og gå til tilgangsstyring`, async () => {
+        await login.selectMainUnitBySearching(actor.navn);
       });
 
       await test.step('Gå til brukere-siden og klikk "legg til bruker"', async () => {
@@ -67,269 +77,229 @@ test.describe('tilgangspakkedelegering fra person til person og person til org',
         await accessManagementFrontPage.clickLeggTilBruker();
       });
 
-      await test.step(`Legg til virksomheten ${target.org} ${target.name}`, async () => {
-        await accessManagementFrontPage.addOrg(target.org);
+      await test.step(`Legg til virksomheten ${target.navn}`, async () => {
+        await accessManagementFrontPage.addOrg(target.orgnr);
       });
 
-      await test.step(`${target.name} finnes i listen over brukere`, async () => {
+      await test.step(`${target.navn} finnes i listen over brukere`, async () => {
         await accessManagementFrontPage.goToUsers();
-        await accessManagementFrontPage.expandOrg(target.name);
-        await accessManagementFrontPage.clickUser(target.name);
+        await accessManagementFrontPage.clickUser(target.navn);
       });
     });
 
     test.afterEach(async () => {
-      try {
-        await api.deleteConnection(actor.pid, actor.pid, [target.org]);
-      } catch (error) {
-        console.error('Cleanup: Failed to delete connection:', error);
-      }
+      await cleanupConnection(api, { pid: actor.pid, from: actor.pid, to: target.orgnr });
     });
   });
 
   test.describe('Deleger tilgangspakke til person', () => {
-    const actor = { pid: '08857499981', name: 'UROMANTISK BRINGE' };
-    const target = { pid: '22911648052', name: 'LETT ANKEL' };
+    let actor: Testperson;
+    let target: Testperson;
     const pkg = {
       urn: 'urn:altinn:accesspackage:innbygger-utdanning',
       name: 'Utdanning',
       area: 'Arbeidsliv, skole og utdanning',
     };
 
-    test.beforeEach(async () => {
-      try {
-        await api.deleteConnection(actor.pid, actor.pid, [target.pid]);
-      } catch {
-        /* ignore if nothing to clean */
-      }
+    test.beforeEach(async ({ testData: testData }) => {
+      // `actor` delegerer (logger inn og representerer seg selv), `target` mottar.
+      [actor, target] = await testData.bosatteMyndigePersoner(2);
       await api.addConnection(actor.pid, actor.pid, target.pid);
     });
 
-    test('Deleger tilgangspakke til person', async ({
-      login,
-      aktorvalgHeader,
-      accessManagementFrontPage,
-    }) => {
+    test('Deleger tilgangspakke til person', async ({ login, accessManagementFrontPage }) => {
       await test.step('Logg inn', async () => {
         await login.LoginToAccessManagement(actor.pid);
       });
 
-      await test.step(`Velg ${actor.name} og gå til tilgangsstyring`, async () => {
-        await aktorvalgHeader.selectActorFromHeaderMenu(actor.name);
+      await test.step(`Velg ${actor.navn} og gå til tilgangsstyring`, async () => {
+        await login.selectMainUnitBySearching(actor.navn);
       });
 
-      await test.step(`Gå til brukere-siden og klikk på "${target.name}"`, async () => {
+      await test.step(`Gå til brukere-siden og klikk på "${target.navn}"`, async () => {
         await accessManagementFrontPage.goToUsers();
-        await accessManagementFrontPage.clickUser(target.name);
+        await accessManagementFrontPage.clickUser(target.navn);
       });
 
-      await test.step(`Gi ${target.name} fullmakt til tilgangspakken "${pkg.name}"`, async () => {
+      await test.step(`Gi ${target.navn} fullmakt til tilgangspakken "${pkg.name}"`, async () => {
         await accessManagementFrontPage.clickGiFullmakt();
         await accessManagementFrontPage.goToArea(pkg.area);
         await accessManagementFrontPage.clickGiFullmaktForTilgangspakke(pkg.name);
         await accessManagementFrontPage.LukkGiFullmaktVindu();
       });
 
-      await test.step(`${target.name} skal ha tilgangspakken "${pkg.name}"`, async () => {
+      await test.step(`${target.navn} skal ha tilgangspakken "${pkg.name}"`, async () => {
         await accessManagementFrontPage.goToUsers();
-        await accessManagementFrontPage.clickUser(target.name);
+        await accessManagementFrontPage.clickUser(target.navn);
         await accessManagementFrontPage.goToArea(pkg.area);
         await accessManagementFrontPage.userCanDeletePackage(pkg.name);
       });
     });
 
     test.afterEach(async () => {
-      try {
-        await api.deleteConnection(actor.pid, actor.pid, [target.pid]);
-      } catch (error) {
-        console.error('Cleanup: Failed to delete connection:', error);
-      }
+      await cleanupConnection(api, { pid: actor.pid, from: actor.pid, to: target.pid });
     });
   });
 
   test.describe('Deleger tilgangspakke til virksomhet', () => {
-    const actor = { pid: '15855499484', name: 'HANDLEKRAFTIG BRØK' };
-    const target = { org: '313904490', name: 'OPPLYST KVART TIGER AS' };
-    const pkg = {
+    let actor: Testperson;
+    let target: Testorganisasjon;
+    const accessPackage = {
       urn: 'urn:altinn:accesspackage:innbygger-utdanning',
       name: 'Utdanning',
       area: 'Arbeidsliv, skole og utdanning',
     };
 
-    test.beforeEach(async () => {
-      try {
-        await api.deleteConnection(actor.pid, actor.pid, [target.org]);
-      } catch {
-        /* ignore if nothing to clean */
-      }
-      await api.addConnection(actor.pid, actor.pid, target.org);
+    test.beforeEach(async ({ testData }) => {
+      [actor, target] = await Promise.all([
+        testData.bosattMyndigPerson(),
+        testData.hentTilfeldigVirksomhet(),
+      ]);
+      await api.addConnection(actor.pid, actor.pid, target.orgnr);
     });
 
-    test('Deleger tilgangspakke til virksomhet', async ({
-      login,
-      aktorvalgHeader,
-      accessManagementFrontPage,
-    }) => {
+    test('Deleger tilgangspakke til virksomhet', async ({ login, accessManagementFrontPage }) => {
       await test.step('Logg inn', async () => {
         await login.LoginToAccessManagement(actor.pid);
       });
 
-      await test.step(`Velg ${actor.name} og gå til tilgangsstyring`, async () => {
-        await aktorvalgHeader.selectActorFromHeaderMenu(actor.name);
+      await test.step(`Velg ${actor.navn} og gå til tilgangsstyring`, async () => {
+        await login.selectMainUnitBySearching(actor.navn);
       });
 
-      await test.step(`Gå til brukere-siden og klikk på "${target.name}"`, async () => {
+      await test.step(`Gå til brukere-siden og klikk på "${target.navn}"`, async () => {
         await accessManagementFrontPage.goToUsers();
-        await accessManagementFrontPage.expandOrg(target.name);
-        await accessManagementFrontPage.clickUser(target.name);
+        await accessManagementFrontPage.clickUser(target.navn);
       });
 
-      await test.step(`Gi ${target.name} fullmakt til tilgangspakken "${pkg.name}"`, async () => {
+      await test.step(`Gi ${target.navn} fullmakt til tilgangspakken "${accessPackage.name}"`, async () => {
         await accessManagementFrontPage.clickGiFullmakt();
-        await accessManagementFrontPage.goToArea(pkg.area);
-        await accessManagementFrontPage.clickGiFullmaktForTilgangspakke(pkg.name);
+        await accessManagementFrontPage.goToArea(accessPackage.area);
+        await accessManagementFrontPage.clickGiFullmaktForTilgangspakke(accessPackage.name);
         await accessManagementFrontPage.LukkGiFullmaktVindu();
       });
 
-      await test.step(`${target.name} skal ha tilgangspakken "${pkg.name}"`, async () => {
+      await test.step(`${target.navn} skal ha tilgangspakken "${accessPackage.name}"`, async () => {
         await accessManagementFrontPage.goToUsers();
-        await accessManagementFrontPage.expandOrg(target.name);
-        await accessManagementFrontPage.clickUser(target.name);
-        await accessManagementFrontPage.goToArea(pkg.area);
-        await accessManagementFrontPage.userCanDeletePackage(pkg.name);
+        await accessManagementFrontPage.clickUser(target.navn);
+        await accessManagementFrontPage.goToArea(accessPackage.area);
+        await accessManagementFrontPage.userCanDeletePackage(accessPackage.name);
       });
     });
 
     test.afterEach(async () => {
-      try {
-        await api.deleteConnection(actor.pid, actor.pid, [target.org]);
-      } catch (error) {
-        console.error('Cleanup: Failed to delete connection:', error);
-      }
+      await cleanupConnection(api, { pid: actor.pid, from: actor.pid, to: target.orgnr });
     });
   });
 
   test.describe('Slett tilgangspakke hos person', () => {
-    const actor = { pid: '26917699703', name: 'GRÅ BLANDING' };
-    const target = { pid: '43818900555', name: 'OPPSTEMT DRAGE' };
-    const pkg = {
+    let actor: Testperson;
+    let target: Testperson;
+    const accessPackage = {
       urn: 'urn:altinn:accesspackage:innbygger-samliv',
       name: 'Samliv',
       area: 'Familie og fritid',
     };
 
-    test.beforeEach(async () => {
-      await api.addConnectionAndPackagesToUser(actor.pid, actor.pid, target.pid, [pkg.urn]);
+    test.beforeEach(async ({ testData }) => {
+      [actor, target] = await testData.bosatteMyndigePersoner(2);
+      await setupPackagesForUser(api, { pid: actor.pid, from: actor.pid, to: target.pid }, [
+        accessPackage.urn,
+      ]);
     });
 
-    test('Slett tilgangspakke hos person', async ({
-      login,
-      aktorvalgHeader,
-      accessManagementFrontPage,
-    }) => {
+    test('Slett tilgangspakke hos person', async ({ login, accessManagementFrontPage }) => {
       await test.step('Logg inn', async () => {
         await login.LoginToAccessManagement(actor.pid);
       });
 
-      await test.step(`Velg ${actor.name} og gå til tilgangsstyring`, async () => {
-        await aktorvalgHeader.selectActorFromHeaderMenu(actor.name);
+      await test.step(`Velg ${actor.navn} og gå til tilgangsstyring`, async () => {
+        await login.selectMainUnitBySearching(actor.navn);
       });
 
-      await test.step(`Gå til brukere-siden og klikk på "${target.name}"`, async () => {
+      await test.step(`Gå til brukere-siden og klikk på "${target.navn}"`, async () => {
         await accessManagementFrontPage.goToUsers();
-        await accessManagementFrontPage.clickUser(target.name);
+        await accessManagementFrontPage.clickUser(target.navn);
       });
 
-      await test.step(`Slett "${pkg.name}" fullmakten for ${target.name}`, async () => {
-        await accessManagementFrontPage.goToArea(pkg.area);
-        await accessManagementFrontPage.clickSlettFullmaktForTilgangspakke(pkg.name);
+      await test.step(`Slett "${accessPackage.name}" fullmakten for ${target.navn}`, async () => {
+        await accessManagementFrontPage.goToArea(accessPackage.area);
+        await accessManagementFrontPage.clickSlettFullmaktForTilgangspakke(accessPackage.name);
       });
 
-      await test.step(`${target.name} ikke skal ha tilgangspakken "${pkg.name}"`, async () => {
+      await test.step(`${target.navn} ikke skal ha tilgangspakken "${accessPackage.name}"`, async () => {
         await accessManagementFrontPage.goToUsers();
-        await accessManagementFrontPage.clickUser(target.name);
+        await accessManagementFrontPage.clickUser(target.navn);
         await accessManagementFrontPage.clickGiFullmakt();
-        await accessManagementFrontPage.goToArea(pkg.area);
-        await accessManagementFrontPage.expectAccessPackageToBeDelegable(pkg.name);
+        await accessManagementFrontPage.goToArea(accessPackage.area);
+        await accessManagementFrontPage.expectAccessPackageToBeDelegable(accessPackage.name);
       });
     });
 
     test.afterEach(async ({}, testInfo) => {
-      if (testInfo.status === 'passed') return;
-
-      try {
-        await api.deleteAccessPackageDelegation(actor.pid, actor.pid, target.pid, pkg.urn);
-      } catch (error) {
-        console.error('Cleanup: Failed to delete access package delegation:', error);
-      }
-      try {
-        await api.deleteConnection(actor.pid, actor.pid, [target.pid]);
-      } catch (error) {
-        console.error('Cleanup: Failed to delete connection:', error);
-      }
+      await cleanupPackageDelegation(
+        api,
+        { pid: actor.pid, from: actor.pid, to: target.pid },
+        accessPackage.urn,
+        { skipPackage: testInfo.status === 'passed' },
+      );
     });
   });
 
   test.describe('Slett tilgangspakke hos virksomhet', () => {
-    const actor = { pid: '25928698737', name: 'KONGE FASTTELEFON' };
-    const target = { org: '313567613', name: 'SKY MOTSTANDSDYKTIG TIGER AS' };
-    const pkg = {
+    let actor: Testperson;
+    let target: Testorganisasjon;
+    const accessPackage = {
       urn: 'urn:altinn:accesspackage:innbygger-samliv',
       name: 'Samliv',
       area: 'Familie og fritid',
     };
 
-    test.beforeEach(async () => {
-      await api.addConnectionAndPackagesToUser(actor.pid, actor.pid, target.org, [pkg.urn]);
+    test.beforeEach(async ({ testData }) => {
+      [actor, target] = await Promise.all([
+        testData.bosattMyndigPerson(),
+        testData.hentTilfeldigVirksomhet(),
+      ]);
+      await setupPackagesForUser(api, { pid: actor.pid, from: actor.pid, to: target.orgnr }, [
+        accessPackage.urn,
+      ]);
     });
 
-    test('Slett tilgangspakke hos virksomhet', async ({
-      login,
-      aktorvalgHeader,
-      accessManagementFrontPage,
-    }) => {
+    test('Slett tilgangspakke hos virksomhet', async ({ login, accessManagementFrontPage }) => {
       await test.step('Logg inn', async () => {
         await login.LoginToAccessManagement(actor.pid);
       });
 
-      await test.step(`Velg ${actor.name} og gå til tilgangsstyring`, async () => {
-        await aktorvalgHeader.selectActorFromHeaderMenu(actor.name);
+      await test.step(`Velg ${actor.navn} og gå til tilgangsstyring`, async () => {
+        await login.selectMainUnitBySearching(actor.navn);
       });
 
-      await test.step(`Gå til brukere-siden og klikk på "${target.name}"`, async () => {
+      await test.step(`Gå til brukere-siden og klikk på "${target.navn}"`, async () => {
         await accessManagementFrontPage.goToUsers();
-        await accessManagementFrontPage.expandOrg(target.name);
-        await accessManagementFrontPage.clickUser(target.name);
+        await accessManagementFrontPage.clickUser(target.navn);
       });
 
-      await test.step(`Slett "${pkg.name}" fullmakten for ${target.name}`, async () => {
-        await accessManagementFrontPage.goToArea(pkg.area);
-        await accessManagementFrontPage.clickSlettFullmaktForTilgangspakke(pkg.name);
+      await test.step(`Slett "${accessPackage.name}" fullmakten for ${target.navn}`, async () => {
+        await accessManagementFrontPage.goToArea(accessPackage.area);
+        await accessManagementFrontPage.clickSlettFullmaktForTilgangspakke(accessPackage.name);
       });
 
-      await test.step(`${target.name} ikke skal ha tilgangspakken "${pkg.name}"`, async () => {
+      await test.step(`${target.navn} ikke skal ha tilgangspakken "${accessPackage.name}"`, async () => {
         await accessManagementFrontPage.goToUsers();
-        await accessManagementFrontPage.expandOrg(target.name);
-        await accessManagementFrontPage.clickUser(target.name);
+        await accessManagementFrontPage.clickUser(target.navn);
         await accessManagementFrontPage.clickGiFullmakt();
-        await accessManagementFrontPage.goToArea(pkg.area);
-        await accessManagementFrontPage.expectAccessPackageToBeDelegable(pkg.name);
+        await accessManagementFrontPage.goToArea(accessPackage.area);
+        await accessManagementFrontPage.expectAccessPackageToBeDelegable(accessPackage.name);
       });
     });
 
     test.afterEach(async ({}, testInfo) => {
-      if (testInfo.status === 'passed') return;
-
-      try {
-        await api.deleteAccessPackageDelegation(actor.pid, actor.pid, target.org, pkg.urn);
-      } catch (error) {
-        console.error('Cleanup: Failed to delete access package delegation:', error);
-      }
-      try {
-        await api.deleteConnection(actor.pid, actor.pid, [target.org]);
-      } catch (error) {
-        console.error('Cleanup: Failed to delete connection:', error);
-      }
+      await cleanupPackageDelegation(
+        api,
+        { pid: actor.pid, from: actor.pid, to: target.orgnr },
+        accessPackage.urn,
+        { skipPackage: testInfo.status === 'passed' },
+      );
     });
   });
 });
@@ -338,20 +308,24 @@ test.describe('tilgangspakkedelegering fra org til person og org til org', () =>
   const api = new EnduserConnection();
 
   test.describe('Legg til ny person hos din org', () => {
-    const actor = { pid: '19858798917', org: '310945552', orgName: 'HARDHUDET REDELIG TIGER AS' };
-    const target = { pid: '41926701744', lastName: 'APRIKOS', name: 'OMSORGSFULL APRIKOS' };
+    let actor: DagligLederMedOrg;
+    let target: Testperson;
 
-    test('Legg til ny person hos din org', async ({
-      login,
-      aktorvalgHeader,
-      accessManagementFrontPage,
-    }) => {
+    test.beforeEach(async ({ testData }) => {
+      // `actor` er daglig leder som representerer sin virksomhet; `target` legges til som bruker.
+      [actor, target] = await Promise.all([
+        testData.dagligLederMedOrg(),
+        testData.bosattMyndigPerson(),
+      ]);
+    });
+
+    test('Legg til ny person hos din org', async ({ login, accessManagementFrontPage }) => {
       await test.step('Logg inn', async () => {
-        await login.LoginToAccessManagement(actor.pid);
+        await login.LoginToAccessManagement(actor.dagligLeder.pid);
       });
 
-      await test.step(`Velg org ${actor.orgName} og gå til tilgangsstyring`, async () => {
-        await aktorvalgHeader.selectActorFromHeaderMenu(actor.orgName);
+      await test.step(`Velg org ${actor.org.navn} og gå til tilgangsstyring`, async () => {
+        await login.selectMainUnitBySearching(actor.org.navn);
       });
 
       await test.step('Gå til brukere-siden og klikk "legg til bruker"', async () => {
@@ -359,44 +333,42 @@ test.describe('tilgangspakkedelegering fra org til person og org til org', () =>
         await accessManagementFrontPage.clickLeggTilBruker();
       });
 
-      await test.step(`Legg til personen ${target.pid} ${target.name}`, async () => {
-        await accessManagementFrontPage.addPerson(target.pid, target.lastName);
+      await test.step(`Legg til personen ${target.navn}`, async () => {
+        await accessManagementFrontPage.addPerson(target.pid, target.etternavn);
       });
 
-      await test.step(`${target.name} finnes i listen over brukere`, async () => {
+      await test.step(`${target.navn} finnes i listen over brukere`, async () => {
         await accessManagementFrontPage.goToUsers();
-        await accessManagementFrontPage.clickUser(target.name);
+        await accessManagementFrontPage.clickUser(target.navn);
       });
     });
 
     test.afterEach(async () => {
-      try {
-        await api.deleteConnection(actor.pid, actor.org, [target.pid]);
-      } catch (error) {
-        console.error('Cleanup: Failed to delete connection:', error);
-      }
+      await cleanupConnection(api, {
+        pid: actor.dagligLeder.pid,
+        from: actor.org.orgnr,
+        to: target.pid,
+      });
     });
   });
 
   test.describe('Legg til ny virksomhet hos din org', () => {
-    const actor = {
-      pid: '28839195259',
-      org: '312841150',
-      orgName: 'UPRESIS DISTINGVERT KATT INNSJØ',
-    };
-    const target = { org: '212209562', name: 'ALLSIDIG SIGEN TIGER AS' };
+    let actor: DagligLederMedOrg;
+    let target: Testorganisasjon;
 
-    test('Legg til ny virksomhet hos din org', async ({
-      login,
-      aktorvalgHeader,
-      accessManagementFrontPage,
-    }) => {
+    test.beforeEach(async ({ testData }) => {
+      actor = await testData.dagligLederMedOrg();
+      // Ekskluder aktørens egen org så vi ikke delegerer til oss selv.
+      target = await testData.hentTilfeldigVirksomhet({ ekskluder: [actor.org.orgnr] });
+    });
+
+    test('Legg til ny virksomhet hos din org', async ({ login, accessManagementFrontPage }) => {
       await test.step('Logg inn', async () => {
-        await login.LoginToAccessManagement(actor.pid);
+        await login.LoginToAccessManagement(actor.dagligLeder.pid);
       });
 
-      await test.step(`Velg org ${actor.orgName} og gå til tilgangsstyring`, async () => {
-        await aktorvalgHeader.selectActorFromHeaderMenu(actor.orgName);
+      await test.step(`Velg org ${actor.org.navn} og gå til tilgangsstyring`, async () => {
+        await login.selectMainUnitBySearching(actor.org.navn);
       });
 
       await test.step('Gå til brukere-siden og klikk "legg til bruker"', async () => {
@@ -404,187 +376,177 @@ test.describe('tilgangspakkedelegering fra org til person og org til org', () =>
         await accessManagementFrontPage.clickLeggTilBruker();
       });
 
-      await test.step(`Legg til virksomheten ${target.org} ${target.name}`, async () => {
-        await accessManagementFrontPage.addOrg(target.org);
+      await test.step(`Legg til virksomheten ${target.navn}`, async () => {
+        await accessManagementFrontPage.addOrg(target.orgnr);
       });
 
-      await test.step(`${target.name} finnes i listen over brukere`, async () => {
+      await test.step(`${target.navn} finnes i listen over brukere`, async () => {
         await accessManagementFrontPage.goToUsers();
-        await accessManagementFrontPage.expandOrg(target.name);
-        await accessManagementFrontPage.clickUser(target.name);
+        await accessManagementFrontPage.clickUser(target.navn);
       });
     });
 
     test.afterEach(async () => {
-      try {
-        await api.deleteConnection(actor.pid, actor.org, [target.org]);
-      } catch (error) {
-        console.error('Cleanup: Failed to delete connection:', error);
-      }
+      await cleanupConnection(api, {
+        pid: actor.dagligLeder.pid,
+        from: actor.org.orgnr,
+        to: target.orgnr,
+      });
     });
   });
 
   test.describe('Deleger tilgangspakke til person', () => {
-    const actor = { pid: '15857698093', org: '310394955', orgName: 'STØYFRI SIVILISERT APE' };
-    const target = { pid: '26832047936', name: 'UFØLSOM BADERING' };
+    let actor: DagligLederMedOrg;
+    let target: Testperson;
     const pkg = {
       urn: 'urn:altinn:accesspackage:posttjenester',
       name: 'Posttjenester',
       area: 'Andre tjenesteytende næringer',
     };
 
-    test.beforeEach(async () => {
-      try {
-        await api.deleteConnection(actor.pid, actor.org, [target.pid]);
-      } catch {
-        /* ignore if nothing to clean */
-      }
-      await api.addConnection(actor.pid, actor.org, target.pid);
+    test.beforeEach(async ({ testData }) => {
+      [actor, target] = await Promise.all([
+        testData.dagligLederMedOrg(),
+        testData.bosattMyndigPerson(),
+      ]);
+      await api.addConnection(actor.dagligLeder.pid, actor.org.orgnr, target.pid);
     });
 
-    test('Deleger tilgangspakke til person', async ({
-      login,
-      aktorvalgHeader,
-      accessManagementFrontPage,
-    }) => {
+    test('Deleger tilgangspakke til person', async ({ login, accessManagementFrontPage }) => {
       await test.step('Logg inn', async () => {
-        await login.LoginToAccessManagement(actor.pid);
+        await login.LoginToAccessManagement(actor.dagligLeder.pid);
       });
 
-      await test.step(`Velg org ${actor.orgName} og gå til tilgangsstyring`, async () => {
-        await aktorvalgHeader.selectActorFromHeaderMenu(actor.orgName);
+      await test.step(`Velg org ${actor.org.navn} og gå til tilgangsstyring`, async () => {
+        await login.selectMainUnitBySearching(actor.org.navn);
       });
 
-      await test.step(`Gå til brukere-siden og klikk på "${target.name}"`, async () => {
+      await test.step(`Gå til brukere-siden og klikk på "${target.navn}"`, async () => {
         await accessManagementFrontPage.goToUsers();
-        await accessManagementFrontPage.clickUser(target.name);
+        await accessManagementFrontPage.clickUser(target.navn);
       });
 
-      await test.step(`Gi ${target.name} fullmakt til tilgangspakken "${pkg.name}"`, async () => {
+      await test.step(`Gi ${target.navn} fullmakt til tilgangspakken "${pkg.name}"`, async () => {
         await accessManagementFrontPage.clickGiFullmakt();
         await accessManagementFrontPage.goToArea(pkg.area);
         await accessManagementFrontPage.clickGiFullmaktForTilgangspakke(pkg.name);
         await accessManagementFrontPage.LukkGiFullmaktVindu();
       });
 
-      await test.step(`${target.name} skal ha tilgangspakken "${pkg.name}"`, async () => {
+      await test.step(`${target.navn} skal ha tilgangspakken "${pkg.name}"`, async () => {
         await accessManagementFrontPage.goToUsers();
-        await accessManagementFrontPage.clickUser(target.name);
+        await accessManagementFrontPage.clickUser(target.navn);
         await accessManagementFrontPage.goToArea(pkg.area);
         await accessManagementFrontPage.userCanDeletePackage(pkg.name);
       });
     });
 
     test.afterEach(async () => {
-      try {
-        await api.deleteConnection(actor.pid, actor.org, [target.pid]);
-      } catch (error) {
-        console.error('Cleanup: Failed to delete connection:', error);
-      }
+      await cleanupConnection(api, {
+        pid: actor.dagligLeder.pid,
+        from: actor.org.orgnr,
+        to: target.pid,
+      });
     });
   });
 
   test.describe('Deleger tilgangspakke til virksomhet', () => {
-    const actor = { pid: '08904899020', org: '310977756', orgName: 'TREG HELDIG STRUTS LTD' };
-    const target = { org: '312188198', name: 'EVENTYRLIG PUSLETE TIGER AS' };
+    let actor: DagligLederMedOrg;
+    let target: Testorganisasjon;
     const pkg = {
       urn: 'urn:altinn:accesspackage:posttjenester',
       name: 'Posttjenester',
       area: 'Andre tjenesteytende næringer',
     };
 
-    test.beforeEach(async () => {
-      try {
-        await api.deleteConnection(actor.pid, actor.org, [target.org]);
-      } catch {
-        /* ignore if nothing to clean */
-      }
-      await api.addConnection(actor.pid, actor.org, target.org);
+    test.beforeEach(async ({ testData }) => {
+      actor = await testData.dagligLederMedOrg();
+      // Ekskluder aktørens egen org så vi ikke delegerer til oss selv.
+      target = await testData.hentTilfeldigVirksomhet({ ekskluder: [actor.org.orgnr] });
+      await api.addConnection(actor.dagligLeder.pid, actor.org.orgnr, target.orgnr);
     });
 
-    test('Deleger tilgangspakke til virksomhet', async ({
-      login,
-      aktorvalgHeader,
-      accessManagementFrontPage,
-    }) => {
+    test('Deleger tilgangspakke til virksomhet', async ({ login, accessManagementFrontPage }) => {
       await test.step('Logg inn', async () => {
-        await login.LoginToAccessManagement(actor.pid);
+        await login.LoginToAccessManagement(actor.dagligLeder.pid);
       });
 
-      await test.step(`Velg org ${actor.orgName} og gå til tilgangsstyring`, async () => {
-        await aktorvalgHeader.selectActorFromHeaderMenu(actor.orgName);
+      await test.step(`Velg org ${actor.org.navn} og gå til tilgangsstyring`, async () => {
+        await login.selectMainUnitBySearching(actor.org.navn);
       });
 
-      await test.step(`Gå til brukere-siden og klikk på "${target.name}"`, async () => {
+      await test.step(`Gå til brukere-siden og klikk på "${target.navn}"`, async () => {
         await accessManagementFrontPage.goToUsers();
-        await accessManagementFrontPage.expandOrg(target.name);
-        await accessManagementFrontPage.clickUser(target.name);
+        await accessManagementFrontPage.clickUser(target.navn);
       });
 
-      await test.step(`Gi ${target.name} fullmakt til tilgangspakken "${pkg.name}"`, async () => {
+      await test.step(`Gi ${target.navn} fullmakt til tilgangspakken "${pkg.name}"`, async () => {
         await accessManagementFrontPage.clickGiFullmakt();
         await accessManagementFrontPage.goToArea(pkg.area);
         await accessManagementFrontPage.clickGiFullmaktForTilgangspakke(pkg.name);
         await accessManagementFrontPage.LukkGiFullmaktVindu();
       });
 
-      await test.step(`${target.name} skal ha tilgangspakken "${pkg.name}"`, async () => {
+      await test.step(`${target.navn} skal ha tilgangspakken "${pkg.name}"`, async () => {
         await accessManagementFrontPage.goToUsers();
-        await accessManagementFrontPage.expandOrg(target.name);
-        await accessManagementFrontPage.clickUser(target.name);
+        await accessManagementFrontPage.clickUser(target.navn);
         await accessManagementFrontPage.goToArea(pkg.area);
         await accessManagementFrontPage.userCanDeletePackage(pkg.name);
       });
     });
 
     test.afterEach(async () => {
-      try {
-        await api.deleteConnection(actor.pid, actor.org, [target.org]);
-      } catch (error) {
-        console.error('Cleanup: Failed to delete connection:', error);
-      }
+      await cleanupConnection(api, {
+        pid: actor.dagligLeder.pid,
+        from: actor.org.orgnr,
+        to: target.orgnr,
+      });
     });
   });
 
   test.describe('Slett tilgangspakke hos person', () => {
-    const actor = { pid: '20826696746', org: '313500640', orgName: 'SKY UKLAR TIGER AS' };
-    const target = { pid: '18894799990', name: 'UTROLIG KLØVER' };
+    let actor: DagligLederMedOrg;
+    let target: Testperson;
     const pkg = {
       urn: 'urn:altinn:accesspackage:posttjenester',
       name: 'Posttjenester',
       area: 'Andre tjenesteytende næringer',
     };
 
-    test.beforeEach(async () => {
-      await api.addConnectionAndPackagesToUser(actor.pid, actor.org, target.pid, [pkg.urn]);
+    test.beforeEach(async ({ testData }) => {
+      [actor, target] = await Promise.all([
+        testData.dagligLederMedOrg(),
+        testData.bosattMyndigPerson(),
+      ]);
+      await setupPackagesForUser(
+        api,
+        { pid: actor.dagligLeder.pid, from: actor.org.orgnr, to: target.pid },
+        [pkg.urn],
+      );
     });
 
-    test('Slett tilgangspakke hos person', async ({
-      login,
-      aktorvalgHeader,
-      accessManagementFrontPage,
-    }) => {
+    test('Slett tilgangspakke hos person', async ({ login, accessManagementFrontPage }) => {
       await test.step('Logg inn', async () => {
-        await login.LoginToAccessManagement(actor.pid);
+        await login.LoginToAccessManagement(actor.dagligLeder.pid);
       });
 
-      await test.step(`Velg org ${actor.orgName} og gå til tilgangsstyring`, async () => {
-        await aktorvalgHeader.selectActorFromHeaderMenu(actor.orgName);
+      await test.step(`Velg org ${actor.org.navn} og gå til tilgangsstyring`, async () => {
+        await login.selectMainUnitBySearching(actor.org.navn);
       });
 
-      await test.step(`Gå til brukere-siden og klikk på "${target.name}"`, async () => {
+      await test.step(`Gå til brukere-siden og klikk på "${target.navn}"`, async () => {
         await accessManagementFrontPage.goToUsers();
-        await accessManagementFrontPage.clickUser(target.name);
+        await accessManagementFrontPage.clickUser(target.navn);
       });
 
-      await test.step(`Slett tilgangspakken "${pkg.name}" for ${target.name}`, async () => {
+      await test.step(`Slett tilgangspakken "${pkg.name}" for ${target.navn}`, async () => {
         await accessManagementFrontPage.goToArea(pkg.area);
         await accessManagementFrontPage.clickSlettFullmaktForTilgangspakke(pkg.name);
       });
 
-      await test.step(`${target.name} ikke skal ha tilgangspakken "${pkg.name}"`, async () => {
+      await test.step(`${target.navn} ikke skal ha tilgangspakken "${pkg.name}"`, async () => {
         await accessManagementFrontPage.goToUsers();
-        await accessManagementFrontPage.clickUser(target.name);
+        await accessManagementFrontPage.clickUser(target.navn);
         await accessManagementFrontPage.clickGiFullmakt();
         await accessManagementFrontPage.goToArea(pkg.area);
         await accessManagementFrontPage.expectAccessPackageToBeDelegable(pkg.name);
@@ -592,62 +554,57 @@ test.describe('tilgangspakkedelegering fra org til person og org til org', () =>
     });
 
     test.afterEach(async ({}, testInfo) => {
-      if (testInfo.status === 'passed') return;
-
-      try {
-        await api.deleteAccessPackageDelegation(actor.pid, actor.org, target.pid, pkg.urn);
-      } catch (error) {
-        console.error('Cleanup: Failed to delete access package delegation:', error);
-      }
-      try {
-        await api.deleteConnection(actor.pid, actor.org, [target.pid]);
-      } catch (error) {
-        console.error('Cleanup: Failed to delete connection:', error);
-      }
+      await cleanupPackageDelegation(
+        api,
+        { pid: actor.dagligLeder.pid, from: actor.org.orgnr, to: target.pid },
+        pkg.urn,
+        { skipPackage: testInfo.status === 'passed' },
+      );
     });
   });
 
   test.describe('Slett tilgangspakke hos virksomhet', () => {
-    const actor = { pid: '04833348529', org: '312738147', orgName: 'RESERVERT RING KATT PERIODE' };
-    const target = { org: '312861305', name: 'GRATIS RØD APE' };
+    let actor: DagligLederMedOrg;
+    let target: Testorganisasjon;
     const pkg = {
       urn: 'urn:altinn:accesspackage:posttjenester',
       name: 'Posttjenester',
       area: 'Andre tjenesteytende næringer',
     };
 
-    test.beforeEach(async () => {
-      await api.addConnectionAndPackagesToUser(actor.pid, actor.org, target.org, [pkg.urn]);
+    test.beforeEach(async ({ testData }) => {
+      actor = await testData.dagligLederMedOrg();
+      // Ekskluder aktørens egen org så vi ikke delegerer til oss selv.
+      target = await testData.hentTilfeldigVirksomhet({ ekskluder: [actor.org.orgnr] });
+      await setupPackagesForUser(
+        api,
+        { pid: actor.dagligLeder.pid, from: actor.org.orgnr, to: target.orgnr },
+        [pkg.urn],
+      );
     });
 
-    test('Slett tilgangspakke hos virksomhet', async ({
-      login,
-      aktorvalgHeader,
-      accessManagementFrontPage,
-    }) => {
+    test('Slett tilgangspakke hos virksomhet', async ({ login, accessManagementFrontPage }) => {
       await test.step('Logg inn', async () => {
-        await login.LoginToAccessManagement(actor.pid);
+        await login.LoginToAccessManagement(actor.dagligLeder.pid);
       });
 
-      await test.step(`Velg org ${actor.orgName} og gå til tilgangsstyring`, async () => {
-        await aktorvalgHeader.selectActorFromHeaderMenu(actor.orgName);
+      await test.step(`Velg org ${actor.org.navn} og gå til tilgangsstyring`, async () => {
+        await login.selectMainUnitBySearching(actor.org.navn);
       });
 
-      await test.step(`Gå til brukere-siden og klikk på "${target.name}"`, async () => {
+      await test.step(`Gå til brukere-siden og klikk på "${target.navn}"`, async () => {
         await accessManagementFrontPage.goToUsers();
-        await accessManagementFrontPage.expandOrg(target.name);
-        await accessManagementFrontPage.clickUser(target.name);
+        await accessManagementFrontPage.clickUser(target.navn);
       });
 
-      await test.step(`Slett "${pkg.name}" fullmakten for ${target.name}`, async () => {
+      await test.step(`Slett "${pkg.name}" fullmakten for ${target.navn}`, async () => {
         await accessManagementFrontPage.goToArea(pkg.area);
         await accessManagementFrontPage.clickSlettFullmaktForTilgangspakke(pkg.name);
       });
 
-      await test.step(`${target.name} ikke skal ha tilgangspakken "${pkg.name}"`, async () => {
+      await test.step(`${target.navn} ikke skal ha tilgangspakken "${pkg.name}"`, async () => {
         await accessManagementFrontPage.goToUsers();
-        await accessManagementFrontPage.expandOrg(target.name);
-        await accessManagementFrontPage.clickUser(target.name);
+        await accessManagementFrontPage.clickUser(target.navn);
         await accessManagementFrontPage.clickGiFullmakt();
         await accessManagementFrontPage.goToArea(pkg.area);
         await accessManagementFrontPage.expectAccessPackageToBeDelegable(pkg.name);
@@ -655,18 +612,12 @@ test.describe('tilgangspakkedelegering fra org til person og org til org', () =>
     });
 
     test.afterEach(async ({}, testInfo) => {
-      if (testInfo.status === 'passed') return;
-
-      try {
-        await api.deleteAccessPackageDelegation(actor.pid, actor.org, target.org, pkg.urn);
-      } catch (error) {
-        console.error('Cleanup: Failed to delete access package delegation:', error);
-      }
-      try {
-        await api.deleteConnection(actor.pid, actor.org, [target.org]);
-      } catch (error) {
-        console.error('Cleanup: Failed to delete connection:', error);
-      }
+      await cleanupPackageDelegation(
+        api,
+        { pid: actor.dagligLeder.pid, from: actor.org.orgnr, to: target.orgnr },
+        pkg.urn,
+        { skipPackage: testInfo.status === 'passed' },
+      );
     });
   });
 });
