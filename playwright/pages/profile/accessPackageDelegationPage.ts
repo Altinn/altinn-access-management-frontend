@@ -106,7 +106,6 @@ export class DelegationPage {
 
     const packageButton = this.page.getByRole('button', {
       name: new RegExp(`^${this.escapeRegExp(packageName)} ${packageCountPattern}$`),
-      exact: true,
     });
 
     await expect(packageButton).toBeVisible({ timeout: 10000 });
@@ -216,7 +215,6 @@ export class DelegationPage {
 
     const packageBtn = this.page.getByRole('button', {
       name: new RegExp(`^${this.escapeRegExp(pacakageName)} ${packageCountPattern}$`),
-      exact: true,
     });
 
     await expect(packageBtn).toBeVisible();
