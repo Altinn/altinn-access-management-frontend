@@ -47,6 +47,10 @@ export class DelegationPage {
     this.clearSearchButton = page.getByRole('button', { name: /Tøm/ });
   }
 
+  escapeRegExp(text: string) {
+    return text.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+  }
+
   async addUser() {
     const addUserBtn = this.page.getByRole('button', {
       name: this.texts.new_user_modal.trigger_button,
@@ -97,7 +101,13 @@ export class DelegationPage {
     await searchBox.click();
     await searchBox.fill(packageName);
 
-    const packageButton = this.page.getByRole('button', { name: packageName, exact: true });
+    const packageCountPattern =
+      this.texts.access_packages.package_number_of_resources_other.replace('{{count}}', '\\d+');
+
+    const packageButton = this.page.getByRole('button', {
+      name: new RegExp(`^${this.escapeRegExp(packageName)} ${packageCountPattern}$`),
+      exact: true,
+    });
 
     await expect(packageButton).toBeVisible({ timeout: 10000 });
     await packageButton.click();
@@ -201,7 +211,14 @@ export class DelegationPage {
     await expect(areaBtn).toBeVisible();
     await areaBtn.click();
 
-    const packageBtn = this.page.getByRole('button', { name: pacakageName, exact: true });
+    const packageCountPattern =
+      this.texts.access_packages.package_number_of_resources_other.replace('{{count}}', '\\d+');
+
+    const packageBtn = this.page.getByRole('button', {
+      name: new RegExp(`^${this.escapeRegExp(pacakageName)} ${packageCountPattern}$`),
+      exact: true,
+    });
+
     await expect(packageBtn).toBeVisible();
   }
 
