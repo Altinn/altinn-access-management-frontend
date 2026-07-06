@@ -97,7 +97,9 @@ export class DelegationPage {
     await searchBox.click();
     await searchBox.fill(packageName);
 
-    const packageButton = this.page.getByRole('button', { name: packageName, exact: true });
+    const packageButton = this.page
+      .getByRole('button')
+      .filter({ has: this.page.getByText(packageName, { exact: true }) });
 
     await expect(packageButton).toBeVisible({ timeout: 10000 });
     await packageButton.click();
@@ -196,13 +198,15 @@ export class DelegationPage {
     await expect(confirmBtn).toBeVisible({ timeout: 10000 });
     await confirmBtn.click();
   }
-  async verifyDelegatedPackage(areaName: string, pacakageName: string) {
+  async verifyDelegatedPackage(areaName: string, packageName: string) {
     const areaBtn = this.page.getByRole('list').getByRole('button', { name: areaName }).first();
     await expect(areaBtn).toBeVisible();
     await areaBtn.click();
 
-    const packageBtn = this.page.getByRole('button', { name: pacakageName, exact: true });
-    await expect(packageBtn).toBeVisible();
+    const packageButton = this.page
+      .getByRole('button')
+      .filter({ has: this.page.getByText(packageName, { exact: true }) });
+    await expect(packageButton).toBeVisible();
   }
 
   async verifyDelegatedPackages(expectations: { areaName: string; packageName: string }[]) {
