@@ -6,6 +6,7 @@ import {
 import {
   hasConsentPermission,
   hasCreateSystemUserPermission,
+  hasReporteesPermission,
   hasSystemUserClientAdminPermission,
 } from '@/resources/utils/permissionUtils';
 import {
@@ -107,7 +108,7 @@ export const useSidebarItems = ({ isSmall }: { isSmall?: boolean }) => {
 
   if (displayConfettiPackage) {
     items.push(getUsersMenuItem(pathname, isLoading, isSmall));
-    if (isAdmin) {
+    if (hasReporteesPermission(reportee, isAdmin, isCurrentUserReportee)) {
       items.push(getReporteesMenuItem(pathname, isLoading, isSmall));
     }
   }
