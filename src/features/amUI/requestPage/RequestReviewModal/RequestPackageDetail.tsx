@@ -1,3 +1,4 @@
+import { useRef } from 'react';
 import { DsAlert, DsButton } from '@altinn/altinn-components';
 import { useTranslation } from 'react-i18next';
 import { ArrowLeftIcon } from '@navikt/aksel-icons';
@@ -35,6 +36,7 @@ export const RequestPackageDetail = ({
 }: RequestPackageDetailProps) => {
   const { t } = useTranslation();
   const backButtonRef = useAutoFocusRef<HTMLButtonElement>();
+  const openedUnprocessed = useRef(!processedStatus);
 
   return (
     <>
@@ -48,12 +50,6 @@ export const RequestPackageDetail = ({
         {t('common.back')}
       </DsButton>
       <PackageHeader name={pkg.name} />
-      {processedStatus && (
-        <ProcessedStatusInfo
-          status={processedStatus}
-          handledAt={handledAt}
-        />
-      )}
       <StatusSection
         userHasAccess={processedStatus === 'approved'}
         toPartyName={toPartyName}
@@ -67,7 +63,13 @@ export const RequestPackageDetail = ({
         </DsAlert>
       )}
       <PackageMeta accessPackage={pkg} />
-      {!processedStatus && (
+      {processedStatus ? (
+        <ProcessedStatusInfo
+          status={processedStatus}
+          handledAt={handledAt}
+          autoFocus={openedUnprocessed.current}
+        />
+      ) : (
         <div className={classes.actionButtons}>
           <DsButton
             data-size='sm'

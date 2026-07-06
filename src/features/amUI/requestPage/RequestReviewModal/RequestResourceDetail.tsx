@@ -1,3 +1,4 @@
+import { useRef } from 'react';
 import { DsButton } from '@altinn/altinn-components';
 import { useTranslation } from 'react-i18next';
 import { ArrowLeftIcon } from '@navikt/aksel-icons';
@@ -34,6 +35,7 @@ export const RequestResourceDetail = ({
 }: RequestResourceDetailProps) => {
   const { t } = useTranslation();
   const backButtonRef = useAutoFocusRef<HTMLButtonElement>();
+  const openedUnprocessed = useRef(!processedStatus);
 
   return (
     <>
@@ -46,18 +48,18 @@ export const RequestResourceDetail = ({
         <ArrowLeftIcon aria-hidden='true' />
         {t('common.back')}
       </DsButton>
-      {processedStatus && (
-        <ProcessedStatusInfo
-          status={processedStatus}
-          handledAt={handledAt}
-        />
-      )}
       <ResourceInfo
         resource={resource}
         toPartyName={toPartyName}
         availableActions={[DelegationAction.APPROVE]}
       />
-      {!processedStatus && (
+      {processedStatus ? (
+        <ProcessedStatusInfo
+          status={processedStatus}
+          handledAt={handledAt}
+          autoFocus={openedUnprocessed.current}
+        />
+      ) : (
         <div className={classes.actionButtons}>
           <DsButton
             data-size='sm'

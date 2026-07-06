@@ -1,22 +1,33 @@
+import { useCallback } from 'react';
 import { DsParagraph } from '@altinn/altinn-components';
 import { useTranslation } from 'react-i18next';
 import { CheckmarkCircleIcon, CircleSlashIcon } from '@navikt/aksel-icons';
 import { formatDateToNorwegian } from '@/resources/utils';
+import { focusElement } from '../../common/RestoreFocus';
 import type { ProcessedStatus } from '../types';
 import classes from './RequestReviewModal.module.css';
 
 interface ProcessedStatusInfoProps {
   status: ProcessedStatus;
   handledAt?: string;
+  autoFocus?: boolean;
 }
 
-export const ProcessedStatusInfo = ({ status, handledAt }: ProcessedStatusInfoProps) => {
+export const ProcessedStatusInfo = ({ status, handledAt, autoFocus }: ProcessedStatusInfoProps) => {
   const { t } = useTranslation();
+  const focusRef = useCallback((node: HTMLDivElement | null) => {
+    if (node) {
+      focusElement(node);
+    }
+  }, []);
   const statusLabel =
     status === 'approved' ? t('request_page.review_approved') : t('request_page.review_rejected');
 
   return (
-    <div className={classes.detailStatus}>
+    <div
+      className={classes.detailStatus}
+      ref={autoFocus ? focusRef : undefined}
+    >
       {status === 'approved' ? (
         <CheckmarkCircleIcon
           className={classes.approvedIcon}

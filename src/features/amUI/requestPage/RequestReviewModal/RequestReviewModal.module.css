@@ -42,7 +42,8 @@
   display: flex;
   align-items: center;
   gap: var(--ds-spacing-2);
-  margin-bottom: var(--ds-spacing-2);
+  margin-top: var(--ds-spacing-4);
+  width: fit-content;
   color: var(--ds-color-text-subtle);
 }
 

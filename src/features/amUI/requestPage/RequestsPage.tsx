@@ -104,8 +104,6 @@ export const RequestPage = () => {
               isLoading={isLoadingReportee}
             >
               <RestoreFocusProvider restoreFocus={restoreFocus}>
-                {/* Catches focus when the row that opened a modal is gone on close
-                    (e.g. all its requests were handled), landing it on the page heading */}
                 <RestoreFocusFallback>
                   <ReporteePageHeading
                     title={t('request_page.heading', { name })}
