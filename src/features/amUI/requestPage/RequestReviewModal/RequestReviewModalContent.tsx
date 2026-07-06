@@ -169,7 +169,13 @@ export const RequestReviewModalContent = ({ request, onClose }: RequestReviewMod
               })}
             </Link>
           </DsLink>
-          {isLoadingRequests || isFetchingRequests ? (
+          {/* The snapshot stays stable while the modal is open, so only the initial load (empty
+              snapshot) shows skeletons. Keeping rows mounted during background refetches lets a
+              pending focus request from handleBack resolve to the row instead of being consumed
+              by the fallback. */}
+          {(isLoadingRequests || isFetchingRequests) &&
+          snapshotPackages.length === 0 &&
+          snapshotResources.length === 0 ? (
             <List>
               {Array.from({ length: request?.numberOfRequests || 2 }).map((_, index) => (
                 <ResourceListItem

@@ -3,7 +3,7 @@ import { DsParagraph } from '@altinn/altinn-components';
 import { useTranslation } from 'react-i18next';
 import { CheckmarkCircleIcon, CircleSlashIcon } from '@navikt/aksel-icons';
 import { formatDateToNorwegian } from '@/resources/utils';
-import { focusElement } from '../../common/RestoreFocus';
+import { focusElement, focusHasBeenLost } from '../../common/RestoreFocus';
 import type { ProcessedStatus } from '../types';
 import classes from './RequestReviewModal.module.css';
 
@@ -16,7 +16,7 @@ interface ProcessedStatusInfoProps {
 export const ProcessedStatusInfo = ({ status, handledAt, autoFocus }: ProcessedStatusInfoProps) => {
   const { t } = useTranslation();
   const focusRef = useCallback((node: HTMLDivElement | null) => {
-    if (node) {
+    if (node && focusHasBeenLost()) {
       focusElement(node);
     }
   }, []);
