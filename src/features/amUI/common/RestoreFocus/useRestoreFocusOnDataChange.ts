@@ -20,6 +20,8 @@ interface PendingFocus<T> {
 export const useRestoreFocusOnDataChange = <T>(data: T) => {
   const restoreFocus = useRestoreFocusContext();
   const pendingRef = useRef<PendingFocus<T> | null>(null);
+  const restoreFocusRef = useRef(restoreFocus);
+  restoreFocusRef.current = restoreFocus;
 
   const requestFocusOnDataChange = (focusId: string, fallbackId?: string) => {
     pendingRef.current = { focusId, fallbackId, dataAtRequest: data };
@@ -37,6 +39,19 @@ export const useRestoreFocusOnDataChange = <T>(data: T) => {
     );
     return () => cancelAnimationFrame(frame);
   }, [data, restoreFocus]);
+
+  // The refetch can unmount this component along with the deleted row (e.g. the last item of a
+  // conditionally rendered list). Hand an unconsumed request to the provider on the way out, so
+  // the zone's fallback chain still catches it instead of focus dying with the component.
+  useEffect(() => {
+    return () => {
+      const pending = pendingRef.current;
+      if (pending && restoreFocusRef.current) {
+        pendingRef.current = null;
+        restoreFocusRef.current.requestFocus(pending.focusId, pending.fallbackId);
+      }
+    };
+  }, []);
 
   return requestFocusOnDataChange;
 };

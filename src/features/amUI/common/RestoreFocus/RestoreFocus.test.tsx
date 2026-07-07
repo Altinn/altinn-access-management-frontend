@@ -402,6 +402,46 @@ const DataRefreshSwapTest = () => {
   );
 };
 
+const UNCHANGING_DATA = { requests: [] };
+
+// Deleting the last item of a conditionally rendered list unmounts the whole list, including the
+// component holding the pending data-change request — before the watched data ever refreshes.
+const UnmountingList = ({ onReady }: { onReady: (trigger: () => void) => void }) => {
+  const requestFocusOnDataChange = useRestoreFocusOnDataChange(UNCHANGING_DATA);
+
+  useEffect(() => {
+    onReady(() => requestFocusOnDataChange('deleted-item'));
+  }, [onReady, requestFocusOnDataChange]);
+
+  return <button>Delete</button>;
+};
+
+const UnmountFlushTest = () => {
+  const restoreFocus = useRestoreFocus();
+  const [showList, setShowList] = useState(true);
+  const triggerRef = useRef<(() => void) | null>(null);
+
+  return (
+    <>
+      <button
+        onClick={() => {
+          triggerRef.current?.();
+          setShowList(false);
+        }}
+      >
+        Delete last item
+      </button>
+      <RestoreFocusProvider restoreFocus={restoreFocus}>
+        <RestoreFocusFallback>
+          <h2>List heading</h2>
+          <button>Close</button>
+        </RestoreFocusFallback>
+        {showList && <UnmountingList onReady={(fn) => (triggerRef.current = fn)} />}
+      </RestoreFocusProvider>
+    </>
+  );
+};
+
 describe('RestoreFocus', () => {
   it('focuses the first focusable descendant of the requested target element', async () => {
     render(
@@ -684,5 +724,13 @@ describe('RestoreFocus', () => {
 
     await waitFor(() => expect(screen.getByRole('button', { name: 'New control' })).toHaveFocus());
     expect(screen.queryByRole('heading', { name: 'List heading' })).not.toHaveFocus();
+  });
+
+  it('hands a pending data-change request to the fallback when the requesting component unmounts', async () => {
+    render(<UnmountFlushTest />);
+
+    fireEvent.click(screen.getByRole('button', { name: 'Delete last item' }));
+
+    await waitFor(() => expect(screen.getByRole('button', { name: 'Close' })).toHaveFocus());
   });
 });

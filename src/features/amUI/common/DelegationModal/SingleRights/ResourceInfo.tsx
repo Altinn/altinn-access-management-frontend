@@ -169,8 +169,9 @@ export const ResourceInfo = ({
       !isActionLoading &&
       !isActionSuccess &&
       !isRightsSectionLoading &&
-      !isResourceDelegationsLoading,
-    requestWhen: isActionLoading,
+      !isResourceDelegationsLoading &&
+      !isLoadingSingleRightRequest,
+    requestWhen: isActionLoading || isLoadingSingleRightRequest,
     onRestore: () => focusFirstEnabledButton(actionsRef.current),
   });
 

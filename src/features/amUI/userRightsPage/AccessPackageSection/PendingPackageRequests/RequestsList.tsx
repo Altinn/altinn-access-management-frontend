@@ -10,7 +10,7 @@ import {
   type EnrichedPackageRequest,
 } from '@/rtk/features/requestApi';
 import { useAutoFocusRef } from '@/resources/hooks/useAutoFocusRef';
-import { useRestoreFocusContext } from '../../../common/RestoreFocus';
+import { useRestoreFocusContext, useRestoreFocusOnDataChange } from '../../../common/RestoreFocus';
 import { getRequestPartyQueryParams } from '@/resources/utils/singleRightRequestUtils';
 import { useIsTabletOrSmaller } from '@/resources/utils/screensizeUtils';
 import { PackageItem } from '../../../common/AccessPackageList/PackageItem';
@@ -59,6 +59,10 @@ export const PendingPackageRequestsList = ({
 
   const [withdrawRequest] = useWithdrawRequestMutation();
 
+  // Deleting a request drops its row once the list refetches; the id no longer exists, so the
+  // zone's RestoreFocusFallback catches the focus instead of letting it fall to <body>.
+  const requestFocusOnDataChange = useRestoreFocusOnDataChange(enrichedRequests);
+
   const handleDelete = async (request: EnrichedPackageRequest) => {
     setLoadingByRequestId((prev) => ({ ...prev, [request.id]: true }));
     try {
@@ -66,6 +70,7 @@ export const PendingPackageRequestsList = ({
         party: actingParty?.partyUuid ?? '',
         id: request.id,
       }).unwrap();
+      requestFocusOnDataChange(request.package?.id ?? request.id);
       openSnackbar({
         message: t('delegation_modal.request.withdraw_request_success', {
           resource: request.package?.name,

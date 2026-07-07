@@ -25,6 +25,7 @@ import {
   RestoreFocusProvider,
   useRestoreFocus,
   useRestoreFocusContext,
+  useRestoreFocusOnDataChange,
 } from '../../common/RestoreFocus';
 
 export const PendingRequests = () => {
@@ -161,10 +162,15 @@ export const PendingRequestsList = ({
       },
     );
 
+  // Deleting a request drops its row once the list refetches; the id no longer exists, so the
+  // zone's RestoreFocusFallback catches the focus instead of letting it fall to <body>.
+  const requestFocusOnDataChange = useRestoreFocusOnDataChange(singleRightRequests);
+
   const { deleteRequest, isLoadingRequest } = useSingleRightRequests({
     canRequestRights: true,
     actingPartyUuid: actingParty?.partyUuid,
     fromPartyUuid: fromParty?.partyUuid,
+    onDeleteRequestSuccess: (resource) => requestFocusOnDataChange(resource.identifier),
   });
 
   return (
