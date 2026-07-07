@@ -18,7 +18,15 @@ import { usePartyRepresentation } from '../../common/PartyRepresentationContext/
 import { PartyType } from '@/rtk/features/userInfoApi';
 import { useIsTabletOrSmaller } from '@/resources/utils/screensizeUtils';
 import { useGetEnrichedSentResourceRequestsQuery } from '@/rtk/features/requestApi';
+import { useAutoFocusRef } from '@/resources/hooks/useAutoFocusRef';
 import { getRequestPartyQueryParams } from '@/resources/utils/singleRightRequestUtils';
+import {
+  RestoreFocusFallback,
+  RestoreFocusProvider,
+  useRestoreFocus,
+  useRestoreFocusContext,
+  useRestoreFocusOnDataChange,
+} from '../../common/RestoreFocus';
 
 export const PendingRequests = () => {
   const modalRef = useRef<HTMLDialogElement>(null);
@@ -89,6 +97,7 @@ export const SentRequestsModal = ({
 }: SentRequestsModalProps) => {
   const { t } = useTranslation();
   const [selectedResource, setSelectedResource] = useState<ServiceResource | null>(null);
+  const restoreFocus = useRestoreFocus();
 
   return (
     <DsDialog
@@ -100,13 +109,17 @@ export const SentRequestsModal = ({
       }}
       className={classes.pendingRequestsModal}
     >
-      {isModalOpen && (
-        <PendingRequestsList
-          heading={heading}
-          selectedResource={selectedResource}
-          setSelectedResource={setSelectedResource}
-        />
-      )}
+      <RestoreFocusProvider restoreFocus={restoreFocus}>
+        <RestoreFocusFallback>
+          {isModalOpen && (
+            <PendingRequestsList
+              heading={heading}
+              selectedResource={selectedResource}
+              setSelectedResource={setSelectedResource}
+            />
+          )}
+        </RestoreFocusFallback>
+      </RestoreFocusProvider>
 
       {!selectedResource && (
         <DsButton
@@ -135,6 +148,8 @@ export const PendingRequestsList = ({
   const { t } = useTranslation();
   const isSmallScreen = useIsTabletOrSmaller();
   const { actingParty, fromParty } = usePartyRepresentation();
+  const backButtonRef = useAutoFocusRef<HTMLButtonElement>();
+  const restoreFocus = useRestoreFocusContext();
 
   const { data: singleRightRequests = [], isLoading: isLoadingRequests } =
     useGetEnrichedSentResourceRequestsQuery(
@@ -147,10 +162,15 @@ export const PendingRequestsList = ({
       },
     );
 
+  // Deleting a request drops its row once the list refetches; the id no longer exists, so the
+  // zone's RestoreFocusFallback catches the focus instead of letting it fall to <body>.
+  const requestFocusOnDataChange = useRestoreFocusOnDataChange(singleRightRequests);
+
   const { deleteRequest, isLoadingRequest } = useSingleRightRequests({
     canRequestRights: true,
     actingPartyUuid: actingParty?.partyUuid,
     fromPartyUuid: fromParty?.partyUuid,
+    onDeleteRequestSuccess: (resource) => requestFocusOnDataChange(resource.identifier),
   });
 
   return (
@@ -158,9 +178,13 @@ export const PendingRequestsList = ({
       {selectedResource ? (
         <>
           <DsButton
+            ref={backButtonRef}
             variant='tertiary'
             className={classes.backButton}
-            onClick={() => setSelectedResource(null)}
+            onClick={() => {
+              restoreFocus?.requestFocus(selectedResource.identifier);
+              setSelectedResource(null);
+            }}
           >
             <ArrowLeftIcon aria-hidden='true' />
             {t('common.back')}

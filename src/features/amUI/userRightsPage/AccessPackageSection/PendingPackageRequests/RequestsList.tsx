@@ -10,6 +10,7 @@ import {
   type EnrichedPackageRequest,
 } from '@/rtk/features/requestApi';
 import { useAutoFocusRef } from '@/resources/hooks/useAutoFocusRef';
+import { useRestoreFocusContext, useRestoreFocusOnDataChange } from '../../../common/RestoreFocus';
 import { getRequestPartyQueryParams } from '@/resources/utils/singleRightRequestUtils';
 import { useIsTabletOrSmaller } from '@/resources/utils/screensizeUtils';
 import { PackageItem } from '../../../common/AccessPackageList/PackageItem';
@@ -33,8 +34,8 @@ export const PendingPackageRequestsList = ({
   const isSmallScreen = useIsTabletOrSmaller();
   const { actingParty, fromParty } = usePartyRepresentation();
   const { openSnackbar } = useSnackbar();
-  const headingRef = useAutoFocusRef<HTMLHeadingElement>();
   const backButtonRef = useAutoFocusRef<HTMLButtonElement>();
+  const restoreFocus = useRestoreFocusContext();
 
   const [loadingByRequestId, setLoadingByRequestId] = useState<Record<string, boolean>>({});
 
@@ -58,6 +59,10 @@ export const PendingPackageRequestsList = ({
 
   const [withdrawRequest] = useWithdrawRequestMutation();
 
+  // Deleting a request drops its row once the list refetches; the id no longer exists, so the
+  // zone's RestoreFocusFallback catches the focus instead of letting it fall to <body>.
+  const requestFocusOnDataChange = useRestoreFocusOnDataChange(enrichedRequests);
+
   const handleDelete = async (request: EnrichedPackageRequest) => {
     setLoadingByRequestId((prev) => ({ ...prev, [request.id]: true }));
     try {
@@ -65,6 +70,7 @@ export const PendingPackageRequestsList = ({
         party: actingParty?.partyUuid ?? '',
         id: request.id,
       }).unwrap();
+      requestFocusOnDataChange(request.package?.id ?? request.id);
       openSnackbar({
         message: t('delegation_modal.request.withdraw_request_success', {
           resource: request.package?.name,
@@ -90,7 +96,12 @@ export const PendingPackageRequestsList = ({
             ref={backButtonRef}
             variant='tertiary'
             className={classes.backButton}
-            onClick={() => setSelectedRequest(null)}
+            onClick={() => {
+              if (selectedRequest.package?.id) {
+                restoreFocus?.requestFocus(selectedRequest.package.id);
+              }
+              setSelectedRequest(null);
+            }}
           >
             <ArrowLeftIcon aria-hidden='true' />
             {t('common.back')}
@@ -104,8 +115,6 @@ export const PendingPackageRequestsList = ({
         <>
           {heading && (
             <DsHeading
-              ref={headingRef}
-              tabIndex={-1}
               data-size='xs'
               level={1}
               className={classes.heading}

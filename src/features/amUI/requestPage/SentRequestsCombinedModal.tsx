@@ -6,6 +6,11 @@ import { useGetSentRequestsQuery, type EnrichedPackageRequest } from '@/rtk/feat
 import { PendingRequestsList } from '../userRightsPage/SingleRightsSection/PendingRequests';
 import { PendingPackageRequestsList } from '../userRightsPage/AccessPackageSection/PendingPackageRequests/RequestsList';
 import { DelegationModalProvider } from '../common/DelegationModal/DelegationModalContext';
+import {
+  RestoreFocusFallback,
+  RestoreFocusProvider,
+  useRestoreFocus,
+} from '../common/RestoreFocus';
 import classes from './SentRequestsCombinedModal.module.css';
 import { usePartyRepresentation } from '../common/PartyRepresentationContext/PartyRepresentationContext';
 
@@ -26,6 +31,7 @@ export const SentRequestsCombinedModal = ({
   const [selectedResource, setSelectedResource] = useState<ServiceResource | null>(null);
   const [selectedPackageRequest, setSelectedPackageRequest] =
     useState<EnrichedPackageRequest | null>(null);
+  const restoreFocus = useRestoreFocus();
 
   const hasDetailView = !!selectedResource || !!selectedPackageRequest;
 
@@ -54,52 +60,56 @@ export const SentRequestsCombinedModal = ({
       className={classes.dialog}
     >
       {isModalOpen && (
-        <div className={classes.container}>
-          {!hasDetailView && (
-            <DsHeading
-              data-size='xs'
-              level={1}
-              className={classes.heading}
-            >
-              {heading}
-            </DsHeading>
-          )}
-          {(hasPendingSentPackageRequests || selectedPackageRequest) && !selectedResource && (
-            <div className={classes.requestList}>
+        <RestoreFocusProvider restoreFocus={restoreFocus}>
+          <RestoreFocusFallback>
+            <div className={classes.container}>
               {!hasDetailView && (
                 <DsHeading
-                  data-size='2xs'
-                  level={2}
+                  data-size='xs'
+                  level={1}
+                  className={classes.heading}
                 >
-                  {t('request_page.package_list_title')}
+                  {heading}
                 </DsHeading>
               )}
+              {(hasPendingSentPackageRequests || selectedPackageRequest) && !selectedResource && (
+                <div className={classes.requestList}>
+                  {!hasDetailView && (
+                    <DsHeading
+                      data-size='2xs'
+                      level={2}
+                    >
+                      {t('request_page.package_list_title')}
+                    </DsHeading>
+                  )}
 
-              <DelegationModalProvider>
-                <PendingPackageRequestsList
-                  selectedRequest={selectedPackageRequest}
-                  setSelectedRequest={setSelectedPackageRequest}
-                />
-              </DelegationModalProvider>
-            </div>
-          )}
-          {(hasPendingSentResourceRequests || selectedResource) && !selectedPackageRequest && (
-            <div className={classes.requestList}>
-              {!hasDetailView && (
-                <DsHeading
-                  data-size='2xs'
-                  level={2}
-                >
-                  {t('request_page.resource_list_title')}
-                </DsHeading>
+                  <DelegationModalProvider>
+                    <PendingPackageRequestsList
+                      selectedRequest={selectedPackageRequest}
+                      setSelectedRequest={setSelectedPackageRequest}
+                    />
+                  </DelegationModalProvider>
+                </div>
               )}
-              <PendingRequestsList
-                selectedResource={selectedResource}
-                setSelectedResource={setSelectedResource}
-              />
+              {(hasPendingSentResourceRequests || selectedResource) && !selectedPackageRequest && (
+                <div className={classes.requestList}>
+                  {!hasDetailView && (
+                    <DsHeading
+                      data-size='2xs'
+                      level={2}
+                    >
+                      {t('request_page.resource_list_title')}
+                    </DsHeading>
+                  )}
+                  <PendingRequestsList
+                    selectedResource={selectedResource}
+                    setSelectedResource={setSelectedResource}
+                  />
+                </div>
+              )}
             </div>
-          )}
-        </div>
+          </RestoreFocusFallback>
+        </RestoreFocusProvider>
       )}
       {!hasDetailView && (
         <DsButton

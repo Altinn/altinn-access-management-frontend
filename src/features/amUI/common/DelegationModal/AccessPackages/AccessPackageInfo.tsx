@@ -65,9 +65,10 @@ export const AccessPackageInfo = ({ accessPackage, availableActions = [] }: Pack
     party: actingParty?.partyUuid ?? '',
   });
   const actionsRef = React.useRef<HTMLDivElement>(null);
+  const isRequestActionLoading = isLoadingRequest(accessPackage);
   useRestoreFocusAfterSettled({
-    isSettled: !isActionLoading && !isFetching && !actionSuccess,
-    requestWhen: isActionLoading,
+    isSettled: !isActionLoading && !isFetching && !actionSuccess && !isRequestActionLoading,
+    requestWhen: isActionLoading || isRequestActionLoading,
     onRestore: () => focusFirstEnabledButton(actionsRef.current),
   });
 

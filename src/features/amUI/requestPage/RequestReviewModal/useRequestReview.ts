@@ -24,6 +24,11 @@ type SnapshotRequests = {
   packageRequests: EnrichedPackageRequest[];
 };
 
+export type ProcessedRequest = {
+  status: ProcessedStatus;
+  handledAt: string;
+};
+
 export const useRequestReview = (request: Request | null, onClose: () => void) => {
   const { t } = useTranslation();
   const { actingParty } = usePartyRepresentation();
@@ -56,7 +61,7 @@ export const useRequestReview = (request: Request | null, onClose: () => void) =
   });
   const [selectedResource, setSelectedResource] = useState<ServiceResource | null>(null);
   const [selectedPackage, setSelectedPackage] = useState<AccessPackage | null>(null);
-  const [processedRequests, setProcessedRequests] = useState<Record<string, ProcessedStatus>>({});
+  const [processedRequests, setProcessedRequests] = useState<Record<string, ProcessedRequest>>({});
   const [delegationChecks, setDelegationChecks] = useState<
     Record<string, DelegationCheckedRight[]>
   >({});
@@ -74,7 +79,6 @@ export const useRequestReview = (request: Request | null, onClose: () => void) =
     setActionLoading(null);
   }, [requestPartyUuid]);
 
-  // Capture snapshot on first successful load (only when fetch has settled for current params)
   useEffect(() => {
     if (
       !isFetchingResourceRequests &&
@@ -96,7 +100,6 @@ export const useRequestReview = (request: Request | null, onClose: () => void) =
     snapshotRequests.packageRequests.length,
   ]); // eslint-disable-line react-hooks/exhaustive-deps
 
-  // Run delegation checks for all snapshotted resources
   useEffect(() => {
     if (snapshotRequests.resourceRequests.length === 0) return;
     snapshotRequests.resourceRequests.forEach(async (req) => {
@@ -166,11 +169,15 @@ export const useRequestReview = (request: Request | null, onClose: () => void) =
     setActionLoading('approve');
 
     try {
-      await approveRequest({ party: actingParty.partyUuid, id: requestId }).unwrap();
+      const result = await approveRequest({
+        party: actingParty.partyUuid,
+        id: requestId,
+      }).unwrap();
       const id = resourceId ?? packageId ?? '';
-      setProcessedRequests((prev) => ({ ...prev, [id]: 'approved' }));
-      setSelectedResource(null);
-      setSelectedPackage(null);
+      setProcessedRequests((prev) => ({
+        ...prev,
+        [id]: { status: 'approved', handledAt: result.lastUpdated },
+      }));
       openSnackbar({
         message: t('request_page.request_approved'),
         color: 'success',
@@ -196,11 +203,15 @@ export const useRequestReview = (request: Request | null, onClose: () => void) =
     if (!requestId || !actingParty?.partyUuid) return;
     setActionLoading('reject');
     try {
-      await rejectRequest({ party: actingParty.partyUuid, id: requestId }).unwrap();
+      const result = await rejectRequest({
+        party: actingParty.partyUuid,
+        id: requestId,
+      }).unwrap();
       const id = resourceId ?? packageId ?? '';
-      setProcessedRequests((prev) => ({ ...prev, [id]: 'rejected' }));
-      setSelectedResource(null);
-      setSelectedPackage(null);
+      setProcessedRequests((prev) => ({
+        ...prev,
+        [id]: { status: 'rejected', handledAt: result.lastUpdated },
+      }));
       openSnackbar({
         message: t('request_page.request_rejected'),
         color: 'success',
@@ -223,13 +234,9 @@ export const useRequestReview = (request: Request | null, onClose: () => void) =
     package?: AccessPackage;
   }) => {
     if (resource) {
-      const status = processedRequests[resource.identifier];
-      if (status) return; // Don't allow selecting already processed requests
       setSelectedResource(resource);
       setSelectedPackage(null);
     } else if (pkg) {
-      const status = processedRequests[pkg.id];
-      if (status) return; // Don't allow selecting already processed requests
       setSelectedPackage(pkg);
       setSelectedResource(null);
     }

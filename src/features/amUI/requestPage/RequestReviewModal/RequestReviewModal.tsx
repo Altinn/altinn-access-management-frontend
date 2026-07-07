@@ -31,9 +31,10 @@ export const RequestReviewModal = ({ request, onClose }: RequestReviewModalProps
       onClose={onClose}
       className={classes.reviewModal}
     >
+      {/* close() instead of onClose ensures native focus restore runs before onClose fires */}
       <RequestReviewModalContent
         request={request}
-        onClose={onClose}
+        onClose={() => modalRef.current?.close()}
       />
     </DsDialog>
   );

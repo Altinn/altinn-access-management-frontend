@@ -1068,6 +1068,7 @@
     "reject_request": "Avvis førespurnad",
     "review_approved": "Godkjent",
     "review_rejected": "Avvist",
+    "review_handled_on": "{{status}} den {{date}}",
     "review_warning": "Du kan ikkje godkjenne",
     "review_user_link": "Sjå fullmaktene {{name}} har no",
     "review_close_info": "Visst du ikkje vel godkjenn eller avvis på ein førespurnad, vil han bli liggande att som ein aktiv førespurnad.",

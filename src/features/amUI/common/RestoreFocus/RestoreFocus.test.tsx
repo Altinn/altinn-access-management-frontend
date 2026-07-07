@@ -216,6 +216,30 @@ const FallbackWithStaleDuplicateInClosedDialogTest = () => {
   );
 };
 
+const FallbackWithDuplicateInOpenDialogTest = () => {
+  const restoreFocus = useRestoreFocus();
+  const { requestFocus } = restoreFocus;
+
+  useEffect(() => {
+    requestFocus('deleted-item', 'section-heading');
+  }, [requestFocus]);
+
+  return (
+    <RestoreFocusProvider restoreFocus={restoreFocus}>
+      <h2 id='section-heading'>Section heading</h2>
+      <RestoreFocusFallback>
+        {/* The requested id exists only inside an open dialog, outside the page's focus scope. */}
+        <dialog open>
+          <div id='deleted-item'>
+            <button>Modal row</button>
+          </div>
+        </dialog>
+        <button>List action</button>
+      </RestoreFocusFallback>
+    </RestoreFocusProvider>
+  );
+};
+
 const RemovalHookTest = () => {
   const restoreFocus = useRestoreFocus();
   const [items, setItems] = useState(['item']);
@@ -373,6 +397,83 @@ const DataRefreshSwapTest = () => {
           <h2>List heading</h2>
         </RestoreFocusFallback>
         <SwappingListItem onReady={(fn) => (triggerRef.current = fn)} />
+      </RestoreFocusProvider>
+    </>
+  );
+};
+
+const UNCHANGING_DATA = { requests: [] };
+
+// Deleting the last item of a conditionally rendered list unmounts the whole list, including the
+// component holding the pending data-change request — before the watched data ever refreshes.
+const UnmountingList = ({ onReady }: { onReady: (trigger: () => void) => void }) => {
+  const requestFocusOnDataChange = useRestoreFocusOnDataChange(UNCHANGING_DATA);
+
+  useEffect(() => {
+    onReady(() => requestFocusOnDataChange('deleted-item'));
+  }, [onReady, requestFocusOnDataChange]);
+
+  return <button>Delete</button>;
+};
+
+const UnmountFlushTest = () => {
+  const restoreFocus = useRestoreFocus();
+  const [showList, setShowList] = useState(true);
+  const triggerRef = useRef<(() => void) | null>(null);
+
+  return (
+    <>
+      <button
+        onClick={() => {
+          triggerRef.current?.();
+          setShowList(false);
+        }}
+      >
+        Delete last item
+      </button>
+      <RestoreFocusProvider restoreFocus={restoreFocus}>
+        <RestoreFocusFallback>
+          <h2>List heading</h2>
+          <button>Close</button>
+        </RestoreFocusFallback>
+        {showList && <UnmountingList onReady={(fn) => (triggerRef.current = fn)} />}
+      </RestoreFocusProvider>
+    </>
+  );
+};
+
+// The refetch lands in one commit (scheduling the deferred requestFocus) and the unmount happens
+// in a later commit, before the scheduled animation frame fires — mirroring two query caches
+// invalidated by the same mutation resolving a commit apart.
+const RefetchingList = ({ onReady }: { onReady: (trigger: () => void) => void }) => {
+  const [data, setData] = useState({ deleted: false });
+  const requestFocusOnDataChange = useRestoreFocusOnDataChange(data);
+
+  useEffect(() => {
+    onReady(() => {
+      requestFocusOnDataChange('deleted-item');
+      setData({ deleted: true });
+    });
+  }, [onReady, requestFocusOnDataChange]);
+
+  return <button>Delete</button>;
+};
+
+const LateUnmountFlushTest = () => {
+  const restoreFocus = useRestoreFocus();
+  const [showList, setShowList] = useState(true);
+  const triggerRef = useRef<(() => void) | null>(null);
+
+  return (
+    <>
+      <button onClick={() => triggerRef.current?.()}>Refetch</button>
+      <button onClick={() => setShowList(false)}>Unmount list</button>
+      <RestoreFocusProvider restoreFocus={restoreFocus}>
+        <RestoreFocusFallback>
+          <h2>List heading</h2>
+          <button>Close</button>
+        </RestoreFocusFallback>
+        {showList && <RefetchingList onReady={(fn) => (triggerRef.current = fn)} />}
       </RestoreFocusProvider>
     </>
   );
@@ -588,6 +689,15 @@ describe('RestoreFocus', () => {
     expect(screen.getByRole('button', { name: 'List action' })).not.toHaveFocus();
   });
 
+  it('ignores a duplicate of the requested id inside a different open dialog and uses the fallback', async () => {
+    render(<FallbackWithDuplicateInOpenDialogTest />);
+
+    await waitFor(() =>
+      expect(screen.getByRole('heading', { name: 'Section heading' })).toHaveFocus(),
+    );
+    expect(screen.getByRole('button', { name: 'Modal row' })).not.toHaveFocus();
+  });
+
   it('does not use the fallback when a requested id is present', async () => {
     render(
       <FallbackTest
@@ -651,5 +761,24 @@ describe('RestoreFocus', () => {
 
     await waitFor(() => expect(screen.getByRole('button', { name: 'New control' })).toHaveFocus());
     expect(screen.queryByRole('heading', { name: 'List heading' })).not.toHaveFocus();
+  });
+
+  it('hands a pending data-change request to the fallback when the requesting component unmounts', async () => {
+    render(<UnmountFlushTest />);
+
+    fireEvent.click(screen.getByRole('button', { name: 'Delete last item' }));
+
+    await waitFor(() => expect(screen.getByRole('button', { name: 'Close' })).toHaveFocus());
+  });
+
+  it('hands the request over when the unmount cancels an already scheduled focus frame', async () => {
+    render(<LateUnmountFlushTest />);
+
+    // The refetch commit schedules the deferred requestFocus; the unmount commit cancels that
+    // frame before it fires. The request must still reach the fallback.
+    fireEvent.click(screen.getByRole('button', { name: 'Refetch' }));
+    fireEvent.click(screen.getByRole('button', { name: 'Unmount list' }));
+
+    await waitFor(() => expect(screen.getByRole('button', { name: 'Close' })).toHaveFocus());
   });
 });
