@@ -84,7 +84,7 @@ export const RightsTabs = ({
       value={chosenTab}
       onChange={setChosenTab}
     >
-      <DsTabs.List>
+      <DsTabs.List className={classes.tabList}>
         <DsTabs.Tab
           {...tabProps}
           value='packages'
@@ -97,8 +97,10 @@ export const RightsTabs = ({
               maxCount={99}
             />
           )}
-          <PackageIcon aria-hidden='true' />
-          {t('user_rights_page.access_packages_title')}
+          <span className={classes.tabLabel}>
+            <PackageIcon aria-hidden='true' fontSize='1rem' />
+            {t('user_rights_page.access_packages_title')}
+          </span>
         </DsTabs.Tab>
         {singleRightsPanel && (
           <DsTabs.Tab
@@ -113,8 +115,10 @@ export const RightsTabs = ({
                 maxCount={99}
               />
             )}
-            <FilesIcon aria-hidden='true' />
-            {t('user_rights_page.single_rights_title')}
+            <span className={classes.tabLabel}>
+              <FilesIcon aria-hidden='true' />
+              {t('user_rights_page.single_rights_title')}
+            </span>
           </DsTabs.Tab>
         )}
         {instancesPanel && (
@@ -130,8 +134,10 @@ export const RightsTabs = ({
                 maxCount={99}
               />
             )}
-            <EnvelopeClosedIcon aria-hidden='true' />
-            {t('user_rights_page.instances_title')}
+            <span className={classes.tabLabel}>
+              <EnvelopeClosedIcon aria-hidden='true' />
+              {t('user_rights_page.instances_title')}
+            </span>
           </DsTabs.Tab>
         )}
         {displayRoles && roleAssignmentsPanel && (
@@ -147,8 +153,10 @@ export const RightsTabs = ({
                 maxCount={99}
               />
             )}
-            <FolderIcon aria-hidden='true' />
-            {t('user_rights_page.roles_title')}
+            <span className={classes.tabLabel}>
+              <FolderIcon aria-hidden='true' />
+              {t('user_rights_page.roles_title')}
+            </span>
           </DsTabs.Tab>
         )}
         {showGuardianshipsTab && (
@@ -164,8 +172,10 @@ export const RightsTabs = ({
                 maxCount={99}
               />
             )}
-            <ShieldLockIcon aria-hidden='true' />
-            {t('user_rights_page.guardianships_title')}
+            <span className={classes.tabLabel}>
+              <ShieldLockIcon aria-hidden='true' />
+              {t('user_rights_page.guardianships_title')}
+            </span>
           </DsTabs.Tab>
         )}
       </DsTabs.List>

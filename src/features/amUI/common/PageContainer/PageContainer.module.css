@@ -27,9 +27,14 @@
   padding: 1rem;
 }
 
-@media (max-width: 768px) {
+@media (max-width: 500px) {
   .pageContent {
     padding: 1rem 0;
+  }
+
+  .container {
+    margin-left: -1rem;
+    margin-right: -1rem;
   }
 }
 
