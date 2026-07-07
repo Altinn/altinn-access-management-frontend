@@ -98,7 +98,7 @@ export const RightsTabs = ({
             />
           )}
           <span className={classes.tabLabel}>
-            <PackageIcon aria-hidden='true' fontSize='1rem' />
+            <PackageIcon aria-hidden='true' />
             {t('user_rights_page.access_packages_title')}
           </span>
         </DsTabs.Tab>

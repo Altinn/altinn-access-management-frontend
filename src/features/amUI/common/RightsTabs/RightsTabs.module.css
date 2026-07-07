@@ -28,6 +28,12 @@
     padding-inline: 0.25rem;
   }
 
+  .tabLabel > svg {
+    width: 1.5rem;
+    height: 1.5rem;
+    flex-shrink: 0;
+  }
+
   .tabList > * {
     padding-inline: 0.375rem !important;
   }
