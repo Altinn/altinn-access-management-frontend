@@ -4,7 +4,7 @@ on:
   workflow_call:
 
 env:
-  dotnet_version: 9.0.x
+  dotnet_version: 10.0.x
 
 jobs:
   build:
