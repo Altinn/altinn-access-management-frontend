@@ -442,6 +442,43 @@ const UnmountFlushTest = () => {
   );
 };
 
+// The refetch lands in one commit (scheduling the deferred requestFocus) and the unmount happens
+// in a later commit, before the scheduled animation frame fires — mirroring two query caches
+// invalidated by the same mutation resolving a commit apart.
+const RefetchingList = ({ onReady }: { onReady: (trigger: () => void) => void }) => {
+  const [data, setData] = useState({ deleted: false });
+  const requestFocusOnDataChange = useRestoreFocusOnDataChange(data);
+
+  useEffect(() => {
+    onReady(() => {
+      requestFocusOnDataChange('deleted-item');
+      setData({ deleted: true });
+    });
+  }, [onReady, requestFocusOnDataChange]);
+
+  return <button>Delete</button>;
+};
+
+const LateUnmountFlushTest = () => {
+  const restoreFocus = useRestoreFocus();
+  const [showList, setShowList] = useState(true);
+  const triggerRef = useRef<(() => void) | null>(null);
+
+  return (
+    <>
+      <button onClick={() => triggerRef.current?.()}>Refetch</button>
+      <button onClick={() => setShowList(false)}>Unmount list</button>
+      <RestoreFocusProvider restoreFocus={restoreFocus}>
+        <RestoreFocusFallback>
+          <h2>List heading</h2>
+          <button>Close</button>
+        </RestoreFocusFallback>
+        {showList && <RefetchingList onReady={(fn) => (triggerRef.current = fn)} />}
+      </RestoreFocusProvider>
+    </>
+  );
+};
+
 describe('RestoreFocus', () => {
   it('focuses the first focusable descendant of the requested target element', async () => {
     render(
@@ -730,6 +767,17 @@ describe('RestoreFocus', () => {
     render(<UnmountFlushTest />);
 
     fireEvent.click(screen.getByRole('button', { name: 'Delete last item' }));
+
+    await waitFor(() => expect(screen.getByRole('button', { name: 'Close' })).toHaveFocus());
+  });
+
+  it('hands the request over when the unmount cancels an already scheduled focus frame', async () => {
+    render(<LateUnmountFlushTest />);
+
+    // The refetch commit schedules the deferred requestFocus; the unmount commit cancels that
+    // frame before it fires. The request must still reach the fallback.
+    fireEvent.click(screen.getByRole('button', { name: 'Refetch' }));
+    fireEvent.click(screen.getByRole('button', { name: 'Unmount list' }));
 
     await waitFor(() => expect(screen.getByRole('button', { name: 'Close' })).toHaveFocus());
   });

@@ -33,10 +33,14 @@ export const useRestoreFocusOnDataChange = <T>(data: T) => {
       return;
     }
 
-    pendingRef.current = null;
-    const frame = requestAnimationFrame(() =>
-      restoreFocus.requestFocus(pending.focusId, pending.fallbackId),
-    );
+    // pendingRef stays set until the frame actually fires: if an unmount cancels the frame, the
+    // unmount effect below can still hand the request over instead of dropping it.
+    const frame = requestAnimationFrame(() => {
+      if (pendingRef.current === pending) {
+        pendingRef.current = null;
+      }
+      restoreFocus.requestFocus(pending.focusId, pending.fallbackId);
+    });
     return () => cancelAnimationFrame(frame);
   }, [data, restoreFocus]);
 
