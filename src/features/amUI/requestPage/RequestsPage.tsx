@@ -15,7 +15,6 @@ import { useDocumentTitle } from '@/resources/hooks/useDocumentTitle';
 import { useRequests } from '@/resources/hooks/useRequests';
 import { useGetSentRequestsCountQuery } from '@/rtk/features/requestApi';
 import { PendingRequests, RequestsTabPanel } from './RequestsTabPanel';
-import classes from './RequestPage.module.css';
 import { SentRequestsTabPanel } from './SentRequestsTabPanel';
 import { PartyRepresentationProvider } from '../common/PartyRepresentationContext/PartyRepresentationContext';
 import {
