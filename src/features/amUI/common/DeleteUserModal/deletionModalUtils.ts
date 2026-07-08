@@ -115,19 +115,14 @@ export const getNonDeletableReasons = (
 };
 
 export const getViaParties = (rolePermissions: RolePermission[] | undefined): Entity[] => {
-  const viaParties = new Map<string, Entity>();
+  const viaParties = (rolePermissions ?? [])
+    .filter((rolePermission) => rolePermission.role?.code === RIGHTHOLDER_ROLE)
+    .flatMap((rolePermission) => rolePermission.permissions ?? [])
+    .map((permission) => permission?.via)
+    .filter((via): via is Entity => !!via);
 
-  rolePermissions
-    ?.filter((rolePermission) => rolePermission.role?.code === RIGHTHOLDER_ROLE)
-    .forEach((rolePermission) => {
-      rolePermission.permissions?.forEach((permission) => {
-        if (permission?.via) {
-          viaParties.set(permission.via.id, permission.via);
-        }
-      });
-    });
-
-  return Array.from(viaParties.values());
+  const uniqueById = new Map(viaParties.map((via) => [via.id, via]));
+  return Array.from(uniqueById.values());
 };
 
 export const getDeletionStatus = (
