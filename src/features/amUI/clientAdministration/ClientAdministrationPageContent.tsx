@@ -114,13 +114,11 @@ export const ClientAdministrationPageContent = () => {
             value='users'
             label={t('client_administration_page.agents_tab_title')}
             icon={<PersonGroupIcon aria-hidden='true' />}
-            className={classes.tab}
           />
           <AmTabs.Tab
             value='clients'
             label={t('client_administration_page.clients_tab_title')}
             icon={<DatabaseIcon aria-hidden='true' />}
-            className={classes.tab}
           />
         </AmTabs.List>
         <AmTabs.Panel value='users'>
