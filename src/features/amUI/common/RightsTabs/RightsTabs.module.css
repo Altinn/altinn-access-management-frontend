@@ -13,28 +13,3 @@
   flex-direction: column;
   gap: 1.5rem;
 }
-
-.tabLabel {
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-}
-
-@media (max-width: 768px) {
-  .tabLabel {
-    flex-direction: column;
-    gap: 0.125rem;
-    font-size: 0.7rem;
-    padding-inline: 0.25rem;
-  }
-
-  .tabLabel > svg {
-    width: 1.5rem;
-    height: 1.5rem;
-    flex-shrink: 0;
-  }
-
-  .tabList > * {
-    padding-inline: 0.375rem !important;
-  }
-}

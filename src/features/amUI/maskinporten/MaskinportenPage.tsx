@@ -1,8 +1,9 @@
 import React from 'react';
 import { Navigate } from 'react-router';
 import { useTranslation } from 'react-i18next';
-import { DsTabs, formatDisplayName } from '@altinn/altinn-components';
+import { formatDisplayName } from '@altinn/altinn-components';
 import { DatabaseIcon, PersonGroupIcon } from '@navikt/aksel-icons';
+import { AmTabs } from '../common/AmTabs/AmTabs';
 
 import { PageWrapper } from '@/components/PageWrapper/PageWrapper';
 import { getCookie } from '@/resources/Cookie/CookieMethods';
@@ -67,36 +68,37 @@ export const MaskinportenPage = () => {
               reportee={reportee}
               isLoading={isLoadingReportee}
             />
-            <DsTabs
-              data-size='sm'
+            <AmTabs
               value={activeTab}
               onChange={setActiveTab}
             >
-              <DsTabs.List>
-                <DsTabs.Tab value='suppliers'>
-                  <PersonGroupIcon aria-hidden='true' />
-                  {t('maskinporten_page.suppliers_tab')}
-                </DsTabs.Tab>
-                <DsTabs.Tab value='consumers'>
-                  <DatabaseIcon aria-hidden='true' />
-                  {t('maskinporten_page.consumers_tab')}
-                </DsTabs.Tab>
-              </DsTabs.List>
-              <DsTabs.Panel value='suppliers'>
+              <AmTabs.List>
+                <AmTabs.Tab
+                  value='suppliers'
+                  label={t('maskinporten_page.suppliers_tab')}
+                  icon={<PersonGroupIcon aria-hidden='true' />}
+                />
+                <AmTabs.Tab
+                  value='consumers'
+                  label={t('maskinporten_page.consumers_tab')}
+                  icon={<DatabaseIcon aria-hidden='true' />}
+                />
+              </AmTabs.List>
+              <AmTabs.Panel value='suppliers'>
                 <SuppliersTab
                   party={party}
                   isActive={activeTab === 'suppliers'}
                   canFetch={canFetchTabData}
                 />
-              </DsTabs.Panel>
-              <DsTabs.Panel value='consumers'>
+              </AmTabs.Panel>
+              <AmTabs.Panel value='consumers'>
                 <ConsumersTab
                   party={party}
                   isActive={activeTab === 'consumers'}
                   canFetch={canFetchTabData}
                 />
-              </DsTabs.Panel>
-            </DsTabs>
+              </AmTabs.Panel>
+            </AmTabs>
           </>
         </PartyRepresentationProvider>
       </PageLayoutWrapper>

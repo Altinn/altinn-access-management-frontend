@@ -1048,8 +1048,8 @@
   "request_page": {
     "page_title": "Forespørsler - Altinn",
     "heading": "Forespørsler for {{name}}",
-    "incoming_requests": "Mottatte forespørsler",
-    "sent_requests": "Sendte forespørsler",
+    "incoming_requests": "Mottatte",
+    "sent_requests": "Sendte",
     "no_received_requests": "Ingen mottatte forespørsler",
     "no_sent_requests": "Ingen sendte forespørsler",
     "process_request_one": "Behandle forespørsel",

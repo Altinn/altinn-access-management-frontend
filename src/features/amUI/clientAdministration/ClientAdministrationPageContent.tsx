@@ -6,9 +6,10 @@ import {
   DsHeading,
   DsParagraph,
   DsSkeleton,
-  DsTabs,
   formatDisplayName,
 } from '@altinn/altinn-components';
+import { DatabaseIcon, PersonGroupIcon } from '@navikt/aksel-icons';
+import { AmTabs } from '../common/AmTabs/AmTabs';
 
 import { clientAdministrationPageEnabled } from '@/resources/utils/featureFlagUtils';
 import {
@@ -20,7 +21,6 @@ import { usePartyRepresentation } from '../common/PartyRepresentationContext/Par
 import { ClientAdministrationAgentsTab } from './ClientAdministrationAgentsTab';
 import { ClientAdministrationClientsTab } from './ClientAdministrationClientsTab';
 import classes from './ClientAdministrationPageContent.module.css';
-import { DatabaseIcon, PersonGroupIcon } from '@navikt/aksel-icons';
 import { useTabState } from '@/resources/hooks';
 import { ReporteePageHeading } from '../common/ReporteePageHeading/ReporteePageHeading';
 
@@ -105,34 +105,31 @@ export const ClientAdministrationPageContent = () => {
           />
         </DsParagraph>
       </div>
-      <DsTabs
-        data-size='sm'
+      <AmTabs
         value={activeTab}
         onChange={setActiveTab}
       >
-        <DsTabs.List>
-          <DsTabs.Tab
+        <AmTabs.List>
+          <AmTabs.Tab
             value='users'
+            label={t('client_administration_page.agents_tab_title')}
+            icon={<PersonGroupIcon aria-hidden='true' />}
             className={classes.tab}
-          >
-            <PersonGroupIcon aria-hidden='true' />
-            {t('client_administration_page.agents_tab_title')}
-          </DsTabs.Tab>
-          <DsTabs.Tab
+          />
+          <AmTabs.Tab
             value='clients'
+            label={t('client_administration_page.clients_tab_title')}
+            icon={<DatabaseIcon aria-hidden='true' />}
             className={classes.tab}
-          >
-            <DatabaseIcon aria-hidden='true' />
-            {t('client_administration_page.clients_tab_title')}
-          </DsTabs.Tab>
-        </DsTabs.List>
-        <DsTabs.Panel value='users'>
+          />
+        </AmTabs.List>
+        <AmTabs.Panel value='users'>
           <ClientAdministrationAgentsTab isActive={activeTab === 'users'} />
-        </DsTabs.Panel>
-        <DsTabs.Panel value='clients'>
+        </AmTabs.Panel>
+        <AmTabs.Panel value='clients'>
           <ClientAdministrationClientsTab isActive={activeTab === 'clients'} />
-        </DsTabs.Panel>
-      </DsTabs>
+        </AmTabs.Panel>
+      </AmTabs>
     </>
   );
 };

@@ -1,13 +1,7 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
-import {
-  Badge,
-  BadgeVariant,
-  Color,
-  DsAlert,
-  DsTabs,
-  formatDisplayName,
-} from '@altinn/altinn-components';
+import { DsAlert, formatDisplayName } from '@altinn/altinn-components';
+import { AmTabs } from '../common/AmTabs/AmTabs';
 import { PageWrapper } from '@/components';
 import { PageLayoutWrapper } from '../common/PageLayoutWrapper';
 import {
@@ -33,15 +27,6 @@ import { getCookie } from '@/resources/Cookie/CookieMethods';
 import { useSidebarRequestCount } from '@/resources/hooks/useSidebarRequestCount';
 import { useTabState } from '@/resources/hooks';
 
-const selectedTabProps = {
-  'data-size': 'sm',
-  variant: 'base' as BadgeVariant,
-};
-
-const unselectedTabProps = {
-  'data-size': 'sm',
-  color: 'neutral' as Color,
-};
 const INCOMING_REQUESTS_TAB = 'incomingRequests';
 const SENT_REQUESTS_TAB = 'sentRequests';
 
@@ -79,9 +64,6 @@ export const RequestPage = () => {
     isLoadingPermissions: isLoadingAdmin,
   });
 
-  const getBadgeProps = (tabValue: string) =>
-    selectedTab === tabValue ? selectedTabProps : unselectedTabProps;
-
   const name = formatDisplayName({
     fullName: reportee?.name || '',
     type: reportee?.type === 'Person' ? 'person' : 'company',
@@ -111,36 +93,23 @@ export const RequestPage = () => {
                     isLoading={isLoadingReportee}
                   />
                 </RestoreFocusFallback>
-                <DsTabs
+                <AmTabs
                   value={selectedTab}
                   onChange={setSelectedTab}
-                  data-size='sm'
                 >
-                  <DsTabs.List className={classes.requestPageTabs}>
-                    <DsTabs.Tab
+                  <AmTabs.List>
+                    <AmTabs.Tab
                       value={INCOMING_REQUESTS_TAB}
-                      className={classes.requestTab}
-                    >
-                      {!!receivedRequestsCount && (
-                        <Badge
-                          {...getBadgeProps(INCOMING_REQUESTS_TAB)}
-                          label={receivedRequestsCount}
-                        />
-                      )}
-                      {t('request_page.incoming_requests')}
-                    </DsTabs.Tab>
-                    <DsTabs.Tab
+                      label={t('request_page.incoming_requests')}
+                      badge={receivedRequestsCount}
+                    />
+                    <AmTabs.Tab
                       value={SENT_REQUESTS_TAB}
-                      className={classes.requestTab}
-                    >
-                      <Badge
-                        {...getBadgeProps(SENT_REQUESTS_TAB)}
-                        label={String(resolvedSentRequestCount)}
-                      />
-                      {t('request_page.sent_requests')}
-                    </DsTabs.Tab>
-                  </DsTabs.List>
-                  <DsTabs.Panel value={INCOMING_REQUESTS_TAB}>
+                      label={t('request_page.sent_requests')}
+                      badge={resolvedSentRequestCount}
+                    />
+                  </AmTabs.List>
+                  <AmTabs.Panel value={INCOMING_REQUESTS_TAB}>
                     <RequestsTabPanel
                       count={receivedRequestsCount}
                       isLoading={isLoadingReceivedRequests}
@@ -149,8 +118,8 @@ export const RequestPage = () => {
                     >
                       <PendingRequests pendingRequests={pendingRequests.received} />
                     </RequestsTabPanel>
-                  </DsTabs.Panel>
-                  <DsTabs.Panel value={SENT_REQUESTS_TAB}>
+                  </AmTabs.Panel>
+                  <AmTabs.Panel value={SENT_REQUESTS_TAB}>
                     <RequestsTabPanel
                       count={sentRequestCount ?? 0}
                       isLoading={isLoadingSentRequests}
@@ -159,8 +128,8 @@ export const RequestPage = () => {
                     >
                       <SentRequestsTabPanel pendingRequests={pendingRequests.sent} />
                     </RequestsTabPanel>
-                  </DsTabs.Panel>
-                </DsTabs>
+                  </AmTabs.Panel>
+                </AmTabs>
               </RestoreFocusProvider>
             </PartyRepresentationProvider>
           </>
