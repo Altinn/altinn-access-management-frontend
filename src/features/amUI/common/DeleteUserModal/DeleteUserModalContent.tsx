@@ -59,6 +59,13 @@ const nonDeletableReasonKeys: Record<NonDeletableReason, string> = {
   [VIA_ROLE_REASON]: 'delete_user.non_deletable_reason_via_role',
 };
 
+type ReasonListItem = {
+  key: string;
+  i18nKey: string;
+  values: Record<string, string>;
+  components: Record<string, React.ReactElement>;
+};
+
 const nonDeletableReasonsIntroKeys: Record<DeletionTarget, string> = {
   [DeletionTarget.User]: 'delete_user.user_non_deletable_reasons_intro',
   [DeletionTarget.Yourself]: 'delete_user.yourself_non_deletable_reasons_intro',
@@ -183,6 +190,41 @@ export const DeleteUserModalContent = ({
     ),
   };
 
+  const nonDeletableReasonItems = dialogModel.nonDeletableReasons.flatMap(
+    (reason): ReasonListItem | ReasonListItem[] => {
+      if (reason !== VIA_ROLE_REASON) {
+        return {
+          key: reason,
+          i18nKey: nonDeletableReasonKeys[reason],
+          values: { linkText: agentAccessLinkText },
+          components: {
+            ...transComponents,
+            agentLink: <Link to={`/${agentAccessLinkPath}`}></Link>,
+          },
+        };
+      }
+      return viaParties.map((viaParty) => ({
+        key: `${reason}-${viaParty.id}`,
+        i18nKey: nonDeletableReasonKeys[reason],
+        values: {
+          via_name: formatDisplayName({
+            fullName: viaParty.name || '',
+            type: String(viaParty.type).toLowerCase() === 'person' ? 'person' : 'company',
+            reverseNameOrder: false,
+          }),
+        },
+        components: {
+          viaLink: (
+            <Link
+              to={`/${amUIPath.Users}/${viaParty.id}`}
+              onClick={() => setDialogVisible(false)}
+            ></Link>
+          ),
+        },
+      }));
+    },
+  );
+
   return (
     <DsDialog.TriggerContext>
       <DsDialog.Trigger
@@ -247,50 +289,13 @@ export const DeleteUserModalContent = ({
                     </DsParagraph>
                   </div>
                   <ul className={classes.reasonList}>
-                    {dialogModel.nonDeletableReasons.map((reason) =>
-                      reason === VIA_ROLE_REASON ? (
-                        viaParties.map((viaParty) => (
-                          <li key={`${reason}-${viaParty.id}`}>
-                            <DsParagraph data-size='sm'>
-                              <Trans
-                                i18nKey={nonDeletableReasonKeys[reason]}
-                                values={{
-                                  via_name: formatDisplayName({
-                                    fullName: viaParty.name || '',
-                                    type:
-                                      String(viaParty.type).toLowerCase() === 'person'
-                                        ? 'person'
-                                        : 'company',
-                                    reverseNameOrder: false,
-                                  }),
-                                }}
-                                components={{
-                                  viaLink: (
-                                    <Link
-                                      to={`/${amUIPath.Users}/${viaParty.id}`}
-                                      onClick={() => setDialogVisible(false)}
-                                    ></Link>
-                                  ),
-                                }}
-                              />
-                            </DsParagraph>
-                          </li>
-                        ))
-                      ) : (
-                        <li key={reason}>
-                          <DsParagraph data-size='sm'>
-                            <Trans
-                              i18nKey={nonDeletableReasonKeys[reason]}
-                              values={{ linkText: agentAccessLinkText }}
-                              components={{
-                                ...transComponents,
-                                agentLink: <Link to={`/${agentAccessLinkPath}`}></Link>,
-                              }}
-                            />
-                          </DsParagraph>
-                        </li>
-                      ),
-                    )}
+                    {nonDeletableReasonItems.map(({ key, ...transProps }) => (
+                      <li key={key}>
+                        <DsParagraph data-size='sm'>
+                          <Trans {...transProps} />
+                        </DsParagraph>
+                      </li>
+                    ))}
                   </ul>
                 </div>
               )}

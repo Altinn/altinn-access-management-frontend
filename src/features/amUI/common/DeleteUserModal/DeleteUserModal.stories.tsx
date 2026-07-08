@@ -102,12 +102,3 @@ export const Default: StoryObj<DeleteUserModalStoryArgs> = {
     isRolePermissionsLoading: false,
   },
 };
-
-export const NonDeletableViaRole: StoryObj<DeleteUserModalStoryArgs> = {
-  args: {
-    target: DeletionTarget.User,
-    level: DeletionLevel.None,
-    nonDeletableReasons: [VIA_ROLE_REASON],
-    isRolePermissionsLoading: false,
-  },
-};
