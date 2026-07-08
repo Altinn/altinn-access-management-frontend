@@ -1,6 +1,7 @@
 {
   "common": {
     "beta": "Beta",
+    "start": "Start",
     "error": "Feil",
     "restart": "Start på nytt",
     "close": "Lukk",
