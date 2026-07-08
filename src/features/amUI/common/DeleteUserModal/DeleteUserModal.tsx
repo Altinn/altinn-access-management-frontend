@@ -2,7 +2,7 @@ import { useGetRolePermissionsQuery } from '@/rtk/features/roleApi';
 
 import { usePartyRepresentation } from '../PartyRepresentationContext/PartyRepresentationContext';
 
-import { getDeletionStatus, getNonDeletableReasons } from './deletionModalUtils';
+import { getDeletionStatus, getNonDeletableReasons, getViaParties } from './deletionModalUtils';
 import { DeleteUserModalContent } from './DeleteUserModalContent';
 
 export type DeleteUserDirection = 'to' | 'from';
@@ -31,11 +31,13 @@ export const DeleteUserModal = ({ direction = 'to' }: DeleteUserModalProps) => {
 
   const status = getDeletionStatus(rolePermissions, viewingYourself, direction === 'from');
   const nonDeletableReasons = getNonDeletableReasons(rolePermissions);
+  const viaParties = getViaParties(rolePermissions);
 
   return (
     <DeleteUserModalContent
       status={status}
       nonDeletableReasons={nonDeletableReasons}
+      viaParties={viaParties}
       isRolePermissionsLoading={isRolePermissionsLoading}
     />
   );

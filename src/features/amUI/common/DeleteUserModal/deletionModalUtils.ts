@@ -1,5 +1,10 @@
 import { RolePermission } from '@/rtk/features/roleApi';
-import { CRA_PROVIDER_CODE, ECC_PROVIDER_CODE } from '../UserRoles/useRoleMetadata';
+import { Entity } from '@/dataObjects/dtos/Common';
+import {
+  A2_PROVIDER_CODE,
+  CRA_PROVIDER_CODE,
+  ECC_PROVIDER_CODE,
+} from '../UserRoles/useRoleMetadata';
 
 export const RIGHTHOLDER_ROLE = 'rettighetshaver';
 export const AGENT_ROLE = 'agent';
@@ -7,11 +12,13 @@ export const AGENT_ROLE = 'agent';
 export const ER_ROLE_REASON = 'er_roles';
 export const AGENT_ROLE_REASON = 'agent_role';
 export const GUARDIANSHIP_ROLE_REASON = 'guardianship_role';
+export const VIA_ROLE_REASON = 'via_role';
 
 export type NonDeletableReason =
   | typeof ER_ROLE_REASON
   | typeof AGENT_ROLE_REASON
-  | typeof GUARDIANSHIP_ROLE_REASON;
+  | typeof GUARDIANSHIP_ROLE_REASON
+  | typeof VIA_ROLE_REASON;
 
 export enum DeletionTarget {
   Yourself = 'yourself',
@@ -48,7 +55,10 @@ export const hasDeletableRights = (rolePermissions: RolePermission[] | undefined
   }
 
   return rolePermissions.some((rolePermission) => {
-    if (rolePermission.role?.code !== RIGHTHOLDER_ROLE) {
+    const isRevocableA2Role =
+      rolePermission.role?.provider?.code === A2_PROVIDER_CODE &&
+      (rolePermission.role?.isRevocable ?? false);
+    if (rolePermission.role?.code !== RIGHTHOLDER_ROLE && !isRevocableA2Role) {
       return false;
     }
     if (rolePermission.permissions?.length === 0) {
@@ -85,6 +95,8 @@ export const getNonDeletableReasons = (
     (rolePermission) => rolePermission?.role?.provider?.code === CRA_PROVIDER_CODE,
   );
 
+  const hasViaRightholderRole = getViaParties(rolePermissions).length > 0;
+
   const reasons: NonDeletableReason[] = [];
   if (hasERRoles) {
     reasons.push(ER_ROLE_REASON);
@@ -95,8 +107,27 @@ export const getNonDeletableReasons = (
   if (hasGuardianshipRole) {
     reasons.push(GUARDIANSHIP_ROLE_REASON);
   }
+  if (hasViaRightholderRole) {
+    reasons.push(VIA_ROLE_REASON);
+  }
 
   return reasons;
+};
+
+export const getViaParties = (rolePermissions: RolePermission[] | undefined): Entity[] => {
+  const viaParties = new Map<string, Entity>();
+
+  rolePermissions
+    ?.filter((rolePermission) => rolePermission.role?.code === RIGHTHOLDER_ROLE)
+    .forEach((rolePermission) => {
+      rolePermission.permissions?.forEach((permission) => {
+        if (permission?.via) {
+          viaParties.set(permission.via.id, permission.via);
+        }
+      });
+    });
+
+  return Array.from(viaParties.values());
 };
 
 export const getDeletionStatus = (

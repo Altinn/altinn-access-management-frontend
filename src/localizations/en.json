@@ -361,6 +361,7 @@
     "non_deletable_reason_er_roles": "Authorizations that follow roles in the Central Coordinating Register for Legal Entities must be changed via <erLink>the Coordinated Register Notification</erLink>.",
     "non_deletable_reason_agent_role": "Client accesses can be managed in <agentLink>{{linkText}}</agentLink>.",
     "non_deletable_reason_guardianship": "Authorizations granted through guardianship from <guardianshipLink>the Norwegian Civil Affairs Authority</guardianshipLink>.",
+    "non_deletable_reason_via_role": "Authorizations received through <viaLink>{{via_name}}</viaLink> must be deleted there.",
     "yes_button": "Yes, delete",
     "user_partial_confirmation_message": "<p>The user also has other authorizations, and you can delete them here. Do you want to proceed? <i>This action cannot be undone.</i></p>",
     "yourself_trigger_button": "Delete all access",

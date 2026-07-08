@@ -13,6 +13,7 @@ import {
   DeletionTarget,
   ER_ROLE_REASON,
   GUARDIANSHIP_ROLE_REASON,
+  VIA_ROLE_REASON,
   type DeletionStatus,
   type NonDeletableReason,
 } from './deletionModalUtils';
@@ -28,6 +29,16 @@ const allReasons: NonDeletableReason[] = [
   ER_ROLE_REASON,
   AGENT_ROLE_REASON,
   GUARDIANSHIP_ROLE_REASON,
+  VIA_ROLE_REASON,
+];
+
+const mockViaParties = [
+  {
+    id: 'via-party-1-uuid',
+    name: 'VIRKSOMHETEN AS',
+    type: 'Organisasjon',
+    variant: 'AS',
+  },
 ];
 
 export default {
@@ -73,6 +84,7 @@ export default {
             <DeleteUserModalContent
               status={status}
               nonDeletableReasons={args.nonDeletableReasons}
+              viaParties={mockViaParties}
               isRolePermissionsLoading={args.isRolePermissionsLoading}
             />
           </PartyRepresentationProvider>
@@ -87,6 +99,15 @@ export const Default: StoryObj<DeleteUserModalStoryArgs> = {
     target: DeletionTarget.User,
     level: DeletionLevel.Full,
     nonDeletableReasons: [],
+    isRolePermissionsLoading: false,
+  },
+};
+
+export const NonDeletableViaRole: StoryObj<DeleteUserModalStoryArgs> = {
+  args: {
+    target: DeletionTarget.User,
+    level: DeletionLevel.None,
+    nonDeletableReasons: [VIA_ROLE_REASON],
     isRolePermissionsLoading: false,
   },
 };
