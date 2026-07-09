@@ -147,7 +147,7 @@ describe('AmTabs', () => {
   });
 
   it('does not render a badge when the badge prop is omitted', () => {
-    renderTabs(
+    const { container } = renderTabs(
       <AmTabs defaultValue='a'>
         <AmTabs.List>
           <AmTabs.Tab
@@ -159,7 +159,7 @@ describe('AmTabs', () => {
       </AmTabs>,
     );
 
-    expect(screen.queryByRole('img', { hidden: true, name: /badge/i })).not.toBeInTheDocument();
+    expect(container.querySelector('[data-count]')).not.toBeInTheDocument();
   });
 
   it('renders the icon when provided', () => {
