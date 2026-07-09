@@ -129,6 +129,7 @@ export const UsersTab = ({ accessPackage, isLoading, isFetching }: UsersTabProps
     onRevoke,
     isLoading: isActionLoading,
   } = useAccessPackageActions({
+    disableSuccessSnackbars: true,
     onDelegateSuccess,
     onRevokeSuccess,
     onDelegateError: handleDelegateError,

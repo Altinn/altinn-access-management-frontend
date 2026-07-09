@@ -45,6 +45,7 @@ export const AccessPackageInfo = ({ accessPackage, availableActions = [] }: Pack
     isLoadingRequest,
     isLoading: isActionLoading,
   } = useAccessPackageActions({
+    disableSuccessSnackbars: true,
     onDelegateSuccess: () => {
       setActionSuccess(true);
       setTimeout(() => setActionSuccess(false), 2000);

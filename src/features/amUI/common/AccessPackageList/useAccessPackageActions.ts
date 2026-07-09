@@ -23,6 +23,8 @@ interface useAccessPackageActionsProps {
   onDelegateError?: (accessPackage: AccessPackage, errorInfo: ActionError, toParty?: Party) => void;
   onRevokeSuccess?: (accessPackage: AccessPackage, toParty: Party) => void;
   onRevokeError?: (accessPackage: AccessPackage, errorInfo: ActionError, toParty?: Party) => void;
+  // Opt out for callers that present delegate/revoke success themselves (e.g. in-modal confirmation)
+  disableSuccessSnackbars?: boolean;
 }
 
 export const useAccessPackageActions = ({
@@ -30,6 +32,7 @@ export const useAccessPackageActions = ({
   onDelegateError,
   onRevokeSuccess,
   onRevokeError,
+  disableSuccessSnackbars = false,
 }: useAccessPackageActionsProps) => {
   const { delegatePackage, isLoading: isDelegationLoading } = useDelegateAccessPackage();
   const { revokePackage, isLoading: isRevokeLoading } = useRevokeAccessPackage();
@@ -76,8 +79,7 @@ export const useAccessPackageActions = ({
   };
 
   const handleDelegateSuccess = (accessPackage: AccessPackage, toParty: Party) => {
-    if (onDelegateSuccess) onDelegateSuccess(accessPackage, toParty);
-    else {
+    if (!disableSuccessSnackbars) {
       openSnackbar({
         message: t('access_packages.package_delegation_success', {
           name: formatToPartyName(toParty),
@@ -86,6 +88,7 @@ export const useAccessPackageActions = ({
         color: 'success',
       });
     }
+    onDelegateSuccess?.(accessPackage, toParty);
   };
 
   const handleDelegateError = (
@@ -109,8 +112,7 @@ export const useAccessPackageActions = ({
   };
 
   const handleRevokeSuccess = (accessPackage: AccessPackage, toParty: Party) => {
-    if (onRevokeSuccess) onRevokeSuccess(accessPackage, toParty);
-    else {
+    if (!disableSuccessSnackbars) {
       openSnackbar({
         message: t('access_packages.package_deletion_success', {
           name: formatToPartyName(toParty),
@@ -119,6 +121,7 @@ export const useAccessPackageActions = ({
         color: 'success',
       });
     }
+    onRevokeSuccess?.(accessPackage, toParty);
   };
 
   const handleRevokeError = (
