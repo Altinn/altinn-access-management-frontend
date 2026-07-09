@@ -359,6 +359,7 @@
     "non_deletable_reason_er_roles": "Fullmakter som følger roller i Enhetsregisteret må endres via <erLink>Samordnet registermelding</erLink>.",
     "non_deletable_reason_agent_role": "Klienttilganger kan administreres på <agentLink>{{linkText}}</agentLink>.",
     "non_deletable_reason_guardianship": "Fullmakter gitt gjennom vergemål fra <guardianshipLink>Sivilrettsforvaltningen</guardianshipLink>.",
+    "non_deletable_reason_via_role": "Fullmakter som er fått gjennom <viaLink>{{via_name}}</viaLink> må slettes der.",
     "yes_button": "Ja, slett",
     "user_partial_confirmation_message": "<p>Brukeren har også andre fullmakter, og disse kan du slette her. Ønsker du det? <i>Denne handlingen kan ikke endres.</i></p>",
     "yourself_trigger_button": "Slett alle tilganger",
