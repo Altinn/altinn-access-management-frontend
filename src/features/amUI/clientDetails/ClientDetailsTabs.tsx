@@ -1,7 +1,7 @@
 import React, { type ReactNode } from 'react';
 import { useTranslation } from 'react-i18next';
-import { DsTabs } from '@altinn/altinn-components';
 import { PersonGroupIcon } from '@navikt/aksel-icons';
+import { AmTabs } from '../common/AmTabs/AmTabs';
 
 type ClientDetailsTabsProps = {
   activeTab: string;
@@ -19,24 +19,25 @@ export const ClientDetailsTabs = ({
   const { t } = useTranslation();
 
   return (
-    <DsTabs
+    <AmTabs
       defaultValue='has-users'
-      data-size='sm'
       value={activeTab}
       onChange={onChange}
     >
-      <DsTabs.List>
-        <DsTabs.Tab value='has-users'>
-          <PersonGroupIcon aria-hidden='true' />
-          {t('client_administration_page.client_has_agents_tab')}
-        </DsTabs.Tab>
-        <DsTabs.Tab value='all-users'>
-          <PersonGroupIcon aria-hidden='true' />
-          {t('client_administration_page.client_can_get_agents_tab')}
-        </DsTabs.Tab>
-      </DsTabs.List>
-      <DsTabs.Panel value='has-users'>{hasUsersContent}</DsTabs.Panel>
-      <DsTabs.Panel value='all-users'>{allUsersContent}</DsTabs.Panel>
-    </DsTabs>
+      <AmTabs.List>
+        <AmTabs.Tab
+          value='has-users'
+          label={t('client_administration_page.client_has_agents_tab')}
+          icon={<PersonGroupIcon aria-hidden='true' />}
+        />
+        <AmTabs.Tab
+          value='all-users'
+          label={t('client_administration_page.client_can_get_agents_tab')}
+          icon={<PersonGroupIcon aria-hidden='true' />}
+        />
+      </AmTabs.List>
+      <AmTabs.Panel value='has-users'>{hasUsersContent}</AmTabs.Panel>
+      <AmTabs.Panel value='all-users'>{allUsersContent}</AmTabs.Panel>
+    </AmTabs>
   );
 };

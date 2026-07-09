@@ -20,7 +20,6 @@ import { formatDisplayName, DsAlert } from '@altinn/altinn-components';
 import { Breadcrumbs } from '../common/Breadcrumbs/Breadcrumbs';
 import { GuardianshipPermissions } from './GuardianshipPermissions';
 import { InstancePermissions } from './InstancePermissions';
-import classes from './PoaOverviewPage.module.css';
 
 export const PoaOverviewPage = () => {
   const { t } = useTranslation();
@@ -61,7 +60,6 @@ export const PoaOverviewPage = () => {
               instancesPanel={showInstancesTab ? <InstancePermissions /> : null}
               roleAssignmentsPanel={null}
               guardianshipsPanel={<GuardianshipPermissions />}
-              tabProps={{ className: classes.tab }}
             />
           </PartyRepresentationProvider>
         )}
