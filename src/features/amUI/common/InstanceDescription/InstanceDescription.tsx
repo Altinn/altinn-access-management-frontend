@@ -3,7 +3,6 @@ import { Avatar, DsHeading, DsParagraph, Icon, formatDisplayName } from '@altinn
 import { useTranslation } from 'react-i18next';
 
 import { useProviderLogoUrl } from '@/resources/hooks';
-import { enableDialogportenDialogLookup } from '@/resources/utils/featureFlagUtils';
 import { PartyType } from '@/rtk/features/userInfoApi';
 import type { ServiceResource } from '@/rtk/features/singleRights/singleRightsApi';
 
@@ -34,7 +33,6 @@ export const InstanceDescription = ({
 }: InstanceDescriptionProps) => {
   const { getProviderLogoUrl } = useProviderLogoUrl();
   const { t, i18n } = useTranslation();
-  const dialogportenLookupEnabled = enableDialogportenDialogLookup();
   const shortId = getInstanceShortId(instanceData?.instance.refId);
   const title = resolveInstanceTitle(instanceData, resource, t, i18n.language);
   const providerLogoUrl = resource.resourceOwnerOrgcode
@@ -79,30 +77,21 @@ export const InstanceDescription = ({
         </DsParagraph>
       </div>
       {statusSection}
-      {dialogportenLookupEnabled
-        ? (resource.title || instanceData?.instance.refId) && (
-            <>
-              {resource.title && (
-                <div className={classes.metadataRow}>
-                  {t('instance.service_title_label')} {': '} {resource.title}
-                </div>
-              )}
-              {instanceData?.instance.refId && (
-                <div className={classes.metadataRow}>
-                  {t('instance.instance_id_label')} {': '}
-                  {shortId}
-                </div>
-              )}
-            </>
-          )
-        : resource.description && (
-            <DsParagraph
-              data-size='sm'
-              className={classes.description}
-            >
-              {resource.description}
-            </DsParagraph>
+      {(resource.title || instanceData?.instance.refId) && (
+        <>
+          {resource.title && (
+            <div className={classes.metadataRow}>
+              {t('instance.service_title_label')} {': '} {resource.title}
+            </div>
           )}
+          {instanceData?.instance.refId && (
+            <div className={classes.metadataRow}>
+              {t('instance.instance_id_label')} {': '}
+              {shortId}
+            </div>
+          )}
+        </>
+      )}
     </div>
   );
 };

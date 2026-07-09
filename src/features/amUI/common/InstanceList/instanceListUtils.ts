@@ -1,6 +1,5 @@
 import type { TFunction } from 'i18next';
 
-import { enableDialogportenDialogLookup } from '@/resources/utils/featureFlagUtils';
 import { getAfUrl } from '@/resources/utils/pathUtils';
 import type {
   DelegationInstance,
@@ -82,21 +81,13 @@ export const getInboxLinkData = ({
   dialogLookup?: DialogLookup;
   isDialogDeepLink?: boolean;
 }) => {
-  const dialogLookupEnabled = enableDialogportenDialogLookup();
   const href = `${getAfUrl()}redirect?instanceUrn=${encodeURIComponent(instanceUrn)}`;
 
   // Correspondence and deeplink should hide the inbox link.
-  // When Dialogporten lookup is enabled, we require a successful lookup to show the inbox link.
+  // We require a successful lookup to show the inbox link.
   if (isDialogDeepLink || isCorrespondenceInstanceUrn(instanceUrn)) {
     return {
       showInboxLink: false,
-    };
-  }
-
-  if (!dialogLookupEnabled) {
-    return {
-      href,
-      showInboxLink: true,
     };
   }
 

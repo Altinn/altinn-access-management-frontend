@@ -86,7 +86,7 @@ export const AddAltinn2AccountPage = () => {
   };
 
   useEffect(() => {
-    const isEnabled = reportee?.type === 'SelfIdentified' && window.featureFlags?.addAltinn2Account;
+    const isEnabled = reportee?.type === 'SelfIdentified';
     if (isEnabled && token) {
       onAddAccountFromToken(token);
     } else if (isEnabled && !token) {

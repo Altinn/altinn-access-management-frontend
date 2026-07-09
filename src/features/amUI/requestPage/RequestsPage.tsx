@@ -10,10 +10,6 @@ import {
 } from '@altinn/altinn-components';
 import { PageWrapper } from '@/components';
 import { PageLayoutWrapper } from '../common/PageLayoutWrapper';
-import {
-  enableRequestSingleRight,
-  useRerouteIfRequestPageDisabled,
-} from '@/resources/utils/featureFlagUtils';
 import { Breadcrumbs } from '../common/Breadcrumbs/Breadcrumbs';
 import ReporteePageHeading from '../common/ReporteePageHeading';
 import { useGetIsAdminQuery, useGetReporteeQuery } from '@/rtk/features/userInfoApi';
@@ -53,8 +49,6 @@ export const RequestPage = () => {
     defaultTab: INCOMING_REQUESTS_TAB,
   });
 
-  useRerouteIfRequestPageDisabled();
-
   useDocumentTitle(t('request_page.page_title'));
 
   const { data: reportee, isLoading: isLoadingReportee } = useGetReporteeQuery();
@@ -70,10 +64,9 @@ export const RequestPage = () => {
   const partyUuid = getCookie('AltinnPartyUuid');
   const { data: sentRequestCount } = useGetSentRequestsCountQuery(
     { party: partyUuid || '', status: ['Pending'] },
-    { skip: !partyUuid || !isAdmin || !enableRequestSingleRight() },
+    { skip: !partyUuid || !isAdmin },
   );
   const { requestsBadgeCount: receivedRequestCount } = useSidebarRequestCount({
-    displayRequestsPage: true,
     isAdmin,
     reportee,
     isLoadingPermissions: isLoadingAdmin,

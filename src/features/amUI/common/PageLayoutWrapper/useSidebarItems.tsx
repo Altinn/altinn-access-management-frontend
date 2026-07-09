@@ -1,9 +1,5 @@
 import { getCookie } from '@/resources/Cookie/CookieMethods';
 import {
-  clientAdministrationPageEnabled,
-  enableMaskinportenAdministration,
-} from '@/resources/utils/featureFlagUtils';
-import {
   hasConsentPermission,
   hasCreateSystemUserPermission,
   hasReporteesPermission,
@@ -40,13 +36,6 @@ import { useTranslation } from 'react-i18next';
 
 export const useSidebarItems = ({ isSmall }: { isSmall?: boolean }) => {
   const { t } = useTranslation();
-  const displayConfettiPackage = window.featureFlags?.displayConfettiPackage;
-
-  const displaySettingsPage = window.featureFlags?.displaySettingsPage;
-  const displayPoaOverviewPage = window.featureFlags?.displayPoaOverviewPage;
-  const displayRequestsPage = window.featureFlags?.displayRequestsPage;
-
-  const displayClientAdministrationPage = clientAdministrationPageEnabled();
   const { data: currentUser } = useGetPartyFromLoggedInUserQuery();
   const { data: reportee, isLoading: isLoadingReportee } = useGetReporteeQuery();
   const isCurrentUserReportee = reportee?.partyUuid === currentUser?.partyUuid;
@@ -58,7 +47,7 @@ export const useSidebarItems = ({ isSmall }: { isSmall?: boolean }) => {
       to: currentUser?.partyUuid ?? '',
     },
     {
-      skip: !displayClientAdministrationPage || !currentUser?.partyUuid || isCurrentUserReportee,
+      skip: !currentUser?.partyUuid || isCurrentUserReportee,
     },
   );
   const isAgent = roles?.some((rolePermission) => rolePermission.role.code === 'agent');
@@ -70,13 +59,12 @@ export const useSidebarItems = ({ isSmall }: { isSmall?: boolean }) => {
   const { data: canAccessSettings, isLoading: isLoadingCompanyProfileAdmin } =
     useGetIsCompanyProfileAdminQuery();
   const { data: isMaskinportenAdmin } = useGetIsMaskinportenAdminQuery(undefined, {
-    skip: !enableMaskinportenAdministration() || !isOrganization(reportee),
+    skip: !isOrganization(reportee),
   });
 
   const isLoading =
     isLoadingReportee || isLoadingIsAdmin || isLoadingIsClientAdmin || isLoadingCompanyProfileAdmin;
   const { requestsBadgeCount, isLoading: isLoadingRequestsBadge } = useSidebarRequestCount({
-    displayRequestsPage: !!displayRequestsPage,
     isAdmin,
     reportee,
     isLoadingPermissions: isLoadingReportee || isLoadingIsAdmin,
@@ -87,7 +75,7 @@ export const useSidebarItems = ({ isSmall }: { isSmall?: boolean }) => {
   if (!isSmall) {
     items.push(getHeadingMenuItem(pathname, isLoading));
   }
-  if (displayRequestsPage && isAdmin) {
+  if (isAdmin) {
     const requestsBadge =
       !isLoadingRequestsBadge && requestsBadgeCount > 0
         ? {
@@ -106,14 +94,12 @@ export const useSidebarItems = ({ isSmall }: { isSmall?: boolean }) => {
     });
   }
 
-  if (displayConfettiPackage) {
-    items.push(getUsersMenuItem(pathname, isLoading, isSmall));
-    if (hasReporteesPermission(reportee, isAdmin, isCurrentUserReportee)) {
-      items.push(getReporteesMenuItem(pathname, isLoading, isSmall));
-    }
+  items.push(getUsersMenuItem(pathname, isLoading, isSmall));
+  if (hasReporteesPermission(reportee, isAdmin, isCurrentUserReportee)) {
+    items.push(getReporteesMenuItem(pathname, isLoading, isSmall));
   }
 
-  if (displayPoaOverviewPage && isAdmin) {
+  if (isAdmin) {
     items.push(getPoaOverviewMenuItem(pathname, isLoading, isSmall));
   }
 
@@ -128,17 +114,17 @@ export const useSidebarItems = ({ isSmall }: { isSmall?: boolean }) => {
     items.push(getSystemUserMenuItem(pathname, isLoading, isSmall));
   }
 
-  if (isClientAdmin && displayClientAdministrationPage) {
+  if (isClientAdmin) {
     items.push(getClientAdministrationMenuItem(pathname, isLoading, isSmall));
   }
 
-  if (isAgent && !isCurrentUserReportee && displayClientAdministrationPage) {
+  if (isAgent && !isCurrentUserReportee) {
     items.push({
       ...getYourClientsMenuItem(pathname, isLoading, isSmall),
     });
   }
 
-  if (canAccessSettings && displaySettingsPage) {
+  if (canAccessSettings) {
     items.push(getSettingsMenuItem(pathname, isLoading, isSmall));
   }
 

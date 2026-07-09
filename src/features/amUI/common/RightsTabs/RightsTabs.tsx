@@ -44,7 +44,6 @@ export const RightsTabs = ({
 }: RightsTabsProps) => {
   const { t } = useTranslation();
 
-  const { displayRoles } = window.featureFlags;
   const { toParty, fromParty, actingParty } = usePartyRepresentation();
 
   const { data: activeDelegations } = useGetUserDelegationsQuery(
@@ -70,10 +69,10 @@ export const RightsTabs = ({
       'packages',
       ...(singleRightsPanel ? ['singleRights'] : []),
       ...(instancesPanel ? ['instances'] : []),
-      ...(displayRoles && roleAssignmentsPanel ? ['roleAssignments'] : []),
+      ...(roleAssignmentsPanel ? ['roleAssignments'] : []),
       ...(showGuardianshipsTab ? ['guardianships'] : []),
     ],
-    [singleRightsPanel, instancesPanel, displayRoles, roleAssignmentsPanel, showGuardianshipsTab],
+    [singleRightsPanel, instancesPanel, roleAssignmentsPanel, showGuardianshipsTab],
   );
 
   const [chosenTab, setChosenTab] = useTabState({ tabs: availableTabs, defaultTab: 'packages' });
@@ -134,7 +133,7 @@ export const RightsTabs = ({
             {t('user_rights_page.instances_title')}
           </DsTabs.Tab>
         )}
-        {displayRoles && roleAssignmentsPanel && (
+        {roleAssignmentsPanel && (
           <DsTabs.Tab
             {...tabProps}
             value='roleAssignments'
@@ -191,7 +190,7 @@ export const RightsTabs = ({
           <div className={classes.innerTabContent}>{instancesPanel}</div>
         </DsTabs.Panel>
       )}
-      {displayRoles && roleAssignmentsPanel && (
+      {roleAssignmentsPanel && (
         <DsTabs.Panel
           className={classes.tabContent}
           value='roleAssignments'

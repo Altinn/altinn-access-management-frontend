@@ -247,7 +247,6 @@
     "no_packages": "Ingen tilgangspakkar tilgjengelege.",
     "no_matching_search": "Ingen treff på søket",
     "info_alert_text": "Tilgangspakkar erstattar dagens Altinn-roller. Les meir om dette på <a href='https://info.altinn.no/nn/hjelp/ny-tilgangsstyring/'>hjelpesidene</a>.",
-    "person_info_alert": "Det er ikkje mogleg å gi og fjerne fullmakter til personar heilt enno. Dette vil komme seinare.",
     "delegation_check": {
       "delegation_check_error_heading": "Teknisk feil",
       "delegation_check_error_message_singular": "Ein teknisk feil hindrar deg i å gi fullmakt til tilgangspakken. Ver venleg å kontakte Altinn brukarservice om problemet held fram.",
@@ -492,7 +491,6 @@
     "trigger_button": "Ny brukar",
     "add_person_button": "Legg til person",
     "add_org_button": "Legg til verksemd",
-    "limited_preview_message": "Du kan dessverre ikkje legge til personar heilt endå. Dette vil komme seinare.",
     "person_identifier": "Fødselsnummer/brukarnamn",
     "person_identifier_ssn_format_error": "Fødselsnummer må innahalde 11 siffer",
     "person_identifier_username_format_error": "Brukarnamn må innehalde minst 6 teikn",
