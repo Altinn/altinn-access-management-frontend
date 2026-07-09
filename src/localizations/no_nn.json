@@ -1047,8 +1047,8 @@
   "request_page": {
     "page_title": "Førespurnader - Altinn",
     "heading": "Førespurnader for {{name}}",
-    "incoming_requests": "Mottatte førespurnader",
-    "sent_requests": "Sendte førespurnader",
+    "incoming_requests": "Mottatte",
+    "sent_requests": "Sendte",
     "no_received_requests": "Ingen mottatte førespurnader",
     "no_sent_requests": "Ingen sendte førespurnader",
     "process_request_one": "Behandle førespurnad",

@@ -1051,8 +1051,8 @@
   "request_page": {
     "page_title": "Requests - Altinn",
     "heading": "Requests for {{name}}",
-    "incoming_requests": "Received requests",
-    "sent_requests": "Sent requests",
+    "incoming_requests": "Received",
+    "sent_requests": "Sent",
     "no_received_requests": "No received requests",
     "no_sent_requests": "No sent requests",
     "process_request_one": "Process request",

@@ -1,7 +1,6 @@
 import type { ReactNode } from 'react';
 import { useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
-import { DsBadge, DsTabs } from '@altinn/altinn-components';
 
 import classes from './RightsTabs.module.css';
 import {
@@ -16,6 +15,7 @@ import { PartyType } from '@/rtk/features/userInfoApi';
 import { useGetUserDelegationsQuery } from '@/rtk/features/accessPackageApi';
 import { isGuardianshipUrn } from '@/resources/utils';
 import { useTabState } from '@/resources/hooks';
+import { AmTabs } from '../AmTabs/AmTabs';
 
 interface RightsTabsProps {
   tabBadge?: {
@@ -30,7 +30,7 @@ interface RightsTabsProps {
   instancesPanel?: ReactNode;
   roleAssignmentsPanel: ReactNode;
   guardianshipsPanel?: ReactNode;
-  tabProps?: Partial<React.ComponentProps<typeof DsTabs.Tab>>;
+  tabProps?: Partial<React.ComponentProps<typeof AmTabs.Tab>>;
 }
 
 export const RightsTabs = ({
@@ -78,134 +78,93 @@ export const RightsTabs = ({
   const [chosenTab, setChosenTab] = useTabState({ tabs: availableTabs, defaultTab: 'packages' });
 
   return (
-    <DsTabs
-      data-size='sm'
+    <AmTabs
       value={chosenTab}
       onChange={setChosenTab}
     >
-      <DsTabs.List>
-        <DsTabs.Tab
+      <AmTabs.List>
+        <AmTabs.Tab
           {...tabProps}
           value='packages'
-        >
-          {tabBadge && (
-            <DsBadge
-              data-size='sm'
-              color={chosenTab === 'packages' ? 'accent' : 'neutral'}
-              count={tabBadge?.accessPackages ?? 0}
-              maxCount={99}
-            />
-          )}
-          <PackageIcon aria-hidden='true' />
-          {t('user_rights_page.access_packages_title')}
-        </DsTabs.Tab>
+          label={t('user_rights_page.access_packages_title')}
+          icon={<PackageIcon aria-hidden='true' />}
+          badge={tabBadge?.accessPackages}
+        />
         {singleRightsPanel && (
-          <DsTabs.Tab
+          <AmTabs.Tab
             {...tabProps}
             value='singleRights'
-          >
-            {tabBadge && (
-              <DsBadge
-                data-size='sm'
-                color={chosenTab === 'singleRights' ? 'accent' : 'neutral'}
-                count={tabBadge?.services ?? 0}
-                maxCount={99}
-              />
-            )}
-            <FilesIcon aria-hidden='true' />
-            {t('user_rights_page.single_rights_title')}
-          </DsTabs.Tab>
+            label={t('user_rights_page.single_rights_title')}
+            icon={<FilesIcon aria-hidden='true' />}
+            badge={tabBadge?.services}
+          />
         )}
         {instancesPanel && (
-          <DsTabs.Tab
+          <AmTabs.Tab
             {...tabProps}
             value='instances'
-          >
-            {tabBadge && (
-              <DsBadge
-                data-size='sm'
-                color={chosenTab === 'instances' ? 'accent' : 'neutral'}
-                count={tabBadge?.instances ?? 0}
-                maxCount={99}
-              />
-            )}
-            <EnvelopeClosedIcon aria-hidden='true' />
-            {t('user_rights_page.instances_title')}
-          </DsTabs.Tab>
+            label={t('user_rights_page.instances_title')}
+            icon={<EnvelopeClosedIcon aria-hidden='true' />}
+            badge={tabBadge?.instances}
+          />
         )}
         {roleAssignmentsPanel && (
-          <DsTabs.Tab
+          <AmTabs.Tab
             {...tabProps}
             value='roleAssignments'
-          >
-            {tabBadge && (
-              <DsBadge
-                data-size='sm'
-                color={chosenTab === 'roleAssignments' ? 'accent' : 'neutral'}
-                count={tabBadge?.roles ?? 0}
-                maxCount={99}
-              />
-            )}
-            <FolderIcon aria-hidden='true' />
-            {t('user_rights_page.roles_title')}
-          </DsTabs.Tab>
+            label={t('user_rights_page.roles_title')}
+            icon={<FolderIcon aria-hidden='true' />}
+            badge={tabBadge?.roles}
+          />
         )}
         {showGuardianshipsTab && (
-          <DsTabs.Tab
+          <AmTabs.Tab
             {...tabProps}
             value='guardianships'
-          >
-            {tabBadge && (
-              <DsBadge
-                data-size='sm'
-                color={chosenTab === 'guardianships' ? 'accent' : 'neutral'}
-                count={tabBadge?.guardianships ?? 0}
-                maxCount={99}
-              />
-            )}
-            <ShieldLockIcon aria-hidden='true' />
-            {t('user_rights_page.guardianships_title')}
-          </DsTabs.Tab>
+            label={t('user_rights_page.guardianships_title')}
+            icon={<ShieldLockIcon aria-hidden='true' />}
+            badge={tabBadge?.guardianships}
+          />
         )}
-      </DsTabs.List>
-      <DsTabs.Panel
+      </AmTabs.List>
+      <AmTabs.Panel
         className={classes.tabContent}
         value='packages'
       >
         <div className={classes.innerTabContent}>{packagesPanel}</div>
-      </DsTabs.Panel>
+      </AmTabs.Panel>
       {singleRightsPanel && (
-        <DsTabs.Panel
+        <AmTabs.Panel
           className={classes.tabContent}
           value='singleRights'
         >
           <div className={classes.innerTabContent}>{singleRightsPanel}</div>
-        </DsTabs.Panel>
+        </AmTabs.Panel>
       )}
       {instancesPanel && (
-        <DsTabs.Panel
+        <AmTabs.Panel
           className={classes.tabContent}
           value='instances'
         >
           <div className={classes.innerTabContent}>{instancesPanel}</div>
-        </DsTabs.Panel>
+        </AmTabs.Panel>
       )}
       {roleAssignmentsPanel && (
-        <DsTabs.Panel
+        <AmTabs.Panel
           className={classes.tabContent}
           value='roleAssignments'
         >
           <div className={classes.innerTabContent}>{roleAssignmentsPanel}</div>
-        </DsTabs.Panel>
+        </AmTabs.Panel>
       )}
       {showGuardianshipsTab && (
-        <DsTabs.Panel
+        <AmTabs.Panel
           className={classes.tabContent}
           value='guardianships'
         >
           <div className={classes.innerTabContent}>{guardianshipsPanel}</div>
-        </DsTabs.Panel>
+        </AmTabs.Panel>
       )}
-    </DsTabs>
+    </AmTabs>
   );
 };
