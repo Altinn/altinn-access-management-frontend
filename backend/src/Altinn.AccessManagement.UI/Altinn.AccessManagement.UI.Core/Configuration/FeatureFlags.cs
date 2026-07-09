@@ -118,5 +118,10 @@ namespace Altinn.AccessManagement.UI.Core.Configuration
         /// Whether to enable adding Altinn 2 account to email user
         /// </summary>
         public bool AddAltinn2Account { get; set; }
+
+        /// <summary>
+        /// Whether to enable adding IdPorten authorization integration
+        /// </summary>
+        public bool IdPortenAuthorization { get; set; }
     }
 }
