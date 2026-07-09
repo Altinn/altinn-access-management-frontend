@@ -12,7 +12,7 @@
 }
 
 .tabList {
-  /* --dsc-tabs-tab-padding */
+  /* Required: CSS Modules needs this top-level class to export the hashed class name used in AmTabs.tsx */
 }
 
 @media (max-width: 768px) {
