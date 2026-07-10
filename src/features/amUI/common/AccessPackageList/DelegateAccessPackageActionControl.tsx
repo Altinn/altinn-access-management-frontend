@@ -1,10 +1,8 @@
-import { Button, DsSpinner, formatDisplayName } from '@altinn/altinn-components';
+import { Button, DsSpinner } from '@altinn/altinn-components';
 import { MinusCircleIcon, PlusCircleIcon } from '@navikt/aksel-icons';
 import { useTranslation } from 'react-i18next';
 import { DelegationAction } from '../DelegationModal/EditModal';
 import { displayPackageRequests } from '@/resources/utils/featureFlagUtils';
-import { usePartyRepresentation } from '../PartyRepresentationContext/PartyRepresentationContext';
-import { PartyType } from '@/rtk/features/userInfoApi';
 
 import { packageActionControlId } from './PackageItem';
 
@@ -36,18 +34,8 @@ export const DelegateAccessPackageActionControl = ({
   packageId,
 }: DelegateAccessPackageActionControlsProps) => {
   const { t } = useTranslation();
-  const { toParty } = usePartyRepresentation();
   const displayPackageRequestsFeature = displayPackageRequests();
   const actionId = packageActionControlId(packageId);
-  const delegateAriaLabel = toParty
-    ? t('common.give_poa_to_name_for', {
-        name: formatDisplayName({
-          fullName: toParty.name,
-          type: toParty.partyTypeName === PartyType.Person ? 'person' : 'company',
-        }),
-        poa_object: accessPackageName,
-      })
-    : t('common.give_poa_for', { poa_object: accessPackageName });
 
   if (isLoading) {
     return (
@@ -66,7 +54,7 @@ export const DelegateAccessPackageActionControl = ({
         size='sm'
         onClick={onDelegate}
         disabled={disabled}
-        aria-label={delegateAriaLabel}
+        aria-label={t('common.give_poa_for', { poa_object: accessPackageName })}
       >
         <PlusCircleIcon aria-hidden='true' />
         {t('common.give_poa')}
