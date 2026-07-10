@@ -194,10 +194,10 @@ export const systemUserApi = createApi({
     }),
     removeCustomer: builder.mutation<
       void,
-      { partyId: string; systemUserId: string; delegationId: string; partyUuid: string }
+      { partyId: string; systemUserId: string; client: string; partyUuid: string }
     >({
-      query: ({ partyId, systemUserId, delegationId, partyUuid }) => ({
-        url: `systemuser/agentdelegation/${partyId}/${systemUserId}/delegation/${delegationId}?partyuuid=${partyUuid}`,
+      query: ({ partyId, systemUserId, client, partyUuid }) => ({
+        url: `systemuser/agentdelegation/${partyId}/${systemUserId}/delegation?partyuuid=${partyUuid}&client=${client}`,
         method: 'DELETE',
       }),
     }),

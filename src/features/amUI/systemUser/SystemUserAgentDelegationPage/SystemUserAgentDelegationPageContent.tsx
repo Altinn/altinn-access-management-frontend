@@ -218,7 +218,7 @@ export const SystemUserAgentDelegationPageContent = ({
     removeCustomer({
       partyId,
       systemUserId: id ?? '',
-      delegationId: toRemove.delegationId,
+      client: toRemove.customerId,
       partyUuid,
     })
       .unwrap()

@@ -96,15 +96,15 @@ namespace Altinn.AccessManagement.UI.Controllers
         /// </summary>
         /// <param name="partyId">Party user represents</param>
         /// <param name="systemUserGuid">System user id to get</param>
-        /// <param name="delegationId">Delegation id to remove from system user</param>
+        /// <param name="client">The client (customer) party uuid to remove from the system user</param>
         /// <param name="partyUuid">Party uuid of party user represents</param>
         /// <param name="cancellationToken">Cancellation token</param>
         /// <returns></returns>
         [Authorize]
-        [HttpDelete("{partyId}/{systemUserGuid}/delegation/{delegationId}")]
-        public async Task<ActionResult> RemoveClient([FromRoute] int partyId, [FromRoute] Guid systemUserGuid, [FromRoute] Guid delegationId, [FromQuery] Guid partyUuid, CancellationToken cancellationToken)
+        [HttpDelete("{partyId}/{systemUserGuid}/delegation")]
+        public async Task<ActionResult> RemoveClient([FromRoute] int partyId, [FromRoute] Guid systemUserGuid, [FromQuery] Guid client, [FromQuery] Guid partyUuid, CancellationToken cancellationToken)
         {
-            Result<bool> result = await _systemUserAgentDelegationService.RemoveClient(partyId, delegationId, partyUuid, systemUserGuid, cancellationToken);
+            Result<bool> result = await _systemUserAgentDelegationService.RemoveClient(partyId, client, partyUuid, systemUserGuid, cancellationToken);
 
             if (result.IsProblem)
             {

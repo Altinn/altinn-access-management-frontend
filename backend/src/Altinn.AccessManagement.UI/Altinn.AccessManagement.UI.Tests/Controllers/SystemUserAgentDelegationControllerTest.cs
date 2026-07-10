@@ -328,12 +328,12 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
             string partyId = "51329012";
             string partyUuid = "cd35779b-b174-4ecc-bbef-ece13611be7f";
             string systemUserId = _regnskapsforerSystemUserId;
-            string delegationId = "7da509f3-cff5-4253-946e-0336ae0bc48f";
+            string client = "7da509f3-cff5-4253-946e-0336ae0bc48f";
 
             bool expectedResponse = true;
 
             // Act
-            HttpResponseMessage httpResponse = await _client.DeleteAsync($"accessmanagement/api/v1/systemuser/agentdelegation/{partyId}/{systemUserId}/delegation/{delegationId}?partyuuid={partyUuid}");
+            HttpResponseMessage httpResponse = await _client.DeleteAsync($"accessmanagement/api/v1/systemuser/agentdelegation/{partyId}/{systemUserId}/delegation?partyuuid={partyUuid}&client={client}");
             bool actualResponse = await httpResponse.Content.ReadFromJsonAsync<bool>();
 
             // Assert
@@ -352,12 +352,12 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
             string partyId = "51329012";
             string partyUuid = "cd35779b-b174-4ecc-bbef-ece13611be7f";
             string systemUserId = _regnskapsforerSystemUserId;
-            string delegationId = "60f1ade9-ed48-4083-a369-178d45d6ffd1";
+            string client = "60f1ade9-ed48-4083-a369-178d45d6ffd1";
 
             HttpStatusCode expectedResponse = HttpStatusCode.NotFound;
 
             // Act
-            HttpResponseMessage httpResponse = await _client.DeleteAsync($"accessmanagement/api/v1/systemuser/agentdelegation/{partyId}/{systemUserId}/delegation/{delegationId}?partyuuid={partyUuid}");
+            HttpResponseMessage httpResponse = await _client.DeleteAsync($"accessmanagement/api/v1/systemuser/agentdelegation/{partyId}/{systemUserId}/delegation?partyuuid={partyUuid}&client={client}");
 
             // Assert
             Assert.Equal(expectedResponse, httpResponse.StatusCode);

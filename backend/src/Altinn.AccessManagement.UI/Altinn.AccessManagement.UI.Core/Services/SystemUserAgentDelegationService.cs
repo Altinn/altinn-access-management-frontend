@@ -81,9 +81,9 @@ namespace Altinn.AccessManagement.UI.Core.Services
         }
 
         /// <inheritdoc />
-        public async Task<Result<bool>> RemoveClient(int partyId, Guid delegationId, Guid partyUuid, Guid systemUserGuid, CancellationToken cancellationToken)
+        public async Task<Result<bool>> RemoveClient(int partyId, Guid client, Guid partyUuid, Guid systemUserGuid, CancellationToken cancellationToken)
         {
-            Result<bool> response = await _systemUserAgentDelegationClient.RemoveClient(partyId, systemUserGuid, partyUuid, delegationId, cancellationToken);
+            Result<bool> response = await _systemUserAgentDelegationClient.RemoveClient(partyId, systemUserGuid, partyUuid, client, cancellationToken);
             if (response.IsProblem)
             {
                 return new Result<bool>(response.Problem);
