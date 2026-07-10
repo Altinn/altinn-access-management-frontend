@@ -1122,7 +1122,6 @@
     "go_to_profile": "Gå til profil",
     "load_user_error": "Kunne ikkje laste brukar.",
     "not_self_identified_error": "Berre epost-brukarar kan legge til konto.",
-    "feature_toggled_off": "Moglegheit for å legge til konto er skrudd av.",
     "forgot_password_info": "Skriv inn brukarnamnet ditt, så sender vi ein lenke for å legge til konto til e-postadressa som er registrert på dette brukarnamnet.",
     "forgot_password_error": "Kunne ikkje sende e-post. Sjekk at brukarnamnet er riktig.",
     "no_email_for_username": "Vi fann ingen e-post for dette brukarnamnet. Sjekk at brukarnamnet er riktig.",

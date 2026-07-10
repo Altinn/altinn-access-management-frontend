@@ -181,9 +181,6 @@ export const AddAltinn2AccountPage = () => {
           {t('add_altinn2_account_page.not_self_identified_error')}
         </DsAlert>
       )}
-      {window.featureFlags && !window.featureFlags.addAltinn2Account && (
-        <DsAlert data-color='danger'>{t('add_altinn2_account_page.feature_toggled_off')}</DsAlert>
-      )}
       {isAddingAltinn2AccountFromToken && (
         <DsSpinner
           data-size='lg'

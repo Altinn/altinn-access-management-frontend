@@ -1123,7 +1123,6 @@
     "go_to_profile": "Gå til profil",
     "load_user_error": "Kunne ikke laste bruker.",
     "not_self_identified_error": "Kun epost-brukere kan legge til konto.",
-    "feature_toggled_off": "Mulighet for å legge til konto er skrudd av.",
     "forgot_password_info": "Skriv inn brukernavnet ditt, så sender vi en lenke til e-postadressen knyttet til kontoen.",
     "forgot_password_error": "Kunne ikke sende e-post. Sjekk at brukernavnet er riktig.",
     "no_email_for_username": "Vi fant ingen e-post for dette brukernavnet. Sjekk at brukernavnet er riktig.",
