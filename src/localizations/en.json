@@ -69,12 +69,14 @@
     "update_poa": "Update power of attorney",
     "give_poa": "Give power of attorney",
     "give_poa_for": "Give power of attorney for {{poa_object}}",
+    "give_poa_to_name": "Give power of attorney to {{name}}",
     "give_poa_to_name_for": "Give {{name}} power of attorney for {{poa_object}}",
     "request_poa": "Request power of attorney",
     "request_poa_for": "Request power of attorney for {{poa_object}}",
     "delete_request_for": "Delete request for {{poa_object}}",
     "delete_poa": "Delete power of attorney",
     "delete_poa_for": "Delete power of attorney for {{poa_object}}",
+    "delete_poa_to_name": "Delete {{name}}'s power of attorney",
     "delete_poa_to_name_for": "Delete {{name}}'s power of attorney for {{poa_object}}",
     "delete_pos_confirm": "Are you sure you want to delete the power of attorney?",
     "has_poa": "Has power of attorney",
@@ -998,8 +1000,6 @@
     "services_tab_title": "Services",
     "load_error": "Oops! Something went wrong.",
     "back_to_overview_link": "Go back to the overview",
-    "package_delegation_success": "{{name}} has been granted power of attorney for {{accessPackage}}.",
-    "package_revocation_success": "{{name}} no longer has power of attorney for {{accessPackage}}.",
     "users_tab": {
       "description": "Search for users to grant or revoke permissions.",
       "no_users": "No users have power of attorney for this package on behalf of {{fromparty}}."

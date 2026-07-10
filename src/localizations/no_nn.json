@@ -68,12 +68,14 @@
     "update_poa": "Oppdater fullmakt",
     "give_poa": "Gi fullmakt",
     "give_poa_for": "Gi fullmakt for {{poa_object}}",
+    "give_poa_to_name": "Gi fullmakt til {{name}}",
     "give_poa_to_name_for": "Gi {{name}} fullmakt til {{poa_object}}",
     "request_poa": "Be om fullmakt",
     "request_poa_for": "Be om fullmakt for {{poa_object}}",
     "delete_request_for": "Slett førespurnad for {{poa_object}}",
     "delete_poa": "Slett fullmakt",
     "delete_poa_for": "Slett fullmakt for {{poa_object}}",
+    "delete_poa_to_name": "Slett fullmakt til {{name}}",
     "delete_poa_to_name_for": "Slett {{name}} si fullmakt til {{poa_object}}",
     "delete_pos_confirm": "Er du sikker på at du vil slette denne?",
     "has_poa": "Har fullmakt",
@@ -994,8 +996,6 @@
     "services_tab_title": "Tenester",
     "load_error": "Oi! Noko gjekk gale.",
     "back_to_overview_link": "Gå tilbake til oversikta",
-    "package_delegation_success": "{{name}} har no fått fullmakt til {{accessPackage}}.",
-    "package_revocation_success": "{{name}} har ikkje lenger fullmakt til {{accessPackage}}.",
     "users_tab": {
       "description": "Søk etter brukarar for å gi eller slette fullmakter.",
       "no_users": "Ingen har fullmakt til denne pakken på vegner av {{fromparty}}."

@@ -1,15 +1,13 @@
 import { useMemo, useRef, useState } from 'react';
 
 import pageClasses from './PackagePoaDetailsPage.module.css';
-import { DsParagraph, formatDisplayName } from '@altinn/altinn-components';
+import { DsParagraph } from '@altinn/altinn-components';
 import { useTranslation } from 'react-i18next';
-import { PartyType } from '@/rtk/features/userInfoApi';
 import { useGetRightHoldersQuery } from '@/rtk/features/connectionApi';
 import { Party } from '@/rtk/features/lookupApi';
 import UserSearch from '../common/UserSearch/UserSearch';
 import { useAccessPackageActions } from '../common/AccessPackageList/useAccessPackageActions';
 import { AccessPackage } from '@/rtk/features/accessPackageApi';
-import { useSnackbarOnIdle } from '@/resources/hooks/useSnackbarOnIdle';
 import { useRoleMetadata } from '../common/UserRoles/useRoleMetadata';
 import { ActionError } from '@/resources/hooks/useActionError';
 import { DelegateErrorAlert } from './DelegateErrorAlert';
@@ -44,7 +42,6 @@ export const UsersTab = ({ accessPackage, isLoading, isFetching }: UsersTabProps
   const modalRef = useRef<PackageUserModalHandle>(null);
   const restoreFocus = useRestoreFocusContext();
   const requestFocusAfterListChange = useRestoreFocusOnDataChange(accessPackage?.permissions);
-  const { queueSnackbar } = useSnackbarOnIdle({ isBusy: isFetching, showPendingOnUnmount: true });
   const { canDelegatePackage, isLoading: isDelegationCheckLoading } =
     useAccessPackageDelegationCheck();
   const canDelegate = accessPackage?.id
@@ -86,36 +83,6 @@ export const UsersTab = ({ accessPackage, isLoading, isFetching }: UsersTabProps
     [indirectConnections],
   );
 
-  const formatToPartyName = (party: Party) => {
-    return formatDisplayName({
-      fullName: party.name,
-      type: party?.partyTypeName === PartyType.Person ? 'person' : 'company',
-    });
-  };
-
-  const onDelegateSuccess = (p: AccessPackage, toParty: Party) => {
-    setDelegateActionError(null);
-    modalRef.current?.showSuccess();
-    queueSnackbar(
-      t('package_poa_details_page.package_delegation_success', {
-        name: formatToPartyName(toParty),
-        accessPackage: p?.name ?? '',
-      }),
-      'success',
-    );
-  };
-
-  const onRevokeSuccess = (p: AccessPackage, toParty: Party) => {
-    modalRef.current?.showSuccess();
-    queueSnackbar(
-      t('package_poa_details_page.package_revocation_success', {
-        name: formatToPartyName(toParty),
-        accessPackage: p?.name ?? '',
-      }),
-      'success',
-    );
-  };
-
   const handleDelegateError = (
     _accessPackage: AccessPackage,
     errorInfo: ActionError,
@@ -129,9 +96,14 @@ export const UsersTab = ({ accessPackage, isLoading, isFetching }: UsersTabProps
     onRevoke,
     isLoading: isActionLoading,
   } = useAccessPackageActions({
-    disableSuccessSnackbars: true,
-    onDelegateSuccess,
-    onRevokeSuccess,
+    snackbarBusy: isFetching,
+    onDelegateSuccess: () => {
+      setDelegateActionError(null);
+      modalRef.current?.showSuccess();
+    },
+    onRevokeSuccess: () => {
+      modalRef.current?.showSuccess();
+    },
     onDelegateError: handleDelegateError,
   });
 

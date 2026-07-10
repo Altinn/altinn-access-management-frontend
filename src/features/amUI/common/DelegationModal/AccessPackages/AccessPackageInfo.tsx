@@ -36,6 +36,12 @@ export const AccessPackageInfo = ({ accessPackage, availableActions = [] }: Pack
   const { canDelegatePackage } = useAccessPackageDelegationCheck();
   const displayPackageRequestsFeature = displayPackageRequests();
 
+  const { data: activeDelegations, isFetching } = useGetUserDelegationsQuery({
+    to: toParty?.partyUuid ?? '',
+    from: fromParty?.partyUuid ?? '',
+    party: actingParty?.partyUuid ?? '',
+  });
+
   const {
     onDelegate,
     onRevoke,
@@ -45,7 +51,7 @@ export const AccessPackageInfo = ({ accessPackage, availableActions = [] }: Pack
     isLoadingRequest,
     isLoading: isActionLoading,
   } = useAccessPackageActions({
-    disableSuccessSnackbars: true,
+    snackbarBusy: isFetching,
     onDelegateSuccess: () => {
       setActionSuccess(true);
       setTimeout(() => setActionSuccess(false), 2000);
@@ -59,12 +65,6 @@ export const AccessPackageInfo = ({ accessPackage, availableActions = [] }: Pack
   });
   const { actionError, setActionError, actionSuccess, setActionSuccess } =
     useDelegationModalContext();
-
-  const { data: activeDelegations, isFetching } = useGetUserDelegationsQuery({
-    to: toParty?.partyUuid ?? '',
-    from: fromParty?.partyUuid ?? '',
-    party: actingParty?.partyUuid ?? '',
-  });
   const actionsRef = React.useRef<HTMLDivElement>(null);
   const isRequestActionLoading = isLoadingRequest(accessPackage);
   useRestoreFocusAfterSettled({
