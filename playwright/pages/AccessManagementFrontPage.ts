@@ -58,6 +58,7 @@ export class AccessManagementFrontPage {
 
   async goToUsers() {
     await this.sidebar.goToUsers();
+    await expect(this.page.getByText(/Brukere med fullmakter for/)).toBeVisible();
   }
 
   async expandOrg(org: string) {
