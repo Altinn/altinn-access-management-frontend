@@ -58,6 +58,11 @@ export class AccessManagementFrontPage {
 
   async goToUsers() {
     await this.sidebar.goToUsers();
+    await expect(
+      this.page.getByRole('heading', {
+        name: this.texts.users_page.main_page_heading.split('{{name}}')[0].trim(),
+      }),
+    ).toBeVisible();
   }
 
   async expandOrg(org: string) {
