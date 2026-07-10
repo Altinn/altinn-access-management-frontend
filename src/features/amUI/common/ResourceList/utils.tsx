@@ -77,3 +77,12 @@ export const extractResourceId = (resource: ResourceListItemResource): string | 
 
   return undefined;
 };
+
+export const isExpiredResource = (resource: ResourceListItemResource): boolean => {
+  const resourceType = 'resourceType' in resource ? resource.resourceType : undefined;
+  const status = 'status' in resource ? resource.status : undefined;
+  return (
+    resourceType === 'MigratedApp' ||
+    (typeof status === 'string' && status.toLowerCase() === 'deprecated')
+  );
+};

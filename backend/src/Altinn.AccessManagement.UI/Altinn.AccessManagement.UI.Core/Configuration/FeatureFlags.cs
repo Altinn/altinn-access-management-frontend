@@ -22,16 +22,6 @@ namespace Altinn.AccessManagement.UI.Core.Configuration
         public bool DisplayRoles { get; set; }
 
         /// <summary>
-        /// Whether or not to only display the service/resource delegation feature in the UI
-        /// </summary>
-        public bool DisplayResourceDelegation { get; set; }
-
-        /// <summary>
-        /// Whether to show the new AMUI to PRIV users
-        /// </summary>
-        public bool RestrictPrivUse { get; set; }
-
-        /// <summary>
         /// Whether to enable cross platform links
         /// </summary>
         public bool CrossPlatformLinks { get; set; }
@@ -105,5 +95,28 @@ namespace Altinn.AccessManagement.UI.Core.Configuration
         /// Whether to enrich instance delegations with dialogporten lookup data
         /// </summary>
         public bool EnableDialogportenDialogLookup { get; set; }
+
+        /// <summary>
+        /// Whether to enable the Maskinporten administration page
+        /// </summary>
+        public bool EnableMaskinportenAdministration { get; set; }
+
+        /// <summary>
+        /// Whether to enable deletion of Altinn 2 roles
+        /// </summary>
+        public bool EnableRoleDeletion { get; set; }
+
+        /// <summary>
+        /// When true, <c>ReporteeController.ChangeAndRedirect</c> bounces through Altinn 2's
+        /// <c>/ui/Reportee/ChangeReporteeAndRedirect</c> after setting Altinn 3 cookies, so that
+        /// Altinn 2 can set its own session cookies before forwarding to the final destination.
+        /// Intended for the migration period while some downstream pages still depend on Altinn 2 cookies.
+        /// </summary>
+        public bool RouteChangeReporteeViaAltinn2 { get; set; }
+
+        /// <summary>
+        /// Whether to enable adding Altinn 2 account to email user
+        /// </summary>
+        public bool AddAltinn2Account { get; set; }
     }
 }

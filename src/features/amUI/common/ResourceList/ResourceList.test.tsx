@@ -5,6 +5,7 @@ import userEvent from '@testing-library/user-event';
 
 import { ResourceList } from './ResourceList';
 import type { PackageResource, ResourceProvider } from '@/rtk/features/accessPackageApi';
+import type { ResourceListItemResource } from './types';
 
 vi.mock('@/resources/hooks/useProviderLogoUrl', () => ({
   useProviderLogoUrl: () => ({
@@ -83,6 +84,21 @@ describe('ResourceList', () => {
     expect(screen.getByText('Badge')).toBeInTheDocument();
   });
 
+  it('uses custom description text while preserving ownerName', () => {
+    const resources = [createResource({ name: 'With Description Text' })];
+
+    render(
+      <ResourceList
+        resources={resources}
+        enableSearch={false}
+        getDescriptionText={() => '3 scopes'}
+      />,
+    );
+
+    expect(screen.getByText('3 scopes')).toBeInTheDocument();
+    expect(screen.getByAltText('Altinn')).toBeInTheDocument();
+  });
+
   it('filters resources based on the search input', async () => {
     const user = userEvent.setup();
     const resources = [
@@ -96,5 +112,67 @@ describe('ResourceList', () => {
 
     expect(screen.queryByRole('button', { name: /Alpha Service/i })).not.toBeInTheDocument();
     expect(screen.getByRole('button', { name: /Beta Service/i })).toBeInTheDocument();
+  });
+
+  it('renders the expired badge for a resource with resourceType MigratedApp', () => {
+    const expiredResource = {
+      ...createResource({ name: 'Expired Service' }),
+      resourceType: 'MigratedApp',
+    } as ResourceListItemResource;
+
+    render(
+      <ResourceList
+        resources={[expiredResource]}
+        enableSearch={false}
+      />,
+    );
+
+    expect(screen.getByText('resource_list.expired_badge')).toBeInTheDocument();
+  });
+
+  it('does not render the expired badge for a migratedcorrespondence resource that is not deprecated', () => {
+    const nonExpiredResource = {
+      ...createResource({ name: 'Migrated Correspondence Service' }),
+      identifier: 'some-migratedcorrespondence-service',
+    } as ResourceListItemResource;
+
+    render(
+      <ResourceList
+        resources={[nonExpiredResource]}
+        enableSearch={false}
+      />,
+    );
+
+    expect(screen.queryByText('resource_list.expired_badge')).not.toBeInTheDocument();
+  });
+
+  it('renders the expired badge for a migratedcorrespondence resource with deprecated status', () => {
+    const expiredResource = {
+      ...createResource({ name: 'Migrated Correspondence Service' }),
+      identifier: 'some-migratedcorrespondence-service',
+      status: 'Deprecated',
+    } as ResourceListItemResource;
+
+    render(
+      <ResourceList
+        resources={[expiredResource]}
+        enableSearch={false}
+      />,
+    );
+
+    expect(screen.getByText('resource_list.expired_badge')).toBeInTheDocument();
+  });
+
+  it('does not render the expired badge for a non-expired resource', () => {
+    const normalResource = createResource({ name: 'Normal Service' });
+
+    render(
+      <ResourceList
+        resources={[normalResource]}
+        enableSearch={false}
+      />,
+    );
+
+    expect(screen.queryByText('resource_list.expired_badge')).not.toBeInTheDocument();
   });
 });

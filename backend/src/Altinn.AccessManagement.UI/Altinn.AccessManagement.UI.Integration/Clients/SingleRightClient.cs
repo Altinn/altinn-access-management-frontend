@@ -59,9 +59,14 @@ namespace Altinn.AccessManagement.UI.Integration.Clients
         }
 
         /// <inheritdoc />
-        public async Task<List<ResourcePermission>> GetDelegatedResources(string languageCode, Guid party, Guid from, Guid to)
+        public async Task<List<ResourcePermission>> GetDelegatedResources(string languageCode, Guid party, Guid from, Guid? to)
         {
-            string endpointUrl = $"enduser/connections/resources?party={party}&to={to}&from={from}";
+            string endpointUrl = $"enduser/connections/resources?party={party}&from={from}";
+            if (to.HasValue)
+            {
+                endpointUrl += $"&to={to.Value}";
+            }
+
             string token = JwtTokenUtil.GetTokenFromContext(_httpContextAccessor.HttpContext, _platformSettings.JwtCookieName);
 
             HttpResponseMessage response = await _client.GetAsync(token, endpointUrl, languageCode: languageCode);

@@ -1,6 +1,6 @@
 import type { Role } from '@/rtk/features/roleApi';
 import { useGetRolePermissionsQuery } from '@/rtk/features/roleApi';
-import type { ActionError } from '@/resources/hooks/useActionError';
+import { enableRoleDeletion } from '@/resources/utils/featureFlagUtils';
 import { usePartyRepresentation } from '../PartyRepresentationContext/PartyRepresentationContext';
 import { SkeletonRoleList } from './SkeletonRoleList';
 import {
@@ -13,9 +13,15 @@ import { t } from 'i18next';
 import { RoleListItem } from './RoleListItem';
 import classes from './roleSection.module.css';
 import { useRoleMetadata } from '../UserRoles/useRoleMetadata';
+import { RoleDeleteButton } from './RoleDeleteButton';
+import { useIsMobileOrSmaller } from '@/resources/utils/screensizeUtils';
+import { useRestoreFocusOnDataChange } from '../RestoreFocus';
+import { HelpText } from '../HelpText/HelpText';
+
+export const ROLE_LIST_HEADING_ID = 'role_list_heading';
 
 interface RoleListProps {
-  onSelect: (role: Role) => void;
+  onSelect: (role: Role, error?: unknown) => void;
   isLoading?: boolean;
 }
 
@@ -36,6 +42,9 @@ export const RoleList = ({ onSelect, isLoading }: RoleListProps) => {
     },
   );
 
+  const enableRoleDeletionFlag = enableRoleDeletion();
+  const isMobileOrSmaller = useIsMobileOrSmaller();
+
   const {
     mapRoles,
     error: roleMetadataError,
@@ -45,6 +54,8 @@ export const RoleList = ({ onSelect, isLoading }: RoleListProps) => {
   const { altinn2Roles } = useGroupedRoleListEntries({
     permissions,
   });
+
+  const requestFocusOnDataChange = useRestoreFocusOnDataChange(permissions);
 
   const mappedRoles = mapRoles(altinn2Roles?.map(({ role }) => role ?? ([] as Role[])));
 
@@ -79,22 +90,41 @@ export const RoleList = ({ onSelect, isLoading }: RoleListProps) => {
   }
   return (
     <div className={classes.roleArea}>
-      <DsHeading
-        level={2}
-        data-size='xs'
-      >
-        {t('role.current_roles_title', { count: mappedRoles.length })}
-      </DsHeading>
+      <div className={classes.roleListHeader}>
+        <DsHeading
+          level={2}
+          data-size='xs'
+          id={ROLE_LIST_HEADING_ID}
+        >
+          {t('role.current_roles_title', { count: mappedRoles.length })}
+        </DsHeading>
+        <HelpText aria-label={t('role.header_info')}>{t('role.header_info_content')}</HelpText>
+      </div>
       {mappedRoles.length === 0 ? (
         <DsParagraph>{t('role.no_roles_message')}</DsParagraph>
       ) : (
         <List>
           {mappedRoles.map((role) => {
+            const rolePermissions = permissions?.find((p) => p.role?.id === role.id);
+            const isRoleDeletable = rolePermissions?.role?.isRevocable ?? false;
             return (
               <RoleListItem
                 key={role.id}
                 role={role}
                 onClick={() => onSelect(role)}
+                deleteButton={
+                  enableRoleDeletionFlag && isRoleDeletable && !isMobileOrSmaller ? (
+                    <RoleDeleteButton
+                      role={role}
+                      variant='tertiary'
+                      color='neutral'
+                      size='sm'
+                      icon={true}
+                      onSuccess={() => requestFocusOnDataChange(role.id, ROLE_LIST_HEADING_ID)}
+                      onError={(error) => onSelect(role, error)}
+                    />
+                  ) : undefined
+                }
               />
             );
           })}

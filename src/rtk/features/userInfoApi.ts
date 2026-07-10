@@ -117,7 +117,7 @@ export const userInfoApi = createApi({
       invalidatesTags: ['UserProfile'],
     }),
     getReportee: builder.query<ReporteeInfo, void>({
-      query: () => `reportee/${getCookie('AltinnPartyId')}`,
+      query: () => `reportee/${getCookie('AltinnPartyUuid')}`,
       keepUnusedDataFor: 300,
     }),
     getReporteeListForParty: builder.query<User[], void>({
@@ -179,6 +179,9 @@ export const userInfoApi = createApi({
     getIsInstanceAdmin: builder.query<boolean, void>({
       query: () => `isInstanceAdmin?party=${getCookie('AltinnPartyUuid')}`,
     }),
+    getIsMaskinportenAdmin: builder.query<boolean, void>({
+      query: () => `isMaskinportenAdmin?party=${getCookie('AltinnPartyUuid')}`,
+    }),
   }),
 });
 
@@ -197,6 +200,7 @@ export const {
   useGetIsCompanyProfileAdminQuery,
   useGetIsHovedadminQuery,
   useGetIsInstanceAdminQuery,
+  useGetIsMaskinportenAdminQuery,
 } = userInfoApi;
 
 export const { endpoints, reducerPath, reducer, middleware } = userInfoApi;

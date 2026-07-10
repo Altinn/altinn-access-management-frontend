@@ -106,9 +106,11 @@ const StepOne = ({ isLoading, isError, onEscalate, onCancel }: StepOneProps) => 
           >
             {t('systemuser_request.escalate_cancel_button')}
           </DsButton>
-          {isError && (
-            <DsValidationMessage>{t('systemuser_request.escalate_error')}</DsValidationMessage>
-          )}
+          <div aria-live='polite'>
+            {isError && (
+              <DsValidationMessage>{t('systemuser_request.escalate_error')}</DsValidationMessage>
+            )}
+          </div>
         </ButtonRow>
       </div>
     </>

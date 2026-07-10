@@ -23,36 +23,6 @@ namespace Altinn.AccessManagement.UI.Tests.Utils
         /// </summary>
         /// <param name="customFactory">Web app factory to configure test services for</param>
         /// <returns>HttpClient</returns>
-        public static HttpClient GetTestClient(CustomWebApplicationFactory<APIDelegationController> customFactory)
-        {
-            WebApplicationFactory<APIDelegationController> factory = customFactory.WithWebHostBuilder(builder =>
-            {
-                builder.ConfigureTestServices(services =>
-                {
-                    services.AddTransient<IResourceRegistryClient, ResourceRegistryClientMock>();
-                    services.AddTransient<IAccessManagementClient, AccessManagementClientMock>();
-                    services.AddTransient<IProfileClient, ProfileClientMock>();
-                    services.AddSingleton<IPostConfigureOptions<JwtCookieOptions>, JwtCookiePostConfigureOptionsStub>();
-                });
-            });
-            WebApplicationFactoryClientOptions opts = new WebApplicationFactoryClientOptions
-            {
-                HandleCookies = true,
-            };
-            factory.Server.AllowSynchronousIO = true;
-            var client = factory.CreateClient(opts);
-            client.DefaultRequestHeaders.Add("Cookie", "altinnPersistentContext=UL=1044");
-            client.DefaultRequestHeaders.Add("Cookie", "selectedLanguage=no_nb");
-
-            return client;
-        }
-
-
-        /// <summary>
-        ///     Gets a HttpClient for unittests testing
-        /// </summary>
-        /// <param name="customFactory">Web app factory to configure test services for</param>
-        /// <returns>HttpClient</returns>
         public static HttpClient GetSingleRightTestClient(CustomWebApplicationFactory<SingleRightController> customFactory)
         {
             WebApplicationFactory<SingleRightController> factory = customFactory.WithWebHostBuilder(builder =>
@@ -129,7 +99,6 @@ namespace Altinn.AccessManagement.UI.Tests.Utils
                     services.Configure<FeatureFlags>(options =>
                     {
                         options.DisplayPopularSingleRightsServices = flags?.DisplayPopularSingleRightsServices ?? true;
-                        options.DisplayResourceDelegation = flags?.DisplayResourceDelegation ?? true;
                         options.DisplayConfettiPackage = flags?.DisplayConfettiPackage ?? true;
                         options.DisplayRoles = flags?.DisplayRoles ?? true;
                     });
@@ -158,7 +127,6 @@ namespace Altinn.AccessManagement.UI.Tests.Utils
                     services.Configure<FeatureFlags>(options =>
                     {
                         options.DisplayPopularSingleRightsServices = flags?.DisplayPopularSingleRightsServices ?? true;
-                        options.DisplayResourceDelegation = flags?.DisplayResourceDelegation ?? true;
                         options.DisplayConfettiPackage = flags?.DisplayConfettiPackage ?? true;
                         options.DisplayRoles = flags?.DisplayRoles ?? true;
                         options.UseNewActorsList = flags?.UseNewActorsList ?? false;
@@ -188,10 +156,8 @@ namespace Altinn.AccessManagement.UI.Tests.Utils
                    services.Configure<FeatureFlags>(options =>
                    {
                        options.DisplayPopularSingleRightsServices = flags?.DisplayPopularSingleRightsServices ?? true;
-                       options.DisplayResourceDelegation = flags?.DisplayResourceDelegation ?? true;
                        options.DisplayConfettiPackage = flags?.DisplayConfettiPackage ?? true;
                        options.DisplayRoles = flags?.DisplayRoles ?? true;
-                       options.RestrictPrivUse = flags?.RestrictPrivUse ?? false;
                        options.CrossPlatformLinks = flags?.CrossPlatformLinks ?? false;
                    });
                });
@@ -233,6 +199,10 @@ namespace Altinn.AccessManagement.UI.Tests.Utils
                 builder.ConfigureTestServices(services =>
                 {
                     services.AddTransient<IProfileClient, ProfileClientMock>();
+                    services.AddTransient<IAccessManagementClient, AccessManagementClientMock>();
+                    services.AddTransient<IAccessManagementClientV0, AccessManagementClientV0Mock>();
+                    services.AddTransient<IConnectionClient, ConnectionClientMock>();
+                    services.AddTransient<IUserService, UserService>();
                     services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
                     services.AddSingleton<IPostConfigureOptions<JwtCookieOptions>, JwtCookiePostConfigureOptionsStub>();
                 });
@@ -564,6 +534,138 @@ namespace Altinn.AccessManagement.UI.Tests.Utils
         }
 
         /// <summary>
+        ///     Gets a HttpClient for unittests testing for ReporteeController
+        /// </summary>
+        /// <param name="customFactory">Web app factory to configure test services for ReporteeController tests</param>
+        /// <returns>HttpClient (auto-redirect disabled)</returns>
+        public static HttpClient GetTestClient(CustomWebApplicationFactory<ReporteeController> customFactory)
+            => GetTestClient(customFactory, flags: null, hostnameOverride: null);
+
+        /// <summary>
+        ///     Gets a HttpClient for unittests testing for ReporteeController with overrides for feature flags and hostname.
+        /// </summary>
+        /// <param name="customFactory">Web app factory to configure test services for ReporteeController tests</param>
+        /// <param name="flags">Optional feature flag overrides. Only flags relevant to ReporteeController are honoured.</param>
+        /// <param name="hostnameOverride">Optional hostname to override <see cref="GeneralSettings.Hostname"/> (e.g. to simulate a real Altinn host in tests).</param>
+        /// <returns>HttpClient (auto-redirect disabled)</returns>
+        public static HttpClient GetTestClient(
+            CustomWebApplicationFactory<ReporteeController> customFactory,
+            FeatureFlags flags,
+            string hostnameOverride)
+        {
+            WebApplicationFactory<ReporteeController> factory = customFactory.WithWebHostBuilder(builder =>
+            {
+                builder.ConfigureTestServices(services =>
+                {
+                    services.AddTransient<IAccessManagementClient, AccessManagementClientMock>();
+                    services.AddTransient<IAccessManagementClientV0, AccessManagementClientV0Mock>();
+                    services.AddTransient<IProfileClient, ProfileClientMock>();
+                    services.AddTransient<IConnectionClient, ConnectionClientMock>();
+                    services.AddTransient<IUserService, UserService>();
+                    services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
+                    services.AddSingleton<IPostConfigureOptions<JwtCookieOptions>, JwtCookiePostConfigureOptionsStub>();
+
+                    if (flags != null)
+                    {
+                        services.Configure<FeatureFlags>(options =>
+                        {
+                            options.RouteChangeReporteeViaAltinn2 = flags.RouteChangeReporteeViaAltinn2;
+                        });
+                    }
+
+                    if (!string.IsNullOrEmpty(hostnameOverride))
+                    {
+                        services.Configure<GeneralSettings>(options =>
+                        {
+                            options.Hostname = hostnameOverride;
+                        });
+                    }
+                });
+            });
+            WebApplicationFactoryClientOptions opts = new WebApplicationFactoryClientOptions
+            {
+                AllowAutoRedirect = false,
+
+                // Test requests target http://localhost/... while the controller writes Set-Cookie with the
+                // overridden domain (e.g. at22.altinn.cloud). The container would reject such mismatched
+                // cookies on parse — we want to inspect the Set-Cookie header directly anyway.
+                HandleCookies = false,
+            };
+            factory.Server.AllowSynchronousIO = true;
+            return factory.CreateClient(opts);
+        }
+
+        /// <summary>
+        /// Gets a HttpClient for unittests testing for MaskinportenController
+        /// </summary>
+        /// <param name="customFactory">Web app factory to configure test services for MaskinportenController tests</param>
+        /// <returns>HttpClient</returns>
+        internal static HttpClient GetTestClient(CustomWebApplicationFactory<MaskinportenController> customFactory)
+        {
+            WebApplicationFactory<MaskinportenController> factory = customFactory.WithWebHostBuilder(builder =>
+            {
+                builder.ConfigureTestServices(services =>
+                {
+                    services.AddTransient<IMaskinportenClient, MaskinportenClientMock>();
+                    services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
+                    services.AddSingleton<IPostConfigureOptions<JwtCookieOptions>, JwtCookiePostConfigureOptionsStub>();
+                });
+            });
+            WebApplicationFactoryClientOptions opts = new WebApplicationFactoryClientOptions
+            {
+                AllowAutoRedirect = false,
+            };
+            factory.Server.AllowSynchronousIO = true;
+            return factory.CreateClient(opts);
+        }
+
+        /// <summary>
+        ///     Gets a HttpClient for unittests testing for DelegationExportController
+        /// </summary>
+        /// <param name="customFactory">Web app factory to configure test services for DelegationExportController tests</param>
+        /// <returns>HttpClient</returns>
+        public static HttpClient GetTestClient(CustomWebApplicationFactory<DelegationExportController> customFactory)
+        {
+            WebApplicationFactory<DelegationExportController> factory = customFactory.WithWebHostBuilder(builder =>
+            {
+                builder.ConfigureTestServices(services =>
+                {
+                    // Reportee resolution (UserService -> these clients).
+                    services.AddTransient<IAccessManagementClient, AccessManagementClientMock>();
+                    services.AddTransient<IAccessManagementClientV0, AccessManagementClientV0Mock>();
+                    services.AddTransient<IConnectionClient, ConnectionClientMock>();
+                    services.AddTransient<IProfileClient, ProfileClientMock>();
+
+                    // Right-type sources.
+                    services.AddTransient<IRoleClient, RoleClientMock>();
+                    services.AddTransient<IAccessPackageClient, AccessPackageClientMock>();
+                    services.AddTransient<ISingleRightClient, SingleRightClientMock>();
+                    services.AddTransient<IInstanceClient, InstanceClientMock>();
+                    services.AddTransient<IAuthenticationClient, AuthenticationMock>();
+                    services.AddTransient<IDialogportClient, DialogportClientMock>();
+                    services.AddTransient<IResourceRegistryClient, ResourceRegistryClientMock>();
+
+                    services.Configure<FeatureFlags>(options =>
+                    {
+                        options.EnableDialogportenDialogLookup = true;
+                    });
+                    services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
+                    services.AddSingleton<IPostConfigureOptions<JwtCookieOptions>, JwtCookiePostConfigureOptionsStub>();
+                });
+            });
+            WebApplicationFactoryClientOptions opts = new WebApplicationFactoryClientOptions
+            {
+                HandleCookies = true,
+            };
+            factory.Server.AllowSynchronousIO = true;
+            var client = factory.CreateClient(opts);
+            client.DefaultRequestHeaders.Add("Cookie", "altinnPersistentContext=UL=1044");
+            client.DefaultRequestHeaders.Add("Cookie", "selectedLanguage=no_nb");
+
+            return client;
+        }
+
+        /// <summary>
         ///     Gets a HttpClient for unittests testing
         /// </summary>
         /// <param name="customFactory">Web app factory to configure test services for RequestController tests</param>
@@ -575,6 +677,28 @@ namespace Altinn.AccessManagement.UI.Tests.Utils
                 builder.ConfigureTestServices(services =>
                 {
                     services.AddTransient<IRequestClient, RequestClientMock>();
+                    services.AddTransient<IAccessPackageClient, AccessPackageClientMock>();
+                    services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
+                    services.AddSingleton<IPostConfigureOptions<JwtCookieOptions>, JwtCookiePostConfigureOptionsStub>();
+                });
+            });
+            factory.Server.AllowSynchronousIO = true;
+            return factory.CreateClient();
+        }
+
+        /// <summary>
+        ///     Gets a HttpClient for unittests testing
+        /// </summary>
+        /// <param name="customFactory">Web app factory to configure test services for RequestController tests</param>
+        /// <returns>HttpClient</returns>
+        public static HttpClient GetTestClient(CustomWebApplicationFactory<SelfIdentifiedUserController> customFactory)
+        {
+            WebApplicationFactory<SelfIdentifiedUserController> factory = customFactory.WithWebHostBuilder(builder =>
+            {
+                builder.ConfigureTestServices(services =>
+                {
+                    services.AddTransient<ISelfIdentifiedUserClient, SelfIdentifiedUserClientMock>();
+                    services.AddTransient<IConnectionClient, ConnectionClientMock>();
                     services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
                     services.AddSingleton<IPostConfigureOptions<JwtCookieOptions>, JwtCookiePostConfigureOptionsStub>();
                 });

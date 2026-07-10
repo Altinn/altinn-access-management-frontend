@@ -1,3 +1,5 @@
+using System.Globalization;
+
 namespace Altinn.AccessManagement.UI.Core.Helpers
 {
     /// <summary>
@@ -5,6 +7,29 @@ namespace Altinn.AccessManagement.UI.Core.Helpers
     /// </summary>
     public static class PersonIdentifierUtils
     {
+        /// <summary>
+        /// Formats a person's date of birth as <c>dd.MM.yyyy</c> (e.g. "1966-12-25" =&gt;
+        /// "25.12.1966"). Used as the recipient identifier for persons in the delegated-rights
+        /// export, where the full national identity number is not available (and must not be
+        /// exposed). The personal-number part is never included.
+        /// </summary>
+        /// <param name="dateOfBirth">The date of birth in ISO format (yyyy-MM-dd).</param>
+        /// <returns>The formatted birth date, or <see cref="string.Empty"/> when the date cannot be parsed.</returns>
+        public static string FormatDateOfBirth(string dateOfBirth)
+        {
+            if (string.IsNullOrWhiteSpace(dateOfBirth))
+            {
+                return string.Empty;
+            }
+
+            if (DateTime.TryParse(dateOfBirth, CultureInfo.InvariantCulture, DateTimeStyles.None, out DateTime parsed))
+            {
+                return parsed.ToString("dd.MM.yyyy", CultureInfo.InvariantCulture);
+            }
+
+            return string.Empty;
+        }
+
         /// <summary>
         /// Checks whether a person identifier is a valid SSN (11 digits).
         /// </summary>

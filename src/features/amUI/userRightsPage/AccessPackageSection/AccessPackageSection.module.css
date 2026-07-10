@@ -20,6 +20,7 @@
   display: flex;
   align-items: center;
   gap: 8px;
+  margin-left: auto;
 }
 
 @media only screen and (max-width: 768px) {
@@ -35,5 +36,6 @@
 
   .delegateButton {
     align-self: flex-start;
+    margin-left: 0;
   }
 }

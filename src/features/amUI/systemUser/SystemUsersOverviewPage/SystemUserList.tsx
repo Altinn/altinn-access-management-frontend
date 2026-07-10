@@ -4,10 +4,10 @@ import { useTranslation } from 'react-i18next';
 import { Link, useLocation } from 'react-router';
 import classes from './SystemUserOverviewPage.module.css';
 import { Badge, DsHeading, List, ListItem } from '@altinn/altinn-components';
-import { TenancyIcon } from '@navikt/aksel-icons';
 import {
   getSystemUserAgentRequestUrl,
   getSystemUserRequestUrl,
+  SystemUserPath,
 } from '@/routes/paths/systemUserPath';
 
 interface SystemUserListProps {
@@ -53,14 +53,23 @@ export const SystemUserList = ({
             href = `/systemuser/${systemUser.id}/agentdelegation`;
           } else if (systemUser.userType === 'standard' && isPendingRequestList) {
             badgeContent = t('systemuser_overviewpage.pending_request_badge');
-            href = getSystemUserRequestUrl(systemUser.id, 'overview');
+            href = getSystemUserRequestUrl(
+              systemUser.id,
+              encodeURIComponent(`/${SystemUserPath.SystemUser}/${SystemUserPath.Overview}`),
+            );
           } else if (systemUser.userType === 'agent' && isPendingRequestList) {
             badgeContent = t('systemuser_overviewpage.pending_agent_request_badge');
-            href = getSystemUserAgentRequestUrl(systemUser.id, 'overview');
+            href = getSystemUserAgentRequestUrl(
+              systemUser.id,
+              encodeURIComponent(`/${SystemUserPath.SystemUser}/${SystemUserPath.Overview}`),
+            );
           }
 
           const badge = (
-            <div className={classes.systemUserBadge}>
+            <div
+              className={classes.systemUserBadge}
+              aria-hidden
+            >
               {newlyCreatedId === systemUser.id && (
                 <Badge
                   label={t('systemuser_overviewpage.new_system_user')}
@@ -81,7 +90,8 @@ export const SystemUserList = ({
             <ListItem
               key={systemUser.id}
               size='lg'
-              title={{ children: `${systemUser.integrationTitle} ${refText}`, as: 'h3' }}
+              title={{ children: `${systemUser.integrationTitle} ${refText}`, as: 'div' }}
+              ariaLabel={`${systemUser.integrationTitle} ${newlyCreatedId === systemUser.id ? t('systemuser_overviewpage.new_system_user') : ''} ${refText} ${systemUser.system.systemVendorOrgName} ${badgeContent}`}
               description={systemUser.system.systemVendorOrgName}
               as={(props) => (
                 <Link

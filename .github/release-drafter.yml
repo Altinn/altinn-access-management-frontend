@@ -1,9 +1,9 @@
 template: |
   # Changelog
   $CHANGES
-  
-  See details of [all code changes](https://github.com/altinn/altinn-access-management-frontend/compare/$PREVIOUS_TAG...v$RESOLVED_VERSION) since previous release 
-  
+
+  See details of [all code changes](https://github.com/altinn/altinn-access-management-frontend/compare/$PREVIOUS_TAG...v$RESOLVED_VERSION) since previous release
+
 categories:
   - title: '🚀 Features'
     labels:
@@ -15,6 +15,9 @@ categories:
   - title: '🧪 Test Coverage'
     labels:
       - 'Test'
+  - title: '📝 Text improvements'
+    labels:
+      - 'Text'
   - title: '🧰 Maintenance'
     labels:
       - 'kind/documentation'

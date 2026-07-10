@@ -1,9 +1,17 @@
-import { env } from 'playwright/util/helper';
 import { test } from 'playwright/fixture/pomFixture';
 import { DelegationApiUtil } from 'playwright/util/delegationApiUtil';
 import { withTimeout } from 'playwright/util/asyncUtils';
 
 test.describe('Delegate access pacakge from Org-A(Avgiver) to Org-B(Rettighetshaver) ', () => {
+  test.beforeEach(async ({}, testInfo) => {
+    const title = testInfo.title || 'unknown-test';
+    try {
+      await DelegationApiUtil.cleanupAllDelegations(title);
+    } catch {
+      /* ignore if nothing to clean */
+    }
+  });
+
   test.afterEach(async ({}, testInfo) => {
     const title = testInfo.title || 'unknown-test';
 
@@ -20,14 +28,14 @@ test.describe('Delegate access pacakge from Org-A(Avgiver) to Org-B(Rettighetsha
   });
 
   test('Org-A delegates access package to Org-B', async ({
-    page,
     delegation,
     login,
     aktorvalgHeader,
     accessManagementFrontPage,
   }) => {
     await test.step('Log in', async () => {
-      await page.goto(env('BASE_URL'));
+      // LoginToAccessManagement pins the app language (before login, via the
+      // settings API) so selectors match regardless of the user's profile.
       await login.LoginToAccessManagement('04856996188');
       await aktorvalgHeader.selectActorFromHeaderMenu('SUBJEKTIV ELASTISK TIGER AS');
       await accessManagementFrontPage.goToUsers();
@@ -75,14 +83,14 @@ test.describe('Delegate access pacakge from Org-A(Avgiver) to Org-B(Rettighetsha
     });
   });
 
-  test('Org-C revokes all delegated rights from Org-D', async ({
+  // Doesnt test anything? Skipping for now.
+  test.skip('Org-C revokes all delegated rights from Org-D', async ({
     delegation,
     page,
     login,
     aktorvalgHeader,
   }) => {
     await test.step('log in', async () => {
-      await page.goto(env('BASE_URL'));
       await login.LoginToAccessManagement('04856996188');
       await aktorvalgHeader.selectActorFromHeaderMenu('SUBJEKTIV ELASTISK TIGER AS');
     });

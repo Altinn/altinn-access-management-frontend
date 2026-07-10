@@ -33,6 +33,7 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
         private readonly ResourceService _resourceService;
         private readonly JsonSerializerOptions options = new JsonSerializerOptions { PropertyNameCaseInsensitive = true };
         private readonly string mockFolder;
+        private const string ExpectedDataPath = "Data/ExpectedResults";
 
         /// <summary>
         ///     Constructor setting up factory, test client and dependencies
@@ -45,40 +46,6 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
             _client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
             _resourceService = new ResourceService();
             mockFolder = Path.GetDirectoryName(new Uri(typeof(ResourceRegistryClientMock).Assembly.Location).LocalPath);
-        }
-
-        /// <summary>
-        ///     Test case: GetResources returns a list of resources
-        ///     Expected: GetResources returns a list of resources with language filtered for the authenticated users selected
-        ///     language
-        /// </summary>
-        [Fact]
-        public async Task GetMaskinportenResources_valid()
-        {
-            // Arrange
-            List<ServiceResourceFE> expectedResources = TestDataUtil.GetExpectedResources(ResourceType.MaskinportenSchema);
-
-            string token = PrincipalUtil.GetToken(1337, 501337);
-            _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
-
-            // Act
-            HttpResponseMessage response = await _client.GetAsync("accessmanagement/api/v1/resources/maskinportenapi/search");
-
-            // Assert
-            Assert.Equal(HttpStatusCode.OK, response.StatusCode);
-
-            List<ServiceResourceFE> actualResources = JsonSerializer.Deserialize<List<ServiceResourceFE>>(await response.Content.ReadAsStringAsync(), options);
-            AssertionUtil.AssertCollections(expectedResources, actualResources, AssertionUtil.AssertEqual);
-
-            // Ensure resources without an owner name still surface with their organisational metadata intact.
-            ServiceResourceFE expectedMissingOwnerResource = expectedResources.Find(r => r.Identifier == "appid-520");
-            Assert.NotNull(expectedMissingOwnerResource);
-
-            ServiceResourceFE actualMissingOwnerResource = actualResources.Find(r => r.Identifier == expectedMissingOwnerResource.Identifier);
-            Assert.NotNull(actualMissingOwnerResource);
-            Assert.Null(actualMissingOwnerResource.ResourceOwnerName);
-            Assert.Equal(expectedMissingOwnerResource.ResourceOwnerOrgNumber, actualMissingOwnerResource.ResourceOwnerOrgNumber);
-            Assert.Equal(expectedMissingOwnerResource.ResourceOwnerOrgcode, actualMissingOwnerResource.ResourceOwnerOrgcode);
         }
 
         /// <summary>
@@ -186,7 +153,7 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
             Assert.Equal(expectedResult.NumEntriesTotal, actualResources.NumEntriesTotal);
             AssertionUtil.AssertCollections(expectedResult.PageList, actualResources.PageList, AssertionUtil.AssertEqual);
         }
-        
+
 
         /// <summary>
         ///     Test case: PaginatedSearch with pagination and search string
@@ -251,6 +218,51 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
         }
 
         /// <summary>
+        ///     Test case: PaginatedSearch with exact title, exact identifier, and identifier substring.
+        ///     Expected: PaginatedSearch prioritizes exact title and identifier matches, and returns partial identifier
+        ///     matches with the expected weights.
+        /// </summary>
+        [Fact]
+        public async Task GetSingleRightsSearch_searchByIdentifier_SetsExpectedWeights()
+        {
+            // Arrange
+            string token = PrincipalUtil.GetToken(1337, 501337);
+            _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+            PaginatedList<ServiceResourceFE> expectedExactTitleResult = Util.GetMockData<PaginatedList<ServiceResourceFE>>($"{ExpectedDataPath}/ResourceRegistry/Search/exactTitle_digdir-sommerfest.json");
+            PaginatedList<ServiceResourceFE> expectedExactIdentifierResult = Util.GetMockData<PaginatedList<ServiceResourceFE>>($"{ExpectedDataPath}/ResourceRegistry/Search/exactIdentifier_appid-511.json");
+            PaginatedList<ServiceResourceFE> expectedPartialIdentifierResult = Util.GetMockData<PaginatedList<ServiceResourceFE>>($"{ExpectedDataPath}/ResourceRegistry/Search/partialIdentifier_appid-51.json");
+
+            // Act
+            HttpResponseMessage exactTitleResponse = await _client.GetAsync("accessmanagement/api/v1/resources/search?ResultsPerPage=10&Page=1&SearchString=DigDir%20Sommerfest");
+            HttpResponseMessage exactIdentifierResponse = await _client.GetAsync("accessmanagement/api/v1/resources/search?ResultsPerPage=10&Page=1&SearchString=appid-511");
+            HttpResponseMessage partialIdentifierResponse = await _client.GetAsync("accessmanagement/api/v1/resources/search?ResultsPerPage=10&Page=1&SearchString=appid-51");
+
+            // Assert
+            Assert.Equal(HttpStatusCode.OK, exactTitleResponse.StatusCode);
+            Assert.Equal(HttpStatusCode.OK, exactIdentifierResponse.StatusCode);
+            Assert.Equal(HttpStatusCode.OK, partialIdentifierResponse.StatusCode);
+
+            PaginatedList<ServiceResourceFE> exactTitleResults = JsonSerializer.Deserialize<PaginatedList<ServiceResourceFE>>(await exactTitleResponse.Content.ReadAsStringAsync(), options);
+            PaginatedList<ServiceResourceFE> exactIdentifierResults = JsonSerializer.Deserialize<PaginatedList<ServiceResourceFE>>(await exactIdentifierResponse.Content.ReadAsStringAsync(), options);
+            PaginatedList<ServiceResourceFE> partialIdentifierResults = JsonSerializer.Deserialize<PaginatedList<ServiceResourceFE>>(await partialIdentifierResponse.Content.ReadAsStringAsync(), options);
+
+            Assert.Equal(expectedExactTitleResult.Page, exactTitleResults.Page);
+            Assert.Equal(expectedExactTitleResult.NumEntriesTotal, exactTitleResults.NumEntriesTotal);
+            AssertionUtil.AssertCollections(expectedExactTitleResult.PageList, exactTitleResults.PageList, AssertionUtil.AssertEqual);
+            AssertionUtil.AssertCollections(expectedExactTitleResult.PageList.Select(resource => resource.PriorityCounter).ToList(), exactTitleResults.PageList.Select(resource => resource.PriorityCounter).ToList(), Assert.Equal);
+
+            Assert.Equal(expectedExactIdentifierResult.Page, exactIdentifierResults.Page);
+            Assert.Equal(expectedExactIdentifierResult.NumEntriesTotal, exactIdentifierResults.NumEntriesTotal);
+            AssertionUtil.AssertCollections(expectedExactIdentifierResult.PageList, exactIdentifierResults.PageList, AssertionUtil.AssertEqual);
+            AssertionUtil.AssertCollections(expectedExactIdentifierResult.PageList.Select(resource => resource.PriorityCounter).ToList(), exactIdentifierResults.PageList.Select(resource => resource.PriorityCounter).ToList(), Assert.Equal);
+
+            Assert.Equal(expectedPartialIdentifierResult.Page, partialIdentifierResults.Page);
+            Assert.Equal(expectedPartialIdentifierResult.NumEntriesTotal, partialIdentifierResults.NumEntriesTotal);
+            AssertionUtil.AssertCollections(expectedPartialIdentifierResult.PageList, partialIdentifierResults.PageList, AssertionUtil.AssertEqual);
+            AssertionUtil.AssertCollections(expectedPartialIdentifierResult.PageList.Select(resource => resource.PriorityCounter).ToList(), partialIdentifierResults.PageList.Select(resource => resource.PriorityCounter).ToList(), Assert.Equal);
+        }
+
+        /// <summary>
         ///     Test case: PaginatedSearch with search string and filters
         ///     Expected: PaginatedSearch returns a list of resources matching the filters and search string, ordered by number of
         ///     matches
@@ -270,7 +282,7 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
             List<ServiceResourceFE> allExpectedResources = TestDataUtil.GetSingleRightsResources().FindAll(r => roFilters.Contains(r.ResourceOwnerOrgcode?.ToLower()));
             // The most relevant resource to our search will be the Brannvesenet service, which is stored last
             // Thus we rearrange the resources until they match expected output of the search
-            var mostRelevantResourceIndex = allExpectedResources.FindIndex(r => r.ResourceOwnerOrgcode?.ToLower() == "fd" );
+            var mostRelevantResourceIndex = allExpectedResources.FindIndex(r => r.ResourceOwnerOrgcode?.ToLower() == "fd");
             var mostRelevantResource = allExpectedResources[mostRelevantResourceIndex];
             allExpectedResources.RemoveAt(mostRelevantResourceIndex);
             allExpectedResources.Insert(0, mostRelevantResource);
@@ -303,7 +315,8 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
             List<ServiceResourceFE> allExpectedResources = TestDataUtil.GetSingleRightsResources();
 
             int totalPages = (int)Math.Ceiling((double)allExpectedResources.Count / resultsPerPage);
-            int resultsFinalPage = allExpectedResources.Count % resultsPerPage;
+            int bleedoverLastPage = allExpectedResources.Count % resultsPerPage;
+            int resultsFinalPage = bleedoverLastPage == 0 ? resultsPerPage : bleedoverLastPage;
 
             List<PaginatedList<ServiceResourceFE>> allActualPages = new List<PaginatedList<ServiceResourceFE>>();
 
@@ -403,103 +416,56 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
         }
 
         /// <summary>
-        ///     Test case: Search for maskinporten schemas (no search string or filters)
-        ///     Expected: Search returns a list of all maskinporten schemas for the authenticated users selected language
+        ///     Test case: PaginatedSearch with includeExpired not set (defaults to false)
+        ///     Expected: Archived resources (MigratedApp type and deprecated status) are excluded from results.
+        ///     MigratedCorrespondence resources that are not deprecated should be included.
         /// </summary>
         [Fact]
-        public async Task MaskinportenschemaSearch_searchStringAndFilterNotSet_ReturnsAll()
+        public async Task GetSingleRightsSearch_IncludeExpiredNotSet_ExcludesArchivedResources()
         {
             // Arrange
             string token = PrincipalUtil.GetToken(1337, 501337);
             _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
-            List<ServiceResourceFE> expectedResult = TestDataUtil.GetExpectedResources(ResourceType.MaskinportenSchema);
+
+            List<ServiceResourceFE> expectedResources = TestDataUtil.GetSingleRightsResources();
 
             // Act
-            HttpResponseMessage response = await _client.GetAsync($"accessmanagement/api/v1/resources/maskinportenapi/search");
+            HttpResponseMessage response = await _client.GetAsync("accessmanagement/api/v1/resources/search?ResultsPerPage=100&Page=1");
 
             // Assert
             Assert.Equal(HttpStatusCode.OK, response.StatusCode);
 
-            List<ServiceResourceFE> actualResources = JsonSerializer.Deserialize<List<ServiceResourceFE>>(await response.Content.ReadAsStringAsync(), options);
-            AssertionUtil.AssertCollections(expectedResult, actualResources, AssertionUtil.AssertEqual);
+            PaginatedList<ServiceResourceFE> actualResult = JsonSerializer.Deserialize<PaginatedList<ServiceResourceFE>>(await response.Content.ReadAsStringAsync(), options);
+            Assert.Equal(expectedResources.Count, actualResult.NumEntriesTotal);
+            Assert.DoesNotContain(actualResult.PageList, r => r.ResourceType == ResourceType.MigratedApp);
+            Assert.DoesNotContain(actualResult.PageList, r => r.Identifier == "migratedcorrespondence-test-resource");
+            Assert.Contains(actualResult.PageList, r => r.Identifier == "migratedcorrespondence-active-resource");
         }
 
         /// <summary>
-        ///     Test case: Search for maskinporten schemas with filters
-        ///     Expected: Search returns a list of all maskinporten schemas for the authenticated users selected language matching the provided filters
+        ///     Test case: PaginatedSearch with includeExpired=true
+        ///     Expected: Archived resources (MigratedApp type and deprecated status) are included in results.
+        ///     MigratedCorrespondence resources with deprecated status should be included.
         /// </summary>
         [Fact]
-        public async Task MaskinportenschemaSearch_filterSet_ReturnsMatches()
+        public async Task GetSingleRightsSearch_IncludeExpiredTrue_IncludesExpiredResources()
         {
             // Arrange
             string token = PrincipalUtil.GetToken(1337, 501337);
             _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
-            // NARNIA
-            string[] roFilters = { "nrna" };
 
-            List<ServiceResourceFE> expectedResult = TestDataUtil.GetExpectedResources(ResourceType.MaskinportenSchema).FindAll(r => roFilters.Contains(r.ResourceOwnerOrgcode?.ToLower()));
+            List<ServiceResourceFE> expectedResources = TestDataUtil.GetSingleRightsResources(includeExpired: true);
 
             // Act
-            HttpResponseMessage response = await _client.GetAsync($"accessmanagement/api/v1/resources/maskinportenapi/search?ROFilters={roFilters[0]}");
+            HttpResponseMessage response = await _client.GetAsync("accessmanagement/api/v1/resources/search?ResultsPerPage=100&Page=1&includeExpired=true");
 
             // Assert
             Assert.Equal(HttpStatusCode.OK, response.StatusCode);
 
-            List<ServiceResourceFE> actualResources = JsonSerializer.Deserialize<List<ServiceResourceFE>>(await response.Content.ReadAsStringAsync(), options);
-            AssertionUtil.AssertCollections(expectedResult, actualResources, AssertionUtil.AssertEqual);
-        }
-
-        /// <summary>
-        ///     Test case: Search for maskinporten schemas with search
-        ///     Expected: Search returns a list of resources matching the filters and with language filtered
-        ///     for the authenticated users selected language
-        /// </summary>
-        [Fact]
-        public async Task MaskinportenschemaSearch_searchStringSet_ReturnsMatches()
-        {
-            // Arrange
-            string token = PrincipalUtil.GetToken(1337, 501337);
-            _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
-            string searchString = "klesskapet";
-
-            List<ServiceResourceFE> expectedResult = TestDataUtil.GetExpectedResources(ResourceType.MaskinportenSchema).FindAll(r => r.Title.ToLower().Contains(searchString));
-
-            // Act
-            HttpResponseMessage response = await _client.GetAsync($"accessmanagement/api/v1/resources/maskinportenapi/search?&SearchString={searchString}");
-
-            // Assert
-            Assert.Equal(HttpStatusCode.OK, response.StatusCode);
-
-            List<ServiceResourceFE> actualResources = JsonSerializer.Deserialize<List<ServiceResourceFE>>(await response.Content.ReadAsStringAsync(), options);
-            AssertionUtil.AssertCollections(expectedResult, actualResources, AssertionUtil.AssertEqual);
-        }
-
-        /// <summary>
-        ///     Test case: Search for maskinporten schemas with search and filter
-        ///     Expected: Returns a list of maskinporten schemas matching the provided filters and search string with correct chosen language
-        /// </summary>
-        [Fact]
-        public async Task MaskinportenschemaSearch_searchStringAndFilterSet_ReturnsMatches()
-        {
-            // Arrange
-            string token = PrincipalUtil.GetToken(1337, 501337);
-            _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
-            string searchString = "det magiske klesskapet";
-            // PÅFUNNSETATEN and NARNIA
-            string[] roFilters = { "paa", "nrna" };
-
-            List<ServiceResourceFE> expectedResult = TestDataUtil.GetExpectedResources(ResourceType.MaskinportenSchema).FindAll(r => roFilters.Contains(r.ResourceOwnerOrgcode?.ToLower()));
-
-            List<ServiceResourceFE> filteredExpectedResult = expectedResult.FindAll(r => r.Title.ToLower().Contains(searchString));
-
-            // Act
-            HttpResponseMessage response = await _client.GetAsync($"accessmanagement/api/v1/resources/maskinportenapi/search?&SearchString={searchString}&ROFilters={roFilters[0]}&ROFilters={roFilters[1]}");
-
-            // Assert
-            Assert.Equal(HttpStatusCode.OK, response.StatusCode);
-
-            List<ServiceResourceFE> actualResources = JsonSerializer.Deserialize<List<ServiceResourceFE>>(await response.Content.ReadAsStringAsync(), options);
-            AssertionUtil.AssertCollections(filteredExpectedResult, actualResources, AssertionUtil.AssertEqual);
+            PaginatedList<ServiceResourceFE> actualResult = JsonSerializer.Deserialize<PaginatedList<ServiceResourceFE>>(await response.Content.ReadAsStringAsync(), options);
+            Assert.Equal(expectedResources.Count, actualResult.NumEntriesTotal);
+            Assert.Contains(actualResult.PageList, r => r.ResourceType == ResourceType.MigratedApp);
+            Assert.Contains(actualResult.PageList, r => r.Identifier == "migratedcorrespondence-test-resource");
         }
 
         private static IHttpContextAccessor GetHttpContextAccessorMock(string partytype, string id)

@@ -20,7 +20,6 @@ export const ClientAdministrationPage = () => {
         <PartyRepresentationProvider
           fromPartyUuid={getCookie('AltinnPartyUuid')}
           actingPartyUuid={getCookie('AltinnPartyUuid')}
-          errorOnPriv={true}
         >
           <Breadcrumbs items={['root', 'client_administration']} />
           <ClientAdministrationPageContent />

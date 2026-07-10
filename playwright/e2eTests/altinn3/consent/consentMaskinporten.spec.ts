@@ -131,6 +131,8 @@ test.describe('Fetch consent token after approval', () => {
   /**
    * Scenario: Displaying the scenario page for a consent request (known bug)
    *
+   * Dokumentasjon: https://docs.altinn.studio/nb/authorization/what-do-you-get/consent/
+   *
    * This test is related to Altinn issue #2094.
    * Kjent bug: https://github.com/Altinn/altinn-authorization-tmp/issues/2094
    *
@@ -138,7 +140,7 @@ test.describe('Fetch consent token after approval', () => {
    *
    */
 
-  test.skip('Kjent bug som gir 400-feil. E-bevis', async ({ login, consentPage }) => {
+  test('E-bevis', async ({ login, consentPage }) => {
     const [fromOrg, personThatCanApprove] = pickRandom(fromOrgs);
     const toOrg = pickRandom(toOrgs);
     const validTo = addTimeToNowUtc({ days: 2 });
@@ -168,9 +170,7 @@ test.describe('Fetch consent token after approval', () => {
       });
 
     await test.step('Verify Digdir on-behalf-of text is displayed', async () => {
-      await expect(
-        consentPage.page.getByText('Digitaliseringsdirektoratet foretar dette oppslaget på'),
-      ).toBeVisible();
+      await expect(consentPage.textBehalfOfDigdir).toBeVisible();
     });
 
     await test.step('Approve consent', async () => {
@@ -243,8 +243,9 @@ test.describe('Fetch consent token after approval', () => {
 
     await test.step('Verify behalf of text is displayed', async () => {
       await expect(
-        consentPage.page.getByText(
-          'Jovial Konservativ Tiger AS foretar dette oppslaget på vegne av Nyttig Fredfull Struts Ltd.',
+        consentPage.textBehalfOfRelation(
+          'Jovial Konservativ Tiger AS',
+          'Nyttig Fredfull Struts Ltd',
         ),
       ).toBeVisible();
     });

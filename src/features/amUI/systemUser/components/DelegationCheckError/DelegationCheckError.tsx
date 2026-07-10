@@ -26,7 +26,12 @@ export const DelegationCheckError = ({
 
   return (
     <div className={classes.delegationCheckError}>
-      <DsAlert data-color='danger'>{getErrorMessage()}</DsAlert>
+      <DsAlert
+        data-color='danger'
+        role='alert'
+      >
+        {getErrorMessage()}
+      </DsAlert>
     </div>
   );
 };

@@ -49,7 +49,10 @@ export const DelegateErrorAlert = ({ error, targetParty, onClose }: DelegateErro
             onClick={onClose}
             aria-label={t('common.close')}
           >
-            <XMarkIcon fontSize='1.2rem' />
+            <XMarkIcon
+              fontSize='1.2rem'
+              aria-hidden='true'
+            />
           </DsButton>
         </div>
         <div className={pageClasses.delegateErrorMessage}>

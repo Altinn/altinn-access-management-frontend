@@ -1,4 +1,4 @@
-import { useMemo, useState } from 'react';
+import { useMemo, useRef, useState } from 'react';
 
 import pageClasses from './PackagePoaDetailsPage.module.css';
 import { DsParagraph, formatDisplayName } from '@altinn/altinn-components';
@@ -18,14 +18,14 @@ import { mapConnectionsToUserSearchNodes } from '../common/UserSearch/connection
 import { mapPermissionsToUserSearchNodes } from '../common/UserSearch/permissionMapper';
 import type { UserActionTarget } from '../common/UserSearch/types';
 import { usePartyRepresentation } from '../common/PartyRepresentationContext/PartyRepresentationContext';
-
-const mapUserToParty = (user: UserActionTarget): Party => ({
-  partyId: 0,
-  partyUuid: user.id,
-  name: user.name,
-  partyTypeName:
-    user.type?.toLowerCase() === 'organisasjon' ? PartyType.Organization : PartyType.Person,
-});
+import { DelegationAction } from '../common/DelegationModal/EditModal';
+import { PackageUserModal, mapUserToParty, type PackageUserModalHandle } from './PackageUserModal';
+import { NewUserButton } from '../users/NewUserModal/NewUserModal';
+import {
+  RestoreFocusFallback,
+  useRestoreFocusContext,
+  useRestoreFocusOnDataChange,
+} from '../common/RestoreFocus';
 
 interface UsersTabProps {
   accessPackage?: AccessPackage;
@@ -34,9 +34,16 @@ interface UsersTabProps {
   onDelegateError?: (errorInfo: ActionError) => void;
 }
 
+// Focus-restore fallback for this zone: when a revoked row is gone, focus lands on the search field
+// (right above the list) instead of the page heading far above. Unique within this provider zone.
+const USER_SEARCH_FALLBACK_ID = 'package_poa_user_search';
+
 export const UsersTab = ({ accessPackage, isLoading, isFetching }: UsersTabProps) => {
   const { t } = useTranslation();
   const { fromParty, toParty } = usePartyRepresentation();
+  const modalRef = useRef<PackageUserModalHandle>(null);
+  const restoreFocus = useRestoreFocusContext();
+  const requestFocusAfterListChange = useRestoreFocusOnDataChange(accessPackage?.permissions);
   const { queueSnackbar } = useSnackbarOnIdle({ isBusy: isFetching, showPendingOnUnmount: true });
   const { canDelegatePackage, isLoading: isDelegationCheckLoading } =
     useAccessPackageDelegationCheck();
@@ -73,6 +80,7 @@ export const UsersTab = ({ accessPackage, isLoading, isFetching }: UsersTabProps
       }),
     [accessPackage?.permissions, toParty?.partyUuid, fromParty?.partyUuid],
   );
+
   const indirectUsers = useMemo(
     () => mapConnectionsToUserSearchNodes(indirectConnections),
     [indirectConnections],
@@ -84,8 +92,10 @@ export const UsersTab = ({ accessPackage, isLoading, isFetching }: UsersTabProps
       type: party?.partyTypeName === PartyType.Person ? 'person' : 'company',
     });
   };
+
   const onDelegateSuccess = (p: AccessPackage, toParty: Party) => {
     setDelegateActionError(null);
+    modalRef.current?.showSuccess();
     queueSnackbar(
       t('package_poa_details_page.package_delegation_success', {
         name: formatToPartyName(toParty),
@@ -96,6 +106,7 @@ export const UsersTab = ({ accessPackage, isLoading, isFetching }: UsersTabProps
   };
 
   const onRevokeSuccess = (p: AccessPackage, toParty: Party) => {
+    modalRef.current?.showSuccess();
     queueSnackbar(
       t('package_poa_details_page.package_revocation_success', {
         name: formatToPartyName(toParty),
@@ -138,48 +149,86 @@ export const UsersTab = ({ accessPackage, isLoading, isFetching }: UsersTabProps
     }
   };
 
+  // Inline list actions move the row between the "with"/"without access" buckets (or remove it), so
+  // arm focus restoration here only — once the data settles, focus follows the row by its id (or the
+  // search field fallback). The modal path keeps focus in the dialog and restores to the list on close.
+  const handleInlineRevoke = (user: UserActionTarget) => {
+    requestFocusAfterListChange(user.id, USER_SEARCH_FALLBACK_ID);
+    handleOnRevoke(user);
+  };
+
+  const handleInlineDelegate = (user: UserActionTarget) => {
+    requestFocusAfterListChange(user.id, USER_SEARCH_FALLBACK_ID);
+    handleOnDelegate(user);
+  };
+
+  const availableActions = [
+    DelegationAction.REVOKE,
+    ...(canDelegate ? [DelegationAction.DELEGATE] : []),
+  ];
+
   return (
     <>
-      {!isLoading && (
-        <DsParagraph
-          data-size='md'
-          className={pageClasses.tabDescription}
-        >
-          {t('package_poa_details_page.users_tab.description')}
-        </DsParagraph>
-      )}
+      <RestoreFocusFallback>
+        {!isLoading && (
+          <DsParagraph
+            data-size='md'
+            className={pageClasses.tabDescription}
+          >
+            {t('package_poa_details_page.users_tab.description')}
+          </DsParagraph>
+        )}
 
-      {delegateActionError?.error && delegateActionError?.targetParty && (
-        <DelegateErrorAlert
-          error={delegateActionError?.error}
-          targetParty={delegateActionError?.targetParty}
-          onClose={() => setDelegateActionError(null)}
+        {delegateActionError?.error && delegateActionError?.targetParty && (
+          <DelegateErrorAlert
+            error={delegateActionError?.error}
+            targetParty={delegateActionError?.targetParty}
+            onClose={() => setDelegateActionError(null)}
+          />
+        )}
+
+        <UserSearch
+          includeSelfAsChild={false}
+          restoreFocusFallbackId={USER_SEARCH_FALLBACK_ID}
+          users={users}
+          indirectUsers={indirectUsers}
+          isLoading={
+            isLoading ||
+            loadingIndirectConnections ||
+            roleMetadataIsLoading ||
+            isDelegationCheckLoading
+          }
+          onDelegate={canDelegate ? handleInlineDelegate : undefined}
+          AddUserButton={
+            <NewUserButton
+              variant='primary'
+              onComplete={handleOnDelegate}
+            />
+          }
+          onRevoke={handleInlineRevoke}
+          onSelect={(user) => modalRef.current?.open(user)}
+          isActionLoading={
+            isActionLoading ||
+            isLoading ||
+            loadingIndirectConnections ||
+            isFetching ||
+            isFetchingIndirectConnections ||
+            roleMetadataIsLoading ||
+            isDelegationCheckLoading
+          }
+          canDelegate={canDelegate}
         />
-      )}
+      </RestoreFocusFallback>
 
-      <UserSearch
-        includeSelfAsChild={false}
-        users={users}
-        indirectUsers={indirectUsers}
-        isLoading={
-          isLoading ||
-          loadingIndirectConnections ||
-          roleMetadataIsLoading ||
-          isDelegationCheckLoading
-        }
-        onDelegate={canDelegate ? handleOnDelegate : undefined}
-        onAddNewUser={canDelegate ? handleOnDelegate : undefined}
+      <PackageUserModal
+        ref={modalRef}
+        accessPackage={accessPackage}
+        availableActions={availableActions}
+        isActionLoading={isActionLoading}
+        isFetching={isFetching}
+        onDelegate={handleOnDelegate}
         onRevoke={handleOnRevoke}
-        isActionLoading={
-          isActionLoading ||
-          isLoading ||
-          loadingIndirectConnections ||
-          isFetching ||
-          isFetchingIndirectConnections ||
-          roleMetadataIsLoading ||
-          isDelegationCheckLoading
-        }
-        canDelegate={canDelegate}
+        onClosed={(user) => restoreFocus?.requestFocus(user.id, USER_SEARCH_FALLBACK_ID)}
       />
     </>
   );

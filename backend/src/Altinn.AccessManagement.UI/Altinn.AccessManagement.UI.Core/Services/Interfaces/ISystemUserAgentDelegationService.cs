@@ -46,9 +46,10 @@ namespace Altinn.AccessManagement.UI.Core.Services.Interfaces
         /// <param name="partyId">The party id of the party owning system user to remove customer from</param>
         /// <param name="delegationId">The delegation id to remove</param>
         /// <param name="partyUuid">The party uuid of the party owning system user to remove customer from</param>
+        /// <param name="systemUserGuid">The system user UUID to remove customer from</param>
         /// <param name="cancellationToken">Cancellation token</param>
         /// <returns>Boolean result of remove</returns>
-        Task<Result<bool>> RemoveClient(int partyId, Guid delegationId, Guid partyUuid, CancellationToken cancellationToken);
+        Task<Result<bool>> RemoveClient(int partyId, Guid delegationId, Guid partyUuid, Guid systemUserGuid, CancellationToken cancellationToken);
 
         /// <summary>
         /// Add own organization to this systemuser

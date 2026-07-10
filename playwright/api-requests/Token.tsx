@@ -4,31 +4,19 @@ export class Token {
   private platformToken: string;
   private readonly username: string;
   private readonly password: string;
-  private readonly org: string;
   private readonly environment: string;
 
-  constructor(org?: string) {
+  constructor() {
     this.username = env('USERNAME_TEST_API');
     this.password = env('PASSWORD_TEST_API');
-    this.org = org || env('ORG');
     this.environment = env('ENV_NAME');
     this.platformToken = '';
   }
 
-  public get orgNo(): string {
-    return this.org;
-  }
-
-  /**
-   * Fetches an enterprise Altinn token for a specific organization and environment.
-   * @param scopes Scopes required for the token.
-   * @returns The enterprise Altinn token as a string.
-   */
-  public async getEnterpriseAltinnToken(scopes: string): Promise<string> {
-    // Construct the URL for fetching the enterprise Altinn test token
+  public async getEnterpriseAltinnToken(orgNo: string, scopes: string): Promise<string> {
     const url =
       `https://altinn-testtools-token-generator.azurewebsites.net/api/GetEnterpriseToken` +
-      `?orgNo=${this.org}&env=${this.environment}&scopes=${scopes}`;
+      `?orgNo=${orgNo}&env=${this.environment}&scopes=${scopes}`;
 
     const auth = Buffer.from(`${this.username}:${this.password}`).toString('base64');
     const headers = {
@@ -42,62 +30,6 @@ export class Token {
     }
 
     return token;
-  }
-
-  /**
-   * Used for fetching an Altinn test token for a specific role
-   * @returns The Altinn test token as a string
-   */
-  public async getPersonalAltinnToken(): Promise<string> {
-    const url =
-      `https://altinn-testtools-token-generator.azurewebsites.net/api/GetPersonalToken?env=${this.environment}` +
-      `&pid=${env('PID')}` +
-      `&userid=${env('ALTINN_USER_ID')}` +
-      `&partyid=${env('ALTINN_PARTY_ID')}` +
-      `&partyUuid=${env('ALTINN_PARTY_UUID')}` +
-      `&authLvl=3&ttl=3000` +
-      `&scopes=altinn:portal/enduser`;
-
-    // Retrieve the token
-    const auth = Buffer.from(`${this.username}:${this.password}`).toString('base64');
-    const headers = {
-      Authorization: `Basic ${auth}`,
-    };
-
-    const token = await this.getAltinnToken(url, headers);
-    if (!token) {
-      throw new Error('Token retrieval failed for Altinn token');
-    }
-    return token;
-  }
-
-  public async generateAltinnPersonalToken(): Promise<string> {
-    const url =
-      `https://altinn-testtools-token-generator.azurewebsites.net/api/GetPersonalToken` +
-      `?env=${env('ENV_NAME')}` +
-      `&pid=${env('DAGL_PID')}` +
-      `&userid=${env('DAGL_USER_ID')}` +
-      `&partyid=${env('DAGL_PARTY_ID')}` +
-      `&partyuuid=${env('DAGL_PARTY_UUID')}` +
-      `&authLvl=3&ttl=3000&scopes=altinn:portal/enduser`;
-
-    const authHeader = Buffer.from(`${this.username}:${this.password}`).toString('base64');
-
-    const response = await fetch(url, {
-      headers: { Authorization: `Basic ${authHeader}` },
-    });
-
-    const token = await response.text();
-
-    if (!token || !token.startsWith('ey')) {
-      throw new Error('Invalid token received from Altinn');
-    }
-
-    return token;
-  }
-  catch(err: unknown) {
-    console.error('Error retrieving Altinn token:', err);
-    throw err;
   }
 
   public async getPersonalCleanupAltinnToken(person: {

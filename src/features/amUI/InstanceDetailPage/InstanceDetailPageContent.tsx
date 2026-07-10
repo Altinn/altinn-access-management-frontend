@@ -1,9 +1,8 @@
-import { useEffect, useMemo, useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { DsAlert, DsButton, DsParagraph } from '@altinn/altinn-components';
 import { Navigate, useSearchParams } from 'react-router';
 import { Trans, useTranslation } from 'react-i18next';
 
-import { InstanceDetailHeader } from './InstanceDetailHeader';
 import { ResourceInfoSkeleton } from '../common/DelegationModal/SingleRights/ResourceInfoSkeleton';
 import { PageDivider } from '../common/PageDivider/PageDivider';
 import { InstanceUsersAsAdmin } from './InstanceUsersAsAdmin';
@@ -13,28 +12,43 @@ import {
   createErrorDetails,
   TechnicalErrorParagraphs,
 } from '../common/TechnicalErrorParagraphs/TechnicalErrorParagraphs';
-import { useRemoveInstanceMutation } from '@/rtk/features/instanceApi';
+import { useGetInstancesQuery, useRemoveInstanceMutation } from '@/rtk/features/instanceApi';
 import { useGetResourceQuery } from '@/rtk/features/resourceApi';
-import { useProviderLogoUrl } from '@/resources/hooks';
 import {
   PartyType,
   useGetIsAdminQuery,
   useGetIsInstanceAdminQuery,
 } from '@/rtk/features/userInfoApi';
-import { getAfUrl } from '@/resources/utils/pathUtils';
-import { CheckmarkIcon, EnvelopeClosedIcon } from '@navikt/aksel-icons';
+import { EnvelopeClosedIcon } from '@navikt/aksel-icons';
 import { DelegationAction, EditModal } from '../common/DelegationModal/EditModal';
 import type { ActionError } from '@/resources/hooks/useActionError';
 import type { UserActionTarget } from '../common/UserSearch/types';
-import { AddUserButton } from './AddUserModal';
+import {
+  getInboxLinkData,
+  toInstancePresentationData,
+} from '../common/InstanceList/instanceListUtils';
+import { InstanceDescription } from '../common/InstanceDescription/InstanceDescription';
+import {
+  RestoreFocusFallback,
+  useRestoreFocusContext,
+  useRestoreFocusOnDataChange,
+} from '../common/RestoreFocus';
 
 import classes from './InstanceDetailPageContent.module.css';
+import { RequestInstanceAdminPackage } from './RequestInstanceAdminPackage';
+
+// Focus-restore fallback for this zone: when a revoked row is gone, focus lands on the search field
+// above the list instead of the page heading. Unique within this provider zone.
+const USER_SEARCH_FALLBACK_ID = 'instance_detail_user_search';
 
 export const InstanceDetailPageContent = () => {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   const [searchParams] = useSearchParams();
   const { actingParty, fromParty } = usePartyRepresentation();
 
+  const actingPartyIsOrg = actingParty?.partyTypeName === PartyType.Organization;
+
+  const restoreFocus = useRestoreFocusContext();
   const modalRef = useRef<HTMLDialogElement>(null);
   const [selectedUser, setSelectedUser] = useState<UserActionTarget | null>(null);
   const [selectedUserMode, setSelectedUserMode] = useState<'edit' | 'delegate'>('edit');
@@ -70,6 +84,9 @@ export const InstanceDetailPageContent = () => {
     })
       .unwrap()
       .then(() => {
+        // Revoking from the list removes the row once the instances query refetches; defer focus
+        // restoration until then. (Modal revoke keeps focus in the dialog and restores on close.)
+        requestFocusOnRevoke(user.id, USER_SEARCH_FALLBACK_ID);
         setSelectedUser(null);
         setActionError(null);
       })
@@ -83,22 +100,9 @@ export const InstanceDetailPageContent = () => {
       });
   };
 
-  const { getProviderLogoUrl } = useProviderLogoUrl();
   const instanceUrn = searchParams.get('instanceUrn') ?? '';
   const resourceId = searchParams.get('resourceId') ?? '';
   const dialogId = searchParams.get('dialogId');
-
-  const InstanceAddUserButton = useMemo(
-    () =>
-      ({ isLarge }: { isLarge?: boolean }) => (
-        <AddUserButton
-          isLarge={isLarge}
-          resourceId={resourceId}
-          instanceUrn={instanceUrn}
-        />
-      ),
-    [resourceId, instanceUrn],
-  );
 
   const {
     data: isAdmin,
@@ -120,6 +124,19 @@ export const InstanceDetailPageContent = () => {
   } = useGetResourceQuery(resourceId, {
     skip: !resourceId,
   });
+  const { data: instanceDelegations = [] } = useGetInstancesQuery(
+    {
+      party: actingParty?.partyUuid || '',
+      from: fromParty?.partyUuid,
+      resource: resourceId,
+      instance: instanceUrn,
+      language: i18n.language,
+    },
+    {
+      skip: !actingParty?.partyUuid || !fromParty?.partyUuid || !resourceId || !instanceUrn,
+    },
+  );
+  const requestFocusOnRevoke = useRestoreFocusOnDataChange(instanceDelegations);
 
   if (!resourceId || !instanceUrn) {
     return (
@@ -129,25 +146,23 @@ export const InstanceDetailPageContent = () => {
       />
     );
   }
-
-  const isCorrespondenceInstance = instanceUrn.startsWith('urn:altinn:correspondence-id:');
-
-  const inboxUrl = dialogId
-    ? `${getAfUrl()}inbox/${encodeURIComponent(dialogId)}`
-    : `${getAfUrl()}redirect?instanceUrn=${encodeURIComponent(instanceUrn)}`;
-
-  const showInboxLink = dialogId || !isCorrespondenceInstance;
+  const instanceDelegation = instanceDelegations[0];
+  const { href: inboxUrl, showInboxLink } = getInboxLinkData({
+    instanceUrn,
+    dialogLookup: instanceDelegation?.dialogLookup,
+    isDialogDeepLink: Boolean(dialogId),
+  });
 
   const inboxLink = showInboxLink ? (
     <div className={classes.inboxLinkContainer}>
       <DsButton
         asChild
-        variant={dialogId ? 'primary' : 'secondary'}
+        variant='secondary'
         className={classes.inboxButton}
       >
         <a href={inboxUrl}>
-          {dialogId ? <CheckmarkIcon aria-hidden /> : <EnvelopeClosedIcon aria-hidden />}
-          {dialogId ? t('common.finished') : t('instance_detail_page.see_in_inbox')}
+          {<EnvelopeClosedIcon aria-hidden='true' />}
+          {t('instance_detail_page.see_in_inbox')}
         </a>
       </DsButton>
     </div>
@@ -162,9 +177,14 @@ export const InstanceDetailPageContent = () => {
       ? createErrorDetails(isAdminErrorObj || isInstanceAdminErrorObj || resourceError)
       : null;
 
-  const providerLogoUrl = resource?.resourceOwnerOrgcode
-    ? getProviderLogoUrl(resource.resourceOwnerOrgcode)
-    : undefined;
+  const instanceData = instanceDelegation
+    ? toInstancePresentationData(instanceDelegation)
+    : {
+        instance: {
+          refId: instanceUrn,
+          type: null,
+        },
+      };
   const selectedUserAvailableActions =
     selectedUserMode === 'delegate' || isAdmin === false
       ? [DelegationAction.DELEGATE]
@@ -173,12 +193,12 @@ export const InstanceDetailPageContent = () => {
   return (
     <>
       {resource && (
-        <InstanceDetailHeader
+        <InstanceDescription
           resource={resource}
-          resourceId={resourceId}
-          providerLogoUrl={providerLogoUrl}
+          instanceData={instanceData}
           fromPartyName={fromParty?.name}
-          fromPartyTypeName={fromParty?.partyTypeName}
+          fromPartyType={fromParty?.partyTypeName}
+          titleLevel={1}
         />
       )}
       {inboxLink}
@@ -202,35 +222,47 @@ export const InstanceDetailPageContent = () => {
             {isInstanceAdmin ? (
               t('instance_detail_page.description')
             ) : (
-              <Trans
-                i18nKey='instance_detail_page.no_access_description'
-                components={{ b: <strong /> }}
-              />
+              <>
+                <Trans
+                  i18nKey='instance_detail_page.no_access_description'
+                  components={{ b: <strong /> }}
+                />
+                <Trans
+                  i18nKey={
+                    actingPartyIsOrg
+                      ? 'instance_detail_page.instance_admin_package_name_org'
+                      : 'instance_detail_page.instance_admin_package_name_person'
+                  }
+                />
+              </>
             )}
           </DsParagraph>
+          {!isInstanceAdmin && actingPartyIsOrg && <RequestInstanceAdminPackage />}
           {isInstanceAdmin && isAdmin === false && (
             <DsParagraph data-size='sm'>
               {t('instance_detail_page.instance_admin_edit_disclaimer')}
             </DsParagraph>
           )}
-          {isAdmin ? (
-            <InstanceUsersAsAdmin
-              resourceId={resourceId}
-              instanceUrn={instanceUrn}
-              AddUserButton={InstanceAddUserButton}
-              onSelect={handleUserSelect}
-              onDelegate={handleIndirectUserDelegate}
-              onRevoke={handleRevoke}
-              isRevoking={isRevoking}
-            />
-          ) : isInstanceAdmin ? (
-            <InstanceUsersAsInstanceAdmin
-              resourceId={resourceId}
-              instanceUrn={instanceUrn}
-              AddUserButton={InstanceAddUserButton}
-              onDelegate={handleIndirectUserDelegate}
-            />
-          ) : null}
+          <RestoreFocusFallback>
+            {isAdmin ? (
+              <InstanceUsersAsAdmin
+                resourceId={resourceId}
+                instanceUrn={instanceUrn}
+                onSelect={handleUserSelect}
+                onDelegate={handleIndirectUserDelegate}
+                onRevoke={handleRevoke}
+                isRevoking={isRevoking}
+                restoreFocusFallbackId={USER_SEARCH_FALLBACK_ID}
+              />
+            ) : isInstanceAdmin ? (
+              <InstanceUsersAsInstanceAdmin
+                resourceId={resourceId}
+                instanceUrn={instanceUrn}
+                onDelegate={handleIndirectUserDelegate}
+                restoreFocusFallbackId={USER_SEARCH_FALLBACK_ID}
+              />
+            ) : null}
+          </RestoreFocusFallback>
         </div>
       )}
       {resource && selectedUser && (
@@ -241,12 +273,18 @@ export const InstanceDetailPageContent = () => {
           toParty={{
             partyUuid: selectedUser.id,
             name: selectedUser.name,
-            partyTypeName:
+            partyTypeName: String(
               selectedUser.type === 'person' ? PartyType.Person : PartyType.Organization,
+            ),
           }}
           openWithError={actionError}
           onSuccess={selectedUserMode === 'delegate' ? () => modalRef.current?.close() : undefined}
           onClose={() => {
+            // Restore focus synchronously to the row that opened the modal before clearing state.
+            // If the user was revoked inside the modal their row is gone, so the fallback catches it.
+            if (selectedUser) {
+              restoreFocus?.requestFocus(selectedUser.id, USER_SEARCH_FALLBACK_ID);
+            }
             setSelectedUser(null);
             setActionError(null);
           }}

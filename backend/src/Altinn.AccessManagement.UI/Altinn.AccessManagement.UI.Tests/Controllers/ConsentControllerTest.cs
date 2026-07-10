@@ -204,12 +204,34 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
         ///     Expected: RedirectAfterApprove redirects to logout url
         /// </summary>
         [Fact]
-        public async Task LogoutAfterApprove_RedirectsToLogoutUrl()
+        public async Task LogoutAfterApprove_RedirectsToLogoutUrlWithFragmentPathAndQuery()
         {
             // Arrange
             string expectedRedirectUrl = "http://localhost:5101/authentication/api/v1/logout";
-            string expectedDecryptedUrl = "https://smartbank.no/consent?Status=OK";
+            string expectedDecryptedUrl = "https://smartbank.no/consent/#/fragmentpath?authcode=123&Status=OK";
             string approvedRequestId = "62334b04-a65b-4eb2-b198-ab3c15e27f16";
+
+            // Act
+            HttpResponseMessage httpResponse = await _client.GetAsync($"accessmanagement/api/v1/consent/request/{approvedRequestId}/logout");
+            string decryptedUrl = GetRedirectCookieValue(httpResponse);
+
+            // Assert
+            Assert.Equal(HttpStatusCode.Found, httpResponse.StatusCode);
+            Assert.Equal(expectedRedirectUrl, httpResponse.Headers.Location.OriginalString);
+            Assert.Equal(expectedDecryptedUrl, decryptedUrl);
+        }
+
+        /// <summary>
+        ///     Test case: RedirectAfterApprove checks that redirect is done to logout url and redirect url is encrypted in cookie
+        ///     Expected: RedirectAfterApprove redirects to logout url
+        /// </summary>
+        [Fact]
+        public async Task LogoutAfterApprove_RedirectsToLogoutUrlWithFragmentPath()
+        {
+            // Arrange
+            string expectedRedirectUrl = "http://localhost:5101/authentication/api/v1/logout";
+            string expectedDecryptedUrl = "https://smartbank.no/consent/#/fragmentpath?Status=OK";
+            string approvedRequestId = "4c42c6cc-7901-4e53-91ca-031f3145a09c";
 
             // Act
             HttpResponseMessage httpResponse = await _client.GetAsync($"accessmanagement/api/v1/consent/request/{approvedRequestId}/logout");
@@ -226,12 +248,34 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
         ///     Expected: RedirectAfterReject redirects to logout url
         /// </summary>
         [Fact]
-        public async Task LogoutAfterReject_RedirectsToLogoutUrl()
+        public async Task LogoutAfterReject_RedirectsToLogoutUrlWithFragment()
         {
             // Arrange
             string expectedRedirectUrl = "http://localhost:5101/authentication/api/v1/logout";
-            string expectedDecryptedUrl = "https://smartbank.no/consent?Status=Failed&ErrorMessage=User+did+not+give+consent";
+            string expectedDecryptedUrl = "https://smartbank.no/consent?Status=Failed&ErrorMessage=User+did+not+give+consent#fragment";
             string rejectedRequestId = "52574a16-4114-4bdf-b471-85ac10a722b9";
+
+            // Act
+            HttpResponseMessage httpResponse = await _client.GetAsync($"accessmanagement/api/v1/consent/request/{rejectedRequestId}/logout");
+            string decryptedUrl = GetRedirectCookieValue(httpResponse);
+
+            // Assert
+            Assert.Equal(HttpStatusCode.Found, httpResponse.StatusCode);
+            Assert.Equal(expectedRedirectUrl, httpResponse.Headers.Location.OriginalString);
+            Assert.Equal(expectedDecryptedUrl, decryptedUrl);
+        }
+
+        /// <summary>
+        ///     Test case: RedirectAfterReject checks that redirect is done to logout url and redirect url is encrypted in cookie
+        ///     Expected: RedirectAfterReject redirects to logout url
+        /// </summary>
+        [Fact]
+        public async Task LogoutAfterReject_RedirectsToLogoutUrlWithQuery()
+        {
+            // Arrange
+            string expectedRedirectUrl = "http://localhost:5101/authentication/api/v1/logout";
+            string expectedDecryptedUrl = "https://smartbank.no/consent?authcode=123&Status=Failed&ErrorMessage=User+did+not+give+consent";
+            string rejectedRequestId = "ecc578c9-f0d6-45c7-a989-fd448f1be4e0";
 
             // Act
             HttpResponseMessage httpResponse = await _client.GetAsync($"accessmanagement/api/v1/consent/request/{rejectedRequestId}/logout");

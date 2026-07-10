@@ -24,5 +24,11 @@ namespace Altinn.AccessManagement.UI.Core.Configuration
         /// Language cookie name
         /// </summary>
         public string LanguageCookie { get; set; }
+
+        /// <summary>
+        /// Apex domains permitted as redirect targets after a reportee change. A target host is allowed
+        /// if it equals one of these values or ends with ".{value}".
+        /// </summary>
+        public List<string> AllowedRedirectDomains { get; set; } = new List<string>();
     }
 }

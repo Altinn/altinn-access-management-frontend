@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { useTranslation } from 'react-i18next';
 import {
   DsAlert,
@@ -10,6 +10,7 @@ import {
 import { useParams } from 'react-router';
 
 import { amUIPath } from '@/routes/paths';
+import { useTabState } from '@/resources/hooks';
 import { PartyType, useGetIsClientAdminQuery } from '@/rtk/features/userInfoApi';
 import {
   useAddAgentAccessPackagesMutation,
@@ -27,7 +28,7 @@ import {
   TechnicalErrorParagraphs,
 } from '../common/TechnicalErrorParagraphs/TechnicalErrorParagraphs';
 import { ClientDetailsTabs } from './ClientDetailsTabs';
-import { ClientDetailsAgentsList } from './ClientDetailsAgentsList';
+import { ClientAgentPackageList } from '../common/ClientAgentPackageList/ClientAgentPackageList';
 import { useClientDetailsAccessAgentLists } from './useClientDetailsAccessAgentLists';
 import { UserPageHeader } from '../common/UserPageHeader/UserPageHeader';
 import { UserPageHeaderSkeleton } from '../common/UserPageHeader/UserPageHeaderSkeleton';
@@ -38,7 +39,10 @@ export const ClientDetails = () => {
   const { openSnackbar } = useSnackbar();
   const { id } = useParams();
   const { fromParty, actingParty } = usePartyRepresentation();
-  const [activeTab, setActiveTab] = useState('has-users');
+  const [activeTab, setActiveTab] = useTabState({
+    tabs: ['has-users', 'all-users'],
+    defaultTab: 'has-users',
+  });
   const { data: isClientAdmin, isLoading: isLoadingIsClientAdmin } = useGetIsClientAdminQuery();
   const {
     data: clientAccessPackages,
@@ -87,7 +91,7 @@ export const ClientDetails = () => {
     );
   }
 
-  const backUrl = `/${amUIPath.ClientAdministration}?tab=clients`;
+  const backUrl = `/${amUIPath.ClientAdministration}#clients`;
   const clientName = formatDisplayName({
     fullName: fromParty?.name || '',
     type: fromParty?.partyTypeName === PartyType.Person ? 'person' : 'company',
@@ -150,7 +154,7 @@ export const ClientDetails = () => {
                   activeTab={activeTab}
                   onChange={setActiveTab}
                   hasUsersContent={
-                    <ClientDetailsAgentsList
+                    <ClientAgentPackageList
                       agents={agentsWithClientAccess}
                       clientAccessPackages={clientAccessPackages ?? []}
                       client={selectedClient}
@@ -163,7 +167,7 @@ export const ClientDetails = () => {
                     />
                   }
                   allUsersContent={
-                    <ClientDetailsAgentsList
+                    <ClientAgentPackageList
                       agents={allAgents}
                       clientAccessPackages={clientAccessPackages ?? []}
                       client={selectedClient}
@@ -173,7 +177,12 @@ export const ClientDetails = () => {
                       addAgentAccessPackages={addAgentAccessPackages}
                       removeAgentAccessPackages={removeAgentAccessPackages}
                       emptyText={`${t('client_administration_page.no_agents')} ${t('client_administration_page.addUserPrompt')}`}
-                      addUserButton={<AddAgentButton onComplete={onUserAdded} />}
+                      addUserButton={
+                        <AddAgentButton
+                          onComplete={onUserAdded}
+                          variant='primary'
+                        />
+                      }
                     />
                   }
                 />

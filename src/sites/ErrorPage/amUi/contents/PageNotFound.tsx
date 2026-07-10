@@ -4,9 +4,11 @@ import { DsHeading, DsParagraph, DsLink, DsListItem } from '@altinn/altinn-compo
 
 import classes from '../ErrorPage.module.css';
 import { getAfUrl, getAltinnStartPageUrl } from '@/resources/utils/pathUtils';
+import { useDocumentTitle } from '@/resources/hooks/useDocumentTitle';
 
 export const PageNotFound = () => {
   const { t } = useTranslation();
+  useDocumentTitle(t('error_page.page_title'));
 
   return (
     <div className={classes.errorContent}>

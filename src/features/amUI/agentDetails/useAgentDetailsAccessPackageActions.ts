@@ -1,5 +1,5 @@
 import { useCallback } from 'react';
-import { SnackbarDuration, useSnackbar } from '@altinn/altinn-components';
+import { useSnackbar } from '@altinn/altinn-components';
 import { useTranslation } from 'react-i18next';
 
 import type {
@@ -30,8 +30,11 @@ export const useAgentDetailsAccessPackageActions = ({
       packageId: string,
       agentName: string,
       accessPackageName: string,
+      onSuccess?: () => void,
+      onError?: () => void,
     ) => {
       if (!toPartyUuid || !actingPartyUuid) {
+        onError?.();
         return;
       }
 
@@ -56,15 +59,16 @@ export const useAgentDetailsAccessPackageActions = ({
           }),
           color: 'success',
         });
-      } catch (error) {
+        onSuccess?.();
+      } catch {
         openSnackbar({
           message: t('client_administration_page.delegate_package_error', {
             name: agentName,
             accessPackage: accessPackageName,
           }),
           color: 'danger',
-          duration: SnackbarDuration.infinite,
         });
+        onError?.();
       }
     },
     [actingPartyUuid, addAgentAccessPackages, openSnackbar, t, toPartyUuid],
@@ -77,8 +81,11 @@ export const useAgentDetailsAccessPackageActions = ({
       packageId: string,
       agentName: string,
       accessPackageName: string,
+      onSuccess?: () => void,
+      onError?: () => void,
     ) => {
       if (!toPartyUuid || !actingPartyUuid) {
+        onError?.();
         return;
       }
 
@@ -103,15 +110,16 @@ export const useAgentDetailsAccessPackageActions = ({
           }),
           color: 'success',
         });
-      } catch (error) {
+        onSuccess?.();
+      } catch {
         openSnackbar({
           message: t('client_administration_page.remove_package_error', {
             name: agentName,
             accessPackage: accessPackageName,
           }),
           color: 'danger',
-          duration: SnackbarDuration.infinite,
         });
+        onError?.();
       }
     },
     [actingPartyUuid, openSnackbar, removeAgentAccessPackages, t, toPartyUuid],

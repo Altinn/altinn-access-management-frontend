@@ -3,35 +3,32 @@ import { PageWrapper } from '@/components';
 import { PageLayoutWrapper } from '../common/PageLayoutWrapper';
 import classes from './LandingPage.module.css';
 import {
-  DsAlert,
-  DsButton,
   DsHeading,
-  DsParagraph,
-  DsSkeleton,
-  formatDate,
   formatDisplayName,
   List,
   ListItem,
   MenuItemProps,
   UserListItem,
 } from '@altinn/altinn-components';
+import { LandingPageInfoCard } from './LandingPageInfoCard';
 import {
   useGetIsAdminQuery,
   useGetIsClientAdminQuery,
   useGetIsCompanyProfileAdminQuery,
+  useGetIsMaskinportenAdminQuery,
   useGetReporteeQuery,
 } from '@/rtk/features/userInfoApi';
-import { useGetMyClientsQuery } from '@/rtk/features/clientApi';
 import { useTranslation } from 'react-i18next';
-import { LeaveIcon } from '@navikt/aksel-icons';
 import { useSearchParams } from 'react-router';
 import {
   hasConsentPermission,
+  hasReporteesPermission,
   hasSystemUserClientAdminPermission,
   hasCreateSystemUserPermission,
 } from '@/resources/utils/permissionUtils';
 import {
   getConsentMenuItem,
+  getMaskinportenMenuItem,
   getPoaOverviewMenuItem,
   getReporteesMenuItem,
   getRequestsMenuItem,
@@ -44,16 +41,25 @@ import {
 } from '@/resources/utils/sidebarConfig';
 import { getCookie } from '@/resources/Cookie/CookieMethods';
 import { useGetPartyFromLoggedInUserQuery } from '@/rtk/features/lookupApi';
-import { formatOrgNr, isOrganization, isSubUnit } from '@/resources/utils/reporteeUtils';
-import { getHostUrl } from '@/resources/utils/pathUtils';
+import {
+  getFormattedDateOfBirthLabel,
+  formatOrgNr,
+  isOrganization,
+  isSubUnit,
+} from '@/resources/utils/reporteeUtils';
 import { useSidebarRequestCount } from '@/resources/hooks/useSidebarRequestCount';
 import cn from 'classnames';
-import { clientAdministrationPageEnabled } from '@/resources/utils/featureFlagUtils';
+import {
+  clientAdministrationPageEnabled,
+  enableMaskinportenAdministration,
+} from '@/resources/utils/featureFlagUtils';
 import { useSelfConnection } from '../common/PartyRepresentationContext/useSelfConnection';
 import { useGetRolePermissionsQuery } from '@/rtk/features/roleApi';
+import { useDocumentTitle } from '@/resources/hooks/useDocumentTitle';
 
 export const LandingPage = () => {
   const { t } = useTranslation();
+  useDocumentTitle(t('landing_page.page_title'));
   const [searchParams, setSearchParams] = useSearchParams();
   const [shouldOpenAccountMenu, setShouldOpenAccountMenu] = useState<boolean>(false);
   const { data: reportee, isLoading: isLoadingReportee } = useGetReporteeQuery();
@@ -61,6 +67,9 @@ export const LandingPage = () => {
   const { data: isClientAdmin, isLoading: isLoadingIsClientAdmin } = useGetIsClientAdminQuery();
   const { data: canAccessSettings, isLoading: isLoadingCanAccessSettings } =
     useGetIsCompanyProfileAdminQuery();
+  const { data: isMaskinportenAdmin } = useGetIsMaskinportenAdminQuery(undefined, {
+    skip: !enableMaskinportenAdministration() || !isOrganization(reportee),
+  });
   const { data: currentUser, isLoading: currentUserIsLoading } = useGetPartyFromLoggedInUserQuery();
   const actingPartyUuid = getCookie('AltinnPartyUuid') ?? '';
   const displayClientAdministrationPage = clientAdministrationPageEnabled();
@@ -147,16 +156,21 @@ export const LandingPage = () => {
     if (displayPoaOverviewPage && isAdmin) {
       items.push({
         ...getPoaOverviewMenuItem(),
-        description: t('landing_page.poa_item_description'),
+        description: isCurrentUserReportee
+          ? t('landing_page.poa_item_description_yourself')
+          : t('landing_page.poa_item_description', { reportee: reporteeName }),
       });
     }
 
-    if (displayConfettiPackage && isAdmin) {
+    if (
+      displayConfettiPackage &&
+      hasReporteesPermission(reportee, isAdmin, isCurrentUserReportee)
+    ) {
       items.push({
         ...getReporteesMenuItem(),
-        description: isOrganization(reportee)
-          ? t('landing_page.reportees_item_description_org')
-          : t('landing_page.reportees_item_description_person'),
+        description: isCurrentUserReportee
+          ? t('landing_page.reportees_item_description_yourself')
+          : t('landing_page.reportees_item_description_org', { reportee: reporteeName }),
       });
     }
 
@@ -169,7 +183,7 @@ export const LandingPage = () => {
     if (isClientAdmin && displayClientAdministrationPage) {
       items.push({
         ...getClientAdministrationMenuItem(),
-        description: t('landing_page.client_admin_item_description'),
+        description: t('landing_page.client_admin_item_description', { reportee: reporteeName }),
       });
     }
     if (
@@ -178,7 +192,13 @@ export const LandingPage = () => {
     ) {
       items.push({
         ...getSystemUserMenuItem(),
-        description: t('landing_page.systemuser_item_description'),
+        description: t('landing_page.systemuser_item_description', { reportee: reporteeName }),
+      });
+    }
+    if (enableMaskinportenAdministration() && isMaskinportenAdmin) {
+      items.push({
+        ...getMaskinportenMenuItem(),
+        description: t('landing_page.maskinporten_item_description'),
       });
     }
     return items;
@@ -249,7 +269,7 @@ export const LandingPage = () => {
       }
       return orgNrString;
     } else if (reportee?.dateOfBirth) {
-      return `${t('common.date_of_birth')} ${formatDate(reportee?.dateOfBirth)}`;
+      return getFormattedDateOfBirthLabel(reportee?.dateOfBirth);
     }
     return '';
   };
@@ -258,10 +278,7 @@ export const LandingPage = () => {
     <PageWrapper>
       <PageLayoutWrapper openAccountMenu={shouldOpenAccountMenu}>
         <div className={classes.landingPage}>
-          <DsHeading
-            level={1}
-            className={classes.landingPageHeading}
-          >
+          <div className={classes.landingPageHeading}>
             <UserListItem
               id={reportee?.partyUuid ?? ''}
               type={isOrganization(reportee) ? 'company' : 'person'}
@@ -270,53 +287,17 @@ export const LandingPage = () => {
               subUnit={isReporteeSubUnit}
               deleted={reportee?.isDeleted}
               size='lg'
+              titleAs='h1'
               loading={!reportee}
               interactive={false}
               shadow='none'
+              containerAs='div'
             />
-          </DsHeading>
-          <DsAlert data-color='info'>
-            {isLoading ? (
-              <DsSkeleton
-                variant='rectangle'
-                height={150}
-                width='100%'
-              />
-            ) : (
-              <>
-                <DsHeading
-                  level={2}
-                  data-size='xs'
-                  color='info'
-                >
-                  {isOrganization(reportee)
-                    ? t('landing_page.alert_heading')
-                    : t('landing_page.alert_heading_priv')}
-                </DsHeading>
-                <div className={classes.landingPageAlert}>
-                  <DsParagraph>
-                    {isOrganization(reportee)
-                      ? t('landing_page.alert_body')
-                      : t('landing_page.alert_body_priv')}
-                  </DsParagraph>
-                  <DsParagraph>
-                    {isOrganization(reportee)
-                      ? t('landing_page.alert_body_p2')
-                      : t('landing_page.alert_body_p2_priv')}
-                  </DsParagraph>
-                  <DsButton
-                    asChild
-                    variant='secondary'
-                  >
-                    <a href={`${getHostUrl()}ui/profile`}>
-                      <LeaveIcon />
-                      {t('landing_page.alert_link')}
-                    </a>
-                  </DsButton>
-                </div>
-              </>
-            )}
-          </DsAlert>
+          </div>
+          <LandingPageInfoCard
+            isLoading={isLoading}
+            isOrganization={isOrganization(reportee)}
+          />
           <ListItemContainer
             heading={t('landing_page.your_content_heading')}
             items={getYourAccessesItems()}

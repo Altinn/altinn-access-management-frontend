@@ -1,6 +1,6 @@
-import { List, DsParagraph, DsButton, DsSpinner } from '@altinn/altinn-components';
+import { List, DsHeading, DsButton, DsSpinner } from '@altinn/altinn-components';
 import { useTranslation } from 'react-i18next';
-import React, { useMemo, useState } from 'react';
+import React, { useState } from 'react';
 import cn from 'classnames';
 import { ChevronDownIcon, ChevronUpIcon } from '@navikt/aksel-icons';
 
@@ -19,6 +19,9 @@ import { isCriticalAndUndelegated, UndelegatedPackageWarning } from './Undelegat
 import { useAccessPackageDelegationCheck } from '../DelegationCheck/AccessPackageDelegationCheckContext';
 import { PartyType } from '@/rtk/features/userInfoApi';
 
+// DOM id for the area's content wrapper, usable as a RestoreFocus fallback target.
+export const areaContentId = (areaId: string) => `area-content-${areaId}`;
+
 interface AreaItemContentProps {
   area: ExtendedAccessArea;
   availableActions?: DelegationAction[];
@@ -26,12 +29,16 @@ interface AreaItemContentProps {
   onDelegate?: (accessPackage: AccessPackage) => void;
   onRevoke?: (accessPackage: AccessPackage) => void;
   onRequest?: (accessPackage: AccessPackage) => void;
+  onDeleteRequest?: (accessPackage: AccessPackage) => void;
+  hasPendingRequest?: (accessPackage: AccessPackage) => boolean;
+  isLoadingRequest?: (accessPackage: AccessPackage) => boolean;
   isActionLoading?: boolean;
   showAvailablePackages?: boolean;
   showAvailableToggle?: boolean;
   showPermissions?: boolean;
   packageAs?: React.ElementType;
   partyType: PartyType;
+  headingLevel: 3 | 4;
 }
 
 export const AreaItemContent = ({
@@ -41,12 +48,16 @@ export const AreaItemContent = ({
   onDelegate,
   onRevoke,
   onRequest,
+  onDeleteRequest,
+  hasPendingRequest,
+  isLoadingRequest,
   isActionLoading = false,
   showAvailablePackages: showAvailablePackagesExternal = false,
   showAvailableToggle = true,
   showPermissions = false,
   packageAs,
   partyType,
+  headingLevel,
 }: AreaItemContentProps) => {
   const { packages } = area;
   const { t } = useTranslation();
@@ -55,7 +66,6 @@ export const AreaItemContent = ({
   );
 
   const isSm = useIsMobileOrSmaller();
-
   const { canDelegatePackage } = useAccessPackageDelegationCheck();
 
   const revokeActionControl = (pkg: AccessPackage) => {
@@ -78,20 +88,35 @@ export const AreaItemContent = ({
   };
 
   return (
-    <div className={cn(classes.accessAreaContent, !isSm && classes.accessAreaContentMargin)}>
-      <DsParagraph>{area.description}</DsParagraph>
+    <div
+      id={areaContentId(area.id)}
+      className={cn(classes.accessAreaContent, !isSm && classes.accessAreaContentMargin)}
+    >
+      <DsHeading
+        className={classes.packagesTitle}
+        level={headingLevel}
+      >
+        {t('access_packages.access_packages_in_area_title')}
+      </DsHeading>
       {packages.assigned.length > 0 && (
         <List aria-label={t('access_packages.given_packages_title')}>
           {packages.assigned.map((pkg) => {
-            const Component = packageAs || 'button';
             return (
               <PackageItem
-                as={(props) => (
-                  <Component
-                    packageId={pkg.id}
-                    {...props}
-                  />
-                )}
+                as={
+                  packageAs
+                    ? (props) => {
+                        const Component = packageAs;
+                        return (
+                          <Component
+                            packageId={pkg.id}
+                            {...props}
+                          />
+                        );
+                      }
+                    : 'button'
+                }
+                titleAs='span'
                 key={pkg.id}
                 pkg={pkg}
                 onSelect={onSelect}
@@ -125,10 +150,11 @@ export const AreaItemContent = ({
         >
           {t('access_packages.other_available')} {`(${packages.available.length})`}{' '}
           {showAvailablePackages ? (
-            <ChevronUpIcon aria-label={t('common.close')} />
+            <ChevronUpIcon aria-hidden='true' />
           ) : (
-            <ChevronDownIcon aria-label={t('common.open')} />
+            <ChevronDownIcon aria-hidden='true' />
           )}
+          {/* TODO: add aria-expanded to available packages button */}
         </DsButton>
       )}
 
@@ -136,15 +162,21 @@ export const AreaItemContent = ({
         <List aria-label={t('access_packages.available_packages_title')}>
           {packages.available.map((pkg) => {
             const canDelegate = canDelegatePackage(pkg.id);
-            const Component = packageAs || 'button';
             return (
               <PackageItem
-                as={(props) => (
-                  <Component
-                    packageId={pkg.id}
-                    {...props}
-                  />
-                )}
+                as={
+                  packageAs
+                    ? (props) => {
+                        const Component = packageAs;
+                        return (
+                          <Component
+                            packageId={pkg.id}
+                            {...props}
+                          />
+                        );
+                      }
+                    : 'button'
+                }
                 key={pkg.id}
                 pkg={pkg}
                 onSelect={onSelect}
@@ -159,13 +191,17 @@ export const AreaItemContent = ({
                 controls={
                   !isSm && (
                     <DelegateAccessPackageActionControl
+                      packageId={pkg.id}
                       isLoading={isActionLoading}
+                      isPackageLoading={isLoadingRequest?.(pkg)}
                       availableActions={availableActions}
+                      isPendingRequest={hasPendingRequest?.(pkg) ?? false}
                       disabled={pkg.isAssignable === false}
                       accessPackageName={pkg.name}
                       canDelegate={canDelegate?.result ?? true /* allow attempt if unknown */}
                       onDelegate={() => onDelegate?.(pkg)}
                       onRequest={() => onRequest?.(pkg)}
+                      onDeleteRequest={() => onDeleteRequest?.(pkg)}
                     />
                   )
                 }

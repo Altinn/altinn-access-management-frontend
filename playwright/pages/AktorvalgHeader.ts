@@ -1,6 +1,8 @@
 import type { Locator, Page } from '@playwright/test';
 import { expect } from '@playwright/test';
 
+import { HTML_LANG, Language, LanguageMenu } from './LanguageMenu';
+
 export class AktorvalgHeader {
   readonly page: Page;
   readonly infoportalLogo: Locator;
@@ -19,7 +21,7 @@ export class AktorvalgHeader {
   readonly menuLogout: Locator;
   readonly aktorvalgSearch: Locator;
   readonly showDeletedSwitch: Locator;
-  readonly bokmalLanguageOption: Locator;
+  readonly languageMenu: LanguageMenu;
   readonly VisibleActors: Locator;
   readonly addFavoriteButtons: Locator;
   readonly removeFavoriteButtons: Locator;
@@ -30,7 +32,7 @@ export class AktorvalgHeader {
     this.page = page;
     this.infoportalLogo = this.page.getByRole('link', { name: 'Gå til forsiden' });
     this.searchButton = this.page.getByText('Søk i Altinn', { exact: true });
-    this.menuButton = this.page.getByRole('button', { name: 'Meny', exact: true });
+    this.menuButton = this.page.getByRole('button', { name: /^(Menu|Meny)$/ });
     this.dummy = this.page.getByRole('link', { name: 'Sjekk innboks' });
     this.searchBar = this.page.getByRole('searchbox', { name: 'Søk' });
 
@@ -45,9 +47,9 @@ export class AktorvalgHeader {
     this.menuProfile = this.menuItem('Din profil');
 
     this.menuLogout = this.page.getByRole('button', { name: 'Logg ut' });
-    this.aktorvalgSearch = this.page.getByRole('searchbox', { name: 'Søk i aktører' });
+    this.aktorvalgSearch = this.page.getByRole('searchbox');
     this.showDeletedSwitch = this.page.getByRole('switch', { name: 'Vis slettede' });
-    this.bokmalLanguageOption = this.page.locator('#no_nb');
+    this.languageMenu = new LanguageMenu(page);
     this.addFavoriteButtons = this.page.getByRole('button', { name: 'Legg til i favorittar' });
     this.removeFavoriteButtons = this.page.getByRole('button', { name: 'Fjern frå favorittar' });
     this.closeMenuButton = this.page.locator('span', { hasText: 'Meny' });
@@ -91,6 +93,34 @@ export class AktorvalgHeader {
     await this.actorOption(actorName).click();
   }
 
+  async selectSubOrgFromHeaderMenu(orgName: string) {
+    const subOrg = this.page.getByText(orgName).nth(1);
+    await expect(subOrg).toBeVisible();
+    await subOrg.click();
+  }
+
+  async orgExistsInAktorvalg(orgName: string) {
+    await expect(this.page.getByText(orgName).first()).toBeVisible();
+  }
+
+  async orgIsNotClickableInAktorvalg(orgName: string) {
+    const actor = this.page.getByText(orgName).first();
+    await expect(actor).toBeVisible();
+    const isDisabled = await actor.isDisabled();
+    const ariaDisabled = await actor.getAttribute('aria-disabled');
+    const pointerEvents = await actor.evaluate(
+      (element) => window.getComputedStyle(element).pointerEvents,
+    );
+    if (isDisabled || ariaDisabled === 'true' || pointerEvents === 'none') {
+      return;
+    }
+    throw new Error(`Forventet å ikke kunne klikke på ${orgName}, men den var klikkbar.`);
+  }
+
+  async subOrgExistsInAktorvalg(orgName: string) {
+    await expect(this.page.getByText(orgName).nth(1)).toBeVisible();
+  }
+
   async currentlySelectedActor(actorName: string) {
     await expect(this.selectedActorButton(actorName)).toBeVisible();
   }
@@ -117,11 +147,6 @@ export class AktorvalgHeader {
     await this.closePopups();
   }
 
-  async clickSearchButton() {
-    await this.searchButton.click();
-    await expect(this.searchBar).toBeVisible();
-  }
-
   async typeInSearchField(text: string) {
     await this.aktorvalgSearch.fill(text);
   }
@@ -132,6 +157,7 @@ export class AktorvalgHeader {
 
   async checkAllMenuButtons() {
     await this.menuButton.click();
+    await expect(this.searchButton).toBeVisible();
     await expect(this.menuInbox).toBeVisible();
     await expect(this.menuAccessManagement).toBeVisible();
     await expect(this.menuApps).toBeVisible();
@@ -174,10 +200,21 @@ export class AktorvalgHeader {
     }
   }
 
-  async chooseBokmalLanguage() {
+  /**
+   * Selects the app language through the real header menu (simulating a user),
+   * then asserts the switch actually applied via `<html lang>`. Call this once
+   * after login so the app language is deterministic regardless of the test
+   * user's profile language.
+   */
+  async selectLanguage(language: Language) {
     await this.menuButton.click();
     await this.menuLanguage.click();
-    await this.bokmalLanguageOption.click();
+    await this.languageMenu.select(language);
+    await expect(this.page.locator('html')).toHaveAttribute('lang', HTML_LANG[language]);
+  }
+
+  async chooseBokmalLanguage() {
+    await this.selectLanguage(Language.NB);
   }
 
   async expectedNumberOfActors(number: number) {

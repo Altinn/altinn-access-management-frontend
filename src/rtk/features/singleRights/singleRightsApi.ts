@@ -2,7 +2,6 @@ import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 
 import type { IdValuePair } from '@/dataObjects/dtos/IdValuePair';
 import { getCookie } from '@/resources/Cookie/CookieMethods';
-import type { BaseAttribute } from '@/dataObjects/dtos/BaseAttribute';
 import type { DelegationResult } from '@/dataObjects/dtos/resourceDelegation';
 import type { Permissions, Reason } from '@/dataObjects/dtos/accessPackage';
 
@@ -21,6 +20,7 @@ export interface ServiceResource {
   resourceOwnerOrgcode: string;
   rightDescription: string;
   description?: string;
+  status?: string;
   resourceReferences: resourceReference[];
   authorizationReference: IdValuePair[];
   resourceType: string;
@@ -56,7 +56,7 @@ interface searchParams {
   page: number;
   resultsPerPage: number;
   includeA2Services?: boolean;
-  includeMigratedApps?: boolean;
+  includeExpired?: boolean;
 }
 
 export interface DelegationCheckedRight {
@@ -87,14 +87,8 @@ export const singleRightsApi = createApi({
     // TODO: Move to resourceApi
     getPaginatedSearch: builder.query<PaginatedListDTO, searchParams>({
       query: (args) => {
-        const {
-          searchString,
-          ROfilters,
-          page,
-          resultsPerPage,
-          includeA2Services,
-          includeMigratedApps,
-        } = args;
+        const { searchString, ROfilters, page, resultsPerPage, includeA2Services, includeExpired } =
+          args;
         let searchParams = '';
         for (const filter of ROfilters) {
           searchParams = searchParams + `&ROFilters=${filter}`;
@@ -103,11 +97,11 @@ export const singleRightsApi = createApi({
           // Default is to include A2 services, so only add param if false
           searchParams = searchParams + `&includeA2Services=false`;
         }
-        if (includeMigratedApps) {
-          // Default is to not include migrated apps, so only add param if true
-          searchParams = searchParams + `&includeMigratedApps=true`;
+        if (includeExpired) {
+          // Default is to not include expired apps, so only add param if true
+          searchParams = searchParams + `&includeExpired=true`;
         }
-        return `resources/search?Page=${page}&ResultsPerPage=${resultsPerPage}&SearchString=${searchString}${searchParams}`;
+        return `resources/search?Page=${page}&ResultsPerPage=${resultsPerPage}&SearchString=${encodeURIComponent(searchString)}${searchParams}`;
       },
     }),
     getSingleRightsForRightholder: builder.query<
@@ -147,15 +141,6 @@ export const singleRightsApi = createApi({
         return { status: response.status, data: new Date().toISOString() };
       },
       providesTags: ['delegationCheck'],
-    }),
-    clearAccessCache: builder.mutation<void, { party: string; user: BaseAttribute }>({
-      query({ party, user }) {
-        return {
-          url: `singleright/${party}/accesscache/clear`,
-          method: 'PUT',
-          body: JSON.stringify(user),
-        };
-      },
     }),
     delegateRights: builder.mutation<
       DelegationResult,
@@ -210,7 +195,6 @@ export const {
   useGetSingleRightsForRightholderQuery,
   useGetResourceRightsQuery,
   useGetResourceRightsMetaQuery,
-  useClearAccessCacheMutation,
   useDelegationCheckQuery,
   useLazyDelegationCheckQuery,
   useDelegateRightsMutation,

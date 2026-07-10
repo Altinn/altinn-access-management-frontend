@@ -14,6 +14,7 @@ import { PageContainer } from '../common/PageContainer/PageContainer';
 import { PageLayoutWrapper } from '../common/PageLayoutWrapper';
 import { PartyRepresentationProvider } from '../common/PartyRepresentationContext/PartyRepresentationContext';
 import { DelegationModalProvider } from '../common/DelegationModal/DelegationModalContext';
+import { RestoreFocusProvider, useRestoreFocus } from '../common/RestoreFocus';
 
 import { InstanceDetailPageContent } from './InstanceDetailPageContent';
 import classes from './InstanceDetailPageContent.module.css';
@@ -30,9 +31,14 @@ export const InstanceDetailPage = () => {
   const dialogId = searchParams.get('dialogId');
   const isInboxDeeplink = !!dialogId;
   const instanceDelegationEnabled = displayInstanceDelegation();
-  const poaOverviewUrl = `/${amUIPath.PoaOverview}?tab=instances`;
+  const poaOverviewUrl = `/${amUIPath.PoaOverview}#instances`;
+  const restoreFocus = useRestoreFocus();
 
-  useDocumentTitle(t('instance_detail_page.document_title'));
+  useDocumentTitle(
+    isInboxDeeplink
+      ? t('instance_detail_page.document_title_from_inbox')
+      : t('instance_detail_page.document_title'),
+  );
 
   if (!instanceDelegationEnabled) {
     return (
@@ -51,7 +57,7 @@ export const InstanceDetailPage = () => {
         className={classes.inboxButton}
       >
         <a href={getInboxUrl(dialogId)}>
-          <EnvelopeClosedIcon />
+          <EnvelopeClosedIcon aria-hidden='true' />
           {t('instance_detail_page.back_to_inbox')}
         </a>
       </DsButton>
@@ -69,7 +75,9 @@ export const InstanceDetailPage = () => {
               actingPartyUuid={partyUuid}
             >
               <DelegationModalProvider>
-                <InstanceDetailPageContent />
+                <RestoreFocusProvider restoreFocus={restoreFocus}>
+                  <InstanceDetailPageContent />
+                </RestoreFocusProvider>
               </DelegationModalProvider>
             </PartyRepresentationProvider>
           </DeeplinkReporteeGuard>

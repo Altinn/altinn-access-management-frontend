@@ -1,17 +1,20 @@
 import React from 'react';
 import { useTranslation, Trans } from 'react-i18next';
 import { useNavigate, useSearchParams } from 'react-router';
-import { DsAlert, DsSpinner, DsHeading, DsParagraph, DsButton } from '@altinn/altinn-components';
+import {
+  DsAlert,
+  DsHeading,
+  DsParagraph,
+  DsButton,
+  formatDisplayName,
+} from '@altinn/altinn-components';
 
 import {
   useGetAgentSystemUserRequestQuery,
   useApproveAgentSystemUserRequestMutation,
   useRejectAgentSystemUserRequestMutation,
-  useGetSystemUserReporteeQuery,
-  useGetSystemuserIsAdminQuery,
 } from '@/rtk/features/systemUserApi';
 import { useDocumentTitle } from '@/resources/hooks/useDocumentTitle';
-
 import { RequestPageBase } from './components/RequestPageBase/RequestPageBase';
 import type { ProblemDetail } from './types';
 import { ButtonRow } from './components/ButtonRow/ButtonRow';
@@ -24,6 +27,7 @@ import { RightsList } from './components/RightsList/RightsList';
 import { getLogoutUrl } from '@/resources/utils/pathUtils';
 import { SystemUserRequestLoadError } from './components/SystemUserRequestLoadError/SystemUserRequestLoadError';
 import { enableAddSelfToSystemuser } from '@/resources/utils/featureFlagUtils';
+import { useGetIsAdminQuery, useGetReporteeQuery } from '@/rtk/features/userInfoApi';
 
 export const SystemUserAgentRequestPage = () => {
   const { t } = useTranslation();
@@ -32,7 +36,6 @@ export const SystemUserAgentRequestPage = () => {
   const [searchParams] = useSearchParams();
   const skipLogout = searchParams.get('skiplogout');
   const requestId = searchParams.get('id') ?? '';
-  const backToPage = searchParams.get('backtopage') ?? '';
 
   const {
     data: request,
@@ -48,12 +51,8 @@ export const SystemUserAgentRequestPage = () => {
     data: reporteeData,
     isLoading: isLoadingReportee,
     error: loadReporteeError,
-  } = useGetSystemUserReporteeQuery(request?.partyId ?? '', {
-    skip: !request?.partyId,
-  });
-  const { data: isAdmin } = useGetSystemuserIsAdminQuery(request?.partyUuid ?? '', {
-    skip: !request?.partyUuid,
-  });
+  } = useGetReporteeQuery();
+  const { data: isAdmin } = useGetIsAdminQuery();
 
   const [
     postAcceptCreationRequest,
@@ -101,27 +100,28 @@ export const SystemUserAgentRequestPage = () => {
     }
   };
 
+  let error: React.ReactNode = null;
+  if (!requestId) {
+    error = (
+      <DsAlert data-color='danger'>{t('systemuser_request.load_creation_request_no_id')}</DsAlert>
+    );
+  } else if (loadReporteeError) {
+    error = <DsAlert data-color='danger'>{t('systemuser_request.load_user_info_error')}</DsAlert>;
+  } else if (loadingRequestError || (request && !request.system)) {
+    error = (
+      <SystemUserRequestLoadError error={(loadingRequestError as { data: ProblemDetail })?.data} />
+    );
+  }
+
   return (
     <RequestPageBase
       system={request?.system}
-      reporteeName={reporteeData?.name}
-      backToPage={backToPage}
+      reportee={reporteeData}
+      isLoading={isLoadingRequest || isLoadingReportee}
+      requestPartyUuid={request?.partyUuid}
+      error={error}
       heading={t('systemuser_agent_request.banner_title')}
     >
-      {!requestId && (
-        <DsAlert data-color='danger'>{t('systemuser_request.load_creation_request_no_id')}</DsAlert>
-      )}
-      {loadReporteeError && (
-        <DsAlert data-color='danger'>{t('systemuser_request.load_user_info_error')}</DsAlert>
-      )}
-      {(loadingRequestError || (request && !request.system)) && (
-        <SystemUserRequestLoadError
-          error={(loadingRequestError as { data: ProblemDetail })?.data}
-        />
-      )}
-      {(isLoadingRequest || isLoadingReportee) && (
-        <DsSpinner aria-label={t('systemuser_request.loading_creation_request')} />
-      )}
       {request?.system && reporteeData && (
         <>
           {request.status === 'Accepted' && (
@@ -146,27 +146,30 @@ export const SystemUserAgentRequestPage = () => {
               i18nKey={'systemuser_agent_request.system_description'}
               values={{
                 vendorName: request.system.name,
-                companyName: reporteeData?.name,
+                companyName: formatDisplayName({ fullName: reporteeData?.name, type: 'company' }),
                 addSelfInfo:
-                  request.accessPackages.every((p) => p.isDelegable) && enableAddSelfToSystemuser()
+                  request.accessPackages.every((p) => p.isAssignable) && enableAddSelfToSystemuser()
                     ? t('systemuser_agent_request.add_self_possible')
                     : '',
               }}
             ></Trans>
           </DsParagraph>
-          <DsHeading
-            level={3}
-            data-size='xs'
-          >
-            {request.accessPackages.length === 1
-              ? t('systemuser_request.rights_list_header_single')
-              : t('systemuser_request.rights_list_header')}
-          </DsHeading>
-          <RightsList
-            resources={[]}
-            accessPackages={request.accessPackages}
-            hideHeadings
-          />
+          <div />
+          <div>
+            <DsHeading
+              level={3}
+              data-size='xs'
+            >
+              {request.accessPackages.length === 1
+                ? t('systemuser_request.rights_list_header_single')
+                : t('systemuser_request.rights_list_header')}
+            </DsHeading>
+            <RightsList
+              resources={[]}
+              accessPackages={request.accessPackages}
+              hideHeadings
+            />
+          </div>
           <div>
             {acceptCreationRequestError && (
               <DelegationCheckError

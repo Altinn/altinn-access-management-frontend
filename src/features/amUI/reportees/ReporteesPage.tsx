@@ -6,6 +6,8 @@ import { useDocumentTitle } from '@/resources/hooks/useDocumentTitle';
 import { PageWrapper } from '@/components';
 import { getCookie } from '@/resources/Cookie/CookieMethods';
 import { useGetIsAdminQuery, useGetReporteeQuery } from '@/rtk/features/userInfoApi';
+import { useGetPartyFromLoggedInUserQuery } from '@/rtk/features/lookupApi';
+import { hasReporteesPermission } from '@/resources/utils/permissionUtils';
 
 import { PageLayoutWrapper } from '../common/PageLayoutWrapper';
 import { PartyRepresentationProvider } from '../common/PartyRepresentationContext/PartyRepresentationContext';
@@ -18,6 +20,8 @@ export const ReporteesPage = () => {
   const { t } = useTranslation();
   const { data: isAdmin, isLoading } = useGetIsAdminQuery();
   const { data: reportee, isLoading: reporteeLoading } = useGetReporteeQuery();
+  const { data: currentUser, isLoading: currentUserIsLoading } = useGetPartyFromLoggedInUserQuery();
+  const isCurrentUserReportee = reportee?.partyUuid === currentUser?.partyUuid;
   const name = formatDisplayName({
     fullName: reportee?.name || '',
     type: reportee?.type === 'Person' ? 'person' : 'company',
@@ -28,7 +32,10 @@ export const ReporteesPage = () => {
   return (
     <PageWrapper>
       <PageLayoutWrapper>
-        {!isLoading && !isAdmin ? (
+        {!isLoading &&
+        !reporteeLoading &&
+        !currentUserIsLoading &&
+        !hasReporteesPermission(reportee, isAdmin, isCurrentUserReportee) ? (
           <DsAlert data-color='warning'>
             {t('reportees_page.not_admin_alert', { name: name || '' })}
           </DsAlert>
@@ -36,7 +43,6 @@ export const ReporteesPage = () => {
           <PartyRepresentationProvider
             toPartyUuid={getCookie('AltinnPartyUuid')}
             actingPartyUuid={getCookie('AltinnPartyUuid')}
-            errorOnPriv={true}
           >
             <Breadcrumbs items={['root', 'reportees']} />
             <ReporteePageHeading

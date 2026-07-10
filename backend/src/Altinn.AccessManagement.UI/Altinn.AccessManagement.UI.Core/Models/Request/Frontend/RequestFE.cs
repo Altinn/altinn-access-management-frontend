@@ -36,9 +36,14 @@ namespace Altinn.AccessManagement.UI.Core.Models.Request.Frontend
         public required Entity To { get; set; }
 
         /// <summary>
-        /// The resource id access is requested for
+        /// The resource id access is requested for (requests are either for a resource or a package, so only one of ResourceId and PackageId will be set)
         /// </summary>
         public string? ResourceId { get; set; }
+
+        /// <summary>
+        /// The package id access is requested for (requests are either for a resource or a package, so only one of ResourceId and PackageId will be set)
+        /// </summary>
+        public string? PackageId { get; set; }
 
         /// <summary>
         /// Last updated

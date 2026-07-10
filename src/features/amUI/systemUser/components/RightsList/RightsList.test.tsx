@@ -60,6 +60,7 @@ const accessPackage = {
     description: '',
     iconUrl: '',
     accessPackages: [],
+    typeName: 'Organisasjon',
   },
 };
 const accessPackage2 = {
@@ -127,7 +128,9 @@ describe('RightsList', () => {
       />,
     );
 
-    const accessPackageListItem = screen.getByRole('button', { name: accessPackage.name });
+    const accessPackageListItem = screen.getByRole('button', {
+      name: `${accessPackage.name} systemuser_detailpage.accesspackage_resources_list_singular`,
+    });
     await user.click(accessPackageListItem);
 
     const accessPackageDescription = screen.getByText(accessPackage.description);
@@ -143,7 +146,9 @@ describe('RightsList', () => {
       />,
     );
 
-    const accessPackageListItem = screen.getByRole('button', { name: accessPackage.name });
+    const accessPackageListItem = screen.getByRole('button', {
+      name: `${accessPackage.name} systemuser_detailpage.accesspackage_resources_list_singular`,
+    });
     await user.click(accessPackageListItem);
 
     const resourcesHeader = screen.getByText(
@@ -161,7 +166,9 @@ describe('RightsList', () => {
       />,
     );
 
-    const accessPackageListItem = screen.getByRole('button', { name: accessPackage2.name });
+    const accessPackageListItem = screen.getByRole('button', {
+      name: `${accessPackage2.name} systemuser_detailpage.accesspackage_resources_list_plural`,
+    });
     await user.click(accessPackageListItem);
 
     const resourcesHeader = screen.getByText(
@@ -195,7 +202,9 @@ describe('RightsList', () => {
       />,
     );
 
-    const accessPackageListItem = screen.getByRole('button', { name: accessPackage.name });
+    const accessPackageListItem = screen.getByRole('button', {
+      name: `${accessPackage.name} systemuser_detailpage.accesspackage_resources_list_singular`,
+    });
     await user.click(accessPackageListItem);
 
     const resourceListItem = screen.getByText(resource.title);
@@ -214,7 +223,9 @@ describe('RightsList', () => {
       />,
     );
 
-    const accessPackageListItem = screen.getByRole('button', { name: accessPackage.name });
+    const accessPackageListItem = screen.getByRole('button', {
+      name: `${accessPackage.name} systemuser_detailpage.accesspackage_resources_list_singular`,
+    });
     await user.click(accessPackageListItem);
 
     const resourceListItem = screen.getByText(resource.title);

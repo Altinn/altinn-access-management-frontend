@@ -8,7 +8,7 @@ import { useGetResourceRightsMetaQuery } from '@/rtk/features/singleRights/singl
 import { createErrorDetails } from '@/features/amUI/common/TechnicalErrorParagraphs/TechnicalErrorParagraphs';
 
 import { usePartyRepresentation } from '../../PartyRepresentationContext/PartyRepresentationContext';
-import { mapRightsToChipRights, type ChipRight } from '../SingleRights/hooks/rightsUtils';
+import { mapRightsToChipRights, type ChipRight } from '../utils/rightsUtils';
 
 export const useInstanceDelegationRightsData = ({
   resourceId,
@@ -150,7 +150,6 @@ export const useInstanceDelegationRightsData = ({
   }, [
     rightsMeta,
     delegationCheckedRights,
-    isDelegationCheckError,
     shouldLoadInstanceRights,
     mode,
     instanceRights,
@@ -175,12 +174,10 @@ export const useInstanceDelegationRightsData = ({
     resetRights,
     hasAccess,
     hasDirectAccess,
-    isLoading,
+    isLoading: isLoading || isDelegationCheckLoading,
     isDelegationCheckLoading,
-    isDelegationCheckError,
     delegationCheckError,
     delegationCheckedRights,
-    rightsMetaTechnicalErrorDetails,
-    instanceRightsErrorDetails,
+    errorDetails: rightsMetaTechnicalErrorDetails || instanceRightsErrorDetails,
   };
 };

@@ -7,8 +7,8 @@ import { usePartyRepresentation } from '../../common/PartyRepresentationContext/
 
 import { isGuardianshipUrn } from '@/resources/utils';
 import { AccessPackageList } from '../../common/AccessPackageList/AccessPackageList';
-import { AccessPackageInfoModal } from '../../userRightsPage/AccessPackageSection/AccessPackageInfoModal';
 import { DebouncedSearchField } from '../DebouncedSearchField/DebouncedSearchField';
+import { EditModal } from '../DelegationModal/EditModal';
 
 export const GuardianshipSection = () => {
   const { t } = useTranslation();
@@ -69,9 +69,10 @@ export const GuardianshipSection = () => {
         }}
         availableActions={[]}
       />
-      <AccessPackageInfoModal
-        modalRef={modalRef}
-        modalItem={modalItem}
+      <EditModal
+        ref={modalRef}
+        accessPackage={modalItem}
+        onClose={() => setModalItem(undefined)}
         availableActions={[]}
       />
     </>

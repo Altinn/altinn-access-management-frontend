@@ -149,8 +149,6 @@ export class EnduserConnection {
     const token = await this.tokenClass.getPersonalTokenByPid(pid);
     let responses = new Array<Response>();
 
-    // bruk Promise.all() og .map her
-
     await Promise.all(
       toList.map(async (to) => {
         const toUuid = await this.tokenClass.getPartyUuid(to);
@@ -266,30 +264,28 @@ export class EnduserConnection {
     const token = await this.tokenClass.getPersonalTokenByPid(pid);
     var responses = new Array<Response>();
 
-    await Promise.all(
-      packageNames.map(async (packageName) => {
-        const url = `${env('API_BASE_URL')}/accessmanagement/api/v1/enduser/connections/accesspackages?party=${fromUuid}&from=${fromUuid}&to=${toUuid}&package=${packageName}`;
-        const response = await fetch(url, {
-          method: 'POST',
-          headers: {
-            Authorization: `Bearer ${token}`,
-            'Content-Type': 'application/json',
-          },
-        });
+    for (const packageName of packageNames) {
+      const url = `${env('API_BASE_URL')}/accessmanagement/api/v1/enduser/connections/accesspackages?party=${fromUuid}&from=${fromUuid}&to=${toUuid}&package=${packageName}`;
+      const response = await fetch(url, {
+        method: 'POST',
+        headers: {
+          Authorization: `Bearer ${token}`,
+          'Content-Type': 'application/json',
+        },
+      });
 
-        if (!response.ok) {
-          throw new Error(
-            `Failed to fetch status for addPackageOrg request. Status: ${response.status}`,
-          );
-        }
-        responses.push(response);
-      }),
-    );
+      if (!response.ok) {
+        throw new Error(
+          `Failed to fetch status for addPackageOrg request. Status: ${response.status}`,
+        );
+      }
+      responses.push(response);
+    }
     return responses;
   }
 
   /**
-   * Deletes an access package connection between two parties for a person.
+   * Deletes an access package between two parties for a person.
    *
    * @param pid - PID used to obtain an authorization token.
    * @param fromOrg - Organization number representing the source party.
@@ -298,7 +294,7 @@ export class EnduserConnection {
    * @returns A promise that resolves with the HTTP response from the delete request.
    * @throws If the DELETE request fails or returns a non-OK status.
    */
-  public async deleteConnectionPackagePerson(
+  public async deleteAccessPackageDelegation(
     pid: string,
     fromOrg: string,
     toPid: string,
@@ -319,7 +315,7 @@ export class EnduserConnection {
 
     if (!response.ok) {
       throw new Error(
-        `Failed to fetch status for deleteConnectionPackagePerson request. Status: ${response.status}`,
+        `Failed to fetch status for deleteAccessPackageDelegation request. Status: ${response.status}`,
       );
     }
 
@@ -380,6 +376,48 @@ export class EnduserConnection {
   }
 
   /**
+   * Sletter delegering til enkelttjenesten 'resource' fra 'from' til 'to' med leserettigheter hvis ikke 'action' er oppgitt.
+   *
+   * @param pid - Fødselsnummeret til "from" som trengs for å lage en Personal Altinn Token.
+   * @param from - Fødselsnummeret eller organisasjonsnummeret til den som skal delegere enkelttjenesten.
+   * @param to - Fødselsnummeret eller organisasjonsnummeret til den som skal motta enkelttjenestedelegeringen.
+   * @param resource - Navnet på tjenesten
+   * @param fromUuid - partyUuid på den som skal delegere enkelttjenesten (valgfritt)
+   * @param toUuid - partyUuid på den som skal motta enkelttjenestedelegeringen (valgfritt)
+   * @returns A promise resolving to the API response JSON payload.
+   * @throws
+   */
+  public async deleteSingleServiceDelegation(
+    pid: string,
+    from: string,
+    to: string,
+    resource: string,
+    fromUuid?: string,
+    toUuid?: string,
+  ) {
+    fromUuid = fromUuid || (await this.tokenClass.getPartyUuid(from));
+    toUuid = toUuid || (await this.tokenClass.getPartyUuid(to));
+    const url = `${env('API_BASE_URL')}/accessmanagement/api/v1/enduser/connections/resources?party=${fromUuid}&from=${fromUuid}&to=${toUuid}&resource=${resource}`;
+
+    const token = await this.tokenClass.getPersonalTokenByPid(pid);
+    const response = await fetch(url, {
+      method: 'DELETE',
+      headers: {
+        Authorization: `Bearer ${token}`,
+        'Content-Type': 'application/json',
+      },
+    });
+
+    if (!response.ok) {
+      throw new Error(
+        `Failed to fetch status for deleteSingleServiceDelegation request. Status: ${response.status}, ${await response.text()}`,
+      );
+    }
+
+    return response;
+  }
+
+  /**
    * Ser hvilke rettigheter "party" har lov til å delegere for tjenesten 'resource'.
    *
    * @param pid - Fødselsnummer som trengs for å lage en Personal Altinn Token.
@@ -413,5 +451,144 @@ export class EnduserConnection {
     }
 
     return response.json();
+  }
+
+  public async addClientDelegationAgent(
+    pid: string,
+    fromParty: string,
+    agentPid: string,
+    fromUuid?: string,
+    agentLastName?: string,
+  ) {
+    fromUuid = fromUuid || (await this.tokenClass.getPartyUuid(fromParty));
+    agentLastName = agentLastName || (await this.tokenClass.getLastName(agentPid));
+    const token = await this.tokenClass.getPersonalTokenByPid(pid);
+    const payload = {
+      personidentifier: agentPid,
+      lastName: agentLastName,
+    };
+
+    const url = `${env('API_BASE_URL')}/accessmanagement/api/v1/enduser/clientdelegations/agents?party=${fromUuid}`;
+    const response = await fetch(url, {
+      method: 'POST',
+      headers: {
+        Authorization: `Bearer ${token}`,
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(payload),
+    });
+
+    if (!response.ok) {
+      throw new Error(
+        `Failed to fetch status for addClientDelegationAgent request. Status: ${response.status}`,
+      );
+    }
+
+    return response;
+  }
+
+  public async deleteClientDelegationAgent(
+    pid: string,
+    fromParty: string,
+    agentPid: string,
+    fromUuid?: string,
+    agentUuid?: string,
+    agentLastName?: string,
+  ) {
+    let agent;
+    fromUuid = fromUuid || (await this.tokenClass.getPartyUuid(fromParty));
+    if (!agentUuid || !agentLastName) {
+      agent = await this.tokenClass.getIds(agentPid);
+    }
+    agentUuid = agentUuid || agent.partyUuid;
+    agentLastName = agentLastName || agent.lastName;
+    const token = await this.tokenClass.getPersonalTokenByPid(pid);
+    const payload = {
+      personidentifier: agentPid,
+      lastName: agentLastName,
+    };
+
+    const url = `${env('API_BASE_URL')}/accessmanagement/api/v1/enduser/clientdelegations/agents?party=${fromUuid}&to=${agentUuid}`;
+    const response = await fetch(url, {
+      method: 'DELETE',
+      headers: {
+        Authorization: `Bearer ${token}`,
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(payload),
+    });
+
+    if (!response.ok) {
+      throw new Error(
+        `Failed to fetch status for deleteClientDelegationAgent request. Status: ${response.status}. Response: ${await response.text()}`,
+      );
+    }
+
+    return response;
+  }
+
+  public async getClientDelegationAgents(pid: string, fromParty: string) {
+    const token = await this.tokenClass.getPersonalTokenByPid(pid);
+    const fromUuid = await this.tokenClass.getPartyUuid(fromParty);
+
+    const url = `${env('API_BASE_URL')}/accessmanagement/api/v1/enduser/clientdelegations/agents?party=${fromUuid}`;
+    const response = await fetch(url, {
+      method: 'GET',
+      headers: {
+        Authorization: `Bearer ${token}`,
+        'Content-Type': 'application/json',
+      },
+    });
+
+    if (!response.ok) {
+      throw new Error(
+        `Failed to fetch status for getClientDelegationAgents request. Status: ${response.status}`,
+      );
+    }
+
+    return response;
+  }
+
+  public async delegerKlientTilBruker(
+    pid: string,
+    fromParty: string,
+    clientOrgNo: string,
+    agentPid: string,
+    packageName: string,
+    fromUuid?: string,
+    agentUuid?: string,
+    clientUuid?: string,
+  ) {
+    fromUuid = fromUuid || (await this.tokenClass.getPartyUuid(fromParty));
+    clientUuid = clientUuid || (await this.tokenClass.getPartyUuid(clientOrgNo));
+    agentUuid = agentUuid || (await this.tokenClass.getPartyUuid(agentPid));
+    const token = await this.tokenClass.getPersonalTokenByPid(pid);
+    const payload = {
+      values: [
+        {
+          role: 'rettighetshaver',
+          packages: [packageName],
+        },
+      ],
+    };
+
+    const url = `${env('API_BASE_URL')}/accessmanagement/api/v1/enduser/clientdelegations/agents/accesspackages?party=${fromUuid}&from=${clientUuid}&to=${agentUuid}`;
+    const response = await fetch(url, {
+      method: 'POST',
+      headers: {
+        Authorization: `Bearer ${token}`,
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(payload),
+    });
+
+    if (!response.ok) {
+      const responseBody = await response.text();
+      throw new Error(
+        `Failed to fetch status for delegerKlientTilBruker request. Status: ${response.status}. Response body: ${responseBody}`,
+      );
+    }
+
+    return response;
   }
 }

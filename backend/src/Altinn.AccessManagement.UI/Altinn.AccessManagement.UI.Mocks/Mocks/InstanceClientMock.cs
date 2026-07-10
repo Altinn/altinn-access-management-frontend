@@ -35,6 +35,7 @@ namespace Altinn.AccessManagement.UI.Mocks.Mocks
         public Task<List<InstancePermission>> GetDelegatedInstances(string languageCode, Guid party, Guid? from, Guid? to, string resource, string instance)
         {
             ThrowExceptionIfTriggerParty(party.ToString());
+            ThrowHttpStatusExceptionIfTriggerParty(party.ToString());
 
             string dataPath = Path.Combine(dataFolder, "Instance", "GetInstances", "instances.json");
             IEnumerable<InstancePermission> instances = Util.GetMockData<List<InstancePermission>>(dataPath);
@@ -148,6 +149,14 @@ namespace Altinn.AccessManagement.UI.Mocks.Mocks
             if (id == "********" || id == "00000000-0000-0000-0000-000000000000")
             {
                 throw new Exception();
+            }
+        }
+
+        private static void ThrowHttpStatusExceptionIfTriggerParty(string id)
+        {
+            if (id == "00000000-0000-0000-0000-000000000404")
+            {
+                throw new HttpStatusException("Status Error", "Downstream message", HttpStatusCode.NotFound, null, "Downstream message");
             }
         }
     }

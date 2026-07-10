@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
 	<PropertyGroup>
-		<TargetFramework>net9.0</TargetFramework>
+		<TargetFramework>net10.0</TargetFramework>
 		<ImplicitUsings>enable</ImplicitUsings>
 		<Nullable>disable</Nullable>
 		<GenerateDocumentationFile>True</GenerateDocumentationFile>
@@ -10,16 +10,16 @@
 	<ItemGroup>
 		<PackageReference Include="Altinn.Authorization.ABAC" Version="0.1.1" />
 		<PackageReference Include="Altinn.Common.PEP" Version="4.2.3" />
-		<PackageReference Include="Altinn.Register.Contracts" Version="1.6.0" />
+		<PackageReference Include="Altinn.Register.Contracts" Version="1.7.0" />
 		<PackageReference Include="JWTCookieAuthentication" Version="4.0.4" />
-		<PackageReference Include="Microsoft.AspNetCore.Mvc" Version="2.3.9" />
-		<PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="9.0.13" />
-		<PackageReference Include="Microsoft.Extensions.Options" Version="9.0.13" />
+		<PackageReference Include="Microsoft.AspNetCore.Mvc" Version="2.3.10" />
+		<PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="10.0.8" />
+		<PackageReference Include="Microsoft.Extensions.Options" Version="10.0.8" />
 		<PackageReference Include="StyleCop.Analyzers" Version="1.2.0-beta.556">
 			<PrivateAssets>all</PrivateAssets>
 			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
 		</PackageReference>
-		<PackageReference Include="System.Text.RegularExpressions" Version="4.3.1" />
+		<PackageReference Include="System.Security.Cryptography.Xml" Version="9.0.16" />
 	</ItemGroup>
 
 	<ItemGroup>

@@ -103,6 +103,7 @@ export function createMaskinportenGrantAssertion(
  * @param fromPartyUrn The consenting party URN (person or org)
  * @param privateKey The private key in JWK format
  * @param consumerOrg Optional organization number for "behalf of" scenarios
+ * @param scope The Maskinporten scope for the consent token. Default: 'altinn:consentrequests.write'
  * @returns The signed JWT as a string
  */
 export function createConsentAuthorizationJWT(
@@ -111,6 +112,7 @@ export function createConsentAuthorizationJWT(
   fromPartyUrn: string,
   privateKey: JsonWebKey,
   consumerOrg?: string,
+  scope = 'altinn:consentrequests.write',
 ): string {
   const { iat, exp } = getCurrentTimestamps();
   const jti = generateJti();
@@ -118,7 +120,7 @@ export function createConsentAuthorizationJWT(
   const payload: Record<string, unknown> = {
     aud: 'https://test.maskinporten.no/', // Default Maskinporten audience
     iss: clientId,
-    scope: 'altinn:consentrequests.write',
+    scope,
     iat,
     exp,
     jti,

@@ -238,16 +238,16 @@ namespace Altinn.AccessManagement.UI.Controllers
         /// <summary>
         /// Endpoint for retrieving party if party exists in the authenticated users reporteelist.
         /// </summary>
-        /// <param name="partyId">The partyId for the reportee to look up.</param>
+        /// <param name="partyUuid">The partyUuid for the reportee to look up.</param>
         /// <returns>Reportee if party is in authenticated users reporteelist.</returns>
         [HttpGet]
         [Authorize]
-        [Route("reportee/{partyId}")]
-        public async Task<ActionResult<AuthorizedParty>> GetPartyFromReporteeListIfExists(int partyId)
+        [Route("reportee/{partyUuid}")]
+        public async Task<ActionResult<AuthorizedParty>> GetPartyFromReporteeListIfExists(Guid partyUuid)
         {
             try
             {
-                AuthorizedParty party = await _userService.GetPartyFromReporteeListIfExists(partyId);
+                AuthorizedParty party = await _userService.GetPartyFromReporteeListIfExists(partyUuid);
 
                 if (party != null)
                 {
@@ -366,6 +366,23 @@ namespace Altinn.AccessManagement.UI.Controllers
         [Authorize(Policy = AuthzConstants.POLICY_ACCESS_MANAGEMENT_INSTANCE_DELEGATION_READ_WITH_PASS_THROUGH)]
         [Route("isInstanceAdmin")]
         public ActionResult<bool> IsInstanceAdmin()
+        {
+            if (_httpContextAccessor.HttpContext.Items.TryGetValue("HasRequestedPermission", out object hasPermissionObj) &&
+                hasPermissionObj is bool hasPermission)
+            {
+                return Ok(hasPermission);
+            }
+
+            return Ok(false);
+        }
+
+        /// <summary>
+        /// Endpoint for checking if the authenticated user has access to the altinn_maskinporten_scope_delegation resource.
+        /// </summary>
+        [HttpGet]
+        [Authorize(Policy = AuthzConstants.POLICY_ACCESS_MANAGEMENT_MASKINPORTEN_SCOPE_DELEGATION_READ_WITH_PASS_THROUGH)]
+        [Route("isMaskinportenAdmin")]
+        public ActionResult<bool> IsMaskinportenAdmin()
         {
             if (_httpContextAccessor.HttpContext.Items.TryGetValue("HasRequestedPermission", out object hasPermissionObj) &&
                 hasPermissionObj is bool hasPermission)

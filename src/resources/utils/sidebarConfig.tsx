@@ -5,20 +5,19 @@ import {
   TenancyIcon,
   PadlockUnlockedIcon,
   HandshakeIcon,
-  LeaveIcon,
   CogIcon,
   BellDotIcon,
   PadlockLockedFillIcon,
   KeyVerticalIcon,
   ExternalLinkIcon,
   DatabaseIcon,
-  PersonIcon,
 } from '@navikt/aksel-icons';
+import ApiIcon from '@/assets/Api.svg?react';
 import i18next, { t } from 'i18next';
 import { Link } from 'react-router';
 
 import { amUIPath, ConsentPath, SystemUserPath } from '@/routes/paths';
-import { getAltinnStartPageUrl, getHostUrl } from '@/resources/utils/pathUtils';
+import { getAltinnStartPageUrl } from '@/resources/utils/pathUtils';
 
 const getMenuLinkAs = (
   props: ComponentProps<typeof Link>,
@@ -230,14 +229,32 @@ export const getRequestsMenuItem = (
   };
 };
 
+export const getMaskinportenMenuItem = (
+  pathname?: string,
+  isLoading = false,
+  isSmall = false,
+): MenuItemProps => {
+  return {
+    groupId: '14',
+    id: 'maskinporten',
+    size: 'md',
+    loading: isLoading,
+    variant: isSmall ? 'default' : 'tinted',
+    title: t('sidebar.maskinporten'),
+    selected: pathname?.includes(`/${amUIPath.Maskinporten}`),
+    icon: { svgElement: ApiIcon, theme: isSmall ? 'surface' : 'default' },
+    as: (props) => getMenuLinkAs(props, `/${amUIPath.Maskinporten}`),
+  };
+};
+
 export const getShortcutsMenuItem = (pathname?: string, isLoading = false): MenuItemProps[] => {
   const infoPortalUrl = getAltinnStartPageUrl(i18next.language);
   const helpPageUrl = infoPortalUrl + 'hjelp/ny-tilgangsstyring/';
-  return [
+  const items: MenuItemProps[] = [
     {
       groupId: 'shortcuts',
       id: 'beta-about',
-      size: 'md',
+      size: 'sm',
       loading: isLoading,
       variant: 'tinted',
       title: t('header.help_pages'),
@@ -245,16 +262,6 @@ export const getShortcutsMenuItem = (pathname?: string, isLoading = false): Menu
       selected: false,
       as: (props) => getMenuLinkAs(props, helpPageUrl, true),
     },
-    {
-      groupId: 'shortcuts',
-      id: 'beta-leave',
-      size: 'md',
-      loading: isLoading,
-      variant: 'tinted',
-      title: t('header.leave_beta'),
-      icon: LeaveIcon,
-      selected: false,
-      as: (props) => getMenuLinkAs(props, getHostUrl() + 'ui/profile'),
-    },
   ];
+  return items;
 };

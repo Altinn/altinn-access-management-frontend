@@ -5,9 +5,9 @@ import { PlusIcon } from '@navikt/aksel-icons';
 import {
   DsAlert,
   DsButton,
-  DsHeading,
   DsParagraph,
   DsSkeleton,
+  formatDisplayName,
   List,
   ListItem,
 } from '@altinn/altinn-components';
@@ -17,7 +17,6 @@ import { PageWrapper } from '@/components';
 import {
   useGetAgentSystemUsersQuery,
   useGetPendingSystemUserRequestsQuery,
-  useGetSystemUserReporteeQuery,
   useGetSystemUsersQuery,
 } from '@/rtk/features/systemUserApi';
 import { getCookie } from '@/resources/Cookie/CookieMethods';
@@ -25,10 +24,15 @@ import { SystemUserPath } from '@/routes/paths';
 import { PageLayoutWrapper } from '@/features/amUI/common/PageLayoutWrapper';
 
 import classes from './SystemUserOverviewPage.module.css';
-import { useGetIsAdminQuery, useGetIsClientAdminQuery } from '@/rtk/features/userInfoApi';
+import {
+  useGetIsAdminQuery,
+  useGetIsClientAdminQuery,
+  useGetReporteeQuery,
+} from '@/rtk/features/userInfoApi';
 import { hasCreateSystemUserPermission } from '@/resources/utils/permissionUtils';
 import { SystemUserList } from './SystemUserList';
 import { Breadcrumbs } from '../../common/Breadcrumbs/Breadcrumbs';
+import ReporteePageHeading from '../../common/ReporteePageHeading';
 
 export const SystemUserOverviewPage = () => {
   const { t } = useTranslation();
@@ -39,8 +43,7 @@ export const SystemUserOverviewPage = () => {
 
   const { data: isAdmin, isLoading: isLoadingIsAdmin } = useGetIsAdminQuery();
   const { data: isClientAdmin, isLoading: isLoadingClientAdmin } = useGetIsClientAdminQuery();
-  const { data: reporteeData, isLoading: isLoadingReportee } =
-    useGetSystemUserReporteeQuery(partyId);
+  const { data: reporteeData, isLoading: isLoadingReportee } = useGetReporteeQuery();
 
   // load only for isAdmin
   const {
@@ -76,17 +79,20 @@ export const SystemUserOverviewPage = () => {
     isLoadingPendingSystemUsers ||
     isLoadingIsAdmin;
 
+  const reporteeName = formatDisplayName({
+    fullName: reporteeData?.name || '',
+    type: reporteeData?.type === 'Person' ? 'person' : 'company',
+  });
+
   return (
     <PageWrapper>
       <PageLayoutWrapper>
         <Breadcrumbs items={['root', 'systemuser_overview']} />
-        <DsHeading
-          level={1}
-          data-size='sm'
-          className={classes.systemUserTopHeader}
-        >
-          {t('systemuser_overviewpage.banner_title')}
-        </DsHeading>
+        <ReporteePageHeading
+          title={t('systemuser_overviewpage.banner_title', { name: reporteeName })}
+          reportee={reporteeData}
+          isLoading={isLoadingReportee}
+        />
         <div className={classes.flexContainer}>
           <DsParagraph
             data-size='sm'

@@ -6,7 +6,7 @@ import { useIsMobileOrSmaller } from '@/resources/utils/screensizeUtils';
 import { RightChips } from './RightChips';
 import { DelegationAction } from '../EditModal';
 import { CheckmarkCircleIcon } from '@navikt/aksel-icons';
-import { ChipRight } from './hooks/rightsUtils';
+import { ChipRight } from '../utils/rightsUtils';
 
 interface RightsSectionProps {
   rights: ChipRight[];
@@ -114,6 +114,7 @@ export const RightsSection = ({
           onClick={() => setRightsExpanded(!rightsExpanded)}
           expanded={rightsExpanded}
           as='button'
+          containerAs='div'
           border='solid'
           shadow='none'
         >

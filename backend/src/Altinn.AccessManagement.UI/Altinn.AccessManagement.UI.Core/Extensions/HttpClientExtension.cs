@@ -16,6 +16,21 @@ namespace Altinn.AccessManagement.UI.Core.Extensions
         /// <returns>A HttpResponseMessage.</returns>
         public static Task<HttpResponseMessage> PostAsync(this HttpClient httpClient, string authorizationToken, string requestUri, HttpContent content, string platformAccessToken = null)
         {
+            return httpClient.PostAsync(authorizationToken, requestUri, content, CancellationToken.None, platformAccessToken);
+        }
+
+        /// <summary>
+        /// Extension that add authorization header to request.
+        /// </summary>
+        /// <param name="httpClient">The HttpClient.</param>
+        /// <param name="authorizationToken">the authorization token (jwt).</param>
+        /// <param name="requestUri">The request Uri.</param>
+        /// <param name="content">The http content.</param>
+        /// <param name="cancellationToken">The cancellation token.</param>
+        /// <param name="platformAccessToken">The platformAccess tokens.</param>
+        /// <returns>A HttpResponseMessage.</returns>
+        public static Task<HttpResponseMessage> PostAsync(this HttpClient httpClient, string authorizationToken, string requestUri, HttpContent content, CancellationToken cancellationToken, string platformAccessToken = null)
+        {
             HttpRequestMessage request = new HttpRequestMessage(HttpMethod.Post, requestUri);
             request.Headers.Add("Authorization", "Bearer " + authorizationToken);
             request.Content = content;
@@ -24,7 +39,7 @@ namespace Altinn.AccessManagement.UI.Core.Extensions
                 request.Headers.Add("PlatformAccessToken", platformAccessToken);
             }
 
-            return httpClient.SendAsync(request, CancellationToken.None);
+            return httpClient.SendAsync(request, cancellationToken);
         }
 
         /// <summary>
@@ -72,7 +87,7 @@ namespace Altinn.AccessManagement.UI.Core.Extensions
         }
 
         /// <summary>
-        /// Extension that add authorization header to request.
+        /// Extension that adds authorization header and cancellation token to request.
         /// </summary>
         /// <param name="httpClient">The HttpClient.</param>
         /// <param name="authorizationToken">the authorization token (jwt).</param>
@@ -81,6 +96,21 @@ namespace Altinn.AccessManagement.UI.Core.Extensions
         /// <param name="languageCode">The language code.</param>
         /// <returns>A HttpResponseMessage.</returns>
         public static Task<HttpResponseMessage> GetAsync(this HttpClient httpClient, string authorizationToken, string requestUri, string platformAccessToken = null, string languageCode = null)
+        {
+            return httpClient.GetAsync(authorizationToken, requestUri, CancellationToken.None, platformAccessToken, languageCode);
+        }
+
+        /// <summary>
+        /// Extension that adds authorization header and cancellation token to request.
+        /// </summary>
+        /// <param name="httpClient">The HttpClient.</param>
+        /// <param name="authorizationToken">the authorization token (jwt).</param>
+        /// <param name="requestUri">The request Uri.</param>
+        /// <param name="cancellationToken">The cancellation token.</param>
+        /// <param name="platformAccessToken">The platformAccess tokens.</param>
+        /// <param name="languageCode">The language code.</param>
+        /// <returns>A HttpResponseMessage.</returns>
+        public static Task<HttpResponseMessage> GetAsync(this HttpClient httpClient, string authorizationToken, string requestUri, CancellationToken cancellationToken, string platformAccessToken = null, string languageCode = null)
         {
             HttpRequestMessage request = new HttpRequestMessage(HttpMethod.Get, requestUri);
             request.Headers.Add("Authorization", "Bearer " + authorizationToken);
@@ -94,7 +124,7 @@ namespace Altinn.AccessManagement.UI.Core.Extensions
                 request.Headers.Add("PlatformAccessToken", platformAccessToken);
             }
 
-            return httpClient.SendAsync(request, HttpCompletionOption.ResponseContentRead, CancellationToken.None);
+            return httpClient.SendAsync(request, HttpCompletionOption.ResponseContentRead, cancellationToken);
         }
 
         /// <summary>

@@ -1,148 +1,214 @@
-import React, { useEffect } from 'react';
-import { useTranslation } from 'react-i18next';
-import { useSearchParams } from 'react-router';
+import React, { useCallback, useMemo, useState } from 'react';
+import { Trans, useTranslation } from 'react-i18next';
+import { DsAlert, DsParagraph, formatDisplayName } from '@altinn/altinn-components';
 import {
-  DsAlert,
-  DsSpinner,
-  formatDisplayName,
-  Layout,
-  RootProvider,
-} from '@altinn/altinn-components';
-import { useDocumentTitle } from '@/resources/hooks/useDocumentTitle';
-import { getAltinnStartPageUrl, getLogoutUrl } from '@/resources/utils/pathUtils';
-import { useUpdateSelectedLanguageMutation } from '@/rtk/features/settingsApi';
-import classes from './DraftRequestPage.module.css';
-import { useGetEnrichedDraftRequestQuery } from '@/rtk/features/requestApi';
-import { redirectToChangeReporteeAndRedirect } from '@/resources/utils/changeReporteeUtils';
+  useConfirmRequestMutation,
+  useGetEnrichedDraftRequestQuery,
+  useWithdrawRequestMutation,
+  type EnrichedResourceRequest,
+} from '@/rtk/features/requestApi';
+import { useSearchParams } from 'react-router';
 import { getCookie } from '@/resources/Cookie/CookieMethods';
+import { RequestPageLayout } from '../../common/RequestPageLayout/RequestPageLayout';
 import { PartyRepresentationProvider } from '../../common/PartyRepresentationContext/PartyRepresentationContext';
-import { useGetUserProfileQuery } from '@/rtk/features/userInfoApi';
-import { DraftRequestPageContent } from './DraftRequestPageContent';
+import { useDocumentTitle } from '@/resources/hooks/useDocumentTitle';
+import { useMultipleDraftRequests } from './useMultipleDraftRequests';
+import { MultipleDraftRequestsView, type BatchActionType } from './MultipleDraftRequestsView';
+import { DraftRequestHeader } from './DraftRequestHeader';
+import { RequestReceiptBody } from './RequestReceiptBody';
+import { SingleDraftRequestView } from './SingleDraftRequestView';
 
 export const DraftRequestPage = () => {
-  const { t, i18n } = useTranslation();
-  const [updateSelectedLanguage] = useUpdateSelectedLanguageMutation();
+  const { t } = useTranslation();
 
   useDocumentTitle(t('draft_request_page.page_title'));
   const [searchParams] = useSearchParams();
-  const requestId = searchParams.get('requestId') ?? '';
   const partyUuid = getCookie('AltinnPartyUuid') || '';
+  const requestIds = Array.from(new Set(searchParams.getAll('requestId'))); // Duplicate IDs are ignored
+  const isMultiMode = requestIds.length > 1;
+  const [batchCompleteAction, setBatchCompleteAction] = useState<BatchActionType>(null);
+
+  const onBatchComplete: (actionType: BatchActionType) => void = useCallback((actionType) => {
+    setBatchCompleteAction(actionType);
+  }, []);
+
+  const singleRequestId = requestIds[0] ?? '';
 
   const {
     data: request,
     isLoading: isLoadingRequest,
     error: loadRequestError,
   } = useGetEnrichedDraftRequestQuery(
-    { id: requestId },
-    {
-      skip: !requestId,
-    },
+    { id: singleRequestId },
+    { skip: !singleRequestId || isMultiMode },
   );
 
-  const { data: userData } = useGetUserProfileQuery();
+  const stableMultiIds = useMemo(
+    () => (isMultiMode ? requestIds : []),
+    [isMultiMode, requestIds.join(',')],
+  );
+  const {
+    requests: multiRequests,
+    isLoading: isLoadingMultiRequests,
+    loadError: multiLoadError,
+  } = useMultipleDraftRequests(stableMultiIds);
 
-  useEffect(() => {
-    // If the request is for a different user than the one currently logged in, redirect to the correct reportee
-    if (request?.from.id && request.from.id !== partyUuid) {
-      redirectToChangeReporteeAndRedirect(request?.from.id, window.location.href);
+  const representativeRequest: EnrichedResourceRequest | undefined = isMultiMode
+    ? multiRequests[0]
+    : request;
+
+  const fromError =
+    isMultiMode && multiRequests.some((r) => r.from.id !== representativeRequest?.from.id);
+
+  const [
+    confirmRequest,
+    { data: confirmResponse, error: confirmRequestError, isLoading: isConfirmingRequest },
+  ] = useConfirmRequestMutation();
+
+  const [
+    withdrawRequest,
+    { data: withdrawResponse, error: withdrawRequestError, isLoading: isWithdrawingRequest },
+  ] = useWithdrawRequestMutation();
+
+  const isActionButtonDisabled = isConfirmingRequest || isWithdrawingRequest;
+  const onConfirmRequest = () => {
+    if (!isActionButtonDisabled && request) {
+      confirmRequest({ party: request.from.id, id: request.id });
     }
-  }, [request, partyUuid]);
-
-  const onChangeLocale = (newLocale: string) => {
-    i18n.changeLanguage(newLocale);
-    document.cookie = `selectedLanguage=${newLocale}; path=/; SameSite=Strict`;
-    updateSelectedLanguage(newLocale);
   };
 
-  const account: { name: string; type: 'person' | 'company' } = {
-    name: request?.from.name ?? '',
-    type: request?.from.type === 'Person' ? 'person' : 'company',
+  const onWithdrawRequest = () => {
+    if (!isActionButtonDisabled && request) {
+      withdrawRequest({ party: request.from.id, id: request.id });
+    }
   };
 
-  return (
-    <RootProvider>
-      <Layout
-        color={request?.from.type === 'Person' ? 'person' : 'company'}
-        theme='subtle'
-        header={{
-          locale: {
-            title: t('header.locale_title'),
-            options: [
-              { label: 'Norsk (bokmål)', value: 'no_nb', checked: i18n.language === 'no_nb' },
-              { label: 'Norsk (nynorsk)', value: 'no_nn', checked: i18n.language === 'no_nn' },
-              { label: 'English', value: 'en', checked: i18n.language === 'en' },
-            ],
-            onSelect: onChangeLocale,
-          },
-          logo: {
-            href: getAltinnStartPageUrl(i18n.language),
-            title: 'Altinn',
-          },
-          currentAccount: {
-            ...account,
-            id: '',
-            icon: account,
-          },
-          globalMenu: {
-            logoutButton: {
-              label: t('header.log_out'),
-              onClick: () => {
-                const logoutUrl = getLogoutUrl();
-                window.location.assign(logoutUrl);
-              },
-            },
-            menuLabel: t('header.menu-label'),
-            backLabel: t('header.back-label'),
-            changeLabel: t('header.change-label'),
-            menu: {
-              items: [{ groupId: 'current-user', hidden: true }],
-              groups: {
-                'current-user': {
-                  title: t('header.logged_in_as_name', {
-                    name: formatDisplayName({
-                      fullName: userData?.name || '',
-                      type: 'person',
-                      reverseNameOrder: true,
-                    }),
-                  }),
-                },
-              },
-            },
-          },
-        }}
-      >
-        {!requestId && (
-          <div className={classes.centerBlock}>
-            <DsAlert data-color='warning'>{t('draft_request_page.missing_request_id')}</DsAlert>
-          </div>
-        )}
-        {isLoadingRequest && <LoadingState />}
-        {loadRequestError && (
-          <DsAlert data-color='danger'>{t('draft_request_page.load_request_error')}</DsAlert>
-        )}
-        {request && (
-          <PartyRepresentationProvider
-            fromPartyUuid={partyUuid}
-            actingPartyUuid={partyUuid}
-            toPartyUuid={''}
-            loadingComponent={<LoadingState />}
-          >
-            <DraftRequestPageContent request={request} />
-          </PartyRepresentationProvider>
-        )}
-      </Layout>
-    </RootProvider>
-  );
-};
+  // The pending reportee-switch ("changing party") state is handled centrally by
+  // RequestPageLayout via the requestPartyUuid prop, so it's intentionally not
+  // duplicated here.
+  const isInitialLoad = isMultiMode ? isLoadingMultiRequests : isLoadingRequest;
 
-const LoadingState = () => {
-  const { t } = useTranslation();
-  return (
-    <div className={classes.centerBlock}>
-      <DsSpinner
-        aria-label={t('draft_request_page.loading_request')}
-        data-size='lg'
+  const toName = formatDisplayName({
+    fullName: representativeRequest?.to.name ?? '',
+    type: representativeRequest?.to.type === 'Person' ? 'person' : 'company',
+  });
+  const fromName = formatDisplayName({
+    fullName: representativeRequest?.from.name ?? '',
+    type: representativeRequest?.from.type === 'Person' ? 'person' : 'company',
+  });
+
+  // Normalise the completed action across single and multi modes
+  const receiptAction: 'confirm' | 'withdraw' | null = isMultiMode
+    ? batchCompleteAction
+    : confirmResponse
+      ? 'confirm'
+      : withdrawResponse
+        ? 'withdraw'
+        : null;
+
+  let heading: React.ReactNode = null;
+  let body: React.ReactNode = null;
+  let error: React.ReactNode = null;
+
+  if (receiptAction) {
+    const isConfirm = receiptAction === 'confirm';
+    heading = (
+      <DraftRequestHeader
+        headerTextKey={
+          isConfirm ? 'draft_request_page.request_approved' : 'draft_request_page.request_withdrawn'
+        }
+        toName={toName}
+        autoFocus
       />
-    </div>
+    );
+    body = (
+      <RequestReceiptBody
+        bodyTextKey={
+          isConfirm
+            ? 'draft_request_page.request_approved_info'
+            : 'draft_request_page.request_withdrawn_info'
+        }
+        toName={toName}
+      />
+    );
+  } else if (!isInitialLoad && representativeRequest) {
+    heading = (
+      <>
+        <DraftRequestHeader
+          headerTextKey='draft_request_page.heading'
+          toName={toName}
+        />
+        <DsParagraph>
+          <Trans
+            i18nKey={
+              partyUuid === representativeRequest.from.id
+                ? 'draft_request_page.intro_person'
+                : 'draft_request_page.intro_company'
+            }
+            components={{ b: <strong /> }}
+            values={{ to_name: toName, from_name: fromName }}
+          />
+        </DsParagraph>
+      </>
+    );
+
+    if (isMultiMode && multiRequests.length > 0) {
+      body = (
+        <PartyRepresentationProvider
+          fromPartyUuid={partyUuid}
+          actingPartyUuid={partyUuid}
+          toPartyUuid={''}
+        >
+          <MultipleDraftRequestsView
+            requests={multiRequests}
+            fromName={fromName}
+            onBatchComplete={onBatchComplete}
+          />
+        </PartyRepresentationProvider>
+      );
+    } else if (request) {
+      body = (
+        <SingleDraftRequestView
+          request={request}
+          fromName={fromName}
+          partyUuid={partyUuid}
+          onConfirmRequest={onConfirmRequest}
+          onWithdrawRequest={onWithdrawRequest}
+          isConfirmingRequest={isConfirmingRequest}
+          isWithdrawingRequest={isWithdrawingRequest}
+          confirmRequestError={confirmRequestError}
+          withdrawRequestError={withdrawRequestError}
+        />
+      );
+    }
+  }
+
+  if (isMultiMode) {
+    if (multiLoadError || fromError) {
+      error = <DsAlert data-color='danger'>{t('draft_request_page.load_request_error')}</DsAlert>;
+      body = null;
+    }
+  } else {
+    if (!singleRequestId) {
+      error = <DsAlert data-color='warning'>{t('draft_request_page.missing_request_id')}</DsAlert>;
+      body = null;
+    } else if (loadRequestError) {
+      error = <DsAlert data-color='danger'>{t('draft_request_page.load_request_error')}</DsAlert>;
+      body = null;
+    }
+  }
+
+  return (
+    <RequestPageLayout
+      account={{
+        name: representativeRequest?.from.name ?? '',
+        type: representativeRequest?.from.type === 'Person' ? 'person' : 'company',
+      }}
+      error={error}
+      isLoading={isInitialLoad}
+      requestPartyUuid={representativeRequest?.from.id}
+      heading={heading}
+      body={body}
+    />
   );
 };

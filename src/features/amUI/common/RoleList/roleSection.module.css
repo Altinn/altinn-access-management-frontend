@@ -1,12 +1,18 @@
 .roleArea {
   display: flex;
   flex-direction: column;
-  gap: 0.3rem;
-  margin-bottom: 0.5rem;
+  gap: var(--ds-spacing-5);
+  margin-bottom: var(--ds-spacing-2);
+}
+
+.roleListHeader {
+  display: flex;
+  align-items: center;
+  gap: var(--ds-spacing-1);
 }
 
 .roleLists {
   display: flex;
   flex-direction: column;
-  gap: 1rem;
+  gap: var(--ds-spacing-2);
 }

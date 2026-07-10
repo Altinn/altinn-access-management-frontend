@@ -8,14 +8,13 @@ import {
   DsDialog,
   DsHeading,
   DsParagraph,
-  Snackbar,
+  formatDisplayName,
   useSnackbar,
 } from '@altinn/altinn-components';
 
 import {
   useAssignCustomerMutation,
   useAssignSelfCustomerMutation,
-  useGetSystemUserReporteeQuery,
   useIsSelfAddedQuery,
   useRemoveCustomerMutation,
   useRemoveSelfCustomerMutation,
@@ -26,10 +25,15 @@ import type { AgentDelegation, AgentDelegationCustomer, ProblemDetail, SystemUse
 import { RightsList } from '../components/RightsList/RightsList';
 import classes from './SystemUserAgentDelegationPage.module.css';
 import { CustomerList } from './CustomerList';
-import { useGetIsAdminQuery, useGetIsClientAdminQuery } from '@/rtk/features/userInfoApi';
+import {
+  useGetIsAdminQuery,
+  useGetIsClientAdminQuery,
+  useGetReporteeQuery,
+} from '@/rtk/features/userInfoApi';
 import { AddAllCustomers } from './AddAllCustomers';
 import { DelegationCheckError } from '../components/DelegationCheckError/DelegationCheckError';
 import { enableAddSelfToSystemuser } from '@/resources/utils/featureFlagUtils';
+import { useIsMobileOrSmaller } from '@/resources/utils/screensizeUtils';
 
 const getAssignedCustomers = (
   customers: AgentDelegationCustomer[],
@@ -55,6 +59,7 @@ export const SystemUserAgentDelegationPageContent = ({
 
   const { id } = useParams();
   const modalRef = useRef<HTMLDialogElement>(null);
+  const isSmall = useIsMobileOrSmaller();
 
   const [delegations, setDelegations] = useState<AgentDelegation[]>(existingAgentDelegations);
   const [loadingIds, setLoadingIds] = useState<string[]>([]);
@@ -71,7 +76,7 @@ export const SystemUserAgentDelegationPageContent = ({
 
   const { data: isClientAdmin } = useGetIsClientAdminQuery();
   const { data: isAdmin } = useGetIsAdminQuery();
-  const { data: reporteeData } = useGetSystemUserReporteeQuery(partyId);
+  const { data: reporteeData } = useGetReporteeQuery();
 
   const [assignCustomer] = useAssignCustomerMutation();
   const [removeCustomer] = useRemoveCustomerMutation();
@@ -95,6 +100,7 @@ export const SystemUserAgentDelegationPageContent = ({
   );
 
   const isAddingAllCustomers = addAllState.maxCount > -1;
+  const reporteeName = formatDisplayName({ fullName: reporteeData?.name || '', type: 'company' });
 
   const resetLoadingId = (customerId: string): void => {
     setLoadingIds((oldLoadingIds) => oldLoadingIds.filter((id) => id !== customerId));
@@ -114,7 +120,6 @@ export const SystemUserAgentDelegationPageContent = ({
       message: message,
       color: color,
       dismissable: false,
-      className: classes.customerListSnackbar,
     });
   };
 
@@ -249,17 +254,18 @@ export const SystemUserAgentDelegationPageContent = ({
       .then(refetchIsSelfAdded);
   };
 
-  const isAllAccessPackagesDelegable = systemUser.accessPackages.every((x) => x.isDelegable);
+  const isAllAccessPackagesAssignable = systemUser.accessPackages.every((x) => x.isAssignable);
   const hasAddSelfPermission =
-    isAdmin && isAllAccessPackagesDelegable && enableAddSelfToSystemuser();
+    isAdmin && isAllAccessPackagesAssignable && enableAddSelfToSystemuser();
   const isLoadingSelf = isAssigningSelf || isRemovingSelf || isRefetchingIsSelfAdded;
   const assignedCustomersList =
     hasAddSelfPermission && reporteeData && (isSelfAdded || assignedCustomers.length > 0)
       ? [
           {
             id: reporteeData.partyUuid,
-            name: reporteeData.name,
+            name: reporteeName,
             orgNo: reporteeData.organizationNumber || '',
+            unitType: reporteeData.unitType,
             access: [],
             isSelfOrg: true,
           },
@@ -302,10 +308,10 @@ export const SystemUserAgentDelegationPageContent = ({
                 onRemoveCustomer={onRemoveCustomer}
                 onAddAllCustomers={onAddAllCustomers}
               />
-              {customers.length === 0 && reporteeData?.name && (
+              {customers.length === 0 && reporteeName && (
                 <DsAlert data-color='warning'>
                   {t('systemuser_agent_delegation.no_customers_warning', {
-                    companyName: reporteeData?.name,
+                    companyName: reporteeName,
                   })}
                 </DsAlert>
               )}
@@ -314,7 +320,6 @@ export const SystemUserAgentDelegationPageContent = ({
                   <DsButton onClick={onCloseModal}>
                     {t('systemuser_agent_delegation.confirm_close')}
                   </DsButton>
-                  <Snackbar className={classes.customerListSnackbar} />
                 </div>
               </div>
             </>
@@ -324,7 +329,7 @@ export const SystemUserAgentDelegationPageContent = ({
       <div className={classes.flexContainer}>
         <SystemUserHeader
           title={systemUser.integrationTitle}
-          subTitle={reporteeData?.name}
+          subTitle={reporteeName}
         />
         <DsHeading
           level={2}
@@ -348,18 +353,29 @@ export const SystemUserAgentDelegationPageContent = ({
         >
           {t('systemuser_agent_delegation.assigned_customers_header')}
         </DsHeading>
+        {!isClientAdmin && (
+          <DsAlert data-color='info'>
+            {t('systemuser_agent_delegation.user_is_not_client_admin')}
+          </DsAlert>
+        )}
         {assignedCustomersList.length === 0 ? (
           <>
-            <DsParagraph>{t('systemuser_agent_delegation.no_assigned_customers')}</DsParagraph>
+            {isClientAdmin && (
+              <DsParagraph>{t('systemuser_agent_delegation.no_assigned_customers')}</DsParagraph>
+            )}
             <div className={classes.addButtons}>
               {hasAddSelfPermission && !isSelfAdded && (
                 <DsButton
                   variant='secondary'
                   loading={isLoadingSelf}
-                  disabled={isLoadingSelf}
-                  onClick={assignSelfToSystemUser}
+                  aria-disabled={isLoadingSelf}
+                  onClick={() => {
+                    if (!isLoadingSelf) {
+                      assignSelfToSystemUser();
+                    }
+                  }}
                 >
-                  <PlusIcon />
+                  <PlusIcon aria-hidden='true' />
                   {t('systemuser_agent_delegation.add_own_organization')}
                 </DsButton>
               )}
@@ -368,7 +384,7 @@ export const SystemUserAgentDelegationPageContent = ({
                   variant='secondary'
                   onClick={enableAddCustomers}
                 >
-                  <PlusIcon />
+                  <PlusIcon aria-hidden='true' />
                   {t('systemuser_agent_delegation.add_customers')}
                 </DsButton>
               )}
@@ -378,31 +394,36 @@ export const SystemUserAgentDelegationPageContent = ({
           <CustomerList
             list={assignedCustomersList}
             selfButton={
-              <>
-                {hasAddSelfPermission && !isSelfAdded && (
-                  <DsButton
-                    variant='tertiary'
-                    aria-label={t('systemuser_agent_delegation.add_own_organization_list_aria')}
-                    loading={isLoadingSelf}
-                    disabled={isLoadingSelf}
-                    onClick={assignSelfToSystemUser}
-                  >
-                    <PlusCircleIcon /> {t('systemuser_agent_delegation.add_own_organization_list')}
-                  </DsButton>
-                )}
-                {hasAddSelfPermission && isSelfAdded && (
-                  <DsButton
-                    data-color='danger'
-                    variant='tertiary'
-                    aria-label={t('systemuser_agent_delegation.remove_own_organization')}
-                    loading={isLoadingSelf}
-                    disabled={isLoadingSelf}
-                    onClick={removeSelfFromSystemuser}
-                  >
-                    <MinusCircleIcon /> {t('systemuser_agent_delegation.remove')}
-                  </DsButton>
-                )}
-              </>
+              hasAddSelfPermission ? (
+                <DsButton
+                  variant='tertiary'
+                  data-color={isSelfAdded ? 'danger' : undefined}
+                  aria-label={t(
+                    isSelfAdded
+                      ? 'systemuser_agent_delegation.remove_own_organization'
+                      : 'systemuser_agent_delegation.add_own_organization_list_aria',
+                  )}
+                  loading={isLoadingSelf}
+                  aria-disabled={isLoadingSelf}
+                  onClick={() => {
+                    if (!isLoadingSelf) {
+                      isSelfAdded ? removeSelfFromSystemuser() : assignSelfToSystemUser();
+                    }
+                  }}
+                >
+                  {isSelfAdded ? (
+                    <>
+                      <MinusCircleIcon aria-hidden='true' />
+                      {!isSmall && t('systemuser_agent_delegation.remove')}
+                    </>
+                  ) : (
+                    <>
+                      <PlusCircleIcon aria-hidden='true' />
+                      {!isSmall && t('systemuser_agent_delegation.add_own_organization_list')}
+                    </>
+                  )}
+                </DsButton>
+              ) : null
             }
           >
             <div className={classes.addButtons}>
@@ -412,7 +433,7 @@ export const SystemUserAgentDelegationPageContent = ({
                   data-size='sm'
                   onClick={enableAddCustomers}
                 >
-                  <PencilIcon />
+                  <PencilIcon aria-hidden='true' />
                   {t('systemuser_agent_delegation.edit_customers')}
                 </DsButton>
               )}

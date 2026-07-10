@@ -29,7 +29,7 @@
 }
 
 .resourceListContainer.maxHeight {
-  min-height: 120px;
+  min-height: 60px;
   max-height: 282px;
   overflow-y: auto;
   overflow-x: visible;

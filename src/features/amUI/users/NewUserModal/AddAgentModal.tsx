@@ -1,7 +1,8 @@
 import React, { useEffect, useId, useRef, useState } from 'react';
-import { DsButton, DsDialog, DsHeading, DsTabs } from '@altinn/altinn-components';
+import { DsButton, DsDialog, DsHeading } from '@altinn/altinn-components';
 import { useTranslation } from 'react-i18next';
 import { PlusIcon } from '@navikt/aksel-icons';
+import { AmTabs } from '../../common/AmTabs/AmTabs';
 
 import { NewPersonContent, personInput } from './NewPersonContent';
 import classes from './NewUserModal.module.css';
@@ -10,23 +11,21 @@ import { useAddAgentMutation } from '@/rtk/features/clientApi';
 import { User } from '@/rtk/features/userInfoApi';
 
 interface AddAgentButtonProps {
-  /*** Render a larger version of the trigger button */
-  isLarge?: boolean;
+  variant: 'primary' | 'secondary';
   onComplete?: (user: User) => void;
 }
 
-export const AddAgentButton: React.FC<AddAgentButtonProps> = ({ isLarge, onComplete }) => {
+export const AddAgentButton: React.FC<AddAgentButtonProps> = ({ variant, onComplete }) => {
   const modalRef = useRef<HTMLDialogElement>(null);
   const { t } = useTranslation();
 
   return (
     <>
       <DsButton
-        variant={isLarge ? 'primary' : 'secondary'}
+        variant={variant}
         onClick={() => modalRef.current?.showModal()}
-        className={isLarge ? classes.largeButton : undefined}
       >
-        <PlusIcon aria-label={t('common.add')} />
+        <PlusIcon aria-hidden='true' />
         {t('client_administration_page.add_agent_button')}
       </DsButton>
       <AddAgentModal
@@ -91,26 +90,26 @@ const AddAgentModal: React.FC<AddAgentModalProps> = ({ modalRef, onComplete }) =
       >
         {t('client_administration_page.add_agent_button')}
       </DsHeading>
-      <DsTabs
+      <AmTabs
         onChange={() => {
           setErrorDetail(null);
         }}
         defaultValue='user'
-        data-size='sm'
       >
-        <DsTabs.List>
-          <DsTabs.Tab value='user'>
-            {t('client_administration_page.add_agentModal_agent_tab_title')}
-          </DsTabs.Tab>
-        </DsTabs.List>
-        <DsTabs.Panel value='user'>
+        <AmTabs.List>
+          <AmTabs.Tab
+            value='user'
+            label={t('client_administration_page.add_agentModal_agent_tab_title')}
+          />
+        </AmTabs.List>
+        <AmTabs.Panel value='user'>
           <NewPersonContent
             isLoading={isLoading}
             errorDetails={errorDetail}
             addPerson={handleAddAgent}
           />
-        </DsTabs.Panel>
-      </DsTabs>
+        </AmTabs.Panel>
+      </AmTabs>
     </DsDialog>
   );
 };

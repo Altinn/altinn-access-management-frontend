@@ -4,9 +4,7 @@ declare global {
   interface Window {
     featureFlags: {
       displayPopularSingleRightsServices: boolean;
-      displayResourceDelegation: boolean;
       displayConfettiPackage: boolean;
-      restrictPrivUse: boolean;
       crossPlatformLinks: boolean;
       displaySettingsPage: boolean;
       displayClientAdministrationPage: boolean;
@@ -22,6 +20,10 @@ declare global {
       addAllSystemuserCustomers: boolean;
       enableAddSelfToSystemuser: boolean;
       enableRequestAccess: boolean;
+      enableDialogportenDialogLookup: boolean;
+      enableMaskinportenAdministration: boolean;
+      enableRoleDeletion: boolean;
+      addAltinn2Account: boolean;
     };
   }
 }

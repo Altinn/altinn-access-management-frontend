@@ -1,6 +1,6 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
-import { Link, useNavigate } from 'react-router';
+import { Link } from 'react-router';
 import {
   DsHeading,
   DsParagraph,
@@ -10,20 +10,16 @@ import {
   DsSpinner,
 } from '@altinn/altinn-components';
 
-import {
-  useGetRegisteredSystemsQuery,
-  useGetSystemUserReporteeQuery,
-} from '@/rtk/features/systemUserApi';
+import { useGetRegisteredSystemsQuery } from '@/rtk/features/systemUserApi';
 import { SystemUserPath } from '@/routes/paths';
 import { PageContainer } from '@/features/amUI/common/PageContainer/PageContainer';
-import { getCookie } from '@/resources/Cookie/CookieMethods';
 
 import { ButtonRow } from '../components/ButtonRow/ButtonRow';
 import type { RegisteredSystem } from '../types';
 import { CreateSystemUserCheck } from '../components/CreateSystemUserCheck/CreateSystemUserCheck';
 
 import classes from './CreateSystemUser.module.css';
-import { useGetIsAdminQuery } from '@/rtk/features/userInfoApi';
+import { useGetIsAdminQuery, useGetReporteeQuery } from '@/rtk/features/userInfoApi';
 
 const isStringMatch = (inputString: string, matchString = ''): boolean => {
   return matchString.toLowerCase().indexOf(inputString.toLowerCase()) >= 0;
@@ -41,10 +37,7 @@ export const SelectRegisteredSystem = ({
   handleConfirm,
 }: SelectRegisteredSystemProps) => {
   const { t } = useTranslation();
-  const navigate = useNavigate();
-  const partyId = getCookie('AltinnPartyId');
-  const { data: reporteeData, isLoading: isLoadingReportee } =
-    useGetSystemUserReporteeQuery(partyId);
+  const { data: reporteeData, isLoading: isLoadingReportee } = useGetReporteeQuery();
 
   const {
     data: registeredSystems,

@@ -52,7 +52,7 @@ namespace Altinn.AccessManagement.UI.Mocks.Mocks
 
         public Task<Result<List<AgentDelegation>>> AddClient(int partyId, Guid systemUserGuid, AgentDelegationRequest delegationRequest, CancellationToken cancellationToken)
         {
-            if (delegationRequest.CustomerId.Equals(Guid.Parse("82cc64c5-60ff-4184-8c07-964c3a1e6fc7"))) 
+            if (delegationRequest.CustomerId.Equals(Guid.Parse("82cc64c5-60ff-4184-8c07-964c3a1e6fc7")))
             {
                 return Task.FromResult(new Result<List<AgentDelegation>>(TestErrors.CustomerNotFound));
             }
@@ -64,9 +64,9 @@ namespace Altinn.AccessManagement.UI.Mocks.Mocks
             }]));
         }
 
-        public Task<Result<bool>> RemoveClient(int partyId, Guid facilitatorId, Guid delegationId, CancellationToken cancellationToken)
+        public Task<Result<bool>> RemoveClient(int partyId, Guid systemUserGuid, Guid facilitatorId, Guid clientId, CancellationToken cancellationToken)
         {
-            if (delegationId.Equals(Guid.Parse("60f1ade9-ed48-4083-a369-178d45d6ffd1"))) 
+            if (clientId.Equals(Guid.Parse("60f1ade9-ed48-4083-a369-178d45d6ffd1"))) 
             {
                 return Task.FromResult(new Result<bool>(TestErrors.CustomerNotFound));
             }

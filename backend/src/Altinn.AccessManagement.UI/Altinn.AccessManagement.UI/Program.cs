@@ -53,7 +53,10 @@ builder.Configuration.AddJsonFile(frontendProdFolder + "manifest.json", true, tr
 
 ConfigureServices(builder.Services, builder.Configuration);
 
-builder.Services.AddControllers();
+builder.Services.AddControllers(opt =>
+{
+    opt.Filters.Add(new AutoValidateAntiforgeryTokenIfAuthCookieAttribute());
+});
 
 builder.Services.AddMemoryCache();
 
@@ -65,7 +68,8 @@ builder.Services.AddAuthorizationBuilder()
     .AddPolicy(AuthzConstants.POLICY_ACCESS_MANAGEMENT_CLIENT_ADMINISTRATION_READ_WITH_PASS_THROUGH, policy => policy.Requirements.Add(new EndUserResourceAccessRequirement("read", "altinn_client_administration", true)))
     .AddPolicy(AuthzConstants.POLICY_ACCESS_MANAGEMENT_PROFIL_API_VARSLINGSDARESSER_FOR_VIRKSOMHETER_READ_WITH_PASS_THROUGH, policy => policy.Requirements.Add(new EndUserResourceAccessRequirement("read", "altinn-profil-api-varslingsdaresser-for-virksomheter", true)))
     .AddPolicy(AuthzConstants.POLICY_ACCESS_MANAGEMENT_HOVEDADMIN_READ_WITH_PASS_THROUGH, policy => policy.Requirements.Add(new EndUserResourceAccessRequirement("read", "altinn_access_management_hovedadmin", true)))
-    .AddPolicy(AuthzConstants.POLICY_ACCESS_MANAGEMENT_INSTANCE_DELEGATION_READ_WITH_PASS_THROUGH, policy => policy.Requirements.Add(new EndUserResourceAccessRequirement("read", "altinn_instance_delegation", true)));
+    .AddPolicy(AuthzConstants.POLICY_ACCESS_MANAGEMENT_INSTANCE_DELEGATION_READ_WITH_PASS_THROUGH, policy => policy.Requirements.Add(new EndUserResourceAccessRequirement("read", "altinn_instance_delegation", true)))
+    .AddPolicy(AuthzConstants.POLICY_ACCESS_MANAGEMENT_MASKINPORTEN_SCOPE_DELEGATION_READ_WITH_PASS_THROUGH, policy => policy.Requirements.Add(new EndUserResourceAccessRequirement("read", "altinn_maskinporten_scope_delegation", true)));
 
 builder.Services.AddScoped<IAuthorizationHandler, EndUserResourceAccessHandler>();
 
@@ -216,7 +220,6 @@ void ConfigureServices(IServiceCollection services, IConfiguration config)
     ConfigureMockableClients(services, config);
 
     services.TryAddSingleton<IHttpContextAccessor, HttpContextAccessor>();
-    services.AddSingleton<IAPIDelegationService, APIDelegationService>();
     services.AddSingleton<ILookupService, LookupService>();
     services.AddSingleton<ISettingsService, SettingsService>();
     services.AddSingleton<IResourceService, ResourceService>();
@@ -236,8 +239,11 @@ void ConfigureServices(IServiceCollection services, IConfiguration config)
     services.AddSingleton<ISystemUserAgentRequestService, SystemUserAgentRequestService>();
     services.AddSingleton<ISystemUserAgentDelegationService, SystemUserAgentDelegationService>();
     services.AddSingleton<IConsentService, ConsentService>();
+    services.AddSingleton<ISelfIdentifiedUserService, SelfIdentifiedUserService>();
     services.AddSingleton<IEncryptionService, EncryptionService>();
     services.AddSingleton<IRoleService, RoleService>();
+    services.AddSingleton<IDelegationExportService, DelegationExportService>();
+    services.AddSingleton<IMaskinportenService, MaskinportenService>();
     services.AddTransient<ISigningCredentialsResolver, SigningCredentialsResolver>();
     services.AddTransient<ResourceHelper, ResourceHelper>();
     services.AddTransient<IAltinnCdnService, AltinnCdnService>();
@@ -495,5 +501,23 @@ void ConfigureMockableClients(IServiceCollection services, IConfiguration config
     else
     {
         services.AddSingleton<IConsentClient, ConsentClient>();
+    }
+
+    if (mockSettings.SelfIdentifiedUser)
+    {
+        services.AddSingleton<ISelfIdentifiedUserClient, SelfIdentifiedUserClientMock>();
+    }
+    else
+    {
+        services.AddHttpClient<ISelfIdentifiedUserClient, SelfIdentifiedUserClient>();
+    }
+
+    if (mockSettings.Maskinporten)
+    {
+        services.AddSingleton<IMaskinportenClient, MaskinportenClientMock>();
+    }
+    else
+    {
+        services.AddHttpClient<IMaskinportenClient, MaskinportenClient>();
     }
 }

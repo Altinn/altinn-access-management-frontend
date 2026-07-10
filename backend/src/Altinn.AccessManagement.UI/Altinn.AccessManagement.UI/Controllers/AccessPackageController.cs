@@ -49,8 +49,7 @@ namespace Altinn.AccessManagement.UI.Controllers
         [Route("search")]
         public async Task<ActionResult<List<AccessAreaFE>>> Search([FromQuery] string searchString, [FromQuery] string typeName = null)
         {
-            // Temporarily hardcoding language to nb until backend has a fix for wrong translations of package names and descriptions. 
-            var languageCode = "nb"; // LanguageHelper.GetSelectedLanguageCookieValueBackendStandard(_httpContextAccessor.HttpContext);
+            var languageCode = LanguageHelper.GetSelectedLanguageCookieValueBackendStandard(_httpContextAccessor.HttpContext);
             try
             {
                 return await _accessPackageService.GetSearch(languageCode, searchString, typeName);
@@ -126,8 +125,7 @@ namespace Altinn.AccessManagement.UI.Controllers
                 return BadRequest("Either 'from' or 'to' query parameter must be provided.");
             }
 
-            // Temporarily hardcoding language to nb until backend has a fix for wrong translations of package names and descriptions.
-            var languageCode = "nb"; // LanguageHelper.GetSelectedLanguageCookieValueBackendStandard(_httpContextAccessor.HttpContext);
+            var languageCode = LanguageHelper.GetSelectedLanguageCookieValueBackendStandard(_httpContextAccessor.HttpContext);
             try
             {
                 var result = await _accessPackageService.GetSinglePackagePermission(party, to, from, packageId, languageCode);

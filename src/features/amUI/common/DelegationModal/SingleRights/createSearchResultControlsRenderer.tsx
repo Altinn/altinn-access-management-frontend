@@ -8,6 +8,9 @@ import { useIsMobileOrSmaller } from '@/resources/utils/screensizeUtils';
 
 import { DelegationAction } from '../EditModal';
 
+// DOM id for a resource's inline action button; used as a RestoreFocus target after delegate/revoke.
+export const resourceActionControlId = (resourceId: string) => `list-action-${resourceId}`;
+
 type UseRenderSearchResultControlProps = {
   isDelegated: (resourceId: string) => boolean;
   isInherited: (resourceId: string) => boolean;
@@ -37,6 +40,8 @@ export const useRenderSearchResultControl = ({
   const isMobile = useIsMobileOrSmaller();
 
   return (resource: ServiceResource) => {
+    if (isMobile) return null;
+
     const isAlreadyDelegated = isDelegated(resource.identifier);
     const isResourceInherited = isInherited(resource.identifier);
     const canRevoke = availableActions?.includes(DelegationAction.REVOKE);
@@ -48,6 +53,7 @@ export const useRenderSearchResultControl = ({
     if (isAlreadyDelegated && canRevoke) {
       return (
         <DsButton
+          id={resourceActionControlId(resource.identifier)}
           variant='tertiary'
           data-size='sm'
           loading={isLoading}
@@ -59,7 +65,7 @@ export const useRenderSearchResultControl = ({
           aria-label={t('common.delete_poa_for', { poa_object: resource.title })}
         >
           <MinusCircleIcon aria-hidden='true' />
-          {!isMobile && t('common.delete_poa')}
+          {t('common.delete_poa')}
         </DsButton>
       );
     }
@@ -67,6 +73,7 @@ export const useRenderSearchResultControl = ({
     if (!isAlreadyDelegated && canDelegate) {
       return (
         <DsButton
+          id={resourceActionControlId(resource.identifier)}
           variant='tertiary'
           data-size='sm'
           loading={isLoading}
@@ -78,7 +85,7 @@ export const useRenderSearchResultControl = ({
           aria-label={t('common.give_poa_for', { poa_object: resource.title })}
         >
           <PlusCircleIcon aria-hidden='true' />
-          {!isMobile && t('common.give_poa')}
+          {t('common.give_poa')}
         </DsButton>
       );
     }
@@ -96,7 +103,7 @@ export const useRenderSearchResultControl = ({
           aria-label={t('common.delete_request_for', { poa_object: resource.title })}
         >
           <MinusCircleIcon aria-hidden='true' />
-          {!isMobile && t('delegation_modal.request.delete_request')}
+          {t('delegation_modal.request.delete_request')}
         </DsButton>
       );
     }
@@ -114,7 +121,7 @@ export const useRenderSearchResultControl = ({
           aria-label={t('common.request_poa_for', { poa_object: resource.title })}
         >
           <PlusCircleIcon aria-hidden='true' />
-          {!isMobile && t('common.request_poa')}
+          {t('common.request_poa')}
         </DsButton>
       );
     }

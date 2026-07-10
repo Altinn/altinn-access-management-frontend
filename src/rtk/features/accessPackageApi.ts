@@ -10,6 +10,7 @@ export interface AccessArea {
   description: string;
   iconUrl: string;
   accessPackages: AccessPackage[];
+  typeName: string;
 }
 
 // either indentifier or refId contains resource.identifier, the other is undefined
@@ -76,12 +77,7 @@ export const accessPackageApi = createApi({
   endpoints: (builder) => ({
     search: builder.query<
       AccessArea[],
-      {
-        searchString: string;
-        // Temporarily disable refetch on language change until backend has a fix for wrong translations of package names and descriptions.
-        // language: string;
-        typeName?: string;
-      }
+      { searchString: string; language: string; typeName?: string }
     >({
       query: ({ searchString, typeName }) => {
         const typeNameParam = typeName ? `&typeName=${typeName}` : '';
@@ -100,14 +96,7 @@ export const accessPackageApi = createApi({
     }),
     getPackagePermissionDetails: builder.query<
       AccessPackage,
-      {
-        from?: string;
-        to?: string;
-        party?: string;
-        packageId: string;
-        // Temporarily disable refetch on language change until backend has a fix for wrong translations of package names and descriptions.
-        // language: string
-      }
+      { from?: string; to?: string; party?: string; packageId: string; language: string }
     >({
       query: ({ from, to, party = getCookie('AltinnPartyUuid'), packageId }) => {
         return `permission/${packageId}?from=${from ?? ''}&to=${to ?? ''}&party=${party}`;

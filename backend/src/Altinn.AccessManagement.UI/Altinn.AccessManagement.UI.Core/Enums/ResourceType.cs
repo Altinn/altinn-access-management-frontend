@@ -49,5 +49,10 @@
         /// Consent resource type
         /// </summary>
         Consent = 1 << 7,
+
+        /// <summary>
+        /// Migrated app resource type
+        /// </summary>
+        MigratedApp = 1 << 8,
     }
 }

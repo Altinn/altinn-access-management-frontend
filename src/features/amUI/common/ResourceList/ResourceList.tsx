@@ -8,6 +8,7 @@ import {
 import { useTranslation } from 'react-i18next';
 
 import { useProviderLogoUrl } from '@/resources/hooks/useProviderLogoUrl';
+import { useRestoreFocusTarget } from '@/features/amUI/common/RestoreFocus';
 
 import { ResourceDetails } from './ResourceDetails';
 import classes from './ResourceList.module.css';
@@ -15,8 +16,6 @@ import { SkeletonResourceList } from './SkeletonResourceList';
 import { useFilteredResources } from './useFilteredResources';
 import { ResourceFilterToolbar } from '../ResourceFilterToolbar/ResourceFilterToolbar';
 import type { ResourceListItemResource } from './types';
-
-import cn from 'classnames';
 import {
   extractResourceName,
   extractOwnerName,
@@ -25,7 +24,25 @@ import {
   extractResourceId,
   extractLogoUrl,
   extractLogoAlt,
+  isExpiredResource,
 } from './utils';
+
+import cn from 'classnames';
+
+interface ResourceListItemRowProps extends React.ComponentProps<typeof ResourceListItem> {
+  resourceId: string;
+  actionControlId?: string;
+}
+
+const ResourceListItemRow = ({
+  resourceId,
+  actionControlId,
+  ...props
+}: ResourceListItemRowProps) => {
+  useRestoreFocusTarget(resourceId);
+  useRestoreFocusTarget(actionControlId ?? '');
+  return <ResourceListItem {...props} />;
+};
 
 export interface ResourceListProps<
   TResource extends ResourceListItemResource = ResourceListItemResource,
@@ -38,7 +55,6 @@ export interface ResourceListProps<
   onSelect?: (resource: TResource) => void;
   showDetails?: boolean;
   size?: ResourceListItemProps['size'];
-  titleAs?: ResourceListItemProps['titleAs'];
   interactive?: boolean | ((resource: TResource) => boolean);
   as?: ResourceListItemProps['as'];
   showMoreButton?: boolean;
@@ -47,8 +63,12 @@ export interface ResourceListProps<
   enableMaxHeight?: boolean;
   renderControls?: (resource: TResource) => React.ReactNode;
   getBadge?: (resource: TResource, index: number) => ResourceListItemProps['badge'];
+  getDescriptionText?: (resource: TResource, index: number) => string | undefined;
   getHasAccess?: (resource: TResource) => boolean;
+  getActionControlId?: (resource: TResource) => string;
   delegationModal?: React.ReactNode;
+  border?: ResourceListItemProps['border'];
+  ariaLabelledBy?: string;
 }
 
 export const ResourceList = <
@@ -61,15 +81,18 @@ export const ResourceList = <
   onSelect,
   showDetails,
   size,
-  titleAs,
   interactive,
   as,
   resolveLogos = true,
   enableMaxHeight = false,
   renderControls,
   getBadge,
+  getDescriptionText,
   getHasAccess,
+  getActionControlId,
   delegationModal,
+  border = 'none',
+  ariaLabelledBy,
 }: ResourceListProps<TResource>) => {
   const { t } = useTranslation();
   const [search, setSearch] = React.useState('');
@@ -136,8 +159,8 @@ export const ResourceList = <
 
   return (
     <div className={classes.container}>
-      <div className={classes.searchAndAdd}>
-        {enableSearch && resources.length > 0 && (
+      {enableSearch && (
+        <div className={classes.searchAndAdd}>
           <ResourceFilterToolbar
             search={search}
             setSearch={setSearch}
@@ -145,9 +168,9 @@ export const ResourceList = <
             setFilterState={setFilterState}
             serviceOwnerOptions={serviceOwnerOptions}
           />
-        )}
-        {delegationModal}
-      </div>
+          {delegationModal}
+        </div>
+      )}
       {isSkeletonVisible ? (
         <SkeletonResourceList />
       ) : (
@@ -166,42 +189,51 @@ export const ResourceList = <
             className={cn(classes.resourceListContainer, { [classes.maxHeight]: enableMaxHeight })}
           >
             {filteredResources.length > 0 && (
-              <List>
+              <List aria-labelledby={ariaLabelledBy}>
                 {filteredResources.map((resource, index) => {
                   const derivedId = extractResourceId(resource);
                   const resourceId = derivedId ? String(derivedId) : `resource-${index}`;
                   const resourceName = extractResourceName(resource);
-                  const ownerName = extractOwnerName(resource);
+                  const defaultOwnerName = extractOwnerName(resource);
+                  const description = getDescriptionText?.(resource, index);
                   const orgCode = extractOrgCode(resource);
                   const providerLogo = resolveLogos && orgCode ? logoResolver(orgCode) : undefined;
                   const fallbackLogoUrl = extractLogoUrl(resource);
                   const ownerLogoUrl = providerLogo ?? fallbackLogoUrl;
-                  const ownerLogoAlt = extractLogoAlt(resource) ?? ownerName;
+                  const ownerLogoAlt = extractLogoAlt(resource) ?? defaultOwnerName;
                   const itemInteractive = derivedInteractive(resource);
                   const itemAs = as ?? (itemInteractive ? 'button' : 'div');
                   const itemSize = size ?? 'xs';
-                  const itemTitleAs = titleAs ?? 'h3';
                   const handleClick = itemInteractive ? () => handleSelect(resource) : undefined;
                   const itemShadow = itemInteractive ? undefined : 'none';
+                  const titleBadge = isExpiredResource(resource)
+                    ? { label: t('resource_list.expired_badge'), color: 'neutral' as const }
+                    : undefined;
 
+                  const actionControlId = getActionControlId?.(resource);
                   return (
-                    <ResourceListItem
+                    <ResourceListItemRow
                       key={resourceId}
+                      resourceId={resourceId}
+                      actionControlId={actionControlId}
                       id={resourceId}
                       resourceName={resourceName}
-                      ownerName={ownerName}
+                      ownerName={defaultOwnerName}
+                      description={description}
                       ownerLogoUrl={ownerLogoUrl}
                       ownerLogoUrlAlt={ownerLogoAlt}
                       as={itemAs}
                       size={itemSize}
-                      titleAs={itemTitleAs}
+                      titleAs='div'
                       interactive={itemInteractive}
                       onClick={handleClick}
                       badge={getBadge?.(resource, index)}
+                      titleBadge={titleBadge}
                       variant={getHasAccess?.(resource) ? 'tinted' : 'default'}
                       controls={renderControls?.(resource)}
                       loading={false}
                       shadow={itemShadow}
+                      border={border}
                     />
                   );
                 })}

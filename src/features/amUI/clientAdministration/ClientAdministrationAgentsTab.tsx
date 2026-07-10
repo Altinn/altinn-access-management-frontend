@@ -1,6 +1,6 @@
 import React, { useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
-import { DsAlert, DsParagraph, SnackbarDuration, useSnackbar } from '@altinn/altinn-components';
+import { DsAlert, DsParagraph, useSnackbar } from '@altinn/altinn-components';
 
 import { AddAgentButton } from '../users/NewUserModal/AddAgentModal';
 import { UserSearch } from '../common/UserSearch/UserSearch';
@@ -50,6 +50,7 @@ export const ClientAdministrationAgentsTab = ({ isActive }: ClientAdministration
             parent: null,
             addedAt: agent.agentAddedAt,
             isDeleted: agent.agent.isDeleted ?? undefined,
+            variant: agent.agent.variant ?? undefined,
             roles: [],
           },
           roles: [],
@@ -81,7 +82,6 @@ export const ClientAdministrationAgentsTab = ({ isActive }: ClientAdministration
         openSnackbar({
           message: t('client_administration_page.add_agent_error'),
           color: 'danger',
-          duration: SnackbarDuration.infinite,
         });
       });
   };
@@ -105,10 +105,14 @@ export const ClientAdministrationAgentsTab = ({ isActive }: ClientAdministration
         users={users}
         indirectUsers={indirectUsers}
         getUserLink={(user) => `/clientadministration/agent/${user.id}`}
-        onAddNewUser={(user) => navigate(`/clientadministration/agent/${user.id}`)}
         isLoading={isAgentsLoading || isIndirectLoading}
         isActionLoading={isIndirectFetching || isAdding}
-        AddUserButton={AddAgentButton}
+        AddUserButton={
+          <AddAgentButton
+            variant='secondary'
+            onComplete={(user) => navigate(`/clientadministration/agent/${user.id}`)}
+          />
+        }
         addUserButtonLabel={t('client_administration_page.add_agent_button_short')}
         onDelegate={(user) => {
           handleAddAgent(user.id);
@@ -118,7 +122,6 @@ export const ClientAdministrationAgentsTab = ({ isActive }: ClientAdministration
         searchPlaceholder={t('client_administration_page.agent_search_placeholder')}
         directConnectionsHeading={t('client_administration_page.direct_connections_heading')}
         indirectConnectionsHeading={t('client_administration_page.indirect_connections_heading')}
-        titleAs='h2'
       />
     </div>
   );

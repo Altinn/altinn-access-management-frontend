@@ -1,4 +1,11 @@
-import { Button, TextField, DsParagraph, DsSpinner } from '@altinn/altinn-components';
+import {
+  DsButton,
+  TextField,
+  DsAlert,
+  DsParagraph,
+  DsSpinner,
+  DsHeading,
+} from '@altinn/altinn-components';
 import { useState } from 'react';
 import { t } from 'i18next';
 
@@ -14,10 +21,12 @@ export const NewOrgContent = ({
   addOrg,
   errorDetails,
   isLoading,
+  ownOrgNumber,
 }: {
   addOrg?: (orgData: Organization) => void;
   errorDetails?: { status: string; time: string } | null;
   isLoading?: boolean;
+  ownOrgNumber?: string;
 }) => {
   const [orgNumber, setOrgNumber] = useState('');
 
@@ -28,38 +37,75 @@ export const NewOrgContent = ({
     isError: isGetOrgError,
   } = useGetOrganizationQuery(orgNumber, { skip: orgNumber.length !== 9 });
 
+  const isOwnOrg = !!ownOrgNumber && orgNumber.length === 9 && orgNumber === ownOrgNumber;
   const isError = isGetOrgError || !!errorDetails;
+  const isAddButtonDisabled =
+    isOwnOrg || isGetOrgError || isLoading || !orgData || orgData.orgNumber !== orgNumber;
 
   return (
     <div className={classes.newOrgContent}>
-      {isError && (
-        <NewUserAlert
-          userType='org'
-          error={isGetOrgError ? createErrorDetails(getOrgError) : errorDetails}
-        />
-      )}
+      <div aria-live='assertive'>
+        {isOwnOrg && (
+          <DsAlert
+            data-size='sm'
+            data-color='warning'
+          >
+            <DsHeading
+              data-size='xs'
+              level={3}
+            >
+              {t('maskinporten_page.own_org_number_warning')}
+            </DsHeading>
+            <DsParagraph data-size='sm'>
+              {t('maskinporten_page.own_org_number_warning_body')}
+            </DsParagraph>
+          </DsAlert>
+        )}
+      </div>
+      <div aria-live='assertive'>
+        {isError && !isOwnOrg && (
+          <NewUserAlert
+            userType='org'
+            error={isGetOrgError ? createErrorDetails(getOrgError) : errorDetails}
+          />
+        )}
+      </div>
       <TextField
         className={classes.textField}
         label={t('common.org_number')}
         size='sm'
         onChange={(e) => setOrgNumber((e.target as HTMLInputElement).value.replace(/ /g, ''))}
+        onKeyDown={(event) => {
+          if (event.key === 'Enter' && !event.repeat && !isAddButtonDisabled && orgData && addOrg) {
+            addOrg(orgData);
+          }
+        }}
       />
-      {!isGetOrgError && !orgDataLoading && orgData && orgData.orgNumber === orgNumber && (
-        <div className={classes.searchResult}>
-          <DsParagraph>
-            <strong>{orgData.name}</strong>
-          </DsParagraph>
-          <DsParagraph data-size='sm'>
-            {t('common.org_nr')} {formatOrgNr(orgData.orgNumber)}
-            {orgData.unitType === 'AAFY' ||
-              (orgData?.unitType === 'BEDR' && ' - ' + t('common.subunit'))}
-          </DsParagraph>
-        </div>
-      )}
+      <div aria-live='polite'>
+        {!isGetOrgError && !orgDataLoading && orgData && orgData.orgNumber === orgNumber && (
+          <div className={classes.searchResult}>
+            <DsHeading
+              data-size='2xs'
+              level={3}
+              className={classes.searchResultHeading}
+            >
+              {t('new_user_modal.org_search_result_label')}
+            </DsHeading>
+            <DsParagraph>
+              <strong>{orgData.name}</strong>
+            </DsParagraph>
+            <DsParagraph data-size='sm'>
+              {t('common.org_nr')} {formatOrgNr(orgData.orgNumber)}
+              {orgData.unitType === 'AAFY' ||
+                (orgData?.unitType === 'BEDR' && ' - ' + t('common.subunit'))}
+            </DsParagraph>
+          </div>
+        )}
+      </div>
 
       <div className={classes.validationButton}>
-        <Button
-          disabled={isGetOrgError || isLoading || !orgData || orgData.orgNumber !== orgNumber}
+        <DsButton
+          disabled={isAddButtonDisabled}
           onClick={() => addOrg && orgData && addOrg(orgData)}
         >
           <span className={classes.addButton}>
@@ -71,7 +117,7 @@ export const NewOrgContent = ({
             )}
             {isLoading ? <span>{t('common.loading')}</span> : t('new_user_modal.add_org_button')}
           </span>
-        </Button>
+        </DsButton>
       </div>
     </div>
   );

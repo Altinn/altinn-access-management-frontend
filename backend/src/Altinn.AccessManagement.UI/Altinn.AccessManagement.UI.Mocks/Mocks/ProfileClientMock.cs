@@ -35,6 +35,11 @@ namespace Altinn.AccessManagement.UI.Mocks.Mocks
         /// <inheritdoc />
         public async Task<UserProfile> GetUserProfile(int userId)
         {
+            if (userId == 500)
+            {
+                throw new HttpRequestException("Internal server error");
+            }
+
             UserProfile profile = null;
             string path = GetDataPathForProfiles();
             if (File.Exists(path))

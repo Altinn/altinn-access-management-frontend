@@ -36,5 +36,12 @@ export const ConsentRequestError = ({ defaultError, error }: ConsentRequestError
     }
   };
 
-  return <DsAlert data-color='danger'>{getErrorMessage()}</DsAlert>;
+  return (
+    <DsAlert
+      data-color='danger'
+      role='alert'
+    >
+      {getErrorMessage()}
+    </DsAlert>
+  );
 };

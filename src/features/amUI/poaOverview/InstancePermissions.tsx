@@ -8,14 +8,14 @@ import { InstanceList } from '../common/InstanceList/InstanceList';
 import { InstanceDelegation, useGetInstancesQuery } from '@/rtk/features/instanceApi';
 
 export const InstancePermissions = () => {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   const { actingParty, fromParty, toParty } = usePartyRepresentation();
   const getItemAs = useCallback(
     (item: InstanceDelegation): ElementType =>
       (props) => (
         <Link
           {...props}
-          to={`/poa-overview/instance?instanceUrn=${encodeURIComponent(item.instance.refId)}&resourceId=${encodeURIComponent(item.resource.identifier)}&tab=instances`}
+          to={`/poa-overview/instance?instanceUrn=${encodeURIComponent(item.instance.refId)}&resourceId=${encodeURIComponent(item.resource.identifier)}`}
         />
       ),
     [],
@@ -30,6 +30,7 @@ export const InstancePermissions = () => {
       party: actingParty?.partyUuid || '',
       from: fromParty?.partyUuid,
       to: toParty?.partyUuid,
+      language: i18n.language,
     },
     {
       skip: !actingParty?.partyUuid || !fromParty?.partyUuid,

@@ -22,7 +22,7 @@ import {
 } from '../common/PartyRepresentationContext/PartyRepresentationContext';
 import { DeleteUserModal } from '../common/DeleteUserModal/DeleteUserModal';
 
-import { ReporteeAccessPackageSection } from './ReporteeAccessPackageSection';
+import { AccessPackageSection } from '../userRightsPage/AccessPackageSection/AccessPackageSection';
 import { ReporteeRoleSection } from './ReporteeRoleSection';
 import { Breadcrumbs } from '../common/Breadcrumbs/Breadcrumbs';
 import { formatDisplayName } from '@altinn/altinn-components';
@@ -35,7 +35,7 @@ export const ReporteeRightsPage = () => {
   const { t } = useTranslation();
   const { id: reporteeUuid } = useParams();
 
-  useDocumentTitle(t('user_rights_page.page_title'));
+  useDocumentTitle(t('reportee_rights_page.page_title'));
 
   useRerouteIfNotConfetti();
 
@@ -61,7 +61,7 @@ export const ReporteeRightsPage = () => {
                 displayRoles={displayRoles}
               />
               <RightsTabs
-                packagesPanel={<ReporteeAccessPackageSection />}
+                packagesPanel={<AccessPackageSection isReportee />}
                 singleRightsPanel={<SingleRightsSection isReportee />}
                 roleAssignmentsPanel={<ReporteeRoleSection />}
                 guardianshipsPanel={<GuardianshipSection />}

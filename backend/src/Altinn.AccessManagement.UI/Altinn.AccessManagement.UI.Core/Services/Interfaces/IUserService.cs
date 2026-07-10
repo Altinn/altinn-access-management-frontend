@@ -25,6 +25,12 @@ namespace Altinn.AccessManagement.UI.Core.Services.Interfaces
         Task<ProfileSettingPreference> SetShowDeletedProfileSetting(bool shouldShowDeletedEntities);
 
         /// <summary>
+        /// Updates the current user's language preference in altinn profile
+        /// </summary>
+        /// <param name="languageCode">Frontend standard language code (e.g. "no_nb", "no_nn", "en")</param>
+        Task SetLanguageProfileSetting(string languageCode);
+
+        /// <summary>
         /// Get the reportees for the user 
         /// </summary>
         /// <param name="userId">The user id</param>
@@ -32,11 +38,11 @@ namespace Altinn.AccessManagement.UI.Core.Services.Interfaces
         Task<List<User>> GetReporteeList(Guid userId);
 
         /// <summary>
-        /// Gets a Party based on partyId if the party is in the users reporteelist
+        /// Gets a Party based on partyUuid if the party is in the users reporteelist
         /// </summary>
-        /// <param name="partyId">The party Id of the party to retrieve</param>
-        /// <returns>Party that corresponds to partyId parameter if it's in the users reporteelist</returns>
-        Task<AuthorizedParty> GetPartyFromReporteeListIfExists(int partyId);
+        /// <param name="partyUuid">The party UUID of the party to retrieve</param>
+        /// <returns>Party that corresponds to partyUuid parameter if it's in the users reporteelist</returns>
+        Task<AuthorizedParty> GetPartyFromReporteeListIfExists(Guid partyUuid);
 
         /// <summary>
         /// Endpoint for reportees the authenticated user can act on behalf of

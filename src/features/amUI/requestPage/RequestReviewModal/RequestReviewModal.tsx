@@ -1,5 +1,5 @@
 import { useRef, useEffect } from 'react';
-import { DsDialog, Snackbar, SnackbarProvider } from '@altinn/altinn-components';
+import { DsDialog } from '@altinn/altinn-components';
 import { useTranslation } from 'react-i18next';
 import type { Request } from '../types';
 import { RequestReviewModalContent } from './RequestReviewModalContent';
@@ -31,13 +31,11 @@ export const RequestReviewModal = ({ request, onClose }: RequestReviewModalProps
       onClose={onClose}
       className={classes.reviewModal}
     >
-      <SnackbarProvider>
-        <RequestReviewModalContent
-          request={request}
-          onClose={onClose}
-        />
-        <Snackbar />
-      </SnackbarProvider>
+      {/* close() instead of onClose ensures native focus restore runs before onClose fires */}
+      <RequestReviewModalContent
+        request={request}
+        onClose={() => modalRef.current?.close()}
+      />
     </DsDialog>
   );
 };

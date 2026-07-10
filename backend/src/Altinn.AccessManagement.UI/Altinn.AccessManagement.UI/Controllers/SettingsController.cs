@@ -22,6 +22,7 @@ namespace Altinn.AccessManagement.UI.Controllers
     {
         private readonly ILogger _logger;
         private readonly ISettingsService _settingsService;
+        private readonly IUserService _userService;
         private readonly GeneralSettings _generalSettings;
 
         /// <summary>
@@ -29,14 +30,17 @@ namespace Altinn.AccessManagement.UI.Controllers
         /// </summary>
         /// <param name="logger">the logger.</param>
         /// <param name="settingsService">service implementation for settings</param>
+        /// <param name="userService">service for user profile operations</param>
         /// <param name="generalSettings">general settings</param>
         public SettingsController(
             ILogger<SettingsController> logger,
             ISettingsService settingsService,
+            IUserService userService,
             IOptions<GeneralSettings> generalSettings)
         {
             _logger = logger;
             _settingsService = settingsService;
+            _userService = userService;
             _generalSettings = generalSettings.Value;
         }
 
@@ -57,7 +61,7 @@ namespace Altinn.AccessManagement.UI.Controllers
         [HttpPost]
         [Authorize]
         [Route("language/selectedLanguage")]
-        public IActionResult UpdateSelectedLanguage([FromBody(EmptyBodyBehavior = EmptyBodyBehavior.Allow)] UpdateSelectedLanguageRequest request)
+        public async Task<IActionResult> UpdateSelectedLanguage([FromBody(EmptyBodyBehavior = EmptyBodyBehavior.Allow)] UpdateSelectedLanguageRequest request)
         {
             if (request == null || string.IsNullOrWhiteSpace(request.LanguageCode))
             {
@@ -85,6 +89,8 @@ namespace Altinn.AccessManagement.UI.Controllers
             }
 
             Response.Headers.Append(HeaderNames.SetCookie, cookie.ToString());
+
+            await _userService.SetLanguageProfileSetting(request.LanguageCode);
 
             return Ok();
         }

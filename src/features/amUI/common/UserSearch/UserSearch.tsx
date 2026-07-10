@@ -2,15 +2,14 @@ import React, { useMemo, useState } from 'react';
 import { DsSearch, DsParagraph, formatDisplayName } from '@altinn/altinn-components';
 import { useTranslation } from 'react-i18next';
 
-import { PartyType, User } from '@/rtk/features/userInfoApi';
+import { PartyType } from '@/rtk/features/userInfoApi';
 import { ConnectionUserType } from '@/rtk/features/connectionApi';
-import { NewUserButton } from '@/features/amUI/users/NewUserModal/NewUserModal';
 
 import classes from './UserSearch.module.css';
 import { useFilteredUsers } from '../UserList/useFilteredUsers';
 import { DelegationAction } from '../DelegationModal/EditModal';
 import { UserList } from '../UserList/UserList';
-import { UserSearchResults, titleAsType } from './UserSearchResults';
+import { UserSearchResults } from './UserSearchResults';
 import { usePartyRepresentation } from '../PartyRepresentationContext/PartyRepresentationContext';
 import type { UserActionTarget, UserSearchNode } from './types';
 
@@ -21,21 +20,24 @@ export interface UserSearchProps {
   indirectUsers?: UserSearchNode[];
   getUserLink?: (user: UserActionTarget) => string;
   onDelegate?: (user: UserActionTarget) => void;
-  onAddNewUser?: (user: User) => void;
   onRevoke?: (user: UserActionTarget) => void;
   onSelect?: (user: UserActionTarget) => void;
   isLoading?: boolean;
   isActionLoading?: boolean;
   canDelegate?: boolean;
-  AddUserButton?: React.ComponentType<{ isLarge?: boolean; onComplete?: (user: User) => void }>;
+  AddUserButton?: React.ReactNode;
   noUsersText?: string;
   searchPlaceholder?: string;
   addUserButtonLabel?: string;
+  revokeLabel?: string;
   directConnectionsHeading?: string;
   indirectConnectionsHeading?: string;
   additionalFilters?: React.ReactNode;
   hasActiveAdditionalFilters?: boolean;
-  titleAs?: titleAsType;
+  // Id the parent can use as a focus-restore fallback (the fallbackId to requestFocus): focus lands
+  // here when an acted-on row is gone. The parent owns the value so it stays unique within its
+  // RestoreFocusProvider zone; UserSearch decides which element carries it.
+  restoreFocusFallbackId?: string;
 }
 
 const filterAvailableUserTypes = (items?: UserSearchNode[]) =>
@@ -51,21 +53,21 @@ export const UserSearch: React.FC<UserSearchProps> = ({
   indirectUsers: initialIndirectUsers,
   getUserLink,
   onDelegate,
-  onAddNewUser,
   onRevoke,
   onSelect,
   isLoading = false,
   isActionLoading = false,
   canDelegate = true,
-  AddUserButton = NewUserButton,
+  AddUserButton,
   noUsersText,
   searchPlaceholder,
   addUserButtonLabel,
+  revokeLabel,
   directConnectionsHeading,
   indirectConnectionsHeading,
   additionalFilters,
   hasActiveAdditionalFilters = false,
-  titleAs = 'h4',
+  restoreFocusFallbackId,
 }) => {
   const { t } = useTranslation();
   const [query, setQuery] = useState('');
@@ -97,18 +99,11 @@ export const UserSearch: React.FC<UserSearchProps> = ({
   const hasDirectUsers = (directUsers?.length ?? 0) > 0;
   const directHasResults = (filteredDirectUsers?.length ?? 0) > 0;
   const indirectHasResults = (filteredIndirectUsers?.length ?? 0) > 0;
+  const queryIsSSN = /^\d{11}$/.test(trimmedQuery);
 
   const showDirectNoResults = isQuery && !directHasResults && indirectHasResults;
   const showIndirectList = isQuery && indirectHasResults && canDelegate;
   const showEmptyState = isQuery && !directHasResults && !indirectHasResults;
-
-  const handleAddNewUser = async (user: User) => {
-    if (onAddNewUser) {
-      if (user?.id && user?.name) {
-        onAddNewUser(user);
-      }
-    }
-  };
 
   if (isLoading) {
     return (
@@ -124,6 +119,7 @@ export const UserSearch: React.FC<UserSearchProps> = ({
         <div className={classes.searchAndFilters}>
           <DsSearch className={classes.searchBar}>
             <DsSearch.Input
+              id={restoreFocusFallbackId}
               aria-label={t('common.search')}
               placeholder={searchPlaceholder ?? t('advanced_user_search.user_search_placeholder')}
               value={query}
@@ -135,11 +131,7 @@ export const UserSearch: React.FC<UserSearchProps> = ({
           </DsSearch>
           {additionalFilters}
         </div>
-        {canDelegate && AddUserButton && (
-          <div className={classes.buttonRow}>
-            <AddUserButton onComplete={handleAddNewUser} />
-          </div>
-        )}
+        {canDelegate && AddUserButton && <div className={classes.buttonRow}>{AddUserButton}</div>}
       </div>
 
       <div className={classes.results}>
@@ -173,7 +165,7 @@ export const UserSearch: React.FC<UserSearchProps> = ({
             onSelect={onSelect}
             includeSelfAsChild={includeSelfAsChild}
             getUserLink={getUserLink}
-            titleAs={titleAs}
+            revokeLabel={revokeLabel}
           />
           {showDirectNoResults && (
             <DsParagraph data-size='md'>
@@ -198,6 +190,7 @@ export const UserSearch: React.FC<UserSearchProps> = ({
               goNextPage={goNextIndirectPage}
               availableAction={DelegationAction.DELEGATE}
               onDelegate={canDelegate ? onDelegate : undefined}
+              onSelect={onSelect}
               isActionLoading={isActionLoading}
               includeSelfAsChild={includeSelfAsChildOnIndirect}
               delegateLabel={addUserButtonLabel}
@@ -209,21 +202,24 @@ export const UserSearch: React.FC<UserSearchProps> = ({
           <div className={classes.emptyState}>
             <DsParagraph data-size='md'>
               {t(
-                canDelegate
-                  ? hasFiltersOnly
-                    ? 'advanced_user_search.user_no_filter_result_with_add_suggestion'
-                    : 'advanced_user_search.user_no_search_result_with_add_suggestion'
-                  : hasFiltersOnly
-                    ? 'advanced_user_search.user_no_filter_result'
-                    : 'advanced_user_search.user_no_search_result',
+                hasFiltersOnly
+                  ? 'advanced_user_search.user_no_filter_result'
+                  : 'advanced_user_search.user_no_search_result',
                 { searchTerm: trimmedQuery || '' },
               )}
             </DsParagraph>
-            {canDelegate && AddUserButton && (
-              <AddUserButton
-                isLarge
-                onComplete={handleAddNewUser}
-              />
+            {queryIsSSN ? (
+              <DsParagraph data-size='md'>
+                {t('advanced_user_search.no_result_help_line_ssn')}
+              </DsParagraph>
+            ) : (
+              AddUserButton &&
+              canDelegate &&
+              !hasFiltersOnly && (
+                <DsParagraph data-size='md'>
+                  {t('advanced_user_search.no_result_help_line_add_user')}
+                </DsParagraph>
+              )
             )}
           </div>
         )}

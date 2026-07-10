@@ -51,15 +51,7 @@ namespace Altinn.AccessManagement.UI.Core.Services
         {
             List<AgentDelegation> delegations = await _systemUserAgentDelegationClient.GetSystemUserAgentDelegations(partyId, partyUuid, systemUserGuid, cancellationToken);
 
-            return delegations.Select(delegation => 
-            {
-                return new AgentDelegationFE()
-                {
-                    AgentSystemUserId = delegation.AgentSystemUserId,
-                    CustomerId = delegation.CustomerId,
-                    DelegationId = delegation.DelegationId,
-                };
-            }).ToList();
+            return delegations.Select(MapAgentDelegationToAgentDelegationFE).ToList();
         }
 
         /// <inheritdoc />
@@ -73,7 +65,7 @@ namespace Altinn.AccessManagement.UI.Core.Services
             };
 
             Result<List<AgentDelegation>> newAgentDelegations = await _systemUserAgentDelegationClient.AddClient(partyId, systemUserGuid, delegationRequest, cancellationToken);
-            
+
             if (newAgentDelegations.IsProblem)
             {
                 return new Result<AgentDelegationFE>(newAgentDelegations.Problem);
@@ -85,18 +77,13 @@ namespace Altinn.AccessManagement.UI.Core.Services
                 return Problem.CustomerIdNotFound;
             }
 
-            return new AgentDelegationFE()
-            {
-                AgentSystemUserId = addedDelegation.AgentSystemUserId,
-                CustomerId = addedDelegation.CustomerId,
-                DelegationId = addedDelegation.DelegationId,
-            };
+            return MapAgentDelegationToAgentDelegationFE(addedDelegation);
         }
 
         /// <inheritdoc />
-        public async Task<Result<bool>> RemoveClient(int partyId, Guid delegationId, Guid partyUuid, CancellationToken cancellationToken)
+        public async Task<Result<bool>> RemoveClient(int partyId, Guid delegationId, Guid partyUuid, Guid systemUserGuid, CancellationToken cancellationToken)
         {
-            Result<bool> response = await _systemUserAgentDelegationClient.RemoveClient(partyId, partyUuid, delegationId, cancellationToken);
+            Result<bool> response = await _systemUserAgentDelegationClient.RemoveClient(partyId, systemUserGuid, partyUuid, delegationId, cancellationToken);
             if (response.IsProblem)
             {
                 return new Result<bool>(response.Problem);
@@ -141,6 +128,16 @@ namespace Altinn.AccessManagement.UI.Core.Services
             return response.Value;
         }
 
+        private AgentDelegationFE MapAgentDelegationToAgentDelegationFE(AgentDelegation delegation)
+        {
+            return new AgentDelegationFE()
+            {
+                AgentSystemUserId = delegation.AgentSystemUserId,
+                CustomerId = delegation.CustomerId,
+                DelegationId = delegation.CustomerId
+            };
+        }
+
         private static List<CustomerPartyFE> MapCustomerListToCustomerFE(List<Customer> customers)
         {
             return customers.Select(x =>
@@ -150,6 +147,7 @@ namespace Altinn.AccessManagement.UI.Core.Services
                     Id = x.PartyUuid,
                     Name = x.DisplayName,
                     OrgNo = x.OrganizationIdentifier,
+                    UnitType = x.UnitType,
                     Access = x.Access
                 };
             }).ToList();

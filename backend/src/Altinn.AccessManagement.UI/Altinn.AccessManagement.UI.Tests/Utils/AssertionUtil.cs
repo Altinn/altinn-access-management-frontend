@@ -6,7 +6,6 @@ using Altinn.AccessManagement.UI.Core.Models.AccessPackage.Frontend;
 using Altinn.AccessManagement.UI.Core.Models.Common;
 using Altinn.AccessManagement.UI.Core.Models.Consent;
 using Altinn.AccessManagement.UI.Core.Models.Consent.Frontend;
-using Altinn.AccessManagement.UI.Core.Models.Delegation.Frontend;
 using Altinn.AccessManagement.UI.Core.Models.Dialogporten;
 using Altinn.AccessManagement.UI.Core.Models.InstanceDelegation;
 using Altinn.AccessManagement.UI.Core.Models.InstanceDelegation.Frontend;
@@ -69,20 +68,6 @@ namespace Altinn.AccessManagement.UI.Tests.Utils
         }
 
         /// <summary>
-        ///     Assert that two <see cref="DelegationResponseData" /> have the same property in the same positions.
-        /// </summary>
-        /// <param name="expected">An instance with the expected values.</param>
-        /// <param name="actual">The instance to verify.</param>
-        public static void AssertEqual(DelegationResponseData expected, DelegationResponseData actual)
-        {
-            Assert.NotNull(actual);
-            Assert.NotNull(expected);
-
-            AssertCollections(expected.Resource, actual.Resource, AssertEqual);
-            Assert.Equal(expected.Action, actual.Action);
-        }
-
-        /// <summary>
         ///     Assert that two <see cref="NotificationAddressResponse" /> have the same property in the same positions.
         /// </summary>
         /// <param name="expected">An instance with the expected values.</param>
@@ -111,47 +96,6 @@ namespace Altinn.AccessManagement.UI.Tests.Utils
             Assert.Equal(expected?.Orgcode, actual.Orgcode);
             Assert.Equal(expected?.Organization, actual.Organization);
             Assert.Equal(expected?.Name, actual.Name);
-        }
-
-        /// <summary>
-        ///     Assert that two <see cref="MaskinportenSchemaDelegationFE" /> have the same property in the same positions.
-        /// </summary>
-        /// <param name="expected">An instance with the expected values.</param>
-        /// <param name="actual">The instance to verify.</param>
-        public static void AssertEqual(MaskinportenSchemaDelegationFE expected, MaskinportenSchemaDelegationFE actual)
-        {
-            Assert.NotNull(actual);
-            Assert.NotNull(expected);
-
-            Assert.Equal(expected.OfferedByPartyId, actual.OfferedByPartyId);
-            Assert.Equal(expected.OfferedByName, actual.OfferedByName);
-            Assert.Equal(expected.OfferedByOrganizationNumber, actual.OfferedByOrganizationNumber);
-            Assert.Equal(expected.CoveredByPartyId, actual.CoveredByPartyId);
-            Assert.Equal(expected.CoveredByName, actual.CoveredByName);
-            Assert.Equal(expected.CoveredByOrganizationNumber, actual.CoveredByOrganizationNumber);
-            Assert.Equal(expected.ResourceId, actual.ResourceId);
-            Assert.Equal(expected.ResourceTitle, actual.ResourceTitle);
-            Assert.Equal(expected.ResourceType, actual.ResourceType);
-            Assert.Equal(expected.LanguageCode, actual.LanguageCode);
-            Assert.Equal(expected.ResourceOwnerOrgNumber, actual.ResourceOwnerOrgNumber);
-            Assert.Equal(expected.ResourceOwnerOrgcode, actual.ResourceOwnerOrgcode);
-            Assert.Equal(expected.ResourceOwnerName, actual.ResourceOwnerName);
-            Assert.Equal(expected.ResourceDescription, actual.ResourceDescription);
-            Assert.Equal(expected.RightDescription, actual.RightDescription);
-        }
-
-        /// <summary>
-        ///     Assert that two <see cref="DelegationOutput" /> have the same property in the same positions.
-        /// </summary>
-        /// <param name="expected">An instance with the expected values.</param>
-        /// <param name="actual">The instance to verify.</param>
-        public static void AssertEqual(DelegationOutput expected, DelegationOutput actual)
-        {
-            Assert.NotNull(actual);
-            Assert.NotNull(expected);
-
-            AssertCollections(expected.To, actual.To, AssertEqual);
-            AssertCollections(expected.RightDelegationResults, actual.RightDelegationResults, AssertEqual);
         }
 
         /// <summary>
@@ -285,6 +229,7 @@ namespace Altinn.AccessManagement.UI.Tests.Utils
             }
 
             Assert.NotNull(expected);
+            Assert.Equal(expected.Status, actual.Status);
             Assert.Equal(expected.DialogId, actual.DialogId);
             Assert.Equal(expected.InstanceRef, actual.InstanceRef);
             AssertCollections(expected.Title, actual.Title, AssertEqual);
@@ -466,19 +411,6 @@ namespace Altinn.AccessManagement.UI.Tests.Utils
             Assert.Equal(expected.Value, actual.Value);
         }
 
-        public static void AssertEqual(List<ApiDelegationOutput> expected, List<ApiDelegationOutput> actual)
-        {
-            Assert.NotNull(actual);
-            Assert.NotNull(expected);
-
-            Assert.Equal(expected.Count, actual.Count);
-            foreach (var item in expected)
-            {
-                var a = actual.FindAll(c => c.OrgNumber == item.OrgNumber && c.ApiId == item.ApiId && c.Success == item.Success);
-                Assert.Single(a);
-            }
-        }
-
         public static void AssertEqual(AccessAreaFE expected, AccessAreaFE actual)
         {
             Assert.NotNull(actual);
@@ -513,19 +445,6 @@ namespace Altinn.AccessManagement.UI.Tests.Utils
             AssertCollections(expected.AccessPackages, actual.AccessPackages, Assert.Equal);
             AssertCollections(expected.Services, actual.Services, Assert.Equal);
 
-        }
-
-        public static void AssertEqual(List<OrganizationApiSet> expected, List<OrganizationApiSet> actual)
-        {
-            Assert.NotNull(actual);
-            Assert.NotNull(expected);
-
-            Assert.Equal(expected.Count, actual.Count);
-            foreach (var item in expected)
-            {
-                var a = actual.FindAll(c => c.OrgNumber == item.OrgNumber && c.Name == item.Name);
-                Assert.Single(a);
-            }
         }
 
         public static void AssertEqual(PackagePermission expected, PackagePermission actual)
@@ -1045,6 +964,7 @@ namespace Altinn.AccessManagement.UI.Tests.Utils
             Assert.Equal(expected.From.Id, actual.From.Id);
             Assert.Equal(expected.To.Id, actual.To.Id);
             Assert.Equal(expected.ResourceId, actual.ResourceId);
+            Assert.Equal(expected.PackageId, actual.PackageId);
             Assert.Equal(expected.Type, actual.Type);
             Assert.Equal(expected.LastUpdated, actual.LastUpdated);
             Assert.Equal(expected.Status, actual.Status);
@@ -1063,6 +983,24 @@ namespace Altinn.AccessManagement.UI.Tests.Utils
             Assert.Equal(expected.Status, actual.Status);
             Assert.Equal(expected.LastUpdated, actual.LastUpdated);
             AssertEqual(expected.Resource, actual.Resource);
+        }
+
+        public static void AssertEqual(EnrichedPackageRequest expected, EnrichedPackageRequest actual)
+        {
+            Assert.NotNull(actual);
+            Assert.NotNull(expected);
+
+            Assert.Equal(expected.Id, actual.Id);
+            Assert.Equal(expected.From.Id, actual.From.Id);
+            Assert.Equal(expected.To.Id, actual.To.Id);
+            Assert.Equal(expected.PackageId, actual.PackageId);
+            Assert.Equal(expected.Type, actual.Type);
+            Assert.Equal(expected.Status, actual.Status);
+            Assert.Equal(expected.LastUpdated, actual.LastUpdated);
+            Assert.NotNull(actual.Package);
+            Assert.Equal(expected.Package.Id, actual.Package.Id);
+            Assert.Equal(expected.Package.Name, actual.Package.Name);
+            Assert.Equal(expected.Package.Urn, actual.Package.Urn);
         }
 
         private static void AssertEqual(Provider expected, Provider actual)

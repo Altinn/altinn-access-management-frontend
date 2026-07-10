@@ -13,9 +13,12 @@ import { useAccessPackageActions } from './useAccessPackageActions';
 import { SkeletonAccessPackageList } from './SkeletonAccessPackageList';
 import { AreaItem } from './AreaItem';
 import { useAreaExpandedContextOrLocal } from './AccessPackageExpandedContext';
-import { AreaItemContent } from './AreaItemContent';
+import { AreaItemContent, areaContentId } from './AreaItemContent';
+import { packageActionControlId } from './PackageItem';
 import { TechnicalErrorParagraphs } from '../TechnicalErrorParagraphs';
 import { createErrorDetails } from '../TechnicalErrorParagraphs/TechnicalErrorParagraphs';
+import { PartyType } from '@/rtk/features/userInfoApi';
+import { useRestoreFocusOnDataChange } from '../RestoreFocus';
 
 interface AccessPackageListProps {
   showAllPackages?: boolean;
@@ -35,6 +38,8 @@ interface AccessPackageListProps {
   onRevokeError?: (accessPackage: AccessPackage, error: ActionError) => void;
   packageAs?: React.ElementType;
   noPackagesText?: string;
+  filterByType?: boolean;
+  areaHeadingLevel?: 2 | 3;
 }
 
 export const AccessPackageList = ({
@@ -55,6 +60,8 @@ export const AccessPackageList = ({
   showPackagesCount,
   packageAs,
   noPackagesText,
+  filterByType = true,
+  areaHeadingLevel = 3,
 }: AccessPackageListProps) => {
   const { t } = useTranslation();
 
@@ -65,25 +72,40 @@ export const AccessPackageList = ({
     assignedAreas,
     availableAreas,
     allPackageAreas,
+    activeDelegations,
     searchError,
     activeDelegationsError,
-    partyType,
   } = useAreaPackageList({
     showAllAreas,
     showAllPackages,
     showOnlyGuardianships,
     searchString,
+    filterByType,
   });
+
+  const requestFocusOnDataChange = useRestoreFocusOnDataChange(activeDelegations);
 
   const {
     onDelegate,
     onRevoke,
     onRequest,
+    deleteRequest,
+    hasPendingRequest,
+    isLoadingRequest,
     isLoading: isActionLoading,
   } = useAccessPackageActions({
-    onDelegateSuccess,
+    onDelegateSuccess: (accessPackage, toParty) => {
+      requestFocusOnDataChange(packageActionControlId(accessPackage.id));
+      onDelegateSuccess?.(accessPackage, toParty);
+    },
     onDelegateError,
-    onRevokeSuccess,
+    onRevokeSuccess: (accessPackage, toParty) => {
+      requestFocusOnDataChange(
+        packageActionControlId(accessPackage.id),
+        areaContentId(accessPackage.area.id),
+      );
+      onRevokeSuccess?.(accessPackage, toParty);
+    },
     onRevokeError,
   });
 
@@ -100,11 +122,8 @@ export const AccessPackageList = ({
 
   if (fetchingSearch && searchString && searchString.length > 0) {
     return (
-      <div className={classes.accessAreaList}>
-        <DsSpinner
-          aria-label={t('common.loading')}
-          className={classes.noAccessPackages}
-        />
+      <div className={classes.loadingSpinner}>
+        <DsSpinner aria-label={t('common.loading')} />
       </div>
     );
   }
@@ -166,7 +185,8 @@ export const AccessPackageList = ({
                 toggleExpandedArea={toggleExpandedArea}
                 showPackagesCount={showPackagesCount}
                 showPermissions={showPermissions}
-                partyType={partyType}
+                partyType={area.typeName === 'Person' ? PartyType.Person : PartyType.Organization}
+                headingLevel={areaHeadingLevel}
               >
                 <AreaItemContent
                   area={area}
@@ -175,12 +195,16 @@ export const AccessPackageList = ({
                   onDelegate={onDelegate}
                   onRevoke={onRevoke}
                   onRequest={onRequest}
+                  onDeleteRequest={deleteRequest}
+                  hasPendingRequest={hasPendingRequest}
+                  isLoadingRequest={isLoadingRequest}
                   isActionLoading={isActionLoading}
                   showAvailablePackages={!minimizeAvailablePackages}
                   showAvailableToggle={showAvailableToggle}
                   showPermissions={showPermissions}
                   packageAs={packageAs}
-                  partyType={partyType}
+                  partyType={area.typeName === 'Person' ? PartyType.Person : PartyType.Organization}
+                  headingLevel={areaHeadingLevel === 2 ? 3 : 4}
                 />
               </AreaItem>
             );

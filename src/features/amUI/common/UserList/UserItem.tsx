@@ -1,6 +1,6 @@
 import type { UserListItemProps } from '@altinn/altinn-components';
-import { formatDate, formatDisplayName, List, UserListItem } from '@altinn/altinn-components';
-import type { ElementType, ReactNode } from 'react';
+import { formatDisplayName, List, UserListItem } from '@altinn/altinn-components';
+import type { ReactNode } from 'react';
 import { useEffect, useState } from 'react';
 import { Link } from 'react-router';
 import { useTranslation } from 'react-i18next';
@@ -10,9 +10,14 @@ import { ConnectionUserType } from '@/rtk/features/connectionApi';
 
 import classes from './UserList.module.css';
 import { displaySubConnections } from '@/resources/utils/featureFlagUtils';
-import { formatOrgNr, isSubUnitByType } from '@/resources/utils/reporteeUtils';
+import {
+  getFormattedDateOfBirthLabel,
+  formatOrgNr,
+  isSubUnitByType,
+} from '@/resources/utils/reporteeUtils';
 import { ECC_PROVIDER_CODE, useRoleMetadata } from '../UserRoles/useRoleMetadata';
 import { isNewUser } from '../isNewUser';
+import { useRestoreFocusTarget } from '../RestoreFocus';
 
 function isExtendedUser(item: ExtendedUser | User): item is ExtendedUser {
   return (item as ExtendedUser).roles !== undefined && Array.isArray((item as ExtendedUser).roles);
@@ -20,7 +25,7 @@ function isExtendedUser(item: ExtendedUser | User): item is ExtendedUser {
 
 interface UserItemProps extends Pick<
   UserListItemProps,
-  'size' | 'titleAs' | 'subUnit' | 'interactive' | 'shadow'
+  'size' | 'subUnit' | 'interactive' | 'shadow'
 > {
   user: ExtendedUser | User;
   showRoles?: boolean;
@@ -28,29 +33,13 @@ interface UserItemProps extends Pick<
   disableLinks?: boolean;
   includeSelfAsChild?: boolean;
   linkTo?: string;
-  onSelect?: () => void;
+  onSelect?: (user: ExtendedUser | User) => void;
   controls?: (user: ExtendedUser | User) => ReactNode;
 }
-
-const userHeadingLevelForMapper = (level?: ElementType) => {
-  switch (level) {
-    case 'h2':
-      return 'h3';
-    case 'h3':
-      return 'h4';
-    case 'h4':
-      return 'h5';
-    case 'h5':
-      return 'h6';
-    default:
-      return 'h6';
-  }
-};
 
 export const UserItem = ({
   user,
   size = 'lg',
-  titleAs,
   interactive = false,
   showRoles = true,
   roleDirection = 'toUser',
@@ -63,6 +52,9 @@ export const UserItem = ({
   controls,
   ...props
 }: UserItemProps) => {
+  // Lets a row be re-focused after the user closes the modal it opened or after an inline action
+  // removes it. No-op unless an ancestor renders a <RestoreFocusProvider>. See common/RestoreFocus.
+  useRestoreFocusTarget(user.id);
   const shouldDisplaySubConnections = displaySubConnections();
   const childrenToDisplay =
     user.children?.filter(
@@ -108,10 +100,7 @@ export const UserItem = ({
   const description = (user: ExtendedUser | User) => {
     let descriptionString = subUnit ? '↳ ' : '';
     if (user.type === ConnectionUserType.Person) {
-      const formattedDate = formatDate(user.dateOfBirth || undefined);
-      if (formattedDate) {
-        descriptionString += t('common.date_of_birth') + ' ' + formattedDate;
-      }
+      descriptionString += getFormattedDateOfBirthLabel(user.dateOfBirth);
     } else if (user.type === ConnectionUserType.Organization) {
       descriptionString +=
         t('common.org_nr') +
@@ -168,10 +157,10 @@ export const UserItem = ({
       linkIcon={!hasInheritingUsers && !disableLinks}
       onClick={() => {
         if (hasInheritingUsers) setExpanded(!isExpanded);
-        else if (onSelect) onSelect();
+        else if (onSelect) onSelect(user);
       }}
       as={
-        interactive && !hasInheritingUsers
+        interactive && !hasInheritingUsers && !onSelect
           ? (props) => (
               <Link
                 {...props}
@@ -183,7 +172,7 @@ export const UserItem = ({
             : 'div'
       }
       controls={!hasInheritingUsers && controls && controls(user)}
-      titleAs={titleAs}
+      titleAs='div'
       subUnit={subUnit || hasSubUnitRole || isSubUnitByType(user.variant?.toString())}
       deleted={user.isDeleted}
     >
@@ -197,7 +186,6 @@ export const UserItem = ({
               key={child.id}
               user={{ ...child, children: null }} // do not allow further expansion of inheriting users
               size='xs'
-              titleAs={userHeadingLevelForMapper(titleAs)}
               subUnit={
                 (includeSelfAsChild ? index !== 0 : true) &&
                 child.type === ConnectionUserType.Organization &&
@@ -207,6 +195,7 @@ export const UserItem = ({
               showRoles={showRoles}
               interactive={interactive}
               disableLinks={disableLinks}
+              onSelect={onSelect}
               shadow='none'
               controls={controls}
             />

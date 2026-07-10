@@ -1,4 +1,5 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
+import { userInfoApi } from './userInfoApi';
 
 import { getCookie } from '@/resources/Cookie/CookieMethods';
 
@@ -74,6 +75,10 @@ export const settingsApi = createApi({
         method: 'POST',
         body: { languageCode },
       }),
+      async onQueryStarted(_, { dispatch, queryFulfilled }) {
+        await queryFulfilled;
+        dispatch(userInfoApi.util.invalidateTags(['UserProfile']));
+      },
     }),
   }),
 });

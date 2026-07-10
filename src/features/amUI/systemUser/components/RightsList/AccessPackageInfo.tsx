@@ -9,6 +9,7 @@ import { useProviderLogoUrl } from '@/resources/hooks/useProviderLogoUrl';
 import type { SystemUserAccessPackage } from '../../types';
 
 import classes from './RightsList.module.css';
+import { useRestoreFocusTarget } from '@/features/amUI/common/RestoreFocus';
 
 interface AccessPackageInfoProps {
   accessPackage: SystemUserAccessPackage;
@@ -19,12 +20,14 @@ export const AccessPackageInfo = ({
   onSelectResource,
 }: AccessPackageInfoProps): React.ReactElement => {
   const { t } = useTranslation();
-  const { getProviderLogoUrl } = useProviderLogoUrl();
 
   return (
-    <div className={classes.accessPackages}>
+    <>
       <div className={classes.resourceInfoHeader}>
-        <PackageIcon fontSize={28} />
+        <PackageIcon
+          fontSize={28}
+          aria-hidden='true'
+        />
         <DsHeading
           level={1}
           data-size='xs'
@@ -32,36 +35,56 @@ export const AccessPackageInfo = ({
           {accessPackage.name}
         </DsHeading>
       </div>
-      <DsParagraph data-size='sm'>{accessPackage.description}</DsParagraph>
-      <DsHeading
-        data-size='2xs'
-        level={2}
-      >
-        {accessPackage.resources.length === 1
-          ? t('systemuser_detailpage.accesspackage_resources_singular')
-          : t('systemuser_detailpage.accesspackage_resources_plural', {
-              resourcesCount: accessPackage.resources.length,
-            })}
-      </DsHeading>
-      <List>
-        {accessPackage.resources.map((resource) => {
-          const emblem = getProviderLogoUrl(resource.resourceOwnerOrgcode ?? '');
-          return (
-            <ResourceListItem
-              key={resource.identifier}
-              id={resource.identifier}
-              as='button'
-              titleAs='h3'
-              size='xs'
-              ownerLogoUrl={emblem ?? resource.resourceOwnerLogoUrl}
-              ownerLogoUrlAlt={resource.resourceOwnerName ?? ''}
-              ownerName={resource.resourceOwnerName ?? ''}
-              resourceName={resource.title}
-              onClick={() => onSelectResource(resource)}
-            />
-          );
-        })}
-      </List>
-    </div>
+      <div className={classes.accessPackages}>
+        <DsParagraph data-size='sm'>{accessPackage.description}</DsParagraph>
+        <DsHeading
+          data-size='2xs'
+          level={2}
+        >
+          {accessPackage.resources.length === 1
+            ? t('systemuser_detailpage.accesspackage_resources_singular')
+            : t('systemuser_detailpage.accesspackage_resources_plural', {
+                resourcesCount: accessPackage.resources.length,
+              })}
+        </DsHeading>
+        <List>
+          {accessPackage.resources.map((resource) => {
+            return (
+              <PackageResourceItem
+                key={resource.identifier}
+                resource={resource}
+                onSelectResource={onSelectResource}
+              />
+            );
+          })}
+        </List>
+      </div>
+    </>
+  );
+};
+
+interface PackageResourceItemProps {
+  resource: ServiceResource;
+  onSelectResource: (resource: ServiceResource) => void;
+}
+
+const PackageResourceItem = ({ resource, onSelectResource }: PackageResourceItemProps) => {
+  const { getProviderLogoUrl } = useProviderLogoUrl();
+
+  useRestoreFocusTarget(resource.identifier);
+  const emblem = getProviderLogoUrl(resource.resourceOwnerOrgcode ?? '');
+
+  return (
+    <ResourceListItem
+      id={resource.identifier}
+      as='button'
+      titleAs='span'
+      size='xs'
+      ownerLogoUrl={emblem ?? resource.resourceOwnerLogoUrl}
+      ownerLogoUrlAlt={resource.resourceOwnerName ?? ''}
+      ownerName={resource.resourceOwnerName ?? ''}
+      resourceName={resource.title}
+      onClick={() => onSelectResource(resource)}
+    />
   );
 };

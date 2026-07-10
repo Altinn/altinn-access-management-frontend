@@ -19,10 +19,25 @@ export interface DelegationInstance {
   type: InstanceType | null;
 }
 
+export type DialogLookupStatus = 'Success' | 'NotFound' | 'Forbidden';
+
+export interface DialogLookupLocalization {
+  value: string;
+  languageCode: string;
+}
+
+export interface DialogLookup {
+  status: DialogLookupStatus;
+  dialogId?: string;
+  instanceRef?: string;
+  title?: DialogLookupLocalization[];
+}
+
 export interface InstanceDelegation {
   resource: ServiceResource;
   instance: DelegationInstance;
   permissions: Permissions[];
+  dialogLookup?: DialogLookup;
 }
 
 export interface InstanceRights {
@@ -53,7 +68,14 @@ export const instanceApi = createApi({
   endpoints: (builder) => ({
     getInstances: builder.query<
       InstanceDelegation[],
-      { party: string; from?: string; to?: string; resource?: string; instance?: string }
+      {
+        party: string;
+        from?: string;
+        to?: string;
+        resource?: string;
+        instance?: string;
+        language: string;
+      }
     >({
       query: ({ party, from, to, resource, instance }) => {
         return `instances/delegation/instances?party=${party}&from=${from ?? ''}&to=${to ?? ''}&resource=${encodeURIComponent(resource ?? '')}&instance=${encodeURIComponent(instance ?? '')}`;

@@ -1,0 +1,66 @@
+{
+  "page": 1,
+  "numEntriesTotal": 2,
+  "pageList": [
+    {
+      "identifier": "appid-511",
+      "title": "DigDir Sommerfest",
+      "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vivamus orci turpis, vehicula a dignissim eget, condimentum at diam. Etiam iaculis, purus vel venenatis condimentum, lectus arcu tempor est, et tempor lorem elit ut nunc. Donec eu bibendum leo. Ut ac dolor erat. Vestibulum posuere fringilla iaculis",
+      "rightDescription": "Her er en beskrivelse.",
+      "homepage": null,
+      "status": null,
+      "spatial": null,
+      "contactPoints": [
+        {
+          "category": "Some category",
+          "email": "email@someemaildigdir.no",
+          "telephone": "12345678",
+          "contactPage": "Some page (webpage maybe?)"
+        }
+      ],
+      "delegable": false,
+      "visible": true,
+      "resourceOwnerName": "Digitaliseringsdirektoratet",
+      "resourceOwnerOrgNumber": "991825827",
+      "resourceReferences": [],
+      "priorityCounter": 4,
+      "resourceType": "Default",
+      "authorizationReference": [
+        {
+          "id": "urn:altinn:resource",
+          "value": "appid-511"
+        }
+      ]
+    },
+    {
+      "identifier": "appid-510",
+      "title": "DigDir WiFi",
+      "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vivamus orci turpis, vehicula a dignissim eget, condimentum at diam. Etiam iaculis, purus vel venenatis condimentum, lectus arcu tempor est, et tempor lorem elit ut nunc. Donec eu bibendum leo. Ut ac dolor erat. Vestibulum posuere fringilla iaculis",
+      "rightDescription": "Her er en beskrivelse.",
+      "homepage": null,
+      "status": null,
+      "spatial": null,
+      "contactPoints": [
+        {
+          "category": "Some category",
+          "email": "email@someemaildigdir.no",
+          "telephone": "12345678",
+          "contactPage": "Some page (webpage maybe?)"
+        }
+      ],
+      "delegable": true,
+      "visible": true,
+      "resourceOwnerName": "Digitaliseringsdirektoratet",
+      "resourceOwnerOrgNumber": "991825827",
+      "resourceReferences": [],
+      "priorityCounter": 1,
+      "resourceType": "Default",
+      "authorizationReference": [
+        {
+          "id": "urn:altinn:resource",
+          "value": "appid-510"
+        }
+      ]
+    }
+  ]
+}

@@ -38,15 +38,22 @@ export const NewPersonContent = ({ errorDetails, addPerson, isLoading }: NewPers
   }
 
   const isValidLastnameFormat = () => lastName.trim().length >= 1;
+  const isAddPersonButtonDisabled =
+    personIdentifier.trim().length === 0 ||
+    getPersonIdentifierErrorKey(personIdentifier) !== null ||
+    !isValidLastnameFormat() ||
+    isLoading;
 
   return (
     <div className={classes.newPersonContent}>
-      {errorDetails && (
-        <NewUserAlert
-          userType='person'
-          error={errorDetails}
-        />
-      )}
+      <div aria-live='assertive'>
+        {errorDetails && (
+          <NewUserAlert
+            userType='person'
+            error={errorDetails}
+          />
+        )}
+      </div>
       <DsTextfield
         className={classes.textField}
         label={t('new_user_modal.person_identifier')}
@@ -64,6 +71,11 @@ export const NewPersonContent = ({ errorDetails, addPerson, isLoading }: NewPers
         onBlur={() => {
           setPersonIdentifierFormatErrorKey(getPersonIdentifierErrorKey(personIdentifier));
         }}
+        onKeyDown={(event) => {
+          if (event.key === 'Enter' && !event.repeat && !isAddPersonButtonDisabled) {
+            navigateIfValidPerson();
+          }
+        }}
       />
       <DsTextfield
         className={classes.textField}
@@ -76,15 +88,15 @@ export const NewPersonContent = ({ errorDetails, addPerson, isLoading }: NewPers
           const error = isValidLastnameFormat() ? '' : t('new_user_modal.last_name_format_error');
           setLastNameFormatError(error);
         }}
+        onKeyDown={(event) => {
+          if (event.key === 'Enter' && !event.repeat && !isAddPersonButtonDisabled) {
+            navigateIfValidPerson();
+          }
+        }}
       />
       <div className={classes.validationButton}>
         <Button
-          disabled={
-            personIdentifier.trim().length === 0 ||
-            getPersonIdentifierErrorKey(personIdentifier) !== null ||
-            !isValidLastnameFormat() ||
-            isLoading
-          }
+          disabled={isAddPersonButtonDisabled}
           loading={isLoading}
           onClick={navigateIfValidPerson}
         >

@@ -2,6 +2,7 @@ import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 import { getCookie } from '@/resources/Cookie/CookieMethods';
 import type { Entity } from '@/dataObjects/dtos/Common';
 import { ServiceResource } from './singleRights/singleRightsApi';
+import type { AccessPackage } from './accessPackageApi';
 
 export type RequestStatus = 'None' | 'Draft' | 'Pending' | 'Approved' | 'Rejected' | 'Withdrawn';
 
@@ -13,10 +14,15 @@ export interface RequestDto {
   to: Entity;
   lastUpdated: string;
   resourceId?: string;
+  packageId?: string;
 }
 
-export interface EnrichedRequestDto extends RequestDto {
+export interface EnrichedResourceRequest extends RequestDto {
   resource: ServiceResource;
+}
+
+export interface EnrichedPackageRequest extends RequestDto {
+  package: AccessPackage;
 }
 
 const baseUrl = `${import.meta.env.BASE_URL}accessmanagement/api/v1/request`;
@@ -37,6 +43,8 @@ export const requestApi = createApi({
     'request',
     'enrichedSentResourceRequests',
     'enrichedReceivedResourceRequests',
+    'enrichedSentPackageRequests',
+    'enrichedReceivedPackageRequests',
   ],
   endpoints: (builder) => ({
     // requests page queries
@@ -73,7 +81,7 @@ export const requestApi = createApi({
 
     // delegation modal queries and mutations
     getEnrichedSentResourceRequests: builder.query<
-      EnrichedRequestDto[],
+      EnrichedResourceRequest[],
       { party: string; to?: string; status?: RequestStatus[] }
     >({
       query: ({ party, to, status = [] }) => {
@@ -85,7 +93,7 @@ export const requestApi = createApi({
       providesTags: ['enrichedSentResourceRequests'],
     }),
     getEnrichedReceivedResourceRequests: builder.query<
-      EnrichedRequestDto[],
+      EnrichedResourceRequest[],
       { party: string; from?: string; status?: RequestStatus[] }
     >({
       query: ({ party, from, status = [] }) => {
@@ -95,6 +103,30 @@ export const requestApi = createApi({
         return `received/resource${params}`;
       },
       providesTags: ['enrichedReceivedResourceRequests'],
+    }),
+    getEnrichedSentPackageRequests: builder.query<
+      EnrichedPackageRequest[],
+      { party: string; to?: string; status?: RequestStatus[] }
+    >({
+      query: ({ party, to, status = [] }) => {
+        let params = `?party=${party}`;
+        if (to) params += `&to=${to}`;
+        for (const s of status) params += `&status=${s}`;
+        return `sent/package${params}`;
+      },
+      providesTags: ['enrichedSentPackageRequests'],
+    }),
+    getEnrichedReceivedPackageRequests: builder.query<
+      EnrichedPackageRequest[],
+      { party: string; from?: string; status?: RequestStatus[] }
+    >({
+      query: ({ party, from, status = [] }) => {
+        let params = `?party=${party}`;
+        if (from) params += `&from=${from}`;
+        for (const s of status) params += `&status=${s}`;
+        return `received/package${params}`;
+      },
+      providesTags: ['enrichedReceivedPackageRequests'],
     }),
     createResourceRequest: builder.mutation<
       RequestDto,
@@ -106,26 +138,48 @@ export const requestApi = createApi({
       }),
       invalidatesTags: ['sentRequests', 'enrichedSentResourceRequests'],
     }),
+    createPackageRequest: builder.mutation<
+      RequestDto,
+      { party: string; to: string; package: string }
+    >({
+      query: ({ party, to, package: packageId }) => ({
+        url: `package?party=${party}&to=${to}&package=${encodeURIComponent(packageId)}`,
+        method: 'POST',
+      }),
+      invalidatesTags: ['sentRequests', 'enrichedSentPackageRequests'],
+    }),
     withdrawRequest: builder.mutation<RequestDto, { party: string; id: string }>({
       query: ({ party, id }) => ({
         url: `sent/withdraw?party=${party}&id=${id}`,
         method: 'DELETE',
       }),
-      invalidatesTags: ['sentRequests', 'enrichedSentResourceRequests'],
+      invalidatesTags: [
+        'sentRequests',
+        'enrichedSentResourceRequests',
+        'enrichedSentPackageRequests',
+      ],
     }),
     rejectRequest: builder.mutation<RequestDto, { party: string; id: string }>({
       query: ({ party, id }) => ({
         url: `received/reject?party=${party}&id=${id}`,
         method: 'PUT',
       }),
-      invalidatesTags: ['receivedRequests', 'enrichedReceivedResourceRequests'],
+      invalidatesTags: [
+        'receivedRequests',
+        'enrichedReceivedResourceRequests',
+        'enrichedReceivedPackageRequests',
+      ],
     }),
     approveRequest: builder.mutation<RequestDto, { party: string; id: string }>({
       query: ({ party, id }) => ({
         url: `received/approve?party=${party}&id=${id}`,
         method: 'PUT',
       }),
-      invalidatesTags: ['receivedRequests', 'enrichedReceivedResourceRequests'],
+      invalidatesTags: [
+        'receivedRequests',
+        'enrichedReceivedResourceRequests',
+        'enrichedReceivedPackageRequests',
+      ],
     }),
 
     // count queries
@@ -147,7 +201,7 @@ export const requestApi = createApi({
     }),
 
     // draft request page query
-    getEnrichedDraftRequest: builder.query<EnrichedRequestDto, { id: string }>({
+    getEnrichedDraftRequest: builder.query<EnrichedResourceRequest, { id: string }>({
       query: ({ id }) => {
         return `draft/${id}`;
       },
@@ -158,7 +212,11 @@ export const requestApi = createApi({
         url: `draft/confirm?party=${party}&id=${id}`,
         method: 'PUT',
       }),
-      invalidatesTags: ['sentRequests', 'enrichedSentResourceRequests'],
+      invalidatesTags: [
+        'sentRequests',
+        'enrichedSentResourceRequests',
+        'enrichedSentPackageRequests',
+      ],
     }),
   }),
 });
@@ -168,12 +226,15 @@ export const {
   useGetReceivedRequestsQuery,
   useGetRequestQuery,
   useCreateResourceRequestMutation,
+  useCreatePackageRequestMutation,
   useWithdrawRequestMutation,
   useConfirmRequestMutation,
   useRejectRequestMutation,
   useApproveRequestMutation,
   useGetEnrichedSentResourceRequestsQuery,
   useGetEnrichedReceivedResourceRequestsQuery,
+  useGetEnrichedSentPackageRequestsQuery,
+  useGetEnrichedReceivedPackageRequestsQuery,
   useGetEnrichedDraftRequestQuery,
   useGetSentRequestsCountQuery,
   useGetReceivedRequestsCountQuery,

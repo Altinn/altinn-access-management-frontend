@@ -2,7 +2,7 @@ import React from 'react';
 import { List, Button } from '@altinn/altinn-components';
 import { useTranslation } from 'react-i18next';
 
-import type { ExtendedUser } from '@/rtk/features/userInfoApi';
+import type { ExtendedUser, User } from '@/rtk/features/userInfoApi';
 import { UserItem } from '@/features/amUI/common/UserList/UserItem';
 import { UserListActions } from '../UserList/UserListActions';
 import { DelegationAction } from '../DelegationModal/EditModal';
@@ -10,8 +10,6 @@ import { DelegationAction } from '../DelegationModal/EditModal';
 import classes from './UserSearch.module.css';
 import { isSubUnitByType } from '@/resources/utils/reporteeUtils';
 import type { UserActionTarget, UserSearchNode } from './types';
-
-export type titleAsType = 'h1' | 'h2' | 'h3' | 'h4' | 'h5' | 'h6' | 'p' | 'div' | 'span';
 
 export interface UserSearchResultsProps {
   users: UserSearchNode[];
@@ -24,9 +22,19 @@ export interface UserSearchResultsProps {
   isActionLoading?: boolean;
   includeSelfAsChild?: boolean;
   delegateLabel?: string;
+  revokeLabel?: string;
   getUserLink?: (user: UserActionTarget) => string;
-  titleAs?: titleAsType;
 }
+
+const mapUserToActionTarget = (user: UserSearchNode | ExtendedUser | User): UserActionTarget => ({
+  id: user.id,
+  name: user.name,
+  type: user.type,
+  variant: user.variant,
+  organizationIdentifier: user.organizationIdentifier,
+  dateOfBirth: user.dateOfBirth,
+  isInherited: 'isInherited' in user ? user.isInherited : undefined,
+});
 
 export const UserSearchResults: React.FC<UserSearchResultsProps> = ({
   users,
@@ -39,8 +47,8 @@ export const UserSearchResults: React.FC<UserSearchResultsProps> = ({
   isActionLoading = false,
   includeSelfAsChild = true,
   delegateLabel,
+  revokeLabel,
   getUserLink,
-  titleAs = 'h4',
 }) => {
   const { t } = useTranslation();
   const isInteractive = !!getUserLink;
@@ -55,14 +63,9 @@ export const UserSearchResults: React.FC<UserSearchResultsProps> = ({
             key={user.id}
             user={user}
             size='md'
-            titleAs={titleAs}
             interactive={isInteractive}
             linkTo={getUserLink ? getUserLink(user) : undefined}
-            onSelect={
-              onSelect
-                ? () => onSelect({ id: user.id, name: user.name, type: user.type })
-                : undefined
-            }
+            onSelect={onSelect ? (user) => onSelect(mapUserToActionTarget(user)) : undefined}
             roleDirection='toUser'
             disableLinks={!isInteractive}
             controls={(user) => (
@@ -73,6 +76,7 @@ export const UserSearchResults: React.FC<UserSearchResultsProps> = ({
                 onRevoke={onRevoke ? () => onRevoke(user as ExtendedUser) : undefined}
                 onDelegate={onDelegate ? () => onDelegate(user as ExtendedUser) : undefined}
                 delegateLabel={delegateLabel}
+                revokeLabel={revokeLabel}
               />
             )}
           />

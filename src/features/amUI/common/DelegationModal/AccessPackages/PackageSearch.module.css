@@ -1,3 +1,15 @@
+.container {
+  display: flex;
+  flex-direction: column;
+  gap: var(--ds-spacing-3);
+}
+
+.description {
+  display: flex;
+  align-items: center;
+  gap: var(--ds-spacing-1);
+}
+
 .searchInputs {
   width: 100%;
   display: flex;

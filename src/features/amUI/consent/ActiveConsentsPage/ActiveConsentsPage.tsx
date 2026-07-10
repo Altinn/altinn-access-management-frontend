@@ -1,7 +1,15 @@
 import React, { useMemo, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Link, useLocation, useNavigate } from 'react-router';
-import { DsAlert, DsDialog, DsHeading, DsLink, DsParagraph, List } from '@altinn/altinn-components';
+import {
+  DsAlert,
+  DsDialog,
+  DsHeading,
+  DsLink,
+  DsParagraph,
+  formatDisplayName,
+  List,
+} from '@altinn/altinn-components';
 import { FolderFileIcon } from '@navikt/aksel-icons';
 
 import { useDocumentTitle } from '@/resources/hooks/useDocumentTitle';
@@ -18,10 +26,10 @@ import { ConsentPath } from '@/routes/paths';
 import { useGetIsAdminQuery, useGetReporteeQuery } from '@/rtk/features/userInfoApi';
 import { hasConsentPermission } from '@/resources/utils/permissionUtils';
 import { ConsentListItem } from './ConsentListItem';
-import { OldConsentAlert } from '../components/OldConsentAlert/OldConsentAlert';
 import { Breadcrumbs } from '../../common/Breadcrumbs/Breadcrumbs';
 import { getConsentRequestUrl } from '@/routes/paths/consentPath';
 import { toDateTimeString } from '../utils';
+import { ReporteePageHeading } from '../../common/ReporteePageHeading';
 
 export const ActiveConsentsPage = () => {
   const { t } = useTranslation();
@@ -63,21 +71,19 @@ export const ActiveConsentsPage = () => {
     modalRef.current?.showModal();
   };
 
+  const reporteeName = formatDisplayName({
+    fullName: reportee?.name || '',
+    type: reportee?.type === 'Person' ? 'person' : 'company',
+  });
+
   return (
     <PageWrapper>
       <PageLayoutWrapper>
         <Breadcrumbs items={['root', 'consent']} />
-        <DsHeading
-          level={1}
-          data-size='sm'
-          className={classes.consentsHeader}
-        >
-          {t('active_consents.heading')}
-        </DsHeading>
-
-        <OldConsentAlert
-          heading='active_consents.altinn2_consent_alert_header'
-          text='active_consents.altinn2_consent_alert_body'
+        <ReporteePageHeading
+          title={t('active_consents.heading', { name: reporteeName })}
+          reportee={reportee}
+          isLoading={isLoadingReportee}
         />
         {groupedPendingActiveConsents && Object.keys(groupedPendingActiveConsents).length > 0 && (
           <>
@@ -104,7 +110,10 @@ export const ActiveConsentsPage = () => {
                       : t('active_consents.see_pending_consent'),
                   }))}
                   onClick={(consentId: string) => {
-                    const consentRequestUrl = getConsentRequestUrl(consentId, 'overview');
+                    const consentRequestUrl = getConsentRequestUrl(
+                      consentId,
+                      encodeURIComponent(`/${ConsentPath.Consent}/${ConsentPath.Active}`),
+                    );
                     navigate(consentRequestUrl);
                   }}
                 />
@@ -125,7 +134,7 @@ export const ActiveConsentsPage = () => {
           >
             <Link to={`/${ConsentPath.Consent}/${ConsentPath.Log}`}>
               <FolderFileIcon
-                aria-hidden
+                aria-hidden='true'
                 fontSize={24}
               />
               <span>{t('active_consents.consent_log')}</span>

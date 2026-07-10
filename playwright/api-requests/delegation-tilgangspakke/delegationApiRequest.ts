@@ -1,6 +1,5 @@
 import { request, APIRequestContext } from '@playwright/test';
 import { Token } from './../Token';
-import { env } from 'playwright/util/helper';
 
 export class DelegationApiRequest {
   private readonly platformUrl: string;
@@ -8,7 +7,7 @@ export class DelegationApiRequest {
 
   constructor(
     private apiRequestContext: APIRequestContext,
-    private tokenHelper: Token = new Token(env('ORG')),
+    private tokenHelper: Token = new Token(),
   ) {
     this.platformUrl = process.env.PLATFORM_URL!;
     if (!this.platformUrl) throw new Error('PLATFORM_URL must be set in .env');
@@ -19,7 +18,7 @@ export class DelegationApiRequest {
     PartyId?: string;
     PartyUUID?: string;
   }): Promise<Record<string, string>> {
-    const token = await this.tokenHelper.generateAltinnPersonalToken();
+    const token = await this.tokenHelper.getPersonalCleanupAltinnToken(person);
     return {
       Authorization: `Bearer ${token}`,
       'Content-Type': 'application/json',
@@ -27,7 +26,7 @@ export class DelegationApiRequest {
   }
 
   //Add org as 'Rettighetshaver' for delegating access pacakage
-  public async addOrgForDelegation(fromPerson: any, toPerson: any): Promise<void> {
+  public async addOrgForDelegation(fromPerson: any, toPerson: any, authPerson: any): Promise<void> {
     const params = new URLSearchParams({
       party: fromPerson.PartyUUID,
       from: fromPerson.PartyUUID,
@@ -35,7 +34,7 @@ export class DelegationApiRequest {
     });
 
     const url = `${this.platformUrl}/v1/enduser/connections?${params.toString()}`;
-    const headers = await this.authHeaders(toPerson);
+    const headers = await this.authHeaders(authPerson);
 
     const response = await this.apiRequestContext.post(url, { headers });
 
@@ -45,8 +44,13 @@ export class DelegationApiRequest {
   }
 
   //Delegate access pacakge to 'Rettighetshaver'
-  public async delegateAccessPkg(fromPerson: any, toPerson: any, pkg: string): Promise<void> {
-    const headers = await this.authHeaders(fromPerson);
+  public async delegateAccessPkg(
+    fromPerson: any,
+    toPerson: any,
+    pkg: string,
+    authPerson: any,
+  ): Promise<void> {
+    const headers = await this.authHeaders(authPerson);
 
     const packagesToDelegate: string[] =
       typeof pkg === 'string' && pkg.trim().length > 0

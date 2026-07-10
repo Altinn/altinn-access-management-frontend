@@ -30,12 +30,13 @@ export const GuardianshipPermissions = () => {
           const { packageId, ...rest } = props;
           return (
             <Link
-              to={`/poa-overview/access-package/${packageId}?tab=guardianships`}
+              to={`/poa-overview/access-package/${packageId}?parentTab=guardianships`}
               {...rest}
             />
           );
         }}
         noPackagesText={t('access_packages.no_packages')}
+        areaHeadingLevel={2}
       />
     </>
   );

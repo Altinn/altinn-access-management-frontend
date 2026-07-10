@@ -1,31 +1,20 @@
 import type { JSX } from 'react';
 import { createContext, useContext } from 'react';
-import {
-  DsAlert,
-  DsHeading,
-  DsLink,
-  DsParagraph,
-  formatDisplayName,
-} from '@altinn/altinn-components';
+import { DsAlert, DsParagraph, formatDisplayName } from '@altinn/altinn-components';
 import { type SerializedError } from '@reduxjs/toolkit';
 import type { FetchBaseQueryError } from '@reduxjs/toolkit/query';
 import { Link } from 'react-router';
 import { t } from 'i18next';
 
 import { useGetPartyFromLoggedInUserQuery, type Party } from '@/rtk/features/lookupApi';
-import { availableForUserTypeCheck } from '@/resources/utils/featureFlagUtils';
 
 import { TechnicalErrorParagraphs } from '../TechnicalErrorParagraphs';
 import { createErrorDetails } from '../TechnicalErrorParagraphs/TechnicalErrorParagraphs';
-import { NotAvailableForUserTypeAlert } from '../NotAvailableForUserTypeAlert/NotAvailableForUserTypeAlert';
 import { AccessPackageDelegationCheckProvider } from '../DelegationCheck/AccessPackageDelegationCheckContext';
 import { useGetRightHoldersQuery } from '@/rtk/features/connectionApi';
 import { useReporteeParty } from './useReporteeParty';
 import { useConnectedParty } from './useConnectedParty';
-import { PartyType, useGetReporteeQuery } from '@/rtk/features/userInfoApi';
-import { getHostUrl } from '@/resources/utils/pathUtils';
-import { ArrowRightIcon } from '@navikt/aksel-icons';
-import classes from './PartyRepresentationContext.module.css';
+import { PartyType } from '@/rtk/features/userInfoApi';
 
 interface PartyRepresentationProviderProps {
   /** The children to be rendered with the provided party-representation data */
@@ -40,8 +29,6 @@ interface PartyRepresentationProviderProps {
   loadingComponent?: JSX.Element;
   /** Optional override for loading state */
   isLoading?: boolean;
-  /** If true, an error alert will be shown if the acting party has 'person' user type */
-  errorOnPriv?: boolean;
   /** Optional override of the back URL in case of an error - defaults to '/' */
   noConnectionBackUrl?: string;
   /** Optional override of the toParty - only use this if absolutely necessary */
@@ -79,7 +66,6 @@ export const PartyRepresentationProvider = ({
   actingPartyUuid,
   loadingComponent,
   isLoading: externalIsLoading,
-  errorOnPriv = false,
   toPartyOverride,
   fromPartyOverride,
   noConnectionBackUrl,
@@ -96,13 +82,15 @@ export const PartyRepresentationProvider = ({
 
   const { data: currentUser, isLoading: currentUserIsLoading } = useGetPartyFromLoggedInUserQuery();
   const { party: reportee, isLoading: reporteeIsLoading } = useReporteeParty();
-  const { data: authorizedPartyReportee } = useGetReporteeQuery();
+
+  const isLoadingInitialState = externalIsLoading || currentUserIsLoading || reporteeIsLoading;
 
   const { party: fromConnectedParty, isLoading: fromPartyIsLoading } = useConnectedParty({
     fromPartyUuid,
     skip:
       !fromPartyUuid ||
       fromPartyUuid === actingPartyUuid ||
+      isLoadingInitialState ||
       fromPartyUuid === currentUser?.partyUuid ||
       fromPartyUuid === reportee?.partyUuid ||
       !!fromPartyOverride, // Skip if fromPartyOverride is provided, since that means the consumer is providing the fromParty data themselves
@@ -113,6 +101,7 @@ export const PartyRepresentationProvider = ({
     skip:
       !toPartyUuid ||
       toPartyUuid === actingPartyUuid ||
+      isLoadingInitialState ||
       toPartyUuid === currentUser?.partyUuid ||
       toPartyUuid === reportee?.partyUuid ||
       !!toPartyOverride, // Skip if toPartyOverride is provided, since that means the consumer is providing the toParty data themselves
@@ -152,11 +141,6 @@ export const PartyRepresentationProvider = ({
     { skip: !fromPartyUuid || !toPartyUuid },
   );
 
-  const notAvailableForUserType =
-    !reporteeIsLoading &&
-    !!actingParty &&
-    !availableForUserTypeCheck(actingParty?.partyTypeName?.toString());
-
   const isLoading =
     externalIsLoading ||
     isConnectionLoading ||
@@ -173,40 +157,15 @@ export const PartyRepresentationProvider = ({
 
   const isError = !fromParty && !toParty;
 
-  const shouldShowUnsyncedConnectionAlert =
-    !isLoading &&
-    authorizedPartyReportee &&
-    (invalidConnection || isError) &&
-    fromPartyUuid &&
-    toPartyUuid &&
-    authorizedPartyReportee?.partyUuid === fromPartyUuid &&
-    toPartyUuid === currentUser?.partyUuid;
-  // The reportee is valid but the connection is unsynced (the user is on their own page for the reportee)
-
-  const shouldShowConnectionErrorAlert =
-    !isLoading && invalidConnection && !shouldShowUnsyncedConnectionAlert;
-
-  const shouldShowUserTypeRestrictionAlert =
-    !shouldShowConnectionErrorAlert &&
-    !isError &&
-    !isLoading &&
-    notAvailableForUserType &&
-    errorOnPriv;
+  const shouldShowConnectionErrorAlert = !isLoading && invalidConnection;
 
   const shouldShowTechnicalErrorAlert =
-    isError &&
-    !isLoading &&
-    !invalidConnection &&
-    !shouldShowUserTypeRestrictionAlert &&
-    !shouldShowConnectionErrorAlert &&
-    !shouldShowUnsyncedConnectionAlert;
+    isError && !isLoading && !invalidConnection && !shouldShowConnectionErrorAlert;
 
   const shouldShowChildren =
     !isError &&
     !invalidConnection &&
-    !shouldShowUnsyncedConnectionAlert &&
     !shouldShowConnectionErrorAlert &&
-    !shouldShowUserTypeRestrictionAlert &&
     !shouldShowTechnicalErrorAlert;
 
   if (isLoading && loadingComponent) {
@@ -224,10 +183,8 @@ export const PartyRepresentationProvider = ({
         isError: isError,
       }}
     >
-      {shouldShowUnsyncedConnectionAlert && <UnsyncedConnectionAlert />}
       {shouldShowConnectionErrorAlert &&
         connectionErrorAlert(error, noConnectionBackUrl ?? '/', formattedReporteeName(reportee))}
-      {shouldShowUserTypeRestrictionAlert && <NotAvailableForUserTypeAlert />}
       {shouldShowTechnicalErrorAlert && (
         <DsAlert data-color='warning'>
           <DsParagraph>{t('error_page.acting_party_data_error')}</DsParagraph>
@@ -277,34 +234,6 @@ const connectionErrorAlert = (
         {t('error_page.no_user_connection', { reportee: reporteeName })}{' '}
         {returnToUrl && <Link to={returnToUrl}>{t('common.go_back')}</Link>}
       </DsParagraph>
-    </DsAlert>
-  );
-};
-
-const UnsyncedConnectionAlert = () => {
-  return (
-    <DsAlert data-color='warning'>
-      <div className={classes.unsyncedAlert}>
-        <DsHeading
-          level={3}
-          data-size='xs'
-        >
-          {t('error_page.unsynced_connection_title')}
-        </DsHeading>
-        <DsParagraph>{t('error_page.unsynced_connection')}</DsParagraph>
-        <DsLink asChild>
-          <Link
-            className={classes.link}
-            to={getHostUrl() + 'ui/profile'}
-          >
-            {t('error_page.unsynced_connection_link')}
-            <ArrowRightIcon
-              aria-hidden={true}
-              fontSize='1.3rem'
-            />
-          </Link>
-        </DsLink>
-      </div>
     </DsAlert>
   );
 };

@@ -13,28 +13,28 @@ import { ConnectionUserType, useGetRightHoldersQuery } from '@/rtk/features/conn
 import { usePartyRepresentation } from '../common/PartyRepresentationContext/PartyRepresentationContext';
 import { useGetInstancesQuery } from '@/rtk/features/instanceApi';
 import type { UserActionTarget } from '../common/UserSearch/types';
-import type { UserSearchProps } from '../common/UserSearch/UserSearch';
+import { AddUserButton } from './AddUserModal';
 
 interface InstanceUsersAsAdminProps {
   resourceId: string;
   instanceUrn: string;
-  AddUserButton: UserSearchProps['AddUserButton'];
   onSelect: (user: UserActionTarget) => void;
   onDelegate: (user: UserActionTarget) => void;
   onRevoke: (user: UserActionTarget) => void;
   isRevoking: boolean;
+  restoreFocusFallbackId?: string;
 }
 
 export const InstanceUsersAsAdmin = ({
   resourceId,
   instanceUrn,
-  AddUserButton,
   onSelect,
   onDelegate,
   onRevoke,
   isRevoking,
+  restoreFocusFallbackId,
 }: InstanceUsersAsAdminProps) => {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   const { actingParty, fromParty } = usePartyRepresentation();
 
   const {
@@ -48,6 +48,7 @@ export const InstanceUsersAsAdmin = ({
       from: fromParty?.partyUuid,
       resource: resourceId,
       instance: instanceUrn,
+      language: i18n.language,
     },
     {
       skip: !actingParty?.partyUuid || !fromParty?.partyUuid || !resourceId || !instanceUrn,
@@ -116,7 +117,13 @@ export const InstanceUsersAsAdmin = ({
       <UserSearch
         includeSelfAsChild={false}
         includeSelfAsChildOnIndirect={false}
-        AddUserButton={AddUserButton}
+        restoreFocusFallbackId={restoreFocusFallbackId}
+        AddUserButton={
+          <AddUserButton
+            resourceId={resourceId}
+            instanceUrn={instanceUrn}
+          />
+        }
         users={users}
         indirectUsers={indirectUsers}
         isLoading={isInstancesLoading || isLoadingIndirectConnections}

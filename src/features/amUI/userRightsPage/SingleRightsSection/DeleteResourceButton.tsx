@@ -1,11 +1,6 @@
 import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import {
-  Button,
-  formatDisplayName,
-  SnackbarDuration,
-  useSnackbar,
-} from '@altinn/altinn-components';
+import { Button, formatDisplayName, useSnackbar } from '@altinn/altinn-components';
 
 import type { ServiceResource } from '@/rtk/features/singleRights/singleRightsApi';
 import { useRevokeResource } from '@/resources/hooks/useRevokeResource';
@@ -18,7 +13,6 @@ import { PartyType } from '@/rtk/features/userInfoApi';
 
 interface DeleteResourceButton {
   resource: ServiceResource;
-  fullText?: boolean;
   disabled?: boolean;
   onSuccess?: () => void;
   onError?: () => void;
@@ -26,7 +20,6 @@ interface DeleteResourceButton {
 
 export const DeleteResourceButton = ({
   resource,
-  fullText = false,
   disabled = false,
   onSuccess,
   onError,
@@ -53,7 +46,6 @@ export const DeleteResourceButton = ({
         },
       ),
       color,
-      duration: isSuccessful ? SnackbarDuration.normal : SnackbarDuration.infinite,
     };
     openSnackbar(snackbarData);
   };
@@ -83,8 +75,8 @@ export const DeleteResourceButton = ({
           );
         }}
       >
-        <MinusCircleIcon />
-        {fullText && t('common.delete_poa')}
+        <MinusCircleIcon aria-hidden='true' />
+        {t('common.delete_poa')}
       </Button>
     )
   );

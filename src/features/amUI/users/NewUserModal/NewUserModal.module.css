@@ -2,10 +2,6 @@
   font-size: 1.3em;
 }
 
-.largeButton {
-  width: 100%;
-}
-
 .textField {
   max-width: 22rem;
 }
@@ -30,6 +26,11 @@
   display: flex;
   flex-direction: column;
   gap: 10px;
+}
+
+.searchResultHeading {
+  margin-bottom: var(--ds-spacing-1);
+  font-size: 0.9em;
 }
 
 .searchResult {

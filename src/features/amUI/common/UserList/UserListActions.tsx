@@ -13,6 +13,7 @@ export const UserListActions = ({
   availableAction,
   isLoading,
   delegateLabel,
+  revokeLabel,
 }: {
   user: ExtendedUser;
   onDelegate?: (user: ExtendedUser) => void;
@@ -21,11 +22,12 @@ export const UserListActions = ({
   availableAction?: DelegationAction;
   isLoading?: boolean;
   delegateLabel?: string;
+  revokeLabel?: string;
 }) => {
   const { t } = useTranslation();
   const isSmall = useIsMobileOrSmaller();
 
-  if (!availableAction) {
+  if (!availableAction || isSmall) {
     return null;
   }
   if (isLoading) {
@@ -35,13 +37,11 @@ export const UserListActions = ({
         data-size='md'
         loading
       >
-        {!isSmall && (
-          <DsSkeleton
-            variant='text'
-            width='20'
-            aria-label={t('common.loading')}
-          />
-        )}
+        <DsSkeleton
+          variant='text'
+          width={20}
+          aria-label={t('common.loading')}
+        />
       </DsButton>
     );
   }
@@ -54,8 +54,8 @@ export const UserListActions = ({
           onClick={() => onDelegate(user)}
           aria-label={t('common.give_poa')}
         >
-          <PlusCircleIcon />
-          {!isSmall && (delegateLabel ?? t('common.give_poa'))}
+          <PlusCircleIcon aria-hidden='true' />
+          {delegateLabel ?? t('common.give_poa')}
         </DsButton>
       )}
       {availableAction === DelegationAction.REQUEST && onRequest && !user.isInherited && (
@@ -65,8 +65,8 @@ export const UserListActions = ({
           onClick={() => onRequest(user)}
           aria-label={t('common.request_poa')}
         >
-          <PlusCircleIcon />
-          {!isSmall && t('common.request_poa')}
+          <PlusCircleIcon aria-hidden='true' />
+          {t('common.request_poa')}
         </DsButton>
       )}
       {availableAction === DelegationAction.REVOKE && onRevoke && !user.isInherited && (
@@ -74,10 +74,10 @@ export const UserListActions = ({
           variant='tertiary'
           data-size='md'
           onClick={() => onRevoke(user)}
-          aria-label={t('common.delete_poa')}
+          aria-label={revokeLabel ?? t('common.delete_poa')}
         >
-          <MinusCircleIcon />
-          {!isSmall && t('common.delete_poa')}
+          <MinusCircleIcon aria-hidden='true' />
+          {revokeLabel ?? t('common.delete_poa')}
         </DsButton>
       )}
     </>

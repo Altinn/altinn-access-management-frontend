@@ -1,5 +1,5 @@
 import React, { useCallback } from 'react';
-import { Snackbar, SnackbarDuration, useSnackbar } from '@altinn/altinn-components';
+import { useSnackbar } from '@altinn/altinn-components';
 import { useTranslation } from 'react-i18next';
 
 import {
@@ -25,8 +25,13 @@ export const MyClientsAccessSection = ({
     useRemoveMyClientAccessPackagesMutation();
 
   const onRemoveAccessPackage = useCallback(
-    async ({ clientId, roleCode, packageId, accessPackageName }: ClientAccessPackageAction) => {
+    async (
+      { clientId, roleCode, packageId, accessPackageName }: ClientAccessPackageAction,
+      onSuccess?: () => void,
+      onError?: () => void,
+    ) => {
       if (!actingPartyUuid) {
+        onError?.();
         return;
       }
 
@@ -50,6 +55,7 @@ export const MyClientsAccessSection = ({
           }),
           color: 'success',
         });
+        onSuccess?.();
       } catch {
         openSnackbar({
           message: t('my_clients_page.remove_package_error', {
@@ -57,24 +63,21 @@ export const MyClientsAccessSection = ({
             accessPackage: accessPackageName,
           }),
           color: 'danger',
-          duration: SnackbarDuration.infinite,
         });
+        onError?.();
       }
     },
     [actingPartyUuid, currentUserName, openSnackbar, removeMyClientAccessPackages, t],
   );
 
   return (
-    <>
-      <ClientAccessList
-        clients={clients}
-        accessStateClients={clients}
-        removeDisabled={isRemovingMyClientAccessPackages || !actingPartyUuid}
-        onRemoveAccessPackage={onRemoveAccessPackage}
-        requireDelegableForActions={false}
-        searchPlaceholder={t('my_clients_page.search_placeholder')}
-      />
-      <Snackbar />
-    </>
+    <ClientAccessList
+      clients={clients}
+      accessStateClients={clients}
+      removeDisabled={isRemovingMyClientAccessPackages || !actingPartyUuid}
+      onRemoveAccessPackage={onRemoveAccessPackage}
+      requireDelegableForActions={false}
+      searchPlaceholder={t('my_clients_page.search_placeholder')}
+    />
   );
 };

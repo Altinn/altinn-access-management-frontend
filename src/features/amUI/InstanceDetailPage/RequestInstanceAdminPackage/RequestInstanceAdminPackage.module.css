@@ -1,0 +1,16 @@
+.triggerButton {
+  margin-top: var(--ds-size-4);
+  width: fit-content;
+}
+
+.modalContent {
+  display: flex;
+  flex-direction: column;
+  gap: var(--ds-size-4);
+}
+
+.actions {
+  display: flex;
+  gap: var(--ds-size-2);
+  flex-wrap: wrap;
+}

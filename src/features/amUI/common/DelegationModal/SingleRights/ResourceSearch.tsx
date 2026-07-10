@@ -1,7 +1,8 @@
 import * as React from 'react';
 import { Trans, useTranslation } from 'react-i18next';
 import { useParams } from 'react-router';
-import { DsHeading, formatDisplayName } from '@altinn/altinn-components';
+import { DsHeading, DsPopover, DsSwitch, formatDisplayName } from '@altinn/altinn-components';
+import { QuestionmarkCircleIcon } from '@navikt/aksel-icons';
 import { useCallback, useEffect } from 'react';
 
 import type { ServiceResource } from '@/rtk/features/singleRights/singleRightsApi';
@@ -34,8 +35,16 @@ export const ResourceSearch = ({ onSelect, availableActions }: ResourceSearchPro
   const { t } = useTranslation();
 
   const { actingParty, fromParty, toParty } = usePartyRepresentation();
-  const { searchString, setSearchString, filters, setFilters, currentPage, setCurrentPage } =
-    useDelegationModalContext();
+  const {
+    searchString,
+    setSearchString,
+    filters,
+    setFilters,
+    currentPage,
+    setCurrentPage,
+    includeExpiredResources,
+    setIncludeExpiredResources,
+  } = useDelegationModalContext();
   const [debouncedSearchString, setDebouncedSearchString] = React.useState(searchString);
 
   useEffect(() => {
@@ -55,7 +64,7 @@ export const ResourceSearch = ({ onSelect, availableActions }: ResourceSearchPro
     page: currentPage,
     resultsPerPage: searchResultsPerPage,
     includeA2Services: false,
-    includeMigratedApps: false,
+    includeExpired: includeExpiredResources,
   });
   const { data: delegatedResources } = useGetSingleRightsForRightholderQuery(
     {
@@ -131,6 +140,28 @@ export const ResourceSearch = ({ onSelect, availableActions }: ResourceSearchPro
           }}
           serviceOwnerOptions={filterOptions}
         />
+        <div className={classes.toggleContainer}>
+          <DsSwitch
+            data-size='sm'
+            checked={includeExpiredResources}
+            onChange={(e) => {
+              setCurrentPage(1);
+              setIncludeExpiredResources(e.target.checked);
+            }}
+            label={t('resource_list.show_expired_services')}
+          />
+          <DsPopover.TriggerContext>
+            <DsPopover.Trigger
+              icon
+              variant='tertiary'
+              data-size='sm'
+              aria-label={t('resource_list.show_expired_services_helptext_button')}
+            >
+              <QuestionmarkCircleIcon aria-hidden='true' />
+            </DsPopover.Trigger>
+            <DsPopover>{t('resource_list.show_expired_services_helptext')}</DsPopover>
+          </DsPopover.TriggerContext>
+        </div>
       </div>
       <div className={classes.searchResults}>
         <SearchResults

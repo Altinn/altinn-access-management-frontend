@@ -1,17 +1,19 @@
 import React from 'react';
 import { useTranslation, Trans } from 'react-i18next';
 import { useSearchParams } from 'react-router';
-import { DsAlert, DsSpinner, DsHeading, DsParagraph, DsButton } from '@altinn/altinn-components';
-
+import {
+  DsAlert,
+  DsHeading,
+  DsParagraph,
+  DsButton,
+  formatDisplayName,
+} from '@altinn/altinn-components';
 import { useDocumentTitle } from '@/resources/hooks/useDocumentTitle';
 import {
   useApproveChangeRequestMutation,
   useGetChangeRequestQuery,
-  useGetSystemuserIsAdminQuery,
-  useGetSystemUserReporteeQuery,
   useRejectChangeRequestMutation,
 } from '@/rtk/features/systemUserApi';
-
 import { RequestPageBase } from './components/RequestPageBase/RequestPageBase';
 import type { ProblemDetail, SystemUserAccessPackage } from './types';
 import { RightsList } from './components/RightsList/RightsList';
@@ -22,6 +24,7 @@ import { CreateSystemUserCheck } from './components/CreateSystemUserCheck/Create
 import type { ServiceResource } from '@/rtk/features/singleRights/singleRightsApi';
 import { getLogoutUrl } from '@/resources/utils/pathUtils';
 import { SystemUserRequestLoadError } from './components/SystemUserRequestLoadError/SystemUserRequestLoadError';
+import { useGetIsAdminQuery, useGetReporteeQuery } from '@/rtk/features/userInfoApi';
 
 export const SystemUserChangeRequestPage = () => {
   const { t } = useTranslation();
@@ -43,12 +46,8 @@ export const SystemUserChangeRequestPage = () => {
     data: reporteeData,
     isLoading: isLoadingReportee,
     error: loadReporteeError,
-  } = useGetSystemUserReporteeQuery(changeRequest?.partyId ?? '', {
-    skip: !changeRequest?.partyId,
-  });
-  const { data: isAdmin } = useGetSystemuserIsAdminQuery(changeRequest?.partyUuid ?? '', {
-    skip: !changeRequest?.partyUuid,
-  });
+  } = useGetReporteeQuery();
+  const { data: isAdmin } = useGetIsAdminQuery();
 
   const [
     postAcceptChangeRequest,
@@ -88,26 +87,30 @@ export const SystemUserChangeRequestPage = () => {
     window.location.assign(url);
   };
 
+  let error: React.ReactNode = null;
+  if (!changeRequestId) {
+    error = (
+      <DsAlert data-color='danger'>{t('systemuser_request.load_creation_request_no_id')}</DsAlert>
+    );
+  } else if (loadReporteeError) {
+    error = <DsAlert data-color='danger'>{t('systemuser_request.load_user_info_error')}</DsAlert>;
+  } else if (loadingChangeRequestError || (changeRequest && !changeRequest.system)) {
+    error = (
+      <SystemUserRequestLoadError
+        error={(loadingChangeRequestError as { data: ProblemDetail })?.data}
+      />
+    );
+  }
+
   return (
     <RequestPageBase
       system={changeRequest?.system}
-      reporteeName={reporteeData?.name}
+      reportee={reporteeData}
+      isLoading={isLoadingChangeRequest || isLoadingReportee}
+      requestPartyUuid={changeRequest?.partyUuid}
+      error={error}
       heading={t('systemuser_change_request.banner_title')}
     >
-      {!changeRequestId && (
-        <DsAlert data-color='danger'>{t('systemuser_request.load_creation_request_no_id')}</DsAlert>
-      )}
-      {loadReporteeError && (
-        <DsAlert data-color='danger'>{t('systemuser_request.load_user_info_error')}</DsAlert>
-      )}
-      {(loadingChangeRequestError || (changeRequest && !changeRequest.system)) && (
-        <SystemUserRequestLoadError
-          error={(loadingChangeRequestError as { data: ProblemDetail })?.data}
-        />
-      )}
-      {(isLoadingChangeRequest || isLoadingReportee) && (
-        <DsSpinner aria-label={t('systemuser_change_request.loading_change_request')} />
-      )}
       {changeRequest?.system && reporteeData && (
         <>
           {changeRequest.status === 'Accepted' && (
@@ -132,7 +135,7 @@ export const SystemUserChangeRequestPage = () => {
               i18nKey={'systemuser_request.system_description'}
               values={{
                 systemName: changeRequest.system.name,
-                partyName: reporteeData?.name,
+                partyName: formatDisplayName({ fullName: reporteeData?.name, type: 'company' }),
               }}
             ></Trans>
           </DsParagraph>

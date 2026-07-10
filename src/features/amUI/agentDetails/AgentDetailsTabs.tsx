@@ -1,7 +1,7 @@
 import React, { type ReactNode } from 'react';
 import { useTranslation } from 'react-i18next';
-import { DsTabs } from '@altinn/altinn-components';
 import { DatabaseIcon } from '@navikt/aksel-icons';
+import { AmTabs } from '../common/AmTabs/AmTabs';
 
 type AgentDetailsTabsProps = {
   activeTab: string;
@@ -19,24 +19,25 @@ export const AgentDetailsTabs = ({
   const { t } = useTranslation();
 
   return (
-    <DsTabs
+    <AmTabs
       defaultValue='has-clients'
-      data-size='sm'
       value={activeTab}
       onChange={onChange}
     >
-      <DsTabs.List>
-        <DsTabs.Tab value='has-clients'>
-          <DatabaseIcon aria-hidden='true' />
-          {t('client_administration_page.agent_has_clients_tab')}
-        </DsTabs.Tab>
-        <DsTabs.Tab value='all-clients'>
-          <DatabaseIcon aria-hidden='true' />
-          {t('client_administration_page.agent_can_get_clients_tab')}
-        </DsTabs.Tab>
-      </DsTabs.List>
-      <DsTabs.Panel value='has-clients'>{hasClientsContent}</DsTabs.Panel>
-      <DsTabs.Panel value='all-clients'>{canGetClientsContent}</DsTabs.Panel>
-    </DsTabs>
+      <AmTabs.List>
+        <AmTabs.Tab
+          value='has-clients'
+          label={t('client_administration_page.agent_has_clients_tab')}
+          icon={<DatabaseIcon aria-hidden='true' />}
+        />
+        <AmTabs.Tab
+          value='all-clients'
+          label={t('client_administration_page.agent_can_get_clients_tab')}
+          icon={<DatabaseIcon aria-hidden='true' />}
+        />
+      </AmTabs.List>
+      <AmTabs.Panel value='has-clients'>{hasClientsContent}</AmTabs.Panel>
+      <AmTabs.Panel value='all-clients'>{canGetClientsContent}</AmTabs.Panel>
+    </AmTabs>
   );
 };

@@ -106,6 +106,16 @@ namespace Altinn.AccessManagement.UI.Core.Configuration
         public bool Dialogporten { get; set; }
 
         /// <summary>
+        /// Set to mock SelfIdentifiedUserClient during runtime
+        /// </summary>
+        public bool SelfIdentifiedUser { get; set; }
+
+        /// <summary>
+        /// Set to mock MaskinportenClient during runtime
+        /// </summary>
+        public bool Maskinporten { get; set; }
+
+        /// <summary>
         /// Default constructor
         /// </summary>
         public MockSettings()
@@ -118,7 +128,7 @@ namespace Altinn.AccessManagement.UI.Core.Configuration
         /// <param name="value">The boolean value to which all memebers will be set</param>
         public MockSettings(bool value)
         {
-            AccessManagement = AccessManagement_V0 = AccessPackage = SingleRights = Instance = Profile = Register = ResourceRegistry = KeyVault = ClientDelegation = Dialogporten = value;
+            AccessManagement = AccessManagement_V0 = AccessPackage = SingleRights = Instance = Profile = Register = ResourceRegistry = KeyVault = ClientDelegation = Dialogporten = Maskinporten = SelfIdentifiedUser = value;
         }
     }
 }

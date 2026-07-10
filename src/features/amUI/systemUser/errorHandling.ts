@@ -32,6 +32,8 @@ export const mapErrorCodeToErrorMessage = (errorCode?: string) => {
       return 'systemuser_delegation_errors.57_systemuser_failed_to_delete_accesspackage';
     case 'AMUI-00066':
       return 'systemuser_request.load_request_missing_permissions';
+    case 'AMUI-00068':
+      return 'systemuser_delegation_errors.68_delegation_right_missing_delegation_accesspackage';
     default:
       return '';
   }

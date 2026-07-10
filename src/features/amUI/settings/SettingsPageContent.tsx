@@ -17,7 +17,12 @@ import { useGetOrgNotificationAddressesQuery } from '@/rtk/features/settingsApi'
 import classes from './SettingsPageContent.module.css';
 import { ChatIcon, PaperplaneIcon, QuestionmarkCircleIcon } from '@navikt/aksel-icons';
 import { SettingsModal } from './SettingsModal';
-import { PartyType, useGetIsCompanyProfileAdminQuery } from '@/rtk/features/userInfoApi';
+import {
+  PartyType,
+  useGetIsCompanyProfileAdminQuery,
+  useGetReporteeQuery,
+} from '@/rtk/features/userInfoApi';
+import { ReporteePageHeading } from '../common/ReporteePageHeading/ReporteePageHeading';
 
 export const SettingsPageContent = () => {
   const { t } = useTranslation();
@@ -26,6 +31,7 @@ export const SettingsPageContent = () => {
   const [openModal, setOpenModal] = React.useState(false);
   const [modalMode, setModalMode] = React.useState<'email' | 'sms' | null>(null);
 
+  const { data: reportee, isLoading: isLoadingReportee } = useGetReporteeQuery();
   const { actingParty, isLoading: actorLoading } = usePartyRepresentation();
   const { data: notificationAddresses, isLoading: notifLoading } =
     useGetOrgNotificationAddressesQuery(actingParty?.orgNumber ?? '', {
@@ -41,7 +47,8 @@ export const SettingsPageContent = () => {
     notificationAddresses
       ?.filter((addr) => addr.phone)
       .map((addr) => `${addr.countryCode} ${addr.phone}`) ?? [];
-  const isLoading = actorLoading || notifLoading || isCompanyProfileAdminLoading;
+  const isLoading =
+    actorLoading || notifLoading || isCompanyProfileAdminLoading || isLoadingReportee;
 
   const onSettingsClick = (mode: 'email' | 'sms') => {
     setModalMode(mode);
@@ -61,7 +68,7 @@ export const SettingsPageContent = () => {
   // Show not-admin alert when loaded and user lacks permission
   if (!isCompanyProfileAdmin && !isCompanyProfileAdminLoading) {
     return (
-      <div className={classes.pageContent}>
+      <div className={classes.notAdminAlert}>
         <DsAlert data-color='warning'>
           {t('settings_page.not_admin_alert', {
             name: formattedActingPartyName,
@@ -72,15 +79,12 @@ export const SettingsPageContent = () => {
   }
 
   return (
-    <div className={classes.pageContent}>
-      <DsHeading
-        level={1}
-        data-size='sm'
-      >
-        {t('settings_page.page_heading', {
-          name: formattedActingPartyName,
-        })}
-      </DsHeading>
+    <div>
+      <ReporteePageHeading
+        title={t('settings_page.page_heading', { name: formattedActingPartyName })}
+        reportee={reportee}
+        isLoading={isLoading}
+      />
       <div className={classes.settingsHeaderAndInfo}>
         <DsHeading
           level={2}
@@ -91,9 +95,10 @@ export const SettingsPageContent = () => {
         <DsPopover.TriggerContext>
           <DsPopover.Trigger
             variant='tertiary'
+            aria-label={t('settings_page.info_button')}
             icon
           >
-            <QuestionmarkCircleIcon />
+            <QuestionmarkCircleIcon aria-hidden='true' />
           </DsPopover.Trigger>
           <DsPopover placement='right'>
             <Trans
@@ -117,7 +122,7 @@ export const SettingsPageContent = () => {
             id='settings-email-alerts'
             title={t('settings_page.alerts_on_email')}
             value={emailAddresses.join(', ')}
-            icon={<PaperplaneIcon />}
+            icon={<PaperplaneIcon aria-hidden='true' />}
             badge={
               emailAddresses.length > 0 && {
                 label:
@@ -137,7 +142,7 @@ export const SettingsPageContent = () => {
             id='settings-sms-alerts'
             title={t('settings_page.alerts_on_sms')}
             value={phoneNumbers.join(', ')}
-            icon={<ChatIcon />}
+            icon={<ChatIcon aria-hidden='true' />}
             badge={
               phoneNumbers.length > 0 && {
                 label:

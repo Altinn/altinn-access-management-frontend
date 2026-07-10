@@ -78,10 +78,9 @@ namespace Altinn.AccessManagement.UI.Integration.Clients
             try
             {
                 string token = JwtTokenUtil.GetTokenFromContext(_httpContextAccessor.HttpContext, _platformSettings.JwtCookieName);
-                string endpointUrl = $"systemuser/agent/{partyId}/{systemUserGuid}/delegation";
-                StringContent requestBody = new StringContent(JsonSerializer.Serialize(delegationRequest, _serializerOptions), System.Text.Encoding.UTF8, "application/json");
+                string endpointUrl = $"systemuser/agent/{partyId}/{systemUserGuid}?provider={delegationRequest.FacilitatorId}&client={delegationRequest.CustomerId}";
 
-                HttpResponseMessage response = await _client.PostAsync(token, endpointUrl, requestBody);
+                HttpResponseMessage response = await _client.PostAsync(token, endpointUrl, null);
                 string responseContent = await response.Content.ReadAsStringAsync(cancellationToken);
 
                 if (response.IsSuccessStatusCode)
@@ -100,12 +99,12 @@ namespace Altinn.AccessManagement.UI.Integration.Clients
         }
 
         /// <inheritdoc/>
-        public async Task<Result<bool>> RemoveClient(int partyId, Guid facilitatorId, Guid delegationId, CancellationToken cancellationToken)
+        public async Task<Result<bool>> RemoveClient(int partyId, Guid systemUserGuid, Guid facilitatorId, Guid clientId, CancellationToken cancellationToken)
         {
             try
             {
                 string token = JwtTokenUtil.GetTokenFromContext(_httpContextAccessor.HttpContext, _platformSettings.JwtCookieName);
-                string endpointUrl = $"systemuser/agent/{partyId}/delegation/{delegationId}?facilitatorId={facilitatorId}";
+                string endpointUrl = $"systemuser/agent/{partyId}/{systemUserGuid}/client?provider={facilitatorId}&client={clientId}";
 
                 HttpResponseMessage response = await _client.DeleteAsync(token, endpointUrl);
                 string responseContent = await response.Content.ReadAsStringAsync(cancellationToken);

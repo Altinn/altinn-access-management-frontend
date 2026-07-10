@@ -13,8 +13,19 @@
   height: 90%;
 }
 
+.loadingSpinner {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: auto;
+}
+
 .showAvailablePackagesButton {
   width: fit-content;
+}
+
+.packagesTitle {
+  font-size: var(--ds-font-size-minus-1);
 }
 
 .noAccessPackages {

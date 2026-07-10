@@ -1,11 +1,13 @@
 import { formatDateToNorwegian } from '@/resources/utils';
-import { formatDisplayName, UserListItem } from '@altinn/altinn-components';
+import { formatDisplayName } from '@altinn/altinn-components';
 import { useTranslation } from 'react-i18next';
 import { Request } from './types';
 
 import classes from './RequestPage.module.css';
 import { useRef, useState } from 'react';
-import { SentRequestsModal } from '../userRightsPage/SingleRightsSection/PendingRequests';
+import { useRestoreFocusContext } from '../common/RestoreFocus';
+import { RequestListItem } from './RequestsTabPanel';
+import { SentRequestsCombinedModal } from './SentRequestsCombinedModal';
 import { PartyRepresentationProvider } from '../common/PartyRepresentationContext/PartyRepresentationContext';
 import { getCookie } from '@/resources/Cookie/CookieMethods';
 import { PartyType } from '@/rtk/features/userInfoApi';
@@ -18,31 +20,35 @@ export const SentRequestsTabPanel = ({ pendingRequests }: SentRequestsTabPanelPr
   const modalRef = useRef<HTMLDialogElement>(null);
   const [openAccessRequest, setOpenAccessRequest] = useState<Request | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const restoreFocus = useRestoreFocusContext();
+
+  const handleClose = () => {
+    if (openAccessRequest) {
+      restoreFocus?.requestFocus(openAccessRequest.id);
+    }
+    setIsModalOpen(false);
+  };
 
   const { t } = useTranslation();
   return (
     <>
       {pendingRequests?.map((request) => {
         return (
-          <UserListItem
+          <RequestListItem
             key={request.id}
             id={request.id}
             name={request.displayPartyName}
             type={request.displayPartyType}
             subUnit={request.isSubUnit}
-            titleAs='h2'
+            titleAs='span'
             linkIcon
             description={`${request.description ? t(request.description) : t('request_page.waiting_for_number', { count: request.numberOfRequests })} (${formatDateToNorwegian(request.createdDate)})`}
-            as={(props) => (
-              <button
-                {...props}
-                onClick={() => {
-                  setOpenAccessRequest(request);
-                  setIsModalOpen(true);
-                  modalRef.current?.showModal();
-                }}
-              />
-            )}
+            as='button'
+            onClick={() => {
+              setOpenAccessRequest(request);
+              setIsModalOpen(true);
+              modalRef.current?.showModal();
+            }}
             controls={
               <div className={classes.requestItemBadge}>
                 {t('request_page.view_request', { count: request.numberOfRequests })}
@@ -64,7 +70,7 @@ export const SentRequestsTabPanel = ({ pendingRequests }: SentRequestsTabPanelPr
         toPartyUuid={getCookie('AltinnPartyUuid')}
         actingPartyUuid={getCookie('AltinnPartyUuid')}
       >
-        <SentRequestsModal
+        <SentRequestsCombinedModal
           modalRef={modalRef}
           heading={t('delegation_modal.request.sent_requests_modal_header', {
             partyName: formatDisplayName({
@@ -73,7 +79,7 @@ export const SentRequestsTabPanel = ({ pendingRequests }: SentRequestsTabPanelPr
             }),
           })}
           isModalOpen={isModalOpen}
-          onClose={() => setIsModalOpen(false)}
+          onClose={handleClose}
         />
       </PartyRepresentationProvider>
     </>

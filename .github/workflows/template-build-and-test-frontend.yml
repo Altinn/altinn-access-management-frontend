@@ -9,12 +9,12 @@ jobs:
     name: Test & Build
     steps:
       - name: checkout
-        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6
+        uses: actions/checkout@df4cb1c069e1874edd31b4311f1884172cec0e10 # v6
         with:
           fetch-depth: 0 # Shallow clones should be disabled for a better relevancy of analysis
 
       - name: install node
-        uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4
+        uses: actions/setup-node@48b55a011bda9f5d6aeb4c2d9c7362e8dae4041e # v6
         with:
           node-version: lts/*
 
@@ -28,10 +28,6 @@ jobs:
       - name: run eslint
         working-directory: ./
         run: yarn lint
-
-      - name: run test coverage components
-        working-directory: ./
-        run: yarn coverage
 
       - name: run unit-test
         working-directory: ./

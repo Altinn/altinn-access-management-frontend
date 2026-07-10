@@ -34,6 +34,7 @@ interface useAreaPackagesProps {
   showAllPackages?: boolean;
   showOnlyGuardianships?: boolean;
   searchString?: string;
+  filterByType?: boolean;
 }
 
 export enum DeletableStatus {
@@ -47,6 +48,7 @@ export const useAreaPackageList = ({
   showAllAreas,
   showAllPackages,
   showOnlyGuardianships,
+  filterByType = true,
 }: useAreaPackagesProps) => {
   const { i18n } = useTranslation();
   const { fromParty, toParty, actingParty } = usePartyRepresentation();
@@ -65,7 +67,7 @@ export const useAreaPackageList = ({
     {
       searchString: searchString ?? '',
       language: i18n.language,
-      typeName,
+      typeName: filterByType ? typeName : undefined,
     },
     {
       skip: !actingParty,
@@ -130,7 +132,8 @@ export const useAreaPackageList = ({
                     permissions: pkgAccess.permissions ?? [],
                   };
                   pkgAcc.assigned.push(acquiredPkg);
-                } else if (showAllPackages) {
+                } else if (showAllPackages && pkg.isAssignable !== false) {
+                  // Non-assignable packages cannot be delegated, so omit them from the available list.
                   pkgAcc.available.push(pkg);
                 }
 
@@ -142,12 +145,21 @@ export const useAreaPackageList = ({
               },
             );
 
-            acc.assignedAreas.push({ ...area, packages: pkgs });
+            // Skip the area if filtering left it empty (e.g. search hit only a non-assignable package).
+            if (pkgs.assigned.length > 0 || pkgs.available.length > 0) {
+              acc.assignedAreas.push({ ...area, packages: pkgs });
+            }
           } else if (showAllAreas) {
-            acc.availableAreas.push({
-              ...area,
-              packages: { assigned: [], available: area.accessPackages },
-            });
+            const assignablePackages = area.accessPackages.filter(
+              (pkg) => pkg.isAssignable !== false,
+            );
+            // Skip the area when none of its packages can be delegated — otherwise it would render empty.
+            if (assignablePackages.length > 0) {
+              acc.availableAreas.push({
+                ...area,
+                packages: { assigned: [], available: assignablePackages },
+              });
+            }
           }
 
           return acc;

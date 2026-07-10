@@ -64,7 +64,7 @@ export const ConsentTimeline = ({ consentLog, showConsentDetails }: ConsentTimel
             <TimelineSegment
               data-color={reportee?.type === 'Person' ? 'person' : 'company'}
               borderColor={reportee?.type === 'Person' ? 'person' : 'company'}
-              key={item.consentEventId}
+              key={`${item.consentId}-${item.consentEventId}`}
             >
               <TimelineActivity byline={item.bylineText}>
                 <div className={classes.timelineContent}>

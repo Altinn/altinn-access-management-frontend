@@ -1,15 +1,17 @@
-import * as React from 'react';
 import { useTranslation } from 'react-i18next';
 import { PlusIcon, ArrowLeftIcon } from '@navikt/aksel-icons';
-import type { JSX } from 'react';
-import { useEffect, useRef } from 'react';
-import { Button, DsDialog, Snackbar, SnackbarProvider } from '@altinn/altinn-components';
+import { type JSX, useEffect, useRef } from 'react';
+import { Button, DsDialog } from '@altinn/altinn-components';
 
 import type { AccessPackage } from '@/rtk/features/accessPackageApi';
 import type { ServiceResource } from '@/rtk/features/singleRights/singleRightsApi';
+import { useAutoFocusRef } from '@/resources/hooks/useAutoFocusRef';
 
 import { usePartyRepresentation } from '../PartyRepresentationContext/PartyRepresentationContext';
 import { useAreaExpandedContextOrLocal } from '../AccessPackageList/AccessPackageExpandedContext';
+import { RestoreFocusFallback, RestoreFocusProvider, useRestoreFocus } from '../RestoreFocus';
+import { ScopeSearch } from '../../maskinporten/ScopeSearch';
+import { ScopeInfo } from '../../maskinporten/ScopeInfo';
 
 import classes from './DelegationModal.module.css';
 import { ResourceSearch } from './SingleRights/ResourceSearch';
@@ -42,6 +44,10 @@ export const DelegationModalContent = ({
   } = useDelegationModalContext();
   const { toParty } = usePartyRepresentation();
   const { closeAllAreas } = useAreaExpandedContextOrLocal();
+  const modalRef = useRef<HTMLDialogElement>(null);
+  const backButtonRef = useAutoFocusRef<HTMLButtonElement>();
+  const restoreFocus = useRestoreFocus();
+
   const onResourceSelection = (resource?: ServiceResource, error = false) => {
     if (!error) {
       setActionError(null);
@@ -57,8 +63,6 @@ export const DelegationModalContent = ({
     setInfoView(true);
     setPackageToView(accessPackage);
   };
-
-  const modalRef = useRef<HTMLDialogElement>(null);
 
   const onClosing = () => {
     reset();
@@ -81,7 +85,7 @@ export const DelegationModalContent = ({
   let searchViewContent: JSX.Element | undefined;
   let infoViewContent: JSX.Element | undefined;
   let triggerButtonText: string | undefined;
-  let triggerButtonVariant: 'primary' | 'secondary' = 'primary';
+  let dialogLabel: string | undefined;
   const hasDelegateAccess = (availableActions ?? []).includes(DelegationAction.DELEGATE);
 
   switch (delegationType) {
@@ -102,7 +106,16 @@ export const DelegationModalContent = ({
           availableActions={availableActions}
         />
       );
-      triggerButtonText = t('access_packages.give_new_button');
+      triggerButtonText = hasDelegateAccess
+        ? t('access_packages.give_new_button')
+        : t('common.request_poa');
+      dialogLabel = t('delegation_modal.aria_label.access_package');
+      break;
+    case DelegationType.MaskinportenScope:
+      searchViewContent = <ScopeSearch onSelect={onResourceSelection} />;
+      infoViewContent = resourceToView && <ScopeInfo resource={resourceToView} />;
+      triggerButtonText = t('maskinporten_page.add_scope_button');
+      dialogLabel = t('delegation_modal.aria_label.maskinporten');
       break;
     default:
       searchViewContent = (
@@ -118,49 +131,55 @@ export const DelegationModalContent = ({
           availableActions={availableActions}
         />
       );
-      triggerButtonVariant = hasDelegateAccess ? 'primary' : 'secondary';
       triggerButtonText = hasDelegateAccess
         ? t('single_rights.give_new_single_right')
         : t('delegation_modal.request.request_service');
+      dialogLabel = t('delegation_modal.aria_label.single_rights');
   }
 
   return (
-    <DsDialog.TriggerContext>
-      <DsDialog.Trigger
-        data-size='sm'
-        variant={triggerButtonVariant}
-        className={classes.triggerButton}
-      >
-        {triggerButtonText}
-        <PlusIcon />
-      </DsDialog.Trigger>
-      <DsDialog
-        className={classes.modalDialog}
-        closedby='any'
-        closeButton={t('common.close')}
-        onClose={reset}
-        ref={modalRef}
-      >
-        <>
-          <SnackbarProvider>
-            {infoView && (
-              <Button
-                className={classes.backButton}
-                variant='tertiary'
-                data-color='neutral'
-                onClick={() => setInfoView(false)}
-              >
-                <ArrowLeftIcon />
-                {t('common.back')}
-              </Button>
-            )}
-            <div className={classes.content}>
-              {infoView ? infoViewContent : searchViewContent}
-              <Snackbar />
-            </div>
-          </SnackbarProvider>
-        </>
-      </DsDialog>
-    </DsDialog.TriggerContext>
+    <RestoreFocusProvider restoreFocus={restoreFocus}>
+      <DsDialog.TriggerContext>
+        <DsDialog.Trigger
+          data-size='sm'
+          variant='primary'
+          className={classes.triggerButton}
+        >
+          <PlusIcon aria-hidden='true' />
+          {triggerButtonText}
+        </DsDialog.Trigger>
+        <DsDialog
+          className={classes.modalDialog}
+          closedby='any'
+          closeButton={t('common.close')}
+          onClose={onClosing}
+          ref={modalRef}
+          aria-label={dialogLabel}
+          aria-description={t('delegation_modal.aria_description')}
+        >
+          {infoView && (
+            <Button
+              ref={backButtonRef}
+              className={classes.backButton}
+              variant='tertiary'
+              data-color='neutral'
+              onClick={() => {
+                const focusTargetId = packageToView?.id ?? resourceToView?.identifier;
+                if (focusTargetId) {
+                  restoreFocus.requestFocus(focusTargetId);
+                }
+                setInfoView(false);
+              }}
+            >
+              <ArrowLeftIcon aria-hidden='true' />
+              {t('common.back')}
+            </Button>
+          )}
+          <RestoreFocusFallback>
+            <div className={classes.content}>{infoView ? infoViewContent : searchViewContent}</div>
+          </RestoreFocusFallback>
+        </DsDialog>
+      </DsDialog.TriggerContext>
+    </RestoreFocusProvider>
   );
 };
