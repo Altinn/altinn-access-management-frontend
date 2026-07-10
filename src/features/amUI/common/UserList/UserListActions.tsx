@@ -84,7 +84,9 @@ export const UserListActions = ({
           variant='tertiary'
           data-size='md'
           onClick={() => onRevoke(user)}
-          aria-label={revokeLabel ?? t('common.delete_poa_to_name', { name: displayName })}
+          aria-label={
+            revokeLabel ? undefined : t('common.delete_poa_to_name', { name: displayName })
+          }
         >
           <MinusCircleIcon aria-hidden='true' />
           {revokeLabel ?? t('common.delete_poa')}

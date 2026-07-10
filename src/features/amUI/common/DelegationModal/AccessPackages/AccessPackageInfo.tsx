@@ -42,6 +42,9 @@ export const AccessPackageInfo = ({ accessPackage, availableActions = [] }: Pack
     party: actingParty?.partyUuid ?? '',
   });
 
+  const { actionError, setActionError, actionSuccess, setActionSuccess } =
+    useDelegationModalContext();
+
   const {
     onDelegate,
     onRevoke,
@@ -63,8 +66,6 @@ export const AccessPackageInfo = ({ accessPackage, availableActions = [] }: Pack
     onDelegateError: (_, error: ActionError) => setActionError(error),
     onRevokeError: (_, error: ActionError) => setActionError(error),
   });
-  const { actionError, setActionError, actionSuccess, setActionSuccess } =
-    useDelegationModalContext();
   const actionsRef = React.useRef<HTMLDivElement>(null);
   const isRequestActionLoading = isLoadingRequest(accessPackage);
   useRestoreFocusAfterSettled({
