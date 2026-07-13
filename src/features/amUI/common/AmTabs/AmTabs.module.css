@@ -17,7 +17,7 @@
 
 @media (max-width: 768px) {
   .tabList > * {
-    padding-inline: 0.375rem !important;
+    padding-inline: 0.1rem !important;
   }
 
   .tabLabel {

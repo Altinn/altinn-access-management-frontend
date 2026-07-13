@@ -36,6 +36,7 @@ import {
 
 import classes from './InstanceDetailPageContent.module.css';
 import { RequestInstanceAdminPackage } from './RequestInstanceAdminPackage';
+import { useIsMobileOrSmaller } from '@/resources/utils/screensizeUtils';
 
 // Focus-restore fallback for this zone: when a revoked row is gone, focus lands on the search field
 // above the list instead of the page heading. Unique within this provider zone.
@@ -45,6 +46,7 @@ export const InstanceDetailPageContent = () => {
   const { t, i18n } = useTranslation();
   const [searchParams] = useSearchParams();
   const { actingParty, fromParty } = usePartyRepresentation();
+  const isSmall = useIsMobileOrSmaller();
 
   const actingPartyIsOrg = actingParty?.partyTypeName === PartyType.Organization;
 
@@ -218,7 +220,7 @@ export const InstanceDetailPageContent = () => {
         </DsAlert>
       ) : (
         <div className={classes.contentSection}>
-          <DsParagraph data-size='sm'>
+          <DsParagraph data-size={isSmall ? 'xs' : 'sm'}>
             {isInstanceAdmin ? (
               t('instance_detail_page.description')
             ) : (

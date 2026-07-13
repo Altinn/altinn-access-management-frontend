@@ -41,6 +41,7 @@ export const PackagePoaDetailsHeader: React.FC<PackagePoaDetailsHeaderProps> = (
       <DsParagraph
         variant='long'
         className={classes.pageDescription}
+        data-size={isSmall ? 'xs' : 'sm'}
       >
         {packageDescription}
       </DsParagraph>
