@@ -34,6 +34,15 @@ export const AccessPackageInfo = ({ accessPackage, availableActions = [] }: Pack
   const { fromParty, toParty, actingParty } = usePartyRepresentation();
   const { canDelegatePackage } = useAccessPackageDelegationCheck();
 
+  const { data: activeDelegations, isFetching } = useGetUserDelegationsQuery({
+    to: toParty?.partyUuid ?? '',
+    from: fromParty?.partyUuid ?? '',
+    party: actingParty?.partyUuid ?? '',
+  });
+
+  const { actionError, setActionError, actionSuccess, setActionSuccess } =
+    useDelegationModalContext();
+
   const {
     onDelegate,
     onRevoke,
@@ -43,6 +52,7 @@ export const AccessPackageInfo = ({ accessPackage, availableActions = [] }: Pack
     isLoadingRequest,
     isLoading: isActionLoading,
   } = useAccessPackageActions({
+    snackbarBusy: isFetching,
     onDelegateSuccess: () => {
       setActionSuccess(true);
       setTimeout(() => setActionSuccess(false), 2000);
@@ -53,14 +63,6 @@ export const AccessPackageInfo = ({ accessPackage, availableActions = [] }: Pack
     },
     onDelegateError: (_, error: ActionError) => setActionError(error),
     onRevokeError: (_, error: ActionError) => setActionError(error),
-  });
-  const { actionError, setActionError, actionSuccess, setActionSuccess } =
-    useDelegationModalContext();
-
-  const { data: activeDelegations, isFetching } = useGetUserDelegationsQuery({
-    to: toParty?.partyUuid ?? '',
-    from: fromParty?.partyUuid ?? '',
-    party: actingParty?.partyUuid ?? '',
   });
   const actionsRef = React.useRef<HTMLDivElement>(null);
   const isRequestActionLoading = isLoadingRequest(accessPackage);
