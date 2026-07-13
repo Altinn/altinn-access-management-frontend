@@ -2,7 +2,6 @@ import { Button, DsSpinner } from '@altinn/altinn-components';
 import { MinusCircleIcon, PlusCircleIcon } from '@navikt/aksel-icons';
 import { useTranslation } from 'react-i18next';
 import { DelegationAction } from '../DelegationModal/EditModal';
-import { displayPackageRequests } from '@/resources/utils/featureFlagUtils';
 
 import { packageActionControlId } from './PackageItem';
 
@@ -34,7 +33,6 @@ export const DelegateAccessPackageActionControl = ({
   packageId,
 }: DelegateAccessPackageActionControlsProps) => {
   const { t } = useTranslation();
-  const displayPackageRequestsFeature = displayPackageRequests();
   const actionId = packageActionControlId(packageId);
 
   if (isLoading) {
@@ -61,7 +59,7 @@ export const DelegateAccessPackageActionControl = ({
       </Button>
     );
   }
-  if (availableActions?.includes(DelegationAction.REQUEST) && displayPackageRequestsFeature) {
+  if (availableActions?.includes(DelegationAction.REQUEST)) {
     if (isPendingRequest) {
       return (
         <Button

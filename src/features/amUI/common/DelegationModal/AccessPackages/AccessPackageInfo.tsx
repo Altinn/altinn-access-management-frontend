@@ -17,7 +17,6 @@ import { DeletableStatus, getDeletableStatus } from '../../AccessPackageList/use
 import { ValidationErrorMessage } from '../../ValidationErrorMessage';
 import { PackageIsPartiallyDeletableAlert } from '../../AccessPackageList/PackageIsPartiallyDeletableAlert/PackageIsPartiallyDeletableAlert';
 
-import { displayPackageRequests } from '@/resources/utils/featureFlagUtils';
 import classes from './AccessPackageInfo.module.css';
 import { PackageHeader } from './PackageHeader';
 import { PackageMeta } from './PackageMeta';
@@ -34,7 +33,6 @@ export const AccessPackageInfo = ({ accessPackage, availableActions = [] }: Pack
   const { t } = useTranslation();
   const { fromParty, toParty, actingParty } = usePartyRepresentation();
   const { canDelegatePackage } = useAccessPackageDelegationCheck();
-  const displayPackageRequestsFeature = displayPackageRequests();
 
   const {
     onDelegate,
@@ -196,7 +194,6 @@ export const AccessPackageInfo = ({ accessPackage, availableActions = [] }: Pack
             )}
             {!userHasPackage &&
               availableActions.includes(DelegationAction.REQUEST) &&
-              displayPackageRequestsFeature &&
               (isPendingRequest ? (
                 <DsButton
                   data-color='danger'

@@ -9,17 +9,6 @@ declare global {
   interface Window {
     featureFlags?: {
       displayPopularSingleRightsServices: boolean;
-      displayConfettiPackage: boolean;
-      displayResourceDelegation: boolean;
-      restrictPrivUse: boolean;
-      displaySettingsPage: boolean;
-      displayPoaOverviewPage: boolean;
-      crossPlatformLinks: boolean;
-      useNewActorsList: boolean;
-      displayPrivDelegation: boolean;
-      displayPackageRequests: boolean;
-      displaySubConnections: boolean;
-      displayRoles: boolean;
     };
   }
 }
@@ -45,16 +34,6 @@ document.cookie = 'XSRF-TOKEN=mocked-xsrf-token; path=/; SameSite=Lax';
 // Set feature flags for Storybook
 window.featureFlags = {
   displayPopularSingleRightsServices: false,
-  displayConfettiPackage: true,
-  displayResourceDelegation: true,
-  restrictPrivUse: false,
-  displaySettingsPage: true,
-  displayPoaOverviewPage: true,
-  crossPlatformLinks: false,
-  useNewActorsList: false,
-  displayPrivDelegation: false,
-  displayPackageRequests: false,
-  displaySubConnections: false,
 };
 
 // Initialise i18next;

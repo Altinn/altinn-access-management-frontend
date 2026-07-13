@@ -248,7 +248,6 @@
     "no_packages": "Ingen tilgangspakker er tilgjengelige.",
     "no_matching_search": "Ingen treff på søket",
     "info_alert_text": "Tilgangspakker erstatter dagens Altinn-roller. Les mer om dette på <a href='https://info.altinn.no/hjelp/ny-tilgangsstyring/'>hjelpesidene</a>.",
-    "person_info_alert": "Det er ikke mulig å gi og fjerne fullmakter til personer helt enda. Dette vil komme senere.",
     "delegation_check": {
       "delegation_check_error_heading": "Teknisk feil",
       "delegation_check_error_message_singular": "En teknisk feil hindrer deg i å gi fullmakt til tilgangspakken. Vennligst kontakt Altinn brukerservice hvis problemet vedvarer.",
@@ -493,7 +492,6 @@
     "trigger_button": "Ny bruker",
     "add_person_button": "Legg til person",
     "add_org_button": "Legg til virksomhet",
-    "limited_preview_message": "Du kan dessverre ikke legge til personer helt enda. Dette vil komme senere.",
     "person_identifier": "Fødselsnummer/brukernavn",
     "person_identifier_ssn_format_error": "Fødselsnummer må bestå av 11 siffer",
     "person_identifier_username_format_error": "Brukernavn må bestå av minst 6 tegn",
@@ -1125,7 +1123,6 @@
     "go_to_profile": "Gå til profil",
     "load_user_error": "Kunne ikke laste bruker.",
     "not_self_identified_error": "Kun epost-brukere kan legge til konto.",
-    "feature_toggled_off": "Mulighet for å legge til konto er skrudd av.",
     "forgot_password_info": "Skriv inn brukernavnet ditt, så sender vi en lenke til e-postadressen knyttet til kontoen.",
     "forgot_password_error": "Kunne ikke sende e-post. Sjekk at brukernavnet er riktig.",
     "no_email_for_username": "Vi fant ingen e-post for dette brukernavnet. Sjekk at brukernavnet er riktig.",

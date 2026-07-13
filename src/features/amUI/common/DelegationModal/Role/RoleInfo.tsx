@@ -7,7 +7,6 @@ import { ExclamationmarkTriangleFillIcon, InformationSquareFillIcon } from '@nav
 import { usePartyRepresentation } from '../../PartyRepresentationContext/PartyRepresentationContext';
 import { RoleResourcesSection } from './RoleResourcesSection';
 import { RoleStatusMessage } from './RoleStatusMessages';
-import { enableRoleDeletion } from '@/resources/utils/featureFlagUtils';
 import { useState } from 'react';
 import { TechnicalErrorParagraphs } from '../../TechnicalErrorParagraphs';
 import { createErrorDetails } from '../../TechnicalErrorParagraphs/TechnicalErrorParagraphs';
@@ -27,7 +26,6 @@ export const RoleInfo = ({ role }: RoleInfoProps) => {
 
   const isExternalRole = role?.provider?.code === 'sys-ccr';
   const isLegacyRole = role?.provider?.code === 'sys-altinn2';
-  const enableRoleDeletionFlag = enableRoleDeletion();
 
   const { actionError } = useDelegationModalContext();
 
@@ -123,7 +121,7 @@ export const RoleInfo = ({ role }: RoleInfoProps) => {
           isLoading={isRoleResourcesLoading}
         />
       )}
-      {hasRole && enableRoleDeletionFlag && (
+      {hasRole && (
         <div className={classes.deleteRoleButtonContainer}>
           <RoleDeleteButton
             role={role}
@@ -133,7 +131,7 @@ export const RoleInfo = ({ role }: RoleInfoProps) => {
           />
         </div>
       )}
-      {!hasRole && enableRoleDeletionFlag && !isPermissionsLoading && (
+      {!hasRole && !isPermissionsLoading && (
         <div className={classes.deleteRoleButtonContainer}>
           <DsParagraph data-size='md'>{t('role.cannot_assign_role_poa')}</DsParagraph>
         </div>

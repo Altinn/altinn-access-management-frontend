@@ -1,6 +1,5 @@
 import type { Role } from '@/rtk/features/roleApi';
 import { useGetRolePermissionsQuery } from '@/rtk/features/roleApi';
-import { enableRoleDeletion } from '@/resources/utils/featureFlagUtils';
 import { usePartyRepresentation } from '../PartyRepresentationContext/PartyRepresentationContext';
 import { SkeletonRoleList } from './SkeletonRoleList';
 import {
@@ -42,7 +41,6 @@ export const RoleList = ({ onSelect, isLoading }: RoleListProps) => {
     },
   );
 
-  const enableRoleDeletionFlag = enableRoleDeletion();
   const isMobileOrSmaller = useIsMobileOrSmaller();
 
   const {
@@ -113,7 +111,7 @@ export const RoleList = ({ onSelect, isLoading }: RoleListProps) => {
                 role={role}
                 onClick={() => onSelect(role)}
                 deleteButton={
-                  enableRoleDeletionFlag && isRoleDeletable && !isMobileOrSmaller ? (
+                  isRoleDeletable && !isMobileOrSmaller ? (
                     <RoleDeleteButton
                       role={role}
                       variant='tertiary'

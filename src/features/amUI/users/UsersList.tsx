@@ -25,13 +25,11 @@ import { usePartyRepresentation } from '../common/PartyRepresentationContext/Par
 import classes from './UsersList.module.css';
 import { NewUserButton } from './NewUserModal/NewUserModal';
 import { useSelfConnection } from '../common/PartyRepresentationContext/useSelfConnection';
-import { displayPrivDelegation } from '@/resources/utils/featureFlagUtils';
 import { ECC_PROVIDER_CODE, useRoleMetadata } from '../common/UserRoles/useRoleMetadata';
 
 export const UsersList = () => {
   const { t } = useTranslation();
   const { fromParty, isLoading: loadingPartyRepresentation } = usePartyRepresentation();
-  const shouldDisplayPrivDelegation = displayPrivDelegation();
   const navigate = useNavigate();
   const { data: isAdmin } = useGetIsAdminQuery();
   const [includeAgentConnections, setIncludeAgentConnections] = useState(false);
@@ -71,7 +69,7 @@ export const UsersList = () => {
       return undefined;
     }
 
-    const removeUuid = shouldDisplayPrivDelegation ? currentUser?.party.id : undefined;
+    const removeUuid = currentUser?.party.id;
 
     const mapConnection = (connection: Connection): Connection => {
       const connectionRoles = mapRoles(connection.roles).filter(
@@ -98,7 +96,6 @@ export const UsersList = () => {
   }, [
     rightHolders,
     mapRoles,
-    shouldDisplayPrivDelegation,
     currentUser?.party.id,
     roleMetadataError,
     loadingRoleMetadata,
@@ -128,25 +125,21 @@ export const UsersList = () => {
 
   return (
     <div className={classes.usersList}>
-      {shouldDisplayPrivDelegation && (
-        <>
-          <CurrentUserPageHeader
-            currentUser={currentUserWithRoles}
-            roleNames={currentUserWithRoles?.roles?.map((role) => role?.name) ?? []}
-            loading={!!(currentUserLoading || loadingPartyRepresentation || loadingRoleMetadata)}
-            as={(props) =>
-              currentUser ? (
-                <Link
-                  {...props}
-                  to={`/users/${currentUser?.party.id ?? ''}`}
-                />
-              ) : (
-                <div {...props} />
-              )
-            }
-          />
-        </>
-      )}
+      <CurrentUserPageHeader
+        currentUser={currentUserWithRoles}
+        roleNames={currentUserWithRoles?.roles?.map((role) => role?.name) ?? []}
+        loading={!!(currentUserLoading || loadingPartyRepresentation || loadingRoleMetadata)}
+        as={(props) =>
+          currentUser ? (
+            <Link
+              {...props}
+              to={`/users/${currentUser?.party.id ?? ''}`}
+            />
+          ) : (
+            <div {...props} />
+          )
+        }
+      />
       {isAdmin ? (
         <>
           <div className={classes.searchAndAddUser}>

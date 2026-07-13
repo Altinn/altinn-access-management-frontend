@@ -251,7 +251,6 @@
     "no_packages": "No access packages available.",
     "no_matching_search": "No matches for your search",
     "info_alert_text": "Access packages replace today's Altinn roles. Read more on the <a href='https://info.altinn.no/en/help/ny-tilgangsstyring/'>help pages</a>.",
-    "person_info_alert": "Giving powers of attorney to individuals is currently not supported. This will come later.",
     "delegation_check": {
       "delegation_check_error_heading": "Technical error",
       "delegation_check_error_message_singular": "A technical error prevents you from giving the user the access package. Please contact Altinn user service if the problem persists.",
@@ -496,7 +495,6 @@
     "trigger_button": "New user",
     "add_person_button": "Add person",
     "add_org_button": "Add organization",
-    "limited_preview_message": "Unfortunately, you cannot add people just yet. This feature will be available in the future.",
     "person_identifier": "SSN/username",
     "person_identifier_ssn_format_error": "Social security number must consist of 11 digits",
     "person_identifier_username_format_error": "Username must be at least 6 characters",
@@ -1128,7 +1126,6 @@
     "go_to_profile": "Go to profile",
     "load_user_error": "Could not load user.",
     "not_self_identified_error": "Only email-users can add an account.",
-    "feature_toggled_off": "Ability to add account is disabled.",
     "forgot_password_info": "Enter your username, and we will send a link to add account to the email address registered for this username.",
     "forgot_password_error": "Could not send email. Check that the username is correct.",
     "no_email_for_username": "We found no email for this username. Check that the username is correct.",
