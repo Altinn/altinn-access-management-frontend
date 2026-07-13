@@ -698,8 +698,6 @@
     "created_by": "Systemtilgang oppretta {{created}}",
     "accesspackage_resources_list_singular": "1 teneste",
     "accesspackage_resources_list_plural": "{{resourcesCount}} tenester",
-    "accesspackage_resources_singular": "Gir tilgang til 1 teneste:",
-    "accesspackage_resources_plural": "Gir tilgang til {{resourcesCount}} tenester:",
     "right_resource_singular": "1 enkeltteneste",
     "right_resource_plural": "{{resourcesCount}} enkelttenester",
     "right_accesspackage_singular": "1 tilgangspakke",

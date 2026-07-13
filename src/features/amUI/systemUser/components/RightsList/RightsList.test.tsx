@@ -56,6 +56,7 @@ const accessPackage = {
   isAssignable: true,
   area: {
     name: 'Transport',
+    urn: '',
     id: '4321',
     description: '',
     iconUrl: '',
@@ -191,50 +192,5 @@ describe('RightsList', () => {
 
     const resourceDescription = screen.getByText(resource2.description);
     expect(resourceDescription).toBeInTheDocument();
-  });
-
-  test('should show resource when resource is clicked in access package modal', async () => {
-    const user = userEvent.setup();
-    render(
-      <RightsList
-        resources={[]}
-        accessPackages={[accessPackage]}
-      />,
-    );
-
-    const accessPackageListItem = screen.getByRole('button', {
-      name: `${accessPackage.name} systemuser_detailpage.accesspackage_resources_list_singular`,
-    });
-    await user.click(accessPackageListItem);
-
-    const resourceListItem = screen.getByText(resource.title);
-    await user.click(resourceListItem);
-
-    const resourceDescription = screen.getByText(resource.description);
-    expect(resourceDescription).toBeInTheDocument();
-  });
-
-  test('should go back to access package when modal back button is clicked', async () => {
-    const user = userEvent.setup();
-    render(
-      <RightsList
-        resources={[]}
-        accessPackages={[accessPackage]}
-      />,
-    );
-
-    const accessPackageListItem = screen.getByRole('button', {
-      name: `${accessPackage.name} systemuser_detailpage.accesspackage_resources_list_singular`,
-    });
-    await user.click(accessPackageListItem);
-
-    const resourceListItem = screen.getByText(resource.title);
-    await user.click(resourceListItem);
-
-    const backButton = screen.getByRole('button', { name: 'common.back' });
-    await user.click(backButton);
-
-    const accessPackageDescription = screen.getByText(accessPackage.description);
-    expect(accessPackageDescription).toBeInTheDocument();
   });
 });
