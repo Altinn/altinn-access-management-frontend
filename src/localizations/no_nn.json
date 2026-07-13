@@ -1075,7 +1075,13 @@
     "error_partial_loading_requests": "Kunne ikkje laste alle førespurnader",
     "package_list_title": "Tilgangspakkar",
     "resource_list_title": "Tenester",
-    "cannot_approve_package": "Du manglar denne tilgangspakken sjølv og kan derfor ikkje godkjenne førespurnaden."
+    "cannot_approve_package": "Du manglar denne tilgangspakken sjølv og kan derfor ikkje godkjenne førespurnaden.",
+    "approve_all": "Godkjenn alle",
+    "reject_all": "Avvis alle",
+    "approve_all_success": "Alle førespurnader godkjende",
+    "approve_all_partial_failed": "Nokre godkjenningar feila",
+    "reject_all_success": "Alle førespurnader avviste",
+    "reject_all_partial_failed": "Nokre avvisingar feila"
   },
   "draft_request_page": {
     "page_title": "Førespurnad om fullmakt - Altinn",

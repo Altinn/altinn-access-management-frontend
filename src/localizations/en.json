@@ -1079,7 +1079,13 @@
     "error_partial_loading_requests": "Could not load all requests",
     "package_list_title": "Access packages:",
     "resource_list_title": "Services:",
-    "cannot_approve_package": "You lack this access package yourself and therefore cannot approve the request."
+    "cannot_approve_package": "You lack this access package yourself and therefore cannot approve the request.",
+    "approve_all": "Approve all",
+    "reject_all": "Reject all",
+    "approve_all_success": "All requests approved",
+    "approve_all_partial_failed": "Some approvals failed",
+    "reject_all_success": "All requests rejected",
+    "reject_all_partial_failed": "Some rejections failed"
   },
   "draft_request_page": {
     "page_title": "Power of Attorney Request - Altinn",

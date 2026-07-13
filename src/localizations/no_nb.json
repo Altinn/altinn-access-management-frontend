@@ -1076,7 +1076,13 @@
     "error_partial_loading_requests": "Kunne ikke laste alle forespørsler",
     "package_list_title": "Tilgangspakker:",
     "resource_list_title": "Tjenester:",
-    "cannot_approve_package": "Du mangler denne tilgangspakken selv og kan derfor ikke godkjenne forespørselen."
+    "cannot_approve_package": "Du mangler denne tilgangspakken selv og kan derfor ikke godkjenne forespørselen.",
+    "approve_all": "Godkjenn alle",
+    "reject_all": "Avvis alle",
+    "approve_all_success": "Alle forespørsler godkjent",
+    "approve_all_partial_failed": "Noen godkjenninger feilet",
+    "reject_all_success": "Alle forespørsler avvist",
+    "reject_all_partial_failed": "Noen avvisninger feilet"
   },
   "draft_request_page": {
     "page_title": "Forespørsel om fullmakt - Altinn",
