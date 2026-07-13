@@ -815,7 +815,7 @@
     "01_rights_not_found_or_not_delegable": "Ei eller fleire tenester finst ikkje, eller kan ikkje delegerast.",
     "02_rights_failed_to_delegate": "Kunne ikkje delegere tenester til systemtilgang.",
     "03_systemuser_failed_to_create": "Kunne ikkje opprette systemtilgang.",
-    "04_system_user_already_exists": "Kunne ikkje opprette systemtilgang, eksisterande systemtilgang finst allereie for valt system",
+    "04_system_user_already_exists": "Kunne ikkje opprette systemtilgang, eksisterande systemtilgang finst allereie for valt system.",
     "11_system_not_found": "Valt system finst ikkje",
     "14_unable_to_do_delegation_check": "Delegering av tenester feila med ukjend feil.",
     "16_delegation_right_missing_role_access": "Delegering av tenester feila: Rolla di har ikkje fullmakt til å delegere tenester til systemtilgang.",
@@ -880,8 +880,6 @@
     "revoke_poa_text": "Er du sikker på at du vil trekke denne fullmakta?",
     "confirm_revoke_consent": "Ja, trekk samtykke",
     "confirm_revoke_poa": "Ja, trekk fullmakt",
-    "altinn2_consent_alert_header": "Du er no i ein ny versjon av Samtykke- og fullmaktsoversikta",
-    "altinn2_consent_alert_body": "Etter kvart vil du finne oversikt over alle aktive samtykke- og fullmaktsavtalar her. Finn du ikkje det du ser etter, kan du gå til dei <a>gamle Altinn-sidene</a> og velje “Samtykker og fullmakter” i oversikta.",
     "newly_consented": "Nyleg samtykka"
   },
   "consent_log": {
@@ -905,9 +903,7 @@
     "poa_used": "{{to}}: Har henta fullmakt frå {{from}}.",
     "handledby": "{{handledBy}} har henta data på vegner av {{to}}.",
     "no_results": "Ingen samtykke eller fullmakter blei funne for dette søket",
-    "no_active_consents": "Det finst ingen innslag i avtaleloggen endå",
-    "altinn2_consent_alert_header": "Du er no i ein ny versjon av avtaleloggen",
-    "altinn2_consent_alert_body": "Etter kvart vil du finne oversikt over alle samtykke- og fullmaktsavtalar her. Finn du ikkje det du ser etter, kan du gå til dei <a>gamle Altinn-sidene</a> og velje “Samtykke og fullmakter” i oversikta."
+    "no_active_consents": "Det finst ingen innslag i avtaleloggen endå"
   },
   "consent_errors": {
     "not_authorized_for_consent": "Brukar er ikkje autorisert for å gi samtykke/fullmakt",
