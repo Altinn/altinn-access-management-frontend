@@ -1,5 +1,6 @@
 import type { ReactNode } from 'react';
 import { Avatar, DsHeading, DsParagraph, Icon, formatDisplayName } from '@altinn/altinn-components';
+import { useIsMobileOrSmaller } from '@/resources/utils/screensizeUtils';
 import { useTranslation } from 'react-i18next';
 
 import { useProviderLogoUrl } from '@/resources/hooks';
@@ -35,6 +36,7 @@ export const InstanceDescription = ({
   const { t, i18n } = useTranslation();
   const shortId = getInstanceShortId(instanceData?.instance.refId);
   const title = resolveInstanceTitle(instanceData, resource, t, i18n.language);
+  const isSmall = useIsMobileOrSmaller();
   const providerLogoUrl = resource.resourceOwnerOrgcode
     ? getProviderLogoUrl(resource.resourceOwnerOrgcode)
     : undefined;
@@ -47,51 +49,53 @@ export const InstanceDescription = ({
     <div className={classes.container}>
       <DsHeading
         level={titleLevel}
-        data-size='sm'
+        data-size={isSmall ? 'xs' : 'sm'}
       >
         {title}
       </DsHeading>
-      <div className={classes.resourceOwner}>
-        {providerLogoUrl || resource.resourceOwnerLogoUrl ? (
-          <Icon
-            iconUrl={providerLogoUrl ?? resource.resourceOwnerLogoUrl}
-            size='sm'
-          />
-        ) : (
-          <Avatar
-            type='company'
-            name={resource.resourceOwnerName}
-            size='sm'
-          />
+      <div className={classes.metadataRows}>
+        <div className={classes.resourceOwner}>
+          {providerLogoUrl || resource.resourceOwnerLogoUrl ? (
+            <Icon
+              iconUrl={providerLogoUrl ?? resource.resourceOwnerLogoUrl}
+              size='sm'
+            />
+          ) : (
+            <Avatar
+              type='company'
+              name={resource.resourceOwnerName}
+              size='sm'
+            />
+          )}
+          <DsParagraph
+            data-size={isSmall ? 'xs' : 'sm'}
+            className={classes.ownerTag}
+          >
+            {resource.resourceOwnerName}{' '}
+            <span className={classes.ownerName}>
+              {t('instance_detail_page.provider_name', {
+                name: fromName,
+              })}
+            </span>
+          </DsParagraph>
+        </div>
+        {statusSection}
+        {(resource.title || instanceData?.instance.refId) && (
+          <>
+            {resource.title && (
+              <div className={classes.metadataRow}>
+                {t('instance.service_title_label')} {': '} {resource.title}
+              </div>
+            )}
+            {instanceData?.instance.refId && (
+              <div className={classes.metadataRow}>
+                {t('instance.instance_id_label')} {': '}
+                {shortId}
+              </div>
+            )}
+          </>
         )}
-        <DsParagraph
-          data-size='sm'
-          className={classes.ownerTag}
-        >
-          {resource.resourceOwnerName}{' '}
-          <span className={classes.ownerName}>
-            {t('instance_detail_page.provider_name', {
-              name: fromName,
-            })}
-          </span>
-        </DsParagraph>
       </div>
-      {statusSection}
-      {(resource.title || instanceData?.instance.refId) && (
-        <>
-          {resource.title && (
-            <div className={classes.metadataRow}>
-              {t('instance.service_title_label')} {': '} {resource.title}
-            </div>
-          )}
-          {instanceData?.instance.refId && (
-            <div className={classes.metadataRow}>
-              {t('instance.instance_id_label')} {': '}
-              {shortId}
-            </div>
-          )}
-        </>
-      )}
     </div>
   );
 };
