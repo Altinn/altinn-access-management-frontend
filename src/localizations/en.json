@@ -884,8 +884,6 @@
     "revoke_poa_text": "Are you certain you want to revoke this power of attorney?",
     "confirm_revoke_consent": "Yes, revoke consent",
     "confirm_revoke_poa": "Yes, revoke power of attorney",
-    "altinn2_consent_alert_header": "You are now in a new version of the Consent- and power of attorney overview",
-    "altinn2_consent_alert_body": "Soon you will find an overview of all active consents and powers of attorney here. If you cannot find what you are looking for, you can go to the <a>old Altinn-pages</a> and choose “Consents and Authorizations” in the overview.",
     "newly_consented": "Newly consented"
   },
   "consent_log": {
@@ -899,19 +897,17 @@
     "view_consent": "View consent",
     "view_poa": "View power of attorney",
     "expires": "Expires {{expires}}",
-    "consent_expired": "{{to}}: consent expired.",
-    "poa_expired": "{{to}}: power of attorney expired.",
-    "consent_revoked": "{{to}}: consent revoked.",
-    "poa_revoked": "{{to}}: power of attorney revoked.",
-    "consent_accepted": "{{to}}: was granted consent from {{from}}.",
-    "poa_accepted": "{{to}}: was granted power of attorney from {{from}}.",
-    "consent_used": "{{to}}: has retrieved consent from {{from}}.",
-    "poa_used": "{{to}}: has retrieved power of attorney from {{from}}.",
+    "consent_expired": "{{to}}: Consent expired.",
+    "poa_expired": "{{to}}: Power of attorney expired.",
+    "consent_revoked": "{{to}}: Consent revoked.",
+    "poa_revoked": "{{to}}: Power of attorney revoked.",
+    "consent_accepted": "{{to}}: Was granted consent from {{from}}.",
+    "poa_accepted": "{{to}}: Was granted power of attorney from {{from}}.",
+    "consent_used": "{{to}}: Has retrieved consent from {{from}}.",
+    "poa_used": "{{to}}: Has retrieved power of attorney from {{from}}.",
     "handledby": "{{handledBy}} has retrieved the data on behalf of {{to}}.",
     "no_results": "No consent or power of attorney was found for this search",
-    "no_active_consents": "There are no entries in agreement log yet",
-    "altinn2_consent_alert_header": "You are now in a new version of the agreement log",
-    "altinn2_consent_alert_body": "Soon you will find an overview of all consents and powers of attorney here. If you cannot find what you are looking for, you can go to the <a>old Altinn-pages</a> and choose “Consents and Authorizations” in the overview."
+    "no_active_consents": "There are no entries in agreement log yet"
   },
   "consent_errors": {
     "not_authorized_for_consent": "User is not authorized to give consent/power of attorney",
