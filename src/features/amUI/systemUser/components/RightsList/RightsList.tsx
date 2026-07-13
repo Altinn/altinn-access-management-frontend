@@ -84,6 +84,7 @@ export const RightsList = ({
   };
 
   const closeModal = (): void => {
+    setSelectedResource(null);
     setSelectedAccessPackage(null);
     modalRef.current?.close();
   };
