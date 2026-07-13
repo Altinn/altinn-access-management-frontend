@@ -1,8 +1,9 @@
-import { DsButton, DsSkeleton } from '@altinn/altinn-components';
+import { DsButton, DsSkeleton, formatDisplayName } from '@altinn/altinn-components';
 import { useTranslation } from 'react-i18next';
 import { DelegationAction } from '../DelegationModal/EditModal';
 import { MinusCircleIcon, PlusCircleIcon } from '@navikt/aksel-icons';
 import { ExtendedUser } from '@/rtk/features/userInfoApi';
+import { ConnectionUserType } from '@/rtk/features/connectionApi';
 import { useIsMobileOrSmaller } from '@/resources/utils/screensizeUtils';
 
 export const UserListActions = ({
@@ -26,6 +27,13 @@ export const UserListActions = ({
 }) => {
   const { t } = useTranslation();
   const isSmall = useIsMobileOrSmaller();
+  const displayName =
+    user.type === ConnectionUserType.Person || user.type === ConnectionUserType.Organization
+      ? formatDisplayName({
+          fullName: user.name,
+          type: user.type === ConnectionUserType.Person ? 'person' : 'company',
+        })
+      : user.name;
 
   if (!availableAction || isSmall) {
     return null;
@@ -52,7 +60,9 @@ export const UserListActions = ({
           variant='tertiary'
           data-size='md'
           onClick={() => onDelegate(user)}
-          aria-label={t('common.give_poa')}
+          aria-label={
+            delegateLabel ? undefined : t('common.give_poa_to_name', { name: displayName })
+          }
         >
           <PlusCircleIcon aria-hidden='true' />
           {delegateLabel ?? t('common.give_poa')}
@@ -74,7 +84,9 @@ export const UserListActions = ({
           variant='tertiary'
           data-size='md'
           onClick={() => onRevoke(user)}
-          aria-label={revokeLabel ?? t('common.delete_poa')}
+          aria-label={
+            revokeLabel ? undefined : t('common.delete_poa_to_name', { name: displayName })
+          }
         >
           <MinusCircleIcon aria-hidden='true' />
           {revokeLabel ?? t('common.delete_poa')}

@@ -1,0 +1,36 @@
+.tabLabel {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  color: var(--ds-color-base-default);
+}
+
+.tabIconBadge {
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+}
+
+.tabList {
+  /* Required: CSS Modules needs this top-level class to export the hashed class name used in AmTabs.tsx */
+}
+
+@media (max-width: 768px) {
+  .tabList > * {
+    padding-inline: 0.375rem !important;
+  }
+
+  .tabLabel {
+    flex-direction: column;
+    gap: 0.125rem;
+    font-size: 0.7rem;
+    padding-inline: 0.25rem;
+  }
+
+  .tabLabel > svg,
+  .tabIconBadge > svg {
+    width: 1.5rem;
+    height: 1.5rem;
+    flex-shrink: 0;
+  }
+}

@@ -122,7 +122,7 @@ export const RightsList = ({
               <AccessPackageListItem
                 key={accessPackage.id}
                 id={accessPackage.id}
-                titleAs='div'
+                titleAs='span'
                 size='md'
                 name={accessPackage.name}
                 description={
@@ -160,7 +160,7 @@ export const RightsList = ({
                   key={resource.identifier}
                   id={resource.identifier}
                   as='button'
-                  titleAs='div'
+                  titleAs='span'
                   size='md'
                   ownerLogoUrl={emblem ?? resource.resourceOwnerLogoUrl}
                   ownerLogoUrlAlt={resource.resourceOwnerName ?? ''}

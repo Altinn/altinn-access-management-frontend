@@ -1,79 +1,84 @@
 import type { Locator, Page } from '@playwright/test';
 import { expect } from '@playwright/test';
 
-import noNb from '../../../src/localizations/no_nb.json';
 import { env } from 'playwright/util/helper';
+import { LANGUAGE_DICTIONARIES, Language } from '../LanguageMenu';
 
 export class SystemUserPage {
-  public readonly SELECT_VENDOR_LABEL: Locator;
-  public readonly CONTINUE_BUTTON: Locator;
-  public readonly CREATE_SYSTEM_USER_BUTTON: Locator;
-  public readonly CREATE_SYSTEM_USER_LINK: Locator;
-  public readonly SYSTEMUSER_CREATED_HEADING: Locator;
-  public readonly EDIT_SYSTEMUSER_LINK: Locator;
-  public readonly DELETE_SYSTEMUSER_BUTTON: Locator;
-  public readonly FINAL_DELETE_SYSTEMUSER_BUTTON: Locator;
-  public readonly CREATE_NEW_SYSTEMUSER_HEADER: Locator;
-  public readonly MAIN_HEADER: Locator;
-  public readonly NEW_SYSTEMUSER_LABEL: Locator;
-  public readonly TRY_NEW_ACCESS_MANAGEMENT_BUTTON: Locator;
+  public readonly selectVendorLabel: Locator;
+  public readonly continueButton: Locator;
+  public readonly createSystemUserButton: Locator;
+  public readonly createSystemUserLink: Locator;
+  public readonly systemUserCreatedHeading: Locator;
+  public readonly editSystemUserLink: Locator;
+  public readonly deleteSystemUserButton: Locator;
+  public readonly finalDeleteSystemUserButton: Locator;
+  public readonly createNewSystemUserHeader: Locator;
+  public readonly mainHeader: Locator;
+  public readonly newSystemUserLabel: Locator;
   public readonly escalateConfirmButton: Locator;
   public readonly finish: Locator;
   public readonly requestsMenuItem: Locator;
 
-  constructor(public page: Page) {
-    this.SELECT_VENDOR_LABEL = this.page.getByLabel(
-      noNb.systemuser_overviewpage.new_system_user_button,
+  constructor(
+    public page: Page,
+    language: Language = Language.NB,
+  ) {
+    const texts = LANGUAGE_DICTIONARIES[language];
+    this.selectVendorLabel = this.page.getByLabel(
+      texts.systemuser_overviewpage.new_system_user_button,
     );
 
-    this.NEW_SYSTEMUSER_LABEL = page.locator('span', {
-      hasText: noNb.systemuser_overviewpage.new_system_user,
+    this.newSystemUserLabel = page.locator('span', {
+      hasText: texts.systemuser_overviewpage.new_system_user,
     });
 
-    this.CREATE_SYSTEM_USER_LINK = page.getByRole('link', { name: 'Lag ny systemtilgang' });
-
-    this.CONTINUE_BUTTON = this.page.getByRole('button', {
-      name: noNb.systemuser_creationpage.confirm_button,
-    });
-    this.CREATE_SYSTEM_USER_BUTTON = this.page.getByRole('button', {
-      name: noNb.systemuser_overviewpage.new_system_user_button,
-    });
-    this.SYSTEMUSER_CREATED_HEADING = this.page.getByRole('heading', {
-      name: noNb.systemuser_overviewpage.existing_system_users_title,
+    this.createSystemUserLink = page.getByRole('link', {
+      name: texts.systemuser_overviewpage.new_system_user_button,
     });
 
-    this.EDIT_SYSTEMUSER_LINK = this.page.getByRole('link', {
-      name: noNb.systemuser_overviewpage.edit_system_user,
+    this.continueButton = this.page.getByRole('button', {
+      name: texts.systemuser_creationpage.confirm_button,
+    });
+    this.createSystemUserButton = this.page.getByRole('button', {
+      name: texts.systemuser_overviewpage.new_system_user_button,
+    });
+    this.systemUserCreatedHeading = this.page.getByRole('heading', {
+      name: texts.systemuser_overviewpage.existing_system_users_title,
     });
 
-    this.DELETE_SYSTEMUSER_BUTTON = this.page.getByRole('button', {
-      name: noNb.systemuser_detailpage.delete_systemuser,
+    this.editSystemUserLink = this.page.getByRole('link', {
+      name: texts.systemuser_overviewpage.edit_system_user,
     });
 
-    this.FINAL_DELETE_SYSTEMUSER_BUTTON = this.page
+    this.deleteSystemUserButton = this.page.getByRole('button', {
+      name: texts.systemuser_detailpage.delete_systemuser,
+    });
+
+    this.finalDeleteSystemUserButton = this.page
       .getByRole('button', {
-        name: noNb.systemuser_detailpage.delete_systemuser,
+        name: texts.systemuser_detailpage.delete_systemuser,
       })
       .nth(1);
 
-    this.CREATE_NEW_SYSTEMUSER_HEADER = this.page.getByRole('heading', {
-      name: noNb.systemuser_overviewpage.sub_title_text,
+    this.createNewSystemUserHeader = this.page.getByRole('heading', {
+      name: texts.systemuser_overviewpage.sub_title_text,
     });
 
-    this.MAIN_HEADER = this.page.getByRole('heading', {
-      name: noNb.systemuser_overviewpage.banner_title,
+    this.mainHeader = this.page.getByRole('heading', {
+      name: texts.systemuser_overviewpage.banner_title,
       level: 1,
     });
 
-    this.TRY_NEW_ACCESS_MANAGEMENT_BUTTON = this.page.getByRole('button', {
-      name: 'Prøv ny tilgangsstyring',
+    this.escalateConfirmButton = this.page.getByRole('button', {
+      name: texts.systemuser_request.escalate_confirm_button,
     });
 
-    this.escalateConfirmButton = this.page.getByRole('button', { name: 'Ja, send videre' });
+    this.finish = this.page.getByRole('button', {
+      name: texts.systemuser_request.escalate_close_button,
+    });
 
-    this.finish = this.page.getByRole('button', { name: 'Avslutt' });
-
-    this.requestsMenuItem = this.page.getByText('Forespørsler', { exact: true });
+    this.requestsMenuItem = this.page.getByText(texts.sidebar.requests, { exact: true });
   }
 
   requestLink(requestId: string) {
@@ -91,8 +96,8 @@ export class SystemUserPage {
   }
 
   async deleteSystemUser(integrationTitle: string): Promise<void> {
-    await this.DELETE_SYSTEMUSER_BUTTON.click();
-    await this.FINAL_DELETE_SYSTEMUSER_BUTTON.click();
+    await this.deleteSystemUserButton.click();
+    await this.finalDeleteSystemUserButton.click();
     await expect(this.page).toHaveURL(`${env('SYSTEMUSER_URL')}/overview`);
     await expect(this.systemUserLink(integrationTitle)).toHaveCount(0);
   }
@@ -101,7 +106,7 @@ export class SystemUserPage {
     await this.page.getByPlaceholder('Velg').fill(system.slice(0, -1)); //If you type in the entire length it's auto selected
     await this.page.getByLabel(system).waitFor({ state: 'visible' });
     await this.page.getByLabel(system).click();
-    await this.CONTINUE_BUTTON.click();
+    await this.continueButton.click();
     await this.page.getByRole('button', { name: 'Opprett systemtilgang' }).click();
   }
 }

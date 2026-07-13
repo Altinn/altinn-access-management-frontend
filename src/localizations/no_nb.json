@@ -1,6 +1,7 @@
 {
   "common": {
     "beta": "Beta",
+    "start": "Start",
     "error": "Feil",
     "restart": "Start på nytt",
     "close": "Lukk",
@@ -67,11 +68,13 @@
     "update_poa": "Oppdater fullmakt",
     "give_poa": "Gi fullmakt",
     "give_poa_for": "Gi fullmakt for {{poa_object}}",
+    "give_poa_to_name": "Gi fullmakt til {{name}}",
     "request_poa": "Be om fullmakt",
     "request_poa_for": "Be om fullmakt for {{poa_object}}",
     "delete_request_for": "Slett forespørsel for {{poa_object}}",
     "delete_poa": "Slett fullmakt",
     "delete_poa_for": "Slett fullmakt for {{poa_object}}",
+    "delete_poa_to_name": "Slett fullmakt til {{name}}",
     "delete_pos_confirm": "Er du sikker på at du vil slette denne?",
     "has_poa": "Har fullmakt",
     "refresh_cookie_alert": "Valgt aktør er endret i en annen fane. For å sykronisere visningen vil denne siden bli lastet på nytt.",
@@ -247,7 +250,6 @@
     "no_packages": "Ingen tilgangspakker er tilgjengelige.",
     "no_matching_search": "Ingen treff på søket",
     "info_alert_text": "Tilgangspakker erstatter dagens Altinn-roller. Les mer om dette på <a href='https://info.altinn.no/hjelp/ny-tilgangsstyring/'>hjelpesidene</a>.",
-    "person_info_alert": "Det er ikke mulig å gi og fjerne fullmakter til personer helt enda. Dette vil komme senere.",
     "delegation_check": {
       "delegation_check_error_heading": "Teknisk feil",
       "delegation_check_error_message_singular": "En teknisk feil hindrer deg i å gi fullmakt til tilgangspakken. Vennligst kontakt Altinn brukerservice hvis problemet vedvarer.",
@@ -263,6 +265,8 @@
     "modal_info_info_2": "For å se hva denne fullmakten gjelder, kan du gå til <a>fanen for vergemål</a> i oversikten."
   },
   "role": {
+    "header_info": "Informasjon om roller i Altinn",
+    "header_info_content": "Disse rollene er overført fra gamle Altinn og vil gradvis fases ut. Vær oppmerksom på at rollene kan være ufullstendige og at du ikke kan gi/be om nye fullmakter til roller. Bruk heller tilgangspakker eller enkelttjenester.",
     "provider_status": "Denne rollen er hentet fra ",
     "current_roles_title": "Fullmakt til {{count}} roller",
     "fetch_error_heading": "Kan ikke vise roller for denne brukeren",
@@ -291,7 +295,7 @@
   },
   "users_page": {
     "page_title": "Brukere - Altinn",
-    "main_page_heading": "Brukere med fullmakter i {{name}}",
+    "main_page_heading": "Brukere med fullmakter for {{name}}",
     "user_list_heading": "Andre med fullmakt",
     "direct_connections": "Brukere med fullmakt",
     "user_search_placeholder": "Søk etter person eller virksomhet",
@@ -299,8 +303,8 @@
     "no_users": "Du har ikke mottatt noen fullmakter fra andre.",
     "show_users_with_client_access": "Vis brukere med klienttilgang",
     "indirect_connections": "Brukere uten fullmakt",
-    "no_access_to_users_header": "Denne siden jobber vi fremdeles med!",
-    "no_access_to_users_message": "Kun tilgangsstyrerere kan se full liste av brukere med fullmakter i denne virksomheten. <br /> Liste over nøkkelpersoner (styret) vil være tilgjengelig for brukere uten tilgangsstyring etterhvert."
+    "no_access_to_users_header": "Kun tilgangsstyrere kan se andre brukere med fullmakter",
+    "no_access_to_users_message": "Du er ikke tilgangsstyrer for {{name}} og kan kun se dine egne fullmakter."
   },
   "advanced_user_search": {
     "add_user_button": "Ny bruker",
@@ -356,6 +360,7 @@
     "non_deletable_reason_er_roles": "Fullmakter som følger roller i Enhetsregisteret må endres via <erLink>Samordnet registermelding</erLink>.",
     "non_deletable_reason_agent_role": "Klienttilganger kan administreres på <agentLink>{{linkText}}</agentLink>.",
     "non_deletable_reason_guardianship": "Fullmakter gitt gjennom vergemål fra <guardianshipLink>Sivilrettsforvaltningen</guardianshipLink>.",
+    "non_deletable_reason_via_role": "Fullmakter som er fått gjennom <viaLink>{{via_name}}</viaLink> må slettes der.",
     "yes_button": "Ja, slett",
     "user_partial_confirmation_message": "<p>Brukeren har også andre fullmakter, og disse kan du slette her. Ønsker du det? <i>Denne handlingen kan ikke endres.</i></p>",
     "yourself_trigger_button": "Slett alle tilganger",
@@ -489,7 +494,6 @@
     "trigger_button": "Ny bruker",
     "add_person_button": "Legg til person",
     "add_org_button": "Legg til virksomhet",
-    "limited_preview_message": "Du kan dessverre ikke legge til personer helt enda. Dette vil komme senere.",
     "person_identifier": "Fødselsnummer/brukernavn",
     "person_identifier_ssn_format_error": "Fødselsnummer må bestå av 11 siffer",
     "person_identifier_username_format_error": "Brukernavn må bestå av minst 6 tegn",
@@ -578,7 +582,6 @@
     "info_button": "Informasjon om ny løsning"
   },
   "a2Alerts": {
-    "oldRolesContent": "Disse Altinn-rollene kan inneholde tjenester som finnes i den nye Altinn-løsningen. Tjenestene blir flyttet inn i de nye tilgangspakkene.",
     "oldRolesLinkText": "Gå til gamle Altinn",
     "legacyRoleContent": "Denne rollen vil snart fjernes. Bruk heller tilgangspakker."
   },
@@ -990,8 +993,6 @@
     "services_tab_title": "Tjenester",
     "load_error": "Oi! Noe gikk galt.",
     "back_to_overview_link": "Gå tilbake til oversikten",
-    "package_delegation_success": "{{name}} har nå fått fullmakt til {{accessPackage}}.",
-    "package_revocation_success": "{{name}} har ikke lenger fullmakt til {{accessPackage}}.",
     "users_tab": {
       "description": "Søk etter brukere for å gi eller slette fullmakter.",
       "no_users": "Ingen har fullmakt til denne pakken på vegne av {{fromparty}}."
@@ -1047,8 +1048,8 @@
   "request_page": {
     "page_title": "Forespørsler - Altinn",
     "heading": "Forespørsler for {{name}}",
-    "incoming_requests": "Mottatte forespørsler",
-    "sent_requests": "Sendte forespørsler",
+    "incoming_requests": "Mottatte",
+    "sent_requests": "Sendte",
     "no_received_requests": "Ingen mottatte forespørsler",
     "no_sent_requests": "Ingen sendte forespørsler",
     "process_request_one": "Behandle forespørsel",
@@ -1068,6 +1069,7 @@
     "reject_request": "Avvis forespørsel",
     "review_approved": "Godkjent",
     "review_rejected": "Avvist",
+    "review_handled_on": "{{status}} den {{date}}",
     "review_warning": "Du kan ikke godkjenne",
     "review_user_link": "Se fullmaktene {{name}} har nå",
     "review_close_info": "Hvis du ikke velger godkjenn eller avvis på en forespørsel, vil den bli liggende igjen som en aktiv forespørsel.",
@@ -1121,7 +1123,6 @@
     "go_to_profile": "Gå til profil",
     "load_user_error": "Kunne ikke laste bruker.",
     "not_self_identified_error": "Kun epost-brukere kan legge til konto.",
-    "feature_toggled_off": "Mulighet for å legge til konto er skrudd av.",
     "forgot_password_info": "Skriv inn brukernavnet ditt, så sender vi en lenke til e-postadressen knyttet til kontoen.",
     "forgot_password_error": "Kunne ikke sende e-post. Sjekk at brukernavnet er riktig.",
     "no_email_for_username": "Vi fant ingen e-post for dette brukernavnet. Sjekk at brukernavnet er riktig.",

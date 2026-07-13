@@ -3,29 +3,25 @@ import { useGetActiveConsentsQuery } from '@/rtk/features/consentApi';
 import { useGetReceivedRequestsCountQuery } from '@/rtk/features/requestApi';
 import { useGetPendingSystemUserRequestsQuery } from '@/rtk/features/systemUserApi';
 import type { ReporteeInfo } from '@/rtk/features/userInfoApi';
-import { enableRequestSingleRight } from '../utils/featureFlagUtils';
 import { hasConsentPermission, hasCreateSystemUserPermission } from '../utils/permissionUtils';
 
 interface UseSidebarRequestCountParams {
-  displayRequestsPage: boolean;
   isAdmin?: boolean;
   reportee?: ReporteeInfo;
   isLoadingPermissions: boolean;
 }
 
 export const useSidebarRequestCount = ({
-  displayRequestsPage,
   isAdmin,
   reportee,
   isLoadingPermissions,
 }: UseSidebarRequestCountParams) => {
   const partyUuid = getCookie('AltinnPartyUuid');
 
-  const shouldFetchReceivedRequestsCount =
-    displayRequestsPage && !!partyUuid && enableRequestSingleRight() && !!isAdmin;
-  const shouldFetchConsents = displayRequestsPage && !!partyUuid && hasConsentPermission(isAdmin);
+  const shouldFetchReceivedRequestsCount = !!partyUuid && !!isAdmin;
+  const shouldFetchConsents = !!partyUuid && hasConsentPermission(isAdmin);
   const shouldFetchSystemUsers =
-    displayRequestsPage && !!partyUuid && !!hasCreateSystemUserPermission(reportee, isAdmin);
+    !!partyUuid && !!hasCreateSystemUserPermission(reportee, isAdmin);
 
   const {
     data: receivedRequestsCount,

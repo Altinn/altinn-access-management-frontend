@@ -14,6 +14,7 @@ import { useDispatch } from 'react-redux';
 import { Link, useLocation, useNavigate } from 'react-router';
 
 import { amUIPath } from '@/routes/paths';
+import { Entity } from '@/dataObjects/dtos/Common';
 import { accessPackageApi } from '@/rtk/features/accessPackageApi';
 import { useRemoveRightHolderMutation } from '@/rtk/features/connectionApi';
 import { roleApi } from '@/rtk/features/roleApi';
@@ -36,12 +37,14 @@ import {
   GUARDIANSHIP_ROLE_REASON,
   getDeleteUserDialogModelFromStatus,
   ER_ROLE_REASON,
+  VIA_ROLE_REASON,
   type NonDeletableReason,
 } from './deletionModalUtils';
 
 export interface DeleteUserModalContentProps {
   status: DeletionStatus;
   nonDeletableReasons: NonDeletableReason[];
+  viaParties?: Entity[];
   isRolePermissionsLoading?: boolean;
 }
 
@@ -53,6 +56,14 @@ const nonDeletableReasonKeys: Record<NonDeletableReason, string> = {
   [ER_ROLE_REASON]: 'delete_user.non_deletable_reason_er_roles',
   [AGENT_ROLE_REASON]: 'delete_user.non_deletable_reason_agent_role',
   [GUARDIANSHIP_ROLE_REASON]: 'delete_user.non_deletable_reason_guardianship',
+  [VIA_ROLE_REASON]: 'delete_user.non_deletable_reason_via_role',
+};
+
+type ReasonListItem = {
+  key: string;
+  i18nKey: string;
+  values: Record<string, string>;
+  components: Record<string, React.ReactElement>;
 };
 
 const nonDeletableReasonsIntroKeys: Record<DeletionTarget, string> = {
@@ -64,6 +75,7 @@ const nonDeletableReasonsIntroKeys: Record<DeletionTarget, string> = {
 export const DeleteUserModalContent = ({
   status,
   nonDeletableReasons,
+  viaParties = [],
   isRolePermissionsLoading = false,
 }: DeleteUserModalContentProps) => {
   const { t } = useTranslation();
@@ -178,6 +190,41 @@ export const DeleteUserModalContent = ({
     ),
   };
 
+  const nonDeletableReasonItems = dialogModel.nonDeletableReasons.flatMap(
+    (reason): ReasonListItem | ReasonListItem[] => {
+      if (reason !== VIA_ROLE_REASON) {
+        return {
+          key: reason,
+          i18nKey: nonDeletableReasonKeys[reason],
+          values: { linkText: agentAccessLinkText },
+          components: {
+            ...transComponents,
+            agentLink: <Link to={`/${agentAccessLinkPath}`}></Link>,
+          },
+        };
+      }
+      return viaParties.map((viaParty) => ({
+        key: `${reason}-${viaParty.id}`,
+        i18nKey: nonDeletableReasonKeys[reason],
+        values: {
+          via_name: formatDisplayName({
+            fullName: viaParty.name || '',
+            type: String(viaParty.type).toLowerCase() === 'person' ? 'person' : 'company',
+            reverseNameOrder: false,
+          }),
+        },
+        components: {
+          viaLink: (
+            <Link
+              to={`/${amUIPath.Users}/${viaParty.id}`}
+              onClick={() => setDialogVisible(false)}
+            ></Link>
+          ),
+        },
+      }));
+    },
+  );
+
   return (
     <DsDialog.TriggerContext>
       <DsDialog.Trigger
@@ -242,17 +289,10 @@ export const DeleteUserModalContent = ({
                     </DsParagraph>
                   </div>
                   <ul className={classes.reasonList}>
-                    {dialogModel.nonDeletableReasons.map((reason) => (
-                      <li key={reason}>
+                    {nonDeletableReasonItems.map(({ key, ...transProps }) => (
+                      <li key={key}>
                         <DsParagraph data-size='sm'>
-                          <Trans
-                            i18nKey={nonDeletableReasonKeys[reason]}
-                            values={{ linkText: agentAccessLinkText }}
-                            components={{
-                              ...transComponents,
-                              agentLink: <Link to={`/${agentAccessLinkPath}`}></Link>,
-                            }}
-                          />
+                          <Trans {...transProps} />
                         </DsParagraph>
                       </li>
                     ))}

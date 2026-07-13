@@ -388,3 +388,6 @@ accessibility-violation*
 storybook-static/
 test-results
 coverage
+
+# Claude Code
+.claude/

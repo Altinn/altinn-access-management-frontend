@@ -1,22 +1,9 @@
 import type { PlaywrightTestConfig } from '@playwright/test';
-// eslint-disable-next-line import/default
-import dotenv from 'dotenv';
-import path from 'path';
+
+import { loadEnv } from './util/helper';
 
 // Load env from playwright/config to match repo layout
-const envName = process.env.environment ?? 'at23';
-const envPaths = [
-  path.join(__dirname, 'config/.env'),
-  path.join(__dirname, `config/.env.${envName}`),
-  path.join(__dirname, 'config/.env.local'),
-  path.join(__dirname, `config/.env.${envName}.local`),
-];
-
-// Load env from playwright/config to match repo layout
-dotenv.config({
-  path: envPaths,
-  override: true,
-});
+loadEnv(process.env.environment ?? 'at23');
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 const config: PlaywrightTestConfig = {
