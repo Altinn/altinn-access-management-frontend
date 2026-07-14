@@ -50,10 +50,15 @@ export const RequestReviewModalContent = ({ request, onClose }: RequestReviewMod
     resetSelection,
     processedRequests,
     actionLoading,
+    bulkActionLoading,
     cannotApprove,
+    hasPendingRequests,
+    hasApprovableRequests,
     handleClose,
     handleApprove,
     handleReject,
+    handleApproveAll,
+    handleRejectAll,
     handleSelection,
   } = useRequestReview(request, onClose);
 
@@ -106,6 +111,12 @@ export const RequestReviewModalContent = ({ request, onClose }: RequestReviewMod
   const itemControls = ({ resourceId, packageId }: { resourceId?: string; packageId?: string }) => {
     const id = resourceId ?? packageId ?? '';
     const status = processedRequests[id]?.status;
+    const chevron = () => (
+      <ChevronRightIcon
+        className={classes.chevronIcon}
+        aria-hidden='true'
+      />
+    );
     if (status === 'approved') {
       return (
         <span className={classes.processedStatus}>
@@ -114,6 +125,7 @@ export const RequestReviewModalContent = ({ request, onClose }: RequestReviewMod
             className={classes.approvedIcon}
             aria-hidden='true'
           />
+          {chevron()}
         </span>
       );
     }
@@ -125,6 +137,7 @@ export const RequestReviewModalContent = ({ request, onClose }: RequestReviewMod
             className={classes.rejectedIcon}
             aria-hidden='true'
           />
+          {chevron()}
         </span>
       );
     }
@@ -136,15 +149,11 @@ export const RequestReviewModalContent = ({ request, onClose }: RequestReviewMod
             className={classes.warningIcon}
             aria-hidden='true'
           />
+          {chevron()}
         </span>
       );
     }
-    return (
-      <ChevronRightIcon
-        className={classes.chevronIcon}
-        aria-hidden='true'
-      />
-    );
+    return chevron();
   };
 
   return (
@@ -237,13 +246,37 @@ export const RequestReviewModalContent = ({ request, onClose }: RequestReviewMod
             </>
           )}
           <DsParagraph data-size='md'>{t('request_page.review_close_info')}</DsParagraph>
-          <DsButton
-            variant='secondary'
-            onClick={handleClose}
-            className={classes.closeButton}
-          >
-            {t('common.close')}
-          </DsButton>
+          <div className={classes.bulkActionButtons}>
+            <DsButton
+              aria-disabled={
+                !hasApprovableRequests || !hasPendingRequests || !!bulkActionLoading || undefined
+              }
+              onClick={
+                !hasApprovableRequests || !hasPendingRequests || !!bulkActionLoading
+                  ? undefined
+                  : handleApproveAll
+              }
+              loading={bulkActionLoading === 'approveAll'}
+            >
+              {t('request_page.approve_all')}
+            </DsButton>
+            <DsButton
+              variant='secondary'
+              data-color='danger'
+              aria-disabled={!hasPendingRequests || !!bulkActionLoading || undefined}
+              onClick={!hasPendingRequests || !!bulkActionLoading ? undefined : handleRejectAll}
+              loading={bulkActionLoading === 'rejectAll'}
+            >
+              {t('request_page.reject_all')}
+            </DsButton>
+            <DsButton
+              variant='secondary'
+              aria-disabled={!!bulkActionLoading || !!actionLoading || undefined}
+              onClick={!!bulkActionLoading || !!actionLoading ? undefined : handleClose}
+            >
+              {t('common.close')}
+            </DsButton>
+          </div>
         </div>
       </RestoreFocusFallback>
     </RestoreFocusProvider>
