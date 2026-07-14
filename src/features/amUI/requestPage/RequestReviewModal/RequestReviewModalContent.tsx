@@ -111,6 +111,12 @@ export const RequestReviewModalContent = ({ request, onClose }: RequestReviewMod
   const itemControls = ({ resourceId, packageId }: { resourceId?: string; packageId?: string }) => {
     const id = resourceId ?? packageId ?? '';
     const status = processedRequests[id]?.status;
+    const chevron = () => (
+      <ChevronRightIcon
+        className={classes.chevronIcon}
+        aria-hidden='true'
+      />
+    );
     if (status === 'approved') {
       return (
         <span className={classes.processedStatus}>
@@ -119,6 +125,7 @@ export const RequestReviewModalContent = ({ request, onClose }: RequestReviewMod
             className={classes.approvedIcon}
             aria-hidden='true'
           />
+          {chevron()}
         </span>
       );
     }
@@ -130,6 +137,7 @@ export const RequestReviewModalContent = ({ request, onClose }: RequestReviewMod
             className={classes.rejectedIcon}
             aria-hidden='true'
           />
+          {chevron()}
         </span>
       );
     }
@@ -141,15 +149,11 @@ export const RequestReviewModalContent = ({ request, onClose }: RequestReviewMod
             className={classes.warningIcon}
             aria-hidden='true'
           />
+          {chevron()}
         </span>
       );
     }
-    return (
-      <ChevronRightIcon
-        className={classes.chevronIcon}
-        aria-hidden='true'
-      />
-    );
+    return chevron();
   };
 
   return (
