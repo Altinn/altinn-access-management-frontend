@@ -267,7 +267,8 @@ export const RequestReviewModalContent = ({ request, onClose }: RequestReviewMod
             </DsButton>
             <DsButton
               variant='secondary'
-              onClick={handleClose}
+              aria-disabled={!!bulkActionLoading || !!actionLoading || undefined}
+              onClick={!!bulkActionLoading || !!actionLoading ? undefined : handleClose}
             >
               {t('common.close')}
             </DsButton>
