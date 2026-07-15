@@ -2,7 +2,7 @@ import { getCookie } from '@/resources/Cookie/CookieMethods';
 import {
   hasConsentPermission,
   hasCreateSystemUserPermission,
-  hasReporteesPermission,
+  hasReporteeListAdminAccess,
   hasSystemUserClientAdminPermission,
 } from '@/resources/utils/permissionUtils';
 import {
@@ -95,7 +95,7 @@ export const useSidebarItems = ({ isSmall }: { isSmall?: boolean }) => {
   }
 
   items.push(getUsersMenuItem(pathname, isLoading, isSmall));
-  if (hasReporteesPermission(reportee, isAdmin, isCurrentUserReportee)) {
+  if (hasReporteeListAdminAccess(reportee, isAdmin, isCurrentUserReportee)) {
     items.push(getReporteesMenuItem(pathname, isLoading, isSmall));
   }
 

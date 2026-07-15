@@ -15,7 +15,11 @@ import {
 import { formatDisplayName } from '@altinn/altinn-components';
 import { isSubUnitByType } from '@/resources/utils/reporteeUtils';
 
-export const useRequests = () => {
+interface UseRequestsOptions {
+  skipSentRequests?: boolean;
+}
+
+export const useRequests = ({ skipSentRequests = false }: UseRequestsOptions = {}) => {
   const partyUuid = getCookie('AltinnPartyUuid');
 
   const {
@@ -54,7 +58,7 @@ export const useRequests = () => {
     isError: isSentAccessRequestsError,
   } = useGetSentRequestsQuery(
     { party: partyUuid || '', status: ['Pending'], to: '' },
-    { skip: !partyUuid },
+    { skip: !partyUuid || skipSentRequests },
   );
   const {
     data: pendingReceivedAccessRequests,
