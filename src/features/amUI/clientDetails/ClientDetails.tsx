@@ -34,6 +34,7 @@ import { UserPageHeaderSkeleton } from '../common/UserPageHeader/UserPageHeaderS
 import { AddAgentButton } from '../users/NewUserModal/AddAgentModal';
 import { ClientAdminSearchField } from '../common/ClientAdminSearchField/ClientAdminSearchField';
 import { ClientAdminDetails } from '../common/ClientAdminDetails/ClientAdminDetails';
+import { isNewUser } from '../common/isNewUser';
 
 export const ClientDetails = () => {
   const { t } = useTranslation();
@@ -59,6 +60,10 @@ export const ClientDetails = () => {
     clientAccessPackages,
     agents,
   });
+
+  const recentlyAddedClients = [...agentsWithClientAccess, ...agentsWithoutClientAccess].filter(
+    (x) => isNewUser(x.agentAddedAt),
+  );
   const [searchString, setSearchString] = useState<string>('');
 
   const selectedClient = clients?.find((client) => client.client.id === id);
@@ -158,6 +163,26 @@ export const ClientDetails = () => {
                       variant='primary'
                     />
                   </ClientAdminSearchField>
+                  {recentlyAddedClients.length > 0 && (
+                    <>
+                      <DsHeading
+                        data-size='xs'
+                        level={2}
+                      >
+                        {t('client_administration_page.recently_added_users')}
+                      </DsHeading>
+                      <ClientAgentPackageList
+                        agents={recentlyAddedClients}
+                        clientAccessPackages={clientAccessPackages ?? []}
+                        client={selectedClient}
+                        isLoading={isAddingAgentAccessPackages || isRemovingAgentAccessPackages}
+                        fromPartyUuid={fromPartyUuid}
+                        actingPartyUuid={actingPartyUuid}
+                        addAgentAccessPackages={addAgentAccessPackages}
+                        removeAgentAccessPackages={removeAgentAccessPackages}
+                      />
+                    </>
+                  )}
                   <DsHeading
                     data-size='xs'
                     level={2}

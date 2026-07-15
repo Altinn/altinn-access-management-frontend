@@ -1,6 +1,7 @@
 .container {
   width: 100%;
   margin-top: var(--ds-spacing-2);
+  margin-bottom: var(--ds-spacing-8);
 }
 
 .accessRoleItem {

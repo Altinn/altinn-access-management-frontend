@@ -646,6 +646,7 @@
     "agent_can_get_clients_tab": "Kan få disse klientene",
     "client_has_agents_tab": "Brukere med fullmakt",
     "client_can_get_agents_tab": "Brukere uten fullmakt",
+    "recently_added_users": "Nylig lagt til brukere",
     "new_agent_tag": "NY",
     "direct_connections_heading": "Brukere med klienttilgang",
     "indirect_connections_heading": "Andre brukere",

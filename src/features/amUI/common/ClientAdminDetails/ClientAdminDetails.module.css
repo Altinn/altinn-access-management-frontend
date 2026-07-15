@@ -9,7 +9,6 @@
   background: none;
   color: var(--ds-color-neutral-text-default);
   cursor: pointer;
-  margin-top: var(--ds-size-8);
 }
 
 .detailClosed {
