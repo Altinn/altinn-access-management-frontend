@@ -7,7 +7,7 @@ import { PageWrapper } from '@/components';
 import { getCookie } from '@/resources/Cookie/CookieMethods';
 import { useGetIsAdminQuery, useGetReporteeQuery } from '@/rtk/features/userInfoApi';
 import { useGetPartyFromLoggedInUserQuery } from '@/rtk/features/lookupApi';
-import { hasReporteesPermission } from '@/resources/utils/permissionUtils';
+import { hasReporteeListAdminAccess } from '@/resources/utils/permissionUtils';
 
 import { PageLayoutWrapper } from '../common/PageLayoutWrapper';
 import { PartyRepresentationProvider } from '../common/PartyRepresentationContext/PartyRepresentationContext';
@@ -35,7 +35,7 @@ export const ReporteesPage = () => {
         {!isLoading &&
         !reporteeLoading &&
         !currentUserIsLoading &&
-        !hasReporteesPermission(reportee, isAdmin, isCurrentUserReportee) ? (
+        !hasReporteeListAdminAccess(reportee, isAdmin, isCurrentUserReportee) ? (
           <DsAlert data-color='warning'>
             {t('reportees_page.not_admin_alert', { name: name || '' })}
           </DsAlert>

@@ -7,6 +7,8 @@ import { PageLayoutWrapper } from '../common/PageLayoutWrapper';
 import { Breadcrumbs } from '../common/Breadcrumbs/Breadcrumbs';
 import ReporteePageHeading from '../common/ReporteePageHeading';
 import { useGetIsAdminQuery, useGetReporteeQuery } from '@/rtk/features/userInfoApi';
+import { useGetPartyFromLoggedInUserQuery } from '@/rtk/features/lookupApi';
+import { hasReporteeListAdminAccess } from '@/resources/utils/permissionUtils';
 import { useDocumentTitle } from '@/resources/hooks/useDocumentTitle';
 import { useRequests } from '@/resources/hooks/useRequests';
 import { useGetSentRequestsCountQuery } from '@/rtk/features/requestApi';
@@ -37,6 +39,9 @@ export const RequestPage = () => {
 
   const { data: reportee, isLoading: isLoadingReportee } = useGetReporteeQuery();
   const { data: isAdmin, isLoading: isLoadingAdmin } = useGetIsAdminQuery();
+  const { data: currentUser } = useGetPartyFromLoggedInUserQuery();
+  const isCurrentUserReportee = reportee?.partyUuid === currentUser?.partyUuid;
+  const showSentRequestsTab = hasReporteeListAdminAccess(reportee, isAdmin, isCurrentUserReportee);
   const {
     pendingRequests,
     isLoadingSentRequests,
@@ -48,7 +53,7 @@ export const RequestPage = () => {
   const partyUuid = getCookie('AltinnPartyUuid');
   const { data: sentRequestCount } = useGetSentRequestsCountQuery(
     { party: partyUuid || '', status: ['Pending'] },
-    { skip: !partyUuid || !isAdmin },
+    { skip: !partyUuid || !isAdmin || !showSentRequestsTab },
   );
   const { requestsBadgeCount: receivedRequestCount } = useSidebarRequestCount({
     isAdmin,
@@ -95,11 +100,13 @@ export const RequestPage = () => {
                       label={t('request_page.incoming_requests')}
                       badge={receivedRequestsCount}
                     />
-                    <AmTabs.Tab
-                      value={SENT_REQUESTS_TAB}
-                      label={t('request_page.sent_requests')}
-                      badge={resolvedSentRequestCount}
-                    />
+                    {showSentRequestsTab && (
+                      <AmTabs.Tab
+                        value={SENT_REQUESTS_TAB}
+                        label={t('request_page.sent_requests')}
+                        badge={resolvedSentRequestCount}
+                      />
+                    )}
                   </AmTabs.List>
                   <AmTabs.Panel value={INCOMING_REQUESTS_TAB}>
                     <RequestsTabPanel
@@ -111,16 +118,18 @@ export const RequestPage = () => {
                       <PendingRequests pendingRequests={pendingRequests.received} />
                     </RequestsTabPanel>
                   </AmTabs.Panel>
-                  <AmTabs.Panel value={SENT_REQUESTS_TAB}>
-                    <RequestsTabPanel
-                      count={sentRequestCount ?? 0}
-                      isLoading={isLoadingSentRequests}
-                      isError={isSentRequestsError}
-                      emptyMessageKey='request_page.no_sent_requests'
-                    >
-                      <SentRequestsTabPanel pendingRequests={pendingRequests.sent} />
-                    </RequestsTabPanel>
-                  </AmTabs.Panel>
+                  {showSentRequestsTab && (
+                    <AmTabs.Panel value={SENT_REQUESTS_TAB}>
+                      <RequestsTabPanel
+                        count={sentRequestCount ?? 0}
+                        isLoading={isLoadingSentRequests}
+                        isError={isSentRequestsError}
+                        emptyMessageKey='request_page.no_sent_requests'
+                      >
+                        <SentRequestsTabPanel pendingRequests={pendingRequests.sent} />
+                      </RequestsTabPanel>
+                    </AmTabs.Panel>
+                  )}
                 </AmTabs>
               </RestoreFocusProvider>
             </PartyRepresentationProvider>
