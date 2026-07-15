@@ -13,12 +13,6 @@
   margin-bottom: var(--ds-size-2);
 }
 
-/* ...but keep it flat on hover/active (the :focus-visible marker is untouched). */
-.clientAdminDetails:hover,
-.clientAdminDetails:active {
-  background: none;
-}
-
 .detailClosed {
   display: none;
 }
