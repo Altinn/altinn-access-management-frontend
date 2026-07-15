@@ -10,7 +10,6 @@
   color: var(--ds-color-neutral-text-default);
   cursor: pointer;
   margin-top: var(--ds-size-8);
-  margin-bottom: var(--ds-size-2);
 }
 
 .detailClosed {
