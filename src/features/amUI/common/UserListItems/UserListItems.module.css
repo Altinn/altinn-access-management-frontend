@@ -2,24 +2,6 @@
   width: 100%;
 }
 
-.search {
-  display: flex;
-  align-items: center;
-  gap: var(--ds-spacing-2);
-  justify-content: space-between;
-  margin-bottom: var(--ds-spacing-4);
-}
-
-.searchBar {
-  max-width: 23rem;
-}
-
-.addButton {
-  display: flex;
-  align-items: center;
-  gap: 4px;
-}
-
 .accessRoleItem {
   display: flex;
   flex-direction: column;

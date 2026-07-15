@@ -1,0 +1,11 @@
+.search {
+  display: flex;
+  align-items: center;
+  gap: var(--ds-spacing-2);
+  justify-content: space-between;
+  margin-bottom: var(--ds-spacing-4);
+}
+
+.searchBar {
+  max-width: 23rem;
+}

@@ -1,5 +1,4 @@
 import React from 'react';
-import { useTranslation } from 'react-i18next';
 import { formatDisplayName } from '@altinn/altinn-components';
 
 import type {
@@ -21,6 +20,7 @@ type AgentDetailsClientsListProps = {
   actingPartyUuid?: string;
   addAgentAccessPackages: AddAgentAccessPackagesFn;
   removeAgentAccessPackages: RemoveAgentAccessPackagesFn;
+  searchString?: string;
 };
 
 export const AgentDetailsClientsList = ({
@@ -31,9 +31,8 @@ export const AgentDetailsClientsList = ({
   actingPartyUuid,
   addAgentAccessPackages,
   removeAgentAccessPackages,
+  searchString,
 }: AgentDetailsClientsListProps) => {
-  const { t } = useTranslation();
-
   const delegateDisabled = isLoading || !toPartyUuid || !actingPartyUuid;
   const removeDisabled = isLoading || !toPartyUuid || !actingPartyUuid;
 
@@ -55,6 +54,7 @@ export const AgentDetailsClientsList = ({
       accessStateClients={agentAccessPackages}
       addDisabled={delegateDisabled}
       removeDisabled={removeDisabled}
+      searchString={searchString}
       onAddAccessPackage={(
         { clientId, roleCode, packageId, accessPackageName },
         onSuccess?: () => void,
@@ -85,7 +85,6 @@ export const AgentDetailsClientsList = ({
           onError,
         )
       }
-      searchPlaceholder={t('client_administration_page.client_search_placeholder')}
     />
   );
 };

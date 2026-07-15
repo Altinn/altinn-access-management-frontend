@@ -1,0 +1,28 @@
+.clientAdminDetails {
+  /* Strip the button chrome so it reads as a plain DsHeading... */
+  display: inline-flex;
+  align-items: center;
+  gap: var(--ds-size-1);
+  padding: 0;
+  min-height: 0;
+  border: none;
+  background: none;
+  color: var(--ds-color-neutral-text-default);
+  cursor: pointer;
+  margin-top: var(--ds-size-8);
+  margin-bottom: var(--ds-size-2);
+}
+
+/* ...but keep it flat on hover/active (the :focus-visible marker is untouched). */
+.clientAdminDetails:hover,
+.clientAdminDetails:active {
+  background: none;
+}
+
+.detailClosed {
+  display: none;
+}
+
+.detailOpen {
+  display: block;
+}

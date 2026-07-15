@@ -1,11 +1,16 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { DsAlert, DsParagraph, DsSkeleton, formatDisplayName } from '@altinn/altinn-components';
+import {
+  DsAlert,
+  DsHeading,
+  DsParagraph,
+  DsSkeleton,
+  formatDisplayName,
+} from '@altinn/altinn-components';
 import { useParams } from 'react-router';
 import { skipToken } from '@reduxjs/toolkit/query';
 
 import { amUIPath } from '@/routes/paths';
-import { useTabState } from '@/resources/hooks';
 
 import { PageContainer } from '../common/PageContainer/PageContainer';
 import { usePartyRepresentation } from '../common/PartyRepresentationContext/PartyRepresentationContext';
@@ -23,19 +28,16 @@ import {
   useGetClientsQuery,
 } from '@/rtk/features/clientApi';
 import { UserPageHeader } from '../common/UserPageHeader/UserPageHeader';
-import { AgentDetailsTabs } from './AgentDetailsTabs';
 import { useAgentDetailsAccessClientLists } from './useAgentDetailsAccessClientLists';
 import { UserPageHeaderSkeleton } from '../common/UserPageHeader/UserPageHeaderSkeleton';
 import { AgentDetailsDeleteModal } from './AgentDetailsDeleteModal';
+import { ClientAdminSearchField } from '../common/ClientAdminSearchField/ClientAdminSearchField';
+import { ClientAdminDetails } from '../common/ClientAdminDetails/ClientAdminDetails';
 
 export const AgentDetails = () => {
   const { t } = useTranslation();
   const { id } = useParams();
   const { toParty, actingParty } = usePartyRepresentation();
-  const [activeTab, setActiveTab] = useTabState({
-    tabs: ['has-clients', 'all-clients'],
-    defaultTab: 'has-clients',
-  });
   const { data: isClientAdmin, isLoading: isLoadingIsClientAdmin } = useGetIsClientAdminQuery();
   const {
     data: agentAccessPackages,
@@ -49,10 +51,12 @@ export const AgentDetails = () => {
   const [removeAgentAccessPackages, { isLoading: isRemovingAgentAccessPackages }] =
     useRemoveAgentAccessPackagesMutation();
 
-  const { clientsWithAgentAccess, allClients } = useAgentDetailsAccessClientLists({
+  const { clientsWithAgentAccess, clientsWithoutAgentAccess } = useAgentDetailsAccessClientLists({
     agentAccessPackages,
     clients,
   });
+  const [searchString, setSearchString] = useState<string>('');
+
   const backUrl = `/${amUIPath.ClientAdministration}#users`;
   const userName = formatDisplayName({
     fullName: toParty?.name || '',
@@ -130,40 +134,49 @@ export const AgentDetails = () => {
               displayDirection={false}
               displayRoles={false}
             />
-            <AgentDetailsTabs
-              activeTab={activeTab}
-              onChange={setActiveTab}
-              hasClientsContent={
-                clientsWithAgentAccess.length > 0 ? (
-                  <AgentDetailsClientsList
-                    clients={clientsWithAgentAccess}
-                    agentAccessPackages={agentAccessPackages ?? []}
-                    isLoading={isAddingAgentAccessPackages || isRemovingAgentAccessPackages}
-                    toPartyUuid={toPartyUuid}
-                    actingPartyUuid={actingPartyUuid}
-                    addAgentAccessPackages={addAgentAccessPackages}
-                    removeAgentAccessPackages={removeAgentAccessPackages}
-                  />
-                ) : (
-                  <DsParagraph>{t('client_administration_page.no_delegations')}</DsParagraph>
-                )
-              }
-              canGetClientsContent={
-                allClients.length > 0 ? (
-                  <AgentDetailsClientsList
-                    clients={allClients}
-                    agentAccessPackages={agentAccessPackages ?? []}
-                    toPartyUuid={toPartyUuid}
-                    actingPartyUuid={actingPartyUuid}
-                    isLoading={isAddingAgentAccessPackages || isRemovingAgentAccessPackages}
-                    addAgentAccessPackages={addAgentAccessPackages}
-                    removeAgentAccessPackages={removeAgentAccessPackages}
-                  />
-                ) : (
-                  <DsParagraph>{t('client_administration_page.no_clients')}</DsParagraph>
-                )
-              }
+            <ClientAdminSearchField
+              setSearchString={setSearchString}
+              searchPlaceholder={t('my_clients_page.search_placeholder')}
             />
+            <DsHeading
+              data-size='xs'
+              level={2}
+            >
+              {t('client_administration_page.agent_has_clients_tab')}
+            </DsHeading>
+            {clientsWithAgentAccess.length > 0 ? (
+              <AgentDetailsClientsList
+                clients={clientsWithAgentAccess}
+                agentAccessPackages={agentAccessPackages ?? []}
+                isLoading={isAddingAgentAccessPackages || isRemovingAgentAccessPackages}
+                toPartyUuid={toPartyUuid}
+                actingPartyUuid={actingPartyUuid}
+                addAgentAccessPackages={addAgentAccessPackages}
+                removeAgentAccessPackages={removeAgentAccessPackages}
+                searchString={searchString}
+              />
+            ) : (
+              <DsParagraph>{t('client_administration_page.no_delegations')}</DsParagraph>
+            )}
+            <ClientAdminDetails
+              heading={t('client_administration_page.agent_can_get_clients_tab')}
+              hasSearch={!!searchString}
+            >
+              {clientsWithoutAgentAccess.length > 0 ? (
+                <AgentDetailsClientsList
+                  clients={clientsWithoutAgentAccess}
+                  agentAccessPackages={agentAccessPackages ?? []}
+                  toPartyUuid={toPartyUuid}
+                  actingPartyUuid={actingPartyUuid}
+                  isLoading={isAddingAgentAccessPackages || isRemovingAgentAccessPackages}
+                  addAgentAccessPackages={addAgentAccessPackages}
+                  removeAgentAccessPackages={removeAgentAccessPackages}
+                  searchString={searchString}
+                />
+              ) : (
+                <DsParagraph>{t('client_administration_page.no_clients')}</DsParagraph>
+              )}
+            </ClientAdminDetails>
           </>
         )}
       </PageContainer>

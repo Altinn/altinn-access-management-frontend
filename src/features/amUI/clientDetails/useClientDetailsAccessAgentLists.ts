@@ -12,20 +12,20 @@ export const useClientDetailsAccessAgentLists = ({
   agents,
 }: UseClientDetailsAccessAgentListsParams) => {
   return useMemo(() => {
-    const allAgents = (agents ?? []).filter(
+    const selectableAgents = (agents ?? []).filter(
       (agent) => agent.agent.type.toLowerCase() !== 'systembruker',
     );
 
-    const agentsWithClientAccess = clientAccessPackages?.length
-      ? allAgents.filter((agent) =>
-          clientAccessPackages.some(
-            (clientAgent) =>
-              clientAgent.agent.id === agent.agent.id &&
-              clientAgent.access.some((access) => access.packages.length > 0),
-          ),
-        )
-      : [];
+    const hasClientAccess = (agent: Agent) =>
+      (clientAccessPackages ?? []).some(
+        (clientAgent) =>
+          clientAgent.agent.id === agent.agent.id &&
+          clientAgent.access.some((access) => access.packages.length > 0),
+      );
 
-    return { agentsWithClientAccess, allAgents };
+    return {
+      agentsWithClientAccess: selectableAgents.filter(hasClientAccess),
+      agentsWithoutClientAccess: selectableAgents.filter((agent) => !hasClientAccess(agent)),
+    };
   }, [agents, clientAccessPackages]);
 };
