@@ -30,10 +30,6 @@ const SENT_REQUESTS_TAB = 'sentRequests';
 export const RequestPage = () => {
   const { t } = useTranslation();
   const restoreFocus = useRestoreFocus();
-  const [selectedTab, setSelectedTab] = useTabState({
-    tabs: [INCOMING_REQUESTS_TAB, SENT_REQUESTS_TAB],
-    defaultTab: INCOMING_REQUESTS_TAB,
-  });
 
   useDocumentTitle(t('request_page.page_title'));
 
@@ -42,13 +38,20 @@ export const RequestPage = () => {
   const { data: currentUser } = useGetPartyFromLoggedInUserQuery();
   const isCurrentUserReportee = reportee?.partyUuid === currentUser?.partyUuid;
   const showSentRequestsTab = hasReporteeListAdminAccess(reportee, isAdmin, isCurrentUserReportee);
+
+  const [selectedTab, setSelectedTab] = useTabState({
+    tabs: showSentRequestsTab
+      ? [INCOMING_REQUESTS_TAB, SENT_REQUESTS_TAB]
+      : [INCOMING_REQUESTS_TAB],
+    defaultTab: INCOMING_REQUESTS_TAB,
+  });
   const {
     pendingRequests,
     isLoadingSentRequests,
     isLoadingReceivedRequests,
     isSentRequestsError,
     isReceivedRequestsError,
-  } = useRequests();
+  } = useRequests({ skipSentRequests: !showSentRequestsTab });
 
   const partyUuid = getCookie('AltinnPartyUuid');
   const { data: sentRequestCount } = useGetSentRequestsCountQuery(
