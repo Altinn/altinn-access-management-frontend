@@ -30,13 +30,14 @@ export const UserListItems = ({ items, emptyText, searchString }: UserListItemsP
   const [currentPage, setCurrentPage] = useState(1);
 
   const filteredItems = useMemo(() => {
-    if (!searchString) {
+    const normalizedSearch = searchString?.trim().toLowerCase();
+    if (!normalizedSearch) {
       return items;
     }
     return items.filter((item) => {
       return (
-        item.name.toLowerCase().includes(searchString.trim().toLowerCase()) ||
-        item.organizationIdentifier?.toLowerCase().includes(searchString.trim().toLowerCase())
+        item.name.toLowerCase().includes(normalizedSearch) ||
+        item.organizationIdentifier?.toLowerCase().includes(normalizedSearch)
       );
     });
   }, [items, searchString]);

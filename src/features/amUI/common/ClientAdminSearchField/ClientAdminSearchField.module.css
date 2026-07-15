@@ -1,5 +1,6 @@
 .search {
   display: flex;
+  flex-wrap: wrap;
   align-items: center;
   gap: var(--ds-spacing-2);
   justify-content: space-between;

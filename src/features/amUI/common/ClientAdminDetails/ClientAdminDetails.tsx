@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useId, useState } from 'react';
 import { DsButton, DsHeading } from '@altinn/altinn-components';
 import { ChevronDownIcon, ChevronUpIcon } from '@navikt/aksel-icons';
 
@@ -13,6 +13,7 @@ interface ClientAdminDetailsProps {
 export const ClientAdminDetails = ({ heading, hasSearch, children }: ClientAdminDetailsProps) => {
   const [isOpen, setIsOpen] = useState<boolean>(false);
   const showChildren = isOpen || hasSearch;
+  const contentId = useId();
 
   return (
     <>
@@ -26,6 +27,7 @@ export const ClientAdminDetails = ({ heading, hasSearch, children }: ClientAdmin
           variant='tertiary'
           onClick={() => setIsOpen((prev) => !prev)}
           aria-expanded={showChildren}
+          aria-controls={contentId}
         >
           {heading}
           {showChildren ? (
@@ -35,7 +37,12 @@ export const ClientAdminDetails = ({ heading, hasSearch, children }: ClientAdmin
           )}
         </DsButton>
       </DsHeading>
-      <div className={showChildren ? classes.detailOpen : classes.detailClosed}>{children}</div>
+      <div
+        id={contentId}
+        className={showChildren ? classes.detailOpen : classes.detailClosed}
+      >
+        {children}
+      </div>
     </>
   );
 };
