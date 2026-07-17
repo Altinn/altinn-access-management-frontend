@@ -107,6 +107,10 @@ export const ResourceList = <
     () => (resolveLogos ? getProviderLogoUrl : () => undefined),
     [getProviderLogoUrl, resolveLogos],
   );
+  const hasExpiredResources = React.useMemo(
+    () => resources && resources.some(isExpiredResource),
+    [resources],
+  );
 
   const shouldShowDetails = showDetails ?? !onSelect;
   const derivedInteractive = (resource: TResource) => {
@@ -174,27 +178,29 @@ export const ResourceList = <
             setFilterState={setFilterState}
             serviceOwnerOptions={serviceOwnerOptions}
           />
-          <div className={classes.expiredSwitch}>
-            <DsSwitch
-              data-size='sm'
-              checked={includeExpired}
-              onChange={(e) => {
-                setIncludeExpired(e.target.checked);
-              }}
-              label={t('resource_list.show_expired_services')}
-            />
-            <DsPopover.TriggerContext>
-              <DsPopover.Trigger
-                icon
-                variant='tertiary'
+          {hasExpiredResources && (
+            <div className={classes.expiredSwitch}>
+              <DsSwitch
                 data-size='sm'
-                aria-label={t('resource_list.show_expired_services_helptext_button')}
-              >
-                <QuestionmarkCircleIcon aria-hidden='true' />
-              </DsPopover.Trigger>
-              <DsPopover>{t('resource_list.show_expired_services_helptext')}</DsPopover>
-            </DsPopover.TriggerContext>
-          </div>
+                checked={includeExpired}
+                onChange={(e) => {
+                  setIncludeExpired(e.target.checked);
+                }}
+                label={t('resource_list.show_expired_services')}
+              />
+              <DsPopover.TriggerContext>
+                <DsPopover.Trigger
+                  icon
+                  variant='tertiary'
+                  data-size='sm'
+                  aria-label={t('resource_list.show_expired_services_helptext_button')}
+                >
+                  <QuestionmarkCircleIcon aria-hidden='true' />
+                </DsPopover.Trigger>
+                <DsPopover>{t('resource_list.show_expired_services_helptext')}</DsPopover>
+              </DsPopover.TriggerContext>
+            </div>
+          )}
           <div className={classes.delegationModalButton}>{delegationModal}</div>
         </div>
       )}
