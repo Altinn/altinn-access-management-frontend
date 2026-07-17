@@ -16,7 +16,7 @@ namespace Altinn.AccessManagement.UI.Tests.Helpers
             string responseContent = "{  \"code\": \"" + errorCode + "\" }";
 
             // Act
-            ProblemDescriptor actualError = ProblemMapper.MapToAuthUiError(responseContent, HttpStatusCode.BadRequest);
+            ProblemInstance actualError = ProblemMapper.MapToAuthUiError(responseContent, HttpStatusCode.BadRequest);
 
             // Assert
             Assert.Equal(expectedErrorCode, actualError.ErrorCode.ToString());
@@ -31,7 +31,7 @@ namespace Altinn.AccessManagement.UI.Tests.Helpers
             string responseContent = "{  \"code\": \"" + errorCode + "\" }";
 
             // Act
-            ProblemDescriptor actualError = ProblemMapper.MapToAuthUiError(responseContent, HttpStatusCode.BadRequest);
+            ProblemInstance actualError = ProblemMapper.MapToAuthUiError(responseContent, HttpStatusCode.BadRequest);
             // Assert
             Assert.Equal(expectedErrorCode, actualError.ErrorCode.ToString());
         }
@@ -45,7 +45,7 @@ namespace Altinn.AccessManagement.UI.Tests.Helpers
             string responseContent = "{  \"code\": \"" + errorCode + "\" }";
 
             // Act
-            ProblemDescriptor actualError = ProblemMapper.MapToAuthUiError(responseContent, HttpStatusCode.BadRequest);
+            ProblemInstance actualError = ProblemMapper.MapToAuthUiError(responseContent, HttpStatusCode.BadRequest);
 
             // Assert
             Assert.Equal(expectedErrorCode, actualError.ErrorCode.ToString());
@@ -60,7 +60,7 @@ namespace Altinn.AccessManagement.UI.Tests.Helpers
             string responseContent = "{  \"code\": \"" + errorCode + "\" }";
 
             // Act
-            ProblemDescriptor actualError = ProblemMapper.MapToAuthUiError(responseContent, HttpStatusCode.BadRequest);
+            ProblemInstance actualError = ProblemMapper.MapToAuthUiError(responseContent, HttpStatusCode.BadRequest);
 
             // Assert
             Assert.Equal(expectedErrorCode, actualError.ErrorCode.ToString());
@@ -75,7 +75,7 @@ namespace Altinn.AccessManagement.UI.Tests.Helpers
             string responseContent = "{  \"code\": \"" + errorCode + "\" }";
 
             // Act
-            ProblemDescriptor actualError = ProblemMapper.MapToAuthUiError(responseContent, HttpStatusCode.BadRequest);
+            ProblemInstance actualError = ProblemMapper.MapToAuthUiError(responseContent, HttpStatusCode.BadRequest);
 
             // Assert
             Assert.Equal(expectedErrorCode, actualError.ErrorCode.ToString());
@@ -90,7 +90,7 @@ namespace Altinn.AccessManagement.UI.Tests.Helpers
             string responseContent = "{  \"code\": \"" + errorCode + "\" }";
 
             // Act
-            ProblemDescriptor actualError = ProblemMapper.MapToAuthUiError(responseContent, HttpStatusCode.BadRequest);
+            ProblemInstance actualError = ProblemMapper.MapToAuthUiError(responseContent, HttpStatusCode.BadRequest);
 
             // Assert
             Assert.Equal(expectedErrorCode, actualError.ErrorCode.ToString());
@@ -105,7 +105,7 @@ namespace Altinn.AccessManagement.UI.Tests.Helpers
             string responseContent = "{  \"code\": \"" + errorCode + "\" }";
 
             // Act
-            ProblemDescriptor actualError = ProblemMapper.MapToAuthUiError(responseContent, HttpStatusCode.BadRequest);
+            ProblemInstance actualError = ProblemMapper.MapToAuthUiError(responseContent, HttpStatusCode.BadRequest);
 
             // Assert
             Assert.Equal(expectedErrorCode, actualError.ErrorCode.ToString());
@@ -120,7 +120,7 @@ namespace Altinn.AccessManagement.UI.Tests.Helpers
             string responseContent = "{  \"code\": \"" + errorCode + "\" }";
 
             // Act
-            ProblemDescriptor actualError = ProblemMapper.MapToAuthUiError(responseContent, HttpStatusCode.BadRequest);
+            ProblemInstance actualError = ProblemMapper.MapToAuthUiError(responseContent, HttpStatusCode.BadRequest);
 
             // Assert
             Assert.Equal(expectedErrorCode, actualError.ErrorCode.ToString());
@@ -135,7 +135,7 @@ namespace Altinn.AccessManagement.UI.Tests.Helpers
             string responseContent = "{  \"code\": \"" + errorCode + "\" }";
 
             // Act
-            ProblemDescriptor actualError = ProblemMapper.MapToAuthUiError(responseContent, HttpStatusCode.BadRequest);
+            ProblemInstance actualError = ProblemMapper.MapToAuthUiError(responseContent, HttpStatusCode.BadRequest);
 
             // Assert
             Assert.Equal(expectedErrorCode, actualError.ErrorCode.ToString());
@@ -150,7 +150,7 @@ namespace Altinn.AccessManagement.UI.Tests.Helpers
             string responseContent = "{  \"code\": \"" + errorCode + "\" }";
 
             // Act
-            ProblemDescriptor actualError = ProblemMapper.MapToAuthUiError(responseContent, HttpStatusCode.BadRequest);
+            ProblemInstance actualError = ProblemMapper.MapToAuthUiError(responseContent, HttpStatusCode.BadRequest);
 
             // Assert
             Assert.Equal(expectedErrorCode, actualError.ErrorCode.ToString());
@@ -165,7 +165,7 @@ namespace Altinn.AccessManagement.UI.Tests.Helpers
             string responseContent = "{  \"code\": \"" + errorCode + "\" }";
 
             // Act
-            ProblemDescriptor actualError = ProblemMapper.MapToAuthUiError(responseContent, HttpStatusCode.BadRequest);
+            ProblemInstance actualError = ProblemMapper.MapToAuthUiError(responseContent, HttpStatusCode.BadRequest);
 
             // Assert
             Assert.Equal(expectedErrorCode, actualError.ErrorCode.ToString());
@@ -179,7 +179,7 @@ namespace Altinn.AccessManagement.UI.Tests.Helpers
             var expectedStatusCode = HttpStatusCode.Forbidden;
 
             // Act
-            ProblemDescriptor actualError = ProblemMapper.MapToAuthUiError("", HttpStatusCode.Forbidden);
+            ProblemInstance actualError = ProblemMapper.MapToAuthUiError("", HttpStatusCode.Forbidden);
 
             // Assert
             Assert.Equal(expectedErrorCode, actualError.ErrorCode.ToString());

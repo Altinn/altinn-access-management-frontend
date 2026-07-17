@@ -24,6 +24,10 @@ export const DelegationCheckError = ({
     return t(mapErrorCodeToErrorMessage(error?.data.code)) || t(defaultError);
   };
 
+  // Specifics forwarded from the backend (which access package/right and why). Shown in addition to
+  // the mapped message so the user/support sees the actual reason without digging through logs.
+  const delegationReasons = error?.data.delegationReasons;
+
   return (
     <div className={classes.delegationCheckError}>
       <DsAlert
@@ -31,6 +35,7 @@ export const DelegationCheckError = ({
         role='alert'
       >
         {getErrorMessage()}
+        {delegationReasons && <div className={classes.delegationReasons}>{delegationReasons}</div>}
       </DsAlert>
     </div>
   );

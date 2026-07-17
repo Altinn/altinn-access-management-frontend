@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using System.Net;
 using System.Text.Json;
 using Altinn.AccessManagement.UI.Core.Constants;
@@ -11,16 +12,23 @@ namespace Altinn.AccessManagement.UI.Core.Helpers
     public static class ProblemMapper
     {
         /// <summary>
+        /// Extension members forwarded verbatim from the upstream (authentication) problem so the
+        /// specifics (e.g. which access package/right could not be delegated and why) survive to the
+        /// frontend instead of being flattened to just the error code.
+        /// </summary>
+        private static readonly string[] ForwardableExtensionKeys = ["delegationReasons"];
+
+        /// <summary>
         /// Map error codes from AUTH to AMUI error codes
         /// </summary>
-        public static ProblemDescriptor MapToAuthUiError(string responseContent, HttpStatusCode statusCode)
+        public static ProblemInstance MapToAuthUiError(string responseContent, HttpStatusCode statusCode)
         {
             try
             {
                 AltinnProblemDetails problemDetails = JsonSerializer.Deserialize<AltinnProblemDetails>(responseContent);
                 string authErrorCode = problemDetails?.ErrorCode.ToString();
 
-                return authErrorCode switch
+                ProblemDescriptor descriptor = authErrorCode switch
                 {
                     "AUTH-00001" => Problem.Rights_NotFound_Or_NotDelegable,
                     "AUTH-00002" => Problem.Rights_FailedToDelegate,
@@ -47,12 +55,51 @@ namespace Altinn.AccessManagement.UI.Core.Helpers
 
                     _ => Problem.Generic_EndOfMethod,
                 };
+
+                // Forward the detail extensions (e.g. "delegationReasons") from the upstream problem so
+                // the reason survives to the frontend instead of being reduced to just the error code.
+                List<KeyValuePair<string, string>> forwarded = ExtractForwardableExtensions(problemDetails);
+                if (forwarded.Count > 0)
+                {
+                    return descriptor.Create(ProblemExtensionData.Create([.. forwarded]));
+                }
+
+                return descriptor;
             }
             catch
             {
                 // In case of deserialization failure or any other exception, return a generic problem descriptor
                 return Problem.CreateGenericProblem(statusCode, "Error without problem code");
             }
+        }
+
+        private static List<KeyValuePair<string, string>> ExtractForwardableExtensions(AltinnProblemDetails problemDetails)
+        {
+            List<KeyValuePair<string, string>> forwarded = [];
+
+            if (problemDetails?.Extensions is null)
+            {
+                return forwarded;
+            }
+
+            foreach (string key in ForwardableExtensionKeys)
+            {
+                if (!problemDetails.Extensions.TryGetValue(key, out object value) || value is null)
+                {
+                    continue;
+                }
+
+                string text = value is JsonElement element
+                    ? (element.ValueKind == JsonValueKind.String ? element.GetString() : element.ToString())
+                    : value.ToString();
+
+                if (!string.IsNullOrWhiteSpace(text))
+                {
+                    forwarded.Add(new KeyValuePair<string, string>(key, text));
+                }
+            }
+
+            return forwarded;
         }
 
         /// <summary>
