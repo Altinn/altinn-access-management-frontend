@@ -59,17 +59,17 @@ namespace Altinn.AccessManagement.UI.Core.Helpers
                 // Forward the detail extensions (e.g. "delegationReasons") from the upstream problem so
                 // the reason survives to the frontend instead of being reduced to just the error code.
                 List<KeyValuePair<string, string>> forwarded = ExtractForwardableExtensions(problemDetails);
-                if (forwarded.Count > 0)
-                {
-                    return descriptor.Create(ProblemExtensionData.Create([.. forwarded]));
-                }
 
-                return descriptor;
+                // Always return a ProblemInstance explicitly (never rely on the implicit
+                // ProblemDescriptor -> ProblemInstance conversion) so the return type is consistent.
+                return forwarded.Count > 0
+                    ? descriptor.Create(ProblemExtensionData.Create([.. forwarded]))
+                    : descriptor.Create();
             }
             catch
             {
-                // In case of deserialization failure or any other exception, return a generic problem descriptor
-                return Problem.CreateGenericProblem(statusCode, "Error without problem code");
+                // In case of deserialization failure or any other exception, return a generic problem instance.
+                return Problem.CreateGenericProblem(statusCode, "Error without problem code").Create();
             }
         }
 
