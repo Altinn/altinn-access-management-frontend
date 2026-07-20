@@ -189,16 +189,19 @@ namespace Altinn.AccessManagement.UI.Tests.Helpers
         [Fact]
         public void MapToAuthUiError_ForwardsDelegationReasonsExtension()
         {
-            // Arrange - the upstream (authentication) problem carries a delegationReasons extension member
-            string responseContent = "{ \"code\": \"AUTH-00016\", \"delegationReasons\": \"Ressurs A: MissingRoleAccess\" }";
+            // Arrange - the upstream (authentication) problem carries the structured delegationReasons
+            // extension (a JSON string of resource id + codes). JsonSerializer.Serialize encodes it as a
+            // JSON string value inside the response body.
+            string reasons = """[{"type":"resource","id":"resource-a","codes":["MissingRoleAccess"]}]""";
+            string responseContent = "{ \"code\": \"AUTH-00016\", \"delegationReasons\": " + System.Text.Json.JsonSerializer.Serialize(reasons) + " }";
 
             // Act
             ProblemInstance actualError = ProblemMapper.MapToAuthUiError(responseContent, HttpStatusCode.BadRequest);
 
-            // Assert - the code is mapped AND the extension member is preserved on the returned problem
+            // Assert - the code is mapped AND the structured extension is preserved verbatim on the returned problem
             Assert.Equal("AMUI-00016", actualError.ErrorCode.ToString());
             Assert.True(actualError.Extensions.TryGetValue("delegationReasons", out string reason));
-            Assert.Equal("Ressurs A: MissingRoleAccess", reason);
+            Assert.Equal(reasons, reason);
         }
 
         [Fact]
@@ -218,16 +221,16 @@ namespace Altinn.AccessManagement.UI.Tests.Helpers
         [Fact]
         public void MapToAuthUiError_ForwardsDelegationReasons_MultipleResourcesAndCodes()
         {
-            // Arrange - a realistic grouped delegationReasons value spanning multiple resources, each with
-            // one or more reason codes (as produced by authentication's DelegationHelper). The BFF must
-            // forward the whole value verbatim - it must not truncate to the first resource/code.
-            string reasons = "Ressurs A: MissingRoleAccess, MissingPackageAccess | Ressurs B: ResourceIsMaskinPortenSchema";
-            string responseContent = "{ \"code\": \"AUTH-00016\", \"delegationReasons\": \"" + reasons + "\" }";
+            // Arrange - a realistic structured delegationReasons value spanning multiple resources, each
+            // with one or more reason codes (as produced by authentication's DelegationHelper). The BFF
+            // must forward the whole value verbatim - it must not truncate to the first resource/code.
+            string reasons = """[{"type":"resource","id":"resource-a","codes":["MissingRoleAccess","MissingPackageAccess"]},{"type":"resource","id":"resource-b","codes":["ResourceIsMaskinPortenSchema"]}]""";
+            string responseContent = "{ \"code\": \"AUTH-00016\", \"delegationReasons\": " + System.Text.Json.JsonSerializer.Serialize(reasons) + " }";
 
             // Act
             ProblemInstance actualError = ProblemMapper.MapToAuthUiError(responseContent, HttpStatusCode.BadRequest);
 
-            // Assert - the full multi-resource / multi-code reason string is preserved unchanged
+            // Assert - the full multi-resource / multi-code structured value is preserved unchanged
             Assert.Equal("AMUI-00016", actualError.ErrorCode.ToString());
             Assert.True(actualError.Extensions.TryGetValue("delegationReasons", out string reason));
             Assert.Equal(reasons, reason);
