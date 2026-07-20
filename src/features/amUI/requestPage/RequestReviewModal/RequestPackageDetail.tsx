@@ -1,14 +1,12 @@
 import { useRef } from 'react';
 import { DsAlert, DsButton } from '@altinn/altinn-components';
 import { useTranslation } from 'react-i18next';
-import { ArrowLeftIcon } from '@navikt/aksel-icons';
 import type { ProcessedStatus } from '../types';
 import classes from './RequestReviewModal.module.css';
 import { AccessPackage } from '@/rtk/features/accessPackageApi';
 import { PackageHeader } from '../../common/DelegationModal/AccessPackages/PackageHeader';
 import { PackageMeta } from '../../common/DelegationModal/AccessPackages/PackageMeta';
 import { StatusSection } from '../../common/StatusSection/StatusSection';
-import { useAutoFocusRef } from '@/resources/hooks/useAutoFocusRef';
 import { ProcessedStatusInfo } from './ProcessedStatusInfo';
 
 interface RequestPackageDetailProps {
@@ -16,7 +14,6 @@ interface RequestPackageDetailProps {
   processedStatus?: ProcessedStatus;
   handledAt?: string;
   actionLoading: 'approve' | 'reject' | null;
-  onBack: () => void;
   onApprove: () => void;
   onReject: () => void;
   cannotApprove: boolean;
@@ -28,27 +25,16 @@ export const RequestPackageDetail = ({
   processedStatus,
   handledAt,
   actionLoading,
-  onBack,
   onApprove,
   onReject,
   cannotApprove,
   toPartyName,
 }: RequestPackageDetailProps) => {
   const { t } = useTranslation();
-  const backButtonRef = useAutoFocusRef<HTMLButtonElement>();
   const openedUnprocessed = useRef(!processedStatus);
 
   return (
     <>
-      <DsButton
-        ref={backButtonRef}
-        variant='tertiary'
-        className={classes.backButton}
-        onClick={onBack}
-      >
-        <ArrowLeftIcon aria-hidden='true' />
-        {t('common.back')}
-      </DsButton>
       <PackageHeader name={pkg.name} />
       <StatusSection
         userHasAccess={processedStatus === 'approved'}

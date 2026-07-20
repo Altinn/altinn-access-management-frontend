@@ -27,7 +27,7 @@ export const hasSystemUserClientAdminPermission = (
   return isOrganization && isClientAdmin;
 };
 
-export const hasReporteesPermission = (
+export const hasReporteeListAdminAccess = (
   reporteeInfo?: ReporteeInfo,
   isAdmin: boolean = false,
   isCurrentUserReportee: boolean = false,

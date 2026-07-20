@@ -22,6 +22,10 @@ export interface PackageResource {
   description: string;
   refId: string;
   provider: ResourceProvider;
+  type: {
+    id: string;
+    name: string;
+  };
   resourceOwnerName: string;
   resourceOwnerLogoUrl: string;
   resourceOwnerOrgcode: string;

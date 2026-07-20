@@ -4,6 +4,7 @@
   overflow-y: auto;
 }
 
-.triggerButton {
-  width: fit-content;
+.backButton {
+  margin-bottom: var(--ds-spacing-2);
+  margin-top: -12px;
 }
