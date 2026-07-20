@@ -165,6 +165,10 @@ namespace Altinn.AccessManagement.UI.Mocks.Mocks
             {
                 dataPath = Path.Combine(dataFolder, "Request", "draftRequestInvalidResource.json");
             }
+            else if (id == Guid.Parse("44444444-4444-4444-4444-444444444444"))
+            {
+                dataPath = Path.Combine(dataFolder, "Request", "draftPackageRequest.json");
+            }
 
             return await Task.FromResult(Util.GetMockData<Request>(dataPath));
         }

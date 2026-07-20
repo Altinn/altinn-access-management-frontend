@@ -1084,8 +1084,8 @@
   "draft_request_page": {
     "page_title": "Førespurnad om fullmakt - Altinn",
     "heading": "Vil du be om tilgang til <strong>{{to_name}}</strong>?",
-    "intro_person": "Det er oppretta eit forslag om tilgang til ei teneste på dine vegner, men du må sjølv godkjenne det for at ho skal tre i kraft. Førespurnaden vil berre bli sendt til <strong>{{to_name}}</strong> dersom du seier deg einig.",
-    "intro_company": "Det er oppretta eit forslag om tilgang til ei teneste på vegner av <strong>{{from_name}}</strong>, men du må sjølv godkjenne det for at ho skal tre i kraft. Førespurnaden vil berre sendast til <strong>{{to_name}}</strong> dersom du seier deg einig.",
+    "intro_person": "Det er oppretta eit forslag om tilgang på dine vegner, men du må sjølv godkjenne det for at det skal tre i kraft. Førespurnaden vil berre bli sendt til <strong>{{to_name}}</strong> dersom du seier deg einig.",
+    "intro_company": "Det er oppretta eit forslag om tilgang på vegner av <strong>{{from_name}}</strong>, men du må sjølv godkjenne det for at det skal tre i kraft. Førespurnaden vil berre sendast til <strong>{{to_name}}</strong> dersom du seier deg einig.",
     "confirm_request": "Ja, be om tilgang",
     "withdraw_request": "Nei, avslå",
     "loading_request": "Lastar førespurnad",
@@ -1098,8 +1098,9 @@
     "request_withdrawn_info": "Du har avslått førespurnaden og vil dermed ikkje få fullmakt til <strong>{{to_name}}</strong>.",
     "close_window_info": "Du kan no lukke dette vinduet.",
     "missing_request_id": "Kan ikkje laste førespurnaden: requestId-parameter er ikkje sett i url",
-    "batch_partial_error": "Kunne ikkje behandle følgande ressursar: {{resources}}. Ver venleg og prøv igjen.",
-    "multiple_services_title": "<strong>{{name}}</strong> ber om følgande tenester:"
+    "batch_partial_error": "Kunne ikkje behandle følgande førespurnader: {{resources}}. Ver venleg og prøv igjen.",
+    "multiple_services_title": "<strong>{{name}}</strong> ber om følgande tenester:",
+    "multiple_packages_title": "<strong>{{name}}</strong> ber om følgande tilgangspakkar:"
   },
   "add_altinn2_account_page": {
     "page_title": "Legg til konto - Altinn",

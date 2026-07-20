@@ -25,6 +25,12 @@ export interface EnrichedPackageRequest extends RequestDto {
   package: AccessPackage;
 }
 
+export type EnrichedRequest = EnrichedResourceRequest | EnrichedPackageRequest;
+
+export const isEnrichedPackageRequest = (
+  request: EnrichedRequest,
+): request is EnrichedPackageRequest => request.type === 'package';
+
 const baseUrl = `${import.meta.env.BASE_URL}accessmanagement/api/v1/request`;
 
 export const requestApi = createApi({
@@ -201,7 +207,7 @@ export const requestApi = createApi({
     }),
 
     // draft request page query
-    getEnrichedDraftRequest: builder.query<EnrichedResourceRequest, { id: string }>({
+    getEnrichedDraftRequest: builder.query<EnrichedRequest, { id: string }>({
       query: ({ id }) => {
         return `draft/${id}`;
       },
