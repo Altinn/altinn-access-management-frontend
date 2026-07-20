@@ -29,7 +29,6 @@ export const ClientAdminDetails = ({
       <DsHeading
         data-size='xs'
         level={2}
-        asChild
       >
         <DsButton
           className={classes.clientAdminDetails}
