@@ -203,7 +203,7 @@ export const ClientDetails = () => {
                   />
                   <ClientAdminDetails
                     heading={t('client_administration_page.client_can_get_agents_tab')}
-                    hasSearch={!!searchString}
+                    searchString={searchString}
                   >
                     <ClientAgentPackageList
                       agents={agentsWithoutClientAccess}

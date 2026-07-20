@@ -1,4 +1,4 @@
-import React, { useId, useState } from 'react';
+import React, { useEffect, useId, useState } from 'react';
 import { DsButton, DsHeading } from '@altinn/altinn-components';
 import { ChevronDownIcon, ChevronUpIcon } from '@navikt/aksel-icons';
 
@@ -6,14 +6,23 @@ import classes from './ClientAdminDetails.module.css';
 
 interface ClientAdminDetailsProps {
   heading: string;
-  hasSearch: boolean;
+  searchString: string;
   children: React.ReactNode;
 }
 
-export const ClientAdminDetails = ({ heading, hasSearch, children }: ClientAdminDetailsProps) => {
+export const ClientAdminDetails = ({
+  heading,
+  searchString,
+  children,
+}: ClientAdminDetailsProps) => {
   const [isOpen, setIsOpen] = useState<boolean>(false);
-  const showChildren = isOpen || hasSearch;
   const contentId = useId();
+
+  useEffect(() => {
+    if (searchString && searchString.length > 0) {
+      setIsOpen(true);
+    }
+  }, [searchString]);
 
   return (
     <>
@@ -26,20 +35,16 @@ export const ClientAdminDetails = ({ heading, hasSearch, children }: ClientAdmin
           className={classes.clientAdminDetails}
           variant='tertiary'
           onClick={() => setIsOpen((prev) => !prev)}
-          aria-expanded={showChildren}
+          aria-expanded={isOpen}
           aria-controls={contentId}
         >
           {heading}
-          {showChildren ? (
-            <ChevronUpIcon aria-hidden='true' />
-          ) : (
-            <ChevronDownIcon aria-hidden='true' />
-          )}
+          {isOpen ? <ChevronUpIcon aria-hidden='true' /> : <ChevronDownIcon aria-hidden='true' />}
         </DsButton>
       </DsHeading>
       <div
         id={contentId}
-        className={showChildren ? classes.detailOpen : classes.detailClosed}
+        className={isOpen ? classes.detailOpen : classes.detailClosed}
       >
         {children}
       </div>

@@ -160,7 +160,7 @@ export const AgentDetails = () => {
             )}
             <ClientAdminDetails
               heading={t('client_administration_page.agent_can_get_clients_tab')}
-              hasSearch={!!searchString}
+              searchString={searchString}
             >
               {clientsWithoutAgentAccess.length > 0 ? (
                 <AgentDetailsClientsList
