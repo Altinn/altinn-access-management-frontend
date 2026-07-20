@@ -180,6 +180,8 @@ export const ClientDetails = () => {
                         actingPartyUuid={actingPartyUuid}
                         addAgentAccessPackages={addAgentAccessPackages}
                         removeAgentAccessPackages={removeAgentAccessPackages}
+                        emptyText={t('client_administration_page.no_agents')}
+                        searchString={searchString}
                       />
                     </>
                   )}
