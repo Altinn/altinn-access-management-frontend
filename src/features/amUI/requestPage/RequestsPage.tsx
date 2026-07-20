@@ -118,7 +118,10 @@ export const RequestPage = () => {
                       isError={isReceivedRequestsError}
                       emptyMessageKey='request_page.no_received_requests'
                     >
-                      <PendingRequests pendingRequests={pendingRequests.received} />
+                      <PendingRequests
+                        pendingRequests={pendingRequests.received}
+                        handledRequests={pendingRequests.handledReceived}
+                      />
                     </RequestsTabPanel>
                   </AmTabs.Panel>
                   {showSentRequestsTab && (
@@ -129,7 +132,10 @@ export const RequestPage = () => {
                         isError={isSentRequestsError}
                         emptyMessageKey='request_page.no_sent_requests'
                       >
-                        <SentRequestsTabPanel pendingRequests={pendingRequests.sent} />
+                        <SentRequestsTabPanel
+                          pendingRequests={pendingRequests.sent}
+                          handledRequests={pendingRequests.handledSent}
+                        />
                       </RequestsTabPanel>
                     </AmTabs.Panel>
                   )}

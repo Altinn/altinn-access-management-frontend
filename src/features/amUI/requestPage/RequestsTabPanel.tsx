@@ -11,9 +11,9 @@ import { Link } from 'react-router';
 import { useRestoreFocusContext, useRestoreFocusTarget } from '../common/RestoreFocus';
 import { RequestReviewModal } from './RequestReviewModal/RequestReviewModal';
 import { Request } from './types';
-
 import classes from './RequestPage.module.css';
 import { amUIPath } from '@/routes/paths';
+import { HandledRequestsSection } from './HandledRequestsSection';
 
 interface RequestsTabPanelProps {
   count: number;
@@ -66,9 +66,10 @@ export const RequestListItem = (props: React.ComponentProps<typeof UserListItem>
 
 interface PendingRequestsProps {
   pendingRequests: Request[] | undefined;
+  handledRequests: Request[] | undefined;
 }
 
-export const PendingRequests = ({ pendingRequests }: PendingRequestsProps) => {
+export const PendingRequests = ({ pendingRequests, handledRequests }: PendingRequestsProps) => {
   const { t } = useTranslation();
   const [openAccessRequest, setOpenAccessRequest] = useState<Request | null>(null);
   const restoreFocus = useRestoreFocusContext();
@@ -127,6 +128,10 @@ export const PendingRequests = ({ pendingRequests }: PendingRequestsProps) => {
       <RequestReviewModal
         request={openAccessRequest}
         onClose={handleClose}
+      />
+      <HandledRequestsSection
+        handledRequests={handledRequests}
+        direction='received'
       />
     </>
   );

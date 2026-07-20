@@ -11,12 +11,17 @@ import { SentRequestsCombinedModal } from './SentRequestsCombinedModal';
 import { PartyRepresentationProvider } from '../common/PartyRepresentationContext/PartyRepresentationContext';
 import { getCookie } from '@/resources/Cookie/CookieMethods';
 import { PartyType } from '@/rtk/features/userInfoApi';
+import { HandledRequestsSection } from './HandledRequestsSection';
 
 interface SentRequestsTabPanelProps {
   pendingRequests: Request[] | undefined;
+  handledRequests: Request[] | undefined;
 }
 
-export const SentRequestsTabPanel = ({ pendingRequests }: SentRequestsTabPanelProps) => {
+export const SentRequestsTabPanel = ({
+  pendingRequests,
+  handledRequests,
+}: SentRequestsTabPanelProps) => {
   const modalRef = useRef<HTMLDialogElement>(null);
   const [openAccessRequest, setOpenAccessRequest] = useState<Request | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -82,6 +87,10 @@ export const SentRequestsTabPanel = ({ pendingRequests }: SentRequestsTabPanelPr
           onClose={handleClose}
         />
       </PartyRepresentationProvider>
+      <HandledRequestsSection
+        handledRequests={handledRequests}
+        direction='sent'
+      />
     </>
   );
 };

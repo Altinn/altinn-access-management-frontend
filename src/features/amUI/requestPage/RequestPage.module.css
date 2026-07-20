@@ -6,6 +6,10 @@
   color: var(--ds-color-text-subtle);
 }
 
+.handledSection {
+  margin-top: var(--ds-size-4);
+}
+
 @media only screen and (max-width: 769px) {
   .requestItemBadge {
     display: none;

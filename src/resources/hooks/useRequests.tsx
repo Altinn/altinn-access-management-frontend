@@ -57,7 +57,7 @@ export const useRequests = ({ skipSentRequests = false }: UseRequestsOptions = {
     isLoading: isLoadingPendingSentAccessRequests,
     isError: isSentAccessRequestsError,
   } = useGetSentRequestsQuery(
-    { party: partyUuid || '', status: ['Pending'], to: '' },
+    { party: partyUuid || '', status: ['Pending', 'Rejected', 'Approved'], to: '' },
     { skip: !partyUuid || skipSentRequests },
   );
   const {
@@ -65,29 +65,50 @@ export const useRequests = ({ skipSentRequests = false }: UseRequestsOptions = {
     isLoading: isLoadingPendingReceivedAccessRequests,
     isError: isReceivedAccessRequestsError,
   } = useGetReceivedRequestsQuery(
-    { party: partyUuid || '', status: ['Pending'], from: '' },
+    { party: partyUuid || '', status: ['Pending', 'Rejected', 'Approved'], from: '' },
     { skip: !partyUuid },
   );
 
-  const pendingRequests: { sent: Request[]; received: Request[] } = useMemo(() => {
+  const sortRequests = (requests: Request[]): Request[] => {
+    return [...requests].sort(
+      (a, b) => new Date(b.createdDate).getTime() - new Date(a.createdDate).getTime(),
+    );
+  };
+
+  const pendingRequests: {
+    sent: Request[];
+    handledSent: Request[];
+    received: Request[];
+    handledReceived: Request[];
+  } = useMemo(() => {
     const consents = (activeConsents || [])
       .filter((x) => x.isPendingConsent)
       .map(mapConsentToRequest);
 
     const systemUserRequests = (pendingSystemUsers || []).map(mapSystemUserRequestToRequest);
-    const sentAccessRequests = groupAccessRequests(pendingSentAccessRequests || [], 'sent');
+    const sentAccessRequests = groupAccessRequests(pendingSentAccessRequests || [], 'sent', [
+      'Pending',
+    ]);
+    const handledSentAccessRequests = groupAccessRequests(pendingSentAccessRequests || [], 'sent', [
+      'Rejected',
+      'Approved',
+    ]);
     const receivedAccessRequests = groupAccessRequests(
       pendingReceivedAccessRequests || [],
       'received',
+      ['Pending'],
+    );
+    const handledReceivedAccessRequests = groupAccessRequests(
+      pendingReceivedAccessRequests || [],
+      'received',
+      ['Rejected', 'Approved'],
     );
 
     return {
-      sent: [...sentAccessRequests].sort(
-        (a, b) => new Date(b.createdDate).getTime() - new Date(a.createdDate).getTime(),
-      ),
-      received: [...consents, ...systemUserRequests, ...receivedAccessRequests].sort(
-        (a, b) => new Date(b.createdDate).getTime() - new Date(a.createdDate).getTime(),
-      ),
+      sent: sortRequests(sentAccessRequests),
+      received: sortRequests([...consents, ...systemUserRequests, ...receivedAccessRequests]),
+      handledSent: sortRequests(handledSentAccessRequests),
+      handledReceived: sortRequests(handledReceivedAccessRequests),
     };
   }, [
     activeConsents,
@@ -139,8 +160,13 @@ const mapSystemUserRequestToRequest = (request: SystemUser): Request => {
   };
 };
 
-const groupAccessRequests = (requests: RequestDto[], direction: 'sent' | 'received'): Request[] => [
+const groupAccessRequests = (
+  requests: RequestDto[],
+  direction: 'sent' | 'received',
+  status: string[],
+): Request[] => [
   ...requests
+    .filter((request) => status.includes(request.status))
     .reduce((map, request) => {
       const key = direction === 'sent' ? request.to.id : request.from.id;
       const existing = map.get(key);
