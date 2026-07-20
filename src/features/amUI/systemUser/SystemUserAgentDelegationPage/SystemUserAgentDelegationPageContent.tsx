@@ -442,12 +442,16 @@ export const SystemUserAgentDelegationPageContent = ({
         )}
         {assignSelfError && (
           <DelegationCheckError
+            accessPackages={systemUser.accessPackages}
+            resources={systemUser.resources}
             error={assignSelfError as { data: ProblemDetail }}
             defaultError={t('systemuser_agent_delegation.add_own_organization_error')}
           />
         )}
         {removeSelfError && (
           <DelegationCheckError
+            accessPackages={systemUser.accessPackages}
+            resources={systemUser.resources}
             error={removeSelfError as { data: ProblemDetail }}
             defaultError={t('systemuser_agent_delegation.remove_own_organization_error')}
           />

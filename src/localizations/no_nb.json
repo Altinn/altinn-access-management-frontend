@@ -820,14 +820,17 @@
     "11_system_not_found": "Valgt system finnes ikke",
     "14_unable_to_do_delegation_check": "Delegering av tjenester feilet med ukjent feil.",
     "16_delegation_right_missing_role_access": "Delegering av tjenester feilet: din rolle har ikke rettigheter til å delegere tjenester til systemtilgang.",
-    "18_delegation_right_missing_delegation_access": "Delegering av tjenester feilet: du har ikke rettigheter til å direkte delegere tjenester.",
+    "18_delegation_right_missing_delegation_access": "Delegering av tjenester feilet: du har ikke rettigheter til å direkte delegere tjenesten.",
     "19_delegation_right_missing_srr_right_access": "Delegering av tjenester feilet: en eller flere tjenester bruker tilgangslister der virksomhet ikke har tilgang.",
     "20_delegation_right_insufficient_authentication_level": "Delegering av tjenester feilet: en eller flere tjenester krever eksplisitt tilgangsnivå.",
     "51_accesspackage_delegation_failed": "Delegering av tilgangspakker til systemtilgang feilet.",
     "53_accesspackage_delegation_missing_required_access": "Du har ikke tilstrekkelige tilganger for å delegere disse tilgangspakkene.",
     "55_accesspackage_failed_to_get_delegated_packages": "Kunne ikke hente delegerte tilgangspakker.",
     "57_systemuser_failed_to_delete_accesspackage": "Kunne ikke fjerne tilgangspakke-delegering for systemtilgang.",
-    "68_delegation_right_missing_delegation_accesspackage": "Delegering av tjenester feilet: du mangler nødvendige tilgangspakker for delegasjon."
+    "68_delegation_right_missing_delegation_accesspackage": "Delegering av tjenester feilet: du mangler nødvendige tilgangspakker for delegasjon.",
+    "69_delegation_right_access_list_validation_fail": "Delegering av tjenester feilet: Mottakeren har ikke rettighet basert på delegasjon via tilgangsliste.",
+    "70_delegation_right_resource_not_delegable": "Delegering av tjenester feilet: Ressursen kan ikke delegeres til en annen bruker eller enhet.",
+    "71_delegation_right_resource_is_maskinporten_schema": "Delegering av tjenester feilet: Ressursen kan ikke delegeres fordi den er en Maskinporten skjemaressurs."
   },
   "consent_request": {
     "page_title": "Godkjenn avtale - Altinn",

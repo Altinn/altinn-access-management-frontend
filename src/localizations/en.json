@@ -823,14 +823,17 @@
     "11_system_not_found": "Chosen system does not exist",
     "14_unable_to_do_delegation_check": "Delegation of services failed with an unknown error.",
     "16_delegation_right_missing_role_access": "Delegation of services failed: your role does not have the rights to delegate services to system access.",
-    "18_delegation_right_missing_delegation_access": "Delegation of services failed: you do not have the rights to directly delegate services.",
+    "18_delegation_right_missing_delegation_access": "Delegation of services failed: you do not have the rights to directly delegate the service.",
     "19_delegation_right_missing_srr_right_access": "Delegation of services failed: one or more services use access lists where the organization does not have access.",
     "20_delegation_right_insufficient_authentication_level": "Delegation of services failed: one or more services require an explicit access level.",
     "51_accesspackage_delegation_failed": "Delegation of access packages to the system access failed.",
     "53_accesspackage_delegation_missing_required_access": "You do not have sufficient access rights to delegate the requested access packages.",
     "55_accesspackage_failed_to_get_delegated_packages": "Unable to retrieve delegated access packages.",
     "57_systemuser_failed_to_delete_accesspackage": "Could not delete access package delegation for the system access.",
-    "68_delegation_right_missing_delegation_accesspackage": "Delegation of services failed: you lack the necessary access packages for delegation."
+    "68_delegation_right_missing_delegation_accesspackage": "Delegation of services failed: you lack the necessary access packages for delegation.",
+    "69_delegation_right_access_list_validation_fail": "Delegation of services failed: The receiver does not have the right based on Access List delegation.",
+    "70_delegation_right_resource_not_delegable": "Delegation of services failed: The resource cannot be delegated to another user or entity.",
+    "71_delegation_right_resource_is_maskinporten_schema": "Delegation of services failed: The resource is not delegable because it is a Maskinporten schema resource."
   },
   "consent_request": {
     "page_title": "Approve agreement - Altinn",

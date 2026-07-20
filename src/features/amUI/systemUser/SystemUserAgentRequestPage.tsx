@@ -173,6 +173,8 @@ export const SystemUserAgentRequestPage = () => {
           <div>
             {acceptCreationRequestError && (
               <DelegationCheckError
+                accessPackages={request.accessPackages}
+                resources={request.resources}
                 defaultError='systemuser_includedrightspage.create_systemuser_error'
                 error={acceptCreationRequestError as { data: ProblemDetail }}
               />

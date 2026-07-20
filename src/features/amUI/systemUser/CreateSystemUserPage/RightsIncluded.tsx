@@ -91,6 +91,8 @@ export const RightsIncluded = ({ selectedSystem, onNavigateBack }: RightsInclude
           />
           {createSystemUserError && (
             <DelegationCheckError
+              accessPackages={rights?.accessPackages ?? []}
+              resources={rights?.resources ?? []}
               defaultError='systemuser_includedrightspage.create_systemuser_error'
               error={createSystemUserError as { data: ProblemDetail }}
             />

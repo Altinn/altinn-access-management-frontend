@@ -52,6 +52,9 @@ namespace Altinn.AccessManagement.UI.Core.Helpers
                     "AUTH-00062" => Problem.SystemUser_FailedToGetDelegatedRights,
                     "AUTH-00066" => Problem.Request_UserIsNotAccessManager,
                     "AUTH-00068" => Problem.DelegationRightMissingPackageAccess,
+                    "AUTH-00069" => Problem.DelegationRightAccessListValidationFail,
+                    "AUTH-00070" => Problem.DelegationRightResourceNotDelegable,
+                    "AUTH-00071" => Problem.DelegationRightResourceIsMaskinPortenSchema,
 
                     _ => Problem.Generic_EndOfMethod,
                 };
