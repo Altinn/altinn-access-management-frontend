@@ -21,6 +21,26 @@ export type HandledOutcome = {
   handledByName?: string;
 };
 
+/**
+ * One handled resource request. Keyed by `requestId` (not by `resource.identifier`) because the same
+ * resource can be requested — and approved/rejected — multiple times, producing several distinct rows.
+ */
+export type HandledResourceItem = {
+  requestId: string;
+  resource: ServiceResource;
+  outcome: HandledOutcome;
+};
+
+/**
+ * One handled package request. Keyed by `requestId` (not by `package.id`) — the same package can be
+ * requested and handled multiple times, producing several distinct rows.
+ */
+export type HandledPackageItem = {
+  requestId: string;
+  package: AccessPackage;
+  outcome: HandledOutcome;
+};
+
 const handledStatus: RequestStatus[] = ['Approved', 'Rejected'];
 
 const toProcessedStatus = (status: RequestStatus): ProcessedStatus | undefined => {
@@ -39,6 +59,9 @@ type SnapshotRequests = {
  * the enriched requests for the counterparty, keeps a stable snapshot while the modal is open, and
  * derives each item's outcome (status, handled date, handler name) directly from the loaded data —
  * no mutations, delegation checks, or bulk actions.
+ *
+ * Each item corresponds to a single request, keyed by its request id, so a resource or package that
+ * has been handled more than once shows up as one row per handled request.
  */
 export const useHandledRequests = (
   request: Request | null,
@@ -80,15 +103,17 @@ export const useHandledRequests = (
     resourceRequests: [],
     packageRequests: [],
   });
-  const [selectedResource, setSelectedResource] = useState<ServiceResource | null>(null);
-  const [selectedPackage, setSelectedPackage] = useState<AccessPackage | null>(null);
+  const [selectedResourceItem, setSelectedResourceItem] = useState<HandledResourceItem | null>(
+    null,
+  );
+  const [selectedPackageItem, setSelectedPackageItem] = useState<HandledPackageItem | null>(null);
 
   // Reset when switching to a different party or direction (not on every object reference change)
   const requestPartyUuid = request?.partyUuid;
   useEffect(() => {
     setSnapshotRequests({ resourceRequests: [], packageRequests: [] });
-    setSelectedResource(null);
-    setSelectedPackage(null);
+    setSelectedResourceItem(null);
+    setSelectedPackageItem(null);
   }, [requestPartyUuid, direction]);
 
   useEffect(() => {
@@ -110,70 +135,69 @@ export const useHandledRequests = (
     snapshotRequests.packageRequests.length,
   ]); // eslint-disable-line react-hooks/exhaustive-deps
 
-  const outcomes = useMemo(() => {
-    const map: Record<string, HandledOutcome> = {};
-    snapshotRequests.resourceRequests.forEach((req) => {
+  const handledResources = useMemo<HandledResourceItem[]>(() => {
+    return snapshotRequests.resourceRequests.reduce<HandledResourceItem[]>((items, req) => {
       const status = toProcessedStatus(req.status);
       if (status) {
-        map[req.resource.identifier] = {
-          status,
-          handledAt: req.lastUpdated,
-          handledByName: req.lastUpdatedByName,
-        };
+        items.push({
+          requestId: req.id,
+          resource: req.resource,
+          outcome: { status, handledAt: req.lastUpdated, handledByName: req.lastUpdatedByName },
+        });
       }
-    });
-    snapshotRequests.packageRequests.forEach((req) => {
+      return items;
+    }, []);
+  }, [snapshotRequests]);
+
+  const handledPackages = useMemo<HandledPackageItem[]>(() => {
+    return snapshotRequests.packageRequests.reduce<HandledPackageItem[]>((items, req) => {
       const status = toProcessedStatus(req.status);
       if (status) {
-        map[req.package.id] = {
-          status,
-          handledAt: req.lastUpdated,
-          handledByName: req.lastUpdatedByName,
-        };
+        items.push({
+          requestId: req.id,
+          package: req.package,
+          outcome: { status, handledAt: req.lastUpdated, handledByName: req.lastUpdatedByName },
+        });
       }
-    });
-    return map;
+      return items;
+    }, []);
   }, [snapshotRequests]);
 
   const handleSelection = ({
-    resource,
-    package: pkg,
+    resourceItem,
+    packageItem,
   }: {
-    resource?: ServiceResource;
-    package?: AccessPackage;
+    resourceItem?: HandledResourceItem;
+    packageItem?: HandledPackageItem;
   }) => {
-    if (resource) {
-      setSelectedResource(resource);
-      setSelectedPackage(null);
-    } else if (pkg) {
-      setSelectedPackage(pkg);
-      setSelectedResource(null);
+    if (resourceItem) {
+      setSelectedResourceItem(resourceItem);
+      setSelectedPackageItem(null);
+    } else if (packageItem) {
+      setSelectedPackageItem(packageItem);
+      setSelectedResourceItem(null);
     }
   };
 
   const resetSelection = () => {
-    setSelectedResource(null);
-    setSelectedPackage(null);
+    setSelectedResourceItem(null);
+    setSelectedPackageItem(null);
   };
 
   const handleClose = () => {
     setSnapshotRequests({ resourceRequests: [], packageRequests: [] });
-    setSelectedResource(null);
-    setSelectedPackage(null);
+    setSelectedResourceItem(null);
+    setSelectedPackageItem(null);
     onClose();
   };
-
-  const snapshotResources = snapshotRequests.resourceRequests.map((r) => r.resource);
-  const snapshotPackages = snapshotRequests.packageRequests.map((p) => p.package);
 
   return {
     isLoadingRequests,
     isFetchingRequests,
-    snapshotResources,
-    snapshotPackages,
-    selectedResource,
-    selectedPackage,
-    outcomes,
+    handledResources,
+    handledPackages,
+    selectedResourceItem,
+    selectedPackageItem,
     handleSelection,
     resetSelection,
     handleClose,

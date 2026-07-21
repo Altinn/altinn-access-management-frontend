@@ -1,4 +1,4 @@
-import { type ReactNode, type RefObject } from 'react';
+import { type ReactNode, type RefObject, useMemo } from 'react';
 import { Link } from 'react-router';
 import {
   AccessPackageListItem,
@@ -10,8 +10,9 @@ import {
 } from '@altinn/altinn-components';
 import { useTranslation } from 'react-i18next';
 import { CheckmarkCircleIcon, ChevronRightIcon, CircleSlashIcon } from '@navikt/aksel-icons';
-import type { Request } from '../types';
+import type { Request, ProcessedStatus } from '../types';
 import type { AccessPackage } from '@/rtk/features/accessPackageApi';
+import type { ServiceResource } from '@/rtk/features/singleRights/singleRightsApi';
 import { ResourceList } from '../../common/ResourceList/ResourceList';
 import { RequestResourceDetail } from '../RequestReviewModal/RequestResourceDetail';
 import { RequestPackageDetail } from '../RequestReviewModal/RequestPackageDetail';
@@ -19,7 +20,11 @@ import { useRestoreFocus, useRestoreFocusTarget } from '../../common/RestoreFocu
 import { TwoStepDialog } from '../../common/TwoStepDialog';
 import { amUIPath } from '@/routes/paths';
 import classes from '../RequestReviewModal/RequestReviewModal.module.css';
-import { useHandledRequests, type HandledDirection } from './useHandledRequests';
+import {
+  useHandledRequests,
+  type HandledDirection,
+  type HandledResourceItem,
+} from './useHandledRequests';
 
 interface HandledRequestModalContentProps {
   modalRef: RefObject<HTMLDialogElement | null>;
@@ -40,28 +45,26 @@ export const HandledRequestModalContent = ({
   const {
     isLoadingRequests,
     isFetchingRequests,
-    snapshotResources,
-    snapshotPackages,
-    selectedResource,
-    selectedPackage,
-    outcomes,
+    handledResources,
+    handledPackages,
+    selectedResourceItem,
+    selectedPackageItem,
     handleSelection,
     resetSelection,
   } = useHandledRequests(request, direction, () => modalRef.current?.close());
 
   const isReceived = direction === 'received';
-  const isDetailView = !!selectedResource || !!selectedPackage;
+  const isDetailView = !!selectedResourceItem || !!selectedPackageItem;
 
   const handleBack = () => {
-    const focusTargetId = selectedResource?.identifier ?? selectedPackage?.id;
+    const focusTargetId = selectedResourceItem?.requestId ?? selectedPackageItem?.requestId;
     if (focusTargetId) {
       restoreFocus.requestFocus(focusTargetId);
     }
     resetSelection();
   };
 
-  const itemControls = (id: string) => {
-    const status = outcomes[id]?.status;
+  const itemControls = (status?: ProcessedStatus) => {
     const chevron = (
       <ChevronRightIcon
         className={classes.chevronIcon}
@@ -95,28 +98,41 @@ export const HandledRequestModalContent = ({
     return chevron;
   };
 
+  // `ResourceList` keys and identifies rows by the resource's `id`. The same resource can appear in
+  // several handled requests, so we key each row by its request id (making duplicates distinct rows)
+  // and map back to the originating item on select / when rendering controls.
+  const resourceRows = useMemo<(ServiceResource & { id: string })[]>(
+    () => handledResources.map((item) => ({ ...item.resource, id: item.requestId })),
+    [handledResources],
+  );
+  const resourceItemById = useMemo(
+    () =>
+      new Map<string, HandledResourceItem>(handledResources.map((item) => [item.requestId, item])),
+    [handledResources],
+  );
+
   let content: ReactNode = null;
   if (request !== null) {
-    if (selectedResource) {
-      const outcome = outcomes[selectedResource.identifier];
+    if (selectedResourceItem) {
+      const { resource, outcome } = selectedResourceItem;
       content = (
         <RequestResourceDetail
-          resource={selectedResource}
+          resource={resource}
           toPartyName={request.displayPartyName || ''}
-          processedStatus={outcome?.status}
-          handledAt={outcome?.handledAt}
-          handledByName={isReceived ? outcome?.handledByName : undefined}
+          processedStatus={outcome.status}
+          handledAt={outcome.handledAt}
+          handledByName={isReceived ? outcome.handledByName : undefined}
         />
       );
-    } else if (selectedPackage) {
-      const outcome = outcomes[selectedPackage.id];
+    } else if (selectedPackageItem) {
+      const { package: pkg, outcome } = selectedPackageItem;
       content = (
         <RequestPackageDetail
-          pkg={selectedPackage}
+          pkg={pkg}
           toPartyName={request.displayPartyName || ''}
-          processedStatus={outcome?.status}
-          handledAt={outcome?.handledAt}
-          handledByName={isReceived ? outcome?.handledByName : undefined}
+          processedStatus={outcome.status}
+          handledAt={outcome.handledAt}
+          handledByName={isReceived ? outcome.handledByName : undefined}
         />
       );
     } else {
@@ -133,8 +149,8 @@ export const HandledRequestModalContent = ({
             </DsLink>
           )}
           {(isLoadingRequests || isFetchingRequests) &&
-          snapshotPackages.length === 0 &&
-          snapshotResources.length === 0 ? (
+          handledPackages.length === 0 &&
+          handledResources.length === 0 ? (
             <List>
               {Array.from({ length: request.numberOfRequests || 2 }).map((_, index) => (
                 <ResourceListItem
@@ -151,7 +167,7 @@ export const HandledRequestModalContent = ({
             </List>
           ) : (
             <>
-              {snapshotPackages.length > 0 && (
+              {handledPackages.length > 0 && (
                 <>
                   <DsHeading
                     level={2}
@@ -161,18 +177,19 @@ export const HandledRequestModalContent = ({
                     {t('request_page.package_list_title')}
                   </DsHeading>
                   <List aria-labelledby='handled-package-list-heading'>
-                    {snapshotPackages.map((p) => (
+                    {handledPackages.map((item) => (
                       <PackageHandledRow
-                        key={p.id}
-                        pkg={p}
-                        controls={itemControls(p.id)}
-                        onClick={() => handleSelection({ package: p })}
+                        key={item.requestId}
+                        requestId={item.requestId}
+                        pkg={item.package}
+                        controls={itemControls(item.outcome.status)}
+                        onClick={() => handleSelection({ packageItem: item })}
                       />
                     ))}
                   </List>
                 </>
               )}
-              {snapshotResources.length > 0 && (
+              {handledResources.length > 0 && (
                 <>
                   <DsHeading
                     level={2}
@@ -187,9 +204,13 @@ export const HandledRequestModalContent = ({
                     border='dotted'
                     enableSearch={false}
                     showDetails={false}
-                    resources={snapshotResources}
-                    onSelect={(resource) => handleSelection({ resource })}
-                    renderControls={(resource) => itemControls(resource.identifier)}
+                    resources={resourceRows}
+                    onSelect={(resource) =>
+                      handleSelection({ resourceItem: resourceItemById.get(resource.id) })
+                    }
+                    renderControls={(resource) =>
+                      itemControls(resourceItemById.get(resource.id)?.outcome.status)
+                    }
                   />
                 </>
               )}
@@ -222,17 +243,18 @@ export const HandledRequestModalContent = ({
 };
 
 interface PackageHandledRowProps {
+  requestId: string;
   pkg: AccessPackage;
   controls: ReactNode;
   onClick: () => void;
 }
 
-const PackageHandledRow = ({ pkg, controls, onClick }: PackageHandledRowProps) => {
+const PackageHandledRow = ({ requestId, pkg, controls, onClick }: PackageHandledRowProps) => {
   const { t } = useTranslation();
-  useRestoreFocusTarget(pkg.id);
+  useRestoreFocusTarget(requestId);
   return (
     <AccessPackageListItem
-      id={pkg.id}
+      id={requestId}
       name={pkg.name}
       description={t('access_packages.package_number_of_resources', {
         count: pkg.resources.length,
