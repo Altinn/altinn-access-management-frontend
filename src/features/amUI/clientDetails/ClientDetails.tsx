@@ -33,7 +33,7 @@ import { UserPageHeader } from '../common/UserPageHeader/UserPageHeader';
 import { UserPageHeaderSkeleton } from '../common/UserPageHeader/UserPageHeaderSkeleton';
 import { AddAgentButton } from '../users/NewUserModal/AddAgentModal';
 import { ClientAdminSearchField } from '../common/ClientAdminSearchField/ClientAdminSearchField';
-import { ClientAdminDetails } from '../common/ClientAdminDetails/ClientAdminDetails';
+import { CollapsibleContainer } from '../common/CollapsibleContainer/CollapsibleContainer';
 import { isNewUser } from '../common/isNewUser';
 
 export const ClientDetails = () => {
@@ -211,7 +211,7 @@ export const ClientDetails = () => {
                     />
                   </section>
                   <section aria-labelledby={unassignedSectionId}>
-                    <ClientAdminDetails
+                    <CollapsibleContainer
                       heading={t('client_administration_page.client_can_get_agents_tab')}
                       searchString={searchString}
                       id={unassignedSectionId}
@@ -228,7 +228,7 @@ export const ClientDetails = () => {
                         emptyText={`${t('client_administration_page.no_agents')} ${t('client_administration_page.addUserPrompt')}`}
                         searchString={searchString}
                       />
-                    </ClientAdminDetails>
+                    </CollapsibleContainer>
                   </section>
                 </>
               ) : (

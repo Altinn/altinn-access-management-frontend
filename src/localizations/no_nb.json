@@ -1071,6 +1071,7 @@
     "review_handled_on": "{{status}} den {{date}}",
     "review_handled_by": "{{status}} av {{name}} den {{date}}",
     "handled_requests_title": "Behandlede forespørsler",
+    "handled_requests_description": "Her vises forespørsler som ble behandlet for opptil et år siden.",
     "review_warning": "Du kan ikke godkjenne",
     "review_user_link": "Se fullmaktene {{name}} har nå",
     "review_close_info": "Hvis du ikke velger godkjenn eller avvis på en forespørsel, vil den bli liggende igjen som en aktiv forespørsel.",

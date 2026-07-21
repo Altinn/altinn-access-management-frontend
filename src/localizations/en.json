@@ -1074,6 +1074,7 @@
     "review_handled_on": "{{status}} on {{date}}",
     "review_handled_by": "{{status}} by {{name}} on {{date}}",
     "handled_requests_title": "Handled requests",
+    "handled_requests_description": "Here you can see requests that were processed up to a year ago.",
     "review_warning": "You cannot approve",
     "review_user_link": "See the powers of attorney {{name}} has now",
     "review_close_info": "If you do not choose to approve or reject a request, it will remain as an active request.",
