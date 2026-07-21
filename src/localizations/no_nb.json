@@ -643,9 +643,10 @@
     "remove_package_error": "Kunne ikke slette fullmakt til {{accessPackage}} for {{name}}.",
     "via_role": "Tilgang gjennom Enhetsregisteret",
     "agent_has_clients_tab": "Har disse klientene",
-    "agent_can_get_clients_tab": "Alle klienter",
+    "agent_can_get_clients_tab": "Kan få disse klientene",
     "client_has_agents_tab": "Brukere med fullmakt",
-    "client_can_get_agents_tab": "Alle brukere",
+    "client_can_get_agents_tab": "Brukere uten fullmakt",
+    "recently_added_users": "Nylig lagt til brukere",
     "new_agent_tag": "NY",
     "direct_connections_heading": "Brukere med klienttilgang",
     "indirect_connections_heading": "Andre brukere",
@@ -1091,8 +1092,8 @@
   "draft_request_page": {
     "page_title": "Forespørsel om fullmakt - Altinn",
     "heading": "Vil du be om tilgang til <strong>{{to_name}}</strong>?",
-    "intro_person": "Det er opprettet et forslag om tilgang til en tjeneste på dine vegne, men du må selv godkjenne den for at den skal tre i kraft. Forespørselen vil kun sendes til <strong>{{to_name}}</strong> dersom du sier deg enig.",
-    "intro_company": "Det er opprettet et forslag om tilgang til en tjeneste på vegne av <strong>{{from_name}}</strong>, men du må selv godkjenne den for at den skal tre i kraft. Forespørselen vil kun sendes til <strong>{{to_name}}</strong> dersom du sier deg enig.",
+    "intro_person": "Det er opprettet et forslag om tilgang på dine vegne, men du må selv godkjenne det for at det skal tre i kraft. Forespørselen vil kun sendes til <strong>{{to_name}}</strong> dersom du sier deg enig.",
+    "intro_company": "Det er opprettet et forslag om tilgang på vegne av <strong>{{from_name}}</strong>, men du må selv godkjenne det for at det skal tre i kraft. Forespørselen vil kun sendes til <strong>{{to_name}}</strong> dersom du sier deg enig.",
     "confirm_request": "Ja, be om tilgang",
     "withdraw_request": "Nei, avvis",
     "loading_request": "Laster forespørsel",
@@ -1105,8 +1106,9 @@
     "request_withdrawn_info": "Du har avvist forespørselen og vil dermed ikke få fullmakt til <strong>{{to_name}}</strong>.",
     "close_window_info": "Du kan nå lukke dette vinduet.",
     "missing_request_id": "Kan ikke laste forespørsel: requestId-parameter er ikke satt i url",
-    "batch_partial_error": "Kunne ikke behandle følgende ressurser: {{resources}}. Vennligst prøv igjen.",
-    "multiple_services_title": "<strong>{{name}}</strong> ber om følgende tjenester:"
+    "batch_partial_error": "Kunne ikke behandle følgende forespørsler: {{resources}}. Vennligst prøv igjen.",
+    "multiple_services_title": "<strong>{{name}}</strong> ber om følgende tjenester:",
+    "multiple_packages_title": "<strong>{{name}}</strong> ber om følgende tilgangspakker:"
   },
   "add_altinn2_account_page": {
     "page_title": "Legg til konto - Altinn",

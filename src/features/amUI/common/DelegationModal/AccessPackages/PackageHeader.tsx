@@ -7,9 +7,10 @@ import classes from './AccessPackageInfo.module.css';
 
 interface PackageHeaderProps {
   name: string;
+  level?: 1 | 2 | 3;
 }
 
-export const PackageHeader = ({ name }: PackageHeaderProps) => {
+export const PackageHeader = ({ name, level = 1 }: PackageHeaderProps) => {
   const isSmall = useIsMobileOrSmaller();
 
   return (
@@ -22,7 +23,7 @@ export const PackageHeader = ({ name }: PackageHeaderProps) => {
         />
       )}
       <DsHeading
-        level={1}
+        level={level}
         data-size={isSmall ? 'xs' : 'md'}
       >
         {name}
