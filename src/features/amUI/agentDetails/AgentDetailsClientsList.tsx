@@ -21,6 +21,7 @@ type AgentDetailsClientsListProps = {
   addAgentAccessPackages: AddAgentAccessPackagesFn;
   removeAgentAccessPackages: RemoveAgentAccessPackagesFn;
   searchString?: string;
+  emptyText?: string;
 };
 
 export const AgentDetailsClientsList = ({
@@ -32,6 +33,7 @@ export const AgentDetailsClientsList = ({
   addAgentAccessPackages,
   removeAgentAccessPackages,
   searchString,
+  emptyText,
 }: AgentDetailsClientsListProps) => {
   const delegateDisabled = isLoading || !toPartyUuid || !actingPartyUuid;
   const removeDisabled = isLoading || !toPartyUuid || !actingPartyUuid;
@@ -55,6 +57,7 @@ export const AgentDetailsClientsList = ({
       addDisabled={delegateDisabled}
       removeDisabled={removeDisabled}
       searchString={searchString}
+      emptyText={emptyText}
       onAddAccessPackage={(
         { clientId, roleCode, packageId, accessPackageName },
         onSuccess?: () => void,
