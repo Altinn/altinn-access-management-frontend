@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Antiforgery;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
+using Microsoft.FeatureManagement;
 
 namespace Altinn.AccessManagement.UI.Controllers
 {
@@ -22,7 +23,7 @@ namespace Altinn.AccessManagement.UI.Controllers
         private readonly IAntiforgery _antiforgery;
         private readonly IWebHostEnvironment _env;
         private readonly GeneralSettings _generalSettings;
-        private readonly FeatureFlags _featureFlags;
+        private readonly IFeatureManager _featureManager;
         private readonly IHttpContextAccessor _httpContextAccessor;
         private readonly PlatformSettings _platformSettings;
         private readonly IUserService _userService;
@@ -37,7 +38,7 @@ namespace Altinn.AccessManagement.UI.Controllers
         /// <param name="env">the current environment</param>
         /// <param name="httpContextAccessor">http context</param>
         /// <param name="generalSettings">general settings</param>
-        /// <param name="featureFlags">feature flags</param>
+        /// <param name="featureManager">the feature manager holding the current feature flag values</param>
         /// <param name="userService">user service to look up things about the user</param>
         /// <param name="logger">the logger</param>
         public HomeController(
@@ -47,7 +48,7 @@ namespace Altinn.AccessManagement.UI.Controllers
             IWebHostEnvironment env,
             IHttpContextAccessor httpContextAccessor,
             IOptions<GeneralSettings> generalSettings,
-            IOptions<FeatureFlags> featureFlags,
+            IFeatureManager featureManager,
             IUserService userService,
             ILogger<HomeController> logger)
         {
@@ -56,7 +57,7 @@ namespace Altinn.AccessManagement.UI.Controllers
             _env = env;
             _httpContextAccessor = httpContextAccessor;
             _generalSettings = generalSettings.Value;
-            _featureFlags = featureFlags.Value;
+            _featureManager = featureManager;
             _userService = userService;
             _logger = logger;
         }
@@ -90,7 +91,7 @@ namespace Altinn.AccessManagement.UI.Controllers
 
             if (await ShouldShowAppView())
             {
-                ViewBag.featureFlags = _featureFlags;
+                ViewBag.featureFlags = await GetFeatureFlags();
                 return View();
             }
 
@@ -107,6 +108,23 @@ namespace Altinn.AccessManagement.UI.Controllers
             "en" => "en",
             _ => "nb"
         };
+
+        /// <summary>
+        ///     Gets all feature flags as a dictionary exposed to the frontend as window.featureFlags,
+        ///     keyed by the camel cased flag name without its "AccessManagementUI." prefix
+        ///     (e.g. "AccessManagementUI.DisplayPopularSingleRightsServices" => "displayPopularSingleRightsServices")
+        /// </summary>
+        private async Task<Dictionary<string, bool>> GetFeatureFlags()
+        {
+            Dictionary<string, bool> featureFlags = new Dictionary<string, bool>();
+            await foreach (string featureName in _featureManager.GetFeatureNamesAsync())
+            {
+                string flagName = featureName[(featureName.LastIndexOf('.') + 1)..];
+                featureFlags[char.ToLowerInvariant(flagName[0]) + flagName[1..]] = await _featureManager.IsEnabledAsync(featureName);
+            }
+
+            return featureFlags;
+        }
 
         private async Task<string> SetLanguageCookie()
         {

@@ -258,6 +258,23 @@ Since most of the mocked data is generated from static files, a lot of the funct
   - Partial data coverage (only new amUI)
   - Is DAGL for Sta Tom Tiger AS (313160300)
 
+## Feature flags 🚩
+
+Feature flags let us turn functionality on and off per environment without changing code. The BFF reads them through `IFeatureManager` ([Microsoft.FeatureManagement](https://learn.microsoft.com/en-us/azure/azure-app-configuration/feature-management-dotnet-reference)), and the source depends on where the app runs:
+
+- **Locally**: the `FeatureManagement` section in `appsettings.Development.json`. The file is hot-reloaded, so you can flip a flag while the BFF is running and just refresh the page.
+- **Deployed environments**: the shared Azure App Configuration store `appconfaltinnauth001hub` (owned by the authorization backend team), where our flags live under the label `{environment}-access-management-ui`. The BFF polls the store every minute, so flags can be toggled in the Azure portal (the store's _Feature manager_ blade) without a redeploy. This requires the `Altinn__AppConfiguration__*` environment variables to be set on the container app — if they are not, the app falls back to the values in appsettings. The deploy workflow sets them automatically for environments that have the `APP_CONFIGURATION_LABEL` GitHub environment variable defined (the value is the label, e.g. `at22-access-management-ui`), so enabling Azure App Configuration for an environment is a matter of adding that variable — no code change needed.
+
+### Adding a new feature flag
+
+1. Add a constant in `Altinn.AccessManagement.UI.Core/Configuration/FeatureFlags.cs`. Flag names use the `AccessManagementUI.` prefix followed by a PascalCase name, e.g. `AccessManagementUI.UseNewSingleRightsClientDelegation`.
+2. Add the flag with its default value (usually `false`) to the `FeatureManagement` section in `appsettings.json` and `appsettings.Development.json`.
+3. The flag is automatically exposed to the frontend as `window.featureFlags.<name>`, where `<name>` is the camelCased flag name without the prefix (e.g. `useNewSingleRightsClientDelegation`). Add it to the `featureFlags` type in `src/global.d.ts` so it can be used with type support.
+4. To read the flag in the BFF, inject `IFeatureManager` and call `IsEnabledAsync(FeatureFlags.YourFlag)`.
+5. To make the flag toggleable in deployed environments, it must also be defined in the Terraform in [altinn-authorization-tmp](https://github.com/Altinn/altinn-authorization-tmp) (the `infra/modules/appsettings` module) with the `{environment}-access-management-ui` label. Terraform only owns the flag's existence and description — the on/off state is controlled in the Azure portal.
+
+When a feature becomes permanent, remove the flag again: the constant, the appsettings entries, the `global.d.ts` entry, all usages, and the Terraform definition.
+
 # Build, Deploy and Release
 
 ## Building and deploying 🚚

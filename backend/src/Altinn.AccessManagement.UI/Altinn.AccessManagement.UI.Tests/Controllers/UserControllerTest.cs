@@ -41,7 +41,7 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
         {
             _factory = factory;
             _profileClient = Mock.Of<IProfileClient>();
-            _client = SetupUtils.GetTestClient(factory, null);
+            _client = SetupUtils.GetTestClient(factory);
             _testDataFolder = Path.GetDirectoryName(new Uri(typeof(UserControllerTest).Assembly.Location).LocalPath);
 
         }
@@ -792,9 +792,7 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
             var httpContextAccessor = new HttpContextAccessor { HttpContext = httpContext };
             var userServiceMock = new Mock<IUserService>();
             var loggerMock = new Mock<ILogger<UserController>>();
-            var featureFlags = Options.Create(new FeatureFlags());
-
-            var controller = new UserController(userServiceMock.Object, httpContextAccessor, loggerMock.Object, featureFlags)
+            var controller = new UserController(userServiceMock.Object, httpContextAccessor, loggerMock.Object)
             {
                 ControllerContext = new ControllerContext { HttpContext = httpContext }
             };
@@ -885,9 +883,7 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
             var httpContextAccessor = new HttpContextAccessor { HttpContext = httpContext };
             var userServiceMock = new Mock<IUserService>();
             var loggerMock = new Mock<ILogger<UserController>>();
-            var featureFlags = Options.Create(new FeatureFlags());
-
-            var controller = new UserController(userServiceMock.Object, httpContextAccessor, loggerMock.Object, featureFlags)
+            var controller = new UserController(userServiceMock.Object, httpContextAccessor, loggerMock.Object)
             {
                 ControllerContext = new ControllerContext { HttpContext = httpContext }
             };
@@ -1002,9 +998,7 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
             var httpContextAccessor = new HttpContextAccessor { HttpContext = httpContext };
             var userServiceMock = new Mock<IUserService>();
             var loggerMock = new Mock<ILogger<UserController>>();
-            var featureFlags = Options.Create(new FeatureFlags());
-
-            var controller = new UserController(userServiceMock.Object, httpContextAccessor, loggerMock.Object, featureFlags)
+            var controller = new UserController(userServiceMock.Object, httpContextAccessor, loggerMock.Object)
             {
                 ControllerContext = new ControllerContext { HttpContext = httpContext }
             };
@@ -1050,9 +1044,7 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
             var httpContextAccessor = new HttpContextAccessor { HttpContext = httpContext };
             var userServiceMock = new Mock<IUserService>();
             var loggerMock = new Mock<ILogger<UserController>>();
-            var featureFlags = Options.Create(new FeatureFlags());
-
-            var controller = new UserController(userServiceMock.Object, httpContextAccessor, loggerMock.Object, featureFlags)
+            var controller = new UserController(userServiceMock.Object, httpContextAccessor, loggerMock.Object)
             {
                 ControllerContext = new ControllerContext { HttpContext = httpContext }
             };

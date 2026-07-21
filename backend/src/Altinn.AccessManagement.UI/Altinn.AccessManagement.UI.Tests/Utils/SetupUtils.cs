@@ -80,9 +80,8 @@ namespace Altinn.AccessManagement.UI.Tests.Utils
         ///     Gets a HttpClient for unittests testing
         /// </summary>
         /// <param name="customFactory">Web app factory to configure test services for UserController tests</param>
-        /// <param name="flags">Override featureFlags in the client. Defaults to true if not set</param>
         /// <returns>HttpClient</returns>
-        public static HttpClient GetTestClient(CustomWebApplicationFactory<UserController> customFactory, FeatureFlags flags)
+        public static HttpClient GetTestClient(CustomWebApplicationFactory<UserController> customFactory)
         {
             WebApplicationFactory<UserController> factory = customFactory.WithWebHostBuilder(builder =>
             {
@@ -102,9 +101,8 @@ namespace Altinn.AccessManagement.UI.Tests.Utils
         ///     Gets a HttpClient for unittests testing
         /// </summary>
         /// <param name="customFactory">Web app factory to configure test services for ConnectionController tests</param>
-        /// <param name="flags">Override featureFlags in the client. Defaults to true if not set</param>
         /// <returns>HttpClient</returns>
-        public static HttpClient GetTestClient(CustomWebApplicationFactory<ConnectionController> customFactory, FeatureFlags flags)
+        public static HttpClient GetTestClient(CustomWebApplicationFactory<ConnectionController> customFactory)
         {
             WebApplicationFactory<ConnectionController> factory = customFactory.WithWebHostBuilder(builder =>
             {
@@ -123,10 +121,9 @@ namespace Altinn.AccessManagement.UI.Tests.Utils
         /// <summary>
         ///     Gets a HttpClient for unittests testing
         /// </summary>
-        /// <param name="customFactory">Web app factory to configure test services for UserController tests</param>
-        /// <param name="flags">Override featureFlags in the client. Defaults to true if not set</param>
+        /// <param name="customFactory">Web app factory to configure test services for RoleController tests</param>
         /// <returns>HttpClient</returns>
-        public static HttpClient GetTestClient(CustomWebApplicationFactory<RoleController> customFactory, FeatureFlags flags)
+        public static HttpClient GetTestClient(CustomWebApplicationFactory<RoleController> customFactory)
         {
             WebApplicationFactory<RoleController> factory = customFactory.WithWebHostBuilder(builder =>
            {
