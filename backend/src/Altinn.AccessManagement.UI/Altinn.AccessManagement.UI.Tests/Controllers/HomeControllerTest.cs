@@ -71,6 +71,29 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
         }
 
         /// <summary>
+        /// Test case: Index renders the app view for an authenticated user
+        /// Expected: All feature flags are exposed on window.featureFlags, keyed by the camel cased
+        /// flag name without the AccessManagementUI prefix
+        /// </summary>
+        [Fact]
+        public async Task Index_Authenticated_ExposesFeatureFlagsToFrontend()
+        {
+            HttpClient client = SetupUtils.GetTestClient(_factory, false);
+            string token = PrincipalUtil.GetAccessToken("sbl.authorization");
+            client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+
+            // Act
+            HttpResponseMessage response = await client.GetAsync($"accessmanagement/");
+            string body = await response.Content.ReadAsStringAsync();
+
+            // Assert
+            Assert.Equal(HttpStatusCode.OK, response.StatusCode);
+            Assert.Contains("window.featureFlags", body);
+            Assert.Contains("\"displayPopularSingleRightsServices\":false", body);
+            Assert.Contains("\"useNewSingleRightsClientDelegation\":false", body);
+        }
+
+        /// <summary>
         /// Test case: Checks if the user is redirected to authentication when not authenticated
         /// Expected: User is redirected to authentication
         /// </summary>

@@ -25,7 +25,6 @@ using Microsoft.ApplicationInsights.Channel;
 using Microsoft.ApplicationInsights.Extensibility;
 using Microsoft.ApplicationInsights.WindowsServer.TelemetryChannel;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.Extensions.Configuration.AzureAppConfiguration;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.Extensions.Logging.ApplicationInsights;
 using Microsoft.FeatureManagement;
@@ -172,43 +171,7 @@ async Task SetConfigurationProviders(ConfigurationManager config)
 
     await ConnectToKeyVaultAndSetApplicationInsights(config);
 
-    AddAltinnAppConfiguration(config);
-}
-
-// Mirrors AddAltinnAppConfiguration in Altinn.Authorization.ServiceDefaults (same configuration
-// keys), so this setup can be replaced by that package once the repos are merged.
-void AddAltinnAppConfiguration(ConfigurationManager config)
-{
-    string appConfigurationEndpoint = config["Altinn:AppConfiguration:Endpoint"];
-    string appConfigurationLabel = config["Altinn:AppConfiguration:Label"];
-
-    if (string.IsNullOrEmpty(appConfigurationEndpoint) || string.IsNullOrEmpty(appConfigurationLabel))
-    {
-        logger.LogInformation("Program // Altinn:AppConfiguration:Endpoint or Label not set - skipping Azure App Configuration");
-        return;
-    }
-
-    ChainedTokenCredential credential = new ChainedTokenCredential(new ManagedIdentityCredential(ManagedIdentityId.SystemAssigned), new AzureCliCredential());
-
-    config.AddAzureAppConfiguration(options =>
-    {
-        options.Connect(new Uri(appConfigurationEndpoint), credential);
-        options.Select(KeyFilter.Any, appConfigurationLabel);
-        options.ConfigureRefresh(refresh =>
-        {
-            refresh.RegisterAll();
-            refresh.SetRefreshInterval(RefreshAppConfigurationHostedService.RefreshInterval);
-        });
-
-        if (config.GetValue("Altinn:AppConfiguration:FeatureFlags:Enable", false))
-        {
-            options.UseFeatureFlags(featureFlagOptions =>
-            {
-                featureFlagOptions.Select(KeyFilter.Any, appConfigurationLabel);
-                featureFlagOptions.SetRefreshInterval(RefreshAppConfigurationHostedService.RefreshInterval);
-            });
-        }
-    });
+    config.AddAltinnAppConfiguration(logger);
 }
 
 async Task ConnectToKeyVaultAndSetApplicationInsights(ConfigurationManager config)
@@ -258,6 +221,7 @@ void ConfigureServices(IServiceCollection services, IConfiguration config)
     if (!string.IsNullOrEmpty(config["Altinn:AppConfiguration:Endpoint"]) && !string.IsNullOrEmpty(config["Altinn:AppConfiguration:Label"]))
     {
         services.AddAzureAppConfiguration();
+        services.TryAddSingleton(TimeProvider.System);
         services.AddHostedService<RefreshAppConfigurationHostedService>();
     }
 
