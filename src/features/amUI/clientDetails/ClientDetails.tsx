@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useId, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import {
   DsAlert,
@@ -95,6 +95,9 @@ export const ClientDetails = () => {
     );
   }
 
+  const recentlyAddedSectionId = useId();
+  const assignedSectionId = useId();
+  const unassignedSectionId = useId();
   const backUrl = `/${amUIPath.ClientAdministration}#clients`;
   const clientName = formatDisplayName({
     fullName: fromParty?.name || '',
@@ -164,10 +167,11 @@ export const ClientDetails = () => {
                     />
                   </ClientAdminSearchField>
                   {recentlyAddedClients.length > 0 && (
-                    <>
+                    <section aria-labelledby={recentlyAddedSectionId}>
                       <DsHeading
                         data-size='xs'
                         level={2}
+                        id={recentlyAddedSectionId}
                       >
                         {t('client_administration_page.recently_added_users')}
                       </DsHeading>
@@ -183,32 +187,18 @@ export const ClientDetails = () => {
                         emptyText={t('client_administration_page.no_agents')}
                         searchString={searchString}
                       />
-                    </>
+                    </section>
                   )}
-                  <DsHeading
-                    data-size='xs'
-                    level={2}
-                  >
-                    {t('client_administration_page.client_has_agents_tab')}
-                  </DsHeading>
-                  <ClientAgentPackageList
-                    agents={agentsWithClientAccess}
-                    clientAccessPackages={clientAccessPackages ?? []}
-                    client={selectedClient}
-                    isLoading={isAddingAgentAccessPackages || isRemovingAgentAccessPackages}
-                    fromPartyUuid={fromPartyUuid}
-                    actingPartyUuid={actingPartyUuid}
-                    addAgentAccessPackages={addAgentAccessPackages}
-                    removeAgentAccessPackages={removeAgentAccessPackages}
-                    emptyText={t('client_administration_page.no_agents')}
-                    searchString={searchString}
-                  />
-                  <ClientAdminDetails
-                    heading={t('client_administration_page.client_can_get_agents_tab')}
-                    searchString={searchString}
-                  >
+                  <section aria-labelledby={assignedSectionId}>
+                    <DsHeading
+                      data-size='xs'
+                      level={2}
+                      id={assignedSectionId}
+                    >
+                      {t('client_administration_page.client_has_agents_tab')}
+                    </DsHeading>
                     <ClientAgentPackageList
-                      agents={agentsWithoutClientAccess}
+                      agents={agentsWithClientAccess}
                       clientAccessPackages={clientAccessPackages ?? []}
                       client={selectedClient}
                       isLoading={isAddingAgentAccessPackages || isRemovingAgentAccessPackages}
@@ -216,10 +206,30 @@ export const ClientDetails = () => {
                       actingPartyUuid={actingPartyUuid}
                       addAgentAccessPackages={addAgentAccessPackages}
                       removeAgentAccessPackages={removeAgentAccessPackages}
-                      emptyText={`${t('client_administration_page.no_agents')} ${t('client_administration_page.addUserPrompt')}`}
+                      emptyText={t('client_administration_page.no_agents')}
                       searchString={searchString}
                     />
-                  </ClientAdminDetails>
+                  </section>
+                  <section aria-labelledby={unassignedSectionId}>
+                    <ClientAdminDetails
+                      heading={t('client_administration_page.client_can_get_agents_tab')}
+                      searchString={searchString}
+                      id={unassignedSectionId}
+                    >
+                      <ClientAgentPackageList
+                        agents={agentsWithoutClientAccess}
+                        clientAccessPackages={clientAccessPackages ?? []}
+                        client={selectedClient}
+                        isLoading={isAddingAgentAccessPackages || isRemovingAgentAccessPackages}
+                        fromPartyUuid={fromPartyUuid}
+                        actingPartyUuid={actingPartyUuid}
+                        addAgentAccessPackages={addAgentAccessPackages}
+                        removeAgentAccessPackages={removeAgentAccessPackages}
+                        emptyText={`${t('client_administration_page.no_agents')} ${t('client_administration_page.addUserPrompt')}`}
+                        searchString={searchString}
+                      />
+                    </ClientAdminDetails>
+                  </section>
                 </>
               ) : (
                 <DsParagraph>
