@@ -275,6 +275,8 @@ Feature flags let us turn functionality on and off per environment without chang
 
 When a feature becomes permanent, remove the flag again: the constant, the appsettings entries, the `global.d.ts` entry, all usages, and the Terraform definition.
 
+**⚠️ Deploy ordering in altinn-authorization-tmp:** the Terraform pipeline there applies the configuration of the commit that triggered each run, and runs are approved manually per environment — nothing enforces ordering. If an older run is approved _after_ a newer one, the older configuration wins and recently added flags are **deleted** from the store, losing their toggle state; the next up-to-date run recreates them disabled. If our flags unexpectedly disappear or reset in the portal, re-run the newest "CD: Apps" run in that repo and re-toggle the flags.
+
 # Build, Deploy and Release
 
 ## Building and deploying 🚚

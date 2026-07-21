@@ -5,6 +5,7 @@ using Altinn.AccessManagement.UI.Core.Services.Interfaces;
 using Altinn.AccessManagement.UI.Core.Services;
 using Altinn.AccessManagement.UI.Mocks.Mocks;
 using AltinnCore.Authentication.JwtCookie;
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc.Testing;
 using Microsoft.AspNetCore.TestHost;
@@ -18,6 +19,20 @@ namespace Altinn.AccessManagement.UI.Tests.Utils
     /// </summary>
     public static class SetupUtils
     {
+        /// <summary>
+        ///     Overrides feature flag values for a test client, taking precedence over the
+        ///     FeatureManagement section in appsettings
+        /// </summary>
+        /// <param name="builder">Web host builder for the test server</param>
+        /// <param name="featureFlags">Flag values keyed by flag name (see <see cref="FeatureFlags" />)</param>
+        public static void SetFeatureFlags(IWebHostBuilder builder, Dictionary<string, bool> featureFlags)
+        {
+            foreach ((string flag, bool enabled) in featureFlags)
+            {
+                builder.UseSetting($"FeatureManagement:{flag}", enabled.ToString());
+            }
+        }
+
         /// <summary>
         ///     Gets a HttpClient for unittests testing
         /// </summary>
