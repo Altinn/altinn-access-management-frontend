@@ -5,21 +5,9 @@ import { PartyRepresentationProvider } from '../common/PartyRepresentationContex
 import { amUIPath } from '@/routes/paths';
 import { getCookie } from '@/resources/Cookie/CookieMethods';
 import { SettingsPageContent } from './SettingsPageContent';
-import { settingsPageEnabled } from '@/resources/utils/featureFlagUtils';
-import { Navigate } from 'react-router';
 import { Breadcrumbs } from '../common/Breadcrumbs/Breadcrumbs';
 
 export const SettingsPage = () => {
-  const pageIsEnabled = settingsPageEnabled();
-  if (!pageIsEnabled) {
-    return (
-      <Navigate
-        to='/not-found'
-        replace
-      />
-    );
-  }
-
   return (
     <PageWrapper>
       <PageLayoutWrapper>

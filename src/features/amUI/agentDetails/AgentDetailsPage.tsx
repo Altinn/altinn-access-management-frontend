@@ -5,8 +5,7 @@ import { AgentDetails } from './AgentDetails';
 import { PartyRepresentationProvider } from '../common/PartyRepresentationContext/PartyRepresentationContext';
 import { getCookie } from '@/resources/Cookie/CookieMethods';
 import { useDocumentTitle } from '@/resources/hooks/useDocumentTitle';
-import { Navigate, useParams } from 'react-router';
-import { clientAdministrationPageEnabled } from '@/resources/utils/featureFlagUtils';
+import { useParams } from 'react-router';
 import { PageWrapper } from '@/components';
 import { PageLayoutWrapper } from '../common/PageLayoutWrapper';
 import { useGetAgentsQuery } from '@/rtk/features/clientApi';
@@ -19,18 +18,8 @@ export const AgentDetailsPage = () => {
 
   useDocumentTitle(t('client_administration_page.agent_page_title'));
 
-  const pageIsEnabled = clientAdministrationPageEnabled();
   const { data: agents } = useGetAgentsQuery();
   const selectedAgent = agents?.find((item) => item.agent.id === id);
-
-  if (!pageIsEnabled) {
-    return (
-      <Navigate
-        to='/not-found'
-        replace
-      />
-    );
-  }
 
   const agentParty: Party | undefined = selectedAgent
     ? {

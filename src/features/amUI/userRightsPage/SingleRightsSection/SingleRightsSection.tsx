@@ -37,8 +37,7 @@ const SingleRightsSectionContent = ({ isReportee }: { isReportee: boolean }) => 
   const canRequestAccess =
     !canGiveAccess &&
     actingParty?.partyUuid === toParty?.partyUuid &&
-    toParty?.partyUuid !== fromParty?.partyUuid &&
-    window.featureFlags?.enableRequestAccess;
+    toParty?.partyUuid !== fromParty?.partyUuid;
 
   const {
     data: delegatedResources,

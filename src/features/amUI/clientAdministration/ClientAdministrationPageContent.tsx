@@ -1,6 +1,5 @@
 import React from 'react';
 import { Trans, useTranslation } from 'react-i18next';
-import { Navigate } from 'react-router';
 import {
   DsAlert,
   DsHeading,
@@ -11,7 +10,6 @@ import {
 import { DatabaseIcon, PersonGroupIcon } from '@navikt/aksel-icons';
 import { AmTabs } from '../common/AmTabs/AmTabs';
 
-import { clientAdministrationPageEnabled } from '@/resources/utils/featureFlagUtils';
 import {
   PartyType,
   useGetIsClientAdminQuery,
@@ -28,7 +26,6 @@ const clientAdministrationTabs = ['users', 'clients'] as const;
 
 export const ClientAdministrationPageContent = () => {
   const { t } = useTranslation();
-  const pageIsEnabled = clientAdministrationPageEnabled();
   const { actingParty, isLoading: actorLoading } = usePartyRepresentation();
 
   const [activeTab, setActiveTab] = useTabState({
@@ -38,15 +35,6 @@ export const ClientAdministrationPageContent = () => {
 
   const { data: reportee, isLoading: isLoadingReportee } = useGetReporteeQuery();
   const { data: isClientAdmin, isLoading: isLoadingIsClientAdmin } = useGetIsClientAdminQuery();
-
-  if (!pageIsEnabled) {
-    return (
-      <Navigate
-        to='/not-found'
-        replace
-      />
-    );
-  }
 
   if (isLoadingIsClientAdmin) {
     return (

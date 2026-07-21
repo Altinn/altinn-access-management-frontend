@@ -1,4 +1,4 @@
-import { Navigate, useSearchParams } from 'react-router';
+import { useSearchParams } from 'react-router';
 import { useTranslation } from 'react-i18next';
 import { DsButton } from '@altinn/altinn-components';
 import { EnvelopeClosedIcon } from '@navikt/aksel-icons';
@@ -6,7 +6,6 @@ import { EnvelopeClosedIcon } from '@navikt/aksel-icons';
 import { PageWrapper } from '@/components';
 import { getCookie } from '@/resources/Cookie/CookieMethods';
 import { useDocumentTitle } from '@/resources/hooks/useDocumentTitle';
-import { displayInstanceDelegation } from '@/resources/utils/featureFlagUtils';
 import { getAfUrl } from '@/resources/utils/pathUtils';
 
 import { DeeplinkReporteeGuard } from '../common/DeeplinkReporteeGuard/DeeplinkReporteeGuard';
@@ -30,7 +29,6 @@ export const InstanceDetailPage = () => {
   const [searchParams] = useSearchParams();
   const dialogId = searchParams.get('dialogId');
   const isInboxDeeplink = !!dialogId;
-  const instanceDelegationEnabled = displayInstanceDelegation();
   const poaOverviewUrl = `/${amUIPath.PoaOverview}#instances`;
   const restoreFocus = useRestoreFocus();
 
@@ -39,15 +37,6 @@ export const InstanceDetailPage = () => {
       ? t('instance_detail_page.document_title_from_inbox')
       : t('instance_detail_page.document_title'),
   );
-
-  if (!instanceDelegationEnabled) {
-    return (
-      <Navigate
-        to='/not-found'
-        replace
-      />
-    );
-  }
 
   const inboxLink = dialogId ? (
     <div className={classes.inboxLinkContainer}>

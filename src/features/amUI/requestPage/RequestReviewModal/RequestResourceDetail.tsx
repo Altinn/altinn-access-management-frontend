@@ -1,9 +1,7 @@
 import { useRef } from 'react';
 import { DsButton } from '@altinn/altinn-components';
 import { useTranslation } from 'react-i18next';
-import { ArrowLeftIcon } from '@navikt/aksel-icons';
 import type { ProcessedStatus } from '../types';
-import { useAutoFocusRef } from '@/resources/hooks/useAutoFocusRef';
 import type { ServiceResource } from '@/rtk/features/singleRights/singleRightsApi';
 import { ResourceInfo } from '../../common/DelegationModal/SingleRights/ResourceInfo';
 import { DelegationAction } from '../../common/DelegationModal/EditModal';
@@ -15,7 +13,6 @@ interface RequestResourceDetailProps {
   processedStatus?: ProcessedStatus;
   handledAt?: string;
   actionLoading: 'approve' | 'reject' | null;
-  onBack: () => void;
   onApprove: () => void;
   onReject: () => void;
   cannotApprove: boolean;
@@ -27,27 +24,16 @@ export const RequestResourceDetail = ({
   processedStatus,
   handledAt,
   actionLoading,
-  onBack,
   onApprove,
   onReject,
   cannotApprove,
   toPartyName,
 }: RequestResourceDetailProps) => {
   const { t } = useTranslation();
-  const backButtonRef = useAutoFocusRef<HTMLButtonElement>();
   const openedUnprocessed = useRef(!processedStatus);
 
   return (
     <>
-      <DsButton
-        ref={backButtonRef}
-        variant='tertiary'
-        className={classes.backButton}
-        onClick={onBack}
-      >
-        <ArrowLeftIcon aria-hidden='true' />
-        {t('common.back')}
-      </DsButton>
       <ResourceInfo
         resource={resource}
         toPartyName={toPartyName}

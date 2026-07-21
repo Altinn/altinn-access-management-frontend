@@ -1,10 +1,9 @@
 import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useParams } from 'react-router';
-import { DsAlert, DsHeading, DsPopover } from '@altinn/altinn-components';
+import { DsHeading, DsPopover } from '@altinn/altinn-components';
 
 import { useGetUserDelegationsQuery } from '@/rtk/features/accessPackageApi';
-import { PartyType } from '@/rtk/features/userInfoApi';
 
 import { DelegationModal, DelegationType } from '../../common/DelegationModal/DelegationModal';
 import { DelegationAction } from '../../common/DelegationModal/EditModal';
@@ -16,7 +15,6 @@ import { PendingPackageRequests } from './PendingPackageRequests/Requests';
 
 import classes from './AccessPackageSection.module.css';
 import { isGuardianshipUrn } from '@/resources/utils';
-import { displayPrivDelegation } from '@/resources/utils/featureFlagUtils';
 import { DebouncedSearchField } from '../../common/DebouncedSearchField/DebouncedSearchField';
 import { useCanGiveAccess } from '@/resources/hooks/useCanGiveAccess';
 import { useCanRequestAccess } from '@/resources/hooks/useCanRequestAccess';
@@ -34,7 +32,6 @@ export const AccessPackageSection = ({ isReportee = false }: { isReportee?: bool
   const partyId = isReportee ? (toParty?.partyUuid ?? '') : (id ?? '');
   const canGiveAccess = useCanGiveAccess(partyId, isReportee);
   const canRequestAccess = useCanRequestAccess(isReportee) && !canGiveAccess;
-  const shouldDisplayPrivDelegation = displayPrivDelegation();
 
   const { data: accesses, isLoading: loadingAccesses } = useGetUserDelegationsQuery(
     {
@@ -56,11 +53,6 @@ export const AccessPackageSection = ({ isReportee = false }: { isReportee?: bool
 
   return (
     <>
-      {!isReportee &&
-        toParty?.partyTypeName === PartyType.Person &&
-        !shouldDisplayPrivDelegation && (
-          <DsAlert data-color='warning'>{t('access_packages.person_info_alert')}</DsAlert>
-        )}
       {loadingPartyRepresentation || loadingAccesses ? (
         <TabContentSkeleton />
       ) : (
@@ -86,10 +78,7 @@ export const AccessPackageSection = ({ isReportee = false }: { isReportee?: bool
               </div>
             )}
             <div className={classes.delegateButton}>
-              {(isReportee ||
-                toParty?.partyTypeName === PartyType.Organization ||
-                shouldDisplayPrivDelegation) &&
-                (canGiveAccess || canRequestAccess) && (
+              {(canGiveAccess || canRequestAccess) && (
                   <DelegationModal
                     delegationType={DelegationType.AccessPackage}
                     availableActions={[

@@ -1,6 +1,5 @@
 import * as React from 'react';
-import { DsHeading, formatDisplayName } from '@altinn/altinn-components';
-import { Trans, useTranslation } from 'react-i18next';
+import { useTranslation } from 'react-i18next';
 
 import { arraysEqual } from '@/resources/utils';
 import { useDebouncedValue } from '@/resources/hooks';
@@ -10,7 +9,6 @@ import {
   useSearchMaskinportenScopesQuery,
 } from '@/rtk/features/maskinportenApi';
 import type { ServiceResource } from '@/rtk/features/singleRights/singleRightsApi';
-import { PartyType } from '@/rtk/features/userInfoApi';
 import { ResourceFilterToolbar } from '@/features/amUI/common/ResourceFilterToolbar/ResourceFilterToolbar';
 
 import { useDelegationModalContext } from '../common/DelegationModal/DelegationModalContext';
@@ -59,11 +57,6 @@ export const ScopeSearch = ({
       label: owner.organisationName ?? owner.organisationCode,
       value: owner.organisationCode,
     })) ?? [];
-  const toPartyName = formatDisplayName({
-    fullName: toParty?.name ?? '',
-    type: toParty?.partyTypeName === PartyType.Person ? 'person' : 'company',
-  });
-
   const setSearch = (value: string) => {
     setSearchString(value);
     setCurrentPage(1);
@@ -71,16 +64,6 @@ export const ScopeSearch = ({
 
   return (
     <>
-      <DsHeading
-        level={2}
-        data-size='sm'
-      >
-        <Trans
-          i18nKey='maskinporten_page.search_scopes_heading'
-          values={{ name: toPartyName }}
-          components={{ strong: <strong /> }}
-        />
-      </DsHeading>
       <div className={classes.toolbarContainer}>
         <ResourceFilterToolbar
           search={searchString}

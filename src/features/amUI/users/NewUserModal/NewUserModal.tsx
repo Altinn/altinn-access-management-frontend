@@ -8,7 +8,6 @@ import { NewPersonContent } from './NewPersonContent';
 import classes from './NewUserModal.module.css';
 import { NewOrgContent } from './NewOrgContent';
 import { User } from '@/rtk/features/userInfoApi';
-import { displayPrivDelegation } from '@/resources/utils/featureFlagUtils';
 import { useAddRightHolderMutation } from '@/rtk/features/connectionApi';
 import { Organization } from '@/rtk/features/lookupApi';
 import { createErrorDetails } from '../../common/TechnicalErrorParagraphs/TechnicalErrorParagraphs';
@@ -47,8 +46,6 @@ interface NewUserModalProps {
 }
 
 const NewUserModal: React.FC<NewUserModalProps> = ({ modalRef, onComplete }) => {
-  const shouldDisplayPrivDelegation = displayPrivDelegation();
-
   const [errorDetail, setErrorDetail] = useState<{ status: string; time: string } | null>(null);
   const [addRightHolder, { isLoading, error }] = useAddRightHolderMutation();
   useEffect(() => {
@@ -116,7 +113,7 @@ const NewUserModal: React.FC<NewUserModalProps> = ({ modalRef, onComplete }) => 
         onChange={() => {
           setErrorDetail(null);
         }}
-        defaultValue={shouldDisplayPrivDelegation ? 'person' : 'org'}
+        defaultValue={'person'}
       >
         <AmTabs.List>
           {

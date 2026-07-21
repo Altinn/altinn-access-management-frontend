@@ -8,7 +8,6 @@ import { AmTabs } from '../common/AmTabs/AmTabs';
 import { PageWrapper } from '@/components/PageWrapper/PageWrapper';
 import { getCookie } from '@/resources/Cookie/CookieMethods';
 import { useDocumentTitle } from '@/resources/hooks/useDocumentTitle';
-import { enableMaskinportenAdministration } from '@/resources/utils/featureFlagUtils';
 import { useGetIsMaskinportenAdminQuery, useGetReporteeQuery } from '@/rtk/features/userInfoApi';
 
 import { Breadcrumbs } from '../common/Breadcrumbs/Breadcrumbs';
@@ -29,18 +28,12 @@ export const MaskinportenPage = () => {
     tabs: maskinportenTabs,
     defaultTab: 'suppliers',
   });
-  const { data: isMaskinportenAdmin, isLoading } = useGetIsMaskinportenAdminQuery(undefined, {
-    skip: !enableMaskinportenAdministration(),
-  });
+  const { data: isMaskinportenAdmin, isLoading } = useGetIsMaskinportenAdminQuery();
   const { data: reportee, isLoading: isLoadingReportee } = useGetReporteeQuery();
-  const canFetchTabData = isMaskinportenAdmin === true && enableMaskinportenAdministration();
+  const canFetchTabData = isMaskinportenAdmin === true;
   useDocumentTitle(t('maskinporten_page.document_title'));
 
-  if (
-    (!isLoading && isMaskinportenAdmin !== true) ||
-    !enableMaskinportenAdministration() ||
-    !party
-  ) {
+  if ((!isLoading && isMaskinportenAdmin !== true) || !party) {
     return (
       <Navigate
         to='/'
