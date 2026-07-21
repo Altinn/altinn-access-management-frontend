@@ -66,6 +66,9 @@ export const ClientDetails = () => {
   );
   const [searchString, setSearchString] = useState<string>('');
 
+  const recentlyAddedSectionId = useId();
+  const assignedSectionId = useId();
+  const unassignedSectionId = useId();
   const selectedClient = clients?.find((client) => client.client.id === id);
   const delegablePackages = selectedClient?.access?.flatMap((access) => access.packages) ?? [];
 
@@ -95,9 +98,6 @@ export const ClientDetails = () => {
     );
   }
 
-  const recentlyAddedSectionId = useId();
-  const assignedSectionId = useId();
-  const unassignedSectionId = useId();
   const backUrl = `/${amUIPath.ClientAdministration}#clients`;
   const clientName = formatDisplayName({
     fullName: fromParty?.name || '',
