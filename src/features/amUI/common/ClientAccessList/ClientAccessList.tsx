@@ -53,6 +53,7 @@ type ClientAccessListProps = {
   ) => void | Promise<void>;
   requireDelegableForActions?: boolean;
   emptyAccessText?: string;
+  emptyText?: string;
   searchString?: string;
 };
 
@@ -74,6 +75,7 @@ export const ClientAccessList = ({
   onRemoveAccessPackage,
   requireDelegableForActions = true,
   emptyAccessText,
+  emptyText,
   searchString,
 }: ClientAccessListProps) => {
   const { t } = useTranslation();
@@ -255,6 +257,7 @@ export const ClientAccessList = ({
     <>
       <UserListItems
         items={userListItems}
+        emptyText={emptyText}
         searchString={searchString}
       />
       <ClientPackageInfoModal
