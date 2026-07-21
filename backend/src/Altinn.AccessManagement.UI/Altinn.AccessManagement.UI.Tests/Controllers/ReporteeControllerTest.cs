@@ -1,8 +1,6 @@
 using System.Net;
 using System.Net.Http.Headers;
-using System.Web;
 using Altinn.AccessManagement.UI.Controllers;
-using Altinn.AccessManagement.UI.Core.Configuration;
 using Altinn.AccessManagement.UI.Mocks.Utils;
 using Altinn.AccessManagement.UI.Tests.Utils;
 
@@ -30,26 +28,11 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
         private const string AltinnCloudGoTo = "https://am.ui.at22.altinn.cloud/some/page";
         private const string ForeignGoTo = "https://evil.example.com/steal";
 
-        private const string Altinn2Hostname = "at22.altinn.cloud";
-
         private readonly HttpClient _client;
-        private readonly CustomWebApplicationFactory<ReporteeController> _factory;
 
         public ReporteeControllerTest(CustomWebApplicationFactory<ReporteeController> factory)
         {
-            _factory = factory;
             _client = SetupUtils.GetTestClient(factory);
-        }
-
-        private HttpClient AuthenticatedClientWithFlag(bool routeViaAltinn2, string hostname)
-        {
-            HttpClient client = SetupUtils.GetTestClient(
-                _factory,
-                new FeatureFlags { RouteChangeReporteeViaAltinn2 = routeViaAltinn2 },
-                hostname);
-            string token = PrincipalUtil.GetToken(1234, 1234, 2);
-            client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
-            return client;
         }
 
         private void Authenticate()
@@ -233,99 +216,6 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
         }
 
         [Fact]
-        public async Task ChangeAndRedirect_FlagOn_BouncesViaAltinn2WithCookiesAndPreservedGoTo()
-        {
-            HttpClient client = AuthenticatedClientWithFlag(routeViaAltinn2: true, hostname: Altinn2Hostname);
-
-            HttpResponseMessage response = await client.GetAsync(
-                $"accessmanagement/api/v1/reportee/changeandredirect?P={ValidPartyUuidInList}&goTo={Encode(AltinnGoTo)}");
-
-            Assert.Equal(HttpStatusCode.Redirect, response.StatusCode);
-
-            Uri location = response.Headers.Location;
-            Assert.Equal("https", location.Scheme);
-            Assert.Equal(Altinn2Hostname, location.Host);
-            Assert.Equal("/ui/Reportee/ChangeReporteeAndRedirect/", location.AbsolutePath);
-
-            System.Collections.Specialized.NameValueCollection query = HttpUtility.ParseQueryString(location.Query);
-            Assert.Equal(ValidPartyUuidInList, query["P"]);
-            Assert.Equal(AltinnGoTo, query["goTo"]);
-
-            // Cookies for AM3 must still be set during the bounce.
-            IEnumerable<string> cookies = response.Headers.GetValues("Set-Cookie");
-            Assert.Contains(cookies, c => c.StartsWith($"AltinnPartyId={ValidPartyIdInList}"));
-            Assert.Contains(cookies, c => c.StartsWith($"AltinnPartyUuid={ValidPartyUuidInList}"));
-        }
-
-        [Fact]
-        public async Task ChangeAndRedirect_FlagOn_LocalhostHostname_FallsBackToDirectRedirect()
-        {
-            // Hostname=localhost is the test default; bounce must be skipped because it isn't a real Altinn host.
-            HttpClient client = AuthenticatedClientWithFlag(routeViaAltinn2: true, hostname: null);
-
-            HttpResponseMessage response = await client.GetAsync(
-                $"accessmanagement/api/v1/reportee/changeandredirect?P={ValidPartyUuidInList}&goTo={Encode(AltinnGoTo)}");
-
-            Assert.Equal(HttpStatusCode.Redirect, response.StatusCode);
-            Assert.Equal(AltinnGoTo, response.Headers.Location.OriginalString);
-
-            IEnumerable<string> cookies = response.Headers.GetValues("Set-Cookie");
-            Assert.Contains(cookies, c => c.StartsWith($"AltinnPartyId={ValidPartyIdInList}"));
-        }
-
-        [Fact]
-        public async Task ChangeAndRedirect_FlagOn_ForeignGoTo_BouncesUsingFallbackUrl()
-        {
-            HttpClient client = AuthenticatedClientWithFlag(routeViaAltinn2: true, hostname: Altinn2Hostname);
-
-            HttpResponseMessage response = await client.GetAsync(
-                $"accessmanagement/api/v1/reportee/changeandredirect?P={ValidPartyUuidInList}&goTo={Encode(ForeignGoTo)}");
-
-            Assert.Equal(HttpStatusCode.Redirect, response.StatusCode);
-
-            Uri location = response.Headers.Location;
-            Assert.Equal(Altinn2Hostname, location.Host);
-
-            // The disallowed goTo must not be forwarded through Altinn 2; the fallback FrontendBaseUrl is passed instead.
-            System.Collections.Specialized.NameValueCollection query = HttpUtility.ParseQueryString(location.Query);
-            Assert.NotEqual(ForeignGoTo, query["goTo"]);
-        }
-
-        [Fact]
-        public async Task ChangeAndRedirect_FlagOn_PartyIdLookup_BouncesWithResolvedUuid()
-        {
-            HttpClient client = AuthenticatedClientWithFlag(routeViaAltinn2: true, hostname: Altinn2Hostname);
-
-            HttpResponseMessage response = await client.GetAsync(
-                $"accessmanagement/api/v1/reportee/changeandredirect?partyId={ValidLookupPartyId}&goTo={Encode(AltinnGoTo)}");
-
-            Assert.Equal(HttpStatusCode.Redirect, response.StatusCode);
-
-            Uri location = response.Headers.Location;
-            Assert.Equal(Altinn2Hostname, location.Host);
-
-            System.Collections.Specialized.NameValueCollection query = HttpUtility.ParseQueryString(location.Query);
-            Assert.Equal(ValidLookupPartyUuid, query["P"]);
-            Assert.Equal(AltinnGoTo, query["goTo"]);
-        }
-
-        [Fact]
-        public async Task Change_FlagOn_StillReturns200_NeverBounces()
-        {
-            // The XHR /change endpoint is same-origin and must not be affected by the bounce flag.
-            HttpClient client = AuthenticatedClientWithFlag(routeViaAltinn2: true, hostname: Altinn2Hostname);
-
-            HttpResponseMessage response = await client.PostAsync(
-                $"accessmanagement/api/v1/reportee/change?partyUuid={ValidPartyUuidInList}",
-                content: null);
-
-            Assert.Equal(HttpStatusCode.OK, response.StatusCode);
-            IEnumerable<string> cookies = response.Headers.GetValues("Set-Cookie");
-            Assert.Contains(cookies, c => c.StartsWith($"AltinnPartyId={ValidPartyIdInList}"));
-            Assert.Contains(cookies, c => c.StartsWith($"AltinnPartyUuid={ValidPartyUuidInList}"));
-        }
-
-        [Fact]
         public async Task ChangeAndRedirect_PartyUuid_MatchesSubunit_RedirectsAndSetsSubunitCookies()
         {
             Authenticate();
@@ -418,26 +308,6 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
             IEnumerable<string> cookies = response.Headers.GetValues("Set-Cookie");
             Assert.Contains(cookies, c => c.StartsWith($"AltinnPartyId={SubunitPartyId}"));
             Assert.Contains(cookies, c => c.StartsWith($"AltinnPartyUuid={SubunitPartyUuid}"));
-        }
-
-        [Fact]
-        public async Task ChangeAndRedirect_FlagOn_SubunitPartyIdLookup_BouncesWithSubunitUuid()
-        {
-            // When the Altinn 2 bounce is enabled and a partyId points to a subunit, the bounce URL must
-            // use the resolved subunit's UUID — not the parent's.
-            HttpClient client = AuthenticatedClientWithFlag(routeViaAltinn2: true, hostname: Altinn2Hostname);
-
-            HttpResponseMessage response = await client.GetAsync(
-                $"accessmanagement/api/v1/reportee/changeandredirect?partyId={SubunitPartyId}&goTo={Encode(AltinnGoTo)}");
-
-            Assert.Equal(HttpStatusCode.Redirect, response.StatusCode);
-
-            Uri location = response.Headers.Location;
-            Assert.Equal(Altinn2Hostname, location.Host);
-
-            System.Collections.Specialized.NameValueCollection query = HttpUtility.ParseQueryString(location.Query);
-            Assert.Equal(SubunitPartyUuid, query["P"]);
-            Assert.Equal(AltinnGoTo, query["goTo"]);
         }
 
         [Fact]

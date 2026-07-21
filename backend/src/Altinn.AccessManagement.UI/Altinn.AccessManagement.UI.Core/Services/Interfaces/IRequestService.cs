@@ -89,8 +89,8 @@ namespace Altinn.AccessManagement.UI.Core.Services.Interfaces
         /// <param name="id">The request id</param>
         /// <param name="languageCode">The language code for the response</param>
         /// <param name="cancellationToken">Cancellation token</param>
-        /// <returns>The request</returns>
-        Task<EnrichedResourceRequest> GetDraftRequest(Guid id, string languageCode, CancellationToken cancellationToken);
+        /// <returns>The request, enriched as either an <see cref="EnrichedResourceRequest"/> or an <see cref="EnrichedPackageRequest"/> depending on the request type</returns>
+        Task<RequestFE> GetDraftRequest(Guid id, string languageCode, CancellationToken cancellationToken);
 
         /// <summary>
         /// Creates a new resource request

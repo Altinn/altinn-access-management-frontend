@@ -66,6 +66,9 @@ export const useRequestReview = (request: Request | null, onClose: () => void) =
     Record<string, DelegationCheckedRight[]>
   >({});
   const [actionLoading, setActionLoading] = useState<'approve' | 'reject' | null>(null);
+  const [bulkActionLoading, setBulkActionLoading] = useState<'approveAll' | 'rejectAll' | null>(
+    null,
+  );
   const { canDelegatePackage } = useAccessPackageDelegationCheck();
 
   // Reset state only when switching to a different party (not on every object reference change)
@@ -77,6 +80,7 @@ export const useRequestReview = (request: Request | null, onClose: () => void) =
     setProcessedRequests({});
     setDelegationChecks({});
     setActionLoading(null);
+    setBulkActionLoading(null);
   }, [requestPartyUuid]);
 
   useEffect(() => {
@@ -136,6 +140,7 @@ export const useRequestReview = (request: Request | null, onClose: () => void) =
     setProcessedRequests({});
     setDelegationChecks({});
     setActionLoading(null);
+    setBulkActionLoading(null);
     onClose();
   };
 
@@ -226,6 +231,63 @@ export const useRequestReview = (request: Request | null, onClose: () => void) =
     }
   };
 
+  const executeBulkAction = async (
+    type: 'approve_all' | 'reject_all',
+    items: { id: string; key: string }[],
+  ) => {
+    if (!actingParty?.partyUuid) return;
+    const partyUuid = actingParty.partyUuid;
+    const mutate = type === 'approve_all' ? approveRequest : rejectRequest;
+    const status: ProcessedStatus = type === 'approve_all' ? 'approved' : 'rejected';
+    setBulkActionLoading(type === 'approve_all' ? 'approveAll' : 'rejectAll');
+    try {
+      const results = await Promise.allSettled(
+        items.map(async ({ id, key }) => {
+          const result = await mutate({ party: partyUuid, id }).unwrap();
+          setProcessedRequests((prev) => ({
+            ...prev,
+            [key]: { status, handledAt: result.lastUpdated },
+          }));
+        }),
+      );
+      const anyFailed = results.some((r) => r.status === 'rejected');
+      openSnackbar({
+        message: t(
+          anyFailed ? `request_page.${type}_partial_failed` : `request_page.${type}_success`,
+        ),
+        color: anyFailed ? 'danger' : 'success',
+      });
+    } finally {
+      setBulkActionLoading(null);
+    }
+  };
+
+  const handleApproveAll = () =>
+    executeBulkAction('approve_all', [
+      ...snapshotRequests.resourceRequests
+        .filter(
+          (r) =>
+            !processedRequests[r.resource.identifier] &&
+            !cannotApprove({ resourceId: r.resource.identifier }),
+        )
+        .map((r) => ({ id: r.id, key: r.resource.identifier })),
+      ...snapshotRequests.packageRequests
+        .filter(
+          (p) => !processedRequests[p.package.id] && !cannotApprove({ packageId: p.package.id }),
+        )
+        .map((p) => ({ id: p.id, key: p.package.id })),
+    ]);
+
+  const handleRejectAll = () =>
+    executeBulkAction('reject_all', [
+      ...snapshotRequests.resourceRequests
+        .filter((r) => !processedRequests[r.resource.identifier])
+        .map((r) => ({ id: r.id, key: r.resource.identifier })),
+      ...snapshotRequests.packageRequests
+        .filter((p) => !processedRequests[p.package.id])
+        .map((p) => ({ id: p.id, key: p.package.id })),
+    ]);
+
   const handleSelection = ({
     resource,
     package: pkg,
@@ -253,6 +315,17 @@ export const useRequestReview = (request: Request | null, onClose: () => void) =
   const isLoadingRequests = isLoadingResourceRequests || isLoadingPackageRequests;
   const isFetchingRequests = isFetchingResourceRequests || isFetchingPackageRequests;
 
+  const pendingResourceIds = snapshotResources
+    .map((r) => r.identifier)
+    .filter((id) => !processedRequests[id]);
+  const pendingPackageIds = snapshotPackages
+    .map((p) => p.id)
+    .filter((id) => !processedRequests[id]);
+  const hasPendingRequests = pendingResourceIds.length > 0 || pendingPackageIds.length > 0;
+  const hasApprovableRequests =
+    pendingResourceIds.some((id) => !cannotApprove({ resourceId: id })) ||
+    pendingPackageIds.some((id) => !cannotApprove({ packageId: id }));
+
   return {
     isLoadingRequests,
     isFetchingRequests,
@@ -263,10 +336,15 @@ export const useRequestReview = (request: Request | null, onClose: () => void) =
     resetSelection,
     processedRequests,
     actionLoading,
+    bulkActionLoading,
     cannotApprove,
+    hasPendingRequests,
+    hasApprovableRequests,
     handleClose,
     handleApprove,
     handleReject,
+    handleApproveAll,
+    handleRejectAll,
     handleSelection,
   };
 };

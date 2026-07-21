@@ -1,0 +1,20 @@
+.clientAdminDetails {
+  /* Strip the button chrome so it reads as a plain DsHeading... */
+  display: inline-flex;
+  align-items: center;
+  gap: var(--ds-size-1);
+  padding: 0;
+  min-height: 0;
+  border: none;
+  background: none;
+  color: var(--ds-color-neutral-text-default);
+  cursor: pointer;
+}
+
+.detailClosed {
+  display: none;
+}
+
+.detailOpen {
+  display: block;
+}

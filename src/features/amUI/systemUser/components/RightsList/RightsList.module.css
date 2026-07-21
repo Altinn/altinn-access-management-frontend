@@ -4,26 +4,8 @@
   gap: var(--ds-size-10);
 }
 
-.resourceInfoHeader {
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  gap: var(--ds-size-4);
-  margin-bottom: var(--ds-size-5);
-}
-
 .resourceInfoText {
   margin-top: var(--ds-size-4);
-}
-
-.accessPackages {
-  display: flex;
-  flex-direction: column;
-  gap: var(--ds-size-4);
-}
-
-.backButton {
-  margin-bottom: var(--ds-size-4);
 }
 
 .rightsList {

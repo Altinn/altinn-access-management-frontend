@@ -2,14 +2,15 @@ import { useState, useCallback, useRef } from 'react';
 import {
   useConfirmRequestMutation,
   useWithdrawRequestMutation,
-  type EnrichedResourceRequest,
+  type EnrichedRequest,
+  isEnrichedPackageRequest,
   requestApi,
 } from '@/rtk/features/requestApi';
 import { useAppDispatch } from '@/rtk/app/hooks';
 
 export interface FailedRequest {
-  request: EnrichedResourceRequest;
-  resourceName: string;
+  request: EnrichedRequest;
+  name: string;
 }
 
 interface UseBatchRequestActionResult {
@@ -21,9 +22,7 @@ interface UseBatchRequestActionResult {
   failedRequests: FailedRequest[];
 }
 
-export const useBatchRequestAction = (
-  requests: EnrichedResourceRequest[],
-): UseBatchRequestActionResult => {
+export const useBatchRequestAction = (requests: EnrichedRequest[]): UseBatchRequestActionResult => {
   const [confirmRequest] = useConfirmRequestMutation();
   const [withdrawRequest] = useWithdrawRequestMutation();
   const dispatch = useAppDispatch();
@@ -36,12 +35,8 @@ export const useBatchRequestAction = (
   const lastActionRef = useRef<'confirm' | 'withdraw' | null>(null);
 
   const performAction = useCallback(
-    async (
-      targetRequests: EnrichedResourceRequest[],
-      action: 'confirm' | 'withdraw',
-    ): Promise<boolean> => {
+    async (targetRequests: EnrichedRequest[], action: 'confirm' | 'withdraw'): Promise<boolean> => {
       setIsProcessing(true);
-      setFailedRequests([]);
       setAllSucceeded(false);
       setActionType(action);
       lastActionRef.current = action;
@@ -58,7 +53,7 @@ export const useBatchRequestAction = (
           const req = targetRequests[index];
           failed.push({
             request: req,
-            resourceName: req.resource.title,
+            name: isEnrichedPackageRequest(req) ? req.package.name : req.resource.title,
           });
         }
       });
@@ -96,6 +91,7 @@ export const useBatchRequestAction = (
         succeeded = stillFailedRequests.length === 0;
         setAllSucceeded(succeeded);
       } else {
+        setFailedRequests([]);
         succeeded = true;
         setAllSucceeded(true);
       }

@@ -9,7 +9,6 @@ import { type ExtendedUser, type User } from '@/rtk/features/userInfoApi';
 import { ConnectionUserType } from '@/rtk/features/connectionApi';
 
 import classes from './UserList.module.css';
-import { displaySubConnections } from '@/resources/utils/featureFlagUtils';
 import {
   getFormattedDateOfBirthLabel,
   formatOrgNr,
@@ -55,13 +54,12 @@ export const UserItem = ({
   // Lets a row be re-focused after the user closes the modal it opened or after an inline action
   // removes it. No-op unless an ancestor renders a <RestoreFocusProvider>. See common/RestoreFocus.
   useRestoreFocusTarget(user.id);
-  const shouldDisplaySubConnections = displaySubConnections();
   const childrenToDisplay =
     user.children?.filter(
       (child) =>
         child.type === ConnectionUserType.Person || child.type === ConnectionUserType.Organization,
     ) || [];
-  const hasInheritingUsers = childrenToDisplay.length > 0 && shouldDisplaySubConnections;
+  const hasInheritingUsers = childrenToDisplay.length > 0;
   const [isExpanded, setExpanded] = useState(false);
   const { t } = useTranslation();
   const { mapRoles } = useRoleMetadata();

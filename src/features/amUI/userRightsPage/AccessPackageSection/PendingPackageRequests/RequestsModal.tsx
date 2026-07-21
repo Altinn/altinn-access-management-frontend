@@ -1,14 +1,8 @@
 import React, { useState } from 'react';
-import { DsButton, DsDialog } from '@altinn/altinn-components';
-import { useTranslation } from 'react-i18next';
 import { type EnrichedPackageRequest } from '@/rtk/features/requestApi';
 import { PendingPackageRequestsList } from './RequestsList';
-import {
-  RestoreFocusFallback,
-  RestoreFocusProvider,
-  useRestoreFocus,
-} from '../../../common/RestoreFocus';
-import classes from './Requests.module.css';
+import { useRestoreFocus } from '../../../common/RestoreFocus';
+import { TwoStepDialog } from '../../../common/TwoStepDialog';
 
 interface PendingPackageRequestsModalProps {
   modalRef: React.RefObject<HTMLDialogElement | null>;
@@ -23,41 +17,32 @@ export const PendingPackageRequestsModal = ({
   heading,
   onClose,
 }: PendingPackageRequestsModalProps) => {
-  const { t } = useTranslation();
   const [selectedRequest, setSelectedRequest] = useState<EnrichedPackageRequest | null>(null);
   const restoreFocus = useRestoreFocus();
 
   return (
-    <DsDialog
+    <TwoStepDialog
       ref={modalRef}
-      closedby='any'
+      title={heading}
+      isDetailView={!!selectedRequest}
+      onBack={() => {
+        if (selectedRequest?.package?.id) {
+          restoreFocus.requestFocus(selectedRequest.package.id);
+        }
+        setSelectedRequest(null);
+      }}
       onClose={() => {
         setSelectedRequest(null);
         onClose();
       }}
-      className={classes.dialog}
+      restoreFocus={restoreFocus}
     >
-      <RestoreFocusProvider restoreFocus={restoreFocus}>
-        <RestoreFocusFallback>
-          {isModalOpen && (
-            <PendingPackageRequestsList
-              heading={heading}
-              selectedRequest={selectedRequest}
-              setSelectedRequest={setSelectedRequest}
-            />
-          )}
-        </RestoreFocusFallback>
-      </RestoreFocusProvider>
-
-      {!selectedRequest && (
-        <DsButton
-          variant='primary'
-          className={classes.closeButton}
-          onClick={() => modalRef.current?.close()}
-        >
-          {t('common.close')}
-        </DsButton>
+      {isModalOpen && (
+        <PendingPackageRequestsList
+          selectedRequest={selectedRequest}
+          setSelectedRequest={setSelectedRequest}
+        />
       )}
-    </DsDialog>
+    </TwoStepDialog>
   );
 };

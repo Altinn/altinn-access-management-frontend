@@ -22,7 +22,7 @@ import { useTranslation } from 'react-i18next';
 import { useSearchParams } from 'react-router';
 import {
   hasConsentPermission,
-  hasReporteesPermission,
+  hasReporteeListAdminAccess,
   hasSystemUserClientAdminPermission,
   hasCreateSystemUserPermission,
 } from '@/resources/utils/permissionUtils';
@@ -49,10 +49,6 @@ import {
 } from '@/resources/utils/reporteeUtils';
 import { useSidebarRequestCount } from '@/resources/hooks/useSidebarRequestCount';
 import cn from 'classnames';
-import {
-  clientAdministrationPageEnabled,
-  enableMaskinportenAdministration,
-} from '@/resources/utils/featureFlagUtils';
 import { useSelfConnection } from '../common/PartyRepresentationContext/useSelfConnection';
 import { useGetRolePermissionsQuery } from '@/rtk/features/roleApi';
 import { useDocumentTitle } from '@/resources/hooks/useDocumentTitle';
@@ -68,14 +64,11 @@ export const LandingPage = () => {
   const { data: canAccessSettings, isLoading: isLoadingCanAccessSettings } =
     useGetIsCompanyProfileAdminQuery();
   const { data: isMaskinportenAdmin } = useGetIsMaskinportenAdminQuery(undefined, {
-    skip: !enableMaskinportenAdministration() || !isOrganization(reportee),
+    skip: !isOrganization(reportee),
   });
   const { data: currentUser, isLoading: currentUserIsLoading } = useGetPartyFromLoggedInUserQuery();
   const actingPartyUuid = getCookie('AltinnPartyUuid') ?? '';
-  const displayClientAdministrationPage = clientAdministrationPageEnabled();
-  const displayRequestsPage = window.featureFlags?.displayRequestsPage;
   const { requestsBadgeCount, isLoading: isLoadingRequestsBadge } = useSidebarRequestCount({
-    displayRequestsPage: !!displayRequestsPage,
     isAdmin,
     reportee,
     isLoadingPermissions: isLoadingReportee || isLoadingIsAdmin,
@@ -95,11 +88,7 @@ export const LandingPage = () => {
       to: currentUser?.partyUuid ?? '',
     },
     {
-      skip:
-        !displayClientAdministrationPage ||
-        !actingPartyUuid ||
-        !currentUser?.partyUuid ||
-        isCurrentUserReportee,
+      skip: !actingPartyUuid || !currentUser?.partyUuid || isCurrentUserReportee,
     },
   );
 
@@ -123,9 +112,6 @@ export const LandingPage = () => {
     currentUserIsLoading;
 
   const getMenuItems = (): MenuItemProps[] => {
-    const displayConfettiPackage = window.featureFlags?.displayConfettiPackage;
-    const displayPoaOverviewPage = window.featureFlags?.displayPoaOverviewPage;
-
     if (isLoading) {
       const loadingMenuItem: MenuItemProps = {
         icon: {
@@ -142,18 +128,16 @@ export const LandingPage = () => {
 
     const items: MenuItemProps[] = [];
 
-    if (displayConfettiPackage) {
-      items.push({
-        ...getUsersMenuItem(),
-        description: isCurrentUserReportee
-          ? t('landing_page.users_item_description_yourself')
-          : t('landing_page.users_item_description', {
-              reportee: reporteeName,
-            }),
-      });
-    }
+    items.push({
+      ...getUsersMenuItem(),
+      description: isCurrentUserReportee
+        ? t('landing_page.users_item_description_yourself')
+        : t('landing_page.users_item_description', {
+            reportee: reporteeName,
+          }),
+    });
 
-    if (displayPoaOverviewPage && isAdmin) {
+    if (isAdmin) {
       items.push({
         ...getPoaOverviewMenuItem(),
         description: isCurrentUserReportee
@@ -162,10 +146,7 @@ export const LandingPage = () => {
       });
     }
 
-    if (
-      displayConfettiPackage &&
-      hasReporteesPermission(reportee, isAdmin, isCurrentUserReportee)
-    ) {
+    if (hasReporteeListAdminAccess(reportee, isAdmin, isCurrentUserReportee)) {
       items.push({
         ...getReporteesMenuItem(),
         description: isCurrentUserReportee
@@ -180,7 +161,7 @@ export const LandingPage = () => {
         description: t('landing_page.consent_item_description'),
       });
     }
-    if (isClientAdmin && displayClientAdministrationPage) {
+    if (isClientAdmin) {
       items.push({
         ...getClientAdministrationMenuItem(),
         description: t('landing_page.client_admin_item_description', { reportee: reporteeName }),
@@ -195,7 +176,7 @@ export const LandingPage = () => {
         description: t('landing_page.systemuser_item_description', { reportee: reporteeName }),
       });
     }
-    if (enableMaskinportenAdministration() && isMaskinportenAdmin) {
+    if (isMaskinportenAdmin) {
       items.push({
         ...getMaskinportenMenuItem(),
         description: t('landing_page.maskinporten_item_description'),
@@ -217,10 +198,9 @@ export const LandingPage = () => {
   };
 
   const getOtherItems = (): MenuItemProps[] => {
-    const displaySettingsPage = window.featureFlags?.displaySettingsPage;
     const items: MenuItemProps[] = [];
 
-    if (displayRequestsPage && isAdmin) {
+    if (isAdmin) {
       items.push({
         ...getRequestsMenuItem(),
         title: getRequestCountText(isLoadingRequestsBadge ? 0 : requestsBadgeCount),
@@ -228,7 +208,7 @@ export const LandingPage = () => {
       });
     }
 
-    if (canAccessSettings && displaySettingsPage) {
+    if (canAccessSettings) {
       items.push({ ...getSettingsMenuItem(), loading: isLoading });
     }
 
@@ -249,7 +229,7 @@ export const LandingPage = () => {
         : t('landing_page.your_rights_description', { reportee: reporteeName }),
     });
 
-    if (!isCurrentUserReportee && isAgent && displayClientAdministrationPage) {
+    if (!isCurrentUserReportee && isAgent) {
       items.push({
         ...getYourClientsMenuItem('/', isLoading),
         description: t('landing_page.your_clients_description', { reportee: reporteeName }),

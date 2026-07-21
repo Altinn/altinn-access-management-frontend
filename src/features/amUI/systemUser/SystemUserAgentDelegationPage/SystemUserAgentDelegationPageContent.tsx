@@ -32,7 +32,6 @@ import {
 } from '@/rtk/features/userInfoApi';
 import { AddAllCustomers } from './AddAllCustomers';
 import { DelegationCheckError } from '../components/DelegationCheckError/DelegationCheckError';
-import { enableAddSelfToSystemuser } from '@/resources/utils/featureFlagUtils';
 import { useIsMobileOrSmaller } from '@/resources/utils/screensizeUtils';
 
 const getAssignedCustomers = (
@@ -255,8 +254,7 @@ export const SystemUserAgentDelegationPageContent = ({
   };
 
   const isAllAccessPackagesAssignable = systemUser.accessPackages.every((x) => x.isAssignable);
-  const hasAddSelfPermission =
-    isAdmin && isAllAccessPackagesAssignable && enableAddSelfToSystemuser();
+  const hasAddSelfPermission = isAdmin && isAllAccessPackagesAssignable;
   const isLoadingSelf = isAssigningSelf || isRemovingSelf || isRefetchingIsSelfAdded;
   const assignedCustomersList =
     hasAddSelfPermission && reporteeData && (isSelfAdded || assignedCustomers.length > 0)

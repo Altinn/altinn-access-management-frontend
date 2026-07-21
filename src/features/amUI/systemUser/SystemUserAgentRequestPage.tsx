@@ -26,7 +26,6 @@ import { SystemUserPath } from '@/routes/paths';
 import { RightsList } from './components/RightsList/RightsList';
 import { getLogoutUrl } from '@/resources/utils/pathUtils';
 import { SystemUserRequestLoadError } from './components/SystemUserRequestLoadError/SystemUserRequestLoadError';
-import { enableAddSelfToSystemuser } from '@/resources/utils/featureFlagUtils';
 import { useGetIsAdminQuery, useGetReporteeQuery } from '@/rtk/features/userInfoApi';
 
 export const SystemUserAgentRequestPage = () => {
@@ -147,10 +146,9 @@ export const SystemUserAgentRequestPage = () => {
               values={{
                 vendorName: request.system.name,
                 companyName: formatDisplayName({ fullName: reporteeData?.name, type: 'company' }),
-                addSelfInfo:
-                  request.accessPackages.every((p) => p.isAssignable) && enableAddSelfToSystemuser()
-                    ? t('systemuser_agent_request.add_self_possible')
-                    : '',
+                addSelfInfo: request.accessPackages.every((p) => p.isAssignable)
+                  ? t('systemuser_agent_request.add_self_possible')
+                  : '',
               }}
             ></Trans>
           </DsParagraph>

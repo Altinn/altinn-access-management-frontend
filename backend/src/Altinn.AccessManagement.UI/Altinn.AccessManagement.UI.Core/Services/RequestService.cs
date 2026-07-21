@@ -81,9 +81,14 @@ namespace Altinn.AccessManagement.UI.Core.Services
         }
 
         /// <inheritdoc />
-        public async Task<EnrichedResourceRequest> GetDraftRequest(Guid id, string languageCode, CancellationToken cancellationToken)
+        public async Task<RequestFE> GetDraftRequest(Guid id, string languageCode, CancellationToken cancellationToken)
         {
             Request response = await _requestClient.GetDraftRequest(id, cancellationToken);
+            if (response.Type == "package")
+            {
+                return (await MapToEnrichedPackageRequestList(new[] { response }, languageCode)).First();
+            }
+
             return (await MapToEnrichedResourceRequestList(new[] { response }, languageCode)).First();
         }
 

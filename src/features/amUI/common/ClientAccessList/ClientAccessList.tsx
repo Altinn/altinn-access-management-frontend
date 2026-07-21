@@ -51,9 +51,10 @@ type ClientAccessListProps = {
     onSuccess?: () => void,
     onError?: () => void,
   ) => void | Promise<void>;
-  searchPlaceholder?: string;
   requireDelegableForActions?: boolean;
   emptyAccessText?: string;
+  emptyText?: string;
+  searchString?: string;
 };
 
 const getUserListItemType = (clientType: string): UserListItemProps['type'] => {
@@ -72,9 +73,10 @@ export const ClientAccessList = ({
   removeDisabled = false,
   onAddAccessPackage,
   onRemoveAccessPackage,
-  searchPlaceholder,
   requireDelegableForActions = true,
   emptyAccessText,
+  emptyText,
+  searchString,
 }: ClientAccessListProps) => {
   const { t } = useTranslation();
   const { getAccessPackageById } = useAccessPackageLookup();
@@ -255,7 +257,8 @@ export const ClientAccessList = ({
     <>
       <UserListItems
         items={userListItems}
-        searchPlaceholder={searchPlaceholder}
+        emptyText={emptyText}
+        searchString={searchString}
       />
       <ClientPackageInfoModal
         ref={modalRef}

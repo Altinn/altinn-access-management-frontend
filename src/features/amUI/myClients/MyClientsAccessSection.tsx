@@ -1,4 +1,4 @@
-import React, { useCallback } from 'react';
+import React, { useCallback, useState } from 'react';
 import { useSnackbar } from '@altinn/altinn-components';
 import { useTranslation } from 'react-i18next';
 
@@ -7,6 +7,7 @@ import {
   type ClientAccessPackageAction,
 } from '../common/ClientAccessList/ClientAccessList';
 import { useRemoveMyClientAccessPackagesMutation, type Client } from '@/rtk/features/clientApi';
+import { ClientAdminSearchField } from '../common/ClientAdminSearchField/ClientAdminSearchField';
 
 type MyClientsAccessSectionProps = {
   clients: Client[];
@@ -23,6 +24,8 @@ export const MyClientsAccessSection = ({
   const { openSnackbar } = useSnackbar();
   const [removeMyClientAccessPackages, { isLoading: isRemovingMyClientAccessPackages }] =
     useRemoveMyClientAccessPackagesMutation();
+
+  const [searchString, setSearchString] = useState<string>('');
 
   const onRemoveAccessPackage = useCallback(
     async (
@@ -71,13 +74,19 @@ export const MyClientsAccessSection = ({
   );
 
   return (
-    <ClientAccessList
-      clients={clients}
-      accessStateClients={clients}
-      removeDisabled={isRemovingMyClientAccessPackages || !actingPartyUuid}
-      onRemoveAccessPackage={onRemoveAccessPackage}
-      requireDelegableForActions={false}
-      searchPlaceholder={t('my_clients_page.search_placeholder')}
-    />
+    <>
+      <ClientAdminSearchField
+        setSearchString={setSearchString}
+        searchPlaceholder={t('my_clients_page.search_placeholder')}
+      />
+      <ClientAccessList
+        clients={clients}
+        accessStateClients={clients}
+        removeDisabled={isRemovingMyClientAccessPackages || !actingPartyUuid}
+        onRemoveAccessPackage={onRemoveAccessPackage}
+        requireDelegableForActions={false}
+        searchString={searchString}
+      />
+    </>
   );
 };

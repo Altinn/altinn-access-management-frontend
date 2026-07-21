@@ -1,9 +1,14 @@
 .container {
   display: flex;
   flex-direction: column;
-  align-items: flex-start;
-  gap: var(--ds-spacing-3);
+  gap: var(--ds-spacing-2);
   padding-bottom: var(--ds-spacing-4);
+}
+
+.metadataRows {
+  display: flex;
+  flex-direction: column;
+  gap: var(--ds-spacing-1);
 }
 
 .resourceOwner {

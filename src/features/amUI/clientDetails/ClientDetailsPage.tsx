@@ -1,10 +1,9 @@
 import React from 'react';
-import { Navigate, useParams } from 'react-router';
+import { useParams } from 'react-router';
 import { useTranslation } from 'react-i18next';
 
 import { PageWrapper } from '@/components';
 import { getCookie } from '@/resources/Cookie/CookieMethods';
-import { clientAdministrationPageEnabled } from '@/resources/utils/featureFlagUtils';
 import { useDocumentTitle } from '@/resources/hooks/useDocumentTitle';
 import { PartyRepresentationProvider } from '../common/PartyRepresentationContext/PartyRepresentationContext';
 import { PageLayoutWrapper } from '../common/PageLayoutWrapper';
@@ -19,19 +18,8 @@ export const ClientDetailsPage = () => {
 
   useDocumentTitle(t('client_administration_page.client_page_title'));
 
-  const pageIsEnabled = clientAdministrationPageEnabled();
-
   const { data: clients } = useGetClientsQuery();
   const selectedClient = clients?.find((item) => item.client.id === id);
-
-  if (!pageIsEnabled) {
-    return (
-      <Navigate
-        to='/not-found'
-        replace
-      />
-    );
-  }
 
   const clientParty: Party | undefined = selectedClient
     ? {
