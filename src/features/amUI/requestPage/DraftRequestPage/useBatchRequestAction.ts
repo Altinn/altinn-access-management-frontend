@@ -37,7 +37,6 @@ export const useBatchRequestAction = (requests: EnrichedRequest[]): UseBatchRequ
   const performAction = useCallback(
     async (targetRequests: EnrichedRequest[], action: 'confirm' | 'withdraw'): Promise<boolean> => {
       setIsProcessing(true);
-      setFailedRequests([]);
       setAllSucceeded(false);
       setActionType(action);
       lastActionRef.current = action;
@@ -92,6 +91,7 @@ export const useBatchRequestAction = (requests: EnrichedRequest[]): UseBatchRequ
         succeeded = stillFailedRequests.length === 0;
         setAllSucceeded(succeeded);
       } else {
+        setFailedRequests([]);
         succeeded = true;
         setAllSucceeded(true);
       }

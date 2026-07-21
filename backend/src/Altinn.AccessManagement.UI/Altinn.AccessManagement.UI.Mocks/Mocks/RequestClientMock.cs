@@ -120,6 +120,7 @@ namespace Altinn.AccessManagement.UI.Mocks.Mocks
         {
             ThrowExceptionIfTriggerParty(party.ToString());
             ThrowHttpStatusExceptionIfTriggerParty(party.ToString());
+            ThrowHttpStatusExceptionIfTriggerRequest(id);
 
             string dataPath = Path.Combine(dataFolder, "Request", "singleRequest.json");
             return await Task.FromResult(Util.GetMockData<Request>(dataPath));
@@ -130,6 +131,7 @@ namespace Altinn.AccessManagement.UI.Mocks.Mocks
         {
             ThrowExceptionIfTriggerParty(party.ToString());
             ThrowHttpStatusExceptionIfTriggerParty(party.ToString());
+            ThrowHttpStatusExceptionIfTriggerRequest(id);
 
             string dataPath = Path.Combine(dataFolder, "Request", "singleRequest.json");
             return await Task.FromResult(Util.GetMockData<Request>(dataPath));
@@ -173,6 +175,10 @@ namespace Altinn.AccessManagement.UI.Mocks.Mocks
             {
                 dataPath = Path.Combine(dataFolder, "Request", "draftPackageRequestByggesoknad.json");
             }
+            else if (id == Guid.Parse("44444444-4444-4444-4444-444444444440"))
+            {
+                dataPath = Path.Combine(dataFolder, "Request", "draftPackageRequestConfirmError.json");
+            }
 
             return await Task.FromResult(Util.GetMockData<Request>(dataPath));
         }
@@ -208,6 +214,14 @@ namespace Altinn.AccessManagement.UI.Mocks.Mocks
             if (id == "11111111-1111-1111-1111-111111111111")
             {
                 throw new HttpStatusException("StatusError", "Simulated backend error", HttpStatusCode.BadRequest, "");
+            }
+        }
+
+        private static void ThrowHttpStatusExceptionIfTriggerRequest(Guid id)
+        {
+            if (id == Guid.Parse("44444444-4444-4444-4444-444444444440"))
+            {
+                throw new HttpStatusException("StatusError", "Simulated confirm/withdraw error", HttpStatusCode.BadRequest, "");
             }
         }
     }
