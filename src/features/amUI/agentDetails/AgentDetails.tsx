@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useId, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import {
   DsAlert,
@@ -64,6 +64,8 @@ export const AgentDetails = () => {
   });
   const toPartyUuid = toParty?.partyUuid;
   const actingPartyUuid = actingParty?.partyUuid;
+  const assignedSectionId = useId();
+  const unassignedSectionId = useId();
 
   if (isClientAdmin === false) {
     return (
@@ -138,39 +140,45 @@ export const AgentDetails = () => {
               setSearchString={setSearchString}
               searchPlaceholder={t('my_clients_page.search_placeholder')}
             />
-            <DsHeading
-              data-size='xs'
-              level={2}
-            >
-              {t('client_administration_page.agent_has_clients_tab')}
-            </DsHeading>
-            <AgentDetailsClientsList
-              clients={clientsWithAgentAccess}
-              agentAccessPackages={agentAccessPackages ?? []}
-              isLoading={isAddingAgentAccessPackages || isRemovingAgentAccessPackages}
-              toPartyUuid={toPartyUuid}
-              actingPartyUuid={actingPartyUuid}
-              addAgentAccessPackages={addAgentAccessPackages}
-              removeAgentAccessPackages={removeAgentAccessPackages}
-              searchString={searchString}
-              emptyText={t('client_administration_page.no_delegations')}
-            />
-            <ClientAdminDetails
-              heading={t('client_administration_page.agent_can_get_clients_tab')}
-              searchString={searchString}
-            >
+            <section aria-labelledby={assignedSectionId}>
+              <DsHeading
+                data-size='xs'
+                level={2}
+                id={assignedSectionId}
+              >
+                {t('client_administration_page.agent_has_clients_tab')}
+              </DsHeading>
               <AgentDetailsClientsList
-                clients={clientsWithoutAgentAccess}
+                clients={clientsWithAgentAccess}
                 agentAccessPackages={agentAccessPackages ?? []}
+                isLoading={isAddingAgentAccessPackages || isRemovingAgentAccessPackages}
                 toPartyUuid={toPartyUuid}
                 actingPartyUuid={actingPartyUuid}
-                isLoading={isAddingAgentAccessPackages || isRemovingAgentAccessPackages}
                 addAgentAccessPackages={addAgentAccessPackages}
                 removeAgentAccessPackages={removeAgentAccessPackages}
                 searchString={searchString}
-                emptyText={t('client_administration_page.no_clients')}
+                emptyText={t('client_administration_page.no_delegations')}
               />
-            </ClientAdminDetails>
+            </section>
+            <section aria-labelledby={unassignedSectionId}>
+              <ClientAdminDetails
+                heading={t('client_administration_page.agent_can_get_clients_tab')}
+                searchString={searchString}
+                id={unassignedSectionId}
+              >
+                <AgentDetailsClientsList
+                  clients={clientsWithoutAgentAccess}
+                  agentAccessPackages={agentAccessPackages ?? []}
+                  toPartyUuid={toPartyUuid}
+                  actingPartyUuid={actingPartyUuid}
+                  isLoading={isAddingAgentAccessPackages || isRemovingAgentAccessPackages}
+                  addAgentAccessPackages={addAgentAccessPackages}
+                  removeAgentAccessPackages={removeAgentAccessPackages}
+                  searchString={searchString}
+                  emptyText={t('client_administration_page.no_clients')}
+                />
+              </ClientAdminDetails>
+            </section>
           </>
         )}
       </PageContainer>

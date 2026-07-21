@@ -7,12 +7,14 @@ import classes from './ClientAdminDetails.module.css';
 interface ClientAdminDetailsProps {
   heading: string;
   searchString: string;
+  id?: string;
   children: React.ReactNode;
 }
 
 export const ClientAdminDetails = ({
   heading,
   searchString,
+  id,
   children,
 }: ClientAdminDetailsProps) => {
   const [isOpen, setIsOpen] = useState<boolean>(false);
@@ -29,6 +31,7 @@ export const ClientAdminDetails = ({
       <DsHeading
         data-size='xs'
         level={2}
+        id={id}
       >
         <DsButton
           className={classes.clientAdminDetails}
