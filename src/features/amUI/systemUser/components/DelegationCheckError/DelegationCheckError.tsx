@@ -100,17 +100,33 @@ const DelegationReasonDetails = ({
 
   return (
     <>
-      {reasons.map((reason: Reason) => {
-        let reasonDetail: string | undefined = '';
-        if (reason.type === 'package') {
-          reasonDetail = accessPackages.find((x) => x.urn === reason.id)?.name;
-        } else {
-          const name = resources.find((x) => x.identifier === reason.id)?.title;
-          reasonDetail = `${name ?? reason.id}: ${reason.codes.map((code) => t(mapErrorCodeToErrorMessage(ReasonErrorMap[code])) || '').join(', ')}`;
-        }
+      {reasons
+        .filter((reason) => !!reason && typeof reason === 'object')
+        .map((reason: Reason, index: number) => {
+          let reasonDetail: string | undefined = '';
+          if (reason.type === 'package') {
+            const packageName = accessPackages.find((x) => x.urn === reason.id)?.name;
+            reasonDetail = packageName ?? reason.id;
+          } else {
+            const resourceName = resources.find((x) => x.identifier === reason.id)?.title;
+            const codesText = Array.isArray(reason.codes)
+              ? reason.codes
+                  .map((code) => {
+                    const error = mapErrorCodeToErrorMessage(
+                      ReasonErrorMap[code] || ReasonErrorMap.Unknown,
+                    );
+                    return t(error) || '';
+                  })
+                  .filter(Boolean)
+                  .join(', ')
+              : '';
+            reasonDetail = codesText
+              ? `${resourceName ?? reason.id}: ${codesText}`
+              : (resourceName ?? reason.id);
+          }
 
-        return <div key={reason.id}>{reasonDetail || ''}</div>;
-      })}
+          return <div key={`${reason.id}-${index}`}>{reasonDetail || ''}</div>;
+        })}
     </>
   );
 };
