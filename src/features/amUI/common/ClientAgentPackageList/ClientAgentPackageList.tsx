@@ -41,7 +41,7 @@ type ClientAgentPackageListProps = {
   addAgentAccessPackages: AddAgentAccessPackagesFn;
   removeAgentAccessPackages: RemoveAgentAccessPackagesFn;
   emptyText?: string;
-  addUserButton?: React.ReactNode;
+  searchString?: string;
 };
 
 const getUserListItemType = (agentType: string): UserListItemProps['type'] => {
@@ -61,7 +61,7 @@ export const ClientAgentPackageList = ({
   addAgentAccessPackages,
   removeAgentAccessPackages,
   emptyText,
-  addUserButton,
+  searchString,
 }: ClientAgentPackageListProps) => {
   const { t } = useTranslation();
   const { getAccessPackageById } = useAccessPackageLookup();
@@ -267,9 +267,8 @@ export const ClientAgentPackageList = ({
     <>
       <UserListItems
         items={userListItems}
-        searchPlaceholder={t('client_administration_page.agent_search_placeholder')}
-        addUserButton={addUserButton}
         emptyText={emptyText}
+        searchString={searchString}
       />
       <ClientPackageInfoModal
         ref={modalRef}

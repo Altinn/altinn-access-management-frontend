@@ -1,7 +1,8 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import {
   DsAlert,
+  DsHeading,
   DsParagraph,
   DsSkeleton,
   formatDisplayName,
@@ -10,7 +11,6 @@ import {
 import { useParams } from 'react-router';
 
 import { amUIPath } from '@/routes/paths';
-import { useTabState } from '@/resources/hooks';
 import { PartyType, useGetIsClientAdminQuery } from '@/rtk/features/userInfoApi';
 import {
   useAddAgentAccessPackagesMutation,
@@ -27,22 +27,21 @@ import {
   createErrorDetails,
   TechnicalErrorParagraphs,
 } from '../common/TechnicalErrorParagraphs/TechnicalErrorParagraphs';
-import { ClientDetailsTabs } from './ClientDetailsTabs';
 import { ClientAgentPackageList } from '../common/ClientAgentPackageList/ClientAgentPackageList';
 import { useClientDetailsAccessAgentLists } from './useClientDetailsAccessAgentLists';
 import { UserPageHeader } from '../common/UserPageHeader/UserPageHeader';
 import { UserPageHeaderSkeleton } from '../common/UserPageHeader/UserPageHeaderSkeleton';
 import { AddAgentButton } from '../users/NewUserModal/AddAgentModal';
+import { ClientAdminSearchField } from '../common/ClientAdminSearchField/ClientAdminSearchField';
+import { ClientAdminDetails } from '../common/ClientAdminDetails/ClientAdminDetails';
+import { isNewUser } from '../common/isNewUser';
 
 export const ClientDetails = () => {
   const { t } = useTranslation();
   const { openSnackbar } = useSnackbar();
   const { id } = useParams();
   const { fromParty, actingParty } = usePartyRepresentation();
-  const [activeTab, setActiveTab] = useTabState({
-    tabs: ['has-users', 'all-users'],
-    defaultTab: 'has-users',
-  });
+
   const { data: isClientAdmin, isLoading: isLoadingIsClientAdmin } = useGetIsClientAdminQuery();
   const {
     data: clientAccessPackages,
@@ -57,10 +56,15 @@ export const ClientDetails = () => {
   const [removeAgentAccessPackages, { isLoading: isRemovingAgentAccessPackages }] =
     useRemoveAgentAccessPackagesMutation();
 
-  const { agentsWithClientAccess, allAgents } = useClientDetailsAccessAgentLists({
+  const { agentsWithClientAccess, agentsWithoutClientAccess } = useClientDetailsAccessAgentLists({
     clientAccessPackages,
     agents,
   });
+
+  const recentlyAddedClients = [...agentsWithClientAccess, ...agentsWithoutClientAccess].filter(
+    (x) => isNewUser(x.agentAddedAt),
+  );
+  const [searchString, setSearchString] = useState<string>('');
 
   const selectedClient = clients?.find((client) => client.client.id === id);
   const delegablePackages = selectedClient?.access?.flatMap((access) => access.packages) ?? [];
@@ -107,7 +111,6 @@ export const ClientDetails = () => {
   const actingPartyUuid = actingParty?.partyUuid;
 
   const onUserAdded = () => {
-    setActiveTab('all-users');
     openSnackbar({
       message: t('client_administration_page.add_agent_client_access_success_snackbar'),
       color: 'success',
@@ -150,25 +153,62 @@ export const ClientDetails = () => {
             )}
             {id &&
               (hasDelegatablePackages ? (
-                <ClientDetailsTabs
-                  activeTab={activeTab}
-                  onChange={setActiveTab}
-                  hasUsersContent={
-                    <ClientAgentPackageList
-                      agents={agentsWithClientAccess}
-                      clientAccessPackages={clientAccessPackages ?? []}
-                      client={selectedClient}
-                      isLoading={isAddingAgentAccessPackages || isRemovingAgentAccessPackages}
-                      fromPartyUuid={fromPartyUuid}
-                      actingPartyUuid={actingPartyUuid}
-                      addAgentAccessPackages={addAgentAccessPackages}
-                      removeAgentAccessPackages={removeAgentAccessPackages}
-                      emptyText={t('client_administration_page.no_agents')}
+                <>
+                  <ClientAdminSearchField
+                    setSearchString={setSearchString}
+                    searchPlaceholder={t('client_administration_page.agent_search_placeholder')}
+                  >
+                    <AddAgentButton
+                      onComplete={onUserAdded}
+                      variant='primary'
                     />
-                  }
-                  allUsersContent={
+                  </ClientAdminSearchField>
+                  {recentlyAddedClients.length > 0 && (
+                    <>
+                      <DsHeading
+                        data-size='xs'
+                        level={2}
+                      >
+                        {t('client_administration_page.recently_added_users')}
+                      </DsHeading>
+                      <ClientAgentPackageList
+                        agents={recentlyAddedClients}
+                        clientAccessPackages={clientAccessPackages ?? []}
+                        client={selectedClient}
+                        isLoading={isAddingAgentAccessPackages || isRemovingAgentAccessPackages}
+                        fromPartyUuid={fromPartyUuid}
+                        actingPartyUuid={actingPartyUuid}
+                        addAgentAccessPackages={addAgentAccessPackages}
+                        removeAgentAccessPackages={removeAgentAccessPackages}
+                        emptyText={t('client_administration_page.no_agents')}
+                        searchString={searchString}
+                      />
+                    </>
+                  )}
+                  <DsHeading
+                    data-size='xs'
+                    level={2}
+                  >
+                    {t('client_administration_page.client_has_agents_tab')}
+                  </DsHeading>
+                  <ClientAgentPackageList
+                    agents={agentsWithClientAccess}
+                    clientAccessPackages={clientAccessPackages ?? []}
+                    client={selectedClient}
+                    isLoading={isAddingAgentAccessPackages || isRemovingAgentAccessPackages}
+                    fromPartyUuid={fromPartyUuid}
+                    actingPartyUuid={actingPartyUuid}
+                    addAgentAccessPackages={addAgentAccessPackages}
+                    removeAgentAccessPackages={removeAgentAccessPackages}
+                    emptyText={t('client_administration_page.no_agents')}
+                    searchString={searchString}
+                  />
+                  <ClientAdminDetails
+                    heading={t('client_administration_page.client_can_get_agents_tab')}
+                    searchString={searchString}
+                  >
                     <ClientAgentPackageList
-                      agents={allAgents}
+                      agents={agentsWithoutClientAccess}
                       clientAccessPackages={clientAccessPackages ?? []}
                       client={selectedClient}
                       isLoading={isAddingAgentAccessPackages || isRemovingAgentAccessPackages}
@@ -177,15 +217,10 @@ export const ClientDetails = () => {
                       addAgentAccessPackages={addAgentAccessPackages}
                       removeAgentAccessPackages={removeAgentAccessPackages}
                       emptyText={`${t('client_administration_page.no_agents')} ${t('client_administration_page.addUserPrompt')}`}
-                      addUserButton={
-                        <AddAgentButton
-                          onComplete={onUserAdded}
-                          variant='primary'
-                        />
-                      }
+                      searchString={searchString}
                     />
-                  }
-                />
+                  </ClientAdminDetails>
+                </>
               ) : (
                 <DsParagraph>
                   {t('client_administration_page.no_access_to_delegate', {
