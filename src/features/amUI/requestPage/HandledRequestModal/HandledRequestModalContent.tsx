@@ -2,6 +2,7 @@ import { type ReactNode, type RefObject, useMemo } from 'react';
 import { Link } from 'react-router';
 import {
   AccessPackageListItem,
+  DsAlert,
   DsHeading,
   DsLink,
   DsParagraph,
@@ -45,6 +46,7 @@ export const HandledRequestModalContent = ({
   const {
     isLoadingRequests,
     isFetchingRequests,
+    loadRequestsError,
     handledResources,
     handledPackages,
     selectedResourceItem,
@@ -113,7 +115,9 @@ export const HandledRequestModalContent = ({
 
   let content: ReactNode = null;
 
-  if (request !== null && selectedResourceItem) {
+  if (loadRequestsError) {
+    content = <DsAlert data-color='danger'>{t('request_page.error_loading_requests')}</DsAlert>;
+  } else if (request !== null && selectedResourceItem) {
     const { resource, outcome } = selectedResourceItem;
     content = (
       <RequestResourceDetail

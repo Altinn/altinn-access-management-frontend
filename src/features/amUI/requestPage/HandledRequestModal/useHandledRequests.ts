@@ -96,6 +96,7 @@ export const useHandledRequests = (request: Request | null, direction: HandledDi
   const packageRequests = packageQuery.data;
   const isLoadingRequests = resourceQuery.isLoading || packageQuery.isLoading;
   const isFetchingRequests = resourceQuery.isFetching || packageQuery.isFetching;
+  const loadRequestsError = resourceQuery.isError || packageQuery.isError;
 
   // Snapshot: capture first non-empty result, keep it stable while the modal is open so rows stay
   // mounted (focus restore on back) and don't flicker on background refetches.
@@ -191,6 +192,7 @@ export const useHandledRequests = (request: Request | null, direction: HandledDi
   return {
     isLoadingRequests,
     isFetchingRequests,
+    loadRequestsError,
     handledResources,
     handledPackages,
     selectedResourceItem,
