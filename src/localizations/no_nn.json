@@ -102,7 +102,9 @@
     "no_access_to_page": "Du har ikkje tilgang til denne sida for vald aktør",
     "see_details": "Sjå detaljar",
     "yes_delete": "Ja, slett",
-    "confirm_delete_heading": "Er du sikker på at du vil slette denne fullmakta?"
+    "confirm_delete_heading": "Er du sikker på at du vil slette denne fullmakta?",
+    "has": "har",
+    "have": "har"
   },
   "download_file": {
     "trigger_button": "Last ned til fil",
@@ -1042,10 +1044,11 @@
   "request_page": {
     "page_title": "Førespurnader - Altinn",
     "heading": "Førespurnader for {{name}}",
+    "your_requests_heading": "Dine førespurnader",
     "incoming_requests": "Mottatte",
     "sent_requests": "Sendte",
-    "no_received_requests": "Ingen mottatte førespurnader",
-    "no_sent_requests": "Ingen sendte førespurnader",
+    "no_received_requests": "{{name}} {{verb}} ingen mottatte førespurnader",
+    "no_sent_requests": "{{name}} {{verb}} ingen sendte førespurnader",
     "process_request_one": "Behandle førespurnad",
     "process_request_other": "Behandle førespurnader",
     "view_request_one": "Sjå førespurnad",

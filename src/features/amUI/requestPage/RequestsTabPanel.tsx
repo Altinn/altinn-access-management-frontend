@@ -19,7 +19,7 @@ interface RequestsTabPanelProps {
   count: number;
   isLoading: boolean;
   isError: boolean;
-  emptyMessageKey: string;
+  emptyMessage: string;
   children?: React.ReactNode;
 }
 
@@ -27,7 +27,7 @@ export const RequestsTabPanel = ({
   count,
   isLoading,
   isError,
-  emptyMessageKey,
+  emptyMessage,
   children,
 }: RequestsTabPanelProps) => {
   const { t } = useTranslation();
@@ -43,6 +43,7 @@ export const RequestsTabPanel = ({
         </div>
       )}
       <List>
+        {!isError && !isLoading && count === 0 && <div>{emptyMessage}</div>}
         {isLoading ? (
           <>
             <LoadingRequestListItem />
@@ -53,7 +54,6 @@ export const RequestsTabPanel = ({
         ) : (
           <>{children}</>
         )}
-        {!isError && !isLoading && count === 0 && <div>{t(emptyMessageKey)}</div>}
       </List>
     </>
   );

@@ -39,7 +39,7 @@ namespace Altinn.AccessManagement.UI.Core.Services
         public async Task<IEnumerable<RequestFE>> GetSentRequests(Guid party, Guid? to, List<RequestStatus> status, string type, CancellationToken cancellationToken)
         {
             PaginatedResult<Request> response = await _requestClient.GetSentRequests(party, to, status, type, cancellationToken);
-                        
+
             // filter approved and handled requests which are older than one year
             return RemoveHandledItemsOlderThanOneYear(response).Select(MapToRequestFE);
         }
@@ -48,7 +48,9 @@ namespace Altinn.AccessManagement.UI.Core.Services
         public async Task<IEnumerable<EnrichedResourceRequest>> GetEnrichedSentResourceRequests(Guid party, Guid? to, List<RequestStatus> status, string languageCode, CancellationToken cancellationToken)
         {
             PaginatedResult<Request> response = await _requestClient.GetSentRequests(party, to, status, "resource", cancellationToken);
-            return await MapToEnrichedResourceRequestList(response.Items, false, languageCode);
+
+            // filter handled requests which are older than one year, so the modal matches the list
+            return await MapToEnrichedResourceRequestList(RemoveHandledItemsOlderThanOneYear(response), false, languageCode);
         }
 
         /// <inheritdoc />
@@ -64,21 +66,27 @@ namespace Altinn.AccessManagement.UI.Core.Services
         public async Task<IEnumerable<EnrichedResourceRequest>> GetEnrichedReceivedResourceRequests(Guid party, Guid? from, List<RequestStatus> status, string languageCode, CancellationToken cancellationToken)
         {
             PaginatedResult<Request> response = await _requestClient.GetReceivedRequests(party, from, status, "resource", cancellationToken);
-            return await MapToEnrichedResourceRequestList(response.Items, IsHandledStatus(status), languageCode);
+
+            // filter handled requests which are older than one year, so the modal matches the list
+            return await MapToEnrichedResourceRequestList(RemoveHandledItemsOlderThanOneYear(response), IsHandledStatus(status), languageCode);
         }
 
         /// <inheritdoc />
         public async Task<IEnumerable<EnrichedPackageRequest>> GetEnrichedSentPackageRequests(Guid party, Guid? to, List<RequestStatus> status, string languageCode, CancellationToken cancellationToken)
         {
             PaginatedResult<Request> response = await _requestClient.GetSentRequests(party, to, status, "package", cancellationToken);
-            return await MapToEnrichedPackageRequestList(response.Items, false, languageCode);
+
+            // filter handled requests which are older than one year, so the modal matches the list
+            return await MapToEnrichedPackageRequestList(RemoveHandledItemsOlderThanOneYear(response), false, languageCode);
         }
 
         /// <inheritdoc />
         public async Task<IEnumerable<EnrichedPackageRequest>> GetEnrichedReceivedPackageRequests(Guid party, Guid? from, List<RequestStatus> status, string languageCode, CancellationToken cancellationToken)
         {
             PaginatedResult<Request> response = await _requestClient.GetReceivedRequests(party, from, status, "package", cancellationToken);
-            return await MapToEnrichedPackageRequestList(response.Items, IsHandledStatus(status), languageCode);
+
+            // filter handled requests which are older than one year, so the modal matches the list
+            return await MapToEnrichedPackageRequestList(RemoveHandledItemsOlderThanOneYear(response), IsHandledStatus(status), languageCode);
         }
 
         /// <inheritdoc />
@@ -254,6 +262,11 @@ namespace Altinn.AccessManagement.UI.Core.Services
         // look up all parties from requests where LastUpdatedBy is set
         private async Task<Dictionary<Guid?, string>> LookupLastUpdatedByParties(IEnumerable<Request> list)
         {
+            if (!list.Any())
+            {
+                return [];
+            }
+
             List<Guid> lastUpdatedNames = list
                 .Select(request => request.LastUpdatedBy)
                 .Where(x => x != null)
@@ -275,7 +288,7 @@ namespace Altinn.AccessManagement.UI.Core.Services
             return requests.Items.Where(item =>
             {
                 bool isHandled = IsHandledStatus([item.Status]);
-                return (isHandled && item.LastUpdated > DateTimeOffset.Now.AddYears(-1)) || !isHandled;
+                return (isHandled && item.LastUpdated > DateTimeOffset.UtcNow.AddYears(-1)) || !isHandled;
             });
         }
     }

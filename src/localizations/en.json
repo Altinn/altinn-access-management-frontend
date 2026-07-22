@@ -105,7 +105,9 @@
     "no_access_to_page": "You do not have access to this page for the selected actor",
     "see_details": "See details",
     "yes_delete": "Yes, delete",
-    "confirm_delete_heading": "Are you sure you want to delete this power of attorney?"
+    "confirm_delete_heading": "Are you sure you want to delete this power of attorney?",
+    "has": "has",
+    "have": "have"
   },
   "download_file": {
     "trigger_button": "Download to file",
@@ -1046,10 +1048,11 @@
   "request_page": {
     "page_title": "Requests - Altinn",
     "heading": "Requests for {{name}}",
+    "your_requests_heading": "Your requests",
     "incoming_requests": "Received",
     "sent_requests": "Sent",
-    "no_received_requests": "No received requests",
-    "no_sent_requests": "No sent requests",
+    "no_received_requests": "{{name}} {{verb}} no received requests",
+    "no_sent_requests": "{{name}} {{verb}} no sent requests",
     "process_request_one": "Process request",
     "process_request_other": "Process requests",
     "view_request_one": "View request",

@@ -71,6 +71,7 @@ export const RequestPage = () => {
 
   const receivedRequestsCount = receivedRequestCount ?? 0;
   const resolvedSentRequestCount = sentRequestCount ?? 0;
+  const emptyTextName = isCurrentUserReportee ? t('common.you_uppercase') : name;
 
   return (
     <PageWrapper>
@@ -88,7 +89,11 @@ export const RequestPage = () => {
               <RestoreFocusProvider restoreFocus={restoreFocus}>
                 <RestoreFocusFallback>
                   <ReporteePageHeading
-                    title={t('request_page.heading', { name })}
+                    title={
+                      isCurrentUserReportee
+                        ? t('request_page.your_requests_heading')
+                        : t('request_page.heading', { name })
+                    }
                     reportee={reportee}
                     isLoading={isLoadingReportee}
                   />
@@ -116,7 +121,10 @@ export const RequestPage = () => {
                       count={receivedRequestsCount}
                       isLoading={isLoadingReceivedRequests}
                       isError={isReceivedRequestsError}
-                      emptyMessageKey='request_page.no_received_requests'
+                      emptyMessage={t('request_page.no_received_requests', {
+                        name: emptyTextName,
+                        verb: isCurrentUserReportee ? t('common.have') : t('common.has'),
+                      })}
                     >
                       <PendingRequests
                         pendingRequests={pendingRequests.received}
@@ -130,7 +138,10 @@ export const RequestPage = () => {
                         count={sentRequestCount ?? 0}
                         isLoading={isLoadingSentRequests}
                         isError={isSentRequestsError}
-                        emptyMessageKey='request_page.no_sent_requests'
+                        emptyMessage={t('request_page.no_sent_requests', {
+                          name: emptyTextName,
+                          verb: isCurrentUserReportee ? t('common.have') : t('common.has'),
+                        })}
                       >
                         <SentRequestsTabPanel
                           pendingRequests={pendingRequests.sent}
