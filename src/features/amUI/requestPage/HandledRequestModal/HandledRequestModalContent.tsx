@@ -51,7 +51,7 @@ export const HandledRequestModalContent = ({
     selectedPackageItem,
     handleSelection,
     resetSelection,
-  } = useHandledRequests(request, direction, () => modalRef.current?.close());
+  } = useHandledRequests(request, direction);
 
   const isReceived = direction === 'received';
   const isDetailView = !!selectedResourceItem || !!selectedPackageItem;
@@ -112,113 +112,115 @@ export const HandledRequestModalContent = ({
   );
 
   let content: ReactNode = null;
-  if (request !== null) {
-    if (selectedResourceItem) {
-      const { resource, outcome } = selectedResourceItem;
-      content = (
-        <RequestResourceDetail
-          resource={resource}
-          toPartyName={request.displayPartyName || ''}
-          processedStatus={outcome.status}
-          handledAt={outcome.handledAt}
-          handledByName={isReceived ? outcome.handledByName : undefined}
-        />
-      );
-    } else if (selectedPackageItem) {
-      const { package: pkg, outcome } = selectedPackageItem;
-      content = (
-        <RequestPackageDetail
-          pkg={pkg}
-          toPartyName={request.displayPartyName || ''}
-          processedStatus={outcome.status}
-          handledAt={outcome.handledAt}
-          handledByName={isReceived ? outcome.handledByName : undefined}
-        />
-      );
-    } else {
-      content = (
-        <div className={classes.reviewListView}>
-          {isReceived && (
-            <DsLink
-              asChild
-              className={classes.userLink}
-            >
-              <Link to={`/${amUIPath.Users}/${request.partyUuid}?returnTo=/${amUIPath.Requests}`}>
-                {t('request_page.review_user_link', { name: request.displayPartyName })}
-              </Link>
-            </DsLink>
-          )}
-          {(isLoadingRequests || isFetchingRequests) &&
-          handledPackages.length === 0 &&
-          handledResources.length === 0 ? (
-            <List>
-              {Array.from({ length: request.numberOfRequests || 2 }).map((_, index) => (
-                <ResourceListItem
-                  key={index}
-                  id={`placeholder-${index}`}
-                  resourceName='xxxxxxxxxxxxxxxxxxxx'
-                  ownerName='xxxxxxxxx xxxxxxxxxxx'
-                  loading
-                  as='div'
-                  interactive={false}
-                  shadow='none'
+
+  if (request !== null && selectedResourceItem) {
+    const { resource, outcome } = selectedResourceItem;
+    content = (
+      <RequestResourceDetail
+        resource={resource}
+        toPartyName={request.displayPartyName || ''}
+        processedStatus={outcome.status}
+        handledAt={outcome.handledAt}
+        handledByName={isReceived ? outcome.handledByName : undefined}
+      />
+    );
+  } else if (request !== null && selectedPackageItem) {
+    const { package: pkg, outcome } = selectedPackageItem;
+    content = (
+      <RequestPackageDetail
+        pkg={pkg}
+        toPartyName={request.displayPartyName || ''}
+        processedStatus={outcome.status}
+        handledAt={outcome.handledAt}
+        handledByName={isReceived ? outcome.handledByName : undefined}
+      />
+    );
+  } else if (request !== null) {
+    content = (
+      <div className={classes.reviewListView}>
+        {isReceived && (
+          <DsLink
+            asChild
+            className={classes.userLink}
+          >
+            <Link to={`/${amUIPath.Users}/${request.partyUuid}?returnTo=/${amUIPath.Requests}`}>
+              {t('request_page.review_user_link', { name: request.displayPartyName })}
+            </Link>
+          </DsLink>
+        )}
+        {(isLoadingRequests || isFetchingRequests) &&
+        handledPackages.length === 0 &&
+        handledResources.length === 0 ? (
+          <List>
+            {Array.from(
+              { length: request.numberOfRequests || 2 },
+              (_, index) => `placeholder-${index}`,
+            ).map((placeholderId) => (
+              <ResourceListItem
+                key={placeholderId}
+                id={placeholderId}
+                resourceName='xxxxxxxxxxxxxxxxxxxx'
+                ownerName='xxxxxxxxx xxxxxxxxxxx'
+                loading
+                as='div'
+                interactive={false}
+                shadow='none'
+              />
+            ))}
+          </List>
+        ) : (
+          <>
+            {handledPackages.length > 0 && (
+              <>
+                <DsHeading
+                  level={2}
+                  data-size='2xs'
+                  id='handled-package-list-heading'
+                >
+                  {t('request_page.package_list_title')}
+                </DsHeading>
+                <List aria-labelledby='handled-package-list-heading'>
+                  {handledPackages.map((item) => (
+                    <PackageHandledRow
+                      key={item.requestId}
+                      requestId={item.requestId}
+                      pkg={item.package}
+                      controls={itemControls(item.outcome.status)}
+                      onClick={() => handleSelection({ packageItem: item })}
+                    />
+                  ))}
+                </List>
+              </>
+            )}
+            {handledResources.length > 0 && (
+              <>
+                <DsHeading
+                  level={2}
+                  data-size='2xs'
+                  id='handled-service-list-heading'
+                >
+                  {t('request_page.resource_list_title')}
+                </DsHeading>
+                <ResourceList
+                  aria-labelledby='handled-service-list-heading'
+                  size='xs'
+                  border='dotted'
+                  enableSearch={false}
+                  showDetails={false}
+                  resources={resourceRows}
+                  onSelect={(resource) =>
+                    handleSelection({ resourceItem: resourceItemById.get(resource.id) })
+                  }
+                  renderControls={(resource) =>
+                    itemControls(resourceItemById.get(resource.id)?.outcome.status)
+                  }
                 />
-              ))}
-            </List>
-          ) : (
-            <>
-              {handledPackages.length > 0 && (
-                <>
-                  <DsHeading
-                    level={2}
-                    data-size='2xs'
-                    id='handled-package-list-heading'
-                  >
-                    {t('request_page.package_list_title')}
-                  </DsHeading>
-                  <List aria-labelledby='handled-package-list-heading'>
-                    {handledPackages.map((item) => (
-                      <PackageHandledRow
-                        key={item.requestId}
-                        requestId={item.requestId}
-                        pkg={item.package}
-                        controls={itemControls(item.outcome.status)}
-                        onClick={() => handleSelection({ packageItem: item })}
-                      />
-                    ))}
-                  </List>
-                </>
-              )}
-              {handledResources.length > 0 && (
-                <>
-                  <DsHeading
-                    level={2}
-                    data-size='2xs'
-                    id='handled-service-list-heading'
-                  >
-                    {t('request_page.resource_list_title')}
-                  </DsHeading>
-                  <ResourceList
-                    aria-labelledby='handled-service-list-heading'
-                    size='xs'
-                    border='dotted'
-                    enableSearch={false}
-                    showDetails={false}
-                    resources={resourceRows}
-                    onSelect={(resource) =>
-                      handleSelection({ resourceItem: resourceItemById.get(resource.id) })
-                    }
-                    renderControls={(resource) =>
-                      itemControls(resourceItemById.get(resource.id)?.outcome.status)
-                    }
-                  />
-                </>
-              )}
-            </>
-          )}
-        </div>
-      );
-    }
+              </>
+            )}
+          </>
+        )}
+      </div>
+    );
   }
 
   return (
@@ -226,7 +228,7 @@ export const HandledRequestModalContent = ({
       ref={modalRef}
       className={classes.reviewModal}
       title={
-        direction === 'received'
+        isReceived
           ? t('request_page.handled_received_modal_title', {
               fromPartyName: request?.displayPartyName,
             })

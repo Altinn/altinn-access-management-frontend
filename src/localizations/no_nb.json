@@ -1066,7 +1066,7 @@
     "error_loading_requests": "Kunne ikke laste forespørsler",
     "review_modal_title": "{{fromPartyName}} ber om disse fullmaktene",
     "handled_received_modal_title": "{{fromPartyName}} ba om disse fullmaktene",
-    "handled_sent_modal_title": "Du bad om disse fullmaktene fra {{fromPartyName}}.",
+    "handled_sent_modal_title": "Du ba om disse fullmaktene fra {{fromPartyName}}.",
     "approve_request": "Godkjenn",
     "reject_request": "Avvis forespørsel",
     "review_approved": "Godkjent",

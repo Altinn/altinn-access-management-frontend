@@ -67,11 +67,7 @@ type SnapshotRequests = {
  * Each item corresponds to a single request, keyed by its request id, so a resource or package that
  * has been handled more than once shows up as one row per handled request.
  */
-export const useHandledRequests = (
-  request: Request | null,
-  direction: HandledDirection,
-  onClose: () => void,
-) => {
+export const useHandledRequests = (request: Request | null, direction: HandledDirection) => {
   const { actingParty } = usePartyRepresentation();
   const isReceived = direction === 'received';
 
@@ -192,13 +188,6 @@ export const useHandledRequests = (
     setSelectedPackageItem(null);
   };
 
-  const handleClose = () => {
-    setSnapshotRequests({ resourceRequests: [], packageRequests: [] });
-    setSelectedResourceItem(null);
-    setSelectedPackageItem(null);
-    onClose();
-  };
-
   return {
     isLoadingRequests,
     isFetchingRequests,
@@ -208,6 +197,5 @@ export const useHandledRequests = (
     selectedPackageItem,
     handleSelection,
     resetSelection,
-    handleClose,
   };
 };

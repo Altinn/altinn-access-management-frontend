@@ -251,7 +251,7 @@ namespace Altinn.AccessManagement.UI.Core.Services
                 string lastUpdatedByName = null;
                 if (x.LastUpdatedBy is Guid updatedBy)
                 {
-                    partyNameDict.TryGetValue(x.LastUpdatedBy, out lastUpdatedByName);
+                    partyNameDict.TryGetValue(updatedBy, out lastUpdatedByName);
                 }
 
                 return new EnrichedPackageRequest()
@@ -288,12 +288,12 @@ namespace Altinn.AccessManagement.UI.Core.Services
             return parties.ToDictionary(p => p.PartyUuid, p => p.Name);
         }
 
-        private bool IsHandledStatus(List<RequestStatus> status)
+        private static bool IsHandledStatus(List<RequestStatus> status)
         {
             return status.Contains(RequestStatus.Approved) || status.Contains(RequestStatus.Rejected);
         }
 
-        private IEnumerable<Request> RemoveHandledItemsOlderThanOneYear(PaginatedResult<Request> requests)
+        private static IEnumerable<Request> RemoveHandledItemsOlderThanOneYear(PaginatedResult<Request> requests)
         {
             return requests.Items.Where(item =>
             {

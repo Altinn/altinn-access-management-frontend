@@ -1073,7 +1073,7 @@
     "review_handled_on": "{{status}} den {{date}}",
     "review_handled_by": "{{status}} av {{name}} den {{date}}",
     "handled_requests_title": "Behandla førespurnader",
-    "handled_requests_description": "Her vises førespurnader som blei behandla for opptil et år siden.",
+    "handled_requests_description": "Her kan du sjå førespurnader som blei behandla for opptil eit år sidan.",
     "review_warning": "Du kan ikkje godkjenne",
     "review_user_link": "Sjå fullmaktene {{name}} har no",
     "review_close_info": "Visst du ikkje vel godkjenn eller avvis på ein førespurnad, vil han bli liggande att som ein aktiv førespurnad.",

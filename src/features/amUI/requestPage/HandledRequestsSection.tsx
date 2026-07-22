@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { DsDetails, DsParagraph, List } from '@altinn/altinn-components';
+import { DsParagraph, List } from '@altinn/altinn-components';
 import { HandledDirection } from './HandledRequestModal/useHandledRequests';
 import { useRestoreFocusContext } from '../common/RestoreFocus';
 import { RequestListItem } from './RequestsTabPanel';

@@ -42,8 +42,8 @@ export const RequestsTabPanel = ({
           </DsAlert>
         </div>
       )}
+      {!isError && !isLoading && count === 0 && <div>{emptyMessage}</div>}
       <List>
-        {!isError && !isLoading && count === 0 && <div>{emptyMessage}</div>}
         {isLoading ? (
           <>
             <LoadingRequestListItem />
