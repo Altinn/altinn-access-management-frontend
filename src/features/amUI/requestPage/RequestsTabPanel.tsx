@@ -4,7 +4,7 @@ import {
   getSystemUserRequestUrl,
   getSystemUserAgentRequestUrl,
 } from '@/routes/paths/systemUserPath';
-import { DsAlert, List, UserListItem } from '@altinn/altinn-components';
+import { Button, DsAlert, List, UserListItem } from '@altinn/altinn-components';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Link } from 'react-router';
@@ -69,9 +69,12 @@ interface PendingRequestsProps {
   handledRequests: Request[] | undefined;
 }
 
+const PAGE_SIZE = 8;
+
 export const PendingRequests = ({ pendingRequests, handledRequests }: PendingRequestsProps) => {
   const { t } = useTranslation();
   const [openAccessRequest, setOpenAccessRequest] = useState<Request | null>(null);
+  const [currentPage, setCurrentPage] = useState(1);
   const restoreFocus = useRestoreFocusContext();
 
   const handleClose = () => {
@@ -80,9 +83,12 @@ export const PendingRequests = ({ pendingRequests, handledRequests }: PendingReq
     }
     setOpenAccessRequest(null);
   };
+
+  const paginatedRequests = pendingRequests?.slice(0, PAGE_SIZE * currentPage);
+  const hasNextPage = (pendingRequests?.length ?? 0) > PAGE_SIZE * currentPage;
   return (
     <>
-      {pendingRequests?.map((request) => {
+      {paginatedRequests?.map((request) => {
         const getRequestUrl = () => {
           if (request.type === 'consent')
             return getConsentRequestUrl(request.id, encodeURIComponent(`/${amUIPath.Requests}`));
@@ -125,6 +131,18 @@ export const PendingRequests = ({ pendingRequests, handledRequests }: PendingReq
           />
         );
       })}
+      {hasNextPage && (
+        <div className={classes.showMoreButtonContainer}>
+          <Button
+            className={classes.showMoreButton}
+            onClick={() => setCurrentPage((prevPage) => prevPage + 1)}
+            variant='outline'
+            size='md'
+          >
+            {t('common.show_more')}
+          </Button>
+        </div>
+      )}
       <RequestReviewModal
         request={openAccessRequest}
         onClose={handleClose}

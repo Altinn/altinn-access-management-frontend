@@ -15,6 +15,16 @@
   margin-bottom: var(--ds-size-4);
 }
 
+.showMoreButtonContainer {
+  display: flex;
+  justify-content: center;
+  margin-top: var(--ds-size-5);
+}
+
+.showMoreButton {
+  min-width: 120px;
+}
+
 @media only screen and (max-width: 769px) {
   .requestItemBadge {
     display: none;

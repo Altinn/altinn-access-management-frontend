@@ -1,5 +1,5 @@
 import { formatDateToNorwegian } from '@/resources/utils';
-import { formatDisplayName } from '@altinn/altinn-components';
+import { Button, formatDisplayName } from '@altinn/altinn-components';
 import { useTranslation } from 'react-i18next';
 import { Request } from './types';
 
@@ -18,6 +18,8 @@ interface SentRequestsTabPanelProps {
   handledRequests: Request[] | undefined;
 }
 
+const PAGE_SIZE = 8;
+
 export const SentRequestsTabPanel = ({
   pendingRequests,
   handledRequests,
@@ -25,6 +27,7 @@ export const SentRequestsTabPanel = ({
   const modalRef = useRef<HTMLDialogElement>(null);
   const [openAccessRequest, setOpenAccessRequest] = useState<Request | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [currentPage, setCurrentPage] = useState(1);
   const restoreFocus = useRestoreFocusContext();
 
   const handleClose = () => {
@@ -34,10 +37,13 @@ export const SentRequestsTabPanel = ({
     setIsModalOpen(false);
   };
 
+  const paginatedRequests = pendingRequests?.slice(0, PAGE_SIZE * currentPage);
+  const hasNextPage = (pendingRequests?.length ?? 0) > PAGE_SIZE * currentPage;
+
   const { t } = useTranslation();
   return (
     <>
-      {pendingRequests?.map((request) => {
+      {paginatedRequests?.map((request) => {
         return (
           <RequestListItem
             key={request.id}
@@ -62,6 +68,18 @@ export const SentRequestsTabPanel = ({
           />
         );
       })}
+      {hasNextPage && (
+        <div className={classes.showMoreButtonContainer}>
+          <Button
+            className={classes.showMoreButton}
+            onClick={() => setCurrentPage((prevPage) => prevPage + 1)}
+            variant='outline'
+            size='md'
+          >
+            {t('common.show_more')}
+          </Button>
+        </div>
+      )}
       <PartyRepresentationProvider
         fromPartyOverride={{
           partyId: 0,
