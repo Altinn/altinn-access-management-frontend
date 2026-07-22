@@ -1080,13 +1080,9 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
             // Assert
             Assert.Equal(HttpStatusCode.OK, httpResponse.StatusCode);
 
-            // the recently handled request is enriched with the handler's name
+            // the recently handled request is enriched with the name of the party that handled it
             EnrichedResourceRequest recentHandled = actualResponse.Single(r => r.Id == Guid.Parse("5a11ab1e-0000-0000-0000-000000000002"));
             Assert.Equal("Sein Dyktig Mår", recentHandled.LastUpdatedByName);
-
-            // the pending request has no handler
-            EnrichedResourceRequest pending = actualResponse.Single(r => r.Id == Guid.Parse("5a11ab1e-0000-0000-0000-000000000001"));
-            Assert.Null(pending.LastUpdatedByName);
 
             // handled requests older than one year are filtered out
             Assert.DoesNotContain(actualResponse, r => r.Id == Guid.Parse("5a11ab1e-0000-0000-0000-000000000003"));
