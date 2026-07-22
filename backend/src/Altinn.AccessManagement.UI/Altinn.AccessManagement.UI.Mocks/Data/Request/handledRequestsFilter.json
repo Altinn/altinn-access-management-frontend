@@ -1,0 +1,82 @@
+{
+  "data": [
+    {
+      "id": "5a11ab1e-0000-0000-0000-000000000001",
+      "type": "resource",
+      "status": "Pending",
+      "to": {
+        "id": "feb51634-0042-4ab0-a9db-8705300141a6",
+        "name": "EKSTRA SUNN KATT DAGSMARSJ",
+        "type": "organization"
+      },
+      "from": {
+        "id": "167536b5-f8ed-4c5a-8f48-0279507e53ae",
+        "name": "SITRONGUL MEDALJONG",
+        "type": "person"
+      },
+      "resource": {
+        "referenceId": "ske-innrapportering-boligsameie"
+      },
+      "lastUpdated": "2000-01-01T12:00:00+00:00"
+    },
+    {
+      "id": "5a11ab1e-0000-0000-0000-000000000002",
+      "type": "resource",
+      "status": "Approved",
+      "to": {
+        "id": "feb51634-0042-4ab0-a9db-8705300141a6",
+        "name": "EKSTRA SUNN KATT DAGSMARSJ",
+        "type": "organization"
+      },
+      "from": {
+        "id": "167536b5-f8ed-4c5a-8f48-0279507e53ae",
+        "name": "SITRONGUL MEDALJONG",
+        "type": "person"
+      },
+      "resource": {
+        "referenceId": "ske-innrapportering-boligsameie"
+      },
+      "lastUpdatedBy": "05bbad70-90db-4900-8f29-0a09cf6db1af",
+      "lastUpdated": "2000-01-01T12:00:00+00:00"
+    },
+    {
+      "id": "5a11ab1e-0000-0000-0000-000000000003",
+      "type": "resource",
+      "status": "Approved",
+      "to": {
+        "id": "feb51634-0042-4ab0-a9db-8705300141a6",
+        "name": "EKSTRA SUNN KATT DAGSMARSJ",
+        "type": "organization"
+      },
+      "from": {
+        "id": "167536b5-f8ed-4c5a-8f48-0279507e53ae",
+        "name": "SITRONGUL MEDALJONG",
+        "type": "person"
+      },
+      "resource": {
+        "referenceId": "ske-innrapportering-boligsameie"
+      },
+      "lastUpdatedBy": "05bbad70-90db-4900-8f29-0a09cf6db1af",
+      "lastUpdated": "2000-01-01T12:00:00+00:00"
+    },
+    {
+      "id": "5a11ab1e-0000-0000-0000-000000000004",
+      "type": "resource",
+      "status": "Rejected",
+      "to": {
+        "id": "feb51634-0042-4ab0-a9db-8705300141a6",
+        "name": "EKSTRA SUNN KATT DAGSMARSJ",
+        "type": "organization"
+      },
+      "from": {
+        "id": "167536b5-f8ed-4c5a-8f48-0279507e53ae",
+        "name": "SITRONGUL MEDALJONG",
+        "type": "person"
+      },
+      "resource": {
+        "referenceId": "ske-innrapportering-boligsameie"
+      },
+      "lastUpdated": "2000-01-01T12:00:00+00:00"
+    }
+  ]
+}

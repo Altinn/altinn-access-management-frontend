@@ -25,6 +25,12 @@ namespace Altinn.AccessManagement.UI.Mocks.Mocks
         };
         private readonly string dataFolder;
 
+        // Party that triggers the handled-requests test data (mix of pending, recently handled and old handled requests)
+        private static readonly Guid HandledRequestsTriggerParty = Guid.Parse("55555555-5555-5555-5555-555555555555");
+
+        // The one handled request that should always be considered "recent" (within the last year)
+        private static readonly Guid RecentHandledRequestId = Guid.Parse("5a11ab1e-0000-0000-0000-000000000002");
+
         /// <summary>
         ///     Initializes a new instance of the <see cref="RequestClientMock" /> class
         /// </summary>
@@ -50,6 +56,11 @@ namespace Altinn.AccessManagement.UI.Mocks.Mocks
             }
             else
             {
+                if (party == HandledRequestsTriggerParty)
+                {
+                    return await Task.FromResult(GetHandledRequestsMockData());
+                }
+
                 dataPath = party == Guid.Parse("22222222-2222-2222-2222-222222222222")
                     ? Path.Combine(dataFolder, "Request", "sentRequestsInvalidResource.json")
                     : party == Guid.Parse("33333333-3333-3333-3333-333333333333")
@@ -75,6 +86,11 @@ namespace Altinn.AccessManagement.UI.Mocks.Mocks
             }
             else
             {
+                if (party == HandledRequestsTriggerParty)
+                {
+                    return await Task.FromResult(GetHandledRequestsMockData());
+                }
+
                 dataPath = party == Guid.Parse("22222222-2222-2222-2222-222222222222")
                     ? Path.Combine(dataFolder, "Request", "receivedRequestsInvalidResource.json")
                     : Path.Combine(dataFolder, "Request", "receivedRequests.json");
@@ -199,6 +215,21 @@ namespace Altinn.AccessManagement.UI.Mocks.Mocks
             ThrowHttpStatusExceptionIfTriggerParty(party.ToString());
 
             return await Task.FromResult(3);
+        }
+
+        // Loads the handled-requests test data and stamps the "recent" handled request with the current
+        // time, so the one-year filter test stays deterministic regardless of when it runs.
+        private PaginatedResult<Request> GetHandledRequestsMockData()
+        {
+            string dataPath = Path.Combine(dataFolder, "Request", "handledRequestsFilter.json");
+            PaginatedResult<Request> result = Util.GetMockData<PaginatedResult<Request>>(dataPath);
+
+            foreach (Request request in result.Items.Where(r => r.Id == RecentHandledRequestId))
+            {
+                request.LastUpdated = DateTimeOffset.UtcNow;
+            }
+
+            return result;
         }
 
         private static void ThrowExceptionIfTriggerParty(string id)

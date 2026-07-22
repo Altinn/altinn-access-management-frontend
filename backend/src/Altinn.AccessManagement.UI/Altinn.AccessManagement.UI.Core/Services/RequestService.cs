@@ -197,7 +197,12 @@ namespace Altinn.AccessManagement.UI.Core.Services
                     throw new ResourceNotFoundException($"Resource not found for ID: {request.ResourceId}");
                 }
 
-                partyNameDict.TryGetValue(x.LastUpdatedBy, out var lastUpdatedByName);
+                string lastUpdatedByName = null;
+                if (x.LastUpdatedBy is Guid updatedBy)
+                {
+                    partyNameDict.TryGetValue(updatedBy, out lastUpdatedByName);
+                }
+
                 return new EnrichedResourceRequest()
                 {
                     Id = request.Id,
@@ -243,7 +248,12 @@ namespace Altinn.AccessManagement.UI.Core.Services
                     throw new ResourceNotFoundException($"Access package not found for ID: {packageId}");
                 }
 
-                partyNameDict.TryGetValue(x.LastUpdatedBy, out var lastUpdatedByName);
+                string lastUpdatedByName = null;
+                if (x.LastUpdatedBy is Guid updatedBy)
+                {
+                    partyNameDict.TryGetValue(x.LastUpdatedBy, out lastUpdatedByName);
+                }
+
                 return new EnrichedPackageRequest()
                 {
                     Id = request.Id,
