@@ -27,6 +27,7 @@ using Microsoft.ApplicationInsights.WindowsServer.TelemetryChannel;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.Extensions.Logging.ApplicationInsights;
+using Microsoft.FeatureManagement;
 using Microsoft.IdentityModel.Logging;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
@@ -39,6 +40,8 @@ WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
 string applicationInsightsKeySecretName = "ApplicationInsights--InstrumentationKey";
 
 string applicationInsightsConnectionString = string.Empty;
+
+bool appConfigurationEnabled = false;
 
 ConfigureSetupLogging();
 
@@ -169,6 +172,8 @@ async Task SetConfigurationProviders(ConfigurationManager config)
     config.AddCommandLine(args);
 
     await ConnectToKeyVaultAndSetApplicationInsights(config);
+
+    appConfigurationEnabled = config.AddAltinnAppConfiguration(logger);
 }
 
 async Task ConnectToKeyVaultAndSetApplicationInsights(ConfigurationManager config)
@@ -210,10 +215,17 @@ void ConfigureServices(IServiceCollection services, IConfiguration config)
 
     services.Configure<CacheConfig>(config.GetSection("CacheConfig"));
     services.Configure<GeneralSettings>(config.GetSection("GeneralSettings"));
-    services.Configure<FeatureFlags>(config.GetSection("FeatureFlags"));
     services.Configure<KeyVaultSettings>(config.GetSection("KeyVaultSettings"));
     services.Configure<ClientSettings>(config.GetSection("ClientSettings"));
     services.AddSingleton(config);
+
+    services.AddFeatureManagement();
+    if (appConfigurationEnabled)
+    {
+        services.AddAzureAppConfiguration();
+        services.TryAddSingleton(TimeProvider.System);
+        services.AddHostedService<RefreshAppConfigurationHostedService>();
+    }
 
     services.AddHttpClient<IAuthenticationClient, AuthenticationClient>();
     services.AddHttpClient<AuthorizationApiClient>();

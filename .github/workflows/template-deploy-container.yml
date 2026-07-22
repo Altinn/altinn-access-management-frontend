@@ -41,11 +41,31 @@ jobs:
         subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
     - uses: azure/CLI@9f7ce6f37c31b777ec6c6b6d1dfe7db79f497956 # v2
       name: Update Container App
+      env:
+        # Environments with the APP_CONFIGURATION_LABEL variable set read feature flags
+        # from Azure App Configuration; environments without it use appsettings values.
+        APP_CONFIGURATION_LABEL: ${{ vars.APP_CONFIGURATION_LABEL }}
       with:
         inlineScript: |
           az config set extension.use_dynamic_install=yes_without_prompt
+          appconfig_args=()
+          # Endpoint/Label control whether the BFF connects to Azure App Configuration at all.
+          # FeatureFlags__Enable additionally loads flags from Azure's dedicated "Feature manager"
+          # Variables mirrors the "tmp monorepo" feature flag setup
+          if [ -n "$APP_CONFIGURATION_LABEL" ]; then
+            appconfig_args=(--set-env-vars \
+              "Altinn__AppConfiguration__Endpoint=https://appconfaltinnauth001hub.azconfig.io" \
+              "Altinn__AppConfiguration__Label=$APP_CONFIGURATION_LABEL" \
+              "Altinn__AppConfiguration__FeatureFlags__Enable=true")
+          else
+            appconfig_args=(--remove-env-vars \
+              "Altinn__AppConfiguration__Endpoint" \
+              "Altinn__AppConfiguration__Label" \
+              "Altinn__AppConfiguration__FeatureFlags__Enable")
+          fi
           az containerapp update \
             --name ${{ vars.CONTAINER_APP_NAME }} \
             --container-name ${{ env.CONTAINER_APP_CONTAINER_NAME }} \
             --resource-group ${{ vars.CONTAINER_APP_RESOURCE_GROUP_NAME }} \
-            --image ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:${{ inputs.tag }}
+            --image ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:${{ inputs.tag }} \
+            "${appconfig_args[@]}"

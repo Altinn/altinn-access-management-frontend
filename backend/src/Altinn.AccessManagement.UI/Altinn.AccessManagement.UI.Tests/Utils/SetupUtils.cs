@@ -5,6 +5,7 @@ using Altinn.AccessManagement.UI.Core.Services.Interfaces;
 using Altinn.AccessManagement.UI.Core.Services;
 using Altinn.AccessManagement.UI.Mocks.Mocks;
 using AltinnCore.Authentication.JwtCookie;
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc.Testing;
 using Microsoft.AspNetCore.TestHost;
@@ -18,6 +19,20 @@ namespace Altinn.AccessManagement.UI.Tests.Utils
     /// </summary>
     public static class SetupUtils
     {
+        /// <summary>
+        ///     Overrides feature flag values for a test client, taking precedence over the
+        ///     FeatureManagement section in appsettings
+        /// </summary>
+        /// <param name="builder">Web host builder for the test server</param>
+        /// <param name="featureFlags">Flag values keyed by flag name (see <see cref="FeatureFlags" />)</param>
+        public static void SetFeatureFlags(IWebHostBuilder builder, Dictionary<string, bool> featureFlags)
+        {
+            foreach ((string flag, bool enabled) in featureFlags)
+            {
+                builder.UseSetting($"FeatureManagement:{flag}", enabled.ToString());
+            }
+        }
+
         /// <summary>
         ///     Gets a HttpClient for unittests testing
         /// </summary>
@@ -80,9 +95,8 @@ namespace Altinn.AccessManagement.UI.Tests.Utils
         ///     Gets a HttpClient for unittests testing
         /// </summary>
         /// <param name="customFactory">Web app factory to configure test services for UserController tests</param>
-        /// <param name="flags">Override featureFlags in the client. Defaults to true if not set</param>
         /// <returns>HttpClient</returns>
-        public static HttpClient GetTestClient(CustomWebApplicationFactory<UserController> customFactory, FeatureFlags flags)
+        public static HttpClient GetTestClient(CustomWebApplicationFactory<UserController> customFactory)
         {
             WebApplicationFactory<UserController> factory = customFactory.WithWebHostBuilder(builder =>
             {
@@ -102,9 +116,8 @@ namespace Altinn.AccessManagement.UI.Tests.Utils
         ///     Gets a HttpClient for unittests testing
         /// </summary>
         /// <param name="customFactory">Web app factory to configure test services for ConnectionController tests</param>
-        /// <param name="flags">Override featureFlags in the client. Defaults to true if not set</param>
         /// <returns>HttpClient</returns>
-        public static HttpClient GetTestClient(CustomWebApplicationFactory<ConnectionController> customFactory, FeatureFlags flags)
+        public static HttpClient GetTestClient(CustomWebApplicationFactory<ConnectionController> customFactory)
         {
             WebApplicationFactory<ConnectionController> factory = customFactory.WithWebHostBuilder(builder =>
             {
@@ -123,10 +136,9 @@ namespace Altinn.AccessManagement.UI.Tests.Utils
         /// <summary>
         ///     Gets a HttpClient for unittests testing
         /// </summary>
-        /// <param name="customFactory">Web app factory to configure test services for UserController tests</param>
-        /// <param name="flags">Override featureFlags in the client. Defaults to true if not set</param>
+        /// <param name="customFactory">Web app factory to configure test services for RoleController tests</param>
         /// <returns>HttpClient</returns>
-        public static HttpClient GetTestClient(CustomWebApplicationFactory<RoleController> customFactory, FeatureFlags flags)
+        public static HttpClient GetTestClient(CustomWebApplicationFactory<RoleController> customFactory)
         {
             WebApplicationFactory<RoleController> factory = customFactory.WithWebHostBuilder(builder =>
            {
@@ -430,11 +442,17 @@ namespace Altinn.AccessManagement.UI.Tests.Utils
         /// </summary>
         /// <param name="customFactory">Web app factory to configure test services for</param>
         /// <param name="allowRedirect">allow redirect flag</param>
+        /// <param name="featureFlags">Override feature flag values (see <see cref="FeatureFlags" />)</param>
         /// <returns>HttpClient</returns>
-        public static HttpClient GetTestClient(CustomWebApplicationFactory<HomeController> customFactory, bool allowRedirect = false)
+        public static HttpClient GetTestClient(CustomWebApplicationFactory<HomeController> customFactory, bool allowRedirect = false, Dictionary<string, bool> featureFlags = null)
         {
             WebApplicationFactory<HomeController> factory = customFactory.WithWebHostBuilder(builder =>
             {
+                if (featureFlags != null)
+                {
+                    SetFeatureFlags(builder, featureFlags);
+                }
+
                 builder.ConfigureTestServices(services =>
                 {
                     services.AddTransient<IResourceRegistryClient, ResourceRegistryClientMock>();
