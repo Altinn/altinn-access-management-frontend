@@ -1,7 +1,7 @@
 namespace Altinn.AccessManagement.UI.Core.Configuration
 {
     /// <summary>
-    /// Feature flag names for use in turning off an on features in different envs.
+    /// Feature flag names for use in turning features off and on in different envs.
     /// Flag values are read through <see cref="Microsoft.FeatureManagement.IFeatureManager" />, sourced from
     /// Azure App Configuration in deployed environments and from the FeatureManagement
     /// section in appsettings when running locally.

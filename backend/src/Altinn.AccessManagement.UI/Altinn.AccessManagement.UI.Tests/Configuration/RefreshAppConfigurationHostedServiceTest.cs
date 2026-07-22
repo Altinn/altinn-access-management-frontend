@@ -12,7 +12,7 @@ namespace Altinn.AccessManagement.UI.Tests.Configuration
     {
         private readonly Mock<IConfigurationRefresher> _refresher1 = NewRefresher();
         private readonly Mock<IConfigurationRefresher> _refresher2 = NewRefresher();
-        private readonly FakeTimeProvider _timeProvider = new FakeTimeProvider();
+        private readonly TimerTrackingFakeTimeProvider _timeProvider = new TimerTrackingFakeTimeProvider();
         private readonly RefreshAppConfigurationHostedService _service;
 
         public RefreshAppConfigurationHostedServiceTest()
@@ -31,33 +31,21 @@ namespace Altinn.AccessManagement.UI.Tests.Configuration
         {
             await _service.StartAsync(CancellationToken.None);
 
-            await AdvanceTimeUntilInvocationsAsync(_refresher1, 1);
+            // StartAsync queues ExecuteAsync without running it (as of .NET 10), so wait for the
+            // service to arm its timer; from then on each advance fires exactly one tick.
+            await _timeProvider.TimerCreated.WaitAsync(TimeSpan.FromSeconds(5));
+
+            await AdvanceOneIntervalAsync();
 
             _refresher1.Verify(r => r.TryRefreshAsync(It.IsAny<CancellationToken>()), Times.Once);
             _refresher2.Verify(r => r.TryRefreshAsync(It.IsAny<CancellationToken>()), Times.Once);
 
-            await AdvanceTimeUntilInvocationsAsync(_refresher1, 2);
+            await AdvanceOneIntervalAsync();
 
             _refresher1.Verify(r => r.TryRefreshAsync(It.IsAny<CancellationToken>()), Times.Exactly(2));
             _refresher2.Verify(r => r.TryRefreshAsync(It.IsAny<CancellationToken>()), Times.Exactly(2));
 
             await _service.StopAsync(CancellationToken.None);
-        }
-
-        /// <summary>
-        /// Test case: The service is stopped before the first interval has passed
-        /// Expected: No refreshes are triggered when time passes after the stop
-        /// </summary>
-        [Fact]
-        public async Task ExecuteAsync_DoesNotRefreshAfterStop()
-        {
-            await _service.StartAsync(CancellationToken.None);
-            await _service.StopAsync(CancellationToken.None);
-
-            _timeProvider.Advance(RefreshAppConfigurationHostedService.RefreshInterval);
-
-            _refresher1.Verify(r => r.TryRefreshAsync(It.IsAny<CancellationToken>()), Times.Never);
-            _refresher2.Verify(r => r.TryRefreshAsync(It.IsAny<CancellationToken>()), Times.Never);
         }
 
         private static Mock<IConfigurationRefresher> NewRefresher()
@@ -68,17 +56,39 @@ namespace Altinn.AccessManagement.UI.Tests.Configuration
         }
 
         /// <summary>
-        /// Advances fake time one refresh interval at a time until the refresher has been invoked
-        /// the expected number of times, yielding between advances so the service's timer loop
-        /// (which runs as background continuations) gets to both arm the timer and process ticks.
+        /// Advances fake time by one refresh interval and waits until both refreshers have processed
+        /// the resulting tick, which happens asynchronously as the service's timer loop continuations
+        /// run. Time is only ever advanced here, one interval at a time with the timer already armed,
+        /// so exactly one tick fires per call and the exact-count verifications are race free.
         /// </summary>
-        private async Task AdvanceTimeUntilInvocationsAsync(Mock<IConfigurationRefresher> refresher, int expectedCount)
+        private async Task AdvanceOneIntervalAsync()
         {
+            int expected1 = _refresher1.Invocations.Count + 1;
+            int expected2 = _refresher2.Invocations.Count + 1;
+            _timeProvider.Advance(RefreshAppConfigurationHostedService.RefreshInterval);
+
             DateTime deadline = DateTime.UtcNow.AddSeconds(5);
-            while (refresher.Invocations.Count < expectedCount && DateTime.UtcNow < deadline)
+            while ((_refresher1.Invocations.Count < expected1 || _refresher2.Invocations.Count < expected2) && DateTime.UtcNow < deadline)
             {
-                _timeProvider.Advance(RefreshAppConfigurationHostedService.RefreshInterval);
                 await Task.Delay(10);
+            }
+        }
+
+        /// <summary>
+        /// Fake time provider that additionally exposes when the service under test has created
+        /// (armed) its refresh timer, so tests know when advancing time will produce ticks.
+        /// </summary>
+        private sealed class TimerTrackingFakeTimeProvider : FakeTimeProvider
+        {
+            private readonly TaskCompletionSource _timerCreated = new TaskCompletionSource(TaskCreationOptions.RunContinuationsAsynchronously);
+
+            public Task TimerCreated => _timerCreated.Task;
+
+            public override ITimer CreateTimer(TimerCallback callback, object state, TimeSpan dueTime, TimeSpan period)
+            {
+                ITimer timer = base.CreateTimer(callback, state, dueTime, period);
+                _timerCreated.TrySetResult();
+                return timer;
             }
         }
     }

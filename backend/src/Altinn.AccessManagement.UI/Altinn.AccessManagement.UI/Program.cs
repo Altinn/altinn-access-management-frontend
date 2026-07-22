@@ -41,6 +41,8 @@ string applicationInsightsKeySecretName = "ApplicationInsights--InstrumentationK
 
 string applicationInsightsConnectionString = string.Empty;
 
+bool appConfigurationEnabled = false;
+
 ConfigureSetupLogging();
 
 await SetConfigurationProviders(builder.Configuration);
@@ -171,7 +173,7 @@ async Task SetConfigurationProviders(ConfigurationManager config)
 
     await ConnectToKeyVaultAndSetApplicationInsights(config);
 
-    config.AddAltinnAppConfiguration(logger);
+    appConfigurationEnabled = config.AddAltinnAppConfiguration(logger);
 }
 
 async Task ConnectToKeyVaultAndSetApplicationInsights(ConfigurationManager config)
@@ -218,7 +220,7 @@ void ConfigureServices(IServiceCollection services, IConfiguration config)
     services.AddSingleton(config);
 
     services.AddFeatureManagement();
-    if (!string.IsNullOrEmpty(config["Altinn:AppConfiguration:Endpoint"]) && !string.IsNullOrEmpty(config["Altinn:AppConfiguration:Label"]))
+    if (appConfigurationEnabled)
     {
         services.AddAzureAppConfiguration();
         services.TryAddSingleton(TimeProvider.System);

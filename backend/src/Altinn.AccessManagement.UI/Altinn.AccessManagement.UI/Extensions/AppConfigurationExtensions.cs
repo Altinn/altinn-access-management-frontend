@@ -21,7 +21,8 @@ namespace Altinn.AccessManagement.UI.Extensions
         /// </summary>
         /// <param name="config">the configuration manager to add the configuration source to</param>
         /// <param name="logger">setup logger</param>
-        public static void AddAltinnAppConfiguration(this ConfigurationManager config, ILogger logger)
+        /// <returns>true if Azure App Configuration was added as a configuration source, false when skipped or unreachable</returns>
+        public static bool AddAltinnAppConfiguration(this ConfigurationManager config, ILogger logger)
         {
             string appConfigurationEndpoint = config["Altinn:AppConfiguration:Endpoint"];
             string appConfigurationLabel = config["Altinn:AppConfiguration:Label"];
@@ -29,7 +30,7 @@ namespace Altinn.AccessManagement.UI.Extensions
             if (string.IsNullOrEmpty(appConfigurationEndpoint) || string.IsNullOrEmpty(appConfigurationLabel))
             {
                 logger.LogInformation("Program // Altinn:AppConfiguration:Endpoint or Label not set - skipping Azure App Configuration");
-                return;
+                return false;
             }
 
             ChainedTokenCredential credential = new ChainedTokenCredential(new ManagedIdentityCredential(ManagedIdentityId.SystemAssigned), new AzureCliCredential());
@@ -59,7 +60,10 @@ namespace Altinn.AccessManagement.UI.Extensions
             catch (Exception appConfigurationException)
             {
                 logger.LogError(appConfigurationException, "Program // Unable to connect to Azure App Configuration - falling back to appsettings values");
+                return false;
             }
+
+            return true;
         }
     }
 }

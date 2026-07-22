@@ -1,4 +1,5 @@
-﻿using System.Web;
+﻿using System.Text.Json;
+using System.Web;
 using Altinn.AccessManagement.Models;
 using Altinn.AccessManagement.UI.Core.Configuration;
 using Altinn.AccessManagement.UI.Core.Helpers;
@@ -120,7 +121,7 @@ namespace Altinn.AccessManagement.UI.Controllers
             await foreach (string featureName in _featureManager.GetFeatureNamesAsync())
             {
                 string flagName = featureName[(featureName.LastIndexOf('.') + 1)..];
-                featureFlags[char.ToLowerInvariant(flagName[0]) + flagName[1..]] = await _featureManager.IsEnabledAsync(featureName);
+                featureFlags[JsonNamingPolicy.CamelCase.ConvertName(flagName)] = await _featureManager.IsEnabledAsync(featureName);
             }
 
             return featureFlags;
