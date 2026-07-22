@@ -442,11 +442,17 @@ namespace Altinn.AccessManagement.UI.Tests.Utils
         /// </summary>
         /// <param name="customFactory">Web app factory to configure test services for</param>
         /// <param name="allowRedirect">allow redirect flag</param>
+        /// <param name="featureFlags">Override feature flag values (see <see cref="FeatureFlags" />)</param>
         /// <returns>HttpClient</returns>
-        public static HttpClient GetTestClient(CustomWebApplicationFactory<HomeController> customFactory, bool allowRedirect = false)
+        public static HttpClient GetTestClient(CustomWebApplicationFactory<HomeController> customFactory, bool allowRedirect = false, Dictionary<string, bool> featureFlags = null)
         {
             WebApplicationFactory<HomeController> factory = customFactory.WithWebHostBuilder(builder =>
             {
+                if (featureFlags != null)
+                {
+                    SetFeatureFlags(builder, featureFlags);
+                }
+
                 builder.ConfigureTestServices(services =>
                 {
                     services.AddTransient<IResourceRegistryClient, ResourceRegistryClientMock>();

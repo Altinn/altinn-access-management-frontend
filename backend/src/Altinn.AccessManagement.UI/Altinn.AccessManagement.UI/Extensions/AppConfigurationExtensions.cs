@@ -34,25 +34,32 @@ namespace Altinn.AccessManagement.UI.Extensions
 
             ChainedTokenCredential credential = new ChainedTokenCredential(new ManagedIdentityCredential(ManagedIdentityId.SystemAssigned), new AzureCliCredential());
 
-            config.AddAzureAppConfiguration(options =>
+            try
             {
-                options.Connect(new Uri(appConfigurationEndpoint), credential);
-                options.Select(KeyFilter.Any, appConfigurationLabel);
-                options.ConfigureRefresh(refresh =>
+                config.AddAzureAppConfiguration(options =>
                 {
-                    refresh.RegisterAll();
-                    refresh.SetRefreshInterval(RefreshAppConfigurationHostedService.RefreshInterval);
-                });
-
-                if (config.GetValue("Altinn:AppConfiguration:FeatureFlags:Enable", false))
-                {
-                    options.UseFeatureFlags(featureFlagOptions =>
+                    options.Connect(new Uri(appConfigurationEndpoint), credential);
+                    options.Select(KeyFilter.Any, appConfigurationLabel);
+                    options.ConfigureRefresh(refresh =>
                     {
-                        featureFlagOptions.Select(KeyFilter.Any, appConfigurationLabel);
-                        featureFlagOptions.SetRefreshInterval(RefreshAppConfigurationHostedService.RefreshInterval);
+                        refresh.RegisterAll();
+                        refresh.SetRefreshInterval(RefreshAppConfigurationHostedService.RefreshInterval);
                     });
-                }
-            });
+
+                    if (config.GetValue("Altinn:AppConfiguration:FeatureFlags:Enable", false))
+                    {
+                        options.UseFeatureFlags(featureFlagOptions =>
+                        {
+                            featureFlagOptions.Select(KeyFilter.Any, appConfigurationLabel);
+                            featureFlagOptions.SetRefreshInterval(RefreshAppConfigurationHostedService.RefreshInterval);
+                        });
+                    }
+                });
+            }
+            catch (Exception appConfigurationException)
+            {
+                logger.LogError(appConfigurationException, "Program // Unable to connect to Azure App Configuration - falling back to appsettings values");
+            }
         }
     }
 }
