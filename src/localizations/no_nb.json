@@ -102,9 +102,7 @@
     "no_access_to_page": "Du har ikke tilgang til denne siden for valgt aktør",
     "see_details": "Se detaljer",
     "yes_delete": "Ja, slett",
-    "confirm_delete_heading": "Er du sikker på at du vil slette denne fullmakten?",
-    "has": "har",
-    "have": "har"
+    "confirm_delete_heading": "Er du sikker på at du vil slette denne fullmakten?"
   },
   "download_file": {
     "trigger_button": "Last ned til fil",
@@ -1048,8 +1046,10 @@
     "your_requests_heading": "Dine forespørsler",
     "incoming_requests": "Mottatte",
     "sent_requests": "Sendte",
-    "no_received_requests": "{{name}} {{verb}} ingen mottatte forespørsler",
-    "no_sent_requests": "{{name}} {{verb}} ingen sendte forespørsler",
+    "no_received_requests": "{{name}} har ingen mottatte forespørsler",
+    "no_sent_requests": "{{name}} har ingen sendte forespørsler",
+    "no_received_requests_you": "Du har ingen mottatte forespørsler",
+    "no_sent_requests_you": "Du har ingen sendte forespørsler",
     "process_request_one": "Behandle forespørsel",
     "process_request_other": "Behandle forespørsler",
     "view_request_one": "Se forespørsel",

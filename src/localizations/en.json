@@ -105,9 +105,7 @@
     "no_access_to_page": "You do not have access to this page for the selected actor",
     "see_details": "See details",
     "yes_delete": "Yes, delete",
-    "confirm_delete_heading": "Are you sure you want to delete this power of attorney?",
-    "has": "has",
-    "have": "have"
+    "confirm_delete_heading": "Are you sure you want to delete this power of attorney?"
   },
   "download_file": {
     "trigger_button": "Download to file",
@@ -1051,8 +1049,10 @@
     "your_requests_heading": "Your requests",
     "incoming_requests": "Received",
     "sent_requests": "Sent",
-    "no_received_requests": "{{name}} {{verb}} no received requests",
-    "no_sent_requests": "{{name}} {{verb}} no sent requests",
+    "no_received_requests": "{{name}} has no received requests",
+    "no_sent_requests": "{{name}} has no sent requests",
+    "no_received_requests_you": "You have no received requests",
+    "no_sent_requests_you": "You have no sent requests",
     "process_request_one": "Process request",
     "process_request_other": "Process requests",
     "view_request_one": "View request",

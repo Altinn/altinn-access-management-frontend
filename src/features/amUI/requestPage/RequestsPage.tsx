@@ -71,7 +71,6 @@ export const RequestPage = () => {
 
   const receivedRequestsCount = receivedRequestCount ?? 0;
   const resolvedSentRequestCount = sentRequestCount ?? 0;
-  const emptyTextName = isCurrentUserReportee ? t('common.you_uppercase') : name;
 
   return (
     <PageWrapper>
@@ -121,10 +120,13 @@ export const RequestPage = () => {
                       count={receivedRequestsCount}
                       isLoading={isLoadingReceivedRequests}
                       isError={isReceivedRequestsError}
-                      emptyMessage={t('request_page.no_received_requests', {
-                        name: emptyTextName,
-                        verb: isCurrentUserReportee ? t('common.have') : t('common.has'),
-                      })}
+                      emptyMessage={
+                        isCurrentUserReportee
+                          ? t('request_page.no_received_requests_you')
+                          : t('request_page.no_received_requests', {
+                              name: name,
+                            })
+                      }
                     >
                       <PendingRequests
                         pendingRequests={pendingRequests.received}
@@ -138,10 +140,13 @@ export const RequestPage = () => {
                         count={sentRequestCount ?? 0}
                         isLoading={isLoadingSentRequests}
                         isError={isSentRequestsError}
-                        emptyMessage={t('request_page.no_sent_requests', {
-                          name: emptyTextName,
-                          verb: isCurrentUserReportee ? t('common.have') : t('common.has'),
-                        })}
+                        emptyMessage={
+                          isCurrentUserReportee
+                            ? t('request_page.no_sent_requests_you')
+                            : t('request_page.no_sent_requests', {
+                                name: name,
+                              })
+                        }
                       >
                         <SentRequestsTabPanel
                           pendingRequests={pendingRequests.sent}
