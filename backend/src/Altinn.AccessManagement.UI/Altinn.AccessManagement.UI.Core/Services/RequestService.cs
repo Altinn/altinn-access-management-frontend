@@ -39,7 +39,9 @@ namespace Altinn.AccessManagement.UI.Core.Services
         public async Task<IEnumerable<RequestFE>> GetSentRequests(Guid party, Guid? to, List<RequestStatus> status, string type, CancellationToken cancellationToken)
         {
             PaginatedResult<Request> response = await _requestClient.GetSentRequests(party, to, status, type, cancellationToken);
-            return response.Items.Select(MapToRequestFE);
+                        
+            // filter approved and handled requests which are older than one year
+            return RemoveHandledItemsOlderThanOneYear(response).Select(MapToRequestFE);
         }
 
         /// <inheritdoc />
@@ -53,7 +55,9 @@ namespace Altinn.AccessManagement.UI.Core.Services
         public async Task<IEnumerable<RequestFE>> GetReceivedRequests(Guid party, Guid? from, List<RequestStatus> status, string type, CancellationToken cancellationToken)
         {
             PaginatedResult<Request> response = await _requestClient.GetReceivedRequests(party, from, status, type, cancellationToken);
-            return response.Items.Select(MapToRequestFE);
+            
+            // filter approved and handled requests which are older than one year
+            return RemoveHandledItemsOlderThanOneYear(response).Select(MapToRequestFE);
         }
 
         /// <inheritdoc />
@@ -264,6 +268,15 @@ namespace Altinn.AccessManagement.UI.Core.Services
         private bool IsHandledStatus(List<RequestStatus> status)
         {
             return status.Contains(RequestStatus.Approved) || status.Contains(RequestStatus.Rejected);
+        }
+
+        private IEnumerable<Request> RemoveHandledItemsOlderThanOneYear(PaginatedResult<Request> requests)
+        {
+            return requests.Items.Where(item =>
+            {
+                bool isHandled = IsHandledStatus([item.Status]);
+                return (isHandled && item.LastUpdated > DateTimeOffset.Now.AddYears(-1)) || !isHandled;
+            });
         }
     }
 }
