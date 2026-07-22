@@ -267,11 +267,11 @@ Feature flags let us turn functionality on and off per environment without chang
 
 ### Adding a new feature flag
 
-1. Add a constant in `Altinn.AccessManagement.UI.Core/Configuration/FeatureFlags.cs`. Flag names use the `AccessManagementUI.` prefix followed by a PascalCase name, e.g. `AccessManagementUI.UseNewSingleRightsClientDelegation`.
-2. Add the flag with its default value (usually `false`) to the `FeatureManagement` section in `appsettings.json` and `appsettings.Development.json`.
-3. The flag is automatically exposed to the frontend as `window.featureFlags.<name>`, where `<name>` is the camelCased flag name without the prefix (e.g. `useNewSingleRightsClientDelegation`). Add it to the `featureFlags` type in `src/global.d.ts` so it can be used with type support.
-4. To read the flag in the BFF, inject `IFeatureManager` and call `IsEnabledAsync(FeatureFlags.YourFlag)`.
-5. To make the flag toggleable in deployed environments, it must also be defined in the Terraform in [altinn-authorization-tmp](https://github.com/Altinn/altinn-authorization-tmp) (the `infra/modules/appsettings` module) with the `{environment}-access-management-ui` label. Terraform only owns the flag's existence and description — the on/off state is controlled in the Azure portal.
+1. **Start with the Terraform definition** — our flags are defined in the backend repo: add the flag to the `feature_flags` list in [`src/apps/Altinn.AccessManagement/infra/frontend.tf`](https://github.com/Altinn/altinn-authorization-tmp/blob/main/src/apps/Altinn.AccessManagement/infra/frontend.tf) in [altinn-authorization-tmp](https://github.com/Altinn/altinn-authorization-tmp), keeping the `{environment}-access-management-ui` label. When that PR merges, their "CD: Apps" pipeline creates the flag (disabled) in the App Configuration store, environment by environment. Terraform only owns the flag's existence and description — the on/off state is controlled in the Azure portal. (The order is forgiving: a flag that does not yet exist in the store simply reads as disabled, so the code steps below can ship first — but defining it first means it is toggleable in the portal from day one.)
+2. Add a constant in `Altinn.AccessManagement.UI.Core/Configuration/FeatureFlags.cs`. Flag names use the `AccessManagementUI.` prefix followed by a PascalCase name, e.g. `AccessManagementUI.UseNewSingleRightsClientDelegation`.
+3. Add the flag with its default value (usually `false`) to the `FeatureManagement` section in `appsettings.json` and `appsettings.Development.json`.
+4. The flag is automatically exposed to the frontend as `window.featureFlags.<name>`, where `<name>` is the camelCased flag name without the prefix (e.g. `useNewSingleRightsClientDelegation`). Add it to the `featureFlags` type in `src/global.d.ts` so it can be used with type support.
+5. To read the flag in the BFF, inject `IFeatureManager` and call `IsEnabledAsync(FeatureFlags.YourFlag)`.
 
 When a feature becomes permanent, remove the flag again: the constant, the appsettings entries, the `global.d.ts` entry, all usages, and the Terraform definition.
 
