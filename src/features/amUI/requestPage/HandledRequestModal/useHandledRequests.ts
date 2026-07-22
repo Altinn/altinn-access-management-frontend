@@ -49,6 +49,10 @@ const toProcessedStatus = (status: RequestStatus): ProcessedStatus | undefined =
   return undefined;
 };
 
+// Most recently handled first.
+const byHandledAtDesc = (a: { outcome: HandledOutcome }, b: { outcome: HandledOutcome }): number =>
+  b.outcome.handledAt.localeCompare(a.outcome.handledAt);
+
 type SnapshotRequests = {
   resourceRequests: EnrichedResourceRequest[];
   packageRequests: EnrichedPackageRequest[];
@@ -136,31 +140,35 @@ export const useHandledRequests = (
   ]); // eslint-disable-line react-hooks/exhaustive-deps
 
   const handledResources = useMemo<HandledResourceItem[]>(() => {
-    return snapshotRequests.resourceRequests.reduce<HandledResourceItem[]>((items, req) => {
-      const status = toProcessedStatus(req.status);
-      if (status) {
-        items.push({
-          requestId: req.id,
-          resource: req.resource,
-          outcome: { status, handledAt: req.lastUpdated, handledByName: req.lastUpdatedByName },
-        });
-      }
-      return items;
-    }, []);
+    return snapshotRequests.resourceRequests
+      .reduce<HandledResourceItem[]>((items, req) => {
+        const status = toProcessedStatus(req.status);
+        if (status) {
+          items.push({
+            requestId: req.id,
+            resource: req.resource,
+            outcome: { status, handledAt: req.lastUpdated, handledByName: req.lastUpdatedByName },
+          });
+        }
+        return items;
+      }, [])
+      .sort(byHandledAtDesc);
   }, [snapshotRequests]);
 
   const handledPackages = useMemo<HandledPackageItem[]>(() => {
-    return snapshotRequests.packageRequests.reduce<HandledPackageItem[]>((items, req) => {
-      const status = toProcessedStatus(req.status);
-      if (status) {
-        items.push({
-          requestId: req.id,
-          package: req.package,
-          outcome: { status, handledAt: req.lastUpdated, handledByName: req.lastUpdatedByName },
-        });
-      }
-      return items;
-    }, []);
+    return snapshotRequests.packageRequests
+      .reduce<HandledPackageItem[]>((items, req) => {
+        const status = toProcessedStatus(req.status);
+        if (status) {
+          items.push({
+            requestId: req.id,
+            package: req.package,
+            outcome: { status, handledAt: req.lastUpdated, handledByName: req.lastUpdatedByName },
+          });
+        }
+        return items;
+      }, [])
+      .sort(byHandledAtDesc);
   }, [snapshotRequests]);
 
   const handleSelection = ({
