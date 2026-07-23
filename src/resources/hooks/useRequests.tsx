@@ -9,6 +9,7 @@ import { SystemUser } from '@/features/amUI/systemUser/types';
 import { ActiveConsentListItem } from '@/features/amUI/consent/types';
 import {
   RequestDto,
+  RequestStatus,
   useGetReceivedRequestsQuery,
   useGetSentRequestsQuery,
 } from '@/rtk/features/requestApi';
@@ -21,6 +22,9 @@ interface UseRequestsOptions {
 
 export const useRequests = ({ skipSentRequests = false }: UseRequestsOptions = {}) => {
   const partyUuid = getCookie('AltinnPartyUuid');
+  const requestStatusesToLoad: RequestStatus[] = window.featureFlags.showHandledRequests
+    ? ['Pending', 'Rejected', 'Approved']
+    : ['Pending'];
 
   const {
     data: isAdmin,
@@ -57,7 +61,7 @@ export const useRequests = ({ skipSentRequests = false }: UseRequestsOptions = {
     isLoading: isLoadingPendingSentAccessRequests,
     isError: isSentAccessRequestsError,
   } = useGetSentRequestsQuery(
-    { party: partyUuid || '', status: ['Pending', 'Rejected', 'Approved'], to: '' },
+    { party: partyUuid || '', status: requestStatusesToLoad, to: '' },
     { skip: !partyUuid || skipSentRequests },
   );
   const {
@@ -65,7 +69,7 @@ export const useRequests = ({ skipSentRequests = false }: UseRequestsOptions = {
     isLoading: isLoadingPendingReceivedAccessRequests,
     isError: isReceivedAccessRequestsError,
   } = useGetReceivedRequestsQuery(
-    { party: partyUuid || '', status: ['Pending', 'Rejected', 'Approved'], from: '' },
+    { party: partyUuid || '', status: requestStatusesToLoad, from: '' },
     { skip: !partyUuid },
   );
 
