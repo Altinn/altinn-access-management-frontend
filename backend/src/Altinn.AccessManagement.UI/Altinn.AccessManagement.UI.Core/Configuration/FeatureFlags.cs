@@ -1,14 +1,21 @@
 namespace Altinn.AccessManagement.UI.Core.Configuration
 {
     /// <summary>
-    /// Feature flags configuration settings
-    /// For use in turning off an on features in different envs
+    /// Feature flag names for use in turning features off and on in different envs.
+    /// Flag values are read through <see cref="Microsoft.FeatureManagement.IFeatureManager" />, sourced from
+    /// Azure App Configuration in deployed environments and from the FeatureManagement
+    /// section in appsettings when running locally.
     /// </summary>
-    public class FeatureFlags
+    public static class FeatureFlags
     {
         /// <summary>
         /// Whether or not to only display popular SingleRights services
         /// </summary>
-        public bool DisplayPopularSingleRightsServices { get; set; }
+        public const string DisplayPopularSingleRightsServices = "AccessManagementUI.DisplayPopularSingleRightsServices";
+
+        /// <summary>
+        /// Whether or not to use the new version of client delegation for single rights services
+        /// </summary>
+        public const string UseNewSingleRightsClientDelegation = "AccessManagementUI.UseNewSingleRightsClientDelegation";
     }
 }

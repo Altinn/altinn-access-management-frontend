@@ -22,6 +22,7 @@
 		<PackageReference Include="Microsoft.AspNetCore.Http.Abstractions" Version="2.3.10" />
 		<PackageReference Include="Microsoft.Bcl.Cryptography" Version="9.0.16" />
 		<PackageReference Include="Microsoft.Extensions.Caching.Abstractions" Version="9.0.16" />
+		<PackageReference Include="Microsoft.FeatureManagement" Version="4.5.0" />
 		<PackageReference Include="StyleCop.Analyzers" Version="1.2.0-beta.556">
 			<PrivateAssets>all</PrivateAssets>
 			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>

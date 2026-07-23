@@ -1,5 +1,4 @@
 ﻿using System.Net;
-using Altinn.AccessManagement.UI.Core.Configuration;
 using Altinn.AccessManagement.UI.Core.Helpers;
 using Altinn.AccessManagement.UI.Core.Models.Connections;
 using Altinn.AccessManagement.UI.Core.Models.User;
@@ -7,7 +6,6 @@ using Altinn.AccessManagement.UI.Core.Services.Interfaces;
 using Altinn.AccessManagement.UI.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Options;
 
 namespace Altinn.AccessManagement.UI.Controllers
 {
@@ -20,7 +18,6 @@ namespace Altinn.AccessManagement.UI.Controllers
         private readonly IConnectionService _connectionService;
         private readonly IHttpContextAccessor _httpContextAccessor;
         private readonly ILogger _logger;
-        private readonly FeatureFlags _featureFlags;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="ConnectionController"/> class
@@ -28,13 +25,11 @@ namespace Altinn.AccessManagement.UI.Controllers
         public ConnectionController(
             IConnectionService connectionService,
             IHttpContextAccessor httpContextAccessor,
-            ILogger<ConnectionController> logger,
-            IOptions<FeatureFlags> featureFlags)
+            ILogger<ConnectionController> logger)
         {
             _connectionService = connectionService;
             _httpContextAccessor = httpContextAccessor;
             _logger = logger;
-            _featureFlags = featureFlags.Value;
         }
 
         /// <summary>
