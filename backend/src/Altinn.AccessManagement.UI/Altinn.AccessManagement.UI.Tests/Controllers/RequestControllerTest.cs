@@ -311,6 +311,27 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
         }
 
         /// <summary>
+        ///     Test case: GetDraftRequest returns a single draft request for an access package by id
+        ///     Expected: GetDraftRequest returns the draft request enriched with the access package
+        /// </summary>
+        [Fact]
+        public async Task GetDraftRequest_ReturnsSingleDraftPackageRequest()
+        {
+            // Arrange
+            string requestId = "44444444-4444-4444-4444-444444444444";
+            string path = Path.Combine(_expectedDataPath, "Request", "getEnrichedDraftPackageRequest.json");
+            EnrichedPackageRequest expectedResponse = Util.GetMockData<EnrichedPackageRequest>(path);
+
+            // Act
+            HttpResponseMessage httpResponse = await _client.GetAsync($"accessmanagement/api/v1/request/draft/{requestId}");
+            EnrichedPackageRequest actualResponse = await httpResponse.Content.ReadFromJsonAsync<EnrichedPackageRequest>();
+
+            // Assert
+            Assert.Equal(HttpStatusCode.OK, httpResponse.StatusCode);
+            AssertionUtil.AssertEqual(expectedResponse, actualResponse);
+        }
+
+        /// <summary>
         ///     Test case: GetDraftRequest encounters an unexpected internal error
         ///     Expected: Returns 500 Internal Server Error
         /// </summary>

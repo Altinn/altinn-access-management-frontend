@@ -1,37 +1,36 @@
 .headingContainer {
-  display: grid;
-  grid-template-areas:
-    'icon heading'
-    'status status'
-    'description description';
-  grid-template-columns: auto 1fr;
-  gap: 1rem;
-  margin-bottom: 1.5rem;
-  align-items: center;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--ds-size-4);
+  margin-bottom: var(--ds-size-8);
 }
 
-@media screen and (max-width: 768px) {
+.headingContainerText {
+  display: flex;
+  flex-direction: row;
+  gap: var(--ds-size-4);
 }
 
 .packageIcon {
-  grid-area: icon;
-  height: 2.6rem;
-  width: 2.6rem;
+  height: var(--ds-size-8);
+  width: var(--ds-size-8);
   margin: auto;
+  flex: 0 0 var(--ds-size-8);
 }
 
 .pageHeading {
-  grid-area: heading;
   max-width: 100%;
   word-break: break-word;
-}
-
-.statusSection {
-  grid-area: status;
 }
 
 .pageDescription {
-  grid-area: description;
   max-width: 100%;
   word-break: break-word;
+}
+
+@media screen and (max-width: 768px) {
+  .packageIcon {
+    display: none;
+  }
 }

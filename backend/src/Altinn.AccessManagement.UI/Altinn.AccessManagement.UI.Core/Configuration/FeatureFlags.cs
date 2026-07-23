@@ -1,127 +1,21 @@
 namespace Altinn.AccessManagement.UI.Core.Configuration
 {
     /// <summary>
-    /// Feature flags configuration settings
-    /// For use in turning off an on features in different envs
+    /// Feature flag names for use in turning features off and on in different envs.
+    /// Flag values are read through <see cref="Microsoft.FeatureManagement.IFeatureManager" />, sourced from
+    /// Azure App Configuration in deployed environments and from the FeatureManagement
+    /// section in appsettings when running locally.
     /// </summary>
-    public class FeatureFlags
+    public static class FeatureFlags
     {
         /// <summary>
         /// Whether or not to only display popular SingleRights services
         /// </summary>
-        public bool DisplayPopularSingleRightsServices { get; set; }
+        public const string DisplayPopularSingleRightsServices = "AccessManagementUI.DisplayPopularSingleRightsServices";
 
         /// <summary>
-        /// Whether or not to display features related to the confetti package launch in the UI
+        /// Whether or not to use the new version of client delegation for single rights services
         /// </summary>
-        public bool DisplayConfettiPackage { get; set; }
-
-        /// <summary>
-        /// Whether or not to display roles functionality in the UI
-        /// </summary>
-        public bool DisplayRoles { get; set; }
-
-        /// <summary>
-        /// Whether to enable cross platform links
-        /// </summary>
-        public bool CrossPlatformLinks { get; set; }
-
-        /// <summary>
-        /// Whether to display the settings page in the sidebar
-        /// </summary>
-        public bool DisplaySettingsPage { get; set; }
-
-        /// <summary>
-        /// Whether to display the client administration page in the sidebar
-        /// </summary>
-        public bool DisplayClientAdministrationPage { get; set; }
-
-        /// <summary>
-        /// Whether to display the POA overview page in the sidebar
-        /// </summary>
-        public bool DisplayPoaOverviewPage { get; set; }
-
-        /// <summary>
-        /// Whether to use the new actors list populated by the connections API
-        /// </summary>
-        public bool UseNewActorsList { get; set; }
-
-        /// <summary>
-        /// Whether to display the requests page
-        /// </summary>
-        public bool DisplayRequestsPage { get; set; }
-
-        /// <summary>
-        /// Whether to display the deleted account toggle feature
-        /// </summary>
-        public bool DisplayDeletedAccountToggle { get; set; }
-
-        /// <summary>
-        /// Whether to display the PRIV delegation feature
-        /// </summary>
-        public bool DisplayPrivDelegation { get; set; }
-
-        /// <summary>
-        /// Whether to display the instance delegation feature
-        /// </summary>
-        public bool DisplayInstanceDelegation { get; set; }
-
-        /// <summary>
-        /// Whether to display the package request feature
-        /// </summary>
-        public bool DisplayPackageRequests { get; set; }
-
-        /// <summary>
-        /// Whether to display sub-connections feature
-        /// </summary>
-        public bool DisplaySubConnections { get; set; }
-
-        /// <summary>
-        /// Whether to show the button to add all customers for agent system user
-        /// </summary>
-        public bool AddAllSystemuserCustomers { get; set; }
-
-        /// <summary>
-        /// Whether to enable adding own organization to agent system user is enabled
-        /// </summary>
-        public bool EnableAddSelfToSystemuser { get; set; }
-
-        /// <summary>
-        /// Whether to enable request access
-        /// </summary>
-        public bool EnableRequestAccess { get; set; }
-
-        /// <summary>
-        /// Whether to enrich instance delegations with dialogporten lookup data
-        /// </summary>
-        public bool EnableDialogportenDialogLookup { get; set; }
-
-        /// <summary>
-        /// Whether to enable the Maskinporten administration page
-        /// </summary>
-        public bool EnableMaskinportenAdministration { get; set; }
-
-        /// <summary>
-        /// Whether to enable deletion of Altinn 2 roles
-        /// </summary>
-        public bool EnableRoleDeletion { get; set; }
-
-        /// <summary>
-        /// When true, <c>ReporteeController.ChangeAndRedirect</c> bounces through Altinn 2's
-        /// <c>/ui/Reportee/ChangeReporteeAndRedirect</c> after setting Altinn 3 cookies, so that
-        /// Altinn 2 can set its own session cookies before forwarding to the final destination.
-        /// Intended for the migration period while some downstream pages still depend on Altinn 2 cookies.
-        /// </summary>
-        public bool RouteChangeReporteeViaAltinn2 { get; set; }
-
-        /// <summary>
-        /// Whether to enable adding Altinn 2 account to email user
-        /// </summary>
-        public bool AddAltinn2Account { get; set; }
-
-        /// <summary>
-        /// Whether to enable adding IdPorten authorization integration
-        /// </summary>
-        public bool IdPortenAuthorization { get; set; }
+        public const string UseNewSingleRightsClientDelegation = "AccessManagementUI.UseNewSingleRightsClientDelegation";
     }
 }

@@ -1,7 +1,5 @@
 /* eslint-disable no-console */
-import path from 'path';
-// eslint-disable-next-line import/default
-import dotenv from 'dotenv';
+import { loadEnv } from 'playwright/util/helper';
 
 import { TenorApiRequests } from './TenorApiRequests';
 
@@ -100,23 +98,9 @@ function printHelp(): void {
   );
 }
 
-/** Laster env-filer fra playwright/config, på samme måte som playwright.config.ts. */
-function lastEnv(envName: string): void {
-  const configDir = path.join(__dirname, '..', 'config');
-  dotenv.config({
-    path: [
-      path.join(configDir, '.env'),
-      path.join(configDir, `.env.${envName}`),
-      path.join(configDir, '.env.local'),
-      path.join(configDir, `.env.${envName}.local`),
-    ],
-    override: true,
-  });
-}
-
 async function main(): Promise<void> {
   const args = parseArgs(process.argv.slice(2));
-  lastEnv(args.env);
+  loadEnv(args.env);
 
   const kql = args.kql ?? TenorApiRequests.bosattMyndigKql();
   console.error(`Henter ${args.antall} person(er) fra Tenor (${args.env}) med KQL: ${kql}`);

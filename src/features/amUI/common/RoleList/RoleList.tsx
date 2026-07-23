@@ -1,6 +1,5 @@
 import type { Role } from '@/rtk/features/roleApi';
 import { useGetRolePermissionsQuery } from '@/rtk/features/roleApi';
-import { enableRoleDeletion } from '@/resources/utils/featureFlagUtils';
 import { usePartyRepresentation } from '../PartyRepresentationContext/PartyRepresentationContext';
 import { SkeletonRoleList } from './SkeletonRoleList';
 import {
@@ -16,6 +15,7 @@ import { useRoleMetadata } from '../UserRoles/useRoleMetadata';
 import { RoleDeleteButton } from './RoleDeleteButton';
 import { useIsMobileOrSmaller } from '@/resources/utils/screensizeUtils';
 import { useRestoreFocusOnDataChange } from '../RestoreFocus';
+import { HelpText } from '../HelpText/HelpText';
 
 export const ROLE_LIST_HEADING_ID = 'role_list_heading';
 
@@ -41,7 +41,6 @@ export const RoleList = ({ onSelect, isLoading }: RoleListProps) => {
     },
   );
 
-  const enableRoleDeletionFlag = enableRoleDeletion();
   const isMobileOrSmaller = useIsMobileOrSmaller();
 
   const {
@@ -89,13 +88,16 @@ export const RoleList = ({ onSelect, isLoading }: RoleListProps) => {
   }
   return (
     <div className={classes.roleArea}>
-      <DsHeading
-        level={2}
-        data-size='xs'
-        id={ROLE_LIST_HEADING_ID}
-      >
-        {t('role.current_roles_title', { count: mappedRoles.length })}
-      </DsHeading>
+      <div className={classes.roleListHeader}>
+        <DsHeading
+          level={2}
+          data-size='xs'
+          id={ROLE_LIST_HEADING_ID}
+        >
+          {t('role.current_roles_title', { count: mappedRoles.length })}
+        </DsHeading>
+        <HelpText aria-label={t('role.header_info')}>{t('role.header_info_content')}</HelpText>
+      </div>
       {mappedRoles.length === 0 ? (
         <DsParagraph>{t('role.no_roles_message')}</DsParagraph>
       ) : (
@@ -109,7 +111,7 @@ export const RoleList = ({ onSelect, isLoading }: RoleListProps) => {
                 role={role}
                 onClick={() => onSelect(role)}
                 deleteButton={
-                  enableRoleDeletionFlag && isRoleDeletable && !isMobileOrSmaller ? (
+                  isRoleDeletable && !isMobileOrSmaller ? (
                     <RoleDeleteButton
                       role={role}
                       variant='tertiary'

@@ -1,13 +1,13 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { DsButton, DsDialog, DsHeading, DsTabs } from '@altinn/altinn-components';
+import { DsButton, DsDialog, DsHeading } from '@altinn/altinn-components';
 import { t } from 'i18next';
 import { PlusIcon } from '@navikt/aksel-icons';
+import { AmTabs } from '../../common/AmTabs/AmTabs';
 
 import { NewPersonContent } from './NewPersonContent';
 import classes from './NewUserModal.module.css';
 import { NewOrgContent } from './NewOrgContent';
 import { User } from '@/rtk/features/userInfoApi';
-import { displayPrivDelegation } from '@/resources/utils/featureFlagUtils';
 import { useAddRightHolderMutation } from '@/rtk/features/connectionApi';
 import { Organization } from '@/rtk/features/lookupApi';
 import { createErrorDetails } from '../../common/TechnicalErrorParagraphs/TechnicalErrorParagraphs';
@@ -46,8 +46,6 @@ interface NewUserModalProps {
 }
 
 const NewUserModal: React.FC<NewUserModalProps> = ({ modalRef, onComplete }) => {
-  const shouldDisplayPrivDelegation = displayPrivDelegation();
-
   const [errorDetail, setErrorDetail] = useState<{ status: string; time: string } | null>(null);
   const [addRightHolder, { isLoading, error }] = useAddRightHolderMutation();
   useEffect(() => {
@@ -111,32 +109,39 @@ const NewUserModal: React.FC<NewUserModalProps> = ({ modalRef, onComplete }) => 
       >
         {t('new_user_modal.modal_title')}
       </DsHeading>
-      <DsTabs
+      <AmTabs
         onChange={() => {
           setErrorDetail(null);
         }}
-        defaultValue={shouldDisplayPrivDelegation ? 'person' : 'org'}
-        data-size='sm'
+        defaultValue={'person'}
       >
-        <DsTabs.List>
-          {<DsTabs.Tab value='person'>{t('new_user_modal.person')}</DsTabs.Tab>}
-          <DsTabs.Tab value='org'>{t('new_user_modal.organization')}</DsTabs.Tab>
-        </DsTabs.List>
-        <DsTabs.Panel value='person'>
+        <AmTabs.List>
+          {
+            <AmTabs.Tab
+              value='person'
+              label={t('new_user_modal.person')}
+            />
+          }
+          <AmTabs.Tab
+            value='org'
+            label={t('new_user_modal.organization')}
+          />
+        </AmTabs.List>
+        <AmTabs.Panel value='person'>
           <NewPersonContent
             isLoading={isLoading}
             errorDetails={errorDetail}
             addPerson={addPerson}
           />
-        </DsTabs.Panel>
-        <DsTabs.Panel value='org'>
+        </AmTabs.Panel>
+        <AmTabs.Panel value='org'>
           <NewOrgContent
             isLoading={isLoading}
             addOrg={addOrg}
             errorDetails={errorDetail}
           />
-        </DsTabs.Panel>
-      </DsTabs>
+        </AmTabs.Panel>
+      </AmTabs>
     </DsDialog>
   );
 };

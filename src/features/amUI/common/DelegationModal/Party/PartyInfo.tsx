@@ -6,6 +6,7 @@ import {
   DsParagraph,
   formatDisplayName,
 } from '@altinn/altinn-components';
+import { useRef } from 'react';
 import { Trans, useTranslation } from 'react-i18next';
 
 import type { ActionError } from '@/resources/hooks/useActionError';
@@ -26,6 +27,7 @@ import type { InheritedStatusMessageType } from '../../useInheritedStatus';
 
 import classes from './PartyInfo.module.css';
 import { DelegationAction } from '../EditModal';
+import { focusFirstEnabledButton, useRestoreFocusAfterSettled } from '../../RestoreFocus';
 
 export interface PartyInfoProps {
   party: Party;
@@ -37,6 +39,9 @@ export interface PartyInfoProps {
   onRevoke: () => void;
   isLoading?: boolean;
   isSuccess?: boolean;
+  // A post-action refetch that outlasts the success animation would otherwise let focus land on the
+  // outgoing button before it swaps. Keep the swap unsettled until the data has landed too.
+  isFetching?: boolean;
   disabled?: boolean;
   error?: ActionError | null;
 }
@@ -53,10 +58,20 @@ export const PartyInfo = ({
   onRevoke,
   isLoading = false,
   isSuccess = false,
+  isFetching = false,
   disabled = false,
   error,
 }: PartyInfoProps) => {
   const { t } = useTranslation();
+
+  // Delegate/revoke swap the action button in place via a loading then success animation, dropping
+  // focus to the dialog body. Once it settles, return focus to whichever button is now shown.
+  const actionsRef = useRef<HTMLDivElement>(null);
+  useRestoreFocusAfterSettled({
+    isSettled: !isLoading && !isSuccess && !isFetching,
+    requestWhen: isLoading,
+    onRestore: () => focusFirstEnabledButton(actionsRef.current),
+  });
 
   const userName = formatDisplayName({
     fullName: party.name,
@@ -161,7 +176,10 @@ export const PartyInfo = ({
             </DsAlert>
           )}
 
-          <div className={classes.actions}>
+          <div
+            ref={actionsRef}
+            className={classes.actions}
+          >
             {canRevoke && (
               <DsButton
                 data-color='danger'

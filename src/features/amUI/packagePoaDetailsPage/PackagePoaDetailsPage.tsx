@@ -13,10 +13,8 @@ import {
   usePartyRepresentation,
 } from '../common/PartyRepresentationContext/PartyRepresentationContext';
 
-import { poaOverviewPageEnabled } from '@/resources/utils/featureFlagUtils';
-
 import { PackagePoaDetails } from './PackagePoaDetails';
-import { Navigate, useParams, useSearchParams } from 'react-router';
+import { useParams, useSearchParams } from 'react-router';
 import { Breadcrumbs } from '../common/Breadcrumbs/Breadcrumbs';
 import { useGetPackagePermissionDetailsQuery } from '@/rtk/features/accessPackageApi';
 import { amUIPath } from '@/routes/paths/amUIPath';
@@ -29,16 +27,6 @@ export const PackagePoaDetailsPage = () => {
   const partyUuid = getCookie('AltinnPartyUuid') || '';
 
   useDocumentTitle(t('package_poa_details_page.page_title'));
-
-  const pageIsEnabled = poaOverviewPageEnabled();
-  if (!pageIsEnabled) {
-    return (
-      <Navigate
-        to='/not-found'
-        replace
-      />
-    );
-  }
 
   return (
     <PageWrapper>

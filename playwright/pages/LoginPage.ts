@@ -1,10 +1,13 @@
 import type { Locator, Page } from '@playwright/test';
 import { expect } from '@playwright/test';
 import { env } from 'playwright/util/helper';
+import { LANGUAGE_CODE, Language } from 'playwright/pages/LanguageMenu';
+import { SettingsApiRequests } from 'playwright/api-requests/SettingsApiRequests';
 
 export class LoginPage {
   readonly page: Page;
-  readonly searchBox: Locator;
+  private readonly language: Language;
+  private readonly settings: SettingsApiRequests;
   readonly reporteeSearchBox: Locator;
   readonly pidInput: Locator;
   readonly testIdLink: Locator;
@@ -14,11 +17,11 @@ export class LoginPage {
   readonly autentiserButton: Locator;
   readonly tilgangsstyringLink: Locator;
   readonly testIdLinkText: Locator;
-  readonly newSolutionHeading: Locator;
 
-  constructor(page: Page) {
+  constructor(page: Page, language: Language = Language.NB) {
     this.page = page;
-    this.searchBox = this.page.getByRole('searchbox', { name: 'Søk etter aktør' });
+    this.language = language;
+    this.settings = new SettingsApiRequests();
     // Post-login "Velg aktør" page has a different (unnamed) searchbox — there is
     // only one searchbox role on that page, so a name is not needed to disambiguate.
     this.reporteeSearchBox = this.page.getByRole('searchbox');
@@ -32,12 +35,13 @@ export class LoginPage {
     this.testIdLinkText = this.page.getByRole('link', {
       name: /TestID Lag din egen testbruker/i,
     });
-    this.newSolutionHeading = this.page.getByRole('heading', {
-      name: 'Du er nå i den nye løsningen',
-    });
   }
 
   async LoginToAccessManagement(pid: string) {
+    // Pin the UI language server-side BEFORE login, so the app seeds the
+    // selectedLanguage cookie from the profile at login. Keeps the session in
+    // the fixture's language (default no_nb) regardless of the user's profile.
+    await this.settings.setSelectedLanguage(pid, LANGUAGE_CODE[this.language]);
     await this.navigateToLoginPage();
     await this.authenticateUser(pid);
   }

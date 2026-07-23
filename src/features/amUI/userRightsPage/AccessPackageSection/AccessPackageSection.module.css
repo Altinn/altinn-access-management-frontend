@@ -36,5 +36,6 @@
 
   .delegateButton {
     align-self: flex-start;
+    margin-left: 0;
   }
 }

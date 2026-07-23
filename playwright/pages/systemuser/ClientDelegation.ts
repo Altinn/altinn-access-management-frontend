@@ -1,10 +1,12 @@
 import type { Page, Locator } from '@playwright/test';
 import { expect } from '@playwright/test';
 
-import { env } from 'playwright/util/helper';
+import { env, withCustomerName } from 'playwright/util/helper';
+import { LANGUAGE_DICTIONARIES, Language, type Dict } from '../LanguageMenu';
 
 export class ClientDelegationPage {
   readonly page: Page;
+  readonly texts: Dict;
 
   readonly confirmButton: Locator;
   readonly customersButton: Locator;
@@ -17,32 +19,39 @@ export class ClientDelegationPage {
   readonly ownOrgBadge: Locator;
   readonly removeOwnOrgButton: Locator;
 
-  constructor(page: Page) {
+  constructor(page: Page, language: Language = Language.NB) {
     this.page = page;
-    this.confirmButton = page.getByRole('button', { name: 'Godkjenn' });
-    this.customersButton = page.getByRole('button', {
-      name: /^(Legg til klienter|Legg til eller fjern klienter)$/,
+    this.texts = LANGUAGE_DICTIONARIES[language];
+    const agent = this.texts.systemuser_agent_delegation;
+
+    this.confirmButton = page.getByRole('button', {
+      name: this.texts.request_page.approve_request,
     });
+    // The button reads "Legg til klienter" on first delegation and "Legg til
+    // eller fjern klienter" afterwards — match either.
+    this.customersButton = page
+      .getByRole('button', { name: agent.add_customers, exact: true })
+      .or(page.getByRole('button', { name: agent.edit_customers, exact: true }));
 
-    this.addAllCustomersButton = page.getByRole('button', { name: 'Legg til alle klienter' });
+    this.addAllCustomersButton = page.getByRole('button', { name: agent.add_all_customers });
 
-    this.addAllCustomersSuccessText = page.getByText(/Alle klienter er lagt til\.?/);
+    this.addAllCustomersSuccessText = page.getByText(agent.add_all_customers_success);
 
-    this.confirmAndCloseButton = page.getByRole('button', { name: 'Bekreft og lukk' });
+    this.confirmAndCloseButton = page.getByRole('button', { name: agent.confirm_close });
 
-    this.deleteSystemAccessButtons = page.getByRole('button', { name: 'Slett systemtilgang' });
+    this.deleteSystemAccessButtons = page.getByRole('button', {
+      name: this.texts.systemuser_detailpage.delete_systemuser,
+    });
 
     this.clientSearchBox = page
       .getByRole('dialog')
-      .getByRole('searchbox', { name: 'Søk i klienter' });
+      .getByRole('searchbox', { name: agent.customer_search });
 
-    this.addOwnOrgButton = page.getByRole('button', { name: 'Legg til din virksomhet' });
+    this.addOwnOrgButton = page.getByRole('button', { name: agent.add_own_organization });
 
-    this.ownOrgBadge = page.getByText('Din virksomhet', { exact: true });
+    this.ownOrgBadge = page.getByText(agent.own_organization, { exact: true });
 
-    this.removeOwnOrgButton = page.getByRole('button', {
-      name: 'Fjern din virksomhet fra systemtilgang',
-    });
+    this.removeOwnOrgButton = page.getByRole('button', { name: agent.remove_own_organization });
   }
 
   systemUserLink(name: string): Locator {
@@ -69,11 +78,18 @@ export class ClientDelegationPage {
   }
 
   addCustomerButtonByName(name: string): Locator {
-    return this.page.getByRole('dialog').getByRole('button', { name: `Legg til ${name}` });
+    return this.page.getByRole('dialog').getByRole('button', {
+      name: withCustomerName(this.texts.systemuser_agent_delegation.add_to_system_user_aria, name),
+    });
   }
 
   removeCustomerButtonByName(name: string): Locator {
-    return this.page.getByRole('dialog').getByRole('button', { name: `Fjern ${name}` });
+    return this.page.getByRole('dialog').getByRole('button', {
+      name: withCustomerName(
+        this.texts.systemuser_agent_delegation.remove_from_system_user_aria,
+        name,
+      ),
+    });
   }
 
   confirmationText(text: string): Locator {
@@ -112,7 +128,9 @@ export class ClientDelegationPage {
     await this.addCustomerButtonByName(customerLabel).click();
 
     // Verify customer was added
-    const confirmation = this.confirmationText(`${confirmationText} er lagt`);
+    const confirmation = this.confirmationText(
+      withCustomerName(this.texts.systemuser_agent_delegation.customer_added, confirmationText),
+    );
     await expect(confirmation).toBeVisible();
 
     //Close customers modal
@@ -142,10 +160,11 @@ export class ClientDelegationPage {
     await expect(removeButton).toBeVisible();
     await this.removeCustomerButtonByName(name).click();
 
-    // Verify the customer removal confirmation text is visible and click it
-    const confirmation = this.confirmationText(`${name} er fjernet fra Systemtilgangen`);
+    // Verify the customer removal confirmation text is visible
+    const confirmation = this.confirmationText(
+      withCustomerName(this.texts.systemuser_agent_delegation.customer_removed, name),
+    );
     await expect(confirmation).toBeVisible();
-    // await this.confirmationText(`${name} er fjernet fra Systemtilgangen`).click();
 
     // Close the customers modal after removal
     await expect(this.confirmAndCloseButton).toBeVisible();

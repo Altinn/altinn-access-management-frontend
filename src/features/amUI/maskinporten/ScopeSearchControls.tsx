@@ -18,6 +18,7 @@ import type { ServiceResource } from '@/rtk/features/singleRights/singleRightsAp
 import { PartyType } from '@/rtk/features/userInfoApi';
 
 import { useDelegationModalContext } from '../common/DelegationModal/DelegationModalContext';
+import { resourceActionControlId } from '../common/DelegationModal/SingleRights/createSearchResultControlsRenderer';
 import { usePartyRepresentation } from '../common/PartyRepresentationContext/PartyRepresentationContext';
 import { useMaskinportenResourceActions } from './hooks/useMaskinportenResourceActions';
 
@@ -26,6 +27,7 @@ interface ScopeSearchControlsProps {
   hasDelegatedResource: boolean;
   isDelegatedResourcesLoading: boolean;
   onSelect: (resource: ServiceResource, error?: boolean) => void;
+  onActionSuccess?: () => void;
 }
 
 export const ScopeSearchControls = ({
@@ -33,6 +35,7 @@ export const ScopeSearchControls = ({
   hasDelegatedResource,
   isDelegatedResourcesLoading,
   onSelect,
+  onActionSuccess,
 }: ScopeSearchControlsProps) => {
   const { t } = useTranslation();
   const { openSnackbar } = useSnackbar();
@@ -63,7 +66,7 @@ export const ScopeSearchControls = ({
   });
   const [checkDelegation] = useLazyMaskinportenResourceDelegationCheckQuery();
 
-  const onActionSuccess = (mode: 'delegate' | 'revoke') => {
+  const showSuccessSnackbar = (mode: 'delegate' | 'revoke') => {
     setActionError(null);
     openSnackbar({
       message: t(
@@ -94,7 +97,10 @@ export const ScopeSearchControls = ({
       }
 
       delegate(resource, {
-        onSuccess: () => onActionSuccess('delegate'),
+        onSuccess: () => {
+          showSuccessSnackbar('delegate');
+          onActionSuccess?.();
+        },
         onError: (_, error) => {
           setActionError(error);
           onSelect(resource, true);
@@ -109,7 +115,10 @@ export const ScopeSearchControls = ({
 
   const handleRemoveResource = () =>
     remove(resource, {
-      onSuccess: () => onActionSuccess('revoke'),
+      onSuccess: () => {
+        showSuccessSnackbar('revoke');
+        onActionSuccess?.();
+      },
       onError: (_, error) => {
         setActionError(error);
         onSelect(resource, true);
@@ -123,6 +132,7 @@ export const ScopeSearchControls = ({
   if (hasDelegatedResource) {
     return (
       <Button
+        id={resourceActionControlId(resource.identifier)}
         variant='tertiary'
         size='sm'
         loading={resourceLoading}
@@ -141,6 +151,7 @@ export const ScopeSearchControls = ({
 
   return (
     <Button
+      id={resourceActionControlId(resource.identifier)}
       variant='tertiary'
       size='sm'
       loading={resourceLoading}

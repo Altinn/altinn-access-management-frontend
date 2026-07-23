@@ -57,7 +57,7 @@ test.describe('Delegering av klienter til Systembruker', () => {
         await login.LoginToAccessManagement(user.pid);
         await login.selectMainUnitBySearching(user.name);
 
-        await accessManagementFrontPage.systemAccessLink.click();
+        await accessManagementFrontPage.systemUserMenuLink.click();
 
         await expect(clientDelegationPage.systemUserLink(name)).toBeVisible();
         await clientDelegationPage.systemUserLink(name).click();
@@ -131,7 +131,7 @@ test.describe('Delegering av klienter til Systembruker', () => {
         await login.LoginToAccessManagement(user.pid);
         await login.selectMainUnitBySearching(user.name);
 
-        await accessManagementFrontPage.systemAccessLink.click();
+        await accessManagementFrontPage.systemUserMenuLink.click();
 
         await expect(clientDelegationPage.systemUserLink(name)).toBeVisible();
         await clientDelegationPage.systemUserLink(name).click();
@@ -211,7 +211,7 @@ test.describe('Delegering av klienter til Systembruker', () => {
         await login.LoginToAccessManagement(user.pid);
         await login.selectMainUnitBySearching(user.name);
 
-        await accessManagementFrontPage.systemAccessLink.click();
+        await accessManagementFrontPage.systemUserMenuLink.click();
 
         await expect(clientDelegationPage.systemUserLink(name)).toBeVisible();
         await clientDelegationPage.systemUserLink(name).click();

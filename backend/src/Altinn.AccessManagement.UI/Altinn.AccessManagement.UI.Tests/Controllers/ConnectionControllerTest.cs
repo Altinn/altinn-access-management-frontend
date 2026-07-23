@@ -44,7 +44,7 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
         public ConnectionControllerTest(CustomWebApplicationFactory<ConnectionController> factory)
         {
             _factory = factory;
-            _client = SetupUtils.GetTestClient(factory, null);
+            _client = SetupUtils.GetTestClient(factory);
             _testDataFolder = Path.GetDirectoryName(new Uri(typeof(ConnectionControllerTest).Assembly.Location).LocalPath);
 
             // Reset the static counter in RegisterClientMock to avoid test interference

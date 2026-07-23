@@ -1,8 +1,13 @@
 import { expect, test } from 'playwright/fixture/pomFixture';
+import { Language } from 'playwright/pages/LanguageMenu';
 
 import { TestdataApi } from 'playwright/util/TestdataApi';
 import { ApiRequests } from 'playwright/api-requests/SystemUserApiRequests';
-import { env } from 'playwright/util/helper';
+
+// Runs in nynorsk on purpose: exercises the before-login language pinning
+// (settings API) and proves the dict-driven selectors work in a non-default
+// language. The rest of the suites run in the default bokmål.
+test.use({ language: Language.NN });
 const vendorOrgNumber = '310547891';
 const testUserPid = '14824497789';
 const testOrgName = 'Aktverdig Retorisk Ape';
@@ -23,17 +28,17 @@ test.describe('System Register', async () => {
     accessManagementFrontPage,
   }): Promise<void> => {
     await test.step('Navigate to system user page', async () => {
-      await accessManagementFrontPage.systemAccessLink.click();
+      await accessManagementFrontPage.systemUserMenuLink.click();
     });
 
     await test.step('Create system user', async () => {
       // this is assigned as a text in code base, will just add more confusion to import that than hardcoding this here
-      await systemUserPage.CREATE_SYSTEM_USER_LINK.click();
+      await systemUserPage.createSystemUserLink.click();
       await systemUserPage.selectSystem(system);
     });
 
     await test.step('Verify system user created', async () => {
-      await expect(systemUserPage.SYSTEMUSER_CREATED_HEADING).toBeVisible();
+      await expect(systemUserPage.systemUserCreatedHeading).toBeVisible();
       await expect(systemUserPage.systemUserLink(system)).toBeVisible();
     });
   });

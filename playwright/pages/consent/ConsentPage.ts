@@ -1,21 +1,9 @@
 import type { Page, Locator } from '@playwright/test';
 
 import { expect } from '@playwright/test';
-import en from '../../../src/localizations/en.json';
-import nn from '../../../src/localizations/no_nn.json';
-import no_nb from '@/localizations/no_nb.json';
+import { LANGUAGE_DICTIONARIES, Language, LanguageMenu, type Dict } from '../LanguageMenu';
 
-export enum Language {
-  NB = 'NB',
-  EN = 'EN',
-  NN = 'NN',
-}
-
-const DICTIONARIES = {
-  [Language.NB]: no_nb,
-  [Language.EN]: en,
-  [Language.NN]: nn,
-} as const satisfies Record<Language, any>;
+export { Language };
 
 export class ConsentPage {
   readonly page: Page;
@@ -29,9 +17,7 @@ export class ConsentPage {
   readonly buttonFullmaktReject: Locator;
   readonly menuButton: Locator;
   readonly languagePicker: Locator;
-  readonly norwegian: Locator;
-  readonly nynorsk: Locator;
-  readonly english: Locator;
+  readonly languageMenu: LanguageMenu;
 
   // Headings
   readonly standardHeading: Locator;
@@ -92,12 +78,12 @@ export class ConsentPage {
   readonly textBehalfOfDigdir: Locator;
 
   // Used for selecting language files
-  private languageDictionary: any;
+  private languageDictionary: Dict;
 
   //Default language to Norwegian
   constructor(page: Page, language: Language) {
     this.page = page;
-    this.languageDictionary = DICTIONARIES[language];
+    this.languageDictionary = LANGUAGE_DICTIONARIES[language];
     this.language = language; // now the fixture value wins
 
     // Controls/links
@@ -106,48 +92,31 @@ export class ConsentPage {
     // knappen der.
     this.menuButton = page.getByRole('navigation', { name: 'hovednavigasjon' }).getByRole('button');
     this.languagePicker = page.getByLabel('Språk/language');
-    this.norwegian = page.locator('#no_nb');
-    this.english = page.locator('#en');
-    this.nynorsk = page.locator('#no_nn');
+    this.languageMenu = new LanguageMenu(page);
     this.linkAltinn = page.getByRole('link', { name: /altinn\.no/i });
-    // Language-specific button selectors
-    const buttonTexts = {
-      [Language.EN]: {
-        approve: /yes, i give consent/i,
-        reject: /no, i do not give consent/i,
-      },
-      [Language.NB]: {
-        approve: /jeg gir samtykke/i,
-        reject: /jeg gir ikke samtykke/i,
-      },
-      [Language.NN]: {
-        approve: /Ja, eg gir samtykke/i,
-        reject: /Nei, eg gir ikkje samtykke/i,
-      },
-    };
 
-    const texts = buttonTexts[language];
-    this.buttonApprove = page.getByRole('button', { name: texts.approve });
-    this.buttonReject = page.getByRole('button', { name: texts.reject });
-
+    // Button labels come from the frontend localization files (consent_request.*),
+    // same principle as the Systembruker tests.
+    this.buttonApprove = page.getByRole('button', {
+      name: this.languageDictionary.consent_request.approve_consent,
+    });
+    this.buttonReject = page.getByRole('button', {
+      name: this.languageDictionary.consent_request.reject_consent,
+    });
     this.buttonFullmaktApprove = page.getByRole('button', {
       name: this.languageDictionary.consent_request.approve_poa,
     });
-
-    // Fullmakt reject button - language specific
-    const fullmaktRejectTexts = {
-      [Language.NN]: /jeg gir ikkje fullmakt/i,
-      [Language.NB]: /jeg gir ikke fullmakt/i,
-      [Language.EN]: /I do not give power of attorney/i,
-    };
     this.buttonFullmaktReject = page.getByRole('button', {
-      name: fullmaktRejectTexts[language] || fullmaktRejectTexts[Language.NB],
+      name: this.languageDictionary.consent_request.reject_poa,
     });
 
-    // Headings (use exact text when stable, regex when copy may drift)
-    this.standardHeading = page.getByRole('heading', {
-      name: this.languageDictionary.consent_requests,
-    });
+    // The consent title is API-provided (request.title[language]) and rendered
+    // as the single level-1 heading on the request page. We assert that heading
+    // is present rather than matching the exact title string, which lives in the
+    // resource registry, not the frontend localization files.
+    // (Previously matched `languageDictionary.consent_requests`, a key that does
+    // not exist — so `name: undefined` matched any heading and asserted nothing.)
+    this.standardHeading = page.getByRole('heading', { level: 1 });
 
     // Headings - language specific
     const headingKravTexts = {
@@ -478,21 +447,7 @@ export class ConsentPage {
 
   async pickLanguage(lang: Language): Promise<void> {
     await this.languagePicker.click();
-
-    switch (lang) {
-      case Language.NB:
-        await this.norwegian.click();
-        break;
-      case Language.NN:
-        await this.nynorsk.click();
-        break;
-      case Language.EN:
-        await this.english.click();
-        break;
-      default:
-        await this.norwegian.click();
-        break;
-    }
+    await this.languageMenu.select(lang);
   }
 
   async waitForLogout(redirectUrl: string, timeout = 30000): Promise<void> {

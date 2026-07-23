@@ -1,11 +1,13 @@
 import React, { useState } from 'react';
-import { DsButton, DsDialog, DsHeading } from '@altinn/altinn-components';
+import { DsHeading } from '@altinn/altinn-components';
 import { useTranslation } from 'react-i18next';
 import { ServiceResource } from '@/rtk/features/singleRights/singleRightsApi';
 import { useGetSentRequestsQuery, type EnrichedPackageRequest } from '@/rtk/features/requestApi';
 import { PendingRequestsList } from '../userRightsPage/SingleRightsSection/PendingRequests';
 import { PendingPackageRequestsList } from '../userRightsPage/AccessPackageSection/PendingPackageRequests/RequestsList';
 import { DelegationModalProvider } from '../common/DelegationModal/DelegationModalContext';
+import { useRestoreFocus } from '../common/RestoreFocus';
+import { TwoStepDialog } from '../common/TwoStepDialog';
 import classes from './SentRequestsCombinedModal.module.css';
 import { usePartyRepresentation } from '../common/PartyRepresentationContext/PartyRepresentationContext';
 
@@ -26,8 +28,18 @@ export const SentRequestsCombinedModal = ({
   const [selectedResource, setSelectedResource] = useState<ServiceResource | null>(null);
   const [selectedPackageRequest, setSelectedPackageRequest] =
     useState<EnrichedPackageRequest | null>(null);
+  const restoreFocus = useRestoreFocus();
 
   const hasDetailView = !!selectedResource || !!selectedPackageRequest;
+
+  const handleBack = () => {
+    const focusTargetId = selectedResource?.identifier ?? selectedPackageRequest?.package?.id;
+    if (focusTargetId) {
+      restoreFocus.requestFocus(focusTargetId);
+    }
+    setSelectedResource(null);
+    setSelectedPackageRequest(null);
+  };
 
   const { actingParty, fromParty } = usePartyRepresentation();
   const { data: pendingSentAccessRequests } = useGetSentRequestsQuery(
@@ -43,27 +55,20 @@ export const SentRequestsCombinedModal = ({
     : false;
 
   return (
-    <DsDialog
+    <TwoStepDialog
       ref={modalRef}
-      closedby='any'
+      title={heading}
+      isDetailView={hasDetailView}
+      onBack={handleBack}
       onClose={() => {
         setSelectedResource(null);
         setSelectedPackageRequest(null);
         onClose();
       }}
-      className={classes.dialog}
+      restoreFocus={restoreFocus}
     >
       {isModalOpen && (
         <div className={classes.container}>
-          {!hasDetailView && (
-            <DsHeading
-              data-size='xs'
-              level={1}
-              className={classes.heading}
-            >
-              {heading}
-            </DsHeading>
-          )}
           {(hasPendingSentPackageRequests || selectedPackageRequest) && !selectedResource && (
             <div className={classes.requestList}>
               {!hasDetailView && (
@@ -101,15 +106,6 @@ export const SentRequestsCombinedModal = ({
           )}
         </div>
       )}
-      {!hasDetailView && (
-        <DsButton
-          variant='primary'
-          className={classes.closeButton}
-          onClick={() => modalRef.current?.close()}
-        >
-          {t('common.close')}
-        </DsButton>
-      )}
-    </DsDialog>
+    </TwoStepDialog>
   );
 };

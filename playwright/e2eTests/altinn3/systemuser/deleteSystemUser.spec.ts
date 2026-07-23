@@ -24,14 +24,14 @@ test.describe('System user deletion', () => {
     });
 
     await test.step('Navigate to system user page and create system user', async () => {
-      await accessManagementFrontPage.systemAccessLink.click();
+      await accessManagementFrontPage.systemUserMenuLink.click();
       // this is assigned as a text in code base, will just add more confusion to import that than hardcoding this here
-      await systemUserPage.CREATE_SYSTEM_USER_LINK.click();
+      await systemUserPage.createSystemUserLink.click();
       await systemUserPage.selectSystem(systemId);
     });
 
     await test.step('Verify system user was created successfully', async () => {
-      await expect(systemUserPage.SYSTEMUSER_CREATED_HEADING).toBeVisible();
+      await expect(systemUserPage.systemUserCreatedHeading).toBeVisible();
       await expect(systemUserPage.systemUserLink(systemId)).toBeVisible();
     });
   });
