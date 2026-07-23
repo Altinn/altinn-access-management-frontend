@@ -160,6 +160,8 @@ export const SystemUserChangeRequestPage = () => {
           <div>
             {acceptChangeRequestError && (
               <DelegationCheckError
+                accessPackages={changeRequest.requiredAccessPackages}
+                resources={changeRequest.requiredRights}
                 defaultError='systemuser_change_request.accept_error'
                 error={acceptChangeRequestError as { data: ProblemDetail }}
               />

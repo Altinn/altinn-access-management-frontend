@@ -1,3 +1,9 @@
 .delegationCheckError {
   margin-top: var(--ds-size-4);
 }
+
+.delegationReasons {
+  margin-top: var(--ds-size-2);
+  font-size: var(--ds-font-size-2);
+  white-space: pre-line;
+}
