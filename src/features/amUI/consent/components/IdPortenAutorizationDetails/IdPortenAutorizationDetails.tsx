@@ -23,7 +23,7 @@ export const IdPortenAutorizationDetails = ({
   const { t } = useTranslation();
   const { openSnackbar } = useSnackbar();
 
-  const [withdrawIdPortenAuthorization, { isLoading: isWithdrawing, error: isWithdrawError }] =
+  const [withdrawIdPortenAuthorization, { isLoading: isWithdrawing, error: withdrawError }] =
     useWithdrawIdPortenAuthorizationMutation();
 
   const handleRevokeConsent = async (): Promise<void> => {
@@ -39,7 +39,7 @@ export const IdPortenAutorizationDetails = ({
       });
       onRevoked();
     } catch {
-      // Error is already tracked via revokeConsentError
+      // Error is already tracked via withdrawError
     }
   };
 
@@ -69,7 +69,7 @@ export const IdPortenAutorizationDetails = ({
           consentIsPoa={false}
           onRevokeConsent={handleRevokeConsent}
         />
-        {isWithdrawError && (
+        {withdrawError && (
           <DsAlert
             data-color='danger'
             role='alert'

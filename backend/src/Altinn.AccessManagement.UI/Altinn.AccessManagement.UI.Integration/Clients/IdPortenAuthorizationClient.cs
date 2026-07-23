@@ -46,7 +46,7 @@ namespace Altinn.AccessManagement.UI.Integration.Clients
         {
             try
             {
-                string endpointUrl = "idportenauthorization";
+                string endpointUrl = "bff/idportenauthorization";
                 string token = JwtTokenUtil.GetTokenFromContext(_httpContextAccessor.HttpContext, _platformSettings.JwtCookieName);
 
                 var httpResponse = await _client.GetAsync(token, endpointUrl, cancellationToken);
@@ -64,7 +64,7 @@ namespace Altinn.AccessManagement.UI.Integration.Clients
         {
             try
             {
-                string endpointUrl = $"idportenauthorization?id={id}";
+                string endpointUrl = $"bff/idportenauthorization?id={id}";
                 string token = JwtTokenUtil.GetTokenFromContext(_httpContextAccessor.HttpContext, _platformSettings.JwtCookieName);
 
                 var httpResponse = await _client.DeleteAsync(token, endpointUrl);

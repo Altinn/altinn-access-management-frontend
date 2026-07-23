@@ -32,7 +32,11 @@ namespace Altinn.AccessManagement.UI.Core.Services
 
             foreach (var auth in response)
             {
-                // Return party name for the organization number in the consumer of the authorization
+                // Return party name for the organization number in the consumer of the authorization.
+                // TODO: this could probably be improved, if we could look up all orgNos with one call.
+                // we don't actually need the partyUuid, so we can rely on the orgNo instead. However,
+                // this means that consent also need to use orgNo to group consent and id-porten 
+                // authorization together in frontend
                 Party party = await _registerClient.GetPartyForOrganization(auth.Consumer.OrgNo);
 
                 IdPortenAuthorizationFE authorization = new()
