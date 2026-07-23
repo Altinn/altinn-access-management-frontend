@@ -57,7 +57,7 @@ export const ActiveConsentsPage = () => {
       !partyUuid ||
       reportee?.type !== 'Person' ||
       currentUser?.partyUuid !== partyUuid ||
-      window.featureFlags?.idPortenAuthorization !== true,
+      window.featureFlags?.showIdPortenAuthorizations !== true,
   });
 
   const isLoading =
@@ -73,7 +73,7 @@ export const ActiveConsentsPage = () => {
       setSelectedConsentId(consentId);
     } else {
       const idPortenAuthorization = idPortenAuthorizations?.find(
-        (x) => x.authorization_id === consentId,
+        (x) => x.authorizationId === consentId,
       );
       setSelectedIdPortenAuthorization(idPortenAuthorization || null);
     }

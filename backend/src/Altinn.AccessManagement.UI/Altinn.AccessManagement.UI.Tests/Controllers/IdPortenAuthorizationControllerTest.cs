@@ -42,10 +42,10 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
 
             // Assert
             Assert.Equal(HttpStatusCode.OK, response.StatusCode);
-            List<IdPortenAuthorization> result = await response.Content.ReadFromJsonAsync<List<IdPortenAuthorization>>(_options);
+            List<IdPortenAuthorizationFE> result = await response.Content.ReadFromJsonAsync<List<IdPortenAuthorizationFE>>(_options);
             Assert.NotNull(result);
             Assert.Single(result);
-            Assert.Equal("democlient_idporten_test", result[0].Client_id);
+            Assert.Equal("democlient_idporten_test", result[0].ClientId);
             Assert.Equal(2, result[0].Scopes.Count());
         }
 

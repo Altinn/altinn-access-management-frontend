@@ -25,23 +25,40 @@ namespace Altinn.AccessManagement.UI.Core.Services
         }
 
         /// <inheritdoc />
-        public async Task<IEnumerable<IdPortenAuthorization>> GetIdPortenAuthorizations(CancellationToken cancellationToken)
+        public async Task<IEnumerable<IdPortenAuthorizationFE>> GetIdPortenAuthorizations(CancellationToken cancellationToken)
         {
             IEnumerable<IdPortenAuthorization> response = await _idPortenAuthorizationClient.GetIdPortenAuthorizations(cancellationToken);
+            List<IdPortenAuthorizationFE> authorizationFEs = [];
+
             foreach (var auth in response)
             {
-                foreach (var scope in auth.Scopes)
-                {
-                    // Convert long description from markdown to html
-                    scope.Long_description = MarkdownConverter.ConvertToHtml(scope.Long_description);
-                }
-
                 // Return party name for the organization number in the consumer of the authorization
                 Party party = await _registerClient.GetPartyForOrganization(auth.Consumer.OrgNo);
-                auth.Consumer.OrgName = party.Name;
+
+                IdPortenAuthorizationFE authorization = new()
+                {
+                    AuthorizationId = auth.Authorization_id,
+                    AuthorizedAt = auth.Authorized_at,
+                    ClientId = auth.Client_id,
+                    ClientName = auth.Client_name,
+                    Expires = auth.Expires,
+                    UserAgent = auth.User_agent,
+                    ConsumerName = party != null ? party.Name : "Unknown consumer",
+                    ConsumerPartyUuid = party != null ? $"urn:altinn:party:uuid:{party.PartyUuid}" : string.Empty,
+                    Scopes = auth.Scopes.Select((scope) =>
+                    {
+                        return new ScopeFE()
+                        {
+                            Name = scope.Name,
+                            Description = scope.Description,
+                            LongDescription = MarkdownConverter.ConvertToHtml(scope.Long_description) // Convert long description from markdown to html
+                        };
+                    })
+                };
+                authorizationFEs.Add(authorization);
             }
 
-            return response;
+            return authorizationFEs;
         }
 
         /// <inheritdoc />

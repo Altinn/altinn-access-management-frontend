@@ -73,7 +73,7 @@ export const ActiveConsentsPageContent = ({
             {Object.keys(groupedPendingActiveConsents).map((partyId) => (
               <ConsentListItem
                 key={partyId}
-                title={groupedPendingActiveConsents[partyId][0].title}
+                title={groupedPendingActiveConsents[partyId][0].ownerName}
                 partyType={reportee?.type}
                 subItems={groupedPendingActiveConsents[partyId].map((item) => ({
                   id: item.id,
@@ -141,7 +141,7 @@ export const ActiveConsentsPageContent = ({
                 {Object.keys(groupedActiveConsents).map((partyId) => (
                   <ConsentListItem
                     key={partyId}
-                    title={groupedActiveConsents[partyId][0].title}
+                    title={groupedActiveConsents[partyId][0].ownerName}
                     partyType={reportee?.type}
                     subItems={groupedActiveConsents[partyId].map((item) => ({
                       id: item.id,
@@ -182,7 +182,7 @@ const groupConsents = (
 ) => {
   const acc: Record<string, ConsentListItemModel[]> = {};
   for (const consent of consents || []) {
-    const key = consent.toParty.orgNo;
+    const key = consent.toParty.id;
     if (!acc[key]) {
       acc[key] = [];
     }
@@ -198,20 +198,20 @@ const groupConsents = (
   }
 
   for (const idPortenAuthorization of idPortenAuthorizations || []) {
-    const key = idPortenAuthorization.consumer.orgNo;
+    const key = idPortenAuthorization.consumerPartyUuid;
     if (!acc[key]) {
       acc[key] = [];
     }
     acc[key].push({
-      id: idPortenAuthorization.authorization_id,
-      title: idPortenAuthorization.client_name,
+      id: idPortenAuthorization.authorizationId,
+      title: idPortenAuthorization.clientName,
       ownerName: formatDisplayName({
-        fullName: idPortenAuthorization.consumer.name,
+        fullName: idPortenAuthorization.consumerName,
         type: 'company',
       }),
       createdDate: '',
-      consentedDate: idPortenAuthorization.authorized_at
-        ? new Date(idPortenAuthorization.authorized_at * 1000).toISOString()
+      consentedDate: idPortenAuthorization.authorizedAt
+        ? new Date(idPortenAuthorization.authorizedAt * 1000).toISOString()
         : '',
       consentType: 'idporten',
     });

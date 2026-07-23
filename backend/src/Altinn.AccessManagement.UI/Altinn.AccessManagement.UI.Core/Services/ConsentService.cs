@@ -4,7 +4,6 @@ using System.Web;
 using Altinn.AccessManagement.UI.Core.ClientInterfaces;
 using Altinn.AccessManagement.UI.Core.Configuration;
 using Altinn.AccessManagement.UI.Core.Constants;
-using Altinn.AccessManagement.UI.Core.Enums;
 using Altinn.AccessManagement.UI.Core.Helpers;
 using Altinn.AccessManagement.UI.Core.Models.Consent;
 using Altinn.AccessManagement.UI.Core.Models.Consent.Frontend;
@@ -507,7 +506,6 @@ namespace Altinn.AccessManagement.UI.Core.Services
                 Id = partyId,
                 Name = party?.Name ?? string.Empty,
                 Type = isSubUnit ? PartyType.SubUnit : party?.PartyTypeName ?? PartyType.Organisation,
-                OrgNo = party.OrgNumber
             };
         }
     }

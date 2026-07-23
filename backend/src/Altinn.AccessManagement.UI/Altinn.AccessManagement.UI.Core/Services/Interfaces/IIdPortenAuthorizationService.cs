@@ -12,7 +12,7 @@ namespace Altinn.AccessManagement.UI.Core.Services.Interfaces
         /// </summary>
         /// <param name="cancellationToken">Cancellation token</param>
         /// <returns>ID-porten authorizations</returns>
-        Task<IEnumerable<IdPortenAuthorization>> GetIdPortenAuthorizations(CancellationToken cancellationToken);
+        Task<IEnumerable<IdPortenAuthorizationFE>> GetIdPortenAuthorizations(CancellationToken cancellationToken);
 
         /// <summary>
         /// Withdraw an ID-porten authorizations by id

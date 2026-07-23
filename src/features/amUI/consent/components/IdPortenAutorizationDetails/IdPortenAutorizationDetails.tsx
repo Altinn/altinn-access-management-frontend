@@ -29,11 +29,11 @@ export const IdPortenAutorizationDetails = ({
   const handleRevokeConsent = async (): Promise<void> => {
     try {
       await withdrawIdPortenAuthorization({
-        id: idPortenAuthorization.authorization_id,
+        id: idPortenAuthorization.authorizationId,
       }).unwrap();
       openSnackbar({
         message: t('active_consents.revoke_consent_success', {
-          consentName: idPortenAuthorization.client_name,
+          consentName: idPortenAuthorization.clientName,
         }),
         color: 'success',
       });
@@ -43,7 +43,7 @@ export const IdPortenAutorizationDetails = ({
     }
   };
 
-  const { browser, os } = parseUserAgent(idPortenAuthorization.user_agent);
+  const { browser, os } = parseUserAgent(idPortenAuthorization.userAgent);
   let userAgentDescription: string;
   if (browser && os) {
     userAgentDescription = t('active_consents.consent_given_on_device', { browser, os });
@@ -82,9 +82,9 @@ export const IdPortenAutorizationDetails = ({
             level={1}
             data-size='md'
           >
-            {idPortenAuthorization.client_name}
+            {idPortenAuthorization.clientName}
           </DsHeading>
-          <div>{idPortenAuthorization.consumer.name}</div>
+          <div>{idPortenAuthorization.consumerName}</div>
         </div>
         <div>{t('active_consents.accesses_given')}</div>
         <ConsentRights
@@ -97,9 +97,9 @@ export const IdPortenAutorizationDetails = ({
                 en: scope.description,
               },
               consentTextHtml: {
-                nb: scope.long_description,
-                nn: scope.long_description,
-                en: scope.long_description,
+                nb: scope.longDescription,
+                nn: scope.longDescription,
+                en: scope.longDescription,
               },
             };
           })}
@@ -126,11 +126,11 @@ export const IdPortenAutorizationDetails = ({
             >
               {t('active_consents.consent_information')}
             </DsHeading>
-            {idPortenAuthorization.authorized_at && (
+            {idPortenAuthorization.authorizedAt && (
               <div>
                 {t('active_consents.consent_given_at', {
                   date: toDateTimeString(
-                    new Date(idPortenAuthorization.authorized_at * 1000).toISOString(),
+                    new Date(idPortenAuthorization.authorizedAt * 1000).toISOString(),
                   ),
                 })}
               </div>

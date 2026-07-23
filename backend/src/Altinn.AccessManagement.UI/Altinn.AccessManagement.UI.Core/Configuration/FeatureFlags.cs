@@ -17,5 +17,10 @@ namespace Altinn.AccessManagement.UI.Core.Configuration
         /// Whether or not to use the new version of client delegation for single rights services
         /// </summary>
         public const string UseNewSingleRightsClientDelegation = "AccessManagementUI.UseNewSingleRightsClientDelegation";
+
+        /// <summary>
+        /// Whether or not to include ID-porten authorizations in active consents list
+        /// </summary>
+        public const string ShowIdPortenAuthorizations = "AccessManagementUI.ShowIdPortenAuthorizations";
     }
 }
