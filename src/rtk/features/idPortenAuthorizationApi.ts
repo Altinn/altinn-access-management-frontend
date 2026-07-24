@@ -1,5 +1,6 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 import { getCookie } from '@/resources/Cookie/CookieMethods';
+import { formatDisplayName } from '@altinn/altinn-components';
 
 export interface IdPortenAuthorization {
   authorizationId: string;
@@ -38,6 +39,14 @@ export const idPortenAuthorizationApi = createApi({
     getIdPortenAuthorizations: builder.query<IdPortenAuthorization[], void>({
       query: () => 'idportenauthorization',
       providesTags: [Tags.IdPortenAuthorizationList],
+      transformResponse: (response: IdPortenAuthorization[]): IdPortenAuthorization[] => {
+        return response.map((x) => {
+          return {
+            ...x,
+            consumerName: formatDisplayName({ fullName: x.consumerName, type: 'company' }),
+          };
+        });
+      },
     }),
     withdrawIdPortenAuthorization: builder.mutation<boolean, { id: string }>({
       query: ({ id }) => ({

@@ -118,32 +118,33 @@ export const IdPortenAuthorizationDetails = ({
         >
           <DsDetails>
             <DsDetails.Summary>{userAgentDescription}</DsDetails.Summary>
-            <DsDetails.Content></DsDetails.Content>
-            <DsHeading
-              level={3}
-              data-size='2xs'
-              className={classes.userAgentDetailsHeading}
-            >
-              {t('active_consents.consent_information')}
-            </DsHeading>
-            {idPortenAuthorization.authorizedAt && (
-              <div>
-                {t('active_consents.consent_given_at', {
-                  date: toDateTimeString(
-                    new Date(idPortenAuthorization.authorizedAt * 1000).toISOString(),
-                  ),
-                })}
-              </div>
-            )}
-            {idPortenAuthorization.expires && (
-              <div>
-                {t('active_consents.consent_time_limited', {
-                  date: toDateTimeString(
-                    new Date(idPortenAuthorization.expires * 1000).toISOString(),
-                  ),
-                })}
-              </div>
-            )}
+            <DsDetails.Content>
+              <DsHeading
+                level={3}
+                data-size='2xs'
+                className={classes.userAgentDetailsHeading}
+              >
+                {t('active_consents.consent_information')}
+              </DsHeading>
+              {idPortenAuthorization.authorizedAt && (
+                <div>
+                  {t('active_consents.consent_given_at', {
+                    date: toDateTimeString(
+                      new Date(idPortenAuthorization.authorizedAt * 1000).toISOString(),
+                    ),
+                  })}
+                </div>
+              )}
+              {!!idPortenAuthorization.expires && (
+                <div>
+                  {t('active_consents.consent_time_limited', {
+                    date: toDateTimeString(
+                      new Date(idPortenAuthorization.expires * 1000).toISOString(),
+                    ),
+                  })}
+                </div>
+              )}
+            </DsDetails.Content>
           </DsDetails>
         </div>
       </div>

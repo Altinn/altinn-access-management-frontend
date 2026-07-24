@@ -133,7 +133,7 @@ namespace Altinn.AccessManagement.UI.Core.Configuration
         /// <param name="value">The boolean value to which all memebers will be set</param>
         public MockSettings(bool value)
         {
-            AccessManagement = AccessManagement_V0 = AccessPackage = SingleRights = Instance = Profile = Register = ResourceRegistry = KeyVault = ClientDelegation = Dialogporten = Maskinporten = SelfIdentifiedUser = value;
+            AccessManagement = AccessManagement_V0 = AccessPackage = SingleRights = Instance = Profile = Register = ResourceRegistry = KeyVault = ClientDelegation = Dialogporten = Maskinporten = SelfIdentifiedUser = IdPortenAuthorization = value;
         }
     }
 }

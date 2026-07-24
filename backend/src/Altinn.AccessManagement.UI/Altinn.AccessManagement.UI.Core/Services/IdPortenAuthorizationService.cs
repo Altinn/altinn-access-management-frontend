@@ -1,4 +1,5 @@
 using Altinn.AccessManagement.UI.Core.ClientInterfaces;
+using Altinn.AccessManagement.UI.Core.Exceptions;
 using Altinn.AccessManagement.UI.Core.Helpers;
 using Altinn.AccessManagement.UI.Core.Models.IdPortenAuthorization;
 using Altinn.AccessManagement.UI.Core.Services.Interfaces;
@@ -39,6 +40,11 @@ namespace Altinn.AccessManagement.UI.Core.Services
                 // authorization together in frontend
                 Party party = await _registerClient.GetPartyForOrganization(auth.Consumer.OrgNo);
 
+                if (party == null)
+                {
+                    throw new ResourceNotFoundException($"Party not found: {auth.Consumer.OrgNo}");
+                }
+
                 IdPortenAuthorizationFE authorization = new()
                 {
                     AuthorizationId = auth.Authorization_id,
@@ -47,8 +53,8 @@ namespace Altinn.AccessManagement.UI.Core.Services
                     ClientName = auth.Client_name,
                     Expires = auth.Expires,
                     UserAgent = auth.User_agent,
-                    ConsumerName = party != null ? party.Name : "Unknown consumer",
-                    ConsumerPartyUuid = party != null ? $"urn:altinn:party:uuid:{party.PartyUuid}" : string.Empty,
+                    ConsumerName = party.Name,
+                    ConsumerPartyUuid = $"urn:altinn:party:uuid:{party.PartyUuid}",
                     Scopes = auth.Scopes.Select((scope) =>
                     {
                         return new ScopeFE()
