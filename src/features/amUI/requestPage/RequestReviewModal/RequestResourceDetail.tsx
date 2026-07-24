@@ -12,10 +12,11 @@ interface RequestResourceDetailProps {
   resource: ServiceResource;
   processedStatus?: ProcessedStatus;
   handledAt?: string;
-  actionLoading: 'approve' | 'reject' | null;
-  onApprove: () => void;
-  onReject: () => void;
-  cannotApprove: boolean;
+  handledByName?: string;
+  actionLoading?: 'approve' | 'reject' | null;
+  onApprove?: () => void;
+  onReject?: () => void;
+  cannotApprove?: boolean;
   toPartyName: string;
 }
 
@@ -23,6 +24,7 @@ export const RequestResourceDetail = ({
   resource,
   processedStatus,
   handledAt,
+  handledByName,
   actionLoading,
   onApprove,
   onReject,
@@ -43,6 +45,7 @@ export const RequestResourceDetail = ({
         <ProcessedStatusInfo
           status={processedStatus}
           handledAt={handledAt}
+          handledByName={handledByName}
           autoFocus={openedUnprocessed.current}
         />
       ) : (

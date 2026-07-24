@@ -88,7 +88,11 @@ export const RequestPage = () => {
               <RestoreFocusProvider restoreFocus={restoreFocus}>
                 <RestoreFocusFallback>
                   <ReporteePageHeading
-                    title={t('request_page.heading', { name })}
+                    title={
+                      isCurrentUserReportee
+                        ? t('request_page.your_requests_heading')
+                        : t('request_page.heading', { name })
+                    }
                     reportee={reportee}
                     isLoading={isLoadingReportee}
                   />
@@ -116,9 +120,18 @@ export const RequestPage = () => {
                       count={receivedRequestsCount}
                       isLoading={isLoadingReceivedRequests}
                       isError={isReceivedRequestsError}
-                      emptyMessageKey='request_page.no_received_requests'
+                      emptyMessage={
+                        isCurrentUserReportee
+                          ? t('request_page.no_received_requests_you')
+                          : t('request_page.no_received_requests', {
+                              name: name,
+                            })
+                      }
                     >
-                      <PendingRequests pendingRequests={pendingRequests.received} />
+                      <PendingRequests
+                        pendingRequests={pendingRequests.received}
+                        handledRequests={pendingRequests.handledReceived}
+                      />
                     </RequestsTabPanel>
                   </AmTabs.Panel>
                   {showSentRequestsTab && (
@@ -127,9 +140,18 @@ export const RequestPage = () => {
                         count={sentRequestCount ?? 0}
                         isLoading={isLoadingSentRequests}
                         isError={isSentRequestsError}
-                        emptyMessageKey='request_page.no_sent_requests'
+                        emptyMessage={
+                          isCurrentUserReportee
+                            ? t('request_page.no_sent_requests_you')
+                            : t('request_page.no_sent_requests', {
+                                name: name,
+                              })
+                        }
                       >
-                        <SentRequestsTabPanel pendingRequests={pendingRequests.sent} />
+                        <SentRequestsTabPanel
+                          pendingRequests={pendingRequests.sent}
+                          handledRequests={pendingRequests.handledSent}
+                        />
                       </RequestsTabPanel>
                     </AmTabs.Panel>
                   )}

@@ -13,10 +13,11 @@ interface RequestPackageDetailProps {
   pkg: AccessPackage;
   processedStatus?: ProcessedStatus;
   handledAt?: string;
-  actionLoading: 'approve' | 'reject' | null;
-  onApprove: () => void;
-  onReject: () => void;
-  cannotApprove: boolean;
+  handledByName?: string;
+  actionLoading?: 'approve' | 'reject' | null;
+  onApprove?: () => void;
+  onReject?: () => void;
+  cannotApprove?: boolean;
   toPartyName: string;
 }
 
@@ -24,6 +25,7 @@ export const RequestPackageDetail = ({
   pkg,
   processedStatus,
   handledAt,
+  handledByName,
   actionLoading,
   onApprove,
   onReject,
@@ -53,6 +55,7 @@ export const RequestPackageDetail = ({
         <ProcessedStatusInfo
           status={processedStatus}
           handledAt={handledAt}
+          handledByName={handledByName}
           autoFocus={openedUnprocessed.current}
         />
       ) : (

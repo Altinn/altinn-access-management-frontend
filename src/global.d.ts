@@ -5,6 +5,7 @@ declare global {
     featureFlags: {
       displayPopularSingleRightsServices: boolean;
       useNewSingleRightsClientDelegation: boolean;
+      showHandledRequests: boolean;
     };
   }
 }
