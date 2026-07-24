@@ -9,17 +9,17 @@ import { ConsentRights } from '../ConsentRights/ConsentRights';
 import { parseUserAgent, toDateTimeString } from '../../utils';
 import { ConsentStatus } from '../ConsentStatus/ConsentStatus';
 import { RevokeConsentPopover } from '../RevokeConsentPopover/RevokeConsentPopover';
-import classes from './IdPortenAutorizationDetails.module.css';
+import classes from './IdPortenAuthorizationDetails.module.css';
 
-interface IdPortenAutorizationDetailsProps {
+interface IdPortenAuthorizationDetailsProps {
   idPortenAuthorization: IdPortenAuthorization;
   onRevoked: () => void;
 }
 
-export const IdPortenAutorizationDetails = ({
+export const IdPortenAuthorizationDetails = ({
   idPortenAuthorization,
   onRevoked,
-}: IdPortenAutorizationDetailsProps) => {
+}: IdPortenAuthorizationDetailsProps) => {
   const { t } = useTranslation();
   const { openSnackbar } = useSnackbar();
 

@@ -17,7 +17,7 @@ import {
   IdPortenAuthorization,
   useGetIdPortenAuthorizationsQuery,
 } from '@/rtk/features/idPortenAuthorizationApi';
-import { IdPortenAutorizationDetails } from '../components/IdPortenAutorizationDetails/IdPortenAutorizationDetails';
+import { IdPortenAuthorizationDetails } from '../components/IdPortenAuthorizationDetails/IdPortenAuthorizationDetails';
 import { ActiveConsentsPageContent } from './ActiveConsentsPageContent';
 import { useGetPartyFromLoggedInUserQuery } from '@/rtk/features/lookupApi';
 
@@ -115,7 +115,7 @@ export const ActiveConsentsPage = () => {
         >
           {selectedConsentId && <ConsentDetails consentId={selectedConsentId} />}
           {selectedIdPortenAuthorization && (
-            <IdPortenAutorizationDetails
+            <IdPortenAuthorizationDetails
               idPortenAuthorization={selectedIdPortenAuthorization}
               onRevoked={() => consentModalRef.current?.close()}
             />
