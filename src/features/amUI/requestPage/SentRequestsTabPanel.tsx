@@ -1,5 +1,5 @@
 import { formatDateToNorwegian } from '@/resources/utils';
-import { Button, formatDisplayName } from '@altinn/altinn-components';
+import { Button, formatDisplayName, List } from '@altinn/altinn-components';
 import { useTranslation } from 'react-i18next';
 import { Request } from './types';
 
@@ -43,31 +43,33 @@ export const SentRequestsTabPanel = ({
   const { t } = useTranslation();
   return (
     <>
-      {paginatedRequests?.map((request) => {
-        return (
-          <RequestListItem
-            key={request.id}
-            id={request.id}
-            name={request.displayPartyName}
-            type={request.displayPartyType}
-            subUnit={request.isSubUnit}
-            titleAs='span'
-            linkIcon
-            description={`${request.description ? t(request.description) : t('request_page.waiting_for_number', { count: request.numberOfRequests })} (${formatDateToNorwegian(request.createdDate)})`}
-            as='button'
-            onClick={() => {
-              setOpenAccessRequest(request);
-              setIsModalOpen(true);
-              modalRef.current?.showModal();
-            }}
-            controls={
-              <div className={classes.requestItemBadge}>
-                {t('request_page.view_request', { count: request.numberOfRequests })}
-              </div>
-            }
-          />
-        );
-      })}
+      <List>
+        {paginatedRequests?.map((request) => {
+          return (
+            <RequestListItem
+              key={request.id}
+              id={request.id}
+              name={request.displayPartyName}
+              type={request.displayPartyType}
+              subUnit={request.isSubUnit}
+              titleAs='span'
+              linkIcon
+              description={`${request.description ? t(request.description) : t('request_page.waiting_for_number', { count: request.numberOfRequests })} (${formatDateToNorwegian(request.createdDate)})`}
+              as='button'
+              onClick={() => {
+                setOpenAccessRequest(request);
+                setIsModalOpen(true);
+                modalRef.current?.showModal();
+              }}
+              controls={
+                <div className={classes.requestItemBadge}>
+                  {t('request_page.view_request', { count: request.numberOfRequests })}
+                </div>
+              }
+            />
+          );
+        })}
+      </List>
       {hasNextPage && (
         <div className={classes.showMoreButtonContainer}>
           <Button

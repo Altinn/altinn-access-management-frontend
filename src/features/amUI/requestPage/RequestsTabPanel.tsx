@@ -43,18 +43,16 @@ export const RequestsTabPanel = ({
         </div>
       )}
       {!isError && !isLoading && count === 0 && <div>{emptyMessage}</div>}
-      <List>
-        {isLoading ? (
-          <>
-            <LoadingRequestListItem />
-            <LoadingRequestListItem />
-            <LoadingRequestListItem />
-            <LoadingRequestListItem />
-          </>
-        ) : (
-          <>{children}</>
-        )}
-      </List>
+      {isLoading ? (
+        <List>
+          <LoadingRequestListItem />
+          <LoadingRequestListItem />
+          <LoadingRequestListItem />
+          <LoadingRequestListItem />
+        </List>
+      ) : (
+        <>{children}</>
+      )}
     </>
   );
 };
@@ -88,49 +86,54 @@ export const PendingRequests = ({ pendingRequests, handledRequests }: PendingReq
   const hasNextPage = (pendingRequests?.length ?? 0) > PAGE_SIZE * currentPage;
   return (
     <>
-      {paginatedRequests?.map((request) => {
-        const getRequestUrl = () => {
-          if (request.type === 'consent')
-            return getConsentRequestUrl(request.id, encodeURIComponent(`/${amUIPath.Requests}`));
-          if (request.type === 'systemuser')
-            return getSystemUserRequestUrl(request.id, encodeURIComponent(`/${amUIPath.Requests}`));
-          if (request.type === 'agentsystemuser')
-            return getSystemUserAgentRequestUrl(
-              request.id,
-              encodeURIComponent(`/${amUIPath.Requests}`),
-            );
-          return null;
-        };
-        const toUrl = getRequestUrl();
-        return (
-          <RequestListItem
-            key={request.id}
-            id={request.id}
-            name={request.displayPartyName}
-            type={request.displayPartyType}
-            subUnit={request.isSubUnit}
-            titleAs='span'
-            linkIcon
-            description={`${request.description ? t(request.description) : t('request_page.asks_for_number', { count: request.numberOfRequests })} (${formatDateToNorwegian(request.createdDate)})`}
-            as={
-              toUrl
-                ? (props) => (
-                    <Link
-                      {...props}
-                      to={toUrl}
-                    />
-                  )
-                : 'button'
-            }
-            onClick={toUrl ? undefined : () => setOpenAccessRequest(request)}
-            controls={
-              <div className={classes.requestItemBadge}>
-                {t('request_page.process_request', { count: request.numberOfRequests || 1 })}
-              </div>
-            }
-          />
-        );
-      })}
+      <List>
+        {paginatedRequests?.map((request) => {
+          const getRequestUrl = () => {
+            if (request.type === 'consent')
+              return getConsentRequestUrl(request.id, encodeURIComponent(`/${amUIPath.Requests}`));
+            if (request.type === 'systemuser')
+              return getSystemUserRequestUrl(
+                request.id,
+                encodeURIComponent(`/${amUIPath.Requests}`),
+              );
+            if (request.type === 'agentsystemuser')
+              return getSystemUserAgentRequestUrl(
+                request.id,
+                encodeURIComponent(`/${amUIPath.Requests}`),
+              );
+            return null;
+          };
+          const toUrl = getRequestUrl();
+          return (
+            <RequestListItem
+              key={request.id}
+              id={request.id}
+              name={request.displayPartyName}
+              type={request.displayPartyType}
+              subUnit={request.isSubUnit}
+              titleAs='span'
+              linkIcon
+              description={`${request.description ? t(request.description) : t('request_page.asks_for_number', { count: request.numberOfRequests })} (${formatDateToNorwegian(request.createdDate)})`}
+              as={
+                toUrl
+                  ? (props) => (
+                      <Link
+                        {...props}
+                        to={toUrl}
+                      />
+                    )
+                  : 'button'
+              }
+              onClick={toUrl ? undefined : () => setOpenAccessRequest(request)}
+              controls={
+                <div className={classes.requestItemBadge}>
+                  {t('request_page.process_request', { count: request.numberOfRequests || 1 })}
+                </div>
+              }
+            />
+          );
+        })}
+      </List>
       {hasNextPage && (
         <div className={classes.showMoreButtonContainer}>
           <Button
