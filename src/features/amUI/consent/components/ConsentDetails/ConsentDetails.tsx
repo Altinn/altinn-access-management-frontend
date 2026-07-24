@@ -1,14 +1,6 @@
-import React, { useMemo, useState } from 'react';
+import React, { useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
-import {
-  DsAlert,
-  DsButton,
-  DsHeading,
-  DsParagraph,
-  DsPopover,
-  DsSpinner,
-} from '@altinn/altinn-components';
-import { EraserIcon } from '@navikt/aksel-icons';
+import { DsAlert, DsHeading, DsParagraph, DsSpinner } from '@altinn/altinn-components';
 
 import { useGetConsentQuery, useRevokeConsentMutation } from '@/rtk/features/consentApi';
 
