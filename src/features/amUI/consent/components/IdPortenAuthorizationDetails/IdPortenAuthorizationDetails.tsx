@@ -126,7 +126,7 @@ export const IdPortenAuthorizationDetails = ({
               >
                 {t('active_consents.consent_information')}
               </DsHeading>
-              {idPortenAuthorization.authorizedAt && (
+              {!!idPortenAuthorization.authorizedAt && (
                 <div>
                   {t('active_consents.consent_given_at', {
                     date: toDateTimeString(
