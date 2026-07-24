@@ -32,7 +32,7 @@ import { useAgentDetailsAccessClientLists } from './useAgentDetailsAccessClientL
 import { UserPageHeaderSkeleton } from '../common/UserPageHeader/UserPageHeaderSkeleton';
 import { AgentDetailsDeleteModal } from './AgentDetailsDeleteModal';
 import { ClientAdminSearchField } from '../common/ClientAdminSearchField/ClientAdminSearchField';
-import { ClientAdminDetails } from '../common/ClientAdminDetails/ClientAdminDetails';
+import { CollapsibleContainer } from '../common/CollapsibleContainer/CollapsibleContainer';
 
 export const AgentDetails = () => {
   const { t } = useTranslation();
@@ -161,7 +161,7 @@ export const AgentDetails = () => {
               />
             </section>
             <section aria-labelledby={unassignedSectionId}>
-              <ClientAdminDetails
+              <CollapsibleContainer
                 heading={t('client_administration_page.agent_can_get_clients_tab')}
                 searchString={searchString}
                 id={unassignedSectionId}
@@ -177,7 +177,7 @@ export const AgentDetails = () => {
                   searchString={searchString}
                   emptyText={t('client_administration_page.no_clients')}
                 />
-              </ClientAdminDetails>
+              </CollapsibleContainer>
             </section>
           </>
         )}

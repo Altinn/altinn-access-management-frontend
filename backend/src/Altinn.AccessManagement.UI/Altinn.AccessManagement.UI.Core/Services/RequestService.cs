@@ -8,6 +8,7 @@ using Altinn.AccessManagement.UI.Core.Models.Request;
 using Altinn.AccessManagement.UI.Core.Models.Request.Frontend;
 using Altinn.AccessManagement.UI.Core.Models.ResourceRegistry.Frontend;
 using Altinn.AccessManagement.UI.Core.Services.Interfaces;
+using Altinn.Register.Contracts.V1;
 
 namespace Altinn.AccessManagement.UI.Core.Services
 {
@@ -16,6 +17,7 @@ namespace Altinn.AccessManagement.UI.Core.Services
     {
         private readonly IRequestClient _requestClient;
         private readonly IAccessPackageClient _accessPackageClient;
+        private readonly IRegisterClient _registerClient;
         private readonly ResourceHelper _resourceHelper;
 
         /// <summary>
@@ -23,11 +25,13 @@ namespace Altinn.AccessManagement.UI.Core.Services
         /// </summary>
         /// <param name="requestClient">The request client.</param>
         /// <param name="accessPackageClient">The access package client.</param>
+        /// <param name="registerClient">The access register client.</param>
         /// <param name="resourceHelper">The resource helper.</param>
-        public RequestService(IRequestClient requestClient, IAccessPackageClient accessPackageClient, ResourceHelper resourceHelper)
+        public RequestService(IRequestClient requestClient, IAccessPackageClient accessPackageClient, IRegisterClient registerClient, ResourceHelper resourceHelper)
         {
             _requestClient = requestClient;
             _accessPackageClient = accessPackageClient;
+            _registerClient = registerClient;
             _resourceHelper = resourceHelper;
         }
 
@@ -35,42 +39,54 @@ namespace Altinn.AccessManagement.UI.Core.Services
         public async Task<IEnumerable<RequestFE>> GetSentRequests(Guid party, Guid? to, List<RequestStatus> status, string type, CancellationToken cancellationToken)
         {
             PaginatedResult<Request> response = await _requestClient.GetSentRequests(party, to, status, type, cancellationToken);
-            return response.Items.Select(MapToRequestFE);
+
+            // filter approved and handled requests which are older than one year
+            return RemoveHandledItemsOlderThanOneYear(response).Select(MapToRequestFE);
         }
 
         /// <inheritdoc />
         public async Task<IEnumerable<EnrichedResourceRequest>> GetEnrichedSentResourceRequests(Guid party, Guid? to, List<RequestStatus> status, string languageCode, CancellationToken cancellationToken)
         {
             PaginatedResult<Request> response = await _requestClient.GetSentRequests(party, to, status, "resource", cancellationToken);
-            return await MapToEnrichedResourceRequestList(response.Items, languageCode);
+
+            // filter handled requests which are older than one year, so the modal matches the list
+            return await MapToEnrichedResourceRequestList(RemoveHandledItemsOlderThanOneYear(response), false, languageCode);
         }
 
         /// <inheritdoc />
         public async Task<IEnumerable<RequestFE>> GetReceivedRequests(Guid party, Guid? from, List<RequestStatus> status, string type, CancellationToken cancellationToken)
         {
             PaginatedResult<Request> response = await _requestClient.GetReceivedRequests(party, from, status, type, cancellationToken);
-            return response.Items.Select(MapToRequestFE);
+            
+            // filter approved and handled requests which are older than one year
+            return RemoveHandledItemsOlderThanOneYear(response).Select(MapToRequestFE);
         }
 
         /// <inheritdoc />
         public async Task<IEnumerable<EnrichedResourceRequest>> GetEnrichedReceivedResourceRequests(Guid party, Guid? from, List<RequestStatus> status, string languageCode, CancellationToken cancellationToken)
         {
             PaginatedResult<Request> response = await _requestClient.GetReceivedRequests(party, from, status, "resource", cancellationToken);
-            return await MapToEnrichedResourceRequestList(response.Items, languageCode);
+
+            // filter handled requests which are older than one year, so the modal matches the list
+            return await MapToEnrichedResourceRequestList(RemoveHandledItemsOlderThanOneYear(response), IsHandledStatus(status), languageCode);
         }
 
         /// <inheritdoc />
         public async Task<IEnumerable<EnrichedPackageRequest>> GetEnrichedSentPackageRequests(Guid party, Guid? to, List<RequestStatus> status, string languageCode, CancellationToken cancellationToken)
         {
             PaginatedResult<Request> response = await _requestClient.GetSentRequests(party, to, status, "package", cancellationToken);
-            return await MapToEnrichedPackageRequestList(response.Items, languageCode);
+
+            // filter handled requests which are older than one year, so the modal matches the list
+            return await MapToEnrichedPackageRequestList(RemoveHandledItemsOlderThanOneYear(response), false, languageCode);
         }
 
         /// <inheritdoc />
         public async Task<IEnumerable<EnrichedPackageRequest>> GetEnrichedReceivedPackageRequests(Guid party, Guid? from, List<RequestStatus> status, string languageCode, CancellationToken cancellationToken)
         {
             PaginatedResult<Request> response = await _requestClient.GetReceivedRequests(party, from, status, "package", cancellationToken);
-            return await MapToEnrichedPackageRequestList(response.Items, languageCode);
+
+            // filter handled requests which are older than one year, so the modal matches the list
+            return await MapToEnrichedPackageRequestList(RemoveHandledItemsOlderThanOneYear(response), IsHandledStatus(status), languageCode);
         }
 
         /// <inheritdoc />
@@ -86,10 +102,10 @@ namespace Altinn.AccessManagement.UI.Core.Services
             Request response = await _requestClient.GetDraftRequest(id, cancellationToken);
             if (response.Type == "package")
             {
-                return (await MapToEnrichedPackageRequestList(new[] { response }, languageCode)).First();
+                return (await MapToEnrichedPackageRequestList(new[] { response }, false, languageCode)).First();
             }
 
-            return (await MapToEnrichedResourceRequestList(new[] { response }, languageCode)).First();
+            return (await MapToEnrichedResourceRequestList(new[] { response }, false, languageCode)).First();
         }
 
         /// <inheritdoc />
@@ -161,7 +177,7 @@ namespace Altinn.AccessManagement.UI.Core.Services
             };
         }
 
-        private async Task<IEnumerable<EnrichedResourceRequest>> MapToEnrichedResourceRequestList(IEnumerable<Request> list, string languageCode)
+        private async Task<IEnumerable<EnrichedResourceRequest>> MapToEnrichedResourceRequestList(IEnumerable<Request> list, bool enrichUpdatedByName, string languageCode)
         {
             Dictionary<string, ServiceResourceFE> resourceDictionary = [];
             var uniqueResourceIds = list
@@ -170,6 +186,8 @@ namespace Altinn.AccessManagement.UI.Core.Services
             var resources = await _resourceHelper.EnrichResources(uniqueResourceIds, languageCode);
             resourceDictionary = resources.ToDictionary(r => r.Identifier);
 
+            Dictionary<Guid?, string> partyNameDict = enrichUpdatedByName ? await LookupLastUpdatedByParties(list) : [];
+
             return list.Select(x =>
             {
                 RequestFE request = MapToRequestFE(x);
@@ -177,6 +195,12 @@ namespace Altinn.AccessManagement.UI.Core.Services
                 if (!resourceDictionary.TryGetValue(request.ResourceId, out var resource))
                 {
                     throw new ResourceNotFoundException($"Resource not found for ID: {request.ResourceId}");
+                }
+
+                string lastUpdatedByName = null;
+                if (x.LastUpdatedBy is Guid updatedBy)
+                {
+                    partyNameDict.TryGetValue(updatedBy, out lastUpdatedByName);
                 }
 
                 return new EnrichedResourceRequest()
@@ -188,12 +212,13 @@ namespace Altinn.AccessManagement.UI.Core.Services
                     Status = request.Status,
                     ResourceId = request.ResourceId,
                     LastUpdated = request.LastUpdated,
+                    LastUpdatedByName = lastUpdatedByName,
                     Resource = resource
                 };
             }).ToList();
         }
 
-        private async Task<IEnumerable<EnrichedPackageRequest>> MapToEnrichedPackageRequestList(IEnumerable<Request> list, string languageCode)
+        private async Task<IEnumerable<EnrichedPackageRequest>> MapToEnrichedPackageRequestList(IEnumerable<Request> list, bool enrichUpdatedByName, string languageCode)
         {
             Dictionary<Guid, AccessPackage> packageDictionary = [];
             var uniquePackageIds = list
@@ -211,6 +236,8 @@ namespace Altinn.AccessManagement.UI.Core.Services
                 packageDictionary[packageId] = package;
             }
 
+            Dictionary<Guid?, string> partyNameDict = enrichUpdatedByName ? await LookupLastUpdatedByParties(list) : [];
+
             return list.Select(x =>
             {
                 RequestFE request = MapToRequestFE(x);
@@ -219,6 +246,12 @@ namespace Altinn.AccessManagement.UI.Core.Services
                 if (!packageDictionary.TryGetValue(packageId, out var package))
                 {
                     throw new ResourceNotFoundException($"Access package not found for ID: {packageId}");
+                }
+
+                string lastUpdatedByName = null;
+                if (x.LastUpdatedBy is Guid updatedBy)
+                {
+                    partyNameDict.TryGetValue(updatedBy, out lastUpdatedByName);
                 }
 
                 return new EnrichedPackageRequest()
@@ -230,9 +263,43 @@ namespace Altinn.AccessManagement.UI.Core.Services
                     Status = request.Status,
                     PackageId = request.PackageId,
                     LastUpdated = request.LastUpdated,
+                    LastUpdatedByName = lastUpdatedByName,
                     Package = package
                 };
             }).ToList();
+        }
+
+        // look up all parties from requests where LastUpdatedBy is set
+        private async Task<Dictionary<Guid?, string>> LookupLastUpdatedByParties(IEnumerable<Request> list)
+        {
+            if (!list.Any())
+            {
+                return [];
+            }
+
+            List<Guid> lastUpdatedNames = list
+                .Select(request => request.LastUpdatedBy)
+                .Where(x => x != null)
+                .Select(x => x.Value)
+                .Distinct()
+                .ToList();
+
+            List<Party> parties = await _registerClient.GetPartyList(lastUpdatedNames);
+            return parties.ToDictionary(p => p.PartyUuid, p => p.Name);
+        }
+
+        private static bool IsHandledStatus(List<RequestStatus> status)
+        {
+            return status.Contains(RequestStatus.Approved) || status.Contains(RequestStatus.Rejected);
+        }
+
+        private static IEnumerable<Request> RemoveHandledItemsOlderThanOneYear(PaginatedResult<Request> requests)
+        {
+            return requests.Items.Where(item =>
+            {
+                bool isHandled = IsHandledStatus([item.Status]);
+                return (isHandled && item.LastUpdated > DateTimeOffset.UtcNow.AddYears(-1)) || !isHandled;
+            });
         }
     }
 }

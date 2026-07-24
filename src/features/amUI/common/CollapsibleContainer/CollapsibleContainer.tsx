@@ -2,21 +2,21 @@ import React, { useEffect, useId, useState } from 'react';
 import { DsButton, DsHeading } from '@altinn/altinn-components';
 import { ChevronDownIcon, ChevronUpIcon } from '@navikt/aksel-icons';
 
-import classes from './ClientAdminDetails.module.css';
+import classes from './CollapsibleContainer.module.css';
 
-interface ClientAdminDetailsProps {
+interface CollapsibleContainerProps {
   heading: string;
-  searchString: string;
+  searchString?: string;
   id?: string;
   children: React.ReactNode;
 }
 
-export const ClientAdminDetails = ({
+export const CollapsibleContainer = ({
   heading,
   searchString,
   id,
   children,
-}: ClientAdminDetailsProps) => {
+}: CollapsibleContainerProps) => {
   const [isOpen, setIsOpen] = useState<boolean>(false);
   const contentId = useId();
 

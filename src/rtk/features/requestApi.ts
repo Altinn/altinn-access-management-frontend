@@ -13,6 +13,7 @@ export interface RequestDto {
   from: Entity;
   to: Entity;
   lastUpdated: string;
+  lastUpdatedByName?: string;
   resourceId?: string;
   packageId?: string;
 }
