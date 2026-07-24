@@ -133,9 +133,12 @@ export const ActiveConsentsPageContent = ({
                 {t('active_consents.load_idporten_authorizations_error')}
               </DsAlert>
             )}
-            {groupedActiveConsents && Object.keys(groupedActiveConsents).length === 0 && (
-              <DsParagraph>{t('active_consents.no_active_consents')}</DsParagraph>
-            )}
+            {!loadActiveConsentsError &&
+              !loadIdPortenAuthorizationsError &&
+              groupedActiveConsents &&
+              Object.keys(groupedActiveConsents).length === 0 && (
+                <DsParagraph>{t('active_consents.no_active_consents')}</DsParagraph>
+              )}
             {groupedActiveConsents && (
               <List>
                 {Object.keys(groupedActiveConsents).map((partyId) => (
