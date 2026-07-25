@@ -1,4 +1,4 @@
-import { DsAlert, DsParagraph, DsSpinner, List } from '@altinn/altinn-components';
+import { DsAlert, DsHeading, DsParagraph, DsSpinner, List } from '@altinn/altinn-components';
 import { useTranslation } from 'react-i18next';
 
 import type { Party } from '@/rtk/features/lookupApi';
@@ -8,7 +8,7 @@ import type { ActionError } from '@/resources/hooks/useActionError';
 import type { DelegationAction } from '../DelegationModal/EditModal';
 
 import classes from './AccessPackageList.module.css';
-import { useAreaPackageList } from './useAreaPackageList';
+import { ExtendedAccessArea, useAreaPackageList } from './useAreaPackageList';
 import { useAccessPackageActions } from './useAccessPackageActions';
 import { SkeletonAccessPackageList } from './SkeletonAccessPackageList';
 import { AreaItem } from './AreaItem';
@@ -40,6 +40,7 @@ interface AccessPackageListProps {
   noPackagesText?: string;
   filterByType?: boolean;
   areaHeadingLevel?: 2 | 3;
+  showUnassignedAvailableAreas?: boolean;
 }
 
 export const AccessPackageList = ({
@@ -62,6 +63,7 @@ export const AccessPackageList = ({
   noPackagesText,
   filterByType = true,
   areaHeadingLevel = 3,
+  showUnassignedAvailableAreas = false,
 }: AccessPackageListProps) => {
   const { t } = useTranslation();
 
@@ -152,6 +154,53 @@ export const AccessPackageList = ({
     ? combinedAreas
     : [...combinedAreas].sort((a, b) => a.name.localeCompare(b.name));
 
+  const areasAssignablePackages = combinedAreas.filter((x) => x.packages.assigned.length > 0);
+  const areasUnassignablePackages = combinedAreas.filter((x) => x.packages.assigned.length === 0);
+
+  const renderAccessPackageList = (items: ExtendedAccessArea[]) => {
+    return (
+      <List>
+        {items.map((area) => {
+          const areaPartyType =
+            area.typeName === 'Person' ? PartyType.Person : PartyType.Organization;
+
+          const expanded = (searchString && searchString.length > 2) || isExpanded(area.id);
+          return (
+            <AreaItem
+              key={area.id}
+              area={area}
+              expanded={expanded}
+              toggleExpandedArea={toggleExpandedArea}
+              showPackagesCount={showPackagesCount}
+              showPermissions={showPermissions}
+              partyType={areaPartyType}
+              headingLevel={areaHeadingLevel}
+            >
+              <AreaItemContent
+                area={area}
+                availableActions={availableActions}
+                onSelect={onSelect}
+                onDelegate={onDelegate}
+                onRevoke={onRevoke}
+                onRequest={onRequest}
+                onDeleteRequest={deleteRequest}
+                hasPendingRequest={hasPendingRequest}
+                isLoadingRequest={isLoadingRequest}
+                isActionLoading={isActionLoading}
+                showAvailablePackages={!minimizeAvailablePackages}
+                showAvailableToggle={showAvailableToggle}
+                showPermissions={showPermissions}
+                packageAs={packageAs}
+                partyType={areaPartyType}
+                headingLevel={areaHeadingLevel === 2 ? 3 : 4}
+              />
+            </AreaItem>
+          );
+        })}
+      </List>
+    );
+  };
+
   if (
     searchString &&
     searchString.length > 0 &&
@@ -168,50 +217,50 @@ export const AccessPackageList = ({
     );
   }
 
-  return (
-    <div className={classes.accessAreaList}>
-      {displayAreas.length === 0 && !searchError && !activeDelegationsError ? (
+  if (displayAreas.length === 0 && !searchError && !activeDelegationsError) {
+    return (
+      <div className={classes.accessAreaList}>
         <DsParagraph className={classes.noAccessPackages}>
           {noPackagesText || t('access_packages.no_packages')}
         </DsParagraph>
-      ) : (
-        <List>
-          {displayAreas.map((area) => {
-            const expanded = (searchString && searchString.length > 2) || isExpanded(area.id);
+      </div>
+    );
+  }
 
-            return (
-              <AreaItem
-                key={area.id}
-                area={area}
-                expanded={expanded}
-                toggleExpandedArea={toggleExpandedArea}
-                showPackagesCount={showPackagesCount}
-                showPermissions={showPermissions}
-                partyType={area.typeName === 'Person' ? PartyType.Person : PartyType.Organization}
-                headingLevel={areaHeadingLevel}
+  return (
+    <div className={classes.accessAreaList}>
+      {showUnassignedAvailableAreas ? (
+        <>
+          <DsHeading
+            level={2}
+            data-size='xs'
+            className={classes.subListHeading}
+          >
+            {t('access_packages.search_active_matches')}:
+          </DsHeading>
+          {areasAssignablePackages.length === 0 ? (
+            <DsParagraph className={classes.noAccessPackages}>
+              {t('access_packages.search_no_active_matches')}
+            </DsParagraph>
+          ) : (
+            renderAccessPackageList(areasAssignablePackages)
+          )}
+          {areasUnassignablePackages.length > 0 && (
+            <>
+              <hr className={classes.otherListDivider} />
+              <DsHeading
+                level={2}
+                data-size='xs'
+                className={classes.subListHeading}
               >
-                <AreaItemContent
-                  area={area}
-                  availableActions={availableActions}
-                  onSelect={onSelect}
-                  onDelegate={onDelegate}
-                  onRevoke={onRevoke}
-                  onRequest={onRequest}
-                  onDeleteRequest={deleteRequest}
-                  hasPendingRequest={hasPendingRequest}
-                  isLoadingRequest={isLoadingRequest}
-                  isActionLoading={isActionLoading}
-                  showAvailablePackages={!minimizeAvailablePackages}
-                  showAvailableToggle={showAvailableToggle}
-                  showPermissions={showPermissions}
-                  packageAs={packageAs}
-                  partyType={area.typeName === 'Person' ? PartyType.Person : PartyType.Organization}
-                  headingLevel={areaHeadingLevel === 2 ? 3 : 4}
-                />
-              </AreaItem>
-            );
-          })}
-        </List>
+                {t('access_packages.search_other_matches')}:
+              </DsHeading>
+              {renderAccessPackageList(areasUnassignablePackages)}
+            </>
+          )}
+        </>
+      ) : (
+        <>{renderAccessPackageList(displayAreas)}</>
       )}
     </div>
   );

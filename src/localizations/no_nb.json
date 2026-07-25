@@ -249,6 +249,9 @@
     "user_has_no_packages": "Denne brukeren har ingen tilgangspakker.",
     "no_packages": "Ingen tilgangspakker er tilgjengelige.",
     "no_matching_search": "Ingen treff på søket",
+    "search_active_matches": "Treff i aktive fullmakter",
+    "search_no_active_matches": "Ingen treff i aktive fullmakter",
+    "search_other_matches": "Andre treff",
     "info_alert_text": "Tilgangspakker erstatter dagens Altinn-roller. Les mer om dette på <a href='https://info.altinn.no/hjelp/ny-tilgangsstyring/'>hjelpesidene</a>.",
     "delegation_check": {
       "delegation_check_error_heading": "Teknisk feil",
