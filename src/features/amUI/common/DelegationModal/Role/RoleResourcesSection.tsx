@@ -63,10 +63,8 @@ export const RoleResourcesSection = ({ roleResources, isLoading }: RoleResources
         resources={roleResourceList}
         noResourcesText={t('role.resources_empty')}
         enableMaxHeight={true}
-        showDetails={false}
         interactive={false}
         size='xs'
-        as='div'
       />
     </>
   );
