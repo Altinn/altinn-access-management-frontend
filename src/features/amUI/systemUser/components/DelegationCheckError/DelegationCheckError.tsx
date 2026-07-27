@@ -144,7 +144,7 @@ const ResourceReasonDetails = ({ codes }: ResourceReasonDetailsProps) => {
             const error = mapErrorCodeToErrorMessage(
               ReasonErrorMap[code] || ReasonErrorMap.Unknown,
             );
-            return <DsListItem>{t(error) || ''}</DsListItem>;
+            return <DsListItem key={code}>{t(error) || ''}</DsListItem>;
           })}
         </DsListUnordered>
       );
