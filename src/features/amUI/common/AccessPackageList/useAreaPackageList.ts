@@ -177,6 +177,7 @@ export const useAreaPackageList = ({
     allPackageAreas,
     activeDelegations,
     fromParty,
+    filterByType,
     showAllAreas,
     showAllPackages,
     showOnlyGuardianships,
