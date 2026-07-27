@@ -204,9 +204,7 @@ export const AccessPackageList = ({
   if (
     searchString &&
     searchString.length > 0 &&
-    (allPackageAreas === undefined ||
-      allPackageAreas.length === 0 ||
-      (!showAllAreas && displayAreas.length === 0))
+    (allPackageAreas === undefined || allPackageAreas.length === 0 || displayAreas.length === 0)
   ) {
     return (
       <div className={classes.accessAreaList}>

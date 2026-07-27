@@ -152,7 +152,7 @@ export const useAreaPackageList = ({
             }
           } else if (showAllAreas) {
             // filter away empty areas for different partyType
-            const matchesPartyType = !filterByType || area.typeName === typeName;
+            const matchesPartyType = area.typeName === typeName;
             const assignablePackages = matchesPartyType
               ? area.accessPackages.filter((pkg) => pkg.isAssignable !== false)
               : [];
