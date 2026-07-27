@@ -1,9 +1,7 @@
-import React from 'react';
+import React, { ReactNode } from 'react';
 import { useTranslation } from 'react-i18next';
-import { DsAlert } from '@altinn/altinn-components';
-
+import { DsAlert, DsListItem, DsListUnordered } from '@altinn/altinn-components';
 import type { ProblemDetail, SystemUserAccessPackage } from '../../types';
-
 import classes from './DelegationCheckError.module.css';
 import { mapErrorCodeToErrorMessage } from '../../errorHandling';
 import { ServiceResource } from '@/rtk/features/singleRights/singleRightsApi';
@@ -99,34 +97,54 @@ const DelegationReasonDetails = ({
   }
 
   return (
-    <>
+    <DsListUnordered>
       {reasons
         .filter((reason) => !!reason && typeof reason === 'object')
         .map((reason: Reason, index: number) => {
-          let reasonDetail: string | undefined = '';
+          let reasonDetail: ReactNode | undefined = '';
+          let name: string = '';
           if (reason.type === 'package') {
             const packageName = accessPackages.find((x) => x.urn === reason.id)?.name;
-            reasonDetail = packageName ?? reason.id;
+            name = packageName ?? reason.id;
           } else {
-            const resourceName = resources.find((x) => x.identifier === reason.id)?.title;
-            const codesText = Array.isArray(reason.codes)
-              ? reason.codes
-                  .map((code) => {
-                    const error = mapErrorCodeToErrorMessage(
-                      ReasonErrorMap[code] || ReasonErrorMap.Unknown,
-                    );
-                    return t(error) || '';
-                  })
-                  .filter(Boolean)
-                  .join(', ')
-              : '';
-            reasonDetail = codesText
-              ? `${resourceName ?? reason.id}: ${codesText}`
-              : (resourceName ?? reason.id);
+            name = `${resources.find((x) => x.identifier === reason.id)?.title ?? reason.id}:`;
+            reasonDetail = <ResourceReasonDetails codes={reason.codes} />;
           }
 
-          return <div key={`${reason.id}-${index}`}>{reasonDetail || ''}</div>;
+          return (
+            <DsListItem key={`${reason.id}-${index}`}>
+              {name}
+              {reasonDetail || ''}
+            </DsListItem>
+          );
         })}
-    </>
+    </DsListUnordered>
   );
+};
+
+interface ResourceReasonDetailsProps {
+  codes: (keyof typeof ReasonErrorMap)[];
+}
+
+const ResourceReasonDetails = ({ codes }: ResourceReasonDetailsProps) => {
+  const { t } = useTranslation();
+
+  if (Array.isArray(codes)) {
+    if (codes.length > 1) {
+      return (
+        <DsListUnordered>
+          {codes.map((code) => {
+            const error = mapErrorCodeToErrorMessage(
+              ReasonErrorMap[code] || ReasonErrorMap.Unknown,
+            );
+            return <DsListItem>{t(error) || ''}</DsListItem>;
+          })}
+        </DsListUnordered>
+      );
+    } else {
+      return mapErrorCodeToErrorMessage(ReasonErrorMap[codes[0]] || ReasonErrorMap.Unknown);
+    }
+  }
+
+  return '';
 };
