@@ -149,7 +149,7 @@ const ResourceReasonDetails = ({ codes }: ResourceReasonDetailsProps) => {
         </DsListUnordered>
       );
     } else {
-      return mapErrorCodeToErrorMessage(ReasonErrorMap[codes[0]] || ReasonErrorMap.Unknown);
+      return mapErrorCodeToErrorMessage(t(ReasonErrorMap[codes[0]] || ReasonErrorMap.Unknown));
     }
   }
 
