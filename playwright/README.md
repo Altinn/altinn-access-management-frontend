@@ -49,6 +49,32 @@ Tests get test data via the `testData` fixture (Tenor by default). Set `USE_TENO
 USE_TENOR=false yarn run env:TT02 --grep "test name"
 ```
 
+#### Reproduce a failing run with the same test data (`TESTDATA_PIN`)
+
+Tenor hands out random actors per run, so a failing test does not necessarily
+fail again. Every run therefore **records** the actors each test received — to
+`playwright/testdata-pins/<testId>.json`, and as a `testdata-pins.json`
+attachment on the test in the HTML report. Recording is always on; you cannot
+opt into it after CI has already gone red.
+
+To re-run with the exact same actors, point `TESTDATA_PIN` at the directory:
+
+```
+TESTDATA_PIN=testdata-pins yarn run env:TT02 --grep "test name"
+```
+
+For a red CI run, download the report artifact, grab that test's
+`testdata-pins.json`, and point `TESTDATA_PIN` straight at the file:
+
+```
+TESTDATA_PIN=./testdata-pins.json yarn run env:TT02 --grep "test name"
+```
+
+Replayed calls never touch Tenor, and **every retry gets the same data** — which
+is what tells a flaky test apart from a bad actor. Calls with no recorded value
+fall through to live data and are annotated `testdata:PIN-MANGLER`, so a
+partially changed test still runs instead of failing outright.
+
 ### Avoid flaky tests
 
 - After creating a test, run that single test x number of times to make sure it's stable. Preferably in different environments:
@@ -64,6 +90,7 @@ yarn run env:AT22 --grep "test name" --timeout 10000 --repeat-each 10 --workers=
 - You must add the an environment variable with the name 'PLAYWRIGHT_SERVICE_URL' pointing to the URL we're using
 
 #### Running tests locally simulating Github action runs using Act (Mac OS)
+
 - Install Collima, and start image.
 - Run Act using: 'act -j playwright-e2e-tests --container-architecture linux/amd64 --pull=false --verbose'
 

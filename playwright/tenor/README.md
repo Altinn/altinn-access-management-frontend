@@ -20,6 +20,41 @@ tynt lag over `TenorApiRequests` (rå KQL-søk mot Tenor).
 
 ---
 
+## Reprodusere en feilende kjøring (`TESTDATA_PIN`)
+
+Prisen for ferske, tilfeldige aktører er at en feilende test ikke nødvendigvis
+feiler igjen. Derfor **tar hver kjøring opp** hvilke aktører hver test fikk:
+
+- på disk i `playwright/testdata-pins/<testId>.json` (for lokal gjenkjøring)
+- som vedlegg `testdata-pins.json` på testen i html-rapporten (den eneste veien
+  pinnene overlever CI — CI laster kun opp `playwright-report/`)
+
+Opptak er alltid på, fordi det ikke går an å skru på i etterkant. Gjenkjøring:
+
+```sh
+# samme aktører som forrige lokale kjøring
+TESTDATA_PIN=testdata-pins yarn run env:TT02 <path>
+
+# eller ett nedlastet vedlegg fra en rød CI-kjøring
+TESTDATA_PIN=./testdata-pins.json yarn run env:TT02 <path>
+```
+
+Detaljer som er verdt å kjenne (implementert i `testdataPinning.ts`):
+
+- **Nøkkelen er `metodenavn#ordinal`**, ikke argumentene. `ekskluder` inneholder
+  orgnr fra tidligere tilfeldige kall, så en args-basert nøkkel ville aldri
+  matchet. Det er trygt: de lagrede verdiene oppfylte allerede det argumentene
+  uttrykte da opptaket ble gjort.
+- Ordinalen tildeles **synkront** ved kallet, så `Promise.all([...])` i en
+  `beforeEach` er deterministisk (elementene evalueres venstre→høyre).
+- **Alle forsøk av samme test får samme data** ved replay. Det er med vilje: da
+  skiller en retry mellom «flaky test» og «dårlig aktør». Opptaket lar derfor
+  forsøk 0 eie `<testId>.json`; retries skrives til `<testId>.retryN.json`.
+- Manglende nøkkel faller gjennom til live data og annoteres
+  `testdata:PIN-MANGLER`, så en delvis endret test fortsatt kjører.
+
+---
+
 ## Hjelpemetodene og hva de krever
 
 | Metode | Krav til dataene (klartekst) | KQL / relasjon i Tenor | Returnerer |

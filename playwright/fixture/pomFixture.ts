@@ -13,6 +13,7 @@ import { ClientDelegationPage } from 'playwright/pages/systemuser/ClientDelegati
 import { runAccessibilityTests } from 'playwright/uuTests/accessibilityHelpers/delegeringHelper';
 import { KlientAdministrasjonPage } from 'playwright/pages/tilgangsstyring/KlientAdministrasjonPage';
 import { createTestData } from 'playwright/tenor/testData';
+import { lagreTestdataPins } from 'playwright/tenor/testdataPinning';
 import type { TestDataProvider } from 'playwright/tenor/TestDataProvider';
 
 const defaultLang = Language.NB;
@@ -107,7 +108,11 @@ const test = baseTest.extend<Fixtures>({
   },
 
   testData: async ({}, use) => {
-    await use(createTestData());
+    const testData = createTestData();
+    await use(testData);
+    // Legger aktørene testen brukte ved som attachment, så en rød CI-kjøring kan
+    // reproduseres med TESTDATA_PIN (CI laster kun opp playwright-report/).
+    await lagreTestdataPins(testData);
   },
 });
 
