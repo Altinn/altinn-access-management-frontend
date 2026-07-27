@@ -14,10 +14,10 @@ using Moq;
 namespace Altinn.AccessManagement.UI.Tests.Clients
 {
     /// <summary>
-    /// Tests that <see cref="ClientDelegationClientSelector"/> routes to
-    /// <see cref="ClientDelegationClientV1"/> when the UseNewSingleRightsClientDelegation feature flag
-    /// is disabled and to <see cref="ClientDelegationClientV2"/> when it is enabled, and that the
-    /// clients build the expected request urls.
+    /// Tests that the v2 client delegation client builds the expected request urls
+    /// (client/agent query parameters and POST /delete routes), and that
+    /// <see cref="ClientDelegationClientSelector"/> routes to v1 when the
+    /// UseNewSingleRightsClientDelegation feature flag is disabled.
     /// </summary>
     public class ClientDelegationClientTest
     {
@@ -94,166 +94,136 @@ namespace Altinn.AccessManagement.UI.Tests.Clients
             return new ClientDelegationClientSelector(v1, v2, featureManager.Object);
         }
 
-        [Theory]
-        [InlineData(false, "v1")]
-        [InlineData(true, "v2")]
-        public async Task GetMyClients_BuildsVersionedUrl(bool useV2, string version)
+        [Fact]
+        public async Task FlagDisabled_RoutesToV1()
         {
             RecordingHandler handler = new RecordingHandler();
 
-            await CreateClient(useV2, handler).GetMyClients(new List<Guid> { _provider });
+            await CreateClient(useV2: false, handler).GetMyClients(new List<Guid> { _provider });
 
             Assert.Equal(HttpMethod.Get, handler.Request.Method);
-            Assert.Equal($"{BaseUrl}{version}/enduser/clientdelegations/my/clients?provider={_provider}", handler.Request.RequestUri.ToString());
+            Assert.Equal($"{BaseUrl}v1/enduser/clientdelegations/my/clients?provider={_provider}", handler.Request.RequestUri.ToString());
         }
 
-        [Theory]
-        [InlineData(false, "v1")]
-        [InlineData(true, "v2")]
-        public async Task RemoveMyClientProvider_BuildsVersionedUrl(bool useV2, string version)
+        [Fact]
+        public async Task GetMyClients_V2Url()
         {
             RecordingHandler handler = new RecordingHandler();
 
-            await CreateClient(useV2, handler).RemoveMyClientProvider(_provider);
+            await CreateClient(useV2: true, handler).GetMyClients(new List<Guid> { _provider });
+
+            Assert.Equal(HttpMethod.Get, handler.Request.Method);
+            Assert.Equal($"{BaseUrl}v2/enduser/clientdelegations/my/clients?provider={_provider}", handler.Request.RequestUri.ToString());
+        }
+
+        [Fact]
+        public async Task RemoveMyClientProvider_V2Url()
+        {
+            RecordingHandler handler = new RecordingHandler();
+
+            await CreateClient(useV2: true, handler).RemoveMyClientProvider(_provider);
 
             Assert.Equal(HttpMethod.Delete, handler.Request.Method);
-            Assert.Equal($"{BaseUrl}{version}/enduser/clientdelegations/my/clientproviders?provider={_provider}", handler.Request.RequestUri.ToString());
+            Assert.Equal($"{BaseUrl}v2/enduser/clientdelegations/my/clientproviders?provider={_provider}", handler.Request.RequestUri.ToString());
         }
 
-        [Theory]
-        [InlineData(false)]
-        [InlineData(true)]
-        public async Task RemoveMyClientAccessPackages_BuildsVersionedUrl(bool useV2)
+        [Fact]
+        public async Task RemoveMyClientAccessPackages_V2PostsToDeleteRoute()
         {
             RecordingHandler handler = new RecordingHandler();
 
-            await CreateClient(useV2, handler).RemoveMyClientAccessPackages(_provider, _client, _payload);
+            await CreateClient(useV2: true, handler).RemoveMyClientAccessPackages(_provider, _client, _payload);
 
-            if (useV2)
-            {
-                Assert.Equal(HttpMethod.Post, handler.Request.Method);
-                Assert.Equal($"{BaseUrl}v2/enduser/clientdelegations/my/clients/accesspackages/delete?provider={_provider}&client={_client}", handler.Request.RequestUri.ToString());
-            }
-            else
-            {
-                Assert.Equal(HttpMethod.Delete, handler.Request.Method);
-                Assert.Equal($"{BaseUrl}v1/enduser/clientdelegations/my/clients?provider={_provider}&from={_client}", handler.Request.RequestUri.ToString());
-            }
+            Assert.Equal(HttpMethod.Post, handler.Request.Method);
+            Assert.Equal($"{BaseUrl}v2/enduser/clientdelegations/my/clients/accesspackages/delete?provider={_provider}&client={_client}", handler.Request.RequestUri.ToString());
         }
 
-        [Theory]
-        [InlineData(false, "v1")]
-        [InlineData(true, "v2")]
-        public async Task GetClients_BuildsVersionedUrl(bool useV2, string version)
+        [Fact]
+        public async Task GetClients_V2Url()
         {
             RecordingHandler handler = new RecordingHandler();
 
-            await CreateClient(useV2, handler).GetClients(_party, new List<string> { "DAGL" });
+            await CreateClient(useV2: true, handler).GetClients(_party, new List<string> { "DAGL" });
 
             Assert.Equal(HttpMethod.Get, handler.Request.Method);
-            Assert.Equal($"{BaseUrl}{version}/enduser/clientdelegations/clients?party={_party}&roles=DAGL", handler.Request.RequestUri.ToString());
+            Assert.Equal($"{BaseUrl}v2/enduser/clientdelegations/clients?party={_party}&roles=DAGL", handler.Request.RequestUri.ToString());
         }
 
-        [Theory]
-        [InlineData(false, "v1")]
-        [InlineData(true, "v2")]
-        public async Task GetAgents_BuildsVersionedUrl(bool useV2, string version)
+        [Fact]
+        public async Task GetAgents_V2Url()
         {
             RecordingHandler handler = new RecordingHandler();
 
-            await CreateClient(useV2, handler).GetAgents(_party);
+            await CreateClient(useV2: true, handler).GetAgents(_party);
 
             Assert.Equal(HttpMethod.Get, handler.Request.Method);
-            Assert.Equal($"{BaseUrl}{version}/enduser/clientdelegations/agents?party={_party}", handler.Request.RequestUri.ToString());
+            Assert.Equal($"{BaseUrl}v2/enduser/clientdelegations/agents?party={_party}", handler.Request.RequestUri.ToString());
         }
 
-        [Theory]
-        [InlineData(false, "v1", "to")]
-        [InlineData(true, "v2", "agent")]
-        public async Task GetAgentAccessPackages_BuildsVersionedUrl(bool useV2, string version, string agentParam)
+        [Fact]
+        public async Task GetAgentAccessPackages_V2UsesAgentParam()
         {
             RecordingHandler handler = new RecordingHandler();
 
-            await CreateClient(useV2, handler).GetAgentAccessPackages(_party, _agent);
+            await CreateClient(useV2: true, handler).GetAgentAccessPackages(_party, _agent);
 
             Assert.Equal(HttpMethod.Get, handler.Request.Method);
-            Assert.Equal($"{BaseUrl}{version}/enduser/clientdelegations/agents/accesspackages?party={_party}&{agentParam}={_agent}", handler.Request.RequestUri.ToString());
+            Assert.Equal($"{BaseUrl}v2/enduser/clientdelegations/agents/accesspackages?party={_party}&agent={_agent}", handler.Request.RequestUri.ToString());
         }
 
-        [Theory]
-        [InlineData(false, "v1", "from")]
-        [InlineData(true, "v2", "client")]
-        public async Task GetClientAccessPackages_BuildsVersionedUrl(bool useV2, string version, string clientParam)
+        [Fact]
+        public async Task GetClientAccessPackages_V2UsesClientParam()
         {
             RecordingHandler handler = new RecordingHandler();
 
-            await CreateClient(useV2, handler).GetClientAccessPackages(_party, _client);
+            await CreateClient(useV2: true, handler).GetClientAccessPackages(_party, _client);
 
             Assert.Equal(HttpMethod.Get, handler.Request.Method);
-            Assert.Equal($"{BaseUrl}{version}/enduser/clientdelegations/clients/accesspackages?party={_party}&{clientParam}={_client}", handler.Request.RequestUri.ToString());
+            Assert.Equal($"{BaseUrl}v2/enduser/clientdelegations/clients/accesspackages?party={_party}&client={_client}", handler.Request.RequestUri.ToString());
         }
 
-        [Theory]
-        [InlineData(false)]
-        [InlineData(true)]
-        public async Task AddAgentAccessPackages_BuildsVersionedUrl(bool useV2)
+        [Fact]
+        public async Task AddAgentAccessPackages_V2UsesClientAndAgentParams()
         {
             RecordingHandler handler = new RecordingHandler("[]");
 
-            await CreateClient(useV2, handler).AddAgentAccessPackages(_party, _client, _agent, _payload);
+            await CreateClient(useV2: true, handler).AddAgentAccessPackages(_party, _client, _agent, _payload);
 
             Assert.Equal(HttpMethod.Post, handler.Request.Method);
-            string expectedUrl = useV2
-                ? $"{BaseUrl}v2/enduser/clientdelegations/agents/accesspackages?party={_party}&client={_client}&agent={_agent}"
-                : $"{BaseUrl}v1/enduser/clientdelegations/agents/accesspackages?party={_party}&from={_client}&to={_agent}";
-            Assert.Equal(expectedUrl, handler.Request.RequestUri.ToString());
+            Assert.Equal($"{BaseUrl}v2/enduser/clientdelegations/agents/accesspackages?party={_party}&client={_client}&agent={_agent}", handler.Request.RequestUri.ToString());
         }
 
-        [Theory]
-        [InlineData(false)]
-        [InlineData(true)]
-        public async Task RemoveAgentAccessPackages_BuildsVersionedUrl(bool useV2)
+        [Fact]
+        public async Task RemoveAgentAccessPackages_V2PostsToDeleteRoute()
         {
             RecordingHandler handler = new RecordingHandler();
 
-            await CreateClient(useV2, handler).RemoveAgentAccessPackages(_party, _client, _agent, _payload);
+            await CreateClient(useV2: true, handler).RemoveAgentAccessPackages(_party, _client, _agent, _payload);
 
-            if (useV2)
-            {
-                Assert.Equal(HttpMethod.Post, handler.Request.Method);
-                Assert.Equal($"{BaseUrl}v2/enduser/clientdelegations/agents/accesspackages/delete?party={_party}&client={_client}&agent={_agent}", handler.Request.RequestUri.ToString());
-            }
-            else
-            {
-                Assert.Equal(HttpMethod.Delete, handler.Request.Method);
-                Assert.Equal($"{BaseUrl}v1/enduser/clientdelegations/agents/accesspackages?party={_party}&from={_client}&to={_agent}", handler.Request.RequestUri.ToString());
-            }
+            Assert.Equal(HttpMethod.Post, handler.Request.Method);
+            Assert.Equal($"{BaseUrl}v2/enduser/clientdelegations/agents/accesspackages/delete?party={_party}&client={_client}&agent={_agent}", handler.Request.RequestUri.ToString());
         }
 
-        [Theory]
-        [InlineData(false, "v1", "to")]
-        [InlineData(true, "v2", "agent")]
-        public async Task AddAgent_BuildsVersionedUrl(bool useV2, string version, string agentParam)
+        [Fact]
+        public async Task AddAgent_V2UsesAgentParam()
         {
             RecordingHandler handler = new RecordingHandler("{}");
 
-            await CreateClient(useV2, handler).AddAgent(_party, _agent);
+            await CreateClient(useV2: true, handler).AddAgent(_party, _agent);
 
             Assert.Equal(HttpMethod.Post, handler.Request.Method);
-            Assert.Equal($"{BaseUrl}{version}/enduser/clientdelegations/agents?party={_party}&{agentParam}={_agent}", handler.Request.RequestUri.ToString());
+            Assert.Equal($"{BaseUrl}v2/enduser/clientdelegations/agents?party={_party}&agent={_agent}", handler.Request.RequestUri.ToString());
         }
 
-        [Theory]
-        [InlineData(false, "v1", "to")]
-        [InlineData(true, "v2", "agent")]
-        public async Task RemoveAgent_BuildsVersionedUrl(bool useV2, string version, string agentParam)
+        [Fact]
+        public async Task RemoveAgent_V2UsesAgentParam()
         {
             RecordingHandler handler = new RecordingHandler();
 
-            await CreateClient(useV2, handler).RemoveAgent(_party, _agent);
+            await CreateClient(useV2: true, handler).RemoveAgent(_party, _agent);
 
             Assert.Equal(HttpMethod.Delete, handler.Request.Method);
-            Assert.Equal($"{BaseUrl}{version}/enduser/clientdelegations/agents?party={_party}&{agentParam}={_agent}&cascade=true", handler.Request.RequestUri.ToString());
+            Assert.Equal($"{BaseUrl}v2/enduser/clientdelegations/agents?party={_party}&agent={_agent}&cascade=true", handler.Request.RequestUri.ToString());
         }
     }
 }
