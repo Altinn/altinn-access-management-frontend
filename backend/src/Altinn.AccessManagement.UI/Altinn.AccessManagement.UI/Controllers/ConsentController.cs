@@ -101,6 +101,27 @@ namespace Altinn.AccessManagement.UI.Controllers
         }
 
         /// <summary>
+        /// Get count of consents for a party filtered by status
+        /// </summary>
+        /// <param name="party">Id of party to count consents for</param>
+        /// <param name="status">Status to filter by</param>
+        /// <param name="cancellationToken">Cancellation token</param>
+        /// <returns></returns>
+        [Authorize]
+        [HttpGet("count/{party}")]
+        public async Task<ActionResult> GetConsentRequestCount([FromRoute] Guid party, [FromQuery] ConsentRequestStatusType status, CancellationToken cancellationToken)
+        {
+            Result<int> count = await _consentService.GetConsentRequestCount(party, status, cancellationToken);
+
+            if (count.IsProblem)
+            {
+                return count.Problem.ToActionResult();
+            }
+
+            return Ok(count.Value);
+        }
+
+        /// <summary>
         /// Get active consents
         /// </summary>
         /// <param name="party">Id of party to get active consents for</param>
