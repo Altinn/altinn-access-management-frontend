@@ -39,7 +39,7 @@ interface AccessPackageListProps {
   packageAs?: React.ElementType;
   noPackagesText?: string;
   filterByType?: boolean;
-  areaHeadingLevel?: 2 | 3;
+  firstHeadingLevel?: 2 | 3;
   showUnassignedAvailableAreas?: boolean;
 }
 
@@ -62,7 +62,7 @@ export const AccessPackageList = ({
   packageAs,
   noPackagesText,
   filterByType = true,
-  areaHeadingLevel = 3,
+  firstHeadingLevel = 3,
   showUnassignedAvailableAreas = false,
 }: AccessPackageListProps) => {
   const { t } = useTranslation();
@@ -157,7 +157,7 @@ export const AccessPackageList = ({
   const areasWithActiveMatches = combinedAreas.filter((x) => x.packages.assigned.length > 0);
   const areasWithoutActiveMatches = combinedAreas.filter((x) => x.packages.assigned.length === 0);
 
-  const renderAccessPackageList = (items: ExtendedAccessArea[]) => {
+  const renderAccessPackageList = (items: ExtendedAccessArea[], headingLevel: 2 | 3 | 4) => {
     return (
       <List>
         {items.map((area) => {
@@ -174,7 +174,7 @@ export const AccessPackageList = ({
               showPackagesCount={showPackagesCount}
               showPermissions={showPermissions}
               partyType={areaPartyType}
-              headingLevel={areaHeadingLevel}
+              headingLevel={headingLevel}
             >
               <AreaItemContent
                 area={area}
@@ -192,7 +192,7 @@ export const AccessPackageList = ({
                 showPermissions={showPermissions}
                 packageAs={packageAs}
                 partyType={areaPartyType}
-                headingLevel={areaHeadingLevel === 2 ? 3 : 4}
+                headingLevel={(headingLevel + 1) as 3 | 4 | 5}
               />
             </AreaItem>
           );
@@ -230,7 +230,7 @@ export const AccessPackageList = ({
       {showUnassignedAvailableAreas ? (
         <>
           <DsHeading
-            level={2}
+            level={firstHeadingLevel}
             data-size='xs'
             className={classes.subListHeading}
           >
@@ -241,7 +241,7 @@ export const AccessPackageList = ({
               {t('access_packages.search_no_active_matches')}
             </DsParagraph>
           ) : (
-            renderAccessPackageList(areasWithActiveMatches)
+            renderAccessPackageList(areasWithActiveMatches, (firstHeadingLevel + 1) as 3 | 4)
           )}
           {areasWithoutActiveMatches.length > 0 && (
             <>
@@ -253,12 +253,12 @@ export const AccessPackageList = ({
               >
                 {t('access_packages.search_other_matches')}:
               </DsHeading>
-              {renderAccessPackageList(areasWithoutActiveMatches)}
+              {renderAccessPackageList(areasWithoutActiveMatches, (firstHeadingLevel + 1) as 3 | 4)}
             </>
           )}
         </>
       ) : (
-        <>{renderAccessPackageList(displayAreas)}</>
+        <>{renderAccessPackageList(displayAreas, firstHeadingLevel)}</>
       )}
     </div>
   );

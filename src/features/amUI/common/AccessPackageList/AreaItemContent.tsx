@@ -38,7 +38,7 @@ interface AreaItemContentProps {
   showPermissions?: boolean;
   packageAs?: React.ElementType;
   partyType: PartyType;
-  headingLevel: 3 | 4;
+  headingLevel: 3 | 4 | 5;
 }
 
 export const AreaItemContent = ({
