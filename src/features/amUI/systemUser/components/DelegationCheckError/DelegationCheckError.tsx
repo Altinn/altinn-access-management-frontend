@@ -52,7 +52,18 @@ export const DelegationCheckError = ({
   );
 };
 
-const ReasonErrorMap = {
+type ReasonErrorCode =
+  | 'MissingRoleAccess'
+  | 'MissingDelegationAccess'
+  | 'MissingSrrRightAccess'
+  | 'InsufficientAuthenticationLevel'
+  | 'AccessListValidationFail'
+  | 'MissingPackageAccess'
+  | 'ResourceNotDelegable'
+  | 'ResourceIsMaskinPortenSchema'
+  | 'Unknown';
+
+const ReasonErrorMap: Record<ReasonErrorCode, string> = {
   MissingRoleAccess: 'AMUI-00016',
   MissingDelegationAccess: 'AMUI-00018',
   MissingSrrRightAccess: 'AMUI-00019',
@@ -63,8 +74,6 @@ const ReasonErrorMap = {
   ResourceIsMaskinPortenSchema: 'AMUI-00071',
   Unknown: 'AMUI-00014',
 };
-
-type ReasonErrorCode = keyof typeof ReasonErrorMap;
 
 type Reason = {
   type: 'package' | 'resource';
@@ -82,8 +91,6 @@ const DelegationReasonDetails = ({
   accessPackages,
   resources,
 }: DelegationReasonDetailsProps) => {
-  const { t } = useTranslation();
-
   let reasons: Reason[];
   try {
     reasons = JSON.parse(delegationReasons);
@@ -123,7 +130,7 @@ const DelegationReasonDetails = ({
 };
 
 interface ResourceReasonDetailsProps {
-  codes: (keyof typeof ReasonErrorMap)[];
+  codes: ReasonErrorCode[];
 }
 
 const ResourceReasonDetails = ({ codes }: ResourceReasonDetailsProps) => {
