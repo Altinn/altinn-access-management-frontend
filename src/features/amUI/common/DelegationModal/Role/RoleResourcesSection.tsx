@@ -5,7 +5,6 @@ import { DsHeading } from '@altinn/altinn-components';
 import type { PackageResource } from '@/rtk/features/accessPackageApi';
 import type { RoleResourceMetadata } from '@/rtk/features/roleApi';
 
-import { SkeletonResourceList } from '../../ResourceList/SkeletonResourceList';
 import { ResourceList } from '../../ResourceList/ResourceList';
 
 interface RoleResourcesSectionProps {
@@ -45,10 +44,6 @@ export const RoleResourcesSection = ({ roleResources, isLoading }: RoleResources
     });
   }, [roleResources]);
 
-  if (isLoading) {
-    return <SkeletonResourceList />;
-  }
-
   return (
     <>
       <DsHeading
@@ -61,6 +56,7 @@ export const RoleResourcesSection = ({ roleResources, isLoading }: RoleResources
       </DsHeading>
       <ResourceList
         resources={roleResourceList}
+        isLoading={isLoading}
         noResourcesText={t('role.resources_empty')}
         enableMaxHeight={true}
         interactive={false}
