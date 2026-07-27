@@ -154,8 +154,8 @@ export const AccessPackageList = ({
     ? combinedAreas
     : [...combinedAreas].sort((a, b) => a.name.localeCompare(b.name));
 
-  const areasAssignablePackages = combinedAreas.filter((x) => x.packages.assigned.length > 0);
-  const areasUnassignablePackages = combinedAreas.filter((x) => x.packages.assigned.length === 0);
+  const areasWithActiveMatches = combinedAreas.filter((x) => x.packages.assigned.length > 0);
+  const areasWithoutActiveMatches = combinedAreas.filter((x) => x.packages.assigned.length === 0);
 
   const renderAccessPackageList = (items: ExtendedAccessArea[]) => {
     return (
@@ -238,14 +238,14 @@ export const AccessPackageList = ({
           >
             {t('access_packages.search_active_matches')}:
           </DsHeading>
-          {areasAssignablePackages.length === 0 ? (
+          {areasWithActiveMatches.length === 0 ? (
             <DsParagraph className={classes.noAccessPackages}>
               {t('access_packages.search_no_active_matches')}
             </DsParagraph>
           ) : (
-            renderAccessPackageList(areasAssignablePackages)
+            renderAccessPackageList(areasWithActiveMatches)
           )}
-          {areasUnassignablePackages.length > 0 && (
+          {areasWithoutActiveMatches.length > 0 && (
             <>
               <hr className={classes.otherListDivider} />
               <DsHeading
@@ -255,7 +255,7 @@ export const AccessPackageList = ({
               >
                 {t('access_packages.search_other_matches')}:
               </DsHeading>
-              {renderAccessPackageList(areasUnassignablePackages)}
+              {renderAccessPackageList(areasWithoutActiveMatches)}
             </>
           )}
         </>
