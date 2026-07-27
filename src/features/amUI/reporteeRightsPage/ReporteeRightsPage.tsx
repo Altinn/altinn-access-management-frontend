@@ -2,10 +2,6 @@ import * as React from 'react';
 import { useTranslation } from 'react-i18next';
 import { useParams } from 'react-router';
 
-import {
-  displayInstanceDelegation,
-  useRerouteIfNotConfetti,
-} from '@/resources/utils/featureFlagUtils';
 import { getCookie } from '@/resources/Cookie/CookieMethods';
 import { amUIPath } from '@/routes/paths';
 import { PageWrapper } from '@/components';
@@ -37,10 +33,6 @@ export const ReporteeRightsPage = () => {
 
   useDocumentTitle(t('reportee_rights_page.page_title'));
 
-  useRerouteIfNotConfetti();
-
-  const { displayRoles } = window.featureFlags;
-  const instanceDelegationEnabled = displayInstanceDelegation();
   return (
     <PageWrapper>
       <PageLayoutWrapper>
@@ -58,14 +50,13 @@ export const ReporteeRightsPage = () => {
               <UserPageHeader
                 direction='from'
                 displayDirection
-                displayRoles={displayRoles}
               />
               <RightsTabs
                 packagesPanel={<AccessPackageSection isReportee />}
                 singleRightsPanel={<SingleRightsSection isReportee />}
                 roleAssignmentsPanel={<ReporteeRoleSection />}
                 guardianshipsPanel={<GuardianshipSection />}
-                instancesPanel={instanceDelegationEnabled ? <InstanceSection isReportee /> : null}
+                instancesPanel={<InstanceSection isReportee />}
               />
             </PageContainer>
           </DelegationModalProvider>

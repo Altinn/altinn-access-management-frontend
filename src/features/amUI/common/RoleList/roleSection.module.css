@@ -5,6 +5,12 @@
   margin-bottom: var(--ds-spacing-2);
 }
 
+.roleListHeader {
+  display: flex;
+  align-items: center;
+  gap: var(--ds-spacing-1);
+}
+
 .roleLists {
   display: flex;
   flex-direction: column;

@@ -1,7 +1,7 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { useParams } from 'react-router';
-import { DsHeading, DsPopover } from '@altinn/altinn-components';
+import { DsHeading } from '@altinn/altinn-components';
 
 import type { ServiceResource } from '@/rtk/features/singleRights/singleRightsApi';
 import { useGetSingleRightsForRightholderQuery } from '@/rtk/features/singleRights/singleRightsApi';
@@ -24,7 +24,7 @@ import { useCanGiveAccess } from '@/resources/hooks/useCanGiveAccess';
 import { useIsTabletOrSmaller } from '@/resources/utils/screensizeUtils';
 import { SingleRightsSectionSkeleton } from './SingleRightsSectionSkeleton';
 import { getInheritedStatus } from '../../common/useInheritedStatus';
-import { QuestionmarkCircleIcon } from '@navikt/aksel-icons';
+import { HelpText } from '../../common/HelpText/HelpText';
 import { PendingRequests } from './PendingRequests';
 
 const SingleRightsSectionContent = ({ isReportee }: { isReportee: boolean }) => {
@@ -37,8 +37,7 @@ const SingleRightsSectionContent = ({ isReportee }: { isReportee: boolean }) => 
   const canRequestAccess =
     !canGiveAccess &&
     actingParty?.partyUuid === toParty?.partyUuid &&
-    toParty?.partyUuid !== fromParty?.partyUuid &&
-    window.featureFlags?.enableRequestAccess;
+    toParty?.partyUuid !== fromParty?.partyUuid;
 
   const {
     data: delegatedResources,
@@ -103,16 +102,9 @@ const SingleRightsSectionContent = ({ isReportee }: { isReportee: boolean }) => 
               count: delegatedResources?.length ?? 0,
             })}
           </DsHeading>
-          <DsPopover.TriggerContext>
-            <DsPopover.Trigger
-              icon
-              variant='tertiary'
-              aria-label={t('single_rights.helptext_button')}
-            >
-              <QuestionmarkCircleIcon aria-hidden='true' />
-            </DsPopover.Trigger>
-            <DsPopover>{t('single_rights.helptext_content')}</DsPopover>
-          </DsPopover.TriggerContext>
+          <HelpText aria-label={t('single_rights.helptext_button')}>
+            {t('single_rights.helptext_content')}
+          </HelpText>
         </div>
         {isError && <div>{t('user_rights_page.error')}</div>}
         {availableActions.includes(DelegationAction.REQUEST) && <PendingRequests />}

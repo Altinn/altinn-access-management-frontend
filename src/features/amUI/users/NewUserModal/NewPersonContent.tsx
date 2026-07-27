@@ -1,10 +1,9 @@
-import { Button, DsAlert, DsTextfield } from '@altinn/altinn-components';
+import { Button, DsTextfield } from '@altinn/altinn-components';
 import { useState } from 'react';
 import { Trans, useTranslation } from 'react-i18next';
 
 import classes from './NewUserModal.module.css';
 import { NewUserAlert } from './NewUserAlert';
-import { displayPrivDelegation } from '@/resources/utils/featureFlagUtils';
 import { getPersonIdentifierErrorKey } from '../../common/personIdentifierUtils';
 
 export type personInput = { personIdentifier: string; lastName: string };
@@ -23,7 +22,6 @@ export const NewPersonContent = ({ errorDetails, addPerson, isLoading }: NewPers
     string | null
   >(null);
   const [lastNameFormatError, setLastNameFormatError] = useState<string>('');
-  const shouldDisplayPrivDelegation = displayPrivDelegation();
 
   const navigateIfValidPerson = () => {
     const personInput = {
@@ -32,10 +30,6 @@ export const NewPersonContent = ({ errorDetails, addPerson, isLoading }: NewPers
     };
     addPerson(personInput);
   };
-
-  if (!shouldDisplayPrivDelegation) {
-    return <DsAlert data-color='info'>{t('new_user_modal.limited_preview_message')}</DsAlert>;
-  }
 
   const isValidLastnameFormat = () => lastName.trim().length >= 1;
   const isAddPersonButtonDisabled =

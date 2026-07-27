@@ -1,15 +1,16 @@
-import { useTranslation } from 'react-i18next';
-import { PlusIcon, ArrowLeftIcon } from '@navikt/aksel-icons';
-import { type JSX, useEffect, useRef } from 'react';
-import { Button, DsDialog } from '@altinn/altinn-components';
+import { Trans, useTranslation } from 'react-i18next';
+import { PlusIcon } from '@navikt/aksel-icons';
+import { type JSX } from 'react';
+import { DsDialog, formatDisplayName } from '@altinn/altinn-components';
 
 import type { AccessPackage } from '@/rtk/features/accessPackageApi';
 import type { ServiceResource } from '@/rtk/features/singleRights/singleRightsApi';
-import { useAutoFocusRef } from '@/resources/hooks/useAutoFocusRef';
+import { PartyType } from '@/rtk/features/userInfoApi';
 
 import { usePartyRepresentation } from '../PartyRepresentationContext/PartyRepresentationContext';
 import { useAreaExpandedContextOrLocal } from '../AccessPackageList/AccessPackageExpandedContext';
-import { RestoreFocusFallback, RestoreFocusProvider, useRestoreFocus } from '../RestoreFocus';
+import { useRestoreFocus } from '../RestoreFocus';
+import { TwoStepDialog } from '../TwoStepDialog';
 import { ScopeSearch } from '../../maskinporten/ScopeSearch';
 import { ScopeInfo } from '../../maskinporten/ScopeInfo';
 
@@ -44,8 +45,6 @@ export const DelegationModalContent = ({
   } = useDelegationModalContext();
   const { toParty } = usePartyRepresentation();
   const { closeAllAreas } = useAreaExpandedContextOrLocal();
-  const modalRef = useRef<HTMLDialogElement>(null);
-  const backButtonRef = useAutoFocusRef<HTMLButtonElement>();
   const restoreFocus = useRestoreFocus();
 
   const onResourceSelection = (resource?: ServiceResource, error = false) => {
@@ -69,24 +68,25 @@ export const DelegationModalContent = ({
     closeAllAreas();
   };
 
-  useEffect(() => {
-    const handleClose = () => onClosing();
-
-    if (modalRef?.current) {
-      modalRef.current.addEventListener('close', handleClose);
+  const onBack = () => {
+    const focusTargetId = packageToView?.id ?? resourceToView?.identifier;
+    if (focusTargetId) {
+      restoreFocus.requestFocus(focusTargetId);
     }
-    return () => {
-      if (modalRef?.current) {
-        modalRef.current.removeEventListener('close', handleClose);
-      }
-    };
-  }, [onClosing, modalRef]);
+    setInfoView(false);
+  };
+
+  const toPartyName = formatDisplayName({
+    fullName: toParty?.name ?? '',
+    type: toParty?.partyTypeName === PartyType.Person ? 'person' : 'company',
+  });
+  const hasDelegateAccess = (availableActions ?? []).includes(DelegationAction.DELEGATE);
+  const isRequest = (availableActions ?? []).includes(DelegationAction.REQUEST);
 
   let searchViewContent: JSX.Element | undefined;
   let infoViewContent: JSX.Element | undefined;
   let triggerButtonText: string | undefined;
-  let dialogLabel: string | undefined;
-  const hasDelegateAccess = (availableActions ?? []).includes(DelegationAction.DELEGATE);
+  let title: JSX.Element | undefined;
 
   switch (delegationType) {
     case DelegationType.AccessPackage:
@@ -109,13 +109,27 @@ export const DelegationModalContent = ({
       triggerButtonText = hasDelegateAccess
         ? t('access_packages.give_new_button')
         : t('common.request_poa');
-      dialogLabel = t('delegation_modal.aria_label.access_package');
+      title = (
+        <Trans
+          i18nKey={
+            isRequest ? 'delegation_modal.request_package' : 'delegation_modal.give_package_to_name'
+          }
+          values={{ name: toPartyName }}
+          components={{ strong: <strong /> }}
+        />
+      );
       break;
     case DelegationType.MaskinportenScope:
       searchViewContent = <ScopeSearch onSelect={onResourceSelection} />;
       infoViewContent = resourceToView && <ScopeInfo resource={resourceToView} />;
       triggerButtonText = t('maskinporten_page.add_scope_button');
-      dialogLabel = t('delegation_modal.aria_label.maskinporten');
+      title = (
+        <Trans
+          i18nKey='maskinporten_page.search_scopes_heading'
+          values={{ name: toPartyName }}
+          components={{ strong: <strong /> }}
+        />
+      );
       break;
     default:
       searchViewContent = (
@@ -134,12 +148,26 @@ export const DelegationModalContent = ({
       triggerButtonText = hasDelegateAccess
         ? t('single_rights.give_new_single_right')
         : t('delegation_modal.request.request_service');
-      dialogLabel = t('delegation_modal.aria_label.single_rights');
+      title = (
+        <Trans
+          i18nKey={
+            isRequest ? 'delegation_modal.request_service' : 'delegation_modal.give_service_to_name'
+          }
+          values={{ name: toPartyName }}
+          components={{ strong: <strong /> }}
+        />
+      );
   }
 
   return (
-    <RestoreFocusProvider restoreFocus={restoreFocus}>
-      <DsDialog.TriggerContext>
+    <TwoStepDialog
+      title={title}
+      isDetailView={infoView}
+      onBack={onBack}
+      onClose={onClosing}
+      restoreFocus={restoreFocus}
+      aria-description={t('delegation_modal.aria_description')}
+      trigger={
         <DsDialog.Trigger
           data-size='sm'
           variant='primary'
@@ -148,38 +176,9 @@ export const DelegationModalContent = ({
           <PlusIcon aria-hidden='true' />
           {triggerButtonText}
         </DsDialog.Trigger>
-        <DsDialog
-          className={classes.modalDialog}
-          closedby='any'
-          closeButton={t('common.close')}
-          onClose={onClosing}
-          ref={modalRef}
-          aria-label={dialogLabel}
-          aria-description={t('delegation_modal.aria_description')}
-        >
-          {infoView && (
-            <Button
-              ref={backButtonRef}
-              className={classes.backButton}
-              variant='tertiary'
-              data-color='neutral'
-              onClick={() => {
-                const focusTargetId = packageToView?.id ?? resourceToView?.identifier;
-                if (focusTargetId) {
-                  restoreFocus.requestFocus(focusTargetId);
-                }
-                setInfoView(false);
-              }}
-            >
-              <ArrowLeftIcon aria-hidden='true' />
-              {t('common.back')}
-            </Button>
-          )}
-          <RestoreFocusFallback>
-            <div className={classes.content}>{infoView ? infoViewContent : searchViewContent}</div>
-          </RestoreFocusFallback>
-        </DsDialog>
-      </DsDialog.TriggerContext>
-    </RestoreFocusProvider>
+      }
+    >
+      {infoView ? infoViewContent : searchViewContent}
+    </TwoStepDialog>
   );
 };

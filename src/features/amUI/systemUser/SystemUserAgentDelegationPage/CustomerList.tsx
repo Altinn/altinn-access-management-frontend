@@ -17,7 +17,6 @@ import type { AgentDelegation, AgentDelegationCustomer } from '../types';
 
 import classes from './CustomerList.module.css';
 import { formatOrgNr, isSubUnitByType } from '@/resources/utils/reporteeUtils';
-import { addAllSystemuserCustomers } from '@/resources/utils/featureFlagUtils';
 import { useIsMobileOrSmaller } from '@/resources/utils/screensizeUtils';
 
 const filterCustomerList = (
@@ -112,7 +111,7 @@ export const CustomerList = ({
             onChange={() => setIsHideAssignedChecked((prev) => !prev)}
           />
         )}
-        {onAddAllCustomers && addAllSystemuserCustomers() && list.length > 0 && (
+        {onAddAllCustomers && list.length > 0 && (
           <div className={classes.addAllCustomers}>
             <DsButton
               variant='secondary'

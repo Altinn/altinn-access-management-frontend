@@ -22,6 +22,7 @@ interface InstanceUsersAsAdminProps {
   onDelegate: (user: UserActionTarget) => void;
   onRevoke: (user: UserActionTarget) => void;
   isRevoking: boolean;
+  restoreFocusFallbackId?: string;
 }
 
 export const InstanceUsersAsAdmin = ({
@@ -31,6 +32,7 @@ export const InstanceUsersAsAdmin = ({
   onDelegate,
   onRevoke,
   isRevoking,
+  restoreFocusFallbackId,
 }: InstanceUsersAsAdminProps) => {
   const { t, i18n } = useTranslation();
   const { actingParty, fromParty } = usePartyRepresentation();
@@ -115,6 +117,7 @@ export const InstanceUsersAsAdmin = ({
       <UserSearch
         includeSelfAsChild={false}
         includeSelfAsChildOnIndirect={false}
+        restoreFocusFallbackId={restoreFocusFallbackId}
         AddUserButton={
           <AddUserButton
             resourceId={resourceId}

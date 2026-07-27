@@ -1,16 +1,15 @@
 import React from 'react';
 import { Trans, useTranslation } from 'react-i18next';
-import { Navigate } from 'react-router';
 import {
   DsAlert,
   DsHeading,
   DsParagraph,
   DsSkeleton,
-  DsTabs,
   formatDisplayName,
 } from '@altinn/altinn-components';
+import { DatabaseIcon, PersonGroupIcon } from '@navikt/aksel-icons';
+import { AmTabs } from '../common/AmTabs/AmTabs';
 
-import { clientAdministrationPageEnabled } from '@/resources/utils/featureFlagUtils';
 import {
   PartyType,
   useGetIsClientAdminQuery,
@@ -20,7 +19,6 @@ import { usePartyRepresentation } from '../common/PartyRepresentationContext/Par
 import { ClientAdministrationAgentsTab } from './ClientAdministrationAgentsTab';
 import { ClientAdministrationClientsTab } from './ClientAdministrationClientsTab';
 import classes from './ClientAdministrationPageContent.module.css';
-import { DatabaseIcon, PersonGroupIcon } from '@navikt/aksel-icons';
 import { useTabState } from '@/resources/hooks';
 import { ReporteePageHeading } from '../common/ReporteePageHeading/ReporteePageHeading';
 
@@ -28,7 +26,6 @@ const clientAdministrationTabs = ['users', 'clients'] as const;
 
 export const ClientAdministrationPageContent = () => {
   const { t } = useTranslation();
-  const pageIsEnabled = clientAdministrationPageEnabled();
   const { actingParty, isLoading: actorLoading } = usePartyRepresentation();
 
   const [activeTab, setActiveTab] = useTabState({
@@ -38,15 +35,6 @@ export const ClientAdministrationPageContent = () => {
 
   const { data: reportee, isLoading: isLoadingReportee } = useGetReporteeQuery();
   const { data: isClientAdmin, isLoading: isLoadingIsClientAdmin } = useGetIsClientAdminQuery();
-
-  if (!pageIsEnabled) {
-    return (
-      <Navigate
-        to='/not-found'
-        replace
-      />
-    );
-  }
 
   if (isLoadingIsClientAdmin) {
     return (
@@ -105,34 +93,29 @@ export const ClientAdministrationPageContent = () => {
           />
         </DsParagraph>
       </div>
-      <DsTabs
-        data-size='sm'
+      <AmTabs
         value={activeTab}
         onChange={setActiveTab}
       >
-        <DsTabs.List>
-          <DsTabs.Tab
+        <AmTabs.List>
+          <AmTabs.Tab
             value='users'
-            className={classes.tab}
-          >
-            <PersonGroupIcon aria-hidden='true' />
-            {t('client_administration_page.agents_tab_title')}
-          </DsTabs.Tab>
-          <DsTabs.Tab
+            label={t('client_administration_page.agents_tab_title')}
+            icon={<PersonGroupIcon aria-hidden='true' />}
+          />
+          <AmTabs.Tab
             value='clients'
-            className={classes.tab}
-          >
-            <DatabaseIcon aria-hidden='true' />
-            {t('client_administration_page.clients_tab_title')}
-          </DsTabs.Tab>
-        </DsTabs.List>
-        <DsTabs.Panel value='users'>
+            label={t('client_administration_page.clients_tab_title')}
+            icon={<DatabaseIcon aria-hidden='true' />}
+          />
+        </AmTabs.List>
+        <AmTabs.Panel value='users'>
           <ClientAdministrationAgentsTab isActive={activeTab === 'users'} />
-        </DsTabs.Panel>
-        <DsTabs.Panel value='clients'>
+        </AmTabs.Panel>
+        <AmTabs.Panel value='clients'>
           <ClientAdministrationClientsTab isActive={activeTab === 'clients'} />
-        </DsTabs.Panel>
-      </DsTabs>
+        </AmTabs.Panel>
+      </AmTabs>
     </>
   );
 };

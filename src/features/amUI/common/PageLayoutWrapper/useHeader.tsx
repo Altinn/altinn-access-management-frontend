@@ -14,7 +14,6 @@ import {
 } from '@/rtk/features/userInfoApi';
 import { useEffect, useState } from 'react';
 import { useUpdateSelectedLanguageMutation } from '@/rtk/features/settingsApi';
-import { displayDeletedAccountToggle } from '@/resources/utils/featureFlagUtils';
 import {
   redirectToChangeReporteeAndRedirect,
   getDefaultChangeReporteeRedirectTarget,
@@ -75,7 +74,6 @@ export const useHeader = ({
 
   useEffect(() => {
     if (
-      displayDeletedAccountToggle() &&
       !isLoadingUserProfile &&
       userProfile?.profileSettingPreference?.shouldShowDeletedEntities !== undefined
     ) {

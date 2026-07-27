@@ -225,7 +225,6 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
             var resourceServiceMock = new Mock<IResourceService>(MockBehavior.Strict);
             var instanceService = new InstanceService(
                 authenticationClientMock.Object,
-                Options.Create(new FeatureFlags { EnableDialogportenDialogLookup = true }),
                 dialogportClientMock.Object,
                 instanceClientMock.Object,
                 new Mock<ILogger<InstanceService>>().Object,
@@ -264,7 +263,6 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
 
             var instanceService = new InstanceService(
                 authenticationClientMock.Object,
-                Options.Create(new FeatureFlags { EnableDialogportenDialogLookup = true }),
                 dialogportClientMock.Object,
                 new InstanceClientMock(null, new Mock<ILogger<InstanceClientMock>>().Object, null),
                 new Mock<ILogger<InstanceService>>().Object,
@@ -314,7 +312,6 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
 
             var instanceService = new InstanceService(
                 authenticationClientMock.Object,
-                Options.Create(new FeatureFlags { EnableDialogportenDialogLookup = true }),
                 dialogportClientMock.Object,
                 new InstanceClientMock(null, new Mock<ILogger<InstanceClientMock>>().Object, null),
                 new Mock<ILogger<InstanceService>>().Object,
@@ -372,7 +369,6 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
 
             var instanceService = new InstanceService(
                 authenticationClientMock.Object,
-                Options.Create(new FeatureFlags { EnableDialogportenDialogLookup = true }),
                 dialogportClientMock.Object,
                 instanceClientMock.Object,
                 new Mock<ILogger<InstanceService>>().Object,
@@ -388,59 +384,6 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
             Assert.NotNull(actualResponse);
             Assert.Single(actualResponse);
             Assert.Null(actualResponse[0].DialogLookup);
-        }
-
-        /// <summary>
-        /// Test case: Dialogporten feature flag is disabled.
-        /// Expected: Returns OK with delegations and neither auth nor dialogporten is called.
-        /// </summary>
-        [Fact]
-        public async Task GetInstances_WhenDialogportenFeatureFlagDisabled_ReturnsDelegationsWithoutDialogLookup()
-        {
-            Guid party = Guid.Parse("cd35779b-b174-4ecc-bbef-ece13611be7f");
-            Guid from = Guid.Parse("cd35779b-b174-4ecc-bbef-ece13611be7f");
-            string resourceId = "generic-access-resource";
-
-            // Strict mocks: any call to auth or dialogporten will fail the test
-            var authenticationClientMock = new Mock<IAuthenticationClient>(MockBehavior.Strict);
-            var dialogportClientMock = new Mock<IDialogportClient>(MockBehavior.Strict);
-
-            var instanceClientMock = new Mock<IInstanceClient>();
-            instanceClientMock
-                .Setup(c => c.GetDelegatedInstances(It.IsAny<string>(), party, from, null, null, null))
-                .ReturnsAsync(
-                [
-                    new InstancePermission
-                    {
-                        Resource = new ResourceAM { RefId = resourceId },
-                        Instance = new DelegationInstance { RefId = "urn:altinn:instance-id:51599233/df333e75-5896-4254-a69f-146736eaf668" },
-                        Permissions = []
-                    }
-                ]);
-
-            var resourceServiceMock = new Mock<IResourceService>();
-            resourceServiceMock
-                .Setup(s => s.GetResource(resourceId, It.IsAny<string>()))
-                .ReturnsAsync(new ServiceResourceFE { Identifier = resourceId });
-
-            var instanceService = new InstanceService(
-                authenticationClientMock.Object,
-                Options.Create(new FeatureFlags { EnableDialogportenDialogLookup = false }),
-                dialogportClientMock.Object,
-                instanceClientMock.Object,
-                new Mock<ILogger<InstanceService>>().Object,
-                resourceServiceMock.Object);
-
-            HttpClient client = GetTestClient(instanceService);
-
-            HttpResponseMessage httpResponse = await client.GetAsync(
-                $"accessmanagement/api/v1/instances/delegation/instances?party={party}&from={from}");
-            List<InstanceDelegation> actualResponse = await httpResponse.Content.ReadFromJsonAsync<List<InstanceDelegation>>();
-
-            Assert.Equal(HttpStatusCode.OK, httpResponse.StatusCode);
-            Assert.NotNull(actualResponse);
-            Assert.Single(actualResponse);
-            Assert.All(actualResponse, d => Assert.Null(d.DialogLookup));
         }
 
         /// <summary>

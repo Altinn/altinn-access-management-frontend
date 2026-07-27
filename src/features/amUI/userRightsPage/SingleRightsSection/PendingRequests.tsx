@@ -1,16 +1,9 @@
 import React, { useRef, useState } from 'react';
-import { ArrowLeftIcon, HandshakeIcon, MinusCircleIcon } from '@navikt/aksel-icons';
-import {
-  DsButton,
-  DsDialog,
-  DsHeading,
-  formatDisplayName,
-  ListItem,
-} from '@altinn/altinn-components';
+import { HandshakeIcon, MinusCircleIcon } from '@navikt/aksel-icons';
+import { DsButton, formatDisplayName, ListItem } from '@altinn/altinn-components';
 import { ResourceList } from '../../common/ResourceList/ResourceList';
 import { useSingleRightRequests } from '../../common/DelegationModal/SingleRights/hooks/useSingleRightRequests';
 import { ServiceResource } from '@/rtk/features/singleRights/singleRightsApi';
-import classes from './PendingRequests.module.css';
 import { ResourceInfo } from '../../common/DelegationModal/SingleRights/ResourceInfo';
 import { DelegationAction } from '../../common/DelegationModal/EditModal';
 import { useTranslation } from 'react-i18next';
@@ -19,6 +12,8 @@ import { PartyType } from '@/rtk/features/userInfoApi';
 import { useIsTabletOrSmaller } from '@/resources/utils/screensizeUtils';
 import { useGetEnrichedSentResourceRequestsQuery } from '@/rtk/features/requestApi';
 import { getRequestPartyQueryParams } from '@/resources/utils/singleRightRequestUtils';
+import { useRestoreFocus, useRestoreFocusOnDataChange } from '../../common/RestoreFocus';
+import { TwoStepDialog } from '../../common/TwoStepDialog';
 
 export const PendingRequests = () => {
   const modalRef = useRef<HTMLDialogElement>(null);
@@ -87,49 +82,43 @@ export const SentRequestsModal = ({
   onClose,
   heading,
 }: SentRequestsModalProps) => {
-  const { t } = useTranslation();
   const [selectedResource, setSelectedResource] = useState<ServiceResource | null>(null);
+  const restoreFocus = useRestoreFocus();
 
   return (
-    <DsDialog
+    <TwoStepDialog
       ref={modalRef}
-      closedby='any'
+      title={heading}
+      isDetailView={!!selectedResource}
+      onBack={() => {
+        if (selectedResource) {
+          restoreFocus.requestFocus(selectedResource.identifier);
+        }
+        setSelectedResource(null);
+      }}
       onClose={() => {
         setSelectedResource(null);
         onClose();
       }}
-      className={classes.pendingRequestsModal}
+      restoreFocus={restoreFocus}
     >
       {isModalOpen && (
         <PendingRequestsList
-          heading={heading}
           selectedResource={selectedResource}
           setSelectedResource={setSelectedResource}
         />
       )}
-
-      {!selectedResource && (
-        <DsButton
-          variant='primary'
-          className={classes.closeButton}
-          onClick={() => modalRef.current?.close()}
-        >
-          {t('common.close')}
-        </DsButton>
-      )}
-    </DsDialog>
+    </TwoStepDialog>
   );
 };
 
 interface PendingRequestsListProps {
   selectedResource: ServiceResource | null;
-  heading?: string;
   setSelectedResource: (resource: ServiceResource | null) => void;
 }
 
 export const PendingRequestsList = ({
   selectedResource,
-  heading,
   setSelectedResource,
 }: PendingRequestsListProps) => {
   const { t } = useTranslation();
@@ -147,66 +136,50 @@ export const PendingRequestsList = ({
       },
     );
 
+  // Deleting a request drops its row once the list refetches; the id no longer exists, so the
+  // zone's RestoreFocusFallback catches the focus instead of letting it fall to <body>.
+  const requestFocusOnDataChange = useRestoreFocusOnDataChange(singleRightRequests);
+
   const { deleteRequest, isLoadingRequest } = useSingleRightRequests({
     canRequestRights: true,
     actingPartyUuid: actingParty?.partyUuid,
     fromPartyUuid: fromParty?.partyUuid,
+    onDeleteRequestSuccess: (resource) => requestFocusOnDataChange(resource.identifier),
   });
 
   return (
     <div>
       {selectedResource ? (
-        <>
-          <DsButton
-            variant='tertiary'
-            className={classes.backButton}
-            onClick={() => setSelectedResource(null)}
-          >
-            <ArrowLeftIcon aria-hidden='true' />
-            {t('common.back')}
-          </DsButton>
-          <ResourceInfo
-            resource={selectedResource}
-            availableActions={[DelegationAction.REQUEST]}
-          />
-        </>
+        <ResourceInfo
+          resource={selectedResource}
+          availableActions={[DelegationAction.REQUEST]}
+        />
       ) : (
-        <>
-          {heading && (
-            <DsHeading
-              data-size='xs'
-              level={1}
-              className={classes.pendingRequestsHeading}
-            >
-              {heading}
-            </DsHeading>
-          )}
-          <ResourceList
-            isLoading={isLoadingRequests}
-            size={isSmallScreen ? 'sm' : 'md'}
-            enableSearch={false}
-            resources={singleRightRequests
-              .map((x) => x.resource)
-              .filter((r): r is ServiceResource => !!r)}
-            showDetails={false}
-            onSelect={(resource) => setSelectedResource(resource)}
-            renderControls={(resource) => {
-              if (isSmallScreen) return undefined;
-              return (
-                <DsButton
-                  variant='tertiary'
-                  aria-label={t('common.delete_request_for', { poa_object: resource.title })}
-                  onClick={() => deleteRequest(resource)}
-                  disabled={isLoadingRequest(resource.identifier)}
-                  loading={isLoadingRequest(resource.identifier)}
-                >
-                  <MinusCircleIcon aria-hidden='true' />
-                  {t('common.delete')}
-                </DsButton>
-              );
-            }}
-          />
-        </>
+        <ResourceList
+          isLoading={isLoadingRequests}
+          size={isSmallScreen ? 'sm' : 'md'}
+          enableSearch={false}
+          resources={singleRightRequests
+            .map((x) => x.resource)
+            .filter((r): r is ServiceResource => !!r)}
+          showDetails={false}
+          onSelect={(resource) => setSelectedResource(resource)}
+          renderControls={(resource) => {
+            if (isSmallScreen) return undefined;
+            return (
+              <DsButton
+                variant='tertiary'
+                aria-label={t('common.delete_request_for', { poa_object: resource.title })}
+                onClick={() => deleteRequest(resource)}
+                disabled={isLoadingRequest(resource.identifier)}
+                loading={isLoadingRequest(resource.identifier)}
+              >
+                <MinusCircleIcon aria-hidden='true' />
+                {t('common.delete')}
+              </DsButton>
+            );
+          }}
+        />
       )}
     </div>
   );

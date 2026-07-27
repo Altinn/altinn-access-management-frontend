@@ -42,7 +42,7 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
         public RoleControllerTest(CustomWebApplicationFactory<RoleController> factory)
         {
             _factory = factory;
-            _client = SetupUtils.GetTestClient(factory, new FeatureFlags());
+            _client = SetupUtils.GetTestClient(factory);
             string token = PrincipalUtil.GetAccessToken("sbl.authorization");
             _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
             _client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));

@@ -4,17 +4,19 @@ import { DsSkeleton } from '@altinn/altinn-components';
 
 export const PackagePoaDetailsHeaderSkeleton: React.FC = () => (
   <>
-    <DsSkeleton
-      variant='rectangle'
-      width={50}
-      height={50}
-      className={classes.packageIcon}
-    />
-    <DsSkeleton
-      className={`${classes.pageHeading}`}
-      variant='rectangle'
-      height={50}
-    />
+    <div className={classes.headingContainerText}>
+      <DsSkeleton
+        variant='rectangle'
+        width={50}
+        height={32}
+        className={classes.packageIcon}
+      />
+      <DsSkeleton
+        className={`${classes.pageHeading}`}
+        height={32}
+        width={200}
+      />
+    </div>
     <DsSkeleton
       className={`${classes.pageDescription}`}
       variant='text'

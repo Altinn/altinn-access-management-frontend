@@ -9,6 +9,8 @@ import type {
   ServiceResource,
 } from '@/rtk/features/singleRights/singleRightsApi';
 
+import { resourceActionControlId } from '../common/DelegationModal/SingleRights/createSearchResultControlsRenderer';
+import { useRestoreFocusOnDataChange } from '../common/RestoreFocus';
 import { ScopeSearchControls } from './ScopeSearchControls';
 import { getMaskinportenScopeCount } from './scopeUtils';
 import classes from '../common/DelegationModal/SingleRights/ResourceSearch.module.css';
@@ -39,6 +41,8 @@ export const ScopeSearchResults = ({
   setCurrentPage,
 }: ScopeSearchResultsProps) => {
   const { t } = useTranslation();
+
+  const requestFocusOnDataChange = useRestoreFocusOnDataChange(delegatedResources);
 
   const isDelegated = (resourceId: string) =>
     delegatedResources?.some(
@@ -85,12 +89,16 @@ export const ScopeSearchResults = ({
                 onSelect={onSelect}
                 size='sm'
                 getHasAccess={(resource) => isDelegated(resource.identifier)}
+                getActionControlId={(resource) => resourceActionControlId(resource.identifier)}
                 renderControls={(resource) => (
                   <ScopeSearchControls
                     resource={resource}
                     hasDelegatedResource={isDelegated(resource.identifier)}
                     isDelegatedResourcesLoading={delegatedResources === undefined}
                     onSelect={onSelect}
+                    onActionSuccess={() =>
+                      requestFocusOnDataChange(resourceActionControlId(resource.identifier))
+                    }
                   />
                 )}
                 getDescriptionText={(resource) =>

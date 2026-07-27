@@ -11,6 +11,7 @@ using Altinn.AccessManagement.UI.Core.Services.Interfaces;
 using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
+using Microsoft.FeatureManagement;
 
 namespace Altinn.AccessManagement.UI.Core.Services
 {
@@ -21,7 +22,7 @@ namespace Altinn.AccessManagement.UI.Core.Services
         private readonly ILogger<IResourceService> _logger;
         private readonly IMemoryCache _memoryCache;
         private readonly IResourceRegistryClient _resourceRegistryClient;
-        private readonly FeatureFlags _featureFlags;
+        private readonly IFeatureManager _featureManager;
 
         /// <summary>
         ///     Initializes a new instance of the <see cref="ResourceService" /> class for testing purposes.
@@ -37,19 +38,19 @@ namespace Altinn.AccessManagement.UI.Core.Services
         /// <param name="resourceRegistryClient">the handler for resource registry client</param>
         /// <param name="cacheConfig">the handler for cache configuration</param>
         /// <param name="memoryCache">the handler for cache</param>
-        /// <param name="featureFlags">the handler for env spesific logic flags</param>
+        /// <param name="featureManager">the feature manager holding the current feature flag values</param>
         public ResourceService(
             ILogger<IResourceService> logger,
             IResourceRegistryClient resourceRegistryClient,
             IMemoryCache memoryCache,
             IOptions<CacheConfig> cacheConfig,
-            IOptions<FeatureFlags> featureFlags)
+            IFeatureManager featureManager)
         {
             _logger = logger;
             _resourceRegistryClient = resourceRegistryClient;
             _memoryCache = memoryCache;
             _cacheConfig = cacheConfig.Value;
-            _featureFlags = featureFlags.Value;
+            _featureManager = featureManager;
         }
 
         /// <inheritdoc />
@@ -61,7 +62,7 @@ namespace Altinn.AccessManagement.UI.Core.Services
                 List<ServiceResource> resourceList = resources.FindAll(r => IncludeInSearch(r, searchParams, resourceTypes));
                 List<ServiceResourceFE> resourcesFE = MapResourceToFrontendModel(resourceList, languageCode);
 
-                bool displayPopularServicesOnly = _featureFlags.DisplayPopularSingleRightsServices;
+                bool displayPopularServicesOnly = await _featureManager.IsEnabledAsync(FeatureFlags.DisplayPopularSingleRightsServices);
                 if (string.IsNullOrEmpty(searchParams.SearchString) &&
                     (searchParams.ROFilters == null || searchParams.ROFilters.Length == 0) &&
                     displayPopularServicesOnly &&

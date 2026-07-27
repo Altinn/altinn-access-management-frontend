@@ -1,19 +1,28 @@
-.requestPageTabs {
-  margin-top: var(--ds-size-4);
-  margin-bottom: var(--ds-size-6);
-}
-
-.requestTab {
-  display: flex;
-  gap: var(--ds-size-2);
-}
-
 .errorWrapper {
   margin-bottom: var(--ds-size-4);
 }
 
 .requestItemBadge {
   color: var(--ds-color-text-subtle);
+}
+
+.handledSection {
+  margin-top: var(--ds-size-8);
+}
+
+.handledDescription {
+  margin-top: var(--ds-size-4);
+  margin-bottom: var(--ds-size-4);
+}
+
+.showMoreButtonContainer {
+  display: flex;
+  justify-content: center;
+  margin-top: var(--ds-size-5);
+}
+
+.showMoreButton {
+  min-width: 120px;
 }
 
 @media only screen and (max-width: 769px) {

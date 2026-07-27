@@ -33,12 +33,27 @@ interface PackageUserModalProps {
   accessPackage?: AccessPackage;
   availableActions: DelegationAction[];
   isActionLoading: boolean;
+  isFetching?: boolean;
   onDelegate: (user: UserActionTarget) => void;
   onRevoke: (user: UserActionTarget) => void;
+  // Called when the dialog closes, with the user it was showing, so the caller can restore focus to
+  // the originating list row (or its fallback if the row was just revoked away).
+  onClosed?: (user: UserActionTarget) => void;
 }
 
 export const PackageUserModal = forwardRef<PackageUserModalHandle, PackageUserModalProps>(
-  ({ accessPackage, availableActions, isActionLoading, onDelegate, onRevoke }, ref) => {
+  (
+    {
+      accessPackage,
+      availableActions,
+      isActionLoading,
+      isFetching,
+      onDelegate,
+      onRevoke,
+      onClosed,
+    },
+    ref,
+  ) => {
     const { fromParty } = usePartyRepresentation();
     const dialogRef = useRef<HTMLDialogElement>(null);
     const [selectedUser, setSelectedUser] = useState<UserActionTarget | null>(null);
@@ -88,6 +103,7 @@ export const PackageUserModal = forwardRef<PackageUserModalHandle, PackageUserMo
                 inheritedStatus: selectedUserInheritedStatus,
                 availableActions: selectedUserAccessIsInherited ? [] : availableActions,
                 isLoading: isActionLoading,
+                isFetching,
                 isSuccess: actionSuccess,
                 onDelegate: () => onDelegate(selectedUser),
                 onRevoke: () => onRevoke(selectedUser),
@@ -95,6 +111,9 @@ export const PackageUserModal = forwardRef<PackageUserModalHandle, PackageUserMo
             : undefined
         }
         onClose={() => {
+          if (selectedUser) {
+            onClosed?.(selectedUser);
+          }
           setSelectedUser(null);
           setActionSuccess(false);
         }}

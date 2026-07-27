@@ -1,13 +1,13 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { DsAlert, DsButton } from '@altinn/altinn-components';
-import type { EnrichedResourceRequest } from '@/rtk/features/requestApi';
+import type { EnrichedRequest } from '@/rtk/features/requestApi';
 import { PartyRepresentationProvider } from '../../common/PartyRepresentationContext/PartyRepresentationContext';
 import { DraftRequestBody } from './DraftRequestBody';
 import classes from './DraftRequestPage.module.css';
 
 interface SingleDraftRequestViewProps {
-  request: EnrichedResourceRequest;
+  request: EnrichedRequest;
   fromName: string;
   partyUuid: string;
   onConfirmRequest: () => void;

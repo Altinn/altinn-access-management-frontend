@@ -1,6 +1,7 @@
 import pageClasses from './PackagePoaDetailsPage.module.css';
 import headerClasses from './PackagePoaDetailsHeader.module.css';
-import { DsAlert, DsTabs } from '@altinn/altinn-components';
+import { DsAlert } from '@altinn/altinn-components';
+import { AmTabs } from '../common/AmTabs/AmTabs';
 import { Link, useParams, useSearchParams } from 'react-router';
 import { usePartyRepresentation } from '../common/PartyRepresentationContext/PartyRepresentationContext';
 import { useGetPackagePermissionDetailsQuery } from '@/rtk/features/accessPackageApi';
@@ -15,6 +16,7 @@ import { FilesIcon, PersonGroupIcon } from '@navikt/aksel-icons';
 import { amUIPath } from '@/routes/paths/amUIPath';
 import { useDocumentTitle } from '@/resources/hooks/useDocumentTitle';
 import { useTabState } from '@/resources/hooks';
+import { RestoreFocusProvider, useRestoreFocus } from '../common/RestoreFocus';
 
 export const PackagePoaDetails = () => {
   const { id } = useParams<{ id: string }>();
@@ -22,6 +24,9 @@ export const PackagePoaDetails = () => {
   const { t, i18n } = useTranslation();
   const { fromParty } = usePartyRepresentation();
   const { canDelegatePackage } = useAccessPackageDelegationCheck();
+  // One zone for the whole page so the users tab can restore focus to the page heading (rendered in
+  // the header, outside the tabs) after a revoke. The services tab only registers passive targets.
+  const restoreFocus = useRestoreFocus();
 
   const {
     data: accessPackage,
@@ -66,7 +71,7 @@ export const PackagePoaDetails = () => {
   }
 
   return (
-    <>
+    <RestoreFocusProvider restoreFocus={restoreFocus}>
       <div className={headerClasses.headingContainer}>
         <PackagePoaDetailsHeader
           isLoading={isLoading}
@@ -82,23 +87,24 @@ export const PackagePoaDetails = () => {
           }
         />
       </div>
-      <DsTabs
+      <AmTabs
         defaultValue='users'
-        data-size='sm'
         value={chosenTab}
         onChange={setChosenTab}
       >
-        <DsTabs.List>
-          <DsTabs.Tab value='users'>
-            <PersonGroupIcon aria-hidden='true' />
-            {t('package_poa_details_page.users_tab_title')}
-          </DsTabs.Tab>
-          <DsTabs.Tab value='services'>
-            <FilesIcon aria-hidden='true' />
-            {t('package_poa_details_page.services_tab_title')}
-          </DsTabs.Tab>
-        </DsTabs.List>
-        <DsTabs.Panel
+        <AmTabs.List>
+          <AmTabs.Tab
+            value='users'
+            label={t('package_poa_details_page.users_tab_title')}
+            icon={<PersonGroupIcon aria-hidden='true' />}
+          />
+          <AmTabs.Tab
+            value='services'
+            label={t('package_poa_details_page.services_tab_title')}
+            icon={<FilesIcon aria-hidden='true' />}
+          />
+        </AmTabs.List>
+        <AmTabs.Panel
           className={pageClasses.tabContent}
           value='users'
         >
@@ -109,8 +115,8 @@ export const PackagePoaDetails = () => {
               isFetching={isFetching}
             />
           </div>
-        </DsTabs.Panel>
-        <DsTabs.Panel
+        </AmTabs.Panel>
+        <AmTabs.Panel
           className={pageClasses.tabContent}
           value='services'
         >
@@ -121,8 +127,8 @@ export const PackagePoaDetails = () => {
               noResourcesText={t('package_poa_details_page.services_tab.no_resources')}
             />
           </div>
-        </DsTabs.Panel>
-      </DsTabs>
-    </>
+        </AmTabs.Panel>
+      </AmTabs>
+    </RestoreFocusProvider>
   );
 };

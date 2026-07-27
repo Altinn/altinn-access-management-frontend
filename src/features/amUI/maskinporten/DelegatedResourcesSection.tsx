@@ -14,6 +14,11 @@ import { ScopeList } from './ScopeList';
 import { getMaskinportenScopes } from './scopeUtils';
 import classes from './DelegatedResourcesSection.module.css';
 
+// Durable anchor that focus falls back to when an acted-on resource row is gone (e.g. after a
+// revoke). The heading sits right above the list, so it's a sensible landing spot. The owning page
+// passes this as the fallbackId to requestFocus; see RestoreFocus.
+export const MASKINPORTEN_RESOURCES_HEADING_ID = 'maskinporten_delegated_resources_heading';
+
 interface DelegatedResourcesSectionProps {
   resourcePermissions: ResourceDelegation[] | undefined;
   isFetching: boolean;
@@ -77,6 +82,7 @@ export const DelegatedResourcesSection = ({
       <DsHeading
         level={2}
         data-size='xs'
+        id={MASKINPORTEN_RESOURCES_HEADING_ID}
       >
         {t('maskinporten_page.delegated_resources_heading', { count: delegatedResources.length })}
       </DsHeading>

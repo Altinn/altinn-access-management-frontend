@@ -10,6 +10,8 @@ import {
   getNonDeletableReasons,
   getDeletionStatus,
   getTextKeysForDeletionStatus,
+  getViaParties,
+  VIA_ROLE_REASON,
   DeletionTarget,
   DeletionLevel,
   RIGHTHOLDER_ROLE,
@@ -18,12 +20,17 @@ import {
 } from './deletionModalUtils';
 import { RolePermission } from '@/rtk/features/roleApi';
 import { Entity } from '@/dataObjects/dtos/Common';
-import { CRA_PROVIDER_CODE, ECC_PROVIDER_CODE } from '../UserRoles/useRoleMetadata';
+import {
+  A2_PROVIDER_CODE,
+  CRA_PROVIDER_CODE,
+  ECC_PROVIDER_CODE,
+} from '../UserRoles/useRoleMetadata';
 
 type rolePermissionSetting = {
   code: string;
   via: (string | null)[];
   providerCode?: string;
+  isRevocable?: boolean;
 };
 
 const defaultEntity: Entity = {
@@ -40,6 +47,7 @@ const mockRolePermissions = (settings: rolePermissionSetting[]): RolePermission[
       code: setting.code,
       name: `Role Name ${index}`,
       description: `Description for role ${index}`,
+      isRevocable: setting.isRevocable,
       provider: setting.providerCode
         ? {
             id: `provider-id-${index}`,
@@ -49,11 +57,12 @@ const mockRolePermissions = (settings: rolePermissionSetting[]): RolePermission[
         : undefined,
     },
     permissions:
-      setting.via?.map((via, permIndex) => ({
+      setting.via?.map((via) => ({
         to: defaultEntity,
         from: defaultEntity,
-        via: via ? { ...defaultEntity, id: `via-entity-id-${permIndex}` } : undefined,
+        via: via ? { ...defaultEntity, id: via } : undefined,
         role: null,
+        reason: null,
       })) || [],
   }));
   return mockedPerms;
@@ -203,6 +212,52 @@ describe('getDeletionStatus', () => {
       expected: { target: DeletionTarget.User, level: DeletionLevel.None },
     },
     {
+      description: 'user view, only revocable A2 roles, should target User and allow Full deletion',
+      rolePermissions: mockRolePermissions([
+        { code: 'a0282', via: [null], providerCode: A2_PROVIDER_CODE, isRevocable: true },
+      ]),
+      viewingYourself: false,
+      reporteeView: false,
+      expected: { target: DeletionTarget.User, level: DeletionLevel.Full },
+    },
+    {
+      description:
+        'user view, only non-revocable A2 role, should target User and allow No deletion',
+      rolePermissions: mockRolePermissions([
+        { code: 'a0282', via: [null], providerCode: A2_PROVIDER_CODE, isRevocable: false },
+      ]),
+      viewingYourself: false,
+      reporteeView: false,
+      expected: { target: DeletionTarget.User, level: DeletionLevel.None },
+    },
+    {
+      description:
+        'user view, revocable A2 role and ER role, should target User and allow Limited deletion',
+      rolePermissions: mockRolePermissions([
+        { code: 'a0282', via: [null], providerCode: A2_PROVIDER_CODE, isRevocable: true },
+        { code: 'dagl', via: ['via-org'], providerCode: ECC_PROVIDER_CODE },
+      ]),
+      viewingYourself: false,
+      reporteeView: false,
+      expected: { target: DeletionTarget.User, level: DeletionLevel.Limited },
+    },
+    {
+      description:
+        'user view, only Rightholder role inherited via another party, should target User and allow No deletion',
+      rolePermissions: mockRolePermissions([{ code: RIGHTHOLDER_ROLE, via: ['via-org'] }]),
+      viewingYourself: false,
+      reporteeView: false,
+      expected: { target: DeletionTarget.User, level: DeletionLevel.None },
+    },
+    {
+      description:
+        'user view, Rightholder role with both direct and inherited access, should target User and allow Limited deletion',
+      rolePermissions: mockRolePermissions([{ code: RIGHTHOLDER_ROLE, via: [null, 'via-org'] }]),
+      viewingYourself: false,
+      reporteeView: false,
+      expected: { target: DeletionTarget.User, level: DeletionLevel.Limited },
+    },
+    {
       description:
         'all roles are Rightholder across multiple rolePermissions, should allow Full deletion (user view)',
       rolePermissions: [
@@ -241,9 +296,9 @@ describe('getNonDeletableReasons', () => {
     expect(getNonDeletableReasons(rolePermissions)).toEqual([]);
   });
 
-  it('returns no reasons when all access is inherited', () => {
+  it('returns via role reason when all access is inherited through another party', () => {
     const rolePermissions = mockRolePermissions([{ code: RIGHTHOLDER_ROLE, via: ['via-org'] }]);
-    expect(getNonDeletableReasons(rolePermissions)).toEqual([]);
+    expect(getNonDeletableReasons(rolePermissions)).toEqual([VIA_ROLE_REASON]);
   });
 
   it('returns ER role reason for non-rightholder, non-agent roles', () => {
@@ -270,12 +325,37 @@ describe('getNonDeletableReasons', () => {
       { code: 'dagl', via: ['via-org'], providerCode: ECC_PROVIDER_CODE },
       { code: AGENT_ROLE, via: ['via-org'] },
       { code: 'role-code', via: ['via-org'], providerCode: CRA_PROVIDER_CODE },
+      { code: RIGHTHOLDER_ROLE, via: ['via-org'] },
     ]);
     expect(getNonDeletableReasons(rolePermissions)).toEqual([
       ER_ROLE_REASON,
       AGENT_ROLE_REASON,
       GUARDIANSHIP_ROLE_REASON,
+      VIA_ROLE_REASON,
     ]);
+  });
+});
+
+describe('getViaParties', () => {
+  it('returns unique via parties from inherited Rightholder access', () => {
+    const rolePermissions = mockRolePermissions([
+      { code: RIGHTHOLDER_ROLE, via: ['via-org', 'via-org', null] },
+    ]);
+    const viaParties = getViaParties(rolePermissions);
+    expect(viaParties).toHaveLength(1);
+    expect(viaParties[0].id).toBe('via-org');
+  });
+
+  it('ignores via parties on other roles than Rightholder', () => {
+    const rolePermissions = mockRolePermissions([
+      { code: 'dagl', via: ['via-org'], providerCode: ECC_PROVIDER_CODE },
+      { code: AGENT_ROLE, via: ['via-org'] },
+    ]);
+    expect(getViaParties(rolePermissions)).toEqual([]);
+  });
+
+  it('returns empty list when rolePermissions is undefined', () => {
+    expect(getViaParties(undefined)).toEqual([]);
   });
 });
 
@@ -413,7 +493,7 @@ describe('getDeleteUserDialogModel', () => {
     expect(model.partialConfirmationMessageKey).toBe(
       'delete_user.yourself_partial_confirmation_message',
     );
-    expect(model.nonDeletableReasons).toEqual([ER_ROLE_REASON, AGENT_ROLE_REASON]);
+    expect(model.nonDeletableReasons).toEqual([ER_ROLE_REASON, AGENT_ROLE_REASON, VIA_ROLE_REASON]);
     expect(model.textKeys.headingKey).toBe('delete_user.yourself_limited_deletion_heading');
   });
 

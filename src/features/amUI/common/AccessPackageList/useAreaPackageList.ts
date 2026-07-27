@@ -77,6 +77,7 @@ export const useAreaPackageList = ({
   const {
     data: activeDelegations,
     isLoading: loadingDelegations,
+    isFetching: fetchingDelegations,
     error: activeDelegationsError,
   } = useGetUserDelegationsQuery(
     {
@@ -184,6 +185,7 @@ export const useAreaPackageList = ({
     loadingPackageAreas,
     fetchingSearch,
     loadingDelegations,
+    fetchingDelegations,
     assignedAreas,
     availableAreas,
     allPackageAreas,

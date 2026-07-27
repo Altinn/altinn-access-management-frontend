@@ -69,6 +69,7 @@ export const AccessPackageList = ({
     loadingPackageAreas,
     fetchingSearch,
     loadingDelegations,
+    fetchingDelegations,
     assignedAreas,
     availableAreas,
     allPackageAreas,
@@ -94,6 +95,7 @@ export const AccessPackageList = ({
     isLoadingRequest,
     isLoading: isActionLoading,
   } = useAccessPackageActions({
+    snackbarBusy: fetchingDelegations,
     onDelegateSuccess: (accessPackage, toParty) => {
       requestFocusOnDataChange(packageActionControlId(accessPackage.id));
       onDelegateSuccess?.(accessPackage, toParty);

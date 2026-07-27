@@ -1,5 +1,5 @@
-import { Trans, useTranslation } from 'react-i18next';
-import { DsHeading, DsParagraph, formatDisplayName } from '@altinn/altinn-components';
+import { useTranslation } from 'react-i18next';
+import { DsParagraph } from '@altinn/altinn-components';
 
 import type { AccessPackage } from '@/rtk/features/accessPackageApi';
 import type { Party } from '@/rtk/features/lookupApi';
@@ -9,7 +9,6 @@ import { useDelegationModalContext } from '../DelegationModalContext';
 import { DelegationAction } from '../EditModal';
 
 import classes from './PackageSearch.module.css';
-import { PartyType } from '@/rtk/features/userInfoApi';
 import { DebouncedSearchField } from '../../DebouncedSearchField/DebouncedSearchField';
 import { AccessPackageInfoPopover } from '../../AccessPackageInfoPopover/AccessPackageInfoPopover';
 
@@ -32,25 +31,6 @@ export const PackageSearch = ({
   return (
     toParty && (
       <div className={classes.container}>
-        <DsHeading
-          level={2}
-          data-size='sm'
-        >
-          <Trans
-            i18nKey={
-              availableActions?.includes(DelegationAction.REQUEST)
-                ? 'delegation_modal.request_package'
-                : 'delegation_modal.give_package_to_name'
-            }
-            values={{
-              name: formatDisplayName({
-                fullName: toParty.name,
-                type: toParty.partyTypeName === PartyType.Person ? 'person' : 'company',
-              }),
-            }}
-            components={{ strong: <strong /> }}
-          />
-        </DsHeading>
         <div className={classes.description}>
           <DsParagraph>{t('delegation_modal.package_delegation_description')}</DsParagraph>
           <AccessPackageInfoPopover />

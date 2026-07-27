@@ -3,6 +3,7 @@ import { Breadcrumbs as AcBreadcrumbs, DsSkeleton } from '@altinn/altinn-compone
 import { Link } from 'react-router';
 import { useTranslation } from 'react-i18next';
 import { amUIPath, ConsentPath, SystemUserPath } from '@/routes/paths';
+import { getAltinnStartPageUrl } from '@/resources/utils/pathUtils';
 
 export type BreadcrumbItem = { label?: string; href?: string };
 
@@ -72,19 +73,32 @@ interface BreadcrumbsProps {
 }
 
 export const Breadcrumbs = ({ items, lastBreadcrumb }: BreadcrumbsProps) => {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
 
+  const start = { label: 'common.start', href: getAltinnStartPageUrl(i18n.language) };
   const last = lastBreadcrumb ? [lastBreadcrumb] : [];
-  const breadcrumbs: BreadcrumbItem[] = [...items.map((item) => BreadcrumbConfig[item]), ...last];
+  const breadcrumbs: BreadcrumbItem[] = [
+    start,
+    ...items.map((item) => BreadcrumbConfig[item]),
+    ...last,
+  ];
   const breadcrumbItems = breadcrumbs.map((item) => {
+    const isExternal = item.href?.startsWith('http');
     return {
       label: item.label ? t(item.label) : <DsSkeleton variant='text'>xxxxxxxxxxxxxx</DsSkeleton>,
-      as: (props: ComponentPropsWithoutRef<typeof Link>) => (
-        <Link
-          {...props}
-          to={item.href ?? ''}
-        />
-      ),
+      as: isExternal
+        ? (props: ComponentPropsWithoutRef<'a'>) => (
+            <a
+              {...props}
+              href={item.href}
+            />
+          )
+        : (props: ComponentPropsWithoutRef<typeof Link>) => (
+            <Link
+              {...props}
+              to={item.href ?? ''}
+            />
+          ),
     };
   });
 

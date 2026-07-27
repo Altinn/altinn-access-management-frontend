@@ -2,30 +2,24 @@ import React from 'react';
 import { useTranslation } from 'react-i18next';
 import {
   AccessPackageListItem,
-  DsButton,
   DsDialog,
   DsHeading,
   ResourceListItem,
   List,
   DsSkeleton,
 } from '@altinn/altinn-components';
-import { ArrowLeftIcon } from '@navikt/aksel-icons';
 
-import { getButtonIconSize } from '@/resources/utils';
+import type { PackageResource } from '@/rtk/features/accessPackageApi';
 import type { ServiceResource } from '@/rtk/features/singleRights/singleRightsApi';
 import { useProviderLogoUrl } from '@/resources/hooks/useProviderLogoUrl';
 
 import type { SystemUserAccessPackage } from '../../types';
+import type { ExtendedAccessPackage } from '@/features/amUI/common/AccessPackageList/useAreaPackageList';
 
 import classes from './RightsList.module.css';
-import { AccessPackageInfo } from './AccessPackageInfo';
+import { PackageHeader } from '@/features/amUI/common/DelegationModal/AccessPackages/PackageHeader';
+import { PackageMeta } from '@/features/amUI/common/DelegationModal/AccessPackages/PackageMeta';
 import { ResourceDetails } from './ResourceDetails';
-import {
-  RestoreFocusFallback,
-  RestoreFocusProvider,
-  useRestoreFocus,
-} from '@/features/amUI/common/RestoreFocus';
-import { useAutoFocusRef } from '@/resources/hooks/useAutoFocusRef';
 
 interface RightsListProps {
   resources: ServiceResource[];
@@ -34,6 +28,35 @@ interface RightsListProps {
   isLoading?: boolean;
   headingLevel?: 2 | 3 | 4;
 }
+
+const mapSystemUserAccessPackageToExtended = (
+  accessPackage: SystemUserAccessPackage,
+): ExtendedAccessPackage => ({
+  ...accessPackage,
+  resources: accessPackage.resources.map(
+    (resource): PackageResource => ({
+      id: resource.identifier,
+      identifier: resource.identifier,
+      name: resource.title,
+      title: resource.title,
+      description: resource.description ?? '',
+      refId: resource.identifier,
+      provider: {
+        id: '',
+        name: resource.resourceOwnerName,
+        refId: '',
+        logoUrl: resource.resourceOwnerLogoUrl,
+        code: '',
+        typeId: '',
+      },
+      resourceOwnerName: resource.resourceOwnerName,
+      resourceOwnerLogoUrl: resource.resourceOwnerLogoUrl,
+      resourceOwnerOrgcode: resource.resourceOwnerOrgcode,
+      resourceOwnerOrgNumber: resource.resourceOwnerOrgNumber,
+      resourceOwnerType: '',
+    }),
+  ),
+});
 
 export const RightsList = ({
   resources,
@@ -45,12 +68,10 @@ export const RightsList = ({
   const { t } = useTranslation();
   const { getProviderLogoUrl } = useProviderLogoUrl();
   const modalRef = React.useRef<HTMLDialogElement>(null);
-  const restoreFocus = useRestoreFocus();
-  const backButtonRef = useAutoFocusRef<HTMLButtonElement>();
 
   const [selectedResource, setSelectedResource] = React.useState<ServiceResource | null>(null);
   const [selectedAccessPackage, setSelectedAccessPackage] =
-    React.useState<SystemUserAccessPackage | null>(null);
+    React.useState<ExtendedAccessPackage | null>(null);
 
   const onSelectResource = (resource: ServiceResource): void => {
     setSelectedResource(resource);
@@ -58,7 +79,7 @@ export const RightsList = ({
   };
 
   const onSelectAccessPackage = (accessPackage: SystemUserAccessPackage): void => {
-    setSelectedAccessPackage(accessPackage);
+    setSelectedAccessPackage(mapSystemUserAccessPackageToExtended(accessPackage));
     modalRef.current?.showModal();
   };
 
@@ -122,7 +143,7 @@ export const RightsList = ({
               <AccessPackageListItem
                 key={accessPackage.id}
                 id={accessPackage.id}
-                titleAs='div'
+                titleAs='span'
                 size='md'
                 name={accessPackage.name}
                 description={
@@ -160,7 +181,7 @@ export const RightsList = ({
                   key={resource.identifier}
                   id={resource.identifier}
                   as='button'
-                  titleAs='div'
+                  titleAs='span'
                   size='md'
                   ownerLogoUrl={emblem ?? resource.resourceOwnerLogoUrl}
                   ownerLogoUrlAlt={resource.resourceOwnerName ?? ''}
@@ -173,45 +194,20 @@ export const RightsList = ({
           </List>
         </div>
       )}
-      <RestoreFocusProvider restoreFocus={restoreFocus}>
-        <DsDialog
-          ref={modalRef}
-          onClose={closeModal}
-          closedby='any'
-        >
-          {selectedAccessPackage && selectedResource && (
-            <DsButton
-              ref={backButtonRef}
-              variant='tertiary'
-              data-color='neutral'
-              data-size='sm'
-              className={classes.backButton}
-              onClick={() => {
-                const focusTargetId = selectedResource.identifier;
-                if (focusTargetId) {
-                  restoreFocus.requestFocus(focusTargetId);
-                }
-                setSelectedResource(null);
-              }}
-            >
-              <ArrowLeftIcon
-                fontSize={getButtonIconSize(true)}
-                aria-hidden='true'
-              />
-              {t('common.back')}
-            </DsButton>
-          )}
-          <RestoreFocusFallback>
-            {selectedAccessPackage && !selectedResource && (
-              <AccessPackageInfo
-                accessPackage={selectedAccessPackage}
-                onSelectResource={(resource: ServiceResource) => setSelectedResource(resource)}
-              />
-            )}
-          </RestoreFocusFallback>
-          {selectedResource && <ResourceDetails resource={selectedResource} />}
-        </DsDialog>
-      </RestoreFocusProvider>
+
+      <DsDialog
+        ref={modalRef}
+        onClose={closeModal}
+        closedby='any'
+      >
+        {selectedAccessPackage && (
+          <div data-size='sm'>
+            <PackageHeader name={selectedAccessPackage.name} />
+            <PackageMeta accessPackage={selectedAccessPackage} />
+          </div>
+        )}
+        {selectedResource && <ResourceDetails resource={selectedResource} />}
+      </DsDialog>
     </div>
   );
 };

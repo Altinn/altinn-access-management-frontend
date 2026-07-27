@@ -2,10 +2,6 @@ import * as React from 'react';
 import { useTranslation } from 'react-i18next';
 import { useParams } from 'react-router';
 
-import {
-  displayInstanceDelegation,
-  useRerouteIfNotConfetti,
-} from '@/resources/utils/featureFlagUtils';
 import { getCookie } from '@/resources/Cookie/CookieMethods';
 import { amUIPath } from '@/routes/paths';
 import { PageWrapper } from '@/components';
@@ -37,7 +33,6 @@ import { useBackUrl } from '@/resources/hooks/useBackUrl';
 export const UserRightsPage = () => {
   const { t } = useTranslation();
   const { id } = useParams();
-  const instanceDelegationEnabled = displayInstanceDelegation();
   const { data: isHovedadmin, isLoading: isHovedadminLoading } = useGetIsHovedadminQuery();
   const { data: currentUser, isLoading: currentUserIsLoading } = useGetPartyFromLoggedInUserQuery();
   const backUrl = useBackUrl(`/${amUIPath.Users}`);
@@ -48,10 +43,6 @@ export const UserRightsPage = () => {
       : getCookie('AltinnPartyUuid');
 
   useDocumentTitle(t('user_rights_page.page_title'));
-
-  useRerouteIfNotConfetti();
-
-  const { displayRoles } = window.featureFlags;
 
   return (
     <PageWrapper>
@@ -70,16 +61,13 @@ export const UserRightsPage = () => {
               backUrl={backUrl}
               contentActions={<DeleteUserModal direction='to' />}
             >
-              <UserPageHeader
-                direction='to'
-                displayRoles={displayRoles}
-              />
+              <UserPageHeader direction='to' />
               <RightsTabs
                 packagesPanel={<AccessPackageSection />}
                 singleRightsPanel={<SingleRightsSection />}
                 roleAssignmentsPanel={<RoleSection />}
                 guardianshipsPanel={<GuardianshipSection />}
-                instancesPanel={instanceDelegationEnabled ? <InstanceSection /> : null}
+                instancesPanel={<InstanceSection />}
               />
             </PageContainer>
           </DelegationModalProvider>

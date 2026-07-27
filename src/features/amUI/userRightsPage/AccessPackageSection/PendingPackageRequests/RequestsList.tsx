@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
-import { ArrowLeftIcon, MinusCircleIcon } from '@navikt/aksel-icons';
-import { Button, DsButton, DsHeading, List, useSnackbar } from '@altinn/altinn-components';
+import { MinusCircleIcon } from '@navikt/aksel-icons';
+import { Button, List, useSnackbar } from '@altinn/altinn-components';
 import { useTranslation } from 'react-i18next';
 import { usePartyRepresentation } from '../../../common/PartyRepresentationContext/PartyRepresentationContext';
 import { PartyType } from '@/rtk/features/userInfoApi';
@@ -9,23 +9,20 @@ import {
   useWithdrawRequestMutation,
   type EnrichedPackageRequest,
 } from '@/rtk/features/requestApi';
-import { useAutoFocusRef } from '@/resources/hooks/useAutoFocusRef';
+import { useRestoreFocusOnDataChange } from '../../../common/RestoreFocus';
 import { getRequestPartyQueryParams } from '@/resources/utils/singleRightRequestUtils';
 import { useIsTabletOrSmaller } from '@/resources/utils/screensizeUtils';
 import { PackageItem } from '../../../common/AccessPackageList/PackageItem';
 import { SkeletonAccessPackageList } from '../../../common/AccessPackageList/SkeletonAccessPackageList';
 import { AccessPackageInfo } from '../../../common/DelegationModal/AccessPackages/AccessPackageInfo';
 import { DelegationAction } from '../../../common/DelegationModal/EditModal';
-import classes from './Requests.module.css';
 
 interface PendingPackageRequestsListProps {
-  heading?: string;
   selectedRequest: EnrichedPackageRequest | null;
   setSelectedRequest: (request: EnrichedPackageRequest | null) => void;
 }
 
 export const PendingPackageRequestsList = ({
-  heading,
   selectedRequest,
   setSelectedRequest,
 }: PendingPackageRequestsListProps) => {
@@ -33,8 +30,6 @@ export const PendingPackageRequestsList = ({
   const isSmallScreen = useIsTabletOrSmaller();
   const { actingParty, fromParty } = usePartyRepresentation();
   const { openSnackbar } = useSnackbar();
-  const headingRef = useAutoFocusRef<HTMLHeadingElement>();
-  const backButtonRef = useAutoFocusRef<HTMLButtonElement>();
 
   const [loadingByRequestId, setLoadingByRequestId] = useState<Record<string, boolean>>({});
 
@@ -58,6 +53,10 @@ export const PendingPackageRequestsList = ({
 
   const [withdrawRequest] = useWithdrawRequestMutation();
 
+  // Deleting a request drops its row once the list refetches; the id no longer exists, so the
+  // zone's RestoreFocusFallback catches the focus instead of letting it fall to <body>.
+  const requestFocusOnDataChange = useRestoreFocusOnDataChange(enrichedRequests);
+
   const handleDelete = async (request: EnrichedPackageRequest) => {
     setLoadingByRequestId((prev) => ({ ...prev, [request.id]: true }));
     try {
@@ -65,6 +64,7 @@ export const PendingPackageRequestsList = ({
         party: actingParty?.partyUuid ?? '',
         id: request.id,
       }).unwrap();
+      requestFocusOnDataChange(request.package?.id ?? request.id);
       openSnackbar({
         message: t('delegation_modal.request.withdraw_request_success', {
           resource: request.package?.name,
@@ -85,70 +85,44 @@ export const PendingPackageRequestsList = ({
   return (
     <div>
       {selectedRequest ? (
-        <>
-          <DsButton
-            ref={backButtonRef}
-            variant='tertiary'
-            className={classes.backButton}
-            onClick={() => setSelectedRequest(null)}
-          >
-            <ArrowLeftIcon aria-hidden='true' />
-            {t('common.back')}
-          </DsButton>
-          <AccessPackageInfo
-            accessPackage={selectedRequest.package}
-            availableActions={[DelegationAction.REQUEST]}
-          />
-        </>
+        <AccessPackageInfo
+          accessPackage={selectedRequest.package}
+          availableActions={[DelegationAction.REQUEST]}
+        />
+      ) : isLoading ? (
+        <SkeletonAccessPackageList />
       ) : (
-        <>
-          {heading && (
-            <DsHeading
-              ref={headingRef}
-              tabIndex={-1}
-              data-size='xs'
-              level={1}
-              className={classes.heading}
-            >
-              {heading}
-            </DsHeading>
-          )}
-          {isLoading ? (
-            <SkeletonAccessPackageList />
-          ) : (
-            <List>
-              {enrichedRequests.map((req) => (
-                <PackageItem
-                  key={req.id}
-                  pkg={req.package}
-                  partyType={fromParty?.partyTypeName ?? PartyType.Organization}
-                  as='button'
-                  onSelect={() => setSelectedRequest(req)}
-                  controls={
-                    isSmallScreen ? undefined : (
-                      <Button
-                        variant='tertiary'
-                        data-size='sm'
-                        aria-label={t('common.delete_request_for', {
-                          poa_object: req.package?.name,
-                        })}
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          handleDelete(req);
-                        }}
-                        disabled={loadingByRequestId[req.id]}
-                        loading={loadingByRequestId[req.id]}
-                      >
-                        <MinusCircleIcon aria-hidden='true' />
-                        {t('common.delete')}
-                      </Button>
-                    )
-                  }
-                />
-              ))}
-            </List>
-          )}
-        </>
+        <List>
+          {enrichedRequests.map((req) => (
+            <PackageItem
+              key={req.id}
+              pkg={req.package}
+              partyType={fromParty?.partyTypeName ?? PartyType.Organization}
+              as='button'
+              onSelect={() => setSelectedRequest(req)}
+              controls={
+                isSmallScreen ? undefined : (
+                  <Button
+                    variant='tertiary'
+                    data-size='sm'
+                    aria-label={t('common.delete_request_for', {
+                      poa_object: req.package?.name,
+                    })}
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      handleDelete(req);
+                    }}
+                    disabled={loadingByRequestId[req.id]}
+                    loading={loadingByRequestId[req.id]}
+                  >
+                    <MinusCircleIcon aria-hidden='true' />
+                    {t('common.delete')}
+                  </Button>
+                )
+              }
+            />
+          ))}
+        </List>
       )}
     </div>
   );

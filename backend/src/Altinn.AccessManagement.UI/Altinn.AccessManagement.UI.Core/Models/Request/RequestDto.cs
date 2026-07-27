@@ -37,4 +37,9 @@ public class RequestDto
     /// Last updated
     /// </summary>
     public DateTimeOffset LastUpdated { get; set; }
+
+    /// <summary>
+    /// Last updated by
+    /// </summary>
+    public Guid? LastUpdatedBy { get; set; }
 }

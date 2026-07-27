@@ -16,6 +16,7 @@ import {
 import type { ServiceResource } from '@/rtk/features/singleRights/singleRightsApi';
 
 import { createErrorDetails } from '../common/TechnicalErrorParagraphs/TechnicalErrorParagraphs';
+import { focusFirstEnabledButton, useRestoreFocusAfterSettled } from '../common/RestoreFocus';
 import { useDelegationModalContext } from '../common/DelegationModal/DelegationModalContext';
 import { DelegationAction } from '../common/DelegationModal/EditModal';
 import { LoadingAnimation } from '../common/LoadingAnimation/LoadingAnimation';
@@ -157,6 +158,20 @@ export const ScopeInfo = ({
   const isResourceListInitialLoading = isDelegatedResourceListLoading && !delegatedResourceList;
   const isInitialLoading = isDelegationCheckInitialLoading || isResourceListInitialLoading;
 
+  // Delegate/revoke swap the action button for a loading then success animation in place, dropping
+  // focus to the dialog body. Once it settles — including the follow-up refetch that decides which
+  // button (give/delete) is shown — return focus to whichever button remains.
+  const actionsRef = useRef<HTMLDivElement>(null);
+  useRestoreFocusAfterSettled({
+    isSettled:
+      !isActionLoading &&
+      !actionSuccess &&
+      !isDelegatedResourceListLoading &&
+      !isDelegationCheckLoading,
+    requestWhen: isActionLoading,
+    onRestore: () => focusFirstEnabledButton(actionsRef.current),
+  });
+
   useEffect(() => {
     return () => {
       if (successTimerRef.current) clearTimeout(successTimerRef.current);
@@ -248,7 +263,10 @@ export const ScopeInfo = ({
               )}
             </div>
             {(hasDelegatedResource && canRevoke) || (!hasDelegatedResource && canDelegate) ? (
-              <div className={classes.editButtons}>
+              <div
+                ref={actionsRef}
+                className={classes.editButtons}
+              >
                 {hasDelegatedResource ? (
                   <Button
                     size='sm'

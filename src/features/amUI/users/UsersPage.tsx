@@ -5,7 +5,6 @@ import { formatDisplayName } from '@altinn/altinn-components';
 import { useDocumentTitle } from '@/resources/hooks/useDocumentTitle';
 import { PageWrapper } from '@/components';
 import { useGetReporteeQuery } from '@/rtk/features/userInfoApi';
-import { useRerouteIfNotConfetti } from '@/resources/utils/featureFlagUtils';
 import { getCookie } from '@/resources/Cookie/CookieMethods';
 
 import { PartyRepresentationProvider } from '../common/PartyRepresentationContext/PartyRepresentationContext';
@@ -24,8 +23,6 @@ export const UsersPage = () => {
     fullName: reportee?.name || '',
     type: reportee?.type === 'Person' ? 'person' : 'company',
   });
-
-  useRerouteIfNotConfetti();
 
   return (
     <PageWrapper>

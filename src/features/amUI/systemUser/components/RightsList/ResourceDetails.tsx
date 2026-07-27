@@ -11,7 +11,9 @@ interface ResourceDetailsProps {
 export const ResourceDetails = ({ resource }: ResourceDetailsProps): React.ReactNode => {
   return (
     <div>
-      <ResourceHeading resource={resource} />
+      <div data-size='sm'>
+        <ResourceHeading resource={resource} />
+      </div>
       <DsParagraph
         data-size='sm'
         className={classes.resourceInfoText}

@@ -23,6 +23,13 @@ export const findFocusableElement = (element: HTMLElement, scope: HTMLElement) =
   );
 };
 
+// Returns the element carrying `id` within the container, excluding matches that are not reachable
+// for focus (closed dialog, hidden, aria-hidden, inert). See isUnavailableForFocus.
+export const findAvailableElementById = (container: HTMLElement, id: string) =>
+  Array.from(container.querySelectorAll<HTMLElement>(`[id="${CSS.escape(id)}"]`)).find(
+    (element) => !isUnavailableForFocus(element, container),
+  ) ?? null;
+
 // Restore focus only when it has been lost to the document body (e.g. the acted-on element was
 // disabled during an async action, or removed). If the user has since moved focus to a real
 // element, leave it alone so we never steal focus after the action settles.
@@ -32,22 +39,23 @@ export const focusHasBeenLost = () =>
   (document.activeElement instanceof HTMLElement &&
     isUnavailableForFocus(document.activeElement, document.activeElement));
 
-// Focuses the element, making it programmatically focusable for this call only when it is not
-// natively focusable (e.g. a heading or a processed, non-interactive row).
+// Moves focus to the element, including non-natively-focusable ones (e.g. a heading or a processed,
+// non-interactive row).
 export const focusElement = (element: HTMLElement) => {
   if (element.matches(FOCUSABLE_SELECTOR)) {
     element.focus();
     return;
   }
 
-  const hadTabIndex = element.hasAttribute('tabindex');
-  if (!hadTabIndex) {
+  // Give a non-natively-focusable element a temporary tabindex so it can take focus. It must stay set
+  // while the element is focused: removing tabindex from the active element blurs it straight to
+  // <body> in real browsers (jsdom does not, which masked this in tests). Defer removal until focus
+  // actually leaves, via a one-shot blur listener.
+  if (!element.hasAttribute('tabindex')) {
     element.tabIndex = -1;
+    element.addEventListener('blur', () => element.removeAttribute('tabindex'), { once: true });
   }
   element.focus();
-  if (!hadTabIndex) {
-    element.removeAttribute('tabindex');
-  }
 };
 
 // Use this in any component that could be the destination of a requestFocus(id) call. Typical
@@ -101,9 +109,9 @@ export const RestoreFocusFallback = ({ children }: { children: ReactNode }) => {
       return;
     }
 
-    // A target will handle it if the requested id is present in the container.
-    const targetPresent = containerElement.querySelector(`[id="${CSS.escape(focusRequestId)}"]`);
-    if (targetPresent) {
+    // A reachable target focuses itself via useRestoreFocusTarget; only fall back when none exists.
+    const liveTargetExists = findAvailableElementById(containerElement, focusRequestId);
+    if (liveTargetExists) {
       return;
     }
 
@@ -111,13 +119,8 @@ export const RestoreFocusFallback = ({ children }: { children: ReactNode }) => {
     // does not have to be interactive itself (e.g. a section heading): like useRestoreFocusTarget,
     // we focus its first focusable descendant if it has one, otherwise the element itself.
     if (focusFallbackId) {
-      const fallbackTarget = containerElement.querySelector(
-        `[id="${CSS.escape(focusFallbackId)}"]`,
-      );
-      if (
-        fallbackTarget instanceof HTMLElement &&
-        !isUnavailableForFocus(fallbackTarget, fallbackTarget)
-      ) {
+      const fallbackTarget = findAvailableElementById(containerElement, focusFallbackId);
+      if (fallbackTarget) {
         if (focusHasBeenLost()) {
           focusElement(findFocusableElement(fallbackTarget, fallbackTarget) ?? fallbackTarget);
         }
