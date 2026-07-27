@@ -54,8 +54,8 @@ export const useAreaPackageList = ({
   const { fromParty, toParty, actingParty } = usePartyRepresentation();
   const typeName = fromParty
     ? fromParty?.partyTypeName === PartyType.Organization
-      ? 'organisasjon'
-      : 'person'
+      ? 'Organisasjon'
+      : 'Person'
     : undefined;
 
   const {
@@ -153,9 +153,7 @@ export const useAreaPackageList = ({
           } else if (showAllAreas) {
             // filter away empty areas for different partyType
             const assignablePackages = area.accessPackages.filter(
-              (pkg) =>
-                pkg.isAssignable !== false &&
-                area.typeName.toLowerCase() === typeName?.toLowerCase(),
+              (pkg) => pkg.isAssignable !== false && area.typeName === typeName,
             );
             // Skip the area when none of its packages can be delegated — otherwise it would render empty.
             if (assignablePackages.length > 0) {
@@ -195,7 +193,6 @@ export const useAreaPackageList = ({
     activeDelegations,
     searchError,
     activeDelegationsError,
-    partyType: typeName === 'person' ? PartyType.Person : PartyType.Organization,
   };
 };
 
