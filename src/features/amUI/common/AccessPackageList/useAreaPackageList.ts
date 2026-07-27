@@ -152,9 +152,10 @@ export const useAreaPackageList = ({
             }
           } else if (showAllAreas) {
             // filter away empty areas for different partyType
-            const assignablePackages = area.accessPackages.filter(
-              (pkg) => pkg.isAssignable !== false && area.typeName === typeName,
-            );
+            const matchesPartyType = !filterByType || area.typeName === typeName;
+            const assignablePackages = matchesPartyType
+              ? area.accessPackages.filter((pkg) => pkg.isAssignable !== false)
+              : [];
             // Skip the area when none of its packages can be delegated — otherwise it would render empty.
             if (assignablePackages.length > 0) {
               acc.availableAreas.push({
