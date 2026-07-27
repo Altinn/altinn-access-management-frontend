@@ -1,7 +1,7 @@
-import React, { useMemo } from 'react';
+import React, { useMemo, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Link, useNavigate } from 'react-router';
-import { DsAlert, DsHeading, DsLink, DsParagraph, List } from '@altinn/altinn-components';
+import { DsAlert, DsDialog, DsHeading, DsLink, DsParagraph, List } from '@altinn/altinn-components';
 import { FolderFileIcon } from '@navikt/aksel-icons';
 import classes from './ActiveConsentsPage.module.css';
 import { ConsentPath } from '@/routes/paths';
@@ -13,6 +13,8 @@ import { FetchBaseQueryError } from '@reduxjs/toolkit/query';
 import { SerializedError } from '@reduxjs/toolkit';
 import { ActiveConsentListItem } from '../types';
 import { IdPortenAuthorization } from '@/rtk/features/idPortenAuthorizationApi';
+import { IdPortenAuthorizationDetails } from '../components/IdPortenAuthorizationDetails/IdPortenAuthorizationDetails';
+import { ConsentDetails } from '../components/ConsentDetails/ConsentDetails';
 
 interface ActiveConsentsPageContentProps {
   activeConsents: ActiveConsentListItem[] | undefined;
@@ -23,7 +25,6 @@ interface ActiveConsentsPageContentProps {
   loadActiveConsentsError: FetchBaseQueryError | SerializedError | undefined;
   loadIdPortenAuthorizationsError: FetchBaseQueryError | SerializedError | undefined;
   newlyCreatedId: string | undefined;
-  showConsentDetails: (consentId: string, consentType: 'altinn' | 'idporten') => void;
 }
 
 export const ActiveConsentsPageContent = ({
@@ -35,10 +36,15 @@ export const ActiveConsentsPageContent = ({
   loadActiveConsentsError,
   loadIdPortenAuthorizationsError,
   newlyCreatedId,
-  showConsentDetails,
 }: ActiveConsentsPageContentProps) => {
   const { t } = useTranslation();
   const navigate = useNavigate();
+  const consentModalRef = useRef<HTMLDialogElement>(null);
+  const activeConsentsHeaderRef = useRef<HTMLHeadingElement>(null);
+
+  const [selectedConsentId, setSelectedConsentId] = useState<string>('');
+  const [selectedIdPortenAuthorization, setSelectedIdPortenAuthorization] =
+    useState<IdPortenAuthorization | null>(null);
 
   const groupedActiveConsents = useMemo(() => {
     const acceptedConsents = activeConsents?.filter((x) => !x.isPendingConsent);
@@ -49,6 +55,18 @@ export const ActiveConsentsPageContent = ({
     const pendingConsents = activeConsents?.filter((x) => x.isPendingConsent);
     return groupConsents(pendingConsents, []);
   }, [activeConsents]);
+
+  const showConsentDetails = (consentId: string, consentType: 'altinn' | 'idporten'): void => {
+    consentModalRef.current?.showModal();
+    if (consentType === 'altinn') {
+      setSelectedConsentId(consentId);
+    } else {
+      const idPortenAuthorization = idPortenAuthorizations?.find(
+        (x) => x.authorizationId === consentId,
+      );
+      setSelectedIdPortenAuthorization(idPortenAuthorization || null);
+    }
+  };
 
   return (
     <>
@@ -89,7 +107,11 @@ export const ActiveConsentsPageContent = ({
           </List>
         </>
       )}
-      <div className={classes.activeConsentsSubHeading}>
+      <div
+        className={classes.activeConsentsSubHeading}
+        tabIndex={-1}
+        ref={activeConsentsHeaderRef}
+      >
         <DsHeading
           level={2}
           data-size='xs'
@@ -157,6 +179,26 @@ export const ActiveConsentsPageContent = ({
           </>
         )}
       </div>
+      <DsDialog
+        ref={consentModalRef}
+        className={classes.consentDialog}
+        closedby='any'
+        onClose={() => {
+          setSelectedConsentId('');
+          setSelectedIdPortenAuthorization(null);
+        }}
+      >
+        {selectedConsentId && <ConsentDetails consentId={selectedConsentId} />}
+        {selectedIdPortenAuthorization && (
+          <IdPortenAuthorizationDetails
+            idPortenAuthorization={selectedIdPortenAuthorization}
+            onRevoked={() => {
+              consentModalRef.current?.close();
+              activeConsentsHeaderRef.current?.focus();
+            }}
+          />
+        )}
+      </DsDialog>
     </>
   );
 };

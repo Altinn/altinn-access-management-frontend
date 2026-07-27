@@ -1,23 +1,17 @@
-import React, { useRef, useState } from 'react';
+import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { useLocation } from 'react-router';
-import { DsDialog, formatDisplayName } from '@altinn/altinn-components';
+import { formatDisplayName } from '@altinn/altinn-components';
 import { useDocumentTitle } from '@/resources/hooks/useDocumentTitle';
 import { PageWrapper } from '@/components';
 import { useGetActiveConsentsQuery } from '@/rtk/features/consentApi';
 import { getCookie } from '@/resources/Cookie/CookieMethods';
 import { PageLayoutWrapper } from '../../common/PageLayoutWrapper';
-import { ConsentDetails } from '../components/ConsentDetails/ConsentDetails';
-import classes from './ActiveConsentsPage.module.css';
 import { useGetIsAdminQuery, useGetReporteeQuery } from '@/rtk/features/userInfoApi';
 import { hasConsentPermission } from '@/resources/utils/permissionUtils';
 import { Breadcrumbs } from '../../common/Breadcrumbs/Breadcrumbs';
 import { ReporteePageHeading } from '../../common/ReporteePageHeading';
-import {
-  IdPortenAuthorization,
-  useGetIdPortenAuthorizationsQuery,
-} from '@/rtk/features/idPortenAuthorizationApi';
-import { IdPortenAuthorizationDetails } from '../components/IdPortenAuthorizationDetails/IdPortenAuthorizationDetails';
+import { useGetIdPortenAuthorizationsQuery } from '@/rtk/features/idPortenAuthorizationApi';
 import { ActiveConsentsPageContent } from './ActiveConsentsPageContent';
 import { useGetPartyFromLoggedInUserQuery } from '@/rtk/features/lookupApi';
 
@@ -25,11 +19,6 @@ export const ActiveConsentsPage = () => {
   const { t } = useTranslation();
 
   const routerLocation = useLocation();
-
-  const consentModalRef = useRef<HTMLDialogElement>(null);
-  const [selectedConsentId, setSelectedConsentId] = useState<string>('');
-  const [selectedIdPortenAuthorization, setSelectedIdPortenAuthorization] =
-    useState<IdPortenAuthorization | null>(null);
 
   useDocumentTitle(t('active_consents.page_title'));
   const partyUuid = getCookie('AltinnPartyUuid');
@@ -67,18 +56,6 @@ export const ActiveConsentsPage = () => {
     isLoadingActiveConsents ||
     isLoadingIdPortenAuthorizations;
 
-  const showConsentDetails = (consentId: string, consentType: 'altinn' | 'idporten'): void => {
-    consentModalRef.current?.showModal();
-    if (consentType === 'altinn') {
-      setSelectedConsentId(consentId);
-    } else {
-      const idPortenAuthorization = idPortenAuthorizations?.find(
-        (x) => x.authorizationId === consentId,
-      );
-      setSelectedIdPortenAuthorization(idPortenAuthorization || null);
-    }
-  };
-
   const reporteeName = formatDisplayName({
     fullName: reportee?.name || '',
     type: reportee?.type === 'Person' ? 'person' : 'company',
@@ -102,25 +79,7 @@ export const ActiveConsentsPage = () => {
           loadActiveConsentsError={loadActiveConsentsError}
           loadIdPortenAuthorizationsError={loadIdPortenAuthorizationsError}
           newlyCreatedId={newlyCreatedId}
-          showConsentDetails={showConsentDetails}
         />
-        <DsDialog
-          ref={consentModalRef}
-          className={classes.consentDialog}
-          closedby='any'
-          onClose={() => {
-            setSelectedConsentId('');
-            setSelectedIdPortenAuthorization(null);
-          }}
-        >
-          {selectedConsentId && <ConsentDetails consentId={selectedConsentId} />}
-          {selectedIdPortenAuthorization && (
-            <IdPortenAuthorizationDetails
-              idPortenAuthorization={selectedIdPortenAuthorization}
-              onRevoked={() => consentModalRef.current?.close()}
-            />
-          )}
-        </DsDialog>
       </PageLayoutWrapper>
     </PageWrapper>
   );
