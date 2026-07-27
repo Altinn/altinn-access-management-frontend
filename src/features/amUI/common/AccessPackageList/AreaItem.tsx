@@ -27,7 +27,7 @@ export const AreaItem = ({
   showPackagesCount,
   showPermissions,
   partyType,
-  headingLevel,
+  headingLevel = 3,
 }: AreaItemProps) => {
   const { t } = useTranslation();
   const isSm = useIsMobileOrSmaller();
