@@ -20,8 +20,7 @@ export const useSidebarRequestCount = ({
 
   const shouldFetchReceivedRequestsCount = !!partyUuid && !!isAdmin;
   const shouldFetchConsents = !!partyUuid && hasConsentPermission(isAdmin);
-  const shouldFetchSystemUsers =
-    !!partyUuid && !!hasCreateSystemUserPermission(reportee, isAdmin);
+  const shouldFetchSystemUsers = !!partyUuid && !!hasCreateSystemUserPermission(reportee, isAdmin);
 
   const {
     data: receivedRequestsCount,
