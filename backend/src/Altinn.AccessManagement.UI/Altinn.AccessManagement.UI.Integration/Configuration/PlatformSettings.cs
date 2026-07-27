@@ -6,7 +6,8 @@
     public class PlatformSettings
     {
         /// <summary>
-        /// Gets or sets the access management api endpoint
+        /// Gets or sets the access management api endpoint. The value is versionless
+        /// (ends with "/accessmanagement/api/"); each client appends the API version it calls.
         /// </summary>
         public string ApiAccessManagementEndpoint { get; set; }
 
