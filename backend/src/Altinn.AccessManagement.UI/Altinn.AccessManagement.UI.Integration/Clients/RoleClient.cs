@@ -1,6 +1,3 @@
-using System;
-using System.Collections.Generic;
-using System.Diagnostics;
 using Altinn.AccessManagement.UI.Core.ClientInterfaces;
 using Altinn.AccessManagement.UI.Core.Extensions;
 using Altinn.AccessManagement.UI.Core.Helpers;
@@ -26,7 +23,6 @@ namespace Altinn.AccessManagement.UI.Integration.Clients
         private readonly HttpClient _client;
         private readonly IHttpContextAccessor _httpContextAccessor;
         private readonly PlatformSettings _platformSettings;
-        private readonly IAccessTokenProvider _accessTokenProvider;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="AccessPackageClient"/> class
@@ -35,13 +31,11 @@ namespace Altinn.AccessManagement.UI.Integration.Clients
         /// <param name="logger">the handler for logger service</param>
         /// <param name="httpContextAccessor">the handler for httpcontextaccessor service</param>
         /// <param name="platformSettings"> platform settings configuration</param>
-        /// <param name="accessTokenProvider">the handler for access token generator</param>
         public RoleClient(
             HttpClient httpClient,
             ILogger<RoleClient> logger,
             IHttpContextAccessor httpContextAccessor,
-            IOptions<PlatformSettings> platformSettings,
-            IAccessTokenProvider accessTokenProvider)
+            IOptions<PlatformSettings> platformSettings)
         {
             _logger = logger;
             _platformSettings = platformSettings.Value;
@@ -49,7 +43,6 @@ namespace Altinn.AccessManagement.UI.Integration.Clients
             httpClient.DefaultRequestHeaders.Add(_platformSettings.SubscriptionKeyHeaderName, _platformSettings.SubscriptionKey);
             _client = httpClient;
             _httpContextAccessor = httpContextAccessor;
-            _accessTokenProvider = accessTokenProvider;
         }
 
         /// <inheritdoc />
