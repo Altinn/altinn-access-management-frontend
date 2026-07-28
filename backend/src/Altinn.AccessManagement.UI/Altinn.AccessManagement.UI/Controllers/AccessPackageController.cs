@@ -1,16 +1,11 @@
 ﻿using System.Net;
-using System.Net.Http.Json;
-using System.Security;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 using Altinn.AccessManagement.UI.Core.Helpers;
-using Altinn.AccessManagement.UI.Core.Models;
 using Altinn.AccessManagement.UI.Core.Models.AccessPackage;
 using Altinn.AccessManagement.UI.Core.Models.AccessPackage.Frontend;
-using Altinn.AccessManagement.UI.Core.Services;
 using Altinn.AccessManagement.UI.Core.Services.Interfaces;
 using Altinn.Authorization.ProblemDetails;
-using Altinn.Platform.Register.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -24,17 +19,15 @@ namespace Altinn.AccessManagement.UI.Controllers
     {
         private readonly IAccessPackageService _accessPackageService;
         private readonly IHttpContextAccessor _httpContextAccessor;
-        private readonly ILogger _logger;
         private readonly JsonSerializerOptions _serializerOptions = new JsonSerializerOptions { PropertyNameCaseInsensitive = true };
 
         /// <summary>
         /// Initializes a new instance of the <see cref="AccessPackageController"/> class
         /// </summary>
-        public AccessPackageController(IAccessPackageService accessPackageService, IHttpContextAccessor httpContextAccessor, ILogger<AccessPackageController> logger)
+        public AccessPackageController(IAccessPackageService accessPackageService, IHttpContextAccessor httpContextAccessor)
         {
             _accessPackageService = accessPackageService;
             _httpContextAccessor = httpContextAccessor;
-            _logger = logger;
             _serializerOptions.Converters.Add(new JsonStringEnumConverter());
         }
 

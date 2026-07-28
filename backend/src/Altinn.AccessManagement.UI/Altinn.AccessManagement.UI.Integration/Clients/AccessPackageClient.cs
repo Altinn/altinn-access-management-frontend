@@ -6,7 +6,6 @@ using Altinn.AccessManagement.UI.Core.Extensions;
 using Altinn.AccessManagement.UI.Core.Helpers;
 using Altinn.AccessManagement.UI.Core.Models.AccessPackage;
 using Altinn.AccessManagement.UI.Core.Models.Common;
-using Altinn.AccessManagement.UI.Core.Services.Interfaces;
 using Altinn.AccessManagement.UI.Integration.Configuration;
 using Altinn.AccessManagement.UI.Integration.Util;
 using Microsoft.AspNetCore.Http;
@@ -24,7 +23,6 @@ namespace Altinn.AccessManagement.UI.Integration.Clients
         private readonly HttpClient _client;
         private readonly IHttpContextAccessor _httpContextAccessor;
         private readonly PlatformSettings _platformSettings;
-        private readonly IAccessTokenProvider _accessTokenProvider;
         private readonly JsonSerializerOptions _serializerOptions = new JsonSerializerOptions { PropertyNameCaseInsensitive = true };
 
         /// <summary>
@@ -34,13 +32,11 @@ namespace Altinn.AccessManagement.UI.Integration.Clients
         /// <param name="logger">the handler for logger service</param>
         /// <param name="httpContextAccessor">the handler for httpcontextaccessor service</param>
         /// <param name="platformSettings"> platform settings configuration</param>
-        /// <param name="accessTokenProvider">the handler for access token generator</param>
         public AccessPackageClient(
             HttpClient httpClient,
             ILogger<AccessPackageClient> logger,
             IHttpContextAccessor httpContextAccessor,
-            IOptions<PlatformSettings> platformSettings,
-            IAccessTokenProvider accessTokenProvider)
+            IOptions<PlatformSettings> platformSettings)
         {
             _logger = logger;
             _platformSettings = platformSettings.Value;
@@ -48,7 +44,6 @@ namespace Altinn.AccessManagement.UI.Integration.Clients
             httpClient.DefaultRequestHeaders.Add(_platformSettings.SubscriptionKeyHeaderName, _platformSettings.SubscriptionKey);
             _client = httpClient;
             _httpContextAccessor = httpContextAccessor;
-            _accessTokenProvider = accessTokenProvider;
         }
 
         /// <inheritdoc />
