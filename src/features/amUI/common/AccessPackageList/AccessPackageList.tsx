@@ -1,4 +1,4 @@
-import { DsAlert, DsParagraph, DsSpinner, List } from '@altinn/altinn-components';
+import { DsAlert, DsHeading, DsParagraph, DsSpinner, List } from '@altinn/altinn-components';
 import { useTranslation } from 'react-i18next';
 
 import type { Party } from '@/rtk/features/lookupApi';
@@ -8,7 +8,7 @@ import type { ActionError } from '@/resources/hooks/useActionError';
 import type { DelegationAction } from '../DelegationModal/EditModal';
 
 import classes from './AccessPackageList.module.css';
-import { useAreaPackageList } from './useAreaPackageList';
+import { ExtendedAccessArea, useAreaPackageList } from './useAreaPackageList';
 import { useAccessPackageActions } from './useAccessPackageActions';
 import { SkeletonAccessPackageList } from './SkeletonAccessPackageList';
 import { AreaItem } from './AreaItem';
@@ -39,7 +39,8 @@ interface AccessPackageListProps {
   packageAs?: React.ElementType;
   noPackagesText?: string;
   filterByType?: boolean;
-  areaHeadingLevel?: 2 | 3;
+  firstHeadingLevel?: 2 | 3;
+  showUnassignedAvailableAreas?: boolean;
 }
 
 export const AccessPackageList = ({
@@ -61,7 +62,8 @@ export const AccessPackageList = ({
   packageAs,
   noPackagesText,
   filterByType = true,
-  areaHeadingLevel = 3,
+  firstHeadingLevel = 3,
+  showUnassignedAvailableAreas = false,
 }: AccessPackageListProps) => {
   const { t } = useTranslation();
 
@@ -152,12 +154,57 @@ export const AccessPackageList = ({
     ? combinedAreas
     : [...combinedAreas].sort((a, b) => a.name.localeCompare(b.name));
 
+  const areasWithActiveMatches = combinedAreas.filter((x) => x.packages.assigned.length > 0);
+  const areasWithoutActiveMatches = combinedAreas.filter((x) => x.packages.assigned.length === 0);
+
+  const renderAccessPackageList = (items: ExtendedAccessArea[], headingLevel: 2 | 3 | 4) => {
+    return (
+      <List>
+        {items.map((area) => {
+          const areaPartyType =
+            area.typeName === 'Person' ? PartyType.Person : PartyType.Organization;
+
+          const expanded = (searchString && searchString.length > 2) || isExpanded(area.id);
+          return (
+            <AreaItem
+              key={area.id}
+              area={area}
+              expanded={expanded}
+              toggleExpandedArea={toggleExpandedArea}
+              showPackagesCount={showPackagesCount}
+              showPermissions={showPermissions}
+              partyType={areaPartyType}
+              headingLevel={headingLevel}
+            >
+              <AreaItemContent
+                area={area}
+                availableActions={availableActions}
+                onSelect={onSelect}
+                onDelegate={onDelegate}
+                onRevoke={onRevoke}
+                onRequest={onRequest}
+                onDeleteRequest={deleteRequest}
+                hasPendingRequest={hasPendingRequest}
+                isLoadingRequest={isLoadingRequest}
+                isActionLoading={isActionLoading}
+                showAvailablePackages={!minimizeAvailablePackages}
+                showAvailableToggle={showAvailableToggle}
+                showPermissions={showPermissions}
+                packageAs={packageAs}
+                partyType={areaPartyType}
+                headingLevel={(headingLevel + 1) as 3 | 4 | 5}
+              />
+            </AreaItem>
+          );
+        })}
+      </List>
+    );
+  };
+
   if (
     searchString &&
     searchString.length > 0 &&
-    (allPackageAreas === undefined ||
-      allPackageAreas.length === 0 ||
-      (!showAllAreas && displayAreas.length === 0))
+    (allPackageAreas === undefined || allPackageAreas.length === 0 || displayAreas.length === 0)
   ) {
     return (
       <div className={classes.accessAreaList}>
@@ -168,50 +215,50 @@ export const AccessPackageList = ({
     );
   }
 
-  return (
-    <div className={classes.accessAreaList}>
-      {displayAreas.length === 0 && !searchError && !activeDelegationsError ? (
+  if (displayAreas.length === 0 && !searchError && !activeDelegationsError) {
+    return (
+      <div className={classes.accessAreaList}>
         <DsParagraph className={classes.noAccessPackages}>
           {noPackagesText || t('access_packages.no_packages')}
         </DsParagraph>
-      ) : (
-        <List>
-          {displayAreas.map((area) => {
-            const expanded = (searchString && searchString.length > 2) || isExpanded(area.id);
+      </div>
+    );
+  }
 
-            return (
-              <AreaItem
-                key={area.id}
-                area={area}
-                expanded={expanded}
-                toggleExpandedArea={toggleExpandedArea}
-                showPackagesCount={showPackagesCount}
-                showPermissions={showPermissions}
-                partyType={area.typeName === 'Person' ? PartyType.Person : PartyType.Organization}
-                headingLevel={areaHeadingLevel}
+  return (
+    <div className={classes.accessAreaList}>
+      {showUnassignedAvailableAreas ? (
+        <>
+          <DsHeading
+            level={firstHeadingLevel}
+            data-size='xs'
+            className={classes.subListHeading}
+          >
+            {t('access_packages.search_active_matches')}:
+          </DsHeading>
+          {areasWithActiveMatches.length === 0 ? (
+            <DsParagraph className={classes.noAccessPackages}>
+              {t('access_packages.search_no_active_matches')}
+            </DsParagraph>
+          ) : (
+            renderAccessPackageList(areasWithActiveMatches, (firstHeadingLevel + 1) as 3 | 4)
+          )}
+          {areasWithoutActiveMatches.length > 0 && (
+            <>
+              <hr className={classes.otherListDivider} />
+              <DsHeading
+                level={2}
+                data-size='xs'
+                className={classes.subListHeading}
               >
-                <AreaItemContent
-                  area={area}
-                  availableActions={availableActions}
-                  onSelect={onSelect}
-                  onDelegate={onDelegate}
-                  onRevoke={onRevoke}
-                  onRequest={onRequest}
-                  onDeleteRequest={deleteRequest}
-                  hasPendingRequest={hasPendingRequest}
-                  isLoadingRequest={isLoadingRequest}
-                  isActionLoading={isActionLoading}
-                  showAvailablePackages={!minimizeAvailablePackages}
-                  showAvailableToggle={showAvailableToggle}
-                  showPermissions={showPermissions}
-                  packageAs={packageAs}
-                  partyType={area.typeName === 'Person' ? PartyType.Person : PartyType.Organization}
-                  headingLevel={areaHeadingLevel === 2 ? 3 : 4}
-                />
-              </AreaItem>
-            );
-          })}
-        </List>
+                {t('access_packages.search_other_matches')}:
+              </DsHeading>
+              {renderAccessPackageList(areasWithoutActiveMatches, (firstHeadingLevel + 1) as 3 | 4)}
+            </>
+          )}
+        </>
+      ) : (
+        <>{renderAccessPackageList(displayAreas, firstHeadingLevel)}</>
       )}
     </div>
   );
