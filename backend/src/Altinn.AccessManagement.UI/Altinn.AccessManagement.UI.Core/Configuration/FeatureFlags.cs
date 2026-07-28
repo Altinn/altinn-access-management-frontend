@@ -22,5 +22,10 @@ namespace Altinn.AccessManagement.UI.Core.Configuration
         /// Whether or not to show handled sent and received access package and resource requests
         /// </summary>
         public const string ShowHandledRequests = "AccessManagementUI.ShowHandledRequests";
+
+        /// <summary>
+        /// Whether or not to include ID-porten authorizations in active consents list
+        /// </summary>
+        public const string ShowIdPortenAuthorizations = "AccessManagementUI.ShowIdPortenAuthorizations";
     }
 }

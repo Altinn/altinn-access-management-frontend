@@ -256,6 +256,7 @@ void ConfigureServices(IServiceCollection services, IConfiguration config)
     services.AddSingleton<IRoleService, RoleService>();
     services.AddSingleton<IDelegationExportService, DelegationExportService>();
     services.AddSingleton<IMaskinportenService, MaskinportenService>();
+    services.AddSingleton<IIdPortenAuthorizationService, IdPortenAuthorizationService>();
     services.AddTransient<ISigningCredentialsResolver, SigningCredentialsResolver>();
     services.AddTransient<ResourceHelper, ResourceHelper>();
     services.AddTransient<IAltinnCdnService, AltinnCdnService>();
@@ -538,5 +539,14 @@ void ConfigureMockableClients(IServiceCollection services, IConfiguration config
     else
     {
         services.AddHttpClient<IMaskinportenClient, MaskinportenClient>();
+    }
+
+    if (mockSettings.IdPortenAuthorization)
+    {
+        services.AddHttpClient<IIdPortenAuthorizationClient, IdPortenAuthorizationClientMock>();
+    }
+    else
+    {
+        services.AddHttpClient<IIdPortenAuthorizationClient, IdPortenAuthorizationClient>();
     }
 }

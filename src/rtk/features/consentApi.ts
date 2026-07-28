@@ -113,7 +113,7 @@ export const consentApi = createApi({
 });
 
 const apiWithTags = consentApi.enhanceEndpoints({
-  addTagTypes: [Tags.ConsentList],
+  addTagTypes: [Tags.ConsentList, Tags.ConsentLog],
 });
 
 export const {
