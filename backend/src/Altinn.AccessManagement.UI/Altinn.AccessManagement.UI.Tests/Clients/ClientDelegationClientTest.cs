@@ -17,7 +17,7 @@ namespace Altinn.AccessManagement.UI.Tests.Clients
     /// <summary>
     /// Tests that the v2 client delegation client builds the expected request urls
     /// (client/agent query parameters and POST /delete routes), and that
-    /// <see cref="ClientDelegationClientSelector"/> routes to v1 when the
+    /// <see cref="ClientDelegationClientResolver"/> resolves to v1 when the
     /// UseNewSingleRightsClientDelegation feature flag is disabled.
     /// </summary>
     public class ClientDelegationClientTest
@@ -102,10 +102,10 @@ namespace Altinn.AccessManagement.UI.Tests.Clients
                 httpContextAccessor,
                 options);
 
-            return new ClientDelegationClientSelector(v1, v2, featureManager.Object);
+            return new ClientDelegationClientResolver(v1, v2, featureManager.Object).Resolve().Result;
         }
 
-        private static IClientDelegationResourceClient CreateResourceClient(RecordingHandler handler)
+        private static IClientDelegationClient CreateResourceClient(RecordingHandler handler)
         {
             PlatformSettings platformSettings = new PlatformSettings
             {
@@ -378,6 +378,37 @@ namespace Altinn.AccessManagement.UI.Tests.Clients
 
             await Assert.ThrowsAsync<HttpStatusException>(
                 () => CreateResourceClient(handler).GetAgentResources(_party, _agent));
+        }
+        /// <summary>
+        /// Single rights delegation arrived with v2. With the flag off the caller must see an empty
+        /// list rather than v2 data, so the flag governs the whole surface and not just the shared
+        /// operations.
+        /// </summary>
+        [Fact]
+        public async Task GetAgentResources_FlagDisabled_ReturnsEmptyWithoutCallingV2()
+        {
+            RecordingHandler handler = new RecordingHandler();
+
+            IEnumerable<ClientDelegation> clients = await CreateClient(useV2: false, handler).GetAgentResources(_party, _agent);
+
+            Assert.Empty(clients);
+            Assert.Null(handler.Request);
+        }
+
+        /// <summary>
+        /// Delegating a resource with the flag off is a configuration problem, not a server error —
+        /// it surfaces as 501 so the caller can tell the two apart.
+        /// </summary>
+        [Fact]
+        public async Task AddAgentResources_FlagDisabled_ThrowsNotImplemented()
+        {
+            RecordingHandler handler = new RecordingHandler();
+
+            HttpStatusException exception = await Assert.ThrowsAsync<HttpStatusException>(
+                () => CreateClient(useV2: false, handler).AddAgentResources(_party, _client, _agent, _resourcePayload));
+
+            Assert.Equal(HttpStatusCode.NotImplemented, exception.StatusCode);
+            Assert.Null(handler.Request);
         }
     }
 }

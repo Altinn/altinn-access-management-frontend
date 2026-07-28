@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using System.Text;
 using System.Text.Json;
 using Altinn.AccessManagement.UI.Core.ClientInterfaces;
@@ -272,6 +273,51 @@ namespace Altinn.AccessManagement.UI.Integration.Clients
             string responseContent = await response.Content.ReadAsStringAsync();
             _logger.LogError("AccessManagement.UI // ClientDelegationClientV1.RemoveAgent // Unexpected HttpStatusCode: {StatusCode}\n {ResponseBody}", response.StatusCode, responseContent);
             throw new HttpStatusException(StatusErrorTitle, StatusErrorMessage, response.StatusCode, _httpContextAccessor.HttpContext?.TraceIdentifier, responseContent);
+        }
+        /// <inheritdoc />
+        /// <remarks>Single rights delegation arrived with v2, so a v1 client never has any.</remarks>
+        public Task<IEnumerable<ClientDelegation>> GetAgentResources(Guid party, Guid to, CancellationToken cancellationToken = default)
+        {
+            return Task.FromResult(Enumerable.Empty<ClientDelegation>());
+        }
+
+        /// <inheritdoc />
+        /// <remarks>Single rights delegation arrived with v2, so a v1 client never has any.</remarks>
+        public Task<IEnumerable<AgentDelegation>> GetClientResources(Guid party, Guid from, CancellationToken cancellationToken = default)
+        {
+            return Task.FromResult(Enumerable.Empty<AgentDelegation>());
+        }
+
+        /// <inheritdoc />
+        public Task<List<ResourceDelegationDto>> AddAgentResources(Guid party, Guid from, Guid to, ResourceDelegationBatchInputDto payload, CancellationToken cancellationToken = default)
+        {
+            throw NotAvailableInV1();
+        }
+
+        /// <inheritdoc />
+        public Task RemoveAgentResources(Guid party, Guid from, Guid to, ResourceDelegationBatchInputDto payload, CancellationToken cancellationToken = default)
+        {
+            throw NotAvailableInV1();
+        }
+
+        /// <inheritdoc />
+        public Task RemoveMyClientResources(Guid provider, Guid from, ResourceDelegationBatchInputDto payload, CancellationToken cancellationToken = default)
+        {
+            throw NotAvailableInV1();
+        }
+
+        /// <summary>
+        /// Delegating single rights requires the v2 endpoints. Surfaced as 501 rather than a server
+        /// error so the caller can tell "not available in this configuration" from "something broke".
+        /// </summary>
+        private HttpStatusException NotAvailableInV1()
+        {
+            _logger.LogWarning("AccessManagement.UI // ClientDelegationClientV1 // Single rights delegation attempted while the v2 client delegation API is disabled");
+            return new HttpStatusException(
+                "NotAvailable",
+                "Single rights delegation requires the v2 client delegation API",
+                HttpStatusCode.NotImplemented,
+                _httpContextAccessor.HttpContext?.TraceIdentifier);
         }
     }
 }

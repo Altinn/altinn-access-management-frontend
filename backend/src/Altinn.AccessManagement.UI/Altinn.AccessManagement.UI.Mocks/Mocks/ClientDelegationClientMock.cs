@@ -15,9 +15,9 @@ using Microsoft.Extensions.Logging;
 namespace Altinn.AccessManagement.UI.Mocks.Mocks
 {
     /// <summary>
-    /// Mock class for the <see cref="IClientDelegationClient"/> and <see cref="IClientDelegationResourceClient"/> interfaces.
+    /// Mock class for the <see cref="IClientDelegationClient"/> interface.
     /// </summary>
-    public class ClientDelegationClientMock : IClientDelegationClient, IClientDelegationResourceClient
+    public class ClientDelegationClientMock : IClientDelegationClient, IClientDelegationClientResolver
     {
         private readonly string dataFolder;
 
@@ -31,6 +31,9 @@ namespace Altinn.AccessManagement.UI.Mocks.Mocks
         {
             dataFolder = Path.Combine(Path.GetDirectoryName(new Uri(typeof(AccessManagementClientMock).Assembly.Location).LocalPath), "Data");
         }
+
+        /// <inheritdoc />
+        public Task<IClientDelegationClient> Resolve() => Task.FromResult<IClientDelegationClient>(this);
 
         /// <inheritdoc />
         public Task<IEnumerable<MyClientDelegation>> GetMyClients(List<Guid> provider = null, CancellationToken cancellationToken = default)

@@ -20,10 +20,10 @@ namespace Altinn.AccessManagement.UI.Integration.Clients
     /// Client for interacting with the v2 client delegation endpoints.
     /// Compared to v1, the client and agent query parameters are named client/agent instead of
     /// from/to, and batch deletes are performed with POST to dedicated /delete routes.
-    /// The single rights resource endpoints of <see cref="IClientDelegationResourceClient"/> only
-    /// exist in v2, so they have no v1 counterpart and are not routed through the selector.
+    /// The single rights resource endpoints exist only here; the v1 client answers them as
+    /// "not available" so the feature flag governs the whole surface.
     /// </summary>
-    public class ClientDelegationClientV2 : IClientDelegationClient, IClientDelegationResourceClient
+    public class ClientDelegationClientV2 : IClientDelegationClient
     {
         private readonly ILogger _logger;
         private readonly HttpClient _client;
