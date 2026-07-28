@@ -43,7 +43,7 @@ namespace Altinn.AccessManagement.UI.Integration.Clients
             _platformSettings = platformSettings.Value;
             _httpContextAccessor = httpContextAccessor;
             _serializerOptions.Converters.Add(new JsonStringEnumConverter());
-            httpClient.BaseAddress = new Uri(_platformSettings.ApiAccessManagementEndpoint);
+            httpClient.BaseAddress = new Uri(_platformSettings.ApiAccessManagementEndpoint + "v1/");
             _client = httpClient;
         }
 

@@ -1,8 +1,5 @@
-﻿using System.Reflection.Metadata.Ecma335;
-using System.Text.Json;
-using Altinn.AccessManagement.UI.Core.ClientInterfaces;
+﻿using Altinn.AccessManagement.UI.Core.ClientInterfaces;
 using Altinn.AccessManagement.UI.Core.Helpers;
-using Altinn.AccessManagement.UI.Core.Models;
 using Altinn.AccessManagement.UI.Core.Models.AccessPackage;
 using Altinn.AccessManagement.UI.Core.Models.AccessPackage.Frontend;
 using Altinn.AccessManagement.UI.Core.Models.Common;
@@ -13,25 +10,15 @@ namespace Altinn.AccessManagement.UI.Core.Services
     /// <inheritdoc />
     public class AccessPackageService : IAccessPackageService
     {
-        private readonly IAccessManagementClient _accessManagementClient;
         private readonly IAccessPackageClient _accessPackageClient;
-        private readonly ILookupService _lookupService;
-        private readonly JsonSerializerOptions options = new JsonSerializerOptions
-        {
-            PropertyNameCaseInsensitive = true,
-        };
 
         /// <summary>
         /// Initializes a new instance of the <see cref="SingleRightService"/> class.
         /// </summary>
-        /// <param name="accessManagementClient">The access management client.</param>
         /// <param name="accessPackageClient">The access package client.</param>
-        /// <param name="lookupService">The lookup service.</param>
-        public AccessPackageService(IAccessManagementClient accessManagementClient, IAccessPackageClient accessPackageClient, ILookupService lookupService)
+        public AccessPackageService(IAccessPackageClient accessPackageClient)
         {
-            _accessManagementClient = accessManagementClient;
             _accessPackageClient = accessPackageClient;
-            _lookupService = lookupService;
         }
 
         /// <inheritdoc />

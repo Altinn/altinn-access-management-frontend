@@ -46,7 +46,7 @@ namespace Altinn.AccessManagement.UI.Integration.Clients
             _httpContextAccessor = httpContextAccessor;
             _httpClientFactory = httpClientFactory;
             _platformSettings = platformSettings.Value;
-            httpClient.BaseAddress = new Uri(_platformSettings.ApiAccessManagementEndpoint);
+            httpClient.BaseAddress = new Uri(_platformSettings.ApiAccessManagementEndpoint + "v1/");
             httpClient.DefaultRequestHeaders.Add(_platformSettings.SubscriptionKeyHeaderName, _platformSettings.SubscriptionKey);
             _httpClient = httpClient;
         }
