@@ -54,7 +54,7 @@ namespace Altinn.AccessManagement.UI.Integration.Clients
                 string token = JwtTokenUtil.GetTokenFromContext(_httpContextAccessor.HttpContext, _platformSettings.JwtCookieName);
                 string endpointUrl = $"systemuser/{partyId}/{id}";
 
-                HttpResponseMessage response = await _httpClient.GetAsync(token, endpointUrl);
+                HttpResponseMessage response = await _httpClient.GetAsync(token, endpointUrl, cancellationToken);
                 string responseContent = await response.Content.ReadAsStringAsync(cancellationToken);
 
                 if (response.IsSuccessStatusCode)
@@ -81,7 +81,7 @@ namespace Altinn.AccessManagement.UI.Integration.Clients
                 string endpointUrl = $"systemuser/{partyId}/create";
 
                 var content = JsonContent.Create(newSystemUser);
-                HttpResponseMessage response = await _httpClient.PostAsync(token, endpointUrl, content);
+                HttpResponseMessage response = await _httpClient.PostAsync(token, endpointUrl, content, cancellationToken);
                 string responseContent = await response.Content.ReadAsStringAsync(cancellationToken);
             
                 if (response.IsSuccessStatusCode) 
@@ -107,7 +107,7 @@ namespace Altinn.AccessManagement.UI.Integration.Clients
                 string token = JwtTokenUtil.GetTokenFromContext(_httpContextAccessor.HttpContext, _platformSettings.JwtCookieName);
                 string endpointUrl = $"systemuser/{partyId}/{id}";
 
-                HttpResponseMessage response = await _httpClient.DeleteAsync(token, endpointUrl);
+                HttpResponseMessage response = await _httpClient.DeleteAsync(token, endpointUrl, null, cancellationToken);
                 string responseContent = await response.Content.ReadAsStringAsync(cancellationToken);
                 
                 if (response.IsSuccessStatusCode)
@@ -133,7 +133,7 @@ namespace Altinn.AccessManagement.UI.Integration.Clients
                 string token = JwtTokenUtil.GetTokenFromContext(_httpContextAccessor.HttpContext, _platformSettings.JwtCookieName);
                 string endpointUrl = $"systemuser/{partyId}";
 
-                HttpResponseMessage response = await _httpClient.GetAsync(token, endpointUrl);
+                HttpResponseMessage response = await _httpClient.GetAsync(token, endpointUrl, cancellationToken);
                 string responseContent = await response.Content.ReadAsStringAsync(cancellationToken);
 
                 if (response.IsSuccessStatusCode)
@@ -159,7 +159,7 @@ namespace Altinn.AccessManagement.UI.Integration.Clients
                 string token = JwtTokenUtil.GetTokenFromContext(_httpContextAccessor.HttpContext, _platformSettings.JwtCookieName);
                 string endpointUrl = $"systemuser/{partyId}/{id}";
 
-                HttpResponseMessage response = await _httpClient.GetAsync(token, endpointUrl);
+                HttpResponseMessage response = await _httpClient.GetAsync(token, endpointUrl, cancellationToken);
                 string responseContent = await response.Content.ReadAsStringAsync(cancellationToken);
 
                 if (response.IsSuccessStatusCode)
@@ -185,7 +185,7 @@ namespace Altinn.AccessManagement.UI.Integration.Clients
                 string token = JwtTokenUtil.GetTokenFromContext(_httpContextAccessor.HttpContext, _platformSettings.JwtCookieName);
                 string endpointUrl = $"systemuser/agent/{partyId}";
 
-                HttpResponseMessage response = await _httpClient.GetAsync(token, endpointUrl);
+                HttpResponseMessage response = await _httpClient.GetAsync(token, endpointUrl, cancellationToken);
                 string responseContent = await response.Content.ReadAsStringAsync(cancellationToken);
 
                 if (response.IsSuccessStatusCode)
@@ -211,7 +211,7 @@ namespace Altinn.AccessManagement.UI.Integration.Clients
                 string token = JwtTokenUtil.GetTokenFromContext(_httpContextAccessor.HttpContext, _platformSettings.JwtCookieName);
                 string endpointUrl = $"systemuser/agent/{partyId}/{systemUserId}?facilitatorId={facilitatorId}";
 
-                HttpResponseMessage response = await _httpClient.DeleteAsync(token, endpointUrl);
+                HttpResponseMessage response = await _httpClient.DeleteAsync(token, endpointUrl, null, cancellationToken);
                 string responseContent = await response.Content.ReadAsStringAsync(cancellationToken);
                 
                 if (response.IsSuccessStatusCode)
@@ -238,7 +238,7 @@ namespace Altinn.AccessManagement.UI.Integration.Clients
                 string token = JwtTokenUtil.GetTokenFromContext(_httpContextAccessor.HttpContext, _platformSettings.JwtCookieName);
                 string endpointUrl = $"systemuser/agent/{partyId}/clients?facilitator={facilitatorId}{packageQuery}";
 
-                HttpResponseMessage response = await _httpClient.GetAsync(token, endpointUrl);
+                HttpResponseMessage response = await _httpClient.GetAsync(token, endpointUrl, cancellationToken);
                 string responseContent = await response.Content.ReadAsStringAsync(cancellationToken);
                 
                 if (response.IsSuccessStatusCode)
@@ -264,7 +264,7 @@ namespace Altinn.AccessManagement.UI.Integration.Clients
                 string token = JwtTokenUtil.GetTokenFromContext(_httpContextAccessor.HttpContext, _platformSettings.JwtCookieName);
                 string endpointUrl = $"systemuser/{partyId}/{systemuserId}/delegations";
 
-                HttpResponseMessage response = await _httpClient.GetAsync(token, endpointUrl);
+                HttpResponseMessage response = await _httpClient.GetAsync(token, endpointUrl, cancellationToken);
                 string responseContent = await response.Content.ReadAsStringAsync(cancellationToken);
 
                 if (response.IsSuccessStatusCode)

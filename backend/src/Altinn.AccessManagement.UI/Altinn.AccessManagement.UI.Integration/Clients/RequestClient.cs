@@ -69,7 +69,7 @@ namespace Altinn.AccessManagement.UI.Integration.Clients
                 string endpointUrl = QueryHelpers.AddQueryString("enduser/request/sent", queryParams.Concat(statusParams));
                 string token = JwtTokenUtil.GetTokenFromContext(_httpContextAccessor.HttpContext, _platformSettings.JwtCookieName);
 
-                var httpResponse = await _client.GetAsync(token, endpointUrl);
+                var httpResponse = await _client.GetAsync(token, endpointUrl, cancellationToken);
                 return await ClientUtils.DeserializeIfSuccessfullStatusCode<PaginatedResult<Request>>(httpResponse);
             }
             catch (Exception ex)
@@ -104,7 +104,7 @@ namespace Altinn.AccessManagement.UI.Integration.Clients
                 string endpointUrl = QueryHelpers.AddQueryString("enduser/request/received", queryParams.Concat(statusParams));
                 string token = JwtTokenUtil.GetTokenFromContext(_httpContextAccessor.HttpContext, _platformSettings.JwtCookieName);
 
-                var httpResponse = await _client.GetAsync(token, endpointUrl);
+                var httpResponse = await _client.GetAsync(token, endpointUrl, cancellationToken);
                 return await ClientUtils.DeserializeIfSuccessfullStatusCode<PaginatedResult<Request>>(httpResponse);
             }
             catch (Exception ex)
@@ -122,7 +122,7 @@ namespace Altinn.AccessManagement.UI.Integration.Clients
                 string endpointUrl = QueryHelpers.AddQueryString($"enduser/request/{id}", "party", party.ToString());
                 string token = JwtTokenUtil.GetTokenFromContext(_httpContextAccessor.HttpContext, _platformSettings.JwtCookieName);
 
-                var httpResponse = await _client.GetAsync(token, endpointUrl);
+                var httpResponse = await _client.GetAsync(token, endpointUrl, cancellationToken);
                 return await ClientUtils.DeserializeIfSuccessfullStatusCode<Request>(httpResponse);
             }
             catch (Exception ex)
@@ -140,7 +140,7 @@ namespace Altinn.AccessManagement.UI.Integration.Clients
                 string endpointUrl = $"enduser/request/draft?id={id}";
                 string token = JwtTokenUtil.GetTokenFromContext(_httpContextAccessor.HttpContext, _platformSettings.JwtCookieName);
 
-                var httpResponse = await _client.GetAsync(token, endpointUrl);
+                var httpResponse = await _client.GetAsync(token, endpointUrl, cancellationToken);
                 return await ClientUtils.DeserializeIfSuccessfullStatusCode<Request>(httpResponse);
             }
             catch (Exception ex)
@@ -158,7 +158,7 @@ namespace Altinn.AccessManagement.UI.Integration.Clients
                 string endpointUrl = $"enduser/request/resource?party={party}&to={to}&resource={resource}";
                 string token = JwtTokenUtil.GetTokenFromContext(_httpContextAccessor.HttpContext, _platformSettings.JwtCookieName);
 
-                var httpResponse = await _client.PostAsync(token, endpointUrl, null);
+                var httpResponse = await _client.PostAsync(token, endpointUrl, null, cancellationToken);
                 return await ClientUtils.DeserializeIfSuccessfullStatusCode<Request>(httpResponse);
             }
             catch (Exception ex)
@@ -176,7 +176,7 @@ namespace Altinn.AccessManagement.UI.Integration.Clients
                 string endpointUrl = $"enduser/request/package?party={party}&to={to}&package={package}";
                 string token = JwtTokenUtil.GetTokenFromContext(_httpContextAccessor.HttpContext, _platformSettings.JwtCookieName);
 
-                var httpResponse = await _client.PostAsync(token, endpointUrl, null);
+                var httpResponse = await _client.PostAsync(token, endpointUrl, null, cancellationToken);
                 return await ClientUtils.DeserializeIfSuccessfullStatusCode<Request>(httpResponse);
             }
             catch (Exception ex)
@@ -194,7 +194,7 @@ namespace Altinn.AccessManagement.UI.Integration.Clients
                 string endpointUrl = $"enduser/request/sent/withdraw?party={party}&id={id}";
                 string token = JwtTokenUtil.GetTokenFromContext(_httpContextAccessor.HttpContext, _platformSettings.JwtCookieName);
 
-                var httpResponse = await _client.PutAsync(token, endpointUrl, null);
+                var httpResponse = await _client.PutAsync(token, endpointUrl, null, null, cancellationToken);
                 return await ClientUtils.DeserializeIfSuccessfullStatusCode<Request>(httpResponse);
             }
             catch (Exception ex)
@@ -212,7 +212,7 @@ namespace Altinn.AccessManagement.UI.Integration.Clients
                 string endpointUrl = $"enduser/request/draft/confirm?party={party}&id={id}";
                 string token = JwtTokenUtil.GetTokenFromContext(_httpContextAccessor.HttpContext, _platformSettings.JwtCookieName);
 
-                var httpResponse = await _client.PutAsync(token, endpointUrl, null);
+                var httpResponse = await _client.PutAsync(token, endpointUrl, null, null, cancellationToken);
                 return await ClientUtils.DeserializeIfSuccessfullStatusCode<Request>(httpResponse);
             }
             catch (Exception ex)
@@ -230,7 +230,7 @@ namespace Altinn.AccessManagement.UI.Integration.Clients
                 string endpointUrl = $"enduser/request/received/reject?party={party}&id={id}";
                 string token = JwtTokenUtil.GetTokenFromContext(_httpContextAccessor.HttpContext, _platformSettings.JwtCookieName);
 
-                var httpResponse = await _client.PutAsync(token, endpointUrl, null);
+                var httpResponse = await _client.PutAsync(token, endpointUrl, null, null, cancellationToken);
                 return await ClientUtils.DeserializeIfSuccessfullStatusCode<Request>(httpResponse);
             }
             catch (Exception ex)
@@ -248,7 +248,7 @@ namespace Altinn.AccessManagement.UI.Integration.Clients
                 string endpointUrl = $"enduser/request/received/approve?party={party}&id={id}";
                 string token = JwtTokenUtil.GetTokenFromContext(_httpContextAccessor.HttpContext, _platformSettings.JwtCookieName);
 
-                var httpResponse = await _client.PutAsync(token, endpointUrl, null);
+                var httpResponse = await _client.PutAsync(token, endpointUrl, null, null, cancellationToken);
                 return await ClientUtils.DeserializeIfSuccessfullStatusCode<Request>(httpResponse);
             }
             catch (Exception ex)
@@ -278,7 +278,7 @@ namespace Altinn.AccessManagement.UI.Integration.Clients
                 string endpointUrl = QueryHelpers.AddQueryString("enduser/request/sent/count", queryParams.Concat(statusParams));
                 string token = JwtTokenUtil.GetTokenFromContext(_httpContextAccessor.HttpContext, _platformSettings.JwtCookieName);
 
-                var httpResponse = await _client.GetAsync(token, endpointUrl);
+                var httpResponse = await _client.GetAsync(token, endpointUrl, cancellationToken);
                 return await ClientUtils.DeserializeIfSuccessfullStatusCode<int>(httpResponse);
             }
             catch (Exception ex)
@@ -308,7 +308,7 @@ namespace Altinn.AccessManagement.UI.Integration.Clients
                 string endpointUrl = QueryHelpers.AddQueryString("enduser/request/received/count", queryParams.Concat(statusParams));
                 string token = JwtTokenUtil.GetTokenFromContext(_httpContextAccessor.HttpContext, _platformSettings.JwtCookieName);
 
-                var httpResponse = await _client.GetAsync(token, endpointUrl);
+                var httpResponse = await _client.GetAsync(token, endpointUrl, cancellationToken);
                 return await ClientUtils.DeserializeIfSuccessfullStatusCode<int>(httpResponse);
             }
             catch (Exception ex)

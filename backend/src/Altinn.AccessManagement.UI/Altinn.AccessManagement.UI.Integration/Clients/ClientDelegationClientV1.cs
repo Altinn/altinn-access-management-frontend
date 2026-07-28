@@ -66,7 +66,7 @@ namespace Altinn.AccessManagement.UI.Integration.Clients
 
             string token = JwtTokenUtil.GetTokenFromContext(_httpContextAccessor.HttpContext, _platformSettings.JwtCookieName);
 
-            HttpResponseMessage response = await _client.GetAsync(token, endpointUrl);
+            HttpResponseMessage response = await _client.GetAsync(token, endpointUrl, cancellationToken);
             PaginatedResult<MyClientDelegation> clients =
                 await ClientUtils.DeserializeIfSuccessfullStatusCode<PaginatedResult<MyClientDelegation>>(response, _logger, "ClientDelegationClientV1.GetMyClients");
 
@@ -84,7 +84,7 @@ namespace Altinn.AccessManagement.UI.Integration.Clients
             string endpointUrl = $"enduser/clientdelegations/my/clientproviders?provider={provider}";
             string token = JwtTokenUtil.GetTokenFromContext(_httpContextAccessor.HttpContext, _platformSettings.JwtCookieName);
 
-            HttpResponseMessage response = await _client.DeleteAsync(token, endpointUrl);
+            HttpResponseMessage response = await _client.DeleteAsync(token, endpointUrl, null, cancellationToken);
             if (response.IsSuccessStatusCode)
             {
                 return;
@@ -102,7 +102,7 @@ namespace Altinn.AccessManagement.UI.Integration.Clients
             string token = JwtTokenUtil.GetTokenFromContext(_httpContextAccessor.HttpContext, _platformSettings.JwtCookieName);
 
             StringContent requestBody = new StringContent(JsonSerializer.Serialize(payload, _serializerOptions), Encoding.UTF8, JsonMediaType);
-            HttpResponseMessage response = await _client.DeleteAsync(token, endpointUrl, requestBody);
+            HttpResponseMessage response = await _client.DeleteAsync(token, endpointUrl, requestBody, null, cancellationToken);
             string responseContent = await response.Content.ReadAsStringAsync(cancellationToken);
             if (response.IsSuccessStatusCode)
             {
@@ -131,7 +131,7 @@ namespace Altinn.AccessManagement.UI.Integration.Clients
 
             string token = JwtTokenUtil.GetTokenFromContext(_httpContextAccessor.HttpContext, _platformSettings.JwtCookieName);
 
-            HttpResponseMessage response = await _client.GetAsync(token, endpointUrl);
+            HttpResponseMessage response = await _client.GetAsync(token, endpointUrl, cancellationToken);
             PaginatedResult<ClientDelegation> clients =
                 await ClientUtils.DeserializeIfSuccessfullStatusCode<PaginatedResult<ClientDelegation>>(response, _logger, "ClientDelegationClientV1.GetClients");
 
@@ -149,7 +149,7 @@ namespace Altinn.AccessManagement.UI.Integration.Clients
             string endpointUrl = $"enduser/clientdelegations/agents?party={party}";
             string token = JwtTokenUtil.GetTokenFromContext(_httpContextAccessor.HttpContext, _platformSettings.JwtCookieName);
 
-            HttpResponseMessage response = await _client.GetAsync(token, endpointUrl);
+            HttpResponseMessage response = await _client.GetAsync(token, endpointUrl, cancellationToken);
             PaginatedResult<AgentDelegation> agents =
                 await ClientUtils.DeserializeIfSuccessfullStatusCode<PaginatedResult<AgentDelegation>>(response, _logger, "ClientDelegationClientV1.GetAgents");
 
@@ -167,7 +167,7 @@ namespace Altinn.AccessManagement.UI.Integration.Clients
             string endpointUrl = $"enduser/clientdelegations/agents/accesspackages?party={party}&to={to}";
             string token = JwtTokenUtil.GetTokenFromContext(_httpContextAccessor.HttpContext, _platformSettings.JwtCookieName);
 
-            HttpResponseMessage response = await _client.GetAsync(token, endpointUrl);
+            HttpResponseMessage response = await _client.GetAsync(token, endpointUrl, cancellationToken);
             PaginatedResult<ClientDelegation> clients =
                 await ClientUtils.DeserializeIfSuccessfullStatusCode<PaginatedResult<ClientDelegation>>(response, _logger, "ClientDelegationClientV1.GetAgentAccessPackages");
 
@@ -185,7 +185,7 @@ namespace Altinn.AccessManagement.UI.Integration.Clients
             string endpointUrl = $"enduser/clientdelegations/clients/accesspackages?party={party}&from={from}";
             string token = JwtTokenUtil.GetTokenFromContext(_httpContextAccessor.HttpContext, _platformSettings.JwtCookieName);
 
-            HttpResponseMessage response = await _client.GetAsync(token, endpointUrl);
+            HttpResponseMessage response = await _client.GetAsync(token, endpointUrl, cancellationToken);
             PaginatedResult<AgentDelegation> agents =
                 await ClientUtils.DeserializeIfSuccessfullStatusCode<PaginatedResult<AgentDelegation>>(response, _logger, "ClientDelegationClientV1.GetClientAccessPackages");
 
@@ -204,7 +204,7 @@ namespace Altinn.AccessManagement.UI.Integration.Clients
             string token = JwtTokenUtil.GetTokenFromContext(_httpContextAccessor.HttpContext, _platformSettings.JwtCookieName);
 
             StringContent requestBody = new StringContent(JsonSerializer.Serialize(payload, _serializerOptions), Encoding.UTF8, JsonMediaType);
-            HttpResponseMessage response = await _client.PostAsync(token, endpointUrl, requestBody);
+            HttpResponseMessage response = await _client.PostAsync(token, endpointUrl, requestBody, cancellationToken);
             string responseContent = await response.Content.ReadAsStringAsync(cancellationToken);
 
             if (!response.IsSuccessStatusCode)
@@ -224,7 +224,7 @@ namespace Altinn.AccessManagement.UI.Integration.Clients
             string token = JwtTokenUtil.GetTokenFromContext(_httpContextAccessor.HttpContext, _platformSettings.JwtCookieName);
 
             StringContent requestBody = new StringContent(JsonSerializer.Serialize(payload, _serializerOptions), Encoding.UTF8, JsonMediaType);
-            HttpResponseMessage response = await _client.DeleteAsync(token, endpointUrl, requestBody);
+            HttpResponseMessage response = await _client.DeleteAsync(token, endpointUrl, requestBody, null, cancellationToken);
             string responseContent = await response.Content.ReadAsStringAsync(cancellationToken);
             if (response.IsSuccessStatusCode)
             {
@@ -243,7 +243,7 @@ namespace Altinn.AccessManagement.UI.Integration.Clients
 
             StringContent requestBody = personInput != null ? new StringContent(JsonSerializer.Serialize(personInput, _serializerOptions), Encoding.UTF8, JsonMediaType) : null;
 
-            var httpResponse = await _client.PostAsync(token, endpointUrl, requestBody);
+            var httpResponse = await _client.PostAsync(token, endpointUrl, requestBody, cancellationToken);
 
             var content = await httpResponse.Content.ReadAsStringAsync();
 
@@ -263,7 +263,7 @@ namespace Altinn.AccessManagement.UI.Integration.Clients
             string endpointUrl = $"enduser/clientdelegations/agents?party={party}&to={to}&cascade=true";
             string token = JwtTokenUtil.GetTokenFromContext(_httpContextAccessor.HttpContext, _platformSettings.JwtCookieName);
 
-            HttpResponseMessage response = await _client.DeleteAsync(token, endpointUrl);
+            HttpResponseMessage response = await _client.DeleteAsync(token, endpointUrl, null, cancellationToken);
             if (response.IsSuccessStatusCode)
             {
                 return;
