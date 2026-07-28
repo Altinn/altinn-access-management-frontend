@@ -5,7 +5,6 @@ using Altinn.AccessManagement.UI.Core.Models.AccessManagement;
 using Altinn.AccessManagement.UI.Core.Models.Profile;
 using Altinn.AccessManagement.UI.Core.Models.User;
 using Altinn.AccessManagement.UI.Core.Services.Interfaces;
-using Microsoft.Extensions.Logging;
 
 namespace Altinn.AccessManagement.UI.Core.Services
 {
@@ -14,7 +13,6 @@ namespace Altinn.AccessManagement.UI.Core.Services
     /// </summary>
     public class UserService : IUserService
     {
-        private readonly ILogger _logger;
         private readonly IProfileClient _profileClient;
         private readonly IAccessManagementClient _accessManagementClient;
         private readonly IAccessManagementClientV0 _accessManagementClientV0;
@@ -23,19 +21,16 @@ namespace Altinn.AccessManagement.UI.Core.Services
         /// <summary>
         /// Initializes a new instance of the <see cref="UserService"/> class.
         /// </summary>
-        /// <param name="logger">handler for logger</param>
         /// <param name="profileClient">handler for profile client</param>
         /// <param name="accessManagementClient">handler for AM client</param>
         /// <param name="accessManagementClientV0">handler for old AM client</param>
         /// <param name="connectionClient">handler for right holder client</param>
         public UserService(
-            ILogger<UserService> logger,
             IProfileClient profileClient,
             IAccessManagementClient accessManagementClient,
             IAccessManagementClientV0 accessManagementClientV0,
             IConnectionClient connectionClient)
         {
-            _logger = logger;
             _profileClient = profileClient;
             _accessManagementClient = accessManagementClient;
             _accessManagementClientV0 = accessManagementClientV0;
@@ -113,9 +108,9 @@ namespace Altinn.AccessManagement.UI.Core.Services
         }
 
         /// <inheritdoc/>
-        public async Task<List<User>> GetReporteeList(Guid partyUuid)
+        public async Task<List<User>> GetReporteeList(Guid userId)
         {
-            List<AuthorizedParty> rightOwners = await _accessManagementClient.GetReporteeList(partyUuid);
+            List<AuthorizedParty> rightOwners = await _accessManagementClient.GetReporteeList(userId);
 
             return rightOwners.Select(party => new User(party)).ToList();
         }

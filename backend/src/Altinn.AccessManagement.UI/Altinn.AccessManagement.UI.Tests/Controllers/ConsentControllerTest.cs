@@ -415,6 +415,80 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
             Assert.Equal(HttpStatusCode.NotFound, httpResponse.StatusCode);
         }
 
+        /// <summary>
+        ///     Test case: GetConsentRequestCount returns the count of consent requests with Created status for an org party
+        ///     Expected: Returns 5
+        /// </summary>
+        [Fact]
+        public async Task GetConsentRequestCount_ReturnsCreatedCountForOrgParty()
+        {
+            // Arrange
+            string party = "cd35779b-b174-4ecc-bbef-ece13611be7f";
+
+            // Act
+            HttpResponseMessage httpResponse = await _client.GetAsync($"accessmanagement/api/v1/consent/count/{party}?status=Created");
+            int actualCount = await httpResponse.Content.ReadFromJsonAsync<int>();
+
+            // Assert
+            Assert.Equal(HttpStatusCode.OK, httpResponse.StatusCode);
+            Assert.Equal(5, actualCount);
+        }
+
+        /// <summary>
+        ///     Test case: GetConsentRequestCount returns the count of consent requests with Accepted status for an org party
+        ///     Expected: Returns 4
+        /// </summary>
+        [Fact]
+        public async Task GetConsentRequestCount_ReturnsAcceptedCountForOrgParty()
+        {
+            // Arrange
+            string party = "cd35779b-b174-4ecc-bbef-ece13611be7f";
+
+            // Act
+            HttpResponseMessage httpResponse = await _client.GetAsync($"accessmanagement/api/v1/consent/count/{party}?status=Accepted");
+            int actualCount = await httpResponse.Content.ReadFromJsonAsync<int>();
+
+            // Assert
+            Assert.Equal(HttpStatusCode.OK, httpResponse.StatusCode);
+            Assert.Equal(4, actualCount);
+        }
+
+        /// <summary>
+        ///     Test case: GetConsentRequestCount returns the count of consent requests with Revoked status for an org party
+        ///     Expected: Returns 1
+        /// </summary>
+        [Fact]
+        public async Task GetConsentRequestCount_ReturnsRevokedCountForOrgParty()
+        {
+            // Arrange
+            string party = "cd35779b-b174-4ecc-bbef-ece13611be7f";
+
+            // Act
+            HttpResponseMessage httpResponse = await _client.GetAsync($"accessmanagement/api/v1/consent/count/{party}?status=Revoked");
+            int actualCount = await httpResponse.Content.ReadFromJsonAsync<int>();
+
+            // Assert
+            Assert.Equal(HttpStatusCode.OK, httpResponse.StatusCode);
+            Assert.Equal(1, actualCount);
+        }
+
+        /// <summary>
+        ///     Test case: GetConsentRequestCount returns error for a party with no consent data
+        ///     Expected: Returns NotFound
+        /// </summary>
+        [Fact]
+        public async Task GetConsentRequestCount_ReturnsNotFoundForPartyWithNoConsents()
+        {
+            // Arrange
+            string party = "477717d1-d9b2-40f0-98c7-0fd8eb0626c2";
+
+            // Act
+            HttpResponseMessage httpResponse = await _client.GetAsync($"accessmanagement/api/v1/consent/count/{party}?status=Revoked");
+
+            // Assert
+            Assert.Equal(HttpStatusCode.NotFound, httpResponse.StatusCode);
+        }
+
         private static string GetRedirectCookieValue(HttpResponseMessage httpResponse)
         {
             string myCookieValue = string.Empty;

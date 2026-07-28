@@ -5,7 +5,7 @@ import {
   useConfirmRequestMutation,
   useGetEnrichedDraftRequestQuery,
   useWithdrawRequestMutation,
-  type EnrichedResourceRequest,
+  type EnrichedRequest,
 } from '@/rtk/features/requestApi';
 import { useSearchParams } from 'react-router';
 import { getCookie } from '@/resources/Cookie/CookieMethods';
@@ -53,7 +53,7 @@ export const DraftRequestPage = () => {
     loadError: multiLoadError,
   } = useMultipleDraftRequests(stableMultiIds);
 
-  const representativeRequest: EnrichedResourceRequest | undefined = isMultiMode
+  const representativeRequest: EnrichedRequest | undefined = isMultiMode
     ? multiRequests[0]
     : request;
 

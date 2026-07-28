@@ -46,7 +46,7 @@ namespace Altinn.AccessManagement.UI.Integration.Clients
             _httpContextAccessor = httpContextAccessor;
             _httpClientFactory = httpClientFactory;
             _platformSettings = platformSettings.Value;
-            httpClient.BaseAddress = new Uri(_platformSettings.ApiAccessManagementEndpoint);
+            httpClient.BaseAddress = new Uri(_platformSettings.ApiAccessManagementEndpoint + "v1/");
             httpClient.DefaultRequestHeaders.Add(_platformSettings.SubscriptionKeyHeaderName, _platformSettings.SubscriptionKey);
             _httpClient = httpClient;
         }
@@ -230,6 +230,33 @@ namespace Altinn.AccessManagement.UI.Integration.Clients
             catch (Exception ex)
             {
                 _logger.LogError(ex, "AccessManagement.UI // ConsentClient // RevokeConsent // Exception");
+                throw;
+            }
+        }
+
+        /// <inheritdoc/>
+        public async Task<Result<int>> GetConsentRequestCount(Guid partyId, ConsentRequestStatusType status, CancellationToken cancellationToken)
+        {
+            try
+            {
+                string token = JwtTokenUtil.GetTokenFromContext(_httpContextAccessor.HttpContext, _platformSettings.JwtCookieName);
+                string endpointUrl = $"bff/consentrequests/count/{partyId}?status={status}";
+
+                HttpResponseMessage response = await _httpClient.GetAsync(token, endpointUrl);
+                string responseContent = await response.Content.ReadAsStringAsync(cancellationToken);
+
+                if (response.IsSuccessStatusCode)
+                {
+                    return JsonSerializer.Deserialize<int>(responseContent, _jsonSerializerOptions);
+                }
+
+                _logger.LogError("AccessManagement.UI // ConsentClient // GetConsentRequestCount // Unexpected HttpStatusCode: {StatusCode}\n {ResponseBody}", response.StatusCode, responseContent);
+
+                return ConsentProblemMapper.MapToConsentUiError(responseContent, response.StatusCode);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "AccessManagement.UI // ConsentClient // GetConsentRequestCount // Exception");
                 throw;
             }
         }

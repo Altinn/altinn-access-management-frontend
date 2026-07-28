@@ -15,11 +15,12 @@
 		<PackageReference Include="Microsoft.AspNetCore.Mvc" Version="2.3.10" />
 		<PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="10.0.8" />
 		<PackageReference Include="Microsoft.Extensions.Options" Version="10.0.8" />
+		<PackageReference Include="Microsoft.FeatureManagement" Version="4.5.0" />
 		<PackageReference Include="StyleCop.Analyzers" Version="1.2.0-beta.556">
 			<PrivateAssets>all</PrivateAssets>
 			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
 		</PackageReference>
-		<PackageReference Include="System.Security.Cryptography.Xml" Version="9.0.16" />
+		<PackageReference Include="System.Security.Cryptography.Xml" Version="9.0.18" />
 	</ItemGroup>
 
 	<ItemGroup>

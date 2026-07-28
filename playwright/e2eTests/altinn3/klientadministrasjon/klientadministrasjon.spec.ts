@@ -31,7 +31,7 @@ test.describe('klientadministrasjon', () => {
 
       await test.step(`${agent.name} har nå blitt lagt til`, async () => {
         await expect(klientAdministrasjonPage.slettBrukerKnapp).toBeVisible();
-        await expect(klientAdministrasjonPage.brukerKnapp(agent.name)).toBeVisible();
+        await expect(klientAdministrasjonPage.brukerHeading(agent.name)).toBeVisible();
       });
     });
 
@@ -146,12 +146,10 @@ test.describe('klientadministrasjon', () => {
       });
 
       await test.step(`${agent.name} finnes nå i listen over eksisterende brukere`, async () => {
-        await klientAdministrasjonPage.klikkBrukereMedFullmakt();
         await expect(klientAdministrasjonPage.brukerKnapp(agent.name)).toBeVisible();
       });
 
       await test.step('og har tilgangspakken Posttjenester', async () => {
-        await klientAdministrasjonPage.klikkKnapp(agent.name);
         await expect(klientAdministrasjonPage.slettFullmaktKnapp('Posttjenester')).toBeVisible();
       });
     });
@@ -226,7 +224,6 @@ test.describe('klientadministrasjon', () => {
       });
 
       await test.step(`${agent.name} finnes nå i listen over eksisterende brukere`, async () => {
-        await klientAdministrasjonPage.klikkHarDisseKlientene();
         await expect(klientAdministrasjonPage.klientKnapp(client.orgName)).toBeVisible();
       });
 

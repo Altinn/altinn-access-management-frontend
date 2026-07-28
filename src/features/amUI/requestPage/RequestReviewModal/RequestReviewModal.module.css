@@ -4,12 +4,6 @@
   overflow-y: auto;
 }
 
-.backButton {
-  margin-bottom: var(--ds-spacing-1);
-  margin-top: -0.7rem;
-  translate: -1rem 0;
-}
-
 .reviewListView {
   display: flex;
   flex-direction: column;

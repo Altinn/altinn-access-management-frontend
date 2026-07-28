@@ -93,13 +93,7 @@ export const UsersList = () => {
       acc.push(mapConnection(connection));
       return acc;
     }, []);
-  }, [
-    rightHolders,
-    mapRoles,
-    currentUser?.party.id,
-    roleMetadataError,
-    loadingRoleMetadata,
-  ]);
+  }, [rightHolders, mapRoles, currentUser?.party.id, roleMetadataError, loadingRoleMetadata]);
 
   const currentUserWithRoles = useMemo(() => {
     if (!currentUser) {

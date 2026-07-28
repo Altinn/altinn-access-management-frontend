@@ -34,6 +34,28 @@ namespace Altinn.AccessManagement.UI.Core.Models.ClientDelegation
             /// Gets or sets the packages for the role.
             /// </summary>
             public CompactPackage[] Packages { get; set; } = Array.Empty<CompactPackage>();
+
+            /// <summary>
+            /// Gets or sets the single rights resources for the role. Only populated by the v2 client delegation API.
+            /// </summary>
+            public CompactResource[] Resources { get; set; } = Array.Empty<CompactResource>();
         }
+    }
+
+    /// <summary>
+    /// Compact resource model
+    /// </summary>
+    public class CompactResource
+    {
+        /// <summary>
+        /// Gets or sets the internal resource id.
+        /// </summary>
+        public Guid Id { get; set; }
+
+        /// <summary>
+        /// Gets or sets the resource registry id. Used to enrich the resource with name and
+        /// description from the resource registry.
+        /// </summary>
+        public string RefId { get; set; }
     }
 }

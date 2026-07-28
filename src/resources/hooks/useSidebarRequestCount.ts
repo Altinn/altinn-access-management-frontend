@@ -1,5 +1,5 @@
 import { getCookie } from '../Cookie/CookieMethods';
-import { useGetActiveConsentsQuery } from '@/rtk/features/consentApi';
+import { useGetConsentRequestsCountQuery } from '@/rtk/features/consentApi';
 import { useGetReceivedRequestsCountQuery } from '@/rtk/features/requestApi';
 import { useGetPendingSystemUserRequestsQuery } from '@/rtk/features/systemUserApi';
 import type { ReporteeInfo } from '@/rtk/features/userInfoApi';
@@ -20,8 +20,7 @@ export const useSidebarRequestCount = ({
 
   const shouldFetchReceivedRequestsCount = !!partyUuid && !!isAdmin;
   const shouldFetchConsents = !!partyUuid && hasConsentPermission(isAdmin);
-  const shouldFetchSystemUsers =
-    !!partyUuid && !!hasCreateSystemUserPermission(reportee, isAdmin);
+  const shouldFetchSystemUsers = !!partyUuid && !!hasCreateSystemUserPermission(reportee, isAdmin);
 
   const {
     data: receivedRequestsCount,
@@ -33,10 +32,10 @@ export const useSidebarRequestCount = ({
   );
 
   const {
-    data: activeConsents,
-    isLoading: isLoadingActiveConsents,
-    isError: isErrorActiveConsents,
-  } = useGetActiveConsentsQuery({ partyId: partyUuid ?? '' }, { skip: !shouldFetchConsents });
+    data: pendingConsentsCount,
+    isLoading: isLoadingPendingConsents,
+    isError: isErrorPendingConsents,
+  } = useGetConsentRequestsCountQuery({ partyId: partyUuid ?? '' }, { skip: !shouldFetchConsents });
 
   const {
     data: pendingSystemUsers,
@@ -46,18 +45,16 @@ export const useSidebarRequestCount = ({
     skip: !shouldFetchSystemUsers,
   });
 
-  const pendingConsentCount = (activeConsents ?? []).filter(
-    (consent) => consent.isPendingConsent,
-  ).length;
   const pendingSystemUserCount = (pendingSystemUsers ?? []).length;
 
   return {
-    requestsBadgeCount: (receivedRequestsCount ?? 0) + pendingConsentCount + pendingSystemUserCount,
+    requestsBadgeCount:
+      (receivedRequestsCount ?? 0) + (pendingConsentsCount ?? 0) + pendingSystemUserCount,
     isLoading:
       isLoadingPermissions ||
       isLoadingReceivedRequestsCount ||
-      isLoadingActiveConsents ||
+      isLoadingPendingConsents ||
       isLoadingPendingSystemUsers,
-    isError: isErrorReceivedRequestsCount || isErrorActiveConsents || isErrorPendingSystemUsers,
+    isError: isErrorReceivedRequestsCount || isErrorPendingConsents || isErrorPendingSystemUsers,
   };
 };

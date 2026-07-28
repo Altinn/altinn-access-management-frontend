@@ -1,16 +1,13 @@
-import React, { type ReactNode, useCallback, useEffect, useMemo, useState } from 'react';
+import React, { type ReactNode, useEffect, useMemo, useState } from 'react';
 import {
   Button,
   DsParagraph,
-  DsSearch,
   formatDisplayName,
   List,
   UserListItem,
   type UserListItemProps,
 } from '@altinn/altinn-components';
 import { useTranslation } from 'react-i18next';
-
-import { debounce } from '@/resources/utils';
 
 import classes from './UserListItems.module.css';
 
@@ -21,41 +18,26 @@ export type UserListItemData = UserListItemProps & {
 
 interface UserListItemsProps {
   items: UserListItemData[];
-  searchPlaceholder?: string;
-  addUserButton?: React.ReactNode;
   emptyText?: string;
+  searchString?: string;
 }
 
 const PAGE_SIZE = 10;
 
-export const UserListItems = ({
-  items,
-  searchPlaceholder,
-  addUserButton,
-  emptyText,
-}: UserListItemsProps) => {
+export const UserListItems = ({ items, emptyText, searchString }: UserListItemsProps) => {
   const { t } = useTranslation();
-  const [searchString, setSearchString] = useState<string>('');
   const [expandedIds, setExpandedIds] = useState<string[]>([]);
   const [currentPage, setCurrentPage] = useState(1);
-  const placeholder =
-    searchPlaceholder ?? t('client_administration_page.client_search_placeholder');
-
-  const onSearch = useCallback(
-    debounce((newSearchString: string) => {
-      setSearchString(newSearchString);
-    }, 300),
-    [],
-  );
 
   const filteredItems = useMemo(() => {
-    if (!searchString) {
+    const normalizedSearch = searchString?.trim().toLowerCase();
+    if (!normalizedSearch) {
       return items;
     }
     return items.filter((item) => {
       return (
-        item.name.toLowerCase().includes(searchString.trim().toLowerCase()) ||
-        item.organizationIdentifier?.toLowerCase().includes(searchString.trim().toLowerCase())
+        item.name.toLowerCase().includes(normalizedSearch) ||
+        item.organizationIdentifier?.toLowerCase().includes(normalizedSearch)
       );
     });
   }, [items, searchString]);
@@ -87,22 +69,6 @@ export const UserListItems = ({
 
   return (
     <div className={classes.container}>
-      <div className={classes.search}>
-        <DsSearch className={classes.searchBar}>
-          <DsSearch.Input
-            aria-label={placeholder}
-            placeholder={placeholder}
-            onChange={(event: React.ChangeEvent<HTMLInputElement>) => onSearch(event.target.value)}
-          />
-          <DsSearch.Clear
-            onClick={() => {
-              onSearch.cancel();
-              setSearchString('');
-            }}
-          />
-        </DsSearch>
-        {addUserButton && <div className={classes.addButton}>{addUserButton}</div>}
-      </div>
       {items.length === 0 ? (
         <DsParagraph className={classes.emptyText}>
           {emptyText ?? t('client_administration_page.no_agents')}

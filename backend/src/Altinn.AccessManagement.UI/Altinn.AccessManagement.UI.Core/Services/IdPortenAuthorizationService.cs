@@ -1,0 +1,80 @@
+using Altinn.AccessManagement.UI.Core.ClientInterfaces;
+using Altinn.AccessManagement.UI.Core.Exceptions;
+using Altinn.AccessManagement.UI.Core.Helpers;
+using Altinn.AccessManagement.UI.Core.Models.IdPortenAuthorization;
+using Altinn.AccessManagement.UI.Core.Services.Interfaces;
+using Altinn.Register.Contracts.V1;
+
+namespace Altinn.AccessManagement.UI.Core.Services
+{
+    /// <inheritdoc />
+    public class IdPortenAuthorizationService : IIdPortenAuthorizationService
+    {
+        private readonly IIdPortenAuthorizationClient _idPortenAuthorizationClient;
+
+        private readonly IRegisterClient _registerClient;
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="IdPortenAuthorizationService"/> class.
+        /// </summary>
+        /// <param name="idPortenAuthorizationClient">The ID-porten authorization client.</param>
+        /// <param name="registerClient">The register client.</param>
+        public IdPortenAuthorizationService(IIdPortenAuthorizationClient idPortenAuthorizationClient, IRegisterClient registerClient)
+        {
+            _idPortenAuthorizationClient = idPortenAuthorizationClient;
+            _registerClient = registerClient;
+        }
+
+        /// <inheritdoc />
+        public async Task<IEnumerable<IdPortenAuthorizationFE>> GetIdPortenAuthorizations(CancellationToken cancellationToken)
+        {
+            IEnumerable<IdPortenAuthorization> response = await _idPortenAuthorizationClient.GetIdPortenAuthorizations(cancellationToken);
+            List<IdPortenAuthorizationFE> authorizationFEs = [];
+
+            foreach (var auth in response)
+            {
+                // Return party name for the organization number in the consumer of the authorization.
+                // TODO: this could probably be improved, if we could look up all orgNos with one call.
+                // we don't actually need the partyUuid, so we can rely on the orgNo instead. However,
+                // this means that consent also need to use orgNo to group consent and id-porten 
+                // authorization together in frontend
+                Party party = await _registerClient.GetPartyForOrganization(auth.Consumer.OrgNo);
+
+                if (party == null)
+                {
+                    throw new ResourceNotFoundException($"Party not found: {auth.Consumer.OrgNo}");
+                }
+
+                IdPortenAuthorizationFE authorization = new()
+                {
+                    AuthorizationId = auth.Authorization_id,
+                    AuthorizedAt = auth.Authorized_at,
+                    ClientId = auth.Client_id,
+                    ClientName = auth.Client_name,
+                    Expires = auth.Expires,
+                    UserAgent = auth.User_agent,
+                    ConsumerName = party.Name,
+                    ConsumerPartyUuid = $"urn:altinn:party:uuid:{party.PartyUuid}",
+                    Scopes = auth.Scopes.Select((scope) =>
+                    {
+                        return new ScopeFE()
+                        {
+                            Name = scope.Name,
+                            Description = scope.Description,
+                            LongDescription = MarkdownConverter.ConvertToHtml(scope.Long_description) // Convert long description from markdown to html
+                        };
+                    })
+                };
+                authorizationFEs.Add(authorization);
+            }
+
+            return authorizationFEs;
+        }
+
+        /// <inheritdoc />
+        public async Task<bool> WithdrawIdPortenAuthorization(string id, CancellationToken cancellationToken)
+        {
+            return await _idPortenAuthorizationClient.WithdrawIdPortenAuthorization(id, cancellationToken);
+        }
+    }
+}
