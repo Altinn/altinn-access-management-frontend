@@ -53,8 +53,9 @@ namespace Altinn.AccessManagement.UI.Core.Models.ClientDelegation
         public Guid Id { get; set; }
 
         /// <summary>
-        /// Gets or sets the resource display name.
+        /// Gets or sets the resource registry id. Used to enrich the resource with name and
+        /// description from the resource registry.
         /// </summary>
-        public string Value { get; set; }
+        public string RefId { get; set; }
     }
 }

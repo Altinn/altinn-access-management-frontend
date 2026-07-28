@@ -41,7 +41,7 @@
             "resources": [
               {
                 "id": "44444444-4444-4444-4444-444444444444",
-                "value": "Demo-tjeneste for enkeltrettigheter"
+                "refId": "app_ttd_demo-tjeneste"
               }
             ]
           }
