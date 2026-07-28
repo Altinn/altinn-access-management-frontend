@@ -137,6 +137,20 @@ namespace Altinn.AccessManagement.UI.Core.Extensions
         /// <returns>A HttpResponseMessage.</returns>
         public static Task<HttpResponseMessage> DeleteAsync(this HttpClient httpClient, string authorizationToken, string requestUri, string platformAccessToken = null)
         {
+            return httpClient.DeleteAsync(authorizationToken, requestUri, CancellationToken.None, platformAccessToken);
+        }
+
+        /// <summary>
+        /// Extension that add authorization header to request.
+        /// </summary>
+        /// <param name="httpClient">The HttpClient.</param>
+        /// <param name="authorizationToken">the authorization token (jwt).</param>
+        /// <param name="requestUri">The request Uri.</param>
+        /// <param name="cancellationToken">The cancellation token.</param>
+        /// <param name="platformAccessToken">The platformAccess tokens.</param>
+        /// <returns>A HttpResponseMessage.</returns>
+        public static Task<HttpResponseMessage> DeleteAsync(this HttpClient httpClient, string authorizationToken, string requestUri, CancellationToken cancellationToken, string platformAccessToken = null)
+        {
             HttpRequestMessage request = new HttpRequestMessage(HttpMethod.Delete, requestUri);
             request.Headers.Add("Authorization", "Bearer " + authorizationToken);
             if (!string.IsNullOrEmpty(platformAccessToken))
@@ -144,7 +158,7 @@ namespace Altinn.AccessManagement.UI.Core.Extensions
                 request.Headers.Add("PlatformAccessToken", platformAccessToken);
             }
 
-            return httpClient.SendAsync(request, CancellationToken.None);
+            return httpClient.SendAsync(request, cancellationToken);
         }
 
         /// <summary>
