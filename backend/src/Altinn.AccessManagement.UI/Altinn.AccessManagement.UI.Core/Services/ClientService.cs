@@ -2,7 +2,7 @@ using Altinn.AccessManagement.UI.Core.ClientInterfaces;
 using Altinn.AccessManagement.UI.Core.Helpers;
 using Altinn.AccessManagement.UI.Core.Models.ClientDelegation;
 using Altinn.AccessManagement.UI.Core.Models.Connections;
-using Altinn.AccessManagement.UI.Core.Models.ResourceRegistry;
+using Altinn.AccessManagement.UI.Core.Models.ResourceRegistry.Frontend;
 using Altinn.AccessManagement.UI.Core.Services.Interfaces;
 using Microsoft.Extensions.Logging;
 
@@ -41,7 +41,7 @@ namespace Altinn.AccessManagement.UI.Core.Services
         public async Task<IEnumerable<MyClientDelegation>> GetMyClients(string languageCode, List<Guid> provider = null, CancellationToken cancellationToken = default)
         {
             IEnumerable<MyClientDelegation> myClients = await _clientDelegationClient.GetMyClients(provider, cancellationToken);
-            await EnrichResourceNames(myClients.SelectMany(myClient => myClient.Clients).SelectMany(client => client.Access), languageCode);
+            await EnrichResources(myClients.SelectMany(myClient => myClient.Clients).SelectMany(client => client.Access), languageCode);
             return myClients;
         }
 
@@ -61,7 +61,7 @@ namespace Altinn.AccessManagement.UI.Core.Services
         public async Task<IEnumerable<ClientDelegation>> GetClients(Guid party, string languageCode, List<string> roles = null, CancellationToken cancellationToken = default)
         {
             IEnumerable<ClientDelegation> clients = await _clientDelegationClient.GetClients(party, roles, cancellationToken);
-            await EnrichResourceNames(clients.SelectMany(client => client.Access), languageCode);
+            await EnrichResources(clients.SelectMany(client => client.Access), languageCode);
             return clients;
         }
 
@@ -69,7 +69,7 @@ namespace Altinn.AccessManagement.UI.Core.Services
         public async Task<IEnumerable<AgentDelegation>> GetAgents(Guid party, string languageCode, CancellationToken cancellationToken = default)
         {
             IEnumerable<AgentDelegation> agents = await _clientDelegationClient.GetAgents(party, cancellationToken);
-            await EnrichResourceNames(agents.SelectMany(agent => agent.Access), languageCode);
+            await EnrichResources(agents.SelectMany(agent => agent.Access), languageCode);
             return agents;
         }
 
@@ -77,7 +77,7 @@ namespace Altinn.AccessManagement.UI.Core.Services
         public async Task<IEnumerable<ClientDelegation>> GetAgentAccessPackages(Guid party, Guid to, string languageCode, CancellationToken cancellationToken = default)
         {
             IEnumerable<ClientDelegation> clients = await _clientDelegationClient.GetAgentAccessPackages(party, to, cancellationToken);
-            await EnrichResourceNames(clients.SelectMany(client => client.Access), languageCode);
+            await EnrichResources(clients.SelectMany(client => client.Access), languageCode);
             return clients;
         }
 
@@ -85,7 +85,7 @@ namespace Altinn.AccessManagement.UI.Core.Services
         public async Task<IEnumerable<AgentDelegation>> GetClientAccessPackages(Guid party, Guid from, string languageCode, CancellationToken cancellationToken = default)
         {
             IEnumerable<AgentDelegation> agents = await _clientDelegationClient.GetClientAccessPackages(party, from, cancellationToken);
-            await EnrichResourceNames(agents.SelectMany(agent => agent.Access), languageCode);
+            await EnrichResources(agents.SelectMany(agent => agent.Access), languageCode);
             return agents;
         }
 
@@ -105,7 +105,7 @@ namespace Altinn.AccessManagement.UI.Core.Services
         public async Task<IEnumerable<ClientDelegation>> GetAgentResources(Guid party, Guid to, string languageCode, CancellationToken cancellationToken = default)
         {
             IEnumerable<ClientDelegation> clients = await _clientDelegationResourceClient.GetAgentResources(party, to, cancellationToken);
-            await EnrichResourceNames(clients.SelectMany(client => client.Access), languageCode);
+            await EnrichResources(clients.SelectMany(client => client.Access), languageCode);
             return clients;
         }
 
@@ -113,7 +113,7 @@ namespace Altinn.AccessManagement.UI.Core.Services
         public async Task<IEnumerable<AgentDelegation>> GetClientResources(Guid party, Guid from, string languageCode, CancellationToken cancellationToken = default)
         {
             IEnumerable<AgentDelegation> agents = await _clientDelegationResourceClient.GetClientResources(party, from, cancellationToken);
-            await EnrichResourceNames(agents.SelectMany(agent => agent.Access), languageCode);
+            await EnrichResources(agents.SelectMany(agent => agent.Access), languageCode);
             return agents;
         }
 
@@ -177,45 +177,43 @@ namespace Altinn.AccessManagement.UI.Core.Services
         }
 
         /// <summary>
-        /// The v2 listings identify resources by registry id only, so the display name is looked up
-        /// from the resource registry. Lookups are cached per registry id, and each id is only
-        /// resolved once per response no matter how many roles it appears under.
-        /// A registry failure leaves the names unset rather than failing the whole listing.
+        /// The v2 listings identify resources by registry id only, so the resource itself is looked
+        /// up from the resource registry and attached. That lets the frontend render both the list
+        /// and the details dialog without a second round trip, using the same
+        /// <see cref="ServiceResourceFE"/> shape the rest of the solution already renders.
+        /// Each registry id is resolved once per response no matter how many roles it appears under,
+        /// and lookups are cached across requests. A registry failure leaves the details unset
+        /// rather than failing the whole listing.
         /// </summary>
-        private async Task EnrichResourceNames(IEnumerable<ClientDelegation.RoleAccessPackages> access, string languageCode)
+        private async Task EnrichResources(IEnumerable<ClientDelegation.RoleAccessPackages> access, string languageCode)
         {
-            List<CompactResource> resources = access
+            List<IGrouping<string, CompactResource>> resourcesByRefId = access
                 .Where(roleAccess => roleAccess?.Resources != null)
                 .SelectMany(roleAccess => roleAccess.Resources)
                 .Where(resource => !string.IsNullOrEmpty(resource.RefId))
+                .GroupBy(resource => resource.RefId)
                 .ToList();
 
-            if (resources.Count == 0)
+            if (resourcesByRefId.Count == 0)
             {
                 return;
             }
 
-            List<string> refIds = resources.Select(resource => resource.RefId).Distinct().ToList();
-
             try
             {
-                List<ServiceResource> registryResources = await _resourceService.GetResources(refIds);
-
-                Dictionary<string, string> namesByRefId = refIds
-                    .Zip(registryResources, (refId, registryResource) => (refId, registryResource))
-                    .ToDictionary(
-                        pair => pair.refId,
-                        pair => pair.registryResource?.Title?.GetValueOrDefault(languageCode)
-                            ?? pair.registryResource?.Title?.GetValueOrDefault("nb"));
-
-                foreach (CompactResource resource in resources)
+                foreach (IGrouping<string, CompactResource> sameResource in resourcesByRefId)
                 {
-                    resource.Name = namesByRefId.GetValueOrDefault(resource.RefId);
+                    ServiceResourceFE details = await _resourceService.GetResource(sameResource.Key, languageCode);
+
+                    foreach (CompactResource resource in sameResource)
+                    {
+                        resource.Details = details;
+                    }
                 }
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "ClientService.EnrichResourceNames failed to look up names for {Count} resources", refIds.Count);
+                _logger.LogError(ex, "ClientService.EnrichResources failed to look up {Count} resources from the resource registry", resourcesByRefId.Count);
             }
         }
     }

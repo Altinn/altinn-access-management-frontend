@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using Altinn.AccessManagement.UI.Core.Models.AccessPackage;
 using Altinn.AccessManagement.UI.Core.Models.Common;
+using Altinn.AccessManagement.UI.Core.Models.ResourceRegistry.Frontend;
 
 namespace Altinn.AccessManagement.UI.Core.Models.ClientDelegation
 {
@@ -53,15 +54,17 @@ namespace Altinn.AccessManagement.UI.Core.Models.ClientDelegation
         public Guid Id { get; set; }
 
         /// <summary>
-        /// Gets or sets the resource registry id. Used to enrich the resource with name and
-        /// description from the resource registry.
+        /// Gets or sets the resource registry id. The key the resource registry, delegation checks
+        /// and the delegate/remove payloads are all addressed by.
         /// </summary>
         public string RefId { get; set; }
 
         /// <summary>
-        /// Gets or sets the resource display name. Not part of the API response — looked up from
-        /// the resource registry by <see cref="RefId"/> before the response leaves the BFF.
+        /// Gets or sets the resource as described by the resource registry. Not part of the client
+        /// delegation API response — looked up by <see cref="RefId"/> before the response leaves the
+        /// BFF, so the frontend can render a resource without a second round trip.
+        /// Null when the registry has no resource with this <see cref="RefId"/>.
         /// </summary>
-        public string Name { get; set; }
+        public ServiceResourceFE Details { get; set; }
     }
 }
