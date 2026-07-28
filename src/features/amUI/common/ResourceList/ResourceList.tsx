@@ -1,6 +1,8 @@
 import React from 'react';
 import {
   DsParagraph,
+  DsPopover,
+  DsSwitch,
   List,
   ResourceListItem,
   type ResourceListItemProps,
@@ -28,6 +30,7 @@ import {
 } from './utils';
 
 import cn from 'classnames';
+import { QuestionmarkCircleIcon } from '@navikt/aksel-icons';
 
 interface ResourceListItemRowProps extends React.ComponentProps<typeof ResourceListItem> {
   resourceId: string;
@@ -97,11 +100,16 @@ export const ResourceList = <
   const { t } = useTranslation();
   const [search, setSearch] = React.useState('');
   const [filterState, setFilterState] = React.useState<string[]>([]);
+  const [includeExpired, setIncludeExpired] = React.useState<boolean>(false);
   const [selected, setSelected] = React.useState<TResource | null>(null);
   const { getProviderLogoUrl, isLoading: orgLoading } = useProviderLogoUrl();
   const logoResolver = React.useMemo(
     () => (resolveLogos ? getProviderLogoUrl : () => undefined),
     [getProviderLogoUrl, resolveLogos],
+  );
+  const hasExpiredResources = React.useMemo(
+    () => resources && resources.some(isExpiredResource),
+    [resources],
   );
 
   const shouldShowDetails = showDetails ?? !onSelect;
@@ -132,10 +140,12 @@ export const ResourceList = <
     resources,
     serviceOwnerFilter: filterState,
     searchString: enableSearch ? search : '',
+    includeExpiredResources: enableSearch ? includeExpired : true,
     getResourceName: extractResourceName,
     getOwnerName: extractOwnerName,
     getOwnerOrgCode: extractOrgCode,
     getDescription: extractDescription,
+    isExpiredResource: isExpiredResource,
   });
 
   const isSkeletonVisible = isLoading || (resolveLogos && orgLoading);
@@ -168,7 +178,30 @@ export const ResourceList = <
             setFilterState={setFilterState}
             serviceOwnerOptions={serviceOwnerOptions}
           />
-          {delegationModal}
+          {hasExpiredResources && (
+            <div className={classes.expiredSwitch}>
+              <DsSwitch
+                data-size='sm'
+                checked={includeExpired}
+                onChange={(e) => {
+                  setIncludeExpired(e.target.checked);
+                }}
+                label={t('resource_list.show_expired_services')}
+              />
+              <DsPopover.TriggerContext>
+                <DsPopover.Trigger
+                  icon
+                  variant='tertiary'
+                  data-size='sm'
+                  aria-label={t('resource_list.show_expired_services_helptext_button')}
+                >
+                  <QuestionmarkCircleIcon aria-hidden='true' />
+                </DsPopover.Trigger>
+                <DsPopover>{t('resource_list.show_expired_services_helptext')}</DsPopover>
+              </DsPopover.TriggerContext>
+            </div>
+          )}
+          <div className={classes.delegationModalButton}>{delegationModal}</div>
         </div>
       )}
       {isSkeletonVisible ? (
