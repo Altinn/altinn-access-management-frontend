@@ -199,21 +199,25 @@ namespace Altinn.AccessManagement.UI.Core.Services
                 return;
             }
 
-            try
+            foreach (IGrouping<string, CompactResource> sameResource in resourcesByRefId)
             {
-                foreach (IGrouping<string, CompactResource> sameResource in resourcesByRefId)
-                {
-                    ServiceResourceFE details = await _resourceService.GetResource(sameResource.Key, languageCode);
+                ServiceResourceFE details;
 
-                    foreach (CompactResource resource in sameResource)
-                    {
-                        resource.Details = details;
-                    }
+                try
+                {
+                    details = await _resourceService.GetResource(sameResource.Key, languageCode);
                 }
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError(ex, "ClientService.EnrichResources failed to look up {Count} resources from the resource registry", resourcesByRefId.Count);
+                catch (Exception ex)
+                {
+                    // One unresolvable resource must not cost the remaining ones their details.
+                    _logger.LogError(ex, "ClientService.EnrichResources failed to look up resource {RefId} from the resource registry", sameResource.Key);
+                    continue;
+                }
+
+                foreach (CompactResource resource in sameResource)
+                {
+                    resource.Details = details;
+                }
             }
         }
     }
