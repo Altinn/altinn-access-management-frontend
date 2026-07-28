@@ -430,13 +430,18 @@ void ConfigureMockableClients(IServiceCollection services, IConfiguration config
 
     if (mockSettings.ClientDelegation)
     {
-        services.AddHttpClient<IClientDelegationClient, ClientDelegationClientMock>();
+        services.AddHttpClient<ClientDelegationClientMock>();
+        services.AddTransient<IClientDelegationClient>(sp => sp.GetRequiredService<ClientDelegationClientMock>());
+        services.AddTransient<IClientDelegationResourceClient>(sp => sp.GetRequiredService<ClientDelegationClientMock>());
     }
     else
     {
         services.AddHttpClient<ClientDelegationClientV1>();
         services.AddHttpClient<ClientDelegationClientV2>();
         services.AddTransient<IClientDelegationClient, ClientDelegationClientSelector>();
+
+        // The resource endpoints only exist in v2, so they bypass the selector entirely.
+        services.AddTransient<IClientDelegationResourceClient>(sp => sp.GetRequiredService<ClientDelegationClientV2>());
     }
 
     if (mockSettings.Register)

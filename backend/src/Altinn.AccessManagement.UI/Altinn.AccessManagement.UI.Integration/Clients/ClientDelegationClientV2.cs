@@ -20,8 +20,10 @@ namespace Altinn.AccessManagement.UI.Integration.Clients
     /// Client for interacting with the v2 client delegation endpoints.
     /// Compared to v1, the client and agent query parameters are named client/agent instead of
     /// from/to, and batch deletes are performed with POST to dedicated /delete routes.
+    /// The single rights resource endpoints of <see cref="IClientDelegationResourceClient"/> only
+    /// exist in v2, so they have no v1 counterpart and are not routed through the selector.
     /// </summary>
-    public class ClientDelegationClientV2 : IClientDelegationClient
+    public class ClientDelegationClientV2 : IClientDelegationClient, IClientDelegationResourceClient
     {
         private readonly ILogger _logger;
         private readonly HttpClient _client;
@@ -272,6 +274,92 @@ namespace Altinn.AccessManagement.UI.Integration.Clients
 
             string responseContent = await response.Content.ReadAsStringAsync();
             _logger.LogError("AccessManagement.UI // ClientDelegationClientV2.RemoveAgent // Unexpected HttpStatusCode: {StatusCode}\n {ResponseBody}", response.StatusCode, responseContent);
+            throw new HttpStatusException(StatusErrorTitle, StatusErrorMessage, response.StatusCode, _httpContextAccessor.HttpContext?.TraceIdentifier, responseContent);
+        }
+
+        /// <inheritdoc />
+        public async Task<IEnumerable<ClientDelegation>> GetAgentResources(Guid party, Guid to, CancellationToken cancellationToken = default)
+        {
+            string endpointUrl = $"enduser/clientdelegations/agents/resources?party={party}&agent={to}";
+            string token = JwtTokenUtil.GetTokenFromContext(_httpContextAccessor.HttpContext, _platformSettings.JwtCookieName);
+
+            HttpResponseMessage response = await _client.GetAsync(token, endpointUrl);
+            PaginatedResult<ClientDelegation> clients =
+                await ClientUtils.DeserializeIfSuccessfullStatusCode<PaginatedResult<ClientDelegation>>(response, _logger, "ClientDelegationClientV2.GetAgentResources");
+
+            if (clients?.Items == null)
+            {
+                return Enumerable.Empty<ClientDelegation>();
+            }
+
+            return clients.Items;
+        }
+
+        /// <inheritdoc />
+        public async Task<IEnumerable<AgentDelegation>> GetClientResources(Guid party, Guid from, CancellationToken cancellationToken = default)
+        {
+            string endpointUrl = $"enduser/clientdelegations/clients/resources?party={party}&client={from}";
+            string token = JwtTokenUtil.GetTokenFromContext(_httpContextAccessor.HttpContext, _platformSettings.JwtCookieName);
+
+            HttpResponseMessage response = await _client.GetAsync(token, endpointUrl);
+            PaginatedResult<AgentDelegation> agents =
+                await ClientUtils.DeserializeIfSuccessfullStatusCode<PaginatedResult<AgentDelegation>>(response, _logger, "ClientDelegationClientV2.GetClientResources");
+
+            if (agents?.Items == null)
+            {
+                return Enumerable.Empty<AgentDelegation>();
+            }
+
+            return agents.Items;
+        }
+
+        /// <inheritdoc />
+        public async Task<List<ResourceDelegationDto>> AddAgentResources(Guid party, Guid from, Guid to, ResourceDelegationBatchInputDto payload, CancellationToken cancellationToken = default)
+        {
+            string endpointUrl = $"enduser/clientdelegations/agents/resources?party={party}&client={from}&agent={to}";
+            string token = JwtTokenUtil.GetTokenFromContext(_httpContextAccessor.HttpContext, _platformSettings.JwtCookieName);
+
+            StringContent requestBody = new StringContent(JsonSerializer.Serialize(payload, _serializerOptions), Encoding.UTF8, JsonMediaType);
+            HttpResponseMessage response = await _client.PostAsync(token, endpointUrl, requestBody);
+            string responseContent = await response.Content.ReadAsStringAsync(cancellationToken);
+
+            if (!response.IsSuccessStatusCode)
+            {
+                _logger.LogError("AccessManagement.UI // ClientDelegationClientV2.AddAgentResources // Unexpected HttpStatusCode: {StatusCode}\n {ResponseBody}", response.StatusCode, responseContent);
+                throw new HttpStatusException(UnexpectedHttpResponseMessage, UnexpectedHttpResponseMessage, response.StatusCode, null, response.ReasonPhrase);
+            }
+
+            List<ResourceDelegationDto> result = JsonSerializer.Deserialize<List<ResourceDelegationDto>>(responseContent, _serializerOptions);
+            return result ?? new List<ResourceDelegationDto>();
+        }
+
+        /// <inheritdoc />
+        public async Task RemoveAgentResources(Guid party, Guid from, Guid to, ResourceDelegationBatchInputDto payload, CancellationToken cancellationToken = default)
+        {
+            string endpointUrl = $"enduser/clientdelegations/agents/resources/delete?party={party}&client={from}&agent={to}";
+            await PostResourceDelete(endpointUrl, payload, "RemoveAgentResources", cancellationToken);
+        }
+
+        /// <inheritdoc />
+        public async Task RemoveMyClientResources(Guid provider, Guid from, ResourceDelegationBatchInputDto payload, CancellationToken cancellationToken = default)
+        {
+            string endpointUrl = $"enduser/clientdelegations/my/clients/resources/delete?provider={provider}&client={from}";
+            await PostResourceDelete(endpointUrl, payload, "RemoveMyClientResources", cancellationToken);
+        }
+
+        private async Task PostResourceDelete(string endpointUrl, ResourceDelegationBatchInputDto payload, string operation, CancellationToken cancellationToken)
+        {
+            string token = JwtTokenUtil.GetTokenFromContext(_httpContextAccessor.HttpContext, _platformSettings.JwtCookieName);
+
+            StringContent requestBody = new StringContent(JsonSerializer.Serialize(payload, _serializerOptions), Encoding.UTF8, JsonMediaType);
+            HttpResponseMessage response = await _client.PostAsync(token, endpointUrl, requestBody);
+            string responseContent = await response.Content.ReadAsStringAsync(cancellationToken);
+            if (response.IsSuccessStatusCode)
+            {
+                return;
+            }
+
+            _logger.LogError("AccessManagement.UI // ClientDelegationClientV2.{Operation} // Unexpected HttpStatusCode: {StatusCode}\n {ResponseBody}", operation, response.StatusCode, responseContent);
             throw new HttpStatusException(StatusErrorTitle, StatusErrorMessage, response.StatusCode, _httpContextAccessor.HttpContext?.TraceIdentifier, responseContent);
         }
     }

@@ -57,5 +57,11 @@ namespace Altinn.AccessManagement.UI.Core.Models.ClientDelegation
         /// description from the resource registry.
         /// </summary>
         public string RefId { get; set; }
+
+        /// <summary>
+        /// Gets or sets the resource display name. Not part of the API response — looked up from
+        /// the resource registry by <see cref="RefId"/> before the response leaves the BFF.
+        /// </summary>
+        public string Name { get; set; }
     }
 }

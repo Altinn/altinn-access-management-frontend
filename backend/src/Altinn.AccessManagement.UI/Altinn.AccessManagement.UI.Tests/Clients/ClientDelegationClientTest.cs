@@ -2,6 +2,7 @@ using System.Net;
 using System.Net.Http;
 using Altinn.AccessManagement.UI.Core.ClientInterfaces;
 using Altinn.AccessManagement.UI.Core.Configuration;
+using Altinn.AccessManagement.UI.Core.Helpers;
 using Altinn.AccessManagement.UI.Core.Models.ClientDelegation;
 using Altinn.AccessManagement.UI.Integration.Clients;
 using Altinn.AccessManagement.UI.Integration.Configuration;
@@ -36,16 +37,26 @@ namespace Altinn.AccessManagement.UI.Tests.Clients
             },
         };
 
+        private static readonly ResourceDelegationBatchInputDto _resourcePayload = new()
+        {
+            Values = new List<ResourceDelegationBatchInputDto.Permission>
+            {
+                new() { Role = "rettighetshaver", Resources = new List<string> { "app_ttd_a3-app" } },
+            },
+        };
+
         /// <summary>
         /// Handler that records the outgoing request and returns a fixed response.
         /// </summary>
         private sealed class RecordingHandler : HttpMessageHandler
         {
             private readonly string _responseContent;
+            private readonly HttpStatusCode _statusCode;
 
-            public RecordingHandler(string responseContent = "{\"items\":[]}")
+            public RecordingHandler(string responseContent = "{\"data\":[]}", HttpStatusCode statusCode = HttpStatusCode.OK)
             {
                 _responseContent = responseContent;
+                _statusCode = statusCode;
             }
 
             public HttpRequestMessage Request { get; private set; }
@@ -55,7 +66,7 @@ namespace Altinn.AccessManagement.UI.Tests.Clients
                 Request = request;
                 return Task.FromResult(new HttpResponseMessage
                 {
-                    StatusCode = HttpStatusCode.OK,
+                    StatusCode = _statusCode,
                     Content = new StringContent(_responseContent),
                 });
             }
@@ -92,6 +103,23 @@ namespace Altinn.AccessManagement.UI.Tests.Clients
                 options);
 
             return new ClientDelegationClientSelector(v1, v2, featureManager.Object);
+        }
+
+        private static IClientDelegationResourceClient CreateResourceClient(RecordingHandler handler)
+        {
+            PlatformSettings platformSettings = new PlatformSettings
+            {
+                ApiAccessManagementEndpoint = BaseUrl,
+                SubscriptionKeyHeaderName = "Ocp-Apim-Subscription-Key",
+                SubscriptionKey = "subscription-key",
+                JwtCookieName = "AltinnStudioRuntime",
+            };
+
+            return new ClientDelegationClientV2(
+                new HttpClient(handler),
+                NullLogger<ClientDelegationClientV2>.Instance,
+                new HttpContextAccessor { HttpContext = new DefaultHttpContext() },
+                Options.Create(platformSettings));
         }
 
         [Fact]
@@ -224,6 +252,132 @@ namespace Altinn.AccessManagement.UI.Tests.Clients
 
             Assert.Equal(HttpMethod.Delete, handler.Request.Method);
             Assert.Equal($"{BaseUrl}v2/enduser/clientdelegations/agents?party={_party}&agent={_agent}&cascade=true", handler.Request.RequestUri.ToString());
+        }
+
+        /// <summary>
+        /// The single rights resources v2 adds are only reachable if they survive deserialization
+        /// into <see cref="ClientDelegation.RoleAccessPackages.Resources"/>.
+        /// </summary>
+        [Fact]
+        public async Task GetClients_V2DeserializesResources()
+        {
+            string responseContent = $$"""
+                {
+                  "data": [
+                    {
+                      "client": { "id": "{{_client}}", "name": "ACME AS" },
+                      "access": [
+                        {
+                          "role": { "id": "{{_party}}", "code": "DAGL" },
+                          "packages": [ { "id": "{{_agent}}", "urn": "urn:altinn:accesspackage:demo" } ],
+                          "resources": [ { "id": "{{_provider}}", "refId": "app_ttd_a3-app" } ]
+                        }
+                      ]
+                    }
+                  ]
+                }
+                """;
+
+            RecordingHandler handler = new RecordingHandler(responseContent);
+
+            IEnumerable<ClientDelegation> clients = await CreateClient(useV2: true, handler).GetClients(_party);
+
+            CompactResource resource = Assert.Single(Assert.Single(Assert.Single(clients).Access).Resources);
+            Assert.Equal(_provider, resource.Id);
+            Assert.Equal("app_ttd_a3-app", resource.RefId);
+        }
+
+        /// <summary>
+        /// Every v2 method throws <see cref="HttpStatusException"/> on a non-success response.
+        /// </summary>
+        [Fact]
+        public async Task RemoveMyClientProvider_V2ThrowsOnErrorResponse()
+        {
+            RecordingHandler handler = new RecordingHandler("upstream is down", HttpStatusCode.InternalServerError);
+
+            HttpStatusException exception = await Assert.ThrowsAsync<HttpStatusException>(
+                () => CreateClient(useV2: true, handler).RemoveMyClientProvider(_provider));
+
+            Assert.Equal(HttpStatusCode.InternalServerError, exception.StatusCode);
+        }
+
+        [Fact]
+        public async Task GetAgentResources_V2Url()
+        {
+            RecordingHandler handler = new RecordingHandler();
+
+            await CreateResourceClient(handler).GetAgentResources(_party, _agent);
+
+            Assert.Equal(HttpMethod.Get, handler.Request.Method);
+            Assert.Equal($"{BaseUrl}v2/enduser/clientdelegations/agents/resources?party={_party}&agent={_agent}", handler.Request.RequestUri.ToString());
+        }
+
+        [Fact]
+        public async Task GetClientResources_V2Url()
+        {
+            RecordingHandler handler = new RecordingHandler();
+
+            await CreateResourceClient(handler).GetClientResources(_party, _client);
+
+            Assert.Equal(HttpMethod.Get, handler.Request.Method);
+            Assert.Equal($"{BaseUrl}v2/enduser/clientdelegations/clients/resources?party={_party}&client={_client}", handler.Request.RequestUri.ToString());
+        }
+
+        [Fact]
+        public async Task AddAgentResources_V2UsesClientAndAgentParams()
+        {
+            RecordingHandler handler = new RecordingHandler("[]");
+
+            await CreateResourceClient(handler).AddAgentResources(_party, _client, _agent, _resourcePayload);
+
+            Assert.Equal(HttpMethod.Post, handler.Request.Method);
+            Assert.Equal($"{BaseUrl}v2/enduser/clientdelegations/agents/resources?party={_party}&client={_client}&agent={_agent}", handler.Request.RequestUri.ToString());
+        }
+
+        /// <summary>
+        /// The delegation payload carries resource registry ids, not the internal guids.
+        /// </summary>
+        [Fact]
+        public async Task AddAgentResources_V2SendsRefIdsInBody()
+        {
+            RecordingHandler handler = new RecordingHandler("[]");
+
+            await CreateResourceClient(handler).AddAgentResources(_party, _client, _agent, _resourcePayload);
+
+            string body = await handler.Request.Content.ReadAsStringAsync();
+            Assert.Contains("\"resources\":[\"app_ttd_a3-app\"]", body);
+            Assert.Contains("\"role\":\"rettighetshaver\"", body);
+        }
+
+        [Fact]
+        public async Task RemoveAgentResources_V2PostsToDeleteRoute()
+        {
+            RecordingHandler handler = new RecordingHandler();
+
+            await CreateResourceClient(handler).RemoveAgentResources(_party, _client, _agent, _resourcePayload);
+
+            Assert.Equal(HttpMethod.Post, handler.Request.Method);
+            Assert.Equal($"{BaseUrl}v2/enduser/clientdelegations/agents/resources/delete?party={_party}&client={_client}&agent={_agent}", handler.Request.RequestUri.ToString());
+        }
+
+        [Fact]
+        public async Task RemoveMyClientResources_V2PostsToDeleteRoute()
+        {
+            RecordingHandler handler = new RecordingHandler();
+
+            await CreateResourceClient(handler).RemoveMyClientResources(_provider, _client, _resourcePayload);
+
+            Assert.Equal(HttpMethod.Post, handler.Request.Method);
+            Assert.Equal($"{BaseUrl}v2/enduser/clientdelegations/my/clients/resources/delete?provider={_provider}&client={_client}", handler.Request.RequestUri.ToString());
+        }
+
+        [Fact]
+        public async Task GetAgentResources_V2ThrowsOnErrorResponse()
+        {
+            RecordingHandler handler = new RecordingHandler("upstream is down", HttpStatusCode.InternalServerError);
+
+            await Assert.ThrowsAsync<HttpStatusException>(
+                () => CreateResourceClient(handler).GetAgentResources(_party, _agent));
         }
     }
 }
