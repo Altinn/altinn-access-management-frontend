@@ -395,7 +395,7 @@ namespace Altinn.AccessManagement.UI.Controllers
             {
                 try
                 {
-                    personInput = await HttpContext.Request.ReadFromJsonAsync<PersonInput>();
+                    personInput = await HttpContext.Request.ReadFromJsonAsync<PersonInput>(cancellationToken);
                 }
                 catch (Exception ex)
                 {
