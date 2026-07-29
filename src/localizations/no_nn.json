@@ -828,7 +828,21 @@
     "68_delegation_right_missing_delegation_accesspackage": "Delegering av tenester feila: Du manglar fullmakt til nødvendige tilgangspakkar.",
     "69_delegation_right_access_list_validation_fail": "Delegering av tenester feila: Mottakaren har ikkje rettigheit basert på delegasjon via tilgangsliste.",
     "70_delegation_right_resource_not_delegable": "Delegering av tenester feila: Ressursen kan ikkje delegerast til ein annan brukar eller eining.",
-    "71_delegation_right_resource_is_maskinporten_schema": "Delegering av tenester feila: Ressursen kan ikkje delegerast fordi ho er ein Maskinporten skjemaressurs."
+    "71_delegation_right_resource_is_maskinporten_schema": "Delegering av tenester feila: Ressursen kan ikkje delegerast fordi ho er ein Maskinporten skjemaressurs.",
+    "title_resources": "Tenester som ikkje kunne delegerast:",
+    "title_accesspackages": "Tilgangspakkar som ikkje kunne delegerast:",
+    "summary_both": "Delegering feila: du manglar nødvendige fullmakter til å delegere tenestene og tilgangspakkane som krevst.",
+    "summary_resources": "Delegering av tenester feila: du manglar nødvendige fullmakter til å delegere tenestene som krevst.",
+    "summary_accesspackages": "Delegering av tilgangspakkar feila: du manglar nødvendige fullmakter til å delegere tilgangspakkane som krevst.",
+    "reason_missing_role_access": "Rolla di har ikkje fullmakt til å delegere tenesten.",
+    "reason_missing_delegation_access": "Du har ikkje fullmakt til å direktedelegere tenesten.",
+    "reason_missing_srr_right_access": "Tenesten nyttar tilgangsliste der verksemda ikkje har tilgang.",
+    "reason_insufficient_authentication_level": "Tenesten krev eit høgare tryggingsnivå.",
+    "reason_missing_package_access": "Du manglar fullmakt til nødvendige tilgangspakkar.",
+    "reason_access_list_validation_fail": "Mottakaren har ikkje tilgang basert på tilgangsliste.",
+    "reason_resource_not_delegable": "Tenesten kan ikkje delegerast vidare.",
+    "reason_resource_is_maskinporten_schema": "Tenesten kan ikkje delegerast (Maskinporten-skjemaressurs).",
+    "reason_unknown": "Ukjend årsak."
   },
   "consent_request": {
     "page_title": "Godkjenn avtale - Altinn",

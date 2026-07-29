@@ -7,3 +7,8 @@
   font-size: var(--ds-font-size-2);
   white-space: pre-line;
 }
+
+.delegationReasonsTitle {
+  margin-top: var(--ds-size-2);
+  font-weight: var(--ds-font-weight-medium);
+}
