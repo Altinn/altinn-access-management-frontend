@@ -47,9 +47,11 @@ export const AgentDetails = () => {
     isLoading: isLoadingAgentAccessPackages,
     error: agentAccessPackagesError,
   } = useGetAgentAccessPackagesQuery(id ? { to: id } : skipToken);
-  const { data: agentResources, isLoading: isLoadingAgentResources } = useGetAgentResourcesQuery(
-    id ? { to: id } : skipToken,
-  );
+  const {
+    data: agentResources,
+    isLoading: isLoadingAgentResources,
+    error: agentResourcesError,
+  } = useGetAgentResourcesQuery(id ? { to: id } : skipToken);
   const { data: clients, isLoading: isLoadingClients, error: clientsError } = useGetClientsQuery();
 
   const [addAgentAccessPackages, { isLoading: isAddingAgentAccessPackages }] =
@@ -83,18 +85,20 @@ export const AgentDetails = () => {
     );
   }
 
-  if (agentAccessPackagesError || clientsError) {
-    const agentAccessPackagesErrorDetails = createErrorDetails(agentAccessPackagesError);
+  if (agentAccessPackagesError || agentResourcesError || clientsError) {
+    const delegationsErrorDetails = createErrorDetails(
+      agentAccessPackagesError ?? agentResourcesError,
+    );
     const clientsErrorDetails = createErrorDetails(clientsError);
     return (
       <>
-        {!!agentAccessPackagesErrorDetails && (
+        {!!delegationsErrorDetails && (
           <DsAlert data-color='danger'>
             <DsParagraph>{t('client_administration_page.load_delegations_error')}</DsParagraph>
             <TechnicalErrorParagraphs
-              status={agentAccessPackagesErrorDetails.status}
-              time={agentAccessPackagesErrorDetails.time}
-              traceId={agentAccessPackagesErrorDetails.traceId}
+              status={delegationsErrorDetails.status}
+              time={delegationsErrorDetails.time}
+              traceId={delegationsErrorDetails.traceId}
             />
           </DsAlert>
         )}

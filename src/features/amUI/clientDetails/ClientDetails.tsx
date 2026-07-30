@@ -51,10 +51,11 @@ export const ClientDetails = () => {
     isLoading: isLoadingClientAccessPackages,
     error: clientAccessPackagesError,
   } = useGetClientAccessPackagesQuery({ from: id ?? '' }, { skip: !id });
-  const { data: clientResources, isLoading: isLoadingClientResources } = useGetClientResourcesQuery(
-    { from: id ?? '' },
-    { skip: !id },
-  );
+  const {
+    data: clientResources,
+    isLoading: isLoadingClientResources,
+    error: clientResourcesError,
+  } = useGetClientResourcesQuery({ from: id ?? '' }, { skip: !id });
   const { data: agents, isLoading: isLoadingAgents, error: agentsError } = useGetAgentsQuery();
   const { data: clients, isLoading: isLoadingClients, error: clientsError } = useGetClientsQuery();
 
@@ -93,8 +94,10 @@ export const ClientDetails = () => {
     );
   }
 
-  if (clientAccessPackagesError || agentsError || clientsError) {
-    const details = createErrorDetails(clientAccessPackagesError || agentsError || clientsError);
+  if (clientAccessPackagesError || clientResourcesError || agentsError || clientsError) {
+    const details = createErrorDetails(
+      clientAccessPackagesError || clientResourcesError || agentsError || clientsError,
+    );
     return (
       <>
         {!!details && (
