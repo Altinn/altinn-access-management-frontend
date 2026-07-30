@@ -6,11 +6,12 @@ export type AccessPackageListItemData = AccessPackageListItemProps;
 
 interface AccessPackageListItemsProps {
   items: AccessPackageListItemData[];
+  labelledBy?: string;
 }
 
-export const AccessPackageListItems = ({ items }: AccessPackageListItemsProps) => {
+export const AccessPackageListItems = ({ items, labelledBy }: AccessPackageListItemsProps) => {
   return (
-    <List>
+    <List aria-labelledby={labelledBy}>
       {items.map((item) => (
         <AccessPackageListItem
           key={item.id}

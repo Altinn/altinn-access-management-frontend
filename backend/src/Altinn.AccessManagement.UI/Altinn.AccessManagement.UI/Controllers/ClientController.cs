@@ -16,6 +16,8 @@ namespace Altinn.AccessManagement.UI.Controllers
     [Route("accessmanagement/api/v1/clientdelegations")]
     public class ClientController : ControllerBase
     {
+        private const string PayloadRequiredMessage = "Delegation payload is required.";
+
         private readonly IClientService _clientService;
         private readonly ILogger _logger;
 
@@ -119,7 +121,7 @@ namespace Altinn.AccessManagement.UI.Controllers
         {
             if (payload == null)
             {
-                return BadRequest("Delegation payload is required.");
+                return BadRequest(PayloadRequiredMessage);
             }
 
             if (!ModelState.IsValid)
@@ -303,7 +305,7 @@ namespace Altinn.AccessManagement.UI.Controllers
         {
             if (payload == null)
             {
-                return BadRequest("Delegation payload is required.");
+                return BadRequest(PayloadRequiredMessage);
             }
 
             if (!ModelState.IsValid)
@@ -349,7 +351,7 @@ namespace Altinn.AccessManagement.UI.Controllers
         {
             if (payload == null)
             {
-                return BadRequest("Delegation payload is required.");
+                return BadRequest(PayloadRequiredMessage);
             }
 
             if (!ModelState.IsValid)
@@ -466,7 +468,7 @@ namespace Altinn.AccessManagement.UI.Controllers
         {
             if (payload == null)
             {
-                return BadRequest("Delegation payload is required.");
+                return BadRequest(PayloadRequiredMessage);
             }
 
             if (!ModelState.IsValid)
@@ -513,7 +515,7 @@ namespace Altinn.AccessManagement.UI.Controllers
         {
             if (payload == null)
             {
-                return BadRequest("Delegation payload is required.");
+                return BadRequest(PayloadRequiredMessage);
             }
 
             if (!ModelState.IsValid)
@@ -558,7 +560,7 @@ namespace Altinn.AccessManagement.UI.Controllers
         {
             if (payload == null)
             {
-                return BadRequest("Delegation payload is required.");
+                return BadRequest(PayloadRequiredMessage);
             }
 
             if (!ModelState.IsValid)

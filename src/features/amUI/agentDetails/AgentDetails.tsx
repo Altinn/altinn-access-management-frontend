@@ -23,8 +23,11 @@ import {
 import { PartyType, useGetIsClientAdminQuery } from '@/rtk/features/userInfoApi';
 import {
   useAddAgentAccessPackagesMutation,
+  useAddAgentResourcesMutation,
   useRemoveAgentAccessPackagesMutation,
+  useRemoveAgentResourcesMutation,
   useGetAgentAccessPackagesQuery,
+  useGetAgentResourcesQuery,
   useGetClientsQuery,
 } from '@/rtk/features/clientApi';
 import { UserPageHeader } from '../common/UserPageHeader/UserPageHeader';
@@ -44,15 +47,22 @@ export const AgentDetails = () => {
     isLoading: isLoadingAgentAccessPackages,
     error: agentAccessPackagesError,
   } = useGetAgentAccessPackagesQuery(id ? { to: id } : skipToken);
+  const { data: agentResources, isLoading: isLoadingAgentResources } = useGetAgentResourcesQuery(
+    id ? { to: id } : skipToken,
+  );
   const { data: clients, isLoading: isLoadingClients, error: clientsError } = useGetClientsQuery();
 
   const [addAgentAccessPackages, { isLoading: isAddingAgentAccessPackages }] =
     useAddAgentAccessPackagesMutation();
   const [removeAgentAccessPackages, { isLoading: isRemovingAgentAccessPackages }] =
     useRemoveAgentAccessPackagesMutation();
+  const [addAgentResources, { isLoading: isAddingAgentResources }] = useAddAgentResourcesMutation();
+  const [removeAgentResources, { isLoading: isRemovingAgentResources }] =
+    useRemoveAgentResourcesMutation();
 
   const { clientsWithAgentAccess, clientsWithoutAgentAccess } = useAgentDetailsAccessClientLists({
     agentAccessPackages,
+    agentResources,
     clients,
   });
   const [searchString, setSearchString] = useState<string>('');
@@ -119,7 +129,10 @@ export const AgentDetails = () => {
           />
         }
       >
-        {isLoadingIsClientAdmin || isLoadingAgentAccessPackages || isLoadingClients ? (
+        {isLoadingIsClientAdmin ||
+        isLoadingAgentAccessPackages ||
+        isLoadingAgentResources ||
+        isLoadingClients ? (
           <>
             <UserPageHeaderSkeleton />
             <DsSkeleton
@@ -151,11 +164,19 @@ export const AgentDetails = () => {
               <AgentDetailsClientsList
                 clients={clientsWithAgentAccess}
                 agentAccessPackages={agentAccessPackages ?? []}
-                isLoading={isAddingAgentAccessPackages || isRemovingAgentAccessPackages}
+                agentResources={agentResources ?? []}
+                isLoading={
+                  isAddingAgentAccessPackages ||
+                  isRemovingAgentAccessPackages ||
+                  isAddingAgentResources ||
+                  isRemovingAgentResources
+                }
                 toPartyUuid={toPartyUuid}
                 actingPartyUuid={actingPartyUuid}
                 addAgentAccessPackages={addAgentAccessPackages}
                 removeAgentAccessPackages={removeAgentAccessPackages}
+                addAgentResources={addAgentResources}
+                removeAgentResources={removeAgentResources}
                 searchString={searchString}
                 emptyText={t('client_administration_page.no_delegations')}
               />
@@ -169,11 +190,19 @@ export const AgentDetails = () => {
                 <AgentDetailsClientsList
                   clients={clientsWithoutAgentAccess}
                   agentAccessPackages={agentAccessPackages ?? []}
+                  agentResources={agentResources ?? []}
                   toPartyUuid={toPartyUuid}
                   actingPartyUuid={actingPartyUuid}
-                  isLoading={isAddingAgentAccessPackages || isRemovingAgentAccessPackages}
+                  isLoading={
+                    isAddingAgentAccessPackages ||
+                    isRemovingAgentAccessPackages ||
+                    isAddingAgentResources ||
+                    isRemovingAgentResources
+                  }
                   addAgentAccessPackages={addAgentAccessPackages}
                   removeAgentAccessPackages={removeAgentAccessPackages}
+                  addAgentResources={addAgentResources}
+                  removeAgentResources={removeAgentResources}
                   searchString={searchString}
                   emptyText={t('client_administration_page.no_clients')}
                 />

@@ -19,7 +19,7 @@ namespace Altinn.AccessManagement.UI.Integration.Clients
 {
     /// <summary>
     /// Client for interacting with the v1 client delegation endpoints.
-    /// Legacy implementation; delete together with <see cref="ClientDelegationClientSelector"/> when v1 is retired.
+    /// Legacy implementation; delete together with <see cref="ClientDelegationClientResolver"/> when v1 is retired.
     /// </summary>
     public class ClientDelegationClientV1 : IClientDelegationClient
     {
@@ -274,6 +274,7 @@ namespace Altinn.AccessManagement.UI.Integration.Clients
             _logger.LogError("AccessManagement.UI // ClientDelegationClientV1.RemoveAgent // Unexpected HttpStatusCode: {StatusCode}\n {ResponseBody}", response.StatusCode, responseContent);
             throw new HttpStatusException(StatusErrorTitle, StatusErrorMessage, response.StatusCode, _httpContextAccessor.HttpContext?.TraceIdentifier, responseContent);
         }
+
         /// <inheritdoc />
         /// <remarks>Single rights delegation arrived with v2, so a v1 client never has any.</remarks>
         public Task<IEnumerable<ClientDelegation>> GetAgentResources(Guid party, Guid to, CancellationToken cancellationToken = default)

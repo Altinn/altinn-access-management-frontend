@@ -648,6 +648,8 @@
     "remove_package_success_snackbar": "{{name}} no longer has power of attorney for {{accessPackage}}.",
     "remove_package_error": "Could not remove {{name}} power of attorney for {{accessPackage}}.",
     "via_role": "Access through Central Coordinating Register",
+    "packages_heading": "Access packages:",
+    "single_rights_heading": "Single services:",
     "agent_has_clients_tab": "Has these clients",
     "agent_can_get_clients_tab": "Can have these clients",
     "client_has_agents_tab": "Users with power of attorney",

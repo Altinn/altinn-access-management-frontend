@@ -644,6 +644,8 @@
     "remove_package_success_snackbar": "{{name}} har ikkje lenger fullmakt til {{accessPackage}}.",
     "remove_package_error": "Kunne ikkje slette fullmakt til {{accessPackage}} for {{name}}.",
     "via_role": "Tilgang gjennom Eningsregisteret",
+    "packages_heading": "Tilgangspakkar:",
+    "single_rights_heading": "Enkelttenester:",
     "agent_has_clients_tab": "Har desse klientane",
     "agent_can_get_clients_tab": "Kan få desse klientane",
     "client_has_agents_tab": "Brukarar med fullmakt",

@@ -156,6 +156,5 @@ namespace Altinn.AccessManagement.UI.Core.ClientInterfaces
         /// <param name="payload">Resource delegation payload, holding resource registry ids.</param>
         /// <param name="cancellationToken">Cancellation token.</param>
         Task RemoveMyClientResources(Guid provider, Guid from, ResourceDelegationBatchInputDto payload, CancellationToken cancellationToken = default);
-    
     }
 }

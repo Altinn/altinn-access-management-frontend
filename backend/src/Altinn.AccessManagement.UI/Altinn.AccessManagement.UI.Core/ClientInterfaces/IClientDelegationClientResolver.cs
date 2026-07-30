@@ -1,11 +1,10 @@
 namespace Altinn.AccessManagement.UI.Core.ClientInterfaces
 {
     /// <summary>
-    /// Resolves which version of the client delegation client to use for the operations that exist
-    /// in both v1 and v2. This is the only place the UseNewSingleRightsClientDelegation feature flag
-    /// is evaluated, so callers stay unaware of which version answered.
-    /// The v2-only operations on <see cref="IClientDelegationClientV2"/> do not go through here —
-    /// they have no v1 counterpart to choose between.
+    /// Resolves which version of the client delegation client to use. This is the only place the
+    /// UseNewSingleRightsClientDelegation feature flag is evaluated, so callers stay unaware of
+    /// which version answered. The v2-only single rights operations resolve through here too —
+    /// the v1 client answers them as empty results or not available.
     /// When v1 is retired, delete this interface and inject <see cref="IClientDelegationClient"/>
     /// directly again.
     /// </summary>
