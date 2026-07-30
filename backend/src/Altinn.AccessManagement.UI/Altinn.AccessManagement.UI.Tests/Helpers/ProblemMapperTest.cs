@@ -16,7 +16,7 @@ namespace Altinn.AccessManagement.UI.Tests.Helpers
             string responseContent = "{  \"code\": \"" + errorCode + "\" }";
 
             // Act
-            ProblemDescriptor actualError = ProblemMapper.MapToAuthUiError(responseContent, HttpStatusCode.BadRequest);
+            ProblemInstance actualError = ProblemMapper.MapToAuthUiError(responseContent, HttpStatusCode.BadRequest);
 
             // Assert
             Assert.Equal(expectedErrorCode, actualError.ErrorCode.ToString());
@@ -31,7 +31,7 @@ namespace Altinn.AccessManagement.UI.Tests.Helpers
             string responseContent = "{  \"code\": \"" + errorCode + "\" }";
 
             // Act
-            ProblemDescriptor actualError = ProblemMapper.MapToAuthUiError(responseContent, HttpStatusCode.BadRequest);
+            ProblemInstance actualError = ProblemMapper.MapToAuthUiError(responseContent, HttpStatusCode.BadRequest);
             // Assert
             Assert.Equal(expectedErrorCode, actualError.ErrorCode.ToString());
         }
@@ -45,7 +45,7 @@ namespace Altinn.AccessManagement.UI.Tests.Helpers
             string responseContent = "{  \"code\": \"" + errorCode + "\" }";
 
             // Act
-            ProblemDescriptor actualError = ProblemMapper.MapToAuthUiError(responseContent, HttpStatusCode.BadRequest);
+            ProblemInstance actualError = ProblemMapper.MapToAuthUiError(responseContent, HttpStatusCode.BadRequest);
 
             // Assert
             Assert.Equal(expectedErrorCode, actualError.ErrorCode.ToString());
@@ -60,7 +60,7 @@ namespace Altinn.AccessManagement.UI.Tests.Helpers
             string responseContent = "{  \"code\": \"" + errorCode + "\" }";
 
             // Act
-            ProblemDescriptor actualError = ProblemMapper.MapToAuthUiError(responseContent, HttpStatusCode.BadRequest);
+            ProblemInstance actualError = ProblemMapper.MapToAuthUiError(responseContent, HttpStatusCode.BadRequest);
 
             // Assert
             Assert.Equal(expectedErrorCode, actualError.ErrorCode.ToString());
@@ -75,7 +75,7 @@ namespace Altinn.AccessManagement.UI.Tests.Helpers
             string responseContent = "{  \"code\": \"" + errorCode + "\" }";
 
             // Act
-            ProblemDescriptor actualError = ProblemMapper.MapToAuthUiError(responseContent, HttpStatusCode.BadRequest);
+            ProblemInstance actualError = ProblemMapper.MapToAuthUiError(responseContent, HttpStatusCode.BadRequest);
 
             // Assert
             Assert.Equal(expectedErrorCode, actualError.ErrorCode.ToString());
@@ -90,7 +90,7 @@ namespace Altinn.AccessManagement.UI.Tests.Helpers
             string responseContent = "{  \"code\": \"" + errorCode + "\" }";
 
             // Act
-            ProblemDescriptor actualError = ProblemMapper.MapToAuthUiError(responseContent, HttpStatusCode.BadRequest);
+            ProblemInstance actualError = ProblemMapper.MapToAuthUiError(responseContent, HttpStatusCode.BadRequest);
 
             // Assert
             Assert.Equal(expectedErrorCode, actualError.ErrorCode.ToString());
@@ -105,7 +105,7 @@ namespace Altinn.AccessManagement.UI.Tests.Helpers
             string responseContent = "{  \"code\": \"" + errorCode + "\" }";
 
             // Act
-            ProblemDescriptor actualError = ProblemMapper.MapToAuthUiError(responseContent, HttpStatusCode.BadRequest);
+            ProblemInstance actualError = ProblemMapper.MapToAuthUiError(responseContent, HttpStatusCode.BadRequest);
 
             // Assert
             Assert.Equal(expectedErrorCode, actualError.ErrorCode.ToString());
@@ -120,7 +120,7 @@ namespace Altinn.AccessManagement.UI.Tests.Helpers
             string responseContent = "{  \"code\": \"" + errorCode + "\" }";
 
             // Act
-            ProblemDescriptor actualError = ProblemMapper.MapToAuthUiError(responseContent, HttpStatusCode.BadRequest);
+            ProblemInstance actualError = ProblemMapper.MapToAuthUiError(responseContent, HttpStatusCode.BadRequest);
 
             // Assert
             Assert.Equal(expectedErrorCode, actualError.ErrorCode.ToString());
@@ -135,7 +135,7 @@ namespace Altinn.AccessManagement.UI.Tests.Helpers
             string responseContent = "{  \"code\": \"" + errorCode + "\" }";
 
             // Act
-            ProblemDescriptor actualError = ProblemMapper.MapToAuthUiError(responseContent, HttpStatusCode.BadRequest);
+            ProblemInstance actualError = ProblemMapper.MapToAuthUiError(responseContent, HttpStatusCode.BadRequest);
 
             // Assert
             Assert.Equal(expectedErrorCode, actualError.ErrorCode.ToString());
@@ -150,7 +150,7 @@ namespace Altinn.AccessManagement.UI.Tests.Helpers
             string responseContent = "{  \"code\": \"" + errorCode + "\" }";
 
             // Act
-            ProblemDescriptor actualError = ProblemMapper.MapToAuthUiError(responseContent, HttpStatusCode.BadRequest);
+            ProblemInstance actualError = ProblemMapper.MapToAuthUiError(responseContent, HttpStatusCode.BadRequest);
 
             // Assert
             Assert.Equal(expectedErrorCode, actualError.ErrorCode.ToString());
@@ -165,7 +165,7 @@ namespace Altinn.AccessManagement.UI.Tests.Helpers
             string responseContent = "{  \"code\": \"" + errorCode + "\" }";
 
             // Act
-            ProblemDescriptor actualError = ProblemMapper.MapToAuthUiError(responseContent, HttpStatusCode.BadRequest);
+            ProblemInstance actualError = ProblemMapper.MapToAuthUiError(responseContent, HttpStatusCode.BadRequest);
 
             // Assert
             Assert.Equal(expectedErrorCode, actualError.ErrorCode.ToString());
@@ -179,11 +179,61 @@ namespace Altinn.AccessManagement.UI.Tests.Helpers
             var expectedStatusCode = HttpStatusCode.Forbidden;
 
             // Act
-            ProblemDescriptor actualError = ProblemMapper.MapToAuthUiError("", HttpStatusCode.Forbidden);
+            ProblemInstance actualError = ProblemMapper.MapToAuthUiError("", HttpStatusCode.Forbidden);
 
             // Assert
             Assert.Equal(expectedErrorCode, actualError.ErrorCode.ToString());
             Assert.Equal(expectedStatusCode, actualError.StatusCode);
+        }
+
+        [Fact]
+        public void MapToAuthUiError_ForwardsDelegationReasonsExtension()
+        {
+            // Arrange - the upstream (authentication) problem carries the structured delegationReasons
+            // extension (a JSON string of resource id + codes). JsonSerializer.Serialize encodes it as a
+            // JSON string value inside the response body.
+            string reasons = """[{"type":"resource","id":"resource-a","codes":["MissingRoleAccess"]}]""";
+            string responseContent = "{ \"code\": \"AUTH-00016\", \"delegationReasons\": " + System.Text.Json.JsonSerializer.Serialize(reasons) + " }";
+
+            // Act
+            ProblemInstance actualError = ProblemMapper.MapToAuthUiError(responseContent, HttpStatusCode.BadRequest);
+
+            // Assert - the code is mapped AND the structured extension is preserved verbatim on the returned problem
+            Assert.Equal("AMUI-00016", actualError.ErrorCode.ToString());
+            Assert.True(actualError.Extensions.TryGetValue("delegationReasons", out string reason));
+            Assert.Equal(reasons, reason);
+        }
+
+        [Fact]
+        public void MapToAuthUiError_WithoutExtensions_DoesNotAddDelegationReasons()
+        {
+            // Arrange - no extension members on the upstream problem
+            string responseContent = "{ \"code\": \"AUTH-00016\" }";
+
+            // Act
+            ProblemInstance actualError = ProblemMapper.MapToAuthUiError(responseContent, HttpStatusCode.BadRequest);
+
+            // Assert - mapped as before, and no delegationReasons is invented
+            Assert.Equal("AMUI-00016", actualError.ErrorCode.ToString());
+            Assert.False(actualError.Extensions.TryGetValue("delegationReasons", out _));
+        }
+
+        [Fact]
+        public void MapToAuthUiError_ForwardsDelegationReasons_MultipleResourcesAndCodes()
+        {
+            // Arrange - a realistic structured delegationReasons value spanning multiple resources, each
+            // with one or more reason codes (as produced by authentication's DelegationHelper). The BFF
+            // must forward the whole value verbatim - it must not truncate to the first resource/code.
+            string reasons = """[{"type":"resource","id":"resource-a","codes":["MissingRoleAccess","MissingPackageAccess"]},{"type":"resource","id":"resource-b","codes":["ResourceIsMaskinPortenSchema"]}]""";
+            string responseContent = "{ \"code\": \"AUTH-00016\", \"delegationReasons\": " + System.Text.Json.JsonSerializer.Serialize(reasons) + " }";
+
+            // Act
+            ProblemInstance actualError = ProblemMapper.MapToAuthUiError(responseContent, HttpStatusCode.BadRequest);
+
+            // Assert - the full multi-resource / multi-code structured value is preserved unchanged
+            Assert.Equal("AMUI-00016", actualError.ErrorCode.ToString());
+            Assert.True(actualError.Extensions.TryGetValue("delegationReasons", out string reason));
+            Assert.Equal(reasons, reason);
         }
     }
 }

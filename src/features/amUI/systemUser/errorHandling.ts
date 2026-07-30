@@ -34,6 +34,12 @@ export const mapErrorCodeToErrorMessage = (errorCode?: string) => {
       return 'systemuser_request.load_request_missing_permissions';
     case 'AMUI-00068':
       return 'systemuser_delegation_errors.68_delegation_right_missing_delegation_accesspackage';
+    case 'AMUI-00069':
+      return 'systemuser_delegation_errors.69_delegation_right_access_list_validation_fail';
+    case 'AMUI-00070':
+      return 'systemuser_delegation_errors.70_delegation_right_resource_not_delegable';
+    case 'AMUI-00071':
+      return 'systemuser_delegation_errors.71_delegation_right_resource_is_maskinporten_schema';
     default:
       return '';
   }
