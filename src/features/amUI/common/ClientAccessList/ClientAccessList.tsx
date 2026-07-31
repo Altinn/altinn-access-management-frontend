@@ -214,7 +214,7 @@ export const ClientAccessList = ({
               onClick={() => onRevoke()}
             >
               <MinusCircleIcon aria-hidden='true' />
-              {t('client_administration_page.remove_package_button')}
+              {t('common.delete_poa')}
             </Button>
           );
         } else if (!isMobileOrSmaller && showAction && !hasAccess && onDelegate) {
@@ -225,7 +225,7 @@ export const ClientAccessList = ({
               onClick={() => onDelegate()}
             >
               <PlusCircleIcon aria-hidden='true' />
-              {t('client_administration_page.delegate_package_button')}
+              {t('common.give_poa')}
             </Button>
           );
         }
@@ -309,7 +309,7 @@ export const ClientAccessList = ({
               onClick={() => onRevoke()}
             >
               <MinusCircleIcon aria-hidden='true' />
-              {t('client_administration_page.remove_package_button')}
+              {t('common.delete_poa')}
             </Button>
           );
         } else if (!isMobileOrSmaller && showAction && !hasAccess && onDelegate) {
@@ -320,7 +320,7 @@ export const ClientAccessList = ({
               onClick={() => onDelegate()}
             >
               <PlusCircleIcon aria-hidden='true' />
-              {t('client_administration_page.delegate_package_button')}
+              {t('common.give_poa')}
             </Button>
           );
         }

@@ -54,18 +54,18 @@ export const useClientResourceActions = ({
           },
         }).unwrap();
         openSnackbar({
-          message: t('client_administration_page.delegate_package_success_snackbar', {
+          message: t('client_administration_page.delegate_success_snackbar', {
             name: input.agentName,
-            accessPackage: input.resourceName,
+            accessName: input.resourceName,
           }),
           color: 'success',
         });
         onSuccess?.();
       } catch (error) {
         openSnackbar({
-          message: t('client_administration_page.delegate_package_error', {
+          message: t('client_administration_page.delegate_error', {
             name: input.agentName,
-            accessPackage: input.resourceName,
+            accessName: input.resourceName,
           }),
           color: 'danger',
         });
@@ -101,18 +101,18 @@ export const useClientResourceActions = ({
           },
         }).unwrap();
         openSnackbar({
-          message: t('client_administration_page.remove_package_success_snackbar', {
+          message: t('client_administration_page.remove_success_snackbar', {
             name: input.agentName,
-            accessPackage: input.resourceName,
+            accessName: input.resourceName,
           }),
           color: 'success',
         });
         onSuccess?.();
       } catch (error) {
         openSnackbar({
-          message: t('client_administration_page.remove_package_error', {
+          message: t('client_administration_page.remove_error', {
             name: input.agentName,
-            accessPackage: input.resourceName,
+            accessName: input.resourceName,
           }),
           color: 'danger',
         });

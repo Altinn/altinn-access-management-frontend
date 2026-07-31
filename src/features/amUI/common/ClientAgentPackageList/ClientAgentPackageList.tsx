@@ -259,7 +259,7 @@ export const ClientAgentPackageList = ({
                 onClick={() => onRevoke()}
               >
                 <MinusCircleIcon aria-hidden='true' />
-                {t('client_administration_page.remove_package_button')}
+                {t('common.delete_poa')}
               </Button>
             ) : (
               <Button
@@ -268,7 +268,7 @@ export const ClientAgentPackageList = ({
                 onClick={() => onDelegate()}
               >
                 <PlusCircleIcon aria-hidden='true' />
-                {t('client_administration_page.delegate_package_button')}
+                {t('common.give_poa')}
               </Button>
             )),
         };
@@ -328,7 +328,7 @@ export const ClientAgentPackageList = ({
                 onClick={() => onRevoke()}
               >
                 <MinusCircleIcon aria-hidden='true' />
-                {t('client_administration_page.remove_package_button')}
+                {t('common.delete_poa')}
               </Button>
             ) : (
               <Button
@@ -337,7 +337,7 @@ export const ClientAgentPackageList = ({
                 onClick={() => onDelegate()}
               >
                 <PlusCircleIcon aria-hidden='true' />
-                {t('client_administration_page.delegate_package_button')}
+                {t('common.give_poa')}
               </Button>
             )),
         });

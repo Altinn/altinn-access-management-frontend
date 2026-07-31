@@ -60,18 +60,18 @@ export const MyClientsAccessSection = ({
           },
         }).unwrap();
         openSnackbar({
-          message: t('my_clients_page.remove_package_success_snackbar', {
+          message: t('my_clients_page.remove_success_snackbar', {
             name: currentUserName,
-            accessPackage: accessPackageName,
+            accessName: accessPackageName,
           }),
           color: 'success',
         });
         onSuccess?.();
       } catch {
         openSnackbar({
-          message: t('my_clients_page.remove_package_error', {
+          message: t('my_clients_page.remove_error', {
             name: currentUserName,
-            accessPackage: accessPackageName,
+            accessName: accessPackageName,
           }),
           color: 'danger',
         });
@@ -106,18 +106,18 @@ export const MyClientsAccessSection = ({
           },
         }).unwrap();
         openSnackbar({
-          message: t('my_clients_page.remove_package_success_snackbar', {
+          message: t('my_clients_page.remove_success_snackbar', {
             name: currentUserName,
-            accessPackage: resourceName,
+            accessName: resourceName,
           }),
           color: 'success',
         });
         onSuccess?.();
       } catch (error) {
         openSnackbar({
-          message: t('my_clients_page.remove_package_error', {
+          message: t('my_clients_page.remove_error', {
             name: currentUserName,
-            accessPackage: resourceName,
+            accessName: resourceName,
           }),
           color: 'danger',
         });
