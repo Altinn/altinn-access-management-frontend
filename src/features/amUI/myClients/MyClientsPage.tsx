@@ -54,7 +54,9 @@ export const MyClientsPage = () => {
     const dedupedClients = new Map<string, Client>();
     (myClientsByProvider ?? []).forEach((providerWithClients) => {
       providerWithClients.clients.forEach((client) => {
-        const hasDelegatedAccess = client.access.some((access) => access.packages.length > 0);
+        const hasDelegatedAccess = client.access.some(
+          (access) => access.packages.length > 0 || (access.resources ?? []).length > 0,
+        );
         if (hasDelegatedAccess && !dedupedClients.has(client.client.id)) {
           dedupedClients.set(client.client.id, client);
         }

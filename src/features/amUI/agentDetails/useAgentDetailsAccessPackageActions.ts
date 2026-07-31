@@ -53,18 +53,18 @@ export const useAgentDetailsAccessPackageActions = ({
           },
         }).unwrap();
         openSnackbar({
-          message: t('client_administration_page.delegate_package_success_snackbar', {
+          message: t('client_administration_page.delegate_success_snackbar', {
             name: agentName,
-            accessPackage: accessPackageName,
+            accessName: accessPackageName,
           }),
           color: 'success',
         });
         onSuccess?.();
       } catch {
         openSnackbar({
-          message: t('client_administration_page.delegate_package_error', {
+          message: t('client_administration_page.delegate_error', {
             name: agentName,
-            accessPackage: accessPackageName,
+            accessName: accessPackageName,
           }),
           color: 'danger',
         });
@@ -104,18 +104,18 @@ export const useAgentDetailsAccessPackageActions = ({
           },
         }).unwrap();
         openSnackbar({
-          message: t('client_administration_page.remove_package_success_snackbar', {
+          message: t('client_administration_page.remove_success_snackbar', {
             name: agentName,
-            accessPackage: accessPackageName,
+            accessName: accessPackageName,
           }),
           color: 'success',
         });
         onSuccess?.();
       } catch {
         openSnackbar({
-          message: t('client_administration_page.remove_package_error', {
+          message: t('client_administration_page.remove_error', {
             name: agentName,
-            accessPackage: accessPackageName,
+            accessName: accessPackageName,
           }),
           color: 'danger',
         });

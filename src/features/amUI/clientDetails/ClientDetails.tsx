@@ -14,10 +14,13 @@ import { amUIPath } from '@/routes/paths';
 import { PartyType, useGetIsClientAdminQuery } from '@/rtk/features/userInfoApi';
 import {
   useAddAgentAccessPackagesMutation,
+  useAddAgentResourcesMutation,
   useGetAgentsQuery,
   useGetClientAccessPackagesQuery,
+  useGetClientResourcesQuery,
   useGetClientsQuery,
   useRemoveAgentAccessPackagesMutation,
+  useRemoveAgentResourcesMutation,
 } from '@/rtk/features/clientApi';
 
 import { PageContainer } from '../common/PageContainer/PageContainer';
@@ -48,6 +51,11 @@ export const ClientDetails = () => {
     isLoading: isLoadingClientAccessPackages,
     error: clientAccessPackagesError,
   } = useGetClientAccessPackagesQuery({ from: id ?? '' }, { skip: !id });
+  const {
+    data: clientResources,
+    isLoading: isLoadingClientResources,
+    error: clientResourcesError,
+  } = useGetClientResourcesQuery({ from: id ?? '' }, { skip: !id });
   const { data: agents, isLoading: isLoadingAgents, error: agentsError } = useGetAgentsQuery();
   const { data: clients, isLoading: isLoadingClients, error: clientsError } = useGetClientsQuery();
 
@@ -55,9 +63,13 @@ export const ClientDetails = () => {
     useAddAgentAccessPackagesMutation();
   const [removeAgentAccessPackages, { isLoading: isRemovingAgentAccessPackages }] =
     useRemoveAgentAccessPackagesMutation();
+  const [addAgentResources, { isLoading: isAddingAgentResources }] = useAddAgentResourcesMutation();
+  const [removeAgentResources, { isLoading: isRemovingAgentResources }] =
+    useRemoveAgentResourcesMutation();
 
   const { agentsWithClientAccess, agentsWithoutClientAccess } = useClientDetailsAccessAgentLists({
     clientAccessPackages,
+    clientResources,
     agents,
   });
 
@@ -71,8 +83,10 @@ export const ClientDetails = () => {
   const unassignedSectionId = useId();
   const selectedClient = clients?.find((client) => client.client.id === id);
   const delegablePackages = selectedClient?.access?.flatMap((access) => access.packages) ?? [];
+  const delegableResources =
+    selectedClient?.access?.flatMap((access) => access.resources ?? []) ?? [];
 
-  const hasDelegatablePackages = (delegablePackages?.length ?? 0) > 0;
+  const hasDelegatableAccesses = delegablePackages.length > 0 || delegableResources.length > 0;
 
   if (isClientAdmin === false) {
     return (
@@ -80,8 +94,10 @@ export const ClientDetails = () => {
     );
   }
 
-  if (clientAccessPackagesError || agentsError || clientsError) {
-    const details = createErrorDetails(clientAccessPackagesError || agentsError || clientsError);
+  if (clientAccessPackagesError || clientResourcesError || agentsError || clientsError) {
+    const details = createErrorDetails(
+      clientAccessPackagesError || clientResourcesError || agentsError || clientsError,
+    );
     return (
       <>
         {!!details && (
@@ -131,6 +147,7 @@ export const ClientDetails = () => {
       <PageContainer backUrl={backUrl}>
         {isLoadingIsClientAdmin ||
         isLoadingClientAccessPackages ||
+        isLoadingClientResources ||
         isLoadingAgents ||
         isLoadingClients ? (
           <>
@@ -155,7 +172,7 @@ export const ClientDetails = () => {
               </DsAlert>
             )}
             {id &&
-              (hasDelegatablePackages ? (
+              (hasDelegatableAccesses ? (
                 <>
                   <ClientAdminSearchField
                     setSearchString={setSearchString}
@@ -178,12 +195,20 @@ export const ClientDetails = () => {
                       <ClientAgentPackageList
                         agents={recentlyAddedClients}
                         clientAccessPackages={clientAccessPackages ?? []}
+                        clientResources={clientResources ?? []}
                         client={selectedClient}
-                        isLoading={isAddingAgentAccessPackages || isRemovingAgentAccessPackages}
+                        isLoading={
+                          isAddingAgentAccessPackages ||
+                          isRemovingAgentAccessPackages ||
+                          isAddingAgentResources ||
+                          isRemovingAgentResources
+                        }
                         fromPartyUuid={fromPartyUuid}
                         actingPartyUuid={actingPartyUuid}
                         addAgentAccessPackages={addAgentAccessPackages}
                         removeAgentAccessPackages={removeAgentAccessPackages}
+                        addAgentResources={addAgentResources}
+                        removeAgentResources={removeAgentResources}
                         emptyText={t('client_administration_page.no_agents')}
                         searchString={searchString}
                       />
@@ -200,12 +225,20 @@ export const ClientDetails = () => {
                     <ClientAgentPackageList
                       agents={agentsWithClientAccess}
                       clientAccessPackages={clientAccessPackages ?? []}
+                      clientResources={clientResources ?? []}
                       client={selectedClient}
-                      isLoading={isAddingAgentAccessPackages || isRemovingAgentAccessPackages}
+                      isLoading={
+                        isAddingAgentAccessPackages ||
+                        isRemovingAgentAccessPackages ||
+                        isAddingAgentResources ||
+                        isRemovingAgentResources
+                      }
                       fromPartyUuid={fromPartyUuid}
                       actingPartyUuid={actingPartyUuid}
                       addAgentAccessPackages={addAgentAccessPackages}
                       removeAgentAccessPackages={removeAgentAccessPackages}
+                      addAgentResources={addAgentResources}
+                      removeAgentResources={removeAgentResources}
                       emptyText={t('client_administration_page.no_agents')}
                       searchString={searchString}
                     />
@@ -219,12 +252,20 @@ export const ClientDetails = () => {
                       <ClientAgentPackageList
                         agents={agentsWithoutClientAccess}
                         clientAccessPackages={clientAccessPackages ?? []}
+                        clientResources={clientResources ?? []}
                         client={selectedClient}
-                        isLoading={isAddingAgentAccessPackages || isRemovingAgentAccessPackages}
+                        isLoading={
+                          isAddingAgentAccessPackages ||
+                          isRemovingAgentAccessPackages ||
+                          isAddingAgentResources ||
+                          isRemovingAgentResources
+                        }
                         fromPartyUuid={fromPartyUuid}
                         actingPartyUuid={actingPartyUuid}
                         addAgentAccessPackages={addAgentAccessPackages}
                         removeAgentAccessPackages={removeAgentAccessPackages}
+                        addAgentResources={addAgentResources}
+                        removeAgentResources={removeAgentResources}
                         emptyText={`${t('client_administration_page.no_agents')} ${t('client_administration_page.addUserPrompt')}`}
                         searchString={searchString}
                       />

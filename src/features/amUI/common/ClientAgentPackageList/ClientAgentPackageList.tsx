@@ -12,16 +12,19 @@ import { MinusCircleIcon, PlusCircleIcon } from '@navikt/aksel-icons';
 
 import type {
   AddAgentAccessPackagesFn,
+  AddAgentResourcesFn,
   Agent,
   Client,
   RemoveAgentAccessPackagesFn,
+  RemoveAgentResourcesFn,
 } from '@/rtk/features/clientApi';
+import type { ServiceResource } from '@/rtk/features/singleRights/singleRightsApi';
+import type { ActionError } from '@/resources/hooks/useActionError';
 import { useAccessPackageLookup } from '@/resources/hooks/useAccessPackageLookup';
 import { getFormattedDateOfBirthLabel, isSubUnitByType } from '@/resources/utils/reporteeUtils';
 import { useRoleMetadata } from '../UserRoles/useRoleMetadata';
 import { isNewUser } from '../isNewUser';
 
-import { AccessPackageListItems } from '../AccessPackageListItems/AccessPackageListItems';
 import { UserListItems, type UserListItemData } from '../UserListItems/UserListItems';
 import { useClientAccessPackageActions } from './useClientAccessPackageActions';
 import { useIsMobileOrSmaller } from '@/resources/utils/screensizeUtils';
@@ -29,19 +32,44 @@ import {
   ClientPackageInfoModal,
   type ClientPackageModalData,
 } from '../DelegationModal/AccessPackages/ClientPackageInfoModal';
+import { ClientAccessSections } from '../ClientResourceList/ClientAccessSections';
+import { type ClientResourceListItemData } from '../ClientResourceList/ClientResourceListItems';
+import {
+  ClientResourceInfoModal,
+  type ClientResourceModalData,
+} from '../DelegationModal/SingleRights/ClientResourceInfoModal';
+import { useClientResourceActions } from '../ClientResourceList/useClientResourceActions';
 import { PartyType } from '@/rtk/features/userInfoApi';
 
 type ClientAgentPackageListProps = {
   agents: Agent[];
   clientAccessPackages: Agent[];
+  clientResources?: Agent[];
   client?: Client;
   isLoading: boolean;
   fromPartyUuid?: string;
   actingPartyUuid?: string;
   addAgentAccessPackages: AddAgentAccessPackagesFn;
   removeAgentAccessPackages: RemoveAgentAccessPackagesFn;
+  addAgentResources?: AddAgentResourcesFn;
+  removeAgentResources?: RemoveAgentResourcesFn;
   emptyText?: string;
   searchString?: string;
+};
+
+type SelectedAgentResource = {
+  agentId: string;
+  refId: string;
+  resource: ServiceResource;
+  toPartyName: string;
+  onDelegate?: (
+    onSuccess?: () => void,
+    onError?: (error?: ActionError) => void,
+  ) => void | Promise<void>;
+  onRevoke?: (
+    onSuccess?: () => void,
+    onError?: (error?: ActionError) => void,
+  ) => void | Promise<void>;
 };
 
 const getUserListItemType = (agentType: string): UserListItemProps['type'] => {
@@ -54,12 +82,15 @@ const getAgentSortKey = (agent: Agent): string =>
 export const ClientAgentPackageList = ({
   agents,
   clientAccessPackages,
+  clientResources,
   client,
   isLoading,
   fromPartyUuid,
   actingPartyUuid,
   addAgentAccessPackages,
   removeAgentAccessPackages,
+  addAgentResources,
+  removeAgentResources,
   emptyText,
   searchString,
 }: ClientAgentPackageListProps) => {
@@ -78,8 +109,16 @@ export const ClientAgentPackageList = ({
     removeAgentAccessPackages,
   });
 
+  const { addClientResource, removeClientResource } = useClientResourceActions({
+    actingPartyUuid,
+    addAgentResources,
+    removeAgentResources,
+  });
+
   const modalRef = useRef<HTMLDialogElement>(null);
+  const resourceModalRef = useRef<HTMLDialogElement>(null);
   const [selected, setSelected] = useState<ClientPackageModalData | null>(null);
+  const [selectedResource, setSelectedResource] = useState<SelectedAgentResource | null>(null);
 
   const clientAccess = client?.access ?? [];
   const clientType = client?.client.type ?? '';
@@ -103,6 +142,23 @@ export const ClientAgentPackageList = ({
   const agentHasPackage = (agentId: string, packageId: string) =>
     packageIdsByAgentId.get(agentId)?.has(packageId) ?? false;
 
+  const resourceRefIdsByAgentId = useMemo(() => {
+    const map = new Map<string, Set<string>>();
+    (clientResources ?? []).forEach((agent) => {
+      const refIds = new Set<string>();
+      agent.access.forEach((access) => {
+        (access.resources ?? []).forEach((resource) => {
+          refIds.add(resource.refId);
+        });
+      });
+      map.set(agent.agent.id, refIds);
+    });
+    return map;
+  }, [clientResources]);
+
+  const agentHasResource = (agentId: string, refId: string) =>
+    resourceRefIdsByAgentId.get(agentId)?.has(refId) ?? false;
+
   const sortedAgents = useMemo(() => {
     return [...agents].sort((a, b) => {
       return getAgentSortKey(a).localeCompare(getAgentSortKey(b));
@@ -114,14 +170,14 @@ export const ClientAgentPackageList = ({
     const isRecentlyAdded = isNewUser(agent.agentAddedAt);
     const isSubUnit = isSubUnitByType(agent.agent.variant);
     const userType = getUserListItemType(agent.agent.type);
+    const agentName = formatDisplayName({
+      fullName: agent.agent.name,
+      type: agent.agent.type === 'Person' ? 'person' : 'company',
+    });
     const nodes = clientAccess.reduce((acc, access) => {
       if (access.packages.length === 0) return acc;
 
       const roleName = getRoleMetadata(access.role.id)?.name ?? access.role.name;
-      const agentName = formatDisplayName({
-        fullName: agent.agent.name,
-        type: agent.agent.type === 'Person' ? 'person' : 'company',
-      });
 
       const packages = access.packages?.map<AccessPackageListItemProps>((pkg) => {
         const hasAccess = agentHasPackage(agentId, pkg.id);
@@ -203,7 +259,7 @@ export const ClientAgentPackageList = ({
                 onClick={() => onRevoke()}
               >
                 <MinusCircleIcon aria-hidden='true' />
-                {t('client_administration_page.remove_package_button')}
+                {t('common.delete_poa')}
               </Button>
             ) : (
               <Button
@@ -212,7 +268,7 @@ export const ClientAgentPackageList = ({
                 onClick={() => onDelegate()}
               >
                 <PlusCircleIcon aria-hidden='true' />
-                {t('client_administration_page.delegate_package_button')}
+                {t('common.give_poa')}
               </Button>
             )),
         };
@@ -225,6 +281,71 @@ export const ClientAgentPackageList = ({
       return acc;
     }, [] as AccessPackageListItemProps[]);
 
+    const resourceNodes = clientAccess.reduce((acc, access) => {
+      (access.resources ?? []).forEach((clientResource) => {
+        const resource = clientResource.details;
+        if (!resource) return;
+
+        const hasAccess = agentHasResource(agentId, clientResource.refId);
+        const delegable = resource.delegable && !!addAgentResources && !!removeAgentResources;
+
+        const delegationInput = {
+          clientId: fromPartyUuid ?? '',
+          agentId,
+          roleCode: access.role.code,
+          resourceId: clientResource.refId,
+          agentName,
+          resourceName: resource.title,
+        };
+        const onDelegate = (onSuccess?: () => void, onError?: (error?: ActionError) => void) =>
+          addClientResource(delegationInput, onSuccess, onError);
+        const onRevoke = (onSuccess?: () => void, onError?: (error?: ActionError) => void) =>
+          removeClientResource(delegationInput, onSuccess, onError);
+
+        acc.push({
+          id: `${access.role.code}:${clientResource.refId}`,
+          resource,
+          hasAccess,
+          titleAs: 'h3',
+          onClick: () => {
+            setSelectedResource({
+              agentId,
+              refId: clientResource.refId,
+              resource,
+              toPartyName: agentName,
+              onDelegate: delegable ? onDelegate : undefined,
+              onRevoke: delegable ? onRevoke : undefined,
+            });
+            resourceModalRef.current?.showModal();
+          },
+          controls:
+            !isMobileOrSmaller &&
+            delegable &&
+            (hasAccess ? (
+              <Button
+                variant='tertiary'
+                disabled={removeDisabled}
+                onClick={() => onRevoke()}
+              >
+                <MinusCircleIcon aria-hidden='true' />
+                {t('common.delete_poa')}
+              </Button>
+            ) : (
+              <Button
+                variant='tertiary'
+                disabled={delegateDisabled}
+                onClick={() => onDelegate()}
+              >
+                <PlusCircleIcon aria-hidden='true' />
+                {t('common.give_poa')}
+              </Button>
+            )),
+        });
+      });
+
+      return acc;
+    }, [] as ClientResourceListItemData[]);
+
     return {
       id: agentId,
       name: agent.agent.name,
@@ -235,7 +356,12 @@ export const ClientAgentPackageList = ({
       interactive: true,
       titleAs: 'h2',
       as: 'button',
-      children: <AccessPackageListItems items={nodes} />,
+      children: (
+        <ClientAccessSections
+          packageItems={nodes}
+          resourceItems={resourceNodes}
+        />
+      ),
       description:
         userType === 'company'
           ? t('client_administration_page.organization_identifier', {
@@ -263,6 +389,16 @@ export const ClientAgentPackageList = ({
       }
     : undefined;
 
+  const resourceModalData: ClientResourceModalData | undefined = selectedResource
+    ? {
+        resource: selectedResource.resource,
+        userHasAccess: agentHasResource(selectedResource.agentId, selectedResource.refId),
+        toPartyName: selectedResource.toPartyName,
+        onDelegate: selectedResource.onDelegate,
+        onRevoke: selectedResource.onRevoke,
+      }
+    : undefined;
+
   return (
     <>
       <UserListItems
@@ -274,6 +410,11 @@ export const ClientAgentPackageList = ({
         ref={modalRef}
         data={modalData}
         onClose={() => setSelected(null)}
+      />
+      <ClientResourceInfoModal
+        ref={resourceModalRef}
+        data={resourceModalData}
+        onClose={() => setSelectedResource(null)}
       />
     </>
   );
