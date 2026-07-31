@@ -55,8 +55,10 @@ jobs:
           MASKINPORTEN_BEHALF_OF_JWK: ${{ secrets.MASKINPORTEN_BEHALF_OF_JWK }}
           AT23_REGISTER_SUBSCRIPTION_KEY: ${{ secrets.AT23_REGISTER_SUBSCRIPTION_KEY }}
           TT02_REGISTER_SUBSCRIPTION_KEY: ${{ secrets.TT02_REGISTER_SUBSCRIPTION_KEY }}
+          ENVIRONMENT: ${{ inputs.environment }}
+          PROJECT: ${{ inputs.project }}
         run: |
-          yarn run env:${{ inputs.environment }} --project ${{ inputs.project }} --workers=4
+          yarn run "env:${ENVIRONMENT}" --project "${PROJECT}" --workers=4
       - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
         if: always()
         with:
@@ -75,11 +77,13 @@ jobs:
       - name: Upload HTML report to Azure
         uses: azure/cli@9f7ce6f37c31b777ec6c6b6d1dfe7db79f497956 # v2
         if: always()
+        env:
+          REPORT_NAME: ${{ inputs.environment }}
+          RUN_ID: ${{ github.run_id }}
         with:
           azcliversion: latest
           inlineScript: |
-            REPORT_NAME=${{ inputs.environment }}                 # e.g. AT23
-            REPORT_ID=${{ github.run_id }}-${{ inputs.environment }}     # unique per job run
+            REPORT_ID="${RUN_ID}-${REPORT_NAME}"     # unique per job run
             ACCOUNT_NAME=playwrightreporting
 
             az storage blob upload-batch \
