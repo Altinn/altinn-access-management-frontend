@@ -34,6 +34,7 @@ export const ClientResourceListItems = ({ items, labelledBy }: ClientResourceLis
         <ResourceListItem
           key={item.id}
           id={item.id}
+          size='sm'
           resourceName={extractResourceName(item.resource)}
           ownerName={extractOwnerName(item.resource)}
           ownerLogoUrl={
