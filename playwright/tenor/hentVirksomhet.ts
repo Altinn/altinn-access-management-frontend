@@ -110,7 +110,7 @@ function printHelp(): void {
       '  -n, --antall <tall>       Antall klienter som hentes (default: 5)',
       '  -m, --maks-klienter <tall> Finn facilitator med færrest klienter, høyst <tall>',
       '      --json                Skriv ut full struktur som JSON',
-      '      --env <miljø>     Miljø for env-fil: tt02, at22, at23, at24 (default: tt02)',
+      '      --env <miljø>     Miljø for env-fil: tt02, at22, at23 (default: tt02)',
       '  -h, --help            Vis denne hjelpeteksten',
     ].join('\n'),
   );

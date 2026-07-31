@@ -92,7 +92,7 @@ function printHelp(): void {
       '      --kql <streng>    Egendefinert KQL (default: bosatt + myndig)',
       '      --navn            Skriv ut navn (fornavn etternavn) ved siden av fnr',
       '      --json            Skriv ut full kildedata som JSON',
-      '      --env <miljø>     Miljø for env-fil: tt02, at22, at23, at24 (default: tt02)',
+      '      --env <miljø>     Miljø for env-fil: tt02, at22, at23 (default: tt02)',
       '  -h, --help            Vis denne hjelpeteksten',
     ].join('\n'),
   );
