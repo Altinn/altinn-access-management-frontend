@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Net;
 using System.Net.Http;
 using System.IO;
+using System.Linq;
 using Altinn.AccessManagement.UI.Core.ClientInterfaces;
 using Altinn.AccessManagement.UI.Core.Helpers;
 using Altinn.AccessManagement.UI.Core.Models.ClientDelegation;
@@ -14,9 +15,9 @@ using Microsoft.Extensions.Logging;
 namespace Altinn.AccessManagement.UI.Mocks.Mocks
 {
     /// <summary>
-    /// Mock class for <see cref="IClientDelegationClient"/> interface.
+    /// Mock class for the <see cref="IClientDelegationClient"/> interface.
     /// </summary>
-    public class ClientDelegationClientMock : IClientDelegationClient
+    public class ClientDelegationClientMock : IClientDelegationClient, IClientDelegationClientResolver
     {
         private readonly string dataFolder;
 
@@ -30,6 +31,9 @@ namespace Altinn.AccessManagement.UI.Mocks.Mocks
         {
             dataFolder = Path.Combine(Path.GetDirectoryName(new Uri(typeof(AccessManagementClientMock).Assembly.Location).LocalPath), "Data");
         }
+
+        /// <inheritdoc />
+        public Task<IClientDelegationClient> Resolve() => Task.FromResult<IClientDelegationClient>(this);
 
         /// <inheritdoc />
         public Task<IEnumerable<MyClientDelegation>> GetMyClients(List<Guid> provider = null, CancellationToken cancellationToken = default)
@@ -132,6 +136,56 @@ namespace Altinn.AccessManagement.UI.Mocks.Mocks
         public Task RemoveAgent(Guid party, Guid to, CancellationToken cancellationToken = default)
         {
             Util.ThrowExceptionIfTriggerParty(party.ToString());
+            return Task.CompletedTask;
+        }
+        /// <inheritdoc />
+        public Task<IEnumerable<ClientDelegation>> GetAgentResources(Guid party, Guid to, CancellationToken cancellationToken = default)
+        {
+            Util.ThrowExceptionIfTriggerParty(party.ToString());
+
+            string dataPath = Path.Combine(dataFolder, "ClientDelegation", "agentResources.json");
+            return Task.FromResult<IEnumerable<ClientDelegation>>(Util.GetMockData<List<ClientDelegation>>(dataPath));
+        }
+
+        /// <inheritdoc />
+        public Task<IEnumerable<AgentDelegation>> GetClientResources(Guid party, Guid from, CancellationToken cancellationToken = default)
+        {
+            Util.ThrowExceptionIfTriggerParty(party.ToString());
+
+            string dataPath = Path.Combine(dataFolder, "ClientDelegation", "clientResources.json");
+            return Task.FromResult<IEnumerable<AgentDelegation>>(Util.GetMockData<List<AgentDelegation>>(dataPath));
+        }
+
+        /// <inheritdoc />
+        public Task<List<ResourceDelegationDto>> AddAgentResources(Guid party, Guid from, Guid to, ResourceDelegationBatchInputDto payload, CancellationToken cancellationToken = default)
+        {
+            Util.ThrowExceptionIfTriggerParty(party.ToString());
+
+            List<ResourceDelegationDto> delegations = payload.Values
+                .SelectMany(permission => permission.Resources.Select(_ => new ResourceDelegationDto
+                {
+                    ResourceId = Guid.NewGuid(),
+                    RoleId = Guid.NewGuid(),
+                    FromId = from,
+                    ToId = to,
+                    ViaId = party,
+                }))
+                .ToList();
+
+            return Task.FromResult(delegations);
+        }
+
+        /// <inheritdoc />
+        public Task RemoveAgentResources(Guid party, Guid from, Guid to, ResourceDelegationBatchInputDto payload, CancellationToken cancellationToken = default)
+        {
+            Util.ThrowExceptionIfTriggerParty(party.ToString());
+            return Task.CompletedTask;
+        }
+
+        /// <inheritdoc />
+        public Task RemoveMyClientResources(Guid provider, Guid from, ResourceDelegationBatchInputDto payload, CancellationToken cancellationToken = default)
+        {
+            Util.ThrowExceptionIfTriggerParty(provider.ToString());
             return Task.CompletedTask;
         }
     }

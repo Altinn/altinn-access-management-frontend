@@ -1,0 +1,10 @@
+.sections {
+  display: flex;
+  flex-direction: column;
+  gap: var(--ds-size-4);
+}
+
+.sectionLabel {
+  font-weight: var(--ds-font-weight-semibold);
+  margin-bottom: var(--ds-size-2);
+}

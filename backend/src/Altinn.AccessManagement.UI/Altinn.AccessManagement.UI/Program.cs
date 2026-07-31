@@ -431,13 +431,14 @@ void ConfigureMockableClients(IServiceCollection services, IConfiguration config
 
     if (mockSettings.ClientDelegation)
     {
-        services.AddHttpClient<IClientDelegationClient, ClientDelegationClientMock>();
+        services.AddHttpClient<ClientDelegationClientMock>();
+        services.AddTransient<IClientDelegationClientResolver>(sp => sp.GetRequiredService<ClientDelegationClientMock>());
     }
     else
     {
         services.AddHttpClient<ClientDelegationClientV1>();
         services.AddHttpClient<ClientDelegationClientV2>();
-        services.AddTransient<IClientDelegationClient, ClientDelegationClientSelector>();
+        services.AddTransient<IClientDelegationClientResolver, ClientDelegationClientResolver>();
     }
 
     if (mockSettings.Register)

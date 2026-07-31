@@ -3,13 +3,15 @@ import { useTranslation } from 'react-i18next';
 import {
   AccessPackageListItemProps,
   Button,
-  DsParagraph,
+  formatDisplayName,
   type Color,
   type UserListItemProps,
 } from '@altinn/altinn-components';
 import { MinusCircleIcon, PlusCircleIcon } from '@navikt/aksel-icons';
 
 import type { Client } from '@/rtk/features/clientApi';
+import type { ServiceResource } from '@/rtk/features/singleRights/singleRightsApi';
+import type { ActionError } from '@/resources/hooks/useActionError';
 import { useAccessPackageLookup } from '@/resources/hooks/useAccessPackageLookup';
 import {
   getFormattedDateOfBirthLabel,
@@ -19,12 +21,17 @@ import {
 
 import { buildClientParentNameById, buildClientSortKey } from '../clientSortUtils';
 import { useRoleMetadata } from '../UserRoles/useRoleMetadata';
-import { AccessPackageListItems } from '../AccessPackageListItems/AccessPackageListItems';
 import { UserListItems, type UserListItemData } from '../UserListItems/UserListItems';
 import {
   ClientPackageInfoModal,
   type ClientPackageModalData,
 } from '../DelegationModal/AccessPackages/ClientPackageInfoModal';
+import { ClientAccessSections } from '../ClientResourceList/ClientAccessSections';
+import { type ClientResourceListItemData } from '../ClientResourceList/ClientResourceListItems';
+import {
+  ClientResourceInfoModal,
+  type ClientResourceModalData,
+} from '../DelegationModal/SingleRights/ClientResourceInfoModal';
 import { useIsMobileOrSmaller } from '@/resources/utils/screensizeUtils';
 import { PartyType } from '@/rtk/features/userInfoApi';
 import type { Party } from '@/rtk/features/lookupApi';
@@ -36,9 +43,32 @@ export type ClientAccessPackageAction = {
   accessPackageName: string;
 };
 
+export type ClientResourceAction = {
+  clientId: string;
+  roleCode: string;
+  resourceId: string;
+  resourceName: string;
+};
+
+type SelectedClientResource = {
+  clientId: string;
+  refId: string;
+  resource: ServiceResource;
+  toPartyName: string;
+  onDelegate?: (
+    onSuccess?: () => void,
+    onError?: (error?: ActionError) => void,
+  ) => void | Promise<void>;
+  onRevoke?: (
+    onSuccess?: () => void,
+    onError?: (error?: ActionError) => void,
+  ) => void | Promise<void>;
+};
+
 type ClientAccessListProps = {
   clients: Client[];
   accessStateClients?: Client[];
+  resourceAccessClients?: Client[];
   addDisabled?: boolean;
   removeDisabled?: boolean;
   onAddAccessPackage?: (
@@ -50,6 +80,16 @@ type ClientAccessListProps = {
     action: ClientAccessPackageAction,
     onSuccess?: () => void,
     onError?: () => void,
+  ) => void | Promise<void>;
+  onAddResource?: (
+    action: ClientResourceAction,
+    onSuccess?: () => void,
+    onError?: (error?: ActionError) => void,
+  ) => void | Promise<void>;
+  onRemoveResource?: (
+    action: ClientResourceAction,
+    onSuccess?: () => void,
+    onError?: (error?: ActionError) => void,
   ) => void | Promise<void>;
   requireDelegableForActions?: boolean;
   emptyAccessText?: string;
@@ -69,10 +109,13 @@ const sortClientsByKey = (clients: Client[], parentNameById: Map<string, string>
 export const ClientAccessList = ({
   clients,
   accessStateClients,
+  resourceAccessClients,
   addDisabled = false,
   removeDisabled = false,
   onAddAccessPackage,
   onRemoveAccessPackage,
+  onAddResource,
+  onRemoveResource,
   requireDelegableForActions = true,
   emptyAccessText,
   emptyText,
@@ -83,10 +126,20 @@ export const ClientAccessList = ({
   const { getRoleMetadata } = useRoleMetadata();
   const isMobileOrSmaller = useIsMobileOrSmaller();
   const modalRef = useRef<HTMLDialogElement>(null);
+  const resourceModalRef = useRef<HTMLDialogElement>(null);
   const [selected, setSelected] = useState<ClientPackageModalData | null>(null);
+  const [selectedResource, setSelectedResource] = useState<SelectedClientResource | null>(null);
   const clientsForAccessState = accessStateClients ?? clients;
+  const clientsForResourceAccessState = resourceAccessClients ?? clientsForAccessState;
   const parentNameById = buildClientParentNameById(clients);
   const sortedClients = sortClientsByKey(clients, parentNameById);
+
+  const clientHasResource = (clientId: string, refId: string) =>
+    clientsForResourceAccessState.some(
+      (aap) =>
+        aap.client.id === clientId &&
+        aap.access.some((access) => (access.resources ?? []).some((r) => r.refId === refId)),
+    );
 
   const userListItems: UserListItemData[] = sortedClients.map((client) => {
     const clientId = client.client.id;
@@ -161,7 +214,7 @@ export const ClientAccessList = ({
               onClick={() => onRevoke()}
             >
               <MinusCircleIcon aria-hidden='true' />
-              {t('client_administration_page.remove_package_button')}
+              {t('common.delete_poa')}
             </Button>
           );
         } else if (!isMobileOrSmaller && showAction && !hasAccess && onDelegate) {
@@ -172,7 +225,7 @@ export const ClientAccessList = ({
               onClick={() => onDelegate()}
             >
               <PlusCircleIcon aria-hidden='true' />
-              {t('client_administration_page.delegate_package_button')}
+              {t('common.give_poa')}
             </Button>
           );
         }
@@ -212,6 +265,93 @@ export const ClientAccessList = ({
       return acc;
     }, [] as AccessPackageListItemProps[]);
 
+    const resourceNodes = client.access.reduce((acc, access) => {
+      (access.resources ?? []).forEach((clientResource) => {
+        const resource = clientResource.details;
+        if (!resource) return;
+
+        const hasAccess = clientHasResource(clientId, clientResource.refId);
+        const showAction = !requireDelegableForActions || resource.delegable;
+
+        const onDelegate = onAddResource
+          ? (onSuccess?: () => void, onError?: (error?: ActionError) => void) =>
+              onAddResource(
+                {
+                  clientId,
+                  roleCode: access.role.code,
+                  resourceId: clientResource.refId,
+                  resourceName: resource.title,
+                },
+                onSuccess,
+                onError,
+              )
+          : undefined;
+        const onRevoke = onRemoveResource
+          ? (onSuccess?: () => void, onError?: (error?: ActionError) => void) =>
+              onRemoveResource(
+                {
+                  clientId,
+                  roleCode: access.role.code,
+                  resourceId: clientResource.refId,
+                  resourceName: resource.title,
+                },
+                onSuccess,
+                onError,
+              )
+          : undefined;
+
+        let controls: React.ReactNode;
+        if (!isMobileOrSmaller && showAction && hasAccess && onRevoke) {
+          controls = (
+            <Button
+              variant='tertiary'
+              disabled={removeDisabled}
+              onClick={() => onRevoke()}
+            >
+              <MinusCircleIcon aria-hidden='true' />
+              {t('common.delete_poa')}
+            </Button>
+          );
+        } else if (!isMobileOrSmaller && showAction && !hasAccess && onDelegate) {
+          controls = (
+            <Button
+              variant='tertiary'
+              disabled={addDisabled}
+              onClick={() => onDelegate()}
+            >
+              <PlusCircleIcon aria-hidden='true' />
+              {t('common.give_poa')}
+            </Button>
+          );
+        }
+
+        acc.push({
+          id: `${access.role.code}:${clientResource.refId}`,
+          resource,
+          hasAccess,
+          titleAs: 'div',
+          controls,
+          onClick: () => {
+            setSelectedResource({
+              clientId,
+              refId: clientResource.refId,
+              resource,
+              toPartyName: formatDisplayName({
+                fullName: client.client.name,
+                type: userType === 'company' ? 'company' : 'person',
+                reverseNameOrder: false,
+              }),
+              onDelegate: showAction ? onDelegate : undefined,
+              onRevoke: showAction ? onRevoke : undefined,
+            });
+            resourceModalRef.current?.showModal();
+          },
+        });
+      });
+
+      return acc;
+    }, [] as ClientResourceListItemData[]);
+
     return {
       id: clientId,
       name: client.client.name,
@@ -223,12 +363,13 @@ export const ClientAccessList = ({
       interactive: true,
       as: 'button',
       titleAs: 'div',
-      children:
-        nodes.length === 0 && emptyAccessText ? (
-          <DsParagraph>{emptyAccessText}</DsParagraph>
-        ) : (
-          <AccessPackageListItems items={nodes} />
-        ),
+      children: (
+        <ClientAccessSections
+          packageItems={nodes}
+          resourceItems={resourceNodes}
+          emptyText={emptyAccessText}
+        />
+      ),
       description:
         userType === 'company'
           ? t('client_administration_page.organization_identifier', {
@@ -253,6 +394,16 @@ export const ClientAccessList = ({
       }
     : undefined;
 
+  const resourceModalData: ClientResourceModalData | undefined = selectedResource
+    ? {
+        resource: selectedResource.resource,
+        userHasAccess: clientHasResource(selectedResource.clientId, selectedResource.refId),
+        toPartyName: selectedResource.toPartyName,
+        onDelegate: selectedResource.onDelegate,
+        onRevoke: selectedResource.onRevoke,
+      }
+    : undefined;
+
   return (
     <>
       <UserListItems
@@ -264,6 +415,11 @@ export const ClientAccessList = ({
         ref={modalRef}
         data={modalData}
         onClose={() => setSelected(null)}
+      />
+      <ClientResourceInfoModal
+        ref={resourceModalRef}
+        data={resourceModalData}
+        onClose={() => setSelectedResource(null)}
       />
     </>
   );

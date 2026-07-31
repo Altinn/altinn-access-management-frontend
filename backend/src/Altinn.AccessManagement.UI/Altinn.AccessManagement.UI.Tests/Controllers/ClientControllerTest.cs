@@ -1055,5 +1055,265 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
             Assert.Equal("Unexpected HttpStatus response", problemDetails.Title);
             Assert.Equal("Downstream message", problemDetails.Detail);
         }
+        /// <summary>
+        /// Test case: GetAgentResources returns the resources delegated to an agent, enriched from the resource registry.
+        /// </summary>
+        [Fact]
+        public async Task GetAgentResources_ReturnsEnrichedResources()
+        {
+            Guid party = Guid.Parse("cd35779b-b174-4ecc-bbef-ece13611be7f");
+            Guid to = Guid.Parse("1c9f2b8b-779e-4f7e-a04a-3f2a3c2dd8b4");
+            SetAuthHeader();
+
+            HttpResponseMessage response = await _client.GetAsync(
+                $"accessmanagement/api/v1/clientdelegations/agents/resources?party={party}&to={to}");
+            List<ClientDelegation> actualResponse = await response.Content.ReadFromJsonAsync<List<ClientDelegation>>();
+
+            Assert.Equal(HttpStatusCode.OK, response.StatusCode);
+            CompactResource resource = Assert.Single(Assert.Single(Assert.Single(actualResponse).Access).Resources);
+            Assert.Equal("jks-test-resource", resource.RefId);
+            Assert.Equal("JK's Test Ressurs", resource.Details?.Title);
+        }
+
+        /// <summary>
+        /// Test case: GetAgentResources with invalid party format returns bad request.
+        /// </summary>
+        [Fact]
+        public async Task GetAgentResources_InvalidParty_ReturnsBadRequest()
+        {
+            Guid to = Guid.Parse("1c9f2b8b-779e-4f7e-a04a-3f2a3c2dd8b4");
+            SetAuthHeader();
+
+            HttpResponseMessage response = await _client.GetAsync(
+                $"accessmanagement/api/v1/clientdelegations/agents/resources?party=not-a-guid&to={to}");
+
+            Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
+        }
+
+        /// <summary>
+        /// Test case: GetAgentResources surfaces a downstream error status instead of a generic failure.
+        /// </summary>
+        [Fact]
+        public async Task GetAgentResources_DownstreamError_ReturnsProblemDetails()
+        {
+            Guid party = Guid.Parse("00000000-0000-0000-0000-000000000404");
+            Guid to = Guid.Parse("1c9f2b8b-779e-4f7e-a04a-3f2a3c2dd8b4");
+            SetAuthHeader();
+
+            HttpResponseMessage response = await _client.GetAsync(
+                $"accessmanagement/api/v1/clientdelegations/agents/resources?party={party}&to={to}");
+
+            Assert.Equal(HttpStatusCode.NotFound, response.StatusCode);
+        }
+
+        /// <summary>
+        /// Test case: GetAgentResources returns internal server error when the service throws.
+        /// </summary>
+        [Fact]
+        public async Task GetAgentResources_ServiceThrows_ReturnsInternalServerError()
+        {
+            Guid party = Guid.Parse("00000000-0000-0000-0000-000000000000");
+            Guid to = Guid.Parse("1c9f2b8b-779e-4f7e-a04a-3f2a3c2dd8b4");
+            SetAuthHeader();
+
+            HttpResponseMessage response = await _client.GetAsync(
+                $"accessmanagement/api/v1/clientdelegations/agents/resources?party={party}&to={to}");
+
+            Assert.Equal(HttpStatusCode.InternalServerError, response.StatusCode);
+        }
+
+        /// <summary>
+        /// Test case: GetClientResources returns the resources delegated from a client, enriched from the resource registry.
+        /// </summary>
+        [Fact]
+        public async Task GetClientResources_ReturnsEnrichedResources()
+        {
+            Guid party = Guid.Parse("cd35779b-b174-4ecc-bbef-ece13611be7f");
+            Guid from = Guid.Parse("7a7a7a7a-7a7a-7a7a-7a7a-7a7a7a7a7a7a");
+            SetAuthHeader();
+
+            HttpResponseMessage response = await _client.GetAsync(
+                $"accessmanagement/api/v1/clientdelegations/clients/resources?party={party}&from={from}");
+            List<AgentDelegation> actualResponse = await response.Content.ReadFromJsonAsync<List<AgentDelegation>>();
+
+            Assert.Equal(HttpStatusCode.OK, response.StatusCode);
+            CompactResource resource = Assert.Single(Assert.Single(Assert.Single(actualResponse).Access).Resources);
+            Assert.Equal("ske-innrapportering-boligsameie", resource.RefId);
+            Assert.Equal("Innrapportering Boligsameie", resource.Details?.Title);
+        }
+
+        /// <summary>
+        /// Test case: GetClientResources with invalid party format returns bad request.
+        /// </summary>
+        [Fact]
+        public async Task GetClientResources_InvalidParty_ReturnsBadRequest()
+        {
+            Guid from = Guid.Parse("7a7a7a7a-7a7a-7a7a-7a7a-7a7a7a7a7a7a");
+            SetAuthHeader();
+
+            HttpResponseMessage response = await _client.GetAsync(
+                $"accessmanagement/api/v1/clientdelegations/clients/resources?party=not-a-guid&from={from}");
+
+            Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
+        }
+
+        /// <summary>
+        /// Test case: AddAgentResources returns a delegation per delegated resource.
+        /// </summary>
+        [Fact]
+        public async Task AddAgentResources_ReturnsDelegations()
+        {
+            Guid party = Guid.Parse("cd35779b-b174-4ecc-bbef-ece13611be7f");
+            Guid from = Guid.Parse("7a7a7a7a-7a7a-7a7a-7a7a-7a7a7a7a7a7a");
+            Guid to = Guid.Parse("1c9f2b8b-779e-4f7e-a04a-3f2a3c2dd8b4");
+            SetAuthHeader();
+
+            HttpResponseMessage response = await _client.PostAsJsonAsync(
+                $"accessmanagement/api/v1/clientdelegations/agents/resources?party={party}&from={from}&to={to}",
+                ResourcePayload());
+            List<ResourceDelegationDto> actualResponse = await response.Content.ReadFromJsonAsync<List<ResourceDelegationDto>>();
+
+            Assert.Equal(HttpStatusCode.OK, response.StatusCode);
+            ResourceDelegationDto delegation = Assert.Single(actualResponse);
+            Assert.Equal(from, delegation.FromId);
+            Assert.Equal(to, delegation.ToId);
+        }
+
+        /// <summary>
+        /// Test case: AddAgentResources with invalid party format returns bad request.
+        /// </summary>
+        [Fact]
+        public async Task AddAgentResources_InvalidParty_ReturnsBadRequest()
+        {
+            Guid from = Guid.Parse("7a7a7a7a-7a7a-7a7a-7a7a-7a7a7a7a7a7a");
+            Guid to = Guid.Parse("1c9f2b8b-779e-4f7e-a04a-3f2a3c2dd8b4");
+            SetAuthHeader();
+
+            HttpResponseMessage response = await _client.PostAsJsonAsync(
+                $"accessmanagement/api/v1/clientdelegations/agents/resources?party=not-a-guid&from={from}&to={to}",
+                ResourcePayload());
+
+            Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
+        }
+
+        /// <summary>
+        /// Test case: AddAgentResources returns bad request when payload is null.
+        /// </summary>
+        [Fact]
+        public async Task AddAgentResources_NullPayload_ReturnsBadRequest()
+        {
+            Guid party = Guid.Parse("cd35779b-b174-4ecc-bbef-ece13611be7f");
+            Guid from = Guid.Parse("7a7a7a7a-7a7a-7a7a-7a7a-7a7a7a7a7a7a");
+            Guid to = Guid.Parse("1c9f2b8b-779e-4f7e-a04a-3f2a3c2dd8b4");
+            SetAuthHeader();
+
+            HttpContent content = new StringContent("null", Encoding.UTF8, "application/json");
+            HttpResponseMessage response = await _client.PostAsync(
+                $"accessmanagement/api/v1/clientdelegations/agents/resources?party={party}&from={from}&to={to}",
+                content);
+
+            Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
+        }
+
+        /// <summary>
+        /// Test case: RemoveAgentResources returns no content on valid input.
+        /// </summary>
+        [Fact]
+        public async Task RemoveAgentResources_ReturnsNoContent()
+        {
+            Guid party = Guid.Parse("cd35779b-b174-4ecc-bbef-ece13611be7f");
+            Guid from = Guid.Parse("7a7a7a7a-7a7a-7a7a-7a7a-7a7a7a7a7a7a");
+            Guid to = Guid.Parse("1c9f2b8b-779e-4f7e-a04a-3f2a3c2dd8b4");
+            SetAuthHeader();
+
+            HttpRequestMessage request = new HttpRequestMessage(
+                HttpMethod.Delete,
+                $"accessmanagement/api/v1/clientdelegations/agents/resources?party={party}&from={from}&to={to}")
+            {
+                Content = JsonContent.Create(ResourcePayload())
+            };
+            HttpResponseMessage response = await _client.SendAsync(request);
+
+            Assert.Equal(HttpStatusCode.NoContent, response.StatusCode);
+        }
+
+        /// <summary>
+        /// Test case: RemoveAgentResources returns bad request when payload is null.
+        /// </summary>
+        [Fact]
+        public async Task RemoveAgentResources_NullPayload_ReturnsBadRequest()
+        {
+            Guid party = Guid.Parse("cd35779b-b174-4ecc-bbef-ece13611be7f");
+            Guid from = Guid.Parse("7a7a7a7a-7a7a-7a7a-7a7a-7a7a7a7a7a7a");
+            Guid to = Guid.Parse("1c9f2b8b-779e-4f7e-a04a-3f2a3c2dd8b4");
+            SetAuthHeader();
+
+            HttpRequestMessage request = new HttpRequestMessage(
+                HttpMethod.Delete,
+                $"accessmanagement/api/v1/clientdelegations/agents/resources?party={party}&from={from}&to={to}")
+            {
+                Content = new StringContent("null", Encoding.UTF8, "application/json")
+            };
+            HttpResponseMessage response = await _client.SendAsync(request);
+
+            Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
+        }
+
+        /// <summary>
+        /// Test case: RemoveMyClientResources returns no content on valid input.
+        /// </summary>
+        [Fact]
+        public async Task RemoveMyClientResources_ReturnsNoContent()
+        {
+            Guid provider = Guid.Parse("cd35779b-b174-4ecc-bbef-ece13611be7f");
+            Guid from = Guid.Parse("7a7a7a7a-7a7a-7a7a-7a7a-7a7a7a7a7a7a");
+            SetAuthHeader();
+
+            HttpRequestMessage request = new HttpRequestMessage(
+                HttpMethod.Delete,
+                $"accessmanagement/api/v1/clientdelegations/my/clients/resources?provider={provider}&from={from}")
+            {
+                Content = JsonContent.Create(ResourcePayload())
+            };
+            HttpResponseMessage response = await _client.SendAsync(request);
+
+            Assert.Equal(HttpStatusCode.NoContent, response.StatusCode);
+        }
+
+        /// <summary>
+        /// Test case: RemoveMyClientResources returns bad request when payload is null.
+        /// </summary>
+        [Fact]
+        public async Task RemoveMyClientResources_NullPayload_ReturnsBadRequest()
+        {
+            Guid provider = Guid.Parse("cd35779b-b174-4ecc-bbef-ece13611be7f");
+            Guid from = Guid.Parse("7a7a7a7a-7a7a-7a7a-7a7a-7a7a7a7a7a7a");
+            SetAuthHeader();
+
+            HttpRequestMessage request = new HttpRequestMessage(
+                HttpMethod.Delete,
+                $"accessmanagement/api/v1/clientdelegations/my/clients/resources?provider={provider}&from={from}")
+            {
+                Content = new StringContent("null", Encoding.UTF8, "application/json")
+            };
+            HttpResponseMessage response = await _client.SendAsync(request);
+
+            Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
+        }
+
+        private static ResourceDelegationBatchInputDto ResourcePayload()
+        {
+            return new ResourceDelegationBatchInputDto
+            {
+                Values =
+                [
+                    new ResourceDelegationBatchInputDto.Permission
+                    {
+                        Role = "rettighetshaver",
+                        Resources = ["jks-test-resource"]
+                    }
+                ]
+            };
+        }
     }
 }

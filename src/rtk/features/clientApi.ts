@@ -5,10 +5,18 @@ import { Entity } from '@/dataObjects/dtos/Common';
 import { Role } from './roleApi';
 import { AccessPackage } from './accessPackageApi';
 import { PersonInput } from './connectionApi';
+import { ServiceResource } from './singleRights/singleRightsApi';
+
+export interface ClientResource {
+  id: string;
+  refId: string;
+  details?: ServiceResource | null;
+}
 
 export interface ClientAccess {
   role: Role;
   packages: AccessPackage[];
+  resources?: ClientResource[];
 }
 
 export interface Client {
@@ -56,6 +64,23 @@ export interface DelegationDto {
   toId: string;
 }
 
+export interface ResourceDelegationBatchPermission {
+  role: string;
+  resources: string[];
+}
+
+export interface ResourceDelegationBatchInput {
+  values: ResourceDelegationBatchPermission[];
+}
+
+export interface ResourceDelegationDto {
+  roleId: string;
+  resourceId: string;
+  viaId: string;
+  fromId: string;
+  toId: string;
+}
+
 const baseUrl = `${import.meta.env.BASE_URL}accessmanagement/api/v1/clientdelegations`;
 
 export const clientApi = createApi({
@@ -68,7 +93,15 @@ export const clientApi = createApi({
       return headers;
     },
   }),
-  tagTypes: ['clients', 'agents', 'agentAccessPackages', 'clientAccessPackages', 'myClients'],
+  tagTypes: [
+    'clients',
+    'agents',
+    'agentAccessPackages',
+    'clientAccessPackages',
+    'agentResources',
+    'clientResources',
+    'myClients',
+  ],
   endpoints: (builder) => ({
     getMyClients: builder.query<MyClientsByProvider[], { provider?: string[] } | void>({
       query: (args) => {
@@ -111,6 +144,18 @@ export const clientApi = createApi({
       keepUnusedDataFor: 5 * 60,
       providesTags: ['clientAccessPackages'],
     }),
+    getAgentResources: builder.query<Client[], { to: string; party?: string }>({
+      query: ({ to, party = getCookie('AltinnPartyUuid') }) =>
+        `agents/resources?party=${party}&to=${to}`,
+      keepUnusedDataFor: 5 * 60,
+      providesTags: ['agentResources'],
+    }),
+    getClientResources: builder.query<Agent[], { from: string; party?: string }>({
+      query: ({ from, party = getCookie('AltinnPartyUuid') }) =>
+        `clients/resources?party=${party}&from=${from}`,
+      keepUnusedDataFor: 5 * 60,
+      providesTags: ['clientResources'],
+    }),
     addAgentAccessPackages: builder.mutation<
       DelegationDto[],
       { from: string; to: string; payload: DelegationBatchInput; party?: string }
@@ -133,12 +178,45 @@ export const clientApi = createApi({
       }),
       invalidatesTags: ['agentAccessPackages', 'clientAccessPackages'],
     }),
+    addAgentResources: builder.mutation<
+      ResourceDelegationDto[],
+      { from: string; to: string; payload: ResourceDelegationBatchInput; party?: string }
+    >({
+      query: ({ from, to, payload, party = getCookie('AltinnPartyUuid') }) => ({
+        url: `agents/resources?party=${party}&from=${from}&to=${to}`,
+        method: 'POST',
+        body: payload,
+      }),
+      invalidatesTags: ['agentResources', 'clientResources'],
+    }),
+    removeAgentResources: builder.mutation<
+      void,
+      { from: string; to: string; payload: ResourceDelegationBatchInput; party?: string }
+    >({
+      query: ({ from, to, payload, party = getCookie('AltinnPartyUuid') }) => ({
+        url: `agents/resources?party=${party}&from=${from}&to=${to}`,
+        method: 'DELETE',
+        body: payload,
+      }),
+      invalidatesTags: ['agentResources', 'clientResources'],
+    }),
     removeMyClientAccessPackages: builder.mutation<
       void,
       { provider: string; from: string; payload: DelegationBatchInput }
     >({
       query: ({ provider, from, payload }) => ({
         url: `my/clients?provider=${provider}&from=${from}`,
+        method: 'DELETE',
+        body: payload,
+      }),
+      invalidatesTags: ['myClients'],
+    }),
+    removeMyClientResources: builder.mutation<
+      void,
+      { provider: string; from: string; payload: ResourceDelegationBatchInput }
+    >({
+      query: ({ provider, from, payload }) => ({
+        url: `my/clients/resources?provider=${provider}&from=${from}`,
         method: 'DELETE',
         body: payload,
       }),
@@ -175,9 +253,14 @@ export const {
   useGetAgentsQuery,
   useGetAgentAccessPackagesQuery,
   useGetClientAccessPackagesQuery,
+  useGetAgentResourcesQuery,
+  useGetClientResourcesQuery,
   useAddAgentAccessPackagesMutation,
   useRemoveAgentAccessPackagesMutation,
+  useAddAgentResourcesMutation,
+  useRemoveAgentResourcesMutation,
   useRemoveMyClientAccessPackagesMutation,
+  useRemoveMyClientResourcesMutation,
   useRemoveMyClientProviderMutation,
   useAddAgentMutation,
   useRemoveAgentMutation,
@@ -187,5 +270,7 @@ export type AddAgentAccessPackagesFn = ReturnType<typeof useAddAgentAccessPackag
 export type RemoveAgentAccessPackagesFn = ReturnType<
   typeof useRemoveAgentAccessPackagesMutation
 >[0];
+export type AddAgentResourcesFn = ReturnType<typeof useAddAgentResourcesMutation>[0];
+export type RemoveAgentResourcesFn = ReturnType<typeof useRemoveAgentResourcesMutation>[0];
 
 export const { endpoints, reducerPath, reducer, middleware } = clientApi;

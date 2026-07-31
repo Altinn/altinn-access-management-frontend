@@ -41,7 +41,11 @@
             "resources": [
               {
                 "id": "44444444-4444-4444-4444-444444444444",
-                "refId": "app_ttd_demo-tjeneste"
+                "refId": "generic-access-resource"
+              },
+              {
+                "id": "55555555-5555-5555-5555-555555555555",
+                "refId": "ske-innrapportering-boligsameie"
               }
             ]
           }

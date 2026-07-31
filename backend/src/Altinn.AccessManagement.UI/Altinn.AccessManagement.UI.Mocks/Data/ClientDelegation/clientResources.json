@@ -1,0 +1,31 @@
+[
+  {
+    "agent": {
+      "id": "88888888-8888-8888-8888-888888888888",
+      "name": "Ola Nordmann",
+      "type": "Person",
+      "variant": "person",
+      "parent": null,
+      "children": null,
+      "partyId": 500001,
+      "organizationIdentifier": null,
+      "dateOfBirth": "1980-01-01"
+    },
+    "access": [
+      {
+        "role": {
+          "id": "11111111-1111-1111-1111-111111111111",
+          "code": "DAGL",
+          "children": null
+        },
+        "packages": [],
+        "resources": [
+          {
+            "id": "55555555-5555-5555-5555-555555555555",
+            "refId": "ske-innrapportering-boligsameie"
+          }
+        ]
+      }
+    ]
+  }
+]
