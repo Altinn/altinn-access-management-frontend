@@ -644,7 +644,7 @@
     "delegate_success_snackbar": "{{name}} now has power of attorney for {{accessName}}.",
     "delegate_error": "Could not grant {{name}} power of attorney for {{accessName}}.",
     "remove_success_snackbar": "{{name}} no longer has power of attorney for {{accessName}}.",
-    "remove_error": "Could not remove {{name}} power of attorney for {{accessName}}.",
+    "remove_error": "Could not remove {{name}}'s power of attorney for {{accessName}}.",
     "via_role": "Access through Central Coordinating Register",
     "packages_heading": "Access packages:",
     "single_rights_heading": "Single services:",
