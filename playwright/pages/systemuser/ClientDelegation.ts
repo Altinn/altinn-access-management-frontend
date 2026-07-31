@@ -98,7 +98,7 @@ export class ClientDelegationPage {
 
   async confirmAndCreateSystemUser(accessPackage: string) {
     const button = this.page.getByRole('button', { name: accessPackage });
-    expect(button).toBeVisible();
+    await expect(button).toBeVisible();
     await expect(this.confirmButton).toBeVisible();
     await this.confirmButton.click();
   }

@@ -12,6 +12,9 @@ import { AktorvalgHeader } from 'playwright/pages/AktorvalgHeader';
 import { ClientDelegationPage } from 'playwright/pages/systemuser/ClientDelegation';
 import { runAccessibilityTests } from 'playwright/uuTests/accessibilityHelpers/delegeringHelper';
 import { KlientAdministrasjonPage } from 'playwright/pages/tilgangsstyring/KlientAdministrasjonPage';
+import { createTestData } from 'playwright/tenor/testData';
+import { lagreTestdataPins } from 'playwright/tenor/testdataPinning';
+import type { TestDataProvider } from 'playwright/tenor/TestDataProvider';
 
 const defaultLang = Language.NB;
 
@@ -34,6 +37,9 @@ type Fixtures = {
   aktorvalgHeader: AktorvalgHeader;
   clientDelegationPage: ClientDelegationPage;
   klientAdministrasjonPage: KlientAdministrasjonPage;
+
+  // Testdata-kilde (Tenor eller statisk). Byttes ett sted via createTestData().
+  testData: TestDataProvider;
 };
 
 const test = baseTest.extend<Fixtures>({
@@ -99,6 +105,14 @@ const test = baseTest.extend<Fixtures>({
 
   klientAdministrasjonPage: async ({ page, language }, use) => {
     await use(new KlientAdministrasjonPage(page, language));
+  },
+
+  testData: async ({}, use) => {
+    const testData = createTestData();
+    await use(testData);
+    // Legger aktørene testen brukte ved som attachment, så en rød CI-kjøring kan
+    // reproduseres med TESTDATA_PIN (CI laster kun opp playwright-report/).
+    await lagreTestdataPins(testData);
   },
 });
 

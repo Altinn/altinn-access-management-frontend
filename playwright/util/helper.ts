@@ -1,6 +1,7 @@
 // eslint-disable-next-line import/default
 import dotenv from 'dotenv';
 import path from 'path';
+import { randomInt } from 'crypto';
 
 export function env(name: string): string {
   const value = process.env[name];
@@ -32,10 +33,12 @@ export function loadEnv(envName: string, { override = true }: { override?: boole
 }
 
 /**
- * Picks a random element from an array
+ * Picks a random element from an array. Uses `crypto.randomInt` (not
+ * `Math.random`) so CodeQL doesn't flag it where the picked value flows into
+ * API calls — it costs nothing here and keeps the security scan clean.
  */
 export function pickRandom<T>(arr: T[]): T {
-  return arr[Math.floor(Math.random() * arr.length)];
+  return arr[randomInt(arr.length)];
 }
 
 /**
