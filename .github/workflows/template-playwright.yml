@@ -11,10 +11,8 @@ on:
         type: choice
         required: true
         options:
-          - AT21
           - AT22
           - AT23
-          - AT24
           - TT02
         description: Environment
 
@@ -80,7 +78,7 @@ jobs:
         with:
           azcliversion: latest
           inlineScript: |
-            REPORT_NAME=${{ inputs.environment }}                 # e.g. AT24
+            REPORT_NAME=${{ inputs.environment }}                 # e.g. AT23
             REPORT_ID=${{ github.run_id }}-${{ inputs.environment }}     # unique per job run
             ACCOUNT_NAME=playwrightreporting
 

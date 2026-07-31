@@ -3,10 +3,8 @@ import { getCookie } from '../Cookie/CookieMethods';
 enum Environment {
   TT02 = 'tt02',
   PROD = 'prod',
-  AT21 = 'at21',
   AT22 = 'at22',
   AT23 = 'at23',
-  AT24 = 'at24',
   YT01 = 'yt01',
 }
 
@@ -15,17 +13,11 @@ export const getEnv = () => {
   if (host.includes('tt02')) {
     return Environment.TT02;
   }
-  if (host.includes('at21')) {
-    return Environment.AT21;
-  }
   if (host.includes('at22')) {
     return Environment.AT22;
   }
   if (host.includes('at23')) {
     return Environment.AT23;
-  }
-  if (host.includes('at24')) {
-    return Environment.AT24;
   }
   if (host.includes('yt01')) {
     return Environment.YT01;
@@ -47,14 +39,10 @@ export const getAltinnStartPageUrl = (languageOverride?: string) => {
       return `https://info.tt02.altinn.no/${langKey}`;
     case Environment.YT01:
       return `https://info.yt01.altinn.cloud/${langKey}`;
-    case Environment.AT21:
-      return `https://info.at21.altinn.cloud/${langKey}`;
     case Environment.AT22:
       return `https://info.at22.altinn.cloud/${langKey}`;
     case Environment.AT23:
       return `https://info.at23.altinn.cloud/${langKey}`;
-    case Environment.AT24:
-      return `https://info.at24.altinn.cloud/${langKey}`;
     case Environment.PROD:
       return `https://info.altinn.no/${langKey}`;
     default:
@@ -69,14 +57,10 @@ export const getHostUrl = () => {
       return 'https://tt02.altinn.no/';
     case Environment.YT01:
       return 'https://yt01.altinn.cloud/';
-    case Environment.AT21:
-      return 'https://at21.altinn.cloud/';
     case Environment.AT22:
       return 'https://at22.altinn.cloud/';
     case Environment.AT23:
       return 'https://at23.altinn.cloud/';
-    case Environment.AT24:
-      return 'https://at24.altinn.cloud/';
     case Environment.PROD:
       return 'https://altinn.no/';
     default:
@@ -89,13 +73,9 @@ export const getAfUrl = () => {
   switch (env) {
     case Environment.TT02:
       return 'https://af.tt02.altinn.no/';
-    case Environment.AT21:
-      return 'https://af.at23.altinn.cloud/';
     case Environment.AT22:
       return 'https://af.at23.altinn.cloud/';
     case Environment.AT23:
-      return 'https://af.at23.altinn.cloud/';
-    case Environment.AT24:
       return 'https://af.at23.altinn.cloud/';
     case Environment.YT01:
       return 'https://af.yt01.altinn.cloud/';
@@ -113,14 +93,10 @@ export const getPlatformUrl = () => {
       return 'https://platform.tt02.altinn.no/';
     case Environment.YT01:
       return 'https://platform.yt01.altinn.cloud/';
-    case Environment.AT21:
-      return 'https://platform.at21.altinn.cloud/';
     case Environment.AT22:
       return 'https://platform.at22.altinn.cloud/';
     case Environment.AT23:
       return 'https://platform.at23.altinn.cloud/';
-    case Environment.AT24:
-      return 'https://platform.at24.altinn.cloud/';
     case Environment.PROD:
       return 'https://platform.altinn.no/';
     default:
@@ -135,14 +111,10 @@ export const getAmBaseUrl = () => {
       return 'https://am.ui.tt02.altinn.no/accessmanagement/';
     case Environment.YT01:
       return 'https://am.ui.yt01.altinn.cloud/accessmanagement/';
-    case Environment.AT21:
-      return 'https://am.ui.at21.altinn.cloud/accessmanagement/';
     case Environment.AT22:
       return 'https://am.ui.at22.altinn.cloud/accessmanagement/';
     case Environment.AT23:
       return 'https://am.ui.at23.altinn.cloud/accessmanagement/';
-    case Environment.AT24:
-      return 'https://am.ui.at24.altinn.cloud/accessmanagement/';
     case Environment.PROD:
       return 'https://am.ui.altinn.no/accessmanagement/';
     default:

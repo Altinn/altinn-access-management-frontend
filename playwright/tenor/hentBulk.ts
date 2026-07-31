@@ -118,7 +118,7 @@ function printHelp(): void {
       '  -n, --antall <tall>   Antall som hentes (default: 10)',
       '      --kql <kql>       Egendefinert KQL – for persons/orgs (overstyrer standardsøk)',
       '      --json            Skriv ut som JSON',
-      '      --env <miljø>     Miljø for env-fil: tt02, at22, at23, at24 (default: tt02)',
+      '      --env <miljø>     Miljø for env-fil: tt02, at22, at23 (default: tt02)',
       '  -h, --help            Vis denne hjelpeteksten',
     ].join('\n'),
   );
