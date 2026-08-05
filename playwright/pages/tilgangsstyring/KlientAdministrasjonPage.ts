@@ -168,7 +168,7 @@ export class KlientAdministrasjonPage {
   }
 
   async klikkGiFullmakt(navn: string) {
-    const giFullmakt = this.texts.client_administration_page.delegate_package_button;
+    const giFullmakt = this.texts.common.give_poa;
     await this.page
       .getByText(`${navn}${giFullmakt}`)
       .getByRole('button', { name: giFullmakt })
@@ -176,7 +176,7 @@ export class KlientAdministrasjonPage {
   }
 
   slettFullmaktKnapp(navn: string): Locator {
-    const slettFullmakt = this.texts.client_administration_page.remove_package_button;
+    const slettFullmakt = this.texts.common.delete_poa;
     return this.page
       .getByText(`${navn}${slettFullmakt}`)
       .getByRole('button', { name: slettFullmakt });

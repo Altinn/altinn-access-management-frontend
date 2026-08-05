@@ -13,6 +13,16 @@
   height: 90%;
 }
 
+.subListHeading {
+  margin-bottom: var(--ds-spacing-2);
+}
+.otherListDivider {
+  border: 0;
+  border-top: 1px solid var(--ds-color-neutral-border-subtle);
+  margin-top: var(--ds-spacing-11);
+  margin-bottom: var(--ds-spacing-8);
+}
+
 .loadingSpinner {
   display: flex;
   align-items: center;

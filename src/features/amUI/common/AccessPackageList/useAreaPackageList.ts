@@ -54,8 +54,8 @@ export const useAreaPackageList = ({
   const { fromParty, toParty, actingParty } = usePartyRepresentation();
   const typeName = fromParty
     ? fromParty?.partyTypeName === PartyType.Organization
-      ? 'organisasjon'
-      : 'person'
+      ? 'Organisasjon'
+      : 'Person'
     : undefined;
 
   const {
@@ -151,9 +151,11 @@ export const useAreaPackageList = ({
               acc.assignedAreas.push({ ...area, packages: pkgs });
             }
           } else if (showAllAreas) {
-            const assignablePackages = area.accessPackages.filter(
-              (pkg) => pkg.isAssignable !== false,
-            );
+            // filter away empty areas for different partyType
+            const matchesPartyType = area.typeName === typeName;
+            const assignablePackages = matchesPartyType
+              ? area.accessPackages.filter((pkg) => pkg.isAssignable !== false)
+              : [];
             // Skip the area when none of its packages can be delegated — otherwise it would render empty.
             if (assignablePackages.length > 0) {
               acc.availableAreas.push({
@@ -175,6 +177,7 @@ export const useAreaPackageList = ({
     allPackageAreas,
     activeDelegations,
     fromParty,
+    filterByType,
     showAllAreas,
     showAllPackages,
     showOnlyGuardianships,
@@ -192,7 +195,6 @@ export const useAreaPackageList = ({
     activeDelegations,
     searchError,
     activeDelegationsError,
-    partyType: typeName === 'person' ? PartyType.Person : PartyType.Organization,
   };
 };
 

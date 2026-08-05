@@ -143,11 +143,11 @@ namespace Altinn.AccessManagement.UI.Mocks.Mocks
         }
 
         /// <inheritdoc />
-        public async Task<HttpResponseMessage> RevokeAccessPackage(Guid from, Guid to, Guid party, string resourceId)
+        public async Task<HttpResponseMessage> RevokeAccessPackage(Guid from, Guid to, Guid party, string packageId)
         {
             string dataPath = Path.Combine(dataFolder, "AccessPackage", "RevokeDelegation");
 
-            var mockResponse = await Util.GetMockedHttpResponse(dataPath, resourceId);
+            var mockResponse = await Util.GetMockedHttpResponse(dataPath, packageId);
             if (mockResponse.IsSuccessStatusCode)
             {
                 return new HttpResponseMessage(HttpStatusCode.NoContent);

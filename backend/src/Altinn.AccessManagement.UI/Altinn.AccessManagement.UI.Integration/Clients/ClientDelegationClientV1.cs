@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using System.Text;
 using System.Text.Json;
 using Altinn.AccessManagement.UI.Core.ClientInterfaces;
@@ -17,9 +18,10 @@ using Microsoft.Extensions.Options;
 namespace Altinn.AccessManagement.UI.Integration.Clients
 {
     /// <summary>
-    /// Client for interacting with client delegation endpoints.
+    /// Client for interacting with the v1 client delegation endpoints.
+    /// Legacy implementation; delete together with <see cref="ClientDelegationClientResolver"/> when v1 is retired.
     /// </summary>
-    public class ClientDelegationClient : IClientDelegationClient
+    public class ClientDelegationClientV1 : IClientDelegationClient
     {
         private readonly ILogger _logger;
         private readonly HttpClient _client;
@@ -27,22 +29,27 @@ namespace Altinn.AccessManagement.UI.Integration.Clients
         private readonly PlatformSettings _platformSettings;
         private readonly JsonSerializerOptions _serializerOptions = new JsonSerializerOptions { PropertyNameCaseInsensitive = true };
 
+        private const string JsonMediaType = "application/json";
+        private const string StatusErrorTitle = "StatusError";
+        private const string StatusErrorMessage = "Unexpected response status from Access Management";
+        private const string UnexpectedHttpResponseMessage = "Unexpected http response.";
+
         /// <summary>
-        /// Initializes a new instance of the <see cref="ClientDelegationClient"/> class.
+        /// Initializes a new instance of the <see cref="ClientDelegationClientV1"/> class.
         /// </summary>
         /// <param name="httpClient">The http client.</param>
         /// <param name="logger">The logger.</param>
         /// <param name="httpContextAccessor">The http context accessor.</param>
         /// <param name="platformSettings">Platform settings configuration.</param>
-        public ClientDelegationClient(
+        public ClientDelegationClientV1(
             HttpClient httpClient,
-            ILogger<ClientDelegationClient> logger,
+            ILogger<ClientDelegationClientV1> logger,
             IHttpContextAccessor httpContextAccessor,
             IOptions<PlatformSettings> platformSettings)
         {
             _logger = logger;
             _platformSettings = platformSettings.Value;
-            httpClient.BaseAddress = new Uri(_platformSettings.ApiAccessManagementEndpoint);
+            httpClient.BaseAddress = new Uri(_platformSettings.ApiAccessManagementEndpoint + "v1/");
             httpClient.DefaultRequestHeaders.Add(_platformSettings.SubscriptionKeyHeaderName, _platformSettings.SubscriptionKey);
             _client = httpClient;
             _httpContextAccessor = httpContextAccessor;
@@ -60,9 +67,9 @@ namespace Altinn.AccessManagement.UI.Integration.Clients
 
             string token = JwtTokenUtil.GetTokenFromContext(_httpContextAccessor.HttpContext, _platformSettings.JwtCookieName);
 
-            HttpResponseMessage response = await _client.GetAsync(token, endpointUrl);
+            HttpResponseMessage response = await _client.GetAsync(token, endpointUrl, cancellationToken);
             PaginatedResult<MyClientDelegation> clients =
-                await ClientUtils.DeserializeIfSuccessfullStatusCode<PaginatedResult<MyClientDelegation>>(response, _logger, "ClientDelegationClient.GetMyClients");
+                await ClientUtils.DeserializeIfSuccessfullStatusCode<PaginatedResult<MyClientDelegation>>(response, _logger, "ClientDelegationClientV1.GetMyClients");
 
             if (clients?.Items == null)
             {
@@ -78,15 +85,15 @@ namespace Altinn.AccessManagement.UI.Integration.Clients
             string endpointUrl = $"enduser/clientdelegations/my/clientproviders?provider={provider}";
             string token = JwtTokenUtil.GetTokenFromContext(_httpContextAccessor.HttpContext, _platformSettings.JwtCookieName);
 
-            HttpResponseMessage response = await _client.DeleteAsync(token, endpointUrl);
+            HttpResponseMessage response = await _client.DeleteAsync(token, endpointUrl, null, cancellationToken);
             if (response.IsSuccessStatusCode)
             {
                 return;
             }
 
             string responseContent = await response.Content.ReadAsStringAsync();
-            _logger.LogError("AccessManagement.UI // ClientDelegationClient.RemoveMyClientProvider // Unexpected HttpStatusCode: {StatusCode}\n {responseBody}", response.StatusCode, responseContent);
-            throw new HttpStatusException("StatusError", "Unexpected response status from Access Management", response.StatusCode, _httpContextAccessor.HttpContext?.TraceIdentifier, responseContent);
+            _logger.LogError("AccessManagement.UI // ClientDelegationClientV1.RemoveMyClientProvider // Unexpected HttpStatusCode: {StatusCode}\n {ResponseBody}", response.StatusCode, responseContent);
+            throw new HttpStatusException(StatusErrorTitle, StatusErrorMessage, response.StatusCode, _httpContextAccessor.HttpContext?.TraceIdentifier, responseContent);
         }
 
         /// <inheritdoc />
@@ -95,16 +102,16 @@ namespace Altinn.AccessManagement.UI.Integration.Clients
             string endpointUrl = $"enduser/clientdelegations/my/clients?provider={provider}&from={from}";
             string token = JwtTokenUtil.GetTokenFromContext(_httpContextAccessor.HttpContext, _platformSettings.JwtCookieName);
 
-            StringContent requestBody = new StringContent(JsonSerializer.Serialize(payload, _serializerOptions), Encoding.UTF8, "application/json");
-            HttpResponseMessage response = await _client.DeleteAsync(token, endpointUrl, requestBody);
+            StringContent requestBody = new StringContent(JsonSerializer.Serialize(payload, _serializerOptions), Encoding.UTF8, JsonMediaType);
+            HttpResponseMessage response = await _client.DeleteAsync(token, endpointUrl, requestBody, null, cancellationToken);
             string responseContent = await response.Content.ReadAsStringAsync(cancellationToken);
             if (response.IsSuccessStatusCode)
             {
                 return;
             }
 
-            _logger.LogError("AccessManagement.UI // ClientDelegationClient.RemoveMyClientAccessPackages // Unexpected HttpStatusCode: {StatusCode}\n {responseBody}", response.StatusCode, responseContent);
-            throw new HttpStatusException("StatusError", "Unexpected response status from Access Management", response.StatusCode, _httpContextAccessor.HttpContext?.TraceIdentifier, responseContent);
+            _logger.LogError("AccessManagement.UI // ClientDelegationClientV1.RemoveMyClientAccessPackages // Unexpected HttpStatusCode: {StatusCode}\n {ResponseBody}", response.StatusCode, responseContent);
+            throw new HttpStatusException(StatusErrorTitle, StatusErrorMessage, response.StatusCode, _httpContextAccessor.HttpContext?.TraceIdentifier, responseContent);
         }
 
         /// <inheritdoc />
@@ -122,12 +129,12 @@ namespace Altinn.AccessManagement.UI.Integration.Clients
                     endpointUrl = $"{endpointUrl}&{roleQuery}";
                 }
             }
-            
+
             string token = JwtTokenUtil.GetTokenFromContext(_httpContextAccessor.HttpContext, _platformSettings.JwtCookieName);
 
-            HttpResponseMessage response = await _client.GetAsync(token, endpointUrl);
+            HttpResponseMessage response = await _client.GetAsync(token, endpointUrl, cancellationToken);
             PaginatedResult<ClientDelegation> clients =
-                await ClientUtils.DeserializeIfSuccessfullStatusCode<PaginatedResult<ClientDelegation>>(response, _logger, "ClientDelegationClient.GetClients");
+                await ClientUtils.DeserializeIfSuccessfullStatusCode<PaginatedResult<ClientDelegation>>(response, _logger, "ClientDelegationClientV1.GetClients");
 
             if (clients?.Items == null)
             {
@@ -143,9 +150,9 @@ namespace Altinn.AccessManagement.UI.Integration.Clients
             string endpointUrl = $"enduser/clientdelegations/agents?party={party}";
             string token = JwtTokenUtil.GetTokenFromContext(_httpContextAccessor.HttpContext, _platformSettings.JwtCookieName);
 
-            HttpResponseMessage response = await _client.GetAsync(token, endpointUrl);
+            HttpResponseMessage response = await _client.GetAsync(token, endpointUrl, cancellationToken);
             PaginatedResult<AgentDelegation> agents =
-                await ClientUtils.DeserializeIfSuccessfullStatusCode<PaginatedResult<AgentDelegation>>(response, _logger, "ClientDelegationClient.GetAgents");
+                await ClientUtils.DeserializeIfSuccessfullStatusCode<PaginatedResult<AgentDelegation>>(response, _logger, "ClientDelegationClientV1.GetAgents");
 
             if (agents?.Items == null)
             {
@@ -161,9 +168,9 @@ namespace Altinn.AccessManagement.UI.Integration.Clients
             string endpointUrl = $"enduser/clientdelegations/agents/accesspackages?party={party}&to={to}";
             string token = JwtTokenUtil.GetTokenFromContext(_httpContextAccessor.HttpContext, _platformSettings.JwtCookieName);
 
-            HttpResponseMessage response = await _client.GetAsync(token, endpointUrl);
+            HttpResponseMessage response = await _client.GetAsync(token, endpointUrl, cancellationToken);
             PaginatedResult<ClientDelegation> clients =
-                await ClientUtils.DeserializeIfSuccessfullStatusCode<PaginatedResult<ClientDelegation>>(response, _logger, "ClientDelegationClient.GetAgentAccessPackages");
+                await ClientUtils.DeserializeIfSuccessfullStatusCode<PaginatedResult<ClientDelegation>>(response, _logger, "ClientDelegationClientV1.GetAgentAccessPackages");
 
             if (clients?.Items == null)
             {
@@ -179,9 +186,9 @@ namespace Altinn.AccessManagement.UI.Integration.Clients
             string endpointUrl = $"enduser/clientdelegations/clients/accesspackages?party={party}&from={from}";
             string token = JwtTokenUtil.GetTokenFromContext(_httpContextAccessor.HttpContext, _platformSettings.JwtCookieName);
 
-            HttpResponseMessage response = await _client.GetAsync(token, endpointUrl);
+            HttpResponseMessage response = await _client.GetAsync(token, endpointUrl, cancellationToken);
             PaginatedResult<AgentDelegation> agents =
-                await ClientUtils.DeserializeIfSuccessfullStatusCode<PaginatedResult<AgentDelegation>>(response, _logger, "ClientDelegationClient.GetClientAccessPackages");
+                await ClientUtils.DeserializeIfSuccessfullStatusCode<PaginatedResult<AgentDelegation>>(response, _logger, "ClientDelegationClientV1.GetClientAccessPackages");
 
             if (agents?.Items == null)
             {
@@ -197,14 +204,14 @@ namespace Altinn.AccessManagement.UI.Integration.Clients
             string endpointUrl = $"enduser/clientdelegations/agents/accesspackages?party={party}&from={from}&to={to}";
             string token = JwtTokenUtil.GetTokenFromContext(_httpContextAccessor.HttpContext, _platformSettings.JwtCookieName);
 
-            StringContent requestBody = new StringContent(JsonSerializer.Serialize(payload, _serializerOptions), Encoding.UTF8, "application/json");
-            HttpResponseMessage response = await _client.PostAsync(token, endpointUrl, requestBody);
+            StringContent requestBody = new StringContent(JsonSerializer.Serialize(payload, _serializerOptions), Encoding.UTF8, JsonMediaType);
+            HttpResponseMessage response = await _client.PostAsync(token, endpointUrl, requestBody, cancellationToken);
             string responseContent = await response.Content.ReadAsStringAsync(cancellationToken);
 
             if (!response.IsSuccessStatusCode)
             {
-                _logger.LogError("AccessManagement.UI // ClientDelegationClient.AddAgentAccessPackages // Unexpected HttpStatusCode: {StatusCode}\n {responseBody}", response.StatusCode, responseContent);
-                throw new HttpStatusException("Unexpected http response.", "Unexpected http response.", response.StatusCode, null, response.ReasonPhrase);
+                _logger.LogError("AccessManagement.UI // ClientDelegationClientV1.AddAgentAccessPackages // Unexpected HttpStatusCode: {StatusCode}\n {ResponseBody}", response.StatusCode, responseContent);
+                throw new HttpStatusException(UnexpectedHttpResponseMessage, UnexpectedHttpResponseMessage, response.StatusCode, null, response.ReasonPhrase);
             }
 
             List<DelegationDto> result = JsonSerializer.Deserialize<List<DelegationDto>>(responseContent, _serializerOptions);
@@ -217,16 +224,16 @@ namespace Altinn.AccessManagement.UI.Integration.Clients
             string endpointUrl = $"enduser/clientdelegations/agents/accesspackages?party={party}&from={from}&to={to}";
             string token = JwtTokenUtil.GetTokenFromContext(_httpContextAccessor.HttpContext, _platformSettings.JwtCookieName);
 
-            StringContent requestBody = new StringContent(JsonSerializer.Serialize(payload, _serializerOptions), Encoding.UTF8, "application/json");
-            HttpResponseMessage response = await _client.DeleteAsync(token, endpointUrl, requestBody);
+            StringContent requestBody = new StringContent(JsonSerializer.Serialize(payload, _serializerOptions), Encoding.UTF8, JsonMediaType);
+            HttpResponseMessage response = await _client.DeleteAsync(token, endpointUrl, requestBody, null, cancellationToken);
             string responseContent = await response.Content.ReadAsStringAsync(cancellationToken);
             if (response.IsSuccessStatusCode)
             {
                 return;
             }
 
-            _logger.LogError("AccessManagement.UI // ClientDelegationClient.RemoveAgentAccessPackages // Unexpected HttpStatusCode: {StatusCode}\n {responseBody}", response.StatusCode, responseContent);
-            throw new HttpStatusException("StatusError", "Unexpected response status from Access Management", response.StatusCode, _httpContextAccessor.HttpContext?.TraceIdentifier, responseContent);
+            _logger.LogError("AccessManagement.UI // ClientDelegationClientV1.RemoveAgentAccessPackages // Unexpected HttpStatusCode: {StatusCode}\n {ResponseBody}", response.StatusCode, responseContent);
+            throw new HttpStatusException(StatusErrorTitle, StatusErrorMessage, response.StatusCode, _httpContextAccessor.HttpContext?.TraceIdentifier, responseContent);
         }
 
         /// <inheritdoc />
@@ -235,16 +242,16 @@ namespace Altinn.AccessManagement.UI.Integration.Clients
             string endpointUrl = $"enduser/clientdelegations/agents?party={party}" + (to != null ? $"&to={to}" : string.Empty);
             string token = JwtTokenUtil.GetTokenFromContext(_httpContextAccessor.HttpContext, _platformSettings.JwtCookieName);
 
-            StringContent requestBody = personInput != null ? new StringContent(JsonSerializer.Serialize(personInput, _serializerOptions), Encoding.UTF8, "application/json") : null;
+            StringContent requestBody = personInput != null ? new StringContent(JsonSerializer.Serialize(personInput, _serializerOptions), Encoding.UTF8, JsonMediaType) : null;
 
-            var httpResponse = await _client.PostAsync(token, endpointUrl, requestBody);
+            var httpResponse = await _client.PostAsync(token, endpointUrl, requestBody, cancellationToken);
 
             var content = await httpResponse.Content.ReadAsStringAsync();
 
             if (!httpResponse.IsSuccessStatusCode)
             {
-                _logger.LogError($"Unexpected http response. Status code: {httpResponse.StatusCode}, Reason: {httpResponse.ReasonPhrase}");
-                throw new HttpStatusException("Unexpected http response.", "Unexpected http response.", httpResponse.StatusCode, null, httpResponse.ReasonPhrase);
+                _logger.LogError("Unexpected http response. Status code: {StatusCode}, Reason: {ReasonPhrase}", httpResponse.StatusCode, httpResponse.ReasonPhrase);
+                throw new HttpStatusException(UnexpectedHttpResponseMessage, UnexpectedHttpResponseMessage, httpResponse.StatusCode, null, httpResponse.ReasonPhrase);
             }
 
             AssignmentDto response = JsonSerializer.Deserialize<AssignmentDto>(content, new JsonSerializerOptions { PropertyNameCaseInsensitive = true });
@@ -257,15 +264,61 @@ namespace Altinn.AccessManagement.UI.Integration.Clients
             string endpointUrl = $"enduser/clientdelegations/agents?party={party}&to={to}&cascade=true";
             string token = JwtTokenUtil.GetTokenFromContext(_httpContextAccessor.HttpContext, _platformSettings.JwtCookieName);
 
-            HttpResponseMessage response = await _client.DeleteAsync(token, endpointUrl);
+            HttpResponseMessage response = await _client.DeleteAsync(token, endpointUrl, null, cancellationToken);
             if (response.IsSuccessStatusCode)
             {
                 return;
             }
 
             string responseContent = await response.Content.ReadAsStringAsync();
-            _logger.LogError("AccessManagement.UI // ClientDelegationClient.RemoveAgent // Unexpected HttpStatusCode: {StatusCode}\n {responseBody}", response.StatusCode, responseContent);
-            throw new HttpStatusException("StatusError", "Unexpected response status from Access Management", response.StatusCode, _httpContextAccessor.HttpContext?.TraceIdentifier, responseContent);
+            _logger.LogError("AccessManagement.UI // ClientDelegationClientV1.RemoveAgent // Unexpected HttpStatusCode: {StatusCode}\n {ResponseBody}", response.StatusCode, responseContent);
+            throw new HttpStatusException(StatusErrorTitle, StatusErrorMessage, response.StatusCode, _httpContextAccessor.HttpContext?.TraceIdentifier, responseContent);
+        }
+
+        /// <inheritdoc />
+        /// <remarks>Single rights delegation arrived with v2, so a v1 client never has any.</remarks>
+        public Task<IEnumerable<ClientDelegation>> GetAgentResources(Guid party, Guid to, CancellationToken cancellationToken = default)
+        {
+            return Task.FromResult(Enumerable.Empty<ClientDelegation>());
+        }
+
+        /// <inheritdoc />
+        /// <remarks>Single rights delegation arrived with v2, so a v1 client never has any.</remarks>
+        public Task<IEnumerable<AgentDelegation>> GetClientResources(Guid party, Guid from, CancellationToken cancellationToken = default)
+        {
+            return Task.FromResult(Enumerable.Empty<AgentDelegation>());
+        }
+
+        /// <inheritdoc />
+        public Task<List<ResourceDelegationDto>> AddAgentResources(Guid party, Guid from, Guid to, ResourceDelegationBatchInputDto payload, CancellationToken cancellationToken = default)
+        {
+            throw NotAvailableInV1();
+        }
+
+        /// <inheritdoc />
+        public Task RemoveAgentResources(Guid party, Guid from, Guid to, ResourceDelegationBatchInputDto payload, CancellationToken cancellationToken = default)
+        {
+            throw NotAvailableInV1();
+        }
+
+        /// <inheritdoc />
+        public Task RemoveMyClientResources(Guid provider, Guid from, ResourceDelegationBatchInputDto payload, CancellationToken cancellationToken = default)
+        {
+            throw NotAvailableInV1();
+        }
+
+        /// <summary>
+        /// Delegating single rights requires the v2 endpoints. Surfaced as 501 rather than a server
+        /// error so the caller can tell "not available in this configuration" from "something broke".
+        /// </summary>
+        private HttpStatusException NotAvailableInV1()
+        {
+            _logger.LogWarning("AccessManagement.UI // ClientDelegationClientV1 // Single rights delegation attempted while the v2 client delegation API is disabled");
+            return new HttpStatusException(
+                "NotAvailable",
+                "Single rights delegation requires the v2 client delegation API",
+                HttpStatusCode.NotImplemented,
+                _httpContextAccessor.HttpContext?.TraceIdentifier);
         }
     }
 }

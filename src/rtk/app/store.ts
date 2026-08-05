@@ -17,6 +17,7 @@ import { instanceApi } from '../features/instanceApi';
 import { requestApi } from '../features/requestApi';
 import { selfIdentifiedUserApi } from '../features/selfIdentifiedUserApi';
 import { maskinportenApi } from '../features/maskinportenApi';
+import { idPortenAuthorizationApi } from '../features/idPortenAuthorizationApi';
 
 const store = configureStore({
   reducer: {
@@ -36,6 +37,7 @@ const store = configureStore({
     [requestApi.reducerPath]: requestApi.reducer,
     [selfIdentifiedUserApi.reducerPath]: selfIdentifiedUserApi.reducer,
     [maskinportenApi.reducerPath]: maskinportenApi.reducer,
+    [idPortenAuthorizationApi.reducerPath]: idPortenAuthorizationApi.reducer,
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware().concat(
@@ -55,6 +57,7 @@ const store = configureStore({
       requestApi.middleware,
       selfIdentifiedUserApi.middleware,
       maskinportenApi.middleware,
+      idPortenAuthorizationApi.middleware,
     ),
 });
 

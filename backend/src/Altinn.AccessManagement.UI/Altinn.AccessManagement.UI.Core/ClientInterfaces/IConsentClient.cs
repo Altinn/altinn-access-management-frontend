@@ -63,5 +63,14 @@ namespace Altinn.AccessManagement.UI.Core.ClientInterfaces
         /// <param name="cancellationToken">Cancellation token</param>
         /// <returns>Boolean value if revoke was successful or not</returns>
         Task<Result<bool>> RevokeConsent(Guid consentId, CancellationToken cancellationToken);
+
+        /// <summary>
+        /// Gets the count of consent requests for a party filtered by status
+        /// </summary>
+        /// <param name="partyId">The party to count consent requests for</param>
+        /// <param name="status">The status to filter by</param>
+        /// <param name="cancellationToken">Cancellation token</param>
+        /// <returns>Count of matching consent requests</returns>
+        Task<Result<int>> GetConsentRequestCount(Guid partyId, ConsentRequestStatusType status, CancellationToken cancellationToken);
     }
 }

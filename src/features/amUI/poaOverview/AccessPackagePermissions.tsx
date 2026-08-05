@@ -47,7 +47,7 @@ export const AccessPackagePermissions = () => {
           );
         }}
         noPackagesText={t('access_packages.no_packages')}
-        areaHeadingLevel={2}
+        firstHeadingLevel={2}
       />
     </>
   );

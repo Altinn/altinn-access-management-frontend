@@ -54,7 +54,7 @@ namespace Altinn.AccessManagement.UI.Integration.Clients
             {
                 string token = JwtTokenUtil.GetTokenFromContext(_httpContextAccessor.HttpContext, _platformSettings.JwtCookieName);
                 string endpoint = $"systemuser/request/agent/{agentRequestId}";
-                HttpResponseMessage response = await _httpClient.GetAsync(token, endpoint);
+                HttpResponseMessage response = await _httpClient.GetAsync(token, endpoint, cancellationToken);
                 
                 if (response.StatusCode == System.Net.HttpStatusCode.NotFound)
                 {
@@ -85,7 +85,7 @@ namespace Altinn.AccessManagement.UI.Integration.Clients
             {
                 string token = JwtTokenUtil.GetTokenFromContext(_httpContextAccessor.HttpContext, _platformSettings.JwtCookieName);
                 string endpoint = $"systemuser/request/agent/{partyId}/{agentRequestId}/approve";
-                HttpResponseMessage response = await _httpClient.PostAsync(token, endpoint, null);
+                HttpResponseMessage response = await _httpClient.PostAsync(token, endpoint, null, cancellationToken);
                 string responseContent = await response.Content.ReadAsStringAsync(cancellationToken);    
                 
                 if (response.IsSuccessStatusCode) 
@@ -110,7 +110,7 @@ namespace Altinn.AccessManagement.UI.Integration.Clients
             {
                 string token = JwtTokenUtil.GetTokenFromContext(_httpContextAccessor.HttpContext, _platformSettings.JwtCookieName);
                 string endpoint = $"systemuser/request/agent/{partyId}/{agentRequestId}/reject";
-                HttpResponseMessage response = await _httpClient.PostAsync(token, endpoint, null);
+                HttpResponseMessage response = await _httpClient.PostAsync(token, endpoint, null, cancellationToken);
                 string responseContent = await response.Content.ReadAsStringAsync(cancellationToken);    
                 
                 if (response.IsSuccessStatusCode) 
@@ -135,7 +135,7 @@ namespace Altinn.AccessManagement.UI.Integration.Clients
             {
                 string token = JwtTokenUtil.GetTokenFromContext(_httpContextAccessor.HttpContext, _platformSettings.JwtCookieName);
                 string endpoint = $"systemuser/request/agent/{partyId}/{orgNo}/pending";
-                HttpResponseMessage response = await _httpClient.GetAsync(token, endpoint);
+                HttpResponseMessage response = await _httpClient.GetAsync(token, endpoint, cancellationToken);
                 string responseContent = await response.Content.ReadAsStringAsync(cancellationToken);
 
                 if (response.IsSuccessStatusCode) 
@@ -160,7 +160,7 @@ namespace Altinn.AccessManagement.UI.Integration.Clients
             {
                 string token = JwtTokenUtil.GetTokenFromContext(_httpContextAccessor.HttpContext, _platformSettings.JwtCookieName);
                 string endpoint = $"systemuser/request/agent/{partyId}/{agentRequestId}/escalate";
-                HttpResponseMessage response = await _httpClient.PostAsync(token, endpoint, null);
+                HttpResponseMessage response = await _httpClient.PostAsync(token, endpoint, null, cancellationToken);
                 string responseContent = await response.Content.ReadAsStringAsync(cancellationToken);
 
                 if (response.IsSuccessStatusCode)

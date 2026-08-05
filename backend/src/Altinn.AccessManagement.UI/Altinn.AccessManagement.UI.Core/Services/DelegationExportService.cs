@@ -9,7 +9,6 @@ using Altinn.AccessManagement.UI.Core.Models.InstanceDelegation.Frontend;
 using Altinn.AccessManagement.UI.Core.Models.Role;
 using Altinn.AccessManagement.UI.Core.Models.SingleRight;
 using Altinn.AccessManagement.UI.Core.Services.Interfaces;
-using Microsoft.Extensions.Logging;
 
 namespace Altinn.AccessManagement.UI.Core.Services
 {
@@ -27,8 +26,7 @@ namespace Altinn.AccessManagement.UI.Core.Services
         private readonly IAccessPackageService _accessPackageService;
         private readonly ISingleRightService _singleRightService;
         private readonly IInstanceService _instanceService;
-        private readonly ILogger<DelegationExportService> _logger;
-
+        
         /// <summary>
         /// Initializes a new instance of the <see cref="DelegationExportService"/> class.
         /// </summary>
@@ -37,15 +35,13 @@ namespace Altinn.AccessManagement.UI.Core.Services
             IRoleService roleService,
             IAccessPackageService accessPackageService,
             ISingleRightService singleRightService,
-            IInstanceService instanceService,
-            ILogger<DelegationExportService> logger)
+            IInstanceService instanceService)
         {
             _userService = userService;
             _roleService = roleService;
             _accessPackageService = accessPackageService;
             _singleRightService = singleRightService;
             _instanceService = instanceService;
-            _logger = logger;
         }
 
         /// <inheritdoc />
