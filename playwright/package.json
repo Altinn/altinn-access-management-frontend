@@ -13,6 +13,7 @@
     "tenor": "npx tsx tenor/hentTestpersoner.ts",
     "tenor:virksomhet": "npx tsx tenor/hentVirksomhet.ts",
     "tenor:bulk": "npx tsx tenor/hentBulk.ts",
+    "tenor:klientdelegering": "npx tsx tenor/hentKlientdelegeringsdata.ts",
     "lint": "eslint ."
   },
   "keywords": [],
