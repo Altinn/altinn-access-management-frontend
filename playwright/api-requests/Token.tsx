@@ -121,6 +121,68 @@ export class Token {
   }
 
   /**
+   * Samme oppslag som {@link getIds}, men for mange identifikatorer om gangen.
+   *
+   * Register tar en liste med urn-er i samme kall, så et datasett på noen hundre
+   * personer og virksomheter koster noen få kall i stedet for ett per rad. Lista
+   * deles i bolker, siden kallet har en øvre grense.
+   *
+   * @param pidsOrOrgNos - Fødselsnummer og organisasjonsnummer om hverandre. Lengde 9 leses som orgnr.
+   * @param bolkStoerrelse - Hvor mange identifikatorer per kall.
+   * @returns Oppslag fra identifikator til det Register svarte. Identifikatorer Register ikke kjenner mangler i kartet.
+   */
+  public async getIdsBulk(
+    pidsOrOrgNos: string[],
+    bolkStoerrelse = 40,
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  ): Promise<Map<string, any>> {
+    const url = `${env('API_BASE_URL')}/register/api/v1/access-management/parties/query?fields=person,party,user`;
+    const subscriptionKey = env(`${env('ENV_NAME').toUpperCase()}_REGISTER_SUBSCRIPTION_KEY`);
+    const platformToken = await this.getPlatformToken();
+
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const resultat = new Map<string, any>();
+
+    for (let i = 0; i < pidsOrOrgNos.length; i += bolkStoerrelse) {
+      const bolk = pidsOrOrgNos.slice(i, i + bolkStoerrelse);
+      const payload = {
+        data: bolk.map((id) =>
+          id.length === 9
+            ? `urn:altinn:organization:identifier-no:${id}`
+            : `urn:altinn:person:identifier-no:${id}`,
+        ),
+      };
+
+      const response = await fetch(url, {
+        method: 'POST',
+        headers: {
+          PlatformAccessToken: platformToken,
+          'Ocp-Apim-Subscription-Key': subscriptionKey,
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(payload),
+      });
+
+      if (!response.ok) {
+        throw new Error(
+          `Failed to fetch status for "getIdsBulk" (${bolk.length} identifikatorer). Status: ${response.status}`,
+        );
+      }
+
+      const responseData = await response.json();
+
+      // Svaret er ikke sortert som forespørselen, og ukjente identifikatorer
+      // faller helt ut, så radene kobles tilbake på identifikatoren de bærer.
+      for (const part of responseData.data ?? []) {
+        const identifikator = part.organizationIdentifier ?? part.personIdentifier;
+        if (identifikator) resultat.set(identifikator, part);
+      }
+    }
+
+    return resultat;
+  }
+
+  /**
    * Retrieves the party UUID for a given identifier by delegating to the appropriate lookup.
    *
    * @param pidOrOrg - A personal identifier or organization number; values with length 9 are treated as organization numbers.

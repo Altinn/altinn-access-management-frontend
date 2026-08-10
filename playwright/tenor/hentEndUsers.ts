@@ -24,7 +24,7 @@ import { TenorApiRequests } from './TenorApiRequests';
  *   yarn tenor:endusers --env tt02 -n 40        # 40 virksomheter
  *   yarn tenor:endusers --env at23 --stdout     # skriv til skjerm i stedet for fil
  *
- * Resultatet havner i K6/testdata/authentication/change-request/<env>/end-users.csv i
+ * Resultatet havner i K6/testdata/authentication/change-request/end-users-<env>.csv i
  * altinn-platform-validation-tests, som testen leser fra main.
  */
 
@@ -34,7 +34,9 @@ const FORMER: Array<{ kode: string; rolle: string }> = [
   { kode: 'ENK', rolle: 'innehaver' },
 ];
 
-const CSV_HEADER = 'orgNo,partyId,orgUuid,userId,userPartyUuid,ssn,orgType,role';
+// Kolonnene sier hvem id-en hører til, siden partyId og partyUuid finnes for både
+// virksomheten og personen, og feil av dem gir 400 AMUI-00005 langt nede i testen.
+const CSV_HEADER = 'orgNo,orgPartyId,orgPartyUuid,orgType,role,userId,userPartyUuid,userPid';
 
 const DEFAULT_UT_KATALOG = path.join(
   __dirname,
@@ -160,45 +162,56 @@ async function main(): Promise<void> {
       virksomheter.map((v) => v.organisasjonsnummer),
     );
 
+    const kandidater = rollehavere.filter(
+      (kandidat): kandidat is { organisasjonsnummer: string; dagligLeder: string } =>
+        kandidat.dagligLeder !== null && !sett.has(kandidat.organisasjonsnummer),
+    );
+
+    // Register tar hele lista i noen få kall, så id-ene slås opp under ett i
+    // stedet for to kall per rad. Det er forskjellen på sekunder og minutter når
+    // datasettet er på et par hundre virksomheter.
+    const ider = await token.getIdsBulk([
+      ...kandidater.map((kandidat) => kandidat.organisasjonsnummer),
+      ...kandidater.map((kandidat) => kandidat.dagligLeder),
+    ]);
+
     let lagtTil = 0;
 
-    for (const { organisasjonsnummer, dagligLeder } of rollehavere) {
+    for (const { organisasjonsnummer, dagligLeder } of kandidater) {
       if (lagtTil >= oenskes) break;
-      if (dagligLeder === null || sett.has(organisasjonsnummer)) continue;
 
-      try {
-        const org = await token.getIds(organisasjonsnummer);
-        const person = await token.getIds(dagligLeder);
+      const org = ider.get(organisasjonsnummer);
+      const person = ider.get(dagligLeder);
 
-        if (!org?.partyUuid || !person?.user?.userId) {
-          console.error(
-            `  hopper over ${organisasjonsnummer}, Register mangler id-er i ${args.env}`,
-          );
-          continue;
-        }
-
-        // partyId er virksomhetens, ikke rollehaverens. Det er virksomheten man
-        // opptrer for, og bff-stiene tar den i {partyId}. Med personens partyId
-        // svarer godkjenning av endringsforespørselen 400 AMUI-00005.
-        sett.add(organisasjonsnummer);
-        rader.push(
-          [
-            organisasjonsnummer,
-            org.partyId,
-            org.partyUuid,
-            person.user.userId,
-            person.partyUuid,
-            dagligLeder,
-            form.kode,
-            form.rolle,
-          ].join(','),
-        );
-        lagtTil++;
-      } catch (error) {
-        console.error(
-          `  hopper over ${organisasjonsnummer}: ${error instanceof Error ? error.message : error}`,
-        );
+      if (!org?.partyUuid || !person?.user?.userId) {
+        console.error(`  hopper over ${organisasjonsnummer}, Register mangler id-er i ${args.env}`);
+        continue;
       }
+
+      // En død rollehaver kan ikke logge inn, og Tenor holder rollen selv om
+      // personen er død, så den må lukes ut her.
+      if (person.dateOfDeath !== null && person.dateOfDeath !== undefined) {
+        console.error(`  hopper over ${organisasjonsnummer}, rollehaveren er død`);
+        continue;
+      }
+
+      // partyId er virksomhetens, ikke rollehaverens. Det er virksomheten man
+      // opptrer for, og bff-stiene tar den i {partyId}. Med personens partyId
+      // svarer godkjenning av endringsforespørselen 400 AMUI-00005.
+      sett.add(organisasjonsnummer);
+      rader.push(
+        [
+          organisasjonsnummer,
+          org.partyId,
+          org.partyUuid,
+          form.kode,
+          form.rolle,
+          person.user.userId,
+          person.partyUuid,
+          dagligLeder,
+        ].join(','),
+      );
+      lagtTil++;
     }
 
     console.error(`  -> ${lagtTil} av ${oenskes} ${form.kode}`);
@@ -218,7 +231,7 @@ async function main(): Promise<void> {
   if (args.stdout) {
     console.log(csv);
   } else {
-    const fil = args.ut ?? path.join(DEFAULT_UT_KATALOG, args.env, 'end-users.csv');
+    const fil = args.ut ?? path.join(DEFAULT_UT_KATALOG, `end-users-${args.env}.csv`);
     mkdirSync(path.dirname(fil), { recursive: true });
     writeFileSync(fil, csv);
     console.error(`\nSkrev ${rader.length} virksomheter til ${fil}`);

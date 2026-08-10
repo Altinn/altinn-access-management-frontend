@@ -15,6 +15,7 @@
     "tenor:bulk": "npx tsx tenor/hentBulk.ts",
     "tenor:klientdelegering": "npx tsx tenor/hentKlientdelegeringsdata.ts",
     "tenor:endusers": "npx tsx tenor/hentEndUsers.ts",
+    "tenor:vendors": "npx tsx tenor/hentVendors.ts",
     "lint": "eslint ."
   },
   "keywords": [],
