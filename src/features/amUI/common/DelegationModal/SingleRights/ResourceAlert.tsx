@@ -93,7 +93,7 @@ export const ResourceAlert = ({
   }
   React.useEffect(() => {
     setSrMessage(headingText);
-  }, [headingText]);
+  }, [headingText, error?.time]);
 
   return (
     <>
