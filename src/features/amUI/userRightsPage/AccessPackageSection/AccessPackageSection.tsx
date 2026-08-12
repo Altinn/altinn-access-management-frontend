@@ -79,14 +79,14 @@ export const AccessPackageSection = ({ isReportee = false }: { isReportee?: bool
             )}
             <div className={classes.delegateButton}>
               {(canGiveAccess || canRequestAccess) && (
-                  <DelegationModal
-                    delegationType={DelegationType.AccessPackage}
-                    availableActions={[
-                      DelegationAction.REVOKE,
-                      canGiveAccess ? DelegationAction.DELEGATE : DelegationAction.REQUEST,
-                    ]}
-                  />
-                )}
+                <DelegationModal
+                  delegationType={DelegationType.AccessPackage}
+                  availableActions={[
+                    DelegationAction.REVOKE,
+                    canGiveAccess ? DelegationAction.DELEGATE : DelegationAction.REQUEST,
+                  ]}
+                />
+              )}
             </div>
           </div>
           <ActiveDelegations searchString={debouncedSearchString} />

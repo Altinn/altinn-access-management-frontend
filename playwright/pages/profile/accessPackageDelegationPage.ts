@@ -42,7 +42,7 @@ export class DelegationPage {
     // Scoped to the access-package delegation dialog: the same searchbox name
     // also exists on the page behind the modal, so an unscoped locator matches two.
     this.packageSearchBox = page
-      .getByRole('dialog', { name: this.texts.delegation_modal.aria_label.access_package })
+      .getByRole('dialog', { description: this.texts.delegation_modal.aria_description })
       .getByRole('searchbox', { name: this.texts.access_packages.search_label });
     this.clearSearchButton = page.getByRole('button', { name: /Tøm/ });
   }

@@ -1,15 +1,7 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Net.Http;
-using System.Text.Json;
-using System.Threading.Tasks;
 using Altinn.AccessManagement.UI.Core.ClientInterfaces;
-using Altinn.AccessManagement.UI.Core.Models;
 using Altinn.AccessManagement.UI.Core.Models.Common;
 using Altinn.AccessManagement.UI.Core.Services.Interfaces;
 using Microsoft.Extensions.Caching.Memory;
-using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 
 namespace Altinn.AccessManagement.UI.Core.Services
@@ -19,7 +11,6 @@ namespace Altinn.AccessManagement.UI.Core.Services
     /// </summary>
     public class AltinnCdnService : IAltinnCdnService
     {
-        private readonly HttpClient _httpClient;
         private readonly IMemoryCache _cache;
         private readonly ILogger<AltinnCdnService> _logger;
         private readonly IAltinnCdnClient _altinnCdnClient;
@@ -31,13 +22,11 @@ namespace Altinn.AccessManagement.UI.Core.Services
         /// Initializes a new instance of the <see cref="AltinnCdnService"/> class.
         /// </summary>
         /// <param name="altinnCdnClient">The client used to fetch organization data from Altinn CDN.</param>
-        /// <param name="httpClient">The HTTP client used to fetch organization logo data.</param>
         /// <param name="cache">The memory cache for storing logo mappings.</param>
         /// <param name="logger">The logger instance for logging errors and information.</param>
-        public AltinnCdnService(IAltinnCdnClient altinnCdnClient, HttpClient httpClient, IMemoryCache cache, ILogger<AltinnCdnService> logger)
+        public AltinnCdnService(IAltinnCdnClient altinnCdnClient, IMemoryCache cache, ILogger<AltinnCdnService> logger)
         {
             _altinnCdnClient = altinnCdnClient;
-            _httpClient = httpClient;
             _cache = cache;
             _logger = logger;
         }

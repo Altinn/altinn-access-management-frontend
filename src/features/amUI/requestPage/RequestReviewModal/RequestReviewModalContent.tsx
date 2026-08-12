@@ -1,4 +1,4 @@
-import { type ReactNode } from 'react';
+import { type ReactNode, type RefObject } from 'react';
 import { Link } from 'react-router';
 import {
   AccessPackageListItem,
@@ -24,19 +24,20 @@ import { useRequestReview } from './useRequestReview';
 import classes from './RequestReviewModal.module.css';
 import { amUIPath } from '@/routes/paths';
 import { RequestPackageDetail } from './RequestPackageDetail';
-import {
-  RestoreFocusFallback,
-  RestoreFocusProvider,
-  useRestoreFocus,
-  useRestoreFocusTarget,
-} from '../../common/RestoreFocus';
+import { useRestoreFocus, useRestoreFocusTarget } from '../../common/RestoreFocus';
+import { TwoStepDialog } from '../../common/TwoStepDialog';
 
 interface RequestReviewModalContentProps {
+  modalRef: RefObject<HTMLDialogElement | null>;
   request: Request | null;
   onClose: () => void;
 }
 
-export const RequestReviewModalContent = ({ request, onClose }: RequestReviewModalContentProps) => {
+export const RequestReviewModalContent = ({
+  modalRef,
+  request,
+  onClose,
+}: RequestReviewModalContentProps) => {
   const { t } = useTranslation();
   const restoreFocus = useRestoreFocus();
 
@@ -60,11 +61,10 @@ export const RequestReviewModalContent = ({ request, onClose }: RequestReviewMod
     handleApproveAll,
     handleRejectAll,
     handleSelection,
-  } = useRequestReview(request, onClose);
+    // close() instead of onClose ensures native focus restore runs before onClose fires
+  } = useRequestReview(request, () => modalRef.current?.close());
 
-  if (request === null) {
-    return null;
-  }
+  const isDetailView = !!selectedResource || !!selectedPackage;
 
   const handleBack = () => {
     const focusTargetId = selectedResource?.identifier ?? selectedPackage?.id;
@@ -73,40 +73,6 @@ export const RequestReviewModalContent = ({ request, onClose }: RequestReviewMod
     }
     resetSelection();
   };
-
-  if (selectedResource) {
-    const processed = processedRequests[selectedResource.identifier];
-    return (
-      <RequestResourceDetail
-        resource={selectedResource}
-        toPartyName={request?.displayPartyName || ''}
-        processedStatus={processed?.status}
-        handledAt={processed?.handledAt}
-        actionLoading={actionLoading}
-        onBack={handleBack}
-        onApprove={() => handleApprove({ resourceId: selectedResource.identifier })}
-        onReject={() => handleReject({ resourceId: selectedResource.identifier })}
-        cannotApprove={cannotApprove({ resourceId: selectedResource.identifier })}
-      />
-    );
-  }
-
-  if (selectedPackage) {
-    const processed = processedRequests[selectedPackage.id];
-    return (
-      <RequestPackageDetail
-        pkg={selectedPackage}
-        toPartyName={request?.displayPartyName || ''}
-        processedStatus={processed?.status}
-        handledAt={processed?.handledAt}
-        actionLoading={actionLoading}
-        onBack={handleBack}
-        onApprove={() => handleApprove({ packageId: selectedPackage.id })}
-        onReject={() => handleReject({ packageId: selectedPackage.id })}
-        cannotApprove={cannotApprove({ packageId: selectedPackage.id })}
-      />
-    );
-  }
 
   const itemControls = ({ resourceId, packageId }: { resourceId?: string; packageId?: string }) => {
     const id = resourceId ?? packageId ?? '';
@@ -156,25 +122,46 @@ export const RequestReviewModalContent = ({ request, onClose }: RequestReviewMod
     return chevron();
   };
 
-  return (
-    <RestoreFocusProvider restoreFocus={restoreFocus}>
-      <RestoreFocusFallback>
+  let content: ReactNode = null;
+  if (request !== null) {
+    if (selectedResource) {
+      const processed = processedRequests[selectedResource.identifier];
+      content = (
+        <RequestResourceDetail
+          resource={selectedResource}
+          toPartyName={request.displayPartyName || ''}
+          processedStatus={processed?.status}
+          handledAt={processed?.handledAt}
+          actionLoading={actionLoading}
+          onApprove={() => handleApprove({ resourceId: selectedResource.identifier })}
+          onReject={() => handleReject({ resourceId: selectedResource.identifier })}
+          cannotApprove={cannotApprove({ resourceId: selectedResource.identifier })}
+        />
+      );
+    } else if (selectedPackage) {
+      const processed = processedRequests[selectedPackage.id];
+      content = (
+        <RequestPackageDetail
+          pkg={selectedPackage}
+          toPartyName={request.displayPartyName || ''}
+          processedStatus={processed?.status}
+          handledAt={processed?.handledAt}
+          actionLoading={actionLoading}
+          onApprove={() => handleApprove({ packageId: selectedPackage.id })}
+          onReject={() => handleReject({ packageId: selectedPackage.id })}
+          cannotApprove={cannotApprove({ packageId: selectedPackage.id })}
+        />
+      );
+    } else {
+      content = (
         <div className={classes.reviewListView}>
-          <DsHeading
-            level={1}
-            data-size='xs'
-          >
-            {t('request_page.review_modal_title', {
-              fromPartyName: request?.displayPartyName,
-            })}
-          </DsHeading>
           <DsLink
             asChild
             className={classes.userLink}
           >
-            <Link to={`/${amUIPath.Users}/${request?.partyUuid}?returnTo=/${amUIPath.Requests}`}>
+            <Link to={`/${amUIPath.Users}/${request.partyUuid}?returnTo=/${amUIPath.Requests}`}>
               {t('request_page.review_user_link', {
-                name: request?.displayPartyName,
+                name: request.displayPartyName,
               })}
             </Link>
           </DsLink>
@@ -186,7 +173,7 @@ export const RequestReviewModalContent = ({ request, onClose }: RequestReviewMod
           snapshotPackages.length === 0 &&
           snapshotResources.length === 0 ? (
             <List>
-              {Array.from({ length: request?.numberOfRequests || 2 }).map((_, index) => (
+              {Array.from({ length: request.numberOfRequests || 2 }).map((_, index) => (
                 <ResourceListItem
                   key={index}
                   id={`placeholder-${index}`}
@@ -278,8 +265,26 @@ export const RequestReviewModalContent = ({ request, onClose }: RequestReviewMod
             </DsButton>
           </div>
         </div>
-      </RestoreFocusFallback>
-    </RestoreFocusProvider>
+      );
+    }
+  }
+
+  return (
+    <TwoStepDialog
+      ref={modalRef}
+      className={classes.reviewModal}
+      title={
+        request === null
+          ? ''
+          : t('request_page.review_modal_title', { fromPartyName: request.displayPartyName })
+      }
+      isDetailView={isDetailView}
+      onBack={handleBack}
+      onClose={onClose}
+      restoreFocus={restoreFocus}
+    >
+      {content}
+    </TwoStepDialog>
   );
 };
 

@@ -37,6 +37,16 @@
                 "urn": "urn:altinn:accesspackage:demo",
                 "areaId": "33333333-3333-3333-3333-333333333333"
               }
+            ],
+            "resources": [
+              {
+                "id": "44444444-4444-4444-4444-444444444444",
+                "refId": "generic-access-resource"
+              },
+              {
+                "id": "55555555-5555-5555-5555-555555555555",
+                "refId": "ske-innrapportering-boligsameie"
+              }
             ]
           }
         ]

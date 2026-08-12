@@ -1,7 +1,7 @@
 import * as React from 'react';
-import { Trans, useTranslation } from 'react-i18next';
+import { useTranslation } from 'react-i18next';
 import { useParams } from 'react-router';
-import { DsHeading, DsPopover, DsSwitch, formatDisplayName } from '@altinn/altinn-components';
+import { DsPopover, DsSwitch } from '@altinn/altinn-components';
 import { QuestionmarkCircleIcon } from '@navikt/aksel-icons';
 import { useCallback, useEffect } from 'react';
 
@@ -21,7 +21,6 @@ import { usePartyRepresentation } from '../../PartyRepresentationContext/PartyRe
 
 import classes from './ResourceSearch.module.css';
 import { DelegationAction } from '../EditModal';
-import { PartyType } from '@/rtk/features/userInfoApi';
 
 export interface ResourceSearchProps {
   onSelect: (resource: ServiceResource, error?: boolean) => void;
@@ -105,25 +104,6 @@ export const ResourceSearch = ({ onSelect, availableActions }: ResourceSearchPro
 
   return (
     <>
-      <DsHeading
-        level={2}
-        data-size='sm'
-      >
-        <Trans
-          i18nKey={
-            availableActions?.includes(DelegationAction.REQUEST)
-              ? 'delegation_modal.request_service'
-              : 'delegation_modal.give_service_to_name'
-          }
-          values={{
-            name: formatDisplayName({
-              fullName: toParty?.name || '',
-              type: toParty?.partyTypeName === PartyType.Person ? 'person' : 'company',
-            }),
-          }}
-          components={{ strong: <strong /> }}
-        />
-      </DsHeading>
       <div className={classes.toolbarContainer}>
         <ResourceFilterToolbar
           search={searchString}

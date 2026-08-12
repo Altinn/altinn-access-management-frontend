@@ -4,24 +4,30 @@ import type { Client } from '@/rtk/features/clientApi';
 
 type UseAgentDetailsAccessClientListsParams = {
   agentAccessPackages?: Client[];
+  agentResources?: Client[];
   clients?: Client[];
 };
 
 export const useAgentDetailsAccessClientLists = ({
   agentAccessPackages,
+  agentResources,
   clients,
 }: UseAgentDetailsAccessClientListsParams) => {
   return useMemo(() => {
-    const agentAccessClientIds = new Set(
-      (agentAccessPackages ?? [])
+    const clientIdsWithAgentAccess = new Set([
+      ...(agentAccessPackages ?? [])
         .filter((client) => client.access.some((access) => access.packages.length > 0))
         .map((client) => client.client.id),
-    );
+      ...(agentResources ?? [])
+        .filter((client) => client.access.some((access) => (access.resources ?? []).length > 0))
+        .map((client) => client.client.id),
+    ]);
 
-    const clientsWithAgentAccess =
-      clients?.filter((client) => agentAccessClientIds.has(client.client.id)) ?? [];
-    const allClients = clients ?? [];
+    const hasAgentAccess = (client: Client) => clientIdsWithAgentAccess.has(client.client.id);
 
-    return { clientsWithAgentAccess, allClients };
-  }, [agentAccessPackages, clients]);
+    return {
+      clientsWithAgentAccess: (clients ?? []).filter(hasAgentAccess),
+      clientsWithoutAgentAccess: (clients ?? []).filter((client) => !hasAgentAccess(client)),
+    };
+  }, [agentAccessPackages, agentResources, clients]);
 };

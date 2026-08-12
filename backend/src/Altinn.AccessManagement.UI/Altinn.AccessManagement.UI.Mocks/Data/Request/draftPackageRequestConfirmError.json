@@ -1,0 +1,20 @@
+{
+  "id": "44444444-4444-4444-4444-444444444440",
+  "type": "package",
+  "status": "Draft",
+  "to": {
+    "id": "feb51634-0042-4ab0-a9db-8705300141a6",
+    "name": "EKSTRA SUNN KATT DAGSMARSJ",
+    "type": "organization"
+  },
+  "from": {
+    "id": "167536b5-f8ed-4c5a-8f48-0279507e53ae",
+    "name": "SITRONGUL MEDALJONG",
+    "type": "person"
+  },
+  "package": {
+    "id": "4c859601-9b2b-4662-af39-846f4117ad7a",
+    "referenceId": "4c859601-9b2b-4662-af39-846f4117ad7a"
+  },
+  "lastUpdated": "2025-06-01T12:00:00+00:00"
+}

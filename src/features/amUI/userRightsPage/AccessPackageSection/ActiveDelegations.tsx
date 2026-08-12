@@ -38,6 +38,8 @@ export const ActiveDelegations = ({ searchString }: ActiveDelegationsProps) => {
           isLoading={isLoading}
           showPackagesCount
           showAllPackages
+          showAllAreas={!!searchString}
+          showUnassignedAvailableAreas={!!searchString}
           minimizeAvailablePackages={!searchString}
           searchString={searchString}
           onSelect={(accessPackage) => {

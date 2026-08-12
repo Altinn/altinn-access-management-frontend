@@ -1,5 +1,4 @@
 ﻿using Altinn.AccessManagement.Core.Constants;
-using Altinn.AccessManagement.UI.Core.Configuration;
 using Altinn.AccessManagement.UI.Core.Helpers;
 using Altinn.AccessManagement.UI.Core.Models;
 using Altinn.AccessManagement.UI.Core.Models.AccessManagement;
@@ -8,7 +7,6 @@ using Altinn.AccessManagement.UI.Core.Models.User;
 using Altinn.AccessManagement.UI.Core.Services.Interfaces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Options;
 
 namespace Altinn.AccessManagement.UI.Controllers
 {
@@ -21,7 +19,6 @@ namespace Altinn.AccessManagement.UI.Controllers
         private readonly IUserService _userService;
         private readonly IHttpContextAccessor _httpContextAccessor;
         private readonly ILogger _logger;
-        private readonly FeatureFlags _featureFlags;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="UserController"/> class
@@ -29,13 +26,11 @@ namespace Altinn.AccessManagement.UI.Controllers
         public UserController(
             IUserService profileService,
             IHttpContextAccessor httpContextAccessor,
-            ILogger<UserController> logger,
-            IOptions<FeatureFlags> featureFlags)
+            ILogger<UserController> logger)
         {
             _userService = profileService;
             _httpContextAccessor = httpContextAccessor;
             _logger = logger;
-            _featureFlags = featureFlags.Value;
         }
 
         /// <summary>

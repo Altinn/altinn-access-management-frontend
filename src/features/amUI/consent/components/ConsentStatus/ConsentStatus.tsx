@@ -8,15 +8,16 @@ import { isAccepted, isExpired, isRevoked } from '../../utils';
 interface ConsentStatusProps {
   events: ConsentRequestEvent[];
   isPoa?: boolean;
+  isIdPortenAuthorization?: boolean;
 }
 
-export const ConsentStatus = ({ events, isPoa }: ConsentStatusProps) => {
+export const ConsentStatus = ({ events, isPoa, isIdPortenAuthorization }: ConsentStatusProps) => {
   const { t } = useTranslation();
 
   let statusClass = '';
   let statusText = '';
 
-  const hasAcceptEvent = isAccepted(events);
+  const hasAcceptEvent = isAccepted(events) || isIdPortenAuthorization;
   const hasRevokeEvent = isRevoked(events);
   const hasExpiredEvent = isExpired(events);
 

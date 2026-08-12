@@ -7,6 +7,8 @@ import { PageLayoutWrapper } from '../common/PageLayoutWrapper';
 import { Breadcrumbs } from '../common/Breadcrumbs/Breadcrumbs';
 import ReporteePageHeading from '../common/ReporteePageHeading';
 import { useGetIsAdminQuery, useGetReporteeQuery } from '@/rtk/features/userInfoApi';
+import { useGetPartyFromLoggedInUserQuery } from '@/rtk/features/lookupApi';
+import { hasReporteeListAdminAccess } from '@/resources/utils/permissionUtils';
 import { useDocumentTitle } from '@/resources/hooks/useDocumentTitle';
 import { useRequests } from '@/resources/hooks/useRequests';
 import { useGetSentRequestsCountQuery } from '@/rtk/features/requestApi';
@@ -28,27 +30,33 @@ const SENT_REQUESTS_TAB = 'sentRequests';
 export const RequestPage = () => {
   const { t } = useTranslation();
   const restoreFocus = useRestoreFocus();
-  const [selectedTab, setSelectedTab] = useTabState({
-    tabs: [INCOMING_REQUESTS_TAB, SENT_REQUESTS_TAB],
-    defaultTab: INCOMING_REQUESTS_TAB,
-  });
 
   useDocumentTitle(t('request_page.page_title'));
 
   const { data: reportee, isLoading: isLoadingReportee } = useGetReporteeQuery();
   const { data: isAdmin, isLoading: isLoadingAdmin } = useGetIsAdminQuery();
+  const { data: currentUser } = useGetPartyFromLoggedInUserQuery();
+  const isCurrentUserReportee = reportee?.partyUuid === currentUser?.partyUuid;
+  const showSentRequestsTab = hasReporteeListAdminAccess(reportee, isAdmin, isCurrentUserReportee);
+
+  const [selectedTab, setSelectedTab] = useTabState({
+    tabs: showSentRequestsTab
+      ? [INCOMING_REQUESTS_TAB, SENT_REQUESTS_TAB]
+      : [INCOMING_REQUESTS_TAB],
+    defaultTab: INCOMING_REQUESTS_TAB,
+  });
   const {
     pendingRequests,
     isLoadingSentRequests,
     isLoadingReceivedRequests,
     isSentRequestsError,
     isReceivedRequestsError,
-  } = useRequests();
+  } = useRequests({ skipSentRequests: !showSentRequestsTab });
 
   const partyUuid = getCookie('AltinnPartyUuid');
   const { data: sentRequestCount } = useGetSentRequestsCountQuery(
     { party: partyUuid || '', status: ['Pending'] },
-    { skip: !partyUuid || !isAdmin },
+    { skip: !partyUuid || !isAdmin || !showSentRequestsTab },
   );
   const { requestsBadgeCount: receivedRequestCount } = useSidebarRequestCount({
     isAdmin,
@@ -80,7 +88,11 @@ export const RequestPage = () => {
               <RestoreFocusProvider restoreFocus={restoreFocus}>
                 <RestoreFocusFallback>
                   <ReporteePageHeading
-                    title={t('request_page.heading', { name })}
+                    title={
+                      isCurrentUserReportee
+                        ? t('request_page.your_requests_heading')
+                        : t('request_page.heading', { name })
+                    }
                     reportee={reportee}
                     isLoading={isLoadingReportee}
                   />
@@ -95,32 +107,54 @@ export const RequestPage = () => {
                       label={t('request_page.incoming_requests')}
                       badge={receivedRequestsCount}
                     />
-                    <AmTabs.Tab
-                      value={SENT_REQUESTS_TAB}
-                      label={t('request_page.sent_requests')}
-                      badge={resolvedSentRequestCount}
-                    />
+                    {showSentRequestsTab && (
+                      <AmTabs.Tab
+                        value={SENT_REQUESTS_TAB}
+                        label={t('request_page.sent_requests')}
+                        badge={resolvedSentRequestCount}
+                      />
+                    )}
                   </AmTabs.List>
                   <AmTabs.Panel value={INCOMING_REQUESTS_TAB}>
                     <RequestsTabPanel
                       count={receivedRequestsCount}
                       isLoading={isLoadingReceivedRequests}
                       isError={isReceivedRequestsError}
-                      emptyMessageKey='request_page.no_received_requests'
+                      emptyMessage={
+                        isCurrentUserReportee
+                          ? t('request_page.no_received_requests_you')
+                          : t('request_page.no_received_requests', {
+                              name: name,
+                            })
+                      }
                     >
-                      <PendingRequests pendingRequests={pendingRequests.received} />
+                      <PendingRequests
+                        pendingRequests={pendingRequests.received}
+                        handledRequests={pendingRequests.handledReceived}
+                      />
                     </RequestsTabPanel>
                   </AmTabs.Panel>
-                  <AmTabs.Panel value={SENT_REQUESTS_TAB}>
-                    <RequestsTabPanel
-                      count={sentRequestCount ?? 0}
-                      isLoading={isLoadingSentRequests}
-                      isError={isSentRequestsError}
-                      emptyMessageKey='request_page.no_sent_requests'
-                    >
-                      <SentRequestsTabPanel pendingRequests={pendingRequests.sent} />
-                    </RequestsTabPanel>
-                  </AmTabs.Panel>
+                  {showSentRequestsTab && (
+                    <AmTabs.Panel value={SENT_REQUESTS_TAB}>
+                      <RequestsTabPanel
+                        count={sentRequestCount ?? 0}
+                        isLoading={isLoadingSentRequests}
+                        isError={isSentRequestsError}
+                        emptyMessage={
+                          isCurrentUserReportee
+                            ? t('request_page.no_sent_requests_you')
+                            : t('request_page.no_sent_requests', {
+                                name: name,
+                              })
+                        }
+                      >
+                        <SentRequestsTabPanel
+                          pendingRequests={pendingRequests.sent}
+                          handledRequests={pendingRequests.handledSent}
+                        />
+                      </RequestsTabPanel>
+                    </AmTabs.Panel>
+                  )}
                 </AmTabs>
               </RestoreFocusProvider>
             </PartyRepresentationProvider>

@@ -19,6 +19,9 @@ export interface ProblemDetail {
   status: number;
   title: string;
   type: string;
+  // Optional extension forwarded from the backend: which access package/right could not be
+  // delegated and why. Used to make delegation/approve errors self-explanatory.
+  delegationReasons?: string;
 }
 
 export interface SystemUser {

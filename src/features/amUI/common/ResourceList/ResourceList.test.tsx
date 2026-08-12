@@ -38,6 +38,10 @@ const createResource = (overrides: Partial<PackageResource> = {}): PackageResour
     name: overrides.name ?? 'Altinn Resource',
     title: overrides.title ?? overrides.name ?? 'Altinn Resource',
     description: overrides.description ?? 'Description',
+    type: {
+      id: '0197a840-2ee9-75f4-879e-9d9197683d88',
+      name: 'GenericAccessResource',
+    },
     provider,
     resourceOwnerName: overrides.resourceOwnerName ?? provider.name,
     resourceOwnerLogoUrl: overrides.resourceOwnerLogoUrl ?? provider.logoUrl,

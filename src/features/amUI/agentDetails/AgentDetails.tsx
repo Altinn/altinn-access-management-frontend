@@ -1,11 +1,16 @@
-import React from 'react';
+import React, { useId, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { DsAlert, DsParagraph, DsSkeleton, formatDisplayName } from '@altinn/altinn-components';
+import {
+  DsAlert,
+  DsHeading,
+  DsParagraph,
+  DsSkeleton,
+  formatDisplayName,
+} from '@altinn/altinn-components';
 import { useParams } from 'react-router';
 import { skipToken } from '@reduxjs/toolkit/query';
 
 import { amUIPath } from '@/routes/paths';
-import { useTabState } from '@/resources/hooks';
 
 import { PageContainer } from '../common/PageContainer/PageContainer';
 import { usePartyRepresentation } from '../common/PartyRepresentationContext/PartyRepresentationContext';
@@ -18,41 +23,52 @@ import {
 import { PartyType, useGetIsClientAdminQuery } from '@/rtk/features/userInfoApi';
 import {
   useAddAgentAccessPackagesMutation,
+  useAddAgentResourcesMutation,
   useRemoveAgentAccessPackagesMutation,
+  useRemoveAgentResourcesMutation,
   useGetAgentAccessPackagesQuery,
+  useGetAgentResourcesQuery,
   useGetClientsQuery,
 } from '@/rtk/features/clientApi';
 import { UserPageHeader } from '../common/UserPageHeader/UserPageHeader';
-import { AgentDetailsTabs } from './AgentDetailsTabs';
 import { useAgentDetailsAccessClientLists } from './useAgentDetailsAccessClientLists';
 import { UserPageHeaderSkeleton } from '../common/UserPageHeader/UserPageHeaderSkeleton';
 import { AgentDetailsDeleteModal } from './AgentDetailsDeleteModal';
+import { ClientAdminSearchField } from '../common/ClientAdminSearchField/ClientAdminSearchField';
+import { CollapsibleContainer } from '../common/CollapsibleContainer/CollapsibleContainer';
 
 export const AgentDetails = () => {
   const { t } = useTranslation();
   const { id } = useParams();
   const { toParty, actingParty } = usePartyRepresentation();
-  const [activeTab, setActiveTab] = useTabState({
-    tabs: ['has-clients', 'all-clients'],
-    defaultTab: 'has-clients',
-  });
   const { data: isClientAdmin, isLoading: isLoadingIsClientAdmin } = useGetIsClientAdminQuery();
   const {
     data: agentAccessPackages,
     isLoading: isLoadingAgentAccessPackages,
     error: agentAccessPackagesError,
   } = useGetAgentAccessPackagesQuery(id ? { to: id } : skipToken);
+  const {
+    data: agentResources,
+    isLoading: isLoadingAgentResources,
+    error: agentResourcesError,
+  } = useGetAgentResourcesQuery(id ? { to: id } : skipToken);
   const { data: clients, isLoading: isLoadingClients, error: clientsError } = useGetClientsQuery();
 
   const [addAgentAccessPackages, { isLoading: isAddingAgentAccessPackages }] =
     useAddAgentAccessPackagesMutation();
   const [removeAgentAccessPackages, { isLoading: isRemovingAgentAccessPackages }] =
     useRemoveAgentAccessPackagesMutation();
+  const [addAgentResources, { isLoading: isAddingAgentResources }] = useAddAgentResourcesMutation();
+  const [removeAgentResources, { isLoading: isRemovingAgentResources }] =
+    useRemoveAgentResourcesMutation();
 
-  const { clientsWithAgentAccess, allClients } = useAgentDetailsAccessClientLists({
+  const { clientsWithAgentAccess, clientsWithoutAgentAccess } = useAgentDetailsAccessClientLists({
     agentAccessPackages,
+    agentResources,
     clients,
   });
+  const [searchString, setSearchString] = useState<string>('');
+
   const backUrl = `/${amUIPath.ClientAdministration}#users`;
   const userName = formatDisplayName({
     fullName: toParty?.name || '',
@@ -60,6 +76,8 @@ export const AgentDetails = () => {
   });
   const toPartyUuid = toParty?.partyUuid;
   const actingPartyUuid = actingParty?.partyUuid;
+  const assignedSectionId = useId();
+  const unassignedSectionId = useId();
 
   if (isClientAdmin === false) {
     return (
@@ -67,18 +85,20 @@ export const AgentDetails = () => {
     );
   }
 
-  if (agentAccessPackagesError || clientsError) {
-    const agentAccessPackagesErrorDetails = createErrorDetails(agentAccessPackagesError);
+  if (agentAccessPackagesError || agentResourcesError || clientsError) {
+    const delegationsErrorDetails = createErrorDetails(
+      agentAccessPackagesError ?? agentResourcesError,
+    );
     const clientsErrorDetails = createErrorDetails(clientsError);
     return (
       <>
-        {!!agentAccessPackagesErrorDetails && (
+        {!!delegationsErrorDetails && (
           <DsAlert data-color='danger'>
             <DsParagraph>{t('client_administration_page.load_delegations_error')}</DsParagraph>
             <TechnicalErrorParagraphs
-              status={agentAccessPackagesErrorDetails.status}
-              time={agentAccessPackagesErrorDetails.time}
-              traceId={agentAccessPackagesErrorDetails.traceId}
+              status={delegationsErrorDetails.status}
+              time={delegationsErrorDetails.time}
+              traceId={delegationsErrorDetails.traceId}
             />
           </DsAlert>
         )}
@@ -113,7 +133,10 @@ export const AgentDetails = () => {
           />
         }
       >
-        {isLoadingIsClientAdmin || isLoadingAgentAccessPackages || isLoadingClients ? (
+        {isLoadingIsClientAdmin ||
+        isLoadingAgentAccessPackages ||
+        isLoadingAgentResources ||
+        isLoadingClients ? (
           <>
             <UserPageHeaderSkeleton />
             <DsSkeleton
@@ -130,40 +153,65 @@ export const AgentDetails = () => {
               displayDirection={false}
               displayRoles={false}
             />
-            <AgentDetailsTabs
-              activeTab={activeTab}
-              onChange={setActiveTab}
-              hasClientsContent={
-                clientsWithAgentAccess.length > 0 ? (
-                  <AgentDetailsClientsList
-                    clients={clientsWithAgentAccess}
-                    agentAccessPackages={agentAccessPackages ?? []}
-                    isLoading={isAddingAgentAccessPackages || isRemovingAgentAccessPackages}
-                    toPartyUuid={toPartyUuid}
-                    actingPartyUuid={actingPartyUuid}
-                    addAgentAccessPackages={addAgentAccessPackages}
-                    removeAgentAccessPackages={removeAgentAccessPackages}
-                  />
-                ) : (
-                  <DsParagraph>{t('client_administration_page.no_delegations')}</DsParagraph>
-                )
-              }
-              canGetClientsContent={
-                allClients.length > 0 ? (
-                  <AgentDetailsClientsList
-                    clients={allClients}
-                    agentAccessPackages={agentAccessPackages ?? []}
-                    toPartyUuid={toPartyUuid}
-                    actingPartyUuid={actingPartyUuid}
-                    isLoading={isAddingAgentAccessPackages || isRemovingAgentAccessPackages}
-                    addAgentAccessPackages={addAgentAccessPackages}
-                    removeAgentAccessPackages={removeAgentAccessPackages}
-                  />
-                ) : (
-                  <DsParagraph>{t('client_administration_page.no_clients')}</DsParagraph>
-                )
-              }
+            <ClientAdminSearchField
+              setSearchString={setSearchString}
+              searchPlaceholder={t('my_clients_page.search_placeholder')}
             />
+            <section aria-labelledby={assignedSectionId}>
+              <DsHeading
+                data-size='xs'
+                level={2}
+                id={assignedSectionId}
+              >
+                {t('client_administration_page.agent_has_clients_tab')}
+              </DsHeading>
+              <AgentDetailsClientsList
+                clients={clientsWithAgentAccess}
+                agentAccessPackages={agentAccessPackages ?? []}
+                agentResources={agentResources ?? []}
+                isLoading={
+                  isAddingAgentAccessPackages ||
+                  isRemovingAgentAccessPackages ||
+                  isAddingAgentResources ||
+                  isRemovingAgentResources
+                }
+                toPartyUuid={toPartyUuid}
+                actingPartyUuid={actingPartyUuid}
+                addAgentAccessPackages={addAgentAccessPackages}
+                removeAgentAccessPackages={removeAgentAccessPackages}
+                addAgentResources={addAgentResources}
+                removeAgentResources={removeAgentResources}
+                searchString={searchString}
+                emptyText={t('client_administration_page.no_delegations')}
+              />
+            </section>
+            <section aria-labelledby={unassignedSectionId}>
+              <CollapsibleContainer
+                heading={t('client_administration_page.agent_can_get_clients_tab')}
+                searchString={searchString}
+                id={unassignedSectionId}
+              >
+                <AgentDetailsClientsList
+                  clients={clientsWithoutAgentAccess}
+                  agentAccessPackages={agentAccessPackages ?? []}
+                  agentResources={agentResources ?? []}
+                  toPartyUuid={toPartyUuid}
+                  actingPartyUuid={actingPartyUuid}
+                  isLoading={
+                    isAddingAgentAccessPackages ||
+                    isRemovingAgentAccessPackages ||
+                    isAddingAgentResources ||
+                    isRemovingAgentResources
+                  }
+                  addAgentAccessPackages={addAgentAccessPackages}
+                  removeAgentAccessPackages={removeAgentAccessPackages}
+                  addAgentResources={addAgentResources}
+                  removeAgentResources={removeAgentResources}
+                  searchString={searchString}
+                  emptyText={t('client_administration_page.no_clients')}
+                />
+              </CollapsibleContainer>
+            </section>
           </>
         )}
       </PageContainer>

@@ -1,9 +1,20 @@
 import React, { useState } from 'react';
 import { Trans, useTranslation } from 'react-i18next';
-import { DsAlert, DsButton, DsHeading } from '@altinn/altinn-components';
+import {
+  AccessPackageListItem,
+  DsAlert,
+  DsButton,
+  DsHeading,
+  List,
+} from '@altinn/altinn-components';
 import { ArrowLeftIcon, ChevronRightIcon } from '@navikt/aksel-icons';
 
-import type { EnrichedResourceRequest } from '@/rtk/features/requestApi';
+import {
+  isEnrichedPackageRequest,
+  type EnrichedPackageRequest,
+  type EnrichedRequest,
+  type EnrichedResourceRequest,
+} from '@/rtk/features/requestApi';
 import { useAutoFocusRef } from '@/resources/hooks/useAutoFocusRef';
 import { ResourceList } from '../../common/ResourceList/ResourceList';
 import { DraftRequestBody } from './DraftRequestBody';
@@ -15,7 +26,7 @@ import { usePartyRepresentation } from '../../common/PartyRepresentationContext/
 export type BatchActionType = 'confirm' | 'withdraw' | null;
 
 interface MultipleDraftRequestsViewProps {
-  requests: EnrichedResourceRequest[];
+  requests: EnrichedRequest[];
   fromName: string;
   onBatchComplete: (actionType: BatchActionType) => void;
 }
@@ -26,7 +37,7 @@ export const MultipleDraftRequestsView = ({
   onBatchComplete,
 }: MultipleDraftRequestsViewProps) => {
   const { t } = useTranslation();
-  const [selectedRequest, setSelectedRequest] = useState<EnrichedResourceRequest | null>(null);
+  const [selectedRequest, setSelectedRequest] = useState<EnrichedRequest | null>(null);
   const { selfParty } = usePartyRepresentation();
 
   const {
@@ -39,10 +50,18 @@ export const MultipleDraftRequestsView = ({
 
   const backButtonRef = useAutoFocusRef<HTMLButtonElement>();
 
-  const resources = requests.map((r) => r.resource);
+  // While there are failures, only the failed requests are shown so the user can retry them
+  const failedRequestIds = new Set(failedRequests.map((f) => f.request.id));
+  const visibleRequests =
+    failedRequests.length > 0 ? requests.filter((r) => failedRequestIds.has(r.id)) : requests;
 
-  const handleSelect = (resource: (typeof resources)[number]) => {
-    const match = requests.find((r) => r.resource.identifier === resource.identifier);
+  const packageRequests = visibleRequests.filter(isEnrichedPackageRequest);
+  const resourceRequests = visibleRequests.filter(
+    (r): r is EnrichedResourceRequest => !isEnrichedPackageRequest(r),
+  );
+
+  const handleSelectResource = (resource: EnrichedResourceRequest['resource']) => {
+    const match = resourceRequests.find((r) => r.resource.identifier === resource.identifier);
     if (match) {
       setSelectedRequest(match);
     }
@@ -59,6 +78,9 @@ export const MultipleDraftRequestsView = ({
     const succeeded = await rawWithdrawAll();
     if (succeeded) onBatchComplete('withdraw');
   };
+
+  const displayFromName =
+    requests[0].from.id === selfParty?.partyUuid ? t('common.you_uppercase') : fromName;
 
   if (selectedRequest) {
     return (
@@ -80,55 +102,77 @@ export const MultipleDraftRequestsView = ({
     );
   }
 
+  const seeDetailsControls = (
+    <div className={classes.seeDetails}>
+      {t('common.see_details')}{' '}
+      <ChevronRightIcon
+        fontSize={'1.2rem'}
+        aria-hidden='true'
+      />
+    </div>
+  );
+
   return (
     <div className={classes.multipleDraftRequests}>
       <div aria-live='polite'>
         {failedRequests.length > 0 && (
           <DsAlert data-color='danger'>
             {t('draft_request_page.batch_partial_error', {
-              resources: failedRequests.map((f) => f.resourceName).join(', '),
+              resources: failedRequests.map((f) => f.name).join(', '),
             })}
           </DsAlert>
         )}
       </div>
-      <DsHeading
-        data-size='sm'
-        level={2}
-        id='multiple-services-title'
-      >
-        <Trans
-          i18nKey={'draft_request_page.multiple_services_title'}
-          components={{ b: <strong /> }}
-          values={{
-            name:
-              requests[0].from.id === selfParty?.partyUuid ? t('common.you_uppercase') : fromName,
-          }}
-        />
-      </DsHeading>
-      <ResourceList
-        size='xs'
-        border='dotted'
-        enableSearch={false}
-        showDetails={false}
-        resources={
-          failedRequests.length > 0
-            ? resources.filter((r) =>
-                failedRequests.some((f) => f.request.resourceId === r.identifier),
-              )
-            : resources
-        }
-        onSelect={handleSelect}
-        ariaLabelledBy='multiple-services-title'
-        renderControls={(resource) => (
-          <div className={classes.seeDetails}>
-            {t('common.see_details')}{' '}
-            <ChevronRightIcon
-              fontSize={'1.2rem'}
-              aria-hidden='true'
+      {packageRequests.length > 0 && (
+        <>
+          <DsHeading
+            data-size='sm'
+            level={2}
+            id='multiple-packages-title'
+          >
+            <Trans
+              i18nKey={'draft_request_page.multiple_packages_title'}
+              components={{ b: <strong /> }}
+              values={{ name: displayFromName }}
             />
-          </div>
-        )}
-      />
+          </DsHeading>
+          <List aria-labelledby='multiple-packages-title'>
+            {packageRequests.map((packageRequest) => (
+              <DraftPackageRow
+                key={packageRequest.id}
+                request={packageRequest}
+                controls={seeDetailsControls}
+                onClick={() => setSelectedRequest(packageRequest)}
+              />
+            ))}
+          </List>
+        </>
+      )}
+      {resourceRequests.length > 0 && (
+        <>
+          <DsHeading
+            data-size='sm'
+            level={2}
+            id='multiple-services-title'
+          >
+            <Trans
+              i18nKey={'draft_request_page.multiple_services_title'}
+              components={{ b: <strong /> }}
+              values={{ name: displayFromName }}
+            />
+          </DsHeading>
+          <ResourceList
+            size='xs'
+            border='dotted'
+            enableSearch={false}
+            showDetails={false}
+            resources={resourceRequests.map((r) => r.resource)}
+            onSelect={handleSelectResource}
+            ariaLabelledBy='multiple-services-title'
+            renderControls={() => seeDetailsControls}
+          />
+        </>
+      )}
       <div className={classes.buttonRow}>
         <DsButton
           variant='primary'
@@ -148,5 +192,29 @@ export const MultipleDraftRequestsView = ({
         </DsButton>
       </div>
     </div>
+  );
+};
+
+interface DraftPackageRowProps {
+  request: EnrichedPackageRequest;
+  controls: React.ReactNode;
+  onClick: () => void;
+}
+
+const DraftPackageRow = ({ request, controls, onClick }: DraftPackageRowProps) => {
+  const { t } = useTranslation();
+  return (
+    <AccessPackageListItem
+      id={request.package.id}
+      name={request.package.name}
+      description={t('access_packages.package_number_of_resources', {
+        count: request.package.resources.length,
+      })}
+      interactive
+      size='xs'
+      border='dotted'
+      controls={controls}
+      onClick={onClick}
+    />
   );
 };

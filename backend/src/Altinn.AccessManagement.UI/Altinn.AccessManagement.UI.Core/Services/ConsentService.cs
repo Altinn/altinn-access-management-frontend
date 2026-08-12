@@ -4,7 +4,6 @@ using System.Web;
 using Altinn.AccessManagement.UI.Core.ClientInterfaces;
 using Altinn.AccessManagement.UI.Core.Configuration;
 using Altinn.AccessManagement.UI.Core.Constants;
-using Altinn.AccessManagement.UI.Core.Enums;
 using Altinn.AccessManagement.UI.Core.Helpers;
 using Altinn.AccessManagement.UI.Core.Models.Consent;
 using Altinn.AccessManagement.UI.Core.Models.Consent.Frontend;
@@ -292,6 +291,12 @@ namespace Altinn.AccessManagement.UI.Core.Services
             return await _consentClient.RevokeConsent(consentId, cancellationToken);
         }
 
+        /// <inheritdoc />
+        public async Task<Result<int>> GetConsentRequestCount(Guid party, ConsentRequestStatusType status, CancellationToken cancellationToken)
+        {
+            return await _consentClient.GetConsentRequestCount(party, status, cancellationToken);
+        }
+
         private static Dictionary<string, Party> PartyListToDict(IEnumerable<Party> parties)
         {
             return parties.Where(p => p != null && p.PartyUuid.HasValue).ToDictionary(p => p.PartyUuid.ToString(), p => p, StringComparer.OrdinalIgnoreCase);
@@ -506,7 +511,7 @@ namespace Altinn.AccessManagement.UI.Core.Services
             {
                 Id = partyId,
                 Name = party?.Name ?? string.Empty,
-                Type = isSubUnit ? PartyType.SubUnit : party?.PartyTypeName ?? PartyType.Organisation
+                Type = isSubUnit ? PartyType.SubUnit : party?.PartyTypeName ?? PartyType.Organisation,
             };
         }
     }

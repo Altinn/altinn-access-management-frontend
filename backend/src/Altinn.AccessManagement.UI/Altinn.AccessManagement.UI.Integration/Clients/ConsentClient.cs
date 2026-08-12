@@ -46,7 +46,7 @@ namespace Altinn.AccessManagement.UI.Integration.Clients
             _httpContextAccessor = httpContextAccessor;
             _httpClientFactory = httpClientFactory;
             _platformSettings = platformSettings.Value;
-            httpClient.BaseAddress = new Uri(_platformSettings.ApiAccessManagementEndpoint);
+            httpClient.BaseAddress = new Uri(_platformSettings.ApiAccessManagementEndpoint + "v1/");
             httpClient.DefaultRequestHeaders.Add(_platformSettings.SubscriptionKeyHeaderName, _platformSettings.SubscriptionKey);
             _httpClient = httpClient;
         }
@@ -59,7 +59,7 @@ namespace Altinn.AccessManagement.UI.Integration.Clients
                 string token = JwtTokenUtil.GetTokenFromContext(_httpContextAccessor.HttpContext, _platformSettings.JwtCookieName);
                 string endpointUrl = $"bff/consentrequests/{consentRequestId}";
 
-                HttpResponseMessage response = await _httpClient.GetAsync(token, endpointUrl);
+                HttpResponseMessage response = await _httpClient.GetAsync(token, endpointUrl, cancellationToken);
                 string responseContent = await response.Content.ReadAsStringAsync(cancellationToken);
 
                 if (response.IsSuccessStatusCode)
@@ -86,7 +86,7 @@ namespace Altinn.AccessManagement.UI.Integration.Clients
                 string token = JwtTokenUtil.GetTokenFromContext(_httpContextAccessor.HttpContext, _platformSettings.JwtCookieName);
                 string endpointUrl = $"bff/consentrequests/{consentRequestId}/reject";
 
-                HttpResponseMessage response = await _httpClient.PostAsync(token, endpointUrl, null);
+                HttpResponseMessage response = await _httpClient.PostAsync(token, endpointUrl, null, cancellationToken);
                 string responseContent = await response.Content.ReadAsStringAsync(cancellationToken);
 
                 if (response.IsSuccessStatusCode)
@@ -114,7 +114,7 @@ namespace Altinn.AccessManagement.UI.Integration.Clients
                 string endpointUrl = $"bff/consentrequests/{consentRequestId}/accept";
                 var content = JsonContent.Create(context);
 
-                HttpResponseMessage response = await _httpClient.PostAsync(token, endpointUrl, content);
+                HttpResponseMessage response = await _httpClient.PostAsync(token, endpointUrl, content, cancellationToken);
                 string responseContent = await response.Content.ReadAsStringAsync(cancellationToken);
 
                 if (response.IsSuccessStatusCode)
@@ -161,7 +161,7 @@ namespace Altinn.AccessManagement.UI.Integration.Clients
                 string token = JwtTokenUtil.GetTokenFromContext(_httpContextAccessor.HttpContext, _platformSettings.JwtCookieName);
                 string endpointUrl = $"bff/consentrequests/list/{partyId}";
 
-                HttpResponseMessage response = await _httpClient.GetAsync(token, endpointUrl);
+                HttpResponseMessage response = await _httpClient.GetAsync(token, endpointUrl, cancellationToken);
                 string responseContent = await response.Content.ReadAsStringAsync(cancellationToken);
 
                 if (response.IsSuccessStatusCode)
@@ -188,7 +188,7 @@ namespace Altinn.AccessManagement.UI.Integration.Clients
                 string token = JwtTokenUtil.GetTokenFromContext(_httpContextAccessor.HttpContext, _platformSettings.JwtCookieName);
                 string endpointUrl = $"bff/consents/{consentId}";
 
-                HttpResponseMessage response = await _httpClient.GetAsync(token, endpointUrl);
+                HttpResponseMessage response = await _httpClient.GetAsync(token, endpointUrl, cancellationToken);
                 string responseContent = await response.Content.ReadAsStringAsync(cancellationToken);
 
                 if (response.IsSuccessStatusCode)
@@ -215,7 +215,7 @@ namespace Altinn.AccessManagement.UI.Integration.Clients
                 string token = JwtTokenUtil.GetTokenFromContext(_httpContextAccessor.HttpContext, _platformSettings.JwtCookieName);
                 string endpointUrl = $"bff/consents/{consentId}/revoke";
 
-                HttpResponseMessage response = await _httpClient.PostAsync(token, endpointUrl, null);
+                HttpResponseMessage response = await _httpClient.PostAsync(token, endpointUrl, null, cancellationToken);
                 string responseContent = await response.Content.ReadAsStringAsync(cancellationToken);
 
                 if (response.IsSuccessStatusCode)
@@ -230,6 +230,33 @@ namespace Altinn.AccessManagement.UI.Integration.Clients
             catch (Exception ex)
             {
                 _logger.LogError(ex, "AccessManagement.UI // ConsentClient // RevokeConsent // Exception");
+                throw;
+            }
+        }
+
+        /// <inheritdoc/>
+        public async Task<Result<int>> GetConsentRequestCount(Guid partyId, ConsentRequestStatusType status, CancellationToken cancellationToken)
+        {
+            try
+            {
+                string token = JwtTokenUtil.GetTokenFromContext(_httpContextAccessor.HttpContext, _platformSettings.JwtCookieName);
+                string endpointUrl = $"bff/consentrequests/count/{partyId}?status={status}";
+
+                HttpResponseMessage response = await _httpClient.GetAsync(token, endpointUrl, cancellationToken);
+                string responseContent = await response.Content.ReadAsStringAsync(cancellationToken);
+
+                if (response.IsSuccessStatusCode)
+                {
+                    return JsonSerializer.Deserialize<int>(responseContent, _jsonSerializerOptions);
+                }
+
+                _logger.LogError("AccessManagement.UI // ConsentClient // GetConsentRequestCount // Unexpected HttpStatusCode: {StatusCode}\n {ResponseBody}", response.StatusCode, responseContent);
+
+                return ConsentProblemMapper.MapToConsentUiError(responseContent, response.StatusCode);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "AccessManagement.UI // ConsentClient // GetConsentRequestCount // Exception");
                 throw;
             }
         }

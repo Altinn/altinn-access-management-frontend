@@ -1,9 +1,6 @@
 import { useRef, useEffect } from 'react';
-import { DsDialog } from '@altinn/altinn-components';
-import { useTranslation } from 'react-i18next';
 import type { Request } from '../types';
 import { RequestReviewModalContent } from './RequestReviewModalContent';
-import classes from './RequestReviewModal.module.css';
 
 interface RequestReviewModalProps {
   request: Request | null;
@@ -11,7 +8,6 @@ interface RequestReviewModalProps {
 }
 
 export const RequestReviewModal = ({ request, onClose }: RequestReviewModalProps) => {
-  const { t } = useTranslation();
   const modalRef = useRef<HTMLDialogElement>(null);
 
   // Open/close the dialog based on the request prop to allow for external control
@@ -24,18 +20,10 @@ export const RequestReviewModal = ({ request, onClose }: RequestReviewModalProps
   }, [request]);
 
   return (
-    <DsDialog
-      ref={modalRef}
-      closedby='any'
-      closeButton={t('common.close')}
+    <RequestReviewModalContent
+      modalRef={modalRef}
+      request={request}
       onClose={onClose}
-      className={classes.reviewModal}
-    >
-      {/* close() instead of onClose ensures native focus restore runs before onClose fires */}
-      <RequestReviewModalContent
-        request={request}
-        onClose={() => modalRef.current?.close()}
-      />
-    </DsDialog>
+    />
   );
 };

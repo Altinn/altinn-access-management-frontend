@@ -27,6 +27,7 @@ using Microsoft.ApplicationInsights.WindowsServer.TelemetryChannel;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.Extensions.Logging.ApplicationInsights;
+using Microsoft.FeatureManagement;
 using Microsoft.IdentityModel.Logging;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
@@ -39,6 +40,8 @@ WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
 string applicationInsightsKeySecretName = "ApplicationInsights--InstrumentationKey";
 
 string applicationInsightsConnectionString = string.Empty;
+
+bool appConfigurationEnabled = false;
 
 ConfigureSetupLogging();
 
@@ -169,6 +172,8 @@ async Task SetConfigurationProviders(ConfigurationManager config)
     config.AddCommandLine(args);
 
     await ConnectToKeyVaultAndSetApplicationInsights(config);
+
+    appConfigurationEnabled = config.AddAltinnAppConfiguration(logger);
 }
 
 async Task ConnectToKeyVaultAndSetApplicationInsights(ConfigurationManager config)
@@ -210,10 +215,17 @@ void ConfigureServices(IServiceCollection services, IConfiguration config)
 
     services.Configure<CacheConfig>(config.GetSection("CacheConfig"));
     services.Configure<GeneralSettings>(config.GetSection("GeneralSettings"));
-    services.Configure<FeatureFlags>(config.GetSection("FeatureFlags"));
     services.Configure<KeyVaultSettings>(config.GetSection("KeyVaultSettings"));
     services.Configure<ClientSettings>(config.GetSection("ClientSettings"));
     services.AddSingleton(config);
+
+    services.AddFeatureManagement();
+    if (appConfigurationEnabled)
+    {
+        services.AddAzureAppConfiguration();
+        services.TryAddSingleton(TimeProvider.System);
+        services.AddHostedService<RefreshAppConfigurationHostedService>();
+    }
 
     services.AddHttpClient<IAuthenticationClient, AuthenticationClient>();
     services.AddHttpClient<AuthorizationApiClient>();
@@ -244,6 +256,7 @@ void ConfigureServices(IServiceCollection services, IConfiguration config)
     services.AddSingleton<IRoleService, RoleService>();
     services.AddSingleton<IDelegationExportService, DelegationExportService>();
     services.AddSingleton<IMaskinportenService, MaskinportenService>();
+    services.AddSingleton<IIdPortenAuthorizationService, IdPortenAuthorizationService>();
     services.AddTransient<ISigningCredentialsResolver, SigningCredentialsResolver>();
     services.AddTransient<ResourceHelper, ResourceHelper>();
     services.AddTransient<IAltinnCdnService, AltinnCdnService>();
@@ -418,11 +431,14 @@ void ConfigureMockableClients(IServiceCollection services, IConfiguration config
 
     if (mockSettings.ClientDelegation)
     {
-        services.AddHttpClient<IClientDelegationClient, ClientDelegationClientMock>();
+        services.AddHttpClient<ClientDelegationClientMock>();
+        services.AddTransient<IClientDelegationClientResolver>(sp => sp.GetRequiredService<ClientDelegationClientMock>());
     }
     else
     {
-        services.AddHttpClient<IClientDelegationClient, ClientDelegationClient>();
+        services.AddHttpClient<ClientDelegationClientV1>();
+        services.AddHttpClient<ClientDelegationClientV2>();
+        services.AddTransient<IClientDelegationClientResolver, ClientDelegationClientResolver>();
     }
 
     if (mockSettings.Register)
@@ -519,5 +535,14 @@ void ConfigureMockableClients(IServiceCollection services, IConfiguration config
     else
     {
         services.AddHttpClient<IMaskinportenClient, MaskinportenClient>();
+    }
+
+    if (mockSettings.IdPortenAuthorization)
+    {
+        services.AddHttpClient<IIdPortenAuthorizationClient, IdPortenAuthorizationClientMock>();
+    }
+    else
+    {
+        services.AddHttpClient<IIdPortenAuthorizationClient, IdPortenAuthorizationClient>();
     }
 }

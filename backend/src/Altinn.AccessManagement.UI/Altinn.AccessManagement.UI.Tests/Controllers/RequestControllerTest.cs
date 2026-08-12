@@ -311,6 +311,27 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
         }
 
         /// <summary>
+        ///     Test case: GetDraftRequest returns a single draft request for an access package by id
+        ///     Expected: GetDraftRequest returns the draft request enriched with the access package
+        /// </summary>
+        [Fact]
+        public async Task GetDraftRequest_ReturnsSingleDraftPackageRequest()
+        {
+            // Arrange
+            string requestId = "44444444-4444-4444-4444-444444444444";
+            string path = Path.Combine(_expectedDataPath, "Request", "getEnrichedDraftPackageRequest.json");
+            EnrichedPackageRequest expectedResponse = Util.GetMockData<EnrichedPackageRequest>(path);
+
+            // Act
+            HttpResponseMessage httpResponse = await _client.GetAsync($"accessmanagement/api/v1/request/draft/{requestId}");
+            EnrichedPackageRequest actualResponse = await httpResponse.Content.ReadFromJsonAsync<EnrichedPackageRequest>();
+
+            // Assert
+            Assert.Equal(HttpStatusCode.OK, httpResponse.StatusCode);
+            AssertionUtil.AssertEqual(expectedResponse, actualResponse);
+        }
+
+        /// <summary>
         ///     Test case: GetDraftRequest encounters an unexpected internal error
         ///     Expected: Returns 500 Internal Server Error
         /// </summary>
@@ -992,6 +1013,103 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
             // Assert
             Assert.Equal(HttpStatusCode.OK, httpResponse.StatusCode);
             AssertionUtil.AssertEqual(expectedResponse, actualResponse);
+        }
+
+        /// <summary>
+        ///     Test case: GetReceivedRequests returns a mix of pending and handled requests
+        ///     Expected: Pending and recently handled requests are kept, while handled requests older than one year are removed
+        /// </summary>
+        [Fact]
+        public async Task GetReceivedRequests_FiltersOutHandledRequestsOlderThanOneYear()
+        {
+            // Arrange - 55555555 triggers a mix of pending, recently handled and old handled requests
+            string party = "55555555-5555-5555-5555-555555555555";
+
+            // Act
+            HttpResponseMessage httpResponse = await _client.GetAsync($"accessmanagement/api/v1/request/received?party={party}");
+            IEnumerable<RequestFE> actualResponse = await httpResponse.Content.ReadFromJsonAsync<IEnumerable<RequestFE>>();
+
+            // Assert
+            Assert.Equal(HttpStatusCode.OK, httpResponse.StatusCode);
+            List<Guid> returnedIds = actualResponse.Select(r => r.Id).ToList();
+            Assert.Equal(2, returnedIds.Count);
+            Assert.Contains(Guid.Parse("5a11ab1e-0000-0000-0000-000000000001"), returnedIds); // pending - kept regardless of age
+            Assert.Contains(Guid.Parse("5a11ab1e-0000-0000-0000-000000000002"), returnedIds); // handled within the last year - kept
+            Assert.DoesNotContain(Guid.Parse("5a11ab1e-0000-0000-0000-000000000003"), returnedIds); // approved > 1 year ago - removed
+            Assert.DoesNotContain(Guid.Parse("5a11ab1e-0000-0000-0000-000000000004"), returnedIds); // rejected > 1 year ago - removed
+        }
+
+        /// <summary>
+        ///     Test case: GetSentRequests returns a mix of pending and handled requests
+        ///     Expected: Pending and recently handled requests are kept, while handled requests older than one year are removed
+        /// </summary>
+        [Fact]
+        public async Task GetSentRequests_FiltersOutHandledRequestsOlderThanOneYear()
+        {
+            // Arrange - 55555555 triggers a mix of pending, recently handled and old handled requests
+            string party = "55555555-5555-5555-5555-555555555555";
+
+            // Act
+            HttpResponseMessage httpResponse = await _client.GetAsync($"accessmanagement/api/v1/request/sent?party={party}");
+            IEnumerable<RequestFE> actualResponse = await httpResponse.Content.ReadFromJsonAsync<IEnumerable<RequestFE>>();
+
+            // Assert
+            Assert.Equal(HttpStatusCode.OK, httpResponse.StatusCode);
+            List<Guid> returnedIds = actualResponse.Select(r => r.Id).ToList();
+            Assert.Equal(2, returnedIds.Count);
+            Assert.Contains(Guid.Parse("5a11ab1e-0000-0000-0000-000000000001"), returnedIds); // pending - kept regardless of age
+            Assert.Contains(Guid.Parse("5a11ab1e-0000-0000-0000-000000000002"), returnedIds); // handled within the last year - kept
+            Assert.DoesNotContain(Guid.Parse("5a11ab1e-0000-0000-0000-000000000003"), returnedIds); // approved > 1 year ago - removed
+            Assert.DoesNotContain(Guid.Parse("5a11ab1e-0000-0000-0000-000000000004"), returnedIds); // rejected > 1 year ago - removed
+        }
+
+        /// <summary>
+        ///     Test case: GetEnrichedReceivedResourceRequests is queried for handled (approved/rejected) requests
+        ///     Expected: Handled requests are enriched with the name of the party that handled them, and old handled requests are filtered out
+        /// </summary>
+        [Fact]
+        public async Task GetEnrichedReceivedResourceRequests_EnrichesLastUpdatedByNameForHandledRequests()
+        {
+            // Arrange - 55555555 triggers a mix of pending, recently handled and old handled requests
+            string party = "55555555-5555-5555-5555-555555555555";
+
+            // Act - status=Approved marks the query as "handled", which enables handler-name enrichment
+            HttpResponseMessage httpResponse = await _client.GetAsync($"accessmanagement/api/v1/request/received/resource?party={party}&status=Approved");
+            IEnumerable<EnrichedResourceRequest> actualResponse = await httpResponse.Content.ReadFromJsonAsync<IEnumerable<EnrichedResourceRequest>>();
+
+            // Assert
+            Assert.Equal(HttpStatusCode.OK, httpResponse.StatusCode);
+
+            // the recently handled request is enriched with the name of the party that handled it
+            EnrichedResourceRequest recentHandled = actualResponse.Single(r => r.Id == Guid.Parse("5a11ab1e-0000-0000-0000-000000000002"));
+            Assert.Equal("Sein Dyktig Mår", recentHandled.LastUpdatedByName);
+
+            // handled requests older than one year are filtered out
+            Assert.DoesNotContain(actualResponse, r => r.Id == Guid.Parse("5a11ab1e-0000-0000-0000-000000000003"));
+            Assert.DoesNotContain(actualResponse, r => r.Id == Guid.Parse("5a11ab1e-0000-0000-0000-000000000004"));
+        }
+
+        /// <summary>
+        ///     Test case: GetEnrichedSentResourceRequests is queried for handled (approved/rejected) requests
+        ///     Expected: Sent requests never expose who handled them, so LastUpdatedByName is not enriched
+        /// </summary>
+        [Fact]
+        public async Task GetEnrichedSentResourceRequests_DoesNotEnrichLastUpdatedByName()
+        {
+            // Arrange - 55555555 triggers a mix of pending, recently handled and old handled requests
+            string party = "55555555-5555-5555-5555-555555555555";
+
+            // Act - even for handled statuses, sent requests must not reveal the handler
+            HttpResponseMessage httpResponse = await _client.GetAsync($"accessmanagement/api/v1/request/sent/resource?party={party}&status=Approved");
+            IEnumerable<EnrichedResourceRequest> actualResponse = await httpResponse.Content.ReadFromJsonAsync<IEnumerable<EnrichedResourceRequest>>();
+
+            // Assert
+            Assert.Equal(HttpStatusCode.OK, httpResponse.StatusCode);
+            Assert.All(actualResponse, r => Assert.Null(r.LastUpdatedByName));
+
+            // old handled requests are still filtered out
+            Assert.DoesNotContain(actualResponse, r => r.Id == Guid.Parse("5a11ab1e-0000-0000-0000-000000000003"));
+            Assert.DoesNotContain(actualResponse, r => r.Id == Guid.Parse("5a11ab1e-0000-0000-0000-000000000004"));
         }
     }
 }

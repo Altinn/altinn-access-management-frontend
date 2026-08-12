@@ -43,6 +43,42 @@ export const canConsentBeRevoked = (events: ConsentRequestEvent[]) => {
   return isAccepted(events) && !hasTerminalEvent;
 };
 
+/**
+ * Parses a raw userAgent string into readable browser and OS names.
+ * Returns `undefined` for a part that couldn't be determined.
+ * Order matters: more specific tokens must be checked before generic ones
+ * (e.g. Edge/Opera before Chrome, since they also contain "Chrome").
+ */
+export const parseUserAgent = (
+  userAgent: string | undefined | null,
+): { browser?: string; os?: string } => {
+  if (!userAgent) {
+    return {};
+  }
+
+  const getBrowser = (): string | undefined => {
+    if (/Edg(?:e|A|iOS)?\//.test(userAgent)) return 'Microsoft Edge';
+    if (/OPR\/|Opera/.test(userAgent)) return 'Opera';
+    if (/SamsungBrowser\//.test(userAgent)) return 'Samsung Internet';
+    if (/Firefox\/|FxiOS\//.test(userAgent)) return 'Firefox';
+    if (/Chrome\/|CriOS\//.test(userAgent)) return 'Chrome';
+    // Safari must be checked last: Chrome/Edge/Opera UAs also contain "Safari".
+    if (/Safari\//.test(userAgent)) return 'Safari';
+    return undefined;
+  };
+
+  const getOs = (): string | undefined => {
+    if (/Windows/.test(userAgent)) return 'Windows';
+    if (/iPhone|iPad|iPod/.test(userAgent)) return 'iOS';
+    if (/Android/.test(userAgent)) return 'Android';
+    if (/Mac OS X|Macintosh/.test(userAgent)) return 'macOS';
+    if (/Linux/.test(userAgent)) return 'Linux';
+    return undefined;
+  };
+
+  return { browser: getBrowser(), os: getOs() };
+};
+
 export const toDateTimeString = (dateString: string, useFullMonthName?: boolean) => {
   return new Date(dateString).toLocaleString('no-NO', {
     day: '2-digit',
