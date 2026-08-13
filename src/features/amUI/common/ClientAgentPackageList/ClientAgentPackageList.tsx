@@ -55,6 +55,8 @@ type ClientAgentPackageListProps = {
   removeAgentResources?: RemoveAgentResourcesFn;
   emptyText?: string;
   searchString?: string;
+  expandedIds?: string[];
+  onToggleExpanded?: (id: string) => void;
 };
 
 type SelectedAgentResource = {
@@ -93,6 +95,8 @@ export const ClientAgentPackageList = ({
   removeAgentResources,
   emptyText,
   searchString,
+  expandedIds,
+  onToggleExpanded,
 }: ClientAgentPackageListProps) => {
   const { t } = useTranslation();
   const { getAccessPackageById } = useAccessPackageLookup();
@@ -405,6 +409,8 @@ export const ClientAgentPackageList = ({
         items={userListItems}
         emptyText={emptyText}
         searchString={searchString}
+        expandedIds={expandedIds}
+        onToggleExpanded={onToggleExpanded}
       />
       <ClientPackageInfoModal
         ref={modalRef}

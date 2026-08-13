@@ -95,6 +95,8 @@ type ClientAccessListProps = {
   emptyAccessText?: string;
   emptyText?: string;
   searchString?: string;
+  expandedIds?: string[];
+  onToggleExpanded?: (id: string) => void;
 };
 
 const getUserListItemType = (clientType: string): UserListItemProps['type'] => {
@@ -120,6 +122,8 @@ export const ClientAccessList = ({
   emptyAccessText,
   emptyText,
   searchString,
+  expandedIds,
+  onToggleExpanded,
 }: ClientAccessListProps) => {
   const { t } = useTranslation();
   const { getAccessPackageById } = useAccessPackageLookup();
@@ -410,6 +414,8 @@ export const ClientAccessList = ({
         items={userListItems}
         emptyText={emptyText}
         searchString={searchString}
+        expandedIds={expandedIds}
+        onToggleExpanded={onToggleExpanded}
       />
       <ClientPackageInfoModal
         ref={modalRef}

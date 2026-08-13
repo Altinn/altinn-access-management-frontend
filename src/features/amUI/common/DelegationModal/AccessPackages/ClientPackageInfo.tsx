@@ -45,7 +45,7 @@ export const ClientPackageInfo = ({
   const canRevoke = userHasAccess && availableActions.includes(DelegationAction.REVOKE);
   const canDelegate =
     !userHasAccess && availableActions.includes(DelegationAction.DELEGATE) && !!onDelegate;
-  const cannotChangeAccess = accessPackage.isAssignable === false;
+  const cannotChangeAccess = accessPackage.isDelegable === false;
 
   return (
     <div className={classes.container}>
