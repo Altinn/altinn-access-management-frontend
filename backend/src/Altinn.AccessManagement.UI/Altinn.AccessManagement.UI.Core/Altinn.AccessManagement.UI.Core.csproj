@@ -20,7 +20,7 @@
 		<PackageReference Include="CsvHelper" Version="33.1.0" />
 		<PackageReference Include="Markdig" Version="0.45.0" />
 		<PackageReference Include="Microsoft.AspNetCore.Http.Abstractions" Version="2.3.11" />
-		<PackageReference Include="Microsoft.Bcl.Cryptography" Version="9.0.18" />
+		<PackageReference Include="Microsoft.Bcl.Cryptography" Version="10.0.2" />
 		<PackageReference Include="Microsoft.Extensions.Caching.Abstractions" Version="9.0.18" />
 		<PackageReference Include="Microsoft.FeatureManagement" Version="4.6.0" />
 		<PackageReference Include="StyleCop.Analyzers" Version="1.2.0-beta.556">
