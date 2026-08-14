@@ -68,9 +68,12 @@ export const AgentDetails = () => {
     clients,
   });
   const [searchString, setSearchString] = useState<string>('');
-  const [expandedIds, setExpandedIds] = useState<string[]>([]);
-  const toggleExpanded = (id: string) =>
-    setExpandedIds((prev) => (prev.includes(id) ? prev.filter((x) => x !== id) : [...prev, id]));
+const [expandedIds, setExpandedIds] = useState<string[]>([]);
+const toggleExpanded = (id: string) =>
+  setExpandedIds((prev) => (prev.includes(id) ? prev.filter((x) => x !== id) : [...prev, id]));
+React.useEffect(() => {
+  setExpandedIds([]);
+}, [id]);
 
   const backUrl = `/${amUIPath.ClientAdministration}#users`;
   const userName = formatDisplayName({
