@@ -81,9 +81,12 @@ export const ClientDetails = () => {
   const recentlyAddedSectionId = useId();
   const assignedSectionId = useId();
   const unassignedSectionId = useId();
-  const [expandedIds, setExpandedIds] = useState<string[]>([]);
-  const toggleExpanded = (id: string) =>
-    setExpandedIds((prev) => (prev.includes(id) ? prev.filter((x) => x !== id) : [...prev, id]));
+const [expandedIds, setExpandedIds] = useState<string[]>([]);
+const toggleExpanded = (id: string) =>
+  setExpandedIds((prev) => (prev.includes(id) ? prev.filter((x) => x !== id) : [...prev, id]));
+React.useEffect(() => {
+  setExpandedIds([]);
+}, [id]);
   const selectedClient = clients?.find((client) => client.client.id === id);
   const delegablePackages = selectedClient?.access?.flatMap((access) => access.packages) ?? [];
   const delegableResources =
