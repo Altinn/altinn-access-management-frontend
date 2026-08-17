@@ -255,7 +255,7 @@
     "search_active_matches": "Matches in active powers of attorney",
     "search_no_active_matches": "No matches in active powers of attorney",
     "search_other_matches": "Other matches",
-    "info_alert_text": "Access packages replace today's Altinn roles. Read more on the <a href='https://info.altinn.no/en/help/ny-tilgangsstyring/'>help pages</a>.",
+    "info_alert_text": "Access packages replace today's Altinn roles. Read more on the <a href='https://info.altinn.no/en/help/access-managment/'>help pages</a>.",
     "delegation_check": {
       "delegation_check_error_heading": "Technical error",
       "delegation_check_error_message_singular": "A technical error prevents you from giving the user the access package. Please contact Altinn user service if the problem persists.",
