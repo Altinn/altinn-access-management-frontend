@@ -2,22 +2,30 @@ import { test, expect } from 'playwright/fixture/pomFixture';
 
 import { TestdataApi } from 'playwright/util/TestdataApi';
 import { ApiRequests } from 'playwright/api-requests/SystemUserApiRequests';
+import type { DagligLederMedOrg } from 'playwright/tenor/TenorTestData';
+import { cleanupSystemUser } from 'playwright/util/systemUserCleanup';
+
+// Leverandør + prebygd system er registrert infrastruktur (ikke Tenor). Kunde-
+// virksomheten som forespørselen gjelder – og som logger inn for å godkjenne –
+// hentes fra Tenor.
 const vendorOrgNumber = '310547891';
 const prebuiltSystemId = '310547891_E2E-Playwright-Authentication';
-const testUserPid = '14824497789';
 
 test.describe('Godkjenn og avvis Systembrukerforespørsel', () => {
   let api: ApiRequests;
+  let owner: DagligLederMedOrg;
+  let externalRef: string;
   let response: Awaited<ReturnType<ApiRequests['postSystemuserRequest']>>;
 
-  test.beforeEach(async () => {
+  test.beforeEach(async ({ testData }) => {
     api = new ApiRequests();
-    const externalRef = TestdataApi.generateExternalRef();
+    owner = await testData.dagligLederMedOrg();
+    externalRef = TestdataApi.generateExternalRef();
     response = await api.postSystemuserRequest(
       vendorOrgNumber,
       externalRef,
       prebuiltSystemId,
-      vendorOrgNumber,
+      owner.org.orgnr,
       'https://altinn.no/',
     );
   });
@@ -29,7 +37,7 @@ test.describe('Godkjenn og avvis Systembrukerforespørsel', () => {
   }): Promise<void> => {
     await test.step('Navigate to confirmation page and login', async () => {
       await page.goto(response.confirmUrl);
-      await login.loginNotChoosingActor(testUserPid);
+      await login.loginNotChoosingActor(owner.dagligLeder.pid);
     });
 
     await test.step('Reject system user request', async () => {
@@ -56,7 +64,7 @@ test.describe('Godkjenn og avvis Systembrukerforespørsel', () => {
   }): Promise<void> => {
     await test.step('Navigate to confirmation page and login', async () => {
       await page.goto(response.confirmUrl);
-      await login.loginNotChoosingActor(testUserPid);
+      await login.loginNotChoosingActor(owner.dagligLeder.pid);
     });
 
     await test.step('Approve system user request', async () => {
@@ -73,6 +81,15 @@ test.describe('Godkjenn og avvis Systembrukerforespørsel', () => {
         response.id,
       );
       expect(statusApiRequest.status).toBe('Accepted');
+    });
+
+    // Kun godkjenning oppretter en systembruker, så bare denne testen rydder.
+    await cleanupSystemUser({
+      vendorOrgNumber,
+      systemId: prebuiltSystemId,
+      ownerOrg: owner.org.orgnr,
+      ownerPid: owner.dagligLeder.pid,
+      externalRef,
     });
   });
 });

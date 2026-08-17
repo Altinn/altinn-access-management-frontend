@@ -1,5 +1,6 @@
 import { MaskinportenToken } from 'playwright/api-requests/MaskinportenToken';
 import { addTimeToNowUtc } from 'playwright/util/helper';
+import { randomInt } from 'crypto';
 
 /**
  * Klient mot Tenor testdatasøk (Skatteetaten).
@@ -39,6 +40,12 @@ const FACILITATOR_ROLLER: Record<FacilitatorRolle, { felt: string; rolleKode: st
 export interface TenorVirksomhet {
   organisasjonsnummer: string;
   navn: string;
+}
+
+/** En underenhet (BEDR) med lenke til sin hovedenhet. */
+export interface TenorUnderenhet extends TenorVirksomhet {
+  /** Organisasjonsnummeret til hovedenheten (`underenhet.hovedenhet`). */
+  hovedenhetOrgnr: string;
 }
 
 /** En facilitator-virksomhet med daglig leder og klienter. */
@@ -253,6 +260,85 @@ export class TenorApiRequests {
     return this.byggFacilitator(rolle, beste.org, beste.antall);
   }
 
+  /**
+   * Facilitator (rolle) med BOSATT daglig leder og minst én klient. Kandidatene
+   * gås gjennom i TILFELDIG rekkefølge, så ulike tester får ulike facilitatorer.
+   * Antall klienter begrenses ikke (til «deleger én klient»-testene holder det
+   * med én); vi henter bare opptil `maksHentedeKlienter` av dem.
+   * @param rolle Facilitator-rolle.
+   * @param maksHentedeKlienter Hvor mange klienter som hentes for den valgte. Default 5.
+   * @param antallKandidater Hvor mange klient-kandidater som skannes. Default 100.
+   */
+  async hentFacilitatorMedBosattLeder(
+    rolle: FacilitatorRolle,
+    maksHentedeKlienter = 5,
+    antallKandidater = 100,
+  ): Promise<TenorFacilitator> {
+    const { felt, rolleKode } = FACILITATOR_ROLLER[rolle];
+    const kandidater = await this.sokBrreg(`${felt}:*`, antallKandidater);
+    const facilitatorOrg = new Set<string>();
+    for (const klient of kandidater) {
+      const org = this.hentRolleVirksomhet(klient, rolleKode);
+      if (org) facilitatorOrg.add(org);
+    }
+    for (const org of this.stokk([...facilitatorOrg])) {
+      const dagligLeder = await this.hentDagligLederForOrg(org);
+      if (!dagligLeder || !(await this.erBosattMyndig(dagligLeder))) continue;
+      const facilitator = await this.byggFacilitator(rolle, org, maksHentedeKlienter);
+      if (facilitator.klienter.length < 1) continue;
+      return facilitator;
+    }
+    throw new Error(
+      `Fant ingen ${rolle}-facilitator med bosatt daglig leder og minst én klient blant ${facilitatorOrg.size} kandidater i Tenor.`,
+    );
+  }
+
+  /**
+   * En FORRETNINGSFØRER med en EIENDOMSKLIENT (borettslag `BRL` / sameie `ESEK`).
+   * `forretningsforer-eiendom` er kun delegerbar for eiendomsklienter, så vi
+   * søker klienter av disse formene som har en forretningsfører, og velger en der
+   * forretningsføreren har en bosatt daglig leder.
+   */
+  async hentForretningsfoererMedEiendomsklient(
+    antallKandidater = 30,
+  ): Promise<{ facilitator: TenorFacilitator; klient: TenorVirksomhet }> {
+    const klientDokumenter = await this.sokBrreg(
+      `forretningsfoerereOrgnr:* AND (organisasjonsform.kode:BRL OR organisasjonsform.kode:ESEK)`,
+      antallKandidater,
+    );
+    for (const dokument of this.stokk(klientDokumenter)) {
+      const klient = this.hentVirksomhet(dokument);
+      const forretningsfoererOrg = this.hentRolleVirksomhet(dokument, 'FFØR');
+      if (!klient || !forretningsfoererOrg) continue;
+      const dagligLeder = await this.hentDagligLederForOrg(forretningsfoererOrg);
+      if (!dagligLeder || !(await this.erBosattMyndig(dagligLeder))) continue;
+      const facilitator = await this.byggFacilitator('forretningsfoerer', forretningsfoererOrg, 5);
+      return { facilitator, klient };
+    }
+    throw new Error(
+      `Fant ingen forretningsfører med bosatt daglig leder og eiendomsklient (BRL/ESEK) blant ${klientDokumenter.length} kandidater i Tenor.`,
+    );
+  }
+
+  /** Sjekker om et fødselsnummer tilhører en bosatt, myndig person i freg. */
+  private async erBosattMyndig(fnr: string): Promise<boolean> {
+    const [person] = await this.hentPersoner(
+      `identifikator:${fnr} AND ${TenorApiRequests.bosattMyndigKql()}`,
+      1,
+    );
+    return !!person;
+  }
+
+  /** Fisher–Yates-stokk (unngår at samme kandidat velges hver gang). */
+  private stokk<T>(arr: T[]): T[] {
+    const kopi = [...arr];
+    for (let i = kopi.length - 1; i > 0; i--) {
+      const j = randomInt(i + 1);
+      [kopi[i], kopi[j]] = [kopi[j], kopi[i]];
+    }
+    return kopi;
+  }
+
   /** Bygger en facilitator med daglig leder og klientliste fra et orgnr. */
   private async byggFacilitator(
     rolle: FacilitatorRolle,
@@ -394,6 +480,52 @@ export class TenorApiRequests {
   }
 
   /**
+   * Henter underenheter (`organisasjonsform.kode:BEDR`) med lenke til hovedenhet.
+   * Underenheten peker på hovedenheten via feltet `underenhet.hovedenhet`
+   * (hovedenheten lister ikke barna sine, så relasjonen leses barn → forelder).
+   * Bare underenheter som faktisk har en hovedenhet-lenke returneres.
+   */
+  async hentUnderenheter(antall: number): Promise<TenorUnderenhet[]> {
+    const dokumenter = await this.hentDokumenterPaginert(
+      'brreg-er-fr',
+      'organisasjonsform.kode:BEDR',
+      antall,
+    );
+    return dokumenter
+      .map((d) => {
+        const data = this.parseKildedata(d);
+        const under = data.underenhet as { hovedenhet?: string } | undefined;
+        const { organisasjonsnummer, navn } = data;
+        if (
+          typeof organisasjonsnummer !== 'string' ||
+          typeof navn !== 'string' ||
+          !under?.hovedenhet
+        ) {
+          return null;
+        }
+        return { organisasjonsnummer, navn, hovedenhetOrgnr: under.hovedenhet };
+      })
+      .filter((u): u is TenorUnderenhet => u !== null)
+      .slice(0, antall);
+  }
+
+  /**
+   * Slår opp én virksomhet på orgnr og returnerer orgnr, navn og
+   * organisasjonsform-kode (f.eks. `AS`, `ENK`). Null hvis den ikke finnes.
+   */
+  async hentVirksomhetMedForm(
+    orgnr: string,
+  ): Promise<{ organisasjonsnummer: string; navn: string; organisasjonsform: string } | null> {
+    const [dokument] = await this.sokBrreg(`organisasjonsnummer:${orgnr}`, 1);
+    if (!dokument) return null;
+    const data = this.parseKildedata(dokument);
+    const navn = data.navn;
+    const form = (data.organisasjonsform as { kode?: string } | undefined)?.kode;
+    if (typeof navn !== 'string' || !form) return null;
+    return { organisasjonsnummer: orgnr, navn, organisasjonsform: form };
+  }
+
+  /**
    * Henter mange unike facilitator-orgnr (revisor/regnskapsfører/forretningsfører)
    * i bulk – f.eks. «100 revisor-virksomheter».
    *
@@ -460,7 +592,8 @@ export class TenorApiRequests {
   /**
    * KQL for å finne privatpersoner som er bosatt og myndige (fyllt 18 år).
    * `foedselsdato` er søkbar i Tenor, så myndighet uttrykkes som et
-   * datointervall (født senest for 18 år siden).
+   * datointervall (født senest for 18 år siden). `personstatus:bosatt` matcher
+   * gjeldende status, så døde treffes ikke.
    */
   static bosattMyndigKql(): string {
     // Født senest denne datoen ⇒ har fyllt 18 år i dag.
@@ -524,11 +657,16 @@ export class TenorApiRequests {
 
   /** Leser fødselsnummeret til daglig leder (eller innehaver) fra en virksomhet. */
   private hentDagligLeder(virksomhetData: Record<string, unknown>): string | null {
+    return this.hentRolleFnr(virksomhetData, 'DAGL') ?? this.hentRolleFnr(virksomhetData, 'INNH');
+  }
+
+  /** Fødselsnummer for første person i en gitt rollegruppe-kode (f.eks. `KONT`), ellers null. */
+  private hentRolleFnr(virksomhetData: Record<string, unknown>, kode: string): string | null {
     const rollegrupper = Array.isArray(virksomhetData.rollegrupper)
       ? (virksomhetData.rollegrupper as RolleGruppe[])
       : [];
     for (const gruppe of rollegrupper) {
-      if (gruppe.type?.kode !== 'DAGL' && gruppe.type?.kode !== 'INNH') continue;
+      if (gruppe.type?.kode !== kode) continue;
       for (const rolle of gruppe.roller ?? []) {
         const fnr = rolle.person?.foedselsnummer;
         if (fnr) return fnr;

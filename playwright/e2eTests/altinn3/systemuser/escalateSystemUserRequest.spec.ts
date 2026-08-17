@@ -1,32 +1,52 @@
 import { test, expect } from 'playwright/fixture/pomFixture';
 
 import { ApiRequests } from 'playwright/api-requests/SystemUserApiRequests';
+import { pickVendorOrg } from 'playwright/util/systemVendors';
 import { TestdataApi } from 'playwright/util/TestdataApi';
 import { LoginPage } from 'playwright/pages/LoginPage';
 import { SystemUserPage } from 'playwright/pages/systemuser/SystemUserPage';
 import { ClientDelegationPage } from 'playwright/pages/systemuser/ClientDelegation';
+import { EnduserConnection } from 'playwright/api-requests/EnduserConnection';
+import { cleanupSystemUser } from 'playwright/util/systemUserCleanup';
+import type { Testperson, DagligLederMedOrg } from 'playwright/tenor/TenorTestData';
+
+// Leverandør er registrert infrastruktur (ikke Tenor). Eier-virksomheten hentes
+// fra Tenor: daglig leder godkjenner, mens en kontaktperson (en vanlig
+// rettighetshaver uten tilgangsstyrer-rettigheter) bare kan eskalere.
+//
+// NB: I Tenor har en AS enten en daglig leder ELLER en kontaktperson (KONT),
+// aldri begge. Vi henter derfor en virksomhet med daglig leder og kobler en egen
+// person til som kontaktperson via API.
+const vendorOrgNumber = pickVendorOrg();
 
 test.describe('Systembruker - Eskaler', () => {
-  const systemuserOwnerOrg = '313084167';
-  const regularUserPid = '09817897166'; // No accessManager privileges, may escalate requests
-  const managerPid = '29849098304';
-  const actorName = 'Ugjennomsiktig Usnobbet Ape';
+  const enduser = new EnduserConnection();
 
   let api: ApiRequests;
+  let owner: {
+    dagligLeder: Testperson;
+    kontaktperson: Testperson;
+    org: { orgnr: string; navn: string };
+  };
   let name: string;
   let systemId: string;
   let externalRef: string;
   let response: { confirmUrl: string; id: string };
   let systemUserId: string;
 
-  test.beforeEach(async () => {
+  test.beforeEach(async ({ testData }) => {
     api = new ApiRequests();
+    const [virksomhet, kontaktperson]: [DagligLederMedOrg, Testperson] = await Promise.all([
+      testData.dagligLederMedOrg(),
+      testData.bosattMyndigPerson(),
+    ]);
+    owner = { dagligLeder: virksomhet.dagligLeder, kontaktperson, org: virksomhet.org };
     name = `Playwright-e2e-eskaler-${Date.now()}`;
     externalRef = TestdataApi.generateExternalRef();
 
     systemId = await test.step('Create system', async () => {
       return await api.createSystemInSystemregisterWithAccessPackages(
-        '312591332',
+        vendorOrgNumber,
         name,
         [{ urn: 'urn:altinn:accesspackage:baerekraft' }],
         'https://example.com/',
@@ -38,10 +58,10 @@ test.describe('Systembruker - Eskaler', () => {
     });
     response = await test.step('Create system user request', async () => {
       return await api.postSystemuserRequest(
-        '312591332',
+        vendorOrgNumber,
         externalRef,
         systemId,
-        systemuserOwnerOrg,
+        owner.org.orgnr,
         undefined,
         [
           { resource: [{ value: 'vegardtestressurs', id: 'urn:altinn:resource' }] },
@@ -49,6 +69,12 @@ test.describe('Systembruker - Eskaler', () => {
         ],
         [{ urn: 'urn:altinn:accesspackage:baerekraft' }],
       );
+    });
+
+    // Kontaktpersonen kobles som en vanlig rettighetshaver (uten tilgangsstyrer-
+    // rettigheter), slik at hen kan eskalere forespørselen, men ikke godkjenne.
+    await test.step('Koble kontaktperson til virksomheten', async () => {
+      await enduser.addConnection(owner.dagligLeder.pid, owner.org.orgnr, owner.kontaktperson.pid);
     });
   });
 
@@ -60,7 +86,7 @@ test.describe('Systembruker - Eskaler', () => {
   }): Promise<void> => {
     await test.step('Login as regular user, select actor and escalate request', async () => {
       await page.goto(response.confirmUrl);
-      await login.loginNotChoosingActor(regularUserPid);
+      await login.loginNotChoosingActor(owner.kontaktperson.pid);
       await systemUserPage.escalateConfirmButton.click();
       await Promise.all([page.waitForLoadState('load'), systemUserPage.finish.click()]);
     });
@@ -72,8 +98,8 @@ test.describe('Systembruker - Eskaler', () => {
     const managerClientDelegationPage = new ClientDelegationPage(managerPage);
 
     await test.step('Login as manager and choose reportee', async () => {
-      await managerLogin.LoginToAccessManagement(managerPid);
-      await managerLogin.selectMainUnitBySearching(actorName);
+      await managerLogin.LoginToAccessManagement(owner.dagligLeder.pid);
+      await managerLogin.selectMainUnitBySearching(owner.org.navn);
     });
 
     await test.step('Find and approve escalated request', async () => {
@@ -97,17 +123,21 @@ test.describe('Systembruker - Eskaler', () => {
   });
 
   test.afterEach(async () => {
-    if (systemUserId) {
-      try {
-        await api.deleteRegularSystemUser(systemUserId, systemuserOwnerOrg, managerPid);
-      } catch (error) {
-        console.error('Cleanup: Failed to delete system user:', error);
-      }
-    }
+    await cleanupSystemUser({
+      vendorOrgNumber,
+      ownerOrg: owner.org.orgnr,
+      ownerPid: owner.dagligLeder.pid,
+      systemUserId, // kan være undefined hvis testen feilet før den ble fanget
+      systemId,
+      externalRef,
+      systemName: name,
+    });
     try {
-      await api.deleteSystemInSystemRegister('312591332', name);
+      await enduser.deleteConnection(owner.dagligLeder.pid, owner.org.orgnr, [
+        owner.kontaktperson.pid,
+      ]);
     } catch (error) {
-      console.error('Cleanup: Failed to delete system from system register:', error);
+      console.error('Cleanup: Failed to delete kontaktperson connection:', error);
     }
   });
 });

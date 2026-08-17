@@ -1,6 +1,7 @@
 import { TestdataApi } from 'playwright/util/TestdataApi';
 import { Token } from './Token';
 import { env } from 'playwright/util/helper';
+import { randomInt, randomUUID } from 'crypto';
 
 export class ApiRequests {
   private tokenClass: Token;
@@ -17,7 +18,7 @@ export class ApiRequests {
     rights?: { resource: { value: string; id: string }[] }[],
   ): Promise<string> {
     const vendorId = vendorOrgNo;
-    const clientId = `Client_${Date.now()}_${Math.random()}`;
+    const clientId = `Client_${Date.now()}_${randomUUID()}`;
 
     const payload = {
       Id: `${vendorId}_${name}`,
@@ -280,11 +281,9 @@ export class ApiRequests {
 
   public async createSystemSystemRegister(vendorOrgNo: string): Promise<string> {
     const vendorId = vendorOrgNo;
-    const clientId = `Client_${Date.now()}` + Math.random();
+    const clientId = `Client_${Date.now()}_${randomUUID()}`;
     // Generate name with max 10 chars: E2E + last 5 digits of timestamp + 2 random digits
-    const randomDigits = Math.floor(Math.random() * 100)
-      .toString()
-      .padStart(2, '0');
+    const randomDigits = randomInt(100).toString().padStart(2, '0');
 
     const name = `E2E${Date.now().toString().slice(-5)}${randomDigits}`;
 

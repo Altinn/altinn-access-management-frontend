@@ -380,6 +380,8 @@ backend/src/Altinn.AccessManagement.UI/.idea/.idea.Altinn.AccessManagement.UI/.i
 playwright/playwright-report
 playwright/test-results
 playwright/jsonReports
+# Opptak av testdata-aktører (TESTDATA_PIN) — per kjøring, aldri sjekket inn
+playwright/testdata-pins
 *storybook.log
 playwright/config/.env
 accessibility-violation*
