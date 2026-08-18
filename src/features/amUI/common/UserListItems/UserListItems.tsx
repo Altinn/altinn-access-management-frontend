@@ -20,13 +20,22 @@ interface UserListItemsProps {
   items: UserListItemData[];
   emptyText?: string;
   searchString?: string;
+  expandedIds?: string[];
+  onToggleExpanded?: (id: string) => void;
 }
 
 const PAGE_SIZE = 10;
 
-export const UserListItems = ({ items, emptyText, searchString }: UserListItemsProps) => {
+export const UserListItems = ({
+  items,
+  emptyText,
+  searchString,
+  expandedIds: controlledExpandedIds,
+  onToggleExpanded: controlledOnToggleExpanded,
+}: UserListItemsProps) => {
   const { t } = useTranslation();
-  const [expandedIds, setExpandedIds] = useState<string[]>([]);
+  const [localExpandedIds, setLocalExpandedIds] = useState<string[]>([]);
+  const expandedIds = controlledExpandedIds ?? localExpandedIds;
   const [currentPage, setCurrentPage] = useState(1);
 
   const filteredItems = useMemo(() => {
@@ -60,11 +69,13 @@ export const UserListItems = ({ items, emptyText, searchString }: UserListItemsP
   const expandedIdsSet = useMemo(() => new Set(expandedIds), [expandedIds]);
 
   const toggleExpanded = (id: string) => {
-    setExpandedIds((prevExpanded) =>
-      prevExpanded.includes(id)
-        ? prevExpanded.filter((expandedId) => expandedId !== id)
-        : [...prevExpanded, id],
-    );
+    if (controlledOnToggleExpanded) {
+      controlledOnToggleExpanded(id);
+    } else {
+      setLocalExpandedIds((prev) =>
+        prev.includes(id) ? prev.filter((expandedId) => expandedId !== id) : [...prev, id],
+      );
+    }
   };
 
   return (
@@ -85,7 +96,6 @@ export const UserListItems = ({ items, emptyText, searchString }: UserListItemsP
           const handleClick = () => {
             toggleExpanded(item.id);
           };
-
           return (
             <UserListItem
               key={item.id}

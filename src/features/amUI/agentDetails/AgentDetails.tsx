@@ -68,6 +68,12 @@ export const AgentDetails = () => {
     clients,
   });
   const [searchString, setSearchString] = useState<string>('');
+  const [expandedIds, setExpandedIds] = useState<string[]>([]);
+  const toggleExpanded = (id: string) =>
+    setExpandedIds((prev) => (prev.includes(id) ? prev.filter((x) => x !== id) : [...prev, id]));
+  React.useEffect(() => {
+    setExpandedIds([]);
+  }, [id]);
 
   const backUrl = `/${amUIPath.ClientAdministration}#users`;
   const userName = formatDisplayName({
@@ -183,6 +189,8 @@ export const AgentDetails = () => {
                 removeAgentResources={removeAgentResources}
                 searchString={searchString}
                 emptyText={t('client_administration_page.no_delegations')}
+                expandedIds={expandedIds}
+                onToggleExpanded={toggleExpanded}
               />
             </section>
             <section aria-labelledby={unassignedSectionId}>
@@ -209,6 +217,8 @@ export const AgentDetails = () => {
                   removeAgentResources={removeAgentResources}
                   searchString={searchString}
                   emptyText={t('client_administration_page.no_clients')}
+                  expandedIds={expandedIds}
+                  onToggleExpanded={toggleExpanded}
                 />
               </CollapsibleContainer>
             </section>

@@ -29,6 +29,8 @@ type AgentDetailsClientsListProps = {
   removeAgentResources?: RemoveAgentResourcesFn;
   searchString?: string;
   emptyText?: string;
+  expandedIds?: string[];
+  onToggleExpanded?: (id: string) => void;
 };
 
 export const AgentDetailsClientsList = ({
@@ -44,6 +46,8 @@ export const AgentDetailsClientsList = ({
   removeAgentResources,
   searchString,
   emptyText,
+  expandedIds,
+  onToggleExpanded,
 }: AgentDetailsClientsListProps) => {
   const delegateDisabled = isLoading || !toPartyUuid || !actingPartyUuid;
   const removeDisabled = isLoading || !toPartyUuid || !actingPartyUuid;
@@ -74,6 +78,8 @@ export const AgentDetailsClientsList = ({
       removeDisabled={removeDisabled}
       searchString={searchString}
       emptyText={emptyText}
+      expandedIds={expandedIds}
+      onToggleExpanded={onToggleExpanded}
       onAddAccessPackage={(
         { clientId, roleCode, packageId, accessPackageName },
         onSuccess?: () => void,

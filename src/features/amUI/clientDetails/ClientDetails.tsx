@@ -81,6 +81,12 @@ export const ClientDetails = () => {
   const recentlyAddedSectionId = useId();
   const assignedSectionId = useId();
   const unassignedSectionId = useId();
+  const [expandedIds, setExpandedIds] = useState<string[]>([]);
+  const toggleExpanded = (id: string) =>
+    setExpandedIds((prev) => (prev.includes(id) ? prev.filter((x) => x !== id) : [...prev, id]));
+  React.useEffect(() => {
+    setExpandedIds([]);
+  }, [id]);
   const selectedClient = clients?.find((client) => client.client.id === id);
   const delegablePackages = selectedClient?.access?.flatMap((access) => access.packages) ?? [];
   const delegableResources =
@@ -211,6 +217,8 @@ export const ClientDetails = () => {
                         removeAgentResources={removeAgentResources}
                         emptyText={t('client_administration_page.no_agents')}
                         searchString={searchString}
+                        expandedIds={expandedIds}
+                        onToggleExpanded={toggleExpanded}
                       />
                     </section>
                   )}
@@ -241,6 +249,8 @@ export const ClientDetails = () => {
                       removeAgentResources={removeAgentResources}
                       emptyText={t('client_administration_page.no_agents')}
                       searchString={searchString}
+                      expandedIds={expandedIds}
+                      onToggleExpanded={toggleExpanded}
                     />
                   </section>
                   <section aria-labelledby={unassignedSectionId}>
@@ -268,6 +278,8 @@ export const ClientDetails = () => {
                         removeAgentResources={removeAgentResources}
                         emptyText={`${t('client_administration_page.no_agents')} ${t('client_administration_page.addUserPrompt')}`}
                         searchString={searchString}
+                        expandedIds={expandedIds}
+                        onToggleExpanded={toggleExpanded}
                       />
                     </CollapsibleContainer>
                   </section>
