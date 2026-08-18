@@ -130,6 +130,7 @@ export const InstanceList = ({
                 <InstanceListItemRow
                   key={item.id}
                   size='md'
+                  color='neutral'
                   as={Component ?? (onSelect ? 'button' : undefined)}
                   interactive={interactive || !!onSelect}
                   onClick={onSelect ? () => onSelect(instanceDelegation) : undefined}
