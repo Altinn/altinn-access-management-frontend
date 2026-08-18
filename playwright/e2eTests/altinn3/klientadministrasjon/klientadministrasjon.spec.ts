@@ -228,7 +228,6 @@ test.describe('klientadministrasjon', () => {
       });
 
       await test.step('og har tilgangspakken Posttjenester', async () => {
-        await klientAdministrasjonPage.klikkKnapp(client.orgName);
         await expect(klientAdministrasjonPage.slettFullmaktKnapp('Posttjenester')).toBeVisible();
       });
     });

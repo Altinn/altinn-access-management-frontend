@@ -155,6 +155,7 @@ export class KlientAdministrasjonPage {
     await this.page
       .getByText(`${navn}${giFullmakt}`)
       .getByRole('button', { name: giFullmakt })
+      .first()
       .click();
   }
 
@@ -162,7 +163,8 @@ export class KlientAdministrasjonPage {
     const slettFullmakt = this.texts.common.delete_poa;
     return this.page
       .getByText(`${navn}${slettFullmakt}`)
-      .getByRole('button', { name: slettFullmakt });
+      .getByRole('button', { name: slettFullmakt })
+      .first();
   }
 
   async slettFullmakt(navn: string) {
