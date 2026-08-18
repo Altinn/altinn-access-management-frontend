@@ -7,11 +7,11 @@ export const InstanceListSkeleton = () => {
         const item: DialogListItemProps = {
           id: `instance-loading-${index}`,
           title: 'xxxxxxxxxxxxxxxxxxxxxxxxxx',
-          description: 'xxxxxxxxx',
           sender: {
             name: 'xxxxxxxxx',
             type: 'company',
           },
+          summary: 'xxxxxxxxxxxxxxxxxxx',
           updatedAt: 'xxxxxxxxxx',
           updatedAtLabel: 'xxxxxxxxxx',
         };

@@ -78,6 +78,22 @@ const noDialogLookup: InstanceDelegation = {
   permissions: [],
 };
 
+const longServiceTitle: InstanceDelegation = {
+  resource: {
+    ...digdirResource,
+    identifier: 'digdir-informasjonsmelding-modernisering',
+    title: 'Informasjonsmelding i forbindelse med modernisering av tilgangsstyring i Altinn',
+  },
+  instance: { refId: 'urn:altinn:instance-id:pqr6789012', type: null },
+  permissions: [],
+  dialogLookup: {
+    status: 'Success',
+    dialogId: 'df333e75-0000-0000-0000-000000000002',
+    instanceRef: 'urn:altinn:instance-id:pqr6789012',
+    title: [{ languageCode: 'nb', value: 'Gi fullmakt til tilgangspakker i nye Altinn' }],
+  },
+};
+
 const Wrapper = ({ children }: { children: ReactNode }) => (
   <Provider store={store}>
     <RootProvider>{children}</RootProvider>
@@ -106,8 +122,14 @@ export const AllTitleCases: Story = {
       dialogNotFoundCorrespondence,
       dialogForbidden,
       noDialogLookup,
+      longServiceTitle,
     ],
   },
+};
+
+export const Mobile: Story = {
+  args: { instances: [longServiceTitle, dialogSuccess] },
+  globals: { viewport: { value: 'mobile1', isRotated: false } },
 };
 
 export const Loading: Story = {

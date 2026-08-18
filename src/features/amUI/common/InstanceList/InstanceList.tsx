@@ -110,18 +110,17 @@ export const InstanceList = ({
               const item: DialogListItemProps = {
                 id: instanceRowId(instanceDelegation),
                 title,
-                description: `${instance.refId} ${title}`,
                 sender: {
                   name: resource.resourceOwnerName ?? '',
                   type: 'company',
                   imageUrl: providerLogoUrl ?? resource.resourceOwnerLogoUrl ?? undefined,
                   imageUrlAlt: resource.resourceOwnerName ?? '',
                 },
-                updatedAt: instance.refId,
-                updatedAtLabel: `${t('instance.instance_id_label')}: ${getInstanceShortId(instance.refId)}`,
-                extendedStatusLabel: serviceTitle
-                  ? `${t('instance.service_title_label')}: ${serviceTitle}`
-                  : undefined,
+                summary:
+                  serviceTitle && serviceTitle !== title
+                    ? `${t('instance.service_title_label')}: ${serviceTitle}`
+                    : undefined,
+                extendedStatusLabel: `${t('instance.instance_id_label')}: ${getInstanceShortId(instance.refId)}`,
               };
               const Component = getItemAs?.(instanceDelegation);
               const className =
