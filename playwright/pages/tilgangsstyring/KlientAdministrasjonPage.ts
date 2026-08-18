@@ -155,6 +155,7 @@ export class KlientAdministrasjonPage {
     await this.page
       .getByText(`${navn}${giFullmakt}`)
       .getByRole('button', { name: giFullmakt })
+      .first()
       .click();
   }
 
@@ -166,6 +167,6 @@ export class KlientAdministrasjonPage {
   }
 
   async slettFullmakt(navn: string) {
-    await this.slettFullmaktKnapp(navn).click();
+    await this.slettFullmaktKnapp(navn).first().click();
   }
 }
