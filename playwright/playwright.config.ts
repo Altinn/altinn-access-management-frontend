@@ -31,8 +31,8 @@ const config: PlaywrightTestConfig = {
       {
         open: 'on-failure',
         trace: 'on',
-        outputDir: `playwright-report/${process.env.environment?.toUpperCase() ?? 'AT24'}`,
-        outputFolder: `playwright-report/${process.env.environment?.toUpperCase() ?? 'AT24'}`,
+        outputDir: `playwright-report/${process.env.environment?.toUpperCase() ?? 'AT23'}`,
+        outputFolder: `playwright-report/${process.env.environment?.toUpperCase() ?? 'AT23'}`,
       },
     ],
   ],

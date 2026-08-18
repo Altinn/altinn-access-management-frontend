@@ -9,7 +9,6 @@ Run the below command to run Playwright tests with the environment in headless m
 ```cmd
     yarn run env:AT22,
     yarn run env:AT23,
-    yarn run env:AT24,
     yarn run env:TT02
 ```
 
@@ -20,7 +19,7 @@ Run the below command to run Playwright tests with the environment in headless m
 --repeat-each 20 --workers=1: (make sure a test is not flaky in combination with 1 worker to avoid test data complexity)
 --debug: step by step mode
 --grep "test name": match test name to only run specific test(s)
-- full example: yarn run env:AT24 --grep "Delegate api to an organization by selecting from API" --timeout 10000 --repeat-each 20 --workers=1
+- full example: yarn run env:AT23 --grep "Delegate api to an organization by selecting from API" --timeout 10000 --repeat-each 20 --workers=1
 ```
 
 Run the below command to run Playwright tests with the environment in UI mode
@@ -70,8 +69,8 @@ yarn run env:AT22 --grep "test name" --timeout 10000 --repeat-each 10 --workers=
 - Good stability - the tests must build trust.
 - Do cleanup via backend if possible.
 - Easy to understand, should create a better understanding of the functionality in the solution and easy to read reports for test run results.
-- Run the tests against only one of the at-environments(?). We should look at better definitions of the different AT environments (AT24)
-  -- AT21 and AT22 = dev environments
+- Run the tests against only one of the at-environments(?). We should look at better definitions of the different AT environments
+  -- AT22 = dev environment
   -- establish a better standard for what the different environments are used for
 
 Test data - what do we need?
