@@ -6,6 +6,7 @@ import type { ServiceResource } from '@/rtk/features/singleRights/singleRightsAp
 import { ErrorCode } from '@/resources/utils/errorCodeUtils';
 import { useGetReporteeQuery } from '@/rtk/features/userInfoApi';
 import { TechnicalErrorParagraphs } from '@/features/amUI/common/TechnicalErrorParagraphs/TechnicalErrorParagraphs';
+import { StatusMessageForScreenReader } from '@/components/StatusMessageForScreenReader/StatusMessageForScreenReader';
 import { DelegationAction } from '../EditModal';
 
 export interface ResourceAlertProps {
@@ -36,6 +37,8 @@ export const ResourceAlert = ({
 
   const isRequest = availableActions?.includes(DelegationAction.REQUEST);
   const isApprove = availableActions?.includes(DelegationAction.APPROVE);
+
+  const [srMessage, setSrMessage] = React.useState('');
 
   if (resource.delegable === false) {
     headingText = isRequest
@@ -88,18 +91,27 @@ export const ResourceAlert = ({
       content = <DsParagraph>{t('delegation_modal.service_error.missing_rights')}</DsParagraph>;
     }
   }
+  React.useEffect(() => {
+    setSrMessage(headingText);
+  }, [headingText, error?.time]);
+
   return (
-    <DsAlert
-      data-color={color}
-      className={className}
-    >
-      <DsHeading
-        level={2}
-        data-size='2xs'
+    <>
+      <StatusMessageForScreenReader politenessSetting='assertive'>
+        {srMessage}
+      </StatusMessageForScreenReader>
+      <DsAlert
+        data-color={color}
+        className={className}
       >
-        {headingText}
-      </DsHeading>
-      {content}
-    </DsAlert>
+        <DsHeading
+          level={2}
+          data-size='2xs'
+        >
+          {headingText}
+        </DsHeading>
+        {content}
+      </DsAlert>
+    </>
   );
 };
