@@ -163,10 +163,11 @@ export class KlientAdministrasjonPage {
     const slettFullmakt = this.texts.common.delete_poa;
     return this.page
       .getByText(`${navn}${slettFullmakt}`)
-      .getByRole('button', { name: slettFullmakt });
+      .getByRole('button', { name: slettFullmakt })
+      .first();
   }
 
   async slettFullmakt(navn: string) {
-    await this.slettFullmaktKnapp(navn).first().click();
+    await this.slettFullmaktKnapp(navn).click();
   }
 }
