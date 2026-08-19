@@ -1,6 +1,6 @@
-import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
+import { createApi } from '@reduxjs/toolkit/query/react';
+import { createBaseQuery } from '@/rtk/app/baseQuery';
 
-import { getCookie } from '@/resources/Cookie/CookieMethods';
 import type {
   ActiveConsentListItem,
   Consent,
@@ -41,14 +41,7 @@ enum Tags {
 
 export const consentApi = createApi({
   reducerPath: 'consentApi',
-  baseQuery: fetchBaseQuery({
-    baseUrl,
-    prepareHeaders: (headers: Headers): Headers => {
-      headers.set('content-type', 'application/json; charset=utf-8');
-      headers.set('X-XSRF-TOKEN', getCookie('XSRF-TOKEN'));
-      return headers;
-    },
-  }),
+  baseQuery: createBaseQuery(baseUrl),
   tagTypes: [Tags.ConsentList, Tags.ConsentLog],
   endpoints: (builder) => ({
     // consent request

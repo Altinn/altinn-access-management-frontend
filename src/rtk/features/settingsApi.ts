@@ -1,7 +1,6 @@
-import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
+import { createApi } from '@reduxjs/toolkit/query/react';
+import { createBaseQuery } from '@/rtk/app/baseQuery';
 import { userInfoApi } from './userInfoApi';
-
-import { getCookie } from '@/resources/Cookie/CookieMethods';
 
 export interface NotificationAddress extends Address {
   notificationAddressId: string;
@@ -17,14 +16,7 @@ const baseUrl = import.meta.env.BASE_URL + 'accessmanagement/api/v1/' + 'setting
 
 export const settingsApi = createApi({
   reducerPath: 'settingsApi',
-  baseQuery: fetchBaseQuery({
-    baseUrl,
-    prepareHeaders: (headers) => {
-      headers.set('content-type', 'application/json; charset=utf-8');
-      headers.set('X-XSRF-TOKEN', getCookie('XSRF-TOKEN'));
-      return headers;
-    },
-  }),
+  baseQuery: createBaseQuery(baseUrl),
   tagTypes: ['NotificationAddress'],
   endpoints: (builder) => ({
     getOrgNotificationAddresses: builder.query<NotificationAddress[], string>({

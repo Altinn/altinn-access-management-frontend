@@ -1,5 +1,5 @@
-import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
-import { getCookie } from '@/resources/Cookie/CookieMethods';
+import { createApi } from '@reduxjs/toolkit/query/react';
+import { createBaseQuery } from '@/rtk/app/baseQuery';
 import { formatDisplayName } from '@altinn/altinn-components';
 
 export interface IdPortenAuthorization {
@@ -26,14 +26,7 @@ enum Tags {
 
 export const idPortenAuthorizationApi = createApi({
   reducerPath: 'idPortenAuthorizationApi',
-  baseQuery: fetchBaseQuery({
-    baseUrl,
-    prepareHeaders: (headers: Headers): Headers => {
-      headers.set('content-type', 'application/json; charset=utf-8');
-      headers.set('X-XSRF-TOKEN', getCookie('XSRF-TOKEN'));
-      return headers;
-    },
-  }),
+  baseQuery: createBaseQuery(baseUrl),
   tagTypes: [Tags.IdPortenAuthorizationList],
   endpoints: (builder) => ({
     getIdPortenAuthorizations: builder.query<IdPortenAuthorization[], void>({

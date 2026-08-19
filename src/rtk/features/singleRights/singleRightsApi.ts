@@ -1,4 +1,5 @@
-import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
+import { createApi } from '@reduxjs/toolkit/query/react';
+import { createBaseQuery } from '@/rtk/app/baseQuery';
 
 import type { IdValuePair } from '@/dataObjects/dtos/IdValuePair';
 import { getCookie } from '@/resources/Cookie/CookieMethods';
@@ -74,14 +75,7 @@ const baseUrl = import.meta.env.BASE_URL + 'accessmanagement/api/v1';
 
 export const singleRightsApi = createApi({
   reducerPath: 'singleRightsApi',
-  baseQuery: fetchBaseQuery({
-    baseUrl,
-    prepareHeaders: (headers) => {
-      headers.set('content-type', 'application/json; charset=utf-8');
-      headers.set('X-XSRF-TOKEN', getCookie('XSRF-TOKEN'));
-      return headers;
-    },
-  }),
+  baseQuery: createBaseQuery(baseUrl),
   tagTypes: ['SingleRights', 'resources', 'delegationCheck', 'rightsMeta', 'rights'],
   endpoints: (builder) => ({
     // TODO: Move to resourceApi

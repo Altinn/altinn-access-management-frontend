@@ -1,5 +1,5 @@
-import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
-import { getCookie } from '@/resources/Cookie/CookieMethods';
+import { createApi } from '@reduxjs/toolkit/query/react';
+import { createBaseQuery } from '@/rtk/app/baseQuery';
 import type { Entity } from '@/dataObjects/dtos/Common';
 import { ServiceResource } from './singleRights/singleRightsApi';
 import type { AccessPackage } from './accessPackageApi';
@@ -36,14 +36,7 @@ const baseUrl = `${import.meta.env.BASE_URL}accessmanagement/api/v1/request`;
 
 export const requestApi = createApi({
   reducerPath: 'requestApi',
-  baseQuery: fetchBaseQuery({
-    baseUrl,
-    prepareHeaders: (headers) => {
-      headers.set('content-type', 'application/json; charset=utf-8');
-      headers.set('X-XSRF-TOKEN', getCookie('XSRF-TOKEN'));
-      return headers;
-    },
-  }),
+  baseQuery: createBaseQuery(baseUrl),
   tagTypes: [
     'sentRequests',
     'receivedRequests',

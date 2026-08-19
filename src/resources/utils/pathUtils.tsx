@@ -125,3 +125,8 @@ export const getAmBaseUrl = () => {
 export const getLogoutUrl = (): string => {
   return `${getPlatformUrl()}authentication/api/v1/logout`;
 };
+
+export const getLoginUrl = (): string => {
+  const goTo = encodeURIComponent(getAmStartPageUrl());
+  return `${getPlatformUrl()}authentication/api/v1/authentication?goto=${goTo}`;
+};
