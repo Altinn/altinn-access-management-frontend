@@ -9,7 +9,6 @@ import {
   DsSpinner,
 } from '@altinn/altinn-components';
 import {
-  Address,
   NotificationAddress,
   useGetOrgNotificationAddressesQuery,
 } from '@/rtk/features/settingsApi';
@@ -198,7 +197,7 @@ export const SettingsModal = ({
             variant='secondary'
             onClick={closeModal}
           >
-            {t('common.cancel')}
+            {isChanges ? t('common.cancel') : t('common.close')}
           </DsButton>
         </div>
       </div>
