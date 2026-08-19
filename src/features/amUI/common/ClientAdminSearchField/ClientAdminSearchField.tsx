@@ -6,12 +6,14 @@ import classes from './ClientAdminSearchField.module.css';
 interface ClientAdminSearchFieldProps {
   searchPlaceholder: string;
   setSearchString: (newSearch: string) => void;
+  filters?: React.ReactNode;
   children?: React.ReactNode;
 }
 
 export const ClientAdminSearchField = ({
   searchPlaceholder,
   setSearchString,
+  filters,
   children,
 }: ClientAdminSearchFieldProps) => {
   const onSearch = useCallback(
@@ -23,19 +25,22 @@ export const ClientAdminSearchField = ({
 
   return (
     <div className={classes.search}>
-      <DsSearch className={classes.searchBar}>
-        <DsSearch.Input
-          aria-label={searchPlaceholder}
-          placeholder={searchPlaceholder}
-          onChange={(event: React.ChangeEvent<HTMLInputElement>) => onSearch(event.target.value)}
-        />
-        <DsSearch.Clear
-          onClick={() => {
-            onSearch.cancel();
-            setSearchString('');
-          }}
-        />
-      </DsSearch>
+      <div className={classes.searchAndFilters}>
+        <DsSearch className={classes.searchBar}>
+          <DsSearch.Input
+            aria-label={searchPlaceholder}
+            placeholder={searchPlaceholder}
+            onChange={(event: React.ChangeEvent<HTMLInputElement>) => onSearch(event.target.value)}
+          />
+          <DsSearch.Clear
+            onClick={() => {
+              onSearch.cancel();
+              setSearchString('');
+            }}
+          />
+        </DsSearch>
+        {filters}
+      </div>
       {children}
     </div>
   );

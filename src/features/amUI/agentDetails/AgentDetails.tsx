@@ -1,4 +1,4 @@
-import React, { useId, useState } from 'react';
+import React, { useId, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import {
   DsAlert,
@@ -6,6 +6,7 @@ import {
   DsParagraph,
   DsSkeleton,
   formatDisplayName,
+  Switch,
 } from '@altinn/altinn-components';
 import { useParams } from 'react-router';
 import { skipToken } from '@reduxjs/toolkit/query';
@@ -53,6 +54,11 @@ export const AgentDetails = () => {
     error: agentResourcesError,
   } = useGetAgentResourcesQuery(id ? { to: id } : skipToken);
   const { data: clients, isLoading: isLoadingClients, error: clientsError } = useGetClientsQuery();
+  const [showDeleted, setShowDeleted] = useState(false);
+  const visibleClients = useMemo(
+    () => (showDeleted ? clients : clients?.filter((client) => !client.client.isDeleted)),
+    [clients, showDeleted],
+  );
 
   const [addAgentAccessPackages, { isLoading: isAddingAgentAccessPackages }] =
     useAddAgentAccessPackagesMutation();
@@ -65,7 +71,7 @@ export const AgentDetails = () => {
   const { clientsWithAgentAccess, clientsWithoutAgentAccess } = useAgentDetailsAccessClientLists({
     agentAccessPackages,
     agentResources,
-    clients,
+    clients: visibleClients,
   });
   const [searchString, setSearchString] = useState<string>('');
   const [expandedIds, setExpandedIds] = useState<string[]>([]);
@@ -162,6 +168,13 @@ export const AgentDetails = () => {
             <ClientAdminSearchField
               setSearchString={setSearchString}
               searchPlaceholder={t('my_clients_page.search_placeholder')}
+              filters={
+                <Switch
+                  onChange={(e) => setShowDeleted(e.target.checked)}
+                  checked={showDeleted}
+                  label={t('client_administration_page.show_deleted_clients')}
+                />
+              }
             />
             <section aria-labelledby={assignedSectionId}>
               <DsHeading
