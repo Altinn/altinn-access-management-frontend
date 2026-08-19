@@ -299,6 +299,11 @@ void ConfigureServices(IServiceCollection services, IConfiguration config)
 
     services.AddSwaggerGen(options =>
     {
+        // Several models declare nested types that share a name with a top-level model
+        // (e.g. DelegationBatchInputDto.Permission vs AccessPackage.Permission). Swashbuckle's
+        // default schema id is the plain type name, which makes those collide and fails generation.
+        options.CustomSchemaIds(SwaggerSchemaId);
+
         options.AddSecurityDefinition("oauth2", new OpenApiSecurityScheme
         {
             Description = "Standard Authorization header using the Bearer scheme. Example: \"bearer {token}\"",
@@ -324,6 +329,24 @@ void ConfigureServices(IServiceCollection services, IConfiguration config)
 
         logger.LogInformation("Startup // ApplicationInsightsConnectionString = {applicationInsightsConnectionString}", applicationInsightsConnectionString);
     }
+}
+
+// Unique swagger schema id for a model type. Non-generic top-level types keep their plain name,
+// and generics keep Swashbuckle's "XOfY" shape, so existing schema names are unchanged. Nested
+// types are prefixed with their declaring type to keep them distinct from same-named models.
+static string SwaggerSchemaId(Type type)
+{
+    string name = type.Name;
+
+    if (type.IsGenericType)
+    {
+        name = string.Concat(
+            name.AsSpan(0, name.IndexOf('`')),
+            "Of",
+            string.Join("And", type.GetGenericArguments().Select(SwaggerSchemaId)));
+    }
+
+    return type.DeclaringType is null ? name : SwaggerSchemaId(type.DeclaringType) + name;
 }
 
 void ConfigureMockableClients(IServiceCollection services, IConfiguration config)
