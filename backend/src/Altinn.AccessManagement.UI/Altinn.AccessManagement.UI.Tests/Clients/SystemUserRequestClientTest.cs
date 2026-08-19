@@ -1,7 +1,6 @@
 using System.Net;
 using System.Net.Http;
 using System.Net.Sockets;
-using Altinn.AccessManagement.UI.Core.ClientInterfaces;
 using Altinn.AccessManagement.UI.Integration.Clients;
 using Altinn.AccessManagement.UI.Integration.Configuration;
 using Altinn.Authorization.ProblemDetails;
@@ -32,9 +31,9 @@ namespace Altinn.AccessManagement.UI.Tests.Clients
             }
         }
 
-        private static ISystemUserRequestClient CreateClient(Exception exception)
+        private static SystemUserRequestClient CreateClient(Exception exception)
         {
-            PlatformSettings platformSettings = new PlatformSettings
+            PlatformSettings platformSettings = new()
             {
                 ApiAuthenticationEndpoint = BaseUrl,
                 SubscriptionKeyHeaderName = "Ocp-Apim-Subscription-Key",
