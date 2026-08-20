@@ -67,6 +67,7 @@ export const useSidebarItems = ({ isSmall }: { isSmall?: boolean }) => {
   const { requestsBadgeCount, isLoading: isLoadingRequestsBadge } = useSidebarRequestCount({
     isAdmin,
     reportee,
+    isCurrentUserReportee,
     isLoadingPermissions: isLoadingReportee || isLoadingIsAdmin,
   });
 
@@ -103,7 +104,7 @@ export const useSidebarItems = ({ isSmall }: { isSmall?: boolean }) => {
     items.push(getPoaOverviewMenuItem(pathname, isLoading, isSmall));
   }
 
-  if (hasConsentPermission(isAdmin)) {
+  if (hasConsentPermission(reportee, isAdmin, isCurrentUserReportee)) {
     items.push(getConsentMenuItem(pathname, isLoading, isSmall));
   }
 

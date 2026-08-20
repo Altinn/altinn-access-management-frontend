@@ -1,7 +1,11 @@
 import { ReporteeInfo } from '@/rtk/features/userInfoApi';
 
-export const hasConsentPermission = (isAdmin: boolean = false): boolean => {
-  return isAdmin;
+export const hasConsentPermission = (
+  reporteeInfo?: ReporteeInfo,
+  isAdmin: boolean = false,
+  isCurrentUserReportee: boolean = false,
+): boolean => {
+  return hasReporteeListAdminAccess(reporteeInfo, isAdmin, isCurrentUserReportee);
 };
 
 export const hasCreateSystemUserPermission = (

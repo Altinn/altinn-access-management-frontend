@@ -28,7 +28,11 @@ export const ActiveConsentsPage = () => {
   const { data: reportee, isLoading: isLoadingReportee } = useGetReporteeQuery();
   const { data: currentUser, isLoading: isCurrentUserLoading } = useGetPartyFromLoggedInUserQuery();
   const { data: isAdmin, isLoading: isLoadingIsAdmin } = useGetIsAdminQuery();
-  const hasPermission = hasConsentPermission(isAdmin);
+  const hasPermission = hasConsentPermission(
+    reportee,
+    isAdmin,
+    currentUser?.partyUuid === reportee?.partyUuid,
+  );
 
   const {
     data: activeConsents,
@@ -41,12 +45,7 @@ export const ActiveConsentsPage = () => {
     isLoading: isLoadingIdPortenAuthorizations,
     error: loadIdPortenAuthorizationsError,
   } = useGetIdPortenAuthorizationsQuery(undefined, {
-    // ID-porten authorizations are only relevant for the logged in user
-    skip:
-      !partyUuid ||
-      reportee?.type !== 'Person' ||
-      currentUser?.partyUuid !== partyUuid ||
-      window.featureFlags?.showIdPortenAuthorizations !== true,
+    skip: !hasPermission || window.featureFlags?.showIdPortenAuthorizations !== true,
   });
 
   const isLoading =

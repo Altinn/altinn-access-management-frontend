@@ -61,6 +61,7 @@ export const RequestPage = () => {
   const { requestsBadgeCount: receivedRequestCount } = useSidebarRequestCount({
     isAdmin,
     reportee,
+    isCurrentUserReportee,
     isLoadingPermissions: isLoadingAdmin,
   });
 

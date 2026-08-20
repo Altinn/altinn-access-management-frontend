@@ -23,6 +23,7 @@ import { useGetIsAdminQuery, useGetReporteeQuery } from '@/rtk/features/userInfo
 import { hasConsentPermission } from '@/resources/utils/permissionUtils';
 import { Breadcrumbs } from '../../common/Breadcrumbs/Breadcrumbs';
 import { ReporteePageHeading } from '../../common/ReporteePageHeading';
+import { useGetPartyFromLoggedInUserQuery } from '@/rtk/features/lookupApi';
 
 export const ConsentHistoryPage = () => {
   const { t } = useTranslation();
@@ -33,8 +34,13 @@ export const ConsentHistoryPage = () => {
   const partyUuid = getCookie('AltinnPartyUuid');
 
   const { data: reportee, isLoading: isLoadingReportee } = useGetReporteeQuery();
+  const { data: currentUser, isLoading: isCurrentUserLoading } = useGetPartyFromLoggedInUserQuery();
   const { data: isAdmin, isLoading: isLoadingIsAdmin } = useGetIsAdminQuery();
-  const hasPermission = hasConsentPermission(isAdmin);
+  const hasPermission = hasConsentPermission(
+    reportee,
+    isAdmin,
+    currentUser?.partyUuid === reportee?.partyUuid,
+  );
 
   const {
     data: consentLog,
@@ -42,7 +48,8 @@ export const ConsentHistoryPage = () => {
     error: loadConsentLogError,
   } = useGetConsentLogQuery({ partyId: partyUuid }, { skip: !partyUuid || !hasPermission });
 
-  const isLoading = isLoadingIsAdmin || isLoadingConsentLog || isLoadingReportee;
+  const isLoading =
+    isLoadingIsAdmin || isLoadingConsentLog || isLoadingReportee || isCurrentUserLoading;
 
   const showConsentDetails = (consentId: string): void => {
     setSelectedConsentId(consentId);
@@ -64,7 +71,9 @@ export const ConsentHistoryPage = () => {
           isLoading={isLoadingReportee}
         />
         <div className={classes.consentHistoryPage}>
-          {!isLoading && !hasPermission && <div>{t('consent_log.no_consent_log_permission')}</div>}
+          {!isLoading && !hasPermission && (
+            <div>{t('consent_log.no_consent_log_permission', { name: reporteeName })}</div>
+          )}
           {isLoading && <LoadingTimeline />}
           {loadConsentLogError && (
             <DsAlert data-color='danger'>{t('consent_log.loading_consent_log_error')}</DsAlert>

@@ -8,18 +8,21 @@ import { hasConsentPermission, hasCreateSystemUserPermission } from '../utils/pe
 interface UseSidebarRequestCountParams {
   isAdmin?: boolean;
   reportee?: ReporteeInfo;
+  isCurrentUserReportee?: boolean;
   isLoadingPermissions: boolean;
 }
 
 export const useSidebarRequestCount = ({
   isAdmin,
   reportee,
+  isCurrentUserReportee,
   isLoadingPermissions,
 }: UseSidebarRequestCountParams) => {
   const partyUuid = getCookie('AltinnPartyUuid');
 
   const shouldFetchReceivedRequestsCount = !!partyUuid && !!isAdmin;
-  const shouldFetchConsents = !!partyUuid && hasConsentPermission(isAdmin);
+  const shouldFetchConsents =
+    !!partyUuid && hasConsentPermission(reportee, isAdmin, isCurrentUserReportee);
   const shouldFetchSystemUsers = !!partyUuid && !!hasCreateSystemUserPermission(reportee, isAdmin);
 
   const {

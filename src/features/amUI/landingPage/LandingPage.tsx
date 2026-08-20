@@ -71,6 +71,7 @@ export const LandingPage = () => {
   const { requestsBadgeCount, isLoading: isLoadingRequestsBadge } = useSidebarRequestCount({
     isAdmin,
     reportee,
+    isCurrentUserReportee: currentUser?.partyUuid === reportee?.partyUuid,
     isLoadingPermissions: isLoadingReportee || isLoadingIsAdmin,
   });
 
@@ -155,7 +156,7 @@ export const LandingPage = () => {
       });
     }
 
-    if (hasConsentPermission(isAdmin)) {
+    if (hasConsentPermission(reportee, isAdmin, isCurrentUserReportee)) {
       items.push({
         ...getConsentMenuItem(),
         description: t('landing_page.consent_item_description'),
