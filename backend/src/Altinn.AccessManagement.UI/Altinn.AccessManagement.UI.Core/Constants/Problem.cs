@@ -186,6 +186,13 @@ namespace Altinn.AccessManagement.UI.Core.Constants
             = _factory.Create(71, HttpStatusCode.Forbidden, "DelegationCheck failed with error: The resource is not delegable because it is a Maskinporten schema resource.");
 
         /// <summary>
+        /// Gets a <see cref="ProblemDescriptor"/>. Used when a call to a downstream API fails with a
+        /// transient network error (socket exception), so that the caller may retry.
+        /// </summary>
+        public static ProblemDescriptor DownstreamApiUnavailable { get; }
+            = _factory.Create(100, HttpStatusCode.ServiceUnavailable, "The downstream API could not be reached due to a transient network error. Please retry.");
+
+        /// <summary>
         /// Gets a <see cref="ProblemDescriptor"/>.
         /// </summary>
         public static ProblemDescriptor CreateGenericProblem(HttpStatusCode statusCode, string detail)
