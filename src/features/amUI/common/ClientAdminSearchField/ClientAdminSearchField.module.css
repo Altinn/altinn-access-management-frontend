@@ -7,6 +7,26 @@
   margin-bottom: var(--ds-spacing-4);
 }
 
+.searchAndFilters {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--ds-spacing-3);
+  flex: 1;
+}
+
 .searchBar {
+  flex: 1;
   max-width: 23rem;
+}
+
+@media only screen and (max-width: 768px) {
+  .searchAndFilters {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .searchBar {
+    max-width: 100%;
+  }
 }
