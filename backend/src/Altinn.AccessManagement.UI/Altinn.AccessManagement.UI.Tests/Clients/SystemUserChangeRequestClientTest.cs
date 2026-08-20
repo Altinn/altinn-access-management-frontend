@@ -51,7 +51,7 @@ namespace Altinn.AccessManagement.UI.Tests.Clients
         /// <summary>
         /// A dropped connection reaches the client as a SocketException nested inside HttpRequestException.
         /// </summary>
-        private static Exception SocketError()
+        private static HttpRequestException SocketError()
             => new HttpRequestException(
                 "An error occurred while sending the request.",
                 new IOException("The response ended prematurely.", new SocketException((int)System.Net.Sockets.SocketError.ConnectionReset)));
@@ -103,7 +103,7 @@ namespace Altinn.AccessManagement.UI.Tests.Clients
         [Fact]
         public async Task ApproveSystemUserChangeRequest_OtherException_Rethrows()
         {
-            Exception otherError = new HttpRequestException("Bad gateway", new InvalidOperationException("nope"));
+            HttpRequestException otherError = new("Bad gateway", new InvalidOperationException("nope"));
 
             await Assert.ThrowsAsync<HttpRequestException>(
                 () => CreateClient(otherError).ApproveSystemUserChangeRequest(51329012, _changeRequestId, CancellationToken.None));
