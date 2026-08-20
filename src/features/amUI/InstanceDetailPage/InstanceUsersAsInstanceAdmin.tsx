@@ -114,6 +114,8 @@ export const InstanceUsersAsInstanceAdmin = ({
         isActionLoading={isFetchingSimplifiedConnections}
         canDelegate
         noUsersText={t('instance_detail_page.no_users')}
+        directConnectionsHeading={t('instance_detail_page.direct_connections')}
+        indirectConnectionsHeading={t('instance_detail_page.indirect_connections')}
         searchPlaceholder={t('instance_detail_page.search_placeholder')}
         onDelegate={onDelegate}
       />
