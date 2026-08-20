@@ -1,6 +1,6 @@
-import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
+import { createApi } from '@reduxjs/toolkit/query/react';
+import { createBaseQuery } from '@/rtk/app/baseQuery';
 
-import { getCookie } from '@/resources/Cookie/CookieMethods';
 import type { Permissions } from '@/dataObjects/dtos/accessPackage';
 import type { PersonInput, SimplifiedParty } from './connectionApi';
 import type {
@@ -56,14 +56,7 @@ const baseUrl = import.meta.env.BASE_URL + 'accessmanagement/api/v1';
 
 export const instanceApi = createApi({
   reducerPath: 'instanceApi',
-  baseQuery: fetchBaseQuery({
-    baseUrl,
-    prepareHeaders: (headers) => {
-      headers.set('content-type', 'application/json; charset=utf-8');
-      headers.set('X-XSRF-TOKEN', getCookie('XSRF-TOKEN'));
-      return headers;
-    },
-  }),
+  baseQuery: createBaseQuery(baseUrl),
   tagTypes: ['instances', 'instanceRights', 'instanceDelegationCheck'],
   endpoints: (builder) => ({
     getInstances: builder.query<

@@ -1,4 +1,5 @@
-import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
+import { createApi } from '@reduxjs/toolkit/query/react';
+import { createBaseQuery } from '@/rtk/app/baseQuery';
 
 import type { CompactRole, Entity } from '@/dataObjects/dtos/Common';
 import { getCookie } from '@/resources/Cookie/CookieMethods';
@@ -39,14 +40,7 @@ const baseUrl = `${import.meta.env.BASE_URL}accessmanagement/api/v1/maskinporten
 
 export const maskinportenApi = createApi({
   reducerPath: 'maskinportenApi',
-  baseQuery: fetchBaseQuery({
-    baseUrl,
-    prepareHeaders: (headers) => {
-      headers.set('content-type', 'application/json; charset=utf-8');
-      headers.set('X-XSRF-TOKEN', getCookie('XSRF-TOKEN'));
-      return headers;
-    },
-  }),
+  baseQuery: createBaseQuery(baseUrl),
   tagTypes: [
     'maskinportenSuppliers',
     'maskinportenConsumers',

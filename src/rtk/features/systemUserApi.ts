@@ -1,6 +1,6 @@
-import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
+import { createApi } from '@reduxjs/toolkit/query/react';
+import { createBaseQuery } from '@/rtk/app/baseQuery';
 
-import { getCookie } from '@/resources/Cookie/CookieMethods';
 import type {
   RegisteredSystem,
   SystemUser,
@@ -38,14 +38,7 @@ const formatSystemVendorName = (system: RegisteredSystem) => {
 
 export const systemUserApi = createApi({
   reducerPath: 'systemUserApi',
-  baseQuery: fetchBaseQuery({
-    baseUrl,
-    prepareHeaders: (headers: Headers): Headers => {
-      headers.set('content-type', 'application/json; charset=utf-8');
-      headers.set('X-XSRF-TOKEN', getCookie('XSRF-TOKEN'));
-      return headers;
-    },
-  }),
+  baseQuery: createBaseQuery(baseUrl),
   tagTypes: [Tags.SystemUsers, Tags.PendingSystemUsers],
   endpoints: (builder) => ({
     // systemregister

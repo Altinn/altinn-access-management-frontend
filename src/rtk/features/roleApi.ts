@@ -1,5 +1,5 @@
-import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
-import { getCookie } from '@/resources/Cookie/CookieMethods';
+import { createApi } from '@reduxjs/toolkit/query/react';
+import { createBaseQuery } from '@/rtk/app/baseQuery';
 import { CompactRole, Entity } from '@/dataObjects/dtos/Common';
 
 export interface ProviderType {
@@ -80,17 +80,7 @@ const baseUrl = `${import.meta.env.BASE_URL}accessmanagement/api/v1/role`;
 export const roleApi = createApi({
   reducerPath: 'roleApi',
   tagTypes: ['roles', 'role-permissions'],
-  baseQuery: fetchBaseQuery({
-    baseUrl,
-    prepareHeaders: (headers: Headers): Headers => {
-      const token = getCookie('XSRF-TOKEN');
-      if (typeof token === 'string') {
-        headers.set('X-XSRF-TOKEN', token);
-      }
-
-      return headers;
-    },
-  }),
+  baseQuery: createBaseQuery(baseUrl),
   endpoints: (builder) => ({
     getRolePermissions: builder.query<
       RolePermission[],

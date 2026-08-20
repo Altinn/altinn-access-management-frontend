@@ -1,4 +1,5 @@
-import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
+import { createApi } from '@reduxjs/toolkit/query/react';
+import { createBaseQuery } from '@/rtk/app/baseQuery';
 
 import { getCookie } from '@/resources/Cookie/CookieMethods';
 import type { CompactPackage, Permissions, Reason } from '@/dataObjects/dtos/accessPackage';
@@ -69,14 +70,7 @@ const baseUrl = `${import.meta.env.BASE_URL}accessmanagement/api/v1/accesspackag
 
 export const accessPackageApi = createApi({
   reducerPath: 'accessPackageApi',
-  baseQuery: fetchBaseQuery({
-    baseUrl: baseUrl,
-    prepareHeaders: (headers) => {
-      headers.set('content-type', 'application/json; charset=utf-8');
-      headers.set('X-XSRF-TOKEN', getCookie('XSRF-TOKEN'));
-      return headers;
-    },
-  }),
+  baseQuery: createBaseQuery(baseUrl),
   tagTypes: ['AccessPackages'],
   endpoints: (builder) => ({
     search: builder.query<

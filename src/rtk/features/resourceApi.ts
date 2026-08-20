@@ -1,6 +1,6 @@
-import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
+import { createApi } from '@reduxjs/toolkit/query/react';
+import { createBaseQuery } from '@/rtk/app/baseQuery';
 
-import { getCookie } from '@/resources/Cookie/CookieMethods';
 import type { ServiceResource } from '@/rtk/features/singleRights/singleRightsApi';
 
 export interface ResourceOwner {
@@ -26,14 +26,7 @@ const baseUrl = import.meta.env.BASE_URL + 'accessmanagement/api/v1/' + 'resourc
 
 export const resourceApi = createApi({
   reducerPath: 'resourceApi',
-  baseQuery: fetchBaseQuery({
-    baseUrl: baseUrl,
-    prepareHeaders: (headers) => {
-      headers.set('content-type', 'application/json; charset=utf-8');
-      headers.set('X-XSRF-TOKEN', getCookie('XSRF-TOKEN'));
-      return headers;
-    },
-  }),
+  baseQuery: createBaseQuery(baseUrl),
   tagTypes: ['APIs'],
   endpoints: (builder) => ({
     getResource: builder.query<ServiceResource, string>({
