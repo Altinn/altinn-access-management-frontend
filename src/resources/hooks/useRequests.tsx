@@ -15,6 +15,7 @@ import {
 } from '@/rtk/features/requestApi';
 import { formatDisplayName } from '@altinn/altinn-components';
 import { isSubUnitByType } from '@/resources/utils/reporteeUtils';
+import { useGetPartyFromLoggedInUserQuery } from '@/rtk/features/lookupApi';
 
 interface UseRequestsOptions {
   skipSentRequests?: boolean;
@@ -36,8 +37,17 @@ export const useRequests = ({ skipSentRequests = false }: UseRequestsOptions = {
     isLoading: isLoadingReportee,
     isError: isReporteeError,
   } = useGetReporteeQuery();
+  const {
+    data: currentUser,
+    isLoading: isLoadingCurrentUser,
+    isError: isCurrentUserError,
+  } = useGetPartyFromLoggedInUserQuery();
 
-  const hasApproveConsentPermission = hasConsentPermission(isAdmin);
+  const hasApproveConsentPermission = hasConsentPermission(
+    reportee,
+    isAdmin,
+    currentUser?.partyUuid === reportee?.partyUuid,
+  );
   const {
     data: activeConsents,
     isLoading: isLoadingActiveConsents,
@@ -127,12 +137,14 @@ export const useRequests = ({ skipSentRequests = false }: UseRequestsOptions = {
       isAdminError ||
       isReporteeError ||
       isLoadingConsentsError ||
+      isCurrentUserError ||
       isLoadingPendingSystemUsersError ||
       isReceivedAccessRequestsError,
     isSentRequestsError: isAdminError || isReporteeError || isSentAccessRequestsError,
     isLoadingReceivedRequests:
       isLoadingIsAdmin ||
       isLoadingReportee ||
+      isLoadingCurrentUser ||
       isLoadingActiveConsents ||
       isLoadingPendingSystemUsers ||
       isLoadingPendingReceivedAccessRequests,

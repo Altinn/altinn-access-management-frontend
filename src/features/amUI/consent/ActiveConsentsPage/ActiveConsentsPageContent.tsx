@@ -1,7 +1,15 @@
 import React, { useMemo, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Link, useNavigate } from 'react-router';
-import { DsAlert, DsDialog, DsHeading, DsLink, DsParagraph, List } from '@altinn/altinn-components';
+import {
+  DsAlert,
+  DsDialog,
+  DsHeading,
+  DsLink,
+  DsParagraph,
+  formatDisplayName,
+  List,
+} from '@altinn/altinn-components';
 import { FolderFileIcon } from '@navikt/aksel-icons';
 import classes from './ActiveConsentsPage.module.css';
 import { ConsentPath } from '@/routes/paths';
@@ -139,7 +147,16 @@ export const ActiveConsentsPageContent = ({
           </List>
         ) : (
           <>
-            {!hasPermission && <div>{t('active_consents.no_active_consents_permission')}</div>}
+            {!hasPermission && (
+              <div>
+                {t('active_consents.no_active_consents_permission', {
+                  name: formatDisplayName({
+                    fullName: reportee?.name || '',
+                    type: reportee?.type === 'Person' ? 'person' : 'company',
+                  }),
+                })}
+              </div>
+            )}
             {loadActiveConsentsError && (
               <DsAlert data-color='danger'>{t('active_consents.load_consents_error')}</DsAlert>
             )}
@@ -151,6 +168,7 @@ export const ActiveConsentsPageContent = ({
             {!loadActiveConsentsError &&
               !loadIdPortenAuthorizationsError &&
               groupedActiveConsents &&
+              hasPermission &&
               Object.keys(groupedActiveConsents).length === 0 && (
                 <DsParagraph>{t('active_consents.no_active_consents')}</DsParagraph>
               )}

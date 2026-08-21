@@ -68,9 +68,12 @@ export const LandingPage = () => {
   });
   const { data: currentUser, isLoading: currentUserIsLoading } = useGetPartyFromLoggedInUserQuery();
   const actingPartyUuid = getCookie('AltinnPartyUuid') ?? '';
+  const isCurrentUserReportee = reportee?.partyUuid === currentUser?.partyUuid;
+
   const { requestsBadgeCount, isLoading: isLoadingRequestsBadge } = useSidebarRequestCount({
     isAdmin,
     reportee,
+    isCurrentUserReportee,
     isLoadingPermissions: isLoadingReportee || isLoadingIsAdmin,
   });
 
@@ -78,8 +81,6 @@ export const LandingPage = () => {
     fullName: reportee?.name || '',
     type: isOrganization(reportee) ? 'company' : 'person',
   });
-
-  const isCurrentUserReportee = reportee?.partyUuid === currentUser?.partyUuid;
 
   const { data: roles } = useGetRolePermissionsQuery(
     {
@@ -155,7 +156,7 @@ export const LandingPage = () => {
       });
     }
 
-    if (hasConsentPermission(isAdmin)) {
+    if (hasConsentPermission(reportee, isAdmin, isCurrentUserReportee)) {
       items.push({
         ...getConsentMenuItem(),
         description: t('landing_page.consent_item_description'),
