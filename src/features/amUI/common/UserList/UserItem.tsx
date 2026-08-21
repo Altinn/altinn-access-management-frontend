@@ -140,8 +140,8 @@ export const UserItem = ({
       {...(isNewUser(user.addedAt) && {
         badge: {
           label: t('client_administration_page.new_agent_tag'),
-          color: 'success',
-          variant: 'base',
+          color: 'success' as const,
+          variant: 'base' as const,
         },
       })}
       roleNames={showRoles && !isExpanded ? roleNames : []}
