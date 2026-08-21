@@ -137,15 +137,13 @@ export const UserItem = ({
       id={user.id}
       name={type !== 'system' ? formatDisplayName({ fullName: user.name, type }) : user.name}
       description={!isExpanded ? description(user) : undefined}
-      badge={
-        isNewUser(user.addedAt)
-          ? {
-              label: t('client_administration_page.new_agent_tag'),
-              color: 'success',
-              variant: 'base',
-            }
-          : undefined
-      }
+      {...(isNewUser(user.addedAt) && {
+        badge: {
+          label: t('client_administration_page.new_agent_tag'),
+          color: 'success' as const,
+          variant: 'base' as const,
+        },
+      })}
       roleNames={showRoles && !isExpanded ? roleNames : []}
       type={type}
       expanded={isExpanded}
