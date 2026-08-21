@@ -39,7 +39,9 @@ namespace Altinn.AccessManagement.UI.Filters
                 return;
             }
 
-            _logger.LogError(context.Exception, "AccessManagement.UI // TransientNetworkExceptionFilter // Transient network error towards downstream API // {Method} {Path}", context.HttpContext.Request.Method, context.HttpContext.Request.Path);
+            // The action name comes from routing metadata, not from the request, so it identifies the endpoint
+            // without logging anything the caller controls.
+            _logger.LogError(context.Exception, "AccessManagement.UI // TransientNetworkExceptionFilter // Transient network error towards downstream API // {Action}", context.ActionDescriptor.DisplayName);
 
             ProblemDescriptor descriptor = Problem.DownstreamApiUnavailable;
 
