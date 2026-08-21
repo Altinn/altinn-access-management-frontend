@@ -4,10 +4,12 @@ using System.Net.Http.Json;
 using System.Net.Sockets;
 using Altinn.AccessManagement.UI.Controllers;
 using Altinn.AccessManagement.UI.Core.ClientInterfaces;
+using Altinn.AccessManagement.UI.Core.Models.Consent;
 using Altinn.AccessManagement.UI.Core.Services.Interfaces;
 using Altinn.AccessManagement.UI.Mocks.Mocks;
 using Altinn.AccessManagement.UI.Mocks.Utils;
 using Altinn.AccessManagement.UI.Tests.Utils;
+using Altinn.Authorization.ProblemDetails;
 using Altinn.Platform.Models.Register;
 using Altinn.Register.Contracts.V1;
 using AltinnCore.Authentication.JwtCookie;
@@ -28,6 +30,8 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
     public class TransientNetworkExceptionFilterTest : IClassFixture<CustomWebApplicationFactory<ConsentController>>
     {
         private const string Party = "cd35779b-b174-4ecc-bbef-ece13611be7f";
+
+        private const string ConsentRequestId = "10fded43-fcd4-4f32-b31c-725fdaba6139";
 
         private readonly CustomWebApplicationFactory<ConsentController> _factory;
 
@@ -88,17 +92,49 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
             Assert.Equal(HttpStatusCode.InternalServerError, httpResponse.StatusCode);
         }
 
-        private HttpClient GetTestClient(Exception exception)
+        /// <summary>
+        ///     Approving a consent request is the action a user is most exposed on, it is a POST, and the socket
+        ///     error comes from the consent client itself rather than from a client further down. It must give the
+        ///     same retryable 503.
+        /// </summary>
+        [Fact]
+        public async Task ApproveConsent_SocketExceptionFromConsentClient_ReturnsServiceUnavailable()
+        {
+            HttpClient client = GetTestClientWithThrowingConsentClient(new HttpRequestException(
+                "An error occurred while sending the request.",
+                new IOException("The response ended prematurely.", new SocketException((int)SocketError.ConnectionReset))));
+
+            HttpResponseMessage httpResponse = await client.PostAsJsonAsync(
+                $"accessmanagement/api/v1/consent/request/{ConsentRequestId}/approve",
+                new ApproveConsentContext { Language = "nb" });
+            AltinnProblemDetails problemDetails = await httpResponse.Content.ReadFromJsonAsync<AltinnProblemDetails>();
+
+            Assert.Equal(HttpStatusCode.ServiceUnavailable, httpResponse.StatusCode);
+            Assert.Equal("AMUI-00100", problemDetails.Code);
+        }
+
+        private HttpClient GetTestClient(Exception exception) => GetTestClient(services =>
+        {
+            services.AddTransient<IConsentClient, ConsentClientMock>();
+            services.AddTransient<IRegisterClient>(_ => new ThrowingRegisterClient(exception));
+        });
+
+        private HttpClient GetTestClientWithThrowingConsentClient(Exception exception) => GetTestClient(services =>
+        {
+            services.AddTransient<IConsentClient>(_ => new ThrowingConsentClient(exception));
+            services.AddTransient<IRegisterClient, RegisterClientMock>();
+        });
+
+        private HttpClient GetTestClient(Action<IServiceCollection> clients)
         {
             WebApplicationFactory<ConsentController> factory = _factory.WithWebHostBuilder(builder =>
             {
                 builder.ConfigureTestServices(services =>
                 {
                     services.AddTransient<IEncryptionService, EncryptionServiceMock>();
-                    services.AddTransient<IConsentClient, ConsentClientMock>();
                     services.AddTransient<IAccessManagementClient, AccessManagementClientMock>();
-                    services.AddTransient<IRegisterClient>(_ => new ThrowingRegisterClient(exception));
                     services.AddTransient<IResourceRegistryClient, ResourceRegistryClientMock>();
+                    clients(services);
                     services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
                     services.AddSingleton<IPostConfigureOptions<JwtCookieOptions>, JwtCookiePostConfigureOptionsStub>();
                 });
@@ -136,6 +172,31 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
             public Task<Person> GetPerson(string ssn, string lastname) => _inner.GetPerson(ssn, lastname);
 
             public Task<List<PartyName>> GetPartyNames(IEnumerable<string> orgNumbers, CancellationToken cancellationToken) => _inner.GetPartyNames(orgNumbers, cancellationToken);
+        }
+
+        /// <summary>
+        ///     Consent client that behaves like the real one for everything but approving, which fails the way a
+        ///     broken connection does.
+        /// </summary>
+        private sealed class ThrowingConsentClient(Exception exception) : IConsentClient
+        {
+            private readonly ConsentClientMock _inner = new();
+
+            public Task<Result<bool>> ApproveConsentRequest(Guid consentRequestId, ApproveConsentContext context, CancellationToken cancellationToken) => throw exception;
+
+            public Task<Result<ConsentRequestDetails>> GetConsentRequest(Guid consentRequestId, CancellationToken cancellationToken) => _inner.GetConsentRequest(consentRequestId, cancellationToken);
+
+            public Task<Result<bool>> RejectConsentRequest(Guid consentRequestId, CancellationToken cancellationToken) => _inner.RejectConsentRequest(consentRequestId, cancellationToken);
+
+            public Task<List<ConsentTemplate>> GetConsentTemplates(CancellationToken cancellationToken) => _inner.GetConsentTemplates(cancellationToken);
+
+            public Task<Result<List<ConsentRequestDetails>>> GetConsentList(Guid partyId, CancellationToken cancellationToken) => _inner.GetConsentList(partyId, cancellationToken);
+
+            public Task<Result<Consent>> GetConsent(Guid consentId, CancellationToken cancellationToken) => _inner.GetConsent(consentId, cancellationToken);
+
+            public Task<Result<bool>> RevokeConsent(Guid consentId, CancellationToken cancellationToken) => _inner.RevokeConsent(consentId, cancellationToken);
+
+            public Task<Result<int>> GetConsentRequestCount(Guid partyId, ConsentRequestStatusType status, CancellationToken cancellationToken) => _inner.GetConsentRequestCount(partyId, status, cancellationToken);
         }
 
         /// <summary>
