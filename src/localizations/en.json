@@ -667,7 +667,7 @@
     "error_loading_clients": "Could not load clients.",
     "error_loading_agents": "Could not load users.",
     "no_agents": "No users have been given client access yet.",
-    "addUserPrompt": "Select «Add new user» to give more users power of attorney to the client.",
+    "addUserPrompt": "Select «Add new user» to give more users power of attorney for this client.",
     "no_results": "No users were found for this search.",
     "client_search_placeholder": "Search for client"
   },
