@@ -276,7 +276,7 @@ export const ClientDetails = () => {
                         removeAgentAccessPackages={removeAgentAccessPackages}
                         addAgentResources={addAgentResources}
                         removeAgentResources={removeAgentResources}
-                        emptyText={`${t('client_administration_page.no_agents')} ${t('client_administration_page.addUserPrompt')}`}
+                        emptyText={t('client_administration_page.addUserPrompt')}
                         searchString={searchString}
                         expandedIds={expandedIds}
                         onToggleExpanded={toggleExpanded}

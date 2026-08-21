@@ -648,7 +648,7 @@
     "agent_has_clients_tab": "Har disse klientene",
     "agent_can_get_clients_tab": "Kan få disse klientene",
     "client_has_agents_tab": "Brukere med fullmakt",
-    "client_can_get_agents_tab": "Brukere uten fullmakt",
+    "client_can_get_agents_tab": "Brukere som kan få fullmakt",
     "recently_added_users": "Nylig lagt til brukere",
     "new_agent_tag": "NY",
     "direct_connections_heading": "Brukere med klienttilgang",
@@ -664,7 +664,7 @@
     "error_loading_clients": "Kunne ikke laste klienter.",
     "error_loading_agents": "Kunne ikke laste brukere.",
     "no_agents": "Ingen brukere har fått klienttilganger ennå.",
-    "addUserPrompt": "Legg til en ny bruker for å komme i gang.",
+    "addUserPrompt": "Velg «Legg til ny bruker» for å gi flere brukere fullmakt til klienten.",
     "no_results": "Ingen brukere ble funnet for dette søket.",
     "client_search_placeholder": "Søk etter klient"
   },

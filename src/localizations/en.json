@@ -651,7 +651,7 @@
     "agent_has_clients_tab": "Has these clients",
     "agent_can_get_clients_tab": "Can have these clients",
     "client_has_agents_tab": "Users with power of attorney",
-    "client_can_get_agents_tab": "Users without power of attorney",
+    "client_can_get_agents_tab": "Users who can get power of attorney",
     "recently_added_users": "Recently added users",
     "new_agent_tag": "NEW",
     "direct_connections_heading": "Users with client access",
@@ -667,7 +667,7 @@
     "error_loading_clients": "Could not load clients.",
     "error_loading_agents": "Could not load users.",
     "no_agents": "No users have been given client access yet.",
-    "addUserPrompt": "Add a new user to get started.",
+    "addUserPrompt": "Select «Add new user» to give more users power of attorney for this client.",
     "no_results": "No users were found for this search.",
     "client_search_placeholder": "Search for client"
   },
