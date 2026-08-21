@@ -10,6 +10,9 @@ import { usePartyRepresentation } from '../../../PartyRepresentationContext/Part
 import { createErrorDetails } from '@/features/amUI/common/TechnicalErrorParagraphs/TechnicalErrorParagraphs';
 import { mapRightsToChipRights, type ChipRight } from '../../utils/rightsUtils';
 import { useHasResourceCheck } from './useHasResourceCheck';
+import { getInheritedStatus } from '../../../useInheritedStatus';
+import { formatDisplayName } from '@altinn/altinn-components';
+import { PartyType } from '@/rtk/features/userInfoApi';
 
 export const useSingleRightsDelegationRightsData = ({
   resource,
@@ -103,6 +106,31 @@ export const useSingleRightsDelegationRightsData = ({
             resourceRights.indirectRights.some((r) => r.right.key === right.right.key),
           isInherited: (rightKey) =>
             resourceRights.indirectRights.some((r) => r.right.key === rightKey),
+          getInheritedReason: (rightKey) => {
+            const indirectRight = resourceRights.indirectRights.find(
+              (r) => r.right.key === rightKey,
+            );
+            const inheritedStatus = getInheritedStatus({
+              permissions: indirectRight?.permissions,
+              actingParty,
+              fromParty,
+              toParty,
+            });
+            return inheritedStatus.length > 0
+              ? {
+                  toParty: formatDisplayName({
+                    fullName: toParty?.name || '',
+                    type: toParty?.partyTypeName === PartyType.Person ? 'person' : 'company',
+                  }),
+                  viaParty:
+                    formatDisplayName({
+                      fullName: inheritedStatus[0].via?.name || '',
+                      type: inheritedStatus[0].via?.type === 'Person' ? 'person' : 'company',
+                    }) || '',
+                  reason: inheritedStatus[0].type,
+                }
+              : undefined;
+          },
         }),
       );
     } else {
