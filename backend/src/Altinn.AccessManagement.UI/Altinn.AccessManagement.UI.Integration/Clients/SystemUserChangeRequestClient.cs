@@ -1,6 +1,5 @@
 using System.Diagnostics.CodeAnalysis;
 using System.Net.Http.Json;
-using System.Net.Sockets;
 using System.Text.Json;
 using Altinn.AccessManagement.UI.Core.ClientInterfaces;
 using Altinn.AccessManagement.UI.Core.Constants;
@@ -72,11 +71,6 @@ namespace Altinn.AccessManagement.UI.Integration.Clients
                 _logger.LogError("AccessManagement.UI // SystemUserChangeRequestClient // GetSystemUserChangeRequest // Unexpected HttpStatusCode: {StatusCode}\n {responseBody}", response.StatusCode, responseContent);
                 return ProblemMapper.MapToAuthUiError(responseContent, response.StatusCode);
             }
-            catch (Exception ex) when (ex.GetBaseException() is SocketException)
-            {
-                _logger.LogError(ex, "AccessManagement.UI // SystemUserChangeRequestClient // GetSystemUserChangeRequest // Socket exception");
-                return Problem.DownstreamApiUnavailable;
-            }
             catch (Exception ex)
             {
                 _logger.LogError(ex, "AccessManagement.UI // SystemUserChangeRequestClient // GetSystemUserChangeRequest // Exception");
@@ -102,11 +96,6 @@ namespace Altinn.AccessManagement.UI.Integration.Clients
                 _logger.LogError("AccessManagement.UI // SystemUserChangeRequestClient // ApproveSystemUserChangeRequest // Unexpected HttpStatusCode: {StatusCode}\n {responseBody}", response.StatusCode, responseContent);
                 return ProblemMapper.MapToAuthUiError(responseContent, response.StatusCode);
             }
-            catch (Exception ex) when (ex.GetBaseException() is SocketException)
-            {
-                _logger.LogError(ex, "AccessManagement.UI // SystemUserChangeRequestClient // ApproveSystemUserChangeRequest // Socket exception");
-                return Problem.DownstreamApiUnavailable;
-            }
             catch (Exception ex)
             {
                 _logger.LogError(ex, "AccessManagement.UI // SystemUserChangeRequestClient // ApproveSystemUserChangeRequest // Exception");
@@ -131,11 +120,6 @@ namespace Altinn.AccessManagement.UI.Integration.Clients
 
                 _logger.LogError("AccessManagement.UI // SystemUserChangeRequestClient // RejectSystemUserChangeRequest // Unexpected HttpStatusCode: {StatusCode}\n {responseBody}", response.StatusCode, responseContent);
                 return ProblemMapper.MapToAuthUiError(responseContent, response.StatusCode);
-            }
-            catch (Exception ex) when (ex.GetBaseException() is SocketException)
-            {
-                _logger.LogError(ex, "AccessManagement.UI // SystemUserChangeRequestClient // RejectSystemUserChangeRequest // Socket exception");
-                return Problem.DownstreamApiUnavailable;
             }
             catch (Exception ex)
             {

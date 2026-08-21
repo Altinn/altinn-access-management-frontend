@@ -1,6 +1,5 @@
 using System.Diagnostics.CodeAnalysis;
 using System.Net.Http.Json;
-using System.Net.Sockets;
 using System.Text.Json;
 using Altinn.AccessManagement.UI.Core.ClientInterfaces;
 using Altinn.AccessManagement.UI.Core.Constants;
@@ -96,11 +95,6 @@ namespace Altinn.AccessManagement.UI.Integration.Clients
 
                 _logger.LogError("AccessManagement.UI // SystemUserRequestClient // ApproveSystemUserRequest // Unexpected HttpStatusCode: {StatusCode}\n {responseBody}", response.StatusCode, responseContent);
                 return ProblemMapper.MapToAuthUiError(responseContent, response.StatusCode);
-            }
-            catch (Exception ex) when (ex.GetBaseException() is SocketException)
-            {
-                _logger.LogError(ex, "AccessManagement.UI // SystemUserRequestClient // ApproveSystemUserRequest // Socket exception");
-                return Problem.DownstreamApiUnavailable;
             }
             catch (Exception ex)
             {

@@ -1,7 +1,6 @@
 using System.Diagnostics.CodeAnalysis;
 using System.Net;
 using System.Net.Http.Json;
-using System.Net.Sockets;
 using System.Text.Json;
 using Altinn.AccessManagement.UI.Core.ClientInterfaces;
 using Altinn.AccessManagement.UI.Core.Constants;
@@ -73,11 +72,6 @@ namespace Altinn.AccessManagement.UI.Integration.Clients
 
                 return ConsentProblemMapper.MapToConsentUiError(responseContent, response.StatusCode);
             }
-            catch (Exception ex) when (ex.GetBaseException() is SocketException)
-            {
-                _logger.LogError(ex, "AccessManagement.UI // ConsentClient // GetConsentRequest // Socket exception");
-                return ConsentProblem.DownstreamApiUnavailable;
-            }
             catch (Exception ex)
             {
                 _logger.LogError(ex, "AccessManagement.UI // ConsentClient // GetConsentRequest // Exception");
@@ -104,11 +98,6 @@ namespace Altinn.AccessManagement.UI.Integration.Clients
                 _logger.LogError("AccessManagement.UI // ConsentClient // RejectConsentRequest // Unexpected HttpStatusCode: {StatusCode}\n {ResponseBody}", response.StatusCode, responseContent);
 
                 return ConsentProblemMapper.MapToConsentUiError(responseContent, response.StatusCode);
-            }
-            catch (Exception ex) when (ex.GetBaseException() is SocketException)
-            {
-                _logger.LogError(ex, "AccessManagement.UI // ConsentClient // RejectConsentRequest // Socket exception");
-                return ConsentProblem.DownstreamApiUnavailable;
             }
             catch (Exception ex)
             {
@@ -137,11 +126,6 @@ namespace Altinn.AccessManagement.UI.Integration.Clients
                 _logger.LogError("AccessManagement.UI // ConsentClient // ApproveConsentRequest // Unexpected HttpStatusCode: {StatusCode}\n {ResponseBody}", response.StatusCode, responseContent);
 
                 return ConsentProblemMapper.MapToConsentUiError(responseContent, response.StatusCode);
-            }
-            catch (Exception ex) when (ex.GetBaseException() is SocketException)
-            {
-                _logger.LogError(ex, "AccessManagement.UI // ConsentClient // ApproveConsentRequest // Socket exception");
-                return ConsentProblem.DownstreamApiUnavailable;
             }
             catch (Exception ex)
             {
@@ -190,11 +174,6 @@ namespace Altinn.AccessManagement.UI.Integration.Clients
 
                 return ConsentProblemMapper.MapToConsentUiError(responseContent, response.StatusCode);
             }
-            catch (Exception ex) when (ex.GetBaseException() is SocketException)
-            {
-                _logger.LogError(ex, "AccessManagement.UI // ConsentClient // GetConsentList // Socket exception");
-                return ConsentProblem.DownstreamApiUnavailable;
-            }
             catch (Exception ex)
             {
                 _logger.LogError(ex, "AccessManagement.UI // ConsentClient // GetConsentList // Exception");
@@ -221,11 +200,6 @@ namespace Altinn.AccessManagement.UI.Integration.Clients
                 _logger.LogError("AccessManagement.UI // ConsentClient // GetConsent // Unexpected HttpStatusCode: {StatusCode}\n {ResponseBody}", response.StatusCode, responseContent);
 
                 return ConsentProblemMapper.MapToConsentUiError(responseContent, response.StatusCode);
-            }
-            catch (Exception ex) when (ex.GetBaseException() is SocketException)
-            {
-                _logger.LogError(ex, "AccessManagement.UI // ConsentClient // GetConsent // Socket exception");
-                return ConsentProblem.DownstreamApiUnavailable;
             }
             catch (Exception ex)
             {
@@ -254,11 +228,6 @@ namespace Altinn.AccessManagement.UI.Integration.Clients
 
                 return ConsentProblemMapper.MapToConsentUiError(responseContent, response.StatusCode);
             }
-            catch (Exception ex) when (ex.GetBaseException() is SocketException)
-            {
-                _logger.LogError(ex, "AccessManagement.UI // ConsentClient // RevokeConsent // Socket exception");
-                return ConsentProblem.DownstreamApiUnavailable;
-            }
             catch (Exception ex)
             {
                 _logger.LogError(ex, "AccessManagement.UI // ConsentClient // RevokeConsent // Exception");
@@ -285,11 +254,6 @@ namespace Altinn.AccessManagement.UI.Integration.Clients
                 _logger.LogError("AccessManagement.UI // ConsentClient // GetConsentRequestCount // Unexpected HttpStatusCode: {StatusCode}\n {ResponseBody}", response.StatusCode, responseContent);
 
                 return ConsentProblemMapper.MapToConsentUiError(responseContent, response.StatusCode);
-            }
-            catch (Exception ex) when (ex.GetBaseException() is SocketException)
-            {
-                _logger.LogError(ex, "AccessManagement.UI // ConsentClient // GetConsentRequestCount // Socket exception");
-                return ConsentProblem.DownstreamApiUnavailable;
             }
             catch (Exception ex)
             {

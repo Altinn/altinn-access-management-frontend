@@ -59,6 +59,7 @@ ConfigureServices(builder.Services, builder.Configuration);
 builder.Services.AddControllers(opt =>
 {
     opt.Filters.Add(new AutoValidateAntiforgeryTokenIfAuthCookieAttribute());
+    opt.Filters.Add<TransientNetworkExceptionFilter>();
 });
 
 builder.Services.AddMemoryCache();
