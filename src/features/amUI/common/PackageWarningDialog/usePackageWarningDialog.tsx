@@ -1,7 +1,7 @@
 import { useState } from 'react';
 
 import { PackageWarningDialog } from './PackageWarningDialog';
-import type { PendingPackageAction } from './packageWarning';
+import { getPackageWarning, type PendingPackageAction } from './packageWarning';
 
 export const usePackageWarningDialog = () => {
   const [pending, setPending] = useState<{
@@ -23,9 +23,19 @@ export const usePackageWarningDialog = () => {
     />
   );
 
-  return {
-    confirmPackageAction: (action: PendingPackageAction, onConfirm: () => void) =>
-      setPending({ action, onConfirm }),
-    packageWarningDialog,
+  // Runs `onConfirm` immediately when the package/party combination needs no warning; otherwise
+  // shows the warning dialog and runs it only if the user confirms.
+  const confirmPackageAction = (
+    action: Omit<PendingPackageAction, 'warning'>,
+    onConfirm: () => void,
+  ) => {
+    const warning = getPackageWarning(action.accessPackage, action.fromParty, action.toParty);
+    if (warning) {
+      setPending({ action: { ...action, warning }, onConfirm });
+    } else {
+      onConfirm();
+    }
   };
+
+  return { confirmPackageAction, packageWarningDialog };
 };

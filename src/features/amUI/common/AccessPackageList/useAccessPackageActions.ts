@@ -18,7 +18,7 @@ import { useSnackbarOnIdle } from '@/resources/hooks/useSnackbarOnIdle';
 
 import { usePartyRepresentation } from '../PartyRepresentationContext/PartyRepresentationContext';
 import { PartyType } from '@/rtk/features/userInfoApi';
-import { getPackageWarning, usePackageWarningDialog } from '../PackageWarningDialog';
+import { usePackageWarningDialog } from '../PackageWarningDialog';
 
 interface useAccessPackageActionsProps {
   onDelegateSuccess?: (accessPackage: AccessPackage, toParty: Party) => void;
@@ -159,30 +159,6 @@ export const useAccessPackageActions = ({
     )?.id;
   };
 
-  const delegate = (accessPackage: AccessPackage, targetToParty: Party) => {
-    if (!fromParty || !actingParty) {
-      return;
-    }
-    delegatePackage(
-      targetToParty,
-      fromParty,
-      actingParty,
-      accessPackage,
-      () => {
-        handleDelegateSuccess(accessPackage, targetToParty);
-      },
-      (httpStatus, details) => {
-        handleDelegateError(
-          accessPackage,
-          targetToParty,
-          httpStatus.toString(),
-          new Date().toISOString(),
-          details,
-        );
-      },
-    );
-  };
-
   const onDelegate = async (accessPackage: AccessPackage, toParty?: Party) => {
     if (!fromParty || !actingParty) {
       return;
@@ -190,15 +166,30 @@ export const useAccessPackageActions = ({
     const targetToParty = toParty ?? toPartyFromContext;
     if (!targetToParty) return;
 
-    const warning = getPackageWarning(accessPackage, fromParty, targetToParty);
-    if (warning) {
-      confirmPackageAction(
-        { action: 'delegate', warning, accessPackage, fromParty, toParty: targetToParty },
-        () => delegate(accessPackage, targetToParty),
+    const delegate = () =>
+      delegatePackage(
+        targetToParty,
+        fromParty,
+        actingParty,
+        accessPackage,
+        () => {
+          handleDelegateSuccess(accessPackage, targetToParty);
+        },
+        (httpStatus, details) => {
+          handleDelegateError(
+            accessPackage,
+            targetToParty,
+            httpStatus.toString(),
+            new Date().toISOString(),
+            details,
+          );
+        },
       );
-    } else {
-      delegate(accessPackage, targetToParty);
-    }
+
+    confirmPackageAction(
+      { action: 'delegate', accessPackage, fromParty, toParty: targetToParty },
+      delegate,
+    );
   };
 
   const onRevoke = async (accessPackage: AccessPackage, toParty?: Party) => {
@@ -227,7 +218,7 @@ export const useAccessPackageActions = ({
     );
   };
 
-  const request = async (accessPackage: AccessPackage) => {
+  const onRequest = async (accessPackage: AccessPackage) => {
     if (!fromParty || !actingParty) {
       return;
     }
@@ -235,58 +226,51 @@ export const useAccessPackageActions = ({
     if (!packageId) return;
     if (loadingByPackageId[packageId]) return;
 
-    setLoadingByPackageId((prev) => ({
-      ...prev,
-      [packageId]: true,
-    }));
-
-    try {
-      await createPackageRequest({
-        party: actingParty.partyUuid,
-        to: fromParty.partyUuid,
-        package: packageId,
-      }).unwrap();
-
-      setLoadingByPackageId((prev) => {
-        const copy = { ...prev };
-        delete copy[packageId];
-        return copy;
-      });
-      setAwaitingRefetch((prev) => new Set([...prev, packageId]));
-      openSnackbar({
-        message: t('delegation_modal.request.sent_request_success', {
-          resource: accessPackage.name,
-        }),
-        color: 'success',
-      });
-    } catch {
+    const request = async () => {
       setLoadingByPackageId((prev) => ({
         ...prev,
-        [packageId]: false,
+        [packageId]: true,
       }));
-      openSnackbar({
-        message: t('delegation_modal.request.sent_request_error', {
-          resource: accessPackage.name,
-        }),
-        color: 'danger',
-      });
-    }
-  };
 
-  const onRequest = async (accessPackage: AccessPackage) => {
-    if (!fromParty || !actingParty) {
-      return;
-    }
+      try {
+        await createPackageRequest({
+          party: actingParty.partyUuid,
+          to: fromParty.partyUuid,
+          package: packageId,
+        }).unwrap();
+
+        setLoadingByPackageId((prev) => {
+          const copy = { ...prev };
+          delete copy[packageId];
+          return copy;
+        });
+        setAwaitingRefetch((prev) => new Set([...prev, packageId]));
+        openSnackbar({
+          message: t('delegation_modal.request.sent_request_success', {
+            resource: accessPackage.name,
+          }),
+          color: 'success',
+        });
+      } catch {
+        setLoadingByPackageId((prev) => ({
+          ...prev,
+          [packageId]: false,
+        }));
+        openSnackbar({
+          message: t('delegation_modal.request.sent_request_error', {
+            resource: accessPackage.name,
+          }),
+          color: 'danger',
+        });
+      }
+    };
+
+    // A request is always for the party currently being viewed (falls back to the acting party)
     const targetToParty = toPartyFromContext ?? actingParty;
-    const warning = getPackageWarning(accessPackage, fromParty, targetToParty);
-    if (warning) {
-      confirmPackageAction(
-        { action: 'request', warning, accessPackage, fromParty, toParty: targetToParty },
-        () => request(accessPackage),
-      );
-    } else {
-      request(accessPackage);
-    }
+    confirmPackageAction(
+      { action: 'request', accessPackage, fromParty, toParty: targetToParty },
+      request,
+    );
   };
 
   const deleteRequest = async (accessPackage: AccessPackage) => {
