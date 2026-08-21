@@ -227,6 +227,7 @@
     "helptext_button": "What are single services?",
     "helptext_content": "Single services are powers of attorney granted to a single service. Services a user has access to through access packages or roles will not appear here.",
     "action_popover": {
+      "right_inherited": "This action is inherited and cannot be changed here.",
       "right_inherited_via_role": "{{user_name}} has this action through the role they hold in {{via_name}}. It cannot be changed here.",
       "right_inherited_via_connection": "{{user_name}} has this action through {{via_name}}. It cannot be changed here.",
       "right_inherited_via_keyrole": "{{user_name}} has this action through the role they hold in {{via_name}}. It cannot be changed here.",

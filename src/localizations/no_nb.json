@@ -224,6 +224,7 @@
     "helptext_button": "Hva er enkelttjenester?",
     "helptext_content": "En enkelttjeneste er en fullmakt gitt til én spesifikk tjeneste. Tjenester man har tilgang til gjennom tilgangspakker eller roller vil ikke vises her.",
     "action_popover": {
+      "right_inherited": "Denne handlingen er arvet og kan ikke endres her.",
       "right_inherited_via_role": "{{user_name}} har denne handlingen gjennom rollen de har i {{via_name}}. Den kan ikke endres her.",
       "right_inherited_via_connection": "{{user_name}} har denne handlingen gjennom {{via_name}}. Den kan ikke endres her.",
       "right_inherited_via_keyrole": "{{user_name}} har denne handlingen gjennom rollen de har i {{via_name}}. Den kan ikke endres her.",

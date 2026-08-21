@@ -223,6 +223,7 @@
     "helptext_button": "Kva er enkelttenester?",
     "helptext_content": "Ein enkeltteneste er ei fullmakt gitt til ei spesifikk teneste. Tenester ein har tilgang til gjennom tilgangspakkar eller roller blir ikkje vist her.",
     "action_popover": {
+      "right_inherited": "Denne handlinga er arva og kan ikkje endrast her.",
       "right_inherited_via_role": "{{user_name}} har denne handlinga gjennom rolla dei har i {{via_name}}. Den kan ikkje endrast her.",
       "right_inherited_via_connection": "{{user_name}} har denne handlinga gjennom {{via_name}}. Den kan ikkje endrast her.",
       "right_inherited_via_keyrole": "{{user_name}} har denne handlinga gjennom rolla dei har i {{via_name}}. Den kan ikkje endrast her.",

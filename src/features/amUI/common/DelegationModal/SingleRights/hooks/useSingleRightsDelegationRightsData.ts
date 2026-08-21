@@ -148,6 +148,7 @@ export const useSingleRightsDelegationRightsData = ({
     hasAccess,
     resourceRights,
     isRequest,
+    toParty,
   ]);
 
   return {

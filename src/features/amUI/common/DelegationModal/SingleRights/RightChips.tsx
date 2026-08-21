@@ -48,6 +48,10 @@ export const RightChips = ({ rights, setRights, editable }: RightChipsProps) => 
   const getPopoverText = (right: ChipRight, editable: boolean | undefined): string => {
     if (right.inherited) {
       const textKey = STATUS_TRANSLATION_KEYS[right.inheritedReason?.reason as InheritedStatusType];
+
+      if (!textKey) {
+        return t('single_rights.action_popover.right_inherited');
+      }
       return t(textKey, {
         user_name: right.inheritedReason?.toParty,
         via_name: right.inheritedReason?.viaParty,
@@ -64,7 +68,8 @@ export const RightChips = ({ rights, setRights, editable }: RightChipsProps) => 
         .filter((right: ChipRight) => !editable || right.delegable || right.checked)
         .map((right: ChipRight) => {
           const actionText = right.rightName;
-          const isPopoverTarget = right.inherited || (!right.delegable && right.checked);
+          const isPopoverTarget =
+            right.inherited || !editable || (!right.delegable && right.checked);
           const popoverText = isPopoverTarget ? getPopoverText(right, editable) : undefined;
           return (
             <div key={right.rightKey}>
