@@ -12,6 +12,7 @@ using Altinn.AccessManagement.UI.Filters;
 using Altinn.AccessManagement.UI.Health;
 using Altinn.AccessManagement.UI.Integration.Clients;
 using Altinn.AccessManagement.UI.Integration.Configuration;
+using Altinn.AccessManagement.UI.Middleware;
 using Altinn.AccessManagement.UI.Mocks.Mocks;
 using Altinn.Common.AccessTokenClient.Services;
 using Altinn.Common.PEP.Clients;
@@ -114,6 +115,8 @@ if (app.Environment.IsDevelopment() || app.Environment.IsStaging())
 }
 else
 {
+    // TransientNetworkExceptionHandler gets to handle the exception first, and anything it does not
+    // recognise falls through to the error endpoint as before.
     app.UseExceptionHandler("/accessmanagement/api/v1/error");
 }
 
@@ -226,6 +229,8 @@ void ConfigureServices(IServiceCollection services, IConfiguration config)
         services.TryAddSingleton(TimeProvider.System);
         services.AddHostedService<RefreshAppConfigurationHostedService>();
     }
+
+    services.AddExceptionHandler<TransientNetworkExceptionHandler>();
 
     services.AddHttpClient<IAuthenticationClient, AuthenticationClient>();
     services.AddHttpClient<AuthorizationApiClient>();
