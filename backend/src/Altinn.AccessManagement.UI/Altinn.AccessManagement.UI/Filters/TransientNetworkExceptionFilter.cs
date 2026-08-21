@@ -1,50 +1,48 @@
 using System.Net.Sockets;
 using Altinn.AccessManagement.UI.Core.Constants;
 using Altinn.Authorization.ProblemDetails;
-using Microsoft.AspNetCore.Diagnostics;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Filters;
 using Microsoft.Extensions.Logging;
 
-namespace Altinn.AccessManagement.UI.Middleware
+namespace Altinn.AccessManagement.UI.Filters
 {
     /// <summary>
     /// Maps transient network failures towards downstream APIs to a 503 the caller may retry, instead of
     /// letting them surface as an unhandled exception (500).
     ///
     /// A socket error can be thrown by any of the integration clients, not just the ones that translate it
-    /// into a problem themselves, and a single endpoint often calls several clients. Handling it here means
-    /// every endpoint and every client is covered, including clients added later.
+    /// into a problem themselves, and a single endpoint often calls several clients. Handling it in a global
+    /// filter means every action and every client is covered, including clients added later.
     ///
     /// Any exception that is not a transient network error is left alone, so all other errors keep their
     /// existing behaviour.
     /// </summary>
-    public class TransientNetworkExceptionHandler : IExceptionHandler
+    public class TransientNetworkExceptionFilter : IExceptionFilter
     {
-        private readonly ILogger<TransientNetworkExceptionHandler> _logger;
+        private readonly ILogger<TransientNetworkExceptionFilter> _logger;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="TransientNetworkExceptionHandler"/> class.
+        /// Initializes a new instance of the <see cref="TransientNetworkExceptionFilter"/> class.
         /// </summary>
         /// <param name="logger">the handler for logger service</param>
-        public TransientNetworkExceptionHandler(ILogger<TransientNetworkExceptionHandler> logger)
+        public TransientNetworkExceptionFilter(ILogger<TransientNetworkExceptionFilter> logger)
         {
             _logger = logger;
         }
 
         /// <inheritdoc/>
-        public async ValueTask<bool> TryHandleAsync(HttpContext httpContext, Exception exception, CancellationToken cancellationToken)
+        public void OnException(ExceptionContext context)
         {
-            if (!IsTransientNetworkError(exception))
+            if (!IsTransientNetworkError(context.Exception))
             {
-                return false;
+                return;
             }
 
-            _logger.LogError(exception, "AccessManagement.UI // TransientNetworkExceptionHandler // Transient network error towards downstream API // {Method} {Path}", httpContext.Request.Method, httpContext.Request.Path);
+            _logger.LogError(context.Exception, "AccessManagement.UI // TransientNetworkExceptionFilter // Transient network error towards downstream API // {Method} {Path}", context.HttpContext.Request.Method, context.HttpContext.Request.Path);
 
             ProblemDescriptor descriptor = Problem.DownstreamApiUnavailable;
 
-            httpContext.Response.StatusCode = (int)descriptor.StatusCode;
             ProblemDetails problemDetails = new()
             {
                 Status = (int)descriptor.StatusCode,
@@ -53,9 +51,12 @@ namespace Altinn.AccessManagement.UI.Middleware
             };
             problemDetails.Extensions["code"] = descriptor.ErrorCode.ToString();
 
-            await httpContext.Response.WriteAsJsonAsync(problemDetails, options: null, contentType: "application/problem+json", cancellationToken);
-
-            return true;
+            context.Result = new ObjectResult(problemDetails)
+            {
+                StatusCode = (int)descriptor.StatusCode,
+                ContentTypes = { "application/problem+json" },
+            };
+            context.ExceptionHandled = true;
         }
 
         /// <summary>

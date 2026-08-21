@@ -21,11 +21,11 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
 {
     /// <summary>
     ///     Tests that a socket error thrown by any integration client during a request is turned into a
-    ///     retryable 503 by the global exception handler, no matter which client threw it.
+    ///     retryable 503 by the global exception filter, no matter which client threw it.
     ///     The consent log is used as the example: it fans out to the register API, which is where the
     ///     socket errors seen in production have been thrown.
     /// </summary>
-    public class TransientNetworkExceptionHandlerTest : IClassFixture<CustomWebApplicationFactory<ConsentController>>
+    public class TransientNetworkExceptionFilterTest : IClassFixture<CustomWebApplicationFactory<ConsentController>>
     {
         private const string Party = "cd35779b-b174-4ecc-bbef-ece13611be7f";
 
@@ -35,7 +35,7 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
         ///     Constructor setting up the factory used to build test clients
         /// </summary>
         /// <param name="factory">CustomWebApplicationFactory</param>
-        public TransientNetworkExceptionHandlerTest(CustomWebApplicationFactory<ConsentController> factory)
+        public TransientNetworkExceptionFilterTest(CustomWebApplicationFactory<ConsentController> factory)
         {
             _factory = factory;
         }
