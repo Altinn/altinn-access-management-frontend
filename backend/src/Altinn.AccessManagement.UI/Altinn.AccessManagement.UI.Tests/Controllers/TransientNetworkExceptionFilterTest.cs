@@ -1,3 +1,4 @@
+using System.Linq.Expressions;
 using System.Net;
 using System.Net.Http.Headers;
 using System.Net.Http.Json;
@@ -9,15 +10,13 @@ using Altinn.AccessManagement.UI.Core.Services.Interfaces;
 using Altinn.AccessManagement.UI.Mocks.Mocks;
 using Altinn.AccessManagement.UI.Mocks.Utils;
 using Altinn.AccessManagement.UI.Tests.Utils;
-using Altinn.Authorization.ProblemDetails;
-using Altinn.Platform.Models.Register;
-using Altinn.Register.Contracts.V1;
 using AltinnCore.Authentication.JwtCookie;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc.Testing;
 using Microsoft.AspNetCore.TestHost;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
+using Moq;
 
 namespace Altinn.AccessManagement.UI.Tests.Controllers
 {
@@ -116,12 +115,12 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
         private HttpClient GetTestClient(Exception exception) => GetTestClient(services =>
         {
             services.AddTransient<IConsentClient, ConsentClientMock>();
-            services.AddTransient<IRegisterClient>(_ => new ThrowingRegisterClient(exception));
+            services.AddTransient(_ => ThrowingClient<IRegisterClient>(c => c.GetPartyList(It.IsAny<List<Guid>>()), exception));
         });
 
         private HttpClient GetTestClientWithThrowingConsentClient(Exception exception) => GetTestClient(services =>
         {
-            services.AddTransient<IConsentClient>(_ => new ThrowingConsentClient(exception));
+            services.AddTransient(_ => ThrowingClient<IConsentClient>(c => c.ApproveConsentRequest(It.IsAny<Guid>(), It.IsAny<ApproveConsentContext>(), It.IsAny<CancellationToken>()), exception));
             services.AddTransient<IRegisterClient, RegisterClientMock>();
         });
 
@@ -154,49 +153,16 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
         }
 
         /// <summary>
-        ///     Register client that behaves like the real one for everything but the party lookup, which fails
-        ///     the way a broken connection does.
+        ///     Builds a client whose one relevant call fails the way a broken connection does. Everything else on
+        ///     the interface is left at its default, since the request never gets that far.
         /// </summary>
-        private sealed class ThrowingRegisterClient(Exception exception) : IRegisterClient
+        private static TClient ThrowingClient<TClient>(Expression<Func<TClient, object>> call, Exception exception)
+            where TClient : class
         {
-            private readonly RegisterClientMock _inner = new();
+            Mock<TClient> client = new();
+            client.Setup(call).Throws(exception);
 
-            public Task<List<Party>> GetPartyList(List<Guid> uuidList) => throw exception;
-
-            public Task<Party> GetPartyForOrganization(string organizationNumber) => _inner.GetPartyForOrganization(organizationNumber);
-
-            public Task<Party> GetPartyForPerson(string ssn) => _inner.GetPartyForPerson(ssn);
-
-            public Task<Altinn.Register.Contracts.Party> GetParty(Guid uuid) => _inner.GetParty(uuid);
-
-            public Task<Person> GetPerson(string ssn, string lastname) => _inner.GetPerson(ssn, lastname);
-
-            public Task<List<PartyName>> GetPartyNames(IEnumerable<string> orgNumbers, CancellationToken cancellationToken) => _inner.GetPartyNames(orgNumbers, cancellationToken);
-        }
-
-        /// <summary>
-        ///     Consent client that behaves like the real one for everything but approving, which fails the way a
-        ///     broken connection does.
-        /// </summary>
-        private sealed class ThrowingConsentClient(Exception exception) : IConsentClient
-        {
-            private readonly ConsentClientMock _inner = new();
-
-            public Task<Result<bool>> ApproveConsentRequest(Guid consentRequestId, ApproveConsentContext context, CancellationToken cancellationToken) => throw exception;
-
-            public Task<Result<ConsentRequestDetails>> GetConsentRequest(Guid consentRequestId, CancellationToken cancellationToken) => _inner.GetConsentRequest(consentRequestId, cancellationToken);
-
-            public Task<Result<bool>> RejectConsentRequest(Guid consentRequestId, CancellationToken cancellationToken) => _inner.RejectConsentRequest(consentRequestId, cancellationToken);
-
-            public Task<List<ConsentTemplate>> GetConsentTemplates(CancellationToken cancellationToken) => _inner.GetConsentTemplates(cancellationToken);
-
-            public Task<Result<List<ConsentRequestDetails>>> GetConsentList(Guid partyId, CancellationToken cancellationToken) => _inner.GetConsentList(partyId, cancellationToken);
-
-            public Task<Result<Consent>> GetConsent(Guid consentId, CancellationToken cancellationToken) => _inner.GetConsent(consentId, cancellationToken);
-
-            public Task<Result<bool>> RevokeConsent(Guid consentId, CancellationToken cancellationToken) => _inner.RevokeConsent(consentId, cancellationToken);
-
-            public Task<Result<int>> GetConsentRequestCount(Guid partyId, ConsentRequestStatusType status, CancellationToken cancellationToken) => _inner.GetConsentRequestCount(partyId, status, cancellationToken);
+            return client.Object;
         }
 
         /// <summary>
