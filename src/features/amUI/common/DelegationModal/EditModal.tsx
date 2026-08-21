@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { forwardRef, useEffect } from 'react';
+import { forwardRef, useEffect, useRef } from 'react';
 import { useTranslation } from 'react-i18next';
 import { DsDialog } from '@altinn/altinn-components';
 
@@ -65,6 +65,13 @@ export const EditModal = forwardRef<HTMLDialogElement, EditModalProps>(
   ) => {
     const { t } = useTranslation();
     const { setActionError, reset } = useDelegationModalContext();
+    const ownDialogRef = useRef<HTMLDialogElement | null>(null);
+
+    const setDialogRef = (node: HTMLDialogElement | null) => {
+      ownDialogRef.current = node;
+      if (typeof ref === 'function') ref(node);
+      else if (ref) ref.current = node;
+    };
 
     const getDialogLabel = () => {
       if (maskinportenScope) return t('delegation_modal.aria_label.maskinporten');
@@ -84,10 +91,13 @@ export const EditModal = forwardRef<HTMLDialogElement, EditModalProps>(
 
     return (
       <DsDialog
-        ref={ref}
+        ref={setDialogRef}
         className={classes.modalDialog}
         closedby='any'
-        onClose={() => {
+        onClose={(event) => {
+          // To prevent the close event from bubbling up to the parent dialog when the user clicks the backdrop.
+          // @digdir/designsystemet-react >= 1.15 has this buildt in, so remove this guard once @altinn/altinn-components bundles that version.
+          if (event.target !== ownDialogRef.current) return;
           onClose?.();
           reset();
         }}

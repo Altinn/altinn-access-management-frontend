@@ -18,6 +18,7 @@ import { useSnackbarOnIdle } from '@/resources/hooks/useSnackbarOnIdle';
 
 import { usePartyRepresentation } from '../PartyRepresentationContext/PartyRepresentationContext';
 import { PartyType } from '@/rtk/features/userInfoApi';
+import { getPackageWarning, usePackageWarningDialog } from '../PackageWarningDialog';
 
 interface useAccessPackageActionsProps {
   onDelegateSuccess?: (accessPackage: AccessPackage, toParty: Party) => void;
@@ -42,6 +43,7 @@ export const useAccessPackageActions = ({
   const [withdrawRequest] = useWithdrawRequestMutation();
   const [loadingByPackageId, setLoadingByPackageId] = useState<Record<string, boolean>>({});
   const [awaitingRefetch, setAwaitingRefetch] = useState<Set<string>>(new Set());
+  const { confirmPackageAction, packageWarningDialog } = usePackageWarningDialog();
   const isLoading = isDelegationLoading || isRevokeLoading;
 
   const { t } = useTranslation();
@@ -157,13 +159,10 @@ export const useAccessPackageActions = ({
     )?.id;
   };
 
-  const onDelegate = async (accessPackage: AccessPackage, toParty?: Party) => {
+  const delegate = (accessPackage: AccessPackage, targetToParty: Party) => {
     if (!fromParty || !actingParty) {
       return;
     }
-    const targetToParty = toParty ?? toPartyFromContext;
-    if (!targetToParty) return;
-
     delegatePackage(
       targetToParty,
       fromParty,
@@ -182,6 +181,24 @@ export const useAccessPackageActions = ({
         );
       },
     );
+  };
+
+  const onDelegate = async (accessPackage: AccessPackage, toParty?: Party) => {
+    if (!fromParty || !actingParty) {
+      return;
+    }
+    const targetToParty = toParty ?? toPartyFromContext;
+    if (!targetToParty) return;
+
+    const warning = getPackageWarning(accessPackage, fromParty, targetToParty);
+    if (warning) {
+      confirmPackageAction(
+        { action: 'delegate', warning, accessPackage, fromParty, toParty: targetToParty },
+        () => delegate(accessPackage, targetToParty),
+      );
+    } else {
+      delegate(accessPackage, targetToParty);
+    }
   };
 
   const onRevoke = async (accessPackage: AccessPackage, toParty?: Party) => {
@@ -210,7 +227,7 @@ export const useAccessPackageActions = ({
     );
   };
 
-  const onRequest = async (accessPackage: AccessPackage) => {
+  const request = async (accessPackage: AccessPackage) => {
     if (!fromParty || !actingParty) {
       return;
     }
@@ -253,6 +270,22 @@ export const useAccessPackageActions = ({
         }),
         color: 'danger',
       });
+    }
+  };
+
+  const onRequest = async (accessPackage: AccessPackage) => {
+    if (!fromParty || !actingParty) {
+      return;
+    }
+    const targetToParty = toPartyFromContext ?? actingParty;
+    const warning = getPackageWarning(accessPackage, fromParty, targetToParty);
+    if (warning) {
+      confirmPackageAction(
+        { action: 'request', warning, accessPackage, fromParty, toParty: targetToParty },
+        () => request(accessPackage),
+      );
+    } else {
+      request(accessPackage);
     }
   };
 
@@ -320,5 +353,6 @@ export const useAccessPackageActions = ({
     isRevokeLoading,
     isRequestLoading,
     isLoading,
+    packageWarningDialog,
   };
 };

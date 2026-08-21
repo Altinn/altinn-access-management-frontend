@@ -446,6 +446,23 @@
       "heading": "Ønsker du å slette tilgangen som ikke er knyttet til Enhetsregisteret?",
       "body": "<p>{{ to_name }} har fått denne fullmakten både direkte og gjennom sine roller i Enhetsregisteret.</p><p>Selv om du sletter denne fullmakten som er gitt direkte vil fortsatt brukeren ha fullmakten gjennom Enhetsregisteret.</p>"
     },
+    "package_warning": {
+      "heading": "Er du sikker?",
+      "delegate": {
+        "confirm": "Ja, gi fullmakt",
+        "hovedadministrator": "<p>Hovedadministrator er en omfattende tilgangspakke. Mottaker vil kunne gi seg selv og andre brukere alle fullmakter for virksomheten. Denne tilgangspakken bør kun gis til noen du stoler på.</p><p>Ønsker du å gi {{package_name}} til {{to_name}}?</p>",
+        "tilgangsstyring_person_to_person": "<p>Alle som mottar denne tilgangspakken får tilgang til hele din fullmaktsoversikt, og kan gi videre de fullmakter de selv har. {{to_name}} trenger bare denne pakken hvis hen skal gi fullmaktene dine videre til andre.</p><p>Ønsker du likevel å gi {{package_name}} til {{to_name}}?</p>",
+        "tilgangsstyring_person_to_org": "<p>Alle som mottar denne tilgangspakken får tilgang til din fullmaktsoversikt, og kan gi videre de fullmakter de selv har. {{to_name}} trenger bare denne pakken hvis de skal gi fullmaktene dine videre til andre enn egne ansatte, f.eks. andre virksomheter.</p><p>Ønsker du likevel å gi {{package_name}} til {{to_name}}?</p>",
+        "tilgangsstyring_org_to_org": "<p>Alle som mottar denne tilgangspakken får tilgang til virksomheten sin fullmaktsoversikt, og kan gi videre de fullmakter de selv har. For å gi fullmakter videre til ansatte kan {{to_name}} benytte klientadministrasjon og trenger ikke pakken {{package_name}}. Skal de gi fullmaktene videre til andre virksomheter må du fortsatt gi dem denne pakken.</p><p>Ønsker du å gi {{package_name}} til {{to_name}}?</p>"
+      },
+      "request": {
+        "confirm": "Ja, be om fullmakt",
+        "hovedadministrator": "<p>Hovedadministrator er en omfattende tilgangspakke. Den som mottar den vil kunne gi seg selv og andre brukere alle fullmakter for virksomheten.</p><p>Ønsker du likevel å be om {{package_name}} fra {{from_name}}?</p>",
+        "tilgangsstyring_person_to_person": "<p>Den som mottar denne tilgangspakken får tilgang til hele fullmaktsoversikten til {{from_name}}, og kan gi videre de fullmakter de selv har. Du trenger bare denne pakken hvis du skal gi fullmaktene videre til andre.</p><p>Ønsker du likevel å be om {{package_name}} fra {{from_name}}?</p>",
+        "tilgangsstyring_person_to_org": "<p>Den som mottar denne tilgangspakken får tilgang til fullmaktsoversikten til {{from_name}}, og kan gi videre de fullmakter de selv har. {{to_name}} trenger bare denne pakken for å gi fullmaktene videre til andre enn egne ansatte, f.eks. andre virksomheter.</p><p>Ønsker du likevel å be om {{package_name}} fra {{from_name}}?</p>",
+        "tilgangsstyring_org_to_org": "<p>Den som mottar denne tilgangspakken får tilgang til fullmaktsoversikten til {{from_name}}, og kan gi videre de fullmakter de selv har. For å gi fullmakter videre til egne ansatte kan {{to_name}} benytte klientadministrasjon og trenger ikke pakken {{package_name}}. Den trengs bare for å gi fullmaktene videre til andre virksomheter.</p><p>Ønsker du likevel å be om {{package_name}} fra {{from_name}}?</p>"
+      }
+    },
     "service_error": {
       "general_heading": "Du kan ikke gi fullmakt til denne tjenesten",
       "approve_heading": "Du kan ikke godkjenne forespørsler for denne tjenesten",
