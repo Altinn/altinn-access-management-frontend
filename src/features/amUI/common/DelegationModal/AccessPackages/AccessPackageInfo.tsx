@@ -51,6 +51,7 @@ export const AccessPackageInfo = ({ accessPackage, availableActions = [] }: Pack
     hasPendingRequest,
     isLoadingRequest,
     isLoading: isActionLoading,
+    packageWarningDialog,
   } = useAccessPackageActions({
     snackbarBusy: isFetching,
     onDelegateSuccess: () => {
@@ -217,6 +218,7 @@ export const AccessPackageInfo = ({ accessPackage, availableActions = [] }: Pack
           </div>
         </>
       )}
+      {packageWarningDialog}
     </div>
   );
 };

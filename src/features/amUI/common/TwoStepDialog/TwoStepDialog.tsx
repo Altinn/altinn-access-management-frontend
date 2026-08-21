@@ -1,4 +1,4 @@
-import { type ReactNode, type Ref, useId } from 'react';
+import { type ReactNode, type Ref, useId, useRef } from 'react';
 import { useTranslation } from 'react-i18next';
 import { ArrowLeftIcon } from '@navikt/aksel-icons';
 import { Button, DsDialog, DsHeading } from '@altinn/altinn-components';
@@ -61,14 +61,25 @@ export const TwoStepDialog = ({
   const { t } = useTranslation();
   const backButtonRef = useAutoFocusRef<HTMLButtonElement>();
   const headingId = useId();
+  const ownDialogRef = useRef<HTMLDialogElement | null>(null);
+
+  const setDialogRef = (node: HTMLDialogElement | null) => {
+    ownDialogRef.current = node;
+    if (typeof ref === 'function') ref(node);
+    else if (ref) ref.current = node;
+  };
 
   const dialog = (
     <DsDialog
-      ref={ref}
+      ref={setDialogRef}
       className={cn(classes.modalDialog, className)}
       closedby='any'
       closeButton={t('common.close')}
-      onClose={onClose}
+      onClose={(event) => {
+        // To prevent the close event from bubbling up to the parent dialog when the user clicks the backdrop.
+        // @digdir/designsystemet-react >= 1.15 has this buildt in, so remove this guard once @altinn/altinn-components bundles that version.
+        if (event.target === ownDialogRef.current) onClose?.();
+      }}
       aria-labelledby={headingId}
       aria-description={ariaDescription}
     >
