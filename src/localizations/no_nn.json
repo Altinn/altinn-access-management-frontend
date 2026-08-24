@@ -470,7 +470,7 @@
       "active_access_request_one": "{{count}} aktiv",
       "active_access_request_other": "{{count}} aktive",
       "view_requests": "Sjå førespurnader",
-      "sent_requests_modal_header": "Førespurnaden din om fullmaktar til {{partyName}} er sendt. Du vil få beskjed når dei er godkjende."
+      "sent_requests_modal_header": "Førespurnaden din om fullmakter til {{partyName}} er sendt. Du vil få beskjed når dei er godkjende."
     }
   },
   "status_section": {
