@@ -26,7 +26,6 @@ interface Altinn2AccountFormProps {
 
 export const Altinn2AccountForm = ({
   onAddAltinn2Account,
-
   isAddingAltinn2Account,
   addUserError,
   onSendForgotPasswordEmail,
@@ -39,7 +38,7 @@ export const Altinn2AccountForm = ({
   const [password, setPassword] = useState('');
   const [isShowPasswordStepVisible, setIsShowPasswordStepVisible] = useState<boolean>(false);
   const isValidateCrentialsButtonDisabled = !userName || !password || isAddingAltinn2Account;
-  const isSendEmailButtonDisabled = !userName || isSendingForgotPasswordEmail;
+  const isSendEmailButtonDisabled = !userName?.trim() || isSendingForgotPasswordEmail;
   const afUrl = `${getAfUrl()}inbox`;
 
   const handleInputFieldKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
@@ -72,42 +71,47 @@ export const Altinn2AccountForm = ({
 
   if (isShowPasswordStepVisible)
     return (
-      <DsDialog.Block className={classes.addAltinn2Account}>
-        <DsHeading>{t('add_altinn2_account_page.forgot_password')}</DsHeading>
-        <DsParagraph>{t('add_altinn2_account_page.forgot_password_info')}</DsParagraph>
-        <DsTextfield
-          label={t('add_altinn2_account_page.username')}
-          data-size='sm'
-          value={userName}
-          onChange={(e) => setUserName(e.target.value)}
-          onKeyDown={(e: React.KeyboardEvent<HTMLInputElement>) => {
-            if (e.key === 'Enter') {
-              e.preventDefault();
-              sendForgotPasswordEmail();
-            }
-          }}
-        />
-        {forgotPasswordError && <DsAlert data-color='danger'>{forgotPasswordError}</DsAlert>}
-        <div className={classes.buttonRow}>
-          <DsButton
-            variant='primary'
-            aria-disabled={isSendEmailButtonDisabled}
-            loading={isSendingForgotPasswordEmail}
-            onClick={sendForgotPasswordEmail}
-          >
-            {t('add_altinn2_account_page.send_link')}
-          </DsButton>
-          <DsButton
-            variant='secondary'
-            onClick={() => {
-              setIsShowPasswordStepVisible(false);
-              setUserName('');
+      <>
+        <DsDialog.Block className={classes.addAltinn2AccountHeader}>
+          <PersonCircleIcon fontSize={'1.5rem'} />
+          <DsHeading>{t('add_altinn2_account_page.forgot_password')}</DsHeading>
+        </DsDialog.Block>
+        <DsDialog.Block className={classes.addAltinn2Account}>
+          <DsParagraph>{t('add_altinn2_account_page.forgot_password_info')}</DsParagraph>
+          <DsTextfield
+            label={t('add_altinn2_account_page.username')}
+            data-size='sm'
+            value={userName}
+            onChange={(e) => setUserName(e.target.value)}
+            onKeyDown={(e: React.KeyboardEvent<HTMLInputElement>) => {
+              if (e.key === 'Enter') {
+                e.preventDefault();
+                sendForgotPasswordEmail();
+              }
             }}
-          >
-            {t('common.cancel')}
-          </DsButton>
-        </div>
-      </DsDialog.Block>
+          />
+          {forgotPasswordError && <DsAlert data-color='danger'>{forgotPasswordError}</DsAlert>}
+          <div className={classes.buttonRow}>
+            <DsButton
+              variant='primary'
+              aria-disabled={isSendEmailButtonDisabled}
+              loading={isSendingForgotPasswordEmail}
+              onClick={sendForgotPasswordEmail}
+            >
+              {t('add_altinn2_account_page.send_link')}
+            </DsButton>
+            <DsButton
+              variant='secondary'
+              onClick={() => {
+                setIsShowPasswordStepVisible(false);
+                setUserName('');
+              }}
+            >
+              {t('common.cancel')}
+            </DsButton>
+          </div>
+        </DsDialog.Block>
+      </>
     );
 
   return (

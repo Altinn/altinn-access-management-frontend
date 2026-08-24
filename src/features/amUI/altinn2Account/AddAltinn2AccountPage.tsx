@@ -52,7 +52,7 @@ export const AddAltinn2AccountPage = () => {
 
   const onAddAltinn2Account = async (userName: string, password: string) => {
     try {
-      await addAltinn2Account({ userName, password }).unwrap();
+      await addAltinn2Account({ userName: userName.trim(), password }).unwrap();
       setStep(3);
     } catch {
       // error displayed via addUserError RTK Query state
@@ -61,13 +61,19 @@ export const AddAltinn2AccountPage = () => {
 
   const onSendForgotPasswordEmail = (userName: string) => {
     const lang = i18n.language as 'no_nb' | 'no_nn' | 'en';
-    sendForgotPasswordEmail({ userName, lang })
+    sendForgotPasswordEmail({ userName: userName.trim(), lang })
       .unwrap()
       .then((payload) => {
         if (payload.maskedEmail) {
           setStep(4);
         } else {
-          setForgotPasswordError(t('add_altinn2_account_page.no_email_for_username'));
+          let errorMessage = t('add_altinn2_account_page.no_email_for_username');
+          if (userName.indexOf('@') > -1) {
+            errorMessage = errorMessage.concat(
+              ` ${t('add_altinn2_account_page.email_as_username')}`,
+            );
+          }
+          setForgotPasswordError(errorMessage);
         }
       })
       .catch(() => {
