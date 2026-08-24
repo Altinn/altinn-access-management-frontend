@@ -470,11 +470,11 @@
       "sent_request_error": "Could not send request for power of attorney for {{resource}}",
       "withdraw_request_success": "Request for power of attorney for {{resource}} has been deleted",
       "withdraw_request_error": "Could not delete request for power of attorney for {{resource}}",
-      "sent_requests_item": "Access request",
+      "sent_requests_item": "Power of attorney request",
       "active_access_request_one": "{{count}} active",
       "active_access_request_other": "{{count}} active",
       "view_requests": "View requests",
-      "sent_requests_modal_header": "Your request for access to {{partyName}} has been sent. You will be notified when it is approved."
+      "sent_requests_modal_header": "Your request for powers of attorney to {{partyName}} has been sent. You will be notified when they are approved."
     }
   },
   "status_section": {
