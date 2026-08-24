@@ -175,7 +175,7 @@ export const ClientAccessList = ({
         const showAction = !requireDelegableForActions || actionIsDelegable;
         const packageName = accessPackage?.name || pkg.name;
         const packageCount = t('access_packages.package_number_of_resources', {
-          count: pkg.resources.length,
+          count: accessPackage?.resources?.length ?? 0,
         });
         const roleDescription =
           access.role.code !== 'rettighetshaver'
