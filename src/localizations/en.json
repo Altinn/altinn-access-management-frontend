@@ -1174,6 +1174,7 @@
     "forgot_password_info": "Enter your username, and we will send a link to add account to the email address registered for this username.",
     "forgot_password_error": "Could not send email. Check that the username is correct.",
     "no_email_for_username": "We found no email for this username. Check that the username is correct.",
+    "email_as_username": "Did you enter an email address instead of a username?",
     "send_link": "Send link",
     "forgot_password_sent": "We have sent an email to {{email}}.",
     "add_account_from_token_error": "Could not add account",
