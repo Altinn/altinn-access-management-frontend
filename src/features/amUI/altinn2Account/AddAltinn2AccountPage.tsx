@@ -52,7 +52,7 @@ export const AddAltinn2AccountPage = () => {
 
   const onAddAltinn2Account = async (userName: string, password: string) => {
     try {
-      await addAltinn2Account({ userName, password }).unwrap();
+      await addAltinn2Account({ userName: userName.trim(), password }).unwrap();
       setStep(3);
     } catch {
       // error displayed via addUserError RTK Query state

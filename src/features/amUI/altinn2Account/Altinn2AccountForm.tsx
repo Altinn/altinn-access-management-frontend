@@ -26,7 +26,6 @@ interface Altinn2AccountFormProps {
 
 export const Altinn2AccountForm = ({
   onAddAltinn2Account,
-
   isAddingAltinn2Account,
   addUserError,
   onSendForgotPasswordEmail,
