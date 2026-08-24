@@ -174,6 +174,9 @@ export const ClientAccessList = ({
         const actionIsDelegable = accessPackage?.isDelegable ?? false;
         const showAction = !requireDelegableForActions || actionIsDelegable;
         const packageName = accessPackage?.name || pkg.name;
+        const packageCount = t('access_packages.package_number_of_resources_other', {
+          count: accessPackage?.resources?.length ?? 0,
+        });
         const roleDescription =
           access.role.code !== 'rettighetshaver'
             ? t('client_administration_page.via_role', { role: roleName })
@@ -242,7 +245,7 @@ export const ClientAccessList = ({
           interactive: showModalTrigger,
           as: showModalTrigger ? 'button' : 'div',
           titleAs: 'div',
-          description: roleDescription ?? '',
+          description: packageCount ?? '',
           color: (hasAccess ? 'company' : 'neutral') as Color,
           onClick:
             showModalTrigger && accessPackage
