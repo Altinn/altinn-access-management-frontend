@@ -641,7 +641,7 @@
     "delegate_error": "Kunne ikkje gi {{name}} fullmakt til {{accessName}}.",
     "remove_success_snackbar": "{{name}} har ikkje lenger fullmakt til {{accessName}}.",
     "remove_error": "Kunne ikkje slette fullmakt til {{accessName}} for {{name}}.",
-    "via_role": "Tilgjengelig via Eningsregisteret",
+    "via_role": "Tilgjengeleg via Einingsregisteret",
     "packages_heading": "Tilgangspakkar:",
     "single_rights_heading": "Enkelttenester:",
     "agent_has_clients_tab": "Har desse klientane",
