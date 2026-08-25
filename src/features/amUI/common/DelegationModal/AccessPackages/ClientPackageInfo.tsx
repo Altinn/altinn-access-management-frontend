@@ -91,14 +91,20 @@ export const ClientPackageInfo = ({
             </DsAlert>
           )}
 
+          {roleDescription && (
+            <DsParagraph
+              data-size='xs'
+              className={classes.roleDescription}
+            >
+              {roleDescription}
+            </DsParagraph>
+          )}
           <StatusSection
             userHasAccess={userHasAccess}
             inheritedStatus={inheritedStatus}
             cannotDelegateHere={cannotChangeAccess}
             toPartyName={userName}
           />
-
-          {roleDescription && <DsParagraph data-size='sm'>{roleDescription}</DsParagraph>}
 
           <PackageMeta accessPackage={accessPackage} />
 
