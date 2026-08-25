@@ -27,8 +27,6 @@ export interface StatusSectionProps {
   inheritedStatus?: InheritedStatusMessageType[];
   cannotDelegateHere?: boolean;
   showDelegationCheckWarning?: boolean;
-  delegationCheckTranslationKey?: string;
-  delegationCheckValues?: Record<string, unknown>;
   showUndelegatedWarning?: boolean;
   undelegatedPackageName?: string;
   isPendingRequest?: boolean;
@@ -41,8 +39,6 @@ export const StatusSection = ({
   inheritedStatus,
   cannotDelegateHere = false,
   showDelegationCheckWarning = false,
-  delegationCheckTranslationKey = 'status_section.delegation_check_not_delegable',
-  delegationCheckValues,
   showUndelegatedWarning = false,
   undelegatedPackageName,
   isPendingRequest,
@@ -84,12 +80,6 @@ export const StatusSection = ({
 
   const formattedUserName = formattedToPartyName;
   const shouldShowDelegationCheck = !cannotDelegateHere && showDelegationCheckWarning;
-
-  const delegationCheckValuesWithDefaults = {
-    you: t('common.you_uppercase'),
-    reporteeorg: formattedFromPartyName,
-    ...delegationCheckValues,
-  };
 
   // remove duplicates from inheritedStatus. Items are duplicate if type AND via.id are the same
   const uniqueInheritedStatus = Array.from(
@@ -194,9 +184,8 @@ export const StatusSection = ({
           />
           <DsParagraph data-size='sm'>
             <Trans
-              i18nKey={delegationCheckTranslationKey}
+              i18nKey={'status_section.delegation_check_not_delegable'}
               components={{ b: <strong /> }}
-              values={delegationCheckValuesWithDefaults}
             />
           </DsParagraph>
         </div>

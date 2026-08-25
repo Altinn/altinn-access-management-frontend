@@ -407,7 +407,7 @@
     "package_delegation_description": "Open an area to see which access packages it contains.",
     "name_will_receive": "<strong>{{name}}</strong> will receive:",
     "name_has_the_following": "<strong>{{name}}</strong> has the following:",
-    "name_requests_access_to": "<strong>{{name}}</strong> is asking for:",
+    "name_requests_access_to": "<strong>{{name}}</strong> request:",
     "give_poa": "Give power of attorney",
     "success_message": "Power of attorney was successfully given to {{name}}",
     "error_message": "Failed to give power of attorney to {{name}}",
@@ -1095,8 +1095,12 @@
     "systemuser_item_description": "{{reportee}}'s system accesses",
     "maskinporten_item_description": "Manage powers of attorney for APIs in Maskinporten",
     "client_admin_item_description": "Grant powers of attorney from clients to users in {{reportee}}",
-    "new_requests_single": "{{reportee}} has {{requestCount}} new request",
-    "new_requests_plural": "{{reportee}} has {{requestCount}} new requests"
+    "new_requests_self_zero": "You have no new requests",
+    "new_requests_self_one": "You have one new request",
+    "new_requests_self_other": "You have {{count}} new requests",
+    "new_requests_zero": "{{reportee}} has no new request",
+    "new_requests_one": "{{reportee}} has one new request",
+    "new_requests_other": "{{reportee}} has {{count}} new requests"
   },
   "request_page": {
     "page_title": "Requests - Altinn",
