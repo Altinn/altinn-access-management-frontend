@@ -1098,7 +1098,7 @@
     "new_requests_self_zero": "You have no new requests",
     "new_requests_self_one": "You have one new request",
     "new_requests_self_other": "You have {{count}} new requests",
-    "new_requests_zero": "{{reportee}} has no new request",
+    "new_requests_zero": "{{reportee}} has no new requests",
     "new_requests_one": "{{reportee}} has one new request",
     "new_requests_other": "{{reportee}} has {{count}} new requests"
   },

@@ -1097,7 +1097,7 @@
     "new_requests_self_other": "Du har {{count}} nye forespørsler",
     "new_requests_zero": "{{reportee}} har ingen nye forespørsler",
     "new_requests_one": "{{reportee}} har en ny forespørsel",
-    "new_requests_other": "{{reportee}} har {{count}} har forespørsler"
+    "new_requests_other": "{{reportee}} har {{count}} nye forespørsler"
   },
   "request_page": {
     "page_title": "Forespørsler - Altinn",

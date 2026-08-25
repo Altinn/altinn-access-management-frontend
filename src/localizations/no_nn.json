@@ -1092,11 +1092,11 @@
     "maskinporten_item_description": "Administrer fullmakter til API som ligg i Maskinporten",
     "client_admin_item_description": "Gi fullmakter frå klientar til brukarar i {{reportee}}.",
     "new_requests_self_zero": "Du har ingen nye førespurnader",
-    "new_requests_self_one": "Du har en ny førespurnad",
+    "new_requests_self_one": "Du har ein ny førespurnad",
     "new_requests_self_other": "Du har {{count}} nye førespurnader",
     "new_requests_zero": "{{reportee}} har ingen nye førespurnader",
     "new_requests_one": "{{reportee}} har en ny førespurnad",
-    "new_requests_other": "{{reportee}} har {{count}} har førespurnader"
+    "new_requests_other": "{{reportee}} har {{count}} nye førespurnader"
   },
   "request_page": {
     "page_title": "Førespurnader - Altinn",
