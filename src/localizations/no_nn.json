@@ -1057,6 +1057,8 @@
     "no_user_resources": "Denne brukaren har ingen tenester.",
     "filter_by_serviceowner": "Filtrer på tenesteeigar",
     "filtered_serviceowners": "{{count}} tenesteeigarar",
+    "all_serviceowners": "Alle tenesteeigarar",
+    "choose_serviceowner": "Vel tenesteeigar",
     "resource_search_clear": "Tøm søk",
     "remove_filter": "Fjern filter",
     "service_owner_filter": "Søk etter tenesteeigar",

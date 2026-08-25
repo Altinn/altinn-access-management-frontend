@@ -11,6 +11,7 @@ interface ResourceFilterToolbarProps {
   searchPlaceholder?: string;
 }
 const OWNER_FILTER_KEY = 'owner';
+const ALL_SERVICE_OWNERS = 'all_service_owners_key';
 
 export const ResourceFilterToolbar = ({
   search,
@@ -23,13 +24,22 @@ export const ResourceFilterToolbar = ({
   const { t } = useTranslation();
   const placeholder = searchPlaceholder ?? t('resource_list.resource_search_placeholder');
 
+  const [ownerSearch, setOwnerSearch] = React.useState('');
+
+  // "Alle tjenesteeiere" is checked whenever no items are selected
   const filterStateWithOwner = React.useMemo(
-    () => ({ [OWNER_FILTER_KEY]: filterState }),
+    () => ({
+      [OWNER_FILTER_KEY]: filterState.length > 0 ? filterState : [ALL_SERVICE_OWNERS],
+    }),
     [filterState],
   );
 
   const onFilterStateChange = (newFilterState: FilterState) => {
-    setFilterState((newFilterState[OWNER_FILTER_KEY] as string[]) ?? []);
+    const newOwners = (newFilterState[OWNER_FILTER_KEY] as string[]) ?? [];
+    const pickedAllServiceOwners = newOwners[newOwners.length - 1] === ALL_SERVICE_OWNERS;
+    setFilterState(
+      pickedAllServiceOwners ? [] : newOwners.filter((owner) => owner !== ALL_SERVICE_OWNERS),
+    );
   };
 
   return (
@@ -47,12 +57,13 @@ export const ResourceFilterToolbar = ({
         filterState: filterStateWithOwner,
         onFilterStateChange: onFilterStateChange,
         getFilterLabel: (_name, value) => {
-          if (value && value.length > 1) {
-            return t('resource_list.filtered_serviceowners', { count: value?.length });
-          } else if (value && value.length === 1) {
-            return serviceOwnerOptions.find((owner) => owner.value === value[0])?.label;
+          const selectedOwners = (value ?? []).filter((owner) => owner !== ALL_SERVICE_OWNERS);
+          if (selectedOwners.length > 1) {
+            return t('resource_list.filtered_serviceowners', { count: selectedOwners.length });
+          } else if (selectedOwners.length === 1) {
+            return serviceOwnerOptions.find((owner) => owner.value === selectedOwners[0])?.label;
           }
-          return t('resource_list.filter_by_serviceowner');
+          return t('resource_list.all_serviceowners');
         },
         filters: [
           {
@@ -66,15 +77,34 @@ export const ResourceFilterToolbar = ({
               placeholder: t('resource_list.service_owner_filter'),
               name: 'search-service-owner',
               clearButtonAltText: t('resource_list.service_owner_filter_clear'),
+              onChange: (e: React.ChangeEvent<HTMLInputElement>) => setOwnerSearch(e.target.value),
+              onClear: () => setOwnerSearch(''),
             },
-            items: serviceOwnerOptions.map((owner) => ({
-              value: owner.value,
-              name: OWNER_FILTER_KEY,
-              role: 'checkbox',
-              count: owner.count,
-              label: `${owner.label}${owner.count ? ` (${owner.count})` : ''}`,
-              searchWords: [owner.label],
-            })),
+            groups: { all: { title: t('resource_list.choose_serviceowner') }, owners: {} },
+            items: [
+              ...(ownerSearch.trim().length > 0
+                ? []
+                : [
+                    {
+                      id: ALL_SERVICE_OWNERS,
+                      value: ALL_SERVICE_OWNERS,
+                      name: OWNER_FILTER_KEY,
+                      groupId: 'all',
+                      role: 'checkbox',
+                      label: t('resource_list.all_serviceowners'),
+                    },
+                  ]),
+              ...serviceOwnerOptions.map((owner) => ({
+                id: owner.value,
+                value: owner.value,
+                name: OWNER_FILTER_KEY,
+                groupId: 'owners',
+                role: 'checkbox',
+                count: owner.count,
+                label: `${owner.label}${owner.count ? ` (${owner.count})` : ''}`,
+                searchWords: [owner.label],
+              })),
+            ],
           },
         ],
       }}

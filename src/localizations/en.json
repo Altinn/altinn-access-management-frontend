@@ -1061,6 +1061,8 @@
     "no_user_resources": "This user has no services.",
     "filter_by_serviceowner": "Filter by service owner",
     "filtered_serviceowners": "{{count}} service owners",
+    "all_serviceowners": "All service owners",
+    "choose_serviceowner": "Choose service owner",
     "resource_search_clear": "Clear search",
     "remove_filter": "Remove filter",
     "service_owner_filter": "Search for service owner",
