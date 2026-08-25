@@ -2,13 +2,9 @@ import React, { useMemo, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import {
   AccessPackageListItemProps,
-  Button,
-  DsParagraph,
   type UserListItemProps,
-  type Color,
   formatDisplayName,
 } from '@altinn/altinn-components';
-import { MinusCircleIcon, PlusCircleIcon } from '@navikt/aksel-icons';
 
 import type {
   AddAgentAccessPackagesFn,
@@ -34,6 +30,7 @@ import {
 } from '../DelegationModal/AccessPackages/ClientPackageInfoModal';
 import { ClientAccessSections } from '../ClientResourceList/ClientAccessSections';
 import { type ClientResourceListItemData } from '../ClientResourceList/ClientResourceListItems';
+import { buildPackageItem, buildResourceItem } from '../ClientResourceList/buildAccessItems';
 import {
   ClientResourceInfoModal,
   type ClientResourceModalData,
@@ -103,8 +100,7 @@ export const ClientAgentPackageList = ({
   const { getRoleMetadata } = useRoleMetadata();
   const isMobileOrSmaller = useIsMobileOrSmaller();
 
-  const delegateDisabled = isLoading || !fromPartyUuid || !actingPartyUuid;
-  const removeDisabled = isLoading || !fromPartyUuid || !actingPartyUuid;
+  const actionsDisabled = isLoading || !fromPartyUuid || !actingPartyUuid;
 
   const { addClientAccessPackage, removeClientAccessPackage } = useClientAccessPackageActions({
     fromPartyUuid,
@@ -163,11 +159,10 @@ export const ClientAgentPackageList = ({
   const agentHasResource = (agentId: string, refId: string) =>
     resourceRefIdsByAgentId.get(agentId)?.has(refId) ?? false;
 
-  const sortedAgents = useMemo(() => {
-    return [...agents].sort((a, b) => {
-      return getAgentSortKey(a).localeCompare(getAgentSortKey(b));
-    });
-  }, [agents]);
+  const sortedAgents = useMemo(
+    () => [...agents].sort((a, b) => getAgentSortKey(a).localeCompare(getAgentSortKey(b))),
+    [agents],
+  );
 
   const userListItems: UserListItemData[] = sortedAgents.map((agent) => {
     const agentId = agent.agent.id;
@@ -183,7 +178,7 @@ export const ClientAgentPackageList = ({
 
       const roleName = getRoleMetadata(access.role.id)?.name ?? access.role.name;
 
-      const packages = access.packages?.map<AccessPackageListItemProps>((pkg) => {
+      const packages = access.packages.map<AccessPackageListItemProps>((pkg) => {
         const hasAccess = agentHasPackage(agentId, pkg.id);
         const accessPackage = getAccessPackageById(pkg.id);
         const delegable = accessPackage?.isDelegable ?? false;
@@ -214,7 +209,7 @@ export const ClientAgentPackageList = ({
             onError,
           );
 
-        const openModal =
+        const onOpenModal =
           accessPackage && delegable
             ? () => {
                 setSelected({
@@ -240,47 +235,23 @@ export const ClientAgentPackageList = ({
               }
             : undefined;
 
-        const showModalTrigger = !!openModal;
-
-        return {
-          id: pkg.id,
-          name: packageName,
-          type: packageType,
-          isSubUnit: clientIsSubUnit,
-          interactive: showModalTrigger,
-          titleAs: 'h3',
-          description: roleDescription ?? '',
-          as: showModalTrigger ? 'button' : 'div',
-          color: (hasAccess ? 'company' : 'neutral') as Color,
-          onClick: showModalTrigger ? openModal : undefined,
-          controls:
-            !isMobileOrSmaller &&
-            delegable &&
-            (hasAccess ? (
-              <Button
-                variant='tertiary'
-                disabled={removeDisabled}
-                onClick={() => onRevoke()}
-              >
-                <MinusCircleIcon aria-hidden='true' />
-                {t('common.delete_poa')}
-              </Button>
-            ) : (
-              <Button
-                variant='tertiary'
-                disabled={delegateDisabled}
-                onClick={() => onDelegate()}
-              >
-                <PlusCircleIcon aria-hidden='true' />
-                {t('common.give_poa')}
-              </Button>
-            )),
-        };
+        return buildPackageItem({
+          pkg,
+          accessPackage,
+          packageName,
+          hasAccess,
+          showAction: delegable,
+          isMobileOrSmaller,
+          addDisabled: actionsDisabled,
+          removeDisabled: actionsDisabled,
+          onDelegate: delegable ? onDelegate : undefined,
+          onRevoke: delegable ? onRevoke : undefined,
+          onOpenModal,
+          t,
+        });
       });
 
-      if (packages) {
-        acc.push(...packages.filter((pkg): pkg is AccessPackageListItemProps => pkg !== null));
-      }
+      acc.push(...packages);
 
       return acc;
     }, [] as AccessPackageListItemProps[]);
@@ -306,45 +277,31 @@ export const ClientAgentPackageList = ({
         const onRevoke = (onSuccess?: () => void, onError?: (error?: ActionError) => void) =>
           removeClientResource(delegationInput, onSuccess, onError);
 
-        acc.push({
-          id: `${access.role.code}:${clientResource.refId}`,
-          resource,
-          hasAccess,
-          titleAs: 'h3',
-          onClick: () => {
-            setSelectedResource({
-              agentId,
-              refId: clientResource.refId,
-              resource,
-              toPartyName: agentName,
-              onDelegate: delegable ? onDelegate : undefined,
-              onRevoke: delegable ? onRevoke : undefined,
-            });
-            resourceModalRef.current?.showModal();
-          },
-          controls:
-            !isMobileOrSmaller &&
-            delegable &&
-            (hasAccess ? (
-              <Button
-                variant='tertiary'
-                disabled={removeDisabled}
-                onClick={() => onRevoke()}
-              >
-                <MinusCircleIcon aria-hidden='true' />
-                {t('common.delete_poa')}
-              </Button>
-            ) : (
-              <Button
-                variant='tertiary'
-                disabled={delegateDisabled}
-                onClick={() => onDelegate()}
-              >
-                <PlusCircleIcon aria-hidden='true' />
-                {t('common.give_poa')}
-              </Button>
-            )),
-        });
+        acc.push(
+          buildResourceItem({
+            id: `${access.role.code}:${clientResource.refId}`,
+            resource,
+            hasAccess,
+            showAction: delegable,
+            isMobileOrSmaller,
+            addDisabled: actionsDisabled,
+            removeDisabled: actionsDisabled,
+            onDelegate: delegable ? onDelegate : undefined,
+            onRevoke: delegable ? onRevoke : undefined,
+            onOpenModal: () => {
+              setSelectedResource({
+                agentId,
+                refId: clientResource.refId,
+                resource,
+                toPartyName: agentName,
+                onDelegate: delegable ? onDelegate : undefined,
+                onRevoke: delegable ? onRevoke : undefined,
+              });
+              resourceModalRef.current?.showModal();
+            },
+            t,
+          }),
+        );
       });
 
       return acc;
