@@ -8,6 +8,7 @@ import {
   formatDisplayName,
   Layout,
   RootProvider,
+  useConsent,
 } from '@altinn/altinn-components';
 import { getAltinnStartPageUrl, getLogoutUrl } from '@/resources/utils/pathUtils';
 import { useUpdateSelectedLanguageMutation } from '@/rtk/features/settingsApi';
@@ -49,6 +50,9 @@ export const RequestPageLayout = ({
   const [updateSelectedLanguage] = useUpdateSelectedLanguageMutation();
 
   const { data: userData } = useGetUserProfileQuery();
+  const { isAnswered, acceptAll, rejectAll } = useConsent();
+
+  const languageCode = i18n.language === 'no_nn' ? 'nn' : i18n.language === 'en' ? 'en' : 'nb';
 
   const partyUuid = useRedirectToRequestParty(requestPartyUuid);
   // While a reportee switch is pending, keep showing the loading state so the
@@ -63,10 +67,15 @@ export const RequestPageLayout = ({
   };
 
   return (
-    <RootProvider>
+    <RootProvider languageCode={languageCode}>
       <Layout
         color={account.type}
         theme='subtle'
+        cookieBanner={
+          window.featureFlags?.enableSkyra !== true || isAnswered
+            ? undefined
+            : { onAccept: acceptAll, onReject: rejectAll }
+        }
         header={{
           locale: {
             title: t('header.locale_title'),

@@ -60,11 +60,11 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
             Assert.StartsWith("0", xxsProtectionHeaders.ElementAt(0));
             Assert.StartsWith("strict-origin-when-cross-origin", referrerPolicyHeaders.ElementAt(0));
             Assert.Contains("default-src 'self';", contentSecurityPolicyHeaders.ElementAt(0));
-            Assert.Contains("script-src 'self' 'unsafe-inline'", contentSecurityPolicyHeaders.ElementAt(0));
+            Assert.Contains("script-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net;", contentSecurityPolicyHeaders.ElementAt(0));
             Assert.Contains("style-src 'self' 'unsafe-inline' https://altinncdn.no;", contentSecurityPolicyHeaders.ElementAt(0));
             Assert.Contains("font-src 'self' https://altinncdn.no data:;", contentSecurityPolicyHeaders.ElementAt(0));
             Assert.Contains("img-src 'self' data: https://altinncdn.no;", contentSecurityPolicyHeaders.ElementAt(0));
-            Assert.Contains("connect-src 'self';", contentSecurityPolicyHeaders.ElementAt(0));
+            Assert.Contains("connect-src 'self' https://ingest.skyra.no;", contentSecurityPolicyHeaders.ElementAt(0));
             Assert.Contains("frame-ancestors 'none';", contentSecurityPolicyHeaders.ElementAt(0));
             Assert.Contains("base-uri 'self';", contentSecurityPolicyHeaders.ElementAt(0));
             Assert.Contains("object-src 'none';", contentSecurityPolicyHeaders.ElementAt(0));
