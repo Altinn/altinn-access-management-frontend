@@ -1,4 +1,11 @@
 import { DelegationCheckedRight, Right } from '@/rtk/features/singleRights/singleRightsApi';
+import { InheritedStatusType } from '../../useInheritedStatus';
+
+type InheritedReason = {
+  toParty: string;
+  viaParty: string;
+  reason: InheritedStatusType;
+};
 
 export type ChipRight = {
   rightName: string;
@@ -8,12 +15,14 @@ export type ChipRight = {
   delegated: boolean;
   delegationReason: string;
   inherited?: boolean;
+  inheritedReason?: InheritedReason;
 };
 
 type MapRightsToChipRightsOptions = {
   isDelegated?: (right: DelegationCheckedRight) => boolean;
   isInherited?: (rightKey: string) => boolean;
   isChecked?: (right: DelegationCheckedRight) => boolean;
+  getInheritedReason?: (rightKey: string) => InheritedReason | undefined;
 };
 
 export const mapRightsToChipRights = (
@@ -23,6 +32,7 @@ export const mapRightsToChipRights = (
     isDelegated = () => false,
     isInherited = () => false,
     isChecked,
+    getInheritedReason,
   }: MapRightsToChipRightsOptions = {},
 ): ChipRight[] => {
   let mappableRights: DelegationCheckedRight[] = [];
@@ -57,6 +67,8 @@ export const mapRightsToChipRights = (
       delegated,
       delegationReason: right.reasonCodes.length > 0 ? right.reasonCodes[0] : '',
       inherited,
+      inheritedReason:
+        inherited && getInheritedReason ? getInheritedReason(right.right.key) : undefined,
     };
   });
 };

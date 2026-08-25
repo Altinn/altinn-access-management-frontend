@@ -3,6 +3,15 @@ import { DsChip, DsPopover } from '@altinn/altinn-components';
 import type { ChipRight } from '../utils/rightsUtils';
 import { useTranslation } from 'react-i18next';
 import classes from './ResourceInfo.module.css';
+import { InheritedStatusType } from '../../useInheritedStatus';
+
+const STATUS_TRANSLATION_KEYS: Record<InheritedStatusType, string> = {
+  [InheritedStatusType.ViaRole]: 'single_rights.action_popover.right_inherited_via_role',
+  [InheritedStatusType.ViaConnection]:
+    'single_rights.action_popover.right_inherited_via_connection',
+  [InheritedStatusType.ViaKeyRole]: 'single_rights.action_popover.right_inherited_via_keyrole',
+  [InheritedStatusType.ViaER]: 'single_rights.action_popover.right_inherited_via_er',
+};
 
 interface RightChipsProps {
   rights: ChipRight[];
@@ -24,8 +33,10 @@ export const RightChips = ({ rights, setRights, editable }: RightChipsProps) => 
       }),
     );
 
-  const onActionClick = (right: ChipRight) => {
+  const onActionClick = (right: ChipRight, editable: boolean | undefined) => {
     if (right.inherited) {
+      setPopoverOpen(right.rightKey);
+    } else if (!editable) {
       setPopoverOpen(right.rightKey);
     } else if (!right.delegable && right.checked) {
       setPopoverOpen(right.rightKey);
@@ -34,25 +45,39 @@ export const RightChips = ({ rights, setRights, editable }: RightChipsProps) => 
     }
   };
 
+  const getPopoverText = (right: ChipRight, editable: boolean | undefined): string => {
+    if (right.inherited) {
+      const textKey = STATUS_TRANSLATION_KEYS[right.inheritedReason?.reason as InheritedStatusType];
+
+      if (!textKey) {
+        return t('single_rights.action_popover.right_inherited');
+      }
+      return t(textKey, {
+        user_name: right.inheritedReason?.toParty,
+        via_name: right.inheritedReason?.viaParty,
+      });
+    } else if (!editable) {
+      return t('single_rights.action_popover.right_not_editable');
+    }
+    return t('single_rights.action_popover.right_not_delegable');
+  };
+
   return (
     <>
       {rights
         .filter((right: ChipRight) => !editable || right.delegable || right.checked)
         .map((right: ChipRight) => {
           const actionText = right.rightName;
-          const isPopoverTarget = right.inherited || (!right.delegable && right.checked);
-          const popoverText = isPopoverTarget
-            ? right.inherited
-              ? t('single_rights.action_popover.right_inherited')
-              : t('single_rights.action_popover.right_not_delegable')
-            : undefined;
+          const isPopoverTarget =
+            right.inherited || !editable || (!right.delegable && right.checked);
+          const popoverText = isPopoverTarget ? getPopoverText(right, editable) : undefined;
           return (
             <div key={right.rightKey}>
               <DsChip.Checkbox
                 className={classes.chip}
                 data-size='sm'
                 checked={right.checked}
-                onClick={() => editable && onActionClick(right)}
+                onClick={() => onActionClick(right, editable)}
                 popoverTarget={isPopoverTarget ? `popover_${right.rightKey}` : undefined}
                 aria-describedby={isPopoverTarget ? `popover_${right.rightKey}` : undefined}
               >
