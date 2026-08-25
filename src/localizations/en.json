@@ -454,6 +454,23 @@
       "heading": "Do you want to delete the access not linked to the Central Coordinating Register for Legal Entities?",
       "body": "<p>{{ to_name }} has been granted this authorization both directly and through their roles in the Central Coordinating Register for Legal Entities.</p><p>Even if you delete this directly granted authorization, the user will still have the authorization through the Central Coordinating Register for Legal Entities.</p>"
     },
+    "package_warning": {
+      "heading": "Are you sure?",
+      "delegate": {
+        "confirm": "Yes, grant authorization",
+        "hovedadministrator": "<p>Main administrator is an extensive access package. The recipient will be able to grant themselves and other users any authorization for the organization. This access package should only be given to someone you trust.</p><p>Do you want to grant {{package_name}} to {{to_name}}?</p>",
+        "tilgangsstyring_person_to_person": "<p>Anyone who receives this access package gets access to your complete authorization overview, and can pass on the authorizations they have themselves. {{to_name}} only needs this package if they are going to pass your authorizations on to others.</p><p>Do you still want to grant {{package_name}} to {{to_name}}?</p>",
+        "tilgangsstyring_person_to_org": "<p>Anyone who receives this access package gets access to your authorization overview, and can pass on the authorizations they have themselves. {{to_name}} only needs this package if they are going to pass your authorizations on to others than their own employees, e.g. other organizations.</p><p>Do you still want to grant {{package_name}} to {{to_name}}?</p>",
+        "tilgangsstyring_org_to_org": "<p>Anyone who receives this access package gets access to the organization's authorization overview, and can pass on the authorizations they have themselves. To pass authorizations on to employees, {{to_name}} can use client administration and does not need the {{package_name}} package. If they are going to pass the authorizations on to other organizations, you still need to grant them this package.</p><p>Do you want to grant {{package_name}} to {{to_name}}?</p>"
+      },
+      "request": {
+        "confirm": "Yes, request authorization",
+        "hovedadministrator": "<p>Main administrator is an extensive access package. The recipient will be able to grant themselves and other users any authorization for the organization.</p><p>Do you still want to request {{package_name}} from {{from_name}}?</p>",
+        "tilgangsstyring_person_to_person": "<p>Anyone who receives this access package gets access to the complete authorization overview of {{from_name}}, and can pass on the authorizations they have themselves. You only need this package if you are going to pass the authorizations on to others.</p><p>Do you still want to request {{package_name}} from {{from_name}}?</p>",
+        "tilgangsstyring_person_to_org": "<p>Anyone who receives this access package gets access to the authorization overview of {{from_name}}, and can pass on the authorizations they have themselves. {{to_name}} only needs this package to pass the authorizations on to others than its own employees, e.g. other organizations.</p><p>Do you still want to request {{package_name}} from {{from_name}}?</p>",
+        "tilgangsstyring_org_to_org": "<p>Anyone who receives this access package gets access to the authorization overview of {{from_name}}, and can pass on the authorizations they have themselves. To pass authorizations on to its own employees, {{to_name}} can use client administration and does not need the {{package_name}} package. It is only needed to pass the authorizations on to other organizations.</p><p>Do you still want to request {{package_name}} from {{from_name}}?</p>"
+      }
+    },
     "service_error": {
       "general_heading": "You cannot give power of attorney to this service",
       "approve_heading": "You cannot approve requests for this service",

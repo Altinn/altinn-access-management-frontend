@@ -96,6 +96,7 @@ export const AccessPackageList = ({
     hasPendingRequest,
     isLoadingRequest,
     isLoading: isActionLoading,
+    packageWarningDialog,
   } = useAccessPackageActions({
     snackbarBusy: fetchingDelegations,
     onDelegateSuccess: (accessPackage, toParty) => {
@@ -260,6 +261,7 @@ export const AccessPackageList = ({
       ) : (
         <>{renderAccessPackageList(displayAreas, firstHeadingLevel)}</>
       )}
+      {packageWarningDialog}
     </div>
   );
 };

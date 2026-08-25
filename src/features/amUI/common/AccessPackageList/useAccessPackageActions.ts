@@ -18,6 +18,7 @@ import { useSnackbarOnIdle } from '@/resources/hooks/useSnackbarOnIdle';
 
 import { usePartyRepresentation } from '../PartyRepresentationContext/PartyRepresentationContext';
 import { PartyType } from '@/rtk/features/userInfoApi';
+import { usePackageWarningDialog } from '../PackageWarningDialog';
 
 interface useAccessPackageActionsProps {
   onDelegateSuccess?: (accessPackage: AccessPackage, toParty: Party) => void;
@@ -42,6 +43,7 @@ export const useAccessPackageActions = ({
   const [withdrawRequest] = useWithdrawRequestMutation();
   const [loadingByPackageId, setLoadingByPackageId] = useState<Record<string, boolean>>({});
   const [awaitingRefetch, setAwaitingRefetch] = useState<Set<string>>(new Set());
+  const { confirmPackageAction, packageWarningDialog } = usePackageWarningDialog();
   const isLoading = isDelegationLoading || isRevokeLoading;
 
   const { t } = useTranslation();
@@ -164,23 +166,29 @@ export const useAccessPackageActions = ({
     const targetToParty = toParty ?? toPartyFromContext;
     if (!targetToParty) return;
 
-    delegatePackage(
-      targetToParty,
-      fromParty,
-      actingParty,
-      accessPackage,
-      () => {
-        handleDelegateSuccess(accessPackage, targetToParty);
-      },
-      (httpStatus, details) => {
-        handleDelegateError(
-          accessPackage,
-          targetToParty,
-          httpStatus.toString(),
-          new Date().toISOString(),
-          details,
-        );
-      },
+    const delegate = () =>
+      delegatePackage(
+        targetToParty,
+        fromParty,
+        actingParty,
+        accessPackage,
+        () => {
+          handleDelegateSuccess(accessPackage, targetToParty);
+        },
+        (httpStatus, details) => {
+          handleDelegateError(
+            accessPackage,
+            targetToParty,
+            httpStatus.toString(),
+            new Date().toISOString(),
+            details,
+          );
+        },
+      );
+
+    confirmPackageAction(
+      { action: 'delegate', accessPackage, fromParty, toParty: targetToParty },
+      delegate,
     );
   };
 
@@ -218,42 +226,51 @@ export const useAccessPackageActions = ({
     if (!packageId) return;
     if (loadingByPackageId[packageId]) return;
 
-    setLoadingByPackageId((prev) => ({
-      ...prev,
-      [packageId]: true,
-    }));
-
-    try {
-      await createPackageRequest({
-        party: actingParty.partyUuid,
-        to: fromParty.partyUuid,
-        package: packageId,
-      }).unwrap();
-
-      setLoadingByPackageId((prev) => {
-        const copy = { ...prev };
-        delete copy[packageId];
-        return copy;
-      });
-      setAwaitingRefetch((prev) => new Set([...prev, packageId]));
-      openSnackbar({
-        message: t('delegation_modal.request.sent_request_success', {
-          resource: accessPackage.name,
-        }),
-        color: 'success',
-      });
-    } catch {
+    const request = async () => {
       setLoadingByPackageId((prev) => ({
         ...prev,
-        [packageId]: false,
+        [packageId]: true,
       }));
-      openSnackbar({
-        message: t('delegation_modal.request.sent_request_error', {
-          resource: accessPackage.name,
-        }),
-        color: 'danger',
-      });
-    }
+
+      try {
+        await createPackageRequest({
+          party: actingParty.partyUuid,
+          to: fromParty.partyUuid,
+          package: packageId,
+        }).unwrap();
+
+        setLoadingByPackageId((prev) => {
+          const copy = { ...prev };
+          delete copy[packageId];
+          return copy;
+        });
+        setAwaitingRefetch((prev) => new Set([...prev, packageId]));
+        openSnackbar({
+          message: t('delegation_modal.request.sent_request_success', {
+            resource: accessPackage.name,
+          }),
+          color: 'success',
+        });
+      } catch {
+        setLoadingByPackageId((prev) => ({
+          ...prev,
+          [packageId]: false,
+        }));
+        openSnackbar({
+          message: t('delegation_modal.request.sent_request_error', {
+            resource: accessPackage.name,
+          }),
+          color: 'danger',
+        });
+      }
+    };
+
+    // A request is always for the party currently being viewed (falls back to the acting party)
+    const targetToParty = toPartyFromContext ?? actingParty;
+    confirmPackageAction(
+      { action: 'request', accessPackage, fromParty, toParty: targetToParty },
+      request,
+    );
   };
 
   const deleteRequest = async (accessPackage: AccessPackage) => {
@@ -320,5 +337,6 @@ export const useAccessPackageActions = ({
     isRevokeLoading,
     isRequestLoading,
     isLoading,
+    packageWarningDialog,
   };
 };

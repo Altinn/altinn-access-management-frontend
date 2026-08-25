@@ -450,6 +450,23 @@
       "heading": "Vil du slette tilgangen som ikkje er knytt til Einingsegisteret?",
       "body": "<p>{{ to_name }} har fått denne fullmakta både direkte og gjennom rollene sine i Einingsregisteret.</p><p>Sjølv om du slettar denne fullmakta som er gitt direkte, vil brukaren framleis ha fullmakta gjennom Einingsregisteret.</p>"
     },
+    "package_warning": {
+      "heading": "Er du sikker?",
+      "delegate": {
+        "confirm": "Ja, gi fullmakt",
+        "hovedadministrator": "<p>Hovudadministrator er ein omfattande tilgangspakke. Mottakaren vil kunne gi seg sjølv og andre brukarar alle fullmakter for verksemda. Denne tilgangspakken bør berre givast til nokon du stolar på.</p><p>Ønskjer du å gi {{package_name}} til {{to_name}}?</p>",
+        "tilgangsstyring_person_to_person": "<p>Alle som får denne tilgangspakken får tilgang til heile fullmaktsoversikta di, og kan gi vidare dei fullmaktene dei sjølve har. {{to_name}} treng berre denne pakken om hen skal gi fullmaktene dine vidare til andre.</p><p>Ønskjer du likevel å gi {{package_name}} til {{to_name}}?</p>",
+        "tilgangsstyring_person_to_org": "<p>Alle som får denne tilgangspakken får tilgang til fullmaktsoversikta di, og kan gi vidare dei fullmaktene dei sjølve har. {{to_name}} treng berre denne pakken om dei skal gi fullmaktene dine vidare til andre enn eigne tilsette, t.d. andre verksemder.</p><p>Ønskjer du likevel å gi {{package_name}} til {{to_name}}?</p>",
+        "tilgangsstyring_org_to_org": "<p>Alle som får denne tilgangspakken får tilgang til fullmaktsoversikta til verksemda, og kan gi vidare dei fullmaktene dei sjølve har. For å gi fullmakter vidare til tilsette kan {{to_name}} bruke klientadministrasjon og treng ikkje pakken {{package_name}}. Skal dei gi fullmaktene vidare til andre verksemder må du framleis gi dei denne pakken.</p><p>Ønskjer du å gi {{package_name}} til {{to_name}}?</p>"
+      },
+      "request": {
+        "confirm": "Ja, be om fullmakt",
+        "hovedadministrator": "<p>Hovudadministrator er ein omfattande tilgangspakke. Den som får han vil kunne gi seg sjølv og andre brukarar alle fullmakter for verksemda.</p><p>Ønskjer du likevel å be om {{package_name}} frå {{from_name}}?</p>",
+        "tilgangsstyring_person_to_person": "<p>Den som får denne tilgangspakken får tilgang til heile fullmaktsoversikta til {{from_name}}, og kan gi vidare dei fullmaktene dei sjølve har. Du treng berre denne pakken om du skal gi fullmaktene vidare til andre.</p><p>Ønskjer du likevel å be om {{package_name}} frå {{from_name}}?</p>",
+        "tilgangsstyring_person_to_org": "<p>Den som får denne tilgangspakken får tilgang til fullmaktsoversikta til {{from_name}}, og kan gi vidare dei fullmaktene dei sjølve har. {{to_name}} treng berre denne pakken for å gi fullmaktene vidare til andre enn eigne tilsette, t.d. andre verksemder.</p><p>Ønskjer du likevel å be om {{package_name}} frå {{from_name}}?</p>",
+        "tilgangsstyring_org_to_org": "<p>Den som får denne tilgangspakken får tilgang til fullmaktsoversikta til {{from_name}}, og kan gi vidare dei fullmaktene dei sjølve har. For å gi fullmakter vidare til eigne tilsette kan {{to_name}} bruke klientadministrasjon og treng ikkje pakken {{package_name}}. Han trengst berre for å gi fullmaktene vidare til andre verksemder.</p><p>Ønskjer du likevel å be om {{package_name}} frå {{from_name}}?</p>"
+      }
+    },
     "service_error": {
       "general_heading": "Du kan ikkje gi fullmakt til denne tenesta",
       "approve_heading": "Du kan ikkje godkjenne førespurnader for denne tenesta",
