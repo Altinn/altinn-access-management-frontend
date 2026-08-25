@@ -2,12 +2,9 @@ import React, { useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import {
   AccessPackageListItemProps,
-  Button,
   formatDisplayName,
-  type Color,
   type UserListItemProps,
 } from '@altinn/altinn-components';
-import { MinusCircleIcon, PlusCircleIcon } from '@navikt/aksel-icons';
 
 import type { Client } from '@/rtk/features/clientApi';
 import type { ServiceResource } from '@/rtk/features/singleRights/singleRightsApi';
@@ -28,6 +25,7 @@ import {
 } from '../DelegationModal/AccessPackages/ClientPackageInfoModal';
 import { ClientAccessSections } from '../ClientResourceList/ClientAccessSections';
 import { type ClientResourceListItemData } from '../ClientResourceList/ClientResourceListItems';
+import { buildPackageItem, buildResourceItem } from '../ClientResourceList/buildAccessItems';
 import {
   ClientResourceInfoModal,
   type ClientResourceModalData,
@@ -163,7 +161,7 @@ export const ClientAccessList = ({
       if (access.packages.length === 0) return acc;
 
       const roleName = getRoleMetadata(access.role.id)?.name ?? access.role.name;
-      const packages = access.packages?.map<AccessPackageListItemProps>((pkg) => {
+      const packages = access.packages.map<AccessPackageListItemProps>((pkg) => {
         const hasAccess = clientsForAccessState.some((aap) => {
           return (
             aap.client.id === clientId &&
@@ -206,65 +204,38 @@ export const ClientAccessList = ({
               )
           : undefined;
 
-        const action = hasAccess ? onRevoke : onDelegate;
-        const showModalTrigger = showAction && !!accessPackage && !!action;
+        const onOpenModal =
+          showAction && accessPackage && (onDelegate || onRevoke)
+            ? () => {
+                setSelected({
+                  party: clientParty,
+                  accessPackage,
+                  userHasAccess: hasAccess,
+                  roleDescription,
+                  onDelegate,
+                  onRevoke: onRevoke ?? (() => {}),
+                });
+                modalRef.current?.showModal();
+              }
+            : undefined;
 
-        let controls: React.ReactNode;
-        if (!isMobileOrSmaller && showAction && hasAccess && onRevoke) {
-          controls = (
-            <Button
-              variant='tertiary'
-              disabled={removeDisabled}
-              onClick={() => onRevoke()}
-            >
-              <MinusCircleIcon aria-hidden='true' />
-              {t('common.delete_poa')}
-            </Button>
-          );
-        } else if (!isMobileOrSmaller && showAction && !hasAccess && onDelegate) {
-          controls = (
-            <Button
-              variant='tertiary'
-              disabled={addDisabled}
-              onClick={() => onDelegate()}
-            >
-              <PlusCircleIcon aria-hidden='true' />
-              {t('common.give_poa')}
-            </Button>
-          );
-        }
-
-        return {
-          id: pkg.id,
-          name: packageName,
-          type: userType,
-          isSubUnit,
-          interactive: showModalTrigger,
-          as: showModalTrigger ? 'button' : 'div',
-          titleAs: 'div',
-          description: roleDescription ?? '',
-          color: (hasAccess ? 'company' : 'neutral') as Color,
-          onClick:
-            showModalTrigger && accessPackage
-              ? () => {
-                  setSelected({
-                    party: clientParty,
-                    accessPackage,
-                    userHasAccess: hasAccess,
-                    roleDescription,
-                    onDelegate,
-                    onRevoke: onRevoke ?? (() => {}),
-                  });
-                  modalRef.current?.showModal();
-                }
-              : undefined,
-          controls,
-        };
+        return buildPackageItem({
+          pkg,
+          accessPackage,
+          packageName,
+          hasAccess,
+          showAction,
+          isMobileOrSmaller,
+          addDisabled,
+          removeDisabled,
+          onDelegate,
+          onRevoke,
+          onOpenModal,
+          t,
+        });
       });
 
-      if (packages) {
-        acc.push(...packages.filter((pkg): pkg is AccessPackageListItemProps => pkg !== null));
-      }
+      acc.push(...packages);
 
       return acc;
     }, [] as AccessPackageListItemProps[]);
@@ -304,53 +275,35 @@ export const ClientAccessList = ({
               )
           : undefined;
 
-        let controls: React.ReactNode;
-        if (!isMobileOrSmaller && showAction && hasAccess && onRevoke) {
-          controls = (
-            <Button
-              variant='tertiary'
-              disabled={removeDisabled}
-              onClick={() => onRevoke()}
-            >
-              <MinusCircleIcon aria-hidden='true' />
-              {t('common.delete_poa')}
-            </Button>
-          );
-        } else if (!isMobileOrSmaller && showAction && !hasAccess && onDelegate) {
-          controls = (
-            <Button
-              variant='tertiary'
-              disabled={addDisabled}
-              onClick={() => onDelegate()}
-            >
-              <PlusCircleIcon aria-hidden='true' />
-              {t('common.give_poa')}
-            </Button>
-          );
-        }
-
-        acc.push({
-          id: `${access.role.code}:${clientResource.refId}`,
-          resource,
-          hasAccess,
-          titleAs: 'div',
-          controls,
-          onClick: () => {
-            setSelectedResource({
-              clientId,
-              refId: clientResource.refId,
-              resource,
-              toPartyName: formatDisplayName({
-                fullName: client.client.name,
-                type: userType === 'company' ? 'company' : 'person',
-                reverseNameOrder: false,
-              }),
-              onDelegate: showAction ? onDelegate : undefined,
-              onRevoke: showAction ? onRevoke : undefined,
-            });
-            resourceModalRef.current?.showModal();
-          },
-        });
+        acc.push(
+          buildResourceItem({
+            id: `${access.role.code}:${clientResource.refId}`,
+            resource,
+            hasAccess,
+            showAction,
+            isMobileOrSmaller,
+            addDisabled,
+            removeDisabled,
+            onDelegate,
+            onRevoke,
+            onOpenModal: () => {
+              setSelectedResource({
+                clientId,
+                refId: clientResource.refId,
+                resource,
+                toPartyName: formatDisplayName({
+                  fullName: client.client.name,
+                  type: userType === 'company' ? 'company' : 'person',
+                  reverseNameOrder: false,
+                }),
+                onDelegate: showAction ? onDelegate : undefined,
+                onRevoke: showAction ? onRevoke : undefined,
+              });
+              resourceModalRef.current?.showModal();
+            },
+            t,
+          }),
+        );
       });
 
       return acc;

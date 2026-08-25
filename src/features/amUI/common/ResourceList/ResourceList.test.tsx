@@ -118,6 +118,68 @@ describe('ResourceList', () => {
     expect(screen.getByRole('button', { name: /Beta Service/i })).toBeInTheDocument();
   });
 
+  it('filters by service owner and resets when "all service owners" is selected', async () => {
+    const user = userEvent.setup();
+    const resources = [
+      createResource({
+        name: 'Skatt Service',
+        provider: { ...baseProvider, name: 'Skatteetaten', code: 'skd' },
+      }),
+      createResource({
+        name: 'Nav Service',
+        provider: { ...baseProvider, name: 'Nav', code: 'nav' },
+      }),
+    ];
+
+    render(<ResourceList resources={resources} />);
+
+    await user.click(screen.getByRole('button', { name: 'resource_list.all_serviceowners' }));
+    await user.click(screen.getByRole('option', { name: /Skatteetaten/i }));
+
+    expect(screen.getByRole('button', { name: /Skatt Service/i })).toBeInTheDocument();
+    expect(screen.queryByRole('button', { name: /Nav Service/i })).not.toBeInTheDocument();
+
+    // The filter menu stays open after picking an owner, so "all service owners" is right there.
+    await user.click(screen.getByRole('option', { name: 'resource_list.all_serviceowners' }));
+
+    expect(screen.getByRole('button', { name: /Skatt Service/i })).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: /Nav Service/i })).toBeInTheDocument();
+  });
+
+  it('leaves out "all service owners" while searching the service owner filter', async () => {
+    const user = userEvent.setup();
+    const resources = [
+      createResource({
+        name: 'Skatt Service',
+        provider: { ...baseProvider, name: 'Skatteetaten', code: 'skd' },
+      }),
+      createResource({
+        name: 'Nav Service',
+        provider: { ...baseProvider, name: 'Nav', code: 'nav' },
+      }),
+    ];
+
+    render(<ResourceList resources={resources} />);
+
+    await user.click(screen.getByRole('button', { name: 'resource_list.all_serviceowners' }));
+    const ownerSearch = screen.getByRole('combobox');
+    await user.type(ownerSearch, 'Skatt');
+
+    // Left in the list it would be listed as selected next to the hits.
+    expect(screen.getByRole('option', { name: /Skatteetaten/i })).toBeInTheDocument();
+    expect(
+      screen.queryByRole('option', { name: 'resource_list.all_serviceowners' }),
+    ).not.toBeInTheDocument();
+
+    // Nor does it come back as a hit when the query matches its own label.
+    await user.clear(ownerSearch);
+    await user.type(ownerSearch, 'resource_list.all');
+
+    expect(
+      screen.queryByRole('option', { name: 'resource_list.all_serviceowners' }),
+    ).not.toBeInTheDocument();
+  });
+
   it('renders the expired badge for a resource with resourceType MigratedApp', () => {
     const expiredResource = {
       ...createResource({ name: 'Expired Service' }),

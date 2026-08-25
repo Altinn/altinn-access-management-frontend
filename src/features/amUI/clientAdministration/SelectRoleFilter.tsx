@@ -72,10 +72,13 @@ export const SelectRoleFilter = ({ roleFilter, setRoleFilter }: SelectRoleFilter
         filterState,
         onFilterStateChange: handleFilterStateChange,
         getFilterLabel: (_name, filtervalue) => {
-          const selected = (filtervalue ?? [])
-            .map((value) => optionsList[String(value)]?.label || String(value))
-            .join(', ');
-          return selected || t('client_administration_page.clients_filter_label');
+          const selected = filtervalue ?? [];
+          if (selected.length === 1) {
+            return `${optionsList[String(selected[0])]?.label}`;
+          } else if (selected.length > 1) {
+            return `${selected.length} ${t('client_administration_page.clients_filter_label')}`;
+          }
+          return t('client_administration_page.clients_filter_label');
         },
       }}
     />
