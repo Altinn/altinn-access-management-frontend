@@ -5,6 +5,7 @@ using Altinn.AccessManagement.UI.Core.Models.ClientDelegation;
 using Altinn.AccessManagement.UI.Core.Models.Common;
 using Altinn.AccessManagement.UI.Core.Models.Connections;
 using Altinn.AccessManagement.UI.Core.Services.Interfaces;
+using Altinn.AccessManagement.UI.Filters;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -14,6 +15,7 @@ namespace Altinn.AccessManagement.UI.Controllers
     /// The <see cref="ClientController"/> provides API endpoints related to client delegations.
     /// </summary>
     [Route("accessmanagement/api/v1/clientdelegations")]
+    [AutoValidateAntiforgeryTokenIfAuthCookie]
     public class ClientController : ControllerBase
     {
         private const string PayloadRequiredMessage = "Delegation payload is required.";

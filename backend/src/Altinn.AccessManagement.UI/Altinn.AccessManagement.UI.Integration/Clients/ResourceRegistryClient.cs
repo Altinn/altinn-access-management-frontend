@@ -62,11 +62,11 @@ namespace Altinn.AccessManagement.UI.Integration.Clients
             try
             {
                 ServiceResource result = null;
-                string endpointUrl = $"v1/resource/{resourceId}";
+                string endpointUrl = $"v1/resource/{Uri.EscapeDataString(resourceId ?? string.Empty)}";
 
                 if (!string.IsNullOrEmpty(versionId))
                 {
-                    endpointUrl += $"?versionId={versionId}";
+                    endpointUrl += $"?versionId={Uri.EscapeDataString(versionId)}";
                 }
 
                 HttpResponseMessage response = await _httpClient.GetAsync(endpointUrl);
