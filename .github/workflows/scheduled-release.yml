@@ -24,7 +24,7 @@ jobs:
           echo "currentyear=$(date +%Y)" >> $GITHUB_ENV
 
       - name: Get Latest Release using github api
-        uses: octokit/request-action@v2.x
+        uses: octokit/request-action@02f5e7c637a73a3b12ed81015fa7fb5f11cc5d7d # v2.x
         continue-on-error: true
         id: get_latest_release_version
         with:
@@ -130,7 +130,7 @@ jobs:
           password: ${{ secrets.GITHUB_TOKEN }}
 
       - id: version
-        uses: battila7/get-version-action@v2
+        uses: battila7/get-version-action@d97fbc34ceb64d1f5d95f4dfd6dce33521ccccf5 # v2.3.0
 
       - name: Add Version tag to Docker Image
         uses: shrink/actions-docker-registry-tag@f04afd0559f66b288586792eb150f45136a927fa # v4
