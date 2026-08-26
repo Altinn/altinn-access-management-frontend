@@ -74,7 +74,7 @@ namespace Altinn.AccessManagement.UI.Controllers
             AntiforgeryTokenSet tokens = _antiforgery.GetAndStoreTokens(HttpContext);
             HttpContext.Response.Cookies.Append("XSRF-TOKEN", tokens.RequestToken, new CookieOptions
             {
-                Secure = !_env.IsDevelopment(), // Local dev is served over HTTP.
+                Secure = !_env.IsDevelopment(),
                 HttpOnly = false, // Make this cookie readable by Javascript.
                 SameSite = SameSiteMode.Strict
             });
@@ -146,7 +146,7 @@ namespace Altinn.AccessManagement.UI.Controllers
             {
                 // Make this cookie readable by Javascript.
                 HttpOnly = false,
-                Secure = !_env.IsDevelopment(), // Local dev is served over HTTP.
+                Secure = !_env.IsDevelopment(),
                 SameSite = SameSiteMode.Lax,
             });
 

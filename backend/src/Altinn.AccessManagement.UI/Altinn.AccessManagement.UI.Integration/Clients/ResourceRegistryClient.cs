@@ -201,7 +201,7 @@ namespace Altinn.AccessManagement.UI.Integration.Clients
         /// <inheritdoc />
         public async Task<List<Right>> GetResourceRights(string resourceId, string languageCode = "nb")
         {
-            string endpointUrl = $"v2/resource/{resourceId}/policy/rights";
+            string endpointUrl = $"v2/resource/{Uri.EscapeDataString(resourceId ?? string.Empty)}/policy/rights";
 
             HttpResponseMessage response = await _httpClient.GetAsync(null, endpointUrl, languageCode: languageCode);
             return await ClientUtils.DeserializeIfSuccessfullStatusCode<List<Right>>(response);
