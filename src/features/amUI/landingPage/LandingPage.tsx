@@ -187,14 +187,13 @@ export const LandingPage = () => {
   };
 
   const getRequestCountText = (requestCount: number): string => {
-    const name = isCurrentUserReportee ? t('common.you_uppercase') : reporteeName;
-    const countText = requestCount === 0 ? t('common.none') : requestCount;
-    const requestTextKey =
-      requestCount === 1 ? 'landing_page.new_requests_single' : 'landing_page.new_requests_plural';
+    const textKey = isCurrentUserReportee
+      ? 'landing_page.new_requests_self'
+      : 'landing_page.new_requests';
 
-    return t(requestTextKey, {
-      reportee: name,
-      requestCount: countText,
+    return t(textKey, {
+      reportee: reporteeName,
+      count: requestCount,
     });
   };
 

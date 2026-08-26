@@ -66,17 +66,15 @@ export const MyClientsPage = () => {
     return [...dedupedClients.values()];
   }, [myClientsByProvider]);
 
-  const currentUserName =
-    formatDisplayName({
-      fullName: currentUser?.name || '',
-      type: currentUser?.partyTypeName === PartyType.Person ? 'person' : 'company',
-    }) || t('common.you_uppercase');
+  const currentUserName = formatDisplayName({
+    fullName: currentUser?.name || '',
+    type: currentUser?.partyTypeName === PartyType.Person ? 'person' : 'company',
+  });
 
-  const actingPartyName =
-    formatDisplayName({
-      fullName: reportee?.name || '',
-      type: reportee?.type === 'Person' ? 'person' : 'company',
-    }) || t('common.you_uppercase');
+  const actingPartyName = formatDisplayName({
+    fullName: reportee?.name || '',
+    type: reportee?.type === 'Person' ? 'person' : 'company',
+  });
 
   const errorDetails = createErrorDetails(myClientsError || currentUserError);
 
