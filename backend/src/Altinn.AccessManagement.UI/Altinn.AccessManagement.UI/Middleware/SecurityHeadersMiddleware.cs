@@ -48,7 +48,6 @@ namespace Altinn.AccessManagement.UI.Middleware
 
         private string CreateContentSecurityPolicy()
         {
-            // The Skyra survey SDK is served from jsDelivr and posts its responses to ingest.skyra.no.
             string scriptSrc = _environment.IsDevelopment()
                 ? "script-src 'self' 'unsafe-inline' http://localhost:5173 https://cdn.jsdelivr.net;"
                 : "script-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net;";
