@@ -69,14 +69,12 @@ export const AccessPackageSection = ({ isReportee = false }: { isReportee?: bool
           </div>
           {canRequestAccess && <PendingPackageRequests />}
           <div className={classes.inputs}>
-            {numberOfAccesses > 0 && (
-              <div className={classes.searchField}>
-                <DebouncedSearchField
-                  placeholder={t('access_packages.search_label')}
-                  setDebouncedSearchString={setDebouncedSearchString}
-                />
-              </div>
-            )}
+            <div className={classes.searchField}>
+              <DebouncedSearchField
+                placeholder={t('access_packages.search_label')}
+                setDebouncedSearchString={setDebouncedSearchString}
+              />
+            </div>
             <div className={classes.delegateButton}>
               {(canGiveAccess || canRequestAccess) && (
                 <DelegationModal
