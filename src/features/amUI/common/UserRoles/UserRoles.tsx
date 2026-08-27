@@ -14,6 +14,8 @@ import { ClientAccessInfoModal } from './ClientAccessInfoModal';
 import { GuardianshipInfoModal } from './GuardianshipInfoModal';
 import { useIsMobileOrSmaller } from '@/resources/utils/screensizeUtils';
 
+const roleCodesToIgnore = ['hovedenhet', 'ikke-naeringsdrivende-hovedenhet'];
+
 export const UserRoles = ({ className, ...props }: React.HTMLAttributes<HTMLDivElement>) => {
   const { t } = useTranslation();
   const modalRef = useRef<HTMLDialogElement>(null);
@@ -56,7 +58,11 @@ export const UserRoles = ({ className, ...props }: React.HTMLAttributes<HTMLDivE
     setSelectedRole(null);
   };
 
-  const roles = mapRoles(userRoles?.map(({ role }) => role) ?? []);
+  const roles = mapRoles(
+    userRoles
+      ?.filter(({ role }) => !roleCodesToIgnore.includes(role.code))
+      ?.map(({ role }) => role) ?? [],
+  );
 
   const isViewingOwnAccess = toParty?.partyUuid === selfParty?.partyUuid;
   const isAgent = altinn3Roles.some((rolePermission) => rolePermission.role?.code === 'agent');

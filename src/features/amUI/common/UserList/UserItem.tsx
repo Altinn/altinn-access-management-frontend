@@ -22,6 +22,8 @@ function isExtendedUser(item: ExtendedUser | User): item is ExtendedUser {
   return (item as ExtendedUser).roles !== undefined && Array.isArray((item as ExtendedUser).roles);
 }
 
+const roleCodesToIgnore = ['hovedenhet', 'ikke-naeringsdrivende-hovedenhet'];
+
 interface UserItemProps extends Pick<
   UserListItemProps,
   'size' | 'subUnit' | 'interactive' | 'shadow'
@@ -72,7 +74,10 @@ export const UserItem = ({
   const roleNames =
     isExtendedUser(user) && user.roles
       ? mapRoles(user.roles.filter((r) => !r.viaParty))
-          .filter((r) => r.provider?.code === ECC_PROVIDER_CODE)
+          .filter(
+            (r) =>
+              r.provider?.code === ECC_PROVIDER_CODE && !roleCodesToIgnore.includes(r.code || ''),
+          )
           .map((r) => r.name)
       : [];
 

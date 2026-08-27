@@ -49,6 +49,13 @@ export const UserPageHeader = ({
   const userName = direction === 'to' ? toPartyName : fromPartyName;
   const secondaryParty = direction === 'to' ? fromParty : toParty;
   const secondaryUserName = direction === 'to' ? fromPartyName : toPartyName;
+  const userIsSubUnit = isSubUnitByType(user?.variant?.toString());
+  const userIsOrganization = isOrganization(user?.partyTypeName?.toString());
+  const userHeadline = userIsOrganization
+    ? userIsSubUnit
+      ? `${userName} (${t('common.subunit_lowercase')})`
+      : `${userName} (${t('common.mainunit_lowercase')})`
+    : userName;
 
   const subHeading =
     direction === 'to'
@@ -60,10 +67,10 @@ export const UserPageHeader = ({
       <div className={classes.avatar}>
         <Avatar
           name={userName}
-          type={isOrganization(user?.partyTypeName?.toString()) ? 'company' : 'person'}
+          type={userIsOrganization ? 'company' : 'person'}
           size={isSmall ? 'md' : 'lg'}
           isDeleted={user?.isDeleted}
-          isParent={!isSubUnitByType(user?.variant?.toString())}
+          isParent={!userIsSubUnit}
           className={classes.avatarInner}
         />
         {displayDirection && (
@@ -90,7 +97,7 @@ export const UserPageHeader = ({
         data-size={isSmall ? '2xs' : 'sm'}
         className={classes.heading}
       >
-        {userName}
+        {userHeadline}
       </DsHeading>
       {subHeading && (
         <DsParagraph
