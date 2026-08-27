@@ -49,12 +49,12 @@ namespace Altinn.AccessManagement.UI.Middleware
         private string CreateContentSecurityPolicy()
         {
             string scriptSrc = _environment.IsDevelopment()
-                ? "script-src 'self' 'unsafe-inline' http://localhost:5173;"
-                : "script-src 'self' 'unsafe-inline';";
+                ? "script-src 'self' 'unsafe-inline' http://localhost:5173 https://cdn.jsdelivr.net;"
+                : "script-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net;";
 
             string connectSrc = _environment.IsDevelopment()
-                ? "connect-src 'self' http://localhost:5173 ws://localhost:5173;"
-                : "connect-src 'self';";
+                ? "connect-src 'self' http://localhost:5173 ws://localhost:5173 https://ingest.skyra.no;"
+                : "connect-src 'self' https://ingest.skyra.no;";
 
             return string.Join(
                 " ",

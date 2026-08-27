@@ -1,6 +1,12 @@
 import React from 'react';
 import type { LanguageCode } from '@altinn/altinn-components';
-import { Layout, RootProvider, Snackbar, SnackbarProvider } from '@altinn/altinn-components';
+import {
+  Layout,
+  RootProvider,
+  Snackbar,
+  SnackbarProvider,
+  useConsent,
+} from '@altinn/altinn-components';
 
 import { useGetReporteeQuery } from '@/rtk/features/userInfoApi';
 
@@ -31,6 +37,7 @@ export const PageLayoutWrapper = ({
   const { data: reportee } = useGetReporteeQuery();
 
   const { menuGroups } = useGlobalMenu();
+  const { isAnswered, acceptAll, rejectAll } = useConsent();
 
   const { header, languageCode } = useHeader({ openAccountMenu, hideSidebarItems: hideSidebar });
   const footer = useFooter();
@@ -76,6 +83,11 @@ export const PageLayoutWrapper = ({
           }
           content={{ color: reportee?.type ? getAccountType(reportee.type) : 'neutral' }}
           footer={footer}
+          cookieBanner={
+            window.featureFlags?.enableSkyra !== true || isAnswered
+              ? undefined
+              : { onAccept: acceptAll, onReject: rejectAll }
+          }
         >
           <div>{children}</div>
         </Layout>

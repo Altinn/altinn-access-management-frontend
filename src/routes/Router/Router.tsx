@@ -33,6 +33,7 @@ import { AddAltinn2AccountPage } from '@/features/amUI/altinn2Account/AddAltinn2
 import { MaskinportenPage } from '@/features/amUI/maskinporten/MaskinportenPage';
 import { SupplierPage } from '@/features/amUI/maskinporten/SupplierPage';
 import { ConsumerPage } from '@/features/amUI/maskinporten/ConsumerPage';
+import { RootLayout } from './RootLayout';
 
 export const Router = createBrowserRouter(
   createRoutesFromElements(
@@ -40,6 +41,7 @@ export const Router = createBrowserRouter(
       {/* A3 user interface routes */}
       <Route
         path='/'
+        element={<RootLayout />}
         errorElement={<ErrorPage />}
       >
         <Route

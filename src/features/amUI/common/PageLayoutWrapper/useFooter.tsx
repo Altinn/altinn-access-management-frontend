@@ -1,8 +1,10 @@
 import { getAltinnStartPageUrl } from '@/resources/utils/pathUtils';
+import { type MenuItemProps, useConsent } from '@altinn/altinn-components';
 import { useTranslation } from 'react-i18next';
 
 export const useFooter = () => {
   const { t, i18n } = useTranslation();
+  const { clear } = useConsent();
   const infoPortalUrl = getAltinnStartPageUrl(i18n.language);
   const langSpecificUrls = getLangSpecificUrls(i18n.language, infoPortalUrl);
 
@@ -21,11 +23,27 @@ export const useFooter = () => {
     address: t('common.digdir') + ',',
     address2: t('footer.digdir_address'),
     menu: {
-      items: footerLinks.map((link) => ({
-        href: link.href,
-        id: link.resourceId,
-        title: t(link.resourceId),
-      })),
+      items: [
+        ...footerLinks.map((link) => ({
+          href: link.href,
+          id: link.resourceId,
+          title: t(link.resourceId),
+        })),
+        // Deletes the consent cookie so the banner comes back and the user can answer again.
+        ...(window.featureFlags?.enableSkyra === true
+          ? [
+              {
+                id: 'footer.cookies',
+                title: t('footer.cookies'),
+                as: 'button' as MenuItemProps['as'],
+                onClick: () => {
+                  clear();
+                  window.scrollTo({ top: 0, behavior: 'instant' });
+                },
+              },
+            ]
+          : []),
+      ],
     },
   };
 

@@ -7,6 +7,7 @@ declare global {
       useNewSingleRightsClientDelegation: boolean;
       showHandledRequests: boolean;
       showIdPortenAuthorizations: boolean;
+      enableSkyra: boolean;
     };
   }
 }
