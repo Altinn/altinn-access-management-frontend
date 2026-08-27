@@ -9,12 +9,10 @@ import { Role, useGetRolePermissionsQuery } from '@/rtk/features/roleApi';
 import { useRef, useState } from 'react';
 import { RoleInfoModal } from '../DelegationModal/RoleInfoModal';
 import { useGroupedRoleListEntries } from '../RoleList/useGroupedRoleListEntries';
-import { useRoleMetadata } from './useRoleMetadata';
+import { useRoleMetadata, ROLE_CODES_TO_IGNORE } from './useRoleMetadata';
 import { ClientAccessInfoModal } from './ClientAccessInfoModal';
 import { GuardianshipInfoModal } from './GuardianshipInfoModal';
 import { useIsMobileOrSmaller } from '@/resources/utils/screensizeUtils';
-
-const roleCodesToIgnore = ['hovedenhet', 'ikke-naeringsdrivende-hovedenhet'];
 
 export const UserRoles = ({ className, ...props }: React.HTMLAttributes<HTMLDivElement>) => {
   const { t } = useTranslation();
@@ -60,7 +58,7 @@ export const UserRoles = ({ className, ...props }: React.HTMLAttributes<HTMLDivE
 
   const roles = mapRoles(
     userRoles
-      ?.filter(({ role }) => !roleCodesToIgnore.includes(role.code))
+      ?.filter(({ role }) => !ROLE_CODES_TO_IGNORE.includes(role.code))
       ?.map(({ role }) => role) ?? [],
   );
 

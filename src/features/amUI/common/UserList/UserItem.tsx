@@ -14,15 +14,17 @@ import {
   formatOrgNr,
   isSubUnitByType,
 } from '@/resources/utils/reporteeUtils';
-import { ECC_PROVIDER_CODE, useRoleMetadata } from '../UserRoles/useRoleMetadata';
+import {
+  ECC_PROVIDER_CODE,
+  ROLE_CODES_TO_IGNORE,
+  useRoleMetadata,
+} from '../UserRoles/useRoleMetadata';
 import { isNewUser } from '../isNewUser';
 import { useRestoreFocusTarget } from '../RestoreFocus';
 
 function isExtendedUser(item: ExtendedUser | User): item is ExtendedUser {
   return (item as ExtendedUser).roles !== undefined && Array.isArray((item as ExtendedUser).roles);
 }
-
-const roleCodesToIgnore = ['hovedenhet', 'ikke-naeringsdrivende-hovedenhet'];
 
 interface UserItemProps extends Pick<
   UserListItemProps,
@@ -76,7 +78,8 @@ export const UserItem = ({
       ? mapRoles(user.roles.filter((r) => !r.viaParty))
           .filter(
             (r) =>
-              r.provider?.code === ECC_PROVIDER_CODE && !roleCodesToIgnore.includes(r.code || ''),
+              r.provider?.code === ECC_PROVIDER_CODE &&
+              !ROLE_CODES_TO_IGNORE.includes(r.code || ''),
           )
           .map((r) => r.name)
       : [];
