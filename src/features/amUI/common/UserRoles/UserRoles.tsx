@@ -9,7 +9,7 @@ import { Role, useGetRolePermissionsQuery } from '@/rtk/features/roleApi';
 import { useRef, useState } from 'react';
 import { RoleInfoModal } from '../DelegationModal/RoleInfoModal';
 import { useGroupedRoleListEntries } from '../RoleList/useGroupedRoleListEntries';
-import { useRoleMetadata } from './useRoleMetadata';
+import { useRoleMetadata, ROLE_CODES_TO_IGNORE } from './useRoleMetadata';
 import { ClientAccessInfoModal } from './ClientAccessInfoModal';
 import { GuardianshipInfoModal } from './GuardianshipInfoModal';
 import { useIsMobileOrSmaller } from '@/resources/utils/screensizeUtils';
@@ -56,7 +56,11 @@ export const UserRoles = ({ className, ...props }: React.HTMLAttributes<HTMLDivE
     setSelectedRole(null);
   };
 
-  const roles = mapRoles(userRoles?.map(({ role }) => role) ?? []);
+  const roles = mapRoles(
+    userRoles
+      ?.filter(({ role }) => !ROLE_CODES_TO_IGNORE.includes(role.code))
+      ?.map(({ role }) => role) ?? [],
+  );
 
   const isViewingOwnAccess = toParty?.partyUuid === selfParty?.partyUuid;
   const isAgent = altinn3Roles.some((rolePermission) => rolePermission.role?.code === 'agent');

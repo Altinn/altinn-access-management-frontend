@@ -14,6 +14,8 @@ export const CRA_PROVIDER_CODE = 'sys-cra';
 export const A2_PROVIDER_CODE = 'sys-altinn2';
 export const A3_PROVIDER_CODE = 'sys-altinn3';
 
+export const ROLE_CODES_TO_IGNORE = ['hovedenhet', 'ikke-naeringsdrivende-hovedenhet'];
+
 /**
  * Fetches all role metadata once and provides helpers to look up and map metadata by role id.
  */

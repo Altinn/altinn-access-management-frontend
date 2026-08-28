@@ -14,7 +14,11 @@ import {
   formatOrgNr,
   isSubUnitByType,
 } from '@/resources/utils/reporteeUtils';
-import { ECC_PROVIDER_CODE, useRoleMetadata } from '../UserRoles/useRoleMetadata';
+import {
+  ECC_PROVIDER_CODE,
+  ROLE_CODES_TO_IGNORE,
+  useRoleMetadata,
+} from '../UserRoles/useRoleMetadata';
 import { isNewUser } from '../isNewUser';
 import { useRestoreFocusTarget } from '../RestoreFocus';
 
@@ -72,7 +76,11 @@ export const UserItem = ({
   const roleNames =
     isExtendedUser(user) && user.roles
       ? mapRoles(user.roles.filter((r) => !r.viaParty))
-          .filter((r) => r.provider?.code === ECC_PROVIDER_CODE)
+          .filter(
+            (r) =>
+              r.provider?.code === ECC_PROVIDER_CODE &&
+              !ROLE_CODES_TO_IGNORE.includes(r.code || ''),
+          )
           .map((r) => r.name)
       : [];
 
