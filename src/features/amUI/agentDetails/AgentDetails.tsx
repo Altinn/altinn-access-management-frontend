@@ -2,7 +2,6 @@ import React, { useId, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import {
   DsAlert,
-  DsHeading,
   DsParagraph,
   DsSkeleton,
   formatDisplayName,
@@ -177,34 +176,34 @@ export const AgentDetails = () => {
               }
             />
             <section aria-labelledby={assignedSectionId}>
-              <DsHeading
-                data-size='xs'
-                level={2}
-                id={assignedSectionId}
-              >
-                {t('client_administration_page.agent_has_clients_tab')}
-              </DsHeading>
-              <AgentDetailsClientsList
-                clients={clientsWithAgentAccess}
-                agentAccessPackages={agentAccessPackages ?? []}
-                agentResources={agentResources ?? []}
-                isLoading={
-                  isAddingAgentAccessPackages ||
-                  isRemovingAgentAccessPackages ||
-                  isAddingAgentResources ||
-                  isRemovingAgentResources
-                }
-                toPartyUuid={toPartyUuid}
-                actingPartyUuid={actingPartyUuid}
-                addAgentAccessPackages={addAgentAccessPackages}
-                removeAgentAccessPackages={removeAgentAccessPackages}
-                addAgentResources={addAgentResources}
-                removeAgentResources={removeAgentResources}
+              <CollapsibleContainer
+                heading={t('client_administration_page.agent_has_clients_tab')}
                 searchString={searchString}
-                emptyText={t('client_administration_page.no_delegations')}
-                expandedIds={expandedIds}
-                onToggleExpanded={toggleExpanded}
-              />
+                id={assignedSectionId}
+                defaultOpen
+              >
+                <AgentDetailsClientsList
+                  clients={clientsWithAgentAccess}
+                  agentAccessPackages={agentAccessPackages ?? []}
+                  agentResources={agentResources ?? []}
+                  isLoading={
+                    isAddingAgentAccessPackages ||
+                    isRemovingAgentAccessPackages ||
+                    isAddingAgentResources ||
+                    isRemovingAgentResources
+                  }
+                  toPartyUuid={toPartyUuid}
+                  actingPartyUuid={actingPartyUuid}
+                  addAgentAccessPackages={addAgentAccessPackages}
+                  removeAgentAccessPackages={removeAgentAccessPackages}
+                  addAgentResources={addAgentResources}
+                  removeAgentResources={removeAgentResources}
+                  searchString={searchString}
+                  emptyText={t('client_administration_page.no_delegations')}
+                  expandedIds={expandedIds}
+                  onToggleExpanded={toggleExpanded}
+                />
+              </CollapsibleContainer>
             </section>
             <section aria-labelledby={unassignedSectionId}>
               <CollapsibleContainer
