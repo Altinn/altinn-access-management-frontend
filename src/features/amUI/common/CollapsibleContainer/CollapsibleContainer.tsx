@@ -8,6 +8,7 @@ interface CollapsibleContainerProps {
   heading: string;
   searchString?: string;
   id?: string;
+  defaultOpen?: boolean;
   children: React.ReactNode;
 }
 
@@ -15,9 +16,10 @@ export const CollapsibleContainer = ({
   heading,
   searchString,
   id,
+  defaultOpen = false,
   children,
 }: CollapsibleContainerProps) => {
-  const [isOpen, setIsOpen] = useState<boolean>(false);
+  const [isOpen, setIsOpen] = useState<boolean>(defaultOpen);
   const contentId = useId();
 
   useEffect(() => {

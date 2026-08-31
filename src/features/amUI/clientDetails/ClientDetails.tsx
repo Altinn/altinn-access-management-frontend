@@ -223,35 +223,35 @@ export const ClientDetails = () => {
                     </section>
                   )}
                   <section aria-labelledby={assignedSectionId}>
-                    <DsHeading
-                      data-size='xs'
-                      level={2}
-                      id={assignedSectionId}
-                    >
-                      {t('client_administration_page.client_has_agents_tab')}
-                    </DsHeading>
-                    <ClientAgentPackageList
-                      agents={agentsWithClientAccess}
-                      clientAccessPackages={clientAccessPackages ?? []}
-                      clientResources={clientResources ?? []}
-                      client={selectedClient}
-                      isLoading={
-                        isAddingAgentAccessPackages ||
-                        isRemovingAgentAccessPackages ||
-                        isAddingAgentResources ||
-                        isRemovingAgentResources
-                      }
-                      fromPartyUuid={fromPartyUuid}
-                      actingPartyUuid={actingPartyUuid}
-                      addAgentAccessPackages={addAgentAccessPackages}
-                      removeAgentAccessPackages={removeAgentAccessPackages}
-                      addAgentResources={addAgentResources}
-                      removeAgentResources={removeAgentResources}
-                      emptyText={t('client_administration_page.no_agents')}
+                    <CollapsibleContainer
+                      heading={t('client_administration_page.client_has_agents_tab')}
                       searchString={searchString}
-                      expandedIds={expandedIds}
-                      onToggleExpanded={toggleExpanded}
-                    />
+                      id={assignedSectionId}
+                      defaultOpen
+                    >
+                      <ClientAgentPackageList
+                        agents={agentsWithClientAccess}
+                        clientAccessPackages={clientAccessPackages ?? []}
+                        clientResources={clientResources ?? []}
+                        client={selectedClient}
+                        isLoading={
+                          isAddingAgentAccessPackages ||
+                          isRemovingAgentAccessPackages ||
+                          isAddingAgentResources ||
+                          isRemovingAgentResources
+                        }
+                        fromPartyUuid={fromPartyUuid}
+                        actingPartyUuid={actingPartyUuid}
+                        addAgentAccessPackages={addAgentAccessPackages}
+                        removeAgentAccessPackages={removeAgentAccessPackages}
+                        addAgentResources={addAgentResources}
+                        removeAgentResources={removeAgentResources}
+                        emptyText={t('client_administration_page.no_agents')}
+                        searchString={searchString}
+                        expandedIds={expandedIds}
+                        onToggleExpanded={toggleExpanded}
+                      />
+                    </CollapsibleContainer>
                   </section>
                   <section aria-labelledby={unassignedSectionId}>
                     <CollapsibleContainer
