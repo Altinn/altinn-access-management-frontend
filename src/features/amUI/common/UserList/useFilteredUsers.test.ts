@@ -163,6 +163,18 @@ describe('useFilteredUsers', () => {
     expect(result.current.users[0].name).toBe('Lorem AS');
   });
 
+  it('should ignore whitespace when searching by organization number', () => {
+    const { result } = renderHook(() =>
+      useFilteredUsers({
+        users: mappedMockConnections,
+        searchString: '123 456 789',
+      }),
+    );
+
+    expect(result.current.users).toHaveLength(1);
+    expect(result.current.users[0].name).toBe('Lorem AS');
+  });
+
   it('should return hasNextPage: false when list contains less than 10 users', () => {
     const { result } = renderHook(() =>
       useFilteredUsers({

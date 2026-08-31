@@ -20,6 +20,15 @@ export const formatOrgNr = (orgNo?: string | null): string | undefined => {
   return orgNo?.match(/.{1,3}/g)?.join(' ');
 };
 
+const stripWhitespace = (value: string): string => value.replace(/\s/g, '');
+
+export const matchesOrgNr = (orgNo: string | null | undefined, searchString: string): boolean => {
+  if (!orgNo) {
+    return false;
+  }
+  return stripWhitespace(orgNo).includes(stripWhitespace(searchString));
+};
+
 export const getFormattedDateOfBirthLabel = (dateOfBirth?: string | null): string => {
   if (!dateOfBirth) {
     return '';
