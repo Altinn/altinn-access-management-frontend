@@ -9,6 +9,8 @@ import {
 } from '@altinn/altinn-components';
 import { useTranslation } from 'react-i18next';
 
+import { matchesOrgNr } from '@/resources/utils/reporteeUtils';
+
 import classes from './UserListItems.module.css';
 
 export type UserListItemData = UserListItemProps & {
@@ -46,7 +48,7 @@ export const UserListItems = ({
     return items.filter((item) => {
       return (
         item.name.toLowerCase().includes(normalizedSearch) ||
-        item.organizationIdentifier?.toLowerCase().includes(normalizedSearch)
+        matchesOrgNr(item.organizationIdentifier, normalizedSearch)
       );
     });
   }, [items, searchString]);

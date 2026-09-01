@@ -16,7 +16,7 @@ import { AmPagination } from '@/components/Paginering';
 import type { AgentDelegation, AgentDelegationCustomer } from '../types';
 
 import classes from './CustomerList.module.css';
-import { formatOrgNr, isSubUnitByType } from '@/resources/utils/reporteeUtils';
+import { formatOrgNr, isSubUnitByType, matchesOrgNr } from '@/resources/utils/reporteeUtils';
 import { useIsMobileOrSmaller } from '@/resources/utils/screensizeUtils';
 
 const filterCustomerList = (
@@ -26,7 +26,7 @@ const filterCustomerList = (
   searchString: string,
 ): AgentDelegationCustomer[] => {
   return list.filter((customer) => {
-    const isOrgNoMatch = customer.orgNo.indexOf(searchString.replace(' ', '')) > -1;
+    const isOrgNoMatch = matchesOrgNr(customer.orgNo, searchString);
     const isNameMatch = customer.name.toLowerCase().indexOf(searchString.toLowerCase()) > -1;
     const isAssigned = delegations?.find((x) => x.customerId === customer.id);
     const isVisible = !(isHideAssignedChecked && isAssigned);

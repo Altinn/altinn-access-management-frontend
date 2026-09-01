@@ -1,5 +1,7 @@
 import { useMemo, useState, useEffect } from 'react';
 
+import { matchesOrgNr } from '@/resources/utils/reporteeUtils';
+
 import type { UserSearchNode } from '../UserSearch/types';
 
 const PAGE_SIZE = 10;
@@ -13,9 +15,7 @@ interface useFilteredUsersProps {
 const partyMatchesSearchTerm = (party: UserSearchNode, searchString: string): boolean => {
   const lowerCaseSearchTerm = searchString.toLocaleLowerCase();
   const nameMatch = party.name.toLowerCase().includes(lowerCaseSearchTerm);
-  const orgNumberMatch = party.organizationIdentifier
-    ? party.organizationIdentifier.toString().toLowerCase().includes(lowerCaseSearchTerm)
-    : false;
+  const orgNumberMatch = matchesOrgNr(party.organizationIdentifier, searchString);
   return nameMatch || orgNumberMatch;
 };
 
