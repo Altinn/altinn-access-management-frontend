@@ -1,4 +1,4 @@
-FROM ghcr.io/altinn/altinn-platform-gh-runner-base:1.0.0
+FROM ghcr.io/altinn/altinn-platform/gh-runner:v0.10.0
 
 USER root
 
