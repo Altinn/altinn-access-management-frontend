@@ -34,5 +34,5 @@ jobs:
           file: .github/Dockerfile
           push: true
           tags: | 
-            ghcr.io/${{ github.repository_owner }}/gh-runner:${{ env.VERSION }}
-            ghcr.io/${{ github.repository_owner }}/gh-runner:latest
+            ghcr.io/altinn/altinn-access-management-frontend/gh-runner:${{ env.VERSION }}
+            ghcr.io/altinn/altinn-access-management-frontend/gh-runner:latest
