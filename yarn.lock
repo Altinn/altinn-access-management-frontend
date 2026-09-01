@@ -20,8 +20,8 @@ __metadata:
   linkType: hard
 
 "@altinn/altinn-components@npm:^0.72.1":
-  version: 0.72.1
-  resolution: "@altinn/altinn-components@npm:0.72.1"
+  version: 0.72.5
+  resolution: "@altinn/altinn-components@npm:0.72.5"
   dependencies:
     "@digdir/designsystemet-css": "npm:^1.14.0"
     "@digdir/designsystemet-react": "npm:^1.14.0"
@@ -34,7 +34,7 @@ __metadata:
   peerDependencies:
     react: ">=18.3.1 || ^19.0.0"
     react-dom: ">=18.3.1 || ^19.0.0"
-  checksum: 10/4724d68da5db040a75ef3291b0cb6cd6ee67a2e2d04b949ef595d247ac15ad56a72b2c30538028593762548c9606ae159e94f28fee531479eb745e92c5a94185
+  checksum: 10/08a39e40d7badd368e6a0d393f2dfe82069fc820409985c0cdc8e90847b6e8d6b88837b2e0575672c41e33830ebd01d7ac8ba6408ca2bed1ef031c9218738abc
   languageName: node
   linkType: hard
 
