@@ -3,10 +3,11 @@ name: 'Build GitHub Runner Image'
 on:
   workflow_dispatch:
   schedule:
-    - cron: '0 0 * * 0' # Every Sunday
+  - cron: '0 0 * * 0' # Every Sunday
 
 jobs:
   build:
+    name: build and push
     runs-on: ubuntu-latest
     permissions:
       contents: read
@@ -32,4 +33,6 @@ jobs:
           context: .github
           file: .github/Dockerfile
           push: true
-          tags: ghcr.io/${{ github.repository_owner }}/gh-runner:${{ env.VERSION }}
+          tags: | 
+            ghcr.io/${{ github.repository_owner }}/gh-runner:${{ env.VERSION }}
+            ghcr.io/${{ github.repository_owner }}/gh-runner:latest
