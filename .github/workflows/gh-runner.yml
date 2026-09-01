@@ -32,4 +32,4 @@ jobs:
           context: .github
           file: .github/Dockerfile
           push: true
-          tags: ghcr.io/${{ github.repository_owner }}/gh-runner:${{ env.VERSION }}
+          tags: ghcr.io/altinn/gh-runner:${{ env.VERSION }}
