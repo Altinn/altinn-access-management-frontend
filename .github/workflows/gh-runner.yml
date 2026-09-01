@@ -1,4 +1,4 @@
-name: 'Build GitHub Runner Image
+name: 'Build GitHub Runner Image'
 
 on:
   workflow_dispatch:
