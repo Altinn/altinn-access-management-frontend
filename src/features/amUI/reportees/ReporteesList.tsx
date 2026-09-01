@@ -1,4 +1,4 @@
-import { useCallback, useState } from 'react';
+import { useCallback, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { DsSearch, DsSwitch } from '@altinn/altinn-components';
 
@@ -10,11 +10,13 @@ import { usePartyRepresentation } from '../common/PartyRepresentationContext/Par
 
 import classes from './ReporteePage.module.css';
 import { PartyType } from '@/rtk/features/userInfoApi';
+import { filterDeletedConnections } from '../common/deletedPartyUtils';
 
 export const ReporteesList = () => {
   const { t } = useTranslation();
   const { toParty, isLoading: loadingPartyRepresentation, actingParty } = usePartyRepresentation();
   const [includeClientDelegations, setIncludeClientDelegations] = useState(false);
+  const [showDeleted, setShowDeleted] = useState(false);
 
   const { data: rightHolders, isLoading: loadingRightHolders } = useGetRightHoldersQuery(
     {
@@ -29,12 +31,17 @@ export const ReporteesList = () => {
     },
   );
 
-  const filterRightHolders = rightHolders?.filter(
-    (rh) =>
-      (rh.party.type === ConnectionUserType.Person ||
-        rh.party.type === ConnectionUserType.Organization) &&
-      rh.party.partyId !== actingParty?.partyId,
-  );
+  const filterRightHolders = useMemo(() => {
+    const relevantRightHolders =
+      rightHolders?.filter(
+        (rh) =>
+          (rh.party.type === ConnectionUserType.Person ||
+            rh.party.type === ConnectionUserType.Organization) &&
+          rh.party.partyId !== actingParty?.partyId,
+      ) ?? [];
+
+    return showDeleted ? relevantRightHolders : filterDeletedConnections(relevantRightHolders);
+  }, [rightHolders, actingParty?.partyId, showDeleted]);
 
   const [searchString, setSearchString] = useState<string>('');
 
@@ -63,21 +70,27 @@ export const ReporteesList = () => {
             }}
           />
         </DsSearch>
-        {actingParty?.partyTypeName === PartyType.Person && (
-          // This is ony relevant for private persons looking at their reportees,
-          // as they can have access from clients that they might want to filter out
-          <div>
+        <div className={classes.searchControls}>
+          {actingParty?.partyTypeName === PartyType.Person && (
+            // This is ony relevant for private persons looking at their reportees,
+            // as they can have access from clients that they might want to filter out
             <DsSwitch
               data-size='sm'
               checked={includeClientDelegations}
               onChange={(event) => setIncludeClientDelegations(event.target.checked)}
               label={t('reportees_page.show_clients_toggle')}
             />
-          </div>
-        )}
+          )}
+          <DsSwitch
+            data-size='sm'
+            checked={showDeleted}
+            onChange={(event) => setShowDeleted(event.target.checked)}
+            label={t('common.show_deleted')}
+          />
+        </div>
       </div>
       <UserList
-        connections={filterRightHolders || []}
+        connections={filterRightHolders}
         searchString={searchString}
         isLoading={loadingRightHolders || loadingPartyRepresentation}
         interactive
