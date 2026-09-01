@@ -34,7 +34,7 @@ jobs:
     permissions:
       id-token: write
       contents: read
-    runs-on: ubuntu-latest
+    runs-on: self-hosted
     steps:
       - uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803 # v6
       - uses: actions/setup-node@249970729cb0ef3589644e2896645e5dc5ba9c38 # v6
@@ -75,26 +75,23 @@ jobs:
           subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
 
       - name: Upload HTML report to Azure
-        uses: azure/cli@9f7ce6f37c31b777ec6c6b6d1dfe7db79f497956 # v2
         if: always()
         env:
           REPORT_NAME: ${{ inputs.environment }}
           RUN_ID: ${{ github.run_id }}
-        with:
-          azcliversion: latest
-          inlineScript: |
-            REPORT_ID="${RUN_ID}-${REPORT_NAME}"     # unique per job run
-            ACCOUNT_NAME=playwrightreporting
+        run: |
+          REPORT_ID="${RUN_ID}-${REPORT_NAME}"     # unique per job run
+          ACCOUNT_NAME=playwrightreporting
 
-            az storage blob upload-batch \
-                --account-name "$ACCOUNT_NAME" \
-                --destination "\$web" \
-                --destination-path "$REPORT_ID/$REPORT_NAME" \
-                --source "playwright/playwright-report/$REPORT_NAME" \
-                --overwrite \
-                --auth-mode login
+          az storage blob upload-batch \
+              --account-name "$ACCOUNT_NAME" \
+              --destination "\$web" \
+              --destination-path "$REPORT_ID/$REPORT_NAME" \
+              --source "playwright/playwright-report/$REPORT_NAME" \
+              --overwrite \
+              --auth-mode login
 
-            echo "REPORT_URL=https://playwrightreporting.z1.web.core.windows.net/$REPORT_ID/$REPORT_NAME/" >> $GITHUB_ENV
+          echo "REPORT_URL=https://playwrightreporting.z1.web.core.windows.net/$REPORT_ID/$REPORT_NAME/" >> "$GITHUB_ENV"
       - name: Show report URL
         if: always()
         run: |
