@@ -9,6 +9,7 @@ import { buildClientParentNameById, buildClientSortKey } from '../common/clientS
 import { SelectRoleFilter } from './SelectRoleFilter';
 import classes from './ClientAdministrationAgentsTab.module.css';
 import { mapConnectionsToUserSearchNodes } from '../common/UserSearch/connectionMapper';
+import { filterDeletedParties } from '../common/deletedPartyUtils';
 
 const buildClientConnections = (clients?: Client[]): Connection[] => {
   if (!clients?.length) return [];
@@ -59,7 +60,7 @@ export const ClientAdministrationClientsTab = ({
     if (!clients || showDeleted) {
       return clients;
     }
-    return clients.filter((client) => !client.client?.isDeleted);
+    return filterDeletedParties(clients, (client) => client.client);
   }, [clients, showDeleted]);
   const clientConnections = useMemo<Connection[]>(
     () => buildClientConnections(filteredClients),
@@ -101,7 +102,7 @@ export const ClientAdministrationClientsTab = ({
             <Switch
               onChange={(e) => setShowDeleted(e.target.checked)}
               checked={showDeleted}
-              label={t('client_administration_page.show_deleted_clients')}
+              label={t('common.show_deleted')}
             />
           </div>
         }

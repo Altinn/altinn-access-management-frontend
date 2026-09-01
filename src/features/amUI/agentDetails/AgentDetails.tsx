@@ -36,6 +36,7 @@ import { UserPageHeaderSkeleton } from '../common/UserPageHeader/UserPageHeaderS
 import { AgentDetailsDeleteModal } from './AgentDetailsDeleteModal';
 import { ClientAdminSearchField } from '../common/ClientAdminSearchField/ClientAdminSearchField';
 import { CollapsibleContainer } from '../common/CollapsibleContainer/CollapsibleContainer';
+import { filterDeletedParties } from '../common/deletedPartyUtils';
 
 export const AgentDetails = () => {
   const { t } = useTranslation();
@@ -55,7 +56,7 @@ export const AgentDetails = () => {
   const { data: clients, isLoading: isLoadingClients, error: clientsError } = useGetClientsQuery();
   const [showDeleted, setShowDeleted] = useState(false);
   const visibleClients = useMemo(
-    () => (showDeleted ? clients : clients?.filter((client) => !client.client.isDeleted)),
+    () => (showDeleted ? clients : filterDeletedParties(clients, (client) => client.client)),
     [clients, showDeleted],
   );
 
@@ -171,7 +172,7 @@ export const AgentDetails = () => {
                 <Switch
                   onChange={(e) => setShowDeleted(e.target.checked)}
                   checked={showDeleted}
-                  label={t('client_administration_page.show_deleted_clients')}
+                  label={t('common.show_deleted')}
                 />
               }
             />
