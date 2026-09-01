@@ -42,8 +42,6 @@ jobs:
           node-version: lts/*
       - name: Install dependencies
         run: yarn --immutable
-      - name: Install Playwright Browsers
-        run: yarn playwright install --with-deps
       - name: Running yarn tests
         working-directory: playwright
         env:
