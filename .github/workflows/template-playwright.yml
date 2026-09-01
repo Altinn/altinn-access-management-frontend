@@ -91,7 +91,7 @@ jobs:
               --overwrite \
               --auth-mode login
 
-          echo "REPORT_URL=https://playwrightreporting.z1.web.core.windows.net/$REPORT_ID/$REPORT_NAME/" >> $GITHUB_ENV
+          echo "REPORT_URL=https://playwrightreporting.z1.web.core.windows.net/$REPORT_ID/$REPORT_NAME/" >> "$GITHUB_ENV"
       - name: Show report URL
         if: always()
         run: |
