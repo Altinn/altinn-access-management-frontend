@@ -12,13 +12,9 @@ const filterDeletedChildren = (
     return null;
   }
 
-  return children.reduce<ConnectionChild[]>((acc, child) => {
-    const grandChildren = filterDeletedChildren(child.children);
-    if (!child.isDeleted || (grandChildren?.length ?? 0) > 0) {
-      acc.push({ ...child, children: grandChildren });
-    }
-    return acc;
-  }, []);
+  return children
+    .filter((child) => !child.isDeleted)
+    .map((child) => ({ ...child, children: filterDeletedChildren(child.children) }));
 };
 
 /**
@@ -30,24 +26,12 @@ export const filterDeletedParties = <T>(
   getParty: (item: T) => DeletableParty | null | undefined,
 ): T[] => items?.filter((item) => !getParty(item)?.isDeleted) ?? [];
 
-/**
- * Removes deleted parties from a connection tree.
- *
- * A deleted party is kept when it still has non-deleted parties below it, so that access
- * held through an active subunit isn't hidden along with its deleted main unit.
- */
+/** Removes deleted parties. */
 export const filterDeletedConnections = (connections: Connection[]): Connection[] =>
-  connections.reduce<Connection[]>((acc, connection) => {
-    const nestedConnections = filterDeletedConnections(connection.connections ?? []);
-    const children = filterDeletedChildren(connection.party.children);
-    const hasVisibleDescendants = nestedConnections.length > 0 || (children?.length ?? 0) > 0;
-
-    if (!connection.party.isDeleted || hasVisibleDescendants) {
-      acc.push({
-        ...connection,
-        party: { ...connection.party, children },
-        connections: nestedConnections,
-      });
-    }
-    return acc;
-  }, []);
+  connections
+    .filter((connection) => !connection.party.isDeleted)
+    .map((connection) => ({
+      ...connection,
+      party: { ...connection.party, children: filterDeletedChildren(connection.party.children) },
+      connections: filterDeletedConnections(connection.connections ?? []),
+    }));
