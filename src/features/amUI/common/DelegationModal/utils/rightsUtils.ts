@@ -25,6 +25,15 @@ type MapRightsToChipRightsOptions = {
   getInheritedReason?: (rightKey: string) => InheritedReason | undefined;
 };
 
+/** Whether every one of the held rights can be delegated, according to a delegation check. */
+export const canRedelegateRights = (
+  heldRightKeys: string[],
+  checkedRights: DelegationCheckedRight[] = [],
+): boolean =>
+  heldRightKeys.every((key) =>
+    checkedRights.some((checked) => checked.right.key === key && checked.result),
+  );
+
 export const mapRightsToChipRights = (
   rightsMeta: Right[],
   delegationCheckedRights?: DelegationCheckedRight[],

@@ -6,6 +6,7 @@ import type { ServiceResource } from '@/rtk/features/singleRights/singleRightsAp
 import { useRevokeResource } from '@/resources/hooks/useRevokeResource';
 
 import { usePartyRepresentation } from '../../common/PartyRepresentationContext/PartyRepresentationContext';
+import { useCanRedelegateResource, useRevokeConfirmation } from '../../common/RevokeConfirmation';
 
 import classes from './DeleteResourceButton.module.css';
 import { MinusCircleIcon } from '@navikt/aksel-icons';
@@ -29,6 +30,9 @@ export const DeleteResourceButton = ({
   const { fromParty, toParty } = usePartyRepresentation();
   const revoke = useRevokeResource();
   const [isLoading, setIsLoading] = useState(false);
+  const [isConfirming, setIsConfirming] = useState(false);
+  const { canRedelegateResource } = useCanRedelegateResource();
+  const { confirmRevoke, revokeConfirmationDialog } = useRevokeConfirmation();
 
   const snackbar = (isSuccessful: boolean) => {
     const color: 'success' | 'danger' = isSuccessful ? 'success' : 'danger';
@@ -50,34 +54,45 @@ export const DeleteResourceButton = ({
     openSnackbar(snackbarData);
   };
 
+  const deleteResource = () => {
+    setIsLoading(true);
+    revoke(
+      resource.identifier,
+      () => {
+        setIsLoading(false);
+        snackbar(true);
+        onSuccess?.();
+      },
+      () => {
+        setIsLoading(false);
+        snackbar(false);
+        onError?.();
+      },
+    );
+  };
+
+  const confirmAndDelete = async () => {
+    setIsConfirming(true);
+    confirmRevoke(await canRedelegateResource(resource.identifier), deleteResource);
+    setIsConfirming(false);
+  };
+
   return (
     fromParty &&
     toParty && (
-      <Button
-        aria-label={t('common.delete') + ' ' + resource.title}
-        variant='tertiary'
-        className={classes.deleteButton}
-        disabled={disabled || isLoading}
-        onClick={() => {
-          setIsLoading(true);
-          revoke(
-            resource.identifier,
-            () => {
-              setIsLoading(false);
-              snackbar(true);
-              onSuccess?.();
-            },
-            () => {
-              setIsLoading(false);
-              snackbar(false);
-              onError?.();
-            },
-          );
-        }}
-      >
-        <MinusCircleIcon aria-hidden='true' />
-        {t('common.delete_poa')}
-      </Button>
+      <>
+        <Button
+          aria-label={t('common.delete') + ' ' + resource.title}
+          variant='tertiary'
+          className={classes.deleteButton}
+          disabled={disabled || isLoading || isConfirming}
+          onClick={confirmAndDelete}
+        >
+          <MinusCircleIcon aria-hidden='true' />
+          {t('common.delete_poa')}
+        </Button>
+        {revokeConfirmationDialog}
+      </>
     )
   );
 };

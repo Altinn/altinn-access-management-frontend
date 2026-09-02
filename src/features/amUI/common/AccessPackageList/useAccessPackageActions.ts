@@ -19,6 +19,14 @@ import { useSnackbarOnIdle } from '@/resources/hooks/useSnackbarOnIdle';
 import { usePartyRepresentation } from '../PartyRepresentationContext/PartyRepresentationContext';
 import { PartyType } from '@/rtk/features/userInfoApi';
 import { usePackageWarningDialog } from '../PackageWarningDialog';
+import { useCanRedelegatePackage, useRevokeConfirmation } from '../RevokeConfirmation';
+
+export interface RevokeOptions {
+  /** Overrides the toParty from context. */
+  toParty?: Party;
+  /** Skips the confirmation dialog, for callers that already confirmed in another dialog. */
+  skipWarning?: boolean;
+}
 
 interface useAccessPackageActionsProps {
   onDelegateSuccess?: (accessPackage: AccessPackage, toParty: Party) => void;
@@ -44,6 +52,8 @@ export const useAccessPackageActions = ({
   const [loadingByPackageId, setLoadingByPackageId] = useState<Record<string, boolean>>({});
   const [awaitingRefetch, setAwaitingRefetch] = useState<Set<string>>(new Set());
   const { confirmPackageAction, packageWarningDialog } = usePackageWarningDialog();
+  const { canRedelegatePackage } = useCanRedelegatePackage();
+  const { confirmRevoke, revokeConfirmationDialog } = useRevokeConfirmation();
   const isLoading = isDelegationLoading || isRevokeLoading;
 
   const { t } = useTranslation();
@@ -192,30 +202,41 @@ export const useAccessPackageActions = ({
     );
   };
 
-  const onRevoke = async (accessPackage: AccessPackage, toParty?: Party) => {
+  const onRevoke = async (
+    accessPackage: AccessPackage,
+    { toParty, skipWarning = false }: RevokeOptions = {},
+  ) => {
     if (!fromParty || !actingParty) {
       return;
     }
     const targetToParty = toParty ?? toPartyFromContext;
     if (!targetToParty) return;
 
-    revokePackage(
-      targetToParty,
-      fromParty,
-      actingParty,
-      accessPackage,
-      () => {
-        handleRevokeSuccess(accessPackage, targetToParty);
-      },
-      (httpStatus) => {
-        handleRevokeError(
-          accessPackage,
-          targetToParty,
-          httpStatus.toString(),
-          new Date().toISOString(),
-        );
-      },
-    );
+    const revoke = () =>
+      revokePackage(
+        targetToParty,
+        fromParty,
+        actingParty,
+        accessPackage,
+        () => {
+          handleRevokeSuccess(accessPackage, targetToParty);
+        },
+        (httpStatus) => {
+          handleRevokeError(
+            accessPackage,
+            targetToParty,
+            httpStatus.toString(),
+            new Date().toISOString(),
+          );
+        },
+      );
+
+    if (skipWarning) {
+      revoke();
+      return;
+    }
+
+    confirmRevoke(await canRedelegatePackage(accessPackage.id), revoke);
   };
 
   const onRequest = async (accessPackage: AccessPackage) => {
@@ -338,5 +359,6 @@ export const useAccessPackageActions = ({
     isRequestLoading,
     isLoading,
     packageWarningDialog,
+    revokeConfirmationDialog,
   };
 };

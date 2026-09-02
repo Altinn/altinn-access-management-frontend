@@ -497,6 +497,9 @@
       "sent_requests_modal_header": "Førespurnaden din om fullmakter til {{partyName}} er sendt. Du vil få beskjed når dei er godkjende."
     }
   },
+  "revoke_confirmation": {
+    "cannot_redelegate": "Du har ikkje fullmakt til å gi han tilbake etterpå."
+  },
   "status_section": {
     "has_package_message": "{{user_name}} har denne fullmakta.",
     "access_status": {

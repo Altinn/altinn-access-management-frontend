@@ -501,6 +501,9 @@
       "sent_requests_modal_header": "Your request for powers of attorney to {{partyName}} has been sent. You will be notified when they are approved."
     }
   },
+  "revoke_confirmation": {
+    "cannot_redelegate": "You are not authorized to give it back afterwards."
+  },
   "status_section": {
     "has_package_message": "{{user_name}} has this power of attorney.",
     "access_status": {

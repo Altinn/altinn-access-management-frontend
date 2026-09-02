@@ -8,10 +8,11 @@ import { DelegationAction } from '../DelegationModal/EditModal';
 import { DeletableStatus, type ExtendedAccessPackage } from './useAreaPackageList';
 import { PackageIsPartiallyDeletableAlert } from './PackageIsPartiallyDeletableAlert/PackageIsPartiallyDeletableAlert';
 import { packageActionControlId } from './PackageItem';
+import type { RevokeOptions } from './useAccessPackageActions';
 
 interface RevokeAccessPackageActionControlsProps {
   availableActions?: DelegationAction[];
-  onRevoke: () => void;
+  onRevoke: (options?: RevokeOptions) => void;
   pkg: ExtendedAccessPackage;
   isLoading?: boolean;
 }
@@ -27,7 +28,7 @@ export const RevokeAccessPackageActionControl = ({
     if (pkg.deletableStatus === DeletableStatus.PartiallyDeletable) {
       return (
         <PackageIsPartiallyDeletableAlert
-          confirmAction={onRevoke}
+          confirmAction={() => onRevoke({ skipWarning: true })}
           triggerButtonProps={{
             id: packageActionControlId(pkg.id),
             'data-size': 'sm',
@@ -41,7 +42,7 @@ export const RevokeAccessPackageActionControl = ({
         id={packageActionControlId(pkg.id)}
         variant='tertiary'
         size='sm'
-        onClick={onRevoke}
+        onClick={() => onRevoke()}
         aria-label={t('common.delete_poa_for', { poa_object: pkg.name })}
       >
         {isLoading ? (

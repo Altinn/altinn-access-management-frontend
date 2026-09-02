@@ -97,6 +97,7 @@ export const AccessPackageList = ({
     isLoadingRequest,
     isLoading: isActionLoading,
     packageWarningDialog,
+    revokeConfirmationDialog,
   } = useAccessPackageActions({
     snackbarBusy: fetchingDelegations,
     onDelegateSuccess: (accessPackage, toParty) => {
@@ -262,6 +263,7 @@ export const AccessPackageList = ({
         <>{renderAccessPackageList(displayAreas, firstHeadingLevel)}</>
       )}
       {packageWarningDialog}
+      {revokeConfirmationDialog}
     </div>
   );
 };
