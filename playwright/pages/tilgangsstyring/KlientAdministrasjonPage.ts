@@ -150,28 +150,31 @@ export class KlientAdministrasjonPage {
     await this.page.getByRole('link', { name: navn }).click();
   }
 
+  giFullmaktKnapp(navn: string): Locator {
+    return this.tilgangspakkeRad(navn).getByRole('button', {
+      name: this.texts.common.give_poa,
+    });
+  }
+
   async klikkGiFullmakt(navn: string) {
-    const giFullmakt = this.texts.common.give_poa;
-    await this.tilgangspakkeKnapp(navn)
-      .locator('..')
-      .getByRole('button', { name: giFullmakt })
-      .click();
+    await this.giFullmaktKnapp(navn).click();
   }
 
   slettFullmaktKnapp(navn: string): Locator {
-    const slettFullmakt = this.texts.common.delete_poa;
-    return this.page
-      .getByRole('button', { name: new RegExp(`^${navn}\\s`) })
-      .locator('..')
-      .getByRole('button', { name: slettFullmakt })
-      .last();
+    return this.tilgangspakkeRad(navn).getByRole('button', {
+      name: this.texts.common.delete_poa,
+    });
   }
 
   async slettFullmakt(navn: string) {
     await this.slettFullmaktKnapp(navn).click();
   }
 
-  private tilgangspakkeKnapp(navn: string): Locator {
-    return this.page.getByRole('button', { name: new RegExp(`^${navn}\\s`) }).last();
+  // Nested client/user and package rows are list items, so select the innermost package row.
+  private tilgangspakkeRad(navn: string): Locator {
+    return this.page
+      .getByRole('listitem')
+      .filter({ has: this.page.getByRole('button', { name: navn }) })
+      .last();
   }
 }
