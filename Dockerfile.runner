@@ -15,6 +15,8 @@ RUN yarn install --immutable && \
     apt-get clean && \
     rm -rf /var/lib/apt/lists/*
 
+WORKDIR /home/runner
+
 ENV PLAYWRIGHT_BROWSERS_PATH=/ms-playwright
 
 RUN chmod -R 755 /ms-playwright
