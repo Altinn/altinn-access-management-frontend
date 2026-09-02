@@ -89,7 +89,7 @@ test.describe('tilgangspakkedelegering fra person til person og person til org',
 
   test.describe('Deleger tilgangspakke til person', () => {
     const actor = { pid: '08857499981', name: 'UROMANTISK BRINGE' };
-    const target = { pid: '22911648052', name: 'LETT ANKEL' };
+    const target = { pid: '23820899601', name: 'ARTIG MARK' };
     const pkg = {
       urn: 'urn:altinn:accesspackage:innbygger-utdanning',
       name: 'Utdanning',
