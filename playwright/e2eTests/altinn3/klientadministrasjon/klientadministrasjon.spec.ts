@@ -256,11 +256,15 @@ test.describe('klientadministrasjon', () => {
     const agent = { pid: '04905999376', name: 'FORSTÅELSESFULL TRAFIKKORK' };
 
     test.beforeEach(async () => {
+      try {
+        await api.deleteConnection(client.connectionPid, client.org, [actor.org]);
       } catch (error) {
         if (!(error instanceof Error) || !error.message.includes('Status: 404')) {
           console.warn('Pre-test cleanup: Failed to delete connection:', error);
         }
       }
+      try {
+        await api.deleteClientDelegationAgent(actor.pid, actor.org, agent.pid);
       } catch (error) {
         if (!(error instanceof Error) || !error.message.includes('Status: 404')) {
           console.warn('Pre-test cleanup: Failed to delete client delegation agent:', error);
