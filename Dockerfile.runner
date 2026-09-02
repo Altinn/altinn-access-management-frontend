@@ -15,8 +15,6 @@ RUN yarn install --immutable && \
     apt-get clean && \
     rm -rf /var/lib/apt/lists/*
 
-# /tmp/playwright-install slettes i RUN-steget over, så cwd må settes tilbake til
-# runner-hjemmet – ellers finner ikke containeren ./entrypoint.sh ved oppstart.
 WORKDIR /home/runner
 
 ENV PLAYWRIGHT_BROWSERS_PATH=/ms-playwright
