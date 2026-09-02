@@ -261,10 +261,10 @@ test.describe('klientadministrasjon', () => {
           console.warn('Pre-test cleanup: Failed to delete connection:', error);
         }
       }
-      try {
-        await api.deleteClientDelegationAgent(actor.pid, actor.org, agent.pid);
-      } catch {
-        /* ignore if nothing to clean */
+      } catch (error) {
+        if (!(error instanceof Error) || !error.message.includes('Status: 404')) {
+          console.warn('Pre-test cleanup: Failed to delete client delegation agent:', error);
+        }
       }
 
       await api.addConnectionAndPackagesToUser(client.connectionPid, client.org, actor.org, [
