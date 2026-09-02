@@ -30,7 +30,7 @@ jobs:
       - name: Build and push Docker image
         uses: docker/build-push-action@v5
         with:
-          context: .github
+          context: .
           file: Dockerfile.runner
           push: true
           tags: | 
