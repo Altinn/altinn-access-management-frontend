@@ -152,22 +152,26 @@ export class KlientAdministrasjonPage {
 
   async klikkGiFullmakt(navn: string) {
     const giFullmakt = this.texts.common.give_poa;
-    await this.page
-      .getByText(`${navn}${giFullmakt}`)
+    await this.tilgangspakkeKnapp(navn)
+      .locator('..')
       .getByRole('button', { name: giFullmakt })
-      .first()
       .click();
   }
 
   slettFullmaktKnapp(navn: string): Locator {
     const slettFullmakt = this.texts.common.delete_poa;
     return this.page
-      .getByText(`${navn}${slettFullmakt}`)
+      .getByRole('button', { name: new RegExp(`^${navn}\\s`) })
+      .locator('..')
       .getByRole('button', { name: slettFullmakt })
-      .first();
+      .last();
   }
 
   async slettFullmakt(navn: string) {
     await this.slettFullmaktKnapp(navn).click();
+  }
+
+  private tilgangspakkeKnapp(navn: string): Locator {
+    return this.page.getByRole('button', { name: new RegExp(`^${navn}\\s`) }).last();
   }
 }
