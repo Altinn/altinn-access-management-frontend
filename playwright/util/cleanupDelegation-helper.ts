@@ -1,6 +1,7 @@
 import fs from 'fs';
 import path from 'path';
 import csv from 'csv-parser';
+import { currentEnv } from './helper';
 
 export type CleanupRow = {
   TestTitle: string;
@@ -8,7 +9,7 @@ export type CleanupRow = {
   ToCategory: string;
 };
 
-const TEST_ENV = (process.env.environment ?? 'at23').toLowerCase();
+const TEST_ENV = currentEnv();
 const FILE = path.resolve(
   __dirname,
   `../e2eTests/testdata/accesspkgdelegation/${TEST_ENV}/cleanup-data.csv`,

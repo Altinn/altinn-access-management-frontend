@@ -358,7 +358,7 @@ these on commits. To avoid confusion, it is recommended to set this up in your I
 
 ### Visual Studio Code
 
-Install the [eslint extension from the marketplace](https://marketplace.visualstudio.com/items?itemName=dbaeumer.vscode-eslint). Configure your IDE to run `eslint --fix` on save (prettier will also reformat your code when doing this).
+VS Code will prompt you to install the recommended extensions on first open (see `.vscode/extensions.json`). Configure your IDE to run `eslint --fix` on save (prettier will also reformat your code when doing this).
 
 ### WebStorm and IntelliJ IDEA
 

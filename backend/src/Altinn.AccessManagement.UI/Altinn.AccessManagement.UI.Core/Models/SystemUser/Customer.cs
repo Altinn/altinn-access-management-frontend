@@ -26,6 +26,11 @@ namespace Altinn.AccessManagement.UI.Core.Models.SystemUser
         public string UnitType { get; set; }
 
         /// <summary>
+        /// Gets or sets a value indicating whether the party is deleted
+        /// </summary>
+        public bool IsDeleted { get; set; }
+
+        /// <summary>
         /// Gets or sets a collection of all access information for the client 
         /// </summary>
         public List<ClientRoleAccessPackages> Access { get; set; } = [];

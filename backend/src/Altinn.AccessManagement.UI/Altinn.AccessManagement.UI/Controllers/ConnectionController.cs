@@ -3,6 +3,7 @@ using Altinn.AccessManagement.UI.Core.Helpers;
 using Altinn.AccessManagement.UI.Core.Models.Connections;
 using Altinn.AccessManagement.UI.Core.Models.User;
 using Altinn.AccessManagement.UI.Core.Services.Interfaces;
+using Altinn.AccessManagement.UI.Filters;
 using Altinn.AccessManagement.UI.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -13,6 +14,7 @@ namespace Altinn.AccessManagement.UI.Controllers
     /// The <see cref="ConnectionController"/> provides the API endpoints related to persons.
     /// </summary>
     [Route("accessmanagement/api/v1/connection")]
+    [AutoValidateAntiforgeryTokenIfAuthCookie]
     public class ConnectionController : ControllerBase
     {
         private readonly IConnectionService _connectionService;

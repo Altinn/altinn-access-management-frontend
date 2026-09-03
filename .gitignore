@@ -391,3 +391,6 @@ coverage
 
 # Claude Code
 .claude/
+
+# Personal VS Code workspace files. Per-developer settings belong here, not in .vscode/settings.json
+*.local.code-workspace

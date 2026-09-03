@@ -116,6 +116,14 @@ function printHelp(): void {
   );
 }
 
+/**
+ * Fjerner linjeskift fra tekst som kommer fra Tenor, slik at innholdet ikke kan
+ * bryte opp en konsoll-linje og se ut som flere linjer.
+ */
+function rensTekst(verdi: string | null | undefined): string {
+  return (verdi ?? '').replace(/[\r\n]+/g, ' ');
+}
+
 async function main(): Promise<void> {
   const args = parseArgs(process.argv.slice(2));
   loadEnv(args.env);
@@ -141,11 +149,13 @@ async function main(): Promise<void> {
   }
 
   console.log(`Rolle:          ${facilitator.rolle}`);
-  console.log(`Virksomhet:     ${facilitator.navn} (${facilitator.organisasjonsnummer})`);
-  console.log(`Daglig leder:   ${facilitator.dagligLeder ?? '(ukjent)'}`);
+  console.log(
+    `Virksomhet:     ${rensTekst(facilitator.navn)} (${rensTekst(facilitator.organisasjonsnummer)})`,
+  );
+  console.log(`Daglig leder:   ${rensTekst(facilitator.dagligLeder ?? '(ukjent)')}`);
   console.log(`Klienter (${facilitator.klienter.length}):`);
   for (const klient of facilitator.klienter) {
-    console.log(`  - ${klient.navn} (${klient.organisasjonsnummer})`);
+    console.log(`  - ${rensTekst(klient.navn)} (${rensTekst(klient.organisasjonsnummer)})`);
   }
 }
 

@@ -5,6 +5,7 @@ using Altinn.AccessManagement.UI.Core.Helpers;
 using Altinn.AccessManagement.UI.Core.Models.AccessPackage;
 using Altinn.AccessManagement.UI.Core.Models.AccessPackage.Frontend;
 using Altinn.AccessManagement.UI.Core.Services.Interfaces;
+using Altinn.AccessManagement.UI.Filters;
 using Altinn.Authorization.ProblemDetails;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -15,6 +16,7 @@ namespace Altinn.AccessManagement.UI.Controllers
     /// The <see cref="AccessPackageController"/> provides the API endpoints related to access packages.
     /// </summary>
     [Route("accessmanagement/api/v1/accesspackage")]
+    [AutoValidateAntiforgeryTokenIfAuthCookie]
     public class AccessPackageController : Controller
     {
         private readonly IAccessPackageService _accessPackageService;
