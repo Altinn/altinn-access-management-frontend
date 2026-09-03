@@ -148,6 +148,7 @@ namespace Altinn.AccessManagement.UI.Core.Services
                     Name = x.DisplayName,
                     OrgNo = x.OrganizationIdentifier,
                     UnitType = x.UnitType,
+                    IsDeleted = x.IsDeleted,
                     Access = x.Access
                 };
             }).ToList();
