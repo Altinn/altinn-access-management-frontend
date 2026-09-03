@@ -1,12 +1,12 @@
 import { expect } from '@playwright/test';
 import { test } from 'playwright/fixture/pomFixture';
 import { ConsentApiRequests } from 'playwright/api-requests/ConsentApiRequests';
-import { addTimeToNowUtc, env, formatUiDateTime, pickRandom } from 'playwright/util/helper';
+import { addTimeToNowUtc, currentEnv, formatUiDateTime, pickRandom } from 'playwright/util/helper';
 import { getConsentRequestId } from './helper/consentHelper.js';
 import { fromOrgs, fromPersons, toOrgs } from './helper/consentTestdata';
 
 const MASKINPORTEN_ORG_DIGDIR = '991825827';
-const ENV = env('environment')?.toUpperCase();
+const ENV = currentEnv().toUpperCase();
 const REDIRECT_URL = 'https://example.com/';
 const APPROVED_REDIRECT_URL = `${REDIRECT_URL}?Status=OK`;
 
