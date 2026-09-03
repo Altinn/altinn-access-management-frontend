@@ -72,23 +72,12 @@ namespace Altinn.AccessManagement.UI.Controllers
         {
             // See comments in the configuration of Antiforgery in MvcConfiguration.cs.
             AntiforgeryTokenSet tokens = _antiforgery.GetAndStoreTokens(HttpContext);
-            if (_env.IsDevelopment())
+            HttpContext.Response.Cookies.Append("XSRF-TOKEN", tokens.RequestToken, new CookieOptions
             {
-                HttpContext.Response.Cookies.Append("XSRF-TOKEN", tokens.RequestToken, new CookieOptions
-                {
-                    HttpOnly = false, // Make this cookie readable by Javascript.
-                    SameSite = SameSiteMode.Strict
-                });
-            }
-            else
-            {
-                HttpContext.Response.Cookies.Append("XSRF-TOKEN", tokens.RequestToken, new CookieOptions
-                {
-                    Secure = true,
-                    HttpOnly = false, // Make this cookie readable by Javascript.
-                    SameSite = SameSiteMode.Strict
-                });
-            }
+                Secure = !_env.IsDevelopment(),
+                HttpOnly = false, // Make this cookie readable by Javascript.
+                SameSite = SameSiteMode.Strict
+            });
 
             if (await ShouldShowAppView())
             {
@@ -157,6 +146,8 @@ namespace Altinn.AccessManagement.UI.Controllers
             {
                 // Make this cookie readable by Javascript.
                 HttpOnly = false,
+                Secure = !_env.IsDevelopment(),
+                SameSite = SameSiteMode.Lax,
             });
 
             return languageCode;

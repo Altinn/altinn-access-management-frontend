@@ -62,11 +62,11 @@ namespace Altinn.AccessManagement.UI.Integration.Clients
             try
             {
                 ServiceResource result = null;
-                string endpointUrl = $"v1/resource/{resourceId}";
+                string endpointUrl = $"v1/resource/{Uri.EscapeDataString(resourceId ?? string.Empty)}";
 
                 if (!string.IsNullOrEmpty(versionId))
                 {
-                    endpointUrl += $"?versionId={versionId}";
+                    endpointUrl += $"?versionId={Uri.EscapeDataString(versionId)}";
                 }
 
                 HttpResponseMessage response = await _httpClient.GetAsync(endpointUrl);
@@ -201,7 +201,7 @@ namespace Altinn.AccessManagement.UI.Integration.Clients
         /// <inheritdoc />
         public async Task<List<Right>> GetResourceRights(string resourceId, string languageCode = "nb")
         {
-            string endpointUrl = $"v2/resource/{resourceId}/policy/rights";
+            string endpointUrl = $"v2/resource/{Uri.EscapeDataString(resourceId ?? string.Empty)}/policy/rights";
 
             HttpResponseMessage response = await _httpClient.GetAsync(null, endpointUrl, languageCode: languageCode);
             return await ClientUtils.DeserializeIfSuccessfullStatusCode<List<Right>>(response);
