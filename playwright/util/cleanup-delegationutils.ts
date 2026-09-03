@@ -76,12 +76,16 @@ export async function getCleanupDataForTest(
 
     try {
       authPerson = await getTestPersonForCategory(`Dagligerleder-${fromOrgCategory}`);
-    } catch {}
+    } catch {
+      /* try next name variant */
+    }
 
     if (!authPerson) {
       try {
         authPerson = await getTestPersonForCategory(`Dagligleder-${fromOrgCategory}`);
-      } catch {}
+      } catch {
+        /* try next name variant */
+      }
     }
 
     if (!authPerson || (!authPerson.PID && !authPerson.UserId)) {

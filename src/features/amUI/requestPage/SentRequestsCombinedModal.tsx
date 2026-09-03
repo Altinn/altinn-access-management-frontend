@@ -12,7 +12,7 @@ import { usePartyRepresentation } from '../common/PartyRepresentationContext/Par
 import classes from './SentRequestsCombinedModal.module.css';
 
 import { useGetSentRequestsQuery, type EnrichedPackageRequest } from '@/rtk/features/requestApi';
-import { ServiceResource } from '@/rtk/features/singleRights/singleRightsApi';
+import { type ServiceResource } from '@/rtk/features/singleRights/singleRightsApi';
 
 interface SentRequestsCombinedModalProps {
   modalRef: React.RefObject<HTMLDialogElement | null>;

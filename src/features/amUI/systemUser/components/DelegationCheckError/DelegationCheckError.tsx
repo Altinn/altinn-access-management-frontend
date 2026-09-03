@@ -7,7 +7,7 @@ import { mapErrorCodeToErrorMessage } from '../../errorHandling';
 
 import classes from './DelegationCheckError.module.css';
 
-import { ServiceResource } from '@/rtk/features/singleRights/singleRightsApi';
+import { type ServiceResource } from '@/rtk/features/singleRights/singleRightsApi';
 
 interface DelegationCheckErrorProps {
   defaultError: string;

@@ -9,9 +9,9 @@ import {
   TimelineActivity,
   TimelineSegment,
 } from '@altinn/altinn-components';
-import { TFunction } from 'i18next';
+import { type TFunction } from 'i18next';
 
-import { ConsentHistoryItem } from '../types';
+import { type ConsentHistoryItem } from '../types';
 import { toDateTimeString } from '../utils';
 
 import classes from './ConsentHistoryPage.module.css';

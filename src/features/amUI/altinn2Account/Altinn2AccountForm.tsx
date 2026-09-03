@@ -9,8 +9,8 @@ import {
   DsTextfield,
 } from '@altinn/altinn-components';
 import { PersonCircleIcon } from '@navikt/aksel-icons';
-import { FetchBaseQueryError } from '@reduxjs/toolkit/query';
-import { SerializedError } from '@reduxjs/toolkit';
+import { type FetchBaseQueryError } from '@reduxjs/toolkit/query';
+import { type SerializedError } from '@reduxjs/toolkit';
 
 import classes from './AddAltinn2AccountPage.module.css';
 

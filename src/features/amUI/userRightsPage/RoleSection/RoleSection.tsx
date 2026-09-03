@@ -9,7 +9,7 @@ import {
   useRestoreFocus,
 } from '../../common/RestoreFocus';
 
-import { ActionError } from '@/resources/hooks/useActionError';
+import { type ActionError } from '@/resources/hooks/useActionError';
 import type { Role } from '@/rtk/features/roleApi';
 
 export const RoleSection = () => {

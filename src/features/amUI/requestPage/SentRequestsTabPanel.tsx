@@ -5,7 +5,7 @@ import { useRef, useState } from 'react';
 import { useRestoreFocusContext } from '../common/RestoreFocus';
 import { PartyRepresentationProvider } from '../common/PartyRepresentationContext/PartyRepresentationContext';
 
-import { Request } from './types';
+import { type Request } from './types';
 import classes from './RequestPage.module.css';
 import { RequestListItem } from './RequestsTabPanel';
 import { SentRequestsCombinedModal } from './SentRequestsCombinedModal';

@@ -1,5 +1,4 @@
 import { formatDisplayName, UserListItem } from '@altinn/altinn-components';
-import { useTranslation } from 'react-i18next';
 
 import classes from './CurrentUserPageHeader.module.css';
 
@@ -19,8 +18,6 @@ export const CurrentUserPageHeader = ({
   loading,
   roleNames,
 }: CurrentUserPageHeaderProps) => {
-  const { t } = useTranslation();
-
   return (
     <div className={classes.currentUser}>
       <UserListItem

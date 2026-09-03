@@ -35,7 +35,7 @@ import {
 } from './deletionModalUtils';
 
 import { amUIPath } from '@/routes/paths';
-import { Entity } from '@/dataObjects/dtos/Common';
+import { type Entity } from '@/dataObjects/dtos/Common';
 import { accessPackageApi } from '@/rtk/features/accessPackageApi';
 import { useRemoveRightHolderMutation } from '@/rtk/features/connectionApi';
 import { roleApi } from '@/rtk/features/roleApi';

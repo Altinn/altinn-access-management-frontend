@@ -1,4 +1,4 @@
-import { LanguageCode, Layout, RootProvider, useConsent } from '@altinn/altinn-components';
+import { type LanguageCode, Layout, RootProvider, useConsent } from '@altinn/altinn-components';
 import { useTranslation } from 'react-i18next';
 import { useLocation } from 'react-router';
 

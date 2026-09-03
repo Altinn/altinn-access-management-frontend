@@ -6,7 +6,7 @@ import React, { useEffect } from 'react';
 import classes from './SettingsModal.module.css';
 
 import { validatePhoneNumber } from '@/resources/utils/textFieldUtils';
-import { NotificationAddress } from '@/rtk/features/settingsApi';
+import { type NotificationAddress } from '@/rtk/features/settingsApi';
 
 export const SmsAddressFields = ({
   addressList,
@@ -46,7 +46,6 @@ export const SmsAddressFields = ({
   };
 
   const phoneFields = addressList.map((address, index) => {
-    const phoneValidation = validatePhoneNumber(address.phone);
     return (
       <div
         key={index}

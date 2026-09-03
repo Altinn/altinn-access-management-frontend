@@ -1,6 +1,5 @@
 import { test } from '@playwright/test';
 
-import { env } from 'playwright/util/helper';
 import { LoginPage } from 'playwright/pages/LoginPage';
 
 test.describe('ID Porten Login', () => {

@@ -11,7 +11,7 @@ import { getCookie } from '@/resources/Cookie/CookieMethods';
 import { useDocumentTitle } from '@/resources/hooks/useDocumentTitle';
 import { PageWrapper } from '@/components';
 import { useGetAgentsQuery } from '@/rtk/features/clientApi';
-import { Party } from '@/rtk/features/lookupApi';
+import { type Party } from '@/rtk/features/lookupApi';
 import { PartyType } from '@/rtk/features/userInfoApi';
 
 export const AgentDetailsPage = () => {

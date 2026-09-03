@@ -14,7 +14,11 @@ import { RoleResourcesSection } from './RoleResourcesSection';
 import classes from './RoleInfo.module.css';
 
 import { RoleDeleteButton } from '@/features/amUI/common/RoleList/RoleDeleteButton';
-import { Role, useGetRolePermissionsQuery, useGetRoleResourcesQuery } from '@/rtk/features/roleApi';
+import {
+  type Role,
+  useGetRolePermissionsQuery,
+  useGetRoleResourcesQuery,
+} from '@/rtk/features/roleApi';
 
 export const ROLE_MODAL_HEADING_ID = 'role_modal_heading';
 

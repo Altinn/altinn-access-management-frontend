@@ -4,7 +4,7 @@ import { DsAlert, DsHeading, DsParagraph, ListItem } from '@altinn/altinn-compon
 import { CheckmarkCircleIcon } from '@navikt/aksel-icons';
 
 import { DelegationAction } from '../EditModal';
-import { ChipRight } from '../utils/rightsUtils';
+import { type ChipRight } from '../utils/rightsUtils';
 
 import classes from './ResourceInfo.module.css';
 import { RightChips } from './RightChips';

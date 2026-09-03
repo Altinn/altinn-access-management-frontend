@@ -1,4 +1,4 @@
-import React, { ComponentProps, JSX } from 'react';
+import React, { type ComponentProps, type JSX } from 'react';
 import { type MenuItemProps } from '@altinn/altinn-components';
 import {
   PersonGroupIcon,
@@ -52,7 +52,7 @@ export const getYourRightsMenuItem = (
   userName: string,
   pathname?: string,
   isLoading = false,
-  isSmall = false,
+  _isSmall = false,
 ): MenuItemProps => {
   return {
     groupId: '12',

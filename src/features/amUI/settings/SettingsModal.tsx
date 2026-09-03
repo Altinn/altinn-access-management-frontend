@@ -18,7 +18,7 @@ import { SmsAddressFields } from './SmsAddressFields';
 import { addressIsEmpty, isValidAddresses, useSaveAddressChanges } from './addressMgmtUtils';
 
 import {
-  NotificationAddress,
+  type NotificationAddress,
   useGetOrgNotificationAddressesQuery,
 } from '@/rtk/features/settingsApi';
 

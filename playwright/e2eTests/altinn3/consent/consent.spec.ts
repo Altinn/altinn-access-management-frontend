@@ -59,7 +59,7 @@ LANGUAGES.forEach((language) => {
       });
     });
 
-    test(`Krav-template`, async ({ page, consentPage, login }) => {
+    test(`Krav-template`, async ({ consentPage, login }) => {
       const fromPerson = pickRandom(fromPersons);
       const toOrg = pickRandom(toOrgs);
       const validTo = addTimeToNowUtc({ days: 2 });
@@ -139,7 +139,7 @@ LANGUAGES.forEach((language) => {
       });
     });
 
-    test(`Lånesøknad`, async ({ consentPage, page, login }) => {
+    test(`Lånesøknad`, async ({ consentPage, login }) => {
       const fromPerson = pickRandom(fromPersons);
       const toOrg = pickRandom(toOrgs);
       const validTo = addTimeToNowUtc({ days: 2 });
@@ -180,7 +180,7 @@ LANGUAGES.forEach((language) => {
       });
     });
 
-    test(`Enkelt samtykke`, async ({ consentPage, page, login }) => {
+    test(`Enkelt samtykke`, async ({ consentPage, login }) => {
       const fromPerson = pickRandom(fromPersons);
       const toOrg = pickRandom(toOrgs);
       const validTo = addTimeToNowUtc({ days: 2 });

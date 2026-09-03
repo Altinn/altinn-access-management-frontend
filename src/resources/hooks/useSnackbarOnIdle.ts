@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from 'react';
-import { SnackbarColor, useSnackbar } from '@altinn/altinn-components';
+import { type SnackbarColor, useSnackbar } from '@altinn/altinn-components';
 
 interface PendingSnackbar {
   message: string;

@@ -141,7 +141,7 @@ test.describe('Enkelttjenestedelegering fra person til person og person til org'
       await api.delegateSingleService(delegator.pid, delegator.pid, recipient.pid, service);
     });
 
-    test.afterEach(async ({}, testInfo) => {
+    test.afterEach(async (_, testInfo) => {
       if (testInfo.status !== 'passed') {
         try {
           await api.deleteSingleServiceDelegation(
@@ -204,7 +204,7 @@ test.describe('Enkelttjenestedelegering fra person til person og person til org'
       await api.delegateSingleService(delegator.pid, delegator.pid, recipient.orgNo, service);
     });
 
-    test.afterEach(async ({}, testInfo) => {
+    test.afterEach(async (_, testInfo) => {
       if (testInfo.status !== 'passed') {
         try {
           await api.deleteSingleServiceDelegation(
@@ -407,7 +407,7 @@ test.describe('Enkelttjenestedelegering fra org til person og org til org', () =
       await api.delegateSingleService(delegator.pid, delegator.orgNo, recipient.pid, service);
     });
 
-    test.afterEach(async ({}, testInfo) => {
+    test.afterEach(async (_, testInfo) => {
       if (testInfo.status !== 'passed') {
         try {
           await api.deleteSingleServiceDelegation(
@@ -474,7 +474,7 @@ test.describe('Enkelttjenestedelegering fra org til person og org til org', () =
       await api.delegateSingleService(delegator.pid, delegator.orgNo, recipient.orgNo, service);
     });
 
-    test.afterEach(async ({}, testInfo) => {
+    test.afterEach(async (_, testInfo) => {
       if (testInfo.status !== 'passed') {
         try {
           await api.deleteSingleServiceDelegation(

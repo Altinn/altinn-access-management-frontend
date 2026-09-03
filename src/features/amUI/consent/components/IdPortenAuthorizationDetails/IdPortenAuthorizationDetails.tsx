@@ -10,7 +10,7 @@ import { RevokeConsentPopover } from '../RevokeConsentPopover/RevokeConsentPopov
 import classes from './IdPortenAuthorizationDetails.module.css';
 
 import {
-  IdPortenAuthorization,
+  type IdPortenAuthorization,
   useWithdrawIdPortenAuthorizationMutation,
 } from '@/rtk/features/idPortenAuthorizationApi';
 

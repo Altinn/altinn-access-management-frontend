@@ -7,7 +7,7 @@ import { createErrorDetails } from '../TechnicalErrorParagraphs/TechnicalErrorPa
 import { useRestoreFocusOnDataChange } from '../RestoreFocus';
 
 import classes from './AccessPackageList.module.css';
-import { ExtendedAccessArea, useAreaPackageList } from './useAreaPackageList';
+import { type ExtendedAccessArea, useAreaPackageList } from './useAreaPackageList';
 import { useAccessPackageActions } from './useAccessPackageActions';
 import { SkeletonAccessPackageList } from './SkeletonAccessPackageList';
 import { AreaItem } from './AreaItem';

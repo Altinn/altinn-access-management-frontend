@@ -12,8 +12,8 @@ import {
   type EnrichedPackageRequest,
   type RequestStatus,
 } from '@/rtk/features/requestApi';
-import { ServiceResource } from '@/rtk/features/singleRights/singleRightsApi';
-import { AccessPackage } from '@/rtk/features/accessPackageApi';
+import { type ServiceResource } from '@/rtk/features/singleRights/singleRightsApi';
+import { type AccessPackage } from '@/rtk/features/accessPackageApi';
 
 export type HandledDirection = 'sent' | 'received';
 
@@ -136,7 +136,7 @@ export const useHandledRequests = (request: Request | null, direction: HandledDi
     isFetchingRequests,
     snapshotRequests.resourceRequests.length,
     snapshotRequests.packageRequests.length,
-  ]); // eslint-disable-line react-hooks/exhaustive-deps
+  ]);
 
   const handledResources = useMemo<HandledResourceItem[]>(() => {
     return snapshotRequests.resourceRequests

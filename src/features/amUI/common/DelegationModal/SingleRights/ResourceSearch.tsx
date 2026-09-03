@@ -1,6 +1,5 @@
 import * as React from 'react';
 import { useTranslation } from 'react-i18next';
-import { useParams } from 'react-router';
 import { DsPopover, DsSwitch } from '@altinn/altinn-components';
 import { QuestionmarkCircleIcon } from '@navikt/aksel-icons';
 import { useCallback, useEffect } from 'react';
@@ -8,7 +7,7 @@ import { useCallback, useEffect } from 'react';
 import { useDelegationModalContext } from '../DelegationModalContext';
 import { ResourceFilterToolbar } from '../../ResourceFilterToolbar/ResourceFilterToolbar';
 import { usePartyRepresentation } from '../../PartyRepresentationContext/PartyRepresentationContext';
-import { DelegationAction } from '../EditModal';
+import { type DelegationAction } from '../EditModal';
 
 import { SearchResults } from './SearchResults';
 import classes from './ResourceSearch.module.css';

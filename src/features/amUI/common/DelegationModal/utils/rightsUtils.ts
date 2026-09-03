@@ -1,6 +1,9 @@
-import { InheritedStatusType } from '../../useInheritedStatus';
+import { type InheritedStatusType } from '../../useInheritedStatus';
 
-import { DelegationCheckedRight, Right } from '@/rtk/features/singleRights/singleRightsApi';
+import {
+  type DelegationCheckedRight,
+  type Right,
+} from '@/rtk/features/singleRights/singleRightsApi';
 
 type InheritedReason = {
   toParty: string;

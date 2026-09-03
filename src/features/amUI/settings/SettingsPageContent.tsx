@@ -3,7 +3,6 @@ import { useTranslation, Trans } from 'react-i18next';
 import {
   Divider,
   DsAlert,
-  DsButton,
   DsHeading,
   DsPopover,
   formatDisplayName,

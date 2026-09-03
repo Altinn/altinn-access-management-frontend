@@ -6,11 +6,11 @@ import { PlusIcon } from '@navikt/aksel-icons';
 import { AmTabs } from '../../common/AmTabs/AmTabs';
 import { createErrorDetails } from '../../common/TechnicalErrorParagraphs/TechnicalErrorParagraphs';
 
-import { NewPersonContent, personInput } from './NewPersonContent';
+import { NewPersonContent, type personInput } from './NewPersonContent';
 import classes from './NewUserModal.module.css';
 
 import { useAddAgentMutation } from '@/rtk/features/clientApi';
-import { User } from '@/rtk/features/userInfoApi';
+import { type User } from '@/rtk/features/userInfoApi';
 
 interface AddAgentButtonProps {
   variant: 'primary' | 'secondary';

@@ -1,4 +1,4 @@
-import { Avatar, Badge, Color, DsHeading, DsParagraph, Icon } from '@altinn/altinn-components';
+import { Avatar, Badge, type Color, DsHeading, DsParagraph, Icon } from '@altinn/altinn-components';
 import { useTranslation } from 'react-i18next';
 
 import { isExpiredResource } from '../../ResourceList/utils';

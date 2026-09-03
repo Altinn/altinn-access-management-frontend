@@ -6,7 +6,7 @@ import type { RegisteredSystem } from '../../types';
 
 import classes from './RequestPageBase.module.css';
 
-import { ReporteeInfo } from '@/rtk/features/userInfoApi';
+import { type ReporteeInfo } from '@/rtk/features/userInfoApi';
 import { formatOrgNr } from '@/resources/utils/reporteeUtils';
 import { RequestPageLayout } from '@/features/amUI/common/RequestPageLayout/RequestPageLayout';
 

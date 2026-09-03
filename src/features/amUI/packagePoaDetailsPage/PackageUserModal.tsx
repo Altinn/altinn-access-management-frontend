@@ -2,7 +2,7 @@ import { forwardRef, useImperativeHandle, useMemo, useRef, useState } from 'reac
 
 import type { UserActionTarget } from '../common/UserSearch/types';
 import { usePartyRepresentation } from '../common/PartyRepresentationContext/PartyRepresentationContext';
-import { DelegationAction } from '../common/DelegationModal/EditModal';
+import { type DelegationAction } from '../common/DelegationModal/EditModal';
 import { getInheritedStatus } from '../common/useInheritedStatus';
 
 import { PartyInfoModal } from './PartyInfoModal';

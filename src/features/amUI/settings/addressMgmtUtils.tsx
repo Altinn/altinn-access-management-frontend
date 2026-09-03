@@ -1,10 +1,10 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 
 import { usePartyRepresentation } from '../common/PartyRepresentationContext/PartyRepresentationContext';
 
 import {
-  Address,
-  NotificationAddress,
+  type Address,
+  type NotificationAddress,
   useCreateOrgNotificationAddressMutation,
   useDeleteOrgNotificationAddressMutation,
   useUpdateOrgNotificationAddressMutation,

@@ -10,7 +10,7 @@ import { StatusSection } from '../../common/StatusSection/StatusSection';
 import classes from './RequestReviewModal.module.css';
 import { ProcessedStatusInfo } from './ProcessedStatusInfo';
 
-import { AccessPackage } from '@/rtk/features/accessPackageApi';
+import { type AccessPackage } from '@/rtk/features/accessPackageApi';
 
 interface RequestPackageDetailProps {
   pkg: AccessPackage;

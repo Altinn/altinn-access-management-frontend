@@ -254,7 +254,7 @@ test.describe('tilgangspakkedelegering fra person til person og person til org',
       });
     });
 
-    test.afterEach(async ({}, testInfo) => {
+    test.afterEach(async (_, testInfo) => {
       if (testInfo.status === 'passed') return;
 
       try {
@@ -317,7 +317,7 @@ test.describe('tilgangspakkedelegering fra person til person og person til org',
       });
     });
 
-    test.afterEach(async ({}, testInfo) => {
+    test.afterEach(async (_, testInfo) => {
       if (testInfo.status === 'passed') return;
 
       try {
@@ -591,7 +591,7 @@ test.describe('tilgangspakkedelegering fra org til person og org til org', () =>
       });
     });
 
-    test.afterEach(async ({}, testInfo) => {
+    test.afterEach(async (_, testInfo) => {
       if (testInfo.status === 'passed') return;
 
       try {
@@ -654,7 +654,7 @@ test.describe('tilgangspakkedelegering fra org til person og org til org', () =>
       });
     });
 
-    test.afterEach(async ({}, testInfo) => {
+    test.afterEach(async (_, testInfo) => {
       if (testInfo.status === 'passed') return;
 
       try {

@@ -1,7 +1,7 @@
 import React, { useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import {
-  AccessPackageListItemProps,
+  type AccessPackageListItemProps,
   formatDisplayName,
   type UserListItemProps,
 } from '@altinn/altinn-components';

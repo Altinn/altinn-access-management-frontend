@@ -1,7 +1,10 @@
 import { request } from '@playwright/test';
 
 import { DelegationApiRequest } from 'playwright/api-requests/delegation-tilgangspakke/delegationApiRequest';
-import { CleanupResolved, getCleanupDataForTest } from 'playwright/util/cleanup-delegationutils';
+import {
+  type CleanupResolved,
+  getCleanupDataForTest,
+} from 'playwright/util/cleanup-delegationutils';
 
 import { Token } from '../api-requests/Token';
 
@@ -11,7 +14,9 @@ async function getDagligLederForCategory(category: string) {
   for (const prefix of ['Dagligleder', 'Dagligerleder']) {
     try {
       return await getTestPersonForCategory(`${prefix}-${category}`);
-    } catch {}
+    } catch {
+      /* try next prefix */
+    }
   }
   throw new Error(`No daglig leder found for category "${category}" in test-person.csv`);
 }

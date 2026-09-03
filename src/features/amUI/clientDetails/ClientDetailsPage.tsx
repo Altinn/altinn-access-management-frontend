@@ -12,7 +12,7 @@ import { getCookie } from '@/resources/Cookie/CookieMethods';
 import { useDocumentTitle } from '@/resources/hooks/useDocumentTitle';
 import { useGetClientsQuery } from '@/rtk/features/clientApi';
 import { PartyType } from '@/rtk/features/userInfoApi';
-import { Party } from '@/rtk/features/lookupApi';
+import { type Party } from '@/rtk/features/lookupApi';
 
 export const ClientDetailsPage = () => {
   const { t } = useTranslation();

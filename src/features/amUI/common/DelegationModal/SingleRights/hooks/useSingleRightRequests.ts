@@ -11,7 +11,7 @@ import {
   getRequestPartyQueryParams,
   getSingleRightRequestId,
 } from '@/resources/utils/singleRightRequestUtils';
-import { ServiceResource } from '@/rtk/features/singleRights/singleRightsApi';
+import { type ServiceResource } from '@/rtk/features/singleRights/singleRightsApi';
 
 interface UseSingleRightRequestsProps {
   canRequestRights?: boolean;

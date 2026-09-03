@@ -25,8 +25,8 @@ import {
   type DeletionI18nKeys,
 } from './deletionModalUtils';
 
-import { RolePermission } from '@/rtk/features/roleApi';
-import { Entity } from '@/dataObjects/dtos/Common';
+import { type RolePermission } from '@/rtk/features/roleApi';
+import { type Entity } from '@/dataObjects/dtos/Common';
 
 type rolePermissionSetting = {
   code: string;

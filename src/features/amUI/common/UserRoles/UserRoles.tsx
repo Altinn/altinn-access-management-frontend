@@ -12,7 +12,7 @@ import { useRoleMetadata, ROLE_CODES_TO_IGNORE } from './useRoleMetadata';
 import { ClientAccessInfoModal } from './ClientAccessInfoModal';
 import { GuardianshipInfoModal } from './GuardianshipInfoModal';
 
-import { Role, useGetRolePermissionsQuery } from '@/rtk/features/roleApi';
+import { type Role, useGetRolePermissionsQuery } from '@/rtk/features/roleApi';
 import { useIsMobileOrSmaller } from '@/resources/utils/screensizeUtils';
 
 export const UserRoles = ({ className, ...props }: React.HTMLAttributes<HTMLDivElement>) => {
@@ -40,11 +40,7 @@ export const UserRoles = ({ className, ...props }: React.HTMLAttributes<HTMLDivE
     permissions,
   });
 
-  const {
-    mapRoles,
-    isLoading: loadingRoleMetadata,
-    isError: roleMetadataError,
-  } = useRoleMetadata();
+  const { mapRoles } = useRoleMetadata();
 
   const onChipClick = (role: Role) => {
     setSelectedRole(role);

@@ -1,4 +1,4 @@
-import { describe, it, expect, vi } from 'vitest';
+import { describe, it, expect } from 'vitest';
 
 import { validateEmail, validatePhoneNumber, validateCountryCode } from './textFieldUtils';
 
@@ -454,7 +454,7 @@ describe('validateCountryCode', () => {
       { code: '+45', country: 'Denmark' },
     ];
 
-    commonCodes.forEach(({ code, country }) => {
+    commonCodes.forEach(({ code }) => {
       const result = validateCountryCode(code);
       expect(result.isValid).toBe(true);
       expect(result.errorMessageKey).toBe('');

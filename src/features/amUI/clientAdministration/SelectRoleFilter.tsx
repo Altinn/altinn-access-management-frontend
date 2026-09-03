@@ -1,6 +1,11 @@
 import React, { useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
-import { FilterProps, MenuItemProps, Toolbar, type FilterState } from '@altinn/altinn-components';
+import {
+  type FilterProps,
+  type MenuItemProps,
+  Toolbar,
+  type FilterState,
+} from '@altinn/altinn-components';
 
 import { useRoleMetadata } from '../common/UserRoles/useRoleMetadata';
 

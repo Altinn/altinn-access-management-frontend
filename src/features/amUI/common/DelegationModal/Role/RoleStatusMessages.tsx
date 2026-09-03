@@ -8,7 +8,7 @@ import { InheritedStatusType, useInheritedStatusInfo } from '../../useInheritedS
 import classes from './RoleInfo.module.css';
 
 import { PartyType } from '@/rtk/features/userInfoApi';
-import { Role, useGetRolePermissionsQuery } from '@/rtk/features/roleApi';
+import { type Role, useGetRolePermissionsQuery } from '@/rtk/features/roleApi';
 
 const STATUS_TRANSLATION_KEYS: Record<InheritedStatusType, string> = {
   [InheritedStatusType.ViaRole]: 'role.access_status.via_role',

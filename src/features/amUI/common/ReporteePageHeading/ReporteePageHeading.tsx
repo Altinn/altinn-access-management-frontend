@@ -6,7 +6,7 @@ import { DownloadFileButton } from '../DownloadFileButton/DownloadFileButton';
 
 import styles from './ReporteePageHeading.module.css';
 
-import { ReporteeInfo } from '@/rtk/features/userInfoApi';
+import { type ReporteeInfo } from '@/rtk/features/userInfoApi';
 import { formatOrgNr, isSubUnit } from '@/resources/utils/reporteeUtils';
 import { useIsTabletOrSmaller } from '@/resources/utils/screensizeUtils';
 

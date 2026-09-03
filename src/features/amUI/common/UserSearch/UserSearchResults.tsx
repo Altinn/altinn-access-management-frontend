@@ -3,7 +3,7 @@ import { List, Button } from '@altinn/altinn-components';
 import { useTranslation } from 'react-i18next';
 
 import { UserListActions } from '../UserList/UserListActions';
-import { DelegationAction } from '../DelegationModal/EditModal';
+import { type DelegationAction } from '../DelegationModal/EditModal';
 
 import classes from './UserSearch.module.css';
 import type { UserActionTarget, UserSearchNode } from './types';

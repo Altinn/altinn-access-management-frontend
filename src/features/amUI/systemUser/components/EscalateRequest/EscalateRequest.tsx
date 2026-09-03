@@ -10,7 +10,7 @@ import { useTranslation } from 'react-i18next';
 
 import { ButtonRow } from '../ButtonRow/ButtonRow';
 import { getApiBaseUrl } from '../../requestUtils';
-import { SystemUserRequest } from '../../types';
+import { type SystemUserRequest } from '../../types';
 
 import classes from './EscalateRequest.module.css';
 

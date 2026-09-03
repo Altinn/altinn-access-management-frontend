@@ -12,11 +12,7 @@ import {
 import type { ActionError } from '@/resources/hooks/useActionError';
 import type { Role } from '@/rtk/features/roleApi';
 
-interface ReporteeRoleSectionProps {
-  numberOfAccesses?: number;
-}
-
-export const ReporteeRoleSection = ({ numberOfAccesses }: ReporteeRoleSectionProps) => {
+export const ReporteeRoleSection = () => {
   const modalRef = useRef<HTMLDialogElement>(null);
   const [modalItem, setModalItem] = useState<Role | undefined>(undefined);
   const [deleteError, setDeleteError] = useState<unknown>(null);

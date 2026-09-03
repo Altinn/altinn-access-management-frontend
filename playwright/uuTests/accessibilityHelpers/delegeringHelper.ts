@@ -1,4 +1,4 @@
-import { Page, expect } from '@playwright/test';
+import { type Page, expect } from '@playwright/test';
 import AxeBuilder from '@axe-core/playwright';
 
 import { env } from 'playwright/util/helper';

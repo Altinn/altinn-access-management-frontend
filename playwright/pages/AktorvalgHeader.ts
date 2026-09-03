@@ -233,10 +233,14 @@ export class AktorvalgHeader {
     try {
       await this.page.waitForTimeout(50);
       await this.page.getByRole('button', { name: 'Close' }).click();
-    } catch (e) {}
+    } catch {
+      /* element not present */
+    }
     try {
       await this.page.waitForTimeout(50);
       await this.page.getByRole('button', { name: 'Lukk' }).click();
-    } catch (e) {}
+    } catch {
+      /* element not present */
+    }
   }
 }

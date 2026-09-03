@@ -1,4 +1,4 @@
-import { type ComponentProps, ElementType, useMemo, useState } from 'react';
+import { type ComponentProps, type ElementType, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import {
   DialogListItem,
@@ -22,7 +22,7 @@ import classes from './InstanceList.module.css';
 
 import { useRestoreFocusTarget } from '@/features/amUI/common/RestoreFocus';
 import { useProviderLogoUrl } from '@/resources/hooks';
-import { InstanceDelegation } from '@/rtk/features/instanceApi';
+import { type InstanceDelegation } from '@/rtk/features/instanceApi';
 
 const InstanceListItemRow = ({
   id,

@@ -1,4 +1,4 @@
-import { DelegationAction, EditModal } from './EditModal';
+import { type DelegationAction, EditModal } from './EditModal';
 
 import type { Role } from '@/rtk/features/roleApi';
 import type { ActionError } from '@/resources/hooks/useActionError';

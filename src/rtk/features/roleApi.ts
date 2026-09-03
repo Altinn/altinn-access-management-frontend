@@ -1,7 +1,7 @@
 import { createApi } from '@reduxjs/toolkit/query/react';
 
 import { createBaseQuery } from '@/rtk/app/baseQuery';
-import { CompactRole, Entity } from '@/dataObjects/dtos/Common';
+import { type CompactRole, type Entity } from '@/dataObjects/dtos/Common';
 
 export interface ProviderType {
   id: string;

@@ -14,7 +14,7 @@ import { createErrorDetails } from '../../common/TechnicalErrorParagraphs/Techni
 import classes from './NewUserModal.module.css';
 import { NewUserAlert } from './NewUserAlert';
 
-import { Organization, useGetOrganizationQuery } from '@/rtk/features/lookupApi';
+import { type Organization, useGetOrganizationQuery } from '@/rtk/features/lookupApi';
 import { formatOrgNr } from '@/resources/utils/reporteeUtils';
 
 export const NewOrgContent = ({

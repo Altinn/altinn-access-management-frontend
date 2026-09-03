@@ -11,7 +11,7 @@ import { usePartyRepresentation } from '../../common/PartyRepresentationContext/
 import { useRestoreFocus, useRestoreFocusOnDataChange } from '../../common/RestoreFocus';
 import { TwoStepDialog } from '../../common/TwoStepDialog';
 
-import { ServiceResource } from '@/rtk/features/singleRights/singleRightsApi';
+import { type ServiceResource } from '@/rtk/features/singleRights/singleRightsApi';
 import { PartyType } from '@/rtk/features/userInfoApi';
 import { useIsTabletOrSmaller } from '@/resources/utils/screensizeUtils';
 import { useGetEnrichedSentResourceRequestsQuery } from '@/rtk/features/requestApi';

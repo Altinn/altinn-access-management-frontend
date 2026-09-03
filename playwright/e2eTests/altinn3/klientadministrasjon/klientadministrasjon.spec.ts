@@ -84,7 +84,7 @@ test.describe('klientadministrasjon', () => {
       });
     });
 
-    test.afterEach(async ({}, testInfo) => {
+    test.afterEach(async (_, testInfo) => {
       if (testInfo.status === 'passed') return;
 
       try {

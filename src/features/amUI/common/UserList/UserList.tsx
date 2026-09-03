@@ -2,7 +2,7 @@ import { useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Button, DsParagraph, List } from '@altinn/altinn-components';
 
-import { DelegationAction } from '../DelegationModal/EditModal';
+import { type DelegationAction } from '../DelegationModal/EditModal';
 import { mapConnectionsToUserSearchNodes } from '../UserSearch/connectionMapper';
 
 import { UserItem } from './UserItem';
@@ -12,7 +12,7 @@ import { SkeletonUserList } from './SkeletonUserList';
 import { UserListActions } from './UserListActions';
 
 import type { ExtendedUser } from '@/rtk/features/userInfoApi';
-import { Connection } from '@/rtk/features/connectionApi';
+import { type Connection } from '@/rtk/features/connectionApi';
 
 export interface UserListProps {
   connections?: Connection[];

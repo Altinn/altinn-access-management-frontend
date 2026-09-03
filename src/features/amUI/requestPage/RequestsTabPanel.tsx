@@ -6,7 +6,7 @@ import { Link } from 'react-router';
 import { useRestoreFocusContext, useRestoreFocusTarget } from '../common/RestoreFocus';
 
 import { RequestReviewModal } from './RequestReviewModal/RequestReviewModal';
-import { Request } from './types';
+import { type Request } from './types';
 import classes from './RequestPage.module.css';
 import { HandledRequestsSection } from './HandledRequestsSection';
 

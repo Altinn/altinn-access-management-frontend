@@ -1,4 +1,4 @@
-import { AccessAreaListItem, Badge, BadgeProps } from '@altinn/altinn-components';
+import { AccessAreaListItem, Badge } from '@altinn/altinn-components';
 import { useTranslation } from 'react-i18next';
 
 import type { ExtendedAccessArea } from './useAreaPackageList';

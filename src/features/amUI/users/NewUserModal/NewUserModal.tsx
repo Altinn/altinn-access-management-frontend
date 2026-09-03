@@ -10,9 +10,9 @@ import { NewPersonContent } from './NewPersonContent';
 import classes from './NewUserModal.module.css';
 import { NewOrgContent } from './NewOrgContent';
 
-import { User } from '@/rtk/features/userInfoApi';
+import { type User } from '@/rtk/features/userInfoApi';
 import { useAddRightHolderMutation } from '@/rtk/features/connectionApi';
-import { Organization } from '@/rtk/features/lookupApi';
+import { type Organization } from '@/rtk/features/lookupApi';
 
 /**
  * NewUserButton component renders a button that, when clicked, opens a modal to add a new user.

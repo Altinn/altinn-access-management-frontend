@@ -1,7 +1,7 @@
 import React, { useMemo, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import {
-  AccessPackageListItemProps,
+  type AccessPackageListItemProps,
   type UserListItemProps,
   formatDisplayName,
 } from '@altinn/altinn-components';
@@ -122,9 +122,6 @@ export const ClientAgentPackageList = ({
   const [selectedResource, setSelectedResource] = useState<SelectedAgentResource | null>(null);
 
   const clientAccess = client?.access ?? [];
-  const clientType = client?.client.type ?? '';
-  const clientIsSubUnit = isSubUnitByType(client?.client.variant);
-  const packageType = clientType.toLowerCase() === 'organisasjon' ? 'company' : 'person';
 
   const packageIdsByAgentId = useMemo(() => {
     const map = new Map<string, Set<string>>();

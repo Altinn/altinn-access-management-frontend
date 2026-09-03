@@ -15,9 +15,8 @@ import {
   useSaveAddressChanges,
 } from './addressMgmtUtils';
 
-import type { Address, NotificationAddress } from '@/rtk/features/settingsApi';
+import type { NotificationAddress } from '@/rtk/features/settingsApi';
 import { settingsApi } from '@/rtk/features/settingsApi';
-import type { Party } from '@/rtk/features/lookupApi';
 import { PartyType } from '@/rtk/features/userInfoApi';
 
 // Mock the PartyRepresentation hook

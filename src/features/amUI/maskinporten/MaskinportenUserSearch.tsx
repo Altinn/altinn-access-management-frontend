@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next';
 import { DsAlert } from '@altinn/altinn-components';
 
 import { mapMaskinportenConnectionsToUserSearchNodes } from '../common/UserSearch/connectionMapper';
-import { UserSearch, UserSearchProps } from '../common/UserSearch/UserSearch';
+import { UserSearch, type UserSearchProps } from '../common/UserSearch/UserSearch';
 
 import type { MaskinportenConnection } from '@/rtk/features/maskinportenApi';
 

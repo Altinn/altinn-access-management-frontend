@@ -2,7 +2,7 @@ import React from 'react';
 import { useTranslation } from 'react-i18next';
 import cn from 'classnames';
 
-import { ConsentRequestEvent } from '../../types';
+import { type ConsentRequestEvent } from '../../types';
 import { isAccepted, isExpired, isRevoked } from '../../utils';
 
 import classes from './ConsentStatus.module.css';

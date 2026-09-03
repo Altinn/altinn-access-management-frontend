@@ -1,4 +1,9 @@
-import { Theme, MenuItemSize, MenuItemProps, formatDisplayName } from '@altinn/altinn-components';
+import {
+  type Theme,
+  type MenuItemSize,
+  type MenuItemProps,
+  formatDisplayName,
+} from '@altinn/altinn-components';
 import {
   InboxFillIcon,
   PersonCircleIcon,

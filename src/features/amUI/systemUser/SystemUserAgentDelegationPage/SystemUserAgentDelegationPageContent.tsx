@@ -407,7 +407,11 @@ export const SystemUserAgentDelegationPageContent = ({
                   aria-disabled={isLoadingSelf}
                   onClick={() => {
                     if (!isLoadingSelf) {
-                      isSelfAdded ? removeSelfFromSystemuser() : assignSelfToSystemUser();
+                      if (isSelfAdded) {
+                        removeSelfFromSystemuser();
+                      } else {
+                        assignSelfToSystemUser();
+                      }
                     }
                   }}
                 >

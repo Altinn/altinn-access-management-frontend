@@ -27,7 +27,7 @@ export default {
 } as Meta<SettingsPageContentStoryProps>;
 
 export const OrganizationWithMultipleAddresses: StoryObj<SettingsPageContentStoryProps> = {
-  render: (args) => (
+  render: () => (
     <StoryWrapper>
       <PartyRepresentationProvider
         actingPartyUuid={'54f128f7-ca7c-4a57-ad49-3787eb79b506'}

@@ -5,7 +5,7 @@ import { DsAlert, DsHeading, DsParagraph, DsSpinner } from '@altinn/altinn-compo
 import { canConsentBeRevoked, getLanguage, replaceStaticMetadata } from '../../utils';
 import { ConsentRights } from '../ConsentRights/ConsentRights';
 import { ConsentStatus } from '../ConsentStatus/ConsentStatus';
-import { Consent } from '../../types';
+import { type Consent } from '../../types';
 import { RevokeConsentPopover } from '../RevokeConsentPopover/RevokeConsentPopover';
 
 import classes from './ConsentDetails.module.css';

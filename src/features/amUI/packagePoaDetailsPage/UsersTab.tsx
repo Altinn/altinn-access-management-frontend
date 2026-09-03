@@ -22,9 +22,9 @@ import { PackageUserModal, mapUserToParty, type PackageUserModalHandle } from '.
 import { DelegateErrorAlert } from './DelegateErrorAlert';
 import pageClasses from './PackagePoaDetailsPage.module.css';
 
-import { ActionError } from '@/resources/hooks/useActionError';
-import { AccessPackage } from '@/rtk/features/accessPackageApi';
-import { Party } from '@/rtk/features/lookupApi';
+import { type ActionError } from '@/resources/hooks/useActionError';
+import { type AccessPackage } from '@/rtk/features/accessPackageApi';
+import { type Party } from '@/rtk/features/lookupApi';
 import { useGetRightHoldersQuery } from '@/rtk/features/connectionApi';
 
 interface UsersTabProps {

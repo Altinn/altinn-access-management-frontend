@@ -1,7 +1,8 @@
 import fs from 'fs';
-import path, { dirname } from 'path';
+import path from 'path';
 
 import csv from 'csv-parser';
+
 import { currentEnv } from './helper';
 
 export type TestPerson = {

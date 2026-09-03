@@ -1,4 +1,4 @@
-import { BadgeVariant, Color, MenuItemProps } from '@altinn/altinn-components';
+import { type BadgeVariant, type Color, type MenuItemProps } from '@altinn/altinn-components';
 import { useLocation } from 'react-router';
 import { useTranslation } from 'react-i18next';
 

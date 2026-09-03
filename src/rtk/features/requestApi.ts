@@ -1,6 +1,6 @@
 import { createApi } from '@reduxjs/toolkit/query/react';
 
-import { ServiceResource } from './singleRights/singleRightsApi';
+import { type ServiceResource } from './singleRights/singleRightsApi';
 import type { AccessPackage } from './accessPackageApi';
 
 import { createBaseQuery } from '@/rtk/app/baseQuery';

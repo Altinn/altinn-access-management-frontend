@@ -1,5 +1,4 @@
 import React from 'react';
-import { DsHeading } from '@altinn/altinn-components';
 import { useTranslation } from 'react-i18next';
 import { useParams, useSearchParams } from 'react-router';
 

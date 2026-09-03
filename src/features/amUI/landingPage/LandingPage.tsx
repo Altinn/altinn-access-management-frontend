@@ -4,7 +4,7 @@ import {
   formatDisplayName,
   List,
   ListItem,
-  MenuItemProps,
+  type MenuItemProps,
   UserListItem,
 } from '@altinn/altinn-components';
 import { useTranslation } from 'react-i18next';
@@ -12,7 +12,6 @@ import { useSearchParams } from 'react-router';
 import cn from 'classnames';
 
 import { PageLayoutWrapper } from '../common/PageLayoutWrapper';
-import { useSelfConnection } from '../common/PartyRepresentationContext/useSelfConnection';
 
 import classes from './LandingPage.module.css';
 import { LandingPageInfoCard } from './LandingPageInfoCard';

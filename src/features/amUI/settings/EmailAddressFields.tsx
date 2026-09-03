@@ -6,7 +6,7 @@ import React, { useEffect } from 'react';
 import classes from './SettingsModal.module.css';
 
 import { validateEmail } from '@/resources/utils/textFieldUtils';
-import { NotificationAddress } from '@/rtk/features/settingsApi';
+import { type NotificationAddress } from '@/rtk/features/settingsApi';
 
 export const EmailAddressFields = ({
   addressList,

@@ -2,7 +2,7 @@ import { useTranslation } from 'react-i18next';
 import { DsParagraph } from '@altinn/altinn-components';
 
 import { useDelegationModalContext } from '../DelegationModalContext';
-import { DelegationAction } from '../EditModal';
+import { type DelegationAction } from '../EditModal';
 import { DebouncedSearchField } from '../../DebouncedSearchField/DebouncedSearchField';
 import { AccessPackageInfoPopover } from '../../AccessPackageInfoPopover/AccessPackageInfoPopover';
 

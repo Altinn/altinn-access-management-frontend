@@ -1,7 +1,7 @@
 import { createApi } from '@reduxjs/toolkit/query/react';
 
 import type { Party } from './lookupApi';
-import { Connection, RoleInfo } from './connectionApi';
+import { type Connection, type RoleInfo } from './connectionApi';
 
 import { createBaseQuery } from '@/rtk/app/baseQuery';
 import { getCookie } from '@/resources/Cookie/CookieMethods';

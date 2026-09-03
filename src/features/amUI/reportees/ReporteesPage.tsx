@@ -1,4 +1,4 @@
-import { DsAlert, DsHeading, formatDisplayName } from '@altinn/altinn-components';
+import { DsAlert, formatDisplayName } from '@altinn/altinn-components';
 import { useTranslation } from 'react-i18next';
 import React from 'react';
 

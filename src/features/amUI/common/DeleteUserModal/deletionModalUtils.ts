@@ -4,8 +4,8 @@ import {
   ECC_PROVIDER_CODE,
 } from '../UserRoles/useRoleMetadata';
 
-import { RolePermission } from '@/rtk/features/roleApi';
-import { Entity } from '@/dataObjects/dtos/Common';
+import { type RolePermission } from '@/rtk/features/roleApi';
+import { type Entity } from '@/dataObjects/dtos/Common';
 
 export const RIGHTHOLDER_ROLE = 'rettighetshaver';
 export const AGENT_ROLE = 'agent';

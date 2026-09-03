@@ -12,9 +12,9 @@ import { PackageMeta } from '../../common/DelegationModal/AccessPackages/Package
 import classes from './DraftRequestPage.module.css';
 
 import {
-  EnrichedPackageRequest,
-  EnrichedRequest,
-  EnrichedResourceRequest,
+  type EnrichedPackageRequest,
+  type EnrichedRequest,
+  type EnrichedResourceRequest,
   isEnrichedPackageRequest,
 } from '@/rtk/features/requestApi';
 

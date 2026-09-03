@@ -114,8 +114,6 @@ export const useHeader = ({
     document.documentElement.lang = languageCode;
   }, [languageCode]);
 
-  let header: GlobalHeaderProps;
-
   // For new header
   const accountSelectorData = useAccountSelector({
     languageCode: languageCode,
@@ -148,7 +146,7 @@ export const useHeader = ({
     forceOpenFullScreen: shouldOpenAccountMenu,
   };
 
-  header = {
+  const header: GlobalHeaderProps = {
     locale: {
       title: t('header.locale_title'),
       options: [

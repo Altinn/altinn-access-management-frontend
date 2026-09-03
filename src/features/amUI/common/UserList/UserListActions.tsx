@@ -4,7 +4,7 @@ import { MinusCircleIcon, PlusCircleIcon } from '@navikt/aksel-icons';
 
 import { DelegationAction } from '../DelegationModal/EditModal';
 
-import { ExtendedUser } from '@/rtk/features/userInfoApi';
+import { type ExtendedUser } from '@/rtk/features/userInfoApi';
 import { ConnectionUserType } from '@/rtk/features/connectionApi';
 import { useIsMobileOrSmaller } from '@/resources/utils/screensizeUtils';
 
