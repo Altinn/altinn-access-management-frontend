@@ -2,6 +2,7 @@ import fs from 'fs';
 import path, { dirname } from 'path';
 
 import csv from 'csv-parser';
+import { currentEnv } from './helper';
 
 export type TestPerson = {
   Category: string;
@@ -10,7 +11,7 @@ export type TestPerson = {
   UserId?: string;
   PID?: string;
 };
-const TEST_ENV = (process.env.environment ?? 'at23').toLowerCase();
+const TEST_ENV = currentEnv();
 const TEST_PERSON_CSV = path.resolve(
   __dirname,
   `../e2eTests/testdata/accesspkgdelegation/${TEST_ENV}/test-person.csv`,

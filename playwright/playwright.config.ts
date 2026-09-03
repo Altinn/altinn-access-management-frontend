@@ -1,9 +1,9 @@
 import type { PlaywrightTestConfig } from '@playwright/test';
 
-import { loadEnv } from './util/helper';
+import { currentEnv, loadEnv } from './util/helper';
 
 // Load env from playwright/config to match repo layout
-loadEnv(process.env.environment ?? 'at23');
+loadEnv(currentEnv());
 
 const config: PlaywrightTestConfig = {
   fullyParallel: true,
@@ -30,8 +30,8 @@ const config: PlaywrightTestConfig = {
       {
         open: 'on-failure',
         trace: 'on',
-        outputDir: `playwright-report/${process.env.environment?.toUpperCase() ?? 'AT23'}`,
-        outputFolder: `playwright-report/${process.env.environment?.toUpperCase() ?? 'AT23'}`,
+        outputDir: `playwright-report/${currentEnv().toUpperCase()}`,
+        outputFolder: `playwright-report/${currentEnv().toUpperCase()}`,
       },
     ],
   ],

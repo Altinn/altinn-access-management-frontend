@@ -1,6 +1,6 @@
 import { test, expect } from 'playwright/fixture/pomFixture';
 import { ConsentApiRequests } from 'playwright/api-requests/ConsentApiRequests';
-import { addTimeToNowUtc, env } from 'playwright/util/helper';
+import { addTimeToNowUtc, currentEnv } from 'playwright/util/helper';
 import { fetchKrav } from 'playwright/api-requests/SkatteetatenApiRequests';
 
 import { getConsentRequestId } from './helper/consentHelper';
@@ -12,7 +12,7 @@ const SKATTEETATEN_RESOURCE = 'ske-samtykke-krav-og-betalinger';
 const SKATTEETATEN_MASKINPORTEN_SCOPE = 'skatteetaten:kravogbetalinger';
 const REDIRECT_URL = 'https://example.com/';
 const APPROVED_REDIRECT_URL = `${REDIRECT_URL}?Status=OK`;
-const ENV = env('environment')?.toUpperCase();
+const ENV = currentEnv().toUpperCase();
 
 test.describe('Samtykke - Skatteetaten krav og betalinger ende til ende', () => {
   test.describe('Org', () => {
