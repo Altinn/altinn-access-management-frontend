@@ -3,21 +3,21 @@ import { useTranslation } from 'react-i18next';
 import { DsButton } from '@altinn/altinn-components';
 import { EnvelopeClosedIcon } from '@navikt/aksel-icons';
 
-import { PageWrapper } from '@/components';
-import { getCookie } from '@/resources/Cookie/CookieMethods';
-import { useDocumentTitle } from '@/resources/hooks/useDocumentTitle';
-import { getAfUrl } from '@/resources/utils/pathUtils';
-
 import { DeeplinkReporteeGuard } from '../common/DeeplinkReporteeGuard/DeeplinkReporteeGuard';
 import { PageContainer } from '../common/PageContainer/PageContainer';
 import { PageLayoutWrapper } from '../common/PageLayoutWrapper';
 import { PartyRepresentationProvider } from '../common/PartyRepresentationContext/PartyRepresentationContext';
 import { DelegationModalProvider } from '../common/DelegationModal/DelegationModalContext';
 import { RestoreFocusProvider, useRestoreFocus } from '../common/RestoreFocus';
+import { Breadcrumbs } from '../common/Breadcrumbs/Breadcrumbs';
 
 import { InstanceDetailPageContent } from './InstanceDetailPageContent';
 import classes from './InstanceDetailPageContent.module.css';
-import { Breadcrumbs } from '../common/Breadcrumbs/Breadcrumbs';
+
+import { getAfUrl } from '@/resources/utils/pathUtils';
+import { useDocumentTitle } from '@/resources/hooks/useDocumentTitle';
+import { getCookie } from '@/resources/Cookie/CookieMethods';
+import { PageWrapper } from '@/components';
 import { useGetResourceQuery } from '@/rtk/features/resourceApi';
 import { amUIPath } from '@/routes/paths/amUIPath';
 

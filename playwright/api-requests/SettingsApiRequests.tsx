@@ -1,5 +1,6 @@
-import { Token } from './Token';
 import { env } from 'playwright/util/helper';
+
+import { Token } from './Token';
 
 export class SettingsApiRequests {
   private tokenClass: Token;

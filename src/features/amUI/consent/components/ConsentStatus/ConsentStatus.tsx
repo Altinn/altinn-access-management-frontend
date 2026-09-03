@@ -1,9 +1,11 @@
 import React from 'react';
-import { ConsentRequestEvent } from '../../types';
 import { useTranslation } from 'react-i18next';
 import cn from 'classnames';
-import classes from './ConsentStatus.module.css';
+
+import { ConsentRequestEvent } from '../../types';
 import { isAccepted, isExpired, isRevoked } from '../../utils';
+
+import classes from './ConsentStatus.module.css';
 
 interface ConsentStatusProps {
   events: ConsentRequestEvent[];

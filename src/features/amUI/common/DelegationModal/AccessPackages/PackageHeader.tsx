@@ -1,9 +1,9 @@
 import { Icon, DsHeading } from '@altinn/altinn-components';
 import { PackageIcon } from '@navikt/aksel-icons';
 
-import { useIsMobileOrSmaller } from '@/resources/utils/screensizeUtils';
-
 import classes from './AccessPackageInfo.module.css';
+
+import { useIsMobileOrSmaller } from '@/resources/utils/screensizeUtils';
 
 interface PackageHeaderProps {
   name: string;

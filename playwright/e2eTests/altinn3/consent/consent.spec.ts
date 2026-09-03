@@ -1,9 +1,10 @@
 import { expect } from '@playwright/test';
-import { test } from 'playwright/fixture/pomFixture';
 
+import { test } from 'playwright/fixture/pomFixture';
 import { ConsentApiRequests } from 'playwright/api-requests/ConsentApiRequests';
 import { Language } from 'playwright/pages/consent/ConsentPage';
 import { addTimeToNowUtc, formatUiDateTime, pickRandom } from 'playwright/util/helper';
+
 import { fromPersons, toOrgs } from './helper/consentTestdata';
 
 const REDIRECT_URL = 'https://example.com/';

@@ -12,6 +12,21 @@ import {
   useSnackbar,
 } from '@altinn/altinn-components';
 
+import { SystemUserHeader } from '../components/SystemUserHeader/SystemUserHeader';
+import type { AgentDelegation, AgentDelegationCustomer, ProblemDetail, SystemUser } from '../types';
+import { RightsList } from '../components/RightsList/RightsList';
+import { DelegationCheckError } from '../components/DelegationCheckError/DelegationCheckError';
+
+import classes from './SystemUserAgentDelegationPage.module.css';
+import { CustomerList } from './CustomerList';
+import { AddAllCustomers } from './AddAllCustomers';
+
+import {
+  useGetIsAdminQuery,
+  useGetIsClientAdminQuery,
+  useGetReporteeQuery,
+} from '@/rtk/features/userInfoApi';
+import { getCookie } from '@/resources/Cookie/CookieMethods';
 import {
   useAssignCustomerMutation,
   useAssignSelfCustomerMutation,
@@ -19,19 +34,6 @@ import {
   useRemoveCustomerMutation,
   useRemoveSelfCustomerMutation,
 } from '@/rtk/features/systemUserApi';
-import { getCookie } from '@/resources/Cookie/CookieMethods';
-import { SystemUserHeader } from '../components/SystemUserHeader/SystemUserHeader';
-import type { AgentDelegation, AgentDelegationCustomer, ProblemDetail, SystemUser } from '../types';
-import { RightsList } from '../components/RightsList/RightsList';
-import classes from './SystemUserAgentDelegationPage.module.css';
-import { CustomerList } from './CustomerList';
-import {
-  useGetIsAdminQuery,
-  useGetIsClientAdminQuery,
-  useGetReporteeQuery,
-} from '@/rtk/features/userInfoApi';
-import { AddAllCustomers } from './AddAllCustomers';
-import { DelegationCheckError } from '../components/DelegationCheckError/DelegationCheckError';
 import { useIsMobileOrSmaller } from '@/resources/utils/screensizeUtils';
 
 const getAssignedCustomers = (

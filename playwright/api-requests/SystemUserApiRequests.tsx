@@ -1,6 +1,7 @@
 import { TestdataApi } from 'playwright/util/TestdataApi';
-import { Token } from './Token';
 import { env } from 'playwright/util/helper';
+
+import { Token } from './Token';
 
 export class ApiRequests {
   private tokenClass: Token;
@@ -412,7 +413,7 @@ export class ApiRequests {
     vendorOrgNo: string,
   ): Promise<TResponse> {
     const baseUrl = env('API_BASE_URL');
-    let url = baseUrl + endpoint;
+    const url = baseUrl + endpoint;
 
     const token = await this.tokenClass.getEnterpriseAltinnToken(vendorOrgNo, scopes);
 

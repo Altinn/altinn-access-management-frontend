@@ -3,6 +3,7 @@ import { Trans, useTranslation } from 'react-i18next';
 import { Link } from 'react-router';
 
 import classes from './clientAccessInfoModal.module.css';
+
 import { amUIPath } from '@/routes/paths';
 
 interface ClientAccessInfoModalProps {

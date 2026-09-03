@@ -1,10 +1,13 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { DsAlert, DsButton } from '@altinn/altinn-components';
-import type { EnrichedRequest } from '@/rtk/features/requestApi';
+
 import { PartyRepresentationProvider } from '../../common/PartyRepresentationContext/PartyRepresentationContext';
+
 import { DraftRequestBody } from './DraftRequestBody';
 import classes from './DraftRequestPage.module.css';
+
+import type { EnrichedRequest } from '@/rtk/features/requestApi';
 
 interface SingleDraftRequestViewProps {
   request: EnrichedRequest;

@@ -9,10 +9,12 @@ import {
   DsTextfield,
 } from '@altinn/altinn-components';
 import { PersonCircleIcon } from '@navikt/aksel-icons';
-import { getAfUrl } from '@/resources/utils/pathUtils';
-import classes from './AddAltinn2AccountPage.module.css';
 import { FetchBaseQueryError } from '@reduxjs/toolkit/query';
 import { SerializedError } from '@reduxjs/toolkit';
+
+import classes from './AddAltinn2AccountPage.module.css';
+
+import { getAfUrl } from '@/resources/utils/pathUtils';
 
 interface Altinn2AccountFormProps {
   onAddAltinn2Account: (username: string, password: string) => Promise<void>;

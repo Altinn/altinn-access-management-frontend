@@ -1,6 +1,6 @@
-import { GeneralPath } from '@/routes/paths';
-
 import { getCookie } from '../Cookie/CookieMethods';
+
+import { GeneralPath } from '@/routes/paths';
 
 export const getRedirectToA2UsersListSectionUrl = (section: number) => {
   const scrollToId = section === 9 ? 'othersWithRightsHeader' : 'rightGiversHeader';

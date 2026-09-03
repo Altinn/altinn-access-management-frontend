@@ -1,8 +1,9 @@
 import { test, expect } from 'playwright/fixture/pomFixture';
 import { ConsentApiRequests } from 'playwright/api-requests/ConsentApiRequests';
 import { addTimeToNowUtc, env } from 'playwright/util/helper';
-import { getConsentRequestId } from './helper/consentHelper';
 import { fetchKrav } from 'playwright/api-requests/SkatteetatenApiRequests';
+
+import { getConsentRequestId } from './helper/consentHelper';
 
 const DIGDIR_ORG = '991825827';
 const MASKINPORTEN_CLIENT_ID_ENV = 'MASKINPORTEN_CLIENT_ID';

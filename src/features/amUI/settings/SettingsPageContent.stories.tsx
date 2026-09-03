@@ -2,10 +2,11 @@ import type { Meta, StoryObj } from '@storybook/react-vite';
 import { Provider } from 'react-redux';
 import { RootProvider } from '@altinn/altinn-components';
 
-import store from '@/rtk/app/store';
 import { PartyRepresentationProvider } from '../common/PartyRepresentationContext/PartyRepresentationContext';
 
 import { SettingsPageContent } from './SettingsPageContent';
+
+import store from '@/rtk/app/store';
 
 type SettingsPageContentStoryProps = React.ComponentProps<typeof SettingsPageContent>;
 

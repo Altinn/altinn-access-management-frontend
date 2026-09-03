@@ -1,8 +1,10 @@
 import { createApi } from '@reduxjs/toolkit/query/react';
-import { createBaseQuery } from '@/rtk/app/baseQuery';
-import type { Entity } from '@/dataObjects/dtos/Common';
+
 import { ServiceResource } from './singleRights/singleRightsApi';
 import type { AccessPackage } from './accessPackageApi';
+
+import { createBaseQuery } from '@/rtk/app/baseQuery';
+import type { Entity } from '@/dataObjects/dtos/Common';
 
 export type RequestStatus = 'None' | 'Draft' | 'Pending' | 'Approved' | 'Rejected' | 'Withdrawn';
 

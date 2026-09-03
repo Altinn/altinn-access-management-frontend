@@ -1,9 +1,9 @@
-import { useGetRolePermissionsQuery } from '@/rtk/features/roleApi';
-
 import { usePartyRepresentation } from '../PartyRepresentationContext/PartyRepresentationContext';
 
 import { getDeletionStatus, getNonDeletableReasons, getViaParties } from './deletionModalUtils';
 import { DeleteUserModalContent } from './DeleteUserModalContent';
+
+import { useGetRolePermissionsQuery } from '@/rtk/features/roleApi';
 
 export type DeleteUserDirection = 'to' | 'from';
 

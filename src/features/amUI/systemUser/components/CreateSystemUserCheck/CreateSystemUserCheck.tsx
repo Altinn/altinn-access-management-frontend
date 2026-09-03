@@ -3,6 +3,7 @@ import { useTranslation } from 'react-i18next';
 import { DsAlert } from '@altinn/altinn-components';
 
 import classes from './CreateSystemUserCheck.module.css';
+
 import type { ReporteeInfo } from '@/rtk/features/userInfoApi';
 import { hasCreateSystemUserPermission } from '@/resources/utils/permissionUtils';
 

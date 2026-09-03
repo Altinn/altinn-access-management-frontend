@@ -1,11 +1,7 @@
 import * as React from 'react';
 import { useTranslation } from 'react-i18next';
 import { useParams } from 'react-router';
-
-import { getCookie } from '@/resources/Cookie/CookieMethods';
-import { amUIPath } from '@/routes/paths';
-import { PageWrapper } from '@/components';
-import { useDocumentTitle } from '@/resources/hooks/useDocumentTitle';
+import { formatDisplayName } from '@altinn/altinn-components';
 
 import { UserPageHeader } from '../common/UserPageHeader/UserPageHeader';
 import { RightsTabs } from '../common/RightsTabs/RightsTabs';
@@ -17,15 +13,19 @@ import {
   usePartyRepresentation,
 } from '../common/PartyRepresentationContext/PartyRepresentationContext';
 import { DeleteUserModal } from '../common/DeleteUserModal/DeleteUserModal';
-
 import { AccessPackageSection } from '../userRightsPage/AccessPackageSection/AccessPackageSection';
-import { ReporteeRoleSection } from './ReporteeRoleSection';
 import { Breadcrumbs } from '../common/Breadcrumbs/Breadcrumbs';
-import { formatDisplayName } from '@altinn/altinn-components';
-import { PartyType } from '@/rtk/features/userInfoApi';
 import { SingleRightsSection } from '../userRightsPage/SingleRightsSection/SingleRightsSection';
 import { InstanceSection } from '../userRightsPage/InstanceSection/InstanceSection';
 import { GuardianshipSection } from '../common/GuardianshipSection/GuardianshipSection';
+
+import { ReporteeRoleSection } from './ReporteeRoleSection';
+
+import { PartyType } from '@/rtk/features/userInfoApi';
+import { useDocumentTitle } from '@/resources/hooks/useDocumentTitle';
+import { PageWrapper } from '@/components';
+import { amUIPath } from '@/routes/paths';
+import { getCookie } from '@/resources/Cookie/CookieMethods';
 
 export const ReporteeRightsPage = () => {
   const { t } = useTranslation();

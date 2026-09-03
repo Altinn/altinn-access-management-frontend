@@ -1,6 +1,6 @@
-import { GeneralPath } from '@/routes/paths';
-
 import { getAmBaseUrl } from './pathUtils';
+
+import { GeneralPath } from '@/routes/paths';
 
 export const getDefaultChangeReporteeRedirectTarget = () =>
   new URL(`${window.location.origin}${GeneralPath.BasePath}`).toString();

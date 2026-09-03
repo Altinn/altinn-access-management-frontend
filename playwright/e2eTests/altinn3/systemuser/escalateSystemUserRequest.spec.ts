@@ -1,5 +1,4 @@
 import { test, expect } from 'playwright/fixture/pomFixture';
-
 import { ApiRequests } from 'playwright/api-requests/SystemUserApiRequests';
 import { TestdataApi } from 'playwright/util/TestdataApi';
 import { LoginPage } from 'playwright/pages/LoginPage';

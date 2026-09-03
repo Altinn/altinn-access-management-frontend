@@ -1,17 +1,19 @@
-import { formatDateToNorwegian } from '@/resources/utils';
 import { Button, formatDisplayName, List } from '@altinn/altinn-components';
 import { useTranslation } from 'react-i18next';
-import { Request } from './types';
-
-import classes from './RequestPage.module.css';
 import { useRef, useState } from 'react';
+
 import { useRestoreFocusContext } from '../common/RestoreFocus';
+import { PartyRepresentationProvider } from '../common/PartyRepresentationContext/PartyRepresentationContext';
+
+import { Request } from './types';
+import classes from './RequestPage.module.css';
 import { RequestListItem } from './RequestsTabPanel';
 import { SentRequestsCombinedModal } from './SentRequestsCombinedModal';
-import { PartyRepresentationProvider } from '../common/PartyRepresentationContext/PartyRepresentationContext';
+import { HandledRequestsSection } from './HandledRequestsSection';
+
 import { getCookie } from '@/resources/Cookie/CookieMethods';
 import { PartyType } from '@/rtk/features/userInfoApi';
-import { HandledRequestsSection } from './HandledRequestsSection';
+import { formatDateToNorwegian } from '@/resources/utils';
 
 interface SentRequestsTabPanelProps {
   pendingRequests: Request[] | undefined;

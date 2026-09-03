@@ -1,4 +1,5 @@
 import { describe, it, expect, vi } from 'vitest';
+
 import { validateEmail, validatePhoneNumber, validateCountryCode } from './textFieldUtils';
 
 describe('validateEmail', () => {

@@ -1,15 +1,15 @@
 import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
-import { PageWrapper } from '@/components';
-import { PageLayoutWrapper } from '@/features/amUI/common/PageLayoutWrapper';
-import { useDocumentTitle } from '@/resources/hooks/useDocumentTitle';
-
 import type { RegisteredSystem } from '../types';
+import { Breadcrumbs } from '../../common/Breadcrumbs/Breadcrumbs';
 
 import { SelectRegisteredSystem } from './SelectRegisteredSystem';
 import { RightsIncluded } from './RightsIncluded';
-import { Breadcrumbs } from '../../common/Breadcrumbs/Breadcrumbs';
+
+import { PageWrapper } from '@/components';
+import { PageLayoutWrapper } from '@/features/amUI/common/PageLayoutWrapper';
+import { useDocumentTitle } from '@/resources/hooks/useDocumentTitle';
 
 export const CreateSystemUserPage = (): React.ReactNode => {
   const { t } = useTranslation();

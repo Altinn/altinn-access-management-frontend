@@ -1,6 +1,6 @@
 import { createApi } from '@reduxjs/toolkit/query/react';
-import { createBaseQuery } from '@/rtk/app/baseQuery';
 
+import { createBaseQuery } from '@/rtk/app/baseQuery';
 import type { IdValuePair } from '@/dataObjects/dtos/IdValuePair';
 import { getCookie } from '@/resources/Cookie/CookieMethods';
 import type { DelegationResult } from '@/dataObjects/dtos/resourceDelegation';

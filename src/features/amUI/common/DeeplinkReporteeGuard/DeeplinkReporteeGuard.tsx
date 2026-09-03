@@ -3,8 +3,6 @@ import { useTranslation } from 'react-i18next';
 import { DsAlert, DsHeading, DsParagraph, DsSkeleton } from '@altinn/altinn-components';
 import { useSearchParams } from 'react-router';
 
-import { getCookie } from '@/resources/Cookie/CookieMethods';
-
 import {
   createErrorDetails,
   TechnicalErrorParagraphs,
@@ -12,6 +10,8 @@ import {
 
 import styles from './DeeplinkReporteeGuard.module.css';
 import { useReporteeGuard } from './useReporteeGuard';
+
+import { getCookie } from '@/resources/Cookie/CookieMethods';
 
 interface DeeplinkReporteeGuardProps {
   children: ReactNode;

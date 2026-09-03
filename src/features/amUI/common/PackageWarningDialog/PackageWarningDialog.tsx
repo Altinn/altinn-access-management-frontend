@@ -8,11 +8,11 @@ import {
   formatDisplayName,
 } from '@altinn/altinn-components';
 
-import type { Party } from '@/rtk/features/lookupApi';
-import { PartyType } from '@/rtk/features/userInfoApi';
-
 import type { PendingPackageAction } from './packageWarning';
 import classes from './PackageWarningDialog.module.css';
+
+import type { Party } from '@/rtk/features/lookupApi';
+import { PartyType } from '@/rtk/features/userInfoApi';
 
 interface PackageWarningDialogProps {
   pending: PendingPackageAction | null;

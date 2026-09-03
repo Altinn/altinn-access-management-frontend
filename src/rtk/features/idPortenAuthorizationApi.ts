@@ -1,6 +1,7 @@
 import { createApi } from '@reduxjs/toolkit/query/react';
-import { createBaseQuery } from '@/rtk/app/baseQuery';
 import { formatDisplayName } from '@altinn/altinn-components';
+
+import { createBaseQuery } from '@/rtk/app/baseQuery';
 
 export interface IdPortenAuthorization {
   authorizationId: string;

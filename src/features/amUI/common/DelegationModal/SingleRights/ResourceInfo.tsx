@@ -3,18 +3,7 @@ import { Button, DsButton, DsParagraph, formatDisplayName } from '@altinn/altinn
 import { useTranslation } from 'react-i18next';
 import { MinusCircleIcon } from '@navikt/aksel-icons';
 
-import {
-  useGetSingleRightsForRightholderQuery,
-  type ServiceResource,
-} from '@/rtk/features/singleRights/singleRightsApi';
-import { PartyType } from '@/rtk/features/userInfoApi';
-import { useDelegateRights } from '@/resources/hooks/useDelegateRights';
-import { useUpdateResource } from '@/resources/hooks/useUpdateResource';
-import { useRevokeResource } from '@/resources/hooks/useRevokeResource';
-import { StatusMessageForScreenReader } from '@/components/StatusMessageForScreenReader/StatusMessageForScreenReader';
-import { useIsMobileOrSmaller } from '@/resources/utils/screensizeUtils';
 import { createErrorDetails } from '../../TechnicalErrorParagraphs/TechnicalErrorParagraphs';
-
 import { StatusSection } from '../../StatusSection/StatusSection';
 import { LoadingAnimation } from '../../LoadingAnimation/LoadingAnimation';
 import { useInheritedStatusInfo } from '../../useInheritedStatus';
@@ -22,16 +11,27 @@ import { usePartyRepresentation } from '../../PartyRepresentationContext/PartyRe
 import { getMissingAccessMessage } from '../missingAccessUtils';
 import { useRightsSection } from '../utils/useRightsSection';
 import { DelegationAction } from '../EditModal';
+import { isExpiredResource } from '../../ResourceList/utils';
+import { focusFirstEnabledButton, useRestoreFocusAfterSettled } from '../../RestoreFocus';
+
 import { ResourceHeading } from './ResourceHeading';
 import { ResourceInfoSkeleton } from './ResourceInfoSkeleton';
 import { ResourceAlert } from './ResourceAlert';
 import { RightsSection } from './RightsSection';
-import { isExpiredResource } from '../../ResourceList/utils';
 import { useSingleRightsDelegationRightsData } from './hooks/useSingleRightsDelegationRightsData';
 import { useSingleRightRequests } from './hooks/useSingleRightRequests';
-import { focusFirstEnabledButton, useRestoreFocusAfterSettled } from '../../RestoreFocus';
-
 import classes from './ResourceInfo.module.css';
+
+import { useIsMobileOrSmaller } from '@/resources/utils/screensizeUtils';
+import { StatusMessageForScreenReader } from '@/components/StatusMessageForScreenReader/StatusMessageForScreenReader';
+import { useRevokeResource } from '@/resources/hooks/useRevokeResource';
+import { useUpdateResource } from '@/resources/hooks/useUpdateResource';
+import { useDelegateRights } from '@/resources/hooks/useDelegateRights';
+import { PartyType } from '@/rtk/features/userInfoApi';
+import {
+  useGetSingleRightsForRightholderQuery,
+  type ServiceResource,
+} from '@/rtk/features/singleRights/singleRightsApi';
 
 export interface ResourceInfoProps {
   resource: ServiceResource;

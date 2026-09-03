@@ -1,6 +1,7 @@
 import React, { useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 import { FilterProps, MenuItemProps, Toolbar, type FilterState } from '@altinn/altinn-components';
+
 import { useRoleMetadata } from '../common/UserRoles/useRoleMetadata';
 
 type SelectRoleFilterProps = {

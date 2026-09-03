@@ -1,5 +1,4 @@
 import { test, expect } from 'playwright/fixture/pomFixture';
-
 import { TestdataApi } from 'playwright/util/TestdataApi';
 import { ApiRequests } from 'playwright/api-requests/SystemUserApiRequests';
 const vendorOrgNumber = '310547891';

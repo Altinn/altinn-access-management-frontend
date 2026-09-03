@@ -1,17 +1,18 @@
 import { DsChip } from '@altinn/altinn-components';
 import { useTranslation } from 'react-i18next';
-
 import cn from 'classnames';
-
-import classes from './userRoles.module.css';
-import { usePartyRepresentation } from '../PartyRepresentationContext/PartyRepresentationContext';
-import { Role, useGetRolePermissionsQuery } from '@/rtk/features/roleApi';
 import { useRef, useState } from 'react';
+
+import { usePartyRepresentation } from '../PartyRepresentationContext/PartyRepresentationContext';
 import { RoleInfoModal } from '../DelegationModal/RoleInfoModal';
 import { useGroupedRoleListEntries } from '../RoleList/useGroupedRoleListEntries';
+
+import classes from './userRoles.module.css';
 import { useRoleMetadata, ROLE_CODES_TO_IGNORE } from './useRoleMetadata';
 import { ClientAccessInfoModal } from './ClientAccessInfoModal';
 import { GuardianshipInfoModal } from './GuardianshipInfoModal';
+
+import { Role, useGetRolePermissionsQuery } from '@/rtk/features/roleApi';
 import { useIsMobileOrSmaller } from '@/resources/utils/screensizeUtils';
 
 export const UserRoles = ({ className, ...props }: React.HTMLAttributes<HTMLDivElement>) => {

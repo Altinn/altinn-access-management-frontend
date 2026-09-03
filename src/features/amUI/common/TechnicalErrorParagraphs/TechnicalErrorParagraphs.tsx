@@ -4,6 +4,7 @@ import type { DsParagraphProps } from '@altinn/altinn-components';
 import { DsParagraph } from '@altinn/altinn-components';
 import React from 'react';
 import { useTranslation } from 'react-i18next';
+
 import classes from './TechnicalErrorParagraphs.module.css';
 
 export interface TechnicalErrorParagraphsProps {

@@ -8,6 +8,12 @@ import * as React from 'react';
 import { useTranslation } from 'react-i18next';
 import { MinusCircleIcon, PlusCircleIcon } from '@navikt/aksel-icons';
 
+import { useDelegationModalContext } from '../common/DelegationModal/DelegationModalContext';
+import { resourceActionControlId } from '../common/DelegationModal/SingleRights/createSearchResultControlsRenderer';
+import { usePartyRepresentation } from '../common/PartyRepresentationContext/PartyRepresentationContext';
+
+import { useMaskinportenResourceActions } from './hooks/useMaskinportenResourceActions';
+
 import { useIsMobileOrSmaller } from '@/resources/utils/screensizeUtils';
 import {
   useAddMaskinportenSupplierResourceMutation,
@@ -16,11 +22,6 @@ import {
 } from '@/rtk/features/maskinportenApi';
 import type { ServiceResource } from '@/rtk/features/singleRights/singleRightsApi';
 import { PartyType } from '@/rtk/features/userInfoApi';
-
-import { useDelegationModalContext } from '../common/DelegationModal/DelegationModalContext';
-import { resourceActionControlId } from '../common/DelegationModal/SingleRights/createSearchResultControlsRenderer';
-import { usePartyRepresentation } from '../common/PartyRepresentationContext/PartyRepresentationContext';
-import { useMaskinportenResourceActions } from './hooks/useMaskinportenResourceActions';
 
 interface ScopeSearchControlsProps {
   resource: ServiceResource;

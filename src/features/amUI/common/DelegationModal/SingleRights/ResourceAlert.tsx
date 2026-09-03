@@ -2,12 +2,13 @@ import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { DsAlert, DsParagraph, DsHeading, formatDisplayName } from '@altinn/altinn-components';
 
+import { DelegationAction } from '../EditModal';
+
 import type { ServiceResource } from '@/rtk/features/singleRights/singleRightsApi';
 import { ErrorCode } from '@/resources/utils/errorCodeUtils';
 import { useGetReporteeQuery } from '@/rtk/features/userInfoApi';
 import { TechnicalErrorParagraphs } from '@/features/amUI/common/TechnicalErrorParagraphs/TechnicalErrorParagraphs';
 import { StatusMessageForScreenReader } from '@/components/StatusMessageForScreenReader/StatusMessageForScreenReader';
-import { DelegationAction } from '../EditModal';
 
 export interface ResourceAlertProps {
   /*** The resource */

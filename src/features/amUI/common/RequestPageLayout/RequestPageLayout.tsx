@@ -10,14 +10,14 @@ import {
   RootProvider,
   useConsent,
 } from '@altinn/altinn-components';
-import { getAltinnStartPageUrl, getLogoutUrl } from '@/resources/utils/pathUtils';
-import { useUpdateSelectedLanguageMutation } from '@/rtk/features/settingsApi';
+import { ArrowLeftIcon } from '@navikt/aksel-icons';
+
 import classes from './RequestPageLayout.module.css';
 
+import { getAltinnStartPageUrl, getLogoutUrl } from '@/resources/utils/pathUtils';
+import { useUpdateSelectedLanguageMutation } from '@/rtk/features/settingsApi';
 import { useGetUserProfileQuery } from '@/rtk/features/userInfoApi';
-
 import { getButtonIconSize } from '@/resources/utils/iconUtils';
-import { ArrowLeftIcon } from '@navikt/aksel-icons';
 import { useRedirectToRequestParty } from '@/resources/hooks/useRedirectToRequestParty';
 
 interface RequestPageLayoutProps {

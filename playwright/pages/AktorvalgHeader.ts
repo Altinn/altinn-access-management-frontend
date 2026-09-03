@@ -175,7 +175,7 @@ export class AktorvalgHeader {
   }
 
   async removeAllFavorites() {
-    var unfavoriteButtons = await this.removeFavoriteButtons.all();
+    const unfavoriteButtons = await this.removeFavoriteButtons.all();
     for (const button of unfavoriteButtons) {
       await button.click();
     }

@@ -1,4 +1,5 @@
 import { createApi } from '@reduxjs/toolkit/query/react';
+
 import { createBaseQuery } from '@/rtk/app/baseQuery';
 import { CompactRole, Entity } from '@/dataObjects/dtos/Common';
 

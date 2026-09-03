@@ -1,11 +1,10 @@
 import { DsAlert, DsHeading, DsParagraph, DsSpinner, List } from '@altinn/altinn-components';
 import { useTranslation } from 'react-i18next';
 
-import type { Party } from '@/rtk/features/lookupApi';
-import type { AccessPackage } from '@/rtk/features/accessPackageApi';
-import type { ActionError } from '@/resources/hooks/useActionError';
-
 import type { DelegationAction } from '../DelegationModal/EditModal';
+import { TechnicalErrorParagraphs } from '../TechnicalErrorParagraphs';
+import { createErrorDetails } from '../TechnicalErrorParagraphs/TechnicalErrorParagraphs';
+import { useRestoreFocusOnDataChange } from '../RestoreFocus';
 
 import classes from './AccessPackageList.module.css';
 import { ExtendedAccessArea, useAreaPackageList } from './useAreaPackageList';
@@ -15,10 +14,11 @@ import { AreaItem } from './AreaItem';
 import { useAreaExpandedContextOrLocal } from './AccessPackageExpandedContext';
 import { AreaItemContent, areaContentId } from './AreaItemContent';
 import { packageActionControlId } from './PackageItem';
-import { TechnicalErrorParagraphs } from '../TechnicalErrorParagraphs';
-import { createErrorDetails } from '../TechnicalErrorParagraphs/TechnicalErrorParagraphs';
+
+import type { ActionError } from '@/resources/hooks/useActionError';
+import type { AccessPackage } from '@/rtk/features/accessPackageApi';
+import type { Party } from '@/rtk/features/lookupApi';
 import { PartyType } from '@/rtk/features/userInfoApi';
-import { useRestoreFocusOnDataChange } from '../RestoreFocus';
 
 interface AccessPackageListProps {
   showAllPackages?: boolean;

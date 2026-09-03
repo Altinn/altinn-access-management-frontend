@@ -2,12 +2,14 @@ import React from 'react';
 import { useParams } from 'react-router';
 import { useTranslation } from 'react-i18next';
 
+import { PartyRepresentationProvider } from '../common/PartyRepresentationContext/PartyRepresentationContext';
+import { PageLayoutWrapper } from '../common/PageLayoutWrapper';
+
+import { ClientDetails } from './ClientDetails';
+
 import { PageWrapper } from '@/components';
 import { getCookie } from '@/resources/Cookie/CookieMethods';
 import { useDocumentTitle } from '@/resources/hooks/useDocumentTitle';
-import { PartyRepresentationProvider } from '../common/PartyRepresentationContext/PartyRepresentationContext';
-import { PageLayoutWrapper } from '../common/PageLayoutWrapper';
-import { ClientDetails } from './ClientDetails';
 import { useGetClientsQuery } from '@/rtk/features/clientApi';
 import { PartyType } from '@/rtk/features/userInfoApi';
 import { Party } from '@/rtk/features/lookupApi';

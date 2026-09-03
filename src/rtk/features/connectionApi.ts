@@ -1,11 +1,11 @@
 import { createApi } from '@reduxjs/toolkit/query/react';
-import { createBaseQuery } from '@/rtk/app/baseQuery';
 
-import { getCookie } from '@/resources/Cookie/CookieMethods';
-
-import { Entity } from '@/dataObjects/dtos/Common';
 import type { Party } from './lookupApi';
 import { ExtendedUser } from './userInfoApi';
+
+import { createBaseQuery } from '@/rtk/app/baseQuery';
+import { getCookie } from '@/resources/Cookie/CookieMethods';
+import { Entity } from '@/dataObjects/dtos/Common';
 
 export enum ConnectionUserType {
   Person = 'Person',

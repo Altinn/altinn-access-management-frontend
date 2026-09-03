@@ -1,7 +1,7 @@
+import { DelegationAction, EditModal } from './EditModal';
+
 import type { Role } from '@/rtk/features/roleApi';
 import type { ActionError } from '@/resources/hooks/useActionError';
-
-import { DelegationAction, EditModal } from './EditModal';
 
 interface RoleInfoModalProps {
   modalRef: React.RefObject<HTMLDialogElement | null>;

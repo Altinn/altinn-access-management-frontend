@@ -9,12 +9,12 @@ import {
 import { useState } from 'react';
 import { t } from 'i18next';
 
-import { Organization, useGetOrganizationQuery } from '@/rtk/features/lookupApi';
-
 import { createErrorDetails } from '../../common/TechnicalErrorParagraphs/TechnicalErrorParagraphs';
 
 import classes from './NewUserModal.module.css';
 import { NewUserAlert } from './NewUserAlert';
+
+import { Organization, useGetOrganizationQuery } from '@/rtk/features/lookupApi';
 import { formatOrgNr } from '@/resources/utils/reporteeUtils';
 
 export const NewOrgContent = ({

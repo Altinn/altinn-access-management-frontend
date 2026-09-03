@@ -1,6 +1,8 @@
 import { useState, useEffect, useMemo } from 'react';
+
 import type { Request, ProcessedStatus } from '../types';
 import { usePartyRepresentation } from '../../common/PartyRepresentationContext/PartyRepresentationContext';
+
 import {
   useGetEnrichedReceivedResourceRequestsQuery,
   useGetEnrichedReceivedPackageRequestsQuery,

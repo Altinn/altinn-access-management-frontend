@@ -1,6 +1,8 @@
 import fs from 'fs';
 import path from 'path';
+
 import csv from 'csv-parser';
+
 import { getTestPersonForCategory } from './testDelegationdatautil';
 
 export type CleanupRow = {

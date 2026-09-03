@@ -9,25 +9,25 @@ import {
 import { useRef } from 'react';
 import { Trans, useTranslation } from 'react-i18next';
 
-import type { ActionError } from '@/resources/hooks/useActionError';
-import type { AccessPackage } from '@/rtk/features/accessPackageApi';
-import type { Party } from '@/rtk/features/lookupApi';
-import { PartyType } from '@/rtk/features/userInfoApi';
-import {
-  formatOrgNr,
-  getFormattedDateOfBirthLabel,
-  isSubUnitByType,
-} from '@/resources/utils/reporteeUtils';
-
 import { LoadingAnimation } from '../../LoadingAnimation/LoadingAnimation';
 import { StatusSection } from '../../StatusSection/StatusSection';
 import { TechnicalErrorParagraphs } from '../../TechnicalErrorParagraphs';
 import { ValidationErrorMessage } from '../../ValidationErrorMessage';
 import type { InheritedStatusMessageType } from '../../useInheritedStatus';
-
-import classes from './PartyInfo.module.css';
 import { DelegationAction } from '../EditModal';
 import { focusFirstEnabledButton, useRestoreFocusAfterSettled } from '../../RestoreFocus';
+
+import classes from './PartyInfo.module.css';
+
+import {
+  formatOrgNr,
+  getFormattedDateOfBirthLabel,
+  isSubUnitByType,
+} from '@/resources/utils/reporteeUtils';
+import { PartyType } from '@/rtk/features/userInfoApi';
+import type { Party } from '@/rtk/features/lookupApi';
+import type { AccessPackage } from '@/rtk/features/accessPackageApi';
+import type { ActionError } from '@/resources/hooks/useActionError';
 
 export interface PartyInfoProps {
   party: Party;

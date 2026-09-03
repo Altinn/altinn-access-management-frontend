@@ -1,14 +1,15 @@
 import { createApi } from '@reduxjs/toolkit/query/react';
-import { createBaseQuery } from '@/rtk/app/baseQuery';
 
-import type { CompactRole, Entity } from '@/dataObjects/dtos/Common';
-import { getCookie } from '@/resources/Cookie/CookieMethods';
 import type {
   DelegationCheckedRight,
   ResourceDelegation,
   ServiceResource,
 } from './singleRights/singleRightsApi';
 import type { AssignmentDto } from './clientApi';
+
+import { createBaseQuery } from '@/rtk/app/baseQuery';
+import type { CompactRole, Entity } from '@/dataObjects/dtos/Common';
+import { getCookie } from '@/resources/Cookie/CookieMethods';
 
 export interface MaskinportenConnection {
   party: Entity;

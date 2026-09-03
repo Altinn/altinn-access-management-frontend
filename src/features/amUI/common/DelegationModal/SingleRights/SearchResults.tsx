@@ -2,6 +2,19 @@ import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { DsAlert, DsHeading, DsParagraph } from '@altinn/altinn-components';
 
+import { DelegationAction } from '../EditModal';
+import { useDelegationModalContext } from '../DelegationModalContext';
+import { usePartyRepresentation } from '../../PartyRepresentationContext/PartyRepresentationContext';
+import { useRestoreFocusOnDataChange } from '../../RestoreFocus';
+
+import classes from './ResourceSearch.module.css';
+import { useResourceListDelegation } from './hooks/useResourceListDelegation';
+import {
+  useRenderSearchResultControl,
+  resourceActionControlId,
+} from './createSearchResultControlsRenderer';
+import { useSingleRightRequests } from './hooks/useSingleRightRequests';
+
 import {
   type ResourceDelegation,
   type ServiceResource,
@@ -10,18 +23,6 @@ import { AmPagination } from '@/components/Paginering/AmPaginering';
 import { ResourceList } from '@/features/amUI/common/ResourceList/ResourceList';
 import { SkeletonResourceList } from '@/features/amUI/common/ResourceList/SkeletonResourceList';
 import { getInheritedStatus } from '@/features/amUI/common/useInheritedStatus';
-
-import classes from './ResourceSearch.module.css';
-import { DelegationAction } from '../EditModal';
-import { useResourceListDelegation } from './hooks/useResourceListDelegation';
-import { useDelegationModalContext } from '../DelegationModalContext';
-import {
-  useRenderSearchResultControl,
-  resourceActionControlId,
-} from './createSearchResultControlsRenderer';
-import { usePartyRepresentation } from '../../PartyRepresentationContext/PartyRepresentationContext';
-import { useSingleRightRequests } from './hooks/useSingleRightRequests';
-import { useRestoreFocusOnDataChange } from '../../RestoreFocus';
 
 interface SearchResultsProps {
   isFetching: boolean;

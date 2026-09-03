@@ -1,13 +1,16 @@
 import { useRef } from 'react';
 import { DsAlert, DsButton } from '@altinn/altinn-components';
 import { useTranslation } from 'react-i18next';
+
 import type { ProcessedStatus } from '../types';
-import classes from './RequestReviewModal.module.css';
-import { AccessPackage } from '@/rtk/features/accessPackageApi';
 import { PackageHeader } from '../../common/DelegationModal/AccessPackages/PackageHeader';
 import { PackageMeta } from '../../common/DelegationModal/AccessPackages/PackageMeta';
 import { StatusSection } from '../../common/StatusSection/StatusSection';
+
+import classes from './RequestReviewModal.module.css';
 import { ProcessedStatusInfo } from './ProcessedStatusInfo';
+
+import { AccessPackage } from '@/rtk/features/accessPackageApi';
 
 interface RequestPackageDetailProps {
   pkg: AccessPackage;

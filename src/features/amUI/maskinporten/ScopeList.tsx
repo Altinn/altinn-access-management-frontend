@@ -2,12 +2,12 @@ import type { ReactNode } from 'react';
 import { useTranslation } from 'react-i18next';
 import { DsParagraph } from '@altinn/altinn-components';
 
+import { getMaskinportenScopeCount } from './scopeUtils';
+import classes from './ScopeList.module.css';
+
 import { ResourceFilterToolbar } from '@/features/amUI/common/ResourceFilterToolbar/ResourceFilterToolbar';
 import { ResourceList } from '@/features/amUI/common/ResourceList/ResourceList';
 import type { ServiceResource } from '@/rtk/features/singleRights/singleRightsApi';
-
-import { getMaskinportenScopeCount } from './scopeUtils';
-import classes from './ScopeList.module.css';
 
 interface ScopeListProps {
   resources: ServiceResource[];

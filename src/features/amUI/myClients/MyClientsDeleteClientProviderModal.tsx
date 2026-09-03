@@ -1,9 +1,10 @@
 import React, { useCallback } from 'react';
 import { useTranslation } from 'react-i18next';
 
-import { useRemoveMyClientProviderMutation } from '@/rtk/features/clientApi';
 import { DeleteClientProviderModal } from '../common/DeleteClientProviderModal/DeleteClientProviderModal';
 import { handleSelectAccount } from '../common/PageLayoutWrapper/useHeader';
+
+import { useRemoveMyClientProviderMutation } from '@/rtk/features/clientApi';
 
 interface MyClientsDeleteClientProviderModalProps {
   provider?: string;

@@ -1,14 +1,17 @@
 import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { DsParagraph, List } from '@altinn/altinn-components';
-import { HandledDirection } from './HandledRequestModal/useHandledRequests';
+
 import { useRestoreFocusContext } from '../common/RestoreFocus';
+import { CollapsibleContainer } from '../common/CollapsibleContainer/CollapsibleContainer';
+
+import { HandledDirection } from './HandledRequestModal/useHandledRequests';
 import { RequestListItem } from './RequestsTabPanel';
 import { HandledRequestModal } from './HandledRequestModal/HandledRequestModal';
 import { Request } from './types';
 import classes from './RequestPage.module.css';
+
 import { formatDateToNorwegian } from '@/resources/utils';
-import { CollapsibleContainer } from '../common/CollapsibleContainer/CollapsibleContainer';
 
 interface HandledRequestsSectionProps {
   handledRequests: Request[] | undefined;

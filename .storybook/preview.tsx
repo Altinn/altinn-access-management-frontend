@@ -16,13 +16,12 @@ declare global {
 import i18n from 'i18next';
 import LanguageDetector from 'i18next-browser-languagedetector';
 import { I18nextProvider, initReactI18next } from 'react-i18next';
+import React, { Suspense, useEffect } from 'react';
+import { Router } from 'react-router';
+
 import no_nb from '../src/localizations/no_nb.json';
 import no_nn from '../src/localizations/no_nn.json';
 import en from '../src/localizations/en.json';
-import { Suspense, useEffect } from 'react';
-import React from 'react';
-import { Router } from 'react-router';
-
 import { worker } from '../.mock/browser';
 worker.start();
 

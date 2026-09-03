@@ -2,16 +2,17 @@ import React, { useMemo, useState } from 'react';
 import { DsSearch, DsParagraph, formatDisplayName } from '@altinn/altinn-components';
 import { useTranslation } from 'react-i18next';
 
-import { PartyType } from '@/rtk/features/userInfoApi';
-import { ConnectionUserType } from '@/rtk/features/connectionApi';
-
-import classes from './UserSearch.module.css';
 import { useFilteredUsers } from '../UserList/useFilteredUsers';
 import { DelegationAction } from '../DelegationModal/EditModal';
 import { UserList } from '../UserList/UserList';
-import { UserSearchResults } from './UserSearchResults';
 import { usePartyRepresentation } from '../PartyRepresentationContext/PartyRepresentationContext';
+
+import classes from './UserSearch.module.css';
+import { UserSearchResults } from './UserSearchResults';
 import type { UserActionTarget, UserSearchNode } from './types';
+
+import { ConnectionUserType } from '@/rtk/features/connectionApi';
+import { PartyType } from '@/rtk/features/userInfoApi';
 
 export interface UserSearchProps {
   includeSelfAsChild: boolean;

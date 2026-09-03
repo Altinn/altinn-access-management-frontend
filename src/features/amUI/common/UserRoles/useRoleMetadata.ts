@@ -1,6 +1,6 @@
 import { useCallback, useMemo } from 'react';
-
 import { useTranslation } from 'react-i18next';
+
 import { useGetAllRolesQuery, type Role } from '@/rtk/features/roleApi';
 import type { RoleInfo } from '@/rtk/features/connectionApi';
 

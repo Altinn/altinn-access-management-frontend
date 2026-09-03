@@ -2,6 +2,7 @@ import type { Locator, Page } from '@playwright/test';
 import { expect } from '@playwright/test';
 
 import { env } from 'playwright/util/helper';
+
 import { LANGUAGE_DICTIONARIES, Language } from '../LanguageMenu';
 
 export class SystemUserPage {

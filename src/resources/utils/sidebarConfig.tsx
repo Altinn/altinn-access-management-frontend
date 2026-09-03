@@ -12,10 +12,10 @@ import {
   ExternalLinkIcon,
   DatabaseIcon,
 } from '@navikt/aksel-icons';
-import ApiIcon from '@/assets/Api.svg?react';
 import i18next, { t } from 'i18next';
 import { Link } from 'react-router';
 
+import ApiIcon from '@/assets/Api.svg?react';
 import { amUIPath, ConsentPath, SystemUserPath } from '@/routes/paths';
 import { getAltinnStartPageUrl } from '@/resources/utils/pathUtils';
 

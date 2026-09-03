@@ -10,17 +10,23 @@ import {
 import { useParams } from 'react-router';
 import { skipToken } from '@reduxjs/toolkit/query';
 
-import { amUIPath } from '@/routes/paths';
-
 import { PageContainer } from '../common/PageContainer/PageContainer';
 import { usePartyRepresentation } from '../common/PartyRepresentationContext/PartyRepresentationContext';
 import { Breadcrumbs } from '../common/Breadcrumbs/Breadcrumbs';
-import { AgentDetailsClientsList } from './AgentDetailsClientsList';
 import {
   createErrorDetails,
   TechnicalErrorParagraphs,
 } from '../common/TechnicalErrorParagraphs/TechnicalErrorParagraphs';
-import { PartyType, useGetIsClientAdminQuery } from '@/rtk/features/userInfoApi';
+import { UserPageHeader } from '../common/UserPageHeader/UserPageHeader';
+import { UserPageHeaderSkeleton } from '../common/UserPageHeader/UserPageHeaderSkeleton';
+import { ClientAdminSearchField } from '../common/ClientAdminSearchField/ClientAdminSearchField';
+import { CollapsibleContainer } from '../common/CollapsibleContainer/CollapsibleContainer';
+import { filterDeletedParties } from '../common/deletedPartyUtils';
+
+import { AgentDetailsDeleteModal } from './AgentDetailsDeleteModal';
+import { useAgentDetailsAccessClientLists } from './useAgentDetailsAccessClientLists';
+import { AgentDetailsClientsList } from './AgentDetailsClientsList';
+
 import {
   useAddAgentAccessPackagesMutation,
   useAddAgentResourcesMutation,
@@ -30,13 +36,8 @@ import {
   useGetAgentResourcesQuery,
   useGetClientsQuery,
 } from '@/rtk/features/clientApi';
-import { UserPageHeader } from '../common/UserPageHeader/UserPageHeader';
-import { useAgentDetailsAccessClientLists } from './useAgentDetailsAccessClientLists';
-import { UserPageHeaderSkeleton } from '../common/UserPageHeader/UserPageHeaderSkeleton';
-import { AgentDetailsDeleteModal } from './AgentDetailsDeleteModal';
-import { ClientAdminSearchField } from '../common/ClientAdminSearchField/ClientAdminSearchField';
-import { CollapsibleContainer } from '../common/CollapsibleContainer/CollapsibleContainer';
-import { filterDeletedParties } from '../common/deletedPartyUtils';
+import { PartyType, useGetIsClientAdminQuery } from '@/rtk/features/userInfoApi';
+import { amUIPath } from '@/routes/paths';
 
 export const AgentDetails = () => {
   const { t } = useTranslation();

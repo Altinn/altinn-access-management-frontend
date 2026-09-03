@@ -1,8 +1,11 @@
 import { useState, useEffect, useCallback } from 'react';
 import { useSnackbar } from '@altinn/altinn-components';
 import { useTranslation } from 'react-i18next';
+
 import type { Request, ProcessedStatus } from '../types';
 import { usePartyRepresentation } from '../../common/PartyRepresentationContext/PartyRepresentationContext';
+import { useAccessPackageDelegationCheck } from '../../common/DelegationCheck/AccessPackageDelegationCheckContext';
+
 import {
   useApproveRequestMutation,
   useRejectRequestMutation,
@@ -16,7 +19,6 @@ import {
   type ServiceResource,
   type DelegationCheckedRight,
 } from '@/rtk/features/singleRights/singleRightsApi';
-import { useAccessPackageDelegationCheck } from '../../common/DelegationCheck/AccessPackageDelegationCheckContext';
 import { AccessPackage } from '@/rtk/features/accessPackageApi';
 
 type SnapshotRequests = {

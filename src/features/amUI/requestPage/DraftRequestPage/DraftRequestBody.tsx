@@ -1,11 +1,6 @@
-import {
-  EnrichedPackageRequest,
-  EnrichedRequest,
-  EnrichedResourceRequest,
-  isEnrichedPackageRequest,
-} from '@/rtk/features/requestApi';
 import { useTranslation } from 'react-i18next';
 import { DsParagraph } from '@altinn/altinn-components';
+
 import { usePartyRepresentation } from '../../common/PartyRepresentationContext/PartyRepresentationContext';
 import { useSingleRightsDelegationRightsData } from '../../common/DelegationModal/SingleRights/hooks/useSingleRightsDelegationRightsData';
 import { ResourceHeading } from '../../common/DelegationModal/SingleRights/ResourceHeading';
@@ -13,7 +8,15 @@ import { RightsSection } from '../../common/DelegationModal/SingleRights/RightsS
 import { DelegationAction } from '../../common/DelegationModal/EditModal';
 import { PackageHeader } from '../../common/DelegationModal/AccessPackages/PackageHeader';
 import { PackageMeta } from '../../common/DelegationModal/AccessPackages/PackageMeta';
+
 import classes from './DraftRequestPage.module.css';
+
+import {
+  EnrichedPackageRequest,
+  EnrichedRequest,
+  EnrichedResourceRequest,
+  isEnrichedPackageRequest,
+} from '@/rtk/features/requestApi';
 
 interface DraftRequestBodyProps {
   request: EnrichedRequest;

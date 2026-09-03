@@ -1,10 +1,11 @@
-import { RolePermission } from '@/rtk/features/roleApi';
-import { Entity } from '@/dataObjects/dtos/Common';
 import {
   A2_PROVIDER_CODE,
   CRA_PROVIDER_CODE,
   ECC_PROVIDER_CODE,
 } from '../UserRoles/useRoleMetadata';
+
+import { RolePermission } from '@/rtk/features/roleApi';
+import { Entity } from '@/dataObjects/dtos/Common';
 
 export const RIGHTHOLDER_ROLE = 'rettighetshaver';
 export const AGENT_ROLE = 'agent';

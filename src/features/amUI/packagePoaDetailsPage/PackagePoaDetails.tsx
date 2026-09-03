@@ -1,22 +1,25 @@
-import pageClasses from './PackagePoaDetailsPage.module.css';
-import headerClasses from './PackagePoaDetailsHeader.module.css';
 import { DsAlert } from '@altinn/altinn-components';
-import { AmTabs } from '../common/AmTabs/AmTabs';
 import { Link, useParams, useSearchParams } from 'react-router';
-import { usePartyRepresentation } from '../common/PartyRepresentationContext/PartyRepresentationContext';
-import { useGetPackagePermissionDetailsQuery } from '@/rtk/features/accessPackageApi';
 import { useTranslation } from 'react-i18next';
-import { PackagePoaDetailsHeader } from './PackagePoaDetailsHeader';
+import { FilesIcon, PersonGroupIcon } from '@navikt/aksel-icons';
+
+import { AmTabs } from '../common/AmTabs/AmTabs';
+import { usePartyRepresentation } from '../common/PartyRepresentationContext/PartyRepresentationContext';
 import { ResourceList } from '../common/ResourceList/ResourceList';
-import { UsersTab } from './UsersTab';
 import { StatusSection } from '../common/StatusSection/StatusSection';
 import { useAccessPackageDelegationCheck } from '../common/DelegationCheck/AccessPackageDelegationCheckContext';
 import { isCriticalAndUndelegated } from '../common/AccessPackageList/UndelegatedPackageWarning';
-import { FilesIcon, PersonGroupIcon } from '@navikt/aksel-icons';
+import { RestoreFocusProvider, useRestoreFocus } from '../common/RestoreFocus';
+
+import pageClasses from './PackagePoaDetailsPage.module.css';
+import headerClasses from './PackagePoaDetailsHeader.module.css';
+import { PackagePoaDetailsHeader } from './PackagePoaDetailsHeader';
+import { UsersTab } from './UsersTab';
+
+import { useGetPackagePermissionDetailsQuery } from '@/rtk/features/accessPackageApi';
 import { amUIPath } from '@/routes/paths/amUIPath';
 import { useDocumentTitle } from '@/resources/hooks/useDocumentTitle';
 import { useTabState } from '@/resources/hooks';
-import { RestoreFocusProvider, useRestoreFocus } from '../common/RestoreFocus';
 
 export const PackagePoaDetails = () => {
   const { id } = useParams<{ id: string }>();

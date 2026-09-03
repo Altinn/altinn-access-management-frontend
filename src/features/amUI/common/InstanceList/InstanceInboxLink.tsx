@@ -2,9 +2,9 @@ import { Button, DsButton } from '@altinn/altinn-components';
 import { EnvelopeClosedIcon } from '@navikt/aksel-icons';
 import { useTranslation } from 'react-i18next';
 
-import type { InstanceDelegation } from '@/rtk/features/instanceApi';
-
 import { getInboxLinkData } from './instanceListUtils';
+
+import type { InstanceDelegation } from '@/rtk/features/instanceApi';
 
 interface InstanceInboxLinkProps {
   instance: Pick<InstanceDelegation, 'instance' | 'dialogLookup'>;

@@ -1,19 +1,22 @@
-import { formatDateToNorwegian } from '@/resources/utils';
-import { getConsentRequestUrl } from '@/routes/paths/consentPath';
-import {
-  getSystemUserRequestUrl,
-  getSystemUserAgentRequestUrl,
-} from '@/routes/paths/systemUserPath';
 import { Button, DsAlert, List, UserListItem } from '@altinn/altinn-components';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Link } from 'react-router';
+
 import { useRestoreFocusContext, useRestoreFocusTarget } from '../common/RestoreFocus';
+
 import { RequestReviewModal } from './RequestReviewModal/RequestReviewModal';
 import { Request } from './types';
 import classes from './RequestPage.module.css';
-import { amUIPath } from '@/routes/paths';
 import { HandledRequestsSection } from './HandledRequestsSection';
+
+import { amUIPath } from '@/routes/paths';
+import {
+  getSystemUserRequestUrl,
+  getSystemUserAgentRequestUrl,
+} from '@/routes/paths/systemUserPath';
+import { getConsentRequestUrl } from '@/routes/paths/consentPath';
+import { formatDateToNorwegian } from '@/resources/utils';
 
 interface RequestsTabPanelProps {
   count: number;

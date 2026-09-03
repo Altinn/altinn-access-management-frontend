@@ -1,12 +1,15 @@
 import { useRef } from 'react';
 import { DsButton } from '@altinn/altinn-components';
 import { useTranslation } from 'react-i18next';
+
 import type { ProcessedStatus } from '../types';
-import type { ServiceResource } from '@/rtk/features/singleRights/singleRightsApi';
 import { ResourceInfo } from '../../common/DelegationModal/SingleRights/ResourceInfo';
 import { DelegationAction } from '../../common/DelegationModal/EditModal';
+
 import { ProcessedStatusInfo } from './ProcessedStatusInfo';
 import classes from './RequestReviewModal.module.css';
+
+import type { ServiceResource } from '@/rtk/features/singleRights/singleRightsApi';
 
 interface RequestResourceDetailProps {
   resource: ServiceResource;

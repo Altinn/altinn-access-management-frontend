@@ -1,11 +1,14 @@
 import { Trans } from 'react-i18next';
 import { DsParagraph, formatDisplayName } from '@altinn/altinn-components';
 import { InformationSquareFillIcon } from '@navikt/aksel-icons';
-import classes from './RoleInfo.module.css';
-import { PartyType } from '@/rtk/features/userInfoApi';
-import { Role, useGetRolePermissionsQuery } from '@/rtk/features/roleApi';
+
 import { usePartyRepresentation } from '../../PartyRepresentationContext/PartyRepresentationContext';
 import { InheritedStatusType, useInheritedStatusInfo } from '../../useInheritedStatus';
+
+import classes from './RoleInfo.module.css';
+
+import { PartyType } from '@/rtk/features/userInfoApi';
+import { Role, useGetRolePermissionsQuery } from '@/rtk/features/roleApi';
 
 const STATUS_TRANSLATION_KEYS: Record<InheritedStatusType, string> = {
   [InheritedStatusType.ViaRole]: 'role.access_status.via_role',

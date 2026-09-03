@@ -3,16 +3,16 @@ import { MinusCircleIcon } from '@navikt/aksel-icons';
 import * as React from 'react';
 import { useTranslation } from 'react-i18next';
 
+import { ScopeList } from './ScopeList';
+import { getMaskinportenScopes } from './scopeUtils';
+import classes from './DelegatedResourcesSection.module.css';
+
 import { useFilteredResources } from '@/features/amUI/common/ResourceList/useFilteredResources';
 import { useIsMobileOrSmaller } from '@/resources/utils/screensizeUtils';
 import type {
   ResourceDelegation,
   ServiceResource,
 } from '@/rtk/features/singleRights/singleRightsApi';
-
-import { ScopeList } from './ScopeList';
-import { getMaskinportenScopes } from './scopeUtils';
-import classes from './DelegatedResourcesSection.module.css';
 
 // Durable anchor that focus falls back to when an acted-on resource row is gone (e.g. after a
 // revoke). The heading sits right above the list, so it's a sensible landing spot. The owning page

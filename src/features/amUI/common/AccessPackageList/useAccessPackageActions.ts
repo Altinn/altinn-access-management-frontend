@@ -2,6 +2,9 @@ import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { formatDisplayName, useSnackbar } from '@altinn/altinn-components';
 
+import { usePartyRepresentation } from '../PartyRepresentationContext/PartyRepresentationContext';
+import { usePackageWarningDialog } from '../PackageWarningDialog';
+
 import type { DelegationErrorDetails } from '@/resources/hooks/useDelegateAccessPackage';
 import { useDelegateAccessPackage } from '@/resources/hooks/useDelegateAccessPackage';
 import { useRevokeAccessPackage } from '@/resources/hooks/useRevokeAccessPackage';
@@ -15,10 +18,7 @@ import {
 } from '@/rtk/features/requestApi';
 import { getRequestPartyQueryParams } from '@/resources/utils/singleRightRequestUtils';
 import { useSnackbarOnIdle } from '@/resources/hooks/useSnackbarOnIdle';
-
-import { usePartyRepresentation } from '../PartyRepresentationContext/PartyRepresentationContext';
 import { PartyType } from '@/rtk/features/userInfoApi';
-import { usePackageWarningDialog } from '../PackageWarningDialog';
 
 interface useAccessPackageActionsProps {
   onDelegateSuccess?: (accessPackage: AccessPackage, toParty: Party) => void;

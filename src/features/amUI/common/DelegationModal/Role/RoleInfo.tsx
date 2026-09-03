@@ -1,17 +1,20 @@
 import { useTranslation } from 'react-i18next';
-import classes from './RoleInfo.module.css';
-import { Role, useGetRolePermissionsQuery, useGetRoleResourcesQuery } from '@/rtk/features/roleApi';
 import { DsAlert, DsHeading, DsParagraph } from '@altinn/altinn-components';
-import { RoleDeleteButton } from '@/features/amUI/common/RoleList/RoleDeleteButton';
 import { ExclamationmarkTriangleFillIcon, InformationSquareFillIcon } from '@navikt/aksel-icons';
-import { usePartyRepresentation } from '../../PartyRepresentationContext/PartyRepresentationContext';
-import { RoleResourcesSection } from './RoleResourcesSection';
-import { RoleStatusMessage } from './RoleStatusMessages';
 import { useState } from 'react';
+
+import { usePartyRepresentation } from '../../PartyRepresentationContext/PartyRepresentationContext';
 import { TechnicalErrorParagraphs } from '../../TechnicalErrorParagraphs';
 import { createErrorDetails } from '../../TechnicalErrorParagraphs/TechnicalErrorParagraphs';
 import { useDelegationModalContext } from '../DelegationModalContext';
 import { useRestoreFocusOnDataChange, useRestoreFocusTarget } from '../../RestoreFocus';
+
+import { RoleStatusMessage } from './RoleStatusMessages';
+import { RoleResourcesSection } from './RoleResourcesSection';
+import classes from './RoleInfo.module.css';
+
+import { RoleDeleteButton } from '@/features/amUI/common/RoleList/RoleDeleteButton';
+import { Role, useGetRolePermissionsQuery, useGetRoleResourcesQuery } from '@/rtk/features/roleApi';
 
 export const ROLE_MODAL_HEADING_ID = 'role_modal_heading';
 

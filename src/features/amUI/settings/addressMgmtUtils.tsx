@@ -1,4 +1,7 @@
-import React from 'react';
+import React, { useState } from 'react';
+
+import { usePartyRepresentation } from '../common/PartyRepresentationContext/PartyRepresentationContext';
+
 import {
   Address,
   NotificationAddress,
@@ -6,8 +9,6 @@ import {
   useDeleteOrgNotificationAddressMutation,
   useUpdateOrgNotificationAddressMutation,
 } from '@/rtk/features/settingsApi';
-import { useState } from 'react';
-import { usePartyRepresentation } from '../common/PartyRepresentationContext/PartyRepresentationContext';
 import {
   validateEmail,
   validatePhoneNumber,

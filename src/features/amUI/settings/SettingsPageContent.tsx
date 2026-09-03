@@ -1,6 +1,4 @@
 import React from 'react';
-import { usePartyRepresentation } from '../common/PartyRepresentationContext/PartyRepresentationContext';
-import { useDocumentTitle } from '@/resources/hooks/useDocumentTitle';
 import { useTranslation, Trans } from 'react-i18next';
 import {
   Divider,
@@ -12,17 +10,21 @@ import {
   List,
   SettingsItem,
 } from '@altinn/altinn-components';
-import { useGetOrgNotificationAddressesQuery } from '@/rtk/features/settingsApi';
+import { ChatIcon, PaperplaneIcon, QuestionmarkCircleIcon } from '@navikt/aksel-icons';
+
+import { usePartyRepresentation } from '../common/PartyRepresentationContext/PartyRepresentationContext';
+import { ReporteePageHeading } from '../common/ReporteePageHeading/ReporteePageHeading';
 
 import classes from './SettingsPageContent.module.css';
-import { ChatIcon, PaperplaneIcon, QuestionmarkCircleIcon } from '@navikt/aksel-icons';
 import { SettingsModal } from './SettingsModal';
+
+import { useDocumentTitle } from '@/resources/hooks/useDocumentTitle';
+import { useGetOrgNotificationAddressesQuery } from '@/rtk/features/settingsApi';
 import {
   PartyType,
   useGetIsCompanyProfileAdminQuery,
   useGetReporteeQuery,
 } from '@/rtk/features/userInfoApi';
-import { ReporteePageHeading } from '../common/ReporteePageHeading/ReporteePageHeading';
 
 export const SettingsPageContent = () => {
   const { t } = useTranslation();

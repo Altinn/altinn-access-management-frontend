@@ -1,6 +1,8 @@
 import React from 'react';
 import { DsParagraph } from '@altinn/altinn-components';
+
 import classes from './RightsList.module.css';
+
 import type { ServiceResource } from '@/rtk/features/singleRights/singleRightsApi';
 import { ResourceHeading } from '@/features/amUI/common/DelegationModal/SingleRights/ResourceHeading';
 

@@ -5,6 +5,7 @@ import { useTranslation } from 'react-i18next';
 
 import { usePartyRepresentation } from '../common/PartyRepresentationContext/PartyRepresentationContext';
 import { InstanceList } from '../common/InstanceList/InstanceList';
+
 import { InstanceDelegation, useGetInstancesQuery } from '@/rtk/features/instanceApi';
 
 export const InstancePermissions = () => {

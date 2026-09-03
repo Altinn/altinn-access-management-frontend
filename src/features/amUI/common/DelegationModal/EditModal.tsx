@@ -3,18 +3,20 @@ import { forwardRef, useEffect, useRef } from 'react';
 import { useTranslation } from 'react-i18next';
 import { DsDialog } from '@altinn/altinn-components';
 
-import type { ActionError } from '@/resources/hooks/useActionError';
-import type { ServiceResource } from '@/rtk/features/singleRights/singleRightsApi';
-import type { AccessPackage } from '@/rtk/features/accessPackageApi';
-import type { Role } from '@/rtk/features/roleApi';
-import type { DialogLookup } from '@/rtk/features/instanceApi';
+import { ScopeInfo } from '../../maskinporten/ScopeInfo';
+
 import { ResourceInfo } from './SingleRights/ResourceInfo';
 import { InstanceInfo } from './Instance/InstanceInfo';
 import classes from './DelegationModal.module.css';
 import { AccessPackageInfo } from './AccessPackages/AccessPackageInfo';
 import { RoleInfo } from './Role/RoleInfo';
 import { useDelegationModalContext } from './DelegationModalContext';
-import { ScopeInfo } from '../../maskinporten/ScopeInfo';
+
+import type { ActionError } from '@/resources/hooks/useActionError';
+import type { ServiceResource } from '@/rtk/features/singleRights/singleRightsApi';
+import type { AccessPackage } from '@/rtk/features/accessPackageApi';
+import type { Role } from '@/rtk/features/roleApi';
+import type { DialogLookup } from '@/rtk/features/instanceApi';
 
 export interface DelegationRecipient {
   partyUuid: string;

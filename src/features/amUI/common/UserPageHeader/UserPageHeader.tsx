@@ -1,13 +1,13 @@
 import { DsParagraph, DsHeading, Avatar, formatDisplayName } from '@altinn/altinn-components';
 import { t } from 'i18next';
 
-import { PartyType } from '@/rtk/features/userInfoApi';
-
 import { usePartyRepresentation } from '../PartyRepresentationContext/PartyRepresentationContext';
 import { UserRoles } from '../UserRoles/UserRoles';
 
 import classes from './UserPageHeader.module.css';
 import { UserPageHeaderSkeleton } from './UserPageHeaderSkeleton';
+
+import { PartyType } from '@/rtk/features/userInfoApi';
 import { isSubUnitByType } from '@/resources/utils/reporteeUtils';
 import { useIsMobileOrSmaller } from '@/resources/utils/screensizeUtils';
 

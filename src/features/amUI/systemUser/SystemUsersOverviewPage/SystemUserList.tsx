@@ -1,9 +1,12 @@
 import React, { ReactElement, ReactNode } from 'react';
-import { SystemUser } from '../types';
 import { useTranslation } from 'react-i18next';
 import { Link, useLocation } from 'react-router';
-import classes from './SystemUserOverviewPage.module.css';
 import { Badge, DsHeading, List, ListItem } from '@altinn/altinn-components';
+
+import { SystemUser } from '../types';
+
+import classes from './SystemUserOverviewPage.module.css';
+
 import {
   getSystemUserAgentRequestUrl,
   getSystemUserRequestUrl,

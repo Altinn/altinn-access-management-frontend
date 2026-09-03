@@ -6,24 +6,9 @@ import {
   formatDisplayName,
 } from '@altinn/altinn-components';
 
-import type {
-  AddAgentAccessPackagesFn,
-  AddAgentResourcesFn,
-  Agent,
-  Client,
-  RemoveAgentAccessPackagesFn,
-  RemoveAgentResourcesFn,
-} from '@/rtk/features/clientApi';
-import type { ServiceResource } from '@/rtk/features/singleRights/singleRightsApi';
-import type { ActionError } from '@/resources/hooks/useActionError';
-import { useAccessPackageLookup } from '@/resources/hooks/useAccessPackageLookup';
-import { getFormattedDateOfBirthLabel, isSubUnitByType } from '@/resources/utils/reporteeUtils';
 import { useRoleMetadata } from '../UserRoles/useRoleMetadata';
 import { isNewUser } from '../isNewUser';
-
 import { UserListItems, type UserListItemData } from '../UserListItems/UserListItems';
-import { useClientAccessPackageActions } from './useClientAccessPackageActions';
-import { useIsMobileOrSmaller } from '@/resources/utils/screensizeUtils';
 import {
   ClientPackageInfoModal,
   type ClientPackageModalData,
@@ -36,6 +21,22 @@ import {
   type ClientResourceModalData,
 } from '../DelegationModal/SingleRights/ClientResourceInfoModal';
 import { useClientResourceActions } from '../ClientResourceList/useClientResourceActions';
+
+import { useClientAccessPackageActions } from './useClientAccessPackageActions';
+
+import { useIsMobileOrSmaller } from '@/resources/utils/screensizeUtils';
+import { getFormattedDateOfBirthLabel, isSubUnitByType } from '@/resources/utils/reporteeUtils';
+import { useAccessPackageLookup } from '@/resources/hooks/useAccessPackageLookup';
+import type { ActionError } from '@/resources/hooks/useActionError';
+import type { ServiceResource } from '@/rtk/features/singleRights/singleRightsApi';
+import type {
+  AddAgentAccessPackagesFn,
+  AddAgentResourcesFn,
+  Agent,
+  Client,
+  RemoveAgentAccessPackagesFn,
+  RemoveAgentResourcesFn,
+} from '@/rtk/features/clientApi';
 import { PartyType } from '@/rtk/features/userInfoApi';
 
 type ClientAgentPackageListProps = {

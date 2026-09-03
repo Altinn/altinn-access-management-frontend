@@ -1,6 +1,13 @@
 import { DsAlert, DsHeading, DsParagraph } from '@altinn/altinn-components';
 import { useTranslation } from 'react-i18next';
 
+import { resourceActionControlId } from '../common/DelegationModal/SingleRights/createSearchResultControlsRenderer';
+import { useRestoreFocusOnDataChange } from '../common/RestoreFocus';
+import classes from '../common/DelegationModal/SingleRights/ResourceSearch.module.css';
+
+import { ScopeSearchControls } from './ScopeSearchControls';
+import { getMaskinportenScopeCount } from './scopeUtils';
+
 import { AmPagination } from '@/components/Paginering/AmPaginering';
 import { ResourceList } from '@/features/amUI/common/ResourceList/ResourceList';
 import { SkeletonResourceList } from '@/features/amUI/common/ResourceList/SkeletonResourceList';
@@ -8,12 +15,6 @@ import type {
   ResourceDelegation,
   ServiceResource,
 } from '@/rtk/features/singleRights/singleRightsApi';
-
-import { resourceActionControlId } from '../common/DelegationModal/SingleRights/createSearchResultControlsRenderer';
-import { useRestoreFocusOnDataChange } from '../common/RestoreFocus';
-import { ScopeSearchControls } from './ScopeSearchControls';
-import { getMaskinportenScopeCount } from './scopeUtils';
-import classes from '../common/DelegationModal/SingleRights/ResourceSearch.module.css';
 
 interface ScopeSearchResultsProps {
   isFetching: boolean;

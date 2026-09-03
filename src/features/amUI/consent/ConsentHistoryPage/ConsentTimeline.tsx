@@ -9,11 +9,14 @@ import {
   TimelineActivity,
   TimelineSegment,
 } from '@altinn/altinn-components';
-import classes from './ConsentHistoryPage.module.css';
-import { ConsentHistoryItem } from '../types';
 import { TFunction } from 'i18next';
-import { useGetReporteeQuery } from '@/rtk/features/userInfoApi';
+
+import { ConsentHistoryItem } from '../types';
 import { toDateTimeString } from '../utils';
+
+import classes from './ConsentHistoryPage.module.css';
+
+import { useGetReporteeQuery } from '@/rtk/features/userInfoApi';
 
 interface ConsentTimelineProps {
   consentLog: ConsentHistoryItem[];

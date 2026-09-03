@@ -1,6 +1,8 @@
 import { createApi } from '@reduxjs/toolkit/query/react';
-import { createBaseQuery } from '@/rtk/app/baseQuery';
+
 import { userInfoApi } from './userInfoApi';
+
+import { createBaseQuery } from '@/rtk/app/baseQuery';
 
 export interface NotificationAddress extends Address {
   notificationAddressId: string;

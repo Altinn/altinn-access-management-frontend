@@ -2,20 +2,22 @@ import { useEffect, useState } from 'react';
 import { MinusCircleIcon } from '@navikt/aksel-icons';
 import { Button, List, useSnackbar } from '@altinn/altinn-components';
 import { useTranslation } from 'react-i18next';
+
 import { usePartyRepresentation } from '../../../common/PartyRepresentationContext/PartyRepresentationContext';
-import { PartyType } from '@/rtk/features/userInfoApi';
+import { useRestoreFocusOnDataChange } from '../../../common/RestoreFocus';
+import { PackageItem } from '../../../common/AccessPackageList/PackageItem';
+import { SkeletonAccessPackageList } from '../../../common/AccessPackageList/SkeletonAccessPackageList';
+import { AccessPackageInfo } from '../../../common/DelegationModal/AccessPackages/AccessPackageInfo';
+import { DelegationAction } from '../../../common/DelegationModal/EditModal';
+
+import { useIsTabletOrSmaller } from '@/resources/utils/screensizeUtils';
+import { getRequestPartyQueryParams } from '@/resources/utils/singleRightRequestUtils';
 import {
   useGetEnrichedSentPackageRequestsQuery,
   useWithdrawRequestMutation,
   type EnrichedPackageRequest,
 } from '@/rtk/features/requestApi';
-import { useRestoreFocusOnDataChange } from '../../../common/RestoreFocus';
-import { getRequestPartyQueryParams } from '@/resources/utils/singleRightRequestUtils';
-import { useIsTabletOrSmaller } from '@/resources/utils/screensizeUtils';
-import { PackageItem } from '../../../common/AccessPackageList/PackageItem';
-import { SkeletonAccessPackageList } from '../../../common/AccessPackageList/SkeletonAccessPackageList';
-import { AccessPackageInfo } from '../../../common/DelegationModal/AccessPackages/AccessPackageInfo';
-import { DelegationAction } from '../../../common/DelegationModal/EditModal';
+import { PartyType } from '@/rtk/features/userInfoApi';
 
 interface PendingPackageRequestsListProps {
   selectedRequest: EnrichedPackageRequest | null;

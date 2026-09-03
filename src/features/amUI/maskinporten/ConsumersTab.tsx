@@ -1,12 +1,13 @@
 import { useTranslation } from 'react-i18next';
 import { DsParagraph, formatDisplayName } from '@altinn/altinn-components';
 
-import { useGetMaskinportenConsumersQuery } from '@/rtk/features/maskinportenApi';
+import { usePartyRepresentation } from '../common/PartyRepresentationContext/PartyRepresentationContext';
 
 import { MaskinportenUserSearch } from './MaskinportenUserSearch';
 import classes from './MaskinportenPage.module.css';
-import { usePartyRepresentation } from '../common/PartyRepresentationContext/PartyRepresentationContext';
 import { MaskinportenInfoPopover } from './MaskinportenInfoPopover';
+
+import { useGetMaskinportenConsumersQuery } from '@/rtk/features/maskinportenApi';
 
 type ConsumersTabProps = {
   party: string;

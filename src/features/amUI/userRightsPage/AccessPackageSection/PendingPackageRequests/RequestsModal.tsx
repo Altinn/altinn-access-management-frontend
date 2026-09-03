@@ -1,8 +1,11 @@
 import React, { useState } from 'react';
-import { type EnrichedPackageRequest } from '@/rtk/features/requestApi';
-import { PendingPackageRequestsList } from './RequestsList';
+
 import { useRestoreFocus } from '../../../common/RestoreFocus';
 import { TwoStepDialog } from '../../../common/TwoStepDialog';
+
+import { PendingPackageRequestsList } from './RequestsList';
+
+import { type EnrichedPackageRequest } from '@/rtk/features/requestApi';
 
 interface PendingPackageRequestsModalProps {
   modalRef: React.RefObject<HTMLDialogElement | null>;

@@ -1,9 +1,9 @@
 import { formatDisplayName, UserListItem } from '@altinn/altinn-components';
 import { useTranslation } from 'react-i18next';
 
-import type { Connection } from '@/rtk/features/connectionApi';
-
 import classes from './CurrentUserPageHeader.module.css';
+
+import type { Connection } from '@/rtk/features/connectionApi';
 import { getFormattedDateOfBirthLabel } from '@/resources/utils/reporteeUtils';
 
 interface CurrentUserPageHeaderProps {

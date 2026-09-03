@@ -2,6 +2,7 @@ import { useTranslation } from 'react-i18next';
 import { MinusCircleIcon } from '@navikt/aksel-icons';
 import { useRef, useState } from 'react';
 import { DsButton, DsDialog, DsHeading, DsParagraph, DsSpinner } from '@altinn/altinn-components';
+
 import classes from './DeletePoaConfirmation.module.css';
 
 export interface DeletePoaConfirmationProps {

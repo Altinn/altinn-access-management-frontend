@@ -1,6 +1,6 @@
 import { createApi } from '@reduxjs/toolkit/query/react';
-import { createBaseQuery } from '@/rtk/app/baseQuery';
 
+import { createBaseQuery } from '@/rtk/app/baseQuery';
 import type { ServiceResource } from '@/rtk/features/singleRights/singleRightsApi';
 
 export interface ResourceOwner {

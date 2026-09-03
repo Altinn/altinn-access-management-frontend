@@ -1,8 +1,6 @@
 import type { ReactNode } from 'react';
 import { useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
-
-import classes from './RightsTabs.module.css';
 import {
   EnvelopeClosedIcon,
   FilesIcon,
@@ -10,12 +8,16 @@ import {
   PackageIcon,
   ShieldLockIcon,
 } from '@navikt/aksel-icons';
+
 import { usePartyRepresentation } from '../PartyRepresentationContext/PartyRepresentationContext';
+import { AmTabs } from '../AmTabs/AmTabs';
+
+import classes from './RightsTabs.module.css';
+
 import { PartyType } from '@/rtk/features/userInfoApi';
 import { useGetUserDelegationsQuery } from '@/rtk/features/accessPackageApi';
 import { isGuardianshipUrn } from '@/resources/utils';
 import { useTabState } from '@/resources/hooks';
-import { AmTabs } from '../AmTabs/AmTabs';
 
 interface RightsTabsProps {
   tabBadge?: {

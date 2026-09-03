@@ -3,16 +3,15 @@ import { Button, DsAlert, DsHeading, DsParagraph, useSnackbar } from '@altinn/al
 import { useTranslation } from 'react-i18next';
 
 import {
-  useCreatePackageRequestMutation,
-  useWithdrawRequestMutation,
-} from '@/rtk/features/requestApi';
-
-import {
   ORG_INSTANCE_ADMIN_PACKAGE_URN,
   useInstanceAdminPackageRequest,
 } from './useInstanceAdminPackageRequest';
-
 import classes from './RequestInstanceAdminPackage.module.css';
+
+import {
+  useCreatePackageRequestMutation,
+  useWithdrawRequestMutation,
+} from '@/rtk/features/requestApi';
 
 interface RequestModalBodyProps {
   dialogRef: RefObject<HTMLDialogElement | null>;

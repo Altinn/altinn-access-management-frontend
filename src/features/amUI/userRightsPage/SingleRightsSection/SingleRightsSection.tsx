@@ -3,6 +3,17 @@ import { useTranslation } from 'react-i18next';
 import { useParams } from 'react-router';
 import { DsHeading } from '@altinn/altinn-components';
 
+import { DelegationModal, DelegationType } from '../../common/DelegationModal/DelegationModal';
+import { usePartyRepresentation } from '../../common/PartyRepresentationContext/PartyRepresentationContext';
+import { DelegationAction, EditModal } from '../../common/DelegationModal/EditModal';
+import { getInheritedStatus } from '../../common/useInheritedStatus';
+import { HelpText } from '../../common/HelpText/HelpText';
+
+import classes from './SingleRightsSection.module.css';
+import { DeleteResourceButton } from './DeleteResourceButton';
+import { SingleRightsSectionSkeleton } from './SingleRightsSectionSkeleton';
+import { PendingRequests } from './PendingRequests';
+
 import type { ServiceResource } from '@/rtk/features/singleRights/singleRightsApi';
 import { useGetSingleRightsForRightholderQuery } from '@/rtk/features/singleRights/singleRightsApi';
 import { ResourceList } from '@/features/amUI/common/ResourceList/ResourceList';
@@ -13,19 +24,8 @@ import {
   useRestoreFocusContext,
   useRestoreFocusOnDataChange,
 } from '@/features/amUI/common/RestoreFocus';
-
-import { DelegationModal, DelegationType } from '../../common/DelegationModal/DelegationModal';
-import { usePartyRepresentation } from '../../common/PartyRepresentationContext/PartyRepresentationContext';
-import { DelegationAction, EditModal } from '../../common/DelegationModal/EditModal';
-
-import classes from './SingleRightsSection.module.css';
-import { DeleteResourceButton } from './DeleteResourceButton';
 import { useCanGiveAccess } from '@/resources/hooks/useCanGiveAccess';
 import { useIsTabletOrSmaller } from '@/resources/utils/screensizeUtils';
-import { SingleRightsSectionSkeleton } from './SingleRightsSectionSkeleton';
-import { getInheritedStatus } from '../../common/useInheritedStatus';
-import { HelpText } from '../../common/HelpText/HelpText';
-import { PendingRequests } from './PendingRequests';
 
 const SingleRightsSectionContent = ({ isReportee }: { isReportee: boolean }) => {
   const { id } = useParams();

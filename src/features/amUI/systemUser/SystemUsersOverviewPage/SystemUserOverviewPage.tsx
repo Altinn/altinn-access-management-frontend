@@ -12,6 +12,12 @@ import {
   ListItem,
 } from '@altinn/altinn-components';
 
+import { Breadcrumbs } from '../../common/Breadcrumbs/Breadcrumbs';
+import ReporteePageHeading from '../../common/ReporteePageHeading';
+
+import classes from './SystemUserOverviewPage.module.css';
+import { SystemUserList } from './SystemUserList';
+
 import { useDocumentTitle } from '@/resources/hooks/useDocumentTitle';
 import { PageWrapper } from '@/components';
 import {
@@ -22,17 +28,12 @@ import {
 import { getCookie } from '@/resources/Cookie/CookieMethods';
 import { SystemUserPath } from '@/routes/paths';
 import { PageLayoutWrapper } from '@/features/amUI/common/PageLayoutWrapper';
-
-import classes from './SystemUserOverviewPage.module.css';
 import {
   useGetIsAdminQuery,
   useGetIsClientAdminQuery,
   useGetReporteeQuery,
 } from '@/rtk/features/userInfoApi';
 import { hasCreateSystemUserPermission } from '@/resources/utils/permissionUtils';
-import { SystemUserList } from './SystemUserList';
-import { Breadcrumbs } from '../../common/Breadcrumbs/Breadcrumbs';
-import ReporteePageHeading from '../../common/ReporteePageHeading';
 
 export const SystemUserOverviewPage = () => {
   const { t } = useTranslation();

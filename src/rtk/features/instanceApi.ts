@@ -1,13 +1,14 @@
 import { createApi } from '@reduxjs/toolkit/query/react';
-import { createBaseQuery } from '@/rtk/app/baseQuery';
 
-import type { Permissions } from '@/dataObjects/dtos/accessPackage';
 import type { PersonInput, SimplifiedParty } from './connectionApi';
 import type {
   DelegationCheckedRight,
   RightAccess,
   ServiceResource,
 } from './singleRights/singleRightsApi';
+
+import { createBaseQuery } from '@/rtk/app/baseQuery';
+import type { Permissions } from '@/dataObjects/dtos/accessPackage';
 
 interface InstanceType {
   id: string;

@@ -94,7 +94,7 @@ export class Token {
     const url = `${env('API_BASE_URL')}/register/api/v1/access-management/parties/query?fields=person,party,user`;
     const subscriptionKey = env(`${env('ENV_NAME').toUpperCase()}_REGISTER_SUBSCRIPTION_KEY`);
     const platformToken = await this.getPlatformToken();
-    var payload;
+    let payload;
     if (pidOrOrgNo.length == 9) {
       payload = { data: [`urn:altinn:organization:identifier-no:${pidOrOrgNo}`] };
     } else {

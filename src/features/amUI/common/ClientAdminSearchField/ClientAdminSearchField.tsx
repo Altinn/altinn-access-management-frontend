@@ -1,7 +1,9 @@
 import React, { useCallback } from 'react';
 import { DsSearch } from '@altinn/altinn-components';
-import { debounce } from '@/resources/utils';
+
 import classes from './ClientAdminSearchField.module.css';
+
+import { debounce } from '@/resources/utils';
 
 interface ClientAdminSearchFieldProps {
   searchPlaceholder: string;

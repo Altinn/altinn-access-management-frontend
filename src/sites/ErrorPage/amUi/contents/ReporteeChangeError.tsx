@@ -9,6 +9,7 @@ import {
 } from '@altinn/altinn-components';
 
 import classes from '../ErrorPage.module.css';
+
 import { getAfUrl, getAltinnStartPageUrl, getAmStartPageUrl } from '@/resources/utils/pathUtils';
 
 export const ReporteeChangeError = () => {

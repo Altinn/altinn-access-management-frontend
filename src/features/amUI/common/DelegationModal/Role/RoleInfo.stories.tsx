@@ -2,13 +2,15 @@ import type { Meta, StoryObj } from '@storybook/react-vite';
 import { Provider } from 'react-redux';
 import { RootProvider } from '@altinn/altinn-components';
 
-import store from '@/rtk/app/store';
-import type { Role } from '@/rtk/features/roleApi';
-import { RoleInfo } from './RoleInfo';
-import type { Party } from '@/rtk/features/lookupApi';
-import { PartyType } from '@/rtk/features/userInfoApi';
 import { PartyRepresentationContext } from '../../PartyRepresentationContext/PartyRepresentationContext';
 import { InheritedStatusType } from '../../useInheritedStatus';
+
+import { RoleInfo } from './RoleInfo';
+
+import store from '@/rtk/app/store';
+import type { Role } from '@/rtk/features/roleApi';
+import type { Party } from '@/rtk/features/lookupApi';
+import { PartyType } from '@/rtk/features/userInfoApi';
 
 const storyRole: Role = {
   id: 'role-ccr-styreleder',

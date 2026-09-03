@@ -1,12 +1,13 @@
 import { useMemo } from 'react';
 
-import type { RolePermission } from '@/rtk/features/roleApi';
 import {
   A2_PROVIDER_CODE,
   ECC_PROVIDER_CODE,
   A3_PROVIDER_CODE,
   CRA_PROVIDER_CODE,
 } from '../UserRoles/useRoleMetadata';
+
+import type { RolePermission } from '@/rtk/features/roleApi';
 
 type UseGroupedRoleListEntriesParams = {
   permissions?: RolePermission[];

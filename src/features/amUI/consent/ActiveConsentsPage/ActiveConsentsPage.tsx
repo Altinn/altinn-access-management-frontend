@@ -2,17 +2,20 @@ import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { useLocation } from 'react-router';
 import { formatDisplayName } from '@altinn/altinn-components';
+
+import { PageLayoutWrapper } from '../../common/PageLayoutWrapper';
+import { Breadcrumbs } from '../../common/Breadcrumbs/Breadcrumbs';
+import { ReporteePageHeading } from '../../common/ReporteePageHeading';
+
+import { ActiveConsentsPageContent } from './ActiveConsentsPageContent';
+
 import { useDocumentTitle } from '@/resources/hooks/useDocumentTitle';
 import { PageWrapper } from '@/components';
 import { useGetActiveConsentsQuery } from '@/rtk/features/consentApi';
 import { getCookie } from '@/resources/Cookie/CookieMethods';
-import { PageLayoutWrapper } from '../../common/PageLayoutWrapper';
 import { useGetIsAdminQuery, useGetReporteeQuery } from '@/rtk/features/userInfoApi';
 import { hasConsentPermission } from '@/resources/utils/permissionUtils';
-import { Breadcrumbs } from '../../common/Breadcrumbs/Breadcrumbs';
-import { ReporteePageHeading } from '../../common/ReporteePageHeading';
 import { useGetIdPortenAuthorizationsQuery } from '@/rtk/features/idPortenAuthorizationApi';
-import { ActiveConsentsPageContent } from './ActiveConsentsPageContent';
 import { useGetPartyFromLoggedInUserQuery } from '@/rtk/features/lookupApi';
 
 export const ActiveConsentsPage = () => {

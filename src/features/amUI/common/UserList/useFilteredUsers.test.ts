@@ -1,11 +1,12 @@
 import { describe, it, expect } from 'vitest';
 import { act, renderHook } from '@testing-library/react';
 
-import type { ExtendedUser } from '@/rtk/features/userInfoApi';
+import { mapConnectionsToUserSearchNodes } from '../UserSearch/connectionMapper';
 
 import { useFilteredUsers } from './useFilteredUsers';
+
+import type { ExtendedUser } from '@/rtk/features/userInfoApi';
 import { Connection } from '@/rtk/features/connectionApi';
-import { mapConnectionsToUserSearchNodes } from '../UserSearch/connectionMapper';
 
 const mockConnections: Connection[] = [
   {

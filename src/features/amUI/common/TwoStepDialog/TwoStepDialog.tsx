@@ -4,11 +4,11 @@ import { ArrowLeftIcon } from '@navikt/aksel-icons';
 import { Button, DsDialog, DsHeading } from '@altinn/altinn-components';
 import cn from 'classnames';
 
-import { useAutoFocusRef } from '@/resources/hooks/useAutoFocusRef';
-
 import { RestoreFocusFallback, RestoreFocusProvider, type RestoreFocus } from '../RestoreFocus';
 
 import classes from './TwoStepDialog.module.css';
+
+import { useAutoFocusRef } from '@/resources/hooks/useAutoFocusRef';
 
 export interface TwoStepDialogProps {
   /**

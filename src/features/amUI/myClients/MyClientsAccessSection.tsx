@@ -7,12 +7,13 @@ import {
   type ClientAccessPackageAction,
   type ClientResourceAction,
 } from '../common/ClientAccessList/ClientAccessList';
+import { ClientAdminSearchField } from '../common/ClientAdminSearchField/ClientAdminSearchField';
+
 import {
   useRemoveMyClientAccessPackagesMutation,
   useRemoveMyClientResourcesMutation,
   type Client,
 } from '@/rtk/features/clientApi';
-import { ClientAdminSearchField } from '../common/ClientAdminSearchField/ClientAdminSearchField';
 import { getActionError, type ActionError } from '@/resources/hooks/useActionError';
 
 type MyClientsAccessSectionProps = {

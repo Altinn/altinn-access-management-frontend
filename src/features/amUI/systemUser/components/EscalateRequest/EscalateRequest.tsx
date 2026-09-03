@@ -6,16 +6,19 @@ import {
   DsValidationMessage,
 } from '@altinn/altinn-components';
 import React, { useState } from 'react';
+import { useTranslation } from 'react-i18next';
+
 import { ButtonRow } from '../ButtonRow/ButtonRow';
 import { getApiBaseUrl } from '../../requestUtils';
+import { SystemUserRequest } from '../../types';
+
 import classes from './EscalateRequest.module.css';
+
 import {
   useEscalateAgentRequestMutation,
   useEscalateRequestMutation,
 } from '@/rtk/features/systemUserApi';
-import { useTranslation } from 'react-i18next';
 import { getLogoutUrl } from '@/resources/utils/pathUtils';
-import { SystemUserRequest } from '../../types';
 
 interface EscalateRequestProps {
   request: SystemUserRequest;

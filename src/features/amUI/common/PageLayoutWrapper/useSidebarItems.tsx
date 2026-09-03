@@ -1,3 +1,7 @@
+import { BadgeVariant, Color, MenuItemProps } from '@altinn/altinn-components';
+import { useLocation } from 'react-router';
+import { useTranslation } from 'react-i18next';
+
 import { getCookie } from '@/resources/Cookie/CookieMethods';
 import {
   hasConsentPermission,
@@ -28,11 +32,8 @@ import {
   useGetIsMaskinportenAdminQuery,
   useGetReporteeQuery,
 } from '@/rtk/features/userInfoApi';
-import { BadgeVariant, Color, MenuItemProps } from '@altinn/altinn-components';
-import { useLocation } from 'react-router';
 import { useGetRolePermissionsQuery } from '@/rtk/features/roleApi';
 import { useSidebarRequestCount } from '@/resources/hooks/useSidebarRequestCount';
-import { useTranslation } from 'react-i18next';
 
 export const useSidebarItems = ({ isSmall }: { isSmall?: boolean }) => {
   const { t } = useTranslation();

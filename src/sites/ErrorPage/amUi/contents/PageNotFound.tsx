@@ -3,6 +3,7 @@ import * as React from 'react';
 import { DsHeading, DsParagraph, DsLink, DsListItem } from '@altinn/altinn-components';
 
 import classes from '../ErrorPage.module.css';
+
 import { getAfUrl, getAltinnStartPageUrl } from '@/resources/utils/pathUtils';
 import { useDocumentTitle } from '@/resources/hooks/useDocumentTitle';
 

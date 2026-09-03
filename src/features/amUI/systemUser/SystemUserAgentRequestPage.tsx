@@ -9,23 +9,24 @@ import {
   formatDisplayName,
 } from '@altinn/altinn-components';
 
-import {
-  useGetAgentSystemUserRequestQuery,
-  useApproveAgentSystemUserRequestMutation,
-  useRejectAgentSystemUserRequestMutation,
-} from '@/rtk/features/systemUserApi';
-import { useDocumentTitle } from '@/resources/hooks/useDocumentTitle';
 import { RequestPageBase } from './components/RequestPageBase/RequestPageBase';
 import type { ProblemDetail } from './types';
 import { ButtonRow } from './components/ButtonRow/ButtonRow';
 import { DelegationCheckError } from './components/DelegationCheckError/DelegationCheckError';
 import { getApiBaseUrl } from './requestUtils';
-import { hasCreateSystemUserPermission } from '@/resources/utils/permissionUtils';
 import { EscalateRequest } from './components/EscalateRequest/EscalateRequest';
-import { SystemUserPath } from '@/routes/paths';
 import { RightsList } from './components/RightsList/RightsList';
-import { getLogoutUrl } from '@/resources/utils/pathUtils';
 import { SystemUserRequestLoadError } from './components/SystemUserRequestLoadError/SystemUserRequestLoadError';
+
+import { hasCreateSystemUserPermission } from '@/resources/utils/permissionUtils';
+import { SystemUserPath } from '@/routes/paths';
+import { getLogoutUrl } from '@/resources/utils/pathUtils';
+import { useDocumentTitle } from '@/resources/hooks/useDocumentTitle';
+import {
+  useGetAgentSystemUserRequestQuery,
+  useApproveAgentSystemUserRequestMutation,
+  useRejectAgentSystemUserRequestMutation,
+} from '@/rtk/features/systemUserApi';
 import { useGetIsAdminQuery, useGetReporteeQuery } from '@/rtk/features/userInfoApi';
 
 export const SystemUserAgentRequestPage = () => {

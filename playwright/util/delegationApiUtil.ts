@@ -1,8 +1,11 @@
 import { request } from '@playwright/test';
-import { Token } from '../api-requests/Token';
+
 import { DelegationApiRequest } from 'playwright/api-requests/delegation-tilgangspakke/delegationApiRequest';
-import { getTestPersonForCategory } from './testDelegationdatautil';
 import { CleanupResolved, getCleanupDataForTest } from 'playwright/util/cleanup-delegationutils';
+
+import { Token } from '../api-requests/Token';
+
+import { getTestPersonForCategory } from './testDelegationdatautil';
 
 async function getDagligLederForCategory(category: string) {
   for (const prefix of ['Dagligleder', 'Dagligerleder']) {

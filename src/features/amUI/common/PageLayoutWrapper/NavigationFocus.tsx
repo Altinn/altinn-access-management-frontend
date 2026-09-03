@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
 import { useLocation } from 'react-router';
+
 import classes from './NavigationFocus.module.css';
 
 export const NavigationFocus = () => {

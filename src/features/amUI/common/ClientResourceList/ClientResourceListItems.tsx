@@ -1,15 +1,15 @@
 import React from 'react';
 import { List, ResourceListItem, type ResourceListItemProps } from '@altinn/altinn-components';
 
-import type { ServiceResource } from '@/rtk/features/singleRights/singleRightsApi';
-import { useProviderLogoUrl } from '@/resources/hooks/useProviderLogoUrl';
-
 import {
   extractLogoUrl,
   extractOrgCode,
   extractOwnerName,
   extractResourceName,
 } from '../ResourceList/utils';
+
+import type { ServiceResource } from '@/rtk/features/singleRights/singleRightsApi';
+import { useProviderLogoUrl } from '@/resources/hooks/useProviderLogoUrl';
 
 export interface ClientResourceListItemData {
   id: string;
