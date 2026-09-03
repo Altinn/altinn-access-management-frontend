@@ -3,7 +3,7 @@ import { DelegationApiUtil } from 'playwright/util/delegationApiUtil';
 import { withTimeout } from 'playwright/util/asyncUtils';
 
 test.describe('Delegate access pacakge from Org-A(Avgiver) to Org-B(Rettighetshaver) ', () => {
-  test.beforeEach(async (_, testInfo) => {
+  test.beforeEach(async ({}, testInfo) => {
     const title = testInfo.title || 'unknown-test';
     try {
       await DelegationApiUtil.cleanupAllDelegations(title);
@@ -12,7 +12,7 @@ test.describe('Delegate access pacakge from Org-A(Avgiver) to Org-B(Rettighetsha
     }
   });
 
-  test.afterEach(async (_, testInfo) => {
+  test.afterEach(async ({}, testInfo) => {
     const title = testInfo.title || 'unknown-test';
 
     try {

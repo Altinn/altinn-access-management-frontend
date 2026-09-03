@@ -111,6 +111,13 @@ module.exports = [
     },
   },
   {
+    files: ['playwright/**'],
+    rules: {
+      // Playwright requires a hook's first argument to be an object destructuring pattern.
+      'no-empty-pattern': 'off',
+    },
+  },
+  {
     files: ['**/*.cjs', 'entrypoint.js'],
     languageOptions: { sourceType: 'commonjs' },
     rules: {
