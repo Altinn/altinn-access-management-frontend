@@ -19,12 +19,10 @@ export const RevokeConfirmationDialog = ({
   const { t } = useTranslation();
   const headingId = useId();
 
-  if (!open) return null;
-
   return (
     <DsDialog.TriggerContext>
       <DsDialog
-        open
+        open={open}
         closedby='any'
         closeButton={t('common.close')}
         onClose={onCancel}

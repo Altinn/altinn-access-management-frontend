@@ -14,11 +14,14 @@ export const useCanRedelegatePackage = () => {
 
   const canRedelegatePackage = async (packageId: string): Promise<boolean> => {
     if (!fromParty) return true;
+    const check = runDelegationCheck({ party: fromParty.partyUuid }, true);
     try {
-      const checks = await runDelegationCheck({ party: fromParty.partyUuid }, true).unwrap();
-      return checks.find((entry) => entry?.package?.id === packageId)?.result ?? true;
+      const checks = await check.unwrap();
+      return checks.find((entry) => entry.package.id === packageId)?.result ?? true;
     } catch (error) {
       return !isForbiddenError(error);
+    } finally {
+      check.unsubscribe();
     }
   };
 

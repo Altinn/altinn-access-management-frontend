@@ -181,7 +181,7 @@ export const AccessPackageInfo = ({ accessPackage, availableActions = [] }: Pack
                 </DsButton>
               ) : (
                 <PackageIsPartiallyDeletableAlert
-                  confirmAction={() => onRevoke(accessPackage, { skipWarning: true })}
+                  confirmAction={() => onRevoke(accessPackage, { skipConfirmation: true })}
                   triggerButtonProps={{
                     variant: 'primary',
                   }}

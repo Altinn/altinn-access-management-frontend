@@ -3,7 +3,6 @@ import {
   useLazyGetResourceRightsQuery,
 } from '@/rtk/features/singleRights/singleRightsApi';
 
-import { canRedelegateRights } from '../DelegationModal/utils/rightsUtils';
 import { usePartyRepresentation } from '../PartyRepresentationContext/PartyRepresentationContext';
 
 import { isForbiddenError } from './isForbiddenError';
@@ -19,25 +18,26 @@ export const useCanRedelegateResource = () => {
 
   const canRedelegateResource = async (resourceId: string): Promise<boolean> => {
     if (!actingParty || !fromParty || !toParty) return true;
+    const check = runDelegationCheck({ resourceId, from: fromParty.partyUuid }, true);
+    const rights = getResourceRights(
+      {
+        actingParty: actingParty.partyUuid,
+        from: fromParty.partyUuid,
+        to: toParty.partyUuid,
+        resourceId,
+      },
+      true,
+    );
     try {
-      const [checkedRights, heldRights] = await Promise.all([
-        runDelegationCheck({ resourceId, from: fromParty.partyUuid }, true).unwrap(),
-        getResourceRights(
-          {
-            actingParty: actingParty.partyUuid,
-            from: fromParty.partyUuid,
-            to: toParty.partyUuid,
-            resourceId,
-          },
-          true,
-        ).unwrap(),
-      ]);
-      return canRedelegateRights(
-        heldRights.directRights.map((held) => held.right.key),
-        checkedRights,
+      const [checkedRights, heldRights] = await Promise.all([check.unwrap(), rights.unwrap()]);
+      return heldRights.directRights.every((held) =>
+        checkedRights.some((checked) => checked.right.key === held.right.key && checked.result),
       );
     } catch (error) {
       return !isForbiddenError(error);
+    } finally {
+      check.unsubscribe();
+      rights.unsubscribe();
     }
   };
 

@@ -78,7 +78,10 @@ export const useResourceListDelegation = ({
       }
 
       setResourceLoading(resource.identifier, true);
-      const result = await runDelegationCheck({ resourceId: resource.identifier });
+      const result = await runDelegationCheck({
+        resourceId: resource.identifier,
+        from: fromParty?.partyUuid || '',
+      });
       if (result.isError) {
         onActionError?.(resource, getActionError(result.error));
         setResourceLoading(resource.identifier, false);

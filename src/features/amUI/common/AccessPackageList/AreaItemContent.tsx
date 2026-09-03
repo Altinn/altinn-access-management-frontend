@@ -10,7 +10,11 @@ import type { AccessPackage } from '@/rtk/features/accessPackageApi';
 import { DelegationAction } from '../DelegationModal/EditModal';
 
 import classes from './AccessPackageList.module.css';
-import { DeletableStatus, type ExtendedAccessArea } from './useAreaPackageList';
+import {
+  DeletableStatus,
+  type ExtendedAccessArea,
+  type ExtendedAccessPackage,
+} from './useAreaPackageList';
 import { PackageItem } from './PackageItem';
 import { RevokeAccessPackageActionControl } from './RevokeAccessPackageActionControl';
 import { DelegateAccessPackageActionControl } from './DelegateAccessPackageActionControl';
@@ -69,7 +73,7 @@ export const AreaItemContent = ({
   const isSm = useIsMobileOrSmaller();
   const { canDelegatePackage } = useAccessPackageDelegationCheck();
 
-  const revokeActionControl = (pkg: AccessPackage) => {
+  const revokeActionControl = (pkg: ExtendedAccessPackage) => {
     if (isActionLoading) {
       return (
         <DsSpinner
@@ -81,7 +85,11 @@ export const AreaItemContent = ({
     return (
       <RevokeAccessPackageActionControl
         availableActions={availableActions}
-        onRevoke={(options) => onRevoke?.(pkg, options)}
+        onRevoke={() =>
+          onRevoke?.(pkg, {
+            skipConfirmation: pkg.deletableStatus === DeletableStatus.PartiallyDeletable,
+          })
+        }
         pkg={pkg}
         isLoading={isActionLoading}
       />

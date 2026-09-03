@@ -30,8 +30,7 @@ import { isExpiredResource } from '../../ResourceList/utils';
 import { useSingleRightsDelegationRightsData } from './hooks/useSingleRightsDelegationRightsData';
 import { useSingleRightRequests } from './hooks/useSingleRightRequests';
 import { focusFirstEnabledButton, useRestoreFocusAfterSettled } from '../../RestoreFocus';
-import { isForbiddenError, useRevokeConfirmation } from '../../RevokeConfirmation';
-import { canRedelegateRights } from '../utils/rightsUtils';
+import { useCanRedelegateResource, useRevokeConfirmation } from '../../RevokeConfirmation';
 
 import classes from './ResourceInfo.module.css';
 
@@ -165,17 +164,11 @@ export const ResourceInfo = ({
     ? t('delegation_modal.expired_resource_description', { name: toName })
     : t('delegation_modal.expired_resource_request_description');
 
+  const { canRedelegateResource } = useCanRedelegateResource();
   const { confirmRevoke, revokeConfirmationDialog } = useRevokeConfirmation();
 
-  const confirmAndRevokeResource = () => {
-    const checkFailedForUnknownReason =
-      isDelegationCheckError && !isForbiddenError(delegationCheckError);
-    const heldRightKeys = rights.filter((r) => r.delegated).map((r) => r.rightKey);
-    confirmRevoke(
-      checkFailedForUnknownReason || canRedelegateRights(heldRightKeys, delegationCheckedActions),
-      revokeResource,
-    );
-  };
+  const confirmAndRevokeResource = async () =>
+    confirmRevoke(await canRedelegateResource(resource.identifier), revokeResource);
 
   const actionsRef = React.useRef<HTMLDivElement>(null);
   useRestoreFocusAfterSettled({

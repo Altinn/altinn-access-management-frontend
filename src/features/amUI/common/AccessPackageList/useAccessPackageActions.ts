@@ -22,10 +22,9 @@ import { usePackageWarningDialog } from '../PackageWarningDialog';
 import { useCanRedelegatePackage, useRevokeConfirmation } from '../RevokeConfirmation';
 
 export interface RevokeOptions {
-  /** Overrides the toParty from context. */
   toParty?: Party;
   /** Skips the confirmation dialog, for callers that already confirmed in another dialog. */
-  skipWarning?: boolean;
+  skipConfirmation?: boolean;
 }
 
 interface useAccessPackageActionsProps {
@@ -204,7 +203,7 @@ export const useAccessPackageActions = ({
 
   const onRevoke = async (
     accessPackage: AccessPackage,
-    { toParty, skipWarning = false }: RevokeOptions = {},
+    { toParty, skipConfirmation }: RevokeOptions = {},
   ) => {
     if (!fromParty || !actingParty) {
       return;
@@ -231,12 +230,7 @@ export const useAccessPackageActions = ({
         },
       );
 
-    if (skipWarning) {
-      revoke();
-      return;
-    }
-
-    confirmRevoke(await canRedelegatePackage(accessPackage.id), revoke);
+    confirmRevoke(skipConfirmation || (await canRedelegatePackage(accessPackage.id)), revoke);
   };
 
   const onRequest = async (accessPackage: AccessPackage) => {
