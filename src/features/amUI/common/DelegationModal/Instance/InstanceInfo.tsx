@@ -1,35 +1,27 @@
-import * as React from 'react';
-import { Button, formatDisplayName } from '@altinn/altinn-components';
 import { useTranslation } from 'react-i18next';
-import { MinusCircleIcon } from '@navikt/aksel-icons';
 
 import type { ServiceResource } from '@/rtk/features/singleRights/singleRightsApi';
-import { PartyType } from '@/rtk/features/userInfoApi';
 import {
   type DialogLookup,
   useDelegateInstanceRightsMutation,
   useUpdateInstanceRightsMutation,
   useRemoveInstanceMutation,
 } from '@/rtk/features/instanceApi';
-import { StatusMessageForScreenReader } from '@/components/StatusMessageForScreenReader/StatusMessageForScreenReader';
-import { useIsMobileOrSmaller } from '@/resources/utils/screensizeUtils';
-import { createErrorDetails } from '../../TechnicalErrorParagraphs/TechnicalErrorParagraphs';
 
 import { StatusSection } from '../../StatusSection/StatusSection';
-import { LoadingAnimation } from '../../LoadingAnimation/LoadingAnimation';
 import { usePartyRepresentation } from '../../PartyRepresentationContext/PartyRepresentationContext';
-import { getMissingAccessMessage } from '../missingAccessUtils';
 import { useRightsSection } from '../utils/useRightsSection';
 import type { DelegationRecipient } from '../EditModal';
 import { DelegationAction } from '../EditModal';
+import {
+  DelegationActionButtons,
+  DelegationPanelSection,
+  DelegationRightsPanel,
+  useDelegationPanelState,
+} from '../DelegationRightsPanel';
 import { RightsSection } from '../SingleRights/RightsSection';
-import { ResourceAlert } from '../SingleRights/ResourceAlert';
-import { ResourceInfoSkeleton } from '../SingleRights/ResourceInfoSkeleton';
 import { InstanceDescription } from '../../InstanceDescription/InstanceDescription';
-import { focusFirstEnabledButton, useRestoreFocusAfterSettled } from '../../RestoreFocus';
 import { useInstanceDelegationRightsData } from './useInstanceDelegationRightsData';
-
-import classes from './InstanceInfo.module.css';
 
 export interface InstanceInfoProps {
   resource: ServiceResource;
@@ -49,7 +41,6 @@ export const InstanceInfo = ({
   onSuccess,
 }: InstanceInfoProps) => {
   const { t } = useTranslation();
-  const isSmall = useIsMobileOrSmaller();
   const { toParty: toPartyContext, fromParty, actingParty } = usePartyRepresentation();
   const toParty = toPartyProp ?? toPartyContext;
   const toPartyUuid = toParty?.partyUuid ?? '';
@@ -57,17 +48,13 @@ export const InstanceInfo = ({
   const hasDelegateAction = availableActions?.includes(DelegationAction.DELEGATE);
   const canRevoke = availableActions?.includes(DelegationAction.REVOKE) ?? false;
 
-  const toName = formatDisplayName({
-    fullName: toParty?.name ?? '',
-    type: toParty?.partyTypeName === PartyType.Organization ? 'company' : 'person',
-  });
-
   const {
     rights,
     setRights,
     hasAccess,
     hasDirectAccess,
     isLoading,
+    isDelegationCheckLoading,
     delegationCheckedRights,
     delegationCheckError,
     errorDetails,
@@ -85,7 +72,7 @@ export const InstanceInfo = ({
 
   const onDelegate = (
     actionKeys: string[],
-    onSuccess: () => void,
+    onDelegateSuccess: () => void,
     onError: (error: any) => void,
   ) => {
     if (!actingParty) return;
@@ -97,11 +84,15 @@ export const InstanceInfo = ({
       input: { directRightKeys: actionKeys },
     })
       .unwrap()
-      .then(onSuccess)
+      .then(onDelegateSuccess)
       .catch(onError);
   };
 
-  const onUpdate = (actionKeys: string[], onSuccess: () => void, onError: (error: any) => void) => {
+  const onUpdate = (
+    actionKeys: string[],
+    onUpdateSuccess: () => void,
+    onError: (error: any) => void,
+  ) => {
     if (!actingParty) return;
     updateInstance({
       party: actingParty.partyUuid,
@@ -111,11 +102,11 @@ export const InstanceInfo = ({
       actionKeys,
     })
       .unwrap()
-      .then(onSuccess)
+      .then(onUpdateSuccess)
       .catch(onError);
   };
 
-  const onRevoke = (onSuccess: () => void, onError: (error: any) => void) => {
+  const onRevoke = (onRevokeSuccess: () => void, onError: (error: any) => void) => {
     if (!actingParty || !fromParty) return;
     removeInstance({
       party: actingParty.partyUuid,
@@ -125,7 +116,7 @@ export const InstanceInfo = ({
       instance: instanceUrn,
     })
       .unwrap()
-      .then(onSuccess)
+      .then(onRevokeSuccess)
       .catch(onError);
   };
 
@@ -148,53 +139,30 @@ export const InstanceInfo = ({
     },
   });
 
-  const rawMissingAccess = delegationCheckedRights
-    ? getMissingAccessMessage(
-        delegationCheckedRights,
-        t,
-        resource?.resourceOwnerName,
-        actingParty?.name,
-      )
-    : null;
-
-  const missingAccess = isActionLoading || delegationError ? null : rawMissingAccess;
-
-  const delegationCheckErrorDetails = !!delegationCheckError
-    ? createErrorDetails(delegationCheckError)
-    : null;
-  const technicalErrorDetails = errorDetails ?? (hasAccess ? null : delegationCheckErrorDetails);
-
-  // Delegate/update/revoke swap the edit buttons for a loading then success animation in place,
-  // dropping focus to the dialog body. Once it settles, return focus to whichever button remains.
-  const actionsRef = React.useRef<HTMLDivElement>(null);
-  useRestoreFocusAfterSettled({
-    isSettled: !isActionLoading && !isActionSuccess,
-    requestWhen: isActionLoading,
-    onRestore: () => focusFirstEnabledButton(actionsRef.current),
+  const {
+    toName,
+    missingAccess,
+    technicalErrorDetails,
+    showMissingRightsStatus,
+    cannotDelegateHere,
+    displayResourceAlert,
+    screenReaderMessage,
+  } = useDelegationPanelState({
+    resource,
+    rights,
+    hasAccess,
+    availableActions,
+    toParty,
+    isActionLoading,
+    delegationError,
+    delegationCheckedRights,
+    delegationCheckError,
+    errorDetails,
   });
 
-  const hasDelegableRights = rights.some((r) => r.delegable);
-  const showMissingRightsStatus = !hasAccess && rights.length > 0 && !hasDelegableRights;
-  const cannotDelegateHere = resource?.delegable === false;
-
-  const displayResourceAlert =
-    !!technicalErrorDetails ||
-    (hasDelegateAction &&
-      !hasAccess &&
-      (!!delegationCheckError ||
-        resource?.delegable === false ||
-        (rights.length > 0 && !rights.some((r) => r.delegable === true))));
-
   return (
-    <>
-      <StatusMessageForScreenReader politenessSetting='assertive'>
-        {delegationError
-          ? delegationError === 'revoke'
-            ? t('delegation_modal.technical_error_message.revoke_failed')
-            : t('delegation_modal.technical_error_message.message')
-          : (missingAccess ?? '')}
-      </StatusMessageForScreenReader>
-      <div>
+    <DelegationRightsPanel
+      header={
         <InstanceDescription
           resource={resource}
           instanceData={{
@@ -208,88 +176,64 @@ export const InstanceInfo = ({
           fromPartyType={fromParty?.partyTypeName}
           titleLevel={2}
           statusSection={
-            <div
-              className={classes.resourceInfo}
-              data-size={isSmall ? 'xs' : 'md'}
-            >
+            <DelegationPanelSection>
               <StatusSection
                 userHasAccess={hasAccess}
                 showDelegationCheckWarning={showMissingRightsStatus}
                 cannotDelegateHere={cannotDelegateHere}
                 toPartyName={toName}
               />
-            </div>
+            </DelegationPanelSection>
           }
         />
-
-        {isActionLoading || isActionSuccess ? (
-          <LoadingAnimation
-            isLoading={isActionLoading}
-            displaySuccess={isActionSuccess}
-          />
-        ) : isLoading ? (
-          <ResourceInfoSkeleton />
-        ) : (
-          <>
-            {displayResourceAlert ? (
-              <ResourceAlert
-                error={technicalErrorDetails}
-                rightReasons={rights.map((r) => r.delegationReason)}
-                resource={resource}
-                className={classes.resourceAlert}
-              />
-            ) : (
-              <RightsSection
-                rights={rights}
-                setRights={setRights}
-                undelegableActions={undelegableActions}
-                isDelegationCheckLoading={isLoading}
-                toName={toName}
-                availableActions={availableActions}
-                delegationError={delegationError}
-                missingAccess={missingAccess && hasDelegateAction ? missingAccess : null}
-                hasAccessAndNoChanges={hasDirectAccess && !hasUnsavedChanges}
-                allAccessTitle={t('delegation_modal.instance_actions.access_to_all')}
-                actionDescription={t('delegation_modal.instance_actions.action_description')}
-              />
-            )}
-            <div
-              ref={actionsRef}
-              className={classes.editButtons}
-            >
-              {hasDelegateAction && (
-                <Button
-                  data-size='sm'
-                  disabled={
-                    isActionLoading ||
-                    displayResourceAlert ||
-                    !rights.some((r) => r.checked === true) ||
-                    !hasUnsavedChanges
-                  }
-                  onClick={hasDirectAccess ? saveEditedRights : delegateChosenRights}
-                >
-                  {hasDirectAccess ? t('common.update_poa') : t('common.give_poa')}
-                </Button>
-              )}
-              {canRevoke && hasDirectAccess && !!toParty && (
-                <Button
-                  data-size='sm'
-                  variant={hasDelegateAction ? 'tertiary' : 'primary'}
-                  onClick={revokeResource}
-                  disabled={
-                    isActionLoading ||
-                    !rights.some((r) => r.delegated === true && r.inherited !== true)
-                  }
-                  color='danger'
-                >
-                  <MinusCircleIcon aria-hidden='true' />
-                  {t('common.delete_poa')}
-                </Button>
-              )}
-            </div>
-          </>
-        )}
-      </div>
-    </>
+      }
+      screenReaderMessage={screenReaderMessage}
+      isActionLoading={isActionLoading}
+      isActionSuccess={isActionSuccess}
+      isLoading={isLoading}
+      alert={
+        displayResourceAlert
+          ? {
+              error: technicalErrorDetails,
+              rightReasons: rights.map((r) => r.delegationReason),
+              resource,
+            }
+          : null
+      }
+      rights={
+        <RightsSection
+          rights={rights}
+          setRights={setRights}
+          undelegableActions={undelegableActions}
+          isDelegationCheckLoading={isDelegationCheckLoading}
+          toName={toName}
+          availableActions={availableActions}
+          delegationError={delegationError}
+          missingAccess={missingAccess && hasDelegateAction ? missingAccess : null}
+          hasAccessAndNoChanges={hasDirectAccess && !hasUnsavedChanges}
+          allAccessTitle={t('delegation_modal.instance_actions.access_to_all')}
+          actionDescription={t('delegation_modal.instance_actions.action_description')}
+        />
+      }
+      actions={
+        <DelegationActionButtons
+          showDelegate={!!hasDelegateAction}
+          hasExistingAccess={hasDirectAccess}
+          isDelegateDisabled={
+            isActionLoading ||
+            displayResourceAlert ||
+            !rights.some((r) => r.checked === true) ||
+            !hasUnsavedChanges
+          }
+          onDelegate={delegateChosenRights}
+          onUpdate={saveEditedRights}
+          showRevoke={canRevoke && hasDirectAccess && !!toParty}
+          isRevokeDisabled={
+            isActionLoading || !rights.some((r) => r.delegated === true && r.inherited !== true)
+          }
+          onRevoke={revokeResource}
+        />
+      }
+    />
   );
 };

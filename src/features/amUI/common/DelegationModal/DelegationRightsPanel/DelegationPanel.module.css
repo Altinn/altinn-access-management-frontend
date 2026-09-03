@@ -6,10 +6,6 @@
   padding-bottom: var(--ds-spacing-1);
 }
 
-.inboxButton {
-  width: fit-content;
-}
-
 .resourceAlert {
   margin-bottom: var(--ds-spacing-2);
 }

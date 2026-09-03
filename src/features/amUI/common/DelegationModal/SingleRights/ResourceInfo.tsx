@@ -1,37 +1,29 @@
-import * as React from 'react';
-import { Button, DsButton, DsParagraph, formatDisplayName } from '@altinn/altinn-components';
+import { DsButton, DsParagraph } from '@altinn/altinn-components';
 import { useTranslation } from 'react-i18next';
-import { MinusCircleIcon } from '@navikt/aksel-icons';
 
 import {
   useGetSingleRightsForRightholderQuery,
   type ServiceResource,
 } from '@/rtk/features/singleRights/singleRightsApi';
-import { PartyType } from '@/rtk/features/userInfoApi';
 import { useDelegateRights } from '@/resources/hooks/useDelegateRights';
 import { useUpdateResource } from '@/resources/hooks/useUpdateResource';
 import { useRevokeResource } from '@/resources/hooks/useRevokeResource';
-import { StatusMessageForScreenReader } from '@/components/StatusMessageForScreenReader/StatusMessageForScreenReader';
-import { useIsMobileOrSmaller } from '@/resources/utils/screensizeUtils';
-import { createErrorDetails } from '../../TechnicalErrorParagraphs/TechnicalErrorParagraphs';
 
 import { StatusSection } from '../../StatusSection/StatusSection';
-import { LoadingAnimation } from '../../LoadingAnimation/LoadingAnimation';
 import { useInheritedStatusInfo } from '../../useInheritedStatus';
 import { usePartyRepresentation } from '../../PartyRepresentationContext/PartyRepresentationContext';
-import { getMissingAccessMessage } from '../missingAccessUtils';
 import { useRightsSection } from '../utils/useRightsSection';
 import { DelegationAction } from '../EditModal';
+import {
+  DelegationActionButtons,
+  DelegationRightsPanel,
+  useDelegationPanelState,
+} from '../DelegationRightsPanel';
 import { ResourceHeading } from './ResourceHeading';
-import { ResourceInfoSkeleton } from './ResourceInfoSkeleton';
-import { ResourceAlert } from './ResourceAlert';
 import { RightsSection } from './RightsSection';
 import { isExpiredResource } from '../../ResourceList/utils';
 import { useSingleRightsDelegationRightsData } from './hooks/useSingleRightsDelegationRightsData';
 import { useSingleRightRequests } from './hooks/useSingleRightRequests';
-import { focusFirstEnabledButton, useRestoreFocusAfterSettled } from '../../RestoreFocus';
-
-import classes from './ResourceInfo.module.css';
 
 export interface ResourceInfoProps {
   resource: ServiceResource;
@@ -47,13 +39,11 @@ export const ResourceInfo = ({
   availableActions,
   toPartyName,
 }: ResourceInfoProps) => {
-  const isSmall = useIsMobileOrSmaller();
   const { t } = useTranslation();
   const { actingParty, fromParty, toParty } = usePartyRepresentation();
 
   const isSingleRightRequest = availableActions?.includes(DelegationAction.REQUEST);
   const hasDelegateAction = availableActions?.includes(DelegationAction.DELEGATE);
-  const hasApproveAction = availableActions?.includes(DelegationAction.APPROVE);
 
   const { data: resourceDelegations, isLoading: isResourceDelegationsLoading } =
     useGetSingleRightsForRightholderQuery(
@@ -71,7 +61,6 @@ export const ResourceInfo = ({
     hasAccess,
     isLoading: isRightsSectionLoading,
     isDelegationCheckLoading,
-    isDelegationCheckError,
     delegationCheckError,
     delegationCheckedActions,
     rightsMetaTechnicalErrorDetails,
@@ -109,20 +98,27 @@ export const ResourceInfo = ({
     },
   });
 
-  const rawMissingAccess = delegationCheckedActions
-    ? getMissingAccessMessage(
-        delegationCheckedActions,
-        t,
-        resource?.resourceOwnerName,
-        actingParty?.name,
-      )
-    : null;
-  const missingAccess = isActionLoading || delegationError ? null : rawMissingAccess;
-
-  const delegationCheckErrorDetails = isDelegationCheckError
-    ? createErrorDetails(delegationCheckError)
-    : null;
-  const technicalErrorDetails = rightsMetaTechnicalErrorDetails ?? delegationCheckErrorDetails;
+  const {
+    toName,
+    missingAccess,
+    technicalErrorDetails,
+    showMissingRightsStatus,
+    cannotDelegateHere,
+    cannotRequestRight,
+    displayResourceAlert,
+    screenReaderMessage,
+  } = useDelegationPanelState({
+    resource,
+    rights,
+    hasAccess,
+    availableActions,
+    toPartyName,
+    isActionLoading,
+    delegationError,
+    delegationCheckedRights: delegationCheckedActions,
+    delegationCheckError,
+    errorDetails: rightsMetaTechnicalErrorDetails,
+  });
 
   const inheritedStatus = useInheritedStatusInfo({
     permissions:
@@ -133,29 +129,7 @@ export const ResourceInfo = ({
     actingParty,
   });
 
-  const toName =
-    toPartyName ??
-    formatDisplayName({
-      fullName: toParty?.name ?? '',
-      type: toParty?.partyTypeName === PartyType.Organization ? 'company' : 'person',
-    });
-
-  const hasDelegableRights = rights.some((r) => r.delegable);
-  const showMissingRightsStatus =
-    !hasAccess && rights.length > 0 && !hasDelegableRights && !isSingleRightRequest;
-  const cannotDelegateHere = resource?.delegable === false && !isSingleRightRequest;
-  const cannotRequestRight = resource?.delegable === false && isSingleRightRequest;
-
-  const displayResourceAlert =
-    (isSingleRightRequest && resource?.delegable === false) ||
-    !!technicalErrorDetails ||
-    (hasApproveAction && !hasAccess && missingAccess) ||
-    ((hasDelegateAction || hasApproveAction) &&
-      !hasAccess &&
-      (isDelegationCheckError ||
-        resource?.delegable === false ||
-        (rights.length > 0 && !rights.some((r) => r.delegable === true))));
-
+  const isPendingRequest = hasPendingRequest(resource.identifier);
   const isLoadingSingleRightRequest = isLoadingRequest(resource.identifier);
 
   const isExpired = isExpiredResource(resource);
@@ -163,129 +137,93 @@ export const ResourceInfo = ({
     ? t('delegation_modal.expired_resource_description', { name: toName })
     : t('delegation_modal.expired_resource_request_description');
 
-  const actionsRef = React.useRef<HTMLDivElement>(null);
-  useRestoreFocusAfterSettled({
-    isSettled:
-      !isActionLoading &&
-      !isActionSuccess &&
-      !isRightsSectionLoading &&
-      !isResourceDelegationsLoading &&
-      !isLoadingSingleRightRequest,
-    requestWhen: isActionLoading || isLoadingSingleRightRequest,
-    onRestore: () => focusFirstEnabledButton(actionsRef.current),
-  });
-
   return (
-    <>
-      <StatusMessageForScreenReader politenessSetting='assertive'>
-        {delegationError ?? missingAccess ?? ''}
-      </StatusMessageForScreenReader>
-      <div>
-        <ResourceHeading resource={resource} />
-        {isActionLoading || isActionSuccess ? (
-          <LoadingAnimation
-            isLoading={isActionLoading}
-            displaySuccess={isActionSuccess}
+    <DelegationRightsPanel
+      header={<ResourceHeading resource={resource} />}
+      screenReaderMessage={screenReaderMessage}
+      isActionLoading={isActionLoading}
+      isActionSuccess={isActionSuccess}
+      isLoading={isRightsSectionLoading || isResourceDelegationsLoading}
+      isSecondaryActionLoading={isLoadingSingleRightRequest}
+      body={
+        <>
+          <StatusSection
+            userHasAccess={hasAccess}
+            showDelegationCheckWarning={showMissingRightsStatus}
+            inheritedStatus={inheritedStatus}
+            cannotDelegateHere={cannotDelegateHere}
+            cannotRequestRight={cannotRequestRight}
+            isPendingRequest={isPendingRequest}
           />
-        ) : isRightsSectionLoading || isResourceDelegationsLoading ? (
-          <ResourceInfoSkeleton />
-        ) : (
-          <>
-            <div
-              className={classes.resourceInfo}
-              data-size={isSmall ? 'xs' : 'md'}
+          {resource.description && <DsParagraph>{resource.description}</DsParagraph>}
+          {resource.rightDescription && <DsParagraph>{resource.rightDescription}</DsParagraph>}
+          {isExpired && <DsParagraph>{isExpiredDescription}</DsParagraph>}
+        </>
+      }
+      alert={
+        displayResourceAlert
+          ? {
+              error: technicalErrorDetails,
+              availableActions,
+              rightReasons: rights.map((r) => r.delegationReason),
+              resource,
+            }
+          : null
+      }
+      rights={
+        <RightsSection
+          rights={rights}
+          setRights={setRights}
+          undelegableActions={undelegableActions}
+          isDelegationCheckLoading={isDelegationCheckLoading}
+          toName={toName}
+          availableActions={availableActions}
+          delegationError={delegationError}
+          missingAccess={missingAccess && hasDelegateAction ? missingAccess : null}
+          hasAccessAndNoChanges={hasAccess && !hasUnsavedChanges}
+        />
+      }
+      actions={
+        <DelegationActionButtons
+          showDelegate={!!hasDelegateAction}
+          hasExistingAccess={hasAccess}
+          isDelegateDisabled={
+            isActionLoading ||
+            displayResourceAlert ||
+            !rights.some((r) => r.checked === true) ||
+            !hasUnsavedChanges
+          }
+          onDelegate={delegateChosenRights}
+          onUpdate={saveEditedRights}
+          showRevoke={hasAccess && !!toParty}
+          isRevokeDisabled={
+            isActionLoading || rights.length === 0 || rights.some((r) => r.inherited === true)
+          }
+          onRevoke={revokeResource}
+        >
+          {!hasAccess && !isPendingRequest && isSingleRightRequest && (
+            <DsButton
+              data-size='sm'
+              disabled={displayResourceAlert || isLoadingSingleRightRequest}
+              loading={isLoadingSingleRightRequest}
+              onClick={() => createRequest(resource)}
             >
-              <StatusSection
-                userHasAccess={hasAccess}
-                showDelegationCheckWarning={showMissingRightsStatus}
-                inheritedStatus={inheritedStatus}
-                cannotDelegateHere={cannotDelegateHere}
-                cannotRequestRight={cannotRequestRight}
-                isPendingRequest={hasPendingRequest(resource.identifier)}
-              />
-              {resource.description && <DsParagraph>{resource.description}</DsParagraph>}
-              {resource.rightDescription && <DsParagraph>{resource.rightDescription}</DsParagraph>}
-              {isExpired && <DsParagraph>{isExpiredDescription}</DsParagraph>}
-            </div>
-            {displayResourceAlert ? (
-              <ResourceAlert
-                error={technicalErrorDetails}
-                availableActions={availableActions}
-                rightReasons={rights.map((r) => r.delegationReason)}
-                resource={resource}
-                className={classes.resourceAlert}
-              />
-            ) : (
-              <RightsSection
-                rights={rights}
-                setRights={setRights}
-                undelegableActions={undelegableActions}
-                isDelegationCheckLoading={isDelegationCheckLoading}
-                toName={toName}
-                availableActions={availableActions}
-                delegationError={delegationError}
-                missingAccess={missingAccess && hasDelegateAction ? missingAccess : null}
-                hasAccessAndNoChanges={hasAccess && !hasUnsavedChanges}
-              />
-            )}
-            <div
-              ref={actionsRef}
-              className={classes.editButtons}
+              {t('common.request_poa')}
+            </DsButton>
+          )}
+          {isPendingRequest && isSingleRightRequest && (
+            <DsButton
+              data-size='sm'
+              disabled={isLoadingSingleRightRequest}
+              data-color='danger'
+              loading={isLoadingSingleRightRequest}
+              onClick={() => deleteRequest(resource)}
             >
-              {hasDelegateAction && (
-                <Button
-                  data-size='sm'
-                  disabled={
-                    isActionLoading ||
-                    !!displayResourceAlert ||
-                    !rights.some((r) => r.checked === true) ||
-                    !hasUnsavedChanges
-                  }
-                  onClick={hasAccess ? saveEditedRights : delegateChosenRights}
-                >
-                  {hasAccess ? t('common.update_poa') : t('common.give_poa')}
-                </Button>
-              )}
-              {hasAccess && toParty && (
-                <Button
-                  variant={hasDelegateAction ? 'tertiary' : 'primary'}
-                  onClick={revokeResource}
-                  disabled={
-                    isActionLoading ||
-                    rights.length === 0 ||
-                    rights.some((r) => r.inherited === true)
-                  }
-                  color='danger'
-                >
-                  <MinusCircleIcon aria-hidden='true' />
-                  {t('common.delete_poa')}
-                </Button>
-              )}
-              {!hasAccess && !hasPendingRequest(resource.identifier) && isSingleRightRequest && (
-                <DsButton
-                  data-size='sm'
-                  disabled={!!displayResourceAlert || isLoadingSingleRightRequest}
-                  loading={isLoadingSingleRightRequest}
-                  onClick={() => createRequest(resource)}
-                >
-                  {t('common.request_poa')}
-                </DsButton>
-              )}
-              {hasPendingRequest(resource.identifier) && isSingleRightRequest && (
-                <DsButton
-                  data-size='sm'
-                  disabled={isLoadingSingleRightRequest}
-                  data-color='danger'
-                  loading={isLoadingSingleRightRequest}
-                  onClick={() => deleteRequest(resource)}
-                >
-                  {t('delegation_modal.request.delete_request')}
-                </DsButton>
-              )}
-            </div>
-          </>
-        )}
-      </div>
-    </>
+              {t('delegation_modal.request.delete_request')}
+            </DsButton>
+          )}
+        </DelegationActionButtons>
+      }
+    />
   );
 };

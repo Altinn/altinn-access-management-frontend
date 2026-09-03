@@ -1,5 +1,6 @@
 import { DsSkeleton } from '@altinn/altinn-components';
 
+import panelClasses from '../DelegationRightsPanel/DelegationPanel.module.css';
 import classes from './ResourceInfo.module.css';
 
 export const ResourceInfoSkeleton = () => {
@@ -8,7 +9,7 @@ export const ResourceInfoSkeleton = () => {
       className={classes.skeletonContainer}
       aria-hidden='true'
     >
-      <div className={classes.resourceInfo}>
+      <div className={panelClasses.resourceInfo}>
         <DsSkeleton
           height={16}
           width='100%'
@@ -30,7 +31,7 @@ export const ResourceInfoSkeleton = () => {
         />
       </div>
 
-      <div className={classes.editButtons}>
+      <div className={panelClasses.editButtons}>
         <DsSkeleton
           height={40}
           width='140px'

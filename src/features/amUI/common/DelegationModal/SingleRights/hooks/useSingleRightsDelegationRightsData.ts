@@ -7,8 +7,8 @@ import {
   useGetResourceRightsQuery,
 } from '@/rtk/features/singleRights/singleRightsApi';
 import { usePartyRepresentation } from '../../../PartyRepresentationContext/PartyRepresentationContext';
-import { createErrorDetails } from '@/features/amUI/common/TechnicalErrorParagraphs/TechnicalErrorParagraphs';
 import { mapRightsToChipRights, type ChipRight } from '../../utils/rightsUtils';
+import { getRightsMetaErrorDetails } from '../../utils/rightsMetaError';
 import { useHasResourceCheck } from './useHasResourceCheck';
 import { getInheritedStatus } from '../../../useInheritedStatus';
 import { formatDisplayName } from '@altinn/altinn-components';
@@ -74,15 +74,11 @@ export const useSingleRightsDelegationRightsData = ({
     Array.isArray(rightsMeta) &&
     rightsMeta.length === 0;
 
-  const rightsMetaErrorDetails = isRightsMetaError ? createErrorDetails(rightsMetaError) : null;
-  const rightsMetaTechnicalErrorDetails = isRightsMetaEmpty
-    ? { status: 'empty response', time: new Date().toISOString() }
-    : isRightsMetaError
-      ? {
-          status: rightsMetaErrorDetails?.status ?? 'no status',
-          time: rightsMetaErrorDetails?.time ?? new Date().toISOString(),
-        }
-      : null;
+  const rightsMetaTechnicalErrorDetails = getRightsMetaErrorDetails({
+    isError: isRightsMetaError,
+    isEmpty: isRightsMetaEmpty,
+    error: rightsMetaError,
+  });
 
   useEffect(() => {
     if (!isResourceRightsFetching) {

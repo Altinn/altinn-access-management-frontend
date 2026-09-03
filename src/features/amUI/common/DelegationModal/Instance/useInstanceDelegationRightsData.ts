@@ -9,6 +9,7 @@ import { createErrorDetails } from '@/features/amUI/common/TechnicalErrorParagra
 
 import { usePartyRepresentation } from '../../PartyRepresentationContext/PartyRepresentationContext';
 import { mapRightsToChipRights, type ChipRight } from '../utils/rightsUtils';
+import { getRightsMetaErrorDetails } from '../utils/rightsMetaError';
 
 export const useInstanceDelegationRightsData = ({
   resourceId,
@@ -87,16 +88,15 @@ export const useInstanceDelegationRightsData = ({
     Array.isArray(rightsMeta) &&
     rightsMeta.length === 0;
 
-  const rightsMetaTechnicalErrorDetails = useMemo(() => {
-    if (!isRightsMetaError && !isRightsMetaEmpty) {
-      return null;
-    }
-    const errorDetails = createErrorDetails(rightsMetaError);
-    return {
-      status: errorDetails?.status ?? (isRightsMetaEmpty ? 'empty response' : 'no status'),
-      time: errorDetails?.time ?? new Date().toISOString(),
-    };
-  }, [isRightsMetaError, isRightsMetaEmpty, rightsMetaError]);
+  const rightsMetaTechnicalErrorDetails = useMemo(
+    () =>
+      getRightsMetaErrorDetails({
+        isError: isRightsMetaError,
+        isEmpty: isRightsMetaEmpty,
+        error: rightsMetaError,
+      }),
+    [isRightsMetaError, isRightsMetaEmpty, rightsMetaError],
+  );
 
   const instanceRightsErrorDetails = useMemo(
     () => createErrorDetails(instanceRightsError),

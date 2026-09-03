@@ -10,8 +10,8 @@ import { StatusSection } from '../../StatusSection/StatusSection';
 import { TechnicalErrorParagraphs } from '../../TechnicalErrorParagraphs';
 import { ValidationErrorMessage } from '../../ValidationErrorMessage';
 
+import panelClasses from '../DelegationRightsPanel/DelegationPanel.module.css';
 import { ResourceHeading } from './ResourceHeading';
-import classes from './ResourceInfo.module.css';
 
 export interface ClientResourceInfoProps {
   resource: ServiceResource;
@@ -53,7 +53,7 @@ export const ClientResourceInfo = ({
       ) : (
         <>
           <div
-            className={classes.resourceInfo}
+            className={panelClasses.resourceInfo}
             data-size={isSmall ? 'xs' : 'md'}
           >
             {!!error && (
@@ -92,7 +92,7 @@ export const ClientResourceInfo = ({
             {resource.rightDescription && <DsParagraph>{resource.rightDescription}</DsParagraph>}
           </div>
 
-          <div className={classes.editButtons}>
+          <div className={panelClasses.editButtons}>
             {canRevoke && (
               <DsButton
                 data-color='danger'
