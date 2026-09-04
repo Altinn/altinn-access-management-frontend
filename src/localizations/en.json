@@ -976,6 +976,7 @@
     "page_title": "Powers of attorney overview - Altinn",
     "heading": "Powers of attorney overview for {{name}}",
     "no_access_title": "You do not have access to this page",
+    "show_users_with_access": "Show users with power of attorney",
     "packages_tab": {
       "description": "Select an area to view the associated access packages and who has power of attorney for them.",
       "info_box_icon_label": "Information about access packages",

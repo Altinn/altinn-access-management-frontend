@@ -1,12 +1,14 @@
-import { AccessAreaListItem, Badge, BadgeProps } from '@altinn/altinn-components';
+import { AccessAreaListItem, Badge } from '@altinn/altinn-components';
+import { useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { useIsMobileOrSmaller } from '@/resources/utils/screensizeUtils';
 
 import type { ExtendedAccessArea } from './useAreaPackageList';
-import { PermissionBadge } from './PermissionBadge';
 import { isCriticalAndUndelegated, UndelegatedPackageWarning } from './UndelegatedPackageWarning';
 import { PartyType } from '@/rtk/features/userInfoApi';
+import { usePackagePermissionOverview } from './usePackagePermissionOverview';
+import { PermissionsBadge } from '../PermissionsBadge/PermissionsBadge';
 
 interface AreaItemProps {
   area: ExtendedAccessArea;
@@ -32,9 +34,12 @@ export const AreaItem = ({
   const { t } = useTranslation();
   const isSm = useIsMobileOrSmaller();
 
-  const permissions = area.packages.assigned
-    .flatMap((pkg) => pkg.permissions)
-    .filter((p) => p !== undefined);
+  const permissions = useMemo(
+    () => area.packages.assigned.flatMap((pkg) => pkg.permissions).filter((p) => p !== undefined),
+    [area.packages.assigned],
+  );
+
+  const { permissionsOverview } = usePackagePermissionOverview({ permissions });
 
   const showPackagesCountBadge = !isSm && showPackagesCount;
   const showPermissionsBadge = showPermissions;
@@ -61,7 +66,7 @@ export const AreaItem = ({
                 color={colorTheme}
               />
             )}
-            {showPermissionsBadge && <PermissionBadge permissions={permissions} />}
+            {showPermissionsBadge && <PermissionsBadge permissions={permissionsOverview} />}
             {showUndelegatedPackageWarning && <UndelegatedPackageWarning />}
           </>
         ) : undefined

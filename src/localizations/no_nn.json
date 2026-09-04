@@ -972,6 +972,7 @@
     "page_title": "Fullmaktsoversikt - Altinn",
     "heading": "Fullmaktsoversikt for {{name}}",
     "no_access_title": "Du har ikkje tilgang til denne sida",
+    "show_users_with_access": "Vis brukarar som har fullmakt",
     "packages_tab": {
       "description": "Vel eit område for å sjå tilhøyrande tilgangspakkar og kven som har fullmakt til dei.",
       "info_box_icon_label": "Informasjon om tilgangspakkar",
