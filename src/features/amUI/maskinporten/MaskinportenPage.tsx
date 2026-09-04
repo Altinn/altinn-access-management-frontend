@@ -3,21 +3,21 @@ import { Navigate } from 'react-router';
 import { useTranslation } from 'react-i18next';
 import { formatDisplayName } from '@altinn/altinn-components';
 import { DatabaseIcon, PersonGroupIcon } from '@navikt/aksel-icons';
+
 import { AmTabs } from '../common/AmTabs/AmTabs';
+import { Breadcrumbs } from '../common/Breadcrumbs/Breadcrumbs';
+import { PageLayoutWrapper } from '../common/PageLayoutWrapper';
+import { PartyRepresentationProvider } from '../common/PartyRepresentationContext/PartyRepresentationContext';
+import ReporteePageHeading from '../common/ReporteePageHeading';
+
+import { ConsumersTab } from './ConsumersTab';
+import { SuppliersTab } from './SuppliersTab';
 
 import { PageWrapper } from '@/components/PageWrapper/PageWrapper';
 import { getCookie } from '@/resources/Cookie/CookieMethods';
 import { useDocumentTitle } from '@/resources/hooks/useDocumentTitle';
 import { useGetIsMaskinportenAdminQuery, useGetReporteeQuery } from '@/rtk/features/userInfoApi';
-
-import { Breadcrumbs } from '../common/Breadcrumbs/Breadcrumbs';
-import { PageLayoutWrapper } from '../common/PageLayoutWrapper';
-import { PartyRepresentationProvider } from '../common/PartyRepresentationContext/PartyRepresentationContext';
 import { useTabState } from '@/resources/hooks';
-
-import { ConsumersTab } from './ConsumersTab';
-import { SuppliersTab } from './SuppliersTab';
-import ReporteePageHeading from '../common/ReporteePageHeading';
 
 const maskinportenTabs = ['suppliers', 'consumers'] as const;
 

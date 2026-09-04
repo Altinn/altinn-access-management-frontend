@@ -9,20 +9,20 @@ import {
   TimelineSegment,
 } from '@altinn/altinn-components';
 
-import { useDocumentTitle } from '@/resources/hooks/useDocumentTitle';
-import { PageWrapper } from '@/components';
-
 import { PageLayoutWrapper } from '../../common/PageLayoutWrapper';
 import { ConsentDetails } from '../components/ConsentDetails/ConsentDetails';
-
-import classes from './ConsentHistoryPage.module.css';
-import { useGetConsentLogQuery } from '@/rtk/features/consentApi';
-import { getCookie } from '@/resources/Cookie/CookieMethods';
-import { ConsentTimeline } from './ConsentTimeline';
-import { useGetIsAdminQuery, useGetReporteeQuery } from '@/rtk/features/userInfoApi';
-import { hasConsentPermission } from '@/resources/utils/permissionUtils';
 import { Breadcrumbs } from '../../common/Breadcrumbs/Breadcrumbs';
 import { ReporteePageHeading } from '../../common/ReporteePageHeading';
+
+import classes from './ConsentHistoryPage.module.css';
+import { ConsentTimeline } from './ConsentTimeline';
+
+import { useDocumentTitle } from '@/resources/hooks/useDocumentTitle';
+import { PageWrapper } from '@/components';
+import { useGetConsentLogQuery } from '@/rtk/features/consentApi';
+import { getCookie } from '@/resources/Cookie/CookieMethods';
+import { useGetIsAdminQuery, useGetReporteeQuery } from '@/rtk/features/userInfoApi';
+import { hasConsentPermission } from '@/resources/utils/permissionUtils';
 import { useGetPartyFromLoggedInUserQuery } from '@/rtk/features/lookupApi';
 
 export const ConsentHistoryPage = () => {

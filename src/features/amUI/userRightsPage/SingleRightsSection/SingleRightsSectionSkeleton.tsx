@@ -1,7 +1,8 @@
 import { DsSkeleton } from '@altinn/altinn-components';
 
-import classes from './SingleRightsSection.module.css';
 import { SkeletonResourceList } from '../../common/ResourceList/SkeletonResourceList';
+
+import classes from './SingleRightsSection.module.css';
 
 export const SingleRightsSectionSkeleton = () => {
   return (

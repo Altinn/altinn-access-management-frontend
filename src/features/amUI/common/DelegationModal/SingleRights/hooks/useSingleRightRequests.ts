@@ -1,4 +1,7 @@
 import { useState, useEffect } from 'react';
+import { useSnackbar } from '@altinn/altinn-components';
+import { useTranslation } from 'react-i18next';
+
 import {
   useCreateResourceRequestMutation,
   useGetSentRequestsQuery,
@@ -8,9 +11,7 @@ import {
   getRequestPartyQueryParams,
   getSingleRightRequestId,
 } from '@/resources/utils/singleRightRequestUtils';
-import { useSnackbar } from '@altinn/altinn-components';
-import { useTranslation } from 'react-i18next';
-import { ServiceResource } from '@/rtk/features/singleRights/singleRightsApi';
+import { type ServiceResource } from '@/rtk/features/singleRights/singleRightsApi';
 
 interface UseSingleRightRequestsProps {
   canRequestRights?: boolean;

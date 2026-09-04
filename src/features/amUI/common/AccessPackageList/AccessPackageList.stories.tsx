@@ -2,12 +2,12 @@ import type { Meta, StoryObj } from '@storybook/react-vite';
 import { Provider } from 'react-redux';
 import { RootProvider, Snackbar } from '@altinn/altinn-components';
 
-import store from '@/rtk/app/store';
-
 import { PartyRepresentationProvider } from '../PartyRepresentationContext/PartyRepresentationContext';
 import { DelegationAction } from '../DelegationModal/EditModal';
 
 import { AccessPackageList } from './AccessPackageList';
+
+import store from '@/rtk/app/store';
 
 type AccessPackageListPropsAndCustomArgs = React.ComponentProps<typeof AccessPackageList>;
 

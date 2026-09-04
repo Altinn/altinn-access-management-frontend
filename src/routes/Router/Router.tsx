@@ -1,6 +1,10 @@
 import { createBrowserRouter, createRoutesFromElements, Route } from 'react-router';
 import * as React from 'react';
 
+import { GeneralPath, amUIPath, SystemUserPath, ConsentPath } from '../paths';
+
+import { RootLayout } from './RootLayout';
+
 import { ErrorPage, ReporteeChangeErrorPage } from '@/sites/ErrorPage';
 import { UserRightsPage } from '@/features/amUI/userRightsPage/UserRightsPage';
 import { UsersPage } from '@/features/amUI/users/UsersPage';
@@ -18,8 +22,6 @@ import { ActiveConsentsPage } from '@/features/amUI/consent/ActiveConsentsPage/A
 import { ConsentHistoryPage } from '@/features/amUI/consent/ConsentHistoryPage/ConsentHistoryPage';
 import { PoaOverviewPage } from '@/features/amUI/poaOverview/PoaOverviewPage';
 import { InstanceDetailPage } from '@/features/amUI/InstanceDetailPage/InstanceDetailPage';
-
-import { GeneralPath, amUIPath, SystemUserPath, ConsentPath } from '../paths';
 import { PackagePoaDetailsPage } from '@/features/amUI/packagePoaDetailsPage/PackagePoaDetailsPage';
 import { SettingsPage } from '@/features/amUI/settings/SettingsPage';
 import { LandingPage } from '@/features/amUI/landingPage/LandingPage';
@@ -33,7 +35,6 @@ import { AddAltinn2AccountPage } from '@/features/amUI/altinn2Account/AddAltinn2
 import { MaskinportenPage } from '@/features/amUI/maskinporten/MaskinportenPage';
 import { SupplierPage } from '@/features/amUI/maskinporten/SupplierPage';
 import { ConsumerPage } from '@/features/amUI/maskinporten/ConsumerPage';
-import { RootLayout } from './RootLayout';
 
 export const Router = createBrowserRouter(
   createRoutesFromElements(

@@ -1,12 +1,12 @@
 import { forwardRef, useState } from 'react';
 import { DsDialog } from '@altinn/altinn-components';
 
-import type { ServiceResource } from '@/rtk/features/singleRights/singleRightsApi';
-import { getActionError, type ActionError } from '@/resources/hooks/useActionError';
-
 import dialogClasses from '../DelegationModal.module.css';
 
 import { ClientResourceInfo } from './ClientResourceInfo';
+
+import type { ServiceResource } from '@/rtk/features/singleRights/singleRightsApi';
+import { getActionError, type ActionError } from '@/resources/hooks/useActionError';
 
 const animationDuration = 2000;
 

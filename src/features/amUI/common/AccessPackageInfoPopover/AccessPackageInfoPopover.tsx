@@ -1,6 +1,8 @@
 import { useTranslation } from 'react-i18next';
 import { DsLink, DsParagraph } from '@altinn/altinn-components';
+
 import { HelpText } from '../HelpText/HelpText';
+
 import classes from './AccessPackageInfoPopover.module.css';
 
 export const AccessPackageInfoPopover = () => {

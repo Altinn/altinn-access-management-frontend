@@ -85,7 +85,6 @@ test.describe('Delegate access pacakge from Org-A(Avgiver) to Org-B(Rettighetsha
 
   // Doesnt test anything? Skipping for now.
   test.skip('Org-C revokes all delegated rights from Org-D', async ({
-    delegation,
     page,
     login,
     aktorvalgHeader,

@@ -1,9 +1,10 @@
 // import { ListItemHeader } from '@altinn/altinn-components';
 
 import { DsSkeleton } from '@altinn/altinn-components';
-import { useIsTabletOrSmaller } from '@/resources/utils/screensizeUtils';
 
 import classes from './UserPageHeader.module.css';
+
+import { useIsTabletOrSmaller } from '@/resources/utils/screensizeUtils';
 
 export const UserPageHeaderSkeleton = () => {
   const isSmallScreen = useIsTabletOrSmaller();

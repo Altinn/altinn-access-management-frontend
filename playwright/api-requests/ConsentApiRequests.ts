@@ -1,7 +1,9 @@
 import { randomUUID } from 'crypto';
+
+import { env, addTimeToNowUtc } from 'playwright/util/helper';
+
 import { Token } from './Token';
 import { MaskinportenToken } from './MaskinportenToken';
-import { env, addTimeToNowUtc } from 'playwright/util/helper';
 
 export class ConsentApiRequests {
   private tokenClass: Token;
@@ -27,7 +29,7 @@ export class ConsentApiRequests {
     getToken: () => Promise<string>,
   ): Promise<TResponse> {
     const baseUrl = env('API_BASE_URL');
-    let url = baseUrl + endpoint;
+    const url = baseUrl + endpoint;
 
     const token = await getToken();
 
@@ -131,7 +133,7 @@ export class ConsentApiRequests {
     const endpoint = '/accessmanagement/api/v1/enterprise/consentrequests';
     const scopes = this.consentRequestScopes;
 
-    var resp = await this.sendPostRequest<typeof payload, { viewUri: string }>(
+    const resp = await this.sendPostRequest<typeof payload, { viewUri: string }>(
       payload,
       endpoint,
       scopes,
@@ -185,7 +187,7 @@ export class ConsentApiRequests {
     // Create MaskinportenToken instance to fetch the access token
     const maskinportenToken = new MaskinportenToken(clientIdEnv, jwkEnv);
 
-    var resp = await this.sendPostRequestWithMaskinporten<typeof payload, { viewUri: string }>(
+    const resp = await this.sendPostRequestWithMaskinporten<typeof payload, { viewUri: string }>(
       payload,
       endpoint,
       scopes,

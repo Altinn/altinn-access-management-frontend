@@ -1,5 +1,6 @@
-import { Token } from './Token';
 import { env } from 'playwright/util/helper';
+
+import { Token } from './Token';
 
 export class EnduserConnection {
   private tokenClass: Token;
@@ -147,7 +148,7 @@ export class EnduserConnection {
   public async deleteConnection(pid: string, from: string, toList: Array<string>) {
     const fromUuid = await this.tokenClass.getPartyUuid(from);
     const token = await this.tokenClass.getPersonalTokenByPid(pid);
-    let responses = new Array<Response>();
+    const responses = new Array<Response>();
 
     await Promise.all(
       toList.map(async (to) => {
@@ -211,7 +212,7 @@ export class EnduserConnection {
       personidentifier: toPid,
       lastName: toLastName,
     };
-    var responses = new Array<Response>();
+    const responses = new Array<Response>();
 
     await Promise.all(
       packageNames.map(async (packageName) => {
@@ -262,7 +263,7 @@ export class EnduserConnection {
     fromUuid = fromUuid || (await this.tokenClass.getPartyUuid(from));
     toUuid = toUuid || (await this.tokenClass.getPartyUuid(toOrgNo));
     const token = await this.tokenClass.getPersonalTokenByPid(pid);
-    var responses = new Array<Response>();
+    const responses = new Array<Response>();
 
     for (const packageName of packageNames) {
       const url = `${env('API_BASE_URL')}/accessmanagement/api/v1/enduser/connections/accesspackages?party=${fromUuid}&from=${fromUuid}&to=${toUuid}&package=${packageName}`;

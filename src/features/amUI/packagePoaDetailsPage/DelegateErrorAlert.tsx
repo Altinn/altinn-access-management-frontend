@@ -2,14 +2,14 @@ import { DsAlert, DsButton, DsHeading } from '@altinn/altinn-components';
 import { XMarkIcon } from '@navikt/aksel-icons';
 import { useTranslation } from 'react-i18next';
 
-import { PartyType } from '@/rtk/features/userInfoApi';
-import { type Party } from '@/rtk/features/lookupApi';
-import { type ActionError } from '@/resources/hooks/useActionError';
-
 import { ValidationErrorMessage } from '../common/ValidationErrorMessage';
 import { TechnicalErrorParagraphs } from '../common/TechnicalErrorParagraphs/TechnicalErrorParagraphs';
 
 import pageClasses from './PackagePoaDetailsPage.module.css';
+
+import { PartyType } from '@/rtk/features/userInfoApi';
+import { type Party } from '@/rtk/features/lookupApi';
+import { type ActionError } from '@/resources/hooks/useActionError';
 
 interface DelegateErrorAlertProps {
   error: ActionError;

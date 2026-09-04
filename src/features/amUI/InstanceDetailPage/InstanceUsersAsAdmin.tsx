@@ -9,11 +9,13 @@ import {
   createErrorDetails,
   TechnicalErrorParagraphs,
 } from '../common/TechnicalErrorParagraphs/TechnicalErrorParagraphs';
-import { ConnectionUserType, useGetRightHoldersQuery } from '@/rtk/features/connectionApi';
 import { usePartyRepresentation } from '../common/PartyRepresentationContext/PartyRepresentationContext';
-import { useGetInstancesQuery } from '@/rtk/features/instanceApi';
 import type { UserActionTarget } from '../common/UserSearch/types';
+
 import { AddUserButton } from './AddUserModal';
+
+import { useGetInstancesQuery } from '@/rtk/features/instanceApi';
+import { ConnectionUserType, useGetRightHoldersQuery } from '@/rtk/features/connectionApi';
 
 interface InstanceUsersAsAdminProps {
   resourceId: string;

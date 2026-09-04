@@ -1,10 +1,10 @@
 import { createApi } from '@reduxjs/toolkit/query/react';
-import { createBaseQuery } from '@/rtk/app/baseQuery';
-
-import { getCookie } from '@/resources/Cookie/CookieMethods';
 
 import type { Party } from './lookupApi';
-import { Connection, RoleInfo } from './connectionApi';
+import { type Connection, type RoleInfo } from './connectionApi';
+
+import { createBaseQuery } from '@/rtk/app/baseQuery';
+import { getCookie } from '@/resources/Cookie/CookieMethods';
 
 export interface ExtendedUser extends Omit<User, 'children'> {
   roles: RoleInfo[];

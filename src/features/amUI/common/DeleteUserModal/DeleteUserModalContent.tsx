@@ -13,13 +13,6 @@ import { Trans, useTranslation } from 'react-i18next';
 import { useDispatch } from 'react-redux';
 import { Link, useLocation, useNavigate } from 'react-router';
 
-import { amUIPath } from '@/routes/paths';
-import { Entity } from '@/dataObjects/dtos/Common';
-import { accessPackageApi } from '@/rtk/features/accessPackageApi';
-import { useRemoveRightHolderMutation } from '@/rtk/features/connectionApi';
-import { roleApi } from '@/rtk/features/roleApi';
-import { PartyType } from '@/rtk/features/userInfoApi';
-
 import { LoadingAnimation } from '../LoadingAnimation/LoadingAnimation';
 import { handleSelectAccount } from '../PageLayoutWrapper/useHeader';
 import { usePartyRepresentation } from '../PartyRepresentationContext/PartyRepresentationContext';
@@ -40,6 +33,13 @@ import {
   VIA_ROLE_REASON,
   type NonDeletableReason,
 } from './deletionModalUtils';
+
+import { amUIPath } from '@/routes/paths';
+import { type Entity } from '@/dataObjects/dtos/Common';
+import { accessPackageApi } from '@/rtk/features/accessPackageApi';
+import { useRemoveRightHolderMutation } from '@/rtk/features/connectionApi';
+import { roleApi } from '@/rtk/features/roleApi';
+import { PartyType } from '@/rtk/features/userInfoApi';
 
 export interface DeleteUserModalContentProps {
   status: DeletionStatus;

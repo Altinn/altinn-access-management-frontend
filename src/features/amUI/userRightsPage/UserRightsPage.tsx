@@ -1,10 +1,7 @@
 import * as React from 'react';
 import { useTranslation } from 'react-i18next';
 import { useParams } from 'react-router';
-
-import { getCookie } from '@/resources/Cookie/CookieMethods';
-import { amUIPath } from '@/routes/paths';
-import { PageWrapper } from '@/components';
+import { formatDisplayName } from '@altinn/altinn-components';
 
 import { PageContainer } from '../common/PageContainer/PageContainer';
 import { PageLayoutWrapper } from '../common/PageLayoutWrapper';
@@ -16,18 +13,21 @@ import {
   usePartyRepresentation,
 } from '../common/PartyRepresentationContext/PartyRepresentationContext';
 import { DeleteUserModal } from '../common/DeleteUserModal/DeleteUserModal';
+import { Breadcrumbs } from '../common/Breadcrumbs/Breadcrumbs';
+import { GuardianshipSection } from '../common/GuardianshipSection/GuardianshipSection';
 
 import { AccessPackageSection } from './AccessPackageSection/AccessPackageSection';
 import { SingleRightsSection } from './SingleRightsSection/SingleRightsSection';
 import { RoleSection } from './RoleSection/RoleSection';
 import { InstanceSection } from './InstanceSection/InstanceSection';
+import { UserRightsPageSkeleton } from './UserRightsPageSkeleton';
+
 import { PartyType, useGetIsHovedadminQuery } from '@/rtk/features/userInfoApi';
 import { useGetPartyFromLoggedInUserQuery } from '@/rtk/features/lookupApi';
-import { UserRightsPageSkeleton } from './UserRightsPageSkeleton';
-import { Breadcrumbs } from '../common/Breadcrumbs/Breadcrumbs';
-import { formatDisplayName } from '@altinn/altinn-components';
 import { useDocumentTitle } from '@/resources/hooks/useDocumentTitle';
-import { GuardianshipSection } from '../common/GuardianshipSection/GuardianshipSection';
+import { PageWrapper } from '@/components';
+import { amUIPath } from '@/routes/paths';
+import { getCookie } from '@/resources/Cookie/CookieMethods';
 import { useBackUrl } from '@/resources/hooks/useBackUrl';
 
 export const UserRightsPage = () => {

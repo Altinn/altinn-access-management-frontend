@@ -1,8 +1,10 @@
-import { getAltinnStartPageUrl } from '@/resources/utils/pathUtils';
 import type { AccountSelectorProps, GlobalHeaderProps } from '@altinn/altinn-components';
 import { useAccountSelector } from '@altinn/altinn-components';
-import { useGlobalMenu } from './useGlobalMenu';
 import { useTranslation } from 'react-i18next';
+import { useEffect, useState } from 'react';
+
+import { useGlobalMenu } from './useGlobalMenu';
+
 import {
   useGetReporteeQuery,
   useGetUserProfileQuery,
@@ -12,7 +14,7 @@ import {
   useRemoveFavoriteActorUuidMutation,
   useUpdateShowDeletedMutation,
 } from '@/rtk/features/userInfoApi';
-import { useEffect, useState } from 'react';
+import { getAltinnStartPageUrl } from '@/resources/utils/pathUtils';
 import { useUpdateSelectedLanguageMutation } from '@/rtk/features/settingsApi';
 import {
   redirectToChangeReporteeAndRedirect,
@@ -112,8 +114,6 @@ export const useHeader = ({
     document.documentElement.lang = languageCode;
   }, [languageCode]);
 
-  let header: GlobalHeaderProps;
-
   // For new header
   const accountSelectorData = useAccountSelector({
     languageCode: languageCode,
@@ -146,7 +146,7 @@ export const useHeader = ({
     forceOpenFullScreen: shouldOpenAccountMenu,
   };
 
-  header = {
+  const header: GlobalHeaderProps = {
     locale: {
       title: t('header.locale_title'),
       options: [

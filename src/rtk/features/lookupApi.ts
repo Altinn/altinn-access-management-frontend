@@ -1,9 +1,9 @@
 import { createApi } from '@reduxjs/toolkit/query/react';
-import { createBaseQuery } from '@/rtk/app/baseQuery';
-
-import { getCookie } from '@/resources/Cookie/CookieMethods';
 
 import type { PartyType } from './userInfoApi';
+
+import { createBaseQuery } from '@/rtk/app/baseQuery';
+import { getCookie } from '@/resources/Cookie/CookieMethods';
 
 export type UserProfile = {
   userId: string;

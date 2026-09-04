@@ -1,10 +1,13 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { DsAlert, DsListItem, DsListUnordered } from '@altinn/altinn-components';
+
 import type { ProblemDetail, SystemUserAccessPackage } from '../../types';
-import classes from './DelegationCheckError.module.css';
 import { mapErrorCodeToErrorMessage } from '../../errorHandling';
-import { ServiceResource } from '@/rtk/features/singleRights/singleRightsApi';
+
+import classes from './DelegationCheckError.module.css';
+
+import { type ServiceResource } from '@/rtk/features/singleRights/singleRightsApi';
 
 interface DelegationCheckErrorProps {
   defaultError: string;

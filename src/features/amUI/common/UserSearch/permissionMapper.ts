@@ -1,8 +1,8 @@
-import type { Permissions } from '@/dataObjects/dtos/accessPackage';
-import type { Entity } from '@/dataObjects/dtos/Common';
-
 import { addRole, buildSortKey, normalizeType } from './mapperUtils';
 import type { UserSearchNode } from './types';
+
+import type { Permissions } from '@/dataObjects/dtos/accessPackage';
+import type { Entity } from '@/dataObjects/dtos/Common';
 
 const mapEntityToUserSearchNode = (entity: Entity, isInherited: boolean): UserSearchNode => ({
   id: entity.id,

@@ -11,21 +11,24 @@ import {
 } from '@altinn/altinn-components';
 import { useTranslation } from 'react-i18next';
 import { CheckmarkCircleIcon, ChevronRightIcon, CircleSlashIcon } from '@navikt/aksel-icons';
+
 import type { Request, ProcessedStatus } from '../types';
-import type { AccessPackage } from '@/rtk/features/accessPackageApi';
-import type { ServiceResource } from '@/rtk/features/singleRights/singleRightsApi';
 import { ResourceList } from '../../common/ResourceList/ResourceList';
 import { RequestResourceDetail } from '../RequestReviewModal/RequestResourceDetail';
 import { RequestPackageDetail } from '../RequestReviewModal/RequestPackageDetail';
 import { useRestoreFocus, useRestoreFocusTarget } from '../../common/RestoreFocus';
 import { TwoStepDialog } from '../../common/TwoStepDialog';
-import { amUIPath } from '@/routes/paths';
 import classes from '../RequestReviewModal/RequestReviewModal.module.css';
+
 import {
   useHandledRequests,
   type HandledDirection,
   type HandledResourceItem,
 } from './useHandledRequests';
+
+import { amUIPath } from '@/routes/paths';
+import type { ServiceResource } from '@/rtk/features/singleRights/singleRightsApi';
+import type { AccessPackage } from '@/rtk/features/accessPackageApi';
 
 interface HandledRequestModalContentProps {
   modalRef: RefObject<HTMLDialogElement | null>;

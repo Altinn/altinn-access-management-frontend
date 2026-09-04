@@ -1,8 +1,5 @@
 import { useRef, useState } from 'react';
 
-import type { Role } from '@/rtk/features/roleApi';
-import type { ActionError } from '@/resources/hooks/useActionError';
-
 import { RoleInfoModal } from '../common/DelegationModal/RoleInfoModal';
 import { RoleList, ROLE_LIST_HEADING_ID } from '../common/RoleList/RoleList';
 import { usePartyRepresentation } from '../common/PartyRepresentationContext/PartyRepresentationContext';
@@ -12,11 +9,10 @@ import {
   useRestoreFocus,
 } from '../common/RestoreFocus';
 
-interface ReporteeRoleSectionProps {
-  numberOfAccesses?: number;
-}
+import type { ActionError } from '@/resources/hooks/useActionError';
+import type { Role } from '@/rtk/features/roleApi';
 
-export const ReporteeRoleSection = ({ numberOfAccesses }: ReporteeRoleSectionProps) => {
+export const ReporteeRoleSection = () => {
   const modalRef = useRef<HTMLDialogElement>(null);
   const [modalItem, setModalItem] = useState<Role | undefined>(undefined);
   const [deleteError, setDeleteError] = useState<unknown>(null);

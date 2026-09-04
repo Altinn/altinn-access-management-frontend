@@ -1,5 +1,7 @@
 import { useRef, useEffect } from 'react';
+
 import type { Request } from '../types';
+
 import { HandledRequestModalContent } from './HandledRequestModalContent';
 import type { HandledDirection } from './useHandledRequests';
 

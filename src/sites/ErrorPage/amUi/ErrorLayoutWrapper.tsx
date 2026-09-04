@@ -1,9 +1,10 @@
+import { type LanguageCode, Layout, RootProvider, useConsent } from '@altinn/altinn-components';
+import { useTranslation } from 'react-i18next';
+import { useLocation } from 'react-router';
+
 import { useFooter } from '@/features/amUI/common/PageLayoutWrapper/useFooter';
 import { useHeader } from '@/features/amUI/common/PageLayoutWrapper/useHeader';
 import { GeneralPath } from '@/routes/paths';
-import { LanguageCode, Layout, RootProvider, useConsent } from '@altinn/altinn-components';
-import { useTranslation } from 'react-i18next';
-import { useLocation } from 'react-router';
 
 export const ErrorLayoutWrapper = ({
   hideAccountSelector = true,

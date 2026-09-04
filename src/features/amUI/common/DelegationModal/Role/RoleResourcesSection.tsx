@@ -2,10 +2,10 @@ import { useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 import { DsHeading } from '@altinn/altinn-components';
 
+import { ResourceList } from '../../ResourceList/ResourceList';
+
 import type { PackageResource } from '@/rtk/features/accessPackageApi';
 import type { RoleResourceMetadata } from '@/rtk/features/roleApi';
-
-import { ResourceList } from '../../ResourceList/ResourceList';
 
 interface RoleResourcesSectionProps {
   roleResources?: RoleResourceMetadata[];

@@ -1,14 +1,14 @@
 import { useEffect, useMemo, useState } from 'react';
 
+import { usePartyRepresentation } from '../../PartyRepresentationContext/PartyRepresentationContext';
+import { mapRightsToChipRights, type ChipRight } from '../utils/rightsUtils';
+
 import {
   useInstanceDelegationCheckQuery,
   useGetInstanceRightsQuery,
 } from '@/rtk/features/instanceApi';
 import { useGetResourceRightsMetaQuery } from '@/rtk/features/singleRights/singleRightsApi';
 import { createErrorDetails } from '@/features/amUI/common/TechnicalErrorParagraphs/TechnicalErrorParagraphs';
-
-import { usePartyRepresentation } from '../../PartyRepresentationContext/PartyRepresentationContext';
-import { mapRightsToChipRights, type ChipRight } from '../utils/rightsUtils';
 
 export const useInstanceDelegationRightsData = ({
   resourceId,

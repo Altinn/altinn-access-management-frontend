@@ -11,11 +11,13 @@ import {
   createErrorDetails,
   TechnicalErrorParagraphs,
 } from '../common/TechnicalErrorParagraphs/TechnicalErrorParagraphs';
-import { ConnectionUserType, useGetSimplifiedConnectionsQuery } from '@/rtk/features/connectionApi';
 import { usePartyRepresentation } from '../common/PartyRepresentationContext/PartyRepresentationContext';
-import { useGetInstanceUsersQuery } from '@/rtk/features/instanceApi';
 import type { UserActionTarget } from '../common/UserSearch/types';
+
 import { AddUserButton } from './AddUserModal';
+
+import { useGetInstanceUsersQuery } from '@/rtk/features/instanceApi';
+import { ConnectionUserType, useGetSimplifiedConnectionsQuery } from '@/rtk/features/connectionApi';
 
 interface InstanceUsersAsInstanceAdminProps {
   resourceId: string;

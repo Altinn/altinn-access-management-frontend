@@ -1,10 +1,10 @@
 import { AccessPackageListItem, type AccessPackageListItemProps } from '@altinn/altinn-components';
 import { useTranslation } from 'react-i18next';
 
+import { useRestoreFocusTarget } from '../RestoreFocus';
+
 import type { AccessPackage } from '@/rtk/features/accessPackageApi';
 import { PartyType } from '@/rtk/features/userInfoApi';
-
-import { useRestoreFocusTarget } from '../RestoreFocus';
 
 // DOM id for the package's inline action button, usable as a RestoreFocus target distinct from the row.
 export const packageActionControlId = (packageId: string) => `list-action-${packageId}`;

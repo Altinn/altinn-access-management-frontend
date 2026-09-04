@@ -1,4 +1,5 @@
 import { test } from 'playwright/fixture/pomFixture';
+
 import { EnduserConnection } from '../../../api-requests/EnduserConnection';
 
 test.describe('Aktørvalg, valg og visning av avgiver', () => {

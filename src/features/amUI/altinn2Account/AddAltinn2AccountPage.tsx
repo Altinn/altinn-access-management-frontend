@@ -9,6 +9,12 @@ import {
   DsParagraph,
   DsSpinner,
 } from '@altinn/altinn-components';
+
+import { PageLayoutWrapper } from '../common/PageLayoutWrapper';
+
+import classes from './AddAltinn2AccountPage.module.css';
+import { Altinn2AccountForm } from './Altinn2AccountForm';
+
 import { useDocumentTitle } from '@/resources/hooks/useDocumentTitle';
 import { getAfUrl } from '@/resources/utils/pathUtils';
 import { useGetReporteeQuery } from '@/rtk/features/userInfoApi';
@@ -17,9 +23,6 @@ import {
   useAddAltinn2AccountMutation,
   useSendForgotPasswordEmailMutation,
 } from '@/rtk/features/selfIdentifiedUserApi';
-import classes from './AddAltinn2AccountPage.module.css';
-import { PageLayoutWrapper } from '../common/PageLayoutWrapper';
-import { Altinn2AccountForm } from './Altinn2AccountForm';
 
 export const AddAltinn2AccountPage = () => {
   const { t, i18n } = useTranslation();

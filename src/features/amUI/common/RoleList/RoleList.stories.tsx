@@ -2,11 +2,11 @@ import type { Meta, StoryObj } from '@storybook/react-vite';
 import { Provider } from 'react-redux';
 import { RootProvider, Snackbar } from '@altinn/altinn-components';
 
-import store from '@/rtk/app/store';
-
 import { PartyRepresentationProvider } from '../PartyRepresentationContext/PartyRepresentationContext';
 
 import { RoleList } from './RoleList';
+
+import store from '@/rtk/app/store';
 
 type RoleListPropsAndCustomArgs = React.ComponentProps<typeof RoleList>;
 

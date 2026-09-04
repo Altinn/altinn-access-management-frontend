@@ -9,17 +9,17 @@ import {
   DsSkeleton,
 } from '@altinn/altinn-components';
 
+import type { SystemUserAccessPackage } from '../../types';
+
+import classes from './RightsList.module.css';
+import { ResourceDetails } from './ResourceDetails';
+
 import type { PackageResource } from '@/rtk/features/accessPackageApi';
 import type { ServiceResource } from '@/rtk/features/singleRights/singleRightsApi';
 import { useProviderLogoUrl } from '@/resources/hooks/useProviderLogoUrl';
-
-import type { SystemUserAccessPackage } from '../../types';
 import type { ExtendedAccessPackage } from '@/features/amUI/common/AccessPackageList/useAreaPackageList';
-
-import classes from './RightsList.module.css';
 import { PackageHeader } from '@/features/amUI/common/DelegationModal/AccessPackages/PackageHeader';
 import { PackageMeta } from '@/features/amUI/common/DelegationModal/AccessPackages/PackageMeta';
-import { ResourceDetails } from './ResourceDetails';
 
 interface RightsListProps {
   resources: ServiceResource[];
@@ -33,29 +33,27 @@ const mapSystemUserAccessPackageToExtended = (
   accessPackage: SystemUserAccessPackage,
 ): ExtendedAccessPackage => ({
   ...accessPackage,
-  resources: accessPackage.resources.map(
-    (resource): PackageResource => ({
-      id: resource.identifier,
-      identifier: resource.identifier,
-      name: resource.title,
-      title: resource.title,
-      description: resource.description ?? '',
-      refId: resource.identifier,
-      provider: {
-        id: '',
-        name: resource.resourceOwnerName,
-        refId: '',
-        logoUrl: resource.resourceOwnerLogoUrl,
-        code: '',
-        typeId: '',
-      },
-      resourceOwnerName: resource.resourceOwnerName,
-      resourceOwnerLogoUrl: resource.resourceOwnerLogoUrl,
-      resourceOwnerOrgcode: resource.resourceOwnerOrgcode,
-      resourceOwnerOrgNumber: resource.resourceOwnerOrgNumber,
-      resourceOwnerType: '',
-    }),
-  ),
+  resources: accessPackage.resources.map((resource): PackageResource => ({
+    id: resource.identifier,
+    identifier: resource.identifier,
+    name: resource.title,
+    title: resource.title,
+    description: resource.description ?? '',
+    refId: resource.identifier,
+    provider: {
+      id: '',
+      name: resource.resourceOwnerName,
+      refId: '',
+      logoUrl: resource.resourceOwnerLogoUrl,
+      code: '',
+      typeId: '',
+    },
+    resourceOwnerName: resource.resourceOwnerName,
+    resourceOwnerLogoUrl: resource.resourceOwnerLogoUrl,
+    resourceOwnerOrgcode: resource.resourceOwnerOrgcode,
+    resourceOwnerOrgNumber: resource.resourceOwnerOrgNumber,
+    resourceOwnerType: '',
+  })),
 });
 
 export const RightsList = ({

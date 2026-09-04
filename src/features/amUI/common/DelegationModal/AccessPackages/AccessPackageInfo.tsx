@@ -1,13 +1,8 @@
 import * as React from 'react';
 import { DsAlert, DsHeading, DsButton } from '@altinn/altinn-components';
 import { useTranslation } from 'react-i18next';
+
 import { useAccessPackageDelegationCheck } from '../../DelegationCheck/AccessPackageDelegationCheckContext';
-
-import type { ActionError } from '@/resources/hooks/useActionError';
-import { useAccessPackageActions } from '@/features/amUI/common/AccessPackageList/useAccessPackageActions';
-import { useGetUserDelegationsQuery } from '@/rtk/features/accessPackageApi';
-import { TechnicalErrorParagraphs } from '@/features/amUI/common/TechnicalErrorParagraphs';
-
 import { useDelegationModalContext } from '../DelegationModalContext';
 import { DelegationAction } from '../EditModal';
 import { usePartyRepresentation } from '../../PartyRepresentationContext/PartyRepresentationContext';
@@ -16,13 +11,18 @@ import type { ExtendedAccessPackage } from '../../AccessPackageList/useAreaPacka
 import { DeletableStatus, getDeletableStatus } from '../../AccessPackageList/useAreaPackageList';
 import { ValidationErrorMessage } from '../../ValidationErrorMessage';
 import { PackageIsPartiallyDeletableAlert } from '../../AccessPackageList/PackageIsPartiallyDeletableAlert/PackageIsPartiallyDeletableAlert';
+import { StatusSection } from '../../StatusSection/StatusSection';
+import { focusFirstEnabledButton, useRestoreFocusAfterSettled } from '../../RestoreFocus';
 
 import classes from './AccessPackageInfo.module.css';
 import { PackageHeader } from './PackageHeader';
 import { PackageMeta } from './PackageMeta';
+
 import { PartyType } from '@/rtk/features/userInfoApi';
-import { StatusSection } from '../../StatusSection/StatusSection';
-import { focusFirstEnabledButton, useRestoreFocusAfterSettled } from '../../RestoreFocus';
+import { TechnicalErrorParagraphs } from '@/features/amUI/common/TechnicalErrorParagraphs';
+import { useGetUserDelegationsQuery } from '@/rtk/features/accessPackageApi';
+import { useAccessPackageActions } from '@/features/amUI/common/AccessPackageList/useAccessPackageActions';
+import type { ActionError } from '@/resources/hooks/useActionError';
 
 export interface PackageInfoProps {
   accessPackage: ExtendedAccessPackage;

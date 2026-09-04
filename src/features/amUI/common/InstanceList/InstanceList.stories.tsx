@@ -3,10 +3,10 @@ import type { ReactNode } from 'react';
 import { RootProvider } from '@altinn/altinn-components';
 import { Provider } from 'react-redux';
 
+import { InstanceList } from './InstanceList';
+
 import store from '@/rtk/app/store';
 import type { InstanceDelegation } from '@/rtk/features/instanceApi';
-
-import { InstanceList } from './InstanceList';
 
 const digdirResource = {
   identifier: 'digdir-eksempeltjeneste',

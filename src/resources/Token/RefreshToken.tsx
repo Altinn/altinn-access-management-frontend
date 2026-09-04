@@ -1,5 +1,5 @@
-/* eslint-disable @typescript-eslint/no-floating-promises */
 import * as React from 'react';
+
 import { refreshToken } from './tokenUtils';
 
 export const RefreshToken = () => {

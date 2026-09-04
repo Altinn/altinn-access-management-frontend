@@ -1,13 +1,13 @@
 import { forwardRef, useState } from 'react';
 import { DsDialog } from '@altinn/altinn-components';
 
-import type { AccessPackage } from '@/rtk/features/accessPackageApi';
-import type { Party } from '@/rtk/features/lookupApi';
-
 import type { InheritedStatusMessageType } from '../../useInheritedStatus';
 import dialogClasses from '../DelegationModal.module.css';
 
 import { ClientPackageInfo } from './ClientPackageInfo';
+
+import type { Party } from '@/rtk/features/lookupApi';
+import type { AccessPackage } from '@/rtk/features/accessPackageApi';
 
 const animationDuration = 2000;
 

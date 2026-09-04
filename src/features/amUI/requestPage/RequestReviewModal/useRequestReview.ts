@@ -1,23 +1,25 @@
 import { useState, useEffect, useCallback } from 'react';
 import { useSnackbar } from '@altinn/altinn-components';
 import { useTranslation } from 'react-i18next';
+
 import type { Request, ProcessedStatus } from '../types';
 import { usePartyRepresentation } from '../../common/PartyRepresentationContext/PartyRepresentationContext';
+import { useAccessPackageDelegationCheck } from '../../common/DelegationCheck/AccessPackageDelegationCheckContext';
+
 import {
   useApproveRequestMutation,
   useRejectRequestMutation,
   useGetEnrichedReceivedResourceRequestsQuery,
   type EnrichedResourceRequest,
   useGetEnrichedReceivedPackageRequestsQuery,
-  EnrichedPackageRequest,
+  type EnrichedPackageRequest,
 } from '@/rtk/features/requestApi';
 import {
   useLazyDelegationCheckQuery,
   type ServiceResource,
   type DelegationCheckedRight,
 } from '@/rtk/features/singleRights/singleRightsApi';
-import { useAccessPackageDelegationCheck } from '../../common/DelegationCheck/AccessPackageDelegationCheckContext';
-import { AccessPackage } from '@/rtk/features/accessPackageApi';
+import { type AccessPackage } from '@/rtk/features/accessPackageApi';
 
 type SnapshotRequests = {
   resourceRequests: EnrichedResourceRequest[];
@@ -102,7 +104,7 @@ export const useRequestReview = (request: Request | null, onClose: () => void) =
     isFetchingPackageRequests,
     snapshotRequests.resourceRequests.length,
     snapshotRequests.packageRequests.length,
-  ]); // eslint-disable-line react-hooks/exhaustive-deps
+  ]);
 
   useEffect(() => {
     if (snapshotRequests.resourceRequests.length === 0) return;
@@ -116,7 +118,7 @@ export const useRequestReview = (request: Request | null, onClose: () => void) =
         // If delegation check fails, treat as no data
       }
     });
-  }, [snapshotRequests]); // eslint-disable-line react-hooks/exhaustive-deps
+  }, [snapshotRequests]);
 
   const cannotApprove = useCallback(
     ({ resourceId, packageId }: { resourceId?: string; packageId?: string }) => {

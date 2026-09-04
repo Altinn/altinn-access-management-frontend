@@ -1,5 +1,6 @@
-import { useGetRightHoldersQuery } from '@/rtk/features/connectionApi';
 import { mapConnectionToParty } from './partyUtils';
+
+import { useGetRightHoldersQuery } from '@/rtk/features/connectionApi';
 import { getCookie } from '@/resources/Cookie/CookieMethods';
 
 /**

@@ -2,21 +2,24 @@ import React, { useEffect, useMemo, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate, useSearchParams } from 'react-router';
 import { DsAlert, DsButton, DsHeading, DsParagraph } from '@altinn/altinn-components';
-import { useDocumentTitle } from '@/resources/hooks/useDocumentTitle';
+
+import type { ConsentRequest, ProblemDetail } from '../types';
+import { getLanguage, isAccepted, isExpired, isRevoked, replaceStaticMetadata } from '../utils';
+import { RequestPageLayout } from '../../common/RequestPageLayout/RequestPageLayout';
+import { ConsentStatus } from '../components/ConsentStatus/ConsentStatus';
+import { ConsentRights } from '../components/ConsentRights/ConsentRights';
+
+import classes from './ConsentRequestPage.module.css';
+import { ConsentRequestError } from './ConsentRequestError';
+
+import { ConsentPath } from '@/routes/paths/consentPath';
+import { PartyType } from '@/rtk/features/userInfoApi';
 import {
   useApproveConsentRequestMutation,
   useGetConsentRequestQuery,
   useRejectConsentRequestMutation,
 } from '@/rtk/features/consentApi';
-import { PartyType } from '@/rtk/features/userInfoApi';
-import type { ConsentRequest, ProblemDetail } from '../types';
-import { getLanguage, isAccepted, isExpired, isRevoked, replaceStaticMetadata } from '../utils';
-import classes from './ConsentRequestPage.module.css';
-import { ConsentRequestError } from './ConsentRequestError';
-import { RequestPageLayout } from '../../common/RequestPageLayout/RequestPageLayout';
-import { ConsentPath } from '@/routes/paths/consentPath';
-import { ConsentStatus } from '../components/ConsentStatus/ConsentStatus';
-import { ConsentRights } from '../components/ConsentRights/ConsentRights';
+import { useDocumentTitle } from '@/resources/hooks/useDocumentTitle';
 
 export const ConsentRequestPage = () => {
   const { t, i18n } = useTranslation();

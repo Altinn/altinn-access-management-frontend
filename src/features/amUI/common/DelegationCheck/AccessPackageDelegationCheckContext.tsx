@@ -1,10 +1,11 @@
 import React, { createContext, useContext, useMemo } from 'react';
+import { type FetchBaseQueryError } from '@reduxjs/toolkit/query';
+import { type SerializedError } from '@reduxjs/toolkit';
+
+import { usePartyRepresentation } from '../PartyRepresentationContext/PartyRepresentationContext';
 
 import type { Reason } from '@/dataObjects/dtos/accessPackage';
 import { useDelegationCheckQuery } from '@/rtk/features/accessPackageApi';
-import { usePartyRepresentation } from '../PartyRepresentationContext/PartyRepresentationContext';
-import { FetchBaseQueryError } from '@reduxjs/toolkit/query';
-import { SerializedError } from '@reduxjs/toolkit';
 import { useGetIsAdminQuery } from '@/rtk/features/userInfoApi';
 
 interface AccessPackageDelegationCheckContextProps {

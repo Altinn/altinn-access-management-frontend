@@ -1,4 +1,4 @@
-import { useTranslation } from 'react-i18next';
+import { type useTranslation } from 'react-i18next';
 
 import type { ChipRight } from '../common/DelegationModal/utils/rightsUtils';
 import { createErrorDetails } from '../common/TechnicalErrorParagraphs/TechnicalErrorParagraphs';

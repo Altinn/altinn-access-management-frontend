@@ -1,21 +1,24 @@
-import type { Role } from '@/rtk/features/roleApi';
-import { useGetRolePermissionsQuery } from '@/rtk/features/roleApi';
+import { DsAlert, DsHeading, DsParagraph, List } from '@altinn/altinn-components';
+import { t } from 'i18next';
+
 import { usePartyRepresentation } from '../PartyRepresentationContext/PartyRepresentationContext';
-import { SkeletonRoleList } from './SkeletonRoleList';
 import {
   createErrorDetails,
   TechnicalErrorParagraphs,
 } from '../TechnicalErrorParagraphs/TechnicalErrorParagraphs';
-import { useGroupedRoleListEntries } from './useGroupedRoleListEntries';
-import { DsAlert, DsHeading, DsParagraph, List } from '@altinn/altinn-components';
-import { t } from 'i18next';
-import { RoleListItem } from './RoleListItem';
-import classes from './roleSection.module.css';
 import { useRoleMetadata } from '../UserRoles/useRoleMetadata';
-import { RoleDeleteButton } from './RoleDeleteButton';
-import { useIsMobileOrSmaller } from '@/resources/utils/screensizeUtils';
 import { useRestoreFocusOnDataChange } from '../RestoreFocus';
 import { HelpText } from '../HelpText/HelpText';
+
+import { SkeletonRoleList } from './SkeletonRoleList';
+import { useGroupedRoleListEntries } from './useGroupedRoleListEntries';
+import { RoleListItem } from './RoleListItem';
+import classes from './roleSection.module.css';
+import { RoleDeleteButton } from './RoleDeleteButton';
+
+import { useIsMobileOrSmaller } from '@/resources/utils/screensizeUtils';
+import { useGetRolePermissionsQuery } from '@/rtk/features/roleApi';
+import type { Role } from '@/rtk/features/roleApi';
 
 export const ROLE_LIST_HEADING_ID = 'role_list_heading';
 

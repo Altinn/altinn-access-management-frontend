@@ -1,6 +1,5 @@
 import { expect, test } from 'playwright/fixture/pomFixture';
 import { Language } from 'playwright/pages/LanguageMenu';
-
 import { TestdataApi } from 'playwright/util/TestdataApi';
 import { ApiRequests } from 'playwright/api-requests/SystemUserApiRequests';
 
@@ -11,12 +10,11 @@ test.use({ language: Language.NN });
 const vendorOrgNumber = '310547891';
 const testUserPid = '14824497789';
 const testOrgName = 'Aktverdig Retorisk Ape';
-const testUserName = 'Skravlete Blåveis';
 
 test.describe('System Register', async () => {
   let system: string;
 
-  test.beforeEach(async ({ page, login }) => {
+  test.beforeEach(async ({ login }) => {
     const api = new ApiRequests();
     system = await api.createSystemSystemRegister(vendorOrgNumber);
     await login.LoginToAccessManagement(testUserPid);

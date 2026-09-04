@@ -2,6 +2,7 @@ import React, { useCallback, useEffect, useState } from 'react';
 import { DsSearch } from '@altinn/altinn-components';
 
 import classes from './DebouncedSearchField.module.css';
+
 import { debounce } from '@/resources/utils';
 
 interface DebouncedSearchFieldProps {

@@ -1,19 +1,18 @@
 import { useRef, useState } from 'react';
-
-import type { AccessPackage } from '@/rtk/features/accessPackageApi';
+import { useTranslation } from 'react-i18next';
 
 import { AccessPackageList } from '../../common/AccessPackageList/AccessPackageList';
 import { DelegationAction, EditModal } from '../../common/DelegationModal/EditModal';
 import { usePartyRepresentation } from '../../common/PartyRepresentationContext/PartyRepresentationContext';
 import { useDelegationModalContext } from '../../common/DelegationModal/DelegationModalContext';
-
-import { useTranslation } from 'react-i18next';
-import { useGetIsHovedadminQuery } from '@/rtk/features/userInfoApi';
 import {
   RestoreFocusFallback,
   RestoreFocusProvider,
   useRestoreFocus,
 } from '../../common/RestoreFocus';
+
+import { useGetIsHovedadminQuery } from '@/rtk/features/userInfoApi';
+import type { AccessPackage } from '@/rtk/features/accessPackageApi';
 
 interface ActiveDelegationsProps {
   searchString?: string;

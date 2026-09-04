@@ -3,10 +3,10 @@ import type { TFunction } from 'i18next';
 import { Button, type AccessPackageListItemProps, type Color } from '@altinn/altinn-components';
 import { MinusCircleIcon, PlusCircleIcon } from '@navikt/aksel-icons';
 
+import type { ClientResourceListItemData } from './ClientResourceListItems';
+
 import type { AccessPackage } from '@/rtk/features/accessPackageApi';
 import type { ActionError } from '@/resources/hooks/useActionError';
-
-import type { ClientResourceListItemData } from './ClientResourceListItems';
 import type { ServiceResource } from '@/rtk/features/singleRights/singleRightsApi';
 
 type DelegateHandler = (

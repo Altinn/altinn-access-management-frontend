@@ -1,4 +1,4 @@
-import { type ComponentProps, ElementType, useMemo, useState } from 'react';
+import { type ComponentProps, type ElementType, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import {
   DialogListItem,
@@ -9,9 +9,6 @@ import {
 import type { TFunction } from 'i18next';
 
 import { DebouncedSearchField } from '../DebouncedSearchField/DebouncedSearchField';
-import { InstanceDelegation } from '@/rtk/features/instanceApi';
-import { useProviderLogoUrl } from '@/resources/hooks';
-import { useRestoreFocusTarget } from '@/features/amUI/common/RestoreFocus';
 
 import { InstanceListSkeleton } from './InstanceListSkeleton';
 import { InstanceInboxLink } from './InstanceInboxLink';
@@ -22,6 +19,10 @@ import {
   toInstancePresentationData,
 } from './instanceListUtils';
 import classes from './InstanceList.module.css';
+
+import { useRestoreFocusTarget } from '@/features/amUI/common/RestoreFocus';
+import { useProviderLogoUrl } from '@/resources/hooks';
+import { type InstanceDelegation } from '@/rtk/features/instanceApi';
 
 const InstanceListItemRow = ({
   id,

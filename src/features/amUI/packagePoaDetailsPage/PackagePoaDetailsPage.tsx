@@ -1,21 +1,20 @@
 import React from 'react';
-import { DsHeading } from '@altinn/altinn-components';
 import { useTranslation } from 'react-i18next';
+import { useParams, useSearchParams } from 'react-router';
 
-import { useDocumentTitle } from '@/resources/hooks/useDocumentTitle';
-import { PageWrapper } from '@/components';
 import { PageContainer } from '../common/PageContainer/PageContainer';
-import { getCookie } from '@/resources/Cookie/CookieMethods';
-
 import { PageLayoutWrapper } from '../common/PageLayoutWrapper';
 import {
   PartyRepresentationProvider,
   usePartyRepresentation,
 } from '../common/PartyRepresentationContext/PartyRepresentationContext';
+import { Breadcrumbs } from '../common/Breadcrumbs/Breadcrumbs';
 
 import { PackagePoaDetails } from './PackagePoaDetails';
-import { useParams, useSearchParams } from 'react-router';
-import { Breadcrumbs } from '../common/Breadcrumbs/Breadcrumbs';
+
+import { useDocumentTitle } from '@/resources/hooks/useDocumentTitle';
+import { PageWrapper } from '@/components';
+import { getCookie } from '@/resources/Cookie/CookieMethods';
 import { useGetPackagePermissionDetailsQuery } from '@/rtk/features/accessPackageApi';
 import { amUIPath } from '@/routes/paths/amUIPath';
 

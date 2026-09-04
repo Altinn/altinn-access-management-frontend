@@ -2,6 +2,7 @@ import type { Page, Locator } from '@playwright/test';
 import { expect } from '@playwright/test';
 
 import { env, withCustomerName } from 'playwright/util/helper';
+
 import { LANGUAGE_DICTIONARIES, Language, type Dict } from '../LanguageMenu';
 
 export class ClientDelegationPage {

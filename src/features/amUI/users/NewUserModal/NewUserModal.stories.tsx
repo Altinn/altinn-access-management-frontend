@@ -1,9 +1,9 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { Provider } from 'react-redux';
 
-import store from '@/rtk/app/store';
-
 import { NewUserButton } from './NewUserModal';
+
+import store from '@/rtk/app/store';
 
 export default {
   title: 'Features/AMUI/NewUserModal',

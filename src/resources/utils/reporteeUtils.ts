@@ -1,6 +1,7 @@
-import { ReporteeInfo } from '@/rtk/features/userInfoApi';
 import { formatDate } from '@altinn/altinn-components';
 import { t } from 'i18next';
+
+import { type ReporteeInfo } from '@/rtk/features/userInfoApi';
 
 export const isOrganization = (reportee?: ReporteeInfo): boolean => {
   return reportee?.type === 'Organization';

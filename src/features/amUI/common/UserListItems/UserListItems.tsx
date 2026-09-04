@@ -9,9 +9,9 @@ import {
 } from '@altinn/altinn-components';
 import { useTranslation } from 'react-i18next';
 
-import { matchesOrgNr } from '@/resources/utils/reporteeUtils';
-
 import classes from './UserListItems.module.css';
+
+import { matchesOrgNr } from '@/resources/utils/reporteeUtils';
 
 export type UserListItemData = UserListItemProps & {
   children?: ReactNode;

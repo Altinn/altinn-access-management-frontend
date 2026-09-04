@@ -1,15 +1,16 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { DsParagraph, formatDisplayName } from '@altinn/altinn-components';
-
-import { useGetMaskinportenSuppliersQuery } from '@/rtk/features/maskinportenApi';
+import { useNavigate } from 'react-router';
 
 import { usePartyRepresentation } from '../common/PartyRepresentationContext/PartyRepresentationContext';
+
 import { AddSupplierButton } from './AddSupplierButton';
 import { MaskinportenUserSearch } from './MaskinportenUserSearch';
 import { MaskinportenInfoPopover } from './MaskinportenInfoPopover';
 import classes from './MaskinportenPage.module.css';
-import { useNavigate } from 'react-router';
+
+import { useGetMaskinportenSuppliersQuery } from '@/rtk/features/maskinportenApi';
 
 type SuppliersTabProps = {
   party: string;

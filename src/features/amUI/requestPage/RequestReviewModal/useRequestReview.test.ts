@@ -1,15 +1,16 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { act, renderHook } from '@testing-library/react';
-
-import * as requestApiModule from '@/rtk/features/requestApi';
-import * as singleRightsModule from '@/rtk/features/singleRights/singleRightsApi';
-import * as partyRepModule from '../../common/PartyRepresentationContext/PartyRepresentationContext';
-import * as delegationCheckModule from '../../common/DelegationCheck/AccessPackageDelegationCheckContext';
 import * as altinnComponents from '@altinn/altinn-components';
 import * as i18nModule from 'react-i18next';
 
-import { useRequestReview } from './useRequestReview';
+import * as partyRepModule from '../../common/PartyRepresentationContext/PartyRepresentationContext';
+import * as delegationCheckModule from '../../common/DelegationCheck/AccessPackageDelegationCheckContext';
 import type { Request } from '../types';
+
+import { useRequestReview } from './useRequestReview';
+
+import * as singleRightsModule from '@/rtk/features/singleRights/singleRightsApi';
+import * as requestApiModule from '@/rtk/features/requestApi';
 import type { EnrichedResourceRequest, EnrichedPackageRequest } from '@/rtk/features/requestApi';
 import type { AccessPackage } from '@/rtk/features/accessPackageApi';
 import type { ServiceResource } from '@/rtk/features/singleRights/singleRightsApi';

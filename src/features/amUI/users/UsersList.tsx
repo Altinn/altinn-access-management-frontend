@@ -9,23 +9,23 @@ import {
   formatDisplayName,
 } from '@altinn/altinn-components';
 
-import type { User } from '@/rtk/features/userInfoApi';
-import { PartyType, useGetIsAdminQuery } from '@/rtk/features/userInfoApi';
+import { UserList } from '../common/UserList/UserList';
+import { CurrentUserPageHeader } from '../common/CurrentUserPageHeader/CurrentUserPageHeader';
+import { usePartyRepresentation } from '../common/PartyRepresentationContext/PartyRepresentationContext';
+import { useSelfConnection } from '../common/PartyRepresentationContext/useSelfConnection';
+import { ECC_PROVIDER_CODE, useRoleMetadata } from '../common/UserRoles/useRoleMetadata';
+
+import classes from './UsersList.module.css';
+import { NewUserButton } from './NewUserModal/NewUserModal';
+
+import { debounce } from '@/resources/utils';
 import {
   type Connection,
   ConnectionUserType,
   useGetRightHoldersQuery,
 } from '@/rtk/features/connectionApi';
-import { debounce } from '@/resources/utils';
-
-import { UserList } from '../common/UserList/UserList';
-import { CurrentUserPageHeader } from '../common/CurrentUserPageHeader/CurrentUserPageHeader';
-import { usePartyRepresentation } from '../common/PartyRepresentationContext/PartyRepresentationContext';
-
-import classes from './UsersList.module.css';
-import { NewUserButton } from './NewUserModal/NewUserModal';
-import { useSelfConnection } from '../common/PartyRepresentationContext/useSelfConnection';
-import { ECC_PROVIDER_CODE, useRoleMetadata } from '../common/UserRoles/useRoleMetadata';
+import { PartyType, useGetIsAdminQuery } from '@/rtk/features/userInfoApi';
+import type { User } from '@/rtk/features/userInfoApi';
 
 export const UsersList = () => {
   const { t } = useTranslation();

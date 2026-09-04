@@ -1,21 +1,21 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
-
-import { useDocumentTitle } from '@/resources/hooks/useDocumentTitle';
-import { PageWrapper } from '@/components';
-import { useGetIsAdminQuery, useGetReporteeQuery } from '@/rtk/features/userInfoApi';
-import { getCookie } from '@/resources/Cookie/CookieMethods';
+import { formatDisplayName, DsAlert } from '@altinn/altinn-components';
 
 import { PageLayoutWrapper } from '../common/PageLayoutWrapper';
 import { PartyRepresentationProvider } from '../common/PartyRepresentationContext/PartyRepresentationContext';
 import { ReporteePageHeading } from '../common/ReporteePageHeading';
-
 import { RightsTabs } from '../common/RightsTabs/RightsTabs';
-import { AccessPackagePermissions } from './AccessPackagePermissions';
-import { formatDisplayName, DsAlert } from '@altinn/altinn-components';
 import { Breadcrumbs } from '../common/Breadcrumbs/Breadcrumbs';
+
+import { AccessPackagePermissions } from './AccessPackagePermissions';
 import { GuardianshipPermissions } from './GuardianshipPermissions';
 import { InstancePermissions } from './InstancePermissions';
+
+import { getCookie } from '@/resources/Cookie/CookieMethods';
+import { useGetIsAdminQuery, useGetReporteeQuery } from '@/rtk/features/userInfoApi';
+import { PageWrapper } from '@/components';
+import { useDocumentTitle } from '@/resources/hooks/useDocumentTitle';
 
 export const PoaOverviewPage = () => {
   const { t } = useTranslation();

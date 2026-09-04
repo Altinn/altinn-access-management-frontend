@@ -3,6 +3,14 @@ import { Link, useParams } from 'react-router';
 import { useTranslation } from 'react-i18next';
 import { DsAlert, DsParagraph, DsSkeleton, formatDisplayName } from '@altinn/altinn-components';
 
+import { Breadcrumbs } from '../common/Breadcrumbs/Breadcrumbs';
+import { DelegationModalProvider } from '../common/DelegationModal/DelegationModalContext';
+import { PageContainer } from '../common/PageContainer/PageContainer';
+import { PageLayoutWrapper } from '../common/PageLayoutWrapper';
+import { PartyRepresentationProvider } from '../common/PartyRepresentationContext/PartyRepresentationContext';
+
+import { SupplierPageContent } from './SupplierPageContent';
+
 import { PageWrapper } from '@/components/PageWrapper/PageWrapper';
 import { getCookie } from '@/resources/Cookie/CookieMethods';
 import { useDocumentTitle } from '@/resources/hooks/useDocumentTitle';
@@ -10,13 +18,6 @@ import type { Party } from '@/rtk/features/lookupApi';
 import { useGetMaskinportenSuppliersQuery } from '@/rtk/features/maskinportenApi';
 import { PartyType } from '@/rtk/features/userInfoApi';
 import { amUIPath } from '@/routes/paths';
-
-import { Breadcrumbs } from '../common/Breadcrumbs/Breadcrumbs';
-import { DelegationModalProvider } from '../common/DelegationModal/DelegationModalContext';
-import { PageContainer } from '../common/PageContainer/PageContainer';
-import { PageLayoutWrapper } from '../common/PageLayoutWrapper';
-import { PartyRepresentationProvider } from '../common/PartyRepresentationContext/PartyRepresentationContext';
-import { SupplierPageContent } from './SupplierPageContent';
 
 export const SupplierPage = () => {
   const { t } = useTranslation();

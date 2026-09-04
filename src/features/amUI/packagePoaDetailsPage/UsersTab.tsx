@@ -1,29 +1,31 @@
 import { useMemo, useRef, useState } from 'react';
-
-import pageClasses from './PackagePoaDetailsPage.module.css';
 import { DsParagraph } from '@altinn/altinn-components';
 import { useTranslation } from 'react-i18next';
-import { useGetRightHoldersQuery } from '@/rtk/features/connectionApi';
-import { Party } from '@/rtk/features/lookupApi';
+
 import UserSearch from '../common/UserSearch/UserSearch';
 import { useAccessPackageActions } from '../common/AccessPackageList/useAccessPackageActions';
-import { AccessPackage } from '@/rtk/features/accessPackageApi';
 import { useRoleMetadata } from '../common/UserRoles/useRoleMetadata';
-import { ActionError } from '@/resources/hooks/useActionError';
-import { DelegateErrorAlert } from './DelegateErrorAlert';
 import { useAccessPackageDelegationCheck } from '../common/DelegationCheck/AccessPackageDelegationCheckContext';
 import { mapConnectionsToUserSearchNodes } from '../common/UserSearch/connectionMapper';
 import { mapPermissionsToUserSearchNodes } from '../common/UserSearch/permissionMapper';
 import type { UserActionTarget } from '../common/UserSearch/types';
 import { usePartyRepresentation } from '../common/PartyRepresentationContext/PartyRepresentationContext';
 import { DelegationAction } from '../common/DelegationModal/EditModal';
-import { PackageUserModal, mapUserToParty, type PackageUserModalHandle } from './PackageUserModal';
 import { NewUserButton } from '../users/NewUserModal/NewUserModal';
 import {
   RestoreFocusFallback,
   useRestoreFocusContext,
   useRestoreFocusOnDataChange,
 } from '../common/RestoreFocus';
+
+import { PackageUserModal, mapUserToParty, type PackageUserModalHandle } from './PackageUserModal';
+import { DelegateErrorAlert } from './DelegateErrorAlert';
+import pageClasses from './PackagePoaDetailsPage.module.css';
+
+import { type ActionError } from '@/resources/hooks/useActionError';
+import { type AccessPackage } from '@/rtk/features/accessPackageApi';
+import { type Party } from '@/rtk/features/lookupApi';
+import { useGetRightHoldersQuery } from '@/rtk/features/connectionApi';
 
 interface UsersTabProps {
   accessPackage?: AccessPackage;

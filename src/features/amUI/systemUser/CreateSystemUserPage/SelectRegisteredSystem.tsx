@@ -10,15 +10,15 @@ import {
   DsSpinner,
 } from '@altinn/altinn-components';
 
-import { useGetRegisteredSystemsQuery } from '@/rtk/features/systemUserApi';
-import { SystemUserPath } from '@/routes/paths';
-import { PageContainer } from '@/features/amUI/common/PageContainer/PageContainer';
-
 import { ButtonRow } from '../components/ButtonRow/ButtonRow';
 import type { RegisteredSystem } from '../types';
 import { CreateSystemUserCheck } from '../components/CreateSystemUserCheck/CreateSystemUserCheck';
 
 import classes from './CreateSystemUser.module.css';
+
+import { PageContainer } from '@/features/amUI/common/PageContainer/PageContainer';
+import { SystemUserPath } from '@/routes/paths';
+import { useGetRegisteredSystemsQuery } from '@/rtk/features/systemUserApi';
 import { useGetIsAdminQuery, useGetReporteeQuery } from '@/rtk/features/userInfoApi';
 
 const isStringMatch = (inputString: string, matchString = ''): boolean => {

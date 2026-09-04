@@ -2,17 +2,17 @@ import * as React from 'react';
 import { useTranslation } from 'react-i18next';
 import { formatDisplayName } from '@altinn/altinn-components';
 
+import { PartyRepresentationProvider } from '../common/PartyRepresentationContext/PartyRepresentationContext';
+import { PageLayoutWrapper } from '../common/PageLayoutWrapper';
+import { ReporteePageHeading } from '../common/ReporteePageHeading';
+import { Breadcrumbs } from '../common/Breadcrumbs/Breadcrumbs';
+
+import { UsersList } from './UsersList';
+
 import { useDocumentTitle } from '@/resources/hooks/useDocumentTitle';
 import { PageWrapper } from '@/components';
 import { useGetReporteeQuery } from '@/rtk/features/userInfoApi';
 import { getCookie } from '@/resources/Cookie/CookieMethods';
-
-import { PartyRepresentationProvider } from '../common/PartyRepresentationContext/PartyRepresentationContext';
-import { PageLayoutWrapper } from '../common/PageLayoutWrapper';
-
-import { UsersList } from './UsersList';
-import { ReporteePageHeading } from '../common/ReporteePageHeading';
-import { Breadcrumbs } from '../common/Breadcrumbs/Breadcrumbs';
 
 export const UsersPage = () => {
   const { t } = useTranslation();

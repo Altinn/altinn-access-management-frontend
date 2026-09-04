@@ -13,6 +13,7 @@ import { useState } from 'react';
 import { usePartyRepresentation } from '../../PartyRepresentationContext/PartyRepresentationContext';
 
 import classes from './PackageIsPartiallyDeletableAlert.module.css';
+
 import { PartyType } from '@/rtk/features/userInfoApi';
 
 interface PackageIsPartiallyDeletableAlertProps {

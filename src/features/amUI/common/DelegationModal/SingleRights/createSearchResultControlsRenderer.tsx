@@ -2,11 +2,11 @@ import { DsButton } from '@altinn/altinn-components';
 import { MinusCircleIcon, PlusCircleIcon } from '@navikt/aksel-icons';
 import { useTranslation } from 'react-i18next';
 
+import { DelegationAction } from '../EditModal';
+
 import type { ActionError } from '@/resources/hooks/useActionError';
 import type { ServiceResource } from '@/rtk/features/singleRights/singleRightsApi';
 import { useIsMobileOrSmaller } from '@/resources/utils/screensizeUtils';
-
-import { DelegationAction } from '../EditModal';
 
 // DOM id for a resource's inline action button; used as a RestoreFocus target after delegate/revoke.
 export const resourceActionControlId = (resourceId: string) => `list-action-${resourceId}`;

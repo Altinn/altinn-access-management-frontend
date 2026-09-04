@@ -1,9 +1,9 @@
-import type { Entity } from '@/dataObjects/dtos/Common';
-import { ConnectionUserType } from '@/rtk/features/connectionApi';
-
 import { isNewUser } from '../isNewUser';
 
 import type { UserSearchNode } from './types';
+
+import type { Entity } from '@/dataObjects/dtos/Common';
+import { ConnectionUserType } from '@/rtk/features/connectionApi';
 
 export const normalizeType = (type?: string) => {
   if (!type) {

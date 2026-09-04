@@ -2,8 +2,10 @@ import { Typography } from '@altinn/altinn-components';
 import { ExclamationmarkTriangleIcon } from '@navikt/aksel-icons';
 import { useTranslation } from 'react-i18next';
 import React, { useId } from 'react';
-import { ExtendedAccessPackage } from './useAreaPackageList';
+
+import { type ExtendedAccessPackage } from './useAreaPackageList';
 import classes from './UndelegatedPackageWarning.module.css';
+
 import { useIsMobileOrSmaller } from '@/resources/utils/screensizeUtils';
 
 const CRITICAL_URN_SUBSTRING = 'post-til-virksomheten-med-taushetsbelagt-innhold';

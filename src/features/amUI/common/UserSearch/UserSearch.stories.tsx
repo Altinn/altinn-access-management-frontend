@@ -1,13 +1,15 @@
-import type { Meta, StoryObj } from '@storybook/react';
+import type { Meta, StoryObj } from '@storybook/react-vite';
 import React from 'react';
 import { RootProvider } from '@altinn/altinn-components';
+import { Provider } from 'react-redux';
+
+import { PartyRepresentationProvider } from '../PartyRepresentationContext/PartyRepresentationContext';
 
 import { UserSearch } from './UserSearch';
-import { Provider } from 'react-redux';
-import store from '@/rtk/app/store';
-import { Connection } from '@/rtk/features/connectionApi';
-import { PartyRepresentationProvider } from '../PartyRepresentationContext/PartyRepresentationContext';
 import { mapConnectionsToUserSearchNodes } from './connectionMapper';
+
+import store from '@/rtk/app/store';
+import { type Connection } from '@/rtk/features/connectionApi';
 
 const mockAllConnections: Connection[] = [
   {

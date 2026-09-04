@@ -1,6 +1,6 @@
-import { TFunction } from 'i18next';
+import { type TFunction } from 'i18next';
 
-import { DelegationCheckedRight } from '@/rtk/features/singleRights/singleRightsApi';
+import { type DelegationCheckedRight } from '@/rtk/features/singleRights/singleRightsApi';
 import { ErrorCode } from '@/resources/utils/errorCodeUtils';
 
 export const getMissingAccessMessage = (

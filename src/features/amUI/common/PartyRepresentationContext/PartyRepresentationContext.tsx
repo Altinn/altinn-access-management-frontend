@@ -6,14 +6,15 @@ import type { FetchBaseQueryError } from '@reduxjs/toolkit/query';
 import { Link } from 'react-router';
 import { t } from 'i18next';
 
-import { useGetPartyFromLoggedInUserQuery, type Party } from '@/rtk/features/lookupApi';
-
 import { TechnicalErrorParagraphs } from '../TechnicalErrorParagraphs';
 import { createErrorDetails } from '../TechnicalErrorParagraphs/TechnicalErrorParagraphs';
 import { AccessPackageDelegationCheckProvider } from '../DelegationCheck/AccessPackageDelegationCheckContext';
-import { useGetRightHoldersQuery } from '@/rtk/features/connectionApi';
+
 import { useReporteeParty } from './useReporteeParty';
 import { useConnectedParty } from './useConnectedParty';
+
+import { useGetRightHoldersQuery } from '@/rtk/features/connectionApi';
+import { useGetPartyFromLoggedInUserQuery, type Party } from '@/rtk/features/lookupApi';
 import { PartyType } from '@/rtk/features/userInfoApi';
 
 interface PartyRepresentationProviderProps {
@@ -116,7 +117,7 @@ export const PartyRepresentationProvider = ({
     actingParty = reportee;
   }
 
-  const fromParty = !!fromPartyOverride
+  const fromParty = fromPartyOverride
     ? fromPartyOverride
     : fromPartyUuid === actingPartyUuid
       ? actingParty
@@ -124,7 +125,7 @@ export const PartyRepresentationProvider = ({
         ? reportee
         : fromConnectedParty;
 
-  const toParty = !!toPartyOverride
+  const toParty = toPartyOverride
     ? toPartyOverride
     : toPartyUuid === actingPartyUuid
       ? actingParty

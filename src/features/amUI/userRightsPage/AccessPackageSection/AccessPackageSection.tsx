@@ -1,24 +1,23 @@
 import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useParams } from 'react-router';
-import { DsHeading, DsPopover } from '@altinn/altinn-components';
-
-import { useGetUserDelegationsQuery } from '@/rtk/features/accessPackageApi';
+import { DsHeading } from '@altinn/altinn-components';
 
 import { DelegationModal, DelegationType } from '../../common/DelegationModal/DelegationModal';
 import { DelegationAction } from '../../common/DelegationModal/EditModal';
 import { usePartyRepresentation } from '../../common/PartyRepresentationContext/PartyRepresentationContext';
 import { TabContentSkeleton } from '../../common/RightsTabs/TabContentSkeleton';
+import { DebouncedSearchField } from '../../common/DebouncedSearchField/DebouncedSearchField';
+import { AccessPackageInfoPopover } from '../../common/AccessPackageInfoPopover/AccessPackageInfoPopover';
 
 import { ActiveDelegations } from './ActiveDelegations';
 import { PendingPackageRequests } from './PendingPackageRequests/Requests';
-
 import classes from './AccessPackageSection.module.css';
+
 import { isGuardianshipUrn } from '@/resources/utils';
-import { DebouncedSearchField } from '../../common/DebouncedSearchField/DebouncedSearchField';
 import { useCanGiveAccess } from '@/resources/hooks/useCanGiveAccess';
 import { useCanRequestAccess } from '@/resources/hooks/useCanRequestAccess';
-import { AccessPackageInfoPopover } from '../../common/AccessPackageInfoPopover/AccessPackageInfoPopover';
+import { useGetUserDelegationsQuery } from '@/rtk/features/accessPackageApi';
 
 export const AccessPackageSection = ({ isReportee = false }: { isReportee?: boolean }) => {
   const { t } = useTranslation();

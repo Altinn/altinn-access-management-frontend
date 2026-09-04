@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { EraserIcon } from '@navikt/aksel-icons';
 import { DsButton, DsParagraph, DsPopover } from '@altinn/altinn-components';
+
 import classes from './RevokeConsentPopover.module.css';
 
 interface RevokeConsentPopoverProps {

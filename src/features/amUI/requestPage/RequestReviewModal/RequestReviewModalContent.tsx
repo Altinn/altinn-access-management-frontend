@@ -16,16 +16,19 @@ import {
   CircleSlashIcon,
   ExclamationmarkTriangleFillIcon,
 } from '@navikt/aksel-icons';
+
 import type { Request } from '../types';
-import type { AccessPackage } from '@/rtk/features/accessPackageApi';
 import { ResourceList } from '../../common/ResourceList/ResourceList';
+import { useRestoreFocus, useRestoreFocusTarget } from '../../common/RestoreFocus';
+import { TwoStepDialog } from '../../common/TwoStepDialog';
+
 import { RequestResourceDetail } from './RequestResourceDetail';
 import { useRequestReview } from './useRequestReview';
 import classes from './RequestReviewModal.module.css';
-import { amUIPath } from '@/routes/paths';
 import { RequestPackageDetail } from './RequestPackageDetail';
-import { useRestoreFocus, useRestoreFocusTarget } from '../../common/RestoreFocus';
-import { TwoStepDialog } from '../../common/TwoStepDialog';
+
+import { amUIPath } from '@/routes/paths';
+import type { AccessPackage } from '@/rtk/features/accessPackageApi';
 
 interface RequestReviewModalContentProps {
   modalRef: RefObject<HTMLDialogElement | null>;

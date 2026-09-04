@@ -1,11 +1,11 @@
-import { AccessAreaListItem, Badge, BadgeProps } from '@altinn/altinn-components';
+import { AccessAreaListItem, Badge } from '@altinn/altinn-components';
 import { useTranslation } from 'react-i18next';
-
-import { useIsMobileOrSmaller } from '@/resources/utils/screensizeUtils';
 
 import type { ExtendedAccessArea } from './useAreaPackageList';
 import { PermissionBadge } from './PermissionBadge';
 import { isCriticalAndUndelegated, UndelegatedPackageWarning } from './UndelegatedPackageWarning';
+
+import { useIsMobileOrSmaller } from '@/resources/utils/screensizeUtils';
 import { PartyType } from '@/rtk/features/userInfoApi';
 
 interface AreaItemProps {

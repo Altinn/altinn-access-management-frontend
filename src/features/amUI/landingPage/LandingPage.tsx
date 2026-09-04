@@ -1,16 +1,22 @@
 import React, { useEffect, useState } from 'react';
-import { PageWrapper } from '@/components';
-import { PageLayoutWrapper } from '../common/PageLayoutWrapper';
-import classes from './LandingPage.module.css';
 import {
   DsHeading,
   formatDisplayName,
   List,
   ListItem,
-  MenuItemProps,
+  type MenuItemProps,
   UserListItem,
 } from '@altinn/altinn-components';
+import { useTranslation } from 'react-i18next';
+import { useSearchParams } from 'react-router';
+import cn from 'classnames';
+
+import { PageLayoutWrapper } from '../common/PageLayoutWrapper';
+
+import classes from './LandingPage.module.css';
 import { LandingPageInfoCard } from './LandingPageInfoCard';
+
+import { PageWrapper } from '@/components';
 import {
   useGetIsAdminQuery,
   useGetIsClientAdminQuery,
@@ -18,8 +24,6 @@ import {
   useGetIsMaskinportenAdminQuery,
   useGetReporteeQuery,
 } from '@/rtk/features/userInfoApi';
-import { useTranslation } from 'react-i18next';
-import { useSearchParams } from 'react-router';
 import {
   hasConsentPermission,
   hasReporteeListAdminAccess,
@@ -48,8 +52,6 @@ import {
   isSubUnit,
 } from '@/resources/utils/reporteeUtils';
 import { useSidebarRequestCount } from '@/resources/hooks/useSidebarRequestCount';
-import cn from 'classnames';
-import { useSelfConnection } from '../common/PartyRepresentationContext/useSelfConnection';
 import { useGetRolePermissionsQuery } from '@/rtk/features/roleApi';
 import { useDocumentTitle } from '@/resources/hooks/useDocumentTitle';
 
