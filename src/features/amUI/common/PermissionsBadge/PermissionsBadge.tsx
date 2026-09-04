@@ -21,7 +21,7 @@ export const PermissionsBadge = ({ permissions }: { permissions: AvatarProps[] }
       <DsPopover.Trigger
         variant='tertiary'
         data-size='xs'
-        aria-label={t('access_packages.show_users_with_access')}
+        aria-label={t('poa_overview_page.show_users_with_access')}
       >
         <AvatarGroup
           items={permissions}

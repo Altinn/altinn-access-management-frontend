@@ -250,7 +250,6 @@
     "package_deletion_success": "Fullmakta til {{accessPackage}} er fjerna frå {{name}}.",
     "package_deletion_error": "Det var ikkje mogleg å fjerne fullmakta til {{accessPackage}} frå {{name}}.",
     "delegated_packages_count_badge": "{{delegated}} av {{total}}",
-    "show_users_with_access": "Vis brukarar som har fullmakt",
     "package_number_of_resources_one": "{{count}} teneste",
     "package_number_of_resources_other": "{{count}} tenester",
     "user_has_no_packages": "Denne brukeren har ingen tilgangspakkar.",
@@ -973,6 +972,7 @@
     "page_title": "Fullmaktsoversikt - Altinn",
     "heading": "Fullmaktsoversikt for {{name}}",
     "no_access_title": "Du har ikkje tilgang til denne sida",
+    "show_users_with_access": "Vis brukarar som har fullmakt",
     "packages_tab": {
       "description": "Vel eit område for å sjå tilhøyrande tilgangspakkar og kven som har fullmakt til dei.",
       "info_box_icon_label": "Informasjon om tilgangspakkar",

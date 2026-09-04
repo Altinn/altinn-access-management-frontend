@@ -254,7 +254,6 @@
     "package_deletion_success": "Power of attorney over {{accessPackage}} has been successfully revoked for {{name}}.",
     "package_deletion_error": "Failed to revoke {{name}}'s power of attorney over {{accessPackage}}.",
     "delegated_packages_count_badge": "{{delegated}} of {{total}}",
-    "show_users_with_access": "Show users with power of attorney",
     "package_number_of_resources_one": "{{count}} service",
     "package_number_of_resources_other": "{{count}} services",
     "user_has_no_packages": "This user has no access packages.",
@@ -977,6 +976,7 @@
     "page_title": "Powers of attorney overview - Altinn",
     "heading": "Powers of attorney overview for {{name}}",
     "no_access_title": "You do not have access to this page",
+    "show_users_with_access": "Show users with power of attorney",
     "packages_tab": {
       "description": "Select an area to view the associated access packages and who has power of attorney for them.",
       "info_box_icon_label": "Information about access packages",
