@@ -251,6 +251,7 @@
     "package_deletion_success": "Fullmakten til {{accessPackage}} er fjernet fra {{name}}.",
     "package_deletion_error": "Det var ikke mulig å fjerne fullmakten til {{accessPackage}} fra {{name}}.",
     "delegated_packages_count_badge": "{{delegated}} av {{total}}",
+    "show_users_with_access": "Vis brukere som har fullmakt",
     "package_number_of_resources_one": "{{count}} tjeneste",
     "package_number_of_resources_other": "{{count}} tjenester",
     "user_has_no_packages": "Denne brukeren har ingen tilgangspakker.",

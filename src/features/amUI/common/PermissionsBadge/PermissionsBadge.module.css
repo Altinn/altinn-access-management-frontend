@@ -1,0 +1,11 @@
+.permissionsBadgeItem {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.permissionsBadgeItemName {
+  flex: 1;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}

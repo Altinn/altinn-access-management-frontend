@@ -10,14 +10,19 @@ import type { AccessPackage } from '@/rtk/features/accessPackageApi';
 import { DelegationAction } from '../DelegationModal/EditModal';
 
 import classes from './AccessPackageList.module.css';
-import { DeletableStatus, type ExtendedAccessArea } from './useAreaPackageList';
+import {
+  DeletableStatus,
+  ExtendedAccessPackage,
+  type ExtendedAccessArea,
+} from './useAreaPackageList';
 import { PackageItem } from './PackageItem';
 import { RevokeAccessPackageActionControl } from './RevokeAccessPackageActionControl';
 import { DelegateAccessPackageActionControl } from './DelegateAccessPackageActionControl';
-import { PermissionBadge } from './PermissionBadge';
 import { isCriticalAndUndelegated, UndelegatedPackageWarning } from './UndelegatedPackageWarning';
 import { useAccessPackageDelegationCheck } from '../DelegationCheck/AccessPackageDelegationCheckContext';
 import { PartyType } from '@/rtk/features/userInfoApi';
+import { usePackagePermissionOverview } from './usePackagePermissionOverview';
+import { PermissionsBadge } from '../PermissionsBadge/PermissionsBadge';
 
 // DOM id for the area's content wrapper, usable as a RestoreFocus fallback target.
 export const areaContentId = (areaId: string) => `area-content-${areaId}`;
@@ -102,39 +107,15 @@ export const AreaItemContent = ({
         <List aria-label={t('access_packages.given_packages_title')}>
           {packages.assigned.map((pkg) => {
             return (
-              <PackageItem
-                as={
-                  packageAs
-                    ? (props) => {
-                        const Component = packageAs;
-                        return (
-                          <Component
-                            packageId={pkg.id}
-                            {...props}
-                          />
-                        );
-                      }
-                    : 'button'
-                }
-                titleAs='span'
+              <AssignedPackageItem
                 key={pkg.id}
                 pkg={pkg}
-                onSelect={onSelect}
+                showPermissions={showPermissions}
                 partyType={partyType}
-                hasAccess
-                controls={
-                  !isSm &&
-                  pkg.deletableStatus !== DeletableStatus.NotDeletable &&
-                  !pkg.inherited &&
-                  revokeActionControl(pkg)
-                }
-                badge={
-                  <>
-                    {showPermissions && pkg.permissions && (
-                      <PermissionBadge permissions={pkg.permissions} />
-                    )}
-                  </>
-                }
+                revokeActionControl={revokeActionControl}
+                packageAs={packageAs}
+                isSm={isSm}
+                onSelect={onSelect}
               />
             );
           })}
@@ -211,5 +192,65 @@ export const AreaItemContent = ({
         </List>
       )}
     </div>
+  );
+};
+
+interface AssignedPackageItemProps {
+  pkg: ExtendedAccessPackage;
+  onSelect?: (accessPackage: AccessPackage) => void;
+  showPermissions: boolean;
+  packageAs?: React.ElementType;
+  partyType: PartyType;
+  isSm?: boolean;
+  revokeActionControl: (pkg: AccessPackage) => React.ReactNode;
+}
+
+const AssignedPackageItem = ({
+  pkg,
+  onSelect,
+  showPermissions,
+  packageAs,
+  partyType,
+  isSm,
+  revokeActionControl,
+}: AssignedPackageItemProps) => {
+  const { permissionsOverview } = usePackagePermissionOverview({
+    permissions: pkg.permissions ?? [],
+  });
+
+  return (
+    <PackageItem
+      as={
+        packageAs
+          ? (props) => {
+              const Component = packageAs;
+              return (
+                <Component
+                  packageId={pkg.id}
+                  {...props}
+                />
+              );
+            }
+          : 'button'
+      }
+      titleAs='span'
+      pkg={pkg}
+      onSelect={onSelect}
+      partyType={partyType}
+      hasAccess
+      controls={
+        !isSm &&
+        pkg.deletableStatus !== DeletableStatus.NotDeletable &&
+        !pkg.inherited &&
+        revokeActionControl(pkg)
+      }
+      badge={
+        <>
+          {showPermissions && pkg.permissions && (
+            <PermissionsBadge permissions={permissionsOverview} />
+          )}
+        </>
+      }
+    />
   );
 };
