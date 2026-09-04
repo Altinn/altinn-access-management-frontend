@@ -9,3 +9,8 @@
   overflow: hidden;
   text-overflow: ellipsis;
 }
+
+.permissionsBadgePopoverContent {
+  max-height: 20rem;
+  overflow-y: auto;
+}

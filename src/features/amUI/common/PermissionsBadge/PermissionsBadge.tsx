@@ -32,19 +32,21 @@ export const PermissionsBadge = ({ permissions }: { permissions: AvatarProps[] }
         placement='top'
         data-size='sm'
       >
-        {permissions.map((p) => (
-          <div
-            key={p.id}
-            className={classes.permissionsBadgeItem}
-          >
-            <Avatar
-              name={p.name}
-              type={p.type}
-              size='md'
-            />
-            <DsParagraph className={classes.permissionsBadgeItemName}>{p.name}</DsParagraph>
-          </div>
-        ))}
+        <div className={classes.permissionsBadgePopoverContent}>
+          {permissions.map((p) => (
+            <div
+              key={p.id}
+              className={classes.permissionsBadgeItem}
+            >
+              <Avatar
+                name={p.name}
+                type={p.type}
+                size='md'
+              />
+              <DsParagraph className={classes.permissionsBadgeItemName}>{p.name}</DsParagraph>
+            </div>
+          ))}
+        </div>
       </DsPopover>
     </DsPopover.TriggerContext>
   );
