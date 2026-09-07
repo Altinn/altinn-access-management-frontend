@@ -1,6 +1,6 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
-import { DsAlert, DsHeading, DsParagraph } from '@altinn/altinn-components';
+import { DsAlert, DsHeading, DsParagraph, formatDisplayName } from '@altinn/altinn-components';
 
 import {
   type ResourceDelegation,
@@ -22,6 +22,7 @@ import {
 import { usePartyRepresentation } from '../../PartyRepresentationContext/PartyRepresentationContext';
 import { useSingleRightRequests } from './hooks/useSingleRightRequests';
 import { useRestoreFocusOnDataChange } from '../../RestoreFocus';
+import { PartyType } from '@/rtk/features/userInfoApi';
 import { useCanRedelegateResource, useRevokeConfirmation } from '../../RevokeConfirmation';
 
 interface SearchResultsProps {
@@ -90,9 +91,6 @@ export const SearchResults = ({
     },
   });
 
-  // The list can revoke too, so it needs the same confirmation as ResourceInfo and
-  // DeleteResourceButton. A repeat click is swallowed with a ref rather than by disabling the
-  // control, which would blur the focused button; `revokeFromList` sets the row's loading state.
   const confirmAndRevokeFromList = async (resource: ServiceResource) => {
     if (awaitingRedelegationCheck.current.has(resource.identifier)) return;
     awaitingRedelegationCheck.current.add(resource.identifier);
@@ -100,7 +98,13 @@ export const SearchResults = ({
       confirmRevoke(
         await canRedelegateResource(resource.identifier),
         () => revokeFromList(resource),
-        { name: resource.title, toName: toParty?.name ?? '' },
+        {
+          name: resource.title,
+          toName: formatDisplayName({
+            fullName: toParty?.name || '',
+            type: toParty?.partyTypeName === PartyType.Person ? 'person' : 'company',
+          }),
+        },
       );
     } finally {
       awaitingRedelegationCheck.current.delete(resource.identifier);

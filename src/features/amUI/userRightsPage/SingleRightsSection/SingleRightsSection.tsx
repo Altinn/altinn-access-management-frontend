@@ -1,7 +1,7 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { useParams } from 'react-router';
-import { DsHeading } from '@altinn/altinn-components';
+import { DsHeading, formatDisplayName } from '@altinn/altinn-components';
 
 import type { ServiceResource } from '@/rtk/features/singleRights/singleRightsApi';
 import { useGetSingleRightsForRightholderQuery } from '@/rtk/features/singleRights/singleRightsApi';
@@ -26,6 +26,8 @@ import { SingleRightsSectionSkeleton } from './SingleRightsSectionSkeleton';
 import { getInheritedStatus } from '../../common/useInheritedStatus';
 import { HelpText } from '../../common/HelpText/HelpText';
 import { PendingRequests } from './PendingRequests';
+import { useCanRedelegateResource, useRevokeConfirmation } from '../../common/RevokeConfirmation';
+import { PartyType } from '@/rtk/features/userInfoApi';
 
 const SingleRightsSectionContent = ({ isReportee }: { isReportee: boolean }) => {
   const { id } = useParams();
@@ -59,6 +61,26 @@ const SingleRightsSectionContent = ({ isReportee }: { isReportee: boolean }) => 
 
   const requestFocusOnDataChange = useRestoreFocusOnDataChange(delegatedResources);
   const restoreFocusContext = useRestoreFocusContext();
+
+  const { canRedelegateResource } = useCanRedelegateResource();
+  const { confirmRevoke, revokeConfirmationDialog } = useRevokeConfirmation();
+  const awaitingRedelegationCheck = React.useRef<Set<string>>(new Set());
+
+  const confirmDelete = async (resource: ServiceResource, deleteResource: () => void) => {
+    if (awaitingRedelegationCheck.current.has(resource.identifier)) return;
+    awaitingRedelegationCheck.current.add(resource.identifier);
+    try {
+      confirmRevoke(await canRedelegateResource(resource.identifier), deleteResource, {
+        name: resource.title,
+        toName: formatDisplayName({
+          fullName: toParty?.name || '',
+          type: toParty?.partyTypeName === PartyType.Person ? 'person' : 'company',
+        }),
+      });
+    } finally {
+      awaitingRedelegationCheck.current.delete(resource.identifier);
+    }
+  };
 
   const resources = React.useMemo(
     () => delegatedResources?.map((delegation) => delegation.resource).filter(Boolean),
@@ -136,6 +158,7 @@ const SingleRightsSectionContent = ({ isReportee }: { isReportee: boolean }) => 
                   <DeleteResourceButton
                     resource={resource}
                     disabled={isInherited}
+                    confirmDelete={confirmDelete}
                     onSuccess={() =>
                       requestFocusOnDataChange(resource.identifier, 'single_rights_title')
                     }
@@ -145,13 +168,11 @@ const SingleRightsSectionContent = ({ isReportee }: { isReportee: boolean }) => 
             />
           </div>
         </RestoreFocusFallback>
+        {revokeConfirmationDialog}
         <EditModal
           ref={modalRef}
           resource={selectedResource ?? undefined}
           onClose={() => {
-            // Request focus synchronously before clearing state.
-            // If the resource was revoked inside the modal its row is gone, so fall back to
-            // the section heading instead of dropping to <body>.
             if (selectedResource) {
               restoreFocusContext?.requestFocus(selectedResource.identifier, 'single_rights_title');
             }

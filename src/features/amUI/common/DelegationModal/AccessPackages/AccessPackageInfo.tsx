@@ -46,6 +46,7 @@ export const AccessPackageInfo = ({ accessPackage, availableActions = [] }: Pack
   const {
     onDelegate,
     onRevoke,
+    revokeWithoutConfirmation,
     onRequest,
     deleteRequest,
     hasPendingRequest,
@@ -181,7 +182,7 @@ export const AccessPackageInfo = ({ accessPackage, availableActions = [] }: Pack
                 </DsButton>
               ) : (
                 <PackageIsPartiallyDeletableAlert
-                  confirmAction={() => onRevoke(accessPackage)}
+                  confirmAction={() => revokeWithoutConfirmation(accessPackage)}
                   triggerButtonProps={{
                     variant: 'primary',
                   }}

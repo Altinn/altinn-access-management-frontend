@@ -110,10 +110,7 @@ export const useRequestReview = (request: Request | null, onClose: () => void) =
       const resourceId = req.resource.identifier;
       if (delegationChecks[resourceId]) return;
       try {
-        const result = await lazyDelegationCheck({
-          resourceId,
-          from: actingParty?.partyUuid || '',
-        }).unwrap();
+        const result = await lazyDelegationCheck({ resourceId }).unwrap();
         setDelegationChecks((prev) => ({ ...prev, [resourceId]: result }));
       } catch {
         // If delegation check fails, treat as no data

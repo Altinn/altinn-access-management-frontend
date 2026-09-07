@@ -1,6 +1,7 @@
 import { createApi } from '@reduxjs/toolkit/query/react';
 import { createBaseQuery } from '@/rtk/app/baseQuery';
 
+import { getCookie } from '@/resources/Cookie/CookieMethods';
 import type { IdValuePair } from '@/dataObjects/dtos/IdValuePair';
 import type { DelegationResult } from '@/dataObjects/dtos/resourceDelegation';
 import type { Permissions, Reason } from '@/dataObjects/dtos/accessPackage';
@@ -127,11 +128,10 @@ export const singleRightsApi = createApi({
       DelegationCheckedRight[],
       {
         resourceId: string;
-        /** The party the right would be delegated from. */
-        from: string;
+        from?: string;
       }
     >({
-      query: ({ resourceId, from }) => ({
+      query: ({ resourceId, from = getCookie('AltinnPartyUuid') }) => ({
         url: `singleright/delegationcheck?from=${from}&resource=${encodeURIComponent(resourceId)}`,
         method: 'GET',
       }),

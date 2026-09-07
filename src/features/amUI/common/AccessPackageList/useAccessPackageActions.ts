@@ -196,12 +196,38 @@ export const useAccessPackageActions = ({
     );
   };
 
-  const onRevoke = async (accessPackage: AccessPackage, toParty?: Party) => {
-    if (!fromParty || !actingParty) {
-      return;
-    }
+  const resolveRevoke = (accessPackage: AccessPackage, toParty?: Party) => {
+    if (!fromParty || !actingParty) return null;
     const targetToParty = toParty ?? toPartyFromContext;
-    if (!targetToParty) return;
+    if (!targetToParty) return null;
+
+    return {
+      targetToParty,
+      revoke: () =>
+        revokePackage(
+          targetToParty,
+          fromParty,
+          actingParty,
+          accessPackage,
+          () => {
+            handleRevokeSuccess(accessPackage, targetToParty);
+          },
+          (httpStatus) => {
+            handleRevokeError(
+              accessPackage,
+              targetToParty,
+              httpStatus.toString(),
+              new Date().toISOString(),
+            );
+          },
+        ),
+    };
+  };
+
+  const onRevoke = async (accessPackage: AccessPackage, toParty?: Party) => {
+    const resolved = resolveRevoke(accessPackage, toParty);
+    if (!resolved) return;
+    const { targetToParty, revoke } = resolved;
 
     // Swallow a repeat click while the check runs, rather than disabling the trigger: disabling the
     // focused button blurs it, and nothing would restore focus if the user then cancels the dialog.
@@ -209,33 +235,23 @@ export const useAccessPackageActions = ({
     if (awaitingRedelegationCheck.current.has(revokeKey)) return;
     awaitingRedelegationCheck.current.add(revokeKey);
 
-    const revoke = () =>
-      revokePackage(
-        targetToParty,
-        fromParty,
-        actingParty,
-        accessPackage,
-        () => {
-          handleRevokeSuccess(accessPackage, targetToParty);
-        },
-        (httpStatus) => {
-          handleRevokeError(
-            accessPackage,
-            targetToParty,
-            httpStatus.toString(),
-            new Date().toISOString(),
-          );
-        },
-      );
-
     try {
       confirmRevoke(await canRedelegatePackage(accessPackage.id), revoke, {
         name: accessPackage.name,
-        toName: targetToParty.name,
+        toName: formatToPartyName(targetToParty),
       });
     } finally {
       awaitingRedelegationCheck.current.delete(revokeKey);
     }
+  };
+
+  /**
+   * Revokes without the cannot-redelegate confirmation, for callers that already show one. Used by
+   * the partial-deletion alert: the recipient keeps the inherited part, so nothing is lost that the
+   * user would need to give back.
+   */
+  const revokeWithoutConfirmation = (accessPackage: AccessPackage, toParty?: Party) => {
+    resolveRevoke(accessPackage, toParty)?.revoke();
   };
 
   const onRequest = async (accessPackage: AccessPackage) => {
@@ -345,6 +361,7 @@ export const useAccessPackageActions = ({
   return {
     onDelegate,
     onRevoke,
+    revokeWithoutConfirmation,
     onRequest,
     deleteRequest,
     hasPendingRequest: (accessPackage: AccessPackage) => !!getRequestId(accessPackage),

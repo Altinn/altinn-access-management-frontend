@@ -14,9 +14,7 @@ export const useCanRedelegatePackage = () => {
 
   const canRedelegatePackage = async (packageId: string): Promise<boolean> => {
     if (!fromParty) return false;
-    // Not preferCacheValue: this endpoint carries no tags and nothing invalidates it, so a cached
-    // answer can be as old as the page.
-    const check = runDelegationCheck({ party: fromParty.partyUuid });
+    const check = runDelegationCheck({ party: fromParty.partyUuid }, true);
     try {
       const checks = await check.unwrap();
       return checks.find((entry) => entry.package.id === packageId)?.result ?? false;

@@ -1,4 +1,4 @@
-import React, { useRef, useState } from 'react';
+import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Button, formatDisplayName, useSnackbar } from '@altinn/altinn-components';
 
@@ -6,7 +6,6 @@ import type { ServiceResource } from '@/rtk/features/singleRights/singleRightsAp
 import { useRevokeResource } from '@/resources/hooks/useRevokeResource';
 
 import { usePartyRepresentation } from '../../common/PartyRepresentationContext/PartyRepresentationContext';
-import { useCanRedelegateResource, useRevokeConfirmation } from '../../common/RevokeConfirmation';
 
 import classes from './DeleteResourceButton.module.css';
 import { MinusCircleIcon } from '@navikt/aksel-icons';
@@ -17,6 +16,7 @@ interface DeleteResourceButton {
   disabled?: boolean;
   onSuccess?: () => void;
   onError?: () => void;
+  confirmDelete: (resource: ServiceResource, deleteResource: () => void) => void;
 }
 
 export const DeleteResourceButton = ({
@@ -24,15 +24,18 @@ export const DeleteResourceButton = ({
   disabled = false,
   onSuccess,
   onError,
+  confirmDelete,
 }: DeleteResourceButton) => {
   const { t } = useTranslation();
   const { openSnackbar } = useSnackbar();
   const { fromParty, toParty } = usePartyRepresentation();
   const revoke = useRevokeResource();
   const [isLoading, setIsLoading] = useState(false);
-  const awaitingRedelegationCheck = useRef(false);
-  const { canRedelegateResource } = useCanRedelegateResource();
-  const { confirmRevoke, revokeConfirmationDialog } = useRevokeConfirmation();
+
+  const toPartyDisplayName = formatDisplayName({
+    fullName: toParty?.name || '',
+    type: toParty?.partyTypeName === PartyType.Person ? 'person' : 'company',
+  });
 
   const snackbar = (isSuccessful: boolean) => {
     const color: 'success' | 'danger' = isSuccessful ? 'success' : 'danger';
@@ -43,10 +46,7 @@ export const DeleteResourceButton = ({
           : 'single_rights.delete_singleRight_error_message',
         {
           resourceTitle: resource.title,
-          name: formatDisplayName({
-            fullName: toParty?.name || '',
-            type: toParty?.partyTypeName === PartyType.Person ? 'person' : 'company',
-          }),
+          name: toPartyDisplayName,
         },
       ),
       color,
@@ -71,38 +71,19 @@ export const DeleteResourceButton = ({
     );
   };
 
-  // A ref, not state: a repeat click is swallowed rather than the button disabled, because
-  // disabling the focused button blurs it and nothing restores focus if the user then cancels the
-  // dialog. See common/RestoreFocus/README.md.
-  const confirmAndDelete = async () => {
-    if (awaitingRedelegationCheck.current) return;
-    awaitingRedelegationCheck.current = true;
-    try {
-      confirmRevoke(await canRedelegateResource(resource.identifier), deleteResource, {
-        name: resource.title,
-        toName: toParty?.name ?? '',
-      });
-    } finally {
-      awaitingRedelegationCheck.current = false;
-    }
-  };
-
   return (
     fromParty &&
     toParty && (
-      <>
-        <Button
-          aria-label={t('common.delete') + ' ' + resource.title}
-          variant='tertiary'
-          className={classes.deleteButton}
-          disabled={disabled || isLoading}
-          onClick={confirmAndDelete}
-        >
-          <MinusCircleIcon aria-hidden='true' />
-          {t('common.delete_poa')}
-        </Button>
-        {revokeConfirmationDialog}
-      </>
+      <Button
+        aria-label={t('common.delete') + ' ' + resource.title}
+        variant='tertiary'
+        className={classes.deleteButton}
+        disabled={disabled || isLoading}
+        onClick={() => confirmDelete(resource, deleteResource)}
+      >
+        <MinusCircleIcon aria-hidden='true' />
+        {t('common.delete_poa')}
+      </Button>
     )
   );
 };
