@@ -14,7 +14,7 @@ export const useCanRedelegatePackage = () => {
 
   const canRedelegatePackage = async (packageId: string): Promise<boolean> => {
     if (!fromParty) return false;
-    const check = runDelegationCheck({ party: fromParty.partyUuid }, true);
+    const check = runDelegationCheck({ party: fromParty.partyUuid });
     try {
       const checks = await check.unwrap();
       return checks.find((entry) => entry.package.id === packageId)?.result ?? false;
