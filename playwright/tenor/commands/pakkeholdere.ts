@@ -58,8 +58,9 @@ const FORDELING: Array<{ pakke: string; antall: number | 'alle' }> = [
 
 /**
  * Hvor mange virksomhets- og person-kandidater som hentes fra Tenor per bruker
- * vi trenger. Ikke alle Tenor-oppføringer finnes i Altinn-registeret i et gitt
- * miljø, så vi henter med margin og hopper over de som ikke slår til.
+ * vi trenger. Så godt som alle Tenor-oppføringer er synket til testmiljøene,
+ * men for særtilfellene som ikke er det henter vi med margin og hopper over
+ * de som ikke slår til i registeret.
  */
 const KANDIDAT_FAKTOR = 4;
 
@@ -210,8 +211,9 @@ async function hentOppgittVirksomhet(
 /**
  * Henter testpersoner som finnes i Altinn-registeret i miljøet.
  *
- * Tenor har mange flere personer enn de som er synket til et testmiljø, så vi
- * henter med margin og beholder de `antall` første som slår til i registeret.
+ * Så godt som alle Tenor-personer er synket til testmiljøene; for
+ * særtilfellene som ikke er det henter vi med margin og beholder de `antall`
+ * første som slår til i registeret.
  *
  * @param tenor Tenor-klienten.
  * @param token Altinn-token-klienten, brukt til registeroppslaget.
