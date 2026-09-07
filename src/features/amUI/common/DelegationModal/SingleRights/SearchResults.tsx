@@ -155,19 +155,22 @@ export const SearchResults = ({
 
   if (error) {
     return (
-      <DsAlert
-        role='alert'
-        className={classes.searchError}
-        data-color='danger'
-      >
-        <DsHeading
-          level={2}
-          data-size='xs'
+      <>
+        <DsAlert
+          role='alert'
+          className={classes.searchError}
+          data-color='danger'
         >
-          {t('common.general_error_title')}
-        </DsHeading>
-        <DsParagraph>{t('common.general_error_paragraph')}</DsParagraph>
-      </DsAlert>
+          <DsHeading
+            level={2}
+            data-size='xs'
+          >
+            {t('common.general_error_title')}
+          </DsHeading>
+          <DsParagraph>{t('common.general_error_paragraph')}</DsParagraph>
+        </DsAlert>
+        {revokeConfirmationDialog}
+      </>
     );
   }
 
