@@ -1,128 +1,83 @@
+const { defineConfig, globalIgnores } = require('eslint/config');
 const js = require('@eslint/js');
-const tseslint = require('@typescript-eslint/eslint-plugin');
-const tsParser = require('@typescript-eslint/parser');
+const tseslint = require('typescript-eslint');
 const globals = require('globals');
 const importPlugin = require('eslint-plugin-import');
 const jsxA11y = require('eslint-plugin-jsx-a11y');
 const react = require('eslint-plugin-react');
 const storybook = require('eslint-plugin-storybook');
-const prettierConfig = require('eslint-config-prettier');
-const prettierPlugin = require('eslint-plugin-prettier');
+const prettier = require('eslint-plugin-prettier/recommended');
 
-// Files that TypeScript's wildcard include does not pick up (dot-directories are
-// skipped by tsc, and CommonJS config files are outside the project entirely), so
-// they have to be linted without type information.
-const untypedFiles = ['.mock/**', '.storybook/**', '**/*.cjs', 'entrypoint.js'];
+// eslint expands only the extensions that some config's `files` pattern names, so this
+// list decides which files `eslint .` visits at all.
+const lintedFiles = ['**/*.{js,jsx,mjs,cjs,ts,tsx,mts,cts}'];
+const nodeFiles = ['.mock/**', '.storybook/**', '**/*.cjs', 'entrypoint.js'];
 
-module.exports = [
-  {
-    ignores: [
-      '**/*.d.ts',
-      'dist/**',
-      'coverage/**',
-      'storybook-static/**',
-      '.mock/mockServiceWorker.js',
-      '.yarn/**',
-    ],
-  },
+module.exports = defineConfig([
+  globalIgnores([
+    '**/*.d.ts',
+    'dist/**',
+    'coverage/**',
+    'storybook-static/**',
+    '.mock/mockServiceWorker.js',
+    '.yarn/**',
+  ]),
   js.configs.recommended,
-  ...tseslint.configs['flat/recommended'],
+  ...tseslint.configs.recommended,
   react.configs.flat.recommended,
   jsxA11y.flatConfigs.recommended,
   ...storybook.configs['flat/recommended'],
-  // Keep prettier last so it wins over the formatting rules the configs above enable.
-  prettierConfig,
+  prettier,
   {
+    files: lintedFiles,
     languageOptions: {
-      parser: tsParser,
-      parserOptions: {
-        project: ['./tsconfig.json', './tsconfig.node.json'],
-        ecmaFeatures: { jsx: true },
-        ecmaVersion: 'latest',
-        sourceType: 'module',
-      },
+      parserOptions: { ecmaFeatures: { jsx: true } },
       globals: globals.browser,
     },
-    plugins: {
-      import: importPlugin,
-      prettier: prettierPlugin,
-    },
+    plugins: { import: importPlugin },
     settings: {
-      react: {
-        version: 'detect',
-      },
-      'import/parsers': {
-        '@typescript-eslint/parser': ['.ts', '.tsx'],
-      },
-      'import/resolver': {
-        typescript: {
-          project: '.',
-        },
-      },
+      react: { version: 'detect' },
+      'import/resolver': { typescript: { project: '.' } },
     },
     rules: {
-      'prettier/prettier': 'error',
-      'arrow-body-style': 'off',
-      'prefer-arrow-callback': 'off',
       'react/react-in-jsx-scope': 'off',
-      'react/jsx-no-bind': 'off',
-      '@typescript-eslint/consistent-type-exports': 'warn',
-      '@typescript-eslint/consistent-type-imports': ['warn', { fixStyle: 'inline-type-imports' }],
-      '@typescript-eslint/explicit-function-return-type': 'off',
-      '@typescript-eslint/strict-boolean-expressions': 0,
-      '@typescript-eslint/triple-slash-reference': 'off',
-      '@typescript-eslint/no-namespace': 'off',
-      'eol-last': 'error',
-      // A leading underscore marks a binding as intentionally unused.
-      '@typescript-eslint/no-unused-vars': [
-        'error',
-        { argsIgnorePattern: '^_', varsIgnorePattern: '^_', caughtErrorsIgnorePattern: '^_' },
-      ],
-      // Pre-existing violations, downgraded so they do not block CI on the flat config
-      // migration. Each needs real typing or accessibility decisions rather than an
-      // autofix, so they are burned down one rule at a time.
-      // TODO: fix the remaining violations of the rules below and restore them to 'error'
-      '@typescript-eslint/no-explicit-any': 'warn',
-      'jsx-a11y/anchor-has-content': 'warn',
-      'jsx-a11y/anchor-is-valid': 'warn',
-      'jsx-a11y/no-autofocus': 'warn',
-      'react/display-name': 'warn',
-      'react/prop-types': 'warn',
-      '@typescript-eslint/no-invalid-void-type': 0,
-      'import/no-duplicates': 'warn',
+      '@typescript-eslint/consistent-type-imports': ['error', { fixStyle: 'inline-type-imports' }],
+      'import/no-duplicates': 'error',
       'import/order': [
-        'warn',
+        'error',
         {
           'newlines-between': 'always',
           groups: ['builtin', 'external', 'internal', 'parent', 'sibling', 'index'],
         },
       ],
+      // A leading underscore marks a binding as intentionally unused.
+      '@typescript-eslint/no-unused-vars': [
+        'error',
+        { argsIgnorePattern: '^_', varsIgnorePattern: '^_', caughtErrorsIgnorePattern: '^_' },
+      ],
+      // Playwright hooks take an object destructuring pattern, sometimes an empty one.
+      'no-empty-pattern': ['error', { allowObjectPatternsAsParameters: true }],
     },
   },
   {
-    files: untypedFiles,
+    // Typed linting, scoped to the trees tsconfig.json covers. `extends` keeps it off
+    // .mock/** and .storybook/**, which tsc skips because they are dot-directories.
+    files: ['src/**/*.{ts,tsx}', 'playwright/**/*.{ts,tsx}', 'config.ts'],
+    extends: [tseslint.configs.recommendedTypeChecked],
     languageOptions: {
-      parserOptions: { project: null },
-      globals: { ...globals.browser, ...globals.node },
+      parserOptions: { projectService: true, tsconfigRootDir: __dirname },
     },
     rules: {
-      // Needs type information, which is unavailable for these files.
-      '@typescript-eslint/consistent-type-exports': 'off',
+      '@typescript-eslint/consistent-type-exports': 'error',
     },
   },
   {
-    files: ['playwright/**'],
-    rules: {
-      // Playwright requires a hook's first argument to be an object destructuring pattern.
-      'no-empty-pattern': 'off',
-    },
+    files: nodeFiles,
+    languageOptions: { globals: { ...globals.browser, ...globals.node } },
   },
   {
     files: ['**/*.cjs', 'entrypoint.js'],
     languageOptions: { sourceType: 'commonjs' },
-    rules: {
-      // These files are CommonJS by definition.
-      '@typescript-eslint/no-require-imports': 'off',
-    },
+    rules: { '@typescript-eslint/no-require-imports': 'off' },
   },
-];
+]);

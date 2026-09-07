@@ -1,6 +1,6 @@
 import React from 'react';
 import type { TFunction } from 'i18next';
-import { Button, type AccessPackageListItemProps, type Color } from '@altinn/altinn-components';
+import { Button, type AccessPackageListItemProps } from '@altinn/altinn-components';
 import { MinusCircleIcon, PlusCircleIcon } from '@navikt/aksel-icons';
 
 import type { ClientResourceListItemData } from './ClientResourceListItems';
@@ -115,7 +115,7 @@ export const buildPackageItem = ({
     as: showModalTrigger ? 'button' : 'div',
     titleAs: 'div',
     description: packageCount,
-    color: (hasAccess ? 'company' : 'neutral') as Color,
+    color: hasAccess ? 'company' : 'neutral',
     onClick: showModalTrigger ? onOpenModal : undefined,
     controls,
   };

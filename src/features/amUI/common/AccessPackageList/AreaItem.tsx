@@ -67,7 +67,7 @@ export const AreaItem = ({
         ) : undefined
       }
       expanded={expanded}
-      titleAs={`h${headingLevel}` as 'h2' | 'h3' | 'h4'}
+      titleAs={`h${headingLevel}`}
       onClick={() => toggleExpandedArea(area.id)}
       size='lg'
       border='solid'

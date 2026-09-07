@@ -47,7 +47,7 @@ export const useSnackbarOnIdle = ({
   }, [isBusy, pending, openSnackbar]);
 
   const queueSnackbar = (message: string, color: SnackbarColor = 'success') => {
-    const next = { message, color } as PendingSnackbar;
+    const next = { message, color };
     pendingRef.current = next;
     setPending(next);
   };

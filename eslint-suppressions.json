@@ -1,0 +1,996 @@
+{
+  ".mock/handlers/role.ts": {
+    "@typescript-eslint/no-explicit-any": {
+      "count": 1
+    }
+  },
+  ".mock/handlers/user.ts": {
+    "@typescript-eslint/no-explicit-any": {
+      "count": 1
+    }
+  },
+  ".storybook/main.ts": {
+    "@typescript-eslint/no-explicit-any": {
+      "count": 1
+    }
+  },
+  "config.ts": {
+    "@typescript-eslint/no-unsafe-assignment": {
+      "count": 2
+    }
+  },
+  "playwright/api-requests/EnduserConnection.tsx": {
+    "@typescript-eslint/no-unsafe-argument": {
+      "count": 7
+    },
+    "@typescript-eslint/no-unsafe-assignment": {
+      "count": 34
+    },
+    "@typescript-eslint/no-unsafe-call": {
+      "count": 1
+    },
+    "@typescript-eslint/no-unsafe-member-access": {
+      "count": 10
+    },
+    "@typescript-eslint/no-unsafe-return": {
+      "count": 3
+    }
+  },
+  "playwright/api-requests/MaskinportenToken.ts": {
+    "@typescript-eslint/no-unsafe-assignment": {
+      "count": 2
+    },
+    "@typescript-eslint/no-unsafe-member-access": {
+      "count": 2
+    },
+    "@typescript-eslint/no-unsafe-return": {
+      "count": 2
+    }
+  },
+  "playwright/api-requests/SystemUserApiRequests.tsx": {
+    "@typescript-eslint/no-unsafe-argument": {
+      "count": 2
+    },
+    "@typescript-eslint/no-unsafe-assignment": {
+      "count": 5
+    },
+    "@typescript-eslint/no-unsafe-member-access": {
+      "count": 1
+    },
+    "@typescript-eslint/no-unsafe-return": {
+      "count": 4
+    }
+  },
+  "playwright/api-requests/Token.tsx": {
+    "@typescript-eslint/no-unsafe-assignment": {
+      "count": 2
+    },
+    "@typescript-eslint/no-unsafe-member-access": {
+      "count": 6
+    },
+    "@typescript-eslint/no-unsafe-return": {
+      "count": 3
+    }
+  },
+  "playwright/api-requests/delegation-tilgangspakke/delegationApiRequest.ts": {
+    "@typescript-eslint/no-explicit-any": {
+      "count": 10
+    },
+    "@typescript-eslint/no-unsafe-argument": {
+      "count": 2
+    },
+    "@typescript-eslint/no-unsafe-assignment": {
+      "count": 14
+    },
+    "@typescript-eslint/no-unsafe-member-access": {
+      "count": 16
+    }
+  },
+  "playwright/e2eTests/altinn3/systemuser/deleteSystemUser.spec.ts": {
+    "@typescript-eslint/require-await": {
+      "count": 1
+    }
+  },
+  "playwright/e2eTests/altinn3/systemuser/selectSystemVendor.spec.ts": {
+    "@typescript-eslint/no-misused-promises": {
+      "count": 1
+    },
+    "@typescript-eslint/require-await": {
+      "count": 1
+    }
+  },
+  "playwright/pages/systemuser/ClientDelegation.ts": {
+    "@typescript-eslint/no-floating-promises": {
+      "count": 1
+    }
+  },
+  "playwright/pages/tilgangsstyring/KlientAdministrasjonPage.ts": {
+    "@typescript-eslint/await-thenable": {
+      "count": 2
+    }
+  },
+  "playwright/util/cleanup-delegationutils.ts": {
+    "@typescript-eslint/no-explicit-any": {
+      "count": 7
+    },
+    "@typescript-eslint/no-redundant-type-constituents": {
+      "count": 1
+    },
+    "@typescript-eslint/no-unsafe-argument": {
+      "count": 1
+    },
+    "@typescript-eslint/no-unsafe-assignment": {
+      "count": 1
+    },
+    "@typescript-eslint/no-unsafe-member-access": {
+      "count": 2
+    }
+  },
+  "playwright/util/cleanupDelegation-helper.ts": {
+    "@typescript-eslint/no-unsafe-argument": {
+      "count": 1
+    }
+  },
+  "playwright/util/testDelegationdatautil.ts": {
+    "@typescript-eslint/no-unsafe-argument": {
+      "count": 1
+    }
+  },
+  "playwright/uuTests/accessibilityHelpers/delegeringHelper.ts": {
+    "@typescript-eslint/no-explicit-any": {
+      "count": 1
+    },
+    "@typescript-eslint/restrict-template-expressions": {
+      "count": 1
+    }
+  },
+  "src/features/amUI/InstanceDetailPage/AddUserModal.tsx": {
+    "@typescript-eslint/no-unsafe-assignment": {
+      "count": 4
+    },
+    "@typescript-eslint/no-unsafe-member-access": {
+      "count": 3
+    }
+  },
+  "src/features/amUI/InstanceDetailPage/InstanceDetailPage.tsx": {
+    "@typescript-eslint/no-unsafe-argument": {
+      "count": 3
+    },
+    "@typescript-eslint/no-unsafe-assignment": {
+      "count": 4
+    },
+    "@typescript-eslint/no-unsafe-call": {
+      "count": 4
+    },
+    "@typescript-eslint/no-unsafe-member-access": {
+      "count": 2
+    }
+  },
+  "src/features/amUI/InstanceDetailPage/InstanceDetailPageContent.tsx": {
+    "@typescript-eslint/no-unsafe-argument": {
+      "count": 1
+    },
+    "@typescript-eslint/no-unsafe-assignment": {
+      "count": 15
+    },
+    "@typescript-eslint/no-unsafe-call": {
+      "count": 4
+    },
+    "@typescript-eslint/no-unsafe-member-access": {
+      "count": 3
+    }
+  },
+  "src/features/amUI/InstanceDetailPage/RequestInstanceAdminPackage/RequestModalBody.tsx": {
+    "@typescript-eslint/no-misused-promises": {
+      "count": 2
+    }
+  },
+  "src/features/amUI/InstanceDetailPage/useInstanceRights.ts": {
+    "@typescript-eslint/no-unsafe-assignment": {
+      "count": 2
+    }
+  },
+  "src/features/amUI/agentDetails/AgentDetails.tsx": {
+    "@typescript-eslint/no-unsafe-assignment": {
+      "count": 4
+    },
+    "@typescript-eslint/no-unsafe-call": {
+      "count": 1
+    }
+  },
+  "src/features/amUI/agentDetails/AgentDetailsDeleteModal.tsx": {
+    "@typescript-eslint/no-unsafe-assignment": {
+      "count": 1
+    },
+    "@typescript-eslint/no-unsafe-call": {
+      "count": 2
+    }
+  },
+  "src/features/amUI/agentDetails/AgentDetailsPage.tsx": {
+    "@typescript-eslint/no-unsafe-assignment": {
+      "count": 1
+    },
+    "@typescript-eslint/no-unsafe-call": {
+      "count": 1
+    }
+  },
+  "src/features/amUI/altinn2Account/AddAltinn2AccountPage.tsx": {
+    "@typescript-eslint/no-floating-promises": {
+      "count": 1
+    },
+    "@typescript-eslint/no-unsafe-argument": {
+      "count": 1
+    },
+    "@typescript-eslint/no-unsafe-assignment": {
+      "count": 2
+    },
+    "@typescript-eslint/no-unsafe-call": {
+      "count": 2
+    },
+    "@typescript-eslint/no-unsafe-member-access": {
+      "count": 1
+    }
+  },
+  "src/features/amUI/altinn2Account/Altinn2AccountForm.tsx": {
+    "@typescript-eslint/no-floating-promises": {
+      "count": 1
+    }
+  },
+  "src/features/amUI/clientAdministration/ClientAdministrationAgentsTab.tsx": {
+    "@typescript-eslint/no-unsafe-assignment": {
+      "count": 1
+    },
+    "@typescript-eslint/no-unsafe-call": {
+      "count": 2
+    },
+    "@typescript-eslint/no-unsafe-return": {
+      "count": 1
+    }
+  },
+  "src/features/amUI/clientAdministration/ClientAdministrationPageContent.tsx": {
+    "jsx-a11y/anchor-has-content": {
+      "count": 1
+    },
+    "jsx-a11y/anchor-is-valid": {
+      "count": 1
+    }
+  },
+  "src/features/amUI/clientAdministration/SelectRoleFilter.tsx": {
+    "@typescript-eslint/no-base-to-string": {
+      "count": 1
+    },
+    "@typescript-eslint/restrict-template-expressions": {
+      "count": 1
+    }
+  },
+  "src/features/amUI/clientDetails/ClientDetails.tsx": {
+    "@typescript-eslint/no-unsafe-assignment": {
+      "count": 7
+    },
+    "@typescript-eslint/no-unsafe-call": {
+      "count": 1
+    }
+  },
+  "src/features/amUI/clientDetails/ClientDetailsPage.tsx": {
+    "@typescript-eslint/no-unsafe-assignment": {
+      "count": 1
+    },
+    "@typescript-eslint/no-unsafe-call": {
+      "count": 1
+    }
+  },
+  "src/features/amUI/common/AccessPackageList/AccessPackageList.tsx": {
+    "@typescript-eslint/no-misused-promises": {
+      "count": 4
+    }
+  },
+  "src/features/amUI/common/AccessPackageList/useAccessPackageActions.ts": {
+    "@typescript-eslint/no-floating-promises": {
+      "count": 1
+    },
+    "@typescript-eslint/no-misused-promises": {
+      "count": 1
+    },
+    "@typescript-eslint/require-await": {
+      "count": 3
+    }
+  },
+  "src/features/amUI/common/AmTabs/AmTabs.tsx": {
+    "@typescript-eslint/no-unsafe-assignment": {
+      "count": 1
+    }
+  },
+  "src/features/amUI/common/Breadcrumbs/Breadcrumbs.tsx": {
+    "jsx-a11y/anchor-has-content": {
+      "count": 1
+    }
+  },
+  "src/features/amUI/common/ClientResourceList/buildAccessItems.tsx": {
+    "@typescript-eslint/no-misused-promises": {
+      "count": 2
+    }
+  },
+  "src/features/amUI/common/DeeplinkReporteeGuard/DeeplinkReporteeGuard.tsx": {
+    "@typescript-eslint/no-unsafe-argument": {
+      "count": 1
+    },
+    "@typescript-eslint/no-unsafe-assignment": {
+      "count": 1
+    },
+    "@typescript-eslint/no-unsafe-call": {
+      "count": 1
+    }
+  },
+  "src/features/amUI/common/DelegationModal/AccessPackages/AccessPackageInfo.tsx": {
+    "@typescript-eslint/no-misused-promises": {
+      "count": 5
+    }
+  },
+  "src/features/amUI/common/DelegationModal/AccessPackages/ClientPackageInfoModal.tsx": {
+    "@typescript-eslint/no-misused-promises": {
+      "count": 2
+    }
+  },
+  "src/features/amUI/common/DelegationModal/Instance/InstanceInfo.tsx": {
+    "@typescript-eslint/no-explicit-any": {
+      "count": 3
+    }
+  },
+  "src/features/amUI/common/DelegationModal/SingleRights/ClientResourceInfoModal.tsx": {
+    "@typescript-eslint/no-misused-promises": {
+      "count": 2
+    }
+  },
+  "src/features/amUI/common/DelegationModal/SingleRights/ResourceAlert.tsx": {
+    "@typescript-eslint/no-unsafe-enum-comparison": {
+      "count": 2
+    }
+  },
+  "src/features/amUI/common/DelegationModal/SingleRights/SearchResults.tsx": {
+    "@typescript-eslint/no-misused-promises": {
+      "count": 1
+    }
+  },
+  "src/features/amUI/common/DelegationModal/SingleRights/createSearchResultControlsRenderer.tsx": {
+    "react/display-name": {
+      "count": 1
+    }
+  },
+  "src/features/amUI/common/DelegationModal/missingAccessUtils.ts": {
+    "@typescript-eslint/no-unsafe-enum-comparison": {
+      "count": 6
+    }
+  },
+  "src/features/amUI/common/DeleteClientProviderModal/DeleteClientProviderModal.tsx": {
+    "@typescript-eslint/no-misused-promises": {
+      "count": 1
+    }
+  },
+  "src/features/amUI/common/DeleteUserModal/DeleteUserModal.stories.tsx": {
+    "@typescript-eslint/no-unsafe-assignment": {
+      "count": 4
+    }
+  },
+  "src/features/amUI/common/DeleteUserModal/DeleteUserModalContent.tsx": {
+    "@typescript-eslint/no-misused-promises": {
+      "count": 1
+    },
+    "@typescript-eslint/no-unsafe-assignment": {
+      "count": 2
+    },
+    "@typescript-eslint/no-unsafe-call": {
+      "count": 5
+    },
+    "@typescript-eslint/no-unsafe-member-access": {
+      "count": 1
+    }
+  },
+  "src/features/amUI/common/PageLayoutWrapper/NavigationFocus.tsx": {
+    "@typescript-eslint/no-unsafe-assignment": {
+      "count": 1
+    },
+    "@typescript-eslint/no-unsafe-call": {
+      "count": 1
+    }
+  },
+  "src/features/amUI/common/PageLayoutWrapper/useGlobalMenu.tsx": {
+    "@typescript-eslint/require-await": {
+      "count": 1
+    },
+    "jsx-a11y/anchor-has-content": {
+      "count": 7
+    }
+  },
+  "src/features/amUI/common/PageLayoutWrapper/useHeader.tsx": {
+    "@typescript-eslint/no-floating-promises": {
+      "count": 5
+    }
+  },
+  "src/features/amUI/common/PageLayoutWrapper/useSidebarItems.tsx": {
+    "@typescript-eslint/no-unsafe-argument": {
+      "count": 12
+    },
+    "@typescript-eslint/no-unsafe-assignment": {
+      "count": 1
+    },
+    "@typescript-eslint/no-unsafe-call": {
+      "count": 1
+    }
+  },
+  "src/features/amUI/common/PartyRepresentationContext/PartyRepresentationContext.test.tsx": {
+    "@typescript-eslint/no-explicit-any": {
+      "count": 18
+    },
+    "@typescript-eslint/no-unsafe-argument": {
+      "count": 18
+    },
+    "@typescript-eslint/require-await": {
+      "count": 1
+    }
+  },
+  "src/features/amUI/common/RequestPageLayout/RequestPageLayout.tsx": {
+    "@typescript-eslint/no-floating-promises": {
+      "count": 2
+    },
+    "@typescript-eslint/no-unsafe-assignment": {
+      "count": 3
+    },
+    "@typescript-eslint/no-unsafe-call": {
+      "count": 2
+    },
+    "@typescript-eslint/no-unsafe-member-access": {
+      "count": 1
+    }
+  },
+  "src/features/amUI/common/UserList/useFilteredUsers.test.ts": {
+    "@typescript-eslint/require-await": {
+      "count": 1
+    }
+  },
+  "src/features/amUI/common/UserSearch/permissionMapper.test.ts": {
+    "@typescript-eslint/no-explicit-any": {
+      "count": 1
+    }
+  },
+  "src/features/amUI/consent/ActiveConsentsPage/ActiveConsentsPage.tsx": {
+    "@typescript-eslint/no-unsafe-assignment": {
+      "count": 3
+    },
+    "@typescript-eslint/no-unsafe-call": {
+      "count": 1
+    },
+    "@typescript-eslint/no-unsafe-member-access": {
+      "count": 1
+    }
+  },
+  "src/features/amUI/consent/ActiveConsentsPage/ActiveConsentsPageContent.tsx": {
+    "@typescript-eslint/no-unsafe-assignment": {
+      "count": 1
+    },
+    "@typescript-eslint/no-unsafe-call": {
+      "count": 2
+    }
+  },
+  "src/features/amUI/consent/ConsentRequestPage/ConsentRequestPage.tsx": {
+    "@typescript-eslint/no-misused-promises": {
+      "count": 2
+    },
+    "@typescript-eslint/no-unsafe-assignment": {
+      "count": 6
+    },
+    "@typescript-eslint/no-unsafe-call": {
+      "count": 6
+    },
+    "@typescript-eslint/no-unsafe-member-access": {
+      "count": 2
+    }
+  },
+  "src/features/amUI/consent/components/ConsentDetails/ConsentDetails.tsx": {
+    "@typescript-eslint/no-misused-promises": {
+      "count": 1
+    }
+  },
+  "src/features/amUI/consent/components/ConsentRights/ConsentRights.tsx": {
+    "@typescript-eslint/no-unsafe-enum-comparison": {
+      "count": 1
+    }
+  },
+  "src/features/amUI/consent/components/IdPortenAuthorizationDetails/IdPortenAuthorizationDetails.tsx": {
+    "@typescript-eslint/no-misused-promises": {
+      "count": 1
+    }
+  },
+  "src/features/amUI/landingPage/LandingPage.tsx": {
+    "@typescript-eslint/no-unsafe-argument": {
+      "count": 1
+    },
+    "@typescript-eslint/no-unsafe-assignment": {
+      "count": 2
+    },
+    "@typescript-eslint/no-unsafe-call": {
+      "count": 3
+    },
+    "@typescript-eslint/no-unsafe-member-access": {
+      "count": 1
+    }
+  },
+  "src/features/amUI/maskinporten/AddSupplierButton.tsx": {
+    "@typescript-eslint/no-misused-promises": {
+      "count": 1
+    }
+  },
+  "src/features/amUI/maskinporten/ConsumerPage.tsx": {
+    "@typescript-eslint/no-unsafe-assignment": {
+      "count": 2
+    },
+    "@typescript-eslint/no-unsafe-call": {
+      "count": 1
+    }
+  },
+  "src/features/amUI/maskinporten/ConsumerPageContent.tsx": {
+    "@typescript-eslint/no-misused-promises": {
+      "count": 2
+    },
+    "@typescript-eslint/no-unsafe-assignment": {
+      "count": 1
+    },
+    "@typescript-eslint/no-unsafe-call": {
+      "count": 2
+    }
+  },
+  "src/features/amUI/maskinporten/MaskinportenDeleteDialog.tsx": {
+    "react/display-name": {
+      "count": 1
+    }
+  },
+  "src/features/amUI/maskinporten/ScopeInfo.tsx": {
+    "@typescript-eslint/no-floating-promises": {
+      "count": 2
+    }
+  },
+  "src/features/amUI/maskinporten/ScopeSearchControls.tsx": {
+    "@typescript-eslint/no-floating-promises": {
+      "count": 3
+    }
+  },
+  "src/features/amUI/maskinporten/SupplierPage.tsx": {
+    "@typescript-eslint/no-unsafe-assignment": {
+      "count": 2
+    },
+    "@typescript-eslint/no-unsafe-call": {
+      "count": 1
+    }
+  },
+  "src/features/amUI/maskinporten/SupplierPageContent.tsx": {
+    "@typescript-eslint/no-misused-promises": {
+      "count": 2
+    },
+    "@typescript-eslint/no-unsafe-assignment": {
+      "count": 1
+    },
+    "@typescript-eslint/no-unsafe-call": {
+      "count": 2
+    }
+  },
+  "src/features/amUI/maskinporten/SuppliersTab.tsx": {
+    "@typescript-eslint/no-unsafe-assignment": {
+      "count": 1
+    },
+    "@typescript-eslint/no-unsafe-call": {
+      "count": 2
+    }
+  },
+  "src/features/amUI/packagePoaDetailsPage/PackagePoaDetails.tsx": {
+    "@typescript-eslint/no-unsafe-assignment": {
+      "count": 4
+    },
+    "@typescript-eslint/no-unsafe-call": {
+      "count": 3
+    },
+    "@typescript-eslint/no-unsafe-member-access": {
+      "count": 1
+    }
+  },
+  "src/features/amUI/packagePoaDetailsPage/PackagePoaDetailsPage.tsx": {
+    "@typescript-eslint/no-unsafe-assignment": {
+      "count": 4
+    },
+    "@typescript-eslint/no-unsafe-call": {
+      "count": 3
+    },
+    "@typescript-eslint/no-unsafe-member-access": {
+      "count": 1
+    }
+  },
+  "src/features/amUI/packagePoaDetailsPage/UsersTab.tsx": {
+    "@typescript-eslint/no-floating-promises": {
+      "count": 2
+    }
+  },
+  "src/features/amUI/poaOverview/AccessPackagePermissions.tsx": {
+    "@typescript-eslint/no-unsafe-assignment": {
+      "count": 1
+    },
+    "react/prop-types": {
+      "count": 1
+    }
+  },
+  "src/features/amUI/poaOverview/GuardianshipPermissions.tsx": {
+    "@typescript-eslint/no-unsafe-assignment": {
+      "count": 1
+    },
+    "react/prop-types": {
+      "count": 1
+    }
+  },
+  "src/features/amUI/poaOverview/InstancePermissions.tsx": {
+    "react/display-name": {
+      "count": 1
+    }
+  },
+  "src/features/amUI/reporteeRightsPage/ReporteeRightsPage.tsx": {
+    "@typescript-eslint/no-unsafe-assignment": {
+      "count": 2
+    },
+    "@typescript-eslint/no-unsafe-call": {
+      "count": 1
+    }
+  },
+  "src/features/amUI/requestPage/DraftRequestPage/DraftRequestPage.tsx": {
+    "@typescript-eslint/no-floating-promises": {
+      "count": 2
+    },
+    "@typescript-eslint/no-unsafe-argument": {
+      "count": 1
+    },
+    "@typescript-eslint/no-unsafe-assignment": {
+      "count": 1
+    },
+    "@typescript-eslint/no-unsafe-call": {
+      "count": 2
+    },
+    "@typescript-eslint/no-unsafe-member-access": {
+      "count": 1
+    },
+    "jsx-a11y/no-autofocus": {
+      "count": 1
+    }
+  },
+  "src/features/amUI/requestPage/DraftRequestPage/MultipleDraftRequestsView.tsx": {
+    "@typescript-eslint/no-misused-promises": {
+      "count": 2
+    }
+  },
+  "src/features/amUI/requestPage/DraftRequestPage/useMultipleDraftRequests.ts": {
+    "@typescript-eslint/unbound-method": {
+      "count": 1
+    }
+  },
+  "src/features/amUI/requestPage/RequestReviewModal/RequestPackageDetail.tsx": {
+    "jsx-a11y/no-autofocus": {
+      "count": 1
+    }
+  },
+  "src/features/amUI/requestPage/RequestReviewModal/RequestResourceDetail.tsx": {
+    "jsx-a11y/no-autofocus": {
+      "count": 1
+    }
+  },
+  "src/features/amUI/requestPage/RequestReviewModal/RequestReviewModalContent.tsx": {
+    "@typescript-eslint/no-misused-promises": {
+      "count": 6
+    }
+  },
+  "src/features/amUI/requestPage/RequestReviewModal/useRequestReview.test.ts": {
+    "@typescript-eslint/no-explicit-any": {
+      "count": 13
+    },
+    "@typescript-eslint/no-unsafe-argument": {
+      "count": 13
+    },
+    "@typescript-eslint/require-await": {
+      "count": 1
+    }
+  },
+  "src/features/amUI/requestPage/RequestReviewModal/useRequestReview.ts": {
+    "@typescript-eslint/no-misused-promises": {
+      "count": 1
+    }
+  },
+  "src/features/amUI/settings/SettingsPageContent.tsx": {
+    "jsx-a11y/anchor-has-content": {
+      "count": 1
+    }
+  },
+  "src/features/amUI/settings/addressMgmtUtils.test.tsx": {
+    "@typescript-eslint/require-await": {
+      "count": 8
+    },
+    "react/display-name": {
+      "count": 1
+    }
+  },
+  "src/features/amUI/systemUser/CreateSystemUserPage/RightsIncluded.tsx": {
+    "@typescript-eslint/no-floating-promises": {
+      "count": 1
+    },
+    "@typescript-eslint/no-unsafe-assignment": {
+      "count": 1
+    },
+    "@typescript-eslint/no-unsafe-call": {
+      "count": 2
+    }
+  },
+  "src/features/amUI/systemUser/SystemUserAgentDelegationPage/SystemUserAgentDelegationPage.tsx": {
+    "@typescript-eslint/no-floating-promises": {
+      "count": 1
+    },
+    "@typescript-eslint/no-unsafe-assignment": {
+      "count": 6
+    },
+    "@typescript-eslint/no-unsafe-call": {
+      "count": 3
+    },
+    "@typescript-eslint/no-unsafe-return": {
+      "count": 1
+    }
+  },
+  "src/features/amUI/systemUser/SystemUserAgentDelegationPage/SystemUserAgentDelegationPageContent.tsx": {
+    "@typescript-eslint/no-floating-promises": {
+      "count": 2
+    },
+    "@typescript-eslint/no-misused-promises": {
+      "count": 1
+    },
+    "@typescript-eslint/no-unsafe-assignment": {
+      "count": 7
+    },
+    "@typescript-eslint/no-unsafe-call": {
+      "count": 1
+    }
+  },
+  "src/features/amUI/systemUser/SystemUserAgentRequestPage.tsx": {
+    "@typescript-eslint/no-floating-promises": {
+      "count": 2
+    },
+    "@typescript-eslint/no-unsafe-assignment": {
+      "count": 5
+    },
+    "@typescript-eslint/no-unsafe-call": {
+      "count": 5
+    },
+    "@typescript-eslint/no-unsafe-member-access": {
+      "count": 2
+    }
+  },
+  "src/features/amUI/systemUser/SystemUserChangeRequestPage.tsx": {
+    "@typescript-eslint/no-floating-promises": {
+      "count": 2
+    },
+    "@typescript-eslint/no-unsafe-assignment": {
+      "count": 3
+    },
+    "@typescript-eslint/no-unsafe-call": {
+      "count": 2
+    },
+    "@typescript-eslint/no-unsafe-member-access": {
+      "count": 1
+    }
+  },
+  "src/features/amUI/systemUser/SystemUserDetailPage/SystemUserDetailsPage.tsx": {
+    "@typescript-eslint/no-floating-promises": {
+      "count": 1
+    },
+    "@typescript-eslint/no-unsafe-assignment": {
+      "count": 4
+    },
+    "@typescript-eslint/no-unsafe-call": {
+      "count": 3
+    }
+  },
+  "src/features/amUI/systemUser/SystemUserRequestPage.tsx": {
+    "@typescript-eslint/no-floating-promises": {
+      "count": 2
+    },
+    "@typescript-eslint/no-unsafe-assignment": {
+      "count": 5
+    },
+    "@typescript-eslint/no-unsafe-call": {
+      "count": 5
+    },
+    "@typescript-eslint/no-unsafe-member-access": {
+      "count": 2
+    }
+  },
+  "src/features/amUI/systemUser/SystemUsersOverviewPage/SystemUserList.tsx": {
+    "@typescript-eslint/no-unsafe-assignment": {
+      "count": 2
+    },
+    "@typescript-eslint/no-unsafe-call": {
+      "count": 1
+    },
+    "@typescript-eslint/no-unsafe-member-access": {
+      "count": 1
+    }
+  },
+  "src/features/amUI/systemUser/components/EscalateRequest/EscalateRequest.tsx": {
+    "@typescript-eslint/no-floating-promises": {
+      "count": 1
+    }
+  },
+  "src/features/amUI/userRightsPage/AccessPackageSection/AccessPackageSection.tsx": {
+    "@typescript-eslint/no-unsafe-argument": {
+      "count": 1
+    },
+    "@typescript-eslint/no-unsafe-assignment": {
+      "count": 2
+    },
+    "@typescript-eslint/no-unsafe-call": {
+      "count": 1
+    }
+  },
+  "src/features/amUI/userRightsPage/AccessPackageSection/PendingPackageRequests/RequestsList.tsx": {
+    "@typescript-eslint/no-floating-promises": {
+      "count": 1
+    }
+  },
+  "src/features/amUI/userRightsPage/InstanceSection/InstanceSection.tsx": {
+    "@typescript-eslint/no-unsafe-argument": {
+      "count": 1
+    },
+    "@typescript-eslint/no-unsafe-assignment": {
+      "count": 1
+    },
+    "@typescript-eslint/no-unsafe-call": {
+      "count": 1
+    }
+  },
+  "src/features/amUI/userRightsPage/SingleRightsSection/SingleRightsSection.tsx": {
+    "@typescript-eslint/no-unsafe-argument": {
+      "count": 1
+    },
+    "@typescript-eslint/no-unsafe-assignment": {
+      "count": 1
+    },
+    "@typescript-eslint/no-unsafe-call": {
+      "count": 1
+    }
+  },
+  "src/features/amUI/userRightsPage/UserRightsPage.tsx": {
+    "@typescript-eslint/no-unsafe-assignment": {
+      "count": 2
+    },
+    "@typescript-eslint/no-unsafe-call": {
+      "count": 1
+    }
+  },
+  "src/features/amUI/users/NewUserModal/AddAgentModal.tsx": {
+    "@typescript-eslint/no-misused-promises": {
+      "count": 1
+    }
+  },
+  "src/features/amUI/users/NewUserModal/NewUserModal.tsx": {
+    "@typescript-eslint/no-floating-promises": {
+      "count": 2
+    }
+  },
+  "src/features/amUI/users/UsersList.tsx": {
+    "@typescript-eslint/no-unsafe-assignment": {
+      "count": 1
+    },
+    "@typescript-eslint/no-unsafe-call": {
+      "count": 2
+    }
+  },
+  "src/resources/Token/RefreshToken.tsx": {
+    "@typescript-eslint/no-floating-promises": {
+      "count": 1
+    }
+  },
+  "src/resources/hooks/useBackUrl.tsx": {
+    "@typescript-eslint/no-unsafe-argument": {
+      "count": 1
+    },
+    "@typescript-eslint/no-unsafe-assignment": {
+      "count": 2
+    },
+    "@typescript-eslint/no-unsafe-call": {
+      "count": 2
+    },
+    "@typescript-eslint/no-unsafe-member-access": {
+      "count": 1
+    },
+    "@typescript-eslint/no-unsafe-return": {
+      "count": 1
+    }
+  },
+  "src/resources/hooks/useDelegateAccessPackage.tsx": {
+    "@typescript-eslint/no-unsafe-argument": {
+      "count": 2
+    },
+    "@typescript-eslint/no-unsafe-member-access": {
+      "count": 2
+    }
+  },
+  "src/resources/hooks/useDelegateRights.tsx": {
+    "@typescript-eslint/no-unsafe-argument": {
+      "count": 1
+    }
+  },
+  "src/resources/hooks/useRevokeAccessPackage.tsx": {
+    "@typescript-eslint/no-unsafe-argument": {
+      "count": 1
+    },
+    "@typescript-eslint/no-unsafe-member-access": {
+      "count": 1
+    }
+  },
+  "src/resources/hooks/useTabState.ts": {
+    "@typescript-eslint/no-unsafe-argument": {
+      "count": 1
+    },
+    "@typescript-eslint/no-unsafe-assignment": {
+      "count": 5
+    },
+    "@typescript-eslint/no-unsafe-call": {
+      "count": 4
+    },
+    "@typescript-eslint/no-unsafe-member-access": {
+      "count": 1
+    },
+    "@typescript-eslint/no-unsafe-return": {
+      "count": 1
+    }
+  },
+  "src/resources/utils/debounce.ts": {
+    "@typescript-eslint/no-unsafe-argument": {
+      "count": 1
+    }
+  },
+  "src/routes/Router/RootLayout.tsx": {
+    "@typescript-eslint/no-unsafe-argument": {
+      "count": 1
+    },
+    "@typescript-eslint/no-unsafe-assignment": {
+      "count": 1
+    },
+    "@typescript-eslint/no-unsafe-call": {
+      "count": 1
+    }
+  },
+  "src/routes/Router/Router.tsx": {
+    "@typescript-eslint/no-unsafe-assignment": {
+      "count": 1
+    },
+    "@typescript-eslint/no-unsafe-call": {
+      "count": 2
+    }
+  },
+  "src/rtk/app/baseQuery.test.ts": {
+    "@typescript-eslint/no-base-to-string": {
+      "count": 2
+    },
+    "@typescript-eslint/require-await": {
+      "count": 1
+    }
+  },
+  "src/sites/ErrorPage/amUi/ErrorLayoutWrapper.tsx": {
+    "@typescript-eslint/no-unsafe-assignment": {
+      "count": 1
+    },
+    "@typescript-eslint/no-unsafe-call": {
+      "count": 1
+    }
+  },
+  "src/sites/ErrorPage/amUi/ErrorPage.tsx": {
+    "@typescript-eslint/no-unsafe-assignment": {
+      "count": 1
+    },
+    "@typescript-eslint/no-unsafe-call": {
+      "count": 1
+    },
+    "@typescript-eslint/no-unsafe-member-access": {
+      "count": 5
+    }
+  }
+}

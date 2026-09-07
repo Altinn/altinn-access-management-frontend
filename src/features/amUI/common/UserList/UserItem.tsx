@@ -135,7 +135,7 @@ export const UserItem = ({
 
   const subUsers = hasInheritingUsers
     ? includeSelfAsChild
-      ? [user as User, ...(childrenToDisplay ?? [])]
+      ? [user, ...(childrenToDisplay ?? [])]
       : childrenToDisplay
     : [];
 

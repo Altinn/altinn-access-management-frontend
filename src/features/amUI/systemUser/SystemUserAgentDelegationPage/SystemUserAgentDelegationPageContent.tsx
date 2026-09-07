@@ -165,7 +165,7 @@ export const SystemUserAgentDelegationPageContent = ({
       results.forEach((res, idx) => {
         const customer = batch[idx];
         if (res.status === 'fulfilled') {
-          successfulDelegations.push(res.value as AgentDelegation);
+          successfulDelegations.push(res.value);
         } else {
           batchErrors.push(customer);
         }

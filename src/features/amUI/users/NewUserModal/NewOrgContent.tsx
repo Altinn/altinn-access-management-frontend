@@ -74,7 +74,7 @@ export const NewOrgContent = ({
         className={classes.textField}
         label={t('common.org_number')}
         size='sm'
-        onChange={(e) => setOrgNumber((e.target as HTMLInputElement).value.replace(/ /g, ''))}
+        onChange={(e) => setOrgNumber(e.target.value.replace(/ /g, ''))}
         onKeyDown={(event) => {
           if (event.key === 'Enter' && !event.repeat && !isAddButtonDisabled && orgData && addOrg) {
             addOrg(orgData);
