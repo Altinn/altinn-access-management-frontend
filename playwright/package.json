@@ -8,9 +8,7 @@
     "env:AT22": "cross-env environment=at22 npx playwright test",
     "env:AT23": "cross-env environment=at23 npx playwright test",
     "env:TT02": "cross-env environment=tt02 npx playwright test",
-    "tenor": "npx tsx tenor/hentTestpersoner.ts",
-    "tenor:virksomhet": "npx tsx tenor/hentVirksomhet.ts",
-    "tenor:bulk": "npx tsx tenor/hentBulk.ts",
+    "tenor": "npx tsx tenor/cli.ts",
     "lint": "eslint ."
   },
   "keywords": [],
