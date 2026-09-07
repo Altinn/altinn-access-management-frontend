@@ -1,10 +1,6 @@
 import { createBrowserRouter, createRoutesFromElements, Route } from 'react-router';
 import * as React from 'react';
 
-import { GeneralPath, amUIPath, SystemUserPath, ConsentPath } from '../paths';
-
-import { RootLayout } from './RootLayout';
-
 import { ErrorPage, ReporteeChangeErrorPage } from '@/sites/ErrorPage';
 import { UserRightsPage } from '@/features/amUI/userRightsPage/UserRightsPage';
 import { UsersPage } from '@/features/amUI/users/UsersPage';
@@ -35,6 +31,10 @@ import { AddAltinn2AccountPage } from '@/features/amUI/altinn2Account/AddAltinn2
 import { MaskinportenPage } from '@/features/amUI/maskinporten/MaskinportenPage';
 import { SupplierPage } from '@/features/amUI/maskinporten/SupplierPage';
 import { ConsumerPage } from '@/features/amUI/maskinporten/ConsumerPage';
+
+import { GeneralPath, amUIPath, SystemUserPath, ConsentPath } from '../paths';
+
+import { RootLayout } from './RootLayout';
 
 export const Router = createBrowserRouter(
   createRoutesFromElements(

@@ -2,10 +2,10 @@ import React from 'react';
 import { DsHeading, DsParagraph } from '@altinn/altinn-components';
 import { PackageIcon } from '@navikt/aksel-icons';
 
+import { useIsMobileOrSmaller } from '@/resources/utils/screensizeUtils';
+
 import classes from './PackagePoaDetailsHeader.module.css';
 import { PackagePoaDetailsHeaderSkeleton } from './PackagePoaDetailsHeaderSkeleton';
-
-import { useIsMobileOrSmaller } from '@/resources/utils/screensizeUtils';
 
 interface PackagePoaDetailsHeaderProps {
   packageName?: string;

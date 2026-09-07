@@ -3,13 +3,6 @@ import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Link } from 'react-router';
 
-import { useRestoreFocusContext, useRestoreFocusTarget } from '../common/RestoreFocus';
-
-import { RequestReviewModal } from './RequestReviewModal/RequestReviewModal';
-import { type Request } from './types';
-import classes from './RequestPage.module.css';
-import { HandledRequestsSection } from './HandledRequestsSection';
-
 import { amUIPath } from '@/routes/paths';
 import {
   getSystemUserRequestUrl,
@@ -17,6 +10,13 @@ import {
 } from '@/routes/paths/systemUserPath';
 import { getConsentRequestUrl } from '@/routes/paths/consentPath';
 import { formatDateToNorwegian } from '@/resources/utils';
+
+import { useRestoreFocusContext, useRestoreFocusTarget } from '../common/RestoreFocus';
+
+import { RequestReviewModal } from './RequestReviewModal/RequestReviewModal';
+import { type Request } from './types';
+import classes from './RequestPage.module.css';
+import { HandledRequestsSection } from './HandledRequestsSection';
 
 interface RequestsTabPanelProps {
   count: number;

@@ -9,12 +9,12 @@ import { DsParagraph, formatDisplayName } from '@altinn/altinn-components';
 import { useContext } from 'react';
 import { Trans, useTranslation } from 'react-i18next';
 
+import { PartyType } from '@/rtk/features/userInfoApi';
+
 import { PartyRepresentationContext } from '../PartyRepresentationContext/PartyRepresentationContext';
 import { InheritedStatusType, type InheritedStatusMessageType } from '../useInheritedStatus';
 
 import classes from './StatusSection.module.css';
-
-import { PartyType } from '@/rtk/features/userInfoApi';
 
 const STATUS_TRANSLATION_KEYS: Record<InheritedStatusType, string> = {
   [InheritedStatusType.ViaRole]: 'status_section.access_status.via_role',

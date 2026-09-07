@@ -12,6 +12,10 @@ import {
 import { useTranslation } from 'react-i18next';
 import { CheckmarkCircleIcon, ChevronRightIcon, CircleSlashIcon } from '@navikt/aksel-icons';
 
+import { amUIPath } from '@/routes/paths';
+import type { ServiceResource } from '@/rtk/features/singleRights/singleRightsApi';
+import type { AccessPackage } from '@/rtk/features/accessPackageApi';
+
 import type { Request, ProcessedStatus } from '../types';
 import { ResourceList } from '../../common/ResourceList/ResourceList';
 import { RequestResourceDetail } from '../RequestReviewModal/RequestResourceDetail';
@@ -25,10 +29,6 @@ import {
   type HandledDirection,
   type HandledResourceItem,
 } from './useHandledRequests';
-
-import { amUIPath } from '@/routes/paths';
-import type { ServiceResource } from '@/rtk/features/singleRights/singleRightsApi';
-import type { AccessPackage } from '@/rtk/features/accessPackageApi';
 
 interface HandledRequestModalContentProps {
   modalRef: RefObject<HTMLDialogElement | null>;

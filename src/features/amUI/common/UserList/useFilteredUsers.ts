@@ -1,8 +1,8 @@
 import { useMemo, useState, useEffect } from 'react';
 
-import type { UserSearchNode } from '../UserSearch/types';
-
 import { matchesOrgNr } from '@/resources/utils/reporteeUtils';
+
+import type { UserSearchNode } from '../UserSearch/types';
 
 const PAGE_SIZE = 10;
 

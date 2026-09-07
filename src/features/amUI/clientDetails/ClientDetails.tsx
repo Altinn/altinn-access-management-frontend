@@ -10,6 +10,19 @@ import {
 } from '@altinn/altinn-components';
 import { useParams } from 'react-router';
 
+import {
+  useAddAgentAccessPackagesMutation,
+  useAddAgentResourcesMutation,
+  useGetAgentsQuery,
+  useGetClientAccessPackagesQuery,
+  useGetClientResourcesQuery,
+  useGetClientsQuery,
+  useRemoveAgentAccessPackagesMutation,
+  useRemoveAgentResourcesMutation,
+} from '@/rtk/features/clientApi';
+import { PartyType, useGetIsClientAdminQuery } from '@/rtk/features/userInfoApi';
+import { amUIPath } from '@/routes/paths';
+
 import { PageContainer } from '../common/PageContainer/PageContainer';
 import { usePartyRepresentation } from '../common/PartyRepresentationContext/PartyRepresentationContext';
 import { Breadcrumbs } from '../common/Breadcrumbs/Breadcrumbs';
@@ -26,19 +39,6 @@ import { CollapsibleContainer } from '../common/CollapsibleContainer/Collapsible
 import { isNewUser } from '../common/isNewUser';
 
 import { useClientDetailsAccessAgentLists } from './useClientDetailsAccessAgentLists';
-
-import {
-  useAddAgentAccessPackagesMutation,
-  useAddAgentResourcesMutation,
-  useGetAgentsQuery,
-  useGetClientAccessPackagesQuery,
-  useGetClientResourcesQuery,
-  useGetClientsQuery,
-  useRemoveAgentAccessPackagesMutation,
-  useRemoveAgentResourcesMutation,
-} from '@/rtk/features/clientApi';
-import { PartyType, useGetIsClientAdminQuery } from '@/rtk/features/userInfoApi';
-import { amUIPath } from '@/routes/paths';
 
 export const ClientDetails = () => {
   const { t } = useTranslation();

@@ -1,6 +1,6 @@
-import { usePartyRepresentation } from '../../common/PartyRepresentationContext/PartyRepresentationContext';
-
 import { useGetSentRequestsQuery } from '@/rtk/features/requestApi';
+
+import { usePartyRepresentation } from '../../common/PartyRepresentationContext/PartyRepresentationContext';
 
 export const ORG_INSTANCE_ADMIN_PACKAGE_URN =
   'urn:altinn:accesspackage:tilgangsstyring-enkeltinstanser';

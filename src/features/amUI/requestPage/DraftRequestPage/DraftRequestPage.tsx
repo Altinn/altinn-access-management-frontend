@@ -3,15 +3,6 @@ import { Trans, useTranslation } from 'react-i18next';
 import { DsAlert, DsParagraph, formatDisplayName } from '@altinn/altinn-components';
 import { useSearchParams } from 'react-router';
 
-import { RequestPageLayout } from '../../common/RequestPageLayout/RequestPageLayout';
-import { PartyRepresentationProvider } from '../../common/PartyRepresentationContext/PartyRepresentationContext';
-
-import { useMultipleDraftRequests } from './useMultipleDraftRequests';
-import { MultipleDraftRequestsView, type BatchActionType } from './MultipleDraftRequestsView';
-import { DraftRequestHeader } from './DraftRequestHeader';
-import { RequestReceiptBody } from './RequestReceiptBody';
-import { SingleDraftRequestView } from './SingleDraftRequestView';
-
 import { useDocumentTitle } from '@/resources/hooks/useDocumentTitle';
 import { getCookie } from '@/resources/Cookie/CookieMethods';
 import {
@@ -20,6 +11,15 @@ import {
   useWithdrawRequestMutation,
   type EnrichedRequest,
 } from '@/rtk/features/requestApi';
+
+import { RequestPageLayout } from '../../common/RequestPageLayout/RequestPageLayout';
+import { PartyRepresentationProvider } from '../../common/PartyRepresentationContext/PartyRepresentationContext';
+
+import { useMultipleDraftRequests } from './useMultipleDraftRequests';
+import { MultipleDraftRequestsView, type BatchActionType } from './MultipleDraftRequestsView';
+import { DraftRequestHeader } from './DraftRequestHeader';
+import { RequestReceiptBody } from './RequestReceiptBody';
+import { SingleDraftRequestView } from './SingleDraftRequestView';
 
 export const DraftRequestPage = () => {
   const { t } = useTranslation();

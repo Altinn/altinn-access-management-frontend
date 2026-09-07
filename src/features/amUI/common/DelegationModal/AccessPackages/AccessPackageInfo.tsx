@@ -2,6 +2,12 @@ import * as React from 'react';
 import { DsAlert, DsHeading, DsButton } from '@altinn/altinn-components';
 import { useTranslation } from 'react-i18next';
 
+import { PartyType } from '@/rtk/features/userInfoApi';
+import { TechnicalErrorParagraphs } from '@/features/amUI/common/TechnicalErrorParagraphs';
+import { useGetUserDelegationsQuery } from '@/rtk/features/accessPackageApi';
+import { useAccessPackageActions } from '@/features/amUI/common/AccessPackageList/useAccessPackageActions';
+import type { ActionError } from '@/resources/hooks/useActionError';
+
 import { useAccessPackageDelegationCheck } from '../../DelegationCheck/AccessPackageDelegationCheckContext';
 import { useDelegationModalContext } from '../DelegationModalContext';
 import { DelegationAction } from '../EditModal';
@@ -17,12 +23,6 @@ import { focusFirstEnabledButton, useRestoreFocusAfterSettled } from '../../Rest
 import classes from './AccessPackageInfo.module.css';
 import { PackageHeader } from './PackageHeader';
 import { PackageMeta } from './PackageMeta';
-
-import { PartyType } from '@/rtk/features/userInfoApi';
-import { TechnicalErrorParagraphs } from '@/features/amUI/common/TechnicalErrorParagraphs';
-import { useGetUserDelegationsQuery } from '@/rtk/features/accessPackageApi';
-import { useAccessPackageActions } from '@/features/amUI/common/AccessPackageList/useAccessPackageActions';
-import type { ActionError } from '@/resources/hooks/useActionError';
 
 export interface PackageInfoProps {
   accessPackage: ExtendedAccessPackage;

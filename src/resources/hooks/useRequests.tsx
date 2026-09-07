@@ -1,9 +1,6 @@
 import { useMemo } from 'react';
 import { formatDisplayName } from '@altinn/altinn-components';
 
-import { getCookie } from '../Cookie/CookieMethods';
-import { hasConsentPermission, hasCreateSystemUserPermission } from '../utils/permissionUtils';
-
 import { PartyType, useGetIsAdminQuery, useGetReporteeQuery } from '@/rtk/features/userInfoApi';
 import { useGetActiveConsentsQuery } from '@/rtk/features/consentApi';
 import { type Request } from '@/features/amUI/requestPage/types';
@@ -18,6 +15,9 @@ import {
 } from '@/rtk/features/requestApi';
 import { isSubUnitByType } from '@/resources/utils/reporteeUtils';
 import { useGetPartyFromLoggedInUserQuery } from '@/rtk/features/lookupApi';
+
+import { hasConsentPermission, hasCreateSystemUserPermission } from '../utils/permissionUtils';
+import { getCookie } from '../Cookie/CookieMethods';
 
 interface UseRequestsOptions {
   skipSentRequests?: boolean;

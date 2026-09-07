@@ -3,13 +3,13 @@ import { Trans, useTranslation } from 'react-i18next';
 import { DsAlert, DsHeading, DsParagraph, ListItem } from '@altinn/altinn-components';
 import { CheckmarkCircleIcon } from '@navikt/aksel-icons';
 
+import { useIsMobileOrSmaller } from '@/resources/utils/screensizeUtils';
+
 import { DelegationAction } from '../EditModal';
 import { type ChipRight } from '../utils/rightsUtils';
 
 import classes from './ResourceInfo.module.css';
 import { RightChips } from './RightChips';
-
-import { useIsMobileOrSmaller } from '@/resources/utils/screensizeUtils';
 
 interface RightsSectionProps {
   rights: ChipRight[];

@@ -3,11 +3,11 @@ import type { FetchBaseQueryError } from '@reduxjs/toolkit/query';
 import type { SerializedError } from '@reduxjs/toolkit';
 import { useSnackbar } from '@altinn/altinn-components';
 
-import { usePartyRepresentation } from '../PartyRepresentationContext/PartyRepresentationContext';
-
 import type { Role } from '@/rtk/features/roleApi';
 import { useRemoveRoleMutation } from '@/rtk/features/roleApi';
 import { DeletePoaConfirmation } from '@/features/amUI/common/DeletePoaConfirmation/DeletePoaConfirmation';
+
+import { usePartyRepresentation } from '../PartyRepresentationContext/PartyRepresentationContext';
 
 interface RoleDeleteButtonProps {
   role: Role;

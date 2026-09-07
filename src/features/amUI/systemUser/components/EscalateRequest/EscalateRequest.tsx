@@ -8,17 +8,17 @@ import {
 import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
-import { ButtonRow } from '../ButtonRow/ButtonRow';
-import { getApiBaseUrl } from '../../requestUtils';
-import { type SystemUserRequest } from '../../types';
-
-import classes from './EscalateRequest.module.css';
-
 import {
   useEscalateAgentRequestMutation,
   useEscalateRequestMutation,
 } from '@/rtk/features/systemUserApi';
 import { getLogoutUrl } from '@/resources/utils/pathUtils';
+
+import { ButtonRow } from '../ButtonRow/ButtonRow';
+import { getApiBaseUrl } from '../../requestUtils';
+import { type SystemUserRequest } from '../../types';
+
+import classes from './EscalateRequest.module.css';
 
 interface EscalateRequestProps {
   request: SystemUserRequest;

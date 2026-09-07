@@ -4,6 +4,16 @@ import { Navigate, useSearchParams } from 'react-router';
 import { Trans, useTranslation } from 'react-i18next';
 import { EnvelopeClosedIcon } from '@navikt/aksel-icons';
 
+import type { ActionError } from '@/resources/hooks/useActionError';
+import {
+  PartyType,
+  useGetIsAdminQuery,
+  useGetIsInstanceAdminQuery,
+} from '@/rtk/features/userInfoApi';
+import { useGetResourceQuery } from '@/rtk/features/resourceApi';
+import { useGetInstancesQuery, useRemoveInstanceMutation } from '@/rtk/features/instanceApi';
+import { useIsMobileOrSmaller } from '@/resources/utils/screensizeUtils';
+
 import { ResourceInfoSkeleton } from '../common/DelegationModal/SingleRights/ResourceInfoSkeleton';
 import { PageDivider } from '../common/PageDivider/PageDivider';
 import { usePartyRepresentation } from '../common/PartyRepresentationContext/PartyRepresentationContext';
@@ -28,16 +38,6 @@ import { InstanceUsersAsInstanceAdmin } from './InstanceUsersAsInstanceAdmin';
 import { InstanceUsersAsAdmin } from './InstanceUsersAsAdmin';
 import classes from './InstanceDetailPageContent.module.css';
 import { RequestInstanceAdminPackage } from './RequestInstanceAdminPackage';
-
-import type { ActionError } from '@/resources/hooks/useActionError';
-import {
-  PartyType,
-  useGetIsAdminQuery,
-  useGetIsInstanceAdminQuery,
-} from '@/rtk/features/userInfoApi';
-import { useGetResourceQuery } from '@/rtk/features/resourceApi';
-import { useGetInstancesQuery, useRemoveInstanceMutation } from '@/rtk/features/instanceApi';
-import { useIsMobileOrSmaller } from '@/resources/utils/screensizeUtils';
 
 // Focus-restore fallback for this zone: when a revoked row is gone, focus lands on the search field
 // above the list instead of the page heading. Unique within this provider zone.

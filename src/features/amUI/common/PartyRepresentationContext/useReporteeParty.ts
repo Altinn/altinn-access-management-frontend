@@ -1,8 +1,8 @@
-import { mapConnectionToParty } from './partyUtils';
-
 import { getCookie } from '@/resources/Cookie/CookieMethods';
 import { useGetPartyFromLoggedInUserQuery } from '@/rtk/features/lookupApi';
 import { useGetRightHoldersQuery } from '@/rtk/features/connectionApi';
+
+import { mapConnectionToParty } from './partyUtils';
 
 /**
  * useReporteeParty

@@ -3,8 +3,6 @@ import { useAccountSelector } from '@altinn/altinn-components';
 import { useTranslation } from 'react-i18next';
 import { useEffect, useState } from 'react';
 
-import { useGlobalMenu } from './useGlobalMenu';
-
 import {
   useGetReporteeQuery,
   useGetUserProfileQuery,
@@ -20,6 +18,8 @@ import {
   redirectToChangeReporteeAndRedirect,
   getDefaultChangeReporteeRedirectTarget,
 } from '@/resources/utils/changeReporteeUtils';
+
+import { useGlobalMenu } from './useGlobalMenu';
 
 export const handleSelectAccount = (
   accountUuid: string,

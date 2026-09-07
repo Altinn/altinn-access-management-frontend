@@ -2,6 +2,10 @@ import { Button, formatDisplayName, List } from '@altinn/altinn-components';
 import { useTranslation } from 'react-i18next';
 import { useRef, useState } from 'react';
 
+import { getCookie } from '@/resources/Cookie/CookieMethods';
+import { PartyType } from '@/rtk/features/userInfoApi';
+import { formatDateToNorwegian } from '@/resources/utils';
+
 import { useRestoreFocusContext } from '../common/RestoreFocus';
 import { PartyRepresentationProvider } from '../common/PartyRepresentationContext/PartyRepresentationContext';
 
@@ -10,10 +14,6 @@ import classes from './RequestPage.module.css';
 import { RequestListItem } from './RequestsTabPanel';
 import { SentRequestsCombinedModal } from './SentRequestsCombinedModal';
 import { HandledRequestsSection } from './HandledRequestsSection';
-
-import { getCookie } from '@/resources/Cookie/CookieMethods';
-import { PartyType } from '@/rtk/features/userInfoApi';
-import { formatDateToNorwegian } from '@/resources/utils';
 
 interface SentRequestsTabPanelProps {
   pendingRequests: Request[] | undefined;

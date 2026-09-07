@@ -17,6 +17,9 @@ import {
   ExclamationmarkTriangleFillIcon,
 } from '@navikt/aksel-icons';
 
+import { amUIPath } from '@/routes/paths';
+import type { AccessPackage } from '@/rtk/features/accessPackageApi';
+
 import type { Request } from '../types';
 import { ResourceList } from '../../common/ResourceList/ResourceList';
 import { useRestoreFocus, useRestoreFocusTarget } from '../../common/RestoreFocus';
@@ -26,9 +29,6 @@ import { RequestResourceDetail } from './RequestResourceDetail';
 import { useRequestReview } from './useRequestReview';
 import classes from './RequestReviewModal.module.css';
 import { RequestPackageDetail } from './RequestPackageDetail';
-
-import { amUIPath } from '@/routes/paths';
-import type { AccessPackage } from '@/rtk/features/accessPackageApi';
 
 interface RequestReviewModalContentProps {
   modalRef: RefObject<HTMLDialogElement | null>;

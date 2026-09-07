@@ -1,5 +1,8 @@
 import { describe, it, expect } from 'vitest';
 
+import { type RolePermission } from '@/rtk/features/roleApi';
+import { type Entity } from '@/dataObjects/dtos/Common';
+
 import {
   A2_PROVIDER_CODE,
   CRA_PROVIDER_CODE,
@@ -24,9 +27,6 @@ import {
   type DeletionStatus,
   type DeletionI18nKeys,
 } from './deletionModalUtils';
-
-import { type RolePermission } from '@/rtk/features/roleApi';
-import { type Entity } from '@/dataObjects/dtos/Common';
 
 type rolePermissionSetting = {
   code: string;

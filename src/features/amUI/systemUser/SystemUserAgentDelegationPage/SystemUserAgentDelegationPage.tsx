@@ -3,15 +3,6 @@ import { useTranslation } from 'react-i18next';
 import { useNavigate, useParams } from 'react-router';
 import { DsAlert, DsHeading, DsSkeleton } from '@altinn/altinn-components';
 
-import { Breadcrumbs } from '../../common/Breadcrumbs/Breadcrumbs';
-import { SystemUserHeader } from '../components/SystemUserHeader/SystemUserHeader';
-import { RightsList } from '../components/RightsList/RightsList';
-import { PageContainer } from '../../common/PageContainer/PageContainer';
-import { DeleteSystemUserPopover } from '../components/DeleteSystemUserPopover/DeleteSystemUserPopover';
-
-import { SystemUserAgentDelegationPageContent } from './SystemUserAgentDelegationPageContent';
-import classes from './SystemUserAgentDelegationPage.module.css';
-
 import {
   useGetAssignedCustomersQuery,
   useGetAgentSystemUserQuery,
@@ -29,6 +20,15 @@ import {
   useGetIsClientAdminQuery,
   useGetReporteeQuery,
 } from '@/rtk/features/userInfoApi';
+
+import { DeleteSystemUserPopover } from '../components/DeleteSystemUserPopover/DeleteSystemUserPopover';
+import { PageContainer } from '../../common/PageContainer/PageContainer';
+import { RightsList } from '../components/RightsList/RightsList';
+import { SystemUserHeader } from '../components/SystemUserHeader/SystemUserHeader';
+import { Breadcrumbs } from '../../common/Breadcrumbs/Breadcrumbs';
+
+import { SystemUserAgentDelegationPageContent } from './SystemUserAgentDelegationPageContent';
+import classes from './SystemUserAgentDelegationPage.module.css';
 
 export const SystemUserAgentDelegationPage = (): React.ReactNode => {
   const { id } = useParams();

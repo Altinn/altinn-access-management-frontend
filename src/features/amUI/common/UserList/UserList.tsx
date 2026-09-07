@@ -2,6 +2,9 @@ import { useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Button, DsParagraph, List } from '@altinn/altinn-components';
 
+import type { ExtendedUser } from '@/rtk/features/userInfoApi';
+import { type Connection } from '@/rtk/features/connectionApi';
+
 import { type DelegationAction } from '../DelegationModal/EditModal';
 import { mapConnectionsToUserSearchNodes } from '../UserSearch/connectionMapper';
 
@@ -10,9 +13,6 @@ import { useFilteredUsers } from './useFilteredUsers';
 import classes from './UserList.module.css';
 import { SkeletonUserList } from './SkeletonUserList';
 import { UserListActions } from './UserListActions';
-
-import type { ExtendedUser } from '@/rtk/features/userInfoApi';
-import { type Connection } from '@/rtk/features/connectionApi';
 
 export interface UserListProps {
   connections?: Connection[];

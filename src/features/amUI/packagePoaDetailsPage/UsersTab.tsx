@@ -2,6 +2,11 @@ import { useMemo, useRef, useState } from 'react';
 import { DsParagraph } from '@altinn/altinn-components';
 import { useTranslation } from 'react-i18next';
 
+import { type ActionError } from '@/resources/hooks/useActionError';
+import { type AccessPackage } from '@/rtk/features/accessPackageApi';
+import { type Party } from '@/rtk/features/lookupApi';
+import { useGetRightHoldersQuery } from '@/rtk/features/connectionApi';
+
 import UserSearch from '../common/UserSearch/UserSearch';
 import { useAccessPackageActions } from '../common/AccessPackageList/useAccessPackageActions';
 import { useRoleMetadata } from '../common/UserRoles/useRoleMetadata';
@@ -21,11 +26,6 @@ import {
 import { PackageUserModal, mapUserToParty, type PackageUserModalHandle } from './PackageUserModal';
 import { DelegateErrorAlert } from './DelegateErrorAlert';
 import pageClasses from './PackagePoaDetailsPage.module.css';
-
-import { type ActionError } from '@/resources/hooks/useActionError';
-import { type AccessPackage } from '@/rtk/features/accessPackageApi';
-import { type Party } from '@/rtk/features/lookupApi';
-import { useGetRightHoldersQuery } from '@/rtk/features/connectionApi';
 
 interface UsersTabProps {
   accessPackage?: AccessPackage;

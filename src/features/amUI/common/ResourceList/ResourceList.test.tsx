@@ -3,10 +3,10 @@ import { describe, expect, it, vi } from 'vitest';
 import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 
+import type { PackageResource, ResourceProvider } from '@/rtk/features/accessPackageApi';
+
 import { ResourceList } from './ResourceList';
 import type { ResourceListItemResource } from './types';
-
-import type { PackageResource, ResourceProvider } from '@/rtk/features/accessPackageApi';
 
 vi.mock('@/resources/hooks/useProviderLogoUrl', () => ({
   useProviderLogoUrl: () => ({

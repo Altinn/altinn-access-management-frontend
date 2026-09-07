@@ -9,6 +9,13 @@ import {
 } from '@altinn/altinn-components';
 import { DatabaseIcon, PersonGroupIcon } from '@navikt/aksel-icons';
 
+import {
+  PartyType,
+  useGetIsClientAdminQuery,
+  useGetReporteeQuery,
+} from '@/rtk/features/userInfoApi';
+import { useTabState } from '@/resources/hooks';
+
 import { AmTabs } from '../common/AmTabs/AmTabs';
 import { usePartyRepresentation } from '../common/PartyRepresentationContext/PartyRepresentationContext';
 import { ReporteePageHeading } from '../common/ReporteePageHeading/ReporteePageHeading';
@@ -16,13 +23,6 @@ import { ReporteePageHeading } from '../common/ReporteePageHeading/ReporteePageH
 import { ClientAdministrationAgentsTab } from './ClientAdministrationAgentsTab';
 import { ClientAdministrationClientsTab } from './ClientAdministrationClientsTab';
 import classes from './ClientAdministrationPageContent.module.css';
-
-import {
-  PartyType,
-  useGetIsClientAdminQuery,
-  useGetReporteeQuery,
-} from '@/rtk/features/userInfoApi';
-import { useTabState } from '@/resources/hooks';
 
 const clientAdministrationTabs = ['users', 'clients'] as const;
 

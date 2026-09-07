@@ -6,6 +6,19 @@ import {
   type UserListItemProps,
 } from '@altinn/altinn-components';
 
+import {
+  getFormattedDateOfBirthLabel,
+  formatOrgNr,
+  isSubUnitByType,
+} from '@/resources/utils/reporteeUtils';
+import { useAccessPackageLookup } from '@/resources/hooks/useAccessPackageLookup';
+import type { ActionError } from '@/resources/hooks/useActionError';
+import type { ServiceResource } from '@/rtk/features/singleRights/singleRightsApi';
+import type { Client } from '@/rtk/features/clientApi';
+import { useIsMobileOrSmaller } from '@/resources/utils/screensizeUtils';
+import { PartyType } from '@/rtk/features/userInfoApi';
+import type { Party } from '@/rtk/features/lookupApi';
+
 import { buildClientParentNameById, buildClientSortKey } from '../clientSortUtils';
 import { useRoleMetadata } from '../UserRoles/useRoleMetadata';
 import { UserListItems, type UserListItemData } from '../UserListItems/UserListItems';
@@ -20,19 +33,6 @@ import {
   ClientResourceInfoModal,
   type ClientResourceModalData,
 } from '../DelegationModal/SingleRights/ClientResourceInfoModal';
-
-import {
-  getFormattedDateOfBirthLabel,
-  formatOrgNr,
-  isSubUnitByType,
-} from '@/resources/utils/reporteeUtils';
-import { useAccessPackageLookup } from '@/resources/hooks/useAccessPackageLookup';
-import type { ActionError } from '@/resources/hooks/useActionError';
-import type { ServiceResource } from '@/rtk/features/singleRights/singleRightsApi';
-import type { Client } from '@/rtk/features/clientApi';
-import { useIsMobileOrSmaller } from '@/resources/utils/screensizeUtils';
-import { PartyType } from '@/rtk/features/userInfoApi';
-import type { Party } from '@/rtk/features/lookupApi';
 
 export type ClientAccessPackageAction = {
   clientId: string;

@@ -12,13 +12,13 @@ import {
 } from '@altinn/altinn-components';
 import { ArrowLeftIcon } from '@navikt/aksel-icons';
 
-import classes from './RequestPageLayout.module.css';
-
 import { getAltinnStartPageUrl, getLogoutUrl } from '@/resources/utils/pathUtils';
 import { useUpdateSelectedLanguageMutation } from '@/rtk/features/settingsApi';
 import { useGetUserProfileQuery } from '@/rtk/features/userInfoApi';
 import { getButtonIconSize } from '@/resources/utils/iconUtils';
 import { useRedirectToRequestParty } from '@/resources/hooks/useRedirectToRequestParty';
+
+import classes from './RequestPageLayout.module.css';
 
 interface RequestPageLayoutProps {
   account: { name: string; type: 'person' | 'company' };

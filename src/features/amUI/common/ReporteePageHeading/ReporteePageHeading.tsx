@@ -2,13 +2,13 @@ import * as React from 'react';
 import { useTranslation } from 'react-i18next';
 import { DsHeading, DsSkeleton } from '@altinn/altinn-components';
 
-import { DownloadFileButton } from '../DownloadFileButton/DownloadFileButton';
-
-import styles from './ReporteePageHeading.module.css';
-
 import { type ReporteeInfo } from '@/rtk/features/userInfoApi';
 import { formatOrgNr, isSubUnit } from '@/resources/utils/reporteeUtils';
 import { useIsTabletOrSmaller } from '@/resources/utils/screensizeUtils';
+
+import { DownloadFileButton } from '../DownloadFileButton/DownloadFileButton';
+
+import styles from './ReporteePageHeading.module.css';
 
 type Props = {
   title: string;

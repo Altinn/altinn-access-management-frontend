@@ -4,6 +4,15 @@ import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router';
 import { TrashIcon } from '@navikt/aksel-icons';
 
+import { PartyType } from '@/rtk/features/userInfoApi';
+import { amUIPath } from '@/routes/paths';
+import type { ServiceResource } from '@/rtk/features/singleRights/singleRightsApi';
+import {
+  useGetMaskinportenConsumerResourcesQuery,
+  useRemoveMaskinportenConsumerMutation,
+  useRemoveMaskinportenConsumerResourceMutation,
+} from '@/rtk/features/maskinportenApi';
+
 import { DelegationAction, EditModal } from '../common/DelegationModal/EditModal';
 import { PageContainer } from '../common/PageContainer/PageContainer';
 import { UserPageHeader } from '../common/UserPageHeader/UserPageHeader';
@@ -22,15 +31,6 @@ import {
   DelegatedResourcesSection,
   MASKINPORTEN_RESOURCES_HEADING_ID,
 } from './DelegatedResourcesSection';
-
-import { PartyType } from '@/rtk/features/userInfoApi';
-import { amUIPath } from '@/routes/paths';
-import type { ServiceResource } from '@/rtk/features/singleRights/singleRightsApi';
-import {
-  useGetMaskinportenConsumerResourcesQuery,
-  useRemoveMaskinportenConsumerMutation,
-  useRemoveMaskinportenConsumerResourceMutation,
-} from '@/rtk/features/maskinportenApi';
 
 const backUrl = `/${amUIPath.Maskinporten}#consumers`;
 

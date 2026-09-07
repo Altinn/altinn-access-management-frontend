@@ -3,17 +3,17 @@ import { act, renderHook } from '@testing-library/react';
 import * as altinnComponents from '@altinn/altinn-components';
 import * as i18nModule from 'react-i18next';
 
-import * as partyRepModule from '../../common/PartyRepresentationContext/PartyRepresentationContext';
-import * as delegationCheckModule from '../../common/DelegationCheck/AccessPackageDelegationCheckContext';
-import type { Request } from '../types';
-
-import { useRequestReview } from './useRequestReview';
-
 import * as singleRightsModule from '@/rtk/features/singleRights/singleRightsApi';
 import * as requestApiModule from '@/rtk/features/requestApi';
 import type { EnrichedResourceRequest, EnrichedPackageRequest } from '@/rtk/features/requestApi';
 import type { AccessPackage } from '@/rtk/features/accessPackageApi';
 import type { ServiceResource } from '@/rtk/features/singleRights/singleRightsApi';
+
+import type { Request } from '../types';
+import * as delegationCheckModule from '../../common/DelegationCheck/AccessPackageDelegationCheckContext';
+import * as partyRepModule from '../../common/PartyRepresentationContext/PartyRepresentationContext';
+
+import { useRequestReview } from './useRequestReview';
 
 vi.mock('@altinn/altinn-components', () => ({ useSnackbar: vi.fn() }));
 vi.mock('react-i18next', () => ({ useTranslation: vi.fn() }));

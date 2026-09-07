@@ -11,7 +11,6 @@ const prettier = require('eslint-plugin-prettier/recommended');
 // eslint expands only the extensions that some config's `files` pattern names, so this
 // list decides which files `eslint .` visits at all.
 const lintedFiles = ['**/*.{js,jsx,mjs,cjs,ts,tsx,mts,cts}'];
-const nodeFiles = ['.mock/**', '.storybook/**', '**/*.cjs', 'entrypoint.js'];
 
 module.exports = defineConfig([
   globalIgnores([
@@ -30,16 +29,15 @@ module.exports = defineConfig([
   prettier,
   {
     files: lintedFiles,
-    languageOptions: {
-      parserOptions: { ecmaFeatures: { jsx: true } },
-      globals: globals.browser,
-    },
+    languageOptions: { globals: globals.browser },
     plugins: { import: importPlugin },
     settings: {
       react: { version: 'detect' },
-      'import/resolver': { typescript: { project: '.' } },
+      'import/resolver': { typescript: {} },
     },
     rules: {
+      // The automatic JSX runtime needs no React import in scope. `react/jsx-uses-react`
+      // stays on, so the files that still import React are not reported as unused.
       'react/react-in-jsx-scope': 'off',
       '@typescript-eslint/consistent-type-imports': ['error', { fixStyle: 'inline-type-imports' }],
       'import/no-duplicates': 'error',
@@ -55,13 +53,11 @@ module.exports = defineConfig([
         'error',
         { argsIgnorePattern: '^_', varsIgnorePattern: '^_', caughtErrorsIgnorePattern: '^_' },
       ],
-      // Playwright hooks take an object destructuring pattern, sometimes an empty one.
-      'no-empty-pattern': ['error', { allowObjectPatternsAsParameters: true }],
     },
   },
   {
-    // Typed linting, scoped to the trees tsconfig.json covers. `extends` keeps it off
-    // .mock/** and .storybook/**, which tsc skips because they are dot-directories.
+    // Typed linting, scoped by `files` to the trees tsconfig.app.json covers. .mock/** and
+    // .storybook/** are linted but belong to no TypeScript project, so they stay untyped.
     files: ['src/**/*.{ts,tsx}', 'playwright/**/*.{ts,tsx}', 'config.ts'],
     extends: [tseslint.configs.recommendedTypeChecked],
     languageOptions: {
@@ -72,11 +68,17 @@ module.exports = defineConfig([
     },
   },
   {
-    files: nodeFiles,
-    languageOptions: { globals: { ...globals.browser, ...globals.node } },
+    // Playwright requires a hook's first argument to be an object destructuring pattern,
+    // sometimes an empty one.
+    files: ['playwright/**'],
+    rules: { 'no-empty-pattern': 'off' },
   },
   {
-    files: ['**/*.cjs', 'entrypoint.js'],
+    files: ['.mock/**', '.storybook/**', '**/*.cjs'],
+    languageOptions: { globals: globals.node },
+  },
+  {
+    files: ['**/*.cjs'],
     languageOptions: { sourceType: 'commonjs' },
     rules: { '@typescript-eslint/no-require-imports': 'off' },
   },

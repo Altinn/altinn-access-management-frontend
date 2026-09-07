@@ -2,6 +2,8 @@ import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { DsParagraph, List } from '@altinn/altinn-components';
 
+import { formatDateToNorwegian } from '@/resources/utils';
+
 import { useRestoreFocusContext } from '../common/RestoreFocus';
 import { CollapsibleContainer } from '../common/CollapsibleContainer/CollapsibleContainer';
 
@@ -10,8 +12,6 @@ import { RequestListItem } from './RequestsTabPanel';
 import { HandledRequestModal } from './HandledRequestModal/HandledRequestModal';
 import { type Request } from './types';
 import classes from './RequestPage.module.css';
-
-import { formatDateToNorwegian } from '@/resources/utils';
 
 interface HandledRequestsSectionProps {
   handledRequests: Request[] | undefined;

@@ -9,13 +9,13 @@ import {
 import { useState } from 'react';
 import { t } from 'i18next';
 
+import { type Organization, useGetOrganizationQuery } from '@/rtk/features/lookupApi';
+import { formatOrgNr } from '@/resources/utils/reporteeUtils';
+
 import { createErrorDetails } from '../../common/TechnicalErrorParagraphs/TechnicalErrorParagraphs';
 
 import classes from './NewUserModal.module.css';
 import { NewUserAlert } from './NewUserAlert';
-
-import { type Organization, useGetOrganizationQuery } from '@/rtk/features/lookupApi';
-import { formatOrgNr } from '@/resources/utils/reporteeUtils';
 
 export const NewOrgContent = ({
   addOrg,

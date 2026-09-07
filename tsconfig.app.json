@@ -1,0 +1,38 @@
+{
+  "compilerOptions": {
+    "composite": true,
+    "tsBuildInfoFile": "./node_modules/.tmp/tsconfig.app.tsbuildinfo",
+    "target": "ESNext",
+    "types": ["vite/client", "vitest/globals"],
+    "useDefineForClassFields": true,
+    "lib": ["DOM", "DOM.Iterable", "ESNext"],
+    "allowJs": false,
+    "skipLibCheck": true,
+    "esModuleInterop": false,
+    "allowSyntheticDefaultImports": true,
+    "strict": true,
+    "forceConsistentCasingInFileNames": true,
+    "module": "ESNext",
+    "moduleResolution": "bundler",
+    "resolveJsonModule": true,
+    "isolatedModules": true,
+    "noEmit": true,
+    "jsx": "react",
+    "baseUrl": "./",
+    "paths": {
+      "@/*": ["./src/*"],
+      "@mock/*": ["./.mock/*"],
+      "playwright/*": ["playwright/*"]
+    },
+    "plugins": [{ "name": "typescript-plugin-css-modules" }],
+    "typeRoots": [
+      "./node_modules/@types",
+      "./node_modules/@digdir",
+      "./node_modules/",
+      "./src",
+      "./.mock"
+    ]
+  },
+  "include": ["**/*.ts", "**/*.tsx"],
+  "exclude": ["node_modules", "dist", "vite.config.ts"]
+}

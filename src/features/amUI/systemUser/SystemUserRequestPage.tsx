@@ -9,15 +9,6 @@ import {
   formatDisplayName,
 } from '@altinn/altinn-components';
 
-import { RequestPageBase } from './components/RequestPageBase/RequestPageBase';
-import type { ProblemDetail } from './types';
-import { RightsList } from './components/RightsList/RightsList';
-import { ButtonRow } from './components/ButtonRow/ButtonRow';
-import { DelegationCheckError } from './components/DelegationCheckError/DelegationCheckError';
-import { EscalateRequest } from './components/EscalateRequest/EscalateRequest';
-import { getApiBaseUrl } from './requestUtils';
-import { SystemUserRequestLoadError } from './components/SystemUserRequestLoadError/SystemUserRequestLoadError';
-
 import { hasCreateSystemUserPermission } from '@/resources/utils/permissionUtils';
 import { SystemUserPath } from '@/routes/paths';
 import { getLogoutUrl } from '@/resources/utils/pathUtils';
@@ -28,6 +19,15 @@ import {
 } from '@/rtk/features/systemUserApi';
 import { useDocumentTitle } from '@/resources/hooks/useDocumentTitle';
 import { useGetIsAdminQuery, useGetReporteeQuery } from '@/rtk/features/userInfoApi';
+
+import { RequestPageBase } from './components/RequestPageBase/RequestPageBase';
+import type { ProblemDetail } from './types';
+import { RightsList } from './components/RightsList/RightsList';
+import { ButtonRow } from './components/ButtonRow/ButtonRow';
+import { DelegationCheckError } from './components/DelegationCheckError/DelegationCheckError';
+import { EscalateRequest } from './components/EscalateRequest/EscalateRequest';
+import { getApiBaseUrl } from './requestUtils';
+import { SystemUserRequestLoadError } from './components/SystemUserRequestLoadError/SystemUserRequestLoadError';
 
 export const SystemUserRequestPage = () => {
   const { t } = useTranslation();

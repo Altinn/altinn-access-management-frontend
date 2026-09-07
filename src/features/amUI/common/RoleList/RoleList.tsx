@@ -1,6 +1,10 @@
 import { DsAlert, DsHeading, DsParagraph, List } from '@altinn/altinn-components';
 import { t } from 'i18next';
 
+import { useIsMobileOrSmaller } from '@/resources/utils/screensizeUtils';
+import { useGetRolePermissionsQuery } from '@/rtk/features/roleApi';
+import type { Role } from '@/rtk/features/roleApi';
+
 import { usePartyRepresentation } from '../PartyRepresentationContext/PartyRepresentationContext';
 import {
   createErrorDetails,
@@ -15,10 +19,6 @@ import { useGroupedRoleListEntries } from './useGroupedRoleListEntries';
 import { RoleListItem } from './RoleListItem';
 import classes from './roleSection.module.css';
 import { RoleDeleteButton } from './RoleDeleteButton';
-
-import { useIsMobileOrSmaller } from '@/resources/utils/screensizeUtils';
-import { useGetRolePermissionsQuery } from '@/rtk/features/roleApi';
-import type { Role } from '@/rtk/features/roleApi';
 
 export const ROLE_LIST_HEADING_ID = 'role_list_heading';
 

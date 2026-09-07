@@ -3,6 +3,18 @@ import { MinusCircleIcon } from '@navikt/aksel-icons';
 import { useEffect, useRef } from 'react';
 import { useTranslation } from 'react-i18next';
 
+import type { ServiceResource } from '@/rtk/features/singleRights/singleRightsApi';
+import {
+  useAddMaskinportenSupplierResourceMutation,
+  useGetMaskinportenConsumerResourcesQuery,
+  useGetMaskinportenSupplierResourcesQuery,
+  useMaskinportenResourceDelegationCheckQuery,
+  useRemoveMaskinportenConsumerResourceMutation,
+  useRemoveMaskinportenSupplierResourceMutation,
+} from '@/rtk/features/maskinportenApi';
+import { useIsMobileOrSmaller } from '@/resources/utils/screensizeUtils';
+import { StatusMessageForScreenReader } from '@/components/StatusMessageForScreenReader/StatusMessageForScreenReader';
+
 import { createErrorDetails } from '../common/TechnicalErrorParagraphs/TechnicalErrorParagraphs';
 import { focusFirstEnabledButton, useRestoreFocusAfterSettled } from '../common/RestoreFocus';
 import { useDelegationModalContext } from '../common/DelegationModal/DelegationModalContext';
@@ -18,18 +30,6 @@ import { ScopeActionAlert } from './ScopeActionAlert';
 import { getMaskinportenScopes } from './scopeUtils';
 import { useMaskinportenResourceActions } from './hooks/useMaskinportenResourceActions';
 import classes from './ScopeInfo.module.css';
-
-import type { ServiceResource } from '@/rtk/features/singleRights/singleRightsApi';
-import {
-  useAddMaskinportenSupplierResourceMutation,
-  useGetMaskinportenConsumerResourcesQuery,
-  useGetMaskinportenSupplierResourcesQuery,
-  useMaskinportenResourceDelegationCheckQuery,
-  useRemoveMaskinportenConsumerResourceMutation,
-  useRemoveMaskinportenSupplierResourceMutation,
-} from '@/rtk/features/maskinportenApi';
-import { useIsMobileOrSmaller } from '@/resources/utils/screensizeUtils';
-import { StatusMessageForScreenReader } from '@/components/StatusMessageForScreenReader/StatusMessageForScreenReader';
 
 const SUCCESS_DISPLAY_MS = 2000;
 

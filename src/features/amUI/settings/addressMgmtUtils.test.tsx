@@ -4,6 +4,10 @@ import { Provider } from 'react-redux';
 import { configureStore } from '@reduxjs/toolkit';
 import React from 'react';
 
+import type { NotificationAddress } from '@/rtk/features/settingsApi';
+import { settingsApi } from '@/rtk/features/settingsApi';
+import { PartyType } from '@/rtk/features/userInfoApi';
+
 import { usePartyRepresentation } from '../common/PartyRepresentationContext/PartyRepresentationContext';
 
 import {
@@ -14,10 +18,6 @@ import {
   isValidAddresses,
   useSaveAddressChanges,
 } from './addressMgmtUtils';
-
-import type { NotificationAddress } from '@/rtk/features/settingsApi';
-import { settingsApi } from '@/rtk/features/settingsApi';
-import { PartyType } from '@/rtk/features/userInfoApi';
 
 // Mock the PartyRepresentation hook
 vi.mock('../common/PartyRepresentationContext/PartyRepresentationContext', () => ({

@@ -3,14 +3,14 @@ import { DsButton, DsDialog, DsHeading } from '@altinn/altinn-components';
 import { useTranslation } from 'react-i18next';
 import { PlusIcon } from '@navikt/aksel-icons';
 
+import { useAddAgentMutation } from '@/rtk/features/clientApi';
+import { type User } from '@/rtk/features/userInfoApi';
+
 import { AmTabs } from '../../common/AmTabs/AmTabs';
 import { createErrorDetails } from '../../common/TechnicalErrorParagraphs/TechnicalErrorParagraphs';
 
 import { NewPersonContent, type personInput } from './NewPersonContent';
 import classes from './NewUserModal.module.css';
-
-import { useAddAgentMutation } from '@/rtk/features/clientApi';
-import { type User } from '@/rtk/features/userInfoApi';
 
 interface AddAgentButtonProps {
   variant: 'primary' | 'secondary';

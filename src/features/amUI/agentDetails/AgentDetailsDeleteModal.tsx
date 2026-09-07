@@ -2,9 +2,9 @@ import React, { useCallback } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router';
 
-import { DeleteClientProviderModal } from '../common/DeleteClientProviderModal/DeleteClientProviderModal';
-
 import { useRemoveAgentMutation } from '@/rtk/features/clientApi';
+
+import { DeleteClientProviderModal } from '../common/DeleteClientProviderModal/DeleteClientProviderModal';
 
 interface AgentDetailsDeleteModalProps {
   agentId?: string;

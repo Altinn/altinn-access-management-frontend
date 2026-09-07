@@ -1,7 +1,5 @@
 import { useState } from 'react';
 
-import { usePartyRepresentation } from '../common/PartyRepresentationContext/PartyRepresentationContext';
-
 import {
   type Address,
   type NotificationAddress,
@@ -14,6 +12,8 @@ import {
   validatePhoneNumber,
   validateCountryCode,
 } from '@/resources/utils/textFieldUtils';
+
+import { usePartyRepresentation } from '../common/PartyRepresentationContext/PartyRepresentationContext';
 
 export const addressIsEmpty = (address: Address) => !address.email && !address.phone;
 

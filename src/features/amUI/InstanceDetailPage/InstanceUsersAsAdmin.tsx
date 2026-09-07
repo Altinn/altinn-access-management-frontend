@@ -2,6 +2,9 @@ import { useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 import { DsAlert, DsParagraph } from '@altinn/altinn-components';
 
+import { useGetInstancesQuery } from '@/rtk/features/instanceApi';
+import { ConnectionUserType, useGetRightHoldersQuery } from '@/rtk/features/connectionApi';
+
 import UserSearch from '../common/UserSearch/UserSearch';
 import { mapPermissionsToUserSearchNodes } from '../common/UserSearch/permissionMapper';
 import { mapConnectionsToUserSearchNodes } from '../common/UserSearch/connectionMapper';
@@ -13,9 +16,6 @@ import { usePartyRepresentation } from '../common/PartyRepresentationContext/Par
 import type { UserActionTarget } from '../common/UserSearch/types';
 
 import { AddUserButton } from './AddUserModal';
-
-import { useGetInstancesQuery } from '@/rtk/features/instanceApi';
-import { ConnectionUserType, useGetRightHoldersQuery } from '@/rtk/features/connectionApi';
 
 interface InstanceUsersAsAdminProps {
   resourceId: string;

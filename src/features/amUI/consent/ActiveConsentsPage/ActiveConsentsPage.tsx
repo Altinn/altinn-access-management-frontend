@@ -3,12 +3,6 @@ import { useTranslation } from 'react-i18next';
 import { useLocation } from 'react-router';
 import { formatDisplayName } from '@altinn/altinn-components';
 
-import { PageLayoutWrapper } from '../../common/PageLayoutWrapper';
-import { Breadcrumbs } from '../../common/Breadcrumbs/Breadcrumbs';
-import { ReporteePageHeading } from '../../common/ReporteePageHeading';
-
-import { ActiveConsentsPageContent } from './ActiveConsentsPageContent';
-
 import { useDocumentTitle } from '@/resources/hooks/useDocumentTitle';
 import { PageWrapper } from '@/components';
 import { useGetActiveConsentsQuery } from '@/rtk/features/consentApi';
@@ -17,6 +11,12 @@ import { useGetIsAdminQuery, useGetReporteeQuery } from '@/rtk/features/userInfo
 import { hasConsentPermission } from '@/resources/utils/permissionUtils';
 import { useGetIdPortenAuthorizationsQuery } from '@/rtk/features/idPortenAuthorizationApi';
 import { useGetPartyFromLoggedInUserQuery } from '@/rtk/features/lookupApi';
+
+import { ReporteePageHeading } from '../../common/ReporteePageHeading';
+import { Breadcrumbs } from '../../common/Breadcrumbs/Breadcrumbs';
+import { PageLayoutWrapper } from '../../common/PageLayoutWrapper';
+
+import { ActiveConsentsPageContent } from './ActiveConsentsPageContent';
 
 export const ActiveConsentsPage = () => {
   const { t } = useTranslation();

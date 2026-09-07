@@ -12,12 +12,6 @@ import {
   ListItem,
 } from '@altinn/altinn-components';
 
-import { Breadcrumbs } from '../../common/Breadcrumbs/Breadcrumbs';
-import ReporteePageHeading from '../../common/ReporteePageHeading';
-
-import classes from './SystemUserOverviewPage.module.css';
-import { SystemUserList } from './SystemUserList';
-
 import { useDocumentTitle } from '@/resources/hooks/useDocumentTitle';
 import { PageWrapper } from '@/components';
 import {
@@ -34,6 +28,12 @@ import {
   useGetReporteeQuery,
 } from '@/rtk/features/userInfoApi';
 import { hasCreateSystemUserPermission } from '@/resources/utils/permissionUtils';
+
+import ReporteePageHeading from '../../common/ReporteePageHeading';
+import { Breadcrumbs } from '../../common/Breadcrumbs/Breadcrumbs';
+
+import classes from './SystemUserOverviewPage.module.css';
+import { SystemUserList } from './SystemUserList';
 
 export const SystemUserOverviewPage = () => {
   const { t } = useTranslation();

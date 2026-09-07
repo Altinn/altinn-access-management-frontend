@@ -2,6 +2,15 @@ import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { DsAlert, DsHeading, DsParagraph } from '@altinn/altinn-components';
 
+import {
+  type ResourceDelegation,
+  type ServiceResource,
+} from '@/rtk/features/singleRights/singleRightsApi';
+import { AmPagination } from '@/components/Paginering/AmPaginering';
+import { ResourceList } from '@/features/amUI/common/ResourceList/ResourceList';
+import { SkeletonResourceList } from '@/features/amUI/common/ResourceList/SkeletonResourceList';
+import { getInheritedStatus } from '@/features/amUI/common/useInheritedStatus';
+
 import { DelegationAction } from '../EditModal';
 import { useDelegationModalContext } from '../DelegationModalContext';
 import { usePartyRepresentation } from '../../PartyRepresentationContext/PartyRepresentationContext';
@@ -14,15 +23,6 @@ import {
   resourceActionControlId,
 } from './createSearchResultControlsRenderer';
 import { useSingleRightRequests } from './hooks/useSingleRightRequests';
-
-import {
-  type ResourceDelegation,
-  type ServiceResource,
-} from '@/rtk/features/singleRights/singleRightsApi';
-import { AmPagination } from '@/components/Paginering/AmPaginering';
-import { ResourceList } from '@/features/amUI/common/ResourceList/ResourceList';
-import { SkeletonResourceList } from '@/features/amUI/common/ResourceList/SkeletonResourceList';
-import { getInheritedStatus } from '@/features/amUI/common/useInheritedStatus';
 
 interface SearchResultsProps {
   isFetching: boolean;

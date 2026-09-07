@@ -3,15 +3,15 @@ import { useTranslation } from 'react-i18next';
 import { Link, useLocation } from 'react-router';
 import { Badge, DsHeading, List, ListItem } from '@altinn/altinn-components';
 
-import { type SystemUser } from '../types';
-
-import classes from './SystemUserOverviewPage.module.css';
-
 import {
   getSystemUserAgentRequestUrl,
   getSystemUserRequestUrl,
   SystemUserPath,
 } from '@/routes/paths/systemUserPath';
+
+import { type SystemUser } from '../types';
+
+import classes from './SystemUserOverviewPage.module.css';
 
 interface SystemUserListProps {
   systemUsers: SystemUser[];

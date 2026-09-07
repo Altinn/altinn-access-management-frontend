@@ -1,6 +1,11 @@
 import { DsAlert, DsHeading, DsParagraph, DsSpinner, List } from '@altinn/altinn-components';
 import { useTranslation } from 'react-i18next';
 
+import type { ActionError } from '@/resources/hooks/useActionError';
+import type { AccessPackage } from '@/rtk/features/accessPackageApi';
+import type { Party } from '@/rtk/features/lookupApi';
+import { PartyType } from '@/rtk/features/userInfoApi';
+
 import type { DelegationAction } from '../DelegationModal/EditModal';
 import { TechnicalErrorParagraphs } from '../TechnicalErrorParagraphs';
 import { createErrorDetails } from '../TechnicalErrorParagraphs/TechnicalErrorParagraphs';
@@ -14,11 +19,6 @@ import { AreaItem } from './AreaItem';
 import { useAreaExpandedContextOrLocal } from './AccessPackageExpandedContext';
 import { AreaItemContent, areaContentId } from './AreaItemContent';
 import { packageActionControlId } from './PackageItem';
-
-import type { ActionError } from '@/resources/hooks/useActionError';
-import type { AccessPackage } from '@/rtk/features/accessPackageApi';
-import type { Party } from '@/rtk/features/lookupApi';
-import { PartyType } from '@/rtk/features/userInfoApi';
 
 interface AccessPackageListProps {
   showAllPackages?: boolean;

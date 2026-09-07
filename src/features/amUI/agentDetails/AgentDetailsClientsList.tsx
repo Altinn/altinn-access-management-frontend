@@ -1,12 +1,6 @@
 import React from 'react';
 import { formatDisplayName } from '@altinn/altinn-components';
 
-import { ClientAccessList } from '../common/ClientAccessList/ClientAccessList';
-import { useClientResourceActions } from '../common/ClientResourceList/useClientResourceActions';
-import { usePartyRepresentation } from '../common/PartyRepresentationContext/PartyRepresentationContext';
-
-import { useAgentDetailsAccessPackageActions } from './useAgentDetailsAccessPackageActions';
-
 import type { ActionError } from '@/resources/hooks/useActionError';
 import type {
   AddAgentAccessPackagesFn,
@@ -16,6 +10,12 @@ import type {
   RemoveAgentResourcesFn,
 } from '@/rtk/features/clientApi';
 import { PartyType } from '@/rtk/features/userInfoApi';
+
+import { ClientAccessList } from '../common/ClientAccessList/ClientAccessList';
+import { useClientResourceActions } from '../common/ClientResourceList/useClientResourceActions';
+import { usePartyRepresentation } from '../common/PartyRepresentationContext/PartyRepresentationContext';
+
+import { useAgentDetailsAccessPackageActions } from './useAgentDetailsAccessPackageActions';
 
 type AgentDetailsClientsListProps = {
   clients: Client[];

@@ -2,15 +2,15 @@ import React from 'react';
 import { List, Button } from '@altinn/altinn-components';
 import { useTranslation } from 'react-i18next';
 
+import { isSubUnitByType } from '@/resources/utils/reporteeUtils';
+import { UserItem } from '@/features/amUI/common/UserList/UserItem';
+import type { ExtendedUser, User } from '@/rtk/features/userInfoApi';
+
 import { UserListActions } from '../UserList/UserListActions';
 import { type DelegationAction } from '../DelegationModal/EditModal';
 
 import classes from './UserSearch.module.css';
 import type { UserActionTarget, UserSearchNode } from './types';
-
-import { isSubUnitByType } from '@/resources/utils/reporteeUtils';
-import { UserItem } from '@/features/amUI/common/UserList/UserItem';
-import type { ExtendedUser, User } from '@/rtk/features/userInfoApi';
 
 export interface UserSearchResultsProps {
   users: UserSearchNode[];

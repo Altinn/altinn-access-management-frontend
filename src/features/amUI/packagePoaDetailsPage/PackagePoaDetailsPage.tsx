@@ -2,6 +2,12 @@ import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { useParams, useSearchParams } from 'react-router';
 
+import { useDocumentTitle } from '@/resources/hooks/useDocumentTitle';
+import { PageWrapper } from '@/components';
+import { getCookie } from '@/resources/Cookie/CookieMethods';
+import { useGetPackagePermissionDetailsQuery } from '@/rtk/features/accessPackageApi';
+import { amUIPath } from '@/routes/paths/amUIPath';
+
 import { PageContainer } from '../common/PageContainer/PageContainer';
 import { PageLayoutWrapper } from '../common/PageLayoutWrapper';
 import {
@@ -11,12 +17,6 @@ import {
 import { Breadcrumbs } from '../common/Breadcrumbs/Breadcrumbs';
 
 import { PackagePoaDetails } from './PackagePoaDetails';
-
-import { useDocumentTitle } from '@/resources/hooks/useDocumentTitle';
-import { PageWrapper } from '@/components';
-import { getCookie } from '@/resources/Cookie/CookieMethods';
-import { useGetPackagePermissionDetailsQuery } from '@/rtk/features/accessPackageApi';
-import { amUIPath } from '@/routes/paths/amUIPath';
 
 export const PackagePoaDetailsPage = () => {
   const { t } = useTranslation();

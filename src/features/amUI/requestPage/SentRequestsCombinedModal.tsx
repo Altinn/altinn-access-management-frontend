@@ -2,6 +2,9 @@ import React, { useState } from 'react';
 import { DsHeading } from '@altinn/altinn-components';
 import { useTranslation } from 'react-i18next';
 
+import { useGetSentRequestsQuery, type EnrichedPackageRequest } from '@/rtk/features/requestApi';
+import { type ServiceResource } from '@/rtk/features/singleRights/singleRightsApi';
+
 import { PendingRequestsList } from '../userRightsPage/SingleRightsSection/PendingRequests';
 import { PendingPackageRequestsList } from '../userRightsPage/AccessPackageSection/PendingPackageRequests/RequestsList';
 import { DelegationModalProvider } from '../common/DelegationModal/DelegationModalContext';
@@ -10,9 +13,6 @@ import { TwoStepDialog } from '../common/TwoStepDialog';
 import { usePartyRepresentation } from '../common/PartyRepresentationContext/PartyRepresentationContext';
 
 import classes from './SentRequestsCombinedModal.module.css';
-
-import { useGetSentRequestsQuery, type EnrichedPackageRequest } from '@/rtk/features/requestApi';
-import { type ServiceResource } from '@/rtk/features/singleRights/singleRightsApi';
 
 interface SentRequestsCombinedModalProps {
   modalRef: React.RefObject<HTMLDialogElement | null>;

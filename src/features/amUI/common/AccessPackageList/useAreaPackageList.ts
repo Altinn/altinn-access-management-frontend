@@ -1,9 +1,6 @@
 import { useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 
-import { usePartyRepresentation } from '../PartyRepresentationContext/PartyRepresentationContext';
-import { getInheritedStatus, type InheritedStatusMessageType } from '../useInheritedStatus';
-
 import type { Permissions } from '@/dataObjects/dtos/accessPackage';
 import {
   useGetUserDelegationsQuery,
@@ -14,6 +11,9 @@ import {
 } from '@/rtk/features/accessPackageApi';
 import { PartyType } from '@/rtk/features/userInfoApi';
 import { isGuardianshipUrn } from '@/resources/utils/urnUtils';
+
+import { getInheritedStatus, type InheritedStatusMessageType } from '../useInheritedStatus';
+import { usePartyRepresentation } from '../PartyRepresentationContext/PartyRepresentationContext';
 
 export interface ExtendedAccessArea extends AccessArea {
   packages: {

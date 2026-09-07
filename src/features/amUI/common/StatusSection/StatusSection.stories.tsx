@@ -1,6 +1,9 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { RootProvider } from '@altinn/altinn-components';
 
+import type { Party } from '@/rtk/features/lookupApi';
+import { PartyType } from '@/rtk/features/userInfoApi';
+
 import {
   PartyRepresentationContext,
   type PartyRepresentationContextOutput,
@@ -8,9 +11,6 @@ import {
 import { InheritedStatusType } from '../useInheritedStatus';
 
 import { StatusSection, type StatusSectionProps } from './StatusSection';
-
-import type { Party } from '@/rtk/features/lookupApi';
-import { PartyType } from '@/rtk/features/userInfoApi';
 
 type StatusSectionScenario =
   'hasAccess' | 'inherited' | 'cannotDelegate' | 'delegationBlocked' | 'undelegated';

@@ -3,10 +3,10 @@ import { MinusCircleIcon } from '@navikt/aksel-icons';
 import { useTranslation } from 'react-i18next';
 import React, { useEffect } from 'react';
 
-import classes from './SettingsModal.module.css';
-
 import { validateEmail } from '@/resources/utils/textFieldUtils';
 import { type NotificationAddress } from '@/rtk/features/settingsApi';
+
+import classes from './SettingsModal.module.css';
 
 export const EmailAddressFields = ({
   addressList,

@@ -2,17 +2,17 @@ import React from 'react';
 import { useParams } from 'react-router';
 import { useTranslation } from 'react-i18next';
 
-import { PartyRepresentationProvider } from '../common/PartyRepresentationContext/PartyRepresentationContext';
-import { PageLayoutWrapper } from '../common/PageLayoutWrapper';
-
-import { ClientDetails } from './ClientDetails';
-
 import { PageWrapper } from '@/components';
 import { getCookie } from '@/resources/Cookie/CookieMethods';
 import { useDocumentTitle } from '@/resources/hooks/useDocumentTitle';
 import { useGetClientsQuery } from '@/rtk/features/clientApi';
 import { PartyType } from '@/rtk/features/userInfoApi';
 import { type Party } from '@/rtk/features/lookupApi';
+
+import { PageLayoutWrapper } from '../common/PageLayoutWrapper';
+import { PartyRepresentationProvider } from '../common/PartyRepresentationContext/PartyRepresentationContext';
+
+import { ClientDetails } from './ClientDetails';
 
 export const ClientDetailsPage = () => {
   const { t } = useTranslation();

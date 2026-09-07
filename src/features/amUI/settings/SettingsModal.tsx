@@ -10,17 +10,17 @@ import {
 } from '@altinn/altinn-components';
 import { ChatIcon, PaperplaneIcon, PlusIcon } from '@navikt/aksel-icons';
 
+import {
+  type NotificationAddress,
+  useGetOrgNotificationAddressesQuery,
+} from '@/rtk/features/settingsApi';
+
 import { usePartyRepresentation } from '../common/PartyRepresentationContext/PartyRepresentationContext';
 
 import classes from './SettingsModal.module.css';
 import { EmailAddressFields } from './EmailAddressFields';
 import { SmsAddressFields } from './SmsAddressFields';
 import { addressIsEmpty, isValidAddresses, useSaveAddressChanges } from './addressMgmtUtils';
-
-import {
-  type NotificationAddress,
-  useGetOrgNotificationAddressesQuery,
-} from '@/rtk/features/settingsApi';
 
 export const SettingsModal = ({
   mode,

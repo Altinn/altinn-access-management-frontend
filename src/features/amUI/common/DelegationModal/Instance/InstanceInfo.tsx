@@ -3,6 +3,17 @@ import { Button, formatDisplayName } from '@altinn/altinn-components';
 import { useTranslation } from 'react-i18next';
 import { MinusCircleIcon } from '@navikt/aksel-icons';
 
+import { useIsMobileOrSmaller } from '@/resources/utils/screensizeUtils';
+import { StatusMessageForScreenReader } from '@/components/StatusMessageForScreenReader/StatusMessageForScreenReader';
+import {
+  type DialogLookup,
+  useDelegateInstanceRightsMutation,
+  useUpdateInstanceRightsMutation,
+  useRemoveInstanceMutation,
+} from '@/rtk/features/instanceApi';
+import { PartyType } from '@/rtk/features/userInfoApi';
+import type { ServiceResource } from '@/rtk/features/singleRights/singleRightsApi';
+
 import { createErrorDetails } from '../../TechnicalErrorParagraphs/TechnicalErrorParagraphs';
 import { StatusSection } from '../../StatusSection/StatusSection';
 import { LoadingAnimation } from '../../LoadingAnimation/LoadingAnimation';
@@ -19,17 +30,6 @@ import { focusFirstEnabledButton, useRestoreFocusAfterSettled } from '../../Rest
 
 import { useInstanceDelegationRightsData } from './useInstanceDelegationRightsData';
 import classes from './InstanceInfo.module.css';
-
-import { useIsMobileOrSmaller } from '@/resources/utils/screensizeUtils';
-import { StatusMessageForScreenReader } from '@/components/StatusMessageForScreenReader/StatusMessageForScreenReader';
-import {
-  type DialogLookup,
-  useDelegateInstanceRightsMutation,
-  useUpdateInstanceRightsMutation,
-  useRemoveInstanceMutation,
-} from '@/rtk/features/instanceApi';
-import { PartyType } from '@/rtk/features/userInfoApi';
-import type { ServiceResource } from '@/rtk/features/singleRights/singleRightsApi';
 
 export interface InstanceInfoProps {
   resource: ServiceResource;

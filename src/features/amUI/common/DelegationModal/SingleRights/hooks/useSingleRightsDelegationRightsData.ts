@@ -1,12 +1,6 @@
 import { useEffect, useState } from 'react';
 import { formatDisplayName } from '@altinn/altinn-components';
 
-import { usePartyRepresentation } from '../../../PartyRepresentationContext/PartyRepresentationContext';
-import { mapRightsToChipRights, type ChipRight } from '../../utils/rightsUtils';
-import { getInheritedStatus } from '../../../useInheritedStatus';
-
-import { useHasResourceCheck } from './useHasResourceCheck';
-
 import {
   type ServiceResource,
   useDelegationCheckQuery,
@@ -15,6 +9,12 @@ import {
 } from '@/rtk/features/singleRights/singleRightsApi';
 import { createErrorDetails } from '@/features/amUI/common/TechnicalErrorParagraphs/TechnicalErrorParagraphs';
 import { PartyType } from '@/rtk/features/userInfoApi';
+
+import { usePartyRepresentation } from '../../../PartyRepresentationContext/PartyRepresentationContext';
+import { mapRightsToChipRights, type ChipRight } from '../../utils/rightsUtils';
+import { getInheritedStatus } from '../../../useInheritedStatus';
+
+import { useHasResourceCheck } from './useHasResourceCheck';
 
 export const useSingleRightsDelegationRightsData = ({
   resource,

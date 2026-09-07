@@ -3,15 +3,15 @@ import { useTranslation } from 'react-i18next';
 import { DsAlert, DsParagraph, useSnackbar } from '@altinn/altinn-components';
 import { useNavigate } from 'react-router';
 
+import { useAddAgentMutation, useGetAgentsQuery } from '@/rtk/features/clientApi';
+import { useGetRightHoldersQuery } from '@/rtk/features/connectionApi';
+
 import { AddAgentButton } from '../users/NewUserModal/AddAgentModal';
 import { UserSearch } from '../common/UserSearch/UserSearch';
 import { usePartyRepresentation } from '../common/PartyRepresentationContext/PartyRepresentationContext';
 import { mapConnectionsToUserSearchNodes } from '../common/UserSearch/connectionMapper';
 
 import classes from './ClientAdministrationAgentsTab.module.css';
-
-import { useAddAgentMutation, useGetAgentsQuery } from '@/rtk/features/clientApi';
-import { useGetRightHoldersQuery } from '@/rtk/features/connectionApi';
 
 type ClientAdministrationAgentsTabProps = {
   isActive: boolean;

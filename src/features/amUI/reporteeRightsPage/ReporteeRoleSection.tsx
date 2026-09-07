@@ -1,5 +1,8 @@
 import { useRef, useState } from 'react';
 
+import type { ActionError } from '@/resources/hooks/useActionError';
+import type { Role } from '@/rtk/features/roleApi';
+
 import { RoleInfoModal } from '../common/DelegationModal/RoleInfoModal';
 import { RoleList, ROLE_LIST_HEADING_ID } from '../common/RoleList/RoleList';
 import { usePartyRepresentation } from '../common/PartyRepresentationContext/PartyRepresentationContext';
@@ -8,9 +11,6 @@ import {
   RestoreFocusProvider,
   useRestoreFocus,
 } from '../common/RestoreFocus';
-
-import type { ActionError } from '@/resources/hooks/useActionError';
-import type { Role } from '@/rtk/features/roleApi';
 
 export const ReporteeRoleSection = () => {
   const modalRef = useRef<HTMLDialogElement>(null);

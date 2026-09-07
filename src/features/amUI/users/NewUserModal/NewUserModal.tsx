@@ -3,16 +3,16 @@ import { DsButton, DsDialog, DsHeading } from '@altinn/altinn-components';
 import { t } from 'i18next';
 import { PlusIcon } from '@navikt/aksel-icons';
 
+import { type User } from '@/rtk/features/userInfoApi';
+import { useAddRightHolderMutation } from '@/rtk/features/connectionApi';
+import { type Organization } from '@/rtk/features/lookupApi';
+
 import { AmTabs } from '../../common/AmTabs/AmTabs';
 import { createErrorDetails } from '../../common/TechnicalErrorParagraphs/TechnicalErrorParagraphs';
 
 import { NewPersonContent } from './NewPersonContent';
 import classes from './NewUserModal.module.css';
 import { NewOrgContent } from './NewOrgContent';
-
-import { type User } from '@/rtk/features/userInfoApi';
-import { useAddRightHolderMutation } from '@/rtk/features/connectionApi';
-import { type Organization } from '@/rtk/features/lookupApi';
 
 /**
  * NewUserButton component renders a button that, when clicked, opens a modal to add a new user.

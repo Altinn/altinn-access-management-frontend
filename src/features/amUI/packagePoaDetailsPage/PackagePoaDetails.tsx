@@ -3,6 +3,11 @@ import { Link, useParams, useSearchParams } from 'react-router';
 import { useTranslation } from 'react-i18next';
 import { FilesIcon, PersonGroupIcon } from '@navikt/aksel-icons';
 
+import { useGetPackagePermissionDetailsQuery } from '@/rtk/features/accessPackageApi';
+import { amUIPath } from '@/routes/paths/amUIPath';
+import { useDocumentTitle } from '@/resources/hooks/useDocumentTitle';
+import { useTabState } from '@/resources/hooks';
+
 import { AmTabs } from '../common/AmTabs/AmTabs';
 import { usePartyRepresentation } from '../common/PartyRepresentationContext/PartyRepresentationContext';
 import { ResourceList } from '../common/ResourceList/ResourceList';
@@ -15,11 +20,6 @@ import pageClasses from './PackagePoaDetailsPage.module.css';
 import headerClasses from './PackagePoaDetailsHeader.module.css';
 import { PackagePoaDetailsHeader } from './PackagePoaDetailsHeader';
 import { UsersTab } from './UsersTab';
-
-import { useGetPackagePermissionDetailsQuery } from '@/rtk/features/accessPackageApi';
-import { amUIPath } from '@/routes/paths/amUIPath';
-import { useDocumentTitle } from '@/resources/hooks/useDocumentTitle';
-import { useTabState } from '@/resources/hooks';
 
 export const PackagePoaDetails = () => {
   const { id } = useParams<{ id: string }>();

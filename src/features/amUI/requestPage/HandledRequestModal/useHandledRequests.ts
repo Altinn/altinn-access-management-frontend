@@ -1,8 +1,5 @@
 import { useState, useEffect, useMemo } from 'react';
 
-import type { Request, ProcessedStatus } from '../types';
-import { usePartyRepresentation } from '../../common/PartyRepresentationContext/PartyRepresentationContext';
-
 import {
   useGetEnrichedReceivedResourceRequestsQuery,
   useGetEnrichedReceivedPackageRequestsQuery,
@@ -14,6 +11,9 @@ import {
 } from '@/rtk/features/requestApi';
 import { type ServiceResource } from '@/rtk/features/singleRights/singleRightsApi';
 import { type AccessPackage } from '@/rtk/features/accessPackageApi';
+
+import { usePartyRepresentation } from '../../common/PartyRepresentationContext/PartyRepresentationContext';
+import type { Request, ProcessedStatus } from '../types';
 
 export type HandledDirection = 'sent' | 'received';
 

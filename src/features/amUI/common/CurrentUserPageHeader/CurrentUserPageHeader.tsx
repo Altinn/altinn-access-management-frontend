@@ -1,9 +1,9 @@
 import { formatDisplayName, UserListItem } from '@altinn/altinn-components';
 
-import classes from './CurrentUserPageHeader.module.css';
-
 import type { Connection } from '@/rtk/features/connectionApi';
 import { getFormattedDateOfBirthLabel } from '@/resources/utils/reporteeUtils';
+
+import classes from './CurrentUserPageHeader.module.css';
 
 interface CurrentUserPageHeaderProps {
   currentUser?: Connection;

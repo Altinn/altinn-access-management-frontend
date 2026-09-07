@@ -1,9 +1,9 @@
 import { useTranslation } from 'react-i18next';
 import { DsDialog, DsParagraph, DsButton } from '@altinn/altinn-components';
 
-import classes from './ReloadAlert.module.css';
-
 import { useCookieListener } from '@/resources/Cookie/CookieMethods';
+
+import classes from './ReloadAlert.module.css';
 
 export const ReloadAlert = () => {
   const { t } = useTranslation();

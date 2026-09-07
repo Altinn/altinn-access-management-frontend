@@ -9,14 +9,6 @@ import {
   TimelineSegment,
 } from '@altinn/altinn-components';
 
-import { PageLayoutWrapper } from '../../common/PageLayoutWrapper';
-import { ConsentDetails } from '../components/ConsentDetails/ConsentDetails';
-import { Breadcrumbs } from '../../common/Breadcrumbs/Breadcrumbs';
-import { ReporteePageHeading } from '../../common/ReporteePageHeading';
-
-import classes from './ConsentHistoryPage.module.css';
-import { ConsentTimeline } from './ConsentTimeline';
-
 import { useDocumentTitle } from '@/resources/hooks/useDocumentTitle';
 import { PageWrapper } from '@/components';
 import { useGetConsentLogQuery } from '@/rtk/features/consentApi';
@@ -24,6 +16,14 @@ import { getCookie } from '@/resources/Cookie/CookieMethods';
 import { useGetIsAdminQuery, useGetReporteeQuery } from '@/rtk/features/userInfoApi';
 import { hasConsentPermission } from '@/resources/utils/permissionUtils';
 import { useGetPartyFromLoggedInUserQuery } from '@/rtk/features/lookupApi';
+
+import { ReporteePageHeading } from '../../common/ReporteePageHeading';
+import { Breadcrumbs } from '../../common/Breadcrumbs/Breadcrumbs';
+import { ConsentDetails } from '../components/ConsentDetails/ConsentDetails';
+import { PageLayoutWrapper } from '../../common/PageLayoutWrapper';
+
+import classes from './ConsentHistoryPage.module.css';
+import { ConsentTimeline } from './ConsentTimeline';
 
 export const ConsentHistoryPage = () => {
   const { t } = useTranslation();

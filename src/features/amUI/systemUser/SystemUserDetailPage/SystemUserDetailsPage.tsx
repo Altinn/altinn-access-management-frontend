@@ -3,13 +3,6 @@ import { useTranslation } from 'react-i18next';
 import { useNavigate, useParams } from 'react-router';
 import { DsAlert, DsParagraph, formatDisplayName } from '@altinn/altinn-components';
 
-import { DeleteSystemUserPopover } from '../components/DeleteSystemUserPopover/DeleteSystemUserPopover';
-import { SystemUserHeader } from '../components/SystemUserHeader/SystemUserHeader';
-import { RightsList } from '../components/RightsList/RightsList';
-import { Breadcrumbs } from '../../common/Breadcrumbs/Breadcrumbs';
-
-import classes from './SystemUserDetailsPage.module.css';
-
 import { useDeleteSystemuserMutation, useGetSystemUserQuery } from '@/rtk/features/systemUserApi';
 import { getCookie } from '@/resources/Cookie/CookieMethods';
 import { PageLayoutWrapper } from '@/features/amUI/common/PageLayoutWrapper';
@@ -19,6 +12,13 @@ import { useDocumentTitle } from '@/resources/hooks/useDocumentTitle';
 import { PageContainer } from '@/features/amUI/common/PageContainer/PageContainer';
 import { hasCreateSystemUserPermission } from '@/resources/utils/permissionUtils';
 import { useGetIsAdminQuery, useGetReporteeQuery } from '@/rtk/features/userInfoApi';
+
+import { Breadcrumbs } from '../../common/Breadcrumbs/Breadcrumbs';
+import { RightsList } from '../components/RightsList/RightsList';
+import { SystemUserHeader } from '../components/SystemUserHeader/SystemUserHeader';
+import { DeleteSystemUserPopover } from '../components/DeleteSystemUserPopover/DeleteSystemUserPopover';
+
+import classes from './SystemUserDetailsPage.module.css';
 
 export const SystemUserDetailsPage = (): React.ReactNode => {
   const { t } = useTranslation();

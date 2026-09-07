@@ -1,13 +1,13 @@
 import { createApi } from '@reduxjs/toolkit/query/react';
 
+import { type Entity } from '@/dataObjects/dtos/Common';
+import { getCookie } from '@/resources/Cookie/CookieMethods';
+import { createBaseQuery } from '@/rtk/app/baseQuery';
+
 import { type Role } from './roleApi';
 import { type AccessPackage } from './accessPackageApi';
 import { type PersonInput } from './connectionApi';
 import { type ServiceResource } from './singleRights/singleRightsApi';
-
-import { type Entity } from '@/dataObjects/dtos/Common';
-import { getCookie } from '@/resources/Cookie/CookieMethods';
-import { createBaseQuery } from '@/rtk/app/baseQuery';
 
 export interface ClientResource {
   id: string;

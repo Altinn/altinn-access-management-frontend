@@ -12,6 +12,9 @@ import { CheckmarkCircleIcon, PlusIcon } from '@navikt/aksel-icons';
 import { useTranslation } from 'react-i18next';
 import { useDispatch } from 'react-redux';
 
+import { connectionApi } from '@/rtk/features/connectionApi';
+import { useDelegateInstanceRightsMutation } from '@/rtk/features/instanceApi';
+
 import {
   createErrorDetails,
   TechnicalErrorParagraphs,
@@ -22,9 +25,6 @@ import { usePartyRepresentation } from '../common/PartyRepresentationContext/Par
 
 import { getRightsSummaryTitle, useInstanceRights } from './useInstanceRights';
 import classes from './AddUserModal.module.css';
-
-import { connectionApi } from '@/rtk/features/connectionApi';
-import { useDelegateInstanceRightsMutation } from '@/rtk/features/instanceApi';
 
 interface AddUserButtonProps {
   resourceId: string;

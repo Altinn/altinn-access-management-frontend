@@ -1,6 +1,10 @@
 import { DsAlert, DsButton, DsHeading, DsParagraph } from '@altinn/altinn-components';
 import { useTranslation } from 'react-i18next';
 
+import { useIsMobileOrSmaller } from '@/resources/utils/screensizeUtils';
+import type { ActionError } from '@/resources/hooks/useActionError';
+import type { ServiceResource } from '@/rtk/features/singleRights/singleRightsApi';
+
 import { LoadingAnimation } from '../../LoadingAnimation/LoadingAnimation';
 import { StatusSection } from '../../StatusSection/StatusSection';
 import { TechnicalErrorParagraphs } from '../../TechnicalErrorParagraphs';
@@ -8,10 +12,6 @@ import { ValidationErrorMessage } from '../../ValidationErrorMessage';
 
 import { ResourceHeading } from './ResourceHeading';
 import classes from './ResourceInfo.module.css';
-
-import { useIsMobileOrSmaller } from '@/resources/utils/screensizeUtils';
-import type { ActionError } from '@/resources/hooks/useActionError';
-import type { ServiceResource } from '@/rtk/features/singleRights/singleRightsApi';
 
 export interface ClientResourceInfoProps {
   resource: ServiceResource;

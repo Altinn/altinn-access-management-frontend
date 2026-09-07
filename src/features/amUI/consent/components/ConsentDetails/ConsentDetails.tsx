@@ -2,6 +2,8 @@ import React, { useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 import { DsAlert, DsHeading, DsParagraph, DsSpinner } from '@altinn/altinn-components';
 
+import { useGetConsentQuery, useRevokeConsentMutation } from '@/rtk/features/consentApi';
+
 import { canConsentBeRevoked, getLanguage, replaceStaticMetadata } from '../../utils';
 import { ConsentRights } from '../ConsentRights/ConsentRights';
 import { ConsentStatus } from '../ConsentStatus/ConsentStatus';
@@ -9,8 +11,6 @@ import { type Consent } from '../../types';
 import { RevokeConsentPopover } from '../RevokeConsentPopover/RevokeConsentPopover';
 
 import classes from './ConsentDetails.module.css';
-
-import { useGetConsentQuery, useRevokeConsentMutation } from '@/rtk/features/consentApi';
 
 interface ConsentDetailsProps {
   consentId: string;

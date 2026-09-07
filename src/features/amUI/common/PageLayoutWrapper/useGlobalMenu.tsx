@@ -17,11 +17,11 @@ import {
 import { useTranslation } from 'react-i18next';
 import { Link } from 'react-router';
 
-import { useSidebarItems } from './useSidebarItems';
-
 import { PartyType, useGetReporteeQuery, useGetUserProfileQuery } from '@/rtk/features/userInfoApi';
 import { useIsTabletOrSmaller } from '@/resources/utils/screensizeUtils';
 import { getAfUrl, getAltinnStartPageUrl, getLogoutUrl } from '@/resources/utils/pathUtils';
+
+import { useSidebarItems } from './useSidebarItems';
 
 const getAccountType = (type: string): 'company' | 'person' => {
   return type === 'Organization' ? 'company' : 'person';

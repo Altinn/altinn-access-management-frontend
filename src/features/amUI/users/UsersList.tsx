@@ -9,15 +9,6 @@ import {
   formatDisplayName,
 } from '@altinn/altinn-components';
 
-import { UserList } from '../common/UserList/UserList';
-import { CurrentUserPageHeader } from '../common/CurrentUserPageHeader/CurrentUserPageHeader';
-import { usePartyRepresentation } from '../common/PartyRepresentationContext/PartyRepresentationContext';
-import { useSelfConnection } from '../common/PartyRepresentationContext/useSelfConnection';
-import { ECC_PROVIDER_CODE, useRoleMetadata } from '../common/UserRoles/useRoleMetadata';
-
-import classes from './UsersList.module.css';
-import { NewUserButton } from './NewUserModal/NewUserModal';
-
 import { debounce } from '@/resources/utils';
 import {
   type Connection,
@@ -26,6 +17,15 @@ import {
 } from '@/rtk/features/connectionApi';
 import { PartyType, useGetIsAdminQuery } from '@/rtk/features/userInfoApi';
 import type { User } from '@/rtk/features/userInfoApi';
+
+import { UserList } from '../common/UserList/UserList';
+import { CurrentUserPageHeader } from '../common/CurrentUserPageHeader/CurrentUserPageHeader';
+import { usePartyRepresentation } from '../common/PartyRepresentationContext/PartyRepresentationContext';
+import { useSelfConnection } from '../common/PartyRepresentationContext/useSelfConnection';
+import { ECC_PROVIDER_CODE, useRoleMetadata } from '../common/UserRoles/useRoleMetadata';
+
+import classes from './UsersList.module.css';
+import { NewUserButton } from './NewUserModal/NewUserModal';
 
 export const UsersList = () => {
   const { t } = useTranslation();

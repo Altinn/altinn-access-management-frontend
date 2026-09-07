@@ -3,6 +3,14 @@ import { useTranslation } from 'react-i18next';
 import { useParams } from 'react-router';
 import { formatDisplayName } from '@altinn/altinn-components';
 
+import { PartyType, useGetIsHovedadminQuery } from '@/rtk/features/userInfoApi';
+import { useGetPartyFromLoggedInUserQuery } from '@/rtk/features/lookupApi';
+import { useDocumentTitle } from '@/resources/hooks/useDocumentTitle';
+import { PageWrapper } from '@/components';
+import { amUIPath } from '@/routes/paths';
+import { getCookie } from '@/resources/Cookie/CookieMethods';
+import { useBackUrl } from '@/resources/hooks/useBackUrl';
+
 import { PageContainer } from '../common/PageContainer/PageContainer';
 import { PageLayoutWrapper } from '../common/PageLayoutWrapper';
 import { UserPageHeader } from '../common/UserPageHeader/UserPageHeader';
@@ -21,14 +29,6 @@ import { SingleRightsSection } from './SingleRightsSection/SingleRightsSection';
 import { RoleSection } from './RoleSection/RoleSection';
 import { InstanceSection } from './InstanceSection/InstanceSection';
 import { UserRightsPageSkeleton } from './UserRightsPageSkeleton';
-
-import { PartyType, useGetIsHovedadminQuery } from '@/rtk/features/userInfoApi';
-import { useGetPartyFromLoggedInUserQuery } from '@/rtk/features/lookupApi';
-import { useDocumentTitle } from '@/resources/hooks/useDocumentTitle';
-import { PageWrapper } from '@/components';
-import { amUIPath } from '@/routes/paths';
-import { getCookie } from '@/resources/Cookie/CookieMethods';
-import { useBackUrl } from '@/resources/hooks/useBackUrl';
 
 export const UserRightsPage = () => {
   const { t } = useTranslation();

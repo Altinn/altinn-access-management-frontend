@@ -3,6 +3,12 @@ import { useTranslation } from 'react-i18next';
 import { useParams } from 'react-router';
 import { formatDisplayName } from '@altinn/altinn-components';
 
+import { PartyType } from '@/rtk/features/userInfoApi';
+import { useDocumentTitle } from '@/resources/hooks/useDocumentTitle';
+import { PageWrapper } from '@/components';
+import { amUIPath } from '@/routes/paths';
+import { getCookie } from '@/resources/Cookie/CookieMethods';
+
 import { UserPageHeader } from '../common/UserPageHeader/UserPageHeader';
 import { RightsTabs } from '../common/RightsTabs/RightsTabs';
 import { PageLayoutWrapper } from '../common/PageLayoutWrapper';
@@ -20,12 +26,6 @@ import { InstanceSection } from '../userRightsPage/InstanceSection/InstanceSecti
 import { GuardianshipSection } from '../common/GuardianshipSection/GuardianshipSection';
 
 import { ReporteeRoleSection } from './ReporteeRoleSection';
-
-import { PartyType } from '@/rtk/features/userInfoApi';
-import { useDocumentTitle } from '@/resources/hooks/useDocumentTitle';
-import { PageWrapper } from '@/components';
-import { amUIPath } from '@/routes/paths';
-import { getCookie } from '@/resources/Cookie/CookieMethods';
 
 export const ReporteeRightsPage = () => {
   const { t } = useTranslation();

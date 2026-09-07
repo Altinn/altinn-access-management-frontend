@@ -14,6 +14,11 @@ import { FolderFileIcon } from '@navikt/aksel-icons';
 import { type FetchBaseQueryError } from '@reduxjs/toolkit/query';
 import { type SerializedError } from '@reduxjs/toolkit';
 
+import { ConsentPath } from '@/routes/paths';
+import { type ReporteeInfo } from '@/rtk/features/userInfoApi';
+import { getConsentRequestUrl } from '@/routes/paths/consentPath';
+import { type IdPortenAuthorization } from '@/rtk/features/idPortenAuthorizationApi';
+
 import { toDateTimeString } from '../utils';
 import { type ActiveConsentListItem } from '../types';
 import { IdPortenAuthorizationDetails } from '../components/IdPortenAuthorizationDetails/IdPortenAuthorizationDetails';
@@ -21,11 +26,6 @@ import { ConsentDetails } from '../components/ConsentDetails/ConsentDetails';
 
 import classes from './ActiveConsentsPage.module.css';
 import { ConsentListItem, LoadingListItem } from './ConsentListItem';
-
-import { ConsentPath } from '@/routes/paths';
-import { type ReporteeInfo } from '@/rtk/features/userInfoApi';
-import { getConsentRequestUrl } from '@/routes/paths/consentPath';
-import { type IdPortenAuthorization } from '@/rtk/features/idPortenAuthorizationApi';
 
 interface ActiveConsentsPageContentProps {
   activeConsents: ActiveConsentListItem[] | undefined;

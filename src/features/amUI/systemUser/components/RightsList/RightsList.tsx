@@ -9,17 +9,17 @@ import {
   DsSkeleton,
 } from '@altinn/altinn-components';
 
-import type { SystemUserAccessPackage } from '../../types';
-
-import classes from './RightsList.module.css';
-import { ResourceDetails } from './ResourceDetails';
-
 import type { PackageResource } from '@/rtk/features/accessPackageApi';
 import type { ServiceResource } from '@/rtk/features/singleRights/singleRightsApi';
 import { useProviderLogoUrl } from '@/resources/hooks/useProviderLogoUrl';
 import type { ExtendedAccessPackage } from '@/features/amUI/common/AccessPackageList/useAreaPackageList';
 import { PackageHeader } from '@/features/amUI/common/DelegationModal/AccessPackages/PackageHeader';
 import { PackageMeta } from '@/features/amUI/common/DelegationModal/AccessPackages/PackageMeta';
+
+import type { SystemUserAccessPackage } from '../../types';
+
+import classes from './RightsList.module.css';
+import { ResourceDetails } from './ResourceDetails';
 
 interface RightsListProps {
   resources: ServiceResource[];

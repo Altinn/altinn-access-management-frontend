@@ -2,13 +2,13 @@ import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { DsHeading, DsParagraph } from '@altinn/altinn-components';
 
-import type { RegisteredSystem } from '../../types';
-
-import classes from './RequestPageBase.module.css';
-
 import { type ReporteeInfo } from '@/rtk/features/userInfoApi';
 import { formatOrgNr } from '@/resources/utils/reporteeUtils';
 import { RequestPageLayout } from '@/features/amUI/common/RequestPageLayout/RequestPageLayout';
+
+import type { RegisteredSystem } from '../../types';
+
+import classes from './RequestPageBase.module.css';
 
 interface RequestPageBaseProps {
   system?: RegisteredSystem;

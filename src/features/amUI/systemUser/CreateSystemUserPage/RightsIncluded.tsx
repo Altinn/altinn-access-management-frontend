@@ -3,14 +3,6 @@ import { useTranslation } from 'react-i18next';
 import { Link, useNavigate } from 'react-router';
 import { DsSpinner, DsAlert, DsButton, formatDisplayName } from '@altinn/altinn-components';
 
-import type { ProblemDetail, RegisteredSystem } from '../types';
-import { RightsList } from '../components/RightsList/RightsList';
-import { DelegationCheckError } from '../components/DelegationCheckError/DelegationCheckError';
-import { ButtonRow } from '../components/ButtonRow/ButtonRow';
-import { SystemUserHeader } from '../components/SystemUserHeader/SystemUserHeader';
-
-import classes from './CreateSystemUser.module.css';
-
 import { PageContainer } from '@/features/amUI/common/PageContainer/PageContainer';
 import { SystemUserPath } from '@/routes/paths';
 import { getCookie } from '@/resources/Cookie/CookieMethods';
@@ -19,6 +11,14 @@ import {
   useGetRegisteredSystemRightsQuery,
 } from '@/rtk/features/systemUserApi';
 import { useGetReporteeQuery } from '@/rtk/features/userInfoApi';
+
+import type { ProblemDetail, RegisteredSystem } from '../types';
+import { RightsList } from '../components/RightsList/RightsList';
+import { DelegationCheckError } from '../components/DelegationCheckError/DelegationCheckError';
+import { ButtonRow } from '../components/ButtonRow/ButtonRow';
+import { SystemUserHeader } from '../components/SystemUserHeader/SystemUserHeader';
+
+import classes from './CreateSystemUser.module.css';
 
 interface RightsIncludedProps {
   selectedSystem: RegisteredSystem;

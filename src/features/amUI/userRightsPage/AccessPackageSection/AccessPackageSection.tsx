@@ -3,6 +3,11 @@ import { useTranslation } from 'react-i18next';
 import { useParams } from 'react-router';
 import { DsHeading } from '@altinn/altinn-components';
 
+import { isGuardianshipUrn } from '@/resources/utils';
+import { useCanGiveAccess } from '@/resources/hooks/useCanGiveAccess';
+import { useCanRequestAccess } from '@/resources/hooks/useCanRequestAccess';
+import { useGetUserDelegationsQuery } from '@/rtk/features/accessPackageApi';
+
 import { DelegationModal, DelegationType } from '../../common/DelegationModal/DelegationModal';
 import { DelegationAction } from '../../common/DelegationModal/EditModal';
 import { usePartyRepresentation } from '../../common/PartyRepresentationContext/PartyRepresentationContext';
@@ -13,11 +18,6 @@ import { AccessPackageInfoPopover } from '../../common/AccessPackageInfoPopover/
 import { ActiveDelegations } from './ActiveDelegations';
 import { PendingPackageRequests } from './PendingPackageRequests/Requests';
 import classes from './AccessPackageSection.module.css';
-
-import { isGuardianshipUrn } from '@/resources/utils';
-import { useCanGiveAccess } from '@/resources/hooks/useCanGiveAccess';
-import { useCanRequestAccess } from '@/resources/hooks/useCanRequestAccess';
-import { useGetUserDelegationsQuery } from '@/rtk/features/accessPackageApi';
 
 export const AccessPackageSection = ({ isReportee = false }: { isReportee?: boolean }) => {
   const { t } = useTranslation();

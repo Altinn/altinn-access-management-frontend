@@ -3,10 +3,6 @@ import { useTranslation } from 'react-i18next';
 import { DsAlert, DsHeading, DsParagraph } from '@altinn/altinn-components';
 import { useParams } from 'react-router';
 
-import { usePartyRepresentation } from '../../common/PartyRepresentationContext/PartyRepresentationContext';
-
-import classes from './InstanceSection.module.css';
-
 import { InstanceList } from '@/features/amUI/common/InstanceList/InstanceList';
 import { instanceRowId } from '@/features/amUI/common/InstanceList/instanceListUtils';
 import { DelegationAction, EditModal } from '@/features/amUI/common/DelegationModal/EditModal';
@@ -18,6 +14,10 @@ import {
   useRestoreFocusContext,
 } from '@/features/amUI/common/RestoreFocus';
 import { useCanGiveAccess } from '@/resources/hooks/useCanGiveAccess';
+
+import { usePartyRepresentation } from '../../common/PartyRepresentationContext/PartyRepresentationContext';
+
+import classes from './InstanceSection.module.css';
 
 const INSTANCES_HEADING_ID = 'instances_title';
 

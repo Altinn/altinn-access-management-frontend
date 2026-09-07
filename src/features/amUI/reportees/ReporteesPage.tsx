@@ -2,19 +2,19 @@ import { DsAlert, formatDisplayName } from '@altinn/altinn-components';
 import { useTranslation } from 'react-i18next';
 import React from 'react';
 
-import { PageLayoutWrapper } from '../common/PageLayoutWrapper';
-import { PartyRepresentationProvider } from '../common/PartyRepresentationContext/PartyRepresentationContext';
-import { ReporteePageHeading } from '../common/ReporteePageHeading';
-import { Breadcrumbs } from '../common/Breadcrumbs/Breadcrumbs';
-
-import { ReporteesList } from './ReporteesList';
-
 import { useDocumentTitle } from '@/resources/hooks/useDocumentTitle';
 import { PageWrapper } from '@/components';
 import { getCookie } from '@/resources/Cookie/CookieMethods';
 import { useGetIsAdminQuery, useGetReporteeQuery } from '@/rtk/features/userInfoApi';
 import { useGetPartyFromLoggedInUserQuery } from '@/rtk/features/lookupApi';
 import { hasReporteeListAdminAccess } from '@/resources/utils/permissionUtils';
+
+import { Breadcrumbs } from '../common/Breadcrumbs/Breadcrumbs';
+import { ReporteePageHeading } from '../common/ReporteePageHeading';
+import { PartyRepresentationProvider } from '../common/PartyRepresentationContext/PartyRepresentationContext';
+import { PageLayoutWrapper } from '../common/PageLayoutWrapper';
+
+import { ReporteesList } from './ReporteesList';
 
 export const ReporteesPage = () => {
   const { t } = useTranslation();

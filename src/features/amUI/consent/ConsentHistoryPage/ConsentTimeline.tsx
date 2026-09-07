@@ -11,12 +11,12 @@ import {
 } from '@altinn/altinn-components';
 import { type TFunction } from 'i18next';
 
+import { useGetReporteeQuery } from '@/rtk/features/userInfoApi';
+
 import { type ConsentHistoryItem } from '../types';
 import { toDateTimeString } from '../utils';
 
 import classes from './ConsentHistoryPage.module.css';
-
-import { useGetReporteeQuery } from '@/rtk/features/userInfoApi';
 
 interface ConsentTimelineProps {
   consentLog: ConsentHistoryItem[];

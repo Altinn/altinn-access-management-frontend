@@ -11,11 +11,6 @@ import { useTranslation } from 'react-i18next';
 import { useSearchParams } from 'react-router';
 import cn from 'classnames';
 
-import { PageLayoutWrapper } from '../common/PageLayoutWrapper';
-
-import classes from './LandingPage.module.css';
-import { LandingPageInfoCard } from './LandingPageInfoCard';
-
 import { PageWrapper } from '@/components';
 import {
   useGetIsAdminQuery,
@@ -54,6 +49,11 @@ import {
 import { useSidebarRequestCount } from '@/resources/hooks/useSidebarRequestCount';
 import { useGetRolePermissionsQuery } from '@/rtk/features/roleApi';
 import { useDocumentTitle } from '@/resources/hooks/useDocumentTitle';
+
+import { PageLayoutWrapper } from '../common/PageLayoutWrapper';
+
+import classes from './LandingPage.module.css';
+import { LandingPageInfoCard } from './LandingPageInfoCard';
 
 export const LandingPage = () => {
   const { t } = useTranslation();

@@ -2,13 +2,13 @@ import React, { useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { DsHeading } from '@altinn/altinn-components';
 
+import { isGuardianshipUrn } from '@/resources/utils';
+import { type AccessPackage, useGetUserDelegationsQuery } from '@/rtk/features/accessPackageApi';
+
 import { usePartyRepresentation } from '../../common/PartyRepresentationContext/PartyRepresentationContext';
 import { AccessPackageList } from '../../common/AccessPackageList/AccessPackageList';
 import { DebouncedSearchField } from '../DebouncedSearchField/DebouncedSearchField';
 import { EditModal } from '../DelegationModal/EditModal';
-
-import { isGuardianshipUrn } from '@/resources/utils';
-import { type AccessPackage, useGetUserDelegationsQuery } from '@/rtk/features/accessPackageApi';
 
 export const GuardianshipSection = () => {
   const { t } = useTranslation();

@@ -5,14 +5,14 @@ import { PlusIcon } from '@navikt/aksel-icons';
 import type { FetchBaseQueryError } from '@reduxjs/toolkit/query';
 import type { SerializedError } from '@reduxjs/toolkit';
 
+import type { User } from '@/rtk/features/userInfoApi';
+import { useAddMaskinportenSupplierMutation } from '@/rtk/features/maskinportenApi';
+import type { Organization } from '@/rtk/features/lookupApi';
+
 import { createErrorDetails } from '../common/TechnicalErrorParagraphs/TechnicalErrorParagraphs';
 import { usePartyRepresentation } from '../common/PartyRepresentationContext/PartyRepresentationContext';
 import { NewOrgContent } from '../users/NewUserModal/NewOrgContent';
 import classes from '../users/NewUserModal/NewUserModal.module.css';
-
-import type { User } from '@/rtk/features/userInfoApi';
-import { useAddMaskinportenSupplierMutation } from '@/rtk/features/maskinportenApi';
-import type { Organization } from '@/rtk/features/lookupApi';
 
 interface AddSupplierButtonProps {
   party: string;

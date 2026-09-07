@@ -2,12 +2,12 @@ import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { DsAlert, DsListItem, DsListUnordered } from '@altinn/altinn-components';
 
+import { type ServiceResource } from '@/rtk/features/singleRights/singleRightsApi';
+
 import type { ProblemDetail, SystemUserAccessPackage } from '../../types';
 import { mapErrorCodeToErrorMessage } from '../../errorHandling';
 
 import classes from './DelegationCheckError.module.css';
-
-import { type ServiceResource } from '@/rtk/features/singleRights/singleRightsApi';
 
 interface DelegationCheckErrorProps {
   defaultError: string;

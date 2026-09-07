@@ -9,13 +9,13 @@ import {
 } from '@altinn/altinn-components';
 import { useTranslation } from 'react-i18next';
 
+import { useGetReporteeQuery } from '@/rtk/features/userInfoApi';
+
 import { useGlobalMenu } from './useGlobalMenu';
 import { useFooter } from './useFooter';
 import { useHeader } from './useHeader';
 import { useSidebarItems } from './useSidebarItems';
 import { NavigationFocus } from './NavigationFocus';
-
-import { useGetReporteeQuery } from '@/rtk/features/userInfoApi';
 
 interface PageLayoutWrapperProps {
   openAccountMenu?: boolean;

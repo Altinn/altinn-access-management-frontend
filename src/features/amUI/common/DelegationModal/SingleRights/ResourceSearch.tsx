@@ -4,14 +4,6 @@ import { DsPopover, DsSwitch } from '@altinn/altinn-components';
 import { QuestionmarkCircleIcon } from '@navikt/aksel-icons';
 import { useCallback, useEffect } from 'react';
 
-import { useDelegationModalContext } from '../DelegationModalContext';
-import { ResourceFilterToolbar } from '../../ResourceFilterToolbar/ResourceFilterToolbar';
-import { usePartyRepresentation } from '../../PartyRepresentationContext/PartyRepresentationContext';
-import { type DelegationAction } from '../EditModal';
-
-import { SearchResults } from './SearchResults';
-import classes from './ResourceSearch.module.css';
-
 import type { ServiceResource } from '@/rtk/features/singleRights/singleRightsApi';
 import {
   useGetPaginatedSearchQuery,
@@ -20,6 +12,14 @@ import {
 import { useGetResourceOwnersQuery } from '@/rtk/features/resourceApi';
 import { arraysEqual, debounce } from '@/resources/utils';
 import type { Party } from '@/rtk/features/lookupApi';
+
+import { useDelegationModalContext } from '../DelegationModalContext';
+import { ResourceFilterToolbar } from '../../ResourceFilterToolbar/ResourceFilterToolbar';
+import { usePartyRepresentation } from '../../PartyRepresentationContext/PartyRepresentationContext';
+import { type DelegationAction } from '../EditModal';
+
+import { SearchResults } from './SearchResults';
+import classes from './ResourceSearch.module.css';
 
 export interface ResourceSearchProps {
   onSelect: (resource: ServiceResource, error?: boolean) => void;

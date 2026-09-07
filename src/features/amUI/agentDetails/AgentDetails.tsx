@@ -10,6 +10,18 @@ import {
 import { useParams } from 'react-router';
 import { skipToken } from '@reduxjs/toolkit/query';
 
+import {
+  useAddAgentAccessPackagesMutation,
+  useAddAgentResourcesMutation,
+  useRemoveAgentAccessPackagesMutation,
+  useRemoveAgentResourcesMutation,
+  useGetAgentAccessPackagesQuery,
+  useGetAgentResourcesQuery,
+  useGetClientsQuery,
+} from '@/rtk/features/clientApi';
+import { PartyType, useGetIsClientAdminQuery } from '@/rtk/features/userInfoApi';
+import { amUIPath } from '@/routes/paths';
+
 import { PageContainer } from '../common/PageContainer/PageContainer';
 import { usePartyRepresentation } from '../common/PartyRepresentationContext/PartyRepresentationContext';
 import { Breadcrumbs } from '../common/Breadcrumbs/Breadcrumbs';
@@ -26,18 +38,6 @@ import { filterDeletedParties } from '../common/deletedPartyUtils';
 import { AgentDetailsDeleteModal } from './AgentDetailsDeleteModal';
 import { useAgentDetailsAccessClientLists } from './useAgentDetailsAccessClientLists';
 import { AgentDetailsClientsList } from './AgentDetailsClientsList';
-
-import {
-  useAddAgentAccessPackagesMutation,
-  useAddAgentResourcesMutation,
-  useRemoveAgentAccessPackagesMutation,
-  useRemoveAgentResourcesMutation,
-  useGetAgentAccessPackagesQuery,
-  useGetAgentResourcesQuery,
-  useGetClientsQuery,
-} from '@/rtk/features/clientApi';
-import { PartyType, useGetIsClientAdminQuery } from '@/rtk/features/userInfoApi';
-import { amUIPath } from '@/routes/paths';
 
 export const AgentDetails = () => {
   const { t } = useTranslation();

@@ -11,12 +11,6 @@ import {
 } from '@altinn/altinn-components';
 import { ChatIcon, PaperplaneIcon, QuestionmarkCircleIcon } from '@navikt/aksel-icons';
 
-import { usePartyRepresentation } from '../common/PartyRepresentationContext/PartyRepresentationContext';
-import { ReporteePageHeading } from '../common/ReporteePageHeading/ReporteePageHeading';
-
-import classes from './SettingsPageContent.module.css';
-import { SettingsModal } from './SettingsModal';
-
 import { useDocumentTitle } from '@/resources/hooks/useDocumentTitle';
 import { useGetOrgNotificationAddressesQuery } from '@/rtk/features/settingsApi';
 import {
@@ -24,6 +18,12 @@ import {
   useGetIsCompanyProfileAdminQuery,
   useGetReporteeQuery,
 } from '@/rtk/features/userInfoApi';
+
+import { usePartyRepresentation } from '../common/PartyRepresentationContext/PartyRepresentationContext';
+import { ReporteePageHeading } from '../common/ReporteePageHeading/ReporteePageHeading';
+
+import classes from './SettingsPageContent.module.css';
+import { SettingsModal } from './SettingsModal';
 
 export const SettingsPageContent = () => {
   const { t } = useTranslation();

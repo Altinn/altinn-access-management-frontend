@@ -8,6 +8,10 @@ import {
 } from '@altinn/altinn-components';
 import type { TFunction } from 'i18next';
 
+import { useRestoreFocusTarget } from '@/features/amUI/common/RestoreFocus';
+import { useProviderLogoUrl } from '@/resources/hooks';
+import { type InstanceDelegation } from '@/rtk/features/instanceApi';
+
 import { DebouncedSearchField } from '../DebouncedSearchField/DebouncedSearchField';
 
 import { InstanceListSkeleton } from './InstanceListSkeleton';
@@ -19,10 +23,6 @@ import {
   toInstancePresentationData,
 } from './instanceListUtils';
 import classes from './InstanceList.module.css';
-
-import { useRestoreFocusTarget } from '@/features/amUI/common/RestoreFocus';
-import { useProviderLogoUrl } from '@/resources/hooks';
-import { type InstanceDelegation } from '@/rtk/features/instanceApi';
 
 const InstanceListItemRow = ({
   id,

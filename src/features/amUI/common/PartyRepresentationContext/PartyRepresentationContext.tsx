@@ -6,16 +6,16 @@ import type { FetchBaseQueryError } from '@reduxjs/toolkit/query';
 import { Link } from 'react-router';
 import { t } from 'i18next';
 
+import { useGetRightHoldersQuery } from '@/rtk/features/connectionApi';
+import { useGetPartyFromLoggedInUserQuery, type Party } from '@/rtk/features/lookupApi';
+import { PartyType } from '@/rtk/features/userInfoApi';
+
 import { TechnicalErrorParagraphs } from '../TechnicalErrorParagraphs';
 import { createErrorDetails } from '../TechnicalErrorParagraphs/TechnicalErrorParagraphs';
 import { AccessPackageDelegationCheckProvider } from '../DelegationCheck/AccessPackageDelegationCheckContext';
 
 import { useReporteeParty } from './useReporteeParty';
 import { useConnectedParty } from './useConnectedParty';
-
-import { useGetRightHoldersQuery } from '@/rtk/features/connectionApi';
-import { useGetPartyFromLoggedInUserQuery, type Party } from '@/rtk/features/lookupApi';
-import { PartyType } from '@/rtk/features/userInfoApi';
 
 interface PartyRepresentationProviderProps {
   /** The children to be rendered with the provided party-representation data */

@@ -4,6 +4,10 @@ import React, { useState } from 'react';
 import cn from 'classnames';
 import { ChevronDownIcon, ChevronUpIcon } from '@navikt/aksel-icons';
 
+import type { AccessPackage } from '@/rtk/features/accessPackageApi';
+import { useIsMobileOrSmaller } from '@/resources/utils/screensizeUtils';
+import { type PartyType } from '@/rtk/features/userInfoApi';
+
 import { type DelegationAction } from '../DelegationModal/EditModal';
 import { useAccessPackageDelegationCheck } from '../DelegationCheck/AccessPackageDelegationCheckContext';
 
@@ -14,10 +18,6 @@ import { RevokeAccessPackageActionControl } from './RevokeAccessPackageActionCon
 import { DelegateAccessPackageActionControl } from './DelegateAccessPackageActionControl';
 import { PermissionBadge } from './PermissionBadge';
 import { isCriticalAndUndelegated, UndelegatedPackageWarning } from './UndelegatedPackageWarning';
-
-import type { AccessPackage } from '@/rtk/features/accessPackageApi';
-import { useIsMobileOrSmaller } from '@/resources/utils/screensizeUtils';
-import { type PartyType } from '@/rtk/features/userInfoApi';
 
 // DOM id for the area's content wrapper, usable as a RestoreFocus fallback target.
 export const areaContentId = (areaId: string) => `area-content-${areaId}`;

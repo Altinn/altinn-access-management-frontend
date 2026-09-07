@@ -3,14 +3,6 @@ import { Link, useParams } from 'react-router';
 import { useTranslation } from 'react-i18next';
 import { DsAlert, DsParagraph, DsSkeleton, formatDisplayName } from '@altinn/altinn-components';
 
-import { Breadcrumbs } from '../common/Breadcrumbs/Breadcrumbs';
-import { DelegationModalProvider } from '../common/DelegationModal/DelegationModalContext';
-import { PageContainer } from '../common/PageContainer/PageContainer';
-import { PageLayoutWrapper } from '../common/PageLayoutWrapper';
-import { PartyRepresentationProvider } from '../common/PartyRepresentationContext/PartyRepresentationContext';
-
-import { ConsumerPageContent } from './ConsumerPageContent';
-
 import { PageWrapper } from '@/components/PageWrapper/PageWrapper';
 import { getCookie } from '@/resources/Cookie/CookieMethods';
 import { useDocumentTitle } from '@/resources/hooks/useDocumentTitle';
@@ -18,6 +10,14 @@ import type { Party } from '@/rtk/features/lookupApi';
 import { useGetMaskinportenConsumersQuery } from '@/rtk/features/maskinportenApi';
 import { PartyType } from '@/rtk/features/userInfoApi';
 import { amUIPath } from '@/routes/paths';
+
+import { PartyRepresentationProvider } from '../common/PartyRepresentationContext/PartyRepresentationContext';
+import { PageLayoutWrapper } from '../common/PageLayoutWrapper';
+import { PageContainer } from '../common/PageContainer/PageContainer';
+import { DelegationModalProvider } from '../common/DelegationModal/DelegationModalContext';
+import { Breadcrumbs } from '../common/Breadcrumbs/Breadcrumbs';
+
+import { ConsumerPageContent } from './ConsumerPageContent';
 
 export const ConsumerPage = () => {
   const { t } = useTranslation();

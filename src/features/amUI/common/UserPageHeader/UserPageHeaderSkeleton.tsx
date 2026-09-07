@@ -2,9 +2,9 @@
 
 import { DsSkeleton } from '@altinn/altinn-components';
 
-import classes from './UserPageHeader.module.css';
-
 import { useIsTabletOrSmaller } from '@/resources/utils/screensizeUtils';
+
+import classes from './UserPageHeader.module.css';
 
 export const UserPageHeaderSkeleton = () => {
   const isSmallScreen = useIsTabletOrSmaller();
