@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Button, formatDisplayName, useSnackbar } from '@altinn/altinn-components';
 
@@ -30,7 +30,7 @@ export const DeleteResourceButton = ({
   const { fromParty, toParty } = usePartyRepresentation();
   const revoke = useRevokeResource();
   const [isLoading, setIsLoading] = useState(false);
-  const [isConfirming, setIsConfirming] = useState(false);
+  const awaitingRedelegationCheck = useRef(false);
   const { canRedelegateResource } = useCanRedelegateResource();
   const { confirmRevoke, revokeConfirmationDialog } = useRevokeConfirmation();
 
@@ -71,10 +71,20 @@ export const DeleteResourceButton = ({
     );
   };
 
+  // A ref, not state: a repeat click is swallowed rather than the button disabled, because
+  // disabling the focused button blurs it and nothing restores focus if the user then cancels the
+  // dialog. See common/RestoreFocus/README.md.
   const confirmAndDelete = async () => {
-    setIsConfirming(true);
-    confirmRevoke(await canRedelegateResource(resource.identifier), deleteResource);
-    setIsConfirming(false);
+    if (awaitingRedelegationCheck.current) return;
+    awaitingRedelegationCheck.current = true;
+    try {
+      confirmRevoke(await canRedelegateResource(resource.identifier), deleteResource, {
+        name: resource.title,
+        toName: toParty?.name ?? '',
+      });
+    } finally {
+      awaitingRedelegationCheck.current = false;
+    }
   };
 
   return (
@@ -85,7 +95,7 @@ export const DeleteResourceButton = ({
           aria-label={t('common.delete') + ' ' + resource.title}
           variant='tertiary'
           className={classes.deleteButton}
-          disabled={disabled || isLoading || isConfirming}
+          disabled={disabled || isLoading}
           onClick={confirmAndDelete}
         >
           <MinusCircleIcon aria-hidden='true' />

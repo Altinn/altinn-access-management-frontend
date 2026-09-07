@@ -1,28 +1,38 @@
 import { useState } from 'react';
 
-import { RevokeConfirmationDialog } from './RevokeConfirmationDialog';
+import { RevokeConfirmationDialog, type RevokedPoa } from './RevokeConfirmationDialog';
+
+interface PendingRevoke {
+  revoke: () => void;
+  poa?: RevokedPoa;
+}
 
 /** Guards deletion of a poa with a confirmation dialog when it cannot be given back again. */
 export const useRevokeConfirmation = () => {
-  const [pendingRevoke, setPendingRevoke] = useState<(() => void) | null>(null);
+  const [pending, setPending] = useState<PendingRevoke | null>(null);
 
   const revokeConfirmationDialog = (
     <RevokeConfirmationDialog
-      open={pendingRevoke !== null}
+      open={pending !== null}
+      poa={pending?.poa}
       onConfirm={() => {
-        setPendingRevoke(null);
-        pendingRevoke?.();
+        const current = pending;
+        setPending(null);
+        current?.revoke();
       }}
-      onCancel={() => setPendingRevoke(null)}
+      onCancel={() => setPending(null)}
     />
   );
 
-  /** Runs `revoke` straight away when the poa can be given back; otherwise asks first. */
-  const confirmRevoke = (canRedelegate: boolean, revoke: () => void) => {
+  /**
+   * Runs `revoke` straight away when the poa can be given back; otherwise asks first. `poa` names
+   * what is being deleted, so the dialog is meaningful when the surrounding list has many rows.
+   */
+  const confirmRevoke = (canRedelegate: boolean, revoke: () => void, poa?: RevokedPoa) => {
     if (canRedelegate) {
       revoke();
     } else {
-      setPendingRevoke(() => revoke);
+      setPending({ revoke, poa });
     }
   };
 

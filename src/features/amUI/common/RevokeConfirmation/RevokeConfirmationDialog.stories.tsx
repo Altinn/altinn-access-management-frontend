@@ -28,3 +28,7 @@ type Story = StoryObj<typeof RevokeConfirmationDialog>;
 export const CannotRedelegate: Story = {
   args: { open: true },
 };
+
+export const CannotRedelegateNamedPoa: Story = {
+  args: { open: true, poa: { name: 'Regnskapsfører lønn', toName: 'Ola Nordmann' } },
+};

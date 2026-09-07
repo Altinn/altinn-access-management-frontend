@@ -59,7 +59,10 @@ export const PackageIsPartiallyDeletableAlert = ({
           <div className={classes.buttons}>
             <DsButton
               data-color='danger'
-              onClick={confirmAction}
+              onClick={() => {
+                setOpen(false);
+                confirmAction();
+              }}
             >
               {t('common.delete')}
             </DsButton>

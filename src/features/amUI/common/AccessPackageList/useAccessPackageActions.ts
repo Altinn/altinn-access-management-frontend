@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { formatDisplayName, useSnackbar } from '@altinn/altinn-components';
 
@@ -20,12 +20,6 @@ import { usePartyRepresentation } from '../PartyRepresentationContext/PartyRepre
 import { PartyType } from '@/rtk/features/userInfoApi';
 import { usePackageWarningDialog } from '../PackageWarningDialog';
 import { useCanRedelegatePackage, useRevokeConfirmation } from '../RevokeConfirmation';
-
-export interface RevokeOptions {
-  toParty?: Party;
-  /** Skips the confirmation dialog, for callers that already confirmed in another dialog. */
-  skipConfirmation?: boolean;
-}
 
 interface useAccessPackageActionsProps {
   onDelegateSuccess?: (accessPackage: AccessPackage, toParty: Party) => void;
@@ -50,6 +44,7 @@ export const useAccessPackageActions = ({
   const [withdrawRequest] = useWithdrawRequestMutation();
   const [loadingByPackageId, setLoadingByPackageId] = useState<Record<string, boolean>>({});
   const [awaitingRefetch, setAwaitingRefetch] = useState<Set<string>>(new Set());
+  const awaitingRedelegationCheck = useRef<Set<string>>(new Set());
   const { confirmPackageAction, packageWarningDialog } = usePackageWarningDialog();
   const { canRedelegatePackage } = useCanRedelegatePackage();
   const { confirmRevoke, revokeConfirmationDialog } = useRevokeConfirmation();
@@ -201,15 +196,18 @@ export const useAccessPackageActions = ({
     );
   };
 
-  const onRevoke = async (
-    accessPackage: AccessPackage,
-    { toParty, skipConfirmation }: RevokeOptions = {},
-  ) => {
+  const onRevoke = async (accessPackage: AccessPackage, toParty?: Party) => {
     if (!fromParty || !actingParty) {
       return;
     }
     const targetToParty = toParty ?? toPartyFromContext;
     if (!targetToParty) return;
+
+    // Swallow a repeat click while the check runs, rather than disabling the trigger: disabling the
+    // focused button blurs it, and nothing would restore focus if the user then cancels the dialog.
+    const revokeKey = `${accessPackage.id}-${targetToParty.partyUuid}`;
+    if (awaitingRedelegationCheck.current.has(revokeKey)) return;
+    awaitingRedelegationCheck.current.add(revokeKey);
 
     const revoke = () =>
       revokePackage(
@@ -230,7 +228,14 @@ export const useAccessPackageActions = ({
         },
       );
 
-    confirmRevoke(skipConfirmation || (await canRedelegatePackage(accessPackage.id)), revoke);
+    try {
+      confirmRevoke(await canRedelegatePackage(accessPackage.id), revoke, {
+        name: accessPackage.name,
+        toName: targetToParty.name,
+      });
+    } finally {
+      awaitingRedelegationCheck.current.delete(revokeKey);
+    }
   };
 
   const onRequest = async (accessPackage: AccessPackage) => {

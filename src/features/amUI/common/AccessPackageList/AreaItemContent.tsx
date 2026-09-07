@@ -10,18 +10,13 @@ import type { AccessPackage } from '@/rtk/features/accessPackageApi';
 import { DelegationAction } from '../DelegationModal/EditModal';
 
 import classes from './AccessPackageList.module.css';
-import {
-  DeletableStatus,
-  type ExtendedAccessArea,
-  type ExtendedAccessPackage,
-} from './useAreaPackageList';
+import { DeletableStatus, type ExtendedAccessArea } from './useAreaPackageList';
 import { PackageItem } from './PackageItem';
 import { RevokeAccessPackageActionControl } from './RevokeAccessPackageActionControl';
 import { DelegateAccessPackageActionControl } from './DelegateAccessPackageActionControl';
 import { PermissionBadge } from './PermissionBadge';
 import { isCriticalAndUndelegated, UndelegatedPackageWarning } from './UndelegatedPackageWarning';
 import { useAccessPackageDelegationCheck } from '../DelegationCheck/AccessPackageDelegationCheckContext';
-import type { RevokeOptions } from './useAccessPackageActions';
 import { PartyType } from '@/rtk/features/userInfoApi';
 
 // DOM id for the area's content wrapper, usable as a RestoreFocus fallback target.
@@ -32,7 +27,7 @@ interface AreaItemContentProps {
   availableActions?: DelegationAction[];
   onSelect?: (accessPackage: AccessPackage) => void;
   onDelegate?: (accessPackage: AccessPackage) => void;
-  onRevoke?: (accessPackage: AccessPackage, options?: RevokeOptions) => void;
+  onRevoke?: (accessPackage: AccessPackage) => void;
   onRequest?: (accessPackage: AccessPackage) => void;
   onDeleteRequest?: (accessPackage: AccessPackage) => void;
   hasPendingRequest?: (accessPackage: AccessPackage) => boolean;
@@ -73,7 +68,7 @@ export const AreaItemContent = ({
   const isSm = useIsMobileOrSmaller();
   const { canDelegatePackage } = useAccessPackageDelegationCheck();
 
-  const revokeActionControl = (pkg: ExtendedAccessPackage) => {
+  const revokeActionControl = (pkg: AccessPackage) => {
     if (isActionLoading) {
       return (
         <DsSpinner
@@ -85,11 +80,7 @@ export const AreaItemContent = ({
     return (
       <RevokeAccessPackageActionControl
         availableActions={availableActions}
-        onRevoke={() =>
-          onRevoke?.(pkg, {
-            skipConfirmation: pkg.deletableStatus === DeletableStatus.PartiallyDeletable,
-          })
-        }
+        onRevoke={() => onRevoke?.(pkg)}
         pkg={pkg}
         isLoading={isActionLoading}
       />

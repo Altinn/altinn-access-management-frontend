@@ -120,7 +120,7 @@ export const UsersTab = ({ accessPackage, isLoading, isFetching }: UsersTabProps
   const handleOnRevoke = (user: UserActionTarget) => {
     const toParty = mapUserToParty(user);
     if (accessPackage && toParty) {
-      onRevoke(accessPackage, { toParty });
+      onRevoke(accessPackage, toParty);
     }
   };
 
