@@ -9,6 +9,18 @@ export function env(name: string): string {
   return value;
 }
 
+export const DEFAULT_ENV = 'at23';
+
+/**
+ * The environment the tests run against. Set as a shell variable by the
+ * `env:<ENV>` scripts in package.json — not read from any .env file — so it is
+ * undefined when tests are started some other way (IDE extension, plain
+ * `npx playwright test`). Falls back to the default instead of throwing.
+ */
+export function currentEnv(): string {
+  return (process.env.environment ?? DEFAULT_ENV).toLowerCase();
+}
+
 /**
  * Loads the playwright/config .env files for a given environment, in the same
  * order and with the same override semantics as playwright.config.ts:

@@ -2,6 +2,7 @@ import fs from 'fs';
 import path from 'path';
 import csv from 'csv-parser';
 import { getTestPersonForCategory } from './testDelegationdatautil';
+import { currentEnv } from './helper';
 
 export type CleanupRow = {
   TestTitle: string;
@@ -14,7 +15,7 @@ export type CleanupResolved = {
   authPerson: any; // Daglig leder used only for token
 };
 
-const TEST_ENV = (process.env.environment ?? 'at23').toLowerCase();
+const TEST_ENV = currentEnv();
 const CLEANUP_CSV = path.resolve(
   __dirname,
   `../e2eTests/testdata/accesspkgdelegation/${TEST_ENV}/cleanup-data.csv`,

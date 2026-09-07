@@ -266,7 +266,7 @@ test.describe('Enkelttjenestedelegering fra org til person og org til org', () =
 
   test.describe('Deleger enkelttjeneste fra org til person', () => {
     const delegator = { pid: '30818599567', orgNo: '313025853', name: 'LYDIG REDELIG TIGER AS' };
-    const recipient = { pid: '17889574100', name: 'ANSVARSFULL REGLE' };
+    const recipient = { pid: '21855097181', name: 'ULTRAFIOLETT POSTKASSE' };
 
     test.beforeEach(async () => {
       await api.addConnection(delegator.pid, delegator.orgNo, recipient.pid);
