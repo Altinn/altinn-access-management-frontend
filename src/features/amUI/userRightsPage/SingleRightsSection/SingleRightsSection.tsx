@@ -173,6 +173,9 @@ const SingleRightsSectionContent = ({ isReportee }: { isReportee: boolean }) => 
           ref={modalRef}
           resource={selectedResource ?? undefined}
           onClose={() => {
+            // Request focus synchronously before clearing state.
+            // If the resource was revoked inside the modal its row is gone, so fall back to
+            // the section heading instead of dropping to <body>.
             if (selectedResource) {
               restoreFocusContext?.requestFocus(selectedResource.identifier, 'single_rights_title');
             }

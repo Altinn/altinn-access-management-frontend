@@ -25,8 +25,7 @@ export const useRevokeConfirmation = () => {
   );
 
   /**
-   * Runs `revoke` straight away when the poa can be given back; otherwise asks first. `poa` names
-   * what is being deleted, so the dialog is meaningful when the surrounding list has many rows.
+   * Show confirm modal if the rights cant be given back, ortherwise revokes the right
    */
   const confirmRevoke = (canRedelegate: boolean, revoke: () => void, poa?: RevokedPoa) => {
     if (canRedelegate) {

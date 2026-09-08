@@ -6,15 +6,13 @@ import { useRevokeConfirmation } from './useRevokeConfirmation';
 
 vi.mock('react-i18next', () => ({
   useTranslation: () => ({ t: (key: string) => key }),
-  // The named heading renders through <Trans>; echo the key plus the interpolated values so a test
-  // can assert both that the right key is used and that the names reach it.
   Trans: ({ i18nKey, values }: { i18nKey: string; values?: Record<string, string> }) => (
     <>{[i18nKey, ...Object.values(values ?? {})].join(' ')}</>
   ),
 }));
 
 /** Renders the hook behind a button so the dialog is mounted the way real callers mount it. */
-const Harness = ({
+const RevokeTrigger = ({
   canRedelegate,
   revoke,
   poa,
@@ -44,7 +42,7 @@ describe('useRevokeConfirmation', () => {
   it('revokes immediately and shows no dialog when the poa can be given back', async () => {
     const revoke = vi.fn();
     render(
-      <Harness
+      <RevokeTrigger
         canRedelegate
         revoke={revoke}
       />,
@@ -59,7 +57,7 @@ describe('useRevokeConfirmation', () => {
   it('asks first and does not revoke when the poa cannot be given back', async () => {
     const revoke = vi.fn();
     render(
-      <Harness
+      <RevokeTrigger
         canRedelegate={false}
         revoke={revoke}
       />,
@@ -74,7 +72,7 @@ describe('useRevokeConfirmation', () => {
   it('revokes exactly once when the user confirms', async () => {
     const revoke = vi.fn();
     render(
-      <Harness
+      <RevokeTrigger
         canRedelegate={false}
         revoke={revoke}
       />,
@@ -89,7 +87,7 @@ describe('useRevokeConfirmation', () => {
 
   it('names the poa and the recipient when given one', async () => {
     render(
-      <Harness
+      <RevokeTrigger
         canRedelegate={false}
         revoke={vi.fn()}
         poa={{ name: 'Regnskapsfører lønn', toName: 'Ola Nordmann' }}
@@ -106,7 +104,7 @@ describe('useRevokeConfirmation', () => {
   it('does not revoke when the user cancels', async () => {
     const revoke = vi.fn();
     render(
-      <Harness
+      <RevokeTrigger
         canRedelegate={false}
         revoke={revoke}
       />,

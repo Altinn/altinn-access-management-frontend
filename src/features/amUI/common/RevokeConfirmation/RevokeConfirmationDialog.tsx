@@ -19,14 +19,6 @@ interface RevokeConfirmationDialogProps {
   onCancel: () => void;
 }
 
-/**
- * Confirmation shown before deleting a poa the user cannot give back again.
- *
- * Always mounted, open or not. Do not wrap this in `{open && ...}`: the browser only returns focus
- * to the trigger when the dialog is closed via `close()`, which DsDialog does from an effect on
- * `open`. Unmounting it while open removes it from the top layer instead, and focus drops to
- * `<body>` — see the gotcha in ../RestoreFocus/README.md.
- */
 export const RevokeConfirmationDialog = ({
   open,
   poa,
