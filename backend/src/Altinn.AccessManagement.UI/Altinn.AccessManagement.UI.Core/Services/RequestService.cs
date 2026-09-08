@@ -23,9 +23,8 @@ namespace Altinn.AccessManagement.UI.Core.Services
         /// </summary>
         /// <param name="requestClient">The request client.</param>
         /// <param name="accessPackageClient">The access package client.</param>
-        /// <param name="registerClient">The access register client.</param>
         /// <param name="resourceHelper">The resource helper.</param>
-        public RequestService(IRequestClient requestClient, IAccessPackageClient accessPackageClient, IRegisterClient registerClient, ResourceHelper resourceHelper)
+        public RequestService(IRequestClient requestClient, IAccessPackageClient accessPackageClient, ResourceHelper resourceHelper)
         {
             _requestClient = requestClient;
             _accessPackageClient = accessPackageClient;
