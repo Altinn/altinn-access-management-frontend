@@ -91,6 +91,7 @@ export const AccessPackageList = ({
   const {
     onDelegate,
     onRevoke,
+    revokeWithoutConfirmation,
     onRequest,
     deleteRequest,
     hasPendingRequest,
@@ -184,6 +185,7 @@ export const AccessPackageList = ({
                 onSelect={onSelect}
                 onDelegate={onDelegate}
                 onRevoke={onRevoke}
+                onRevokeWithoutConfirmation={revokeWithoutConfirmation}
                 onRequest={onRequest}
                 onDeleteRequest={deleteRequest}
                 hasPendingRequest={hasPendingRequest}
