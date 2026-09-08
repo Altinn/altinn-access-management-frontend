@@ -106,7 +106,7 @@ export class Token {
     const subscriptionKey = env(`${env('ENV_NAME').toUpperCase()}_REGISTER_SUBSCRIPTION_KEY`);
     const platformToken = await this.getPlatformToken();
     var payload;
-    if (pidOrOrgNo.length == 9) {
+    if (pidOrOrgNo.length === 9) {
       payload = { data: [`urn:altinn:organization:identifier-no:${pidOrOrgNo}`] };
     } else {
       payload = { data: [`urn:altinn:person:identifier-no:${pidOrOrgNo}`] };
@@ -135,7 +135,7 @@ export class Token {
     // `undefined` and fails with a TypeError that says nothing about the cause —
     // which is almost always a typo'd or unfilled test-data identifier.
     if (!party) {
-      const kind = pidOrOrgNo.length == 9 ? 'organisation number' : 'PID';
+      const kind = pidOrOrgNo.length === 9 ? 'organisation number' : 'PID';
       throw new Error(
         `No party found for ${kind} "${pidOrOrgNo}" in ${this.environment}. ` +
           `Check that it exists in this environment's register and that the test data is filled in.`,

@@ -2,6 +2,20 @@ import { Token } from './Token';
 import { env } from 'playwright/util/helper';
 
 /**
+ * Thrown for any non-OK response from the settings BFF, carrying the status so
+ * callers can react to one specific failure instead of catching everything.
+ */
+export class SettingsApiError extends Error {
+  constructor(
+    message: string,
+    readonly status: number,
+  ) {
+    super(message);
+    this.name = 'SettingsApiError';
+  }
+}
+
+/**
  * A notification address as returned by the settings BFF. Email addresses have
  * `email` set and `phone` empty; SMS addresses the other way around.
  */
@@ -182,12 +196,17 @@ export class SettingsApiRequests {
 
   /**
    * Reads the organisation's addresses, seeding one first if the list cannot be
-   * read at all.
+   * read because the organisation has none.
    *
    * Listing answers 500 for an organisation with no registered addresses, while
-   * POST works — so on failure one wanted address is created and the list is read
-   * again. The re-read is what gets returned, so the caller's diff sees the seeded
-   * address and does not add it a second time.
+   * POST works — so in that one case a wanted address is created and the list is
+   * read again. The re-read is what gets returned, so the caller's diff sees the
+   * seeded address and does not add it a second time.
+   *
+   * Only that specific 500 is treated as "empty". Anything else — 401/403, a
+   * misconfigured BASE_URL, a network failure — is rethrown, so a real problem
+   * surfaces instead of being hidden behind a write. A genuinely transient 500
+   * would still be read as empty; that is the closest signal the endpoint gives.
    */
   private async readOrSeedAddresses(
     pid: string,
@@ -196,7 +215,11 @@ export class SettingsApiRequests {
   ): Promise<NotificationAddress[]> {
     try {
       return await this.getNotificationAddresses(pid, orgNumber);
-    } catch {
+    } catch (error) {
+      if (!(error instanceof SettingsApiError) || error.status !== 500) {
+        throw error;
+      }
+
       if (emails.length > 0) {
         await this.addEmailNotificationAddress(pid, orgNumber, emails[0]);
       } else {
@@ -237,8 +260,9 @@ export class SettingsApiRequests {
     });
 
     if (!response.ok) {
-      throw new Error(
+      throw new SettingsApiError(
         `Failed ${method} ${path} for "${pid}". Status: ${response.status}. Response: ${await response.text()}`,
+        response.status,
       );
     }
 

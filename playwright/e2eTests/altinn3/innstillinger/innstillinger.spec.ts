@@ -41,7 +41,7 @@ const ACTORS = {
  * not a company profile admin, which is what the test asserts.
  */
 const IKKE_ADMIN = {
-  admin: { pid: '14817198504', org: '314242394', orgName: 'LAV PLEIENDE TIGER AS' },
+  admin: { pid: '12897599595', org: '312810336', orgName: 'EKSTRA KONKRET PUMA' },
   bruker: { pid: '14871748749' },
 };
 
