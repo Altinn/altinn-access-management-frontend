@@ -52,7 +52,6 @@ export const getYourRightsMenuItem = (
   userName: string,
   pathname?: string,
   isLoading = false,
-  _isSmall = false,
 ): MenuItemProps => {
   return {
     groupId: '12',
