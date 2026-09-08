@@ -198,7 +198,7 @@ namespace Altinn.AccessManagement.UI.Core.Services
                 }
 
                 string lastUpdatedByName = null;
-                if (x.LastUpdatedBy is Guid updatedBy)
+                if (x.LastUpdatedBy?.Id is Guid updatedBy)
                 {
                     partyNameDict.TryGetValue(updatedBy, out lastUpdatedByName);
                 }
@@ -249,7 +249,7 @@ namespace Altinn.AccessManagement.UI.Core.Services
                 }
 
                 string lastUpdatedByName = null;
-                if (x.LastUpdatedBy is Guid updatedBy)
+                if (x.LastUpdatedBy?.Id is Guid updatedBy)
                 {
                     partyNameDict.TryGetValue(updatedBy, out lastUpdatedByName);
                 }
@@ -280,7 +280,7 @@ namespace Altinn.AccessManagement.UI.Core.Services
             List<Guid> lastUpdatedNames = list
                 .Select(request => request.LastUpdatedBy)
                 .Where(x => x != null)
-                .Select(x => x.Value)
+                .Select(x => x.Id)
                 .Distinct()
                 .ToList();
 

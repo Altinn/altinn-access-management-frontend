@@ -41,5 +41,16 @@ public class RequestDto
     /// <summary>
     /// Last updated by
     /// </summary>
-    public Guid? LastUpdatedBy { get; set; }
+    public LastUpdatedByUserDto LastUpdatedBy { get; set; }
+}
+
+/// <summary>
+/// Last updated by user dto
+/// </summary>
+public class LastUpdatedByUserDto
+{
+    /// <summary>
+    /// User id
+    /// </summary>
+    public Guid Id { get; set; }
 }
