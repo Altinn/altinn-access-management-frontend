@@ -118,6 +118,8 @@ export const useRequestReview = (request: Request | null, onClose: () => void) =
         // If delegation check fails, treat as no data
       }
     });
+    // Deliberately keyed on snapshotRequests alone: depending on delegationChecks would
+    // re-run this effect on every result it writes. The guard above skips ids already checked.
   }, [snapshotRequests]);
 
   const cannotApprove = useCallback(
