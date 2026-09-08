@@ -23,6 +23,20 @@ namespace Altinn.AccessManagement.UI.Core.Services.Interfaces
         Task<List<InstanceDelegation>> GetDelegatedInstances(string languageCode, Guid party, Guid? from, Guid? to, string resource, string instance);
 
         /// <summary>
+        /// Gets delegated instances for the specified parties, optionally without the Dialogporten enrichment.
+        /// Skipping the enrichment avoids one PID-enriched token refresh per call and one Dialogporten lookup per instance.
+        /// </summary>
+        /// <param name="languageCode">The language to use for resource texts.</param>
+        /// <param name="party">The acting party asking for the delegations.</param>
+        /// <param name="from">The party the instance access was delegated from.</param>
+        /// <param name="to">The party the instance access was delegated to.</param>
+        /// <param name="resource">Optional resource identifier filter.</param>
+        /// <param name="instance">Optional instance urn filter.</param>
+        /// <param name="includeDialogLookup">When false, <see cref="InstanceDelegation.DialogLookup"/> is left null and no token refresh or Dialogporten calls are made.</param>
+        /// <returns>A list of delegated instances.</returns>
+        Task<List<InstanceDelegation>> GetDelegatedInstances(string languageCode, Guid party, Guid? from, Guid? to, string resource, string instance, bool includeDialogLookup);
+
+        /// <summary>
         /// Gets the rights a user can delegate on a specific instance.
         /// </summary>
         /// <param name="party">The party for which the delegation check is performed.</param>

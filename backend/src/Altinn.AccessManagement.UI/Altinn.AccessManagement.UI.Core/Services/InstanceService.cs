@@ -44,18 +44,27 @@ namespace Altinn.AccessManagement.UI.Core.Services
         }
 
         /// <inheritdoc />
-        public async Task<List<InstanceDelegation>> GetDelegatedInstances(string languageCode, Guid party, Guid? from, Guid? to, string resource, string instance)
+        public Task<List<InstanceDelegation>> GetDelegatedInstances(string languageCode, Guid party, Guid? from, Guid? to, string resource, string instance)
         {
-            string enrichedToken;
+            return GetDelegatedInstances(languageCode, party, from, to, resource, instance, includeDialogLookup: true);
+        }
 
-            try
+        /// <inheritdoc />
+        public async Task<List<InstanceDelegation>> GetDelegatedInstances(string languageCode, Guid party, Guid? from, Guid? to, string resource, string instance, bool includeDialogLookup)
+        {
+            string enrichedToken = null;
+
+            if (includeDialogLookup)
             {
-                enrichedToken = await _authenticationClient.GetPidEnrichedToken();
-            }
-            catch (Exception ex)
-            {
-                _logger.LogWarning(ex, "InstanceService // GetDelegatedInstances // Failed to fetch enriched token for dialogporten lookup");
-                throw new ApplicationException("Failed to enrich token for dialogporten lookup", ex);
+                try
+                {
+                    enrichedToken = await _authenticationClient.GetPidEnrichedToken();
+                }
+                catch (Exception ex)
+                {
+                    _logger.LogWarning(ex, "InstanceService // GetDelegatedInstances // Failed to fetch enriched token for dialogporten lookup");
+                    throw new ApplicationException("Failed to enrich token for dialogporten lookup", ex);
+                }
             }
 
             List<InstancePermission> instancePermissions = await _instanceClient.GetDelegatedInstances(languageCode, party, from, to, resource, instance);
@@ -75,7 +84,7 @@ namespace Altinn.AccessManagement.UI.Core.Services
                 .Select(x => new InstanceDelegation(x.resourceFe, x.permission.Instance, x.permission.Permissions))
                 .ToList();
 
-            if (string.IsNullOrWhiteSpace(enrichedToken))
+            if (!includeDialogLookup || string.IsNullOrWhiteSpace(enrichedToken))
             {
                 return delegations;
             }
