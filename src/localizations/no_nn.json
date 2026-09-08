@@ -696,7 +696,11 @@
     "content_text1": "Er du usikker på kva fagsystem du skal velje, anbefaler vi at du kontaktar leverandøren av fagsystemet. Altinn har ikkje gjort noka vurdering av kvalitet og tryggleik på fagsystema i lista.",
     "pull_down_menu_label": "Vel systemleverandør og system",
     "confirm_button": "Gå vidare",
-    "choose": "Velg ...",
+    "system_search_placeholder": "Søk etter fagsystem eller leverandør",
+    "no_systems_found": "Ingen fagsystem vart funne for dette søket.",
+    "selected_system": "Valt: {{systemName}} - {{vendor}}",
+    "search_hits_one": "{{count}} fagsystem funne",
+    "search_hits_other": "{{count}} fagsystem funne",
     "load_vendors_error": "Kunne ikkje laste systemleverandørar",
     "loading_systems": "Lastar leverandørar og system..."
   },
