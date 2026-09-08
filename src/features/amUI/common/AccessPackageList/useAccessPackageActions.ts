@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { formatDisplayName, useSnackbar } from '@altinn/altinn-components';
 
@@ -44,7 +44,6 @@ export const useAccessPackageActions = ({
   const [withdrawRequest] = useWithdrawRequestMutation();
   const [loadingByPackageId, setLoadingByPackageId] = useState<Record<string, boolean>>({});
   const [awaitingRefetch, setAwaitingRefetch] = useState<Set<string>>(new Set());
-  const awaitingRedelegationCheck = useRef<Set<string>>(new Set());
   const { confirmPackageAction, packageWarningDialog } = usePackageWarningDialog();
   const { canRedelegatePackage } = useCanRedelegatePackage();
   const { confirmRevoke, revokeConfirmationDialog } = useRevokeConfirmation();
@@ -224,32 +223,19 @@ export const useAccessPackageActions = ({
     };
   };
 
-  const onRevoke = async (accessPackage: AccessPackage, toParty?: Party) => {
+  const onRevoke = (accessPackage: AccessPackage, toParty?: Party) => {
     const resolved = resolveRevoke(accessPackage, toParty);
     if (!resolved) return;
     const { targetToParty, revoke } = resolved;
-
-    // Swallow a repeat click while the check runs, rather than disabling the trigger: disabling the
-    // focused button blurs it, and nothing would restore focus if the user then cancels the dialog.
-    const revokeKey = `${accessPackage.id}-${targetToParty.partyUuid}`;
-    if (awaitingRedelegationCheck.current.has(revokeKey)) return;
-    awaitingRedelegationCheck.current.add(revokeKey);
-
-    try {
-      confirmRevoke(await canRedelegatePackage(accessPackage.id), revoke, {
-        name: accessPackage.name,
-        toName: formatToPartyName(targetToParty),
-      });
-    } finally {
-      awaitingRedelegationCheck.current.delete(revokeKey);
-    }
+    return confirmRevoke(
+      `${accessPackage.id}-${targetToParty.partyUuid}`,
+      () => canRedelegatePackage(accessPackage.id),
+      revoke,
+      { name: accessPackage.name, toName: formatToPartyName(targetToParty) },
+    );
   };
 
-  /**
-   * Revokes without the cannot-redelegate confirmation, for callers that already show one. Used by
-   * the partial-deletion alert: the recipient keeps the inherited part, so nothing is lost that the
-   * user would need to give back.
-   */
+  // For callers that already confirm, e.g. PackageIsPartiallyDeletableAlert.
   const revokeWithoutConfirmation = (accessPackage: AccessPackage, toParty?: Party) => {
     resolveRevoke(accessPackage, toParty)?.revoke();
   };

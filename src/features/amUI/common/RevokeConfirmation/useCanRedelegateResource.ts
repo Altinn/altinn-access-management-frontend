@@ -5,10 +5,6 @@ import {
 
 import { usePartyRepresentation } from '../PartyRepresentationContext/PartyRepresentationContext';
 
-/**
- * Whether the logged in user can give every right the recipient holds on a resource back again
- * after deleting it.
- */
 export const useCanRedelegateResource = () => {
   const { actingParty, fromParty, toParty } = usePartyRepresentation();
   const [runDelegationCheck] = useLazyDelegationCheckQuery();

@@ -32,11 +32,6 @@ export const DeleteResourceButton = ({
   const revoke = useRevokeResource();
   const [isLoading, setIsLoading] = useState(false);
 
-  const toPartyDisplayName = formatDisplayName({
-    fullName: toParty?.name || '',
-    type: toParty?.partyTypeName === PartyType.Person ? 'person' : 'company',
-  });
-
   const snackbar = (isSuccessful: boolean) => {
     const color: 'success' | 'danger' = isSuccessful ? 'success' : 'danger';
     const snackbarData = {
@@ -46,7 +41,10 @@ export const DeleteResourceButton = ({
           : 'single_rights.delete_singleRight_error_message',
         {
           resourceTitle: resource.title,
-          name: toPartyDisplayName,
+          name: formatDisplayName({
+            fullName: toParty?.name || '',
+            type: toParty?.partyTypeName === PartyType.Person ? 'person' : 'company',
+          }),
         },
       ),
       color,

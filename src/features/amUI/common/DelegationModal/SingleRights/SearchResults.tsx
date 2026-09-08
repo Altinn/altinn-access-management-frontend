@@ -10,6 +10,7 @@ import { AmPagination } from '@/components/Paginering/AmPaginering';
 import { ResourceList } from '@/features/amUI/common/ResourceList/ResourceList';
 import { SkeletonResourceList } from '@/features/amUI/common/ResourceList/SkeletonResourceList';
 import { getInheritedStatus } from '@/features/amUI/common/useInheritedStatus';
+import { PartyType } from '@/rtk/features/userInfoApi';
 
 import classes from './ResourceSearch.module.css';
 import { DelegationAction } from '../EditModal';
@@ -22,7 +23,6 @@ import {
 import { usePartyRepresentation } from '../../PartyRepresentationContext/PartyRepresentationContext';
 import { useSingleRightRequests } from './hooks/useSingleRightRequests';
 import { useRestoreFocusOnDataChange } from '../../RestoreFocus';
-import { PartyType } from '@/rtk/features/userInfoApi';
 import { useCanRedelegateResource, useRevokeConfirmation } from '../../RevokeConfirmation';
 
 interface SearchResultsProps {
@@ -74,7 +74,6 @@ export const SearchResults = ({
 
   const { canRedelegateResource } = useCanRedelegateResource();
   const { confirmRevoke, revokeConfirmationDialog } = useRevokeConfirmation();
-  const awaitingRedelegationCheck = React.useRef<Set<string>>(new Set());
 
   const { delegateFromList, revokeFromList, isResourceLoading } = useResourceListDelegation({
     onActionError: (resource, errorInfo) => {
@@ -91,25 +90,19 @@ export const SearchResults = ({
     },
   });
 
-  const confirmAndRevokeFromList = async (resource: ServiceResource) => {
-    if (awaitingRedelegationCheck.current.has(resource.identifier)) return;
-    awaitingRedelegationCheck.current.add(resource.identifier);
-    try {
-      confirmRevoke(
-        await canRedelegateResource(resource.identifier),
-        () => revokeFromList(resource),
-        {
-          name: resource.title,
-          toName: formatDisplayName({
-            fullName: toParty?.name || '',
-            type: toParty?.partyTypeName === PartyType.Person ? 'person' : 'company',
-          }),
-        },
-      );
-    } finally {
-      awaitingRedelegationCheck.current.delete(resource.identifier);
-    }
-  };
+  const confirmAndRevokeFromList = (resource: ServiceResource) =>
+    confirmRevoke(
+      resource.identifier,
+      () => canRedelegateResource(resource.identifier),
+      () => revokeFromList(resource),
+      {
+        name: resource.title,
+        toName: formatDisplayName({
+          fullName: toParty?.name || '',
+          type: toParty?.partyTypeName === PartyType.Person ? 'person' : 'company',
+        }),
+      },
+    );
 
   const requestFromList = (resource: ServiceResource) => {
     createRequest(resource);
@@ -155,22 +148,19 @@ export const SearchResults = ({
 
   if (error) {
     return (
-      <>
-        <DsAlert
-          role='alert'
-          className={classes.searchError}
-          data-color='danger'
+      <DsAlert
+        role='alert'
+        className={classes.searchError}
+        data-color='danger'
+      >
+        <DsHeading
+          level={2}
+          data-size='xs'
         >
-          <DsHeading
-            level={2}
-            data-size='xs'
-          >
-            {t('common.general_error_title')}
-          </DsHeading>
-          <DsParagraph>{t('common.general_error_paragraph')}</DsParagraph>
-        </DsAlert>
-        {revokeConfirmationDialog}
-      </>
+          {t('common.general_error_title')}
+        </DsHeading>
+        <DsParagraph>{t('common.general_error_paragraph')}</DsParagraph>
+      </DsAlert>
     );
   }
 

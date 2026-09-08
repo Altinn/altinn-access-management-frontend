@@ -166,20 +166,14 @@ export const ResourceInfo = ({
 
   const { canRedelegateResource } = useCanRedelegateResource();
   const { confirmRevoke, revokeConfirmationDialog } = useRevokeConfirmation();
-  const awaitingRedelegationCheck = React.useRef(false);
 
-  const confirmAndRevokeResource = async () => {
-    if (awaitingRedelegationCheck.current) return;
-    awaitingRedelegationCheck.current = true;
-    try {
-      confirmRevoke(await canRedelegateResource(resource.identifier), revokeResource, {
-        name: resource.title,
-        toName,
-      });
-    } finally {
-      awaitingRedelegationCheck.current = false;
-    }
-  };
+  const confirmAndRevokeResource = () =>
+    confirmRevoke(
+      resource.identifier,
+      () => canRedelegateResource(resource.identifier),
+      revokeResource,
+      { name: resource.title, toName },
+    );
 
   const actionsRef = React.useRef<HTMLDivElement>(null);
   useRestoreFocusAfterSettled({

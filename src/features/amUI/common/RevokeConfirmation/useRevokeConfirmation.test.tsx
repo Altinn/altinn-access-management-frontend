@@ -1,4 +1,4 @@
-import { render, screen } from '@testing-library/react';
+import { render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { describe, expect, it, vi } from 'vitest';
 
@@ -11,27 +11,27 @@ vi.mock('react-i18next', () => ({
   ),
 }));
 
-/** Renders the hook behind a button so the dialog is mounted the way real callers mount it. */
 const RevokeTrigger = ({
   canRedelegate,
   revoke,
   poa,
 }: {
-  canRedelegate: boolean;
+  canRedelegate: boolean | (() => Promise<boolean>);
   revoke: () => void;
   poa?: { name: string; toName: string };
 }) => {
   const { confirmRevoke, revokeConfirmationDialog } = useRevokeConfirmation();
+  const check =
+    typeof canRedelegate === 'function' ? canRedelegate : () => Promise.resolve(canRedelegate);
   return (
     <>
-      <button onClick={() => confirmRevoke(canRedelegate, revoke, poa)}>trigger</button>
+      <button onClick={() => confirmRevoke('key', check, revoke, poa)}>trigger</button>
       {revokeConfirmationDialog}
     </>
   );
 };
 
-// DsDialog keeps its children in the DOM while closed, so "no dialog shown" has to be asserted on
-// the element's open state — querying for the confirm button finds it either way.
+// DsDialog keeps its children mounted while closed, so visibility is asserted on the open state.
 const dialogIsOpen = () => !!document.querySelector('dialog')?.open;
 
 const clickTrigger = async () => {
@@ -50,7 +50,7 @@ describe('useRevokeConfirmation', () => {
 
     await clickTrigger();
 
-    expect(revoke).toHaveBeenCalledTimes(1);
+    await waitFor(() => expect(revoke).toHaveBeenCalledTimes(1));
     expect(dialogIsOpen()).toBe(false);
   });
 
@@ -65,7 +65,7 @@ describe('useRevokeConfirmation', () => {
 
     await clickTrigger();
 
-    expect(dialogIsOpen()).toBe(true);
+    await waitFor(() => expect(dialogIsOpen()).toBe(true));
     expect(revoke).not.toHaveBeenCalled();
   });
 
@@ -78,6 +78,7 @@ describe('useRevokeConfirmation', () => {
       />,
     );
     await clickTrigger();
+    await waitFor(() => expect(dialogIsOpen()).toBe(true));
 
     await userEvent.click(screen.getByRole('button', { name: 'common.yes_delete' }));
 
@@ -97,8 +98,27 @@ describe('useRevokeConfirmation', () => {
     await clickTrigger();
 
     expect(
-      screen.getByText(/revoke_confirmation\.heading_for Regnskapsfører lønn Ola Nordmann/),
+      await screen.findByText(/revoke_confirmation\.heading_for Regnskapsfører lønn Ola Nordmann/),
     ).toBeInTheDocument();
+  });
+
+  it('ignores repeat clicks while the check is pending', async () => {
+    const revoke = vi.fn();
+    let resolveCheck: (value: boolean) => void = () => {};
+    const check = vi.fn(() => new Promise<boolean>((resolve) => (resolveCheck = resolve)));
+    render(
+      <RevokeTrigger
+        canRedelegate={check}
+        revoke={revoke}
+      />,
+    );
+
+    await clickTrigger();
+    await clickTrigger();
+    resolveCheck(true);
+
+    await waitFor(() => expect(revoke).toHaveBeenCalledTimes(1));
+    expect(check).toHaveBeenCalledTimes(1);
   });
 
   it('does not revoke when the user cancels', async () => {
@@ -110,6 +130,7 @@ describe('useRevokeConfirmation', () => {
       />,
     );
     await clickTrigger();
+    await waitFor(() => expect(dialogIsOpen()).toBe(true));
 
     await userEvent.click(screen.getByRole('button', { name: 'common.cancel' }));
 

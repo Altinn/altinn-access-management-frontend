@@ -143,7 +143,6 @@ export const accessPackageApi = createApi({
           method: 'GET',
         };
       },
-      providesTags: ['AccessPackages'],
     }),
   }),
 });

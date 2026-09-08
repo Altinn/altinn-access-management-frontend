@@ -2,12 +2,7 @@ import { useLazyDelegationCheckQuery } from '@/rtk/features/accessPackageApi';
 
 import { usePartyRepresentation } from '../PartyRepresentationContext/PartyRepresentationContext';
 
-/**
- * Whether the logged in user can give an access package back again after deleting it, checked on
- * behalf of the party the package was given from. When the answer cannot be established we ask for
- * confirmation rather than skip it — a missed warning costs an access the user cannot restore,
- * while a spurious one costs a click.
- */
+// Falls back to false when the check fails, so the user is asked rather than skipped.
 export const useCanRedelegatePackage = () => {
   const { fromParty } = usePartyRepresentation();
   const [runDelegationCheck] = useLazyDelegationCheckQuery();

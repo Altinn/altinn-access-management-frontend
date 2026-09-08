@@ -5,6 +5,7 @@ import { DsHeading, formatDisplayName } from '@altinn/altinn-components';
 
 import type { ServiceResource } from '@/rtk/features/singleRights/singleRightsApi';
 import { useGetSingleRightsForRightholderQuery } from '@/rtk/features/singleRights/singleRightsApi';
+import { PartyType } from '@/rtk/features/userInfoApi';
 import { ResourceList } from '@/features/amUI/common/ResourceList/ResourceList';
 import {
   RestoreFocusFallback,
@@ -27,7 +28,6 @@ import { getInheritedStatus } from '../../common/useInheritedStatus';
 import { HelpText } from '../../common/HelpText/HelpText';
 import { PendingRequests } from './PendingRequests';
 import { useCanRedelegateResource, useRevokeConfirmation } from '../../common/RevokeConfirmation';
-import { PartyType } from '@/rtk/features/userInfoApi';
 
 const SingleRightsSectionContent = ({ isReportee }: { isReportee: boolean }) => {
   const { id } = useParams();
@@ -64,23 +64,20 @@ const SingleRightsSectionContent = ({ isReportee }: { isReportee: boolean }) => 
 
   const { canRedelegateResource } = useCanRedelegateResource();
   const { confirmRevoke, revokeConfirmationDialog } = useRevokeConfirmation();
-  const awaitingRedelegationCheck = React.useRef<Set<string>>(new Set());
 
-  const confirmDelete = async (resource: ServiceResource, deleteResource: () => void) => {
-    if (awaitingRedelegationCheck.current.has(resource.identifier)) return;
-    awaitingRedelegationCheck.current.add(resource.identifier);
-    try {
-      confirmRevoke(await canRedelegateResource(resource.identifier), deleteResource, {
+  const confirmDelete = (resource: ServiceResource, deleteResource: () => void) =>
+    confirmRevoke(
+      resource.identifier,
+      () => canRedelegateResource(resource.identifier),
+      deleteResource,
+      {
         name: resource.title,
         toName: formatDisplayName({
           fullName: toParty?.name || '',
           type: toParty?.partyTypeName === PartyType.Person ? 'person' : 'company',
         }),
-      });
-    } finally {
-      awaitingRedelegationCheck.current.delete(resource.identifier);
-    }
-  };
+      },
+    );
 
   const resources = React.useMemo(
     () => delegatedResources?.map((delegation) => delegation.resource).filter(Boolean),

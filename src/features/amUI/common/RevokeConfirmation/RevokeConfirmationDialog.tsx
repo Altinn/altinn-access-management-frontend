@@ -4,11 +4,8 @@ import { DsButton, DsDialog, DsHeading, DsParagraph } from '@altinn/altinn-compo
 
 import classes from './RevokeConfirmationDialog.module.css';
 
-/** Names the poa about to be deleted, so the dialog identifies the row the user clicked. */
 export interface RevokedPoa {
-  /** The access package or resource being deleted. */
   name: string;
-  /** The party that loses the access. */
   toName: string;
 }
 

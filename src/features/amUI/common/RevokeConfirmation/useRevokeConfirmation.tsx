@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useRef, useState } from 'react';
 
 import { RevokeConfirmationDialog, type RevokedPoa } from './RevokeConfirmationDialog';
 
@@ -7,9 +7,9 @@ interface PendingRevoke {
   poa?: RevokedPoa;
 }
 
-/** Guards deletion of a poa with a confirmation dialog when it cannot be given back again. */
 export const useRevokeConfirmation = () => {
   const [pending, setPending] = useState<PendingRevoke | null>(null);
+  const awaitingCheck = useRef<Set<string>>(new Set());
 
   const revokeConfirmationDialog = (
     <RevokeConfirmationDialog
@@ -24,14 +24,25 @@ export const useRevokeConfirmation = () => {
     />
   );
 
-  /**
-   * Show confirm modal if the rights cant be given back, ortherwise revokes the right
-   */
-  const confirmRevoke = (canRedelegate: boolean, revoke: () => void, poa?: RevokedPoa) => {
-    if (canRedelegate) {
-      revoke();
-    } else {
-      setPending({ revoke, poa });
+  // Runs `revoke` immediately when the poa can be given back again; otherwise shows the dialog and
+  // runs it only if the user confirms. Repeat clicks on `key` are ignored while the check runs
+  // instead of disabling the trigger, since disabling would blur it and lose focus on cancel.
+  const confirmRevoke = async (
+    key: string,
+    canRedelegate: () => Promise<boolean>,
+    revoke: () => void,
+    poa?: RevokedPoa,
+  ) => {
+    if (awaitingCheck.current.has(key)) return;
+    awaitingCheck.current.add(key);
+    try {
+      if (await canRedelegate()) {
+        revoke();
+      } else {
+        setPending({ revoke, poa });
+      }
+    } finally {
+      awaitingCheck.current.delete(key);
     }
   };
 
