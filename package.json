@@ -7,7 +7,7 @@
     "start": "vite",
     "build": "vite build",
     "preview": "vite preview",
-    "lint": "eslint . --pass-on-unpruned-suppressions",
+    "lint": "eslint .",
     "lint:prune": "eslint . --prune-suppressions",
     "format": "prettier --write './**/*.{js,jsx,ts,tsx,css}' --config ./.prettierrc.cjs",
     "postinstall": "husky install",
