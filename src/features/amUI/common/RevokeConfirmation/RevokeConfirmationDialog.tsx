@@ -1,5 +1,5 @@
 import { useId } from 'react';
-import { useTranslation } from 'react-i18next';
+import { Trans, useTranslation } from 'react-i18next';
 import { DsButton, DsDialog, DsHeading, DsParagraph } from '@altinn/altinn-components';
 
 import classes from './RevokeConfirmationDialog.module.css';
@@ -51,9 +51,15 @@ export const RevokeConfirmationDialog = ({
             level={2}
             data-size='xs'
           >
-            {poa
-              ? t('revoke_confirmation.heading_for', { name: poa.name, to_name: poa.toName })
-              : t('common.confirm_delete_heading')}
+            {poa ? (
+              <Trans
+                i18nKey='revoke_confirmation.heading_for'
+                values={{ name: poa.name, to_name: poa.toName }}
+                components={{ b: <strong /> }}
+              />
+            ) : (
+              t('common.confirm_delete_heading')
+            )}
           </DsHeading>
           <DsParagraph data-size='sm'>{t('revoke_confirmation.cannot_redelegate')}</DsParagraph>
           <div className={classes.buttons}>

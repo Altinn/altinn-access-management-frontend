@@ -6,14 +6,27 @@ import { useRevokeConfirmation } from './useRevokeConfirmation';
 
 vi.mock('react-i18next', () => ({
   useTranslation: () => ({ t: (key: string) => key }),
+  // The named heading renders through <Trans>; echo the key plus the interpolated values so a test
+  // can assert both that the right key is used and that the names reach it.
+  Trans: ({ i18nKey, values }: { i18nKey: string; values?: Record<string, string> }) => (
+    <>{[i18nKey, ...Object.values(values ?? {})].join(' ')}</>
+  ),
 }));
 
 /** Renders the hook behind a button so the dialog is mounted the way real callers mount it. */
-const Harness = ({ canRedelegate, revoke }: { canRedelegate: boolean; revoke: () => void }) => {
+const Harness = ({
+  canRedelegate,
+  revoke,
+  poa,
+}: {
+  canRedelegate: boolean;
+  revoke: () => void;
+  poa?: { name: string; toName: string };
+}) => {
   const { confirmRevoke, revokeConfirmationDialog } = useRevokeConfirmation();
   return (
     <>
-      <button onClick={() => confirmRevoke(canRedelegate, revoke)}>trigger</button>
+      <button onClick={() => confirmRevoke(canRedelegate, revoke, poa)}>trigger</button>
       {revokeConfirmationDialog}
     </>
   );
@@ -72,6 +85,22 @@ describe('useRevokeConfirmation', () => {
 
     expect(revoke).toHaveBeenCalledTimes(1);
     expect(dialogIsOpen()).toBe(false);
+  });
+
+  it('names the poa and the recipient when given one', async () => {
+    render(
+      <Harness
+        canRedelegate={false}
+        revoke={vi.fn()}
+        poa={{ name: 'Regnskapsfører lønn', toName: 'Ola Nordmann' }}
+      />,
+    );
+
+    await clickTrigger();
+
+    expect(
+      screen.getByText(/revoke_confirmation\.heading_for Regnskapsfører lønn Ola Nordmann/),
+    ).toBeInTheDocument();
   });
 
   it('does not revoke when the user cancels', async () => {

@@ -499,7 +499,7 @@
   },
   "revoke_confirmation": {
     "cannot_redelegate": "Du har ikkje fullmakt til å gi den tilbake etterpå.",
-    "heading_for": "Er du sikker på at du vil slette «{{name}}» for {{to_name}}?"
+    "heading_for": "Er du sikker på at du vil slette <b>{{name}}</b> for <b>{{to_name}}</b>?"
   },
   "status_section": {
     "has_package_message": "{{user_name}} har denne fullmakta.",
