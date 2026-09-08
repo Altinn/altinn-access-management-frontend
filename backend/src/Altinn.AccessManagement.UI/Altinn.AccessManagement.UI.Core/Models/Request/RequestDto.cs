@@ -1,3 +1,4 @@
+using System.Text.Json.Serialization;
 using Altinn.AccessManagement.UI.Core.Enums;
 using Altinn.AccessManagement.UI.Core.Models.User;
 
@@ -47,6 +48,7 @@ public class RequestDto
 /// <summary>
 /// Party reference dto
 /// </summary>
+[JsonConverter(typeof(PartyReferenceDtoConverter))]
 public class PartyReferenceDto
 {
     /// <summary>

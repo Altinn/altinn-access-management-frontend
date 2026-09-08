@@ -251,17 +251,12 @@ namespace Altinn.AccessManagement.UI.Core.Services
             }).ToList();
         }
 
-        private static bool IsHandledStatus(List<RequestStatus> status)
-        {
-            return status.Contains(RequestStatus.Approved) || status.Contains(RequestStatus.Rejected);
-        }
-
         private static IEnumerable<Request> RemoveHandledItemsOlderThanOneYear(PaginatedResult<Request> requests)
         {
             return requests.Items.Where(item =>
             {
-                bool isHandled = IsHandledStatus([item.Status]);
-                return (isHandled && item.LastUpdated > DateTimeOffset.UtcNow.AddYears(-1)) || !isHandled;
+                bool isHandled = item.Status is RequestStatus.Approved or RequestStatus.Rejected;
+                return !isHandled || item.LastUpdated > DateTimeOffset.UtcNow.AddYears(-1);
             });
         }
     }
