@@ -22,6 +22,10 @@ export class SidebarNav {
   readonly reportees: Locator;
   readonly consent: Locator;
   readonly clientAdministration: Locator;
+  readonly settings: Locator;
+  readonly requests: Locator;
+  readonly myClients: Locator;
+  readonly maskinporten: Locator;
 
   constructor(page: Page, language: Language = Language.NB) {
     this.page = page;
@@ -35,6 +39,15 @@ export class SidebarNav {
     this.reportees = this.nav.getByLabel(dict.sidebar.reportees);
     this.consent = this.nav.getByLabel(dict.sidebar.consent);
     this.clientAdministration = this.nav.getByLabel(dict.sidebar.client_administration);
+    this.settings = this.nav.getByLabel(dict.sidebar.settings);
+    // The requests item appends a badge ("Forespørsler (2 mottatt)") when there
+    // are pending requests, so match the title as a prefix rather than exactly.
+    this.requests = this.nav.getByLabel(new RegExp(`^${dict.sidebar.requests}`));
+    this.myClients = this.nav.getByLabel(dict.sidebar.your_clients);
+    // "Maskinporten­administrasjon" carries a soft hyphen (U+00AD) in the
+    // localization files that the accessible name may or may not preserve, so
+    // match on the part before it.
+    this.maskinporten = this.nav.getByLabel(dict.sidebar.maskinporten.split('­')[0]);
   }
 
   async goToUsers() {
@@ -47,5 +60,25 @@ export class SidebarNav {
 
   async goToKlientAdministrasjon() {
     await this.clientAdministration.click();
+  }
+
+  async goToInnstillinger() {
+    await this.settings.click();
+  }
+
+  async goToForespoersler() {
+    await this.requests.click();
+  }
+
+  async goToDineKlienter() {
+    await this.myClients.click();
+  }
+
+  async goToMaskinporten() {
+    await this.maskinporten.click();
+  }
+
+  async goToFullmakter() {
+    await this.powersOfAttorney.click();
   }
 }
