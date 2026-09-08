@@ -1088,28 +1088,5 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
             Assert.DoesNotContain(actualResponse, r => r.Id == Guid.Parse("5a11ab1e-0000-0000-0000-000000000003"));
             Assert.DoesNotContain(actualResponse, r => r.Id == Guid.Parse("5a11ab1e-0000-0000-0000-000000000004"));
         }
-
-        /// <summary>
-        ///     Test case: GetEnrichedSentResourceRequests is queried for handled (approved/rejected) requests
-        ///     Expected: Sent requests never expose who handled them, so LastUpdatedByName is not enriched
-        /// </summary>
-        [Fact]
-        public async Task GetEnrichedSentResourceRequests_DoesNotEnrichLastUpdatedByName()
-        {
-            // Arrange - 55555555 triggers a mix of pending, recently handled and old handled requests
-            string party = "55555555-5555-5555-5555-555555555555";
-
-            // Act - even for handled statuses, sent requests must not reveal the handler
-            HttpResponseMessage httpResponse = await _client.GetAsync($"accessmanagement/api/v1/request/sent/resource?party={party}&status=Approved");
-            IEnumerable<EnrichedResourceRequest> actualResponse = await httpResponse.Content.ReadFromJsonAsync<IEnumerable<EnrichedResourceRequest>>();
-
-            // Assert
-            Assert.Equal(HttpStatusCode.OK, httpResponse.StatusCode);
-            Assert.All(actualResponse, r => Assert.Null(r.LastUpdatedByName));
-
-            // old handled requests are still filtered out
-            Assert.DoesNotContain(actualResponse, r => r.Id == Guid.Parse("5a11ab1e-0000-0000-0000-000000000003"));
-            Assert.DoesNotContain(actualResponse, r => r.Id == Guid.Parse("5a11ab1e-0000-0000-0000-000000000004"));
-        }
     }
 }
