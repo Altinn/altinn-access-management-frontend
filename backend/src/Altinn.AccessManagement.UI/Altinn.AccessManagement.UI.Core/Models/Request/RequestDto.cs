@@ -41,16 +41,21 @@ public class RequestDto
     /// <summary>
     /// Last updated by
     /// </summary>
-    public LastUpdatedByUserDto LastUpdatedBy { get; set; }
+    public PartyReferenceDto LastUpdatedBy { get; set; }
 }
 
 /// <summary>
-/// Last updated by user dto
+/// Party reference dto
 /// </summary>
-public class LastUpdatedByUserDto
+public class PartyReferenceDto
 {
     /// <summary>
-    /// User id
+    /// Party id
     /// </summary>
     public Guid Id { get; set; }
+
+    /// <summary>
+    /// Name
+    /// </summary>
+    public string Name { get; set; }
 }

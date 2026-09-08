@@ -8,7 +8,6 @@ using Altinn.AccessManagement.UI.Core.Models.Request;
 using Altinn.AccessManagement.UI.Core.Models.Request.Frontend;
 using Altinn.AccessManagement.UI.Core.Models.ResourceRegistry.Frontend;
 using Altinn.AccessManagement.UI.Core.Services.Interfaces;
-using Altinn.Register.Contracts.V1;
 
 namespace Altinn.AccessManagement.UI.Core.Services
 {
@@ -17,7 +16,6 @@ namespace Altinn.AccessManagement.UI.Core.Services
     {
         private readonly IRequestClient _requestClient;
         private readonly IAccessPackageClient _accessPackageClient;
-        private readonly IRegisterClient _registerClient;
         private readonly ResourceHelper _resourceHelper;
 
         /// <summary>
@@ -31,7 +29,6 @@ namespace Altinn.AccessManagement.UI.Core.Services
         {
             _requestClient = requestClient;
             _accessPackageClient = accessPackageClient;
-            _registerClient = registerClient;
             _resourceHelper = resourceHelper;
         }
 
@@ -50,7 +47,7 @@ namespace Altinn.AccessManagement.UI.Core.Services
             PaginatedResult<Request> response = await _requestClient.GetSentRequests(party, to, status, "resource", cancellationToken);
 
             // filter handled requests which are older than one year, so the modal matches the list
-            return await MapToEnrichedResourceRequestList(RemoveHandledItemsOlderThanOneYear(response), false, languageCode);
+            return await MapToEnrichedResourceRequestList(RemoveHandledItemsOlderThanOneYear(response), languageCode);
         }
 
         /// <inheritdoc />
@@ -68,7 +65,7 @@ namespace Altinn.AccessManagement.UI.Core.Services
             PaginatedResult<Request> response = await _requestClient.GetReceivedRequests(party, from, status, "resource", cancellationToken);
 
             // filter handled requests which are older than one year, so the modal matches the list
-            return await MapToEnrichedResourceRequestList(RemoveHandledItemsOlderThanOneYear(response), IsHandledStatus(status), languageCode);
+            return await MapToEnrichedResourceRequestList(RemoveHandledItemsOlderThanOneYear(response), languageCode);
         }
 
         /// <inheritdoc />
@@ -77,7 +74,7 @@ namespace Altinn.AccessManagement.UI.Core.Services
             PaginatedResult<Request> response = await _requestClient.GetSentRequests(party, to, status, "package", cancellationToken);
 
             // filter handled requests which are older than one year, so the modal matches the list
-            return await MapToEnrichedPackageRequestList(RemoveHandledItemsOlderThanOneYear(response), false, languageCode);
+            return await MapToEnrichedPackageRequestList(RemoveHandledItemsOlderThanOneYear(response), languageCode);
         }
 
         /// <inheritdoc />
@@ -86,7 +83,7 @@ namespace Altinn.AccessManagement.UI.Core.Services
             PaginatedResult<Request> response = await _requestClient.GetReceivedRequests(party, from, status, "package", cancellationToken);
 
             // filter handled requests which are older than one year, so the modal matches the list
-            return await MapToEnrichedPackageRequestList(RemoveHandledItemsOlderThanOneYear(response), IsHandledStatus(status), languageCode);
+            return await MapToEnrichedPackageRequestList(RemoveHandledItemsOlderThanOneYear(response), languageCode);
         }
 
         /// <inheritdoc />
@@ -102,10 +99,10 @@ namespace Altinn.AccessManagement.UI.Core.Services
             Request response = await _requestClient.GetDraftRequest(id, cancellationToken);
             if (response.Type == "package")
             {
-                return (await MapToEnrichedPackageRequestList(new[] { response }, false, languageCode)).First();
+                return (await MapToEnrichedPackageRequestList(new[] { response }, languageCode)).First();
             }
 
-            return (await MapToEnrichedResourceRequestList(new[] { response }, false, languageCode)).First();
+            return (await MapToEnrichedResourceRequestList(new[] { response }, languageCode)).First();
         }
 
         /// <inheritdoc />
@@ -173,11 +170,12 @@ namespace Altinn.AccessManagement.UI.Core.Services
                 Status = x.Status,
                 ResourceId = x.Resource?.ReferenceId,
                 PackageId = x.Package?.ReferenceId,
-                LastUpdated = x.LastUpdated
+                LastUpdated = x.LastUpdated,
+                LastUpdatedByName = x.LastUpdatedBy?.Name
             };
         }
 
-        private async Task<IEnumerable<EnrichedResourceRequest>> MapToEnrichedResourceRequestList(IEnumerable<Request> list, bool enrichUpdatedByName, string languageCode)
+        private async Task<IEnumerable<EnrichedResourceRequest>> MapToEnrichedResourceRequestList(IEnumerable<Request> list, string languageCode)
         {
             Dictionary<string, ServiceResourceFE> resourceDictionary = [];
             var uniqueResourceIds = list
@@ -186,8 +184,6 @@ namespace Altinn.AccessManagement.UI.Core.Services
             var resources = await _resourceHelper.EnrichResources(uniqueResourceIds, languageCode);
             resourceDictionary = resources.ToDictionary(r => r.Identifier);
 
-            Dictionary<Guid?, string> partyNameDict = enrichUpdatedByName ? await LookupLastUpdatedByParties(list) : [];
-
             return list.Select(x =>
             {
                 RequestFE request = MapToRequestFE(x);
@@ -195,12 +191,6 @@ namespace Altinn.AccessManagement.UI.Core.Services
                 if (!resourceDictionary.TryGetValue(request.ResourceId, out var resource))
                 {
                     throw new ResourceNotFoundException($"Resource not found for ID: {request.ResourceId}");
-                }
-
-                string lastUpdatedByName = null;
-                if (x.LastUpdatedBy?.Id is Guid updatedBy)
-                {
-                    partyNameDict.TryGetValue(updatedBy, out lastUpdatedByName);
                 }
 
                 return new EnrichedResourceRequest()
@@ -212,13 +202,13 @@ namespace Altinn.AccessManagement.UI.Core.Services
                     Status = request.Status,
                     ResourceId = request.ResourceId,
                     LastUpdated = request.LastUpdated,
-                    LastUpdatedByName = lastUpdatedByName,
+                    LastUpdatedByName = request.LastUpdatedByName ?? string.Empty,
                     Resource = resource
                 };
             }).ToList();
         }
 
-        private async Task<IEnumerable<EnrichedPackageRequest>> MapToEnrichedPackageRequestList(IEnumerable<Request> list, bool enrichUpdatedByName, string languageCode)
+        private async Task<IEnumerable<EnrichedPackageRequest>> MapToEnrichedPackageRequestList(IEnumerable<Request> list, string languageCode)
         {
             Dictionary<Guid, AccessPackage> packageDictionary = [];
             var uniquePackageIds = list
@@ -236,8 +226,6 @@ namespace Altinn.AccessManagement.UI.Core.Services
                 packageDictionary[packageId] = package;
             }
 
-            Dictionary<Guid?, string> partyNameDict = enrichUpdatedByName ? await LookupLastUpdatedByParties(list) : [];
-
             return list.Select(x =>
             {
                 RequestFE request = MapToRequestFE(x);
@@ -246,12 +234,6 @@ namespace Altinn.AccessManagement.UI.Core.Services
                 if (!packageDictionary.TryGetValue(packageId, out var package))
                 {
                     throw new ResourceNotFoundException($"Access package not found for ID: {packageId}");
-                }
-
-                string lastUpdatedByName = null;
-                if (x.LastUpdatedBy?.Id is Guid updatedBy)
-                {
-                    partyNameDict.TryGetValue(updatedBy, out lastUpdatedByName);
                 }
 
                 return new EnrichedPackageRequest()
@@ -263,29 +245,10 @@ namespace Altinn.AccessManagement.UI.Core.Services
                     Status = request.Status,
                     PackageId = request.PackageId,
                     LastUpdated = request.LastUpdated,
-                    LastUpdatedByName = lastUpdatedByName,
+                    LastUpdatedByName = request.LastUpdatedByName ?? string.Empty,
                     Package = package
                 };
             }).ToList();
-        }
-
-        // look up all parties from requests where LastUpdatedBy is set
-        private async Task<Dictionary<Guid?, string>> LookupLastUpdatedByParties(IEnumerable<Request> list)
-        {
-            if (!list.Any())
-            {
-                return [];
-            }
-
-            List<Guid> lastUpdatedNames = list
-                .Select(request => request.LastUpdatedBy)
-                .Where(x => x != null)
-                .Select(x => x.Id)
-                .Distinct()
-                .ToList();
-
-            List<Party> parties = await _registerClient.GetPartyList(lastUpdatedNames);
-            return parties.ToDictionary(p => p.PartyUuid, p => p.Name);
         }
 
         private static bool IsHandledStatus(List<RequestStatus> status)
