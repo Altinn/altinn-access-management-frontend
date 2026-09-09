@@ -33,14 +33,7 @@
     <ProjectReference Include="..\Altinn.AccessManagement.UI.Mocks\Altinn.AccessManagement.UI.Mocks.csproj" />
   </ItemGroup>
 
-  <ItemGroup Condition="'$(Configuration)'=='Debug'">
-    <AdditionalFiles Include="$(SolutionDir)stylecop.json">
-      <Link>stylecop.json</Link>
-    </AdditionalFiles>
-  </ItemGroup>
-
   <ItemGroup>
     <Folder Include="wwwroot\accessmanagement\" />
   </ItemGroup>
-
 </Project>
