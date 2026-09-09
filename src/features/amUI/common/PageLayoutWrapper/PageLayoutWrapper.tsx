@@ -1,5 +1,4 @@
 import React from 'react';
-import type { LanguageCode } from '@altinn/altinn-components';
 import {
   Layout,
   RootProvider,
@@ -44,12 +43,10 @@ export const PageLayoutWrapper = ({
   const { sidebarItems, shortcutsMenuItem } = useSidebarItems({ isSmall: false });
 
   const isNewBanner = new Date() >= new Date(2026, 5, 20); // Change to new banner on June 20th, 2026
-  const bannerLink = isNewBanner
-    ? getBannerLink_new(languageCode as LanguageCode)
-    : getBannerLink(languageCode as LanguageCode);
+  const bannerLink = isNewBanner ? getBannerLink_new(languageCode) : getBannerLink(languageCode);
 
   return (
-    <RootProvider languageCode={languageCode as LanguageCode}>
+    <RootProvider languageCode={languageCode}>
       <NavigationFocus />
       <SnackbarProvider>
         <Layout
@@ -97,7 +94,7 @@ export const PageLayoutWrapper = ({
   );
 };
 
-const getBannerLink = (languageCode: LanguageCode) => {
+const getBannerLink = (languageCode: string) => {
   switch (languageCode) {
     case 'en':
       return 'https://info.altinn.no/en/news/check-if-you-need-to-take-action-before-we-shut-down-the-old-altinn/';
@@ -108,7 +105,7 @@ const getBannerLink = (languageCode: LanguageCode) => {
   }
 };
 
-const getBannerLink_new = (languageCode: LanguageCode) => {
+const getBannerLink_new = (languageCode: string) => {
   switch (languageCode) {
     case 'en':
       return 'https://info.altinn.no/en/news/new-power-of-attorney-solution/';

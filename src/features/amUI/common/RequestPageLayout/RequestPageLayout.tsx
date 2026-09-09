@@ -19,6 +19,7 @@ import { useGetUserProfileQuery } from '@/rtk/features/userInfoApi';
 import { getButtonIconSize } from '@/resources/utils/iconUtils';
 import { ArrowLeftIcon } from '@navikt/aksel-icons';
 import { useRedirectToRequestParty } from '@/resources/hooks/useRedirectToRequestParty';
+import { useLanguageCode } from '@/resources/hooks/useLanguageCode';
 
 interface RequestPageLayoutProps {
   account: { name: string; type: 'person' | 'company' };
@@ -52,7 +53,7 @@ export const RequestPageLayout = ({
   const { data: userData } = useGetUserProfileQuery();
   const { isAnswered, acceptAll, rejectAll } = useConsent();
 
-  const languageCode = i18n.language === 'no_nn' ? 'nn' : i18n.language === 'en' ? 'en' : 'nb';
+  const languageCode = useLanguageCode();
 
   const partyUuid = useRedirectToRequestParty(requestPartyUuid);
   // While a reportee switch is pending, keep showing the loading state so the
