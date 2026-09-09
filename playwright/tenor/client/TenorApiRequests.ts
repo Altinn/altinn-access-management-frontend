@@ -65,7 +65,7 @@ interface TenorResponse {
 }
 
 /** Tenor returnerer maks 200 dokumenter per kall. */
-const TENOR_MAX_PER_PAGE = 200;
+export const TENOR_MAX_PER_PAGE = 200;
 
 /** En testperson hentet fra Tenor. */
 export interface TenorTestperson {
