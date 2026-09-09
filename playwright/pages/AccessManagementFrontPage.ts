@@ -163,13 +163,16 @@ export class AccessManagementFrontPage {
     ).toBeVisible();
   }
 
+  /** The "Slett fullmakt for {{pakke}}" button on a user's detail page. */
+  slettFullmaktKnapp(packageName: string): Locator {
+    return this.page.getByRole('button', {
+      name: withPoaObject(this.texts.common.delete_poa_for, packageName),
+      exact: true,
+    });
+  }
+
   async userCanDeletePackage(packageName: string) {
-    await expect(
-      this.page.getByRole('button', {
-        name: withPoaObject(this.texts.common.delete_poa_for, packageName),
-        exact: true,
-      }),
-    ).toBeVisible();
+    await expect(this.slettFullmaktKnapp(packageName)).toBeVisible();
   }
 
   async expectUserToHavePackage(packageName: string) {
@@ -185,12 +188,7 @@ export class AccessManagementFrontPage {
   }
 
   async clickSlettFullmaktForTilgangspakke(packageName: string) {
-    await this.page
-      .getByRole('button', {
-        name: withPoaObject(this.texts.common.delete_poa_for, packageName),
-        exact: true,
-      })
-      .click();
+    await this.slettFullmaktKnapp(packageName).click();
   }
 
   async clickSlettEnkelttjeneste(resourceName: string) {

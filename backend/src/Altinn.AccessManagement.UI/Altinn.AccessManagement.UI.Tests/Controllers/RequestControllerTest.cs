@@ -1090,26 +1090,44 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
         }
 
         /// <summary>
-        ///     Test case: GetEnrichedSentResourceRequests is queried for handled (approved/rejected) requests
-        ///     Expected: Sent requests never expose who handled them, so LastUpdatedByName is not enriched
+        ///     Test case: The access management API returns LastUpdatedBy in the legacy shape, as a bare uuid with no name
+        ///     Expected: The request still deserializes, and is returned without a handler name
         /// </summary>
         [Fact]
-        public async Task GetEnrichedSentResourceRequests_DoesNotEnrichLastUpdatedByName()
+        public async Task GetEnrichedReceivedResourceRequests_HandlesLegacyUuidShapedLastUpdatedBy()
         {
-            // Arrange - 55555555 triggers a mix of pending, recently handled and old handled requests
+            // Arrange - 55555555 triggers the handled-requests test data, where request ...0001 has the legacy shape
             string party = "55555555-5555-5555-5555-555555555555";
 
-            // Act - even for handled statuses, sent requests must not reveal the handler
-            HttpResponseMessage httpResponse = await _client.GetAsync($"accessmanagement/api/v1/request/sent/resource?party={party}&status=Approved");
+            // Act
+            HttpResponseMessage httpResponse = await _client.GetAsync($"accessmanagement/api/v1/request/received/resource?party={party}&status=Approved");
+            IEnumerable<EnrichedResourceRequest> actualResponse = await httpResponse.Content.ReadFromJsonAsync<IEnumerable<EnrichedResourceRequest>>();
+
+            // Assert - the legacy shape carries no name, so the request is returned with an empty one
+            Assert.Equal(HttpStatusCode.OK, httpResponse.StatusCode);
+
+            EnrichedResourceRequest legacyShaped = actualResponse.Single(r => r.Id == Guid.Parse("5a11ab1e-0000-0000-0000-000000000001"));
+            Assert.Equal(string.Empty, legacyShaped.LastUpdatedByName);
+        }
+
+        /// <summary>
+        ///     Test case: The access management API returns a request where LastUpdatedBy is null
+        ///     Expected: The request still deserializes, and is returned without a handler name
+        /// </summary>
+        [Fact]
+        public async Task GetEnrichedReceivedResourceRequests_HandlesNullLastUpdatedBy()
+        {
+            // Arrange - the received requests test data has lastUpdatedBy set to null
+            string party = "167536b5-f8ed-4c5a-8f48-0279507e53ae";
+            string fromParty = "feb51634-0042-4ab0-a9db-8705300141a6";
+
+            // Act
+            HttpResponseMessage httpResponse = await _client.GetAsync($"accessmanagement/api/v1/request/received/resource?party={party}&from={fromParty}");
             IEnumerable<EnrichedResourceRequest> actualResponse = await httpResponse.Content.ReadFromJsonAsync<IEnumerable<EnrichedResourceRequest>>();
 
             // Assert
             Assert.Equal(HttpStatusCode.OK, httpResponse.StatusCode);
-            Assert.All(actualResponse, r => Assert.Null(r.LastUpdatedByName));
-
-            // old handled requests are still filtered out
-            Assert.DoesNotContain(actualResponse, r => r.Id == Guid.Parse("5a11ab1e-0000-0000-0000-000000000003"));
-            Assert.DoesNotContain(actualResponse, r => r.Id == Guid.Parse("5a11ab1e-0000-0000-0000-000000000004"));
+            Assert.All(actualResponse, r => Assert.Equal(string.Empty, r.LastUpdatedByName));
         }
     }
 }

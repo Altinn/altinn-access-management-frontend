@@ -1,14 +1,7 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { Link } from 'react-router';
-import {
-  DsHeading,
-  DsParagraph,
-  DsAlert,
-  DsButton,
-  DsCombobox,
-  DsSpinner,
-} from '@altinn/altinn-components';
+import { DsHeading, DsParagraph, DsAlert, DsButton, DsSpinner } from '@altinn/altinn-components';
 
 import { useGetRegisteredSystemsQuery } from '@/rtk/features/systemUserApi';
 import { SystemUserPath } from '@/routes/paths';
@@ -20,10 +13,7 @@ import { CreateSystemUserCheck } from '../components/CreateSystemUserCheck/Creat
 
 import classes from './CreateSystemUser.module.css';
 import { useGetIsAdminQuery, useGetReporteeQuery } from '@/rtk/features/userInfoApi';
-
-const isStringMatch = (inputString: string, matchString = ''): boolean => {
-  return matchString.toLowerCase().indexOf(inputString.toLowerCase()) >= 0;
-};
+import { RegisteredSystemSearch } from './RegisteredSystemSearch';
 
 interface SelectRegisteredSystemProps {
   selectedSystem: RegisteredSystem | undefined;
@@ -45,10 +35,6 @@ export const SelectRegisteredSystem = ({
     isError: isLoadRegisteredSystemsError,
   } = useGetRegisteredSystemsQuery();
   const { data: isAdmin } = useGetIsAdminQuery();
-
-  const onSelectSystem = (newValue: string[]) => {
-    setSelectedSystem(registeredSystems?.find((system) => system.systemId === newValue[0]));
-  };
 
   return (
     <PageContainer backUrl={`/${SystemUserPath.SystemUser}/${SystemUserPath.Overview}`}>
@@ -73,31 +59,14 @@ export const SelectRegisteredSystem = ({
             {t('systemuser_creationpage.content_text1')}
           </DsParagraph>
           <div className={classes.inputContainer}>
-            <DsCombobox
+            <RegisteredSystemSearch
               label={t('systemuser_creationpage.pull_down_menu_label')}
-              loading={isLoadingRegisteredSystems}
-              loadingLabel={t('systemuser_creationpage.loading_systems')}
-              placeholder={t('systemuser_creationpage.choose')}
-              value={selectedSystem ? [selectedSystem.systemId] : undefined}
-              onValueChange={onSelectSystem}
-              filter={(inputValue: string, { label, description }) => {
-                const isLabelMatch = isStringMatch(inputValue, label);
-                const isDescriptionMatch = isStringMatch(inputValue, description);
-                return isLabelMatch || isDescriptionMatch;
-              }}
-            >
-              {registeredSystems?.map((system) => {
-                return (
-                  <DsCombobox.Option
-                    key={system.systemId}
-                    value={system.systemId}
-                    description={`${system.systemVendorOrgName} (${system.systemVendorOrgNumber})`}
-                  >
-                    {system.name}
-                  </DsCombobox.Option>
-                );
-              })}
-            </DsCombobox>
+              placeholder={t('systemuser_creationpage.system_search_placeholder')}
+              systems={registeredSystems ?? []}
+              selectedSystem={selectedSystem}
+              onSelectSystem={setSelectedSystem}
+              isLoading={isLoadingRegisteredSystems}
+            />
             {isLoadRegisteredSystemsError && (
               <DsAlert data-color='danger'>
                 {t('systemuser_creationpage.load_vendors_error')}

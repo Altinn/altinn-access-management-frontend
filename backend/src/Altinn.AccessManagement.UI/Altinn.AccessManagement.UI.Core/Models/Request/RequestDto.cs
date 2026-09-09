@@ -1,3 +1,4 @@
+using System.Text.Json.Serialization;
 using Altinn.AccessManagement.UI.Core.Enums;
 using Altinn.AccessManagement.UI.Core.Models.User;
 
@@ -41,5 +42,22 @@ public class RequestDto
     /// <summary>
     /// Last updated by
     /// </summary>
-    public Guid? LastUpdatedBy { get; set; }
+    public PartyReferenceDto LastUpdatedBy { get; set; }
+}
+
+/// <summary>
+/// Party reference dto
+/// </summary>
+[JsonConverter(typeof(PartyReferenceDtoConverter))]
+public class PartyReferenceDto
+{
+    /// <summary>
+    /// Party id
+    /// </summary>
+    public Guid Id { get; set; }
+
+    /// <summary>
+    /// Name
+    /// </summary>
+    public string Name { get; set; }
 }

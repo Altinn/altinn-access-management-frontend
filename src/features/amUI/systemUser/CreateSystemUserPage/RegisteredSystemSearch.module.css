@@ -1,0 +1,65 @@
+.container {
+  display: flex;
+  flex-direction: column;
+  gap: var(--ds-size-2);
+}
+
+.label {
+  font-weight: var(--ds-font-weight-medium);
+}
+
+.field {
+  position: relative;
+}
+
+.selectedSystem {
+  color: var(--ds-color-neutral-text-subtle);
+}
+
+.listbox {
+  position: absolute;
+  z-index: 1;
+  top: 100%;
+  left: 0;
+  right: 0;
+  margin-top: var(--ds-size-1);
+  max-height: 20rem;
+  overflow-y: auto;
+  background-color: var(--ds-color-neutral-background-default);
+  border: 1px solid var(--ds-color-neutral-border-subtle);
+  border-radius: var(--ds-border-radius-md);
+  box-shadow: var(--ds-shadow-md);
+}
+
+.option {
+  display: flex;
+  flex-direction: column;
+  gap: var(--ds-size-1);
+  padding: var(--ds-size-2) var(--ds-size-3);
+  cursor: pointer;
+  border-bottom: 1px solid var(--ds-color-neutral-border-subtle);
+}
+
+.option:last-child {
+  border-bottom: none;
+}
+
+.option[aria-selected='true'] {
+  background-color: var(--ds-color-neutral-surface-active);
+}
+
+.active {
+  background-color: var(--ds-color-neutral-surface-hover);
+}
+
+.optionDescription {
+  color: var(--ds-color-neutral-text-subtle);
+}
+
+.message {
+  display: flex;
+  align-items: center;
+  gap: var(--ds-size-2);
+  padding: var(--ds-size-2) var(--ds-size-3);
+  color: var(--ds-color-neutral-text-subtle);
+}

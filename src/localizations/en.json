@@ -704,7 +704,11 @@
     "content_text1": "If you are unsure about which vendor system to choose, we recommend that you contact the provider of the vendor system. Altinn has not made any assessment of the quality and safety of the vendor systems in the list.",
     "pull_down_menu_label": "Choose vendor system",
     "confirm_button": "Proceed",
-    "choose": "Choose ...",
+    "system_search_placeholder": "Search for vendor system or provider",
+    "no_systems_found": "No vendor systems were found for this search.",
+    "selected_system": "Selected: {{systemName}} - {{vendor}}",
+    "search_hits_one": "{{count}} vendor system found",
+    "search_hits_other": "{{count}} vendor systems found",
     "load_vendors_error": "Could not load system providers",
     "loading_systems": "Loading vendors and systems..."
   },
@@ -980,6 +984,7 @@
     "page_title": "Powers of attorney overview - Altinn",
     "heading": "Powers of attorney overview for {{name}}",
     "no_access_title": "You do not have access to this page",
+    "show_users_with_access": "Show users with power of attorney",
     "packages_tab": {
       "description": "Select an area to view the associated access packages and who has power of attorney for them.",
       "info_box_icon_label": "Information about access packages",
