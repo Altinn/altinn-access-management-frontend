@@ -1,6 +1,6 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
-import { DsAlert, DsHeading, DsParagraph } from '@altinn/altinn-components';
+import { DsAlert, DsHeading, DsParagraph, formatDisplayName } from '@altinn/altinn-components';
 
 import {
   type ResourceDelegation,
@@ -10,6 +10,7 @@ import { AmPagination } from '@/components/Paginering/AmPaginering';
 import { ResourceList } from '@/features/amUI/common/ResourceList/ResourceList';
 import { SkeletonResourceList } from '@/features/amUI/common/ResourceList/SkeletonResourceList';
 import { getInheritedStatus } from '@/features/amUI/common/useInheritedStatus';
+import { PartyType } from '@/rtk/features/userInfoApi';
 
 import classes from './ResourceSearch.module.css';
 import { DelegationAction } from '../EditModal';
@@ -22,6 +23,7 @@ import {
 import { usePartyRepresentation } from '../../PartyRepresentationContext/PartyRepresentationContext';
 import { useSingleRightRequests } from './hooks/useSingleRightRequests';
 import { useRestoreFocusOnDataChange } from '../../RestoreFocus';
+import { useCanRedelegateResource, useRevokeConfirmation } from '../../RevokeConfirmation';
 
 interface SearchResultsProps {
   isFetching: boolean;
@@ -70,6 +72,9 @@ export const SearchResults = ({
       },
     });
 
+  const { canRedelegateResource } = useCanRedelegateResource();
+  const { confirmRevoke, revokeConfirmationDialog } = useRevokeConfirmation();
+
   const { delegateFromList, revokeFromList, isResourceLoading } = useResourceListDelegation({
     onActionError: (resource, errorInfo) => {
       onSelect(resource, true);
@@ -84,6 +89,20 @@ export const SearchResults = ({
       onSelect(resource);
     },
   });
+
+  const confirmAndRevokeFromList = (resource: ServiceResource) =>
+    confirmRevoke(
+      resource.identifier,
+      () => canRedelegateResource(resource.identifier),
+      () => revokeFromList(resource),
+      {
+        name: resource.title,
+        toName: formatDisplayName({
+          fullName: toParty?.name || '',
+          type: toParty?.partyTypeName === PartyType.Person ? 'person' : 'company',
+        }),
+      },
+    );
 
   const requestFromList = (resource: ServiceResource) => {
     createRequest(resource);
@@ -121,7 +140,7 @@ export const SearchResults = ({
     availableActions,
     isResourceLoading: isLoading,
     setActionError,
-    revokeFromList,
+    revokeFromList: confirmAndRevokeFromList,
     delegateFromList,
     requestFromList,
     deleteRequestFromList,
@@ -195,6 +214,7 @@ export const SearchResults = ({
             hideLabels={true}
           />
         )}
+      {revokeConfirmationDialog}
     </>
   );
 };

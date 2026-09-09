@@ -46,12 +46,14 @@ export const AccessPackageInfo = ({ accessPackage, availableActions = [] }: Pack
   const {
     onDelegate,
     onRevoke,
+    revokeWithoutConfirmation,
     onRequest,
     deleteRequest,
     hasPendingRequest,
     isLoadingRequest,
     isLoading: isActionLoading,
     packageWarningDialog,
+    revokeConfirmationDialog,
   } = useAccessPackageActions({
     snackbarBusy: isFetching,
     onDelegateSuccess: () => {
@@ -180,7 +182,7 @@ export const AccessPackageInfo = ({ accessPackage, availableActions = [] }: Pack
                 </DsButton>
               ) : (
                 <PackageIsPartiallyDeletableAlert
-                  confirmAction={() => onRevoke(accessPackage)}
+                  confirmAction={() => revokeWithoutConfirmation(accessPackage)}
                   triggerButtonProps={{
                     variant: 'primary',
                   }}
@@ -219,6 +221,7 @@ export const AccessPackageInfo = ({ accessPackage, availableActions = [] }: Pack
         </>
       )}
       {packageWarningDialog}
+      {revokeConfirmationDialog}
     </div>
   );
 };

@@ -12,8 +12,8 @@ import { DelegationAction } from '../DelegationModal/EditModal';
 import classes from './AccessPackageList.module.css';
 import {
   DeletableStatus,
-  ExtendedAccessPackage,
   type ExtendedAccessArea,
+  type ExtendedAccessPackage,
 } from './useAreaPackageList';
 import { PackageItem } from './PackageItem';
 import { RevokeAccessPackageActionControl } from './RevokeAccessPackageActionControl';
@@ -33,6 +33,7 @@ interface AreaItemContentProps {
   onSelect?: (accessPackage: AccessPackage) => void;
   onDelegate?: (accessPackage: AccessPackage) => void;
   onRevoke?: (accessPackage: AccessPackage) => void;
+  onRevokeWithoutConfirmation?: (accessPackage: AccessPackage) => void;
   onRequest?: (accessPackage: AccessPackage) => void;
   onDeleteRequest?: (accessPackage: AccessPackage) => void;
   hasPendingRequest?: (accessPackage: AccessPackage) => boolean;
@@ -52,6 +53,7 @@ export const AreaItemContent = ({
   onSelect,
   onDelegate,
   onRevoke,
+  onRevokeWithoutConfirmation,
   onRequest,
   onDeleteRequest,
   hasPendingRequest,
@@ -73,7 +75,7 @@ export const AreaItemContent = ({
   const isSm = useIsMobileOrSmaller();
   const { canDelegatePackage } = useAccessPackageDelegationCheck();
 
-  const revokeActionControl = (pkg: AccessPackage) => {
+  const revokeActionControl = (pkg: ExtendedAccessPackage) => {
     if (isActionLoading) {
       return (
         <DsSpinner
@@ -82,10 +84,12 @@ export const AreaItemContent = ({
         />
       );
     }
+    const isPartiallyDeletable = pkg.deletableStatus === DeletableStatus.PartiallyDeletable;
+    const revoke = isPartiallyDeletable ? (onRevokeWithoutConfirmation ?? onRevoke) : onRevoke;
     return (
       <RevokeAccessPackageActionControl
         availableActions={availableActions}
-        onRevoke={() => onRevoke?.(pkg)}
+        onRevoke={() => revoke?.(pkg)}
         pkg={pkg}
         isLoading={isActionLoading}
       />

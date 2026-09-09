@@ -16,6 +16,7 @@ interface DeleteResourceButton {
   disabled?: boolean;
   onSuccess?: () => void;
   onError?: () => void;
+  confirmDelete: (resource: ServiceResource, deleteResource: () => void) => void;
 }
 
 export const DeleteResourceButton = ({
@@ -23,6 +24,7 @@ export const DeleteResourceButton = ({
   disabled = false,
   onSuccess,
   onError,
+  confirmDelete,
 }: DeleteResourceButton) => {
   const { t } = useTranslation();
   const { openSnackbar } = useSnackbar();
@@ -50,6 +52,23 @@ export const DeleteResourceButton = ({
     openSnackbar(snackbarData);
   };
 
+  const deleteResource = () => {
+    setIsLoading(true);
+    revoke(
+      resource.identifier,
+      () => {
+        setIsLoading(false);
+        snackbar(true);
+        onSuccess?.();
+      },
+      () => {
+        setIsLoading(false);
+        snackbar(false);
+        onError?.();
+      },
+    );
+  };
+
   return (
     fromParty &&
     toParty && (
@@ -58,22 +77,7 @@ export const DeleteResourceButton = ({
         variant='tertiary'
         className={classes.deleteButton}
         disabled={disabled || isLoading}
-        onClick={() => {
-          setIsLoading(true);
-          revoke(
-            resource.identifier,
-            () => {
-              setIsLoading(false);
-              snackbar(true);
-              onSuccess?.();
-            },
-            () => {
-              setIsLoading(false);
-              snackbar(false);
-              onError?.();
-            },
-          );
-        }}
+        onClick={() => confirmDelete(resource, deleteResource)}
       >
         <MinusCircleIcon aria-hidden='true' />
         {t('common.delete_poa')}

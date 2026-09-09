@@ -154,6 +154,7 @@ export const {
   useRevokeDelegationMutation,
   useDelegatePackageMutation,
   useDelegationCheckQuery,
+  useLazyDelegationCheckQuery,
 } = accessPackageApi;
 
 export const { endpoints, reducerPath, reducer, middleware } = accessPackageApi;

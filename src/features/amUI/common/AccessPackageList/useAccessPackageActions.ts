@@ -19,6 +19,7 @@ import { useSnackbarOnIdle } from '@/resources/hooks/useSnackbarOnIdle';
 import { usePartyRepresentation } from '../PartyRepresentationContext/PartyRepresentationContext';
 import { PartyType } from '@/rtk/features/userInfoApi';
 import { usePackageWarningDialog } from '../PackageWarningDialog';
+import { useCanRedelegatePackage, useRevokeConfirmation } from '../RevokeConfirmation';
 
 interface useAccessPackageActionsProps {
   onDelegateSuccess?: (accessPackage: AccessPackage, toParty: Party) => void;
@@ -44,6 +45,8 @@ export const useAccessPackageActions = ({
   const [loadingByPackageId, setLoadingByPackageId] = useState<Record<string, boolean>>({});
   const [awaitingRefetch, setAwaitingRefetch] = useState<Set<string>>(new Set());
   const { confirmPackageAction, packageWarningDialog } = usePackageWarningDialog();
+  const { canRedelegatePackage } = useCanRedelegatePackage();
+  const { confirmRevoke, revokeConfirmationDialog } = useRevokeConfirmation();
   const isLoading = isDelegationLoading || isRevokeLoading;
 
   const { t } = useTranslation();
@@ -192,30 +195,49 @@ export const useAccessPackageActions = ({
     );
   };
 
-  const onRevoke = async (accessPackage: AccessPackage, toParty?: Party) => {
-    if (!fromParty || !actingParty) {
-      return;
-    }
+  const resolveRevoke = (accessPackage: AccessPackage, toParty?: Party) => {
+    if (!fromParty || !actingParty) return null;
     const targetToParty = toParty ?? toPartyFromContext;
-    if (!targetToParty) return;
+    if (!targetToParty) return null;
 
-    revokePackage(
+    return {
       targetToParty,
-      fromParty,
-      actingParty,
-      accessPackage,
-      () => {
-        handleRevokeSuccess(accessPackage, targetToParty);
-      },
-      (httpStatus) => {
-        handleRevokeError(
-          accessPackage,
+      revoke: () =>
+        revokePackage(
           targetToParty,
-          httpStatus.toString(),
-          new Date().toISOString(),
-        );
-      },
+          fromParty,
+          actingParty,
+          accessPackage,
+          () => {
+            handleRevokeSuccess(accessPackage, targetToParty);
+          },
+          (httpStatus) => {
+            handleRevokeError(
+              accessPackage,
+              targetToParty,
+              httpStatus.toString(),
+              new Date().toISOString(),
+            );
+          },
+        ),
+    };
+  };
+
+  const onRevoke = (accessPackage: AccessPackage, toParty?: Party) => {
+    const resolved = resolveRevoke(accessPackage, toParty);
+    if (!resolved) return;
+    const { targetToParty, revoke } = resolved;
+    return confirmRevoke(
+      `${accessPackage.id}-${targetToParty.partyUuid}`,
+      () => canRedelegatePackage(accessPackage.id),
+      revoke,
+      { name: accessPackage.name, toName: formatToPartyName(targetToParty) },
     );
+  };
+
+  // For callers that already confirm, e.g. PackageIsPartiallyDeletableAlert.
+  const revokeWithoutConfirmation = (accessPackage: AccessPackage, toParty?: Party) => {
+    resolveRevoke(accessPackage, toParty)?.revoke();
   };
 
   const onRequest = async (accessPackage: AccessPackage) => {
@@ -325,6 +347,7 @@ export const useAccessPackageActions = ({
   return {
     onDelegate,
     onRevoke,
+    revokeWithoutConfirmation,
     onRequest,
     deleteRequest,
     hasPendingRequest: (accessPackage: AccessPackage) => !!getRequestId(accessPackage),
@@ -338,5 +361,6 @@ export const useAccessPackageActions = ({
     isRequestLoading,
     isLoading,
     packageWarningDialog,
+    revokeConfirmationDialog,
   };
 };

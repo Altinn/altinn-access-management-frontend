@@ -30,6 +30,7 @@ import { isExpiredResource } from '../../ResourceList/utils';
 import { useSingleRightsDelegationRightsData } from './hooks/useSingleRightsDelegationRightsData';
 import { useSingleRightRequests } from './hooks/useSingleRightRequests';
 import { focusFirstEnabledButton, useRestoreFocusAfterSettled } from '../../RestoreFocus';
+import { useCanRedelegateResource, useRevokeConfirmation } from '../../RevokeConfirmation';
 
 import classes from './ResourceInfo.module.css';
 
@@ -163,6 +164,17 @@ export const ResourceInfo = ({
     ? t('delegation_modal.expired_resource_description', { name: toName })
     : t('delegation_modal.expired_resource_request_description');
 
+  const { canRedelegateResource } = useCanRedelegateResource();
+  const { confirmRevoke, revokeConfirmationDialog } = useRevokeConfirmation();
+
+  const confirmAndRevokeResource = () =>
+    confirmRevoke(
+      resource.identifier,
+      () => canRedelegateResource(resource.identifier),
+      revokeResource,
+      { name: resource.title, toName },
+    );
+
   const actionsRef = React.useRef<HTMLDivElement>(null);
   useRestoreFocusAfterSettled({
     isSettled:
@@ -249,7 +261,7 @@ export const ResourceInfo = ({
               {hasAccess && toParty && (
                 <Button
                   variant={hasDelegateAction ? 'tertiary' : 'primary'}
-                  onClick={revokeResource}
+                  onClick={confirmAndRevokeResource}
                   disabled={
                     isActionLoading ||
                     rights.length === 0 ||
@@ -286,6 +298,7 @@ export const ResourceInfo = ({
           </>
         )}
       </div>
+      {revokeConfirmationDialog}
     </>
   );
 };
