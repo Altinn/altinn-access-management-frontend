@@ -19,6 +19,8 @@ export class SystemUserPage {
   public readonly escalateConfirmButton: Locator;
   public readonly finish: Locator;
   public readonly requestsMenuItem: Locator;
+  public readonly systemSearch: Locator;
+  public readonly createSystemUserConfirmButton: Locator;
 
   constructor(
     public page: Page,
@@ -79,6 +81,14 @@ export class SystemUserPage {
     });
 
     this.requestsMenuItem = this.page.getByText(texts.sidebar.requests, { exact: true });
+
+    this.systemSearch = this.page.getByRole('combobox', {
+      name: texts.systemuser_creationpage.pull_down_menu_label,
+    });
+
+    this.createSystemUserConfirmButton = this.page.getByRole('button', {
+      name: texts.systemuser_includedrightspage.confirm_button,
+    });
   }
 
   requestLink(requestId: string) {
@@ -103,10 +113,10 @@ export class SystemUserPage {
   }
 
   async selectSystem(system: string) {
-    await this.page.getByPlaceholder('Velg').fill(system.slice(0, -1)); //If you type in the entire length it's auto selected
-    await this.page.getByLabel(system).waitFor({ state: 'visible' });
-    await this.page.getByLabel(system).click();
+    await this.systemSearch.fill(system);
+    const systemOption = this.page.getByRole('option').filter({ hasText: system }).first();
+    await systemOption.click();
     await this.continueButton.click();
-    await this.page.getByRole('button', { name: 'Opprett systemtilgang' }).click();
+    await this.createSystemUserConfirmButton.click();
   }
 }
