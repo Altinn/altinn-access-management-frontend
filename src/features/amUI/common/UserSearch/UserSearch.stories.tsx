@@ -104,6 +104,28 @@ const mockConnections: Connection[] = [
     roles: [],
     connections: [],
   },
+  {
+    party: {
+      id: 'o1',
+      name: 'UNG GYLDEN BJØRN KOMMUNE',
+      type: 'Organisasjon',
+      variant: 'KOMM',
+      organizationIdentifier: '311010905',
+      children: [
+        {
+          id: 'o1-ados',
+          name: 'VIS KONGE PANDA',
+          type: 'Organisasjon',
+          variant: 'ADOS',
+          organizationIdentifier: '313676781',
+          children: null,
+        },
+      ],
+      roles: [],
+    },
+    roles: [],
+    connections: [],
+  },
 ];
 
 const meta = {

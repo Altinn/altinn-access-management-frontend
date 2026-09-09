@@ -506,7 +506,7 @@ namespace Altinn.AccessManagement.UI.Core.Services
                 return null;
             }
 
-            bool isSubUnit = party?.UnitType == "BEDR" || party?.UnitType == "AAFY";
+            bool isSubUnit = party?.UnitType is "BEDR" or "AAFY" or "ADOS";
             return new ConsentPartyFE()
             {
                 Id = partyId,

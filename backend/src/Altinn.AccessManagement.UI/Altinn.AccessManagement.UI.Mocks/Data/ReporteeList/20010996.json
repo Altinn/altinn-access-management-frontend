@@ -73,6 +73,29 @@
           "A0298"
         ],
         "subunits": []
+      },
+      {
+        "partyUuid": "7be4bbc3-032d-4508-acf4-6fdb96ef0d9d",
+        "name": "VIS KONGE PANDA",
+        "organizationNumber": "313676781",
+        "dateOfBirth": null,
+        "partyId": 51862126,
+        "type": "Organization",
+        "unitType": "ADOS",
+        "isDeleted": false,
+        "onlyHierarchyElementWithNoAccess": false,
+        "authorizedResources": [],
+        "authorizedRoles": [
+          "LEDE",
+          "LOPER",
+          "ADMAI",
+          "REGNA",
+          "SISKD",
+          "UILUF",
+          "UTINN",
+          "UTOMR"
+        ],
+        "subunits": []
       }
     ]
   },

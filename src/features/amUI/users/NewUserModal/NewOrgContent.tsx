@@ -15,7 +15,7 @@ import { createErrorDetails } from '../../common/TechnicalErrorParagraphs/Techni
 
 import classes from './NewUserModal.module.css';
 import { NewUserAlert } from './NewUserAlert';
-import { formatOrgNr } from '@/resources/utils/reporteeUtils';
+import { formatOrgNr, isSubUnitByType } from '@/resources/utils/reporteeUtils';
 
 export const NewOrgContent = ({
   addOrg,
@@ -96,8 +96,7 @@ export const NewOrgContent = ({
             </DsParagraph>
             <DsParagraph data-size='sm'>
               {t('common.org_nr')} {formatOrgNr(orgData.orgNumber)}
-              {orgData.unitType === 'AAFY' ||
-                (orgData?.unitType === 'BEDR' && ' - ' + t('common.subunit'))}
+              {isSubUnitByType(orgData.unitType) && ' - ' + t('common.subunit')}
             </DsParagraph>
           </div>
         )}

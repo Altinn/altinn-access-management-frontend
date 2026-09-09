@@ -2,18 +2,18 @@ import { ReporteeInfo } from '@/rtk/features/userInfoApi';
 import { formatDate } from '@altinn/altinn-components';
 import { t } from 'i18next';
 
+const SUBUNIT_TYPES = ['BEDR', 'AAFY', 'ADOS'];
+
 export const isOrganization = (reportee?: ReporteeInfo): boolean => {
   return reportee?.type === 'Organization';
 };
 
-export const isSubUnit = (reportee?: ReporteeInfo): boolean => {
-  return (
-    isOrganization(reportee) && (reportee?.unitType === 'BEDR' || reportee?.unitType === 'AAFY')
-  );
+export const isSubUnitByType = (unitType?: string | null): boolean => {
+  return !!unitType && SUBUNIT_TYPES.includes(unitType);
 };
 
-export const isSubUnitByType = (unitType?: string): boolean => {
-  return unitType === 'BEDR' || unitType === 'AAFY';
+export const isSubUnit = (reportee?: ReporteeInfo): boolean => {
+  return isOrganization(reportee) && isSubUnitByType(reportee?.unitType);
 };
 
 export const formatOrgNr = (orgNo?: string | null): string | undefined => {
