@@ -16,6 +16,9 @@ HTMLDialogElement.prototype.close = function mock(this: HTMLDialogElement) {
   this.open = false;
 };
 
+// Element.scrollIntoView is not implemented by jsdom, but is used to keep focused list items in view.
+Element.prototype.scrollIntoView = function mock() {};
+
 // document.getAnimations must be mocked because it is used by the design system, but it is not supported by React Testing Library.
 Object.defineProperty(document, 'getAnimations', {
   value: () => [],
