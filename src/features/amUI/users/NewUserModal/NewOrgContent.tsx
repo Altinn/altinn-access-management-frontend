@@ -10,7 +10,7 @@ import { useState } from 'react';
 import { t } from 'i18next';
 
 import { type Organization, useGetOrganizationQuery } from '@/rtk/features/lookupApi';
-import { formatOrgNr } from '@/resources/utils/reporteeUtils';
+import { formatOrgNr, isSubUnitByType } from '@/resources/utils/reporteeUtils';
 
 import { createErrorDetails } from '../../common/TechnicalErrorParagraphs/TechnicalErrorParagraphs';
 
@@ -96,8 +96,7 @@ export const NewOrgContent = ({
             </DsParagraph>
             <DsParagraph data-size='sm'>
               {t('common.org_nr')} {formatOrgNr(orgData.orgNumber)}
-              {orgData.unitType === 'AAFY' ||
-                (orgData?.unitType === 'BEDR' && ' - ' + t('common.subunit'))}
+              {isSubUnitByType(orgData.unitType) && ' - ' + t('common.subunit')}
             </DsParagraph>
           </div>
         )}

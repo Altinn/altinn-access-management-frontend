@@ -19,6 +19,11 @@
       "count": 2
     }
   },
+  "playwright/api-requests/AuthorizedParties.ts": {
+    "@typescript-eslint/no-unsafe-assignment": {
+      "count": 1
+    }
+  },
   "playwright/api-requests/EnduserConnection.tsx": {
     "@typescript-eslint/no-unsafe-argument": {
       "count": 7
