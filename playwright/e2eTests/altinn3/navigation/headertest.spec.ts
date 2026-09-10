@@ -82,7 +82,7 @@ test.describe('Aktørvalg, valg og visning av avgiver', () => {
       await login.LoginToAccessManagement(ACTOR_SEARCH_TEST_USER);
       await aktorvalgHeader.selectActorFromHeaderMenu(ACTOR_SEARCH_DEFAULT_ACTOR_NAME);
       await aktorvalgHeader.chooseBokmalLanguage();
-      await aktorvalgHeader.selectActorFromHeaderMenu(ACTOR_SEARCH_DEFAULT_ACTOR_NAME);
+      await aktorvalgHeader.goToSelectActor(ACTOR_SEARCH_DEFAULT_ACTOR_NAME);
     });
 
     await test.step('Search for actor using several fields', async () => {

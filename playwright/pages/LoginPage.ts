@@ -3,11 +3,14 @@ import { expect } from '@playwright/test';
 import { env } from 'playwright/util/helper';
 import { LANGUAGE_CODE, Language } from 'playwright/pages/LanguageMenu';
 import { SettingsApiRequests } from 'playwright/api-requests/SettingsApiRequests';
+import { AuthorizedParties } from 'playwright/api-requests/AuthorizedParties';
 
 export class LoginPage {
   readonly page: Page;
   private readonly language: Language;
   private readonly settings: SettingsApiRequests;
+  private readonly authorizedParties = new AuthorizedParties();
+  private loggedInPid?: string;
   readonly reporteeSearchBox: Locator;
   readonly pidInput: Locator;
   readonly testIdLink: Locator;
@@ -50,26 +53,23 @@ export class LoginPage {
     await this.testIdLink.click();
     await this.pidInput.fill(pid);
     await this.autentiserButton.click();
+    this.loggedInPid = pid;
   }
 
   async selectMainUnitBySearching(targetReportee: string) {
+    if (!this.loggedInPid) {
+      throw new Error('Log in before selecting an actor.');
+    }
+    const accountCount = await this.authorizedParties.antallAktoererForbruker(this.loggedInPid);
     const dialog = this.page.getByRole('dialog');
     await expect(dialog).toBeVisible();
 
     const searchBox = dialog.getByRole('searchbox');
     const item = dialog.getByRole('menuitem', { name: targetReportee }).first();
 
-    // Aktørlista lastes etter at dialogen er åpnet, så før den er på plass er
-    // både søkefeltet og aktøren fraværende. Denne ventingen er det som skiller
-    // «kort liste» fra «ikke lastet ennå» — uten den er de to umulige å skille,
-    // og det var nettopp den forvekslingen som ga 90 s timeout på klikket.
-    // `.first()` fordi begge kan finnes samtidig.
-    await expect(searchBox.or(item).first()).toBeVisible();
-
-    // Har brukeren mange aktører (#2299) er lista virtualisert, og aktøren ligger
-    // ikke i DOM-en før den er søkt fram. Ventingen over har alt slått fast at
-    // lista er lastet, så her trengs bare et oppslag - ikke en ny venting.
-    if (await searchBox.count()) {
+    // AccountSelector shows search only above five accounts, including subunits.
+    // fill/click wait for the appropriate element while the actor list loads.
+    if (accountCount > 5) {
       await searchBox.fill(targetReportee);
     }
 
@@ -86,6 +86,7 @@ export class LoginPage {
   private async authenticateUser(pid: string) {
     await this.pidInput.fill(pid);
     await this.autentiserButton.click();
+    this.loggedInPid = pid;
   }
 }
 

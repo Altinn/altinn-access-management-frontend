@@ -93,8 +93,8 @@ const test = baseTest.extend<Fixtures>({
     await use(new ConsentPage(page, language));
   },
 
-  aktorvalgHeader: async ({ page }, use) => {
-    await use(new AktorvalgHeader(page));
+  aktorvalgHeader: async ({ page, login }, use) => {
+    await use(new AktorvalgHeader(page, login));
   },
 
   clientDelegationPage: async ({ page, language }, use) => {

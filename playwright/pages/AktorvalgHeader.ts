@@ -2,6 +2,7 @@ import type { Locator, Page } from '@playwright/test';
 import { expect } from '@playwright/test';
 
 import { HTML_LANG, Language, LanguageMenu } from './LanguageMenu';
+import type { LoginPage } from './LoginPage';
 
 export class AktorvalgHeader {
   readonly page: Page;
@@ -28,7 +29,10 @@ export class AktorvalgHeader {
   readonly closeMenuButton: Locator;
   readonly deletedActorBadge: Locator;
 
-  constructor(page: Page) {
+  constructor(
+    page: Page,
+    private readonly login: LoginPage,
+  ) {
     this.page = page;
     this.infoportalLogo = this.page.getByRole('link', { name: 'Gå til forsiden' });
     this.searchButton = this.page.getByText('Søk i Altinn', { exact: true });
@@ -89,8 +93,7 @@ export class AktorvalgHeader {
   }
 
   async selectActorFromHeaderMenu(actorName: string) {
-    await expect(this.actorOption(actorName)).toBeVisible();
-    await this.actorOption(actorName).click();
+    await this.login.selectMainUnitBySearching(actorName);
   }
 
   async selectSubOrgFromHeaderMenu(orgName: string) {
