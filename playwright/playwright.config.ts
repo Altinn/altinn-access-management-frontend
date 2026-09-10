@@ -51,6 +51,16 @@ const config: PlaywrightTestConfig = {
       },
     },
     {
+      // API-level tests. No browser: these assert backend rules and error cases
+      // directly, which is faster and steadier than driving them through the UI.
+      name: 'api-tests',
+      testMatch: 'playwright/apiTests/**/*.spec.ts',
+      timeout: 60 * 1000,
+      expect: {
+        timeout: 15 * 1000,
+      },
+    },
+    {
       name: 'accessibility-tests',
       testMatch: 'playwright/uuTests/accessibilityTests/*.spec.ts',
       expect: {

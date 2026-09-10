@@ -319,17 +319,17 @@ test.describe('klientadministrasjon', () => {
   });
 
   test.describe('Slett fullmakt for en bruker fra klientfanen', () => {
-    const actor = {
-      pid: '21895699168',
-      org: '310781940',
-      orgName: 'UAVHENGIG REALISTISK TIGER AS',
-    };
+    // Refreshed from Tenor: the previous actor represented nine organisations,
+    // which is where the aktørvelger starts paging its list. `client` must be a
+    // real ER client of `actor` — an arbitrary connection between two unrelated
+    // organisations does not show up under the Klienter tab.
+    const actor = { pid: '16847999717', org: '310280623', orgName: 'SKYFRI OPPRØMT TIGER AS' };
     const client = {
-      connectionPid: '19876699047',
-      org: '213836722',
-      orgName: 'VENSTRE GENIERKLÆRT KATT SEPARASJON',
+      connectionPid: '01909299930',
+      org: '313430626',
+      orgName: 'LETT AKVATISK KATT MANDOLIN',
     };
-    const agent = { pid: '03924296991', name: 'ORANSJE TEST' };
+    const agent = { pid: '15855499999', name: 'INKONSEKVENT AMBULANSE' };
 
     test.beforeEach(async () => {
       try {

@@ -5,6 +5,13 @@ import { EnduserConnection } from '../../../api-requests/EnduserConnection';
 /**
  * Innstillinger — varslingsadresser for virksomheten.
  *
+ * Deliberately thin: one happy path through the route a user actually takes, and
+ * one role check. That is what needs a browser — the control exists, it is shown
+ * to the right role, and saving reaches the right endpoint. The rules and error
+ * cases (SMS, edit, delete, "must keep one address") live in
+ * apiTests/innstillinger/varslingsadresser.spec.ts, where they run faster and
+ * with less to go wrong.
+ *
  * Each describe block has its OWN organisation, because the tests mutate that
  * organisation's notification addresses and the suite runs fully parallel — two
  * blocks sharing an org would see each other's addresses.
@@ -20,18 +27,6 @@ import { EnduserConnection } from '../../../api-requests/EnduserConnection';
  */
 const ACTORS = {
   leggTilEpost: { pid: '14817198504', org: '314242394', orgName: 'LAV PLEIENDE TIGER AS' },
-  leggTilSms: { pid: '24856398710', org: '312939053', orgName: 'KULTURELL UPOPULÆR TIGER AS' },
-  endreAdresse: { pid: '23885997783', org: '210486372', orgName: 'NYSGJERRIG FORNEM PUMA BBL' },
-  slettAdresse: {
-    pid: '11863047716',
-    org: '214240432',
-    orgName: 'FORSTÅELSESFULL LOGISK TIGER AS',
-  },
-  sisteAdresse: {
-    pid: '22856996909',
-    org: '313363376',
-    orgName: 'REFLEKTERENDE IHERDIG TIGER AS',
-  },
 };
 
 /**
@@ -84,186 +79,6 @@ test.describe('Innstillinger - varslingsadresser', () => {
     test.afterEach(async () => {
       try {
         await api.setNotificationAddresses(actor.pid, actor.org, { emails: [BASELINE_EPOST] });
-      } catch (error) {
-        console.error('Cleanup: Failed to reset notification addresses:', error);
-      }
-    });
-  });
-
-  test.describe('legg til SMS-adresse', () => {
-    const actor = ACTORS.leggTilSms;
-    // Deliberately an obviously-synthetic number, matching the dummy values in
-    // the repo's own mock data. Any structurally valid Norwegian mobile number
-    // could belong to a real subscriber, and this one is briefly registered as a
-    // real notification address before afterEach removes it.
-    const nyttNummer = { countryCode: '+47', phone: '99999999' };
-
-    test.beforeEach(async () => {
-      // Baseline keeps one email and no SMS, so the SMS dialog opens on an
-      // empty first row and the org still has the one address it must have.
-      await api.setNotificationAddresses(actor.pid, actor.org, {
-        emails: [BASELINE_EPOST],
-        phones: [],
-      });
-    });
-
-    test('legg til SMS-adresse', async ({ innstillingerPage, login }) => {
-      await test.step(`Logg inn som ${actor.orgName} og åpne innstillinger`, async () => {
-        await login.LoginToAccessManagement(actor.pid);
-        await login.selectMainUnitBySearching(actor.orgName);
-        await innstillingerPage.goToInnstillinger();
-      });
-
-      await test.step('Legg til et telefonnummer for varslinger', async () => {
-        await innstillingerPage.openSmsDialog();
-        await innstillingerPage.skrivTelefonnummer(0, nyttNummer.countryCode, nyttNummer.phone);
-        await innstillingerPage.lagreEndringer();
-      });
-
-      await test.step('Telefonnummeret er nå lagret', async () => {
-        await innstillingerPage.openSmsDialog();
-        await expect(innstillingerPage.countryCodeField(0)).toHaveValue(nyttNummer.countryCode);
-        await expect(innstillingerPage.phoneField(0)).toHaveValue(nyttNummer.phone);
-      });
-    });
-
-    test.afterEach(async () => {
-      try {
-        await api.setNotificationAddresses(actor.pid, actor.org, {
-          emails: [BASELINE_EPOST],
-          phones: [],
-        });
-      } catch (error) {
-        console.error('Cleanup: Failed to reset notification addresses:', error);
-      }
-    });
-  });
-
-  test.describe('endre e-postadresse', () => {
-    const actor = ACTORS.endreAdresse;
-    const endretEpost = 'playwright-endret@example.com';
-
-    test.beforeEach(async () => {
-      await api.setNotificationAddresses(actor.pid, actor.org, { emails: [BASELINE_EPOST] });
-    });
-
-    test('endre e-postadresse', async ({ innstillingerPage, login }) => {
-      await test.step(`Logg inn som ${actor.orgName} og åpne innstillinger`, async () => {
-        await login.LoginToAccessManagement(actor.pid);
-        await login.selectMainUnitBySearching(actor.orgName);
-        await innstillingerPage.goToInnstillinger();
-      });
-
-      await test.step('Endre den eksisterende e-postadressen', async () => {
-        await innstillingerPage.openEpostDialog();
-        await expect(innstillingerPage.emailField(0)).toHaveValue(BASELINE_EPOST);
-        await innstillingerPage.skrivEpost(0, endretEpost);
-        await innstillingerPage.lagreEndringer();
-      });
-
-      await test.step('Den nye adressen er lagret, og den gamle er borte', async () => {
-        await innstillingerPage.openEpostDialog();
-        await expect(innstillingerPage.emailField(0)).toHaveValue(endretEpost);
-        await expect(innstillingerPage.emailField(1)).toBeHidden();
-      });
-    });
-
-    test.afterEach(async () => {
-      try {
-        await api.setNotificationAddresses(actor.pid, actor.org, { emails: [BASELINE_EPOST] });
-      } catch (error) {
-        console.error('Cleanup: Failed to reset notification addresses:', error);
-      }
-    });
-  });
-
-  test.describe('slett e-postadresse', () => {
-    const actor = ACTORS.slettAdresse;
-    const ekstraEpost = 'playwright-skal-slettes@example.com';
-
-    test.beforeEach(async () => {
-      await api.setNotificationAddresses(actor.pid, actor.org, {
-        emails: [BASELINE_EPOST, ekstraEpost],
-      });
-    });
-
-    test('slett e-postadresse', async ({ innstillingerPage, login }) => {
-      await test.step(`Logg inn som ${actor.orgName} og åpne innstillinger`, async () => {
-        await login.LoginToAccessManagement(actor.pid);
-        await login.selectMainUnitBySearching(actor.orgName);
-        await innstillingerPage.goToInnstillinger();
-      });
-
-      await test.step('Virksomheten har to e-postadresser', async () => {
-        await expect(innstillingerPage.addressCountBadge(2)).toBeVisible();
-      });
-
-      await test.step('Fjern den andre adressen', async () => {
-        await innstillingerPage.openEpostDialog();
-        await innstillingerPage.removeEmailButton(1).click();
-        await innstillingerPage.lagreEndringer();
-      });
-
-      await test.step('Bare én e-postadresse er igjen', async () => {
-        await expect(innstillingerPage.addressCountBadge(1)).toBeVisible();
-        await innstillingerPage.openEpostDialog();
-        await expect(innstillingerPage.emailField(0)).toHaveValue(BASELINE_EPOST);
-        await expect(innstillingerPage.emailField(1)).toBeHidden();
-      });
-    });
-
-    test.afterEach(async () => {
-      try {
-        await api.setNotificationAddresses(actor.pid, actor.org, { emails: [BASELINE_EPOST] });
-      } catch (error) {
-        console.error('Cleanup: Failed to reset notification addresses:', error);
-      }
-    });
-  });
-
-  test.describe('kan ikke fjerne den siste adressen', () => {
-    const actor = ACTORS.sisteAdresse;
-
-    test.beforeEach(async () => {
-      // Exactly one email and no SMS: emptying the email field then leaves the
-      // organisation with no notification address at all, which is what the
-      // dialog must refuse to save.
-      await api.setNotificationAddresses(actor.pid, actor.org, {
-        emails: [BASELINE_EPOST],
-        phones: [],
-      });
-    });
-
-    test('kan ikke fjerne den siste adressen', async ({ innstillingerPage, login }) => {
-      await test.step(`Logg inn som ${actor.orgName} og åpne innstillinger`, async () => {
-        await login.LoginToAccessManagement(actor.pid);
-        await login.selectMainUnitBySearching(actor.orgName);
-        await innstillingerPage.goToInnstillinger();
-      });
-
-      await test.step('Tøm den eneste e-postadressen', async () => {
-        await innstillingerPage.openEpostDialog();
-        await innstillingerPage.skrivEpost(0, '');
-      });
-
-      await test.step('Feilmeldingen vises og endringen kan ikke lagres', async () => {
-        await expect(innstillingerPage.noAddressesError).toBeVisible();
-        await expect(innstillingerPage.saveButton).toBeDisabled();
-      });
-
-      await test.step('Adressen er uendret etter at dialogen lukkes', async () => {
-        await innstillingerPage.lukkDialog();
-        await innstillingerPage.openEpostDialog();
-        await expect(innstillingerPage.emailField(0)).toHaveValue(BASELINE_EPOST);
-      });
-    });
-
-    test.afterEach(async () => {
-      try {
-        await api.setNotificationAddresses(actor.pid, actor.org, {
-          emails: [BASELINE_EPOST],
-          phones: [],
-        });
       } catch (error) {
         console.error('Cleanup: Failed to reset notification addresses:', error);
       }
