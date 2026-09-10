@@ -13,26 +13,28 @@ import {
 } from '@altinn/altinn-components';
 
 import {
+  useGetIsAdminQuery,
+  useGetIsClientAdminQuery,
+  useGetReporteeQuery,
+} from '@/rtk/features/userInfoApi';
+import { getCookie } from '@/resources/Cookie/CookieMethods';
+import {
   useAssignCustomerMutation,
   useAssignSelfCustomerMutation,
   useIsSelfAddedQuery,
   useRemoveCustomerMutation,
   useRemoveSelfCustomerMutation,
 } from '@/rtk/features/systemUserApi';
-import { getCookie } from '@/resources/Cookie/CookieMethods';
+import { useIsMobileOrSmaller } from '@/resources/utils/screensizeUtils';
+
 import { SystemUserHeader } from '../components/SystemUserHeader/SystemUserHeader';
 import type { AgentDelegation, AgentDelegationCustomer, ProblemDetail, SystemUser } from '../types';
 import { RightsList } from '../components/RightsList/RightsList';
+import { DelegationCheckError } from '../components/DelegationCheckError/DelegationCheckError';
+
 import classes from './SystemUserAgentDelegationPage.module.css';
 import { CustomerList } from './CustomerList';
-import {
-  useGetIsAdminQuery,
-  useGetIsClientAdminQuery,
-  useGetReporteeQuery,
-} from '@/rtk/features/userInfoApi';
 import { AddAllCustomers } from './AddAllCustomers';
-import { DelegationCheckError } from '../components/DelegationCheckError/DelegationCheckError';
-import { useIsMobileOrSmaller } from '@/resources/utils/screensizeUtils';
 
 const getAssignedCustomers = (
   customers: AgentDelegationCustomer[],
@@ -163,7 +165,7 @@ export const SystemUserAgentDelegationPageContent = ({
       results.forEach((res, idx) => {
         const customer = batch[idx];
         if (res.status === 'fulfilled') {
-          successfulDelegations.push(res.value as AgentDelegation);
+          successfulDelegations.push(res.value);
         } else {
           batchErrors.push(customer);
         }
@@ -405,7 +407,11 @@ export const SystemUserAgentDelegationPageContent = ({
                   aria-disabled={isLoadingSelf}
                   onClick={() => {
                     if (!isLoadingSelf) {
-                      isSelfAdded ? removeSelfFromSystemuser() : assignSelfToSystemUser();
+                      if (isSelfAdded) {
+                        removeSelfFromSystemuser();
+                      } else {
+                        assignSelfToSystemUser();
+                      }
                     }
                   }}
                 >

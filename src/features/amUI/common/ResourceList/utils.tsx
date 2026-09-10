@@ -1,4 +1,4 @@
-import { ResourceListItemResource } from './types';
+import { type ResourceListItemResource } from './types';
 
 export const extractResourceName = (resource: ResourceListItemResource): string => {
   if ('name' in resource && typeof resource.name === 'string' && resource.name.trim().length > 0) {

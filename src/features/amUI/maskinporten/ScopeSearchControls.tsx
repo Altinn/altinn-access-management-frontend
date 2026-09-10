@@ -20,6 +20,7 @@ import { PartyType } from '@/rtk/features/userInfoApi';
 import { useDelegationModalContext } from '../common/DelegationModal/DelegationModalContext';
 import { resourceActionControlId } from '../common/DelegationModal/SingleRights/createSearchResultControlsRenderer';
 import { usePartyRepresentation } from '../common/PartyRepresentationContext/PartyRepresentationContext';
+
 import { useMaskinportenResourceActions } from './hooks/useMaskinportenResourceActions';
 
 interface ScopeSearchControlsProps {

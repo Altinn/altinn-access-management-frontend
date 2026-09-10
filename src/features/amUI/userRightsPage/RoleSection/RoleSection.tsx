@@ -1,10 +1,11 @@
 import React, { useRef, useState } from 'react';
+
+import { type ActionError } from '@/resources/hooks/useActionError';
 import type { Role } from '@/rtk/features/roleApi';
 
 import { RoleList, ROLE_LIST_HEADING_ID } from '../../common/RoleList/RoleList';
 import { RoleInfoModal } from '../../common/DelegationModal/RoleInfoModal';
 import { usePartyRepresentation } from '../../common/PartyRepresentationContext/PartyRepresentationContext';
-import { ActionError } from '@/resources/hooks/useActionError';
 import {
   RestoreFocusFallback,
   RestoreFocusProvider,

@@ -1,6 +1,7 @@
 import { Button, DsSpinner } from '@altinn/altinn-components';
 import { MinusCircleIcon, PlusCircleIcon } from '@navikt/aksel-icons';
 import { useTranslation } from 'react-i18next';
+
 import { DelegationAction } from '../DelegationModal/EditModal';
 
 import { packageActionControlId } from './PackageItem';

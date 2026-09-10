@@ -14,11 +14,11 @@ import { StatusSection } from '../../StatusSection/StatusSection';
 import { TechnicalErrorParagraphs } from '../../TechnicalErrorParagraphs';
 import { ValidationErrorMessage } from '../../ValidationErrorMessage';
 import type { PartyInfoProps } from '../Party/PartyInfo';
+import { DelegationAction } from '../EditModal';
 
 import classes from './AccessPackageInfo.module.css';
 import { PackageHeader } from './PackageHeader';
 import { PackageMeta } from './PackageMeta';
-import { DelegationAction } from '../EditModal';
 
 export const ClientPackageInfo = ({
   party,

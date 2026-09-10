@@ -3,8 +3,7 @@ import { MinusCircleIcon } from '@navikt/aksel-icons';
 import { useEffect, useRef } from 'react';
 import { useTranslation } from 'react-i18next';
 
-import { StatusMessageForScreenReader } from '@/components/StatusMessageForScreenReader/StatusMessageForScreenReader';
-import { useIsMobileOrSmaller } from '@/resources/utils/screensizeUtils';
+import type { ServiceResource } from '@/rtk/features/singleRights/singleRightsApi';
 import {
   useAddMaskinportenSupplierResourceMutation,
   useGetMaskinportenConsumerResourcesQuery,
@@ -13,7 +12,8 @@ import {
   useRemoveMaskinportenConsumerResourceMutation,
   useRemoveMaskinportenSupplierResourceMutation,
 } from '@/rtk/features/maskinportenApi';
-import type { ServiceResource } from '@/rtk/features/singleRights/singleRightsApi';
+import { useIsMobileOrSmaller } from '@/resources/utils/screensizeUtils';
+import { StatusMessageForScreenReader } from '@/components/StatusMessageForScreenReader/StatusMessageForScreenReader';
 
 import { createErrorDetails } from '../common/TechnicalErrorParagraphs/TechnicalErrorParagraphs';
 import { focusFirstEnabledButton, useRestoreFocusAfterSettled } from '../common/RestoreFocus';
@@ -25,6 +25,7 @@ import { ResourceHeading } from '../common/DelegationModal/SingleRights/Resource
 import { ResourceInfoSkeleton } from '../common/DelegationModal/SingleRights/ResourceInfoSkeleton';
 import { usePartyRepresentation } from '../common/PartyRepresentationContext/PartyRepresentationContext';
 import { StatusSection } from '../common/StatusSection/StatusSection';
+
 import { ScopeActionAlert } from './ScopeActionAlert';
 import { getMaskinportenScopes } from './scopeUtils';
 import { useMaskinportenResourceActions } from './hooks/useMaskinportenResourceActions';

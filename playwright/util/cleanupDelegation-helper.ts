@@ -1,6 +1,8 @@
 import fs from 'fs';
 import path from 'path';
+
 import csv from 'csv-parser';
+
 import { currentEnv } from './helper';
 
 export type CleanupRow = {

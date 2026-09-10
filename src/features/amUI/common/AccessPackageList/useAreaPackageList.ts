@@ -9,11 +9,11 @@ import {
   type AccessPackage,
   type AccessPackageDelegation,
 } from '@/rtk/features/accessPackageApi';
-
-import { usePartyRepresentation } from '../PartyRepresentationContext/PartyRepresentationContext';
-import { getInheritedStatus, type InheritedStatusMessageType } from '../useInheritedStatus';
 import { PartyType } from '@/rtk/features/userInfoApi';
 import { isGuardianshipUrn } from '@/resources/utils/urnUtils';
+
+import { getInheritedStatus, type InheritedStatusMessageType } from '../useInheritedStatus';
+import { usePartyRepresentation } from '../PartyRepresentationContext/PartyRepresentationContext';
 
 export interface ExtendedAccessArea extends AccessArea {
   packages: {

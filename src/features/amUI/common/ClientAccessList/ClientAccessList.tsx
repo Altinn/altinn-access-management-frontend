@@ -1,20 +1,23 @@
 import React, { useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import {
-  AccessPackageListItemProps,
+  type AccessPackageListItemProps,
   formatDisplayName,
   type UserListItemProps,
 } from '@altinn/altinn-components';
 
-import type { Client } from '@/rtk/features/clientApi';
-import type { ServiceResource } from '@/rtk/features/singleRights/singleRightsApi';
-import type { ActionError } from '@/resources/hooks/useActionError';
-import { useAccessPackageLookup } from '@/resources/hooks/useAccessPackageLookup';
 import {
   getFormattedDateOfBirthLabel,
   formatOrgNr,
   isSubUnitByType,
 } from '@/resources/utils/reporteeUtils';
+import { useAccessPackageLookup } from '@/resources/hooks/useAccessPackageLookup';
+import type { ActionError } from '@/resources/hooks/useActionError';
+import type { ServiceResource } from '@/rtk/features/singleRights/singleRightsApi';
+import type { Client } from '@/rtk/features/clientApi';
+import { useIsMobileOrSmaller } from '@/resources/utils/screensizeUtils';
+import { PartyType } from '@/rtk/features/userInfoApi';
+import type { Party } from '@/rtk/features/lookupApi';
 
 import { buildClientParentNameById, buildClientSortKey } from '../clientSortUtils';
 import { useRoleMetadata } from '../UserRoles/useRoleMetadata';
@@ -30,9 +33,6 @@ import {
   ClientResourceInfoModal,
   type ClientResourceModalData,
 } from '../DelegationModal/SingleRights/ClientResourceInfoModal';
-import { useIsMobileOrSmaller } from '@/resources/utils/screensizeUtils';
-import { PartyType } from '@/rtk/features/userInfoApi';
-import type { Party } from '@/rtk/features/lookupApi';
 
 export type ClientAccessPackageAction = {
   clientId: string;

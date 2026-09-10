@@ -1,8 +1,8 @@
 import type { ReactNode } from 'react';
 import { Avatar, DsHeading, DsParagraph, Icon, formatDisplayName } from '@altinn/altinn-components';
-import { useIsMobileOrSmaller } from '@/resources/utils/screensizeUtils';
 import { useTranslation } from 'react-i18next';
 
+import { useIsMobileOrSmaller } from '@/resources/utils/screensizeUtils';
 import { useProviderLogoUrl } from '@/resources/hooks';
 import { PartyType } from '@/rtk/features/userInfoApi';
 import type { ServiceResource } from '@/rtk/features/singleRights/singleRightsApi';

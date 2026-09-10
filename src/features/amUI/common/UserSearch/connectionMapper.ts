@@ -4,10 +4,10 @@ import type {
   SimplifiedParty,
 } from '@/rtk/features/connectionApi';
 import type { MaskinportenConnection } from '@/rtk/features/maskinportenApi';
+import { type ExtendedUser, type User } from '@/rtk/features/userInfoApi';
 
-import { buildSortKey, normalizeType } from './mapperUtils';
 import type { UserSearchNode } from './types';
-import { ExtendedUser, User } from '@/rtk/features/userInfoApi';
+import { buildSortKey, normalizeType } from './mapperUtils';
 
 const mapUserToUserSearchNode = (user: ExtendedUser | User): UserSearchNode => ({
   id: user.id,

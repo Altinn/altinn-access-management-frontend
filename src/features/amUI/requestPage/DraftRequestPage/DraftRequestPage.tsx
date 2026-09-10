@@ -1,17 +1,20 @@
 import React, { useCallback, useMemo, useState } from 'react';
 import { Trans, useTranslation } from 'react-i18next';
 import { DsAlert, DsParagraph, formatDisplayName } from '@altinn/altinn-components';
+import { useSearchParams } from 'react-router';
+
+import { useDocumentTitle } from '@/resources/hooks/useDocumentTitle';
+import { getCookie } from '@/resources/Cookie/CookieMethods';
 import {
   useConfirmRequestMutation,
   useGetEnrichedDraftRequestQuery,
   useWithdrawRequestMutation,
   type EnrichedRequest,
 } from '@/rtk/features/requestApi';
-import { useSearchParams } from 'react-router';
-import { getCookie } from '@/resources/Cookie/CookieMethods';
+
 import { RequestPageLayout } from '../../common/RequestPageLayout/RequestPageLayout';
 import { PartyRepresentationProvider } from '../../common/PartyRepresentationContext/PartyRepresentationContext';
-import { useDocumentTitle } from '@/resources/hooks/useDocumentTitle';
+
 import { useMultipleDraftRequests } from './useMultipleDraftRequests';
 import { MultipleDraftRequestsView, type BatchActionType } from './MultipleDraftRequestsView';
 import { DraftRequestHeader } from './DraftRequestHeader';

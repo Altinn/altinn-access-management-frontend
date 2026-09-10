@@ -1,4 +1,5 @@
 import { createApi } from '@reduxjs/toolkit/query/react';
+
 import { createBaseQuery } from '@/rtk/app/baseQuery';
 
 const baseUrl = `${import.meta.env.BASE_URL}accessmanagement/api/v1/selfidentifieduser`;

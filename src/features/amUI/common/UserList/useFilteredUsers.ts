@@ -47,9 +47,7 @@ const filterUserNode = (userNode: UserSearchNode, searchString: string): UserSea
 
 const filterUsers = (users: UserSearchNode[], searchString: string): UserSearchNode[] => {
   if (!searchString || searchString === '') return users;
-  return users
-    .map((user) => filterUserNode(user, searchString))
-    .filter((user) => user !== null) as UserSearchNode[];
+  return users.map((user) => filterUserNode(user, searchString)).filter((user) => user !== null);
 };
 
 const sortUsers = (users: UserSearchNode[]): UserSearchNode[] => {

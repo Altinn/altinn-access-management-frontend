@@ -2,9 +2,10 @@ import { useTranslation } from 'react-i18next';
 import * as React from 'react';
 import { DsHeading, DsParagraph, DsLink, DsListItem } from '@altinn/altinn-components';
 
-import classes from '../ErrorPage.module.css';
 import { getAfUrl, getAltinnStartPageUrl } from '@/resources/utils/pathUtils';
 import { useDocumentTitle } from '@/resources/hooks/useDocumentTitle';
+
+import classes from '../ErrorPage.module.css';
 
 export const PageNotFound = () => {
   const { t } = useTranslation();

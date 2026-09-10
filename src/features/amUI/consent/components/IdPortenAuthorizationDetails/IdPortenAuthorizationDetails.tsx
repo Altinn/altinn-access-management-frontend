@@ -1,14 +1,17 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
+import { DsAlert, DsDetails, DsHeading, useSnackbar } from '@altinn/altinn-components';
+
 import {
-  IdPortenAuthorization,
+  type IdPortenAuthorization,
   useWithdrawIdPortenAuthorizationMutation,
 } from '@/rtk/features/idPortenAuthorizationApi';
-import { DsAlert, DsDetails, DsHeading, useSnackbar } from '@altinn/altinn-components';
+
 import { ConsentRights } from '../ConsentRights/ConsentRights';
 import { parseUserAgent, toDateTimeString } from '../../utils';
 import { ConsentStatus } from '../ConsentStatus/ConsentStatus';
 import { RevokeConsentPopover } from '../RevokeConsentPopover/RevokeConsentPopover';
+
 import classes from './IdPortenAuthorizationDetails.module.css';
 
 interface IdPortenAuthorizationDetailsProps {

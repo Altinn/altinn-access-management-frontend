@@ -1,17 +1,19 @@
 import React, { useRef, useState } from 'react';
 import { HandshakeIcon, MinusCircleIcon } from '@navikt/aksel-icons';
 import { DsButton, formatDisplayName, ListItem } from '@altinn/altinn-components';
-import { ResourceList } from '../../common/ResourceList/ResourceList';
-import { useSingleRightRequests } from '../../common/DelegationModal/SingleRights/hooks/useSingleRightRequests';
-import { ServiceResource } from '@/rtk/features/singleRights/singleRightsApi';
-import { ResourceInfo } from '../../common/DelegationModal/SingleRights/ResourceInfo';
-import { DelegationAction } from '../../common/DelegationModal/EditModal';
 import { useTranslation } from 'react-i18next';
-import { usePartyRepresentation } from '../../common/PartyRepresentationContext/PartyRepresentationContext';
+
+import { type ServiceResource } from '@/rtk/features/singleRights/singleRightsApi';
 import { PartyType } from '@/rtk/features/userInfoApi';
 import { useIsTabletOrSmaller } from '@/resources/utils/screensizeUtils';
 import { useGetEnrichedSentResourceRequestsQuery } from '@/rtk/features/requestApi';
 import { getRequestPartyQueryParams } from '@/resources/utils/singleRightRequestUtils';
+
+import { ResourceList } from '../../common/ResourceList/ResourceList';
+import { useSingleRightRequests } from '../../common/DelegationModal/SingleRights/hooks/useSingleRightRequests';
+import { ResourceInfo } from '../../common/DelegationModal/SingleRights/ResourceInfo';
+import { DelegationAction } from '../../common/DelegationModal/EditModal';
+import { usePartyRepresentation } from '../../common/PartyRepresentationContext/PartyRepresentationContext';
 import { useRestoreFocus, useRestoreFocusOnDataChange } from '../../common/RestoreFocus';
 import { TwoStepDialog } from '../../common/TwoStepDialog';
 

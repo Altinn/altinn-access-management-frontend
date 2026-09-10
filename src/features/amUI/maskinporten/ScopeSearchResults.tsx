@@ -11,9 +11,10 @@ import type {
 
 import { resourceActionControlId } from '../common/DelegationModal/SingleRights/createSearchResultControlsRenderer';
 import { useRestoreFocusOnDataChange } from '../common/RestoreFocus';
+import classes from '../common/DelegationModal/SingleRights/ResourceSearch.module.css';
+
 import { ScopeSearchControls } from './ScopeSearchControls';
 import { getMaskinportenScopeCount } from './scopeUtils';
-import classes from '../common/DelegationModal/SingleRights/ResourceSearch.module.css';
 
 interface ScopeSearchResultsProps {
   isFetching: boolean;

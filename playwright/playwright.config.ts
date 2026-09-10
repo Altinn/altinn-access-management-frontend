@@ -5,7 +5,6 @@ import { currentEnv, loadEnv } from './util/helper';
 // Load env from playwright/config to match repo layout
 loadEnv(currentEnv());
 
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
 const config: PlaywrightTestConfig = {
   fullyParallel: true,
   retries: 1,

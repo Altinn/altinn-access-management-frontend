@@ -4,10 +4,13 @@ import React, { useState } from 'react';
 import cn from 'classnames';
 import { ChevronDownIcon, ChevronUpIcon } from '@navikt/aksel-icons';
 
-import { useIsMobileOrSmaller } from '@/resources/utils/screensizeUtils';
 import type { AccessPackage } from '@/rtk/features/accessPackageApi';
+import { useIsMobileOrSmaller } from '@/resources/utils/screensizeUtils';
+import { type PartyType } from '@/rtk/features/userInfoApi';
 
-import { DelegationAction } from '../DelegationModal/EditModal';
+import { type DelegationAction } from '../DelegationModal/EditModal';
+import { useAccessPackageDelegationCheck } from '../DelegationCheck/AccessPackageDelegationCheckContext';
+import { PermissionsBadge } from '../PermissionsBadge/PermissionsBadge';
 
 import classes from './AccessPackageList.module.css';
 import {
@@ -19,10 +22,7 @@ import { PackageItem } from './PackageItem';
 import { RevokeAccessPackageActionControl } from './RevokeAccessPackageActionControl';
 import { DelegateAccessPackageActionControl } from './DelegateAccessPackageActionControl';
 import { isCriticalAndUndelegated, UndelegatedPackageWarning } from './UndelegatedPackageWarning';
-import { useAccessPackageDelegationCheck } from '../DelegationCheck/AccessPackageDelegationCheckContext';
-import { PartyType } from '@/rtk/features/userInfoApi';
 import { usePackagePermissionOverview } from './usePackagePermissionOverview';
-import { PermissionsBadge } from '../PermissionsBadge/PermissionsBadge';
 
 // DOM id for the area's content wrapper, usable as a RestoreFocus fallback target.
 export const areaContentId = (areaId: string) => `area-content-${areaId}`;

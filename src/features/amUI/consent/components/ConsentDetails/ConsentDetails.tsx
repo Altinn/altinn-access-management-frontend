@@ -6,11 +6,11 @@ import { useGetConsentQuery, useRevokeConsentMutation } from '@/rtk/features/con
 
 import { canConsentBeRevoked, getLanguage, replaceStaticMetadata } from '../../utils';
 import { ConsentRights } from '../ConsentRights/ConsentRights';
+import { ConsentStatus } from '../ConsentStatus/ConsentStatus';
+import { type Consent } from '../../types';
+import { RevokeConsentPopover } from '../RevokeConsentPopover/RevokeConsentPopover';
 
 import classes from './ConsentDetails.module.css';
-import { ConsentStatus } from '../ConsentStatus/ConsentStatus';
-import { Consent } from '../../types';
-import { RevokeConsentPopover } from '../RevokeConsentPopover/RevokeConsentPopover';
 
 interface ConsentDetailsProps {
   consentId: string;

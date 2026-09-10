@@ -1,10 +1,12 @@
 import { DsButton, DsSkeleton, formatDisplayName } from '@altinn/altinn-components';
 import { useTranslation } from 'react-i18next';
-import { DelegationAction } from '../DelegationModal/EditModal';
 import { MinusCircleIcon, PlusCircleIcon } from '@navikt/aksel-icons';
-import { ExtendedUser } from '@/rtk/features/userInfoApi';
+
+import { type ExtendedUser } from '@/rtk/features/userInfoApi';
 import { ConnectionUserType } from '@/rtk/features/connectionApi';
 import { useIsMobileOrSmaller } from '@/resources/utils/screensizeUtils';
+
+import { DelegationAction } from '../DelegationModal/EditModal';
 
 export const UserListActions = ({
   user,

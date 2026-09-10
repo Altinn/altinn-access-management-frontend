@@ -8,13 +8,15 @@ import type { ServiceResource } from '@/rtk/features/singleRights/singleRightsAp
 import type { AccessPackage } from '@/rtk/features/accessPackageApi';
 import type { Role } from '@/rtk/features/roleApi';
 import type { DialogLookup } from '@/rtk/features/instanceApi';
+
+import { ScopeInfo } from '../../maskinporten/ScopeInfo';
+
 import { ResourceInfo } from './SingleRights/ResourceInfo';
 import { InstanceInfo } from './Instance/InstanceInfo';
 import classes from './DelegationModal.module.css';
 import { AccessPackageInfo } from './AccessPackages/AccessPackageInfo';
 import { RoleInfo } from './Role/RoleInfo';
 import { useDelegationModalContext } from './DelegationModalContext';
-import { ScopeInfo } from '../../maskinporten/ScopeInfo';
 
 export interface DelegationRecipient {
   partyUuid: string;

@@ -1,4 +1,5 @@
 import { ListItem } from '@altinn/altinn-components';
+
 import type { Role } from '@/rtk/features/roleApi';
 import { useRestoreFocusTarget } from '@/features/amUI/common/RestoreFocus';
 

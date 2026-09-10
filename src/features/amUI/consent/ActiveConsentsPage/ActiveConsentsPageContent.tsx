@@ -11,18 +11,21 @@ import {
   List,
 } from '@altinn/altinn-components';
 import { FolderFileIcon } from '@navikt/aksel-icons';
-import classes from './ActiveConsentsPage.module.css';
+import { type FetchBaseQueryError } from '@reduxjs/toolkit/query';
+import { type SerializedError } from '@reduxjs/toolkit';
+
 import { ConsentPath } from '@/routes/paths';
-import { ReporteeInfo } from '@/rtk/features/userInfoApi';
-import { ConsentListItem, LoadingListItem } from './ConsentListItem';
+import { type ReporteeInfo } from '@/rtk/features/userInfoApi';
 import { getConsentRequestUrl } from '@/routes/paths/consentPath';
+import { type IdPortenAuthorization } from '@/rtk/features/idPortenAuthorizationApi';
+
 import { toDateTimeString } from '../utils';
-import { FetchBaseQueryError } from '@reduxjs/toolkit/query';
-import { SerializedError } from '@reduxjs/toolkit';
-import { ActiveConsentListItem } from '../types';
-import { IdPortenAuthorization } from '@/rtk/features/idPortenAuthorizationApi';
+import { type ActiveConsentListItem } from '../types';
 import { IdPortenAuthorizationDetails } from '../components/IdPortenAuthorizationDetails/IdPortenAuthorizationDetails';
 import { ConsentDetails } from '../components/ConsentDetails/ConsentDetails';
+
+import classes from './ActiveConsentsPage.module.css';
+import { ConsentListItem, LoadingListItem } from './ConsentListItem';
 
 interface ActiveConsentsPageContentProps {
   activeConsents: ActiveConsentListItem[] | undefined;

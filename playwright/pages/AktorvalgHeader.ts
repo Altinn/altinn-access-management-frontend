@@ -178,7 +178,7 @@ export class AktorvalgHeader {
   }
 
   async removeAllFavorites() {
-    var unfavoriteButtons = await this.removeFavoriteButtons.all();
+    const unfavoriteButtons = await this.removeFavoriteButtons.all();
     for (const button of unfavoriteButtons) {
       await button.click();
     }
@@ -236,10 +236,14 @@ export class AktorvalgHeader {
     try {
       await this.page.waitForTimeout(50);
       await this.page.getByRole('button', { name: 'Close' }).click();
-    } catch (e) {}
+    } catch {
+      /* element not present */
+    }
     try {
       await this.page.waitForTimeout(50);
       await this.page.getByRole('button', { name: 'Lukk' }).click();
-    } catch (e) {}
+    } catch {
+      /* element not present */
+    }
   }
 }

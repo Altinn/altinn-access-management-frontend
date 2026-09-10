@@ -1,9 +1,10 @@
 import {
   randomUUID,
   createPrivateKey,
-  KeyObject,
+  type KeyObject,
   type JsonWebKey as CryptoJsonWebKey,
 } from 'crypto';
+
 import * as jwt from 'jsonwebtoken';
 
 /**

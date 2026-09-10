@@ -9,13 +9,13 @@ import {
 import { useState } from 'react';
 import { t } from 'i18next';
 
-import { Organization, useGetOrganizationQuery } from '@/rtk/features/lookupApi';
+import { type Organization, useGetOrganizationQuery } from '@/rtk/features/lookupApi';
+import { formatOrgNr, isSubUnitByType } from '@/resources/utils/reporteeUtils';
 
 import { createErrorDetails } from '../../common/TechnicalErrorParagraphs/TechnicalErrorParagraphs';
 
 import classes from './NewUserModal.module.css';
 import { NewUserAlert } from './NewUserAlert';
-import { formatOrgNr, isSubUnitByType } from '@/resources/utils/reporteeUtils';
 
 export const NewOrgContent = ({
   addOrg,
@@ -74,7 +74,7 @@ export const NewOrgContent = ({
         className={classes.textField}
         label={t('common.org_number')}
         size='sm'
-        onChange={(e) => setOrgNumber((e.target as HTMLInputElement).value.replace(/ /g, ''))}
+        onChange={(e) => setOrgNumber(e.target.value.replace(/ /g, ''))}
         onKeyDown={(event) => {
           if (event.key === 'Enter' && !event.repeat && !isAddButtonDisabled && orgData && addOrg) {
             addOrg(orgData);

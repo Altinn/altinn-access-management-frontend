@@ -5,15 +5,16 @@ import { Provider } from 'react-redux';
 import { configureStore } from '@reduxjs/toolkit';
 import { MemoryRouter } from 'react-router';
 
-import { PartyRepresentationProvider, usePartyRepresentation } from './PartyRepresentationContext';
 import * as lookupApi from '@/rtk/features/lookupApi';
 import * as userInfoApi from '@/rtk/features/userInfoApi';
 import * as accessPackageApi from '@/rtk/features/accessPackageApi';
 import * as connectionApi from '@/rtk/features/connectionApi';
-import { useConnectedParty } from './useConnectedParty';
 import type { Party } from '@/rtk/features/lookupApi';
 import { useGetRightHoldersQuery, type Connection } from '@/rtk/features/connectionApi';
+
 import { useReporteeParty } from './useReporteeParty';
+import { useConnectedParty } from './useConnectedParty';
+import { PartyRepresentationProvider, usePartyRepresentation } from './PartyRepresentationContext';
 
 // Mock the API modules
 vi.mock('@/rtk/features/lookupApi', async () => {

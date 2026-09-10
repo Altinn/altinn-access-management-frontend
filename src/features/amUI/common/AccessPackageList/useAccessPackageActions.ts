@@ -15,10 +15,10 @@ import {
 } from '@/rtk/features/requestApi';
 import { getRequestPartyQueryParams } from '@/resources/utils/singleRightRequestUtils';
 import { useSnackbarOnIdle } from '@/resources/hooks/useSnackbarOnIdle';
-
-import { usePartyRepresentation } from '../PartyRepresentationContext/PartyRepresentationContext';
 import { PartyType } from '@/rtk/features/userInfoApi';
+
 import { usePackageWarningDialog } from '../PackageWarningDialog';
+import { usePartyRepresentation } from '../PartyRepresentationContext/PartyRepresentationContext';
 import { useCanRedelegatePackage, useRevokeConfirmation } from '../RevokeConfirmation';
 
 interface useAccessPackageActionsProps {

@@ -7,13 +7,12 @@ import { useTranslation } from 'react-i18next';
 
 import { type ExtendedUser, type User } from '@/rtk/features/userInfoApi';
 import { ConnectionUserType } from '@/rtk/features/connectionApi';
-
-import classes from './UserList.module.css';
 import {
   getFormattedDateOfBirthLabel,
   formatOrgNr,
   isSubUnitByType,
 } from '@/resources/utils/reporteeUtils';
+
 import {
   ECC_PROVIDER_CODE,
   ROLE_CODES_TO_IGNORE,
@@ -21,6 +20,8 @@ import {
 } from '../UserRoles/useRoleMetadata';
 import { isNewUser } from '../isNewUser';
 import { useRestoreFocusTarget } from '../RestoreFocus';
+
+import classes from './UserList.module.css';
 
 function isExtendedUser(item: ExtendedUser | User): item is ExtendedUser {
   return (item as ExtendedUser).roles !== undefined && Array.isArray((item as ExtendedUser).roles);
@@ -134,7 +135,7 @@ export const UserItem = ({
 
   const subUsers = hasInheritingUsers
     ? includeSelfAsChild
-      ? [user as User, ...(childrenToDisplay ?? [])]
+      ? [user, ...(childrenToDisplay ?? [])]
       : childrenToDisplay
     : [];
 

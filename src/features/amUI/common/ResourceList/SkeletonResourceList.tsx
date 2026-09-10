@@ -1,5 +1,5 @@
 import React from 'react';
-import { List, ResourceListItem, ResourceListItemProps } from '@altinn/altinn-components';
+import { List, ResourceListItem, type ResourceListItemProps } from '@altinn/altinn-components';
 
 export const SkeletonResourceList = ({ count = 3 }: { count?: number }) => {
   const resourceSkeletons: ResourceListItemProps[] = React.useMemo(

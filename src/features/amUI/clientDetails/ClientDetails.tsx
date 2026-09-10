@@ -10,8 +10,6 @@ import {
 } from '@altinn/altinn-components';
 import { useParams } from 'react-router';
 
-import { amUIPath } from '@/routes/paths';
-import { PartyType, useGetIsClientAdminQuery } from '@/rtk/features/userInfoApi';
 import {
   useAddAgentAccessPackagesMutation,
   useAddAgentResourcesMutation,
@@ -22,6 +20,8 @@ import {
   useRemoveAgentAccessPackagesMutation,
   useRemoveAgentResourcesMutation,
 } from '@/rtk/features/clientApi';
+import { PartyType, useGetIsClientAdminQuery } from '@/rtk/features/userInfoApi';
+import { amUIPath } from '@/routes/paths';
 
 import { PageContainer } from '../common/PageContainer/PageContainer';
 import { usePartyRepresentation } from '../common/PartyRepresentationContext/PartyRepresentationContext';
@@ -31,7 +31,6 @@ import {
   TechnicalErrorParagraphs,
 } from '../common/TechnicalErrorParagraphs/TechnicalErrorParagraphs';
 import { ClientAgentPackageList } from '../common/ClientAgentPackageList/ClientAgentPackageList';
-import { useClientDetailsAccessAgentLists } from './useClientDetailsAccessAgentLists';
 import { UserPageHeader } from '../common/UserPageHeader/UserPageHeader';
 import { UserPageHeaderSkeleton } from '../common/UserPageHeader/UserPageHeaderSkeleton';
 import { AddAgentButton } from '../users/NewUserModal/AddAgentModal';
@@ -39,6 +38,7 @@ import { ClientAdminSearchField } from '../common/ClientAdminSearchField/ClientA
 import { CollapsibleContainer } from '../common/CollapsibleContainer/CollapsibleContainer';
 import { isNewUser } from '../common/isNewUser';
 
+import { useClientDetailsAccessAgentLists } from './useClientDetailsAccessAgentLists';
 import classes from './ClientDetails.module.css';
 
 export const ClientDetails = () => {

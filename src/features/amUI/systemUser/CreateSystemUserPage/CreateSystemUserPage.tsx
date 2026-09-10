@@ -6,10 +6,10 @@ import { PageLayoutWrapper } from '@/features/amUI/common/PageLayoutWrapper';
 import { useDocumentTitle } from '@/resources/hooks/useDocumentTitle';
 
 import type { RegisteredSystem } from '../types';
+import { Breadcrumbs } from '../../common/Breadcrumbs/Breadcrumbs';
 
 import { SelectRegisteredSystem } from './SelectRegisteredSystem';
 import { RightsIncluded } from './RightsIncluded';
-import { Breadcrumbs } from '../../common/Breadcrumbs/Breadcrumbs';
 
 export const CreateSystemUserPage = (): React.ReactNode => {
   const { t } = useTranslation();

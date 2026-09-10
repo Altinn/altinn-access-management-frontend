@@ -4,13 +4,13 @@ import { DsSearch, DsSwitch } from '@altinn/altinn-components';
 
 import { debounce } from '@/resources/utils';
 import { ConnectionUserType, useGetRightHoldersQuery } from '@/rtk/features/connectionApi';
+import { PartyType } from '@/rtk/features/userInfoApi';
 
 import { UserList } from '../common/UserList/UserList';
 import { usePartyRepresentation } from '../common/PartyRepresentationContext/PartyRepresentationContext';
+import { filterDeletedConnections } from '../common/deletedPartyUtils';
 
 import classes from './ReporteePage.module.css';
-import { PartyType } from '@/rtk/features/userInfoApi';
-import { filterDeletedConnections } from '../common/deletedPartyUtils';
 
 export const ReporteesList = () => {
   const { t } = useTranslation();

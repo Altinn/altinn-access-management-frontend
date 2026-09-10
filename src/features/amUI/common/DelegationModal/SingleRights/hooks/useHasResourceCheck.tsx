@@ -1,4 +1,5 @@
 import { useGetSingleRightsForRightholderQuery } from '@/rtk/features/singleRights/singleRightsApi';
+
 import { usePartyRepresentation } from '../../../PartyRepresentationContext/PartyRepresentationContext';
 
 export const useHasResourceCheck = (resourceId: string) => {

@@ -1,11 +1,13 @@
+import { Avatar, Badge, type Color, DsHeading, DsParagraph, Icon } from '@altinn/altinn-components';
+import { useTranslation } from 'react-i18next';
+
 import { useProviderLogoUrl } from '@/resources/hooks';
 import type { ServiceResource } from '@/rtk/features/singleRights/singleRightsApi';
-import { Avatar, Badge, Color, DsHeading, DsParagraph, Icon } from '@altinn/altinn-components';
+import { useIsMobileOrSmaller } from '@/resources/utils/screensizeUtils';
+
+import { isExpiredResource } from '../../ResourceList/utils';
 
 import classes from './ResourceInfo.module.css';
-import { useIsMobileOrSmaller } from '@/resources/utils/screensizeUtils';
-import { isExpiredResource } from '../../ResourceList/utils';
-import { useTranslation } from 'react-i18next';
 
 export const ResourceHeading = ({ resource }: { resource: ServiceResource }) => {
   const { t } = useTranslation();

@@ -1,6 +1,7 @@
-import { getAltinnStartPageUrl } from '@/resources/utils/pathUtils';
 import { type MenuItemProps, useConsent } from '@altinn/altinn-components';
 import { useTranslation } from 'react-i18next';
+
+import { getAltinnStartPageUrl } from '@/resources/utils/pathUtils';
 
 export const useFooter = () => {
   const { t, i18n } = useTranslation();

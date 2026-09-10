@@ -8,15 +8,18 @@ import {
   type ResourceListItemProps,
 } from '@altinn/altinn-components';
 import { useTranslation } from 'react-i18next';
+import cn from 'classnames';
+import { QuestionmarkCircleIcon } from '@navikt/aksel-icons';
 
-import { useProviderLogoUrl } from '@/resources/hooks/useProviderLogoUrl';
 import { useRestoreFocusTarget } from '@/features/amUI/common/RestoreFocus';
+import { useProviderLogoUrl } from '@/resources/hooks/useProviderLogoUrl';
+
+import { ResourceFilterToolbar } from '../ResourceFilterToolbar/ResourceFilterToolbar';
 
 import { ResourceDetails } from './ResourceDetails';
 import classes from './ResourceList.module.css';
 import { SkeletonResourceList } from './SkeletonResourceList';
 import { useFilteredResources } from './useFilteredResources';
-import { ResourceFilterToolbar } from '../ResourceFilterToolbar/ResourceFilterToolbar';
 import type { ResourceListItemResource } from './types';
 import {
   extractResourceName,
@@ -28,9 +31,6 @@ import {
   extractLogoAlt,
   isExpiredResource,
 } from './utils';
-
-import cn from 'classnames';
-import { QuestionmarkCircleIcon } from '@navikt/aksel-icons';
 
 interface ResourceListItemRowProps extends React.ComponentProps<typeof ResourceListItem> {
   resourceId: string;

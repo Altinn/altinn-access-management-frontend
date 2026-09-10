@@ -1,28 +1,31 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { DsAlert, formatDisplayName } from '@altinn/altinn-components';
-import { AmTabs } from '../common/AmTabs/AmTabs';
+
 import { PageWrapper } from '@/components';
-import { PageLayoutWrapper } from '../common/PageLayoutWrapper';
-import { Breadcrumbs } from '../common/Breadcrumbs/Breadcrumbs';
-import ReporteePageHeading from '../common/ReporteePageHeading';
 import { useGetIsAdminQuery, useGetReporteeQuery } from '@/rtk/features/userInfoApi';
 import { useGetPartyFromLoggedInUserQuery } from '@/rtk/features/lookupApi';
 import { hasReporteeListAdminAccess } from '@/resources/utils/permissionUtils';
 import { useDocumentTitle } from '@/resources/hooks/useDocumentTitle';
 import { useRequests } from '@/resources/hooks/useRequests';
 import { useGetSentRequestsCountQuery } from '@/rtk/features/requestApi';
-import { PendingRequests, RequestsTabPanel } from './RequestsTabPanel';
-import { SentRequestsTabPanel } from './SentRequestsTabPanel';
-import { PartyRepresentationProvider } from '../common/PartyRepresentationContext/PartyRepresentationContext';
+import { getCookie } from '@/resources/Cookie/CookieMethods';
+import { useSidebarRequestCount } from '@/resources/hooks/useSidebarRequestCount';
+import { useTabState } from '@/resources/hooks';
+
 import {
   RestoreFocusFallback,
   RestoreFocusProvider,
   useRestoreFocus,
 } from '../common/RestoreFocus';
-import { getCookie } from '@/resources/Cookie/CookieMethods';
-import { useSidebarRequestCount } from '@/resources/hooks/useSidebarRequestCount';
-import { useTabState } from '@/resources/hooks';
+import { PartyRepresentationProvider } from '../common/PartyRepresentationContext/PartyRepresentationContext';
+import ReporteePageHeading from '../common/ReporteePageHeading';
+import { Breadcrumbs } from '../common/Breadcrumbs/Breadcrumbs';
+import { PageLayoutWrapper } from '../common/PageLayoutWrapper';
+import { AmTabs } from '../common/AmTabs/AmTabs';
+
+import { PendingRequests, RequestsTabPanel } from './RequestsTabPanel';
+import { SentRequestsTabPanel } from './SentRequestsTabPanel';
 
 const INCOMING_REQUESTS_TAB = 'incomingRequests';
 const SENT_REQUESTS_TAB = 'sentRequests';

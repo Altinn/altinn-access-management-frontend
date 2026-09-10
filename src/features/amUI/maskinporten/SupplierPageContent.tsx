@@ -4,16 +4,15 @@ import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router';
 import { TrashIcon } from '@navikt/aksel-icons';
 
+import { PartyType } from '@/rtk/features/userInfoApi';
+import { amUIPath } from '@/routes/paths';
+import type { ServiceResource } from '@/rtk/features/singleRights/singleRightsApi';
 import {
   useGetMaskinportenSupplierResourcesQuery,
   useRemoveMaskinportenSupplierMutation,
   useRemoveMaskinportenSupplierResourceMutation,
 } from '@/rtk/features/maskinportenApi';
-import type { ServiceResource } from '@/rtk/features/singleRights/singleRightsApi';
-import { amUIPath } from '@/routes/paths';
-import { PartyType } from '@/rtk/features/userInfoApi';
 
-import { useMaskinportenResourceActions } from './hooks/useMaskinportenResourceActions';
 import { DelegationAction, EditModal } from '../common/DelegationModal/EditModal';
 import { DelegationModal, DelegationType } from '../common/DelegationModal/DelegationModal';
 import { PageContainer } from '../common/PageContainer/PageContainer';
@@ -26,6 +25,8 @@ import {
   useRestoreFocusContext,
   useRestoreFocusOnDataChange,
 } from '../common/RestoreFocus';
+
+import { useMaskinportenResourceActions } from './hooks/useMaskinportenResourceActions';
 import { MaskinportenDeleteDialog } from './MaskinportenDeleteDialog';
 import {
   DelegatedResourcesSection,

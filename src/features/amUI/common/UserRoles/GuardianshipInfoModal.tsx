@@ -1,8 +1,8 @@
 import { DsDialog, DsHeading, DsParagraph, DsValidationMessage } from '@altinn/altinn-components';
 import { Trans, useTranslation } from 'react-i18next';
+import { Link } from 'react-router';
 
 import classes from './GuardianshipInfoModal.module.css';
-import { Link } from 'react-router';
 
 interface GuardianshipInfoModalProps {
   open: boolean;

@@ -2,13 +2,15 @@ import React, { useMemo } from 'react';
 import { DsAlert, DsParagraph, DsSkeleton, formatDisplayName } from '@altinn/altinn-components';
 import { useTranslation } from 'react-i18next';
 
-import { PageContainer } from '../common/PageContainer/PageContainer';
-import { getCookie } from '@/resources/Cookie/CookieMethods';
-import { useDocumentTitle } from '@/resources/hooks/useDocumentTitle';
-import { useGetPartyFromLoggedInUserQuery } from '@/rtk/features/lookupApi';
-import { useGetMyClientsQuery, type Client } from '@/rtk/features/clientApi';
 import { PartyType, useGetReporteeQuery } from '@/rtk/features/userInfoApi';
+import { useGetMyClientsQuery, type Client } from '@/rtk/features/clientApi';
+import { useGetPartyFromLoggedInUserQuery } from '@/rtk/features/lookupApi';
+import { useDocumentTitle } from '@/resources/hooks/useDocumentTitle';
+import { getCookie } from '@/resources/Cookie/CookieMethods';
+import { useBackUrl } from '@/resources/hooks/useBackUrl';
+import { PageWrapper } from '@/components/PageWrapper/PageWrapper';
 
+import { PageContainer } from '../common/PageContainer/PageContainer';
 import { Breadcrumbs } from '../common/Breadcrumbs/Breadcrumbs';
 import { PageLayoutWrapper } from '../common/PageLayoutWrapper';
 import { ReporteePageHeading } from '../common/ReporteePageHeading';
@@ -16,12 +18,10 @@ import {
   createErrorDetails,
   TechnicalErrorParagraphs,
 } from '../common/TechnicalErrorParagraphs/TechnicalErrorParagraphs';
+
 import { MyClientsAccessSection } from './MyClientsAccessSection';
 import { MyClientsDeleteClientProviderModal } from './MyClientsDeleteClientProviderModal';
-
 import classes from './MyClientsPage.module.css';
-import { useBackUrl } from '@/resources/hooks/useBackUrl';
-import { PageWrapper } from '@/components/PageWrapper/PageWrapper';
 
 export const MyClientsPage = () => {
   const { t } = useTranslation();

@@ -5,12 +5,14 @@ import { useTranslation } from 'react-i18next';
 import { PageWrapper } from '@/components';
 import { getCookie } from '@/resources/Cookie/CookieMethods';
 import { useDocumentTitle } from '@/resources/hooks/useDocumentTitle';
-import { PartyRepresentationProvider } from '../common/PartyRepresentationContext/PartyRepresentationContext';
-import { PageLayoutWrapper } from '../common/PageLayoutWrapper';
-import { ClientDetails } from './ClientDetails';
 import { useGetClientsQuery } from '@/rtk/features/clientApi';
 import { PartyType } from '@/rtk/features/userInfoApi';
-import { Party } from '@/rtk/features/lookupApi';
+import { type Party } from '@/rtk/features/lookupApi';
+
+import { PageLayoutWrapper } from '../common/PageLayoutWrapper';
+import { PartyRepresentationProvider } from '../common/PartyRepresentationContext/PartyRepresentationContext';
+
+import { ClientDetails } from './ClientDetails';
 
 export const ClientDetailsPage = () => {
   const { t } = useTranslation();

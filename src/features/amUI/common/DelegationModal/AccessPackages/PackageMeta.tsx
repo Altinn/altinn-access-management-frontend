@@ -3,6 +3,7 @@ import { useTranslation } from 'react-i18next';
 
 import { ResourceList } from '@/features/amUI/common/ResourceList/ResourceList';
 import { useIsMobileOrSmaller } from '@/resources/utils/screensizeUtils';
+
 import type { ExtendedAccessPackage } from '../../AccessPackageList/useAreaPackageList';
 
 import classes from './AccessPackageInfo.module.css';

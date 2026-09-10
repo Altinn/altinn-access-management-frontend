@@ -14,20 +14,20 @@ import {
   useRestoreFocusContext,
   useRestoreFocusOnDataChange,
 } from '@/features/amUI/common/RestoreFocus';
+import { useCanGiveAccess } from '@/resources/hooks/useCanGiveAccess';
+import { useIsTabletOrSmaller } from '@/resources/utils/screensizeUtils';
 
 import { DelegationModal, DelegationType } from '../../common/DelegationModal/DelegationModal';
 import { usePartyRepresentation } from '../../common/PartyRepresentationContext/PartyRepresentationContext';
 import { DelegationAction, EditModal } from '../../common/DelegationModal/EditModal';
+import { getInheritedStatus } from '../../common/useInheritedStatus';
+import { HelpText } from '../../common/HelpText/HelpText';
+import { useCanRedelegateResource, useRevokeConfirmation } from '../../common/RevokeConfirmation';
 
 import classes from './SingleRightsSection.module.css';
 import { DeleteResourceButton } from './DeleteResourceButton';
-import { useCanGiveAccess } from '@/resources/hooks/useCanGiveAccess';
-import { useIsTabletOrSmaller } from '@/resources/utils/screensizeUtils';
 import { SingleRightsSectionSkeleton } from './SingleRightsSectionSkeleton';
-import { getInheritedStatus } from '../../common/useInheritedStatus';
-import { HelpText } from '../../common/HelpText/HelpText';
 import { PendingRequests } from './PendingRequests';
-import { useCanRedelegateResource, useRevokeConfirmation } from '../../common/RevokeConfirmation';
 
 const SingleRightsSectionContent = ({ isReportee }: { isReportee: boolean }) => {
   const { id } = useParams();

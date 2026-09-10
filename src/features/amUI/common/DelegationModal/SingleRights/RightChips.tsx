@@ -1,9 +1,11 @@
 import React, { useState } from 'react';
 import { DsChip, DsPopover } from '@altinn/altinn-components';
-import type { ChipRight } from '../utils/rightsUtils';
 import { useTranslation } from 'react-i18next';
-import classes from './ResourceInfo.module.css';
+
+import type { ChipRight } from '../utils/rightsUtils';
 import { InheritedStatusType } from '../../useInheritedStatus';
+
+import classes from './ResourceInfo.module.css';
 
 const STATUS_TRANSLATION_KEYS: Record<InheritedStatusType, string> = {
   [InheritedStatusType.ViaRole]: 'single_rights.action_popover.right_inherited_via_role',

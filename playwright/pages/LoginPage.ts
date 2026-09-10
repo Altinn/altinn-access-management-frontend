@@ -1,5 +1,6 @@
 import type { Locator, Page } from '@playwright/test';
 import { expect } from '@playwright/test';
+
 import { env } from 'playwright/util/helper';
 import { LANGUAGE_CODE, Language } from 'playwright/pages/LanguageMenu';
 import { SettingsApiRequests } from 'playwright/api-requests/SettingsApiRequests';

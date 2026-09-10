@@ -1,6 +1,6 @@
-import { test, expect } from '../../../fixture/pomFixture';
-
 import { ApiRequests } from 'playwright/api-requests/SystemUserApiRequests';
+
+import { test, expect } from '../../../fixture/pomFixture';
 
 test.describe('Delegering av klienter til Systembruker', () => {
   let api: ApiRequests;

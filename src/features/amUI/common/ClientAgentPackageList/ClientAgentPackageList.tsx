@@ -1,11 +1,16 @@
 import React, { useMemo, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import {
-  AccessPackageListItemProps,
+  type AccessPackageListItemProps,
   type UserListItemProps,
   formatDisplayName,
 } from '@altinn/altinn-components';
 
+import { useIsMobileOrSmaller } from '@/resources/utils/screensizeUtils';
+import { getFormattedDateOfBirthLabel, isSubUnitByType } from '@/resources/utils/reporteeUtils';
+import { useAccessPackageLookup } from '@/resources/hooks/useAccessPackageLookup';
+import type { ActionError } from '@/resources/hooks/useActionError';
+import type { ServiceResource } from '@/rtk/features/singleRights/singleRightsApi';
 import type {
   AddAgentAccessPackagesFn,
   AddAgentResourcesFn,
@@ -14,16 +19,11 @@ import type {
   RemoveAgentAccessPackagesFn,
   RemoveAgentResourcesFn,
 } from '@/rtk/features/clientApi';
-import type { ServiceResource } from '@/rtk/features/singleRights/singleRightsApi';
-import type { ActionError } from '@/resources/hooks/useActionError';
-import { useAccessPackageLookup } from '@/resources/hooks/useAccessPackageLookup';
-import { getFormattedDateOfBirthLabel, isSubUnitByType } from '@/resources/utils/reporteeUtils';
+import { PartyType } from '@/rtk/features/userInfoApi';
+
 import { useRoleMetadata } from '../UserRoles/useRoleMetadata';
 import { isNewUser } from '../isNewUser';
-
 import { UserListItems, type UserListItemData } from '../UserListItems/UserListItems';
-import { useClientAccessPackageActions } from './useClientAccessPackageActions';
-import { useIsMobileOrSmaller } from '@/resources/utils/screensizeUtils';
 import {
   ClientPackageInfoModal,
   type ClientPackageModalData,
@@ -36,7 +36,8 @@ import {
   type ClientResourceModalData,
 } from '../DelegationModal/SingleRights/ClientResourceInfoModal';
 import { useClientResourceActions } from '../ClientResourceList/useClientResourceActions';
-import { PartyType } from '@/rtk/features/userInfoApi';
+
+import { useClientAccessPackageActions } from './useClientAccessPackageActions';
 
 type ClientAgentPackageListProps = {
   agents: Agent[];
@@ -121,9 +122,6 @@ export const ClientAgentPackageList = ({
   const [selectedResource, setSelectedResource] = useState<SelectedAgentResource | null>(null);
 
   const clientAccess = client?.access ?? [];
-  const clientType = client?.client.type ?? '';
-  const clientIsSubUnit = isSubUnitByType(client?.client.variant);
-  const packageType = clientType.toLowerCase() === 'organisasjon' ? 'company' : 'person';
 
   const packageIdsByAgentId = useMemo(() => {
     const map = new Map<string, Set<string>>();

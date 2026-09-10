@@ -16,13 +16,7 @@ export interface ConsentRight {
 }
 
 export type ConsentRequestEventType =
-  | 'Created'
-  | 'Rejected'
-  | 'Accepted'
-  | 'Revoked'
-  | 'Deleted'
-  | 'Expired'
-  | 'Used';
+  'Created' | 'Rejected' | 'Accepted' | 'Revoked' | 'Deleted' | 'Expired' | 'Used';
 export interface ConsentRequestEvent {
   consentEventID: string;
   created: string;

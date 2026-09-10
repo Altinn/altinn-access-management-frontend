@@ -1,7 +1,7 @@
 import { getCookie } from '@/resources/Cookie/CookieMethods';
-import { Connection, useGetRightHoldersQuery } from '@/rtk/features/connectionApi';
+import { type Connection, useGetRightHoldersQuery } from '@/rtk/features/connectionApi';
 import { useGetPartyFromLoggedInUserQuery } from '@/rtk/features/lookupApi';
-import { ExtendedUser } from '@/rtk/features/userInfoApi';
+import { type ExtendedUser } from '@/rtk/features/userInfoApi';
 
 /**
  * useSelfConnection

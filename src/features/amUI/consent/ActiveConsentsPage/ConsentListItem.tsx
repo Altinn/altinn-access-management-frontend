@@ -1,10 +1,9 @@
 import React, { useState } from 'react';
-
 import { Badge, DsSkeleton, List, ListItem } from '@altinn/altinn-components';
 import { HandshakeIcon } from '@navikt/aksel-icons';
+import { useTranslation } from 'react-i18next';
 
 import classes from './ActiveConsentsPage.module.css';
-import { useTranslation } from 'react-i18next';
 
 interface ConsentListItemProps {
   title: string;

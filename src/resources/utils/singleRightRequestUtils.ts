@@ -1,4 +1,4 @@
-import { RequestDto } from '@/rtk/features/requestApi';
+import { type RequestDto } from '@/rtk/features/requestApi';
 
 export const getSingleRightRequestId = (
   singleRightRequests: RequestDto[] | undefined,

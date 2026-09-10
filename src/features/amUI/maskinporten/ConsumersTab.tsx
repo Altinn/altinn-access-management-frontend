@@ -3,9 +3,10 @@ import { DsParagraph, formatDisplayName } from '@altinn/altinn-components';
 
 import { useGetMaskinportenConsumersQuery } from '@/rtk/features/maskinportenApi';
 
+import { usePartyRepresentation } from '../common/PartyRepresentationContext/PartyRepresentationContext';
+
 import { MaskinportenUserSearch } from './MaskinportenUserSearch';
 import classes from './MaskinportenPage.module.css';
-import { usePartyRepresentation } from '../common/PartyRepresentationContext/PartyRepresentationContext';
 import { MaskinportenInfoPopover } from './MaskinportenInfoPopover';
 
 type ConsumersTabProps = {

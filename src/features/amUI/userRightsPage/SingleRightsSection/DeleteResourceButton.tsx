@@ -1,15 +1,15 @@
 import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Button, formatDisplayName, useSnackbar } from '@altinn/altinn-components';
+import { MinusCircleIcon } from '@navikt/aksel-icons';
 
 import type { ServiceResource } from '@/rtk/features/singleRights/singleRightsApi';
 import { useRevokeResource } from '@/resources/hooks/useRevokeResource';
+import { PartyType } from '@/rtk/features/userInfoApi';
 
 import { usePartyRepresentation } from '../../common/PartyRepresentationContext/PartyRepresentationContext';
 
 import classes from './DeleteResourceButton.module.css';
-import { MinusCircleIcon } from '@navikt/aksel-icons';
-import { PartyType } from '@/rtk/features/userInfoApi';
 
 interface DeleteResourceButton {
   resource: ServiceResource;

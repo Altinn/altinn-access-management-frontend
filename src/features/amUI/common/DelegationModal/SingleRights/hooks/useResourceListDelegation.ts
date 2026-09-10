@@ -1,4 +1,6 @@
 import { useCallback, useState, useEffect, useRef } from 'react';
+import { formatDisplayName, useSnackbar } from '@altinn/altinn-components';
+import { useTranslation } from 'react-i18next';
 
 import { getActionError, type ActionError } from '@/resources/hooks/useActionError';
 import { usePartyRepresentation } from '@/features/amUI/common/PartyRepresentationContext/PartyRepresentationContext';
@@ -9,8 +11,6 @@ import {
   useRevokeResourceMutation,
   type ServiceResource,
 } from '@/rtk/features/singleRights/singleRightsApi';
-import { formatDisplayName, useSnackbar } from '@altinn/altinn-components';
-import { useTranslation } from 'react-i18next';
 import { PartyType } from '@/rtk/features/userInfoApi';
 
 interface UseResourceListDelegationProps {

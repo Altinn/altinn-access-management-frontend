@@ -1,5 +1,4 @@
 import { useDelegateRightsMutation } from '@/rtk/features/singleRights/singleRightsApi';
-import type { DelegationResult } from '@/dataObjects/dtos/resourceDelegation';
 import { usePartyRepresentation } from '@/features/amUI/common/PartyRepresentationContext/PartyRepresentationContext';
 
 export const useDelegateRights = () => {

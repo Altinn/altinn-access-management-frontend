@@ -1,4 +1,4 @@
-import { List, ListItem, DsSkeleton, DsParagraph, DsHeading } from '@altinn/altinn-components';
+import { List, ListItem } from '@altinn/altinn-components';
 
 import classes from './roleSection.module.css';
 

@@ -3,17 +3,18 @@ import { useSnackbar } from '@altinn/altinn-components';
 import { useTranslation } from 'react-i18next';
 
 import {
-  ClientAccessList,
-  type ClientAccessPackageAction,
-  type ClientResourceAction,
-} from '../common/ClientAccessList/ClientAccessList';
-import {
   useRemoveMyClientAccessPackagesMutation,
   useRemoveMyClientResourcesMutation,
   type Client,
 } from '@/rtk/features/clientApi';
-import { ClientAdminSearchField } from '../common/ClientAdminSearchField/ClientAdminSearchField';
 import { getActionError, type ActionError } from '@/resources/hooks/useActionError';
+
+import {
+  ClientAccessList,
+  type ClientAccessPackageAction,
+  type ClientResourceAction,
+} from '../common/ClientAccessList/ClientAccessList';
+import { ClientAdminSearchField } from '../common/ClientAdminSearchField/ClientAdminSearchField';
 
 type MyClientsAccessSectionProps = {
   clients: Client[];

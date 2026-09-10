@@ -1,9 +1,11 @@
 import React from 'react';
-import classes from './PackagePoaDetailsHeader.module.css';
 import { DsHeading, DsParagraph } from '@altinn/altinn-components';
 import { PackageIcon } from '@navikt/aksel-icons';
-import { PackagePoaDetailsHeaderSkeleton } from './PackagePoaDetailsHeaderSkeleton';
+
 import { useIsMobileOrSmaller } from '@/resources/utils/screensizeUtils';
+
+import classes from './PackagePoaDetailsHeader.module.css';
+import { PackagePoaDetailsHeaderSkeleton } from './PackagePoaDetailsHeaderSkeleton';
 
 interface PackagePoaDetailsHeaderProps {
   packageName?: string;

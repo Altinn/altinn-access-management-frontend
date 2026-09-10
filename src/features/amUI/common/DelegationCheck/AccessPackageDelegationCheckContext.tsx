@@ -1,11 +1,12 @@
 import React, { createContext, useContext, useMemo } from 'react';
+import { type FetchBaseQueryError } from '@reduxjs/toolkit/query';
+import { type SerializedError } from '@reduxjs/toolkit';
 
 import type { Reason } from '@/dataObjects/dtos/accessPackage';
 import { useDelegationCheckQuery } from '@/rtk/features/accessPackageApi';
-import { usePartyRepresentation } from '../PartyRepresentationContext/PartyRepresentationContext';
-import { FetchBaseQueryError } from '@reduxjs/toolkit/query';
-import { SerializedError } from '@reduxjs/toolkit';
 import { useGetIsAdminQuery } from '@/rtk/features/userInfoApi';
+
+import { usePartyRepresentation } from '../PartyRepresentationContext/PartyRepresentationContext';
 
 interface AccessPackageDelegationCheckContextProps {
   canDelegatePackage: (packageId: string) => { result: boolean; reasons: Reason[] } | undefined;

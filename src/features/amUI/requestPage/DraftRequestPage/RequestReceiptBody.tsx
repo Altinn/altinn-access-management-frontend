@@ -1,6 +1,7 @@
 import React from 'react';
 import { Trans, useTranslation } from 'react-i18next';
 import { DsParagraph } from '@altinn/altinn-components';
+
 import classes from './DraftRequestPage.module.css';
 
 interface RequestReceiptBodyProps {

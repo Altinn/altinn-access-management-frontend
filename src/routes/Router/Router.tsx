@@ -18,8 +18,6 @@ import { ActiveConsentsPage } from '@/features/amUI/consent/ActiveConsentsPage/A
 import { ConsentHistoryPage } from '@/features/amUI/consent/ConsentHistoryPage/ConsentHistoryPage';
 import { PoaOverviewPage } from '@/features/amUI/poaOverview/PoaOverviewPage';
 import { InstanceDetailPage } from '@/features/amUI/InstanceDetailPage/InstanceDetailPage';
-
-import { GeneralPath, amUIPath, SystemUserPath, ConsentPath } from '../paths';
 import { PackagePoaDetailsPage } from '@/features/amUI/packagePoaDetailsPage/PackagePoaDetailsPage';
 import { SettingsPage } from '@/features/amUI/settings/SettingsPage';
 import { LandingPage } from '@/features/amUI/landingPage/LandingPage';
@@ -33,6 +31,9 @@ import { AddAltinn2AccountPage } from '@/features/amUI/altinn2Account/AddAltinn2
 import { MaskinportenPage } from '@/features/amUI/maskinporten/MaskinportenPage';
 import { SupplierPage } from '@/features/amUI/maskinporten/SupplierPage';
 import { ConsumerPage } from '@/features/amUI/maskinporten/ConsumerPage';
+
+import { GeneralPath, amUIPath, SystemUserPath, ConsentPath } from '../paths';
+
 import { RootLayout } from './RootLayout';
 
 export const Router = createBrowserRouter(

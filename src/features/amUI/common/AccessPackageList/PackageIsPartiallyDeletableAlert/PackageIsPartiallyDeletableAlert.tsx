@@ -10,10 +10,11 @@ import { t } from 'i18next';
 import { Trans } from 'react-i18next';
 import { useState } from 'react';
 
+import { PartyType } from '@/rtk/features/userInfoApi';
+
 import { usePartyRepresentation } from '../../PartyRepresentationContext/PartyRepresentationContext';
 
 import classes from './PackageIsPartiallyDeletableAlert.module.css';
-import { PartyType } from '@/rtk/features/userInfoApi';
 
 interface PackageIsPartiallyDeletableAlertProps {
   confirmAction: () => void;

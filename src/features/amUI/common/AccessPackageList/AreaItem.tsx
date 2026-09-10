@@ -3,12 +3,13 @@ import { useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { useIsMobileOrSmaller } from '@/resources/utils/screensizeUtils';
+import { PartyType } from '@/rtk/features/userInfoApi';
+
+import { PermissionsBadge } from '../PermissionsBadge/PermissionsBadge';
 
 import type { ExtendedAccessArea } from './useAreaPackageList';
 import { isCriticalAndUndelegated, UndelegatedPackageWarning } from './UndelegatedPackageWarning';
-import { PartyType } from '@/rtk/features/userInfoApi';
 import { usePackagePermissionOverview } from './usePackagePermissionOverview';
-import { PermissionsBadge } from '../PermissionsBadge/PermissionsBadge';
 
 interface AreaItemProps {
   area: ExtendedAccessArea;
@@ -72,7 +73,7 @@ export const AreaItem = ({
         ) : undefined
       }
       expanded={expanded}
-      titleAs={`h${headingLevel}` as 'h2' | 'h3' | 'h4'}
+      titleAs={`h${headingLevel}`}
       onClick={() => toggleExpandedArea(area.id)}
       size='lg'
       border='solid'

@@ -2,9 +2,10 @@ import { Button, DsTextfield } from '@altinn/altinn-components';
 import { useState } from 'react';
 import { Trans, useTranslation } from 'react-i18next';
 
+import { getPersonIdentifierErrorKey } from '../../common/personIdentifierUtils';
+
 import classes from './NewUserModal.module.css';
 import { NewUserAlert } from './NewUserAlert';
-import { getPersonIdentifierErrorKey } from '../../common/personIdentifierUtils';
 
 export type personInput = { personIdentifier: string; lastName: string };
 

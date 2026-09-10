@@ -2,14 +2,16 @@ import React, { useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { DsAlert, DsParagraph, Switch } from '@altinn/altinn-components';
 
-import { UserSearch } from '../common/UserSearch/UserSearch';
-import { type Client, useGetClientsQuery } from '@/rtk/features/clientApi';
 import { type Connection } from '@/rtk/features/connectionApi';
+import { type Client, useGetClientsQuery } from '@/rtk/features/clientApi';
+
+import { UserSearch } from '../common/UserSearch/UserSearch';
 import { buildClientParentNameById, buildClientSortKey } from '../common/clientSortUtils';
-import { SelectRoleFilter } from './SelectRoleFilter';
-import classes from './ClientAdministrationAgentsTab.module.css';
 import { mapConnectionsToUserSearchNodes } from '../common/UserSearch/connectionMapper';
 import { filterDeletedParties } from '../common/deletedPartyUtils';
+
+import { SelectRoleFilter } from './SelectRoleFilter';
+import classes from './ClientAdministrationAgentsTab.module.css';
 
 const buildClientConnections = (clients?: Client[]): Connection[] => {
   if (!clients?.length) return [];

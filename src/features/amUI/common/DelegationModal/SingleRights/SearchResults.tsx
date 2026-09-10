@@ -12,18 +12,19 @@ import { SkeletonResourceList } from '@/features/amUI/common/ResourceList/Skelet
 import { getInheritedStatus } from '@/features/amUI/common/useInheritedStatus';
 import { PartyType } from '@/rtk/features/userInfoApi';
 
-import classes from './ResourceSearch.module.css';
 import { DelegationAction } from '../EditModal';
-import { useResourceListDelegation } from './hooks/useResourceListDelegation';
 import { useDelegationModalContext } from '../DelegationModalContext';
+import { usePartyRepresentation } from '../../PartyRepresentationContext/PartyRepresentationContext';
+import { useRestoreFocusOnDataChange } from '../../RestoreFocus';
+import { useCanRedelegateResource, useRevokeConfirmation } from '../../RevokeConfirmation';
+
+import classes from './ResourceSearch.module.css';
+import { useResourceListDelegation } from './hooks/useResourceListDelegation';
 import {
   useRenderSearchResultControl,
   resourceActionControlId,
 } from './createSearchResultControlsRenderer';
-import { usePartyRepresentation } from '../../PartyRepresentationContext/PartyRepresentationContext';
 import { useSingleRightRequests } from './hooks/useSingleRightRequests';
-import { useRestoreFocusOnDataChange } from '../../RestoreFocus';
-import { useCanRedelegateResource, useRevokeConfirmation } from '../../RevokeConfirmation';
 
 interface SearchResultsProps {
   isFetching: boolean;

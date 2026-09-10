@@ -1,6 +1,7 @@
-import { Page, expect } from '@playwright/test';
-import { env } from 'playwright/util/helper';
+import { type Page, expect } from '@playwright/test';
 import AxeBuilder from '@axe-core/playwright';
+
+import { env } from 'playwright/util/helper';
 
 export class runAccessibilityTests {
   static brukerflateEnkelttjenesteDelegeringUU: any;

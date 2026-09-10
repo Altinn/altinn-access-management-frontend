@@ -2,13 +2,14 @@ import React from 'react';
 import { List, Button } from '@altinn/altinn-components';
 import { useTranslation } from 'react-i18next';
 
-import type { ExtendedUser, User } from '@/rtk/features/userInfoApi';
+import { isSubUnitByType } from '@/resources/utils/reporteeUtils';
 import { UserItem } from '@/features/amUI/common/UserList/UserItem';
+import type { ExtendedUser, User } from '@/rtk/features/userInfoApi';
+
 import { UserListActions } from '../UserList/UserListActions';
-import { DelegationAction } from '../DelegationModal/EditModal';
+import { type DelegationAction } from '../DelegationModal/EditModal';
 
 import classes from './UserSearch.module.css';
-import { isSubUnitByType } from '@/resources/utils/reporteeUtils';
 import type { UserActionTarget, UserSearchNode } from './types';
 
 export interface UserSearchResultsProps {
@@ -73,8 +74,8 @@ export const UserSearchResults: React.FC<UserSearchResultsProps> = ({
                 isLoading={isActionLoading}
                 user={user as ExtendedUser}
                 availableAction={availableAction}
-                onRevoke={onRevoke ? () => onRevoke(user as ExtendedUser) : undefined}
-                onDelegate={onDelegate ? () => onDelegate(user as ExtendedUser) : undefined}
+                onRevoke={onRevoke ? () => onRevoke(user) : undefined}
+                onDelegate={onDelegate ? () => onDelegate(user) : undefined}
                 delegateLabel={delegateLabel}
                 revokeLabel={revokeLabel}
               />

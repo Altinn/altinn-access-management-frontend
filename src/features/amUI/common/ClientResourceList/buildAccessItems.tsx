@@ -1,13 +1,13 @@
 import React from 'react';
 import type { TFunction } from 'i18next';
-import { Button, type AccessPackageListItemProps, type Color } from '@altinn/altinn-components';
+import { Button, type AccessPackageListItemProps } from '@altinn/altinn-components';
 import { MinusCircleIcon, PlusCircleIcon } from '@navikt/aksel-icons';
 
 import type { AccessPackage } from '@/rtk/features/accessPackageApi';
 import type { ActionError } from '@/resources/hooks/useActionError';
+import type { ServiceResource } from '@/rtk/features/singleRights/singleRightsApi';
 
 import type { ClientResourceListItemData } from './ClientResourceListItems';
-import type { ServiceResource } from '@/rtk/features/singleRights/singleRightsApi';
 
 type DelegateHandler = (
   onSuccess?: () => void,
@@ -115,7 +115,7 @@ export const buildPackageItem = ({
     as: showModalTrigger ? 'button' : 'div',
     titleAs: 'div',
     description: packageCount,
-    color: (hasAccess ? 'company' : 'neutral') as Color,
+    color: hasAccess ? 'company' : 'neutral',
     onClick: showModalTrigger ? onOpenModal : undefined,
     controls,
   };

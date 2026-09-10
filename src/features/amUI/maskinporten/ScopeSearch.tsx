@@ -11,11 +11,11 @@ import {
 import type { ServiceResource } from '@/rtk/features/singleRights/singleRightsApi';
 import { ResourceFilterToolbar } from '@/features/amUI/common/ResourceFilterToolbar/ResourceFilterToolbar';
 
-import { useDelegationModalContext } from '../common/DelegationModal/DelegationModalContext';
-import { usePartyRepresentation } from '../common/PartyRepresentationContext/PartyRepresentationContext';
-import { ScopeSearchResults } from './ScopeSearchResults';
-
 import classes from '../common/DelegationModal/SingleRights/ResourceSearch.module.css';
+import { usePartyRepresentation } from '../common/PartyRepresentationContext/PartyRepresentationContext';
+import { useDelegationModalContext } from '../common/DelegationModal/DelegationModalContext';
+
+import { ScopeSearchResults } from './ScopeSearchResults';
 
 const searchResultsPerPage = 7;
 

@@ -1,8 +1,9 @@
-import { getAfUrl, getAltinnStartPageUrl, getLogoutUrl } from '@/resources/utils/pathUtils';
-import { useIsTabletOrSmaller } from '@/resources/utils/screensizeUtils';
-
-import { PartyType, useGetReporteeQuery, useGetUserProfileQuery } from '@/rtk/features/userInfoApi';
-import { Theme, MenuItemSize, MenuItemProps, formatDisplayName } from '@altinn/altinn-components';
+import {
+  type Theme,
+  type MenuItemSize,
+  type MenuItemProps,
+  formatDisplayName,
+} from '@altinn/altinn-components';
 import {
   InboxFillIcon,
   PersonCircleIcon,
@@ -15,6 +16,11 @@ import {
 } from '@navikt/aksel-icons';
 import { useTranslation } from 'react-i18next';
 import { Link } from 'react-router';
+
+import { PartyType, useGetReporteeQuery, useGetUserProfileQuery } from '@/rtk/features/userInfoApi';
+import { useIsTabletOrSmaller } from '@/resources/utils/screensizeUtils';
+import { getAfUrl, getAltinnStartPageUrl, getLogoutUrl } from '@/resources/utils/pathUtils';
+
 import { useSidebarItems } from './useSidebarItems';
 
 const getAccountType = (type: string): 'company' | 'person' => {

@@ -1,6 +1,6 @@
-// eslint-disable-next-line import/default
-import dotenv from 'dotenv';
 import path from 'path';
+
+import dotenv from 'dotenv';
 
 export function env(name: string): string {
   const value = process.env[name];

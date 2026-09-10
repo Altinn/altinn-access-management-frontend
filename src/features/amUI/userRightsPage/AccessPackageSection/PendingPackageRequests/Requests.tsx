@@ -2,11 +2,14 @@ import { useRef, useState } from 'react';
 import { HandshakeIcon } from '@navikt/aksel-icons';
 import { formatDisplayName, ListItem } from '@altinn/altinn-components';
 import { useTranslation } from 'react-i18next';
-import { usePartyRepresentation } from '../../../common/PartyRepresentationContext/PartyRepresentationContext';
+
 import { PartyType } from '@/rtk/features/userInfoApi';
 import { useGetSentRequestsQuery } from '@/rtk/features/requestApi';
 import { getRequestPartyQueryParams } from '@/resources/utils/singleRightRequestUtils';
 import { useIsTabletOrSmaller } from '@/resources/utils/screensizeUtils';
+
+import { usePartyRepresentation } from '../../../common/PartyRepresentationContext/PartyRepresentationContext';
+
 import { PendingPackageRequestsModal } from './RequestsModal';
 
 export const PendingPackageRequests = () => {

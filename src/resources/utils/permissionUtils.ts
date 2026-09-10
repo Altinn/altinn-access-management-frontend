@@ -1,4 +1,4 @@
-import { ReporteeInfo } from '@/rtk/features/userInfoApi';
+import { type ReporteeInfo } from '@/rtk/features/userInfoApi';
 
 export const hasConsentPermission = (
   reporteeInfo?: ReporteeInfo,

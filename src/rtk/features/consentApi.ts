@@ -1,6 +1,7 @@
 import { createApi } from '@reduxjs/toolkit/query/react';
-import { createBaseQuery } from '@/rtk/app/baseQuery';
+import { formatDisplayName } from '@altinn/altinn-components';
 
+import { createBaseQuery } from '@/rtk/app/baseQuery';
 import type {
   ActiveConsentListItem,
   Consent,
@@ -8,7 +9,7 @@ import type {
   ConsentParty,
   ConsentRequest,
 } from '@/features/amUI/consent/types';
-import { formatDisplayName } from '@altinn/altinn-components';
+
 import { PartyType } from './userInfoApi';
 
 const baseUrl = `${import.meta.env.BASE_URL}accessmanagement/api/v1/`;
