@@ -99,7 +99,7 @@ export const UserItem = ({
   const isSubOrMainUnit =
     isExtendedUser(user) &&
     user.type === ConnectionUserType.Organization &&
-    user.roles?.some((role) => role.code === 'hovedenhet');
+    user.roles?.some((role) => ROLE_CODES_TO_IGNORE.includes(role.code ?? ''));
 
   const hasSubUnitRole = isSubOrMainUnit && roleDirection === 'fromUser';
 
