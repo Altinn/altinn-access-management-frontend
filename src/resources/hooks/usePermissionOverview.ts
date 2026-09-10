@@ -3,7 +3,7 @@ import { AvatarProps, formatDisplayName } from '@altinn/altinn-components';
 import type { Permissions } from '@/dataObjects/dtos/accessPackage';
 import { isSubUnitByType } from '@/resources/utils/reporteeUtils';
 
-export const usePackagePermissionOverview = ({ permissions }: { permissions: Permissions[] }) => {
+export const usePermissionOverview = ({ permissions }: { permissions: Permissions[] }) => {
   const calculatedPermissions = useMemo(() => {
     const seen = new Set<string>();
     const result: AvatarProps[] = [];

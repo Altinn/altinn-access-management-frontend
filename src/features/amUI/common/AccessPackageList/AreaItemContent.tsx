@@ -21,7 +21,7 @@ import { DelegateAccessPackageActionControl } from './DelegateAccessPackageActio
 import { isCriticalAndUndelegated, UndelegatedPackageWarning } from './UndelegatedPackageWarning';
 import { useAccessPackageDelegationCheck } from '../DelegationCheck/AccessPackageDelegationCheckContext';
 import { PartyType } from '@/rtk/features/userInfoApi';
-import { usePackagePermissionOverview } from './usePackagePermissionOverview';
+import { usePermissionOverview } from '@/resources/hooks';
 import { PermissionsBadge } from '../PermissionsBadge/PermissionsBadge';
 
 // DOM id for the area's content wrapper, usable as a RestoreFocus fallback target.
@@ -218,7 +218,7 @@ const AssignedPackageItem = ({
   isSm,
   revokeActionControl,
 }: AssignedPackageItemProps) => {
-  const { permissionsOverview } = usePackagePermissionOverview({
+  const { permissionsOverview } = usePermissionOverview({
     permissions: pkg.permissions ?? [],
   });
 
