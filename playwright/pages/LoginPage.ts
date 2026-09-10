@@ -56,19 +56,21 @@ export class LoginPage {
     const dialog = this.page.getByRole('dialog');
     await expect(dialog).toBeVisible();
 
-    // Søkefeltet vises bare når brukeren har mange aktører (#2299). Vent en kort
-    // stund på at det dukker opp — finnes det, filtrer på navnet. Dukker det ikke
-    // opp (få aktører) ligger aktøren allerede i en kort liste, og vi klikker den
-    // direkte. waitFor retryer, så vi unngår race på et øyeblikks-snapshot.
     const searchBox = dialog.getByRole('searchbox');
-    try {
-      await searchBox.waitFor({ state: 'visible', timeout: 3000 });
+    const item = dialog.getByRole('menuitem', { name: targetReportee }).first();
+
+    // Søkefeltet vises bare når brukeren har mange aktører (#2299), og da er lista
+    // virtualisert — aktøren finnes ikke i DOM-en før den er søkt fram. Vent derfor
+    // på at én av de to faktisk kommer, i stedet for å gjette på antall aktører
+    // eller på hvor lang tid aktørlista bruker. `.first()` fordi begge kan finnes
+    // samtidig: søkefelt og aktøren allerede synlig i lista.
+    await expect(searchBox.or(item).first()).toBeVisible();
+
+    if (await searchBox.isVisible()) {
       await searchBox.fill(targetReportee);
-    } catch {
-      // Ingen søkefelt – brukeren har få aktører.
     }
 
-    await dialog.getByRole('menuitem', { name: targetReportee }).first().click();
+    await item.click();
     await expect(dialog).not.toBeVisible();
   }
 
