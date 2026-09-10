@@ -41,9 +41,7 @@ export class LoginPage {
   }
 
   async LoginToAccessManagement(pid: string) {
-    // Pin the UI language server-side BEFORE login, so the app seeds the
-    // selectedLanguage cookie from the profile at login. Keeps the session in
-    // the fixture's language (default no_nb) regardless of the user's profile.
+    // Setter språk med en gang i tilfelle noen har endret dette som kan brekke testen
     await this.settings.setSelectedLanguage(pid, LANGUAGE_CODE[this.language]);
     await this.navigateToLoginPage();
     await this.authenticateUser(pid);
@@ -60,16 +58,15 @@ export class LoginPage {
     if (!this.loggedInPid) {
       throw new Error('Log in before selecting an actor.');
     }
-    const accountCount = await this.authorizedParties.antallAktoererForbruker(this.loggedInPid);
+    const antallAktoerer = await this.authorizedParties.antallAktoererForbruker(this.loggedInPid);
     const dialog = this.page.getByRole('dialog');
     await expect(dialog).toBeVisible();
 
     const searchBox = dialog.getByRole('searchbox');
     const item = dialog.getByRole('menuitem', { name: targetReportee }).first();
 
-    // AccountSelector shows search only above five accounts, including subunits.
-    // fill/click wait for the appropriate element while the actor list loads.
-    if (accountCount > 5) {
+    // Dersom flere enn 5 kan man søke i aktørene
+    if (antallAktoerer > 5) {
       await searchBox.fill(targetReportee);
     }
 
