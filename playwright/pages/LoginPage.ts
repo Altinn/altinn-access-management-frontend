@@ -56,19 +56,24 @@ export class LoginPage {
     const dialog = this.page.getByRole('dialog');
     await expect(dialog).toBeVisible();
 
-    // Søkefeltet vises bare når brukeren har mange aktører (#2299). Vent en kort
-    // stund på at det dukker opp — finnes det, filtrer på navnet. Dukker det ikke
-    // opp (få aktører) ligger aktøren allerede i en kort liste, og vi klikker den
-    // direkte. waitFor retryer, så vi unngår race på et øyeblikks-snapshot.
     const searchBox = dialog.getByRole('searchbox');
-    try {
-      await searchBox.waitFor({ state: 'visible', timeout: 3000 });
+    const item = dialog.getByRole('menuitem', { name: targetReportee }).first();
+
+    // Aktørlista lastes etter at dialogen er åpnet, så før den er på plass er
+    // både søkefeltet og aktøren fraværende. Denne ventingen er det som skiller
+    // «kort liste» fra «ikke lastet ennå» — uten den er de to umulige å skille,
+    // og det var nettopp den forvekslingen som ga 90 s timeout på klikket.
+    // `.first()` fordi begge kan finnes samtidig.
+    await expect(searchBox.or(item).first()).toBeVisible();
+
+    // Har brukeren mange aktører (#2299) er lista virtualisert, og aktøren ligger
+    // ikke i DOM-en før den er søkt fram. Ventingen over har alt slått fast at
+    // lista er lastet, så her trengs bare et oppslag - ikke en ny venting.
+    if (await searchBox.count()) {
       await searchBox.fill(targetReportee);
-    } catch {
-      // Ingen søkefelt – brukeren har få aktører.
     }
 
-    await dialog.getByRole('menuitem', { name: targetReportee }).first().click();
+    await item.click();
     await expect(dialog).not.toBeVisible();
   }
 
