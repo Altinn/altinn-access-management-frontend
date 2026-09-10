@@ -72,6 +72,56 @@ export class MaskinportenApiRequests {
   }
 
   /**
+   * Grants a supplier access to one API (a MaskinportenSchema resource).
+   *
+   * @param resourceId - The resource's identifier, as returned by scope search.
+   *   Not every resource in the search is delegable — some are absent from the
+   *   access-management database and answer 400 "The resource is invalid".
+   */
+  public async addSupplierResource(
+    pid: string,
+    partyOrgNo: string,
+    supplierOrgNo: string,
+    resourceId: string,
+  ): Promise<void> {
+    const party = await this.tokenClass.getPartyUuid(partyOrgNo);
+    await this.request(
+      pid,
+      'POST',
+      `suppliers/resources?party=${party}&supplier=${supplierOrgNo}&resource=${encodeURIComponent(resourceId)}`,
+    );
+  }
+
+  public async removeSupplierResource(
+    pid: string,
+    partyOrgNo: string,
+    supplierOrgNo: string,
+    resourceId: string,
+  ): Promise<void> {
+    const party = await this.tokenClass.getPartyUuid(partyOrgNo);
+    await this.request(
+      pid,
+      'DELETE',
+      `suppliers/resources?party=${party}&supplier=${supplierOrgNo}&resource=${encodeURIComponent(resourceId)}`,
+    );
+  }
+
+  /** The APIs a supplier has been granted. */
+  public async getSupplierResources(
+    pid: string,
+    partyOrgNo: string,
+    supplierOrgNo: string,
+  ): Promise<unknown[]> {
+    const party = await this.tokenClass.getPartyUuid(partyOrgNo);
+    const response = await this.request(
+      pid,
+      'GET',
+      `suppliers/resources?party=${party}&supplier=${supplierOrgNo}`,
+    );
+    return response.status === 204 ? [] : response.json();
+  }
+
+  /**
    * Removes every supplier the acting party has.
    *
    * Cleanup helper: a supplier left behind would show up in the next run's list

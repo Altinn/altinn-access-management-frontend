@@ -1,5 +1,5 @@
 import { expect, type Locator, type Page } from '@playwright/test';
-import { env } from 'playwright/util/helper';
+import { env, withPoaObject } from 'playwright/util/helper';
 
 import { LANGUAGE_DICTIONARIES, Language, type Dict } from '../LanguageMenu';
 import { SidebarNav } from '../SidebarNav';
@@ -81,6 +81,65 @@ export class MaskinportenPage {
     this.giFullmaktKnapp = this.page.getByRole('button', { name: mp.add_scope_button });
   }
 
+  /**
+   * The "Fullmakt til N API" heading on a supplier's page.
+   *
+   * Matched as an anchored pattern with the count filled in, because the scope
+   * modal's own heading ("Hvilke API vil du gi X fullmakt til?") also contains
+   * "fullmakt til" and would otherwise collide.
+   */
+  delegerteApiOverskrift(antall: number): Locator {
+    return this.page.getByRole('heading', {
+      name: this.texts.maskinporten_page.delegated_resources_heading.replace(
+        '{{count}}',
+        String(antall),
+      ),
+      exact: true,
+    });
+  }
+
+  /** The search field inside the "Gi fullmakt" scope modal. */
+  get apiSokefelt(): Locator {
+    return this.dialog.getByPlaceholder(this.texts.maskinporten_page.search_api_placeholder);
+  }
+
+  /**
+   * The "Gi fullmakt for {{api}}" button on a search-result row.
+   *
+   * Each row carries its own grant button, so there is no need to open the
+   * scope's detail step first. The button's visible text is just "Gi fullmakt";
+   * the API name comes from its aria-label, which is what makes it addressable.
+   */
+  giFullmaktForApiKnapp(apiTittel: string): Locator {
+    return this.dialog.getByRole('button', {
+      name: withPoaObject(this.texts.common.give_poa_for, apiTittel),
+      exact: true,
+    });
+  }
+
+  /**
+   * The "Slett fullmakt for {{api}}" button on a granted API's row.
+   *
+   * Visible text is just "Slett fullmakt"; the API name lives in the aria-label,
+   * which is what distinguishes one row from another.
+   */
+  slettApiFullmaktKnapp(apiTittel: string): Locator {
+    return this.page.getByRole('button', {
+      name: withPoaObject(this.texts.common.delete_poa_for, apiTittel),
+      exact: true,
+    });
+  }
+
+  /** Shown on a supplier's page when it has no API access at all. */
+  get ingenDelegerteApiTekst(): Locator {
+    return this.page.getByText(this.texts.maskinporten_page.no_delegated_resources);
+  }
+
+  /** The row for an API already granted to the supplier. */
+  delegertApi(apiTittel: string): Locator {
+    return this.page.getByRole('button', { name: apiTittel });
+  }
+
   /** A supplier or consumer row, by organisation name. */
   connectionRad(orgName: string): Locator {
     return this.page.getByRole('link', { name: orgName });
@@ -121,6 +180,27 @@ export class MaskinportenPage {
 
   async aapneLeverandoer(orgName: string) {
     await this.connectionRad(orgName).click();
+  }
+
+  /**
+   * Grants the open supplier access to one API, through the scope modal.
+   *
+   * Search first: the catalogue holds hundreds of APIs, so the wanted one is not
+   * in the initial page of results.
+   */
+  async giFullmaktTilApi(apiTittel: string) {
+    await this.giFullmaktKnapp.click();
+    await expect(this.dialog).toBeVisible();
+    await this.apiSokefelt.fill(apiTittel);
+    await this.giFullmaktForApiKnapp(apiTittel).click();
+    // The modal stays open after granting, so close it to get the supplier's
+    // page (and its "Fullmakt til N API" list) back in view.
+    await this.dialog.getByRole('button', { name: this.texts.common.close, exact: true }).click();
+    await expect(this.dialog).toBeHidden();
+  }
+
+  async slettApiFullmakt(apiTittel: string) {
+    await this.slettApiFullmaktKnapp(apiTittel).click();
   }
 
   async slettLeverandoer() {

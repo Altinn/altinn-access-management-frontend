@@ -115,6 +115,11 @@ export class InnstillingerPage {
       .nth(index);
   }
 
+  /** The client-side validation message shown for a malformed e-mail. */
+  get ugyldigEpostFeilmelding(): Locator {
+    return this.dialog.getByText(this.texts.text_field_errors.invalid_email_pattern);
+  }
+
   /** The badge on a row: "1 adresse" or "{{count}} adresser". */
   addressCountBadge(count: number): Locator {
     const label =
