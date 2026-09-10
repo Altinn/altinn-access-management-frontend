@@ -10,14 +10,19 @@ import { type PartyType } from '@/rtk/features/userInfoApi';
 
 import { type DelegationAction } from '../DelegationModal/EditModal';
 import { useAccessPackageDelegationCheck } from '../DelegationCheck/AccessPackageDelegationCheckContext';
+import { PermissionsBadge } from '../PermissionsBadge/PermissionsBadge';
 
 import classes from './AccessPackageList.module.css';
-import { DeletableStatus, type ExtendedAccessArea } from './useAreaPackageList';
+import {
+  DeletableStatus,
+  type ExtendedAccessArea,
+  type ExtendedAccessPackage,
+} from './useAreaPackageList';
 import { PackageItem } from './PackageItem';
 import { RevokeAccessPackageActionControl } from './RevokeAccessPackageActionControl';
 import { DelegateAccessPackageActionControl } from './DelegateAccessPackageActionControl';
-import { PermissionBadge } from './PermissionBadge';
 import { isCriticalAndUndelegated, UndelegatedPackageWarning } from './UndelegatedPackageWarning';
+import { usePackagePermissionOverview } from './usePackagePermissionOverview';
 
 // DOM id for the area's content wrapper, usable as a RestoreFocus fallback target.
 export const areaContentId = (areaId: string) => `area-content-${areaId}`;
@@ -28,6 +33,7 @@ interface AreaItemContentProps {
   onSelect?: (accessPackage: AccessPackage) => void;
   onDelegate?: (accessPackage: AccessPackage) => void;
   onRevoke?: (accessPackage: AccessPackage) => void;
+  onRevokeWithoutConfirmation?: (accessPackage: AccessPackage) => void;
   onRequest?: (accessPackage: AccessPackage) => void;
   onDeleteRequest?: (accessPackage: AccessPackage) => void;
   hasPendingRequest?: (accessPackage: AccessPackage) => boolean;
@@ -47,6 +53,7 @@ export const AreaItemContent = ({
   onSelect,
   onDelegate,
   onRevoke,
+  onRevokeWithoutConfirmation,
   onRequest,
   onDeleteRequest,
   hasPendingRequest,
@@ -68,7 +75,7 @@ export const AreaItemContent = ({
   const isSm = useIsMobileOrSmaller();
   const { canDelegatePackage } = useAccessPackageDelegationCheck();
 
-  const revokeActionControl = (pkg: AccessPackage) => {
+  const revokeActionControl = (pkg: ExtendedAccessPackage) => {
     if (isActionLoading) {
       return (
         <DsSpinner
@@ -77,10 +84,12 @@ export const AreaItemContent = ({
         />
       );
     }
+    const isPartiallyDeletable = pkg.deletableStatus === DeletableStatus.PartiallyDeletable;
+    const revoke = isPartiallyDeletable ? (onRevokeWithoutConfirmation ?? onRevoke) : onRevoke;
     return (
       <RevokeAccessPackageActionControl
         availableActions={availableActions}
-        onRevoke={() => onRevoke?.(pkg)}
+        onRevoke={() => revoke?.(pkg)}
         pkg={pkg}
         isLoading={isActionLoading}
       />
@@ -102,39 +111,15 @@ export const AreaItemContent = ({
         <List aria-label={t('access_packages.given_packages_title')}>
           {packages.assigned.map((pkg) => {
             return (
-              <PackageItem
-                as={
-                  packageAs
-                    ? (props) => {
-                        const Component = packageAs;
-                        return (
-                          <Component
-                            packageId={pkg.id}
-                            {...props}
-                          />
-                        );
-                      }
-                    : 'button'
-                }
-                titleAs='span'
+              <AssignedPackageItem
                 key={pkg.id}
                 pkg={pkg}
-                onSelect={onSelect}
+                showPermissions={showPermissions}
                 partyType={partyType}
-                hasAccess
-                controls={
-                  !isSm &&
-                  pkg.deletableStatus !== DeletableStatus.NotDeletable &&
-                  !pkg.inherited &&
-                  revokeActionControl(pkg)
-                }
-                badge={
-                  <>
-                    {showPermissions && pkg.permissions && (
-                      <PermissionBadge permissions={pkg.permissions} />
-                    )}
-                  </>
-                }
+                revokeActionControl={revokeActionControl}
+                packageAs={packageAs}
+                isSm={isSm}
+                onSelect={onSelect}
               />
             );
           })}
@@ -211,5 +196,65 @@ export const AreaItemContent = ({
         </List>
       )}
     </div>
+  );
+};
+
+interface AssignedPackageItemProps {
+  pkg: ExtendedAccessPackage;
+  onSelect?: (accessPackage: AccessPackage) => void;
+  showPermissions: boolean;
+  packageAs?: React.ElementType;
+  partyType: PartyType;
+  isSm?: boolean;
+  revokeActionControl: (pkg: AccessPackage) => React.ReactNode;
+}
+
+const AssignedPackageItem = ({
+  pkg,
+  onSelect,
+  showPermissions,
+  packageAs,
+  partyType,
+  isSm,
+  revokeActionControl,
+}: AssignedPackageItemProps) => {
+  const { permissionsOverview } = usePackagePermissionOverview({
+    permissions: pkg.permissions ?? [],
+  });
+
+  return (
+    <PackageItem
+      as={
+        packageAs
+          ? (props) => {
+              const Component = packageAs;
+              return (
+                <Component
+                  packageId={pkg.id}
+                  {...props}
+                />
+              );
+            }
+          : 'button'
+      }
+      titleAs='span'
+      pkg={pkg}
+      onSelect={onSelect}
+      partyType={partyType}
+      hasAccess
+      controls={
+        !isSm &&
+        pkg.deletableStatus !== DeletableStatus.NotDeletable &&
+        !pkg.inherited &&
+        revokeActionControl(pkg)
+      }
+      badge={
+        <>
+          {showPermissions && pkg.permissions && (
+            <PermissionsBadge permissions={permissionsOverview} />
+          )}
+        </>
+      }
+    />
   );
 };

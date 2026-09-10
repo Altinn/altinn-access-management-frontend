@@ -65,6 +65,17 @@ export class Token {
    */
   public async getPersonalTokenByPid(pid: string): Promise<string> {
     const person = await this.getIds(pid);
+
+    // A party without a user is an organisation, not a person — a personal token
+    // cannot be built from it. Caught here so the error names the real problem
+    // instead of failing on `person.user.userId` below.
+    if (!person.user?.userId) {
+      throw new Error(
+        `Party "${pid}" has no user in ${this.environment}, so no personal token can be created. ` +
+          `A personal token needs a person's PID — an organisation number will not work.`,
+      );
+    }
+
     const url =
       `https://altinn-testtools-token-generator.azurewebsites.net/api/GetPersonalToken?env=${this.environment}` +
       `&pid=${pid}` +
@@ -95,7 +106,7 @@ export class Token {
     const subscriptionKey = env(`${env('ENV_NAME').toUpperCase()}_REGISTER_SUBSCRIPTION_KEY`);
     const platformToken = await this.getPlatformToken();
     let payload;
-    if (pidOrOrgNo.length == 9) {
+    if (pidOrOrgNo.length === 9) {
       payload = { data: [`urn:altinn:organization:identifier-no:${pidOrOrgNo}`] };
     } else {
       payload = { data: [`urn:altinn:person:identifier-no:${pidOrOrgNo}`] };
@@ -117,7 +128,21 @@ export class Token {
       );
     }
     const responseData = await response.json();
-    return await responseData.data[0];
+    const party = responseData?.data?.[0];
+
+    // The register answers 200 with an empty `data` array for an identifier it
+    // does not know. Without this guard the caller reads a property off
+    // `undefined` and fails with a TypeError that says nothing about the cause —
+    // which is almost always a typo'd or unfilled test-data identifier.
+    if (!party) {
+      const kind = pidOrOrgNo.length === 9 ? 'organisation number' : 'PID';
+      throw new Error(
+        `No party found for ${kind} "${pidOrOrgNo}" in ${this.environment}. ` +
+          `Check that it exists in this environment's register and that the test data is filled in.`,
+      );
+    }
+
+    return party;
   }
 
   /**

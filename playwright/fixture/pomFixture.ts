@@ -13,6 +13,8 @@ import { AktorvalgHeader } from 'playwright/pages/AktorvalgHeader';
 import { ClientDelegationPage } from 'playwright/pages/systemuser/ClientDelegation';
 import { runAccessibilityTests } from 'playwright/uuTests/accessibilityHelpers/delegeringHelper';
 import { KlientAdministrasjonPage } from 'playwright/pages/tilgangsstyring/KlientAdministrasjonPage';
+import { InnstillingerPage } from 'playwright/pages/settings/InnstillingerPage';
+import { ForespoerslerPage } from 'playwright/pages/requests/ForespoerslerPage';
 
 const defaultLang = Language.NB;
 
@@ -35,6 +37,8 @@ type Fixtures = {
   aktorvalgHeader: AktorvalgHeader;
   clientDelegationPage: ClientDelegationPage;
   klientAdministrasjonPage: KlientAdministrasjonPage;
+  innstillingerPage: InnstillingerPage;
+  forespoerslerPage: ForespoerslerPage;
 };
 
 const test = baseTest.extend<Fixtures>({
@@ -100,6 +104,14 @@ const test = baseTest.extend<Fixtures>({
 
   klientAdministrasjonPage: async ({ page, language }, use) => {
     await use(new KlientAdministrasjonPage(page, language));
+  },
+
+  innstillingerPage: async ({ page, language }, use) => {
+    await use(new InnstillingerPage(page, language));
+  },
+
+  forespoerslerPage: async ({ page, language }, use) => {
+    await use(new ForespoerslerPage(page, language));
   },
 });
 

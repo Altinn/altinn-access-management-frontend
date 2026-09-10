@@ -497,6 +497,10 @@
       "sent_requests_modal_header": "Førespurnaden din om fullmakter til {{partyName}} er sendt. Du vil få beskjed når dei er godkjende."
     }
   },
+  "revoke_confirmation": {
+    "cannot_redelegate": "Du har ikkje fullmakt til å gi den tilbake etterpå.",
+    "heading_for": "Er du sikker på at du vil slette <b>{{name}}</b> for <b>{{to_name}}</b>?"
+  },
   "status_section": {
     "has_package_message": "{{user_name}} har denne fullmakta.",
     "access_status": {
@@ -696,7 +700,11 @@
     "content_text1": "Er du usikker på kva fagsystem du skal velje, anbefaler vi at du kontaktar leverandøren av fagsystemet. Altinn har ikkje gjort noka vurdering av kvalitet og tryggleik på fagsystema i lista.",
     "pull_down_menu_label": "Vel systemleverandør og system",
     "confirm_button": "Gå vidare",
-    "choose": "Velg ...",
+    "system_search_placeholder": "Søk etter fagsystem eller leverandør",
+    "no_systems_found": "Ingen fagsystem vart funne for dette søket.",
+    "selected_system": "Valt: {{systemName}} - {{vendor}}",
+    "search_hits_one": "{{count}} fagsystem funne",
+    "search_hits_other": "{{count}} fagsystem funne",
     "load_vendors_error": "Kunne ikkje laste systemleverandørar",
     "loading_systems": "Lastar leverandørar og system..."
   },
@@ -972,6 +980,7 @@
     "page_title": "Fullmaktsoversikt - Altinn",
     "heading": "Fullmaktsoversikt for {{name}}",
     "no_access_title": "Du har ikkje tilgang til denne sida",
+    "show_users_with_access": "Vis brukarar som har fullmakt",
     "packages_tab": {
       "description": "Vel eit område for å sjå tilhøyrande tilgangspakkar og kven som har fullmakt til dei.",
       "info_box_icon_label": "Informasjon om tilgangspakkar",

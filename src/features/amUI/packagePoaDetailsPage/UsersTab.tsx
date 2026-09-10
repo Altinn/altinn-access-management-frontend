@@ -98,6 +98,7 @@ export const UsersTab = ({ accessPackage, isLoading, isFetching }: UsersTabProps
     onRevoke,
     isLoading: isActionLoading,
     packageWarningDialog,
+    revokeConfirmationDialog,
   } = useAccessPackageActions({
     snackbarBusy: isFetching,
     onDelegateSuccess: () => {
@@ -207,6 +208,7 @@ export const UsersTab = ({ accessPackage, isLoading, isFetching }: UsersTabProps
         onClosed={(user) => restoreFocus?.requestFocus(user.id, USER_SEARCH_FALLBACK_ID)}
       />
       {packageWarningDialog}
+      {revokeConfirmationDialog}
     </>
   );
 };

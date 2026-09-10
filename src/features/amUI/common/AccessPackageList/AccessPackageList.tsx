@@ -91,12 +91,14 @@ export const AccessPackageList = ({
   const {
     onDelegate,
     onRevoke,
+    revokeWithoutConfirmation,
     onRequest,
     deleteRequest,
     hasPendingRequest,
     isLoadingRequest,
     isLoading: isActionLoading,
     packageWarningDialog,
+    revokeConfirmationDialog,
   } = useAccessPackageActions({
     snackbarBusy: fetchingDelegations,
     onDelegateSuccess: (accessPackage, toParty) => {
@@ -183,6 +185,7 @@ export const AccessPackageList = ({
                 onSelect={onSelect}
                 onDelegate={onDelegate}
                 onRevoke={onRevoke}
+                onRevokeWithoutConfirmation={revokeWithoutConfirmation}
                 onRequest={onRequest}
                 onDeleteRequest={deleteRequest}
                 hasPendingRequest={hasPendingRequest}
@@ -262,6 +265,7 @@ export const AccessPackageList = ({
         <>{renderAccessPackageList(displayAreas, firstHeadingLevel)}</>
       )}
       {packageWarningDialog}
+      {revokeConfirmationDialog}
     </div>
   );
 };

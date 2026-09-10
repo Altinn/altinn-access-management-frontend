@@ -60,9 +60,10 @@ export const useSingleRightsDelegationRightsData = ({
     isError: isDelegationCheckError,
     error: delegationCheckError,
     isLoading: isDelegationCheckLoading,
-  } = useDelegationCheckQuery(resource.identifier, {
-    skip: !resource.identifier || isRequest,
-  });
+  } = useDelegationCheckQuery(
+    { resourceId: resource.identifier },
+    { skip: !resource.identifier || isRequest },
+  );
 
   const isLoading =
     isResourceAccessLoading ||

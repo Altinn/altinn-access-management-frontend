@@ -1,16 +1,11 @@
-import { AvatarGroup, type AvatarProps, formatDisplayName } from '@altinn/altinn-components';
 import { useMemo } from 'react';
+import { type AvatarProps, formatDisplayName } from '@altinn/altinn-components';
 
 import type { Permissions } from '@/dataObjects/dtos/accessPackage';
 import { isSubUnitByType } from '@/resources/utils/reporteeUtils';
 
-interface PermissionBadgeProps {
-  permissions?: Permissions[];
-}
-
-export const PermissionBadge = ({ permissions }: PermissionBadgeProps) => {
-  const items = useMemo<AvatarProps[]>(() => {
-    if (!permissions || permissions.length === 0) return [];
+export const usePackagePermissionOverview = ({ permissions }: { permissions: Permissions[] }) => {
+  const calculatedPermissions = useMemo(() => {
     const seen = new Set<string>();
     const result: AvatarProps[] = [];
 
@@ -28,14 +23,16 @@ export const PermissionBadge = ({ permissions }: PermissionBadgeProps) => {
       const isParent = !isPerson && !isSubUnitByType(to.variant);
       seen.add(id);
       result.push({
+        id,
         name,
         size: 'md',
         type,
         isParent,
       });
     }
+
     return result;
   }, [permissions]);
 
-  return <AvatarGroup items={items} />;
+  return { permissionsOverview: calculatedPermissions };
 };

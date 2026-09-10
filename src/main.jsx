@@ -1,5 +1,4 @@
 import '@/resources/css/Common.css';
-import '@/resources/css/systemuser.css';
 import '@altinn/altinn-components/dist/global.css';
 
 import React from 'react';

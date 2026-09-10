@@ -1,10 +1,11 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { useParams } from 'react-router';
-import { DsHeading } from '@altinn/altinn-components';
+import { DsHeading, formatDisplayName } from '@altinn/altinn-components';
 
 import type { ServiceResource } from '@/rtk/features/singleRights/singleRightsApi';
 import { useGetSingleRightsForRightholderQuery } from '@/rtk/features/singleRights/singleRightsApi';
+import { PartyType } from '@/rtk/features/userInfoApi';
 import { ResourceList } from '@/features/amUI/common/ResourceList/ResourceList';
 import {
   RestoreFocusFallback,
@@ -21,6 +22,7 @@ import { usePartyRepresentation } from '../../common/PartyRepresentationContext/
 import { DelegationAction, EditModal } from '../../common/DelegationModal/EditModal';
 import { getInheritedStatus } from '../../common/useInheritedStatus';
 import { HelpText } from '../../common/HelpText/HelpText';
+import { useCanRedelegateResource, useRevokeConfirmation } from '../../common/RevokeConfirmation';
 
 import classes from './SingleRightsSection.module.css';
 import { DeleteResourceButton } from './DeleteResourceButton';
@@ -59,6 +61,23 @@ const SingleRightsSectionContent = ({ isReportee }: { isReportee: boolean }) => 
 
   const requestFocusOnDataChange = useRestoreFocusOnDataChange(delegatedResources);
   const restoreFocusContext = useRestoreFocusContext();
+
+  const { canRedelegateResource } = useCanRedelegateResource();
+  const { confirmRevoke, revokeConfirmationDialog } = useRevokeConfirmation();
+
+  const confirmDelete = (resource: ServiceResource, deleteResource: () => void) =>
+    confirmRevoke(
+      resource.identifier,
+      () => canRedelegateResource(resource.identifier),
+      deleteResource,
+      {
+        name: resource.title,
+        toName: formatDisplayName({
+          fullName: toParty?.name || '',
+          type: toParty?.partyTypeName === PartyType.Person ? 'person' : 'company',
+        }),
+      },
+    );
 
   const resources = React.useMemo(
     () => delegatedResources?.map((delegation) => delegation.resource).filter(Boolean),
@@ -136,6 +155,7 @@ const SingleRightsSectionContent = ({ isReportee }: { isReportee: boolean }) => 
                   <DeleteResourceButton
                     resource={resource}
                     disabled={isInherited}
+                    confirmDelete={confirmDelete}
                     onSuccess={() =>
                       requestFocusOnDataChange(resource.identifier, 'single_rights_title')
                     }
@@ -145,6 +165,7 @@ const SingleRightsSectionContent = ({ isReportee }: { isReportee: boolean }) => 
             />
           </div>
         </RestoreFocusFallback>
+        {revokeConfirmationDialog}
         <EditModal
           ref={modalRef}
           resource={selectedResource ?? undefined}

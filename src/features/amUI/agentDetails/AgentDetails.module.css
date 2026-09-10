@@ -1,0 +1,6 @@
+.clientSections {
+  display: flex;
+  flex-direction: column;
+  gap: var(--ds-spacing-5);
+  padding-top: var(--ds-spacing-2);
+}

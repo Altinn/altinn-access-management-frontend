@@ -1,9 +1,0 @@
-@media (min-width: 1024px) {
-  .systemuser_combobox_workaround aside {
-    display: flex !important;
-  }
-
-  .systemuser_combobox_workaround main {
-    padding: 0 !important;
-  }
-}

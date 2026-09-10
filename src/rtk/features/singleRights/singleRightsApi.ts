@@ -124,9 +124,15 @@ export const singleRightsApi = createApi({
       },
       providesTags: ['rightsMeta'],
     }),
-    delegationCheck: builder.query<DelegationCheckedRight[], string>({
-      query: (resourceId) => ({
-        url: `singleright/delegationcheck?from=${getCookie('AltinnPartyUuid')}&resource=${encodeURIComponent(resourceId)}`,
+    delegationCheck: builder.query<
+      DelegationCheckedRight[],
+      {
+        resourceId: string;
+        from?: string;
+      }
+    >({
+      query: ({ resourceId, from = getCookie('AltinnPartyUuid') }) => ({
+        url: `singleright/delegationcheck?from=${from}&resource=${encodeURIComponent(resourceId)}`,
         method: 'GET',
       }),
       transformErrorResponse: (response: {
@@ -188,6 +194,7 @@ export const {
   useGetPaginatedSearchQuery,
   useGetSingleRightsForRightholderQuery,
   useGetResourceRightsQuery,
+  useLazyGetResourceRightsQuery,
   useGetResourceRightsMetaQuery,
   useDelegationCheckQuery,
   useLazyDelegationCheckQuery,

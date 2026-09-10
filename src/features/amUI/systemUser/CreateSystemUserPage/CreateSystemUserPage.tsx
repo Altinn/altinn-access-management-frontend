@@ -26,7 +26,7 @@ export const CreateSystemUserPage = (): React.ReactNode => {
   };
 
   return (
-    <div className='systemuser_combobox_workaround'>
+    <div>
       <PageWrapper>
         <PageLayoutWrapper>
           <Breadcrumbs items={['root', 'systemuser_overview', 'systemuser_create']} />

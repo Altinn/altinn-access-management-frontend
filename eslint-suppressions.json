@@ -47,6 +47,19 @@
       "count": 2
     }
   },
+  "playwright/api-requests/RequestApiRequests.ts": {
+    "@typescript-eslint/no-unsafe-assignment": {
+      "count": 10
+    },
+    "@typescript-eslint/no-unsafe-return": {
+      "count": 4
+    }
+  },
+  "playwright/api-requests/SettingsApiRequests.tsx": {
+    "@typescript-eslint/no-unsafe-return": {
+      "count": 3
+    }
+  },
   "playwright/api-requests/SystemUserApiRequests.tsx": {
     "@typescript-eslint/no-unsafe-argument": {
       "count": 2
@@ -63,10 +76,10 @@
   },
   "playwright/api-requests/Token.tsx": {
     "@typescript-eslint/no-unsafe-assignment": {
-      "count": 2
+      "count": 3
     },
     "@typescript-eslint/no-unsafe-member-access": {
-      "count": 6
+      "count": 7
     },
     "@typescript-eslint/no-unsafe-return": {
       "count": 3
@@ -84,6 +97,14 @@
     },
     "@typescript-eslint/no-unsafe-member-access": {
       "count": 16
+    }
+  },
+  "playwright/e2eTests/altinn3/forespoersler/forespoersler.spec.ts": {
+    "@typescript-eslint/no-unsafe-argument": {
+      "count": 4
+    },
+    "@typescript-eslint/no-unsafe-assignment": {
+      "count": 3
     }
   },
   "playwright/e2eTests/altinn3/systemuser/deleteSystemUser.spec.ts": {
@@ -211,7 +232,7 @@
       "count": 1
     },
     "@typescript-eslint/require-await": {
-      "count": 3
+      "count": 2
     }
   },
   "src/features/amUI/common/Breadcrumbs/Breadcrumbs.tsx": {
@@ -226,7 +247,7 @@
   },
   "src/features/amUI/common/DelegationModal/AccessPackages/AccessPackageInfo.tsx": {
     "@typescript-eslint/no-misused-promises": {
-      "count": 5
+      "count": 4
     }
   },
   "src/features/amUI/common/DelegationModal/AccessPackages/ClientPackageInfoModal.tsx": {
@@ -249,9 +270,14 @@
       "count": 2
     }
   },
-  "src/features/amUI/common/DelegationModal/SingleRights/SearchResults.tsx": {
+  "src/features/amUI/common/DelegationModal/SingleRights/ResourceInfo.tsx": {
     "@typescript-eslint/no-misused-promises": {
       "count": 1
+    }
+  },
+  "src/features/amUI/common/DelegationModal/SingleRights/SearchResults.tsx": {
+    "@typescript-eslint/no-misused-promises": {
+      "count": 2
     }
   },
   "src/features/amUI/common/DelegationModal/SingleRights/createSearchResultControlsRenderer.tsx": {
@@ -309,6 +335,11 @@
   "src/features/amUI/common/RequestPageLayout/RequestPageLayout.tsx": {
     "@typescript-eslint/no-floating-promises": {
       "count": 2
+    }
+  },
+  "src/features/amUI/common/RevokeConfirmation/useRevokeConfirmation.test.tsx": {
+    "@typescript-eslint/no-misused-promises": {
+      "count": 1
     }
   },
   "src/features/amUI/common/UserList/useFilteredUsers.test.ts": {
@@ -491,6 +522,14 @@
       "count": 1
     }
   },
+  "src/features/amUI/systemUser/CreateSystemUserPage/RegisteredSystemSearch.tsx": {
+    "jsx-a11y/click-events-have-key-events": {
+      "count": 1
+    },
+    "jsx-a11y/interactive-supports-focus": {
+      "count": 2
+    }
+  },
   "src/features/amUI/systemUser/CreateSystemUserPage/RightsIncluded.tsx": {
     "@typescript-eslint/no-floating-promises": {
       "count": 2
@@ -544,6 +583,11 @@
   },
   "src/features/amUI/userRightsPage/AccessPackageSection/PendingPackageRequests/RequestsList.tsx": {
     "@typescript-eslint/no-floating-promises": {
+      "count": 1
+    }
+  },
+  "src/features/amUI/userRightsPage/SingleRightsSection/SingleRightsSection.tsx": {
+    "@typescript-eslint/no-misused-promises": {
       "count": 1
     }
   },
