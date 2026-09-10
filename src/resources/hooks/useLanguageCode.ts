@@ -5,7 +5,7 @@ import { useTranslation } from 'react-i18next';
  * Maps an i18next language (`no_nb`, `no_nn`, `en`) to the `LanguageCode` used by altinn-components.
  * Anything unknown falls back to Bokmål, matching the app's default locale.
  */
-export const toLanguageCode = (language: string | undefined): LanguageCode => {
+const toLanguageCode = (language: string | undefined): LanguageCode => {
   switch (language) {
     case 'no_nn':
       return 'nn';
