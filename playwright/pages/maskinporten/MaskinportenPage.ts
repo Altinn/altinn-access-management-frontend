@@ -8,6 +8,26 @@ import { SidebarNav } from '../SidebarNav';
 const SOFT_HYPHEN = '\u00AD';
 
 /**
+ * A pattern matching the static part of a localized heading — everything before
+ * the {{name}} placeholder.
+ *
+ * Two things make a plain string match unreliable here. The Norwegian headings
+ * carry a soft hyphen that may or may not survive into the accessible name, so
+ * it is matched optionally. And the placeholder has to be dropped rather than
+ * matched literally, which the English heading (no soft hyphen) would otherwise
+ * keep. Anchored at the start so it cannot match an unrelated heading.
+ */
+const headingPrefix = (template: string): RegExp => {
+  const pattern = template
+    .split('{{name}}')[0]
+    .trim()
+    .split(SOFT_HYPHEN)
+    .map((part) => part.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'))
+    .join(`${SOFT_HYPHEN}?`);
+  return new RegExp(`^${pattern}`);
+};
+
+/**
  * Maskinporten-administrasjon
  * (https://am.ui.<env>.altinn.cloud/accessmanagement/ui/maskinporten).
  *
@@ -45,12 +65,7 @@ export class MaskinportenPage {
     this.sidebar = new SidebarNav(page, language);
     const mp = this.texts.maskinporten_page;
 
-    // heading is "Maskinporten<soft hyphen>administrasjon for {{name}}" — match
-    // the part before the soft hyphen, which holds whether or not the accessible
-    // name preserves that character.
-    this.pageHeading = this.page.getByRole('heading', {
-      name: mp.heading.split(SOFT_HYPHEN)[0],
-    });
+    this.pageHeading = this.page.getByRole('heading', { name: headingPrefix(mp.heading) });
     this.leverandoererFane = this.page.getByRole('tab', { name: mp.suppliers_tab });
     this.konsumenterFane = this.page.getByRole('tab', { name: mp.consumers_tab });
     this.ingenLeverandoererTekst = this.page.getByText(mp.no_suppliers);
