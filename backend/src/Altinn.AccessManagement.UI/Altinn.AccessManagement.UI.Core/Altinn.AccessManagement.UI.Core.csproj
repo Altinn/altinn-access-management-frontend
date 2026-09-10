@@ -30,12 +30,4 @@
 		<PackageReference Include="Swashbuckle.AspNetCore.Annotations" Version="9.0.6" />
 	</ItemGroup>
 
-	<ItemGroup Condition="'$(Configuration)'=='Debug'">
-		<AdditionalFiles Include="$(SolutionDir)stylecop.json">
-			<Link>stylecop.json</Link>
-		</AdditionalFiles>
-	</ItemGroup>
-	<PropertyGroup Condition="'$(Configuration)'=='Debug'">
-		<CodeAnalysisRuleSet>$(SolutionDir)Altinn3.ruleset</CodeAnalysisRuleSet>
-	</PropertyGroup>
 </Project>
