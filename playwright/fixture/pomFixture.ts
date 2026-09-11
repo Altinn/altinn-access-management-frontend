@@ -14,6 +14,7 @@ import { runAccessibilityTests } from 'playwright/uuTests/accessibilityHelpers/d
 import { KlientAdministrasjonPage } from 'playwright/pages/tilgangsstyring/KlientAdministrasjonPage';
 import { InnstillingerPage } from 'playwright/pages/settings/InnstillingerPage';
 import { ForespoerslerPage } from 'playwright/pages/requests/ForespoerslerPage';
+import { MaskinportenPage } from 'playwright/pages/maskinporten/MaskinportenPage';
 
 const defaultLang = Language.NB;
 
@@ -38,6 +39,7 @@ type Fixtures = {
   klientAdministrasjonPage: KlientAdministrasjonPage;
   innstillingerPage: InnstillingerPage;
   forespoerslerPage: ForespoerslerPage;
+  maskinportenPage: MaskinportenPage;
 };
 
 const test = baseTest.extend<Fixtures>({
@@ -111,6 +113,10 @@ const test = baseTest.extend<Fixtures>({
 
   forespoerslerPage: async ({ page, language }, use) => {
     await use(new ForespoerslerPage(page, language));
+  },
+
+  maskinportenPage: async ({ page, language }, use) => {
+    await use(new MaskinportenPage(page, language));
   },
 });
 

@@ -20,6 +20,7 @@ import { EnduserConnection } from '../../../api-requests/EnduserConnection';
  */
 const ACTORS = {
   leggTilEpost: { pid: '14817198504', org: '314242394', orgName: 'LAV PLEIENDE TIGER AS' },
+  ugyldigEpost: { pid: '12897599595', org: '312810336', orgName: 'EKSTRA KONKRET PUMA' },
   leggTilSms: { pid: '24856398710', org: '312939053', orgName: 'KULTURELL UPOPULÆR TIGER AS' },
   endreAdresse: { pid: '23885997783', org: '210486372', orgName: 'NYSGJERRIG FORNEM PUMA BBL' },
   slettAdresse: {
@@ -306,6 +307,47 @@ test.describe('Innstillinger - varslingsadresser', () => {
         await connections.deleteConnection(admin.pid, admin.org, [bruker.pid]);
       } catch (error) {
         console.error('Cleanup: Failed to delete connection:', error);
+      }
+    });
+  });
+
+  test.describe('ugyldig e-postadresse', () => {
+    const actor = ACTORS.ugyldigEpost;
+
+    test.beforeEach(async () => {
+      await api.setNotificationAddresses(actor.pid, actor.org, { emails: [BASELINE_EPOST] });
+    });
+
+    test('ugyldig e-postadresse kan ikke lagres', async ({ innstillingerPage, login }) => {
+      await test.step(`Logg inn som ${actor.orgName} og åpne innstillinger`, async () => {
+        await login.LoginToAccessManagement(actor.pid);
+        await login.selectMainUnitBySearching(actor.orgName);
+        await innstillingerPage.goToInnstillinger();
+      });
+
+      await test.step('Skriv inn en ugyldig e-postadresse', async () => {
+        await innstillingerPage.openEpostDialog();
+        await innstillingerPage.klikkLeggTilFlere();
+        await innstillingerPage.skrivEpost(1, 'ikke-en-epost');
+      });
+
+      await test.step('Feilmeldingen vises og endringen kan ikke lagres', async () => {
+        await expect(innstillingerPage.ugyldigEpostFeilmelding).toBeVisible();
+        await expect(innstillingerPage.saveButton).toBeDisabled();
+      });
+
+      await test.step('Den opprinnelige adressen er uendret', async () => {
+        await innstillingerPage.lukkDialog();
+        await innstillingerPage.openEpostDialog();
+        await expect(innstillingerPage.emailField(0)).toHaveValue(BASELINE_EPOST);
+      });
+    });
+
+    test.afterEach(async () => {
+      try {
+        await api.setNotificationAddresses(actor.pid, actor.org, { emails: [BASELINE_EPOST] });
+      } catch (error) {
+        console.error('Cleanup: Failed to reset notification addresses:', error);
       }
     });
   });

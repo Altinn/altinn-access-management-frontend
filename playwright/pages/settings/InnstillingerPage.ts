@@ -115,6 +115,11 @@ export class InnstillingerPage {
       .nth(index);
   }
 
+  /** The client-side validation message shown for a malformed e-mail. */
+  get ugyldigEpostFeilmelding(): Locator {
+    return this.dialog.getByText(this.texts.text_field_errors.invalid_email_pattern);
+  }
+
   /** The badge on a row: "1 adresse" or "{{count}} adresser". */
   addressCountBadge(count: number): Locator {
     const label =
@@ -175,19 +180,24 @@ export class InnstillingerPage {
   }
 
   /**
-   * Saves the open dialog and closes it.
+   * Saves the open dialog and closes it once the write has landed.
    *
-   * Saving on its own leaves the dialog open, so there is no "dialog gone" event
-   * to wait on. Instead: once the write lands the addresses are refetched, the
-   * form matches what is stored, and the save button disables itself again —
-   * that is the signal the save completed. Closing afterwards is what puts the
-   * updated row (and its badge) back in view for assertions.
+   * Saving leaves the dialog open, so there is no "dialog gone" event to wait on.
+   * The save button is NOT a usable signal either — it is disabled *while* the
+   * write is in flight (`isSaving`), so it goes disabled within a few hundred
+   * milliseconds and closing on that races the write.
+   *
+   * The secondary button is the reliable signal: it reads "Avbryt" while there
+   * are unsaved changes and flips to "Lukk" only once the refetched addresses
+   * match the form. Waiting for it also means a failed save fails loudly here,
+   * rather than silently leaving stale values for the assertions to trip over.
    */
   async lagreEndringer() {
     await expect(this.saveButton).toBeEnabled();
     await this.saveButton.click();
-    await expect(this.saveButton).toBeDisabled();
-    await this.lukkDialog();
+    await expect(this.closeButton).toBeVisible();
+    await this.closeButton.click();
+    await expect(this.dialog).toBeHidden();
   }
 
   async lukkDialog() {
