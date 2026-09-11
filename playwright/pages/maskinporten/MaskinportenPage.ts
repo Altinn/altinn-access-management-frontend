@@ -17,12 +17,17 @@ const SOFT_HYPHEN = '\u00AD';
  * matched literally, which the English heading (no soft hyphen) would otherwise
  * keep. Anchored at the start so it cannot match an unrelated heading.
  */
+const escapeRegExp = (value: string): string => value.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+
+/** Matches an accessible name that BEGINS with `value`. */
+const startsWith = (value: string): RegExp => new RegExp(`^${escapeRegExp(value)}`);
+
 const headingPrefix = (template: string): RegExp => {
   const pattern = template
     .split('{{name}}')[0]
     .trim()
     .split(SOFT_HYPHEN)
-    .map((part) => part.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'))
+    .map(escapeRegExp)
     .join(`${SOFT_HYPHEN}?`);
   return new RegExp(`^${pattern}`);
 };
@@ -150,9 +155,32 @@ export class MaskinportenPage {
     return this.page.getByText(this.texts.maskinporten_page.no_delegated_resources);
   }
 
-  /** The row for an API already granted to the supplier. */
+  /**
+   * The row for an API already granted to the supplier.
+   *
+   * Anchored to the start of the accessible name. The row's own button reads
+   * "<title> N scopes" while its sibling reads "Slett fullmakt for <title>" —
+   * both contain the title, and name matching is substring, so only anchoring
+   * separates them. This is what lets callers skip `.first()`.
+   */
   delegertApi(apiTittel: string): Locator {
-    return this.page.getByRole('button', { name: apiTittel });
+    return this.page.getByRole('button', { name: startsWith(apiTittel) });
+  }
+
+  /**
+   * The landing page's own heading, which is where a user without Maskinporten
+   * rights ends up after being redirected off the page.
+   */
+  get landingssideOverskrift(): Locator {
+    return this.page.getByRole('heading', {
+      name: this.texts.landing_page.your_content_heading,
+      exact: true,
+    });
+  }
+
+  /** The URL the redirect lands on, tolerating a trailing slash. */
+  get landingssideUrl(): RegExp {
+    return new RegExp(`^${escapeRegExp(env('BASE_URL'))}/?$`);
   }
 
   /** A supplier or consumer row, by organisation name. */

@@ -57,11 +57,26 @@ const API = { id: 'altinn_automation_test_lv4', title: 'Automation test - innlog
 test.describe('Maskinporten-administrasjon', () => {
   const api = new MaskinportenApiRequests();
 
+  /**
+   * Removes one specific supplier link, ignoring "it was not there anyway".
+   *
+   * Deliberately narrow: these organisations are shared with other tests and
+   * with manual testers, so a test only ever clears the one connection it is
+   * about to create.
+   */
+  const removeSupplierIfPresent = async (pid: string, orgNo: string, supplierOrgNo: string) => {
+    try {
+      await api.removeSupplier(pid, orgNo, supplierOrgNo);
+    } catch {
+      /* not present — nothing to clean */
+    }
+  };
+
   test.describe('oversikt', () => {
     const { virksomhet, konsument } = ACTORS.oversikt;
 
     test.beforeEach(async () => {
-      await api.removeAllSuppliers(virksomhet.pid, virksomhet.org);
+      await removeSupplierIfPresent(konsument.pid, konsument.org, virksomhet.org);
       await api.addSupplier(konsument.pid, konsument.org, virksomhet.org);
     });
 
@@ -99,7 +114,7 @@ test.describe('Maskinporten-administrasjon', () => {
     const { virksomhet, leverandoer } = ACTORS.leggTilLeverandoer;
 
     test.beforeEach(async () => {
-      await api.removeAllSuppliers(virksomhet.pid, virksomhet.org);
+      await removeSupplierIfPresent(virksomhet.pid, virksomhet.org, leverandoer.org);
     });
 
     test('legg til en leverandør', async ({ maskinportenPage, login }) => {
@@ -127,9 +142,9 @@ test.describe('Maskinporten-administrasjon', () => {
 
     test.afterEach(async () => {
       try {
-        await api.removeAllSuppliers(virksomhet.pid, virksomhet.org);
+        await api.removeSupplier(virksomhet.pid, virksomhet.org, leverandoer.org);
       } catch (error) {
-        console.error('Cleanup: Failed to remove suppliers:', error);
+        console.error('Cleanup: Failed to remove supplier:', error);
       }
     });
   });
@@ -138,7 +153,7 @@ test.describe('Maskinporten-administrasjon', () => {
     const { virksomhet, leverandoer } = ACTORS.giApiFullmakt;
 
     test.beforeEach(async () => {
-      await api.removeAllSuppliers(virksomhet.pid, virksomhet.org);
+      await removeSupplierIfPresent(virksomhet.pid, virksomhet.org, leverandoer.org);
       await api.addSupplier(virksomhet.pid, virksomhet.org, leverandoer.org);
     });
 
@@ -156,7 +171,7 @@ test.describe('Maskinporten-administrasjon', () => {
 
       await test.step('API-et vises i listen over delegerte fullmakter', async () => {
         await expect(maskinportenPage.delegerteApiOverskrift(1)).toBeVisible();
-        await expect(maskinportenPage.delegertApi(API.title).first()).toBeVisible();
+        await expect(maskinportenPage.delegertApi(API.title)).toBeVisible();
       });
 
       await test.step('Fullmakten er faktisk lagret hos leverandøren', async () => {
@@ -189,9 +204,9 @@ test.describe('Maskinporten-administrasjon', () => {
 
     test.afterEach(async () => {
       try {
-        await api.removeAllSuppliers(virksomhet.pid, virksomhet.org);
+        await api.removeSupplier(virksomhet.pid, virksomhet.org, leverandoer.org);
       } catch (error) {
-        console.error('Cleanup: Failed to remove suppliers:', error);
+        console.error('Cleanup: Failed to remove supplier:', error);
       }
     });
   });
@@ -200,7 +215,7 @@ test.describe('Maskinporten-administrasjon', () => {
     const { virksomhet, leverandoer } = ACTORS.slettLeverandoer;
 
     test.beforeEach(async () => {
-      await api.removeAllSuppliers(virksomhet.pid, virksomhet.org);
+      await removeSupplierIfPresent(virksomhet.pid, virksomhet.org, leverandoer.org);
       await api.addSupplier(virksomhet.pid, virksomhet.org, leverandoer.org);
     });
 
@@ -230,9 +245,9 @@ test.describe('Maskinporten-administrasjon', () => {
       if (testInfo.status === 'passed') return;
 
       try {
-        await api.removeAllSuppliers(virksomhet.pid, virksomhet.org);
+        await api.removeSupplier(virksomhet.pid, virksomhet.org, leverandoer.org);
       } catch (error) {
-        console.error('Cleanup: Failed to remove suppliers:', error);
+        console.error('Cleanup: Failed to remove supplier:', error);
       }
     });
   });
@@ -260,10 +275,13 @@ test.describe('Maskinporten-administrasjon', () => {
         await expect(maskinportenPage.sidebar.maskinporten).toBeHidden();
       });
 
-      await test.step('Direkte navigering sender brukeren bort fra siden', async () => {
+      await test.step('Direkte navigering sender brukeren til forsiden', async () => {
         await maskinportenPage.goToMaskinportenViaUrl();
+        // Assert where the user ended up, not just that the page is absent —
+        // a bare toBeHidden() would also pass mid-load or on an error page.
+        await expect(maskinportenPage.page).toHaveURL(maskinportenPage.landingssideUrl);
+        await expect(maskinportenPage.landingssideOverskrift).toBeVisible();
         await expect(maskinportenPage.pageHeading).toBeHidden();
-        await expect(maskinportenPage.leverandoererFane).toBeHidden();
       });
     });
 

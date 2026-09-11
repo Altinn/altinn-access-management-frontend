@@ -122,18 +122,6 @@ export class MaskinportenApiRequests {
   }
 
   /**
-   * Removes every supplier the acting party has.
-   *
-   * Cleanup helper: a supplier left behind would show up in the next run's list
-   * and break assertions about what is present.
-   */
-  public async removeAllSuppliers(pid: string, partyOrgNo: string): Promise<void> {
-    for (const supplier of await this.getSuppliers(pid, partyOrgNo)) {
-      await this.removeSupplier(pid, partyOrgNo, supplier.party.organizationIdentifier);
-    }
-  }
-
-  /**
    * Issues an authenticated call against the Maskinporten BFF, which lives on the
    * app host (BASE_URL origin) rather than the platform host.
    */
