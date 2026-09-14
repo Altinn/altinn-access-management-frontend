@@ -8,6 +8,7 @@ declare global {
       showHandledRequests: boolean;
       showIdPortenAuthorizations: boolean;
       enableSkyra: boolean;
+      enableSingleRightsTabInPoaOverview: boolean;
     };
   }
 }

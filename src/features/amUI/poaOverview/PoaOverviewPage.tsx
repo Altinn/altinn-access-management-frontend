@@ -50,7 +50,11 @@ export const PoaOverviewPage = () => {
             />
             <RightsTabs
               packagesPanel={<AccessPackagePermissions />}
-              singleRightsPanel={<SingleRightsPermissions />}
+              singleRightsPanel={
+                window.featureFlags.enableSingleRightsTabInPoaOverview ? (
+                  <SingleRightsPermissions />
+                ) : null
+              }
               instancesPanel={<InstancePermissions />}
               roleAssignmentsPanel={null}
               guardianshipsPanel={<GuardianshipPermissions />}
