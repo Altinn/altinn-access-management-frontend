@@ -40,8 +40,8 @@ export class InnstillingerPage {
     this.sidebar = new SidebarNav(page, language);
     const settings = this.texts.settings_page;
 
-    this.pageHeading = this.page.getByRole('heading', { level: 1 }).filter({ hasText: /\S/ });
-    this.notAdminAlert = this.page.locator('[class*="notAdminAlert"] .ds-alert');
+    this.pageHeading = this.page.getByTestId('settings-page-heading');
+    this.notAdminAlert = this.page.getByTestId('settings-not-admin-alert');
     this.sectionHeading = this.page.getByRole('heading', {
       name: settings.alert_settings_heading,
     });
@@ -72,7 +72,7 @@ export class InnstillingerPage {
 
   /** Email inputs in the open email dialog. */
   get emailFields(): Locator {
-    return this.dialog.getByRole('textbox');
+    return this.dialog.getByTestId('email-address');
   }
 
   /** Find a controlled email input by its exact value, regardless of row order. */
@@ -80,9 +80,8 @@ export class InnstillingerPage {
     return this.emailFields.and(this.dialog.locator(`input[value=${JSON.stringify(email)}]`));
   }
 
-  // Use existing row classes until the test IDs are deployed.
   private get smsRows(): Locator {
-    return this.dialog.locator('[class*="phoneFieldRow"]');
+    return this.dialog.getByTestId('sms-address-row');
   }
 
   /** Match both values to distinguish local numbers with different country codes. */
@@ -93,19 +92,17 @@ export class InnstillingerPage {
   }
 
   phoneField(address: SmsAddress): Locator {
-    return this.smsAddressRow(address).locator(`input[value=${JSON.stringify(address.phone)}]`);
+    return this.smsAddressRow(address).getByTestId('sms-phone');
   }
 
   countryCodeField(address: SmsAddress): Locator {
-    return this.smsAddressRow(address).locator(
-      `input[value=${JSON.stringify(address.countryCode)}]`,
-    );
+    return this.smsAddressRow(address).getByTestId('sms-country-code');
   }
 
   /** Find the remove button in the row containing this email address. */
   removeEmailButton(email: string): Locator {
     return this.dialog
-      .locator('[class*="emailFieldRow"]')
+      .getByTestId('email-address-row')
       .filter({ has: this.page.locator(`input[value=${JSON.stringify(email)}]`) })
       .getByRole('button', { name: this.texts.settings_page.remove_email, exact: true });
   }
@@ -123,10 +120,7 @@ export class InnstillingerPage {
   }
 
   get emailAddressCount(): Locator {
-    return this.page
-      .getByRole('listitem')
-      .filter({ has: this.emailRow })
-      .getByText(/^\d+\s+\S+$/, { exact: true });
+    return this.page.getByTestId('email-address-count');
   }
 
   async goToInnstillinger() {
@@ -170,12 +164,11 @@ export class InnstillingerPage {
   }
 
   async leggTilTelefonnummer(address: SmsAddress) {
-    const emptyPhone = this.smsRows.locator('input[value=""]');
-    await emptyPhone.fill(address.phone);
-    const row = this.smsRows.filter({
-      has: this.page.locator(`input[value=${JSON.stringify(address.phone)}]`),
+    const emptyRow = this.smsRows.filter({
+      has: this.page.getByTestId('sms-phone').and(this.page.locator('input[value=""]')),
     });
-    await row.locator('input[value^="+"]').fill(address.countryCode);
+    await emptyRow.getByTestId('sms-country-code').fill(address.countryCode);
+    await emptyRow.getByTestId('sms-phone').fill(address.phone);
     await this.phoneField(address).blur();
   }
 
