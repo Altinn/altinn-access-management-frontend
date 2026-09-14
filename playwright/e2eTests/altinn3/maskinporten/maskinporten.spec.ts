@@ -86,7 +86,7 @@ test.describe('Maskinporten-administrasjon', () => {
     }) => {
       await test.step(`Logg inn som ${virksomhet.orgName} og åpne maskinportenadministrasjon`, async () => {
         await login.LoginToAccessManagement(virksomhet.pid);
-        await login.selectMainUnitBySearching(virksomhet.orgName);
+        await login.selectActor(virksomhet.orgName);
         await maskinportenPage.goToMaskinporten();
         await maskinportenPage.verifyPaaMaskinporten();
       });
@@ -120,7 +120,7 @@ test.describe('Maskinporten-administrasjon', () => {
     test('legg til en leverandør', async ({ maskinportenPage, login }) => {
       await test.step(`Logg inn som ${virksomhet.orgName} og åpne maskinportenadministrasjon`, async () => {
         await login.LoginToAccessManagement(virksomhet.pid);
-        await login.selectMainUnitBySearching(virksomhet.orgName);
+        await login.selectActor(virksomhet.orgName);
         await maskinportenPage.goToMaskinporten();
       });
 
@@ -160,7 +160,7 @@ test.describe('Maskinporten-administrasjon', () => {
     test('gi og fjern fullmakt til et API', async ({ maskinportenPage, login }) => {
       await test.step(`Logg inn som ${virksomhet.orgName} og åpne leverandøren`, async () => {
         await login.LoginToAccessManagement(virksomhet.pid);
-        await login.selectMainUnitBySearching(virksomhet.orgName);
+        await login.selectActor(virksomhet.orgName);
         await maskinportenPage.goToMaskinporten();
         await maskinportenPage.aapneLeverandoer(leverandoer.orgName);
       });
@@ -222,7 +222,7 @@ test.describe('Maskinporten-administrasjon', () => {
     test('slett en leverandør', async ({ maskinportenPage, login }) => {
       await test.step(`Logg inn som ${virksomhet.orgName} og åpne maskinportenadministrasjon`, async () => {
         await login.LoginToAccessManagement(virksomhet.pid);
-        await login.selectMainUnitBySearching(virksomhet.orgName);
+        await login.selectActor(virksomhet.orgName);
         await maskinportenPage.goToMaskinporten();
       });
 
@@ -268,7 +268,7 @@ test.describe('Maskinporten-administrasjon', () => {
     }) => {
       await test.step(`Logg inn som ${bruker.pid} og velg ${virksomhet.orgName}`, async () => {
         await login.LoginToAccessManagement(bruker.pid);
-        await login.selectMainUnitBySearching(virksomhet.orgName);
+        await login.selectActor(virksomhet.orgName);
       });
 
       await test.step('Menyvalget for maskinportenadministrasjon vises ikke', async () => {

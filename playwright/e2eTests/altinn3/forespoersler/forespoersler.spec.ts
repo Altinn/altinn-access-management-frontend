@@ -74,7 +74,7 @@ test.describe('Forespørsler', () => {
 
       await test.step(`Logg inn som ${actor.orgName} og åpne forespørsler`, async () => {
         await login.LoginToAccessManagement(actor.pid);
-        await login.selectMainUnitBySearching(actor.orgName);
+        await login.selectActor(actor.orgName);
         await forespoerslerPage.goToForespoersler();
       });
 
@@ -135,7 +135,7 @@ test.describe('Forespørsler', () => {
 
       await test.step(`Logg inn som ${actor.orgName} og åpne forespørsler`, async () => {
         await login.LoginToAccessManagement(actor.pid);
-        await login.selectMainUnitBySearching(actor.orgName);
+        await login.selectActor(actor.orgName);
         await forespoerslerPage.goToForespoersler();
       });
 
@@ -182,7 +182,7 @@ test.describe('Forespørsler', () => {
 
       await test.step(`Logg inn som ${actor.orgName} og åpne forespørsler`, async () => {
         await login.LoginToAccessManagement(actor.pid);
-        await login.selectMainUnitBySearching(actor.orgName);
+        await login.selectActor(actor.orgName);
         await forespoerslerPage.goToForespoersler();
       });
 

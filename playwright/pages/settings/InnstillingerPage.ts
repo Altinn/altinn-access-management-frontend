@@ -4,6 +4,8 @@ import { env } from 'playwright/util/helper';
 import { LANGUAGE_DICTIONARIES, Language, type Dict } from '../LanguageMenu';
 import { SidebarNav } from '../SidebarNav';
 
+type SmsAddress = { countryCode: string; phone: string };
+
 /**
  * Innstillinger (https://am.ui.<env>.altinn.cloud/accessmanagement/ui/settings).
  *
@@ -38,11 +40,8 @@ export class InnstillingerPage {
     this.sidebar = new SidebarNav(page, language);
     const settings = this.texts.settings_page;
 
-    // page_heading is "Innstillinger for {{name}}" — match the static prefix.
-    this.pageHeading = this.page.getByRole('heading', {
-      name: settings.page_heading.split('{{name}}')[0].trim(),
-    });
-    this.notAdminAlert = this.page.getByText(settings.not_admin_alert.split('{{name}}')[0].trim());
+    this.pageHeading = this.page.getByRole('heading', { level: 1 }).filter({ hasText: /\S/ });
+    this.notAdminAlert = this.page.locator('[class*="notAdminAlert"] .ds-alert');
     this.sectionHeading = this.page.getByRole('heading', {
       name: settings.alert_settings_heading,
     });
@@ -71,48 +70,51 @@ export class InnstillingerPage {
     this.savingError = this.dialog.getByText(settings.error_saving_addresses);
   }
 
-  /** The nth (0-based) email field in the open dialog. Labelled "Adresse 1", "Adresse 2", … */
-  emailField(index = 0): Locator {
-    return this.dialog.getByRole('textbox', {
-      name: this.texts.settings_page.address_number.replace('{{number}}', String(index + 1)),
-      exact: true,
-    });
+  /** Email inputs in the open email dialog. */
+  get emailFields(): Locator {
+    return this.dialog.getByRole('textbox');
   }
 
-  /** The nth (0-based) phone field in the open dialog. Labelled "Telefonnummer 1", … */
-  phoneField(index = 0): Locator {
-    return this.dialog.getByRole('textbox', {
-      name: this.texts.settings_page.phone_number.replace('{{number}}', String(index + 1)),
-      exact: true,
-    });
+  /** Find a controlled email input by its exact value, regardless of row order. */
+  emailField(email: string): Locator {
+    return this.emailFields.and(this.dialog.locator(`input[value=${JSON.stringify(email)}]`));
   }
 
-  /** The nth (0-based) country code field in the open dialog. Labelled "Landskode 1", … */
-  countryCodeField(index = 0): Locator {
-    return this.dialog.getByRole('textbox', {
-      name: this.texts.settings_page.country_code_number.replace('{{number}}', String(index + 1)),
-      exact: true,
-    });
+  // Use existing row classes until the test IDs are deployed.
+  private get smsRows(): Locator {
+    return this.dialog.locator('[class*="phoneFieldRow"]');
   }
 
-  /**
-   * The remove button on the nth (0-based) address row.
-   *
-   * Every remove button carries the same label ("Fjern e-post"/"Fjern telefonnummer")
-   * and the rows are plain divs with no role or accessible name of their own, so
-   * there is nothing to scope or filter by — the row index is the only thing that
-   * distinguishes them. Kept as a method so tests never index locators inline.
-   */
-  removeEmailButton(index: number): Locator {
+  /** Match both values to distinguish local numbers with different country codes. */
+  private smsAddressRow(address: SmsAddress): Locator {
+    return this.smsRows
+      .filter({ has: this.page.locator(`input[value=${JSON.stringify(address.phone)}]`) })
+      .filter({ has: this.page.locator(`input[value=${JSON.stringify(address.countryCode)}]`) });
+  }
+
+  phoneField(address: SmsAddress): Locator {
+    return this.smsAddressRow(address).locator(`input[value=${JSON.stringify(address.phone)}]`);
+  }
+
+  countryCodeField(address: SmsAddress): Locator {
+    return this.smsAddressRow(address).locator(
+      `input[value=${JSON.stringify(address.countryCode)}]`,
+    );
+  }
+
+  /** Find the remove button in the row containing this email address. */
+  removeEmailButton(email: string): Locator {
     return this.dialog
-      .getByRole('button', { name: this.texts.settings_page.remove_email })
-      .nth(index);
+      .locator('[class*="emailFieldRow"]')
+      .filter({ has: this.page.locator(`input[value=${JSON.stringify(email)}]`) })
+      .getByRole('button', { name: this.texts.settings_page.remove_email, exact: true });
   }
 
-  removeSmsButton(index: number): Locator {
-    return this.dialog
-      .getByRole('button', { name: this.texts.settings_page.remove_sms })
-      .nth(index);
+  removeSmsButton(address: SmsAddress): Locator {
+    return this.smsAddressRow(address).getByRole('button', {
+      name: this.texts.settings_page.remove_sms,
+      exact: true,
+    });
   }
 
   /** The client-side validation message shown for a malformed e-mail. */
@@ -120,13 +122,11 @@ export class InnstillingerPage {
     return this.dialog.getByText(this.texts.text_field_errors.invalid_email_pattern);
   }
 
-  /** The badge on a row: "1 adresse" or "{{count}} adresser". */
-  addressCountBadge(count: number): Locator {
-    const label =
-      count === 1
-        ? this.texts.settings_page.one_address
-        : this.texts.settings_page.num_of_addresses.replace('{{count}}', String(count));
-    return this.page.getByText(label, { exact: true });
+  get emailAddressCount(): Locator {
+    return this.page
+      .getByRole('listitem')
+      .filter({ has: this.emailRow })
+      .getByText(/^\d+\s+\S+$/, { exact: true });
   }
 
   async goToInnstillinger() {
@@ -153,26 +153,30 @@ export class InnstillingerPage {
   async openEpostDialog() {
     await this.emailRow.click();
     await expect(this.dialog).toBeVisible();
-    await expect(this.emailField(0)).toBeVisible();
+    await expect(this.emailFields.first()).toBeVisible();
   }
 
   async openSmsDialog() {
     await this.smsRow.click();
     await expect(this.dialog).toBeVisible();
-    await expect(this.phoneField(0)).toBeVisible();
+    await expect(this.smsRows.first()).toBeVisible();
   }
 
-  async skrivEpost(index: number, email: string) {
-    await this.emailField(index).fill(email);
+  async skrivEpost(currentEmail: string, email: string) {
+    await this.emailField(currentEmail).fill(email);
     // The field validates on blur, so move focus off it before saving —
     // otherwise a bad address can still leave the save button enabled.
-    await this.emailField(index).blur();
+    await this.emailField(email).blur();
   }
 
-  async skrivTelefonnummer(index: number, countryCode: string, phone: string) {
-    await this.countryCodeField(index).fill(countryCode);
-    await this.phoneField(index).fill(phone);
-    await this.phoneField(index).blur();
+  async leggTilTelefonnummer(address: SmsAddress) {
+    const emptyPhone = this.smsRows.locator('input[value=""]');
+    await emptyPhone.fill(address.phone);
+    const row = this.smsRows.filter({
+      has: this.page.locator(`input[value=${JSON.stringify(address.phone)}]`),
+    });
+    await row.locator('input[value^="+"]').fill(address.countryCode);
+    await this.phoneField(address).blur();
   }
 
   async klikkLeggTilFlere() {

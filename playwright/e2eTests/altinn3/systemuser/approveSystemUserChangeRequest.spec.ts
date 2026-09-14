@@ -103,7 +103,7 @@ test.describe('Systembruker endringsforespørsel', () => {
 
     await test.step('Verify rights changes are reflected', async () => {
       await login.LoginToAccessManagement(testUser);
-      await login.selectMainUnitBySearching(testOrgName);
+      await login.selectActor(testOrgName);
 
       const systemUserUrl = `${env('SYSTEMUSER_URL')}`;
       await page.goto(systemUserUrl + '/' + systemUserId);
