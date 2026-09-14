@@ -58,9 +58,9 @@ export const ActiveConsentsPageContent = ({
     const acceptedConsents = activeConsents?.filter((x) => !x.isPendingConsent);
     const groups = groupConsents(acceptedConsents, idPortenAuthorizations);
 
-    groups.forEach((group) =>
-      group.items.sort((a, b) => toDateSortKey(b.consentedDate) - toDateSortKey(a.consentedDate)),
-    );
+    groups.forEach((group) => {
+      group.items.sort((a, b) => toDateSortKey(b.consentedDate) - toDateSortKey(a.consentedDate));
+    });
 
     return groups;
   }, [activeConsents, idPortenAuthorizations]);
@@ -69,9 +69,9 @@ export const ActiveConsentsPageContent = ({
     const pendingConsents = activeConsents?.filter((x) => x.isPendingConsent);
     const groups = groupConsents(pendingConsents, []);
 
-    groups.forEach((group) =>
-      group.items.sort((a, b) => toDateSortKey(b.createdDate) - toDateSortKey(a.createdDate)),
-    );
+    groups.forEach((group) => {
+      group.items.sort((a, b) => toDateSortKey(b.createdDate) - toDateSortKey(a.createdDate));
+    });
 
     return groups;
   }, [activeConsents]);
