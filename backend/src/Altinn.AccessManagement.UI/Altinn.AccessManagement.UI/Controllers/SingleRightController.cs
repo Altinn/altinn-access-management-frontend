@@ -137,14 +137,14 @@ namespace Altinn.AccessManagement.UI.Controllers
         /// </summary>
         /// <param name="party">The acting party that is asking to see the resource delegations</param>
         /// <param name="from">The party from which the resources have been delegated (the owner of the data)</param>
-        /// <param name="to">The party that has received the delegations</param>
+        /// <param name="to">The party that has received the delegations. If omitted, resources delegated to all recipients are returned</param>
         /// <response code="200">OK</response>
         /// <response code="400">Bad Request</response>
         /// <response code="500">Internal Server Error</response>
         [HttpGet]
         [Authorize]
         [Route("delegation/resources")]
-        public async Task<ActionResult<List<ResourceDelegation>>> GetDelegatedResources([FromQuery] Guid party, [FromQuery] Guid from, [FromQuery] Guid to)
+        public async Task<ActionResult<List<ResourceDelegation>>> GetDelegatedResources([FromQuery] Guid party, [FromQuery] Guid from, [FromQuery] Guid? to)
         {
             var languageCode = LanguageHelper.GetSelectedLanguageCookieValueBackendStandard(_httpContextAccessor.HttpContext);
             try
