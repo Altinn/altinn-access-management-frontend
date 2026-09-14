@@ -164,12 +164,11 @@ export class InnstillingerPage {
   }
 
   async leggTilTelefonnummer(address: SmsAddress) {
-    const emptyRow = this.smsRows.filter({
-      has: this.page.getByTestId('sms-phone').and(this.page.locator('input[value=""]')),
-    });
-    await emptyRow.getByTestId('sms-country-code').fill(address.countryCode);
-    await emptyRow.getByTestId('sms-phone').fill(address.phone);
-    await this.phoneField(address).blur();
+    const phone = this.dialog.getByTestId('sms-phone');
+    await expect(phone).toHaveValue('');
+    await this.dialog.getByTestId('sms-country-code').fill(address.countryCode);
+    await phone.fill(address.phone);
+    await phone.blur();
   }
 
   async klikkLeggTilFlere() {
