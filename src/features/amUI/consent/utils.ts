@@ -89,13 +89,10 @@ export const toDateTimeString = (dateString: string, useFullMonthName?: boolean)
   });
 };
 
-export const toDateSortKey = (dateString: string | undefined, invalidAsOldest = true): number => {
+export const toDateSortKey = (dateString: string | undefined): number => {
   const time = new Date(dateString ?? '').getTime();
-  if (!Number.isNaN(time)) {
-    return time;
-  }
 
-  return invalidAsOldest ? Number.MIN_SAFE_INTEGER : Number.MAX_SAFE_INTEGER;
+  return Number.isNaN(time) ? Number.MIN_SAFE_INTEGER : time;
 };
 
 type KeysWithValueOfConsentLanguageOrUndefined<T> = {
