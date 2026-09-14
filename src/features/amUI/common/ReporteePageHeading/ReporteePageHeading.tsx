@@ -10,6 +10,7 @@ import { useIsTabletOrSmaller } from '@/resources/utils/screensizeUtils';
 
 type Props = {
   title: string;
+  'data-testid'?: string;
   reportee?: ReporteeInfo;
   className?: string;
   level?: 1 | 2 | 3 | 4 | 5 | 6;
@@ -21,6 +22,7 @@ type Props = {
 
 export const ReporteePageHeading: React.FC<Props> = ({
   title,
+  'data-testid': testId,
   reportee,
   className,
   level = 1,
@@ -59,6 +61,7 @@ export const ReporteePageHeading: React.FC<Props> = ({
         <DsHeading
           level={level}
           data-size={dataSize}
+          data-testid={testId}
         >
           {title}
         </DsHeading>

@@ -73,7 +73,7 @@ test.describe('Systembruker - Eskaler', () => {
 
     await test.step('Login as manager and choose reportee', async () => {
       await managerLogin.LoginToAccessManagement(managerPid);
-      await managerLogin.selectMainUnitBySearching(actorName);
+      await managerLogin.selectActor(actorName);
     });
 
     await test.step('Find and approve escalated request', async () => {
