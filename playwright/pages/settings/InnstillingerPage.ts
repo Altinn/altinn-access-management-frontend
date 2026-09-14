@@ -80,7 +80,7 @@ export class InnstillingerPage {
     return this.emailFields.and(this.dialog.locator(`input[value=${JSON.stringify(email)}]`));
   }
 
-  private get smsRows(): Locator {
+  get smsRows(): Locator {
     return this.dialog.getByTestId('sms-address-row');
   }
 
@@ -91,12 +91,12 @@ export class InnstillingerPage {
       .filter({ has: this.page.locator(`input[value=${JSON.stringify(address.countryCode)}]`) });
   }
 
-  phoneField(address: SmsAddress): Locator {
-    return this.smsAddressRow(address).getByTestId('sms-phone');
+  get phoneFields(): Locator {
+    return this.smsRows.getByTestId('sms-phone');
   }
 
-  countryCodeField(address: SmsAddress): Locator {
-    return this.smsAddressRow(address).getByTestId('sms-country-code');
+  get countryCodeFields(): Locator {
+    return this.smsRows.getByTestId('sms-country-code');
   }
 
   /** Find the remove button in the row containing this email address. */
