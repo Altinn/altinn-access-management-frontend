@@ -89,6 +89,15 @@ export const toDateTimeString = (dateString: string, useFullMonthName?: boolean)
   });
 };
 
+export const toDateSortKey = (dateString: string | undefined, invalidAsOldest = true): number => {
+  const time = new Date(dateString ?? '').getTime();
+  if (!Number.isNaN(time)) {
+    return time;
+  }
+
+  return invalidAsOldest ? Number.MIN_SAFE_INTEGER : Number.MAX_SAFE_INTEGER;
+};
+
 type KeysWithValueOfConsentLanguageOrUndefined<T> = {
   [K in keyof T]: T[K] extends ConsentLanguage | undefined ? K : never;
 }[keyof T];

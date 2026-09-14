@@ -16,7 +16,7 @@ import { ConsentPath } from '@/routes/paths';
 import { ReporteeInfo } from '@/rtk/features/userInfoApi';
 import { ConsentListItem, LoadingListItem } from './ConsentListItem';
 import { getConsentRequestUrl } from '@/routes/paths/consentPath';
-import { toDateTimeString } from '../utils';
+import { toDateSortKey, toDateTimeString } from '../utils';
 import { FetchBaseQueryError } from '@reduxjs/toolkit/query';
 import { SerializedError } from '@reduxjs/toolkit';
 import { ActiveConsentListItem } from '../types';
@@ -56,12 +56,24 @@ export const ActiveConsentsPageContent = ({
 
   const groupedActiveConsents = useMemo(() => {
     const acceptedConsents = activeConsents?.filter((x) => !x.isPendingConsent);
-    return groupConsents(acceptedConsents, idPortenAuthorizations);
+    const groups = groupConsents(acceptedConsents, idPortenAuthorizations);
+
+    groups.forEach((group) =>
+      group.items.sort((a, b) => toDateSortKey(b.consentedDate) - toDateSortKey(a.consentedDate)),
+    );
+
+    return groups;
   }, [activeConsents, idPortenAuthorizations]);
 
   const groupedPendingActiveConsents = useMemo(() => {
     const pendingConsents = activeConsents?.filter((x) => x.isPendingConsent);
-    return groupConsents(pendingConsents, []);
+    const groups = groupConsents(pendingConsents, []);
+
+    groups.forEach((group) =>
+      group.items.sort((a, b) => toDateSortKey(b.createdDate) - toDateSortKey(a.createdDate)),
+    );
+
+    return groups;
   }, [activeConsents]);
 
   const showConsentDetails = (consentId: string, consentType: 'altinn' | 'idporten'): void => {
@@ -78,7 +90,7 @@ export const ActiveConsentsPageContent = ({
 
   return (
     <>
-      {groupedPendingActiveConsents && Object.keys(groupedPendingActiveConsents).length > 0 && (
+      {groupedPendingActiveConsents.length > 0 && (
         <>
           <div className={classes.activeConsentsSubHeading}>
             <DsHeading
@@ -89,12 +101,12 @@ export const ActiveConsentsPageContent = ({
             </DsHeading>
           </div>
           <List>
-            {Object.keys(groupedPendingActiveConsents).map((partyId) => (
+            {groupedPendingActiveConsents.map((group) => (
               <ConsentListItem
-                key={partyId}
-                title={groupedPendingActiveConsents[partyId][0].ownerName}
+                key={group.partyId}
+                title={group.ownerName}
                 partyType={reportee?.type}
-                subItems={groupedPendingActiveConsents[partyId].map((item) => ({
+                subItems={group.items.map((item) => ({
                   id: item.id,
                   title: item.title,
                   description: toDateTimeString(item.createdDate),
@@ -167,19 +179,18 @@ export const ActiveConsentsPageContent = ({
             )}
             {!loadActiveConsentsError &&
               !loadIdPortenAuthorizationsError &&
-              groupedActiveConsents &&
               hasPermission &&
-              Object.keys(groupedActiveConsents).length === 0 && (
+              groupedActiveConsents.length === 0 && (
                 <DsParagraph>{t('active_consents.no_active_consents')}</DsParagraph>
               )}
-            {groupedActiveConsents && (
+            {groupedActiveConsents.length > 0 && (
               <List>
-                {Object.keys(groupedActiveConsents).map((partyId) => (
+                {groupedActiveConsents.map((group) => (
                   <ConsentListItem
-                    key={partyId}
-                    title={groupedActiveConsents[partyId][0].ownerName}
+                    key={group.partyId}
+                    title={group.ownerName}
                     partyType={reportee?.type}
-                    subItems={groupedActiveConsents[partyId].map((item) => ({
+                    subItems={group.items.map((item) => ({
                       id: item.id,
                       title: item.title,
                       description: item.consentedDate ? toDateTimeString(item.consentedDate) : '',
@@ -221,9 +232,14 @@ export const ActiveConsentsPageContent = ({
   );
 };
 
+interface ConsentListItemGroupModel {
+  partyId: string;
+  ownerName: string;
+  items: ConsentListItemModel[];
+}
+
 interface ConsentListItemModel {
   id: string;
-  ownerName: string;
   title: string;
   createdDate: string;
   consentedDate?: string;
@@ -235,17 +251,20 @@ interface ConsentListItemModel {
 const groupConsents = (
   consents: ActiveConsentListItem[] | undefined,
   idPortenAuthorizations: IdPortenAuthorization[] | undefined,
-) => {
-  const acc: Record<string, ConsentListItemModel[]> = {};
+): ConsentListItemGroupModel[] => {
+  const acc: Record<string, ConsentListItemGroupModel> = {};
   for (const consent of consents || []) {
     const key = consent.toParty.id;
     if (!acc[key]) {
-      acc[key] = [];
+      acc[key] = {
+        partyId: key,
+        ownerName: consent.toParty.name,
+        items: [],
+      };
     }
-    acc[key].push({
+    acc[key].items.push({
       id: consent.id,
       title: consent.toParty.name,
-      ownerName: consent.toParty.name,
       createdDate: consent.createdDate,
       consentedDate: consent.consentedDate,
       isPoa: consent.isPoa,
@@ -256,12 +275,15 @@ const groupConsents = (
   for (const idPortenAuthorization of idPortenAuthorizations || []) {
     const key = idPortenAuthorization.consumerPartyUuid;
     if (!acc[key]) {
-      acc[key] = [];
+      acc[key] = {
+        partyId: key,
+        ownerName: idPortenAuthorization.consumerName,
+        items: [],
+      };
     }
-    acc[key].push({
+    acc[key].items.push({
       id: idPortenAuthorization.authorizationId,
       title: idPortenAuthorization.clientName,
-      ownerName: idPortenAuthorization.consumerName,
       createdDate: '',
       consentedDate: idPortenAuthorization.authorizedAt
         ? new Date(idPortenAuthorization.authorizedAt * 1000).toISOString()
@@ -270,5 +292,11 @@ const groupConsents = (
     });
   }
 
-  return acc;
+  return orderGroupsAlphabetically(Object.values(acc));
+};
+
+const orderGroupsAlphabetically = (groups: ConsentListItemGroupModel[]) => {
+  const ownerNameCollator = new Intl.Collator('no-NO', { sensitivity: 'base' });
+
+  return groups.sort((a, b) => ownerNameCollator.compare(a.ownerName, b.ownerName));
 };
