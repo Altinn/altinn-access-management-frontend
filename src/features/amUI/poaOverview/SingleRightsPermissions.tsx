@@ -39,7 +39,7 @@ export const SingleRightsPermissions = () => {
   // No `to` is passed: the overview lists services delegated from the reportee to anyone.
   const {
     data: delegations,
-    isLoading,
+    isLoading: isLoadingDelegations,
     isError,
   } = useGetSingleRightsForRightholderQuery(
     {
@@ -131,7 +131,7 @@ export const SingleRightsPermissions = () => {
         >
           <ResourceList
             resources={filteredResources}
-            isLoading={isLoading || isPartyLoading}
+            isLoading={isLoadingDelegations || isPartyLoading}
             enableSearch={false}
             showDetails={false}
             noResourcesText={
@@ -165,7 +165,11 @@ export const SingleRightsPermissions = () => {
             <>
               <ResourceList
                 resources={searchResources}
-                isLoading={isSearchFetching && searchResources.length === 0}
+                isLoading={
+                  isLoadingDelegations ||
+                  isPartyLoading ||
+                  (isSearchFetching && searchResources.length === 0)
+                }
                 enableSearch={false}
                 showDetails={false}
                 noResourcesText={t('poa_overview_page.services_tab.no_other_services')}
