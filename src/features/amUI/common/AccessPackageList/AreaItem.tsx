@@ -7,7 +7,7 @@ import { useIsMobileOrSmaller } from '@/resources/utils/screensizeUtils';
 import type { ExtendedAccessArea } from './useAreaPackageList';
 import { isCriticalAndUndelegated, UndelegatedPackageWarning } from './UndelegatedPackageWarning';
 import { PartyType } from '@/rtk/features/userInfoApi';
-import { usePackagePermissionOverview } from './usePackagePermissionOverview';
+import { usePermissionOverview } from '@/resources/hooks';
 import { PermissionsBadge } from '../PermissionsBadge/PermissionsBadge';
 
 interface AreaItemProps {
@@ -39,7 +39,7 @@ export const AreaItem = ({
     [area.packages.assigned],
   );
 
-  const { permissionsOverview } = usePackagePermissionOverview({ permissions });
+  const { permissionsOverview } = usePermissionOverview({ permissions });
 
   const showPackagesCountBadge = !isSm && showPackagesCount;
   const showPermissionsBadge = showPermissions;
