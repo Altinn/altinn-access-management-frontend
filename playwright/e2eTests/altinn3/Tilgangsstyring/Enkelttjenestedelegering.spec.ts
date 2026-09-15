@@ -1,4 +1,4 @@
-import { test } from '../../../fixture/pomFixture';
+import { test, expect } from '../../../fixture/pomFixture';
 import { EnduserConnection } from '../../../api-requests/EnduserConnection';
 
 const service = 'bruno-correspondence';
@@ -32,40 +32,60 @@ test.describe('Enkelttjenestedelegering fra person til person og person til org'
       }
     });
 
-    test('Deleger enkelttjeneste til person', async ({
-      login,
-      aktorvalgHeader,
-      accessManagementFrontPage,
-    }) => {
-      await test.step('Logg inn', async () => {
-        await login.LoginToAccessManagement(delegator.pid);
-      });
+    test(
+      'Deleger enkelttjeneste til person',
+      { tag: '@uu' },
+      async (
+        { page, login, aktorvalgHeader, accessManagementFrontPage, runAccessibilityTest },
+        testInfo,
+      ) => {
+        await test.step('Logg inn', async () => {
+          await login.LoginToAccessManagement(delegator.pid);
+        });
 
-      await test.step(`Velg deg selv (${delegator.name}) og gå til tilgangsstyring`, async () => {
-        await aktorvalgHeader.selectActorFromHeaderMenu(delegator.name);
-      });
+        await test.step(`Velg deg selv (${delegator.name}) og gå til tilgangsstyring`, async () => {
+          await aktorvalgHeader.selectActorFromHeaderMenu(delegator.name);
+        });
 
-      await test.step(`Gå til brukere-siden og klikk på "${recipient.name}"`, async () => {
-        await accessManagementFrontPage.goToUsers();
-        await accessManagementFrontPage.clickUser(recipient.name);
-      });
+        await test.step(`Gå til brukere-siden og klikk på "${recipient.name}"`, async () => {
+          await accessManagementFrontPage.goToUsers();
+          await runAccessibilityTest.scan(testInfo, 'brukeroversikt');
+          await accessManagementFrontPage.clickUser(recipient.name);
+        });
 
-      await test.step(`Gi ${recipient.name} fullmakt til enkelttjenesten "${service}"`, async () => {
-        await accessManagementFrontPage.goToEnkelttjenester();
-        await accessManagementFrontPage.clickGiFullmakt();
-        await accessManagementFrontPage.sokEtterEnkelttjeneste(service);
-        await accessManagementFrontPage.clickEnkelttjeneste(service);
-        await accessManagementFrontPage.clickGiFullmaktEnkelttjeneste();
-        await accessManagementFrontPage.LukkGiFullmaktVindu();
-      });
+        await test.step(`Gi ${recipient.name} fullmakt til enkelttjenesten "${service}"`, async () => {
+          await accessManagementFrontPage.goToEnkelttjenester();
+          await accessManagementFrontPage.clickGiFullmakt();
+          await runAccessibilityTest.scan(testInfo, 'delegeringsdialog');
+          await accessManagementFrontPage.sokEtterEnkelttjeneste(service);
+          await expect(
+            page.getByRole('dialog').getByRole('button', { name: service }).first(),
+          ).toBeVisible();
+          await runAccessibilityTest.scan(testInfo, 'søkeresultat');
+          await runAccessibilityTest.checkDialog(testInfo, {
+            searchPlaceholder:
+              accessManagementFrontPage.texts.resource_list.resource_search_placeholder,
+            errorTitle: accessManagementFrontPage.texts.common.general_error_title,
+            trigger: accessManagementFrontPage.singleServicesPanel.getByRole('button', {
+              name: accessManagementFrontPage.texts.access_packages.give_new_button,
+              exact: true,
+            }),
+          });
+          if (runAccessibilityTest.enabled)
+            await accessManagementFrontPage.sokEtterEnkelttjeneste(service);
+          await accessManagementFrontPage.clickEnkelttjeneste(service);
+          await accessManagementFrontPage.clickGiFullmaktEnkelttjeneste();
+          await accessManagementFrontPage.LukkGiFullmaktVindu();
+        });
 
-      await test.step(`${recipient.name} skal ha enkelttjenesten "${service}"`, async () => {
-        await accessManagementFrontPage.goToUsers();
-        await accessManagementFrontPage.clickUser(recipient.name);
-        await accessManagementFrontPage.goToEnkelttjenester();
-        await accessManagementFrontPage.userCanDeleteEnkelttjeneste(service);
-      });
-    });
+        await test.step(`${recipient.name} skal ha enkelttjenesten "${service}"`, async () => {
+          await accessManagementFrontPage.goToUsers();
+          await accessManagementFrontPage.clickUser(recipient.name);
+          await accessManagementFrontPage.goToEnkelttjenester();
+          await accessManagementFrontPage.userCanDeleteEnkelttjeneste(service);
+        });
+      },
+    );
   });
 
   test.describe('Deleger enkelttjeneste til virksomhet', () => {
