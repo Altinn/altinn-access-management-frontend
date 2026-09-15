@@ -21,15 +21,16 @@ namespace Altinn.AccessManagement.UI.Core.Services
         private const string TypeInstances = "instances";
         private const string DefaultLanguage = "nb";
 
-        // Max giver calls in flight per right type; the four types run concurrently, so 4 x this in total
-        private const int MaxConcurrentRequestsPerType = 8;
+        // Max backend calls in flight per export; the right types are fetched one after another. Keep it low:
+        // every call triggers several PDP lookups in the backend, and AT22 fell over at 32 in flight
+        private const int MaxConcurrentRequests = 4;
 
         private readonly IUserService _userService;
         private readonly IRoleService _roleService;
         private readonly IAccessPackageService _accessPackageService;
         private readonly ISingleRightService _singleRightService;
         private readonly IInstanceService _instanceService;
-        
+
         /// <summary>
         /// Initializes a new instance of the <see cref="DelegationExportService"/> class.
         /// </summary>
@@ -70,61 +71,35 @@ namespace Altinn.AccessManagement.UI.Core.Services
                 givers.AddRange(reportee.Subunits);
             }
 
-            // Build each right type as its own job so the fan-outs overlap; the first failure cancels the rest
-            using var abort = new CancellationTokenSource();
-            var jobs = new List<(string EntryName, Task<Action<Stream>> Writer)>();
+            // The right types are fetched one after another; only the givers within a type are fetched concurrently
+            var entries = new List<(string EntryName, Action<Stream> Write)>();
 
             if (IncludeType(TypeRoles))
             {
                 string filename = language == "en" ? "roles.csv" : "roller.csv";
-                jobs.Add((filename, RunTagged("Role", abort, async cancellationToken =>
-                {
-                    List<RoleExportRow> rows = await BuildRoleRows(givers, language, cancellationToken);
-                    return stream => DelegationExportCsvBuilder.WriteCsv(rows, new RoleExportRowMap(language), stream);
-                })));
+                List<RoleExportRow> rows = await RunTagged("Role", () => BuildRoleRows(givers, language));
+                entries.Add((filename, stream => DelegationExportCsvBuilder.WriteCsv(rows, new RoleExportRowMap(language), stream)));
             }
 
             if (IncludeType(TypeAccessPackages))
             {
                 string filename = language == "en" ? "access_packages.csv" : language == "nn" ? "tilgangspakkar.csv" : "tilgangspakker.csv";
-                jobs.Add((filename, RunTagged("AccessPackage", abort, async cancellationToken =>
-                {
-                    List<AccessPackageExportRow> rows = await BuildAccessPackageRows(givers, language, cancellationToken);
-                    return stream => DelegationExportCsvBuilder.WriteCsv(rows, new AccessPackageExportRowMap(language), stream);
-                })));
+                List<AccessPackageExportRow> rows = await RunTagged("AccessPackage", () => BuildAccessPackageRows(givers, language));
+                entries.Add((filename, stream => DelegationExportCsvBuilder.WriteCsv(rows, new AccessPackageExportRowMap(language), stream)));
             }
 
             if (IncludeType(TypeSingleRights))
             {
                 string filename = language == "en" ? "single_rights.csv" : language == "nn" ? "enkelttenester.csv" : "enkelttjenester.csv";
-                jobs.Add((filename, RunTagged("SingleRights", abort, async cancellationToken =>
-                {
-                    List<SingleRightExportRow> rows = await BuildSingleRightRows(givers, language, cancellationToken);
-                    return stream => DelegationExportCsvBuilder.WriteCsv(rows, new SingleRightExportRowMap(language), stream);
-                })));
+                List<SingleRightExportRow> rows = await RunTagged("SingleRights", () => BuildSingleRightRows(givers, language));
+                entries.Add((filename, stream => DelegationExportCsvBuilder.WriteCsv(rows, new SingleRightExportRowMap(language), stream)));
             }
 
             if (IncludeType(TypeInstances))
             {
                 string filename = language == "en" ? "instance_rights.csv" : language == "nn" ? "enkelttenester-instans.csv" : "enkelttjenester-instans.csv";
-                jobs.Add((filename, RunTagged("Instances", abort, async cancellationToken =>
-                {
-                    List<InstanceRightExportRow> rows = await BuildInstanceRows(givers, language, cancellationToken);
-                    return stream => DelegationExportCsvBuilder.WriteCsv(rows, new InstanceRightExportRowMap(language), stream);
-                })));
-            }
-
-            // Await every job so nothing outlives the request; rethrows the first failure in job order
-            await Task.WhenAll(jobs.Select(job => job.Writer));
-
-            var entries = new List<(string EntryName, Action<Stream> Write)>();
-            foreach ((string entryName, Task<Action<Stream>> writer) in jobs)
-            {
-                Action<Stream> write = await writer;
-                if (write != null)
-                {
-                    entries.Add((entryName, write));
-                }
+                List<InstanceRightExportRow> rows = await RunTagged("Instances", () => BuildInstanceRows(givers, language));
+                entries.Add((filename, stream => DelegationExportCsvBuilder.WriteCsv(rows, new InstanceRightExportRowMap(language), stream)));
             }
 
             byte[] zip = DelegationExportCsvBuilder.BuildZip(entries);
@@ -157,7 +132,7 @@ namespace Altinn.AccessManagement.UI.Core.Services
             return null;
         }
 
-        private async Task<List<RoleExportRow>> BuildRoleRows(List<AuthorizedParty> givers, string language, CancellationToken cancellationToken)
+        private async Task<List<RoleExportRow>> BuildRoleRows(List<AuthorizedParty> givers, string language)
         {
             // Run the role-name lookup and the giver fan-out concurrently; each giver is mapped to rows as its response arrives
             Task<Dictionary<Guid, string>> lookupTask = BuildRoleNameLookup(language);
@@ -167,8 +142,7 @@ namespace Altinn.AccessManagement.UI.Core.Services
                 {
                     List<RolePermission> permissions = await _roleService.GetRolePermissions(giver.PartyUuid, giver.PartyUuid, null, language);
                     return MapRoleRows(giver, permissions, await lookupTask);
-                },
-                cancellationToken);
+                });
 
             await Task.WhenAll(lookupTask, rowsTask);
             return (await rowsTask).SelectMany(rows => rows).ToList();
@@ -186,7 +160,7 @@ namespace Altinn.AccessManagement.UI.Core.Services
             return map;
         }
 
-        private async Task<List<AccessPackageExportRow>> BuildAccessPackageRows(List<AuthorizedParty> givers, string language, CancellationToken cancellationToken)
+        private async Task<List<AccessPackageExportRow>> BuildAccessPackageRows(List<AuthorizedParty> givers, string language)
         {
             // Run the package-name lookup and the giver fan-out concurrently; each giver is mapped to rows as its response arrives
             Task<Dictionary<Guid, string>> lookupTask = BuildPackageNameLookup(language);
@@ -196,20 +170,18 @@ namespace Altinn.AccessManagement.UI.Core.Services
                 {
                     Dictionary<Guid, List<PackagePermission>> delegations = await _accessPackageService.GetDelegations(giver.PartyUuid, null, giver.PartyUuid, language);
                     return MapAccessPackageRows(giver, delegations, await lookupTask);
-                },
-                cancellationToken);
+                });
 
             await Task.WhenAll(lookupTask, rowsTask);
             return (await rowsTask).SelectMany(rows => rows).ToList();
         }
 
-        private async Task<List<InstanceRightExportRow>> BuildInstanceRows(List<AuthorizedParty> givers, string language, CancellationToken cancellationToken)
+        private async Task<List<InstanceRightExportRow>> BuildInstanceRows(List<AuthorizedParty> givers, string language)
         {
             // Skip Dialogporten enrichment; the export only needs resource and instance ids
             List<InstanceRightExportRow>[] rowsPerGiver = await ForEachGiverAsync(
                 givers,
-                async giver => MapInstanceRows(giver, await _instanceService.GetDelegatedInstances(language, giver.PartyUuid, giver.PartyUuid, null, null, null, includeDialogLookup: false)),
-                cancellationToken);
+                async giver => MapInstanceRows(giver, await _instanceService.GetDelegatedInstances(language, giver.PartyUuid, giver.PartyUuid, null, null, null, includeDialogLookup: false)));
 
             return rowsPerGiver.SelectMany(rows => rows).ToList();
         }
@@ -217,12 +189,11 @@ namespace Altinn.AccessManagement.UI.Core.Services
         // Single-rights RESOURCE delegations (without actions/operations) are listed for all
         // recipients at once; the recipient is read from each permission's "to" party. Since the
         // export does not include operations, no per-recipient ".../rights" lookup is needed.
-        private async Task<List<SingleRightExportRow>> BuildSingleRightRows(List<AuthorizedParty> givers, string language, CancellationToken cancellationToken)
+        private async Task<List<SingleRightExportRow>> BuildSingleRightRows(List<AuthorizedParty> givers, string language)
         {
             List<SingleRightExportRow>[] rowsPerGiver = await ForEachGiverAsync(
                 givers,
-                async giver => MapSingleRightRows(giver, await _singleRightService.GetDelegatedResources(language, giver.PartyUuid, giver.PartyUuid, null)),
-                cancellationToken);
+                async giver => MapSingleRightRows(giver, await _singleRightService.GetDelegatedResources(language, giver.PartyUuid, giver.PartyUuid, null)));
 
             return rowsPerGiver.SelectMany(rows => rows).ToList();
         }
@@ -242,40 +213,25 @@ namespace Altinn.AccessManagement.UI.Core.Services
             return map;
         }
 
-        // Tags backend errors with the right type (reported by the controller) and cancels sibling builders.
-        // A builder cancelled because a sibling failed returns null; the sibling's exception is surfaced.
-        private static async Task<Action<Stream>> RunTagged(string origin, CancellationTokenSource abort, Func<CancellationToken, Task<Action<Stream>>> build)
+        // Re-throws backend errors tagged with the right type they came from (reported by the controller)
+        private static async Task<T> RunTagged<T>(string origin, Func<Task<T>> build)
         {
             try
             {
-                return await build(abort.Token);
+                return await build();
             }
             catch (HttpStatusException ex)
             {
-                abort.Cancel();
                 throw new HttpStatusException(ex.Type, origin, ex.StatusCode, ex.TraceId, ex.Message);
-            }
-            catch (OperationCanceledException) when (abort.IsCancellationRequested)
-            {
-                return null;
-            }
-            catch
-            {
-                abort.Cancel();
-                throw;
             }
         }
 
-        // One call per giver, max MaxConcurrentRequestsPerType in flight, results kept in giver order; the callback
+        // One call per giver, max MaxConcurrentRequests in flight, results kept in giver order; the callback
         // maps the response to rows right away so the backend DTOs can be collected early
-        private static async Task<TResult[]> ForEachGiverAsync<TResult>(List<AuthorizedParty> givers, Func<AuthorizedParty, Task<TResult>> fetch, CancellationToken cancellationToken)
+        private static async Task<TResult[]> ForEachGiverAsync<TResult>(List<AuthorizedParty> givers, Func<AuthorizedParty, Task<TResult>> fetch)
         {
             var results = new TResult[givers.Count];
-            var options = new ParallelOptions
-            {
-                MaxDegreeOfParallelism = MaxConcurrentRequestsPerType,
-                CancellationToken = cancellationToken,
-            };
+            var options = new ParallelOptions { MaxDegreeOfParallelism = MaxConcurrentRequests };
 
             await Parallel.ForEachAsync(Enumerable.Range(0, givers.Count), options, async (index, _) =>
             {

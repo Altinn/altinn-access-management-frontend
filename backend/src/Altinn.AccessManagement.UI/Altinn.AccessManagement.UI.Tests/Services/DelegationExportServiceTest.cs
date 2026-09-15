@@ -29,8 +29,8 @@ namespace Altinn.AccessManagement.UI.Tests.Services
     /// </summary>
     public class DelegationExportServiceTest
     {
-        // Mirrors DelegationExportService.MaxConcurrentRequestsPerType.
-        private const int Limit = 8;
+        // Mirrors DelegationExportService.MaxConcurrentRequests.
+        private const int Limit = 4;
         private const string MainOrgNumber = "100000001";
         private static readonly TimeSpan WaitTimeout = TimeSpan.FromSeconds(10);
 
@@ -83,34 +83,6 @@ namespace Altinn.AccessManagement.UI.Tests.Services
 
             Assert.Equal(DelegationExportStatus.Ok, result.Status);
             _roleService.Verify(r => r.GetRolePermissions(It.IsAny<Guid>(), It.IsAny<Guid?>(), It.IsAny<Guid?>(), It.IsAny<string>()), Times.Exactly(21));
-        }
-
-        [Fact]
-        public async Task Export_RunsRightTypesConcurrently()
-        {
-            AuthorizedParty reportee = ArrangeReportee(subunits: 0);
-            var roleGate = new Gate<List<RolePermission>>();
-            var instanceGate = new Gate<List<InstanceDelegation>>();
-            _roleService
-                .Setup(r => r.GetRolePermissions(It.IsAny<Guid>(), It.IsAny<Guid?>(), It.IsAny<Guid?>(), It.IsAny<string>()))
-                .Returns(() => roleGate.Next());
-            _instanceService
-                .Setup(i => i.GetDelegatedInstances(It.IsAny<string>(), It.IsAny<Guid>(), It.IsAny<Guid?>(), It.IsAny<Guid?>(), It.IsAny<string>(), It.IsAny<string>(), false))
-                .Returns(() => instanceGate.Next());
-
-            Task<DelegationExportResult> export = _service.ExportReporteeDelegations(reportee.PartyUuid, false, new HashSet<string> { "roles", "instances" }, "nb");
-
-            // Both types have issued their backend call before either of them has completed.
-            await WaitUntilAsync(() => roleGate.Started == 1 && instanceGate.Started == 1, "role and instance calls started");
-            Assert.False(export.IsCompleted);
-
-            roleGate.ReleaseOne(new List<RolePermission>());
-            instanceGate.ReleaseOne(new List<InstanceDelegation>());
-            DelegationExportResult result = await export;
-
-            Assert.Equal(DelegationExportStatus.Ok, result.Status);
-            Dictionary<string, string> entries = ReadZipEntries(result.Content);
-            Assert.Equal(new[] { "roller.csv", "enkelttjenester-instans.csv" }, entries.Keys);
         }
 
         [Fact]
@@ -190,32 +162,20 @@ namespace Altinn.AccessManagement.UI.Tests.Services
         }
 
         [Fact]
-        public async Task Export_StopsStartingCallsInOtherTypes_WhenOneTypeFails()
+        public async Task Export_FailureInOneType_SkipsRemainingTypes()
         {
-            AuthorizedParty reportee = ArrangeReportee(subunits: 20);
-            var roleGate = new Gate<List<RolePermission>>();
-            var instanceGate = new Gate<List<InstanceDelegation>>();
+            AuthorizedParty reportee = ArrangeReportee(subunits: 2);
             _roleService
                 .Setup(r => r.GetRolePermissions(It.IsAny<Guid>(), It.IsAny<Guid?>(), It.IsAny<Guid?>(), It.IsAny<string>()))
-                .Returns(() => roleGate.Next());
-            _instanceService
-                .Setup(i => i.GetDelegatedInstances(It.IsAny<string>(), It.IsAny<Guid>(), It.IsAny<Guid?>(), It.IsAny<Guid?>(), It.IsAny<string>(), It.IsAny<string>(), false))
-                .Returns(() => instanceGate.Next());
+                .ThrowsAsync(new HttpStatusException("BackendError", "Downstream", HttpStatusCode.BadGateway, "trace-2", "roles down"));
 
-            Task<DelegationExportResult> export = _service.ExportReporteeDelegations(reportee.PartyUuid, true, new HashSet<string> { "roles", "instances" }, "nb");
-            await WaitUntilAsync(() => roleGate.Started == Limit && instanceGate.Started == Limit, "first wave of role and instance calls");
+            HttpStatusException thrown = await Assert.ThrowsAsync<HttpStatusException>(
+                () => _service.ExportReporteeDelegations(reportee.PartyUuid, true, new HashSet<string> { "roles", "instances" }, "nb"));
 
-            // Every in-flight instance call fails; the export must then stop issuing new role calls.
-            instanceGate.FailAll(new HttpStatusException("BackendError", "Downstream", HttpStatusCode.BadGateway, "trace-2", "instances down"));
-            // Let the cancellation reach the role fan-out before releasing its calls
-            await Task.Delay(500);
-
-            await roleGate.ReleaseUntilCompletedAsync(export, new List<RolePermission>());
-            HttpStatusException thrown = await Assert.ThrowsAsync<HttpStatusException>(() => export);
-
-            Assert.Equal("Instances", thrown.Title);
-            Assert.Equal(HttpStatusCode.BadGateway, thrown.StatusCode);
-            Assert.True(roleGate.Started <= Limit + 1, $"Expected no new role calls after the instance failure, but {roleGate.Started} of 21 were started.");
+            Assert.Equal("Role", thrown.Title);
+            _instanceService.Verify(
+                i => i.GetDelegatedInstances(It.IsAny<string>(), It.IsAny<Guid>(), It.IsAny<Guid?>(), It.IsAny<Guid?>(), It.IsAny<string>(), It.IsAny<string>(), It.IsAny<bool>()),
+                Times.Never);
         }
 
         [Fact]
