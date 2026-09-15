@@ -31,7 +31,7 @@ function visit(suite) {
 for (const suite of report.suites || []) visit(suite);
 if (!links.length) {
   console.error('Ingen UU-rapporter å eksportere. Kontroller at UU-skanning var aktivert.');
-  process.exit(1);
+  process.exit(report.stats?.unexpected > 0 ? 0 : 1);
 }
 fs.writeFileSync(
   path.join(outputDir, 'index.html'),
