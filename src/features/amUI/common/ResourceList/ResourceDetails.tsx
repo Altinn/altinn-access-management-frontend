@@ -26,8 +26,8 @@ export const ResourceDetails = ({ resource, onClose, providerLogoUrl }: Resource
 
   const description = resource ? extractDescription(resource) : '';
   const rightDescription =
-    resource && 'rightDescription' in resource
-      ? (resource as { rightDescription?: string }).rightDescription
+    resource && 'rightDescription' in resource && typeof resource.rightDescription === 'string'
+      ? resource.rightDescription
       : undefined;
 
   return (
