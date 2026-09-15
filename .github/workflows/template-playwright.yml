@@ -64,10 +64,9 @@ jobs:
           PROJECT: ${{ inputs.project }}
           UU_SCAN: ${{ inputs.accessibility && '1' || '0' }}
           PLAYWRIGHT_HTML_OPEN: never
-        run: |
-          yarn run "env:${ENVIRONMENT}" --project "${PROJECT}" --workers=4
+        run: yarn run "env:${ENVIRONMENT}" --project "${PROJECT}" --workers=4
       - name: Export UU HTML reports
-        if: ${{ always() && inputs.accessibility && (steps.playwright-tests.outcome == 'success' || steps.playwright-tests.outcome == 'failure') }}
+        if: ${{ !cancelled() && inputs.accessibility && steps.playwright-tests.outcome != 'skipped' }}
         working-directory: playwright
         env:
           REPORT_NAME: ${{ inputs.environment }}
