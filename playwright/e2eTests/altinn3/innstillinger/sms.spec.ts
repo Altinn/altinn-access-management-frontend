@@ -38,10 +38,9 @@ test.describe('Innstillinger - SMS-adresser', () => {
 
       await test.step('Telefonnummeret er nå lagret', async () => {
         await innstillingerPage.openSmsDialog();
-        await expect(innstillingerPage.countryCodeField(nyttNummer)).toHaveValue(
-          nyttNummer.countryCode,
-        );
-        await expect(innstillingerPage.phoneField(nyttNummer)).toHaveValue(nyttNummer.phone);
+        await expect(innstillingerPage.smsRows).toHaveCount(1);
+        await expect(innstillingerPage.countryCodeFields).toHaveValue(nyttNummer.countryCode);
+        await expect(innstillingerPage.phoneFields).toHaveValue(nyttNummer.phone);
       });
     });
 
