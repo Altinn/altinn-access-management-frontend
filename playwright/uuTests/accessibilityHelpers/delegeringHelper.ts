@@ -10,7 +10,12 @@ export class runAccessibilityTests {
 
   /** Scan the current page without navigating away from the state under test. */
   async scan(testInfo: TestInfo, name: string) {
-    if (!this.enabled) return;
+    if (
+      !this.enabled ||
+      this.page.isClosed() ||
+      !new URL(this.page.url()).pathname.startsWith('/accessmanagement/ui')
+    )
+      return;
     await this.page.bringToFront();
     // Contrast checks must use final colors, rather than an opening transition.
     await this.page.evaluate(async () => {
@@ -44,6 +49,41 @@ export class runAccessibilityTests {
       body: await this.page.screenshot({ fullPage: true }),
       contentType: 'image/png',
     });
+    if (results.violations.length) {
+      await this.page.evaluate((violations) => {
+        const overlay = document.createElement('div');
+        overlay.id = 'uu-findings-overlay';
+        overlay.setAttribute('popover', 'manual');
+        overlay.style.cssText =
+          'position:absolute;inset:0;margin:0;padding:0;border:0;width:100%;height:100%;background:transparent;overflow:visible;pointer-events:none;z-index:2147483647';
+        violations.forEach((violation, index) => {
+          violation.nodes.forEach((node) => {
+            if (node.target.length !== 1 || typeof node.target[0] !== 'string') return;
+            const element = document.querySelector(node.target[0]);
+            if (!element) return;
+            const rect = element.getBoundingClientRect();
+            const marker = document.createElement('div');
+            marker.style.cssText = `position:absolute;left:${rect.left + scrollX - 3}px;top:${rect.top + scrollY - 3}px;width:${Math.max(rect.width, 12) + 6}px;height:${Math.max(rect.height, 12) + 6}px;outline:3px solid #d00000;`;
+            const label = document.createElement('span');
+            label.textContent = `${index + 1}: ${violation.id}`;
+            label.style.cssText =
+              'position:absolute;bottom:100%;left:0;background:#d00000;color:white;font:12px sans-serif;padding:3px;white-space:nowrap';
+            marker.append(label);
+            overlay.append(marker);
+          });
+        });
+        document.body.append(overlay);
+        overlay.showPopover();
+      }, results.violations);
+      try {
+        await testInfo.attach(`${name}-marked-screenshot`, {
+          body: await this.page.screenshot({ fullPage: true }),
+          contentType: 'image/png',
+        });
+      } finally {
+        await this.page.evaluate(() => document.getElementById('uu-findings-overlay')?.remove());
+      }
+    }
 
     const summary = results.violations.map((violation) => ({
       id: violation.id,
