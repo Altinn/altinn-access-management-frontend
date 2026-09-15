@@ -8,7 +8,7 @@ loadEnv(currentEnv());
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 const config: PlaywrightTestConfig = {
   fullyParallel: true,
-  retries: 1,
+  retries: process.env.UU_SCAN === '1' ? 0 : 1,
   use: {
     trace: 'on',
     screenshot: { mode: 'only-on-failure', fullPage: true },
@@ -52,6 +52,7 @@ const config: PlaywrightTestConfig = {
     },
     {
       name: 'accessibility-tests',
+      retries: 0,
       testMatch: 'playwright/uuTests/accessibilityTests/*.spec.ts',
       timeout: 90 * 1000,
       expect: {
