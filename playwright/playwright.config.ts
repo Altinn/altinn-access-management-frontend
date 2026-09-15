@@ -13,7 +13,7 @@ const config: PlaywrightTestConfig = {
   use: {
     trace: uuRun ? 'off' : 'on',
     screenshot: { mode: 'only-on-failure', fullPage: true },
-    video: uuRun ? 'off' : { mode: 'retain-on-failure', size: { width: 1900, height: 1500 } },
+    video: 'off',
     launchOptions: {
       args: ['--start-maximized'],
     },
@@ -60,7 +60,6 @@ const config: PlaywrightTestConfig = {
       },
       use: {
         trace: 'off',
-        video: 'off',
         browserName: 'chromium',
         headless: true,
       },
