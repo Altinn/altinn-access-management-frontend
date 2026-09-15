@@ -45,16 +45,9 @@ type Fixtures = {
 
 const test = baseTest.extend<Fixtures>({
   accessibilityScan: [
-    async ({ page, runAccessibilityTest }, use, testInfo) => {
+    async ({ runAccessibilityTest }, use, testInfo) => {
       await use();
-      if (
-        testInfo.project.name === 'e2e-tests' &&
-        runAccessibilityTest.enabled &&
-        !runAccessibilityTest.scanned &&
-        testInfo.status === 'passed' &&
-        !page.isClosed() &&
-        new URL(page.url()).pathname.startsWith('/accessmanagement/ui')
-      ) {
+      if (testInfo.status === 'passed' && !runAccessibilityTest.scanned) {
         await runAccessibilityTest.scan(testInfo, 'sluttside');
       }
     },

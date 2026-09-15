@@ -1,5 +1,6 @@
 import { expect, type Locator, type Page, type TestInfo } from '@playwright/test';
 import AxeBuilder from '@axe-core/playwright';
+import { createHtmlReport } from 'axe-html-reporter';
 
 export class runAccessibilityTests {
   scanned = false;
@@ -45,8 +46,9 @@ export class runAccessibilityTests {
       body: JSON.stringify(results, null, 2),
       contentType: 'application/json',
     });
+    let screenshot = await this.page.screenshot({ fullPage: true });
     await testInfo.attach(`${name}-screenshot`, {
-      body: await this.page.screenshot({ fullPage: true }),
+      body: screenshot,
       contentType: 'image/png',
     });
     if (results.violations.length) {
@@ -76,14 +78,26 @@ export class runAccessibilityTests {
         overlay.showPopover();
       }, results.violations);
       try {
+        screenshot = await this.page.screenshot({ fullPage: true });
         await testInfo.attach(`${name}-marked-screenshot`, {
-          body: await this.page.screenshot({ fullPage: true }),
+          body: screenshot,
           contentType: 'image/png',
         });
       } finally {
         await this.page.evaluate(() => document.getElementById('uu-findings-overlay')?.remove());
       }
     }
+    await testInfo.attach(`${name}-uu-report`, {
+      body: createHtmlReport({
+        results,
+        options: {
+          doNotCreateReportFile: true,
+          projectKey: `UU: ${name}`,
+          customSummary: `<img alt="Skjermbilde fra UU-skanningen" style="max-width:100%;height:auto" src="data:image/png;base64,${screenshot.toString('base64')}">`,
+        },
+      }),
+      contentType: 'text/html',
+    });
 
     const summary = results.violations.map((violation) => ({
       id: violation.id,
