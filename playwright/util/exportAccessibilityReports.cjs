@@ -4,8 +4,8 @@ const path = require('node:path');
 const reportPath = process.argv[2] || 'jsonReports/jsonReport.json';
 const outputDir = process.argv[3] || 'jsonReports/uu-report';
 if (!fs.existsSync(reportPath)) {
-  console.log('Ingen Playwright-rapport ble generert.');
-  process.exit(0);
+  console.error('Kan ikke eksportere UU-rapporter: Playwright-resultatene mangler.');
+  process.exit(1);
 }
 const report = JSON.parse(fs.readFileSync(reportPath, 'utf8'));
 const escape = (text) => text.replace(/[&<>"']/g, (char) => `&#${char.charCodeAt(0)};`);
@@ -29,6 +29,10 @@ function visit(suite) {
   for (const child of suite.suites || []) visit(child);
 }
 for (const suite of report.suites || []) visit(suite);
+if (!links.length) {
+  console.error('Ingen UU-rapporter å eksportere. Kontroller at UU-skanning var aktivert.');
+  process.exit(1);
+}
 fs.writeFileSync(
   path.join(outputDir, 'index.html'),
   `<!doctype html><html lang="nb"><meta charset="utf-8"><title>UU-rapporter</title><style>body{font:18px system-ui;max-width:1000px;margin:40px auto;padding:20px}li{margin:16px 0}</style><h1>UU-rapporter</h1><p>${links.length} fullførte skanninger. Hver rapport viser axe-funn, elementer og skjermbilde.</p><ul>${links.join('')}</ul></html>`,

@@ -149,7 +149,7 @@ export class runAccessibilityTests {
             () =>
               dialog.evaluate((el) => !document.hasFocus() || el.contains(document.activeElement)),
             {
-              message: `${key}: fokus skal holdes i dialogen`,
+              message: `UU-funn: ${key} flytter fokus til innhold utenfor dialogen`,
               timeout: 1000,
             },
           )
@@ -171,15 +171,17 @@ export class runAccessibilityTests {
     // A search input consumes Escape to clear its value; test modal dismissal from a button.
     await dialog.getByRole('button', { name: 'Lukk', exact: true }).focus();
     await this.page.keyboard.press('Escape');
-    await expect.soft(dialog).toBeHidden({ timeout: 1000 });
+    await expect.soft(dialog, 'UU-funn: Escape lukker ikke dialogen').toBeHidden({ timeout: 1000 });
     if (await dialog.isVisible())
       await dialog.getByRole('button', { name: 'Lukk', exact: true }).click();
-    await expect.soft(trigger).toBeFocused();
+    await expect.soft(trigger, 'UU-funn: fokus returnerer ikke til Gi fullmakt').toBeFocused();
     await trigger.focus();
     await this.page.keyboard.press('Enter');
     await expect(dialog).toBeVisible();
     await expect.soft
-      .poll(() => dialog.evaluate((el) => el.contains(document.activeElement)))
+      .poll(() => dialog.evaluate((el) => el.contains(document.activeElement)), {
+        message: 'UU-funn: fokus flyttes ikke inn i den åpne dialogen',
+      })
       .toBe(true);
   }
 }

@@ -73,7 +73,7 @@ jobs:
         working-directory: playwright
         env:
           REPORT_NAME: ${{ inputs.environment }}
-        run: node util/accessibilityReport.cjs jsonReports/jsonReport.json "playwright-report/$REPORT_NAME/uu"
+        run: node util/exportAccessibilityReports.cjs jsonReports/jsonReport.json "playwright-report/$REPORT_NAME/uu"
       - name: Test summary
         if: always()
         working-directory: playwright

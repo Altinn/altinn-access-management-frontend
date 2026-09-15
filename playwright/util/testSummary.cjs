@@ -87,16 +87,7 @@ function visit(suite) {
       if (hasScan) uuTests++;
       if (
         status === 'failed' &&
-        (result.errors || []).some(
-          (error) =>
-            !(
-              /UU-funn/.test(error.message || '') ||
-              (/fokus skal|toBeFocused|toBeHidden/.test(error.message || '') &&
-                (error.location?.file || error.stack || error.message || '').includes(
-                  'accessibilityHelpers',
-                ))
-            ),
-        )
+        (result.errors || []).some((error) => !/UU-funn/.test(error.message || ''))
       )
         otherFailures++;
     }
