@@ -172,6 +172,23 @@ namespace Altinn.AccessManagement.UI.Tests.Services
             Assert.Equal("backend says no", thrown.Message);
         }
 
+        [Theory]
+        [InlineData("roles", "Role")]
+        [InlineData("accesspackages", "AccessPackage")]
+        public async Task Export_TagsLookupHttpStatusExceptionWithOrigin(string type, string expectedTitle)
+        {
+            AuthorizedParty reportee = ArrangeReportee(subunits: 2);
+            var backendError = new HttpStatusException("BackendError", "Downstream", HttpStatusCode.ServiceUnavailable, "trace-3", "lookup down");
+            _roleService.Setup(r => r.GetAllRoles(It.IsAny<string>())).ThrowsAsync(backendError);
+            _accessPackageService.Setup(a => a.GetSearch(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>())).ThrowsAsync(backendError);
+
+            HttpStatusException thrown = await Assert.ThrowsAsync<HttpStatusException>(
+                () => _service.ExportReporteeDelegations(reportee.PartyUuid, true, new HashSet<string> { type }, "nb"));
+
+            Assert.Equal(expectedTitle, thrown.Title);
+            Assert.Equal(HttpStatusCode.ServiceUnavailable, thrown.StatusCode);
+        }
+
         [Fact]
         public async Task Export_StopsStartingCallsInOtherTypes_WhenOneTypeFails()
         {
@@ -190,7 +207,7 @@ namespace Altinn.AccessManagement.UI.Tests.Services
 
             // Every in-flight instance call fails; the export must then stop issuing new role calls.
             instanceGate.FailAll(new HttpStatusException("BackendError", "Downstream", HttpStatusCode.BadGateway, "trace-2", "instances down"));
-            // Give the cancellation a generous window to propagate to the role fan-out before releasing its calls.
+            // Let the cancellation reach the role fan-out before releasing its calls
             await Task.Delay(500);
 
             await roleGate.ReleaseUntilCompletedAsync(export, new List<RolePermission>());

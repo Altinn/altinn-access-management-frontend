@@ -50,21 +50,30 @@ namespace Altinn.AccessManagement.UI.Core.Helpers
         public static byte[] WriteCsv<TRow>(IEnumerable<TRow> rows, ClassMap<TRow> map)
         {
             using var memory = new MemoryStream();
-            using (var writer = new StreamWriter(memory, Utf8WithBom))
-            using (var csv = new CsvWriter(writer, CreateConfig()))
-            {
-                csv.Context.RegisterClassMap(map);
-                csv.WriteHeader<TRow>();
-                csv.NextRecord();
-
-                foreach (TRow row in rows ?? Enumerable.Empty<TRow>())
-                {
-                    csv.WriteRecord(row);
-                    csv.NextRecord();
-                }
-            }
-
+            WriteCsv(rows, map, memory);
             return memory.ToArray();
+        }
+
+        /// <summary>
+        /// Serializes a set of typed rows as CSV straight into <paramref name="destination"/>, which is closed when done.
+        /// </summary>
+        /// <typeparam name="TRow">The row type.</typeparam>
+        /// <param name="rows">The rows to write.</param>
+        /// <param name="map">The CsvHelper class map instance to use.</param>
+        /// <param name="destination">The stream to write the UTF-8 (with BOM) CSV content to.</param>
+        public static void WriteCsv<TRow>(IEnumerable<TRow> rows, ClassMap<TRow> map, Stream destination)
+        {
+            using var writer = new StreamWriter(destination, Utf8WithBom);
+            using var csv = new CsvWriter(writer, CreateConfig());
+            csv.Context.RegisterClassMap(map);
+            csv.WriteHeader<TRow>();
+            csv.NextRecord();
+
+            foreach (TRow row in rows ?? Enumerable.Empty<TRow>())
+            {
+                csv.WriteRecord(row);
+                csv.NextRecord();
+            }
         }
 
         /// <summary>
@@ -74,14 +83,24 @@ namespace Altinn.AccessManagement.UI.Core.Helpers
         /// <returns>The zip archive as bytes.</returns>
         public static byte[] BuildZip(IReadOnlyDictionary<string, byte[]> files)
         {
+            return BuildZip(files.Select(file => (file.Key, (Action<Stream>)(stream => stream.Write(file.Value, 0, file.Value.Length)))));
+        }
+
+        /// <summary>
+        /// Packs the given entries into a single zip archive; each writer streams its content straight into its entry.
+        /// </summary>
+        /// <param name="entries">Entry names paired with a writer for the entry content.</param>
+        /// <returns>The zip archive as bytes.</returns>
+        public static byte[] BuildZip(IEnumerable<(string EntryName, Action<Stream> Write)> entries)
+        {
             using var memory = new MemoryStream();
             using (var archive = new ZipArchive(memory, ZipArchiveMode.Create, leaveOpen: true))
             {
-                foreach (KeyValuePair<string, byte[]> file in files)
+                foreach ((string entryName, Action<Stream> write) in entries)
                 {
-                    ZipArchiveEntry entry = archive.CreateEntry(file.Key, CompressionLevel.Optimal);
+                    ZipArchiveEntry entry = archive.CreateEntry(entryName, CompressionLevel.Optimal);
                     using Stream entryStream = entry.Open();
-                    entryStream.Write(file.Value, 0, file.Value.Length);
+                    write(entryStream);
                 }
             }
 

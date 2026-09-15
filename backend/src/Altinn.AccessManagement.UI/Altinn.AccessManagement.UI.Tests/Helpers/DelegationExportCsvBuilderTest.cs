@@ -90,6 +90,31 @@ namespace Altinn.AccessManagement.UI.Tests.Helpers
             }
         }
 
+        [Fact]
+        public void BuildZip_StreamsWriterOutputIntoEntries()
+        {
+            var rows = new List<RoleExportRow> { new RoleExportRow { GiverOrgnr = "123456789", RolleCode = "DAGL" } };
+            var entries = new List<(string EntryName, Action<Stream> Write)>
+            {
+                ("roller.csv", stream => DelegationExportCsvBuilder.WriteCsv(rows, new RoleExportRowMap("nb"), stream)),
+                ("notat.txt", stream => stream.Write(Encoding.UTF8.GetBytes("hei"))),
+            };
+
+            byte[] zip = DelegationExportCsvBuilder.BuildZip(entries);
+
+            using var archive = new ZipArchive(new MemoryStream(zip), ZipArchiveMode.Read);
+            Assert.Equal(new[] { "roller.csv", "notat.txt" }, archive.Entries.Select(entry => entry.FullName));
+
+            using var csvReader = new StreamReader(archive.GetEntry("roller.csv").Open());
+            string csv = csvReader.ReadToEnd();
+            Assert.StartsWith("Organisasjonsnummer;", csv);
+            Assert.Contains("123456789;", csv);
+            Assert.Contains("DAGL", csv);
+
+            using var textReader = new StreamReader(archive.GetEntry("notat.txt").Open());
+            Assert.Equal("hei", textReader.ReadToEnd());
+        }
+
         private static string Decode(byte[] bytes) => new UTF8Encoding(true).GetString(bytes);
     }
 }
