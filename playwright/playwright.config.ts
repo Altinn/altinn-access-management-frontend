@@ -4,15 +4,16 @@ import { currentEnv, loadEnv } from './util/helper';
 
 // Load env from playwright/config to match repo layout
 loadEnv(currentEnv());
+const uuRun = process.env.UU_SCAN === '1';
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 const config: PlaywrightTestConfig = {
   fullyParallel: true,
-  retries: process.env.UU_SCAN === '1' ? 0 : 1,
+  retries: uuRun ? 0 : 1,
   use: {
-    trace: 'on',
+    trace: uuRun ? 'off' : 'on',
     screenshot: { mode: 'only-on-failure', fullPage: true },
-    video: { mode: 'retain-on-failure', size: { width: 1900, height: 1500 } },
+    video: uuRun ? 'off' : { mode: 'retain-on-failure', size: { width: 1900, height: 1500 } },
     launchOptions: {
       args: ['--start-maximized'],
     },
@@ -30,7 +31,6 @@ const config: PlaywrightTestConfig = {
       'html',
       {
         open: 'on-failure',
-        trace: 'on',
         outputDir: `playwright-report/${currentEnv().toUpperCase()}`,
         outputFolder: `playwright-report/${currentEnv().toUpperCase()}`,
       },
@@ -59,6 +59,8 @@ const config: PlaywrightTestConfig = {
         timeout: 15 * 1000, // 15 seconds for expect assertions
       },
       use: {
+        trace: 'off',
+        video: 'off',
         browserName: 'chromium',
         headless: true,
       },
