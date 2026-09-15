@@ -6,6 +6,7 @@ import { loadEnv } from 'playwright/util/helper';
 import { TenorApiRequests } from '../client/TenorApiRequests';
 import { fail, parseFlags, requirePositiveInt, unknownArg } from '../lib/cliArgs';
 import { pakkenavn, rensTekst, tilPakkeUrn } from '../lib/format';
+
 import type { Command } from './Command';
 
 /**
@@ -82,6 +83,13 @@ interface Resultat {
   dagligLeder: string;
   uiUrl: string;
   brukere: Pakkeholder[];
+  feil: Array<{
+    foedselsnummer: string;
+    tilkoblingBekreftet: boolean;
+    steg: 'tilkobling' | 'pakke';
+    pakke?: string;
+    melding: string;
+  }>;
 }
 
 interface Args {
@@ -327,6 +335,7 @@ async function run(argv: string[]): Promise<void> {
     dagligLeder: virksomhet.dagligLeder,
     uiUrl: UI_URL[args.miljo],
     brukere: [],
+    feil: [],
   };
 
   // Sekvensielt: alle delegeringene går fra samme virksomhet, og parallelle
@@ -338,28 +347,53 @@ async function run(argv: string[]): Promise<void> {
         pakker.map(pakkenavn).join(', '),
     );
 
-    await connection.addConnection(
-      virksomhet.dagligLeder,
-      virksomhet.organisasjonsnummer,
-      bruker.foedselsnummer,
-      orgUuid,
-      bruker.lastName,
-    );
-    await connection.addPackagePerson(
-      virksomhet.dagligLeder,
-      virksomhet.organisasjonsnummer,
-      bruker.foedselsnummer,
-      pakker,
-      orgUuid,
-      bruker.partyUuid,
-      bruker.lastName,
-    );
-
-    resultat.brukere.push({
+    const pakkeholder: Pakkeholder = {
       foedselsnummer: bruker.foedselsnummer,
       navn: bruker.navn,
-      pakker,
-    });
+      pakker: [],
+    };
+    let tilkoblingBekreftet = false;
+    let aktivPakke: string | undefined;
+    try {
+      await connection.addConnection(
+        virksomhet.dagligLeder,
+        virksomhet.organisasjonsnummer,
+        bruker.foedselsnummer,
+        orgUuid,
+        bruker.lastName,
+      );
+      tilkoblingBekreftet = true;
+      resultat.brukere.push(pakkeholder);
+      // Én pakke om gangen bevarer bekreftede tildelinger ved delvis feil.
+      for (const pakke of pakker) {
+        aktivPakke = pakke;
+        await connection.addPackagePerson(
+          virksomhet.dagligLeder,
+          virksomhet.organisasjonsnummer,
+          bruker.foedselsnummer,
+          [pakke],
+          orgUuid,
+          bruker.partyUuid,
+          bruker.lastName,
+        );
+        pakkeholder.pakker.push(pakke);
+      }
+    } catch (error) {
+      const melding = error instanceof Error ? error.message : String(error);
+      resultat.feil.push({
+        foedselsnummer: bruker.foedselsnummer,
+        tilkoblingBekreftet,
+        steg: tilkoblingBekreftet ? 'pakke' : 'tilkobling',
+        pakke: aktivPakke,
+        melding,
+      });
+      console.error(`Feil for ${bruker.foedselsnummer}: ${melding}`);
+    }
+  }
+
+  if (resultat.feil.length) {
+    console.error(`${resultat.feil.length} brukere feilet; resultatet viser bekreftede endringer.`);
+    process.exitCode = 1;
   }
 
   if (args.json) {

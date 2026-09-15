@@ -1,5 +1,5 @@
-import { Token } from '../../api-requests/Token';
-import { env } from '../../util/helper';
+import { Token } from 'playwright/api-requests/Token';
+import { env } from 'playwright/util/helper';
 
 export interface RegisterParty {
   partyUuid: string;

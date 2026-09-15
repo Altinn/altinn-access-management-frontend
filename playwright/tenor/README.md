@@ -13,19 +13,23 @@ yarn tenor --help                 # list all commands
 yarn tenor <command> --help       # options for one command
 ```
 
+The command name is now required: replace `yarn tenor -n 5` with
+`yarn tenor personer -n 5`. The old invocation prints help and exits with code 1.
+
 ## Commands
 
-| Command              | What it does                                                          |
-| --------------------- | ---------------------------------------------------------------------- |
-| `personer`            | Fetch test persons (default: resident + of legal age)                  |
-| `virksomheter`        | Fetch businesses in bulk (default: `AS`)                               |
-| `facilitator`         | Fetch one facilitator business (revisor/regnskapsfører/forretningsfører) with its clients |
-| `facilitator-orgnr`   | Fetch facilitator org numbers in bulk, optionally with their daglig leder (`--dagl`) |
-| `pakkeholdere`        | Build a business where many users share access packages ([altinn-auth#829](https://github.com/Altinn/altinn-auth/issues/829)) |
-| `be-om-tilgang`       | Export `AS` businesses + daglig leder to a JSON file for `altinn-platform-validation-tests` |
+| Command             | What it does                                                                                                                  |
+| ------------------- | ----------------------------------------------------------------------------------------------------------------------------- |
+| `personer`          | Fetch test persons (default: resident + of legal age)                                                                         |
+| `virksomheter`      | Fetch businesses in bulk (default: `AS`)                                                                                      |
+| `facilitator`       | Fetch one facilitator business (revisor/regnskapsfører/forretningsfører) with its clients                                     |
+| `facilitator-orgnr` | Fetch facilitator org numbers in bulk, optionally with their daglig leder (`--dagl`)                                          |
+| `pakkeholdere`      | Build a business where many users share access packages ([altinn-auth#829](https://github.com/Altinn/altinn-auth/issues/829)) |
+| `be-om-tilgang`     | Export `AS` businesses + daglig leder to a JSON file for `altinn-platform-validation-tests`                                   |
 
-Every command supports `--env <tt02\|at22\|at23>` (default `tt02`) and most
-support `--json` for machine-readable output. Run any command with `--help`
+Every command supports `--env <tt02|at22|at23>`. `pakkeholdere` defaults to
+`at23`; other commands use the `environment` variable or fall back to `tt02`.
+Most commands support `--json` for machine-readable output. Run any command with `--help`
 for its full option list.
 
 ## Structure
@@ -40,9 +44,11 @@ tenor/
     facilitatorOrgnr.ts, pakkeholdere.ts, beOmTilgang.ts
   client/
     TenorApiRequests.ts    # the actual Tenor integration (auth, search, pagination)
+    RegisterApiRequests.ts # batched Altinn Register lookups
   lib/
     cliArgs.ts              # shared flag-parsing helpers
     format.ts                # shared text-formatting helpers
+    registerEnrichment.ts    # add Register parties to Tenor rows
 ```
 
 Adding a new command means adding one file under `commands/` that exports a
@@ -113,3 +119,18 @@ Run the isolated, mocked Register checks from the repository root:
 ```sh
 yarn vitest run --config playwright/tenor/vitest.config.mts
 ```
+
+## Partial runs of `pakkeholdere`
+
+This command writes connections and access-package assignments in the selected
+environment. It continues with the next user after a failure and prints the result
+before exiting with code 1 if any user failed. With `--json`, `brukere` contains
+users with confirmed connections and only their confirmed package assignments;
+`feil` identifies failed users, the failed step/package, the error message, and
+whether the connection was confirmed (`tilkoblingBekreftet`). Packages are assigned
+one at a time so earlier successful assignments survive in the output.
+A failed request can have an uncertain server-side outcome (for example after a
+network timeout); check the failed operation before cleanup or retrying.
+
+`be-om-tilgang` writes to `be-om-tilgang-orgs.json` in the operating system's
+temporary directory by default. Use `--ut <file>` to choose another location.

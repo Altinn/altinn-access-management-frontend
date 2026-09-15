@@ -2,8 +2,9 @@
 import { loadEnv } from 'playwright/util/helper';
 
 import { TenorApiRequests, type FacilitatorRolle } from '../client/TenorApiRequests';
-import { parseFlags, requirePositiveInt, unknownArg } from '../lib/cliArgs';
+import { parseFlags, parseRolle, requirePositiveInt, ROLLER, unknownArg } from '../lib/cliArgs';
 import { rensTekst } from '../lib/format';
+
 import type { Command } from './Command';
 
 /**
@@ -16,8 +17,6 @@ import type { Command } from './Command';
  *   yarn tenor facilitator --maks-klienter 10          # finn facilitator med <= 10 klienter (færrest)
  *   yarn tenor facilitator --json                      # full struktur som JSON
  */
-
-const ROLLER: FacilitatorRolle[] = ['revisor', 'regnskapsfoerer', 'forretningsfoerer'];
 
 interface Args {
   rolle: FacilitatorRolle;
@@ -78,14 +77,6 @@ function parseArgs(argv: string[]): Args {
   requirePositiveInt(args.antall, '--antall');
   if (args.maksKlienter !== undefined) requirePositiveInt(args.maksKlienter, '--maks-klienter');
   return args;
-}
-
-function parseRolle(rolle: string): FacilitatorRolle {
-  if (!ROLLER.includes(rolle as FacilitatorRolle)) {
-    console.error(`Ugyldig rolle: ${rolle}. Gyldige: ${ROLLER.join(', ')}`);
-    process.exit(1);
-  }
-  return rolle as FacilitatorRolle;
 }
 
 async function run(argv: string[]): Promise<void> {

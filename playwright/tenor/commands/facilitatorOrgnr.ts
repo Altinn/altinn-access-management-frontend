@@ -2,7 +2,7 @@
 import { loadEnv } from 'playwright/util/helper';
 
 import { TenorApiRequests, type FacilitatorRolle } from '../client/TenorApiRequests';
-import { parseFlags, requirePositiveInt, unknownArg } from '../lib/cliArgs';
+import { parseFlags, parseRolle, requirePositiveInt, ROLLER, unknownArg } from '../lib/cliArgs';
 import { enrichWithRegister } from '../lib/registerEnrichment';
 
 import type { Command } from './Command';
@@ -15,8 +15,6 @@ import type { Command } from './Command';
  *   yarn tenor facilitator-orgnr --rolle revisor -n 100 --dagl   # + daglig leder for hver
  *   yarn tenor facilitator-orgnr -n 20 --json                    # som JSON
  */
-
-const ROLLER: FacilitatorRolle[] = ['revisor', 'regnskapsfoerer', 'forretningsfoerer'];
 
 interface Args {
   rolle: FacilitatorRolle;
@@ -82,12 +80,35 @@ function parseArgs(argv: string[]): Args {
   return args;
 }
 
-function parseRolle(rolle: string): FacilitatorRolle {
-  if (!ROLLER.includes(rolle as FacilitatorRolle)) {
-    console.error(`Ugyldig rolle: ${rolle}. Gyldige: ${ROLLER.join(', ')}`);
-    process.exit(1);
+async function printRows<T>(
+  rows: T[],
+  args: Args,
+  identifier: (row: T) => string,
+  plain: (row: T) => string,
+  leaderIdentifier?: (row: T) => string | null,
+): Promise<void> {
+  if (args.register) {
+    const registerRows = rows.map((row) => ({
+      organisasjonsnummer: identifier(row),
+      ...(leaderIdentifier ? { dagligLeder: leaderIdentifier(row) } : {}),
+    }));
+    console.log(
+      JSON.stringify(
+        await enrichWithRegister(
+          registerRows,
+          (row) => row.organisasjonsnummer,
+          args.env,
+          leaderIdentifier ? (row) => row.dagligLeder : undefined,
+        ),
+        null,
+        2,
+      ),
+    );
+  } else if (args.json) {
+    console.log(JSON.stringify(rows, null, 2));
+  } else {
+    for (const row of rows) console.log(plain(row));
   }
-  return rolle as FacilitatorRolle;
 }
 
 async function run(argv: string[]): Promise<void> {
@@ -99,20 +120,12 @@ async function run(argv: string[]): Promise<void> {
   if (!args.dagl) {
     console.error(`Henter ${args.antall} ${args.rolle}-virksomheter fra Tenor (${args.env}) ...`);
     const orgnr = await tenor.hentFacilitatorOrgnr(args.rolle, args.antall);
-    if (args.register) {
-      const rows = orgnr.map((organisasjonsnummer) => ({ organisasjonsnummer }));
-      console.log(
-        JSON.stringify(
-          await enrichWithRegister(rows, (v) => v.organisasjonsnummer, args.env),
-          null,
-          2,
-        ),
-      );
-    } else if (args.json) {
-      console.log(JSON.stringify(orgnr, null, 2));
-    } else {
-      for (const o of orgnr) console.log(o);
-    }
+    await printRows(
+      orgnr,
+      args,
+      (org) => org,
+      (org) => org,
+    );
     console.error(`\n-> ${orgnr.length} ${args.rolle}-virksomheter`);
     return;
   }
@@ -122,25 +135,13 @@ async function run(argv: string[]): Promise<void> {
   );
   const orgnr = await tenor.hentFacilitatorOrgnr(args.rolle, args.antall);
   const dagligLedere = await tenor.hentDagligLedere(orgnr);
-  if (args.register) {
-    console.log(
-      JSON.stringify(
-        await enrichWithRegister(
-          dagligLedere,
-          (v) => v.organisasjonsnummer,
-          args.env,
-          (v) => v.dagligLeder,
-        ),
-        null,
-        2,
-      ),
-    );
-  } else if (args.json) {
-    console.log(JSON.stringify(dagligLedere, null, 2));
-  } else {
-    for (const d of dagligLedere)
-      console.log(`${d.organisasjonsnummer}\t${d.dagligLeder ?? '(ukjent)'}`);
-  }
+  await printRows(
+    dagligLedere,
+    args,
+    (row) => row.organisasjonsnummer,
+    (row) => `${row.organisasjonsnummer}\t${row.dagligLeder ?? '(ukjent)'}`,
+    (row) => row.dagligLeder,
+  );
   const medDagl = dagligLedere.filter((d) => d.dagligLeder).length;
   console.error(`\n-> ${medDagl}/${dagligLedere.length} virksomheter har daglig leder`);
 }

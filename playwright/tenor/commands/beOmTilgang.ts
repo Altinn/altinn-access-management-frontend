@@ -1,10 +1,13 @@
 /* eslint-disable no-console */
 import { writeFileSync } from 'node:fs';
+import { tmpdir } from 'node:os';
+import { join } from 'node:path';
 
 import { loadEnv } from 'playwright/util/helper';
 
 import { TenorApiRequests } from '../client/TenorApiRequests';
 import { parseFlags, requirePositiveInt, unknownArg } from '../lib/cliArgs';
+
 import type { Command } from './Command';
 
 /**
@@ -20,6 +23,8 @@ import type { Command } from './Command';
  *   yarn tenor be-om-tilgang -n 200 --ut /tmp/be-om-tilgang-tt02.json
  */
 
+const DEFAULT_OUTPUT = join(tmpdir(), 'be-om-tilgang-orgs.json');
+
 interface Args {
   antall: number;
   ut: string;
@@ -34,7 +39,7 @@ function printHelp(): void {
       'Bruk: yarn tenor be-om-tilgang [valg]',
       '',
       '  -n, --antall <tall>   Antall virksomheter i output (default: 200)',
-      '      --ut <fil>        Fil JSON-resultatet skrives til (default: /tmp/be-om-tilgang-orgs.json)',
+      `      --ut <fil>        Fil JSON-resultatet skrives til (default: ${DEFAULT_OUTPUT})`,
       '      --env <miljø>     Miljø for env-fil: tt02, at22, at23 (default: tt02)',
       '  -h, --help            Vis denne hjelpeteksten',
     ].join('\n'),
@@ -44,7 +49,7 @@ function printHelp(): void {
 function parseArgs(argv: string[]): Args {
   const args: Args = {
     antall: 200,
-    ut: '/tmp/be-om-tilgang-orgs.json',
+    ut: DEFAULT_OUTPUT,
     env: process.env.environment ?? 'tt02',
   };
 
@@ -94,7 +99,7 @@ async function run(argv: string[]): Promise<void> {
   writeFileSync(args.ut, JSON.stringify(rader, null, 2));
   console.error(
     `Skrev ${rader.length} rader til ${args.ut} ` +
-      `(${virksomheter.length - rader.length} virksomheter manglet daglig leder).`,
+      `(${dagligLedere.filter((d) => !d.dagligLeder).length} virksomheter manglet daglig leder).`,
   );
 }
 

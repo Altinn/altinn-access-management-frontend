@@ -1,4 +1,5 @@
 /* eslint-disable no-console */
+import type { FacilitatorRolle } from '../client/TenorApiRequests';
 
 /** Skriver en feilmelding og avslutter prosessen med exit code 1. */
 export function fail(message: string): never {
@@ -46,4 +47,13 @@ export function unknownArg(arg: string, printHelp: () => void): void {
   console.error(`Ukjent argument: ${arg}`);
   printHelp();
   process.exit(1);
+}
+
+export const ROLLER: FacilitatorRolle[] = ['revisor', 'regnskapsfoerer', 'forretningsfoerer'];
+
+export function parseRolle(rolle: string): FacilitatorRolle {
+  if (!ROLLER.includes(rolle as FacilitatorRolle)) {
+    fail(`Ugyldig rolle: ${rolle}. Gyldige: ${ROLLER.join(', ')}`);
+  }
+  return rolle as FacilitatorRolle;
 }
