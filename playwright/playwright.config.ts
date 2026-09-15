@@ -53,6 +53,7 @@ const config: PlaywrightTestConfig = {
     {
       name: 'accessibility-tests',
       testMatch: 'playwright/uuTests/accessibilityTests/*.spec.ts',
+      timeout: 90 * 1000,
       expect: {
         timeout: 15 * 1000, // 15 seconds for expect assertions
       },

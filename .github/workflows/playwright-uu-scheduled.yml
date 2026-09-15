@@ -1,0 +1,19 @@
+name: "Playwright UU: AT23"
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: '17 4 * * 1-5' # Weekdays at 04:17 UTC
+
+concurrency:
+  group: playwright-uu-at23
+  cancel-in-progress: false
+
+jobs:
+  accessibility:
+    uses: ./.github/workflows/template-playwright.yml
+    secrets: inherit
+    with:
+      environment: AT23
+      project: e2e-tests
+      accessibility: true

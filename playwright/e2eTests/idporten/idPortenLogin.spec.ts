@@ -1,6 +1,6 @@
 /* eslint-disable import/default */
 /* eslint-disable import/no-named-as-default-member */
-import { test } from '@playwright/test';
+import { test } from 'playwright/fixture/pomFixture';
 import { env } from 'playwright/util/helper';
 import { LoginPage } from 'playwright/pages/LoginPage';
 
