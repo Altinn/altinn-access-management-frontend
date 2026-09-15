@@ -6,7 +6,6 @@ if (!fs.existsSync(reportPath)) {
 }
 const report = JSON.parse(fs.readFileSync(reportPath, 'utf8'));
 const groups = new Map();
-const rules = new Map();
 const areas = {
   accessPackageDelegation: 'Fullmakter',
   Tilgangsstyring: 'Fullmakter',
@@ -18,34 +17,6 @@ const areas = {
   navigation: 'Aktørvalg og meny',
   systemuser: 'Systembruker',
   idporten: 'Innlogging',
-};
-const findings = {
-  'svg-img-alt': 'SVG uten alternativ tekst',
-  'color-contrast': 'For lav kontrast',
-  'button-name': 'Knapp uten navn',
-  'aria-allowed-attr': 'Ugyldig ARIA-attributt',
-  'aria-required-children': 'Meny mangler påkrevde elementer',
-  'document-title': 'Siden mangler tittel',
-  list: 'Feil listestruktur',
-  listitem: 'Listeelement uten liste',
-};
-const states = {
-  systembruker: 'Systembruker',
-  sluttside: 'Siste side',
-  brukeroversikt: 'Brukeroversikt',
-  delegeringsdialog: 'Dialog',
-  søkeresultat: 'Søkeresultat',
-  'simulert-søkefeil': 'Feilmelding',
-};
-const consequences = {
-  'svg-img-alt': [
-    'Ikoner kan leses opp uten forklaring; navn på knappen må vurderes',
-    'Skjermleserbrukere',
-  ],
-  'color-contrast': ['Tekst kan være vanskelig å lese', 'Brukere med nedsatt syn'],
-  'button-name': ['Knappens formål kan være ukjent', 'Skjermleserbrukere'],
-  'aria-allowed-attr': ['Kontrollens tilstand kan formidles feil', 'Skjermleserbrukere'],
-  'aria-required-children': ['Menyens struktur kan være vanskelig å forstå', 'Skjermleserbrukere'],
 };
 let scans = 0;
 let uuTests = 0;
@@ -67,22 +38,8 @@ function visit(suite) {
       let hasScan = false;
       for (const attachment of result.attachments || []) {
         if (!attachment.name.endsWith('-axe-results')) continue;
-        const raw = attachment.body
-          ? Buffer.from(attachment.body, 'base64').toString()
-          : fs.readFileSync(attachment.path, 'utf8');
-        const scan = JSON.parse(raw);
         scans++;
         hasScan = true;
-        for (const violation of scan.violations) {
-          const rule = rules.get(violation.id) || {
-            impact: violation.impact,
-            nodes: 0,
-            states: new Set(),
-          };
-          rule.nodes += violation.nodes.length;
-          rule.states.add(attachment.name.replace('-axe-results', ''));
-          rules.set(violation.id, rule);
-        }
       }
       if (hasScan) uuTests++;
       if (
@@ -111,17 +68,4 @@ const total = [...groups.values()].reduce(
 console.log(`| **Totalt** | **${total.passed}** | **${total.failed}** | **${total.skipped}** |`);
 console.log(
   `\nUU-skanning: ${uuTests} tester, ${scans} skanninger. Andre testfeil: ${otherFailures}.`,
-);
-if (rules.size) {
-  console.log(
-    '\n| UU-funn | Treff | Hvor | Mulig konsekvens | Berørte brukere |\n|---|---:|---|---|---|',
-  );
-  for (const [id, rule] of rules)
-    console.log(
-      `| ${findings[id] || id} | ${rule.nodes} | ${[...rule.states].map((state) => states[state] || state).join(', ')} | ${(consequences[id] || ['Må vurderes manuelt', 'Må vurderes manuelt']).join(' | ')} |`,
-    );
-  console.log('\nTreff kan gjelde samme element i flere skanninger.');
-} else console.log('\nIngen axe-brudd i de fullførte skanningene.');
-console.log(
-  '\nSkanner tilgangsstyringsappen. Delegeringsflyten sjekker også dialog, søk, feilmelding og tastatur/fokus.',
 );

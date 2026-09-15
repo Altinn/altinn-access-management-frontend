@@ -106,10 +106,6 @@ export class runAccessibilityTests {
       helpUrl: violation.helpUrl,
       nodes: violation.nodes.map(({ target, failureSummary }) => ({ target, failureSummary })),
     }));
-    await testInfo.attach(`${name}-violations`, {
-      body: JSON.stringify(summary, null, 2),
-      contentType: 'application/json',
-    });
     expect.soft(summary, `UU-funn på ${name}; se vedlagt axe-rapport`).toEqual([]);
   }
 
