@@ -7,6 +7,7 @@ export enum amUIPath {
   PoaOverview = 'poa-overview',
   PoaOverviewInstance = 'poa-overview/instance',
   PackagePoaDetails = 'poa-overview/access-package/:id',
+  ServicePoaDetails = 'poa-overview/service/:id',
   Settings = 'settings',
   Requests = 'requests',
   DraftRequest = 'requests/resource',

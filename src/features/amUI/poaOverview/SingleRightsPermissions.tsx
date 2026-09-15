@@ -1,9 +1,11 @@
-import { useEffect, useMemo, useState } from 'react';
+import { useCallback, useEffect, useMemo, useState, type ElementType } from 'react';
+import { Link } from 'react-router';
 import { useTranslation } from 'react-i18next';
 import { DsAlert, DsButton, DsParagraph } from '@altinn/altinn-components';
 import {
   useSearchResourcesInfiniteQuery,
   useGetSingleRightsForRightholderQuery,
+  type ServiceResource,
 } from '@/rtk/features/singleRights/singleRightsApi';
 import { ResourceList } from '@/features/amUI/common/ResourceList/ResourceList';
 import { usePartyRepresentation } from '../common/PartyRepresentationContext/PartyRepresentationContext';
@@ -13,6 +15,7 @@ import type { Permissions } from '@/dataObjects/dtos/accessPackage';
 import { ResourceFilterToolbar } from '../common/ResourceFilterToolbar/ResourceFilterToolbar';
 import { CollapsibleContainer } from '../common/CollapsibleContainer/CollapsibleContainer';
 import { useGetResourceOwnersQuery } from '@/rtk/features/resourceApi';
+import { amUIPath } from '@/routes/paths/amUIPath';
 import { useDebouncedValue, usePermissionOverview } from '@/resources/hooks';
 import { useFilteredResources } from '../common/ResourceList/useFilteredResources';
 import {
@@ -35,6 +38,18 @@ export const SingleRightsPermissions = () => {
   // ServicesToolbar so that typing does not re-render the service lists below.
   const [debouncedSearch, setDebouncedSearch] = useState('');
   const [filterState, setFilterState] = useState<string[]>([]);
+
+  // Both lists link to the service's own details page, where permissions are given and revoked.
+  const getResourceItemAs = useCallback(
+    (resource: ServiceResource): ElementType =>
+      (props) => (
+        <Link
+          {...props}
+          to={`/${amUIPath.PoaOverview}/service/${encodeURIComponent(resource.identifier)}`}
+        />
+      ),
+    [],
+  );
 
   // No `to` is passed: the overview lists services delegated from the reportee to anyone.
   const {
@@ -134,6 +149,7 @@ export const SingleRightsPermissions = () => {
             isLoading={isLoadingDelegations || isPartyLoading}
             enableSearch={false}
             showDetails={false}
+            getItemAs={getResourceItemAs}
             noResourcesText={
               hasSearch
                 ? t('poa_overview_page.services_tab.no_services_found')
@@ -172,6 +188,7 @@ export const SingleRightsPermissions = () => {
                 }
                 enableSearch={false}
                 showDetails={false}
+                getItemAs={getResourceItemAs}
                 noResourcesText={t('poa_overview_page.services_tab.no_other_services')}
               />
               {hasNextPage && (

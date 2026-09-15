@@ -1072,6 +1072,12 @@
       "no_resources": "This package includes no services"
     }
   },
+  "service_poa_details_page": {
+    "page_title": "Service - Altinn",
+    "page_title_service": "{{service}} - Altinn",
+    "load_error": "Oops! Something went wrong.",
+    "back_to_overview_link": "Go back to the overview"
+  },
   "resource_list": {
     "resource_search_placeholder": "Search resources",
     "no_resources_filtered": "No matches for the search \"{{searchTerm}}\".",
