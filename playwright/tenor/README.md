@@ -74,3 +74,42 @@ from another project. The key points:
   discovered by scanning their clients (`<felt>:*`, e.g.
   `revisorerOrgnr:*`) and reading the facilitator's orgnr back out of the
   client's `rollegrupper` (role code `REVI`/`REGN`/`FFØR`).
+
+## Optional Altinn IDs from Register
+
+Run from `playwright/` in this repository (install dependencies with `yarn install`
+from the repository root first):
+
+```sh
+yarn tenor personer -n 100 --env at22 --register
+yarn tenor virksomheter -n 100 --env at23 --register
+yarn tenor facilitator-orgnr --rolle revisor -n 100 --dagl --env tt02 --register
+```
+
+`--register` is opt-in on these three commands and implies JSON output. Without
+it, output and Tenor-only behavior remain unchanged and no Register credentials
+are needed. `--env` alone selects configuration; it does not enrich Tenor results.
+
+Each output row keeps its Tenor fields and adds `altinnEnvironment` and `altinn`
+(the Register party, including `partyUuid`, `partyId` and available `user` fields).
+For facilitator org numbers, rows become objects with `organisasjonsnummer`.
+With `--dagl`, `dagligLederAltinn` contains the leader's Register party as well.
+Identifiers are deduplicated and queried in batches of at most **100**, requesting
+`party,person,organization,user`. Results are matched by identifier, not response
+order. Missing parties remain in the output with `altinn: null` and a count is
+reported to stderr. HTTP errors or malformed responses fail the command.
+Consumers requiring a user ID must also check `altinn.user.userId`; a party need
+not have a user. IDs must be regenerated separately for AT22, AT23 and TT02.
+
+The existing `playwright/config/.env*` loader supplies Tenor/Maskinporten settings.
+Enrichment additionally uses `API_BASE_URL`, `ENV_NAME`, `USERNAME_TEST_API`,
+`PASSWORD_TEST_API`, and `<ENV>_REGISTER_SUBSCRIPTION_KEY` (e.g.
+`AT23_REGISTER_SUBSCRIPTION_KEY`). Keep these in local environment configuration;
+`API_BASE_URL` and `ENV_NAME` must correspond to the requested `--env`.
+Register uses a platform access token from the existing test token generator.
+
+Run the isolated, mocked Register checks from the repository root:
+
+```sh
+yarn vitest run --config playwright/tenor/vitest.config.mts
+```

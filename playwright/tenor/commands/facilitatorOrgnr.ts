@@ -3,6 +3,8 @@ import { loadEnv } from 'playwright/util/helper';
 
 import { TenorApiRequests, type FacilitatorRolle } from '../client/TenorApiRequests';
 import { parseFlags, requirePositiveInt, unknownArg } from '../lib/cliArgs';
+import { enrichWithRegister } from '../lib/registerEnrichment';
+
 import type { Command } from './Command';
 
 /**
@@ -21,6 +23,7 @@ interface Args {
   antall: number;
   dagl: boolean;
   json: boolean;
+  register: boolean;
   env: string;
 }
 
@@ -34,6 +37,7 @@ function printHelp(): void {
       `  -r, --rolle <rolle>   ${ROLLER.join(' | ')} (default: revisor)`,
       '  -n, --antall <tall>   Antall unike facilitator-orgnr som hentes (default: 10)',
       '      --dagl            Slå også opp daglig leder for hver facilitator',
+      '      --register        Berik med Altinn-ID-er fra Register (impliserer JSON)',
       '      --json            Skriv ut som JSON',
       '      --env <miljø>     Miljø for env-fil: tt02, at22, at23 (default: tt02)',
       '  -h, --help            Vis denne hjelpeteksten',
@@ -47,6 +51,7 @@ function parseArgs(argv: string[]): Args {
     antall: 10,
     dagl: false,
     json: false,
+    register: false,
     env: process.env.environment ?? 'tt02',
   };
 
@@ -59,6 +64,7 @@ function parseArgs(argv: string[]): Args {
       '--antall': (next) => (args.antall = Number(next())),
       '--dagl': () => (args.dagl = true),
       '--env': (next) => (args.env = next()),
+      '--register': () => (args.register = true),
       '--json': () => (args.json = true),
       '-h': () => {
         printHelp();
@@ -93,7 +99,16 @@ async function run(argv: string[]): Promise<void> {
   if (!args.dagl) {
     console.error(`Henter ${args.antall} ${args.rolle}-virksomheter fra Tenor (${args.env}) ...`);
     const orgnr = await tenor.hentFacilitatorOrgnr(args.rolle, args.antall);
-    if (args.json) {
+    if (args.register) {
+      const rows = orgnr.map((organisasjonsnummer) => ({ organisasjonsnummer }));
+      console.log(
+        JSON.stringify(
+          await enrichWithRegister(rows, (v) => v.organisasjonsnummer, args.env),
+          null,
+          2,
+        ),
+      );
+    } else if (args.json) {
       console.log(JSON.stringify(orgnr, null, 2));
     } else {
       for (const o of orgnr) console.log(o);
@@ -107,7 +122,20 @@ async function run(argv: string[]): Promise<void> {
   );
   const orgnr = await tenor.hentFacilitatorOrgnr(args.rolle, args.antall);
   const dagligLedere = await tenor.hentDagligLedere(orgnr);
-  if (args.json) {
+  if (args.register) {
+    console.log(
+      JSON.stringify(
+        await enrichWithRegister(
+          dagligLedere,
+          (v) => v.organisasjonsnummer,
+          args.env,
+          (v) => v.dagligLeder,
+        ),
+        null,
+        2,
+      ),
+    );
+  } else if (args.json) {
     console.log(JSON.stringify(dagligLedere, null, 2));
   } else {
     for (const d of dagligLedere)

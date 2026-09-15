@@ -3,6 +3,8 @@ import { loadEnv } from 'playwright/util/helper';
 
 import { TenorApiRequests } from '../client/TenorApiRequests';
 import { parseFlags, requirePositiveInt, unknownArg } from '../lib/cliArgs';
+import { enrichWithRegister } from '../lib/registerEnrichment';
+
 import type { Command } from './Command';
 
 /**
@@ -18,6 +20,7 @@ interface Args {
   antall: number;
   kql?: string;
   json: boolean;
+  register: boolean;
   env: string;
 }
 
@@ -30,6 +33,7 @@ function printHelp(): void {
       '',
       '  -n, --antall <tall>   Antall virksomheter som hentes (default: 10)',
       '      --kql <kql>       Egendefinert KQL (default: organisasjonsform.kode:AS)',
+      '      --register        Berik med Altinn-ID-er fra Register (impliserer JSON)',
       '      --json            Skriv ut som JSON',
       '      --env <miljø>     Miljø for env-fil: tt02, at22, at23 (default: tt02)',
       '  -h, --help            Vis denne hjelpeteksten',
@@ -38,7 +42,12 @@ function printHelp(): void {
 }
 
 function parseArgs(argv: string[]): Args {
-  const args: Args = { antall: 10, json: false, env: process.env.environment ?? 'tt02' };
+  const args: Args = {
+    antall: 10,
+    json: false,
+    register: false,
+    env: process.env.environment ?? 'tt02',
+  };
 
   parseFlags(
     argv,
@@ -47,6 +56,7 @@ function parseArgs(argv: string[]): Args {
       '--antall': (next) => (args.antall = Number(next())),
       '--kql': (next) => (args.kql = next()),
       '--env': (next) => (args.env = next()),
+      '--register': () => (args.register = true),
       '--json': () => (args.json = true),
       '-h': () => {
         printHelp();
@@ -74,7 +84,15 @@ async function run(argv: string[]): Promise<void> {
   const tenor = new TenorApiRequests();
   const virksomheter = await tenor.hentVirksomheterPaginert(kql, args.antall);
 
-  if (args.json) {
+  if (args.register) {
+    console.log(
+      JSON.stringify(
+        await enrichWithRegister(virksomheter, (v) => v.organisasjonsnummer, args.env),
+        null,
+        2,
+      ),
+    );
+  } else if (args.json) {
     console.log(JSON.stringify(virksomheter, null, 2));
   } else {
     for (const v of virksomheter) console.log(`${v.organisasjonsnummer}\t${v.navn}`);

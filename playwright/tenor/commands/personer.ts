@@ -3,6 +3,8 @@ import { loadEnv } from 'playwright/util/helper';
 
 import { TENOR_MAX_PER_PAGE, TenorApiRequests } from '../client/TenorApiRequests';
 import { fail, parseFlags, requirePositiveInt, unknownArg } from '../lib/cliArgs';
+import { enrichWithRegister } from '../lib/registerEnrichment';
+
 import type { Command } from './Command';
 
 /**
@@ -21,6 +23,7 @@ interface Args {
   antall: number;
   kql?: string;
   json: boolean;
+  register: boolean;
   navn: boolean;
   env: string;
 }
@@ -35,6 +38,7 @@ function printHelp(): void {
       '  -n, --antall <tall>   Antall personer som hentes (default: 1)',
       '      --kql <streng>    Egendefinert KQL (default: bosatt + myndig)',
       '      --navn            Skriv ut navn (fornavn etternavn) ved siden av fnr',
+      '      --register        Berik med Altinn-ID-er fra Register (impliserer JSON)',
       '      --json            Skriv ut full kildedata som JSON',
       '      --env <miljø>     Miljø for env-fil: tt02, at22, at23 (default: tt02)',
       '  -h, --help            Vis denne hjelpeteksten',
@@ -46,6 +50,7 @@ function parseArgs(argv: string[]): Args {
   const args: Args = {
     antall: 1,
     json: false,
+    register: false,
     navn: false,
     env: process.env.environment ?? 'tt02',
   };
@@ -57,6 +62,7 @@ function parseArgs(argv: string[]): Args {
       '--antall': (next) => (args.antall = Number(next())),
       '--kql': (next) => (args.kql = next()),
       '--env': (next) => (args.env = next()),
+      '--register': () => (args.register = true),
       '--json': () => (args.json = true),
       '--navn': () => (args.navn = true),
       '-h': () => {
@@ -95,7 +101,15 @@ async function run(argv: string[]): Promise<void> {
     console.error(`Advarsel: fant bare ${personer.length} av ${args.antall} ønskede personer.`);
   }
 
-  if (args.json) {
+  if (args.register) {
+    console.log(
+      JSON.stringify(
+        await enrichWithRegister(personer, (p) => p.foedselsnummer, args.env),
+        null,
+        2,
+      ),
+    );
+  } else if (args.json) {
     console.log(JSON.stringify(personer, null, 2));
   } else {
     for (const person of personer) {
