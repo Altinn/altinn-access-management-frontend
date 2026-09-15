@@ -25,14 +25,21 @@ export class InnstillingerPage {
   readonly sectionHeading: Locator;
   readonly emailRow: Locator;
   readonly smsRow: Locator;
+  readonly emailAddressCount: Locator;
 
   readonly dialog: Locator;
+  readonly emailRows: Locator;
+  readonly emailFields: Locator;
+  readonly smsRows: Locator;
+  readonly phoneFields: Locator;
+  readonly countryCodeFields: Locator;
   readonly addMoreButton: Locator;
   readonly saveButton: Locator;
   readonly cancelButton: Locator;
   readonly closeButton: Locator;
   readonly noAddressesError: Locator;
   readonly savingError: Locator;
+  readonly ugyldigEpostFeilmelding: Locator;
 
   constructor(page: Page, language: Language = Language.NB) {
     this.page = page;
@@ -50,8 +57,14 @@ export class InnstillingerPage {
     // repeats the current addresses and the badge, so this matches as a substring.
     this.emailRow = this.page.getByRole('button', { name: settings.alerts_on_email });
     this.smsRow = this.page.getByRole('button', { name: settings.alerts_on_sms });
+    this.emailAddressCount = this.page.getByTestId('email-address-count');
 
     this.dialog = this.page.getByRole('dialog');
+    this.emailRows = this.dialog.getByTestId('email-address-row');
+    this.emailFields = this.emailRows.getByTestId('email-address');
+    this.smsRows = this.dialog.getByTestId('sms-address-row');
+    this.phoneFields = this.smsRows.getByTestId('sms-phone');
+    this.countryCodeFields = this.smsRows.getByTestId('sms-country-code');
     this.addMoreButton = this.dialog.getByRole('button', { name: settings.add_more });
     this.saveButton = this.dialog.getByRole('button', {
       name: this.texts.common.save_changes,
@@ -68,20 +81,14 @@ export class InnstillingerPage {
     });
     this.noAddressesError = this.dialog.getByText(settings.no_addresses_error);
     this.savingError = this.dialog.getByText(settings.error_saving_addresses);
-  }
-
-  /** Email inputs in the open email dialog. */
-  get emailFields(): Locator {
-    return this.dialog.getByTestId('email-address');
+    this.ugyldigEpostFeilmelding = this.dialog.getByText(
+      this.texts.text_field_errors.invalid_email_pattern,
+    );
   }
 
   /** Find a controlled email input by its exact value, regardless of row order. */
   emailField(email: string): Locator {
     return this.emailFields.and(this.dialog.locator(`input[value=${JSON.stringify(email)}]`));
-  }
-
-  get smsRows(): Locator {
-    return this.dialog.getByTestId('sms-address-row');
   }
 
   /** Match both values to distinguish local numbers with different country codes. */
@@ -91,18 +98,9 @@ export class InnstillingerPage {
       .filter({ has: this.page.locator(`input[value=${JSON.stringify(address.countryCode)}]`) });
   }
 
-  get phoneFields(): Locator {
-    return this.smsRows.getByTestId('sms-phone');
-  }
-
-  get countryCodeFields(): Locator {
-    return this.smsRows.getByTestId('sms-country-code');
-  }
-
   /** Find the remove button in the row containing this email address. */
   removeEmailButton(email: string): Locator {
-    return this.dialog
-      .getByTestId('email-address-row')
+    return this.emailRows
       .filter({ has: this.page.locator(`input[value=${JSON.stringify(email)}]`) })
       .getByRole('button', { name: this.texts.settings_page.remove_email, exact: true });
   }
@@ -112,15 +110,6 @@ export class InnstillingerPage {
       name: this.texts.settings_page.remove_sms,
       exact: true,
     });
-  }
-
-  /** The client-side validation message shown for a malformed e-mail. */
-  get ugyldigEpostFeilmelding(): Locator {
-    return this.dialog.getByText(this.texts.text_field_errors.invalid_email_pattern);
-  }
-
-  get emailAddressCount(): Locator {
-    return this.page.getByTestId('email-address-count');
   }
 
   async goToInnstillinger() {
@@ -164,11 +153,10 @@ export class InnstillingerPage {
   }
 
   async leggTilTelefonnummer(address: SmsAddress) {
-    const phone = this.dialog.getByTestId('sms-phone');
-    await expect(phone).toHaveValue('');
-    await this.dialog.getByTestId('sms-country-code').fill(address.countryCode);
-    await phone.fill(address.phone);
-    await phone.blur();
+    await expect(this.phoneFields).toHaveValue('');
+    await this.countryCodeFields.fill(address.countryCode);
+    await this.phoneFields.fill(address.phone);
+    await this.phoneFields.blur();
   }
 
   async klikkLeggTilFlere() {
