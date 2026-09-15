@@ -991,6 +991,14 @@
       "search_label": "Søk etter delingar frå innboks",
       "no_results": "Ingen element frå innboks funne.",
       "no_search_results": "Ingen treff på melding eller skjema."
+    },
+    "services_tab": {
+      "assigned_services_title": "Tenester det er gitt fullmakt til",
+      "other_services_title": "Andre tenester",
+      "description": "Her blir det vist tenester som det er gitt fullmakt til direkte. Dersom ein brukar har fått fullmakt til ei teneste gjennom tilgangspakkar, blir ho ikkje vist her.",
+      "no_services": "Det er ikkje gitt fullmakt til nokre tenester.",
+      "no_services_found": "Ingen tenester funne",
+      "no_other_services": "Ingen andre tenester funne."
     }
   },
   "instance": {
