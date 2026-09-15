@@ -3,7 +3,7 @@ name: "Playwright UU: AT23"
 on:
   workflow_dispatch:
   schedule:
-    - cron: '17 4 * * 1-5' # Weekdays at 04:17 UTC
+    - cron: '17 4 * * 1' # Mondays at 04:17 UTC
 
 concurrency:
   group: playwright-uu-at23

@@ -68,6 +68,12 @@ jobs:
           PLAYWRIGHT_HTML_OPEN: never
         run: |
           yarn run "env:${ENVIRONMENT}" --project "${PROJECT}" --workers=4
+      - name: Export UU HTML reports
+        if: ${{ always() && inputs.accessibility }}
+        working-directory: playwright
+        env:
+          REPORT_NAME: ${{ inputs.environment }}
+        run: node util/accessibilityReport.cjs jsonReports/jsonReport.json "playwright-report/$REPORT_NAME/uu"
       - name: Test summary
         if: always()
         working-directory: playwright
@@ -88,6 +94,7 @@ jobs:
           subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
 
       - name: Upload HTML report to Azure
+        id: upload-report
         if: always()
         env:
           REPORT_NAME: ${{ inputs.environment }}
@@ -106,9 +113,13 @@ jobs:
 
           echo "REPORT_URL=https://playwrightreporting.z1.web.core.windows.net/$REPORT_ID/$REPORT_NAME/" >> "$GITHUB_ENV"
       - name: Show report URL
-        if: always()
+        if: ${{ always() && steps.upload-report.outcome == 'success' }}
+        env:
+          ACCESSIBILITY: ${{ inputs.accessibility }}
         run: |
-          echo ""
-          echo "📊 Playwright test report:"
-          echo "➡️  $REPORT_URL"
-          echo ""
+          echo "Playwright report: $REPORT_URL"
+          echo "[Playwright report]($REPORT_URL)" >> "$GITHUB_STEP_SUMMARY"
+          if [ "$ACCESSIBILITY" = "true" ]; then
+            echo "UU report: ${REPORT_URL}uu/"
+            echo "[UU reports with screenshots and fixes](${REPORT_URL}uu/)" >> "$GITHUB_STEP_SUMMARY"
+          fi
