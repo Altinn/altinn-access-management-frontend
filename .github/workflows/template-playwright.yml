@@ -51,8 +51,9 @@ jobs:
       - name: Install Chromium
         if: inputs.accessibility
         working-directory: playwright
-        run: yarn exec playwright install --with-deps chromium
+        run: yarn exec playwright install chromium
       - name: Running yarn tests
+        id: playwright-tests
         working-directory: playwright
         env:
           USERNAME_TEST_API: ${{ secrets.USERNAME_TEST_API }}
@@ -70,7 +71,7 @@ jobs:
         run: |
           yarn run "env:${ENVIRONMENT}" --project "${PROJECT}" --workers=4
       - name: Export UU HTML reports
-        if: ${{ always() && inputs.accessibility }}
+        if: ${{ always() && inputs.accessibility && (steps.playwright-tests.outcome == 'success' || steps.playwright-tests.outcome == 'failure') }}
         working-directory: playwright
         env:
           REPORT_NAME: ${{ inputs.environment }}
