@@ -1,5 +1,4 @@
 using Altinn.AccessManagement.UI.Core.Helpers;
-using Altinn.AccessManagement.UI.Core.Models.AccessPackage;
 using Altinn.AccessManagement.UI.Core.Models.Common;
 
 namespace Altinn.AccessManagement.UI.Tests.Helpers
@@ -91,44 +90,6 @@ namespace Altinn.AccessManagement.UI.Tests.Helpers
             Assert.Null(ResourceUtils.ResolveOwnerLogoUrl(orgs, "unknown-org"));
             Assert.Null(ResourceUtils.ResolveOwnerLogoUrl(null, "skd"));
             Assert.Null(ResourceUtils.ResolveOwnerLogoUrl(new Dictionary<string, OrgData> { { "skd", null } }, "skd"));
-        }
-
-        /// <summary>
-        /// Test case: Resources are passed through to the frontend as they arrive from Access
-        /// Management, carrying provider logo urls that point anywhere.
-        /// Expected: Those urls are replaced by the resolved one, including being cleared when the
-        /// org cannot be resolved.
-        /// </summary>
-        [Fact]
-        public void ApplyOwnerLogos_ReplacesProviderLogoUrls()
-        {
-            var orgs = Orgs(("digdir", "logo.png", "emblem.svg"));
-            var resources = new List<ResourceAM>
-            {
-                new() { Provider = new Provider { Code = "digdir", LogoUrl = "https://example.com/from-an-image-search.png" } },
-                new() { Provider = new Provider { Code = "unknown-org", LogoUrl = "https://example.com/also-junk.png" } },
-                new() { Provider = null },
-            };
-
-            ResourceUtils.ApplyOwnerLogos(resources, orgs);
-
-            Assert.Equal("emblem.svg", resources[0].Provider.LogoUrl);
-            Assert.Null(resources[1].Provider.LogoUrl);
-            Assert.Null(resources[2].Provider);
-        }
-
-        /// <summary>
-        /// Test case: An access package has no resources, or the list itself is absent.
-        /// Expected: No exception.
-        /// </summary>
-        [Fact]
-        public void ApplyOwnerLogos_HandlesMissingResources()
-        {
-            var orgs = Orgs(("digdir", "logo.png", "emblem.svg"));
-
-            ResourceUtils.ApplyOwnerLogos((IEnumerable<ResourceAM>)null, orgs);
-            ResourceUtils.ApplyOwnerLogos((IEnumerable<AccessPackage>)null, orgs);
-            ResourceUtils.ApplyOwnerLogos(new List<AccessPackage> { new() { Resources = null } }, orgs);
         }
     }
 }

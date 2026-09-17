@@ -30,7 +30,7 @@ namespace Altinn.AccessManagement.UI.Core.Services
         {
             IEnumerable<SearchObject<AccessPackage>> searchMatches = await _accessPackageClient.GetAccessPackageSearchMatches(languageCode, searchString, typeName);
 
-            ResourceUtils.ApplyOwnerLogos(searchMatches.Select(match => match.Object), await _altinnCdnService.GetOrgData());
+            await _altinnCdnService.ApplyOwnerLogos(searchMatches.Select(match => match.Object));
 
             List<AccessAreaFE> sortedAreas = new List<AccessAreaFE>();
 
@@ -110,7 +110,7 @@ namespace Altinn.AccessManagement.UI.Core.Services
         {
             AccessPackage package = await _accessPackageClient.GetAccessPackageById(languageCode, packageId);
 
-            ResourceUtils.ApplyOwnerLogos(package?.Resources, await _altinnCdnService.GetOrgData());
+            await _altinnCdnService.ApplyOwnerLogos(package?.Resources);
 
             return package;
         }

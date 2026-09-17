@@ -1,4 +1,5 @@
 using Altinn.AccessManagement.UI.Core.ClientInterfaces;
+using Altinn.AccessManagement.UI.Core.Models.AccessPackage;
 using Altinn.AccessManagement.UI.Core.Models.Common;
 using Altinn.AccessManagement.UI.Core.Services;
 using Microsoft.Extensions.Caching.Memory;
@@ -126,6 +127,66 @@ namespace Altinn.AccessManagement.UI.Tests.Services
 
             Assert.Equal(OrgDataAvailability.Live, snapshot.Availability);
             Assert.Equal(OrgData, snapshot.Data);
+        }
+
+        /// <summary>
+        /// Test case: Resources are passed through to the frontend as they arrive from Access
+        /// Management, carrying provider logo urls that are the wide logo rather than the emblem.
+        /// Expected: Those urls are replaced by the resolved one, including being cleared when the
+        /// org cannot be resolved.
+        /// </summary>
+        [Fact]
+        public async Task ApplyOwnerLogos_ReplacesProviderLogoUrls()
+        {
+            _client.Setup(c => c.GetOrgData()).ReturnsAsync(OrgData);
+            var resources = new List<ResourceAM>
+            {
+                new() { Provider = new Provider { Code = "skd", LogoUrl = "https://altinncdn.no/orgs/skd/skd.png" } },
+                new() { Provider = new Provider { Code = "unknown-org", LogoUrl = "https://example.com/from-an-image-search.png" } },
+                new() { Provider = null },
+            };
+
+            await Service.ApplyOwnerLogos(resources);
+
+            Assert.Equal("https://altinncdn.no/orgs/skd/skd.svg", resources[0].Provider.LogoUrl);
+            Assert.Null(resources[1].Provider.LogoUrl);
+            Assert.Null(resources[2].Provider);
+        }
+
+        /// <summary>
+        /// Test case: Access packages are passed through with their resources.
+        /// Expected: Every resource gets its logo resolved, with one lookup for the whole batch.
+        /// </summary>
+        [Fact]
+        public async Task ApplyOwnerLogos_ResolvesPackageResourcesWithOneLookup()
+        {
+            _client.Setup(c => c.GetOrgData()).ReturnsAsync(OrgData);
+            var packages = new List<AccessPackage>
+            {
+                new() { Resources = [new ResourceAM { Provider = new Provider { Code = "skd" } }] },
+                new() { Resources = [new ResourceAM { Provider = new Provider { Code = "skd" } }] },
+                new() { Resources = null },
+            };
+
+            await Service.ApplyOwnerLogos(packages);
+
+            Assert.All(packages.Take(2), p => Assert.Equal("https://altinncdn.no/orgs/skd/skd.svg", p.Resources.Single().Provider.LogoUrl));
+            _client.Verify(c => c.GetOrgData(), Times.Once);
+        }
+
+        /// <summary>
+        /// Test case: Nothing to resolve logos for.
+        /// Expected: No exception, and the CDN is not consulted.
+        /// </summary>
+        [Fact]
+        public async Task ApplyOwnerLogos_HandlesMissingInput()
+        {
+            AltinnCdnService service = Service;
+
+            await service.ApplyOwnerLogos((IEnumerable<ResourceAM>)null);
+            await service.ApplyOwnerLogos((IEnumerable<AccessPackage>)null);
+
+            _client.Verify(c => c.GetOrgData(), Times.Never);
         }
 
         /// <summary>

@@ -1,6 +1,8 @@
 #nullable enable
 
 using Altinn.AccessManagement.UI.Core.ClientInterfaces;
+using Altinn.AccessManagement.UI.Core.Helpers;
+using Altinn.AccessManagement.UI.Core.Models.AccessPackage;
 using Altinn.AccessManagement.UI.Core.Models.Common;
 using Altinn.AccessManagement.UI.Core.Services.Interfaces;
 using Microsoft.Extensions.Caching.Memory;
@@ -80,6 +82,47 @@ namespace Altinn.AccessManagement.UI.Core.Services
                 _logger.LogError(e, "Error retrieving organization data from Altinn CDN.");
                 _cache.Set(FetchFailedCacheKey, true, new MemoryCacheEntryOptions().SetAbsoluteExpiration(FailureBackoff));
                 return LastKnownGood();
+            }
+        }
+
+        /// <inheritdoc/>
+        public async Task ApplyOwnerLogos(IEnumerable<ResourceAM> resources)
+        {
+            if (resources == null)
+            {
+                return;
+            }
+
+            Dictionary<string, OrgData> orgs = await GetOrgData();
+            foreach (ResourceAM resource in resources)
+            {
+                if (resource?.Provider != null)
+                {
+                    resource.Provider.LogoUrl = ResourceUtils.ResolveOwnerLogoUrl(orgs, resource.Provider.Code);
+                }
+            }
+        }
+
+        /// <inheritdoc/>
+        public async Task ApplyOwnerLogos(IEnumerable<AccessPackage> packages)
+        {
+            if (packages == null)
+            {
+                return;
+            }
+
+            // Resolved once for all packages; GetOrgData is cached, but the loop below should not
+            // depend on that.
+            Dictionary<string, OrgData> orgs = await GetOrgData();
+            foreach (AccessPackage package in packages)
+            {
+                foreach (ResourceAM resource in package?.Resources ?? [])
+                {
+                    if (resource?.Provider != null)
+                    {
+                        resource.Provider.LogoUrl = ResourceUtils.ResolveOwnerLogoUrl(orgs, resource.Provider.Code);
+                    }
+                }
             }
         }
 

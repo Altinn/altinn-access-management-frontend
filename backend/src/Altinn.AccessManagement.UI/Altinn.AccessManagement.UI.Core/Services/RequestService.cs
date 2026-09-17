@@ -229,7 +229,7 @@ namespace Altinn.AccessManagement.UI.Core.Services
                 packageDictionary[packageId] = package;
             }
 
-            ResourceUtils.ApplyOwnerLogos(packageDictionary.Values, await _altinnCdnService.GetOrgData());
+            await _altinnCdnService.ApplyOwnerLogos(packageDictionary.Values);
 
             return list.Select(x =>
             {

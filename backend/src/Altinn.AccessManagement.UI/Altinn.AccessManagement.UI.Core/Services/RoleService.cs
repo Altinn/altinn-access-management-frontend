@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using Altinn.AccessManagement.UI.Core.ClientInterfaces;
 using Altinn.AccessManagement.UI.Core.Configuration;
-using Altinn.AccessManagement.UI.Core.Helpers;
 using Altinn.AccessManagement.UI.Core.Models.AccessPackage;
 using Altinn.AccessManagement.UI.Core.Models.Common;
 using Altinn.AccessManagement.UI.Core.Models.Role;
@@ -77,7 +76,7 @@ namespace Altinn.AccessManagement.UI.Core.Services
         {
             IEnumerable<AccessPackage> packages = await _roleClient.GetRolePackages(roleCode, variant, includeResources, languageCode);
 
-            ResourceUtils.ApplyOwnerLogos(packages, await _altinnCdnService.GetOrgData());
+            await _altinnCdnService.ApplyOwnerLogos(packages);
 
             return packages;
         }
@@ -87,7 +86,7 @@ namespace Altinn.AccessManagement.UI.Core.Services
         {
             IEnumerable<ResourceAM> resources = await _roleClient.GetRoleResources(roleCode, variant, includePackageResources, languageCode);
 
-            ResourceUtils.ApplyOwnerLogos(resources, await _altinnCdnService.GetOrgData());
+            await _altinnCdnService.ApplyOwnerLogos(resources);
 
             return resources;
         }

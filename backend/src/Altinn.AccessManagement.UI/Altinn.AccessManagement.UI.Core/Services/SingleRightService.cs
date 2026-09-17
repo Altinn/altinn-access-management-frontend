@@ -104,7 +104,7 @@ namespace Altinn.AccessManagement.UI.Core.Services
         {
             ResourceRight resourceRight = await _singleRightClient.GetDelegatedResourceRights(languageCode, party, from, to, resource);
 
-            ResourceUtils.ApplyOwnerLogos([resourceRight?.Resource], await _altinnCdnService.GetOrgData());
+            await _altinnCdnService.ApplyOwnerLogos([resourceRight?.Resource]);
 
             return resourceRight;
         }

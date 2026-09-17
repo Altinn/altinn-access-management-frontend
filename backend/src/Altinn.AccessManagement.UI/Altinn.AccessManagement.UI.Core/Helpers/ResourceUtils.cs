@@ -47,36 +47,6 @@ namespace Altinn.AccessManagement.UI.Core.Helpers
         }
 
         /// <summary>
-        /// Replaces the provider logo urls on resources that are passed through to the frontend as
-        /// they arrive from Access Management, where the urls are user maintained and point anywhere.
-        /// </summary>
-        /// <param name="resources">Resources to resolve logos for. Modified in place</param>
-        /// <param name="orgs">Organization data from the Altinn CDN</param>
-        public static void ApplyOwnerLogos(IEnumerable<ResourceAM> resources, IReadOnlyDictionary<string, Models.Common.OrgData> orgs)
-        {
-            foreach (ResourceAM resource in resources ?? [])
-            {
-                if (resource?.Provider != null)
-                {
-                    resource.Provider.LogoUrl = ResolveOwnerLogoUrl(orgs, resource.Provider.Code);
-                }
-            }
-        }
-
-        /// <summary>
-        /// Replaces the provider logo urls on the resources of every given access package.
-        /// </summary>
-        /// <param name="packages">Access packages whose resources to resolve logos for. Modified in place</param>
-        /// <param name="orgs">Organization data from the Altinn CDN</param>
-        public static void ApplyOwnerLogos(IEnumerable<AccessPackage> packages, IReadOnlyDictionary<string, Models.Common.OrgData> orgs)
-        {
-            foreach (AccessPackage package in packages ?? [])
-            {
-                ApplyOwnerLogos(package?.Resources, orgs);
-            }
-        }
-
-        /// <summary>
         /// Map a list of resources to frontend resource objects
         /// </summary>
         /// <param name="languageCode">Language code. Can be either nb, nn or en</param>

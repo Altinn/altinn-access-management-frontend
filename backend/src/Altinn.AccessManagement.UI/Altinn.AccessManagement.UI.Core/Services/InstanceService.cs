@@ -131,7 +131,7 @@ namespace Altinn.AccessManagement.UI.Core.Services
         {
             InstanceRights rights = await _instanceClient.GetInstanceRights(languageCode, party, from, to, resource, instance);
 
-            ResourceUtils.ApplyOwnerLogos([rights?.Resource], await _altinnCdnService.GetOrgData());
+            await _altinnCdnService.ApplyOwnerLogos([rights?.Resource]);
 
             return rights;
         }

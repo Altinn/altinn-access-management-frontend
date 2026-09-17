@@ -1,6 +1,5 @@
 using Altinn.AccessManagement.UI.Core.ClientInterfaces;
 using Altinn.AccessManagement.UI.Core.Enums;
-using Altinn.AccessManagement.UI.Core.Helpers;
 using Altinn.AccessManagement.UI.Core.Models.ClientDelegation;
 using Altinn.AccessManagement.UI.Core.Models.Maskinporten;
 using Altinn.AccessManagement.UI.Core.Models.ResourceRegistry;
@@ -49,7 +48,7 @@ namespace Altinn.AccessManagement.UI.Core.Services
         {
             ResourceCheckDto resourceCheck = await _maskinportenClient.ResourceDelegationCheck(party, resource, languageCode, cancellationToken);
 
-            ResourceUtils.ApplyOwnerLogos([resourceCheck?.Resource], await _altinnCdnService.GetOrgData());
+            await _altinnCdnService.ApplyOwnerLogos([resourceCheck?.Resource]);
 
             return resourceCheck;
         }
