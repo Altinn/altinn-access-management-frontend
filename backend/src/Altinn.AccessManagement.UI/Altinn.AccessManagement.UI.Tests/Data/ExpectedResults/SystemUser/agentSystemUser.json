@@ -23,7 +23,7 @@
           "title": "Innrapportering A-melding",
           "description": "A-meldingen er en månedlig melding til NAV, SSB og Skatteetaten om inntekt, arbeidsforhold og forskuddstrekk, samt arbeidsgiveravgift og finansskatt for virksomheten.",
           "resourceOwnerName": "Skatteetaten",
-          "resourceOwnerLogoUrl": "https://altinncdn.no/orgs/skd/skd.png",
+          "resourceOwnerLogoUrl": "https://altinncdn.no/orgs/skd/skd.svg",
           "resourceOwnerOrgcode": "skd",
           "resourceType": "GenericAccessResource"
         }

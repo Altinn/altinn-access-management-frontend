@@ -1,5 +1,6 @@
 using Altinn.AccessManagement.UI.Core.ClientInterfaces;
 using Altinn.AccessManagement.UI.Core.Enums;
+using Altinn.AccessManagement.UI.Core.Helpers;
 using Altinn.AccessManagement.UI.Core.Models.ClientDelegation;
 using Altinn.AccessManagement.UI.Core.Models.Maskinporten;
 using Altinn.AccessManagement.UI.Core.Models.ResourceRegistry;
@@ -16,16 +17,19 @@ namespace Altinn.AccessManagement.UI.Core.Services
     {
         private readonly IMaskinportenClient _maskinportenClient;
         private readonly IResourceService _resourceService;
+        private readonly IAltinnCdnService _altinnCdnService;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="MaskinportenService"/> class.
         /// </summary>
         /// <param name="maskinportenClient">Maskinporten client.</param>
         /// <param name="resourceService">Resource service.</param>
-        public MaskinportenService(IMaskinportenClient maskinportenClient, IResourceService resourceService)
+        /// <param name="altinnCdnService">Altinn CDN service. Provides the service owner logos</param>
+        public MaskinportenService(IMaskinportenClient maskinportenClient, IResourceService resourceService, IAltinnCdnService altinnCdnService)
         {
             _maskinportenClient = maskinportenClient;
             _resourceService = resourceService;
+            _altinnCdnService = altinnCdnService;
         }
 
         /// <inheritdoc />
@@ -43,7 +47,11 @@ namespace Altinn.AccessManagement.UI.Core.Services
         /// <inheritdoc />
         public async Task<ResourceCheckDto> ResourceDelegationCheck(Guid party, string resource, string languageCode, CancellationToken cancellationToken = default)
         {
-            return await _maskinportenClient.ResourceDelegationCheck(party, resource, languageCode, cancellationToken);
+            ResourceCheckDto resourceCheck = await _maskinportenClient.ResourceDelegationCheck(party, resource, languageCode, cancellationToken);
+
+            ResourceUtils.ApplyOwnerLogos([resourceCheck?.Resource], await _altinnCdnService.GetOrgData());
+
+            return resourceCheck;
         }
 
         /// <inheritdoc />

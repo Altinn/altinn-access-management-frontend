@@ -10,7 +10,6 @@ import type { TFunction } from 'i18next';
 
 import { DebouncedSearchField } from '../DebouncedSearchField/DebouncedSearchField';
 import { InstanceDelegation } from '@/rtk/features/instanceApi';
-import { useProviderLogoUrl } from '@/resources/hooks';
 import { useRestoreFocusTarget } from '@/features/amUI/common/RestoreFocus';
 
 import { InstanceListSkeleton } from './InstanceListSkeleton';
@@ -67,7 +66,6 @@ export const InstanceList = ({
   const [debouncedSearchString, setDebouncedSearchString] = useState('');
   const hasSearch = debouncedSearchString.trim().length > 0;
 
-  const { getProviderLogoUrl } = useProviderLogoUrl();
   const filteredInstances = useMemo(() => {
     const instanceList = instances ?? [];
 
@@ -102,9 +100,6 @@ export const InstanceList = ({
           <List>
             {filteredInstances.map((instanceDelegation) => {
               const { instance, resource, dialogLookup } = instanceDelegation;
-              const providerLogoUrl = resource.resourceOwnerOrgcode
-                ? getProviderLogoUrl(resource.resourceOwnerOrgcode)
-                : undefined;
               const title = getResolvedInstanceTitle(instanceDelegation, t, i18n.language);
               const serviceTitle = resource.title ?? resource.identifier;
               const item: DialogListItemProps = {
@@ -113,7 +108,7 @@ export const InstanceList = ({
                 sender: {
                   name: resource.resourceOwnerName ?? '',
                   type: 'company',
-                  imageUrl: providerLogoUrl ?? resource.resourceOwnerLogoUrl ?? undefined,
+                  imageUrl: resource.resourceOwnerLogoUrl ?? undefined,
                   imageUrlAlt: resource.resourceOwnerName ?? '',
                 },
                 summary:

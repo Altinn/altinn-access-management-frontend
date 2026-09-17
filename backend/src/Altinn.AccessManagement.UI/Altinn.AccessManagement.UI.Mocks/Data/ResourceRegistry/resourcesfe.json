@@ -55,7 +55,8 @@
     ],
     "resourceOwnerName": "Skatteetaten",
     "resourceOwnerOrgcode": "skd",
-    "resourceOwnerOrgNumber": "974761076"
+    "resourceOwnerOrgNumber": "974761076",
+    "resourceOwnerLogoUrl": "https://altinncdn.no/orgs/skd/skd.svg"
   },
   {
     "title": "Tulleregisteret",
@@ -108,7 +109,8 @@
     ],
     "resourceOwnerName": "PÅFUNNSETATEN",
     "resourceOwnerOrgcode": "PAA",
-    "resourceOwnerOrgNumber": "985399077"
+    "resourceOwnerOrgNumber": "985399077",
+    "resourceOwnerLogoUrl": null
   },
   {
     "title": "Blomsterhagen",
@@ -166,7 +168,8 @@
     ],
     "resourceOwnerName": "BLOMSTERFINN",
     "resourceOwnerOrgcode": "finn",
-    "resourceOwnerOrgNumber": "994598759"
+    "resourceOwnerOrgNumber": "994598759",
+    "resourceOwnerLogoUrl": null
   },
   {
     "title": "Det magiske klesskapet",
@@ -224,7 +227,8 @@
     ],
     "resourceOwnerName": "NARNIA",
     "resourceOwnerOrgNumber": "777777777",
-    "resourceOwnerOrgcode": "NRNA"
+    "resourceOwnerOrgcode": "NRNA",
+    "resourceOwnerLogoUrl": "https://altinncdn.no/orgs/nbib/nasjonalbiblioteket.png"
   },
   {
     "title": "Snarveien",
@@ -277,7 +281,8 @@
     ],
     "resourceOwnerName": "PÅFUNNSETATEN",
     "resourceOwnerOrgcode": "PAA",
-    "resourceOwnerOrgNumber": "130000000"
+    "resourceOwnerOrgNumber": "130000000",
+    "resourceOwnerLogoUrl": null
   },
   {
     "title": "Det magiske klesskapet - lenketjeneste",
@@ -313,7 +318,8 @@
     ],
     "resourceOwnerName": "NARNIA",
     "resourceOwnerOrgcode": "NRNA",
-    "resourceOwnerOrgNumber": "777777777"
+    "resourceOwnerOrgNumber": "777777777",
+    "resourceOwnerLogoUrl": "https://altinncdn.no/orgs/nbib/nasjonalbiblioteket.png"
   },
   {
     "title": "Snarveien - lenketjeneste",
@@ -347,7 +353,8 @@
     ],
     "resourceOwnerName": "PÅFUNNSETATEN",
     "resourceOwnerOrgcode": "PAA",
-    "resourceOwnerOrgNumber": "130000000"
+    "resourceOwnerOrgNumber": "130000000",
+    "resourceOwnerLogoUrl": null
   },
   {
     "title": "A3 app",
@@ -391,7 +398,8 @@
     ],
     "resourceOwnerName": "Testdepartementet",
     "resourceOwnerOrgcode": "ttd",
-    "resourceOwnerOrgNumber": "974760746"
+    "resourceOwnerOrgNumber": "974760746",
+    "resourceOwnerLogoUrl": "https://altinncdn.no/orgs/ttd/ttd.svg"
   },
   {
     "title": "A2 skjema",
@@ -440,7 +448,8 @@
     ],
     "resourceOwnerName": "Testdepartementet",
     "resourceOwnerOrgcode": "ttd",
-    "resourceOwnerOrgNumber": "974760746"
+    "resourceOwnerOrgNumber": "974760746",
+    "resourceOwnerLogoUrl": "https://altinncdn.no/orgs/ttd/ttd.svg"
   },
   {
     "title": "A3 app 2",
@@ -484,7 +493,8 @@
     ],
     "resourceOwnerName": "Testdepartementet",
     "resourceOwnerOrgcode": "ttd",
-    "resourceOwnerOrgNumber": "974760746"
+    "resourceOwnerOrgNumber": "974760746",
+    "resourceOwnerLogoUrl": "https://altinncdn.no/orgs/ttd/ttd.svg"
   },
   {
     "title": "A2 skjema 2",
@@ -533,7 +543,8 @@
     ],
     "resourceOwnerName": "Testdepartementet",
     "resourceOwnerOrgcode": "ttd",
-    "resourceOwnerOrgNumber": "974760746"
+    "resourceOwnerOrgNumber": "974760746",
+    "resourceOwnerLogoUrl": "https://altinncdn.no/orgs/ttd/ttd.svg"
   },
   {
     "title": "Brannbilen i Brønnøysund",
@@ -567,7 +578,8 @@
     ],
     "resourceOwnerName": "Brannvesenet",
     "resourceOwnerOrgcode": "FD",
-    "resourceOwnerOrgNumber": "110110110"
+    "resourceOwnerOrgNumber": "110110110",
+    "resourceOwnerLogoUrl": "https://altinncdn.no/orgs/fd/fiskeridirektoratet.svg"
   },
   {
     "title": "Kaffemaskinen i 4. etasje",
@@ -601,7 +613,8 @@
     ],
     "resourceOwnerName": "ØkernPortal",
     "resourceOwnerOrgcode": "okp",
-    "resourceOwnerOrgNumber": "904111111"
+    "resourceOwnerOrgNumber": "904111111",
+    "resourceOwnerLogoUrl": null
   },
   {
     "title": "DigDir WiFi",
@@ -635,7 +648,8 @@
     ],
     "resourceOwnerName": "Digitaliseringsdirektoratet",
     "resourceOwnerOrgcode": "digdir",
-    "resourceOwnerOrgNumber": "991825827"
+    "resourceOwnerOrgNumber": "991825827",
+    "resourceOwnerLogoUrl": "https://altinncdn.no/orgs/digdir/digdir.svg"
   },
   {
     "title": "DigDir Sommerfest",
@@ -669,7 +683,8 @@
     ],
     "resourceOwnerName": "Digitaliseringsdirektoratet",
     "resourceOwnerOrgcode": "digdir",
-    "resourceOwnerOrgNumber": "991825827"
+    "resourceOwnerOrgNumber": "991825827",
+    "resourceOwnerLogoUrl": "https://altinncdn.no/orgs/digdir/digdir.svg"
   },
   {
     "title": "Lønningsoversikt",
@@ -703,7 +718,8 @@
     ],
     "resourceOwnerName": "Digitaliseringsdirektoratet",
     "resourceOwnerOrgcode": "digdir",
-    "resourceOwnerOrgNumber": "991825827"
+    "resourceOwnerOrgNumber": "991825827",
+    "resourceOwnerLogoUrl": "https://altinncdn.no/orgs/digdir/digdir.svg"
   },
   {
     "title": "Inngangsdøra på kontoret",
@@ -737,7 +753,8 @@
     ],
     "resourceOwnerName": "Digitaliseringsdirektoratet",
     "resourceOwnerOrgcode": "digdir",
-    "resourceOwnerOrgNumber": "991825827"
+    "resourceOwnerOrgNumber": "991825827",
+    "resourceOwnerLogoUrl": "https://altinncdn.no/orgs/digdir/digdir.svg"
   },
   {
     "identifier": "jks-test-resource",
@@ -752,7 +769,7 @@
     "visible": true,
     "resourceOwnerName": "JK's Test departement",
     "resourceOwnerOrgNumber": "991825827",
-    "resourceOwnerLogoUrl": "https://altinncdn.no/img/illustration-help-circle.svg",
+    "resourceOwnerLogoUrl": "https://altinncdn.no/orgs/ttd/ttd.svg",
     "resourceOwnerOrgcode": "ttd",
     "resourceReferences": [],
     "priorityCounter": null,
@@ -785,7 +802,7 @@
     "visible": true,
     "resourceOwnerName": "Skatteetaten",
     "resourceOwnerOrgNumber": "974761076",
-    "resourceOwnerLogoUrl": "https://altinncdn.no/orgs/skd/skd.png",
+    "resourceOwnerLogoUrl": "https://altinncdn.no/orgs/skd/skd.svg",
     "resourceOwnerOrgcode": "skd",
     "resourceReferences": [],
     "priorityCounter": null,
@@ -814,7 +831,7 @@
     "visible": true,
     "resourceOwnerName": null,
     "resourceOwnerOrgNumber": "123456789",
-    "resourceOwnerLogoUrl": null,
+    "resourceOwnerLogoUrl": "https://altinncdn.no/orgs/zzzdemo/zzzdemo.svg",
     "resourceOwnerOrgcode": "zzzdemo",
     "resourceReferences": [],
     "priorityCounter": null,
@@ -845,7 +862,8 @@
     "resourceOwnerName": "Testdepartementet",
     "resourceOwnerOrgcode": "TTD",
     "resourceOwnerOrgNumber": "974760746",
-    "keywords": []
+    "keywords": [],
+    "resourceOwnerLogoUrl": "https://altinncdn.no/orgs/ttd/ttd.svg"
   },
   {
     "title": "Arkivert tjeneste - MigratedCorrespondence",
@@ -866,7 +884,8 @@
     "resourceOwnerName": "Testdepartementet",
     "resourceOwnerOrgcode": "TTD",
     "resourceOwnerOrgNumber": "974760746",
-    "keywords": []
+    "keywords": [],
+    "resourceOwnerLogoUrl": "https://altinncdn.no/orgs/ttd/ttd.svg"
   },
   {
     "title": "Aktiv tjeneste - MigratedCorrespondence",
@@ -887,6 +906,7 @@
     "resourceOwnerName": "Testdepartementet",
     "resourceOwnerOrgcode": "TTD",
     "resourceOwnerOrgNumber": "974760746",
-    "keywords": []
+    "keywords": [],
+    "resourceOwnerLogoUrl": "https://altinncdn.no/orgs/ttd/ttd.svg"
   }
 ]

@@ -3,9 +3,6 @@
 using System.Text.Json;
 using Altinn.AccessManagement.UI.Core.ClientInterfaces;
 using Altinn.AccessManagement.UI.Core.Models.Common;
-using Altinn.AccessManagement.UI.Core.Services.Interfaces;
-using Microsoft.AspNetCore.Http;
-using Microsoft.Extensions.Logging;
 
 namespace Altinn.AccessManagement.UI.Mocks.Mocks
 {
@@ -23,26 +20,10 @@ namespace Altinn.AccessManagement.UI.Mocks.Mocks
         {
         }
 
-        /// <summary>
-        /// Initializes a new instance of the <see cref="AltinnCdnClientMock"/> class with dependencies
-        /// </summary>
-        /// <param name="httpClient">The HTTP client (not used in mock)</param>
-        /// <param name="logger">The logger (not used in mock)</param>
-        /// <param name="httpContextAccessor">The HTTP context accessor (not used in mock)</param>
-        /// <param name="accessTokenProvider">The access token provider (not used in mock)</param>
-        public AltinnCdnClientMock(
-            HttpClient httpClient,
-            ILogger<AltinnCdnClientMock> logger,
-            IHttpContextAccessor httpContextAccessor,
-            IAccessTokenProvider accessTokenProvider)
-        {
-            // Parameters not used in mock implementation
-        }
-
         /// <inheritdoc/>
         public async Task<Dictionary<string, OrgData>> GetOrgData()
         {
-            var orgData = new Dictionary<string, OrgData>();
+            var orgData = new Dictionary<string, OrgData>(StringComparer.OrdinalIgnoreCase);
 
             string testDataPath = GetDataPath();
 
@@ -53,7 +34,7 @@ namespace Altinn.AccessManagement.UI.Mocks.Mocks
 
                 if (rawData != null && rawData.TryGetValue("orgs", out var innerOrgData) && innerOrgData != null)
                 {
-                    orgData = innerOrgData;
+                    orgData = new Dictionary<string, OrgData>(innerOrgData, StringComparer.OrdinalIgnoreCase);
                 }
             }
             return orgData;

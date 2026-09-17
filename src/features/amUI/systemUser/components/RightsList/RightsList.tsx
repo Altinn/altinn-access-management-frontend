@@ -11,7 +11,6 @@ import {
 
 import type { PackageResource } from '@/rtk/features/accessPackageApi';
 import type { ServiceResource } from '@/rtk/features/singleRights/singleRightsApi';
-import { useProviderLogoUrl } from '@/resources/hooks/useProviderLogoUrl';
 
 import type { SystemUserAccessPackage } from '../../types';
 import type { ExtendedAccessPackage } from '@/features/amUI/common/AccessPackageList/useAreaPackageList';
@@ -33,29 +32,27 @@ const mapSystemUserAccessPackageToExtended = (
   accessPackage: SystemUserAccessPackage,
 ): ExtendedAccessPackage => ({
   ...accessPackage,
-  resources: accessPackage.resources.map(
-    (resource): PackageResource => ({
-      id: resource.identifier,
-      identifier: resource.identifier,
-      name: resource.title,
-      title: resource.title,
-      description: resource.description ?? '',
-      refId: resource.identifier,
-      provider: {
-        id: '',
-        name: resource.resourceOwnerName,
-        refId: '',
-        logoUrl: resource.resourceOwnerLogoUrl,
-        code: '',
-        typeId: '',
-      },
-      resourceOwnerName: resource.resourceOwnerName,
-      resourceOwnerLogoUrl: resource.resourceOwnerLogoUrl,
-      resourceOwnerOrgcode: resource.resourceOwnerOrgcode,
-      resourceOwnerOrgNumber: resource.resourceOwnerOrgNumber,
-      resourceOwnerType: '',
-    }),
-  ),
+  resources: accessPackage.resources.map((resource): PackageResource => ({
+    id: resource.identifier,
+    identifier: resource.identifier,
+    name: resource.title,
+    title: resource.title,
+    description: resource.description ?? '',
+    refId: resource.identifier,
+    provider: {
+      id: '',
+      name: resource.resourceOwnerName,
+      refId: '',
+      logoUrl: resource.resourceOwnerLogoUrl,
+      code: '',
+      typeId: '',
+    },
+    resourceOwnerName: resource.resourceOwnerName,
+    resourceOwnerLogoUrl: resource.resourceOwnerLogoUrl,
+    resourceOwnerOrgcode: resource.resourceOwnerOrgcode,
+    resourceOwnerOrgNumber: resource.resourceOwnerOrgNumber,
+    resourceOwnerType: '',
+  })),
 });
 
 export const RightsList = ({
@@ -66,7 +63,6 @@ export const RightsList = ({
   headingLevel,
 }: RightsListProps): React.ReactNode => {
   const { t } = useTranslation();
-  const { getProviderLogoUrl } = useProviderLogoUrl();
   const modalRef = React.useRef<HTMLDialogElement>(null);
 
   const [selectedResource, setSelectedResource] = React.useState<ServiceResource | null>(null);
@@ -174,23 +170,20 @@ export const RightsList = ({
             />
           )}
           <List className={classes.rightsList}>
-            {resources.map((resource) => {
-              const emblem = getProviderLogoUrl(resource.resourceOwnerOrgcode ?? '');
-              return (
-                <ResourceListItem
-                  key={resource.identifier}
-                  id={resource.identifier}
-                  as='button'
-                  titleAs='span'
-                  size='md'
-                  ownerLogoUrl={emblem ?? resource.resourceOwnerLogoUrl}
-                  ownerLogoUrlAlt={resource.resourceOwnerName ?? ''}
-                  ownerName={resource.resourceOwnerName ?? ''}
-                  resourceName={resource.title}
-                  onClick={() => onSelectResource(resource)}
-                />
-              );
-            })}
+            {resources.map((resource) => (
+              <ResourceListItem
+                key={resource.identifier}
+                id={resource.identifier}
+                as='button'
+                titleAs='span'
+                size='md'
+                ownerLogoUrl={resource.resourceOwnerLogoUrl}
+                ownerLogoUrlAlt={resource.resourceOwnerName ?? ''}
+                ownerName={resource.resourceOwnerName ?? ''}
+                resourceName={resource.title}
+                onClick={() => onSelectResource(resource)}
+              />
+            ))}
           </List>
         </div>
       )}

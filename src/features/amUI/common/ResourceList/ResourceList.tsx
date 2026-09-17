@@ -9,7 +9,6 @@ import {
 } from '@altinn/altinn-components';
 import { useTranslation } from 'react-i18next';
 
-import { useProviderLogoUrl } from '@/resources/hooks/useProviderLogoUrl';
 import { useRestoreFocusTarget } from '@/features/amUI/common/RestoreFocus';
 
 import { ResourceDetails } from './ResourceDetails';
@@ -62,7 +61,6 @@ export interface ResourceListProps<
   as?: ResourceListItemProps['as'];
   showMoreButton?: boolean;
   skeletonCount?: number;
-  resolveLogos?: boolean;
   enableMaxHeight?: boolean;
   renderControls?: (resource: TResource) => React.ReactNode;
   getBadge?: (resource: TResource, index: number) => ResourceListItemProps['badge'];
@@ -86,7 +84,6 @@ export const ResourceList = <
   size,
   interactive,
   as,
-  resolveLogos = true,
   enableMaxHeight = false,
   renderControls,
   getBadge,
@@ -102,11 +99,6 @@ export const ResourceList = <
   const [filterState, setFilterState] = React.useState<string[]>([]);
   const [includeExpired, setIncludeExpired] = React.useState<boolean>(false);
   const [selected, setSelected] = React.useState<TResource | null>(null);
-  const { getProviderLogoUrl, isLoading: orgLoading } = useProviderLogoUrl();
-  const logoResolver = React.useMemo(
-    () => (resolveLogos ? getProviderLogoUrl : () => undefined),
-    [getProviderLogoUrl, resolveLogos],
-  );
   const hasExpiredResources = React.useMemo(
     () => resources && resources.some(isExpiredResource),
     [resources],
@@ -148,7 +140,7 @@ export const ResourceList = <
     isExpiredResource: isExpiredResource,
   });
 
-  const isSkeletonVisible = isLoading || (resolveLogos && orgLoading);
+  const isSkeletonVisible = isLoading;
 
   const serviceOwnerOptions = React.useMemo(() => {
     const uniqueOwners = new Map<string, { value: string; label: string; count: number }>();
@@ -229,10 +221,7 @@ export const ResourceList = <
                   const resourceName = extractResourceName(resource);
                   const defaultOwnerName = extractOwnerName(resource);
                   const description = getDescriptionText?.(resource, index);
-                  const orgCode = extractOrgCode(resource);
-                  const providerLogo = resolveLogos && orgCode ? logoResolver(orgCode) : undefined;
-                  const fallbackLogoUrl = extractLogoUrl(resource);
-                  const ownerLogoUrl = providerLogo ?? fallbackLogoUrl;
+                  const ownerLogoUrl = extractLogoUrl(resource);
                   const ownerLogoAlt = extractLogoAlt(resource) ?? defaultOwnerName;
                   const itemInteractive = derivedInteractive(resource);
                   const itemAs = as ?? (itemInteractive ? 'button' : 'div');
@@ -280,13 +269,6 @@ export const ResourceList = <
         <ResourceDetails
           resource={selected}
           onClose={closeDetails}
-          providerLogoUrl={
-            selected
-              ? resolveLogos
-                ? (logoResolver(extractOrgCode(selected) ?? '') ?? selected.resourceOwnerLogoUrl)
-                : extractLogoUrl(selected)
-              : undefined
-          }
         />
       )}
     </div>

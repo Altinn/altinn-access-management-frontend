@@ -1,6 +1,7 @@
 using Altinn.AccessManagement.UI.Core.ClientInterfaces;
+using Altinn.AccessManagement.UI.Core.Helpers;
+using Altinn.AccessManagement.UI.Core.Models.Common;
 using Altinn.AccessManagement.UI.Core.Models.ResourceRegistry.Frontend;
-using Altinn.AccessManagement.UI.Core.Models.ResourceRegistry.ResourceOwner;
 using Altinn.AccessManagement.UI.Core.Models.SingleRight;
 using Altinn.AccessManagement.UI.Core.Services.Interfaces;
 
@@ -13,17 +14,21 @@ namespace Altinn.AccessManagement.UI.Core.Services
         private readonly IResourceRegistryClient _resourceRegistryClient;
         private readonly ISingleRightClient _singleRightClient;
 
+        private readonly IAltinnCdnService _altinnCdnService;
+
         /// <summary>
         /// Initializes a new instance of the <see cref="SingleRightService"/> class.
         /// </summary>
         /// <param name="resourceService">The resource service.</param>
         /// <param name="resourceRegistryClient">The resource registry client.</param>
         /// <param name="singleRightClient">The single rights client.</param>
-        public SingleRightService(IResourceService resourceService, IResourceRegistryClient resourceRegistryClient, ISingleRightClient singleRightClient)
+        /// <param name="altinnCdnService">Altinn CDN service. Provides the service owner logos</param>
+        public SingleRightService(IResourceService resourceService, IResourceRegistryClient resourceRegistryClient, ISingleRightClient singleRightClient, IAltinnCdnService altinnCdnService)
         {
             _resourceService = resourceService;
             _resourceRegistryClient = resourceRegistryClient;
             _singleRightClient = singleRightClient;
+            _altinnCdnService = altinnCdnService;
         }
 
         /// <inheritdoc />
@@ -54,8 +59,7 @@ namespace Altinn.AccessManagement.UI.Core.Services
 
             List<ResourceDelegation> delegationsFE = new List<ResourceDelegation>();
 
-            // Create a Lookup to map orgnr to org details
-            OrgList orgList = await _resourceRegistryClient.GetAllResourceOwners();
+            Dictionary<string, OrgData> orgs = await _altinnCdnService.GetOrgData();
 
             foreach (var resourcePermission in resourcePermissions)
             {
@@ -70,9 +74,6 @@ namespace Altinn.AccessManagement.UI.Core.Services
 
                 if (resource != null)
                 {
-                    // Find the logo based on the orgnr in the orgnrToOrgLookup
-                    orgList.Orgs.TryGetValue(resource.HasCompetentAuthority?.Orgcode?.ToLower() ?? string.Empty, out var org);
-
                     ServiceResourceFE resourceFE = new ServiceResourceFE(
                         resource.Identifier,
                         resource.Title?.GetValueOrDefault(languageCode) ?? resource.Title?.GetValueOrDefault("nb"),
@@ -89,7 +90,7 @@ namespace Altinn.AccessManagement.UI.Core.Services
                         contactPoints: resource.ContactPoints,
                         spatial: resource.Spatial,
                         authorizationReference: resource.AuthorizationReference,
-                        resourceOwnerLogoUrl: org?.Logo);
+                        resourceOwnerLogoUrl: ResourceUtils.ResolveOwnerLogoUrl(orgs, resource.HasCompetentAuthority?.Orgcode));
 
                     delegationsFE.Add(new ResourceDelegation(resourceFE, resourcePermission.Permissions));
                 }
@@ -101,7 +102,11 @@ namespace Altinn.AccessManagement.UI.Core.Services
         /// <inheritdoc />
         public async Task<ResourceRight> GetDelegatedResourceRights(string languageCode, Guid party, Guid from, Guid to, string resource)
         {
-            return await _singleRightClient.GetDelegatedResourceRights(languageCode, party, from, to, resource);
+            ResourceRight resourceRight = await _singleRightClient.GetDelegatedResourceRights(languageCode, party, from, to, resource);
+
+            ResourceUtils.ApplyOwnerLogos([resourceRight?.Resource], await _altinnCdnService.GetOrgData());
+
+            return resourceRight;
         }
 
         /// <inheritdoc />

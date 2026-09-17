@@ -471,7 +471,7 @@
               "code": "digdir",
               "name": "Digitaliseringsdirektoratet",
               "refId": null,
-              "logoUrl": "https://profilveileder.digdir.no/sites/leikanger/files/styles/xxxs/public/2022-04/Ikon_Emblem-blaasvart.png?itok=QU5K_ApH"
+              "logoUrl": "https://altinncdn.no/orgs/digdir/digdir.svg"
             },
             "type": {
               "name": "GenericAccessResource"
@@ -488,7 +488,7 @@
               "code": "dsb",
               "name": "Direktoratet for samfunnssikkerhet og beredskap",
               "refId": null,
-              "logoUrl": "https://elvirksomhetsregisteret.dsb.no/assets/dsb_logo.png"
+              "logoUrl": "https://altinncdn.no/orgs/dsb/dsb.svg"
             },
             "type": {
               "name": "GenericAccessResource"
@@ -505,7 +505,7 @@
               "code": "dat",
               "name": "Arbeidstilsynet",
               "refId": null,
-              "logoUrl": "https://upload.wikimedia.org/wikipedia/commons/thumb/0/03/Emblem_of_the_Norwegian_Labour_Inspection_Authority.svg/1200px-Emblem_of_the_Norwegian_Labour_Inspection_Authority.svg.png"
+              "logoUrl": "https://altinncdn.no/orgs/dat/arbeidstilsynet.svg"
             },
             "type": {
               "name": "GenericAccessResource"
@@ -522,7 +522,7 @@
               "code": "digdir",
               "name": "Næringslivets sikkerhetsråd",
               "refId": null,
-              "logoUrl": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRN0P4ygJ_NZXANCOzMyKonqsKRP4zCPDSp866h4tyh7-9kLWOs09wEeKygX2WsaMVpLQI&usqp=CAU"
+              "logoUrl": "https://altinncdn.no/orgs/digdir/digdir.svg"
             },
             "type": {
               "name": "GenericAccessResource"
@@ -539,7 +539,7 @@
               "code": "dsb",
               "name": "Direktoratet for samfunnssikkerhet og beredskap",
               "refId": null,
-              "logoUrl": "https://elvirksomhetsregisteret.dsb.no/assets/dsb_logo.png"
+              "logoUrl": "https://altinncdn.no/orgs/dsb/dsb.svg"
             },
             "type": {
               "name": "GenericAccessResource"
@@ -556,7 +556,7 @@
               "code": "dpa",
               "name": "Datatilsynet",
               "refId": null,
-              "logoUrl": "https://www.datatilsynet.no/globalassets/global/bilder/logoer/pvo_logo?width=756&height=710&quality=80&h=4c22bcfb2f8f388c55db321994144cb6d8fcba42"
+              "logoUrl": null
             },
             "type": {
               "name": "GenericAccessResource"
@@ -573,7 +573,7 @@
               "code": "digdir",
               "name": "Næringslivets sikkerhetsråd",
               "refId": null,
-              "logoUrl": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRN0P4ygJ_NZXANCOzMyKonqsKRP4zCPDSp866h4tyh7-9kLWOs09wEeKygX2WsaMVpLQI&usqp=CAU"
+              "logoUrl": "https://altinncdn.no/orgs/digdir/digdir.svg"
             },
             "type": {
               "name": "GenericAccessResource"
@@ -2814,7 +2814,7 @@
             "provider": {
               "code": "skd",
               "name": "Skatteetaten",
-              "logoUrl": "https://altinncdn.no/orgs/skd/skd.png"
+              "logoUrl": "https://altinncdn.no/orgs/skd/skd.svg"
             },
             "type": {
               "name": "GenericAccessResource"

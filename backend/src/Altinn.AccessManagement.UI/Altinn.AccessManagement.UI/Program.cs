@@ -507,7 +507,7 @@ void ConfigureMockableClients(IServiceCollection services, IConfiguration config
     }
     else
     {
-        services.AddSingleton<IAltinnCdnClient, AltinnCdnClient>();
+        services.AddHttpClient<IAltinnCdnClient, AltinnCdnClient>();
     }
 
     if (mockSettings.SystemUser)

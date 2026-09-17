@@ -116,13 +116,13 @@ namespace Altinn.AccessManagement.UI.Tests.Utils
             Assert.Equal(expected.Visible, actual.Visible);
             Assert.Equal(expected.ResourceOwnerName, actual.ResourceOwnerName);
             Assert.Equal(expected.ResourceOwnerOrgNumber, actual.ResourceOwnerOrgNumber);
+            Assert.Equal(expected.ResourceOwnerLogoUrl, actual.ResourceOwnerLogoUrl);
             Assert.Equal(expected.Homepage, actual.Homepage);
             Assert.Equal(expected.Status, actual.Status);
             Assert.Equal(expected.Spatial, actual.Spatial);
             Assert.Equal(expected.ResourceType, actual.ResourceType);
             AssertCollections(expected.AuthorizationReference, actual.AuthorizationReference, AssertEqual);
             AssertEqual(expected.ContactPoints, actual.ContactPoints);
-            Assert.Equal(expected.Spatial, actual.Spatial);
             Assert.Equal(expected.ResourceReferences?.Count, actual.ResourceReferences?.Count);
             AssertEqual(expected.ResourceReferences, actual.ResourceReferences);
         }

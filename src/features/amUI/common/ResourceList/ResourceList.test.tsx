@@ -7,13 +7,6 @@ import { ResourceList } from './ResourceList';
 import type { PackageResource, ResourceProvider } from '@/rtk/features/accessPackageApi';
 import type { ResourceListItemResource } from './types';
 
-vi.mock('@/resources/hooks/useProviderLogoUrl', () => ({
-  useProviderLogoUrl: () => ({
-    getProviderLogoUrl: () => undefined,
-    isLoading: false,
-  }),
-}));
-
 vi.mock('react-i18next', () => ({
   useTranslation: () => ({
     t: (key: string) => key,

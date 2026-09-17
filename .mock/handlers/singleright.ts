@@ -11,7 +11,7 @@ export const singlerightHandlers = (ACCESSMANAGEMENT_BASE_URL: string) => [
           description: 'Det magiske klesskapet',
           rightDescription: 'Gir tilgang til Narnia.',
           resourceOwnerName: 'NARNIA',
-          resourceOwnerLogoUrl: 'https://altinncdn.no/orgs/digdir/digdir.png',
+          resourceOwnerLogoUrl: 'https://altinncdn.no/orgs/digdir/digdir.svg',
           resourceOwnerOrgNumber: '777777777',
           resourceOwnerOrgcode: 'digdir',
           resourceReferences: [],

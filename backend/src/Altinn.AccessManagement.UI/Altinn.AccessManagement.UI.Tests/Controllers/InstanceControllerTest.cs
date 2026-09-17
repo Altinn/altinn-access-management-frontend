@@ -228,7 +228,8 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
                 dialogportClientMock.Object,
                 instanceClientMock.Object,
                 new Mock<ILogger<InstanceService>>().Object,
-                resourceServiceMock.Object);
+                resourceServiceMock.Object,
+                new Mock<IAltinnCdnService>().Object);
 
             HttpClient client = GetTestClient(instanceService);
 
@@ -266,7 +267,8 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
                 dialogportClientMock.Object,
                 new InstanceClientMock(null, new Mock<ILogger<InstanceClientMock>>().Object, null),
                 new Mock<ILogger<InstanceService>>().Object,
-                _factory.Services.GetRequiredService<IResourceService>());
+                _factory.Services.GetRequiredService<IResourceService>(),
+                _factory.Services.GetRequiredService<IAltinnCdnService>());
 
             HttpClient client = GetTestClient(instanceService);
 
@@ -315,7 +317,8 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
                 dialogportClientMock.Object,
                 new InstanceClientMock(null, new Mock<ILogger<InstanceClientMock>>().Object, null),
                 new Mock<ILogger<InstanceService>>().Object,
-                _factory.Services.GetRequiredService<IResourceService>());
+                _factory.Services.GetRequiredService<IResourceService>(),
+                _factory.Services.GetRequiredService<IAltinnCdnService>());
 
             HttpClient client = GetTestClient(instanceService);
 
@@ -372,7 +375,8 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
                 dialogportClientMock.Object,
                 instanceClientMock.Object,
                 new Mock<ILogger<InstanceService>>().Object,
-                resourceServiceMock.Object);
+                resourceServiceMock.Object,
+                new Mock<IAltinnCdnService>().Object);
 
             HttpClient client = GetTestClient(instanceService);
 

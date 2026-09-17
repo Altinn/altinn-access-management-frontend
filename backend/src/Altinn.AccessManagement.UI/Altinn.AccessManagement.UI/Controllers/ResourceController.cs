@@ -48,9 +48,15 @@ namespace Altinn.AccessManagement.UI.Controllers
             {
                 return await _resourceService.GetResourceOwners(relevantResourceTypes, languageCode);
             }
-            else
+
+            try
             {
                 return await _resourceService.GetAllResourceOwners(languageCode);
+            }
+            catch (HttpStatusException ex)
+            {
+                // Better an error the frontend can show than an empty list, which reads as "no service owners".
+                return new ObjectResult(ProblemDetailsFactory.CreateProblemDetails(HttpContext, (int?)ex.StatusCode, "Unexpected HttpStatus response", detail: ex.Message));
             }
         }
 

@@ -3,7 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using Altinn.AccessManagement.UI.Core.ClientInterfaces;
 using Altinn.AccessManagement.UI.Core.Configuration;
+using Altinn.AccessManagement.UI.Core.Helpers;
 using Altinn.AccessManagement.UI.Core.Models.AccessPackage;
+using Altinn.AccessManagement.UI.Core.Models.Common;
 using Altinn.AccessManagement.UI.Core.Models.Role;
 using Altinn.AccessManagement.UI.Core.Services.Interfaces;
 using Microsoft.Extensions.Caching.Memory;
@@ -18,6 +20,7 @@ namespace Altinn.AccessManagement.UI.Core.Services
         private readonly IRoleClient _roleClient;
         private readonly IMemoryCache _memoryCache;
         private readonly CacheConfig _cacheConfig;
+        private readonly IAltinnCdnService _altinnCdnService;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="RoleService"/> class.
@@ -25,14 +28,17 @@ namespace Altinn.AccessManagement.UI.Core.Services
         /// <param name="roleClient">The role client.</param>
         /// <param name="memoryCache">The memory cache.</param>
         /// <param name="cacheConfig">Cache configuration.</param>
+        /// <param name="altinnCdnService">Altinn CDN service. Provides the service owner logos</param>
         public RoleService(
             IRoleClient roleClient,
             IMemoryCache memoryCache,
-            IOptions<CacheConfig> cacheConfig)
+            IOptions<CacheConfig> cacheConfig,
+            IAltinnCdnService altinnCdnService)
         {
             _roleClient = roleClient;
             _memoryCache = memoryCache;
             _cacheConfig = cacheConfig.Value;
+            _altinnCdnService = altinnCdnService;
         }
 
         /// <inheritdoc />
@@ -67,12 +73,24 @@ namespace Altinn.AccessManagement.UI.Core.Services
         }
 
         /// <inheritdoc />
-        public Task<IEnumerable<AccessPackage>> GetRolePackages(string roleCode, string variant, bool includeResources, string languageCode)
-            => _roleClient.GetRolePackages(roleCode, variant, includeResources, languageCode);
+        public async Task<IEnumerable<AccessPackage>> GetRolePackages(string roleCode, string variant, bool includeResources, string languageCode)
+        {
+            IEnumerable<AccessPackage> packages = await _roleClient.GetRolePackages(roleCode, variant, includeResources, languageCode);
+
+            ResourceUtils.ApplyOwnerLogos(packages, await _altinnCdnService.GetOrgData());
+
+            return packages;
+        }
 
         /// <inheritdoc />
-        public Task<IEnumerable<ResourceAM>> GetRoleResources(string roleCode, string variant, bool includePackageResources, string languageCode)
-            => _roleClient.GetRoleResources(roleCode, variant, includePackageResources, languageCode);
+        public async Task<IEnumerable<ResourceAM>> GetRoleResources(string roleCode, string variant, bool includePackageResources, string languageCode)
+        {
+            IEnumerable<ResourceAM> resources = await _roleClient.GetRoleResources(roleCode, variant, includePackageResources, languageCode);
+
+            ResourceUtils.ApplyOwnerLogos(resources, await _altinnCdnService.GetOrgData());
+
+            return resources;
+        }
 
         /// <inheritdoc />
         public Task RemoveRole(Guid party, Guid from, Guid to, string roleCode)

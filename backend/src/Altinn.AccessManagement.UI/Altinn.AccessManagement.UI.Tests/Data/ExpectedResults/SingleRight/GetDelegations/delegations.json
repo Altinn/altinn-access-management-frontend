@@ -80,7 +80,7 @@
       "visible": true,
       "resourceOwnerName": "Testdepartementet",
       "resourceOwnerOrgNumber": "974760746",
-      "resourceOwnerLogoUrl": "https://altinncdn.no/img/illustration-help-circle.svg",
+      "resourceOwnerLogoUrl": "https://altinncdn.no/orgs/ttd/ttd.svg",
       "resourceOwnerOrgcode": null,
       "resourceReferences": [
         {
@@ -147,7 +147,7 @@
       "visible": true,
       "resourceOwnerName": "JK's Test departement",
       "resourceOwnerOrgNumber": "991825827",
-      "resourceOwnerLogoUrl": "https://altinncdn.no/img/illustration-help-circle.svg",
+      "resourceOwnerLogoUrl": "https://altinncdn.no/orgs/ttd/ttd.svg",
       "resourceOwnerOrgcode": null,
       "resourceReferences": [],
       "priorityCounter": null,
@@ -207,7 +207,7 @@
       "visible": true,
       "resourceOwnerName": "Skatteetaten",
       "resourceOwnerOrgNumber": "974761076",
-      "resourceOwnerLogoUrl": "https://altinncdn.no/orgs/skd/skd.png",
+      "resourceOwnerLogoUrl": "https://altinncdn.no/orgs/skd/skd.svg",
       "resourceOwnerOrgcode": null,
       "resourceReferences": null,
       "priorityCounter": null,

@@ -6,13 +6,9 @@ import classes from './ResourceDetails.module.css';
 
 export interface ResourceDetailsContentProps {
   resource: ResourceListItemResource;
-  providerLogoUrl?: string;
 }
 
-export const ResourceDetailsContent = ({
-  resource,
-  providerLogoUrl,
-}: ResourceDetailsContentProps) => {
+export const ResourceDetailsContent = ({ resource }: ResourceDetailsContentProps) => {
   const ownerName =
     ('provider' in resource && resource.provider?.name) ||
     ('resourceOwnerName' in resource ? resource.resourceOwnerName : undefined);
@@ -39,7 +35,7 @@ export const ResourceDetailsContent = ({
           <div className={classes.resourceIcon}>
             <Avatar
               type='company'
-              imageUrl={providerLogoUrl ?? resource.resourceOwnerLogoUrl}
+              imageUrl={resource.resourceOwnerLogoUrl}
               name={resource.resourceOwnerName ?? ''}
             />
           </div>
@@ -63,16 +59,10 @@ export const ResourceDetailsContent = ({
 interface ResourceDetailsProps {
   resource: ResourceListItemResource | null;
   onClose: () => void;
-  providerLogoUrl?: string;
-  renderContent?: (resource: ResourceListItemResource, providerLogoUrl?: string) => React.ReactNode;
+  renderContent?: (resource: ResourceListItemResource) => React.ReactNode;
 }
 
-export const ResourceDetails = ({
-  resource,
-  onClose,
-  providerLogoUrl,
-  renderContent,
-}: ResourceDetailsProps) => {
+export const ResourceDetails = ({ resource, onClose, renderContent }: ResourceDetailsProps) => {
   const dialogRef = React.useRef<HTMLDialogElement>(null);
 
   React.useEffect(() => {
@@ -89,13 +79,7 @@ export const ResourceDetails = ({
       onClose={onClose}
       closedby='any'
     >
-      {resource &&
-        (renderContent?.(resource, providerLogoUrl) ?? (
-          <ResourceDetailsContent
-            resource={resource}
-            providerLogoUrl={providerLogoUrl}
-          />
-        ))}
+      {resource && (renderContent?.(resource) ?? <ResourceDetailsContent resource={resource} />)}
     </DsDialog>
   );
 };

@@ -7,7 +7,6 @@ using Altinn.AccessManagement.UI.Core.Configuration;
 using Altinn.AccessManagement.UI.Core.Extensions;
 using Altinn.AccessManagement.UI.Core.Helpers;
 using Altinn.AccessManagement.UI.Core.Models.ResourceRegistry;
-using Altinn.AccessManagement.UI.Core.Models.ResourceRegistry.ResourceOwner;
 using Altinn.AccessManagement.UI.Core.Models.SingleRight;
 using Altinn.AccessManagement.UI.Integration.Configuration;
 using Altinn.AccessManagement.UI.Integration.Util;
@@ -117,47 +116,6 @@ namespace Altinn.AccessManagement.UI.Integration.Clients
             }
 
             return resources;
-        }
-
-        /// <inheritdoc />
-        public async Task<OrgList> GetAllResourceOwners()
-        {
-            string endpointUrl = "v1/resource/orgs";
-            string cacheKey = "all_resource_owners";
-            if (!_memoryCache.TryGetValue(cacheKey, out OrgList resourceOwners))
-            {
-                try
-                {
-                    HttpResponseMessage response = await _httpClient.GetAsync(endpointUrl);
-
-                    if (response.StatusCode == HttpStatusCode.OK)
-                    {
-                        JsonSerializerOptions options = new JsonSerializerOptions
-                        {
-                            PropertyNameCaseInsensitive = true,
-                        };
-                        string content = await response.Content.ReadAsStringAsync();
-                        resourceOwners = JsonSerializer.Deserialize<OrgList>(content, options);
-                        MemoryCacheEntryOptions cacheEntryOptions = new MemoryCacheEntryOptions()
-                            .SetPriority(CacheItemPriority.High)
-                            .SetAbsoluteExpiration(new TimeSpan(0, _cacheConfig.ResourceOwnerCacheTimeout, 0));
-
-                        _memoryCache.Set(cacheKey, resourceOwners, cacheEntryOptions);
-                        return resourceOwners;
-                    }
-                    else
-                    {
-                        _logger.LogError("Getting service owners from resourceregistry/api/v1/resource/orgs failed with {StatusCode}", response.StatusCode);
-                    }
-                }
-                catch (Exception e)
-                {
-                    _logger.LogError(e, "AccessManagement.UI // ResourceClient // SearchResources // Exception");
-                    throw;
-                }
-            }
-
-            return resourceOwners;
         }
 
         /// <summary>

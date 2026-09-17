@@ -6,9 +6,11 @@ using Altinn.AccessManagement.UI.Controllers;
 using Altinn.AccessManagement.UI.Core.ClientInterfaces;
 using Altinn.AccessManagement.UI.Core.Configuration;
 using Altinn.AccessManagement.UI.Core.Enums;
+using Altinn.AccessManagement.UI.Core.Models.Common;
 using Altinn.AccessManagement.UI.Core.Models.ResourceRegistry;
 using Altinn.AccessManagement.UI.Core.Models.ResourceRegistry.Frontend;
 using Altinn.AccessManagement.UI.Core.Services;
+using Altinn.AccessManagement.UI.Core.Services.Interfaces;
 using Altinn.AccessManagement.UI.Mocks.Mocks;
 using Altinn.AccessManagement.UI.Mocks.Utils;
 using Altinn.AccessManagement.UI.Tests.Utils;
@@ -504,6 +506,41 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
             Mock<IHttpContextAccessor> httpContextAccessorMock = new Mock<IHttpContextAccessor>();
             httpContextAccessorMock.Setup(h => h.HttpContext).Returns(httpContext);
             return httpContextAccessorMock.Object;
+        }
+
+        /// <summary>
+        ///     Test case: GetAllResourceOwners when the Altinn CDN cannot be reached and nothing has been cached.
+        ///     Expected: 503 rather than an empty list, which the frontend would render as "no service owners".
+        /// </summary>
+        [Fact]
+        public async Task GetAllResourceOwners_OrgDataUnavailable_ReturnsServiceUnavailable()
+        {
+            // Arrange
+            var cdnServiceMock = new Mock<IAltinnCdnService>();
+            cdnServiceMock
+                .Setup(s => s.GetOrgDataSnapshot())
+                .ReturnsAsync(new OrgDataSnapshot(new Dictionary<string, OrgData>(), OrgDataAvailability.Unavailable));
+
+            HttpClient client = _factory.WithWebHostBuilder(builder =>
+            {
+                builder.ConfigureTestServices(services =>
+                {
+                    services.AddSingleton<IProfileClient, ProfileClientMock>();
+                    services.AddSingleton<IResourceRegistryClient, ResourceRegistryClientMock>();
+                    services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
+                    services.AddSingleton<IPostConfigureOptions<JwtCookieOptions>, JwtCookiePostConfigureOptionsStub>();
+                    services.AddSingleton<IPDP, PdpPermitMock>();
+                    services.AddSingleton(cdnServiceMock.Object);
+                });
+            }).CreateClient(new WebApplicationFactoryClientOptions { AllowAutoRedirect = false });
+
+            client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", PrincipalUtil.GetToken(1337, 501337));
+
+            // Act
+            HttpResponseMessage response = await client.GetAsync("accessmanagement/api/v1/resources/resourceowners");
+
+            // Assert
+            Assert.Equal(HttpStatusCode.ServiceUnavailable, response.StatusCode);
         }
 
         private HttpClient GetTestClient(IHttpContextAccessor httpContextAccessor = null, Dictionary<string, bool> featureFlags = null)

@@ -30,7 +30,8 @@
           "id": "urn:altinn:resource",
           "value": "appid-510"
         }
-      ]
+      ],
+      "resourceOwnerLogoUrl": "https://altinncdn.no/orgs/digdir/digdir.svg"
     },
     {
       "identifier": "appid-511",
@@ -60,7 +61,8 @@
           "id": "urn:altinn:resource",
           "value": "appid-511"
         }
-      ]
+      ],
+      "resourceOwnerLogoUrl": "https://altinncdn.no/orgs/digdir/digdir.svg"
     },
     {
       "identifier": "appid-512",
@@ -90,7 +92,8 @@
           "id": "urn:altinn:resource",
           "value": "appid-512"
         }
-      ]
+      ],
+      "resourceOwnerLogoUrl": "https://altinncdn.no/orgs/digdir/digdir.svg"
     },
     {
       "identifier": "appid-513",
@@ -120,7 +123,8 @@
           "id": "urn:altinn:resource",
           "value": "appid-513"
         }
-      ]
+      ],
+      "resourceOwnerLogoUrl": "https://altinncdn.no/orgs/digdir/digdir.svg"
     }
   ]
 }

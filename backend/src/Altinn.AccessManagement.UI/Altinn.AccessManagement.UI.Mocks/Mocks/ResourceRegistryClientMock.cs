@@ -5,7 +5,6 @@ using Altinn.AccessManagement.UI.Core.ClientInterfaces;
 using Altinn.AccessManagement.UI.Core.Helpers;
 using Altinn.AccessManagement.UI.Core.Models.AccessPackage;
 using Altinn.AccessManagement.UI.Core.Models.ResourceRegistry;
-using Altinn.AccessManagement.UI.Core.Models.ResourceRegistry.ResourceOwner;
 using Altinn.AccessManagement.UI.Core.Models.SingleRight;
 using Altinn.AccessManagement.UI.Mocks.Utils;
 
@@ -48,20 +47,6 @@ namespace Altinn.AccessManagement.UI.Mocks.Mocks
         public Task<List<ServiceResource>> GetResourceList(bool includeMigratedApps = false)
         {
             return GetResources();
-        }
-
-        /// <inheritdoc />
-        public Task<OrgList> GetAllResourceOwners()
-        {
-            string folder = Path.GetDirectoryName(new Uri(typeof(ResourceRegistryClientMock).Assembly.Location).LocalPath);
-            if (!string.IsNullOrEmpty(folder))
-            {
-                string path = Path.Combine(folder, "Data", "ResourceRegistry", "resourceowners.json");
-                OrgList orgList = Util.GetMockData<OrgList>(path);
-                return Task.FromResult(orgList);
-            }
-
-            return Task.FromResult<OrgList>(null);
         }
 
         public Task<List<Right>> GetResourceRights(string resourceId, string languageCode = "nb")

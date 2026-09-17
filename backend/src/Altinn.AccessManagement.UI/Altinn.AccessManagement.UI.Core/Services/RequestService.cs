@@ -18,17 +18,21 @@ namespace Altinn.AccessManagement.UI.Core.Services
         private readonly IAccessPackageClient _accessPackageClient;
         private readonly ResourceHelper _resourceHelper;
 
+        private readonly IAltinnCdnService _altinnCdnService;
+
         /// <summary>
         /// Initializes a new instance of the <see cref="RequestService"/> class.
         /// </summary>
         /// <param name="requestClient">The request client.</param>
         /// <param name="accessPackageClient">The access package client.</param>
         /// <param name="resourceHelper">The resource helper.</param>
-        public RequestService(IRequestClient requestClient, IAccessPackageClient accessPackageClient, ResourceHelper resourceHelper)
+        /// <param name="altinnCdnService">Altinn CDN service. Provides the service owner logos</param>
+        public RequestService(IRequestClient requestClient, IAccessPackageClient accessPackageClient, ResourceHelper resourceHelper, IAltinnCdnService altinnCdnService)
         {
             _requestClient = requestClient;
             _accessPackageClient = accessPackageClient;
             _resourceHelper = resourceHelper;
+            _altinnCdnService = altinnCdnService;
         }
 
         /// <inheritdoc />
@@ -224,6 +228,8 @@ namespace Altinn.AccessManagement.UI.Core.Services
 
                 packageDictionary[packageId] = package;
             }
+
+            ResourceUtils.ApplyOwnerLogos(packageDictionary.Values, await _altinnCdnService.GetOrgData());
 
             return list.Select(x =>
             {

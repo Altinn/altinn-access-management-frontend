@@ -20,6 +20,7 @@ namespace Altinn.AccessManagement.UI.Core.Services
         private readonly IInstanceClient _instanceClient;
         private readonly ILogger<InstanceService> _logger;
         private readonly IResourceService _resourceService;
+        private readonly IAltinnCdnService _altinnCdnService;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="InstanceService"/> class.
@@ -29,18 +30,21 @@ namespace Altinn.AccessManagement.UI.Core.Services
         /// <param name="instanceClient">Client for instance delegation data.</param>
         /// <param name="logger">Logger instance.</param>
         /// <param name="resourceService">Service for resource data.</param>
+        /// <param name="altinnCdnService">Altinn CDN service. Provides the service owner logos</param>
         public InstanceService(
             IAuthenticationClient authenticationClient,
             IDialogportClient dialogportClient,
             IInstanceClient instanceClient,
             ILogger<InstanceService> logger,
-            IResourceService resourceService)
+            IResourceService resourceService,
+            IAltinnCdnService altinnCdnService)
         {
             _authenticationClient = authenticationClient;
             _dialogportClient = dialogportClient;
             _instanceClient = instanceClient;
             _logger = logger;
             _resourceService = resourceService;
+            _altinnCdnService = altinnCdnService;
         }
 
         /// <inheritdoc />
@@ -125,7 +129,11 @@ namespace Altinn.AccessManagement.UI.Core.Services
         /// <inheritdoc />
         public async Task<InstanceRights> GetInstanceRights(string languageCode, Guid party, Guid from, Guid to, string resource, string instance)
         {
-            return await _instanceClient.GetInstanceRights(languageCode, party, from, to, resource, instance);
+            InstanceRights rights = await _instanceClient.GetInstanceRights(languageCode, party, from, to, resource, instance);
+
+            ResourceUtils.ApplyOwnerLogos([rights?.Resource], await _altinnCdnService.GetOrgData());
+
+            return rights;
         }
 
         /// <inheritdoc />

@@ -1,166 +1,212 @@
 [
   {
-    "OrganisationName": "Narnia",
-    "OrganisationNumber": "777777777"
-  },
-  {
-    "OrganisationName": "Brønnøysundregistrene",
-    "OrganisationNumber": "974760673"
-  },
-  {
-    "OrganisationName": "Barne-, ungdoms- og familiedirektoratet",
-    "OrganisationNumber": "986128433"
+    "OrganisationName": "Arbeids- og velferdsetaten",
+    "OrganisationNumber": "889640782",
+    "OrganisationCode": "nav"
   },
   {
     "OrganisationName": "Arbeidstilsynet",
-    "OrganisationNumber": "974761211"
+    "OrganisationNumber": "974761211",
+    "OrganisationCode": "dat"
   },
   {
-    "OrganisationName": "Direktoratet for byggkvalitet",
-    "OrganisationNumber": "974760223"
+    "OrganisationName": "Barne-, ungdoms- og familiedirektoratet",
+    "OrganisationNumber": "986128433",
+    "OrganisationCode": "buf"
   },
   {
-    "OrganisationName": "Digitaliseringsdirektoratet",
-    "OrganisationNumber": "991825827"
+    "OrganisationName": "Brønnøysundregistrene",
+    "OrganisationNumber": "974760673",
+    "OrganisationCode": "brg"
   },
   {
     "OrganisationName": "Digitale Helgeland",
-    "OrganisationNumber": "964983291"
+    "OrganisationNumber": "964983291",
+    "OrganisationCode": "dihe"
+  },
+  {
+    "OrganisationName": "Digitaliseringsdirektoratet",
+    "OrganisationNumber": "991825827",
+    "OrganisationCode": "digdir"
+  },
+  {
+    "OrganisationName": "Direktoratet for byggkvalitet",
+    "OrganisationNumber": "974760223",
+    "OrganisationCode": "dibk"
   },
   {
     "OrganisationName": "Direktoratet for mineralforvaltning",
-    "OrganisationNumber": "974760282"
+    "OrganisationNumber": "974760282",
+    "OrganisationCode": "dmf"
   },
   {
     "OrganisationName": "Direktoratet for samfunnssikkerhet og beredskap",
-    "OrganisationNumber": "974760983"
-  },
-  {
-    "OrganisationName": "Fiskeridirektoratet",
-    "OrganisationNumber": "971203420"
-  },
-  {
-    "OrganisationName": "Statsforvalterens fellestjenester",
-    "OrganisationNumber": "921627009"
-  },
-  {
-    "OrganisationName": "Forsvaret",
-    "OrganisationNumber": "986105174"
-  },
-  {
-    "OrganisationName": "Gjenopptakelseskommisjonen",
-    "OrganisationNumber": "985847215"
-  },
-  {
-    "OrganisationName": "Helsedirektoratet",
-    "OrganisationNumber": "983544622"
-  },
-  {
-    "OrganisationName": "Havforskningsinstituttet",
-    "OrganisationNumber": "971349077"
-  },
-  {
-    "OrganisationName": "Helse Møre og Romsdal",
-    "OrganisationNumber": "997005562"
+    "OrganisationNumber": "974760983",
+    "OrganisationCode": "dsb"
   },
   {
     "OrganisationName": "Finanstilsynet",
-    "OrganisationNumber": "840747972"
+    "OrganisationNumber": "840747972",
+    "OrganisationCode": "krt"
+  },
+  {
+    "OrganisationName": "Fiskeridirektoratet",
+    "OrganisationNumber": "971203420",
+    "OrganisationCode": "fd"
+  },
+  {
+    "OrganisationName": "Forsvaret",
+    "OrganisationNumber": "986105174",
+    "OrganisationCode": "fors"
+  },
+  {
+    "OrganisationName": "Gjenopptakelseskommisjonen",
+    "OrganisationNumber": "985847215",
+    "OrganisationCode": "gk"
+  },
+  {
+    "OrganisationName": "Havforskningsinstituttet",
+    "OrganisationNumber": "971349077",
+    "OrganisationCode": "hi"
+  },
+  {
+    "OrganisationName": "Helse Møre og Romsdal",
+    "OrganisationNumber": "997005562",
+    "OrganisationCode": "hmrhf"
+  },
+  {
+    "OrganisationName": "Helsedirektoratet",
+    "OrganisationNumber": "983544622",
+    "OrganisationCode": "hdir"
   },
   {
     "OrganisationName": "Kartverket",
-    "OrganisationNumber": "971040238"
-  },
-  {
-    "OrganisationName": "Mattilsynet",
-    "OrganisationNumber": "985399077"
-  },
-  {
-    "OrganisationName": "Miljødirektoratet",
-    "OrganisationNumber": "999601391"
-  },
-  {
-    "OrganisationName": "Nasjonalbiblioteket",
-    "OrganisationNumber": "976029100"
-  },
-  {
-    "OrganisationName": "Norsk helsenett",
-    "OrganisationNumber": "994598759"
-  },
-  {
-    "OrganisationName": "Nasjonal kommunikasjonsmyndighet",
-    "OrganisationNumber": "974446871"
+    "OrganisationNumber": "971040238",
+    "OrganisationCode": "kv"
   },
   {
     "OrganisationName": "Kulturrådet",
-    "OrganisationNumber": "971527412"
+    "OrganisationNumber": "971527412",
+    "OrganisationCode": "nkr"
   },
   {
-    "OrganisationName": "Arbeids- og velferdsetaten",
-    "OrganisationNumber": "889640782"
+    "OrganisationName": "Mattilsynet",
+    "OrganisationNumber": "985399077",
+    "OrganisationCode": "mat"
   },
   {
-    "OrganisationName": "Norsk pasientskadeerstatning",
-    "OrganisationNumber": "984936923"
+    "OrganisationName": "Miljødirektoratet",
+    "OrganisationNumber": "999601391",
+    "OrganisationCode": "mdir"
+  },
+  {
+    "OrganisationName": "Narnia",
+    "OrganisationNumber": "777777777",
+    "OrganisationCode": "nrna"
+  },
+  {
+    "OrganisationName": "Nasjonal kommunikasjonsmyndighet",
+    "OrganisationNumber": "974446871",
+    "OrganisationCode": "nkom"
   },
   {
     "OrganisationName": "Nasjonal sikkerhetsmyndighet",
-    "OrganisationNumber": "985165262"
+    "OrganisationNumber": "985165262",
+    "OrganisationCode": "nsm"
+  },
+  {
+    "OrganisationName": "Nasjonalbiblioteket",
+    "OrganisationNumber": "976029100",
+    "OrganisationCode": "nbib"
+  },
+  {
+    "OrganisationName": "Norsk helsenett",
+    "OrganisationNumber": "994598759",
+    "OrganisationCode": "nhn"
+  },
+  {
+    "OrganisationName": "Norsk pasientskadeerstatning",
+    "OrganisationNumber": "984936923",
+    "OrganisationCode": "npe"
   },
   {
     "OrganisationName": "Olje- og energidepartementet",
-    "OrganisationNumber": "977161630"
-  },
-  {
-    "OrganisationName": "Økokrim",
-    "OrganisationNumber": "874761532"
+    "OrganisationNumber": "977161630",
+    "OrganisationCode": "oed"
   },
   {
     "OrganisationName": "Patentstyret",
-    "OrganisationNumber": "971526157"
+    "OrganisationNumber": "971526157",
+    "OrganisationCode": "pat"
   },
   {
     "OrganisationName": "Sjøfartsdirektoratet",
-    "OrganisationNumber": "974761262"
+    "OrganisationNumber": "974761262",
+    "OrganisationCode": "sfd"
   },
   {
     "OrganisationName": "Skatteetaten",
-    "OrganisationNumber": "974761076"
+    "OrganisationNumber": "974761076",
+    "OrganisationCode": "skd"
   },
   {
     "OrganisationName": "Statens Sivilrettsforvaltning",
-    "OrganisationNumber": "986186999"
-  },
-  {
-    "OrganisationName": "Statistisk sentralbyrå",
-    "OrganisationNumber": "971526920"
+    "OrganisationNumber": "986186999",
+    "OrganisationCode": "srf"
   },
   {
     "OrganisationName": "Statens arbeidsmiljøinstitutt",
-    "OrganisationNumber": "874761222"
+    "OrganisationNumber": "874761222",
+    "OrganisationCode": "stami"
   },
   {
     "OrganisationName": "Statens vegvesen",
-    "OrganisationNumber": "971032081"
+    "OrganisationNumber": "971032081",
+    "OrganisationCode": "svv"
   },
   {
-    "OrganisationName": "Tolletaten",
-    "OrganisationNumber": "880455702"
+    "OrganisationName": "Statistisk sentralbyrå",
+    "OrganisationNumber": "971526920",
+    "OrganisationCode": "ssb"
+  },
+  {
+    "OrganisationName": "Statsforvalterens fellestjenester",
+    "OrganisationNumber": "921627009",
+    "OrganisationCode": "fmfa"
   },
   {
     "OrganisationName": "Testdepartementet",
-    "OrganisationNumber": "974760746"
+    "OrganisationNumber": "974760746",
+    "OrganisationCode": "ttd"
   },
   {
-    "OrganisationName": "Utlendingsdirektoratet",
-    "OrganisationNumber": "974760746"
+    "OrganisationName": "Tolletaten",
+    "OrganisationNumber": "880455702",
+    "OrganisationCode": "tad"
   },
   {
     "OrganisationName": "Utdanningsdirektoratet",
-    "OrganisationNumber": "970018131"
+    "OrganisationNumber": "970018131",
+    "OrganisationCode": "udir"
+  },
+  {
+    "OrganisationName": "Utlendingsdirektoratet",
+    "OrganisationNumber": "974760746",
+    "OrganisationCode": "udi"
   },
   {
     "OrganisationName": "Valgdirektoratet",
-    "OrganisationNumber": "916132727"
+    "OrganisationNumber": "916132727",
+    "OrganisationCode": "valg"
+  },
+  {
+    "OrganisationName": "ZZZ Demo Organisasjon",
+    "OrganisationNumber": "123456789",
+    "OrganisationCode": "zzzdemo"
+  },
+  {
+    "OrganisationName": "Økokrim",
+    "OrganisationNumber": "874761532",
+    "OrganisationCode": "oko"
   }
 ]

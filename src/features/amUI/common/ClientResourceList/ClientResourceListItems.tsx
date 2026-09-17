@@ -2,14 +2,8 @@ import React from 'react';
 import { List, ResourceListItem, type ResourceListItemProps } from '@altinn/altinn-components';
 
 import type { ServiceResource } from '@/rtk/features/singleRights/singleRightsApi';
-import { useProviderLogoUrl } from '@/resources/hooks/useProviderLogoUrl';
 
-import {
-  extractLogoUrl,
-  extractOrgCode,
-  extractOwnerName,
-  extractResourceName,
-} from '../ResourceList/utils';
+import { extractLogoUrl, extractOwnerName, extractResourceName } from '../ResourceList/utils';
 
 export interface ClientResourceListItemData {
   id: string;
@@ -26,8 +20,6 @@ interface ClientResourceListItemsProps {
 }
 
 export const ClientResourceListItems = ({ items, labelledBy }: ClientResourceListItemsProps) => {
-  const { getProviderLogoUrl } = useProviderLogoUrl();
-
   return (
     <List aria-labelledby={labelledBy}>
       {items.map((item) => (
@@ -37,9 +29,7 @@ export const ClientResourceListItems = ({ items, labelledBy }: ClientResourceLis
           size='sm'
           resourceName={extractResourceName(item.resource)}
           ownerName={extractOwnerName(item.resource)}
-          ownerLogoUrl={
-            getProviderLogoUrl(extractOrgCode(item.resource)) ?? extractLogoUrl(item.resource)
-          }
+          ownerLogoUrl={extractLogoUrl(item.resource)}
           ownerLogoUrlAlt={extractOwnerName(item.resource)}
           titleAs={item.titleAs}
           interactive={!!item.onClick}

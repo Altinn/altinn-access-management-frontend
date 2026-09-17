@@ -38,11 +38,13 @@ namespace Altinn.AccessManagement.UI.Integration.Clients
 
             Dictionary<string, Dictionary<string, OrgData>> rawOrgData = JsonSerializer.Deserialize<Dictionary<string, Dictionary<string, OrgData>>>(responseContent, _jsonOptions);
 
-            Dictionary<string, OrgData> orgData = new Dictionary<string, OrgData>();
+            // Org codes are looked up from resource metadata, which is not consistent about casing
+            // (e.g. "TTD" vs "ttd"), so the map is keyed case-insensitively at the source.
+            Dictionary<string, OrgData> orgData = new Dictionary<string, OrgData>(StringComparer.OrdinalIgnoreCase);
 
             if (rawOrgData != null && rawOrgData.TryGetValue("orgs", out var innerOrgData) && innerOrgData != null)
             {
-                orgData = innerOrgData;
+                orgData = new Dictionary<string, OrgData>(innerOrgData, StringComparer.OrdinalIgnoreCase);
             }
             else
             {

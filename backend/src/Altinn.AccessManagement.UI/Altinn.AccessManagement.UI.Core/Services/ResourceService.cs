@@ -1,12 +1,14 @@
 ﻿using System.Configuration;
+using System.Diagnostics;
+using System.Net;
 using System.Text.Json;
 using Altinn.AccessManagement.UI.Core.ClientInterfaces;
 using Altinn.AccessManagement.UI.Core.Configuration;
 using Altinn.AccessManagement.UI.Core.Enums;
 using Altinn.AccessManagement.UI.Core.Helpers;
+using Altinn.AccessManagement.UI.Core.Models.Common;
 using Altinn.AccessManagement.UI.Core.Models.ResourceRegistry;
 using Altinn.AccessManagement.UI.Core.Models.ResourceRegistry.Frontend;
-using Altinn.AccessManagement.UI.Core.Models.ResourceRegistry.ResourceOwner;
 using Altinn.AccessManagement.UI.Core.Services.Interfaces;
 using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Logging;
@@ -24,6 +26,8 @@ namespace Altinn.AccessManagement.UI.Core.Services
         private readonly IResourceRegistryClient _resourceRegistryClient;
         private readonly IFeatureManager _featureManager;
 
+        private readonly IAltinnCdnService _altinnCdnService;
+
         /// <summary>
         ///     Initializes a new instance of the <see cref="ResourceService" /> class for testing purposes.
         /// </summary>
@@ -39,18 +43,21 @@ namespace Altinn.AccessManagement.UI.Core.Services
         /// <param name="cacheConfig">the handler for cache configuration</param>
         /// <param name="memoryCache">the handler for cache</param>
         /// <param name="featureManager">the feature manager holding the current feature flag values</param>
+        /// <param name="altinnCdnService">Altinn CDN service. Provides the service owner logos</param>
         public ResourceService(
             ILogger<IResourceService> logger,
             IResourceRegistryClient resourceRegistryClient,
             IMemoryCache memoryCache,
             IOptions<CacheConfig> cacheConfig,
-            IFeatureManager featureManager)
+            IFeatureManager featureManager,
+            IAltinnCdnService altinnCdnService)
         {
             _logger = logger;
             _resourceRegistryClient = resourceRegistryClient;
             _memoryCache = memoryCache;
             _cacheConfig = cacheConfig.Value;
             _featureManager = featureManager;
+            _altinnCdnService = altinnCdnService;
         }
 
         /// <inheritdoc />
@@ -60,7 +67,8 @@ namespace Altinn.AccessManagement.UI.Core.Services
             {
                 List<ServiceResource> resources = await GetFullResourceList(searchParams.IncludeExpired, cancellationToken);
                 List<ServiceResource> resourceList = resources.FindAll(r => IncludeInSearch(r, searchParams, resourceTypes));
-                List<ServiceResourceFE> resourcesFE = MapResourceToFrontendModel(resourceList, languageCode);
+                Dictionary<string, OrgData> orgs = await _altinnCdnService.GetOrgData();
+                List<ServiceResourceFE> resourcesFE = MapResourceToFrontendModel(resourceList, languageCode, orgs);
 
                 bool displayPopularServicesOnly = await _featureManager.IsEnabledAsync(FeatureFlags.DisplayPopularSingleRightsServices);
                 if (string.IsNullOrEmpty(searchParams.SearchString) &&
@@ -78,21 +86,8 @@ namespace Altinn.AccessManagement.UI.Core.Services
                     // Perform search/filtering and return matches
                     List<ServiceResourceFE> filteredresources = FilterResourceList(resourcesFE, searchParams.ROFilters);
                     List<ServiceResourceFE> searchResults = SearchInResourceList(filteredresources, searchParams.SearchString, resourceTypes, cancellationToken);
-                    OrgList orgList = await GetResourceOwnerOrgList(cancellationToken);
 
-                    var paginatedResult = PaginationUtils.GetListPage(searchResults, searchParams.Page, searchParams.ResultsPerPage);
-
-                    // Add logo to each resource if it exists
-                    foreach (ServiceResourceFE resource in paginatedResult.PageList)
-                    {
-                        orgList.Orgs.TryGetValue(resource.ResourceOwnerOrgcode.ToLower(), out var org);
-                        if (org?.Logo != null)
-                        {
-                            resource.ResourceOwnerLogoUrl = org.Logo;
-                        }
-                    }
-
-                    return paginatedResult;
+                    return PaginationUtils.GetListPage(searchResults, searchParams.Page, searchParams.ResultsPerPage);
                 }
             }
             catch (Exception ex)
@@ -137,7 +132,7 @@ namespace Altinn.AccessManagement.UI.Core.Services
             {
                 List<ServiceResource> resources = await GetResources();
                 List<ServiceResource> resourceList = resources.FindAll(r => r.ResourceType == resourceType && r.Delegable && r.Visible);
-                return MapResourceToFrontendModel(resourceList, languageCode);
+                return MapResourceToFrontendModel(resourceList, languageCode, await _altinnCdnService.GetOrgData());
             }
             catch (Exception ex)
             {
@@ -240,21 +235,7 @@ namespace Altinn.AccessManagement.UI.Core.Services
                     return null;
                 }
 
-                ServiceResourceFE resourceFe = MapResourceToFrontendModel([resource], languageCode).FirstOrDefault();
-                if (resourceFe == null)
-                {
-                    return null;
-                }
-
-                string resourceOwnerOrgCode = resourceFe.ResourceOwnerOrgcode?.ToLower();
-                if (!string.IsNullOrEmpty(resourceOwnerOrgCode))
-                {
-                    OrgList orgList = await _resourceRegistryClient.GetAllResourceOwners();
-                    if (orgList?.Orgs?.TryGetValue(resourceOwnerOrgCode, out var org) == true)
-                    {
-                        resourceFe.ResourceOwnerLogoUrl = org?.Logo;
-                    }
-                }
+                ServiceResourceFE resourceFe = MapResourceToFrontendModel([resource], languageCode, await _altinnCdnService.GetOrgData()).FirstOrDefault();
 
                 return resourceFe;
             }
@@ -322,48 +303,34 @@ namespace Altinn.AccessManagement.UI.Core.Services
         /// <inheritdoc />
         public async Task<List<ResourceOwnerFE>> GetAllResourceOwners(string languageCode)
         {
-            JsonSerializerOptions options = new JsonSerializerOptions
+            OrgDataSnapshot snapshot = await _altinnCdnService.GetOrgDataSnapshot();
+
+            // Here the organization data is the response, not a decoration on it, so an empty list
+            // would be indistinguishable from "there are no service owners" and would silently empty
+            // the service owner filters in the frontend.
+            if (snapshot.Availability == OrgDataAvailability.Unavailable)
             {
-                PropertyNameCaseInsensitive = true,
-            };
-            OrgList orgList = new OrgList();
-            try
-            {
-                orgList = await _resourceRegistryClient.GetAllResourceOwners();
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError("//ResourceService //GetAllResourceOwners failed, exception: {Ex}", ex);
+                _logger.LogError("//ResourceService //GetAllResourceOwners could not reach the Altinn CDN and has no cached organization data.");
+                throw new HttpStatusException("ServiceUnavailable", "Organization data unavailable", HttpStatusCode.ServiceUnavailable, Activity.Current?.Id);
             }
 
-            return MapOrgListToResourceOwnerFe(orgList, languageCode)
-                .OrderBy(resorceOwner => resorceOwner.OrganisationName) // Order alphabetically
+            return snapshot.Data
+                .Select(org => new ResourceOwnerFE(GetNameInCorrectLanguage(org.Value.Name, languageCode), org.Value.Orgnr)
+                {
+                    OrganisationCode = org.Key,
+                })
+                .OrderBy(resourceOwner => resourceOwner.OrganisationName) // Order alphabetically
                 .ToList();
         }
 
-        private List<ResourceOwnerFE> MapOrgListToResourceOwnerFe(OrgList orgList, string languageCode)
+        private static string GetNameInCorrectLanguage(IReadOnlyDictionary<string, string> name, string languageCode)
         {
-            return orgList.Orgs?
-               .Select(org => new ResourceOwnerFE(org.Value.Name != null ? GetNameInCorrectLanguage(org.Value.Name, languageCode) : null, org.Value.Orgnr)
-               {
-                   OrganisationCode = org.Key,
-               })
-                .ToList() ?? new List<ResourceOwnerFE>();
-        }
-
-        private static string GetNameInCorrectLanguage(Name name, string languageCode)
-        {
-            switch (languageCode.ToLowerInvariant())
+            if (name == null)
             {
-                case "en":
-                    return name.En;
-                case "nb":
-                    return name.Nb;
-                case "nn":
-                    return name.Nn;
-                default:
-                    return name.Nb;
+                return null;
             }
+
+            return name.GetValueOrDefault(languageCode) ?? name.GetValueOrDefault("nb");
         }
 
         private async Task<List<ServiceResource>> GetResources()
@@ -403,13 +370,6 @@ namespace Altinn.AccessManagement.UI.Core.Services
             return resources;
         }
 
-        private async Task<OrgList> GetResourceOwnerOrgList(CancellationToken cancellationToken = default)
-        {
-            cancellationToken.ThrowIfCancellationRequested();
-            OrgList orgList = await _resourceRegistryClient.GetAllResourceOwners();
-            return orgList;
-        }
-
         /// <summary>
         ///     Filters the provided list of resources based on provided resourceOwnerFilters.
         ///     <param name="resources">The list of resources to be filtered.</param>
@@ -428,7 +388,7 @@ namespace Altinn.AccessManagement.UI.Core.Services
 
             foreach (ServiceResourceFE res in resources)
             {
-                if (resourceOwnerFiltersLowercase.Contains(res.ResourceOwnerOrgcode.ToLower()))
+                if (resourceOwnerFiltersLowercase.Contains(res.ResourceOwnerOrgcode?.ToLower()))
                 {
                     filteredResources.Add(res);
                 }
@@ -532,7 +492,7 @@ namespace Altinn.AccessManagement.UI.Core.Services
             return resources.Where(r => popularResources.Contains(r.Identifier)).ToList();
         }
 
-        private List<ServiceResourceFE> MapResourceToFrontendModel(List<ServiceResource> resources, string languageCode)
+        private List<ServiceResourceFE> MapResourceToFrontendModel(List<ServiceResource> resources, string languageCode, IReadOnlyDictionary<string, OrgData> orgs)
         {
             List<ServiceResourceFE> resourceList = new List<ServiceResourceFE>();
             foreach (ServiceResource resource in resources)
@@ -555,7 +515,8 @@ namespace Altinn.AccessManagement.UI.Core.Services
                         contactPoints: resource.ContactPoints,
                         spatial: resource.Spatial,
                         authorizationReference: resource.AuthorizationReference,
-                        keywords: resource.Keywords?.FindAll(kw => kw.Language == languageCode).Select(kw => kw.Word).ToList() ?? new List<string>());
+                        keywords: resource.Keywords?.FindAll(kw => kw.Language == languageCode).Select(kw => kw.Word).ToList() ?? new List<string>(),
+                        resourceOwnerLogoUrl: ResourceUtils.ResolveOwnerLogoUrl(orgs, resource.HasCompetentAuthority?.Orgcode));
 
                     resourceList.Add(resourceFE);
                 }

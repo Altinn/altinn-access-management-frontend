@@ -1,6 +1,5 @@
 ﻿using Altinn.AccessManagement.UI.Core.Enums;
 using Altinn.AccessManagement.UI.Core.Models.ResourceRegistry;
-using Altinn.AccessManagement.UI.Core.Models.ResourceRegistry.ResourceOwner;
 using Altinn.AccessManagement.UI.Core.Models.SingleRight;
 
 namespace Altinn.AccessManagement.UI.Core.ClientInterfaces
@@ -30,12 +29,6 @@ namespace Altinn.AccessManagement.UI.Core.ClientInterfaces
         /// <param name="includeMigratedApps">Indicates whether to include migrated applications in the list</param>
         /// <returns>The resource full list of all resources if exists</returns>
         Task<List<ServiceResource>> GetResourceList(bool includeMigratedApps = false);
-
-        /// <summary>
-        ///     Gets list of all resource owners.
-        /// </summary>
-        /// <returns>List of resource owners in string format.</returns>
-        Task<OrgList> GetAllResourceOwners();
 
         /// <summary>
         ///     Gets list of rights for a specified resource, with names on the given language.

@@ -60,7 +60,6 @@ const meta: Meta<typeof ResourceList> = {
   args: {
     resources: sampleResources,
     enableSearch: true,
-    resolveLogos: false,
   },
 };
 
@@ -74,7 +73,6 @@ export const WithControls: Story = {
   args: {
     resources: sampleResources,
     enableSearch: false,
-    resolveLogos: false,
     renderControls: (resource) => <span>{`Action for ${resource.title}`}</span>,
     getBadge: (_, index) =>
       index === 0 ? { label: 'New', theme: 'base', color: 'success' } : undefined,
@@ -85,7 +83,6 @@ export const NonInteractive: Story = {
   args: {
     resources: sampleResources,
     enableSearch: false,
-    resolveLogos: false,
     interactive: false,
     showDetails: false,
   },

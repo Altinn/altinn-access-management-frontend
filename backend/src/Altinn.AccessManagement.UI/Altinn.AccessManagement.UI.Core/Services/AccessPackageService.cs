@@ -12,19 +12,25 @@ namespace Altinn.AccessManagement.UI.Core.Services
     {
         private readonly IAccessPackageClient _accessPackageClient;
 
+        private readonly IAltinnCdnService _altinnCdnService;
+
         /// <summary>
-        /// Initializes a new instance of the <see cref="SingleRightService"/> class.
+        /// Initializes a new instance of the <see cref="AccessPackageService"/> class.
         /// </summary>
         /// <param name="accessPackageClient">The access package client.</param>
-        public AccessPackageService(IAccessPackageClient accessPackageClient)
+        /// <param name="altinnCdnService">Altinn CDN service. Provides the service owner logos</param>
+        public AccessPackageService(IAccessPackageClient accessPackageClient, IAltinnCdnService altinnCdnService)
         {
             _accessPackageClient = accessPackageClient;
+            _altinnCdnService = altinnCdnService;
         }
 
         /// <inheritdoc />
         public async Task<List<AccessAreaFE>> GetSearch(string languageCode, string searchString, string typeName)
         {
             IEnumerable<SearchObject<AccessPackage>> searchMatches = await _accessPackageClient.GetAccessPackageSearchMatches(languageCode, searchString, typeName);
+
+            ResourceUtils.ApplyOwnerLogos(searchMatches.Select(match => match.Object), await _altinnCdnService.GetOrgData());
 
             List<AccessAreaFE> sortedAreas = new List<AccessAreaFE>();
 
@@ -92,7 +98,7 @@ namespace Altinn.AccessManagement.UI.Core.Services
                         Name = package.Name,
                         IsAssignable = package.IsAssignable,
                         Description = package.Description,
-                        Resources = ResourceUtils.MapToAccessPackageResourceFE(package.Resources),
+                        Resources = ResourceUtils.MapToAccessPackageResourceFE(package.Resources, await _altinnCdnService.GetOrgData()),
                         Permissions = packagePermissions?.Permissions?.ToList() ?? new List<Permission>()
                     };
                 }
@@ -102,7 +108,11 @@ namespace Altinn.AccessManagement.UI.Core.Services
         /// <inheritdoc />
         public async Task<AccessPackage> GetAccessPackageById(string languageCode, Guid packageId)
         {
-            return await _accessPackageClient.GetAccessPackageById(languageCode, packageId);
+            AccessPackage package = await _accessPackageClient.GetAccessPackageById(languageCode, packageId);
+
+            ResourceUtils.ApplyOwnerLogos(package?.Resources, await _altinnCdnService.GetOrgData());
+
+            return package;
         }
 
         /// <inheritdoc />
