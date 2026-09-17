@@ -3,8 +3,6 @@ import { List, ResourceListItem, type ResourceListItemProps } from '@altinn/alti
 
 import type { ServiceResource } from '@/rtk/features/singleRights/singleRightsApi';
 
-import { extractLogoUrl, extractOwnerName, extractResourceName } from '../ResourceList/utils';
-
 export interface ClientResourceListItemData {
   id: string;
   resource: ServiceResource;
@@ -27,10 +25,10 @@ export const ClientResourceListItems = ({ items, labelledBy }: ClientResourceLis
           key={item.id}
           id={item.id}
           size='sm'
-          resourceName={extractResourceName(item.resource)}
-          ownerName={extractOwnerName(item.resource)}
-          ownerLogoUrl={extractLogoUrl(item.resource)}
-          ownerLogoUrlAlt={extractOwnerName(item.resource)}
+          resourceName={item.resource.title}
+          ownerName={item.resource.resourceOwnerName}
+          ownerLogoUrl={item.resource.resourceOwnerLogoUrl}
+          ownerLogoUrlAlt={item.resource.resourceOwnerName}
           titleAs={item.titleAs}
           interactive={!!item.onClick}
           as={item.onClick ? 'button' : 'div'}

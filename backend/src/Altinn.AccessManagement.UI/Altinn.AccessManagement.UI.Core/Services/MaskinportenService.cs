@@ -46,11 +46,9 @@ namespace Altinn.AccessManagement.UI.Core.Services
         /// <inheritdoc />
         public async Task<ResourceCheckDto> ResourceDelegationCheck(Guid party, string resource, string languageCode, CancellationToken cancellationToken = default)
         {
-            ResourceCheckDto resourceCheck = await _maskinportenClient.ResourceDelegationCheck(party, resource, languageCode, cancellationToken);
+            ResourceCheckAM resourceCheck = await _maskinportenClient.ResourceDelegationCheck(party, resource, languageCode, cancellationToken);
 
-            await _altinnCdnService.ApplyOwnerLogos([resourceCheck?.Resource]);
-
-            return resourceCheck;
+            return ResourceCheckDto.FromAm(resourceCheck, await _altinnCdnService.GetOrgData());
         }
 
         /// <inheritdoc />

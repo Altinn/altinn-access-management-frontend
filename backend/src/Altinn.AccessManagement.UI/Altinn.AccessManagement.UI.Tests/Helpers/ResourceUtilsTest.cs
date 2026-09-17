@@ -1,5 +1,8 @@
+using Altinn.AccessManagement.UI.Core.Enums;
 using Altinn.AccessManagement.UI.Core.Helpers;
+using Altinn.AccessManagement.UI.Core.Models.AccessPackage;
 using Altinn.AccessManagement.UI.Core.Models.Common;
+using Altinn.AccessManagement.UI.Core.Models.ResourceRegistry.Frontend;
 
 namespace Altinn.AccessManagement.UI.Tests.Helpers
 {
@@ -90,6 +93,77 @@ namespace Altinn.AccessManagement.UI.Tests.Helpers
             Assert.Null(ResourceUtils.ResolveOwnerLogoUrl(orgs, "unknown-org"));
             Assert.Null(ResourceUtils.ResolveOwnerLogoUrl(null, "skd"));
             Assert.Null(ResourceUtils.ResolveOwnerLogoUrl(new Dictionary<string, OrgData> { { "skd", null } }, "skd"));
+        }
+
+        /// <summary>
+        /// Test case: A resource arrives from Access Management, which names things differently than
+        /// the resource registry does.
+        /// Expected: It maps onto the one frontend resource model, including the org number that the
+        /// old access package specific model dropped.
+        /// </summary>
+        [Fact]
+        public void MapToResourceFE_MapsAccessManagementResource()
+        {
+            var orgs = Orgs(("skd", "logo.png", "emblem.svg"));
+            var resource = new ResourceAM
+            {
+                RefId = "ske-innrapportering-amelding",
+                Name = "Innrapportering A-melding",
+                Description = "A-meldingen",
+                Type = new AccessPackageResourceType { Name = "GenericAccessResource" },
+                Provider = new Provider { Name = "Skatteetaten", Code = "skd", RefId = "974761076", LogoUrl = "https://altinncdn.no/orgs/skd/skd.png" },
+            };
+
+            ServiceResourceFE mapped = ResourceUtils.MapToResourceFE(resource, orgs);
+
+            Assert.Equal("ske-innrapportering-amelding", mapped.Identifier);
+            Assert.Equal("Innrapportering A-melding", mapped.Title);
+            Assert.Equal("A-meldingen", mapped.Description);
+            Assert.Equal(ResourceType.GenericAccessResource, mapped.ResourceType);
+            Assert.Equal("Skatteetaten", mapped.ResourceOwnerName);
+            Assert.Equal("skd", mapped.ResourceOwnerOrgcode);
+            Assert.Equal("974761076", mapped.ResourceOwnerOrgNumber);
+            Assert.Equal("emblem.svg", mapped.ResourceOwnerLogoUrl);
+
+            // Access management cannot answer these, and guessing would be worse than saying nothing.
+            Assert.Null(mapped.Delegable);
+            Assert.Null(mapped.Visible);
+            Assert.Null(mapped.RightDescription);
+            Assert.Null(mapped.Status);
+        }
+
+        /// <summary>
+        /// Test case: A resource arrives with no provider and no type, which the mocks show happens.
+        /// Expected: No exception, and no invented values.
+        /// </summary>
+        [Fact]
+        public void MapToResourceFE_ToleratesMissingProviderAndType()
+        {
+            ServiceResourceFE mapped = ResourceUtils.MapToResourceFE(
+                new ResourceAM { RefId = "some-resource", Name = "Some resource" },
+                Orgs(("skd", "logo.png", "emblem.svg")));
+
+            Assert.Equal("some-resource", mapped.Identifier);
+            Assert.Null(mapped.ResourceOwnerName);
+            Assert.Null(mapped.ResourceOwnerLogoUrl);
+            Assert.Equal(ResourceType.Default, mapped.ResourceType);
+        }
+
+        /// <summary>
+        /// Test case: The access management type vocabulary does not match the resource registry one.
+        /// Expected: Known differences are aliased; anything else falls back to Default rather than
+        /// throwing.
+        /// </summary>
+        [Theory]
+        [InlineData("Application", ResourceType.AltinnApp)]
+        [InlineData("GenericAccessResource", ResourceType.GenericAccessResource)]
+        [InlineData("genericaccessresource", ResourceType.GenericAccessResource)]
+        [InlineData("something-nobody-has-seen", ResourceType.Default)]
+        [InlineData("", ResourceType.Default)]
+        [InlineData(null, ResourceType.Default)]
+        public void ParseResourceType_TranslatesAccessManagementTypeNames(string typeName, ResourceType expected)
+        {
+            Assert.Equal(expected, ResourceUtils.ParseResourceType(typeName));
         }
     }
 }

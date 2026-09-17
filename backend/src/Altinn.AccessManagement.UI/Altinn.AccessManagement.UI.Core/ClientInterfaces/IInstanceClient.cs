@@ -28,7 +28,7 @@ namespace Altinn.AccessManagement.UI.Core.ClientInterfaces
         /// <param name="resource">The resource identifier.</param>
         /// <param name="instance">The instance urn.</param>
         /// <returns>The delegation check result.</returns>
-        Task<ResourceCheckDto> GetDelegationCheck(Guid party, string resource, string instance);
+        Task<ResourceCheckAM> GetDelegationCheck(Guid party, string resource, string instance);
 
         /// <summary>
         /// Gets rights for a delegated instance.
@@ -40,7 +40,7 @@ namespace Altinn.AccessManagement.UI.Core.ClientInterfaces
         /// <param name="resource">The resource identifier.</param>
         /// <param name="instance">The instance urn.</param>
         /// <returns>The delegated instance rights.</returns>
-        Task<InstanceRights> GetInstanceRights(string languageCode, Guid party, Guid from, Guid to, string resource, string instance);
+        Task<InstanceRightsAM> GetInstanceRights(string languageCode, Guid party, Guid from, Guid to, string resource, string instance);
 
         /// <summary>
         /// Delegates rights on a specific instance.

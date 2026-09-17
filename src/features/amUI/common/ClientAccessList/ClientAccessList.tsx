@@ -246,7 +246,7 @@ export const ClientAccessList = ({
         if (!resource) return;
 
         const hasAccess = clientHasResource(clientId, clientResource.refId);
-        const showAction = !requireDelegableForActions || resource.delegable;
+        const showAction = !requireDelegableForActions || resource.delegable !== false;
 
         const onDelegate = onAddResource
           ? (onSuccess?: () => void, onError?: (error?: ActionError) => void) =>

@@ -59,7 +59,7 @@ namespace Altinn.AccessManagement.UI.Mocks.Mocks
         }
 
         /// <inheritdoc />
-        public Task<ResourceCheckDto> GetDelegationCheck(Guid party, string resource, string instance)
+        public Task<ResourceCheckAM> GetDelegationCheck(Guid party, string resource, string instance)
         {
             ThrowExceptionIfTriggerParty(party.ToString());
 
@@ -76,7 +76,7 @@ namespace Altinn.AccessManagement.UI.Mocks.Mocks
             try
             {
                 string dataPath = Path.Combine(dataFolder, "Instance", "DelegationCheck", $"{resource}.json");
-                return Task.FromResult(Util.GetMockData<ResourceCheckDto>(dataPath));
+                return Task.FromResult(Util.GetMockData<ResourceCheckAM>(dataPath));
             }
             catch
             {
@@ -93,7 +93,7 @@ namespace Altinn.AccessManagement.UI.Mocks.Mocks
         }
 
         /// <inheritdoc />
-        public Task<InstanceRights> GetInstanceRights(string languageCode, Guid party, Guid from, Guid to, string resource, string instance)
+        public Task<InstanceRightsAM> GetInstanceRights(string languageCode, Guid party, Guid from, Guid to, string resource, string instance)
         {
             ThrowExceptionIfTriggerParty(party.ToString());
 
@@ -110,7 +110,7 @@ namespace Altinn.AccessManagement.UI.Mocks.Mocks
             try
             {
                 string dataPath = Path.Combine(dataFolder, "Instance", "GetInstanceRights", $"{resource}.json");
-                InstanceRights instanceRights = Util.GetMockData<InstanceRights>(dataPath);
+                InstanceRightsAM instanceRights = Util.GetMockData<InstanceRightsAM>(dataPath);
                 return Task.FromResult(instanceRights);
             }
             catch (FileNotFoundException)

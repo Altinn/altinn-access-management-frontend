@@ -32,7 +32,7 @@ namespace Altinn.AccessManagement.UI.Core.ClientInterfaces
         /// <param name="variant">Optional variant filter.</param>
         /// <param name="includeResources">Whether package resources should be included.</param>
         /// <param name="languageCode">Language code for localization.</param>
-        Task<IEnumerable<AccessPackage>> GetRolePackages(string roleCode, string variant, bool includeResources, string languageCode);
+        Task<IEnumerable<AccessPackageAM>> GetRolePackages(string roleCode, string variant, bool includeResources, string languageCode);
 
         /// <summary>
         /// Retrieves resource metadata for a given role.

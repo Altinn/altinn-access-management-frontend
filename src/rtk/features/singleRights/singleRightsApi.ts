@@ -12,20 +12,29 @@ interface PaginatedListDTO {
   pageList: ServiceResource[];
 }
 
+/**
+ * A resource, as the backend serves it.
+ *
+ * The fields below the core ones come from the resource registry. Resources that the backend
+ * resolves from access management (access package resources, role resources, request packages)
+ * cannot supply them, so they are optional.
+ */
 export interface ServiceResource {
-  title: string;
   identifier: string;
-  resourceOwnerName: string;
-  resourceOwnerLogoUrl: string;
-  resourceOwnerOrgNumber: string;
-  resourceOwnerOrgcode: string;
-  rightDescription: string;
+  title: string;
   description?: string;
-  status?: string;
-  resourceReferences: resourceReference[];
-  authorizationReference: IdValuePair[];
   resourceType: string;
-  delegable: boolean;
+  resourceOwnerName: string;
+  resourceOwnerOrgcode: string;
+  resourceOwnerOrgNumber?: string;
+  resourceOwnerLogoUrl?: string;
+  rightDescription?: string;
+  status?: string;
+  delegable?: boolean;
+  visible?: boolean;
+  keywords?: string[];
+  resourceReferences?: resourceReference[];
+  authorizationReference?: IdValuePair[];
 }
 
 export interface ResourceDelegation {

@@ -26,7 +26,7 @@ namespace Altinn.AccessManagement.UI.Core.ClientInterfaces
         /// <param name="languageCode">The language code.</param>
         /// <param name="cancellationToken">Cancellation token.</param>
         /// <returns>The resource delegation check.</returns>
-        Task<ResourceCheckDto> ResourceDelegationCheck(Guid party, string resource, string languageCode, CancellationToken cancellationToken = default);
+        Task<ResourceCheckAM> ResourceDelegationCheck(Guid party, string resource, string languageCode, CancellationToken cancellationToken = default);
 
         /// <summary>
         /// Delegates a Maskinporten scope resource from a consumer party to a supplier.

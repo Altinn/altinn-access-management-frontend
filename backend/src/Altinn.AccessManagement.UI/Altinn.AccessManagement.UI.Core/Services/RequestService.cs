@@ -213,7 +213,7 @@ namespace Altinn.AccessManagement.UI.Core.Services
 
         private async Task<IEnumerable<EnrichedPackageRequest>> MapToEnrichedPackageRequestList(IEnumerable<Request> list, string languageCode)
         {
-            Dictionary<Guid, AccessPackage> packageDictionary = [];
+            Dictionary<Guid, AccessPackageAM> packageDictionary = [];
             var uniquePackageIds = list
                 .Select(x => x.Package.Id)
                 .Distinct();
@@ -229,14 +229,15 @@ namespace Altinn.AccessManagement.UI.Core.Services
                 packageDictionary[packageId] = package;
             }
 
-            await _altinnCdnService.ApplyOwnerLogos(packageDictionary.Values);
+            IReadOnlyDictionary<string, OrgData> orgs = await _altinnCdnService.GetOrgData();
+            Dictionary<Guid, AccessPackage> packages = packageDictionary.ToDictionary(entry => entry.Key, entry => AccessPackage.FromAm(entry.Value, orgs));
 
             return list.Select(x =>
             {
                 RequestFE request = MapToRequestFE(x);
                 var packageId = x.Package.Id;
 
-                if (!packageDictionary.TryGetValue(packageId, out var package))
+                if (!packages.TryGetValue(packageId, out var package))
                 {
                     throw new ResourceNotFoundException($"Access package not found for ID: {packageId}");
                 }

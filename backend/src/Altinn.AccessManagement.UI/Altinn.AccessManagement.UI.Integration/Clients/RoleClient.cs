@@ -66,14 +66,14 @@ namespace Altinn.AccessManagement.UI.Integration.Clients
         }
 
         /// <inheritdoc />
-        public async Task<IEnumerable<AccessPackage>> GetRolePackages(string roleCode, string variant, bool includeResources, string languageCode)
+        public async Task<IEnumerable<AccessPackageAM>> GetRolePackages(string roleCode, string variant, bool includeResources, string languageCode)
         {
             string endpointUrl =
                 $"meta/info/roles/packages?role={Uri.EscapeDataString(roleCode ?? string.Empty)}&variant={Uri.EscapeDataString(variant ?? string.Empty)}&includeResources={includeResources}";
             string token = JwtTokenUtil.GetTokenFromContext(_httpContextAccessor.HttpContext, _platformSettings.JwtCookieName);
 
             HttpResponseMessage response = await _client.GetAsync(token, endpointUrl, languageCode: languageCode);
-            return await ClientUtils.DeserializeIfSuccessfullStatusCode<IEnumerable<AccessPackage>>(response, _logger, "RoleClient // GetRolePackages");
+            return await ClientUtils.DeserializeIfSuccessfullStatusCode<IEnumerable<AccessPackageAM>>(response, _logger, "RoleClient // GetRolePackages");
         }
 
         /// <inheritdoc />

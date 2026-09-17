@@ -113,6 +113,10 @@ export const HandledRequestModalContent = ({
     [handledResources],
   );
 
+  // Rows are keyed by request id, not by resource identifier: the same resource can be handled
+  // in several requests and must stay a distinct row.
+  const rowId = (resource: ServiceResource) => (resource as ServiceResource & { id: string }).id;
+
   let content: ReactNode = null;
 
   if (loadRequestsError) {
@@ -212,11 +216,12 @@ export const HandledRequestModalContent = ({
                   enableSearch={false}
                   showDetails={false}
                   resources={resourceRows}
+                  getItemId={rowId}
                   onSelect={(resource) =>
-                    handleSelection({ resourceItem: resourceItemById.get(resource.id) })
+                    handleSelection({ resourceItem: resourceItemById.get(rowId(resource)) })
                   }
                   renderControls={(resource) =>
-                    itemControls(resourceItemById.get(resource.id)?.outcome.status)
+                    itemControls(resourceItemById.get(rowId(resource))?.outcome.status)
                   }
                 />
               </>

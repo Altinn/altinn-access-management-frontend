@@ -1,6 +1,7 @@
 import { createApi } from '@reduxjs/toolkit/query/react';
 import { createBaseQuery } from '@/rtk/app/baseQuery';
 import { CompactRole, Entity } from '@/dataObjects/dtos/Common';
+import type { ServiceResource } from '@/rtk/features/singleRights/singleRightsApi';
 
 export interface ProviderType {
   id: string;
@@ -53,17 +54,6 @@ export interface RolePermission {
   permissions: Permission[];
 }
 
-export interface RoleResourceMetadata {
-  id: string;
-  providerId: string;
-  typeId: string;
-  name: string;
-  description: string;
-  refId: string;
-  provider?: Provider | null;
-  type?: ProviderType | null;
-}
-
 export interface RolePackageMetadata {
   id: string;
   name: string;
@@ -72,7 +62,7 @@ export interface RolePackageMetadata {
   isDelegable: boolean;
   isAssignable: boolean;
   isResourcePolicyAvailable: boolean;
-  resources: RoleResourceMetadata[];
+  resources: ServiceResource[];
 }
 
 const baseUrl = `${import.meta.env.BASE_URL}accessmanagement/api/v1/role`;
@@ -115,7 +105,7 @@ export const roleApi = createApi({
       },
     }),
     getRoleResources: builder.query<
-      RoleResourceMetadata[],
+      ServiceResource[],
       { roleCode: string; variant?: string; includePackageResources?: boolean }
     >({
       query: ({ roleCode, variant, includePackageResources = false }) => {

@@ -58,13 +58,13 @@ namespace Altinn.AccessManagement.UI.Integration.Clients
         }
 
         /// <inheritdoc />
-        public async Task<ResourceCheckDto> ResourceDelegationCheck(Guid party, string resource, string languageCode, CancellationToken cancellationToken = default)
+        public async Task<ResourceCheckAM> ResourceDelegationCheck(Guid party, string resource, string languageCode, CancellationToken cancellationToken = default)
         {
             var token = JwtTokenUtil.GetTokenFromContext(_httpContextAccessor.HttpContext, _platformSettings.JwtCookieName);
             var endpointUrl = $"enduser/maskinportensuppliers/resources/delegationcheck?party={party}&resource={Uri.EscapeDataString(resource)}";
 
             HttpResponseMessage response = await _client.GetAsync(token, endpointUrl, cancellationToken, languageCode: languageCode);
-            return await ClientUtils.DeserializeIfSuccessfullStatusCode<ResourceCheckDto>(response, _logger, "MaskinportenClient.ResourceDelegationCheck");
+            return await ClientUtils.DeserializeIfSuccessfullStatusCode<ResourceCheckAM>(response, _logger, "MaskinportenClient.ResourceDelegationCheck");
         }
 
         /// <inheritdoc />

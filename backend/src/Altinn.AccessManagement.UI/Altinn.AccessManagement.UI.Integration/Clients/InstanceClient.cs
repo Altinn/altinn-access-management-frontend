@@ -83,7 +83,7 @@ namespace Altinn.AccessManagement.UI.Integration.Clients
         }
 
         /// <inheritdoc />
-        public async Task<ResourceCheckDto> GetDelegationCheck(Guid party, string resource, string instance)
+        public async Task<ResourceCheckAM> GetDelegationCheck(Guid party, string resource, string instance)
         {
             string endpointUrl =
                 $"enduser/connections/resources/instances/delegationcheck?party={party}&resource={Uri.EscapeDataString(resource)}&instance={Uri.EscapeDataString(instance)}";
@@ -91,11 +91,11 @@ namespace Altinn.AccessManagement.UI.Integration.Clients
 
             HttpResponseMessage response = await _client.GetAsync(token, endpointUrl);
 
-            return await ClientUtils.DeserializeIfSuccessfullStatusCode<ResourceCheckDto>(response);
+            return await ClientUtils.DeserializeIfSuccessfullStatusCode<ResourceCheckAM>(response);
         }
 
         /// <inheritdoc />
-        public async Task<InstanceRights> GetInstanceRights(string languageCode, Guid party, Guid from, Guid to, string resource, string instance)
+        public async Task<InstanceRightsAM> GetInstanceRights(string languageCode, Guid party, Guid from, Guid to, string resource, string instance)
         {
             string endpointUrl =
                 $"enduser/connections/resources/instances/rights?party={party}&from={from}&to={to}&resource={Uri.EscapeDataString(resource)}&instance={Uri.EscapeDataString(instance)}";
@@ -103,7 +103,7 @@ namespace Altinn.AccessManagement.UI.Integration.Clients
             string token = JwtTokenUtil.GetTokenFromContext(_httpContextAccessor.HttpContext, _platformSettings.JwtCookieName);
             HttpResponseMessage response = await _client.GetAsync(token, endpointUrl, languageCode: languageCode);
 
-            return await ClientUtils.DeserializeIfSuccessfullStatusCode<InstanceRights>(response, _logger, "InstanceClient // GetInstanceRights");
+            return await ClientUtils.DeserializeIfSuccessfullStatusCode<InstanceRightsAM>(response, _logger, "InstanceClient // GetInstanceRights");
         }
 
         /// <inheritdoc />

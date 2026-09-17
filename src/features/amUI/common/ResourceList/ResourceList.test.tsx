@@ -4,8 +4,7 @@ import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 
 import { ResourceList } from './ResourceList';
-import type { PackageResource, ResourceProvider } from '@/rtk/features/accessPackageApi';
-import type { ResourceListItemResource } from './types';
+import type { ServiceResource } from '@/rtk/features/singleRights/singleRightsApi';
 
 vi.mock('react-i18next', () => ({
   useTranslation: () => ({
@@ -13,45 +12,25 @@ vi.mock('react-i18next', () => ({
   }),
 }));
 
-const baseProvider: ResourceProvider = {
-  id: 'org',
-  name: 'Altinn',
-  refId: 'org',
-  logoUrl: 'logo.png',
-  code: 'org',
-  typeId: 'type',
-};
-
-const createResource = (overrides: Partial<PackageResource> = {}): PackageResource => {
-  const id = overrides.id ?? `resource-${Math.random().toString(36).slice(2, 8)}`;
-  const provider = overrides.provider ?? baseProvider;
-
-  return {
-    id,
-    name: overrides.name ?? 'Altinn Resource',
-    title: overrides.title ?? overrides.name ?? 'Altinn Resource',
-    description: overrides.description ?? 'Description',
-    type: {
-      id: '0197a840-2ee9-75f4-879e-9d9197683d88',
-      name: 'GenericAccessResource',
-    },
-    provider,
-    resourceOwnerName: overrides.resourceOwnerName ?? provider.name,
-    resourceOwnerLogoUrl: overrides.resourceOwnerLogoUrl ?? provider.logoUrl,
-    resourceOwnerOrgcode: overrides.resourceOwnerOrgcode ?? provider.code,
-    resourceOwnerOrgNumber: overrides.resourceOwnerOrgNumber ?? '123456789',
-    resourceOwnerType: overrides.resourceOwnerType ?? 'type',
-    ...overrides,
-  };
-};
+const createResource = (overrides: Partial<ServiceResource> = {}): ServiceResource => ({
+  identifier: overrides.identifier ?? `resource-${Math.random().toString(36).slice(2, 8)}`,
+  title: overrides.title ?? 'Altinn Resource',
+  description: overrides.description ?? 'Description',
+  resourceType: overrides.resourceType ?? 'GenericAccessResource',
+  resourceOwnerName: overrides.resourceOwnerName ?? 'Altinn',
+  resourceOwnerOrgcode: overrides.resourceOwnerOrgcode ?? 'org',
+  resourceOwnerOrgNumber: overrides.resourceOwnerOrgNumber ?? '123456789',
+  resourceOwnerLogoUrl: overrides.resourceOwnerLogoUrl ?? 'logo.png',
+  ...overrides,
+});
 
 describe('ResourceList', () => {
   it('invokes onSelect when an item is clicked', async () => {
     const user = userEvent.setup();
     const handleSelect = vi.fn();
     const resources = [
-      createResource({ name: 'Resource One' }),
-      createResource({ name: 'Resource Two' }),
+      createResource({ title: 'Resource One' }),
+      createResource({ title: 'Resource Two' }),
     ];
 
     render(
@@ -66,7 +45,7 @@ describe('ResourceList', () => {
   });
 
   it('renders custom controls provided via renderControls and getBadge', () => {
-    const resources = [createResource({ name: 'With Controls' })];
+    const resources = [createResource({ title: 'With Controls' })];
 
     render(
       <ResourceList
@@ -82,7 +61,7 @@ describe('ResourceList', () => {
   });
 
   it('uses custom description text while preserving ownerName', () => {
-    const resources = [createResource({ name: 'With Description Text' })];
+    const resources = [createResource({ title: 'With Description Text' })];
 
     render(
       <ResourceList
@@ -99,8 +78,8 @@ describe('ResourceList', () => {
   it('filters resources based on the search input', async () => {
     const user = userEvent.setup();
     const resources = [
-      createResource({ name: 'Alpha Service' }),
-      createResource({ name: 'Beta Service' }),
+      createResource({ title: 'Alpha Service' }),
+      createResource({ title: 'Beta Service' }),
     ];
 
     render(<ResourceList resources={resources} />);
@@ -115,12 +94,14 @@ describe('ResourceList', () => {
     const user = userEvent.setup();
     const resources = [
       createResource({
-        name: 'Skatt Service',
-        provider: { ...baseProvider, name: 'Skatteetaten', code: 'skd' },
+        title: 'Skatt Service',
+        resourceOwnerName: 'Skatteetaten',
+        resourceOwnerOrgcode: 'skd',
       }),
       createResource({
-        name: 'Nav Service',
-        provider: { ...baseProvider, name: 'Nav', code: 'nav' },
+        title: 'Nav Service',
+        resourceOwnerName: 'Nav',
+        resourceOwnerOrgcode: 'nav',
       }),
     ];
 
@@ -143,12 +124,14 @@ describe('ResourceList', () => {
     const user = userEvent.setup();
     const resources = [
       createResource({
-        name: 'Skatt Service',
-        provider: { ...baseProvider, name: 'Skatteetaten', code: 'skd' },
+        title: 'Skatt Service',
+        resourceOwnerName: 'Skatteetaten',
+        resourceOwnerOrgcode: 'skd',
       }),
       createResource({
-        name: 'Nav Service',
-        provider: { ...baseProvider, name: 'Nav', code: 'nav' },
+        title: 'Nav Service',
+        resourceOwnerName: 'Nav',
+        resourceOwnerOrgcode: 'nav',
       }),
     ];
 
@@ -175,9 +158,9 @@ describe('ResourceList', () => {
 
   it('renders the expired badge for a resource with resourceType MigratedApp', () => {
     const expiredResource = {
-      ...createResource({ name: 'Expired Service' }),
+      ...createResource({ title: 'Expired Service' }),
       resourceType: 'MigratedApp',
-    } as ResourceListItemResource;
+    } as ServiceResource;
 
     render(
       <ResourceList
@@ -191,9 +174,9 @@ describe('ResourceList', () => {
 
   it('does not render the expired badge for a migratedcorrespondence resource that is not deprecated', () => {
     const nonExpiredResource = {
-      ...createResource({ name: 'Migrated Correspondence Service' }),
+      ...createResource({ title: 'Migrated Correspondence Service' }),
       identifier: 'some-migratedcorrespondence-service',
-    } as ResourceListItemResource;
+    } as ServiceResource;
 
     render(
       <ResourceList
@@ -207,10 +190,10 @@ describe('ResourceList', () => {
 
   it('renders the expired badge for a migratedcorrespondence resource with deprecated status', () => {
     const expiredResource = {
-      ...createResource({ name: 'Migrated Correspondence Service' }),
+      ...createResource({ title: 'Migrated Correspondence Service' }),
       identifier: 'some-migratedcorrespondence-service',
       status: 'Deprecated',
-    } as ResourceListItemResource;
+    } as ServiceResource;
 
     render(
       <ResourceList
@@ -223,7 +206,7 @@ describe('ResourceList', () => {
   });
 
   it('does not render the expired badge for a non-expired resource', () => {
-    const normalResource = createResource({ name: 'Normal Service' });
+    const normalResource = createResource({ title: 'Normal Service' });
 
     render(
       <ResourceList

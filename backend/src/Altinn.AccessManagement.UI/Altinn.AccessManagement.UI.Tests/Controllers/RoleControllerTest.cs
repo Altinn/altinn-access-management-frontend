@@ -8,6 +8,7 @@ using Altinn.AccessManagement.UI.Controllers;
 using Altinn.AccessManagement.UI.Core.ClientInterfaces;
 using Altinn.AccessManagement.UI.Core.Configuration;
 using Altinn.AccessManagement.UI.Core.Models.AccessPackage;
+using Altinn.AccessManagement.UI.Core.Models.ResourceRegistry.Frontend;
 using Altinn.AccessManagement.UI.Core.Models.Role;
 using Altinn.AccessManagement.UI.Mocks.Mocks;
 using Altinn.AccessManagement.UI.Mocks.Utils;
@@ -135,8 +136,8 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
 
             Assert.Equal(HttpStatusCode.OK, response.StatusCode);
 
-            List<ResourceAM> actual = JsonSerializer.Deserialize<List<ResourceAM>>(await response.Content.ReadAsStringAsync(), _serializerOptions);
-            List<ResourceAM> expected = Util.GetMockData<List<ResourceAM>>($"{ExpectedDataPath}/Role/Resources/{roleCode}.json");
+            List<ServiceResourceFE> actual = JsonSerializer.Deserialize<List<ServiceResourceFE>>(await response.Content.ReadAsStringAsync(), _serializerOptions);
+            List<ServiceResourceFE> expected = Util.GetMockData<List<ServiceResourceFE>>($"{ExpectedDataPath}/Role/Resources/{roleCode}.json");
 
             Assert.NotNull(actual);
             Assert.Equivalent(expected, actual);

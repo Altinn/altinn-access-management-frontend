@@ -15,13 +15,6 @@ import { CollapsibleContainer } from '../common/CollapsibleContainer/Collapsible
 import { useGetResourceOwnersQuery } from '@/rtk/features/resourceApi';
 import { useDebouncedValue, usePermissionOverview } from '@/resources/hooks';
 import { useFilteredResources } from '../common/ResourceList/useFilteredResources';
-import {
-  extractResourceName,
-  extractOwnerName,
-  extractOrgCode,
-  extractDescription,
-  isExpiredResource,
-} from '../common/ResourceList/utils';
 
 const searchResultsPerPage = 7;
 const ASSIGNED_SERVICES_SECTION = 'assigned-services-section';
@@ -92,11 +85,6 @@ export const SingleRightsPermissions = () => {
     serviceOwnerFilter: filterState,
     searchString: debouncedSearch,
     includeExpiredResources: true,
-    getResourceName: extractResourceName,
-    getOwnerName: extractOwnerName,
-    getOwnerOrgCode: extractOrgCode,
-    getDescription: extractDescription,
-    isExpiredResource: isExpiredResource,
   });
 
   const hasSearch = debouncedSearch || filterState.length > 0;

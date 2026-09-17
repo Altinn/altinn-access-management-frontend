@@ -1,23 +1,13 @@
 {
   "resource": {
-    "id": "b8c9d0e1-f2a3-4567-0123-678901234567",
-    "providerId": "c9d0e1f2-a3b4-5678-1234-789012345678",
-    "typeId": "d0e1f2a3-b4c5-6789-2345-890123456789",
-    "name": "JK's Test Ressurs",
+    "identifier": "jks-test-resource",
+    "title": "JK's Test Ressurs",
     "description": "Veldig fin test ressurs",
-    "refId": "jks-test-resource",
-    "provider": {
-      "id": "c9d0e1f2-a3b4-5678-1234-789012345678",
-      "name": "JK's Test departement",
-      "refId": "991825827",
-      "logoUrl": "https://altinncdn.no/orgs/ttd/ttd.svg",
-      "code": "ttd",
-      "typeId": "e1f2a3b4-c5d6-7890-3456-901234567890"
-    },
-    "type": {
-      "id": "genericaccessresource",
-      "name": "GenericAccessResource"
-    }
+    "resourceType": "GenericAccessResource",
+    "resourceOwnerName": "JK's Test departement",
+    "resourceOwnerOrgcode": "ttd",
+    "resourceOwnerOrgNumber": "991825827",
+    "resourceOwnerLogoUrl": "https://altinncdn.no/orgs/ttd/ttd.svg"
   },
   "rights": [
     {

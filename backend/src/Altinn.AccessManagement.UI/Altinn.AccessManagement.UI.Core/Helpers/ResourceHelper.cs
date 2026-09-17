@@ -92,11 +92,11 @@ namespace Altinn.AccessManagement.UI.Core.Helpers
             {
                 Dictionary<string, Models.Common.OrgData> orgs = await _altinnCdnService.GetOrgData();
                 var accessPackageSearchMatches = await _accessPackageClient.GetAccessPackageSearchMatches(languageCode, string.Empty, null);
-                IEnumerable<AccessPackage> accessPackages = accessPackageSearchMatches.Select(x => x.Object);
+                IEnumerable<AccessPackageAM> accessPackages = accessPackageSearchMatches.Select(x => x.Object);
 
-                IEnumerable<AccessPackage> usedAccessPackages = accessPackages.Where(package => accessPackageIds.Contains(package.Urn));
+                IEnumerable<AccessPackageAM> usedAccessPackages = accessPackages.Where(package => accessPackageIds.Contains(package.Urn));
 
-                foreach (AccessPackage accessPackage in usedAccessPackages)
+                foreach (AccessPackageAM accessPackage in usedAccessPackages)
                 {
                     accessPackagesFE.Add(new AccessPackageFE()
                     {
@@ -106,7 +106,7 @@ namespace Altinn.AccessManagement.UI.Core.Helpers
                         Name = accessPackage.Name,
                         IsAssignable = accessPackage.IsAssignable,
                         IsDelegable = accessPackage.IsDelegable,
-                        Resources = ResourceUtils.MapToAccessPackageResourceFE(accessPackage.Resources, orgs)
+                        Resources = ResourceUtils.MapToResourceFE(accessPackage.Resources, orgs)
                     });
                 }
             }

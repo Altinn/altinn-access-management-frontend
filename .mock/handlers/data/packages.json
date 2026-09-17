@@ -29,21 +29,14 @@
         },
         "resources": [
           {
-            "id": "0197a842-3531-7aa5-aa69-288a4a96999b",
-            "providerId": "9b295788-3843-6aee-e3b3-59f28a4eba67",
-            "typeId": "0197a840-2b32-7799-94eb-42f74f75a4cb",
-            "name": "Klientadministrering",
+            "identifier": "altinn_client_administration",
+            "title": "Klientadministrering",
             "description": "System ressurs for autorisasjon av brukere som skal ha tilgang til brukergrensesnitt og informasjon knytt til klientadministrering i Altinn.",
-            "refId": "altinn_client_administration",
-            "provider": {
-              "id": "9b295788-3843-6aee-e3b3-59f28a4eba67",
-              "name": "Digitaliseringsdirektoratet",
-              "refId": "991825827",
-              "logoUrl": "https://altinncdn.no/orgs/digdir/digdir.svg",
-              "code": "digdir",
-              "typeId": "0195efb8-7c80-713e-ad96-a9896d12f444"
-            },
-            "type": { "name": "Systemresource" }
+            "resourceType": "Systemresource",
+            "resourceOwnerName": "Digitaliseringsdirektoratet",
+            "resourceOwnerOrgcode": "digdir",
+            "resourceOwnerOrgNumber": "991825827",
+            "resourceOwnerLogoUrl": "https://altinncdn.no/orgs/digdir/digdir.svg"
           }
         ]
       },
@@ -71,21 +64,14 @@
         },
         "resources": [
           {
-            "id": "0197a840-2b5a-71b9-af6c-331aac224bdd",
-            "providerId": "9b295788-3843-6aee-e3b3-59f28a4eba67",
-            "typeId": "0197a840-2b32-7799-94eb-42f74f75a4cb",
-            "name": "Tilgangsstyring",
+            "identifier": "altinn_access_management",
+            "title": "Tilgangsstyring",
             "description": "System ressurs for autorisasjon av brukere som skal ha tilgang til brukergrensesnitt og informasjon knytt til tilgangsstyring i Altinn.",
-            "refId": "altinn_access_management",
-            "provider": {
-              "id": "9b295788-3843-6aee-e3b3-59f28a4eba67",
-              "name": "Digitaliseringsdirektoratet",
-              "refId": "991825827",
-              "logoUrl": "https://altinncdn.no/orgs/digdir/digdir.svg",
-              "code": "digdir",
-              "typeId": "0195efb8-7c80-713e-ad96-a9896d12f444"
-            },
-            "type": { "name": "Systemresource" }
+            "resourceType": "Systemresource",
+            "resourceOwnerName": "Digitaliseringsdirektoratet",
+            "resourceOwnerOrgcode": "digdir",
+            "resourceOwnerOrgNumber": "991825827",
+            "resourceOwnerLogoUrl": "https://altinncdn.no/orgs/digdir/digdir.svg"
           }
         ]
       }

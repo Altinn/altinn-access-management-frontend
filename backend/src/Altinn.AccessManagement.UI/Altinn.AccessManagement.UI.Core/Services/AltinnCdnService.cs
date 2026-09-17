@@ -104,7 +104,7 @@ namespace Altinn.AccessManagement.UI.Core.Services
         }
 
         /// <inheritdoc/>
-        public async Task ApplyOwnerLogos(IEnumerable<AccessPackage> packages)
+        public async Task ApplyOwnerLogos(IEnumerable<AccessPackageAM> packages)
         {
             if (packages == null)
             {
@@ -114,7 +114,7 @@ namespace Altinn.AccessManagement.UI.Core.Services
             // Resolved once for all packages; GetOrgData is cached, but the loop below should not
             // depend on that.
             Dictionary<string, OrgData> orgs = await GetOrgData();
-            foreach (AccessPackage package in packages)
+            foreach (AccessPackageAM package in packages)
             {
                 foreach (ResourceAM resource in package?.Resources ?? [])
                 {

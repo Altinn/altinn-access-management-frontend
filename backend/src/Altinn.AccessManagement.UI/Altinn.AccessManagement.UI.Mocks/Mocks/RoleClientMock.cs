@@ -86,10 +86,10 @@ namespace Altinn.AccessManagement.UI.Mocks.Mocks
         }
 
         /// <inheritdoc />
-        public Task<IEnumerable<AccessPackage>> GetRolePackages(string roleCode, string variant, bool includeResources, string languageCode)
+        public Task<IEnumerable<AccessPackageAM>> GetRolePackages(string roleCode, string variant, bool includeResources, string languageCode)
         {
             string dataPath = Path.Combine(_dataFolder, "Roles", "Packages", $"{roleCode}.json");
-            return Task.FromResult(Util.GetMockData<IEnumerable<AccessPackage>>(dataPath));
+            return Task.FromResult(Util.GetMockData<IEnumerable<AccessPackageAM>>(dataPath));
         }
 
         /// <inheritdoc />

@@ -1,23 +1,13 @@
 {
   "resource": {
-    "id": "f2a3b4c5-d6e7-8901-4567-012345678901",
-    "providerId": "a3b4c5d6-e7f8-9012-5678-123456789012",
-    "typeId": "b4c5d6e7-f8a9-0123-6789-234567890123",
-    "name": "Innrapportering Boligsameie",
+    "identifier": "ske-innrapportering-boligsameie",
+    "title": "Innrapportering Boligsameie",
     "description": "Sameier med 9 eller flere boligseksjoner skal levere opplysninger om sameiers andel av felles inntekter, utgifter, formue og gjeld. Det er vanligvis sameiets styre eller forretningsfører som leverer opplysningene.",
-    "refId": "ske-innrapportering-boligsameie",
-    "provider": {
-      "id": "a3b4c5d6-e7f8-9012-5678-123456789012",
-      "name": "Skatteetaten",
-      "refId": "974761076",
-      "logoUrl": "https://altinncdn.no/orgs/skd/skd.svg",
-      "code": "skd",
-      "typeId": "c5d6e7f8-a9b0-1234-7890-345678901234"
-    },
-    "type": {
-      "id": "genericaccessresource",
-      "name": "GenericAccessResource"
-    }
+    "resourceType": "GenericAccessResource",
+    "resourceOwnerName": "Skatteetaten",
+    "resourceOwnerOrgcode": "skd",
+    "resourceOwnerOrgNumber": "974761076",
+    "resourceOwnerLogoUrl": "https://altinncdn.no/orgs/skd/skd.svg"
   },
   "rights": [
     {

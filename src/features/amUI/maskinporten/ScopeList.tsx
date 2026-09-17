@@ -71,7 +71,6 @@ export const ScopeList = ({
             showDetails={false}
             onSelect={onSelect}
             size='sm'
-            titleAs='span'
             getHasAccess={getHasAccess}
             renderControls={renderControls}
             getDescriptionText={(resource) =>

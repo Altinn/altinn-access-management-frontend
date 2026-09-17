@@ -1,26 +1,45 @@
+using Altinn.AccessManagement.UI.Core.Helpers;
 using Altinn.AccessManagement.UI.Core.Models.AccessPackage;
+using Altinn.AccessManagement.UI.Core.Models.Common;
+using Altinn.AccessManagement.UI.Core.Models.ResourceRegistry.Frontend;
 
 namespace Altinn.AccessManagement.UI.Core.Models.SingleRight;
 
 /// <summary>
-/// Model representing a resource with its associated rights and permissions
+/// The rights a party has on a resource, as it is served to the frontend
 /// </summary>
 public class ResourceRight
 {
     /// <summary>
     /// The resource
     /// </summary>
-    public required ResourceAM Resource { get; set; }
+    public required ServiceResourceFE Resource { get; set; }
 
     /// <summary>
-    /// List of direct rights and associated permissions for the resource
+    /// Rights delegated directly to the party
     /// </summary>
     public required List<RightAccess> DirectRights { get; set; }
 
     /// <summary>
-    /// List of indirect rights and associated permissions for the resource
+    /// Rights the party has through something else
     /// </summary>
     public required List<RightAccess> IndirectRights { get; set; }
+
+    /// <summary>
+    /// Maps access management resource rights to the frontend model.
+    /// </summary>
+    /// <param name="rights">The upstream resource rights</param>
+    /// <param name="orgs">Organization data from the Altinn CDN. Used to look up the service owner logo</param>
+    /// <returns>The frontend model</returns>
+    public static ResourceRight FromAm(ResourceRightAM rights, IReadOnlyDictionary<string, OrgData> orgs)
+    {
+        return new ResourceRight
+        {
+            Resource = ResourceUtils.MapToResourceFE(rights.Resource, orgs),
+            DirectRights = rights.DirectRights,
+            IndirectRights = rights.IndirectRights,
+        };
+    }
 }
 
 /// <summary>

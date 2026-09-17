@@ -117,7 +117,7 @@ namespace Altinn.AccessManagement.UI.Tests.Utils
             Assert.Equal(expected.ResourceOwnerName, actual.ResourceOwnerName);
             Assert.Equal(expected.ResourceOwnerOrgNumber, actual.ResourceOwnerOrgNumber);
             Assert.Equal(expected.ResourceOwnerLogoUrl, actual.ResourceOwnerLogoUrl);
-            Assert.Equal(expected.Homepage, actual.Homepage);
+            Assert.Equal(expected.Keywords ?? [], actual.Keywords ?? []);
             Assert.Equal(expected.Status, actual.Status);
             Assert.Equal(expected.Spatial, actual.Spatial);
             Assert.Equal(expected.ResourceType, actual.ResourceType);
@@ -144,21 +144,6 @@ namespace Altinn.AccessManagement.UI.Tests.Utils
 
 
 
-        /// <summary>
-        ///     Assert that two <see cref="AccessPackageResourceFE" /> have the same property in the same positions.
-        /// </summary>
-        /// <param name="expected">An instance with the expected values.</param>
-        /// <param name="actual">The instance to verify.</param>
-        public static void AssertEqual(AccessPackageResourceFE expected, AccessPackageResourceFE actual)
-        {
-            Assert.Equal(expected.Identifier, actual.Identifier);
-            Assert.Equal(expected.Title, actual.Title);
-            Assert.Equal(expected.Description, actual.Description);
-            Assert.Equal(expected.ResourceOwnerName, actual.ResourceOwnerName);
-            Assert.Equal(expected.ResourceOwnerLogoUrl, actual.ResourceOwnerLogoUrl);
-            Assert.Equal(expected.ResourceOwnerOrgcode, actual.ResourceOwnerOrgcode);
-            Assert.Equal(expected.ResourceType, actual.ResourceType);
-        }
 
         /// <summary>
         ///     Assert that two <see cref="ResourceAM" /> have the same property in the same positions.

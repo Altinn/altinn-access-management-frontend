@@ -60,7 +60,7 @@ namespace Altinn.AccessManagement.UI.Mocks.Mocks
             {
                 string folder = Path.GetDirectoryName(new Uri(typeof(ResourceRegistryClientMock).Assembly.Location).LocalPath);
                 string dataPath = Path.Combine(folder, "Data", "SingleRight", "DelegationCheck", $"{resourceId}.json");
-                return Task.FromResult(Util.GetMockData<ResourceCheckDto>(dataPath)?.Rights.Select(r => r.Right).ToList());
+                return Task.FromResult(Util.GetMockData<ResourceCheckAM>(dataPath)?.Rights.Select(r => r.Right).ToList());
             }
             catch
             {

@@ -1,61 +1,62 @@
 import { useMemo } from 'react';
 
-interface UseFilteredResourcesProps<TResource> {
-  resources?: TResource[];
+import type { ServiceResource } from '@/rtk/features/singleRights/singleRightsApi';
+
+import { isExpiredResource } from './utils';
+
+interface UseFilteredResourcesProps {
+  resources?: ServiceResource[];
   searchString: string;
   serviceOwnerFilter?: string[];
   includeExpiredResources?: boolean;
-  getResourceName: (resource: TResource) => string;
-  getOwnerName: (resource: TResource) => string;
-  getOwnerOrgCode: (resource: TResource) => string;
-  getDescription?: (resource: TResource) => string;
-  isExpiredResource?: (resource: TResource) => boolean;
+  /** Extra text to match the search against, e.g. the scope references of a maskinporten resource */
+  additionalSearchText?: (resource: ServiceResource) => string;
 }
 
-export const useFilteredResources = <TResource>({
+export const useFilteredResources = ({
   resources,
   searchString,
   serviceOwnerFilter,
   includeExpiredResources,
-  getResourceName,
-  getOwnerName,
-  getOwnerOrgCode,
-  getDescription,
-  isExpiredResource,
-}: UseFilteredResourcesProps<TResource>) => {
+  additionalSearchText,
+}: UseFilteredResourcesProps) => {
   const normalizedSearch = searchString.trim().toLowerCase();
 
   const filteredResources = useMemo(() => {
     let list = resources ?? [];
-    if (!includeExpiredResources && isExpiredResource) {
-      list = list.filter((x) => !isExpiredResource(x));
+    if (!includeExpiredResources) {
+      list = list.filter((resource) => !isExpiredResource(resource));
     }
-    if (!normalizedSearch && !serviceOwnerFilter) return list;
+
+    if (!normalizedSearch && !serviceOwnerFilter) {
+      return list;
+    }
+
     return list.filter((resource) => {
-      const nameOrTitle = getResourceName(resource).toLowerCase();
-      const ownerName = getOwnerName(resource).toLowerCase();
-      const description = getDescription?.(resource)?.toLowerCase() ?? '';
       const serviceOwnerMatch =
         serviceOwnerFilter && serviceOwnerFilter.length > 0
           ? serviceOwnerFilter
               .map((owner) => owner.toLowerCase())
-              .includes(getOwnerOrgCode(resource).toLowerCase())
+              .includes(resource.resourceOwnerOrgcode.toLowerCase())
           : true;
-      return (
-        (nameOrTitle.includes(normalizedSearch) ||
-          ownerName.includes(normalizedSearch) ||
-          description.includes(normalizedSearch)) &&
-        serviceOwnerMatch
-      );
+
+      const matchesSearch = [
+        resource.title,
+        resource.resourceOwnerName,
+        resource.description,
+        additionalSearchText?.(resource),
+      ]
+        .filter(Boolean)
+        .some((field) => field?.toLowerCase().includes(normalizedSearch));
+
+      return matchesSearch && serviceOwnerMatch;
     });
   }, [
     resources,
     normalizedSearch,
     serviceOwnerFilter,
     includeExpiredResources,
-    getDescription,
-    getOwnerName,
-    getResourceName,
+    additionalSearchText,
   ]);
 
   return {

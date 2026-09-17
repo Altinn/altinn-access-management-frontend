@@ -85,7 +85,6 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
             Assert.NotNull(actualResponse);
             ServiceResourceFE resource = Assert.Single(actualResponse.PageList);
             Assert.Equal("appid-400", resource.Identifier);
-            Assert.Equal(3, resource.PriorityCounter);
             Assert.Contains(resource.ResourceReferences, reference => reference.Reference == searchString);
         }
 
@@ -123,7 +122,7 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
 
             Assert.Equal(HttpStatusCode.OK, response.StatusCode);
             Assert.NotNull(actualResponse);
-            Assert.Equal(resource, actualResponse.Resource.RefId);
+            Assert.Equal(resource, actualResponse.Resource.Identifier);
             RightCheck right = Assert.Single(actualResponse.Rights);
             Assert.True(right.Result);
             Assert.Equal("ScopeAccess", right.Right.Name);

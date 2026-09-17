@@ -359,7 +359,7 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
             Assert.Equal(HttpStatusCode.OK, httpResponse.StatusCode);
             Assert.NotNull(actualResponse);
             Assert.NotNull(actualResponse.Resource);
-            Assert.Equal(expectedResponse.Resource.RefId, actualResponse.Resource.RefId);
+            Assert.Equal(expectedResponse.Resource.Identifier, actualResponse.Resource.Identifier);
         }
 
         /// <summary>

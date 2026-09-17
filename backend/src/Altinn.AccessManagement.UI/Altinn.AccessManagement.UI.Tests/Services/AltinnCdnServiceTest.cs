@@ -161,7 +161,7 @@ namespace Altinn.AccessManagement.UI.Tests.Services
         public async Task ApplyOwnerLogos_ResolvesPackageResourcesWithOneLookup()
         {
             _client.Setup(c => c.GetOrgData()).ReturnsAsync(OrgData);
-            var packages = new List<AccessPackage>
+            var packages = new List<AccessPackageAM>
             {
                 new() { Resources = [new ResourceAM { Provider = new Provider { Code = "skd" } }] },
                 new() { Resources = [new ResourceAM { Provider = new Provider { Code = "skd" } }] },
@@ -184,7 +184,7 @@ namespace Altinn.AccessManagement.UI.Tests.Services
             AltinnCdnService service = Service;
 
             await service.ApplyOwnerLogos((IEnumerable<ResourceAM>)null);
-            await service.ApplyOwnerLogos((IEnumerable<AccessPackage>)null);
+            await service.ApplyOwnerLogos((IEnumerable<AccessPackageAM>)null);
 
             _client.Verify(c => c.GetOrgData(), Times.Never);
         }

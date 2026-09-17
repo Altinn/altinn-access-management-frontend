@@ -43,14 +43,14 @@ namespace Altinn.AccessManagement.UI.Mocks.Mocks
 
 
         /// <inheritdoc />
-        public Task<ResourceCheckDto> GetDelegationCheck(Guid from, string resource)
+        public Task<ResourceCheckAM> GetDelegationCheck(Guid from, string resource)
         {
             ThrowExceptionIfTriggerParty(from.ToString());
 
             try
             {
                 string dataPath = Path.Combine(dataFolder, "SingleRight", "DelegationCheck", $"{resource}.json");
-                return Task.FromResult(Util.GetMockData<ResourceCheckDto>(dataPath));
+                return Task.FromResult(Util.GetMockData<ResourceCheckAM>(dataPath));
             }
             catch
             {
@@ -69,7 +69,7 @@ namespace Altinn.AccessManagement.UI.Mocks.Mocks
         }
 
         /// <inheritdoc />
-        public Task<ResourceRight> GetDelegatedResourceRights(string languageCode, Guid party, Guid from, Guid to, string resource)
+        public Task<ResourceRightAM> GetDelegatedResourceRights(string languageCode, Guid party, Guid from, Guid to, string resource)
         {
             ThrowExceptionIfTriggerParty(party.ToString());
             ThrowHttpStatusExceptionIfTriggerParty(from.ToString());
@@ -77,7 +77,7 @@ namespace Altinn.AccessManagement.UI.Mocks.Mocks
             try
             {
                 string dataPath = Path.Combine(dataFolder, "SingleRight", "GetResourceRights", $"{resource}.json");
-                return Task.FromResult(Util.GetMockData<ResourceRight>(dataPath));
+                return Task.FromResult(Util.GetMockData<ResourceRightAM>(dataPath));
             }
             catch (FileNotFoundException)
             {

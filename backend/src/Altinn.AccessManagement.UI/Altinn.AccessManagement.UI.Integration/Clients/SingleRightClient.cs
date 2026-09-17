@@ -48,14 +48,14 @@ namespace Altinn.AccessManagement.UI.Integration.Clients
         }
 
         /// <inheritdoc />
-        public async Task<ResourceCheckDto> GetDelegationCheck(Guid from, string resource)
+        public async Task<ResourceCheckAM> GetDelegationCheck(Guid from, string resource)
         {
             string endpointUrl = $"enduser/connections/resources/delegationcheck?party={from}&resource={resource}";
             string token = JwtTokenUtil.GetTokenFromContext(_httpContextAccessor.HttpContext, _platformSettings.JwtCookieName);
 
             HttpResponseMessage response = await _client.GetAsync(token, endpointUrl);
 
-            return await ClientUtils.DeserializeIfSuccessfullStatusCode<ResourceCheckDto>(response);
+            return await ClientUtils.DeserializeIfSuccessfullStatusCode<ResourceCheckAM>(response);
         }
 
         /// <inheritdoc />
@@ -76,7 +76,7 @@ namespace Altinn.AccessManagement.UI.Integration.Clients
         }
 
         /// <inheritdoc />
-        public async Task<ResourceRight> GetDelegatedResourceRights(string languageCode, Guid party, Guid from, Guid to, string resource)
+        public async Task<ResourceRightAM> GetDelegatedResourceRights(string languageCode, Guid party, Guid from, Guid to, string resource)
         {
             string endpointUrl = $"enduser/connections/resources/rights?party={party}&to={to}&from={from}&resource={resource}";
             string token = JwtTokenUtil.GetTokenFromContext(_httpContextAccessor.HttpContext, _platformSettings.JwtCookieName);
@@ -84,7 +84,7 @@ namespace Altinn.AccessManagement.UI.Integration.Clients
             HttpResponseMessage response = await _client.GetAsync(token, endpointUrl, languageCode: languageCode);
             var responseContent = await response.Content.ReadAsStringAsync();
 
-            return await ClientUtils.DeserializeIfSuccessfullStatusCode<ResourceRight>(response, _logger, "SingleRightClient // GetDelegatedResourceRights");
+            return await ClientUtils.DeserializeIfSuccessfullStatusCode<ResourceRightAM>(response, _logger, "SingleRightClient // GetDelegatedResourceRights");
         }
 
         /// <inheritdoc />

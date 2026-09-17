@@ -29,11 +29,6 @@ namespace Altinn.AccessManagement.UI.Core.Models.ResourceRegistry.Frontend
         public string RightDescription { get; set; }
 
         /// <summary>
-        /// The homepage
-        /// </summary>
-        public string Homepage { get; set; }
-
-        /// <summary>
         /// The status
         /// </summary>
         public string Status { get; set; }
@@ -52,12 +47,12 @@ namespace Altinn.AccessManagement.UI.Core.Models.ResourceRegistry.Frontend
         /// <summary>
         /// Is this resource possible to delegate to others or not
         /// </summary>
-        public bool Delegable { get; set; } = true;
+        public bool? Delegable { get; set; }
 
         /// <summary>
         /// The visibility of the resource
         /// </summary>
-        public bool Visible { get; set; } = true;
+        public bool? Visible { get; set; }
 
         /// <summary>
         /// Name of resource owner
@@ -87,6 +82,7 @@ namespace Altinn.AccessManagement.UI.Core.Models.ResourceRegistry.Frontend
         /// <summary>
         /// Counter that denotes the priority of which the resource is to be sorted (if appliccable)
         /// </summary>
+        [JsonIgnore]
         public int? PriorityCounter { get; set; }
 
         /// <summary>
@@ -110,78 +106,6 @@ namespace Altinn.AccessManagement.UI.Core.Models.ResourceRegistry.Frontend
         /// </summary>
         public ServiceResourceFE()
         {
-        }
-
-        /// <summary>
-        /// Basic constructor
-        /// </summary>
-        public ServiceResourceFE(
-            string identifier, 
-            string title, 
-            string description, 
-            string rightDescription, 
-            string status, 
-            string resourceOwnerName, 
-            string resourceOwnerOrgNumber,
-            List<ResourceReference> resourceReferences, 
-            ResourceType resourceType, 
-            List<ContactPoint> contactPoints, 
-            List<string> spatial, 
-            List<IdValuePair> authorizationReference, 
-            string homepage = null,
-            int? priorityCounter = null, 
-            bool visible = true, 
-            bool delegable = true, 
-            List<string> keywords = null,
-            string resourceOwnerLogoUrl = null,
-            string resourceOwnerOrgcode = null)
-        {
-            Identifier = identifier;
-            Title = title;
-            Description = description;
-            RightDescription = rightDescription;
-            Homepage = homepage;
-            Status = status;
-            ResourceOwnerName = resourceOwnerName;
-            ResourceOwnerLogoUrl = resourceOwnerLogoUrl;
-            ResourceOwnerOrgNumber = resourceOwnerOrgNumber;
-            ResourceReferences = resourceReferences;
-            PriorityCounter = priorityCounter;
-            ResourceType = resourceType;
-            Visible = visible;
-            Delegable = delegable;
-            ContactPoints = contactPoints;
-            Spatial = spatial;
-            AuthorizationReference = authorizationReference;
-            Keywords = keywords ?? new List<string>();
-            ResourceOwnerOrgcode = resourceOwnerOrgcode;
-        }
-
-        /// <summary>
-        /// Constructor used when copying
-        /// </summary>
-        /// <param name="serviceResourceFE">The resource to be copied</param>
-        public ServiceResourceFE(ServiceResourceFE serviceResourceFE)
-        {
-            Identifier = serviceResourceFE.Identifier;
-            Title = serviceResourceFE.Title;
-            Description = serviceResourceFE.Description;
-            RightDescription = serviceResourceFE.RightDescription;
-            Homepage = serviceResourceFE.Homepage;
-            Status = serviceResourceFE.Status;
-            ResourceOwnerName = serviceResourceFE.ResourceOwnerName;
-            ResourceOwnerLogoUrl = serviceResourceFE.ResourceOwnerLogoUrl;
-            ResourceOwnerOrgNumber = serviceResourceFE.ResourceOwnerOrgNumber;
-            PriorityCounter = serviceResourceFE.PriorityCounter;
-            ResourceReferences = serviceResourceFE.ResourceReferences;
-            ResourceType = serviceResourceFE.ResourceType;
-            Visible = serviceResourceFE.Visible;
-            Delegable = serviceResourceFE.Delegable;
-            ContactPoints = serviceResourceFE.ContactPoints;
-            Spatial = serviceResourceFE.Spatial;
-            AuthorizationReference = serviceResourceFE.AuthorizationReference;
-            Keywords = serviceResourceFE.Keywords ?? new List<string>();
-            ResourceOwnerOrgcode = serviceResourceFE.ResourceOwnerOrgcode;
         }
     }
 }

@@ -34,7 +34,7 @@ namespace Altinn.AccessManagement.UI.Core.Services
         /// <inheritdoc />
         public async Task<List<RightCheck>> DelegationCheck(Guid from, string resource)
         {
-            ResourceCheckDto delegationCheckResult = await _singleRightClient.GetDelegationCheck(from, resource);
+            ResourceCheckAM delegationCheckResult = await _singleRightClient.GetDelegationCheck(from, resource);
             List<RightCheck> actions = delegationCheckResult.Rights.ToList();
 
             return actions;
@@ -74,23 +74,7 @@ namespace Altinn.AccessManagement.UI.Core.Services
 
                 if (resource != null)
                 {
-                    ServiceResourceFE resourceFE = new ServiceResourceFE(
-                        resource.Identifier,
-                        resource.Title?.GetValueOrDefault(languageCode) ?? resource.Title?.GetValueOrDefault("nb"),
-                        resourceType: resource.ResourceType,
-                        status: resource.Status,
-                        resourceReferences: resource.ResourceReferences,
-                        resourceOwnerName: resource.HasCompetentAuthority?.Name?.GetValueOrDefault(languageCode) ?? resource.HasCompetentAuthority?.Name?.GetValueOrDefault("nb"),
-                        resourceOwnerOrgNumber: resource.HasCompetentAuthority?.Organization,
-                        resourceOwnerOrgcode: resource.HasCompetentAuthority?.Orgcode,
-                        rightDescription: resource.RightDescription?.GetValueOrDefault(languageCode) ?? resource.RightDescription?.GetValueOrDefault("nb"),
-                        description: resource.Description?.GetValueOrDefault(languageCode) ?? resource.Description?.GetValueOrDefault("nb"),
-                        visible: resource.Visible,
-                        delegable: resource.Delegable,
-                        contactPoints: resource.ContactPoints,
-                        spatial: resource.Spatial,
-                        authorizationReference: resource.AuthorizationReference,
-                        resourceOwnerLogoUrl: ResourceUtils.ResolveOwnerLogoUrl(orgs, resource.HasCompetentAuthority?.Orgcode));
+                    ServiceResourceFE resourceFE = ResourceUtils.MapToResourceFE(resource, languageCode, orgs);
 
                     delegationsFE.Add(new ResourceDelegation(resourceFE, resourcePermission.Permissions));
                 }
@@ -102,11 +86,9 @@ namespace Altinn.AccessManagement.UI.Core.Services
         /// <inheritdoc />
         public async Task<ResourceRight> GetDelegatedResourceRights(string languageCode, Guid party, Guid from, Guid to, string resource)
         {
-            ResourceRight resourceRight = await _singleRightClient.GetDelegatedResourceRights(languageCode, party, from, to, resource);
+            ResourceRightAM resourceRight = await _singleRightClient.GetDelegatedResourceRights(languageCode, party, from, to, resource);
 
-            await _altinnCdnService.ApplyOwnerLogos([resourceRight?.Resource]);
-
-            return resourceRight;
+            return ResourceRight.FromAm(resourceRight, await _altinnCdnService.GetOrgData());
         }
 
         /// <inheritdoc />

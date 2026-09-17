@@ -3,8 +3,10 @@ using System.Collections.Generic;
 using System.Linq;
 using Altinn.AccessManagement.UI.Core.ClientInterfaces;
 using Altinn.AccessManagement.UI.Core.Configuration;
+using Altinn.AccessManagement.UI.Core.Helpers;
 using Altinn.AccessManagement.UI.Core.Models.AccessPackage;
 using Altinn.AccessManagement.UI.Core.Models.Common;
+using Altinn.AccessManagement.UI.Core.Models.ResourceRegistry.Frontend;
 using Altinn.AccessManagement.UI.Core.Models.Role;
 using Altinn.AccessManagement.UI.Core.Services.Interfaces;
 using Microsoft.Extensions.Caching.Memory;
@@ -74,21 +76,19 @@ namespace Altinn.AccessManagement.UI.Core.Services
         /// <inheritdoc />
         public async Task<IEnumerable<AccessPackage>> GetRolePackages(string roleCode, string variant, bool includeResources, string languageCode)
         {
-            IEnumerable<AccessPackage> packages = await _roleClient.GetRolePackages(roleCode, variant, includeResources, languageCode);
+            IEnumerable<AccessPackageAM> packages = await _roleClient.GetRolePackages(roleCode, variant, includeResources, languageCode);
 
-            await _altinnCdnService.ApplyOwnerLogos(packages);
+            IReadOnlyDictionary<string, OrgData> orgs = await _altinnCdnService.GetOrgData();
 
-            return packages;
+            return (packages ?? []).Select(package => AccessPackage.FromAm(package, orgs)).ToList();
         }
 
         /// <inheritdoc />
-        public async Task<IEnumerable<ResourceAM>> GetRoleResources(string roleCode, string variant, bool includePackageResources, string languageCode)
+        public async Task<IEnumerable<ServiceResourceFE>> GetRoleResources(string roleCode, string variant, bool includePackageResources, string languageCode)
         {
             IEnumerable<ResourceAM> resources = await _roleClient.GetRoleResources(roleCode, variant, includePackageResources, languageCode);
 
-            await _altinnCdnService.ApplyOwnerLogos(resources);
-
-            return resources;
+            return ResourceUtils.MapToResourceFE(resources, await _altinnCdnService.GetOrgData());
         }
 
         /// <inheritdoc />

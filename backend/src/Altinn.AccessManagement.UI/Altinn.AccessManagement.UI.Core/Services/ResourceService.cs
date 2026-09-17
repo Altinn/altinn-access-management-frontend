@@ -492,37 +492,9 @@ namespace Altinn.AccessManagement.UI.Core.Services
             return resources.Where(r => popularResources.Contains(r.Identifier)).ToList();
         }
 
-        private List<ServiceResourceFE> MapResourceToFrontendModel(List<ServiceResource> resources, string languageCode, IReadOnlyDictionary<string, OrgData> orgs)
+        private static List<ServiceResourceFE> MapResourceToFrontendModel(List<ServiceResource> resources, string languageCode, IReadOnlyDictionary<string, OrgData> orgs)
         {
-            List<ServiceResourceFE> resourceList = new List<ServiceResourceFE>();
-            foreach (ServiceResource resource in resources)
-            {
-                if (resource != null)
-                {
-                    ServiceResourceFE resourceFE = new ServiceResourceFE(
-                        resource.Identifier,
-                        resource.Title?.GetValueOrDefault(languageCode) ?? resource.Title?.GetValueOrDefault("nb"),
-                        resourceType: resource.ResourceType,
-                        status: resource.Status,
-                        resourceReferences: resource.ResourceReferences,
-                        resourceOwnerName: resource.HasCompetentAuthority?.Name?.GetValueOrDefault(languageCode) ?? resource.HasCompetentAuthority?.Name?.GetValueOrDefault("nb"),
-                        resourceOwnerOrgNumber: resource.HasCompetentAuthority?.Organization,
-                        resourceOwnerOrgcode: resource.HasCompetentAuthority?.Orgcode,
-                        rightDescription: resource.RightDescription?.GetValueOrDefault(languageCode) ?? resource.RightDescription?.GetValueOrDefault("nb"),
-                        description: resource.Description?.GetValueOrDefault(languageCode) ?? resource.Description?.GetValueOrDefault("nb"),
-                        visible: resource.Visible,
-                        delegable: resource.Delegable,
-                        contactPoints: resource.ContactPoints,
-                        spatial: resource.Spatial,
-                        authorizationReference: resource.AuthorizationReference,
-                        keywords: resource.Keywords?.FindAll(kw => kw.Language == languageCode).Select(kw => kw.Word).ToList() ?? new List<string>(),
-                        resourceOwnerLogoUrl: ResourceUtils.ResolveOwnerLogoUrl(orgs, resource.HasCompetentAuthority?.Orgcode));
-
-                    resourceList.Add(resourceFE);
-                }
-            }
-
-            return resourceList;
+            return ResourceUtils.MapToServiceResourcesFE(languageCode, resources, orgs);
         }
     }
 }

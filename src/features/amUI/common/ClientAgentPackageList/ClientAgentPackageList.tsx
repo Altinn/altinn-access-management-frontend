@@ -262,7 +262,8 @@ export const ClientAgentPackageList = ({
         if (!resource) return;
 
         const hasAccess = agentHasResource(agentId, clientResource.refId);
-        const delegable = resource.delegable && !!addAgentResources && !!removeAgentResources;
+        const delegable =
+          resource.delegable !== false && !!addAgentResources && !!removeAgentResources;
 
         const delegationInput = {
           clientId: fromPartyUuid ?? '',

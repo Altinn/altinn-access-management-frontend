@@ -1,48 +1,17 @@
-import { useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 import { DsHeading } from '@altinn/altinn-components';
 
-import type { PackageResource } from '@/rtk/features/accessPackageApi';
-import type { RoleResourceMetadata } from '@/rtk/features/roleApi';
+import type { ServiceResource } from '@/rtk/features/singleRights/singleRightsApi';
 
 import { ResourceList } from '../../ResourceList/ResourceList';
 
 interface RoleResourcesSectionProps {
-  roleResources?: RoleResourceMetadata[];
+  roleResources?: ServiceResource[];
   isLoading: boolean;
 }
 
 export const RoleResourcesSection = ({ roleResources, isLoading }: RoleResourcesSectionProps) => {
   const { t } = useTranslation();
-
-  const roleResourceList = useMemo<PackageResource[]>(() => {
-    if (!roleResources) {
-      return [];
-    }
-
-    return roleResources.map((resource) => {
-      const provider = resource.provider;
-      return {
-        id: resource.id,
-        name: resource.name,
-        title: resource.name,
-        description: resource.description ?? '',
-        provider: {
-          id: provider?.id ?? resource.providerId,
-          name: provider?.name ?? '',
-          refId: provider?.refId ?? resource.refId ?? '',
-          logoUrl: provider?.logoUrl ?? '',
-          code: provider?.code ?? '',
-          typeId: provider?.typeId ?? resource.typeId ?? '',
-        },
-        resourceOwnerName: provider?.name ?? '',
-        resourceOwnerLogoUrl: provider?.logoUrl ?? '',
-        resourceOwnerOrgcode: provider?.code ?? '',
-        resourceOwnerOrgNumber: provider?.refId ?? '',
-        resourceOwnerType: provider?.type?.name ?? resource.type?.name ?? '',
-      };
-    });
-  }, [roleResources]);
 
   return (
     <>
@@ -55,11 +24,12 @@ export const RoleResourcesSection = ({ roleResources, isLoading }: RoleResources
         })}
       </DsHeading>
       <ResourceList
-        resources={roleResourceList}
+        resources={roleResources ?? []}
         isLoading={isLoading}
         noResourcesText={t('role.resources_empty')}
         enableMaxHeight={true}
         interactive={false}
+        showDetails={false}
         size='xs'
       />
     </>

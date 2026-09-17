@@ -4,46 +4,30 @@ import { RootProvider } from '@altinn/altinn-components';
 
 import store from '@/rtk/app/store';
 
+import type { ServiceResource } from '@/rtk/features/singleRights/singleRightsApi';
+
 import { ResourceList } from './ResourceList';
 
-const sampleResources = [
+const sampleResources: ServiceResource[] = [
   {
-    id: 'resource-1',
-    name: 'Altinn Resource',
+    identifier: 'resource-1',
     title: 'Altinn Resource',
     description: 'Access to core Altinn services.',
-    provider: {
-      id: 'digdir',
-      name: 'Digitaliseringsdirektoratet',
-      refId: 'digdir',
-      logoUrl: '',
-      code: 'digdir',
-      typeId: 'agencies',
-    },
+    resourceType: 'GenericAccessResource',
     resourceOwnerName: 'Digitaliseringsdirektoratet',
-    resourceOwnerLogoUrl: '',
     resourceOwnerOrgcode: 'digdir',
     resourceOwnerOrgNumber: '991825827',
-    resourceOwnerType: 'state',
+    resourceOwnerLogoUrl: '',
   },
   {
-    id: 'resource-2',
-    name: 'Tax Reporting',
+    identifier: 'resource-2',
     title: 'Tax Reporting',
-    description: 'Allows submitting tax data on behalf of an organization.',
-    provider: {
-      id: 'skd',
-      name: 'Skatteetaten',
-      refId: 'skd',
-      logoUrl: '',
-      code: 'skd',
-      typeId: 'agencies',
-    },
+    description: 'Report taxes on behalf of an organisation.',
+    resourceType: 'GenericAccessResource',
     resourceOwnerName: 'Skatteetaten',
-    resourceOwnerLogoUrl: '',
     resourceOwnerOrgcode: 'skd',
     resourceOwnerOrgNumber: '974761076',
-    resourceOwnerType: 'state',
+    resourceOwnerLogoUrl: '',
   },
 ];
 

@@ -1,3 +1,4 @@
+import type { ServiceResource } from '@/rtk/features/singleRights/singleRightsApi';
 import { createApi } from '@reduxjs/toolkit/query/react';
 import { createBaseQuery } from '@/rtk/app/baseQuery';
 
@@ -15,39 +16,12 @@ export interface AccessArea {
 }
 
 // either indentifier or refId contains resource.identifier, the other is undefined
-export interface PackageResource {
-  id: string;
-  identifier: string;
-  name: string;
-  title: string;
-  description: string;
-  refId: string;
-  provider: ResourceProvider;
-  type: {
-    id: string;
-    name: string;
-  };
-  resourceOwnerName: string;
-  resourceOwnerLogoUrl: string;
-  resourceOwnerOrgcode: string;
-  resourceOwnerOrgNumber: string;
-  resourceOwnerType: string;
-}
-
-export interface ResourceProvider {
-  id: string;
-  name: string;
-  refId: string;
-  logoUrl: string;
-  code: string;
-  typeId: string;
-}
 
 export interface AccessPackage {
   id: string;
   name: string;
   description: string;
-  resources: PackageResource[];
+  resources: ServiceResource[];
   isAssignable: boolean;
   isDelegable?: boolean;
   area: AccessArea;

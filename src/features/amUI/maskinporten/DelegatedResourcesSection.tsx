@@ -49,19 +49,15 @@ export const DelegatedResourcesSection = ({
     .map((delegation) => delegation.resource)
     .filter((resource) => resource.identifier);
 
-  const { resources: filteredResources } = useFilteredResources<ServiceResource>({
+  const { resources: filteredResources } = useFilteredResources({
     resources: delegatedResources,
     searchString: search,
     serviceOwnerFilter: filterState,
-    getResourceName: (resource) => resource.title ?? '',
-    getOwnerName: (resource) => resource.resourceOwnerName ?? '',
-    getOwnerOrgCode: (resource) => resource.resourceOwnerOrgcode ?? '',
-    getDescription: (resource) => {
-      const scopes = getMaskinportenScopes(resource)
+    includeExpiredResources: true,
+    additionalSearchText: (resource) =>
+      getMaskinportenScopes(resource)
         .map((ref) => ref.reference)
-        .join(' ');
-      return `${resource.description ?? ''} ${scopes}`.trim();
-    },
+        .join(' '),
   });
 
   const serviceOwnerOptions = React.useMemo(() => {

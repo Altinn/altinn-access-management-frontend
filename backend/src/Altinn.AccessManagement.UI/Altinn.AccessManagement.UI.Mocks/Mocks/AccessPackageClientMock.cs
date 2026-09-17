@@ -36,10 +36,10 @@ namespace Altinn.AccessManagement.UI.Mocks.Mocks
         }
 
         /// <inheritdoc />
-        public Task<IEnumerable<SearchObject<AccessPackage>>> GetAccessPackageSearchMatches(string languageCode, string searchString, string typeName)
+        public Task<IEnumerable<SearchObject<AccessPackageAM>>> GetAccessPackageSearchMatches(string languageCode, string searchString, string typeName)
         {
 
-            IEnumerable<SearchObject<AccessPackage>> searchResults = Util.GetMockData<IEnumerable<SearchObject<AccessPackage>>>($"{dataFolder}/AccessPackage/packages.json");
+            IEnumerable<SearchObject<AccessPackageAM>> searchResults = Util.GetMockData<IEnumerable<SearchObject<AccessPackageAM>>>($"{dataFolder}/AccessPackage/packages.json");
 
             return searchString != null ? Task.FromResult(searchResults.Where(sr => sr.Object.Name.ToLower().Contains(searchString.ToLower()))) : Task.FromResult(searchResults);
         }
@@ -178,7 +178,7 @@ namespace Altinn.AccessManagement.UI.Mocks.Mocks
         }
         
         /// <inheritdoc />
-        public Task<AccessPackage> GetAccessPackageById(string languageCode, Guid packageId)
+        public Task<AccessPackageAM> GetAccessPackageById(string languageCode, Guid packageId)
         {
             // Trigger internal server error
             if (packageId.Equals(new Guid("d98ac728-d127-4a4c-96e1-738f856e5332")))
@@ -192,10 +192,10 @@ namespace Altinn.AccessManagement.UI.Mocks.Mocks
             try
             {
                 string dataPath = Path.Combine(dataFolder, "AccessPackage", "packages.json");
-                IEnumerable<SearchObject<AccessPackage>> searchResults =
-                    Util.GetMockData<IEnumerable<SearchObject<AccessPackage>>>(dataPath);
+                IEnumerable<SearchObject<AccessPackageAM>> searchResults =
+                    Util.GetMockData<IEnumerable<SearchObject<AccessPackageAM>>>(dataPath);
 
-                AccessPackage result = searchResults?.FirstOrDefault(sr => sr?.Object?.Id == packageId)?.Object;
+                AccessPackageAM result = searchResults?.FirstOrDefault(sr => sr?.Object?.Id == packageId)?.Object;
 
                 return Task.FromResult(result);
             }

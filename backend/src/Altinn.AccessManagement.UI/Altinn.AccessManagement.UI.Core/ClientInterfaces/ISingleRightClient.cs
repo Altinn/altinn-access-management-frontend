@@ -12,7 +12,7 @@ namespace Altinn.AccessManagement.UI.Core.ClientInterfaces
         /// </summary>
         /// <param name="from">The party from which the delegation would be on behalf of</param>
         /// <param name="resource">The id of the resource to be checked for delegation</param>
-        Task<ResourceCheckDto> GetDelegationCheck(Guid from, string resource);
+        Task<ResourceCheckAM> GetDelegationCheck(Guid from, string resource);
 
         /// <summary>
         ///     Retrieves the delegated resources for a specific right holder.
@@ -32,8 +32,8 @@ namespace Altinn.AccessManagement.UI.Core.ClientInterfaces
         /// <param name="from">The party from which the resources have been delegated</param>
         /// <param name="to">The party that has received the delegations</param>
         /// <param name="resource">The id of the resource to fetch single rights for</param>
-        /// <returns>A <see cref="ResourceRight"/> representing the delegated rights for the specified resource</returns>
-        Task<ResourceRight> GetDelegatedResourceRights(string languageCode, Guid party, Guid from, Guid to, string resource);
+        /// <returns>A <see cref="ResourceRightAM"/> representing the delegated rights for the specified resource</returns>
+        Task<ResourceRightAM> GetDelegatedResourceRights(string languageCode, Guid party, Guid from, Guid to, string resource);
 
         /// <summary>
         ///    Creates a new delegation of a service with rights

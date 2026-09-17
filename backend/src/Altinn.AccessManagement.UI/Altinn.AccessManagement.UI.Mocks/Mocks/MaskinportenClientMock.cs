@@ -40,11 +40,11 @@ namespace Altinn.AccessManagement.UI.Mocks.Mocks
         }
 
         /// <inheritdoc />
-        public Task<ResourceCheckDto> ResourceDelegationCheck(Guid party, string resource, string languageCode, CancellationToken cancellationToken = default)
+        public Task<ResourceCheckAM> ResourceDelegationCheck(Guid party, string resource, string languageCode, CancellationToken cancellationToken = default)
         {
             Util.ThrowExceptionIfTriggerParty(party.ToString());
 
-            return Task.FromResult(new ResourceCheckDto
+            return Task.FromResult(new ResourceCheckAM
             {
                 Resource = new ResourceAM
                 {

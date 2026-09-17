@@ -39,6 +39,6 @@ namespace Altinn.AccessManagement.UI.Core.Services.Interfaces
         /// Resolves the service owner logo for the resources of every given access package.
         /// </summary>
         /// <param name="packages">Access packages whose resources to resolve logos for. Modified in place</param>
-        Task ApplyOwnerLogos(IEnumerable<AccessPackage> packages);
+        Task ApplyOwnerLogos(IEnumerable<AccessPackageAM> packages);
     }
 }

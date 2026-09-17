@@ -47,7 +47,7 @@ namespace Altinn.AccessManagement.UI.Integration.Clients
         }
 
         /// <inheritdoc />
-        public async Task<AccessPackage> GetAccessPackageById(string languageCode, Guid packageId)
+        public async Task<AccessPackageAM> GetAccessPackageById(string languageCode, Guid packageId)
         {
             string endpointUrl = $"meta/info/accesspackages/package/{packageId}";
             string token = JwtTokenUtil.GetTokenFromContext(_httpContextAccessor.HttpContext, _platformSettings.JwtCookieName);
@@ -61,7 +61,7 @@ namespace Altinn.AccessManagement.UI.Integration.Clients
             else if (response.StatusCode == HttpStatusCode.OK)
             {
                 string responseContent = await response.Content.ReadAsStringAsync();
-                return JsonSerializer.Deserialize<AccessPackage>(responseContent, _serializerOptions);
+                return JsonSerializer.Deserialize<AccessPackageAM>(responseContent, _serializerOptions);
             }
             else
             {
@@ -76,7 +76,7 @@ namespace Altinn.AccessManagement.UI.Integration.Clients
         }
 
         /// <inheritdoc />
-        public async Task<IEnumerable<SearchObject<AccessPackage>>> GetAccessPackageSearchMatches(string languageCode, string searchString, string typeName)
+        public async Task<IEnumerable<SearchObject<AccessPackageAM>>> GetAccessPackageSearchMatches(string languageCode, string searchString, string typeName)
         {
             string safeSearchTerm = Uri.EscapeDataString(searchString ?? string.Empty);
             string endpointUrl = $"meta/info/accesspackages/search/?term={safeSearchTerm}&searchInResources=true";
@@ -92,12 +92,12 @@ namespace Altinn.AccessManagement.UI.Integration.Clients
 
             if (response.StatusCode == HttpStatusCode.NoContent)
             {
-                return new List<SearchObject<AccessPackage>>();
+                return new List<SearchObject<AccessPackageAM>>();
             }
             else if (response.StatusCode == HttpStatusCode.OK)
             {
                 string responseContent = await response.Content.ReadAsStringAsync();
-                return JsonSerializer.Deserialize<IEnumerable<SearchObject<AccessPackage>>>(responseContent, _serializerOptions);
+                return JsonSerializer.Deserialize<IEnumerable<SearchObject<AccessPackageAM>>>(responseContent, _serializerOptions);
             }
             else
             {
