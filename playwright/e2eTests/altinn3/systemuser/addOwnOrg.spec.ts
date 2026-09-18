@@ -25,9 +25,14 @@ test.describe('Systembruker - Legg til egen organisasjon', () => {
   let externalRef: string;
   let response: { confirmUrl: string; id: string };
 
-  test.beforeEach(async () => {
+  test.beforeEach(async ({ systemUserCleanup }) => {
     api = new ApiRequests();
-    name = `Playwright-e2e-${accessPackageApiName}-${Date.now()}`;
+    name = systemUserCleanup.track(
+      { orgNo: systemUserOwner.partyOrgNo, pid: systemUserOwner.managerPid },
+      '310547891',
+      'own-org',
+      'agent',
+    ).name;
     externalRef = TestdataApi.generateExternalRef();
 
     systemId = await test.step('Create system with access package', async () => {

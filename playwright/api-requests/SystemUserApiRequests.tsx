@@ -278,7 +278,10 @@ export class ApiRequests {
     return apiResponse;
   }
 
-  public async createSystemSystemRegister(vendorOrgNo: string): Promise<string> {
+  public async createSystemSystemRegister(
+    vendorOrgNo: string,
+    systemName?: string,
+  ): Promise<string> {
     const vendorId = vendorOrgNo;
     const clientId = `Client_${Date.now()}` + Math.random();
     // Generate name with max 10 chars: E2E + last 5 digits of timestamp + 2 random digits
@@ -286,7 +289,7 @@ export class ApiRequests {
       .toString()
       .padStart(2, '0');
 
-    const name = `E2E${Date.now().toString().slice(-5)}${randomDigits}`;
+    const name = systemName ?? `E2E${Date.now().toString().slice(-5)}${randomDigits}`;
 
     const payload = {
       Id: `${vendorId}_${name}`,

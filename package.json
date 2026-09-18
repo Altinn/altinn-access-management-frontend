@@ -15,7 +15,8 @@
     "storybook": "storybook dev -p 6006",
     "build-storybook": "storybook build",
     "vitest": "vitest",
-    "vitest:ci": "vitest --coverage"
+    "vitest:ci": "vitest --coverage",
+    "test:systemuser-cleanup": "vitest run --config playwright/util/systemuser/vitest.config.mts"
   },
   "dependencies": {
     "@altinn/altinn-components": "^0.73.0",

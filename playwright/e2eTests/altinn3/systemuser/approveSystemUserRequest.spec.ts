@@ -2,22 +2,35 @@ import { test, expect } from 'playwright/fixture/pomFixture';
 
 import { TestdataApi } from 'playwright/util/TestdataApi';
 import { ApiRequests } from 'playwright/api-requests/SystemUserApiRequests';
+import { systemUserOwners } from './testdata';
+
+const owner = systemUserOwners.requests;
 const vendorOrgNumber = '310547891';
-const prebuiltSystemId = '310547891_E2E-Playwright-Authentication';
-const testUserPid = '14824497789';
+const testUserPid = owner.pid;
 
 test.describe('Godkjenn og avvis Systembrukerforespørsel', () => {
   let api: ApiRequests;
   let response: Awaited<ReturnType<ApiRequests['postSystemuserRequest']>>;
 
-  test.beforeEach(async () => {
+  test.beforeEach(async ({ systemUserCleanup }) => {
     api = new ApiRequests();
     const externalRef = TestdataApi.generateExternalRef();
+    const system = systemUserCleanup.track(owner, vendorOrgNumber, 'requests');
+    await api.createSystemInSystemregisterWithAccessPackages(
+      vendorOrgNumber,
+      system.name,
+      [{ urn: 'urn:altinn:accesspackage:baerekraft' }, { urn: 'urn:altinn:accesspackage:plansak' }],
+      'https://altinn.no/',
+      [
+        { resource: [{ value: 'authentication-e2e-test', id: 'urn:altinn:resource' }] },
+        { resource: [{ value: 'vegardtestressurs', id: 'urn:altinn:resource' }] },
+      ],
+    );
     response = await api.postSystemuserRequest(
       vendorOrgNumber,
       externalRef,
-      prebuiltSystemId,
-      vendorOrgNumber,
+      system.id,
+      owner.orgNo,
       'https://altinn.no/',
     );
   });

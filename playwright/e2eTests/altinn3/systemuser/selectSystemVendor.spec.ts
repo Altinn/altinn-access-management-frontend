@@ -1,24 +1,25 @@
 import { expect, test } from 'playwright/fixture/pomFixture';
 import { Language } from 'playwright/pages/LanguageMenu';
 
-import { TestdataApi } from 'playwright/util/TestdataApi';
 import { ApiRequests } from 'playwright/api-requests/SystemUserApiRequests';
+import { systemUserOwners } from './testdata';
 
 // Runs in nynorsk on purpose: exercises the before-login language pinning
 // (settings API) and proves the dict-driven selectors work in a non-default
 // language. The rest of the suites run in the default bokmål.
 test.use({ language: Language.NN });
+const owner = systemUserOwners.creation;
 const vendorOrgNumber = '310547891';
-const testUserPid = '14824497789';
-const testOrgName = 'Aktverdig Retorisk Ape';
-const testUserName = 'Skravlete Blåveis';
+const testUserPid = owner.pid;
+const testOrgName = owner.name;
 
 test.describe('System Register', async () => {
   let system: string;
 
-  test.beforeEach(async ({ page, login }) => {
+  test.beforeEach(async ({ login, systemUserCleanup }) => {
     const api = new ApiRequests();
-    system = await api.createSystemSystemRegister(vendorOrgNumber);
+    system = systemUserCleanup.track(owner, vendorOrgNumber, 'creation').name;
+    await api.createSystemSystemRegister(vendorOrgNumber, system);
     await login.LoginToAccessManagement(testUserPid);
     await login.selectActor(testOrgName);
   });
@@ -41,11 +42,5 @@ test.describe('System Register', async () => {
       await expect(systemUserPage.systemUserCreatedHeading).toBeVisible();
       await expect(systemUserPage.systemUserLink(system)).toBeVisible();
     });
-  });
-
-  test.afterEach(async () => {
-    if (system) {
-      await TestdataApi.removeSystem(vendorOrgNumber, system);
-    }
   });
 });

@@ -2,10 +2,12 @@ import { test, expect } from 'playwright/fixture/pomFixture';
 import { TestdataApi } from 'playwright/util/TestdataApi';
 import { env } from 'playwright/util/helper';
 import { ApiRequests } from 'playwright/api-requests/SystemUserApiRequests';
+import { systemUserOwners } from './testdata';
+
+const owner = systemUserOwners.changes;
 const vendorOrgNumber = '310547891';
-const prebuiltSystemId = '310547891_E2E-Playwright-Authentication';
-const testUserPid = '14824497789';
-const testOrgName = 'Aktverdig Retorisk Ape';
+const testUserPid = owner.pid;
+const testOrgName = owner.name;
 
 const testUser = testUserPid;
 
@@ -18,29 +20,40 @@ const changeRequest = {
 
 test.describe('Systembruker endringsforespørsel', () => {
   let api: ApiRequests;
-  let systemUserIds: string[] = [];
   let systemUserId: string;
   let changeRequestResponse: Awaited<ReturnType<ApiRequests['postSystemuserChangeRequest']>>;
 
-  test.beforeEach(async () => {
+  test.beforeEach(async ({ systemUserCleanup }) => {
     api = new ApiRequests();
     const externalRef = TestdataApi.generateExternalRef();
+    const system = systemUserCleanup.track(owner, vendorOrgNumber, 'changes');
+    await api.createSystemInSystemregisterWithAccessPackages(
+      vendorOrgNumber,
+      system.name,
+      [{ urn: 'urn:altinn:accesspackage:baerekraft' }, { urn: 'urn:altinn:accesspackage:plansak' }],
+      'https://altinn.no/',
+      [
+        { resource: [{ value: 'authentication-e2e-test', id: 'urn:altinn:resource' }] },
+        { resource: [{ value: 'vegardtestressurs', id: 'urn:altinn:resource' }] },
+      ],
+    );
 
     const response = await api.postSystemuserRequest(
       vendorOrgNumber,
       externalRef,
-      prebuiltSystemId,
-      vendorOrgNumber,
+      system.id,
+      owner.orgNo,
+      undefined,
+      [{ resource: [{ value: 'authentication-e2e-test', id: 'urn:altinn:resource' }] }],
     );
-    await api.approveSystemuserRequest(response.id, vendorOrgNumber, testUserPid);
+    await api.approveSystemuserRequest(response.id, owner.orgNo, testUserPid);
 
     systemUserId = await api.getSystemUserByQuery(
       vendorOrgNumber,
-      prebuiltSystemId,
-      vendorOrgNumber,
+      system.id,
+      owner.orgNo,
       externalRef,
     );
-    systemUserIds.push(systemUserId);
 
     changeRequestResponse = await api.postSystemuserChangeRequest(
       vendorOrgNumber,
@@ -116,21 +129,5 @@ test.describe('Systembruker endringsforespørsel', () => {
       await expect(page.getByText('authentication-e2e-test')).not.toBeVisible();
       await expect(page.getByText('Baerekraft')).not.toBeVisible();
     });
-  });
-
-  test.afterEach(async () => {
-    // Cleanup system users created during tests
-    if (systemUserIds.length > 0) {
-      try {
-        await api.cleanUpSystemUsers(
-          systemUserIds.map((id) => ({ id })),
-          testUserPid,
-          vendorOrgNumber,
-        );
-      } catch (error) {
-        console.error('Error during system user cleanup:', error);
-      }
-      systemUserIds = [];
-    }
   });
 });
