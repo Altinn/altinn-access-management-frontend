@@ -17,8 +17,11 @@ interface ResourceHeadingProps {
   resource: ResourceListItemResource;
   /** Heading level for the resource title. Defaults to 3, which fits the dialogs it is used in. */
   level?: 1 | 2 | 3 | 4 | 5 | 6;
-  /** Already resolved owner logo, for callers that have looked it up themselves. */
-  providerLogoUrl?: string;
+  /**
+   * Already resolved owner logo, for callers that have looked it up themselves.
+   * `null` means the caller resolved it and there is no logo, which suppresses the lookup below.
+   */
+  providerLogoUrl?: string | null;
 }
 
 export const ResourceHeading = ({ resource, level = 3, providerLogoUrl }: ResourceHeadingProps) => {
@@ -28,7 +31,9 @@ export const ResourceHeading = ({ resource, level = 3, providerLogoUrl }: Resour
 
   const ownerName = extractOwnerName(resource);
   const logoUrl =
-    providerLogoUrl ?? getProviderLogoUrl(extractOrgCode(resource)) ?? extractLogoUrl(resource);
+    providerLogoUrl !== undefined
+      ? (providerLogoUrl ?? undefined)
+      : (getProviderLogoUrl(extractOrgCode(resource)) ?? extractLogoUrl(resource));
 
   const icon = (small: boolean) =>
     logoUrl ? (

@@ -10,7 +10,7 @@ import classes from './ResourceDetails.module.css';
 interface ResourceDetailsProps {
   resource: ResourceListItemResource | null;
   onClose: () => void;
-  providerLogoUrl?: string;
+  providerLogoUrl?: string | null;
 }
 
 export const ResourceDetails = ({ resource, onClose, providerLogoUrl }: ResourceDetailsProps) => {
