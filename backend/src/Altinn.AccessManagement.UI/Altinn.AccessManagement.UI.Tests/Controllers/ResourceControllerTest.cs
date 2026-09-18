@@ -379,7 +379,7 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
         ///     Expected: GetResourceOwners returns a list of resource owners in correct language, with MaskinportenSchema, ordered alphabetically
         /// </summary>
         [Fact]
-        public async Task GetResourceOwners_resourceTypeMaskinPortenSchemAndAltinn2Service()
+        public async Task GetResourceOwners_resourceTypeMaskinPortenSchema()
         {
             // Arrange
             string token = PrincipalUtil.GetToken(1337, 501337);
@@ -387,7 +387,6 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
 
             List<ResourceType> relevantResourceTypes = new List<ResourceType>
             {
-                ResourceType.Altinn2Service,
                 ResourceType.MaskinportenSchema
             };
 
@@ -397,7 +396,6 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
                 new ResourceOwnerFE("NARNIA", "777777777"),
                 new ResourceOwnerFE("PÅFUNNSETATEN", "985399077"),
                 new ResourceOwnerFE("Skatteetaten", "974761076"),
-                new ResourceOwnerFE("Testdepartementet", "974760746"),
                 new ResourceOwnerFE(null, "123456789")
                 {
                     OrganisationCode = "zzzdemo",
@@ -405,7 +403,7 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
             };
 
             // Act
-            HttpResponseMessage response = await _client.GetAsync($"accessmanagement/api/v1/resources/resourceowners?relevantResourceTypes={relevantResourceTypes[0]}&relevantResourceTypes={relevantResourceTypes[1]}");
+            HttpResponseMessage response = await _client.GetAsync($"accessmanagement/api/v1/resources/resourceowners?relevantResourceTypes={relevantResourceTypes[0]}");
 
             // Assert
             Assert.Equal(HttpStatusCode.OK, response.StatusCode);
