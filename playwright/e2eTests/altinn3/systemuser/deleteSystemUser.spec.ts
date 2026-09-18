@@ -1,9 +1,11 @@
+import { systemUserOwners } from './testdata';
 import { expect, test } from 'playwright/fixture/pomFixture';
 import { ApiRequests } from 'playwright/api-requests/SystemUserApiRequests';
 import { TestdataApi } from 'playwright/util/TestdataApi';
+const owner = systemUserOwners.deletion;
 const vendorOrgNumber = '310736007';
-const testUserPid = '13832749995';
-const testOrgName = 'Initiativrik Fiolett Tiger AS';
+const testUserPid = owner.pid;
+const testOrgName = owner.name;
 
 test.describe('System user deletion', () => {
   let systemId: string;
@@ -11,6 +13,7 @@ test.describe('System user deletion', () => {
 
   test.beforeEach(async ({ login, systemUserPage, accessManagementFrontPage }) => {
     await test.step('Setup API client', async () => {
+      systemId = '';
       api = new ApiRequests();
     });
 
@@ -48,7 +51,12 @@ test.describe('System user deletion', () => {
 
   test.afterEach(async () => {
     if (systemId) {
-      // Remove system
+      await api.cleanUpSystemUsersForSystem(
+        `${vendorOrgNumber}_${systemId}`,
+        owner.pid,
+        owner.orgNo,
+      );
+      // Remove system after deleting its users
       await TestdataApi.removeSystem(vendorOrgNumber, systemId);
     }
   });

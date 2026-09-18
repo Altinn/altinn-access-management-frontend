@@ -284,7 +284,7 @@ export const ResourceList = <
             selected
               ? resolveLogos
                 ? (logoResolver(extractOrgCode(selected) ?? '') ?? selected.resourceOwnerLogoUrl)
-                : extractLogoUrl(selected)
+                : (extractLogoUrl(selected) ?? null)
               : undefined
           }
         />

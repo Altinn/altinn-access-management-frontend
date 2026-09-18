@@ -1,3 +1,4 @@
+import { systemUserOwners } from './testdata';
 import { expect, test } from 'playwright/fixture/pomFixture';
 import { Language } from 'playwright/pages/LanguageMenu';
 
@@ -8,16 +9,18 @@ import { ApiRequests } from 'playwright/api-requests/SystemUserApiRequests';
 // (settings API) and proves the dict-driven selectors work in a non-default
 // language. The rest of the suites run in the default bokmål.
 test.use({ language: Language.NN });
+const owner = systemUserOwners.creation;
 const vendorOrgNumber = '310547891';
-const testUserPid = '14824497789';
-const testOrgName = 'Aktverdig Retorisk Ape';
-const testUserName = 'Skravlete Blåveis';
+const testUserPid = owner.pid;
+const testOrgName = owner.name;
 
 test.describe('System Register', async () => {
   let system: string;
+  let api: ApiRequests;
 
   test.beforeEach(async ({ page, login }) => {
-    const api = new ApiRequests();
+    system = '';
+    api = new ApiRequests();
     system = await api.createSystemSystemRegister(vendorOrgNumber);
     await login.LoginToAccessManagement(testUserPid);
     await login.selectActor(testOrgName);
@@ -45,6 +48,7 @@ test.describe('System Register', async () => {
 
   test.afterEach(async () => {
     if (system) {
+      await api.cleanUpSystemUsersForSystem(`${vendorOrgNumber}_${system}`, owner.pid, owner.orgNo);
       await TestdataApi.removeSystem(vendorOrgNumber, system);
     }
   });

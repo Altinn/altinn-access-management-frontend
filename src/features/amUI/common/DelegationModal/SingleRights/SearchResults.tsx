@@ -205,7 +205,6 @@ export const SearchResults = ({
           totalPages={Math.ceil(totalNumberOfResults / searchResultsPerPage)}
           setCurrentPage={setCurrentPage}
           size='xs'
-          hideLabels={true}
         />
       )}
       {revokeConfirmationDialog}
