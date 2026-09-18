@@ -4,7 +4,6 @@ using System.Net.Http.Json;
 using System.Text.Json;
 using Altinn.AccessManagement.UI.Controllers;
 using Altinn.AccessManagement.UI.Core.ClientInterfaces;
-using Altinn.AccessManagement.UI.Core.Configuration;
 using Altinn.AccessManagement.UI.Core.Enums;
 using Altinn.AccessManagement.UI.Core.Models.ResourceRegistry;
 using Altinn.AccessManagement.UI.Core.Models.ResourceRegistry.Frontend;
@@ -478,7 +477,7 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
             return httpContextAccessorMock.Object;
         }
 
-        private HttpClient GetTestClient(IHttpContextAccessor httpContextAccessor = null, Dictionary<string, bool> featureFlags = null)
+        private HttpClient GetTestClient(IHttpContextAccessor httpContextAccessor = null)
         {
             httpContextAccessor ??= new HttpContextAccessor();
             HttpClient client = _factory.WithWebHostBuilder(builder =>
