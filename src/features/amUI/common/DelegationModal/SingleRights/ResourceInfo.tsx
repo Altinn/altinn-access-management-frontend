@@ -193,7 +193,10 @@ export const ResourceInfo = ({
         {delegationError ?? missingAccess ?? ''}
       </StatusMessageForScreenReader>
       <div>
-        <ResourceHeading resource={resource} />
+        <ResourceHeading
+          resource={resource}
+          level={2}
+        />
         {isActionLoading || isActionSuccess ? (
           <LoadingAnimation
             isLoading={isActionLoading}
