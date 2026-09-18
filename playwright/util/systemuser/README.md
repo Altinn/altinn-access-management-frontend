@@ -63,4 +63,4 @@ yarn test:systemuser-cleanup
 ```
 
 Disse testene sjekker avgrensning av sletting, agent-endepunkt, delvis oppsett,
-404, videre opprydding etter feil og validering av planer. De kjøres også i frontend-CI.
+404, videre opprydding etter feil og validering av planer.

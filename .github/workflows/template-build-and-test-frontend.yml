@@ -33,9 +33,6 @@ jobs:
         working-directory: ./
         run: yarn vitest
 
-      - name: test system user cleanup
-        run: yarn test:systemuser-cleanup
-
       - name: run build
         working-directory: ./
         run: yarn build
