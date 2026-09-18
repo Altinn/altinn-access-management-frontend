@@ -1,6 +1,8 @@
+import { expect } from '@playwright/test';
 import { test } from 'playwright/fixture/pomFixture';
 import { DelegationApiUtil } from 'playwright/util/delegationApiUtil';
 import { withTimeout } from 'playwright/util/asyncUtils';
+import { getTestPersonForCategory } from 'playwright/util/testDelegationdatautil';
 
 test.describe('Delegate access pacakge from Org-A(Avgiver) to Org-B(Rettighetshaver) ', () => {
   test.beforeEach(async ({}, testInfo) => {
@@ -32,7 +34,8 @@ test.describe('Delegate access pacakge from Org-A(Avgiver) to Org-B(Rettighetsha
     login,
     aktorvalgHeader,
     accessManagementFrontPage,
-  }) => {
+    runAccessibilityTest,
+  }, testInfo) => {
     await test.step('Log in', async () => {
       // LoginToAccessManagement pins the app language (before login, via the
       // settings API) so selectors match regardless of the user's profile.
@@ -78,56 +81,63 @@ test.describe('Delegate access pacakge from Org-A(Avgiver) to Org-B(Rettighetsha
       );
     });
 
+    await runAccessibilityTest.scan(testInfo, 'delegerte-tilgangspakker');
+
     await test.step('log out', async () => {
       await delegation.logoutFromBrukerflate();
     });
   });
 
-  // Doesnt test anything? Skipping for now.
-  test.skip('Org-C revokes all delegated rights from Org-D', async ({
+  test('Org-C revokes all delegated rights from Org-D', async ({
     delegation,
     page,
     login,
     aktorvalgHeader,
-  }) => {
-    await test.step('log in', async () => {
-      await login.LoginToAccessManagement('04856996188');
-      await aktorvalgHeader.selectActorFromHeaderMenu('SUBJEKTIV ELASTISK TIGER AS');
-    });
+    accessManagementFrontPage,
+    runAccessibilityTest,
+  }, testInfo) => {
+    const recipient = 'Skyfri Oksydert Katt Klemme';
+    const manager = await getTestPersonForCategory('Dagligleder-Org-C');
+    const recipientParty = await getTestPersonForCategory('Org-D');
 
-    await test.step('delegate stuff via api', async () => {
+    await test.step('Create delegated rights via API', async () => {
       await DelegationApiUtil.addOrgToDelegate('Org-C', 'Org-D');
       await DelegationApiUtil.delegateAccessPackage('Org-C', 'Org-D', [
         'urn:altinn:accesspackage:byggesoknad',
         'urn:altinn:accesspackage:godkjenning-av-personell',
         'urn:altinn:accesspackage:veitransport',
       ]);
-      await page.reload();
-      await page.waitForLoadState('domcontentloaded');
     });
 
-    // // Step 2: Open delegation flow
-    // await test.step('velg aktør Skyfri Oksydert Katt Klemme', async () => {
-    //   // await delegation.chooseOrg('Skyfri Oksydert Katt Klemme');
-    //   await aktorvalgHeader.goToSelectActor('SUBJEKTIV ELASTISK TIGER AS');
-    //   await aktorvalgHeader.selectActor('Skyfri Oksydert Katt Klemme');
-    // });
+    await test.step('Log in as Org-C and verify Org-D has the delegated rights', async () => {
+      await login.LoginToAccessManagement(manager.PID!);
+      await aktorvalgHeader.selectActorFromHeaderMenu('DRIFTIG LOGISK TIGER AS');
+      await accessManagementFrontPage.goToUsers();
+      await accessManagementFrontPage.expandOrg(recipient);
+      await accessManagementFrontPage.clickUser(recipient);
+      await delegation.verifyDelegatedPackages([
+        { areaName: 'Bygg, anlegg og eiendom', packageName: 'Byggesøknad' },
+        { areaName: 'Oppvekst og utdanning', packageName: 'Godkjenning av personell' },
+        { areaName: 'Transport og lagring', packageName: 'Veitransport' },
+      ]);
+    });
 
-    // //Step3 : Delete delegated pacakge directly from area list
-    // await test.step('deleger pakker direkte fra area-lista', async () => {
-    //   await delegation.deleteDelegatedPackage('Transport og lagring', 'Veitransport');
-    //   await delegation.deleteDelegatedPackage('Oppvekst og utdanning', 'Godkjenning av personell');
-    // });
+    await test.step('Remove Org-D and all delegated rights', async () => {
+      await delegation.deleteDelegatedUser();
+      await accessManagementFrontPage.goToUsers();
+      await expect(page.getByRole('button', { name: recipient, exact: true })).toHaveCount(0);
+      const reloadedUsers = page.waitForResponse(
+        (response) =>
+          response.url().includes('/rightholders?') && response.request().method() === 'GET',
+      );
+      await page.reload();
+      const response = await reloadedUsers;
+      expect(response.ok()).toBeTruthy();
+      expect(JSON.stringify(await response.json())).not.toContain(recipientParty.PartyUUID!);
+      await accessManagementFrontPage.goToUsers();
+      await expect(page.getByRole('button', { name: recipient, exact: true })).toHaveCount(0);
+    });
 
-    // //Delete package by opening the package first
-    // await test.step('slett pakke', async () => {
-    //   await delegation.deletePackageInside('Bygg, anlegg og eiendom', 'Byggesøknad');
-    // });
-
-    // //Delete user from rettighetshaver list
-    // await test.step('slett brukeren fra rettighetshaverlista', async () => {
-    //   await delegation.deleteDelegatedUser();
-    //   await delegation.logoutFromBrukerflate();
-    // });
+    await runAccessibilityTest.scan(testInfo, 'etter-tilbakekalling-av-fullmakter');
   });
 });

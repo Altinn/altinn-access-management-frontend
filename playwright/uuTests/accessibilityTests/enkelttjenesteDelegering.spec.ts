@@ -1,23 +1,19 @@
-import { test } from '../../fixture/pomFixture';
+import { test, expect } from '../../fixture/pomFixture';
+import { currentEnv } from '../../util/helper';
 
-test.describe.skip('New brukerflate - EnkelttjenesteDelegering', () => {
-  test('Skipped until bug is fixed, see Github issue: #1303 Verify accessibility errors in brukerflate GUI for enkelttjenestedelegering- Mainpage', async ({
-    login,
-    runAccessibilityTest,
-  }) => {
+test.describe('Universell utforming – tilgangsstyring', () => {
+  test.skip(currentEnv() !== 'at23', 'UU-baseline for issue #2509 kjøres i AT23.');
+
+  test.beforeEach(async ({ login, accessManagementFrontPage }) => {
     await login.LoginToAccessManagement('20838198385');
     await login.selectActor('Diskret Nær Tiger As');
-
-    //await runAccessibilityTest.brukerflateEnkelttjenesteDelegering();
+    await accessManagementFrontPage.goToUsers();
+    await expect(accessManagementFrontPage.newUserButton).toBeVisible();
   });
 
-  test('Skipped until bug is fixed, see Github issue: #1303 Verify accessibility errors in brukerflate GUI for enkelttjenestedelegering- delegationPage', async ({
-    login,
-    runAccessibilityTest,
-  }) => {
-    await login.LoginToAccessManagement('20838198385');
-    await login.selectActor('Diskret Nær Tiger As');
-
-    //await runAccessibilityTest.brukerflateEnkelttjenesteDelegering();
+  test('Oversikt over brukere', async ({ runAccessibilityTest }, testInfo) => {
+    await test.step('Sjekk WCAG A/AA og legg funn ved rapporten', async () => {
+      await runAccessibilityTest.scan(testInfo, 'brukeroversikt');
+    });
   });
 });

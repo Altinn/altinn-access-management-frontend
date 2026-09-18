@@ -19,26 +19,27 @@ LANGUAGES.forEach((language) => {
       language,
       viewport: MOBILE_VIEWPORT,
     });
-    test(`Standard samtykke`, async ({ login, consentPage }) => {
-      const fromPerson = pickRandom(fromPersons);
-      const toOrg = pickRandom(toOrgs);
+    test(`Standard samtykke`, async ({ login, consentPage, runAccessibilityTest }, testInfo) => {
+      const from = { pid: pickRandom(fromPersons) };
+      const to = { orgNo: pickRandom(toOrgs) };
       const validTo = addTimeToNowUtc({ days: 2 });
-      const api = new ConsentApiRequests(toOrg);
+      const api = new ConsentApiRequests(to.orgNo);
 
       const consentResponse = await test.step('Create consent request', async () => {
         return await api.createConsentRequest({
-          from: { type: 'person', id: fromPerson },
-          to: { type: 'org', id: toOrg },
+          from: { type: 'person', id: from.pid },
+          to: { type: 'org', id: to.orgNo },
           validToIsoUtc: validTo,
           resourceValue: 'standard-samtykke-for-dele-data',
           redirectUrl: REDIRECT_URL,
           metaData: { inntektsaar: '2028' },
         });
       });
+      runAccessibilityTest.setTestData({ from, to, validTo });
 
       await test.step('Open consent page and login', async () => {
         await consentPage.open(consentResponse.viewUri);
-        await login.loginNotChoosingActor(fromPerson);
+        await login.loginNotChoosingActor(from.pid);
       });
 
       await test.step('Pick language', async () => {
@@ -54,30 +55,33 @@ LANGUAGES.forEach((language) => {
       });
 
       await test.step('Approve consent', async () => {
+        await expect(consentPage.buttonApprove).toBeEnabled();
+        await runAccessibilityTest.scan(testInfo, 'samtykke-før-godkjenning');
         await consentPage.approveStandardAndWaitLogout(APPROVED_REDIRECT_URL);
       });
     });
 
-    test(`Krav-template`, async ({ page, consentPage, login }) => {
-      const fromPerson = pickRandom(fromPersons);
-      const toOrg = pickRandom(toOrgs);
+    test(`Krav-template`, async ({ page, consentPage, login, runAccessibilityTest }, testInfo) => {
+      const from = { pid: pickRandom(fromPersons) };
+      const to = { orgNo: pickRandom(toOrgs) };
       const validTo = addTimeToNowUtc({ days: 2 });
-      const api = new ConsentApiRequests(toOrg);
+      const api = new ConsentApiRequests(to.orgNo);
 
       const consentResponse = await test.step('Create consent request', async () => {
         return await api.createConsentRequest({
-          from: { type: 'person', id: fromPerson },
-          to: { type: 'org', id: toOrg },
+          from: { type: 'person', id: from.pid },
+          to: { type: 'org', id: to.orgNo },
           validToIsoUtc: validTo,
           resourceValue: 'samtykke-brukerstyrt-tilgang',
           redirectUrl: REDIRECT_URL,
           metaData: { brukerdata: 'AutomatisertTiltakE2E' },
         });
       });
+      runAccessibilityTest.setTestData({ from, to, validTo });
 
       await test.step('Open consent page and login', async () => {
         await consentPage.open(consentResponse.viewUri);
-        await login.loginNotChoosingActor(fromPerson);
+        await login.loginNotChoosingActor(from.pid);
       });
 
       await test.step('Pick language', async () => {
@@ -92,30 +96,38 @@ LANGUAGES.forEach((language) => {
       });
 
       await test.step('Approve consent', async () => {
+        await expect(consentPage.buttonApprove).toBeEnabled();
+        await runAccessibilityTest.scan(testInfo, 'samtykke-før-godkjenning');
         await consentPage.approveStandardAndWaitLogout(APPROVED_REDIRECT_URL);
       });
     });
 
-    test(`Fullmakt utføre tjeneste`, async ({ consentPage, page, login }) => {
-      const fromPerson = pickRandom(fromPersons);
-      const toOrg = pickRandom(toOrgs);
+    test(`Fullmakt utføre tjeneste`, async ({
+      consentPage,
+      page,
+      login,
+      runAccessibilityTest,
+    }, testInfo) => {
+      const from = { pid: pickRandom(fromPersons) };
+      const to = { orgNo: pickRandom(toOrgs) };
       const validTo = addTimeToNowUtc({ days: 2 });
-      const api = new ConsentApiRequests(toOrg);
+      const api = new ConsentApiRequests(to.orgNo);
 
       const consentResponse = await test.step('Create consent request', async () => {
         return await api.createConsentRequest({
-          from: { type: 'person', id: fromPerson },
-          to: { type: 'org', id: toOrg },
+          from: { type: 'person', id: from.pid },
+          to: { type: 'org', id: to.orgNo },
           validToIsoUtc: validTo,
           resourceValue: 'samtykke-fullmakt-utfoere-tjeneste',
           redirectUrl: REDIRECT_URL,
           metaData: { tiltak: '2024' },
         });
       });
+      runAccessibilityTest.setTestData({ from, to, validTo });
 
       await test.step('Open consent page and login', async () => {
         await consentPage.open(consentResponse.viewUri);
-        await login.loginNotChoosingActor(fromPerson);
+        await login.loginNotChoosingActor(from.pid);
       });
 
       await test.step('Pick language', async () => {
@@ -134,30 +146,33 @@ LANGUAGES.forEach((language) => {
       });
 
       await test.step('Approve consent', async () => {
+        await expect(consentPage.buttonFullmaktApprove).toBeEnabled();
+        await runAccessibilityTest.scan(testInfo, 'fullmakt-før-godkjenning');
         await consentPage.approveFullmaktAndWaitLogout(APPROVED_REDIRECT_URL);
       });
     });
 
-    test(`Lånesøknad`, async ({ consentPage, page, login }) => {
-      const fromPerson = pickRandom(fromPersons);
-      const toOrg = pickRandom(toOrgs);
+    test(`Lånesøknad`, async ({ consentPage, page, login, runAccessibilityTest }, testInfo) => {
+      const from = { pid: pickRandom(fromPersons) };
+      const to = { orgNo: pickRandom(toOrgs) };
       const validTo = addTimeToNowUtc({ days: 2 });
-      const api = new ConsentApiRequests(toOrg);
+      const api = new ConsentApiRequests(to.orgNo);
 
       const consentResponse = await test.step('Create consent request', async () => {
         return await api.createConsentRequest({
-          from: { type: 'person', id: fromPerson },
-          to: { type: 'org', id: toOrg },
+          from: { type: 'person', id: from.pid },
+          to: { type: 'org', id: to.orgNo },
           validToIsoUtc: validTo,
           resourceValue: 'samtykke-laanesoeknad',
           redirectUrl: REDIRECT_URL,
           metaData: { rente: '4.2', banknavn: 'Testbanken E2E', utloepsar: '2027' },
         });
       });
+      runAccessibilityTest.setTestData({ from, to, validTo });
 
       await test.step('Open consent page and login', async () => {
         await consentPage.open(consentResponse.viewUri);
-        await login.loginNotChoosingActor(fromPerson);
+        await login.loginNotChoosingActor(from.pid);
       });
 
       await test.step('Pick language', async () => {
@@ -175,30 +190,38 @@ LANGUAGES.forEach((language) => {
       });
 
       await test.step('Approve consent', async () => {
+        await expect(consentPage.buttonApprove).toBeEnabled();
+        await runAccessibilityTest.scan(testInfo, 'samtykke-før-godkjenning');
         await consentPage.approveStandardAndWaitLogout(APPROVED_REDIRECT_URL);
       });
     });
 
-    test(`Enkelt samtykke`, async ({ consentPage, page, login }) => {
-      const fromPerson = pickRandom(fromPersons);
-      const toOrg = pickRandom(toOrgs);
+    test(`Enkelt samtykke`, async ({
+      consentPage,
+      page,
+      login,
+      runAccessibilityTest,
+    }, testInfo) => {
+      const from = { pid: pickRandom(fromPersons) };
+      const to = { orgNo: pickRandom(toOrgs) };
       const validTo = addTimeToNowUtc({ days: 2 });
-      const api = new ConsentApiRequests(toOrg);
+      const api = new ConsentApiRequests(to.orgNo);
 
       const consentResponse = await test.step('Create consent request', async () => {
         return await api.createConsentRequest({
-          from: { type: 'person', id: fromPerson },
-          to: { type: 'org', id: toOrg },
+          from: { type: 'person', id: from.pid },
+          to: { type: 'org', id: to.orgNo },
           validToIsoUtc: validTo,
           resourceValue: 'enkelt-samtykke',
           redirectUrl: REDIRECT_URL,
           metaData: { simpletag: 'E2E Playwright metadata for simpletag' },
         });
       });
+      runAccessibilityTest.setTestData({ from, to, validTo });
 
       await test.step('Open consent page and login', async () => {
         await consentPage.open(consentResponse.viewUri);
-        await login.loginNotChoosingActor(fromPerson);
+        await login.loginNotChoosingActor(from.pid);
       });
 
       await test.step('Pick language', async () => {
@@ -217,30 +240,33 @@ LANGUAGES.forEach((language) => {
       });
 
       await test.step('Approve consent', async () => {
+        await expect(consentPage.buttonApprove).toBeEnabled();
+        await runAccessibilityTest.scan(testInfo, 'samtykke-før-godkjenning');
         await consentPage.approveStandardAndWaitLogout(APPROVED_REDIRECT_URL);
       });
     });
 
-    test(`Avvis samtykke`, async ({ consentPage, login }) => {
-      const fromPerson = pickRandom(fromPersons);
-      const toOrg = pickRandom(toOrgs);
+    test(`Avvis samtykke`, async ({ consentPage, login, runAccessibilityTest }, testInfo) => {
+      const from = { pid: pickRandom(fromPersons) };
+      const to = { orgNo: pickRandom(toOrgs) };
       const validTo = addTimeToNowUtc({ days: 2 });
-      const api = new ConsentApiRequests(toOrg);
+      const api = new ConsentApiRequests(to.orgNo);
 
       const consentResponse = await test.step('Create consent request', async () => {
         return await api.createConsentRequest({
-          from: { type: 'person', id: fromPerson },
-          to: { type: 'org', id: toOrg },
+          from: { type: 'person', id: from.pid },
+          to: { type: 'org', id: to.orgNo },
           validToIsoUtc: validTo,
           resourceValue: 'enkelt-samtykke',
           redirectUrl: REDIRECT_URL,
           metaData: { simpletag: 'E2E reject test' },
         });
       });
+      runAccessibilityTest.setTestData({ from, to, validTo });
 
       await test.step('Open consent page and login', async () => {
         await consentPage.open(consentResponse.viewUri);
-        await login.loginNotChoosingActor(fromPerson);
+        await login.loginNotChoosingActor(from.pid);
       });
 
       await test.step('Pick language', async () => {
@@ -253,6 +279,8 @@ LANGUAGES.forEach((language) => {
       });
 
       await test.step('Reject consent', async () => {
+        await expect(consentPage.buttonReject).toBeEnabled();
+        await runAccessibilityTest.scan(testInfo, 'samtykke-før-avvisning');
         await consentPage.rejectStandardAndWaitLogout(REJECTED_REDIRECT_URL);
       });
     });
