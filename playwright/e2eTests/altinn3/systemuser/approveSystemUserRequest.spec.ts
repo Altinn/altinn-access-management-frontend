@@ -29,13 +29,18 @@ test.describe('Godkjenn og avvis Systembrukerforespørsel', () => {
     page,
     login,
     systemUserConfirmPage,
-  }): Promise<void> => {
+    runAccessibilityTest,
+  }, testInfo): Promise<void> => {
+    runAccessibilityTest.setTestData({ from: owner, systemId: prebuiltSystemId, vendorOrgNumber });
+
     await test.step('Navigate to confirmation page and login', async () => {
       await page.goto(response.confirmUrl);
       await login.loginNotChoosingActor(testUserPid);
     });
 
     await test.step('Reject system user request', async () => {
+      await expect(systemUserConfirmPage.rejectButton).toBeVisible();
+      await runAccessibilityTest.scan(testInfo, 'forespørsel-før-reject');
       await systemUserConfirmPage.reject();
     });
 
@@ -56,13 +61,18 @@ test.describe('Godkjenn og avvis Systembrukerforespørsel', () => {
     page,
     login,
     systemUserConfirmPage,
-  }): Promise<void> => {
+    runAccessibilityTest,
+  }, testInfo): Promise<void> => {
+    runAccessibilityTest.setTestData({ from: owner, systemId: prebuiltSystemId, vendorOrgNumber });
+
     await test.step('Navigate to confirmation page and login', async () => {
       await page.goto(response.confirmUrl);
       await login.loginNotChoosingActor(testUserPid);
     });
 
     await test.step('Approve system user request', async () => {
+      await expect(systemUserConfirmPage.approveButton).toBeVisible();
+      await runAccessibilityTest.scan(testInfo, 'forespørsel-før-approve');
       await systemUserConfirmPage.approve();
     });
 

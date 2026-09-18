@@ -29,7 +29,14 @@ test.describe('System Register', async () => {
   test('Create system user and verify landing page', async ({
     systemUserPage,
     accessManagementFrontPage,
-  }): Promise<void> => {
+    runAccessibilityTest,
+  }, testInfo): Promise<void> => {
+    runAccessibilityTest.setTestData({
+      from: owner,
+      systemId: `${vendorOrgNumber}_${system}`,
+      vendorOrgNumber,
+    });
+
     await test.step('Navigate to system user page', async () => {
       await accessManagementFrontPage.systemUserMenuLink.click();
     });
@@ -43,6 +50,7 @@ test.describe('System Register', async () => {
     await test.step('Verify system user created', async () => {
       await expect(systemUserPage.systemUserCreatedHeading).toBeVisible();
       await expect(systemUserPage.systemUserLink(system)).toBeVisible();
+      await runAccessibilityTest.scan(testInfo, 'systembruker');
     });
   });
 

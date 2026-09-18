@@ -77,10 +77,13 @@ export class ApiRequests {
         user.systemId === systemId &&
         (externalRef === undefined || user.externalRef === externalRef),
     )) {
-      const deleted = await fetch(`${url}/${user.id}${agent ? `?partyuuid=${partyUuid}` : ''}`, {
-        method: 'DELETE',
-        headers,
-      });
+      const deleted = await fetch(
+        `${url}/${user.id}${agent ? `?facilitatorId=${partyUuid}` : ''}`,
+        {
+          method: 'DELETE',
+          headers,
+        },
+      );
       if (!deleted.ok && deleted.status !== 404) {
         throw new Error(`Could not delete system user ${user.id}: HTTP ${deleted.status}`);
       }
@@ -114,7 +117,7 @@ export class ApiRequests {
       externalRef,
     );
     const token = await this.tokenClass.getPersonalTokenByPid(userPid);
-    const url = `${env('API_BASE_URL')}/authentication/api/v1/systemuser/agent/${partyId}/${systemUserId}?partyuuid=${partyUuid}`;
+    const url = `${env('API_BASE_URL')}/authentication/api/v1/systemuser/agent/${partyId}/${systemUserId}?facilitatorId=${partyUuid}`;
 
     const response = await fetch(url, {
       method: 'DELETE',

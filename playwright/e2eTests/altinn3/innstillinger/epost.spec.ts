@@ -126,7 +126,11 @@ test.describe('Innstillinger - e-postadresser', () => {
       await api.setNotificationAddresses(actor.pid, actor.org, { emails: [BASELINE_EPOST] });
     });
 
-    test('ugyldig e-postadresse kan ikke lagres', async ({ innstillingerPage, login }) => {
+    test('ugyldig e-postadresse kan ikke lagres', async ({
+      innstillingerPage,
+      login,
+      runAccessibilityTest,
+    }, testInfo) => {
       await test.step(`Logg inn som ${actor.orgName} og åpne innstillinger`, async () => {
         await login.LoginToAccessManagement(actor.pid);
         await login.selectActor(actor.orgName);
@@ -143,6 +147,8 @@ test.describe('Innstillinger - e-postadresser', () => {
         await expect(innstillingerPage.ugyldigEpostFeilmelding).toBeVisible();
         await expect(innstillingerPage.saveButton).toBeDisabled();
       });
+
+      await runAccessibilityTest.scan(testInfo, 'ugyldig-epost');
 
       await test.step('Den opprinnelige adressen er uendret', async () => {
         await innstillingerPage.lukkDialog();

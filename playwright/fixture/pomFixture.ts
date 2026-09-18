@@ -20,6 +20,7 @@ const defaultLang = Language.NB;
 
 type Fixtures = {
   slowNetwork: void;
+  accessibilityScan: void;
   // The app language for the run (default NB). Page objects take this and read
   // their text selectors from the matching localization dictionary.
   language: Language;
@@ -43,6 +44,16 @@ type Fixtures = {
 };
 
 const test = baseTest.extend<Fixtures>({
+  accessibilityScan: [
+    async ({ runAccessibilityTest }, use, testInfo) => {
+      await use();
+      const coveredElsewhere = testInfo.annotations.some(({ type }) => type === 'UU-dekket-av');
+      if (testInfo.status === 'passed' && !runAccessibilityTest.scanned && !coveredElsewhere) {
+        await runAccessibilityTest.scan(testInfo, 'sluttside');
+      }
+    },
+    { auto: true, timeout: 60_000 },
+  ],
   // Simulate slow CI runner network: SLOW_NETWORK=1 yarn run env:TT02 <path>
   slowNetwork: [
     async ({ page }, use) => {
@@ -84,8 +95,13 @@ const test = baseTest.extend<Fixtures>({
   logoutUser: async ({ page }, use) => {
     await use(new logoutWithUser(page));
   },
-  runAccessibilityTest: async ({ page }, use) => {
-    await use(new runAccessibilityTests(page));
+  runAccessibilityTest: async ({ page }, use, testInfo) => {
+    await use(
+      new runAccessibilityTests(
+        page,
+        testInfo.project.name === 'accessibility-tests' || process.env.UU_SCAN === '1',
+      ),
+    );
   },
   delegation: async ({ page, language }, use) => {
     await use(new DelegationPage(page, language));

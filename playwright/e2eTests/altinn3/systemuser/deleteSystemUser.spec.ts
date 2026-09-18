@@ -39,12 +39,19 @@ test.describe('System user deletion', () => {
     });
   });
 
-  test('Delete created system user', async ({ systemUserPage }) => {
+  test('Delete created system user', async ({ systemUserPage, runAccessibilityTest }, testInfo) => {
+    runAccessibilityTest.setTestData({
+      from: owner,
+      systemId: `${vendorOrgNumber}_${systemId}`,
+      vendorOrgNumber,
+    });
+
     await test.step('Select system user to delete', async () => {
       await systemUserPage.openSystemUser(systemId);
     });
 
     await test.step('Delete system user and verify removal from overview', async () => {
+      await runAccessibilityTest.scan(testInfo, 'systembruker-før-sletting');
       await systemUserPage.deleteSystemUser(systemId);
     });
   });

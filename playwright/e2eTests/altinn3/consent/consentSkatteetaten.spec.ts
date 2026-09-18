@@ -16,31 +16,43 @@ const ENV = currentEnv().toUpperCase();
 test.describe('Samtykke - Skatteetaten krav og betalinger ende til ende', () => {
   test.describe('Org', () => {
     test.skip(ENV !== 'TT02', 'Kun TT02');
-    const orgNr = '313506673'; // Org med krav og betalinger
-    const pid = '02925796975'; // innehaver
+    const from = { orgNo: '313506673', pid: '02925796975' }; // Virksomhet med krav og innehaver
+    const to = { orgNo: DIGDIR_ORG };
 
-    test('Godkjenn samtykke og hent skattegrunnlag', async ({ login, consentPage }) => {
+    test('Godkjenn samtykke og hent skattegrunnlag', async ({
+      login,
+      consentPage,
+      runAccessibilityTest,
+    }, testInfo) => {
       const validTo = addTimeToNowUtc({ days: 5 });
-      const api = new ConsentApiRequests(DIGDIR_ORG);
+      const api = new ConsentApiRequests(to.orgNo);
 
       const consentResp = await test.step('Opprett samtykkeforespørsel', async () => {
         return await api.createConsentRequest({
-          from: { type: 'org', id: orgNr },
-          to: { type: 'org', id: DIGDIR_ORG },
+          from: { type: 'org', id: from.orgNo },
+          to: { type: 'org', id: to.orgNo },
           validToIsoUtc: validTo,
           resourceValue: SKATTEETATEN_RESOURCE,
           redirectUrl: REDIRECT_URL,
         });
       });
+      runAccessibilityTest.setTestData({
+        from,
+        to,
+        resource: SKATTEETATEN_RESOURCE,
+        validTo,
+      });
 
       await test.step('Åpne samtykkeside og logg inn som dagligLeder', async () => {
         await consentPage.open(consentResp.viewUri);
-        await login.loginNotChoosingActor(pid);
+        await login.loginNotChoosingActor(from.pid);
         await consentPage.openMenu();
         await consentPage.pickLanguage(consentPage.language);
       });
 
       await test.step('Godkjenn samtykke', async () => {
+        await expect(consentPage.buttonApprove).toBeEnabled();
+        await runAccessibilityTest.scan(testInfo, 'samtykke-før-godkjenning');
         await consentPage.approveStandardAndWaitLogout(APPROVED_REDIRECT_URL);
       });
 
@@ -48,7 +60,7 @@ test.describe('Samtykke - Skatteetaten krav og betalinger ende til ende', () => 
         const consentId = getConsentRequestId(consentResp.viewUri);
         const consentToken = await api.getConsentTokenWithMaskinporten(
           consentId,
-          `urn:altinn:organization:identifier-no:${orgNr}`,
+          `urn:altinn:organization:identifier-no:${from.orgNo}`,
           MASKINPORTEN_CLIENT_ID_ENV,
           MASKINPORTEN_JWK_ENV,
           undefined,
@@ -56,7 +68,7 @@ test.describe('Samtykke - Skatteetaten krav og betalinger ende til ende', () => 
         );
         expect(consentToken).toBeTruthy();
 
-        const response = await fetchKrav(orgNr, consentToken);
+        const response = await fetchKrav(from.orgNo, consentToken);
         expect(response.status).toBe(200);
       });
     });

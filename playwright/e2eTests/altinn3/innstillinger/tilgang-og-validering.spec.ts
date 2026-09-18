@@ -20,7 +20,11 @@ test.describe('Innstillinger - tilgang og validering', () => {
       });
     });
 
-    test('kan ikke fjerne den siste adressen', async ({ innstillingerPage, login }) => {
+    test('kan ikke fjerne den siste adressen', async ({
+      innstillingerPage,
+      login,
+      runAccessibilityTest,
+    }, testInfo) => {
       await test.step(`Logg inn som ${actor.orgName} og åpne innstillinger`, async () => {
         await login.LoginToAccessManagement(actor.pid);
         await login.selectActor(actor.orgName);
@@ -37,6 +41,8 @@ test.describe('Innstillinger - tilgang og validering', () => {
         await expect(innstillingerPage.noAddressesError).toBeVisible();
         await expect(innstillingerPage.saveButton).toBeDisabled();
       });
+
+      await runAccessibilityTest.scan(testInfo, 'valideringsfeil');
 
       await test.step('Adressen er uendret etter at dialogen lukkes', async () => {
         await innstillingerPage.lukkDialog();

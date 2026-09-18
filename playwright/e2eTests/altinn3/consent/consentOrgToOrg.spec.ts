@@ -22,29 +22,32 @@ LANGUAGES.forEach((language) => {
     test(`Skal kunne godkjenne samtykke med Utfyller/innsender-rollen (${language})`, async ({
       consentPage,
       login,
-    }) => {
+      runAccessibilityTest,
+    }, testInfo) => {
       // Create consent request from one org to another org
       // For å godkjenne her kreves det at ressursen i ressursregisteret er satt opp med utfyller/innsender-rollen for org til org-samtykke
       // fordi privatperson" ikke har rettighet til å godkjenne på vegne av en organisasjon
-      const [fromOrg, fromPerson] = pickRandom(fromOrgs);
-      const toOrg = pickRandom(toOrgs);
+      const [orgNo, pid] = pickRandom(fromOrgs);
+      const from = { orgNo, pid };
+      const to = { orgNo: pickRandom(toOrgs) };
       const validTo = addTimeToNowUtc({ days: 2 });
-      const api = new ConsentApiRequests(toOrg);
+      const api = new ConsentApiRequests(to.orgNo);
 
       const consentResponse = await test.step('Create consent request', async () => {
         return await api.createConsentRequest({
-          from: { type: 'org', id: fromOrg },
-          to: { type: 'org', id: toOrg },
+          from: { type: 'org', id: from.orgNo },
+          to: { type: 'org', id: to.orgNo },
           validToIsoUtc: validTo,
           resourceValue: 'standard-samtykke-for-dele-data',
           redirectUrl: REDIRECT_URL,
           metaData: { inntektsaar: '2028' },
         });
       });
+      runAccessibilityTest.setTestData({ from, to, validTo });
 
       await test.step('Open consent page and login', async () => {
         await consentPage.open(consentResponse.viewUri);
-        await login.loginNotChoosingActor(fromPerson);
+        await login.loginNotChoosingActor(from.pid);
       });
 
       await test.step('Pick language', async () => {
@@ -60,6 +63,8 @@ LANGUAGES.forEach((language) => {
       });
 
       await test.step('Approve consent', async () => {
+        await expect(consentPage.buttonApprove).toBeEnabled();
+        await runAccessibilityTest.scan(testInfo, 'samtykke-før-godkjenning');
         await consentPage.approveStandardAndWaitLogout(APPROVED_REDIRECT_URL);
       });
     });

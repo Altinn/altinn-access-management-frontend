@@ -54,13 +54,18 @@ test.describe('Systembruker endringsforespørsel', () => {
     page,
     login,
     systemUserConfirmPage,
-  }): Promise<void> => {
+    runAccessibilityTest,
+  }, testInfo): Promise<void> => {
+    runAccessibilityTest.setTestData({ from: owner, systemId: prebuiltSystemId, vendorOrgNumber });
+
     await test.step('Navigate to change request confirmation page and login', async () => {
       await page.goto(changeRequestResponse.confirmUrl);
       await login.loginNotChoosingActor(testUser);
     });
 
     await test.step('Reject change request', async () => {
+      await expect(systemUserConfirmPage.rejectButton).toBeVisible();
+      await runAccessibilityTest.scan(testInfo, 'forespørsel-før-reject');
       await systemUserConfirmPage.reject();
     });
 
@@ -80,13 +85,18 @@ test.describe('Systembruker endringsforespørsel', () => {
     page,
     login,
     systemUserConfirmPage,
-  }): Promise<void> => {
+    runAccessibilityTest,
+  }, testInfo): Promise<void> => {
+    runAccessibilityTest.setTestData({ from: owner, systemId: prebuiltSystemId, vendorOrgNumber });
+
     await test.step('Navigate to change request confirmation page and login', async () => {
       await page.goto(changeRequestResponse.confirmUrl);
       await login.loginNotChoosingActor(testUser);
     });
 
     await test.step('Approve change request', async () => {
+      await expect(systemUserConfirmPage.approveButton).toBeVisible();
+      await runAccessibilityTest.scan(testInfo, 'forespørsel-før-approve');
       await systemUserConfirmPage.approve();
     });
 
@@ -116,6 +126,7 @@ test.describe('Systembruker endringsforespørsel', () => {
       // Removed by change request
       await expect(page.getByText('authentication-e2e-test')).not.toBeVisible();
       await expect(page.getByText('Baerekraft')).not.toBeVisible();
+      await runAccessibilityTest.scan(testInfo, 'oppdaterte-rettigheter');
     });
   });
 
