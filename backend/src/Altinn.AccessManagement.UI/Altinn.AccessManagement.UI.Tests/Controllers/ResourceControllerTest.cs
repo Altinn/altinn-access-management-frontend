@@ -4,7 +4,6 @@ using System.Net.Http.Json;
 using System.Text.Json;
 using Altinn.AccessManagement.UI.Controllers;
 using Altinn.AccessManagement.UI.Core.ClientInterfaces;
-using Altinn.AccessManagement.UI.Core.Configuration;
 using Altinn.AccessManagement.UI.Core.Enums;
 using Altinn.AccessManagement.UI.Core.Models.ResourceRegistry;
 using Altinn.AccessManagement.UI.Core.Models.ResourceRegistry.Frontend;
@@ -122,34 +121,6 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
             Assert.Equal(expectedResult.NumEntriesTotal, actualResources.NumEntriesTotal);
             AssertionUtil.AssertCollections(expectedResult.PageList, actualResources.PageList, AssertionUtil.AssertEqual);
         }
-
-        /// <summary>
-        ///     Test case: PaginatedSearch with no search string or filters while the DisplayPopularSingleRightsServices
-        ///     feature flag is enabled
-        ///     Expected: PaginatedSearch returns only the selection of popular services instead of the full resource list
-        ///     (none of the resources in the mock data are part of the popular selection, so the result is empty)
-        /// </summary>
-        [Fact]
-        public async Task GetSingleRightsSearch_popularServicesFlagEnabled_ReturnsOnlyPopularServices()
-        {
-            // Arrange
-            HttpClient client = GetTestClient(featureFlags: new Dictionary<string, bool>
-            {
-                [FeatureFlags.DisplayPopularSingleRightsServices] = true,
-            });
-            string token = PrincipalUtil.GetToken(1337, 501337);
-            client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
-
-            // Act
-            HttpResponseMessage response = await client.GetAsync("accessmanagement/api/v1/resources/search?ResultsPerPage=7&Page=1");
-
-            // Assert
-            Assert.Equal(HttpStatusCode.OK, response.StatusCode);
-
-            PaginatedList<ServiceResourceFE> actualResources = JsonSerializer.Deserialize<PaginatedList<ServiceResourceFE>>(await response.Content.ReadAsStringAsync(), options);
-            Assert.Empty(actualResources.PageList);
-        }
-
 
         /// <summary>
         ///     Test case: PaginatedSearch with pagination and filters
@@ -408,7 +379,7 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
         ///     Expected: GetResourceOwners returns a list of resource owners in correct language, with MaskinportenSchema, ordered alphabetically
         /// </summary>
         [Fact]
-        public async Task GetResourceOwners_resourceTypeMaskinPortenSchemAndAltinn2Service()
+        public async Task GetResourceOwners_resourceTypeMaskinPortenSchema()
         {
             // Arrange
             string token = PrincipalUtil.GetToken(1337, 501337);
@@ -416,7 +387,6 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
 
             List<ResourceType> relevantResourceTypes = new List<ResourceType>
             {
-                ResourceType.Altinn2Service,
                 ResourceType.MaskinportenSchema
             };
 
@@ -426,7 +396,6 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
                 new ResourceOwnerFE("NARNIA", "777777777"),
                 new ResourceOwnerFE("PÅFUNNSETATEN", "985399077"),
                 new ResourceOwnerFE("Skatteetaten", "974761076"),
-                new ResourceOwnerFE("Testdepartementet", "974760746"),
                 new ResourceOwnerFE(null, "123456789")
                 {
                     OrganisationCode = "zzzdemo",
@@ -434,7 +403,7 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
             };
 
             // Act
-            HttpResponseMessage response = await _client.GetAsync($"accessmanagement/api/v1/resources/resourceowners?relevantResourceTypes={relevantResourceTypes[0]}&relevantResourceTypes={relevantResourceTypes[1]}");
+            HttpResponseMessage response = await _client.GetAsync($"accessmanagement/api/v1/resources/resourceowners?relevantResourceTypes={relevantResourceTypes[0]}");
 
             // Assert
             Assert.Equal(HttpStatusCode.OK, response.StatusCode);
@@ -506,16 +475,11 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
             return httpContextAccessorMock.Object;
         }
 
-        private HttpClient GetTestClient(IHttpContextAccessor httpContextAccessor = null, Dictionary<string, bool> featureFlags = null)
+        private HttpClient GetTestClient(IHttpContextAccessor httpContextAccessor = null)
         {
             httpContextAccessor ??= new HttpContextAccessor();
             HttpClient client = _factory.WithWebHostBuilder(builder =>
             {
-                if (featureFlags != null)
-                {
-                    SetupUtils.SetFeatureFlags(builder, featureFlags);
-                }
-
                 builder.ConfigureTestServices(services =>
                 {
                     services.AddSingleton<IProfileClient, ProfileClientMock>();
