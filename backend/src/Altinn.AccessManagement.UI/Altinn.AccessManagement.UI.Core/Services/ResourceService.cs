@@ -101,7 +101,8 @@ namespace Altinn.AccessManagement.UI.Core.Services
             }
 
             return resource.ResourceType != ResourceType.MaskinportenSchema &&
-                resource.ResourceType != ResourceType.Systemresource;
+                resource.ResourceType != ResourceType.Systemresource && 
+                resource.ResourceType != ResourceType.Altinn2Service;
         }
 
         private static bool IsExpiredResource(ServiceResource resource)
