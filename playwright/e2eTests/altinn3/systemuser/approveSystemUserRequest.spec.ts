@@ -1,35 +1,25 @@
+import { systemUserOwners } from './testdata';
 import { test, expect } from 'playwright/fixture/pomFixture';
 
 import { TestdataApi } from 'playwright/util/TestdataApi';
 import { ApiRequests } from 'playwright/api-requests/SystemUserApiRequests';
-import { systemUserOwners } from './testdata';
-
 const owner = systemUserOwners.requests;
 const vendorOrgNumber = '310547891';
+const prebuiltSystemId = '310547891_E2E-Playwright-Authentication';
 const testUserPid = owner.pid;
 
 test.describe('Godkjenn og avvis Systembrukerforespørsel', () => {
   let api: ApiRequests;
+  let externalRef: string;
   let response: Awaited<ReturnType<ApiRequests['postSystemuserRequest']>>;
 
-  test.beforeEach(async ({ systemUserCleanup }) => {
+  test.beforeEach(async () => {
     api = new ApiRequests();
-    const externalRef = TestdataApi.generateExternalRef();
-    const system = systemUserCleanup.track(owner, vendorOrgNumber, 'requests');
-    await api.createSystemInSystemregisterWithAccessPackages(
-      vendorOrgNumber,
-      system.name,
-      [{ urn: 'urn:altinn:accesspackage:baerekraft' }, { urn: 'urn:altinn:accesspackage:plansak' }],
-      'https://altinn.no/',
-      [
-        { resource: [{ value: 'authentication-e2e-test', id: 'urn:altinn:resource' }] },
-        { resource: [{ value: 'vegardtestressurs', id: 'urn:altinn:resource' }] },
-      ],
-    );
+    externalRef = TestdataApi.generateExternalRef();
     response = await api.postSystemuserRequest(
       vendorOrgNumber,
       externalRef,
-      system.id,
+      prebuiltSystemId,
       owner.orgNo,
       'https://altinn.no/',
     );
@@ -87,5 +77,16 @@ test.describe('Godkjenn og avvis Systembrukerforespørsel', () => {
       );
       expect(statusApiRequest.status).toBe('Accepted');
     });
+  });
+  test.afterEach(async () => {
+    if (externalRef) {
+      await api.cleanUpSystemUsersForSystem(
+        prebuiltSystemId,
+        owner.pid,
+        owner.orgNo,
+        false,
+        externalRef,
+      );
+    }
   });
 });

@@ -25,14 +25,10 @@ test.describe('Systembruker - Legg til egen organisasjon', () => {
   let externalRef: string;
   let response: { confirmUrl: string; id: string };
 
-  test.beforeEach(async ({ systemUserCleanup }) => {
+  test.beforeEach(async () => {
+    name = '';
     api = new ApiRequests();
-    name = systemUserCleanup.track(
-      { orgNo: systemUserOwner.partyOrgNo, pid: systemUserOwner.managerPid },
-      '310547891',
-      'own-org',
-      'agent',
-    ).name;
+    name = `Playwright-e2e-${accessPackageApiName}-${Date.now()}`;
     externalRef = TestdataApi.generateExternalRef();
 
     systemId = await test.step('Create system with access package', async () => {
@@ -113,5 +109,16 @@ test.describe('Systembruker - Legg til egen organisasjon', () => {
     await test.step('Delete system user and verify it is removed', async () => {
       await clientDelegationPage.deleteSystemUser(name);
     });
+  });
+  test.afterEach(async () => {
+    if (name) {
+      await api.cleanUpSystemUsersForSystem(
+        `310547891_${name}`,
+        systemUserOwner.managerPid,
+        systemUserOwner.partyOrgNo,
+        true,
+      );
+      await api.deleteSystemInSystemRegister('310547891', name);
+    }
   });
 });

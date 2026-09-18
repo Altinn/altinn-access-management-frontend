@@ -18,13 +18,10 @@ test.describe('Systembruker - Eskaler', () => {
   let externalRef: string;
   let response: { confirmUrl: string; id: string };
 
-  test.beforeEach(async ({ systemUserCleanup }) => {
+  test.beforeEach(async () => {
+    name = '';
     api = new ApiRequests();
-    name = systemUserCleanup.track(
-      { orgNo: systemuserOwnerOrg, pid: managerPid },
-      '312591332',
-      'eskaler',
-    ).name;
+    name = `Playwright-e2e-eskaler-${Date.now()}`;
     externalRef = TestdataApi.generateExternalRef();
 
     systemId = await test.step('Create system', async () => {
@@ -69,34 +66,39 @@ test.describe('Systembruker - Eskaler', () => {
     });
 
     const managerContext = await browser.newContext();
-    try {
-      const managerPage = await managerContext.newPage();
-      const managerLogin = new LoginPage(managerPage);
-      const managerSystemUserPage = new SystemUserPage(managerPage);
-      const managerClientDelegationPage = new ClientDelegationPage(managerPage);
+    const managerPage = await managerContext.newPage();
+    const managerLogin = new LoginPage(managerPage);
+    const managerSystemUserPage = new SystemUserPage(managerPage);
+    const managerClientDelegationPage = new ClientDelegationPage(managerPage);
 
-      await test.step('Login as manager and choose reportee', async () => {
-        await managerLogin.LoginToAccessManagement(managerPid);
-        await managerLogin.selectActor(actorName);
-      });
+    await test.step('Login as manager and choose reportee', async () => {
+      await managerLogin.LoginToAccessManagement(managerPid);
+      await managerLogin.selectActor(actorName);
+    });
 
-      await test.step('Find and approve escalated request', async () => {
-        await managerSystemUserPage.requestsMenuItem.click();
-        await managerSystemUserPage.requestLink(response.id).click();
-        await expect(managerClientDelegationPage.confirmButton).toBeVisible();
-        await managerClientDelegationPage.confirmButton.click();
-      });
+    await test.step('Find and approve escalated request', async () => {
+      await managerSystemUserPage.requestsMenuItem.click();
+      await managerSystemUserPage.requestLink(response.id).click();
+      await expect(managerClientDelegationPage.confirmButton).toBeVisible();
+      await managerClientDelegationPage.confirmButton.click();
+    });
 
-      await test.step('Verify system user was created with proper rights', async () => {
-        await managerClientDelegationPage.systemUserLink(name).click();
-        await expect(managerPage.getByRole('button', { name: 'Bærekraft' })).toBeVisible();
-        await expect(managerPage.getByRole('button', { name: 'vegardendetilende' })).toBeVisible();
-        await expect(
-          managerPage.getByRole('button', { name: 'authentication-e2e-test' }),
-        ).toBeVisible();
-      });
-    } finally {
-      await managerContext.close();
+    await test.step('Verify system user was created with proper rights', async () => {
+      await managerClientDelegationPage.systemUserLink(name).click();
+      await expect(managerPage.getByRole('button', { name: 'Bærekraft' })).toBeVisible();
+      await expect(managerPage.getByRole('button', { name: 'vegardendetilende' })).toBeVisible();
+      await expect(
+        managerPage.getByRole('button', { name: 'authentication-e2e-test' }),
+      ).toBeVisible();
+    });
+
+    await managerContext.close();
+  });
+
+  test.afterEach(async () => {
+    if (name) {
+      await api.cleanUpSystemUsersForSystem(`312591332_${name}`, managerPid, systemuserOwnerOrg);
+      await api.deleteSystemInSystemRegister('312591332', name);
     }
   });
 });

@@ -56,6 +56,37 @@ export class ApiRequests {
     return `${vendorId}_${name}`;
   }
 
+  /** Clean up this test's users, including after failed setup or UI verification. */
+  public async cleanUpSystemUsersForSystem(
+    systemId: string,
+    userPid: string,
+    partyOrgNo: string,
+    agent = false,
+    externalRef?: string,
+  ): Promise<void> {
+    const { partyId, partyUuid } = await this.tokenClass.getIds(partyOrgNo);
+    const token = await this.tokenClass.getPersonalTokenByPid(userPid);
+    const url = `${env('API_BASE_URL')}/authentication/api/v1/systemuser/${agent ? 'agent/' : ''}${partyId}`;
+    const headers = { Authorization: `Bearer ${token}` };
+    const response = await fetch(url, { headers });
+    if (!response.ok)
+      throw new Error(`Could not list system users for cleanup: HTTP ${response.status}`);
+    const users: { id: string; systemId: string; externalRef: string }[] = await response.json();
+    for (const user of users.filter(
+      (user) =>
+        user.systemId === systemId &&
+        (externalRef === undefined || user.externalRef === externalRef),
+    )) {
+      const deleted = await fetch(`${url}/${user.id}${agent ? `?partyuuid=${partyUuid}` : ''}`, {
+        method: 'DELETE',
+        headers,
+      });
+      if (!deleted.ok && deleted.status !== 404) {
+        throw new Error(`Could not delete system user ${user.id}: HTTP ${deleted.status}`);
+      }
+    }
+  }
+
   public async cleanUpSystemUsers(
     systemUsers: { id: string }[],
     userPid: string,
@@ -278,10 +309,7 @@ export class ApiRequests {
     return apiResponse;
   }
 
-  public async createSystemSystemRegister(
-    vendorOrgNo: string,
-    systemName?: string,
-  ): Promise<string> {
+  public async createSystemSystemRegister(vendorOrgNo: string): Promise<string> {
     const vendorId = vendorOrgNo;
     const clientId = `Client_${Date.now()}` + Math.random();
     // Generate name with max 10 chars: E2E + last 5 digits of timestamp + 2 random digits
@@ -289,7 +317,7 @@ export class ApiRequests {
       .toString()
       .padStart(2, '0');
 
-    const name = systemName ?? `E2E${Date.now().toString().slice(-5)}${randomDigits}`;
+    const name = `E2E${Date.now().toString().slice(-5)}${randomDigits}`;
 
     const payload = {
       Id: `${vendorId}_${name}`,

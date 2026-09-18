@@ -9,8 +9,7 @@
     "env:AT23": "cross-env environment=at23 npx playwright test",
     "env:TT02": "cross-env environment=tt02 npx playwright test",
     "tenor": "npx tsx tenor/cli.ts",
-    "lint": "eslint .",
-    "cleanup:systemusers": "npx tsx --tsconfig ../tsconfig.json util/systemuser/cleanup-existing.ts"
+    "lint": "eslint ."
   },
   "keywords": [],
   "author": "",

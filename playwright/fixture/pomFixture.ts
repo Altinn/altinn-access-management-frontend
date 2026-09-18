@@ -1,6 +1,5 @@
 // pomFixtures.ts
 import { test as baseTest, expect } from '@playwright/test';
-import { SystemUserCleanup } from 'playwright/util/systemuser/SystemUserCleanup';
 import { ConsentPage, Language } from 'playwright/pages/consent/ConsentPage';
 import { LanguageMenu } from 'playwright/pages/LanguageMenu';
 import { LoginPage, logoutWithUser } from 'playwright/pages/LoginPage';
@@ -20,7 +19,6 @@ import { MaskinportenPage } from 'playwright/pages/maskinporten/MaskinportenPage
 const defaultLang = Language.NB;
 
 type Fixtures = {
-  systemUserCleanup: SystemUserCleanup;
   slowNetwork: void;
   // The app language for the run (default NB). Page objects take this and read
   // their text selectors from the matching localization dictionary.
@@ -45,17 +43,6 @@ type Fixtures = {
 };
 
 const test = baseTest.extend<Fixtures>({
-  systemUserCleanup: [
-    async ({}, use) => {
-      const cleanup = new SystemUserCleanup();
-      try {
-        await use(cleanup);
-      } finally {
-        await cleanup.cleanup();
-      }
-    },
-    { timeout: 120_000 },
-  ],
   // Simulate slow CI runner network: SLOW_NETWORK=1 yarn run env:TT02 <path>
   slowNetwork: [
     async ({ page }, use) => {

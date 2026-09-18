@@ -1,8 +1,9 @@
+import { systemUserOwners } from './testdata';
 import { expect, test } from 'playwright/fixture/pomFixture';
 import { Language } from 'playwright/pages/LanguageMenu';
 
+import { TestdataApi } from 'playwright/util/TestdataApi';
 import { ApiRequests } from 'playwright/api-requests/SystemUserApiRequests';
-import { systemUserOwners } from './testdata';
 
 // Runs in nynorsk on purpose: exercises the before-login language pinning
 // (settings API) and proves the dict-driven selectors work in a non-default
@@ -15,11 +16,12 @@ const testOrgName = owner.name;
 
 test.describe('System Register', async () => {
   let system: string;
+  let api: ApiRequests;
 
-  test.beforeEach(async ({ login, systemUserCleanup }) => {
-    const api = new ApiRequests();
-    system = systemUserCleanup.track(owner, vendorOrgNumber, 'creation').name;
-    await api.createSystemSystemRegister(vendorOrgNumber, system);
+  test.beforeEach(async ({ page, login }) => {
+    system = '';
+    api = new ApiRequests();
+    system = await api.createSystemSystemRegister(vendorOrgNumber);
     await login.LoginToAccessManagement(testUserPid);
     await login.selectActor(testOrgName);
   });
@@ -42,5 +44,12 @@ test.describe('System Register', async () => {
       await expect(systemUserPage.systemUserCreatedHeading).toBeVisible();
       await expect(systemUserPage.systemUserLink(system)).toBeVisible();
     });
+  });
+
+  test.afterEach(async () => {
+    if (system) {
+      await api.cleanUpSystemUsersForSystem(`${vendorOrgNumber}_${system}`, owner.pid, owner.orgNo);
+      await TestdataApi.removeSystem(vendorOrgNumber, system);
+    }
   });
 });

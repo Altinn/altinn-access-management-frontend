@@ -23,13 +23,8 @@ test.describe('Delegering av klienter til Systembruker', () => {
     let name: string;
     let response: { confirmUrl: string };
 
-    test.beforeEach(async ({ systemUserCleanup }) => {
-      name = systemUserCleanup.track(
-        { orgNo: user.org, pid: user.pid },
-        '310547891',
-        role,
-        'agent',
-      ).name;
+    test.beforeEach(async () => {
+      name = `Playwright-e2e-${role}-${Date.now()}`;
 
       const systemId = await test.step('Create system with access packages', async () => {
         return await api.createSystemInSystemregisterWithAccessPackages('310547891', name);
@@ -43,6 +38,13 @@ test.describe('Delegering av klienter til Systembruker', () => {
           user.org,
         );
       });
+    });
+
+    test.afterEach(async () => {
+      if (name) {
+        await api.cleanUpSystemUsersForSystem(`310547891_${name}`, user.pid, user.org, true);
+        await api.deleteSystemInSystemRegister('310547891', name);
+      }
     });
 
     test('Ansvarlig revisor - add all customers with one click', async ({
@@ -102,13 +104,8 @@ test.describe('Delegering av klienter til Systembruker', () => {
     let name: string;
     let response: { confirmUrl: string };
 
-    test.beforeEach(async ({ systemUserCleanup }) => {
-      name = systemUserCleanup.track(
-        { orgNo: user.org, pid: user.pid },
-        '310547891',
-        role,
-        'agent',
-      ).name;
+    test.beforeEach(async () => {
+      name = `Playwright-e2e-${role}-${Date.now()}`;
 
       const systemId = await test.step('Create system with access packages', async () => {
         return await api.createSystemInSystemregisterWithAccessPackages('310547891', name);
@@ -122,6 +119,13 @@ test.describe('Delegering av klienter til Systembruker', () => {
           user.org,
         );
       });
+    });
+
+    test.afterEach(async () => {
+      if (name) {
+        await api.cleanUpSystemUsersForSystem(`310547891_${name}`, user.pid, user.org, true);
+        await api.deleteSystemInSystemRegister('310547891', name);
+      }
     });
 
     test('Regnskapsfører', async ({
@@ -187,13 +191,8 @@ test.describe('Delegering av klienter til Systembruker', () => {
     let name: string;
     let response: { confirmUrl: string };
 
-    test.beforeEach(async ({ systemUserCleanup }) => {
-      name = systemUserCleanup.track(
-        { orgNo: user.org, pid: user.pid },
-        '310547891',
-        role,
-        'agent',
-      ).name;
+    test.beforeEach(async () => {
+      name = `Playwright-e2e-${role}-${Date.now()}`;
 
       const systemId = await test.step('Create system with access packages', async () => {
         return await api.createSystemInSystemregisterWithAccessPackages('310547891', name);
@@ -207,6 +206,13 @@ test.describe('Delegering av klienter til Systembruker', () => {
           user.org,
         );
       });
+    });
+
+    test.afterEach(async () => {
+      if (name) {
+        await api.cleanUpSystemUsersForSystem(`310547891_${name}`, user.pid, user.org, true);
+        await api.deleteSystemInSystemRegister('310547891', name);
+      }
     });
 
     test('Forretningsfører', async ({
