@@ -7,6 +7,7 @@ import { SystemUserPage } from 'playwright/pages/systemuser/SystemUserPage';
 import { ClientDelegationPage } from 'playwright/pages/systemuser/ClientDelegation';
 
 test.describe('Systembruker - Eskaler', () => {
+  const vendorOrgNumber = '312591332';
   const systemuserOwnerOrg = '313084167';
   const regularUserPid = '09817897166'; // No accessManager privileges, may escalate requests
   const managerPid = '29849098304';
@@ -26,7 +27,7 @@ test.describe('Systembruker - Eskaler', () => {
 
     systemId = await test.step('Create system', async () => {
       return await api.createSystemInSystemregisterWithAccessPackages(
-        '312591332',
+        vendorOrgNumber,
         name,
         [{ urn: 'urn:altinn:accesspackage:baerekraft' }],
         'https://example.com/',
@@ -38,7 +39,7 @@ test.describe('Systembruker - Eskaler', () => {
     });
     response = await test.step('Create system user request', async () => {
       return await api.postSystemuserRequest(
-        '312591332',
+        vendorOrgNumber,
         externalRef,
         systemId,
         systemuserOwnerOrg,
@@ -97,8 +98,12 @@ test.describe('Systembruker - Eskaler', () => {
 
   test.afterEach(async () => {
     if (name) {
-      await api.cleanUpSystemUsersForSystem(`312591332_${name}`, managerPid, systemuserOwnerOrg);
-      await api.deleteSystemInSystemRegister('312591332', name);
+      await api.cleanUpSystemUsersForSystem(
+        `${vendorOrgNumber}_${name}`,
+        managerPid,
+        systemuserOwnerOrg,
+      );
+      await api.deleteSystemInSystemRegister(vendorOrgNumber, name);
     }
   });
 });

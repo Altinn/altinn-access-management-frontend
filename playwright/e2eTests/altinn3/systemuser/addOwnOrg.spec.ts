@@ -4,6 +4,7 @@ import { TestdataApi } from 'playwright/util/TestdataApi';
 import { pickRandom } from 'playwright/util/helper';
 
 test.describe('Systembruker - Legg til egen organisasjon', () => {
+  const vendorOrgNumber = '310547891';
   const systemUserOwner = {
     partyOrgNo: '314240545',
     managerPid: '02858098613',
@@ -32,14 +33,14 @@ test.describe('Systembruker - Legg til egen organisasjon', () => {
     externalRef = TestdataApi.generateExternalRef();
 
     systemId = await test.step('Create system with access package', async () => {
-      return await api.createSystemInSystemregisterWithAccessPackages('310547891', name, [
+      return await api.createSystemInSystemregisterWithAccessPackages(vendorOrgNumber, name, [
         { urn: accessPackageUrn },
       ]);
     });
 
     response = await test.step('Create system user agent request', async () => {
       return await api.postClientDelegationAgentRequest(
-        '310547891',
+        vendorOrgNumber,
         systemId,
         accessPackageApiName,
         systemUserOwner.partyOrgNo,
@@ -113,12 +114,12 @@ test.describe('Systembruker - Legg til egen organisasjon', () => {
   test.afterEach(async () => {
     if (name) {
       await api.cleanUpSystemUsersForSystem(
-        `310547891_${name}`,
+        `${vendorOrgNumber}_${name}`,
         systemUserOwner.managerPid,
         systemUserOwner.partyOrgNo,
         true,
       );
-      await api.deleteSystemInSystemRegister('310547891', name);
+      await api.deleteSystemInSystemRegister(vendorOrgNumber, name);
     }
   });
 });

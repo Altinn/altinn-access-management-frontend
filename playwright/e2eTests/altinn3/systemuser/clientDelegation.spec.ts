@@ -3,6 +3,7 @@ import { test, expect } from '../../../fixture/pomFixture';
 import { ApiRequests } from 'playwright/api-requests/SystemUserApiRequests';
 
 test.describe('Delegering av klienter til Systembruker', () => {
+  const vendorOrgNumber = '310547891';
   let api: ApiRequests;
 
   test.beforeEach(() => {
@@ -27,12 +28,12 @@ test.describe('Delegering av klienter til Systembruker', () => {
       name = `Playwright-e2e-${role}-${Date.now()}`;
 
       const systemId = await test.step('Create system with access packages', async () => {
-        return await api.createSystemInSystemregisterWithAccessPackages('310547891', name);
+        return await api.createSystemInSystemregisterWithAccessPackages(vendorOrgNumber, name);
       });
 
       response = await test.step('Create client delegation agent request', async () => {
         return await api.postClientDelegationAgentRequest(
-          '310547891',
+          vendorOrgNumber,
           systemId,
           accessPackageApiName,
           user.org,
@@ -42,8 +43,13 @@ test.describe('Delegering av klienter til Systembruker', () => {
 
     test.afterEach(async () => {
       if (name) {
-        await api.cleanUpSystemUsersForSystem(`310547891_${name}`, user.pid, user.org, true);
-        await api.deleteSystemInSystemRegister('310547891', name);
+        await api.cleanUpSystemUsersForSystem(
+          `${vendorOrgNumber}_${name}`,
+          user.pid,
+          user.org,
+          true,
+        );
+        await api.deleteSystemInSystemRegister(vendorOrgNumber, name);
       }
     });
 
@@ -108,12 +114,12 @@ test.describe('Delegering av klienter til Systembruker', () => {
       name = `Playwright-e2e-${role}-${Date.now()}`;
 
       const systemId = await test.step('Create system with access packages', async () => {
-        return await api.createSystemInSystemregisterWithAccessPackages('310547891', name);
+        return await api.createSystemInSystemregisterWithAccessPackages(vendorOrgNumber, name);
       });
 
       response = await test.step('Create client delegation agent request', async () => {
         return await api.postClientDelegationAgentRequest(
-          '310547891',
+          vendorOrgNumber,
           systemId,
           accessPackageApiName,
           user.org,
@@ -123,8 +129,13 @@ test.describe('Delegering av klienter til Systembruker', () => {
 
     test.afterEach(async () => {
       if (name) {
-        await api.cleanUpSystemUsersForSystem(`310547891_${name}`, user.pid, user.org, true);
-        await api.deleteSystemInSystemRegister('310547891', name);
+        await api.cleanUpSystemUsersForSystem(
+          `${vendorOrgNumber}_${name}`,
+          user.pid,
+          user.org,
+          true,
+        );
+        await api.deleteSystemInSystemRegister(vendorOrgNumber, name);
       }
     });
 
@@ -195,12 +206,12 @@ test.describe('Delegering av klienter til Systembruker', () => {
       name = `Playwright-e2e-${role}-${Date.now()}`;
 
       const systemId = await test.step('Create system with access packages', async () => {
-        return await api.createSystemInSystemregisterWithAccessPackages('310547891', name);
+        return await api.createSystemInSystemregisterWithAccessPackages(vendorOrgNumber, name);
       });
 
       response = await test.step('Create client delegation agent request', async () => {
         return await api.postClientDelegationAgentRequest(
-          '310547891',
+          vendorOrgNumber,
           systemId,
           accessPackageApiName,
           user.org,
@@ -210,8 +221,13 @@ test.describe('Delegering av klienter til Systembruker', () => {
 
     test.afterEach(async () => {
       if (name) {
-        await api.cleanUpSystemUsersForSystem(`310547891_${name}`, user.pid, user.org, true);
-        await api.deleteSystemInSystemRegister('310547891', name);
+        await api.cleanUpSystemUsersForSystem(
+          `${vendorOrgNumber}_${name}`,
+          user.pid,
+          user.org,
+          true,
+        );
+        await api.deleteSystemInSystemRegister(vendorOrgNumber, name);
       }
     });
 
