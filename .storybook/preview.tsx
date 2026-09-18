@@ -4,15 +4,6 @@ import '@/resources/css/Common.css';
 
 import '@altinn/altinn-components/dist/global.css';
 
-// Extend Window interface for feature flags
-declare global {
-  interface Window {
-    featureFlags?: {
-      displayPopularSingleRightsServices: boolean;
-    };
-  }
-}
-
 import i18n from 'i18next';
 import LanguageDetector from 'i18next-browser-languagedetector';
 import { I18nextProvider, initReactI18next } from 'react-i18next';
@@ -33,7 +24,11 @@ document.cookie = 'XSRF-TOKEN=mocked-xsrf-token; path=/; SameSite=Lax';
 
 // Set feature flags for Storybook
 window.featureFlags = {
-  displayPopularSingleRightsServices: false,
+  useNewSingleRightsClientDelegation: false,
+  showHandledRequests: false,
+  showIdPortenAuthorizations: false,
+  enableSkyra: false,
+  enableSingleRightsTabInPoaOverview: false,
 };
 
 // Initialise i18next;

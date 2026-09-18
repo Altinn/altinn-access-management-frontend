@@ -56,7 +56,6 @@ interface searchParams {
   ROfilters: string[];
   page: number;
   resultsPerPage: number;
-  includeA2Services?: boolean;
   includeExpired?: boolean;
 }
 
@@ -76,16 +75,11 @@ const buildResourceSearchUrl = ({
   ROfilters,
   page,
   resultsPerPage,
-  includeA2Services,
   includeExpired,
 }: searchParams): string => {
   let filterParams = '';
   for (const filter of ROfilters) {
     filterParams = filterParams + `&ROFilters=${filter}`;
-  }
-  if (includeA2Services === false) {
-    // Default is to include A2 services, so only add param if false
-    filterParams = filterParams + `&includeA2Services=false`;
   }
   if (includeExpired) {
     // Default is to not include expired apps, so only add param if true

@@ -32,7 +32,6 @@ interface SearchResultsProps {
   searchString?: string;
   delegatedResources?: ResourceDelegation[];
   totalNumberOfResults?: number;
-  displayPopularResources: boolean;
   currentPage: number;
   searchResultsPerPage: number;
   onSelect: (resource: ServiceResource, error?: boolean) => void;
@@ -47,7 +46,6 @@ export const SearchResults = ({
   searchString,
   delegatedResources,
   totalNumberOfResults,
-  displayPopularResources,
   currentPage,
   searchResultsPerPage,
   onSelect,
@@ -169,9 +167,7 @@ export const SearchResults = ({
       <div className={classes.resultCount}>
         {!isFetching && totalNumberOfResults !== undefined && (
           <DsParagraph>
-            {displayPopularResources
-              ? t('single_rights.popular_services')
-              : `${String(totalNumberOfResults)} ${t('single_rights.search_hits')}`}
+            {`${String(totalNumberOfResults)} ${t('single_rights.search_hits')}`}
           </DsParagraph>
         )}
       </div>
@@ -202,18 +198,16 @@ export const SearchResults = ({
           )}
         </>
       )}
-      {totalNumberOfResults !== undefined &&
-        totalNumberOfResults > searchResultsPerPage &&
-        !displayPopularResources && (
-          <AmPagination
-            className={classes.pagination}
-            currentPage={currentPage}
-            totalPages={Math.ceil(totalNumberOfResults / searchResultsPerPage)}
-            setCurrentPage={setCurrentPage}
-            size='xs'
-            hideLabels={true}
-          />
-        )}
+      {totalNumberOfResults !== undefined && totalNumberOfResults > searchResultsPerPage && (
+        <AmPagination
+          className={classes.pagination}
+          currentPage={currentPage}
+          totalPages={Math.ceil(totalNumberOfResults / searchResultsPerPage)}
+          setCurrentPage={setCurrentPage}
+          size='xs'
+          hideLabels={true}
+        />
+      )}
       {revokeConfirmationDialog}
     </>
   );

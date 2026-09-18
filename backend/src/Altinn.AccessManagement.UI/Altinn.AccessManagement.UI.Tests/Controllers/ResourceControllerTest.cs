@@ -124,34 +124,6 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
         }
 
         /// <summary>
-        ///     Test case: PaginatedSearch with no search string or filters while the DisplayPopularSingleRightsServices
-        ///     feature flag is enabled
-        ///     Expected: PaginatedSearch returns only the selection of popular services instead of the full resource list
-        ///     (none of the resources in the mock data are part of the popular selection, so the result is empty)
-        /// </summary>
-        [Fact]
-        public async Task GetSingleRightsSearch_popularServicesFlagEnabled_ReturnsOnlyPopularServices()
-        {
-            // Arrange
-            HttpClient client = GetTestClient(featureFlags: new Dictionary<string, bool>
-            {
-                [FeatureFlags.DisplayPopularSingleRightsServices] = true,
-            });
-            string token = PrincipalUtil.GetToken(1337, 501337);
-            client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
-
-            // Act
-            HttpResponseMessage response = await client.GetAsync("accessmanagement/api/v1/resources/search?ResultsPerPage=7&Page=1");
-
-            // Assert
-            Assert.Equal(HttpStatusCode.OK, response.StatusCode);
-
-            PaginatedList<ServiceResourceFE> actualResources = JsonSerializer.Deserialize<PaginatedList<ServiceResourceFE>>(await response.Content.ReadAsStringAsync(), options);
-            Assert.Empty(actualResources.PageList);
-        }
-
-
-        /// <summary>
         ///     Test case: PaginatedSearch with pagination and filters
         ///     Expected: PaginatedSearch returns a list of resources matching the filters in paginated form with language filtered
         ///     for the authenticated users selected language
@@ -511,11 +483,6 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
             httpContextAccessor ??= new HttpContextAccessor();
             HttpClient client = _factory.WithWebHostBuilder(builder =>
             {
-                if (featureFlags != null)
-                {
-                    SetupUtils.SetFeatureFlags(builder, featureFlags);
-                }
-
                 builder.ConfigureTestServices(services =>
                 {
                     services.AddSingleton<IProfileClient, ProfileClientMock>();
