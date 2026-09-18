@@ -7,6 +7,7 @@ import { SystemUserPage } from 'playwright/pages/systemuser/SystemUserPage';
 import { ClientDelegationPage } from 'playwright/pages/systemuser/ClientDelegation';
 
 test.describe('Systembruker - Eskaler', () => {
+  const vendorOrgNumber = '312591332';
   const systemuserOwnerOrg = '313084167';
   const regularUserPid = '09817897166'; // No accessManager privileges, may escalate requests
   const managerPid = '29849098304';
@@ -17,16 +18,16 @@ test.describe('Systembruker - Eskaler', () => {
   let systemId: string;
   let externalRef: string;
   let response: { confirmUrl: string; id: string };
-  let systemUserId: string;
 
   test.beforeEach(async () => {
+    name = '';
     api = new ApiRequests();
     name = `Playwright-e2e-eskaler-${Date.now()}`;
     externalRef = TestdataApi.generateExternalRef();
 
     systemId = await test.step('Create system', async () => {
       return await api.createSystemInSystemregisterWithAccessPackages(
-        '312591332',
+        vendorOrgNumber,
         name,
         [{ urn: 'urn:altinn:accesspackage:baerekraft' }],
         'https://example.com/',
@@ -38,7 +39,7 @@ test.describe('Systembruker - Eskaler', () => {
     });
     response = await test.step('Create system user request', async () => {
       return await api.postSystemuserRequest(
-        '312591332',
+        vendorOrgNumber,
         externalRef,
         systemId,
         systemuserOwnerOrg,
@@ -85,7 +86,6 @@ test.describe('Systembruker - Eskaler', () => {
 
     await test.step('Verify system user was created with proper rights', async () => {
       await managerClientDelegationPage.systemUserLink(name).click();
-      systemUserId = new URL(managerPage.url()).pathname.split('/').pop()!;
       await expect(managerPage.getByRole('button', { name: 'Bærekraft' })).toBeVisible();
       await expect(managerPage.getByRole('button', { name: 'vegardendetilende' })).toBeVisible();
       await expect(
@@ -97,17 +97,13 @@ test.describe('Systembruker - Eskaler', () => {
   });
 
   test.afterEach(async () => {
-    if (systemUserId) {
-      try {
-        await api.deleteRegularSystemUser(systemUserId, systemuserOwnerOrg, managerPid);
-      } catch (error) {
-        console.error('Cleanup: Failed to delete system user:', error);
-      }
-    }
-    try {
-      await api.deleteSystemInSystemRegister('312591332', name);
-    } catch (error) {
-      console.error('Cleanup: Failed to delete system from system register:', error);
+    if (name) {
+      await api.cleanUpSystemUsersForSystem(
+        `${vendorOrgNumber}_${name}`,
+        managerPid,
+        systemuserOwnerOrg,
+      );
+      await api.deleteSystemInSystemRegister(vendorOrgNumber, name);
     }
   });
 });
