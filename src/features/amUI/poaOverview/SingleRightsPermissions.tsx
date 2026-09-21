@@ -61,7 +61,6 @@ export const SingleRightsPermissions = () => {
     searchString: debouncedSearch,
     ROfilters: filterState,
     resultsPerPage: searchResultsPerPage,
-    includeA2Services: false,
     includeExpired: true,
   });
 

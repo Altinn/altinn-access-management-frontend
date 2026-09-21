@@ -102,7 +102,7 @@ namespace Altinn.AccessManagement.UI.Controllers
         /// <summary>
         ///     Gets all feature flags as a dictionary exposed to the frontend as window.featureFlags,
         ///     keyed by the camel cased flag name without its "AccessManagementUI." prefix
-        ///     (e.g. "AccessManagementUI.DisplayPopularSingleRightsServices" => "displayPopularSingleRightsServices")
+        ///     (e.g. "AccessManagementUI.ShowHandledRequests" => "showHandledRequests")
         /// </summary>
         private async Task<Dictionary<string, bool>> GetFeatureFlags()
         {
