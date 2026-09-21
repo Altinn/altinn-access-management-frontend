@@ -217,7 +217,6 @@
   },
   "single_rights": {
     "search_hits": "treff på søket:",
-    "popular_services": "Populære tjenester:",
     "give_new_single_right": "Gi fullmakt",
     "current_services_title": "Fullmakt til {{count}} enkelttjenester",
     "delete_singleRight_success_message": "Fullmakten til {{resourceTitle}} er fjernet fra {{name}}.",

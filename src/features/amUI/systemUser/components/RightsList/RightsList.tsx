@@ -4,14 +4,13 @@ import {
   AccessPackageListItem,
   DsDialog,
   DsHeading,
-  ResourceListItem,
   List,
   DsSkeleton,
 } from '@altinn/altinn-components';
 
 import type { PackageResource } from '@/rtk/features/accessPackageApi';
 import type { ServiceResource } from '@/rtk/features/singleRights/singleRightsApi';
-import { useProviderLogoUrl } from '@/resources/hooks/useProviderLogoUrl';
+import { ResourceList } from '@/features/amUI/common/ResourceList/ResourceList';
 
 import type { SystemUserAccessPackage } from '../../types';
 import type { ExtendedAccessPackage } from '@/features/amUI/common/AccessPackageList/useAreaPackageList';
@@ -19,7 +18,6 @@ import type { ExtendedAccessPackage } from '@/features/amUI/common/AccessPackage
 import classes from './RightsList.module.css';
 import { PackageHeader } from '@/features/amUI/common/DelegationModal/AccessPackages/PackageHeader';
 import { PackageMeta } from '@/features/amUI/common/DelegationModal/AccessPackages/PackageMeta';
-import { ResourceDetails } from './ResourceDetails';
 
 interface RightsListProps {
   resources: ServiceResource[];
@@ -33,29 +31,27 @@ const mapSystemUserAccessPackageToExtended = (
   accessPackage: SystemUserAccessPackage,
 ): ExtendedAccessPackage => ({
   ...accessPackage,
-  resources: accessPackage.resources.map(
-    (resource): PackageResource => ({
-      id: resource.identifier,
-      identifier: resource.identifier,
-      name: resource.title,
-      title: resource.title,
-      description: resource.description ?? '',
-      refId: resource.identifier,
-      provider: {
-        id: '',
-        name: resource.resourceOwnerName,
-        refId: '',
-        logoUrl: resource.resourceOwnerLogoUrl,
-        code: '',
-        typeId: '',
-      },
-      resourceOwnerName: resource.resourceOwnerName,
-      resourceOwnerLogoUrl: resource.resourceOwnerLogoUrl,
-      resourceOwnerOrgcode: resource.resourceOwnerOrgcode,
-      resourceOwnerOrgNumber: resource.resourceOwnerOrgNumber,
-      resourceOwnerType: '',
-    }),
-  ),
+  resources: accessPackage.resources.map((resource): PackageResource => ({
+    id: resource.identifier,
+    identifier: resource.identifier,
+    name: resource.title,
+    title: resource.title,
+    description: resource.description ?? '',
+    refId: resource.identifier,
+    provider: {
+      id: '',
+      name: resource.resourceOwnerName,
+      refId: '',
+      logoUrl: resource.resourceOwnerLogoUrl,
+      code: '',
+      typeId: '',
+    },
+    resourceOwnerName: resource.resourceOwnerName,
+    resourceOwnerLogoUrl: resource.resourceOwnerLogoUrl,
+    resourceOwnerOrgcode: resource.resourceOwnerOrgcode,
+    resourceOwnerOrgNumber: resource.resourceOwnerOrgNumber,
+    resourceOwnerType: '',
+  })),
 });
 
 export const RightsList = ({
@@ -66,17 +62,10 @@ export const RightsList = ({
   headingLevel,
 }: RightsListProps): React.ReactNode => {
   const { t } = useTranslation();
-  const { getProviderLogoUrl } = useProviderLogoUrl();
   const modalRef = React.useRef<HTMLDialogElement>(null);
 
-  const [selectedResource, setSelectedResource] = React.useState<ServiceResource | null>(null);
   const [selectedAccessPackage, setSelectedAccessPackage] =
     React.useState<ExtendedAccessPackage | null>(null);
-
-  const onSelectResource = (resource: ServiceResource): void => {
-    setSelectedResource(resource);
-    modalRef.current?.showModal();
-  };
 
   const onSelectAccessPackage = (accessPackage: SystemUserAccessPackage): void => {
     setSelectedAccessPackage(mapSystemUserAccessPackageToExtended(accessPackage));
@@ -84,7 +73,6 @@ export const RightsList = ({
   };
 
   const closeModal = (): void => {
-    setSelectedResource(null);
     setSelectedAccessPackage(null);
     modalRef.current?.close();
   };
@@ -173,25 +161,13 @@ export const RightsList = ({
               }
             />
           )}
-          <List className={classes.rightsList}>
-            {resources.map((resource) => {
-              const emblem = getProviderLogoUrl(resource.resourceOwnerOrgcode ?? '');
-              return (
-                <ResourceListItem
-                  key={resource.identifier}
-                  id={resource.identifier}
-                  as='button'
-                  titleAs='span'
-                  size='md'
-                  ownerLogoUrl={emblem ?? resource.resourceOwnerLogoUrl}
-                  ownerLogoUrlAlt={resource.resourceOwnerName ?? ''}
-                  ownerName={resource.resourceOwnerName ?? ''}
-                  resourceName={resource.title}
-                  onClick={() => onSelectResource(resource)}
-                />
-              );
-            })}
-          </List>
+          <div className={classes.rightsList}>
+            <ResourceList
+              resources={resources}
+              enableSearch={false}
+              size='md'
+            />
+          </div>
         </div>
       )}
 
@@ -206,7 +182,6 @@ export const RightsList = ({
             <PackageMeta accessPackage={selectedAccessPackage} />
           </div>
         )}
-        {selectedResource && <ResourceDetails resource={selectedResource} />}
       </DsDialog>
     </div>
   );

@@ -4,10 +4,6 @@
   gap: var(--ds-size-10);
 }
 
-.resourceInfoText {
-  margin-top: var(--ds-size-4);
-}
-
 .rightsList {
   margin-top: var(--ds-size-2);
 }

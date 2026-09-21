@@ -8,7 +8,6 @@ export interface AmPaginationProps extends DsPaginationProps {
   showPages?: number;
   setCurrentPage?: (page: number) => void;
   currentPage: number;
-  hideLabels?: boolean;
   size?: 'xs' | 'sm' | 'md' | 'lg';
 }
 
@@ -17,7 +16,6 @@ export const AmPagination = ({
   showPages = 5,
   currentPage,
   setCurrentPage,
-  hideLabels = false,
   className,
   size,
 }: AmPaginationProps) => {
@@ -36,9 +34,10 @@ export const AmPagination = ({
     >
       <DsPagination.List>
         <DsPagination.Item>
-          <DsPagination.Button {...prevButtonProps}>
-            {!hideLabels && t('common.previous')}
-          </DsPagination.Button>
+          <DsPagination.Button
+            {...prevButtonProps}
+            aria-label={t('common.previous')}
+          />
         </DsPagination.Item>
         {pages.map(({ page, itemKey, buttonProps }) => (
           <DsPagination.Item key={itemKey}>
@@ -53,9 +52,10 @@ export const AmPagination = ({
           </DsPagination.Item>
         ))}
         <DsPagination.Item>
-          <DsPagination.Button {...nextButtonProps}>
-            {!hideLabels && t('common.next')}
-          </DsPagination.Button>
+          <DsPagination.Button
+            {...nextButtonProps}
+            aria-label={t('common.next')}
+          />
         </DsPagination.Item>
       </DsPagination.List>
     </DsPagination>
