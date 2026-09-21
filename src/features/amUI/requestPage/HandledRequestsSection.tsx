@@ -44,12 +44,13 @@ export const HandledRequestsSection = ({
         heading={t('request_page.handled_requests_title')}
         searchString={searchString}
       >
-        <DsParagraph className={classes.handledDescription}>
-          {t('request_page.handled_requests_description')}
-        </DsParagraph>
-        {filteredRequests.length === 0 && (
+        {filteredRequests.length === 0 ? (
           <DsParagraph className={classes.noResults}>
             {t('request_page.no_search_results', { searchTerm: searchString })}
+          </DsParagraph>
+        ) : (
+          <DsParagraph className={classes.handledDescription}>
+            {t('request_page.handled_requests_description')}
           </DsParagraph>
         )}
         <List>
