@@ -172,6 +172,7 @@ const mapSystemUserRequestToRequest = (request: SystemUser): Request => {
     createdDate: request.created,
     displayPartyName: request.system.systemVendorOrgName,
     displayPartyType: 'system',
+    organizationIdentifier: request.system.systemVendorOrgNumber,
     description: 'request_page.request_systemuser',
   };
 };
