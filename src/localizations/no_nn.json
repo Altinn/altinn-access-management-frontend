@@ -1067,6 +1067,12 @@
       "no_resources": "Denne pakken inkluderer ingen tenester"
     }
   },
+  "service_poa_details_page": {
+    "page_title": "Teneste - Altinn",
+    "page_title_service": "{{service}} - Altinn",
+    "load_error": "Oi! Noko gjekk gale.",
+    "back_to_overview_link": "Gå tilbake til oversikta"
+  },
   "resource_list": {
     "resource_search_placeholder": "Søk etter tenester",
     "no_resources_filtered": "Ingen treff på søket \"{{searchTerm}}\".",

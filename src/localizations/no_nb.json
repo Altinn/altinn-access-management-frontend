@@ -1068,6 +1068,12 @@
       "no_resources": "Denne pakken inkluderer ingen tjenester"
     }
   },
+  "service_poa_details_page": {
+    "page_title": "Tjeneste - Altinn",
+    "page_title_service": "{{service}} - Altinn",
+    "load_error": "Oi! Noe gikk galt.",
+    "back_to_overview_link": "Gå tilbake til oversikten"
+  },
   "resource_list": {
     "resource_search_placeholder": "Søk etter tjenester",
     "no_resources_filtered": "Ingen treff på søket \"{{searchTerm}}\".",

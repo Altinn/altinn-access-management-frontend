@@ -56,6 +56,11 @@ export interface ResourceListProps<
   enableSearch?: boolean;
   searchPlaceholder?: string;
   onSelect?: (resource: TResource) => void;
+  /**
+   * Renders each row as a custom element, e.g. a router Link pointing at the resource's own page.
+   * A row with a custom element is always interactive and never opens the details dialog.
+   */
+  getItemAs?: (resource: TResource) => React.ElementType | undefined;
   showDetails?: boolean;
   size?: ResourceListItemProps['size'];
   interactive?: boolean | ((resource: TResource) => boolean);
@@ -82,6 +87,7 @@ export const ResourceList = <
   noResourcesText,
   enableSearch = true,
   onSelect,
+  getItemAs,
   showDetails,
   size,
   interactive,
@@ -234,10 +240,12 @@ export const ResourceList = <
                   const fallbackLogoUrl = extractLogoUrl(resource);
                   const ownerLogoUrl = providerLogo ?? fallbackLogoUrl;
                   const ownerLogoAlt = extractLogoAlt(resource) ?? defaultOwnerName;
-                  const itemInteractive = derivedInteractive(resource);
-                  const itemAs = as ?? (itemInteractive ? 'button' : 'div');
+                  const customAs = getItemAs?.(resource);
+                  const itemInteractive = customAs ? true : derivedInteractive(resource);
+                  const itemAs = customAs ?? as ?? (itemInteractive ? 'button' : 'div');
                   const itemSize = size ?? 'xs';
-                  const handleClick = itemInteractive ? () => handleSelect(resource) : undefined;
+                  const handleClick =
+                    !customAs && itemInteractive ? () => handleSelect(resource) : undefined;
                   const itemShadow = itemInteractive ? undefined : 'none';
                   const titleBadge = isExpiredResource(resource)
                     ? { label: t('resource_list.expired_badge'), color: 'neutral' as const }
