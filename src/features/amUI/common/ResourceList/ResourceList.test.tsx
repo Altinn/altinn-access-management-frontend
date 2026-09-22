@@ -52,6 +52,21 @@ const createResource = (overrides: Partial<PackageResource> = {}): PackageResour
   };
 };
 
+// Stands in for the router Link that consumers pass through getItemAs.
+const linkTo =
+  (href: string): React.ElementType =>
+  (props: React.AnchorHTMLAttributes<HTMLAnchorElement>) => (
+    <a
+      {...props}
+      href={href}
+      onClick={(event) => {
+        // Let any onClick the list passed through still run, but keep jsdom from navigating.
+        props.onClick?.(event);
+        event.preventDefault();
+      }}
+    />
+  );
+
 describe('ResourceList', () => {
   it('invokes onSelect when an item is clicked', async () => {
     const user = userEvent.setup();
@@ -240,5 +255,74 @@ describe('ResourceList', () => {
     );
 
     expect(screen.queryByText('resource_list.expired_badge')).not.toBeInTheDocument();
+  });
+
+  it('renders rows as the element from getItemAs and leaves onSelect alone', async () => {
+    const user = userEvent.setup();
+    const handleSelect = vi.fn();
+    const resources = [createResource({ name: 'Linked Service' })];
+
+    render(
+      <ResourceList
+        resources={resources}
+        enableSearch={false}
+        onSelect={handleSelect}
+        getItemAs={() => linkTo('/service/linked')}
+      />,
+    );
+
+    const link = screen.getByRole('link', { name: /Linked Service/i });
+    expect(link).toHaveAttribute('href', '/service/linked');
+    expect(screen.queryByRole('button', { name: /Linked Service/i })).not.toBeInTheDocument();
+
+    await user.click(link);
+
+    expect(handleSelect).not.toHaveBeenCalled();
+  });
+
+  it('does not open the details dialog for a row rendered via getItemAs', async () => {
+    const user = userEvent.setup();
+    const resources = [
+      createResource({ name: 'Linked Service', description: 'Only shown in the details dialog' }),
+    ];
+
+    render(
+      <ResourceList
+        resources={resources}
+        enableSearch={false}
+        getItemAs={() => linkTo('/service/linked')}
+      />,
+    );
+
+    await user.click(screen.getByRole('link', { name: /Linked Service/i }));
+
+    expect(screen.queryByText('Only shown in the details dialog')).not.toBeInTheDocument();
+  });
+
+  it('falls back to the default button row when getItemAs returns undefined', async () => {
+    const user = userEvent.setup();
+    const handleSelect = vi.fn();
+    const resources = [
+      createResource({ name: 'Linked Service' }),
+      createResource({ name: 'Plain Service' }),
+    ];
+
+    render(
+      <ResourceList
+        resources={resources}
+        enableSearch={false}
+        onSelect={handleSelect}
+        getItemAs={(resource) =>
+          resource.name === 'Linked Service' ? linkTo('/service/linked') : undefined
+        }
+      />,
+    );
+
+    expect(screen.getByRole('link', { name: /Linked Service/i })).toBeInTheDocument();
+
+    await user.click(screen.getByRole('button', { name: /Plain Service/i }));
+
+    expect(handleSelect).toHaveBeenCalledTimes(1);
+    expect(handleSelect).toHaveBeenCalledWith(expect.objectContaining({ name: 'Plain Service' }));
   });
 });
