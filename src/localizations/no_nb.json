@@ -1072,7 +1072,16 @@
     "page_title": "Tjeneste - Altinn",
     "page_title_service": "{{service}} - Altinn",
     "load_error": "Oi! Noe gikk galt.",
-    "back_to_overview_link": "Gå tilbake til oversikten"
+    "back_to_overview_link": "Gå tilbake til oversikten",
+    "users_description": "Søk etter brukere for å gi eller slette fullmakter.",
+    "no_users": "Ingen har fullmakt til denne tjenesten.",
+    "search_placeholder": "Søk etter person eller virksomhet",
+    "revoke_success": "{{name}} har ikke lenger fullmakt til {{service}}",
+    "revoke_error": "Kunne ikke slette fullmakten til {{service}} for {{name}}",
+    "add_user_modal": {
+      "heading": "Gi fullmakt til ny bruker",
+      "user_will_receive": "Brukeren vil få:"
+    }
   },
   "resource_list": {
     "resource_search_placeholder": "Søk etter tjenester",
