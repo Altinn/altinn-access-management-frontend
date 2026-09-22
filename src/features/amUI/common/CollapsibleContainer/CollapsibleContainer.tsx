@@ -1,4 +1,4 @@
-import React, { useEffect, useId, useRef, useState } from 'react';
+import React, { useEffect, useId, useState } from 'react';
 import { DsButton, DsHeading } from '@altinn/altinn-components';
 import { ChevronDownIcon, ChevronUpIcon } from '@navikt/aksel-icons';
 
@@ -19,24 +19,21 @@ export const CollapsibleContainer = ({
   defaultOpen = false,
   children,
 }: CollapsibleContainerProps) => {
-  const [isOpen, setIsOpen] = useState<boolean>(defaultOpen);
-  const openedBySearchRef = useRef(false);
+  const [{ isOpen, openedBySearch }, setOpenState] = useState({
+    isOpen: defaultOpen,
+    openedBySearch: false,
+  });
   const contentId = useId();
 
   // A search opens the section so matches are visible. Clearing the search closes it again, but only
   // if the search was what opened it. A manual toggle resets the flag so the user's choice wins.
   useEffect(() => {
-    if (searchString) {
-      setIsOpen((prev) => {
-        if (!prev) {
-          openedBySearchRef.current = true;
-        }
-        return true;
-      });
-    } else if (openedBySearchRef.current) {
-      openedBySearchRef.current = false;
-      setIsOpen(false);
-    }
+    setOpenState((prev) => {
+      if (searchString) {
+        return prev.isOpen ? prev : { isOpen: true, openedBySearch: true };
+      }
+      return prev.openedBySearch ? { isOpen: false, openedBySearch: false } : prev;
+    });
   }, [searchString]);
 
   return (
@@ -49,10 +46,7 @@ export const CollapsibleContainer = ({
         <DsButton
           className={classes.clientAdminDetails}
           variant='tertiary'
-          onClick={() => {
-            openedBySearchRef.current = false;
-            setIsOpen((prev) => !prev);
-          }}
+          onClick={() => setOpenState((prev) => ({ isOpen: !prev.isOpen, openedBySearch: false }))}
           aria-expanded={isOpen}
           aria-controls={contentId}
         >
