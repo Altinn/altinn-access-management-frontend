@@ -120,7 +120,7 @@ export const useRequestReview = (request: Request | null, onClose: () => void) =
     });
     // Deliberately keyed on snapshotRequests alone: depending on delegationChecks would
     // re-run this effect on every result it writes. The guard above skips ids already checked.
-  }, [snapshotRequests]);
+  }, [snapshotRequests]); // eslint-disable-line react-hooks/exhaustive-deps
 
   const cannotApprove = useCallback(
     ({ resourceId, packageId }: { resourceId?: string; packageId?: string }) => {

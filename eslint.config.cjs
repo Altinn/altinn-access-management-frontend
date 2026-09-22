@@ -5,6 +5,7 @@ const globals = require('globals');
 const importPlugin = require('eslint-plugin-import');
 const jsxA11y = require('eslint-plugin-jsx-a11y');
 const react = require('eslint-plugin-react');
+const reactHooks = require('eslint-plugin-react-hooks');
 const storybook = require('eslint-plugin-storybook');
 const prettier = require('eslint-plugin-prettier/recommended');
 
@@ -24,6 +25,7 @@ module.exports = defineConfig([
   js.configs.recommended,
   ...tseslint.configs.recommended,
   react.configs.flat.recommended,
+  reactHooks.configs.flat.recommended,
   jsxA11y.flatConfigs.recommended,
   ...storybook.configs['flat/recommended'],
   prettier,
@@ -68,10 +70,15 @@ module.exports = defineConfig([
     },
   },
   {
-    // Playwright requires a hook's first argument to be an object destructuring pattern,
-    // sometimes an empty one.
     files: ['playwright/**'],
-    rules: { 'no-empty-pattern': 'off' },
+    rules: {
+      // Playwright requires a hook's first argument to be an object destructuring pattern,
+      // sometimes an empty one.
+      'no-empty-pattern': 'off',
+      // Playwright fixtures take a callback named `use`, which the React hook rules read as a
+      // call to React's `use`.
+      'react-hooks/rules-of-hooks': 'off',
+    },
   },
   {
     files: ['.mock/**', '.storybook/**', '**/*.cjs'],
