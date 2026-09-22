@@ -8,23 +8,27 @@ import { useRestoreFocusContext } from '../common/RestoreFocus';
 import { CollapsibleContainer } from '../common/CollapsibleContainer/CollapsibleContainer';
 
 import { type HandledDirection } from './HandledRequestModal/useHandledRequests';
-import { RequestListItem } from './RequestsTabPanel';
+import { RequestListItem } from './RequestListItem';
 import { HandledRequestModal } from './HandledRequestModal/HandledRequestModal';
 import { type Request } from './types';
 import classes from './RequestPage.module.css';
+import { useFilteredRequests } from './useFilteredRequests';
 
 interface HandledRequestsSectionProps {
   handledRequests: Request[] | undefined;
   direction: HandledDirection;
+  searchString?: string;
 }
 
 export const HandledRequestsSection = ({
   handledRequests,
   direction,
+  searchString = '',
 }: HandledRequestsSectionProps) => {
   const { t } = useTranslation();
   const [openHandledRequest, setOpenHandledRequest] = useState<Request | null>(null);
   const restoreFocus = useRestoreFocusContext();
+  const filteredRequests = useFilteredRequests(handledRequests, searchString);
 
   const handleClose = () => {
     if (openHandledRequest) {
@@ -39,12 +43,21 @@ export const HandledRequestsSection = ({
 
   return (
     <div className={classes.handledSection}>
-      <CollapsibleContainer heading={t('request_page.handled_requests_title')}>
-        <DsParagraph className={classes.handledDescription}>
-          {t('request_page.handled_requests_description')}
-        </DsParagraph>
+      <CollapsibleContainer
+        heading={t('request_page.handled_requests_title')}
+        searchString={searchString}
+      >
+        {filteredRequests.length === 0 ? (
+          <DsParagraph className={classes.noResults}>
+            {t('request_page.no_search_results', { searchTerm: searchString })}
+          </DsParagraph>
+        ) : (
+          <DsParagraph className={classes.handledDescription}>
+            {t('request_page.handled_requests_description')}
+          </DsParagraph>
+        )}
         <List>
-          {handledRequests.map((request) => (
+          {filteredRequests.map((request) => (
             <RequestListItem
               key={request.id}
               id={request.id}

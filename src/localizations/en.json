@@ -220,7 +220,6 @@
   },
   "single_rights": {
     "search_hits": "matches found:",
-    "popular_services": "Popular services",
     "give_new_single_right": "Give power of attorney",
     "current_services_title": "Power of attorney for {{count}} single services",
     "delete_singleRight_success_message": "Power of attorney over {{resourceTitle}} has been successfully revoked for {{name}}.",
@@ -995,6 +994,14 @@
       "search_label": "Search for inbox items",
       "no_results": "No inbox items found.",
       "no_search_results": "No matches for message or form."
+    },
+    "services_tab": {
+      "assigned_services_title": "Services with power of attorney granted",
+      "other_services_title": "Other services",
+      "description": "This shows services that power of attorney has been granted for directly. If a user has been given power of attorney for a service through access packages, it is not shown here.",
+      "no_services": "Power of attorney has not been granted to any service directly.",
+      "no_services_found": "No services found",
+      "no_other_services": "No other services found."
     }
   },
   "instance": {
@@ -1063,6 +1070,12 @@
     "services_tab": {
       "no_resources": "This package includes no services"
     }
+  },
+  "service_poa_details_page": {
+    "page_title": "Service - Altinn",
+    "page_title_service": "{{service}} - Altinn",
+    "load_error": "Oops! Something went wrong.",
+    "back_to_overview_link": "Go back to the overview"
   },
   "resource_list": {
     "resource_search_placeholder": "Search resources",
@@ -1149,6 +1162,8 @@
     "review_handled_by": "{{status}} by {{name}} on {{date}}",
     "handled_requests_title": "Handled requests",
     "handled_requests_description": "Here you can see requests that were processed up to a year ago.",
+    "search_placeholder": "Search requests",
+    "no_search_results": "No results for \"{{searchTerm}}\".",
     "review_warning": "You cannot approve",
     "review_user_link": "See the powers of attorney {{name}} has now",
     "review_close_info": "If you do not choose to approve or reject a request, it will remain as an active request.",

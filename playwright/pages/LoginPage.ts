@@ -55,7 +55,7 @@ export class LoginPage {
     this.loggedInPid = pid;
   }
 
-  async selectMainUnitBySearching(targetReportee: string) {
+  async selectActor(targetReportee: string) {
     if (!this.loggedInPid) {
       throw new Error('Log in before selecting an actor.');
     }

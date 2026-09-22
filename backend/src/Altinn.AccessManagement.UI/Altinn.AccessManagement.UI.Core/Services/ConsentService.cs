@@ -189,7 +189,7 @@ namespace Altinn.AccessManagement.UI.Core.Services
                 };
             });
 
-            return activeConsentsFE.Reverse().ToList();
+            return activeConsentsFE.ToList();
         }
 
         /// <inheritdoc />

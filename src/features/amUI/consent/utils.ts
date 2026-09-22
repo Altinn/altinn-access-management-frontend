@@ -89,6 +89,12 @@ export const toDateTimeString = (dateString: string, useFullMonthName?: boolean)
   });
 };
 
+export const toDateSortKey = (dateString: string | undefined): number => {
+  const time = new Date(dateString ?? '').getTime();
+
+  return Number.isNaN(time) ? Number.MIN_SAFE_INTEGER : time;
+};
+
 type KeysWithValueOfConsentLanguageOrUndefined<T> = {
   [K in keyof T]: T[K] extends ConsentLanguage | undefined ? K : never;
 }[keyof T];

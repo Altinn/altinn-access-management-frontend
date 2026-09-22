@@ -216,7 +216,6 @@
   },
   "single_rights": {
     "search_hits": "treff på søket:",
-    "popular_services": "Populære tenester:",
     "give_new_single_right": "Gi fullmakt",
     "current_services_title": "Fullmakt til {{count}} enkelttenester",
     "delete_singleRight_success_message": "Fullmakta til {{resourceTitle}} er fjerna frå {{name}}.",
@@ -991,6 +990,14 @@
       "search_label": "Søk etter delingar frå innboks",
       "no_results": "Ingen element frå innboks funne.",
       "no_search_results": "Ingen treff på melding eller skjema."
+    },
+    "services_tab": {
+      "assigned_services_title": "Tenester det er gitt fullmakt til",
+      "other_services_title": "Andre tenester",
+      "description": "Her blir det vist tenester som det er gitt fullmakt til direkte. Dersom ein brukar har fått fullmakt til ei teneste gjennom tilgangspakkar, blir ho ikkje vist her.",
+      "no_services": "Det er ikkje gitt fullmakt til nokre tenester.",
+      "no_services_found": "Ingen tenester funne",
+      "no_other_services": "Ingen andre tenester funne."
     }
   },
   "instance": {
@@ -1059,6 +1066,12 @@
     "services_tab": {
       "no_resources": "Denne pakken inkluderer ingen tenester"
     }
+  },
+  "service_poa_details_page": {
+    "page_title": "Teneste - Altinn",
+    "page_title_service": "{{service}} - Altinn",
+    "load_error": "Oi! Noko gjekk gale.",
+    "back_to_overview_link": "Gå tilbake til oversikta"
   },
   "resource_list": {
     "resource_search_placeholder": "Søk etter tenester",
@@ -1145,6 +1158,8 @@
     "review_handled_by": "{{status}} av {{name}} den {{date}}",
     "handled_requests_title": "Behandla førespurnader",
     "handled_requests_description": "Her kan du sjå førespurnader som blei behandla for opptil eit år sidan.",
+    "search_placeholder": "Søk i førespurnader",
+    "no_search_results": "Ingen treff på søket \"{{searchTerm}}\".",
     "review_warning": "Du kan ikkje godkjenne",
     "review_user_link": "Sjå fullmaktene {{name}} har no",
     "review_close_info": "Visst du ikkje vel godkjenn eller avvis på ein førespurnad, vil han bli liggande att som ein aktiv førespurnad.",

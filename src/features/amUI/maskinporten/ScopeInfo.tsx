@@ -210,7 +210,10 @@ export const ScopeInfo = ({
         {actionError ? t('delegation_modal.technical_error_message.heading') : ''}
       </StatusMessageForScreenReader>
       <div>
-        <ResourceHeading resource={resource} />
+        <ResourceHeading
+          resource={resource}
+          level={2}
+        />
         {isActionLoading || actionSuccess ? (
           <LoadingAnimation
             isLoading={isActionLoading}

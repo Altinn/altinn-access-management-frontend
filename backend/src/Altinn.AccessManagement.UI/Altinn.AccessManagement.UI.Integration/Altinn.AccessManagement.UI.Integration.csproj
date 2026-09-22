@@ -26,14 +26,6 @@
 	<ItemGroup>
 		<ProjectReference Include="..\Altinn.AccessManagement.UI.Core\Altinn.AccessManagement.UI.Core.csproj" />
 	</ItemGroup>
-	<ItemGroup Condition="'$(Configuration)'=='Debug'">
-		<AdditionalFiles Include="$(SolutionDir)stylecop.json">
-			<Link>stylecop.json</Link>
-		</AdditionalFiles>
-	</ItemGroup>
-	<PropertyGroup Condition="'$(Configuration)'=='Debug'">
-		<CodeAnalysisRuleSet>$(SolutionDir)Altinn3.ruleset</CodeAnalysisRuleSet>
-	</PropertyGroup>
 	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
 		<Optimize>True</Optimize>
 	</PropertyGroup>

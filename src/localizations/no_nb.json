@@ -217,7 +217,6 @@
   },
   "single_rights": {
     "search_hits": "treff på søket:",
-    "popular_services": "Populære tjenester:",
     "give_new_single_right": "Gi fullmakt",
     "current_services_title": "Fullmakt til {{count}} enkelttjenester",
     "delete_singleRight_success_message": "Fullmakten til {{resourceTitle}} er fjernet fra {{name}}.",
@@ -992,6 +991,14 @@
       "search_label": "Søk etter element",
       "no_results": "Ingen elementer fra innboks funnet.",
       "no_search_results": "Ingen treff på melding eller skjema."
+    },
+    "services_tab": {
+      "assigned_services_title": "Tjenester det er gitt fullmakt til",
+      "other_services_title": "Andre tjenester",
+      "description": "Her vises tjenester som det er gitt fullmakt til direkte. Hvis en bruker har fått fullmakt til en tjeneste gjennom tilgangspakker, vises de ikke her.",
+      "no_services": "Det er ikke gitt fullmakt til noen tjenester direkte.",
+      "no_services_found": "Ingen tjenester funnet",
+      "no_other_services": "Ingen andre tjenester funnet."
     }
   },
   "instance": {
@@ -1060,6 +1067,12 @@
     "services_tab": {
       "no_resources": "Denne pakken inkluderer ingen tjenester"
     }
+  },
+  "service_poa_details_page": {
+    "page_title": "Tjeneste - Altinn",
+    "page_title_service": "{{service}} - Altinn",
+    "load_error": "Oi! Noe gikk galt.",
+    "back_to_overview_link": "Gå tilbake til oversikten"
   },
   "resource_list": {
     "resource_search_placeholder": "Søk etter tjenester",
@@ -1146,6 +1159,8 @@
     "review_handled_by": "{{status}} av {{name}} den {{date}}",
     "handled_requests_title": "Behandlede forespørsler",
     "handled_requests_description": "Her vises forespørsler som ble behandlet for opptil et år siden.",
+    "search_placeholder": "Søk i forespørsler",
+    "no_search_results": "Ingen treff på søket \"{{searchTerm}}\".",
     "review_warning": "Du kan ikke godkjenne",
     "review_user_link": "Se fullmaktene {{name}} har nå",
     "review_close_info": "Hvis du ikke velger godkjenn eller avvis på en forespørsel, vil den bli liggende igjen som en aktiv forespørsel.",

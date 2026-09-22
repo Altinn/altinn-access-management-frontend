@@ -56,7 +56,6 @@ interface searchParams {
   ROfilters: string[];
   page: number;
   resultsPerPage: number;
-  includeA2Services?: boolean;
   includeExpired?: boolean;
 }
 
@@ -71,6 +70,24 @@ export interface Right {
   name: string;
 }
 
+const buildResourceSearchUrl = ({
+  searchString,
+  ROfilters,
+  page,
+  resultsPerPage,
+  includeExpired,
+}: searchParams): string => {
+  let filterParams = '';
+  for (const filter of ROfilters) {
+    filterParams = filterParams + `&ROFilters=${filter}`;
+  }
+  if (includeExpired) {
+    // Default is to not include expired apps, so only add param if true
+    filterParams = filterParams + `&includeExpired=true`;
+  }
+  return `resources/search?Page=${page}&ResultsPerPage=${resultsPerPage}&SearchString=${encodeURIComponent(searchString)}${filterParams}`;
+};
+
 const baseUrl = import.meta.env.BASE_URL + 'accessmanagement/api/v1';
 
 export const singleRightsApi = createApi({
@@ -80,30 +97,34 @@ export const singleRightsApi = createApi({
   endpoints: (builder) => ({
     // TODO: Move to resourceApi
     getPaginatedSearch: builder.query<PaginatedListDTO, searchParams>({
-      query: (args) => {
-        const { searchString, ROfilters, page, resultsPerPage, includeA2Services, includeExpired } =
-          args;
-        let searchParams = '';
-        for (const filter of ROfilters) {
-          searchParams = searchParams + `&ROFilters=${filter}`;
-        }
-        if (includeA2Services === false) {
-          // Default is to include A2 services, so only add param if false
-          searchParams = searchParams + `&includeA2Services=false`;
-        }
-        if (includeExpired) {
-          // Default is to not include expired apps, so only add param if true
-          searchParams = searchParams + `&includeExpired=true`;
-        }
-        return `resources/search?Page=${page}&ResultsPerPage=${resultsPerPage}&SearchString=${encodeURIComponent(searchString)}${searchParams}`;
-      },
+      query: buildResourceSearchUrl,
     }),
+    /**
+     * Same search as `getPaginatedSearch`, but pages are accumulated instead of replaced.
+     * Use with a "load more" button: `data.pages` holds every page fetched so far for the
+     * current search arguments, and changing those arguments starts a fresh cache entry.
+     */
+    searchResources: builder.infiniteQuery<PaginatedListDTO, Omit<searchParams, 'page'>, number>({
+      infiniteQueryOptions: {
+        initialPageParam: 1,
+        getNextPageParam: (lastPage, allPages, lastPageParam) => {
+          const loadedCount = allPages.reduce((count, page) => count + page.pageList.length, 0);
+          return loadedCount >= lastPage.numEntriesTotal ? undefined : lastPageParam + 1;
+        },
+      },
+      query: ({ queryArg, pageParam }) => buildResourceSearchUrl({ ...queryArg, page: pageParam }),
+    }),
+    /**
+     * Fetches the resources delegated from a party. When `to` is omitted, resources
+     * delegated to every recipient are returned (used by the power of attorney overview).
+     */
     getSingleRightsForRightholder: builder.query<
       ResourceDelegation[],
-      { actingParty: string; from: string; to: string }
+      { actingParty: string; from: string; to?: string }
     >({
       query: ({ actingParty, from, to }) =>
-        `singleright/delegation/resources?party=${actingParty}&to=${to}&from=${from}`,
+        `singleright/delegation/resources?party=${actingParty}&from=${from}` +
+        (to ? `&to=${to}` : ''),
       providesTags: ['resources'],
     }),
     getResourceRights: builder.query<
@@ -192,6 +213,7 @@ export const singleRightsApi = createApi({
 
 export const {
   useGetPaginatedSearchQuery,
+  useSearchResourcesInfiniteQuery,
   useGetSingleRightsForRightholderQuery,
   useGetResourceRightsQuery,
   useLazyGetResourceRightsQuery,

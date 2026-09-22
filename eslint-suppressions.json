@@ -41,6 +41,14 @@
       "count": 3
     }
   },
+  "playwright/api-requests/MaskinportenApiRequests.ts": {
+    "@typescript-eslint/no-unsafe-assignment": {
+      "count": 7
+    },
+    "@typescript-eslint/no-unsafe-return": {
+      "count": 3
+    }
+  },
   "playwright/api-requests/MaskinportenToken.ts": {
     "@typescript-eslint/no-unsafe-assignment": {
       "count": 2
@@ -70,7 +78,7 @@
       "count": 2
     },
     "@typescript-eslint/no-unsafe-assignment": {
-      "count": 5
+      "count": 7
     },
     "@typescript-eslint/no-unsafe-member-access": {
       "count": 1
@@ -133,6 +141,87 @@
   "playwright/pages/tilgangsstyring/KlientAdministrasjonPage.ts": {
     "@typescript-eslint/await-thenable": {
       "count": 2
+    }
+  },
+  "playwright/tenor/client/RegisterApiRequests.test.ts": {
+    "@typescript-eslint/no-unsafe-argument": {
+      "count": 3
+    },
+    "@typescript-eslint/no-unsafe-assignment": {
+      "count": 2
+    },
+    "@typescript-eslint/no-unsafe-call": {
+      "count": 2
+    },
+    "@typescript-eslint/no-unsafe-member-access": {
+      "count": 8
+    },
+    "@typescript-eslint/no-unsafe-return": {
+      "count": 1
+    },
+    "@typescript-eslint/require-await": {
+      "count": 5
+    }
+  },
+  "playwright/tenor/client/RegisterApiRequests.ts": {
+    "@typescript-eslint/no-unsafe-assignment": {
+      "count": 1
+    },
+    "@typescript-eslint/no-unsafe-member-access": {
+      "count": 2
+    }
+  },
+  "playwright/tenor/commands/beOmTilgang.test.ts": {
+    "@typescript-eslint/no-unsafe-argument": {
+      "count": 1
+    },
+    "@typescript-eslint/require-await": {
+      "count": 2
+    }
+  },
+  "playwright/tenor/commands/pakkeholdere.test.ts": {
+    "@typescript-eslint/no-unsafe-argument": {
+      "count": 1
+    },
+    "@typescript-eslint/no-unsafe-call": {
+      "count": 2
+    },
+    "@typescript-eslint/no-unsafe-member-access": {
+      "count": 8
+    },
+    "@typescript-eslint/no-unsafe-return": {
+      "count": 1
+    },
+    "@typescript-eslint/require-await": {
+      "count": 5
+    }
+  },
+  "playwright/tenor/commands/pakkeholdere.ts": {
+    "@typescript-eslint/no-unsafe-argument": {
+      "count": 3
+    },
+    "@typescript-eslint/no-unsafe-assignment": {
+      "count": 4
+    },
+    "@typescript-eslint/no-unsafe-member-access": {
+      "count": 3
+    }
+  },
+  "playwright/tenor/commands/registerOptIn.test.ts": {
+    "@typescript-eslint/no-unsafe-argument": {
+      "count": 2
+    },
+    "@typescript-eslint/no-unsafe-assignment": {
+      "count": 1
+    },
+    "@typescript-eslint/no-unsafe-call": {
+      "count": 2
+    },
+    "@typescript-eslint/no-unsafe-member-access": {
+      "count": 2
+    },
+    "@typescript-eslint/require-await": {
+      "count": 4
     }
   },
   "playwright/util/cleanup-delegationutils.ts": {
@@ -337,9 +426,15 @@
       "count": 1
     }
   },
-  "src/features/amUI/common/RequestPageLayout/RequestPageLayout.tsx": {
-    "@typescript-eslint/no-floating-promises": {
-      "count": 2
+  "src/features/amUI/common/ResourceList/ResourceList.test.tsx": {
+    "jsx-a11y/anchor-has-content": {
+      "count": 1
+    },
+    "react/display-name": {
+      "count": 1
+    },
+    "react/prop-types": {
+      "count": 1
     }
   },
   "src/features/amUI/common/RevokeConfirmation/useRevokeConfirmation.test.tsx": {
@@ -461,6 +556,14 @@
     }
   },
   "src/features/amUI/poaOverview/InstancePermissions.tsx": {
+    "react/display-name": {
+      "count": 1
+    }
+  },
+  "src/features/amUI/poaOverview/SingleRightsPermissions.tsx": {
+    "@typescript-eslint/no-floating-promises": {
+      "count": 1
+    },
     "react/display-name": {
       "count": 1
     }

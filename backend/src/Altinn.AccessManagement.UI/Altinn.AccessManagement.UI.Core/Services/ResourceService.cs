@@ -11,7 +11,6 @@ using Altinn.AccessManagement.UI.Core.Services.Interfaces;
 using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
-using Microsoft.FeatureManagement;
 
 namespace Altinn.AccessManagement.UI.Core.Services
 {
@@ -22,7 +21,6 @@ namespace Altinn.AccessManagement.UI.Core.Services
         private readonly ILogger<IResourceService> _logger;
         private readonly IMemoryCache _memoryCache;
         private readonly IResourceRegistryClient _resourceRegistryClient;
-        private readonly IFeatureManager _featureManager;
 
         /// <summary>
         ///     Initializes a new instance of the <see cref="ResourceService" /> class for testing purposes.
@@ -38,19 +36,16 @@ namespace Altinn.AccessManagement.UI.Core.Services
         /// <param name="resourceRegistryClient">the handler for resource registry client</param>
         /// <param name="cacheConfig">the handler for cache configuration</param>
         /// <param name="memoryCache">the handler for cache</param>
-        /// <param name="featureManager">the feature manager holding the current feature flag values</param>
         public ResourceService(
             ILogger<IResourceService> logger,
             IResourceRegistryClient resourceRegistryClient,
             IMemoryCache memoryCache,
-            IOptions<CacheConfig> cacheConfig,
-            IFeatureManager featureManager)
+            IOptions<CacheConfig> cacheConfig)
         {
             _logger = logger;
             _resourceRegistryClient = resourceRegistryClient;
             _memoryCache = memoryCache;
             _cacheConfig = cacheConfig.Value;
-            _featureManager = featureManager;
         }
 
         /// <inheritdoc />
@@ -62,38 +57,24 @@ namespace Altinn.AccessManagement.UI.Core.Services
                 List<ServiceResource> resourceList = resources.FindAll(r => IncludeInSearch(r, searchParams, resourceTypes));
                 List<ServiceResourceFE> resourcesFE = MapResourceToFrontendModel(resourceList, languageCode);
 
-                bool displayPopularServicesOnly = await _featureManager.IsEnabledAsync(FeatureFlags.DisplayPopularSingleRightsServices);
-                if (string.IsNullOrEmpty(searchParams.SearchString) &&
-                    (searchParams.ROFilters == null || searchParams.ROFilters.Length == 0) &&
-                    displayPopularServicesOnly &&
-                    searchParams.IncludeA2Services &&
-                    (resourceTypes == null || resourceTypes.Length == 0))
-                {
-                    // Return a selection of popular services (A2 services)
-                    List<ServiceResourceFE> popularResources = FilterOutPopularResources(resourcesFE);
-                    return PaginationUtils.GetListPage(popularResources, searchParams.Page, searchParams.ResultsPerPage);
-                }
-                else
-                {
-                    // Perform search/filtering and return matches
-                    List<ServiceResourceFE> filteredresources = FilterResourceList(resourcesFE, searchParams.ROFilters);
-                    List<ServiceResourceFE> searchResults = SearchInResourceList(filteredresources, searchParams.SearchString, resourceTypes, cancellationToken);
-                    OrgList orgList = await GetResourceOwnerOrgList(cancellationToken);
+                // Perform search/filtering and return matches
+                List<ServiceResourceFE> filteredresources = FilterResourceList(resourcesFE, searchParams.ROFilters);
+                List<ServiceResourceFE> searchResults = SearchInResourceList(filteredresources, searchParams.SearchString, resourceTypes, cancellationToken);
+                OrgList orgList = await GetResourceOwnerOrgList(cancellationToken);
 
-                    var paginatedResult = PaginationUtils.GetListPage(searchResults, searchParams.Page, searchParams.ResultsPerPage);
+                var paginatedResult = PaginationUtils.GetListPage(searchResults, searchParams.Page, searchParams.ResultsPerPage);
 
-                    // Add logo to each resource if it exists
-                    foreach (ServiceResourceFE resource in paginatedResult.PageList)
+                // Add logo to each resource if it exists
+                foreach (ServiceResourceFE resource in paginatedResult.PageList)
+                {
+                    orgList.Orgs.TryGetValue(resource.ResourceOwnerOrgcode.ToLower(), out var org);
+                    if (org?.Logo != null)
                     {
-                        orgList.Orgs.TryGetValue(resource.ResourceOwnerOrgcode.ToLower(), out var org);
-                        if (org?.Logo != null)
-                        {
-                            resource.ResourceOwnerLogoUrl = org.Logo;
-                        }
+                        resource.ResourceOwnerLogoUrl = org.Logo;
                     }
-
-                    return paginatedResult;
                 }
+
+                return paginatedResult;
             }
             catch (Exception ex)
             {
@@ -120,8 +101,7 @@ namespace Altinn.AccessManagement.UI.Core.Services
             }
 
             return resource.ResourceType != ResourceType.MaskinportenSchema &&
-                resource.ResourceType != ResourceType.Systemresource &&
-                (searchParams.IncludeA2Services || resource.ResourceType != ResourceType.Altinn2Service);
+                resource.ResourceType != ResourceType.Systemresource;
         }
 
         private static bool IsExpiredResource(ServiceResource resource)
@@ -522,14 +502,6 @@ namespace Altinn.AccessManagement.UI.Core.Services
                 reference.ReferenceType == ReferenceType.MaskinportenScope &&
                 reference.Reference != null &&
                 string.Equals(searchString, reference.Reference.Trim(), StringComparison.OrdinalIgnoreCase)) == true;
-        }
-
-        private List<ServiceResourceFE> FilterOutPopularResources(List<ServiceResourceFE> resources)
-        {
-            // A list of resource IDs for popular resources in Altinn2
-            List<string> popularResources = new List<string> { "se_4596_1", "se_4936_1", "se_1051_211111", "se_3906_141205", "se_3707_190403", "se_3161_140411", "se_3728_130106", "se_4655_4", "se_4699_3", "se_2437_1" };
-
-            return resources.Where(r => popularResources.Contains(r.Identifier)).ToList();
         }
 
         private List<ServiceResourceFE> MapResourceToFrontendModel(List<ServiceResource> resources, string languageCode)

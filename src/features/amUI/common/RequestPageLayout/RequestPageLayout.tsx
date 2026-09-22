@@ -2,21 +2,15 @@ import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { Link, useSearchParams } from 'react-router';
 import cn from 'classnames';
-import {
-  DsButton,
-  DsSpinner,
-  formatDisplayName,
-  Layout,
-  RootProvider,
-  useConsent,
-} from '@altinn/altinn-components';
+import { DsButton, DsSpinner, Layout, RootProvider } from '@altinn/altinn-components';
 import { ArrowLeftIcon } from '@navikt/aksel-icons';
 
-import { getAltinnStartPageUrl, getLogoutUrl } from '@/resources/utils/pathUtils';
-import { useUpdateSelectedLanguageMutation } from '@/rtk/features/settingsApi';
-import { useGetUserProfileQuery } from '@/rtk/features/userInfoApi';
 import { getButtonIconSize } from '@/resources/utils/iconUtils';
 import { useRedirectToRequestParty } from '@/resources/hooks/useRedirectToRequestParty';
+import { useLanguageCode } from '@/resources/hooks/useLanguageCode';
+
+import { useHeader } from '../PageLayoutWrapper/useHeader';
+import { NavigationFocus } from '../PageLayoutWrapper/NavigationFocus';
 
 import classes from './RequestPageLayout.module.css';
 
@@ -43,16 +37,12 @@ export const RequestPageLayout = ({
   body,
   footer,
 }: RequestPageLayoutProps) => {
-  const { t, i18n } = useTranslation();
+  const { t } = useTranslation();
 
   const [searchParams] = useSearchParams();
   const backToPage = searchParams.get('backtopage');
-  const [updateSelectedLanguage] = useUpdateSelectedLanguageMutation();
 
-  const { data: userData } = useGetUserProfileQuery();
-  const { isAnswered, acceptAll, rejectAll } = useConsent();
-
-  const languageCode = i18n.language === 'no_nn' ? 'nn' : i18n.language === 'en' ? 'en' : 'nb';
+  const languageCode = useLanguageCode();
 
   const partyUuid = useRedirectToRequestParty(requestPartyUuid);
   // While a reportee switch is pending, keep showing the loading state so the
@@ -60,68 +50,40 @@ export const RequestPageLayout = ({
   const isChangingParty = !!requestPartyUuid && requestPartyUuid !== partyUuid;
   const showLoading = isLoading || isChangingParty;
 
-  const onChangeLocale = (newLocale: string) => {
-    i18n.changeLanguage(newLocale);
-    document.cookie = `selectedLanguage=${newLocale}; path=/; SameSite=Strict`;
-    updateSelectedLanguage(newLocale);
-  };
+  const { header } = useHeader({
+    openAccountMenu: false,
+    hideSidebarItems: true,
+  });
 
   return (
     <RootProvider languageCode={languageCode}>
+      <NavigationFocus />
       <Layout
         color={account.type}
         theme='subtle'
-        cookieBanner={
-          window.featureFlags?.enableSkyra !== true || isAnswered
-            ? undefined
-            : { onAccept: acceptAll, onReject: rejectAll }
-        }
         header={{
-          locale: {
-            title: t('header.locale_title'),
-            options: [
-              { label: 'Norsk (bokmål)', value: 'no_nb', checked: i18n.language === 'no_nb' },
-              { label: 'Norsk (nynorsk)', value: 'no_nn', checked: i18n.language === 'no_nn' },
-              { label: 'English', value: 'en', checked: i18n.language === 'en' },
-            ],
-            onSelect: onChangeLocale,
+          ...header,
+          disableAccountSelection: true,
+          desktopMenu: {
+            ...header.desktopMenu,
+            items: [{ groupId: 'current-user', hidden: true }],
           },
-          logo: {
-            href: getAltinnStartPageUrl(i18n.language),
-            title: 'Altinn',
-          },
-          currentAccount: {
-            ...account,
-            id: '',
-            icon: account,
+          mobileMenu: {
+            ...header.mobileMenu,
+            items: [{ groupId: 'current-user', hidden: true }],
           },
           globalMenu: {
-            logoutButton: {
-              label: t('header.log_out'),
-              onClick: () => {
-                const logoutUrl = getLogoutUrl();
-                window.location.assign(logoutUrl);
-              },
-            },
-            menuLabel: t('header.menu-label'),
-            backLabel: t('header.back-label'),
-            changeLabel: t('header.change-label'),
-            menu: {
-              items: [{ groupId: 'current-user', hidden: true }],
-              groups: {
-                'current-user': {
-                  title: t('header.logged_in_as_name', {
-                    name: formatDisplayName({
-                      fullName: userData?.name || '',
-                      type: 'person',
-                      reverseNameOrder: true,
-                    }),
-                  }),
-                },
-              },
-            },
+            ...header.globalMenu,
+            logoutButton: undefined,
           },
         }}
+        skipLink={{
+          href: '#main-content',
+          color: 'inherit',
+          size: 'xs',
+          children: t('common.skiplink'),
+        }}
+        content={{ color: account.type }}
       >
         {showLoading && <LoadingState />}
         {!showLoading && error && <div className={classes.centerBlock}>{error}</div>}

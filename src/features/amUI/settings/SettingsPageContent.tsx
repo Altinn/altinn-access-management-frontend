@@ -70,7 +70,10 @@ export const SettingsPageContent = () => {
   if (!isCompanyProfileAdmin && !isCompanyProfileAdminLoading) {
     return (
       <div className={classes.notAdminAlert}>
-        <DsAlert data-color='warning'>
+        <DsAlert
+          data-color='warning'
+          data-testid='settings-not-admin-alert'
+        >
           {t('settings_page.not_admin_alert', {
             name: formattedActingPartyName,
           })}
@@ -82,6 +85,7 @@ export const SettingsPageContent = () => {
   return (
     <div>
       <ReporteePageHeading
+        data-testid='settings-page-heading'
         title={t('settings_page.page_heading', { name: formattedActingPartyName })}
         reportee={reportee}
         isLoading={isLoading}
@@ -126,10 +130,13 @@ export const SettingsPageContent = () => {
             icon={<PaperplaneIcon aria-hidden='true' />}
             badge={
               emailAddresses.length > 0 && {
-                label:
-                  emailAddresses.length === 1
-                    ? t('settings_page.one_address')
-                    : t('settings_page.num_of_addresses', { count: emailAddresses.length }),
+                children: (
+                  <span data-testid='email-address-count'>
+                    {emailAddresses.length === 1
+                      ? t('settings_page.one_address')
+                      : t('settings_page.num_of_addresses', { count: emailAddresses.length })}
+                  </span>
+                ),
               }
             }
             as={'button'}
@@ -146,10 +153,13 @@ export const SettingsPageContent = () => {
             icon={<ChatIcon aria-hidden='true' />}
             badge={
               phoneNumbers.length > 0 && {
-                label:
-                  phoneNumbers.length === 1
-                    ? t('settings_page.one_address')
-                    : t('settings_page.num_of_addresses', { count: phoneNumbers.length }),
+                children: (
+                  <span data-testid='sms-address-count'>
+                    {phoneNumbers.length === 1
+                      ? t('settings_page.one_address')
+                      : t('settings_page.num_of_addresses', { count: phoneNumbers.length })}
+                  </span>
+                ),
               }
             }
             as={'button'}

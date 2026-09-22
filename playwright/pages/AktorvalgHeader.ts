@@ -93,7 +93,7 @@ export class AktorvalgHeader {
   }
 
   async selectActorFromHeaderMenu(actorName: string) {
-    await this.login.selectMainUnitBySearching(actorName);
+    await this.login.selectActor(actorName);
   }
 
   async selectSubOrgFromHeaderMenu(orgName: string) {

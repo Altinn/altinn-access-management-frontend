@@ -50,8 +50,10 @@ export const SmsAddressFields = ({
       <div
         key={index}
         className={classes.phoneFieldRow}
+        data-testid='sms-address-row'
       >
         <DsTextfield
+          data-testid='sms-country-code'
           aria-label={t('settings_page.country_code_number', { number: index + 1 })}
           value={address.countryCode}
           onChange={(e) =>
@@ -61,6 +63,7 @@ export const SmsAddressFields = ({
           className={classes.countryCodeField}
         />
         <DsTextfield
+          data-testid='sms-phone'
           aria-label={t('settings_page.phone_number', { number: index + 1 })}
           value={address.phone}
           onChange={(e) => onPhoneChange(e, index)}

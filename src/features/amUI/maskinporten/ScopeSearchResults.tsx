@@ -124,7 +124,6 @@ export const ScopeSearchResults = ({
           totalPages={Math.ceil(totalNumberOfResults / searchResultsPerPage)}
           setCurrentPage={setCurrentPage}
           size='xs'
-          hideLabels={true}
         />
       )}
     </>

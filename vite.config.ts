@@ -21,6 +21,11 @@ export default defineConfig({
       ],
       credentials: true,
     },
+    // Nothing in the frontend imports from the .NET tree, and on Windows its build artifacts and
+    // VS index get exclusively locked, killing the watcher with EBUSY
+    watch: {
+      ignored: ['**/backend/**'],
+    },
   },
   plugins: [svgr(), react()],
   build: {

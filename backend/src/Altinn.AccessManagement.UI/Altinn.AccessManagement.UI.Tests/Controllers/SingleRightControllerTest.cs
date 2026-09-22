@@ -276,6 +276,29 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
         }
 
         /// <summary>
+        ///     Test case: Retrieve delegated resources without specifying a recipient
+        ///     Expected: Returns OK and the resources delegated to all recipients
+        /// </summary>
+        [Fact]
+        public async Task GetDelegatedResources_WithoutTo_ReturnsValid()
+        {
+            // Arrange
+            Guid party = Guid.Parse("cd35779b-b174-4ecc-bbef-ece13611be7f");
+            Guid from = Guid.Parse("cd35779b-b174-4ecc-bbef-ece13611be7f");
+            string path = Path.Combine(mockFolder, "Data", "ExpectedResults", "SingleRight", "GetDelegations", "delegations.json");
+            List<ResourceDelegation> expectedResponse = Util.GetMockData<List<ResourceDelegation>>(path);
+
+            // Act
+            HttpResponseMessage httpResponse = await _client.GetAsync($"accessmanagement/api/v1/singleright/delegation/resources?party={party}&from={from}");
+            List<ResourceDelegation> actualResponse = await httpResponse.Content.ReadFromJsonAsync<List<ResourceDelegation>>();
+
+            // Assert
+            Assert.Equal(HttpStatusCode.OK, httpResponse.StatusCode);
+            Assert.NotNull(actualResponse);
+            Assert.Equal(expectedResponse.Count, actualResponse.Count);
+        }
+
+        /// <summary>
         ///     Test case: Handles unexpected errors when retrieving delegated resources
         ///     Expected: Returns an internal server error
         /// </summary>

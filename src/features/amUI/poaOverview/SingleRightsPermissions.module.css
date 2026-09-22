@@ -1,0 +1,9 @@
+.description {
+  margin-bottom: var(--ds-spacing-4);
+}
+
+.showMoreButton {
+  display: flex;
+  justify-content: center;
+  margin-top: var(--ds-spacing-3);
+}

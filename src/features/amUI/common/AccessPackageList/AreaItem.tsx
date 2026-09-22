@@ -4,12 +4,12 @@ import { useTranslation } from 'react-i18next';
 
 import { useIsMobileOrSmaller } from '@/resources/utils/screensizeUtils';
 import { PartyType } from '@/rtk/features/userInfoApi';
+import { usePermissionOverview } from '@/resources/hooks';
 
 import { PermissionsBadge } from '../PermissionsBadge/PermissionsBadge';
 
-import type { ExtendedAccessArea } from './useAreaPackageList';
 import { isCriticalAndUndelegated, UndelegatedPackageWarning } from './UndelegatedPackageWarning';
-import { usePackagePermissionOverview } from './usePackagePermissionOverview';
+import type { ExtendedAccessArea } from './useAreaPackageList';
 
 interface AreaItemProps {
   area: ExtendedAccessArea;
@@ -40,7 +40,7 @@ export const AreaItem = ({
     [area.packages.assigned],
   );
 
-  const { permissionsOverview } = usePackagePermissionOverview({ permissions });
+  const { permissionsOverview } = usePermissionOverview({ permissions });
 
   const showPackagesCountBadge = !isSm && showPackagesCount;
   const showPermissionsBadge = showPermissions;

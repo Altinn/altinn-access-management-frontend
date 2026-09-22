@@ -1,4 +1,4 @@
-import { type LanguageCode, Layout, RootProvider, useConsent } from '@altinn/altinn-components';
+import { Layout, RootProvider, useConsent } from '@altinn/altinn-components';
 import { useTranslation } from 'react-i18next';
 import { useLocation } from 'react-router';
 
@@ -25,7 +25,7 @@ export const ErrorLayoutWrapper = ({
   const { isAnswered, acceptAll, rejectAll } = useConsent();
 
   return (
-    <RootProvider languageCode={languageCode as LanguageCode}>
+    <RootProvider languageCode={languageCode}>
       <Layout
         color={'neutral'}
         theme='default'

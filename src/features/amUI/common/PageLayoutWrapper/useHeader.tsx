@@ -14,6 +14,7 @@ import {
 } from '@/rtk/features/userInfoApi';
 import { getAltinnStartPageUrl } from '@/resources/utils/pathUtils';
 import { useUpdateSelectedLanguageMutation } from '@/rtk/features/settingsApi';
+import { useLanguageCode } from '@/resources/hooks/useLanguageCode';
 import {
   redirectToChangeReporteeAndRedirect,
   getDefaultChangeReporteeRedirectTarget,
@@ -106,9 +107,7 @@ export const useHeader = ({
       });
   };
 
-  const languageFromi18n = i18n.language;
-  const languageCode =
-    languageFromi18n === 'no_nn' ? 'nn' : languageFromi18n === 'en' ? 'en' : 'nb';
+  const languageCode = useLanguageCode();
 
   useEffect(() => {
     document.documentElement.lang = languageCode;

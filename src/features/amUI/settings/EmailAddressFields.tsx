@@ -40,8 +40,10 @@ export const EmailAddressFields = ({
       <div
         key={index}
         className={classes.emailFieldRow}
+        data-testid='email-address-row'
       >
         <DsTextfield
+          data-testid='email-address'
           aria-label={t('settings_page.address_number', { number: index + 1 })}
           value={address.email}
           onChange={(e) => onTextFieldChange(e, index)}

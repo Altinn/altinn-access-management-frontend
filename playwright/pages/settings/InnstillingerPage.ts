@@ -5,6 +5,8 @@ import { env } from 'playwright/util/helper';
 import { LANGUAGE_DICTIONARIES, Language, type Dict } from '../LanguageMenu';
 import { SidebarNav } from '../SidebarNav';
 
+type SmsAddress = { countryCode: string; phone: string };
+
 /**
  * Innstillinger (https://am.ui.<env>.altinn.cloud/accessmanagement/ui/settings).
  *
@@ -24,14 +26,21 @@ export class InnstillingerPage {
   readonly sectionHeading: Locator;
   readonly emailRow: Locator;
   readonly smsRow: Locator;
+  readonly emailAddressCount: Locator;
 
   readonly dialog: Locator;
+  readonly emailRows: Locator;
+  readonly emailFields: Locator;
+  readonly smsRows: Locator;
+  readonly phoneFields: Locator;
+  readonly countryCodeFields: Locator;
   readonly addMoreButton: Locator;
   readonly saveButton: Locator;
   readonly cancelButton: Locator;
   readonly closeButton: Locator;
   readonly noAddressesError: Locator;
   readonly savingError: Locator;
+  readonly ugyldigEpostFeilmelding: Locator;
 
   constructor(page: Page, language: Language = Language.NB) {
     this.page = page;
@@ -39,11 +48,8 @@ export class InnstillingerPage {
     this.sidebar = new SidebarNav(page, language);
     const settings = this.texts.settings_page;
 
-    // page_heading is "Innstillinger for {{name}}" — match the static prefix.
-    this.pageHeading = this.page.getByRole('heading', {
-      name: settings.page_heading.split('{{name}}')[0].trim(),
-    });
-    this.notAdminAlert = this.page.getByText(settings.not_admin_alert.split('{{name}}')[0].trim());
+    this.pageHeading = this.page.getByTestId('settings-page-heading');
+    this.notAdminAlert = this.page.getByTestId('settings-not-admin-alert');
     this.sectionHeading = this.page.getByRole('heading', {
       name: settings.alert_settings_heading,
     });
@@ -52,8 +58,14 @@ export class InnstillingerPage {
     // repeats the current addresses and the badge, so this matches as a substring.
     this.emailRow = this.page.getByRole('button', { name: settings.alerts_on_email });
     this.smsRow = this.page.getByRole('button', { name: settings.alerts_on_sms });
+    this.emailAddressCount = this.page.getByTestId('email-address-count');
 
     this.dialog = this.page.getByRole('dialog');
+    this.emailRows = this.dialog.getByTestId('email-address-row');
+    this.emailFields = this.emailRows.getByTestId('email-address');
+    this.smsRows = this.dialog.getByTestId('sms-address-row');
+    this.phoneFields = this.smsRows.getByTestId('sms-phone');
+    this.countryCodeFields = this.smsRows.getByTestId('sms-country-code');
     this.addMoreButton = this.dialog.getByRole('button', { name: settings.add_more });
     this.saveButton = this.dialog.getByRole('button', {
       name: this.texts.common.save_changes,
@@ -70,59 +82,35 @@ export class InnstillingerPage {
     });
     this.noAddressesError = this.dialog.getByText(settings.no_addresses_error);
     this.savingError = this.dialog.getByText(settings.error_saving_addresses);
+    this.ugyldigEpostFeilmelding = this.dialog.getByText(
+      this.texts.text_field_errors.invalid_email_pattern,
+    );
   }
 
-  /** The nth (0-based) email field in the open dialog. Labelled "Adresse 1", "Adresse 2", … */
-  emailField(index = 0): Locator {
-    return this.dialog.getByRole('textbox', {
-      name: this.texts.settings_page.address_number.replace('{{number}}', String(index + 1)),
+  /** Find a controlled email input by its exact value, regardless of row order. */
+  emailField(email: string): Locator {
+    return this.emailFields.and(this.dialog.locator(`input[value=${JSON.stringify(email)}]`));
+  }
+
+  /** Match both values to distinguish local numbers with different country codes. */
+  private smsAddressRow(address: SmsAddress): Locator {
+    return this.smsRows
+      .filter({ has: this.page.locator(`input[value=${JSON.stringify(address.phone)}]`) })
+      .filter({ has: this.page.locator(`input[value=${JSON.stringify(address.countryCode)}]`) });
+  }
+
+  /** Find the remove button in the row containing this email address. */
+  removeEmailButton(email: string): Locator {
+    return this.emailRows
+      .filter({ has: this.page.locator(`input[value=${JSON.stringify(email)}]`) })
+      .getByRole('button', { name: this.texts.settings_page.remove_email, exact: true });
+  }
+
+  removeSmsButton(address: SmsAddress): Locator {
+    return this.smsAddressRow(address).getByRole('button', {
+      name: this.texts.settings_page.remove_sms,
       exact: true,
     });
-  }
-
-  /** The nth (0-based) phone field in the open dialog. Labelled "Telefonnummer 1", … */
-  phoneField(index = 0): Locator {
-    return this.dialog.getByRole('textbox', {
-      name: this.texts.settings_page.phone_number.replace('{{number}}', String(index + 1)),
-      exact: true,
-    });
-  }
-
-  /** The nth (0-based) country code field in the open dialog. Labelled "Landskode 1", … */
-  countryCodeField(index = 0): Locator {
-    return this.dialog.getByRole('textbox', {
-      name: this.texts.settings_page.country_code_number.replace('{{number}}', String(index + 1)),
-      exact: true,
-    });
-  }
-
-  /**
-   * The remove button on the nth (0-based) address row.
-   *
-   * Every remove button carries the same label ("Fjern e-post"/"Fjern telefonnummer")
-   * and the rows are plain divs with no role or accessible name of their own, so
-   * there is nothing to scope or filter by — the row index is the only thing that
-   * distinguishes them. Kept as a method so tests never index locators inline.
-   */
-  removeEmailButton(index: number): Locator {
-    return this.dialog
-      .getByRole('button', { name: this.texts.settings_page.remove_email })
-      .nth(index);
-  }
-
-  removeSmsButton(index: number): Locator {
-    return this.dialog
-      .getByRole('button', { name: this.texts.settings_page.remove_sms })
-      .nth(index);
-  }
-
-  /** The badge on a row: "1 adresse" or "{{count}} adresser". */
-  addressCountBadge(count: number): Locator {
-    const label =
-      count === 1
-        ? this.texts.settings_page.one_address
-        : this.texts.settings_page.num_of_addresses.replace('{{count}}', String(count));
-    return this.page.getByText(label, { exact: true });
   }
 
   async goToInnstillinger() {
@@ -149,26 +137,27 @@ export class InnstillingerPage {
   async openEpostDialog() {
     await this.emailRow.click();
     await expect(this.dialog).toBeVisible();
-    await expect(this.emailField(0)).toBeVisible();
+    await expect(this.emailFields.first()).toBeVisible();
   }
 
   async openSmsDialog() {
     await this.smsRow.click();
     await expect(this.dialog).toBeVisible();
-    await expect(this.phoneField(0)).toBeVisible();
+    await expect(this.smsRows.first()).toBeVisible();
   }
 
-  async skrivEpost(index: number, email: string) {
-    await this.emailField(index).fill(email);
+  async skrivEpost(currentEmail: string, email: string) {
+    await this.emailField(currentEmail).fill(email);
     // The field validates on blur, so move focus off it before saving —
     // otherwise a bad address can still leave the save button enabled.
-    await this.emailField(index).blur();
+    await this.emailField(email).blur();
   }
 
-  async skrivTelefonnummer(index: number, countryCode: string, phone: string) {
-    await this.countryCodeField(index).fill(countryCode);
-    await this.phoneField(index).fill(phone);
-    await this.phoneField(index).blur();
+  async leggTilTelefonnummer(address: SmsAddress) {
+    await expect(this.phoneFields).toHaveValue('');
+    await this.countryCodeFields.fill(address.countryCode);
+    await this.phoneFields.fill(address.phone);
+    await this.phoneFields.blur();
   }
 
   async klikkLeggTilFlere() {
@@ -176,19 +165,24 @@ export class InnstillingerPage {
   }
 
   /**
-   * Saves the open dialog and closes it.
+   * Saves the open dialog and closes it once the write has landed.
    *
-   * Saving on its own leaves the dialog open, so there is no "dialog gone" event
-   * to wait on. Instead: once the write lands the addresses are refetched, the
-   * form matches what is stored, and the save button disables itself again —
-   * that is the signal the save completed. Closing afterwards is what puts the
-   * updated row (and its badge) back in view for assertions.
+   * Saving leaves the dialog open, so there is no "dialog gone" event to wait on.
+   * The save button is NOT a usable signal either — it is disabled *while* the
+   * write is in flight (`isSaving`), so it goes disabled within a few hundred
+   * milliseconds and closing on that races the write.
+   *
+   * The secondary button is the reliable signal: it reads "Avbryt" while there
+   * are unsaved changes and flips to "Lukk" only once the refetched addresses
+   * match the form. Waiting for it also means a failed save fails loudly here,
+   * rather than silently leaving stale values for the assertions to trip over.
    */
   async lagreEndringer() {
     await expect(this.saveButton).toBeEnabled();
     await this.saveButton.click();
-    await expect(this.saveButton).toBeDisabled();
-    await this.lukkDialog();
+    await expect(this.closeButton).toBeVisible();
+    await this.closeButton.click();
+    await expect(this.dialog).toBeHidden();
   }
 
   async lukkDialog() {

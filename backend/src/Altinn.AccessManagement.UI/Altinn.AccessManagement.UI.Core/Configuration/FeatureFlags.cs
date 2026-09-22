@@ -9,11 +9,6 @@ namespace Altinn.AccessManagement.UI.Core.Configuration
     public static class FeatureFlags
     {
         /// <summary>
-        /// Whether or not to only display popular SingleRights services
-        /// </summary>
-        public const string DisplayPopularSingleRightsServices = "AccessManagementUI.DisplayPopularSingleRightsServices";
-
-        /// <summary>
         /// Whether or not to use the new version of client delegation for single rights services
         /// </summary>
         public const string UseNewSingleRightsClientDelegation = "AccessManagementUI.UseNewSingleRightsClientDelegation";

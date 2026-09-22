@@ -90,7 +90,9 @@ export class ConsentPage {
     // På mobil (consent kjører i MOBILE_VIEWPORT) er menyknappen en hamburger
     // uten tilgjengelig navn «Meny», så vi skoper til hovednavigasjonen og tar
     // knappen der.
-    this.menuButton = page.getByRole('navigation', { name: 'hovednavigasjon' }).getByRole('button');
+    this.menuButton = page
+      .getByRole('navigation', { name: 'hovednavigasjon' })
+      .getByRole('button', { name: /^(Menu|Meny)$/ });
     this.languagePicker = page.getByLabel('Språk/language');
     this.languageMenu = new LanguageMenu(page);
     this.linkAltinn = page.getByRole('link', { name: /altinn\.no/i });

@@ -17,5 +17,5 @@ export function loadCustomersFromCsv(relativeToRootPath: string): CustomerData[]
     columns: true,
     skip_empty_lines: true,
     trim: true,
-  }) as CustomerData[];
+  });
 }

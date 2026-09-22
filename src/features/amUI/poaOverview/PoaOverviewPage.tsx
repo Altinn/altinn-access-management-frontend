@@ -16,6 +16,7 @@ import { Breadcrumbs } from '../common/Breadcrumbs/Breadcrumbs';
 import { AccessPackagePermissions } from './AccessPackagePermissions';
 import { GuardianshipPermissions } from './GuardianshipPermissions';
 import { InstancePermissions } from './InstancePermissions';
+import { SingleRightsPermissions } from './SingleRightsPermissions';
 
 export const PoaOverviewPage = () => {
   const { t } = useTranslation();
@@ -49,7 +50,11 @@ export const PoaOverviewPage = () => {
             />
             <RightsTabs
               packagesPanel={<AccessPackagePermissions />}
-              singleRightsPanel={null}
+              singleRightsPanel={
+                window.featureFlags.enableSingleRightsTabInPoaOverview ? (
+                  <SingleRightsPermissions />
+                ) : null
+              }
               instancesPanel={<InstancePermissions />}
               roleAssignmentsPanel={null}
               guardianshipsPanel={<GuardianshipPermissions />}

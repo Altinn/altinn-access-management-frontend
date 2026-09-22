@@ -19,6 +19,7 @@ import { ConsentHistoryPage } from '@/features/amUI/consent/ConsentHistoryPage/C
 import { PoaOverviewPage } from '@/features/amUI/poaOverview/PoaOverviewPage';
 import { InstanceDetailPage } from '@/features/amUI/InstanceDetailPage/InstanceDetailPage';
 import { PackagePoaDetailsPage } from '@/features/amUI/packagePoaDetailsPage/PackagePoaDetailsPage';
+import { ServicePoaDetailsPage } from '@/features/amUI/servicePoaDetailsPage/ServicePoaDetailsPage';
 import { SettingsPage } from '@/features/amUI/settings/SettingsPage';
 import { LandingPage } from '@/features/amUI/landingPage/LandingPage';
 import { RequestPage } from '@/features/amUI/requestPage/RequestsPage';
@@ -80,6 +81,10 @@ export const Router = createBrowserRouter(
         <Route
           path={amUIPath.PackagePoaDetails}
           element={<PackagePoaDetailsPage />}
+        />
+        <Route
+          path={amUIPath.ServicePoaDetails}
+          element={<ServicePoaDetailsPage />}
         />
         <Route path={SystemUserPath.SystemUser}>
           <Route

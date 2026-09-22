@@ -4,9 +4,10 @@ import React, { useState } from 'react';
 import cn from 'classnames';
 import { ChevronDownIcon, ChevronUpIcon } from '@navikt/aksel-icons';
 
-import type { AccessPackage } from '@/rtk/features/accessPackageApi';
 import { useIsMobileOrSmaller } from '@/resources/utils/screensizeUtils';
+import type { AccessPackage } from '@/rtk/features/accessPackageApi';
 import { type PartyType } from '@/rtk/features/userInfoApi';
+import { usePermissionOverview } from '@/resources/hooks';
 
 import { type DelegationAction } from '../DelegationModal/EditModal';
 import { useAccessPackageDelegationCheck } from '../DelegationCheck/AccessPackageDelegationCheckContext';
@@ -22,7 +23,6 @@ import { PackageItem } from './PackageItem';
 import { RevokeAccessPackageActionControl } from './RevokeAccessPackageActionControl';
 import { DelegateAccessPackageActionControl } from './DelegateAccessPackageActionControl';
 import { isCriticalAndUndelegated, UndelegatedPackageWarning } from './UndelegatedPackageWarning';
-import { usePackagePermissionOverview } from './usePackagePermissionOverview';
 
 // DOM id for the area's content wrapper, usable as a RestoreFocus fallback target.
 export const areaContentId = (areaId: string) => `area-content-${areaId}`;
@@ -218,7 +218,7 @@ const AssignedPackageItem = ({
   isSm,
   revokeActionControl,
 }: AssignedPackageItemProps) => {
-  const { permissionsOverview } = usePackagePermissionOverview({
+  const { permissionsOverview } = usePermissionOverview({
     permissions: pkg.permissions ?? [],
   });
 

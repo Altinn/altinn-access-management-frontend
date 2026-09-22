@@ -41,7 +41,6 @@ export const Default: StoryObj<AmPaginationPropsAndCustomArgs> = {
     totalPages: 10,
     showPages: 5,
     currentPage: 1,
-    hideLabels: false,
     size: 'md',
   },
   argTypes: {
@@ -49,7 +48,6 @@ export const Default: StoryObj<AmPaginationPropsAndCustomArgs> = {
     showPages: { control: { type: 'number' } },
     size: { control: { type: 'inline-radio', options: ['sm', 'md', 'lg'] } },
     currentPage: { control: { type: 'number' } },
-    hideLabels: { control: { type: 'boolean' } },
   },
   render: (args) => <AmPagination {...args} />,
 };
@@ -64,7 +62,6 @@ export const Test: StoryObj<AmPaginationPropsAndCustomArgs> = {
     totalPages: { disabled: true },
     currentPage: { disabled: true },
     setCurrentPage: { disabled: true },
-    hideLabels: { control: { type: 'boolean' } },
     size: { control: { type: 'inline-radio', options: ['sm', 'md', 'lg'] } },
   },
 };

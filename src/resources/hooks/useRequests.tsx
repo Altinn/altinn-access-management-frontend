@@ -174,6 +174,7 @@ const mapSystemUserRequestToRequest = (request: SystemUser): Request => {
     createdDate: request.created,
     displayPartyName: request.system.systemVendorOrgName,
     displayPartyType: 'system',
+    organizationIdentifier: request.system.systemVendorOrgNumber,
     description: 'request_page.request_systemuser',
   };
 };
@@ -221,6 +222,7 @@ const mapAccessRequestToRequest = (
     displayPartyName: partyName,
     displayPartyType: partyType,
     partyUuid: party.id,
+    organizationIdentifier: party.organizationIdentifier ?? undefined,
     isSubUnit: isSubUnitByType(party.variant),
     description: undefined, // Use default description for access requests
     numberOfRequests: numberOfRequests ?? 1,
