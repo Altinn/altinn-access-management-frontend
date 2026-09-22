@@ -1,19 +1,13 @@
 import { useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
-import { DsAlert, DsParagraph } from '@altinn/altinn-components';
 
-import UserSearch from '../common/UserSearch/UserSearch';
 import { mapPermissionsToUserSearchNodes } from '../common/UserSearch/permissionMapper';
 import { mapConnectionsToUserSearchNodes } from '../common/UserSearch/connectionMapper';
-import {
-  createErrorDetails,
-  TechnicalErrorParagraphs,
-} from '../common/TechnicalErrorParagraphs/TechnicalErrorParagraphs';
-import { ConnectionUserType, useGetRightHoldersQuery } from '@/rtk/features/connectionApi';
+import { useGetRightHoldersQuery } from '@/rtk/features/connectionApi';
 import { usePartyRepresentation } from '../common/PartyRepresentationContext/PartyRepresentationContext';
 import { useGetInstancesQuery } from '@/rtk/features/instanceApi';
 import type { UserActionTarget } from '../common/UserSearch/types';
-import { AddUserButton } from './AddUserModal';
+import { InstanceUserSearch } from './InstanceUserSearch';
 
 interface InstanceUsersAsAdminProps {
   resourceId: string;
@@ -25,6 +19,10 @@ interface InstanceUsersAsAdminProps {
   restoreFocusFallbackId?: string;
 }
 
+/**
+ * Instance users as seen by an admin: the full delegations of the instance,
+ * which the admin can inspect and revoke as well as delegate.
+ */
 export const InstanceUsersAsAdmin = ({
   resourceId,
   instanceUrn,
@@ -34,13 +32,12 @@ export const InstanceUsersAsAdmin = ({
   isRevoking,
   restoreFocusFallbackId,
 }: InstanceUsersAsAdminProps) => {
-  const { t, i18n } = useTranslation();
+  const { i18n } = useTranslation();
   const { actingParty, fromParty } = usePartyRepresentation();
 
   const {
     data: instances = [],
     isLoading: isInstancesLoading,
-    isError: isInstancesError,
     error: instancesError,
   } = useGetInstancesQuery(
     {
@@ -55,22 +52,19 @@ export const InstanceUsersAsAdmin = ({
     },
   );
 
-  const users = useMemo(
-    () =>
-      mapPermissionsToUserSearchNodes(
-        instances.flatMap((instanceDelegation) => instanceDelegation.permissions),
-        {
-          fromPartyUuid: fromParty?.partyUuid,
-        },
-      ),
-    [fromParty?.partyUuid, instances],
-  );
+  const users = useMemo(() => {
+    return mapPermissionsToUserSearchNodes(
+      instances.flatMap((instanceDelegation) => instanceDelegation.permissions),
+      {
+        fromPartyUuid: fromParty?.partyUuid,
+      },
+    );
+  }, [fromParty?.partyUuid, instances]);
 
   const {
     data: indirectConnections,
     isLoading: isLoadingIndirectConnections,
     isFetching: isFetchingIndirectConnections,
-    isError: isIndirectError,
     error: indirectError,
   } = useGetRightHoldersQuery(
     {
@@ -84,59 +78,23 @@ export const InstanceUsersAsAdmin = ({
   );
 
   const indirectUsers = useMemo(
-    () =>
-      mapConnectionsToUserSearchNodes(indirectConnections).filter(
-        (user) =>
-          user.type !== ConnectionUserType.Organization ||
-          (user.children && user.children.length > 0),
-      ),
+    () => mapConnectionsToUserSearchNodes(indirectConnections),
     [indirectConnections],
   );
 
-  const errorDetails =
-    isInstancesError || isIndirectError
-      ? createErrorDetails(instancesError || indirectError)
-      : null;
-
   return (
-    <>
-      {errorDetails && (
-        <DsAlert
-          role='alert'
-          data-color='danger'
-        >
-          <DsParagraph>{t('common.general_error_paragraph')}</DsParagraph>
-          <TechnicalErrorParagraphs
-            size='sm'
-            status={errorDetails.status}
-            time={errorDetails.time}
-            traceId={errorDetails.traceId}
-          />
-        </DsAlert>
-      )}
-      <UserSearch
-        includeSelfAsChild={false}
-        includeSelfAsChildOnIndirect={false}
-        restoreFocusFallbackId={restoreFocusFallbackId}
-        AddUserButton={
-          <AddUserButton
-            resourceId={resourceId}
-            instanceUrn={instanceUrn}
-          />
-        }
-        users={users}
-        indirectUsers={indirectUsers}
-        isLoading={isInstancesLoading || isLoadingIndirectConnections}
-        isActionLoading={isFetchingIndirectConnections || isRevoking}
-        canDelegate
-        noUsersText={t('instance_detail_page.no_users')}
-        directConnectionsHeading={t('instance_detail_page.direct_connections')}
-        indirectConnectionsHeading={t('instance_detail_page.indirect_connections')}
-        searchPlaceholder={t('instance_detail_page.search_placeholder')}
-        onDelegate={onDelegate}
-        onSelect={onSelect}
-        onRevoke={onRevoke}
-      />
-    </>
+    <InstanceUserSearch
+      resourceId={resourceId}
+      instanceUrn={instanceUrn}
+      users={users}
+      indirectUsers={indirectUsers}
+      isLoading={isInstancesLoading || isLoadingIndirectConnections}
+      isActionLoading={isFetchingIndirectConnections || isRevoking}
+      error={instancesError || indirectError}
+      onSelect={onSelect}
+      onDelegate={onDelegate}
+      onRevoke={onRevoke}
+      restoreFocusFallbackId={restoreFocusFallbackId}
+    />
   );
 };

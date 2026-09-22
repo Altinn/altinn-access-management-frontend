@@ -1,21 +1,14 @@
 import { useMemo } from 'react';
-import { useTranslation } from 'react-i18next';
-import { DsAlert, DsParagraph } from '@altinn/altinn-components';
 
-import UserSearch from '../common/UserSearch/UserSearch';
 import {
   mapSimplifiedConnectionsToUserSearchNodes,
   mapSimplifiedPartiesToUserSearchNodes,
 } from '../common/UserSearch/connectionMapper';
-import {
-  createErrorDetails,
-  TechnicalErrorParagraphs,
-} from '../common/TechnicalErrorParagraphs/TechnicalErrorParagraphs';
-import { ConnectionUserType, useGetSimplifiedConnectionsQuery } from '@/rtk/features/connectionApi';
+import { useGetSimplifiedConnectionsQuery } from '@/rtk/features/connectionApi';
 import { usePartyRepresentation } from '../common/PartyRepresentationContext/PartyRepresentationContext';
 import { useGetInstanceUsersQuery } from '@/rtk/features/instanceApi';
 import type { UserActionTarget } from '../common/UserSearch/types';
-import { AddUserButton } from './AddUserModal';
+import { InstanceUserSearch } from './InstanceUserSearch';
 
 interface InstanceUsersAsInstanceAdminProps {
   resourceId: string;
@@ -24,19 +17,22 @@ interface InstanceUsersAsInstanceAdminProps {
   restoreFocusFallbackId?: string;
 }
 
+/**
+ * Instance users as seen by an instance admin: only who has access, in simplified
+ * form. No onSelect/onRevoke is passed, so existing delegations can't be inspected
+ * or revoked from here - delegating is the only action available.
+ */
 export const InstanceUsersAsInstanceAdmin = ({
   resourceId,
   instanceUrn,
   onDelegate,
   restoreFocusFallbackId,
 }: InstanceUsersAsInstanceAdminProps) => {
-  const { t } = useTranslation();
   const { actingParty, fromParty } = usePartyRepresentation();
 
   const {
     data: instanceUsers,
     isLoading: isLoadingInstanceUsers,
-    isError: isInstanceUsersError,
     error: instanceUsersError,
   } = useGetInstanceUsersQuery(
     {
@@ -53,7 +49,6 @@ export const InstanceUsersAsInstanceAdmin = ({
     data: simplifiedConnections,
     isLoading: isLoadingSimplifiedConnections,
     isFetching: isFetchingSimplifiedConnections,
-    isError: isConnectionError,
     error: connectionError,
   } = useGetSimplifiedConnectionsQuery(
     { partyUuid: fromParty?.partyUuid ?? '' },
@@ -68,57 +63,21 @@ export const InstanceUsersAsInstanceAdmin = ({
   );
 
   const indirectUsers = useMemo(
-    () =>
-      mapSimplifiedConnectionsToUserSearchNodes(simplifiedConnections).filter(
-        (user) =>
-          user.type !== ConnectionUserType.Organization ||
-          (user.children && user.children.length > 0),
-      ),
+    () => mapSimplifiedConnectionsToUserSearchNodes(simplifiedConnections),
     [simplifiedConnections],
   );
 
-  const errorDetails =
-    isInstanceUsersError || isConnectionError
-      ? createErrorDetails(instanceUsersError || connectionError)
-      : null;
-
   return (
-    <>
-      {errorDetails && (
-        <DsAlert
-          role='alert'
-          data-color='danger'
-        >
-          <DsParagraph>{t('common.general_error_paragraph')}</DsParagraph>
-          <TechnicalErrorParagraphs
-            size='sm'
-            status={errorDetails.status}
-            time={errorDetails.time}
-            traceId={errorDetails.traceId}
-          />
-        </DsAlert>
-      )}
-      <UserSearch
-        includeSelfAsChild={false}
-        includeSelfAsChildOnIndirect={false}
-        restoreFocusFallbackId={restoreFocusFallbackId}
-        AddUserButton={
-          <AddUserButton
-            resourceId={resourceId}
-            instanceUrn={instanceUrn}
-          />
-        }
-        users={users}
-        indirectUsers={indirectUsers}
-        isLoading={isLoadingInstanceUsers || isLoadingSimplifiedConnections}
-        isActionLoading={isFetchingSimplifiedConnections}
-        canDelegate
-        noUsersText={t('instance_detail_page.no_users')}
-        directConnectionsHeading={t('instance_detail_page.direct_connections')}
-        indirectConnectionsHeading={t('instance_detail_page.indirect_connections')}
-        searchPlaceholder={t('instance_detail_page.search_placeholder')}
-        onDelegate={onDelegate}
-      />
-    </>
+    <InstanceUserSearch
+      resourceId={resourceId}
+      instanceUrn={instanceUrn}
+      users={users}
+      indirectUsers={indirectUsers}
+      isLoading={isLoadingInstanceUsers || isLoadingSimplifiedConnections}
+      isActionLoading={isFetchingSimplifiedConnections}
+      error={instanceUsersError || connectionError}
+      onDelegate={onDelegate}
+      restoreFocusFallbackId={restoreFocusFallbackId}
+    />
   );
 };
