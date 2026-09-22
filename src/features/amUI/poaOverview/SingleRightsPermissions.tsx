@@ -39,7 +39,7 @@ export const SingleRightsPermissions = () => {
   const [debouncedSearch, setDebouncedSearch] = useState('');
   const [filterState, setFilterState] = useState<string[]>([]);
 
-  // Both lists link to the service's own details page, where permissions are given and revoked.
+  // Both lists link to the service's own details page.
   const getResourceItemAs = useCallback(
     (resource: ServiceResource): ElementType =>
       (props) => (
