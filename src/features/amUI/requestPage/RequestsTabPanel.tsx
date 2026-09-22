@@ -4,16 +4,17 @@ import {
   getSystemUserRequestUrl,
   getSystemUserAgentRequestUrl,
 } from '@/routes/paths/systemUserPath';
-import { Button, DsAlert, List, UserListItem } from '@altinn/altinn-components';
+import { DsAlert, List, UserListItem } from '@altinn/altinn-components';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Link } from 'react-router';
-import { useRestoreFocusContext, useRestoreFocusTarget } from '../common/RestoreFocus';
+import { useRestoreFocusContext } from '../common/RestoreFocus';
 import { RequestReviewModal } from './RequestReviewModal/RequestReviewModal';
 import { Request } from './types';
 import classes from './RequestPage.module.css';
 import { amUIPath } from '@/routes/paths';
-import { HandledRequestsSection } from './HandledRequestsSection';
+import { RequestList } from './RequestList';
+import { RequestListItem } from './RequestListItem';
 
 interface RequestsTabPanelProps {
   count: number;
@@ -57,22 +58,14 @@ export const RequestsTabPanel = ({
   );
 };
 
-export const RequestListItem = (props: React.ComponentProps<typeof UserListItem>) => {
-  useRestoreFocusTarget(props.id);
-  return <UserListItem {...props} />;
-};
-
 interface PendingRequestsProps {
   pendingRequests: Request[] | undefined;
   handledRequests: Request[] | undefined;
 }
 
-const PAGE_SIZE = 8;
-
 export const PendingRequests = ({ pendingRequests, handledRequests }: PendingRequestsProps) => {
   const { t } = useTranslation();
   const [openAccessRequest, setOpenAccessRequest] = useState<Request | null>(null);
-  const [currentPage, setCurrentPage] = useState(1);
   const restoreFocus = useRestoreFocusContext();
 
   const handleClose = () => {
@@ -82,28 +75,24 @@ export const PendingRequests = ({ pendingRequests, handledRequests }: PendingReq
     setOpenAccessRequest(null);
   };
 
-  const paginatedRequests = pendingRequests?.slice(0, PAGE_SIZE * currentPage);
-  const hasNextPage = (pendingRequests?.length ?? 0) > PAGE_SIZE * currentPage;
+  const getRequestUrl = (request: Request) => {
+    if (request.type === 'consent')
+      return getConsentRequestUrl(request.id, encodeURIComponent(`/${amUIPath.Requests}`));
+    if (request.type === 'systemuser')
+      return getSystemUserRequestUrl(request.id, encodeURIComponent(`/${amUIPath.Requests}`));
+    if (request.type === 'agentsystemuser')
+      return getSystemUserAgentRequestUrl(request.id, encodeURIComponent(`/${amUIPath.Requests}`));
+    return null;
+  };
+
   return (
     <>
-      <List>
-        {paginatedRequests?.map((request) => {
-          const getRequestUrl = () => {
-            if (request.type === 'consent')
-              return getConsentRequestUrl(request.id, encodeURIComponent(`/${amUIPath.Requests}`));
-            if (request.type === 'systemuser')
-              return getSystemUserRequestUrl(
-                request.id,
-                encodeURIComponent(`/${amUIPath.Requests}`),
-              );
-            if (request.type === 'agentsystemuser')
-              return getSystemUserAgentRequestUrl(
-                request.id,
-                encodeURIComponent(`/${amUIPath.Requests}`),
-              );
-            return null;
-          };
-          const toUrl = getRequestUrl();
+      <RequestList
+        pendingRequests={pendingRequests}
+        handledRequests={handledRequests}
+        direction='received'
+        renderItem={(request) => {
+          const toUrl = getRequestUrl(request);
           return (
             <RequestListItem
               key={request.id}
@@ -132,27 +121,11 @@ export const PendingRequests = ({ pendingRequests, handledRequests }: PendingReq
               }
             />
           );
-        })}
-      </List>
-      {hasNextPage && (
-        <div className={classes.showMoreButtonContainer}>
-          <Button
-            className={classes.showMoreButton}
-            onClick={() => setCurrentPage((prevPage) => prevPage + 1)}
-            variant='outline'
-            size='md'
-          >
-            {t('common.show_more')}
-          </Button>
-        </div>
-      )}
+        }}
+      />
       <RequestReviewModal
         request={openAccessRequest}
         onClose={handleClose}
-      />
-      <HandledRequestsSection
-        handledRequests={handledRequests}
-        direction='received'
       />
     </>
   );

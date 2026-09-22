@@ -19,13 +19,21 @@ export const CollapsibleContainer = ({
   defaultOpen = false,
   children,
 }: CollapsibleContainerProps) => {
-  const [isOpen, setIsOpen] = useState<boolean>(defaultOpen);
+  const [{ isOpen, openedBySearch }, setOpenState] = useState({
+    isOpen: defaultOpen,
+    openedBySearch: false,
+  });
   const contentId = useId();
 
+  // A search opens the section so matches are visible. Clearing the search closes it again, but only
+  // if the search was what opened it. A manual toggle resets the flag so the user's choice wins.
   useEffect(() => {
-    if (searchString && searchString.length > 0) {
-      setIsOpen(true);
-    }
+    setOpenState((prev) => {
+      if (searchString) {
+        return prev.isOpen ? prev : { isOpen: true, openedBySearch: true };
+      }
+      return prev.openedBySearch ? { isOpen: false, openedBySearch: false } : prev;
+    });
   }, [searchString]);
 
   return (
@@ -38,7 +46,7 @@ export const CollapsibleContainer = ({
         <DsButton
           className={classes.clientAdminDetails}
           variant='tertiary'
-          onClick={() => setIsOpen((prev) => !prev)}
+          onClick={() => setOpenState((prev) => ({ isOpen: !prev.isOpen, openedBySearch: false }))}
           aria-expanded={isOpen}
           aria-controls={contentId}
         >

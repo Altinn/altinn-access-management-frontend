@@ -1158,6 +1158,8 @@
     "review_handled_by": "{{status}} av {{name}} den {{date}}",
     "handled_requests_title": "Behandla førespurnader",
     "handled_requests_description": "Her kan du sjå førespurnader som blei behandla for opptil eit år sidan.",
+    "search_placeholder": "Søk i førespurnader",
+    "no_search_results": "Ingen treff på søket \"{{searchTerm}}\".",
     "review_warning": "Du kan ikkje godkjenne",
     "review_user_link": "Sjå fullmaktene {{name}} har no",
     "review_close_info": "Visst du ikkje vel godkjenn eller avvis på ein førespurnad, vil han bli liggande att som ein aktiv førespurnad.",

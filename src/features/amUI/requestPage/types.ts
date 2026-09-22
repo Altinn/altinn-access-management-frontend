@@ -6,6 +6,7 @@ export interface Request {
   displayPartyType: 'person' | 'company' | 'system';
   isSubUnit?: boolean;
   partyUuid?: string;
+  organizationIdentifier?: string;
   description?: string;
   numberOfRequests?: number;
 }
