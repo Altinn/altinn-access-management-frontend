@@ -17,26 +17,10 @@
   align-items: center;
 }
 
-.actions {
-  display: flex;
-  gap: 0.5rem;
-}
-
-.inherited {
-  display: flex;
-  color: var(--ds-text-color-secondary);
-  margin-right: 0.3rem;
-}
-
 .inheritedInfoIcon {
   color: var(--ds-color-info-base-default);
   margin-right: 0.3rem;
   min-width: 1.5rem;
-}
-
-.nonDelegableIcon {
-  color: var(--ds-color-warning-base-default);
-  margin-right: 0.3rem;
 }
 
 .infoLine {
