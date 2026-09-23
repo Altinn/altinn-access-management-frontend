@@ -1,9 +1,10 @@
 import { expect } from '@playwright/test';
-import { test } from 'playwright/fixture/pomFixture';
 
+import { test } from 'playwright/fixture/pomFixture';
 import { ConsentApiRequests } from 'playwright/api-requests/ConsentApiRequests';
 import { Language } from 'playwright/pages/consent/ConsentPage';
 import { addTimeToNowUtc, formatUiDateTime, pickRandom } from 'playwright/util/helper';
+
 import { fromPersons, toOrgs } from './helper/consentTestdata';
 
 const REDIRECT_URL = 'https://example.com/';
@@ -58,7 +59,7 @@ LANGUAGES.forEach((language) => {
       });
     });
 
-    test(`Krav-template`, async ({ page, consentPage, login }) => {
+    test(`Krav-template`, async ({ consentPage, login }) => {
       const fromPerson = pickRandom(fromPersons);
       const toOrg = pickRandom(toOrgs);
       const validTo = addTimeToNowUtc({ days: 2 });
@@ -138,7 +139,7 @@ LANGUAGES.forEach((language) => {
       });
     });
 
-    test(`Lånesøknad`, async ({ consentPage, page, login }) => {
+    test(`Lånesøknad`, async ({ consentPage, login }) => {
       const fromPerson = pickRandom(fromPersons);
       const toOrg = pickRandom(toOrgs);
       const validTo = addTimeToNowUtc({ days: 2 });
@@ -179,7 +180,7 @@ LANGUAGES.forEach((language) => {
       });
     });
 
-    test(`Enkelt samtykke`, async ({ consentPage, page, login }) => {
+    test(`Enkelt samtykke`, async ({ consentPage, login }) => {
       const fromPerson = pickRandom(fromPersons);
       const toOrg = pickRandom(toOrgs);
       const validTo = addTimeToNowUtc({ days: 2 });

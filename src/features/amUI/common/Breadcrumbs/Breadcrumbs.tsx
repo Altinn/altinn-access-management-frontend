@@ -1,7 +1,8 @@
-import React, { ComponentPropsWithoutRef } from 'react';
+import React, { type ComponentPropsWithoutRef } from 'react';
 import { Breadcrumbs as AcBreadcrumbs, DsSkeleton } from '@altinn/altinn-components';
 import { Link } from 'react-router';
 import { useTranslation } from 'react-i18next';
+
 import { amUIPath, ConsentPath, SystemUserPath } from '@/routes/paths';
 import { getAltinnStartPageUrl } from '@/resources/utils/pathUtils';
 

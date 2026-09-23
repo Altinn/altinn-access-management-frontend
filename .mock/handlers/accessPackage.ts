@@ -1,4 +1,5 @@
 import { http, HttpResponse } from 'msw';
+
 import packages from './data/packages.json';
 import delegations from './data/delegations.json';
 
@@ -25,7 +26,7 @@ const normalizeArea = (area: AccessAreaLike): AccessAreaLike => {
 };
 
 export const accessPackageHandlers = (ACCESSMANAGEMENT_BASE_URL: string) => [
-  http.get(`${ACCESSMANAGEMENT_BASE_URL}/accesspackage/delegations`, ({ params }) => {
+  http.get(`${ACCESSMANAGEMENT_BASE_URL}/accesspackage/delegations`, () => {
     return HttpResponse.json(delegations);
   }),
   http.post(`${ACCESSMANAGEMENT_BASE_URL}/accesspackage/delegationcheck`, async ({ request }) => {
@@ -44,10 +45,7 @@ export const accessPackageHandlers = (ACCESSMANAGEMENT_BASE_URL: string) => [
         : [],
     );
   }),
-  http.get(`${ACCESSMANAGEMENT_BASE_URL}/accesspackage/delegationcheck`, ({ request }) => {
-    const url = new URL(request.url);
-    const party = url.searchParams.get('party');
-
+  http.get(`${ACCESSMANAGEMENT_BASE_URL}/accesspackage/delegationcheck`, () => {
     // Return mock delegation check responses with proper structure
     return HttpResponse.json([
       {

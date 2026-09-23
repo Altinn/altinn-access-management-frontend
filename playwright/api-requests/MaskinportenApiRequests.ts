@@ -1,5 +1,6 @@
-import { Token } from './Token';
 import { env } from 'playwright/util/helper';
+
+import { Token } from './Token';
 
 /** A supplier or consumer connection as returned by the Maskinporten BFF. */
 export interface MaskinportenConnection {

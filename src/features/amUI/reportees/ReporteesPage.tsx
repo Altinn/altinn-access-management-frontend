@@ -1,4 +1,4 @@
-import { DsAlert, DsHeading, formatDisplayName } from '@altinn/altinn-components';
+import { DsAlert, formatDisplayName } from '@altinn/altinn-components';
 import { useTranslation } from 'react-i18next';
 import React from 'react';
 
@@ -9,12 +9,12 @@ import { useGetIsAdminQuery, useGetReporteeQuery } from '@/rtk/features/userInfo
 import { useGetPartyFromLoggedInUserQuery } from '@/rtk/features/lookupApi';
 import { hasReporteeListAdminAccess } from '@/resources/utils/permissionUtils';
 
-import { PageLayoutWrapper } from '../common/PageLayoutWrapper';
-import { PartyRepresentationProvider } from '../common/PartyRepresentationContext/PartyRepresentationContext';
+import { Breadcrumbs } from '../common/Breadcrumbs/Breadcrumbs';
 import { ReporteePageHeading } from '../common/ReporteePageHeading';
+import { PartyRepresentationProvider } from '../common/PartyRepresentationContext/PartyRepresentationContext';
+import { PageLayoutWrapper } from '../common/PageLayoutWrapper';
 
 import { ReporteesList } from './ReporteesList';
-import { Breadcrumbs } from '../common/Breadcrumbs/Breadcrumbs';
 
 export const ReporteesPage = () => {
   const { t } = useTranslation();

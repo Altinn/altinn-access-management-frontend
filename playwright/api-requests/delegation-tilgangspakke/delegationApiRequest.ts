@@ -1,4 +1,5 @@
-import { request, APIRequestContext } from '@playwright/test';
+import { type APIRequestContext } from '@playwright/test';
+
 import { Token } from './../Token';
 
 export class DelegationApiRequest {

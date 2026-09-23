@@ -1,6 +1,8 @@
 import fs from 'fs';
 import path from 'path';
+
 import csv from 'csv-parser';
+
 import { getTestPersonForCategory } from './testDelegationdatautil';
 import { currentEnv } from './helper';
 
@@ -74,12 +76,16 @@ export async function getCleanupDataForTest(
 
     try {
       authPerson = await getTestPersonForCategory(`Dagligerleder-${fromOrgCategory}`);
-    } catch {}
+    } catch {
+      /* try next name variant */
+    }
 
     if (!authPerson) {
       try {
         authPerson = await getTestPersonForCategory(`Dagligleder-${fromOrgCategory}`);
-      } catch {}
+      } catch {
+        /* try next name variant */
+      }
     }
 
     if (!authPerson || (!authPerson.PID && !authPerson.UserId)) {

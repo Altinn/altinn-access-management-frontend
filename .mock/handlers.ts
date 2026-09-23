@@ -1,4 +1,5 @@
-import { http, passthrough, HttpResponse } from 'msw';
+import { http, passthrough } from 'msw';
+
 import { resourceHandler } from './handlers/resource';
 import { userHandlers } from './handlers/user';
 import { singlerightHandlers } from './handlers/singleright';

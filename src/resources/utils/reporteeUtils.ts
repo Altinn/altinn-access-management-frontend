@@ -1,6 +1,7 @@
-import { ReporteeInfo } from '@/rtk/features/userInfoApi';
 import { formatDate } from '@altinn/altinn-components';
 import { t } from 'i18next';
+
+import { type ReporteeInfo } from '@/rtk/features/userInfoApi';
 
 const SUBUNIT_TYPES = ['BEDR', 'AAFY', 'ADOS'];
 

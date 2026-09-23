@@ -10,15 +10,17 @@ import {
 import { DownloadIcon } from '@navikt/aksel-icons';
 import { useTranslation } from 'react-i18next';
 import { useRef, useState } from 'react';
-import { usePartyRepresentation } from '../PartyRepresentationContext/PartyRepresentationContext';
+
 import {
   PartyType,
   useGetIsAdminQuery,
   useGetReporteeListForAuthorizedUserQuery,
 } from '@/rtk/features/userInfoApi';
+import { isSubUnitByType } from '@/resources/utils/reporteeUtils';
+
+import { usePartyRepresentation } from '../PartyRepresentationContext/PartyRepresentationContext';
 
 import classes from './DownloadFileButton.module.css';
-import { isSubUnitByType } from '@/resources/utils/reporteeUtils';
 
 const MAX_SUBUNITS_FOR_DOWNLOAD_OPTION = 500;
 
