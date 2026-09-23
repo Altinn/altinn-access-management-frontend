@@ -1,5 +1,4 @@
-import { Button, DsHeading, DsParagraph } from '@altinn/altinn-components';
-import { MinusCircleIcon } from '@navikt/aksel-icons';
+import { DsButton, DsHeading, DsParagraph } from '@altinn/altinn-components';
 import { useEffect, useRef } from 'react';
 import { useTranslation } from 'react-i18next';
 
@@ -272,18 +271,18 @@ export const ScopeInfo = ({
                 className={classes.editButtons}
               >
                 {hasDelegatedResource ? (
-                  <Button
-                    size='sm'
+                  <DsButton
+                    data-size='sm'
                     variant='secondary'
+                    data-color='danger'
                     disabled={isActionLoading}
                     onClick={handleRemoveResource}
                   >
-                    <MinusCircleIcon aria-hidden='true' />
                     {t('common.delete_poa')}
-                  </Button>
+                  </DsButton>
                 ) : (
-                  <Button
-                    size='sm'
+                  <DsButton
+                    data-size='sm'
                     disabled={
                       isActionLoading ||
                       !!displayResourceAlert ||
@@ -294,7 +293,7 @@ export const ScopeInfo = ({
                     onClick={handleAddResource}
                   >
                     {t('common.give_poa')}
-                  </Button>
+                  </DsButton>
                 )}
               </div>
             ) : null}

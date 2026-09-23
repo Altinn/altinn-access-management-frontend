@@ -1,7 +1,6 @@
 import * as React from 'react';
-import { Button, formatDisplayName } from '@altinn/altinn-components';
+import { DsButton, formatDisplayName } from '@altinn/altinn-components';
 import { useTranslation } from 'react-i18next';
-import { MinusCircleIcon } from '@navikt/aksel-icons';
 
 import { useIsMobileOrSmaller } from '@/resources/utils/screensizeUtils';
 import { StatusMessageForScreenReader } from '@/components/StatusMessageForScreenReader/StatusMessageForScreenReader';
@@ -258,7 +257,7 @@ export const InstanceInfo = ({
               className={classes.editButtons}
             >
               {hasDelegateAction && (
-                <Button
+                <DsButton
                   data-size='sm'
                   disabled={
                     isActionLoading ||
@@ -269,22 +268,21 @@ export const InstanceInfo = ({
                   onClick={hasDirectAccess ? saveEditedRights : delegateChosenRights}
                 >
                   {hasDirectAccess ? t('common.update_poa') : t('common.give_poa')}
-                </Button>
+                </DsButton>
               )}
               {canRevoke && hasDirectAccess && !!toParty && (
-                <Button
+                <DsButton
                   data-size='sm'
-                  variant={hasDelegateAction ? 'tertiary' : 'primary'}
+                  variant={hasDelegateAction ? 'secondary' : 'primary'}
                   onClick={revokeResource}
                   disabled={
                     isActionLoading ||
                     !rights.some((r) => r.delegated === true && r.inherited !== true)
                   }
-                  color='danger'
+                  data-color='danger'
                 >
-                  <MinusCircleIcon aria-hidden='true' />
                   {t('common.delete_poa')}
-                </Button>
+                </DsButton>
               )}
             </div>
           </>

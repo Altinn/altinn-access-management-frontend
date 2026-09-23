@@ -185,6 +185,7 @@ export const AccessPackageInfo = ({ accessPackage, availableActions = [] }: Pack
                   confirmAction={() => revokeWithoutConfirmation(accessPackage)}
                   triggerButtonProps={{
                     variant: 'primary',
+                    'data-color': 'danger',
                   }}
                 />
               )
