@@ -18,6 +18,7 @@ vi.mock('react-i18next', () => ({
     t: (key: string, options?: Record<string, unknown>) =>
       options ? `${key} ${JSON.stringify(options)}` : key,
   }),
+  Trans: ({ i18nKey }: { i18nKey: string }) => i18nKey,
 }));
 
 vi.mock('react-redux', () => ({
@@ -38,12 +39,18 @@ vi.mock('@/rtk/features/connectionApi', () => ({
 vi.mock('@/rtk/features/instanceApi', () => ({
   useDelegateInstanceRightsMutation: () => [delegateInstanceRights, { isLoading: false }],
   useInstanceDelegationCheckQuery: () => delegationCheck,
-  // The add-user flow passes no from/to party, so this query is always skipped.
-  useGetInstanceRightsQuery: () => ({ data: undefined, isLoading: false, isFetching: false }),
+}));
+
+// useRecipientForm always runs the org lookup, even for a person-only flow where it is skipped -
+// a skipped RTK hook still runs, and an unmocked one throws without a store.
+vi.mock('@/rtk/features/lookupApi', () => ({
+  useGetOrganizationQuery: () => ({ data: undefined, isFetching: false, isError: false }),
 }));
 
 vi.mock('@/rtk/features/singleRights/singleRightsApi', () => ({
   useGetResourceRightsMetaQuery: () => rightsMeta,
+  // Declared by useDelegableRights but skipped for an instance; a skipped hook still runs.
+  useDelegationCheckQuery: () => ({ data: undefined, isLoading: false, isError: false }),
 }));
 
 const dialog = () => document.querySelector('dialog');
@@ -102,7 +109,13 @@ describe('AddUserModal', () => {
     ).toBeInTheDocument();
 
     await expandActions();
-    expect(screen.getByText('delegation_modal.actions.cannot_give_header')).toBeInTheDocument();
+    // Level 4 under the level 3 section heading. This modal used to jump to 5.
+    expect(
+      screen.getByRole('heading', {
+        name: 'delegation_modal.actions.cannot_give_header',
+        level: 4,
+      }),
+    ).toBeInTheDocument();
     expect(screen.getByText('Signer')).toBeInTheDocument();
   });
 
@@ -137,9 +150,35 @@ describe('AddUserModal', () => {
     );
   });
 
+  // The dialog unmounts its content when it closes, which is what replaced the old resetForm().
+  it('starts from a clean form when reopened', async () => {
+    await openModal();
+    await fillPerson();
+    await submit();
+
+    await userEvent.click(screen.getByRole('button', { name: 'new_user_modal.trigger_button' }));
+
+    expect(screen.getByLabelText('new_user_modal.person_identifier')).toHaveValue('');
+    expect(screen.getByLabelText('common.last_name')).toHaveValue('');
+    expect(screen.getByRole('button', { name: 'common.give_poa' })).toBeDisabled();
+  });
+
   it('cannot submit before an identity is given', async () => {
     await openModal();
 
+    expect(screen.getByRole('button', { name: 'common.give_poa' })).toBeDisabled();
+  });
+
+  // PersonFields keeps the format error as a translation key and only shows it once the field is
+  // left, which is the behaviour the users page has always had.
+  it('reports a malformed identifier when the field is left, and keeps submit disabled', async () => {
+    await openModal();
+    await userEvent.type(screen.getByLabelText('new_user_modal.person_identifier'), '2083819838');
+    await userEvent.type(screen.getByLabelText('common.last_name'), 'Medaljong');
+
+    expect(
+      screen.getByText('new_user_modal.person_identifier_ssn_format_error'),
+    ).toBeInTheDocument();
     expect(screen.getByRole('button', { name: 'common.give_poa' })).toBeDisabled();
   });
 
@@ -153,8 +192,8 @@ describe('AddUserModal', () => {
     expect(screen.getByRole('button', { name: 'common.give_poa' })).toBeDisabled();
   });
 
-  // Regression: the rights error was read from a key useInstanceDelegationRightsData no longer
-  // returned, so a failing rights meta left the chip list empty and the submit button live.
+  // Regression: the rights error used to be read from a key its hook no longer returned, so a
+  // failing rights meta left the chip list empty and the submit button live.
   it('blocks submit and reports the error when the actions cannot be loaded', async () => {
     rightsMeta = { data: undefined, isLoading: false, isError: true, error: { status: 500 } };
     await openModal();
@@ -172,6 +211,20 @@ describe('AddUserModal', () => {
 
     expect(screen.getByText('common.general_error_paragraph')).toBeInTheDocument();
     expect(screen.getByRole('button', { name: 'common.give_poa' })).toBeDisabled();
+  });
+
+  // A failure with no message of its own leads with the apology and carries the trace id, which is
+  // what support asks for. Both arrived when this modal moved onto the shared NewUserAlert.
+  it('reports an unrecognised failure with the trace id', async () => {
+    delegateInstanceRights.mockReturnValue({
+      unwrap: () => Promise.reject({ status: '500', data: { traceId: 'abc-123' } }),
+    });
+    await openModal();
+    await fillPerson();
+    await submit();
+
+    expect(await screen.findByText('common.general_error_paragraph')).toBeInTheDocument();
+    expect(screen.getByText('common.trace_id {"traceId":"abc-123"}')).toBeInTheDocument();
   });
 
   it('keeps the dialog open and reports the failure when the delegation fails', async () => {

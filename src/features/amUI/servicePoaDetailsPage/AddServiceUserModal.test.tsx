@@ -20,6 +20,7 @@ vi.mock('react-i18next', () => ({
     t: (key: string, options?: Record<string, unknown>) =>
       options ? `${key} ${JSON.stringify(options)}` : key,
   }),
+  Trans: ({ i18nKey }: { i18nKey: string }) => i18nKey,
 }));
 
 vi.mock('../common/PartyRepresentationContext/PartyRepresentationContext', () => ({
@@ -35,6 +36,12 @@ vi.mock('@/rtk/features/connectionApi', () => ({
 
 vi.mock('@/rtk/features/lookupApi', () => ({
   useGetOrganizationQuery: () => organization,
+}));
+
+// Declared by useDelegableRights but skipped without an instanceUrn; a skipped hook still runs,
+// and an unmocked RTK hook throws without a store.
+vi.mock('@/rtk/features/instanceApi', () => ({
+  useInstanceDelegationCheckQuery: () => ({ data: undefined, isLoading: false, isError: false }),
 }));
 
 vi.mock('@/rtk/features/singleRights/singleRightsApi', () => ({
@@ -144,6 +151,37 @@ describe('AddServiceUserModal', () => {
     expect(delegateRights).toHaveBeenCalledWith(
       expect.objectContaining({ toUuid: 'new-user-uuid', actionKeys: ['read', 'write'] }),
     );
+  });
+
+  const foundOrg = {
+    data: { orgNumber: '310202398', name: 'Diskret Nær Tiger AS', partyUuid: 'org-uuid' },
+    isFetching: false,
+    isError: false,
+  };
+
+  const fillOrgNumber = async (value: string) => {
+    await userEvent.click(screen.getByRole('tab', { name: 'new_user_modal.organization' }));
+    await userEvent.type(screen.getByLabelText('common.org_number'), value);
+  };
+
+  // The shared lookup strips spaces, so a number typed in groups still reaches the 9 digit query.
+  it('ignores spaces typed into the org number', async () => {
+    organization = foundOrg;
+    await openModal();
+    await fillOrgNumber('310 202 398');
+
+    expect(screen.getByLabelText('common.org_number')).toHaveValue('310202398');
+    expect(screen.getByRole('button', { name: 'common.give_poa' })).toBeEnabled();
+  });
+
+  // isFetching, not isLoading: a second lookup leaves the first organisation in data while it runs.
+  it('will not submit an organisation while its lookup is still running', async () => {
+    organization = { ...foundOrg, isFetching: true };
+    await openModal();
+    await fillOrgNumber('310202398');
+
+    expect(screen.queryByText('Diskret Nær Tiger AS')).not.toBeInTheDocument();
+    expect(screen.getByRole('button', { name: 'common.give_poa' })).toBeDisabled();
   });
 
   it('cannot submit before an identity is given', async () => {
