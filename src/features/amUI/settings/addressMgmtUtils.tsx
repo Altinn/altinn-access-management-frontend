@@ -1,18 +1,19 @@
-import React from 'react';
+import { useState } from 'react';
+
 import {
-  Address,
-  NotificationAddress,
+  type Address,
+  type NotificationAddress,
   useCreateOrgNotificationAddressMutation,
   useDeleteOrgNotificationAddressMutation,
   useUpdateOrgNotificationAddressMutation,
 } from '@/rtk/features/settingsApi';
-import { useState } from 'react';
-import { usePartyRepresentation } from '../common/PartyRepresentationContext/PartyRepresentationContext';
 import {
   validateEmail,
   validatePhoneNumber,
   validateCountryCode,
 } from '@/resources/utils/textFieldUtils';
+
+import { usePartyRepresentation } from '../common/PartyRepresentationContext/PartyRepresentationContext';
 
 export const addressIsEmpty = (address: Address) => !address.email && !address.phone;
 

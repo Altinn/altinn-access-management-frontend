@@ -1,10 +1,9 @@
 import { formatDisplayName, UserListItem } from '@altinn/altinn-components';
-import { useTranslation } from 'react-i18next';
 
 import type { Connection } from '@/rtk/features/connectionApi';
+import { getFormattedDateOfBirthLabel } from '@/resources/utils/reporteeUtils';
 
 import classes from './CurrentUserPageHeader.module.css';
-import { getFormattedDateOfBirthLabel } from '@/resources/utils/reporteeUtils';
 
 interface CurrentUserPageHeaderProps {
   currentUser?: Connection;
@@ -19,8 +18,6 @@ export const CurrentUserPageHeader = ({
   loading,
   roleNames,
 }: CurrentUserPageHeaderProps) => {
-  const { t } = useTranslation();
-
   return (
     <div className={classes.currentUser}>
       <UserListItem

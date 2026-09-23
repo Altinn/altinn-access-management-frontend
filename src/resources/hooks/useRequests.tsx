@@ -1,21 +1,23 @@
 import { useMemo } from 'react';
-import { getCookie } from '../Cookie/CookieMethods';
+import { formatDisplayName } from '@altinn/altinn-components';
+
 import { PartyType, useGetIsAdminQuery, useGetReporteeQuery } from '@/rtk/features/userInfoApi';
-import { hasConsentPermission, hasCreateSystemUserPermission } from '../utils/permissionUtils';
 import { useGetActiveConsentsQuery } from '@/rtk/features/consentApi';
-import { Request } from '@/features/amUI/requestPage/types';
+import { type Request } from '@/features/amUI/requestPage/types';
 import { useGetPendingSystemUserRequestsQuery } from '@/rtk/features/systemUserApi';
-import { SystemUser } from '@/features/amUI/systemUser/types';
-import { ActiveConsentListItem } from '@/features/amUI/consent/types';
+import { type SystemUser } from '@/features/amUI/systemUser/types';
+import { type ActiveConsentListItem } from '@/features/amUI/consent/types';
 import {
-  RequestDto,
-  RequestStatus,
+  type RequestDto,
+  type RequestStatus,
   useGetReceivedRequestsQuery,
   useGetSentRequestsQuery,
 } from '@/rtk/features/requestApi';
-import { formatDisplayName } from '@altinn/altinn-components';
 import { isSubUnitByType } from '@/resources/utils/reporteeUtils';
 import { useGetPartyFromLoggedInUserQuery } from '@/rtk/features/lookupApi';
+
+import { hasConsentPermission, hasCreateSystemUserPermission } from '../utils/permissionUtils';
+import { getCookie } from '../Cookie/CookieMethods';
 
 interface UseRequestsOptions {
   skipSentRequests?: boolean;

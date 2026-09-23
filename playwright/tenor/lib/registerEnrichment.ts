@@ -1,4 +1,3 @@
-/* eslint-disable no-console */
 import { RegisterApiRequests } from '../client/RegisterApiRequests';
 
 /** Preserve Tenor rows and order, including rows absent from this environment. */

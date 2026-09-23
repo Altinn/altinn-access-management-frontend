@@ -1,8 +1,8 @@
 import { DsAlert, DsHeading } from '@altinn/altinn-components';
 import { useTranslation } from 'react-i18next';
 
-import type { ActionError } from '@/resources/hooks/useActionError';
 import { PartyType } from '@/rtk/features/userInfoApi';
+import type { ActionError } from '@/resources/hooks/useActionError';
 
 import { TechnicalErrorParagraphs } from '../common/TechnicalErrorParagraphs/TechnicalErrorParagraphs';
 import { ValidationErrorMessage } from '../common/ValidationErrorMessage';

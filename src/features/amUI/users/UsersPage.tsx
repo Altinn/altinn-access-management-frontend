@@ -9,10 +9,10 @@ import { getCookie } from '@/resources/Cookie/CookieMethods';
 
 import { PartyRepresentationProvider } from '../common/PartyRepresentationContext/PartyRepresentationContext';
 import { PageLayoutWrapper } from '../common/PageLayoutWrapper';
-
-import { UsersList } from './UsersList';
 import { ReporteePageHeading } from '../common/ReporteePageHeading';
 import { Breadcrumbs } from '../common/Breadcrumbs/Breadcrumbs';
+
+import { UsersList } from './UsersList';
 
 export const UsersPage = () => {
   const { t } = useTranslation();

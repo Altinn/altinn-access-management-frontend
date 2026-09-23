@@ -1,4 +1,3 @@
-/* eslint-disable no-console */
 /**
  * Tenor CLI — hent testdata (personer, virksomheter, facilitatorer) fra
  * Skatteetatens Tenor-tjeneste, og bygg opp Altinn-testdata fra det.

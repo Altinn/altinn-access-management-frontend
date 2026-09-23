@@ -18,9 +18,9 @@ export const useUpdateResource = () => {
     }
 
     update({
-      party: actingParty!.partyUuid,
-      from: fromParty!.partyUuid,
-      to: toParty!.partyUuid,
+      party: actingParty.partyUuid,
+      from: fromParty.partyUuid,
+      to: toParty.partyUuid,
       resourceId,
       actionKeys,
     })

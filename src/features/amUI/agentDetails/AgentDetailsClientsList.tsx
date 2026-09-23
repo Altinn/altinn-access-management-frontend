@@ -1,6 +1,7 @@
 import React from 'react';
 import { formatDisplayName } from '@altinn/altinn-components';
 
+import type { ActionError } from '@/resources/hooks/useActionError';
 import type {
   AddAgentAccessPackagesFn,
   AddAgentResourcesFn,
@@ -8,13 +9,13 @@ import type {
   RemoveAgentAccessPackagesFn,
   RemoveAgentResourcesFn,
 } from '@/rtk/features/clientApi';
-import type { ActionError } from '@/resources/hooks/useActionError';
-import { ClientAccessList } from '../common/ClientAccessList/ClientAccessList';
+import { PartyType } from '@/rtk/features/userInfoApi';
 
-import { useAgentDetailsAccessPackageActions } from './useAgentDetailsAccessPackageActions';
+import { ClientAccessList } from '../common/ClientAccessList/ClientAccessList';
 import { useClientResourceActions } from '../common/ClientResourceList/useClientResourceActions';
 import { usePartyRepresentation } from '../common/PartyRepresentationContext/PartyRepresentationContext';
-import { PartyType } from '@/rtk/features/userInfoApi';
+
+import { useAgentDetailsAccessPackageActions } from './useAgentDetailsAccessPackageActions';
 
 type AgentDetailsClientsListProps = {
   clients: Client[];

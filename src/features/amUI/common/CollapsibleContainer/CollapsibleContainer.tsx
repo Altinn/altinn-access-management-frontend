@@ -19,7 +19,7 @@ export const CollapsibleContainer = ({
   defaultOpen = false,
   children,
 }: CollapsibleContainerProps) => {
-  const [{ isOpen, openedBySearch }, setOpenState] = useState({
+  const [{ isOpen }, setOpenState] = useState({
     isOpen: defaultOpen,
     openedBySearch: false,
   });

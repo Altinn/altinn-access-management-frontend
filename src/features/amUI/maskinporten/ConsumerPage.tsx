@@ -11,11 +11,12 @@ import { useGetMaskinportenConsumersQuery } from '@/rtk/features/maskinportenApi
 import { PartyType } from '@/rtk/features/userInfoApi';
 import { amUIPath } from '@/routes/paths';
 
-import { Breadcrumbs } from '../common/Breadcrumbs/Breadcrumbs';
-import { DelegationModalProvider } from '../common/DelegationModal/DelegationModalContext';
-import { PageContainer } from '../common/PageContainer/PageContainer';
-import { PageLayoutWrapper } from '../common/PageLayoutWrapper';
 import { PartyRepresentationProvider } from '../common/PartyRepresentationContext/PartyRepresentationContext';
+import { PageLayoutWrapper } from '../common/PageLayoutWrapper';
+import { PageContainer } from '../common/PageContainer/PageContainer';
+import { DelegationModalProvider } from '../common/DelegationModal/DelegationModalContext';
+import { Breadcrumbs } from '../common/Breadcrumbs/Breadcrumbs';
+
 import { ConsumerPageContent } from './ConsumerPageContent';
 
 export const ConsumerPage = () => {

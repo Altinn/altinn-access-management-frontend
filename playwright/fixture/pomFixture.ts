@@ -1,5 +1,6 @@
 // pomFixtures.ts
 import { test as baseTest, expect } from '@playwright/test';
+
 import { ConsentPage, Language } from 'playwright/pages/consent/ConsentPage';
 import { LanguageMenu } from 'playwright/pages/LanguageMenu';
 import { LoginPage, logoutWithUser } from 'playwright/pages/LoginPage';

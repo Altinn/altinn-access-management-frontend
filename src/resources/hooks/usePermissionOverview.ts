@@ -1,5 +1,6 @@
 import { useMemo } from 'react';
-import { AvatarProps, formatDisplayName } from '@altinn/altinn-components';
+import { type AvatarProps, formatDisplayName } from '@altinn/altinn-components';
+
 import type { Permissions } from '@/dataObjects/dtos/accessPackage';
 import { isSubUnitByType } from '@/resources/utils/reporteeUtils';
 

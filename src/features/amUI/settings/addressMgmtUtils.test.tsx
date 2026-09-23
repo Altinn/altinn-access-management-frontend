@@ -4,11 +4,11 @@ import { Provider } from 'react-redux';
 import { configureStore } from '@reduxjs/toolkit';
 import React from 'react';
 
-import type { Address, NotificationAddress } from '@/rtk/features/settingsApi';
+import type { NotificationAddress } from '@/rtk/features/settingsApi';
 import { settingsApi } from '@/rtk/features/settingsApi';
-import { usePartyRepresentation } from '../common/PartyRepresentationContext/PartyRepresentationContext';
-import type { Party } from '@/rtk/features/lookupApi';
 import { PartyType } from '@/rtk/features/userInfoApi';
+
+import { usePartyRepresentation } from '../common/PartyRepresentationContext/PartyRepresentationContext';
 
 import {
   hasDeletions,

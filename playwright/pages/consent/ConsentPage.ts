@@ -1,6 +1,6 @@
 import type { Page, Locator } from '@playwright/test';
-
 import { expect } from '@playwright/test';
+
 import { LANGUAGE_DICTIONARIES, Language, LanguageMenu, type Dict } from '../LanguageMenu';
 
 export { Language };

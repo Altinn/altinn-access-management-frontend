@@ -1,12 +1,12 @@
 import { forwardRef, useImperativeHandle, useMemo, useRef, useState } from 'react';
 
-import type { AccessPackage } from '@/rtk/features/accessPackageApi';
-import type { Party } from '@/rtk/features/lookupApi';
 import { PartyType } from '@/rtk/features/userInfoApi';
+import type { Party } from '@/rtk/features/lookupApi';
+import type { AccessPackage } from '@/rtk/features/accessPackageApi';
 
 import type { UserActionTarget } from '../common/UserSearch/types';
 import { usePartyRepresentation } from '../common/PartyRepresentationContext/PartyRepresentationContext';
-import { DelegationAction } from '../common/DelegationModal/EditModal';
+import { type DelegationAction } from '../common/DelegationModal/EditModal';
 import { getInheritedStatus } from '../common/useInheritedStatus';
 
 import { PartyInfoModal } from './PartyInfoModal';

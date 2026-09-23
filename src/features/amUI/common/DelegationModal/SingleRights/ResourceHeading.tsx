@@ -1,8 +1,9 @@
-import { useProviderLogoUrl } from '@/resources/hooks';
-import { Avatar, Badge, Color, DsHeading, DsParagraph, Icon } from '@altinn/altinn-components';
+import { Avatar, Badge, type Color, DsHeading, DsParagraph, Icon } from '@altinn/altinn-components';
+import { useTranslation } from 'react-i18next';
 
-import classes from './ResourceInfo.module.css';
+import { useProviderLogoUrl } from '@/resources/hooks';
 import { useIsMobileOrSmaller } from '@/resources/utils/screensizeUtils';
+
 import type { ResourceListItemResource } from '../../ResourceList/types';
 import {
   extractLogoUrl,
@@ -11,7 +12,8 @@ import {
   extractResourceName,
   isExpiredResource,
 } from '../../ResourceList/utils';
-import { useTranslation } from 'react-i18next';
+
+import classes from './ResourceInfo.module.css';
 
 interface ResourceHeadingProps {
   resource: ResourceListItemResource;
