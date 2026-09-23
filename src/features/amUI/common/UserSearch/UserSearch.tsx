@@ -118,7 +118,10 @@ export const UserSearch: React.FC<UserSearchProps> = ({
     <div className={classes.container}>
       <div className={classes.controls}>
         <div className={classes.searchAndFilters}>
-          <DsSearch className={classes.searchBar}>
+          <DsSearch
+            className={classes.searchBar}
+            data-size='sm'
+          >
             <DsSearch.Input
               id={restoreFocusFallbackId}
               aria-label={t('common.search')}
@@ -152,9 +155,9 @@ export const UserSearch: React.FC<UserSearchProps> = ({
             </DsParagraph>
           )}
           {isQuery && showIndirectList && (
-            <h3 className={classes.subHeader}>
+            <h2 className={classes.subHeader}>
               {directConnectionsHeading ?? t('advanced_user_search.direct_connections')}
-            </h3>
+            </h2>
           )}
           <UserSearchResults
             users={filteredDirectUsers}
@@ -182,9 +185,9 @@ export const UserSearch: React.FC<UserSearchProps> = ({
 
         {showIndirectList && (
           <>
-            <h3 className={classes.subHeader}>
+            <h2 className={classes.subHeader}>
               {indirectConnectionsHeading ?? t('advanced_user_search.indirect_connections')}
-            </h3>
+            </h2>
             <UserSearchResults
               users={filteredIndirectUsers}
               hasNextPage={!!hasNextIndirectPage}

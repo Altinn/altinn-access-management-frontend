@@ -44,6 +44,10 @@
   padding-top: var(--ds-spacing-1);
 }
 
+.subHeader {
+  font-size: var(--ds-body-lg-font-size);
+}
+
 @media only screen and (max-width: 768px) {
   .controls {
     flex-direction: column;
