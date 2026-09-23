@@ -5,6 +5,8 @@ import { ApiRequests } from 'playwright/api-requests/SystemUserApiRequests';
 
 import { systemUserOwners } from './testdata';
 
+const reportArea = { annotation: { type: 'report-area', description: 'Systembruker' } };
+
 // Runs in nynorsk on purpose: exercises the before-login language pinning
 // (settings API) and proves the dict-driven selectors work in a non-default
 // language. The rest of the suites run in the default bokmål.
@@ -14,14 +16,16 @@ const vendorOrgNumber = '310547891';
 const testUserPid = owner.pid;
 const testOrgName = owner.name;
 
-test.describe('System Register', async () => {
+test.describe('System Register', reportArea, async () => {
   let system: string;
   let api: ApiRequests;
 
-  test.beforeEach(async ({ login }) => {
+  test.beforeEach(async ({ reportContext, login }) => {
     system = '';
+    reportContext.set({ from: owner, vendorOrgNumber });
     api = new ApiRequests();
     system = await api.createSystemSystemRegister(vendorOrgNumber);
+    reportContext.set({ from: owner, systemId: `${vendorOrgNumber}_${system}`, vendorOrgNumber });
     await login.LoginToAccessManagement(testUserPid);
     await login.selectActor(testOrgName);
   });
@@ -29,6 +33,7 @@ test.describe('System Register', async () => {
   test('Create system user and verify landing page', async ({
     systemUserPage,
     accessManagementFrontPage,
+    runAccessibilityTest,
   }): Promise<void> => {
     await test.step('Navigate to system user page', async () => {
       await accessManagementFrontPage.systemUserMenuLink.click();
@@ -43,6 +48,7 @@ test.describe('System Register', async () => {
     await test.step('Verify system user created', async () => {
       await expect(systemUserPage.systemUserCreatedHeading).toBeVisible();
       await expect(systemUserPage.systemUserLink(system)).toBeVisible();
+      await runAccessibilityTest.scan('systembruker');
     });
   });
 

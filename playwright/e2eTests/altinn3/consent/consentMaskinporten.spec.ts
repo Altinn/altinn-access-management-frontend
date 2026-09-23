@@ -7,6 +7,8 @@ import { addTimeToNowUtc, currentEnv, formatUiDateTime, pickRandom } from 'playw
 import { getConsentRequestId } from './helper/consentHelper.js';
 import { fromOrgs, fromPersons, toOrgs } from './helper/consentTestdata';
 
+const reportArea = { annotation: { type: 'report-area', description: 'Samtykke' } };
+
 const MASKINPORTEN_ORG_DIGDIR = '991825827';
 const ENV = currentEnv().toUpperCase();
 const REDIRECT_URL = 'https://example.com/';
@@ -23,7 +25,7 @@ const MASKINPORTEN_JWK_ENV = 'MASKINPORTEN_JWK';
 const MASKINPORTEN_BEHALF_OF_CLIENT_ID_ENV = 'MASKINPORTEN_BEHALF_OF_CLIENT_ID';
 const MASKINPORTEN_BEHALF_OF_JWK_ENV = 'MASKINPORTEN_BEHALF_OF_JWK';
 
-test.describe('Fetch consent token after approval', () => {
+test.describe('Fetch consent token after approval', reportArea, () => {
   async function assertConsentTokenIsReturned(
     api: ConsentApiRequests,
     consentViewUri: string,
@@ -44,16 +46,26 @@ test.describe('Fetch consent token after approval', () => {
     expect(token.length).toBeGreaterThan(10);
   }
 
-  test('From person to org', async ({ login, consentPage }) => {
-    const fromPerson = pickRandom(fromPersons);
-    const toOrg = MASKINPORTEN_ORG_DIGDIR;
+  test('From person to org', async ({
+    login,
+    consentPage,
+    reportContext,
+    runAccessibilityTest,
+  }) => {
+    const from = { pid: pickRandom(fromPersons) };
+    const to = { orgNo: MASKINPORTEN_ORG_DIGDIR };
     const validTo = addTimeToNowUtc({ days: 5 });
-    const api = new ConsentApiRequests(toOrg);
+    reportContext.set({
+      from,
+      to,
+      validTo,
+    });
+    const api = new ConsentApiRequests(to.orgNo);
 
     const consentResp = await test.step('Create consent request', async () => {
       const response = await api.createConsentRequestWithMaskinporten(
-        { type: 'person', id: fromPerson },
-        { type: 'org', id: toOrg },
+        { type: 'person', id: from.pid },
+        { type: 'org', id: to.orgNo },
         MASKINPORTEN_CLIENT_ID_ENV,
         MASKINPORTEN_JWK_ENV,
         {
@@ -62,13 +74,14 @@ test.describe('Fetch consent token after approval', () => {
         },
       );
       await consentPage.open(response.viewUri);
-      await login.loginNotChoosingActor(fromPerson);
+      await login.loginNotChoosingActor(from.pid);
       await consentPage.openMenu();
       await consentPage.pickLanguage(consentPage.language);
       return response;
     });
-
     await test.step('Approve consent', async () => {
+      await expect(consentPage.buttonApprove).toBeEnabled();
+      await runAccessibilityTest.scan('samtykke-før-godkjenning');
       await consentPage.approveStandardAndWaitLogout(APPROVED_REDIRECT_URL);
     });
 
@@ -80,23 +93,29 @@ test.describe('Fetch consent token after approval', () => {
       await assertConsentTokenIsReturned(
         api,
         consentResp.viewUri,
-        `urn:altinn:person:identifier-no:${fromPerson}`,
+        `urn:altinn:person:identifier-no:${from.pid}`,
         MASKINPORTEN_CLIENT_ID_ENV,
         MASKINPORTEN_JWK_ENV,
       );
     });
   });
 
-  test('From org to org', async ({ login, consentPage }) => {
-    const [fromOrg, personThatCanApprove] = pickRandom(fromOrgs);
-    const toOrg = MASKINPORTEN_ORG_DIGDIR;
+  test('From org to org', async ({ login, consentPage, reportContext, runAccessibilityTest }) => {
+    const [orgNo, pid] = pickRandom(fromOrgs);
+    const from = { orgNo, pid };
+    const to = { orgNo: MASKINPORTEN_ORG_DIGDIR };
     const validTo = addTimeToNowUtc({ days: 5 });
-    const api = new ConsentApiRequests(toOrg);
+    reportContext.set({
+      from,
+      to,
+      validTo,
+    });
+    const api = new ConsentApiRequests(to.orgNo);
 
     const consentResp = await test.step('Create consent request', async () => {
       const response = await api.createConsentRequestWithMaskinporten(
-        { type: 'org', id: fromOrg },
-        { type: 'org', id: toOrg },
+        { type: 'org', id: from.orgNo },
+        { type: 'org', id: to.orgNo },
         MASKINPORTEN_CLIENT_ID_ENV,
         MASKINPORTEN_JWK_ENV,
         {
@@ -105,13 +124,14 @@ test.describe('Fetch consent token after approval', () => {
         },
       );
       await consentPage.open(response.viewUri);
-      await login.loginNotChoosingActor(personThatCanApprove);
+      await login.loginNotChoosingActor(from.pid);
       await consentPage.openMenu();
       await consentPage.pickLanguage(consentPage.language);
       return response;
     });
-
     await test.step('Approve consent', async () => {
+      await expect(consentPage.buttonApprove).toBeEnabled();
+      await runAccessibilityTest.scan('samtykke-før-godkjenning');
       await consentPage.approveStandardAndWaitLogout(APPROVED_REDIRECT_URL);
     });
 
@@ -123,7 +143,7 @@ test.describe('Fetch consent token after approval', () => {
       await assertConsentTokenIsReturned(
         api,
         consentResp.viewUri,
-        `urn:altinn:organization:identifier-no:${fromOrg}`,
+        `urn:altinn:organization:identifier-no:${from.orgNo}`,
         MASKINPORTEN_CLIENT_ID_ENV,
         MASKINPORTEN_JWK_ENV,
       );
@@ -142,17 +162,23 @@ test.describe('Fetch consent token after approval', () => {
    *
    */
 
-  test('E-bevis', async ({ login, consentPage }) => {
-    const [fromOrg, personThatCanApprove] = pickRandom(fromOrgs);
-    const toOrg = pickRandom(toOrgs);
+  test('E-bevis', async ({ login, consentPage, reportContext, runAccessibilityTest }) => {
+    const [orgNo, pid] = pickRandom(fromOrgs);
+    const from = { orgNo, pid };
+    const to = { orgNo: pickRandom(toOrgs) };
     const validTo = addTimeToNowUtc({ days: 2 });
-    const api = new ConsentApiRequests(toOrg);
+    reportContext.set({
+      from,
+      to,
+      validTo,
+    });
+    const api = new ConsentApiRequests(to.orgNo);
 
     const consentResp =
       await test.step('Create consent request with Maskinporten using org scope', async () => {
         const response = await api.createConsentRequestWithMaskinporten(
-          { type: 'org', id: fromOrg },
-          { type: 'org', id: toOrg },
+          { type: 'org', id: from.orgNo },
+          { type: 'org', id: to.orgNo },
           MASKINPORTEN_CLIENT_ID_ENV,
           MASKINPORTEN_JWK_ENV,
           {
@@ -165,17 +191,18 @@ test.describe('Fetch consent token after approval', () => {
         );
 
         await consentPage.open(response.viewUri);
-        await login.loginNotChoosingActor(personThatCanApprove);
+        await login.loginNotChoosingActor(from.pid);
         await consentPage.openMenu();
         await consentPage.pickLanguage(consentPage.language);
         return response;
       });
-
     await test.step('Verify Digdir on-behalf-of text is displayed', async () => {
       await expect(consentPage.textBehalfOfDigdir).toBeVisible();
     });
 
     await test.step('Approve consent', async () => {
+      await expect(consentPage.buttonApprove).toBeEnabled();
+      await runAccessibilityTest.scan('samtykke-før-godkjenning');
       await consentPage.approveStandardAndWaitLogout(APPROVED_REDIRECT_URL);
     });
 
@@ -187,7 +214,7 @@ test.describe('Fetch consent token after approval', () => {
       await assertConsentTokenIsReturned(
         api,
         consentResp.viewUri,
-        `urn:altinn:organization:identifier-no:${fromOrg}`,
+        `urn:altinn:organization:identifier-no:${from.orgNo}`,
         MASKINPORTEN_CLIENT_ID_ENV,
         MASKINPORTEN_JWK_ENV,
       );
@@ -206,37 +233,46 @@ test.describe('Fetch consent token after approval', () => {
    * - Sparebanken Drift henter ut Maskinporten-token for Sparebank 1 Øst ved å oppgi
    *   consumer_org for Sparebank 1 Øst (for selve forespørselen).
    */
-  test('På vegne av - Person to org', async ({ login, consentPage }) => {
-    const FROM_ORG = '313876144'; //Dagl 28913749776
+  test('På vegne av - Person to org', async ({
+    login,
+    consentPage,
+    reportContext,
+    runAccessibilityTest,
+  }) => {
+    const to = { orgNo: '313876144' }; //Dagl 28913749776
 
-    const fromPerson = pickRandom(fromPersons);
+    const from = { pid: pickRandom(fromPersons) };
     const validTo = addTimeToNowUtc({ days: 5 });
+    reportContext.set({
+      from,
+      to,
+      validTo,
+    });
     const api = new ConsentApiRequests();
 
     const consentResp =
-      await test.step('Fetch Maskinporten token for consumer_org and create consent request with toOrg as FROM_ORG', async () => {
+      await test.step('Create consent request on behalf of recipient organization', async () => {
         // Use Maskinporten token (from behalf_of client) with consumer_orgno to create consent request
         const { viewUri } = await api.createConsentRequestWithMaskinporten(
-          { type: 'person', id: fromPerson },
-          { type: 'org', id: FROM_ORG },
+          { type: 'person', id: from.pid },
+          { type: 'org', id: to.orgNo },
           MASKINPORTEN_BEHALF_OF_CLIENT_ID_ENV,
           MASKINPORTEN_BEHALF_OF_JWK_ENV,
           {
             consentRequestScope: CONSENTREQUESTS_WRITE_SCOPE,
-            consumerOrg: FROM_ORG,
+            consumerOrg: to.orgNo,
             validToIsoUtc: validTo,
           },
         );
 
         await consentPage.open(viewUri);
-        await login.loginNotChoosingActor(fromPerson);
+        await login.loginNotChoosingActor(from.pid);
         await consentPage.openMenu();
         await consentPage.pickLanguage(consentPage.language);
 
         expect(viewUri).toBeTruthy();
         return { viewUri };
       });
-
     await test.step('Verify consent UI and expiry', async () => {
       await consentPage.expectStandardIntro();
       await expect(consentPage.textIncomeData).toBeVisible();
@@ -253,6 +289,8 @@ test.describe('Fetch consent token after approval', () => {
     });
 
     await test.step('Approve consent', async () => {
+      await expect(consentPage.buttonApprove).toBeEnabled();
+      await runAccessibilityTest.scan('samtykke-før-godkjenning');
       await consentPage.approveStandardAndWaitLogout(APPROVED_REDIRECT_URL);
     });
 
@@ -264,10 +302,10 @@ test.describe('Fetch consent token after approval', () => {
       await assertConsentTokenIsReturned(
         api,
         consentResp.viewUri,
-        `urn:altinn:person:identifier-no:${fromPerson}`,
+        `urn:altinn:person:identifier-no:${from.pid}`,
         MASKINPORTEN_BEHALF_OF_CLIENT_ID_ENV,
         MASKINPORTEN_BEHALF_OF_JWK_ENV,
-        FROM_ORG,
+        to.orgNo,
       );
     });
   });
@@ -284,35 +322,44 @@ test.describe('Fetch consent token after approval', () => {
    * - Sparebanken Drift henter ut Maskinporten-token for Sparebank 1 Øst ved å oppgi
    *   consumer_org for Sparebank 1 Øst (for selve forespørselen).
    */
-  test('På vegne av - Org to org', async ({ login, consentPage }) => {
-    const SPAREBANKEN_ORG_NUMBER = '313876144'; //Dagl 28913749776
+  test('På vegne av - Org to org', async ({
+    login,
+    consentPage,
+    reportContext,
+    runAccessibilityTest,
+  }) => {
+    const to = { orgNo: '313876144' }; //Dagl 28913749776
 
     // Org that consents
-    const fromOrg = '312690365';
-    const personThatCanApprove = '09923649732';
+    const from = { orgNo: '312690365', pid: '09923649732' };
     const validTo = addTimeToNowUtc({ days: 5 });
+    reportContext.set({
+      from,
+      to,
+      validTo,
+    });
 
     const api = new ConsentApiRequests();
 
     let viewUri: string;
 
-    await test.step('Fetch Maskinporten token for consumer_org and create consent request with toOrg as SPAREBANKEN_ORG_NUMBER', async () => {
+    await test.step('Create consent request on behalf of recipient organization', async () => {
       // Use Maskinporten token (from behalf_of client) with consumer_orgno to create consent request
       const response = await api.createConsentRequestWithMaskinporten(
-        { type: 'org', id: fromOrg },
-        { type: 'org', id: SPAREBANKEN_ORG_NUMBER },
+        { type: 'org', id: from.orgNo },
+        { type: 'org', id: to.orgNo },
         MASKINPORTEN_BEHALF_OF_CLIENT_ID_ENV,
         MASKINPORTEN_BEHALF_OF_JWK_ENV,
         {
           consentRequestScope: CONSENTREQUESTS_WRITE_SCOPE,
-          consumerOrg: SPAREBANKEN_ORG_NUMBER,
+          consumerOrg: to.orgNo,
           validToIsoUtc: validTo,
         },
       );
       viewUri = response.viewUri;
 
       await consentPage.open(viewUri);
-      await login.loginNotChoosingActor(personThatCanApprove);
+      await login.loginNotChoosingActor(from.pid);
       await consentPage.openMenu();
       await consentPage.pickLanguage(consentPage.language);
 
@@ -321,6 +368,8 @@ test.describe('Fetch consent token after approval', () => {
     });
 
     await test.step('Approve consent', async () => {
+      await expect(consentPage.buttonApprove).toBeEnabled();
+      await runAccessibilityTest.scan('samtykke-før-godkjenning');
       await consentPage.approveStandardAndWaitLogout(APPROVED_REDIRECT_URL);
     });
 
@@ -332,10 +381,10 @@ test.describe('Fetch consent token after approval', () => {
       await assertConsentTokenIsReturned(
         api,
         viewUri,
-        `urn:altinn:organization:identifier-no:${fromOrg}`,
+        `urn:altinn:organization:identifier-no:${from.orgNo}`,
         MASKINPORTEN_BEHALF_OF_CLIENT_ID_ENV,
         MASKINPORTEN_BEHALF_OF_JWK_ENV,
-        SPAREBANKEN_ORG_NUMBER,
+        to.orgNo,
       );
     });
   });

@@ -4,6 +4,8 @@ import { env } from 'playwright/util/helper';
 import { ApiRequests } from 'playwright/api-requests/SystemUserApiRequests';
 
 import { systemUserOwners } from './testdata';
+
+const reportArea = { annotation: { type: 'report-area', description: 'Systembruker' } };
 const owner = systemUserOwners.changes;
 const vendorOrgNumber = '310547891';
 const prebuiltSystemId = '310547891_E2E-Playwright-Authentication';
@@ -19,13 +21,14 @@ const changeRequest = {
   unwantedAccessPackages: [{ urn: 'urn:altinn:accesspackage:baerekraft' }],
 };
 
-test.describe('Systembruker endringsforespørsel', () => {
+test.describe('Systembruker endringsforespørsel', reportArea, () => {
   let api: ApiRequests;
   let externalRef: string;
   let systemUserId: string;
   let changeRequestResponse: Awaited<ReturnType<ApiRequests['postSystemuserChangeRequest']>>;
 
-  test.beforeEach(async () => {
+  test.beforeEach(async ({ reportContext }) => {
+    reportContext.set({ from: owner, systemId: prebuiltSystemId, vendorOrgNumber });
     api = new ApiRequests();
     externalRef = TestdataApi.generateExternalRef();
 
@@ -55,6 +58,7 @@ test.describe('Systembruker endringsforespørsel', () => {
     page,
     login,
     systemUserConfirmPage,
+    runAccessibilityTest,
   }): Promise<void> => {
     await test.step('Navigate to change request confirmation page and login', async () => {
       await page.goto(changeRequestResponse.confirmUrl);
@@ -62,6 +66,8 @@ test.describe('Systembruker endringsforespørsel', () => {
     });
 
     await test.step('Reject change request', async () => {
+      await expect(systemUserConfirmPage.rejectButton).toBeVisible();
+      await runAccessibilityTest.scan('forespørsel-før-reject');
       await systemUserConfirmPage.reject();
     });
 
@@ -81,6 +87,7 @@ test.describe('Systembruker endringsforespørsel', () => {
     page,
     login,
     systemUserConfirmPage,
+    runAccessibilityTest,
   }): Promise<void> => {
     await test.step('Navigate to change request confirmation page and login', async () => {
       await page.goto(changeRequestResponse.confirmUrl);
@@ -88,6 +95,8 @@ test.describe('Systembruker endringsforespørsel', () => {
     });
 
     await test.step('Approve change request', async () => {
+      await expect(systemUserConfirmPage.approveButton).toBeVisible();
+      await runAccessibilityTest.scan('forespørsel-før-approve');
       await systemUserConfirmPage.approve();
     });
 
@@ -117,6 +126,7 @@ test.describe('Systembruker endringsforespørsel', () => {
       // Removed by change request
       await expect(page.getByText('authentication-e2e-test')).not.toBeVisible();
       await expect(page.getByText('Baerekraft')).not.toBeVisible();
+      await runAccessibilityTest.scan('oppdaterte-rettigheter');
     });
   });
 

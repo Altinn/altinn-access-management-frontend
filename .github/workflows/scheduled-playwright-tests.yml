@@ -19,3 +19,5 @@ jobs:
     with:
       environment: ${{ matrix.environment }}
       project: ${{ matrix.project }}
+      # Temporary observation mode while we build confidence in UU scanning; findings never fail tests either way.
+      non_blocking: true

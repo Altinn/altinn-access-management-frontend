@@ -2,6 +2,8 @@ import { expect, test } from '../../../fixture/pomFixture';
 import { MaskinportenApiRequests } from '../../../api-requests/MaskinportenApiRequests';
 import { EnduserConnection } from '../../../api-requests/EnduserConnection';
 
+const reportArea = { annotation: { type: 'report-area', description: 'Maskinporten' } };
+
 /**
  * Maskinporten-administrasjon — leverandører, konsumenter og API-fullmakter.
  *
@@ -54,7 +56,7 @@ const ACTORS = {
  */
 const API = { id: 'altinn_automation_test_lv4', title: 'Automation test - innloggingsnivå 4' };
 
-test.describe('Maskinporten-administrasjon', () => {
+test.describe('Maskinporten-administrasjon', reportArea, () => {
   const api = new MaskinportenApiRequests();
 
   /**
@@ -117,7 +119,7 @@ test.describe('Maskinporten-administrasjon', () => {
       await removeSupplierIfPresent(virksomhet.pid, virksomhet.org, leverandoer.org);
     });
 
-    test('legg til en leverandør', async ({ maskinportenPage, login }) => {
+    test('legg til en leverandør', async ({ runAccessibilityTest, maskinportenPage, login }) => {
       await test.step(`Logg inn som ${virksomhet.orgName} og åpne maskinportenadministrasjon`, async () => {
         await login.LoginToAccessManagement(virksomhet.pid);
         await login.selectActor(virksomhet.orgName);
@@ -126,10 +128,15 @@ test.describe('Maskinporten-administrasjon', () => {
 
       await test.step('Virksomheten har ingen leverandører fra før', async () => {
         await expect(maskinportenPage.ingenLeverandoererTekst).toBeVisible();
+        await runAccessibilityTest.scan('tom-leverandøroversikt');
       });
 
       await test.step(`Legg til ${leverandoer.orgName} som leverandør`, async () => {
-        await maskinportenPage.leggTilLeverandoer(leverandoer.org);
+        await maskinportenPage.leggTilLeverandoerKnapp.click();
+        await expect(maskinportenPage.orgNummerFelt).toBeVisible();
+        await runAccessibilityTest.scan('legg-til-leverandør-dialog');
+        await maskinportenPage.orgNummerFelt.fill(leverandoer.org);
+        await maskinportenPage.leggTilVirksomhetKnapp.click();
       });
 
       await test.step('Leverandøren er lagt til og vises i oversikten', async () => {
@@ -137,6 +144,7 @@ test.describe('Maskinporten-administrasjon', () => {
         await expect(maskinportenPage.slettLeverandoerKnapp).toBeVisible();
         await maskinportenPage.goToMaskinporten();
         await expect(maskinportenPage.connectionRad(leverandoer.orgName)).toBeVisible();
+        await runAccessibilityTest.scan('leverandøroversikt');
       });
     });
 
@@ -157,7 +165,11 @@ test.describe('Maskinporten-administrasjon', () => {
       await api.addSupplier(virksomhet.pid, virksomhet.org, leverandoer.org);
     });
 
-    test('gi og fjern fullmakt til et API', async ({ maskinportenPage, login }) => {
+    test('gi og fjern fullmakt til et API', async ({
+      runAccessibilityTest,
+      maskinportenPage,
+      login,
+    }) => {
       await test.step(`Logg inn som ${virksomhet.orgName} og åpne leverandøren`, async () => {
         await login.LoginToAccessManagement(virksomhet.pid);
         await login.selectActor(virksomhet.orgName);
@@ -166,12 +178,25 @@ test.describe('Maskinporten-administrasjon', () => {
       });
 
       await test.step(`Gi fullmakt til ${API.title}`, async () => {
-        await maskinportenPage.giFullmaktTilApi(API.title);
+        await maskinportenPage.giFullmaktKnapp.click();
+        await expect(maskinportenPage.apiSokefelt).toBeVisible();
+        await maskinportenPage.apiSokefelt.fill(API.title);
+        await expect(maskinportenPage.giFullmaktForApiKnapp(API.title)).toBeEnabled();
+        await runAccessibilityTest.scan('api-fullmakt-søkeresultat');
+        await maskinportenPage.giFullmaktForApiKnapp(API.title).click();
+        await maskinportenPage.dialog
+          .getByRole('button', {
+            name: maskinportenPage.texts.common.close,
+            exact: true,
+          })
+          .click();
+        await expect(maskinportenPage.dialog).toBeHidden();
       });
 
       await test.step('API-et vises i listen over delegerte fullmakter', async () => {
         await expect(maskinportenPage.delegerteApiOverskrift(1)).toBeVisible();
         await expect(maskinportenPage.delegertApi(API.title)).toBeVisible();
+        await runAccessibilityTest.scan('delegerte-api');
       });
 
       await test.step('Fullmakten er faktisk lagret hos leverandøren', async () => {
@@ -190,6 +215,7 @@ test.describe('Maskinporten-administrasjon', () => {
       await test.step('API-et er borte fra listen', async () => {
         await expect(maskinportenPage.slettApiFullmaktKnapp(API.title)).toBeHidden();
         await expect(maskinportenPage.ingenDelegerteApiTekst).toBeVisible();
+        await runAccessibilityTest.scan('ingen-delegerte-api');
       });
 
       await test.step('og fullmakten er fjernet hos leverandøren', async () => {

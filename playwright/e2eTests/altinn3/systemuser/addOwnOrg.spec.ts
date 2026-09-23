@@ -3,12 +3,14 @@ import { ApiRequests } from 'playwright/api-requests/SystemUserApiRequests';
 import { TestdataApi } from 'playwright/util/TestdataApi';
 import { pickRandom } from 'playwright/util/helper';
 
-test.describe('Systembruker - Legg til egen organisasjon', () => {
+const reportArea = { annotation: { type: 'report-area', description: 'Systembruker' } };
+
+test.describe('Systembruker - Legg til egen organisasjon', reportArea, () => {
   const vendorOrgNumber = '310547891';
   const systemUserOwner = {
-    partyOrgNo: '314240545',
-    managerPid: '02858098613',
-    orgName: 'Elegant Lett Tiger AS',
+    orgNo: '314240545',
+    pid: '02858098613',
+    name: 'Elegant Lett Tiger AS',
   };
   const accessPackageApiName = pickRandom(['jordbruk', 'motorvognavgift', 'pensjon']);
   const accessPackageUrn = `urn:altinn:accesspackage:${accessPackageApiName}`;
@@ -26,10 +28,11 @@ test.describe('Systembruker - Legg til egen organisasjon', () => {
   let externalRef: string;
   let response: { confirmUrl: string; id: string };
 
-  test.beforeEach(async () => {
+  test.beforeEach(async ({ reportContext }) => {
     name = '';
     api = new ApiRequests();
     name = `Playwright-e2e-${accessPackageApiName}-${Date.now()}`;
+    reportContext.set({ from: systemUserOwner, systemName: name, vendorOrgNumber });
     externalRef = TestdataApi.generateExternalRef();
 
     systemId = await test.step('Create system with access package', async () => {
@@ -38,12 +41,13 @@ test.describe('Systembruker - Legg til egen organisasjon', () => {
       ]);
     });
 
+    reportContext.set({ from: systemUserOwner, systemId, vendorOrgNumber });
     response = await test.step('Create system user agent request', async () => {
       return await api.postClientDelegationAgentRequest(
         vendorOrgNumber,
         systemId,
         accessPackageApiName,
-        systemUserOwner.partyOrgNo,
+        systemUserOwner.orgNo,
         externalRef,
       );
     });
@@ -54,18 +58,20 @@ test.describe('Systembruker - Legg til egen organisasjon', () => {
     login,
     accessManagementFrontPage,
     clientDelegationPage,
+    runAccessibilityTest,
   }): Promise<void> => {
     await test.step('Navigate to confirmation page and approve request', async () => {
       await page.goto(response.confirmUrl);
-      await login.loginNotChoosingActor(systemUserOwner.managerPid);
+      await login.loginNotChoosingActor(systemUserOwner.pid);
       await expect(clientDelegationPage.confirmButton).toBeVisible();
+      await runAccessibilityTest.scan('klientforespørsel');
       await clientDelegationPage.confirmButton.click();
       await expect(login.loginButton).toBeVisible();
     });
 
     await test.step('Login and navigate to system user', async () => {
-      await login.LoginToAccessManagement(systemUserOwner.managerPid);
-      await login.selectActor(systemUserOwner.orgName);
+      await login.LoginToAccessManagement(systemUserOwner.pid);
+      await login.selectActor(systemUserOwner.name);
       await accessManagementFrontPage.systemUserMenuLink.click();
 
       await expect(clientDelegationPage.systemUserLink(name)).toBeVisible();
@@ -92,14 +98,16 @@ test.describe('Systembruker - Legg til egen organisasjon', () => {
     await test.step('Verify own org is added', async () => {
       await expect(clientDelegationPage.ownOrgBadge).toBeVisible();
       await expect(clientDelegationPage.removeOwnOrgButton).toBeVisible();
-      await expect(clientDelegationPage.ownOrgHeading(systemUserOwner.orgName)).toBeVisible();
+      await expect(clientDelegationPage.ownOrgHeading(systemUserOwner.name)).toBeVisible();
       await expect(
         clientDelegationPage.ownOrgNumber(
-          systemUserOwner.orgName,
-          `Org.nr. ${systemUserOwner.partyOrgNo.slice(0, 3)} ${systemUserOwner.partyOrgNo.slice(3, 6)} ${systemUserOwner.partyOrgNo.slice(6)}`,
+          systemUserOwner.name,
+          `Org.nr. ${systemUserOwner.orgNo.slice(0, 3)} ${systemUserOwner.orgNo.slice(3, 6)} ${systemUserOwner.orgNo.slice(6)}`,
         ),
       ).toBeVisible();
     });
+
+    await runAccessibilityTest.scan('systembruker-med-egen-organisasjon');
 
     await test.step('Remove own org via "Fjern fra systemtilgang" link', async () => {
       await clientDelegationPage.removeOwnOrgButton.click();
@@ -115,8 +123,8 @@ test.describe('Systembruker - Legg til egen organisasjon', () => {
     if (name) {
       await api.cleanUpSystemUsersForSystem(
         `${vendorOrgNumber}_${name}`,
-        systemUserOwner.managerPid,
-        systemUserOwner.partyOrgNo,
+        systemUserOwner.pid,
+        systemUserOwner.orgNo,
         true,
       );
       await api.deleteSystemInSystemRegister(vendorOrgNumber, name);

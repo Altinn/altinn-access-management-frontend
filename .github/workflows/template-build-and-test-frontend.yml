@@ -33,6 +33,10 @@ jobs:
         working-directory: ./
         run: yarn vitest
 
+      - name: run UU report export tests
+        working-directory: ./
+        run: node --test playwright/util/accessibilityReports.test.cjs
+
       - name: run build
         working-directory: ./
         run: yarn build
