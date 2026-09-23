@@ -263,6 +263,7 @@ export const ResourceInfo = ({
               )}
               {hasAccess && toParty && (
                 <Button
+                  data-size='sm'
                   variant={hasDelegateAction ? 'tertiary' : 'primary'}
                   onClick={confirmAndRevokeResource}
                   disabled={
