@@ -283,7 +283,6 @@
     "resources_title": "Gjev tilgang til {{count}} tenester",
     "resources_empty": "Denne rolla har ingen tenester.",
     "delete_role_confirmation": "Roller frå gamle Altinn er avvikla, så du vil IKKJE kunne gi fullmakt til denne rollen på nytt.",
-    "deleting_role_loading": "Venter på at rolla skal slettast...",
     "delete_role_success": "Fullmakt til rolla er sletta.",
     "delete_role_error": "Kunne ikkje slette rolla.",
     "cannot_assign_role_poa": "Denne rolla er utgått og kan ikkje lenger bli gitt som fullmakt. For å gi tilgang til tenester, bruk tilgangspakkar eller enkelttenester.",

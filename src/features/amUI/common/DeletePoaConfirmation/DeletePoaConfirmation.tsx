@@ -1,7 +1,7 @@
 import { useTranslation } from 'react-i18next';
 import { MinusCircleIcon } from '@navikt/aksel-icons';
 import { useRef, useState } from 'react';
-import { DsButton, DsDialog, DsHeading, DsParagraph, DsSpinner } from '@altinn/altinn-components';
+import { DsButton, DsDialog, DsHeading, DsParagraph } from '@altinn/altinn-components';
 
 import classes from './DeletePoaConfirmation.module.css';
 
@@ -9,7 +9,6 @@ export interface DeletePoaConfirmationProps {
   warningText: string;
   handleDeletion: () => void;
   isDeleteLoading?: boolean;
-  loadingAriaLabel: string;
   color?: 'danger' | 'neutral';
   size?: 'xs' | 'sm' | 'md' | 'lg';
   variant?: 'primary' | 'secondary' | 'tertiary';
@@ -21,7 +20,6 @@ export const DeletePoaConfirmation = ({
   warningText,
   handleDeletion,
   isDeleteLoading = false,
-  loadingAriaLabel,
   color = 'danger',
   size = 'sm',
   variant = 'secondary',
@@ -43,6 +41,7 @@ export const DeletePoaConfirmation = ({
         data-color={color}
         data-size={size}
         variant={variant}
+        loading={isDeleteLoading}
         disabled={isDeleteLoading || disabled}
         onClick={() => {
           if (!open) {
@@ -81,12 +80,6 @@ export const DeletePoaConfirmation = ({
             </div>
           </div>
         </DsDialog>
-      )}
-      {isDeleteLoading && (
-        <DsSpinner
-          aria-label={loadingAriaLabel}
-          data-size='sm'
-        />
       )}
     </div>
   );

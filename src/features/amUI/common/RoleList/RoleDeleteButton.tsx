@@ -58,7 +58,6 @@ export const RoleDeleteButton = ({
       warningText={t('role.delete_role_confirmation')}
       handleDeletion={handleDeleteRole}
       isDeleteLoading={isRemoveRoleLoading}
-      loadingAriaLabel={t('role.deleting_role_loading')}
       disabled={disabled}
       size={size}
       color={color}
