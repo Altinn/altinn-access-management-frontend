@@ -888,5 +888,73 @@
     "resourceOwnerOrgcode": "TTD",
     "resourceOwnerOrgNumber": "974760746",
     "keywords": []
+  },
+  {
+    "title": "GSI - Administrasjon",
+    "sector": null,
+    "status": null,
+    "contactPoints": [
+      {
+        "category": "Some category",
+        "email": "email@someemaildigdir.no",
+        "telephone": "12345678",
+        "contactPage": "Some page (webpage maybe?)"
+      }
+    ],
+    "homepage": null,
+    "isPartOf": null,
+    "keywords": null,
+    "identifier": "gsi-administrasjon",
+    "visible": true,
+    "delegable": true,
+    "description": "Nasjonalt register for geografisk stedfestet informasjon.",
+    "resourceType": "Default",
+    "thematicArea": null,
+    "isPublicService": true,
+    "rightDescription": "Gir tilgang til GSI.",
+    "resourceReferences": [],
+    "authorizationReference": [
+      {
+        "id": "urn:altinn:resource",
+        "value": "gsi-administrasjon"
+      }
+    ],
+    "resourceOwnerName": "Digitaliseringsdirektoratet",
+    "resourceOwnerOrgcode": "digdir",
+    "resourceOwnerOrgNumber": "991825827"
+  },
+  {
+    "title": "Regnskapstjenester for kommuner",
+    "sector": null,
+    "status": null,
+    "contactPoints": [
+      {
+        "category": "Some category",
+        "email": "email@someemaildigdir.no",
+        "telephone": "12345678",
+        "contactPage": "Some page (webpage maybe?)"
+      }
+    ],
+    "homepage": null,
+    "isPartOf": null,
+    "keywords": null,
+    "identifier": "regnskap-bergsiden",
+    "visible": true,
+    "delegable": true,
+    "description": "Dekker regnskap og logistikk for Bergsiden-området i kommunen.",
+    "resourceType": "Default",
+    "thematicArea": null,
+    "isPublicService": true,
+    "rightDescription": "Gir tilgang til regnskapsdata.",
+    "resourceReferences": [],
+    "authorizationReference": [
+      {
+        "id": "urn:altinn:resource",
+        "value": "regnskap-bergsiden"
+      }
+    ],
+    "resourceOwnerName": "Testdepartementet",
+    "resourceOwnerOrgcode": "ttd",
+    "resourceOwnerOrgNumber": "974760746"
   }
 ]
