@@ -1,16 +1,11 @@
-import React, { useEffect, useRef, useState } from 'react';
-import { DsButton, DsDialog, DsHeading } from '@altinn/altinn-components';
-import { t } from 'i18next';
-import { PlusIcon } from '@navikt/aksel-icons';
-import { AmTabs } from '../../common/AmTabs/AmTabs';
+import React from 'react';
+import { useTranslation } from 'react-i18next';
 
-import { NewPersonContent } from './NewPersonContent';
-import classes from './NewUserModal.module.css';
-import { NewOrgContent } from './NewOrgContent';
 import { User } from '@/rtk/features/userInfoApi';
 import { useAddRightHolderMutation } from '@/rtk/features/connectionApi';
-import { Organization } from '@/rtk/features/lookupApi';
-import { createErrorDetails } from '../../common/TechnicalErrorParagraphs/TechnicalErrorParagraphs';
+
+import { AddUserDialog } from '../../common/AddUserDialog/AddUserDialog';
+import { toAddRightHolderArgs, type Recipient } from '../../common/AddUserDialog/recipient';
 
 /**
  * NewUserButton component renders a button that, when clicked, opens a modal to add a new user.
@@ -22,128 +17,34 @@ interface NewUserButtonProps {
 }
 
 export const NewUserButton: React.FC<NewUserButtonProps> = ({ variant, onComplete }) => {
-  const modalRef = useRef<HTMLDialogElement>(null);
-  return (
-    <>
-      <DsButton
-        variant={variant}
-        onClick={() => modalRef.current?.showModal()}
-      >
-        <PlusIcon aria-hidden='true' />
-        {t('new_user_modal.trigger_button')}
-      </DsButton>
-      <NewUserModal
-        modalRef={modalRef}
-        onComplete={onComplete}
-      />
-    </>
-  );
-};
+  const { t } = useTranslation();
+  const [addRightHolder] = useAddRightHolderMutation();
 
-interface NewUserModalProps {
-  modalRef: React.RefObject<HTMLDialogElement | null>;
-  onComplete?: (user: User) => void;
-}
-
-const NewUserModal: React.FC<NewUserModalProps> = ({ modalRef, onComplete }) => {
-  const [errorDetail, setErrorDetail] = useState<{ status: string; time: string } | null>(null);
-  const [addRightHolder, { isLoading, error }] = useAddRightHolderMutation();
-  useEffect(() => {
-    if (error) {
-      const details = createErrorDetails(error);
-      setErrorDetail(details);
-    }
-  }, [error]);
-
-  const addPerson = (personInput: { personIdentifier: string; lastName: string }) => {
-    setErrorDetail(null);
-    addRightHolder({ personInput })
-      .unwrap()
-      .then((toUuid) => {
-        if (onComplete) {
-          onComplete({
-            id: toUuid,
-            name: personInput.lastName,
-            type: 'person',
+  const handleSubmit = async (recipient: Recipient) => {
+    const toUuid = await addRightHolder(toAddRightHolderArgs(recipient)).unwrap();
+    onComplete?.(
+      recipient.kind === 'person'
+        ? { id: toUuid, name: recipient.lastName, type: 'person', children: null }
+        : {
+            id: recipient.organization.partyUuid,
+            name: recipient.organization.name,
+            type: 'organisasjon',
             children: null,
-          });
-        }
-        modalRef.current?.close();
-      });
-  };
-
-  const addOrg = (orgData: Organization) => {
-    setErrorDetail(null);
-    if (orgData?.partyUuid) {
-      addRightHolder({ partyUuidToBeAdded: orgData.partyUuid })
-        .unwrap()
-        .then(() => {
-          if (onComplete) {
-            onComplete({
-              id: orgData.partyUuid,
-              name: orgData.name,
-              type: 'organisasjon',
-              children: null,
-              organizationIdentifier: orgData.orgNumber,
-            });
-          }
-          modalRef.current?.close();
-        });
-    }
+            organizationIdentifier: recipient.organization.orgNumber,
+          },
+    );
   };
 
   return (
-    <DsDialog
-      ref={modalRef}
-      closedby='any'
-      aria-labelledby='newUserModal'
-      onClose={() => {
-        setErrorDetail(null);
-      }}
-    >
-      <DsHeading
-        data-size='xs'
-        level={2}
-        className={classes.modalHeading}
-        id='newUserModal'
-      >
-        {t('new_user_modal.modal_title')}
-      </DsHeading>
-      <AmTabs
-        onChange={() => {
-          setErrorDetail(null);
-        }}
-        defaultValue={'person'}
-      >
-        <AmTabs.List>
-          {
-            <AmTabs.Tab
-              value='person'
-              label={t('new_user_modal.person')}
-            />
-          }
-          <AmTabs.Tab
-            value='org'
-            label={t('new_user_modal.organization')}
-          />
-        </AmTabs.List>
-        <AmTabs.Panel value='person'>
-          <NewPersonContent
-            isLoading={isLoading}
-            errorDetails={errorDetail}
-            addPerson={addPerson}
-          />
-        </AmTabs.Panel>
-        <AmTabs.Panel value='org'>
-          <NewOrgContent
-            isLoading={isLoading}
-            addOrg={addOrg}
-            errorDetails={errorDetail}
-          />
-        </AmTabs.Panel>
-      </AmTabs>
-    </DsDialog>
+    <AddUserDialog
+      recipientKinds={[
+        { type: 'person', submitLabel: t('new_user_modal.add_person_button') },
+        { type: 'org', submitLabel: t('new_user_modal.add_org_button') },
+      ]}
+      triggerLabel={t('new_user_modal.trigger_button')}
+      triggerVariant={variant}
+      heading={t('new_user_modal.modal_title')}
+      onSubmit={handleSubmit}
+    />
   );
 };
-
-export default NewUserModal;

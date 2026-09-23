@@ -1,0 +1,15 @@
+.textField {
+  max-width: 22rem;
+}
+
+@media (max-width: 600px) {
+  .textField {
+    max-width: none;
+  }
+}
+
+.searchResult {
+  display: flex;
+  flex-direction: column;
+  gap: var(--ds-spacing-1);
+}

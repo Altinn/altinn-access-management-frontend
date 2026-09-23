@@ -2,11 +2,11 @@ import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { DsAlert, DsParagraph } from '@altinn/altinn-components';
 
-import { TechnicalErrorParagraphs } from '../../common/TechnicalErrorParagraphs/TechnicalErrorParagraphs';
+import { TechnicalErrorParagraphs } from '../TechnicalErrorParagraphs/TechnicalErrorParagraphs';
 
 export interface NewUserAlertProps {
   /*** The technical error if one has occured */
-  error?: { status: string; time: string } | null;
+  error?: { status: string; time: string; traceId?: string } | null;
   /*** The type of user to be added */
   userType: 'person' | 'org';
 }
@@ -27,11 +27,15 @@ export const NewUserAlert = ({ error, userType }: NewUserAlertProps) => {
     );
   } else if (error) {
     errorText = (
-      <TechnicalErrorParagraphs
-        status={error.status}
-        time={error.time}
-        data-size='sm'
-      />
+      <>
+        <DsParagraph data-size='sm'>{t('common.general_error_paragraph')}</DsParagraph>
+        <TechnicalErrorParagraphs
+          status={error.status}
+          time={error.time}
+          traceId={error.traceId}
+          size='sm'
+        />
+      </>
     );
   }
 

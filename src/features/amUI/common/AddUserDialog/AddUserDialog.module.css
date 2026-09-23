@@ -1,0 +1,25 @@
+.wide {
+  width: min(100%, 42rem);
+}
+
+.fields {
+  display: flex;
+  flex-direction: column;
+  gap: var(--ds-spacing-3);
+  margin-bottom: var(--ds-spacing-4);
+}
+
+.heading {
+  margin-bottom: var(--ds-spacing-6);
+}
+
+/* The content is a flex column, so without this the button would span the dialog. */
+.submit {
+  align-self: flex-start;
+}
+
+@media (max-width: 600px) {
+  .wide {
+    width: calc(100% - var(--ds-spacing-4));
+  }
+}

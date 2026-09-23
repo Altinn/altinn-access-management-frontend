@@ -1,11 +1,10 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { Trans, useTranslation } from 'react-i18next';
-import { DsAlert, DsHeading, DsParagraph, ListItem } from '@altinn/altinn-components';
+import { DsAlert, DsHeading, DsParagraph } from '@altinn/altinn-components';
 import classes from './ResourceInfo.module.css';
 import { useIsMobileOrSmaller } from '@/resources/utils/screensizeUtils';
-import { RightChips } from './RightChips';
+import { RightsChipList } from './RightsChipList';
 import { DelegationAction } from '../EditModal';
-import { CheckmarkCircleIcon } from '@navikt/aksel-icons';
 import { ChipRight } from '../utils/rightsUtils';
 
 interface RightsSectionProps {
@@ -38,7 +37,6 @@ export const RightsSection = ({
   const { t } = useTranslation();
   const isSmall = useIsMobileOrSmaller();
 
-  const [rightsExpanded, setRightsExpanded] = useState(false);
   const isRequest = availableActions?.includes(DelegationAction.REQUEST);
   const isApprove = availableActions?.includes(DelegationAction.APPROVE);
 
@@ -98,50 +96,17 @@ export const RightsSection = ({
             components={{ strong: <strong /> }}
           />
         </DsHeading>
-        <ListItem
-          loading={isDelegationCheckLoading}
-          icon={CheckmarkCircleIcon}
-          collapsible={true}
-          size={isSmall ? 'sm' : 'md'}
-          title={
-            rights.filter((r) => r.checked).length !== rights.length
-              ? t('delegation_modal.actions.partial_access', {
-                  count: rights.filter((r) => r.checked).length,
-                  total: rights.length,
-                })
-              : (allAccessTitle ?? t('delegation_modal.actions.access_to_all'))
-          }
-          onClick={() => setRightsExpanded(!rightsExpanded)}
-          expanded={rightsExpanded}
-          as='button'
-          containerAs='div'
-          border='solid'
-          shadow='none'
-        >
-          <div className={classes.rightExpandableContent}>
-            <DsParagraph>{rightsDescription()}</DsParagraph>
-            <div className={classes.rightChips}>
-              <RightChips
-                rights={rights}
-                setRights={setRights}
-                editable={availableActions?.includes(DelegationAction.DELEGATE)}
-              />
-            </div>
-            {undelegableActions.length > 0 &&
-              availableActions?.includes(DelegationAction.DELEGATE) && (
-                <div className={classes.undelegableSection}>
-                  <DsHeading
-                    level={5}
-                    data-size='2xs'
-                    className={classes.undelegableHeader}
-                  >
-                    {t('delegation_modal.actions.cannot_give_header')}
-                  </DsHeading>
-                  <div className={classes.undelegableActions}>{undelegableActions.join(', ')}</div>
-                </div>
-              )}
-          </div>
-        </ListItem>
+        <RightsChipList
+          rights={rights}
+          setRights={setRights}
+          description={rightsDescription()}
+          allAccessTitle={allAccessTitle ?? t('delegation_modal.actions.access_to_all')}
+          undelegableActions={undelegableActions}
+          showUndelegable={availableActions?.includes(DelegationAction.DELEGATE)}
+          editable={availableActions?.includes(DelegationAction.DELEGATE)}
+          isLoading={isDelegationCheckLoading}
+          undelegableHeadingLevel={5}
+        />
       </div>
     </>
   );
