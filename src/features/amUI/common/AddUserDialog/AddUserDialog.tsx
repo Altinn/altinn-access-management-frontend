@@ -172,7 +172,6 @@ const AddUserForm = ({
           value={person}
           onChange={setPerson}
           onSubmit={submit}
-          canSubmit={canSubmit}
           disabled={isSubmitting}
         />
       ) : (
@@ -180,7 +179,6 @@ const AddUserForm = ({
           lookup={orgLookup}
           warning={orgLookup.isOwnOrg && orgOption?.ownOrgWarning}
           onSubmit={submit}
-          canSubmit={canSubmit}
           disabled={isSubmitting}
         />
       )}

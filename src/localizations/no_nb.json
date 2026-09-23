@@ -651,7 +651,6 @@
     "agents_tab_title": "Brukere",
     "add_agent_button": "Legg til ny bruker",
     "add_agent_button_short": "Legg til",
-    "add_agentModal_agent_tab_title": "Person",
     "add_agent_error": "Kunne ikke legge til bruker.",
     "add_agent_success_snackbar": "Bruker lagt til.",
     "add_agent_client_access_success_snackbar": "Brukeren har nå klienttilgang.",

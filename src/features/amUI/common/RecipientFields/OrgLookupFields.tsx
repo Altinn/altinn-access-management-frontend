@@ -16,9 +16,9 @@ export interface OrgLookupFieldsProps {
   errorDetails?: { status: string; time: string } | null;
   /*** Shown in place of any error, for a reason the flow decides - e.g. "this is your own org" */
   warning?: React.ReactNode;
-  /*** Called on Enter in the field, but only while canSubmit is true */
-  onSubmit?: () => void;
-  canSubmit?: boolean;
+  /*** Called on Enter in the field. Whether that submits is the caller's decision */
+  onSubmit: () => void;
+  /*** Optional because a field left alone is simply enabled */
   disabled?: boolean;
 }
 
@@ -34,10 +34,15 @@ export const OrgLookupFields = ({
   errorDetails,
   warning,
   onSubmit,
-  canSubmit = false,
   disabled,
 }: OrgLookupFieldsProps) => {
   const { t } = useTranslation();
+
+  const onKeyDown = (event: React.KeyboardEvent) => {
+    if (event.key === 'Enter' && !event.repeat) {
+      onSubmit();
+    }
+  };
 
   const error = lookup.isError ? createErrorDetails(lookup.error) : errorDetails;
 
@@ -59,11 +64,7 @@ export const OrgLookupFields = ({
         value={lookup.orgNumber}
         onChange={(e) => lookup.setOrgNumber(e.target.value)}
         disabled={disabled}
-        onKeyDown={(event) => {
-          if (event.key === 'Enter' && !event.repeat && canSubmit) {
-            onSubmit?.();
-          }
-        }}
+        onKeyDown={onKeyDown}
       />
       <div aria-live='polite'>
         {lookup.isValid && lookup.orgData && (

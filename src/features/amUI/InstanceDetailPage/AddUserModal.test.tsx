@@ -182,6 +182,23 @@ describe('AddUserModal', () => {
     expect(screen.getByRole('button', { name: 'common.give_poa' })).toBeDisabled();
   });
 
+  // The fields always fire on Enter; the form decides, the same way it decides the button.
+  it('submits on Enter from a field once the form is valid', async () => {
+    await openModal();
+    await fillPerson();
+    await userEvent.type(screen.getByLabelText('common.last_name'), '{Enter}');
+
+    expect(delegateInstanceRights).toHaveBeenCalled();
+  });
+
+  it('ignores Enter while the form is not valid', async () => {
+    await openModal();
+    await userEvent.type(screen.getByLabelText('new_user_modal.person_identifier'), '2083819838');
+    await userEvent.type(screen.getByLabelText('common.last_name'), 'Medaljong{Enter}');
+
+    expect(delegateInstanceRights).not.toHaveBeenCalled();
+  });
+
   it('cannot submit with every action unchecked', async () => {
     await openModal();
     await fillPerson();
