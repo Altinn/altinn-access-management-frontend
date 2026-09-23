@@ -3,9 +3,10 @@ import { Link } from 'react-router';
 import { DsAlert, DsParagraph } from '@altinn/altinn-components';
 import { useTranslation } from 'react-i18next';
 
+import { type InstanceDelegation, useGetInstancesQuery } from '@/rtk/features/instanceApi';
+
 import { usePartyRepresentation } from '../common/PartyRepresentationContext/PartyRepresentationContext';
 import { InstanceList } from '../common/InstanceList/InstanceList';
-import { InstanceDelegation, useGetInstancesQuery } from '@/rtk/features/instanceApi';
 
 export const InstancePermissions = () => {
   const { t, i18n } = useTranslation();

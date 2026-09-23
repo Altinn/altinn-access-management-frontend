@@ -1,4 +1,3 @@
-/* eslint-disable no-console */
 import { EnduserConnection } from 'playwright/api-requests/EnduserConnection';
 import { Token } from 'playwright/api-requests/Token';
 import { loadEnv } from 'playwright/util/helper';

@@ -2,8 +2,9 @@ import { useTranslation } from 'react-i18next';
 import * as React from 'react';
 import { DsHeading, DsParagraph, DsLink } from '@altinn/altinn-components';
 
-import classes from '../ErrorPage.module.css';
 import { getAltinnStartPageUrl } from '@/resources/utils/pathUtils';
+
+import classes from '../ErrorPage.module.css';
 
 export const UnknownError = () => {
   const { t } = useTranslation();

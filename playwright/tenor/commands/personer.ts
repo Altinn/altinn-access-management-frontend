@@ -1,4 +1,3 @@
-/* eslint-disable no-console */
 import { loadEnv } from 'playwright/util/helper';
 
 import { TENOR_MAX_PER_PAGE, TenorApiRequests } from '../client/TenorApiRequests';

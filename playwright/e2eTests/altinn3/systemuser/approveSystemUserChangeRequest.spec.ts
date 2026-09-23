@@ -1,8 +1,9 @@
-import { systemUserOwners } from './testdata';
 import { test, expect } from 'playwright/fixture/pomFixture';
 import { TestdataApi } from 'playwright/util/TestdataApi';
 import { env } from 'playwright/util/helper';
 import { ApiRequests } from 'playwright/api-requests/SystemUserApiRequests';
+
+import { systemUserOwners } from './testdata';
 const owner = systemUserOwners.changes;
 const vendorOrgNumber = '310547891';
 const prebuiltSystemId = '310547891_E2E-Playwright-Authentication';

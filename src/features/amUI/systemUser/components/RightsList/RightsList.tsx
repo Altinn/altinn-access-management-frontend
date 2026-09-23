@@ -11,13 +11,13 @@ import {
 import type { PackageResource } from '@/rtk/features/accessPackageApi';
 import type { ServiceResource } from '@/rtk/features/singleRights/singleRightsApi';
 import { ResourceList } from '@/features/amUI/common/ResourceList/ResourceList';
-
-import type { SystemUserAccessPackage } from '../../types';
 import type { ExtendedAccessPackage } from '@/features/amUI/common/AccessPackageList/useAreaPackageList';
-
-import classes from './RightsList.module.css';
 import { PackageHeader } from '@/features/amUI/common/DelegationModal/AccessPackages/PackageHeader';
 import { PackageMeta } from '@/features/amUI/common/DelegationModal/AccessPackages/PackageMeta';
+
+import type { SystemUserAccessPackage } from '../../types';
+
+import classes from './RightsList.module.css';
 
 interface RightsListProps {
   resources: ServiceResource[];

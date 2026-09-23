@@ -5,7 +5,7 @@ export const validateEmail = (email: string) => {
   // - Requires proper domain structure with TLD
   // - Supports Norwegian characters (æøåÆØÅ) in domain names
   const emailRegex =
-    /^([a-zA-Z0-9!#$%&'*+\-=?\^_`{}~]+(\.[a-zA-Z0-9!#$%&'*+\-=?\^_`{}~]+)*)@([a-zA-Z0-9æøåÆØÅ]([a-zA-Z0-9\-æøåÆØÅ]{0,61}[a-zA-Z0-9æøåÆØÅ])?\.)*[a-zA-Z0-9æøåÆØÅ]([a-zA-Z0-9\-æøåÆØÅ]{0,61}[a-zA-Z0-9æøåÆØÅ])?\.[a-zA-Z]{2,14}$/;
+    /^([a-zA-Z0-9!#$%&'*+\-=?^_`{}~]+(\.[a-zA-Z0-9!#$%&'*+\-=?^_`{}~]+)*)@([a-zA-Z0-9æøåÆØÅ]([a-zA-Z0-9\-æøåÆØÅ]{0,61}[a-zA-Z0-9æøåÆØÅ])?\.)*[a-zA-Z0-9æøåÆØÅ]([a-zA-Z0-9\-æøåÆØÅ]{0,61}[a-zA-Z0-9æøåÆØÅ])?\.[a-zA-Z]{2,14}$/;
   const isValid = emailRegex.test(email);
 
   return {

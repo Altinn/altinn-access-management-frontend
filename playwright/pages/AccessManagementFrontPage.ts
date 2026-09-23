@@ -1,8 +1,9 @@
 import { expect, type Locator, type Page } from '@playwright/test';
 
+import { withPoaObject } from '../util/helper';
+
 import { SidebarNav } from './SidebarNav';
 import { LANGUAGE_DICTIONARIES, Language, type Dict } from './LanguageMenu';
-import { withPoaObject } from '../util/helper';
 
 export class AccessManagementFrontPage {
   readonly page: Page;

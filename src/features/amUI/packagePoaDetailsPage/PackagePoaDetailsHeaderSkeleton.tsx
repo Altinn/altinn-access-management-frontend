@@ -1,6 +1,7 @@
 import React from 'react';
-import classes from './PackagePoaDetailsHeader.module.css';
 import { DsSkeleton } from '@altinn/altinn-components';
+
+import classes from './PackagePoaDetailsHeader.module.css';
 
 export const PackagePoaDetailsHeaderSkeleton: React.FC = () => (
   <>

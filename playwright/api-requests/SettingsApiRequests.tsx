@@ -1,5 +1,6 @@
-import { Token } from './Token';
 import { env } from 'playwright/util/helper';
+
+import { Token } from './Token';
 
 /**
  * Thrown for any non-OK response from the settings BFF, carrying the status so

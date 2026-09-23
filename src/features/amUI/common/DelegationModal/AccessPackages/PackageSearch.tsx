@@ -1,16 +1,16 @@
 import { useTranslation } from 'react-i18next';
 import { DsParagraph } from '@altinn/altinn-components';
 
-import type { AccessPackage } from '@/rtk/features/accessPackageApi';
-import type { Party } from '@/rtk/features/lookupApi';
 import { AccessPackageList } from '@/features/amUI/common/AccessPackageList/AccessPackageList';
+import type { Party } from '@/rtk/features/lookupApi';
+import type { AccessPackage } from '@/rtk/features/accessPackageApi';
 
 import { useDelegationModalContext } from '../DelegationModalContext';
-import { DelegationAction } from '../EditModal';
-
-import classes from './PackageSearch.module.css';
+import { type DelegationAction } from '../EditModal';
 import { DebouncedSearchField } from '../../DebouncedSearchField/DebouncedSearchField';
 import { AccessPackageInfoPopover } from '../../AccessPackageInfoPopover/AccessPackageInfoPopover';
+
+import classes from './PackageSearch.module.css';
 
 export interface PackageSearchProps {
   onSelection: (pack: AccessPackage) => void;

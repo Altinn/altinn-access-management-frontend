@@ -122,7 +122,7 @@ export class DelegationPage {
     await tilbakeButton.click();
   }
 
-  async closeAccessModal(buttonName: string = 'Lukk') {
+  async closeAccessModal(_buttonName: string = 'Lukk') {
     await expect(this.closeModalBtn).toBeVisible();
     await this.closeModalBtn.click();
   }

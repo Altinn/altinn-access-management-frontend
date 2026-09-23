@@ -3,14 +3,14 @@ import type { ReactNode } from 'react';
 import { RootProvider } from '@altinn/altinn-components';
 import { Provider } from 'react-redux';
 
+import store from '@/rtk/app/store';
+
 import { PartyRepresentationProvider } from '../common/PartyRepresentationContext/PartyRepresentationContext';
 import { RestoreFocusProvider, useRestoreFocus } from '../common/RestoreFocus';
 
 import { PendingRequests } from './RequestsTabPanel';
 import { SentRequestsTabPanel } from './SentRequestsTabPanel';
 import type { Request } from './types';
-
-import store from '@/rtk/app/store';
 
 const accessRequest = (id: string, name: string, overrides: Partial<Request> = {}): Request => ({
   id,

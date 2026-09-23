@@ -2,13 +2,13 @@ import React, { useId, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { DsButton, DsDialog, DsHeading } from '@altinn/altinn-components';
 import { PlusIcon } from '@navikt/aksel-icons';
-
-import type { Organization } from '@/rtk/features/lookupApi';
-import { useAddMaskinportenSupplierMutation } from '@/rtk/features/maskinportenApi';
-import type { User } from '@/rtk/features/userInfoApi';
-
 import type { FetchBaseQueryError } from '@reduxjs/toolkit/query';
 import type { SerializedError } from '@reduxjs/toolkit';
+
+import type { User } from '@/rtk/features/userInfoApi';
+import { useAddMaskinportenSupplierMutation } from '@/rtk/features/maskinportenApi';
+import type { Organization } from '@/rtk/features/lookupApi';
+
 import { createErrorDetails } from '../common/TechnicalErrorParagraphs/TechnicalErrorParagraphs';
 import { usePartyRepresentation } from '../common/PartyRepresentationContext/PartyRepresentationContext';
 import { NewOrgContent } from '../users/NewUserModal/NewOrgContent';

@@ -2,21 +2,22 @@ import { useCallback, useEffect, useMemo, useState, type ElementType } from 'rea
 import { Link } from 'react-router';
 import { useTranslation } from 'react-i18next';
 import { DsAlert, DsButton, DsParagraph } from '@altinn/altinn-components';
+
 import {
   useSearchResourcesInfiniteQuery,
   useGetSingleRightsForRightholderQuery,
   type ServiceResource,
 } from '@/rtk/features/singleRights/singleRightsApi';
 import { ResourceList } from '@/features/amUI/common/ResourceList/ResourceList';
-import { usePartyRepresentation } from '../common/PartyRepresentationContext/PartyRepresentationContext';
-import { PermissionsBadge } from '../common/PermissionsBadge/PermissionsBadge';
-import classes from './SingleRightsPermissions.module.css';
 import type { Permissions } from '@/dataObjects/dtos/accessPackage';
-import { ResourceFilterToolbar } from '../common/ResourceFilterToolbar/ResourceFilterToolbar';
-import { CollapsibleContainer } from '../common/CollapsibleContainer/CollapsibleContainer';
 import { useGetResourceOwnersQuery } from '@/rtk/features/resourceApi';
 import { amUIPath } from '@/routes/paths/amUIPath';
 import { useDebouncedValue, usePermissionOverview } from '@/resources/hooks';
+
+import { CollapsibleContainer } from '../common/CollapsibleContainer/CollapsibleContainer';
+import { ResourceFilterToolbar } from '../common/ResourceFilterToolbar/ResourceFilterToolbar';
+import { PermissionsBadge } from '../common/PermissionsBadge/PermissionsBadge';
+import { usePartyRepresentation } from '../common/PartyRepresentationContext/PartyRepresentationContext';
 import { useFilteredResources } from '../common/ResourceList/useFilteredResources';
 import {
   extractResourceName,
@@ -25,6 +26,8 @@ import {
   extractDescription,
   isExpiredResource,
 } from '../common/ResourceList/utils';
+
+import classes from './SingleRightsPermissions.module.css';
 
 const searchResultsPerPage = 7;
 const ASSIGNED_SERVICES_SECTION = 'assigned-services-section';

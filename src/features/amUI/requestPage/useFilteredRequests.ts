@@ -1,8 +1,8 @@
 import { useMemo } from 'react';
 
-import type { Request } from './types';
-
 import { matchesOrgNr } from '@/resources/utils/reporteeUtils';
+
+import type { Request } from './types';
 
 export const filterRequests = (
   requests: Request[] | undefined,

@@ -1,5 +1,6 @@
-import { RolePermission } from '@/rtk/features/roleApi';
-import { Entity } from '@/dataObjects/dtos/Common';
+import { type RolePermission } from '@/rtk/features/roleApi';
+import { type Entity } from '@/dataObjects/dtos/Common';
+
 import {
   A2_PROVIDER_CODE,
   CRA_PROVIDER_CODE,

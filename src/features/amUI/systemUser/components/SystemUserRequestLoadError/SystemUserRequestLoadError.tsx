@@ -1,7 +1,8 @@
 import React from 'react';
-import { ProblemDetail } from '../../types';
 import { DsAlert } from '@altinn/altinn-components';
 import { useTranslation } from 'react-i18next';
+
+import { type ProblemDetail } from '../../types';
 import { mapErrorCodeToErrorMessage } from '../../errorHandling';
 
 interface SystemUserRequestLoadErrorProps {

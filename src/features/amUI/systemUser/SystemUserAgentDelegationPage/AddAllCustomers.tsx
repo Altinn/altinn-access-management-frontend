@@ -1,7 +1,9 @@
 import React, { useEffect, useRef } from 'react';
 import { useTranslation } from 'react-i18next';
 import { DsAlert, DsButton, DsListItem, DsListUnordered } from '@altinn/altinn-components';
+
 import type { AgentDelegationCustomer } from '../types';
+
 import classes from './SystemUserAgentDelegationPage.module.css';
 
 interface AddAllCustomersProps {

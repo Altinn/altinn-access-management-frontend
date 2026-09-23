@@ -3,14 +3,16 @@ import { useTranslation } from 'react-i18next';
 import { Link, useSearchParams } from 'react-router';
 import cn from 'classnames';
 import { DsButton, DsSpinner, Layout, RootProvider } from '@altinn/altinn-components';
-import classes from './RequestPageLayout.module.css';
+import { ArrowLeftIcon } from '@navikt/aksel-icons';
 
 import { getButtonIconSize } from '@/resources/utils/iconUtils';
-import { ArrowLeftIcon } from '@navikt/aksel-icons';
 import { useRedirectToRequestParty } from '@/resources/hooks/useRedirectToRequestParty';
 import { useLanguageCode } from '@/resources/hooks/useLanguageCode';
+
 import { useHeader } from '../PageLayoutWrapper/useHeader';
 import { NavigationFocus } from '../PageLayoutWrapper/NavigationFocus';
+
+import classes from './RequestPageLayout.module.css';
 
 interface RequestPageLayoutProps {
   account: { name: string; type: 'person' | 'company' };
@@ -35,7 +37,7 @@ export const RequestPageLayout = ({
   body,
   footer,
 }: RequestPageLayoutProps) => {
-  const { t, i18n } = useTranslation();
+  const { t } = useTranslation();
 
   const [searchParams] = useSearchParams();
   const backToPage = searchParams.get('backtopage');

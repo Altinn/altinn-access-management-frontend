@@ -1,6 +1,7 @@
 import { createApi } from '@reduxjs/toolkit/query/react';
-import { createBaseQuery } from '@/rtk/app/baseQuery';
+import { formatDisplayName } from '@altinn/altinn-components';
 
+import { createBaseQuery } from '@/rtk/app/baseQuery';
 import type {
   RegisteredSystem,
   SystemUser,
@@ -10,8 +11,6 @@ import type {
   AgentDelegation,
   SystemUserChangeRequest,
 } from '@/features/amUI/systemUser/types';
-
-import { formatDisplayName } from '@altinn/altinn-components';
 
 const baseUrl = `${import.meta.env.BASE_URL}accessmanagement/api/v1/`;
 
