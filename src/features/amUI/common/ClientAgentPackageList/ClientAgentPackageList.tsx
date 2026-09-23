@@ -30,12 +30,18 @@ import {
 } from '../DelegationModal/AccessPackages/ClientPackageInfoModal';
 import { ClientAccessSections } from '../ClientResourceList/ClientAccessSections';
 import { type ClientResourceListItemData } from '../ClientResourceList/ClientResourceListItems';
-import { buildPackageItem, buildResourceItem } from '../ClientResourceList/buildAccessItems';
+import {
+  buildPackageItem,
+  buildResourceItem,
+  clientActionControlId,
+  restoreFocusOnSuccess,
+} from '../ClientResourceList/buildAccessItems';
 import {
   ClientResourceInfoModal,
   type ClientResourceModalData,
 } from '../DelegationModal/SingleRights/ClientResourceInfoModal';
 import { useClientResourceActions } from '../ClientResourceList/useClientResourceActions';
+import { useRestoreFocusContext, useRestoreFocusOnDataChange } from '../RestoreFocus';
 
 import { useClientAccessPackageActions } from './useClientAccessPackageActions';
 
@@ -55,9 +61,14 @@ type ClientAgentPackageListProps = {
   searchString?: string;
   expandedIds?: string[];
   onToggleExpanded?: (id: string) => void;
+  // Keeps DOM ids unique when the same agent is rendered in more than one list on the page.
+  listKey?: string;
+  // Focus target when the acted-on row is no longer reachable here, typically the section heading.
+  restoreFocusFallbackId?: string;
 };
 
 type SelectedAgentResource = {
+  itemId: string;
   agentId: string;
   refId: string;
   resource: ServiceResource;
@@ -95,6 +106,8 @@ export const ClientAgentPackageList = ({
   searchString,
   expandedIds,
   onToggleExpanded,
+  listKey,
+  restoreFocusFallbackId,
 }: ClientAgentPackageListProps) => {
   const { t } = useTranslation();
   const { getAccessPackageById } = useAccessPackageLookup();
@@ -118,8 +131,14 @@ export const ClientAgentPackageList = ({
 
   const modalRef = useRef<HTMLDialogElement>(null);
   const resourceModalRef = useRef<HTMLDialogElement>(null);
-  const [selected, setSelected] = useState<ClientPackageModalData | null>(null);
+  const [selected, setSelected] = useState<{
+    itemId: string;
+    data: ClientPackageModalData;
+  } | null>(null);
   const [selectedResource, setSelectedResource] = useState<SelectedAgentResource | null>(null);
+  const restoreFocus = useRestoreFocusContext();
+  const requestPackageFocus = useRestoreFocusOnDataChange(clientAccessPackages);
+  const requestResourceFocus = useRestoreFocusOnDataChange(clientResources);
 
   const clientAccess = client?.access ?? [];
 
@@ -164,6 +183,7 @@ export const ClientAgentPackageList = ({
 
   const userListItems: UserListItemData[] = sortedAgents.map((agent) => {
     const agentId = agent.agent.id;
+    const idPrefix = listKey ? `${listKey}:${agentId}` : agentId;
     const isRecentlyAdded = isNewUser(agent.agentAddedAt);
     const isSubUnit = isSubUnitByType(agent.agent.variant);
     const userType = getUserListItemType(agent.agent.type);
@@ -185,6 +205,9 @@ export const ClientAgentPackageList = ({
           access.role.code !== 'rettighetshaver'
             ? t('client_administration_page.via_role', { role: roleName })
             : undefined;
+        const itemId = `${idPrefix}:${pkg.id}`;
+        const requestFocus = () =>
+          requestPackageFocus(clientActionControlId(itemId), restoreFocusFallbackId);
 
         const onDelegate = (onSuccess?: () => void, onError?: () => void) =>
           addClientAccessPackage(
@@ -211,30 +234,33 @@ export const ClientAgentPackageList = ({
           accessPackage && delegable
             ? () => {
                 setSelected({
-                  party: {
-                    partyId: 0,
-                    partyUuid: agentId,
-                    name: agent.agent.name,
-                    orgNumber: agent.agent.organizationIdentifier ?? undefined,
-                    partyTypeName:
-                      agent.agent.type.toLowerCase() === 'person'
-                        ? PartyType.Person
-                        : PartyType.Organization,
-                    dateOfBirth: agent.agent.dateOfBirth ?? undefined,
-                    variant: agent.agent.variant ?? undefined,
+                  itemId,
+                  data: {
+                    party: {
+                      partyId: 0,
+                      partyUuid: agentId,
+                      name: agent.agent.name,
+                      orgNumber: agent.agent.organizationIdentifier ?? undefined,
+                      partyTypeName:
+                        agent.agent.type.toLowerCase() === 'person'
+                          ? PartyType.Person
+                          : PartyType.Organization,
+                      dateOfBirth: agent.agent.dateOfBirth ?? undefined,
+                      variant: agent.agent.variant ?? undefined,
+                    },
+                    accessPackage,
+                    userHasAccess: hasAccess,
+                    roleDescription,
+                    onDelegate,
+                    onRevoke,
                   },
-                  accessPackage,
-                  userHasAccess: hasAccess,
-                  roleDescription,
-                  onDelegate,
-                  onRevoke,
                 });
                 modalRef.current?.showModal();
               }
             : undefined;
 
         return buildPackageItem({
-          pkg,
+          id: itemId,
           accessPackage,
           packageName,
           hasAccess,
@@ -242,8 +268,8 @@ export const ClientAgentPackageList = ({
           isMobileOrSmaller,
           addDisabled: actionsDisabled,
           removeDisabled: actionsDisabled,
-          onDelegate: delegable ? onDelegate : undefined,
-          onRevoke: delegable ? onRevoke : undefined,
+          onDelegate: restoreFocusOnSuccess(delegable ? onDelegate : undefined, requestFocus),
+          onRevoke: restoreFocusOnSuccess(delegable ? onRevoke : undefined, requestFocus),
           onOpenModal,
           t,
         });
@@ -261,6 +287,9 @@ export const ClientAgentPackageList = ({
 
         const hasAccess = agentHasResource(agentId, clientResource.refId);
         const delegable = resource.delegable && !!addAgentResources && !!removeAgentResources;
+        const itemId = `${idPrefix}:${access.role.code}:${clientResource.refId}`;
+        const requestFocus = () =>
+          requestResourceFocus(clientActionControlId(itemId), restoreFocusFallbackId);
 
         const delegationInput = {
           clientId: fromPartyUuid ?? '',
@@ -277,17 +306,18 @@ export const ClientAgentPackageList = ({
 
         acc.push(
           buildResourceItem({
-            id: `${access.role.code}:${clientResource.refId}`,
+            id: itemId,
             resource,
             hasAccess,
             showAction: delegable,
             isMobileOrSmaller,
             addDisabled: actionsDisabled,
             removeDisabled: actionsDisabled,
-            onDelegate: delegable ? onDelegate : undefined,
-            onRevoke: delegable ? onRevoke : undefined,
+            onDelegate: restoreFocusOnSuccess(delegable ? onDelegate : undefined, requestFocus),
+            onRevoke: restoreFocusOnSuccess(delegable ? onRevoke : undefined, requestFocus),
             onOpenModal: () => {
               setSelectedResource({
+                itemId,
                 agentId,
                 refId: clientResource.refId,
                 resource,
@@ -343,10 +373,19 @@ export const ClientAgentPackageList = ({
   // correct after a mutation even when its row leaves the filtered ("has access" / "all") tab.
   const modalData: ClientPackageModalData | undefined = selected
     ? {
-        ...selected,
-        userHasAccess: agentHasPackage(selected.party.partyUuid, selected.accessPackage.id),
+        ...selected.data,
+        userHasAccess: agentHasPackage(
+          selected.data.party.partyUuid,
+          selected.data.accessPackage.id,
+        ),
       }
     : undefined;
+
+  // Request focus synchronously before clearing state, so the originating item is targeted even
+  // if its row has moved to another section while the modal was open.
+  const closeModal = (itemId: string) => {
+    restoreFocus?.requestFocus(itemId, restoreFocusFallbackId);
+  };
 
   const resourceModalData: ClientResourceModalData | undefined = selectedResource
     ? {
@@ -370,12 +409,18 @@ export const ClientAgentPackageList = ({
       <ClientPackageInfoModal
         ref={modalRef}
         data={modalData}
-        onClose={() => setSelected(null)}
+        onClose={() => {
+          if (selected) closeModal(selected.itemId);
+          setSelected(null);
+        }}
       />
       <ClientResourceInfoModal
         ref={resourceModalRef}
         data={resourceModalData}
-        onClose={() => setSelectedResource(null)}
+        onClose={() => {
+          if (selectedResource) closeModal(selectedResource.itemId);
+          setSelectedResource(null);
+        }}
       />
     </>
   );

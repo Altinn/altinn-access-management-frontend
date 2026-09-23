@@ -375,11 +375,6 @@
       "count": 1
     }
   },
-  "src/features/amUI/common/ClientResourceList/buildAccessItems.tsx": {
-    "@typescript-eslint/no-misused-promises": {
-      "count": 2
-    }
-  },
   "src/features/amUI/common/CollapsibleContainer/CollapsibleContainer.tsx": {
     "react-hooks/set-state-in-effect": {
       "count": 1
