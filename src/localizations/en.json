@@ -1079,6 +1079,7 @@
     "users_description": "Search for users to give or delete power of attorney.",
     "no_users": "No one has power of attorney for this service.",
     "search_placeholder": "Search for a person or an organisation",
+    "delegation_success": "{{name}} now has power of attorney for {{service}}",
     "revoke_success": "{{name}} no longer has power of attorney for {{service}}",
     "revoke_error": "Could not delete the power of attorney for {{service}} for {{name}}",
     "add_user_modal": {

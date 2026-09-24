@@ -17,7 +17,6 @@ interface ServiceUserModalProps {
   /** The reportee, which is both the acting party and the party the service is delegated from. */
   partyUuid: string;
   availableActions: DelegationAction[];
-  onActionSuccess?: () => void;
   onClose: () => void;
   ref?: Ref<HTMLDialogElement>;
 }
@@ -35,7 +34,6 @@ export const ServiceUserModal = ({
   user,
   partyUuid,
   availableActions,
-  onActionSuccess,
   onClose,
   ref,
 }: ServiceUserModalProps) => {
@@ -59,7 +57,6 @@ export const ServiceUserModal = ({
           <ResourceInfo
             resource={resource}
             availableActions={availableActions}
-            onDelegate={onActionSuccess}
           />
         </PartyRepresentationProvider>
       </div>

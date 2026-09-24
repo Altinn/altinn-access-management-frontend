@@ -37,10 +37,21 @@ vi.mock('./ServiceUserModal', () => ({
   }) => <div data-testid='service-user-modal'>{`${user.name}:${availableActions.join(',')}`}</div>,
 }));
 
+// Captured the same way as UserSearch's props: the dialog has its own tests, so what matters here
+// is what this section does when it reports a user it has added.
+let addUserProps: {
+  resourceId: string;
+  onUserAdded?: (user: { name: string; type: 'person' | 'org' }) => void;
+};
+
 vi.mock('./AddServiceUserModal', () => ({
-  AddServiceUserButton: ({ resourceId }: { resourceId: string }) => (
-    <button type='button'>{`add user for ${resourceId}`}</button>
-  ),
+  AddServiceUserButton: (props: {
+    resourceId: string;
+    onUserAdded?: (user: { name: string; type: 'person' | 'org' }) => void;
+  }) => {
+    addUserProps = props;
+    return <button type='button'>{`add user for ${props.resourceId}`}</button>;
+  },
 }));
 
 vi.mock('../common/PartyRepresentationContext/PartyRepresentationContext', () => ({
@@ -209,5 +220,30 @@ describe('ServiceUsersSection', () => {
     renderSection();
 
     expect(screen.getByRole('button', { name: 'add user for res-1' })).toBeInTheDocument();
+  });
+
+  it('confirms an added user only once the refreshed list has arrived', async () => {
+    const { rerender } = renderSection();
+    const refetch = (isFetching: boolean) => {
+      delegations = { ...(delegations as object), isFetching };
+      rerender(
+        <ServiceUsersSection
+          resource={RESOURCE}
+          isLoading={false}
+        />,
+      );
+    };
+
+    addUserProps.onUserAdded?.({ name: 'Medaljong', type: 'person' });
+
+    // Still waiting for the delegations query, so the row the message is about does not exist yet.
+    expect(openSnackbar).not.toHaveBeenCalled();
+
+    refetch(true);
+    refetch(false);
+
+    await vi.waitFor(() =>
+      expect(openSnackbar).toHaveBeenCalledWith(expect.objectContaining({ color: 'success' })),
+    );
   });
 });

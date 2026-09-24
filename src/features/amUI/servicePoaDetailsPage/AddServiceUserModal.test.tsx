@@ -6,6 +6,7 @@ import { AddServiceUserButton } from './AddServiceUserModal';
 
 const addRightHolder = vi.fn();
 const delegateRights = vi.fn();
+const onUserAdded = vi.fn();
 
 let rightsMeta: unknown;
 let delegationCheck: unknown;
@@ -46,7 +47,12 @@ vi.mock('@/rtk/features/singleRights/singleRightsApi', () => ({
 const dialog = () => document.querySelector('dialog');
 
 const openModal = async () => {
-  render(<AddServiceUserButton resourceId='res-1' />);
+  render(
+    <AddServiceUserButton
+      resourceId='res-1'
+      onUserAdded={onUserAdded}
+    />,
+  );
   await userEvent.click(screen.getByRole('button', { name: 'new_user_modal.trigger_button' }));
 };
 
@@ -117,6 +123,9 @@ describe('AddServiceUserModal', () => {
       actionKeys: ['read', 'write'],
     });
     expect(dialog()?.open).toBe(false);
+    // Reported back so the page can confirm it; the dialog is closed by then, because a snackbar
+    // raised over an open dialog is not announced.
+    expect(onUserAdded).toHaveBeenCalledWith({ name: 'Medaljong', type: 'person' });
   });
 
   it('delegates only the actions left checked', async () => {
@@ -144,6 +153,7 @@ describe('AddServiceUserModal', () => {
     expect(delegateRights).toHaveBeenCalledWith(
       expect.objectContaining({ toUuid: 'new-user-uuid', actionKeys: ['read', 'write'] }),
     );
+    expect(onUserAdded).toHaveBeenCalledWith({ name: 'Diskret Nær Tiger AS', type: 'org' });
   });
 
   it('cannot submit before an identity is given', async () => {
@@ -198,5 +208,14 @@ describe('AddServiceUserModal', () => {
 
     expect(addRightHolder).toHaveBeenCalled();
     expect(dialog()?.open).toBe(true);
+  });
+
+  it('does not report a user who never got the service', async () => {
+    delegateRights.mockReturnValue({ unwrap: () => Promise.reject(new Error('500')) });
+    await openModal();
+    await fillPerson();
+    await submit();
+
+    expect(onUserAdded).not.toHaveBeenCalled();
   });
 });

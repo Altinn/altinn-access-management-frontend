@@ -8,6 +8,7 @@ import {
   useGetSingleRightsForRightholderQuery,
   type ServiceResource,
 } from '@/rtk/features/singleRights/singleRightsApi';
+import { useSnackbarOnIdle } from '@/resources/hooks/useSnackbarOnIdle';
 
 import { DelegationAction } from '../common/DelegationModal/EditModal';
 import { usePartyRepresentation } from '../common/PartyRepresentationContext/PartyRepresentationContext';
@@ -26,7 +27,7 @@ import { mapPermissionsToUserSearchNodes } from '../common/UserSearch/permission
 import type { UserActionTarget } from '../common/UserSearch/types';
 import UserSearch from '../common/UserSearch/UserSearch';
 
-import { AddServiceUserButton } from './AddServiceUserModal';
+import { AddServiceUserButton, type AddedServiceUser } from './AddServiceUserModal';
 import { ServiceUserModal } from './ServiceUserModal';
 import classes from './ServicePoaDetailsPage.module.css';
 
@@ -115,11 +116,23 @@ export const ServiceUsersSection = ({ resource, isLoading }: ServiceUsersSection
     setSelectedUser(user);
   };
 
-  const formatUserName = (user: UserActionTarget) =>
+  const formatUserName = (user: { name: string; type?: string }) =>
     formatDisplayName({
       fullName: user.name,
       type: user.type?.toLowerCase() === 'person' ? 'person' : 'company',
     });
+
+  // The added user only shows up once the delegations query comes back, so hold the confirmation
+  // until then and it arrives together with the row it is about.
+  const { queueSnackbar } = useSnackbarOnIdle({ isBusy: isDelegationsFetching });
+
+  const handleUserAdded = (user: AddedServiceUser) =>
+    queueSnackbar(
+      t('service_poa_details_page.delegation_success', {
+        name: formatUserName(user),
+        service: resource?.title,
+      }),
+    );
 
   const handleRevoke = (user: UserActionTarget) => {
     if (!actingParty?.partyUuid || !fromParty?.partyUuid || !resourceId) return;
@@ -202,7 +215,12 @@ export const ServiceUsersSection = ({ resource, isLoading }: ServiceUsersSection
           canDelegate
           noUsersText={t('service_poa_details_page.no_users')}
           searchPlaceholder={t('service_poa_details_page.search_placeholder')}
-          AddUserButton={<AddServiceUserButton resourceId={resourceId} />}
+          AddUserButton={
+            <AddServiceUserButton
+              resourceId={resourceId}
+              onUserAdded={handleUserAdded}
+            />
+          }
           onSelect={(user) => openModalFor(user, 'edit')}
           onDelegate={(user) => openModalFor(user, 'delegate')}
           onRevoke={handleRevoke}
@@ -219,9 +237,6 @@ export const ServiceUsersSection = ({ resource, isLoading }: ServiceUsersSection
             selectedUserMode === 'delegate'
               ? [DelegationAction.DELEGATE]
               : [DelegationAction.DELEGATE, DelegationAction.REVOKE]
-          }
-          onActionSuccess={
-            selectedUserMode === 'delegate' ? () => modalRef.current?.close() : undefined
           }
           onClose={() => {
             // Restore focus synchronously to the row that opened the dialog before clearing state.

@@ -30,11 +30,18 @@ import { NewUserAlert } from '../users/NewUserModal/NewUserAlert';
 import { getRightsSummaryTitle, useServiceRights } from './useServiceRights';
 import classes from './AddServiceUserModal.module.css';
 
-interface AddServiceUserButtonProps {
-  resourceId: string;
+/** The user as the dialog knows them: a person is only known by the last name that was typed. */
+export interface AddedServiceUser {
+  name: string;
+  type: 'person' | 'org';
 }
 
-export const AddServiceUserButton = ({ resourceId }: AddServiceUserButtonProps) => {
+interface AddServiceUserButtonProps {
+  resourceId: string;
+  onUserAdded: (user: AddedServiceUser) => void;
+}
+
+export const AddServiceUserButton = ({ resourceId, onUserAdded }: AddServiceUserButtonProps) => {
   const { t } = useTranslation();
   const modalRef = useRef<HTMLDialogElement>(null);
   const [isOpen, setIsOpen] = useState(false);
@@ -55,6 +62,7 @@ export const AddServiceUserButton = ({ resourceId }: AddServiceUserButtonProps) 
         modalRef={modalRef}
         isOpen={isOpen}
         resourceId={resourceId}
+        onUserAdded={onUserAdded}
         onClose={() => setIsOpen(false)}
       />
     </>
@@ -65,6 +73,8 @@ interface AddServiceUserModalProps {
   modalRef: React.RefObject<HTMLDialogElement | null>;
   isOpen: boolean;
   resourceId: string;
+  /** Called once the user both exists and holds the service, after the dialog has closed. */
+  onUserAdded: (user: AddedServiceUser) => void;
   onClose: () => void;
 }
 
@@ -80,6 +90,7 @@ const AddServiceUserModal = ({
   modalRef,
   isOpen,
   resourceId,
+  onUserAdded,
   onClose,
 }: AddServiceUserModalProps) => {
   const { t } = useTranslation();
@@ -195,7 +206,15 @@ const AddServiceUserModal = ({
         actionKeys: selectedRights,
       }).unwrap();
 
+      // Close first: a snackbar opened while a modal dialog is still up is not announced by screen
+      // readers, which scope the live region to the dialog.
       modalRef.current?.close();
+      onUserAdded({
+        // A brand-new person has no name until the list reloads; the last name that was typed is
+        // what the add-user flow elsewhere reports as well.
+        name: userType === 'person' ? lastName.trim() : (orgData?.name ?? ''),
+        type: userType,
+      });
     } catch (error: unknown) {
       // The right holder exists by now, so nothing here can mean "no such person".
       setSubmitError({ step: 'delegate', details: toErrorDetails(error) });
