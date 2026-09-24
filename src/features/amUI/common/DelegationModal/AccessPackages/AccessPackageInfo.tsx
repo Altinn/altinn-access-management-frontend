@@ -174,6 +174,7 @@ export const AccessPackageInfo = ({ accessPackage, availableActions = [] }: Pack
             {userHasPackage && availableActions.includes(DelegationAction.REVOKE) ? (
               deletableStatus !== DeletableStatus.PartiallyDeletable ? (
                 <DsButton
+                  variant='secondary'
                   disabled={accessIsInherited || accessPackage.isAssignable === false}
                   onClick={() => onRevoke(accessPackage)}
                   data-color='danger'
@@ -184,7 +185,7 @@ export const AccessPackageInfo = ({ accessPackage, availableActions = [] }: Pack
                 <PackageIsPartiallyDeletableAlert
                   confirmAction={() => revokeWithoutConfirmation(accessPackage)}
                   triggerButtonProps={{
-                    variant: 'primary',
+                    variant: 'secondary',
                     'data-color': 'danger',
                   }}
                 />
@@ -202,6 +203,7 @@ export const AccessPackageInfo = ({ accessPackage, availableActions = [] }: Pack
               availableActions.includes(DelegationAction.REQUEST) &&
               (isPendingRequest ? (
                 <DsButton
+                  variant='secondary'
                   data-color='danger'
                   loading={isLoadingRequest(accessPackage)}
                   disabled={isLoadingRequest(accessPackage)}

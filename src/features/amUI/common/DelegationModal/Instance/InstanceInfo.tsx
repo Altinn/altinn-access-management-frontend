@@ -273,7 +273,7 @@ export const InstanceInfo = ({
               {canRevoke && hasDirectAccess && !!toParty && (
                 <DsButton
                   data-size='sm'
-                  variant={hasDelegateAction ? 'secondary' : 'primary'}
+                  variant='secondary'
                   onClick={revokeResource}
                   disabled={
                     isActionLoading ||

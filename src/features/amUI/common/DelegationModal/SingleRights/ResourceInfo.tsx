@@ -263,7 +263,7 @@ export const ResourceInfo = ({
               {hasAccess && toParty && (
                 <DsButton
                   data-size='sm'
-                  variant={hasDelegateAction ? 'secondary' : 'primary'}
+                  variant='secondary'
                   onClick={confirmAndRevokeResource}
                   disabled={
                     isActionLoading ||
@@ -288,6 +288,7 @@ export const ResourceInfo = ({
               {hasPendingRequest(resource.identifier) && isSingleRightRequest && (
                 <DsButton
                   data-size='sm'
+                  variant='secondary'
                   disabled={isLoadingSingleRightRequest}
                   data-color='danger'
                   loading={isLoadingSingleRightRequest}
