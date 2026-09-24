@@ -378,13 +378,6 @@ const AddServiceUserModal = ({
         </AmTabs>
 
         <div className={classes.rightsSection}>
-          <DsHeading
-            level={3}
-            data-size='xs'
-          >
-            {t('service_poa_details_page.add_user_modal.user_will_receive')}
-          </DsHeading>
-
           {resource && displayResourceAlert ? (
             <ResourceAlert
               error={rightsErrorDetails}
@@ -392,41 +385,50 @@ const AddServiceUserModal = ({
               resource={resource}
             />
           ) : (
-            <ListItem
-              loading={isRightsLoading}
-              icon={CheckmarkCircleIcon}
-              collapsible
-              size='md'
-              title={getRightsSummaryTitle(rights, t)}
-              onClick={() => setRightsExpanded(!rightsExpanded)}
-              expanded={rightsExpanded}
-              as='button'
-              containerAs='div'
-              border='solid'
-              shadow='none'
-            >
-              <div className={classes.rightExpandableContent}>
-                <DsParagraph>{t('delegation_modal.actions.action_description')}</DsParagraph>
-                <div className={classes.rightChips}>
-                  <RightChips
-                    rights={rights}
-                    setRights={setRights}
-                    editable
-                  />
-                </div>
-                {undelegableActions.length > 0 && (
-                  <div className={classes.undelegableSection}>
-                    <DsHeading
-                      level={4}
-                      data-size='2xs'
-                    >
-                      {t('delegation_modal.actions.cannot_give_header')}
-                    </DsHeading>
-                    <div>{undelegableActions.join(', ')}</div>
+            <>
+              <DsHeading
+                level={3}
+                data-size='xs'
+              >
+                {t('service_poa_details_page.add_user_modal.user_will_receive')}
+              </DsHeading>
+
+              <ListItem
+                loading={isRightsLoading}
+                icon={CheckmarkCircleIcon}
+                collapsible
+                size='md'
+                title={getRightsSummaryTitle(rights, t)}
+                onClick={() => setRightsExpanded(!rightsExpanded)}
+                expanded={rightsExpanded}
+                as='button'
+                containerAs='div'
+                border='solid'
+                shadow='none'
+              >
+                <div className={classes.rightExpandableContent}>
+                  <DsParagraph>{t('delegation_modal.actions.action_description')}</DsParagraph>
+                  <div className={classes.rightChips}>
+                    <RightChips
+                      rights={rights}
+                      setRights={setRights}
+                      editable
+                    />
                   </div>
-                )}
-              </div>
-            </ListItem>
+                  {undelegableActions.length > 0 && (
+                    <div className={classes.undelegableSection}>
+                      <DsHeading
+                        level={4}
+                        data-size='2xs'
+                      >
+                        {t('delegation_modal.actions.cannot_give_header')}
+                      </DsHeading>
+                      <div>{undelegableActions.join(', ')}</div>
+                    </div>
+                  )}
+                </div>
+              </ListItem>
+            </>
           )}
         </div>
 
