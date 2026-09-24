@@ -73,21 +73,20 @@ export async function checkDialogInteractions(
     await check('Dialogen har flere tabulatorstopp', () => {
       expect(tabStops).toBeGreaterThan(1);
     });
-    for (const key of ['Tab', 'Shift+Tab']) {
+    // Without document focus, activeElement is not updated by Tab, so the trap can't be judged.
+    const hasFocus = await page.evaluate(() => document.hasFocus());
+    await check('Tabulatorfellen kan avgjøres', () => {
+      expect(hasFocus, 'Kunne ikke avgjøres: dokumentet har ikke fokus').toBe(true);
+    });
+    for (const key of hasFocus ? ['Tab', 'Shift+Tab'] : []) {
       await check(`${key} holder fokus i dialogen`, async () => {
         for (let i = 0; i <= tabStops; i++) {
           await page.keyboard.press(key);
           await expect
-            .poll(
-              () =>
-                dialog.evaluate(
-                  (el) => !document.hasFocus() || el.contains(document.activeElement),
-                ),
-              {
-                message: `UU-funn: ${key} nr. ${i + 1} flytter fokus til innhold utenfor dialogen`,
-                timeout: 1000,
-              },
-            )
+            .poll(() => dialog.evaluate((el) => el.contains(document.activeElement)), {
+              message: `UU-funn: ${key} nr. ${i + 1} flytter fokus til innhold utenfor dialogen`,
+              timeout: 1000,
+            })
             .toBe(true);
         }
       });
@@ -127,14 +126,13 @@ export async function checkDialogInteractions(
     });
   } finally {
     // One attachment per dialog keeps the report at one row, even if a runtime error aborts midway.
-    if (results.length)
+    if (results.length) {
+      // The page may be closed or gone; don't let metadata hide the original error.
+      const metadata = await collectScanMetadata(testInfo, page, name).catch(() => undefined);
       await testInfo.attach(`${name}-uu-check`, {
-        body: JSON.stringify({
-          name,
-          checks: results,
-          metadata: await collectScanMetadata(testInfo, page, name),
-        }),
+        body: JSON.stringify({ name, checks: results, metadata }),
         contentType: 'application/json',
       });
+    }
   }
 }
