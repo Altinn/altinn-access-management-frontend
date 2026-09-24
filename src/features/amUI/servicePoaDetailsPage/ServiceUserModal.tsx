@@ -1,4 +1,4 @@
-import { forwardRef } from 'react';
+import type { Ref } from 'react';
 import { DsDialog } from '@altinn/altinn-components';
 import { useTranslation } from 'react-i18next';
 
@@ -19,6 +19,7 @@ interface ServiceUserModalProps {
   availableActions: DelegationAction[];
   onActionSuccess?: () => void;
   onClose: () => void;
+  ref?: Ref<HTMLDialogElement>;
 }
 
 /**
@@ -29,35 +30,39 @@ interface ServiceUserModalProps {
  * machinery (rights meta, delegation check, delegate/update/revoke) reusable here untouched, and is
  * why the recipient can differ per row on a page whose outer provider only knows the reportee.
  */
-export const ServiceUserModal = forwardRef<HTMLDialogElement, ServiceUserModalProps>(
-  ({ resource, user, partyUuid, availableActions, onActionSuccess, onClose }, ref) => {
-    const { t } = useTranslation();
+export const ServiceUserModal = ({
+  resource,
+  user,
+  partyUuid,
+  availableActions,
+  onActionSuccess,
+  onClose,
+  ref,
+}: ServiceUserModalProps) => {
+  const { t } = useTranslation();
 
-    return (
-      <DsDialog
-        ref={ref}
-        className={classes.modalDialog}
-        closedby='any'
-        onClose={onClose}
-        aria-label={t('delegation_modal.aria_label.single_rights')}
-        aria-description={t('delegation_modal.aria_description')}
-      >
-        <div className={classes.content}>
-          <PartyRepresentationProvider
-            actingPartyUuid={partyUuid}
-            fromPartyUuid={partyUuid}
-            toPartyUuid={user.id}
-          >
-            <ResourceInfo
-              resource={resource}
-              availableActions={availableActions}
-              onDelegate={onActionSuccess}
-            />
-          </PartyRepresentationProvider>
-        </div>
-      </DsDialog>
-    );
-  },
-);
-
-ServiceUserModal.displayName = 'ServiceUserModal';
+  return (
+    <DsDialog
+      ref={ref}
+      className={classes.modalDialog}
+      closedby='any'
+      onClose={onClose}
+      aria-label={t('delegation_modal.aria_label.single_rights')}
+      aria-description={t('delegation_modal.aria_description')}
+    >
+      <div className={classes.content}>
+        <PartyRepresentationProvider
+          actingPartyUuid={partyUuid}
+          fromPartyUuid={partyUuid}
+          toPartyUuid={user.id}
+        >
+          <ResourceInfo
+            resource={resource}
+            availableActions={availableActions}
+            onDelegate={onActionSuccess}
+          />
+        </PartyRepresentationProvider>
+      </div>
+    </DsDialog>
+  );
+};
