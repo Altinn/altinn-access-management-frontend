@@ -2,8 +2,8 @@ import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useDispatch } from 'react-redux';
 
-import { useDelegateInstanceRightsMutation } from '@/rtk/features/instanceApi';
 import { connectionApi } from '@/rtk/features/connectionApi';
+import { useDelegateInstanceRightsMutation } from '@/rtk/features/instanceApi';
 
 import { usePartyRepresentation } from '../common/PartyRepresentationContext/PartyRepresentationContext';
 import { AddUserDialog } from '../common/AddUserDialog/AddUserDialog';

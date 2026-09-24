@@ -2,7 +2,7 @@ import React from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { useAddAgentMutation } from '@/rtk/features/clientApi';
-import { User } from '@/rtk/features/userInfoApi';
+import { type User } from '@/rtk/features/userInfoApi';
 
 import { AddUserDialog } from '../../common/AddUserDialog/AddUserDialog';
 import type { Recipient } from '../../common/AddUserDialog/recipient';

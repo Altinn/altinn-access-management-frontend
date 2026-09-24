@@ -2,26 +2,26 @@ import { useEffect, useRef, useState } from 'react';
 import { DsAlert, DsButton, DsParagraph } from '@altinn/altinn-components';
 import { Navigate, useSearchParams } from 'react-router';
 import { Trans, useTranslation } from 'react-i18next';
+import { EnvelopeClosedIcon } from '@navikt/aksel-icons';
 
-import { ResourceInfoSkeleton } from '../common/DelegationModal/SingleRights/ResourceInfoSkeleton';
-import { PageDivider } from '../common/PageDivider/PageDivider';
-import { InstanceUsersAsAdmin } from './InstanceUsersAsAdmin';
-import { InstanceUsersAsInstanceAdmin } from './InstanceUsersAsInstanceAdmin';
-import { usePartyRepresentation } from '../common/PartyRepresentationContext/PartyRepresentationContext';
-import {
-  createErrorDetails,
-  TechnicalErrorParagraphs,
-} from '../common/TechnicalErrorParagraphs/TechnicalErrorParagraphs';
-import { useGetInstancesQuery, useRemoveInstanceMutation } from '@/rtk/features/instanceApi';
-import { useGetResourceQuery } from '@/rtk/features/resourceApi';
+import type { ActionError } from '@/resources/hooks/useActionError';
 import {
   PartyType,
   useGetIsAdminQuery,
   useGetIsInstanceAdminQuery,
 } from '@/rtk/features/userInfoApi';
-import { EnvelopeClosedIcon } from '@navikt/aksel-icons';
+import { useGetResourceQuery } from '@/rtk/features/resourceApi';
+import { useGetInstancesQuery, useRemoveInstanceMutation } from '@/rtk/features/instanceApi';
+import { useIsMobileOrSmaller } from '@/resources/utils/screensizeUtils';
+
+import { ResourceInfoSkeleton } from '../common/DelegationModal/SingleRights/ResourceInfoSkeleton';
+import { PageDivider } from '../common/PageDivider/PageDivider';
+import { usePartyRepresentation } from '../common/PartyRepresentationContext/PartyRepresentationContext';
+import {
+  createErrorDetails,
+  TechnicalErrorParagraphs,
+} from '../common/TechnicalErrorParagraphs/TechnicalErrorParagraphs';
 import { DelegationAction, EditModal } from '../common/DelegationModal/EditModal';
-import type { ActionError } from '@/resources/hooks/useActionError';
 import type { UserActionTarget } from '../common/UserSearch/types';
 import {
   getInboxLinkData,
@@ -34,9 +34,10 @@ import {
   useRestoreFocusOnDataChange,
 } from '../common/RestoreFocus';
 
+import { InstanceUsersAsInstanceAdmin } from './InstanceUsersAsInstanceAdmin';
+import { InstanceUsersAsAdmin } from './InstanceUsersAsAdmin';
 import classes from './InstanceDetailPageContent.module.css';
 import { RequestInstanceAdminPackage } from './RequestInstanceAdminPackage';
-import { useIsMobileOrSmaller } from '@/resources/utils/screensizeUtils';
 
 // Focus-restore fallback for this zone: when a revoked row is gone, focus lands on the search field
 // above the list instead of the page heading. Unique within this provider zone.

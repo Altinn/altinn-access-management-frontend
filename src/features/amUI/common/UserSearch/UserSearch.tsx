@@ -2,15 +2,16 @@ import React, { useMemo, useState } from 'react';
 import { DsSearch, DsParagraph, formatDisplayName } from '@altinn/altinn-components';
 import { useTranslation } from 'react-i18next';
 
-import { PartyType } from '@/rtk/features/userInfoApi';
 import { ConnectionUserType } from '@/rtk/features/connectionApi';
+import { PartyType } from '@/rtk/features/userInfoApi';
 
-import classes from './UserSearch.module.css';
 import { useFilteredUsers } from '../UserList/useFilteredUsers';
 import { DelegationAction } from '../DelegationModal/EditModal';
 import { UserList } from '../UserList/UserList';
-import { UserSearchResults } from './UserSearchResults';
 import { usePartyRepresentation } from '../PartyRepresentationContext/PartyRepresentationContext';
+
+import classes from './UserSearch.module.css';
+import { UserSearchResults } from './UserSearchResults';
 import type { UserActionTarget, UserSearchNode } from './types';
 
 export interface UserSearchProps {
@@ -117,7 +118,10 @@ export const UserSearch: React.FC<UserSearchProps> = ({
     <div className={classes.container}>
       <div className={classes.controls}>
         <div className={classes.searchAndFilters}>
-          <DsSearch className={classes.searchBar}>
+          <DsSearch
+            className={classes.searchBar}
+            data-size='sm'
+          >
             <DsSearch.Input
               id={restoreFocusFallbackId}
               aria-label={t('common.search')}
@@ -151,9 +155,9 @@ export const UserSearch: React.FC<UserSearchProps> = ({
             </DsParagraph>
           )}
           {isQuery && showIndirectList && (
-            <h3 className={classes.subHeader}>
+            <h2 className={classes.subHeader}>
               {directConnectionsHeading ?? t('advanced_user_search.direct_connections')}
-            </h3>
+            </h2>
           )}
           <UserSearchResults
             users={filteredDirectUsers}
@@ -181,9 +185,9 @@ export const UserSearch: React.FC<UserSearchProps> = ({
 
         {showIndirectList && (
           <>
-            <h3 className={classes.subHeader}>
+            <h2 className={classes.subHeader}>
               {indirectConnectionsHeading ?? t('advanced_user_search.indirect_connections')}
-            </h3>
+            </h2>
             <UserSearchResults
               users={filteredIndirectUsers}
               hasNextPage={!!hasNextIndirectPage}

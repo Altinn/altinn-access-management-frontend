@@ -1,5 +1,5 @@
 import React from 'react';
-import { FilterState, Toolbar } from '@altinn/altinn-components';
+import { type FilterState, Toolbar } from '@altinn/altinn-components';
 import { useTranslation } from 'react-i18next';
 
 interface ResourceFilterToolbarProps {

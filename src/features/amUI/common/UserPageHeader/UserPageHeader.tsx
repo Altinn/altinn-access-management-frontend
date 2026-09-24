@@ -2,14 +2,14 @@ import { DsParagraph, DsHeading, Avatar, formatDisplayName } from '@altinn/altin
 import { t } from 'i18next';
 
 import { PartyType } from '@/rtk/features/userInfoApi';
+import { isSubUnitByType } from '@/resources/utils/reporteeUtils';
+import { useIsMobileOrSmaller } from '@/resources/utils/screensizeUtils';
 
 import { usePartyRepresentation } from '../PartyRepresentationContext/PartyRepresentationContext';
 import { UserRoles } from '../UserRoles/UserRoles';
 
 import classes from './UserPageHeader.module.css';
 import { UserPageHeaderSkeleton } from './UserPageHeaderSkeleton';
-import { isSubUnitByType } from '@/resources/utils/reporteeUtils';
-import { useIsMobileOrSmaller } from '@/resources/utils/screensizeUtils';
 
 interface UserPageHeaderProps {
   direction: 'to' | 'from';

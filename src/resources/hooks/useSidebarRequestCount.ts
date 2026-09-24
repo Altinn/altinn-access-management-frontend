@@ -1,9 +1,10 @@
-import { getCookie } from '../Cookie/CookieMethods';
 import { useGetConsentRequestsCountQuery } from '@/rtk/features/consentApi';
 import { useGetReceivedRequestsCountQuery } from '@/rtk/features/requestApi';
 import { useGetPendingSystemUserRequestsQuery } from '@/rtk/features/systemUserApi';
 import type { ReporteeInfo } from '@/rtk/features/userInfoApi';
+
 import { hasConsentPermission, hasCreateSystemUserPermission } from '../utils/permissionUtils';
+import { getCookie } from '../Cookie/CookieMethods';
 
 interface UseSidebarRequestCountParams {
   isAdmin?: boolean;

@@ -3,15 +3,16 @@ import { useTranslation } from 'react-i18next';
 import { Button, DsParagraph, List } from '@altinn/altinn-components';
 
 import type { ExtendedUser } from '@/rtk/features/userInfoApi';
+import { type Connection } from '@/rtk/features/connectionApi';
+
+import { type DelegationAction } from '../DelegationModal/EditModal';
+import { mapConnectionsToUserSearchNodes } from '../UserSearch/connectionMapper';
 
 import { UserItem } from './UserItem';
 import { useFilteredUsers } from './useFilteredUsers';
 import classes from './UserList.module.css';
 import { SkeletonUserList } from './SkeletonUserList';
-import { DelegationAction } from '../DelegationModal/EditModal';
 import { UserListActions } from './UserListActions';
-import { Connection } from '@/rtk/features/connectionApi';
-import { mapConnectionsToUserSearchNodes } from '../UserSearch/connectionMapper';
 
 export interface UserListProps {
   connections?: Connection[];

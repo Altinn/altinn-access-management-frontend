@@ -16,12 +16,13 @@ import {
   type EnrichedResourceRequest,
 } from '@/rtk/features/requestApi';
 import { useAutoFocusRef } from '@/resources/hooks/useAutoFocusRef';
+
 import { ResourceList } from '../../common/ResourceList/ResourceList';
+import { usePartyRepresentation } from '../../common/PartyRepresentationContext/PartyRepresentationContext';
+
 import { DraftRequestBody } from './DraftRequestBody';
 import { useBatchRequestAction } from './useBatchRequestAction';
-
 import classes from './DraftRequestPage.module.css';
-import { usePartyRepresentation } from '../../common/PartyRepresentationContext/PartyRepresentationContext';
 
 export type BatchActionType = 'confirm' | 'withdraw' | null;
 

@@ -6,8 +6,8 @@ import { ResourceFilterToolbar } from '@/features/amUI/common/ResourceFilterTool
 import { ResourceList } from '@/features/amUI/common/ResourceList/ResourceList';
 import type { ServiceResource } from '@/rtk/features/singleRights/singleRightsApi';
 
-import { getMaskinportenScopeCount } from './scopeUtils';
 import classes from './ScopeList.module.css';
+import { getMaskinportenScopeCount } from './scopeUtils';
 
 interface ScopeListProps {
   resources: ServiceResource[];

@@ -9,9 +9,10 @@ import { DsParagraph, formatDisplayName } from '@altinn/altinn-components';
 import { useContext } from 'react';
 import { Trans, useTranslation } from 'react-i18next';
 
+import { PartyType } from '@/rtk/features/userInfoApi';
+
 import { PartyRepresentationContext } from '../PartyRepresentationContext/PartyRepresentationContext';
 import { InheritedStatusType, type InheritedStatusMessageType } from '../useInheritedStatus';
-import { PartyType } from '@/rtk/features/userInfoApi';
 
 import classes from './StatusSection.module.css';
 

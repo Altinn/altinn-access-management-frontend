@@ -5,7 +5,7 @@ import { DsAlert } from '@altinn/altinn-components';
 import type { MaskinportenConnection } from '@/rtk/features/maskinportenApi';
 
 import { mapMaskinportenConnectionsToUserSearchNodes } from '../common/UserSearch/connectionMapper';
-import { UserSearch, UserSearchProps } from '../common/UserSearch/UserSearch';
+import { UserSearch, type UserSearchProps } from '../common/UserSearch/UserSearch';
 
 interface MaskinportenUserSearchProps extends Pick<
   UserSearchProps,

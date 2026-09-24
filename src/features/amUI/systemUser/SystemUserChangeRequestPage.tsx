@@ -8,12 +8,17 @@ import {
   DsButton,
   formatDisplayName,
 } from '@altinn/altinn-components';
-import { useDocumentTitle } from '@/resources/hooks/useDocumentTitle';
+
+import type { ServiceResource } from '@/rtk/features/singleRights/singleRightsApi';
+import { getLogoutUrl } from '@/resources/utils/pathUtils';
 import {
   useApproveChangeRequestMutation,
   useGetChangeRequestQuery,
   useRejectChangeRequestMutation,
 } from '@/rtk/features/systemUserApi';
+import { useDocumentTitle } from '@/resources/hooks/useDocumentTitle';
+import { useGetIsAdminQuery, useGetReporteeQuery } from '@/rtk/features/userInfoApi';
+
 import { RequestPageBase } from './components/RequestPageBase/RequestPageBase';
 import type { ProblemDetail, SystemUserAccessPackage } from './types';
 import { RightsList } from './components/RightsList/RightsList';
@@ -21,10 +26,7 @@ import { ButtonRow } from './components/ButtonRow/ButtonRow';
 import { DelegationCheckError } from './components/DelegationCheckError/DelegationCheckError';
 import { getApiBaseUrl } from './requestUtils';
 import { CreateSystemUserCheck } from './components/CreateSystemUserCheck/CreateSystemUserCheck';
-import type { ServiceResource } from '@/rtk/features/singleRights/singleRightsApi';
-import { getLogoutUrl } from '@/resources/utils/pathUtils';
 import { SystemUserRequestLoadError } from './components/SystemUserRequestLoadError/SystemUserRequestLoadError';
-import { useGetIsAdminQuery, useGetReporteeQuery } from '@/rtk/features/userInfoApi';
 
 export const SystemUserChangeRequestPage = () => {
   const { t } = useTranslation();

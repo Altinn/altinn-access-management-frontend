@@ -1,4 +1,3 @@
-/* eslint-disable no-console */
 import type { FacilitatorRolle } from '../client/TenorApiRequests';
 
 /** Skriver en feilmelding og avslutter prosessen med exit code 1. */

@@ -13,21 +13,22 @@ import { getCookie } from '@/resources/Cookie/CookieMethods';
 import { PageWrapper } from '@/components';
 import { useDocumentTitle } from '@/resources/hooks/useDocumentTitle';
 import { PageLayoutWrapper } from '@/features/amUI/common/PageLayoutWrapper';
-
-import { SystemUserAgentDelegationPageContent } from './SystemUserAgentDelegationPageContent';
-import { Breadcrumbs } from '../../common/Breadcrumbs/Breadcrumbs';
-import { SystemUserHeader } from '../components/SystemUserHeader/SystemUserHeader';
-import { RightsList } from '../components/RightsList/RightsList';
-import classes from './SystemUserAgentDelegationPage.module.css';
-import { PageContainer } from '../../common/PageContainer/PageContainer';
 import { SystemUserPath } from '@/routes/paths';
 import { hasCreateSystemUserPermission } from '@/resources/utils/permissionUtils';
-import { DeleteSystemUserPopover } from '../components/DeleteSystemUserPopover/DeleteSystemUserPopover';
 import {
   useGetIsAdminQuery,
   useGetIsClientAdminQuery,
   useGetReporteeQuery,
 } from '@/rtk/features/userInfoApi';
+
+import { DeleteSystemUserPopover } from '../components/DeleteSystemUserPopover/DeleteSystemUserPopover';
+import { PageContainer } from '../../common/PageContainer/PageContainer';
+import { RightsList } from '../components/RightsList/RightsList';
+import { SystemUserHeader } from '../components/SystemUserHeader/SystemUserHeader';
+import { Breadcrumbs } from '../../common/Breadcrumbs/Breadcrumbs';
+
+import { SystemUserAgentDelegationPageContent } from './SystemUserAgentDelegationPageContent';
+import classes from './SystemUserAgentDelegationPage.module.css';
 
 export const SystemUserAgentDelegationPage = (): React.ReactNode => {
   const { id } = useParams();

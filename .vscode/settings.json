@@ -2,7 +2,5 @@
   "editor.codeActionsOnSave": {
     "source.fixAll.eslint": "explicit"
   },
-  "eslint.validate": ["javascript"],
-  "eslint.useFlatConfig": false,
   "dotnet.defaultSolution": "backend/src/Altinn.AccessManagement.UI/Altinn.AccessManagement.UI.sln"
 }

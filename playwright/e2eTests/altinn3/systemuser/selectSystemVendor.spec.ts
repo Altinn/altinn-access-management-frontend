@@ -1,9 +1,9 @@
-import { systemUserOwners } from './testdata';
 import { expect, test } from 'playwright/fixture/pomFixture';
 import { Language } from 'playwright/pages/LanguageMenu';
-
 import { TestdataApi } from 'playwright/util/TestdataApi';
 import { ApiRequests } from 'playwright/api-requests/SystemUserApiRequests';
+
+import { systemUserOwners } from './testdata';
 
 // Runs in nynorsk on purpose: exercises the before-login language pinning
 // (settings API) and proves the dict-driven selectors work in a non-default
@@ -18,7 +18,7 @@ test.describe('System Register', async () => {
   let system: string;
   let api: ApiRequests;
 
-  test.beforeEach(async ({ page, login }) => {
+  test.beforeEach(async ({ login }) => {
     system = '';
     api = new ApiRequests();
     system = await api.createSystemSystemRegister(vendorOrgNumber);

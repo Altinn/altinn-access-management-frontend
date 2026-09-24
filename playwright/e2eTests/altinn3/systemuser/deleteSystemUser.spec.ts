@@ -1,7 +1,8 @@
-import { systemUserOwners } from './testdata';
 import { expect, test } from 'playwright/fixture/pomFixture';
 import { ApiRequests } from 'playwright/api-requests/SystemUserApiRequests';
 import { TestdataApi } from 'playwright/util/TestdataApi';
+
+import { systemUserOwners } from './testdata';
 const owner = systemUserOwners.deletion;
 const vendorOrgNumber = '310736007';
 const testUserPid = owner.pid;

@@ -3,8 +3,9 @@ import { describe, expect, it, vi } from 'vitest';
 import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 
-import { TwoStepDialog } from './TwoStepDialog';
 import type { RestoreFocus } from '../RestoreFocus';
+
+import { TwoStepDialog } from './TwoStepDialog';
 
 vi.mock('react-i18next', () => ({
   useTranslation: () => ({
