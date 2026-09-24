@@ -163,7 +163,9 @@ describe('AddServiceUserModal', () => {
   });
 
   it('does not delegate when adding the right holder fails', async () => {
-    addRightHolder.mockReturnValue({ unwrap: () => Promise.reject({ status: '400' }) });
+    addRightHolder.mockReturnValue({
+      unwrap: () => Promise.reject(Object.assign(new Error('Bad request'), { status: '400' })),
+    });
     await openModal();
     await fillPerson();
     await submit();
@@ -174,7 +176,7 @@ describe('AddServiceUserModal', () => {
   });
 
   it('keeps the dialog open when the delegation itself fails', async () => {
-    delegateRights.mockReturnValue({ unwrap: () => Promise.reject('500') });
+    delegateRights.mockReturnValue({ unwrap: () => Promise.reject(new Error('500')) });
     await openModal();
     await fillPerson();
     await submit();
