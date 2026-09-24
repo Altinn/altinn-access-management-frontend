@@ -1,7 +1,7 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 
-import { User } from '@/rtk/features/userInfoApi';
+import { type User } from '@/rtk/features/userInfoApi';
 import { useAddRightHolderMutation } from '@/rtk/features/connectionApi';
 
 import { AddUserDialog } from '../../common/AddUserDialog/AddUserDialog';

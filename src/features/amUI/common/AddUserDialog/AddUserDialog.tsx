@@ -171,14 +171,14 @@ const AddUserForm = ({
         <PersonFields
           value={person}
           onChange={setPerson}
-          onSubmit={submit}
+          onSubmit={() => void submit()}
           disabled={isSubmitting}
         />
       ) : (
         <OrgLookupFields
           lookup={orgLookup}
           warning={orgLookup.isOwnOrg && orgOption?.ownOrgWarning}
-          onSubmit={submit}
+          onSubmit={() => void submit()}
           disabled={isSubmitting}
         />
       )}
@@ -230,7 +230,7 @@ const AddUserForm = ({
 
       <DsButton
         className={classes.submit}
-        onClick={submit}
+        onClick={() => void submit()}
         disabled={!canSubmit}
         loading={isSubmitting}
       >

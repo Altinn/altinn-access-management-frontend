@@ -143,11 +143,15 @@ describe('AddUserModal', () => {
     await userEvent.click(screen.getByRole('checkbox', { name: 'Skriv' }));
     await submit();
 
-    expect(delegateInstanceRights).toHaveBeenCalledWith(
-      expect.objectContaining({
-        input: expect.objectContaining({ directRightKeys: ['read'] }),
-      }),
-    );
+    expect(delegateInstanceRights).toHaveBeenCalledWith({
+      party: 'org',
+      resource: 'res-1',
+      instance: 'urn:altinn:instance:i-1',
+      input: {
+        to: { personIdentifier: '20838198385', lastName: 'Medaljong' },
+        directRightKeys: ['read'],
+      },
+    });
   });
 
   // The dialog unmounts its content when it closes, which is what replaced the old resetForm().
@@ -234,6 +238,9 @@ describe('AddUserModal', () => {
   // what support asks for. Both arrived when this modal moved onto the shared NewUserAlert.
   it('reports an unrecognised failure with the trace id', async () => {
     delegateInstanceRights.mockReturnValue({
+      // RTK Query rejects with its own error shape rather than an Error, which is what the
+      // flows have to handle, so that is what these reproduce.
+      // eslint-disable-next-line @typescript-eslint/prefer-promise-reject-errors
       unwrap: () => Promise.reject({ status: '500', data: { traceId: 'abc-123' } }),
     });
     await openModal();
@@ -246,6 +253,9 @@ describe('AddUserModal', () => {
 
   it('keeps the dialog open and reports the failure when the delegation fails', async () => {
     delegateInstanceRights.mockReturnValue({
+      // RTK Query rejects with its own error shape rather than an Error, which is what the
+      // flows have to handle, so that is what these reproduce.
+      // eslint-disable-next-line @typescript-eslint/prefer-promise-reject-errors
       unwrap: () => Promise.reject({ status: '400', data: '' }),
     });
     await openModal();

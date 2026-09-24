@@ -6,6 +6,7 @@ import { CheckmarkCircleIcon } from '@navikt/aksel-icons';
 import { useIsMobileOrSmaller } from '@/resources/utils/screensizeUtils';
 
 import type { ChipRight } from '../utils/rightsUtils';
+
 import { RightChips } from './RightChips';
 import classes from './RightsChipList.module.css';
 

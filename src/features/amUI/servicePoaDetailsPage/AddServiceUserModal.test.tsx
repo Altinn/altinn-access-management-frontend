@@ -201,6 +201,9 @@ describe('AddServiceUserModal', () => {
   });
 
   it('does not delegate when adding the right holder fails', async () => {
+    // RTK Query rejects with its own error shape rather than an Error, which is what the
+    // flows have to handle, so that is what these reproduce.
+    // eslint-disable-next-line @typescript-eslint/prefer-promise-reject-errors
     addRightHolder.mockReturnValue({ unwrap: () => Promise.reject({ status: '400' }) });
     await openModal();
     await fillPerson();
@@ -212,6 +215,9 @@ describe('AddServiceUserModal', () => {
   });
 
   it('keeps the dialog open when the delegation itself fails', async () => {
+    // RTK Query rejects with its own error shape rather than an Error, which is what the
+    // flows have to handle, so that is what these reproduce.
+    // eslint-disable-next-line @typescript-eslint/prefer-promise-reject-errors
     delegateRights.mockReturnValue({ unwrap: () => Promise.reject('500') });
     await openModal();
     await fillPerson();

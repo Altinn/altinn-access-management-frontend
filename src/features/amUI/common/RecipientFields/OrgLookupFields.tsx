@@ -5,8 +5,8 @@ import { DsHeading, DsParagraph, DsTextfield } from '@altinn/altinn-components';
 import { formatOrgNr, isSubUnitByType } from '@/resources/utils/reporteeUtils';
 
 import { createErrorDetails } from '../TechnicalErrorParagraphs/TechnicalErrorParagraphs';
-import { NewUserAlert } from './NewUserAlert';
 
+import { NewUserAlert } from './NewUserAlert';
 import type { OrgLookup } from './useOrgLookup';
 import classes from './RecipientFields.module.css';
 

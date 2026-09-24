@@ -1,4 +1,6 @@
 import { useState } from 'react';
+import type { SerializedError } from '@reduxjs/toolkit';
+import type { FetchBaseQueryError } from '@reduxjs/toolkit/query';
 
 import { useGetOrganizationQuery, type Organization } from '@/rtk/features/lookupApi';
 
@@ -9,7 +11,7 @@ export interface OrgLookup {
   orgData?: Organization;
   isFetching: boolean;
   isError: boolean;
-  error: ReturnType<typeof useGetOrganizationQuery>['error'];
+  error: FetchBaseQueryError | SerializedError | undefined;
   /*** The acting party cannot be added to itself, when the flow says who that is */
   isOwnOrg: boolean;
   /*** Whether the organisation found can be submitted */

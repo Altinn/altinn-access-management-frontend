@@ -1,11 +1,14 @@
 import React from 'react';
 import { Trans, useTranslation } from 'react-i18next';
 import { DsAlert, DsHeading, DsParagraph } from '@altinn/altinn-components';
-import classes from './ResourceInfo.module.css';
+
 import { useIsMobileOrSmaller } from '@/resources/utils/screensizeUtils';
-import { RightsChipList } from './RightsChipList';
+
 import { DelegationAction } from '../EditModal';
-import { ChipRight } from '../utils/rightsUtils';
+import { type ChipRight } from '../utils/rightsUtils';
+
+import { RightsChipList } from './RightsChipList';
+import classes from './ResourceInfo.module.css';
 
 interface RightsSectionProps {
   rights: ChipRight[];

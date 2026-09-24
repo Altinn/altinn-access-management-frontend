@@ -3,9 +3,11 @@ import { beforeEach, describe, expect, it, vi } from 'vitest';
 
 import { useDelegableRights } from './useDelegableRights';
 
-const rightsMetaQuery = vi.fn();
-const resourceCheckQuery = vi.fn();
-const instanceCheckQuery = vi.fn();
+type QueryHook = (...args: unknown[]) => unknown;
+
+const rightsMetaQuery = vi.fn<QueryHook>();
+const resourceCheckQuery = vi.fn<QueryHook>();
+const instanceCheckQuery = vi.fn<QueryHook>();
 
 vi.mock('../PartyRepresentationContext/PartyRepresentationContext', () => ({
   usePartyRepresentation: () => ({ actingParty: { partyUuid: 'acting-party' } }),

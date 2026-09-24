@@ -2,9 +2,10 @@ import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 
-import { RightsSection } from './RightsSection';
 import { DelegationAction } from '../EditModal';
 import type { ChipRight } from '../utils/rightsUtils';
+
+import { RightsSection } from './RightsSection';
 
 // DelegationAction comes from EditModal, which drags in the loading animation.
 vi.mock('lottie-react', () => ({ default: () => null }));
@@ -60,7 +61,7 @@ beforeEach(() => {
 
 describe('RightsSection', () => {
   describe('the summary title', () => {
-    it('says access to everything when every action is checked', async () => {
+    it('says access to everything when every action is checked', () => {
       renderSection();
 
       expect(
@@ -68,7 +69,7 @@ describe('RightsSection', () => {
       ).toBeInTheDocument();
     });
 
-    it('counts the checked actions when only some are', async () => {
+    it('counts the checked actions when only some are', () => {
       rights = [right({ rightKey: 'read' }), right({ rightKey: 'write', checked: false })];
       renderSection();
 
@@ -79,7 +80,7 @@ describe('RightsSection', () => {
       ).toBeInTheDocument();
     });
 
-    it('lets the caller override the everything title', async () => {
+    it('lets the caller override the everything title', () => {
       renderSection({ allAccessTitle: 'the whole message' });
 
       expect(screen.getByRole('button', { name: 'the whole message' })).toBeInTheDocument();
@@ -87,7 +88,7 @@ describe('RightsSection', () => {
   });
 
   describe('the heading', () => {
-    it('says what the recipient will receive', async () => {
+    it('says what the recipient will receive', () => {
       renderSection();
 
       expect(
@@ -95,7 +96,7 @@ describe('RightsSection', () => {
       ).toBeInTheDocument();
     });
 
-    it('says what they already have when there is nothing to save', async () => {
+    it('says what they already have when there is nothing to save', () => {
       renderSection({ hasAccessAndNoChanges: true });
 
       expect(
@@ -103,7 +104,7 @@ describe('RightsSection', () => {
       ).toBeInTheDocument();
     });
 
-    it('says what they are asking for on a request', async () => {
+    it('says what they are asking for on a request', () => {
       renderSection({ availableActions: [DelegationAction.REQUEST] });
 
       expect(
@@ -196,7 +197,7 @@ describe('RightsSection', () => {
   });
 
   describe('the alerts', () => {
-    it('reports a failed delegation by naming the recipient', async () => {
+    it('reports a failed delegation by naming the recipient', () => {
       renderSection({ delegationError: 'delegate' });
 
       expect(
@@ -204,7 +205,7 @@ describe('RightsSection', () => {
       ).toBeInTheDocument();
     });
 
-    it('reports a failed revoke with its own message', async () => {
+    it('reports a failed revoke with its own message', () => {
       renderSection({ delegationError: 'revoke' });
 
       expect(
@@ -212,7 +213,7 @@ describe('RightsSection', () => {
       ).toBeInTheDocument();
     });
 
-    it('shows the missing access message when there is one', async () => {
+    it('shows the missing access message when there is one', () => {
       renderSection({ missingAccess: 'you cannot give this away' });
 
       expect(screen.getByText('you cannot give this away')).toBeInTheDocument();

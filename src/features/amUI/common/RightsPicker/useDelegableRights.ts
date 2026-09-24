@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from 'react';
+import { useMemo, useState } from 'react';
 
 import {
   useDelegationCheckQuery,
@@ -100,11 +100,13 @@ export const useDelegableRights = ({
     });
   }, [rightsMeta, delegationCheckedRights, isDelegationCheckError]);
 
-  useEffect(() => {
-    if (defaultRights) {
-      setRights(defaultRights);
-    }
-  }, [defaultRights]);
+  // Seeding the editable copy is "adjusting state when props change": done while rendering rather
+  // than from an effect, so the defaults are there on the first paint and nothing renders twice.
+  const [seededFrom, setSeededFrom] = useState<ChipRight[] | null>(null);
+  if (defaultRights && defaultRights !== seededFrom) {
+    setSeededFrom(defaultRights);
+    setRights(defaultRights);
+  }
 
   // The caller outlives the dialog, so it resets the picks when the dialog closes.
   const resetRights = () => setRights(defaultRights ?? []);
