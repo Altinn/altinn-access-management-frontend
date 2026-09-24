@@ -46,20 +46,10 @@ test.describe('Fetch consent token after approval', reportArea, () => {
     expect(token.length).toBeGreaterThan(10);
   }
 
-  test('From person to org', async ({
-    login,
-    consentPage,
-    reportContext,
-    runAccessibilityTest,
-  }) => {
+  test('From person to org', async ({ login, consentPage, runAccessibilityTest }) => {
     const from = { pid: pickRandom(fromPersons) };
     const to = { orgNo: MASKINPORTEN_ORG_DIGDIR };
     const validTo = addTimeToNowUtc({ days: 5 });
-    reportContext.set({
-      from,
-      to,
-      validTo,
-    });
     const api = new ConsentApiRequests(to.orgNo);
 
     const consentResp = await test.step('Create consent request', async () => {
@@ -100,16 +90,11 @@ test.describe('Fetch consent token after approval', reportArea, () => {
     });
   });
 
-  test('From org to org', async ({ login, consentPage, reportContext, runAccessibilityTest }) => {
+  test('From org to org', async ({ login, consentPage, runAccessibilityTest }) => {
     const [orgNo, pid] = pickRandom(fromOrgs);
     const from = { orgNo, pid };
     const to = { orgNo: MASKINPORTEN_ORG_DIGDIR };
     const validTo = addTimeToNowUtc({ days: 5 });
-    reportContext.set({
-      from,
-      to,
-      validTo,
-    });
     const api = new ConsentApiRequests(to.orgNo);
 
     const consentResp = await test.step('Create consent request', async () => {
@@ -162,16 +147,11 @@ test.describe('Fetch consent token after approval', reportArea, () => {
    *
    */
 
-  test('E-bevis', async ({ login, consentPage, reportContext, runAccessibilityTest }) => {
+  test('E-bevis', async ({ login, consentPage, runAccessibilityTest }) => {
     const [orgNo, pid] = pickRandom(fromOrgs);
     const from = { orgNo, pid };
     const to = { orgNo: pickRandom(toOrgs) };
     const validTo = addTimeToNowUtc({ days: 2 });
-    reportContext.set({
-      from,
-      to,
-      validTo,
-    });
     const api = new ConsentApiRequests(to.orgNo);
 
     const consentResp =
@@ -233,21 +213,11 @@ test.describe('Fetch consent token after approval', reportArea, () => {
    * - Sparebanken Drift henter ut Maskinporten-token for Sparebank 1 Øst ved å oppgi
    *   consumer_org for Sparebank 1 Øst (for selve forespørselen).
    */
-  test('På vegne av - Person to org', async ({
-    login,
-    consentPage,
-    reportContext,
-    runAccessibilityTest,
-  }) => {
+  test('På vegne av - Person to org', async ({ login, consentPage, runAccessibilityTest }) => {
     const to = { orgNo: '313876144' }; //Dagl 28913749776
 
     const from = { pid: pickRandom(fromPersons) };
     const validTo = addTimeToNowUtc({ days: 5 });
-    reportContext.set({
-      from,
-      to,
-      validTo,
-    });
     const api = new ConsentApiRequests();
 
     const consentResp =
@@ -322,22 +292,12 @@ test.describe('Fetch consent token after approval', reportArea, () => {
    * - Sparebanken Drift henter ut Maskinporten-token for Sparebank 1 Øst ved å oppgi
    *   consumer_org for Sparebank 1 Øst (for selve forespørselen).
    */
-  test('På vegne av - Org to org', async ({
-    login,
-    consentPage,
-    reportContext,
-    runAccessibilityTest,
-  }) => {
+  test('På vegne av - Org to org', async ({ login, consentPage, runAccessibilityTest }) => {
     const to = { orgNo: '313876144' }; //Dagl 28913749776
 
     // Org that consents
     const from = { orgNo: '312690365', pid: '09923649732' };
     const validTo = addTimeToNowUtc({ days: 5 });
-    reportContext.set({
-      from,
-      to,
-      validTo,
-    });
 
     const api = new ConsentApiRequests();
 

@@ -28,11 +28,10 @@ test.describe('Systembruker - Legg til egen organisasjon', reportArea, () => {
   let externalRef: string;
   let response: { confirmUrl: string; id: string };
 
-  test.beforeEach(async ({ reportContext }) => {
+  test.beforeEach(async () => {
     name = '';
     api = new ApiRequests();
     name = `Playwright-e2e-${accessPackageApiName}-${Date.now()}`;
-    reportContext.set({ from: systemUserOwner, systemName: name, vendorOrgNumber });
     externalRef = TestdataApi.generateExternalRef();
 
     systemId = await test.step('Create system with access package', async () => {
@@ -41,7 +40,6 @@ test.describe('Systembruker - Legg til egen organisasjon', reportArea, () => {
       ]);
     });
 
-    reportContext.set({ from: systemUserOwner, systemId, vendorOrgNumber });
     response = await test.step('Create system user agent request', async () => {
       return await api.postClientDelegationAgentRequest(
         vendorOrgNumber,

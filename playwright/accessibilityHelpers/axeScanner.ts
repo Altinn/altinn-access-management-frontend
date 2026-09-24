@@ -3,7 +3,6 @@ import AxeBuilder from '@axe-core/playwright';
 import type { AxeResults } from 'axe-core';
 
 import { collectScanMetadata, renderAccessibilityReport } from './accessibilityReport';
-import type { TestReportContext } from './reportContext';
 
 // Contrast checks must use final colors, rather than an opening transition.
 async function waitForAnimations(page: Page) {
@@ -84,7 +83,6 @@ async function withViolationMarkers<T>(
 export async function scanPage(
   page: Page,
   testInfo: TestInfo,
-  reportContext: TestReportContext,
   name: string,
 ): Promise<{ scanned: boolean }> {
   if (page.isClosed() || !new URL(page.url()).pathname.startsWith('/accessmanagement/ui'))
@@ -111,7 +109,7 @@ export async function scanPage(
     contentType: 'application/json',
   });
   await testInfo.attach(`${name}-uu-report`, {
-    body: renderAccessibilityReport(results, screenshot, metadata, reportContext.get()),
+    body: renderAccessibilityReport(results, screenshot, metadata),
     contentType: 'text/html',
   });
 

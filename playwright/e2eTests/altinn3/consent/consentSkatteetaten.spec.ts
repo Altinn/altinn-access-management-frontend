@@ -25,16 +25,9 @@ test.describe('Samtykke - Skatteetaten krav og betalinger ende til ende', report
     test('Godkjenn samtykke og hent skattegrunnlag', async ({
       login,
       consentPage,
-      reportContext,
       runAccessibilityTest,
     }) => {
       const validTo = addTimeToNowUtc({ days: 5 });
-      reportContext.set({
-        from,
-        to,
-        resource: SKATTEETATEN_RESOURCE,
-        validTo,
-      });
       const api = new ConsentApiRequests(to.orgNo);
 
       const consentResp = await test.step('Opprett samtykkeforespørsel', async () => {

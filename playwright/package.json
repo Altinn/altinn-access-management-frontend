@@ -8,7 +8,6 @@
     "env:AT22": "cross-env environment=at22 npx playwright test",
     "env:AT23": "cross-env environment=at23 npx playwright test",
     "env:TT02": "cross-env environment=tt02 npx playwright test",
-    "env:AT22:noUU": "cross-env UU_SCAN=0 environment=at22 npx playwright test",
     "env:AT23:noUU": "cross-env UU_SCAN=0 environment=at23 npx playwright test",
     "env:TT02:noUU": "cross-env UU_SCAN=0 environment=tt02 npx playwright test",
     "tenor": "npx tsx tenor/cli.ts",

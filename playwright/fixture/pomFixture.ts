@@ -11,7 +11,6 @@ import { SystemUserConfirmPage } from 'playwright/pages/systemuser/SystemUserCon
 import { DelegationPage } from 'playwright/pages/profile/accessPackageDelegationPage';
 import { AktorvalgHeader } from 'playwright/pages/AktorvalgHeader';
 import { ClientDelegationPage } from 'playwright/pages/systemuser/ClientDelegation';
-import { TestReportContext } from 'playwright/accessibilityHelpers/reportContext';
 import { runAccessibilityTests } from 'playwright/accessibilityHelpers/accessibilityHelper';
 import { KlientAdministrasjonPage } from 'playwright/pages/tilgangsstyring/KlientAdministrasjonPage';
 import { InnstillingerPage } from 'playwright/pages/settings/InnstillingerPage';
@@ -23,7 +22,6 @@ const defaultLang = Language.NB;
 type Fixtures = {
   slowNetwork: void;
   accessibilityScan: void;
-  reportContext: TestReportContext;
   // The app language for the run (default NB). Page objects take this and read
   // their text selectors from the matching localization dictionary.
   language: Language;
@@ -98,13 +96,8 @@ const test = baseTest.extend<Fixtures>({
   logoutUser: async ({ page }, use) => {
     await use(new logoutWithUser(page));
   },
-  reportContext: async ({}, use, testInfo) => {
-    await use(new TestReportContext(testInfo));
-  },
-  runAccessibilityTest: async ({ page, reportContext }, use, testInfo) => {
-    await use(
-      new runAccessibilityTests(page, testInfo, reportContext, process.env.UU_SCAN !== '0'),
-    );
+  runAccessibilityTest: async ({ page }, use, testInfo) => {
+    await use(new runAccessibilityTests(page, testInfo, process.env.UU_SCAN !== '0'));
   },
   delegation: async ({ page, language }, use) => {
     await use(new DelegationPage(page, language));

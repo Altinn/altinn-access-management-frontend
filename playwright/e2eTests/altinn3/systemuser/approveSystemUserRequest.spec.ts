@@ -15,8 +15,7 @@ test.describe('Godkjenn og avvis Systembrukerforespørsel', reportArea, () => {
   let externalRef: string;
   let response: Awaited<ReturnType<ApiRequests['postSystemuserRequest']>>;
 
-  test.beforeEach(async ({ reportContext }) => {
-    reportContext.set({ from: owner, systemId: prebuiltSystemId, vendorOrgNumber });
+  test.beforeEach(async () => {
     api = new ApiRequests();
     externalRef = TestdataApi.generateExternalRef();
     response = await api.postSystemuserRequest(

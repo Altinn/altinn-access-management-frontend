@@ -2,7 +2,6 @@ import { expect, type Locator, type Page, type Route, type TestInfo } from '@pla
 
 import { collectScanMetadata } from './accessibilityReport';
 import { scanPage } from './axeScanner';
-import type { TestReportContext } from './reportContext';
 
 export type DialogCheckOptions = {
   /** Stage name used in the report, e.g. 'delegeringsdialog'. */
@@ -41,7 +40,6 @@ async function runCheck(
 export async function checkDialogInteractions(
   page: Page,
   testInfo: TestInfo,
-  reportContext: TestReportContext,
   {
     name = 'dialogkontroller',
     searchPlaceholder,
@@ -102,7 +100,7 @@ export async function checkDialogInteractions(
       await check('Søkefeil annonseres som varsel', async () => {
         await expect(dialog.getByRole('alert')).toContainText(errorTitle);
       });
-      await scanPage(page, testInfo, reportContext, 'simulert-søkefeil');
+      await scanPage(page, testInfo, 'simulert-søkefeil');
     } finally {
       await page.unroute(searchRoute, failSearch);
     }

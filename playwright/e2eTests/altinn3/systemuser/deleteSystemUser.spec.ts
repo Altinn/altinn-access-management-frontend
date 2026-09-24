@@ -14,10 +14,9 @@ test.describe('System user deletion', reportArea, () => {
   let systemId: string;
   let api: ApiRequests;
 
-  test.beforeEach(async ({ reportContext, login, systemUserPage, accessManagementFrontPage }) => {
+  test.beforeEach(async ({ login, systemUserPage, accessManagementFrontPage }) => {
     await test.step('Setup API client', async () => {
       systemId = '';
-      reportContext.set({ from: owner, vendorOrgNumber });
       api = new ApiRequests();
     });
 
@@ -28,11 +27,6 @@ test.describe('System user deletion', reportArea, () => {
 
     await test.step('Create system in system register', async () => {
       systemId = await api.createSystemSystemRegister(vendorOrgNumber);
-      reportContext.set({
-        from: owner,
-        systemId: `${vendorOrgNumber}_${systemId}`,
-        vendorOrgNumber,
-      });
     });
 
     await test.step('Navigate to system user page and create system user', async () => {

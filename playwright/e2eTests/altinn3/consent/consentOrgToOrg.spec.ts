@@ -25,7 +25,6 @@ LANGUAGES.forEach((language) => {
     test(`Skal kunne godkjenne samtykke med Utfyller/innsender-rollen (${language})`, async ({
       consentPage,
       login,
-      reportContext,
       runAccessibilityTest,
     }) => {
       // Create consent request from one org to another org
@@ -35,11 +34,6 @@ LANGUAGES.forEach((language) => {
       const from = { orgNo, pid };
       const to = { orgNo: pickRandom(toOrgs) };
       const validTo = addTimeToNowUtc({ days: 2 });
-      reportContext.set({
-        from,
-        to,
-        validTo,
-      });
       const api = new ConsentApiRequests(to.orgNo);
 
       const consentResponse = await test.step('Create consent request', async () => {

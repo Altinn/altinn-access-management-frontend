@@ -22,20 +22,10 @@ LANGUAGES.forEach((language) => {
       language,
       viewport: MOBILE_VIEWPORT,
     });
-    test(`Standard samtykke`, async ({
-      login,
-      consentPage,
-      reportContext,
-      runAccessibilityTest,
-    }) => {
+    test(`Standard samtykke`, async ({ login, consentPage, runAccessibilityTest }) => {
       const from = { pid: pickRandom(fromPersons) };
       const to = { orgNo: pickRandom(toOrgs) };
       const validTo = addTimeToNowUtc({ days: 2 });
-      reportContext.set({
-        from,
-        to,
-        validTo,
-      });
       const api = new ConsentApiRequests(to.orgNo);
 
       const consentResponse = await test.step('Create consent request', async () => {
@@ -72,15 +62,10 @@ LANGUAGES.forEach((language) => {
       });
     });
 
-    test(`Krav-template`, async ({ consentPage, login, reportContext, runAccessibilityTest }) => {
+    test(`Krav-template`, async ({ consentPage, login, runAccessibilityTest }) => {
       const from = { pid: pickRandom(fromPersons) };
       const to = { orgNo: pickRandom(toOrgs) };
       const validTo = addTimeToNowUtc({ days: 2 });
-      reportContext.set({
-        from,
-        to,
-        validTo,
-      });
       const api = new ConsentApiRequests(to.orgNo);
 
       const consentResponse = await test.step('Create consent request', async () => {
@@ -117,21 +102,10 @@ LANGUAGES.forEach((language) => {
       });
     });
 
-    test(`Fullmakt utføre tjeneste`, async ({
-      consentPage,
-      page,
-      login,
-      reportContext,
-      runAccessibilityTest,
-    }) => {
+    test(`Fullmakt utføre tjeneste`, async ({ consentPage, page, login, runAccessibilityTest }) => {
       const from = { pid: pickRandom(fromPersons) };
       const to = { orgNo: pickRandom(toOrgs) };
       const validTo = addTimeToNowUtc({ days: 2 });
-      reportContext.set({
-        from,
-        to,
-        validTo,
-      });
       const api = new ConsentApiRequests(to.orgNo);
 
       const consentResponse = await test.step('Create consent request', async () => {
@@ -172,15 +146,10 @@ LANGUAGES.forEach((language) => {
       });
     });
 
-    test(`Lånesøknad`, async ({ consentPage, login, reportContext, runAccessibilityTest }) => {
+    test(`Lånesøknad`, async ({ consentPage, login, runAccessibilityTest }) => {
       const from = { pid: pickRandom(fromPersons) };
       const to = { orgNo: pickRandom(toOrgs) };
       const validTo = addTimeToNowUtc({ days: 2 });
-      reportContext.set({
-        from,
-        to,
-        validTo,
-      });
       const api = new ConsentApiRequests(to.orgNo);
 
       const consentResponse = await test.step('Create consent request', async () => {
@@ -220,15 +189,10 @@ LANGUAGES.forEach((language) => {
       });
     });
 
-    test(`Enkelt samtykke`, async ({ consentPage, login, reportContext, runAccessibilityTest }) => {
+    test(`Enkelt samtykke`, async ({ consentPage, login, runAccessibilityTest }) => {
       const from = { pid: pickRandom(fromPersons) };
       const to = { orgNo: pickRandom(toOrgs) };
       const validTo = addTimeToNowUtc({ days: 2 });
-      reportContext.set({
-        from,
-        to,
-        validTo,
-      });
       const api = new ConsentApiRequests(to.orgNo);
 
       const consentResponse = await test.step('Create consent request', async () => {
@@ -269,15 +233,10 @@ LANGUAGES.forEach((language) => {
       });
     });
 
-    test(`Avvis samtykke`, async ({ consentPage, login, reportContext, runAccessibilityTest }) => {
+    test(`Avvis samtykke`, async ({ consentPage, login, runAccessibilityTest }) => {
       const from = { pid: pickRandom(fromPersons) };
       const to = { orgNo: pickRandom(toOrgs) };
       const validTo = addTimeToNowUtc({ days: 2 });
-      reportContext.set({
-        from,
-        to,
-        validTo,
-      });
       const api = new ConsentApiRequests(to.orgNo);
 
       const consentResponse = await test.step('Create consent request', async () => {

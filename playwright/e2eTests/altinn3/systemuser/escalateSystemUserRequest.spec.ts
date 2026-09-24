@@ -20,15 +20,10 @@ test.describe('Systembruker - Eskaler', reportArea, () => {
   let externalRef: string;
   let response: { confirmUrl: string; id: string };
 
-  test.beforeEach(async ({ reportContext }) => {
+  test.beforeEach(async () => {
     name = '';
     api = new ApiRequests();
     name = `Playwright-e2e-eskaler-${Date.now()}`;
-    reportContext.set({
-      from: { pid: regularUserPid, orgNo: systemuserOwnerOrg, name: actorName },
-      systemName: name,
-      vendorOrgNumber,
-    });
     externalRef = TestdataApi.generateExternalRef();
 
     systemId = await test.step('Create system', async () => {
@@ -42,12 +37,6 @@ test.describe('Systembruker - Eskaler', reportArea, () => {
           { resource: [{ value: 'vegardtestressurs', id: 'urn:altinn:resource' }] },
         ],
       );
-    });
-    reportContext.set({
-      from: { pid: regularUserPid, orgNo: systemuserOwnerOrg, name: actorName },
-      systemId,
-      systemName: name,
-      vendorOrgNumber,
     });
     response = await test.step('Create system user request', async () => {
       return await api.postSystemuserRequest(
@@ -70,7 +59,6 @@ test.describe('Systembruker - Eskaler', reportArea, () => {
     login,
     systemUserPage,
     browser,
-    reportContext,
     runAccessibilityTest,
   }): Promise<void> => {
     await test.step('Login as regular user, select actor and escalate request', async () => {
@@ -89,13 +77,6 @@ test.describe('Systembruker - Eskaler', reportArea, () => {
     const managerLogin = new LoginPage(managerPage);
     const managerSystemUserPage = new SystemUserPage(managerPage);
     const managerClientDelegationPage = new ClientDelegationPage(managerPage);
-
-    reportContext.set({
-      from: { pid: managerPid, orgNo: systemuserOwnerOrg, name: actorName },
-      systemId,
-      systemName: name,
-      vendorOrgNumber,
-    });
 
     await test.step('Login as manager and choose reportee', async () => {
       await managerLogin.LoginToAccessManagement(managerPid);

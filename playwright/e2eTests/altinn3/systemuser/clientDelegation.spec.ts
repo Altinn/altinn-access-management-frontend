@@ -26,15 +26,13 @@ test.describe('Delegering av klienter til Systembruker', reportArea, () => {
     let name: string;
     let response: { confirmUrl: string };
 
-    test.beforeEach(async ({ reportContext }) => {
+    test.beforeEach(async () => {
       name = `Playwright-e2e-${role}-${Date.now()}`;
-      reportContext.set({ from: user, systemName: name, vendorOrgNumber });
 
       const systemId = await test.step('Create system with access packages', async () => {
         return await api.createSystemInSystemregisterWithAccessPackages(vendorOrgNumber, name);
       });
 
-      reportContext.set({ from: user, systemName: name, systemId, vendorOrgNumber });
       response = await test.step('Create client delegation agent request', async () => {
         return await api.postClientDelegationAgentRequest(
           vendorOrgNumber,
@@ -119,15 +117,13 @@ test.describe('Delegering av klienter til Systembruker', reportArea, () => {
     let name: string;
     let response: { confirmUrl: string };
 
-    test.beforeEach(async ({ reportContext }) => {
+    test.beforeEach(async () => {
       name = `Playwright-e2e-${role}-${Date.now()}`;
-      reportContext.set({ from: user, systemName: name, vendorOrgNumber });
 
       const systemId = await test.step('Create system with access packages', async () => {
         return await api.createSystemInSystemregisterWithAccessPackages(vendorOrgNumber, name);
       });
 
-      reportContext.set({ from: user, systemName: name, systemId, vendorOrgNumber });
       response = await test.step('Create client delegation agent request', async () => {
         return await api.postClientDelegationAgentRequest(
           vendorOrgNumber,
@@ -218,15 +214,13 @@ test.describe('Delegering av klienter til Systembruker', reportArea, () => {
     let name: string;
     let response: { confirmUrl: string };
 
-    test.beforeEach(async ({ reportContext }) => {
+    test.beforeEach(async () => {
       name = `Playwright-e2e-${role}-${Date.now()}`;
-      reportContext.set({ from: user, systemName: name, vendorOrgNumber });
 
       const systemId = await test.step('Create system with access packages', async () => {
         return await api.createSystemInSystemregisterWithAccessPackages(vendorOrgNumber, name);
       });
 
-      reportContext.set({ from: user, systemName: name, systemId, vendorOrgNumber });
       response = await test.step('Create client delegation agent request', async () => {
         return await api.postClientDelegationAgentRequest(
           vendorOrgNumber,

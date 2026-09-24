@@ -20,12 +20,10 @@ test.describe('System Register', reportArea, async () => {
   let system: string;
   let api: ApiRequests;
 
-  test.beforeEach(async ({ reportContext, login }) => {
+  test.beforeEach(async ({ login }) => {
     system = '';
-    reportContext.set({ from: owner, vendorOrgNumber });
     api = new ApiRequests();
     system = await api.createSystemSystemRegister(vendorOrgNumber);
-    reportContext.set({ from: owner, systemId: `${vendorOrgNumber}_${system}`, vendorOrgNumber });
     await login.LoginToAccessManagement(testUserPid);
     await login.selectActor(testOrgName);
   });

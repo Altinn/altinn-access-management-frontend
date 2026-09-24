@@ -5,15 +5,13 @@ Helperen kjører axe på siden testen allerede har åpnet, og legger resultatene
 ## Slik bruker du den i en test
 
 ```ts
-test('Godkjenn samtykke', async ({ reportContext, runAccessibilityTest, consentPage }) => {
-  reportContext.set({ from, to, validTo });
+test('Godkjenn samtykke', async ({ runAccessibilityTest, consentPage }) => {
   await expect(consentPage.buttonApprove).toBeEnabled();
   await runAccessibilityTest.scan('samtykke-før-godkjenning');
   await consentPage.approveStandardAndWaitLogout(redirectUrl);
 });
 ```
 
-- `reportContext.set(...)` registrerer testdata (personer, org, system-ID) som brukes i rapporten. Helt valgfritt, testen fungerer fint uten.
 - Vent alltid til ønsket innhold er synlig før du kaller `scan()`. Axe ser kun tilstanden som er tilgjengelig akkurat da.
 - Sett fagområde på testsuiten, ikke på hver test:
 
@@ -49,7 +47,7 @@ UU-funn feiler aldri den funksjonelle testen, uansett hvor mange eller alvorlige
 UU kjører som standard sammen med E2E-testene. Sett `UU_SCAN=0` for å hoppe over skanning og dialogkontroller, f.eks. når du feilsøker en funksjonell test:
 
 ```sh
-yarn run env:AT23:noUU <path>   # tilsvarende env:AT22:noUU og env:TT02:noUU
+yarn run env:AT23:noUU <path>   # eller env:TT02:noUU
 ```
 
 ## Kjør UU manuelt

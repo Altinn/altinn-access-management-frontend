@@ -27,8 +27,7 @@ test.describe('Systembruker endringsforespørsel', reportArea, () => {
   let systemUserId: string;
   let changeRequestResponse: Awaited<ReturnType<ApiRequests['postSystemuserChangeRequest']>>;
 
-  test.beforeEach(async ({ reportContext }) => {
-    reportContext.set({ from: owner, systemId: prebuiltSystemId, vendorOrgNumber });
+  test.beforeEach(async () => {
     api = new ApiRequests();
     externalRef = TestdataApi.generateExternalRef();
 
