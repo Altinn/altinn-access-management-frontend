@@ -10,6 +10,7 @@ import {
 } from '@altinn/altinn-components';
 import { CheckmarkCircleIcon, PlusIcon } from '@navikt/aksel-icons';
 import { useTranslation } from 'react-i18next';
+import type { FetchBaseQueryError } from '@reduxjs/toolkit/query';
 
 import { useAddRightHolderMutation } from '@/rtk/features/connectionApi';
 import { useGetOrganizationQuery, type Organization } from '@/rtk/features/lookupApi';
@@ -96,10 +97,11 @@ const AddServiceUserModal = ({
   const [lastNameError, setLastNameError] = useState('');
   const [orgNumber, setOrgNumber] = useState('');
   const [rightsExpanded, setRightsExpanded] = useState(false);
-  const [submitErrorDetails, setSubmitErrorDetails] = useState<{
-    status: string;
-    time: string;
-    traceId?: string;
+  // Which step failed decides how it is reported: only the right holder step can mean "we could
+  // not find that person or organisation".
+  const [submitError, setSubmitError] = useState<{
+    step: 'addRightHolder' | 'delegate';
+    details: { status: string; time: string; traceId?: string };
   } | null>(null);
 
   const {
@@ -125,7 +127,7 @@ const AddServiceUserModal = ({
     setLastNameError('');
     setOrgNumber('');
     setRightsExpanded(false);
-    setSubmitErrorDetails(null);
+    setSubmitError(null);
     resetRights();
   };
 
@@ -148,13 +150,27 @@ const AddServiceUserModal = ({
     !rightsErrorDetails &&
     !isSubmitting;
 
+  // delegateRights' transformErrorResponse reduces the error to a bare status, so it can arrive as
+  // a string or a number rather than something createErrorDetails understands.
+  const toErrorDetails = (error: unknown) => {
+    const unknownFailure = { status: '500', time: new Date().toISOString() };
+    if (typeof error === 'string' || typeof error === 'number') {
+      return { status: String(error), time: new Date().toISOString() };
+    }
+    if (error && typeof error === 'object' && 'status' in error) {
+      return createErrorDetails(error as FetchBaseQueryError) ?? unknownFailure;
+    }
+    return unknownFailure;
+  };
+
   const handleSubmit = async () => {
     if (!isFormValid || !actingParty || !fromParty) return;
-    setSubmitErrorDetails(null);
+    setSubmitError(null);
     setIsSubmitting(true);
 
+    let toUuid: string;
     try {
-      const toUuid = await addRightHolder(
+      toUuid = await addRightHolder(
         userType === 'person'
           ? {
               personInput: {
@@ -164,7 +180,13 @@ const AddServiceUserModal = ({
             }
           : { partyUuidToBeAdded: (orgData as Organization).partyUuid },
       ).unwrap();
+    } catch (error: unknown) {
+      setSubmitError({ step: 'addRightHolder', details: toErrorDetails(error) });
+      setIsSubmitting(false);
+      return;
+    }
 
+    try {
       await delegateRights({
         partyUuid: actingParty.partyUuid,
         fromUuid: fromParty.partyUuid,
@@ -175,12 +197,8 @@ const AddServiceUserModal = ({
 
       modalRef.current?.close();
     } catch (error: unknown) {
-      // delegateRights' transformErrorResponse reduces the error to a bare status.
-      const details =
-        typeof error === 'string' || typeof error === 'number'
-          ? { status: String(error), time: new Date().toISOString() }
-          : createErrorDetails(error);
-      setSubmitErrorDetails(details ?? { status: '500', time: new Date().toISOString() });
+      // The right holder exists by now, so nothing here can mean "no such person".
+      setSubmitError({ step: 'delegate', details: toErrorDetails(error) });
     } finally {
       setIsSubmitting(false);
     }
@@ -213,11 +231,25 @@ const AddServiceUserModal = ({
         </DsHeading>
 
         <div aria-live='assertive'>
-          {submitErrorDetails && (
+          {submitError?.step === 'addRightHolder' && (
             <NewUserAlert
               userType={userType}
-              error={submitErrorDetails}
+              error={submitError.details}
             />
+          )}
+          {submitError?.step === 'delegate' && (
+            <DsAlert
+              data-size='sm'
+              data-color='danger'
+            >
+              <DsParagraph data-size='sm'>{t('common.general_error_paragraph')}</DsParagraph>
+              <TechnicalErrorParagraphs
+                status={submitError.details.status}
+                time={submitError.details.time}
+                traceId={submitError.details.traceId}
+                size='sm'
+              />
+            </DsAlert>
           )}
         </div>
 
@@ -225,7 +257,7 @@ const AddServiceUserModal = ({
           value={userType}
           onChange={(value) => {
             setUserType(value as 'person' | 'org');
-            setSubmitErrorDetails(null);
+            setSubmitError(null);
           }}
         >
           <AmTabs.List>

@@ -175,6 +175,21 @@ describe('AddServiceUserModal', () => {
     expect(dialog()?.open).toBe(true);
   });
 
+  // The right holder exists by the time the delegation runs, so a 400 there must not be reported
+  // as "we found no such person".
+  it('does not blame the person when the delegation fails', async () => {
+    // RTK Query rejects with its own shape rather than an Error, which is what this reproduces.
+    // eslint-disable-next-line @typescript-eslint/prefer-promise-reject-errors
+    delegateRights.mockReturnValue({ unwrap: () => Promise.reject('400') });
+    await openModal();
+    await fillPerson();
+    await submit();
+
+    expect(addRightHolder).toHaveBeenCalled();
+    expect(screen.queryByText('new_user_modal.not_found_error_person')).not.toBeInTheDocument();
+    expect(await screen.findByText('common.general_error_paragraph')).toBeInTheDocument();
+  });
+
   it('keeps the dialog open when the delegation itself fails', async () => {
     delegateRights.mockReturnValue({ unwrap: () => Promise.reject(new Error('500')) });
     await openModal();
