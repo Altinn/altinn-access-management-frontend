@@ -76,10 +76,18 @@ function visit(suite) {
         let incomplete = 0;
         let metadata;
         if (isCheck) {
+          // One attachment holds all checks for a dialog, so it renders as a single row.
           const check = JSON.parse(html);
-          findings = check.finding ? 1 : 0;
+          const checks = check.checks || [];
+          findings = checks.filter(({ finding }) => finding).length;
           metadata = check.metadata;
-          html = `<!doctype html><html lang="nb"><meta charset="utf-8"><title>${escapeHtml(check.name)}</title><h1>${escapeHtml(check.name)}</h1><p>${check.finding ? 'UU-funn' : 'Bestått'}</p><pre>${escapeHtml(check.finding || '')}</pre></html>`;
+          const items = checks
+            .map(
+              ({ name, finding }) =>
+                `<li>${finding ? '❌' : '✅'} ${escapeHtml(name)}${finding ? `<pre>${escapeHtml(finding)}</pre>` : ''}</li>`,
+            )
+            .join('');
+          html = `<!doctype html><html lang="nb"><meta charset="utf-8"><title>${escapeHtml(check.name)}</title><h1>${escapeHtml(check.name)}</h1><p>${findings ? `${findings} av ${checks.length} kontroller har UU-funn` : `Alle ${checks.length} kontroller bestått`}</p><ul>${items}</ul></html>`;
         } else {
           const metadataAttachment = attachments.find(
             (item) => item.name === attachment.name.replace(/-uu-report$/, '-scan-metadata'),

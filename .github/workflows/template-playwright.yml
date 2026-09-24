@@ -3,10 +3,6 @@ name: template-playwright.yml
 on:
   workflow_dispatch:
     inputs:
-      non_blocking:
-        description: Observation mode - job failures do not fail the workflow
-        type: boolean
-        default: false
       project:
         description: Playwright project
         type: string
@@ -22,10 +18,6 @@ on:
 
   workflow_call:
     inputs:
-      non_blocking:
-        description: Observation mode - job failures do not fail the workflow
-        type: boolean
-        default: false
       project:
         description: Playwright project
         type: string
@@ -39,7 +31,6 @@ jobs:
   e2e-tests:
     name: Playwright end to end tests
     environment: ${{ inputs.environment }}
-    continue-on-error: ${{ inputs.non_blocking }}
     permissions:
       id-token: write
       contents: read

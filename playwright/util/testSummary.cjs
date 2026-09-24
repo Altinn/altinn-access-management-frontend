@@ -42,8 +42,10 @@ function visit(suite) {
           findings += data.violations.length;
           incomplete += data.incomplete?.length || 0;
         } else {
-          checks++;
-          if (data.finding) findings++;
+          for (const check of data.checks || []) {
+            checks++;
+            if (check.finding) findings++;
+          }
         }
       }
       if (hasScan) uuTests++;

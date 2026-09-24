@@ -87,8 +87,9 @@ test('groups skipped and failed tests by annotation and uses unknown for missing
     spec(
       'Dialog',
       [
-        attachment('focus-uu-check', {
-          name: 'Focus',
+        attachment('dialogkontroller-uu-check', {
+          name: 'dialogkontroller',
+          checks: [{ name: 'Focus' }],
           metadata: { area: 'Fullmakter', language: 'nb', stage: 'Dialog' },
         }),
       ],
@@ -119,4 +120,30 @@ test('technical scan errors are reported as warnings, not clean scans', (t) => {
   assert.doesNotMatch(index, /Ingen automatiske funn/);
   assert.match(summary, /Tekniske UU-feil: 1/);
   assert.match(summary, /\| Samtykke \| 1 \| 0 \| 0 \|/);
+});
+
+test('dialog checks are grouped into one row per dialog', (t) => {
+  const { dir, index, summary } = exportReports(t, [
+    spec(
+      'Dialog',
+      [
+        attachment('dialogkontroller-uu-check', {
+          name: 'dialogkontroller',
+          checks: [
+            { name: 'Tab holder fokus i dialogen' },
+            { name: 'Shift+Tab holder fokus i dialogen' },
+            { name: 'Escape lukker dialogen', finding: 'dialog still visible' },
+          ],
+          metadata: { area: 'Fullmakter', language: 'nb', stage: 'dialogkontroller' },
+        }),
+      ],
+      [{ type: 'report-area', description: 'Fullmakter' }],
+    ),
+  ]);
+  assert.equal((index.match(/href="scan-\d+\.html"/g) || []).length, 1);
+  assert.match(index, /❌ 1 funn/);
+  const detail = fs.readFileSync(path.join(dir, 'scan-1.html'), 'utf8');
+  assert.match(detail, /1 av 3 kontroller har UU-funn/);
+  assert.match(detail, /dialog still visible/);
+  assert.match(summary, /Dialogkontroller: 3\. UU-funn: 1\./);
 });

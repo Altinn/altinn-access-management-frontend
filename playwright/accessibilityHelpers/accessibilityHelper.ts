@@ -1,8 +1,8 @@
-import type { Locator, Page, TestInfo } from '@playwright/test';
+import type { Page, TestInfo } from '@playwright/test';
 
 import { runOptionalCheck } from './accessibilityCheckBoundary';
 import { scanPage } from './axeScanner';
-import { checkDialogInteractions } from './dialogAccessibilityChecks';
+import { checkDialogInteractions, type DialogCheckOptions } from './dialogAccessibilityChecks';
 import type { TestReportContext } from './reportContext';
 
 export class runAccessibilityTests {
@@ -30,8 +30,8 @@ export class runAccessibilityTests {
    * Checks this dialog's tab trap, Escape-to-close and focus-return, plus that
    * a simulated search-request failure (HTTP 500) is announced accessibly.
    */
-  async checkDialog(options: { searchPlaceholder: string; errorTitle: string; trigger: Locator }) {
-    await runOptionalCheck(this.testInfo, this.enabled, 'dialogkontroller', () =>
+  async checkDialog(options: DialogCheckOptions) {
+    await runOptionalCheck(this.testInfo, this.enabled, options.name ?? 'dialogkontroller', () =>
       checkDialogInteractions(this.page, this.testInfo, this.reportContext, options),
     );
   }

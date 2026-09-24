@@ -26,8 +26,8 @@ test.describe('Samtykke', { annotation: { type: 'report-area', description: 'Sam
 ## Hva `scan()` gjør
 
 1. Kjører axe (WCAG A/AA) på siden slik den ser ut akkurat nå.
-2. Legger ved axe-resultat, skjermbilde og en HTML-rapport på testen.
-3. Ved funn: tegner et rødt merke rundt de berørte elementene på et ekstra skjermbilde.
+2. Legger ved axe-resultat og en HTML-rapport med skjermbilde på testen.
+3. Ved funn: tegner et rødt merke rundt de berørte elementene på skjermbildet.
 4. Kan aldri feile testen. Feil under skanning fanges og logges som `UU-feil` i stedet.
 
 Alle beståtte tester som ikke selv kaller `scan()` får automatisk ett scan av sluttilstanden (via en fixture). Det er et sikkerhetsnett, ikke full dekning av brukerreisen.
@@ -38,18 +38,26 @@ Alle beståtte tester som ikke selv kaller `scan()` får automatisk ett scan av 
 - **Krever manuell vurdering**: axe klarte ikke avgjøre det automatisk (f.eks. kontrast bak et overlappende element). Ikke et bekreftet brudd.
 - **Ingen funn**: ingen automatiske funn i den skannede tilstanden. Ikke det samme som at hele siden er universelt utformet.
 
-UU-funn feiler aldri den funksjonelle testen, uansett hvor mange eller alvorlige. Deploy- og de planlagte jobbene kjører i tillegg med `non_blocking: true` på jobbnivå, midlertidig mens vi bygger tillit til skanningen.
+UU-funn feiler aldri den funksjonelle testen, uansett hvor mange eller alvorlige. UU-stegene i workflowen (eksport og opplasting av rapport) har `continue-on-error: true`, så de feiler heller ikke bygget. Funksjonelle E2E-feil gir fortsatt rødt bygg.
 
 ## Dialogkontroller
 
-`checkDialog()` er en egen, mer inngripende sjekk: tabulatorfelle, at Escape lukker dialogen, at fokus returnerer til utløserknappen, og en simulert søkefeil. Kjøres etter de funksjonelle testtrinnene, siden den endrer siden aktivt.
+`checkDialog()` er en egen, mer inngripende sjekk: tabulatorfelle, at Escape lukker dialogen, at fokus returnerer til utløserknappen, og en simulert søkefeil. Kjøres etter de funksjonelle testtrinnene, siden den endrer siden aktivt. Søkeruten (`searchRoute`) og navnet på lukkeknappen (`closeButtonName`, fra oversettelsene) sendes inn, så helperen fungerer for andre dialoger og språk. Alle delsjekkene havner på én rad i rapporten per dialog.
+
+## Skru av UU lokalt
+
+UU kjører som standard sammen med E2E-testene. Sett `UU_SCAN=0` for å hoppe over skanning og dialogkontroller, f.eks. når du feilsøker en funksjonell test:
+
+```sh
+yarn run env:AT23:noUU <path>   # tilsvarende env:AT22:noUU og env:TT02:noUU
+```
 
 ## Kjør UU manuelt
 
-UU kjører alltid sammen med de eksisterende E2E-testene, det finnes ingen egen av/på-bryter. For å kjøre mot et valgfritt miljø uten å vente på deploy eller planlagt kjøring:
+For å kjøre mot et valgfritt miljø uten å vente på deploy eller planlagt kjøring:
 
 ```sh
-gh workflow run template-playwright.yml -f environment=AT23 -f project=e2e-tests -f non_blocking=true
+gh workflow run template-playwright.yml -f environment=AT23 -f project=e2e-tests
 ```
 
 Rapporteksporten (`exportAccessibilityReports.cjs`) kan testes uten nettleser eller testmiljø:

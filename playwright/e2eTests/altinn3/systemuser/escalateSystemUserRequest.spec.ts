@@ -46,6 +46,7 @@ test.describe('Systembruker - Eskaler', reportArea, () => {
     reportContext.set({
       from: { pid: regularUserPid, orgNo: systemuserOwnerOrg, name: actorName },
       systemId,
+      systemName: name,
       vendorOrgNumber,
     });
     response = await test.step('Create system user request', async () => {
@@ -92,6 +93,7 @@ test.describe('Systembruker - Eskaler', reportArea, () => {
     reportContext.set({
       from: { pid: managerPid, orgNo: systemuserOwnerOrg, name: actorName },
       systemId,
+      systemName: name,
       vendorOrgNumber,
     });
 

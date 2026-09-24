@@ -97,20 +97,14 @@ export async function scanPage(
 
   // Keep findings in the report without failing the functional test.
   await testInfo.attach(`${name}-axe-results`, {
-    body: JSON.stringify(results, null, 2),
+    body: JSON.stringify(results),
     contentType: 'application/json',
   });
-  let screenshot = await page.screenshot({ fullPage: true, timeout: 5000 });
-  await testInfo.attach(`${name}-screenshot`, { body: screenshot, contentType: 'image/png' });
-  if (results.violations.length) {
-    screenshot = await withViolationMarkers(page, results.violations, () =>
-      page.screenshot({ fullPage: true, timeout: 5000 }),
-    );
-    await testInfo.attach(`${name}-marked-screenshot`, {
-      body: screenshot,
-      contentType: 'image/png',
-    });
-  }
+  // The screenshot is embedded in the HTML report only, to keep report size down.
+  const takeScreenshot = () => page.screenshot({ fullPage: true, timeout: 5000 });
+  const screenshot = results.violations.length
+    ? await withViolationMarkers(page, results.violations, takeScreenshot)
+    : await takeScreenshot();
   const metadata = await collectScanMetadata(testInfo, page, name);
   await testInfo.attach(`${name}-scan-metadata`, {
     body: JSON.stringify(metadata),
