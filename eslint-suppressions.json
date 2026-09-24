@@ -745,6 +745,11 @@
       "count": 2
     }
   },
+  "src/features/amUI/servicePoaDetailsPage/useServiceRights.ts": {
+    "react-hooks/set-state-in-effect": {
+      "count": 1
+    }
+  },
   "src/features/amUI/settings/EmailAddressFields.tsx": {
     "react-hooks/set-state-in-effect": {
       "count": 1

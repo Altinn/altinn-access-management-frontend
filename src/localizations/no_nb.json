@@ -1075,6 +1075,7 @@
     "users_description": "Søk etter brukere for å gi eller slette fullmakter.",
     "no_users": "Ingen har fullmakt til denne tjenesten.",
     "search_placeholder": "Søk etter person eller virksomhet",
+    "delegation_success": "{{name}} har nå fått fullmakt til {{service}}",
     "revoke_success": "{{name}} har ikke lenger fullmakt til {{service}}",
     "revoke_error": "Kunne ikke slette fullmakten til {{service}} for {{name}}",
     "add_user_modal": {

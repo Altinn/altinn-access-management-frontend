@@ -105,7 +105,7 @@ describe('useCanRedelegateResource with an explicit recipient', () => {
       actingParty: party('org'),
       fromParty: party('org'),
       selfParty: party('me'),
-    } as never);
+    });
 
     await expect(canRedelegate('res', 'row-user')).resolves.toBe(true);
     expect(resourceCheck).toHaveBeenCalledTimes(1);
