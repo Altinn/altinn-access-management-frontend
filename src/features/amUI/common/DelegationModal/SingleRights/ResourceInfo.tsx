@@ -1,7 +1,6 @@
 import * as React from 'react';
-import { Button, DsButton, DsParagraph, formatDisplayName } from '@altinn/altinn-components';
+import { DsButton, DsParagraph, formatDisplayName } from '@altinn/altinn-components';
 import { useTranslation } from 'react-i18next';
-import { MinusCircleIcon } from '@navikt/aksel-icons';
 
 import { useIsMobileOrSmaller } from '@/resources/utils/screensizeUtils';
 import { StatusMessageForScreenReader } from '@/components/StatusMessageForScreenReader/StatusMessageForScreenReader';
@@ -248,7 +247,7 @@ export const ResourceInfo = ({
               className={classes.editButtons}
             >
               {hasDelegateAction && (
-                <Button
+                <DsButton
                   data-size='sm'
                   disabled={
                     isActionLoading ||
@@ -259,23 +258,22 @@ export const ResourceInfo = ({
                   onClick={hasAccess ? saveEditedRights : delegateChosenRights}
                 >
                   {hasAccess ? t('common.update_poa') : t('common.give_poa')}
-                </Button>
+                </DsButton>
               )}
               {hasAccess && toParty && (
-                <Button
+                <DsButton
                   data-size='sm'
-                  variant={hasDelegateAction ? 'tertiary' : 'primary'}
+                  variant='secondary'
                   onClick={confirmAndRevokeResource}
                   disabled={
                     isActionLoading ||
                     rights.length === 0 ||
                     rights.some((r) => r.inherited === true)
                   }
-                  color='danger'
+                  data-color='danger'
                 >
-                  <MinusCircleIcon aria-hidden='true' />
                   {t('common.delete_poa')}
-                </Button>
+                </DsButton>
               )}
               {!hasAccess && !hasPendingRequest(resource.identifier) && isSingleRightRequest && (
                 <DsButton
@@ -290,6 +288,7 @@ export const ResourceInfo = ({
               {hasPendingRequest(resource.identifier) && isSingleRightRequest && (
                 <DsButton
                   data-size='sm'
+                  variant='secondary'
                   disabled={isLoadingSingleRightRequest}
                   data-color='danger'
                   loading={isLoadingSingleRightRequest}
