@@ -5,7 +5,7 @@ import { useTranslation } from 'react-i18next';
 import type { ServiceResource } from '@/rtk/features/singleRights/singleRightsApi';
 
 import classes from '../common/DelegationModal/DelegationModal.module.css';
-import { DelegationAction } from '../common/DelegationModal/EditModal';
+import type { DelegationAction } from '../common/DelegationModal/EditModal';
 import { ResourceInfo } from '../common/DelegationModal/SingleRights/ResourceInfo';
 import { PartyRepresentationProvider } from '../common/PartyRepresentationContext/PartyRepresentationContext';
 import type { UserActionTarget } from '../common/UserSearch/types';

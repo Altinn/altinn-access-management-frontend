@@ -8,6 +8,7 @@ import {
   useGetSingleRightsForRightholderQuery,
   type ServiceResource,
 } from '@/rtk/features/singleRights/singleRightsApi';
+
 import { DelegationAction } from '../common/DelegationModal/EditModal';
 import { usePartyRepresentation } from '../common/PartyRepresentationContext/PartyRepresentationContext';
 import {
@@ -154,7 +155,7 @@ export const ServiceUsersSection = ({ resource, isLoading }: ServiceUsersSection
         );
     };
 
-    confirmRevoke(
+    void confirmRevoke(
       `${resourceId}-${user.id}`,
       () => canRedelegateResource(resourceId, user.id),
       revoke,

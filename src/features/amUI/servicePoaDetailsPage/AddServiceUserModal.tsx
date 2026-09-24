@@ -188,7 +188,7 @@ const AddServiceUserModal = ({
 
   const submitOnEnter = (event: React.KeyboardEvent) => {
     if (event.key === 'Enter' && !event.repeat && isFormValid) {
-      handleSubmit();
+      void handleSubmit();
     }
   };
 
@@ -370,7 +370,7 @@ const AddServiceUserModal = ({
 
         <div className={classes.buttonRow}>
           <DsButton
-            onClick={handleSubmit}
+            onClick={() => void handleSubmit()}
             disabled={!isFormValid}
             loading={isSubmitting}
           >
