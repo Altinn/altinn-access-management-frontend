@@ -14,10 +14,14 @@ import type { FetchBaseQueryError } from '@reduxjs/toolkit/query';
 
 import { useAddRightHolderMutation } from '@/rtk/features/connectionApi';
 import { useGetOrganizationQuery, type Organization } from '@/rtk/features/lookupApi';
-import { useDelegateRightsMutation } from '@/rtk/features/singleRights/singleRightsApi';
+import {
+  useDelegateRightsMutation,
+  type ServiceResource,
+} from '@/rtk/features/singleRights/singleRightsApi';
 import { formatOrgNr, isSubUnitByType } from '@/resources/utils/reporteeUtils';
 
 import { AmTabs } from '../common/AmTabs/AmTabs';
+import { ResourceAlert } from '../common/DelegationModal/SingleRights/ResourceAlert';
 import { RightChips } from '../common/DelegationModal/SingleRights/RightChips';
 import { usePartyRepresentation } from '../common/PartyRepresentationContext/PartyRepresentationContext';
 import { getPersonIdentifierErrorKey } from '../common/personIdentifierUtils';
@@ -37,11 +41,11 @@ export interface AddedServiceUser {
 }
 
 interface AddServiceUserButtonProps {
-  resourceId: string;
+  resource?: ServiceResource;
   onUserAdded: (user: AddedServiceUser) => void;
 }
 
-export const AddServiceUserButton = ({ resourceId, onUserAdded }: AddServiceUserButtonProps) => {
+export const AddServiceUserButton = ({ resource, onUserAdded }: AddServiceUserButtonProps) => {
   const { t } = useTranslation();
   const modalRef = useRef<HTMLDialogElement>(null);
   const [isOpen, setIsOpen] = useState(false);
@@ -61,7 +65,7 @@ export const AddServiceUserButton = ({ resourceId, onUserAdded }: AddServiceUser
       <AddServiceUserModal
         modalRef={modalRef}
         isOpen={isOpen}
-        resourceId={resourceId}
+        resource={resource}
         onUserAdded={onUserAdded}
         onClose={() => setIsOpen(false)}
       />
@@ -72,7 +76,7 @@ export const AddServiceUserButton = ({ resourceId, onUserAdded }: AddServiceUser
 interface AddServiceUserModalProps {
   modalRef: React.RefObject<HTMLDialogElement | null>;
   isOpen: boolean;
-  resourceId: string;
+  resource?: ServiceResource;
   /** Called once the user both exists and holds the service, after the dialog has closed. */
   onUserAdded: (user: AddedServiceUser) => void;
   onClose: () => void;
@@ -89,13 +93,14 @@ interface AddServiceUserModalProps {
 const AddServiceUserModal = ({
   modalRef,
   isOpen,
-  resourceId,
+  resource,
   onUserAdded,
   onClose,
 }: AddServiceUserModalProps) => {
   const { t } = useTranslation();
   const headingId = useId();
   const { actingParty, fromParty } = usePartyRepresentation();
+  const resourceId = resource?.identifier ?? '';
 
   const [addRightHolder] = useAddRightHolderMutation();
   const [delegateRights] = useDelegateRightsMutation();
@@ -145,6 +150,15 @@ const AddServiceUserModal = ({
   const undelegableActions = rights.filter((r) => !r.delegable).map((r) => r.rightName);
   const selectedRights = rights.filter((r) => r.checked).map((r) => r.rightKey);
 
+  // Same shape as the other resource modals, minus their `hasAccess` term: the user being added is
+  // new, so there is never an existing delegation to fall back on. Without this the picker would
+  // render empty (RightChips drops every non-delegable action) above a button that can never be
+  // pressed, and the reason would be buried in the collapsed section.
+  const displayResourceAlert =
+    !!rightsErrorDetails ||
+    resource?.delegable === false ||
+    (rights.length > 0 && !rights.some((r) => r.delegable === true));
+
   const personIdentifierValidation = getPersonIdentifierErrorKey(personIdentifier);
   const isPersonValid =
     personIdentifier.trim().length > 0 &&
@@ -158,7 +172,7 @@ const AddServiceUserModal = ({
     (userType === 'person' ? isPersonValid : isOrgValid) &&
     selectedRights.length > 0 &&
     !isRightsLoading &&
-    !rightsErrorDetails &&
+    !displayResourceAlert &&
     !isSubmitting;
 
   // delegateRights' transformErrorResponse reduces the error to a bare status, so it can arrive as
@@ -371,15 +385,12 @@ const AddServiceUserModal = ({
             {t('service_poa_details_page.add_user_modal.user_will_receive')}
           </DsHeading>
 
-          {rightsErrorDetails ? (
-            <DsAlert data-color='danger'>
-              <DsParagraph>{t('common.general_error_paragraph')}</DsParagraph>
-              <TechnicalErrorParagraphs
-                status={rightsErrorDetails.status}
-                time={rightsErrorDetails.time}
-                additionalContext={`resource: ${resourceId}`}
-              />
-            </DsAlert>
+          {resource && displayResourceAlert ? (
+            <ResourceAlert
+              error={rightsErrorDetails}
+              rightReasons={rights.map((r) => r.delegationReason)}
+              resource={resource}
+            />
           ) : (
             <ListItem
               loading={isRightsLoading}

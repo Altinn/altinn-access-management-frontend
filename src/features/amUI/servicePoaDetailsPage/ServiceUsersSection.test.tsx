@@ -40,17 +40,17 @@ vi.mock('./ServiceUserModal', () => ({
 // Captured the same way as UserSearch's props: the dialog has its own tests, so what matters here
 // is what this section does when it reports a user it has added.
 let addUserProps: {
-  resourceId: string;
+  resource?: { identifier: string };
   onUserAdded?: (user: { name: string; type: 'person' | 'org' }) => void;
 };
 
 vi.mock('./AddServiceUserModal', () => ({
   AddServiceUserButton: (props: {
-    resourceId: string;
+    resource?: { identifier: string };
     onUserAdded?: (user: { name: string; type: 'person' | 'org' }) => void;
   }) => {
     addUserProps = props;
-    return <button type='button'>{`add user for ${props.resourceId}`}</button>;
+    return <button type='button'>{`add user for ${props.resource?.identifier}`}</button>;
   },
 }));
 

@@ -217,7 +217,7 @@ export const ServiceUsersSection = ({ resource, isLoading }: ServiceUsersSection
           searchPlaceholder={t('service_poa_details_page.search_placeholder')}
           AddUserButton={
             <AddServiceUserButton
-              resourceId={resourceId}
+              resource={resource}
               onUserAdded={handleUserAdded}
             />
           }
