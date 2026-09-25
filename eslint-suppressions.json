@@ -277,11 +277,6 @@
       "count": 2
     }
   },
-  "src/features/amUI/InstanceDetailPage/useInstanceRights.ts": {
-    "@typescript-eslint/no-unsafe-assignment": {
-      "count": 2
-    }
-  },
   "src/features/amUI/agentDetails/AgentDetails.tsx": {
     "react-hooks/set-state-in-effect": {
       "count": 1

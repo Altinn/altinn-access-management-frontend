@@ -32,7 +32,7 @@ export const useInstanceRights = ({
     setRights,
     resetRights,
     isLoading,
-    rightsMetaTechnicalErrorDetails,
+    errorDetails: rightsErrorDetails,
     delegationCheckError,
   } = useInstanceDelegationRightsData({
     resourceId,
@@ -40,7 +40,7 @@ export const useInstanceRights = ({
     isEnabled: isOpen,
   });
 
-  const errorDetails = rightsMetaTechnicalErrorDetails ?? createErrorDetails(delegationCheckError);
+  const errorDetails = rightsErrorDetails ?? createErrorDetails(delegationCheckError);
 
   return { rights, setRights, resetRights, isLoading, errorDetails };
 };
