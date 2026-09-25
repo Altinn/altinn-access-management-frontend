@@ -44,7 +44,12 @@ export const ServiceUserModal = ({
       ref={ref}
       className={classes.modalDialog}
       closedby='any'
-      onClose={onClose}
+      onClose={(event) => {
+        // To prevent the close event from bubbling up to the parent dialog when the user clicks the backdrop.
+        // @digdir/designsystemet-react >= 1.15 has this buildt in, so remove this guard once @altinn/altinn-components bundles that version.
+        if (event.target !== event.currentTarget) return;
+        onClose();
+      }}
       aria-label={t('delegation_modal.aria_label.single_rights')}
       aria-description={t('delegation_modal.aria_description')}
     >
