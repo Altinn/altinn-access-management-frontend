@@ -25,7 +25,6 @@ export const ServicePoaDetailsPage = () => {
   const resourceId = id ?? '';
   const partyUuid = getCookie('AltinnPartyUuid') || '';
   const poaOverviewUrl = `/${amUIPath.PoaOverview}#singleRights`;
-  // One zone for the whole page, so the users list can fall back to the page heading above it.
   const restoreFocus = useRestoreFocus();
 
   const {
