@@ -21,12 +21,16 @@ namespace Altinn.AccessManagement.UI.Core.Services
         private const string TypeInstances = "instances";
         private const string DefaultLanguage = "nb";
 
+        // Max backend calls in flight per export; the right types are fetched one after another. Keep it low:
+        // every call triggers several PDP lookups in the backend, and AT22 fell over at 32 in flight
+        private const int MaxConcurrentRequests = 4;
+
         private readonly IUserService _userService;
         private readonly IRoleService _roleService;
         private readonly IAccessPackageService _accessPackageService;
         private readonly ISingleRightService _singleRightService;
         private readonly IInstanceService _instanceService;
-        
+
         /// <summary>
         /// Initializes a new instance of the <see cref="DelegationExportService"/> class.
         /// </summary>
@@ -67,65 +71,38 @@ namespace Altinn.AccessManagement.UI.Core.Services
                 givers.AddRange(reportee.Subunits);
             }
 
-            var files = new Dictionary<string, byte[]>();
+            // The right types are fetched one after another; only the givers within a type are fetched concurrently
+            var entries = new List<(string EntryName, Action<Stream> Write)>();
 
             if (IncludeType(TypeRoles))
             {
-                try
-                {
-                    string filename = language == "en" ? "roles.csv" : "roller.csv";
-                    List<RoleExportRow> rows = await BuildRoleRows(givers, language);
-                    files[filename] = DelegationExportCsvBuilder.WriteCsv(rows, new RoleExportRowMap(language));
-                }
-                catch (HttpStatusException ex)
-                {
-                    throw new HttpStatusException(ex.Type, "Role", ex.StatusCode, ex.TraceId, ex.Message);
-                }
+                string filename = language == "en" ? "roles.csv" : "roller.csv";
+                List<RoleExportRow> rows = await RunTagged("Role", () => BuildRoleRows(givers, language));
+                entries.Add((filename, stream => DelegationExportCsvBuilder.WriteCsv(rows, new RoleExportRowMap(language), stream)));
             }
 
             if (IncludeType(TypeAccessPackages))
             {
-                try
-                {
-                    List<AccessPackageExportRow> rows = await BuildAccessPackageRows(givers, language);
-                    string filename = language == "en" ? "access_packages.csv" : language == "nn" ? "tilgangspakkar.csv" : "tilgangspakker.csv";
-                    files[filename] = DelegationExportCsvBuilder.WriteCsv(rows, new AccessPackageExportRowMap(language));
-                }
-                catch (HttpStatusException ex)
-                {
-                    throw new HttpStatusException(ex.Type, "AccessPackage", ex.StatusCode, ex.TraceId, ex.Message);
-                }
+                string filename = language == "en" ? "access_packages.csv" : language == "nn" ? "tilgangspakkar.csv" : "tilgangspakker.csv";
+                List<AccessPackageExportRow> rows = await RunTagged("AccessPackage", () => BuildAccessPackageRows(givers, language));
+                entries.Add((filename, stream => DelegationExportCsvBuilder.WriteCsv(rows, new AccessPackageExportRowMap(language), stream)));
             }
 
             if (IncludeType(TypeSingleRights))
             {
-                try
-                {
-                    List<SingleRightExportRow> rows = await BuildSingleRightRows(givers, language);
-                    string filename = language == "en" ? "single_rights.csv" : language == "nn" ? "enkelttenester.csv" : "enkelttjenester.csv";
-                    files[filename] = DelegationExportCsvBuilder.WriteCsv(rows, new SingleRightExportRowMap(language));
-                }
-                catch (HttpStatusException ex)
-                {
-                    throw new HttpStatusException(ex.Type, "SingleRights", ex.StatusCode, ex.TraceId, ex.Message);
-                }
+                string filename = language == "en" ? "single_rights.csv" : language == "nn" ? "enkelttenester.csv" : "enkelttjenester.csv";
+                List<SingleRightExportRow> rows = await RunTagged("SingleRights", () => BuildSingleRightRows(givers, language));
+                entries.Add((filename, stream => DelegationExportCsvBuilder.WriteCsv(rows, new SingleRightExportRowMap(language), stream)));
             }
 
             if (IncludeType(TypeInstances))
             {
-                try
-                {
-                    List<InstanceRightExportRow> rows = await BuildInstanceRows(givers, language);
-                    string filename = language == "en" ? "instance_rights.csv" : language == "nn" ? "enkelttenester-instans.csv" : "enkelttjenester-instans.csv";
-                    files[filename] = DelegationExportCsvBuilder.WriteCsv(rows, new InstanceRightExportRowMap(language));
-                }
-                catch (HttpStatusException ex)
-                {
-                    throw new HttpStatusException(ex.Type, "Instances", ex.StatusCode, ex.TraceId, ex.Message);
-                }
+                string filename = language == "en" ? "instance_rights.csv" : language == "nn" ? "enkelttenester-instans.csv" : "enkelttjenester-instans.csv";
+                List<InstanceRightExportRow> rows = await RunTagged("Instances", () => BuildInstanceRows(givers, language));
+                entries.Add((filename, stream => DelegationExportCsvBuilder.WriteCsv(rows, new InstanceRightExportRowMap(language), stream)));
             }
 
-            byte[] zip = DelegationExportCsvBuilder.BuildZip(files);
+            byte[] zip = DelegationExportCsvBuilder.BuildZip(entries);
             string fileName = $"{reportee.OrganizationNumber}_{DateTime.UtcNow:yyyy-MM-dd}.zip";
             return DelegationExportResult.Success(zip, fileName);
         }
@@ -157,35 +134,18 @@ namespace Altinn.AccessManagement.UI.Core.Services
 
         private async Task<List<RoleExportRow>> BuildRoleRows(List<AuthorizedParty> givers, string language)
         {
-            var rows = new List<RoleExportRow>();
-            Dictionary<Guid, string> roleNameLookup = await BuildRoleNameLookup(language);
-
-            foreach (AuthorizedParty giver in givers)
-            {
-                List<RolePermission> permissions = await _roleService.GetRolePermissions(giver.PartyUuid, giver.PartyUuid, null, language);
-                foreach (RolePermission rolePermission in permissions ?? new List<RolePermission>())
+            // Run the role-name lookup and the giver fan-out concurrently; each giver is mapped to rows as its response arrives
+            Task<Dictionary<Guid, string>> lookupTask = BuildRoleNameLookup(language);
+            Task<List<RoleExportRow>[]> rowsTask = ForEachGiverAsync(
+                givers,
+                async giver =>
                 {
-                    foreach (Permission permission in DirectPermissions(rolePermission.Permissions))
-                    {
-                        string roleName = rolePermission.Role != null && roleNameLookup.TryGetValue(rolePermission.Role.Id, out string name)
-                            ? name
-                            : rolePermission.Role?.Name;
+                    List<RolePermission> permissions = await _roleService.GetRolePermissions(giver.PartyUuid, giver.PartyUuid, null, language);
+                    return MapRoleRows(giver, permissions, await lookupTask);
+                });
 
-                        rows.Add(new RoleExportRow
-                        {
-                            GiverOrgnr = giver.OrganizationNumber,
-                            GiverNavn = giver.Name,
-                            MottakerId = RecipientId(permission.To),
-                            MottakerNavn = permission.To?.Name,
-                            MottakerType = permission.To?.Type,
-                            RolleNavn = roleName,
-                            RolleCode = rolePermission.Role?.Code,
-                        });
-                    }
-                }
-            }
-
-            return rows;
+            await Task.WhenAll(lookupTask, rowsTask);
+            return (await rowsTask).SelectMany(rows => rows).ToList();
         }
 
         private async Task<Dictionary<Guid, string>> BuildRoleNameLookup(string language)
@@ -202,71 +162,28 @@ namespace Altinn.AccessManagement.UI.Core.Services
 
         private async Task<List<AccessPackageExportRow>> BuildAccessPackageRows(List<AuthorizedParty> givers, string language)
         {
-            var rows = new List<AccessPackageExportRow>();
-            Dictionary<Guid, string> packageNames = await BuildPackageNameLookup(language);
-
-            foreach (AuthorizedParty giver in givers)
-            {
-                Dictionary<Guid, List<PackagePermission>> delegations =
-                    await _accessPackageService.GetDelegations(giver.PartyUuid, null, giver.PartyUuid, language);
-
-                foreach (List<PackagePermission> packagePermissions in (delegations ?? new Dictionary<Guid, List<PackagePermission>>()).Values)
+            // Run the package-name lookup and the giver fan-out concurrently; each giver is mapped to rows as its response arrives
+            Task<Dictionary<Guid, string>> lookupTask = BuildPackageNameLookup(language);
+            Task<List<AccessPackageExportRow>[]> rowsTask = ForEachGiverAsync(
+                givers,
+                async giver =>
                 {
-                    foreach (PackagePermission packagePermission in packagePermissions)
-                    {
-                        string packageName = packagePermission.Package != null && packageNames.TryGetValue(packagePermission.Package.Id, out string name)
-                            ? name
-                            : null;
+                    Dictionary<Guid, List<PackagePermission>> delegations = await _accessPackageService.GetDelegations(giver.PartyUuid, null, giver.PartyUuid, language);
+                    return MapAccessPackageRows(giver, delegations, await lookupTask);
+                });
 
-                        foreach (Permission permission in DirectPermissions(packagePermission.Permissions))
-                        {
-                            rows.Add(new AccessPackageExportRow
-                            {
-                                GiverOrgnr = giver.OrganizationNumber,
-                                GiverNavn = giver.Name,
-                                MottakerId = RecipientId(permission.To),
-                                MottakerNavn = permission.To?.Name,
-                                MottakerType = permission.To?.Type,
-                                TilgangspakkeNavn = packageName,
-                                TilgangspakkeCode = packagePermission.Package?.Urn,
-                            });
-                        }
-                    }
-                }
-            }
-
-            return rows;
+            await Task.WhenAll(lookupTask, rowsTask);
+            return (await rowsTask).SelectMany(rows => rows).ToList();
         }
 
         private async Task<List<InstanceRightExportRow>> BuildInstanceRows(List<AuthorizedParty> givers, string language)
         {
-            var rows = new List<InstanceRightExportRow>();
+            // Skip Dialogporten enrichment; the export only needs resource and instance ids
+            List<InstanceRightExportRow>[] rowsPerGiver = await ForEachGiverAsync(
+                givers,
+                async giver => MapInstanceRows(giver, await _instanceService.GetDelegatedInstances(language, giver.PartyUuid, giver.PartyUuid, null, null, null, includeDialogLookup: false)));
 
-            foreach (AuthorizedParty giver in givers)
-            {
-                List<InstanceDelegation> delegations =
-                    await _instanceService.GetDelegatedInstances(language, giver.PartyUuid, giver.PartyUuid, null, null, null);
-
-                foreach (InstanceDelegation delegation in delegations ?? new List<InstanceDelegation>())
-                {
-                    foreach (Permission permission in DirectPermissions(delegation.Permissions))
-                    {
-                        rows.Add(new InstanceRightExportRow
-                        {
-                            GiverOrgnr = giver.OrganizationNumber,
-                            GiverNavn = giver.Name,
-                            MottakerId = RecipientId(permission.To),
-                            MottakerNavn = permission.To?.Name,
-                            MottakerType = permission.To?.Type,
-                            TjenesteNavn = delegation.Resource?.Title,
-                            ResourceId = delegation.Resource?.Identifier,
-                            InstansId = delegation.Instance?.RefId,
-                        });
-                    }
-                }
-            }
-
-            return rows;
+            return rowsPerGiver.SelectMany(rows => rows).ToList();
         }
 
         // Single-rights RESOURCE delegations (without actions/operations) are listed for all
@@ -274,32 +191,11 @@ namespace Altinn.AccessManagement.UI.Core.Services
         // export does not include operations, no per-recipient ".../rights" lookup is needed.
         private async Task<List<SingleRightExportRow>> BuildSingleRightRows(List<AuthorizedParty> givers, string language)
         {
-            var rows = new List<SingleRightExportRow>();
+            List<SingleRightExportRow>[] rowsPerGiver = await ForEachGiverAsync(
+                givers,
+                async giver => MapSingleRightRows(giver, await _singleRightService.GetDelegatedResources(language, giver.PartyUuid, giver.PartyUuid, null)));
 
-            foreach (AuthorizedParty giver in givers)
-            {
-                List<ResourceDelegation> delegations =
-                    await _singleRightService.GetDelegatedResources(language, giver.PartyUuid, giver.PartyUuid, null);
-
-                foreach (ResourceDelegation delegation in delegations ?? new List<ResourceDelegation>())
-                {
-                    foreach (Permission permission in DirectPermissions(delegation.Permissions))
-                    {
-                        rows.Add(new SingleRightExportRow
-                        {
-                            GiverOrgnr = giver.OrganizationNumber,
-                            GiverNavn = giver.Name,
-                            MottakerId = RecipientId(permission.To),
-                            MottakerNavn = permission.To?.Name,
-                            MottakerType = permission.To?.Type,
-                            TjenesteNavn = delegation.Resource?.Title,
-                            ResourceId = delegation.Resource?.Identifier,
-                        });
-                    }
-                }
-            }
-
-            return rows;
+            return rowsPerGiver.SelectMany(rows => rows).ToList();
         }
 
         private async Task<Dictionary<Guid, string>> BuildPackageNameLookup(string language)
@@ -315,6 +211,138 @@ namespace Altinn.AccessManagement.UI.Core.Services
             }
 
             return map;
+        }
+
+        // Re-throws backend errors tagged with the right type they came from (reported by the controller)
+        private static async Task<T> RunTagged<T>(string origin, Func<Task<T>> build)
+        {
+            try
+            {
+                return await build();
+            }
+            catch (HttpStatusException ex)
+            {
+                throw new HttpStatusException(ex.Type, origin, ex.StatusCode, ex.TraceId, ex.Message);
+            }
+        }
+
+        // One call per giver, max MaxConcurrentRequests in flight, results kept in giver order; the callback
+        // maps the response to rows right away so the backend DTOs can be collected early
+        private static async Task<TResult[]> ForEachGiverAsync<TResult>(List<AuthorizedParty> givers, Func<AuthorizedParty, Task<TResult>> fetch)
+        {
+            var results = new TResult[givers.Count];
+            var options = new ParallelOptions { MaxDegreeOfParallelism = MaxConcurrentRequests };
+
+            await Parallel.ForEachAsync(Enumerable.Range(0, givers.Count), options, async (index, _) =>
+            {
+                results[index] = await fetch(givers[index]);
+            });
+
+            return results;
+        }
+
+        private static List<RoleExportRow> MapRoleRows(AuthorizedParty giver, List<RolePermission> permissions, Dictionary<Guid, string> roleNameLookup)
+        {
+            var rows = new List<RoleExportRow>();
+            foreach (RolePermission rolePermission in permissions ?? new List<RolePermission>())
+            {
+                foreach (Permission permission in DirectPermissions(rolePermission.Permissions))
+                {
+                    string roleName = rolePermission.Role != null && roleNameLookup.TryGetValue(rolePermission.Role.Id, out string name)
+                        ? name
+                        : rolePermission.Role?.Name;
+
+                    rows.Add(new RoleExportRow
+                    {
+                        GiverOrgnr = giver.OrganizationNumber,
+                        GiverNavn = giver.Name,
+                        MottakerId = RecipientId(permission.To),
+                        MottakerNavn = permission.To?.Name,
+                        MottakerType = permission.To?.Type,
+                        RolleNavn = roleName,
+                        RolleCode = rolePermission.Role?.Code,
+                    });
+                }
+            }
+
+            return rows;
+        }
+
+        private static List<AccessPackageExportRow> MapAccessPackageRows(AuthorizedParty giver, Dictionary<Guid, List<PackagePermission>> delegations, Dictionary<Guid, string> packageNames)
+        {
+            var rows = new List<AccessPackageExportRow>();
+            foreach (List<PackagePermission> packagePermissions in (delegations ?? new Dictionary<Guid, List<PackagePermission>>()).Values)
+            {
+                foreach (PackagePermission packagePermission in packagePermissions)
+                {
+                    string packageName = packagePermission.Package != null && packageNames.TryGetValue(packagePermission.Package.Id, out string name)
+                        ? name
+                        : null;
+
+                    foreach (Permission permission in DirectPermissions(packagePermission.Permissions))
+                    {
+                        rows.Add(new AccessPackageExportRow
+                        {
+                            GiverOrgnr = giver.OrganizationNumber,
+                            GiverNavn = giver.Name,
+                            MottakerId = RecipientId(permission.To),
+                            MottakerNavn = permission.To?.Name,
+                            MottakerType = permission.To?.Type,
+                            TilgangspakkeNavn = packageName,
+                            TilgangspakkeCode = packagePermission.Package?.Urn,
+                        });
+                    }
+                }
+            }
+
+            return rows;
+        }
+
+        private static List<InstanceRightExportRow> MapInstanceRows(AuthorizedParty giver, List<InstanceDelegation> delegations)
+        {
+            var rows = new List<InstanceRightExportRow>();
+            foreach (InstanceDelegation delegation in delegations ?? new List<InstanceDelegation>())
+            {
+                foreach (Permission permission in DirectPermissions(delegation.Permissions))
+                {
+                    rows.Add(new InstanceRightExportRow
+                    {
+                        GiverOrgnr = giver.OrganizationNumber,
+                        GiverNavn = giver.Name,
+                        MottakerId = RecipientId(permission.To),
+                        MottakerNavn = permission.To?.Name,
+                        MottakerType = permission.To?.Type,
+                        TjenesteNavn = delegation.Resource?.Title,
+                        ResourceId = delegation.Resource?.Identifier,
+                        InstansId = delegation.Instance?.RefId,
+                    });
+                }
+            }
+
+            return rows;
+        }
+
+        private static List<SingleRightExportRow> MapSingleRightRows(AuthorizedParty giver, List<ResourceDelegation> delegations)
+        {
+            var rows = new List<SingleRightExportRow>();
+            foreach (ResourceDelegation delegation in delegations ?? new List<ResourceDelegation>())
+            {
+                foreach (Permission permission in DirectPermissions(delegation.Permissions))
+                {
+                    rows.Add(new SingleRightExportRow
+                    {
+                        GiverOrgnr = giver.OrganizationNumber,
+                        GiverNavn = giver.Name,
+                        MottakerId = RecipientId(permission.To),
+                        MottakerNavn = permission.To?.Name,
+                        MottakerType = permission.To?.Type,
+                        TjenesteNavn = delegation.Resource?.Title,
+                        ResourceId = delegation.Resource?.Identifier,
+                    });
+                }
+            }
+
+            return rows;
         }
 
         // Only direct delegations are included (v1 scope): permissions routed via an
