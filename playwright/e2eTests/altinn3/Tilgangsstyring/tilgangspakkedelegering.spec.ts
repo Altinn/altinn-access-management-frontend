@@ -1,7 +1,9 @@
 import { test } from '../../../fixture/pomFixture';
 import { EnduserConnection } from '../../../api-requests/EnduserConnection';
 
-test.describe('tilgangspakkedelegering fra person til person og person til org', () => {
+const reportArea = { annotation: { type: 'report-area', description: 'Fullmakter' } };
+
+test.describe('tilgangspakkedelegering fra person til person og person til org', reportArea, () => {
   const api = new EnduserConnection();
 
   test.describe('Legg til ny person hos deg selv', () => {
@@ -334,7 +336,7 @@ test.describe('tilgangspakkedelegering fra person til person og person til org',
   });
 });
 
-test.describe('tilgangspakkedelegering fra org til person og org til org', () => {
+test.describe('tilgangspakkedelegering fra org til person og org til org', reportArea, () => {
   const api = new EnduserConnection();
 
   test.describe('Legg til ny person hos din org', () => {

@@ -3,6 +3,8 @@ import { EnduserConnection } from '../../../api-requests/EnduserConnection';
 import { RequestApiRequests } from '../../../api-requests/RequestApiRequests';
 import { Token } from '../../../api-requests/Token';
 
+const reportArea = { annotation: { type: 'report-area', description: 'Forespørsler' } };
+
 const posttjenester = 'urn:altinn:accesspackage:posttjenester';
 const posttjenesterNavn = 'Posttjenester';
 // Access packages are grouped by område on a user's detail page, and the område
@@ -51,7 +53,7 @@ const ACTORS = {
   },
 };
 
-test.describe('Forespørsler', () => {
+test.describe('Forespørsler', reportArea, () => {
   const requests = new RequestApiRequests();
   const connections = new EnduserConnection();
   const token = new Token();
@@ -66,6 +68,7 @@ test.describe('Forespørsler', () => {
     });
 
     test('godkjenn forespørsel og slett fullmakten etterpå', async ({
+      runAccessibilityTest,
       accessManagementFrontPage,
       forespoerslerPage,
       login,
@@ -76,11 +79,17 @@ test.describe('Forespørsler', () => {
         await login.LoginToAccessManagement(actor.pid);
         await login.selectActor(actor.orgName);
         await forespoerslerPage.goToForespoersler();
+        await expect(forespoerslerPage.forespoerselRad(requesterName)).toBeVisible();
+        await runAccessibilityTest.scan('mottatte-forespørsler');
       });
 
       await test.step('Åpne forespørselen og velg tilgangspakken', async () => {
         await forespoerslerPage.aapneForespoersel(requesterName);
+        await expect(forespoerslerPage.pakkeRad(posttjenesterNavn)).toBeVisible();
+        await runAccessibilityTest.scan('forespørselsdialog');
         await forespoerslerPage.aapnePakke(posttjenesterNavn);
+        await expect(forespoerslerPage.godkjennKnapp).toBeEnabled();
+        await runAccessibilityTest.scan('forespørsel-pakkedetaljer');
       });
 
       await test.step('Godkjenn forespørselen', async () => {
@@ -89,6 +98,7 @@ test.describe('Forespørsler', () => {
 
       await test.step('Forespørselen er nå godkjent', async () => {
         await expect(forespoerslerPage.godkjentStatus).toBeVisible();
+        await runAccessibilityTest.scan('forespørsel-godkjent');
       });
 
       // The dialog saying "Godkjent" only proves the request was answered. This

@@ -1,9 +1,11 @@
 import { expect, test } from '../../../fixture/pomFixture';
 import { EnduserConnection } from '../../../api-requests/EnduserConnection';
 
+const reportArea = { annotation: { type: 'report-area', description: 'Klientadministrasjon' } };
+
 const posttjenester = 'urn:altinn:accesspackage:posttjenester';
 
-test.describe('klientadministrasjon', () => {
+test.describe('klientadministrasjon', reportArea, () => {
   const api = new EnduserConnection();
 
   test.describe('legg til bruker', () => {
@@ -11,6 +13,7 @@ test.describe('klientadministrasjon', () => {
     const agent = { pid: '29814895546', name: 'MUNTER SKO', lastName: 'Sko' };
 
     test('legg til bruker', async ({
+      runAccessibilityTest,
       accessManagementFrontPage,
       klientAdministrasjonPage,
       login,
@@ -24,6 +27,8 @@ test.describe('klientadministrasjon', () => {
 
       await test.step(`legg til bruker ${agent.pid} ${agent.name}`, async () => {
         await klientAdministrasjonPage.clickLeggTilBrukerKnapp();
+        await expect(klientAdministrasjonPage.fnrFelt).toBeVisible();
+        await runAccessibilityTest.scan('legg-til-klientbruker-dialog');
         await klientAdministrasjonPage.skrivFnr(agent.pid);
         await klientAdministrasjonPage.skrivEtternavn(agent.lastName);
         await klientAdministrasjonPage.klikkLeggTilPerson();
@@ -32,6 +37,7 @@ test.describe('klientadministrasjon', () => {
       await test.step(`${agent.name} har nå blitt lagt til`, async () => {
         await expect(klientAdministrasjonPage.slettBrukerKnapp).toBeVisible();
         await expect(klientAdministrasjonPage.brukerHeading(agent.name)).toBeVisible();
+        await runAccessibilityTest.scan('klientbruker-opprettet');
       });
     });
 
@@ -58,6 +64,7 @@ test.describe('klientadministrasjon', () => {
     });
 
     test('slett bruker', async ({
+      runAccessibilityTest,
       accessManagementFrontPage,
       klientAdministrasjonPage,
       login,
@@ -76,11 +83,15 @@ test.describe('klientadministrasjon', () => {
       });
 
       await test.step(`slett ${agent.name}`, async () => {
-        await klientAdministrasjonPage.slettBruker();
+        await klientAdministrasjonPage.slettBrukerKnapp.click();
+        await expect(klientAdministrasjonPage.slettBrukerDialogKnapp).toBeEnabled();
+        await runAccessibilityTest.scan('slett-klientbruker-bekreftelse');
+        await klientAdministrasjonPage.slettBrukerDialogKnapp.click();
       });
 
       await test.step(`${agent.name} er nå slettet`, async () => {
         await expect(klientAdministrasjonPage.ingenBrukereTekst).toBeVisible();
+        await runAccessibilityTest.scan('tom-klientbrukeroversikt');
       });
     });
 

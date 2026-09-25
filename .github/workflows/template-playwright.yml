@@ -40,6 +40,7 @@ jobs:
       - name: Install dependencies
         run: yarn --immutable
       - name: Running yarn tests
+        id: playwright-tests
         working-directory: playwright
         env:
           USERNAME_TEST_API: ${{ secrets.USERNAME_TEST_API }}
@@ -52,13 +53,39 @@ jobs:
           TT02_REGISTER_SUBSCRIPTION_KEY: ${{ secrets.TT02_REGISTER_SUBSCRIPTION_KEY }}
           ENVIRONMENT: ${{ inputs.environment }}
           PROJECT: ${{ inputs.project }}
+          PLAYWRIGHT_HTML_OPEN: never
+        run: yarn run "env:${ENVIRONMENT}" --project "${PROJECT}" --workers=4
+      - name: Export UU HTML reports
+        continue-on-error: true
+        if: always()
+        working-directory: playwright
+        env:
+          REPORT_NAME: ${{ inputs.environment }}
         run: |
-          yarn run "env:${ENVIRONMENT}" --project "${PROJECT}" --workers=4
-      - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
+          node util/exportAccessibilityReports.cjs jsonReports/jsonReport.json "playwright-report/$REPORT_NAME/uu"
+      - name: Test summary
+        continue-on-error: true
+        if: always()
+        working-directory: playwright
+        run: node util/testSummary.cjs >> "$GITHUB_STEP_SUMMARY"
+      - name: Upload Playwright report
+        continue-on-error: true
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
         if: always()
         with:
           name: playwright-report-${{ inputs.environment }}
-          path: playwright/playwright-report/${{ inputs.environment }}
+          path: |
+            playwright/playwright-report/${{ inputs.environment }}
+            !playwright/playwright-report/${{ inputs.environment }}/uu
+          retention-days: 30
+
+      - name: Upload UU report
+        continue-on-error: true
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
+        if: always()
+        with:
+          name: uu-report-${{ inputs.environment }}
+          path: playwright/playwright-report/${{ inputs.environment }}/uu
           retention-days: 30
 
       - name: Azure CLI Login
@@ -90,7 +117,7 @@ jobs:
       - name: Show report URL
         if: always()
         run: |
-          echo ""
-          echo "📊 Playwright test report:"
-          echo "➡️  $REPORT_URL"
-          echo ""
+          echo "Playwright report: $REPORT_URL"
+          echo "[Playwright report]($REPORT_URL)" >> "$GITHUB_STEP_SUMMARY"
+          echo "UU report: ${REPORT_URL}uu/"
+          echo "[UU reports with screenshots and fixes](${REPORT_URL}uu/)" >> "$GITHUB_STEP_SUMMARY"

@@ -3,7 +3,9 @@ import { SettingsApiRequests } from '../../../api-requests/SettingsApiRequests';
 
 import { ACTORS, BASELINE_EPOST } from './testdata';
 
-test.describe('Innstillinger - e-postadresser', () => {
+const reportArea = { annotation: { type: 'report-area', description: 'Innstillinger' } };
+
+test.describe('Innstillinger - e-postadresser', reportArea, () => {
   const api = new SettingsApiRequests();
 
   test.describe('legg til e-postadresse', () => {
@@ -14,18 +16,23 @@ test.describe('Innstillinger - e-postadresser', () => {
       await api.setNotificationAddresses(actor.pid, actor.org, { emails: [BASELINE_EPOST] });
     });
 
-    test('legg til e-postadresse', async ({ innstillingerPage, login }) => {
+    test('legg til e-postadresse', async ({ runAccessibilityTest, innstillingerPage, login }) => {
       await test.step(`Logg inn som ${actor.orgName} og åpne innstillinger`, async () => {
         await login.LoginToAccessManagement(actor.pid);
         await login.selectActor(actor.orgName);
         await innstillingerPage.goToInnstillinger();
         await innstillingerPage.verifyPaaInnstillinger();
+        await expect(innstillingerPage.emailAddressCount).toHaveText(/^1\b/);
+        await runAccessibilityTest.scan('varslingsinnstillinger');
       });
 
       await test.step('Legg til en ny e-postadresse', async () => {
         await innstillingerPage.openEpostDialog();
+        await runAccessibilityTest.scan('epost-dialog');
         await innstillingerPage.klikkLeggTilFlere();
         await innstillingerPage.skrivEpost('', nyEpost);
+        await expect(innstillingerPage.saveButton).toBeEnabled();
+        await runAccessibilityTest.scan('epost-flere-adresser');
         await innstillingerPage.lagreEndringer();
       });
 
@@ -35,6 +42,7 @@ test.describe('Innstillinger - e-postadresser', () => {
         await expect(innstillingerPage.emailFields).toHaveCount(2);
         await expect(innstillingerPage.emailField(BASELINE_EPOST)).toBeVisible();
         await expect(innstillingerPage.emailField(nyEpost)).toBeVisible();
+        await runAccessibilityTest.scan('epost-lagret');
       });
     });
 
@@ -126,7 +134,11 @@ test.describe('Innstillinger - e-postadresser', () => {
       await api.setNotificationAddresses(actor.pid, actor.org, { emails: [BASELINE_EPOST] });
     });
 
-    test('ugyldig e-postadresse kan ikke lagres', async ({ innstillingerPage, login }) => {
+    test('ugyldig e-postadresse kan ikke lagres', async ({
+      innstillingerPage,
+      login,
+      runAccessibilityTest,
+    }) => {
       await test.step(`Logg inn som ${actor.orgName} og åpne innstillinger`, async () => {
         await login.LoginToAccessManagement(actor.pid);
         await login.selectActor(actor.orgName);
@@ -143,6 +155,8 @@ test.describe('Innstillinger - e-postadresser', () => {
         await expect(innstillingerPage.ugyldigEpostFeilmelding).toBeVisible();
         await expect(innstillingerPage.saveButton).toBeDisabled();
       });
+
+      await runAccessibilityTest.scan('ugyldig-epost');
 
       await test.step('Den opprinnelige adressen er uendret', async () => {
         await innstillingerPage.lukkDialog();

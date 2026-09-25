@@ -1,9 +1,11 @@
 import { test } from '../../../fixture/pomFixture';
 import { EnduserConnection } from '../../../api-requests/EnduserConnection';
 
+const reportArea = { annotation: { type: 'report-area', description: 'Fullmakter' } };
+
 const service = 'bruno-correspondence';
 
-test.describe('Tilgangsstyring', () => {
+test.describe('Tilgangsstyring', reportArea, () => {
   const api = new EnduserConnection();
   const org = {
     managerPid: '12816699205',
@@ -250,7 +252,7 @@ test.describe('Tilgangsstyring', () => {
   });
 });
 
-test.describe('over- og underenheter', () => {
+test.describe('over- og underenheter', reportArea, () => {
   const api = new EnduserConnection();
 
   test.describe('Virksomhet skal kunne se tilgangspakker hos hoved- og underenhet som delegerte dem', () => {
