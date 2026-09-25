@@ -1070,7 +1070,17 @@
     "page_title": "Teneste - Altinn",
     "page_title_service": "{{service}} - Altinn",
     "load_error": "Oi! Noko gjekk gale.",
-    "back_to_overview_link": "Gå tilbake til oversikta"
+    "back_to_overview_link": "Gå tilbake til oversikta",
+    "users_description": "Søk etter brukarar for å gi eller slette fullmakter.",
+    "no_users": "Ingen har fullmakt til denne tenesta.",
+    "search_placeholder": "Søk etter person eller verksemd",
+    "delegation_success": "{{name}} har no fått fullmakt til {{service}}",
+    "revoke_success": "{{name}} har ikkje lenger fullmakt til {{service}}",
+    "revoke_error": "Kunne ikkje slette fullmakta til {{service}} for {{name}}",
+    "add_user_modal": {
+      "heading": "Gi fullmakt til ny brukar",
+      "user_will_receive": "Brukaren vil få:"
+    }
   },
   "resource_list": {
     "resource_search_placeholder": "Søk etter tenester",

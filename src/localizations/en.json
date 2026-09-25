@@ -1074,7 +1074,17 @@
     "page_title": "Service - Altinn",
     "page_title_service": "{{service}} - Altinn",
     "load_error": "Oops! Something went wrong.",
-    "back_to_overview_link": "Go back to the overview"
+    "back_to_overview_link": "Go back to the overview",
+    "users_description": "Search for users to give or delete power of attorney.",
+    "no_users": "No one has power of attorney for this service.",
+    "search_placeholder": "Search for a person or an organisation",
+    "delegation_success": "{{name}} now has power of attorney for {{service}}",
+    "revoke_success": "{{name}} no longer has power of attorney for {{service}}",
+    "revoke_error": "Could not delete the power of attorney for {{service}} for {{name}}",
+    "add_user_modal": {
+      "heading": "Give power of attorney to a new user",
+      "user_will_receive": "The user will receive:"
+    }
   },
   "resource_list": {
     "resource_search_placeholder": "Search resources",

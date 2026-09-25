@@ -1,0 +1,11 @@
+.content {
+  display: flex;
+  flex-direction: column;
+  gap: var(--ds-spacing-4);
+}
+
+.usersSection {
+  display: flex;
+  flex-direction: column;
+  gap: var(--ds-spacing-4);
+}
