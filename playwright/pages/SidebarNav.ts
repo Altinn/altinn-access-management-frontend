@@ -49,13 +49,15 @@ export class SidebarNav {
     // suffix once the pending-request query resolves — "Forespørsler" becomes
     // "Forespørsler (1 mottatt)". Name matching is substring by default, so the
     // title covers both, and the locator is not racing that update.
-    this.requests = this.navLink(dict.sidebar.requests);
+    this.requests = this.navLink(dict.sidebar.requests, { exact: false });
     this.myClients = this.navLink(dict.sidebar.your_clients);
     // The Maskinporten label carries a soft hyphen for line breaking, and whether
     // it survives into the accessible name depends on the component. Matching the
     // part before it is a substring that holds either way. Written as an escape
     // rather than the literal character, which is invisible in source.
-    this.maskinporten = this.navLink(dict.sidebar.maskinporten.split(SOFT_HYPHEN)[0]);
+    this.maskinporten = this.navLink(dict.sidebar.maskinporten.split(SOFT_HYPHEN)[0], {
+      exact: false,
+    });
   }
 
   /**
@@ -64,8 +66,15 @@ export class SidebarNav {
    * Substring matching is deliberate: some labels carry a suffix (a pending
    * count) that appears only after data loads.
    */
-  private navLink(name: string): Locator {
-    return this.nav.getByRole('link', { name });
+  /**
+   * One sidebar item, by the accessible name of its link.
+   *
+   * Exact by default: several labels are prefixes of others — "Fullmakter" is a
+   * prefix of "Fullmakter hos andre" — so a substring match would resolve to two
+   * links. Pass `exact: false` only where the label genuinely grows at runtime.
+   */
+  private navLink(name: string, { exact = true }: { exact?: boolean } = {}): Locator {
+    return this.nav.getByRole('link', { name, exact });
   }
 
   async goToUsers() {
