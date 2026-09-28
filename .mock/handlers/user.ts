@@ -272,6 +272,9 @@ export const userHandlers = (ACCESSMANAGEMENT_BASE_URL: string) => [
       }
     },
   ),
+  http.post(`${ACCESSMANAGEMENT_BASE_URL}/connection/reportee/:party/rightholder`, () => {
+    return HttpResponse.json('54f128f7-ca7c-4a57-ad49-3787eb79b506');
+  }),
   http.get(`${ACCESSMANAGEMENT_BASE_URL}/user/reportee/:id`, () => {
     return HttpResponse.json({
       partyUuid: '2a2f6ea4-ae81-4098-8e14-a68dec6f9aac',

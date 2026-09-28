@@ -1,8 +1,9 @@
-import React, { useState } from 'react';
+import React, { useId, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { DsAlert, DsParagraph } from '@altinn/altinn-components';
+import { DsButton, DsDialog } from '@altinn/altinn-components';
+import { PlusIcon } from '@navikt/aksel-icons';
 
-import { getActionError, type ActionError } from '@/resources/hooks/useActionError';
+import { getActionError } from '@/resources/hooks/useActionError';
 import { useAddRightHolderMutation } from '@/rtk/features/connectionApi';
 import {
   useDelegateRightsMutation,
@@ -10,12 +11,12 @@ import {
 } from '@/rtk/features/singleRights/singleRightsApi';
 
 import { usePartyRepresentation } from '../common/PartyRepresentationContext/PartyRepresentationContext';
-import { AddUserDialog } from '../common/AddUserDialog/AddUserDialog';
-import { toAddRightHolderArgs, type Recipient } from '../common/AddUserDialog/recipient';
+import { AddUserForm } from '../common/AddUserForm/AddUserForm';
+import { toAddRightHolderArgs, type Recipient } from '../common/AddUserForm/recipient';
+import { SubmitErrorAlert, type SubmitError } from '../common/AddUserForm/SubmitErrorAlert';
 import { ResourceAlert } from '../common/DelegationModal/SingleRights/ResourceAlert';
 import { RightsPicker } from '../common/RightsPicker/RightsPicker';
 import { useDelegableRights } from '../common/RightsPicker/useDelegableRights';
-import { TechnicalErrorParagraphs } from '../common/TechnicalErrorParagraphs/TechnicalErrorParagraphs';
 
 /** The user as the dialog knows them: a person is only known by the last name that was typed. */
 export interface AddedServiceUser {
@@ -42,11 +43,16 @@ export const AddServiceUserButton = ({ resource, onUserAdded }: AddServiceUserBu
   const { t } = useTranslation();
   const { actingParty, fromParty } = usePartyRepresentation();
   const resourceId = resource?.identifier ?? '';
+  const modalRef = useRef<HTMLDialogElement>(null);
+  const headingId = useId();
+  // jsdom's close() does not dispatch a close event, so this is not read off the dialog element.
+  const [isOpen, setIsOpen] = useState(false);
+  const [submitError, setSubmitError] = useState<SubmitError | null>(null);
+  // Held across both requests: between them neither mutation reports itself as loading.
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const [addRightHolder] = useAddRightHolderMutation();
   const [delegateRights] = useDelegateRightsMutation();
-  const [isOpen, setIsOpen] = useState(false);
-  const [delegateError, setDelegateError] = useState<ActionError | null>(null);
 
   const { rights, setRights, resetRights, isLoading, errorDetails } = useDelegableRights({
     resourceId,
@@ -63,96 +69,110 @@ export const AddServiceUserButton = ({ resource, onUserAdded }: AddServiceUserBu
     resource?.delegable === false ||
     (rights.length > 0 && !rights.some((r) => r.delegable === true));
 
-  // The single rights API delegates to a party uuid, so the right holder is created first and the
-  // uuid that comes back is what the delegation is made to.
-  const handleSubmit = async (recipient: Recipient) => {
-    setDelegateError(null);
-    const toUuid = await addRightHolder(toAddRightHolderArgs(recipient)).unwrap();
-    try {
-      await delegateRights({
-        partyUuid: actingParty?.partyUuid ?? '',
-        fromUuid: fromParty?.partyUuid ?? '',
-        toUuid,
-        resourceId,
-        actionKeys,
-      }).unwrap();
-    } catch (error: unknown) {
-      // The right holder exists by now, so nothing here can mean "no such person": this is reported
-      // below rather than by the dialog, which would read a 400 as exactly that.
-      setDelegateError(getActionError(error));
-      return false;
-    }
+  const close = () => {
+    setIsOpen(false);
+    setSubmitError(null);
+    resetRights();
+    modalRef.current?.close();
+  };
 
-    // A brand-new person has no name until the list reloads, so the last name that was typed is
-    // what is reported — as the other add-user flows do. The page holds the confirmation until that
-    // list has arrived, by which time this dialog has closed: a snackbar raised over an open dialog
-    // is not announced, because screen readers scope the live region to the dialog.
-    onUserAdded({
-      name: recipient.kind === 'person' ? recipient.lastName : recipient.organization.name,
-      type: recipient.kind,
-    });
+  const handleSubmit = async (recipient: Recipient) => {
+    setSubmitError(null);
+    setIsSubmitting(true);
+    try {
+      let toUuid: string;
+      try {
+        toUuid = await addRightHolder(toAddRightHolderArgs(recipient)).unwrap();
+      } catch (error: unknown) {
+        setSubmitError({ error: getActionError(error), recipientKind: recipient.kind });
+        return;
+      }
+      try {
+        await delegateRights({
+          partyUuid: actingParty?.partyUuid ?? '',
+          fromUuid: fromParty?.partyUuid ?? '',
+          toUuid,
+          resourceId,
+          actionKeys,
+        }).unwrap();
+      } catch (error: unknown) {
+        // The right holder exists by now, so nothing here can mean "no such person".
+        setSubmitError({ error: getActionError(error) });
+        return;
+      }
+
+      // Closed first: a snackbar raised over an open dialog is not announced, because screen readers
+      // scope the live region to the dialog. A brand-new person has no name until the list reloads,
+      // so the last name that was typed is what is reported, as the other add-user flows do.
+      close();
+      onUserAdded({
+        name: recipient.kind === 'person' ? recipient.lastName : recipient.organization.name,
+        type: recipient.kind,
+      });
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   return (
-    <AddUserDialog
-      recipientKinds={[
-        { type: 'person', submitLabel: t('common.give_poa') },
-        { type: 'org', submitLabel: t('common.give_poa') },
-      ]}
-      triggerLabel={t('new_user_modal.trigger_button')}
-      triggerVariant='primary'
-      heading={t('service_poa_details_page.add_user_modal.heading')}
-      width='wide'
-      onOpenChange={(open) => {
-        setIsOpen(open);
-        if (!open) {
-          resetRights();
-          setDelegateError(null);
-        }
-      }}
-      isSubmitDisabled={
-        !actingParty?.partyUuid ||
-        !fromParty?.partyUuid ||
-        actionKeys.length === 0 ||
-        isLoading ||
-        displayResourceAlert
-      }
-      onSubmit={handleSubmit}
-    >
-      <div aria-live='assertive'>
-        {delegateError && (
-          <DsAlert
-            data-size='sm'
-            data-color='danger'
+    <>
+      <DsButton
+        variant='primary'
+        onClick={() => {
+          setIsOpen(true);
+          modalRef.current?.showModal();
+        }}
+      >
+        <PlusIcon aria-hidden='true' />
+        {t('new_user_modal.trigger_button')}
+      </DsButton>
+      <DsDialog
+        ref={modalRef}
+        closedby='any'
+        aria-labelledby={headingId}
+        onClose={close}
+      >
+        {isOpen && (
+          <AddUserForm
+            heading={t('service_poa_details_page.add_user_modal.heading')}
+            headingId={headingId}
+            recipientKinds={[
+              { type: 'person', submitLabel: t('common.give_poa') },
+              { type: 'org', submitLabel: t('common.give_poa') },
+            ]}
+            isSubmitDisabled={
+              !actingParty?.partyUuid ||
+              !fromParty?.partyUuid ||
+              actionKeys.length === 0 ||
+              isLoading ||
+              displayResourceAlert
+            }
+            onKindChange={() => setSubmitError(null)}
+            isSubmitting={isSubmitting}
+            onSubmit={(recipient) => void handleSubmit(recipient)}
           >
-            <DsParagraph data-size='sm'>{t('common.general_error_paragraph')}</DsParagraph>
-            <TechnicalErrorParagraphs
-              status={delegateError.httpStatus}
-              time={delegateError.timestamp}
-              traceId={delegateError.details?.traceId}
-              size='sm'
-            />
-          </DsAlert>
+            {resource && displayResourceAlert ? (
+              <ResourceAlert
+                error={errorDetails}
+                rightReasons={rights.map((r) => r.delegationReason)}
+                resource={resource}
+              />
+            ) : (
+              <RightsPicker
+                heading={t('service_poa_details_page.add_user_modal.user_will_receive')}
+                rights={rights}
+                setRights={setRights}
+                accessToAllLabel={t('delegation_modal.actions.access_to_all')}
+                actionDescription={t('delegation_modal.actions.action_description')}
+                isLoading={isLoading}
+                errorDetails={errorDetails}
+                errorContext={`resource: ${resourceId}`}
+              />
+            )}
+            <SubmitErrorAlert submitError={submitError} />
+          </AddUserForm>
         )}
-      </div>
-      {resource && displayResourceAlert ? (
-        <ResourceAlert
-          error={errorDetails}
-          rightReasons={rights.map((r) => r.delegationReason)}
-          resource={resource}
-        />
-      ) : (
-        <RightsPicker
-          heading={t('service_poa_details_page.add_user_modal.user_will_receive')}
-          rights={rights}
-          setRights={setRights}
-          accessToAllLabel={t('delegation_modal.actions.access_to_all')}
-          actionDescription={t('delegation_modal.actions.action_description')}
-          isLoading={isLoading}
-          errorDetails={errorDetails}
-          errorContext={`resource: ${resourceId}`}
-        />
-      )}
-    </AddUserDialog>
+      </DsDialog>
+    </>
   );
 };
