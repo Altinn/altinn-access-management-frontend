@@ -594,11 +594,6 @@
       "count": 1
     }
   },
-  "src/features/amUI/maskinporten/AddSupplierButton.tsx": {
-    "@typescript-eslint/no-misused-promises": {
-      "count": 1
-    }
-  },
   "src/features/amUI/maskinporten/ConsumerPageContent.tsx": {
     "@typescript-eslint/no-floating-promises": {
       "count": 1
