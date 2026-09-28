@@ -111,7 +111,7 @@ export const SingleRightsPermissions = () => {
   // contribute fewer results than `searchResultsPerPage`. Keep fetching until enough non-delegated
   // results have been found to reach the target, or there is nothing more to fetch.
   useEffect(() => {
-    if (searchResources.length < targetResultCount && hasNextPage && !isSearchFetching) {
+    if (searchResources.length < targetResultCount && hasNextPage && !isSearchFetching && !isSearchError) {
       void fetchNextPage();
     }
   }, [searchResources.length, targetResultCount, hasNextPage, isSearchFetching, fetchNextPage]);
