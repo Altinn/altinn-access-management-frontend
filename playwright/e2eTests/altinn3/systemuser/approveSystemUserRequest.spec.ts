@@ -3,12 +3,14 @@ import { TestdataApi } from 'playwright/util/TestdataApi';
 import { ApiRequests } from 'playwright/api-requests/SystemUserApiRequests';
 
 import { systemUserOwners } from './testdata';
+
+const reportArea = { annotation: { type: 'report-area', description: 'Systembruker' } };
 const owner = systemUserOwners.requests;
 const vendorOrgNumber = '310547891';
 const prebuiltSystemId = '310547891_E2E-Playwright-Authentication';
 const testUserPid = owner.pid;
 
-test.describe('Godkjenn og avvis Systembrukerforespørsel', () => {
+test.describe('Godkjenn og avvis Systembrukerforespørsel', reportArea, () => {
   let api: ApiRequests;
   let externalRef: string;
   let response: Awaited<ReturnType<ApiRequests['postSystemuserRequest']>>;
@@ -29,6 +31,7 @@ test.describe('Godkjenn og avvis Systembrukerforespørsel', () => {
     page,
     login,
     systemUserConfirmPage,
+    runAccessibilityTest,
   }): Promise<void> => {
     await test.step('Navigate to confirmation page and login', async () => {
       await page.goto(response.confirmUrl);
@@ -36,6 +39,8 @@ test.describe('Godkjenn og avvis Systembrukerforespørsel', () => {
     });
 
     await test.step('Reject system user request', async () => {
+      await expect(systemUserConfirmPage.rejectButton).toBeVisible();
+      await runAccessibilityTest.scan('forespørsel-før-reject');
       await systemUserConfirmPage.reject();
     });
 
@@ -56,6 +61,7 @@ test.describe('Godkjenn og avvis Systembrukerforespørsel', () => {
     page,
     login,
     systemUserConfirmPage,
+    runAccessibilityTest,
   }): Promise<void> => {
     await test.step('Navigate to confirmation page and login', async () => {
       await page.goto(response.confirmUrl);
@@ -63,6 +69,8 @@ test.describe('Godkjenn og avvis Systembrukerforespørsel', () => {
     });
 
     await test.step('Approve system user request', async () => {
+      await expect(systemUserConfirmPage.approveButton).toBeVisible();
+      await runAccessibilityTest.scan('forespørsel-før-approve');
       await systemUserConfirmPage.approve();
     });
 

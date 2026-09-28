@@ -1,13 +1,23 @@
-import { test } from '@playwright/test';
-
+import { test } from 'playwright/fixture/pomFixture';
 import { LoginPage } from 'playwright/pages/LoginPage';
 
-test.describe('ID Porten Login', () => {
-  test('Login with TestID', async ({ page }) => {
-    const login = new LoginPage(page);
+const reportArea = { annotation: { type: 'report-area', description: 'Innlogging' } };
 
-    await test.step('Login to Access Management', async () => {
-      await login.LoginToAccessManagement('02828698497');
-    });
-  });
+test.describe('ID Porten Login', reportArea, () => {
+  test(
+    'Login with TestID',
+    {
+      annotation: {
+        type: 'UU-dekket-av',
+        description: 'Sjekk at slettede enheter kan vises/skjules',
+      },
+    },
+    async ({ page }) => {
+      const login = new LoginPage(page);
+
+      await test.step('Login to Access Management', async () => {
+        await login.LoginToAccessManagement('02828698497');
+      });
+    },
+  );
 });

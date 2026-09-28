@@ -3,7 +3,9 @@ import { SettingsApiRequests } from '../../../api-requests/SettingsApiRequests';
 
 import { ACTORS, BASELINE_EPOST } from './testdata';
 
-test.describe('Innstillinger - SMS-adresser', () => {
+const reportArea = { annotation: { type: 'report-area', description: 'Innstillinger' } };
+
+test.describe('Innstillinger - SMS-adresser', reportArea, () => {
   const api = new SettingsApiRequests();
 
   test.describe('legg til SMS-adresse', () => {
@@ -23,7 +25,7 @@ test.describe('Innstillinger - SMS-adresser', () => {
       });
     });
 
-    test('legg til SMS-adresse', async ({ innstillingerPage, login }) => {
+    test('legg til SMS-adresse', async ({ runAccessibilityTest, innstillingerPage, login }) => {
       await test.step(`Logg inn som ${actor.orgName} og åpne innstillinger`, async () => {
         await login.LoginToAccessManagement(actor.pid);
         await login.selectActor(actor.orgName);
@@ -32,6 +34,7 @@ test.describe('Innstillinger - SMS-adresser', () => {
 
       await test.step('Legg til et telefonnummer for varslinger', async () => {
         await innstillingerPage.openSmsDialog();
+        await runAccessibilityTest.scan('sms-tom-dialog');
         await innstillingerPage.leggTilTelefonnummer(nyttNummer);
         await innstillingerPage.lagreEndringer();
       });
@@ -41,6 +44,7 @@ test.describe('Innstillinger - SMS-adresser', () => {
         await expect(innstillingerPage.smsRows).toHaveCount(1);
         await expect(innstillingerPage.countryCodeFields).toHaveValue(nyttNummer.countryCode);
         await expect(innstillingerPage.phoneFields).toHaveValue(nyttNummer.phone);
+        await runAccessibilityTest.scan('sms-lagret');
       });
     });
 

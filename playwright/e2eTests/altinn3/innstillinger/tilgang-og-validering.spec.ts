@@ -4,7 +4,9 @@ import { EnduserConnection } from '../../../api-requests/EnduserConnection';
 
 import { ACTORS, BASELINE_EPOST, IKKE_ADMIN } from './testdata';
 
-test.describe('Innstillinger - tilgang og validering', () => {
+const reportArea = { annotation: { type: 'report-area', description: 'Innstillinger' } };
+
+test.describe('Innstillinger - tilgang og validering', reportArea, () => {
   const api = new SettingsApiRequests();
 
   test.describe('kan ikke fjerne den siste adressen', () => {
@@ -20,7 +22,11 @@ test.describe('Innstillinger - tilgang og validering', () => {
       });
     });
 
-    test('kan ikke fjerne den siste adressen', async ({ innstillingerPage, login }) => {
+    test('kan ikke fjerne den siste adressen', async ({
+      innstillingerPage,
+      login,
+      runAccessibilityTest,
+    }) => {
       await test.step(`Logg inn som ${actor.orgName} og åpne innstillinger`, async () => {
         await login.LoginToAccessManagement(actor.pid);
         await login.selectActor(actor.orgName);
@@ -37,6 +43,8 @@ test.describe('Innstillinger - tilgang og validering', () => {
         await expect(innstillingerPage.noAddressesError).toBeVisible();
         await expect(innstillingerPage.saveButton).toBeDisabled();
       });
+
+      await runAccessibilityTest.scan('valideringsfeil');
 
       await test.step('Adressen er uendret etter at dialogen lukkes', async () => {
         await innstillingerPage.lukkDialog();

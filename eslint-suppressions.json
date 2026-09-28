@@ -34,7 +34,7 @@
       "count": 7
     },
     "@typescript-eslint/no-unsafe-assignment": {
-      "count": 34
+      "count": 32
     },
     "@typescript-eslint/no-unsafe-call": {
       "count": 1
@@ -100,7 +100,7 @@
       "count": 7
     },
     "@typescript-eslint/no-unsafe-return": {
-      "count": 3
+      "count": 2
     }
   },
   "playwright/api-requests/delegation-tilgangspakke/delegationApiRequest.ts": {
@@ -115,14 +115,6 @@
     },
     "@typescript-eslint/no-unsafe-member-access": {
       "count": 16
-    }
-  },
-  "playwright/e2eTests/altinn3/forespoersler/forespoersler.spec.ts": {
-    "@typescript-eslint/no-unsafe-argument": {
-      "count": 4
-    },
-    "@typescript-eslint/no-unsafe-assignment": {
-      "count": 3
     }
   },
   "playwright/e2eTests/altinn3/systemuser/deleteSystemUser.spec.ts": {
@@ -253,14 +245,6 @@
   },
   "playwright/util/testDelegationdatautil.ts": {
     "@typescript-eslint/no-unsafe-argument": {
-      "count": 1
-    }
-  },
-  "playwright/uuTests/accessibilityHelpers/delegeringHelper.ts": {
-    "@typescript-eslint/no-explicit-any": {
-      "count": 1
-    },
-    "@typescript-eslint/restrict-template-expressions": {
       "count": 1
     }
   },

@@ -155,8 +155,10 @@ export class Token {
     return (await this.getIds(pidOrOrg)).partyUuid;
   }
 
-  public async getLastName(pid: string) {
-    return (await this.getIds(pid)).lastName;
+  public async getLastName(pid: string): Promise<string> {
+    const lastName: unknown = (await this.getIds(pid)).lastName;
+    if (typeof lastName !== 'string') throw new Error('Test person has no last name');
+    return lastName;
   }
 
   /**
