@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
+import { DsAlert, DsParagraph } from '@altinn/altinn-components';
 
+import { getActionError, type ActionError } from '@/resources/hooks/useActionError';
 import { useAddRightHolderMutation } from '@/rtk/features/connectionApi';
 import {
   useDelegateRightsMutation,
@@ -13,6 +15,7 @@ import { toAddRightHolderArgs, type Recipient } from '../common/AddUserDialog/re
 import { ResourceAlert } from '../common/DelegationModal/SingleRights/ResourceAlert';
 import { RightsPicker } from '../common/RightsPicker/RightsPicker';
 import { useDelegableRights } from '../common/RightsPicker/useDelegableRights';
+import { TechnicalErrorParagraphs } from '../common/TechnicalErrorParagraphs/TechnicalErrorParagraphs';
 
 /** The user as the dialog knows them: a person is only known by the last name that was typed. */
 export interface AddedServiceUser {
@@ -43,6 +46,7 @@ export const AddServiceUserButton = ({ resource, onUserAdded }: AddServiceUserBu
   const [addRightHolder] = useAddRightHolderMutation();
   const [delegateRights] = useDelegateRightsMutation();
   const [isOpen, setIsOpen] = useState(false);
+  const [delegateError, setDelegateError] = useState<ActionError | null>(null);
 
   const { rights, setRights, resetRights, isLoading, errorDetails } = useDelegableRights({
     resourceId,
@@ -62,14 +66,22 @@ export const AddServiceUserButton = ({ resource, onUserAdded }: AddServiceUserBu
   // The single rights API delegates to a party uuid, so the right holder is created first and the
   // uuid that comes back is what the delegation is made to.
   const handleSubmit = async (recipient: Recipient) => {
+    setDelegateError(null);
     const toUuid = await addRightHolder(toAddRightHolderArgs(recipient)).unwrap();
-    await delegateRights({
-      partyUuid: actingParty?.partyUuid ?? '',
-      fromUuid: fromParty?.partyUuid ?? '',
-      toUuid,
-      resourceId,
-      actionKeys,
-    }).unwrap();
+    try {
+      await delegateRights({
+        partyUuid: actingParty?.partyUuid ?? '',
+        fromUuid: fromParty?.partyUuid ?? '',
+        toUuid,
+        resourceId,
+        actionKeys,
+      }).unwrap();
+    } catch (error: unknown) {
+      // The right holder exists by now, so nothing here can mean "no such person": this is reported
+      // below rather than by the dialog, which would read a 400 as exactly that.
+      setDelegateError(getActionError(error));
+      return false;
+    }
 
     // A brand-new person has no name until the list reloads, so the last name that was typed is
     // what is reported — as the other add-user flows do. The page holds the confirmation until that
@@ -95,6 +107,7 @@ export const AddServiceUserButton = ({ resource, onUserAdded }: AddServiceUserBu
         setIsOpen(open);
         if (!open) {
           resetRights();
+          setDelegateError(null);
         }
       }}
       isSubmitDisabled={
@@ -106,6 +119,22 @@ export const AddServiceUserButton = ({ resource, onUserAdded }: AddServiceUserBu
       }
       onSubmit={handleSubmit}
     >
+      <div aria-live='assertive'>
+        {delegateError && (
+          <DsAlert
+            data-size='sm'
+            data-color='danger'
+          >
+            <DsParagraph data-size='sm'>{t('common.general_error_paragraph')}</DsParagraph>
+            <TechnicalErrorParagraphs
+              status={delegateError.httpStatus}
+              time={delegateError.timestamp}
+              traceId={delegateError.details?.traceId}
+              size='sm'
+            />
+          </DsAlert>
+        )}
+      </div>
       {resource && displayResourceAlert ? (
         <ResourceAlert
           error={errorDetails}

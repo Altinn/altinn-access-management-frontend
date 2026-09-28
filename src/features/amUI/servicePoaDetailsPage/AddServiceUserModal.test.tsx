@@ -238,6 +238,21 @@ describe('AddServiceUserModal', () => {
     expect(dialog()?.open).toBe(true);
   });
 
+  // The right holder exists by the time the delegation runs, so a 400 there must not be reported
+  // as "we found no such person".
+  it('does not blame the person when the delegation fails', async () => {
+    // eslint-disable-next-line @typescript-eslint/prefer-promise-reject-errors
+    delegateRights.mockReturnValue({ unwrap: () => Promise.reject('400') });
+    await openModal();
+    await fillPerson();
+    await submit();
+
+    expect(addRightHolder).toHaveBeenCalled();
+    expect(await screen.findByText('common.general_error_paragraph')).toBeInTheDocument();
+    expect(screen.queryByText('new_user_modal.not_found_error_person')).not.toBeInTheDocument();
+    expect(dialog()?.open).toBe(true);
+  });
+
   // A picker with nothing pickable in it, over a button that can never be pressed, says nothing
   // about why. These three hand over to ResourceAlert instead, as the other resource modals do.
   it('explains itself instead of offering an empty picker when no action is delegable', async () => {

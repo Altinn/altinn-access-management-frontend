@@ -34,9 +34,10 @@ export interface AddUserDialogProps {
   /**
    * Everything this flow does with the recipient: one mutation or several, cache invalidation,
    * notifying the page, navigating. Reject to keep the dialog open and show the error; resolve to
-   * close it.
+   * close it. Resolve with false to keep it open without an error of its own: a step that fails
+   * after the recipient was added must not read as "not found", so the flow reports it in children.
    */
-  onSubmit: (recipient: Recipient) => Promise<void>;
+  onSubmit: (recipient: Recipient) => Promise<void | false>;
   /*** ANDed with recipient validity, for flows whose payload reaches past the recipient */
   isSubmitDisabled?: boolean;
   /*** Reported on open and on close, so callers can gate queries and reset their own payload */
@@ -156,8 +157,9 @@ const AddUserForm = ({
     setErrorDetails(null);
     setIsSubmitting(true);
     try {
-      await onSubmit(recipient);
-      close();
+      if ((await onSubmit(recipient)) !== false) {
+        close();
+      }
     } catch (error: unknown) {
       setErrorDetails(toErrorDetails(error));
     } finally {

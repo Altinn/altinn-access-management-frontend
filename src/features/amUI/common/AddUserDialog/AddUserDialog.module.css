@@ -15,6 +15,7 @@
 
 /* The content is a flex column, so without this the button would span the dialog. */
 .submit {
+  margin-top: var(--ds-spacing-2);
   align-self: flex-start;
 }
 
