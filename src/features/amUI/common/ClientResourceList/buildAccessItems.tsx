@@ -182,7 +182,6 @@ export type BuildResourceItemOptions = {
   onDelegate: DelegateHandler | undefined;
   onRevoke: DelegateHandler | undefined;
   onOpenModal: () => void;
-  t: TFunction;
 };
 
 export const buildResourceItem = ({

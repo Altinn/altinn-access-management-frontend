@@ -327,7 +327,6 @@ export const ClientAccessList = ({
               });
               resourceModalRef.current?.showModal();
             },
-            t,
           }),
         );
       });
@@ -381,7 +380,7 @@ export const ClientAccessList = ({
 
   // Request focus synchronously before clearing state, so the originating item is targeted even
   // if its row has moved to another section while the modal was open.
-  const closeModal = (itemId: string) => {
+  const restoreFocusOnClose = (itemId: string) => {
     restoreFocus?.requestFocus(itemId, restoreFocusFallbackId);
   };
 
@@ -408,7 +407,7 @@ export const ClientAccessList = ({
         ref={modalRef}
         data={modalData}
         onClose={() => {
-          if (selected) closeModal(selected.itemId);
+          if (selected) restoreFocusOnClose(selected.itemId);
           setSelected(null);
         }}
       />
@@ -416,7 +415,7 @@ export const ClientAccessList = ({
         ref={resourceModalRef}
         data={resourceModalData}
         onClose={() => {
-          if (selectedResource) closeModal(selectedResource.itemId);
+          if (selectedResource) restoreFocusOnClose(selectedResource.itemId);
           setSelectedResource(null);
         }}
       />
