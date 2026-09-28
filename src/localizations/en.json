@@ -287,7 +287,6 @@
     "resources_title": "Gives access to {{count}} services",
     "resources_empty": "This role has no services.",
     "delete_role_confirmation": "Roles from the old Altinn solution have been discontinued, so you will NOT be able to grant power of attorney to this role again.",
-    "deleting_role_loading": "Waiting for the role to be deleted...",
     "delete_role_success": "The power of attorney for this role has been deleted.",
     "delete_role_error": "Could not delete the role.",
     "cannot_assign_role_poa": "This role has been discontinued and can no longer be granted as a power of attorney. To grant access to services, please use access packages or single services.",
@@ -1075,7 +1074,17 @@
     "page_title": "Service - Altinn",
     "page_title_service": "{{service}} - Altinn",
     "load_error": "Oops! Something went wrong.",
-    "back_to_overview_link": "Go back to the overview"
+    "back_to_overview_link": "Go back to the overview",
+    "users_description": "Search for users to give or delete power of attorney.",
+    "no_users": "No one has power of attorney for this service.",
+    "search_placeholder": "Search for a person or an organisation",
+    "delegation_success": "{{name}} now has power of attorney for {{service}}",
+    "revoke_success": "{{name}} no longer has power of attorney for {{service}}",
+    "revoke_error": "Could not delete the power of attorney for {{service}} for {{name}}",
+    "add_user_modal": {
+      "heading": "Give power of attorney to a new user",
+      "user_will_receive": "The user will receive:"
+    }
   },
   "resource_list": {
     "resource_search_placeholder": "Search resources",

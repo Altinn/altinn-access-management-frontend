@@ -23,7 +23,7 @@
       "resourceOwnerName": "Digitaliseringsdirektoratet",
       "resourceOwnerOrgNumber": "991825827",
       "resourceReferences": [],
-      "priorityCounter": 4,
+      "priorityCounter": 6,
       "resourceType": "Default",
       "authorizationReference": [
         {
@@ -53,7 +53,7 @@
       "resourceOwnerName": "Digitaliseringsdirektoratet",
       "resourceOwnerOrgNumber": "991825827",
       "resourceReferences": [],
-      "priorityCounter": 1,
+      "priorityCounter": 2,
       "resourceType": "Default",
       "authorizationReference": [
         {

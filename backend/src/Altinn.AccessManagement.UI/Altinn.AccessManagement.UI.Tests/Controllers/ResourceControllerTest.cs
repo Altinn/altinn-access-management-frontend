@@ -262,6 +262,36 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
         }
 
         /// <summary>
+        ///     Test case: PaginatedSearch with a short search string that is contained in one resource's title and, as a
+        ///     substring of a longer word, in another resource's description (reproduces issue #4113 "gsi" case).
+        ///     Expected: The resource with the title match is prioritized over the resource with only a description match.
+        /// </summary>
+        [Fact]
+        public async Task GetSingleRightsSearch_searchMatchesTitleAndDescription_PrioritizesTitleMatch()
+        {
+            // Arrange
+            string token = PrincipalUtil.GetToken(1337, 501337);
+            _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+            string searchString = "gsi";
+
+            // Act
+            HttpResponseMessage response = await _client.GetAsync($"accessmanagement/api/v1/resources/search?ResultsPerPage=10&Page=1&SearchString={searchString}");
+
+            // Assert
+            Assert.Equal(HttpStatusCode.OK, response.StatusCode);
+
+            PaginatedList<ServiceResourceFE> actualResources = JsonSerializer.Deserialize<PaginatedList<ServiceResourceFE>>(await response.Content.ReadAsStringAsync(), options);
+            Assert.Equal(2, actualResources.PageList.Count);
+
+            ServiceResourceFE titleMatch = actualResources.PageList[0];
+            ServiceResourceFE descriptionMatch = actualResources.PageList[1];
+
+            Assert.Equal("gsi-administrasjon", titleMatch.Identifier);
+            Assert.Equal("regnskap-bergsiden", descriptionMatch.Identifier);
+            Assert.True(titleMatch.PriorityCounter > descriptionMatch.PriorityCounter);
+        }
+
+        /// <summary>
         ///     Test case: PaginatedSearch with search string and filters
         ///     Expected: PaginatedSearch returns a list of resources matching the filters and search string, ordered by number of
         ///     matches

@@ -283,7 +283,6 @@
     "resources_title": "Gjev tilgang til {{count}} tenester",
     "resources_empty": "Denne rolla har ingen tenester.",
     "delete_role_confirmation": "Roller frå gamle Altinn er avvikla, så du vil IKKJE kunne gi fullmakt til denne rollen på nytt.",
-    "deleting_role_loading": "Venter på at rolla skal slettast...",
     "delete_role_success": "Fullmakt til rolla er sletta.",
     "delete_role_error": "Kunne ikkje slette rolla.",
     "cannot_assign_role_poa": "Denne rolla er utgått og kan ikkje lenger bli gitt som fullmakt. For å gi tilgang til tenester, bruk tilgangspakkar eller enkelttenester.",
@@ -1071,7 +1070,17 @@
     "page_title": "Teneste - Altinn",
     "page_title_service": "{{service}} - Altinn",
     "load_error": "Oi! Noko gjekk gale.",
-    "back_to_overview_link": "Gå tilbake til oversikta"
+    "back_to_overview_link": "Gå tilbake til oversikta",
+    "users_description": "Søk etter brukarar for å gi eller slette fullmakter.",
+    "no_users": "Ingen har fullmakt til denne tenesta.",
+    "search_placeholder": "Søk etter person eller verksemd",
+    "delegation_success": "{{name}} har no fått fullmakt til {{service}}",
+    "revoke_success": "{{name}} har ikkje lenger fullmakt til {{service}}",
+    "revoke_error": "Kunne ikkje slette fullmakta til {{service}} for {{name}}",
+    "add_user_modal": {
+      "heading": "Gi fullmakt til ny brukar",
+      "user_will_receive": "Brukaren vil få:"
+    }
   },
   "resource_list": {
     "resource_search_placeholder": "Søk etter tenester",

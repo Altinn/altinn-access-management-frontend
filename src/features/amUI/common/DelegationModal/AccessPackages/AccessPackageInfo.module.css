@@ -48,3 +48,10 @@
   padding-top: var(--ds-spacing-3);
   margin-bottom: var(--ds-spacing-1);
 }
+
+@media (max-width: 500px) {
+  .actions {
+    flex-direction: column;
+    align-items: stretch;
+  }
+}

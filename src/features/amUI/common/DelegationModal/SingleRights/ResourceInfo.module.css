@@ -100,3 +100,10 @@
     padding-top: 4px;
   }
 }
+
+@media (max-width: 500px) {
+  .editButtons {
+    flex-direction: column;
+    align-items: stretch;
+  }
+}

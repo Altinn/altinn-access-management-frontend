@@ -1354,5 +1354,115 @@
         "nn": "Testdepartementet"
       }
     }
+  },
+  {
+    "title": {
+      "en": "GSI - Administration",
+      "nb": "GSI - Administrasjon",
+      "nn": "GSI - Administrasjon"
+    },
+    "sector": null,
+    "status": null,
+    "limitedByRRR": false,
+    "SelfIdentifiedUserEnabled": false,
+    "EnterpriseUserEnabled": false,
+    "homepage": null,
+    "isPartOf": null,
+    "keywords": null,
+    "identifier": "gsi-administrasjon",
+    "contactPoints": [
+      {
+        "category": "Some category",
+        "email": "email@someemaildigdir.no",
+        "telephone": "12345678",
+        "contactPage": "Some page (webpage maybe?)"
+      }
+    ],
+    "visible": true,
+    "delegable": true,
+    "description": {
+      "en": "National register for geographic information.",
+      "nb": "Nasjonalt register for geografisk stedfestet informasjon.",
+      "nn": "Nasjonalt register for geografisk stadfesta informasjon."
+    },
+    "resourceType": "Default",
+    "thematicArea": null,
+    "isPublicService": true,
+    "rightDescription": {
+      "en": "Grants access to GSI.",
+      "nb": "Gir tilgang til GSI.",
+      "nn": "Gir tilgang til GSI."
+    },
+    "resourceReferences": [],
+    "authorizationReference": [
+      {
+        "id": "urn:altinn:resource",
+        "value": "gsi-administrasjon"
+      }
+    ],
+    "hasCompetentAuthority": {
+      "orgcode": "DIGDIR",
+      "organization": "991825827",
+      "name": {
+        "en": "Digitaliseringsdirektoratet",
+        "nb": "Digitaliseringsdirektoratet",
+        "nn": "Digitaliseringsdirektoratet"
+      }
+    }
+  },
+  {
+    "title": {
+      "en": "Accounting services for municipalities",
+      "nb": "Regnskapstjenester for kommuner",
+      "nn": "Rekneskapstenester for kommunar"
+    },
+    "sector": null,
+    "status": null,
+    "limitedByRRR": false,
+    "SelfIdentifiedUserEnabled": false,
+    "EnterpriseUserEnabled": false,
+    "homepage": null,
+    "isPartOf": null,
+    "keywords": null,
+    "identifier": "regnskap-bergsiden",
+    "contactPoints": [
+      {
+        "category": "Some category",
+        "email": "email@someemaildigdir.no",
+        "telephone": "12345678",
+        "contactPage": "Some page (webpage maybe?)"
+      }
+    ],
+    "visible": true,
+    "delegable": true,
+    "description": {
+      "en": "Covers accounting and logistics for the Bergsiden area of the municipality.",
+      "nb": "Dekker regnskap og logistikk for Bergsiden-området i kommunen.",
+      "nn": "Dekker rekneskap og logistikk for Bergsiden-området i kommunen."
+    },
+    "resourceType": "Default",
+    "thematicArea": null,
+    "isPublicService": true,
+    "rightDescription": {
+      "en": "Grants access to accounting data.",
+      "nb": "Gir tilgang til regnskapsdata.",
+      "nn": "Gir tilgang til rekneskapsdata."
+    },
+    "resourceReferences": [],
+    "authorizationReference": [
+      {
+        "id": "urn:altinn:resource",
+        "value": "regnskap-bergsiden"
+      }
+    ],
+    "hasCompetentAuthority": {
+      "orgcode": "TTD",
+      "organization": "974760746",
+      "name": {
+        "en": "Testdepartementet",
+        "nb": "Testdepartementet",
+        "nn": "Testdepartementet"
+      }
+    }
   }
 ]

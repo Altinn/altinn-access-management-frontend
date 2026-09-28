@@ -444,11 +444,13 @@ namespace Altinn.AccessManagement.UI.Core.Services
 
             foreach (ServiceResourceFE res in resources)
             {
-                int numMatches = 0;
+                int matchScore = 0;
 
                 foreach (string word in searchWords)
                 {
-                    if (StringUtils.NotNullAndContains(res.Title, word)
+                    bool titleMatch = StringUtils.NotNullAndContains(res.Title, word);
+
+                    if (titleMatch
                     || StringUtils.NotNullAndContains(res.Description, word)
                     || StringUtils.NotNullAndContains(res.RightDescription, word)
                     || StringUtils.NotNullAndContains(res.ResourceOwnerName, word)
@@ -456,13 +458,18 @@ namespace Altinn.AccessManagement.UI.Core.Services
                     || (includeResourceReferencesInSearch && ResourceReferenceContains(res, word))
                     || (res.Keywords != null && res.Keywords.Exists((kw) => StringUtils.NotNullAndContains(kw, word))))
                     {
-                        numMatches++;
+                        matchScore++;
+                    }
+
+                    if (titleMatch)
+                    {
+                        matchScore++; // Extra weight for title matches, so they outrank matches in other fields
                     }
                 }
 
-                if (numMatches > 0)
+                if (matchScore > 0)
                 {
-                    res.PriorityCounter = numMatches;
+                    res.PriorityCounter = matchScore;
                     if (res.Identifier != null && string.Equals(trimmedSearchString, res.Identifier.Trim(), StringComparison.OrdinalIgnoreCase))
                     {
                         res.PriorityCounter += 2; // Prioritize resources whose identifier is an exact match

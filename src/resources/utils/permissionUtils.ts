@@ -5,7 +5,10 @@ export const hasConsentPermission = (
   isAdmin: boolean = false,
   isCurrentUserReportee: boolean = false,
 ): boolean => {
-  return hasReporteeListAdminAccess(reporteeInfo, isAdmin, isCurrentUserReportee);
+  return (
+    reporteeInfo?.type !== 'SelfIdentified' &&
+    hasReporteeListAdminAccess(reporteeInfo, isAdmin, isCurrentUserReportee)
+  );
 };
 
 export const hasCreateSystemUserPermission = (
