@@ -33,13 +33,14 @@ export const restoreFocusOnSuccess = (
 
 interface DelegationControlProps {
   id: string;
+  name: string;
   hasAccess: boolean;
   disabled: boolean;
   onAction: DelegateHandler;
 }
 
 // Stays rendered and enabled while its own action runs, so focus is never lost to <body>.
-const DelegationControl = ({ id, hasAccess, disabled, onAction }: DelegationControlProps) => {
+const DelegationControl = ({ id, name, hasAccess, disabled, onAction }: DelegationControlProps) => {
   const { t } = useTranslation();
   const [isLoading, setIsLoading] = useState(false);
   useRestoreFocusTarget(id);
@@ -56,6 +57,9 @@ const DelegationControl = ({ id, hasAccess, disabled, onAction }: DelegationCont
       variant='tertiary'
       disabled={disabled && !isLoading}
       onClick={onClick}
+      aria-label={t(hasAccess ? 'common.delete_poa_for' : 'common.give_poa_for', {
+        poa_object: name,
+      })}
     >
       {isLoading ? (
         <DsSpinner
@@ -102,10 +106,11 @@ type DelegationControlOptions = Pick<
   | 'removeDisabled'
   | 'onDelegate'
   | 'onRevoke'
->;
+> & { name: string };
 
 const buildDelegationControl = ({
   id,
+  name,
   isMobileOrSmaller,
   showAction,
   hasAccess,
@@ -121,6 +126,7 @@ const buildDelegationControl = ({
   return (
     <DelegationControl
       id={clientActionControlId(id)}
+      name={name}
       hasAccess={hasAccess}
       disabled={hasAccess ? removeDisabled : addDisabled}
       onAction={onAction}
@@ -149,6 +155,7 @@ export const buildPackageItem = ({
   const showModalTrigger = showAction && !!accessPackage && !!onOpenModal;
   const controls = buildDelegationControl({
     id,
+    name: packageName,
     isMobileOrSmaller,
     showAction,
     hasAccess,
@@ -198,6 +205,7 @@ export const buildResourceItem = ({
 }: BuildResourceItemOptions): ClientResourceListItemData => {
   const controls = buildDelegationControl({
     id,
+    name: resource.title,
     isMobileOrSmaller,
     showAction,
     hasAccess,

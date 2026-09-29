@@ -206,7 +206,7 @@ export const ClientAgentPackageList = ({
           access.role.code !== 'rettighetshaver'
             ? t('client_administration_page.via_role', { role: roleName })
             : undefined;
-        const itemId = `${idPrefix}:${pkg.id}`;
+        const itemId = `${idPrefix}:${access.role.code}:${pkg.id}`;
         const requestFocus = () =>
           requestPackageFocus(clientActionControlId(itemId), restoreFocusFallbackId);
 

@@ -107,8 +107,8 @@ export const MyClientsPage = () => {
               isLoading={isLoadingReportee}
             />
             <RestoreFocusProvider restoreFocus={restoreFocus}>
-              <RestoreFocusFallback>
-                <div className={classes.content}>
+              <div className={classes.content}>
+                <RestoreFocusFallback>
                   {isActingOnBehalfOfSelf ? (
                     <DsAlert data-color='info'>
                       {t('my_clients_page.not_acting_on_behalf_info')}
@@ -138,8 +138,8 @@ export const MyClientsPage = () => {
                       {t('my_clients_page.no_clients', { actingParty: actingPartyName })}
                     </DsParagraph>
                   )}
-                </div>
-              </RestoreFocusFallback>
+                </RestoreFocusFallback>
+              </div>
             </RestoreFocusProvider>
           </>
         </PageContainer>

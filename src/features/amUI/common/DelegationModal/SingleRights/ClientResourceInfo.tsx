@@ -42,7 +42,11 @@ export const ClientResourceInfo = ({
   useRestoreFocusAfterSettled({
     isSettled: !isLoading && !isSuccess,
     requestWhen: isLoading,
-    onRestore: () => focusFirstEnabledButton(actionsRef.current),
+    onRestore: () => {
+      focusFirstEnabledButton(actionsRef.current);
+      // Revoke-only lists leave no action button, so fall back to the dialog's close button.
+      focusFirstEnabledButton(actionsRef.current?.closest('dialog') ?? null);
+    },
   });
 
   const cannotChangeAccess = resource.delegable === false;

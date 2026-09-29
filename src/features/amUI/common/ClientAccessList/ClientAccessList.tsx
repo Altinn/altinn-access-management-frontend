@@ -1,4 +1,4 @@
-import React, { useRef, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import {
   type AccessPackageListItemProps,
@@ -192,7 +192,7 @@ export const ClientAccessList = ({
           access.role.code !== 'rettighetshaver'
             ? t('client_administration_page.via_role', { role: roleName })
             : undefined;
-        const itemId = `${clientId}:${pkg.id}`;
+        const itemId = `${clientId}:${access.role.code}:${pkg.id}`;
         const requestFocus = () =>
           requestPackageFocus(clientActionControlId(itemId), restoreFocusFallbackId);
 
@@ -383,6 +383,15 @@ export const ClientAccessList = ({
   const restoreFocusOnClose = (itemId: string) => {
     restoreFocus?.requestFocus(itemId, restoreFocusFallbackId);
   };
+
+  // Removing the last client unmounts the list together with its open modal, so onClose never
+  // fires. Hand the request to the zone on the way out instead.
+  const restoreFocusOnUnmountRef = useRef<(() => void) | null>(null);
+  useEffect(() => {
+    const openItemId = selected?.itemId ?? selectedResource?.itemId;
+    restoreFocusOnUnmountRef.current = openItemId ? () => restoreFocusOnClose(openItemId) : null;
+  });
+  useEffect(() => () => restoreFocusOnUnmountRef.current?.(), []);
 
   const resourceModalData: ClientResourceModalData | undefined = selectedResource
     ? {
