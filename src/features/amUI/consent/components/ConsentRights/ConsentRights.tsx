@@ -38,6 +38,7 @@ export const ConsentRights = ({ rights, language }: ConsentRightsProps) => {
 
 const parserOptions: HTMLReactParserOptions = {
   replace: (domNode) => {
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-enum-comparison
     if (domNode.type === 'tag' && domNode.name === 'a') {
       const href = domNode.attribs?.href;
       if (!href) {

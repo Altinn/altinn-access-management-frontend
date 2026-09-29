@@ -26,7 +26,7 @@ export const ActiveConsentsPage = () => {
   useDocumentTitle(t('active_consents.page_title'));
   const partyUuid = getCookie('AltinnPartyUuid');
 
-  const newlyCreatedId = routerLocation?.state?.createdId;
+  const newlyCreatedId = (routerLocation.state as { createdId?: string } | null)?.createdId;
 
   const { data: reportee, isLoading: isLoadingReportee } = useGetReporteeQuery();
   const { data: currentUser, isLoading: isCurrentUserLoading } = useGetPartyFromLoggedInUserQuery();

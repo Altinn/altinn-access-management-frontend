@@ -123,7 +123,7 @@ export const ActiveConsentsPageContent = ({
                     consentId,
                     encodeURIComponent(`/${ConsentPath.Consent}/${ConsentPath.Active}`),
                   );
-                  navigate(consentRequestUrl);
+                  void navigate(consentRequestUrl);
                 }}
               />
             ))}
