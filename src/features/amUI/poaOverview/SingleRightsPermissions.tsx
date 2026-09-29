@@ -41,6 +41,19 @@ export const SingleRightsPermissions = () => {
   // ServicesToolbar so that typing does not re-render the service lists below.
   const [debouncedSearch, setDebouncedSearch] = useState('');
   const [filterState, setFilterState] = useState<string[]>([]);
+  // How many non-delegated results the "other services" list should try to display. Grows by
+  // one page per "show more" click, reset to one page whenever the search changes below.
+  const [targetResultCount, setTargetResultCount] = useState(searchResultsPerPage);
+
+  const handleSearchChange = useCallback((search: string) => {
+    setDebouncedSearch(search);
+    setTargetResultCount(searchResultsPerPage);
+  }, []);
+
+  const handleFilterChange = useCallback((filters: string[]) => {
+    setFilterState(filters);
+    setTargetResultCount(searchResultsPerPage);
+  }, []);
 
   // Both lists link to the service's own details page.
   const getResourceItemAs = useCallback(
@@ -94,6 +107,27 @@ export const SingleRightsPermissions = () => {
     );
   }, [searchData, delegatedIds]);
 
+  // Resources already assigned are filtered out of each fetched page above, so a fetched page can
+  // contribute fewer results than `searchResultsPerPage`. Keep fetching until enough non-delegated
+  // results have been found to reach the target, or there is nothing more to fetch.
+  useEffect(() => {
+    if (
+      searchResources.length < targetResultCount &&
+      hasNextPage &&
+      !isSearchFetching &&
+      !isSearchError
+    ) {
+      void fetchNextPage();
+    }
+  }, [
+    searchResources.length,
+    targetResultCount,
+    hasNextPage,
+    isSearchFetching,
+    fetchNextPage,
+    isSearchError,
+  ]);
+
   const resources = useMemo(
     () => (delegations ?? []).map((delegation) => delegation.resource).filter(Boolean),
     [delegations],
@@ -131,13 +165,11 @@ export const SingleRightsPermissions = () => {
 
   return (
     <>
-      <DsParagraph className={classes.description}>
-        {t('poa_overview_page.services_tab.description')}
-      </DsParagraph>
+      <DsParagraph>{t('poa_overview_page.services_tab.description')}</DsParagraph>
       <ServicesToolbar
-        onSearchChange={setDebouncedSearch}
+        onSearchChange={handleSearchChange}
         filterState={filterState}
-        setFilterState={setFilterState}
+        setFilterState={handleFilterChange}
       />
       <section aria-labelledby={ASSIGNED_SERVICES_SECTION}>
         <CollapsibleContainer
@@ -147,6 +179,7 @@ export const SingleRightsPermissions = () => {
           defaultOpen
         >
           <ResourceList
+            className={classes.resourceList}
             resources={filteredResources}
             isLoading={isLoadingDelegations || isPartyLoading}
             enableSearch={false}
@@ -163,6 +196,7 @@ export const SingleRightsPermissions = () => {
                 <SingleRightsPermissionBadge permissions={permissions} />
               ) : null;
             }}
+            size='md'
           />
         </CollapsibleContainer>
       </section>
@@ -182,6 +216,7 @@ export const SingleRightsPermissions = () => {
           ) : (
             <>
               <ResourceList
+                className={classes.resourceList}
                 resources={searchResources}
                 isLoading={
                   isLoadingDelegations ||
@@ -192,6 +227,7 @@ export const SingleRightsPermissions = () => {
                 showDetails={false}
                 getItemAs={getResourceItemAs}
                 noResourcesText={t('poa_overview_page.services_tab.no_other_services')}
+                size='md'
               />
               {hasNextPage && (
                 <div className={classes.showMoreButton}>
@@ -200,7 +236,7 @@ export const SingleRightsPermissions = () => {
                     data-size='sm'
                     onClick={() => {
                       if (!isSearchFetching) {
-                        fetchNextPage();
+                        setTargetResultCount((count) => count + searchResultsPerPage);
                       }
                     }}
                     aria-disabled={isSearchFetching}

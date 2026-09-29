@@ -77,6 +77,7 @@ export interface ResourceListProps<
   delegationModal?: React.ReactNode;
   border?: ResourceListItemProps['border'];
   ariaLabelledBy?: string;
+  className?: string;
 }
 
 export const ResourceList = <
@@ -102,6 +103,7 @@ export const ResourceList = <
   delegationModal,
   border = 'none',
   ariaLabelledBy,
+  className,
 }: ResourceListProps<TResource>) => {
   const { t } = useTranslation();
   const [search, setSearch] = React.useState('');
@@ -174,7 +176,7 @@ export const ResourceList = <
   }, [resources]);
 
   return (
-    <div className={classes.container}>
+    <div className={cn(classes.container, className)}>
       {enableSearch && (
         <div className={classes.searchAndAdd}>
           <ResourceFilterToolbar
@@ -211,7 +213,7 @@ export const ResourceList = <
         </div>
       )}
       {isSkeletonVisible ? (
-        <SkeletonResourceList />
+        <SkeletonResourceList size={size} />
       ) : (
         <>
           {resources.length === 0 && !search && (
