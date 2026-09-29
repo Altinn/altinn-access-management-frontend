@@ -11,14 +11,17 @@ let pendingRefresh: Promise<void> | undefined;
 export const refreshToken = (): Promise<void> => {
   pendingRefresh ??= fetch(refreshUrl)
     .then(
-      (response) => response.ok,
-      () => false,
+      (response) => {
+        if (!response.ok) {
+          window.location.href = getLoginUrl();
+        }
+      },
+      () => {
+        // Network error, or the request was aborted by a navigation (Safari and Firefox reject
+        // in-flight fetches when the page navigates). That is no proof the token is invalid, and
+        // redirecting here would override the navigation the user started.
+      },
     )
-    .then((tokenIsValid) => {
-      if (!tokenIsValid) {
-        window.location.href = getLoginUrl();
-      }
-    })
     .finally(() => {
       pendingRefresh = undefined;
     });
