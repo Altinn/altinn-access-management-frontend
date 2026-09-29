@@ -1,7 +1,13 @@
 import React from 'react';
 import { List, ResourceListItem, type ResourceListItemProps } from '@altinn/altinn-components';
 
-export const SkeletonResourceList = ({ count = 3 }: { count?: number }) => {
+export const SkeletonResourceList = ({
+  count = 3,
+  size = 'sm',
+}: {
+  count?: number;
+  size?: ResourceListItemProps['size'];
+}) => {
   const resourceSkeletons: ResourceListItemProps[] = React.useMemo(
     () =>
       Array.from({ length: count }, (_, i) => ({
@@ -19,6 +25,7 @@ export const SkeletonResourceList = ({ count = 3 }: { count?: number }) => {
       as='div'
       interactive={false}
       shadow='none'
+      size={size}
       {...item}
     />
   ));

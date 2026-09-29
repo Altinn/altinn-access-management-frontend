@@ -213,7 +213,7 @@ export const ResourceList = <
         </div>
       )}
       {isSkeletonVisible ? (
-        <SkeletonResourceList />
+        <SkeletonResourceList size={size} />
       ) : (
         <>
           {resources.length === 0 && !search && (
