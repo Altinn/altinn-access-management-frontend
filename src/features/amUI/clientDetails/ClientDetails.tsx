@@ -6,7 +6,6 @@ import {
   DsParagraph,
   DsSkeleton,
   formatDisplayName,
-  useSnackbar,
 } from '@altinn/altinn-components';
 import { useParams } from 'react-router';
 
@@ -22,6 +21,7 @@ import {
 } from '@/rtk/features/clientApi';
 import { PartyType, useGetIsClientAdminQuery } from '@/rtk/features/userInfoApi';
 import { amUIPath } from '@/routes/paths';
+import { useSnackbarOnIdle } from '@/resources/hooks/useSnackbarOnIdle';
 
 import { PageContainer } from '../common/PageContainer/PageContainer';
 import { usePartyRepresentation } from '../common/PartyRepresentationContext/PartyRepresentationContext';
@@ -48,7 +48,6 @@ import classes from './ClientDetails.module.css';
 
 export const ClientDetails = () => {
   const { t } = useTranslation();
-  const { openSnackbar } = useSnackbar();
   const { id } = useParams();
   const { fromParty, actingParty } = usePartyRepresentation();
 
@@ -63,7 +62,12 @@ export const ClientDetails = () => {
     isLoading: isLoadingClientResources,
     error: clientResourcesError,
   } = useGetClientResourcesQuery({ from: id ?? '' }, { skip: !id });
-  const { data: agents, isLoading: isLoadingAgents, error: agentsError } = useGetAgentsQuery();
+  const {
+    data: agents,
+    isLoading: isLoadingAgents,
+    isFetching: isFetchingAgents,
+    error: agentsError,
+  } = useGetAgentsQuery();
   const { data: clients, isLoading: isLoadingClients, error: clientsError } = useGetClientsQuery();
 
   const [addAgentAccessPackages, { isLoading: isAddingAgentAccessPackages }] =
@@ -84,6 +88,10 @@ export const ClientDetails = () => {
     (x) => isNewUser(x.agentAddedAt),
   );
   const [searchString, setSearchString] = useState<string>('');
+
+  // Hold the confirmation until the agents have refetched, so it is announced after the modal has
+  // closed and focus has returned, together with the row it is about.
+  const { queueSnackbar } = useSnackbarOnIdle({ isBusy: isFetchingAgents });
 
   const recentlyAddedSectionId = useId();
   const assignedSectionId = useId();
@@ -144,12 +152,8 @@ export const ClientDetails = () => {
   const fromPartyUuid = fromParty?.partyUuid ?? id;
   const actingPartyUuid = actingParty?.partyUuid;
 
-  const onUserAdded = () => {
-    openSnackbar({
-      message: t('client_administration_page.add_agent_client_access_success_snackbar'),
-      color: 'success',
-    });
-  };
+  const onUserAdded = () =>
+    queueSnackbar(t('client_administration_page.add_agent_client_access_success_snackbar'));
 
   return (
     <>
