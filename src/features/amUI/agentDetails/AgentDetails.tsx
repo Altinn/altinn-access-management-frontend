@@ -34,6 +34,11 @@ import { UserPageHeaderSkeleton } from '../common/UserPageHeader/UserPageHeaderS
 import { ClientAdminSearchField } from '../common/ClientAdminSearchField/ClientAdminSearchField';
 import { CollapsibleContainer } from '../common/CollapsibleContainer/CollapsibleContainer';
 import { filterDeletedParties } from '../common/deletedPartyUtils';
+import {
+  RestoreFocusFallback,
+  RestoreFocusProvider,
+  useRestoreFocus,
+} from '../common/RestoreFocus';
 
 import { AgentDetailsDeleteModal } from './AgentDetailsDeleteModal';
 import { useAgentDetailsAccessClientLists } from './useAgentDetailsAccessClientLists';
@@ -92,6 +97,8 @@ export const AgentDetails = () => {
   const actingPartyUuid = actingParty?.partyUuid;
   const assignedSectionId = useId();
   const unassignedSectionId = useId();
+  // One zone for both sections, so a client that moves between them is still found by its id.
+  const restoreFocus = useRestoreFocus();
 
   if (isClientAdmin === false) {
     return (
@@ -167,78 +174,84 @@ export const AgentDetails = () => {
               displayDirection={false}
               displayRoles={false}
             />
-            <ClientAdminSearchField
-              setSearchString={setSearchString}
-              searchPlaceholder={t('my_clients_page.search_placeholder')}
-              filters={
-                <Switch
-                  onChange={(e) => setShowDeleted(e.target.checked)}
-                  checked={showDeleted}
-                  label={t('common.show_deleted')}
+            <RestoreFocusProvider restoreFocus={restoreFocus}>
+              <RestoreFocusFallback>
+                <ClientAdminSearchField
+                  setSearchString={setSearchString}
+                  searchPlaceholder={t('my_clients_page.search_placeholder')}
+                  filters={
+                    <Switch
+                      onChange={(e) => setShowDeleted(e.target.checked)}
+                      checked={showDeleted}
+                      label={t('common.show_deleted')}
+                    />
+                  }
                 />
-              }
-            />
-            <div className={classes.clientSections}>
-              <section aria-labelledby={assignedSectionId}>
-                <CollapsibleContainer
-                  heading={t('client_administration_page.agent_has_clients_tab')}
-                  searchString={searchString}
-                  id={assignedSectionId}
-                  defaultOpen
-                >
-                  <AgentDetailsClientsList
-                    clients={clientsWithAgentAccess}
-                    agentAccessPackages={agentAccessPackages ?? []}
-                    agentResources={agentResources ?? []}
-                    isLoading={
-                      isAddingAgentAccessPackages ||
-                      isRemovingAgentAccessPackages ||
-                      isAddingAgentResources ||
-                      isRemovingAgentResources
-                    }
-                    toPartyUuid={toPartyUuid}
-                    actingPartyUuid={actingPartyUuid}
-                    addAgentAccessPackages={addAgentAccessPackages}
-                    removeAgentAccessPackages={removeAgentAccessPackages}
-                    addAgentResources={addAgentResources}
-                    removeAgentResources={removeAgentResources}
-                    searchString={searchString}
-                    emptyText={t('client_administration_page.no_delegations')}
-                    expandedIds={expandedIds}
-                    onToggleExpanded={toggleExpanded}
-                  />
-                </CollapsibleContainer>
-              </section>
-              <section aria-labelledby={unassignedSectionId}>
-                <CollapsibleContainer
-                  heading={t('client_administration_page.agent_can_get_clients_tab')}
-                  searchString={searchString}
-                  id={unassignedSectionId}
-                >
-                  <AgentDetailsClientsList
-                    clients={clientsWithoutAgentAccess}
-                    agentAccessPackages={agentAccessPackages ?? []}
-                    agentResources={agentResources ?? []}
-                    toPartyUuid={toPartyUuid}
-                    actingPartyUuid={actingPartyUuid}
-                    isLoading={
-                      isAddingAgentAccessPackages ||
-                      isRemovingAgentAccessPackages ||
-                      isAddingAgentResources ||
-                      isRemovingAgentResources
-                    }
-                    addAgentAccessPackages={addAgentAccessPackages}
-                    removeAgentAccessPackages={removeAgentAccessPackages}
-                    addAgentResources={addAgentResources}
-                    removeAgentResources={removeAgentResources}
-                    searchString={searchString}
-                    emptyText={t('client_administration_page.no_clients')}
-                    expandedIds={expandedIds}
-                    onToggleExpanded={toggleExpanded}
-                  />
-                </CollapsibleContainer>
-              </section>
-            </div>
+                <div className={classes.clientSections}>
+                  <section aria-labelledby={assignedSectionId}>
+                    <CollapsibleContainer
+                      heading={t('client_administration_page.agent_has_clients_tab')}
+                      searchString={searchString}
+                      id={assignedSectionId}
+                      defaultOpen
+                    >
+                      <AgentDetailsClientsList
+                        clients={clientsWithAgentAccess}
+                        agentAccessPackages={agentAccessPackages ?? []}
+                        agentResources={agentResources ?? []}
+                        isLoading={
+                          isAddingAgentAccessPackages ||
+                          isRemovingAgentAccessPackages ||
+                          isAddingAgentResources ||
+                          isRemovingAgentResources
+                        }
+                        toPartyUuid={toPartyUuid}
+                        actingPartyUuid={actingPartyUuid}
+                        addAgentAccessPackages={addAgentAccessPackages}
+                        removeAgentAccessPackages={removeAgentAccessPackages}
+                        addAgentResources={addAgentResources}
+                        removeAgentResources={removeAgentResources}
+                        searchString={searchString}
+                        emptyText={t('client_administration_page.no_delegations')}
+                        expandedIds={expandedIds}
+                        onToggleExpanded={toggleExpanded}
+                        restoreFocusFallbackId={assignedSectionId}
+                      />
+                    </CollapsibleContainer>
+                  </section>
+                  <section aria-labelledby={unassignedSectionId}>
+                    <CollapsibleContainer
+                      heading={t('client_administration_page.agent_can_get_clients_tab')}
+                      searchString={searchString}
+                      id={unassignedSectionId}
+                    >
+                      <AgentDetailsClientsList
+                        clients={clientsWithoutAgentAccess}
+                        agentAccessPackages={agentAccessPackages ?? []}
+                        agentResources={agentResources ?? []}
+                        toPartyUuid={toPartyUuid}
+                        actingPartyUuid={actingPartyUuid}
+                        isLoading={
+                          isAddingAgentAccessPackages ||
+                          isRemovingAgentAccessPackages ||
+                          isAddingAgentResources ||
+                          isRemovingAgentResources
+                        }
+                        addAgentAccessPackages={addAgentAccessPackages}
+                        removeAgentAccessPackages={removeAgentAccessPackages}
+                        addAgentResources={addAgentResources}
+                        removeAgentResources={removeAgentResources}
+                        searchString={searchString}
+                        emptyText={t('client_administration_page.no_clients')}
+                        expandedIds={expandedIds}
+                        onToggleExpanded={toggleExpanded}
+                        restoreFocusFallbackId={unassignedSectionId}
+                      />
+                    </CollapsibleContainer>
+                  </section>
+                </div>
+              </RestoreFocusFallback>
+            </RestoreFocusProvider>
           </>
         )}
       </PageContainer>

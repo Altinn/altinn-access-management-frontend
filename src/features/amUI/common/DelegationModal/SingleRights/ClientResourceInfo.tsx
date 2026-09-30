@@ -1,3 +1,4 @@
+import { useRef } from 'react';
 import { DsAlert, DsButton, DsHeading, DsParagraph } from '@altinn/altinn-components';
 import { useTranslation } from 'react-i18next';
 
@@ -6,6 +7,7 @@ import type { ActionError } from '@/resources/hooks/useActionError';
 import type { ServiceResource } from '@/rtk/features/singleRights/singleRightsApi';
 
 import { LoadingAnimation } from '../../LoadingAnimation/LoadingAnimation';
+import { focusFirstEnabledButton, useRestoreFocusAfterSettled } from '../../RestoreFocus';
 import { StatusSection } from '../../StatusSection/StatusSection';
 import { TechnicalErrorParagraphs } from '../../TechnicalErrorParagraphs';
 import { ValidationErrorMessage } from '../../ValidationErrorMessage';
@@ -36,6 +38,16 @@ export const ClientResourceInfo = ({
 }: ClientResourceInfoProps) => {
   const { t } = useTranslation();
   const isSmall = useIsMobileOrSmaller();
+  const actionsRef = useRef<HTMLDivElement>(null);
+  useRestoreFocusAfterSettled({
+    isSettled: !isLoading && !isSuccess,
+    requestWhen: isLoading,
+    onRestore: () => {
+      focusFirstEnabledButton(actionsRef.current);
+      // Revoke-only lists leave no action button, so fall back to the dialog's close button.
+      focusFirstEnabledButton(actionsRef.current?.closest('dialog') ?? null);
+    },
+  });
 
   const cannotChangeAccess = resource.delegable === false;
   const canRevoke = userHasAccess && !!onRevoke;
@@ -92,7 +104,10 @@ export const ClientResourceInfo = ({
             {resource.rightDescription && <DsParagraph>{resource.rightDescription}</DsParagraph>}
           </div>
 
-          <div className={classes.editButtons}>
+          <div
+            ref={actionsRef}
+            className={classes.editButtons}
+          >
             {canRevoke && (
               <DsButton
                 data-color='danger'

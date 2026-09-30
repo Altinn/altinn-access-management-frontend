@@ -32,6 +32,7 @@ type AgentDetailsClientsListProps = {
   emptyText?: string;
   expandedIds?: string[];
   onToggleExpanded?: (id: string) => void;
+  restoreFocusFallbackId?: string;
 };
 
 export const AgentDetailsClientsList = ({
@@ -49,6 +50,7 @@ export const AgentDetailsClientsList = ({
   emptyText,
   expandedIds,
   onToggleExpanded,
+  restoreFocusFallbackId,
 }: AgentDetailsClientsListProps) => {
   const delegateDisabled = isLoading || !toPartyUuid || !actingPartyUuid;
   const removeDisabled = isLoading || !toPartyUuid || !actingPartyUuid;
@@ -81,6 +83,7 @@ export const AgentDetailsClientsList = ({
       emptyText={emptyText}
       expandedIds={expandedIds}
       onToggleExpanded={onToggleExpanded}
+      restoreFocusFallbackId={restoreFocusFallbackId}
       onAddAccessPackage={(
         { clientId, roleCode, packageId, accessPackageName },
         onSuccess?: () => void,

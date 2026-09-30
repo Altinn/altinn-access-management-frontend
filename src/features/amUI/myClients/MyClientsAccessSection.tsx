@@ -22,6 +22,9 @@ type MyClientsAccessSectionProps = {
   currentUserName: string;
 };
 
+// Focus lands on the search field when a revoked access removed the client row it belonged to.
+const MY_CLIENTS_SEARCH_ID = 'my_clients_search';
+
 export const MyClientsAccessSection = ({
   clients,
   actingPartyUuid,
@@ -133,6 +136,7 @@ export const MyClientsAccessSection = ({
       <ClientAdminSearchField
         setSearchString={setSearchString}
         searchPlaceholder={t('my_clients_page.search_placeholder')}
+        inputId={MY_CLIENTS_SEARCH_ID}
       />
       <ClientAccessList
         clients={clients}
@@ -144,6 +148,7 @@ export const MyClientsAccessSection = ({
         onRemoveResource={onRemoveResource}
         requireDelegableForActions={false}
         searchString={searchString}
+        restoreFocusFallbackId={MY_CLIENTS_SEARCH_ID}
       />
     </>
   );

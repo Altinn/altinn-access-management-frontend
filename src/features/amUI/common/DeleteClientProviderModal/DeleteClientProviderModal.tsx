@@ -1,5 +1,12 @@
 import React, { useCallback, useRef, useState } from 'react';
-import { DsAlert, DsButton, DsDialog, DsHeading, DsParagraph } from '@altinn/altinn-components';
+import {
+  DsAlert,
+  DsButton,
+  DsDialog,
+  DsHeading,
+  DsParagraph,
+  DsSpinner,
+} from '@altinn/altinn-components';
 import { TrashIcon } from '@navikt/aksel-icons';
 import { useTranslation } from 'react-i18next';
 
@@ -30,6 +37,9 @@ export const DeleteClientProviderModal = ({
   const [hasError, setHasError] = useState(false);
 
   const onConfirmDelete = useCallback(async () => {
+    if (isSubmitting) {
+      return;
+    }
     setHasError(false);
     setIsSubmitting(true);
 
@@ -41,7 +51,7 @@ export const DeleteClientProviderModal = ({
     } finally {
       setIsSubmitting(false);
     }
-  }, [onConfirm]);
+  }, [isSubmitting, onConfirm]);
 
   return (
     <DsDialog.TriggerContext>
@@ -74,9 +84,15 @@ export const DeleteClientProviderModal = ({
             <DsButton
               data-color='danger'
               onClick={onConfirmDelete}
-              loading={isSubmitting}
             >
-              {confirmLabel}
+              {isSubmitting ? (
+                <DsSpinner
+                  aria-label={t('common.loading')}
+                  data-size='sm'
+                />
+              ) : (
+                confirmLabel
+              )}
             </DsButton>
             <DsButton
               variant='secondary'

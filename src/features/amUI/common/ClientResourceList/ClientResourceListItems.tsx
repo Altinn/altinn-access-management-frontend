@@ -10,6 +10,7 @@ import {
   extractOwnerName,
   extractResourceName,
 } from '../ResourceList/utils';
+import { useRestoreFocusTarget } from '../RestoreFocus';
 
 export interface ClientResourceListItemData {
   id: string;
@@ -25,28 +26,37 @@ interface ClientResourceListItemsProps {
   labelledBy?: string;
 }
 
-export const ClientResourceListItems = ({ items, labelledBy }: ClientResourceListItemsProps) => {
+const ClientResourceListRow = (item: ClientResourceListItemData) => {
   const { getProviderLogoUrl } = useProviderLogoUrl();
+  useRestoreFocusTarget(item.id);
 
+  return (
+    <ResourceListItem
+      id={item.id}
+      size='sm'
+      resourceName={extractResourceName(item.resource)}
+      ownerName={extractOwnerName(item.resource)}
+      ownerLogoUrl={
+        getProviderLogoUrl(extractOrgCode(item.resource)) ?? extractLogoUrl(item.resource)
+      }
+      ownerLogoUrlAlt={extractOwnerName(item.resource)}
+      titleAs={item.titleAs}
+      interactive={!!item.onClick}
+      as={item.onClick ? 'button' : 'div'}
+      variant={item.hasAccess ? 'tinted' : 'default'}
+      onClick={item.onClick}
+      controls={item.controls}
+    />
+  );
+};
+
+export const ClientResourceListItems = ({ items, labelledBy }: ClientResourceListItemsProps) => {
   return (
     <List aria-labelledby={labelledBy}>
       {items.map((item) => (
-        <ResourceListItem
+        <ClientResourceListRow
           key={item.id}
-          id={item.id}
-          size='sm'
-          resourceName={extractResourceName(item.resource)}
-          ownerName={extractOwnerName(item.resource)}
-          ownerLogoUrl={
-            getProviderLogoUrl(extractOrgCode(item.resource)) ?? extractLogoUrl(item.resource)
-          }
-          ownerLogoUrlAlt={extractOwnerName(item.resource)}
-          titleAs={item.titleAs}
-          interactive={!!item.onClick}
-          as={item.onClick ? 'button' : 'div'}
-          variant={item.hasAccess ? 'tinted' : 'default'}
-          onClick={item.onClick}
-          controls={item.controls}
+          {...item}
         />
       ))}
     </List>
