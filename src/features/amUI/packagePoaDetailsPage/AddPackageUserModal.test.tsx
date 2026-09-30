@@ -129,14 +129,22 @@ describe('AddPackageUserModal', () => {
     expect(dialog()?.open).toBe(true);
   });
 
-  it('keeps the dialog open with a general error when the delegation fails', async () => {
+  // The same alert the page shows when delegating to an existing user fails, one level down.
+  it('keeps the dialog open with the delegation error when the delegation fails', async () => {
     // eslint-disable-next-line @typescript-eslint/prefer-promise-reject-errors
     delegatePackage.mockReturnValue({ unwrap: () => Promise.reject({ status: 500 }) });
     await openModal();
     await fillPerson();
     await submit();
 
-    expect(await screen.findByText('common.general_error_paragraph')).toBeInTheDocument();
+    expect(
+      await screen.findByRole('heading', {
+        level: 3,
+        name: 'delegation_modal.general_error.delegate_heading',
+      }),
+    ).toBeInTheDocument();
+    // Nothing to dismiss: the alert goes when the dialog does.
+    expect(screen.queryByRole('button', { name: 'common.close' })).not.toBeInTheDocument();
     expect(screen.queryByText('new_user_modal.not_found_error_person')).not.toBeInTheDocument();
     expect(dialog()?.open).toBe(true);
     expect(onUserAdded).not.toHaveBeenCalled();

@@ -1,6 +1,6 @@
 import React, { useId, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { DsAlert, DsButton, DsDialog, DsHeading } from '@altinn/altinn-components';
+import { DsButton, DsDialog } from '@altinn/altinn-components';
 import { PlusIcon } from '@navikt/aksel-icons';
 
 import { getActionError, type ActionError } from '@/resources/hooks/useActionError';
@@ -11,14 +11,11 @@ import { PartyType } from '@/rtk/features/userInfoApi';
 
 import { usePartyRepresentation } from '../common/PartyRepresentationContext/PartyRepresentationContext';
 import { AddUserForm } from '../common/AddUserForm/AddUserForm';
-import {
-  toAddRightHolderArgs,
-  type Recipient,
-  type RecipientKind,
-} from '../common/AddUserForm/recipient';
+import { toAddRightHolderArgs, type Recipient } from '../common/AddUserForm/recipient';
 import { SubmitErrorAlert, type SubmitError } from '../common/AddUserForm/SubmitErrorAlert';
 import { usePackageWarningDialog } from '../common/PackageWarningDialog';
-import { ValidationErrorMessage } from '../common/ValidationErrorMessage';
+
+import { DelegateErrorAlert } from './DelegateErrorAlert';
 
 /** The user as the dialog knows them: a person is only known by the last name that was typed. */
 export interface AddedPackageUser {
@@ -32,20 +29,21 @@ interface AddPackageUserButtonProps {
   onUserAdded: (user: AddedPackageUser) => void;
 }
 
-/** A delegation refused for a reason the backend names, as opposed to a technical failure. */
-interface ValidationError {
+/** A failed delegation, reported the same way as one to an existing user on the page. */
+interface DelegateError {
   error: ActionError;
-  recipientKind: RecipientKind;
+  targetParty: Party;
 }
 
 const recipientName = (recipient: Recipient) =>
   recipient.kind === 'person' ? recipient.lastName : recipient.organization.name;
 
 /**
- * The package warning needs to know whether the recipient is a person or an organisation before
- * they exist as a right holder, so it is given a party that holds only that and the name.
+ * The package warning and the delegation error need to know whether the recipient is a person or an
+ * organisation, before they exist as a right holder, so they are given a party that holds only that
+ * and the name.
  */
-const toWarningParty = (recipient: Recipient): Party => ({
+const toRecipientParty = (recipient: Recipient): Party => ({
   partyId: 0,
   partyUuid: recipient.kind === 'org' ? recipient.organization.partyUuid : '',
   name: recipientName(recipient),
@@ -67,7 +65,7 @@ export const AddPackageUserButton = ({ accessPackage, onUserAdded }: AddPackageU
   // jsdom's close() does not dispatch a close event, so this is not read off the dialog element.
   const [isOpen, setIsOpen] = useState(false);
   const [submitError, setSubmitError] = useState<SubmitError | null>(null);
-  const [validationError, setValidationError] = useState<ValidationError | null>(null);
+  const [delegateError, setDelegateError] = useState<DelegateError | null>(null);
   // Held across both requests: between them neither mutation reports itself as loading.
   const [isSubmitting, setIsSubmitting] = useState(false);
 
@@ -77,7 +75,7 @@ export const AddPackageUserButton = ({ accessPackage, onUserAdded }: AddPackageU
 
   const clearErrors = () => {
     setSubmitError(null);
-    setValidationError(null);
+    setDelegateError(null);
   };
 
   const close = () => {
@@ -107,12 +105,10 @@ export const AddPackageUserButton = ({ accessPackage, onUserAdded }: AddPackageU
         }).unwrap();
       } catch (error: unknown) {
         // The right holder exists by now, so nothing here can mean "no such person".
-        const actionError = getActionError(error);
-        if (actionError.details?.errorCode || actionError.details?.detail) {
-          setValidationError({ error: actionError, recipientKind: recipient.kind });
-        } else {
-          setSubmitError({ error: actionError });
-        }
+        setDelegateError({
+          error: getActionError(error),
+          targetParty: toRecipientParty(recipient),
+        });
         return;
       }
 
@@ -129,7 +125,7 @@ export const AddPackageUserButton = ({ accessPackage, onUserAdded }: AddPackageU
   const handleSubmit = (recipient: Recipient) => {
     if (!accessPackage || !fromParty) return;
     confirmPackageAction(
-      { action: 'delegate', accessPackage, fromParty, toParty: toWarningParty(recipient) },
+      { action: 'delegate', accessPackage, fromParty, toParty: toRecipientParty(recipient) },
       () => void addAndDelegate(recipient),
     );
   };
@@ -166,31 +162,12 @@ export const AddPackageUserButton = ({ accessPackage, onUserAdded }: AddPackageU
             onSubmit={handleSubmit}
           >
             <div aria-live='assertive'>
-              {validationError && (
-                <DsAlert
-                  data-size='sm'
-                  data-color='danger'
-                >
-                  <DsHeading
-                    level={3}
-                    data-size='2xs'
-                  >
-                    {t('delegation_modal.general_error.delegate_heading')}
-                  </DsHeading>
-                  <ValidationErrorMessage
-                    errorCode={
-                      validationError.error.details?.errorCode ??
-                      validationError.error.details?.detail ??
-                      ''
-                    }
-                    translationValues={{
-                      entity_type:
-                        validationError.recipientKind === 'person'
-                          ? t('common.persons_lowercase')
-                          : t('common.organizations_lowercase'),
-                    }}
-                  />
-                </DsAlert>
+              {delegateError && (
+                <DelegateErrorAlert
+                  error={delegateError.error}
+                  targetParty={delegateError.targetParty}
+                  headingLevel={3}
+                />
               )}
             </div>
             <SubmitErrorAlert submitError={submitError} />
