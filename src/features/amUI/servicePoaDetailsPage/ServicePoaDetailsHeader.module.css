@@ -4,7 +4,6 @@
   gap: var(--ds-size-2);
   max-width: 100%;
   word-break: break-word;
-  padding-bottom: var(--ds-size-5);
 }
 
 .skeletonHeading {

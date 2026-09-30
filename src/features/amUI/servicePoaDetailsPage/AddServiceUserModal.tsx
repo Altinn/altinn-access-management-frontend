@@ -14,7 +14,6 @@ import { usePartyRepresentation } from '../common/PartyRepresentationContext/Par
 import { AddUserForm } from '../common/AddUserForm/AddUserForm';
 import { toAddRightHolderArgs, type Recipient } from '../common/AddUserForm/recipient';
 import { SubmitErrorAlert, type SubmitError } from '../common/AddUserForm/SubmitErrorAlert';
-import { ResourceAlert } from '../common/DelegationModal/SingleRights/ResourceAlert';
 import { RightsPicker } from '../common/RightsPicker/RightsPicker';
 import { useDelegableRights } from '../common/RightsPicker/useDelegableRights';
 
@@ -25,7 +24,7 @@ export interface AddedServiceUser {
 }
 
 interface AddServiceUserButtonProps {
-  /*** The whole resource, not just its id: ResourceAlert reports on the service itself */
+  /*** The service being given */
   resource?: ServiceResource;
   /*** Called once the user both exists and holds the service */
   onUserAdded: (user: AddedServiceUser) => void;
@@ -54,20 +53,13 @@ export const AddServiceUserButton = ({ resource, onUserAdded }: AddServiceUserBu
   const [addRightHolder] = useAddRightHolderMutation();
   const [delegateRights] = useDelegateRightsMutation();
 
+  // The page hides this button when the service cannot be given to anyone, and says why there.
   const { rights, setRights, resetRights, isLoading, errorDetails } = useDelegableRights({
     resourceId,
     isEnabled: isOpen,
   });
 
   const actionKeys = rights.filter((r) => r.checked).map((r) => r.rightKey);
-
-  // Same shape as the other resource modals, minus their `hasAccess` term: the user being added is
-  // new, so there is never an existing delegation to fall back on. Without it the picker would
-  // render empty, since RightsChipList drops every action that cannot be given.
-  const displayResourceAlert =
-    !!errorDetails ||
-    resource?.delegable === false ||
-    (rights.length > 0 && !rights.some((r) => r.delegable === true));
 
   const close = () => {
     setIsOpen(false);
@@ -145,30 +137,22 @@ export const AddServiceUserButton = ({ resource, onUserAdded }: AddServiceUserBu
               !fromParty?.partyUuid ||
               actionKeys.length === 0 ||
               isLoading ||
-              displayResourceAlert
+              !!errorDetails
             }
             onKindChange={() => setSubmitError(null)}
             isSubmitting={isSubmitting}
             onSubmit={(recipient) => void handleSubmit(recipient)}
           >
-            {resource && displayResourceAlert ? (
-              <ResourceAlert
-                error={errorDetails}
-                rightReasons={rights.map((r) => r.delegationReason)}
-                resource={resource}
-              />
-            ) : (
-              <RightsPicker
-                heading={t('service_poa_details_page.add_user_modal.user_will_receive')}
-                rights={rights}
-                setRights={setRights}
-                accessToAllLabel={t('delegation_modal.actions.access_to_all')}
-                actionDescription={t('delegation_modal.actions.action_description')}
-                isLoading={isLoading}
-                errorDetails={errorDetails}
-                errorContext={`resource: ${resourceId}`}
-              />
-            )}
+            <RightsPicker
+              heading={t('service_poa_details_page.add_user_modal.user_will_receive')}
+              rights={rights}
+              setRights={setRights}
+              accessToAllLabel={t('delegation_modal.actions.access_to_all')}
+              actionDescription={t('delegation_modal.actions.action_description')}
+              isLoading={isLoading}
+              errorDetails={errorDetails}
+              errorContext={`resource: ${resourceId}`}
+            />
             <SubmitErrorAlert submitError={submitError} />
           </AddUserForm>
         )}

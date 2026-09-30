@@ -11,6 +11,10 @@ const openSnackbar = vi.fn();
 
 let delegations: unknown;
 let rightHolders: unknown;
+let delegableRights: {
+  rights: { delegable: boolean; delegationReason: string }[];
+  errorDetails: unknown;
+};
 
 // The list itself is covered by UserSearch's own tests; capture its props instead so the assertions
 // stay on what this section decides: which users it hands over, and what each action does.
@@ -71,6 +75,32 @@ vi.mock('@/rtk/features/connectionApi', () => ({
   ConnectionUserType: { Person: 'Person', Organization: 'Organisasjon' },
 }));
 
+// The rights and the delegation check have their own tests; what this section decides from them is
+// whether the service can be given to anyone at all.
+vi.mock('../common/RightsPicker/useDelegableRights', () => ({
+  useDelegableRights: () => ({ ...delegableRights, isLoading: false }),
+}));
+
+// Both have their own tests; what matters here is when the section shows them, and with what.
+vi.mock('../common/DelegationModal/SingleRights/ResourceAlert', () => ({
+  ResourceAlert: ({
+    rightReasons,
+    error,
+  }: {
+    rightReasons: string[];
+    error?: { status: string } | null;
+  }) => (
+    <div data-testid='resource-alert'>
+      {error ? `error ${error.status}` : rightReasons.join(',')}
+    </div>
+  ),
+}));
+
+vi.mock('../common/StatusSection/StatusSection', () => ({
+  StatusSection: ({ cannotDelegateHere }: { cannotDelegateHere?: boolean }) =>
+    cannotDelegateHere ? <div data-testid='cannot-delegate-here' /> : null,
+}));
+
 vi.mock('../common/RevokeConfirmation', () => ({
   // Runs the revoke straight away when redelegation is possible, mirroring useRevokeConfirmation.
   useRevokeConfirmation: () => ({
@@ -109,6 +139,13 @@ beforeEach(() => {
     isLoading: false,
     isFetching: false,
     isError: false,
+  };
+  delegableRights = {
+    rights: [
+      { delegable: true, delegationReason: '' },
+      { delegable: false, delegationReason: 'MissingRoleAccess' },
+    ],
+    errorDetails: null,
   };
   rightHolders = {
     data: [{ party: { id: 'per', name: 'Per Person', type: 'Person' }, roles: [] }],
@@ -245,5 +282,54 @@ describe('ServiceUsersSection', () => {
     await vi.waitFor(() =>
       expect(openSnackbar).toHaveBeenCalledWith(expect.objectContaining({ color: 'success' })),
     );
+  });
+
+  it('offers giving the service when the reportee may pass on at least one action', () => {
+    renderSection();
+
+    expect(userSearchProps.canDelegate).toBe(true);
+    expect(screen.queryByTestId('resource-alert')).not.toBeInTheDocument();
+  });
+
+  // UserSearch hides the add button, the inline delegate and the users without access when told the
+  // service cannot be given, so the section only has to say why.
+  it('explains why and hides the ways of giving it when no action can be passed on', () => {
+    delegableRights = {
+      rights: [
+        { delegable: false, delegationReason: 'MissingRoleAccess' },
+        { delegable: false, delegationReason: 'MissingRoleAccess' },
+      ],
+      errorDetails: null,
+    };
+    renderSection();
+
+    expect(userSearchProps.canDelegate).toBe(false);
+    expect(screen.getByTestId('resource-alert')).toHaveTextContent(
+      'MissingRoleAccess,MissingRoleAccess',
+    );
+  });
+
+  // Both are shown, as ResourceInfo does in the dialogs.
+  it('hides the ways of giving an undelegable service, and says so in both places', () => {
+    render(
+      <ServiceUsersSection
+        resource={{ identifier: 'res-1', title: 'Skattemelding', delegable: false } as never}
+        isLoading={false}
+      />,
+    );
+
+    expect(userSearchProps.canDelegate).toBe(false);
+    expect(screen.getByTestId('cannot-delegate-here')).toBeInTheDocument();
+    expect(screen.getByTestId('resource-alert')).toBeInTheDocument();
+  });
+
+  // The alert makes the failure visible on the page, so hiding the button does not disguise it as
+  // missing rights, and the dialog would only have shown the same error.
+  it('reports a failed check on the page instead of offering the service', () => {
+    delegableRights = { rights: [], errorDetails: { status: '500', time: 'now' } };
+    renderSection();
+
+    expect(userSearchProps.canDelegate).toBe(false);
+    expect(screen.getByTestId('resource-alert')).toHaveTextContent('error 500');
   });
 });
