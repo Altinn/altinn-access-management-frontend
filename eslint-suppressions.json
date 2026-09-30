@@ -264,21 +264,8 @@
       "count": 1
     }
   },
-  "src/features/amUI/InstanceDetailPage/AddUserModal.tsx": {
-    "@typescript-eslint/no-unsafe-assignment": {
-      "count": 4
-    },
-    "@typescript-eslint/no-unsafe-member-access": {
-      "count": 3
-    }
-  },
   "src/features/amUI/InstanceDetailPage/RequestInstanceAdminPackage/RequestModalBody.tsx": {
     "@typescript-eslint/no-misused-promises": {
-      "count": 2
-    }
-  },
-  "src/features/amUI/InstanceDetailPage/useInstanceRights.ts": {
-    "@typescript-eslint/no-unsafe-assignment": {
       "count": 2
     }
   },
@@ -602,11 +589,6 @@
       "count": 1
     }
   },
-  "src/features/amUI/maskinporten/AddSupplierButton.tsx": {
-    "@typescript-eslint/no-misused-promises": {
-      "count": 1
-    }
-  },
   "src/features/amUI/maskinporten/ConsumerPageContent.tsx": {
     "@typescript-eslint/no-floating-promises": {
       "count": 1
@@ -750,11 +732,6 @@
       "count": 2
     }
   },
-  "src/features/amUI/servicePoaDetailsPage/useServiceRights.ts": {
-    "react-hooks/set-state-in-effect": {
-      "count": 1
-    }
-  },
   "src/features/amUI/settings/EmailAddressFields.tsx": {
     "react-hooks/set-state-in-effect": {
       "count": 1
@@ -857,22 +834,6 @@
   },
   "src/features/amUI/userRightsPage/SingleRightsSection/SingleRightsSection.tsx": {
     "@typescript-eslint/no-misused-promises": {
-      "count": 1
-    }
-  },
-  "src/features/amUI/users/NewUserModal/AddAgentModal.tsx": {
-    "@typescript-eslint/no-misused-promises": {
-      "count": 1
-    },
-    "react-hooks/set-state-in-effect": {
-      "count": 1
-    }
-  },
-  "src/features/amUI/users/NewUserModal/NewUserModal.tsx": {
-    "@typescript-eslint/no-floating-promises": {
-      "count": 2
-    },
-    "react-hooks/set-state-in-effect": {
       "count": 1
     }
   },

@@ -23,3 +23,11 @@ export const getPersonIdentifierErrorKey = (identifier: string): string | null =
 
   return null;
 };
+
+export type PersonInput = { personIdentifier: string; lastName: string };
+
+/*** Whether the identity typed into the person fields can be submitted */
+export const isPersonInputValid = (value: PersonInput): boolean =>
+  value.personIdentifier.trim().length > 0 &&
+  getPersonIdentifierErrorKey(value.personIdentifier) === null &&
+  value.lastName.trim().length >= 1;
