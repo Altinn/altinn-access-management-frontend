@@ -1,11 +1,12 @@
 import { useMemo, useRef, useState } from 'react';
-import { DsParagraph } from '@altinn/altinn-components';
+import { DsParagraph, formatDisplayName } from '@altinn/altinn-components';
 import { useTranslation } from 'react-i18next';
 
 import { type ActionError } from '@/resources/hooks/useActionError';
 import { type AccessPackage } from '@/rtk/features/accessPackageApi';
 import { type Party } from '@/rtk/features/lookupApi';
 import { useGetRightHoldersQuery } from '@/rtk/features/connectionApi';
+import { useSnackbarOnIdle } from '@/resources/hooks/useSnackbarOnIdle';
 
 import UserSearch from '../common/UserSearch/UserSearch';
 import { useAccessPackageActions } from '../common/AccessPackageList/useAccessPackageActions';
@@ -16,7 +17,6 @@ import { mapPermissionsToUserSearchNodes } from '../common/UserSearch/permission
 import type { UserActionTarget } from '../common/UserSearch/types';
 import { usePartyRepresentation } from '../common/PartyRepresentationContext/PartyRepresentationContext';
 import { DelegationAction } from '../common/DelegationModal/EditModal';
-import { NewUserButton } from '../users/NewUserModal/NewUserModal';
 import {
   RestoreFocusFallback,
   useRestoreFocusContext,
@@ -25,6 +25,7 @@ import {
 
 import { PackageUserModal, mapUserToParty, type PackageUserModalHandle } from './PackageUserModal';
 import { DelegateErrorAlert } from './DelegateErrorAlert';
+import { AddPackageUserButton, type AddedPackageUser } from './AddPackageUserModal';
 import pageClasses from './PackagePoaDetailsPage.module.css';
 
 interface UsersTabProps {
@@ -46,9 +47,10 @@ export const UsersTab = ({ accessPackage, isLoading, isFetching }: UsersTabProps
   const requestFocusAfterListChange = useRestoreFocusOnDataChange(accessPackage?.permissions);
   const { canDelegatePackage, isLoading: isDelegationCheckLoading } =
     useAccessPackageDelegationCheck();
-  const canDelegate = accessPackage?.id
-    ? canDelegatePackage(accessPackage.id)?.result !== false
-    : true;
+  // Both are explained by the page header, so here they only hide the ways of giving the package.
+  const canDelegate =
+    accessPackage?.isAssignable !== false &&
+    (accessPackage?.id ? canDelegatePackage(accessPackage.id)?.result !== false : true);
 
   const [delegateActionError, setDelegateActionError] = useState<{
     error: ActionError;
@@ -84,6 +86,21 @@ export const UsersTab = ({ accessPackage, isLoading, isFetching }: UsersTabProps
     () => mapConnectionsToUserSearchNodes(indirectConnections),
     [indirectConnections],
   );
+
+  // The added user only shows up once the package refetches, so hold the confirmation until then and
+  // it arrives together with the row it is about.
+  const { queueSnackbar } = useSnackbarOnIdle({ isBusy: isFetching });
+
+  const handleUserAdded = (user: AddedPackageUser) =>
+    queueSnackbar(
+      t('access_packages.package_delegation_success', {
+        name: formatDisplayName({
+          fullName: user.name,
+          type: user.type === 'person' ? 'person' : 'company',
+        }),
+        accessPackage: accessPackage?.name,
+      }),
+    );
 
   const handleDelegateError = (
     _accessPackage: AccessPackage,
@@ -177,9 +194,9 @@ export const UsersTab = ({ accessPackage, isLoading, isFetching }: UsersTabProps
           }
           onDelegate={canDelegate ? handleInlineDelegate : undefined}
           AddUserButton={
-            <NewUserButton
-              variant='primary'
-              onComplete={handleOnDelegate}
+            <AddPackageUserButton
+              accessPackage={accessPackage}
+              onUserAdded={handleUserAdded}
             />
           }
           onRevoke={handleInlineRevoke}
