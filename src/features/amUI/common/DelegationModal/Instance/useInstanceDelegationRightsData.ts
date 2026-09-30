@@ -95,6 +95,7 @@ export const useInstanceDelegationRightsData = ({
     return {
       status: errorDetails?.status ?? (isRightsMetaEmpty ? 'empty response' : 'no status'),
       time: errorDetails?.time ?? new Date().toISOString(),
+      traceId: errorDetails?.traceId,
     };
   }, [isRightsMetaError, isRightsMetaEmpty, rightsMetaError]);
 

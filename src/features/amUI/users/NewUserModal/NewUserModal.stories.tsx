@@ -10,7 +10,7 @@ export default {
   component: NewUserButton,
   render: () => (
     <Provider store={store}>
-      <NewUserButton />
+      <NewUserButton variant='primary' />
     </Provider>
   ),
 } as Meta;

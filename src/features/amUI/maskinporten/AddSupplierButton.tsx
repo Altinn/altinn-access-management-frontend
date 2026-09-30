@@ -1,18 +1,16 @@
 import React, { useId, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { DsButton, DsDialog, DsHeading } from '@altinn/altinn-components';
+import { DsAlert, DsButton, DsDialog, DsHeading, DsParagraph } from '@altinn/altinn-components';
 import { PlusIcon } from '@navikt/aksel-icons';
-import type { FetchBaseQueryError } from '@reduxjs/toolkit/query';
-import type { SerializedError } from '@reduxjs/toolkit';
 
-import type { User } from '@/rtk/features/userInfoApi';
+import { getActionError } from '@/resources/hooks/useActionError';
 import { useAddMaskinportenSupplierMutation } from '@/rtk/features/maskinportenApi';
-import type { Organization } from '@/rtk/features/lookupApi';
+import type { User } from '@/rtk/features/userInfoApi';
 
-import { createErrorDetails } from '../common/TechnicalErrorParagraphs/TechnicalErrorParagraphs';
 import { usePartyRepresentation } from '../common/PartyRepresentationContext/PartyRepresentationContext';
-import { NewOrgContent } from '../users/NewUserModal/NewOrgContent';
-import classes from '../users/NewUserModal/NewUserModal.module.css';
+import { AddUserForm } from '../common/AddUserForm/AddUserForm';
+import type { Recipient } from '../common/AddUserForm/recipient';
+import { SubmitErrorAlert, type SubmitError } from '../common/AddUserForm/SubmitErrorAlert';
 
 interface AddSupplierButtonProps {
   party: string;
@@ -23,32 +21,47 @@ export const AddSupplierButton = ({ party, onComplete }: AddSupplierButtonProps)
   const { t } = useTranslation();
   const { actingParty } = usePartyRepresentation();
   const modalRef = useRef<HTMLDialogElement>(null);
-  const modalHeadingId = useId();
-  const [errorDetail, setErrorDetail] = useState<{ status: string; time: string } | null>(null);
-  const [addSupplier, { isLoading }] = useAddMaskinportenSupplierMutation();
+  const headingId = useId();
+  // jsdom's close() does not dispatch a close event, so this is not read off the dialog element.
+  const [isOpen, setIsOpen] = useState(false);
+  const [submitError, setSubmitError] = useState<SubmitError | null>(null);
+  const [addSupplier, { isLoading: isSubmitting }] = useAddMaskinportenSupplierMutation();
 
-  const handleAddSupplier = async (orgData: Organization) => {
-    setErrorDetail(null);
+  const close = () => {
+    setIsOpen(false);
+    setSubmitError(null);
+    modalRef.current?.close();
+  };
 
-    try {
-      await addSupplier({ party, supplier: orgData.orgNumber }).unwrap();
-      onComplete({
-        name: orgData.name,
-        type: 'organisasjon',
-        children: null,
-        id: orgData.partyUuid,
-        organizationIdentifier: orgData.orgNumber,
-      });
-    } catch (err) {
-      setErrorDetail(createErrorDetails(err as FetchBaseQueryError | SerializedError));
+  const handleAddSupplier = async (recipient: Recipient) => {
+    if (recipient.kind !== 'org') {
+      return;
     }
+    setSubmitError(null);
+    try {
+      await addSupplier({ party, supplier: recipient.organization.orgNumber }).unwrap();
+    } catch (error: unknown) {
+      setSubmitError({ error: getActionError(error), recipientKind: 'org' });
+      return;
+    }
+    close();
+    onComplete({
+      name: recipient.organization.name,
+      type: 'organisasjon',
+      children: null,
+      id: recipient.organization.partyUuid,
+      organizationIdentifier: recipient.organization.orgNumber,
+    });
   };
 
   return (
     <>
       <DsButton
         variant='secondary'
-        onClick={() => modalRef.current?.showModal()}
+        onClick={() => {
+          setIsOpen(true);
+          modalRef.current?.showModal();
+        }}
       >
         <PlusIcon aria-hidden='true' />
         {t('maskinporten_page.add_supplier_button')}
@@ -56,23 +69,42 @@ export const AddSupplierButton = ({ party, onComplete }: AddSupplierButtonProps)
       <DsDialog
         ref={modalRef}
         closedby='any'
-        aria-labelledby={modalHeadingId}
-        onClose={() => setErrorDetail(null)}
+        aria-labelledby={headingId}
+        onClose={close}
       >
-        <DsHeading
-          data-size='xs'
-          level={2}
-          className={classes.modalHeading}
-          id={modalHeadingId}
-        >
-          {t('maskinporten_page.add_supplier_button')}
-        </DsHeading>
-        <NewOrgContent
-          isLoading={isLoading}
-          addOrg={handleAddSupplier}
-          errorDetails={errorDetail}
-          ownOrgNumber={actingParty?.orgNumber}
-        />
+        {isOpen && (
+          <AddUserForm
+            heading={t('maskinporten_page.add_supplier_button')}
+            headingId={headingId}
+            recipientKinds={[
+              {
+                type: 'org',
+                submitLabel: t('new_user_modal.add_org_button'),
+                ownOrgNumber: actingParty?.orgNumber,
+                ownOrgWarning: (
+                  <DsAlert
+                    data-size='sm'
+                    data-color='warning'
+                  >
+                    <DsHeading
+                      data-size='xs'
+                      level={3}
+                    >
+                      {t('maskinporten_page.own_org_number_warning')}
+                    </DsHeading>
+                    <DsParagraph data-size='sm'>
+                      {t('maskinporten_page.own_org_number_warning_body')}
+                    </DsParagraph>
+                  </DsAlert>
+                ),
+              },
+            ]}
+            isSubmitting={isSubmitting}
+            onSubmit={(recipient) => void handleAddSupplier(recipient)}
+          >
+            <SubmitErrorAlert submitError={submitError} />
+          </AddUserForm>
+        )}
       </DsDialog>
     </>
   );

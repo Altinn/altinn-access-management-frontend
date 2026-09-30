@@ -1,48 +1,76 @@
 import React, { useId, useRef, useState } from 'react';
-import {
-  DsAlert,
-  DsButton,
-  DsDialog,
-  DsHeading,
-  DsParagraph,
-  DsTextfield,
-  ListItem,
-} from '@altinn/altinn-components';
-import { CheckmarkCircleIcon, PlusIcon } from '@navikt/aksel-icons';
 import { useTranslation } from 'react-i18next';
 import { useDispatch } from 'react-redux';
+import { DsButton, DsDialog } from '@altinn/altinn-components';
+import { PlusIcon } from '@navikt/aksel-icons';
 
+import { getActionError } from '@/resources/hooks/useActionError';
 import { connectionApi } from '@/rtk/features/connectionApi';
 import { useDelegateInstanceRightsMutation } from '@/rtk/features/instanceApi';
 
-import {
-  createErrorDetails,
-  TechnicalErrorParagraphs,
-} from '../common/TechnicalErrorParagraphs/TechnicalErrorParagraphs';
-import { RightChips } from '../common/DelegationModal/SingleRights/RightChips';
-import { getPersonIdentifierErrorKey } from '../common/personIdentifierUtils';
 import { usePartyRepresentation } from '../common/PartyRepresentationContext/PartyRepresentationContext';
-
-import { getRightsSummaryTitle, useInstanceRights } from './useInstanceRights';
-import classes from './AddUserModal.module.css';
+import { AddUserForm } from '../common/AddUserForm/AddUserForm';
+import type { Recipient } from '../common/AddUserForm/recipient';
+import { SubmitErrorAlert, type SubmitError } from '../common/AddUserForm/SubmitErrorAlert';
+import { RightsPicker } from '../common/RightsPicker/RightsPicker';
+import { useDelegableRights } from '../common/RightsPicker/useDelegableRights';
 
 interface AddUserButtonProps {
   resourceId: string;
   instanceUrn: string;
 }
 
-interface AddUserModalProps {
-  modalRef: React.RefObject<HTMLDialogElement | null>;
-  isOpen: boolean;
-  resourceId: string;
-  instanceUrn: string;
-  onClose: () => void;
-}
-
 export const AddUserButton = ({ resourceId, instanceUrn }: AddUserButtonProps) => {
-  const modalRef = useRef<HTMLDialogElement>(null);
-  const [isOpen, setIsOpen] = useState(false);
   const { t } = useTranslation();
+  const { actingParty } = usePartyRepresentation();
+  const dispatch = useDispatch();
+  const modalRef = useRef<HTMLDialogElement>(null);
+  const headingId = useId();
+  // jsdom's close() does not dispatch a close event, so this is not read off the dialog element.
+  const [isOpen, setIsOpen] = useState(false);
+  const [submitError, setSubmitError] = useState<SubmitError | null>(null);
+  const [delegateInstanceRights, { isLoading: isSubmitting }] = useDelegateInstanceRightsMutation();
+
+  const { rights, setRights, resetRights, isLoading, errorDetails } = useDelegableRights({
+    resourceId,
+    instanceUrn,
+    isEnabled: isOpen,
+  });
+
+  const directRightKeys = rights.filter((r) => r.checked).map((r) => r.rightKey);
+
+  const close = () => {
+    setIsOpen(false);
+    setSubmitError(null);
+    resetRights();
+    modalRef.current?.close();
+  };
+
+  const handleSubmit = async (recipient: Recipient) => {
+    if (recipient.kind !== 'person') {
+      return;
+    }
+    setSubmitError(null);
+    try {
+      await delegateInstanceRights({
+        party: actingParty?.partyUuid || '',
+        resource: resourceId,
+        instance: instanceUrn,
+        input: {
+          to: {
+            personIdentifier: recipient.personIdentifier,
+            lastName: recipient.lastName,
+          },
+          directRightKeys,
+        },
+      }).unwrap();
+    } catch (error: unknown) {
+      setSubmitError({ error: getActionError(error), recipientKind: 'person' });
+      return;
+    }
+    dispatch(connectionApi.util.invalidateTags(['Connections']));
+    close();
+  };
 
   return (
     <>
@@ -56,255 +84,37 @@ export const AddUserButton = ({ resourceId, instanceUrn }: AddUserButtonProps) =
         <PlusIcon aria-hidden='true' />
         {t('new_user_modal.trigger_button')}
       </DsButton>
-      <AddUserModal
-        modalRef={modalRef}
-        isOpen={isOpen}
-        resourceId={resourceId}
-        instanceUrn={instanceUrn}
-        onClose={() => setIsOpen(false)}
-      />
-    </>
-  );
-};
-
-const AddUserModal = ({
-  modalRef,
-  isOpen,
-  resourceId,
-  instanceUrn,
-  onClose,
-}: AddUserModalProps) => {
-  const { t } = useTranslation();
-  const headingId = useId();
-  const { actingParty } = usePartyRepresentation();
-  const dispatch = useDispatch();
-  const [delegateInstanceRights, { isLoading: isSubmitting }] = useDelegateInstanceRightsMutation();
-
-  const [personIdentifier, setPersonIdentifier] = useState('');
-  const [lastName, setLastName] = useState('');
-  const [personIdentifierError, setPersonIdentifierError] = useState<string | null>(null);
-  const [lastNameError, setLastNameError] = useState('');
-  const [rightsExpanded, setRightsExpanded] = useState(false);
-  const [submitErrorDetails, setSubmitErrorDetails] = useState<{
-    status: string;
-    time: string;
-    traceId?: string;
-  } | null>(null);
-
-  const {
-    rights,
-    setRights,
-    resetRights,
-    isLoading: isRightsLoading,
-    errorDetails: rightsErrorDetails,
-  } = useInstanceRights({ resourceId, instanceUrn, isOpen });
-
-  const resetForm = () => {
-    setPersonIdentifier('');
-    setLastName('');
-    setPersonIdentifierError(null);
-    setLastNameError('');
-    resetRights();
-    setRightsExpanded(false);
-    setSubmitErrorDetails(null);
-  };
-
-  const undelegableActions = rights.filter((r) => !r.delegable).map((r) => r.rightName);
-
-  const personIdentifierValidation = getPersonIdentifierErrorKey(personIdentifier);
-  const selectedRights = rights.filter((r) => r.checked).map((r) => r.rightKey);
-  const isLastNameValid = lastName.trim().length >= 1;
-  const isFormValid =
-    !!actingParty?.partyUuid &&
-    personIdentifier.trim().length > 0 &&
-    personIdentifierValidation === null &&
-    isLastNameValid &&
-    selectedRights.length > 0 &&
-    !isRightsLoading &&
-    !rightsErrorDetails;
-
-  const handleSubmit = () => {
-    setSubmitErrorDetails(null);
-
-    delegateInstanceRights({
-      party: actingParty?.partyUuid || '',
-      resource: resourceId,
-      instance: instanceUrn,
-      input: {
-        to: {
-          personIdentifier: personIdentifier.trim(),
-          lastName: lastName.trim(),
-        },
-        directRightKeys: selectedRights,
-      },
-    })
-      .unwrap()
-      .then(() => {
-        dispatch(connectionApi.util.invalidateTags(['Connections']));
-        modalRef.current?.close();
-      })
-      .catch((error: unknown) => {
-        const details = createErrorDetails(error);
-        setSubmitErrorDetails(
-          details ?? {
-            status: '500',
-            time: new Date().toISOString(),
-          },
-        );
-      });
-  };
-
-  return (
-    <DsDialog
-      ref={modalRef}
-      closedby='any'
-      aria-labelledby={headingId}
-      className={classes.modal}
-      onClose={() => {
-        resetForm();
-        onClose();
-      }}
-    >
-      <div className={classes.content}>
-        <DsHeading
-          data-size='xs'
-          level={2}
-          id={headingId}
-          className={classes.heading}
-        >
-          {t('instance_detail_page.add_user_modal.heading')}
-        </DsHeading>
-
-        {submitErrorDetails && (
-          <DsAlert data-color='danger'>
-            {submitErrorDetails.status === '400' ? (
-              <DsParagraph>{t('new_user_modal.not_found_error_person')}</DsParagraph>
-            ) : submitErrorDetails.status === '429' ? (
-              <DsParagraph>{t('new_user_modal.too_many_requests_error')}</DsParagraph>
-            ) : (
-              <>
-                <DsParagraph>{t('common.general_error_paragraph')}</DsParagraph>
-                <TechnicalErrorParagraphs
-                  status={submitErrorDetails.status}
-                  time={submitErrorDetails.time}
-                  traceId={submitErrorDetails.traceId}
-                />
-              </>
-            )}
-          </DsAlert>
+      <DsDialog
+        ref={modalRef}
+        closedby='any'
+        aria-labelledby={headingId}
+        onClose={close}
+      >
+        {isOpen && (
+          <AddUserForm
+            heading={t('instance_detail_page.add_user_modal.heading')}
+            headingId={headingId}
+            recipientKinds={[{ type: 'person', submitLabel: t('common.give_poa') }]}
+            isSubmitDisabled={
+              !actingParty?.partyUuid || directRightKeys.length === 0 || isLoading || !!errorDetails
+            }
+            isSubmitting={isSubmitting}
+            onSubmit={(recipient) => void handleSubmit(recipient)}
+          >
+            <RightsPicker
+              heading={t('instance_detail_page.add_user_modal.user_will_receive')}
+              rights={rights}
+              setRights={setRights}
+              accessToAllLabel={t('delegation_modal.instance_actions.access_to_all')}
+              actionDescription={t('delegation_modal.instance_actions.action_description')}
+              isLoading={isLoading}
+              errorDetails={errorDetails}
+              errorContext={`resource: ${resourceId} - instance: ${instanceUrn}`}
+            />
+            <SubmitErrorAlert submitError={submitError} />
+          </AddUserForm>
         )}
-
-        <div className={classes.fields}>
-          <DsTextfield
-            className={classes.textField}
-            label={t('new_user_modal.person_identifier')}
-            data-size='sm'
-            value={personIdentifier}
-            onChange={(e) => setPersonIdentifier(e.target.value)}
-            onBlur={() =>
-              setPersonIdentifierError(
-                personIdentifierValidation ? t(personIdentifierValidation) : null,
-              )
-            }
-            error={personIdentifierError}
-            disabled={isSubmitting}
-            onKeyDown={(event) => {
-              if (event.key === 'Enter' && !event.repeat && !isSubmitting && isFormValid) {
-                handleSubmit();
-              }
-            }}
-          />
-          <DsTextfield
-            className={classes.textField}
-            label={t('common.last_name')}
-            data-size='sm'
-            value={lastName}
-            onChange={(e) => setLastName(e.target.value)}
-            onBlur={() =>
-              setLastNameError(isLastNameValid ? '' : t('new_user_modal.last_name_format_error'))
-            }
-            error={lastNameError}
-            disabled={isSubmitting}
-            onKeyDown={(event) => {
-              if (event.key === 'Enter' && !event.repeat && !isSubmitting && isFormValid) {
-                handleSubmit();
-              }
-            }}
-          />
-        </div>
-
-        <div className={classes.rightsSection}>
-          <DsHeading
-            level={3}
-            data-size='xs'
-          >
-            {t('instance_detail_page.add_user_modal.user_will_receive')}
-          </DsHeading>
-
-          {rightsErrorDetails ? (
-            <DsAlert data-color='danger'>
-              <DsParagraph>{t('common.general_error_paragraph')}</DsParagraph>
-              <TechnicalErrorParagraphs
-                status={rightsErrorDetails.status}
-                time={rightsErrorDetails.time}
-                traceId={rightsErrorDetails.traceId}
-                additionalContext={`resource: ${resourceId} - instance: ${instanceUrn}`}
-              />
-            </DsAlert>
-          ) : (
-            <ListItem
-              loading={isRightsLoading}
-              icon={CheckmarkCircleIcon}
-              collapsible
-              size='md'
-              title={getRightsSummaryTitle(rights, t)}
-              onClick={() => setRightsExpanded(!rightsExpanded)}
-              expanded={rightsExpanded}
-              as='button'
-              containerAs='div'
-              border='solid'
-              shadow='none'
-            >
-              <div className={classes.rightExpandableContent}>
-                <DsParagraph>
-                  {t('delegation_modal.instance_actions.action_description')}
-                </DsParagraph>
-                <div className={classes.rightChips}>
-                  <RightChips
-                    rights={rights}
-                    setRights={setRights}
-                    editable
-                  />
-                </div>
-                {undelegableActions.length > 0 && (
-                  <div className={classes.undelegableSection}>
-                    <DsHeading
-                      level={5}
-                      data-size='2xs'
-                      className={classes.undelegableHeader}
-                    >
-                      {t('delegation_modal.actions.cannot_give_header')}
-                    </DsHeading>
-                    <div className={classes.undelegableActions}>
-                      {undelegableActions.join(', ')}
-                    </div>
-                  </div>
-                )}
-              </div>
-            </ListItem>
-          )}
-        </div>
-
-        <div className={classes.buttonRow}>
-          <DsButton
-            onClick={handleSubmit}
-            disabled={!isFormValid}
-            loading={isSubmitting}
-          >
-            {t('common.give_poa')}
-          </DsButton>
-        </div>
-      </div>
-    </DsDialog>
+      </DsDialog>
+    </>
   );
 };

@@ -22,6 +22,7 @@ vi.mock('react-i18next', () => ({
     t: (key: string, options?: Record<string, unknown>) =>
       options ? `${key} ${JSON.stringify(options)}` : key,
   }),
+  Trans: ({ i18nKey }: { i18nKey: string }) => i18nKey,
 }));
 
 vi.mock('../common/PartyRepresentationContext/PartyRepresentationContext', () => ({
@@ -45,6 +46,12 @@ vi.mock('@/rtk/features/userInfoApi', () => ({
     data: { name: 'Diskret Nær Tiger AS', organizationNumber: '310202398' },
   }),
   PartyType: { Person: 'Person', Organization: 'Organisasjon' },
+}));
+
+// Declared by useDelegableRights but skipped without an instanceUrn; a skipped hook still runs,
+// and an unmocked RTK hook throws without a store.
+vi.mock('@/rtk/features/instanceApi', () => ({
+  useInstanceDelegationCheckQuery: () => ({ data: undefined, isLoading: false, isError: false }),
 }));
 
 vi.mock('@/rtk/features/singleRights/singleRightsApi', () => ({
@@ -138,8 +145,7 @@ describe('AddServiceUserModal', () => {
       actionKeys: ['read', 'write'],
     });
     expect(dialog()?.open).toBe(false);
-    // Reported back so the page can confirm it; the dialog is closed by then, because a snackbar
-    // raised over an open dialog is not announced.
+    // Reported so the page can confirm it once the list it belongs to has reloaded.
     expect(onUserAdded).toHaveBeenCalledWith({ name: 'Medaljong', type: 'person' });
   });
 
@@ -171,6 +177,37 @@ describe('AddServiceUserModal', () => {
     expect(onUserAdded).toHaveBeenCalledWith({ name: 'Diskret Nær Tiger AS', type: 'org' });
   });
 
+  const foundOrg = {
+    data: { orgNumber: '310202398', name: 'Diskret Nær Tiger AS', partyUuid: 'org-uuid' },
+    isFetching: false,
+    isError: false,
+  };
+
+  const fillOrgNumber = async (value: string) => {
+    await userEvent.click(screen.getByRole('tab', { name: 'new_user_modal.organization' }));
+    await userEvent.type(screen.getByLabelText('common.org_number'), value);
+  };
+
+  // The shared lookup strips spaces, so a number typed in groups still reaches the 9 digit query.
+  it('ignores spaces typed into the org number', async () => {
+    organization = foundOrg;
+    await openModal();
+    await fillOrgNumber('310 202 398');
+
+    expect(screen.getByLabelText('common.org_number')).toHaveValue('310202398');
+    expect(screen.getByRole('button', { name: 'common.give_poa' })).toBeEnabled();
+  });
+
+  // isFetching, not isLoading: a second lookup leaves the first organisation in data while it runs.
+  it('will not submit an organisation while its lookup is still running', async () => {
+    organization = { ...foundOrg, isFetching: true };
+    await openModal();
+    await fillOrgNumber('310202398');
+
+    expect(screen.queryByText('Diskret Nær Tiger AS')).not.toBeInTheDocument();
+    expect(screen.getByRole('button', { name: 'common.give_poa' })).toBeDisabled();
+  });
+
   it('cannot submit before an identity is given', async () => {
     await openModal();
 
@@ -188,9 +225,10 @@ describe('AddServiceUserModal', () => {
   });
 
   it('does not delegate when adding the right holder fails', async () => {
-    addRightHolder.mockReturnValue({
-      unwrap: () => Promise.reject(Object.assign(new Error('Bad request'), { status: '400' })),
-    });
+    // RTK Query rejects with its own error shape rather than an Error, which is what the
+    // flows have to handle, so that is what these reproduce.
+    // eslint-disable-next-line @typescript-eslint/prefer-promise-reject-errors
+    addRightHolder.mockReturnValue({ unwrap: () => Promise.reject({ status: '400' }) });
     await openModal();
     await fillPerson();
     await submit();
@@ -203,7 +241,6 @@ describe('AddServiceUserModal', () => {
   // The right holder exists by the time the delegation runs, so a 400 there must not be reported
   // as "we found no such person".
   it('does not blame the person when the delegation fails', async () => {
-    // RTK Query rejects with its own shape rather than an Error, which is what this reproduces.
     // eslint-disable-next-line @typescript-eslint/prefer-promise-reject-errors
     delegateRights.mockReturnValue({ unwrap: () => Promise.reject('400') });
     await openModal();
@@ -211,22 +248,13 @@ describe('AddServiceUserModal', () => {
     await submit();
 
     expect(addRightHolder).toHaveBeenCalled();
-    expect(screen.queryByText('new_user_modal.not_found_error_person')).not.toBeInTheDocument();
     expect(await screen.findByText('common.general_error_paragraph')).toBeInTheDocument();
-  });
-
-  it('keeps the dialog open when the delegation itself fails', async () => {
-    delegateRights.mockReturnValue({ unwrap: () => Promise.reject(new Error('500')) });
-    await openModal();
-    await fillPerson();
-    await submit();
-
-    expect(addRightHolder).toHaveBeenCalled();
+    expect(screen.queryByText('new_user_modal.not_found_error_person')).not.toBeInTheDocument();
     expect(dialog()?.open).toBe(true);
   });
 
   // A picker with nothing pickable in it, over a button that can never be pressed, says nothing
-  // about why. These three cases hand over to ResourceAlert instead, as the other resource modals do.
+  // about why. These three hand over to ResourceAlert instead, as the other resource modals do.
   it('explains itself instead of offering an empty picker when no action is delegable', async () => {
     delegationCheck = {
       data: [
@@ -273,12 +301,17 @@ describe('AddServiceUserModal', () => {
     expect(screen.getByRole('button', { name: 'common.give_poa' })).toBeDisabled();
   });
 
-  it('does not report a user who never got the service', async () => {
-    delegateRights.mockReturnValue({ unwrap: () => Promise.reject(new Error('500')) });
+  it('keeps the dialog open when the delegation itself fails', async () => {
+    // RTK Query rejects with its own error shape rather than an Error, which is what the
+    // flows have to handle, so that is what these reproduce.
+    // eslint-disable-next-line @typescript-eslint/prefer-promise-reject-errors
+    delegateRights.mockReturnValue({ unwrap: () => Promise.reject('500') });
     await openModal();
     await fillPerson();
     await submit();
 
+    expect(addRightHolder).toHaveBeenCalled();
+    expect(dialog()?.open).toBe(true);
     expect(onUserAdded).not.toHaveBeenCalled();
   });
 });
