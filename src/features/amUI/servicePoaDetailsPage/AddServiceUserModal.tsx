@@ -381,7 +381,7 @@ const AddServiceUserModal = ({
           {resource && displayResourceAlert ? (
             <ResourceAlert
               error={rightsErrorDetails}
-              rightReasons={rights.map((r) => r.delegationReason)}
+              rightReasons={rights.flatMap((r) => r.delegationReasons)}
               resource={resource}
             />
           ) : (

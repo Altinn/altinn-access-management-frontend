@@ -436,7 +436,7 @@
     },
     "specific_rights": {
       "missing_role_message": "Du får ikke delegert hele tjenesten, fordi du mangler noen av rettighetene selv.",
-      "missing_srr_right_message": "{{reportee}} er ikke gitt tillatelse fra {{resourceOwner}} til å delegere hele tjenesten. Ta kontakt med dem dersom du ønsker å endre dette."
+      "access_list_message": "{{reportee}} er ikke gitt tillatelse fra {{resourceOwner}} til å delegere hele tjenesten. Ta kontakt med dem dersom du ønsker å endre dette."
     },
     "general_error": {
       "revoke_heading": "Kunne ikke slette fullmakt",
