@@ -13,12 +13,17 @@ import { Trans, useTranslation } from 'react-i18next';
 import { useDispatch } from 'react-redux';
 import { Link, useLocation, useNavigate } from 'react-router';
 
-import { amUIPath } from '@/routes/paths';
+import { amUIPath, GeneralPath } from '@/routes/paths';
 import { type Entity } from '@/dataObjects/dtos/Common';
 import { accessPackageApi } from '@/rtk/features/accessPackageApi';
 import { useRemoveRightHolderMutation } from '@/rtk/features/connectionApi';
 import { roleApi } from '@/rtk/features/roleApi';
-import { PartyType } from '@/rtk/features/userInfoApi';
+import {
+  PartyType,
+  useGetIsAdminQuery,
+  useGetReporteeListForAuthorizedUserQuery,
+} from '@/rtk/features/userInfoApi';
+import { getChangeReporteeAndRedirectUrl } from '@/resources/utils/changeReporteeUtils';
 
 import { LoadingAnimation } from '../LoadingAnimation/LoadingAnimation';
 import { handleSelectAccount } from '../PageLayoutWrapper/useHeader';
@@ -58,6 +63,7 @@ const nonDeletableReasonKeys: Record<NonDeletableReason, string> = {
   [GUARDIANSHIP_ROLE_REASON]: 'delete_user.non_deletable_reason_guardianship',
   [VIA_ROLE_REASON]: 'delete_user.non_deletable_reason_via_role',
 };
+const viaRoleSwitchKey = 'delete_user.non_deletable_reason_via_role_switch';
 
 type ReasonListItem = {
   key: string;
@@ -94,6 +100,10 @@ export const DeleteUserModalContent = ({
 
   const [deleteUser, { isLoading: isDeleteLoading, isError, error }] =
     useRemoveRightHolderMutation();
+  const { data: isAdmin } = useGetIsAdminQuery();
+  const { data: reporteeList } = useGetReporteeListForAuthorizedUserQuery(undefined, {
+    skip: isAdmin !== false,
+  });
 
   const {
     fromParty,
@@ -203,25 +213,42 @@ export const DeleteUserModalContent = ({
           },
         };
       }
-      return viaParties.map((viaParty) => ({
-        key: `${reason}-${viaParty.id}`,
-        i18nKey: nonDeletableReasonKeys[reason],
-        values: {
-          via_name: formatDisplayName({
-            fullName: viaParty.name || '',
-            type: String(viaParty.type).toLowerCase() === 'person' ? 'person' : 'company',
-            reverseNameOrder: false,
-          }),
-        },
-        components: {
-          viaLink: (
-            <Link
-              to={`/${amUIPath.Users}/${viaParty.id}`}
-              onClick={() => setDialogVisible(false)}
-            ></Link>
-          ),
-        },
-      }));
+      return viaParties.map((viaParty) => {
+        const viaName = formatDisplayName({
+          fullName: viaParty.name || '',
+          type: String(viaParty.type).toLowerCase() === 'person' ? 'person' : 'company',
+          reverseNameOrder: false,
+        });
+        const isViaMainUnit = !!reporteeList?.some(
+          (reportee) =>
+            reportee.partyUuid === viaParty.id &&
+            reportee.subunits?.some((subunit) => subunit.partyUuid === fromParty?.partyUuid),
+        );
+        const goTo = isViaMainUnit
+          ? window.location.href
+          : `${window.location.origin}${GeneralPath.BasePath}/${amUIPath.Reportees}/${fromParty?.partyUuid}`;
+        return {
+          key: `${reason}-${viaParty.id}`,
+          i18nKey: isAdmin ? nonDeletableReasonKeys[reason] : viaRoleSwitchKey,
+          values: {
+            via_name: isViaMainUnit ? `${viaName} (${t('common.mainunit_lowercase')})` : viaName,
+          },
+          components: {
+            viaLink: (
+              <Link
+                to={`/${amUIPath.Users}/${viaParty.id}`}
+                onClick={() => setDialogVisible(false)}
+              ></Link>
+            ),
+            switchLink: (
+              <Link
+                to={getChangeReporteeAndRedirectUrl(viaParty.id, goTo)}
+                reloadDocument
+              ></Link>
+            ),
+          },
+        };
+      });
     },
   );
 
