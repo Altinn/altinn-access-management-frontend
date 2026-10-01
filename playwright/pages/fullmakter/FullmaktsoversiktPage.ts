@@ -99,9 +99,19 @@ export class FullmaktsoversiktPage {
     });
   }
 
-  /** A service listed on a package's Tjenester tab. */
+  /** A named service on a package's Tjenester tab. */
   tjenesteRad(tjenesteNavn: string): Locator {
     return this.page.getByRole('button', { name: startsWith(tjenesteNavn) });
+  }
+
+  /**
+   * Every service row on a package's Tjenester tab.
+   *
+   * Used to assert the package lists services at all, without pinning a specific
+   * service name — the catalogue behind a package changes over time.
+   */
+  get tjenesteRader(): Locator {
+    return this.page.getByRole('listitem').getByRole('button');
   }
 
   async goToFullmakter() {

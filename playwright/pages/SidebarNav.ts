@@ -45,27 +45,21 @@ export class SidebarNav {
     this.consent = this.navLink(dict.sidebar.consent);
     this.clientAdministration = this.navLink(dict.sidebar.client_administration);
     this.settings = this.navLink(dict.sidebar.settings);
-    // Matched on the title alone because this item's aria-label gains a count
-    // suffix once the pending-request query resolves — "Forespørsler" becomes
-    // "Forespørsler (1 mottatt)". Name matching is substring by default, so the
-    // title covers both, and the locator is not racing that update.
+    // Not exact: this item's aria-label gains a count suffix once the
+    // pending-request query resolves — "Forespørsler" becomes "Forespørsler
+    // (1 mottatt)". Matching the title alone covers both, so the locator is not
+    // racing that update.
     this.requests = this.navLink(dict.sidebar.requests, { exact: false });
     this.myClients = this.navLink(dict.sidebar.your_clients);
-    // The Maskinporten label carries a soft hyphen for line breaking, and whether
-    // it survives into the accessible name depends on the component. Matching the
-    // part before it is a substring that holds either way. Written as an escape
-    // rather than the literal character, which is invisible in source.
+    // Not exact: the Maskinporten label carries a soft hyphen for line breaking,
+    // and whether it survives into the accessible name depends on the component.
+    // Matching the part before it holds either way. Written as an escape rather
+    // than the literal character, which is invisible in source.
     this.maskinporten = this.navLink(dict.sidebar.maskinporten.split(SOFT_HYPHEN)[0], {
       exact: false,
     });
   }
 
-  /**
-   * One sidebar item, by the accessible name of its link.
-   *
-   * Substring matching is deliberate: some labels carry a suffix (a pending
-   * count) that appears only after data loads.
-   */
   /**
    * One sidebar item, by the accessible name of its link.
    *

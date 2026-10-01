@@ -18,7 +18,6 @@ import { EnduserConnection } from '../../../api-requests/EnduserConnection';
 const ACTORS = {
   oversikt: {
     virksomhet: { pid: '06876299923', org: '314241363', orgName: 'UNGT LAV TIGER AS' },
-    mottaker: { pid: '22871249036', navn: 'Intrikat Anarkist' },
   },
   pakkensBrukere: {
     virksomhet: { pid: '25887399541', org: '214242192', orgName: 'FREDFULL SUNN TIGER AS' },
@@ -51,17 +50,10 @@ test.describe('Fullmaktsoversikt', () => {
   const connections = new EnduserConnection();
 
   test.describe('oversikt', () => {
-    const { virksomhet, mottaker } = ACTORS.oversikt;
+    const { virksomhet } = ACTORS.oversikt;
 
-    test.beforeEach(async () => {
-      await connections.addConnectionAndPackagesToUser(
-        virksomhet.pid,
-        virksomhet.org,
-        mottaker.pid,
-        [PAKKE.urn],
-      );
-    });
-
+    // No setup: the overview lists every access package regardless of what has
+    // been delegated, and nothing here asserts on a recipient.
     test('oversikten viser tilgangspakker og nedlastingsvalg', async ({
       fullmaktsoversiktPage,
       login,
@@ -81,14 +73,6 @@ test.describe('Fullmaktsoversikt', () => {
         await fullmaktsoversiktPage.pakkeSok.fill(PAKKE.navn);
         await expect(fullmaktsoversiktPage.pakkeLenke(PAKKE.navn).first()).toBeVisible();
       });
-    });
-
-    test.afterEach(async () => {
-      try {
-        await connections.deleteConnection(virksomhet.pid, virksomhet.org, [mottaker.pid]);
-      } catch (error) {
-        console.error('Cleanup: Failed to delete connection:', error);
-      }
     });
   });
 
@@ -199,9 +183,7 @@ test.describe('Fullmaktsoversikt', () => {
       await test.step('Tjenestefanen lister minst én tjeneste', async () => {
         await fullmaktsoversiktPage.goToTjenesterFane();
         await expect(fullmaktsoversiktPage.tjenesteSok).toBeVisible();
-        await expect(
-          fullmaktsoversiktPage.page.getByRole('listitem').getByRole('button').first(),
-        ).toBeVisible();
+        await expect(fullmaktsoversiktPage.tjenesteRader.first()).toBeVisible();
       });
     });
   });
@@ -210,6 +192,13 @@ test.describe('Fullmaktsoversikt', () => {
     const { virksomhet, bruker } = ACTORS.utenTilgang;
 
     test.beforeEach(async () => {
+      // Clear any leftover from an earlier failed run first — addConnection
+      // fails if the connection is already there.
+      try {
+        await connections.deleteConnection(virksomhet.pid, virksomhet.org, [bruker.pid]);
+      } catch {
+        /* not connected — nothing to clean */
+      }
       // A plain right-holder: may represent the organisation, but is not admin.
       await connections.addConnection(virksomhet.pid, virksomhet.org, bruker.pid);
     });
