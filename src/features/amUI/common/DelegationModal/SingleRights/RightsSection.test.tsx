@@ -26,7 +26,7 @@ const right = (overrides: Partial<ChipRight> & { rightKey: string }): ChipRight 
   delegable: true,
   checked: true,
   delegated: false,
-  delegationReason: '',
+  delegationReasons: [],
   ...overrides,
 });
 

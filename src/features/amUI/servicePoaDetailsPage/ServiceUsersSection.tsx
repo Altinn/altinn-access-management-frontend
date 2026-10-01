@@ -210,7 +210,7 @@ export const ServiceUsersSection = ({ resource, isLoading }: ServiceUsersSection
         <ResourceAlert
           resource={resource}
           error={rightsErrorDetails}
-          rightReasons={rights.map((r) => r.delegationReason)}
+          rightReasons={rights.flatMap((r) => r.delegationReasons)}
         />
       )}
       <PageDivider className={classes.divider} />

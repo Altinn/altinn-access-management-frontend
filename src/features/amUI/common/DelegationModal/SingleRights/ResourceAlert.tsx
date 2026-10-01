@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next';
 import { DsAlert, DsParagraph, DsHeading, formatDisplayName } from '@altinn/altinn-components';
 
 import type { ServiceResource } from '@/rtk/features/singleRights/singleRightsApi';
-import { ErrorCode } from '@/resources/utils/errorCodeUtils';
+import { isAccessListFailure } from '@/resources/utils/errorCodeUtils';
 import { useGetReporteeQuery } from '@/rtk/features/userInfoApi';
 import { TechnicalErrorParagraphs } from '@/features/amUI/common/TechnicalErrorParagraphs/TechnicalErrorParagraphs';
 import { StatusMessageForScreenReader } from '@/components/StatusMessageForScreenReader/StatusMessageForScreenReader';
@@ -63,13 +63,7 @@ export const ResourceAlert = ({
       />
     );
   } else if (rightReasons) {
-    if (
-      rightReasons.every(
-        (reason) =>
-          reason === ErrorCode.MissingSrrRightAccess ||
-          reason === ErrorCode.AccessListValidationFail,
-      )
-    ) {
+    if (isAccessListFailure(rightReasons)) {
       headingText = t('delegation_modal.service_error.general_heading');
       content = (
         <DsParagraph>
