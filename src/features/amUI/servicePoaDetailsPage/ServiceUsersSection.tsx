@@ -120,6 +120,9 @@ export const ServiceUsersSection = ({ resource, isLoading }: ServiceUsersSection
     (rights.length > 0 && !rights.some((r) => r.delegable));
   const canDelegate = !displayResourceAlert;
 
+  const hasDelegableRights = rights.some((r) => r.delegable);
+  const showMissingRightsStatus = rights.length > 0 && !hasDelegableRights;
+
   const [revokeResource, { isLoading: isRevoking }] = useRevokeResourceMutation();
   const { canRedelegateResource } = useCanRedelegateResource();
   const { confirmRevoke, revokeConfirmationDialog } = useRevokeConfirmation();
@@ -205,7 +208,12 @@ export const ServiceUsersSection = ({ resource, isLoading }: ServiceUsersSection
 
   return (
     <>
-      <StatusSection cannotDelegateHere={cannotDelegateHere} />
+      <StatusSection
+        cannotDelegateHere={cannotDelegateHere}
+        showDelegationCheckWarning={showMissingRightsStatus}
+      />
+      {resource?.description && <DsParagraph>{resource.description}</DsParagraph>}
+      {resource?.rightDescription && <DsParagraph>{resource.rightDescription}</DsParagraph>}
       {resource && displayResourceAlert && (
         <ResourceAlert
           resource={resource}
