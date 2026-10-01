@@ -154,7 +154,7 @@ export const AddServiceUserButton = ({ resource, onUserAdded }: AddServiceUserBu
             {resource && displayResourceAlert ? (
               <ResourceAlert
                 error={errorDetails}
-                rightReasons={rights.map((r) => r.delegationReason)}
+                rightReasons={rights.flatMap((r) => r.delegationReasons)}
                 resource={resource}
               />
             ) : (

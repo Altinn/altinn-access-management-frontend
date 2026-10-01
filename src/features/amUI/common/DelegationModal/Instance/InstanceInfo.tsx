@@ -233,7 +233,7 @@ export const InstanceInfo = ({
             {displayResourceAlert ? (
               <ResourceAlert
                 error={technicalErrorDetails}
-                rightReasons={rights.map((r) => r.delegationReason)}
+                rightReasons={rights.flatMap((r) => r.delegationReasons)}
                 resource={resource}
                 className={classes.resourceAlert}
               />
