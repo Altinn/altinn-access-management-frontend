@@ -1064,6 +1064,9 @@
     },
     "services_tab": {
       "no_resources": "Denne pakken inkluderer ingen tjenester"
+    },
+    "add_user_modal": {
+      "heading": "Gi fullmakt til ny bruker"
     }
   },
   "service_poa_details_page": {
