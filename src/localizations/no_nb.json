@@ -115,10 +115,8 @@
     "too_many_subunits_warning": "Denne virksomheten har for mange underenheter til å inkludere dem i nedlastingen. Dette er noe vi jobber med å løse, men for nå må du laste ned hver underenhet for seg hvis du ønsker denne informasjonen."
   },
   "info_banner": {
-    "info": "19. juni skrus gamle Altinn av.",
-    "info_new": "Altinn er fornyet.",
-    "link": "Dette må du passe på.",
-    "link_new": "Slik gir du nye fullmakter og tilganger."
+    "info": "Altinn er fornyet.",
+    "link": "Slik gir du nye fullmakter og tilganger."
   },
   "error_page": {
     "page_title": "Feilside - Altinn",
