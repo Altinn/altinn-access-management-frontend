@@ -12,7 +12,7 @@ const openSnackbar = vi.fn();
 let delegations: unknown;
 let rightHolders: unknown;
 let delegableRights: {
-  rights: { delegable: boolean; delegationReason: string }[];
+  rights: { delegable: boolean; delegationReasons: string[] }[];
   errorDetails: unknown;
 };
 
@@ -142,8 +142,8 @@ beforeEach(() => {
   };
   delegableRights = {
     rights: [
-      { delegable: true, delegationReason: '' },
-      { delegable: false, delegationReason: 'MissingRoleAccess' },
+      { delegable: true, delegationReasons: [] },
+      { delegable: false, delegationReasons: ['MissingRoleAccess'] },
     ],
     errorDetails: null,
   };
@@ -296,8 +296,8 @@ describe('ServiceUsersSection', () => {
   it('explains why and hides the ways of giving it when no action can be passed on', () => {
     delegableRights = {
       rights: [
-        { delegable: false, delegationReason: 'MissingRoleAccess' },
-        { delegable: false, delegationReason: 'MissingRoleAccess' },
+        { delegable: false, delegationReasons: ['MissingRoleAccess'] },
+        { delegable: false, delegationReasons: ['MissingRoleAccess'] },
       ],
       errorDetails: null,
     };

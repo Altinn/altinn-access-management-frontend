@@ -114,12 +114,11 @@ export const ServiceUsersSection = ({ resource, isLoading }: ServiceUsersSection
   } = useDelegableRights({ resourceId, isEnabled: !!resource });
   const cannotDelegateHere = resource?.delegable === false;
   const hasDelegableRights = rights.some((r) => r.delegable);
+  const showMissingRightsStatus = rights.length > 0 && !hasDelegableRights;
   // An undelegable service gets both the status section and the alert, as in ResourceInfo.
   const displayResourceAlert =
-    cannotDelegateHere || !!rightsErrorDetails || (rights.length > 0 && !hasDelegableRights);
+    cannotDelegateHere || !!rightsErrorDetails || showMissingRightsStatus;
   const canDelegate = !displayResourceAlert;
-
-  const showMissingRightsStatus = rights.length > 0 && !hasDelegableRights;
 
   const [revokeResource, { isLoading: isRevoking }] = useRevokeResourceMutation();
   const { canRedelegateResource } = useCanRedelegateResource();
