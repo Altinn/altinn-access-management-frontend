@@ -78,6 +78,7 @@ export const PackageUserModal = forwardRef<PackageUserModalHandle, PackageUserMo
         // The error is about this user, even if the dialog was opened on someone else meanwhile.
         setSelectedUser(user);
         setActionError(error);
+        setActionSuccess(false);
         if (!dialogRef.current?.open) {
           dialogRef.current?.showModal();
         }
