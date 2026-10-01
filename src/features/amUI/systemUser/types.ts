@@ -69,7 +69,9 @@ export interface AgentDelegationCustomer {
   id: string;
   name: string;
   orgNo: string;
-  unitType?: string;
+  variant?: string;
+  type?: string;
+  isDeleted?: boolean;
   access: {
     role: string;
     packages: string[];

@@ -4,8 +4,11 @@ using System.Text.Json;
 using Altinn.AccessManagement.UI.Core.ClientInterfaces;
 using Altinn.AccessManagement.UI.Core.Extensions;
 using Altinn.AccessManagement.UI.Core.Helpers;
+using Altinn.AccessManagement.UI.Core.Models.ClientDelegation;
+using Altinn.AccessManagement.UI.Core.Models.Common;
 using Altinn.AccessManagement.UI.Core.Models.SystemUser;
 using Altinn.AccessManagement.UI.Integration.Configuration;
+using Altinn.AccessManagement.UI.Integration.Util;
 using Altinn.Authorization.ProblemDetails;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
@@ -232,27 +235,75 @@ namespace Altinn.AccessManagement.UI.Integration.Clients
         /// <inheritdoc/>
         public async Task<Result<List<Customer>>> GetClients(int partyId, Guid facilitatorId, List<string> accessPackages, CancellationToken cancellationToken)
         {
-            try
+            bool useV2 = true;
+            if (useV2)
             {
-                string packageQuery = accessPackages.Aggregate(string.Empty, (acc, accessPackage) => acc + $"&packages={accessPackage}");
-                string token = JwtTokenUtil.GetTokenFromContext(_httpContextAccessor.HttpContext, _platformSettings.JwtCookieName);
-                string endpointUrl = $"systemuser/agent/{partyId}/clients?facilitator={facilitatorId}{packageQuery}";
-
-                HttpResponseMessage response = await _httpClient.GetAsync(token, endpointUrl, cancellationToken);
-                string responseContent = await response.Content.ReadAsStringAsync(cancellationToken);
-                
-                if (response.IsSuccessStatusCode)
+                try
                 {
-                    return JsonSerializer.Deserialize<List<Customer>>(responseContent, _jsonSerializerOptions);
-                }
+                    string packageQuery = accessPackages.Aggregate(string.Empty, (acc, accessPackage) => acc + $"&packages={accessPackage}");
+                    string token = JwtTokenUtil.GetTokenFromContext(_httpContextAccessor.HttpContext, _platformSettings.JwtCookieName);
+                    string endpointUrl = $"https://platform.at23.altinn.cloud/accessmanagement/api/v2/enduser/clientdelegations/clients?party={facilitatorId}&match=all";
 
-                _logger.LogError("AccessManagement.UI // SystemUserClient // GetClients // Unexpected HttpStatusCode: {StatusCode}\n {responseBody}", response.StatusCode, responseContent);
-                return ProblemMapper.MapToAuthUiError(responseContent, response.StatusCode);
+                    HttpResponseMessage response = await _httpClient.GetAsync(token, endpointUrl, cancellationToken);
+                    string responseContent = await response.Content.ReadAsStringAsync(cancellationToken);
+                    if (response.IsSuccessStatusCode)
+                    {
+                        PaginatedResult<ClientDelegation> clients = await ClientUtils.DeserializeIfSuccessfullStatusCode<PaginatedResult<ClientDelegation>>(response, _logger, "ClientDelegationClientV2.GetClients");
+                        return clients.Items.Select(x =>
+                        {
+                            return new Customer()
+                            {
+                                PartyUuid = x.Client.Id,
+                                DisplayName = x.Client.Name,
+                                OrganizationIdentifier = x.Client.OrganizationIdentifier,
+                                Type = x.Client.Type,
+                                Variant = x.Client.Variant,
+                                IsDeleted = x.Client.IsDeleted,
+                                Access = x.Access.Select(y =>
+                                {
+                                    return new ClientRoleAccessPackages()
+                                    {
+                                        Packages = y.Packages.Select(p => p.Urn).ToArray(),
+                                        Role = y.Role.Urn
+                                    };
+                                }).ToList()
+                            };
+                        }).ToList();
+                    }
+
+                    _logger.LogError("AccessManagement.UI // SystemUserClient // GetClients // Unexpected HttpStatusCode: {StatusCode}\n {responseBody}", response.StatusCode, responseContent);
+                    return ProblemMapper.MapToAuthUiError(responseContent, response.StatusCode);
+                }
+                catch (Exception ex)
+                {
+                    _logger.LogError(ex, "AccessManagement.UI // SystemUserClient // GetClients // Exception");
+                    throw;
+                }
             }
-            catch (Exception ex)
+            else 
             {
-                _logger.LogError(ex, "AccessManagement.UI // SystemUserClient // GetClients // Exception");
-                throw;
+                try
+                {
+                    string packageQuery = accessPackages.Aggregate(string.Empty, (acc, accessPackage) => acc + $"&packages={accessPackage}");
+                    string token = JwtTokenUtil.GetTokenFromContext(_httpContextAccessor.HttpContext, _platformSettings.JwtCookieName);
+                    string endpointUrl = $"systemuser/agent/{partyId}/clients?facilitator={facilitatorId}{packageQuery}";
+
+                    HttpResponseMessage response = await _httpClient.GetAsync(token, endpointUrl, cancellationToken);
+                    string responseContent = await response.Content.ReadAsStringAsync(cancellationToken);
+                    
+                    if (response.IsSuccessStatusCode)
+                    {
+                        return JsonSerializer.Deserialize<List<Customer>>(responseContent, _jsonSerializerOptions);
+                    }
+
+                    _logger.LogError("AccessManagement.UI // SystemUserClient // GetClients // Unexpected HttpStatusCode: {StatusCode}\n {responseBody}", response.StatusCode, responseContent);
+                    return ProblemMapper.MapToAuthUiError(responseContent, response.StatusCode);
+                }
+                catch (Exception ex)
+                {
+                    _logger.LogError(ex, "AccessManagement.UI // SystemUserClient // GetClients // Exception");
+                    throw;
+                }
             }
         }
 

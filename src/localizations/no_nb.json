@@ -840,7 +840,9 @@
     "add_own_organization": "Legg til din virksomhet",
     "add_own_organization_error": "Kunne ikke legge til din virksomhet",
     "remove_own_organization_error": "Kunne ikke fjerne din virksomhet",
-    "user_is_not_client_admin": "Kun klientadministratorer kan administrere klienter."
+    "user_is_not_client_admin": "Kun klientadministratorer kan administrere klienter.",
+    "cannot_add_customer": "Kan ikke legge til klient",
+    "cannot_add_customer_missing_packages": "Denne klienten har ikke gitt {{companyName}} alle nødvendige fullmakter for at den kan knyttes som klient til denne systemtilgangen. Fullmakt til følgende tilgangspakker mangler:"
   },
   "systemuser_delegation_errors": {
     "01_rights_not_found_or_not_delegable": "En eller flere tjenester eksisterer ikke, eller er ikke delegerbare.",

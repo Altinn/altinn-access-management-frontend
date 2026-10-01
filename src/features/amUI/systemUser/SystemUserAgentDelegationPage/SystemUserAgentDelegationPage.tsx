@@ -143,7 +143,7 @@ export const SystemUserAgentDelegationPage = (): React.ReactNode => {
           {systemUser && customers && agentDelegations && !isLoading && (
             <SystemUserAgentDelegationPageContent
               systemUser={systemUser}
-              customers={customers}
+              customers={customers.filter((c) => c.type !== 'Person')}
               existingAgentDelegations={agentDelegations}
             />
           )}

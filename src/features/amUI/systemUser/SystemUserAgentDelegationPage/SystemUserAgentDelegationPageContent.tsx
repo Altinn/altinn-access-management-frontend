@@ -130,7 +130,10 @@ export const SystemUserAgentDelegationPageContent = ({
 
     const unAssignedCustomers = customers.filter((customer) => {
       const isAssigned = delegations?.find((x) => x.customerId === customer.id);
-      return !isAssigned;
+      const hasAllAccessPackages = systemUser.accessPackages.every((p) =>
+        customer.access.some((a) => a.packages.includes(p.urn)),
+      );
+      return !isAssigned && hasAllAccessPackages;
     });
 
     setAddAllState({
@@ -301,6 +304,8 @@ export const SystemUserAgentDelegationPageContent = ({
             <>
               <CustomerList
                 list={customers}
+                systemUser={systemUser}
+                reporteeName={reporteeName}
                 delegations={delegations}
                 loadingIds={loadingIds}
                 errorIds={errorIds}

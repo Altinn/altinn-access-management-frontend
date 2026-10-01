@@ -7,15 +7,18 @@ import {
   ListItem,
   DsCheckbox,
   Badge,
+  DsPopover,
+  DsListUnordered,
+  DsListItem,
 } from '@altinn/altinn-components';
-import { MinusCircleIcon, PlusCircleIcon } from '@navikt/aksel-icons';
+import { InformationSquareIcon, MinusCircleIcon, PlusCircleIcon } from '@navikt/aksel-icons';
 import { useTranslation } from 'react-i18next';
 
 import { AmPagination } from '@/components/Paginering';
 import { formatOrgNr, isSubUnitByType, matchesOrgNr } from '@/resources/utils/reporteeUtils';
 import { useIsMobileOrSmaller } from '@/resources/utils/screensizeUtils';
 
-import type { AgentDelegation, AgentDelegationCustomer } from '../types';
+import type { AgentDelegation, AgentDelegationCustomer, SystemUser } from '../types';
 
 import classes from './CustomerList.module.css';
 
@@ -47,6 +50,8 @@ interface CustomerListProps {
   onRemoveCustomer?: (delegationToRemove: AgentDelegation, customerName: string) => void;
   onAddAllCustomers?: () => void;
   selfButton?: React.ReactNode;
+  systemUser?: SystemUser;
+  reporteeName?: string;
   children?: React.ReactNode;
 }
 
@@ -59,6 +64,8 @@ export const CustomerList = ({
   onRemoveCustomer,
   onAddAllCustomers,
   selfButton,
+  systemUser,
+  reporteeName,
   children,
 }: CustomerListProps) => {
   const { t } = useTranslation();
@@ -131,7 +138,8 @@ export const CustomerList = ({
             icon={{
               type: 'company',
               name: customer.name,
-              isParent: !isSubUnitByType(customer.unitType),
+              isParent: !isSubUnitByType(customer.variant),
+              isDeleted: customer.isDeleted,
             }}
             title={{ children: customer.name, as: 'div' }}
             description={`${t('common.org_nr')} ${formatOrgNr(customer.orgNo)}`}
@@ -146,6 +154,8 @@ export const CustomerList = ({
                 isError={errorIds?.some((x) => x === customer.id)}
                 onRemoveCustomer={onRemoveCustomer}
                 onAddCustomer={onAddCustomer}
+                systemUser={systemUser}
+                reporteeName={reporteeName}
                 selfButton={selfButton}
               />
             }
@@ -174,6 +184,8 @@ interface ListControlsProps {
   onRemoveCustomer?: (delegationToRemove: AgentDelegation, customerName: string) => void;
   onAddCustomer?: (customer: AgentDelegationCustomer) => void;
   selfButton?: React.ReactNode;
+  systemUser?: SystemUser;
+  reporteeName?: string;
 }
 const ListControls = ({
   customer,
@@ -183,9 +195,17 @@ const ListControls = ({
   onRemoveCustomer,
   onAddCustomer,
   selfButton,
+  systemUser,
+  reporteeName,
 }: ListControlsProps): React.ReactNode => {
   const { t } = useTranslation();
   const isSmall = useIsMobileOrSmaller();
+
+  const allAccessPackageUrns = customer.access.flatMap((a) => a.packages);
+  const missingAccessPackages =
+    systemUser?.accessPackages.filter((p) => !allAccessPackageUrns?.some((ap) => ap === p.urn)) ??
+    [];
+  const isMissingAccessPackage = missingAccessPackages.length > 0 && !customer.isSelfOrg;
 
   return (
     <div className={classes.listControls}>
@@ -201,11 +221,36 @@ const ListControls = ({
           </DsValidationMessage>
         )}
       </div>
-      {(onRemoveCustomer || onAddCustomer) && (
+      {isMissingAccessPackage && (
+        <>
+          <DsPopover.TriggerContext>
+            <DsPopover.Trigger
+              variant='tertiary'
+              data-size='sm'
+              aria-label={t('systemuser_agent_delegation.cannot_add_customer')}
+            >
+              <InformationSquareIcon aria-hidden='true' />
+              {!isSmall && t('systemuser_agent_delegation.cannot_add_customer')}
+            </DsPopover.Trigger>
+            <DsPopover className={classes.popover}>
+              {t('systemuser_agent_delegation.cannot_add_customer_missing_packages', {
+                companyName: reporteeName,
+              })}
+              <DsListUnordered className={classes.popoverList}>
+                {missingAccessPackages.map((item) => {
+                  return <DsListItem key={item.urn}>{item.name}</DsListItem>;
+                })}
+              </DsListUnordered>
+            </DsPopover>
+          </DsPopover.TriggerContext>
+          {!isSmall && <div className={classes.notAddableClient} />}
+        </>
+      )}
+      {!isMissingAccessPackage && (onRemoveCustomer || onAddCustomer) && (
         <DsButton
           variant='tertiary'
           data-size='sm'
-          data-color={delegation ? 'danger' : 'primary'}
+          data-color={delegation ? 'danger' : 'info'}
           aria-label={t(
             delegation
               ? 'systemuser_agent_delegation.remove_from_system_user_aria'

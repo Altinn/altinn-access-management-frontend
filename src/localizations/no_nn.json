@@ -839,7 +839,9 @@
     "add_own_organization": "Legg til verksemda di",
     "add_own_organization_error": "Kunne ikkje legge til verksemda di",
     "remove_own_organization_error": "Kunne ikkje fjerne verksemda di",
-    "user_is_not_client_admin": "Kun klientadministratorar kan administrere klientar."
+    "user_is_not_client_admin": "Kun klientadministratorar kan administrere klientar.",
+    "cannot_add_customer": "Kan ikkje legge til klient",
+    "cannot_add_customer_missing_packages": "Denne klienten har ikkje gitt {{companyName}} alle nødvendige fullmakter for at han kan knytast som klient til denne systemtilgangen. Fullmakt til følgjande tilgangspakkar manglar:"
   },
   "systemuser_delegation_errors": {
     "01_rights_not_found_or_not_delegable": "Ei eller fleire tenester finst ikkje, eller kan ikkje delegerast.",

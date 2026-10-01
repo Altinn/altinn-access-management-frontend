@@ -21,9 +21,14 @@ namespace Altinn.AccessManagement.UI.Core.Models.SystemUser
         public required string OrganizationIdentifier { get; set; }
 
         /// <summary>
+        /// Gets or sets the variant/subtype of the party.
+        /// </summary>
+        public string Variant { get; set; }
+
+        /// <summary>
         /// Gets or sets the unit type if the party is an organization
         /// </summary>
-        public string UnitType { get; set; }
+        public string Type { get; set; }
 
         /// <summary>
         /// Gets or sets a value indicating whether the party is deleted

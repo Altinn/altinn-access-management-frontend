@@ -29,6 +29,18 @@
   gap: var(--ds-size-2);
 }
 
+.popover {
+  white-space: normal;
+}
+
+.notAddableClient {
+  width: 16rem;
+}
+
+.popoverList {
+  margin-top: 1rem;
+}
+
 @media only screen and (max-width: 769px) {
   .listControls {
     white-space: pre-line;
