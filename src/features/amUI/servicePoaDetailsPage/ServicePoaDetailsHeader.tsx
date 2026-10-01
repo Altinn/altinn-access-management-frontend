@@ -23,6 +23,9 @@ export const ServicePoaDetailsHeader = ({ resource, isLoading }: ServicePoaDetai
         level={1}
       />
       {resource.description && <DsParagraph data-size='sm'>{resource.description}</DsParagraph>}
+      {resource.rightDescription && (
+        <DsParagraph data-size='sm'>{resource.rightDescription}</DsParagraph>
+      )}
     </div>
   );
 };

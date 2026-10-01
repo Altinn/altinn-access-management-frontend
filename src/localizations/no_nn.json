@@ -428,7 +428,7 @@
     },
     "specific_rights": {
       "missing_role_message": "Du får ikkje delegert heile tenesta, fordi du manglar nokre av rettane sjølv.",
-      "missing_srr_right_message": "{{reportee}} har ikkje fått løyve frå {{resourceOwner}} til å delegere heile tenesta. Ta kontakt med dei dersom du ønsker å endre dette."
+      "access_list_message": "{{reportee}} har ikkje fått løyve frå {{resourceOwner}} til å delegere heile tenesta. Ta kontakt med dei dersom du ønsker å endre dette."
     },
     "technical_error_message": {
       "heading": "Oi! Noko gjekk gale",
@@ -649,7 +649,6 @@
     "agents_tab_title": "Brukarar",
     "add_agent_button": "Legg til ny brukar",
     "add_agent_button_short": "Legg til",
-    "add_agentModal_agent_tab_title": "Person",
     "add_agent_error": "Kunne ikkje legge til brukar.",
     "add_agent_success_snackbar": "Brukar lagt til.",
     "add_agent_client_access_success_snackbar": "Brukaren har no klienttilgang.",

@@ -18,6 +18,11 @@ import {
   createErrorDetails,
   TechnicalErrorParagraphs,
 } from '../common/TechnicalErrorParagraphs/TechnicalErrorParagraphs';
+import {
+  RestoreFocusFallback,
+  RestoreFocusProvider,
+  useRestoreFocus,
+} from '../common/RestoreFocus';
 
 import { MyClientsAccessSection } from './MyClientsAccessSection';
 import { MyClientsDeleteClientProviderModal } from './MyClientsDeleteClientProviderModal';
@@ -28,6 +33,9 @@ export const MyClientsPage = () => {
   const actingPartyUuid = getCookie('AltinnPartyUuid') ?? '';
 
   useDocumentTitle(t('my_clients_page.page_title'));
+  // The zone lives here, not in MyClientsAccessSection: revoking the last access unmounts the whole
+  // section, and the fallback must outlive it.
+  const restoreFocus = useRestoreFocus();
 
   const {
     data: currentUser,
@@ -98,37 +106,41 @@ export const MyClientsPage = () => {
               reportee={reportee}
               isLoading={isLoadingReportee}
             />
-            <div className={classes.content}>
-              {isActingOnBehalfOfSelf ? (
-                <DsAlert data-color='info'>
-                  {t('my_clients_page.not_acting_on_behalf_info')}
-                </DsAlert>
-              ) : errorDetails ? (
-                <DsAlert data-color='danger'>
-                  <TechnicalErrorParagraphs
-                    status={errorDetails.status}
-                    time={errorDetails.time}
-                    traceId={errorDetails.traceId}
-                  />
-                </DsAlert>
-              ) : isLoadingCurrentUser || isLoadingMyClients ? (
-                <DsSkeleton
-                  variant='rectangle'
-                  width='100%'
-                  height='220px'
-                />
-              ) : clients.length > 0 ? (
-                <MyClientsAccessSection
-                  clients={clients}
-                  actingPartyUuid={actingPartyUuid}
-                  currentUserName={currentUserName}
-                />
-              ) : (
-                <DsParagraph>
-                  {t('my_clients_page.no_clients', { actingParty: actingPartyName })}
-                </DsParagraph>
-              )}
-            </div>
+            <RestoreFocusProvider restoreFocus={restoreFocus}>
+              <div className={classes.content}>
+                <RestoreFocusFallback>
+                  {isActingOnBehalfOfSelf ? (
+                    <DsAlert data-color='info'>
+                      {t('my_clients_page.not_acting_on_behalf_info')}
+                    </DsAlert>
+                  ) : errorDetails ? (
+                    <DsAlert data-color='danger'>
+                      <TechnicalErrorParagraphs
+                        status={errorDetails.status}
+                        time={errorDetails.time}
+                        traceId={errorDetails.traceId}
+                      />
+                    </DsAlert>
+                  ) : isLoadingCurrentUser || isLoadingMyClients ? (
+                    <DsSkeleton
+                      variant='rectangle'
+                      width='100%'
+                      height='220px'
+                    />
+                  ) : clients.length > 0 ? (
+                    <MyClientsAccessSection
+                      clients={clients}
+                      actingPartyUuid={actingPartyUuid}
+                      currentUserName={currentUserName}
+                    />
+                  ) : (
+                    <DsParagraph>
+                      {t('my_clients_page.no_clients', { actingParty: actingPartyName })}
+                    </DsParagraph>
+                  )}
+                </RestoreFocusFallback>
+              </div>
+            </RestoreFocusProvider>
           </>
         </PageContainer>
       </PageLayoutWrapper>

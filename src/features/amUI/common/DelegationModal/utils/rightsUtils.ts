@@ -17,7 +17,7 @@ export type ChipRight = {
   delegable: boolean;
   checked: boolean;
   delegated: boolean;
-  delegationReason: string;
+  delegationReasons: string[];
   inherited?: boolean;
   inheritedReason?: InheritedReason;
 };
@@ -69,7 +69,7 @@ export const mapRightsToChipRights = (
       delegable: right.result === true,
       checked: checkedPredicate(right),
       delegated,
-      delegationReason: right.reasonCodes.length > 0 ? right.reasonCodes[0] : '',
+      delegationReasons: right.reasonCodes,
       inherited,
       inheritedReason:
         inherited && getInheritedReason ? getInheritedReason(right.right.key) : undefined,
