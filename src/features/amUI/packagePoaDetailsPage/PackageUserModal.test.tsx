@@ -98,13 +98,13 @@ describe('PackageUserModal', () => {
     ).not.toBeInTheDocument();
   });
 
-  it('keeps the dialog on the user it already shows', () => {
+  it('switches an open dialog to the user whose action failed', () => {
     const ref = renderModal();
     act(() => ref.current?.open(user));
 
     act(() => ref.current?.showError({ ...user, id: 'other', name: 'Annen Kari' }, error));
 
-    expect(screen.getByRole('heading', { level: 1 })).toHaveTextContent('Medaljong Ola');
+    expect(screen.getByRole('heading', { level: 1 })).toHaveTextContent('Annen Kari');
     expect(screen.getByText('delegation_modal.general_error.delegate_heading')).toBeInTheDocument();
   });
 });

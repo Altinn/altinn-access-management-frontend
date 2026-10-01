@@ -75,9 +75,10 @@ export const PackageUserModal = forwardRef<PackageUserModalHandle, PackageUserMo
         setTimeout(() => setActionSuccess(false), SUCCESS_ANIMATION_DURATION);
       },
       showError: (user, error) => {
+        // The error is about this user, even if the dialog was opened on someone else meanwhile.
+        setSelectedUser(user);
         setActionError(error);
         if (!dialogRef.current?.open) {
-          setSelectedUser(user);
           dialogRef.current?.showModal();
         }
       },
