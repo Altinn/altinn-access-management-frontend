@@ -118,7 +118,8 @@ export const ServiceUsersSection = ({ resource, isLoading }: ServiceUsersSection
   // An undelegable service gets both the status section and the alert, as in ResourceInfo.
   const displayResourceAlert =
     cannotDelegateHere || !!rightsErrorDetails || showMissingRightsStatus;
-  const canDelegate = !displayResourceAlert;
+  // Hold the ways of giving the service back until eligibility is known.
+  const canDelegate = !isRightsLoading && !displayResourceAlert;
 
   const [revokeResource, { isLoading: isRevoking }] = useRevokeResourceMutation();
   const { canRedelegateResource } = useCanRedelegateResource();
@@ -201,7 +202,7 @@ export const ServiceUsersSection = ({ resource, isLoading }: ServiceUsersSection
       ? createErrorDetails(delegationsError || indirectError)
       : null;
 
-  const isListLoading = isLoading || isDelegationsLoading || isIndirectLoading || isRightsLoading;
+  const isListLoading = isLoading || isDelegationsLoading || isIndirectLoading;
 
   return (
     <>
