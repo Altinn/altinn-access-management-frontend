@@ -1,20 +1,11 @@
 import { useCallback, useMemo, useState } from 'react';
 import { Trans, useTranslation } from 'react-i18next';
 import { Link, useNavigate } from 'react-router';
-import {
-  DsHeading,
-  DsParagraph,
-  DsSearch,
-  DsSwitch,
-  formatDisplayName,
-} from '@altinn/altinn-components';
+import { DsHeading, DsParagraph, DsSearch, DsSwitch } from '@altinn/altinn-components';
 
+import { formatEntityDisplayName } from '@/resources/utils/reporteeUtils';
 import { debounce } from '@/resources/utils';
-import {
-  type Connection,
-  ConnectionUserType,
-  useGetRightHoldersQuery,
-} from '@/rtk/features/connectionApi';
+import { type Connection, useGetRightHoldersQuery } from '@/rtk/features/connectionApi';
 import { PartyType, useGetIsAdminQuery } from '@/rtk/features/userInfoApi';
 import type { User } from '@/rtk/features/userInfoApi';
 
@@ -47,10 +38,7 @@ export const UsersList = () => {
     },
   );
   const { partyConnection: currentUser, isLoading: currentUserLoading } = useSelfConnection();
-  const fromPartyName = formatDisplayName({
-    fullName: fromParty?.name ?? '',
-    type: fromParty?.partyTypeName === PartyType.Person ? 'person' : 'company',
-  });
+  const fromPartyName = formatEntityDisplayName(fromParty);
 
   const handleNewUser = (user: User) => {
     navigate(`/users/${user.id}`);
@@ -84,10 +72,7 @@ export const UsersList = () => {
     };
 
     return rightHolders.reduce<Connection[]>((acc, connection) => {
-      if (
-        connection.party.id === removeUuid ||
-        connection.party.type === ConnectionUserType.Systemuser
-      ) {
+      if (connection.party.id === removeUuid) {
         return acc;
       }
       acc.push(mapConnection(connection));

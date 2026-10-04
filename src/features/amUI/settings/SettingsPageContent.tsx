@@ -5,19 +5,15 @@ import {
   DsAlert,
   DsHeading,
   DsPopover,
-  formatDisplayName,
   List,
   SettingsItem,
 } from '@altinn/altinn-components';
 import { ChatIcon, PaperplaneIcon, QuestionmarkCircleIcon } from '@navikt/aksel-icons';
 
+import { formatEntityDisplayName } from '@/resources/utils/reporteeUtils';
 import { useDocumentTitle } from '@/resources/hooks/useDocumentTitle';
 import { useGetOrgNotificationAddressesQuery } from '@/rtk/features/settingsApi';
-import {
-  PartyType,
-  useGetIsCompanyProfileAdminQuery,
-  useGetReporteeQuery,
-} from '@/rtk/features/userInfoApi';
+import { useGetIsCompanyProfileAdminQuery, useGetReporteeQuery } from '@/rtk/features/userInfoApi';
 
 import { usePartyRepresentation } from '../common/PartyRepresentationContext/PartyRepresentationContext';
 import { ReporteePageHeading } from '../common/ReporteePageHeading/ReporteePageHeading';
@@ -61,10 +57,7 @@ export const SettingsPageContent = () => {
     setModalMode(null);
   };
 
-  const formattedActingPartyName = formatDisplayName({
-    fullName: actingParty?.name || '',
-    type: actingParty?.partyTypeName === PartyType.Person ? 'person' : 'company',
-  });
+  const formattedActingPartyName = formatEntityDisplayName(actingParty);
 
   // Show not-admin alert when loaded and user lacks permission
   if (!isCompanyProfileAdmin && !isCompanyProfileAdminLoading) {

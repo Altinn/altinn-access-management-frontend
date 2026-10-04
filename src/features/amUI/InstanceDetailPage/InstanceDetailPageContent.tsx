@@ -199,8 +199,7 @@ export const InstanceDetailPageContent = () => {
         <InstanceDescription
           resource={resource}
           instanceData={instanceData}
-          fromPartyName={fromParty?.name}
-          fromPartyType={fromParty?.partyTypeName}
+          fromParty={fromParty}
           titleLevel={1}
         />
       )}

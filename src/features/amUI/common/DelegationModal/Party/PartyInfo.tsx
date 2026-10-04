@@ -1,11 +1,4 @@
-import {
-  Avatar,
-  DsAlert,
-  DsButton,
-  DsHeading,
-  DsParagraph,
-  formatDisplayName,
-} from '@altinn/altinn-components';
+import { Avatar, DsAlert, DsButton, DsHeading, DsParagraph } from '@altinn/altinn-components';
 import { useRef } from 'react';
 import { Trans, useTranslation } from 'react-i18next';
 
@@ -13,6 +6,7 @@ import {
   formatOrgNr,
   getFormattedDateOfBirthLabel,
   isSubUnitByType,
+  formatEntityDisplayName,
 } from '@/resources/utils/reporteeUtils';
 import { PartyType } from '@/rtk/features/userInfoApi';
 import type { Party } from '@/rtk/features/lookupApi';
@@ -73,11 +67,7 @@ export const PartyInfo = ({
     onRestore: () => focusFirstEnabledButton(actionsRef.current),
   });
 
-  const userName = formatDisplayName({
-    fullName: party.name,
-    type: party.partyTypeName === PartyType.Person ? 'person' : 'company',
-    reverseNameOrder: false,
-  });
+  const userName = formatEntityDisplayName(party, { reverseNameOrder: false });
   const partyAvatarType = party.partyTypeName === PartyType.Person ? 'person' : 'company';
 
   const canRevoke = userHasAccess && availableActions.includes(DelegationAction.REVOKE);

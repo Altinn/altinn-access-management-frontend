@@ -1,9 +1,9 @@
 import React from 'react';
 import { Navigate } from 'react-router';
 import { useTranslation } from 'react-i18next';
-import { formatDisplayName } from '@altinn/altinn-components';
 import { DatabaseIcon, PersonGroupIcon } from '@navikt/aksel-icons';
 
+import { formatEntityDisplayName } from '@/resources/utils/reporteeUtils';
 import { PageWrapper } from '@/components/PageWrapper/PageWrapper';
 import { getCookie } from '@/resources/Cookie/CookieMethods';
 import { useDocumentTitle } from '@/resources/hooks/useDocumentTitle';
@@ -53,10 +53,7 @@ export const MaskinportenPage = () => {
             <Breadcrumbs items={['root', 'maskinporten']} />
             <ReporteePageHeading
               title={t('maskinporten_page.heading', {
-                name: formatDisplayName({
-                  fullName: reportee?.name ?? '',
-                  type: reportee?.type === 'Person' ? 'person' : 'company',
-                }),
+                name: formatEntityDisplayName(reportee),
               })}
               reportee={reportee}
               isLoading={isLoadingReportee}

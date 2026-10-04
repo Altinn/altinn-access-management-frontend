@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import {
   DsHeading,
-  formatDisplayName,
   List,
   ListItem,
   type MenuItemProps,
@@ -45,6 +44,7 @@ import {
   formatOrgNr,
   isOrganization,
   isSubUnit,
+  formatEntityDisplayName,
 } from '@/resources/utils/reporteeUtils';
 import { useSidebarRequestCount } from '@/resources/hooks/useSidebarRequestCount';
 import { useGetRolePermissionsQuery } from '@/rtk/features/roleApi';
@@ -79,10 +79,7 @@ export const LandingPage = () => {
     isLoadingPermissions: isLoadingReportee || isLoadingIsAdmin,
   });
 
-  const reporteeName = formatDisplayName({
-    fullName: reportee?.name || '',
-    type: isOrganization(reportee) ? 'company' : 'person',
-  });
+  const reporteeName = formatEntityDisplayName(reportee);
 
   const { data: roles } = useGetRolePermissionsQuery(
     {
@@ -222,7 +219,7 @@ export const LandingPage = () => {
     items.push({
       ...getYourRightsMenuItem(
         currentUser?.partyUuid ?? '',
-        formatDisplayName({ fullName: currentUser?.name ?? '', type: 'person' }),
+        formatEntityDisplayName(currentUser),
         '/',
         isLoading,
       ),

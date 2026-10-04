@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { useTranslation } from 'react-i18next';
-import { formatDisplayName } from '@altinn/altinn-components';
 
+import { formatEntityDisplayName } from '@/resources/utils/reporteeUtils';
 import { useDocumentTitle } from '@/resources/hooks/useDocumentTitle';
 import { PageWrapper } from '@/components';
 import { useGetReporteeQuery } from '@/rtk/features/userInfoApi';
@@ -19,10 +19,7 @@ export const UsersPage = () => {
   useDocumentTitle(t('users_page.page_title'));
 
   const { data: reportee, isLoading } = useGetReporteeQuery();
-  const name = formatDisplayName({
-    fullName: reportee?.name || '',
-    type: reportee?.type === 'Person' ? 'person' : 'company',
-  });
+  const name = formatEntityDisplayName(reportee);
 
   return (
     <PageWrapper>

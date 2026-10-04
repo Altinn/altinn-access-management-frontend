@@ -1,17 +1,18 @@
 import type { UserListItemProps } from '@altinn/altinn-components';
-import { formatDisplayName, List, UserListItem } from '@altinn/altinn-components';
+import { List, UserListItem } from '@altinn/altinn-components';
 import type { ReactNode } from 'react';
 import { useEffect, useState } from 'react';
 import { Link } from 'react-router';
 import { useTranslation } from 'react-i18next';
 
-import { type ExtendedUser, type User } from '@/rtk/features/userInfoApi';
-import { ConnectionUserType } from '@/rtk/features/connectionApi';
 import {
+  formatEntityDisplayName,
   getFormattedDateOfBirthLabel,
   formatOrgNr,
   isSubUnitByType,
 } from '@/resources/utils/reporteeUtils';
+import { type ExtendedUser, type User } from '@/rtk/features/userInfoApi';
+import { ConnectionUserType } from '@/rtk/features/connectionApi';
 
 import {
   ECC_PROVIDER_CODE,
@@ -93,9 +94,7 @@ export const UserItem = ({
       : [];
 
   const viaEntity =
-    isExtendedUser(user) && user.roles
-      ? user.roles.find((r) => r.viaParty)?.viaParty?.name
-      : undefined;
+    isExtendedUser(user) && user.roles ? user.roles.find((r) => r.viaParty)?.viaParty : undefined;
 
   const isSubOrMainUnit =
     isExtendedUser(user) &&
@@ -118,7 +117,7 @@ export const UserItem = ({
           : '');
     }
     if (viaRoleNames.length > 0 && viaEntity) {
-      descriptionString += ` | ${viaRoleNames.join(', ')} for ${formatDisplayName({ fullName: viaEntity, type: 'company' })}`;
+      descriptionString += ` | ${viaRoleNames.join(', ')} for ${formatEntityDisplayName(viaEntity)}`;
     }
     if (descriptionString) {
       return descriptionString;
@@ -144,7 +143,7 @@ export const UserItem = ({
       {...props}
       size={size}
       id={user.id}
-      name={type !== 'system' ? formatDisplayName({ fullName: user.name, type }) : user.name}
+      name={formatEntityDisplayName(user)}
       description={!isExpanded ? description(user) : undefined}
       {...(isNewUser(user.addedAt) && {
         badge: {

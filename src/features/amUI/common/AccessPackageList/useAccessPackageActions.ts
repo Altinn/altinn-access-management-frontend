@@ -1,7 +1,8 @@
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { formatDisplayName, useSnackbar } from '@altinn/altinn-components';
+import { useSnackbar } from '@altinn/altinn-components';
 
+import { formatEntityDisplayName } from '@/resources/utils/reporteeUtils';
 import type { DelegationErrorDetails } from '@/resources/hooks/useDelegateAccessPackage';
 import { useDelegateAccessPackage } from '@/resources/hooks/useDelegateAccessPackage';
 import { useRevokeAccessPackage } from '@/resources/hooks/useRevokeAccessPackage';
@@ -15,7 +16,6 @@ import {
 } from '@/rtk/features/requestApi';
 import { getRequestPartyQueryParams } from '@/resources/utils/singleRightRequestUtils';
 import { useSnackbarOnIdle } from '@/resources/hooks/useSnackbarOnIdle';
-import { PartyType } from '@/rtk/features/userInfoApi';
 
 import { usePackageWarningDialog } from '../PackageWarningDialog';
 import { usePartyRepresentation } from '../PartyRepresentationContext/PartyRepresentationContext';
@@ -88,10 +88,7 @@ export const useAccessPackageActions = ({
   }, [isFetchingPackageRequests, awaitingRefetch]);
 
   const formatToPartyName = (party: Party) => {
-    return formatDisplayName({
-      fullName: party.name,
-      type: party?.partyTypeName === PartyType.Person ? 'person' : 'company',
-    });
+    return formatEntityDisplayName(party);
   };
 
   const handleDelegateSuccess = (accessPackage: AccessPackage, toParty: Party) => {

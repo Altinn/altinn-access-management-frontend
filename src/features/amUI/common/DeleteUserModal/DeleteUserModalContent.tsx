@@ -5,7 +5,6 @@ import {
   DsHeading,
   DsParagraph,
   DsSkeleton,
-  formatDisplayName,
 } from '@altinn/altinn-components';
 import { TrashIcon, XMarkOctagonFillIcon } from '@navikt/aksel-icons';
 import { useEffect, useMemo, useState } from 'react';
@@ -13,12 +12,12 @@ import { Trans, useTranslation } from 'react-i18next';
 import { useDispatch } from 'react-redux';
 import { Link, useLocation, useNavigate } from 'react-router';
 
+import { formatEntityDisplayName } from '@/resources/utils/reporteeUtils';
 import { amUIPath } from '@/routes/paths';
 import { type Entity } from '@/dataObjects/dtos/Common';
 import { accessPackageApi } from '@/rtk/features/accessPackageApi';
 import { useRemoveRightHolderMutation } from '@/rtk/features/connectionApi';
 import { roleApi } from '@/rtk/features/roleApi';
-import { PartyType } from '@/rtk/features/userInfoApi';
 
 import { LoadingAnimation } from '../LoadingAnimation/LoadingAnimation';
 import { handleSelectAccount } from '../PageLayoutWrapper/useHeader';
@@ -108,17 +107,9 @@ export const DeleteUserModalContent = ({
     [nonDeletableReasons, status],
   );
 
-  const formattedToPartyName = formatDisplayName({
-    fullName: toParty?.name || '',
-    type: toParty?.partyTypeName === PartyType.Person ? 'person' : 'company',
-    reverseNameOrder: false,
-  });
+  const formattedToPartyName = formatEntityDisplayName(toParty, { reverseNameOrder: false });
 
-  const formattedFromPartyName = formatDisplayName({
-    fullName: fromParty?.name || '',
-    type: fromParty?.partyTypeName === PartyType.Person ? 'person' : 'company',
-    reverseNameOrder: false,
-  });
+  const formattedFromPartyName = formatEntityDisplayName(fromParty, { reverseNameOrder: false });
 
   const isDeletingYourself = dialogModel.status.target === DeletionTarget.Yourself;
   const shouldNavigateOnDeleteComplete = dialogModel.status.level === DeletionLevel.Full;
@@ -207,11 +198,7 @@ export const DeleteUserModalContent = ({
         key: `${reason}-${viaParty.id}`,
         i18nKey: nonDeletableReasonKeys[reason],
         values: {
-          via_name: formatDisplayName({
-            fullName: viaParty.name || '',
-            type: String(viaParty.type).toLowerCase() === 'person' ? 'person' : 'company',
-            reverseNameOrder: false,
-          }),
+          via_name: formatEntityDisplayName(viaParty, { reverseNameOrder: false }),
         },
         components: {
           viaLink: (

@@ -1,7 +1,8 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
-import { formatDisplayName, DsAlert } from '@altinn/altinn-components';
+import { DsAlert } from '@altinn/altinn-components';
 
+import { formatEntityDisplayName } from '@/resources/utils/reporteeUtils';
 import { getCookie } from '@/resources/Cookie/CookieMethods';
 import { useGetIsAdminQuery, useGetReporteeQuery } from '@/rtk/features/userInfoApi';
 import { PageWrapper } from '@/components';
@@ -22,10 +23,7 @@ export const PoaOverviewPage = () => {
   const { t } = useTranslation();
   const { data: reportee, isLoading } = useGetReporteeQuery();
   const { data: isAdmin, isLoading: isLoadingIsAdmin } = useGetIsAdminQuery();
-  const name = formatDisplayName({
-    fullName: reportee?.name || '',
-    type: reportee?.type === 'Person' ? 'person' : 'company',
-  });
+  const name = formatEntityDisplayName(reportee);
 
   useDocumentTitle(t('poa_overview_page.page_title'));
 

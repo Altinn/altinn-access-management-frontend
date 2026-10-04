@@ -1,8 +1,8 @@
-import { DsParagraph, DsHeading, Avatar, formatDisplayName } from '@altinn/altinn-components';
+import { DsParagraph, DsHeading, Avatar } from '@altinn/altinn-components';
 import { t } from 'i18next';
 
 import { PartyType } from '@/rtk/features/userInfoApi';
-import { isSubUnitByType } from '@/resources/utils/reporteeUtils';
+import { isSubUnitByType, formatEntityDisplayName } from '@/resources/utils/reporteeUtils';
 import { useIsMobileOrSmaller } from '@/resources/utils/screensizeUtils';
 
 import { usePartyRepresentation } from '../PartyRepresentationContext/PartyRepresentationContext';
@@ -31,14 +31,8 @@ export const UserPageHeader = ({
   displayRoles = true,
 }: UserPageHeaderProps) => {
   const { toParty, fromParty, isLoading: loadingPartyRepresentation } = usePartyRepresentation();
-  const toPartyName = formatDisplayName({
-    fullName: toParty?.name ?? '',
-    type: toParty?.partyTypeName === PartyType.Organization ? 'company' : 'person',
-  });
-  const fromPartyName = formatDisplayName({
-    fullName: fromParty?.name ?? '',
-    type: fromParty?.partyTypeName === PartyType.Organization ? 'company' : 'person',
-  });
+  const toPartyName = formatEntityDisplayName(toParty);
+  const fromPartyName = formatEntityDisplayName(fromParty);
   const isSmall = useIsMobileOrSmaller();
 
   if (!toParty && !fromParty && !loadingPartyRepresentation) {

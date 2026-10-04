@@ -1,9 +1,4 @@
-import {
-  type Theme,
-  type MenuItemSize,
-  type MenuItemProps,
-  formatDisplayName,
-} from '@altinn/altinn-components';
+import { type Theme, type MenuItemSize, type MenuItemProps } from '@altinn/altinn-components';
 import {
   InboxFillIcon,
   PersonCircleIcon,
@@ -17,7 +12,8 @@ import {
 import { useTranslation } from 'react-i18next';
 import { Link } from 'react-router';
 
-import { PartyType, useGetReporteeQuery, useGetUserProfileQuery } from '@/rtk/features/userInfoApi';
+import { formatEntityDisplayName } from '@/resources/utils/reporteeUtils';
+import { useGetReporteeQuery, useGetUserProfileQuery } from '@/rtk/features/userInfoApi';
 import { useIsTabletOrSmaller } from '@/resources/utils/screensizeUtils';
 import { getAfUrl, getAltinnStartPageUrl, getLogoutUrl } from '@/resources/utils/pathUtils';
 
@@ -205,11 +201,7 @@ export const useGlobalMenu = ({
     links: { divider: true },
     'current-user': {
       title: t('header.logged_in_as_name', {
-        name: formatDisplayName({
-          fullName: userinfo?.name || '',
-          type: userinfo?.party?.partyTypeName === PartyType.Person ? 'person' : 'company',
-          reverseNameOrder: true,
-        }),
+        name: formatEntityDisplayName(userinfo?.party, { reverseNameOrder: true }),
       }),
     },
     shortcuts: {

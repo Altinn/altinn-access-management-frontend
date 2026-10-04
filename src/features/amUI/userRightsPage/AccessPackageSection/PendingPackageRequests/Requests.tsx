@@ -1,9 +1,9 @@
 import { useRef, useState } from 'react';
 import { HandshakeIcon } from '@navikt/aksel-icons';
-import { formatDisplayName, ListItem } from '@altinn/altinn-components';
+import { ListItem } from '@altinn/altinn-components';
 import { useTranslation } from 'react-i18next';
 
-import { PartyType } from '@/rtk/features/userInfoApi';
+import { formatEntityDisplayName } from '@/resources/utils/reporteeUtils';
 import { useGetSentRequestsQuery } from '@/rtk/features/requestApi';
 import { getRequestPartyQueryParams } from '@/resources/utils/singleRightRequestUtils';
 import { useIsTabletOrSmaller } from '@/resources/utils/screensizeUtils';
@@ -29,10 +29,7 @@ export const PendingPackageRequests = () => {
   );
 
   const heading = t('delegation_modal.request.sent_requests_modal_header', {
-    partyName: formatDisplayName({
-      fullName: fromParty?.name || '',
-      type: fromParty?.partyTypeName === PartyType.Person ? 'person' : 'company',
-    }),
+    partyName: formatEntityDisplayName(fromParty),
   });
 
   return (

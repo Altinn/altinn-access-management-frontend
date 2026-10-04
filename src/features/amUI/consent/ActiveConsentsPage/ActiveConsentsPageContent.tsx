@@ -1,19 +1,12 @@
 import React, { useMemo, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Link, useNavigate } from 'react-router';
-import {
-  DsAlert,
-  DsDialog,
-  DsHeading,
-  DsLink,
-  DsParagraph,
-  formatDisplayName,
-  List,
-} from '@altinn/altinn-components';
+import { DsAlert, DsDialog, DsHeading, DsLink, DsParagraph, List } from '@altinn/altinn-components';
 import { FolderFileIcon } from '@navikt/aksel-icons';
 import { type FetchBaseQueryError } from '@reduxjs/toolkit/query';
 import { type SerializedError } from '@reduxjs/toolkit';
 
+import { formatEntityDisplayName } from '@/resources/utils/reporteeUtils';
 import { getConsentRequestUrl } from '@/routes/paths/consentPath';
 import { type ReporteeInfo } from '@/rtk/features/userInfoApi';
 import { ConsentPath } from '@/routes/paths';
@@ -165,10 +158,7 @@ export const ActiveConsentsPageContent = ({
             {!hasPermission && (
               <div>
                 {t('active_consents.no_active_consents_permission', {
-                  name: formatDisplayName({
-                    fullName: reportee?.name || '',
-                    type: reportee?.type === 'Person' ? 'person' : 'company',
-                  }),
+                  name: formatEntityDisplayName(reportee),
                 })}
               </div>
             )}

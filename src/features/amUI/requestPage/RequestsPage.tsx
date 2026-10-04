@@ -1,7 +1,8 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
-import { DsAlert, formatDisplayName } from '@altinn/altinn-components';
+import { DsAlert } from '@altinn/altinn-components';
 
+import { formatEntityDisplayName } from '@/resources/utils/reporteeUtils';
 import { PageWrapper } from '@/components';
 import { useGetIsAdminQuery, useGetReporteeQuery } from '@/rtk/features/userInfoApi';
 import { useGetPartyFromLoggedInUserQuery } from '@/rtk/features/lookupApi';
@@ -68,10 +69,7 @@ export const RequestPage = () => {
     isLoadingPermissions: isLoadingAdmin,
   });
 
-  const name = formatDisplayName({
-    fullName: reportee?.name || '',
-    type: reportee?.type === 'Person' ? 'person' : 'company',
-  });
+  const name = formatEntityDisplayName(reportee);
 
   const receivedRequestsCount = receivedRequestCount ?? 0;
   const resolvedSentRequestCount = sentRequestCount ?? 0;

@@ -1,7 +1,8 @@
 import * as React from 'react';
-import { DsButton, formatDisplayName } from '@altinn/altinn-components';
+import { DsButton } from '@altinn/altinn-components';
 import { useTranslation } from 'react-i18next';
 
+import { formatEntityDisplayName } from '@/resources/utils/reporteeUtils';
 import { useIsMobileOrSmaller } from '@/resources/utils/screensizeUtils';
 import { StatusMessageForScreenReader } from '@/components/StatusMessageForScreenReader/StatusMessageForScreenReader';
 import {
@@ -10,7 +11,6 @@ import {
   useUpdateInstanceRightsMutation,
   useRemoveInstanceMutation,
 } from '@/rtk/features/instanceApi';
-import { PartyType } from '@/rtk/features/userInfoApi';
 import type { ServiceResource } from '@/rtk/features/singleRights/singleRightsApi';
 
 import { createErrorDetails } from '../../TechnicalErrorParagraphs/TechnicalErrorParagraphs';
@@ -56,10 +56,7 @@ export const InstanceInfo = ({
   const hasDelegateAction = availableActions?.includes(DelegationAction.DELEGATE);
   const canRevoke = availableActions?.includes(DelegationAction.REVOKE) ?? false;
 
-  const toName = formatDisplayName({
-    fullName: toParty?.name ?? '',
-    type: toParty?.partyTypeName === PartyType.Organization ? 'company' : 'person',
-  });
+  const toName = formatEntityDisplayName(toParty);
 
   const {
     rights,
@@ -203,8 +200,7 @@ export const InstanceInfo = ({
             },
             dialogLookup,
           }}
-          fromPartyName={fromParty?.name}
-          fromPartyType={fromParty?.partyTypeName}
+          fromParty={fromParty}
           titleLevel={2}
           statusSection={
             <div

@@ -1,11 +1,11 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { useParams } from 'react-router';
-import { DsHeading, formatDisplayName } from '@altinn/altinn-components';
+import { DsHeading } from '@altinn/altinn-components';
 
+import { formatEntityDisplayName } from '@/resources/utils/reporteeUtils';
 import type { ServiceResource } from '@/rtk/features/singleRights/singleRightsApi';
 import { useGetSingleRightsForRightholderQuery } from '@/rtk/features/singleRights/singleRightsApi';
-import { PartyType } from '@/rtk/features/userInfoApi';
 import { ResourceList } from '@/features/amUI/common/ResourceList/ResourceList';
 import {
   RestoreFocusFallback,
@@ -72,10 +72,7 @@ const SingleRightsSectionContent = ({ isReportee }: { isReportee: boolean }) => 
       deleteResource,
       {
         name: resource.title,
-        toName: formatDisplayName({
-          fullName: toParty?.name || '',
-          type: toParty?.partyTypeName === PartyType.Person ? 'person' : 'company',
-        }),
+        toName: formatEntityDisplayName(toParty),
       },
     );
 

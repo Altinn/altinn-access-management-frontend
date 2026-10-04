@@ -1,8 +1,9 @@
 import React, { useCallback, useMemo, useState } from 'react';
 import { Trans, useTranslation } from 'react-i18next';
-import { DsAlert, DsParagraph, formatDisplayName } from '@altinn/altinn-components';
+import { DsAlert, DsParagraph } from '@altinn/altinn-components';
 import { useSearchParams } from 'react-router';
 
+import { formatEntityDisplayName } from '@/resources/utils/reporteeUtils';
 import { useDocumentTitle } from '@/resources/hooks/useDocumentTitle';
 import { getCookie } from '@/resources/Cookie/CookieMethods';
 import {
@@ -91,14 +92,8 @@ export const DraftRequestPage = () => {
   // duplicated here.
   const isInitialLoad = isMultiMode ? isLoadingMultiRequests : isLoadingRequest;
 
-  const toName = formatDisplayName({
-    fullName: representativeRequest?.to.name ?? '',
-    type: representativeRequest?.to.type === 'Person' ? 'person' : 'company',
-  });
-  const fromName = formatDisplayName({
-    fullName: representativeRequest?.from.name ?? '',
-    type: representativeRequest?.from.type === 'Person' ? 'person' : 'company',
-  });
+  const toName = formatEntityDisplayName(representativeRequest?.to);
+  const fromName = formatEntityDisplayName(representativeRequest?.from);
 
   // Normalise the completed action across single and multi modes
   const receiptAction: 'confirm' | 'withdraw' | null = isMultiMode

@@ -1,8 +1,8 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { useLocation } from 'react-router';
-import { formatDisplayName } from '@altinn/altinn-components';
 
+import { formatEntityDisplayName } from '@/resources/utils/reporteeUtils';
 import { useDocumentTitle } from '@/resources/hooks/useDocumentTitle';
 import { PageWrapper } from '@/components';
 import { useGetActiveConsentsQuery } from '@/rtk/features/consentApi';
@@ -58,10 +58,7 @@ export const ActiveConsentsPage = () => {
     isLoadingActiveConsents ||
     isLoadingIdPortenAuthorizations;
 
-  const reporteeName = formatDisplayName({
-    fullName: reportee?.name || '',
-    type: reportee?.type === 'Person' ? 'person' : 'company',
-  });
+  const reporteeName = formatEntityDisplayName(reportee);
 
   return (
     <PageWrapper>
