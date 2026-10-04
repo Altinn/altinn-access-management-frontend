@@ -5,7 +5,11 @@ import { DsHeading, DsParagraph, DsSearch, DsSwitch } from '@altinn/altinn-compo
 
 import { formatEntityDisplayName } from '@/resources/utils/reporteeUtils';
 import { debounce } from '@/resources/utils';
-import { type Connection, useGetRightHoldersQuery } from '@/rtk/features/connectionApi';
+import {
+  type Connection,
+  ConnectionUserType,
+  useGetRightHoldersQuery,
+} from '@/rtk/features/connectionApi';
 import { PartyType, useGetIsAdminQuery } from '@/rtk/features/userInfoApi';
 import type { User } from '@/rtk/features/userInfoApi';
 
@@ -72,7 +76,10 @@ export const UsersList = () => {
     };
 
     return rightHolders.reduce<Connection[]>((acc, connection) => {
-      if (connection.party.id === removeUuid) {
+      if (
+        connection.party.id === removeUuid ||
+        connection.party.type === ConnectionUserType.Systemuser
+      ) {
         return acc;
       }
       acc.push(mapConnection(connection));
