@@ -1,5 +1,6 @@
 import { randomUUID } from 'crypto';
 
+import { fetchWithRetry } from 'playwright/util/fetchWithRetry';
 import { env, addTimeToNowUtc } from 'playwright/util/helper';
 
 import { Token } from './Token';
@@ -33,7 +34,7 @@ export class ConsentApiRequests {
 
     const token = await getToken();
 
-    const response = await fetch(url, {
+    const response = await fetchWithRetry(url, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',

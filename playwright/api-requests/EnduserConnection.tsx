@@ -1,4 +1,5 @@
 import { env } from 'playwright/util/helper';
+import { fetchWithRetry } from 'playwright/util/fetchWithRetry';
 
 import { Token } from './Token';
 
@@ -60,7 +61,7 @@ export class EnduserConnection {
     const toUuid = await this.tokenClass.getPartyUuid(to);
     const url = `${env('API_BASE_URL')}/accessmanagement/api/v1/enduser/connections?party=${fromUuid}&from=${fromUuid}&to=${toUuid}`;
     const token = await this.tokenClass.getPersonalTokenByPid(pid);
-    const response = await fetch(url, {
+    const response = await fetchWithRetry(url, {
       method: 'GET',
       headers: {
         Authorization: `Bearer ${token}`,
@@ -108,7 +109,7 @@ export class EnduserConnection {
         personidentifier: to,
         lastName: toLastName,
       };
-      response = await fetch(url, {
+      response = await fetchWithRetry(url, {
         method: 'POST',
         headers: {
           Authorization: `Bearer ${token}`,
@@ -119,7 +120,7 @@ export class EnduserConnection {
     } else {
       toUuid = toUuid || (await this.tokenClass.getPartyUuid(to));
       url = `${env('API_BASE_URL')}/accessmanagement/api/v1/enduser/connections?party=${fromUuid}&from=${fromUuid}&to=${toUuid}`;
-      response = await fetch(url, {
+      response = await fetchWithRetry(url, {
         method: 'POST',
         headers: {
           Authorization: `Bearer ${token}`,
@@ -156,7 +157,7 @@ export class EnduserConnection {
 
         const url = `${env('API_BASE_URL')}/accessmanagement/api/v1/enduser/connections?party=${fromUuid}&from=${fromUuid}&to=${toUuid}&cascade=true`;
 
-        const response = await fetch(url, {
+        const response = await fetchWithRetry(url, {
           method: 'DELETE',
           headers: {
             Authorization: `Bearer ${token}`,
@@ -217,7 +218,7 @@ export class EnduserConnection {
     await Promise.all(
       packageNames.map(async (packageName) => {
         const url = `${env('API_BASE_URL')}/accessmanagement/api/v1/enduser/connections/accesspackages?party=${fromUuid}&from=${fromUuid}&to=${toUuid}&package=${packageName}`;
-        const response = await fetch(url, {
+        const response = await fetchWithRetry(url, {
           method: 'POST',
           headers: {
             Authorization: `Bearer ${token}`,
@@ -267,7 +268,7 @@ export class EnduserConnection {
 
     for (const packageName of packageNames) {
       const url = `${env('API_BASE_URL')}/accessmanagement/api/v1/enduser/connections/accesspackages?party=${fromUuid}&from=${fromUuid}&to=${toUuid}&package=${packageName}`;
-      const response = await fetch(url, {
+      const response = await fetchWithRetry(url, {
         method: 'POST',
         headers: {
           Authorization: `Bearer ${token}`,
@@ -306,7 +307,7 @@ export class EnduserConnection {
     const url = `${env('API_BASE_URL')}/accessmanagement/api/v1/enduser/connections/accesspackages?party=${fromUuid}&from=${fromUuid}&to=${toUuid}&package=${packageName}`;
     const token = await this.tokenClass.getPersonalTokenByPid(pid);
 
-    const response = await fetch(url, {
+    const response = await fetchWithRetry(url, {
       method: 'DELETE',
       headers: {
         Authorization: `Bearer ${token}`,
@@ -358,7 +359,7 @@ export class EnduserConnection {
       directRightKeys: [rightKey],
     };
     const token = await this.tokenClass.getPersonalTokenByPid(pid);
-    const response = await fetch(url, {
+    const response = await fetchWithRetry(url, {
       method: 'POST',
       headers: {
         Authorization: `Bearer ${token}`,
@@ -401,7 +402,7 @@ export class EnduserConnection {
     const url = `${env('API_BASE_URL')}/accessmanagement/api/v1/enduser/connections/resources?party=${fromUuid}&from=${fromUuid}&to=${toUuid}&resource=${resource}`;
 
     const token = await this.tokenClass.getPersonalTokenByPid(pid);
-    const response = await fetch(url, {
+    const response = await fetchWithRetry(url, {
       method: 'DELETE',
       headers: {
         Authorization: `Bearer ${token}`,
@@ -437,7 +438,7 @@ export class EnduserConnection {
     partyUuid = partyUuid || (await this.tokenClass.getPartyUuid(party));
     const url = `${env('API_BASE_URL')}/accessmanagement/api/v1/enduser/connections/resources/delegationcheck?party=${partyUuid}&resource=${resource}`;
     const token = await this.tokenClass.getPersonalTokenByPid(pid);
-    const response = await fetch(url, {
+    const response = await fetchWithRetry(url, {
       method: 'GET',
       headers: {
         Authorization: `Bearer ${token}`,
@@ -470,7 +471,7 @@ export class EnduserConnection {
     };
 
     const url = `${env('API_BASE_URL')}/accessmanagement/api/v1/enduser/clientdelegations/agents?party=${fromUuid}`;
-    const response = await fetch(url, {
+    const response = await fetchWithRetry(url, {
       method: 'POST',
       headers: {
         Authorization: `Bearer ${token}`,
@@ -510,7 +511,7 @@ export class EnduserConnection {
     };
 
     const url = `${env('API_BASE_URL')}/accessmanagement/api/v1/enduser/clientdelegations/agents?party=${fromUuid}&to=${agentUuid}`;
-    const response = await fetch(url, {
+    const response = await fetchWithRetry(url, {
       method: 'DELETE',
       headers: {
         Authorization: `Bearer ${token}`,
@@ -533,7 +534,7 @@ export class EnduserConnection {
     const fromUuid = await this.tokenClass.getPartyUuid(fromParty);
 
     const url = `${env('API_BASE_URL')}/accessmanagement/api/v1/enduser/clientdelegations/agents?party=${fromUuid}`;
-    const response = await fetch(url, {
+    const response = await fetchWithRetry(url, {
       method: 'GET',
       headers: {
         Authorization: `Bearer ${token}`,
@@ -574,7 +575,7 @@ export class EnduserConnection {
     };
 
     const url = `${env('API_BASE_URL')}/accessmanagement/api/v1/enduser/clientdelegations/agents/accesspackages?party=${fromUuid}&from=${clientUuid}&to=${agentUuid}`;
-    const response = await fetch(url, {
+    const response = await fetchWithRetry(url, {
       method: 'POST',
       headers: {
         Authorization: `Bearer ${token}`,

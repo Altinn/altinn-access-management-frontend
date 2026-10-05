@@ -1,4 +1,5 @@
 import { env } from 'playwright/util/helper';
+import { fetchWithRetry } from 'playwright/util/fetchWithRetry';
 
 import { Token } from './Token';
 
@@ -134,13 +135,16 @@ export class MaskinportenApiRequests {
     const token = await this.tokenClass.getPersonalTokenByPid(pid);
     const appOrigin = new URL(env('BASE_URL')).origin;
 
-    const response = await fetch(`${appOrigin}/accessmanagement/api/v1/maskinporten/${path}`, {
-      method,
-      headers: {
-        Authorization: `Bearer ${token}`,
-        'Content-Type': 'application/json',
+    const response = await fetchWithRetry(
+      `${appOrigin}/accessmanagement/api/v1/maskinporten/${path}`,
+      {
+        method,
+        headers: {
+          Authorization: `Bearer ${token}`,
+          'Content-Type': 'application/json',
+        },
       },
-    });
+    );
 
     if (!response.ok) {
       throw new Error(

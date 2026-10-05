@@ -1,4 +1,5 @@
 import { env } from 'playwright/util/helper';
+import { fetchWithRetry } from 'playwright/util/fetchWithRetry';
 
 import { Token } from './Token';
 
@@ -11,7 +12,7 @@ export class AuthorizedParties {
 
   async antallAktoererForbruker(pid: string): Promise<number> {
     const token = await this.token.getPersonalTokenByPid(pid);
-    const response = await fetch(
+    const response = await fetchWithRetry(
       `${env('API_BASE_URL')}/accessmanagement/api/v1/enduser/authorizedparties?includeSubParties=true&includeInactiveParties=true`,
       { headers: { Authorization: `Bearer ${token}` } },
     );

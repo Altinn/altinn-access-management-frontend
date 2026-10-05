@@ -1,4 +1,5 @@
 import { env } from 'playwright/util/helper';
+import { fetchWithRetry } from 'playwright/util/fetchWithRetry';
 
 export class Token {
   private platformToken: string;
@@ -112,7 +113,7 @@ export class Token {
       payload = { data: [`urn:altinn:person:identifier-no:${pidOrOrgNo}`] };
     }
 
-    const response = await fetch(url, {
+    const response = await fetchWithRetry(url, {
       method: 'POST',
       headers: {
         PlatformAccessToken: platformToken,
@@ -185,7 +186,7 @@ export class Token {
   }
 
   private async getAltinnToken(url: string, headers: Record<string, string>): Promise<string> {
-    const response = await fetch(url, { headers });
+    const response = await fetchWithRetry(url, { headers });
     if (!response.ok) {
       const errorMessage = await response.text(); // Fetch the full error message from the response
       throw new Error(`Failed to fetch token: ${response.statusText} - ${errorMessage}`);

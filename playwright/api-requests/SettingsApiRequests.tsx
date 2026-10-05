@@ -1,4 +1,5 @@
 import { env } from 'playwright/util/helper';
+import { fetchWithRetry } from 'playwright/util/fetchWithRetry';
 
 import { Token } from './Token';
 
@@ -251,7 +252,7 @@ export class SettingsApiRequests {
     const appOrigin = new URL(env('BASE_URL')).origin;
     const url = `${appOrigin}/accessmanagement/api/v1/settings/${path}`;
 
-    const response = await fetch(url, {
+    const response = await fetchWithRetry(url, {
       method,
       headers: {
         Authorization: `Bearer ${token}`,

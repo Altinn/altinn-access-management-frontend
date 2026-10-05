@@ -1,4 +1,5 @@
 import { env } from '../util/helper';
+import { fetchWithRetry } from '../util/fetchWithRetry';
 import { createMaskinportenGrantAssertion, createConsentAuthorizationJWT } from '../util/jwtHelper';
 
 /**
@@ -52,7 +53,7 @@ export class MaskinportenToken {
       consumerOrg,
     );
 
-    const response = await fetch(this.tokenEndpoint, {
+    const response = await fetchWithRetry(this.tokenEndpoint, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/x-www-form-urlencoded',
@@ -108,7 +109,7 @@ export class MaskinportenToken {
       scope,
     );
 
-    const response = await fetch(this.tokenEndpoint, {
+    const response = await fetchWithRetry(this.tokenEndpoint, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/x-www-form-urlencoded',

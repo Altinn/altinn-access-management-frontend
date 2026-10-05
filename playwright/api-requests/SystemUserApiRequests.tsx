@@ -1,4 +1,5 @@
 import { TestdataApi } from 'playwright/util/TestdataApi';
+import { fetchWithRetry } from 'playwright/util/fetchWithRetry';
 import { env } from 'playwright/util/helper';
 
 import { Token } from './Token';
@@ -69,7 +70,7 @@ export class ApiRequests {
     const token = await this.tokenClass.getPersonalTokenByPid(userPid);
     const url = `${env('API_BASE_URL')}/authentication/api/v1/systemuser/${agent ? 'agent/' : ''}${partyId}`;
     const headers = { Authorization: `Bearer ${token}` };
-    const response = await fetch(url, { headers });
+    const response = await fetchWithRetry(url, { headers });
     if (!response.ok)
       throw new Error(`Could not list system users for cleanup: HTTP ${response.status}`);
     const users: { id: string; systemId: string; externalRef: string }[] = await response.json();
@@ -78,10 +79,13 @@ export class ApiRequests {
         user.systemId === systemId &&
         (externalRef === undefined || user.externalRef === externalRef),
     )) {
-      const deleted = await fetch(`${url}/${user.id}${agent ? `?partyuuid=${partyUuid}` : ''}`, {
-        method: 'DELETE',
-        headers,
-      });
+      const deleted = await fetchWithRetry(
+        `${url}/${user.id}${agent ? `?partyuuid=${partyUuid}` : ''}`,
+        {
+          method: 'DELETE',
+          headers,
+        },
+      );
       if (!deleted.ok && deleted.status !== 404) {
         throw new Error(`Could not delete system user ${user.id}: HTTP ${deleted.status}`);
       }
@@ -117,7 +121,7 @@ export class ApiRequests {
     const token = await this.tokenClass.getPersonalTokenByPid(userPid);
     const url = `${env('API_BASE_URL')}/authentication/api/v1/systemuser/agent/${partyId}/${systemUserId}?partyuuid=${partyUuid}`;
 
-    const response = await fetch(url, {
+    const response = await fetchWithRetry(url, {
       method: 'DELETE',
       headers: {
         Authorization: `Bearer ${token}`,
@@ -140,7 +144,7 @@ export class ApiRequests {
     const url = `${env('API_BASE_URL')}/authentication/api/${endpoint}`;
 
     try {
-      const response = await fetch(url, {
+      const response = await fetchWithRetry(url, {
         method: 'DELETE',
         headers: {
           Authorization: `Bearer ${token}`,
@@ -168,7 +172,7 @@ export class ApiRequests {
     const url = `${env('API_BASE_URL')}/authentication/api/${endpoint}`;
 
     try {
-      const response = await fetch(url, {
+      const response = await fetchWithRetry(url, {
         method: 'DELETE',
         headers: {
           Authorization: `Bearer ${token}`,
@@ -261,7 +265,7 @@ export class ApiRequests {
     const userToken = await this.tokenClass.getPersonalTokenByPid(userPid);
 
     try {
-      const response = await fetch(url, {
+      const response = await fetchWithRetry(url, {
         method: 'POST',
         headers: {
           Authorization: `Bearer ${userToken}`,
@@ -395,7 +399,7 @@ export class ApiRequests {
     const url = `${env('API_BASE_URL')}${endpoint}`;
 
     try {
-      const response = await fetch(url, {
+      const response = await fetchWithRetry(url, {
         method: 'GET',
         headers: {
           Authorization: `Bearer ${token}`,
@@ -423,7 +427,7 @@ export class ApiRequests {
     const token = await this.tokenClass.getEnterpriseAltinnToken(vendorOrgNo, scopes);
     const url = `${env('API_BASE_URL')}/${endpoint}`;
 
-    const response = await fetch(url, {
+    const response = await fetchWithRetry(url, {
       method: 'GET',
       headers: {
         Authorization: `Bearer ${token}`,
@@ -448,7 +452,7 @@ export class ApiRequests {
 
     const token = await this.tokenClass.getEnterpriseAltinnToken(vendorOrgNo, scopes);
 
-    const response = await fetch(url, {
+    const response = await fetchWithRetry(url, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
