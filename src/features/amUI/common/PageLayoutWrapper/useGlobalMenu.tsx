@@ -7,7 +7,6 @@ import {
 import {
   InboxFillIcon,
   PersonCircleIcon,
-  InformationSquareIcon,
   PadlockLockedFillIcon,
   MenuGridIcon,
   Buildings2Icon,
@@ -32,11 +31,6 @@ const linkUrls = {
     no_nb: 'skjemaoversikt',
     no_nn: 'skjemaoversikt',
     en: 'forms-overview',
-  },
-  about: {
-    no_nb: 'nyheter/om-nye-altinn',
-    no_nn: 'nyheiter/om-nye-altinn',
-    en: 'news/about-the-new-altinn',
   },
   'start-business': {
     no_nb: 'starte-og-drive',
@@ -122,19 +116,6 @@ export const useGlobalMenu = ({
         <a
           {...props}
           href={`${getAltinnStartPageUrl()}${linkUrls['search'][lang] ?? linkUrls['search']['no_nb']}`}
-        />
-      ),
-    },
-    {
-      id: 'info',
-      groupId: 'links',
-      icon: InformationSquareIcon,
-      title: t('header.new_altinn_info'),
-      size: 'sm',
-      as: (props) => (
-        <a
-          {...props}
-          href={`${getAltinnStartPageUrl()}${linkUrls['about'][lang] ?? linkUrls['about']['no_nb']}`}
         />
       ),
     },

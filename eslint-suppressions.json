@@ -469,7 +469,7 @@
       "count": 1
     },
     "jsx-a11y/anchor-has-content": {
-      "count": 7
+      "count": 6
     }
   },
   "src/features/amUI/common/PageLayoutWrapper/useHeader.tsx": {
