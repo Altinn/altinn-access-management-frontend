@@ -175,11 +175,13 @@ export const useGlobalMenu = ({
   };
 
   const desktopMenu = {
+    id: 'global-menu',
     items: headerLinks,
     groups,
   };
 
   const mobileMenu = {
+    id: 'global-menu',
     items: headerLinks,
     groups,
   };
