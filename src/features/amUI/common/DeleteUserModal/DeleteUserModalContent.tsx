@@ -96,7 +96,7 @@ export const DeleteUserModalContent = ({
 
   const [deleteUser, { isLoading: isDeleteLoading, isError, error }] =
     useRemoveRightHolderMutation();
-  const { data: isAdmin } = useGetIsAdminQuery();
+  const { data: isAdmin, isLoading: isAdminLoading } = useGetIsAdminQuery();
 
   const {
     fromParty,
@@ -173,7 +173,7 @@ export const DeleteUserModalContent = ({
   const isDeletionNotAllowed = dialogModel.status.level === DeletionLevel.None;
   const shouldShowNonDeletableReasons =
     dialogModel.status.level !== DeletionLevel.Full && dialogModel.nonDeletableReasons.length > 0;
-  const isLoading = isDeleteLoading || isRolePermissionsLoading;
+  const isLoading = isDeleteLoading || isRolePermissionsLoading || isAdminLoading;
   const errorDetails = isError ? createErrorDetails(error) : null;
   const transComponents = {
     p: <DsParagraph data-size='sm'></DsParagraph>,
