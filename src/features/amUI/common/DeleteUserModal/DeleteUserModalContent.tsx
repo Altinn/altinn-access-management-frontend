@@ -14,15 +14,10 @@ import { useDispatch } from 'react-redux';
 import { Link, useLocation, useNavigate } from 'react-router';
 
 import { amUIPath, GeneralPath } from '@/routes/paths';
-import { type Entity } from '@/dataObjects/dtos/Common';
 import { accessPackageApi } from '@/rtk/features/accessPackageApi';
 import { useRemoveRightHolderMutation } from '@/rtk/features/connectionApi';
 import { roleApi } from '@/rtk/features/roleApi';
-import {
-  PartyType,
-  useGetIsAdminQuery,
-  useGetReporteeListForAuthorizedUserQuery,
-} from '@/rtk/features/userInfoApi';
+import { PartyType, useGetIsAdminQuery } from '@/rtk/features/userInfoApi';
 import { getChangeReporteeAndRedirectUrl } from '@/resources/utils/changeReporteeUtils';
 
 import { LoadingAnimation } from '../LoadingAnimation/LoadingAnimation';
@@ -44,12 +39,13 @@ import {
   ER_ROLE_REASON,
   VIA_ROLE_REASON,
   type NonDeletableReason,
+  type ViaParty,
 } from './deletionModalUtils';
 
 export interface DeleteUserModalContentProps {
   status: DeletionStatus;
   nonDeletableReasons: NonDeletableReason[];
-  viaParties?: Entity[];
+  viaParties?: ViaParty[];
   isRolePermissionsLoading?: boolean;
 }
 
@@ -101,9 +97,6 @@ export const DeleteUserModalContent = ({
   const [deleteUser, { isLoading: isDeleteLoading, isError, error }] =
     useRemoveRightHolderMutation();
   const { data: isAdmin } = useGetIsAdminQuery();
-  const { data: reporteeList } = useGetReporteeListForAuthorizedUserQuery(undefined, {
-    skip: isAdmin !== false,
-  });
 
   const {
     fromParty,
@@ -219,19 +212,17 @@ export const DeleteUserModalContent = ({
           type: String(viaParty.type).toLowerCase() === 'person' ? 'person' : 'company',
           reverseNameOrder: false,
         });
-        const isViaMainUnit = !!reporteeList?.some(
-          (reportee) =>
-            reportee.partyUuid === viaParty.id &&
-            reportee.subunits?.some((subunit) => subunit.partyUuid === fromParty?.partyUuid),
-        );
-        const goTo = isViaMainUnit
+        const goTo = viaParty.isMainUnit
           ? window.location.href
           : `${window.location.origin}${GeneralPath.BasePath}/${amUIPath.Reportees}/${fromParty?.partyUuid}`;
         return {
           key: `${reason}-${viaParty.id}`,
           i18nKey: isAdmin ? nonDeletableReasonKeys[reason] : viaRoleSwitchKey,
           values: {
-            via_name: isViaMainUnit ? `${viaName} (${t('common.mainunit_lowercase')})` : viaName,
+            via_name:
+              !isAdmin && viaParty.isMainUnit
+                ? `${viaName} (${t('common.mainunit_lowercase')})`
+                : viaName,
           },
           components: {
             viaLink: (
