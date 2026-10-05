@@ -25,7 +25,6 @@ export type Party = {
   partyTypeName: PartyType;
   dateOfBirth?: string;
   isDeleted?: boolean;
-  variant?: string;
 };
 
 export enum UserType {
@@ -36,13 +35,6 @@ export enum UserType {
   AgencyUser,
   PSAN,
   PSA,
-}
-
-export interface Organization {
-  orgNumber: string;
-  name: string;
-  partyUuid: string;
-  unitType: string;
 }
 
 const baseUrl = import.meta.env.BASE_URL + 'accessmanagement/api/v1/' + 'lookup';
@@ -65,7 +57,7 @@ export const lookupApi = createApi({
       query: ({ partyUuid }) => `party/${partyUuid}`,
       keepUnusedDataFor: 300,
     }),
-    getOrganization: builder.query<Organization, string>({
+    getOrganization: builder.query<Party, string>({
       query: (orgNumber) => `org/${orgNumber}`,
       transformErrorResponse: (response: {
         status: string | number;

@@ -170,7 +170,7 @@ export const ClientAccessList = ({
       name: client.client.name,
       partyTypeName: userType === 'company' ? PartyType.Organization : PartyType.Person,
       dateOfBirth: client.client.dateOfBirth ?? undefined,
-      variant: client.client.variant ?? undefined,
+      unitType: client.client.variant ?? undefined,
     };
 
     const nodes = client.access.reduce((acc, access) => {

@@ -247,7 +247,7 @@ export const ClientAgentPackageList = ({
                           ? PartyType.Person
                           : PartyType.Organization,
                       dateOfBirth: agent.agent.dateOfBirth ?? undefined,
-                      variant: agent.agent.variant ?? undefined,
+                      unitType: agent.agent.variant ?? undefined,
                     },
                     accessPackage,
                     userHasAccess: hasAccess,

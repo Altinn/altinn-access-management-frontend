@@ -1,6 +1,6 @@
 import type { ReactNode } from 'react';
 
-import type { Organization } from '@/rtk/features/lookupApi';
+import type { Party } from '@/rtk/features/lookupApi';
 
 export type RecipientKind = 'person' | 'org';
 
@@ -31,7 +31,7 @@ export type OrgRecipientOption = Extract<RecipientOption, { type: 'org' }>;
 /*** Someone who can be given access, once the form holds enough to identify them */
 export type Recipient =
   | { kind: 'person'; personIdentifier: string; lastName: string }
-  | { kind: 'org'; organization: Organization };
+  | { kind: 'org'; organization: Party };
 
 /**
  * connectionApi's addRightHolder takes either a person to look up or the uuid of a party that

@@ -8,7 +8,7 @@ export const mapConnectionToParty = (party: User | undefined): Party | undefined
   return {
     partyId: partyId ?? 0,
     name: party.name,
-    unitType: party.type,
+    unitType: party.variant,
     orgNumber: party.organizationIdentifier ?? undefined,
     isDeleted: party.isDeleted,
     partyUuid: party.id,
@@ -16,6 +16,5 @@ export const mapConnectionToParty = (party: User | undefined): Party | undefined
       party.type?.toLocaleLowerCase() === 'organisasjon'
         ? PartyType.Organization
         : PartyType.Person,
-    variant: party.variant,
   };
 };
