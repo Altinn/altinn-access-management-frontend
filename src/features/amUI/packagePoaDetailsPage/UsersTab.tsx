@@ -1,10 +1,9 @@
-import { useMemo, useRef, useState } from 'react';
+import { useMemo, useRef } from 'react';
 import { DsParagraph, formatDisplayName } from '@altinn/altinn-components';
 import { useTranslation } from 'react-i18next';
 
 import { type ActionError } from '@/resources/hooks/useActionError';
 import { type AccessPackage } from '@/rtk/features/accessPackageApi';
-import { type Party } from '@/rtk/features/lookupApi';
 import { useGetRightHoldersQuery } from '@/rtk/features/connectionApi';
 import { useSnackbarOnIdle } from '@/resources/hooks/useSnackbarOnIdle';
 
@@ -24,7 +23,6 @@ import {
 } from '../common/RestoreFocus';
 
 import { PackageUserModal, mapUserToParty, type PackageUserModalHandle } from './PackageUserModal';
-import { DelegateErrorAlert } from './DelegateErrorAlert';
 import { AddPackageUserButton, type AddedPackageUser } from './AddPackageUserModal';
 import pageClasses from './PackagePoaDetailsPage.module.css';
 
@@ -32,7 +30,6 @@ interface UsersTabProps {
   accessPackage?: AccessPackage;
   isLoading: boolean;
   isFetching: boolean;
-  onDelegateError?: (errorInfo: ActionError) => void;
 }
 
 // Focus-restore fallback for this zone: when a revoked row is gone, focus lands on the search field
@@ -52,10 +49,9 @@ export const UsersTab = ({ accessPackage, isLoading, isFetching }: UsersTabProps
     accessPackage?.isAssignable !== false &&
     (accessPackage?.id ? canDelegatePackage(accessPackage.id)?.result !== false : true);
 
-  const [delegateActionError, setDelegateActionError] = useState<{
-    error: ActionError;
-    targetParty?: Party;
-  } | null>(null);
+  // The user the latest delegate/revoke was for, so a failure can open the dialog on them even when
+  // the action was taken from the list.
+  const actionTargetRef = useRef<UserActionTarget | null>(null);
 
   const { isLoading: roleMetadataIsLoading } = useRoleMetadata();
   const {
@@ -102,12 +98,10 @@ export const UsersTab = ({ accessPackage, isLoading, isFetching }: UsersTabProps
       }),
     );
 
-  const handleDelegateError = (
-    _accessPackage: AccessPackage,
-    errorInfo: ActionError,
-    toParty?: Party,
-  ) => {
-    setDelegateActionError({ error: errorInfo, targetParty: toParty });
+  const handleActionError = (_accessPackage: AccessPackage, errorInfo: ActionError) => {
+    if (actionTargetRef.current) {
+      modalRef.current?.showError(actionTargetRef.current, errorInfo);
+    }
   };
 
   const {
@@ -119,19 +113,19 @@ export const UsersTab = ({ accessPackage, isLoading, isFetching }: UsersTabProps
   } = useAccessPackageActions({
     snackbarBusy: isFetching,
     onDelegateSuccess: () => {
-      setDelegateActionError(null);
       modalRef.current?.showSuccess();
     },
     onRevokeSuccess: () => {
       modalRef.current?.showSuccess();
     },
-    onDelegateError: handleDelegateError,
+    onDelegateError: handleActionError,
+    onRevokeError: handleActionError,
   });
 
   const handleOnDelegate = (user: UserActionTarget) => {
     const toParty = mapUserToParty(user);
     if (accessPackage && toParty) {
-      setDelegateActionError(null);
+      actionTargetRef.current = user;
       onDelegate(accessPackage, toParty);
     }
   };
@@ -139,6 +133,7 @@ export const UsersTab = ({ accessPackage, isLoading, isFetching }: UsersTabProps
   const handleOnRevoke = (user: UserActionTarget) => {
     const toParty = mapUserToParty(user);
     if (accessPackage && toParty) {
+      actionTargetRef.current = user;
       onRevoke(accessPackage, toParty);
     }
   };
@@ -171,14 +166,6 @@ export const UsersTab = ({ accessPackage, isLoading, isFetching }: UsersTabProps
           >
             {t('package_poa_details_page.users_tab.description')}
           </DsParagraph>
-        )}
-
-        {delegateActionError?.error && delegateActionError?.targetParty && (
-          <DelegateErrorAlert
-            error={delegateActionError?.error}
-            targetParty={delegateActionError?.targetParty}
-            onClose={() => setDelegateActionError(null)}
-          />
         )}
 
         <UserSearch
