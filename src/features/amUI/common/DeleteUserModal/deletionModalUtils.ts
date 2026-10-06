@@ -98,7 +98,7 @@ export const getNonDeletableReasons = (
     (rolePermission) => rolePermission?.role?.provider?.code === CRA_PROVIDER_CODE,
   );
 
-  const hasViaRightholderRole = getViaParties(rolePermissions).length > 0;
+  const hasViaInheritedRole = getViaParties(rolePermissions).length > 0;
 
   const reasons: NonDeletableReason[] = [];
   if (hasERRoles) {
@@ -110,16 +110,24 @@ export const getNonDeletableReasons = (
   if (hasGuardianshipRole) {
     reasons.push(GUARDIANSHIP_ROLE_REASON);
   }
-  if (hasViaRightholderRole) {
+  if (hasViaInheritedRole) {
     reasons.push(VIA_ROLE_REASON);
   }
 
   return reasons;
 };
 
+// ER, Agent and Guardianship roles are reported separately, so any other role
+// (e.g. Rightholder, or other Altinn roles inherited via an org) with a `via`
+// party is reported as a generic "via role" reason.
 export const getViaParties = (rolePermissions: RolePermission[] | undefined): ViaParty[] => {
   const viaParties = (rolePermissions ?? [])
-    .filter((rolePermission) => rolePermission.role?.code === RIGHTHOLDER_ROLE)
+    .filter(
+      (rolePermission) =>
+        rolePermission.role?.provider?.code !== ECC_PROVIDER_CODE &&
+        rolePermission.role?.provider?.code !== CRA_PROVIDER_CODE &&
+        rolePermission.role?.code !== AGENT_ROLE,
+    )
     .flatMap((rolePermission) => rolePermission.permissions ?? [])
     .flatMap((permission) =>
       permission?.via
