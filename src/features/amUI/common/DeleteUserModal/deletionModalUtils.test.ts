@@ -5,6 +5,7 @@ import { type Entity } from '@/dataObjects/dtos/Common';
 
 import {
   A2_PROVIDER_CODE,
+  A3_PROVIDER_CODE,
   CRA_PROVIDER_CODE,
   ECC_PROVIDER_CODE,
 } from '../UserRoles/useRoleMetadata';
@@ -281,6 +282,16 @@ describe('getDeletionStatus', () => {
       reporteeView: false,
       expected: { target: DeletionTarget.User, level: DeletionLevel.Limited },
     },
+    {
+      description:
+        'user view, only a non-Rightholder Altinn3 role inherited via another party, should target User and allow No deletion',
+      rolePermissions: mockRolePermissions([
+        { code: 'hovedadministrator', via: ['via-org'], providerCode: A3_PROVIDER_CODE },
+      ]),
+      viewingYourself: false,
+      reporteeView: false,
+      expected: { target: DeletionTarget.User, level: DeletionLevel.None },
+    },
   ];
 
   it.each(testCases)(
@@ -300,6 +311,13 @@ describe('getNonDeletableReasons', () => {
 
   it('returns via role reason when all access is inherited through another party', () => {
     const rolePermissions = mockRolePermissions([{ code: RIGHTHOLDER_ROLE, via: ['via-org'] }]);
+    expect(getNonDeletableReasons(rolePermissions)).toEqual([VIA_ROLE_REASON]);
+  });
+
+  it('returns via role reason for a non-Rightholder Altinn3 role inherited through another party', () => {
+    const rolePermissions = mockRolePermissions([
+      { code: 'hovedadministrator', via: ['via-org'], providerCode: A3_PROVIDER_CODE },
+    ]);
     expect(getNonDeletableReasons(rolePermissions)).toEqual([VIA_ROLE_REASON]);
   });
 
@@ -348,12 +366,21 @@ describe('getViaParties', () => {
     expect(viaParties[0].id).toBe('via-org');
   });
 
-  it('ignores via parties on other roles than Rightholder', () => {
+  it('ignores via parties on ER and Agent roles, which are reported separately', () => {
     const rolePermissions = mockRolePermissions([
       { code: 'dagl', via: ['via-org'], providerCode: ECC_PROVIDER_CODE },
       { code: AGENT_ROLE, via: ['via-org'] },
     ]);
     expect(getViaParties(rolePermissions)).toEqual([]);
+  });
+
+  it('includes via parties from other Altinn3 roles than Rightholder', () => {
+    const rolePermissions = mockRolePermissions([
+      { code: 'hovedadministrator', via: ['via-org'], providerCode: A3_PROVIDER_CODE },
+    ]);
+    const viaParties = getViaParties(rolePermissions);
+    expect(viaParties).toHaveLength(1);
+    expect(viaParties[0].id).toBe('via-org');
   });
 
   it('marks via party as main unit when it is the parent of the from party', () => {
