@@ -4,6 +4,7 @@ import { t } from 'i18next';
 import type { Entity } from '@/dataObjects/dtos/Common';
 import type { Party } from '@/rtk/features/lookupApi';
 import { PartyType, type ReporteeInfo, type User } from '@/rtk/features/userInfoApi';
+import { type UserListItemData } from '@/features/amUI/common/UserListItems/UserListItems';
 
 const SUBUNIT_TYPES = ['BEDR', 'AAFY', 'ADOS'];
 
@@ -21,7 +22,8 @@ export const isSubUnit = (reportee?: ReporteeInfo): boolean => {
 
 /** The parts of a Party, User, ReporteeInfo, UserListItemData or Entity needed to format its name. */
 type NamedEntity =
-  Pick<Party, 'name' | 'partyTypeName'> | Pick<User | ReporteeInfo | Entity, 'name' | 'type'>;
+  | Pick<Party, 'name' | 'partyTypeName'>
+  | Pick<User | ReporteeInfo | Entity | UserListItemData, 'name' | 'type'>;
 
 const isPersonEntity = (entity: NamedEntity): boolean =>
   'partyTypeName' in entity
