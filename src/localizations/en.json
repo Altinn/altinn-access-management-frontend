@@ -1066,6 +1066,9 @@
     },
     "services_tab": {
       "no_resources": "This package includes no services"
+    },
+    "add_user_modal": {
+      "heading": "Give power of attorney to a new user"
     }
   },
   "service_poa_details_page": {
