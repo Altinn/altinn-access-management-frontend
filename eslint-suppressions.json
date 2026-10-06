@@ -406,9 +406,6 @@
     }
   },
   "src/features/amUI/common/DelegationModal/SingleRights/ResourceAlert.tsx": {
-    "@typescript-eslint/no-unsafe-enum-comparison": {
-      "count": 2
-    },
     "react-hooks/set-state-in-effect": {
       "count": 1
     }
@@ -449,11 +446,6 @@
       "count": 2
     }
   },
-  "src/features/amUI/common/DelegationModal/missingAccessUtils.ts": {
-    "@typescript-eslint/no-unsafe-enum-comparison": {
-      "count": 6
-    }
-  },
   "src/features/amUI/common/DeleteClientProviderModal/DeleteClientProviderModal.tsx": {
     "@typescript-eslint/no-misused-promises": {
       "count": 1
@@ -470,14 +462,6 @@
     },
     "@typescript-eslint/no-misused-promises": {
       "count": 1
-    }
-  },
-  "src/features/amUI/common/PageLayoutWrapper/useGlobalMenu.tsx": {
-    "@typescript-eslint/require-await": {
-      "count": 1
-    },
-    "jsx-a11y/anchor-has-content": {
-      "count": 7
     }
   },
   "src/features/amUI/common/PageLayoutWrapper/useHeader.tsx": {

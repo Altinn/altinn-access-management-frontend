@@ -1,11 +1,11 @@
-import { useMemo, useRef, useState } from 'react';
-import { DsParagraph } from '@altinn/altinn-components';
+import { useMemo, useRef } from 'react';
+import { DsParagraph, formatDisplayName } from '@altinn/altinn-components';
 import { useTranslation } from 'react-i18next';
 
 import { type ActionError } from '@/resources/hooks/useActionError';
 import { type AccessPackage } from '@/rtk/features/accessPackageApi';
-import { type Party } from '@/rtk/features/lookupApi';
 import { useGetRightHoldersQuery } from '@/rtk/features/connectionApi';
+import { useSnackbarOnIdle } from '@/resources/hooks/useSnackbarOnIdle';
 
 import UserSearch from '../common/UserSearch/UserSearch';
 import { useAccessPackageActions } from '../common/AccessPackageList/useAccessPackageActions';
@@ -16,7 +16,6 @@ import { mapPermissionsToUserSearchNodes } from '../common/UserSearch/permission
 import type { UserActionTarget } from '../common/UserSearch/types';
 import { usePartyRepresentation } from '../common/PartyRepresentationContext/PartyRepresentationContext';
 import { DelegationAction } from '../common/DelegationModal/EditModal';
-import { NewUserButton } from '../users/NewUserModal/NewUserModal';
 import {
   RestoreFocusFallback,
   useRestoreFocusContext,
@@ -24,14 +23,13 @@ import {
 } from '../common/RestoreFocus';
 
 import { PackageUserModal, mapUserToParty, type PackageUserModalHandle } from './PackageUserModal';
-import { DelegateErrorAlert } from './DelegateErrorAlert';
+import { AddPackageUserButton, type AddedPackageUser } from './AddPackageUserModal';
 import pageClasses from './PackagePoaDetailsPage.module.css';
 
 interface UsersTabProps {
   accessPackage?: AccessPackage;
   isLoading: boolean;
   isFetching: boolean;
-  onDelegateError?: (errorInfo: ActionError) => void;
 }
 
 // Focus-restore fallback for this zone: when a revoked row is gone, focus lands on the search field
@@ -46,14 +44,14 @@ export const UsersTab = ({ accessPackage, isLoading, isFetching }: UsersTabProps
   const requestFocusAfterListChange = useRestoreFocusOnDataChange(accessPackage?.permissions);
   const { canDelegatePackage, isLoading: isDelegationCheckLoading } =
     useAccessPackageDelegationCheck();
-  const canDelegate = accessPackage?.id
-    ? canDelegatePackage(accessPackage.id)?.result !== false
-    : true;
+  // Both are explained by the page header, so here they only hide the ways of giving the package.
+  const canDelegate =
+    accessPackage?.isAssignable !== false &&
+    (accessPackage?.id ? canDelegatePackage(accessPackage.id)?.result !== false : true);
 
-  const [delegateActionError, setDelegateActionError] = useState<{
-    error: ActionError;
-    targetParty?: Party;
-  } | null>(null);
+  // The user the latest delegate/revoke was for, so a failure can open the dialog on them even when
+  // the action was taken from the list.
+  const actionTargetRef = useRef<UserActionTarget | null>(null);
 
   const { isLoading: roleMetadataIsLoading } = useRoleMetadata();
   const {
@@ -85,12 +83,25 @@ export const UsersTab = ({ accessPackage, isLoading, isFetching }: UsersTabProps
     [indirectConnections],
   );
 
-  const handleDelegateError = (
-    _accessPackage: AccessPackage,
-    errorInfo: ActionError,
-    toParty?: Party,
-  ) => {
-    setDelegateActionError({ error: errorInfo, targetParty: toParty });
+  // The added user only shows up once the package refetches, so hold the confirmation until then and
+  // it arrives together with the row it is about.
+  const { queueSnackbar } = useSnackbarOnIdle({ isBusy: isFetching });
+
+  const handleUserAdded = (user: AddedPackageUser) =>
+    queueSnackbar(
+      t('access_packages.package_delegation_success', {
+        name: formatDisplayName({
+          fullName: user.name,
+          type: user.type === 'person' ? 'person' : 'company',
+        }),
+        accessPackage: accessPackage?.name,
+      }),
+    );
+
+  const handleActionError = (_accessPackage: AccessPackage, errorInfo: ActionError) => {
+    if (actionTargetRef.current) {
+      modalRef.current?.showError(actionTargetRef.current, errorInfo);
+    }
   };
 
   const {
@@ -102,19 +113,19 @@ export const UsersTab = ({ accessPackage, isLoading, isFetching }: UsersTabProps
   } = useAccessPackageActions({
     snackbarBusy: isFetching,
     onDelegateSuccess: () => {
-      setDelegateActionError(null);
       modalRef.current?.showSuccess();
     },
     onRevokeSuccess: () => {
       modalRef.current?.showSuccess();
     },
-    onDelegateError: handleDelegateError,
+    onDelegateError: handleActionError,
+    onRevokeError: handleActionError,
   });
 
   const handleOnDelegate = (user: UserActionTarget) => {
     const toParty = mapUserToParty(user);
     if (accessPackage && toParty) {
-      setDelegateActionError(null);
+      actionTargetRef.current = user;
       onDelegate(accessPackage, toParty);
     }
   };
@@ -122,6 +133,7 @@ export const UsersTab = ({ accessPackage, isLoading, isFetching }: UsersTabProps
   const handleOnRevoke = (user: UserActionTarget) => {
     const toParty = mapUserToParty(user);
     if (accessPackage && toParty) {
+      actionTargetRef.current = user;
       onRevoke(accessPackage, toParty);
     }
   };
@@ -156,14 +168,6 @@ export const UsersTab = ({ accessPackage, isLoading, isFetching }: UsersTabProps
           </DsParagraph>
         )}
 
-        {delegateActionError?.error && delegateActionError?.targetParty && (
-          <DelegateErrorAlert
-            error={delegateActionError?.error}
-            targetParty={delegateActionError?.targetParty}
-            onClose={() => setDelegateActionError(null)}
-          />
-        )}
-
         <UserSearch
           includeSelfAsChild={false}
           restoreFocusFallbackId={USER_SEARCH_FALLBACK_ID}
@@ -177,9 +181,9 @@ export const UsersTab = ({ accessPackage, isLoading, isFetching }: UsersTabProps
           }
           onDelegate={canDelegate ? handleInlineDelegate : undefined}
           AddUserButton={
-            <NewUserButton
-              variant='primary'
-              onComplete={handleOnDelegate}
+            <AddPackageUserButton
+              accessPackage={accessPackage}
+              onUserAdded={handleUserAdded}
             />
           }
           onRevoke={handleInlineRevoke}

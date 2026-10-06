@@ -147,7 +147,7 @@ export const ScopeInfo = ({
         }
       : null;
   const delegationCheckRightReasons = showDelegationCheckWarning
-    ? (delegationCheck?.rights?.map((right) => right.reasonCodes?.[0] ?? '') ?? [''])
+    ? (delegationCheck?.rights?.flatMap((right) => right.reasonCodes ?? []) ?? [])
     : undefined;
   const displayResourceAlert =
     canDelegate &&

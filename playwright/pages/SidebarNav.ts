@@ -45,27 +45,30 @@ export class SidebarNav {
     this.consent = this.navLink(dict.sidebar.consent);
     this.clientAdministration = this.navLink(dict.sidebar.client_administration);
     this.settings = this.navLink(dict.sidebar.settings);
-    // Matched on the title alone because this item's aria-label gains a count
-    // suffix once the pending-request query resolves — "Forespørsler" becomes
-    // "Forespørsler (1 mottatt)". Name matching is substring by default, so the
-    // title covers both, and the locator is not racing that update.
-    this.requests = this.navLink(dict.sidebar.requests);
+    // Not exact: this item's aria-label gains a count suffix once the
+    // pending-request query resolves — "Forespørsler" becomes "Forespørsler
+    // (1 mottatt)". Matching the title alone covers both, so the locator is not
+    // racing that update.
+    this.requests = this.navLink(dict.sidebar.requests, { exact: false });
     this.myClients = this.navLink(dict.sidebar.your_clients);
-    // The Maskinporten label carries a soft hyphen for line breaking, and whether
-    // it survives into the accessible name depends on the component. Matching the
-    // part before it is a substring that holds either way. Written as an escape
-    // rather than the literal character, which is invisible in source.
-    this.maskinporten = this.navLink(dict.sidebar.maskinporten.split(SOFT_HYPHEN)[0]);
+    // Not exact: the Maskinporten label carries a soft hyphen for line breaking,
+    // and whether it survives into the accessible name depends on the component.
+    // Matching the part before it holds either way. Written as an escape rather
+    // than the literal character, which is invisible in source.
+    this.maskinporten = this.navLink(dict.sidebar.maskinporten.split(SOFT_HYPHEN)[0], {
+      exact: false,
+    });
   }
 
   /**
    * One sidebar item, by the accessible name of its link.
    *
-   * Substring matching is deliberate: some labels carry a suffix (a pending
-   * count) that appears only after data loads.
+   * Exact by default: several labels are prefixes of others — "Fullmakter" is a
+   * prefix of "Fullmakter hos andre" — so a substring match would resolve to two
+   * links. Pass `exact: false` only where the label genuinely grows at runtime.
    */
-  private navLink(name: string): Locator {
-    return this.nav.getByRole('link', { name });
+  private navLink(name: string, { exact = true }: { exact?: boolean } = {}): Locator {
+    return this.nav.getByRole('link', { name, exact });
   }
 
   async goToUsers() {

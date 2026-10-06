@@ -142,7 +142,6 @@
     "log_out": "Log out",
     "locale_title": "Choose language",
     "logged_in_as_name": "Logged in as {{name}}",
-    "new_altinn_info": "About new Altinn",
     "help_pages": "Help pages",
     "leave_beta": "Go to old Altinn",
     "shortcuts": "Shortcuts",
@@ -433,7 +432,7 @@
     },
     "specific_rights": {
       "missing_role_message": "You cannot delegate the entire service because you lack some of the rights yourself.",
-      "missing_srr_right_message": "{{reportee}} is not given permission from {{resourceOwner}} to delegate the whole service. Contact them if you want to change this."
+      "access_list_message": "{{reportee}} is not given permission from {{resourceOwner}} to delegate the whole service. Contact them if you want to change this."
     },
     "technical_error_message": {
       "heading": "Oops! Something went wrong.",
@@ -1068,6 +1067,9 @@
     },
     "services_tab": {
       "no_resources": "This package includes no services"
+    },
+    "add_user_modal": {
+      "heading": "Give power of attorney to a new user"
     }
   },
   "service_poa_details_page": {

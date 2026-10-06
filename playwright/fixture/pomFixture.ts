@@ -16,6 +16,7 @@ import { KlientAdministrasjonPage } from 'playwright/pages/tilgangsstyring/Klien
 import { InnstillingerPage } from 'playwright/pages/settings/InnstillingerPage';
 import { ForespoerslerPage } from 'playwright/pages/requests/ForespoerslerPage';
 import { MaskinportenPage } from 'playwright/pages/maskinporten/MaskinportenPage';
+import { FullmaktsoversiktPage } from 'playwright/pages/fullmakter/FullmaktsoversiktPage';
 
 const defaultLang = Language.NB;
 
@@ -41,6 +42,7 @@ type Fixtures = {
   innstillingerPage: InnstillingerPage;
   forespoerslerPage: ForespoerslerPage;
   maskinportenPage: MaskinportenPage;
+  fullmaktsoversiktPage: FullmaktsoversiktPage;
 };
 
 const test = baseTest.extend<Fixtures>({
@@ -118,6 +120,10 @@ const test = baseTest.extend<Fixtures>({
 
   maskinportenPage: async ({ page, language }, use) => {
     await use(new MaskinportenPage(page, language));
+  },
+
+  fullmaktsoversiktPage: async ({ page, language }, use) => {
+    await use(new FullmaktsoversiktPage(page, language));
   },
 });
 

@@ -225,7 +225,7 @@ export const ResourceInfo = ({
               <ResourceAlert
                 error={technicalErrorDetails}
                 availableActions={availableActions}
-                rightReasons={rights.map((r) => r.delegationReason)}
+                rightReasons={rights.flatMap((r) => r.delegationReasons)}
                 resource={resource}
                 className={classes.resourceAlert}
               />
