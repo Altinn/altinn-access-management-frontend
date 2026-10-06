@@ -14,6 +14,7 @@ export const usePermissionOverview = ({ permissions }: { permissions: Permission
       const id = to?.id;
       if (!to || !id) continue;
       if (seen.has(id)) continue;
+      if (to.type === 'Systembruker') continue; // skip system users
       const isPerson = to?.type === 'Person';
       const type = isPerson ? 'person' : 'company';
       const name = formatDisplayName({
