@@ -13,12 +13,12 @@ import { Trans, useTranslation } from 'react-i18next';
 import { useDispatch } from 'react-redux';
 import { Link, useLocation, useNavigate } from 'react-router';
 
-import { amUIPath } from '@/routes/paths';
-import { type Entity } from '@/dataObjects/dtos/Common';
+import { amUIPath, GeneralPath } from '@/routes/paths';
 import { accessPackageApi } from '@/rtk/features/accessPackageApi';
 import { useRemoveRightHolderMutation } from '@/rtk/features/connectionApi';
 import { roleApi } from '@/rtk/features/roleApi';
-import { PartyType } from '@/rtk/features/userInfoApi';
+import { PartyType, useGetIsAdminQuery } from '@/rtk/features/userInfoApi';
+import { getChangeReporteeAndRedirectUrl } from '@/resources/utils/changeReporteeUtils';
 
 import { LoadingAnimation } from '../LoadingAnimation/LoadingAnimation';
 import { handleSelectAccount } from '../PageLayoutWrapper/useHeader';
@@ -39,12 +39,13 @@ import {
   ER_ROLE_REASON,
   VIA_ROLE_REASON,
   type NonDeletableReason,
+  type ViaParty,
 } from './deletionModalUtils';
 
 export interface DeleteUserModalContentProps {
   status: DeletionStatus;
   nonDeletableReasons: NonDeletableReason[];
-  viaParties?: Entity[];
+  viaParties?: ViaParty[];
   isRolePermissionsLoading?: boolean;
 }
 
@@ -58,6 +59,7 @@ const nonDeletableReasonKeys: Record<NonDeletableReason, string> = {
   [GUARDIANSHIP_ROLE_REASON]: 'delete_user.non_deletable_reason_guardianship',
   [VIA_ROLE_REASON]: 'delete_user.non_deletable_reason_via_role',
 };
+const viaRoleSwitchKey = 'delete_user.non_deletable_reason_via_role_switch';
 
 type ReasonListItem = {
   key: string;
@@ -94,6 +96,7 @@ export const DeleteUserModalContent = ({
 
   const [deleteUser, { isLoading: isDeleteLoading, isError, error }] =
     useRemoveRightHolderMutation();
+  const { data: isAdmin, isLoading: isAdminLoading } = useGetIsAdminQuery();
 
   const {
     fromParty,
@@ -170,7 +173,7 @@ export const DeleteUserModalContent = ({
   const isDeletionNotAllowed = dialogModel.status.level === DeletionLevel.None;
   const shouldShowNonDeletableReasons =
     dialogModel.status.level !== DeletionLevel.Full && dialogModel.nonDeletableReasons.length > 0;
-  const isLoading = isDeleteLoading || isRolePermissionsLoading;
+  const isLoading = isDeleteLoading || isRolePermissionsLoading || isAdminLoading;
   const errorDetails = isError ? createErrorDetails(error) : null;
   const transComponents = {
     p: <DsParagraph data-size='sm'></DsParagraph>,
@@ -203,25 +206,40 @@ export const DeleteUserModalContent = ({
           },
         };
       }
-      return viaParties.map((viaParty) => ({
-        key: `${reason}-${viaParty.id}`,
-        i18nKey: nonDeletableReasonKeys[reason],
-        values: {
-          via_name: formatDisplayName({
-            fullName: viaParty.name || '',
-            type: String(viaParty.type).toLowerCase() === 'person' ? 'person' : 'company',
-            reverseNameOrder: false,
-          }),
-        },
-        components: {
-          viaLink: (
-            <Link
-              to={`/${amUIPath.Users}/${viaParty.id}`}
-              onClick={() => setDialogVisible(false)}
-            ></Link>
-          ),
-        },
-      }));
+      return viaParties.map((viaParty) => {
+        const viaName = formatDisplayName({
+          fullName: viaParty.name || '',
+          type: String(viaParty.type).toLowerCase() === 'person' ? 'person' : 'company',
+          reverseNameOrder: false,
+        });
+        const goTo = viaParty.isMainUnit
+          ? window.location.href
+          : `${window.location.origin}${GeneralPath.BasePath}/${amUIPath.Reportees}/${fromParty?.partyUuid}`;
+        return {
+          key: `${reason}-${viaParty.id}`,
+          i18nKey: isAdmin ? nonDeletableReasonKeys[reason] : viaRoleSwitchKey,
+          values: {
+            via_name:
+              !isAdmin && viaParty.isMainUnit
+                ? `${viaName} (${t('common.mainunit_lowercase')})`
+                : viaName,
+          },
+          components: {
+            viaLink: (
+              <Link
+                to={`/${amUIPath.Users}/${viaParty.id}`}
+                onClick={() => setDialogVisible(false)}
+              ></Link>
+            ),
+            switchLink: (
+              <Link
+                to={getChangeReporteeAndRedirectUrl(viaParty.id, goTo)}
+                reloadDocument
+              ></Link>
+            ),
+          },
+        };
+      });
     },
   );
 

@@ -33,6 +33,8 @@ export enum DeletionLevel {
   None = 'none',
 }
 
+export type ViaParty = Entity & { isMainUnit?: boolean };
+
 export interface DeletionStatus {
   target: DeletionTarget;
   level: DeletionLevel;
@@ -115,12 +117,15 @@ export const getNonDeletableReasons = (
   return reasons;
 };
 
-export const getViaParties = (rolePermissions: RolePermission[] | undefined): Entity[] => {
+export const getViaParties = (rolePermissions: RolePermission[] | undefined): ViaParty[] => {
   const viaParties = (rolePermissions ?? [])
     .filter((rolePermission) => rolePermission.role?.code === RIGHTHOLDER_ROLE)
     .flatMap((rolePermission) => rolePermission.permissions ?? [])
-    .map((permission) => permission?.via)
-    .filter((via): via is Entity => !!via);
+    .flatMap((permission) =>
+      permission?.via
+        ? [{ ...permission.via, isMainUnit: permission.from?.parent?.id === permission.via.id }]
+        : [],
+    );
 
   const uniqueById = new Map(viaParties.map((via) => [via.id, via]));
   return Array.from(uniqueById.values());
