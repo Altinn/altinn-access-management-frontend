@@ -115,10 +115,8 @@
     "too_many_subunits_warning": "Denne verksemda har for mange undereiningar til å inkludere dei i nedlastinga. Dette er noko vi jobbar med å løyse, men for no må du laste ned kvar undereining for seg dersom du ønskjer denne informasjonen."
   },
   "info_banner": {
-    "info": "19. juni blir gamle Altinn skrudd av.",
-    "info_new": "Altinn er fornya.",
-    "link": "Dette må du passe på.",
-    "link_new": "Slik gir du nye fullmakter og tilgangar."
+    "info": "Altinn er fornya.",
+    "link": "Slik gir du nye fullmakter og tilgangar."
   },
   "header": {
     "access_management": "Tilgangsstyring",
