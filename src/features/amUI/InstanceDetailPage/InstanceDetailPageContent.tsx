@@ -277,7 +277,7 @@ export const InstanceDetailPageContent = () => {
             partyUuid: selectedUser.id,
             name: selectedUser.name,
             partyTypeName: String(
-              selectedUser.type === 'person' ? PartyType.Person : PartyType.Organization,
+              selectedUser.type === 'Person' ? PartyType.Person : PartyType.Organization,
             ),
           }}
           openWithError={actionError}
