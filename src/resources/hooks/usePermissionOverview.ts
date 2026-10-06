@@ -29,6 +29,7 @@ export const usePermissionOverview = ({ permissions }: { permissions: Permission
         size: 'md',
         type,
         isParent,
+        isDeleted: to?.isDeleted ?? undefined,
       });
     }
 
