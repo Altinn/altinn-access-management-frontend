@@ -9,3 +9,7 @@
   flex-direction: column;
   gap: var(--ds-spacing-4);
 }
+
+.divider {
+  margin-top: var(--ds-spacing-6);
+}

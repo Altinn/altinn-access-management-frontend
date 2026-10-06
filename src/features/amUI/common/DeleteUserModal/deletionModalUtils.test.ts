@@ -356,6 +356,19 @@ describe('getViaParties', () => {
     expect(getViaParties(rolePermissions)).toEqual([]);
   });
 
+  it('marks via party as main unit when it is the parent of the from party', () => {
+    const rolePermissions = mockRolePermissions([
+      { code: RIGHTHOLDER_ROLE, via: ['main-unit', 'keyrole-org'] },
+    ]);
+    rolePermissions[0].permissions[0].from = {
+      ...defaultEntity,
+      parent: { ...defaultEntity, id: 'main-unit' },
+    };
+    const viaParties = getViaParties(rolePermissions);
+    expect(viaParties.find((via) => via.id === 'main-unit')?.isMainUnit).toBe(true);
+    expect(viaParties.find((via) => via.id === 'keyrole-org')?.isMainUnit).toBe(false);
+  });
+
   it('returns empty list when rolePermissions is undefined', () => {
     expect(getViaParties(undefined)).toEqual([]);
   });

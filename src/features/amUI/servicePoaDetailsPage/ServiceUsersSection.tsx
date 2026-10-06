@@ -12,13 +12,17 @@ import {
 import { useSnackbarOnIdle } from '@/resources/hooks/useSnackbarOnIdle';
 
 import { DelegationAction } from '../common/DelegationModal/EditModal';
+import { ResourceAlert } from '../common/DelegationModal/SingleRights/ResourceAlert';
 import { usePartyRepresentation } from '../common/PartyRepresentationContext/PartyRepresentationContext';
 import {
   RestoreFocusFallback,
   useRestoreFocusContext,
   useRestoreFocusOnDataChange,
 } from '../common/RestoreFocus';
+import { PageDivider } from '../common/PageDivider/PageDivider';
 import { useCanRedelegateResource, useRevokeConfirmation } from '../common/RevokeConfirmation';
+import { useDelegableRights } from '../common/RightsPicker/useDelegableRights';
+import { StatusSection } from '../common/StatusSection/StatusSection';
 import {
   createErrorDetails,
   TechnicalErrorParagraphs,
@@ -101,6 +105,23 @@ export const ServiceUsersSection = ({ resource, isLoading }: ServiceUsersSection
     [indirectConnections],
   );
 
+  // Neither check depends on who the recipient is, so the page can tell up front whether the service
+  // can be given to anyone. When it cannot, the reason is shown under the description, as ResourceInfo
+  // does in the dialogs, and the ways of giving it are hidden.
+  const {
+    rights,
+    isLoading: isRightsLoading,
+    errorDetails: rightsErrorDetails,
+  } = useDelegableRights({ resourceId, isEnabled: !!resource });
+  const cannotDelegateHere = resource?.delegable === false;
+  const hasDelegableRights = rights.some((r) => r.delegable);
+  const showMissingRightsStatus = rights.length > 0 && !hasDelegableRights;
+  // An undelegable service gets both the status section and the alert, as in ResourceInfo.
+  const displayResourceAlert =
+    cannotDelegateHere || !!rightsErrorDetails || showMissingRightsStatus;
+  // Hold the ways of giving the service back until eligibility is known.
+  const canDelegate = !isRightsLoading && !displayResourceAlert;
+
   const [revokeResource, { isLoading: isRevoking }] = useRevokeResourceMutation();
   const { canRedelegateResource } = useCanRedelegateResource();
   const { confirmRevoke, revokeConfirmationDialog } = useRevokeConfirmation();
@@ -181,69 +202,85 @@ export const ServiceUsersSection = ({ resource, isLoading }: ServiceUsersSection
   const isListLoading = isLoading || isDelegationsLoading || isIndirectLoading;
 
   return (
-    <div className={classes.usersSection}>
-      <DsParagraph data-size='md'>{t('service_poa_details_page.users_description')}</DsParagraph>
-
-      {errorDetails && (
-        <DsAlert
-          role='alert'
-          data-color='danger'
-        >
-          <DsParagraph>{t('common.general_error_paragraph')}</DsParagraph>
-          <TechnicalErrorParagraphs
-            size='sm'
-            status={errorDetails.status}
-            time={errorDetails.time}
-            traceId={errorDetails.traceId}
-          />
-        </DsAlert>
-      )}
-
-      <RestoreFocusFallback>
-        <UserSearch
-          includeSelfAsChild={false}
-          restoreFocusFallbackId={USER_SEARCH_FALLBACK_ID}
-          users={users}
-          indirectUsers={indirectUsers}
-          isLoading={isListLoading}
-          isActionLoading={
-            isListLoading || isDelegationsFetching || isIndirectFetching || isRevoking
-          }
-          canDelegate
-          noUsersText={t('service_poa_details_page.no_users')}
-          searchPlaceholder={t('service_poa_details_page.search_placeholder')}
-          AddUserButton={
-            <AddServiceUserButton
-              resource={resource}
-              onUserAdded={handleUserAdded}
-            />
-          }
-          onSelect={(user) => openModalFor(user, 'edit')}
-          onDelegate={(user) => openModalFor(user, 'delegate')}
-          onRevoke={handleRevoke}
-        />
-      </RestoreFocusFallback>
-
-      {resource && selectedUser && (
-        <ServiceUserModal
-          ref={modalRef}
+    <>
+      <StatusSection
+        cannotDelegateHere={cannotDelegateHere}
+        showDelegationCheckWarning={showMissingRightsStatus}
+      />
+      {resource?.description && <DsParagraph>{resource.description}</DsParagraph>}
+      {resource?.rightDescription && <DsParagraph>{resource.rightDescription}</DsParagraph>}
+      {resource && displayResourceAlert && (
+        <ResourceAlert
           resource={resource}
-          user={selectedUser}
-          partyUuid={fromParty?.partyUuid ?? ''}
-          availableActions={
-            selectedUserMode === 'delegate'
-              ? [DelegationAction.DELEGATE]
-              : [DelegationAction.DELEGATE, DelegationAction.REVOKE]
-          }
-          onClose={() => {
-            // Restore focus synchronously to the row that opened the dialog before clearing state.
-            // If the user was revoked inside the dialog their row is gone, so the fallback catches it.
-            restoreFocus?.requestFocus(selectedUser.id, USER_SEARCH_FALLBACK_ID);
-            setSelectedUser(null);
-          }}
+          error={rightsErrorDetails}
+          rightReasons={rights.flatMap((r) => r.delegationReasons)}
         />
       )}
-      {revokeConfirmationDialog}
-    </div>
+      <PageDivider className={classes.divider} />
+      <div className={classes.usersSection}>
+        <DsParagraph data-size='md'>{t('service_poa_details_page.users_description')}</DsParagraph>
+
+        {errorDetails && (
+          <DsAlert
+            role='alert'
+            data-color='danger'
+          >
+            <DsParagraph>{t('common.general_error_paragraph')}</DsParagraph>
+            <TechnicalErrorParagraphs
+              size='sm'
+              status={errorDetails.status}
+              time={errorDetails.time}
+              traceId={errorDetails.traceId}
+            />
+          </DsAlert>
+        )}
+
+        <RestoreFocusFallback>
+          <UserSearch
+            includeSelfAsChild={false}
+            restoreFocusFallbackId={USER_SEARCH_FALLBACK_ID}
+            users={users}
+            indirectUsers={indirectUsers}
+            isLoading={isListLoading}
+            isActionLoading={
+              isListLoading || isDelegationsFetching || isIndirectFetching || isRevoking
+            }
+            canDelegate={canDelegate}
+            noUsersText={t('service_poa_details_page.no_users')}
+            searchPlaceholder={t('service_poa_details_page.search_placeholder')}
+            AddUserButton={
+              <AddServiceUserButton
+                resource={resource}
+                onUserAdded={handleUserAdded}
+              />
+            }
+            onSelect={(user) => openModalFor(user, 'edit')}
+            onDelegate={(user) => openModalFor(user, 'delegate')}
+            onRevoke={handleRevoke}
+          />
+        </RestoreFocusFallback>
+
+        {resource && selectedUser && (
+          <ServiceUserModal
+            ref={modalRef}
+            resource={resource}
+            user={selectedUser}
+            partyUuid={fromParty?.partyUuid ?? ''}
+            availableActions={
+              selectedUserMode === 'delegate'
+                ? [DelegationAction.DELEGATE]
+                : [DelegationAction.DELEGATE, DelegationAction.REVOKE]
+            }
+            onClose={() => {
+              // Restore focus synchronously to the row that opened the dialog before clearing state.
+              // If the user was revoked inside the dialog their row is gone, so the fallback catches it.
+              restoreFocus?.requestFocus(selectedUser.id, USER_SEARCH_FALLBACK_ID);
+              setSelectedUser(null);
+            }}
+          />
+        )}
+        {revokeConfirmationDialog}
+      </div>
+    </>
   );
 };

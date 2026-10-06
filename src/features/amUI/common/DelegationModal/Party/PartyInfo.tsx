@@ -161,6 +161,7 @@ export const PartyInfo = ({
                   size='xs'
                   status={error.httpStatus}
                   time={error.timestamp}
+                  traceId={error.details?.traceId}
                 />
               )}
             </DsAlert>

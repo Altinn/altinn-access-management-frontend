@@ -115,10 +115,8 @@
     "too_many_subunits_warning": "Denne verksemda har for mange undereiningar til å inkludere dei i nedlastinga. Dette er noko vi jobbar med å løyse, men for no må du laste ned kvar undereining for seg dersom du ønskjer denne informasjonen."
   },
   "info_banner": {
-    "info": "19. juni blir gamle Altinn skrudd av.",
-    "info_new": "Altinn er fornya.",
-    "link": "Dette må du passe på.",
-    "link_new": "Slik gir du nye fullmakter og tilgangar."
+    "info": "Altinn er fornya.",
+    "link": "Slik gir du nye fullmakter og tilgangar."
   },
   "header": {
     "access_management": "Tilgangsstyring",
@@ -139,7 +137,6 @@
     "log_out": "Logg ut",
     "locale_title": "Vel språk",
     "logged_in_as_name": "Logga inn som {{name}}",
-    "new_altinn_info": "Om nye Altinn",
     "help_pages": "Hjelpesider",
     "leave_beta": "Til gamle Altinn",
     "shortcuts": "Snarvegar",
@@ -368,6 +365,7 @@
     "non_deletable_reason_agent_role": "Klienttilgangar kan administrerast i <agentLink>{{linkText}}</agentLink>.",
     "non_deletable_reason_guardianship": "Fullmakter gitt gjennom verjemål frå <guardianshipLink>Sivilrettsforvaltninga</guardianshipLink>.",
     "non_deletable_reason_via_role": "Fullmakter som er fått gjennom <viaLink>{{via_name}}</viaLink> må slettast der.",
+    "non_deletable_reason_via_role_switch": "Fullmakter som er fått gjennom {{via_name}} må slettast der. <switchLink>Byt til {{via_name}} og slett fullmakter der.</switchLink>",
     "yes_button": "Ja, slett",
     "user_partial_confirmation_message": "<p>Brukaren har også andre fullmakter, og desse kan du slette her. Ønsker du det? <i>Denne handlinga kan ikkje gjerast om.</i></p>",
     "yourself_trigger_button": "Slett alle tilgangar",
@@ -1063,6 +1061,9 @@
     },
     "services_tab": {
       "no_resources": "Denne pakken inkluderer ingen tenester"
+    },
+    "add_user_modal": {
+      "heading": "Gi fullmakt til ny brukar"
     }
   },
   "service_poa_details_page": {
