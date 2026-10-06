@@ -284,9 +284,9 @@ describe('getDeletionStatus', () => {
     },
     {
       description:
-        'user view, only a non-Rightholder Altinn3 role inherited via another party, should target User and allow No deletion',
+        'user view, only a revocable Altinn2 role inherited via another party, should target User and allow No deletion',
       rolePermissions: mockRolePermissions([
-        { code: 'hovedadministrator', via: ['via-org'], providerCode: A3_PROVIDER_CODE },
+        { code: 'a0282', via: ['via-org'], providerCode: A2_PROVIDER_CODE, isRevocable: true },
       ]),
       viewingYourself: false,
       reporteeView: false,
