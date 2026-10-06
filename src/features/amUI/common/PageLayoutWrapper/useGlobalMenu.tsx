@@ -7,7 +7,6 @@ import {
 import {
   InboxFillIcon,
   PersonCircleIcon,
-  InformationSquareIcon,
   PadlockLockedFillIcon,
   MenuGridIcon,
   Buildings2Icon,
@@ -32,11 +31,6 @@ const linkUrls = {
     no_nb: 'skjemaoversikt',
     no_nn: 'skjemaoversikt',
     en: 'forms-overview',
-  },
-  about: {
-    no_nb: 'nyheter/om-nye-altinn',
-    no_nn: 'nyheiter/om-nye-altinn',
-    en: 'news/about-the-new-altinn',
   },
   'start-business': {
     no_nb: 'starte-og-drive',
@@ -69,6 +63,9 @@ export const useGlobalMenu = ({
 
   const { sidebarItems, shortcutsMenuItem } = useSidebarItems({ isSmall: true });
 
+  const getLocalizedLinkUrl = (link: keyof typeof linkUrls) =>
+    `${getAltinnStartPageUrl()}${linkUrls[link][lang] ?? linkUrls[link].no_nb}`;
+
   const headerLinks: MenuItemProps[] = [
     {
       groupId: 'global',
@@ -76,12 +73,7 @@ export const useGlobalMenu = ({
       id: 'inbox',
       size: 'lg',
       title: t('header.inbox'),
-      as: (props: React.AnchorHTMLAttributes<HTMLAnchorElement>) => (
-        <a
-          {...props}
-          href={getAfUrl()}
-        />
-      ),
+      href: getAfUrl(),
     },
     {
       groupId: 'global',
@@ -105,12 +97,7 @@ export const useGlobalMenu = ({
       id: 'all_forms',
       size: 'lg',
       title: t('header.all_forms'),
-      as: (props) => (
-        <a
-          {...props}
-          href={`${getAltinnStartPageUrl()}${linkUrls['forms'][lang] ?? linkUrls['forms']['no_nb']}`}
-        />
-      ),
+      href: getLocalizedLinkUrl('forms'),
     },
     {
       groupId: 'global',
@@ -118,25 +105,7 @@ export const useGlobalMenu = ({
       id: 'search',
       size: 'lg',
       title: t('header.search'),
-      as: (props) => (
-        <a
-          {...props}
-          href={`${getAltinnStartPageUrl()}${linkUrls['search'][lang] ?? linkUrls['search']['no_nb']}`}
-        />
-      ),
-    },
-    {
-      id: 'info',
-      groupId: 'links',
-      icon: InformationSquareIcon,
-      title: t('header.new_altinn_info'),
-      size: 'sm',
-      as: (props) => (
-        <a
-          {...props}
-          href={`${getAltinnStartPageUrl()}${linkUrls['about'][lang] ?? linkUrls['about']['no_nb']}`}
-        />
-      ),
+      href: getLocalizedLinkUrl('search'),
     },
     {
       id: 'starte-og-drive',
@@ -144,12 +113,7 @@ export const useGlobalMenu = ({
       icon: Buildings2Icon,
       title: t('header.start_business'),
       size: 'sm',
-      as: (props) => (
-        <a
-          {...props}
-          href={`${getAltinnStartPageUrl()}${linkUrls['start-business'][lang] ?? linkUrls['start-business']['no_nb']}`}
-        />
-      ),
+      href: getLocalizedLinkUrl('start-business'),
     },
     {
       id: 'trenger-du-hjelp',
@@ -157,12 +121,7 @@ export const useGlobalMenu = ({
       icon: ChatExclamationmarkIcon,
       title: t('header.help'),
       size: 'sm',
-      as: (props) => (
-        <a
-          {...props}
-          href={`${getAltinnStartPageUrl()}${linkUrls['help'][lang] ?? linkUrls['help']['no_nb']}`}
-        />
-      ),
+      href: getLocalizedLinkUrl('help'),
     },
     {
       groupId: 'current-user',
@@ -170,12 +129,7 @@ export const useGlobalMenu = ({
       id: 'profile',
       size: 'sm',
       title: t('header.profile'),
-      as: (props: React.AnchorHTMLAttributes<HTMLAnchorElement>) => (
-        <a
-          {...props}
-          href={`${getAfUrl()}profile`}
-        />
-      ),
+      href: `${getAfUrl()}profile`,
     },
     ...(isSm && !hideSidebarItems ? shortcutsMenuItem : []),
   ];
@@ -183,7 +137,7 @@ export const useGlobalMenu = ({
   const globalMenu = {
     logoutButton: {
       label: t('header.log_out'),
-      onClick: async () => {
+      onClick: () => {
         const logoutUrl = getLogoutUrl();
         window.location.assign(logoutUrl);
       },
@@ -221,11 +175,13 @@ export const useGlobalMenu = ({
   };
 
   const desktopMenu = {
+    id: 'global-menu',
     items: headerLinks,
     groups,
   };
 
   const mobileMenu = {
+    id: 'global-menu',
     items: headerLinks,
     groups,
   };
