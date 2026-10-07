@@ -19,7 +19,8 @@
 }
 
 .pagingContainer {
-  justify-self: center;
+  display: flex;
+  justify-content: center;
   margin-top: var(--ds-size-4);
 }
 
