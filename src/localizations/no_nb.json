@@ -991,7 +991,7 @@
     "services_tab": {
       "assigned_services_title": "Tjenester det er gitt fullmakt til",
       "other_services_title": "Andre tjenester",
-      "description": "Her vises tjenester som det er gitt fullmakt til direkte. Hvis en bruker har fått fullmakt til en tjeneste gjennom tilgangspakker, vises de ikke her.",
+      "description": "Her vises enkelttjenester gitt til andre. Tjenester gitt via en tilgangspakke vises ikke her.",
       "no_services": "Det er ikke gitt fullmakt til noen tjenester direkte.",
       "no_services_found": "Ingen tjenester funnet",
       "no_other_services": "Ingen andre tjenester funnet."
