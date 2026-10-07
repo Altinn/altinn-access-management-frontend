@@ -275,9 +275,8 @@ export const InstanceDetailPageContent = () => {
           toParty={{
             partyUuid: selectedUser.id,
             name: selectedUser.name,
-            partyTypeName: String(
+            partyTypeName:
               selectedUser.type === 'Person' ? PartyType.Person : PartyType.Organization,
-            ),
           }}
           openWithError={actionError}
           onSuccess={selectedUserMode === 'delegate' ? () => modalRef.current?.close() : undefined}

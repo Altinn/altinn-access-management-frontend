@@ -12,6 +12,7 @@ import {
   useRemoveInstanceMutation,
 } from '@/rtk/features/instanceApi';
 import type { ServiceResource } from '@/rtk/features/singleRights/singleRightsApi';
+import type { Party } from '@/rtk/features/lookupApi';
 
 import { createErrorDetails } from '../../TechnicalErrorParagraphs/TechnicalErrorParagraphs';
 import { StatusSection } from '../../StatusSection/StatusSection';
@@ -19,7 +20,6 @@ import { LoadingAnimation } from '../../LoadingAnimation/LoadingAnimation';
 import { usePartyRepresentation } from '../../PartyRepresentationContext/PartyRepresentationContext';
 import { getMissingAccessMessage } from '../missingAccessUtils';
 import { useRightsSection } from '../utils/useRightsSection';
-import type { DelegationRecipient } from '../EditModal';
 import { DelegationAction } from '../EditModal';
 import { RightsSection } from '../SingleRights/RightsSection';
 import { ResourceAlert } from '../SingleRights/ResourceAlert';
@@ -34,7 +34,7 @@ export interface InstanceInfoProps {
   resource: ServiceResource;
   instanceUrn: string;
   dialogLookup?: DialogLookup;
-  toParty?: DelegationRecipient;
+  toParty?: Pick<Party, 'partyUuid' | 'name' | 'partyTypeName'>;
   availableActions?: DelegationAction[];
   onSuccess?: () => void;
 }
