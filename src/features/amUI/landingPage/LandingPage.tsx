@@ -51,6 +51,7 @@ import { useGetRolePermissionsQuery } from '@/rtk/features/roleApi';
 import { useDocumentTitle } from '@/resources/hooks/useDocumentTitle';
 
 import { PageLayoutWrapper } from '../common/PageLayoutWrapper';
+import { Breadcrumbs } from '../common/Breadcrumbs/Breadcrumbs';
 
 import classes from './LandingPage.module.css';
 import { LandingPageInfoCard } from './LandingPageInfoCard';
@@ -259,6 +260,7 @@ export const LandingPage = () => {
   return (
     <PageWrapper>
       <PageLayoutWrapper openAccountMenu={shouldOpenAccountMenu}>
+        <Breadcrumbs items={['root']} />
         <div className={classes.landingPage}>
           <div className={classes.landingPageHeading}>
             <UserListItem
