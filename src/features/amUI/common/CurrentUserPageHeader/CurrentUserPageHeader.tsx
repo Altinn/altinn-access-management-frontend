@@ -1,7 +1,10 @@
-import { formatDisplayName, UserListItem } from '@altinn/altinn-components';
+import { UserListItem } from '@altinn/altinn-components';
 
 import type { Connection } from '@/rtk/features/connectionApi';
-import { getFormattedDateOfBirthLabel } from '@/resources/utils/reporteeUtils';
+import {
+  getFormattedDateOfBirthLabel,
+  formatEntityDisplayName,
+} from '@/resources/utils/reporteeUtils';
 
 import classes from './CurrentUserPageHeader.module.css';
 
@@ -22,10 +25,7 @@ export const CurrentUserPageHeader = ({
     <div className={classes.currentUser}>
       <UserListItem
         id={currentUser?.party?.id || ''}
-        name={formatDisplayName({
-          fullName: currentUser?.party?.name || '',
-          type: currentUser?.party?.type === 'Person' ? 'person' : 'company',
-        })}
+        name={formatEntityDisplayName(currentUser?.party)}
         description={getFormattedDateOfBirthLabel(currentUser?.party?.dateOfBirth)}
         roleNames={roleNames}
         type='person'

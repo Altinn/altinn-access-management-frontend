@@ -1,8 +1,9 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { Link, useNavigate } from 'react-router';
-import { DsSpinner, DsAlert, DsButton, formatDisplayName } from '@altinn/altinn-components';
+import { DsSpinner, DsAlert, DsButton } from '@altinn/altinn-components';
 
+import { formatEntityDisplayName } from '@/resources/utils/reporteeUtils';
 import { PageContainer } from '@/features/amUI/common/PageContainer/PageContainer';
 import { SystemUserPath } from '@/routes/paths';
 import { getCookie } from '@/resources/Cookie/CookieMethods';
@@ -75,10 +76,7 @@ export const RightsIncluded = ({ selectedSystem, onNavigateBack }: RightsInclude
                 : 'systemuser_includedrightspage.header',
               {
                 integrationTitle: selectedSystem.name,
-                companyName: formatDisplayName({
-                  fullName: reporteeData?.name || '',
-                  type: 'company',
-                }),
+                companyName: formatEntityDisplayName(reporteeData),
               },
             )}
             avatarTitle={selectedSystem.name}

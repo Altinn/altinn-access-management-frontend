@@ -1,7 +1,8 @@
 import * as React from 'react';
-import { DsButton, formatDisplayName } from '@altinn/altinn-components';
+import { DsButton } from '@altinn/altinn-components';
 import { useTranslation } from 'react-i18next';
 
+import { formatEntityDisplayName } from '@/resources/utils/reporteeUtils';
 import { useIsMobileOrSmaller } from '@/resources/utils/screensizeUtils';
 import { StatusMessageForScreenReader } from '@/components/StatusMessageForScreenReader/StatusMessageForScreenReader';
 import {
@@ -10,8 +11,8 @@ import {
   useUpdateInstanceRightsMutation,
   useRemoveInstanceMutation,
 } from '@/rtk/features/instanceApi';
-import { PartyType } from '@/rtk/features/userInfoApi';
 import type { ServiceResource } from '@/rtk/features/singleRights/singleRightsApi';
+import type { Party } from '@/rtk/features/lookupApi';
 
 import { createErrorDetails } from '../../TechnicalErrorParagraphs/TechnicalErrorParagraphs';
 import { StatusSection } from '../../StatusSection/StatusSection';
@@ -19,7 +20,6 @@ import { LoadingAnimation } from '../../LoadingAnimation/LoadingAnimation';
 import { usePartyRepresentation } from '../../PartyRepresentationContext/PartyRepresentationContext';
 import { getMissingAccessMessage } from '../missingAccessUtils';
 import { useRightsSection } from '../utils/useRightsSection';
-import type { DelegationRecipient } from '../EditModal';
 import { DelegationAction } from '../EditModal';
 import { RightsSection } from '../SingleRights/RightsSection';
 import { ResourceAlert } from '../SingleRights/ResourceAlert';
@@ -34,7 +34,7 @@ export interface InstanceInfoProps {
   resource: ServiceResource;
   instanceUrn: string;
   dialogLookup?: DialogLookup;
-  toParty?: DelegationRecipient;
+  toParty?: Pick<Party, 'partyUuid' | 'name' | 'partyTypeName'>;
   availableActions?: DelegationAction[];
   onSuccess?: () => void;
 }
@@ -56,10 +56,7 @@ export const InstanceInfo = ({
   const hasDelegateAction = availableActions?.includes(DelegationAction.DELEGATE);
   const canRevoke = availableActions?.includes(DelegationAction.REVOKE) ?? false;
 
-  const toName = formatDisplayName({
-    fullName: toParty?.name ?? '',
-    type: toParty?.partyTypeName === PartyType.Organization ? 'company' : 'person',
-  });
+  const toName = formatEntityDisplayName(toParty);
 
   const {
     rights,
@@ -203,8 +200,7 @@ export const InstanceInfo = ({
             },
             dialogLookup,
           }}
-          fromPartyName={fromParty?.name}
-          fromPartyType={fromParty?.partyTypeName}
+          fromParty={fromParty}
           titleLevel={2}
           statusSection={
             <div

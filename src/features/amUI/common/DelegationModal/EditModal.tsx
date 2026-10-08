@@ -8,6 +8,7 @@ import type { ServiceResource } from '@/rtk/features/singleRights/singleRightsAp
 import type { AccessPackage } from '@/rtk/features/accessPackageApi';
 import type { Role } from '@/rtk/features/roleApi';
 import type { DialogLookup } from '@/rtk/features/instanceApi';
+import type { Party } from '@/rtk/features/lookupApi';
 
 import { ScopeInfo } from '../../maskinporten/ScopeInfo';
 
@@ -17,12 +18,6 @@ import classes from './DelegationModal.module.css';
 import { AccessPackageInfo } from './AccessPackages/AccessPackageInfo';
 import { RoleInfo } from './Role/RoleInfo';
 import { useDelegationModalContext } from './DelegationModalContext';
-
-export interface DelegationRecipient {
-  partyUuid: string;
-  name: string;
-  partyTypeName: string;
-}
 
 export enum DelegationAction {
   DELEGATE = 'DELEGATE',
@@ -42,7 +37,7 @@ export interface EditModalProps {
   accessPackage?: AccessPackage;
   role?: Role;
   instance?: InstanceData;
-  toParty?: DelegationRecipient;
+  toParty?: Pick<Party, 'partyUuid' | 'name' | 'partyTypeName'>;
   availableActions?: DelegationAction[];
   openWithError?: ActionError | null;
   onSuccess?: () => void;
@@ -138,7 +133,7 @@ const renderModalContent = ({
   accessPackage?: AccessPackage;
   role?: Role;
   instance?: InstanceData;
-  toParty?: DelegationRecipient;
+  toParty?: Pick<Party, 'partyUuid' | 'name' | 'partyTypeName'>;
   availableActions?: DelegationAction[];
   onSuccess?: () => void;
 }) => {

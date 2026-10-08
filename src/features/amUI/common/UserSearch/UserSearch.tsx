@@ -1,9 +1,9 @@
 import React, { useMemo, useState } from 'react';
-import { DsSearch, DsParagraph, formatDisplayName } from '@altinn/altinn-components';
+import { DsSearch, DsParagraph } from '@altinn/altinn-components';
 import { useTranslation } from 'react-i18next';
 
+import { formatEntityDisplayName } from '@/resources/utils/reporteeUtils';
 import { ConnectionUserType } from '@/rtk/features/connectionApi';
-import { PartyType } from '@/rtk/features/userInfoApi';
 
 import { useFilteredUsers } from '../UserList/useFilteredUsers';
 import { DelegationAction } from '../DelegationModal/EditModal';
@@ -147,10 +147,7 @@ export const UserSearch: React.FC<UserSearchProps> = ({
             >
               {noUsersText ??
                 t('package_poa_details_page.users_tab.no_users', {
-                  fromparty: formatDisplayName({
-                    fullName: fromParty?.name ?? '',
-                    type: fromParty?.partyTypeName === PartyType.Person ? 'person' : 'company',
-                  }),
+                  fromparty: formatEntityDisplayName(fromParty),
                 })}
             </DsParagraph>
           )}

@@ -1,13 +1,9 @@
-import {
-  Button,
-  SnackbarDuration,
-  formatDisplayName,
-  useSnackbar,
-} from '@altinn/altinn-components';
+import { Button, SnackbarDuration, useSnackbar } from '@altinn/altinn-components';
 import * as React from 'react';
 import { useTranslation } from 'react-i18next';
 import { MinusCircleIcon, PlusCircleIcon } from '@navikt/aksel-icons';
 
+import { formatEntityDisplayName } from '@/resources/utils/reporteeUtils';
 import { useIsMobileOrSmaller } from '@/resources/utils/screensizeUtils';
 import {
   useAddMaskinportenSupplierResourceMutation,
@@ -15,7 +11,6 @@ import {
   useRemoveMaskinportenSupplierResourceMutation,
 } from '@/rtk/features/maskinportenApi';
 import type { ServiceResource } from '@/rtk/features/singleRights/singleRightsApi';
-import { PartyType } from '@/rtk/features/userInfoApi';
 
 import { useDelegationModalContext } from '../common/DelegationModal/DelegationModalContext';
 import { resourceActionControlId } from '../common/DelegationModal/SingleRights/createSearchResultControlsRenderer';
@@ -45,10 +40,7 @@ export const ScopeSearchControls = ({
   const { setActionError } = useDelegationModalContext();
   const [isCheckingDelegation, setIsCheckingDelegation] = React.useState(false);
   const supplier = toParty?.orgNumber ?? '';
-  const toPartyName = formatDisplayName({
-    fullName: toParty?.name ?? '',
-    type: toParty?.partyTypeName === PartyType.Person ? 'person' : 'company',
-  });
+  const toPartyName = formatEntityDisplayName(toParty);
   const [addSupplierResource] = useAddMaskinportenSupplierResourceMutation();
   const [removeSupplierResource] = useRemoveMaskinportenSupplierResourceMutation();
   const { delegate, remove, isLoading } = useMaskinportenResourceActions({

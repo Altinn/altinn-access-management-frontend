@@ -1,13 +1,13 @@
 import React, { useMemo, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import {
-  type AccessPackageListItemProps,
-  type UserListItemProps,
-  formatDisplayName,
-} from '@altinn/altinn-components';
+import { type AccessPackageListItemProps, type UserListItemProps } from '@altinn/altinn-components';
 
 import { useIsMobileOrSmaller } from '@/resources/utils/screensizeUtils';
-import { getFormattedDateOfBirthLabel, isSubUnitByType } from '@/resources/utils/reporteeUtils';
+import {
+  getFormattedDateOfBirthLabel,
+  isSubUnitByType,
+  formatEntityDisplayName,
+} from '@/resources/utils/reporteeUtils';
 import { useAccessPackageLookup } from '@/resources/hooks/useAccessPackageLookup';
 import type { ActionError } from '@/resources/hooks/useActionError';
 import type { ServiceResource } from '@/rtk/features/singleRights/singleRightsApi';
@@ -188,10 +188,7 @@ export const ClientAgentPackageList = ({
     const isRecentlyAdded = isNewUser(agent.agentAddedAt);
     const isSubUnit = isSubUnitByType(agent.agent.variant);
     const userType = getUserListItemType(agent.agent.type);
-    const agentName = formatDisplayName({
-      fullName: agent.agent.name,
-      type: agent.agent.type === 'Person' ? 'person' : 'company',
-    });
+    const agentName = formatEntityDisplayName(agent.agent);
     const nodes = clientAccess.reduce((acc, access) => {
       if (access.packages.length === 0) return acc;
 

@@ -1,9 +1,9 @@
 import * as React from 'react';
 import { useTranslation } from 'react-i18next';
 import { useParams } from 'react-router';
-import { formatDisplayName } from '@altinn/altinn-components';
 
-import { PartyType, useGetIsHovedadminQuery } from '@/rtk/features/userInfoApi';
+import { formatEntityDisplayName } from '@/resources/utils/reporteeUtils';
+import { useGetIsHovedadminQuery } from '@/rtk/features/userInfoApi';
 import { useGetPartyFromLoggedInUserQuery } from '@/rtk/features/lookupApi';
 import { useDocumentTitle } from '@/resources/hooks/useDocumentTitle';
 import { PageWrapper } from '@/components';
@@ -83,10 +83,7 @@ const BreadcrumbsWrapper = () => {
     <Breadcrumbs
       items={['root', 'users']}
       lastBreadcrumb={{
-        label: formatDisplayName({
-          fullName: toParty?.name ?? '',
-          type: toParty?.partyTypeName === PartyType.Organization ? 'company' : 'person',
-        }),
+        label: formatEntityDisplayName(toParty),
       }}
     />
   );

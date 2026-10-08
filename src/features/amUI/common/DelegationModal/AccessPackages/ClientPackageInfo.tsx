@@ -1,13 +1,8 @@
-import {
-  DsAlert,
-  DsButton,
-  DsHeading,
-  DsParagraph,
-  formatDisplayName,
-} from '@altinn/altinn-components';
+import { DsAlert, DsButton, DsHeading, DsParagraph } from '@altinn/altinn-components';
 import { useRef } from 'react';
 import { useTranslation } from 'react-i18next';
 
+import { formatEntityDisplayName } from '@/resources/utils/reporteeUtils';
 import { PartyType } from '@/rtk/features/userInfoApi';
 
 import { LoadingAnimation } from '../../LoadingAnimation/LoadingAnimation';
@@ -48,11 +43,7 @@ export const ClientPackageInfo = ({
     },
   });
 
-  const userName = formatDisplayName({
-    fullName: party.name,
-    type: party.partyTypeName === PartyType.Person ? 'person' : 'company',
-    reverseNameOrder: false,
-  });
+  const userName = formatEntityDisplayName(party);
 
   const canRevoke = userHasAccess && availableActions.includes(DelegationAction.REVOKE);
   const canDelegate =

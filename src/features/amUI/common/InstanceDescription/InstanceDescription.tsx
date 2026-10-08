@@ -1,11 +1,12 @@
 import type { ReactNode } from 'react';
-import { Avatar, DsHeading, DsParagraph, Icon, formatDisplayName } from '@altinn/altinn-components';
+import { Avatar, DsHeading, DsParagraph, Icon } from '@altinn/altinn-components';
 import { useTranslation } from 'react-i18next';
 
 import { useIsMobileOrSmaller } from '@/resources/utils/screensizeUtils';
 import { useProviderLogoUrl } from '@/resources/hooks';
-import { PartyType } from '@/rtk/features/userInfoApi';
 import type { ServiceResource } from '@/rtk/features/singleRights/singleRightsApi';
+import { type Party } from '@/rtk/features/lookupApi';
+import { formatEntityDisplayName } from '@/resources/utils/reporteeUtils';
 
 import {
   getInstanceShortId,
@@ -18,8 +19,7 @@ import classes from './InstanceDescription.module.css';
 interface InstanceDescriptionProps {
   resource: ServiceResource;
   instanceData?: InstancePresentationData;
-  fromPartyName?: string;
-  fromPartyType?: PartyType;
+  fromParty?: Party;
   titleLevel?: 1 | 2 | 3 | 4 | 5 | 6;
   statusSection?: ReactNode;
 }
@@ -27,8 +27,7 @@ interface InstanceDescriptionProps {
 export const InstanceDescription = ({
   resource,
   instanceData,
-  fromPartyName,
-  fromPartyType,
+  fromParty,
   titleLevel = 2,
   statusSection,
 }: InstanceDescriptionProps) => {
@@ -40,10 +39,7 @@ export const InstanceDescription = ({
   const providerLogoUrl = resource.resourceOwnerOrgcode
     ? getProviderLogoUrl(resource.resourceOwnerOrgcode)
     : undefined;
-  const fromName = formatDisplayName({
-    fullName: fromPartyName ?? '',
-    type: fromPartyType === PartyType.Person ? 'person' : 'company',
-  });
+  const fromName = formatEntityDisplayName(fromParty);
 
   return (
     <div className={classes.container}>

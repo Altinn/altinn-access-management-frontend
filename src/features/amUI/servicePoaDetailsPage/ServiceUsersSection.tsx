@@ -1,7 +1,8 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
-import { DsAlert, DsParagraph, formatDisplayName, useSnackbar } from '@altinn/altinn-components';
+import { DsAlert, DsParagraph, useSnackbar } from '@altinn/altinn-components';
 import { useTranslation } from 'react-i18next';
 
+import { formatEntityDisplayName } from '@/resources/utils/reporteeUtils';
 import { useGetRightHoldersQuery } from '@/rtk/features/connectionApi';
 import {
   useRevokeResourceMutation,
@@ -137,11 +138,7 @@ export const ServiceUsersSection = ({ resource, isLoading }: ServiceUsersSection
     setSelectedUser(user);
   };
 
-  const formatUserName = (user: { name: string; type?: string }) =>
-    formatDisplayName({
-      fullName: user.name,
-      type: user.type?.toLowerCase() === 'person' ? 'person' : 'company',
-    });
+  const formatUserName = (user: { name: string; type?: string }) => formatEntityDisplayName(user);
 
   // The added user only shows up once the delegations query comes back, so hold the confirmation
   // until then and it arrives together with the row it is about.

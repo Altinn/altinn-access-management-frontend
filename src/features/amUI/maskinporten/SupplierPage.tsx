@@ -1,9 +1,10 @@
 import { useMemo } from 'react';
 import { Link, useParams } from 'react-router';
 import { useTranslation } from 'react-i18next';
-import { DsAlert, DsParagraph, DsSkeleton, formatDisplayName } from '@altinn/altinn-components';
+import { DsAlert, DsParagraph, DsSkeleton } from '@altinn/altinn-components';
 
 import { PageWrapper } from '@/components/PageWrapper/PageWrapper';
+import { formatEntityDisplayName } from '@/resources/utils/reporteeUtils';
 import { getCookie } from '@/resources/Cookie/CookieMethods';
 import { useDocumentTitle } from '@/resources/hooks/useDocumentTitle';
 import type { Party } from '@/rtk/features/lookupApi';
@@ -34,9 +35,7 @@ export const SupplierPage = () => {
   );
 
   const supplier = data?.[0];
-  const supplierName = supplier?.party.name
-    ? formatDisplayName({ fullName: supplier?.party.name, type: 'company' })
-    : '';
+  const supplierName = formatEntityDisplayName(supplier?.party);
 
   const supplierParty = useMemo((): Party | undefined => {
     const party = supplier?.party;

@@ -1,15 +1,10 @@
 import React, { useId, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import {
-  DsAlert,
-  DsParagraph,
-  DsSkeleton,
-  formatDisplayName,
-  Switch,
-} from '@altinn/altinn-components';
+import { DsAlert, DsParagraph, DsSkeleton, Switch } from '@altinn/altinn-components';
 import { useParams } from 'react-router';
 import { skipToken } from '@reduxjs/toolkit/query';
 
+import { formatEntityDisplayName } from '@/resources/utils/reporteeUtils';
 import {
   useAddAgentAccessPackagesMutation,
   useAddAgentResourcesMutation,
@@ -19,7 +14,7 @@ import {
   useGetAgentResourcesQuery,
   useGetClientsQuery,
 } from '@/rtk/features/clientApi';
-import { PartyType, useGetIsClientAdminQuery } from '@/rtk/features/userInfoApi';
+import { useGetIsClientAdminQuery } from '@/rtk/features/userInfoApi';
 import { amUIPath } from '@/routes/paths';
 
 import { PageContainer } from '../common/PageContainer/PageContainer';
@@ -89,10 +84,7 @@ export const AgentDetails = () => {
   }, [id]);
 
   const backUrl = `/${amUIPath.ClientAdministration}#users`;
-  const userName = formatDisplayName({
-    fullName: toParty?.name || '',
-    type: toParty?.partyTypeName === PartyType.Person ? 'person' : 'company',
-  });
+  const userName = formatEntityDisplayName(toParty);
   const toPartyUuid = toParty?.partyUuid;
   const actingPartyUuid = actingParty?.partyUuid;
   const assignedSectionId = useId();

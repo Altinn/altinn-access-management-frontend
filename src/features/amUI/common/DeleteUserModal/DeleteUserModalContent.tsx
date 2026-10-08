@@ -5,7 +5,6 @@ import {
   DsHeading,
   DsParagraph,
   DsSkeleton,
-  formatDisplayName,
 } from '@altinn/altinn-components';
 import { TrashIcon, XMarkOctagonFillIcon } from '@navikt/aksel-icons';
 import { useEffect, useMemo, useState } from 'react';
@@ -13,11 +12,12 @@ import { Trans, useTranslation } from 'react-i18next';
 import { useDispatch } from 'react-redux';
 import { Link, useLocation, useNavigate } from 'react-router';
 
+import { formatEntityDisplayName } from '@/resources/utils/reporteeUtils';
 import { amUIPath, GeneralPath } from '@/routes/paths';
 import { accessPackageApi } from '@/rtk/features/accessPackageApi';
 import { useRemoveRightHolderMutation } from '@/rtk/features/connectionApi';
 import { roleApi } from '@/rtk/features/roleApi';
-import { PartyType, useGetIsAdminQuery } from '@/rtk/features/userInfoApi';
+import { useGetIsAdminQuery } from '@/rtk/features/userInfoApi';
 import { getChangeReporteeAndRedirectUrl } from '@/resources/utils/changeReporteeUtils';
 
 import { LoadingAnimation } from '../LoadingAnimation/LoadingAnimation';
@@ -111,17 +111,9 @@ export const DeleteUserModalContent = ({
     [nonDeletableReasons, status],
   );
 
-  const formattedToPartyName = formatDisplayName({
-    fullName: toParty?.name || '',
-    type: toParty?.partyTypeName === PartyType.Person ? 'person' : 'company',
-    reverseNameOrder: false,
-  });
+  const formattedToPartyName = formatEntityDisplayName(toParty);
 
-  const formattedFromPartyName = formatDisplayName({
-    fullName: fromParty?.name || '',
-    type: fromParty?.partyTypeName === PartyType.Person ? 'person' : 'company',
-    reverseNameOrder: false,
-  });
+  const formattedFromPartyName = formatEntityDisplayName(fromParty);
 
   const isDeletingYourself = dialogModel.status.target === DeletionTarget.Yourself;
   const shouldNavigateOnDeleteComplete = dialogModel.status.level === DeletionLevel.Full;
@@ -207,11 +199,7 @@ export const DeleteUserModalContent = ({
         };
       }
       return viaParties.map((viaParty) => {
-        const viaName = formatDisplayName({
-          fullName: viaParty.name || '',
-          type: String(viaParty.type).toLowerCase() === 'person' ? 'person' : 'company',
-          reverseNameOrder: false,
-        });
+        const viaName = formatEntityDisplayName(viaParty);
         const goTo = viaParty.isMainUnit
           ? window.location.href
           : `${window.location.origin}${GeneralPath.BasePath}/${amUIPath.Reportees}/${fromParty?.partyUuid}`;

@@ -1,19 +1,10 @@
 import React from 'react';
 import { Trans, useTranslation } from 'react-i18next';
-import {
-  DsAlert,
-  DsHeading,
-  DsParagraph,
-  DsSkeleton,
-  formatDisplayName,
-} from '@altinn/altinn-components';
+import { DsAlert, DsHeading, DsParagraph, DsSkeleton } from '@altinn/altinn-components';
 import { DatabaseIcon, PersonGroupIcon } from '@navikt/aksel-icons';
 
-import {
-  PartyType,
-  useGetIsClientAdminQuery,
-  useGetReporteeQuery,
-} from '@/rtk/features/userInfoApi';
+import { formatEntityDisplayName } from '@/resources/utils/reporteeUtils';
+import { useGetIsClientAdminQuery, useGetReporteeQuery } from '@/rtk/features/userInfoApi';
 import { useTabState } from '@/resources/hooks';
 
 import { AmTabs } from '../common/AmTabs/AmTabs';
@@ -70,10 +61,7 @@ export const ClientAdministrationPageContent = () => {
       <div>
         <ReporteePageHeading
           title={t('client_administration_page.page_heading', {
-            name: formatDisplayName({
-              fullName: actingParty?.name ?? '',
-              type: actingParty?.partyTypeName === PartyType.Person ? 'person' : 'company',
-            }),
+            name: formatEntityDisplayName(actingParty),
           })}
           reportee={reportee}
           isLoading={isLoadingReportee || actorLoading}

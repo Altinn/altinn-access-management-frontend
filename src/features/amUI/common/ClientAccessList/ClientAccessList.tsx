@@ -1,13 +1,10 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import {
-  type AccessPackageListItemProps,
-  formatDisplayName,
-  type UserListItemProps,
-} from '@altinn/altinn-components';
+import { type AccessPackageListItemProps, type UserListItemProps } from '@altinn/altinn-components';
 
 import {
   getFormattedDateOfBirthLabel,
+  formatEntityDisplayName,
   formatOrgNr,
   isSubUnitByType,
 } from '@/resources/utils/reporteeUtils';
@@ -317,11 +314,7 @@ export const ClientAccessList = ({
                 clientId,
                 refId: clientResource.refId,
                 resource,
-                toPartyName: formatDisplayName({
-                  fullName: client.client.name,
-                  type: userType === 'company' ? 'company' : 'person',
-                  reverseNameOrder: false,
-                }),
+                toPartyName: formatEntityDisplayName(client.client),
                 onDelegate: showAction ? onDelegate : undefined,
                 onRevoke: showAction ? onRevoke : undefined,
               });

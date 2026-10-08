@@ -1,11 +1,11 @@
 import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Button, formatDisplayName, useSnackbar } from '@altinn/altinn-components';
+import { Button, useSnackbar } from '@altinn/altinn-components';
 import { MinusCircleIcon } from '@navikt/aksel-icons';
 
+import { formatEntityDisplayName } from '@/resources/utils/reporteeUtils';
 import type { ServiceResource } from '@/rtk/features/singleRights/singleRightsApi';
 import { useRevokeResource } from '@/resources/hooks/useRevokeResource';
-import { PartyType } from '@/rtk/features/userInfoApi';
 
 import { usePartyRepresentation } from '../../common/PartyRepresentationContext/PartyRepresentationContext';
 
@@ -41,10 +41,7 @@ export const DeleteResourceButton = ({
           : 'single_rights.delete_singleRight_error_message',
         {
           resourceTitle: resource.title,
-          name: formatDisplayName({
-            fullName: toParty?.name || '',
-            type: toParty?.partyTypeName === PartyType.Person ? 'person' : 'company',
-          }),
+          name: formatEntityDisplayName(toParty),
         },
       ),
       color,

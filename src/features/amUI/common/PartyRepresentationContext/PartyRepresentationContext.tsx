@@ -1,14 +1,14 @@
 import type { JSX } from 'react';
 import { createContext, useContext } from 'react';
-import { DsAlert, DsParagraph, formatDisplayName } from '@altinn/altinn-components';
+import { DsAlert, DsParagraph } from '@altinn/altinn-components';
 import { type SerializedError } from '@reduxjs/toolkit';
 import type { FetchBaseQueryError } from '@reduxjs/toolkit/query';
 import { Link } from 'react-router';
 import { t } from 'i18next';
 
+import { formatEntityDisplayName } from '@/resources/utils/reporteeUtils';
 import { useGetRightHoldersQuery } from '@/rtk/features/connectionApi';
 import { useGetPartyFromLoggedInUserQuery, type Party } from '@/rtk/features/lookupApi';
-import { PartyType } from '@/rtk/features/userInfoApi';
 
 import { TechnicalErrorParagraphs } from '../TechnicalErrorParagraphs';
 import { createErrorDetails } from '../TechnicalErrorParagraphs/TechnicalErrorParagraphs';
@@ -198,11 +198,7 @@ export const PartyRepresentationProvider = ({
   );
 };
 
-const formattedReporteeName = (reportee?: Party): string => {
-  if (!reportee) return '';
-  const reporteeType = reportee.partyTypeName === PartyType.Person ? 'person' : 'company';
-  return formatDisplayName({ fullName: reportee.name, type: reporteeType });
-};
+const formattedReporteeName = (reportee?: Party): string => formatEntityDisplayName(reportee);
 
 export const usePartyRepresentation = (): PartyRepresentationContextOutput => {
   const context = useContext(PartyRepresentationContext);

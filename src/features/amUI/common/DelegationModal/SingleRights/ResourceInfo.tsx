@@ -1,13 +1,13 @@
 import * as React from 'react';
-import { DsButton, DsParagraph, formatDisplayName } from '@altinn/altinn-components';
+import { DsButton, DsParagraph } from '@altinn/altinn-components';
 import { useTranslation } from 'react-i18next';
 
+import { formatEntityDisplayName } from '@/resources/utils/reporteeUtils';
 import { useIsMobileOrSmaller } from '@/resources/utils/screensizeUtils';
 import { StatusMessageForScreenReader } from '@/components/StatusMessageForScreenReader/StatusMessageForScreenReader';
 import { useRevokeResource } from '@/resources/hooks/useRevokeResource';
 import { useUpdateResource } from '@/resources/hooks/useUpdateResource';
 import { useDelegateRights } from '@/resources/hooks/useDelegateRights';
-import { PartyType } from '@/rtk/features/userInfoApi';
 import {
   useGetSingleRightsForRightholderQuery,
   type ServiceResource,
@@ -133,12 +133,7 @@ export const ResourceInfo = ({
     actingParty,
   });
 
-  const toName =
-    toPartyName ??
-    formatDisplayName({
-      fullName: toParty?.name ?? '',
-      type: toParty?.partyTypeName === PartyType.Organization ? 'company' : 'person',
-    });
+  const toName = toPartyName ?? formatEntityDisplayName(toParty);
 
   const hasDelegableRights = rights.some((r) => r.delegable);
   const showMissingRightsStatus =

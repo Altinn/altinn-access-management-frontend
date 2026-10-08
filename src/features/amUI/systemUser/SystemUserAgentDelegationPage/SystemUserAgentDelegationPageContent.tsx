@@ -8,10 +8,10 @@ import {
   DsDialog,
   DsHeading,
   DsParagraph,
-  formatDisplayName,
   useSnackbar,
 } from '@altinn/altinn-components';
 
+import { formatEntityDisplayName } from '@/resources/utils/reporteeUtils';
 import {
   useGetIsAdminQuery,
   useGetIsClientAdminQuery,
@@ -101,7 +101,7 @@ export const SystemUserAgentDelegationPageContent = ({
   );
 
   const isAddingAllCustomers = addAllState.maxCount > -1;
-  const reporteeName = formatDisplayName({ fullName: reporteeData?.name || '', type: 'company' });
+  const reporteeName = formatEntityDisplayName(reporteeData);
 
   const resetLoadingId = (customerId: string): void => {
     setLoadingIds((oldLoadingIds) => oldLoadingIds.filter((id) => id !== customerId));

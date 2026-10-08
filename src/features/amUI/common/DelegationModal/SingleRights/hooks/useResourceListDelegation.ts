@@ -1,7 +1,8 @@
 import { useCallback, useState, useEffect, useRef } from 'react';
-import { formatDisplayName, useSnackbar } from '@altinn/altinn-components';
+import { useSnackbar } from '@altinn/altinn-components';
 import { useTranslation } from 'react-i18next';
 
+import { formatEntityDisplayName } from '@/resources/utils/reporteeUtils';
 import { getActionError, type ActionError } from '@/resources/hooks/useActionError';
 import { usePartyRepresentation } from '@/features/amUI/common/PartyRepresentationContext/PartyRepresentationContext';
 import {
@@ -11,7 +12,6 @@ import {
   useRevokeResourceMutation,
   type ServiceResource,
 } from '@/rtk/features/singleRights/singleRightsApi';
-import { PartyType } from '@/rtk/features/userInfoApi';
 
 interface UseResourceListDelegationProps {
   onActionError?: (resource: ServiceResource, errorInfo: ActionError) => void;
@@ -44,10 +44,7 @@ export const useResourceListDelegation = ({
     },
     { skip: !toParty || !fromParty || !actingParty },
   );
-  const toPartyName = formatDisplayName({
-    fullName: toParty?.name || '',
-    type: toParty?.partyTypeName === PartyType.Person ? 'person' : 'company',
-  });
+  const toPartyName = formatEntityDisplayName(toParty);
 
   const [loadingByResourceId, setLoadingByResourceId] = useState<Record<string, boolean>>({});
   const waitingForRefetchRef = useRef<Set<string>>(new Set());

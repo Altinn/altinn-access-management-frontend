@@ -1,5 +1,4 @@
 import { useMemo } from 'react';
-import { formatDisplayName } from '@altinn/altinn-components';
 
 import { PartyType, useGetIsAdminQuery, useGetReporteeQuery } from '@/rtk/features/userInfoApi';
 import { useGetActiveConsentsQuery } from '@/rtk/features/consentApi';
@@ -13,7 +12,7 @@ import {
   useGetReceivedRequestsQuery,
   useGetSentRequestsQuery,
 } from '@/rtk/features/requestApi';
-import { isSubUnitByType } from '@/resources/utils/reporteeUtils';
+import { isSubUnitByType, formatEntityDisplayName } from '@/resources/utils/reporteeUtils';
 import { useGetPartyFromLoggedInUserQuery } from '@/rtk/features/lookupApi';
 
 import { hasConsentPermission, hasCreateSystemUserPermission } from '../utils/permissionUtils';
@@ -214,7 +213,7 @@ const mapAccessRequestToRequest = (
 ): Request => {
   const party = direction === 'sent' ? request.to : request.from;
   const partyType = party.organizationIdentifier ? 'company' : 'person';
-  const partyName = formatDisplayName({ fullName: party.name, type: partyType });
+  const partyName = formatEntityDisplayName(party);
   return {
     id: request.id,
     type: 'accessrequest',

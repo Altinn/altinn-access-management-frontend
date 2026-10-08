@@ -1,16 +1,10 @@
 import type { DsButtonProps } from '@altinn/altinn-components';
-import {
-  DsButton,
-  DsDialog,
-  DsHeading,
-  DsParagraph,
-  formatDisplayName,
-} from '@altinn/altinn-components';
+import { DsButton, DsDialog, DsHeading, DsParagraph } from '@altinn/altinn-components';
 import { t } from 'i18next';
 import { Trans } from 'react-i18next';
 import { useState } from 'react';
 
-import { PartyType } from '@/rtk/features/userInfoApi';
+import { formatEntityDisplayName } from '@/resources/utils/reporteeUtils';
 
 import { usePartyRepresentation } from '../../PartyRepresentationContext/PartyRepresentationContext';
 
@@ -47,10 +41,7 @@ export const PackageIsPartiallyDeletableAlert = ({
             <Trans
               i18nKey={'delegation_modal.partial_deletion_message.body'}
               values={{
-                to_name: formatDisplayName({
-                  fullName: toParty?.name || '',
-                  type: toParty?.partyTypeName === PartyType.Person ? 'person' : 'company',
-                }),
+                to_name: formatEntityDisplayName(toParty),
               }}
               components={{
                 p: <DsParagraph data-size='sm'></DsParagraph>,

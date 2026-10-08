@@ -1,9 +1,9 @@
-import { DsButton, DsSkeleton, formatDisplayName } from '@altinn/altinn-components';
+import { DsButton, DsSkeleton } from '@altinn/altinn-components';
 import { useTranslation } from 'react-i18next';
 import { MinusCircleIcon, PlusCircleIcon } from '@navikt/aksel-icons';
 
+import { formatEntityDisplayName } from '@/resources/utils/reporteeUtils';
 import { type ExtendedUser } from '@/rtk/features/userInfoApi';
-import { ConnectionUserType } from '@/rtk/features/connectionApi';
 import { useIsMobileOrSmaller } from '@/resources/utils/screensizeUtils';
 
 import { DelegationAction } from '../DelegationModal/EditModal';
@@ -29,13 +29,7 @@ export const UserListActions = ({
 }) => {
   const { t } = useTranslation();
   const isSmall = useIsMobileOrSmaller();
-  const displayName =
-    user.type === ConnectionUserType.Person || user.type === ConnectionUserType.Organization
-      ? formatDisplayName({
-          fullName: user.name,
-          type: user.type === ConnectionUserType.Person ? 'person' : 'company',
-        })
-      : user.name;
+  const displayName = formatEntityDisplayName(user);
 
   if (!availableAction || isSmall) {
     return null;

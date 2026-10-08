@@ -1,10 +1,10 @@
 import React, { useRef, useState } from 'react';
 import { HandshakeIcon, MinusCircleIcon } from '@navikt/aksel-icons';
-import { DsButton, formatDisplayName, ListItem } from '@altinn/altinn-components';
+import { DsButton, ListItem } from '@altinn/altinn-components';
 import { useTranslation } from 'react-i18next';
 
+import { formatEntityDisplayName } from '@/resources/utils/reporteeUtils';
 import { type ServiceResource } from '@/rtk/features/singleRights/singleRightsApi';
-import { PartyType } from '@/rtk/features/userInfoApi';
 import { useIsTabletOrSmaller } from '@/resources/utils/screensizeUtils';
 import { useGetEnrichedSentResourceRequestsQuery } from '@/rtk/features/requestApi';
 import { getRequestPartyQueryParams } from '@/resources/utils/singleRightRequestUtils';
@@ -38,10 +38,7 @@ export const PendingRequests = () => {
         isModalOpen={isModalOpen}
         modalRef={modalRef}
         heading={t('delegation_modal.request.sent_requests_modal_header', {
-          partyName: formatDisplayName({
-            fullName: fromParty?.name || '',
-            type: fromParty?.partyTypeName === PartyType.Person ? 'person' : 'company',
-          }),
+          partyName: formatEntityDisplayName(fromParty),
         })}
         onClose={() => setIsModalOpen(false)}
       />

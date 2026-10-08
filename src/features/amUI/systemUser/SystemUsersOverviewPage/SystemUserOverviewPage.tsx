@@ -7,11 +7,11 @@ import {
   DsButton,
   DsParagraph,
   DsSkeleton,
-  formatDisplayName,
   List,
   ListItem,
 } from '@altinn/altinn-components';
 
+import { formatEntityDisplayName } from '@/resources/utils/reporteeUtils';
 import { useDocumentTitle } from '@/resources/hooks/useDocumentTitle';
 import { PageWrapper } from '@/components';
 import {
@@ -80,10 +80,7 @@ export const SystemUserOverviewPage = () => {
     isLoadingPendingSystemUsers ||
     isLoadingIsAdmin;
 
-  const reporteeName = formatDisplayName({
-    fullName: reporteeData?.name || '',
-    type: reporteeData?.type === 'Person' ? 'person' : 'company',
-  });
+  const reporteeName = formatEntityDisplayName(reporteeData);
 
   return (
     <PageWrapper>
