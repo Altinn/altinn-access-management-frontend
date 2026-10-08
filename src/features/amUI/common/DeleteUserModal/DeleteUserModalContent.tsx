@@ -111,9 +111,9 @@ export const DeleteUserModalContent = ({
     [nonDeletableReasons, status],
   );
 
-  const formattedToPartyName = formatEntityDisplayName(toParty, { reverseNameOrder: false });
+  const formattedToPartyName = formatEntityDisplayName(toParty);
 
-  const formattedFromPartyName = formatEntityDisplayName(fromParty, { reverseNameOrder: false });
+  const formattedFromPartyName = formatEntityDisplayName(fromParty);
 
   const isDeletingYourself = dialogModel.status.target === DeletionTarget.Yourself;
   const shouldNavigateOnDeleteComplete = dialogModel.status.level === DeletionLevel.Full;
@@ -199,7 +199,7 @@ export const DeleteUserModalContent = ({
         };
       }
       return viaParties.map((viaParty) => {
-        const viaName = formatEntityDisplayName(viaParty, { reverseNameOrder: false });
+        const viaName = formatEntityDisplayName(viaParty);
         const goTo = viaParty.isMainUnit
           ? window.location.href
           : `${window.location.origin}${GeneralPath.BasePath}/${amUIPath.Reportees}/${fromParty?.partyUuid}`;

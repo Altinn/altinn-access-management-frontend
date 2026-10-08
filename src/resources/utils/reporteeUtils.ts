@@ -31,17 +31,14 @@ const isPersonEntity = (entity: NamedEntity): boolean =>
     : entity.type?.toLowerCase() === 'person';
 
 /** Formats the name of a Party, User, ReporteeInfo, UserListItemData or Entity with formatDisplayName. */
-export const formatEntityDisplayName = (
-  entity: NamedEntity | null | undefined,
-  options?: { reverseNameOrder?: boolean },
-): string =>
-  entity
+export const formatEntityDisplayName = (entity: NamedEntity | null | undefined): string => {
+  return entity
     ? formatDisplayName({
         fullName: entity.name ?? '',
         type: isPersonEntity(entity) ? 'person' : 'company',
-        reverseNameOrder: options?.reverseNameOrder,
       })
     : '';
+};
 
 export const formatOrgNr = (orgNo?: string | null): string | undefined => {
   return orgNo?.match(/.{1,3}/g)?.join(' ');

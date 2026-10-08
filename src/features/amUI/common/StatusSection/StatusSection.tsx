@@ -66,10 +66,9 @@ export const StatusSection = ({
     return null;
   }
 
-  const formattedToPartyName =
-    toPartyName ?? formatEntityDisplayName(toParty, { reverseNameOrder: false });
+  const formattedToPartyName = toPartyName ?? formatEntityDisplayName(toParty);
 
-  const formattedFromPartyName = formatEntityDisplayName(fromParty, { reverseNameOrder: false });
+  const formattedFromPartyName = formatEntityDisplayName(fromParty);
 
   const formattedUserName = formattedToPartyName;
   const shouldShowDelegationCheck = !cannotDelegateHere && showDelegationCheckWarning;
@@ -121,7 +120,7 @@ export const StatusSection = ({
         </div>
       )}
       {uniqueInheritedStatus?.map((status) => {
-        const formattedViaName = formatEntityDisplayName(status.via, { reverseNameOrder: false });
+        const formattedViaName = formatEntityDisplayName(status.via);
 
         const textKey =
           toParty?.partyUuid === status.via?.id && toParty?.partyTypeName === PartyType.Person

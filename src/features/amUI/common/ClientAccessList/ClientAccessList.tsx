@@ -314,7 +314,7 @@ export const ClientAccessList = ({
                 clientId,
                 refId: clientResource.refId,
                 resource,
-                toPartyName: formatEntityDisplayName(client.client, { reverseNameOrder: false }),
+                toPartyName: formatEntityDisplayName(client.client),
                 onDelegate: showAction ? onDelegate : undefined,
                 onRevoke: showAction ? onRevoke : undefined,
               });

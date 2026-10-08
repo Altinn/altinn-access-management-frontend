@@ -155,7 +155,7 @@ export const useGlobalMenu = ({
     links: { divider: true },
     'current-user': {
       title: t('header.logged_in_as_name', {
-        name: formatEntityDisplayName(userinfo?.party, { reverseNameOrder: true }),
+        name: formatEntityDisplayName(userinfo?.party, true),
       }),
     },
     shortcuts: {

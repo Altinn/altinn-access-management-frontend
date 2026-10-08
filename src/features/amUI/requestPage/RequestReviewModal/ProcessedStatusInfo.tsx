@@ -56,7 +56,7 @@ export const ProcessedStatusInfo = ({
             name: formatDisplayName({
               fullName: handledByName,
               type: 'person',
-              reverseNameOrder: true,
+              reverseNameOrder: false,
             }),
           })}
         </DsParagraph>

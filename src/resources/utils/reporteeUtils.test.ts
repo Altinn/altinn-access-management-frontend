@@ -21,15 +21,6 @@ describe('formatEntityDisplayName', () => {
     );
   });
 
-  it('passes reverseNameOrder through', () => {
-    expect(
-      formatEntityDisplayName(
-        { name: 'NORDMANN OLA', partyTypeName: PartyType.Person },
-        { reverseNameOrder: true },
-      ),
-    ).toBe('Ola Nordmann');
-  });
-
   it('returns an empty string for a missing entity', () => {
     expect(formatEntityDisplayName(undefined)).toBe('');
     expect(formatEntityDisplayName(null)).toBe('');

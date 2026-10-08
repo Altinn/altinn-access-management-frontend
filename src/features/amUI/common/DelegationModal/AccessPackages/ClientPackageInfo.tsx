@@ -43,7 +43,7 @@ export const ClientPackageInfo = ({
     },
   });
 
-  const userName = formatEntityDisplayName(party, { reverseNameOrder: false });
+  const userName = formatEntityDisplayName(party);
 
   const canRevoke = userHasAccess && availableActions.includes(DelegationAction.REVOKE);
   const canDelegate =

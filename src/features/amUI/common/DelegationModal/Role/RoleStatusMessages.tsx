@@ -42,7 +42,7 @@ export const RoleStatusMessage = ({ role }: RoleStatusMessageProps) => {
     toParty,
   });
 
-  const formattedUserName = formatEntityDisplayName(toParty, { reverseNameOrder: false });
+  const formattedUserName = formatEntityDisplayName(toParty);
 
   // remove duplicates from inheritedStatus. Items are duplicate if type AND via.id are the same
   const uniqueInheritedStatus = Array.from(
@@ -60,7 +60,7 @@ export const RoleStatusMessage = ({ role }: RoleStatusMessageProps) => {
   return (
     <>
       {filteredStatuses.map((s) => {
-        const formattedViaName = formatEntityDisplayName(s.via, { reverseNameOrder: false });
+        const formattedViaName = formatEntityDisplayName(s.via);
 
         const textKey =
           toParty?.partyUuid === s.via?.id && toParty?.partyTypeName === PartyType.Person

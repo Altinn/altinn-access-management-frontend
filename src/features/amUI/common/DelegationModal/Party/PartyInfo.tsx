@@ -67,7 +67,7 @@ export const PartyInfo = ({
     onRestore: () => focusFirstEnabledButton(actionsRef.current),
   });
 
-  const userName = formatEntityDisplayName(party, { reverseNameOrder: false });
+  const userName = formatEntityDisplayName(party);
   const partyAvatarType = party.partyTypeName === PartyType.Person ? 'person' : 'company';
 
   const canRevoke = userHasAccess && availableActions.includes(DelegationAction.REVOKE);
