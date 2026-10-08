@@ -14,27 +14,19 @@ namespace Altinn.AccessManagement.UI.Core.Services
     public class UserService : IUserService
     {
         private readonly IProfileClient _profileClient;
-        private readonly IAccessManagementClient _accessManagementClient;
         private readonly IAccessManagementClientV0 _accessManagementClientV0;
-        private readonly IConnectionClient _connectionClient;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="UserService"/> class.
         /// </summary>
         /// <param name="profileClient">handler for profile client</param>
-        /// <param name="accessManagementClient">handler for AM client</param>
         /// <param name="accessManagementClientV0">handler for old AM client</param>
-        /// <param name="connectionClient">handler for right holder client</param>
         public UserService(
             IProfileClient profileClient,
-            IAccessManagementClient accessManagementClient,
-            IAccessManagementClientV0 accessManagementClientV0,
-            IConnectionClient connectionClient)
+            IAccessManagementClientV0 accessManagementClientV0)
         {
             _profileClient = profileClient;
-            _accessManagementClient = accessManagementClient;
             _accessManagementClientV0 = accessManagementClientV0;
-            _connectionClient = connectionClient;
         }
 
         /// <inheritdoc/>
@@ -82,13 +74,6 @@ namespace Altinn.AccessManagement.UI.Core.Services
         }
 
         /// <inheritdoc/>
-        public async Task<List<Connection>> GetActorListForUser(Guid authenticatedUserPartyUuid)
-        {
-            List<Connection> connections = await _connectionClient.GetConnections(authenticatedUserPartyUuid, null, authenticatedUserPartyUuid);
-            return connections;
-        }
-
-        /// <inheritdoc/>
         public async Task<List<string>> GetFavoriteActorUuids()
         {
             ProfileGroup favoriteProfileGroup = await _profileClient.GetFavoriteProfileGroup();
@@ -105,14 +90,6 @@ namespace Altinn.AccessManagement.UI.Core.Services
         public async Task DeletePartyUuidFromFavorites(Guid partyUuid)
         {
             await _profileClient.DeletePartyUuidFromFavorites(partyUuid);
-        }
-
-        /// <inheritdoc/>
-        public async Task<List<User>> GetReporteeList(Guid userId)
-        {
-            List<AuthorizedParty> rightOwners = await _accessManagementClient.GetReporteeList(userId);
-
-            return rightOwners.Select(party => new User(party)).ToList();
         }
     }
 }

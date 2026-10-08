@@ -39,14 +39,6 @@ namespace Altinn.AccessManagement.UI.Core.Services
         }
 
         /// <inheritdoc/>
-        public async Task<List<User>> GetReporteeConnections(int partyId)
-        {
-            List<AuthorizedParty> rightHolders = await _accessManagementClient.GetReporteeRightHolders(partyId);
-
-            return rightHolders.Select(party => new User(party)).ToList();
-        }
-
-        /// <inheritdoc/>
         public async Task<Guid?> ValidatePerson(string personIdentifier, string lastname)
         {
             string personIdentifierCleaned = personIdentifier.Trim().Replace("\"", string.Empty);

@@ -4,7 +4,7 @@ import { createBaseQuery } from '@/rtk/app/baseQuery';
 import { getCookie } from '@/resources/Cookie/CookieMethods';
 
 import type { Party } from './lookupApi';
-import { type Connection, type RoleInfo } from './connectionApi';
+import { type RoleInfo } from './connectionApi';
 
 export interface ExtendedUser extends Omit<User, 'children'> {
   roles: RoleInfo[];
@@ -114,22 +114,9 @@ export const userInfoApi = createApi({
       query: () => `reportee/${getCookie('AltinnPartyUuid')}`,
       keepUnusedDataFor: 300,
     }),
-    getReporteeListForParty: builder.query<User[], void>({
-      query: () => {
-        const partyUuid = getCookie('AltinnPartyUuid');
-        return `/reporteelist/${partyUuid}`;
-      },
-      keepUnusedDataFor: 300,
-    }),
     getReporteeListForAuthorizedUser: builder.query<ReporteeInfo[], void>({
       query: () => {
         return '/actorlist/old';
-      },
-      keepUnusedDataFor: 300,
-    }),
-    getActorListForAuthorizedUser: builder.query<Connection[], void>({
-      query: () => {
-        return '/actorlist';
       },
       keepUnusedDataFor: 300,
     }),
@@ -183,9 +170,7 @@ export const {
   useGetUserProfileQuery,
   useUpdateShowDeletedMutation,
   useGetReporteeQuery,
-  useGetReporteeListForPartyQuery,
   useGetReporteeListForAuthorizedUserQuery,
-  useGetActorListForAuthorizedUserQuery,
   useGetFavoriteActorUuidsQuery,
   useAddFavoriteActorUuidMutation,
   useRemoveFavoriteActorUuidMutation,

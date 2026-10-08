@@ -35,34 +35,6 @@ namespace Altinn.AccessManagement.UI.Controllers
         }
 
         /// <summary>
-        /// Endpoint for retrieving all right holders of a reportee
-        /// </summary>
-        /// <param name="partyId">The partyId for the reportee who's right holders to return</param>
-        /// <returns>List of right holders</returns>
-        [HttpGet]
-        [Authorize]
-        [Route("reportee/{partyId}/rightholders")]
-        public async Task<ActionResult<List<User>>> GetReporteeRightHolders(int partyId)
-        {
-            if (!ModelState.IsValid)
-            {
-                return BadRequest(ModelState);
-            }
-
-            try
-            {
-                List<User> rightHolders = await _connectionService.GetReporteeConnections(partyId);
-
-                return rightHolders;
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError(ex, "GetReportee failed to fetch right holders");
-                return StatusCode(500);
-            }
-        }
-
-        /// <summary>
         ///     Endpoint for revoking all rights associated with a right holder by revoking their status as a right holder for another party.
         /// </summary>
         /// <param name="party">The uuid identifying the party the authenticated user is acting on behalf of.</param>

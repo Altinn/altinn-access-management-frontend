@@ -9,7 +9,6 @@ using Altinn.AccessManagement.UI.Core.Extensions;
 using Altinn.AccessManagement.UI.Core.Services.Interfaces;
 using Altinn.AccessManagement.UI.Integration.Configuration;
 using Altinn.AccessManagement.UI.Integration.Util;
-using Altinn.Platform.Models.Register;
 using Altinn.Register.Contracts.V1;
 using AltinnCore.Authentication.Utils;
 using Microsoft.AspNetCore.Http;

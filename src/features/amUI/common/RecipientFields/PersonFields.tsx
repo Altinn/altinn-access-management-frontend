@@ -2,7 +2,9 @@ import React, { useState } from 'react';
 import { Trans, useTranslation } from 'react-i18next';
 import { DsTextfield } from '@altinn/altinn-components';
 
-import { getPersonIdentifierErrorKey, type PersonInput } from '../personIdentifierUtils';
+import { type PersonInput } from '@/rtk/features/connectionApi';
+
+import { getPersonIdentifierErrorKey } from '../personIdentifierUtils';
 
 import classes from './RecipientFields.module.css';
 
