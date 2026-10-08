@@ -40,7 +40,6 @@ const createParty = (
   partyTypeName: type,
   orgNumber: type === PartyType.Person ? undefined : '912345678',
   unitType: type === PartyType.Person ? undefined : 'AS',
-  variant: type === PartyType.Person ? 'Person' : 'AS',
 });
 
 const scenarioConfigs = {

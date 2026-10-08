@@ -22,7 +22,7 @@ export const mapUserToParty = (user: UserActionTarget): Party => ({
   partyTypeName:
     user.type?.toLowerCase() === 'organisasjon' ? PartyType.Organization : PartyType.Person,
   dateOfBirth: user.dateOfBirth ?? undefined,
-  variant: user.variant ?? undefined,
+  unitType: user.variant ?? undefined,
 });
 
 export interface PackageUserModalHandle {

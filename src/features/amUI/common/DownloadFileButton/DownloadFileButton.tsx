@@ -50,7 +50,7 @@ export const DownloadFileButton = ({
     accountList?.find((account) => account.partyUuid === fromParty?.partyUuid)?.subunits?.length ||
     0;
   const allowSubunitDownload =
-    !isSubUnitByType(fromParty?.variant) &&
+    !isSubUnitByType(fromParty?.unitType) &&
     fromAccountSubunitsNumber > 0 &&
     fromAccountSubunitsNumber <= MAX_SUBUNITS_FOR_DOWNLOAD_OPTION;
 

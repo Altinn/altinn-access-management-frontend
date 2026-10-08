@@ -103,7 +103,7 @@ export const PartyInfo = ({
           type={partyAvatarType}
           size='md'
           isDeleted={party.isDeleted}
-          isParent={!isSubUnitByType(party.variant?.toString())}
+          isParent={!isSubUnitByType(party.unitType?.toString())}
           className={classes.avatar}
         />
         <DsHeading

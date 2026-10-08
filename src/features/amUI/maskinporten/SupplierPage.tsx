@@ -50,7 +50,7 @@ export const SupplierPage = () => {
       partyTypeName: PartyType.Organization,
       orgNumber: party.organizationIdentifier ?? '',
       isDeleted: party.isDeleted ?? false,
-      variant: party.variant ?? '',
+      unitType: party.variant ?? '',
     };
   }, [supplier]);
 

@@ -49,7 +49,7 @@ export const UserPageHeader = ({
   const userName = direction === 'to' ? toPartyName : fromPartyName;
   const secondaryParty = direction === 'to' ? fromParty : toParty;
   const secondaryUserName = direction === 'to' ? fromPartyName : toPartyName;
-  const userIsSubUnit = isSubUnitByType(user?.variant?.toString());
+  const userIsSubUnit = isSubUnitByType(user?.unitType?.toString());
   const userIsOrganization = isOrganization(user?.partyTypeName?.toString());
   const userHeadline = userIsOrganization
     ? userIsSubUnit
@@ -80,7 +80,7 @@ export const UserPageHeader = ({
             size={isSmall ? 'md' : 'lg'}
             isDeleted={secondaryParty?.isDeleted}
             className={classes.secondaryAvatar}
-            isParent={!isSubUnitByType(secondaryParty?.variant?.toString())}
+            isParent={!isSubUnitByType(secondaryParty?.unitType?.toString())}
           />
         )}
       </div>

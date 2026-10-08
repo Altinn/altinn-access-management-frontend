@@ -30,7 +30,6 @@ const createParty = (
   partyTypeName: type,
   orgNumber: type === PartyType.Organization ? '912345678' : undefined,
   unitType: type === PartyType.Organization ? 'AS' : undefined,
-  variant: type === PartyType.Person ? 'Person' : 'AS',
 });
 
 const storyContextValue: PartyRepresentationContextOutput = {
