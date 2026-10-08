@@ -88,7 +88,7 @@ export const ConsentDetails = ({ consentId }: ConsentDetailsProps) => {
               <RevokeConsentPopover
                 isRevoking={isRevoking}
                 consentIsPoa={consent.isPoa}
-                onRevokeConsent={handleRevokeConsent}
+                onRevokeConsent={() => void handleRevokeConsent()}
               />
             )}
             {revokeConsentError && (

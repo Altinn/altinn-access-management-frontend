@@ -529,42 +529,6 @@
       "count": 1
     }
   },
-  "src/features/amUI/consent/ActiveConsentsPage/ActiveConsentsPage.tsx": {
-    "@typescript-eslint/no-unsafe-assignment": {
-      "count": 2
-    },
-    "@typescript-eslint/no-unsafe-member-access": {
-      "count": 1
-    }
-  },
-  "src/features/amUI/consent/ActiveConsentsPage/ActiveConsentsPageContent.tsx": {
-    "@typescript-eslint/no-floating-promises": {
-      "count": 1
-    }
-  },
-  "src/features/amUI/consent/ConsentRequestPage/ConsentRequestPage.tsx": {
-    "@typescript-eslint/no-floating-promises": {
-      "count": 2
-    },
-    "@typescript-eslint/no-misused-promises": {
-      "count": 2
-    }
-  },
-  "src/features/amUI/consent/components/ConsentDetails/ConsentDetails.tsx": {
-    "@typescript-eslint/no-misused-promises": {
-      "count": 1
-    }
-  },
-  "src/features/amUI/consent/components/ConsentRights/ConsentRights.tsx": {
-    "@typescript-eslint/no-unsafe-enum-comparison": {
-      "count": 1
-    }
-  },
-  "src/features/amUI/consent/components/IdPortenAuthorizationDetails/IdPortenAuthorizationDetails.tsx": {
-    "@typescript-eslint/no-misused-promises": {
-      "count": 1
-    }
-  },
   "src/features/amUI/landingPage/LandingPage.tsx": {
     "@typescript-eslint/no-unsafe-assignment": {
       "count": 1
