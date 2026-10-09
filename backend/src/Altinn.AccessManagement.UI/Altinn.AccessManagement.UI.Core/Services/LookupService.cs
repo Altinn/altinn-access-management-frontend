@@ -12,17 +12,14 @@ namespace Altinn.AccessManagement.UI.Core.Services
     public class LookupService : ILookupService
     {
         private readonly IRegisterClient _registerClient;
-        private readonly IProfileClient _profileClient;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="LookupService"/> class.
         /// </summary>
         /// <param name="registerClient">Client wrapper for platform register</param>
-        /// <param name="profileClient">profile client</param>
-        public LookupService(IRegisterClient registerClient, IProfileClient profileClient)
+        public LookupService(IRegisterClient registerClient)
         {
             _registerClient = registerClient;
-            _profileClient = profileClient;
         }
 
         /// <inheritdoc/>        

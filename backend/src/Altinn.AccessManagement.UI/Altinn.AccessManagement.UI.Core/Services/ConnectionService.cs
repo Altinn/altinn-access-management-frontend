@@ -15,7 +15,6 @@ namespace Altinn.AccessManagement.UI.Core.Services
     public class ConnectionService : IConnectionService
     {
         private readonly ILogger _logger;
-        private readonly IAccessManagementClient _accessManagementClient;
         private readonly IConnectionClient _connectionClient;
         private readonly IRegisterClient _registerClient;
 
@@ -23,17 +22,14 @@ namespace Altinn.AccessManagement.UI.Core.Services
         /// Initializes a new instance of the <see cref="ConnectionService"/> class.
         /// </summary>
         /// <param name="logger">handler for logger</param>
-        /// <param name="accessManagementClient">handler for AM client</param>
         /// <param name="registerClient">handler for register client</param>
         /// <param name="connectionClient">handler for right holder client</param>
         public ConnectionService(
             ILogger<ConnectionService> logger,
-            IAccessManagementClient accessManagementClient,
             IRegisterClient registerClient,
             IConnectionClient connectionClient)
         {
             _logger = logger;
-            _accessManagementClient = accessManagementClient;
             _registerClient = registerClient;
             _connectionClient = connectionClient;
         }
