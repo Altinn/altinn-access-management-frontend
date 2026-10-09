@@ -30,7 +30,7 @@ const getUserHeadline = (userName: string, user?: Party) => {
       ? `${userName} (${t('common.subunit_lowercase')})`
       : `${userName} (${t('common.mainunit_lowercase')})`;
   } else if (user?.partyTypeName === PartyType.Systemuser) {
-    return `${userName} (systembruker)`;
+    return `${userName} (${t('common.systemuser_lowercase')})`;
   }
   return userName;
 };

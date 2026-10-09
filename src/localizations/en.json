@@ -93,6 +93,7 @@
     "subunit": "Subunit",
     "subunit_lowercase": "subunit",
     "mainunit_lowercase": "main unit",
+    "systemuser_lowercase": "system access",
     "org_nr_lowercase": "org.no. {{org_number}}",
     "org_no": "Org.no",
     "part_of": "part of",
