@@ -1,20 +1,8 @@
 import { createApi } from '@reduxjs/toolkit/query/react';
 
 import { createBaseQuery } from '@/rtk/app/baseQuery';
-import { getCookie } from '@/resources/Cookie/CookieMethods';
 
 import type { PartyType } from './userInfoApi';
-
-export type UserProfile = {
-  userId: string;
-  userUuid: string;
-  userType: UserType;
-  userName: string;
-  phoneNumber: string;
-  email: string;
-  partyId: number;
-  party: Party;
-};
 
 export type Party = {
   partyId: number;
@@ -27,36 +15,12 @@ export type Party = {
   isDeleted?: boolean;
 };
 
-export enum UserType {
-  None,
-  SSNIdentified,
-  SelfIdentified,
-  EnterpriseIdentified,
-  AgencyUser,
-  PSAN,
-  PSA,
-}
-
 const baseUrl = import.meta.env.BASE_URL + 'accessmanagement/api/v1/' + 'lookup';
 
 export const lookupApi = createApi({
   reducerPath: 'lookupApi',
   baseQuery: createBaseQuery(baseUrl),
   endpoints: (builder) => ({
-    getUserByUUID: builder.query<UserProfile, string>({
-      query: (userUUID) => `user/${userUUID}`,
-    }),
-    /**
-     * @deprecated This endpoint is deprecated and should not be used in new code.
-     * It can be removed when the old access management frontend is decommissioned.
-     * Use useGetPartyFromLoggedInUserQuery for logged-in user data, or see
-     * useReporteeParty/useConnectedParty hooks in "common/PartyRepresentationContext/useConnectedParty.ts"
-     * for secure alternatives.
-     **/
-    deprecatedGetPartyByUUID: builder.query<Party, { partyUuid: string }>({
-      query: ({ partyUuid }) => `party/${partyUuid}`,
-      keepUnusedDataFor: 300,
-    }),
     getOrganization: builder.query<Party, string>({
       query: (orgNumber) => `org/${orgNumber}`,
       transformErrorResponse: (response: {
@@ -69,19 +33,9 @@ export const lookupApi = createApi({
       query: () => `party/user`,
       keepUnusedDataFor: 300,
     }),
-    getReporteeParty: builder.query<Party, void>({
-      query: () => `party/${getCookie('AltinnPartyUuid')}`,
-      keepUnusedDataFor: 300,
-    }),
   }),
 });
 
-export const {
-  useGetUserByUUIDQuery,
-  useDeprecatedGetPartyByUUIDQuery,
-  useGetOrganizationQuery,
-  useGetPartyFromLoggedInUserQuery,
-  useGetReporteePartyQuery,
-} = lookupApi;
+export const { useGetOrganizationQuery, useGetPartyFromLoggedInUserQuery } = lookupApi;
 
 export const { endpoints, reducerPath, reducer, middleware } = lookupApi;

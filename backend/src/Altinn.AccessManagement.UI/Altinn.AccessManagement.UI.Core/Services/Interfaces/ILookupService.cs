@@ -17,27 +17,6 @@ namespace Altinn.AccessManagement.UI.Core.Services.Interfaces
         Task<PartyFE> GetPartyForOrganization(string organizationNumber);
 
         /// <summary>
-        /// Gets a Party based on provided uuid, using the old register data (name is lastname firstname)
-        /// </summary>
-        /// <param name="uuid">The uuid of the party</param>
-        /// <returns>Party that corresponds to uuid parameter</returns>
-        Task<PartyFE> GetPartyByUUID_old(Guid uuid);
-
-        /// <summary>
-        /// Gets a Party based on provided uuid
-        /// </summary>
-        /// <param name="uuid">The uuid of the party</param>
-        /// <returns>Party that corresponds to uuid parameter</returns>
-        Task<PartyFE> GetPartyByUUID(Guid uuid);
-
-        /// <summary>
-        /// Gets a UserProfile based on provided uuid
-        /// </summary>
-        /// <param name="uuid">The uuid of the user</param>
-        /// <returns>The user profile that corresponds to the uuid parameter</returns>
-        Task<UserProfileFE> GetUserByUUID(Guid uuid);
-
-        /// <summary>
         /// Gets a Party using the provided uuid.
         /// </summary>
         /// <param name="userUuid">The uuid of the user</param>
