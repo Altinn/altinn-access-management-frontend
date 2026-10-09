@@ -25,23 +25,43 @@ type NamedEntity =
   | Pick<Party, 'name' | 'partyTypeName'>
   | Pick<User | ReporteeInfo | Entity | UserListItemData, 'name' | 'type'>;
 
-const isPersonEntity = (entity: NamedEntity): boolean =>
+const isOrganizationEntity = (entity: NamedEntity): boolean =>
   'partyTypeName' in entity
-    ? entity.partyTypeName === PartyType.Person
-    : entity.type?.toLowerCase() === 'person';
+    ? entity.partyTypeName === PartyType.Organization
+    : entity.type?.toLowerCase() === 'organization' ||
+      entity.type?.toLowerCase() === 'organisasjon';
+
+const isSystemuserEntity = (entity: NamedEntity): boolean =>
+  'partyTypeName' in entity
+    ? entity.partyTypeName === PartyType.Systemuser
+    : entity.type?.toLowerCase() === 'systemuser' || entity.type?.toLowerCase() === 'systembruker';
 
 /** Formats the name of a Party, User, ReporteeInfo, UserListItemData or Entity with formatDisplayName. */
 export const formatEntityDisplayName = (
   entity: NamedEntity | null | undefined,
   reverseNameOrder?: boolean,
 ): string => {
+  if (entity && isSystemuserEntity(entity)) {
+    return entity.name; // do not format system user name
+  }
   return entity
     ? formatDisplayName({
         fullName: entity.name ?? '',
-        type: isPersonEntity(entity) ? 'person' : 'company',
+        type: isOrganizationEntity(entity) ? 'company' : 'person',
         reverseNameOrder,
       })
     : '';
+};
+
+export const getAvatarType = (
+  entity: NamedEntity | null | undefined,
+): 'person' | 'company' | 'system' => {
+  if (entity && isOrganizationEntity(entity)) {
+    return 'company';
+  } else if (entity && isSystemuserEntity(entity)) {
+    return 'system';
+  }
+  return 'person';
 };
 
 export const formatOrgNr = (orgNo?: string | null): string | undefined => {
