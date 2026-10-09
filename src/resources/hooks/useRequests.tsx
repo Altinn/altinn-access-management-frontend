@@ -12,7 +12,11 @@ import {
   useGetReceivedRequestsQuery,
   useGetSentRequestsQuery,
 } from '@/rtk/features/requestApi';
-import { isSubUnitByType, formatEntityDisplayName } from '@/resources/utils/reporteeUtils';
+import {
+  isSubUnitByType,
+  formatEntityDisplayName,
+  getAvatarType,
+} from '@/resources/utils/reporteeUtils';
 import { useGetPartyFromLoggedInUserQuery } from '@/rtk/features/lookupApi';
 
 import { hasConsentPermission, hasCreateSystemUserPermission } from '../utils/permissionUtils';
@@ -172,7 +176,7 @@ const mapSystemUserRequestToRequest = (request: SystemUser): Request => {
     type: request.userType === 'agent' ? 'agentsystemuser' : 'systemuser',
     createdDate: request.created,
     displayPartyName: request.system.systemVendorOrgName,
-    displayPartyType: 'system',
+    displayPartyType: 'company',
     organizationIdentifier: request.system.systemVendorOrgNumber,
     description: 'request_page.request_systemuser',
   };
@@ -212,7 +216,7 @@ const mapAccessRequestToRequest = (
   numberOfRequests: number = 1,
 ): Request => {
   const party = direction === 'sent' ? request.to : request.from;
-  const partyType = party.organizationIdentifier ? 'company' : 'person';
+  const partyType = getAvatarType(party);
   const partyName = formatEntityDisplayName(party);
   return {
     id: request.id,

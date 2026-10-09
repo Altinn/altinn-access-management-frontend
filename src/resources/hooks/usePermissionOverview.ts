@@ -2,7 +2,11 @@ import { useMemo } from 'react';
 import { type AvatarProps } from '@altinn/altinn-components';
 
 import type { Permissions } from '@/dataObjects/dtos/accessPackage';
-import { isSubUnitByType, formatEntityDisplayName } from '@/resources/utils/reporteeUtils';
+import {
+  isSubUnitByType,
+  formatEntityDisplayName,
+  getAvatarType,
+} from '@/resources/utils/reporteeUtils';
 
 export const usePermissionOverview = ({ permissions }: { permissions: Permissions[] }) => {
   const calculatedPermissions = useMemo(() => {
@@ -16,7 +20,7 @@ export const usePermissionOverview = ({ permissions }: { permissions: Permission
       if (seen.has(id)) continue;
       if (to.type === 'Systembruker') continue; // skip system users
       const isPerson = to?.type === 'Person';
-      const type = isPerson ? 'person' : 'company';
+      const type = getAvatarType(to);
       const name = formatEntityDisplayName(to);
       const isParent = !isPerson && !isSubUnitByType(to.variant);
       seen.add(id);
