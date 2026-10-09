@@ -92,6 +92,7 @@
     "subunit": "Undereining",
     "subunit_lowercase": "undereining",
     "mainunit_lowercase": "hovudeining",
+    "systemuser_lowercase": "systemtilgang",
     "org_nr_lowercase": "org.nr. {{org_number}}",
     "org_no": "Org.nr",
     "part_of": "del av",

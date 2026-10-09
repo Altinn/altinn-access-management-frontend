@@ -63,6 +63,7 @@ export enum PartyType {
   Organization = 2,
   SelfIdentified = 3,
   SubUnit = 4,
+  Systemuser = 6,
 }
 
 export interface UserAccesses {
