@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import {
   DsButton,
   DsSearch,
@@ -75,14 +75,9 @@ export const CustomerList = ({
   );
 
   const totalPages = Math.ceil(filteredSearchList.length / itemsPerPage);
-  const startIndex = (currentPage - 1) * itemsPerPage;
-  const endIndex = currentPage * itemsPerPage;
-
-  useEffect(() => {
-    if (currentPage > totalPages) {
-      setCurrentPage(1);
-    }
-  }, [totalPages, currentPage, itemsPerPage]);
+  const safeCurrentPage = currentPage > totalPages ? 1 : currentPage;
+  const startIndex = (safeCurrentPage - 1) * itemsPerPage;
+  const endIndex = safeCurrentPage * itemsPerPage;
 
   const onSearch = (event: React.ChangeEvent<HTMLInputElement>): void => {
     setSearchValue(event.target.value);
@@ -157,7 +152,7 @@ export const CustomerList = ({
           <AmPagination
             totalPages={totalPages}
             showPages={showPages}
-            currentPage={currentPage}
+            currentPage={safeCurrentPage}
             setCurrentPage={setCurrentPage}
             size='sm'
           />
