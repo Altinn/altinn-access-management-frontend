@@ -96,14 +96,12 @@ export class ApiRequests {
       'POST',
       platformUrl(`${AUTHENTICATION}/systemuser/request/vendor`),
       {
-        json: {
-          systemId,
-          partyOrgNo,
-          externalRef,
-          rights: rights ?? [],
-          accessPackages: accessPackages ?? [{ urn: 'urn:altinn:accesspackage:baerekraft' }],
-          redirectUrl: redirectUrl ?? '',
-        },
+        systemId,
+        partyOrgNo,
+        externalRef,
+        rights: rights ?? [],
+        accessPackages: accessPackages ?? [{ urn: 'urn:altinn:accesspackage:baerekraft' }],
+        redirectUrl: redirectUrl ?? '',
       },
     );
   }
@@ -121,13 +119,11 @@ export class ApiRequests {
       'POST',
       platformUrl(`${AUTHENTICATION}/systemuser/request/vendor/agent`),
       {
-        json: {
-          externalRef,
-          systemId,
-          partyOrgNo,
-          accessPackages: [{ urn: `urn:altinn:accesspackage:${accessPackageUrn}` }],
-          redirectUrl: '',
-        },
+        externalRef,
+        systemId,
+        partyOrgNo,
+        accessPackages: [{ urn: `urn:altinn:accesspackage:${accessPackageUrn}` }],
+        redirectUrl: '',
       },
     );
   }
@@ -150,7 +146,7 @@ export class ApiRequests {
         'correlation-id': crypto.randomUUID(),
         'system-user-id': systemUserId,
       }),
-      { json: changes },
+      changes,
     );
   }
 
@@ -292,13 +288,11 @@ export class ApiRequests {
       'POST',
       platformUrl(`${AUTHENTICATION}/systemregister/vendor`),
       {
-        json: {
-          Id: `${vendorOrgNo}_${name}`,
-          Vendor: { ID: `0192:${vendorOrgNo}` },
-          Name: { en: name, nb: name, nn: name },
-          ClientId: [`Client_${Date.now()}_${Math.random()}`],
-          ...details,
-        },
+        Id: `${vendorOrgNo}_${name}`,
+        Vendor: { ID: `0192:${vendorOrgNo}` },
+        Name: { en: name, nb: name, nn: name },
+        ClientId: [`Client_${Date.now()}_${Math.random()}`],
+        ...details,
       },
     );
   }

@@ -21,13 +21,32 @@ export interface RegisterParty {
 const parties = new Map<string, Promise<RegisterParty>>();
 let platformToken: Promise<string> | undefined;
 
+/**
+ * Generated tokens are reused for a while instead of fetched for every API call. Well inside the
+ * shortest token lifetime, and longer than a full run takes.
+ */
+const TOKEN_MAX_AGE_MS = 10 * 60_000;
+const tokens = new Map<string, { token: Promise<string>; created: number }>();
+
+function cachedToken(key: string, create: () => Promise<string>): Promise<string> {
+  const cached = tokens.get(key);
+  if (cached && Date.now() - cached.created < TOKEN_MAX_AGE_MS) return cached.token;
+
+  const token = create();
+  tokens.set(key, { token, created: Date.now() });
+  token.catch(() => tokens.delete(key));
+  return token;
+}
+
 export class Token {
   private readonly username = env('USERNAME_TEST_API');
   private readonly password = env('PASSWORD_TEST_API');
   private readonly environment = env('ENV_NAME');
 
   public async getEnterpriseAltinnToken(orgNo: string, scopes: string): Promise<string> {
-    return this.generateToken('GetEnterpriseToken', { orgNo, env: this.environment, scopes });
+    return cachedToken(`enterprise:${orgNo}:${scopes}`, () =>
+      this.generateToken('GetEnterpriseToken', { orgNo, env: this.environment, scopes }),
+    );
   }
 
   public async getPersonalCleanupAltinnToken(person: {
@@ -49,6 +68,10 @@ export class Token {
    * @returns personal token
    */
   public async getPersonalTokenByPid(pid: string): Promise<string> {
+    return cachedToken(`personal:${pid}`, () => this.createPersonalToken(pid));
+  }
+
+  private async createPersonalToken(pid: string): Promise<string> {
     const person = await this.getIds(pid);
 
     // A party without a user is an organisation, not a person — a personal token

@@ -20,9 +20,7 @@ export class ConsentApiRequests {
     endpoint: string,
     scopes: string,
   ): Promise<TResponse> {
-    return asEnterprise<TResponse>(this.org, scopes, 'POST', platformUrl(endpoint), {
-      json: payload,
-    });
+    return asEnterprise<TResponse>(this.org, scopes, 'POST', platformUrl(endpoint), payload);
   }
 
   private async sendPostRequestWithMaskinporten<TPayload, TResponse>(

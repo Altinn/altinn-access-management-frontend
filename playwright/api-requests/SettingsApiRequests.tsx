@@ -211,9 +211,7 @@ export class SettingsApiRequests {
    * The settings endpoints live on the app host (BASE_URL origin), not the
    * platform host (API_BASE_URL): e.g. https://am.ui.tt02.altinn.no/...
    */
-  private request<T>(pid: string, method: HttpMethod, path: string, json?: unknown): Promise<T> {
-    return asUser<T>(pid, method, appUrl(`accessmanagement/api/v1/settings/${path}`), {
-      json,
-    });
+  private request<T>(pid: string, method: HttpMethod, path: string, body?: unknown): Promise<T> {
+    return asUser<T>(pid, method, appUrl(`accessmanagement/api/v1/settings/${path}`), body);
   }
 }

@@ -12,6 +12,17 @@ const DELAY_MS = 1_000;
 const MAX_DELAY_MS = 8_000;
 
 /**
+ * A request that never reached the API: fetch's "fetch failed" (connection reset, DNS failure)
+ * or a per-attempt timeout. Anything else fetch throws, such as a GET with a body, is a bug in
+ * the test code and is not retried.
+ */
+function isNetworkError(error: unknown): boolean {
+  return (
+    error instanceof Error && (error.message === 'fetch failed' || error.name === 'TimeoutError')
+  );
+}
+
+/**
  * Sends a request and retries it while it fails transiently. A network error
  * (connection reset, DNS failure, timeout) counts as transient too — that is what
  * K6 reports as status 0.
@@ -33,7 +44,7 @@ export async function withRetries(
       failure = `status ${response.status}`;
       await response.body?.cancel();
     } catch (error) {
-      if (used === RETRIES) throw error;
+      if (!isNetworkError(error) || used === RETRIES) throw error;
       failure = String(error);
     }
 

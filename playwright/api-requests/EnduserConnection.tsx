@@ -50,9 +50,12 @@ export class EnduserConnection {
   public async addConnection(pid: string, from: string, to: string) {
     const fromUuid = await partyUuid(from);
     if (isPerson(to)) {
-      return asUser(pid, 'POST', platformUrl(`${ENDUSER}/connections`, this.fromSelf(fromUuid)), {
-        json: await this.personPayload(to),
-      });
+      return asUser(
+        pid,
+        'POST',
+        platformUrl(`${ENDUSER}/connections`, this.fromSelf(fromUuid)),
+        await this.personPayload(to),
+      );
     }
     return asUser(
       pid,
@@ -90,14 +93,14 @@ export class EnduserConnection {
     packageNames: string[],
   ) {
     const query = await this.fromTo(fromOrg, toPid);
-    const json = await this.personPayload(toPid);
+    const body = await this.personPayload(toPid);
     await Promise.all(
       packageNames.map((packageName) =>
         asUser(
           pid,
           'POST',
           platformUrl(`${ENDUSER}/connections/accesspackages`, { ...query, package: packageName }),
-          { json },
+          body,
         ),
       ),
     );
@@ -157,7 +160,7 @@ export class EnduserConnection {
         to: await partyUuid(to),
         resource,
       }),
-      { json: { directRightKeys: [right.right.key] } },
+      { directRightKeys: [right.right.key] },
     );
   }
 
@@ -198,7 +201,7 @@ export class EnduserConnection {
       platformUrl(`${ENDUSER}/clientdelegations/agents`, {
         party: await partyUuid(fromParty),
       }),
-      { json: await this.personPayload(agentPid) },
+      await this.personPayload(agentPid),
     );
   }
 
@@ -210,7 +213,7 @@ export class EnduserConnection {
         party: await partyUuid(fromParty),
         to: await partyUuid(agentPid),
       }),
-      { json: await this.personPayload(agentPid) },
+      await this.personPayload(agentPid),
     );
   }
 
@@ -240,7 +243,7 @@ export class EnduserConnection {
         from: await partyUuid(clientOrgNo),
         to: await partyUuid(agentPid),
       }),
-      { json: { values: [{ role: 'rettighetshaver', packages: [packageName] }] } },
+      { values: [{ role: 'rettighetshaver', packages: [packageName] }] },
     );
   }
 
