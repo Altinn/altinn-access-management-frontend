@@ -1,12 +1,12 @@
-import { fetchWithRetry } from 'playwright/util/fetchWithRetry';
 import { env } from 'playwright/util/helper';
+import { withRetries } from 'playwright/util/retry';
 
 /**
  * The one place the Playwright API clients talk HTTP.
  *
- * Every call goes through `fetchWithRetry` (503 is retried, then `TestSetupError`), and every
- * unexpected status becomes an `ApiError` carrying the status and response body — so callers
- * never check `response.ok` themselves, and a spec can react to one status with
+ * Transient failures are retried (`withRetries`), and every unexpected status becomes an
+ * `ApiError` carrying the status and response body — so callers never check `response.ok`
+ * themselves, and a spec can react to one status with
  * `error instanceof ApiError && error.status === 404` instead of matching message text.
  */
 
@@ -29,12 +29,11 @@ export interface RequestOptions {
 
 export class ApiError extends Error {
   constructor(
-    readonly method: HttpMethod,
     readonly request: string,
     readonly status: number,
     readonly body: string,
   ) {
-    super(`API-kall feilet: ${method} ${request} svarte ${status}${body ? `. Svar: ${body}` : ''}`);
+    super(`API-kall feilet: ${request} svarte ${status}${body ? `. Svar: ${body}` : ''}`);
     this.name = 'ApiError';
   }
 }
@@ -69,7 +68,11 @@ export async function send(
   url: string,
   { token, headers, json, form, accept = [] }: RequestOptions = {},
 ): Promise<Response> {
-  const response = await fetchWithRetry(url, {
+  // Query strings carry test PIDs and long URNs; the path is enough to identify the call.
+  const { host, pathname } = new URL(url);
+  const request = `${method} ${host}${pathname}`;
+
+  const init: RequestInit = {
     method,
     headers: {
       ...(token && { Authorization: `Bearer ${token}` }),
@@ -78,12 +81,17 @@ export async function send(
       ...headers,
     },
     body: json !== undefined ? JSON.stringify(json) : form && new URLSearchParams(form),
-  });
+  };
+
+  // A per-attempt timeout, so a hanging call is retried like K6's request timeout
+  // instead of eating the whole test timeout. 4 × 20s + 7s backoff fits inside 90s.
+  const response = await withRetries(
+    () => fetch(url, { ...init, signal: AbortSignal.timeout(20_000) }),
+    request,
+  );
 
   if (!response.ok && !accept.includes(response.status)) {
-    // Query strings carry test PIDs and long URNs; the path is enough to identify the call.
-    const { host, pathname } = new URL(url);
-    throw new ApiError(method, `${host}${pathname}`, response.status, await response.text());
+    throw new ApiError(request, response.status, await response.text());
   }
   return response;
 }

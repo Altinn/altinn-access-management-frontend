@@ -1,4 +1,4 @@
-import { buildUrl, send } from './apiRequest';
+import { withRetries } from 'playwright/util/retry';
 
 const KRAV_OG_BETALINGER_BASE = 'https://kravogbetalinger.api.skatteetaten-test.no/v1';
 
@@ -6,6 +6,9 @@ export async function fetchKrav(
   norskIdentifikator: string,
   consentToken: string,
 ): Promise<Response> {
-  const url = buildUrl(KRAV_OG_BETALINGER_BASE, `finans/${norskIdentifikator}/aapnekrav`);
-  return send('GET', url, { token: consentToken });
+  const url = `${KRAV_OG_BETALINGER_BASE}/finans/${norskIdentifikator}/aapnekrav`;
+  return withRetries(
+    () => fetch(url, { headers: { Authorization: `Bearer ${consentToken}` } }),
+    'GET aapnekrav',
+  );
 }
