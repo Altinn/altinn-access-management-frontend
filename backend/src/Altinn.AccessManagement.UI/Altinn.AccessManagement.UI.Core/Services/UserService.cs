@@ -2,6 +2,7 @@
 using Altinn.AccessManagement.UI.Core.Helpers;
 using Altinn.AccessManagement.UI.Core.Models;
 using Altinn.AccessManagement.UI.Core.Models.AccessManagement;
+using Altinn.AccessManagement.UI.Core.Models.Common.Frontend;
 using Altinn.AccessManagement.UI.Core.Models.Profile;
 using Altinn.AccessManagement.UI.Core.Models.User;
 using Altinn.AccessManagement.UI.Core.Services.Interfaces;
@@ -60,10 +61,10 @@ namespace Altinn.AccessManagement.UI.Core.Services
         }
 
         /// <inheritdoc/>        
-        public async Task<AuthorizedParty> GetPartyFromReporteeListIfExists(Guid partyUuid)
+        public async Task<AuthorizedPartyFE> GetPartyFromReporteeListIfExists(Guid partyUuid)
         {
             AuthorizedParty partyInfo = await _accessManagementClientV0.GetPartyFromReporteeListIfExists(partyUuid);
-            return partyInfo;
+            return AuthorizedPartyFE.FromAuthorizedParty(partyInfo);
         }
 
         /// <inheritdoc/>        

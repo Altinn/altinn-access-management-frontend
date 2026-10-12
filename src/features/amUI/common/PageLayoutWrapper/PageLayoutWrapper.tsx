@@ -9,6 +9,7 @@ import {
 import { useTranslation } from 'react-i18next';
 
 import { useGetReporteeQuery } from '@/rtk/features/userInfoApi';
+import { isOrganization } from '@/resources/utils/reporteeUtils';
 
 import { useGlobalMenu } from './useGlobalMenu';
 import { useFooter } from './useFooter';
@@ -21,10 +22,6 @@ interface PageLayoutWrapperProps {
   hideSidebar?: boolean;
   children?: React.ReactNode;
 }
-
-const getAccountType = (type: string): 'company' | 'person' => {
-  return type === 'Organization' ? 'company' : 'person';
-};
 
 export const PageLayoutWrapper = ({
   openAccountMenu = false,
@@ -46,7 +43,7 @@ export const PageLayoutWrapper = ({
       <NavigationFocus />
       <SnackbarProvider>
         <Layout
-          color={reportee?.type ? getAccountType(reportee.type) : 'neutral'}
+          color={reportee ? (isOrganization(reportee) ? 'company' : 'person') : 'neutral'}
           theme='subtle'
           header={header}
           banner={{
@@ -72,7 +69,9 @@ export const PageLayoutWrapper = ({
                   },
                 }
           }
-          content={{ color: reportee?.type ? getAccountType(reportee.type) : 'neutral' }}
+          content={{
+            color: reportee ? (isOrganization(reportee) ? 'company' : 'person') : 'neutral',
+          }}
           footer={footer}
           cookieBanner={
             window.featureFlags?.enableSkyra !== true || isAnswered

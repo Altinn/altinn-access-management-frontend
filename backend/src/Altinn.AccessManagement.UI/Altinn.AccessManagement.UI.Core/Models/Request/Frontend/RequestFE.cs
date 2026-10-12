@@ -1,7 +1,7 @@
 #nullable enable
 
 using Altinn.AccessManagement.UI.Core.Enums;
-using Altinn.AccessManagement.UI.Core.Models.User;
+using Altinn.AccessManagement.UI.Core.Models.Common.Frontend;
 
 namespace Altinn.AccessManagement.UI.Core.Models.Request.Frontend
 {
@@ -28,12 +28,12 @@ namespace Altinn.AccessManagement.UI.Core.Models.Request.Frontend
         /// <summary>
         /// Party that is requested to grant access
         /// </summary>
-        public required Entity From { get; set; }
+        public required PartyFE From { get; set; }
 
         /// <summary>
         /// Party that access is requested for
         /// </summary>
-        public required Entity To { get; set; }
+        public required PartyFE To { get; set; }
 
         /// <summary>
         /// The resource id access is requested for (requests are either for a resource or a package, so only one of ResourceId and PackageId will be set)

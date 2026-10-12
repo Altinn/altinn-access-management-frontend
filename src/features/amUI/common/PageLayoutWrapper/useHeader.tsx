@@ -118,7 +118,7 @@ export const useHeader = ({
     languageCode: languageCode,
     partyListDTO: reporteeList ?? [],
     favoriteAccountUuids: favoriteAccountUuids ?? [],
-    currentAccountUuid: reportee?.partyUuid,
+    currentAccountUuid: reportee?.id,
     selfAccountUuid: userProfile?.uuid,
     virtualized: reporteeList && reporteeList.length > 20,
     isLoading:
@@ -133,7 +133,7 @@ export const useHeader = ({
     onShowDeletedUnitsChange: onShowDeletedUnitsChange,
 
     onSelectAccount: (accountId: string) => {
-      if (accountId !== reportee?.partyUuid) {
+      if (accountId !== reportee?.id) {
         handleSelectAccount(accountId);
       }
       setShouldOpenAccountMenu(false);

@@ -8,7 +8,7 @@ import { type SerializedError } from '@reduxjs/toolkit';
 
 import { formatEntityDisplayName } from '@/resources/utils/reporteeUtils';
 import { getConsentRequestUrl } from '@/routes/paths/consentPath';
-import { type ReporteeInfo } from '@/rtk/features/userInfoApi';
+import type { AuthorizedPartyEntity } from '@/dataObjects/dtos/Party';
 import { ConsentPath } from '@/routes/paths';
 import { type IdPortenAuthorization } from '@/rtk/features/idPortenAuthorizationApi';
 
@@ -23,7 +23,7 @@ import classes from './ActiveConsentsPage.module.css';
 interface ActiveConsentsPageContentProps {
   activeConsents: ActiveConsentListItem[] | undefined;
   idPortenAuthorizations: IdPortenAuthorization[] | undefined;
-  reportee: ReporteeInfo | undefined;
+  reportee: AuthorizedPartyEntity | undefined;
   isLoading: boolean;
   hasPermission: boolean;
   loadActiveConsentsError: FetchBaseQueryError | SerializedError | undefined;

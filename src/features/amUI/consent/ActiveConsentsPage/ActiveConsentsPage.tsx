@@ -34,7 +34,7 @@ export const ActiveConsentsPage = () => {
   const hasPermission = hasConsentPermission(
     reportee,
     isAdmin,
-    currentUser?.partyUuid === reportee?.partyUuid,
+    currentUser?.partyUuid === reportee?.id,
   );
 
   const {

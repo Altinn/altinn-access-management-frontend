@@ -2,6 +2,7 @@
 using Altinn.AccessManagement.UI.Core.Helpers;
 using Altinn.AccessManagement.UI.Core.Models;
 using Altinn.AccessManagement.UI.Core.Models.AccessManagement;
+using Altinn.AccessManagement.UI.Core.Models.Common.Frontend;
 using Altinn.AccessManagement.UI.Core.Models.Profile;
 using Altinn.AccessManagement.UI.Core.Models.User;
 using Altinn.AccessManagement.UI.Core.Services.Interfaces;
@@ -208,11 +209,11 @@ namespace Altinn.AccessManagement.UI.Controllers
         [HttpGet]
         [Authorize]
         [Route("reportee/{partyUuid}")]
-        public async Task<ActionResult<AuthorizedParty>> GetPartyFromReporteeListIfExists(Guid partyUuid)
+        public async Task<ActionResult<AuthorizedPartyFE>> GetPartyFromReporteeListIfExists(Guid partyUuid)
         {
             try
             {
-                AuthorizedParty party = await _userService.GetPartyFromReporteeListIfExists(partyUuid);
+                AuthorizedPartyFE party = await _userService.GetPartyFromReporteeListIfExists(partyUuid);
 
                 if (party != null)
                 {

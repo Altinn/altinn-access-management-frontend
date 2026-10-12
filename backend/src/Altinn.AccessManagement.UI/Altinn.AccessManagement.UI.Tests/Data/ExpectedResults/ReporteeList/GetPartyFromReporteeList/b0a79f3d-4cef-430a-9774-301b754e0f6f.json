@@ -1,13 +1,13 @@
 {
-    "partyUuid": "b0a79f3d-4cef-430a-9774-301b754e0f6f",
-    "name": "DISKRET NÆR TIGER AS",
-    "organizationNumber": "311312294",
-    "personId": null,
+    "id": "b0a79f3d-4cef-430a-9774-301b754e0f6f",
     "partyId": 51433301,
+    "name": "DISKRET NÆR TIGER AS",
     "type": "Organization",
     "unitType": "BEDR",
+    "organizationIdentifier": "311312294",
+    "dateOfBirth": null,
     "isDeleted": false,
-    "onlyHierarchyElementWithNoAccess": false,
+    "parent": null,
     "authorizedResources": [],
     "authorizedRoles": [
         "LEDE",
@@ -34,5 +34,6 @@
         "APIADM",
         "A0298"
     ],
-    "subunits": []
+    "onlyHierarchyElementWithNoAccess": false,
+    "children": []
 }

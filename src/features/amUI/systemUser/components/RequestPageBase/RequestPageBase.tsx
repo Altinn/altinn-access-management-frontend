@@ -2,7 +2,7 @@ import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { DsHeading, DsParagraph } from '@altinn/altinn-components';
 
-import { type ReporteeInfo } from '@/rtk/features/userInfoApi';
+import { PartyEntityType, type AuthorizedPartyEntity } from '@/dataObjects/dtos/Party';
 import { formatOrgNr } from '@/resources/utils/reporteeUtils';
 import { RequestPageLayout } from '@/features/amUI/common/RequestPageLayout/RequestPageLayout';
 
@@ -13,7 +13,7 @@ import classes from './RequestPageBase.module.css';
 interface RequestPageBaseProps {
   system?: RegisteredSystem;
   heading: string;
-  reportee?: ReporteeInfo;
+  reportee?: AuthorizedPartyEntity;
   isLoading?: boolean;
   requestPartyUuid?: string;
   error?: React.ReactNode;
@@ -33,7 +33,7 @@ export const RequestPageBase = ({
 
   const account: { name: string; type: 'person' | 'company' } = {
     name: reportee?.name || '',
-    type: reportee?.type === 'Person' ? 'person' : 'company',
+    type: reportee?.type === PartyEntityType.Person ? 'person' : 'company',
   };
 
   return (
