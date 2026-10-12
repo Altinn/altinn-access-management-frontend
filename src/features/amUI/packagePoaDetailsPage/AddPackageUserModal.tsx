@@ -6,8 +6,7 @@ import { PlusIcon } from '@navikt/aksel-icons';
 import { getActionError, type ActionError } from '@/resources/hooks/useActionError';
 import { useAddRightHolderMutation } from '@/rtk/features/connectionApi';
 import { useDelegatePackageMutation, type AccessPackage } from '@/rtk/features/accessPackageApi';
-import { type Party } from '@/rtk/features/lookupApi';
-import { PartyType } from '@/rtk/features/userInfoApi';
+import { PartyType, type PartyEntity } from '@/dataObjects/dtos/Party';
 
 import { usePartyRepresentation } from '../common/PartyRepresentationContext/PartyRepresentationContext';
 import { AddUserForm } from '../common/AddUserForm/AddUserForm';
@@ -32,7 +31,7 @@ interface AddPackageUserButtonProps {
 /** A failed delegation, reported the same way as one to an existing user on the page. */
 interface DelegateError {
   error: ActionError;
-  targetParty: Party;
+  targetParty: PartyEntity;
 }
 
 const recipientName = (recipient: Recipient) =>
@@ -43,11 +42,12 @@ const recipientName = (recipient: Recipient) =>
  * organisation, before they exist as a right holder, so they are given a party that holds only that
  * and the name.
  */
-const toRecipientParty = (recipient: Recipient): Party => ({
+const toRecipientParty = (recipient: Recipient): PartyEntity => ({
   partyId: 0,
-  partyUuid: recipient.kind === 'org' ? recipient.organization.partyUuid : '',
+  id: recipient.kind === 'org' ? recipient.organization.id : '',
   name: recipientName(recipient),
-  partyTypeName: recipient.kind === 'person' ? PartyType.Person : PartyType.Organization,
+  type: recipient.kind === 'person' ? PartyType.Person : PartyType.Organization,
+  isDeleted: false,
 });
 
 /**
@@ -100,8 +100,8 @@ export const AddPackageUserButton = ({ accessPackage, onUserAdded }: AddPackageU
         await delegatePackage({
           to: toUuid,
           packageId: accessPackage.id,
-          from: fromParty.partyUuid,
-          party: actingParty.partyUuid,
+          from: fromParty.id,
+          party: actingParty.id,
         }).unwrap();
       } catch (error: unknown) {
         // The right holder exists by now, so nothing here can mean "no such person".
@@ -156,7 +156,7 @@ export const AddPackageUserButton = ({ accessPackage, onUserAdded }: AddPackageU
               { type: 'person', submitLabel: t('common.give_poa') },
               { type: 'org', submitLabel: t('common.give_poa') },
             ]}
-            isSubmitDisabled={!accessPackage || !actingParty?.partyUuid || !fromParty?.partyUuid}
+            isSubmitDisabled={!accessPackage || !actingParty?.id || !fromParty?.id}
             onKindChange={clearErrors}
             isSubmitting={isSubmitting}
             onSubmit={handleSubmit}

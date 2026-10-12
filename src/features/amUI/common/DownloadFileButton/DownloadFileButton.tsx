@@ -10,8 +10,8 @@ import { DownloadIcon } from '@navikt/aksel-icons';
 import { useTranslation } from 'react-i18next';
 import { useRef, useState } from 'react';
 
+import { PartyType } from '@/dataObjects/dtos/Party';
 import {
-  PartyType,
   useGetIsAdminQuery,
   useGetReporteeListForAuthorizedUserQuery,
 } from '@/rtk/features/userInfoApi';
@@ -43,11 +43,10 @@ export const DownloadFileButton = ({
   const { fromParty } = usePartyRepresentation();
   const reporteeName = formatEntityDisplayName(fromParty);
   const { data: accountList } = useGetReporteeListForAuthorizedUserQuery(undefined, {
-    skip: !isAdmin || fromParty?.partyTypeName !== PartyType.Organization,
+    skip: !isAdmin || fromParty?.type !== PartyType.Organization,
   });
   const fromAccountSubunitsNumber =
-    accountList?.find((account) => account.partyUuid === fromParty?.partyUuid)?.subunits?.length ||
-    0;
+    accountList?.find((account) => account.partyUuid === fromParty?.id)?.subunits?.length || 0;
   const allowSubunitDownload =
     !isSubUnitByType(fromParty?.unitType) &&
     fromAccountSubunitsNumber > 0 &&
@@ -57,7 +56,7 @@ export const DownloadFileButton = ({
     if (!fromParty) return;
 
     const params = new URLSearchParams({
-      partyUuid: fromParty.partyUuid,
+      partyUuid: fromParty.id,
       includeSubunits: String(includeSubunits),
     });
 
@@ -78,7 +77,7 @@ export const DownloadFileButton = ({
     setIsDialogOpen(false);
   };
 
-  if (fromParty?.partyTypeName !== PartyType.Organization || !isAdmin) {
+  if (fromParty?.type !== PartyType.Organization || !isAdmin) {
     return null;
   }
 

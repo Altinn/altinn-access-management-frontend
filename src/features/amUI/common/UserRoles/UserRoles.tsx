@@ -27,12 +27,12 @@ export const UserRoles = ({ className, ...props }: React.HTMLAttributes<HTMLDivE
 
   const { data: permissions } = useGetRolePermissionsQuery(
     {
-      party: actingParty?.partyUuid ?? '',
-      from: fromParty?.partyUuid,
-      to: toParty?.partyUuid,
+      party: actingParty?.id ?? '',
+      from: fromParty?.id,
+      to: toParty?.id,
     },
     {
-      skip: !actingParty?.partyUuid || !fromParty?.partyUuid || !toParty?.partyUuid,
+      skip: !actingParty?.id || !fromParty?.id || !toParty?.id,
     },
   );
 
@@ -59,7 +59,7 @@ export const UserRoles = ({ className, ...props }: React.HTMLAttributes<HTMLDivE
       ?.map(({ role }) => role) ?? [],
   );
 
-  const isViewingOwnAccess = toParty?.partyUuid === selfParty?.partyUuid;
+  const isViewingOwnAccess = toParty?.id === selfParty?.id;
   const isAgent = altinn3Roles.some((rolePermission) => rolePermission.role?.code === 'agent');
   const isGuardian = guardianshipRoles.length > 0;
   const chipSize = isSmall ? 'sm' : 'md';

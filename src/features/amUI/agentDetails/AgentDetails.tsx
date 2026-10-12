@@ -85,8 +85,8 @@ export const AgentDetails = () => {
 
   const backUrl = `/${amUIPath.ClientAdministration}#users`;
   const userName = formatEntityDisplayName(toParty);
-  const toPartyUuid = toParty?.partyUuid;
-  const actingPartyUuid = actingParty?.partyUuid;
+  const toPartyUuid = toParty?.id;
+  const actingPartyUuid = actingParty?.id;
   const assignedSectionId = useId();
   const unassignedSectionId = useId();
   // One zone for both sections, so a client that moves between them is still found by its id.

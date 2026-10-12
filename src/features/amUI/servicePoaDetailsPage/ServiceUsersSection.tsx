@@ -2,6 +2,7 @@ import { useEffect, useMemo, useRef, useState } from 'react';
 import { DsAlert, DsParagraph, useSnackbar } from '@altinn/altinn-components';
 import { useTranslation } from 'react-i18next';
 
+import { PartyType } from '@/dataObjects/dtos/Party';
 import { formatEntityDisplayName } from '@/resources/utils/reporteeUtils';
 import { useGetRightHoldersQuery } from '@/rtk/features/connectionApi';
 import {
@@ -69,10 +70,10 @@ export const ServiceUsersSection = ({ resource, isLoading }: ServiceUsersSection
     error: delegationsError,
   } = useGetSingleRightsForRightholderQuery(
     {
-      actingParty: actingParty?.partyUuid || '',
-      from: fromParty?.partyUuid || '',
+      actingParty: actingParty?.id || '',
+      from: fromParty?.id || '',
     },
-    { skip: !actingParty?.partyUuid || !fromParty?.partyUuid },
+    { skip: !actingParty?.id || !fromParty?.id },
   );
 
   const permissions = useMemo(
@@ -81,8 +82,8 @@ export const ServiceUsersSection = ({ resource, isLoading }: ServiceUsersSection
   );
 
   const users = useMemo(
-    () => mapPermissionsToUserSearchNodes(permissions, { fromPartyUuid: fromParty?.partyUuid }),
-    [permissions, fromParty?.partyUuid],
+    () => mapPermissionsToUserSearchNodes(permissions, { fromPartyUuid: fromParty?.id }),
+    [permissions, fromParty?.id],
   );
 
   const {
@@ -93,11 +94,11 @@ export const ServiceUsersSection = ({ resource, isLoading }: ServiceUsersSection
     error: indirectError,
   } = useGetRightHoldersQuery(
     {
-      partyUuid: fromParty?.partyUuid ?? '',
-      fromUuid: fromParty?.partyUuid ?? '',
+      partyUuid: fromParty?.id ?? '',
+      fromUuid: fromParty?.id ?? '',
       toUuid: '', // all
     },
-    { skip: !fromParty?.partyUuid },
+    { skip: !fromParty?.id },
   );
 
   const indirectUsers = useMemo(
@@ -138,7 +139,7 @@ export const ServiceUsersSection = ({ resource, isLoading }: ServiceUsersSection
     setSelectedUser(user);
   };
 
-  const formatUserName = (user: { name: string; type?: string }) => formatEntityDisplayName(user);
+  const formatUserName = (user: UserActionTarget) => formatEntityDisplayName(user);
 
   // The added user only shows up once the delegations query comes back, so hold the confirmation
   // until then and it arrives together with the row it is about.
@@ -147,21 +148,24 @@ export const ServiceUsersSection = ({ resource, isLoading }: ServiceUsersSection
   const handleUserAdded = (user: AddedServiceUser) =>
     queueSnackbar(
       t('service_poa_details_page.delegation_success', {
-        name: formatUserName(user),
+        name: formatEntityDisplayName({
+          name: user.name,
+          type: user.type === 'org' ? PartyType.Organization : PartyType.Person,
+        }),
         service: resource?.title,
       }),
     );
 
   const handleRevoke = (user: UserActionTarget) => {
-    if (!actingParty?.partyUuid || !fromParty?.partyUuid || !resourceId) return;
+    if (!actingParty?.id || !fromParty?.id || !resourceId) return;
 
     const revoke = () => {
       // Revoking from the list removes the row once the delegations query refetches, so defer
       // focus restoration until then. (Revoking in the dialog keeps focus there until it closes.)
       requestFocusAfterListChange(user.id, USER_SEARCH_FALLBACK_ID);
       revokeResource({
-        party: actingParty.partyUuid,
-        from: fromParty.partyUuid,
+        party: actingParty.id,
+        from: fromParty.id,
         to: user.id,
         resourceId,
       })
@@ -265,7 +269,7 @@ export const ServiceUsersSection = ({ resource, isLoading }: ServiceUsersSection
             ref={modalRef}
             resource={resource}
             user={selectedUser}
-            partyUuid={fromParty?.partyUuid ?? ''}
+            partyUuid={fromParty?.id ?? ''}
             availableActions={
               selectedUserMode === 'delegate'
                 ? [DelegationAction.DELEGATE]

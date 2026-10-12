@@ -22,7 +22,7 @@ export const ReporteesPage = () => {
   const { data: isAdmin, isLoading } = useGetIsAdminQuery();
   const { data: reportee, isLoading: reporteeLoading } = useGetReporteeQuery();
   const { data: currentUser, isLoading: currentUserIsLoading } = useGetPartyFromLoggedInUserQuery();
-  const isCurrentUserReportee = reportee?.id === currentUser?.partyUuid;
+  const isCurrentUserReportee = reportee?.id === currentUser?.id;
   const name = formatEntityDisplayName(reportee);
 
   useDocumentTitle(t('reportees_page.page_title'));

@@ -6,8 +6,6 @@ import { PageWrapper } from '@/components';
 import { getCookie } from '@/resources/Cookie/CookieMethods';
 import { useDocumentTitle } from '@/resources/hooks/useDocumentTitle';
 import { useGetClientsQuery } from '@/rtk/features/clientApi';
-import { PartyType } from '@/rtk/features/userInfoApi';
-import { type Party } from '@/rtk/features/lookupApi';
 
 import { PageLayoutWrapper } from '../common/PageLayoutWrapper';
 import { PartyRepresentationProvider } from '../common/PartyRepresentationContext/PartyRepresentationContext';
@@ -23,16 +21,7 @@ export const ClientDetailsPage = () => {
   const { data: clients } = useGetClientsQuery();
   const selectedClient = clients?.find((item) => item.client.id === id);
 
-  const clientParty: Party | undefined = selectedClient
-    ? {
-        name: selectedClient.client.name,
-        partyUuid: selectedClient.client.id,
-        partyTypeName: PartyType.Organization,
-        partyId: Number(selectedClient.client.partyId ?? 0),
-        isDeleted: selectedClient.client.isDeleted ?? undefined,
-        unitType: selectedClient.client.unitType ?? undefined,
-      }
-    : undefined;
+  const clientParty = selectedClient?.client;
 
   return (
     <PageWrapper>

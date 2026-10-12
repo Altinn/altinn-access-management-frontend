@@ -31,8 +31,8 @@ export const SettingsPageContent = () => {
   const { data: reportee, isLoading: isLoadingReportee } = useGetReporteeQuery();
   const { actingParty, isLoading: actorLoading } = usePartyRepresentation();
   const { data: notificationAddresses, isLoading: notifLoading } =
-    useGetOrgNotificationAddressesQuery(actingParty?.orgNumber ?? '', {
-      skip: !actingParty?.orgNumber,
+    useGetOrgNotificationAddressesQuery(actingParty?.organizationIdentifier ?? '', {
+      skip: !actingParty?.organizationIdentifier,
     });
 
   const { data: isCompanyProfileAdmin, isLoading: isCompanyProfileAdminLoading } =

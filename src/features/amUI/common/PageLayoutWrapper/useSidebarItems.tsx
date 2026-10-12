@@ -39,16 +39,16 @@ export const useSidebarItems = ({ isSmall }: { isSmall?: boolean }) => {
   const { t } = useTranslation();
   const { data: currentUser } = useGetPartyFromLoggedInUserQuery();
   const { data: reportee, isLoading: isLoadingReportee } = useGetReporteeQuery();
-  const isCurrentUserReportee = reportee?.id === currentUser?.partyUuid;
+  const isCurrentUserReportee = reportee?.id === currentUser?.id;
 
   const { data: roles } = useGetRolePermissionsQuery(
     {
-      party: currentUser?.partyUuid ?? '',
+      party: currentUser?.id ?? '',
       from: getCookie('AltinnPartyUuid') ?? '',
-      to: currentUser?.partyUuid ?? '',
+      to: currentUser?.id ?? '',
     },
     {
-      skip: !currentUser?.partyUuid || isCurrentUserReportee,
+      skip: !currentUser?.id || isCurrentUserReportee,
     },
   );
   const isAgent = roles?.some((rolePermission) => rolePermission.role.code === 'agent');

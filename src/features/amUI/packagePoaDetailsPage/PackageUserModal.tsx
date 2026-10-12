@@ -5,7 +5,6 @@ import type { ActionError } from '@/resources/hooks/useActionError';
 
 import type { UserActionTarget } from '../common/UserSearch/types';
 import { usePartyRepresentation } from '../common/PartyRepresentationContext/PartyRepresentationContext';
-import { mapPartyEntityToParty } from '../common/PartyRepresentationContext/partyUtils';
 import { type DelegationAction } from '../common/DelegationModal/EditModal';
 import { getInheritedStatus } from '../common/useInheritedStatus';
 
@@ -88,7 +87,7 @@ export const PackageUserModal = forwardRef<PackageUserModalHandle, PackageUserMo
       () =>
         getInheritedStatus({
           permissions: selectedUserPermissions,
-          toParty: mapPartyEntityToParty(selectedUser ?? undefined),
+          toParty: selectedUser ?? undefined,
           fromParty,
         }),
       [selectedUserPermissions, selectedUser, fromParty],
@@ -100,7 +99,7 @@ export const PackageUserModal = forwardRef<PackageUserModalHandle, PackageUserMo
         partyInfo={
           selectedUser && accessPackage
             ? {
-                party: mapPartyEntityToParty(selectedUser),
+                party: selectedUser,
                 accessPackage,
                 userHasAccess: selectedUserHasAccess,
                 inheritedStatus: selectedUserInheritedStatus,

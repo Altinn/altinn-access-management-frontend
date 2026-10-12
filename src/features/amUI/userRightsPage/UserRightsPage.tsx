@@ -38,8 +38,8 @@ export const UserRightsPage = () => {
   const backUrl = useBackUrl(`/${amUIPath.Users}`);
 
   const actingPartyUuid =
-    !isHovedadminLoading && !isHovedadmin && !currentUserIsLoading && currentUser?.partyUuid === id
-      ? currentUser?.partyUuid
+    !isHovedadminLoading && !isHovedadmin && !currentUserIsLoading && currentUser?.id === id
+      ? currentUser?.id
       : getCookie('AltinnPartyUuid');
 
   useDocumentTitle(t('user_rights_page.page_title'));

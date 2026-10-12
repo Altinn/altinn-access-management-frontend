@@ -79,7 +79,7 @@ export const OrgLookupFields = ({
               <strong>{lookup.orgData.name}</strong>
             </DsParagraph>
             <DsParagraph data-size='sm'>
-              {t('common.org_nr')} {formatOrgNr(lookup.orgData.orgNumber)}
+              {t('common.org_nr')} {formatOrgNr(lookup.orgData.organizationIdentifier)}
               {isSubUnitByType(lookup.orgData.unitType) && ' - ' + t('common.subunit')}
             </DsParagraph>
           </div>

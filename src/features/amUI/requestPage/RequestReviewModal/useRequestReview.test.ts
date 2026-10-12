@@ -82,7 +82,7 @@ describe('useRequestReview', () => {
     } as any);
     vi.mocked(i18nModule.useTranslation).mockReturnValue({ t: (k: string) => k } as any);
     vi.mocked(partyRepModule.usePartyRepresentation).mockReturnValue({
-      actingParty: { partyUuid: PARTY_UUID },
+      actingParty: { id: PARTY_UUID },
     } as any);
     vi.mocked(delegationCheckModule.useAccessPackageDelegationCheck).mockReturnValue({
       canDelegatePackage: mockCanDelegatePackage,

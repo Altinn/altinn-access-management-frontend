@@ -3,8 +3,7 @@ import { XMarkIcon } from '@navikt/aksel-icons';
 import { useTranslation } from 'react-i18next';
 import type { ComponentProps } from 'react';
 
-import { PartyType } from '@/rtk/features/userInfoApi';
-import { type Party } from '@/rtk/features/lookupApi';
+import { PartyType, type PartyEntity } from '@/dataObjects/dtos/Party';
 import { type ActionError } from '@/resources/hooks/useActionError';
 
 import { ValidationErrorMessage } from '../common/ValidationErrorMessage';
@@ -14,7 +13,7 @@ import pageClasses from './PackagePoaDetailsPage.module.css';
 
 interface DelegateErrorAlertProps {
   error: ActionError;
-  targetParty?: Party;
+  targetParty?: PartyEntity;
   /*** Renders a close button when given. Left out where the alert goes away with its container */
   onClose?: () => void;
   /*** Keeps the heading in order with the ones around it, e.g. 3 inside a dialog titled at 2 */
@@ -31,7 +30,7 @@ export const DelegateErrorAlert = ({
   if (!error) return null;
 
   const entityType =
-    targetParty?.partyTypeName === PartyType.Person
+    targetParty?.type === PartyType.Person
       ? t('common.persons_lowercase')
       : t('common.organizations_lowercase');
 

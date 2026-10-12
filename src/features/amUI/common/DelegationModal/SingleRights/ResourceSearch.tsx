@@ -11,7 +11,7 @@ import {
 } from '@/rtk/features/singleRights/singleRightsApi';
 import { useGetResourceOwnersQuery } from '@/rtk/features/resourceApi';
 import { arraysEqual, debounce } from '@/resources/utils';
-import type { Party } from '@/rtk/features/lookupApi';
+import type { PartyEntity } from '@/dataObjects/dtos/Party';
 
 import { useDelegationModalContext } from '../DelegationModalContext';
 import { ResourceFilterToolbar } from '../../ResourceFilterToolbar/ResourceFilterToolbar';
@@ -23,7 +23,7 @@ import classes from './ResourceSearch.module.css';
 
 export interface ResourceSearchProps {
   onSelect: (resource: ServiceResource, error?: boolean) => void;
-  toParty?: Party;
+  toParty?: PartyEntity;
   availableActions?: DelegationAction[];
 }
 
@@ -65,9 +65,9 @@ export const ResourceSearch = ({ onSelect, availableActions }: ResourceSearchPro
   });
   const { data: delegatedResources } = useGetSingleRightsForRightholderQuery(
     {
-      actingParty: actingParty?.partyUuid || '',
-      from: fromParty?.partyUuid || '',
-      to: toParty?.partyUuid || '',
+      actingParty: actingParty?.id || '',
+      from: fromParty?.id || '',
+      to: toParty?.id || '',
     },
     { skip: !toParty || !fromParty || !actingParty },
   );

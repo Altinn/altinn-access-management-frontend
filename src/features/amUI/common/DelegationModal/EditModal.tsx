@@ -8,7 +8,7 @@ import type { ServiceResource } from '@/rtk/features/singleRights/singleRightsAp
 import type { AccessPackage } from '@/rtk/features/accessPackageApi';
 import type { Role } from '@/rtk/features/roleApi';
 import type { DialogLookup } from '@/rtk/features/instanceApi';
-import type { Party } from '@/rtk/features/lookupApi';
+import type { PartyEntity } from '@/dataObjects/dtos/Party';
 
 import { ScopeInfo } from '../../maskinporten/ScopeInfo';
 
@@ -37,7 +37,7 @@ export interface EditModalProps {
   accessPackage?: AccessPackage;
   role?: Role;
   instance?: InstanceData;
-  toParty?: Pick<Party, 'partyUuid' | 'name' | 'partyTypeName'>;
+  toParty?: Pick<PartyEntity, 'id' | 'name' | 'type'>;
   availableActions?: DelegationAction[];
   openWithError?: ActionError | null;
   onSuccess?: () => void;
@@ -133,7 +133,7 @@ const renderModalContent = ({
   accessPackage?: AccessPackage;
   role?: Role;
   instance?: InstanceData;
-  toParty?: Pick<Party, 'partyUuid' | 'name' | 'partyTypeName'>;
+  toParty?: Pick<PartyEntity, 'id' | 'name' | 'type'>;
   availableActions?: DelegationAction[];
   onSuccess?: () => void;
 }) => {

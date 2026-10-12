@@ -27,8 +27,8 @@ vi.mock('react-redux', () => ({
 
 vi.mock('../common/PartyRepresentationContext/PartyRepresentationContext', () => ({
   usePartyRepresentation: () => ({
-    actingParty: { partyUuid: 'org' },
-    fromParty: { partyUuid: 'org' },
+    actingParty: { id: 'org' },
+    fromParty: { id: 'org' },
   }),
 }));
 

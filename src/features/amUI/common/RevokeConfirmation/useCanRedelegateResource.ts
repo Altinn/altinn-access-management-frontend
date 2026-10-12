@@ -18,15 +18,15 @@ export const useCanRedelegateResource = () => {
     resourceId: string,
     toPartyUuid?: string,
   ): Promise<boolean> => {
-    const to = toPartyUuid ?? toParty?.partyUuid;
+    const to = toPartyUuid ?? toParty?.id;
     if (!actingParty || !fromParty || !to) return false;
     // If the user is deleting their own access and is not hovedadmin, show the warning regardless
     // of the delegation check: the check passes only because they still hold the access.
-    if (to === selfParty?.partyUuid) return !!isHovedadmin;
-    const check = runDelegationCheck({ resourceId, from: fromParty.partyUuid });
+    if (to === selfParty?.id) return !!isHovedadmin;
+    const check = runDelegationCheck({ resourceId, from: fromParty.id });
     const rights = getResourceRights({
-      actingParty: actingParty.partyUuid,
-      from: fromParty.partyUuid,
+      actingParty: actingParty.id,
+      from: fromParty.id,
       to,
       resourceId,
     });

@@ -2,8 +2,6 @@ import { getCookie } from '@/resources/Cookie/CookieMethods';
 import { useGetPartyFromLoggedInUserQuery } from '@/rtk/features/lookupApi';
 import { useGetRightHoldersQuery } from '@/rtk/features/connectionApi';
 
-import { mapPartyEntityToParty } from './partyUtils';
-
 /**
  * useReporteeParty
  * ------------------
@@ -26,18 +24,18 @@ export const useReporteeParty = () => {
     error,
   } = useGetRightHoldersQuery(
     {
-      partyUuid: currentUser?.partyUuid ?? '',
+      partyUuid: currentUser?.id ?? '',
       fromUuid: partyUuid,
-      toUuid: currentUser?.partyUuid,
+      toUuid: currentUser?.id,
     },
     {
-      skip: !currentUser?.partyUuid || !partyUuid,
+      skip: !currentUser?.id || !partyUuid,
     },
   );
 
   const partyConnection = connection?.[0];
 
-  const party = mapPartyEntityToParty(partyConnection?.party);
+  const party = partyConnection?.party;
   return { party, isLoading: isLoading || currentUserIsLoading, error: error || currentUserError };
 };
 

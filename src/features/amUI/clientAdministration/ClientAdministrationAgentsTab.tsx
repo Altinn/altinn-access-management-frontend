@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next';
 import { DsAlert, DsParagraph, useSnackbar } from '@altinn/altinn-components';
 import { useNavigate } from 'react-router';
 
-import { PartyEntityType } from '@/dataObjects/dtos/Party';
+import { PartyType } from '@/dataObjects/dtos/Party';
 import { useAddAgentMutation, useGetAgentsQuery } from '@/rtk/features/clientApi';
 import { useGetRightHoldersQuery } from '@/rtk/features/connectionApi';
 
@@ -46,11 +46,11 @@ const ClientAdministrationAgentsTabContent = ({ isActive }: ClientAdministration
     isFetching: isIndirectFetching,
   } = useGetRightHoldersQuery(
     {
-      partyUuid: fromParty?.partyUuid ?? '',
-      fromUuid: fromParty?.partyUuid ?? '',
+      partyUuid: fromParty?.id ?? '',
+      fromUuid: fromParty?.id ?? '',
       toUuid: '',
     },
-    { skip: !isActive || !fromParty?.partyUuid },
+    { skip: !isActive || !fromParty?.id },
   );
 
   const users = useMemo(
@@ -67,7 +67,7 @@ const ClientAdministrationAgentsTabContent = ({ isActive }: ClientAdministration
     () =>
       mapConnectionsToUserSearchNodes(
         indirectConnections?.filter((connection) => {
-          return connection.party.type === PartyEntityType.Person;
+          return connection.party.type === PartyType.Person;
         }) ?? [],
       ),
     [indirectConnections],
