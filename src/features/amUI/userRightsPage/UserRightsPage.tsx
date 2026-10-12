@@ -53,7 +53,7 @@ export const UserRightsPage = () => {
   return (
     <PageWrapper>
       <PageLayoutWrapper>
-        {!showNoAccessAlert ? (
+        {showNoAccessAlert ? (
           <DsAlert data-color='warning'>
             <DsParagraph>
               {t('users_page.no_access_to_users_page')}{' '}
