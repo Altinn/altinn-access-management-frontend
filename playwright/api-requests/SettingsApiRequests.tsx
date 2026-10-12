@@ -1,21 +1,5 @@
-import { env } from 'playwright/util/helper';
-import { fetchWithRetry } from 'playwright/util/fetchWithRetry';
-
-import { Token } from './Token';
-
-/**
- * Thrown for any non-OK response from the settings BFF, carrying the status so
- * callers can react to one specific failure instead of catching everything.
- */
-export class SettingsApiError extends Error {
-  constructor(
-    message: string,
-    readonly status: number,
-  ) {
-    super(message);
-    this.name = 'SettingsApiError';
-  }
-}
+import { AltinnApi } from './AltinnApi';
+import { ApiError, appUrl, type HttpMethod } from './apiRequest';
 
 /**
  * A notification address as returned by the settings BFF. Email addresses have
@@ -28,13 +12,7 @@ export interface NotificationAddress {
   countryCode: string;
 }
 
-export class SettingsApiRequests {
-  private tokenClass: Token;
-
-  constructor() {
-    this.tokenClass = new Token();
-  }
-
+export class SettingsApiRequests extends AltinnApi {
   /**
    * Sets the user's UI language server-side (profile) using their enduser token.
    *
@@ -64,18 +42,12 @@ export class SettingsApiRequests {
     pid: string,
     orgNumber: string,
   ): Promise<NotificationAddress[]> {
-    const response = await this.request(
+    const addresses = await this.request<NotificationAddress[]>(
       pid,
       'GET',
       `org/${orgNumber}/notificationaddresses`,
-      undefined,
     );
-
-    if (response.status === 204) {
-      return [];
-    }
-
-    return response.json();
+    return addresses ?? [];
   }
 
   /**
@@ -88,12 +60,11 @@ export class SettingsApiRequests {
     orgNumber: string,
     email: string,
   ): Promise<NotificationAddress> {
-    const response = await this.request(pid, 'POST', `org/${orgNumber}/notificationaddresses`, {
+    return this.request(pid, 'POST', `org/${orgNumber}/notificationaddresses`, {
       email,
       phone: '',
       countryCode: '',
     });
-    return response.json();
   }
 
   /**
@@ -109,12 +80,11 @@ export class SettingsApiRequests {
     countryCode: string,
     phone: string,
   ): Promise<NotificationAddress> {
-    const response = await this.request(pid, 'POST', `org/${orgNumber}/notificationaddresses`, {
+    return this.request(pid, 'POST', `org/${orgNumber}/notificationaddresses`, {
       email: '',
       phone,
       countryCode,
     });
-    return response.json();
   }
 
   public async deleteNotificationAddress(
@@ -126,7 +96,6 @@ export class SettingsApiRequests {
       pid,
       'DELETE',
       `org/${orgNumber}/notificationaddresses/${notificationAddressId}`,
-      undefined,
     );
   }
 
@@ -218,7 +187,7 @@ export class SettingsApiRequests {
     try {
       return await this.getNotificationAddresses(pid, orgNumber);
     } catch (error) {
-      if (!(error instanceof SettingsApiError) || error.status !== 500) {
+      if (!(error instanceof ApiError) || error.status !== 500) {
         throw error;
       }
 
@@ -242,32 +211,9 @@ export class SettingsApiRequests {
    * The settings endpoints live on the app host (BASE_URL origin), not the
    * platform host (API_BASE_URL): e.g. https://am.ui.tt02.altinn.no/...
    */
-  private async request(
-    pid: string,
-    method: 'GET' | 'POST' | 'PUT' | 'DELETE',
-    path: string,
-    body: unknown,
-  ): Promise<Response> {
-    const token = await this.tokenClass.getPersonalTokenByPid(pid);
-    const appOrigin = new URL(env('BASE_URL')).origin;
-    const url = `${appOrigin}/accessmanagement/api/v1/settings/${path}`;
-
-    const response = await fetchWithRetry(url, {
-      method,
-      headers: {
-        Authorization: `Bearer ${token}`,
-        'Content-Type': 'application/json',
-      },
-      body: body === undefined ? undefined : JSON.stringify(body),
+  private request<T>(pid: string, method: HttpMethod, path: string, json?: unknown): Promise<T> {
+    return this.asUser<T>(pid, method, appUrl(`accessmanagement/api/v1/settings/${path}`), {
+      json,
     });
-
-    if (!response.ok) {
-      throw new SettingsApiError(
-        `Failed ${method} ${path} for "${pid}". Status: ${response.status}. Response: ${await response.text()}`,
-        response.status,
-      );
-    }
-
-    return response;
   }
 }

@@ -1,596 +1,265 @@
-import { env } from 'playwright/util/helper';
-import { fetchWithRetry } from 'playwright/util/fetchWithRetry';
+import { AltinnApi } from './AltinnApi';
+import { platformUrl, type Query } from './apiRequest';
 
-import { Token } from './Token';
+const ENDUSER = 'accessmanagement/api/v1/enduser';
 
-export class EnduserConnection {
-  private tokenClass: Token;
+const isPerson = (pidOrOrgNo: string) => pidOrOrgNo.length === 11;
 
-  constructor() {
-    this.tokenClass = new Token();
-  }
-
+/**
+ * Connections (rettighetshavere), access packages, single services and client delegations,
+ * set up through the enduser API on the platform host.
+ *
+ * Every method takes `pid` first: the person whose personal token makes the call. `from`/`to`
+ * are PIDs or organisation numbers — party UUIDs are looked up (and cached) by `Token`.
+ */
+export class EnduserConnection extends AltinnApi {
   /**
    * The "from"-person/organization adds the "to"-person/organization as a user, then delegates the accesspackages to this new user.
    *
-   * @param pid - PID used to acquire an Altinn Personal tokens.
-   * @param from - PID or Organization number that is adding a new user/connection.
-   * @param to - The target PID or organization number that is being added as a new user/connection.
-   * @param packageNames - The package names to add for the connected user. e.g. ['urn:altinn:accesspackage:tilgangsstyrer', 'urn:altinn:accesspackage:posttjenester', 'urn:altinn:accesspackage:byggesoknad',]
+   * @param packageNames - e.g. ['urn:altinn:accesspackage:tilgangsstyrer', 'urn:altinn:accesspackage:posttjenester']
    */
   public async addConnectionAndPackagesToUser(
     pid: string,
     from: string,
     to: string,
-    packageNames: Array<string>,
+    packageNames: string[],
   ) {
-    const fromUuid = await this.tokenClass.getPartyUuid(from);
-    const toIds = await this.tokenClass.getIds(to);
-
-    await this.addConnection(pid, from, to, fromUuid, toIds.lastName);
-
-    if (to.length == 11) {
-      await this.addPackagePerson(
-        pid,
-        from,
-        to,
-        packageNames,
-        fromUuid,
-        toIds.partyUuid,
-        toIds.lastName,
-      );
+    await this.addConnection(pid, from, to);
+    if (isPerson(to)) {
+      await this.addPackagePerson(pid, from, to, packageNames);
     } else {
-      await this.addPackageOrg(pid, from, to, packageNames, fromUuid, toIds.partyUuid);
+      await this.addPackageOrg(pid, from, to, packageNames);
     }
   }
 
-  /**
-   * Fetches connection details between a source organization and a target user.
-   *
-   * Resolves party UUIDs for the provided `from` organization and `to` user, then queries
-   * the connections endpoint using a personal token bound to `pid`.
-   *
-   * @param pid - PID used to acquire an Altinn Personal token.
-   * @param fromOrg - Organization number used to resolve the source party UUID.
-   * @param to - PID used to resolve the target party UUID.
-   * @returns A promise resolving to the JSON response from the connections endpoint.
-   * @throws Error when the HTTP response is not OK.
-   */
+  /** Connection details between `fromOrg` and the person `to`. */
   public async getConnectionPerson(pid: string, fromOrg: string, to: string) {
-    const fromUuid = await this.tokenClass.getPartyUuid(fromOrg);
-    const toUuid = await this.tokenClass.getPartyUuid(to);
-    const url = `${env('API_BASE_URL')}/accessmanagement/api/v1/enduser/connections?party=${fromUuid}&from=${fromUuid}&to=${toUuid}`;
-    const token = await this.tokenClass.getPersonalTokenByPid(pid);
-    const response = await fetchWithRetry(url, {
-      method: 'GET',
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    });
-
-    if (!response.ok) {
-      throw new Error(
-        `Failed to fetch status for getConnectionPerson request. Status: ${response.status}`,
-      );
-    }
-
-    return response.json();
-  }
-
-  /**
-   * Adds a connection person to the specified party by issuing a POST request to the access management API.
-   *
-   * @param pid - The PID used to acquire an Altinn token.
-   * @param from - The PID or organization number used to resolve the party UUID for the connection.
-   * @param to - The PID or organization number of the connection being added.
-   * @param fromUuid - The from's partyUuid.
-   * @param toLastName - the last name for the connection being added.
-   * @param toUuid - the to's partyUuid.
-   * @returns A promise resolving to the JSON response from the API.
-   * @throws Error if the request fails or returns a non-OK HTTP status.
-   */
-  public async addConnection(
-    pid: string,
-    from: string,
-    to: string,
-    fromUuid?: string,
-    toLastName?: string,
-    toUuid?: string,
-  ) {
-    const token = await this.tokenClass.getPersonalTokenByPid(pid);
-    let url;
-    let payload;
-    let response;
-    fromUuid = fromUuid || (await this.tokenClass.getPartyUuid(from));
-    if (to.length == 11) {
-      toLastName = toLastName || (await this.tokenClass.getLastName(to));
-      url = `${env('API_BASE_URL')}/accessmanagement/api/v1/enduser/connections?party=${fromUuid}&from=${fromUuid}`;
-      payload = {
-        personidentifier: to,
-        lastName: toLastName,
-      };
-      response = await fetchWithRetry(url, {
-        method: 'POST',
-        headers: {
-          Authorization: `Bearer ${token}`,
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(payload),
-      });
-    } else {
-      toUuid = toUuid || (await this.tokenClass.getPartyUuid(to));
-      url = `${env('API_BASE_URL')}/accessmanagement/api/v1/enduser/connections?party=${fromUuid}&from=${fromUuid}&to=${toUuid}`;
-      response = await fetchWithRetry(url, {
-        method: 'POST',
-        headers: {
-          Authorization: `Bearer ${token}`,
-          'Content-Type': 'application/json',
-        },
-      });
-    }
-
-    if (!response.ok) {
-      throw new Error(
-        `Failed to fetch status for addConnectionPerson request. Status: ${response.status}`,
-      );
-    }
-
-    return response.json();
-  }
-
-  /**
-   * Deletes an end-user connection between two parties by resolving their UUIDs and issuing a DELETE request.
-   *
-   * @param pid - The PID used to obtain an authorization token.
-   * @param from - The party identifier representing the source party.
-   * @param toList - An array of PIDs whose connections are to be deleted.
-   * @returns A promise that resolves to the fetch response.
-   */
-  public async deleteConnection(pid: string, from: string, toList: Array<string>) {
-    const fromUuid = await this.tokenClass.getPartyUuid(from);
-    const token = await this.tokenClass.getPersonalTokenByPid(pid);
-    const responses = new Array<Response>();
-
-    await Promise.all(
-      toList.map(async (to) => {
-        const toUuid = await this.tokenClass.getPartyUuid(to);
-
-        const url = `${env('API_BASE_URL')}/accessmanagement/api/v1/enduser/connections?party=${fromUuid}&from=${fromUuid}&to=${toUuid}&cascade=true`;
-
-        const response = await fetchWithRetry(url, {
-          method: 'DELETE',
-          headers: {
-            Authorization: `Bearer ${token}`,
-            'Content-Type': 'application/json',
-          },
-        });
-
-        if (!response.ok) {
-          throw new Error(
-            `Failed to fetch status for deleteConnectionPerson request. Status: ${response.status}`,
-          );
-        }
-        responses.push(response);
+    const from = await this.partyUuid(fromOrg);
+    return this.asUser(
+      pid,
+      'GET',
+      platformUrl(`${ENDUSER}/connections`, {
+        party: from,
+        from,
+        to: await this.partyUuid(to),
       }),
     );
-
-    return responses;
   }
 
-  /**
-   * Adds an access package connection from one party to another person.
-   *
-   * Resolves party UUIDs and the recipient's last name, builds the access package
-   * request URL, and submits a POST request with the recipient details.
-   *
-   * @param pid - The PID used to acquire the access token.
-   * @param fromOrg - The organization number used to resolve the "from" party UUID.
-   * @param toPid - The recipient's PID used to resolve the "to" party UUID and last name.
-   * @param packageName - The access package name to be granted.
-   * @param fromUuid - The organization's partyUuid.
-   * @param toUuid - the partyUuid of the connection being added.
-   * @param toLastName - the last name for the connection being added.
-   * @returns A promise resolving to the API response JSON payload.
-   */
+  /** Adds `to` (PID or organisation number) as a user (rettighetshaver) of `from`. */
+  public async addConnection(pid: string, from: string, to: string) {
+    const fromUuid = await this.partyUuid(from);
+    if (isPerson(to)) {
+      return this.asUser(
+        pid,
+        'POST',
+        platformUrl(`${ENDUSER}/connections`, this.fromSelf(fromUuid)),
+        {
+          json: await this.personPayload(to),
+        },
+      );
+    }
+    return this.asUser(
+      pid,
+      'POST',
+      platformUrl(`${ENDUSER}/connections`, {
+        ...this.fromSelf(fromUuid),
+        to: await this.partyUuid(to),
+      }),
+    );
+  }
+
+  /** Removes the connection from `from` to each of `toList`, including everything delegated over it. */
+  public async deleteConnection(pid: string, from: string, toList: string[]) {
+    const fromUuid = await this.partyUuid(from);
+    await Promise.all(
+      toList.map(async (to) =>
+        this.asUser(
+          pid,
+          'DELETE',
+          platformUrl(`${ENDUSER}/connections`, {
+            ...this.fromSelf(fromUuid),
+            to: await this.partyUuid(to),
+            cascade: true,
+          }),
+        ),
+      ),
+    );
+  }
+
+  /** Delegates the access packages from `fromOrg` to the person `toPid`. */
   public async addPackagePerson(
     pid: string,
     fromOrg: string,
     toPid: string,
-    packageNames: Array<string>,
-    fromUuid?: string,
-    toUuid?: string,
-    toLastName?: string,
+    packageNames: string[],
   ) {
-    let toPerson;
-    fromUuid = fromUuid || (await this.tokenClass.getPartyUuid(fromOrg));
-    if (!toUuid || !toLastName) {
-      toPerson = await this.tokenClass.getIds(toPid);
-    }
-    toUuid = toUuid || toPerson.partyUuid;
-    toLastName = toLastName || toPerson.lastName;
-    const token = await this.tokenClass.getPersonalTokenByPid(pid);
-    const payload = {
-      personidentifier: toPid,
-      lastName: toLastName,
-    };
-    const responses = new Array<Response>();
-
+    const query = await this.fromTo(fromOrg, toPid);
+    const json = await this.personPayload(toPid);
     await Promise.all(
-      packageNames.map(async (packageName) => {
-        const url = `${env('API_BASE_URL')}/accessmanagement/api/v1/enduser/connections/accesspackages?party=${fromUuid}&from=${fromUuid}&to=${toUuid}&package=${packageName}`;
-        const response = await fetchWithRetry(url, {
-          method: 'POST',
-          headers: {
-            Authorization: `Bearer ${token}`,
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify(payload),
-        });
-
-        if (!response.ok) {
-          throw new Error(
-            `Failed to fetch status for addPackagePerson request. Status: ${response.status}`,
-          );
-        }
-        responses.push(response);
-      }),
+      packageNames.map((packageName) =>
+        this.asUser(
+          pid,
+          'POST',
+          platformUrl(`${ENDUSER}/connections/accesspackages`, { ...query, package: packageName }),
+          { json },
+        ),
+      ),
     );
-
-    return responses;
   }
 
-  /**
-   * Adds an access package connection from one party to another organization.
-   *
-   * Resolves party UUIDs, builds the access package
-   * request URL, and submits a POST request with the recipient details.
-   *
-   * @param pid - The PID used to acquire the access token.
-   * @param from - The PID or organization number used to resolve the "from" party UUID.
-   * @param toOrg - The recipient's organization number used to resolve the "to" party UUID.
-   * @param packageName - The access package name to be granted.
-   * @param fromUuid - The organization's partyUuid.
-   * @param toUuid - the partyUuid of the connection being added.
-   * @returns A promise resolving to the API response JSON payload.
-   */
-  public async addPackageOrg(
-    pid: string,
-    from: string,
-    toOrgNo: string,
-    packageNames: Array<string>,
-    fromUuid?: string,
-    toUuid?: string,
-  ) {
-    fromUuid = fromUuid || (await this.tokenClass.getPartyUuid(from));
-    toUuid = toUuid || (await this.tokenClass.getPartyUuid(toOrgNo));
-    const token = await this.tokenClass.getPersonalTokenByPid(pid);
-    const responses = new Array<Response>();
-
+  /** Delegates the access packages from `from` to the organisation `toOrgNo`, one at a time. */
+  public async addPackageOrg(pid: string, from: string, toOrgNo: string, packageNames: string[]) {
+    const query = await this.fromTo(from, toOrgNo);
     for (const packageName of packageNames) {
-      const url = `${env('API_BASE_URL')}/accessmanagement/api/v1/enduser/connections/accesspackages?party=${fromUuid}&from=${fromUuid}&to=${toUuid}&package=${packageName}`;
-      const response = await fetchWithRetry(url, {
-        method: 'POST',
-        headers: {
-          Authorization: `Bearer ${token}`,
-          'Content-Type': 'application/json',
-        },
-      });
-
-      if (!response.ok) {
-        throw new Error(
-          `Failed to fetch status for addPackageOrg request. Status: ${response.status}`,
-        );
-      }
-      responses.push(response);
+      await this.asUser(
+        pid,
+        'POST',
+        platformUrl(`${ENDUSER}/connections/accesspackages`, { ...query, package: packageName }),
+      );
     }
-    return responses;
   }
 
-  /**
-   * Deletes an access package between two parties for a person.
-   *
-   * @param pid - PID used to obtain an authorization token.
-   * @param fromOrg - Organization number representing the source party.
-   * @param toPid - PID for the target party.
-   * @param packageName - Name of the access package to delete.
-   * @returns A promise that resolves with the HTTP response from the delete request.
-   * @throws If the DELETE request fails or returns a non-OK status.
-   */
   public async deleteAccessPackageDelegation(
     pid: string,
     fromOrg: string,
     toPid: string,
     packageName: string,
   ) {
-    const fromUuid = await this.tokenClass.getPartyUuid(fromOrg);
-    const toUuid = await this.tokenClass.getPartyUuid(toPid);
-    const url = `${env('API_BASE_URL')}/accessmanagement/api/v1/enduser/connections/accesspackages?party=${fromUuid}&from=${fromUuid}&to=${toUuid}&package=${packageName}`;
-    const token = await this.tokenClass.getPersonalTokenByPid(pid);
-
-    const response = await fetchWithRetry(url, {
-      method: 'DELETE',
-      headers: {
-        Authorization: `Bearer ${token}`,
-        'Content-Type': 'application/json',
-      },
-    });
-
-    if (!response.ok) {
-      throw new Error(
-        `Failed to fetch status for deleteAccessPackageDelegation request. Status: ${response.status}`,
-      );
-    }
-
-    return response;
+    await this.asUser(
+      pid,
+      'DELETE',
+      platformUrl(`${ENDUSER}/connections/accesspackages`, {
+        ...(await this.fromTo(fromOrg, toPid)),
+        package: packageName,
+      }),
+    );
   }
 
   /**
-   * Delegerer en enkelttjenesten 'resource' fra 'from' til 'to' med leserettigheter hvis ikke 'action' er oppgitt.
+   * Delegerer enkelttjenesten `resource` fra `from` til `to`, med leserettigheter hvis ikke `action` er oppgitt.
    *
-   * @param pid - Fødselsnummeret til "from" som trengs for å lage en Personal Altinn Token.
-   * @param from - Fødselsnummeret eller organisasjonsnummeret til den som skal delegere enkelttjenesten.
-   * @param to - Fødselsnummeret eller organisasjonsnummeret til den som skal motta enkelttjenestedelegeringen.
-   * @param resource - Navnet på tjenesten
-   * @param fromUuid - partyUuid på den som skal delegere enkelttjenesten (valgfritt)
-   * @param toUuid - partyUuid på den som skal motta enkelttjenestedelegeringen (valgfritt)
-   * @param action - Hvilken handling mottakeren skal få rettighet til (f.eks. 'Read', 'Write', 'Sign', osv). Default verdi er 'Read.'
-   * @returns A promise resolving to the API response JSON payload.
-   * @throws
+   * @param action - Hvilken handling mottakeren skal få rettighet til (f.eks. 'Read', 'Write', 'Sign').
    */
   public async delegateSingleService(
     pid: string,
     from: string,
     to: string,
     resource: string,
-    fromUuid?: string,
-    toUuid?: string,
     action = 'Read',
   ) {
-    fromUuid = fromUuid || (await this.tokenClass.getPartyUuid(from));
-    toUuid = toUuid || (await this.tokenClass.getPartyUuid(to));
-    const url = `${env('API_BASE_URL')}/accessmanagement/api/v1/enduser/connections/resources/rights?party=${fromUuid}&to=${toUuid}&resource=${resource}`;
-
-    const resourceDelegationCheck = await this.getResourceDelegationcheck(pid, pid, resource);
-    const rightKey = resourceDelegationCheck.rights.find(
-      (element: { right: { name: string } }) => element.right.name == action,
-    ).right.key;
-
-    const payload = {
-      directRightKeys: [rightKey],
-    };
-    const token = await this.tokenClass.getPersonalTokenByPid(pid);
-    const response = await fetchWithRetry(url, {
-      method: 'POST',
-      headers: {
-        Authorization: `Bearer ${token}`,
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(payload),
-    });
-
-    if (!response.ok) {
-      throw new Error(
-        `Failed to fetch status for delegateSingleService request. Status: ${response.status}, ${await response.text()}`,
-      );
+    const { rights } = await this.getResourceDelegationcheck(pid, pid, resource);
+    const right = rights.find((element) => element.right.name === action);
+    if (!right) {
+      throw new Error(`"${resource}" has no delegable right "${action}" for "${pid}".`);
     }
 
-    return response;
+    await this.asUser(
+      pid,
+      'POST',
+      platformUrl(`${ENDUSER}/connections/resources/rights`, {
+        party: await this.partyUuid(from),
+        to: await this.partyUuid(to),
+        resource,
+      }),
+      { json: { directRightKeys: [right.right.key] } },
+    );
   }
 
-  /**
-   * Sletter delegering til enkelttjenesten 'resource' fra 'from' til 'to' med leserettigheter hvis ikke 'action' er oppgitt.
-   *
-   * @param pid - Fødselsnummeret til "from" som trengs for å lage en Personal Altinn Token.
-   * @param from - Fødselsnummeret eller organisasjonsnummeret til den som skal delegere enkelttjenesten.
-   * @param to - Fødselsnummeret eller organisasjonsnummeret til den som skal motta enkelttjenestedelegeringen.
-   * @param resource - Navnet på tjenesten
-   * @param fromUuid - partyUuid på den som skal delegere enkelttjenesten (valgfritt)
-   * @param toUuid - partyUuid på den som skal motta enkelttjenestedelegeringen (valgfritt)
-   * @returns A promise resolving to the API response JSON payload.
-   * @throws
-   */
+  /** Sletter delegeringen av enkelttjenesten `resource` fra `from` til `to`. */
   public async deleteSingleServiceDelegation(
     pid: string,
     from: string,
     to: string,
     resource: string,
-    fromUuid?: string,
-    toUuid?: string,
   ) {
-    fromUuid = fromUuid || (await this.tokenClass.getPartyUuid(from));
-    toUuid = toUuid || (await this.tokenClass.getPartyUuid(to));
-    const url = `${env('API_BASE_URL')}/accessmanagement/api/v1/enduser/connections/resources?party=${fromUuid}&from=${fromUuid}&to=${toUuid}&resource=${resource}`;
-
-    const token = await this.tokenClass.getPersonalTokenByPid(pid);
-    const response = await fetchWithRetry(url, {
-      method: 'DELETE',
-      headers: {
-        Authorization: `Bearer ${token}`,
-        'Content-Type': 'application/json',
-      },
-    });
-
-    if (!response.ok) {
-      throw new Error(
-        `Failed to fetch status for deleteSingleServiceDelegation request. Status: ${response.status}, ${await response.text()}`,
-      );
-    }
-
-    return response;
+    await this.asUser(
+      pid,
+      'DELETE',
+      platformUrl(`${ENDUSER}/connections/resources`, {
+        ...(await this.fromTo(from, to)),
+        resource,
+      }),
+    );
   }
 
-  /**
-   * Ser hvilke rettigheter "party" har lov til å delegere for tjenesten 'resource'.
-   *
-   * @param pid - Fødselsnummer som trengs for å lage en Personal Altinn Token.
-   * @param party - Fødselsnummeret eller organisasjonsnummeret til den som skal gjøre en delegationcheck.
-   * @param resource - Navnet på tjenesten
-   * @param partyUuid - partyUuid til den som skal gjøre en delegationcheck. (valgfritt)
-   * @returns A promise resolving to the API response JSON payload.
-   * @throws
-   */
-  public async getResourceDelegationcheck(
-    pid: string,
-    party: string,
-    resource: string,
-    partyUuid?: string,
-  ) {
-    partyUuid = partyUuid || (await this.tokenClass.getPartyUuid(party));
-    const url = `${env('API_BASE_URL')}/accessmanagement/api/v1/enduser/connections/resources/delegationcheck?party=${partyUuid}&resource=${resource}`;
-    const token = await this.tokenClass.getPersonalTokenByPid(pid);
-    const response = await fetchWithRetry(url, {
-      method: 'GET',
-      headers: {
-        Authorization: `Bearer ${token}`,
-        'Content-Type': 'application/json',
-      },
-    });
-
-    if (!response.ok) {
-      throw new Error(
-        `Failed to fetch status for getResourceDelegationcheck request. Status: ${response.status}, ${await response.text()}`,
-      );
-    }
-
-    return response.json();
+  /** Hvilke rettigheter `party` har lov til å delegere for tjenesten `resource`. */
+  public async getResourceDelegationcheck(pid: string, party: string, resource: string) {
+    return this.asUser<{ rights: { right: { name: string; key: string } }[] }>(
+      pid,
+      'GET',
+      platformUrl(`${ENDUSER}/connections/resources/delegationcheck`, {
+        party: await this.partyUuid(party),
+        resource,
+      }),
+    );
   }
 
-  public async addClientDelegationAgent(
-    pid: string,
-    fromParty: string,
-    agentPid: string,
-    fromUuid?: string,
-    agentLastName?: string,
-  ) {
-    fromUuid = fromUuid || (await this.tokenClass.getPartyUuid(fromParty));
-    agentLastName = agentLastName || (await this.tokenClass.getLastName(agentPid));
-    const token = await this.tokenClass.getPersonalTokenByPid(pid);
-    const payload = {
-      personidentifier: agentPid,
-      lastName: agentLastName,
-    };
-
-    const url = `${env('API_BASE_URL')}/accessmanagement/api/v1/enduser/clientdelegations/agents?party=${fromUuid}`;
-    const response = await fetchWithRetry(url, {
-      method: 'POST',
-      headers: {
-        Authorization: `Bearer ${token}`,
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(payload),
-    });
-
-    if (!response.ok) {
-      throw new Error(
-        `Failed to fetch status for addClientDelegationAgent request. Status: ${response.status}`,
-      );
-    }
-
-    return response;
+  /** Adds the person `agentPid` as a client administration agent (klientbruker) of `fromParty`. */
+  public async addClientDelegationAgent(pid: string, fromParty: string, agentPid: string) {
+    await this.asUser(
+      pid,
+      'POST',
+      platformUrl(`${ENDUSER}/clientdelegations/agents`, {
+        party: await this.partyUuid(fromParty),
+      }),
+      { json: await this.personPayload(agentPid) },
+    );
   }
 
-  public async deleteClientDelegationAgent(
-    pid: string,
-    fromParty: string,
-    agentPid: string,
-    fromUuid?: string,
-    agentUuid?: string,
-    agentLastName?: string,
-  ) {
-    let agent;
-    fromUuid = fromUuid || (await this.tokenClass.getPartyUuid(fromParty));
-    if (!agentUuid || !agentLastName) {
-      agent = await this.tokenClass.getIds(agentPid);
-    }
-    agentUuid = agentUuid || agent.partyUuid;
-    agentLastName = agentLastName || agent.lastName;
-    const token = await this.tokenClass.getPersonalTokenByPid(pid);
-    const payload = {
-      personidentifier: agentPid,
-      lastName: agentLastName,
-    };
-
-    const url = `${env('API_BASE_URL')}/accessmanagement/api/v1/enduser/clientdelegations/agents?party=${fromUuid}&to=${agentUuid}`;
-    const response = await fetchWithRetry(url, {
-      method: 'DELETE',
-      headers: {
-        Authorization: `Bearer ${token}`,
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(payload),
-    });
-
-    if (!response.ok) {
-      throw new Error(
-        `Failed to fetch status for deleteClientDelegationAgent request. Status: ${response.status}. Response: ${await response.text()}`,
-      );
-    }
-
-    return response;
+  public async deleteClientDelegationAgent(pid: string, fromParty: string, agentPid: string) {
+    await this.asUser(
+      pid,
+      'DELETE',
+      platformUrl(`${ENDUSER}/clientdelegations/agents`, {
+        party: await this.partyUuid(fromParty),
+        to: await this.partyUuid(agentPid),
+      }),
+      { json: await this.personPayload(agentPid) },
+    );
   }
 
   public async getClientDelegationAgents(pid: string, fromParty: string) {
-    const token = await this.tokenClass.getPersonalTokenByPid(pid);
-    const fromUuid = await this.tokenClass.getPartyUuid(fromParty);
-
-    const url = `${env('API_BASE_URL')}/accessmanagement/api/v1/enduser/clientdelegations/agents?party=${fromUuid}`;
-    const response = await fetchWithRetry(url, {
-      method: 'GET',
-      headers: {
-        Authorization: `Bearer ${token}`,
-        'Content-Type': 'application/json',
-      },
-    });
-
-    if (!response.ok) {
-      throw new Error(
-        `Failed to fetch status for getClientDelegationAgents request. Status: ${response.status}`,
-      );
-    }
-
-    return response;
+    return this.asUser(
+      pid,
+      'GET',
+      platformUrl(`${ENDUSER}/clientdelegations/agents`, {
+        party: await this.partyUuid(fromParty),
+      }),
+    );
   }
 
+  /** Gives the agent `agentPid` the access package `packageName` for the client `clientOrgNo`. */
   public async delegerKlientTilBruker(
     pid: string,
     fromParty: string,
     clientOrgNo: string,
     agentPid: string,
     packageName: string,
-    fromUuid?: string,
-    agentUuid?: string,
-    clientUuid?: string,
   ) {
-    fromUuid = fromUuid || (await this.tokenClass.getPartyUuid(fromParty));
-    clientUuid = clientUuid || (await this.tokenClass.getPartyUuid(clientOrgNo));
-    agentUuid = agentUuid || (await this.tokenClass.getPartyUuid(agentPid));
-    const token = await this.tokenClass.getPersonalTokenByPid(pid);
-    const payload = {
-      values: [
-        {
-          role: 'rettighetshaver',
-          packages: [packageName],
-        },
-      ],
-    };
+    await this.asUser(
+      pid,
+      'POST',
+      platformUrl(`${ENDUSER}/clientdelegations/agents/accesspackages`, {
+        party: await this.partyUuid(fromParty),
+        from: await this.partyUuid(clientOrgNo),
+        to: await this.partyUuid(agentPid),
+      }),
+      { json: { values: [{ role: 'rettighetshaver', packages: [packageName] }] } },
+    );
+  }
 
-    const url = `${env('API_BASE_URL')}/accessmanagement/api/v1/enduser/clientdelegations/agents/accesspackages?party=${fromUuid}&from=${clientUuid}&to=${agentUuid}`;
-    const response = await fetchWithRetry(url, {
-      method: 'POST',
-      headers: {
-        Authorization: `Bearer ${token}`,
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(payload),
-    });
+  /** The acting party is the one delegating: `party` and `from` are the same. */
+  private fromSelf(fromUuid: string): Query {
+    return { party: fromUuid, from: fromUuid };
+  }
 
-    if (!response.ok) {
-      const responseBody = await response.text();
-      throw new Error(
-        `Failed to fetch status for delegerKlientTilBruker request. Status: ${response.status}. Response body: ${responseBody}`,
-      );
-    }
+  private async fromTo(from: string, to: string): Promise<Query> {
+    return { ...this.fromSelf(await this.partyUuid(from)), to: await this.partyUuid(to) };
+  }
 
-    return response;
+  /** A person is added by identifier and last name, as in the UI's "Legg til person". */
+  private async personPayload(pid: string) {
+    return { personidentifier: pid, lastName: await this.tokenClass.getLastName(pid) };
   }
 }

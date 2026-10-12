@@ -1,7 +1,5 @@
-import { env } from 'playwright/util/helper';
-import { fetchWithRetry } from 'playwright/util/fetchWithRetry';
-
-import { Token } from './Token';
+import { AltinnApi } from './AltinnApi';
+import { appUrl, type HttpMethod, type Query } from './apiRequest';
 
 /** A supplier or consumer connection as returned by the Maskinporten BFF. */
 export interface MaskinportenConnection {
@@ -24,13 +22,7 @@ export interface MaskinportenConnection {
  * access package (`GET user/isMaskinportenAdmin`). An organisation's daglig
  * leder satisfies this.
  */
-export class MaskinportenApiRequests {
-  private tokenClass: Token;
-
-  constructor() {
-    this.tokenClass = new Token();
-  }
-
+export class MaskinportenApiRequests extends AltinnApi {
   /**
    * Adds an organisation as a supplier of the acting party.
    *
@@ -39,20 +31,18 @@ export class MaskinportenApiRequests {
    * @param supplierOrgNo - The organisation to add as supplier.
    */
   public async addSupplier(pid: string, partyOrgNo: string, supplierOrgNo: string): Promise<void> {
-    const party = await this.tokenClass.getPartyUuid(partyOrgNo);
-    await this.request(pid, 'POST', `suppliers?party=${party}&supplier=${supplierOrgNo}`);
+    const party = await this.partyUuid(partyOrgNo);
+    await this.request(pid, 'POST', 'suppliers', { party, supplier: supplierOrgNo });
   }
 
   public async getSuppliers(pid: string, partyOrgNo: string): Promise<MaskinportenConnection[]> {
-    const party = await this.tokenClass.getPartyUuid(partyOrgNo);
-    const response = await this.request(pid, 'GET', `suppliers?party=${party}`);
-    return response.status === 204 ? [] : response.json();
+    const party = await this.partyUuid(partyOrgNo);
+    return (await this.request<MaskinportenConnection[]>(pid, 'GET', 'suppliers', { party })) ?? [];
   }
 
   public async getConsumers(pid: string, partyOrgNo: string): Promise<MaskinportenConnection[]> {
-    const party = await this.tokenClass.getPartyUuid(partyOrgNo);
-    const response = await this.request(pid, 'GET', `consumers?party=${party}`);
-    return response.status === 204 ? [] : response.json();
+    const party = await this.partyUuid(partyOrgNo);
+    return (await this.request<MaskinportenConnection[]>(pid, 'GET', 'consumers', { party })) ?? [];
   }
 
   /**
@@ -65,12 +55,8 @@ export class MaskinportenApiRequests {
     supplierOrgNo: string,
     cascade = true,
   ): Promise<void> {
-    const party = await this.tokenClass.getPartyUuid(partyOrgNo);
-    await this.request(
-      pid,
-      'DELETE',
-      `suppliers?party=${party}&supplier=${supplierOrgNo}&cascade=${cascade}`,
-    );
+    const party = await this.partyUuid(partyOrgNo);
+    await this.request(pid, 'DELETE', 'suppliers', { party, supplier: supplierOrgNo, cascade });
   }
 
   /**
@@ -86,12 +72,12 @@ export class MaskinportenApiRequests {
     supplierOrgNo: string,
     resourceId: string,
   ): Promise<void> {
-    const party = await this.tokenClass.getPartyUuid(partyOrgNo);
-    await this.request(
-      pid,
-      'POST',
-      `suppliers/resources?party=${party}&supplier=${supplierOrgNo}&resource=${encodeURIComponent(resourceId)}`,
-    );
+    const party = await this.partyUuid(partyOrgNo);
+    await this.request(pid, 'POST', 'suppliers/resources', {
+      party,
+      supplier: supplierOrgNo,
+      resource: resourceId,
+    });
   }
 
   public async removeSupplierResource(
@@ -100,12 +86,12 @@ export class MaskinportenApiRequests {
     supplierOrgNo: string,
     resourceId: string,
   ): Promise<void> {
-    const party = await this.tokenClass.getPartyUuid(partyOrgNo);
-    await this.request(
-      pid,
-      'DELETE',
-      `suppliers/resources?party=${party}&supplier=${supplierOrgNo}&resource=${encodeURIComponent(resourceId)}`,
-    );
+    const party = await this.partyUuid(partyOrgNo);
+    await this.request(pid, 'DELETE', 'suppliers/resources', {
+      party,
+      supplier: supplierOrgNo,
+      resource: resourceId,
+    });
   }
 
   /** The APIs a supplier has been granted. */
@@ -114,44 +100,23 @@ export class MaskinportenApiRequests {
     partyOrgNo: string,
     supplierOrgNo: string,
   ): Promise<unknown[]> {
-    const party = await this.tokenClass.getPartyUuid(partyOrgNo);
-    const response = await this.request(
-      pid,
-      'GET',
-      `suppliers/resources?party=${party}&supplier=${supplierOrgNo}`,
-    );
-    return response.status === 204 ? [] : response.json();
+    const party = await this.partyUuid(partyOrgNo);
+    const resources = await this.request<unknown[]>(pid, 'GET', 'suppliers/resources', {
+      party,
+      supplier: supplierOrgNo,
+    });
+    return resources ?? [];
   }
 
   /**
    * Issues an authenticated call against the Maskinporten BFF, which lives on the
    * app host (BASE_URL origin) rather than the platform host.
    */
-  private async request(
-    pid: string,
-    method: 'GET' | 'POST' | 'DELETE',
-    path: string,
-  ): Promise<Response> {
-    const token = await this.tokenClass.getPersonalTokenByPid(pid);
-    const appOrigin = new URL(env('BASE_URL')).origin;
-
-    const response = await fetchWithRetry(
-      `${appOrigin}/accessmanagement/api/v1/maskinporten/${path}`,
-      {
-        method,
-        headers: {
-          Authorization: `Bearer ${token}`,
-          'Content-Type': 'application/json',
-        },
-      },
+  private request<T>(pid: string, method: HttpMethod, path: string, query: Query): Promise<T> {
+    return this.asUser<T>(
+      pid,
+      method,
+      appUrl(`accessmanagement/api/v1/maskinporten/${path}`, query),
     );
-
-    if (!response.ok) {
-      throw new Error(
-        `Failed ${method} maskinporten/${path} for "${pid}". Status: ${response.status}. Response: ${await response.text()}`,
-      );
-    }
-
-    return response;
   }
 }
