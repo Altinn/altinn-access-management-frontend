@@ -120,36 +120,6 @@ namespace Altinn.AccessManagement.UI.Controllers
         }
 
         /// <summary>
-        /// Endpoint for getting the list of party connections the authenticated user can act on behalf of.
-        /// </summary>
-        /// <returns></returns>
-        [HttpGet]
-        [Authorize]
-        [Route("actorlist")]
-        public async Task<ActionResult<List<Connection>>> GetActorListForAuthenticatedUser()
-        {
-            try
-            {
-                Guid authenticatedUserUuid = AuthenticationHelper.GetUserPartyUuid(_httpContextAccessor.HttpContext);
-                List<Connection> reporteelist = await _userService.GetActorListForUser(authenticatedUserUuid);
-
-                if (reporteelist != null)
-                {
-                    return reporteelist;
-                }
-                else
-                {
-                    return StatusCode(404);
-                }
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError(ex, "GetActorListForAuthenticatedUser failed to fetch actorlist information");
-                return StatusCode(500);
-            }
-        }
-
-        /// <summary>
         /// Endpoint for getting the favorite actors of the authenticated user.
         /// </summary>
         /// <returns>A list of partyUuids</returns>
@@ -256,32 +226,6 @@ namespace Altinn.AccessManagement.UI.Controllers
             catch (Exception ex)
             {
                 _logger.LogError(ex, "GetReportee failed to fetch reportee information");
-                return StatusCode(500);
-            }
-        }
-
-        /// <summary>
-        /// Endpoint for retrieving all right holders of a reportee
-        /// </summary>
-        /// <param name="partyUuid">The partyId for the reportee whose right holders to return</param>
-        /// <returns>List of right holders</returns>
-        [HttpGet]
-        [Authorize]
-        [Route("reporteelist/{partyUuid}")]
-        public async Task<ActionResult<List<User>>> GetReporteeList(Guid partyUuid)
-        {
-            if (!ModelState.IsValid)
-            {
-                return BadRequest(ModelState);
-            }
-
-            try
-            {
-                return await _userService.GetReporteeList(partyUuid);
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError(ex, "GetReportee failed to fetch right holders");
                 return StatusCode(500);
             }
         }

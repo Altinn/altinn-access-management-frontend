@@ -1,6 +1,8 @@
 import { useMemo, useState } from 'react';
 
-import { isPersonInputValid, type PersonInput } from '../personIdentifierUtils';
+import { type PersonInput } from '@/rtk/features/connectionApi';
+
+import { isPersonInputValid } from '../personIdentifierUtils';
 import { useOrgLookup, type OrgLookup } from '../RecipientFields/useOrgLookup';
 
 import type { Recipient, RecipientKind } from './recipient';

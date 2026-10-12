@@ -31,13 +31,6 @@ namespace Altinn.AccessManagement.UI.Core.Services.Interfaces
         Task SetLanguageProfileSetting(string languageCode);
 
         /// <summary>
-        /// Get the reportees for the user 
-        /// </summary>
-        /// <param name="userId">The user id</param>
-        /// <returns></returns>
-        Task<List<User>> GetReporteeList(Guid userId);
-
-        /// <summary>
         /// Gets a Party based on partyUuid if the party is in the users reporteelist
         /// </summary>
         /// <param name="partyUuid">The party UUID of the party to retrieve</param>
@@ -49,12 +42,6 @@ namespace Altinn.AccessManagement.UI.Core.Services.Interfaces
         /// </summary>
         /// <returns>List of reportees</returns>
         Task<List<AuthorizedParty>> GetReporteeListForUser();
-
-        /// <summary>
-        /// Endpoint for getting the parties the authenticated user can act on behalf of, with connection info
-        /// </summary>
-        /// <returns>List of connections</returns>
-        Task<List<Connection>> GetActorListForUser(Guid authenticatedUserPartyUuid);
 
         /// <summary>
         /// Function for getting the favorite actors of the authenticated user
