@@ -76,6 +76,9 @@ export const CustomerList = ({
 
   const totalPages = Math.ceil(filteredSearchList.length / itemsPerPage);
   const safeCurrentPage = currentPage > totalPages ? 1 : currentPage;
+  if (currentPage !== safeCurrentPage) {
+    setCurrentPage(safeCurrentPage);
+  }
   const startIndex = (safeCurrentPage - 1) * itemsPerPage;
   const endIndex = safeCurrentPage * itemsPerPage;
 
