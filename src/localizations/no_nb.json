@@ -309,7 +309,8 @@
     "show_users_with_client_access": "Vis brukere med klienttilgang",
     "indirect_connections": "Brukere uten fullmakt",
     "no_access_to_users_header": "Kun tilgangsstyrere kan se andre brukere med fullmakter",
-    "no_access_to_users_message": "Du er ikke tilgangsstyrer for {{name}} og kan kun se dine egne fullmakter."
+    "no_access_to_users_message": "Du er ikke tilgangsstyrer for {{name}} og kan kun se dine egne fullmakter.",
+    "no_access_to_users_page": "Du har ikke fullmakt til å se denne siden."
   },
   "advanced_user_search": {
     "add_user_button": "Ny bruker",

@@ -1,13 +1,14 @@
 import * as React from 'react';
 import { useTranslation } from 'react-i18next';
-import { useParams } from 'react-router';
+import { Link, useParams } from 'react-router';
+import { DsAlert, DsParagraph } from '@altinn/altinn-components';
 
 import { formatEntityDisplayName } from '@/resources/utils/reporteeUtils';
-import { useGetIsHovedadminQuery } from '@/rtk/features/userInfoApi';
+import { useGetIsAdminQuery, useGetIsHovedadminQuery } from '@/rtk/features/userInfoApi';
 import { useGetPartyFromLoggedInUserQuery } from '@/rtk/features/lookupApi';
 import { useDocumentTitle } from '@/resources/hooks/useDocumentTitle';
 import { PageWrapper } from '@/components';
-import { amUIPath } from '@/routes/paths';
+import { amUIPath, GeneralPath } from '@/routes/paths';
 import { getCookie } from '@/resources/Cookie/CookieMethods';
 import { useBackUrl } from '@/resources/hooks/useBackUrl';
 
@@ -34,8 +35,13 @@ export const UserRightsPage = () => {
   const { t } = useTranslation();
   const { id } = useParams();
   const { data: isHovedadmin, isLoading: isHovedadminLoading } = useGetIsHovedadminQuery();
+  const { data: isAdmin, isLoading: isAdminLoading } = useGetIsAdminQuery();
   const { data: currentUser, isLoading: currentUserIsLoading } = useGetPartyFromLoggedInUserQuery();
   const backUrl = useBackUrl(`/${amUIPath.Users}`);
+  const returnToUrl = `/${GeneralPath.BasePath}`;
+
+  const isViewingOtherUser = !!id && id !== currentUser?.partyUuid;
+  const showNoAccessAlert = !isAdminLoading && isViewingOtherUser && isAdmin === false;
 
   const actingPartyUuid =
     !isHovedadminLoading && !isHovedadmin && !currentUserIsLoading && currentUser?.partyUuid === id
@@ -47,31 +53,42 @@ export const UserRightsPage = () => {
   return (
     <PageWrapper>
       <PageLayoutWrapper>
-        <PartyRepresentationProvider
-          loadingComponent={<UserRightsPageSkeleton />}
-          isLoading={isHovedadminLoading || currentUserIsLoading}
-          actingPartyUuid={actingPartyUuid ?? ''}
-          fromPartyUuid={getCookie('AltinnPartyUuid')}
-          toPartyUuid={id ?? undefined}
-          noConnectionBackUrl={backUrl}
-        >
-          <BreadcrumbsWrapper />
-          <DelegationModalProvider>
-            <PageContainer
-              backUrl={backUrl}
-              contentActions={<DeleteUserModal direction='to' />}
-            >
-              <UserPageHeader direction='to' />
-              <RightsTabs
-                packagesPanel={<AccessPackageSection />}
-                singleRightsPanel={<SingleRightsSection />}
-                roleAssignmentsPanel={<RoleSection />}
-                guardianshipsPanel={<GuardianshipSection />}
-                instancesPanel={<InstanceSection />}
-              />
-            </PageContainer>
-          </DelegationModalProvider>
-        </PartyRepresentationProvider>
+        {!showNoAccessAlert ? (
+          <DsAlert data-color='warning'>
+            <DsParagraph>
+              {t('users_page.no_access_to_users_page')}{' '}
+              {returnToUrl && (
+                <Link to={'/'}>{t('error_page.reportee_change_error.go_to_am')}</Link>
+              )}
+            </DsParagraph>
+          </DsAlert>
+        ) : (
+          <PartyRepresentationProvider
+            loadingComponent={<UserRightsPageSkeleton />}
+            isLoading={isHovedadminLoading || currentUserIsLoading}
+            actingPartyUuid={actingPartyUuid ?? ''}
+            fromPartyUuid={getCookie('AltinnPartyUuid')}
+            toPartyUuid={id ?? undefined}
+            noConnectionBackUrl={backUrl}
+          >
+            <BreadcrumbsWrapper />
+            <DelegationModalProvider>
+              <PageContainer
+                backUrl={backUrl}
+                contentActions={<DeleteUserModal direction='to' />}
+              >
+                <UserPageHeader direction='to' />
+                <RightsTabs
+                  packagesPanel={<AccessPackageSection />}
+                  singleRightsPanel={<SingleRightsSection />}
+                  roleAssignmentsPanel={<RoleSection />}
+                  guardianshipsPanel={<GuardianshipSection />}
+                  instancesPanel={<InstanceSection />}
+                />
+              </PageContainer>
+            </DelegationModalProvider>
+          </PartyRepresentationProvider>
+        )}
       </PageLayoutWrapper>
     </PageWrapper>
   );
