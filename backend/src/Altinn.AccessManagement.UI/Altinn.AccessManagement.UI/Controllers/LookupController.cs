@@ -41,11 +41,11 @@ namespace Altinn.AccessManagement.UI.Controllers
         [HttpGet]
         [Authorize]
         [Route("org/{orgNummer}")]
-        public async Task<ActionResult<PartyFE>> GetOrganisation(string orgNummer)
+        public async Task<ActionResult<LegacyPartyFE>> GetOrganisation(string orgNummer)
         {
             try
             {
-                PartyFE party = await _lookupService.GetPartyForOrganization(orgNummer);
+                LegacyPartyFE party = await _lookupService.GetPartyForOrganization(orgNummer);
 
                 if (party == null)
                 {
@@ -70,7 +70,7 @@ namespace Altinn.AccessManagement.UI.Controllers
         [HttpGet]
         [Authorize]
         [Route("party/user")]
-        public async Task<ActionResult<PartyFE>> GetPartyFromLoggedInUser()
+        public async Task<ActionResult<LegacyPartyFE>> GetPartyFromLoggedInUser()
         {
             if (ModelState.IsValid == false)
             {
@@ -86,7 +86,7 @@ namespace Altinn.AccessManagement.UI.Controllers
                     return new ObjectResult(ProblemDetailsFactory.CreateValidationProblemDetails(HttpContext, ModelState, 400, detail: "Missing or invalid user uuid in token"));
                 }
 
-                PartyFE party = await _lookupService.GetPartyFromLoggedInUser(userUuid.Value);
+                LegacyPartyFE party = await _lookupService.GetPartyFromLoggedInUser(userUuid.Value);
     
                 if (party != null)
                 {
