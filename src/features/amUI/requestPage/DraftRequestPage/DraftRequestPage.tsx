@@ -3,8 +3,7 @@ import { Trans, useTranslation } from 'react-i18next';
 import { DsAlert, DsParagraph } from '@altinn/altinn-components';
 import { useSearchParams } from 'react-router';
 
-import { formatEntityDisplayName } from '@/resources/utils/reporteeUtils';
-import { PartyType } from '@/dataObjects/dtos/Party';
+import { formatEntityDisplayName, getPartyColor } from '@/resources/utils/reporteeUtils';
 import { useDocumentTitle } from '@/resources/hooks/useDocumentTitle';
 import { getCookie } from '@/resources/Cookie/CookieMethods';
 import {
@@ -201,7 +200,7 @@ export const DraftRequestPage = () => {
     <RequestPageLayout
       account={{
         name: representativeRequest?.from.name ?? '',
-        type: representativeRequest?.from.type === PartyType.Person ? 'person' : 'company',
+        type: getPartyColor(representativeRequest?.from),
       }}
       error={error}
       isLoading={isInitialLoad}
