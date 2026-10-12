@@ -40,13 +40,13 @@ export const UserRightsPage = () => {
   const backUrl = useBackUrl(`/${amUIPath.Users}`);
   const returnToUrl = `/${GeneralPath.BasePath}`;
 
-  const isViewingOtherUser = !!id && id !== currentUser?.partyUuid;
-  const showNoAccessAlert = !isAdminLoading && isViewingOtherUser && isAdmin === false;
-
   const actingPartyUuid =
     !isHovedadminLoading && !isHovedadmin && !currentUserIsLoading && currentUser?.partyUuid === id
       ? currentUser?.partyUuid
       : getCookie('AltinnPartyUuid');
+
+  const isViewingOtherUser = !!id && id !== currentUser?.partyUuid;
+  const showNoAccessAlert = !isAdminLoading && isViewingOtherUser && isAdmin === false;
 
   useDocumentTitle(t('user_rights_page.page_title'));
 
