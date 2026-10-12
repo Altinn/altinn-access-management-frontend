@@ -167,7 +167,7 @@ namespace Altinn.AccessManagement.UI.Controllers
         [HttpGet]
         [Authorize]
         [Route("delegation/instances/rights")]
-        public async Task<ActionResult<InstanceRights>> GetInstanceRights(
+        public async Task<ActionResult<InstanceRightsFE>> GetInstanceRights(
             [FromQuery] Guid party,
             [FromQuery] Guid from,
             [FromQuery] Guid to,
@@ -178,7 +178,7 @@ namespace Altinn.AccessManagement.UI.Controllers
 
             try
             {
-                InstanceRights delegations = await _instanceService.GetInstanceRights(languageCode, party, from, to, resource, instance);
+                InstanceRightsFE delegations = await _instanceService.GetInstanceRights(languageCode, party, from, to, resource, instance);
                 return Ok(delegations);
             }
             catch (HttpStatusException ex)

@@ -35,7 +35,7 @@ namespace Altinn.AccessManagement.UI.Core.Services.Interfaces
         /// <param name="from">The uuid of the party whose accesses have been delegated (or empty, if delegations from all parties are to be returned)</param>
         /// <param name="languageCode">The code of the language on which texts are to be returned</param>
         /// <returns>A dictionary of lists (sorted by access area) containing all access package delegations that have been granted from one (or more) party to another (or several others)</returns>
-        Task<Dictionary<Guid, List<PackagePermission>>> GetDelegations(Guid party, Guid? to, Guid? from, string languageCode);
+        Task<Dictionary<Guid, List<PackagePermissionFE>>> GetDelegations(Guid party, Guid? to, Guid? from, string languageCode);
 
         /// <summary>
         ///     Gets a single access package and its permissions (not grouped by area)

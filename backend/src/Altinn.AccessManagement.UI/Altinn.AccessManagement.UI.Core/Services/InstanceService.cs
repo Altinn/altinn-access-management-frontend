@@ -1,6 +1,7 @@
 using System.Net;
 using Altinn.AccessManagement.UI.Core.ClientInterfaces;
 using Altinn.AccessManagement.UI.Core.Helpers;
+using Altinn.AccessManagement.UI.Core.Models.AccessPackage.Frontend;
 using Altinn.AccessManagement.UI.Core.Models.Common.Frontend;
 using Altinn.AccessManagement.UI.Core.Models.Dialogporten;
 using Altinn.AccessManagement.UI.Core.Models.InstanceDelegation;
@@ -73,7 +74,7 @@ namespace Altinn.AccessManagement.UI.Core.Services
             List<InstanceDelegation> delegations = validPermissions
                 .Zip(resources, (permission, resourceFe) => (permission, resourceFe))
                 .Where(x => x.resourceFe != null)
-                .Select(x => new InstanceDelegation(x.resourceFe, x.permission.Instance, x.permission.Permissions))
+                .Select(x => new InstanceDelegation(x.resourceFe, x.permission.Instance, PermissionFE.FromPermissions(x.permission.Permissions)))
                 .ToList();
 
             if (string.IsNullOrWhiteSpace(enrichedToken))
@@ -124,9 +125,10 @@ namespace Altinn.AccessManagement.UI.Core.Services
         }
 
         /// <inheritdoc />
-        public async Task<InstanceRights> GetInstanceRights(string languageCode, Guid party, Guid from, Guid to, string resource, string instance)
+        public async Task<InstanceRightsFE> GetInstanceRights(string languageCode, Guid party, Guid from, Guid to, string resource, string instance)
         {
-            return await _instanceClient.GetInstanceRights(languageCode, party, from, to, resource, instance);
+            InstanceRights instanceRights = await _instanceClient.GetInstanceRights(languageCode, party, from, to, resource, instance);
+            return InstanceRightsFE.FromInstanceRights(instanceRights);
         }
 
         /// <inheritdoc />

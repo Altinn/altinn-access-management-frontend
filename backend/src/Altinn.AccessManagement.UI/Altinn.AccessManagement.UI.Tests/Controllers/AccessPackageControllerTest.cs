@@ -87,7 +87,7 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
             string from = "cd35779b-b174-4ecc-bbef-ece13611be7f"; // Valid reportee
             string to = "167536b5-f8ed-4c5a-8f48-0279507e53ae"; // Valid user that has access package rights for the reportee
             string party = "cd35779b-b174-4ecc-bbef-ece13611be7f"; // Valid party, same as reportee
-            Dictionary<Guid, List<PackagePermission>> expectedResult = Util.GetMockData<Dictionary<Guid, List<PackagePermission>>>(_expectedDataPath + $"/AccessPackage/GetDelegations/{to}.json");
+            Dictionary<Guid, List<PackagePermissionFE>> expectedResult = Util.GetMockData<Dictionary<Guid, List<PackagePermissionFE>>>(_expectedDataPath + $"/AccessPackage/GetDelegations/{to}.json");
 
             // Act
             HttpResponseMessage response = await _client.GetAsync($"accessmanagement/api/v1/accesspackage/delegations?to={to}&from={from}&party={party}");
@@ -95,7 +95,7 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
             // Assert
             Assert.Equal(HttpStatusCode.OK, response.StatusCode);
 
-            Dictionary<Guid, List<PackagePermission>> actualResult = JsonSerializer.Deserialize<Dictionary<Guid, List<PackagePermission>>>(await response.Content.ReadAsStringAsync(), options);
+            Dictionary<Guid, List<PackagePermissionFE>> actualResult = JsonSerializer.Deserialize<Dictionary<Guid, List<PackagePermissionFE>>>(await response.Content.ReadAsStringAsync(), options);
 
             Assert.True(new HashSet<Guid>(expectedResult.Keys).SetEquals(actualResult.Keys));
             foreach (Guid key in actualResult.Keys)
@@ -116,14 +116,14 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
             string from = "cd35779b-b174-4ecc-bbef-ece13611be7f"; // Valid reportee
             string to = "21cc8752-4801-490d-a6ab-ab3266a0f748"; // Valid user that has both inherited and delegated rights to a package
             string party = "cd35779b-b174-4ecc-bbef-ece13611be7f"; // Valid party, same as reportee
-            Dictionary<Guid, List<PackagePermission>> expectedResult = Util.GetMockData<Dictionary<Guid, List<PackagePermission>>>(_expectedDataPath + $"/AccessPackage/GetDelegations/{to}.json");
+            Dictionary<Guid, List<PackagePermissionFE>> expectedResult = Util.GetMockData<Dictionary<Guid, List<PackagePermissionFE>>>(_expectedDataPath + $"/AccessPackage/GetDelegations/{to}.json");
 
             // Act
             HttpResponseMessage response = await _client.GetAsync($"accessmanagement/api/v1/accesspackage/delegations?to={to}&from={from}&party={party}");
 
             // Assert
             Assert.Equal(HttpStatusCode.OK, response.StatusCode);
-            Dictionary<Guid, List<PackagePermission>> actualResult = JsonSerializer.Deserialize<Dictionary<Guid, List<PackagePermission>>>(await response.Content.ReadAsStringAsync(), options);
+            Dictionary<Guid, List<PackagePermissionFE>> actualResult = JsonSerializer.Deserialize<Dictionary<Guid, List<PackagePermissionFE>>>(await response.Content.ReadAsStringAsync(), options);
 
             Assert.True(new HashSet<Guid>(expectedResult.Keys).SetEquals(actualResult.Keys));
             foreach (Guid key in actualResult.Keys)
@@ -150,7 +150,7 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
             // Assert
             Assert.Equal(HttpStatusCode.OK, response.StatusCode);
 
-            Dictionary<Guid, List<PackagePermission>> actualResult = JsonSerializer.Deserialize<Dictionary<Guid, List<PackagePermission>>>(await response.Content.ReadAsStringAsync(), options);
+            Dictionary<Guid, List<PackagePermissionFE>> actualResult = JsonSerializer.Deserialize<Dictionary<Guid, List<PackagePermissionFE>>>(await response.Content.ReadAsStringAsync(), options);
             Assert.Empty(actualResult.Keys);
         }
 

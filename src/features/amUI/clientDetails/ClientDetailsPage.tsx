@@ -30,7 +30,7 @@ export const ClientDetailsPage = () => {
         partyTypeName: PartyType.Organization,
         partyId: Number(selectedClient.client.partyId ?? 0),
         isDeleted: selectedClient.client.isDeleted ?? undefined,
-        unitType: selectedClient.client.variant,
+        unitType: selectedClient.client.unitType ?? undefined,
       }
     : undefined;
 

@@ -1,26 +1,29 @@
 import { describe, expect, it } from 'vitest';
 
+import { PartyEntityType, type PartyEntity } from '@/dataObjects/dtos/Party';
+
 import { mapPermissionsToUserSearchNodes } from './permissionMapper';
 
-const org = (id: string, name: string) => ({
+const org = (id: string, name: string): PartyEntity => ({
   id,
   name,
-  type: 'Organisasjon',
-  variant: 'AS',
+  type: PartyEntityType.Organization,
+  unitType: 'AS',
   organizationIdentifier: '123456789',
-  partyId: `pid-${id}`,
+  partyId: 1,
+  isDeleted: false,
   dateOfBirth: '1990-01-01',
   parent: null,
   children: null,
 });
 
-const person = (id: string, name: string) => ({
+const person = (id: string, name: string): PartyEntity => ({
   id,
   name,
-  type: 'Person',
-  variant: 'Person',
+  type: PartyEntityType.Person,
   organizationIdentifier: '123456789',
-  partyId: `pid-${id}`,
+  partyId: 2,
+  isDeleted: false,
   dateOfBirth: '1990-01-01',
   parent: null,
   children: null,

@@ -1,5 +1,5 @@
 import { type RolePermission } from '@/rtk/features/roleApi';
-import { type Entity } from '@/dataObjects/dtos/Common';
+import { type PartyEntity } from '@/dataObjects/dtos/Party';
 
 import {
   A2_PROVIDER_CODE,
@@ -33,7 +33,7 @@ export enum DeletionLevel {
   None = 'none',
 }
 
-export type ViaParty = Entity & { isMainUnit?: boolean };
+export type ViaParty = PartyEntity & { isMainUnit?: boolean };
 
 export interface DeletionStatus {
   target: DeletionTarget;

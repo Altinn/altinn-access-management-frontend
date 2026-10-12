@@ -12,6 +12,7 @@ import { useAccessPackageLookup } from '@/resources/hooks/useAccessPackageLookup
 import type { ActionError } from '@/resources/hooks/useActionError';
 import type { ServiceResource } from '@/rtk/features/singleRights/singleRightsApi';
 import type { Client } from '@/rtk/features/clientApi';
+import { PartyEntityType } from '@/dataObjects/dtos/Party';
 import { useIsMobileOrSmaller } from '@/resources/utils/screensizeUtils';
 import { PartyType } from '@/rtk/features/userInfoApi';
 import type { Party } from '@/rtk/features/lookupApi';
@@ -103,8 +104,8 @@ type ClientAccessListProps = {
   restoreFocusFallbackId?: string;
 };
 
-const getUserListItemType = (clientType: string): UserListItemProps['type'] => {
-  return clientType.toLowerCase() === 'organisasjon' ? 'company' : 'person';
+const getUserListItemType = (clientType: PartyEntityType): UserListItemProps['type'] => {
+  return clientType === PartyEntityType.Organization ? 'company' : 'person';
 };
 
 const sortClientsByKey = (clients: Client[], parentNameById: Map<string, string>): Client[] =>
@@ -158,7 +159,7 @@ export const ClientAccessList = ({
 
   const userListItems: UserListItemData[] = sortedClients.map((client) => {
     const clientId = client.client.id;
-    const isSubUnit = isSubUnitByType(client.client.variant);
+    const isSubUnit = isSubUnitByType(client.client.unitType);
     const userType = getUserListItemType(client.client.type);
     const clientParty: Party = {
       partyId: 0,
@@ -167,7 +168,7 @@ export const ClientAccessList = ({
       name: client.client.name,
       partyTypeName: userType === 'company' ? PartyType.Organization : PartyType.Person,
       dateOfBirth: client.client.dateOfBirth ?? undefined,
-      unitType: client.client.variant ?? undefined,
+      unitType: client.client.unitType ?? undefined,
     };
 
     const nodes = client.access.reduce((acc, access) => {

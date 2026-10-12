@@ -1,5 +1,5 @@
 import type { Party } from '@/rtk/features/lookupApi';
-import type { Entity } from '@/dataObjects/dtos/Common';
+import type { PartyEntity } from '@/dataObjects/dtos/Party';
 import type { Permission } from '@/rtk/features/roleApi';
 
 export enum InheritedStatusType {
@@ -11,7 +11,7 @@ export enum InheritedStatusType {
 
 export interface InheritedStatusMessageType {
   type: InheritedStatusType;
-  via?: Entity;
+  via?: PartyEntity;
 }
 
 const resolveInheritanceStatus = (

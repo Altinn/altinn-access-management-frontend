@@ -5,7 +5,7 @@ using System.Text.Json;
 using Altinn.AccessManagement.UI.Controllers;
 using Altinn.AccessManagement.UI.Core.Enums;
 using Altinn.AccessManagement.UI.Core.Models.ClientDelegation;
-using Altinn.AccessManagement.UI.Core.Models.Maskinporten;
+using Altinn.AccessManagement.UI.Core.Models.Maskinporten.Frontend;
 using Altinn.AccessManagement.UI.Core.Models.ResourceRegistry;
 using Altinn.AccessManagement.UI.Core.Models.ResourceRegistry.Frontend;
 using Altinn.AccessManagement.UI.Core.Models.SingleRight;
@@ -371,13 +371,13 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
         {
             Guid party = Guid.Parse("cd35779b-b174-4ecc-bbef-ece13611be7f");
             string path = Path.Combine(_testDataFolder, "suppliers.json");
-            List<MaskinportenConnection> expectedResponse = Util.GetMockData<List<MaskinportenConnection>>(path);
+            List<MaskinportenConnectionFE> expectedResponse = Util.GetMockData<List<MaskinportenConnectionFE>>(path);
             SetAuthHeader();
 
             HttpResponseMessage response = await _client.GetAsync($"accessmanagement/api/v1/maskinporten/suppliers?party={party}");
 
             Assert.Equal(HttpStatusCode.OK, response.StatusCode);
-            List<MaskinportenConnection> actualResponse = await response.Content.ReadFromJsonAsync<List<MaskinportenConnection>>();
+            List<MaskinportenConnectionFE> actualResponse = await response.Content.ReadFromJsonAsync<List<MaskinportenConnectionFE>>();
 
             Assert.NotNull(actualResponse);
             Assert.Equivalent(expectedResponse, actualResponse);
@@ -391,13 +391,13 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
         {
             Guid party = Guid.Parse("cd35779b-b174-4ecc-bbef-ece13611be7f");
             string path = Path.Combine(_testDataFolder, "consumers.json");
-            List<MaskinportenConnection> expectedResponse = Util.GetMockData<List<MaskinportenConnection>>(path);
+            List<MaskinportenConnectionFE> expectedResponse = Util.GetMockData<List<MaskinportenConnectionFE>>(path);
             SetAuthHeader();
 
             HttpResponseMessage response = await _client.GetAsync($"accessmanagement/api/v1/maskinporten/consumers?party={party}");
 
             Assert.Equal(HttpStatusCode.OK, response.StatusCode);
-            List<MaskinportenConnection> actualResponse = await response.Content.ReadFromJsonAsync<List<MaskinportenConnection>>();
+            List<MaskinportenConnectionFE> actualResponse = await response.Content.ReadFromJsonAsync<List<MaskinportenConnectionFE>>();
 
             Assert.NotNull(actualResponse);
             Assert.Equivalent(expectedResponse, actualResponse);

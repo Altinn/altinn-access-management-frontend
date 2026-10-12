@@ -3,7 +3,7 @@ import type { Connection, SimplifiedConnection } from '@/rtk/features/connection
 import type { MaskinportenConnection } from '@/rtk/features/maskinportenApi';
 
 import type { UserSearchNode } from './types';
-import { mapEntityToUserSearchNode, mapPartyToUserSearchNode } from './mapperUtils';
+import { mapPartyToUserSearchNode } from './mapperUtils';
 
 export const mapConnectionsToUserSearchNodes = (connections?: Connection[]): UserSearchNode[] =>
   connections?.map((connection) => {
@@ -34,6 +34,7 @@ export const mapMaskinportenConnectionsToUserSearchNodes = (
   connections?: MaskinportenConnection[],
 ): UserSearchNode[] =>
   connections?.map((connection) => ({
-    ...mapEntityToUserSearchNode(connection.party),
+    ...mapPartyToUserSearchNode(connection.party),
+    children: null,
     roles: connection.roles.map((role) => ({ id: role.id, code: role.code })),
   })) ?? [];

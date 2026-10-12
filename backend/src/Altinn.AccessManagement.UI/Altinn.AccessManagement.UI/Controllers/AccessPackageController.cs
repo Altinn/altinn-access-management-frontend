@@ -68,7 +68,7 @@ namespace Altinn.AccessManagement.UI.Controllers
         [HttpGet]
         [Authorize]
         [Route("delegations/")]
-        public async Task<ActionResult<Dictionary<Guid, List<PackagePermission>>>> GetDelegations([FromQuery] Guid party, [FromQuery] Guid? from, [FromQuery] Guid? to)
+        public async Task<ActionResult<Dictionary<Guid, List<PackagePermissionFE>>>> GetDelegations([FromQuery] Guid party, [FromQuery] Guid? from, [FromQuery] Guid? to)
         {
             if (!ModelState.IsValid)
             {

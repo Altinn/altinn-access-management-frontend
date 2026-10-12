@@ -32,22 +32,27 @@
       {
         "from": {
           "id": "cd35779b-b174-4ecc-bbef-ece13611be7f",
+          "partyId": 51329012,
           "name": "DISKRET NÆR TIGER AS",
-          "type": "organization",
-          "variant": "AS",
-          "parent": null,
+          "type": "Organization",
+          "unitType": "AS",
+          "organizationIdentifier": null,
+          "dateOfBirth": null,
+          "isDeleted": false,
           "children": null,
-          "partyId": 51329012
+          "parent": null
         },
         "to": {
           "id": "167536b5-f8ed-4c5a-8f48-0279507e53ae",
-          "name": "SITRONGUL MEDALJONG",
-          "type": "person",
-          "variant": null,
-          "parent": null,
-          "children": null,
           "partyId": 50789533,
-          "dateOfBirth": "1981-03-20"
+          "name": "SITRONGUL MEDALJONG",
+          "type": "Person",
+          "unitType": null,
+          "organizationIdentifier": null,
+          "dateOfBirth": "1981-03-20",
+          "isDeleted": false,
+          "children": null,
+          "parent": null
         },
         "via": null,
         "role": null,
@@ -100,22 +105,27 @@
       {
         "from": {
           "id": "cd35779b-b174-4ecc-bbef-ece13611be7f",
+          "partyId": 51329012,
           "name": "DISKRET NÆR TIGER AS",
-          "type": "organization",
-          "variant": "AS",
-          "parent": null,
+          "type": "Organization",
+          "unitType": "AS",
+          "organizationIdentifier": null,
+          "dateOfBirth": null,
+          "isDeleted": false,
           "children": null,
-          "partyId": 51329012
+          "parent": null
         },
         "to": {
           "id": "167536b5-f8ed-4c5a-8f48-0279507e53ae",
-          "name": "SITRONGUL MEDALJONG",
-          "type": "person",
-          "variant": null,
-          "parent": null,
-          "children": null,
           "partyId": 50789533,
-          "dateOfBirth": "1981-03-20"
+          "name": "SITRONGUL MEDALJONG",
+          "type": "Person",
+          "unitType": null,
+          "organizationIdentifier": null,
+          "dateOfBirth": "1981-03-20",
+          "isDeleted": false,
+          "children": null,
+          "parent": null
         },
         "via": null,
         "role": {
@@ -172,22 +182,27 @@
       {
         "from": {
           "id": "cd35779b-b174-4ecc-bbef-ece13611be7f",
+          "partyId": 51329012,
           "name": "DISKRET NÆR TIGER AS",
-          "type": "organization",
-          "variant": "AS",
-          "parent": null,
+          "type": "Organization",
+          "unitType": "AS",
+          "organizationIdentifier": null,
+          "dateOfBirth": null,
+          "isDeleted": false,
           "children": null,
-          "partyId": 51329012
+          "parent": null
         },
         "to": {
           "id": "167536b5-f8ed-4c5a-8f48-0279507e53ae",
-          "name": "SITRONGUL MEDALJONG",
-          "type": "person",
-          "variant": null,
-          "parent": null,
-          "children": null,
           "partyId": 50789533,
-          "dateOfBirth": "1981-03-20"
+          "name": "SITRONGUL MEDALJONG",
+          "type": "Person",
+          "unitType": null,
+          "organizationIdentifier": null,
+          "dateOfBirth": "1981-03-20",
+          "isDeleted": false,
+          "children": null,
+          "parent": null
         },
         "via": null,
         "role": null,
@@ -232,22 +247,27 @@
       {
         "from": {
           "id": "cd35779b-b174-4ecc-bbef-ece13611be7f",
+          "partyId": 51329012,
           "name": "DISKRET NÆR TIGER AS",
-          "type": "organization",
-          "variant": "AS",
-          "parent": null,
+          "type": "Organization",
+          "unitType": "AS",
+          "organizationIdentifier": null,
+          "dateOfBirth": null,
+          "isDeleted": false,
           "children": null,
-          "partyId": 51329012
+          "parent": null
         },
         "to": {
           "id": "167536b5-f8ed-4c5a-8f48-0279507e53ae",
-          "name": "SITRONGUL MEDALJONG",
-          "type": "person",
-          "variant": null,
-          "parent": null,
-          "children": null,
           "partyId": 50789533,
-          "dateOfBirth": "1981-03-20"
+          "name": "SITRONGUL MEDALJONG",
+          "type": "Person",
+          "unitType": null,
+          "organizationIdentifier": null,
+          "dateOfBirth": "1981-03-20",
+          "isDeleted": false,
+          "children": null,
+          "parent": null
         },
         "via": null,
         "role": null,
@@ -300,22 +320,27 @@
       {
         "from": {
           "id": "cd35779b-b174-4ecc-bbef-ece13611be7f",
+          "partyId": 51329012,
           "name": "DISKRET NÆR TIGER AS",
-          "type": "organization",
-          "variant": "AS",
-          "parent": null,
+          "type": "Organization",
+          "unitType": "AS",
+          "organizationIdentifier": null,
+          "dateOfBirth": null,
+          "isDeleted": false,
           "children": null,
-          "partyId": 51329012
+          "parent": null
         },
         "to": {
           "id": "167536b5-f8ed-4c5a-8f48-0279507e53ae",
-          "name": "SITRONGUL MEDALJONG",
-          "type": "person",
-          "variant": null,
-          "parent": null,
-          "children": null,
           "partyId": 50789533,
-          "dateOfBirth": "1981-03-20"
+          "name": "SITRONGUL MEDALJONG",
+          "type": "Person",
+          "unitType": null,
+          "organizationIdentifier": null,
+          "dateOfBirth": "1981-03-20",
+          "isDeleted": false,
+          "children": null,
+          "parent": null
         },
         "via": null,
         "role": null,
@@ -360,22 +385,27 @@
       {
         "from": {
           "id": "cd35779b-b174-4ecc-bbef-ece13611be7f",
+          "partyId": 51329012,
           "name": "DISKRET NÆR TIGER AS",
-          "type": "organization",
-          "variant": "AS",
-          "parent": null,
+          "type": "Organization",
+          "unitType": "AS",
+          "organizationIdentifier": null,
+          "dateOfBirth": null,
+          "isDeleted": false,
           "children": null,
-          "partyId": 51329012
+          "parent": null
         },
         "to": {
           "id": "167536b5-f8ed-4c5a-8f48-0279507e53ae",
-          "name": "SITRONGUL MEDALJONG",
-          "type": "person",
-          "variant": null,
-          "parent": null,
-          "children": null,
           "partyId": 50789533,
-          "dateOfBirth": "1981-03-20"
+          "name": "SITRONGUL MEDALJONG",
+          "type": "Person",
+          "unitType": null,
+          "organizationIdentifier": null,
+          "dateOfBirth": "1981-03-20",
+          "isDeleted": false,
+          "children": null,
+          "parent": null
         },
         "via": null,
         "role": null,
