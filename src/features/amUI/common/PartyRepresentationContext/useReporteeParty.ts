@@ -2,7 +2,7 @@ import { getCookie } from '@/resources/Cookie/CookieMethods';
 import { useGetPartyFromLoggedInUserQuery } from '@/rtk/features/lookupApi';
 import { useGetRightHoldersQuery } from '@/rtk/features/connectionApi';
 
-import { mapConnectionToParty } from './partyUtils';
+import { mapPartyEntityToParty } from './partyUtils';
 
 /**
  * useReporteeParty
@@ -37,7 +37,7 @@ export const useReporteeParty = () => {
 
   const partyConnection = connection?.[0];
 
-  const party = mapConnectionToParty(partyConnection?.party);
+  const party = mapPartyEntityToParty(partyConnection?.party);
   return { party, isLoading: isLoading || currentUserIsLoading, error: error || currentUserError };
 };
 

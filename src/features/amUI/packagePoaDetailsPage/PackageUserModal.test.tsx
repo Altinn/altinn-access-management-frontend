@@ -3,6 +3,8 @@ import { act, render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 
+import { PartyEntityType } from '@/dataObjects/dtos/Party';
+
 import { DelegationAction } from '../common/DelegationModal/EditModal';
 import type { UserActionTarget } from '../common/UserSearch/types';
 
@@ -31,7 +33,11 @@ vi.mock(
   }),
 );
 
-const user: UserActionTarget = { id: 'user-1', name: 'Medaljong Ola', type: 'Person' };
+const user: UserActionTarget = {
+  id: 'user-1',
+  name: 'Medaljong Ola',
+  type: PartyEntityType.Person,
+};
 
 const accessPackage = {
   id: 'pkg-1',

@@ -2,8 +2,9 @@ import { useCallback, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { DsSearch, DsSwitch } from '@altinn/altinn-components';
 
+import { PartyEntityType } from '@/dataObjects/dtos/Party';
 import { debounce } from '@/resources/utils';
-import { ConnectionUserType, useGetRightHoldersQuery } from '@/rtk/features/connectionApi';
+import { useGetRightHoldersQuery } from '@/rtk/features/connectionApi';
 import { PartyType } from '@/rtk/features/userInfoApi';
 
 import { UserList } from '../common/UserList/UserList';
@@ -35,8 +36,8 @@ export const ReporteesList = () => {
     const relevantRightHolders =
       rightHolders?.filter(
         (rh) =>
-          (rh.party.type === ConnectionUserType.Person ||
-            rh.party.type === ConnectionUserType.Organization) &&
+          (rh.party.type === PartyEntityType.Person ||
+            rh.party.type === PartyEntityType.Organization) &&
           rh.party.partyId !== actingParty?.partyId,
       ) ?? [];
 

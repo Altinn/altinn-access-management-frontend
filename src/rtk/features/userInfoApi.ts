@@ -4,22 +4,14 @@ import { createBaseQuery } from '@/rtk/app/baseQuery';
 import { getCookie } from '@/resources/Cookie/CookieMethods';
 
 import type { Party } from './lookupApi';
-import { type RoleInfo } from './connectionApi';
-
-export interface ExtendedUser extends Omit<User, 'children'> {
-  roles: RoleInfo[];
-  children: (ExtendedUser | User)[] | null;
-  matchInChildren?: boolean;
-  isInherited?: boolean;
-}
 
 export interface User {
   id: string;
   name: string;
   type?: string;
   variant?: string;
-  children: (User | ExtendedUser)[] | null;
-  parent?: ExtendedUser | null;
+  children: User[] | null;
+  parent?: User | null;
   partyId?: number | string | null;
   organizationIdentifier?: string | null;
   dateOfBirth?: string | null;

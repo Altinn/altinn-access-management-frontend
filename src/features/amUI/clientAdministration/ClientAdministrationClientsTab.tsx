@@ -2,38 +2,27 @@ import React, { useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { DsAlert, DsParagraph, Switch } from '@altinn/altinn-components';
 
-import { type Connection } from '@/rtk/features/connectionApi';
 import { type Client, useGetClientsQuery } from '@/rtk/features/clientApi';
 
 import { UserSearch } from '../common/UserSearch/UserSearch';
 import { buildClientParentNameById, buildClientSortKey } from '../common/clientSortUtils';
-import { mapConnectionsToUserSearchNodes } from '../common/UserSearch/connectionMapper';
+import { mapEntityToUserSearchNode } from '../common/UserSearch/mapperUtils';
+import type { UserSearchNode } from '../common/UserSearch/types';
 import { filterDeletedParties } from '../common/deletedPartyUtils';
 
 import { SelectRoleFilter } from './SelectRoleFilter';
 import classes from './ClientAdministrationAgentsTab.module.css';
 
-const buildClientConnections = (clients?: Client[]): Connection[] => {
+const buildClientUsers = (clients?: Client[]): UserSearchNode[] => {
   if (!clients?.length) return [];
 
   const parentNameById = buildClientParentNameById(clients);
 
-  return clients.map((client) => {
-    const sortKey = buildClientSortKey(client, parentNameById);
-    return {
-      party: {
-        ...client.client,
-        children: null,
-        parent: null,
-        roles: [],
-        isDeleted: client.client.isDeleted ?? undefined,
-        variant: client.client.variant ?? undefined,
-      },
-      sortKey,
-      roles: [],
-      connections: [],
-    };
-  });
+  return clients.map((client) =>
+    mapEntityToUserSearchNode(client.client, {
+      sortKey: buildClientSortKey(client, parentNameById),
+    }),
+  );
 };
 
 type ClientAdministrationClientsTabProps = {
@@ -64,14 +53,7 @@ export const ClientAdministrationClientsTab = ({
     }
     return filterDeletedParties(clients, (client) => client.client);
   }, [clients, showDeleted]);
-  const clientConnections = useMemo<Connection[]>(
-    () => buildClientConnections(filteredClients),
-    [filteredClients],
-  );
-  const users = useMemo(
-    () => mapConnectionsToUserSearchNodes(clientConnections),
-    [clientConnections],
-  );
+  const users = useMemo(() => buildClientUsers(filteredClients), [filteredClients]);
 
   if (isClientsError) {
     return (

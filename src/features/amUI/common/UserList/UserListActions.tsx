@@ -3,10 +3,10 @@ import { useTranslation } from 'react-i18next';
 import { MinusCircleIcon, PlusCircleIcon } from '@navikt/aksel-icons';
 
 import { formatEntityDisplayName } from '@/resources/utils/reporteeUtils';
-import { type ExtendedUser } from '@/rtk/features/userInfoApi';
 import { useIsMobileOrSmaller } from '@/resources/utils/screensizeUtils';
 
 import { DelegationAction } from '../DelegationModal/EditModal';
+import type { UserSearchNode } from '../UserSearch/types';
 
 export const UserListActions = ({
   user,
@@ -18,10 +18,10 @@ export const UserListActions = ({
   delegateLabel,
   revokeLabel,
 }: {
-  user: ExtendedUser;
-  onDelegate?: (user: ExtendedUser) => void;
-  onRevoke?: (user: ExtendedUser) => void;
-  onRequest?: (user: ExtendedUser) => void;
+  user: UserSearchNode;
+  onDelegate?: (user: UserSearchNode) => void;
+  onRevoke?: (user: UserSearchNode) => void;
+  onRequest?: (user: UserSearchNode) => void;
   availableAction?: DelegationAction;
   isLoading?: boolean;
   delegateLabel?: string;

@@ -1,5 +1,6 @@
 import { useMemo, useState, useEffect } from 'react';
 
+import { PartyEntityType } from '@/dataObjects/dtos/Party';
 import { matchesOrgNr } from '@/resources/utils/reporteeUtils';
 
 import type { UserSearchNode } from '../UserSearch/types';
@@ -66,10 +67,9 @@ const sortUsers = (users: UserSearchNode[]): UserSearchNode[] => {
       return sortKeyComparison;
     }
 
-    if (a.type?.toLowerCase() === 'organisasjon' && b.type?.toLowerCase() !== 'organisasjon')
-      return -1;
-    if (b.type?.toLowerCase() === 'organisasjon' && a.type?.toLowerCase() !== 'organisasjon')
-      return 1;
+    const aIsOrg = a.type === PartyEntityType.Organization;
+    const bIsOrg = b.type === PartyEntityType.Organization;
+    if (aIsOrg !== bIsOrg) return aIsOrg ? -1 : 1;
 
     return a.name.localeCompare(b.name);
   });

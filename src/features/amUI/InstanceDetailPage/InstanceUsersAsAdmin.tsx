@@ -3,7 +3,8 @@ import { useTranslation } from 'react-i18next';
 import { DsAlert, DsParagraph } from '@altinn/altinn-components';
 
 import { useGetInstancesQuery } from '@/rtk/features/instanceApi';
-import { ConnectionUserType, useGetRightHoldersQuery } from '@/rtk/features/connectionApi';
+import { PartyEntityType } from '@/dataObjects/dtos/Party';
+import { useGetRightHoldersQuery } from '@/rtk/features/connectionApi';
 
 import UserSearch from '../common/UserSearch/UserSearch';
 import { mapPermissionsToUserSearchNodes } from '../common/UserSearch/permissionMapper';
@@ -89,8 +90,7 @@ export const InstanceUsersAsAdmin = ({
     () =>
       mapConnectionsToUserSearchNodes(indirectConnections).filter(
         (user) =>
-          user.type !== ConnectionUserType.Organization ||
-          (user.children && user.children.length > 0),
+          user.type !== PartyEntityType.Organization || (user.children && user.children.length > 0),
       ),
     [indirectConnections],
   );

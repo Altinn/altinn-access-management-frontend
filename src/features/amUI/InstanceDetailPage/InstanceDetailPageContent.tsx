@@ -17,6 +17,7 @@ import { useIsMobileOrSmaller } from '@/resources/utils/screensizeUtils';
 import { ResourceInfoSkeleton } from '../common/DelegationModal/SingleRights/ResourceInfoSkeleton';
 import { PageDivider } from '../common/PageDivider/PageDivider';
 import { usePartyRepresentation } from '../common/PartyRepresentationContext/PartyRepresentationContext';
+import { mapPartyEntityToParty } from '../common/PartyRepresentationContext/partyUtils';
 import {
   createErrorDetails,
   TechnicalErrorParagraphs,
@@ -272,12 +273,7 @@ export const InstanceDetailPageContent = () => {
           ref={modalRef}
           resource={resource}
           instance={{ instanceUrn }}
-          toParty={{
-            partyUuid: selectedUser.id,
-            name: selectedUser.name,
-            partyTypeName:
-              selectedUser.type === 'Person' ? PartyType.Person : PartyType.Organization,
-          }}
+          toParty={mapPartyEntityToParty(selectedUser)}
           openWithError={actionError}
           onSuccess={selectedUserMode === 'delegate' ? () => modalRef.current?.close() : undefined}
           onClose={() => {

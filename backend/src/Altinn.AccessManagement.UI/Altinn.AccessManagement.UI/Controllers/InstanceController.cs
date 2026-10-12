@@ -1,5 +1,6 @@
 using System.Net;
 using Altinn.AccessManagement.UI.Core.Helpers;
+using Altinn.AccessManagement.UI.Core.Models.Common.Frontend;
 using Altinn.AccessManagement.UI.Core.Models.InstanceDelegation;
 using Altinn.AccessManagement.UI.Core.Models.InstanceDelegation.Frontend;
 using Altinn.AccessManagement.UI.Core.Models.SingleRight;
@@ -237,7 +238,7 @@ namespace Altinn.AccessManagement.UI.Controllers
         [HttpGet]
         [Authorize]
         [Route("delegation/instances/simplified/users")]
-        public async Task<ActionResult<List<SimplifiedParty>>> GetInstanceUsers(
+        public async Task<ActionResult<List<PartyFE>>> GetInstanceUsers(
             [FromQuery] Guid party,
             [FromQuery] string resource,
             [FromQuery] string instance)

@@ -3,6 +3,7 @@ import { useTranslation } from 'react-i18next';
 import { DsAlert, DsParagraph, useSnackbar } from '@altinn/altinn-components';
 import { useNavigate } from 'react-router';
 
+import { PartyEntityType } from '@/dataObjects/dtos/Party';
 import { useAddAgentMutation, useGetAgentsQuery } from '@/rtk/features/clientApi';
 import { useGetRightHoldersQuery } from '@/rtk/features/connectionApi';
 
@@ -10,6 +11,7 @@ import { AddAgentButton } from '../users/NewUserModal/AddAgentModal';
 import { UserSearch } from '../common/UserSearch/UserSearch';
 import { usePartyRepresentation } from '../common/PartyRepresentationContext/PartyRepresentationContext';
 import { mapConnectionsToUserSearchNodes } from '../common/UserSearch/connectionMapper';
+import { mapEntityToUserSearchNode } from '../common/UserSearch/mapperUtils';
 import {
   RestoreFocusFallback,
   RestoreFocusProvider,
@@ -53,28 +55,16 @@ const ClientAdministrationAgentsTabContent = ({ isActive }: ClientAdministration
 
   const users = useMemo(
     () =>
-      mapConnectionsToUserSearchNodes(
-        agents?.map((agent) => ({
-          party: {
-            ...agent.agent,
-            children: null,
-            parent: null,
-            addedAt: agent.agentAddedAt,
-            isDeleted: agent.agent.isDeleted ?? undefined,
-            variant: agent.agent.variant ?? undefined,
-            roles: [],
-          },
-          roles: [],
-          connections: [],
-        })) ?? [],
-      ),
+      agents?.map((agent) =>
+        mapEntityToUserSearchNode(agent.agent, { addedAt: agent.agentAddedAt }),
+      ) ?? [],
     [agents],
   );
   const indirectUsers = useMemo(
     () =>
       mapConnectionsToUserSearchNodes(
         indirectConnections?.filter((connection) => {
-          return connection.party.type === 'Person';
+          return connection.party.type === PartyEntityType.Person;
         }) ?? [],
       ),
     [indirectConnections],

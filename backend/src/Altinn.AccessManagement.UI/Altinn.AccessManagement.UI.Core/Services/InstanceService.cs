@@ -1,6 +1,7 @@
 using System.Net;
 using Altinn.AccessManagement.UI.Core.ClientInterfaces;
 using Altinn.AccessManagement.UI.Core.Helpers;
+using Altinn.AccessManagement.UI.Core.Models.Common.Frontend;
 using Altinn.AccessManagement.UI.Core.Models.Dialogporten;
 using Altinn.AccessManagement.UI.Core.Models.InstanceDelegation;
 using Altinn.AccessManagement.UI.Core.Models.InstanceDelegation.Frontend;
@@ -141,9 +142,10 @@ namespace Altinn.AccessManagement.UI.Core.Services
         }
 
         /// <inheritdoc />
-        public async Task<List<SimplifiedParty>> GetInstanceUsers(Guid party, string resource, string instance)
+        public async Task<List<PartyFE>> GetInstanceUsers(Guid party, string resource, string instance)
         {
-            return await _instanceClient.GetInstanceUsers(party, resource, instance);
+            List<SimplifiedParty> users = await _instanceClient.GetInstanceUsers(party, resource, instance);
+            return users?.Select(PartyFE.FromSimplifiedParty).ToList();
         }
 
         /// <inheritdoc />

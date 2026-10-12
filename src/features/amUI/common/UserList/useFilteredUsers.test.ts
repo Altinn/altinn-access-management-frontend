@@ -1,10 +1,11 @@
 import { describe, it, expect } from 'vitest';
 import { act, renderHook } from '@testing-library/react';
 
-import type { ExtendedUser } from '@/rtk/features/userInfoApi';
+import { PartyEntityType, type PartyEntity } from '@/dataObjects/dtos/Party';
 import { type Connection } from '@/rtk/features/connectionApi';
 
 import { mapConnectionsToUserSearchNodes } from '../UserSearch/connectionMapper';
+import { mapPartyToUserSearchNode } from '../UserSearch/mapperUtils';
 
 import { useFilteredUsers } from './useFilteredUsers';
 
@@ -13,12 +14,11 @@ const mockConnections: Connection[] = [
     party: {
       id: '123',
       name: 'Alice',
-      type: 'Person',
-      variant: 'Person',
+      type: PartyEntityType.Person,
+      isDeleted: false,
       children: null,
-      partyId: '00000000',
+      partyId: 0,
       dateOfBirth: '1981-03-20',
-      roles: [],
     },
     roles: [
       {
@@ -27,27 +27,27 @@ const mockConnections: Connection[] = [
       },
     ],
     connections: [],
-    sortKey: 'Alice',
   },
   {
     party: {
       id: '789',
       name: 'Lorem AS',
-      type: 'Organisasjon',
-      variant: 'AS',
+      type: PartyEntityType.Organization,
+      isDeleted: false,
+      unitType: 'AS',
       children: [
         {
           id: '0e56dc9e-bfb8-4914-809f-1720932c0088',
           name: 'InheritAlice',
-          type: 'Person',
+          type: PartyEntityType.Person,
+          isDeleted: false,
           children: null,
-          partyId: '51256682',
+          partyId: 51256682,
           dateOfBirth: '01-02-03',
         },
       ],
-      partyId: '00000000',
+      partyId: 0,
       organizationIdentifier: '123456789',
-      roles: [],
     },
     roles: [
       { id: '123', code: 'rettighetshaver' },
@@ -57,81 +57,80 @@ const mockConnections: Connection[] = [
       },
     ],
     connections: [],
-    sortKey: 'Lorem AS',
   },
   {
     party: {
       id: '3d8b34c3-df0d-4dcc-be12-e788ce414744',
       name: 'DIGITALISERINGSDIREKTORATET',
-      type: 'Organisasjon',
-      variant: 'ORGL',
+      type: PartyEntityType.Organization,
+      isDeleted: false,
+      unitType: 'ORGL',
       children: null,
-      partyId: '50088610',
+      partyId: 50088610,
       organizationIdentifier: '991825827',
-      roles: [],
     },
     roles: [{ id: '42cae370-2dc1-4fdc-9c67-c2f4b0f0f829', code: 'rettighetshaver' }],
     connections: [],
-    sortKey: 'DIGITALISERINGSDIREKTORATET',
   },
   {
     party: {
       id: '3f8e7d85-0dc5-4ab8-a5d0-8fcfa3926d01',
       name: 'ORANSJE ALLSLAGS HAMSTER KF',
-      type: 'Organisasjon',
-      variant: 'KF',
+      type: PartyEntityType.Organization,
+      isDeleted: false,
+      unitType: 'KF',
       children: [
         {
           id: 'd0f3c7b4-fe95-4ace-896e-538f13f941ca',
           name: 'ORANSJE ALLSLAGS HAMSTER KF',
-          type: 'Organisasjon',
-          variant: 'BEDR',
+          type: PartyEntityType.Organization,
+          isDeleted: false,
+          unitType: 'BEDR',
           children: null,
-          partyId: '51467911',
+          partyId: 51467911,
           organizationIdentifier: '311567330',
         },
       ],
-      partyId: '51325818',
+      partyId: 51325818,
       organizationIdentifier: '310167010',
-      roles: [],
     },
     roles: [{ id: '42cae370-2dc1-4fdc-9c67-c2f4b0f0f829', code: 'rettighetshaver' }],
     connections: [],
-    sortKey: 'ORANSJE ALLSLAGS HAMSTER KF',
   },
   {
     party: {
       id: '4fc5c70f-69a2-4fa6-a794-90b0a82d5d9f',
       name: 'TYKKHUDET IDIOTSIKKER STRUTS LTD',
-      type: 'Organisasjon',
-      variant: 'NUF',
+      type: PartyEntityType.Organization,
+      isDeleted: false,
+      unitType: 'NUF',
       children: [
         {
           id: 'ab8b2d5f-0aa4-4ff9-9be2-4bd542ae9b05',
           name: 'TYKKHUDET IDIOTSIKKER STRUTS LTD',
-          type: 'Organisasjon',
-          variant: 'BEDR',
+          type: PartyEntityType.Organization,
+          isDeleted: false,
+          unitType: 'BEDR',
           children: null,
-          partyId: '51480388',
+          partyId: 51480388,
           organizationIdentifier: '311657348',
         },
         {
           id: '7be4bbc3-032d-4508-acf4-6fdb96ef0d9d',
           name: 'VIS KONGE PANDA',
-          type: 'Organisasjon',
-          variant: 'ADOS',
+          type: PartyEntityType.Organization,
+          isDeleted: false,
+          unitType: 'ADOS',
           children: null,
-          partyId: '51862126',
+          partyId: 51862126,
           organizationIdentifier: '313676781',
         },
       ],
-      partyId: '51480407',
+      partyId: 51480407,
       organizationIdentifier: '314081544',
-      roles: [],
     },
     roles: [{ id: '42cae370-2dc1-4fdc-9c67-c2f4b0f0f829', code: 'rettighetshaver' }],
     connections: [],
-    sortKey: 'TYKKHUDET IDIOTSIKKER STRUTS LTD',
   },
 ];
 const mappedMockConnections = mapConnectionsToUserSearchNodes(mockConnections);
@@ -245,7 +244,7 @@ describe('useFilteredUsers', () => {
     );
 
     expect(result.current.users).toHaveLength(1);
-    expect((result.current.users[0] as ExtendedUser).matchInChildren).toBe(true);
+    expect(result.current.users[0].matchInChildren).toBe(true);
     expect(result.current.users[0].children).toHaveLength(1);
     expect(result.current.users[0]?.name).toBe('Lorem AS');
     expect(result?.current?.users?.[0]?.children?.[0]?.name).toBe('InheritAlice');
@@ -270,57 +269,23 @@ describe('useFilteredUsers', () => {
 
   it('prioritizes new users and sorts newest first', () => {
     const now = Date.now();
-    const connections: Connection[] = [
-      {
-        party: {
-          id: 'old-org',
-          name: 'Old Org',
-          type: 'Organisasjon',
-          variant: 'AS',
-          children: null,
-          partyId: '1',
-          organizationIdentifier: '100000001',
-          roles: [],
-        },
-        roles: [],
-        connections: [],
-        sortKey: 'Old Org',
-      },
-      {
-        party: {
-          id: 'newer-person',
-          name: 'Newer Person',
-          type: 'Person',
-          variant: 'Person',
-          children: null,
-          partyId: '2',
-          dateOfBirth: '1980-01-01',
-          addedAt: new Date(now - 2 * 60 * 1000).toISOString(),
-          roles: [],
-        },
-        roles: [],
-        connections: [],
-        sortKey: 'Newer Person',
-      },
-      {
-        party: {
-          id: 'older-new-org',
-          name: 'Older New Org',
-          type: 'Organisasjon',
-          variant: 'AS',
-          children: null,
-          partyId: '3',
-          organizationIdentifier: '100000003',
-          addedAt: new Date(now - 4 * 60 * 1000).toISOString(),
-          roles: [],
-        },
-        roles: [],
-        connections: [],
-        sortKey: 'Older New Org',
-      },
+    const party = (id: string, name: string, type: PartyEntityType): PartyEntity => ({
+      id,
+      name,
+      type,
+      isDeleted: false,
+      children: null,
+    });
+    const users = [
+      mapPartyToUserSearchNode(party('old-org', 'Old Org', PartyEntityType.Organization)),
+      mapPartyToUserSearchNode(party('newer-person', 'Newer Person', PartyEntityType.Person), {
+        addedAt: new Date(now - 2 * 60 * 1000).toISOString(),
+      }),
+      mapPartyToUserSearchNode(
+        party('older-new-org', 'Older New Org', PartyEntityType.Organization),
+        { addedAt: new Date(now - 4 * 60 * 1000).toISOString() },
+      ),
     ];
-
-    const users = mapConnectionsToUserSearchNodes(connections);
     const { result } = renderHook(() => useFilteredUsers({ users, searchString: '' }));
 
     expect(result.current.users.map((user) => user.name)).toEqual([
@@ -339,7 +304,7 @@ describe('useFilteredUsers', () => {
     );
 
     expect(result.current.users).toHaveLength(1);
-    const parent = result.current.users[0] as ExtendedUser;
+    const parent = result.current.users[0];
     expect(parent.name).toBe('Lorem AS');
     expect(parent.children).toBeTruthy();
     expect(parent.children?.length).toBe(1);
@@ -352,11 +317,10 @@ describe('useFilteredUsers', () => {
         party: {
           id: '123', // Alice exists in direct graph
           name: 'Alice',
-          type: 'Person',
-          variant: 'Person',
+          type: PartyEntityType.Person,
+          isDeleted: false,
           children: null,
-          partyId: '00000000',
-          roles: [],
+          partyId: 0,
         },
         roles: [],
         connections: [],
@@ -365,11 +329,11 @@ describe('useFilteredUsers', () => {
         party: {
           id: 'ind-unique',
           name: 'Indirect Unique',
-          type: 'Organisasjon',
-          variant: 'AS',
+          type: PartyEntityType.Organization,
+          isDeleted: false,
+          unitType: 'AS',
           children: null,
-          partyId: '11111111',
-          roles: [],
+          partyId: 11111111,
         },
         roles: [],
         connections: [],
@@ -397,11 +361,11 @@ describe('useFilteredUsers', () => {
         party: {
           id: `ind-${i + 1}`,
           name: `Indirect ${String(i + 1).padStart(2, '0')}`,
-          type: 'Organisasjon',
-          variant: 'AS',
+          type: PartyEntityType.Organization,
+          isDeleted: false,
+          unitType: 'AS',
           children: null,
-          partyId: `${i + 1}`,
-          roles: [],
+          partyId: i + 1,
         },
         roles: [],
         connections: [],
