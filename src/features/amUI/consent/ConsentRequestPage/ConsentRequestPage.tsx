@@ -4,7 +4,7 @@ import { useNavigate, useSearchParams } from 'react-router';
 import { DsAlert, DsButton, DsHeading, DsParagraph } from '@altinn/altinn-components';
 
 import { ConsentPath } from '@/routes/paths/consentPath';
-import { PartyType } from '@/dataObjects/dtos/Party';
+import { getPartyColor } from '@/resources/utils/reporteeUtils';
 import {
   useApproveConsentRequestMutation,
   useGetConsentRequestQuery,
@@ -122,7 +122,7 @@ export const ConsentRequestPage = () => {
 
   const account: { name: string; type: 'person' | 'company' } = {
     name: memoizedRequest?.fromParty.name ?? '',
-    type: memoizedRequest?.fromParty.type === PartyType.Person ? 'person' : 'company',
+    type: getPartyColor(memoizedRequest?.fromParty),
   };
 
   let heading: React.ReactNode = null;

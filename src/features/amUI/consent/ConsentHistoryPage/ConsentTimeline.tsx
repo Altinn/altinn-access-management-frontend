@@ -12,7 +12,7 @@ import {
 import { type TFunction } from 'i18next';
 
 import { useGetReporteeQuery } from '@/rtk/features/userInfoApi';
-import { PartyType } from '@/dataObjects/dtos/Party';
+import { getPartyColor } from '@/resources/utils/reporteeUtils';
 
 import { type ConsentHistoryItem } from '../types';
 import { toDateTimeString } from '../utils';
@@ -66,8 +66,8 @@ export const ConsentTimeline = ({ consentLog, showConsentDetails }: ConsentTimel
         {filteredTimelineItems.map((item) => {
           return (
             <TimelineSegment
-              data-color={reportee?.type === PartyType.Person ? 'person' : 'company'}
-              borderColor={reportee?.type === PartyType.Person ? 'person' : 'company'}
+              data-color={getPartyColor(reportee)}
+              borderColor={getPartyColor(reportee)}
               key={`${item.consentId}-${item.consentEventId}`}
             >
               <TimelineActivity byline={item.bylineText}>
