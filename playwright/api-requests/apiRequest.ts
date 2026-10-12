@@ -23,8 +23,6 @@ export interface RequestOptions {
   json?: unknown;
   /** Sent as an `application/x-www-form-urlencoded` body. */
   form?: Record<string, string>;
-  /** Non-2xx statuses that are an expected answer for this call, e.g. 404 when cleaning up. */
-  accept?: number[];
 }
 
 export class ApiError extends Error {
@@ -66,7 +64,7 @@ export function buildUrl(base: string, path: string, query: Query = {}): string 
 export async function send(
   method: HttpMethod,
   url: string,
-  { token, headers, json, form, accept = [] }: RequestOptions = {},
+  { token, headers, json, form }: RequestOptions = {},
 ): Promise<Response> {
   // Query strings carry test PIDs and long URNs; the path is enough to identify the call.
   const { host, pathname } = new URL(url);
@@ -90,15 +88,14 @@ export async function send(
     request,
   );
 
-  if (!response.ok && !accept.includes(response.status)) {
+  if (!response.ok) {
     throw new ApiError(request, response.status, await response.text());
   }
   return response;
 }
 
 /**
- * Like `send`, but returns the parsed JSON body — `undefined` for an empty body such as 204,
- * and for a status let through by `accept`.
+ * Like `send`, but returns the parsed JSON body — `undefined` for an empty body such as 204.
  */
 export async function sendJson<T>(
   method: HttpMethod,
@@ -106,6 +103,6 @@ export async function sendJson<T>(
   options?: RequestOptions,
 ): Promise<T> {
   const response = await send(method, url, options);
-  const text = response.ok ? await response.text() : '';
+  const text = await response.text();
   return (text ? JSON.parse(text) : undefined) as T;
 }

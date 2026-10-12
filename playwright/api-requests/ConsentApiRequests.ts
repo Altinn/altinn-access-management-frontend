@@ -4,15 +4,13 @@ import { addTimeToNowUtc } from 'playwright/util/helper';
 
 import { platformUrl, sendJson } from './apiRequest';
 import { MaskinportenToken } from './MaskinportenToken';
-import { Token } from './Token';
+import { asEnterprise } from './callAs';
 
 export class ConsentApiRequests {
-  private tokenClass: Token;
   private readonly org: string;
   private readonly consentRequestScopes: string;
 
   constructor(org?: string, consentRequestScopes = 'altinn:consentrequests.write') {
-    this.tokenClass = new Token();
     this.org = org ?? '';
     this.consentRequestScopes = consentRequestScopes;
   }
@@ -22,8 +20,9 @@ export class ConsentApiRequests {
     endpoint: string,
     scopes: string,
   ): Promise<TResponse> {
-    const token = await this.tokenClass.getEnterpriseAltinnToken(this.org, scopes);
-    return sendJson<TResponse>('POST', platformUrl(endpoint), { token, json: payload });
+    return asEnterprise<TResponse>(this.org, scopes, 'POST', platformUrl(endpoint), {
+      json: payload,
+    });
   }
 
   private async sendPostRequestWithMaskinporten<TPayload, TResponse>(

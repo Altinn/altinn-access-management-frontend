@@ -1,7 +1,7 @@
 import { TestdataApi } from 'playwright/util/TestdataApi';
 
-import { AltinnApi } from './AltinnApi';
-import { platformUrl } from './apiRequest';
+import { asEnterprise, asUser, token } from './callAs';
+import { ApiError, platformUrl } from './apiRequest';
 
 const AUTHENTICATION = 'authentication/api/v1';
 
@@ -19,7 +19,7 @@ type AccessPackages = { urn: string }[];
 type CreatedRequest = { confirmUrl: string; id: string };
 
 /** System register and system user setup: systems are created by the vendor, users by the party. */
-export class ApiRequests extends AltinnApi {
+export class ApiRequests {
   public async createSystemInSystemregisterWithAccessPackages(
     vendorOrgNo: string,
     name: string,
@@ -73,7 +73,7 @@ export class ApiRequests extends AltinnApi {
   }
 
   public async deleteSystemInSystemRegister(vendorOrgNo: string, systemName: string) {
-    await this.asEnterprise(
+    await asEnterprise(
       vendorOrgNo,
       SCOPES.registerDelete,
       'DELETE',
@@ -90,7 +90,7 @@ export class ApiRequests extends AltinnApi {
     rights?: Rights,
     accessPackages?: AccessPackages,
   ) {
-    return this.asEnterprise<CreatedRequest>(
+    return asEnterprise<CreatedRequest>(
       vendorOrgNo,
       SCOPES.request,
       'POST',
@@ -115,7 +115,7 @@ export class ApiRequests extends AltinnApi {
     partyOrgNo: string,
     externalRef: string = TestdataApi.generateExternalRef(),
   ) {
-    return this.asEnterprise<CreatedRequest>(
+    return asEnterprise<CreatedRequest>(
       vendorOrgNo,
       SCOPES.request,
       'POST',
@@ -142,7 +142,7 @@ export class ApiRequests extends AltinnApi {
       unwantedAccessPackages: AccessPackages;
     },
   ) {
-    return this.asEnterprise<CreatedRequest>(
+    return asEnterprise<CreatedRequest>(
       vendorOrgNo,
       SCOPES.request,
       'POST',
@@ -158,7 +158,7 @@ export class ApiRequests extends AltinnApi {
     vendorOrgNo: string,
     systemRequestId: string,
   ): Promise<T> {
-    return this.asEnterprise<T>(
+    return asEnterprise<T>(
       vendorOrgNo,
       SCOPES.request,
       'GET',
@@ -170,7 +170,7 @@ export class ApiRequests extends AltinnApi {
     vendorOrgNo: string,
     systemRequestId: string,
   ): Promise<T> {
-    return this.asEnterprise<T>(
+    return asEnterprise<T>(
       vendorOrgNo,
       SCOPES.request,
       'GET',
@@ -184,7 +184,7 @@ export class ApiRequests extends AltinnApi {
     orgno: string,
     externalRef: string,
   ): Promise<string> {
-    const systemUser = await this.asEnterprise<{ id: string }>(
+    const systemUser = await asEnterprise<{ id: string }>(
       vendorOrgNo,
       SCOPES.requestWrite,
       'GET',
@@ -198,8 +198,8 @@ export class ApiRequests extends AltinnApi {
   }
 
   public async approveSystemuserRequest(requestId: string, partyOrgNo: string, userPid: string) {
-    const { partyId } = await this.tokenClass.getIds(partyOrgNo);
-    await this.asUser(
+    const { partyId } = await token.getIds(partyOrgNo);
+    await asUser(
       userPid,
       'POST',
       platformUrl(`${AUTHENTICATION}/systemuser/request/${partyId}/${requestId}/approve`),
@@ -214,9 +214,9 @@ export class ApiRequests extends AltinnApi {
     agent = false,
     externalRef?: string,
   ): Promise<void> {
-    const { partyId, partyUuid } = await this.tokenClass.getIds(partyOrgNo);
+    const { partyId, partyUuid } = await token.getIds(partyOrgNo);
     const path = `${AUTHENTICATION}/systemuser/${agent ? 'agent/' : ''}${partyId}`;
-    const users = await this.asUser<{ id: string; systemId: string; externalRef: string }[]>(
+    const users = await asUser<{ id: string; systemId: string; externalRef: string }[]>(
       userPid,
       'GET',
       platformUrl(path),
@@ -227,12 +227,14 @@ export class ApiRequests extends AltinnApi {
         user.systemId === systemId &&
         (externalRef === undefined || user.externalRef === externalRef),
     )) {
-      await this.asUser(
+      // A 404 means the system user is already gone, which is what cleanup wants.
+      await asUser(
         userPid,
         'DELETE',
         platformUrl(`${path}/${user.id}`, { partyuuid: agent ? partyUuid : undefined }),
-        { accept: [404] },
-      );
+      ).catch((error) => {
+        if (!(error instanceof ApiError && error.status === 404)) throw error;
+      });
     }
   }
 
@@ -251,8 +253,8 @@ export class ApiRequests extends AltinnApi {
     partyOrgNo: string,
     userPid: string,
   ): Promise<void> {
-    const { partyId } = await this.tokenClass.getIds(partyOrgNo);
-    await this.asUser(
+    const { partyId } = await token.getIds(partyOrgNo);
+    await asUser(
       userPid,
       'DELETE',
       platformUrl(`${AUTHENTICATION}/systemuser/${partyId}/${systemUserId}`),
@@ -266,14 +268,14 @@ export class ApiRequests extends AltinnApi {
     externalRef: string,
     userPid: string,
   ): Promise<void> {
-    const { partyId, partyUuid } = await this.tokenClass.getIds(partyOrgNo);
+    const { partyId, partyUuid } = await token.getIds(partyOrgNo);
     const systemUserId = await this.getSystemUserByQuery(
       vendorOrgNo,
       systemId,
       partyOrgNo,
       externalRef,
     );
-    await this.asUser(
+    await asUser(
       userPid,
       'DELETE',
       platformUrl(`${AUTHENTICATION}/systemuser/agent/${partyId}/${systemUserId}`, {
@@ -284,7 +286,7 @@ export class ApiRequests extends AltinnApi {
 
   /** Registers a system owned by the vendor; the fields that differ per test are in `details`. */
   private async registerSystem(vendorOrgNo: string, name: string, details: object) {
-    await this.asEnterprise(
+    await asEnterprise(
       vendorOrgNo,
       SCOPES.registerWrite,
       'POST',

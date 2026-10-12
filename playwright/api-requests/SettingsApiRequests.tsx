@@ -1,4 +1,4 @@
-import { AltinnApi } from './AltinnApi';
+import { asUser } from './callAs';
 import { ApiError, appUrl, type HttpMethod } from './apiRequest';
 
 /**
@@ -12,7 +12,7 @@ export interface NotificationAddress {
   countryCode: string;
 }
 
-export class SettingsApiRequests extends AltinnApi {
+export class SettingsApiRequests {
   /**
    * Sets the user's UI language server-side (profile) using their enduser token.
    *
@@ -212,7 +212,7 @@ export class SettingsApiRequests extends AltinnApi {
    * platform host (API_BASE_URL): e.g. https://am.ui.tt02.altinn.no/...
    */
   private request<T>(pid: string, method: HttpMethod, path: string, json?: unknown): Promise<T> {
-    return this.asUser<T>(pid, method, appUrl(`accessmanagement/api/v1/settings/${path}`), {
+    return asUser<T>(pid, method, appUrl(`accessmanagement/api/v1/settings/${path}`), {
       json,
     });
   }

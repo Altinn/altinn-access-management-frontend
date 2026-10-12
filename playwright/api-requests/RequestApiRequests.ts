@@ -1,4 +1,4 @@
-import { AltinnApi } from './AltinnApi';
+import { asUser, partyUuid } from './callAs';
 import { appUrl, type HttpMethod, type Query } from './apiRequest';
 
 export type RequestStatus = 'Draft' | 'Pending' | 'Approved' | 'Rejected' | 'Withdrawn';
@@ -23,7 +23,7 @@ export interface RequestDto {
  * party being asked to grant it. So a person asking an organisation for a
  * package passes party=<person>, to=<organisation>.
  */
-export class RequestApiRequests extends AltinnApi {
+export class RequestApiRequests {
   /**
    * Asks `toOrgOrPid` for an access package on behalf of `requesterPid`.
    *
@@ -38,8 +38,8 @@ export class RequestApiRequests extends AltinnApi {
     packageUrn: string,
   ): Promise<RequestDto> {
     return this.request(requesterPid, 'POST', 'package', {
-      party: await this.partyUuid(requesterPid),
-      to: await this.partyUuid(toOrgOrPid),
+      party: await partyUuid(requesterPid),
+      to: await partyUuid(toOrgOrPid),
       package: packageUrn,
     });
   }
@@ -55,8 +55,8 @@ export class RequestApiRequests extends AltinnApi {
     resourceId: string,
   ): Promise<RequestDto> {
     return this.request(requesterPid, 'POST', 'resource', {
-      party: await this.partyUuid(requesterPid),
-      to: await this.partyUuid(toOrgOrPid),
+      party: await partyUuid(requesterPid),
+      to: await partyUuid(toOrgOrPid),
       resource: resourceId,
     });
   }
@@ -73,7 +73,7 @@ export class RequestApiRequests extends AltinnApi {
     statuses: RequestStatus[] = ['Pending'],
   ): Promise<RequestDto[]> {
     const requests = await this.request<RequestDto[]>(pid, 'GET', 'received', {
-      party: await this.partyUuid(partyOrgOrPid),
+      party: await partyUuid(partyOrgOrPid),
       status: statuses,
     });
     return requests ?? [];
@@ -86,7 +86,7 @@ export class RequestApiRequests extends AltinnApi {
     statuses: RequestStatus[] = ['Pending'],
   ): Promise<RequestDto[]> {
     const requests = await this.request<RequestDto[]>(pid, 'GET', 'sent', {
-      party: await this.partyUuid(partyOrgOrPid),
+      party: await partyUuid(partyOrgOrPid),
       status: statuses,
     });
     return requests ?? [];
@@ -104,7 +104,7 @@ export class RequestApiRequests extends AltinnApi {
     requestId: string,
   ): Promise<void> {
     await this.request(pid, 'PUT', 'received/approve', {
-      party: await this.partyUuid(partyOrgOrPid),
+      party: await partyUuid(partyOrgOrPid),
       id: requestId,
     });
   }
@@ -112,7 +112,7 @@ export class RequestApiRequests extends AltinnApi {
   /** Rejects a received request. */
   public async rejectRequest(pid: string, partyOrgOrPid: string, requestId: string): Promise<void> {
     await this.request(pid, 'PUT', 'received/reject', {
-      party: await this.partyUuid(partyOrgOrPid),
+      party: await partyUuid(partyOrgOrPid),
       id: requestId,
     });
   }
@@ -129,7 +129,7 @@ export class RequestApiRequests extends AltinnApi {
     requestId: string,
   ): Promise<void> {
     await this.request(pid, 'DELETE', 'sent/withdraw', {
-      party: await this.partyUuid(partyOrgOrPid),
+      party: await partyUuid(partyOrgOrPid),
       id: requestId,
     });
   }
@@ -141,7 +141,7 @@ export class RequestApiRequests extends AltinnApi {
    * run's list and break assertions that count what is waiting.
    */
   public async withdrawAllPendingRequests(requesterPid: string, toOrgOrPid: string): Promise<void> {
-    const toUuid = await this.partyUuid(toOrgOrPid);
+    const toUuid = await partyUuid(toOrgOrPid);
     const pending = await this.getSentRequests(requesterPid, requesterPid, ['Pending']);
 
     for (const request of pending.filter((r) => r.to.id === toUuid)) {
@@ -156,6 +156,6 @@ export class RequestApiRequests extends AltinnApi {
    * host (API_BASE_URL) — same as the settings BFF.
    */
   private request<T>(pid: string, method: HttpMethod, path: string, query: Query): Promise<T> {
-    return this.asUser<T>(pid, method, appUrl(`accessmanagement/api/v1/request/${path}`, query));
+    return asUser<T>(pid, method, appUrl(`accessmanagement/api/v1/request/${path}`, query));
   }
 }

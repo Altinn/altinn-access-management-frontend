@@ -1,4 +1,4 @@
-import { AltinnApi } from './AltinnApi';
+import { asUser, partyUuid } from './callAs';
 import { appUrl, type HttpMethod, type Query } from './apiRequest';
 
 /** A supplier or consumer connection as returned by the Maskinporten BFF. */
@@ -22,7 +22,7 @@ export interface MaskinportenConnection {
  * access package (`GET user/isMaskinportenAdmin`). An organisation's daglig
  * leder satisfies this.
  */
-export class MaskinportenApiRequests extends AltinnApi {
+export class MaskinportenApiRequests {
   /**
    * Adds an organisation as a supplier of the acting party.
    *
@@ -31,17 +31,17 @@ export class MaskinportenApiRequests extends AltinnApi {
    * @param supplierOrgNo - The organisation to add as supplier.
    */
   public async addSupplier(pid: string, partyOrgNo: string, supplierOrgNo: string): Promise<void> {
-    const party = await this.partyUuid(partyOrgNo);
+    const party = await partyUuid(partyOrgNo);
     await this.request(pid, 'POST', 'suppliers', { party, supplier: supplierOrgNo });
   }
 
   public async getSuppliers(pid: string, partyOrgNo: string): Promise<MaskinportenConnection[]> {
-    const party = await this.partyUuid(partyOrgNo);
+    const party = await partyUuid(partyOrgNo);
     return (await this.request<MaskinportenConnection[]>(pid, 'GET', 'suppliers', { party })) ?? [];
   }
 
   public async getConsumers(pid: string, partyOrgNo: string): Promise<MaskinportenConnection[]> {
-    const party = await this.partyUuid(partyOrgNo);
+    const party = await partyUuid(partyOrgNo);
     return (await this.request<MaskinportenConnection[]>(pid, 'GET', 'consumers', { party })) ?? [];
   }
 
@@ -55,7 +55,7 @@ export class MaskinportenApiRequests extends AltinnApi {
     supplierOrgNo: string,
     cascade = true,
   ): Promise<void> {
-    const party = await this.partyUuid(partyOrgNo);
+    const party = await partyUuid(partyOrgNo);
     await this.request(pid, 'DELETE', 'suppliers', { party, supplier: supplierOrgNo, cascade });
   }
 
@@ -72,7 +72,7 @@ export class MaskinportenApiRequests extends AltinnApi {
     supplierOrgNo: string,
     resourceId: string,
   ): Promise<void> {
-    const party = await this.partyUuid(partyOrgNo);
+    const party = await partyUuid(partyOrgNo);
     await this.request(pid, 'POST', 'suppliers/resources', {
       party,
       supplier: supplierOrgNo,
@@ -86,7 +86,7 @@ export class MaskinportenApiRequests extends AltinnApi {
     supplierOrgNo: string,
     resourceId: string,
   ): Promise<void> {
-    const party = await this.partyUuid(partyOrgNo);
+    const party = await partyUuid(partyOrgNo);
     await this.request(pid, 'DELETE', 'suppliers/resources', {
       party,
       supplier: supplierOrgNo,
@@ -100,7 +100,7 @@ export class MaskinportenApiRequests extends AltinnApi {
     partyOrgNo: string,
     supplierOrgNo: string,
   ): Promise<unknown[]> {
-    const party = await this.partyUuid(partyOrgNo);
+    const party = await partyUuid(partyOrgNo);
     const resources = await this.request<unknown[]>(pid, 'GET', 'suppliers/resources', {
       party,
       supplier: supplierOrgNo,
@@ -113,10 +113,6 @@ export class MaskinportenApiRequests extends AltinnApi {
    * app host (BASE_URL origin) rather than the platform host.
    */
   private request<T>(pid: string, method: HttpMethod, path: string, query: Query): Promise<T> {
-    return this.asUser<T>(
-      pid,
-      method,
-      appUrl(`accessmanagement/api/v1/maskinporten/${path}`, query),
-    );
+    return asUser<T>(pid, method, appUrl(`accessmanagement/api/v1/maskinporten/${path}`, query));
   }
 }

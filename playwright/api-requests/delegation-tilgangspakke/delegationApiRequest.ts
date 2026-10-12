@@ -1,11 +1,9 @@
 import { type TestPerson } from 'playwright/util/testDelegationdatautil';
 
 import { type HttpMethod, platformUrl, type Query, send } from '../apiRequest';
-import { Token } from '../Token';
+import { token } from '../callAs';
 
 export class DelegationApiRequest {
-  private readonly token = new Token();
-
   //Add org as 'Rettighetshaver' for delegating access pacakage
   public async addOrgForDelegation(
     fromPerson: TestPerson,
@@ -49,7 +47,7 @@ export class DelegationApiRequest {
   }
 
   private async request(authPerson: TestPerson, method: HttpMethod, path: string, query: Query) {
-    const token = await this.token.getPersonalCleanupAltinnToken(authPerson);
-    await send(method, platformUrl(path, query), { token });
+    const accessToken = await token.getPersonalCleanupAltinnToken(authPerson);
+    await send(method, platformUrl(path, query), { token: accessToken });
   }
 }

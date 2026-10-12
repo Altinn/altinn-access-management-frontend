@@ -1,13 +1,13 @@
-import { AltinnApi } from './AltinnApi';
+import { asUser } from './callAs';
 import { platformUrl } from './apiRequest';
 
 interface AuthorizedParty {
   subunits?: AuthorizedParty[];
 }
 
-export class AuthorizedParties extends AltinnApi {
+export class AuthorizedParties {
   async antallAktoererForbruker(pid: string): Promise<number> {
-    const { data } = await this.asUser<{ data: AuthorizedParty[] }>(
+    const { data } = await asUser<{ data: AuthorizedParty[] }>(
       pid,
       'GET',
       platformUrl('accessmanagement/api/v1/enduser/authorizedparties', {
