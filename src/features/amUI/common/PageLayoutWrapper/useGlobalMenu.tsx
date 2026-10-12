@@ -11,7 +11,7 @@ import {
 import { useTranslation } from 'react-i18next';
 import { Link } from 'react-router';
 
-import { formatEntityDisplayName, isOrganization } from '@/resources/utils/reporteeUtils';
+import { formatEntityDisplayName, getPartyColor } from '@/resources/utils/reporteeUtils';
 import { useGetReporteeQuery, useGetUserProfileQuery } from '@/rtk/features/userInfoApi';
 import { useIsTabletOrSmaller } from '@/resources/utils/screensizeUtils';
 import { getAfUrl, getAltinnStartPageUrl, getLogoutUrl } from '@/resources/utils/pathUtils';
@@ -141,7 +141,7 @@ export const useGlobalMenu = ({
 
     currentAccount: {
       name: reportee?.name || '',
-      type: isOrganization(reportee) ? 'company' : 'person',
+      type: getPartyColor(reportee),
       id: reportee?.partyId?.toString() ?? '',
     },
   };

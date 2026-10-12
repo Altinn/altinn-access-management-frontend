@@ -2,8 +2,8 @@ import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { DsHeading, DsParagraph } from '@altinn/altinn-components';
 
-import { PartyType, type AuthorizedPartyEntity } from '@/dataObjects/dtos/Party';
-import { formatOrgNr } from '@/resources/utils/reporteeUtils';
+import type { AuthorizedPartyEntity } from '@/dataObjects/dtos/Party';
+import { formatOrgNr, getPartyColor } from '@/resources/utils/reporteeUtils';
 import { RequestPageLayout } from '@/features/amUI/common/RequestPageLayout/RequestPageLayout';
 
 import type { RegisteredSystem } from '../../types';
@@ -33,7 +33,7 @@ export const RequestPageBase = ({
 
   const account: { name: string; type: 'person' | 'company' } = {
     name: reportee?.name || '',
-    type: reportee?.type === PartyType.Person ? 'person' : 'company',
+    type: getPartyColor(reportee),
   };
 
   return (
