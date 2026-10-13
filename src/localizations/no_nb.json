@@ -860,6 +860,7 @@
     "69_delegation_right_access_list_validation_fail": "Delegering av tjenester feilet: Mottakeren har ikke rettighet basert på delegasjon via tilgangsliste.",
     "70_delegation_right_resource_not_delegable": "Delegering av tjenester feilet: Ressursen kan ikke delegeres til en annen bruker eller enhet.",
     "71_delegation_right_resource_is_maskinporten_schema": "Delegering av tjenester feilet: Ressursen kan ikke delegeres fordi den er en Maskinporten skjemaressurs.",
+    "82_rights_resource_not_delegable": "En eller flere tjenester kan ikke lenger delegeres. Tjenesteeier har merket tjenesten som ikke delegerbar.",
     "title_resources": "Tjenester som ikke kunne delegeres:",
     "title_accesspackages": "Tilgangspakker som ikke kunne delegeres:",
     "summary_both": "Delegering feilet: du mangler nødvendige fullmakter til å delegere tjenestene og tilgangspakkene som kreves.",
