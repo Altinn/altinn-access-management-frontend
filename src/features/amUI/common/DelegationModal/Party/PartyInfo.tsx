@@ -7,6 +7,7 @@ import {
   getFormattedDateOfBirthLabel,
   isSubUnitByType,
   formatEntityDisplayName,
+  getAvatarType,
 } from '@/resources/utils/reporteeUtils';
 import { PartyType, type PartyEntity } from '@/dataObjects/dtos/Party';
 import type { AccessPackage } from '@/rtk/features/accessPackageApi';
@@ -67,7 +68,7 @@ export const PartyInfo = ({
   });
 
   const userName = formatEntityDisplayName(party);
-  const partyAvatarType = party.type === PartyType.Person ? 'person' : 'company';
+  const partyAvatarType = getAvatarType(party);
 
   const canRevoke = userHasAccess && availableActions.includes(DelegationAction.REVOKE);
   const canDelegate =
