@@ -41,9 +41,6 @@ export const PageLayoutWrapper = ({
   const footer = useFooter();
   const { sidebarItems, shortcutsMenuItem } = useSidebarItems({ isSmall: false });
 
-  const isNewBanner = new Date() >= new Date(2026, 5, 20); // Change to new banner on June 20th, 2026
-  const bannerLink = isNewBanner ? getBannerLink_new(languageCode) : getBannerLink(languageCode);
-
   return (
     <RootProvider languageCode={languageCode}>
       <NavigationFocus />
@@ -53,13 +50,11 @@ export const PageLayoutWrapper = ({
           theme='subtle'
           header={header}
           banner={{
-            title: !isNewBanner ? t('info_banner.info') : t('info_banner.info_new'),
+            title: t('info_banner.info'),
             link: {
-              label: !isNewBanner ? t('info_banner.link') : t('info_banner.link_new'),
-              href: bannerLink,
+              label: t('info_banner.link'),
+              href: getBannerLink(languageCode),
             },
-            color: !isNewBanner ? 'warning' : undefined,
-            variant: !isNewBanner ? 'alert' : undefined,
           }}
           skipLink={{
             href: '#main-content',
@@ -94,17 +89,6 @@ export const PageLayoutWrapper = ({
 };
 
 const getBannerLink = (languageCode: string) => {
-  switch (languageCode) {
-    case 'en':
-      return 'https://info.altinn.no/en/news/check-if-you-need-to-take-action-before-we-shut-down-the-old-altinn/';
-    case 'nn':
-      return 'https://info.altinn.no/nn/nyheiter/sjekk-om-du-ma-gjere-noko-for-vi-slar-av-gamle-altinn/';
-    default:
-      return 'https://info.altinn.no/nyheter/sjekk-om-du-ma-gjore-noe-for-vi-slar-av-gamle-altinn/';
-  }
-};
-
-const getBannerLink_new = (languageCode: string) => {
   switch (languageCode) {
     case 'en':
       return 'https://info.altinn.no/en/news/new-power-of-attorney-solution/';

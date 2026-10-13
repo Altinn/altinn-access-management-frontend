@@ -23,7 +23,6 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Moq;
-using User = Altinn.AccessManagement.UI.Core.Models.User.User;
 
 namespace Altinn.AccessManagement.UI.Tests.Controllers
 {
@@ -76,27 +75,6 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
             {
                 // If reflection fails, just continue - tests might still work
             }
-        }
-
-        /// <summary>
-        /// Assert that List of right holders is returned when valid input
-        /// </summary>
-        [Fact]
-        public async Task GetReporteeRightHolders_ReturnsList()
-        {
-            const int userId = 1234;
-            var token = PrincipalUtil.GetToken(userId, 1234, 2);
-            _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
-            string reporteePartyID = "51329012";
-
-            string path = Path.Combine(_testDataFolder, "Data", "ExpectedResults", "RightHolders", $"{reporteePartyID}.json");
-            List<User> expectedResponse = Util.GetMockData<List<User>>(path);
-
-            var response = await _client.GetAsync($"accessmanagement/api/v1/connection/reportee/{reporteePartyID}/rightholders");
-            List<User> actualResponse = await response.Content.ReadFromJsonAsync<List<User>>();
-
-            Assert.Equal(HttpStatusCode.OK, response.StatusCode);
-            AssertionUtil.AssertCollections(expectedResponse, actualResponse, AssertionUtil.AssertEqual);
         }
 
         /// <summary>

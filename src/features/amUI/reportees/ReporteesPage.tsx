@@ -1,7 +1,8 @@
-import { DsAlert, formatDisplayName } from '@altinn/altinn-components';
+import { DsAlert } from '@altinn/altinn-components';
 import { useTranslation } from 'react-i18next';
 import React from 'react';
 
+import { formatEntityDisplayName } from '@/resources/utils/reporteeUtils';
 import { useDocumentTitle } from '@/resources/hooks/useDocumentTitle';
 import { PageWrapper } from '@/components';
 import { getCookie } from '@/resources/Cookie/CookieMethods';
@@ -22,10 +23,7 @@ export const ReporteesPage = () => {
   const { data: reportee, isLoading: reporteeLoading } = useGetReporteeQuery();
   const { data: currentUser, isLoading: currentUserIsLoading } = useGetPartyFromLoggedInUserQuery();
   const isCurrentUserReportee = reportee?.partyUuid === currentUser?.partyUuid;
-  const name = formatDisplayName({
-    fullName: reportee?.name || '',
-    type: reportee?.type === 'Person' ? 'person' : 'company',
-  });
+  const name = formatEntityDisplayName(reportee);
 
   useDocumentTitle(t('reportees_page.page_title'));
 

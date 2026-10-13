@@ -1,14 +1,9 @@
 import React, { useId, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import {
-  DsAlert,
-  DsHeading,
-  DsParagraph,
-  DsSkeleton,
-  formatDisplayName,
-} from '@altinn/altinn-components';
+import { DsAlert, DsHeading, DsParagraph, DsSkeleton } from '@altinn/altinn-components';
 import { useParams } from 'react-router';
 
+import { formatEntityDisplayName } from '@/resources/utils/reporteeUtils';
 import {
   useAddAgentAccessPackagesMutation,
   useAddAgentResourcesMutation,
@@ -19,7 +14,7 @@ import {
   useRemoveAgentAccessPackagesMutation,
   useRemoveAgentResourcesMutation,
 } from '@/rtk/features/clientApi';
-import { PartyType, useGetIsClientAdminQuery } from '@/rtk/features/userInfoApi';
+import { useGetIsClientAdminQuery } from '@/rtk/features/userInfoApi';
 import { amUIPath } from '@/routes/paths';
 import { useSnackbarOnIdle } from '@/resources/hooks/useSnackbarOnIdle';
 
@@ -138,17 +133,9 @@ export const ClientDetails = () => {
   }
 
   const backUrl = `/${amUIPath.ClientAdministration}#clients`;
-  const clientName = formatDisplayName({
-    fullName: fromParty?.name || '',
-    type: fromParty?.partyTypeName === PartyType.Person ? 'person' : 'company',
-  });
+  const clientName = formatEntityDisplayName(fromParty);
   const actingPartyName =
-    actingParty?.name && actingParty.partyTypeName
-      ? formatDisplayName({
-          fullName: actingParty.name,
-          type: actingParty.partyTypeName === PartyType.Person ? 'person' : 'company',
-        })
-      : '';
+    actingParty?.name && actingParty.partyTypeName ? formatEntityDisplayName(actingParty) : '';
   const fromPartyUuid = fromParty?.partyUuid ?? id;
   const actingPartyUuid = actingParty?.partyUuid;
 

@@ -1,7 +1,8 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
-import { DsAlert, DsHeading, DsParagraph, formatDisplayName } from '@altinn/altinn-components';
+import { DsAlert, DsHeading, DsParagraph } from '@altinn/altinn-components';
 
+import { formatEntityDisplayName } from '@/resources/utils/reporteeUtils';
 import {
   type ResourceDelegation,
   type ServiceResource,
@@ -10,7 +11,6 @@ import { AmPagination } from '@/components/Paginering/AmPaginering';
 import { ResourceList } from '@/features/amUI/common/ResourceList/ResourceList';
 import { SkeletonResourceList } from '@/features/amUI/common/ResourceList/SkeletonResourceList';
 import { getInheritedStatus } from '@/features/amUI/common/useInheritedStatus';
-import { PartyType } from '@/rtk/features/userInfoApi';
 
 import { DelegationAction } from '../EditModal';
 import { useDelegationModalContext } from '../DelegationModalContext';
@@ -96,10 +96,7 @@ export const SearchResults = ({
       () => revokeFromList(resource),
       {
         name: resource.title,
-        toName: formatDisplayName({
-          fullName: toParty?.name || '',
-          type: toParty?.partyTypeName === PartyType.Person ? 'person' : 'company',
-        }),
+        toName: formatEntityDisplayName(toParty),
       },
     );
 

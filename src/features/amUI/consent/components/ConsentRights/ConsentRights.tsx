@@ -3,7 +3,7 @@ import React from 'react';
 import { DsLink, DsParagraph } from '@altinn/altinn-components';
 import DOMPurify from 'dompurify';
 import type { DOMNode, HTMLReactParserOptions } from 'html-react-parser';
-import parseHtmlToReact, { domToReact } from 'html-react-parser';
+import parseHtmlToReact, { domToReact, Element } from 'html-react-parser';
 
 import type { ConsentLanguage, ConsentRight } from '../../types';
 
@@ -38,7 +38,7 @@ export const ConsentRights = ({ rights, language }: ConsentRightsProps) => {
 
 const parserOptions: HTMLReactParserOptions = {
   replace: (domNode) => {
-    if (domNode.type === 'tag' && domNode.name === 'a') {
+    if (domNode instanceof Element && domNode.name === 'a') {
       const href = domNode.attribs?.href;
       if (!href) {
         return null;

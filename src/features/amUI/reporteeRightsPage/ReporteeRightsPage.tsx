@@ -1,9 +1,8 @@
 import * as React from 'react';
 import { useTranslation } from 'react-i18next';
 import { useParams } from 'react-router';
-import { formatDisplayName } from '@altinn/altinn-components';
 
-import { PartyType } from '@/rtk/features/userInfoApi';
+import { formatEntityDisplayName } from '@/resources/utils/reporteeUtils';
 import { useDocumentTitle } from '@/resources/hooks/useDocumentTitle';
 import { PageWrapper } from '@/components';
 import { amUIPath } from '@/routes/paths';
@@ -72,10 +71,7 @@ const BreadcrumbsWrapper = () => {
     <Breadcrumbs
       items={['root', 'reportees']}
       lastBreadcrumb={{
-        label: formatDisplayName({
-          fullName: fromParty?.name ?? '',
-          type: fromParty?.partyTypeName === PartyType.Organization ? 'company' : 'person',
-        }),
+        label: formatEntityDisplayName(fromParty),
       }}
     />
   );

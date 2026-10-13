@@ -3,12 +3,12 @@ import { useTranslation } from 'react-i18next';
 import {
   DsAlert,
   DsDialog,
-  formatDisplayName,
   Timeline,
   TimelineActivity,
   TimelineSegment,
 } from '@altinn/altinn-components';
 
+import { formatEntityDisplayName } from '@/resources/utils/reporteeUtils';
 import { useDocumentTitle } from '@/resources/hooks/useDocumentTitle';
 import { PageWrapper } from '@/components';
 import { useGetConsentLogQuery } from '@/rtk/features/consentApi';
@@ -56,10 +56,7 @@ export const ConsentHistoryPage = () => {
     modalRef.current?.showModal();
   };
 
-  const reporteeName = formatDisplayName({
-    fullName: reportee?.name || '',
-    type: reportee?.type === 'Person' ? 'person' : 'company',
-  });
+  const reporteeName = formatEntityDisplayName(reportee);
 
   return (
     <PageWrapper>

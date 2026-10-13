@@ -366,20 +366,6 @@ namespace Altinn.AccessManagement.UI.Tests.Utils
 
         }
 
-        public static void AssertEqual(User expected, User actual)
-        {
-            Assert.NotNull(actual);
-            Assert.NotNull(expected);
-
-            Assert.Equal(expected.Name, actual.Name);
-            Assert.Equal(expected.UnitType, actual.UnitType);
-            Assert.Equal(expected.OrganizationNumber, actual.OrganizationNumber);
-            Assert.Equal(expected.PartyUuid, actual.PartyUuid);
-            Assert.Equal(expected.PartyType, actual.PartyType);
-            AssertCollections(expected.Roles, actual.Roles, Assert.Equal);
-
-        }
-
         public static void AssertEqual(SimplifiedParty expected, SimplifiedParty actual)
         {
             Assert.NotNull(actual);

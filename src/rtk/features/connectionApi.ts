@@ -5,7 +5,6 @@ import { getCookie } from '@/resources/Cookie/CookieMethods';
 import { type Entity } from '@/dataObjects/dtos/Common';
 
 import { type ExtendedUser } from './userInfoApi';
-import type { Party } from './lookupApi';
 
 export enum ConnectionUserType {
   Person = 'Person',
@@ -24,12 +23,6 @@ export interface Connection {
   roles: RoleInfo[];
   connections: Connection[];
   sortKey?: string;
-}
-
-export interface UserInfo {
-  name: string;
-  uuid: string;
-  party: Party;
 }
 
 export interface SimplifiedParty {
@@ -111,6 +104,7 @@ export const connectionApi = createApi({
         return { status: response.status, data: new Date().toISOString() };
       },
     }),
+    // This endpoint is not currently in use.
     validateNewUserPerson: builder.mutation<string, { ssn: string; lastName: string }>({
       query: ({ ssn, lastName }) => ({
         url: `reportee/${getCookie('AltinnPartyUuid')}/rightholder/validateperson`,

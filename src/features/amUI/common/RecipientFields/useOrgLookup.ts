@@ -2,13 +2,13 @@ import { useState } from 'react';
 import type { SerializedError } from '@reduxjs/toolkit';
 import type { FetchBaseQueryError } from '@reduxjs/toolkit/query';
 
-import { useGetOrganizationQuery, type Organization } from '@/rtk/features/lookupApi';
+import { useGetOrganizationQuery, type Party } from '@/rtk/features/lookupApi';
 
 export interface OrgLookup {
   orgNumber: string;
   /*** Spaces are stripped, so a number typed in groups still matches the 9 digit lookup */
   setOrgNumber: (value: string) => void;
-  orgData?: Organization;
+  orgData?: Party;
   isFetching: boolean;
   isError: boolean;
   error: FetchBaseQueryError | SerializedError | undefined;

@@ -1,7 +1,8 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
-import { DsAlert, DsParagraph, DsHeading, formatDisplayName } from '@altinn/altinn-components';
+import { DsAlert, DsParagraph, DsHeading } from '@altinn/altinn-components';
 
+import { formatEntityDisplayName } from '@/resources/utils/reporteeUtils';
 import type { ServiceResource } from '@/rtk/features/singleRights/singleRightsApi';
 import { isAccessListFailure } from '@/resources/utils/errorCodeUtils';
 import { useGetReporteeQuery } from '@/rtk/features/userInfoApi';
@@ -69,10 +70,7 @@ export const ResourceAlert = ({
         <DsParagraph>
           {t('delegation_modal.service_error.access_list_service', {
             resourceOwner: resource.resourceOwnerName,
-            reportee: formatDisplayName({
-              fullName: reportee?.name ?? '',
-              type: reportee?.organizationNumber ? 'company' : 'person',
-            }),
+            reportee: formatEntityDisplayName(reportee),
           })}
         </DsParagraph>
       );

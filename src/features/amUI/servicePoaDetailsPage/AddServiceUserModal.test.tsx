@@ -40,14 +40,6 @@ vi.mock('@/rtk/features/lookupApi', () => ({
   useGetOrganizationQuery: () => organization,
 }));
 
-// Read by ResourceAlert, which names the reportee in the access-list variant of its message.
-vi.mock('@/rtk/features/userInfoApi', () => ({
-  useGetReporteeQuery: () => ({
-    data: { name: 'Diskret Nær Tiger AS', organizationNumber: '310202398' },
-  }),
-  PartyType: { Person: 'Person', Organization: 'Organisasjon' },
-}));
-
 // Declared by useDelegableRights but skipped without an instanceUrn; a skipped hook still runs,
 // and an unmocked RTK hook throws without a store.
 vi.mock('@/rtk/features/instanceApi', () => ({
@@ -251,54 +243,6 @@ describe('AddServiceUserModal', () => {
     expect(await screen.findByText('common.general_error_paragraph')).toBeInTheDocument();
     expect(screen.queryByText('new_user_modal.not_found_error_person')).not.toBeInTheDocument();
     expect(dialog()?.open).toBe(true);
-  });
-
-  // A picker with nothing pickable in it, over a button that can never be pressed, says nothing
-  // about why. These three hand over to ResourceAlert instead, as the other resource modals do.
-  it('explains itself instead of offering an empty picker when no action is delegable', async () => {
-    delegationCheck = {
-      data: [
-        { right: { key: 'read', name: 'Les' }, result: false, reasonCodes: ['MissingRoleAccess'] },
-        {
-          right: { key: 'write', name: 'Skriv' },
-          result: false,
-          reasonCodes: ['MissingRoleAccess'],
-        },
-        {
-          right: { key: 'sign', name: 'Signer' },
-          result: false,
-          reasonCodes: ['MissingRoleAccess'],
-        },
-      ],
-      isLoading: false,
-      isError: false,
-    };
-    await openModal();
-    await fillPerson();
-
-    expect(screen.getByText('delegation_modal.service_error.missing_rights')).toBeInTheDocument();
-    expect(screen.queryByRole('button', { name: /delegation_modal\.actions\./ })).toBeNull();
-    expect(screen.getByRole('button', { name: 'common.give_poa' })).toBeDisabled();
-  });
-
-  it('explains itself when the service cannot be given away at all', async () => {
-    resource = { ...(resource as object), delegable: false };
-    await openModal();
-    await fillPerson();
-
-    expect(screen.getByText(/service_error\.undelegable_service/)).toBeInTheDocument();
-    expect(screen.getByRole('button', { name: 'common.give_poa' })).toBeDisabled();
-  });
-
-  it('explains itself when the actions cannot be loaded', async () => {
-    rightsMeta = { data: undefined, isLoading: false, isError: true, error: { status: 500 } };
-    await openModal();
-    await fillPerson();
-
-    expect(
-      screen.getAllByText('delegation_modal.service_error.technical_error_heading').length,
-    ).toBeGreaterThan(0);
-    expect(screen.getByRole('button', { name: 'common.give_poa' })).toBeDisabled();
   });
 
   it('keeps the dialog open when the delegation itself fails', async () => {

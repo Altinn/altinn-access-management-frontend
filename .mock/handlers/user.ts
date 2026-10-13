@@ -199,25 +199,6 @@ const getRightHoldersResponse = (requestUrl: URL): MockConnection[] => {
 };
 
 export const userHandlers = (ACCESSMANAGEMENT_BASE_URL: string) => [
-  http.get(`${ACCESSMANAGEMENT_BASE_URL}/user/reporteelist/:id`, () => {
-    return HttpResponse.json({
-      partyUuid: '54f128f7-ca7c-4a57-ad49-3787eb79b506',
-      name: 'DISKRET NÆR TIGER AS',
-      organizationNumber: '310202398',
-      subunits: [
-        {
-          partyUuid: '0020c970-ba68-44cd-8440-0894b594f58a',
-          name: 'DISKRET NÆR TIGER AS',
-          organizationNumber: '311312294',
-          subunits: [],
-        },
-      ],
-    });
-  }),
-  http.get(`${ACCESSMANAGEMENT_BASE_URL}/user/rightholders`, ({ request }) => {
-    const url = new URL(request.url);
-    return HttpResponse.json(getRightHoldersResponse(url));
-  }),
   http.get(`${ACCESSMANAGEMENT_BASE_URL}/connection/rightholders`, ({ request }) => {
     const url = new URL(request.url);
     const party = url.searchParams.get('party');

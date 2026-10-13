@@ -5,7 +5,6 @@ import {
   DsHeading,
   DsParagraph,
   DsSwitch,
-  formatDisplayName,
 } from '@altinn/altinn-components';
 import { DownloadIcon } from '@navikt/aksel-icons';
 import { useTranslation } from 'react-i18next';
@@ -16,7 +15,7 @@ import {
   useGetIsAdminQuery,
   useGetReporteeListForAuthorizedUserQuery,
 } from '@/rtk/features/userInfoApi';
-import { isSubUnitByType } from '@/resources/utils/reporteeUtils';
+import { isSubUnitByType, formatEntityDisplayName } from '@/resources/utils/reporteeUtils';
 
 import { usePartyRepresentation } from '../PartyRepresentationContext/PartyRepresentationContext';
 
@@ -42,7 +41,7 @@ export const DownloadFileButton = ({
 
   const { data: isAdmin } = useGetIsAdminQuery();
   const { fromParty } = usePartyRepresentation();
-  const reporteeName = formatDisplayName({ fullName: fromParty?.name || '', type: 'company' });
+  const reporteeName = formatEntityDisplayName(fromParty);
   const { data: accountList } = useGetReporteeListForAuthorizedUserQuery(undefined, {
     skip: !isAdmin || fromParty?.partyTypeName !== PartyType.Organization,
   });
@@ -50,7 +49,7 @@ export const DownloadFileButton = ({
     accountList?.find((account) => account.partyUuid === fromParty?.partyUuid)?.subunits?.length ||
     0;
   const allowSubunitDownload =
-    !isSubUnitByType(fromParty?.variant) &&
+    !isSubUnitByType(fromParty?.unitType) &&
     fromAccountSubunitsNumber > 0 &&
     fromAccountSubunitsNumber <= MAX_SUBUNITS_FOR_DOWNLOAD_OPTION;
 

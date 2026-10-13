@@ -464,14 +464,6 @@
       "count": 1
     }
   },
-  "src/features/amUI/common/PageLayoutWrapper/useGlobalMenu.tsx": {
-    "@typescript-eslint/require-await": {
-      "count": 1
-    },
-    "jsx-a11y/anchor-has-content": {
-      "count": 7
-    }
-  },
   "src/features/amUI/common/PageLayoutWrapper/useHeader.tsx": {
     "@typescript-eslint/no-floating-promises": {
       "count": 5
@@ -534,42 +526,6 @@
   },
   "src/features/amUI/common/UserSearch/permissionMapper.test.ts": {
     "@typescript-eslint/no-explicit-any": {
-      "count": 1
-    }
-  },
-  "src/features/amUI/consent/ActiveConsentsPage/ActiveConsentsPage.tsx": {
-    "@typescript-eslint/no-unsafe-assignment": {
-      "count": 2
-    },
-    "@typescript-eslint/no-unsafe-member-access": {
-      "count": 1
-    }
-  },
-  "src/features/amUI/consent/ActiveConsentsPage/ActiveConsentsPageContent.tsx": {
-    "@typescript-eslint/no-floating-promises": {
-      "count": 1
-    }
-  },
-  "src/features/amUI/consent/ConsentRequestPage/ConsentRequestPage.tsx": {
-    "@typescript-eslint/no-floating-promises": {
-      "count": 2
-    },
-    "@typescript-eslint/no-misused-promises": {
-      "count": 2
-    }
-  },
-  "src/features/amUI/consent/components/ConsentDetails/ConsentDetails.tsx": {
-    "@typescript-eslint/no-misused-promises": {
-      "count": 1
-    }
-  },
-  "src/features/amUI/consent/components/ConsentRights/ConsentRights.tsx": {
-    "@typescript-eslint/no-unsafe-enum-comparison": {
-      "count": 1
-    }
-  },
-  "src/features/amUI/consent/components/IdPortenAuthorizationDetails/IdPortenAuthorizationDetails.tsx": {
-    "@typescript-eslint/no-misused-promises": {
       "count": 1
     }
   },
@@ -763,11 +719,6 @@
   "src/features/amUI/systemUser/CreateSystemUserPage/RightsIncluded.tsx": {
     "@typescript-eslint/no-floating-promises": {
       "count": 2
-    }
-  },
-  "src/features/amUI/systemUser/SystemUserAgentDelegationPage/CustomerList.tsx": {
-    "react-hooks/set-state-in-effect": {
-      "count": 1
     }
   },
   "src/features/amUI/systemUser/SystemUserAgentDelegationPage/SystemUserAgentDelegationPage.tsx": {

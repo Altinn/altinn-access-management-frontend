@@ -1,8 +1,9 @@
 import React, { useMemo } from 'react';
-import { DsAlert, DsParagraph, DsSkeleton, formatDisplayName } from '@altinn/altinn-components';
+import { DsAlert, DsParagraph, DsSkeleton } from '@altinn/altinn-components';
 import { useTranslation } from 'react-i18next';
 
-import { PartyType, useGetReporteeQuery } from '@/rtk/features/userInfoApi';
+import { formatEntityDisplayName } from '@/resources/utils/reporteeUtils';
+import { useGetReporteeQuery } from '@/rtk/features/userInfoApi';
 import { useGetMyClientsQuery, type Client } from '@/rtk/features/clientApi';
 import { useGetPartyFromLoggedInUserQuery } from '@/rtk/features/lookupApi';
 import { useDocumentTitle } from '@/resources/hooks/useDocumentTitle';
@@ -74,15 +75,9 @@ export const MyClientsPage = () => {
     return [...dedupedClients.values()];
   }, [myClientsByProvider]);
 
-  const currentUserName = formatDisplayName({
-    fullName: currentUser?.name || '',
-    type: currentUser?.partyTypeName === PartyType.Person ? 'person' : 'company',
-  });
+  const currentUserName = formatEntityDisplayName(currentUser);
 
-  const actingPartyName = formatDisplayName({
-    fullName: reportee?.name || '',
-    type: reportee?.type === 'Person' ? 'person' : 'company',
-  });
+  const actingPartyName = formatEntityDisplayName(reportee);
 
   const errorDetails = createErrorDetails(myClientsError || currentUserError);
 

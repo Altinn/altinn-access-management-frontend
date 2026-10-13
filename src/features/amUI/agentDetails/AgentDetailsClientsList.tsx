@@ -1,6 +1,6 @@
 import React from 'react';
-import { formatDisplayName } from '@altinn/altinn-components';
 
+import { formatEntityDisplayName } from '@/resources/utils/reporteeUtils';
 import type { ActionError } from '@/resources/hooks/useActionError';
 import type {
   AddAgentAccessPackagesFn,
@@ -9,7 +9,6 @@ import type {
   RemoveAgentAccessPackagesFn,
   RemoveAgentResourcesFn,
 } from '@/rtk/features/clientApi';
-import { PartyType } from '@/rtk/features/userInfoApi';
 
 import { ClientAccessList } from '../common/ClientAccessList/ClientAccessList';
 import { useClientResourceActions } from '../common/ClientResourceList/useClientResourceActions';
@@ -67,10 +66,7 @@ export const AgentDetailsClientsList = ({
     removeAgentResources,
   });
   const { toParty } = usePartyRepresentation();
-  const agentName = formatDisplayName({
-    fullName: toParty?.name || '',
-    type: toParty?.partyTypeName === PartyType.Person ? 'person' : 'company',
-  });
+  const agentName = formatEntityDisplayName(toParty);
 
   return (
     <ClientAccessList

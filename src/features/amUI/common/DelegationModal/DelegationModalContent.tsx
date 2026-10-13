@@ -1,9 +1,9 @@
 import { Trans, useTranslation } from 'react-i18next';
 import { PlusIcon } from '@navikt/aksel-icons';
 import { type JSX } from 'react';
-import { DsDialog, formatDisplayName } from '@altinn/altinn-components';
+import { DsDialog } from '@altinn/altinn-components';
 
-import { PartyType } from '@/rtk/features/userInfoApi';
+import { formatEntityDisplayName } from '@/resources/utils/reporteeUtils';
 import type { ServiceResource } from '@/rtk/features/singleRights/singleRightsApi';
 import type { AccessPackage } from '@/rtk/features/accessPackageApi';
 
@@ -76,10 +76,7 @@ export const DelegationModalContent = ({
     setInfoView(false);
   };
 
-  const toPartyName = formatDisplayName({
-    fullName: toParty?.name ?? '',
-    type: toParty?.partyTypeName === PartyType.Person ? 'person' : 'company',
-  });
+  const toPartyName = formatEntityDisplayName(toParty);
   const hasDelegateAccess = (availableActions ?? []).includes(DelegationAction.DELEGATE);
   const isRequest = (availableActions ?? []).includes(DelegationAction.REQUEST);
 

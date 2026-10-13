@@ -1,10 +1,10 @@
-import { Button, formatDisplayName, useSnackbar } from '@altinn/altinn-components';
+import { Button, useSnackbar } from '@altinn/altinn-components';
 import * as React from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router';
 import { TrashIcon } from '@navikt/aksel-icons';
 
-import { PartyType } from '@/rtk/features/userInfoApi';
+import { formatEntityDisplayName } from '@/resources/utils/reporteeUtils';
 import { amUIPath } from '@/routes/paths';
 import type { ServiceResource } from '@/rtk/features/singleRights/singleRightsApi';
 import {
@@ -45,12 +45,7 @@ const SupplierPageContentInner = () => {
   const { toParty, actingParty } = usePartyRepresentation();
   const party = actingParty?.partyUuid;
   const supplier = toParty?.orgNumber;
-  const supplierName = toParty?.name
-    ? formatDisplayName({
-        fullName: toParty.name,
-        type: toParty.partyTypeName === PartyType.Person ? 'person' : 'company',
-      })
-    : '';
+  const supplierName = toParty?.name ? formatEntityDisplayName(toParty) : '';
 
   const deleteDialogRef = React.useRef<HTMLDialogElement>(null);
   const scopeModalRef = React.useRef<HTMLDialogElement>(null);

@@ -99,7 +99,7 @@ export const ConsentRequestPage = () => {
     if (skipLogout && isApproved) {
       setIsReceiptVisible(true);
     } else if (skipLogout && !isApproved) {
-      navigate(`/${ConsentPath.Consent}/${ConsentPath.Active}`);
+      void navigate(`/${ConsentPath.Consent}/${ConsentPath.Active}`);
     } else {
       window.location.assign(
         `${import.meta.env.BASE_URL}accessmanagement/api/v1/consent/request/${request?.id}/logout`,
@@ -156,7 +156,7 @@ export const ConsentRequestPage = () => {
         </DsParagraph>
         <DsButton
           onClick={() => {
-            navigate(`/${ConsentPath.Consent}/${ConsentPath.Active}`, {
+            void navigate(`/${ConsentPath.Consent}/${ConsentPath.Active}`, {
               state: { createdId: requestId },
             });
           }}
@@ -244,7 +244,7 @@ export const ConsentRequestPage = () => {
             variant='primary'
             aria-disabled={isActionButtonDisabled}
             loading={isApprovingConsent}
-            onClick={approveConsent}
+            onClick={() => void approveConsent()}
           >
             {memoizedRequest.isPoa
               ? t('consent_request.approve_poa')
@@ -254,7 +254,7 @@ export const ConsentRequestPage = () => {
             variant='primary'
             aria-disabled={isActionButtonDisabled}
             loading={isRejectingConsent}
-            onClick={rejectConsent}
+            onClick={() => void rejectConsent()}
           >
             {memoizedRequest.isPoa
               ? t('consent_request.reject_poa')

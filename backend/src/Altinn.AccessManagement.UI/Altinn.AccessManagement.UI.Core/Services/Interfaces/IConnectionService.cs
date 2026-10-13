@@ -9,13 +9,6 @@ namespace Altinn.AccessManagement.UI.Core.Services.Interfaces
     public interface IConnectionService
     {
         /// <summary>
-        /// Gets the right holders of a given reportee
-        /// </summary>
-        /// <param name="partyId">The party Id of the reportee</param>
-        /// <returns>List of right holders</returns>
-        Task<List<User>> GetReporteeConnections(int partyId);
-
-        /// <summary>
         /// Checks that a person with the provided person identifier (SSN or username) and lastname exists. If they do, the person's partyUuid is returned.
         /// </summary>
         /// <param name="personIdentifier">The ssn or username of the user</param>

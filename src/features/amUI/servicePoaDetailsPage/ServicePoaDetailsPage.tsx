@@ -10,7 +10,6 @@ import { amUIPath } from '@/routes/paths/amUIPath';
 
 import { Breadcrumbs } from '../common/Breadcrumbs/Breadcrumbs';
 import { PageContainer } from '../common/PageContainer/PageContainer';
-import { PageDivider } from '../common/PageDivider/PageDivider';
 import { PageLayoutWrapper } from '../common/PageLayoutWrapper';
 import { PartyRepresentationProvider } from '../common/PartyRepresentationContext/PartyRepresentationContext';
 import { RestoreFocusProvider, useRestoreFocus } from '../common/RestoreFocus';
@@ -65,7 +64,6 @@ export const ServicePoaDetailsPage = () => {
                     resource={resource}
                     isLoading={isLoading}
                   />
-                  <PageDivider />
                   <ServiceUsersSection
                     resource={resource}
                     isLoading={isLoading}

@@ -1,14 +1,9 @@
 import { useCallback, useMemo, useState } from 'react';
 import { Trans, useTranslation } from 'react-i18next';
 import { Link, useNavigate } from 'react-router';
-import {
-  DsHeading,
-  DsParagraph,
-  DsSearch,
-  DsSwitch,
-  formatDisplayName,
-} from '@altinn/altinn-components';
+import { DsHeading, DsParagraph, DsSearch, DsSwitch } from '@altinn/altinn-components';
 
+import { formatEntityDisplayName } from '@/resources/utils/reporteeUtils';
 import { debounce } from '@/resources/utils';
 import {
   type Connection,
@@ -47,10 +42,7 @@ export const UsersList = () => {
     },
   );
   const { partyConnection: currentUser, isLoading: currentUserLoading } = useSelfConnection();
-  const fromPartyName = formatDisplayName({
-    fullName: fromParty?.name ?? '',
-    type: fromParty?.partyTypeName === PartyType.Person ? 'person' : 'company',
-  });
+  const fromPartyName = formatEntityDisplayName(fromParty);
 
   const handleNewUser = (user: User) => {
     navigate(`/users/${user.id}`);
