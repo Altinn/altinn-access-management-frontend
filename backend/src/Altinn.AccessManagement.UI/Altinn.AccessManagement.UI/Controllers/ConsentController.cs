@@ -222,6 +222,12 @@ namespace Altinn.AccessManagement.UI.Controllers
 
             if (redirectUrlResponse.IsSuccess)
             {
+                // do not log out user if redirect url is on the same host as Altinn (e.g. Arbeidsflate)
+                if (IsLocalRedirectUrl(redirectUrlResponse.Value))
+                {
+                    return Redirect(redirectUrlResponse.Value);
+                }
+
                 // store encrypted redirect url in cookie
                 string encryptedUrl = await _encryptionService.EncryptText(redirectUrlResponse.Value);
                 HttpContext.Response.Cookies.Append(_platformSettings.Value.AltinnLogoutInfoCookieName, $"amSafeRedirectUrl={encryptedUrl}", cookieOptions);
@@ -229,6 +235,18 @@ namespace Altinn.AccessManagement.UI.Controllers
             
             string logoutUrl = $"{_platformSettings.Value.ApiAuthenticationEndpoint}logout";
             return Redirect(logoutUrl);
+        }
+
+        private bool IsLocalRedirectUrl(string redirectUrl)
+        {
+            string hostname = _generalSettings.Value.Hostname;
+            if (string.IsNullOrEmpty(hostname) || !Uri.TryCreate(redirectUrl, UriKind.Absolute, out Uri uri) || uri.Scheme != Uri.UriSchemeHttps)
+            {
+                return false;
+            }
+
+            return string.Equals(uri.Host, hostname, StringComparison.OrdinalIgnoreCase)
+                || uri.Host.EndsWith($".{hostname}", StringComparison.OrdinalIgnoreCase);
         }
     }
 }

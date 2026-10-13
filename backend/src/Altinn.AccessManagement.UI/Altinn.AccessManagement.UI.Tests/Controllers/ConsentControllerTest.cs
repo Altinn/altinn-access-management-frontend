@@ -288,6 +288,26 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
         }
 
         /// <summary>
+        ///     Test case: Logout checks that user is not logged out when redirect url is on the same host as Altinn
+        ///     Expected: Logout redirects directly to redirect url without setting logout cookie
+        /// </summary>
+        [Fact]
+        public async Task LogoutAfterReject_LocalRedirectUrl_RedirectsWithoutLogout()
+        {
+            // Arrange
+            string expectedRedirectUrl = "https://af.localhost/inbox?Status=Failed&ErrorMessage=User+did+not+give+consent";
+            string rejectedRequestId = "b8d3f1a2-6c4e-4f7a-9e2d-3a5b7c9d1e0f";
+
+            // Act
+            HttpResponseMessage httpResponse = await _client.GetAsync($"accessmanagement/api/v1/consent/request/{rejectedRequestId}/logout");
+
+            // Assert
+            Assert.Equal(HttpStatusCode.Found, httpResponse.StatusCode);
+            Assert.Equal(expectedRedirectUrl, httpResponse.Headers.Location.OriginalString);
+            Assert.False(httpResponse.Headers.TryGetValues("Set-Cookie", out IEnumerable<string> cookies) && cookies.Any(c => c.StartsWith("AltinnLogoutInfo=")));
+        }
+
+        /// <summary>
         ///     Test case: GetActiveConsents checks that active consents are returned
         ///     Expected: GetActiveConsents returns active consents
         /// </summary>
