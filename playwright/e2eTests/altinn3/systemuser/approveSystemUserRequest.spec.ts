@@ -1,6 +1,6 @@
 import { test, expect } from 'playwright/fixture/pomFixture';
 import { TestdataApi } from 'playwright/util/TestdataApi';
-import type { ApiRequests } from 'playwright/api-requests/SystemUserApiRequests';
+import type { SystemUserApiRequests } from 'playwright/api-requests/SystemUserApiRequests';
 
 import { systemUserOwners } from './testdata';
 const owner = systemUserOwners.requests;
@@ -10,7 +10,7 @@ const testUserPid = owner.pid;
 
 test.describe('Godkjenn og avvis Systembrukerforespørsel', () => {
   let externalRef: string;
-  let response: Awaited<ReturnType<ApiRequests['postSystemuserRequest']>>;
+  let response: Awaited<ReturnType<SystemUserApiRequests['postSystemuserRequest']>>;
 
   test.beforeEach(async ({ api }) => {
     externalRef = TestdataApi.generateExternalRef();

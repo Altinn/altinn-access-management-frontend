@@ -1,6 +1,5 @@
 import { expect, test } from 'playwright/fixture/pomFixture';
 import { Language } from 'playwright/pages/LanguageMenu';
-import { TestdataApi } from 'playwright/util/TestdataApi';
 
 import { systemUserOwners } from './testdata';
 
@@ -50,7 +49,7 @@ test.describe('System Register', async () => {
         owner.pid,
         owner.orgNo,
       );
-      await TestdataApi.removeSystem(vendorOrgNumber, system);
+      await api.systemUsers.deleteSystemInSystemRegister(vendorOrgNumber, system);
     }
   });
 });

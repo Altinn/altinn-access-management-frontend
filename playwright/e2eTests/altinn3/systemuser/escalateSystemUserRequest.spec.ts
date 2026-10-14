@@ -55,6 +55,7 @@ test.describe('Systembruker - Eskaler', () => {
     systemUserPage,
     browser,
     api,
+    language,
   }): Promise<void> => {
     await test.step('Login as regular user, select actor and escalate request', async () => {
       await page.goto(response.confirmUrl);
@@ -65,9 +66,9 @@ test.describe('Systembruker - Eskaler', () => {
 
     const managerContext = await browser.newContext();
     const managerPage = await managerContext.newPage();
-    const managerLogin = new LoginPage(managerPage, api);
-    const managerSystemUserPage = new SystemUserPage(managerPage);
-    const managerClientDelegationPage = new ClientDelegationPage(managerPage);
+    const managerLogin = new LoginPage(managerPage, api, language);
+    const managerSystemUserPage = new SystemUserPage(managerPage, language);
+    const managerClientDelegationPage = new ClientDelegationPage(managerPage, language);
 
     await test.step('Login as manager and choose reportee', async () => {
       await managerLogin.LoginToAccessManagement(managerPid);

@@ -1,5 +1,4 @@
 import { expect, test } from 'playwright/fixture/pomFixture';
-import { TestdataApi } from 'playwright/util/TestdataApi';
 
 import { systemUserOwners } from './testdata';
 const owner = systemUserOwners.deletion;
@@ -53,7 +52,7 @@ test.describe('System user deletion', () => {
         owner.orgNo,
       );
       // Remove system after deleting its users
-      await TestdataApi.removeSystem(vendorOrgNumber, systemId);
+      await api.systemUsers.deleteSystemInSystemRegister(vendorOrgNumber, systemId);
     }
   });
 });

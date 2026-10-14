@@ -5,7 +5,7 @@ import { EnduserConnection } from './EnduserConnection';
 import { MaskinportenApiRequests } from './MaskinportenApiRequests';
 import { RequestApiRequests } from './RequestApiRequests';
 import { SettingsApiRequests } from './SettingsApiRequests';
-import { ApiRequests } from './SystemUserApiRequests';
+import { SystemUserApiRequests } from './SystemUserApiRequests';
 
 /** All API clients for test-data setup and cleanup, handed to specs as the `api` fixture. */
 export class ApiClient {
@@ -15,6 +15,6 @@ export class ApiClient {
   readonly maskinporten = new MaskinportenApiRequests();
   readonly requests = new RequestApiRequests();
   readonly settings = new SettingsApiRequests();
-  readonly systemUsers = new ApiRequests();
+  readonly systemUsers = new SystemUserApiRequests();
   readonly token = token;
 }

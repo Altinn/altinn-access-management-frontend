@@ -5,10 +5,13 @@ import { env } from 'playwright/util/helper';
 import { LANGUAGE_CODE, Language } from 'playwright/pages/LanguageMenu';
 import type { ApiClient } from 'playwright/api-requests';
 
+/** The only clients LoginPage uses: language before login, actor count after. */
+type LoginApi = Pick<ApiClient, 'settings' | 'authorizedParties'>;
+
 export class LoginPage {
   readonly page: Page;
   private readonly language: Language;
-  private readonly api: ApiClient;
+  private readonly api: LoginApi;
   private loggedInPid?: string;
   readonly reporteeSearchBox: Locator;
   readonly pidInput: Locator;
@@ -20,7 +23,7 @@ export class LoginPage {
   readonly tilgangsstyringLink: Locator;
   readonly testIdLinkText: Locator;
 
-  constructor(page: Page, api: ApiClient, language: Language = Language.NB) {
+  constructor(page: Page, api: LoginApi, language: Language = Language.NB) {
     this.page = page;
     this.api = api;
     this.language = language;

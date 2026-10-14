@@ -7,6 +7,7 @@ Coderabbit, ignore this file.
 Use Playwright's built-in locators. They have auto-waiting and retry built in.
 
 **Priority order:**
+
 1. `getByRole()` — always preferred, reflects what users and assistive technology see
 2. `getByText()` — for non-interactive elements like labels, badges, org numbers
 3. `getByLabel()`, `getByPlaceholder()`, `getByTitle()` — for form inputs
@@ -16,24 +17,25 @@ Use Playwright's built-in locators. They have auto-waiting and retry built in.
 
 ```ts
 // Bad
-page.locator('span[data-variant="subtle"]', { hasText: 'Din virksomhet' })
-page.locator('.button-primary')
+page.locator('span[data-variant="subtle"]', { hasText: 'Din virksomhet' });
+page.locator('.button-primary');
 
 // Good
-page.getByText('Din virksomhet', { exact: true })
-page.getByRole('button', { name: 'Godkjenn' })
+page.getByText('Din virksomhet', { exact: true });
+page.getByRole('button', { name: 'Godkjenn' });
 ```
 
 When a locator matches multiple elements, narrow it by chaining or filtering rather than using `.first()` or indexes:
 
 ```ts
 // Bad — fragile, relies on DOM order
-page.getByRole('button', { name: /^Legg til/ }).first()
+page.getByRole('button', { name: /^Legg til/ }).first();
 
 // Good — scoped to the relevant list item
-page.getByRole('listitem')
+page
+  .getByRole('listitem')
   .filter({ has: page.getByRole('heading', { name: orgName, level: 3 }) })
-  .getByText(formattedOrgNo, { exact: true })
+  .getByText(formattedOrgNo, { exact: true });
 ```
 
 ## Assertions
@@ -41,11 +43,8 @@ page.getByRole('listitem')
 Use web-first assertions. They wait and retry automatically.
 
 ```ts
-// Bad — evaluates immediately, no retry -- deprecated
-expect(await element.isVisible()).toBe(true)
-
 // Good — retries until condition is met or timeout
-await expect(page.getByText('welcome')).toBeVisible()
+await expect(page.getByText('welcome')).toBeVisible();
 ```
 
 Use `expect.soft()` when you want to verify multiple things in the same test and see all failures at once, not just the first.
@@ -64,6 +63,7 @@ test('my test', async ({ clientDelegationPage }) => { ... });
 ```
 
 When adding a new page object class:
+
 1. Import it in `pomFixture.ts`
 2. Add it to the `Fixtures` type
 3. Register it with `async ({ page }, use) => { await use(new MyPage(page)); }`
@@ -77,10 +77,14 @@ Test-data setup and cleanup go through the worker-scoped `api` fixture (`fixture
 ```ts
 // Bad
 const api = new EnduserConnection();
-test.beforeEach(async () => { await api.addConnection(pid, org, to); });
+test.beforeEach(async () => {
+  await api.addConnection(pid, org, to);
+});
 
 // Good
-test.beforeEach(async ({ api }) => { await api.connections.addConnection(pid, org, to); });
+test.beforeEach(async ({ api }) => {
+  await api.connections.addConnection(pid, org, to);
+});
 ```
 
 Helper functions take the client they need as a parameter (e.g. `connections: EnduserConnection`) instead of closing over a module-level instance. A new client is added as a field on `ApiClient`.
@@ -103,16 +107,22 @@ Each test must be fully independent. Never rely on state left by a previous test
 - Wrap each cleanup step in its own `try/catch` so one failure doesn't prevent others
 
 ```ts
-test.afterEach(async ({}, testInfo) => {
+test.afterEach(async ({ api }, testInfo) => {
   if (testInfo.status === 'passed') return;
 
   try {
-    await api.deleteAgentSystemUser(systemId, partyOrgNo, externalRef, managerPid);
+    await api.systemUsers.deleteAgentSystemUser(
+      vendorOrgNo,
+      systemId,
+      partyOrgNo,
+      externalRef,
+      managerPid,
+    );
   } catch (error) {
     console.error('Cleanup: Failed to delete agent system user:', error);
   }
   try {
-    await api.deleteSystemInSystemRegister(name);
+    await api.systemUsers.deleteSystemInSystemRegister(vendorOrgNo, name);
   } catch (error) {
     console.error('Cleanup: Failed to delete system from system register:', error);
   }
@@ -127,20 +137,20 @@ If a test has no UI deletion step and cleanup should always run, omit the `statu
 
 Prefer API calls over UI for setup and teardown. Tests should only use the browser for what actually needs browser verification.
 
-- Use `ApiRequests` for system register and system user CRUD
-- Use `EnduserConnection` for org-to-org delegation setup
+- Use `api.systemUsers` for system register and system user CRUD
+- Use `api.connections` for org-to-org delegation setup
 - Track `systemId` and `externalRef` at describe scope so `afterEach` can use them
 
 ## Test data — never share or reuse
 
 **Each test run must create its own test data from scratch and clean it up afterwards.**
 
-This is especially critical for anything involving the connections API (`EnduserConnection`) or access package delegations (tilgangspakker). These operations mutate shared state in Altinn — delegations, system users, and connections persist across runs if not cleaned up. If two tests share the same org numbers, PIDs, or system IDs, they will interfere with each other when run in parallel or back-to-back.
+This is especially critical for anything involving the connections API (`api.connections`) or access package delegations (tilgangspakker). These operations mutate shared state in Altinn — delegations, system users, and connections persist across runs if not cleaned up. If two tests share the same org numbers, PIDs, or system IDs, they will interfere with each other when run in parallel or back-to-back.
 
 Concrete rules:
 
 - **Never assume a delegation or connection is absent at test start.** Set it up explicitly, even if a previous test run should have left it in that state.
-- **Access package delegations via `EnduserConnection` are not automatically cleaned up.** If your test adds a connection or delegates a package, verify in `afterEach` whether it needs to be removed — otherwise it accumulates across runs and can cause unexpected state for other tests using the same org numbers.
+- **Access package delegations via `api.connections` are not automatically cleaned up.** If your test adds a connection or delegates a package, verify in `afterEach` whether it needs to be removed — otherwise it accumulates across runs and can cause unexpected state for other tests using the same org numbers.
 - **Each spec file must use its own dedicated org numbers and PIDs.** Because tests run in parallel, two spec files using the same `partyOrgNo` will see each other's delegations and system users simultaneously. Assign a unique org/PID pair per spec file and never share them across files. The `beforeEach`/`afterEach` lifecycle ensures the same org can be safely reused across runs of the same spec — but only because no other spec is touching that org at the same time.
 
 ## Test inputs
@@ -168,4 +178,5 @@ Spec files follow `test.describe` → `test.beforeEach` → `test.afterEach` →
 Use `test.step()` to label logical phases within a test. This makes trace viewer output readable.
 
 ## Git
+
 Use convention `test/name-of-feature` for branches

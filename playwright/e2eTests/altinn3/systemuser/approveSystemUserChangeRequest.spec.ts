@@ -1,7 +1,7 @@
 import { test, expect } from 'playwright/fixture/pomFixture';
 import { TestdataApi } from 'playwright/util/TestdataApi';
 import { env } from 'playwright/util/helper';
-import type { ApiRequests } from 'playwright/api-requests/SystemUserApiRequests';
+import type { SystemUserApiRequests } from 'playwright/api-requests/SystemUserApiRequests';
 
 import { systemUserOwners } from './testdata';
 const owner = systemUserOwners.changes;
@@ -22,7 +22,9 @@ const changeRequest = {
 test.describe('Systembruker endringsforespørsel', () => {
   let externalRef: string;
   let systemUserId: string;
-  let changeRequestResponse: Awaited<ReturnType<ApiRequests['postSystemuserChangeRequest']>>;
+  let changeRequestResponse: Awaited<
+    ReturnType<SystemUserApiRequests['postSystemuserChangeRequest']>
+  >;
 
   test.beforeEach(async ({ api }) => {
     externalRef = TestdataApi.generateExternalRef();

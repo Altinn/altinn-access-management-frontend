@@ -64,16 +64,15 @@ export class ConsentApiRequests {
     };
   }
 
-  //
   /**
    * Generalized consent request supporting both person and org as 'from'.
-   * @param fromType 'person' or 'org'
-   * @param validToIsoUtc ISO UTC string for validity
+   *
+   * Sent by the receiving organisation (`params.to`) with its enterprise token, so there is
+   * no separate sender to pass.
    */
   public async createConsentRequest(
     params: CreateConsentRequestParams,
   ): Promise<{ viewUri: string }> {
-    // Sent by the receiving organisation (`to`), with its enterprise token.
     return asEnterprise<{ viewUri: string }>(
       params.to.id,
       'altinn:consentrequests.write',
