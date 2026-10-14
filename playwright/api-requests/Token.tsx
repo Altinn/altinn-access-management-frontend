@@ -39,9 +39,16 @@ function cachedToken(key: string, create: () => Promise<string>): Promise<string
 }
 
 export class Token {
-  private readonly username = env('USERNAME_TEST_API');
-  private readonly password = env('PASSWORD_TEST_API');
-  private readonly environment = env('ENV_NAME');
+  // Read lazily: callAs.ts creates a Token at import time, before the Tenor CLI has run loadEnv.
+  private get username() {
+    return env('USERNAME_TEST_API');
+  }
+  private get password() {
+    return env('PASSWORD_TEST_API');
+  }
+  private get environment() {
+    return env('ENV_NAME');
+  }
 
   public async getEnterpriseAltinnToken(orgNo: string, scopes: string): Promise<string> {
     return cachedToken(`enterprise:${orgNo}:${scopes}`, () =>

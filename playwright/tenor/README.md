@@ -26,6 +26,7 @@ The command name is now required: replace `yarn tenor -n 5` with
 | `facilitator-orgnr` | Fetch facilitator org numbers in bulk, optionally with their daglig leder (`--dagl`)                                          |
 | `pakkeholdere`      | Build a business where many users share access packages ([altinn-auth#829](https://github.com/Altinn/altinn-auth/issues/829)) |
 | `be-om-tilgang`     | Export `AS` businesses + daglig leder to a JSON file for `altinn-platform-validation-tests`                                   |
+| `klientadmin`       | Generate the checked-in data pool for `klientadministrasjon.spec.ts` (`playwright/testdata/klientadministrasjon.ts`)          |
 
 Every command supports `--env <tt02|at22|at23>`. `pakkeholdere` defaults to
 `at23`; other commands use the `environment` variable or fall back to `tt02`.
@@ -41,7 +42,8 @@ tenor/
     Command.ts            # shared Command interface
     index.ts               # registry of all commands
     personer.ts, virksomheter.ts, facilitator.ts,
-    facilitatorOrgnr.ts, pakkeholdere.ts, beOmTilgang.ts
+    facilitatorOrgnr.ts, pakkeholdere.ts, beOmTilgang.ts,
+    klientadmin.ts
   client/
     TenorApiRequests.ts    # the actual Tenor integration (auth, search, pagination)
     RegisterApiRequests.ts # batched Altinn Register lookups
@@ -101,7 +103,7 @@ Each output row keeps its Tenor fields and adds `altinnEnvironment` and `altinn`
 For facilitator org numbers, rows become objects with `organisasjonsnummer`.
 With `--dagl`, `dagligLederAltinn` contains the leader's Register party as well.
 Identifiers are deduplicated and queried in batches of at most **100**, requesting
-`party,person,organization,user`. Results are matched by identifier, not response
+`party,person,user` (`organization` gives HTTP 400). Results are matched by identifier, not response
 order. Missing parties remain in the output with `altinn: null` and a count is
 reported to stderr. HTTP errors or malformed responses fail the command.
 Consumers requiring a user ID must also check `altinn.user.userId`; a party need

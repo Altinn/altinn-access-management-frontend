@@ -30,7 +30,7 @@ export class RegisterApiRequests {
     if (unique.length === 0) return parties;
 
     const url = new URL(`${env('API_BASE_URL')}/register/api/v1/access-management/parties/query`);
-    url.searchParams.set('fields', 'party,person,organization,user');
+    url.searchParams.set('fields', 'party,person,user');
     const headers = {
       PlatformAccessToken: await this.token.getPlatformToken(),
       'Ocp-Apim-Subscription-Key': env(
