@@ -7,22 +7,6 @@ import { MaskinportenToken } from './MaskinportenToken';
 import { asEnterprise } from './callAs';
 
 export class ConsentApiRequests {
-  private readonly org: string;
-  private readonly consentRequestScopes: string;
-
-  constructor(org?: string, consentRequestScopes = 'altinn:consentrequests.write') {
-    this.org = org ?? '';
-    this.consentRequestScopes = consentRequestScopes;
-  }
-
-  private async sendPostRequest<TPayload, TResponse>(
-    payload: TPayload,
-    endpoint: string,
-    scopes: string,
-  ): Promise<TResponse> {
-    return asEnterprise<TResponse>(this.org, scopes, 'POST', platformUrl(endpoint), payload);
-  }
-
   private async sendPostRequestWithMaskinporten<TPayload, TResponse>(
     payload: TPayload,
     endpoint: string,
@@ -80,26 +64,22 @@ export class ConsentApiRequests {
     };
   }
 
-  //
   /**
    * Generalized consent request supporting both person and org as 'from'.
-   * @param fromType 'person' or 'org'
-   * @param validToIsoUtc ISO UTC string for validity
+   *
+   * Sent by the receiving organisation (`params.to`) with its enterprise token, so there is
+   * no separate sender to pass.
    */
   public async createConsentRequest(
     params: CreateConsentRequestParams,
   ): Promise<{ viewUri: string }> {
-    const payload = this.buildConsentRequestPayload(params);
-
-    const endpoint = 'accessmanagement/api/v1/enterprise/consentrequests';
-    const scopes = this.consentRequestScopes;
-
-    const resp = await this.sendPostRequest<typeof payload, { viewUri: string }>(
-      payload,
-      endpoint,
-      scopes,
+    return asEnterprise<{ viewUri: string }>(
+      params.to.id,
+      'altinn:consentrequests.write',
+      'POST',
+      platformUrl('accessmanagement/api/v1/enterprise/consentrequests'),
+      this.buildConsentRequestPayload(params),
     );
-    return resp;
   }
 
   /**

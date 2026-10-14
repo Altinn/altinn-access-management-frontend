@@ -1,7 +1,5 @@
 import { expect, test } from 'playwright/fixture/pomFixture';
 import { Language } from 'playwright/pages/LanguageMenu';
-import { TestdataApi } from 'playwright/util/TestdataApi';
-import { ApiRequests } from 'playwright/api-requests/SystemUserApiRequests';
 
 import { systemUserOwners } from './testdata';
 
@@ -16,12 +14,10 @@ const testOrgName = owner.name;
 
 test.describe('System Register', async () => {
   let system: string;
-  let api: ApiRequests;
 
-  test.beforeEach(async ({ login }) => {
+  test.beforeEach(async ({ api, login }) => {
     system = '';
-    api = new ApiRequests();
-    system = await api.createSystemSystemRegister(vendorOrgNumber);
+    system = await api.systemUsers.createSystemSystemRegister(vendorOrgNumber);
     await login.LoginToAccessManagement(testUserPid);
     await login.selectActor(testOrgName);
   });
@@ -46,10 +42,14 @@ test.describe('System Register', async () => {
     });
   });
 
-  test.afterEach(async () => {
+  test.afterEach(async ({ api }) => {
     if (system) {
-      await api.cleanUpSystemUsersForSystem(`${vendorOrgNumber}_${system}`, owner.pid, owner.orgNo);
-      await TestdataApi.removeSystem(vendorOrgNumber, system);
+      await api.systemUsers.cleanUpSystemUsersForSystem(
+        `${vendorOrgNumber}_${system}`,
+        owner.pid,
+        owner.orgNo,
+      );
+      await api.systemUsers.deleteSystemInSystemRegister(vendorOrgNumber, system);
     }
   });
 });

@@ -1,5 +1,4 @@
 import { test, expect } from 'playwright/fixture/pomFixture';
-import { ConsentApiRequests } from 'playwright/api-requests/ConsentApiRequests';
 import { addTimeToNowUtc, currentEnv } from 'playwright/util/helper';
 import { fetchKrav } from 'playwright/api-requests/SkatteetatenApiRequests';
 
@@ -20,12 +19,11 @@ test.describe('Samtykke - Skatteetaten krav og betalinger ende til ende', () => 
     const orgNr = '313506673'; // Org med krav og betalinger
     const pid = '02925796975'; // innehaver
 
-    test('Godkjenn samtykke og hent skattegrunnlag', async ({ login, consentPage }) => {
+    test('Godkjenn samtykke og hent skattegrunnlag', async ({ login, consentPage, api }) => {
       const validTo = addTimeToNowUtc({ days: 5 });
-      const api = new ConsentApiRequests(DIGDIR_ORG);
 
       const consentResp = await test.step('Opprett samtykkeforespørsel', async () => {
-        return await api.createConsentRequest({
+        return await api.consent.createConsentRequest({
           from: { type: 'org', id: orgNr },
           to: { type: 'org', id: DIGDIR_ORG },
           validToIsoUtc: validTo,
@@ -47,7 +45,7 @@ test.describe('Samtykke - Skatteetaten krav og betalinger ende til ende', () => 
 
       await test.step('Hent consent-token og verifiser krav-og-betalinger-API', async () => {
         const consentId = getConsentRequestId(consentResp.viewUri);
-        const consentToken = await api.getConsentTokenWithMaskinporten(
+        const consentToken = await api.consent.getConsentTokenWithMaskinporten(
           consentId,
           `urn:altinn:organization:identifier-no:${orgNr}`,
           MASKINPORTEN_CLIENT_ID_ENV,

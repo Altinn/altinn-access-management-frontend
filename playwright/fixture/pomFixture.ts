@@ -1,5 +1,5 @@
 // pomFixtures.ts
-import { test as baseTest, expect } from '@playwright/test';
+import { expect } from '@playwright/test';
 
 import { ConsentPage, Language } from 'playwright/pages/consent/ConsentPage';
 import { LanguageMenu } from 'playwright/pages/LanguageMenu';
@@ -17,6 +17,8 @@ import { InnstillingerPage } from 'playwright/pages/settings/InnstillingerPage';
 import { ForespoerslerPage } from 'playwright/pages/requests/ForespoerslerPage';
 import { MaskinportenPage } from 'playwright/pages/maskinporten/MaskinportenPage';
 import { FullmaktsoversiktPage } from 'playwright/pages/fullmakter/FullmaktsoversiktPage';
+
+import { apiFixture } from './apiFixture';
 
 const defaultLang = Language.NB;
 
@@ -45,7 +47,8 @@ type Fixtures = {
   fullmaktsoversiktPage: FullmaktsoversiktPage;
 };
 
-const test = baseTest.extend<Fixtures>({
+// Page objects on top of the api fixture, so LoginPage (and specs) get `api` too.
+const test = apiFixture.extend<Fixtures>({
   // Simulate slow CI runner network: SLOW_NETWORK=1 yarn run env:TT02 <path>
   slowNetwork: [
     async ({ page }, use) => {
@@ -66,8 +69,8 @@ const test = baseTest.extend<Fixtures>({
   // NEW: language fixture (default NB, overridable via test.use or project/use)
   language: [defaultLang, { option: true }],
 
-  login: async ({ page, language }, use) => {
-    await use(new LoginPage(page, language));
+  login: async ({ page, api, language }, use) => {
+    await use(new LoginPage(page, api, language));
   },
   accessManagementFrontPage: async ({ page, language }, use) => {
     await use(new AccessManagementFrontPage(page, language));
