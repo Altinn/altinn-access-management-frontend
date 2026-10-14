@@ -1,6 +1,8 @@
 import { env } from '../util/helper';
 import { createMaskinportenGrantAssertion, createConsentAuthorizationJWT } from '../util/jwtHelper';
 
+import { sendJson } from './apiRequest';
+
 /**
  * MaskinportenToken Class
  *
@@ -52,37 +54,7 @@ export class MaskinportenToken {
       consumerOrg,
     );
 
-    const response = await fetch(this.tokenEndpoint, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/x-www-form-urlencoded',
-      },
-      body: new URLSearchParams({
-        grant_type: 'urn:ietf:params:oauth:grant-type:jwt-bearer',
-        assertion,
-      }),
-    });
-
-    const status = response.status;
-    const statusText = response.statusText;
-    const responseBody = await response.text();
-
-    if (!response.ok) {
-      throw new Error(
-        `Failed to fetch Maskinporten token: ${status} ${statusText} - ${responseBody}`,
-      );
-    }
-
-    let tokenData;
-    try {
-      tokenData = JSON.parse(responseBody);
-    } catch (parseError) {
-      const errorMessage = parseError instanceof Error ? parseError.message : String(parseError);
-      throw new Error(
-        `Failed to parse Maskinporten token response as JSON: ${errorMessage}. Status: ${status} ${statusText}. Response body: ${responseBody}`,
-      );
-    }
-    return tokenData.access_token;
+    return this.requestToken(assertion);
   }
 
   /**
@@ -108,24 +80,14 @@ export class MaskinportenToken {
       scope,
     );
 
-    const response = await fetch(this.tokenEndpoint, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/x-www-form-urlencoded',
-      },
-      body: new URLSearchParams({
-        grant_type: 'urn:ietf:params:oauth:grant-type:jwt-bearer',
-        assertion,
-      }),
+    return this.requestToken(assertion);
+  }
+
+  private async requestToken(assertion: string): Promise<string> {
+    const { access_token } = await sendJson<{ access_token: string }>('POST', this.tokenEndpoint, {
+      form: { grant_type: 'urn:ietf:params:oauth:grant-type:jwt-bearer', assertion },
     });
-
-    if (!response.ok) {
-      const errorBody = await response.text();
-      throw new Error(`Failed to fetch consent token: ${response.status} ${errorBody}`);
-    }
-
-    const tokenData = await response.json();
-    return tokenData.access_token;
+    return access_token;
   }
 
   /**

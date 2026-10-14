@@ -1,5 +1,6 @@
 import { expect, test } from '../../../fixture/pomFixture';
 import { EnduserConnection } from '../../../api-requests/EnduserConnection';
+import { ApiError } from '../../../api-requests/apiRequest';
 
 const posttjenester = 'urn:altinn:accesspackage:posttjenester';
 
@@ -259,14 +260,14 @@ test.describe('klientadministrasjon', () => {
       try {
         await api.deleteConnection(client.connectionPid, client.org, [actor.org]);
       } catch (error) {
-        if (!(error instanceof Error) || !error.message.includes('Status: 404')) {
+        if (!(error instanceof ApiError) || error.status !== 404) {
           console.warn('Pre-test cleanup: Failed to delete connection:', error);
         }
       }
       try {
         await api.deleteClientDelegationAgent(actor.pid, actor.org, agent.pid);
       } catch (error) {
-        if (!(error instanceof Error) || !error.message.includes('Status: 404')) {
+        if (!(error instanceof ApiError) || error.status !== 404) {
           console.warn('Pre-test cleanup: Failed to delete client delegation agent:', error);
         }
       }

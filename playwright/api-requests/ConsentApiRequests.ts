@@ -1,54 +1,18 @@
 import { randomUUID } from 'crypto';
 
-import { env, addTimeToNowUtc } from 'playwright/util/helper';
+import { addTimeToNowUtc } from 'playwright/util/helper';
 
-import { Token } from './Token';
+import { platformUrl, sendJson } from './apiRequest';
 import { MaskinportenToken } from './MaskinportenToken';
+import { asEnterprise } from './callAs';
 
 export class ConsentApiRequests {
-  private tokenClass: Token;
   private readonly org: string;
   private readonly consentRequestScopes: string;
 
   constructor(org?: string, consentRequestScopes = 'altinn:consentrequests.write') {
-    this.tokenClass = new Token();
     this.org = org ?? '';
     this.consentRequestScopes = consentRequestScopes;
-  }
-
-  /**
-   * Unified helper method for POST requests that handles token acquisition and HTTP request logic.
-   * @param payload The request payload
-   * @param endpoint The API endpoint
-   * @param getToken Async function that returns the authentication token
-   * @returns The parsed JSON response
-   */
-  private async sendPostRequestInternal<TPayload, TResponse>(
-    payload: TPayload,
-    endpoint: string,
-    getToken: () => Promise<string>,
-  ): Promise<TResponse> {
-    const baseUrl = env('API_BASE_URL');
-    const url = baseUrl + endpoint;
-
-    const token = await getToken();
-
-    const response = await fetch(url, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        Authorization: `Bearer ${token}`,
-      },
-      body: JSON.stringify(payload),
-    });
-
-    if (!response.ok) {
-      const errorBody = await response.text();
-      console.error(`HTTP Error! Status: ${response.status}, Body: ${errorBody}`);
-      throw new Error(`HTTP error! Status: ${response.status}, Body: ${errorBody}`);
-    }
-
-    return (await response.json()) as TResponse;
   }
 
   private async sendPostRequest<TPayload, TResponse>(
@@ -56,9 +20,7 @@ export class ConsentApiRequests {
     endpoint: string,
     scopes: string,
   ): Promise<TResponse> {
-    return this.sendPostRequestInternal<TPayload, TResponse>(payload, endpoint, () =>
-      this.tokenClass.getEnterpriseAltinnToken(this.org, scopes),
-    );
+    return asEnterprise<TResponse>(this.org, scopes, 'POST', platformUrl(endpoint), payload);
   }
 
   private async sendPostRequestWithMaskinporten<TPayload, TResponse>(
@@ -68,9 +30,8 @@ export class ConsentApiRequests {
     maskinportenToken: MaskinportenToken,
     consumerOrg?: string,
   ): Promise<TResponse> {
-    return this.sendPostRequestInternal<TPayload, TResponse>(payload, endpoint, () =>
-      maskinportenToken.getMaskinportenToken(scopes, consumerOrg),
-    );
+    const token = await maskinportenToken.getMaskinportenToken(scopes, consumerOrg);
+    return sendJson<TResponse>('POST', platformUrl(endpoint), { token, json: payload });
   }
 
   /**
@@ -130,7 +91,7 @@ export class ConsentApiRequests {
   ): Promise<{ viewUri: string }> {
     const payload = this.buildConsentRequestPayload(params);
 
-    const endpoint = '/accessmanagement/api/v1/enterprise/consentrequests';
+    const endpoint = 'accessmanagement/api/v1/enterprise/consentrequests';
     const scopes = this.consentRequestScopes;
 
     const resp = await this.sendPostRequest<typeof payload, { viewUri: string }>(
@@ -181,7 +142,7 @@ export class ConsentApiRequests {
 
     const payload = this.buildConsentRequestPayload(params);
 
-    const endpoint = '/accessmanagement/api/v1/enterprise/consentrequests';
+    const endpoint = 'accessmanagement/api/v1/enterprise/consentrequests';
     const scopes = options.consentRequestScope;
 
     // Create MaskinportenToken instance to fetch the access token
