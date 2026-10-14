@@ -9,6 +9,7 @@ export class KlientAdministrasjonPage {
   readonly brukerFane: Locator;
   readonly klientFane: Locator;
   readonly brukerSok: Locator;
+  readonly klientSok: Locator;
   readonly fnrFelt: Locator;
   readonly etternavnFelt: Locator;
   readonly leggTilPersonKnapp: Locator;
@@ -40,6 +41,7 @@ export class KlientAdministrasjonPage {
     });
     // "Søk" is a design-system searchbox placeholder, not in our localization files.
     this.brukerSok = this.page.getByRole('searchbox', { name: 'Søk' });
+    this.klientSok = this.page.getByRole('searchbox', { name: client.client_search_placeholder });
     this.fnrFelt = this.page.getByRole('textbox', {
       name: this.texts.new_user_modal.person_identifier,
     });
@@ -93,6 +95,16 @@ export class KlientAdministrasjonPage {
 
   async searchForUser(userName: string) {
     await this.brukerSok.fill(userName);
+  }
+
+  // Klientlistene pagineres («Se mer»), så en regnskapsfører med mange klienter
+  // må søke klienten fram i stedet for å bla.
+  async sokIKlientfanen(klientnavn: string) {
+    await this.brukerSok.fill(klientnavn);
+  }
+
+  async sokEtterKlient(klientnavn: string) {
+    await this.klientSok.fill(klientnavn);
   }
 
   async skrivFnr(fnr: string) {

@@ -204,7 +204,7 @@ export class TenorApiRequests {
       throw new Error(`Fant ingen ${rolle}-virksomhet i Tenor (felt: ${felt}).`);
     }
 
-    return this.byggFacilitator(rolle, facilitatorOrg, antallKlienter);
+    return this.hentFacilitator(rolle, facilitatorOrg, antallKlienter);
   }
 
   /**
@@ -250,11 +250,11 @@ export class TenorApiRequests {
       );
     }
 
-    return this.byggFacilitator(rolle, beste.org, beste.antall);
+    return this.hentFacilitator(rolle, beste.org, beste.antall);
   }
 
   /** Bygger en facilitator med daglig leder og klientliste fra et orgnr. */
-  private async byggFacilitator(
+  async hentFacilitator(
     rolle: FacilitatorRolle,
     facilitatorOrg: string,
     antallKlienter: number,
@@ -455,6 +455,17 @@ export class TenorApiRequests {
       });
     }
     return resultat;
+  }
+
+  /**
+   * Slår opp en person på fødselsnummer, men bare hvis vedkommende er bosatt.
+   * Brreg kan liste en død daglig leder, og en død person kan ikke logge inn
+   * eller få delegeringer.
+   * @returns personen, eller null hvis fnr mangler i freg eller ikke er bosatt.
+   */
+  async hentBosattPerson(fnr: string): Promise<TenorTestperson | null> {
+    const [person] = await this.hentPersoner(`identifikator:${fnr} AND personstatus:bosatt`, 1);
+    return person ?? null;
   }
 
   /**

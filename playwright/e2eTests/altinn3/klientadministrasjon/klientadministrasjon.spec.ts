@@ -1,12 +1,23 @@
 import { expect, test } from '../../../fixture/pomFixture';
 import { ApiError } from '../../../api-requests/apiRequest';
+import { klientadminTestdata } from '../../../testdata/klientadministrasjon';
 
 const posttjenester = 'urn:altinn:accesspackage:posttjenester';
 
+/**
+ * Trekker et tilfeldig sett fra poolen i testdata/klientadministrasjon.ts (lages med
+ * `yarn tenor klientadmin`). Hver describe får sin egen bit av poolen, så describene
+ * aldri deler aktør — og to samtidige kjøringer treffer sjelden samme sett.
+ */
+const ANTALL_DESCRIBES = 6;
+function trekkTestdata(describe: number) {
+  const bit = klientadminTestdata.filter((_, i) => i % ANTALL_DESCRIBES === describe);
+  return bit[Math.floor(Math.random() * bit.length)];
+}
+
 test.describe('klientadministrasjon', () => {
   test.describe('legg til bruker', () => {
-    const actor = { pid: '09866598352', org: '213779702', orgName: 'UVANLIG FILOSOFISK TIGER AS' };
-    const agent = { pid: '29814895546', name: 'MUNTER SKO', lastName: 'Sko' };
+    const { actor, agent } = trekkTestdata(0);
 
     test('legg til bruker', async ({
       accessManagementFrontPage,
@@ -43,8 +54,7 @@ test.describe('klientadministrasjon', () => {
   });
 
   test.describe('slett bruker', () => {
-    const actor = { pid: '16830197862', org: '311164651', orgName: 'KLARTENKT UPRESIS ISBJØRN SA' };
-    const agent = { pid: '30877795760', name: 'TROVERDIG JUICE' };
+    const { actor, agent } = trekkTestdata(1);
 
     test.beforeEach(async ({ api }) => {
       try {
@@ -94,13 +104,7 @@ test.describe('klientadministrasjon', () => {
   });
 
   test.describe('deleger klient til en bruker fra klientfanen', () => {
-    const actor = { pid: '15846199893', org: '310002224', orgName: 'TRÅDLØS FORNUFTIG KATT LYTE' };
-    const client = {
-      connectionPid: '28868199808',
-      org: '314087917',
-      orgName: 'PARISK AKADEMISK KATT SITRON',
-    };
-    const agent = { pid: '28822449737', name: 'SINDIG BRUD' };
+    const { actor, client, agent } = trekkTestdata(2);
 
     test.beforeEach(async ({ api }) => {
       try {
@@ -137,6 +141,7 @@ test.describe('klientadministrasjon', () => {
 
       await test.step(`Gå til klientfanen og velg ${client.orgName}`, async () => {
         await klientAdministrasjonPage.goToKlientFane();
+        await klientAdministrasjonPage.sokIKlientfanen(client.orgName);
         await klientAdministrasjonPage.klikkListeElement(client.orgName);
       });
 
@@ -170,17 +175,7 @@ test.describe('klientadministrasjon', () => {
   });
 
   test.describe('deleger klient til en bruker fra brukerfanen', () => {
-    const actor = {
-      pid: '16852749125',
-      org: '313662624',
-      orgName: 'INTERESSERT KONVENSJONELL TIGER AS',
-    };
-    const client = {
-      connectionPid: '23907296857',
-      org: '313238105',
-      orgName: 'BESTEMT SLAKK TIGER AS',
-    };
-    const agent = { pid: '47822800420', name: 'UVANLIG FREDAG' };
+    const { actor, client, agent } = trekkTestdata(3);
 
     test.beforeEach(async ({ api }) => {
       try {
@@ -223,6 +218,7 @@ test.describe('klientadministrasjon', () => {
 
       await test.step(`Gi ${agent.name} fullmakt til Posttjenester for ${client.orgName}`, async () => {
         await klientAdministrasjonPage.klikkAlleKlienter();
+        await klientAdministrasjonPage.sokEtterKlient(client.orgName);
         await klientAdministrasjonPage.klikkKnapp(client.orgName);
         await klientAdministrasjonPage.klikkGiFullmakt('Posttjenester');
       });
@@ -251,13 +247,7 @@ test.describe('klientadministrasjon', () => {
   });
 
   test.describe('Slett fullmakt for en bruker fra brukerfanen', () => {
-    const actor = { pid: '08873349590', org: '312772655', orgName: 'RØRETE RAKRYGGET TIGER AS' };
-    const client = {
-      connectionPid: '12886999389',
-      org: '313428435',
-      orgName: 'ROSA UNDERDANIG TIGER AS',
-    };
-    const agent = { pid: '04905999376', name: 'FORSTÅELSESFULL TRAFIKKORK' };
+    const { actor, client, agent } = trekkTestdata(4);
 
     test.beforeEach(async ({ api }) => {
       try {
@@ -332,17 +322,7 @@ test.describe('klientadministrasjon', () => {
   });
 
   test.describe('Slett fullmakt for en bruker fra klientfanen', () => {
-    // Refreshed from Tenor: the previous actor represented nine organisations,
-    // which is where the aktørvelger starts paging its list. `client` must be a
-    // real ER client of `actor` — an arbitrary connection between two unrelated
-    // organisations does not show up under the Klienter tab.
-    const actor = { pid: '16847999717', org: '310280623', orgName: 'SKYFRI OPPRØMT TIGER AS' };
-    const client = {
-      connectionPid: '01909299930',
-      org: '313430626',
-      orgName: 'LETT AKVATISK KATT MANDOLIN',
-    };
-    const agent = { pid: '15855499999', name: 'INKONSEKVENT AMBULANSE' };
+    const { actor, client, agent } = trekkTestdata(5);
 
     test.beforeEach(async ({ api }) => {
       try {
@@ -387,6 +367,7 @@ test.describe('klientadministrasjon', () => {
       await test.step(`Gå til brukeren ${agent.name} hos klienten ${client.orgName}`, async () => {
         await klientAdministrasjonPage.verifyPaaKlientadministrasjon();
         await klientAdministrasjonPage.goToKlientFane();
+        await klientAdministrasjonPage.sokIKlientfanen(client.orgName);
         await klientAdministrasjonPage.klikkListeElement(client.orgName);
         await klientAdministrasjonPage.verifyPaaKlientDetaljer();
         await klientAdministrasjonPage.klikkKnapp(agent.name);
