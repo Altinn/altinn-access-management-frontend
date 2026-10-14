@@ -70,6 +70,21 @@ When adding a new page object class:
 
 `beforeEach` hooks that only do API setup don't need `page` — omit it from the destructured args if unused.
 
+### API clients — `api` fixture
+
+Test-data setup and cleanup go through the worker-scoped `api` fixture (`fixture/apiFixture.ts`, built from `ApiClient` in `api-requests/index.ts`). Specs never `new` an API client; take `api` from the fixture args — it works in `beforeAll`/`afterAll` too.
+
+```ts
+// Bad
+const api = new EnduserConnection();
+test.beforeEach(async () => { await api.addConnection(pid, org, to); });
+
+// Good
+test.beforeEach(async ({ api }) => { await api.connections.addConnection(pid, org, to); });
+```
+
+Helper functions take the client they need as a parameter (e.g. `connections: EnduserConnection`) instead of closing over a module-level instance. A new client is added as a field on `ApiClient`.
+
 ## Page Object Model
 
 All locators and page interactions live in page objects under `playwright/pages/`. Tests should not contain raw locators.

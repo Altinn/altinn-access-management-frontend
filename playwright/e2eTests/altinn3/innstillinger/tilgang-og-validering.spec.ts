@@ -1,20 +1,16 @@
 import { expect, test } from '../../../fixture/pomFixture';
-import { SettingsApiRequests } from '../../../api-requests/SettingsApiRequests';
-import { EnduserConnection } from '../../../api-requests/EnduserConnection';
 
 import { ACTORS, BASELINE_EPOST, IKKE_ADMIN } from './testdata';
 
 test.describe('Innstillinger - tilgang og validering', () => {
-  const api = new SettingsApiRequests();
-
   test.describe('kan ikke fjerne den siste adressen', () => {
     const actor = ACTORS.sisteAdresse;
 
-    test.beforeEach(async () => {
+    test.beforeEach(async ({ api }) => {
       // Exactly one email and no SMS: emptying the email field then leaves the
       // organisation with no notification address at all, which is what the
       // dialog must refuse to save.
-      await api.setNotificationAddresses(actor.pid, actor.org, {
+      await api.settings.setNotificationAddresses(actor.pid, actor.org, {
         emails: [BASELINE_EPOST],
         phones: [],
       });
@@ -45,8 +41,8 @@ test.describe('Innstillinger - tilgang og validering', () => {
       });
     });
 
-    test.afterEach(async () => {
-      await api.setNotificationAddresses(actor.pid, actor.org, {
+    test.afterEach(async ({ api }) => {
+      await api.settings.setNotificationAddresses(actor.pid, actor.org, {
         emails: [BASELINE_EPOST],
         phones: [],
       });
@@ -55,12 +51,11 @@ test.describe('Innstillinger - tilgang og validering', () => {
 
   test.describe('bruker uten tilgang', () => {
     const { admin, bruker } = IKKE_ADMIN;
-    const connections = new EnduserConnection();
 
-    test.beforeEach(async () => {
+    test.beforeEach(async ({ api }) => {
       // Make `bruker` a plain right-holder so the organisation is selectable in
       // the header menu, without granting any administrator right.
-      await connections.addConnection(admin.pid, admin.org, bruker.pid);
+      await api.connections.addConnection(admin.pid, admin.org, bruker.pid);
     });
 
     test('bruker uten administratorrettighet får ikke redigere varslingsadresser', async ({
@@ -84,8 +79,8 @@ test.describe('Innstillinger - tilgang og validering', () => {
       });
     });
 
-    test.afterEach(async () => {
-      await connections.deleteConnection(admin.pid, admin.org, [bruker.pid]);
+    test.afterEach(async ({ api }) => {
+      await api.connections.deleteConnection(admin.pid, admin.org, [bruker.pid]);
     });
   });
 });

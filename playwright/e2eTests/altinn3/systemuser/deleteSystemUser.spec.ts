@@ -1,5 +1,4 @@
 import { expect, test } from 'playwright/fixture/pomFixture';
-import { ApiRequests } from 'playwright/api-requests/SystemUserApiRequests';
 import { TestdataApi } from 'playwright/util/TestdataApi';
 
 import { systemUserOwners } from './testdata';
@@ -10,13 +9,9 @@ const testOrgName = owner.name;
 
 test.describe('System user deletion', () => {
   let systemId: string;
-  let api: ApiRequests;
 
-  test.beforeEach(async ({ login, systemUserPage, accessManagementFrontPage }) => {
-    await test.step('Setup API client', async () => {
-      systemId = '';
-      api = new ApiRequests();
-    });
+  test.beforeEach(async ({ api, login, systemUserPage, accessManagementFrontPage }) => {
+    systemId = '';
 
     await test.step('Login and navigate to application', async () => {
       await login.LoginToAccessManagement(testUserPid);
@@ -24,7 +19,7 @@ test.describe('System user deletion', () => {
     });
 
     await test.step('Create system in system register', async () => {
-      systemId = await api.createSystemSystemRegister(vendorOrgNumber);
+      systemId = await api.systemUsers.createSystemSystemRegister(vendorOrgNumber);
     });
 
     await test.step('Navigate to system user page and create system user', async () => {
@@ -50,9 +45,9 @@ test.describe('System user deletion', () => {
     });
   });
 
-  test.afterEach(async () => {
+  test.afterEach(async ({ api }) => {
     if (systemId) {
-      await api.cleanUpSystemUsersForSystem(
+      await api.systemUsers.cleanUpSystemUsersForSystem(
         `${vendorOrgNumber}_${systemId}`,
         owner.pid,
         owner.orgNo,

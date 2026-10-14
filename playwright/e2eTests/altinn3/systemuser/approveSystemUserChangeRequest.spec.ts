@@ -1,7 +1,7 @@
 import { test, expect } from 'playwright/fixture/pomFixture';
 import { TestdataApi } from 'playwright/util/TestdataApi';
 import { env } from 'playwright/util/helper';
-import { ApiRequests } from 'playwright/api-requests/SystemUserApiRequests';
+import type { ApiRequests } from 'playwright/api-requests/SystemUserApiRequests';
 
 import { systemUserOwners } from './testdata';
 const owner = systemUserOwners.changes;
@@ -20,31 +20,29 @@ const changeRequest = {
 };
 
 test.describe('Systembruker endringsforespørsel', () => {
-  let api: ApiRequests;
   let externalRef: string;
   let systemUserId: string;
   let changeRequestResponse: Awaited<ReturnType<ApiRequests['postSystemuserChangeRequest']>>;
 
-  test.beforeEach(async () => {
-    api = new ApiRequests();
+  test.beforeEach(async ({ api }) => {
     externalRef = TestdataApi.generateExternalRef();
 
-    const response = await api.postSystemuserRequest(
+    const response = await api.systemUsers.postSystemuserRequest(
       vendorOrgNumber,
       externalRef,
       prebuiltSystemId,
       owner.orgNo,
     );
-    await api.approveSystemuserRequest(response.id, owner.orgNo, testUserPid);
+    await api.systemUsers.approveSystemuserRequest(response.id, owner.orgNo, testUserPid);
 
-    systemUserId = await api.getSystemUserByQuery(
+    systemUserId = await api.systemUsers.getSystemUserByQuery(
       vendorOrgNumber,
       prebuiltSystemId,
       owner.orgNo,
       externalRef,
     );
 
-    changeRequestResponse = await api.postSystemuserChangeRequest(
+    changeRequestResponse = await api.systemUsers.postSystemuserChangeRequest(
       vendorOrgNumber,
       systemUserId,
       changeRequest,
@@ -55,6 +53,7 @@ test.describe('Systembruker endringsforespørsel', () => {
     page,
     login,
     systemUserConfirmPage,
+    api,
   }): Promise<void> => {
     await test.step('Navigate to change request confirmation page and login', async () => {
       await page.goto(changeRequestResponse.confirmUrl);
@@ -68,10 +67,9 @@ test.describe('Systembruker endringsforespørsel', () => {
     await test.step('Verify rejection status', async () => {
       await expect(login.loginButton).toBeVisible();
 
-      const statusApiRequest = await api.getStatusForSystemUserChangeRequest<{ status: string }>(
-        vendorOrgNumber,
-        changeRequestResponse.id,
-      );
+      const statusApiRequest = await api.systemUsers.getStatusForSystemUserChangeRequest<{
+        status: string;
+      }>(vendorOrgNumber, changeRequestResponse.id);
 
       expect(statusApiRequest.status).toBe('Rejected');
     });
@@ -81,6 +79,7 @@ test.describe('Systembruker endringsforespørsel', () => {
     page,
     login,
     systemUserConfirmPage,
+    api,
   }): Promise<void> => {
     await test.step('Navigate to change request confirmation page and login', async () => {
       await page.goto(changeRequestResponse.confirmUrl);
@@ -96,10 +95,9 @@ test.describe('Systembruker endringsforespørsel', () => {
       await expect(login.loginButton).toBeVisible();
 
       //Read from status api to verify that status is not Accepted after clicking "Approve"
-      const statusApiRequest = await api.getStatusForSystemUserChangeRequest<{ status: string }>(
-        vendorOrgNumber,
-        changeRequestResponse.id,
-      );
+      const statusApiRequest = await api.systemUsers.getStatusForSystemUserChangeRequest<{
+        status: string;
+      }>(vendorOrgNumber, changeRequestResponse.id);
       expect(statusApiRequest.status).toBe('Accepted');
     });
 
@@ -120,9 +118,9 @@ test.describe('Systembruker endringsforespørsel', () => {
     });
   });
 
-  test.afterEach(async () => {
+  test.afterEach(async ({ api }) => {
     if (externalRef) {
-      await api.cleanUpSystemUsersForSystem(
+      await api.systemUsers.cleanUpSystemUsersForSystem(
         prebuiltSystemId,
         owner.pid,
         owner.orgNo,

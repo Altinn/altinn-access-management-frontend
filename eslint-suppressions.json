@@ -24,11 +24,6 @@
       "count": 2
     }
   },
-  "playwright/e2eTests/altinn3/systemuser/deleteSystemUser.spec.ts": {
-    "@typescript-eslint/require-await": {
-      "count": 1
-    }
-  },
   "playwright/e2eTests/altinn3/systemuser/selectSystemVendor.spec.ts": {
     "@typescript-eslint/no-misused-promises": {
       "count": 1

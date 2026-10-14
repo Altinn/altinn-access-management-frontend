@@ -1,6 +1,6 @@
 import { test, expect } from 'playwright/fixture/pomFixture';
 import { TestdataApi } from 'playwright/util/TestdataApi';
-import { ApiRequests } from 'playwright/api-requests/SystemUserApiRequests';
+import type { ApiRequests } from 'playwright/api-requests/SystemUserApiRequests';
 
 import { systemUserOwners } from './testdata';
 const owner = systemUserOwners.requests;
@@ -9,14 +9,12 @@ const prebuiltSystemId = '310547891_E2E-Playwright-Authentication';
 const testUserPid = owner.pid;
 
 test.describe('Godkjenn og avvis Systembrukerforespørsel', () => {
-  let api: ApiRequests;
   let externalRef: string;
   let response: Awaited<ReturnType<ApiRequests['postSystemuserRequest']>>;
 
-  test.beforeEach(async () => {
-    api = new ApiRequests();
+  test.beforeEach(async ({ api }) => {
     externalRef = TestdataApi.generateExternalRef();
-    response = await api.postSystemuserRequest(
+    response = await api.systemUsers.postSystemuserRequest(
       vendorOrgNumber,
       externalRef,
       prebuiltSystemId,
@@ -29,6 +27,7 @@ test.describe('Godkjenn og avvis Systembrukerforespørsel', () => {
     page,
     login,
     systemUserConfirmPage,
+    api,
   }): Promise<void> => {
     await test.step('Navigate to confirmation page and login', async () => {
       await page.goto(response.confirmUrl);
@@ -44,10 +43,9 @@ test.describe('Godkjenn og avvis Systembrukerforespørsel', () => {
       await expect(page).toHaveURL('https://info.altinn.no');
 
       //Read from status api to verify that status is not rejected after clicking "Avvis"
-      const statusApiRequest = await api.getStatusForSystemUserRequest<{ status: string }>(
-        vendorOrgNumber,
-        response.id,
-      );
+      const statusApiRequest = await api.systemUsers.getStatusForSystemUserRequest<{
+        status: string;
+      }>(vendorOrgNumber, response.id);
       expect(statusApiRequest.status).toBe('Rejected');
     });
   });
@@ -56,6 +54,7 @@ test.describe('Godkjenn og avvis Systembrukerforespørsel', () => {
     page,
     login,
     systemUserConfirmPage,
+    api,
   }): Promise<void> => {
     await test.step('Navigate to confirmation page and login', async () => {
       await page.goto(response.confirmUrl);
@@ -71,16 +70,15 @@ test.describe('Godkjenn og avvis Systembrukerforespørsel', () => {
       await expect(page).toHaveURL('https://info.altinn.no');
 
       //Read from status api to verify that status is not Accepted after clicking "Avvis"
-      const statusApiRequest = await api.getStatusForSystemUserRequest<{ status: string }>(
-        vendorOrgNumber,
-        response.id,
-      );
+      const statusApiRequest = await api.systemUsers.getStatusForSystemUserRequest<{
+        status: string;
+      }>(vendorOrgNumber, response.id);
       expect(statusApiRequest.status).toBe('Accepted');
     });
   });
-  test.afterEach(async () => {
+  test.afterEach(async ({ api }) => {
     if (externalRef) {
-      await api.cleanUpSystemUsersForSystem(
+      await api.systemUsers.cleanUpSystemUsersForSystem(
         prebuiltSystemId,
         owner.pid,
         owner.orgNo,
