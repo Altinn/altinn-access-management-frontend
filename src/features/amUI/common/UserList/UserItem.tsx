@@ -5,14 +5,14 @@ import { useEffect, useState } from 'react';
 import { Link } from 'react-router';
 import { useTranslation } from 'react-i18next';
 
+import { PartyEntityType } from '@/dataObjects/dtos/Party';
 import {
   formatEntityDisplayName,
+  getAvatarType,
   getFormattedDateOfBirthLabel,
   formatOrgNr,
   isSubUnitByType,
 } from '@/resources/utils/reporteeUtils';
-import { type ExtendedUser, type User } from '@/rtk/features/userInfoApi';
-import { ConnectionUserType } from '@/rtk/features/connectionApi';
 
 import {
   ECC_PROVIDER_CODE,
@@ -21,25 +21,22 @@ import {
 } from '../UserRoles/useRoleMetadata';
 import { isNewUser } from '../isNewUser';
 import { useRestoreFocusTarget } from '../RestoreFocus';
+import type { UserSearchNode } from '../UserSearch/types';
 
 import classes from './UserList.module.css';
-
-function isExtendedUser(item: ExtendedUser | User): item is ExtendedUser {
-  return (item as ExtendedUser).roles !== undefined && Array.isArray((item as ExtendedUser).roles);
-}
 
 interface UserItemProps extends Pick<
   UserListItemProps,
   'size' | 'subUnit' | 'interactive' | 'shadow'
 > {
-  user: ExtendedUser | User;
+  user: UserSearchNode;
   showRoles?: boolean;
   roleDirection?: 'toUser' | 'fromUser';
   disableLinks?: boolean;
   includeSelfAsChild?: boolean;
   linkTo?: string;
-  onSelect?: (user: ExtendedUser | User) => void;
-  controls?: (user: ExtendedUser | User) => ReactNode;
+  onSelect?: (user: UserSearchNode) => void;
+  controls?: (user: UserSearchNode) => ReactNode;
 }
 
 export const UserItem = ({
@@ -63,51 +60,42 @@ export const UserItem = ({
   const childrenToDisplay =
     user.children?.filter(
       (child) =>
-        child.type === ConnectionUserType.Person || child.type === ConnectionUserType.Organization,
+        child.type === PartyEntityType.Person || child.type === PartyEntityType.Organization,
     ) || [];
   const hasInheritingUsers = childrenToDisplay.length > 0;
   const [isExpanded, setExpanded] = useState(false);
   const { t } = useTranslation();
   const { mapRoles } = useRoleMetadata();
-  useEffect(
-    () =>
-      setExpanded((hasInheritingUsers && isExtendedUser(user) && user.matchInChildren) ?? false),
-    [user],
-  );
+  useEffect(() => setExpanded((hasInheritingUsers && user.matchInChildren) ?? false), [user]);
 
-  const roleNames =
-    isExtendedUser(user) && user.roles
-      ? mapRoles(user.roles.filter((r) => !r.viaParty))
-          .filter(
-            (r) =>
-              r.provider?.code === ECC_PROVIDER_CODE &&
-              !ROLE_CODES_TO_IGNORE.includes(r.code || ''),
-          )
-          .map((r) => r.name)
-      : [];
+  const roleNames = user.roles
+    ? mapRoles(user.roles.filter((r) => !r.viaParty))
+        .filter(
+          (r) =>
+            r.provider?.code === ECC_PROVIDER_CODE && !ROLE_CODES_TO_IGNORE.includes(r.code || ''),
+        )
+        .map((r) => r.name)
+    : [];
 
-  const viaRoleNames =
-    isExtendedUser(user) && user.roles
-      ? mapRoles(user.roles.filter((r) => r.viaParty))
-          .filter((r) => r.provider?.code === ECC_PROVIDER_CODE)
-          .map((r) => r.name)
-      : [];
+  const viaRoleNames = user.roles
+    ? mapRoles(user.roles.filter((r) => r.viaParty))
+        .filter((r) => r.provider?.code === ECC_PROVIDER_CODE)
+        .map((r) => r.name)
+    : [];
 
-  const viaEntity =
-    isExtendedUser(user) && user.roles ? user.roles.find((r) => r.viaParty)?.viaParty : undefined;
+  const viaEntity = user.roles?.find((r) => r.viaParty)?.viaParty;
 
   const isSubOrMainUnit =
-    isExtendedUser(user) &&
-    user.type === ConnectionUserType.Organization &&
+    user.type === PartyEntityType.Organization &&
     user.roles?.some((role) => ROLE_CODES_TO_IGNORE.includes(role.code ?? ''));
 
   const hasSubUnitRole = isSubOrMainUnit && roleDirection === 'fromUser';
 
-  const description = (user: ExtendedUser | User) => {
+  const description = (user: UserSearchNode) => {
     let descriptionString = subUnit ? '↳ ' : '';
-    if (user.type === ConnectionUserType.Person) {
+    if (user.type === PartyEntityType.Person) {
       descriptionString += getFormattedDateOfBirthLabel(user.dateOfBirth);
-    } else if (user.type === ConnectionUserType.Organization) {
+    } else if (user.type === PartyEntityType.Organization) {
       descriptionString +=
         t('common.org_nr') +
         ' ' +
@@ -124,13 +112,6 @@ export const UserItem = ({
     }
     return undefined;
   };
-
-  const type =
-    user.type === ConnectionUserType.Person
-      ? 'person'
-      : user.type === ConnectionUserType.Organization
-        ? 'company'
-        : 'system';
 
   const subUsers = hasInheritingUsers
     ? includeSelfAsChild
@@ -153,7 +134,7 @@ export const UserItem = ({
         },
       })}
       roleNames={showRoles && !isExpanded ? roleNames : []}
-      type={type}
+      type={getAvatarType(user)}
       expanded={isExpanded}
       collapsible={!!hasInheritingUsers}
       interactive={!!hasInheritingUsers || !!onSelect || interactive}
@@ -177,7 +158,7 @@ export const UserItem = ({
       }
       controls={!hasInheritingUsers && controls && controls(user)}
       titleAs='div'
-      subUnit={subUnit || hasSubUnitRole || isSubUnitByType(user.variant?.toString())}
+      subUnit={subUnit || hasSubUnitRole || isSubUnitByType(user.unitType)}
       deleted={user.isDeleted}
     >
       {hasInheritingUsers && isExpanded && (
@@ -192,8 +173,8 @@ export const UserItem = ({
               size='xs'
               subUnit={
                 (includeSelfAsChild ? index !== 0 : true) &&
-                child.type === ConnectionUserType.Organization &&
-                isSubUnitByType(child.variant?.toString())
+                child.type === PartyEntityType.Organization &&
+                isSubUnitByType(child.unitType)
               }
               roleDirection={roleDirection}
               showRoles={showRoles}

@@ -15,6 +15,7 @@ import { mapConnectionsToUserSearchNodes } from '../common/UserSearch/connection
 import { mapPermissionsToUserSearchNodes } from '../common/UserSearch/permissionMapper';
 import type { UserActionTarget } from '../common/UserSearch/types';
 import { usePartyRepresentation } from '../common/PartyRepresentationContext/PartyRepresentationContext';
+import { mapPartyEntityToParty } from '../common/PartyRepresentationContext/partyUtils';
 import { DelegationAction } from '../common/DelegationModal/EditModal';
 import {
   RestoreFocusFallback,
@@ -22,7 +23,7 @@ import {
   useRestoreFocusOnDataChange,
 } from '../common/RestoreFocus';
 
-import { PackageUserModal, mapUserToParty, type PackageUserModalHandle } from './PackageUserModal';
+import { PackageUserModal, type PackageUserModalHandle } from './PackageUserModal';
 import { AddPackageUserButton, type AddedPackageUser } from './AddPackageUserModal';
 import pageClasses from './PackagePoaDetailsPage.module.css';
 
@@ -123,16 +124,16 @@ export const UsersTab = ({ accessPackage, isLoading, isFetching }: UsersTabProps
   });
 
   const handleOnDelegate = (user: UserActionTarget) => {
-    const toParty = mapUserToParty(user);
-    if (accessPackage && toParty) {
+    const toParty = mapPartyEntityToParty(user);
+    if (accessPackage) {
       actionTargetRef.current = user;
       onDelegate(accessPackage, toParty);
     }
   };
 
   const handleOnRevoke = (user: UserActionTarget) => {
-    const toParty = mapUserToParty(user);
-    if (accessPackage && toParty) {
+    const toParty = mapPartyEntityToParty(user);
+    if (accessPackage) {
       actionTargetRef.current = user;
       onRevoke(accessPackage, toParty);
     }

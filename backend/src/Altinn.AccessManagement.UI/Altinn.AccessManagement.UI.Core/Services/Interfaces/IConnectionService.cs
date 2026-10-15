@@ -1,5 +1,6 @@
 ﻿using Altinn.AccessManagement.UI.Core.Models.Connections;
 using Altinn.AccessManagement.UI.Core.Models.User;
+using Altinn.AccessManagement.UI.Core.Models.User.Frontend;
 
 namespace Altinn.AccessManagement.UI.Core.Services.Interfaces
 {
@@ -43,7 +44,7 @@ namespace Altinn.AccessManagement.UI.Core.Services.Interfaces
         /// <param name="includeClientDelegations">Whether to include client delegations in the response.</param>
         /// <param name="includeAgentConnections">Whether to include agent connections in the response.</param>
         /// <returns> A list of RightHolderInfo </returns>
-        Task<List<Connection>> GetConnections(
+        Task<List<ConnectionFE>> GetConnections(
             Guid party,
             Guid? from,
             Guid? to,
@@ -56,6 +57,6 @@ namespace Altinn.AccessManagement.UI.Core.Services.Interfaces
         /// </summary>
         /// <param name="party">The party UUID.</param>
         /// <returns>A list of simplified connections.</returns>
-        Task<List<SimplifiedConnection>> GetSimplifiedConnections(Guid party);
+        Task<List<SimplifiedConnectionFE>> GetSimplifiedConnections(Guid party);
     }
 }
