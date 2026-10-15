@@ -60,6 +60,11 @@ namespace Altinn.AccessManagement.UI.Core.Models.Common.Frontend
         public List<PartyFE> Children { get; set; }
 
         /// <summary>
+        /// Gets or sets the parent party (the main unit of a subunit), when known
+        /// </summary>
+        public PartyFE Parent { get; set; }
+
+        /// <summary>
         /// Maps an entity from the access management connection endpoints
         /// </summary>
         public static PartyFE FromEntity(Entity entity)
@@ -81,6 +86,7 @@ namespace Altinn.AccessManagement.UI.Core.Models.Common.Frontend
                 DateOfBirth = entity.DateOfBirth,
                 IsDeleted = entity.IsDeleted,
                 Children = entity.Children?.Select(FromEntity).ToList(),
+                Parent = FromEntity(entity.Parent),
             };
         }
 
@@ -106,6 +112,7 @@ namespace Altinn.AccessManagement.UI.Core.Models.Common.Frontend
                 DateOfBirth = entity.DateOfBirth,
                 IsDeleted = entity.IsDeleted,
                 Children = entity.Children?.Select(FromCompactEntity).ToList(),
+                Parent = FromCompactEntity(entity.Parent),
             };
         }
 

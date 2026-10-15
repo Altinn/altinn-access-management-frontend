@@ -5,6 +5,7 @@ using Altinn.AccessManagement.UI.Core.ClientInterfaces;
 using Altinn.AccessManagement.UI.Core.Configuration;
 using Altinn.AccessManagement.UI.Core.Models.AccessPackage;
 using Altinn.AccessManagement.UI.Core.Models.Role;
+using Altinn.AccessManagement.UI.Core.Models.Role.Frontend;
 using Altinn.AccessManagement.UI.Core.Services.Interfaces;
 using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Options;
@@ -36,10 +37,10 @@ namespace Altinn.AccessManagement.UI.Core.Services
         }
 
         /// <inheritdoc />
-        public async Task<List<RolePermission>> GetRolePermissions(Guid party, Guid? from, Guid? to, string languageCode)
+        public async Task<List<RolePermissionFE>> GetRolePermissions(Guid party, Guid? from, Guid? to, string languageCode)
         {
             var paginated = await _roleClient.GetRolePermissions(party, from, to, languageCode);
-            return paginated?.Items?.ToList() ?? new List<RolePermission>();
+            return paginated?.Items?.Select(RolePermissionFE.FromRolePermission).ToList() ?? new List<RolePermissionFE>();
         }
 
         /// <inheritdoc />

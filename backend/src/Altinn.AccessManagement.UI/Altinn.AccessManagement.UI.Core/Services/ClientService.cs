@@ -1,6 +1,7 @@
 using Altinn.AccessManagement.UI.Core.ClientInterfaces;
 using Altinn.AccessManagement.UI.Core.Helpers;
 using Altinn.AccessManagement.UI.Core.Models.ClientDelegation;
+using Altinn.AccessManagement.UI.Core.Models.ClientDelegation.Frontend;
 using Altinn.AccessManagement.UI.Core.Models.Connections;
 using Altinn.AccessManagement.UI.Core.Models.ResourceRegistry.Frontend;
 using Altinn.AccessManagement.UI.Core.Services.Interfaces;
@@ -34,12 +35,12 @@ namespace Altinn.AccessManagement.UI.Core.Services
         }
 
         /// <inheritdoc />
-        public async Task<IEnumerable<MyClientDelegation>> GetMyClients(string languageCode, List<Guid> provider = null, CancellationToken cancellationToken = default)
+        public async Task<IEnumerable<MyClientDelegationFE>> GetMyClients(string languageCode, List<Guid> provider = null, CancellationToken cancellationToken = default)
         {
             IClientDelegationClient client = await _clientDelegationClientResolver.Resolve();
             IEnumerable<MyClientDelegation> myClients = await client.GetMyClients(provider, cancellationToken);
             await EnrichResources(myClients.SelectMany(myClient => myClient.Clients).SelectMany(delegation => delegation.Access), languageCode);
-            return myClients;
+            return myClients.Select(MyClientDelegationFE.FromMyClientDelegation).ToList();
         }
 
         /// <inheritdoc />
@@ -57,39 +58,39 @@ namespace Altinn.AccessManagement.UI.Core.Services
         }
 
         /// <inheritdoc />
-        public async Task<IEnumerable<ClientDelegation>> GetClients(Guid party, string languageCode, List<string> roles = null, CancellationToken cancellationToken = default)
+        public async Task<IEnumerable<ClientDelegationFE>> GetClients(Guid party, string languageCode, List<string> roles = null, CancellationToken cancellationToken = default)
         {
             IClientDelegationClient client = await _clientDelegationClientResolver.Resolve();
             IEnumerable<ClientDelegation> clients = await client.GetClients(party, roles, cancellationToken);
             await EnrichResources(clients.SelectMany(delegation => delegation.Access), languageCode);
-            return clients;
+            return clients.Select(ClientDelegationFE.FromClientDelegation).ToList();
         }
 
         /// <inheritdoc />
-        public async Task<IEnumerable<AgentDelegation>> GetAgents(Guid party, string languageCode, CancellationToken cancellationToken = default)
+        public async Task<IEnumerable<AgentDelegationFE>> GetAgents(Guid party, string languageCode, CancellationToken cancellationToken = default)
         {
             IClientDelegationClient client = await _clientDelegationClientResolver.Resolve();
             IEnumerable<AgentDelegation> agents = await client.GetAgents(party, cancellationToken);
             await EnrichResources(agents.SelectMany(agent => agent.Access), languageCode);
-            return agents;
+            return agents.Select(AgentDelegationFE.FromAgentDelegation).ToList();
         }
 
         /// <inheritdoc />
-        public async Task<IEnumerable<ClientDelegation>> GetAgentAccessPackages(Guid party, Guid to, string languageCode, CancellationToken cancellationToken = default)
+        public async Task<IEnumerable<ClientDelegationFE>> GetAgentAccessPackages(Guid party, Guid to, string languageCode, CancellationToken cancellationToken = default)
         {
             IClientDelegationClient client = await _clientDelegationClientResolver.Resolve();
             IEnumerable<ClientDelegation> clients = await client.GetAgentAccessPackages(party, to, cancellationToken);
             await EnrichResources(clients.SelectMany(delegation => delegation.Access), languageCode);
-            return clients;
+            return clients.Select(ClientDelegationFE.FromClientDelegation).ToList();
         }
 
         /// <inheritdoc />
-        public async Task<IEnumerable<AgentDelegation>> GetClientAccessPackages(Guid party, Guid from, string languageCode, CancellationToken cancellationToken = default)
+        public async Task<IEnumerable<AgentDelegationFE>> GetClientAccessPackages(Guid party, Guid from, string languageCode, CancellationToken cancellationToken = default)
         {
             IClientDelegationClient client = await _clientDelegationClientResolver.Resolve();
             IEnumerable<AgentDelegation> agents = await client.GetClientAccessPackages(party, from, cancellationToken);
             await EnrichResources(agents.SelectMany(agent => agent.Access), languageCode);
-            return agents;
+            return agents.Select(AgentDelegationFE.FromAgentDelegation).ToList();
         }
 
         /// <inheritdoc />
@@ -107,21 +108,21 @@ namespace Altinn.AccessManagement.UI.Core.Services
         }
 
         /// <inheritdoc />
-        public async Task<IEnumerable<ClientDelegation>> GetAgentResources(Guid party, Guid to, string languageCode, CancellationToken cancellationToken = default)
+        public async Task<IEnumerable<ClientDelegationFE>> GetAgentResources(Guid party, Guid to, string languageCode, CancellationToken cancellationToken = default)
         {
             IClientDelegationClient client = await _clientDelegationClientResolver.Resolve();
             IEnumerable<ClientDelegation> clients = await client.GetAgentResources(party, to, cancellationToken);
             await EnrichResources(clients.SelectMany(delegation => delegation.Access), languageCode);
-            return clients;
+            return clients.Select(ClientDelegationFE.FromClientDelegation).ToList();
         }
 
         /// <inheritdoc />
-        public async Task<IEnumerable<AgentDelegation>> GetClientResources(Guid party, Guid from, string languageCode, CancellationToken cancellationToken = default)
+        public async Task<IEnumerable<AgentDelegationFE>> GetClientResources(Guid party, Guid from, string languageCode, CancellationToken cancellationToken = default)
         {
             IClientDelegationClient client = await _clientDelegationClientResolver.Resolve();
             IEnumerable<AgentDelegation> agents = await client.GetClientResources(party, from, cancellationToken);
             await EnrichResources(agents.SelectMany(agent => agent.Access), languageCode);
-            return agents;
+            return agents.Select(AgentDelegationFE.FromAgentDelegation).ToList();
         }
 
         /// <inheritdoc />

@@ -1,6 +1,6 @@
 import { createApi } from '@reduxjs/toolkit/query/react';
 
-import { type Entity } from '@/dataObjects/dtos/Common';
+import { type PartyEntity } from '@/dataObjects/dtos/Party';
 import { getCookie } from '@/resources/Cookie/CookieMethods';
 import { createBaseQuery } from '@/rtk/app/baseQuery';
 
@@ -22,18 +22,18 @@ export interface ClientAccess {
 }
 
 export interface Client {
-  client: Entity;
+  client: PartyEntity;
   access: ClientAccess[];
 }
 
 export interface Agent {
-  agent: Entity;
+  agent: PartyEntity;
   agentAddedAt: string;
   access: ClientAccess[];
 }
 
 export interface MyClientsByProvider {
-  provider: Entity;
+  provider: PartyEntity;
   clients: Client[];
 }
 

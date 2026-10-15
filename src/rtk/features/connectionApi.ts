@@ -2,13 +2,12 @@ import { createApi } from '@reduxjs/toolkit/query/react';
 
 import { createBaseQuery } from '@/rtk/app/baseQuery';
 import { getCookie } from '@/resources/Cookie/CookieMethods';
-import { type Entity } from '@/dataObjects/dtos/Common';
 import { type PartyEntity } from '@/dataObjects/dtos/Party';
 
 export interface RoleInfo {
   id: string;
   code?: string;
-  viaParty?: Entity;
+  viaParty?: PartyEntity | null;
 }
 
 export interface Connection {
