@@ -1,7 +1,7 @@
 import { render, screen } from '@testing-library/react';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 
-import { PartyEntityType } from '@/dataObjects/dtos/Party';
+import { PartyType } from '@/dataObjects/dtos/Party';
 
 import type { UserSearchProps } from '../common/UserSearch/UserSearch';
 
@@ -62,8 +62,8 @@ vi.mock('./AddServiceUserModal', () => ({
 
 vi.mock('../common/PartyRepresentationContext/PartyRepresentationContext', () => ({
   usePartyRepresentation: () => ({
-    actingParty: { partyUuid: 'org' },
-    fromParty: { partyUuid: 'org', name: 'Diskret Nær Tiger AS' },
+    actingParty: { id: 'org' },
+    fromParty: { id: 'org', name: 'Diskret Nær Tiger AS' },
   }),
 }));
 
@@ -118,7 +118,7 @@ vi.mock('@altinn/altinn-components', async () => {
   return { ...actual, useSnackbar: () => ({ openSnackbar }) };
 });
 
-const entity = (id: string, name: string) => ({ id, name, type: PartyEntityType.Person });
+const entity = (id: string, name: string) => ({ id, name, type: PartyType.Person });
 
 const RESOURCE = { identifier: 'res-1', title: 'Skattemelding' } as never;
 
@@ -187,7 +187,12 @@ describe('ServiceUsersSection', () => {
   it('opens the dialog to pick actions instead of delegating on the spot', async () => {
     renderSection();
 
-    userSearchProps.onDelegate?.({ id: 'per', name: 'Per Person', type: PartyEntityType.Person });
+    userSearchProps.onDelegate?.({
+      id: 'per',
+      name: 'Per Person',
+      type: PartyType.Person,
+      isDeleted: false,
+    });
 
     expect(await screen.findByTestId('service-user-modal')).toHaveTextContent(
       'Per Person:DELEGATE',
@@ -198,7 +203,12 @@ describe('ServiceUsersSection', () => {
   it('offers revoking as well when opening a user that already holds the service', async () => {
     renderSection();
 
-    userSearchProps.onSelect?.({ id: 'ola', name: 'Ola Nordmann', type: PartyEntityType.Person });
+    userSearchProps.onSelect?.({
+      id: 'ola',
+      name: 'Ola Nordmann',
+      type: PartyType.Person,
+      isDeleted: false,
+    });
 
     expect(await screen.findByTestId('service-user-modal')).toHaveTextContent(
       'Ola Nordmann:DELEGATE,REVOKE',
@@ -208,7 +218,12 @@ describe('ServiceUsersSection', () => {
   it('revokes the whole service from the user of the row that was acted on', async () => {
     renderSection();
 
-    userSearchProps.onRevoke?.({ id: 'ola', name: 'Ola Nordmann', type: PartyEntityType.Person });
+    userSearchProps.onRevoke?.({
+      id: 'ola',
+      name: 'Ola Nordmann',
+      type: PartyType.Person,
+      isDeleted: false,
+    });
 
     await vi.waitFor(() =>
       expect(revokeTrigger).toHaveBeenCalledWith({
@@ -224,7 +239,12 @@ describe('ServiceUsersSection', () => {
     canRedelegateResource.mockResolvedValue(false);
     renderSection();
 
-    userSearchProps.onRevoke?.({ id: 'ola', name: 'Ola Nordmann', type: PartyEntityType.Person });
+    userSearchProps.onRevoke?.({
+      id: 'ola',
+      name: 'Ola Nordmann',
+      type: PartyType.Person,
+      isDeleted: false,
+    });
 
     await vi.waitFor(() => expect(canRedelegateResource).toHaveBeenCalledWith('res-1', 'ola'));
     expect(revokeTrigger).not.toHaveBeenCalled();
@@ -234,7 +254,12 @@ describe('ServiceUsersSection', () => {
     revokeTrigger.mockReturnValue({ unwrap: () => Promise.reject(new Error('boom')) });
     renderSection();
 
-    userSearchProps.onRevoke?.({ id: 'ola', name: 'Ola Nordmann', type: PartyEntityType.Person });
+    userSearchProps.onRevoke?.({
+      id: 'ola',
+      name: 'Ola Nordmann',
+      type: PartyType.Person,
+      isDeleted: false,
+    });
 
     await vi.waitFor(() =>
       expect(openSnackbar).toHaveBeenCalledWith(expect.objectContaining({ color: 'danger' })),

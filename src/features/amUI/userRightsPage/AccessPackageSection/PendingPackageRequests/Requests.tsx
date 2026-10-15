@@ -21,11 +21,11 @@ export const PendingPackageRequests = () => {
 
   const { data: sentPackageRequests = [] } = useGetSentRequestsQuery(
     {
-      ...getRequestPartyQueryParams(actingParty?.partyUuid, fromParty?.partyUuid),
+      ...getRequestPartyQueryParams(actingParty?.id, fromParty?.id),
       type: 'package',
       status: ['Pending'],
     },
-    { skip: !actingParty?.partyUuid || !fromParty?.partyUuid },
+    { skip: !actingParty?.id || !fromParty?.id },
   );
 
   const heading = t('delegation_modal.request.sent_requests_modal_header', {

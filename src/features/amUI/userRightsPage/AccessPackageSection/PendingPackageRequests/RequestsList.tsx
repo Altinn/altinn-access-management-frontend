@@ -3,6 +3,7 @@ import { MinusCircleIcon } from '@navikt/aksel-icons';
 import { Button, List, useSnackbar } from '@altinn/altinn-components';
 import { useTranslation } from 'react-i18next';
 
+import { PartyType } from '@/dataObjects/dtos/Party';
 import { useIsTabletOrSmaller } from '@/resources/utils/screensizeUtils';
 import { getRequestPartyQueryParams } from '@/resources/utils/singleRightRequestUtils';
 import {
@@ -10,7 +11,6 @@ import {
   useWithdrawRequestMutation,
   type EnrichedPackageRequest,
 } from '@/rtk/features/requestApi';
-import { PartyType } from '@/rtk/features/userInfoApi';
 
 import { usePartyRepresentation } from '../../../common/PartyRepresentationContext/PartyRepresentationContext';
 import { useRestoreFocusOnDataChange } from '../../../common/RestoreFocus';
@@ -41,10 +41,10 @@ export const PendingPackageRequestsList = ({
     isFetching: isRefetching,
   } = useGetEnrichedSentPackageRequestsQuery(
     {
-      ...getRequestPartyQueryParams(actingParty?.partyUuid, fromParty?.partyUuid),
+      ...getRequestPartyQueryParams(actingParty?.id, fromParty?.id),
       status: ['Pending'],
     },
-    { skip: !actingParty?.partyUuid || !fromParty?.partyUuid },
+    { skip: !actingParty?.id || !fromParty?.id },
   );
 
   useEffect(() => {
@@ -63,7 +63,7 @@ export const PendingPackageRequestsList = ({
     setLoadingByRequestId((prev) => ({ ...prev, [request.id]: true }));
     try {
       await withdrawRequest({
-        party: actingParty?.partyUuid ?? '',
+        party: actingParty?.id ?? '',
         id: request.id,
       }).unwrap();
       requestFocusOnDataChange(request.package?.id ?? request.id);
@@ -99,7 +99,7 @@ export const PendingPackageRequestsList = ({
             <PackageItem
               key={req.id}
               pkg={req.package}
-              partyType={fromParty?.partyTypeName ?? PartyType.Organization}
+              partyType={fromParty?.type ?? PartyType.Organization}
               as='button'
               onSelect={() => setSelectedRequest(req)}
               controls={

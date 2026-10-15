@@ -38,11 +38,11 @@ export const PackagePoaDetails = () => {
     error,
   } = useGetPackagePermissionDetailsQuery(
     {
-      from: fromParty?.partyUuid ?? '',
+      from: fromParty?.id ?? '',
       packageId: id || '',
       language: i18n.language,
     },
-    { skip: !id || !fromParty?.partyUuid },
+    { skip: !id || !fromParty?.id },
   );
 
   useDocumentTitle(

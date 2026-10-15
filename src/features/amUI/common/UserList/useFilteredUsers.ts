@@ -1,6 +1,6 @@
 import { useMemo, useState, useEffect } from 'react';
 
-import { PartyEntityType } from '@/dataObjects/dtos/Party';
+import { PartyType } from '@/dataObjects/dtos/Party';
 import { matchesOrgNr } from '@/resources/utils/reporteeUtils';
 
 import type { UserSearchNode } from '../UserSearch/types';
@@ -67,8 +67,8 @@ const sortUsers = (users: UserSearchNode[]): UserSearchNode[] => {
       return sortKeyComparison;
     }
 
-    const aIsOrg = a.type === PartyEntityType.Organization;
-    const bIsOrg = b.type === PartyEntityType.Organization;
+    const aIsOrg = a.type === PartyType.Organization;
+    const bIsOrg = b.type === PartyType.Organization;
     if (aIsOrg !== bIsOrg) return aIsOrg ? -1 : 1;
 
     return a.name.localeCompare(b.name);

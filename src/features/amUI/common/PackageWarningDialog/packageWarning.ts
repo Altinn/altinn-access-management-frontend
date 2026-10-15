@@ -1,6 +1,5 @@
 import type { AccessPackage } from '@/rtk/features/accessPackageApi';
-import type { Party } from '@/rtk/features/lookupApi';
-import { PartyType } from '@/rtk/features/userInfoApi';
+import { PartyType, type PartyEntity } from '@/dataObjects/dtos/Party';
 
 const HOVEDADMINISTRATOR_URN = 'urn:altinn:accesspackage:hovedadministrator';
 const TILGANGSSTYRING_URNS = [
@@ -20,11 +19,11 @@ export interface PendingPackageAction {
   action: PackageAction;
   warning: PackageWarning;
   accessPackage: AccessPackage;
-  fromParty: Party;
-  toParty: Party;
+  fromParty: PartyEntity;
+  toParty: PartyEntity;
 }
 
-const isPerson = (party: Party) => party.partyTypeName === PartyType.Person;
+const isPerson = (party: PartyEntity) => party.type === PartyType.Person;
 
 /**
  * Hovedadministrator and the access management packages are the most powerful packages in Altinn,
@@ -33,8 +32,8 @@ const isPerson = (party: Party) => party.partyTypeName === PartyType.Person;
  */
 export const getPackageWarning = (
   accessPackage: AccessPackage,
-  fromParty: Party,
-  toParty: Party,
+  fromParty: PartyEntity,
+  toParty: PartyEntity,
 ): PackageWarning | null => {
   if (accessPackage.urn === HOVEDADMINISTRATOR_URN) {
     return 'hovedadministrator';

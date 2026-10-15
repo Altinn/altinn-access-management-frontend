@@ -1,8 +1,6 @@
 import { useGetRightHoldersQuery } from '@/rtk/features/connectionApi';
 import { getCookie } from '@/resources/Cookie/CookieMethods';
 
-import { mapPartyEntityToParty } from './partyUtils';
-
 /**
  * useConnectedParty
  * ------------------
@@ -38,6 +36,6 @@ export const useConnectedParty = ({
 
   const partyConnection = connection?.[0];
 
-  const party = mapPartyEntityToParty(partyConnection?.party);
+  const party = partyConnection?.party;
   return { party, isLoading, error, isError };
 };

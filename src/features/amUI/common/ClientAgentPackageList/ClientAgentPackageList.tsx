@@ -19,8 +19,7 @@ import type {
   RemoveAgentAccessPackagesFn,
   RemoveAgentResourcesFn,
 } from '@/rtk/features/clientApi';
-import { PartyType } from '@/rtk/features/userInfoApi';
-import { PartyEntityType } from '@/dataObjects/dtos/Party';
+import { PartyType } from '@/dataObjects/dtos/Party';
 
 import { useRoleMetadata } from '../UserRoles/useRoleMetadata';
 import { isNewUser } from '../isNewUser';
@@ -85,8 +84,8 @@ type SelectedAgentResource = {
   ) => void | Promise<void>;
 };
 
-const getUserListItemType = (agentType: PartyEntityType): UserListItemProps['type'] => {
-  return agentType === PartyEntityType.Person ? 'person' : 'company';
+const getUserListItemType = (agentType: PartyType): UserListItemProps['type'] => {
+  return agentType === PartyType.Person ? 'person' : 'company';
 };
 
 const getAgentSortKey = (agent: Agent): string =>
@@ -235,18 +234,7 @@ export const ClientAgentPackageList = ({
                 setSelected({
                   itemId,
                   data: {
-                    party: {
-                      partyId: 0,
-                      partyUuid: agentId,
-                      name: agent.agent.name,
-                      orgNumber: agent.agent.organizationIdentifier ?? undefined,
-                      partyTypeName:
-                        agent.agent.type === PartyEntityType.Person
-                          ? PartyType.Person
-                          : PartyType.Organization,
-                      dateOfBirth: agent.agent.dateOfBirth ?? undefined,
-                      unitType: agent.agent.unitType ?? undefined,
-                    },
+                    party: agent.agent,
                     accessPackage,
                     userHasAccess: hasAccess,
                     roleDescription,
@@ -372,10 +360,7 @@ export const ClientAgentPackageList = ({
   const modalData: ClientPackageModalData | undefined = selected
     ? {
         ...selected.data,
-        userHasAccess: agentHasPackage(
-          selected.data.party.partyUuid,
-          selected.data.accessPackage.id,
-        ),
+        userHasAccess: agentHasPackage(selected.data.party.id, selected.data.accessPackage.id),
       }
     : undefined;
 

@@ -61,8 +61,8 @@ export const SearchResults = ({
   const { createRequest, deleteRequest, hasPendingRequest, isLoadingRequest } =
     useSingleRightRequests({
       canRequestRights: availableActions?.includes(DelegationAction.REQUEST) ?? false,
-      actingPartyUuid: actingParty?.partyUuid,
-      fromPartyUuid: fromParty?.partyUuid,
+      actingPartyUuid: actingParty?.id,
+      fromPartyUuid: fromParty?.id,
       onCreateRequestError: (resource) => {
         onSelect(resource);
       },

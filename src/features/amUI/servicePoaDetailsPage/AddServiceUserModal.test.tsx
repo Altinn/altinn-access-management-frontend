@@ -27,8 +27,8 @@ vi.mock('react-i18next', () => ({
 
 vi.mock('../common/PartyRepresentationContext/PartyRepresentationContext', () => ({
   usePartyRepresentation: () => ({
-    actingParty: { partyUuid: 'org' },
-    fromParty: { partyUuid: 'org' },
+    actingParty: { id: 'org' },
+    fromParty: { id: 'org' },
   }),
 }));
 
@@ -153,7 +153,13 @@ describe('AddServiceUserModal', () => {
 
   it('adds an organisation by the party uuid its lookup returns', async () => {
     organization = {
-      data: { orgNumber: '310202398', name: 'Diskret Nær Tiger AS', partyUuid: 'org-uuid' },
+      data: {
+        id: 'org-uuid',
+        name: 'Diskret Nær Tiger AS',
+        type: 'Organization',
+        organizationIdentifier: '310202398',
+        isDeleted: false,
+      },
       isFetching: false,
       isError: false,
     };
@@ -170,7 +176,13 @@ describe('AddServiceUserModal', () => {
   });
 
   const foundOrg = {
-    data: { orgNumber: '310202398', name: 'Diskret Nær Tiger AS', partyUuid: 'org-uuid' },
+    data: {
+      id: 'org-uuid',
+      name: 'Diskret Nær Tiger AS',
+      type: 'Organization',
+      organizationIdentifier: '310202398',
+      isDeleted: false,
+    },
     isFetching: false,
     isError: false,
   };

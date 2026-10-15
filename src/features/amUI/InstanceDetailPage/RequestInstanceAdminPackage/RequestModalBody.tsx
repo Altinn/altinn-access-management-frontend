@@ -49,8 +49,8 @@ export const RequestModalBody = ({ dialogRef }: RequestModalBodyProps) => {
     setRequestError(false);
     try {
       await createPackageRequest({
-        party: selfParty.partyUuid,
-        to: actingParty.partyUuid,
+        party: selfParty.id,
+        to: actingParty.id,
         package: ORG_INSTANCE_ADMIN_PACKAGE_URN,
       }).unwrap();
       // Move focus to heading
@@ -66,7 +66,7 @@ export const RequestModalBody = ({ dialogRef }: RequestModalBodyProps) => {
     setRequestError(false);
     try {
       await withdrawRequest({
-        party: selfParty.partyUuid,
+        party: selfParty.id,
         id: pendingRequest.id,
       }).unwrap();
       // Move focus to heading

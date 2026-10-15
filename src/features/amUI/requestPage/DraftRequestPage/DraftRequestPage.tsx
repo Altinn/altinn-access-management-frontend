@@ -4,7 +4,7 @@ import { DsAlert, DsParagraph } from '@altinn/altinn-components';
 import { useSearchParams } from 'react-router';
 
 import { formatEntityDisplayName } from '@/resources/utils/reporteeUtils';
-import { PartyEntityType } from '@/dataObjects/dtos/Party';
+import { PartyType } from '@/dataObjects/dtos/Party';
 import { useDocumentTitle } from '@/resources/hooks/useDocumentTitle';
 import { getCookie } from '@/resources/Cookie/CookieMethods';
 import {
@@ -201,7 +201,7 @@ export const DraftRequestPage = () => {
     <RequestPageLayout
       account={{
         name: representativeRequest?.from.name ?? '',
-        type: representativeRequest?.from.type === PartyEntityType.Person ? 'person' : 'company',
+        type: representativeRequest?.from.type === PartyType.Person ? 'person' : 'company',
       }}
       error={error}
       isLoading={isInitialLoad}

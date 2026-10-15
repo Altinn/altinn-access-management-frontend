@@ -6,9 +6,9 @@ export const useHasResourceCheck = (resourceId: string) => {
   const { toParty, fromParty, actingParty } = usePartyRepresentation();
   const { data: resourcesWithAccess, isLoading } = useGetSingleRightsForRightholderQuery(
     {
-      actingParty: actingParty?.partyUuid || '',
-      from: fromParty?.partyUuid || '',
-      to: toParty?.partyUuid || '',
+      actingParty: actingParty?.id || '',
+      from: fromParty?.id || '',
+      to: toParty?.id || '',
     },
     { skip: !toParty || !fromParty || !actingParty },
   );

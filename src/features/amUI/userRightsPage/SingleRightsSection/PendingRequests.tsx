@@ -28,8 +28,8 @@ export const PendingRequests = () => {
 
   const { singleRightRequests = [] } = useSingleRightRequests({
     canRequestRights: true,
-    actingPartyUuid: actingParty?.partyUuid,
-    fromPartyUuid: fromParty?.partyUuid,
+    actingPartyUuid: actingParty?.id,
+    fromPartyUuid: fromParty?.id,
   });
 
   return (
@@ -127,11 +127,11 @@ export const PendingRequestsList = ({
   const { data: singleRightRequests = [], isLoading: isLoadingRequests } =
     useGetEnrichedSentResourceRequestsQuery(
       {
-        ...getRequestPartyQueryParams(actingParty?.partyUuid, fromParty?.partyUuid),
+        ...getRequestPartyQueryParams(actingParty?.id, fromParty?.id),
         status: ['Pending'],
       },
       {
-        skip: !actingParty?.partyUuid || !fromParty?.partyUuid,
+        skip: !actingParty?.id || !fromParty?.id,
       },
     );
 
@@ -141,8 +141,8 @@ export const PendingRequestsList = ({
 
   const { deleteRequest, isLoadingRequest } = useSingleRightRequests({
     canRequestRights: true,
-    actingPartyUuid: actingParty?.partyUuid,
-    fromPartyUuid: fromParty?.partyUuid,
+    actingPartyUuid: actingParty?.id,
+    fromPartyUuid: fromParty?.id,
     onDeleteRequestSuccess: (resource) => requestFocusOnDataChange(resource.identifier),
   });
 

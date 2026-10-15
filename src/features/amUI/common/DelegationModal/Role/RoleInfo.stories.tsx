@@ -4,8 +4,7 @@ import { RootProvider } from '@altinn/altinn-components';
 
 import store from '@/rtk/app/store';
 import type { Role } from '@/rtk/features/roleApi';
-import type { Party } from '@/rtk/features/lookupApi';
-import { PartyType } from '@/rtk/features/userInfoApi';
+import { PartyType, type PartyEntity } from '@/dataObjects/dtos/Party';
 
 import { InheritedStatusType } from '../../useInheritedStatus';
 import { PartyRepresentationContext } from '../../PartyRepresentationContext/PartyRepresentationContext';
@@ -29,17 +28,18 @@ const createParty = (
   partyUuid: string,
   name: string,
   type: PartyType = PartyType.Organization,
-): Party => ({
+): PartyEntity => ({
   partyId: Math.abs(
     Array.from(partyUuid).reduce((sum, char) => {
       return sum + char.charCodeAt(0);
     }, 0),
   ),
-  partyUuid,
+  id: partyUuid,
   name,
-  partyTypeName: type,
-  orgNumber: type === PartyType.Person ? undefined : '912345678',
+  type: type,
+  organizationIdentifier: type === PartyType.Person ? undefined : '912345678',
   unitType: type === PartyType.Person ? undefined : 'AS',
+  isDeleted: false,
 });
 
 const scenarioConfigs = {

@@ -12,7 +12,7 @@ import {
   useRemoveInstanceMutation,
 } from '@/rtk/features/instanceApi';
 import type { ServiceResource } from '@/rtk/features/singleRights/singleRightsApi';
-import type { Party } from '@/rtk/features/lookupApi';
+import type { PartyEntity } from '@/dataObjects/dtos/Party';
 
 import { createErrorDetails } from '../../TechnicalErrorParagraphs/TechnicalErrorParagraphs';
 import { StatusSection } from '../../StatusSection/StatusSection';
@@ -34,7 +34,7 @@ export interface InstanceInfoProps {
   resource: ServiceResource;
   instanceUrn: string;
   dialogLookup?: DialogLookup;
-  toParty?: Pick<Party, 'partyUuid' | 'name' | 'partyTypeName'>;
+  toParty?: Pick<PartyEntity, 'id' | 'name' | 'type'>;
   availableActions?: DelegationAction[];
   onSuccess?: () => void;
 }
@@ -51,7 +51,7 @@ export const InstanceInfo = ({
   const isSmall = useIsMobileOrSmaller();
   const { toParty: toPartyContext, fromParty, actingParty } = usePartyRepresentation();
   const toParty = toPartyProp ?? toPartyContext;
-  const toPartyUuid = toParty?.partyUuid ?? '';
+  const toPartyUuid = toParty?.id ?? '';
 
   const hasDelegateAction = availableActions?.includes(DelegationAction.DELEGATE);
   const canRevoke = availableActions?.includes(DelegationAction.REVOKE) ?? false;
@@ -70,7 +70,7 @@ export const InstanceInfo = ({
   } = useInstanceDelegationRightsData({
     resourceId: resource.identifier,
     instanceUrn,
-    fromPartyUuid: fromParty?.partyUuid,
+    fromPartyUuid: fromParty?.id,
     toPartyUuid,
     mode: canRevoke ? 'edit' : 'delegate',
   });
@@ -86,7 +86,7 @@ export const InstanceInfo = ({
   ) => {
     if (!actingParty) return;
     delegateInstance({
-      party: actingParty.partyUuid,
+      party: actingParty.id,
       to: toPartyUuid,
       resource: resource.identifier,
       instance: instanceUrn,
@@ -100,7 +100,7 @@ export const InstanceInfo = ({
   const onUpdate = (actionKeys: string[], onSuccess: () => void, onError: (error: any) => void) => {
     if (!actingParty) return;
     updateInstance({
-      party: actingParty.partyUuid,
+      party: actingParty.id,
       to: toPartyUuid,
       resource: resource.identifier,
       instance: instanceUrn,
@@ -114,8 +114,8 @@ export const InstanceInfo = ({
   const onRevoke = (onSuccess: () => void, onError: (error: any) => void) => {
     if (!actingParty || !fromParty) return;
     removeInstance({
-      party: actingParty.partyUuid,
-      from: fromParty.partyUuid,
+      party: actingParty.id,
+      from: fromParty.id,
       to: toPartyUuid,
       resource: resource.identifier,
       instance: instanceUrn,

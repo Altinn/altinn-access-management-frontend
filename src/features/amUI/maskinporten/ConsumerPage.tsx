@@ -1,4 +1,3 @@
-import { useMemo } from 'react';
 import { Link, useParams } from 'react-router';
 import { useTranslation } from 'react-i18next';
 import { DsAlert, DsParagraph, DsSkeleton } from '@altinn/altinn-components';
@@ -7,9 +6,7 @@ import { PageWrapper } from '@/components/PageWrapper/PageWrapper';
 import { formatEntityDisplayName } from '@/resources/utils/reporteeUtils';
 import { getCookie } from '@/resources/Cookie/CookieMethods';
 import { useDocumentTitle } from '@/resources/hooks/useDocumentTitle';
-import type { Party } from '@/rtk/features/lookupApi';
 import { useGetMaskinportenConsumersQuery } from '@/rtk/features/maskinportenApi';
-import { PartyType } from '@/rtk/features/userInfoApi';
 import { amUIPath } from '@/routes/paths';
 
 import { PartyRepresentationProvider } from '../common/PartyRepresentationContext/PartyRepresentationContext';
@@ -37,21 +34,7 @@ export const ConsumerPage = () => {
   const consumer = data?.[0];
   const consumerName = formatEntityDisplayName(consumer?.party);
 
-  const consumerParty = useMemo((): Party | undefined => {
-    const party = consumer?.party;
-    if (!party) {
-      return undefined;
-    }
-    return {
-      partyUuid: party.id,
-      partyId: 0,
-      name: party.name,
-      partyTypeName: PartyType.Organization,
-      orgNumber: party.organizationIdentifier ?? '',
-      isDeleted: party.isDeleted ?? false,
-      unitType: party.unitType ?? '',
-    };
-  }, [consumer]);
+  const consumerParty = consumer?.party;
 
   const notFound = !!error || (!isLoading && !data?.length);
 

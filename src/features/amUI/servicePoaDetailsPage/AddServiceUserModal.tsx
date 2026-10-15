@@ -81,8 +81,8 @@ export const AddServiceUserButton = ({ resource, onUserAdded }: AddServiceUserBu
       }
       try {
         await delegateRights({
-          partyUuid: actingParty?.partyUuid ?? '',
-          fromUuid: fromParty?.partyUuid ?? '',
+          partyUuid: actingParty?.id ?? '',
+          fromUuid: fromParty?.id ?? '',
           toUuid,
           resourceId,
           actionKeys,
@@ -133,8 +133,8 @@ export const AddServiceUserButton = ({ resource, onUserAdded }: AddServiceUserBu
               { type: 'org', submitLabel: t('common.give_poa') },
             ]}
             isSubmitDisabled={
-              !actingParty?.partyUuid ||
-              !fromParty?.partyUuid ||
+              !actingParty?.id ||
+              !fromParty?.id ||
               actionKeys.length === 0 ||
               isLoading ||
               !!errorDetails

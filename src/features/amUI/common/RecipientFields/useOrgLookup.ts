@@ -2,13 +2,14 @@ import { useState } from 'react';
 import type { SerializedError } from '@reduxjs/toolkit';
 import type { FetchBaseQueryError } from '@reduxjs/toolkit/query';
 
-import { useGetOrganizationQuery, type Party } from '@/rtk/features/lookupApi';
+import { useGetOrganizationQuery } from '@/rtk/features/lookupApi';
+import type { PartyEntity } from '@/dataObjects/dtos/Party';
 
 export interface OrgLookup {
   orgNumber: string;
   /*** Spaces are stripped, so a number typed in groups still matches the 9 digit lookup */
   setOrgNumber: (value: string) => void;
-  orgData?: Party;
+  orgData?: PartyEntity;
   isFetching: boolean;
   isError: boolean;
   error: FetchBaseQueryError | SerializedError | undefined;
@@ -46,6 +47,7 @@ export const useOrgLookup = (ownOrgNumber?: string): OrgLookup => {
     isOwnOrg,
     // isFetching is the one to gate on: it stays true while a second lookup replaces a first,
     // where isLoading would already be false and the previous organisation still shown.
-    isValid: !!orgData?.partyUuid && orgData.orgNumber === orgNumber && !isOwnOrg && !isFetching,
+    isValid:
+      !!orgData?.id && orgData.organizationIdentifier === orgNumber && !isOwnOrg && !isFetching,
   };
 };

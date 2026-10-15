@@ -3,7 +3,7 @@ import { Provider } from 'react-redux';
 import { RootProvider } from '@altinn/altinn-components';
 
 import store from '@/rtk/app/store';
-import { PartyEntityType } from '@/dataObjects/dtos/Party';
+import { PartyType } from '@/dataObjects/dtos/Party';
 
 import { PartyRepresentationProvider } from '../PartyRepresentationContext/PartyRepresentationContext';
 
@@ -37,7 +37,7 @@ const mockViaParties = [
   {
     id: 'via-party-1-uuid',
     name: 'VIRKSOMHETEN AS',
-    type: PartyEntityType.Organization,
+    type: PartyType.Organization,
     unitType: 'AS',
     isDeleted: false,
   },

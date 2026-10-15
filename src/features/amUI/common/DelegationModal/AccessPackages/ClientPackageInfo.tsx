@@ -2,8 +2,8 @@ import { DsAlert, DsButton, DsHeading, DsParagraph } from '@altinn/altinn-compon
 import { useRef } from 'react';
 import { useTranslation } from 'react-i18next';
 
+import { PartyType } from '@/dataObjects/dtos/Party';
 import { formatEntityDisplayName } from '@/resources/utils/reporteeUtils';
-import { PartyType } from '@/rtk/features/userInfoApi';
 
 import { LoadingAnimation } from '../../LoadingAnimation/LoadingAnimation';
 import { focusFirstEnabledButton, useRestoreFocusAfterSettled } from '../../RestoreFocus';
@@ -79,7 +79,7 @@ export const ClientPackageInfo = ({
                   errorCode={error.details?.errorCode ?? error.details?.detail ?? ''}
                   translationValues={{
                     entity_type:
-                      party.partyTypeName === PartyType.Person
+                      party.type === PartyType.Person
                         ? t('common.persons_lowercase')
                         : t('common.organizations_lowercase'),
                   }}

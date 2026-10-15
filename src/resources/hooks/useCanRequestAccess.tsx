@@ -8,8 +8,7 @@ export const useCanRequestAccess = (isReportee: boolean = false) => {
     return true;
   }
 
-  const partyCheck =
-    actingParty?.partyUuid === toParty?.partyUuid && toParty?.partyUuid !== fromParty?.partyUuid;
+  const partyCheck = actingParty?.id === toParty?.id && toParty?.id !== fromParty?.id;
 
   return partyCheck;
 };

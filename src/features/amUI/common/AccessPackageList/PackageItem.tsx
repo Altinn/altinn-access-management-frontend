@@ -1,8 +1,8 @@
 import { AccessPackageListItem, type AccessPackageListItemProps } from '@altinn/altinn-components';
 import { useTranslation } from 'react-i18next';
 
+import { PartyType } from '@/dataObjects/dtos/Party';
 import type { AccessPackage } from '@/rtk/features/accessPackageApi';
-import { PartyType } from '@/rtk/features/userInfoApi';
 
 import { useRestoreFocusTarget } from '../RestoreFocus';
 

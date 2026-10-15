@@ -31,11 +31,7 @@ export const ActiveConsentsPage = () => {
   const { data: reportee, isLoading: isLoadingReportee } = useGetReporteeQuery();
   const { data: currentUser, isLoading: isCurrentUserLoading } = useGetPartyFromLoggedInUserQuery();
   const { data: isAdmin, isLoading: isLoadingIsAdmin } = useGetIsAdminQuery();
-  const hasPermission = hasConsentPermission(
-    reportee,
-    isAdmin,
-    currentUser?.partyUuid === reportee?.id,
-  );
+  const hasPermission = hasConsentPermission(reportee, isAdmin, currentUser?.id === reportee?.id);
 
   const {
     data: activeConsents,

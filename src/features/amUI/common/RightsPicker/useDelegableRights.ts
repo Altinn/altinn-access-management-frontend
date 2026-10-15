@@ -48,11 +48,11 @@ export const useDelegableRights = ({
 
   const instanceCheck = useInstanceDelegationCheckQuery(
     {
-      party: actingParty?.partyUuid || '',
+      party: actingParty?.id || '',
       resource: resourceId,
       instance: instanceUrn || '',
     },
-    { skip: skip || !isInstance || !actingParty?.partyUuid },
+    { skip: skip || !isInstance || !actingParty?.id },
   );
 
   const {

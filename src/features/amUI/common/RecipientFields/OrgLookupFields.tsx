@@ -2,7 +2,11 @@ import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { DsHeading, DsParagraph, DsTextfield } from '@altinn/altinn-components';
 
-import { formatOrgNr, isSubUnitByType } from '@/resources/utils/reporteeUtils';
+import {
+  formatEntityDisplayName,
+  formatOrgNr,
+  isSubUnitByType,
+} from '@/resources/utils/reporteeUtils';
 
 import { createErrorDetails } from '../TechnicalErrorParagraphs/TechnicalErrorParagraphs';
 
@@ -76,10 +80,10 @@ export const OrgLookupFields = ({
               {t('new_user_modal.org_search_result_label')}
             </DsHeading>
             <DsParagraph>
-              <strong>{lookup.orgData.name}</strong>
+              <strong>{formatEntityDisplayName(lookup.orgData)}</strong>
             </DsParagraph>
             <DsParagraph data-size='sm'>
-              {t('common.org_nr')} {formatOrgNr(lookup.orgData.orgNumber)}
+              {t('common.org_nr')} {formatOrgNr(lookup.orgData.organizationIdentifier)}
               {isSubUnitByType(lookup.orgData.unitType) && ' - ' + t('common.subunit')}
             </DsParagraph>
           </div>

@@ -58,9 +58,9 @@ export const ResourceInfo = ({
   const { data: resourceDelegations, isLoading: isResourceDelegationsLoading } =
     useGetSingleRightsForRightholderQuery(
       {
-        actingParty: actingParty?.partyUuid || '',
-        from: fromParty?.partyUuid || '',
-        to: toParty?.partyUuid || '',
+        actingParty: actingParty?.id || '',
+        from: fromParty?.id || '',
+        to: toParty?.id || '',
       },
       { skip: !actingParty || !fromParty || !toParty },
     );
@@ -80,8 +80,8 @@ export const ResourceInfo = ({
   const { createRequest, deleteRequest, hasPendingRequest, isLoadingRequest } =
     useSingleRightRequests({
       canRequestRights: isSingleRightRequest,
-      actingPartyUuid: actingParty?.partyUuid,
-      fromPartyUuid: fromParty?.partyUuid,
+      actingPartyUuid: actingParty?.id,
+      fromPartyUuid: fromParty?.id,
     });
 
   const delegateRights = useDelegateRights();

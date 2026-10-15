@@ -73,7 +73,13 @@ describe('AddUserForm', () => {
 
   it('hands the flow the organisation its lookup found', async () => {
     organization = {
-      data: { orgNumber: '310202398', name: 'Diskret Nær Tiger AS', partyUuid: 'org-uuid' },
+      data: {
+        id: 'org-uuid',
+        name: 'Diskret Nær Tiger AS',
+        type: 'Organization',
+        organizationIdentifier: '310202398',
+        isDeleted: false,
+      },
       isFetching: false,
       isError: false,
     };
@@ -84,7 +90,7 @@ describe('AddUserForm', () => {
 
     expect(onSubmit.mock.calls[0][0]).toMatchObject({
       kind: 'org',
-      organization: { partyUuid: 'org-uuid' },
+      organization: { id: 'org-uuid' },
     });
   });
 

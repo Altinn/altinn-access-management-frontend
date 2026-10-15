@@ -28,7 +28,7 @@ export const ScopeSearch = ({
   const { fromParty, toParty } = usePartyRepresentation();
   const { searchString, setSearchString, filters, setFilters, currentPage, setCurrentPage } =
     useDelegationModalContext();
-  const supplier = toParty?.orgNumber ?? '';
+  const supplier = toParty?.organizationIdentifier ?? '';
 
   const debouncedSearchString = useDebouncedValue(searchString, searchString ? 300 : 0);
 
@@ -41,11 +41,11 @@ export const ScopeSearch = ({
   const { data: resourceOwners } = useGetResourceOwnersQuery([ResourceType.MaskinportenSchema]);
   const { data: delegatedResources } = useGetMaskinportenSupplierResourcesQuery(
     {
-      party: fromParty?.partyUuid,
+      party: fromParty?.id,
       supplier,
     },
     {
-      skip: !fromParty?.partyUuid || !supplier,
+      skip: !fromParty?.id || !supplier,
       refetchOnMountOrArgChange: true,
     },
   );

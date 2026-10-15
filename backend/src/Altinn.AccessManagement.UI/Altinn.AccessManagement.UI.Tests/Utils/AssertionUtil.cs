@@ -334,25 +334,6 @@ namespace Altinn.AccessManagement.UI.Tests.Utils
             }
         }
 
-        public static void AssertEqual(LegacyPartyFE expected, LegacyPartyFE actual)
-        {
-            Assert.NotNull(actual);
-            Assert.NotNull(expected);
-
-            Assert.Equal(expected.Name, actual.Name);
-            Assert.Equal(expected.UnitType, actual.UnitType);
-            Assert.Equal(expected.PartyTypeName, actual.PartyTypeName);
-            Assert.Equal(expected.Organization?.Name, actual.Organization?.Name);
-            Assert.Equal(expected.Organization?.UnitType, actual.Organization?.UnitType);
-            Assert.Equal(expected.Organization?.OrgNumber, actual.Organization?.OrgNumber);
-            Assert.Equal(expected.OrgNumber, actual.OrgNumber);
-            Assert.Equal(expected.PartyUuid, actual.PartyUuid);
-            Assert.Equal(expected.PartyId, actual.PartyId);
-            Assert.Equal(expected.OnlyHierarchyElementWithNoAccess, actual.OnlyHierarchyElementWithNoAccess);
-            AssertCollections<LegacyPartyFE>(expected.ChildParties, actual.ChildParties, AssertEqual);
-
-        }
-
         public static void AssertEqual(AuthorizedParty expected, AuthorizedParty actual)
         {
             Assert.NotNull(actual);

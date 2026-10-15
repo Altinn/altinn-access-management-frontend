@@ -3,7 +3,7 @@ import { Trans, useTranslation } from 'react-i18next';
 import { DsButton, DsDialog, DsHeading, DsParagraph } from '@altinn/altinn-components';
 
 import { formatEntityDisplayName } from '@/resources/utils/reporteeUtils';
-import type { Party } from '@/rtk/features/lookupApi';
+import type { PartyEntity } from '@/dataObjects/dtos/Party';
 
 import type { PendingPackageAction } from './packageWarning';
 import classes from './PackageWarningDialog.module.css';
@@ -14,7 +14,7 @@ interface PackageWarningDialogProps {
   onCancel: () => void;
 }
 
-const displayName = (party: Party) => formatEntityDisplayName(party);
+const displayName = (party: PartyEntity) => formatEntityDisplayName(party);
 
 export const PackageWarningDialog = ({
   pending,

@@ -3,11 +3,11 @@ using System.Net.Http.Headers;
 using System.Net.Http.Json;
 using Altinn.AccessManagement.UI.Controllers;
 using Altinn.AccessManagement.UI.Core.ClientInterfaces;
-using Altinn.AccessManagement.UI.Core.Models;
+using Altinn.AccessManagement.UI.Core.Enums;
+using Altinn.AccessManagement.UI.Core.Models.Common.Frontend;
 using Altinn.AccessManagement.UI.Mocks.Mocks;
 using Altinn.AccessManagement.UI.Mocks.Utils;
 using Altinn.AccessManagement.UI.Tests.Utils;
-using Altinn.Register.Contracts.V1;
 using AltinnCore.Authentication.JwtCookie;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc.Testing;
@@ -80,10 +80,10 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
 
             Assert.Equal(HttpStatusCode.OK, response.StatusCode);
 
-            LegacyPartyFE actualParty = await response.Content.ReadFromJsonAsync<LegacyPartyFE>();
-            Assert.Equal(lookupOrgNo, actualParty.OrgNumber);
+            PartyFE actualParty = await response.Content.ReadFromJsonAsync<PartyFE>();
+            Assert.Equal(lookupOrgNo, actualParty.OrganizationIdentifier);
             Assert.Equal(50004222, actualParty.PartyId);
-            Assert.Equal(PartyType.Organisation, actualParty.PartyTypeName);
+            Assert.Equal(PartyTypeFE.Organization, actualParty.Type);
             Assert.Equal("KARLSTAD OG ULOYBUKT", actualParty.Name);
         }
 
@@ -126,11 +126,11 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
             _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
             
             string path = Path.Combine(_testDataPath, "GetPartyFromLoggedInUser", "person_party.json");
-            LegacyPartyFE expectedParty = Util.GetMockData<LegacyPartyFE>(path);
+            PartyFE expectedParty = Util.GetMockData<PartyFE>(path);
 
             // Act
             HttpResponseMessage response = await _client.GetAsync("accessmanagement/api/v1/lookup/party/user");
-            LegacyPartyFE actualParty = await response.Content.ReadFromJsonAsync<LegacyPartyFE>();
+            PartyFE actualParty = await response.Content.ReadFromJsonAsync<PartyFE>();
 
             // Assert
             Assert.Equal(HttpStatusCode.OK, response.StatusCode);
@@ -196,11 +196,11 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
             _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
             
             string path = Path.Combine(_testDataPath, "GetPartyFromLoggedInUser", "organization_party.json");
-            LegacyPartyFE expectedParty = Util.GetMockData<LegacyPartyFE>(path);
+            PartyFE expectedParty = Util.GetMockData<PartyFE>(path);
 
             // Act
             HttpResponseMessage response = await _client.GetAsync("accessmanagement/api/v1/lookup/party/user");
-            LegacyPartyFE actualParty = await response.Content.ReadFromJsonAsync<LegacyPartyFE>();
+            PartyFE actualParty = await response.Content.ReadFromJsonAsync<PartyFE>();
 
             // Assert
             Assert.Equal(HttpStatusCode.OK, response.StatusCode);

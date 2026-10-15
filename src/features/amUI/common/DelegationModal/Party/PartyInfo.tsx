@@ -7,9 +7,9 @@ import {
   getFormattedDateOfBirthLabel,
   isSubUnitByType,
   formatEntityDisplayName,
+  getAvatarType,
 } from '@/resources/utils/reporteeUtils';
-import { PartyType } from '@/rtk/features/userInfoApi';
-import type { Party } from '@/rtk/features/lookupApi';
+import { PartyType, type PartyEntity } from '@/dataObjects/dtos/Party';
 import type { AccessPackage } from '@/rtk/features/accessPackageApi';
 import type { ActionError } from '@/resources/hooks/useActionError';
 
@@ -24,7 +24,7 @@ import { focusFirstEnabledButton, useRestoreFocusAfterSettled } from '../../Rest
 import classes from './PartyInfo.module.css';
 
 export interface PartyInfoProps {
-  party: Party;
+  party: PartyEntity;
   accessPackage: AccessPackage;
   userHasAccess: boolean;
   inheritedStatus?: InheritedStatusMessageType[];
@@ -68,17 +68,17 @@ export const PartyInfo = ({
   });
 
   const userName = formatEntityDisplayName(party);
-  const partyAvatarType = party.partyTypeName === PartyType.Person ? 'person' : 'company';
+  const partyAvatarType = getAvatarType(party);
 
   const canRevoke = userHasAccess && availableActions.includes(DelegationAction.REVOKE);
   const canDelegate =
     !userHasAccess && availableActions.includes(DelegationAction.DELEGATE) && !!onDelegate;
 
   const partySubtitle =
-    party.partyTypeName === PartyType.Person
+    party.type === PartyType.Person
       ? getFormattedDateOfBirthLabel(party.dateOfBirth)
-      : party.orgNumber
-        ? `${t('common.org_nr')} ${formatOrgNr(party.orgNumber)}`
+      : party.organizationIdentifier
+        ? `${t('common.org_nr')} ${formatOrgNr(party.organizationIdentifier)}`
         : undefined;
 
   const actionDescriptionKey = userHasAccess
@@ -151,7 +151,7 @@ export const PartyInfo = ({
                   errorCode={error.details?.errorCode ?? error.details?.detail ?? ''}
                   translationValues={{
                     entity_type:
-                      party.partyTypeName === PartyType.Person
+                      party.type === PartyType.Person
                         ? t('common.persons_lowercase')
                         : t('common.organizations_lowercase'),
                   }}

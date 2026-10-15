@@ -4,12 +4,9 @@ import { Navigate, useSearchParams } from 'react-router';
 import { Trans, useTranslation } from 'react-i18next';
 import { EnvelopeClosedIcon } from '@navikt/aksel-icons';
 
+import { PartyType } from '@/dataObjects/dtos/Party';
 import type { ActionError } from '@/resources/hooks/useActionError';
-import {
-  PartyType,
-  useGetIsAdminQuery,
-  useGetIsInstanceAdminQuery,
-} from '@/rtk/features/userInfoApi';
+import { useGetIsAdminQuery, useGetIsInstanceAdminQuery } from '@/rtk/features/userInfoApi';
 import { useGetResourceQuery } from '@/rtk/features/resourceApi';
 import { useGetInstancesQuery, useRemoveInstanceMutation } from '@/rtk/features/instanceApi';
 import { useIsMobileOrSmaller } from '@/resources/utils/screensizeUtils';
@@ -17,7 +14,6 @@ import { useIsMobileOrSmaller } from '@/resources/utils/screensizeUtils';
 import { ResourceInfoSkeleton } from '../common/DelegationModal/SingleRights/ResourceInfoSkeleton';
 import { PageDivider } from '../common/PageDivider/PageDivider';
 import { usePartyRepresentation } from '../common/PartyRepresentationContext/PartyRepresentationContext';
-import { mapPartyEntityToParty } from '../common/PartyRepresentationContext/partyUtils';
 import {
   createErrorDetails,
   TechnicalErrorParagraphs,
@@ -50,7 +46,7 @@ export const InstanceDetailPageContent = () => {
   const { actingParty, fromParty } = usePartyRepresentation();
   const isSmall = useIsMobileOrSmaller();
 
-  const actingPartyIsOrg = actingParty?.partyTypeName === PartyType.Organization;
+  const actingPartyIsOrg = actingParty?.type === PartyType.Organization;
 
   const restoreFocus = useRestoreFocusContext();
   const modalRef = useRef<HTMLDialogElement>(null);
@@ -78,10 +74,10 @@ export const InstanceDetailPageContent = () => {
   };
 
   const handleRevoke = (user: UserActionTarget) => {
-    if (!actingParty?.partyUuid || !fromParty?.partyUuid) return;
+    if (!actingParty?.id || !fromParty?.id) return;
     removeInstance({
-      party: actingParty.partyUuid,
-      from: fromParty.partyUuid,
+      party: actingParty.id,
+      from: fromParty.id,
       to: user.id,
       resource: resourceId,
       instance: instanceUrn,
@@ -130,14 +126,14 @@ export const InstanceDetailPageContent = () => {
   });
   const { data: instanceDelegations = [] } = useGetInstancesQuery(
     {
-      party: actingParty?.partyUuid || '',
-      from: fromParty?.partyUuid,
+      party: actingParty?.id || '',
+      from: fromParty?.id,
       resource: resourceId,
       instance: instanceUrn,
       language: i18n.language,
     },
     {
-      skip: !actingParty?.partyUuid || !fromParty?.partyUuid || !resourceId || !instanceUrn,
+      skip: !actingParty?.id || !fromParty?.id || !resourceId || !instanceUrn,
     },
   );
   const requestFocusOnRevoke = useRestoreFocusOnDataChange(instanceDelegations);
@@ -273,7 +269,7 @@ export const InstanceDetailPageContent = () => {
           ref={modalRef}
           resource={resource}
           instance={{ instanceUrn }}
-          toParty={mapPartyEntityToParty(selectedUser)}
+          toParty={selectedUser}
           openWithError={actionError}
           onSuccess={selectedUserMode === 'delegate' ? () => modalRef.current?.close() : undefined}
           onClose={() => {
