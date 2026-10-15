@@ -80,7 +80,7 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
 
             Assert.Equal(HttpStatusCode.OK, response.StatusCode);
 
-            PartyFE actualParty = await response.Content.ReadFromJsonAsync<PartyFE>();
+            LegacyPartyFE actualParty = await response.Content.ReadFromJsonAsync<LegacyPartyFE>();
             Assert.Equal(lookupOrgNo, actualParty.OrgNumber);
             Assert.Equal(50004222, actualParty.PartyId);
             Assert.Equal(PartyType.Organisation, actualParty.PartyTypeName);
@@ -126,11 +126,11 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
             _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
             
             string path = Path.Combine(_testDataPath, "GetPartyFromLoggedInUser", "person_party.json");
-            PartyFE expectedParty = Util.GetMockData<PartyFE>(path);
+            LegacyPartyFE expectedParty = Util.GetMockData<LegacyPartyFE>(path);
 
             // Act
             HttpResponseMessage response = await _client.GetAsync("accessmanagement/api/v1/lookup/party/user");
-            PartyFE actualParty = await response.Content.ReadFromJsonAsync<PartyFE>();
+            LegacyPartyFE actualParty = await response.Content.ReadFromJsonAsync<LegacyPartyFE>();
 
             // Assert
             Assert.Equal(HttpStatusCode.OK, response.StatusCode);
@@ -196,11 +196,11 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
             _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
             
             string path = Path.Combine(_testDataPath, "GetPartyFromLoggedInUser", "organization_party.json");
-            PartyFE expectedParty = Util.GetMockData<PartyFE>(path);
+            LegacyPartyFE expectedParty = Util.GetMockData<LegacyPartyFE>(path);
 
             // Act
             HttpResponseMessage response = await _client.GetAsync("accessmanagement/api/v1/lookup/party/user");
-            PartyFE actualParty = await response.Content.ReadFromJsonAsync<PartyFE>();
+            LegacyPartyFE actualParty = await response.Content.ReadFromJsonAsync<LegacyPartyFE>();
 
             // Assert
             Assert.Equal(HttpStatusCode.OK, response.StatusCode);

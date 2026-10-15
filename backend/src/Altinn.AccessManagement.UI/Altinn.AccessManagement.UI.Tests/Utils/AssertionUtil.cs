@@ -332,7 +332,7 @@ namespace Altinn.AccessManagement.UI.Tests.Utils
             }
         }
 
-        public static void AssertEqual(PartyFE expected, PartyFE actual)
+        public static void AssertEqual(LegacyPartyFE expected, LegacyPartyFE actual)
         {
             Assert.NotNull(actual);
             Assert.NotNull(expected);
@@ -347,7 +347,7 @@ namespace Altinn.AccessManagement.UI.Tests.Utils
             Assert.Equal(expected.PartyUuid, actual.PartyUuid);
             Assert.Equal(expected.PartyId, actual.PartyId);
             Assert.Equal(expected.OnlyHierarchyElementWithNoAccess, actual.OnlyHierarchyElementWithNoAccess);
-            AssertCollections<PartyFE>(expected.ChildParties, actual.ChildParties, AssertEqual);
+            AssertCollections<LegacyPartyFE>(expected.ChildParties, actual.ChildParties, AssertEqual);
 
         }
 
