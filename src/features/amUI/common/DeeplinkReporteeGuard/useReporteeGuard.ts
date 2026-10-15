@@ -1,19 +1,17 @@
 import { useEffect } from 'react';
 import { type SerializedError } from '@reduxjs/toolkit';
 import type { FetchBaseQueryError } from '@reduxjs/toolkit/query';
+import type { AuthorizedParty } from '@altinn/altinn-components';
 
 import { redirectToChangeReporteeAndRedirect } from '@/resources/utils/changeReporteeUtils';
-import {
-  type ReporteeInfo,
-  useGetReporteeListForAuthorizedUserQuery,
-} from '@/rtk/features/userInfoApi';
+import { useGetReporteeListForAuthorizedUserQuery } from '@/rtk/features/userInfoApi';
 
 export type ReporteeGuardStatus = 'ready' | 'loading' | 'redirecting' | 'unauthorized' | 'error';
 
 interface GetReporteeGuardStatusArgs {
   actingPartyUuid?: string;
   requestedPartyUuid?: string;
-  reporteeList?: ReporteeInfo[];
+  reporteeList?: AuthorizedParty[];
   isAuthorizedPartyListLoading: boolean;
   isAuthorizedPartyListError: boolean;
 }
@@ -44,7 +42,7 @@ export const getUrlWithoutRequestedPartyUuid = (url: string) => {
 };
 
 export const hasAccessToRequestedParty = (
-  reporteeList: ReporteeInfo[] | undefined,
+  reporteeList: AuthorizedParty[] | undefined,
   requestedPartyUuid: string,
 ): boolean => {
   const normalized = normalizePartyUuid(requestedPartyUuid);

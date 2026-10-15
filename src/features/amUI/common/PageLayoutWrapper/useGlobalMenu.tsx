@@ -11,16 +11,12 @@ import {
 import { useTranslation } from 'react-i18next';
 import { Link } from 'react-router';
 
-import { formatEntityDisplayName } from '@/resources/utils/reporteeUtils';
+import { formatEntityDisplayName, isOrganization } from '@/resources/utils/reporteeUtils';
 import { useGetReporteeQuery, useGetUserProfileQuery } from '@/rtk/features/userInfoApi';
 import { useIsTabletOrSmaller } from '@/resources/utils/screensizeUtils';
 import { getAfUrl, getAltinnStartPageUrl, getLogoutUrl } from '@/resources/utils/pathUtils';
 
 import { useSidebarItems } from './useSidebarItems';
-
-const getAccountType = (type: string): 'company' | 'person' => {
-  return type === 'Organization' ? 'company' : 'person';
-};
 
 const linkUrls = {
   forms: {
@@ -145,8 +141,8 @@ export const useGlobalMenu = ({
 
     currentAccount: {
       name: reportee?.name || '',
-      type: getAccountType(reportee?.type ?? ''),
-      id: reportee?.partyId || '',
+      type: isOrganization(reportee) ? 'company' : 'person',
+      id: reportee?.partyId?.toString() ?? '',
     },
   };
 

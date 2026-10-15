@@ -1,14 +1,14 @@
 import { useGetConsentRequestsCountQuery } from '@/rtk/features/consentApi';
 import { useGetReceivedRequestsCountQuery } from '@/rtk/features/requestApi';
 import { useGetPendingSystemUserRequestsQuery } from '@/rtk/features/systemUserApi';
-import type { ReporteeInfo } from '@/rtk/features/userInfoApi';
+import type { AuthorizedPartyEntity } from '@/dataObjects/dtos/Party';
 
 import { hasConsentPermission, hasCreateSystemUserPermission } from '../utils/permissionUtils';
 import { getCookie } from '../Cookie/CookieMethods';
 
 interface UseSidebarRequestCountParams {
   isAdmin?: boolean;
-  reportee?: ReporteeInfo;
+  reportee?: AuthorizedPartyEntity;
   isCurrentUserReportee?: boolean;
   isLoadingPermissions: boolean;
 }

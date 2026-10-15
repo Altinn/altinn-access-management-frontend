@@ -4,7 +4,7 @@ import { useNavigate, useSearchParams } from 'react-router';
 import { DsAlert, DsButton, DsHeading, DsParagraph } from '@altinn/altinn-components';
 
 import { ConsentPath } from '@/routes/paths/consentPath';
-import { PartyType } from '@/rtk/features/userInfoApi';
+import { PartyEntityType } from '@/dataObjects/dtos/Party';
 import {
   useApproveConsentRequestMutation,
   useGetConsentRequestQuery,
@@ -122,7 +122,7 @@ export const ConsentRequestPage = () => {
 
   const account: { name: string; type: 'person' | 'company' } = {
     name: memoizedRequest?.fromParty.name ?? '',
-    type: memoizedRequest?.fromParty.type === PartyType.Person ? 'person' : 'company',
+    type: memoizedRequest?.fromParty.type === PartyEntityType.Person ? 'person' : 'company',
   };
 
   let heading: React.ReactNode = null;

@@ -2,13 +2,13 @@ import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { DsAlert } from '@altinn/altinn-components';
 
-import type { ReporteeInfo } from '@/rtk/features/userInfoApi';
+import type { AuthorizedPartyEntity } from '@/dataObjects/dtos/Party';
 import { hasCreateSystemUserPermission } from '@/resources/utils/permissionUtils';
 
 import classes from './CreateSystemUserCheck.module.css';
 
 interface CreateSystemUserCheckProps {
-  reporteeData: ReporteeInfo | undefined;
+  reporteeData: AuthorizedPartyEntity | undefined;
   isAdmin: boolean | undefined;
   children: React.ReactNode;
 }

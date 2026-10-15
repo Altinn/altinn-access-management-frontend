@@ -13,6 +13,7 @@ import {
 import { useDocumentTitle } from '@/resources/hooks/useDocumentTitle';
 import { getAfUrl } from '@/resources/utils/pathUtils';
 import { useGetReporteeQuery } from '@/rtk/features/userInfoApi';
+import { PartyEntityType } from '@/dataObjects/dtos/Party';
 import {
   useAddAltinn2AccountFromTokenMutation,
   useAddAltinn2AccountMutation,
@@ -95,7 +96,7 @@ export const AddAltinn2AccountPage = () => {
   };
 
   useEffect(() => {
-    const isEnabled = reportee?.type === 'SelfIdentified';
+    const isEnabled = reportee?.type === PartyEntityType.SelfIdentified;
     if (isEnabled && token) {
       onAddAccountFromToken(token);
     } else if (isEnabled && !token) {
@@ -185,7 +186,7 @@ export const AddAltinn2AccountPage = () => {
       {isReporteeError && (
         <DsAlert data-color='danger'>{t('add_altinn2_account_page.load_user_error')}</DsAlert>
       )}
-      {reportee && reportee.type !== 'SelfIdentified' && (
+      {reportee && reportee.type !== PartyEntityType.SelfIdentified && (
         <DsAlert data-color='danger'>
           {t('add_altinn2_account_page.not_self_identified_error')}
         </DsAlert>
