@@ -313,7 +313,8 @@
     "show_users_with_client_access": "Show users with client access",
     "indirect_connections": "Users without power of attorney",
     "no_access_to_users_header": "Only access managers can see other users with powers of attorney",
-    "no_access_to_users_message": "You are not an access manager for {{name}} and can only see your own powers of attorney."
+    "no_access_to_users_message": "You are not an access manager for {{name}} and can only see your own powers of attorney.",
+    "no_access_to_users_page": "You do not have access to view this page."
   },
   "advanced_user_search": {
     "add_user_button": "Add user",
