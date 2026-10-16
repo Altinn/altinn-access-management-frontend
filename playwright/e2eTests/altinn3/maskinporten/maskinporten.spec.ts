@@ -1,6 +1,5 @@
 import { expect, test } from '../../../fixture/pomFixture';
-import { MaskinportenApiRequests } from '../../../api-requests/MaskinportenApiRequests';
-import { EnduserConnection } from '../../../api-requests/EnduserConnection';
+import type { MaskinportenApiRequests } from '../../../api-requests/MaskinportenApiRequests';
 
 /**
  * Maskinporten-administrasjon — leverandører, konsumenter og API-fullmakter.
@@ -55,8 +54,6 @@ const ACTORS = {
 const API = { id: 'altinn_automation_test_lv4', title: 'Automation test - innloggingsnivå 4' };
 
 test.describe('Maskinporten-administrasjon', () => {
-  const api = new MaskinportenApiRequests();
-
   /**
    * Removes one specific supplier link, ignoring "it was not there anyway".
    *
@@ -64,9 +61,14 @@ test.describe('Maskinporten-administrasjon', () => {
    * with manual testers, so a test only ever clears the one connection it is
    * about to create.
    */
-  const removeSupplierIfPresent = async (pid: string, orgNo: string, supplierOrgNo: string) => {
+  const removeSupplierIfPresent = async (
+    maskinporten: MaskinportenApiRequests,
+    pid: string,
+    orgNo: string,
+    supplierOrgNo: string,
+  ) => {
     try {
-      await api.removeSupplier(pid, orgNo, supplierOrgNo);
+      await maskinporten.removeSupplier(pid, orgNo, supplierOrgNo);
     } catch {
       /* not present — nothing to clean */
     }
@@ -75,9 +77,9 @@ test.describe('Maskinporten-administrasjon', () => {
   test.describe('oversikt', () => {
     const { virksomhet, konsument } = ACTORS.oversikt;
 
-    test.beforeEach(async () => {
-      await removeSupplierIfPresent(konsument.pid, konsument.org, virksomhet.org);
-      await api.addSupplier(konsument.pid, konsument.org, virksomhet.org);
+    test.beforeEach(async ({ api }) => {
+      await removeSupplierIfPresent(api.maskinporten, konsument.pid, konsument.org, virksomhet.org);
+      await api.maskinporten.addSupplier(konsument.pid, konsument.org, virksomhet.org);
     });
 
     test('leverandør- og konsumentfanen viser riktig innhold', async ({
@@ -101,9 +103,9 @@ test.describe('Maskinporten-administrasjon', () => {
       });
     });
 
-    test.afterEach(async () => {
+    test.afterEach(async ({ api }) => {
       try {
-        await api.removeSupplier(konsument.pid, konsument.org, virksomhet.org);
+        await api.maskinporten.removeSupplier(konsument.pid, konsument.org, virksomhet.org);
       } catch (error) {
         console.error('Cleanup: Failed to remove consumer relationship:', error);
       }
@@ -113,8 +115,13 @@ test.describe('Maskinporten-administrasjon', () => {
   test.describe('legg til leverandør', () => {
     const { virksomhet, leverandoer } = ACTORS.leggTilLeverandoer;
 
-    test.beforeEach(async () => {
-      await removeSupplierIfPresent(virksomhet.pid, virksomhet.org, leverandoer.org);
+    test.beforeEach(async ({ api }) => {
+      await removeSupplierIfPresent(
+        api.maskinporten,
+        virksomhet.pid,
+        virksomhet.org,
+        leverandoer.org,
+      );
     });
 
     test('legg til en leverandør', async ({ maskinportenPage, login }) => {
@@ -140,9 +147,9 @@ test.describe('Maskinporten-administrasjon', () => {
       });
     });
 
-    test.afterEach(async () => {
+    test.afterEach(async ({ api }) => {
       try {
-        await api.removeSupplier(virksomhet.pid, virksomhet.org, leverandoer.org);
+        await api.maskinporten.removeSupplier(virksomhet.pid, virksomhet.org, leverandoer.org);
       } catch (error) {
         console.error('Cleanup: Failed to remove supplier:', error);
       }
@@ -152,12 +159,17 @@ test.describe('Maskinporten-administrasjon', () => {
   test.describe('gi leverandør fullmakt til et API', () => {
     const { virksomhet, leverandoer } = ACTORS.giApiFullmakt;
 
-    test.beforeEach(async () => {
-      await removeSupplierIfPresent(virksomhet.pid, virksomhet.org, leverandoer.org);
-      await api.addSupplier(virksomhet.pid, virksomhet.org, leverandoer.org);
+    test.beforeEach(async ({ api }) => {
+      await removeSupplierIfPresent(
+        api.maskinporten,
+        virksomhet.pid,
+        virksomhet.org,
+        leverandoer.org,
+      );
+      await api.maskinporten.addSupplier(virksomhet.pid, virksomhet.org, leverandoer.org);
     });
 
-    test('gi og fjern fullmakt til et API', async ({ maskinportenPage, login }) => {
+    test('gi og fjern fullmakt til et API', async ({ maskinportenPage, login, api }) => {
       await test.step(`Logg inn som ${virksomhet.orgName} og åpne leverandøren`, async () => {
         await login.LoginToAccessManagement(virksomhet.pid);
         await login.selectActor(virksomhet.orgName);
@@ -175,7 +187,7 @@ test.describe('Maskinporten-administrasjon', () => {
       });
 
       await test.step('Fullmakten er faktisk lagret hos leverandøren', async () => {
-        const resources = await api.getSupplierResources(
+        const resources = await api.maskinporten.getSupplierResources(
           virksomhet.pid,
           virksomhet.org,
           leverandoer.org,
@@ -193,7 +205,7 @@ test.describe('Maskinporten-administrasjon', () => {
       });
 
       await test.step('og fullmakten er fjernet hos leverandøren', async () => {
-        const resources = await api.getSupplierResources(
+        const resources = await api.maskinporten.getSupplierResources(
           virksomhet.pid,
           virksomhet.org,
           leverandoer.org,
@@ -202,9 +214,9 @@ test.describe('Maskinporten-administrasjon', () => {
       });
     });
 
-    test.afterEach(async () => {
+    test.afterEach(async ({ api }) => {
       try {
-        await api.removeSupplier(virksomhet.pid, virksomhet.org, leverandoer.org);
+        await api.maskinporten.removeSupplier(virksomhet.pid, virksomhet.org, leverandoer.org);
       } catch (error) {
         console.error('Cleanup: Failed to remove supplier:', error);
       }
@@ -214,9 +226,14 @@ test.describe('Maskinporten-administrasjon', () => {
   test.describe('slett leverandør', () => {
     const { virksomhet, leverandoer } = ACTORS.slettLeverandoer;
 
-    test.beforeEach(async () => {
-      await removeSupplierIfPresent(virksomhet.pid, virksomhet.org, leverandoer.org);
-      await api.addSupplier(virksomhet.pid, virksomhet.org, leverandoer.org);
+    test.beforeEach(async ({ api }) => {
+      await removeSupplierIfPresent(
+        api.maskinporten,
+        virksomhet.pid,
+        virksomhet.org,
+        leverandoer.org,
+      );
+      await api.maskinporten.addSupplier(virksomhet.pid, virksomhet.org, leverandoer.org);
     });
 
     test('slett en leverandør', async ({ maskinportenPage, login }) => {
@@ -241,11 +258,11 @@ test.describe('Maskinporten-administrasjon', () => {
       });
     });
 
-    test.afterEach(async ({}, testInfo) => {
+    test.afterEach(async ({ api }, testInfo) => {
       if (testInfo.status === 'passed') return;
 
       try {
-        await api.removeSupplier(virksomhet.pid, virksomhet.org, leverandoer.org);
+        await api.maskinporten.removeSupplier(virksomhet.pid, virksomhet.org, leverandoer.org);
       } catch (error) {
         console.error('Cleanup: Failed to remove supplier:', error);
       }
@@ -254,12 +271,11 @@ test.describe('Maskinporten-administrasjon', () => {
 
   test.describe('bruker uten tilgang', () => {
     const { virksomhet, bruker } = ACTORS.utenTilgang;
-    const connections = new EnduserConnection();
 
-    test.beforeEach(async () => {
+    test.beforeEach(async ({ api }) => {
       // Make `bruker` a plain right-holder: able to represent the organisation,
       // but not a Maskinporten administrator.
-      await connections.addConnection(virksomhet.pid, virksomhet.org, bruker.pid);
+      await api.connections.addConnection(virksomhet.pid, virksomhet.org, bruker.pid);
     });
 
     test('bruker uten maskinportenrettighet kommer ikke inn på siden', async ({
@@ -285,9 +301,9 @@ test.describe('Maskinporten-administrasjon', () => {
       });
     });
 
-    test.afterEach(async () => {
+    test.afterEach(async ({ api }) => {
       try {
-        await connections.deleteConnection(virksomhet.pid, virksomhet.org, [bruker.pid]);
+        await api.connections.deleteConnection(virksomhet.pid, virksomhet.org, [bruker.pid]);
       } catch (error) {
         console.error('Cleanup: Failed to delete connection:', error);
       }

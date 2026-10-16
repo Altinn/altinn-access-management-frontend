@@ -92,6 +92,7 @@
     "subunit": "Undereining",
     "subunit_lowercase": "undereining",
     "mainunit_lowercase": "hovudeining",
+    "systemuser_lowercase": "systemtilgang",
     "org_nr_lowercase": "org.nr. {{org_number}}",
     "org_no": "Org.nr",
     "part_of": "del av",
@@ -308,7 +309,8 @@
     "show_users_with_client_access": "Vis brukarar med klienttilgang",
     "indirect_connections": "Brukarar utan fullmakt",
     "no_access_to_users_header": "Kun tilgangsstyrare kan sjå andre brukarar med fullmakter",
-    "no_access_to_users_message": "Du er ikkje tilgangsstyrer for {{name}} og kan kun sjå dine eigne fullmakter."
+    "no_access_to_users_message": "Du er ikkje tilgangsstyrer for {{name}} og kan kun sjå dine eigne fullmakter.",
+    "no_access_to_users_page": "Du har ikkje fullmakt til å sjå denne sida."
   },
   "advanced_user_search": {
     "add_user_button": "Ny brukar",
@@ -860,6 +862,7 @@
     "69_delegation_right_access_list_validation_fail": "Delegering av tenester feila: Mottakaren har ikkje rettigheit basert på delegasjon via tilgangsliste.",
     "70_delegation_right_resource_not_delegable": "Delegering av tenester feila: Ressursen kan ikkje delegerast til ein annan brukar eller eining.",
     "71_delegation_right_resource_is_maskinporten_schema": "Delegering av tenester feila: Ressursen kan ikkje delegerast fordi ho er ein Maskinporten skjemaressurs.",
+    "82_rights_resource_not_delegable": "Ei eller fleire tenester kan ikkje lenger delegerast. Tenesteeigar har merkt tenesta som ikkje delegerbar.",
     "title_resources": "Tenester som ikkje kunne delegerast:",
     "title_accesspackages": "Tilgangspakkar som ikkje kunne delegerast:",
     "summary_both": "Delegering feila: du manglar nødvendige fullmakter til å delegere tenestene og tilgangspakkane som krevst.",

@@ -2,8 +2,13 @@ import { DsParagraph, DsHeading, Avatar } from '@altinn/altinn-components';
 import { t } from 'i18next';
 
 import { PartyType } from '@/rtk/features/userInfoApi';
-import { isSubUnitByType, formatEntityDisplayName } from '@/resources/utils/reporteeUtils';
+import {
+  isSubUnitByType,
+  formatEntityDisplayName,
+  getAvatarType,
+} from '@/resources/utils/reporteeUtils';
 import { useIsMobileOrSmaller } from '@/resources/utils/screensizeUtils';
+import { type Party } from '@/rtk/features/lookupApi';
 
 import { usePartyRepresentation } from '../PartyRepresentationContext/PartyRepresentationContext';
 import { UserRoles } from '../UserRoles/UserRoles';
@@ -17,12 +22,17 @@ interface UserPageHeaderProps {
   displayRoles?: boolean;
 }
 
-const isOrganization = (partyType?: string) => {
-  return (
-    partyType === PartyType.Organization.toString() ||
-    partyType?.toLowerCase() === 'organization' ||
-    partyType?.toLowerCase() === 'organisasjon'
-  );
+const getUserHeadline = (userName: string, user?: Party) => {
+  const userIsOrganization = user?.partyTypeName === PartyType.Organization;
+  const userIsSubUnit = isSubUnitByType(user?.unitType?.toString());
+  if (userIsOrganization) {
+    return userIsSubUnit
+      ? `${userName} (${t('common.subunit_lowercase')})`
+      : `${userName} (${t('common.mainunit_lowercase')})`;
+  } else if (user?.partyTypeName === PartyType.Systemuser) {
+    return `${userName} (${t('common.systemuser_lowercase')})`;
+  }
+  return userName;
 };
 
 export const UserPageHeader = ({
@@ -44,12 +54,7 @@ export const UserPageHeader = ({
   const secondaryParty = direction === 'to' ? fromParty : toParty;
   const secondaryUserName = direction === 'to' ? fromPartyName : toPartyName;
   const userIsSubUnit = isSubUnitByType(user?.unitType?.toString());
-  const userIsOrganization = isOrganization(user?.partyTypeName?.toString());
-  const userHeadline = userIsOrganization
-    ? userIsSubUnit
-      ? `${userName} (${t('common.subunit_lowercase')})`
-      : `${userName} (${t('common.mainunit_lowercase')})`
-    : userName;
+  const userHeadline = getUserHeadline(userName, user);
 
   const subHeading =
     direction === 'to'
@@ -61,7 +66,7 @@ export const UserPageHeader = ({
       <div className={classes.avatar}>
         <Avatar
           name={userName}
-          type={userIsOrganization ? 'company' : 'person'}
+          type={getAvatarType(user)}
           size={isSmall ? 'md' : 'lg'}
           isDeleted={user?.isDeleted}
           isParent={!userIsSubUnit}
@@ -70,7 +75,7 @@ export const UserPageHeader = ({
         {displayDirection && (
           <Avatar
             name={secondaryUserName}
-            type={isOrganization(secondaryParty?.partyTypeName?.toString()) ? 'company' : 'person'}
+            type={getAvatarType(secondaryParty)}
             size={isSmall ? 'md' : 'lg'}
             isDeleted={secondaryParty?.isDeleted}
             className={classes.secondaryAvatar}

@@ -1,7 +1,6 @@
 import { expect } from '@playwright/test';
 
 import { test } from 'playwright/fixture/pomFixture';
-import { ConsentApiRequests } from 'playwright/api-requests/ConsentApiRequests';
 import { Language } from 'playwright/pages/consent/ConsentPage';
 import { addTimeToNowUtc, formatUiDateTime, pickRandom } from 'playwright/util/helper';
 
@@ -20,14 +19,13 @@ LANGUAGES.forEach((language) => {
       language,
       viewport: MOBILE_VIEWPORT,
     });
-    test(`Standard samtykke`, async ({ login, consentPage }) => {
+    test(`Standard samtykke`, async ({ login, consentPage, api }) => {
       const fromPerson = pickRandom(fromPersons);
       const toOrg = pickRandom(toOrgs);
       const validTo = addTimeToNowUtc({ days: 2 });
-      const api = new ConsentApiRequests(toOrg);
 
       const consentResponse = await test.step('Create consent request', async () => {
-        return await api.createConsentRequest({
+        return await api.consent.createConsentRequest({
           from: { type: 'person', id: fromPerson },
           to: { type: 'org', id: toOrg },
           validToIsoUtc: validTo,
@@ -59,14 +57,13 @@ LANGUAGES.forEach((language) => {
       });
     });
 
-    test(`Krav-template`, async ({ consentPage, login }) => {
+    test(`Krav-template`, async ({ consentPage, login, api }) => {
       const fromPerson = pickRandom(fromPersons);
       const toOrg = pickRandom(toOrgs);
       const validTo = addTimeToNowUtc({ days: 2 });
-      const api = new ConsentApiRequests(toOrg);
 
       const consentResponse = await test.step('Create consent request', async () => {
-        return await api.createConsentRequest({
+        return await api.consent.createConsentRequest({
           from: { type: 'person', id: fromPerson },
           to: { type: 'org', id: toOrg },
           validToIsoUtc: validTo,
@@ -97,14 +94,13 @@ LANGUAGES.forEach((language) => {
       });
     });
 
-    test(`Fullmakt utføre tjeneste`, async ({ consentPage, page, login }) => {
+    test(`Fullmakt utføre tjeneste`, async ({ consentPage, page, login, api }) => {
       const fromPerson = pickRandom(fromPersons);
       const toOrg = pickRandom(toOrgs);
       const validTo = addTimeToNowUtc({ days: 2 });
-      const api = new ConsentApiRequests(toOrg);
 
       const consentResponse = await test.step('Create consent request', async () => {
-        return await api.createConsentRequest({
+        return await api.consent.createConsentRequest({
           from: { type: 'person', id: fromPerson },
           to: { type: 'org', id: toOrg },
           validToIsoUtc: validTo,
@@ -139,14 +135,13 @@ LANGUAGES.forEach((language) => {
       });
     });
 
-    test(`Lånesøknad`, async ({ consentPage, login }) => {
+    test(`Lånesøknad`, async ({ consentPage, login, api }) => {
       const fromPerson = pickRandom(fromPersons);
       const toOrg = pickRandom(toOrgs);
       const validTo = addTimeToNowUtc({ days: 2 });
-      const api = new ConsentApiRequests(toOrg);
 
       const consentResponse = await test.step('Create consent request', async () => {
-        return await api.createConsentRequest({
+        return await api.consent.createConsentRequest({
           from: { type: 'person', id: fromPerson },
           to: { type: 'org', id: toOrg },
           validToIsoUtc: validTo,
@@ -180,14 +175,13 @@ LANGUAGES.forEach((language) => {
       });
     });
 
-    test(`Enkelt samtykke`, async ({ consentPage, login }) => {
+    test(`Enkelt samtykke`, async ({ consentPage, login, api }) => {
       const fromPerson = pickRandom(fromPersons);
       const toOrg = pickRandom(toOrgs);
       const validTo = addTimeToNowUtc({ days: 2 });
-      const api = new ConsentApiRequests(toOrg);
 
       const consentResponse = await test.step('Create consent request', async () => {
-        return await api.createConsentRequest({
+        return await api.consent.createConsentRequest({
           from: { type: 'person', id: fromPerson },
           to: { type: 'org', id: toOrg },
           validToIsoUtc: validTo,
@@ -222,14 +216,13 @@ LANGUAGES.forEach((language) => {
       });
     });
 
-    test(`Avvis samtykke`, async ({ consentPage, login }) => {
+    test(`Avvis samtykke`, async ({ consentPage, login, api }) => {
       const fromPerson = pickRandom(fromPersons);
       const toOrg = pickRandom(toOrgs);
       const validTo = addTimeToNowUtc({ days: 2 });
-      const api = new ConsentApiRequests(toOrg);
 
       const consentResponse = await test.step('Create consent request', async () => {
-        return await api.createConsentRequest({
+        return await api.consent.createConsentRequest({
           from: { type: 'person', id: fromPerson },
           to: { type: 'org', id: toOrg },
           validToIsoUtc: validTo,

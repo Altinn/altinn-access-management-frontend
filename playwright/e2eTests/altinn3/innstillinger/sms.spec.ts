@@ -1,11 +1,8 @@
 import { expect, test } from '../../../fixture/pomFixture';
-import { SettingsApiRequests } from '../../../api-requests/SettingsApiRequests';
 
 import { ACTORS, BASELINE_EPOST } from './testdata';
 
 test.describe('Innstillinger - SMS-adresser', () => {
-  const api = new SettingsApiRequests();
-
   test.describe('legg til SMS-adresse', () => {
     const actor = ACTORS.leggTilSms;
     // Deliberately an obviously-synthetic number, matching the dummy values in
@@ -14,10 +11,10 @@ test.describe('Innstillinger - SMS-adresser', () => {
     // real notification address before afterEach removes it.
     const nyttNummer = { countryCode: '+47', phone: '99999999' };
 
-    test.beforeEach(async () => {
+    test.beforeEach(async ({ api }) => {
       // Baseline keeps one email and no SMS, so the SMS dialog opens on an
       // empty first row and the org still has the one address it must have.
-      await api.setNotificationAddresses(actor.pid, actor.org, {
+      await api.settings.setNotificationAddresses(actor.pid, actor.org, {
         emails: [BASELINE_EPOST],
         phones: [],
       });
@@ -44,8 +41,8 @@ test.describe('Innstillinger - SMS-adresser', () => {
       });
     });
 
-    test.afterEach(async () => {
-      await api.setNotificationAddresses(actor.pid, actor.org, {
+    test.afterEach(async ({ api }) => {
+      await api.settings.setNotificationAddresses(actor.pid, actor.org, {
         emails: [BASELINE_EPOST],
         phones: [],
       });
