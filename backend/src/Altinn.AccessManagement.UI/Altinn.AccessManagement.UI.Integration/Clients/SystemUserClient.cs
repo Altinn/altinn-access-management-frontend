@@ -236,13 +236,14 @@ namespace Altinn.AccessManagement.UI.Integration.Clients
         public async Task<Result<List<Customer>>> GetClients(int partyId, Guid facilitatorId, List<string> accessPackages, CancellationToken cancellationToken)
         {
             bool useV2 = true;
+            string packageQuery = accessPackages.Aggregate(string.Empty, (acc, accessPackage) => acc + $"&packages={accessPackage}");
+            string token = JwtTokenUtil.GetTokenFromContext(_httpContextAccessor.HttpContext, _platformSettings.JwtCookieName);
+
             if (useV2)
             {
                 try
                 {
-                    string packageQuery = accessPackages.Aggregate(string.Empty, (acc, accessPackage) => acc + $"&packages={accessPackage}");
-                    string token = JwtTokenUtil.GetTokenFromContext(_httpContextAccessor.HttpContext, _platformSettings.JwtCookieName);
-                    string endpointUrl = $"https://platform.at23.altinn.cloud/accessmanagement/api/v2/enduser/clientdelegations/clients?party={facilitatorId}&match=all";
+                    string endpointUrl = $"{_platformSettings.ApiAccessManagementEndpoint}v2/enduser/clientdelegations/clients?party={facilitatorId}&match=all";
 
                     HttpResponseMessage response = await _httpClient.GetAsync(token, endpointUrl, cancellationToken);
                     string responseContent = await response.Content.ReadAsStringAsync(cancellationToken);
@@ -284,8 +285,6 @@ namespace Altinn.AccessManagement.UI.Integration.Clients
             {
                 try
                 {
-                    string packageQuery = accessPackages.Aggregate(string.Empty, (acc, accessPackage) => acc + $"&packages={accessPackage}");
-                    string token = JwtTokenUtil.GetTokenFromContext(_httpContextAccessor.HttpContext, _platformSettings.JwtCookieName);
                     string endpointUrl = $"systemuser/agent/{partyId}/clients?facilitator={facilitatorId}{packageQuery}";
 
                     HttpResponseMessage response = await _httpClient.GetAsync(token, endpointUrl, cancellationToken);
