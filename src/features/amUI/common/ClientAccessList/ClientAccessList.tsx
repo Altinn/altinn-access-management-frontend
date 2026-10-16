@@ -1,18 +1,18 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { type AccessPackageListItemProps, type UserListItemProps } from '@altinn/altinn-components';
+import { type AccessPackageListItemProps } from '@altinn/altinn-components';
 
 import {
   getFormattedDateOfBirthLabel,
   formatEntityDisplayName,
   formatOrgNr,
   isSubUnitByType,
+  getAvatarType,
 } from '@/resources/utils/reporteeUtils';
 import { useAccessPackageLookup } from '@/resources/hooks/useAccessPackageLookup';
 import type { ActionError } from '@/resources/hooks/useActionError';
 import type { ServiceResource } from '@/rtk/features/singleRights/singleRightsApi';
 import type { Client } from '@/rtk/features/clientApi';
-import { PartyType } from '@/dataObjects/dtos/Party';
 import { useIsMobileOrSmaller } from '@/resources/utils/screensizeUtils';
 
 import { buildClientParentNameById, buildClientSortKey } from '../clientSortUtils';
@@ -102,10 +102,6 @@ type ClientAccessListProps = {
   restoreFocusFallbackId?: string;
 };
 
-const getUserListItemType = (clientType: PartyType): UserListItemProps['type'] => {
-  return clientType === PartyType.Organization ? 'company' : 'person';
-};
-
 const sortClientsByKey = (clients: Client[], parentNameById: Map<string, string>): Client[] =>
   [...clients].sort((a, b) =>
     buildClientSortKey(a, parentNameById).localeCompare(buildClientSortKey(b, parentNameById)),
@@ -158,7 +154,7 @@ export const ClientAccessList = ({
   const userListItems: UserListItemData[] = sortedClients.map((client) => {
     const clientId = client.client.id;
     const isSubUnit = isSubUnitByType(client.client.unitType);
-    const userType = getUserListItemType(client.client.type);
+    const userType = getAvatarType(client.client);
 
     const nodes = client.access.reduce((acc, access) => {
       if (access.packages.length === 0) return acc;

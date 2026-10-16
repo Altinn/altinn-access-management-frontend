@@ -3,6 +3,9 @@ import { Badge, DsSkeleton, List, ListItem } from '@altinn/altinn-components';
 import { HandshakeIcon } from '@navikt/aksel-icons';
 import { useTranslation } from 'react-i18next';
 
+import type { PartyType } from '@/dataObjects/dtos/Party';
+import { getPartyColor } from '@/resources/utils/reporteeUtils';
+
 import classes from './ActiveConsentsPage.module.css';
 
 interface ConsentListItemProps {
@@ -15,7 +18,7 @@ interface ConsentListItemProps {
     isNew?: boolean;
     consentType: 'altinn' | 'idporten';
   }[];
-  partyType?: string;
+  partyType?: PartyType;
   isLoading?: boolean;
   onClick?: (consentId: string, consentType: 'altinn' | 'idporten') => void;
 }
@@ -28,7 +31,7 @@ export const ConsentListItem = ({
 }: ConsentListItemProps): React.ReactNode => {
   const { t } = useTranslation();
   const [isExpanded, setIsExpanded] = useState<boolean>(true);
-  const partyColor = partyType === 'Person' ? 'person' : 'company';
+  const partyColor = getPartyColor({ type: partyType });
 
   return (
     <ListItem

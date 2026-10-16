@@ -1,12 +1,13 @@
 import React, { useMemo, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { type AccessPackageListItemProps, type UserListItemProps } from '@altinn/altinn-components';
+import { type AccessPackageListItemProps } from '@altinn/altinn-components';
 
 import { useIsMobileOrSmaller } from '@/resources/utils/screensizeUtils';
 import {
   getFormattedDateOfBirthLabel,
   isSubUnitByType,
   formatEntityDisplayName,
+  getAvatarType,
 } from '@/resources/utils/reporteeUtils';
 import { useAccessPackageLookup } from '@/resources/hooks/useAccessPackageLookup';
 import type { ActionError } from '@/resources/hooks/useActionError';
@@ -19,7 +20,6 @@ import type {
   RemoveAgentAccessPackagesFn,
   RemoveAgentResourcesFn,
 } from '@/rtk/features/clientApi';
-import { PartyType } from '@/dataObjects/dtos/Party';
 
 import { useRoleMetadata } from '../UserRoles/useRoleMetadata';
 import { isNewUser } from '../isNewUser';
@@ -82,10 +82,6 @@ type SelectedAgentResource = {
     onSuccess?: () => void,
     onError?: (error?: ActionError) => void,
   ) => void | Promise<void>;
-};
-
-const getUserListItemType = (agentType: PartyType): UserListItemProps['type'] => {
-  return agentType === PartyType.Person ? 'person' : 'company';
 };
 
 const getAgentSortKey = (agent: Agent): string =>
@@ -187,7 +183,7 @@ export const ClientAgentPackageList = ({
     const idPrefix = listKey ? `${listKey}:${agentId}` : agentId;
     const isRecentlyAdded = isNewUser(agent.agentAddedAt);
     const isSubUnit = isSubUnitByType(agent.agent.unitType);
-    const userType = getUserListItemType(agent.agent.type);
+    const userType = getAvatarType(agent.agent);
     const agentName = formatEntityDisplayName(agent.agent);
     const nodes = clientAccess.reduce((acc, access) => {
       if (access.packages.length === 0) return acc;
