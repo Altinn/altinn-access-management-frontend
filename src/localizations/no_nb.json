@@ -818,7 +818,7 @@
     "add_customers": "Legg til klienter",
     "edit_customers": "Legg til eller fjern klienter",
     "customer_search": "Søk i klienter",
-    "hide_assigned_customers": "Skjul klienter som er lagt til",
+    "show_only_addable_customers": "Vis kun klienter som kan legges til",
     "add_all_customers": "Legg til alle klienter",
     "no_customers_warning": "Det finnes ingen klienter enda. Klienter må gi fullmakt til tilgangspakkene som kreves av systemtilgangen til {{companyName}}.",
     "remove_from_system_user": "Fjern fra systemtilgang",

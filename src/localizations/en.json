@@ -821,7 +821,7 @@
     "add_customers": "Add clients",
     "edit_customers": "Add or remove clients",
     "customer_search": "Search in clients",
-    "hide_assigned_customers": "Hide clients already added",
+    "show_only_addable_customers": "Show only clients that can be added",
     "add_all_customers": "Add all clients",
     "no_customers_warning": "There are no clients yet. Clients must give power of attorney to the access packages required for this system access to {{companyName}}.",
     "remove_from_system_user": "Remove from system access",

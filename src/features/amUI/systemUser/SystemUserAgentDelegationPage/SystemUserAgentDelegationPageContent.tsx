@@ -35,6 +35,7 @@ import { DelegationCheckError } from '../components/DelegationCheckError/Delegat
 import classes from './SystemUserAgentDelegationPage.module.css';
 import { CustomerList } from './CustomerList';
 import { AddAllCustomers } from './AddAllCustomers';
+import { getMissingAccessPackages } from './customerUtils';
 
 const getAssignedCustomers = (
   customers: AgentDelegationCustomer[],
@@ -130,9 +131,8 @@ export const SystemUserAgentDelegationPageContent = ({
 
     const unAssignedCustomers = customers.filter((customer) => {
       const isAssigned = delegations?.find((x) => x.customerId === customer.id);
-      const hasAllAccessPackages = systemUser.accessPackages.every((p) =>
-        customer.access.some((a) => a.packages.includes(p.urn)),
-      );
+      const hasAllAccessPackages =
+        getMissingAccessPackages(customer, systemUser.accessPackages).length === 0;
       return !isAssigned && hasAllAccessPackages;
     });
 

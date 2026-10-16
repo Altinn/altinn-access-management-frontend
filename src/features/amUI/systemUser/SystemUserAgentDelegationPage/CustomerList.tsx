@@ -21,18 +21,23 @@ import { useIsMobileOrSmaller } from '@/resources/utils/screensizeUtils';
 import type { AgentDelegation, AgentDelegationCustomer, SystemUser } from '../types';
 
 import classes from './CustomerList.module.css';
+import { getMissingAccessPackages } from './customerUtils';
 
 const filterCustomerList = (
   list: AgentDelegationCustomer[],
   delegations: AgentDelegation[],
-  isHideAssignedChecked: boolean,
+  systemUser: SystemUser | undefined,
+  isShowOnlyAddableChecked: boolean,
   searchString: string,
 ): AgentDelegationCustomer[] => {
   return list.filter((customer) => {
     const isOrgNoMatch = matchesOrgNr(customer.orgNo, searchString);
     const isNameMatch = customer.name.toLowerCase().indexOf(searchString.toLowerCase()) > -1;
     const isAssigned = delegations?.find((x) => x.customerId === customer.id);
-    const isVisible = !(isHideAssignedChecked && isAssigned);
+    const isMissingAccessPackage =
+      getMissingAccessPackages(customer, systemUser?.accessPackages ?? []).length > 0;
+    const isAddable = !isAssigned && !isMissingAccessPackage;
+    const isVisible = !isShowOnlyAddableChecked || isAddable;
 
     return (isOrgNoMatch || isNameMatch) && isVisible;
   });
@@ -72,12 +77,13 @@ export const CustomerList = ({
 
   const [searchValue, setSearchValue] = useState<string>('');
   const [currentPage, setCurrentPage] = useState<number>(1);
-  const [isHideAssignedChecked, setIsHideAssignedChecked] = useState<boolean>(false);
+  const [isShowOnlyAddableChecked, setIsShowOnlyAddableChecked] = useState<boolean>(false);
 
   const filteredSearchList = filterCustomerList(
     list,
     delegations ?? [],
-    isHideAssignedChecked,
+    systemUser,
+    isShowOnlyAddableChecked,
     searchValue,
   );
 
@@ -111,9 +117,9 @@ export const CustomerList = ({
         </DsSearch>
         {onAddCustomer && (
           <DsCheckbox
-            label={t('systemuser_agent_delegation.hide_assigned_customers')}
-            checked={isHideAssignedChecked}
-            onChange={() => setIsHideAssignedChecked((prev) => !prev)}
+            label={t('systemuser_agent_delegation.show_only_addable_customers')}
+            checked={isShowOnlyAddableChecked}
+            onChange={() => setIsShowOnlyAddableChecked((prev) => !prev)}
           />
         )}
         {onAddAllCustomers && list.length > 0 && (
@@ -199,11 +205,11 @@ const ListControls = ({
   const { t } = useTranslation();
   const isSmall = useIsMobileOrSmaller();
 
-  const allAccessPackageUrns = customer.access.flatMap((a) => a.packages);
-  const missingAccessPackages =
-    systemUser?.accessPackages.filter((p) => !allAccessPackageUrns?.some((ap) => ap === p.urn)) ??
-    [];
-  const isMissingAccessPackage = missingAccessPackages.length > 0 && !customer.isSelfOrg;
+  const missingAccessPackages = getMissingAccessPackages(
+    customer,
+    systemUser?.accessPackages ?? [],
+  );
+  const isMissingAccessPackage = missingAccessPackages.length > 0;
 
   return (
     <div className={classes.listControls}>
