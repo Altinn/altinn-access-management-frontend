@@ -12,18 +12,22 @@ namespace Altinn.AccessManagement.UI.Core.Services
     {
         private readonly ISystemUserAgentDelegationClient _systemUserAgentDelegationClient;
         private readonly ISystemUserClient _systemUserClient;
+        private readonly IClientDelegationClientResolver _clientDelegationClientResolver;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="SystemUserAgentDelegationService"/> class.
         /// </summary>
         /// <param name="systemUserAgentDelegationClient">The system user client administration client.</param>
         /// <param name="systemUserClient">The system user client</param>
+        /// <param name="clientDelegationClientResolver">Resolves the client delegation client matching the feature flag.</param>
         public SystemUserAgentDelegationService(
             ISystemUserAgentDelegationClient systemUserAgentDelegationClient,
-            ISystemUserClient systemUserClient)
+            ISystemUserClient systemUserClient,
+            IClientDelegationClientResolver clientDelegationClientResolver)
         {
             _systemUserAgentDelegationClient = systemUserAgentDelegationClient;
             _systemUserClient = systemUserClient;
+            _clientDelegationClientResolver = clientDelegationClientResolver;
         }
         
         /// <inheritdoc /> 
@@ -37,13 +41,42 @@ namespace Altinn.AccessManagement.UI.Core.Services
 
             List<string> accessPackages = systemUser.AccessPackages.Select(x => x.Urn.Split(":").Last()).ToList();
 
-            Result<List<Customer>> customers = await _systemUserClient.GetClients(partyId, partyUuid, accessPackages, cancellationToken);
-            if (customers.IsProblem)
+            bool useV2 = false;
+            if (useV2)
             {
-                return new Result<List<CustomerPartyFE>>(customers.Problem);
-            }
+                IClientDelegationClient client = await _clientDelegationClientResolver.Resolve();
+                IEnumerable<Models.ClientDelegation.ClientDelegation> clients = await client.GetClients(partyUuid, null, cancellationToken);
+                return clients.Select(x =>
+                {
+                    return new CustomerPartyFE()
+                    {
+                        Id = x.Client.Id,
+                        Name = x.Client.Name,
+                        OrgNo = x.Client.OrganizationIdentifier,
+                        Type = x.Client.Type,
+                        Variant = x.Client.Variant,
+                        IsDeleted = x.Client.IsDeleted,
+                        Access = x.Access.Select(y =>
+                        {
+                            return new ClientRoleAccessPackages()
+                            {
+                                Packages = y.Packages.Select(p => p.Urn).ToArray(),
+                                Role = y.Role.Urn
+                            };
+                        }).ToList()
+                    };
+                }).ToList();
+            } 
+            else 
+            {
+                Result<List<Customer>> customers = await _systemUserClient.GetClients(partyId, partyUuid, accessPackages, cancellationToken);
+                if (customers.IsProblem)
+                {
+                    return new Result<List<CustomerPartyFE>>(customers.Problem);
+                }
 
-            return MapCustomerListToCustomerFE(customers.Value);
+                return MapCustomerListToCustomerFE(customers.Value);
+            }
         }
 
         /// <inheritdoc />
@@ -147,8 +180,8 @@ namespace Altinn.AccessManagement.UI.Core.Services
                     Id = x.PartyUuid,
                     Name = x.DisplayName,
                     OrgNo = x.OrganizationIdentifier,
-                    Variant = x.Variant,
-                    Type = x.Type,
+                    Variant = x.UnitType,
+                    Type = "Organisasjon",
                     IsDeleted = x.IsDeleted,
                     Access = x.Access
                 };
