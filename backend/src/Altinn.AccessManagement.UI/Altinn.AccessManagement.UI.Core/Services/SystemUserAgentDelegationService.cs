@@ -39,36 +39,17 @@ namespace Altinn.AccessManagement.UI.Core.Services
                 return new Result<List<CustomerPartyFE>>(Problem.SystemUserNotFound);
             }
 
-            List<string> accessPackages = systemUser.AccessPackages.Select(x => x.Urn.Split(":").Last()).ToList();
-
             bool useV2 = false;
             if (useV2)
             {
                 IClientDelegationClient client = await _clientDelegationClientResolver.Resolve();
                 IEnumerable<Models.ClientDelegation.ClientDelegation> clients = await client.GetClients(partyUuid, null, cancellationToken);
-                return clients.Select(x =>
-                {
-                    return new CustomerPartyFE()
-                    {
-                        Id = x.Client.Id,
-                        Name = x.Client.Name,
-                        OrgNo = x.Client.OrganizationIdentifier,
-                        Type = x.Client.Type,
-                        Variant = x.Client.Variant,
-                        IsDeleted = x.Client.IsDeleted,
-                        Access = x.Access.Select(y =>
-                        {
-                            return new ClientRoleAccessPackages()
-                            {
-                                Packages = y.Packages.Select(p => p.Urn).ToArray(),
-                                Role = y.Role.Urn
-                            };
-                        }).ToList()
-                    };
-                }).ToList();
-            } 
-            else 
+                
+                return MapClientListToCustomerFE(clients);
+            }
+            else
             {
+                List<string> accessPackages = systemUser.AccessPackages.Select(x => x.Urn.Split(":").Last()).ToList();
                 Result<List<Customer>> customers = await _systemUserClient.GetClients(partyId, partyUuid, accessPackages, cancellationToken);
                 if (customers.IsProblem)
                 {
@@ -169,6 +150,30 @@ namespace Altinn.AccessManagement.UI.Core.Services
                 CustomerId = delegation.CustomerId,
                 DelegationId = delegation.CustomerId
             };
+        }
+
+        private static List<CustomerPartyFE> MapClientListToCustomerFE(IEnumerable<Models.ClientDelegation.ClientDelegation> clients)
+        {
+            return clients.Select(x =>
+                {
+                    return new CustomerPartyFE()
+                    {
+                        Id = x.Client.Id,
+                        Name = x.Client.Name,
+                        OrgNo = x.Client.OrganizationIdentifier,
+                        Type = x.Client.Type,
+                        Variant = x.Client.Variant,
+                        IsDeleted = x.Client.IsDeleted,
+                        Access = x.Access.Select(y =>
+                        {
+                            return new ClientRoleAccessPackages()
+                            {
+                                Packages = y.Packages.Select(p => p.Urn).ToArray(),
+                                Role = y.Role.Urn
+                            };
+                        }).ToList()
+                    };
+                }).ToList();
         }
 
         private static List<CustomerPartyFE> MapCustomerListToCustomerFE(List<Customer> customers)
