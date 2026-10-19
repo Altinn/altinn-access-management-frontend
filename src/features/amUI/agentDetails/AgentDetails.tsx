@@ -47,7 +47,8 @@ export const AgentDetails = () => {
   const { t } = useTranslation();
   const { id } = useParams();
   const { toParty, actingParty } = usePartyRepresentation();
-  const { getAccessPackageById } = useAccessPackageLookup();
+  const { getAccessPackageById, isFetching: isFetchingAccessPackageLookup } =
+    useAccessPackageLookup();
   const { data: isClientAdmin, isLoading: isLoadingIsClientAdmin } = useGetIsClientAdminQuery();
   const {
     data: agentAccessPackages,
@@ -113,6 +114,7 @@ export const AgentDetails = () => {
     isMutating ||
     isFetchingAgentAccessPackages ||
     isFetchingAgentResources ||
+    isFetchingAccessPackageLookup ||
     !toPartyUuid ||
     !actingPartyUuid;
   const assignedSectionId = useId();
