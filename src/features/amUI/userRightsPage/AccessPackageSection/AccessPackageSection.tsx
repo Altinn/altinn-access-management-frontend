@@ -10,6 +10,7 @@ import { useGetUserDelegationsQuery } from '@/rtk/features/accessPackageApi';
 
 import { DelegationModal, DelegationType } from '../../common/DelegationModal/DelegationModal';
 import { DelegationAction } from '../../common/DelegationModal/EditModal';
+import { getAvailableActions } from '../../common/DelegationModal/delegationActionUtils';
 import { usePartyRepresentation } from '../../common/PartyRepresentationContext/PartyRepresentationContext';
 import { TabContentSkeleton } from '../../common/RightsTabs/TabContentSkeleton';
 import { DebouncedSearchField } from '../../common/DebouncedSearchField/DebouncedSearchField';
@@ -31,6 +32,8 @@ export const AccessPackageSection = ({ isReportee = false }: { isReportee?: bool
   const partyId = isReportee ? (toParty?.partyUuid ?? '') : (id ?? '');
   const canGiveAccess = useCanGiveAccess(partyId, isReportee);
   const canRequestAccess = useCanRequestAccess(isReportee) && !canGiveAccess;
+
+  const availableActions = getAvailableActions({ toParty, canGiveAccess, canRequestAccess });
 
   const { data: accesses, isLoading: loadingAccesses } = useGetUserDelegationsQuery(
     {
@@ -75,18 +78,19 @@ export const AccessPackageSection = ({ isReportee = false }: { isReportee?: bool
               />
             </div>
             <div className={classes.delegateButton}>
-              {(canGiveAccess || canRequestAccess) && (
+              {(availableActions.includes(DelegationAction.DELEGATE) ||
+                availableActions.includes(DelegationAction.REQUEST)) && (
                 <DelegationModal
                   delegationType={DelegationType.AccessPackage}
-                  availableActions={[
-                    DelegationAction.REVOKE,
-                    canGiveAccess ? DelegationAction.DELEGATE : DelegationAction.REQUEST,
-                  ]}
+                  availableActions={availableActions}
                 />
               )}
             </div>
           </div>
-          <ActiveDelegations searchString={debouncedSearchString} />
+          <ActiveDelegations
+            searchString={debouncedSearchString}
+            availableActions={availableActions}
+          />
         </>
       )}
     </>
