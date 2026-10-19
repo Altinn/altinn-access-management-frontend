@@ -93,6 +93,8 @@ type ClientAccessListProps = {
     onSuccess?: () => void,
     onError?: (error?: ActionError) => void,
   ) => void | Promise<void>;
+  renderClientActions?: (client: Client) => React.ReactNode;
+  isAccessPending?: (clientId: string, accessId: string) => boolean;
   requireDelegableForActions?: boolean;
   emptyAccessText?: string;
   emptyText?: string;
@@ -122,6 +124,8 @@ export const ClientAccessList = ({
   onRemoveAccessPackage,
   onAddResource,
   onRemoveResource,
+  renderClientActions,
+  isAccessPending,
   requireDelegableForActions = true,
   emptyAccessText,
   emptyText,
@@ -247,6 +251,7 @@ export const ClientAccessList = ({
           isMobileOrSmaller,
           addDisabled,
           removeDisabled,
+          isPending: !!pkg.urn && isAccessPending?.(clientId, pkg.urn),
           onDelegate: restoreFocusOnSuccess(onDelegate, requestFocus),
           onRevoke: restoreFocusOnSuccess(onRevoke, requestFocus),
           onOpenModal,
@@ -306,6 +311,7 @@ export const ClientAccessList = ({
             isMobileOrSmaller,
             addDisabled,
             removeDisabled,
+            isPending: isAccessPending?.(clientId, clientResource.refId),
             onDelegate: restoreFocusOnSuccess(onDelegate, requestFocus),
             onRevoke: restoreFocusOnSuccess(onRevoke, requestFocus),
             onOpenModal: () => {
@@ -343,6 +349,7 @@ export const ClientAccessList = ({
           packageItems={nodes}
           resourceItems={resourceNodes}
           emptyText={emptyAccessText}
+          clientActions={renderClientActions?.(client)}
         />
       ),
       description:

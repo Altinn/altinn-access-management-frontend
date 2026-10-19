@@ -17,12 +17,14 @@ interface ClientAccessSectionsProps {
   packageItems: AccessPackageListItemData[];
   resourceItems: ClientResourceListItemData[];
   emptyText?: string;
+  clientActions?: React.ReactNode;
 }
 
 export const ClientAccessSections = ({
   packageItems,
   resourceItems,
   emptyText,
+  clientActions,
 }: ClientAccessSectionsProps) => {
   const { t } = useTranslation();
   const packagesLabelId = useId();
@@ -32,12 +34,13 @@ export const ClientAccessSections = ({
     return emptyText ? <DsParagraph>{emptyText}</DsParagraph> : null;
   }
 
-  if (resourceItems.length === 0) {
+  if (resourceItems.length === 0 && !clientActions) {
     return <AccessPackageListItems items={packageItems} />;
   }
 
   return (
     <div className={classes.sections}>
+      {clientActions}
       {packageItems.length > 0 && (
         <div>
           <DsParagraph
@@ -52,18 +55,20 @@ export const ClientAccessSections = ({
           />
         </div>
       )}
-      <div>
-        <DsParagraph
-          id={resourcesLabelId}
-          className={classes.sectionLabel}
-        >
-          {t('client_administration_page.single_rights_heading')}
-        </DsParagraph>
-        <ClientResourceListItems
-          items={resourceItems}
-          labelledBy={resourcesLabelId}
-        />
-      </div>
+      {resourceItems.length > 0 && (
+        <div>
+          <DsParagraph
+            id={resourcesLabelId}
+            className={classes.sectionLabel}
+          >
+            {t('client_administration_page.single_rights_heading')}
+          </DsParagraph>
+          <ClientResourceListItems
+            items={resourceItems}
+            labelledBy={resourcesLabelId}
+          />
+        </div>
+      )}
     </div>
   );
 };

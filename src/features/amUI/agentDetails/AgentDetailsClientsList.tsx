@@ -13,6 +13,8 @@ import type {
 import { ClientAccessList } from '../common/ClientAccessList/ClientAccessList';
 import { useClientResourceActions } from '../common/ClientResourceList/useClientResourceActions';
 import { usePartyRepresentation } from '../common/PartyRepresentationContext/PartyRepresentationContext';
+import { ClientBulkActions } from '../common/ClientBulkDelegation/ClientBulkActions';
+import { useClientBulkDelegation } from '../common/ClientBulkDelegation/ClientBulkDelegation';
 
 import { useAgentDetailsAccessPackageActions } from './useAgentDetailsAccessPackageActions';
 
@@ -51,8 +53,8 @@ export const AgentDetailsClientsList = ({
   onToggleExpanded,
   restoreFocusFallbackId,
 }: AgentDetailsClientsListProps) => {
-  const delegateDisabled = isLoading || !toPartyUuid || !actingPartyUuid;
-  const removeDisabled = isLoading || !toPartyUuid || !actingPartyUuid;
+  const bulk = useClientBulkDelegation();
+  const actionDisabled = isLoading || !!bulk?.activeRun || !toPartyUuid || !actingPartyUuid;
 
   const { addAgentAccessPackage, removeAgentAccessPackage } = useAgentDetailsAccessPackageActions({
     toPartyUuid,
@@ -73,13 +75,24 @@ export const AgentDetailsClientsList = ({
       clients={clients}
       accessStateClients={agentAccessPackages}
       resourceAccessClients={agentResources}
-      addDisabled={delegateDisabled}
-      removeDisabled={removeDisabled}
+      addDisabled={actionDisabled}
+      removeDisabled={actionDisabled}
       searchString={searchString}
       emptyText={emptyText}
       expandedIds={expandedIds}
       onToggleExpanded={onToggleExpanded}
       restoreFocusFallbackId={restoreFocusFallbackId}
+      renderClientActions={(client) => {
+        const items = bulk?.getClientItems(client);
+        if (!items || (items.missing.length === 0 && items.held.length === 0)) return null;
+        return (
+          <ClientBulkActions
+            client={client}
+            items={items}
+          />
+        );
+      }}
+      isAccessPending={bulk?.isAccessPending}
       onAddAccessPackage={(
         { clientId, roleCode, packageId, accessPackageName },
         onSuccess?: () => void,

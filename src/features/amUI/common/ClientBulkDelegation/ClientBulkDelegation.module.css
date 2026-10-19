@@ -1,0 +1,19 @@
+.bulkActions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--ds-size-2) var(--ds-size-4);
+}
+
+.bulkActionButtons {
+  display: flex;
+  gap: var(--ds-size-2);
+}
+
+@media (max-width: 768px) {
+  .bulkActions {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+}

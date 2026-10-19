@@ -690,7 +690,16 @@
     "no_agents": "Ingen brukere har fått klienttilganger ennå.",
     "addUserPrompt": "Velg «Legg til ny bruker» for å gi flere brukere fullmakt til klienten.",
     "no_results": "Ingen brukere ble funnet for dette søket.",
-    "client_search_placeholder": "Søk etter klient"
+    "client_search_placeholder": "Søk etter klient",
+    "bulk_actions_description": "Fullmakter som kan tildeles på vegne av klient",
+    "give_all": "Gi alle",
+    "delete_all": "Slett alle",
+    "give_all_for": "Gi alle fullmakter for {{clientName}}",
+    "delete_all_for": "Slett alle fullmakter for {{clientName}}",
+    "delegate_all_success_snackbar": "{{name}} har nå fått alle fullmakter for {{clientName}}.",
+    "delegate_all_error": "{{failedCount}} av {{totalCount}} fullmakter for {{clientName}} kunne ikke gis til {{name}}.",
+    "remove_all_success_snackbar": "{{name}} har ikke lenger fullmakter for {{clientName}}.",
+    "remove_all_error": "{{failedCount}} av {{totalCount}} fullmakter for {{clientName}} kunne ikke slettes for {{name}}."
   },
   "systemuser_creationpage": {
     "page_title": "Lag ny systemtilgang - Altinn",

@@ -36,19 +36,28 @@ interface DelegationControlProps {
   name: string;
   hasAccess: boolean;
   disabled: boolean;
+  isPending?: boolean;
   onAction: DelegateHandler;
 }
 
 // Stays rendered and enabled while its own action runs, so focus is never lost to <body>.
-const DelegationControl = ({ id, name, hasAccess, disabled, onAction }: DelegationControlProps) => {
+const DelegationControl = ({
+  id,
+  name,
+  hasAccess,
+  disabled,
+  isPending = false,
+  onAction,
+}: DelegationControlProps) => {
   const { t } = useTranslation();
-  const [isLoading, setIsLoading] = useState(false);
+  const [isActionLoading, setIsActionLoading] = useState(false);
+  const isLoading = isActionLoading || isPending;
   useRestoreFocusTarget(id);
 
   const onClick = () => {
     if (isLoading) return;
-    setIsLoading(true);
-    void Promise.resolve(onAction()).finally(() => setIsLoading(false));
+    setIsActionLoading(true);
+    void Promise.resolve(onAction()).finally(() => setIsActionLoading(false));
   };
 
   return (
@@ -90,6 +99,7 @@ export type BuildPackageItemOptions = {
   isMobileOrSmaller: boolean;
   addDisabled: boolean;
   removeDisabled: boolean;
+  isPending?: boolean;
   onDelegate: DelegateHandler | undefined;
   onRevoke: DelegateHandler | undefined;
   onOpenModal: (() => void) | undefined;
@@ -104,6 +114,7 @@ type DelegationControlOptions = Pick<
   | 'hasAccess'
   | 'addDisabled'
   | 'removeDisabled'
+  | 'isPending'
   | 'onDelegate'
   | 'onRevoke'
 > & { name: string };
@@ -116,6 +127,7 @@ const buildDelegationControl = ({
   hasAccess,
   addDisabled,
   removeDisabled,
+  isPending,
   onDelegate,
   onRevoke,
 }: DelegationControlOptions): React.ReactNode => {
@@ -129,6 +141,7 @@ const buildDelegationControl = ({
       name={name}
       hasAccess={hasAccess}
       disabled={hasAccess ? removeDisabled : addDisabled}
+      isPending={isPending}
       onAction={onAction}
     />
   );
@@ -143,6 +156,7 @@ export const buildPackageItem = ({
   isMobileOrSmaller,
   addDisabled,
   removeDisabled,
+  isPending,
   onDelegate,
   onRevoke,
   onOpenModal,
@@ -161,6 +175,7 @@ export const buildPackageItem = ({
     hasAccess,
     addDisabled,
     removeDisabled,
+    isPending,
     onDelegate,
     onRevoke,
   });
@@ -186,6 +201,7 @@ export type BuildResourceItemOptions = {
   isMobileOrSmaller: boolean;
   addDisabled: boolean;
   removeDisabled: boolean;
+  isPending?: boolean;
   onDelegate: DelegateHandler | undefined;
   onRevoke: DelegateHandler | undefined;
   onOpenModal: () => void;
@@ -199,6 +215,7 @@ export const buildResourceItem = ({
   isMobileOrSmaller,
   addDisabled,
   removeDisabled,
+  isPending,
   onDelegate,
   onRevoke,
   onOpenModal,
@@ -211,6 +228,7 @@ export const buildResourceItem = ({
     hasAccess,
     addDisabled,
     removeDisabled,
+    isPending,
     onDelegate,
     onRevoke,
   });
