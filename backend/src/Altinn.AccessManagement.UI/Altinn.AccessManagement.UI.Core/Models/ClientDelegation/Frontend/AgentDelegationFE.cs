@@ -34,7 +34,7 @@ namespace Altinn.AccessManagement.UI.Core.Models.ClientDelegation.Frontend
 
             return new AgentDelegationFE
             {
-                Agent = PartyFE.FromCompactEntity(delegation.Agent),
+                Agent = PartyFE.FromEntity(delegation.Agent),
                 AgentAddedAt = delegation.AgentAddedAt,
                 Access = delegation.Access ?? new(),
             };
