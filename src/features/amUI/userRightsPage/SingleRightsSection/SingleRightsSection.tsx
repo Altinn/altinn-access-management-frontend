@@ -18,7 +18,7 @@ import { useCanGiveAccess } from '@/resources/hooks/useCanGiveAccess';
 import { useIsTabletOrSmaller } from '@/resources/utils/screensizeUtils';
 import { useCanRequestAccess } from '@/resources/hooks/useCanRequestAccess';
 
-import { DelegationModal, DelegationType } from '../../common/DelegationModal/DelegationModal';
+import { SingleRightsDelegationModal } from '../../common/DelegationModal/SingleRights/SingleRightsDelegationModal';
 import { usePartyRepresentation } from '../../common/PartyRepresentationContext/PartyRepresentationContext';
 import { DelegationAction, EditModal } from '../../common/DelegationModal/EditModal';
 import { getAvailableActions } from '../../common/DelegationModal/delegationActionUtils';
@@ -134,10 +134,7 @@ const SingleRightsSectionContent = ({ isReportee }: { isReportee: boolean }) => 
               delegationModal={
                 (availableActions.includes(DelegationAction.DELEGATE) ||
                   availableActions.includes(DelegationAction.REQUEST)) && (
-                  <DelegationModal
-                    delegationType={DelegationType.SingleRights}
-                    availableActions={availableActions}
-                  />
+                  <SingleRightsDelegationModal availableActions={availableActions} />
                 )
               }
               renderControls={(resource) => {

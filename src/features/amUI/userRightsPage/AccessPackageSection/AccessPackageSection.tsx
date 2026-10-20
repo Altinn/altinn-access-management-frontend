@@ -8,7 +8,7 @@ import { useCanGiveAccess } from '@/resources/hooks/useCanGiveAccess';
 import { useCanRequestAccess } from '@/resources/hooks/useCanRequestAccess';
 import { useGetUserDelegationsQuery } from '@/rtk/features/accessPackageApi';
 
-import { DelegationModal, DelegationType } from '../../common/DelegationModal/DelegationModal';
+import { AccessPackageDelegationModal } from '../../common/DelegationModal/AccessPackages/AccessPackageDelegationModal';
 import { DelegationAction } from '../../common/DelegationModal/EditModal';
 import { getAvailableActions } from '../../common/DelegationModal/delegationActionUtils';
 import { usePartyRepresentation } from '../../common/PartyRepresentationContext/PartyRepresentationContext';
@@ -80,10 +80,7 @@ export const AccessPackageSection = ({ isReportee = false }: { isReportee?: bool
             <div className={classes.delegateButton}>
               {(availableActions.includes(DelegationAction.DELEGATE) ||
                 availableActions.includes(DelegationAction.REQUEST)) && (
-                <DelegationModal
-                  delegationType={DelegationType.AccessPackage}
-                  availableActions={availableActions}
-                />
+                <AccessPackageDelegationModal availableActions={availableActions} />
               )}
             </div>
           </div>

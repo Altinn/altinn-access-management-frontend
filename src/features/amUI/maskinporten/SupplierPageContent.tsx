@@ -13,8 +13,7 @@ import {
   useRemoveMaskinportenSupplierResourceMutation,
 } from '@/rtk/features/maskinportenApi';
 
-import { DelegationAction, EditModal } from '../common/DelegationModal/EditModal';
-import { DelegationModal, DelegationType } from '../common/DelegationModal/DelegationModal';
+import { EditModal } from '../common/DelegationModal/EditModal';
 import { PageContainer } from '../common/PageContainer/PageContainer';
 import { UserPageHeader } from '../common/UserPageHeader/UserPageHeader';
 import { usePartyRepresentation } from '../common/PartyRepresentationContext/PartyRepresentationContext';
@@ -26,6 +25,7 @@ import {
   useRestoreFocusOnDataChange,
 } from '../common/RestoreFocus';
 
+import { ScopeDelegationModal } from './ScopeDelegationModal';
 import { useMaskinportenResourceActions } from './hooks/useMaskinportenResourceActions';
 import { MaskinportenDeleteDialog } from './MaskinportenDeleteDialog';
 import {
@@ -161,12 +161,7 @@ const SupplierPageContentInner = () => {
               }}
             />
           }
-          addNewResourceButton={
-            <DelegationModal
-              delegationType={DelegationType.MaskinportenScope}
-              availableActions={[DelegationAction.DELEGATE]}
-            />
-          }
+          addNewResourceButton={<ScopeDelegationModal />}
         />
       </RestoreFocusFallback>
       <MaskinportenDeleteDialog

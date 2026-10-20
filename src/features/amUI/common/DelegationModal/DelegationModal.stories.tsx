@@ -1,4 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
+import type { JSX } from 'react';
 import { Provider } from 'react-redux';
 import { RootProvider, Snackbar } from '@altinn/altinn-components';
 
@@ -6,40 +7,44 @@ import store from '@/rtk/app/store';
 
 import { PartyRepresentationProvider } from '../PartyRepresentationContext/PartyRepresentationContext';
 
-import { DelegationModal, DelegationType } from './DelegationModal';
 import { DelegationModalProvider } from './DelegationModalContext';
+import { DelegationAction } from './EditModal';
+import { SingleRightsDelegationModal } from './SingleRights/SingleRightsDelegationModal';
+import { AccessPackageDelegationModal } from './AccessPackages/AccessPackageDelegationModal';
 
-type DelegationModalProps = React.ComponentProps<typeof DelegationModal>;
+const Providers = ({ children }: { children: JSX.Element }) => (
+  <RootProvider>
+    <DelegationModalProvider>
+      <Provider store={store}>
+        <PartyRepresentationProvider
+          fromPartyUuid='123'
+          toPartyUuid='123'
+          actingPartyUuid='123'
+        >
+          {children}
+        </PartyRepresentationProvider>
+      </Provider>
+    </DelegationModalProvider>
+    <Snackbar />
+  </RootProvider>
+);
 
 export default {
   title: 'Features/AMUI/DelegationModal',
-  component: DelegationModal,
-  argTypes: {
-    delegationType: {
-      options: [DelegationType.SingleRights, DelegationType.AccessPackage],
-      control: { type: 'inline-radio' },
-    },
-  },
-  render: (props) => (
-    <RootProvider>
-      <DelegationModalProvider>
-        <Provider store={store}>
-          <PartyRepresentationProvider
-            fromPartyUuid='123'
-            toPartyUuid='123'
-            actingPartyUuid='123'
-          >
-            <DelegationModal {...(props as DelegationModalProps)} />
-          </PartyRepresentationProvider>
-        </Provider>
-      </DelegationModalProvider>
-      <Snackbar />
-    </RootProvider>
-  ),
 } as Meta;
 
-export const Default: StoryObj<DelegationModalProps> = {
-  args: {
-    delegationType: DelegationType.SingleRights,
-  },
+export const SingleRights: StoryObj = {
+  render: () => (
+    <Providers>
+      <SingleRightsDelegationModal availableActions={[DelegationAction.DELEGATE]} />
+    </Providers>
+  ),
+};
+
+export const AccessPackage: StoryObj = {
+  render: () => (
+    <Providers>
+      <AccessPackageDelegationModal availableActions={[DelegationAction.DELEGATE]} />
+    </Providers>
+  ),
 };
