@@ -21,6 +21,7 @@ type AgentDetailsClientsListProps = {
   agentAccessPackages: Client[];
   agentResources?: Client[];
   isLoading: boolean;
+  renderClientActions: (client: Client) => React.ReactNode;
   toPartyUuid?: string;
   actingPartyUuid?: string;
   addAgentAccessPackages: AddAgentAccessPackagesFn;
@@ -39,6 +40,7 @@ export const AgentDetailsClientsList = ({
   agentAccessPackages,
   agentResources,
   isLoading,
+  renderClientActions,
   toPartyUuid,
   actingPartyUuid,
   addAgentAccessPackages,
@@ -51,8 +53,7 @@ export const AgentDetailsClientsList = ({
   onToggleExpanded,
   restoreFocusFallbackId,
 }: AgentDetailsClientsListProps) => {
-  const delegateDisabled = isLoading || !toPartyUuid || !actingPartyUuid;
-  const removeDisabled = isLoading || !toPartyUuid || !actingPartyUuid;
+  const actionDisabled = isLoading || !toPartyUuid || !actingPartyUuid;
 
   const { addAgentAccessPackage, removeAgentAccessPackage } = useAgentDetailsAccessPackageActions({
     toPartyUuid,
@@ -73,42 +74,19 @@ export const AgentDetailsClientsList = ({
       clients={clients}
       accessStateClients={agentAccessPackages}
       resourceAccessClients={agentResources}
-      addDisabled={delegateDisabled}
-      removeDisabled={removeDisabled}
+      addDisabled={actionDisabled}
+      removeDisabled={actionDisabled}
       searchString={searchString}
       emptyText={emptyText}
       expandedIds={expandedIds}
       onToggleExpanded={onToggleExpanded}
       restoreFocusFallbackId={restoreFocusFallbackId}
-      onAddAccessPackage={(
-        { clientId, roleCode, packageId, accessPackageName },
-        onSuccess?: () => void,
-        onError?: () => void,
-      ) =>
-        addAgentAccessPackage(
-          clientId,
-          roleCode,
-          packageId,
-          agentName,
-          accessPackageName,
-          onSuccess,
-          onError,
-        )
+      renderClientActions={renderClientActions}
+      onAddAccessPackage={(action, onSuccess, onError) =>
+        addAgentAccessPackage({ ...action, agentName }, onSuccess, onError)
       }
-      onRemoveAccessPackage={(
-        { clientId, roleCode, packageId, accessPackageName },
-        onSuccess?: () => void,
-        onError?: () => void,
-      ) =>
-        removeAgentAccessPackage(
-          clientId,
-          roleCode,
-          packageId,
-          agentName,
-          accessPackageName,
-          onSuccess,
-          onError,
-        )
+      onRemoveAccessPackage={(action, onSuccess, onError) =>
+        removeAgentAccessPackage({ ...action, agentName }, onSuccess, onError)
       }
       onAddResource={(
         { clientId, roleCode, resourceId, resourceName },

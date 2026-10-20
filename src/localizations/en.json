@@ -693,7 +693,16 @@
     "no_agents": "No users have been given client access yet.",
     "addUserPrompt": "Select «Add new user» to give more users power of attorney for this client.",
     "no_results": "No users were found for this search.",
-    "client_search_placeholder": "Search for client"
+    "client_search_placeholder": "Search for client",
+    "bulk_actions_description": "Powers of attorney that can be granted on behalf of the client",
+    "give_all": "Give all",
+    "delete_all": "Delete all",
+    "give_all_for": "Give all powers of attorney for {{clientName}}",
+    "delete_all_for": "Delete all powers of attorney for {{clientName}}",
+    "delegate_all_success_snackbar": "{{name}} now has all powers of attorney for {{clientName}}.",
+    "delegate_all_error": "{{failedCount}} of {{totalCount}} powers of attorney for {{clientName}} could not be granted to {{name}}.",
+    "remove_all_success_snackbar": "{{name}} no longer has any powers of attorney for {{clientName}}.",
+    "remove_all_error": "{{failedCount}} of {{totalCount}} of {{name}}'s powers of attorney for {{clientName}} could not be removed."
   },
   "systemuser_creationpage": {
     "page_title": "Create new system access - Altinn",

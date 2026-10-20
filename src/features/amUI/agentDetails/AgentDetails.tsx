@@ -1,10 +1,11 @@
-import React, { useId, useMemo, useState } from 'react';
+import React, { useCallback, useId, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { DsAlert, DsParagraph, DsSkeleton, Switch } from '@altinn/altinn-components';
 import { useParams } from 'react-router';
 import { skipToken } from '@reduxjs/toolkit/query';
 
 import { formatEntityDisplayName } from '@/resources/utils/reporteeUtils';
+import type { Client } from '@/rtk/features/clientApi';
 import {
   useAddAgentAccessPackagesMutation,
   useAddAgentResourcesMutation,
@@ -34,6 +35,8 @@ import {
   RestoreFocusProvider,
   useRestoreFocus,
 } from '../common/RestoreFocus';
+import { ClientBulkActions } from '../common/ClientBulkDelegation/ClientBulkActions';
+import { useClientBulkDelegation } from '../common/ClientBulkDelegation/useClientBulkDelegation';
 
 import { AgentDetailsDeleteModal } from './AgentDetailsDeleteModal';
 import { useAgentDetailsAccessClientLists } from './useAgentDetailsAccessClientLists';
@@ -48,11 +51,13 @@ export const AgentDetails = () => {
   const {
     data: agentAccessPackages,
     isLoading: isLoadingAgentAccessPackages,
+    isFetching: isFetchingAgentAccessPackages,
     error: agentAccessPackagesError,
   } = useGetAgentAccessPackagesQuery(id ? { to: id } : skipToken);
   const {
     data: agentResources,
     isLoading: isLoadingAgentResources,
+    isFetching: isFetchingAgentResources,
     error: agentResourcesError,
   } = useGetAgentResourcesQuery(id ? { to: id } : skipToken);
   const { data: clients, isLoading: isLoadingClients, error: clientsError } = useGetClientsQuery();
@@ -62,14 +67,10 @@ export const AgentDetails = () => {
     [clients, showDeleted],
   );
 
-  const [addAgentAccessPackages, { isLoading: isAddingAgentAccessPackages }] =
-    useAddAgentAccessPackagesMutation();
-  const [removeAgentAccessPackages, { isLoading: isRemovingAgentAccessPackages }] =
-    useRemoveAgentAccessPackagesMutation();
-  const [addAgentResources, { isLoading: isAddingAgentResources }] = useAddAgentResourcesMutation();
-  const [removeAgentResources, { isLoading: isRemovingAgentResources }] =
-    useRemoveAgentResourcesMutation();
-
+  const [addAgentAccessPackages] = useAddAgentAccessPackagesMutation();
+  const [removeAgentAccessPackages] = useRemoveAgentAccessPackagesMutation();
+  const [addAgentResources] = useAddAgentResourcesMutation();
+  const [removeAgentResources] = useRemoveAgentResourcesMutation();
   const { clientsWithAgentAccess, clientsWithoutAgentAccess } = useAgentDetailsAccessClientLists({
     agentAccessPackages,
     agentResources,
@@ -87,10 +88,40 @@ export const AgentDetails = () => {
   const userName = formatEntityDisplayName(toParty);
   const toPartyUuid = toParty?.partyUuid;
   const actingPartyUuid = actingParty?.partyUuid;
+  const accessStateClients = agentAccessPackages ?? [];
+  const resourceAccessClients = agentResources ?? [];
+  const actionsDisabled =
+    isFetchingAgentAccessPackages || isFetchingAgentResources || !toPartyUuid || !actingPartyUuid;
   const assignedSectionId = useId();
   const unassignedSectionId = useId();
   // One zone for both sections, so a client that moves between them is still found by its id.
   const restoreFocus = useRestoreFocus();
+  const bulk = useClientBulkDelegation({
+    agentName: userName,
+    agentId: toPartyUuid,
+    actingPartyUuid,
+    accessStateClients,
+    resourceAccessClients,
+    disabled: actionsDisabled,
+    addAgentAccessPackages,
+    removeAgentAccessPackages,
+    addAgentResources,
+    removeAgentResources,
+  });
+  const renderClientActions = useCallback(
+    (client: Client) => {
+      const items = bulk.getClientItems(client);
+      if (items.missing.length === 0 && items.held.length === 0) return null;
+      return (
+        <ClientBulkActions
+          client={client}
+          items={items}
+          bulk={bulk}
+        />
+      );
+    },
+    [bulk],
+  );
 
   if (isClientAdmin === false) {
     return (
@@ -189,14 +220,10 @@ export const AgentDetails = () => {
                     >
                       <AgentDetailsClientsList
                         clients={clientsWithAgentAccess}
-                        agentAccessPackages={agentAccessPackages ?? []}
-                        agentResources={agentResources ?? []}
-                        isLoading={
-                          isAddingAgentAccessPackages ||
-                          isRemovingAgentAccessPackages ||
-                          isAddingAgentResources ||
-                          isRemovingAgentResources
-                        }
+                        agentAccessPackages={accessStateClients}
+                        agentResources={resourceAccessClients}
+                        isLoading={bulk.disabled || !!bulk.activeRun}
+                        renderClientActions={renderClientActions}
                         toPartyUuid={toPartyUuid}
                         actingPartyUuid={actingPartyUuid}
                         addAgentAccessPackages={addAgentAccessPackages}
@@ -219,16 +246,12 @@ export const AgentDetails = () => {
                     >
                       <AgentDetailsClientsList
                         clients={clientsWithoutAgentAccess}
-                        agentAccessPackages={agentAccessPackages ?? []}
-                        agentResources={agentResources ?? []}
+                        agentAccessPackages={accessStateClients}
+                        agentResources={resourceAccessClients}
                         toPartyUuid={toPartyUuid}
                         actingPartyUuid={actingPartyUuid}
-                        isLoading={
-                          isAddingAgentAccessPackages ||
-                          isRemovingAgentAccessPackages ||
-                          isAddingAgentResources ||
-                          isRemovingAgentResources
-                        }
+                        isLoading={bulk.disabled || !!bulk.activeRun}
+                        renderClientActions={renderClientActions}
                         addAgentAccessPackages={addAgentAccessPackages}
                         removeAgentAccessPackages={removeAgentAccessPackages}
                         addAgentResources={addAgentResources}

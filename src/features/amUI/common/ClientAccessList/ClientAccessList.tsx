@@ -76,12 +76,12 @@ type ClientAccessListProps = {
   onAddAccessPackage?: (
     action: ClientAccessPackageAction,
     onSuccess?: () => void,
-    onError?: () => void,
+    onError?: (error?: ActionError) => void,
   ) => void | Promise<void>;
   onRemoveAccessPackage?: (
     action: ClientAccessPackageAction,
     onSuccess?: () => void,
-    onError?: () => void,
+    onError?: (error?: ActionError) => void,
   ) => void | Promise<void>;
   onAddResource?: (
     action: ClientResourceAction,
@@ -93,6 +93,7 @@ type ClientAccessListProps = {
     onSuccess?: () => void,
     onError?: (error?: ActionError) => void,
   ) => void | Promise<void>;
+  renderClientActions?: (client: Client) => React.ReactNode;
   requireDelegableForActions?: boolean;
   emptyAccessText?: string;
   emptyText?: string;
@@ -122,6 +123,7 @@ export const ClientAccessList = ({
   onRemoveAccessPackage,
   onAddResource,
   onRemoveResource,
+  renderClientActions,
   requireDelegableForActions = true,
   emptyAccessText,
   emptyText,
@@ -194,7 +196,7 @@ export const ClientAccessList = ({
           requestPackageFocus(clientActionControlId(itemId), restoreFocusFallbackId);
 
         const onDelegate = onAddAccessPackage
-          ? (onSuccess?: () => void, onError?: () => void) =>
+          ? (onSuccess?: () => void, onError?: (error?: ActionError) => void) =>
               onAddAccessPackage(
                 {
                   clientId,
@@ -207,7 +209,7 @@ export const ClientAccessList = ({
               )
           : undefined;
         const onRevoke = onRemoveAccessPackage
-          ? (onSuccess?: () => void, onError?: () => void) =>
+          ? (onSuccess?: () => void, onError?: (error?: ActionError) => void) =>
               onRemoveAccessPackage(
                 {
                   clientId,
@@ -339,11 +341,14 @@ export const ClientAccessList = ({
       as: 'button',
       titleAs: 'div',
       children: (
-        <ClientAccessSections
-          packageItems={nodes}
-          resourceItems={resourceNodes}
-          emptyText={emptyAccessText}
-        />
+        <>
+          {renderClientActions?.(client)}
+          <ClientAccessSections
+            packageItems={nodes}
+            resourceItems={resourceNodes}
+            emptyText={emptyAccessText}
+          />
+        </>
       ),
       description:
         userType === 'company'
