@@ -10,11 +10,14 @@ import {
   type ClientBulkItem,
   type ClientBulkItems,
 } from './getClientBulkItems';
+import type { ClientAccessOutcome } from './useClientAccessDelegation';
 
 export type ClientBulkMode = 'add' | 'remove';
 
-// Resolves to the number of items that failed.
-type ClientBulkItemsHandler = (clientId: string, items: ClientBulkItem[]) => Promise<number>;
+type ClientBulkItemsHandler = (
+  clientId: string,
+  items: ClientBulkItem[],
+) => Promise<ClientAccessOutcome>;
 
 type ActiveRun = { mode: ClientBulkMode; clientId: string };
 
@@ -81,7 +84,8 @@ export const useClientBulkDelegation = ({
 
       setActiveRun({ mode, clientId });
       const handler = mode === 'add' ? onDelegateItems : onRevokeItems;
-      const failedCount = await handler(clientId, items).catch(() => items.length);
+      const { failed } = await handler(clientId, items).catch(() => ({ failed: items }));
+      const failedCount = failed.length;
       setActiveRun(null);
 
       const messages = MODE_MESSAGES[mode];

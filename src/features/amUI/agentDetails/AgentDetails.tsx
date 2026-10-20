@@ -36,11 +36,12 @@ import {
   useRestoreFocus,
 } from '../common/RestoreFocus';
 import { ClientBulkActions } from '../common/ClientBulkDelegation/ClientBulkActions';
+import { useClientAccessDelegation } from '../common/ClientBulkDelegation/useClientAccessDelegation';
+import type { ClientBulkItem } from '../common/ClientBulkDelegation/getClientBulkItems';
 import { useClientBulkDelegation } from '../common/ClientBulkDelegation/useClientBulkDelegation';
 
 import { AgentDetailsDeleteModal } from './AgentDetailsDeleteModal';
 import { useAgentDetailsAccessClientLists } from './useAgentDetailsAccessClientLists';
-import { useAgentDetailsBulkAccessActions } from './useAgentDetailsBulkAccessActions';
 import { AgentDetailsClientsList } from './AgentDetailsClientsList';
 import classes from './AgentDetails.module.css';
 
@@ -68,21 +69,11 @@ export const AgentDetails = () => {
     [clients, showDeleted],
   );
 
-  const [addAgentAccessPackages, { isLoading: isAddingAgentAccessPackages }] =
-    useAddAgentAccessPackagesMutation();
-  const [removeAgentAccessPackages, { isLoading: isRemovingAgentAccessPackages }] =
-    useRemoveAgentAccessPackagesMutation();
-  const [addAgentResources, { isLoading: isAddingAgentResources }] = useAddAgentResourcesMutation();
-  const [removeAgentResources, { isLoading: isRemovingAgentResources }] =
-    useRemoveAgentResourcesMutation();
-
-  const isMutating =
-    isAddingAgentAccessPackages ||
-    isRemovingAgentAccessPackages ||
-    isAddingAgentResources ||
-    isRemovingAgentResources;
-  const { delegateItems, revokeItems } = useAgentDetailsBulkAccessActions({
-    toPartyUuid: toParty?.partyUuid,
+  const [addAgentAccessPackages] = useAddAgentAccessPackagesMutation();
+  const [removeAgentAccessPackages] = useRemoveAgentAccessPackagesMutation();
+  const [addAgentResources] = useAddAgentResourcesMutation();
+  const [removeAgentResources] = useRemoveAgentResourcesMutation();
+  const { delegate, revoke } = useClientAccessDelegation({
     actingPartyUuid: actingParty?.partyUuid,
     addAgentAccessPackages,
     removeAgentAccessPackages,
@@ -110,15 +101,21 @@ export const AgentDetails = () => {
   const accessStateClients = agentAccessPackages ?? [];
   const resourceAccessClients = agentResources ?? [];
   const actionsDisabled =
-    isMutating ||
-    isFetchingAgentAccessPackages ||
-    isFetchingAgentResources ||
-    !toPartyUuid ||
-    !actingPartyUuid;
+    isFetchingAgentAccessPackages || isFetchingAgentResources || !toPartyUuid || !actingPartyUuid;
   const assignedSectionId = useId();
   const unassignedSectionId = useId();
   // One zone for both sections, so a client that moves between them is still found by its id.
   const restoreFocus = useRestoreFocus();
+  const delegateItems = useCallback(
+    (clientId: string, items: ClientBulkItem[]) =>
+      delegate({ clientId, agentId: toPartyUuid }, items),
+    [delegate, toPartyUuid],
+  );
+  const revokeItems = useCallback(
+    (clientId: string, items: ClientBulkItem[]) =>
+      revoke({ clientId, agentId: toPartyUuid }, items),
+    [revoke, toPartyUuid],
+  );
   const bulk = useClientBulkDelegation({
     agentName: userName,
     accessStateClients,

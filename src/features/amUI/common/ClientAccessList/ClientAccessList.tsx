@@ -76,12 +76,12 @@ type ClientAccessListProps = {
   onAddAccessPackage?: (
     action: ClientAccessPackageAction,
     onSuccess?: () => void,
-    onError?: () => void,
+    onError?: (error?: ActionError) => void,
   ) => void | Promise<void>;
   onRemoveAccessPackage?: (
     action: ClientAccessPackageAction,
     onSuccess?: () => void,
-    onError?: () => void,
+    onError?: (error?: ActionError) => void,
   ) => void | Promise<void>;
   onAddResource?: (
     action: ClientResourceAction,
@@ -196,7 +196,7 @@ export const ClientAccessList = ({
           requestPackageFocus(clientActionControlId(itemId), restoreFocusFallbackId);
 
         const onDelegate = onAddAccessPackage
-          ? (onSuccess?: () => void, onError?: () => void) =>
+          ? (onSuccess?: () => void, onError?: (error?: ActionError) => void) =>
               onAddAccessPackage(
                 {
                   clientId,
@@ -209,7 +209,7 @@ export const ClientAccessList = ({
               )
           : undefined;
         const onRevoke = onRemoveAccessPackage
-          ? (onSuccess?: () => void, onError?: () => void) =>
+          ? (onSuccess?: () => void, onError?: (error?: ActionError) => void) =>
               onRemoveAccessPackage(
                 {
                   clientId,

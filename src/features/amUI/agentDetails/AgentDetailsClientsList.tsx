@@ -82,35 +82,11 @@ export const AgentDetailsClientsList = ({
       onToggleExpanded={onToggleExpanded}
       restoreFocusFallbackId={restoreFocusFallbackId}
       renderClientActions={renderClientActions}
-      onAddAccessPackage={(
-        { clientId, roleCode, packageId, accessPackageName },
-        onSuccess?: () => void,
-        onError?: () => void,
-      ) =>
-        addAgentAccessPackage(
-          clientId,
-          roleCode,
-          packageId,
-          agentName,
-          accessPackageName,
-          onSuccess,
-          onError,
-        )
+      onAddAccessPackage={(action, onSuccess, onError) =>
+        addAgentAccessPackage({ ...action, agentName }, onSuccess, onError)
       }
-      onRemoveAccessPackage={(
-        { clientId, roleCode, packageId, accessPackageName },
-        onSuccess?: () => void,
-        onError?: () => void,
-      ) =>
-        removeAgentAccessPackage(
-          clientId,
-          roleCode,
-          packageId,
-          agentName,
-          accessPackageName,
-          onSuccess,
-          onError,
-        )
+      onRemoveAccessPackage={(action, onSuccess, onError) =>
+        removeAgentAccessPackage({ ...action, agentName }, onSuccess, onError)
       }
       onAddResource={(
         { clientId, roleCode, resourceId, resourceName },
