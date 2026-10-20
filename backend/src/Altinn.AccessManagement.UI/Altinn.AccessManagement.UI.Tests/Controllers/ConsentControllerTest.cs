@@ -288,11 +288,11 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
         }
 
         /// <summary>
-        ///     Test case: Logout checks that user is not logged out when redirect url is on the same host as Altinn
+        ///     Test case: Logout checks that user is not logged out when redirect url host is in KeepSessionRedirectHosts
         ///     Expected: Logout redirects directly to redirect url without setting logout cookie
         /// </summary>
         [Fact]
-        public async Task LogoutAfterReject_LocalRedirectUrl_RedirectsWithoutLogout()
+        public async Task LogoutAfterReject_KeepSessionRedirectHost_RedirectsWithoutLogout()
         {
             // Arrange
             string expectedRedirectUrl = "https://af.localhost/inbox?Status=Failed&ErrorMessage=User+did+not+give+consent";

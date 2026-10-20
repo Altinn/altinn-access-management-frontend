@@ -1,4 +1,5 @@
 using Altinn.AccessManagement.UI.Core.Configuration;
+using Altinn.AccessManagement.UI.Core.Helpers;
 using Altinn.AccessManagement.UI.Core.Models.Consent;
 using Altinn.AccessManagement.UI.Core.Models.Consent.Frontend;
 using Altinn.AccessManagement.UI.Core.Services.Interfaces;
@@ -222,8 +223,8 @@ namespace Altinn.AccessManagement.UI.Controllers
 
             if (redirectUrlResponse.IsSuccess)
             {
-                // do not log out user if redirect url is on the same host as Altinn (e.g. Arbeidsflate)
-                if (IsLocalRedirectUrl(redirectUrlResponse.Value))
+                // do not log out user if redirect url is an allowed Altinn host (e.g. Arbeidsflate)
+                if (RedirectUrlUtils.IsAllowedHost(redirectUrlResponse.Value, _generalSettings.Value.KeepSessionRedirectHosts))
                 {
                     return Redirect(redirectUrlResponse.Value);
                 }
@@ -235,18 +236,6 @@ namespace Altinn.AccessManagement.UI.Controllers
             
             string logoutUrl = $"{_platformSettings.Value.ApiAuthenticationEndpoint}logout";
             return Redirect(logoutUrl);
-        }
-
-        private bool IsLocalRedirectUrl(string redirectUrl)
-        {
-            string hostname = _generalSettings.Value.Hostname;
-            if (string.IsNullOrEmpty(hostname) || !Uri.TryCreate(redirectUrl, UriKind.Absolute, out Uri uri) || uri.Scheme != Uri.UriSchemeHttps)
-            {
-                return false;
-            }
-
-            return string.Equals(uri.Host, hostname, StringComparison.OrdinalIgnoreCase)
-                || uri.Host.EndsWith($".{hostname}", StringComparison.OrdinalIgnoreCase);
         }
     }
 }
