@@ -16,9 +16,7 @@ type GetClientBulkItemsParams = {
   getAccessPackageById: (packageId?: string | null) => AccessPackage | undefined;
 };
 
-// Maps each held access to every role it is actually delegated under. Revoking has to target those
-// roles, not the role the client happens to offer the access under, and an access held under two
-// roles needs one revoke per role.
+// Revoking has to target the role the delegation was made under, not the offered one.
 const heldRolesForClient = (
   clients: Client[],
   clientId: string,

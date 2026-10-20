@@ -1,8 +1,8 @@
-import React, { createContext, useCallback, useContext, useMemo, useState } from 'react';
+import { useCallback, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useSnackbar } from '@altinn/altinn-components';
 
-import type { AccessPackage } from '@/rtk/features/accessPackageApi';
+import { useAccessPackageLookup } from '@/resources/hooks/useAccessPackageLookup';
 import type { Client } from '@/rtk/features/clientApi';
 
 import {
@@ -18,7 +18,16 @@ type ClientBulkItemsHandler = (clientId: string, items: ClientBulkItem[]) => Pro
 
 type ActiveRun = { mode: ClientBulkMode; clientId: string; accessIds: ReadonlySet<string> };
 
-type ClientBulkDelegationContextValue = {
+type UseClientBulkDelegationParams = {
+  agentName: string;
+  accessStateClients: Client[];
+  resourceAccessClients: Client[];
+  disabled: boolean;
+  onDelegateItems: ClientBulkItemsHandler;
+  onRevokeItems: ClientBulkItemsHandler;
+};
+
+export type ClientBulkDelegation = {
   getClientItems: (client: Client) => ClientBulkItems;
   disabled: boolean;
   activeRun: ActiveRun | null;
@@ -29,23 +38,6 @@ type ClientBulkDelegationContextValue = {
     clientName: string,
     items: ClientBulkItem[],
   ) => Promise<void>;
-};
-
-const ClientBulkDelegationContext = createContext<ClientBulkDelegationContextValue | undefined>(
-  undefined,
-);
-
-export const useClientBulkDelegation = () => useContext(ClientBulkDelegationContext);
-
-type ClientBulkDelegationProviderProps = {
-  children: React.ReactNode;
-  agentName: string;
-  accessStateClients: Client[];
-  resourceAccessClients: Client[];
-  getAccessPackageById: (packageId?: string | null) => AccessPackage | undefined;
-  disabled: boolean;
-  onDelegateItems: ClientBulkItemsHandler;
-  onRevokeItems: ClientBulkItemsHandler;
 };
 
 const MODE_MESSAGES = {
@@ -59,19 +51,18 @@ const MODE_MESSAGES = {
   },
 } as const;
 
-// Lives above both client sections, so pending state follows a client that moves between them.
-export const ClientBulkDelegationProvider = ({
-  children,
+// Call this above both client sections, so pending state follows a client moving between them.
+export const useClientBulkDelegation = ({
   agentName,
   accessStateClients,
   resourceAccessClients,
-  getAccessPackageById,
   disabled,
   onDelegateItems,
   onRevokeItems,
-}: ClientBulkDelegationProviderProps) => {
+}: UseClientBulkDelegationParams): ClientBulkDelegation => {
   const { t } = useTranslation();
   const { openSnackbar } = useSnackbar();
+  const { getAccessPackageById, isFetching: isFetchingAccessPackages } = useAccessPackageLookup();
   const [activeRun, setActiveRun] = useState<ActiveRun | null>(null);
 
   const getClientItems = useCallback(
@@ -114,20 +105,15 @@ export const ClientBulkDelegationProvider = ({
     [activeRun, agentName, onDelegateItems, onRevokeItems, openSnackbar, t],
   );
 
-  const value = useMemo(
+  return useMemo(
     () => ({
       getClientItems,
-      disabled,
+      // A fetching lookup resolves no packages, so a run would silently skip all of them.
+      disabled: disabled || isFetchingAccessPackages,
       activeRun,
       isAccessPending,
       start,
     }),
-    [activeRun, disabled, getClientItems, isAccessPending, start],
-  );
-
-  return (
-    <ClientBulkDelegationContext.Provider value={value}>
-      {children}
-    </ClientBulkDelegationContext.Provider>
+    [activeRun, disabled, getClientItems, isAccessPending, isFetchingAccessPackages, start],
   );
 };

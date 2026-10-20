@@ -13,8 +13,6 @@ import type {
 import { ClientAccessList } from '../common/ClientAccessList/ClientAccessList';
 import { useClientResourceActions } from '../common/ClientResourceList/useClientResourceActions';
 import { usePartyRepresentation } from '../common/PartyRepresentationContext/PartyRepresentationContext';
-import { ClientBulkActions } from '../common/ClientBulkDelegation/ClientBulkActions';
-import { useClientBulkDelegation } from '../common/ClientBulkDelegation/ClientBulkDelegation';
 
 import { useAgentDetailsAccessPackageActions } from './useAgentDetailsAccessPackageActions';
 
@@ -22,7 +20,9 @@ type AgentDetailsClientsListProps = {
   clients: Client[];
   agentAccessPackages: Client[];
   agentResources?: Client[];
-  isLoading: boolean;
+  actionsDisabled: boolean;
+  isBulkAccessPending: (clientId: string, accessId: string) => boolean;
+  renderClientActions: (client: Client) => React.ReactNode;
   toPartyUuid?: string;
   actingPartyUuid?: string;
   addAgentAccessPackages: AddAgentAccessPackagesFn;
@@ -40,7 +40,9 @@ export const AgentDetailsClientsList = ({
   clients,
   agentAccessPackages,
   agentResources,
-  isLoading,
+  actionsDisabled,
+  isBulkAccessPending,
+  renderClientActions,
   toPartyUuid,
   actingPartyUuid,
   addAgentAccessPackages,
@@ -53,8 +55,7 @@ export const AgentDetailsClientsList = ({
   onToggleExpanded,
   restoreFocusFallbackId,
 }: AgentDetailsClientsListProps) => {
-  const bulk = useClientBulkDelegation();
-  const actionDisabled = isLoading || !!bulk?.activeRun || !toPartyUuid || !actingPartyUuid;
+  const actionDisabled = actionsDisabled || !toPartyUuid || !actingPartyUuid;
 
   const { addAgentAccessPackage, removeAgentAccessPackage } = useAgentDetailsAccessPackageActions({
     toPartyUuid,
@@ -82,17 +83,8 @@ export const AgentDetailsClientsList = ({
       expandedIds={expandedIds}
       onToggleExpanded={onToggleExpanded}
       restoreFocusFallbackId={restoreFocusFallbackId}
-      renderClientActions={(client) => {
-        const items = bulk?.getClientItems(client);
-        if (!items || (items.missing.length === 0 && items.held.length === 0)) return null;
-        return (
-          <ClientBulkActions
-            client={client}
-            items={items}
-          />
-        );
-      }}
-      isAccessPending={bulk?.isAccessPending}
+      renderClientActions={renderClientActions}
+      isAccessPending={isBulkAccessPending}
       onAddAccessPackage={(
         { clientId, roleCode, packageId, accessPackageName },
         onSuccess?: () => void,

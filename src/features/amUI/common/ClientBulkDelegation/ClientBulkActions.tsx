@@ -7,7 +7,7 @@ import type { Client } from '@/rtk/features/clientApi';
 
 import { useRestoreFocusContext, useRestoreFocusTarget } from '../RestoreFocus';
 
-import { useClientBulkDelegation, type ClientBulkMode } from './ClientBulkDelegation';
+import type { ClientBulkDelegation, ClientBulkMode } from './useClientBulkDelegation';
 import type { ClientBulkItems } from './getClientBulkItems';
 import classes from './ClientBulkDelegation.module.css';
 
@@ -73,17 +73,18 @@ const BulkActionButton = ({
   );
 };
 
+interface ClientBulkActionsProps {
+  client: Client;
+  items: ClientBulkItems;
+  bulk: ClientBulkDelegation;
+}
+
 export const ClientBulkActions = ({
   client,
   items: { missing, held },
-}: {
-  client: Client;
-  items: ClientBulkItems;
-}) => {
+  bulk,
+}: ClientBulkActionsProps) => {
   const { t } = useTranslation();
-  const bulk = useClientBulkDelegation();
-
-  if (!bulk) return null;
 
   const clientId = client.client.id;
   const clientName = formatEntityDisplayName(client.client);
