@@ -13,7 +13,7 @@ import {
   useRemoveMaskinportenSupplierResourceMutation,
 } from '@/rtk/features/maskinportenApi';
 
-import { EditModal } from '../common/DelegationModal/EditModal';
+import { DelegationAction, EditModal } from '../common/DelegationModal/EditModal';
 import { PageContainer } from '../common/PageContainer/PageContainer';
 import { UserPageHeader } from '../common/UserPageHeader/UserPageHeader';
 import { usePartyRepresentation } from '../common/PartyRepresentationContext/PartyRepresentationContext';
@@ -148,6 +148,7 @@ const SupplierPageContentInner = () => {
             <EditModal
               ref={scopeModalRef}
               maskinportenScope={selectedResource ?? undefined}
+              availableActions={[DelegationAction.DELEGATE, DelegationAction.REVOKE]}
               onClose={() => {
                 // Restore focus to the row that opened the modal before clearing state. If the
                 // resource was revoked inside the modal its row is gone, so the heading catches it.
@@ -161,7 +162,11 @@ const SupplierPageContentInner = () => {
               }}
             />
           }
-          addNewResourceButton={<ScopeDelegationModal />}
+          addNewResourceButton={
+            <ScopeDelegationModal
+              availableActions={[DelegationAction.DELEGATE, DelegationAction.REVOKE]}
+            />
+          }
         />
       </RestoreFocusFallback>
       <MaskinportenDeleteDialog

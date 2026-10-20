@@ -6,11 +6,16 @@ import type { ServiceResource } from '@/rtk/features/singleRights/singleRightsAp
 import { usePartyRepresentation } from '../common/PartyRepresentationContext/PartyRepresentationContext';
 import { DelegationDialog } from '../common/DelegationModal/DelegationDialog';
 import { useDelegationModalContext } from '../common/DelegationModal/DelegationModalContext';
+import type { DelegationAction } from '../common/DelegationModal/EditModal';
 
 import { ScopeSearch } from './ScopeSearch';
 import { ScopeInfo } from './ScopeInfo';
 
-export const ScopeDelegationModal = () => {
+interface ScopeDelegationModalProps {
+  availableActions?: DelegationAction[];
+}
+
+export const ScopeDelegationModal = ({ availableActions = [] }: ScopeDelegationModalProps) => {
   const { t } = useTranslation();
   const { setInfoView, setResourceToView, resourceToView, setActionError } =
     useDelegationModalContext();
@@ -36,7 +41,14 @@ export const ScopeDelegationModal = () => {
       triggerText={t('maskinporten_page.add_scope_button')}
       focusTargetId={resourceToView?.identifier}
       searchView={<ScopeSearch onSelect={onSelection} />}
-      infoView={resourceToView && <ScopeInfo resource={resourceToView} />}
+      infoView={
+        resourceToView && (
+          <ScopeInfo
+            resource={resourceToView}
+            availableActions={availableActions}
+          />
+        )
+      }
     />
   );
 };
