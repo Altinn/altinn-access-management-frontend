@@ -3,31 +3,36 @@ import { useTranslation } from 'react-i18next';
 import { useSnackbar } from '@altinn/altinn-components';
 
 import { useAccessPackageLookup } from '@/resources/hooks/useAccessPackageLookup';
-import type { Client } from '@/rtk/features/clientApi';
+import type {
+  AddAgentAccessPackagesFn,
+  AddAgentResourcesFn,
+  Client,
+  RemoveAgentAccessPackagesFn,
+  RemoveAgentResourcesFn,
+} from '@/rtk/features/clientApi';
 
 import {
   getClientBulkItems,
   type ClientBulkItem,
   type ClientBulkItems,
 } from './getClientBulkItems';
-import type { ClientAccessOutcome } from './useClientAccessDelegation';
+import { useClientAccessDelegation } from './useClientAccessDelegation';
 
 export type ClientBulkMode = 'add' | 'remove';
-
-type ClientBulkItemsHandler = (
-  clientId: string,
-  items: ClientBulkItem[],
-) => Promise<ClientAccessOutcome>;
 
 type ActiveRun = { mode: ClientBulkMode; clientId: string };
 
 type UseClientBulkDelegationParams = {
   agentName: string;
+  agentId?: string;
+  actingPartyUuid?: string;
   accessStateClients: Client[];
   resourceAccessClients: Client[];
   disabled: boolean;
-  onDelegateItems: ClientBulkItemsHandler;
-  onRevokeItems: ClientBulkItemsHandler;
+  addAgentAccessPackages?: AddAgentAccessPackagesFn;
+  removeAgentAccessPackages?: RemoveAgentAccessPackagesFn;
+  addAgentResources?: AddAgentResourcesFn;
+  removeAgentResources?: RemoveAgentResourcesFn;
 };
 
 export type ClientBulkDelegation = {
@@ -56,15 +61,26 @@ const MODE_MESSAGES = {
 // Call this above both client sections, so pending state follows a client moving between them.
 export const useClientBulkDelegation = ({
   agentName,
+  agentId,
+  actingPartyUuid,
   accessStateClients,
   resourceAccessClients,
   disabled,
-  onDelegateItems,
-  onRevokeItems,
+  addAgentAccessPackages,
+  removeAgentAccessPackages,
+  addAgentResources,
+  removeAgentResources,
 }: UseClientBulkDelegationParams): ClientBulkDelegation => {
   const { t } = useTranslation();
   const { openSnackbar } = useSnackbar();
   const { getAccessPackageById, isFetching: isFetchingAccessPackages } = useAccessPackageLookup();
+  const { delegate, revoke } = useClientAccessDelegation({
+    actingPartyUuid,
+    addAgentAccessPackages,
+    removeAgentAccessPackages,
+    addAgentResources,
+    removeAgentResources,
+  });
   const [activeRun, setActiveRun] = useState<ActiveRun | null>(null);
 
   const getClientItems = useCallback(
@@ -83,8 +99,10 @@ export const useClientBulkDelegation = ({
       if (activeRun || items.length === 0) return;
 
       setActiveRun({ mode, clientId });
-      const handler = mode === 'add' ? onDelegateItems : onRevokeItems;
-      const { failed } = await handler(clientId, items).catch(() => ({ failed: items }));
+      const action = mode === 'add' ? delegate : revoke;
+      const { failed } = await action({ clientId, agentId }, items).catch(() => ({
+        failed: items,
+      }));
       const failedCount = failed.length;
       setActiveRun(null);
 
@@ -99,7 +117,7 @@ export const useClientBulkDelegation = ({
         color: failedCount > 0 ? 'danger' : 'success',
       });
     },
-    [activeRun, agentName, onDelegateItems, onRevokeItems, openSnackbar, t],
+    [activeRun, agentId, agentName, delegate, openSnackbar, revoke, t],
   );
 
   return useMemo(

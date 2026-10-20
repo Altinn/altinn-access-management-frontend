@@ -25,6 +25,11 @@ type UseClientAccessDelegationParams = {
   removeAgentResources?: RemoveAgentResourcesFn;
 };
 
+// Temporary, until the backend fixes this issue: #4660
+// Now repeated roles in one payload or two calls for the same pair fail with Postgres 23505.
+// Fix: One call at a time.
+const pendingByTarget = new Map<string, Promise<unknown>>();
+
 const groupIdsByRole = (items: ClientBulkItem[]) =>
   items.reduce<{ role: string; ids: string[] }[]>((groups, { roleCode, id }) => {
     const group = groups.find((g) => g.role === roleCode);
@@ -36,10 +41,21 @@ const groupIdsByRole = (items: ClientBulkItem[]) =>
     return groups;
   }, []);
 
-// One request per kind, whether the caller delegates a single access or every access a client
-// offers. Packages go before resources, and never at the same time: both endpoints create the
-// delegation row, concurrent calls race on it, and the loser fails with a duplicate key. This can
-// go parallel once the backend makes that creation idempotent.
+const enqueue = <T>(key: string, task: () => Promise<T>): Promise<T> => {
+  const previous = pendingByTarget.get(key) ?? Promise.resolve();
+  const result = previous.then(task, task);
+  const tail = result.then(
+    () => {
+      if (pendingByTarget.get(key) === tail) pendingByTarget.delete(key);
+    },
+    () => {
+      if (pendingByTarget.get(key) === tail) pendingByTarget.delete(key);
+    },
+  );
+  pendingByTarget.set(key, tail);
+  return result;
+};
+
 export const useClientAccessDelegation = ({
   actingPartyUuid,
   addAgentAccessPackages,
@@ -92,22 +108,24 @@ export const useClientAccessDelegation = ({
         },
       ];
 
-      const failed: ClientBulkItem[] = [];
-      let error: ActionError | undefined;
-      for (const { items: callItems, call } of calls) {
-        if (callItems.length === 0) continue;
-        if (!call) {
-          failed.push(...callItems);
-          continue;
+      return enqueue(`${clientId}:${agentId}`, async () => {
+        const failed: ClientBulkItem[] = [];
+        let error: ActionError | undefined;
+        for (const { items: callItems, call } of calls) {
+          if (callItems.length === 0) continue;
+          if (!call) {
+            failed.push(...callItems);
+            continue;
+          }
+          try {
+            await call();
+          } catch (caught) {
+            failed.push(...callItems);
+            error ??= getActionError(caught);
+          }
         }
-        try {
-          await call();
-        } catch (caught) {
-          failed.push(...callItems);
-          error ??= getActionError(caught);
-        }
-      }
-      return { failed, error };
+        return { failed, error };
+      });
     },
     [actingPartyUuid],
   );

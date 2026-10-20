@@ -36,8 +36,6 @@ import {
   useRestoreFocus,
 } from '../common/RestoreFocus';
 import { ClientBulkActions } from '../common/ClientBulkDelegation/ClientBulkActions';
-import { useClientAccessDelegation } from '../common/ClientBulkDelegation/useClientAccessDelegation';
-import type { ClientBulkItem } from '../common/ClientBulkDelegation/getClientBulkItems';
 import { useClientBulkDelegation } from '../common/ClientBulkDelegation/useClientBulkDelegation';
 
 import { AgentDetailsDeleteModal } from './AgentDetailsDeleteModal';
@@ -73,14 +71,6 @@ export const AgentDetails = () => {
   const [removeAgentAccessPackages] = useRemoveAgentAccessPackagesMutation();
   const [addAgentResources] = useAddAgentResourcesMutation();
   const [removeAgentResources] = useRemoveAgentResourcesMutation();
-  const { delegate, revoke } = useClientAccessDelegation({
-    actingPartyUuid: actingParty?.partyUuid,
-    addAgentAccessPackages,
-    removeAgentAccessPackages,
-    addAgentResources,
-    removeAgentResources,
-  });
-
   const { clientsWithAgentAccess, clientsWithoutAgentAccess } = useAgentDetailsAccessClientLists({
     agentAccessPackages,
     agentResources,
@@ -106,23 +96,17 @@ export const AgentDetails = () => {
   const unassignedSectionId = useId();
   // One zone for both sections, so a client that moves between them is still found by its id.
   const restoreFocus = useRestoreFocus();
-  const delegateItems = useCallback(
-    (clientId: string, items: ClientBulkItem[]) =>
-      delegate({ clientId, agentId: toPartyUuid }, items),
-    [delegate, toPartyUuid],
-  );
-  const revokeItems = useCallback(
-    (clientId: string, items: ClientBulkItem[]) =>
-      revoke({ clientId, agentId: toPartyUuid }, items),
-    [revoke, toPartyUuid],
-  );
   const bulk = useClientBulkDelegation({
     agentName: userName,
+    agentId: toPartyUuid,
+    actingPartyUuid,
     accessStateClients,
     resourceAccessClients,
     disabled: actionsDisabled,
-    onDelegateItems: delegateItems,
-    onRevokeItems: revokeItems,
+    addAgentAccessPackages,
+    removeAgentAccessPackages,
+    addAgentResources,
+    removeAgentResources,
   });
   const renderClientActions = useCallback(
     (client: Client) => {
