@@ -1,4 +1,5 @@
 using Altinn.AccessManagement.UI.Core.Configuration;
+using Altinn.AccessManagement.UI.Core.Helpers;
 using Altinn.AccessManagement.UI.Core.Models.Consent;
 using Altinn.AccessManagement.UI.Core.Models.Consent.Frontend;
 using Altinn.AccessManagement.UI.Core.Services.Interfaces;
@@ -222,6 +223,12 @@ namespace Altinn.AccessManagement.UI.Controllers
 
             if (redirectUrlResponse.IsSuccess)
             {
+                // do not log out user if redirect url is an allowed Altinn host (e.g. Arbeidsflate)
+                if (RedirectUrlUtils.IsAllowedHost(redirectUrlResponse.Value, _generalSettings.Value.KeepSessionRedirectHosts))
+                {
+                    return Redirect(redirectUrlResponse.Value);
+                }
+
                 // store encrypted redirect url in cookie
                 string encryptedUrl = await _encryptionService.EncryptText(redirectUrlResponse.Value);
                 HttpContext.Response.Cookies.Append(_platformSettings.Value.AltinnLogoutInfoCookieName, $"amSafeRedirectUrl={encryptedUrl}", cookieOptions);
