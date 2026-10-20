@@ -269,6 +269,7 @@ export const ConsentRequestPage = () => {
     <RequestPageLayout
       account={account}
       isLoading={isLoadingRequest}
+      requestPartyUuid={request?.fromParty.id}
       error={error}
       heading={heading}
       body={body}
