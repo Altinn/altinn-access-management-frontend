@@ -241,8 +241,7 @@ export const AgentDetails = () => {
                         clients={clientsWithAgentAccess}
                         agentAccessPackages={accessStateClients}
                         agentResources={resourceAccessClients}
-                        actionsDisabled={bulk.disabled || !!bulk.activeRun}
-                        isBulkAccessPending={bulk.isAccessPending}
+                        isLoading={bulk.disabled || !!bulk.activeRun}
                         renderClientActions={renderClientActions}
                         toPartyUuid={toPartyUuid}
                         actingPartyUuid={actingPartyUuid}
@@ -270,8 +269,7 @@ export const AgentDetails = () => {
                         agentResources={resourceAccessClients}
                         toPartyUuid={toPartyUuid}
                         actingPartyUuid={actingPartyUuid}
-                        actionsDisabled={bulk.disabled || !!bulk.activeRun}
-                        isBulkAccessPending={bulk.isAccessPending}
+                        isLoading={bulk.disabled || !!bulk.activeRun}
                         renderClientActions={renderClientActions}
                         addAgentAccessPackages={addAgentAccessPackages}
                         removeAgentAccessPackages={removeAgentAccessPackages}

@@ -20,8 +20,7 @@ type AgentDetailsClientsListProps = {
   clients: Client[];
   agentAccessPackages: Client[];
   agentResources?: Client[];
-  actionsDisabled: boolean;
-  isBulkAccessPending: (clientId: string, accessId: string) => boolean;
+  isLoading: boolean;
   renderClientActions: (client: Client) => React.ReactNode;
   toPartyUuid?: string;
   actingPartyUuid?: string;
@@ -40,8 +39,7 @@ export const AgentDetailsClientsList = ({
   clients,
   agentAccessPackages,
   agentResources,
-  actionsDisabled,
-  isBulkAccessPending,
+  isLoading,
   renderClientActions,
   toPartyUuid,
   actingPartyUuid,
@@ -55,7 +53,7 @@ export const AgentDetailsClientsList = ({
   onToggleExpanded,
   restoreFocusFallbackId,
 }: AgentDetailsClientsListProps) => {
-  const actionDisabled = actionsDisabled || !toPartyUuid || !actingPartyUuid;
+  const actionDisabled = isLoading || !toPartyUuid || !actingPartyUuid;
 
   const { addAgentAccessPackage, removeAgentAccessPackage } = useAgentDetailsAccessPackageActions({
     toPartyUuid,
@@ -84,7 +82,6 @@ export const AgentDetailsClientsList = ({
       onToggleExpanded={onToggleExpanded}
       restoreFocusFallbackId={restoreFocusFallbackId}
       renderClientActions={renderClientActions}
-      isAccessPending={isBulkAccessPending}
       onAddAccessPackage={(
         { clientId, roleCode, packageId, accessPackageName },
         onSuccess?: () => void,

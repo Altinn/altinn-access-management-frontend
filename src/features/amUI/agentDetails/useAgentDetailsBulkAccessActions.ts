@@ -18,16 +18,6 @@ type UseAgentDetailsBulkAccessActionsParams = {
   removeAgentResources: RemoveAgentResourcesFn;
 };
 
-type BatchArgs = { from: string; to: string; party: string };
-
-type PackagesFn = (
-  args: BatchArgs & { payload: { values: { role: string; packages: string[] }[] } },
-) => { unwrap: () => Promise<unknown> };
-
-type ResourcesFn = (
-  args: BatchArgs & { payload: { values: { role: string; resources: string[] }[] } },
-) => { unwrap: () => Promise<unknown> };
-
 const groupIdsByRole = (items: ClientBulkItem[]) =>
   items.reduce<{ role: string; ids: string[] }[]>((groups, { roleCode, id }) => {
     const group = groups.find((g) => g.role === roleCode);
@@ -65,8 +55,8 @@ export const useAgentDetailsBulkAccessActions = ({
 }: UseAgentDetailsBulkAccessActionsParams) => {
   const runItems = useCallback(
     async (
-      packagesFn: PackagesFn,
-      resourcesFn: ResourcesFn,
+      packagesFn: AddAgentAccessPackagesFn | RemoveAgentAccessPackagesFn,
+      resourcesFn: AddAgentResourcesFn | RemoveAgentResourcesFn,
       clientId: string,
       items: ClientBulkItem[],
     ) => {

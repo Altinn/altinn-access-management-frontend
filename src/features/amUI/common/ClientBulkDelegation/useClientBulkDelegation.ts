@@ -16,7 +16,7 @@ export type ClientBulkMode = 'add' | 'remove';
 // Resolves to the number of items that failed.
 type ClientBulkItemsHandler = (clientId: string, items: ClientBulkItem[]) => Promise<number>;
 
-type ActiveRun = { mode: ClientBulkMode; clientId: string; accessIds: ReadonlySet<string> };
+type ActiveRun = { mode: ClientBulkMode; clientId: string };
 
 type UseClientBulkDelegationParams = {
   agentName: string;
@@ -31,7 +31,6 @@ export type ClientBulkDelegation = {
   getClientItems: (client: Client) => ClientBulkItems;
   disabled: boolean;
   activeRun: ActiveRun | null;
-  isAccessPending: (clientId: string, accessId: string) => boolean;
   start: (
     mode: ClientBulkMode,
     clientId: string,
@@ -76,17 +75,11 @@ export const useClientBulkDelegation = ({
     [accessStateClients, getAccessPackageById, resourceAccessClients],
   );
 
-  const isAccessPending = useCallback(
-    (clientId: string, accessId: string) =>
-      activeRun?.clientId === clientId && activeRun.accessIds.has(accessId),
-    [activeRun],
-  );
-
   const start = useCallback(
     async (mode: ClientBulkMode, clientId: string, clientName: string, items: ClientBulkItem[]) => {
       if (activeRun || items.length === 0) return;
 
-      setActiveRun({ mode, clientId, accessIds: new Set(items.map((item) => item.id)) });
+      setActiveRun({ mode, clientId });
       const handler = mode === 'add' ? onDelegateItems : onRevokeItems;
       const failedCount = await handler(clientId, items).catch(() => items.length);
       setActiveRun(null);
@@ -111,9 +104,8 @@ export const useClientBulkDelegation = ({
       // A fetching lookup resolves no packages, so a run would silently skip all of them.
       disabled: disabled || isFetchingAccessPackages,
       activeRun,
-      isAccessPending,
       start,
     }),
-    [activeRun, disabled, getClientItems, isAccessPending, isFetchingAccessPackages, start],
+    [activeRun, disabled, getClientItems, isFetchingAccessPackages, start],
   );
 };
