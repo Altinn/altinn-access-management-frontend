@@ -28,7 +28,7 @@
     }
   ],
   "requestMessage": null,
-  "redirectUrl": "https://af.localhost/inbox",
+  "redirectUrl": "https://test-api.data.altinn.no/",
   "templateId": "sblanesoknad",
   "templateVersion": 1
 }

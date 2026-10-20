@@ -295,7 +295,7 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
         public async Task LogoutAfterReject_KeepSessionRedirectHost_RedirectsWithoutLogout()
         {
             // Arrange
-            string expectedRedirectUrl = "https://af.localhost/inbox?Status=Failed&ErrorMessage=User+did+not+give+consent";
+            string expectedRedirectUrl = "https://test-api.data.altinn.no/?Status=Failed&ErrorMessage=User+did+not+give+consent";
             string rejectedRequestId = "b8d3f1a2-6c4e-4f7a-9e2d-3a5b7c9d1e0f";
 
             // Act
