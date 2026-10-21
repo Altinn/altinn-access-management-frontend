@@ -537,7 +537,106 @@
     "tab_connections": "Fullmakter",
     "tab_request": "Forespørsler",
     "tab_maskinporten": "Maskinportenadministrasjon",
-    "empty": "Det er ingen aktivitet i loggen ennå."
+    "direction_legend": "Vis aktivitet",
+    "direction_from": "Fra virksomheten",
+    "direction_to": "Til virksomheten",
+    "filter_party_to": "Til",
+    "filter_party_from": "Fra",
+    "add_filter": "Legg til filter",
+    "remove_filter": "Fjern filter",
+    "reset_filters": "Nullstill filter",
+    "timestamp": "{{date}} kl. {{time}}",
+    "load_more": "Last mer",
+    "load_error": "Kunne ikke laste aktivitetsloggen.",
+    "empty": "Det er ingen aktivitet i loggen ennå.",
+    "no_results": "Ingen aktivitet funnet for valgt filter.",
+    "object": {
+      "package": "tilgangspakken «{{name}}»",
+      "resource": "enkelttjenesten «{{name}}»",
+      "scope": "scopet «{{name}}»",
+      "instance": "instansen «{{name}}»",
+      "role": "rollen «{{name}}»",
+      "delegation": "klientdelegering",
+      "access": "tilgang"
+    },
+    "events": {
+      "assignment": {
+        "created": {
+          "from": "<0>{{counterpart}}</0> fikk {{object}}.",
+          "to": "{{reportee}} fikk {{object}} fra <0>{{counterpart}}</0>.",
+          "by": "Det var {{by}} som tildelte tilgangen."
+        },
+        "updated": {
+          "from": "Tilgangen til {{object}} for <0>{{counterpart}}</0> ble flyttet.",
+          "to": "Tilgangen til {{object}} fra <0>{{counterpart}}</0> ble flyttet.",
+          "by": "Det var {{by}} som gjorde endringen."
+        },
+        "deleted": {
+          "from": "<0>{{counterpart}}</0> ble fratatt {{object}}.",
+          "to": "{{reportee}} ble fratatt {{object}} fra <0>{{counterpart}}</0>.",
+          "by": "Det var {{by}} som fjernet tilgangen."
+        }
+      },
+      "delegation": {
+        "created": {
+          "from": "<0>{{counterpart}}</0> fikk {{object}} via {{via}}.",
+          "to": "{{reportee}} fikk {{object}} fra <0>{{counterpart}}</0> via {{via}}.",
+          "by": "Det var {{by}} som delegerte tilgangen."
+        },
+        "deleted": {
+          "from": "<0>{{counterpart}}</0> ble fratatt {{object}} via {{via}}.",
+          "to": "{{reportee}} ble fratatt {{object}} fra <0>{{counterpart}}</0> via {{via}}.",
+          "by": "Det var {{by}} som fjernet tilgangen."
+        }
+      },
+      "request": {
+        "created": {
+          "from": "<0>{{counterpart}}</0> ba om {{object}}.",
+          "to": "{{reportee}} ba om {{object}} fra <0>{{counterpart}}</0>.",
+          "by": "Det var {{by}} som sendte forespørselen."
+        },
+        "created_draft": {
+          "from": "<0>{{counterpart}}</0> opprettet et utkast til forespørsel om {{object}}.",
+          "to": "{{reportee}} opprettet et utkast til forespørsel om {{object}} fra <0>{{counterpart}}</0>.",
+          "by": "Det var {{by}} som opprettet utkastet."
+        },
+        "updated": {
+          "from": "Forespørselen fra <0>{{counterpart}}</0> om {{object}} endret status.",
+          "to": "Forespørselen til <0>{{counterpart}}</0> om {{object}} endret status.",
+          "by": "Det var {{by}} som gjorde endringen."
+        },
+        "updated_pending": {
+          "from": "<0>{{counterpart}}</0> sendte forespørselen om {{object}}.",
+          "to": "{{reportee}} sendte forespørselen om {{object}} til <0>{{counterpart}}</0>.",
+          "by": "Det var {{by}} som sendte forespørselen."
+        },
+        "updated_approved": {
+          "from": "Forespørselen fra <0>{{counterpart}}</0> om {{object}} ble godkjent.",
+          "to": "<0>{{counterpart}}</0> godkjente forespørselen om {{object}}.",
+          "by": "Det var {{by}} som godkjente forespørselen."
+        },
+        "updated_rejected": {
+          "from": "Forespørselen fra <0>{{counterpart}}</0> om {{object}} ble avslått.",
+          "to": "<0>{{counterpart}}</0> avslo forespørselen om {{object}}.",
+          "by": "Det var {{by}} som avslo forespørselen."
+        },
+        "updated_withdrawn": {
+          "from": "<0>{{counterpart}}</0> trakk forespørselen om {{object}}.",
+          "to": "{{reportee}} trakk forespørselen om {{object}} fra <0>{{counterpart}}</0>.",
+          "by": "Det var {{by}} som trakk forespørselen."
+        },
+        "deleted": {
+          "from": "Forespørselen fra <0>{{counterpart}}</0> om {{object}} ble fjernet.",
+          "to": "Forespørselen til <0>{{counterpart}}</0> om {{object}} ble fjernet.",
+          "by": "Det var {{by}} som fjernet forespørselen."
+        }
+      },
+      "fallback": {
+        "from": "<0>{{counterpart}}</0>: {{typeName}} – {{object}}.",
+        "to": "<0>{{counterpart}}</0>: {{typeName}} – {{object}}.",
+        "by": "Utført av {{by}}."
+      }
+    }
   },
   "maskinporten_page": {
     "scopes": "Scopes",

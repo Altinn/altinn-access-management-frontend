@@ -540,7 +540,106 @@
     "tab_connections": "Powers of attorney",
     "tab_request": "Requests",
     "tab_maskinporten": "Maskinporten administration",
-    "empty": "There is no activity in the log yet."
+    "direction_legend": "Show activity",
+    "direction_from": "From the organisation",
+    "direction_to": "To the organisation",
+    "filter_party_to": "To",
+    "filter_party_from": "From",
+    "add_filter": "Add filter",
+    "remove_filter": "Remove filter",
+    "reset_filters": "Reset filter",
+    "timestamp": "{{date}} at {{time}}",
+    "load_more": "Load more",
+    "load_error": "Could not load the activity log.",
+    "empty": "There is no activity in the log yet.",
+    "no_results": "No activity found for the selected filter.",
+    "object": {
+      "package": "the access package “{{name}}”",
+      "resource": "the service “{{name}}”",
+      "scope": "the scope “{{name}}”",
+      "instance": "the instance “{{name}}”",
+      "role": "the role “{{name}}”",
+      "delegation": "client delegation",
+      "access": "access"
+    },
+    "events": {
+      "assignment": {
+        "created": {
+          "from": "<0>{{counterpart}}</0> was given {{object}}.",
+          "to": "{{reportee}} was given {{object}} by <0>{{counterpart}}</0>.",
+          "by": "It was {{by}} who granted the access."
+        },
+        "updated": {
+          "from": "The access to {{object}} for <0>{{counterpart}}</0> was moved.",
+          "to": "The access to {{object}} from <0>{{counterpart}}</0> was moved.",
+          "by": "It was {{by}} who made the change."
+        },
+        "deleted": {
+          "from": "<0>{{counterpart}}</0> lost {{object}}.",
+          "to": "{{reportee}} lost {{object}} from <0>{{counterpart}}</0>.",
+          "by": "It was {{by}} who removed the access."
+        }
+      },
+      "delegation": {
+        "created": {
+          "from": "<0>{{counterpart}}</0> was given {{object}} via {{via}}.",
+          "to": "{{reportee}} was given {{object}} by <0>{{counterpart}}</0> via {{via}}.",
+          "by": "It was {{by}} who delegated the access."
+        },
+        "deleted": {
+          "from": "<0>{{counterpart}}</0> lost {{object}} via {{via}}.",
+          "to": "{{reportee}} lost {{object}} from <0>{{counterpart}}</0> via {{via}}.",
+          "by": "It was {{by}} who removed the access."
+        }
+      },
+      "request": {
+        "created": {
+          "from": "<0>{{counterpart}}</0> requested {{object}}.",
+          "to": "{{reportee}} requested {{object}} from <0>{{counterpart}}</0>.",
+          "by": "It was {{by}} who sent the request."
+        },
+        "created_draft": {
+          "from": "<0>{{counterpart}}</0> created a draft request for {{object}}.",
+          "to": "{{reportee}} created a draft request for {{object}} from <0>{{counterpart}}</0>.",
+          "by": "It was {{by}} who created the draft."
+        },
+        "updated": {
+          "from": "The request from <0>{{counterpart}}</0> for {{object}} changed status.",
+          "to": "The request to <0>{{counterpart}}</0> for {{object}} changed status.",
+          "by": "It was {{by}} who made the change."
+        },
+        "updated_pending": {
+          "from": "<0>{{counterpart}}</0> sent the request for {{object}}.",
+          "to": "{{reportee}} sent the request for {{object}} to <0>{{counterpart}}</0>.",
+          "by": "It was {{by}} who sent the request."
+        },
+        "updated_approved": {
+          "from": "The request from <0>{{counterpart}}</0> for {{object}} was approved.",
+          "to": "<0>{{counterpart}}</0> approved the request for {{object}}.",
+          "by": "It was {{by}} who approved the request."
+        },
+        "updated_rejected": {
+          "from": "The request from <0>{{counterpart}}</0> for {{object}} was rejected.",
+          "to": "<0>{{counterpart}}</0> rejected the request for {{object}}.",
+          "by": "It was {{by}} who rejected the request."
+        },
+        "updated_withdrawn": {
+          "from": "<0>{{counterpart}}</0> withdrew the request for {{object}}.",
+          "to": "{{reportee}} withdrew the request for {{object}} from <0>{{counterpart}}</0>.",
+          "by": "It was {{by}} who withdrew the request."
+        },
+        "deleted": {
+          "from": "The request from <0>{{counterpart}}</0> for {{object}} was removed.",
+          "to": "The request to <0>{{counterpart}}</0> for {{object}} was removed.",
+          "by": "It was {{by}} who removed the request."
+        }
+      },
+      "fallback": {
+        "from": "<0>{{counterpart}}</0>: {{typeName}} – {{object}}.",
+        "to": "<0>{{counterpart}}</0>: {{typeName}} – {{object}}.",
+        "by": "Performed by {{by}}."
+      }
+    }
   },
   "maskinporten_page": {
     "scopes": "Scopes",

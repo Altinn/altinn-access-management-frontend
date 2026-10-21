@@ -1,6 +1,6 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
-import { DsAlert, DsParagraph } from '@altinn/altinn-components';
+import { DsAlert } from '@altinn/altinn-components';
 
 import { PageWrapper } from '@/components';
 import { formatEntityDisplayName, isOrganization } from '@/resources/utils/reporteeUtils';
@@ -18,6 +18,7 @@ import { Breadcrumbs } from '../common/Breadcrumbs/Breadcrumbs';
 import { PageLayoutWrapper } from '../common/PageLayoutWrapper';
 import { ReporteePageHeading } from '../common/ReporteePageHeading';
 
+import { ActivityLogTab } from './ActivityLogTab';
 import { type ActivityLogArea, activityLogAreas } from './types';
 
 const tabLabelKeys: Record<ActivityLogArea, string> = {
@@ -86,8 +87,10 @@ export const ActivityLogPage = () => {
                     key={area}
                     value={area}
                   >
-                    {/* The log for each area is added in a follow-up. */}
-                    <DsParagraph data-color='info'>{t('activity_log_page.empty')}</DsParagraph>
+                    <ActivityLogTab
+                      area={area}
+                      reporteeName={reporteeName}
+                    />
                   </AmTabs.Panel>
                 ))}
               </AmTabs>
