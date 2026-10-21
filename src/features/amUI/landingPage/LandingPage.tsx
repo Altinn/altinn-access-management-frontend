@@ -19,12 +19,14 @@ import {
   useGetReporteeQuery,
 } from '@/rtk/features/userInfoApi';
 import {
+  hasActivityLogPermission,
   hasConsentPermission,
   hasReporteeListAdminAccess,
   hasSystemUserClientAdminPermission,
   hasCreateSystemUserPermission,
 } from '@/resources/utils/permissionUtils';
 import {
+  getActivityLogMenuItem,
   getConsentMenuItem,
   getMaskinportenMenuItem,
   getPoaOverviewMenuItem,
@@ -181,6 +183,12 @@ export const LandingPage = () => {
       items.push({
         ...getMaskinportenMenuItem(),
         description: t('landing_page.maskinporten_item_description'),
+      });
+    }
+    if (hasActivityLogPermission(isAdmin, isMaskinportenAdmin)) {
+      items.push({
+        ...getActivityLogMenuItem(),
+        description: t('landing_page.activity_log_item_description', { reportee: reporteeName }),
       });
     }
     return items;

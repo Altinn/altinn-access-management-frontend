@@ -34,6 +34,13 @@ export const hasSystemUserClientAdminPermission = (
   return isOrganization && isClientAdmin;
 };
 
+export const hasActivityLogPermission = (
+  isAdmin: boolean = false,
+  isMaskinportenAdmin: boolean = false,
+): boolean => {
+  return window.featureFlags?.enableActivityLog === true && (isAdmin || isMaskinportenAdmin);
+};
+
 export const hasReporteeListAdminAccess = (
   reporteeInfo?: ReporteeInfo,
   isAdmin: boolean = false,

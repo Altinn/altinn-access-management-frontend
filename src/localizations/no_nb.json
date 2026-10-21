@@ -202,7 +202,8 @@
     "settings": "Innstillinger",
     "requests": "Forespørsler",
     "requests_badge": "mottatt",
-    "maskinporten": "Maskinporten\u00ADadministrasjon"
+    "maskinporten": "Maskinporten\u00ADadministrasjon",
+    "activity_log": "Aktivitetslogg"
   },
   "profile": {
     "received": "Mottatte",
@@ -528,6 +529,15 @@
     "person_identifier_whitespace_forbidden_error": "Mellomrom er ikke tillatt i fødselsnummer eller brukernavn",
     "last_name_format_error": "Vennligst fyll inn et gyldig etternavn",
     "org_search_result_label": "Du legger til:"
+  },
+  "activity_log_page": {
+    "document_title": "Aktivitetslogg - Altinn",
+    "heading": "Aktivitetslogg for {{name}}",
+    "no_access": "Du har ikke tilgang til denne siden",
+    "tab_connections": "Fullmakter",
+    "tab_request": "Forespørsler",
+    "tab_maskinporten": "Maskinportenadministrasjon",
+    "empty": "Det er ingen aktivitet i loggen ennå."
   },
   "maskinporten_page": {
     "scopes": "Scopes",
@@ -1126,6 +1136,7 @@
     "consent_item_description": "Alle inngåtte avtaler",
     "systemuser_item_description": "Alle {{reportee}} sine systemtilganger",
     "maskinporten_item_description": "Administrer fullmakter til API som ligger i Maskinporten",
+    "activity_log_item_description": "Se hva som har skjedd med fullmakter og tilganger hos {{reportee}}",
     "client_admin_item_description": "Gi fullmakter fra klienter til brukere i {{reportee}}.",
     "new_requests_self_zero": "Du har ingen nye forespørsler",
     "new_requests_self_one": "Du har en ny forespørsel",
