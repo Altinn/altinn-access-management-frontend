@@ -101,7 +101,6 @@ export const UserListItems = ({
             <UserListItem
               key={item.id}
               {...item}
-              name={item.name}
               collapsible={collapsible}
               expanded={expanded}
               onClick={collapsible ? handleClick : item.onClick}
