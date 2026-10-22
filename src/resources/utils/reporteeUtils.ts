@@ -2,12 +2,11 @@ import { formatDate, formatDisplayName } from '@altinn/altinn-components';
 import { t } from 'i18next';
 
 import { PartyType, type PartyEntity } from '@/dataObjects/dtos/Party';
-import { type UserListItemData } from '@/features/amUI/common/UserListItems/UserListItems';
 
 const SUBUNIT_TYPES = ['BEDR', 'AAFY', 'ADOS'];
 
-/** The parts of a PartyEntity or UserListItemData needed to format its name. */
-type NamedEntity = Pick<PartyEntity | UserListItemData, 'name' | 'type'>;
+/** The parts of a PartyEntity needed to format its name. */
+type NamedEntity = Pick<PartyEntity, 'name' | 'type'>;
 /** Anything that may carry a party type. */
 type TypedEntity = Partial<Pick<NamedEntity, 'type'>>;
 
@@ -29,7 +28,7 @@ export const isSubUnit = (
   return isOrganization(entity) && isSubUnitByType(entity?.unitType);
 };
 
-/** Formats the name of a PartyEntity or UserListItemData with formatDisplayName. */
+/** Formats the name of a PartyEntity with formatDisplayName. */
 export const formatEntityDisplayName = (
   entity: NamedEntity | null | undefined,
   reverseNameOrder?: boolean,
