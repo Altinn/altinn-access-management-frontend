@@ -40,7 +40,7 @@ export const RequestPage = () => {
   const { data: reportee, isLoading: isLoadingReportee } = useGetReporteeQuery();
   const { data: isAdmin, isLoading: isLoadingAdmin } = useGetIsAdminQuery();
   const { data: currentUser } = useGetPartyFromLoggedInUserQuery();
-  const isCurrentUserReportee = reportee?.id === currentUser?.partyUuid;
+  const isCurrentUserReportee = reportee?.id === currentUser?.id;
   const showSentRequestsTab = hasReporteeListAdminAccess(reportee, isAdmin, isCurrentUserReportee);
 
   const [selectedTab, setSelectedTab] = useTabState({

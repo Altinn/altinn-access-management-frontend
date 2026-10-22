@@ -3,29 +3,10 @@ import type { AuthorizedParty } from '@altinn/altinn-components';
 
 import { createBaseQuery } from '@/rtk/app/baseQuery';
 import { getCookie } from '@/resources/Cookie/CookieMethods';
-import type { AuthorizedPartyEntity } from '@/dataObjects/dtos/Party';
-
-import type { Party } from './lookupApi';
-
-export interface User {
-  id: string;
-  name: string;
-  type?: string;
-  variant?: string;
-  children: User[] | null;
-  parent?: User | null;
-  partyId?: number | string | null;
-  organizationIdentifier?: string | null;
-  dateOfBirth?: string | null;
-  userId?: string | null;
-  username?: string | null;
-  sortKey?: string;
-  addedAt?: string;
-  isDeleted?: boolean;
-}
+import type { AuthorizedPartyEntity, PartyEntity } from '@/dataObjects/dtos/Party';
 
 interface UserProfileApiResponse {
-  party: Party;
+  party: PartyEntity;
   userUuid: string;
   profileSettingPreference: ProfileSettingPreference;
 }
@@ -33,16 +14,8 @@ interface UserProfileApiResponse {
 export interface UserProfile {
   name: string;
   uuid: string;
-  party: Party;
+  party: PartyEntity;
   profileSettingPreference: ProfileSettingPreference;
-}
-
-export enum PartyType {
-  Person = 1,
-  Organization = 2,
-  SelfIdentified = 3,
-  SubUnit = 4,
-  Systemuser = 6,
 }
 
 export interface UserAccesses {

@@ -1,7 +1,7 @@
 import { forwardRef, useState } from 'react';
 import { DsDialog } from '@altinn/altinn-components';
 
-import type { Party } from '@/rtk/features/lookupApi';
+import type { PartyEntity } from '@/dataObjects/dtos/Party';
 import type { AccessPackage } from '@/rtk/features/accessPackageApi';
 
 import type { InheritedStatusMessageType } from '../../useInheritedStatus';
@@ -12,7 +12,7 @@ import { ClientPackageInfo } from './ClientPackageInfo';
 const animationDuration = 2000;
 
 export interface ClientPackageModalData {
-  party: Party;
+  party: PartyEntity;
   accessPackage: AccessPackage;
   userHasAccess: boolean;
   inheritedStatus?: InheritedStatusMessageType[];

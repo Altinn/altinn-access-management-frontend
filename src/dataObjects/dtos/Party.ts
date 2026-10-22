@@ -1,5 +1,5 @@
 /** The kind of party, as sent by the BFF (PartyTypeFE). Subunits are Organization with a subunit unitType. */
-export enum PartyEntityType {
+export enum PartyType {
   Person = 'Person',
   Organization = 'Organization',
   SystemUser = 'SystemUser',
@@ -11,7 +11,7 @@ export interface PartyEntity {
   id: string;
   partyId?: number | null;
   name: string;
-  type: PartyEntityType;
+  type: PartyType;
   unitType?: string | null;
   organizationIdentifier?: string | null;
   dateOfBirth?: string | null;

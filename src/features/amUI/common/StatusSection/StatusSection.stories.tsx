@@ -1,8 +1,7 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { RootProvider } from '@altinn/altinn-components';
 
-import type { Party } from '@/rtk/features/lookupApi';
-import { PartyType } from '@/rtk/features/userInfoApi';
+import { PartyType, type PartyEntity } from '@/dataObjects/dtos/Party';
 
 import {
   PartyRepresentationContext,
@@ -19,17 +18,18 @@ const createParty = (
   partyUuid: string,
   name: string,
   type: PartyType = PartyType.Organization,
-): Party => ({
+): PartyEntity => ({
   partyId: Math.abs(
     Array.from(partyUuid).reduce((sum, char) => {
       return sum + char.charCodeAt(0);
     }, 0),
   ),
-  partyUuid,
+  id: partyUuid,
   name,
-  partyTypeName: type,
-  orgNumber: type === PartyType.Organization ? '912345678' : undefined,
+  type: type,
+  organizationIdentifier: type === PartyType.Organization ? '912345678' : undefined,
   unitType: type === PartyType.Organization ? 'AS' : undefined,
+  isDeleted: false,
 });
 
 const storyContextValue: PartyRepresentationContextOutput = {

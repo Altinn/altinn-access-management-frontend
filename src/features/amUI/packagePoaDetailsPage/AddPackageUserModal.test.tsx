@@ -26,11 +26,11 @@ vi.mock(
     ...(await importOriginal<object>()),
     usePartyRepresentation: () => ({
       actingParty: {
-        partyUuid: 'acting',
+        id: 'acting',
         name: 'Diskret Nær Tiger AS',
-        partyTypeName: 'Organisasjon',
+        type: 'Organization',
       },
-      fromParty: { partyUuid: 'from', name: 'Diskret Nær Tiger AS', partyTypeName: 'Organisasjon' },
+      fromParty: { id: 'from', name: 'Diskret Nær Tiger AS', type: 'Organization' },
     }),
   }),
 );
@@ -102,7 +102,13 @@ describe('AddPackageUserModal', () => {
 
   it('adds an organisation by the party uuid its lookup returns', async () => {
     organization = {
-      data: { orgNumber: '310202398', name: 'Sprudlende Ape AS', partyUuid: 'org-uuid' },
+      data: {
+        id: 'org-uuid',
+        name: 'Sprudlende Ape AS',
+        type: 'Organization',
+        organizationIdentifier: '310202398',
+        isDeleted: false,
+      },
       isFetching: false,
       isError: false,
     };

@@ -5,7 +5,7 @@ import { useEffect, useState } from 'react';
 import { Link } from 'react-router';
 import { useTranslation } from 'react-i18next';
 
-import { PartyEntityType } from '@/dataObjects/dtos/Party';
+import { PartyType } from '@/dataObjects/dtos/Party';
 import {
   formatEntityDisplayName,
   getAvatarType,
@@ -59,8 +59,7 @@ export const UserItem = ({
   useRestoreFocusTarget(user.id);
   const childrenToDisplay =
     user.children?.filter(
-      (child) =>
-        child.type === PartyEntityType.Person || child.type === PartyEntityType.Organization,
+      (child) => child.type === PartyType.Person || child.type === PartyType.Organization,
     ) || [];
   const hasInheritingUsers = childrenToDisplay.length > 0;
   const [isExpanded, setExpanded] = useState(false);
@@ -86,16 +85,16 @@ export const UserItem = ({
   const viaEntity = user.roles?.find((r) => r.viaParty)?.viaParty;
 
   const isSubOrMainUnit =
-    user.type === PartyEntityType.Organization &&
+    user.type === PartyType.Organization &&
     user.roles?.some((role) => ROLE_CODES_TO_IGNORE.includes(role.code ?? ''));
 
   const hasSubUnitRole = isSubOrMainUnit && roleDirection === 'fromUser';
 
   const description = (user: UserSearchNode) => {
     let descriptionString = subUnit ? '↳ ' : '';
-    if (user.type === PartyEntityType.Person) {
+    if (user.type === PartyType.Person) {
       descriptionString += getFormattedDateOfBirthLabel(user.dateOfBirth);
-    } else if (user.type === PartyEntityType.Organization) {
+    } else if (user.type === PartyType.Organization) {
       descriptionString +=
         t('common.org_nr') +
         ' ' +
@@ -173,7 +172,7 @@ export const UserItem = ({
               size='xs'
               subUnit={
                 (includeSelfAsChild ? index !== 0 : true) &&
-                child.type === PartyEntityType.Organization &&
+                child.type === PartyType.Organization &&
                 isSubUnitByType(child.unitType)
               }
               roleDirection={roleDirection}

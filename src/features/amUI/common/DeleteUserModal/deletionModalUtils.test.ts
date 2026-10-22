@@ -1,7 +1,7 @@
 import { describe, it, expect } from 'vitest';
 
 import { type RolePermission } from '@/rtk/features/roleApi';
-import { PartyEntityType, type PartyEntity } from '@/dataObjects/dtos/Party';
+import { PartyType, type PartyEntity } from '@/dataObjects/dtos/Party';
 
 import {
   A2_PROVIDER_CODE,
@@ -39,7 +39,7 @@ type rolePermissionSetting = {
 const defaultEntity: PartyEntity = {
   id: 'entity-id',
   name: 'Entity Name',
-  type: PartyEntityType.Organization,
+  type: PartyType.Organization,
   unitType: 'AS',
   isDeleted: false,
 };

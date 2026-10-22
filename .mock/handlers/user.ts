@@ -225,9 +225,12 @@ export const userHandlers = (ACCESSMANAGEMENT_BASE_URL: string) => [
       userName: 'GullMedalje',
       partyId: 50789533,
       party: {
+        id: '167536b5-f8ed-4c5a-8f48-0279507e53ae',
         partyId: 50789533,
-        partyUuid: '167536b5-f8ed-4c5a-8f48-0279507e53ae',
         name: 'SITRONGUL MEDALJONG',
+        type: 'Person',
+        dateOfBirth: '1981-03-20',
+        isDeleted: false,
       },
       userType: 1,
       profileSettingPreference: {

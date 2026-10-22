@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next';
 import { DsAlert, DsParagraph } from '@altinn/altinn-components';
 
 import { useGetInstancesQuery } from '@/rtk/features/instanceApi';
-import { PartyEntityType } from '@/dataObjects/dtos/Party';
+import { PartyType } from '@/dataObjects/dtos/Party';
 import { useGetRightHoldersQuery } from '@/rtk/features/connectionApi';
 
 import UserSearch from '../common/UserSearch/UserSearch';
@@ -47,14 +47,14 @@ export const InstanceUsersAsAdmin = ({
     error: instancesError,
   } = useGetInstancesQuery(
     {
-      party: actingParty?.partyUuid || '',
-      from: fromParty?.partyUuid,
+      party: actingParty?.id || '',
+      from: fromParty?.id,
       resource: resourceId,
       instance: instanceUrn,
       language: i18n.language,
     },
     {
-      skip: !actingParty?.partyUuid || !fromParty?.partyUuid || !resourceId || !instanceUrn,
+      skip: !actingParty?.id || !fromParty?.id || !resourceId || !instanceUrn,
     },
   );
 
@@ -63,10 +63,10 @@ export const InstanceUsersAsAdmin = ({
       mapPermissionsToUserSearchNodes(
         instances.flatMap((instanceDelegation) => instanceDelegation.permissions),
         {
-          fromPartyUuid: fromParty?.partyUuid,
+          fromPartyUuid: fromParty?.id,
         },
       ),
-    [fromParty?.partyUuid, instances],
+    [fromParty?.id, instances],
   );
 
   const {
@@ -77,12 +77,12 @@ export const InstanceUsersAsAdmin = ({
     error: indirectError,
   } = useGetRightHoldersQuery(
     {
-      partyUuid: fromParty?.partyUuid ?? '',
-      fromUuid: fromParty?.partyUuid ?? '',
+      partyUuid: fromParty?.id ?? '',
+      fromUuid: fromParty?.id ?? '',
       toUuid: '',
     },
     {
-      skip: !fromParty?.partyUuid,
+      skip: !fromParty?.id,
     },
   );
 
@@ -90,7 +90,7 @@ export const InstanceUsersAsAdmin = ({
     () =>
       mapConnectionsToUserSearchNodes(indirectConnections).filter(
         (user) =>
-          user.type !== PartyEntityType.Organization || (user.children && user.children.length > 0),
+          user.type !== PartyType.Organization || (user.children && user.children.length > 0),
       ),
     [indirectConnections],
   );

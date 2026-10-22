@@ -45,7 +45,7 @@ export const MyClientsPage = () => {
   } = useGetPartyFromLoggedInUserQuery();
   const { data: reportee, isLoading: isLoadingReportee } = useGetReporteeQuery();
   const backUrl = useBackUrl(`/`);
-  const isActingOnBehalfOfSelf = currentUser?.partyUuid === actingPartyUuid;
+  const isActingOnBehalfOfSelf = currentUser?.id === actingPartyUuid;
 
   const {
     data: myClientsByProvider,
@@ -54,8 +54,7 @@ export const MyClientsPage = () => {
   } = useGetMyClientsQuery(
     { provider: [actingPartyUuid] },
     {
-      skip:
-        !actingPartyUuid || !currentUser?.partyUuid || isActingOnBehalfOfSelf || !!currentUserError,
+      skip: !actingPartyUuid || !currentUser?.id || isActingOnBehalfOfSelf || !!currentUserError,
     },
   );
 
@@ -91,7 +90,7 @@ export const MyClientsPage = () => {
             <MyClientsDeleteClientProviderModal
               provider={actingPartyUuid}
               providerName={actingPartyName}
-              selfPartyUuid={currentUser?.partyUuid}
+              selfPartyUuid={currentUser?.id}
             />
           }
         >

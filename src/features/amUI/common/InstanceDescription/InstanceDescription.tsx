@@ -5,7 +5,7 @@ import { useTranslation } from 'react-i18next';
 import { useIsMobileOrSmaller } from '@/resources/utils/screensizeUtils';
 import { useProviderLogoUrl } from '@/resources/hooks';
 import type { ServiceResource } from '@/rtk/features/singleRights/singleRightsApi';
-import { type Party } from '@/rtk/features/lookupApi';
+import type { PartyEntity } from '@/dataObjects/dtos/Party';
 import { formatEntityDisplayName } from '@/resources/utils/reporteeUtils';
 
 import {
@@ -19,7 +19,7 @@ import classes from './InstanceDescription.module.css';
 interface InstanceDescriptionProps {
   resource: ServiceResource;
   instanceData?: InstancePresentationData;
-  fromParty?: Party;
+  fromParty?: PartyEntity;
   titleLevel?: 1 | 2 | 3 | 4 | 5 | 6;
   statusSection?: ReactNode;
 }

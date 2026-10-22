@@ -8,12 +8,12 @@ import type {
   ConsentHistoryItem,
   ConsentRequest,
 } from '@/features/amUI/consent/types';
-import { PartyEntityType, type PartyEntity } from '@/dataObjects/dtos/Party';
+import { PartyType, type PartyEntity } from '@/dataObjects/dtos/Party';
 
 const baseUrl = `${import.meta.env.BASE_URL}accessmanagement/api/v1/`;
 
 const formatName = (party: PartyEntity): PartyEntity => {
-  const type = party.type === PartyEntityType.Person ? 'person' : 'company';
+  const type = party.type === PartyType.Person ? 'person' : 'company';
   return {
     ...party,
     name: formatDisplayName({ fullName: party.name, type: type }),

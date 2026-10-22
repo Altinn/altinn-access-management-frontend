@@ -4,9 +4,9 @@ import React, { useState } from 'react';
 import cn from 'classnames';
 import { ChevronDownIcon, ChevronUpIcon } from '@navikt/aksel-icons';
 
+import { type PartyType } from '@/dataObjects/dtos/Party';
 import { useIsMobileOrSmaller } from '@/resources/utils/screensizeUtils';
 import type { AccessPackage } from '@/rtk/features/accessPackageApi';
-import { type PartyType } from '@/rtk/features/userInfoApi';
 import { usePermissionOverview } from '@/resources/hooks';
 
 import { type DelegationAction } from '../DelegationModal/EditModal';

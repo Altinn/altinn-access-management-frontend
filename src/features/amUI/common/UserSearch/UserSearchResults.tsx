@@ -33,6 +33,7 @@ const mapUserToActionTarget = (user: UserSearchNode): UserActionTarget => ({
   unitType: user.unitType,
   organizationIdentifier: user.organizationIdentifier,
   dateOfBirth: user.dateOfBirth,
+  isDeleted: user.isDeleted,
   isInherited: user.isInherited,
 });
 

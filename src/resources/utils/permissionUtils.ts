@@ -1,4 +1,4 @@
-import { PartyEntityType, type AuthorizedPartyEntity } from '@/dataObjects/dtos/Party';
+import { PartyType, type AuthorizedPartyEntity } from '@/dataObjects/dtos/Party';
 
 export const hasConsentPermission = (
   reporteeInfo?: AuthorizedPartyEntity,
@@ -6,7 +6,7 @@ export const hasConsentPermission = (
   isCurrentUserReportee: boolean = false,
 ): boolean => {
   return (
-    reporteeInfo?.type !== PartyEntityType.SelfIdentified &&
+    reporteeInfo?.type !== PartyType.SelfIdentified &&
     hasReporteeListAdminAccess(reporteeInfo, isAdmin, isCurrentUserReportee)
   );
 };
@@ -18,7 +18,7 @@ export const hasCreateSystemUserPermission = (
   if (!reporteeInfo) {
     return undefined;
   }
-  const isOrganization = reporteeInfo.type === PartyEntityType.Organization;
+  const isOrganization = reporteeInfo.type === PartyType.Organization;
   return isOrganization && isAdmin;
 };
 
@@ -30,7 +30,7 @@ export const hasSystemUserClientAdminPermission = (
     return undefined;
   }
 
-  const isOrganization = reporteeInfo.type === PartyEntityType.Organization;
+  const isOrganization = reporteeInfo.type === PartyType.Organization;
   return isOrganization && isClientAdmin;
 };
 
@@ -42,7 +42,7 @@ export const hasReporteeListAdminAccess = (
   if (!reporteeInfo) {
     return false;
   }
-  const isOrg = reporteeInfo.type === PartyEntityType.Organization;
+  const isOrg = reporteeInfo.type === PartyType.Organization;
   if (isOrg) {
     return isAdmin;
   }

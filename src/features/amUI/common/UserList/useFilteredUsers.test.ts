@@ -1,7 +1,7 @@
 import { describe, it, expect } from 'vitest';
 import { act, renderHook } from '@testing-library/react';
 
-import { PartyEntityType, type PartyEntity } from '@/dataObjects/dtos/Party';
+import { PartyType, type PartyEntity } from '@/dataObjects/dtos/Party';
 import { type Connection } from '@/rtk/features/connectionApi';
 
 import { mapConnectionsToUserSearchNodes } from '../UserSearch/connectionMapper';
@@ -14,7 +14,7 @@ const mockConnections: Connection[] = [
     party: {
       id: '123',
       name: 'Alice',
-      type: PartyEntityType.Person,
+      type: PartyType.Person,
       isDeleted: false,
       children: null,
       partyId: 0,
@@ -32,14 +32,14 @@ const mockConnections: Connection[] = [
     party: {
       id: '789',
       name: 'Lorem AS',
-      type: PartyEntityType.Organization,
+      type: PartyType.Organization,
       isDeleted: false,
       unitType: 'AS',
       children: [
         {
           id: '0e56dc9e-bfb8-4914-809f-1720932c0088',
           name: 'InheritAlice',
-          type: PartyEntityType.Person,
+          type: PartyType.Person,
           isDeleted: false,
           children: null,
           partyId: 51256682,
@@ -62,7 +62,7 @@ const mockConnections: Connection[] = [
     party: {
       id: '3d8b34c3-df0d-4dcc-be12-e788ce414744',
       name: 'DIGITALISERINGSDIREKTORATET',
-      type: PartyEntityType.Organization,
+      type: PartyType.Organization,
       isDeleted: false,
       unitType: 'ORGL',
       children: null,
@@ -76,14 +76,14 @@ const mockConnections: Connection[] = [
     party: {
       id: '3f8e7d85-0dc5-4ab8-a5d0-8fcfa3926d01',
       name: 'ORANSJE ALLSLAGS HAMSTER KF',
-      type: PartyEntityType.Organization,
+      type: PartyType.Organization,
       isDeleted: false,
       unitType: 'KF',
       children: [
         {
           id: 'd0f3c7b4-fe95-4ace-896e-538f13f941ca',
           name: 'ORANSJE ALLSLAGS HAMSTER KF',
-          type: PartyEntityType.Organization,
+          type: PartyType.Organization,
           isDeleted: false,
           unitType: 'BEDR',
           children: null,
@@ -101,14 +101,14 @@ const mockConnections: Connection[] = [
     party: {
       id: '4fc5c70f-69a2-4fa6-a794-90b0a82d5d9f',
       name: 'TYKKHUDET IDIOTSIKKER STRUTS LTD',
-      type: PartyEntityType.Organization,
+      type: PartyType.Organization,
       isDeleted: false,
       unitType: 'NUF',
       children: [
         {
           id: 'ab8b2d5f-0aa4-4ff9-9be2-4bd542ae9b05',
           name: 'TYKKHUDET IDIOTSIKKER STRUTS LTD',
-          type: PartyEntityType.Organization,
+          type: PartyType.Organization,
           isDeleted: false,
           unitType: 'BEDR',
           children: null,
@@ -118,7 +118,7 @@ const mockConnections: Connection[] = [
         {
           id: '7be4bbc3-032d-4508-acf4-6fdb96ef0d9d',
           name: 'VIS KONGE PANDA',
-          type: PartyEntityType.Organization,
+          type: PartyType.Organization,
           isDeleted: false,
           unitType: 'ADOS',
           children: null,
@@ -269,7 +269,7 @@ describe('useFilteredUsers', () => {
 
   it('prioritizes new users and sorts newest first', () => {
     const now = Date.now();
-    const party = (id: string, name: string, type: PartyEntityType): PartyEntity => ({
+    const party = (id: string, name: string, type: PartyType): PartyEntity => ({
       id,
       name,
       type,
@@ -277,14 +277,13 @@ describe('useFilteredUsers', () => {
       children: null,
     });
     const users = [
-      mapPartyToUserSearchNode(party('old-org', 'Old Org', PartyEntityType.Organization)),
-      mapPartyToUserSearchNode(party('newer-person', 'Newer Person', PartyEntityType.Person), {
+      mapPartyToUserSearchNode(party('old-org', 'Old Org', PartyType.Organization)),
+      mapPartyToUserSearchNode(party('newer-person', 'Newer Person', PartyType.Person), {
         addedAt: new Date(now - 2 * 60 * 1000).toISOString(),
       }),
-      mapPartyToUserSearchNode(
-        party('older-new-org', 'Older New Org', PartyEntityType.Organization),
-        { addedAt: new Date(now - 4 * 60 * 1000).toISOString() },
-      ),
+      mapPartyToUserSearchNode(party('older-new-org', 'Older New Org', PartyType.Organization), {
+        addedAt: new Date(now - 4 * 60 * 1000).toISOString(),
+      }),
     ];
     const { result } = renderHook(() => useFilteredUsers({ users, searchString: '' }));
 
@@ -317,7 +316,7 @@ describe('useFilteredUsers', () => {
         party: {
           id: '123', // Alice exists in direct graph
           name: 'Alice',
-          type: PartyEntityType.Person,
+          type: PartyType.Person,
           isDeleted: false,
           children: null,
           partyId: 0,
@@ -329,7 +328,7 @@ describe('useFilteredUsers', () => {
         party: {
           id: 'ind-unique',
           name: 'Indirect Unique',
-          type: PartyEntityType.Organization,
+          type: PartyType.Organization,
           isDeleted: false,
           unitType: 'AS',
           children: null,
@@ -361,7 +360,7 @@ describe('useFilteredUsers', () => {
         party: {
           id: `ind-${i + 1}`,
           name: `Indirect ${String(i + 1).padStart(2, '0')}`,
-          type: PartyEntityType.Organization,
+          type: PartyType.Organization,
           isDeleted: false,
           unitType: 'AS',
           children: null,

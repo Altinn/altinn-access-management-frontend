@@ -71,7 +71,7 @@ export const LandingPage = () => {
   });
   const { data: currentUser, isLoading: currentUserIsLoading } = useGetPartyFromLoggedInUserQuery();
   const actingPartyUuid = getCookie('AltinnPartyUuid') ?? '';
-  const isCurrentUserReportee = reportee?.id === currentUser?.partyUuid;
+  const isCurrentUserReportee = reportee?.id === currentUser?.id;
 
   const { requestsBadgeCount, isLoading: isLoadingRequestsBadge } = useSidebarRequestCount({
     isAdmin,
@@ -84,12 +84,12 @@ export const LandingPage = () => {
 
   const { data: roles } = useGetRolePermissionsQuery(
     {
-      party: currentUser?.partyUuid ?? '',
+      party: currentUser?.id ?? '',
       from: actingPartyUuid,
-      to: currentUser?.partyUuid ?? '',
+      to: currentUser?.id ?? '',
     },
     {
-      skip: !actingPartyUuid || !currentUser?.partyUuid || isCurrentUserReportee,
+      skip: !actingPartyUuid || !currentUser?.id || isCurrentUserReportee,
     },
   );
 
@@ -219,7 +219,7 @@ export const LandingPage = () => {
     const items: MenuItemProps[] = [];
     items.push({
       ...getYourRightsMenuItem(
-        currentUser?.partyUuid ?? '',
+        currentUser?.id ?? '',
         formatEntityDisplayName(currentUser),
         '/',
         isLoading,

@@ -1,13 +1,13 @@
 import { describe, expect, it } from 'vitest';
 
-import { PartyEntityType, type PartyEntity } from '@/dataObjects/dtos/Party';
+import { PartyType, type PartyEntity } from '@/dataObjects/dtos/Party';
 
 import { mapPermissionsToUserSearchNodes } from './permissionMapper';
 
 const org = (id: string, name: string): PartyEntity => ({
   id,
   name,
-  type: PartyEntityType.Organization,
+  type: PartyType.Organization,
   unitType: 'AS',
   organizationIdentifier: '123456789',
   partyId: 1,
@@ -20,7 +20,7 @@ const org = (id: string, name: string): PartyEntity => ({
 const person = (id: string, name: string): PartyEntity => ({
   id,
   name,
-  type: PartyEntityType.Person,
+  type: PartyType.Person,
   organizationIdentifier: '123456789',
   partyId: 2,
   isDeleted: false,

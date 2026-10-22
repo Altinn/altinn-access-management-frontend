@@ -1,6 +1,6 @@
 import { useMemo } from 'react';
 
-import { PartyEntityType } from '@/dataObjects/dtos/Party';
+import { PartyType } from '@/dataObjects/dtos/Party';
 import type { Agent } from '@/rtk/features/clientApi';
 
 type UseClientDetailsAccessAgentListsParams = {
@@ -16,7 +16,7 @@ export const useClientDetailsAccessAgentLists = ({
 }: UseClientDetailsAccessAgentListsParams) => {
   return useMemo(() => {
     const selectableAgents = (agents ?? []).filter(
-      (agent) => agent.agent.type !== PartyEntityType.SystemUser,
+      (agent) => agent.agent.type !== PartyType.SystemUser,
     );
 
     const hasClientAccess = (agent: Agent) =>

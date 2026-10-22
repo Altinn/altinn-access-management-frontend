@@ -2,10 +2,9 @@ import { useCallback, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { DsSearch, DsSwitch } from '@altinn/altinn-components';
 
-import { PartyEntityType } from '@/dataObjects/dtos/Party';
+import { PartyType } from '@/dataObjects/dtos/Party';
 import { debounce } from '@/resources/utils';
 import { useGetRightHoldersQuery } from '@/rtk/features/connectionApi';
-import { PartyType } from '@/rtk/features/userInfoApi';
 
 import { UserList } from '../common/UserList/UserList';
 import { usePartyRepresentation } from '../common/PartyRepresentationContext/PartyRepresentationContext';
@@ -21,14 +20,14 @@ export const ReporteesList = () => {
 
   const { data: rightHolders, isLoading: loadingRightHolders } = useGetRightHoldersQuery(
     {
-      partyUuid: actingParty?.partyUuid ?? '',
+      partyUuid: actingParty?.id ?? '',
       fromUuid: '', // all
-      toUuid: toParty?.partyUuid ?? '',
+      toUuid: toParty?.id ?? '',
       includeClientDelegations,
       includeAgentConnections: true,
     },
     {
-      skip: !toParty?.partyUuid || !actingParty?.partyUuid,
+      skip: !toParty?.id || !actingParty?.id,
     },
   );
 
@@ -36,8 +35,7 @@ export const ReporteesList = () => {
     const relevantRightHolders =
       rightHolders?.filter(
         (rh) =>
-          (rh.party.type === PartyEntityType.Person ||
-            rh.party.type === PartyEntityType.Organization) &&
+          (rh.party.type === PartyType.Person || rh.party.type === PartyType.Organization) &&
           rh.party.partyId !== actingParty?.partyId,
       ) ?? [];
 
@@ -72,7 +70,7 @@ export const ReporteesList = () => {
           />
         </DsSearch>
         <div className={classes.searchControls}>
-          {actingParty?.partyTypeName === PartyType.Person && (
+          {actingParty?.type === PartyType.Person && (
             // This is ony relevant for private persons looking at their reportees,
             // as they can have access from clients that they might want to filter out
             <DsSwitch

@@ -1,4 +1,4 @@
-﻿using Altinn.AccessManagement.UI.Core.Models;
+﻿using Altinn.AccessManagement.UI.Core.Models.Common.Frontend;
 
 namespace Altinn.AccessManagement.UI.Core.Services.Interfaces
 {
@@ -14,13 +14,13 @@ namespace Altinn.AccessManagement.UI.Core.Services.Interfaces
         /// <returns>
         /// Party information
         /// </returns>
-        Task<LegacyPartyFE> GetPartyForOrganization(string organizationNumber);
+        Task<PartyFE> GetPartyForOrganization(string organizationNumber);
 
         /// <summary>
         /// Gets a Party using the provided uuid.
         /// </summary>
         /// <param name="userUuid">The uuid of the user</param>
         /// <returns>Party information for the GUI</returns>
-        Task<LegacyPartyFE> GetPartyFromLoggedInUser(Guid userUuid);
+        Task<PartyFE> GetPartyFromLoggedInUser(Guid userUuid);
     }
 }

@@ -2,7 +2,7 @@ import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { DsHeading, DsParagraph } from '@altinn/altinn-components';
 
-import { PartyEntityType, type AuthorizedPartyEntity } from '@/dataObjects/dtos/Party';
+import { PartyType, type AuthorizedPartyEntity } from '@/dataObjects/dtos/Party';
 import { formatOrgNr } from '@/resources/utils/reporteeUtils';
 import { RequestPageLayout } from '@/features/amUI/common/RequestPageLayout/RequestPageLayout';
 
@@ -33,7 +33,7 @@ export const RequestPageBase = ({
 
   const account: { name: string; type: 'person' | 'company' } = {
     name: reportee?.name || '',
-    type: reportee?.type === PartyEntityType.Person ? 'person' : 'company',
+    type: reportee?.type === PartyType.Person ? 'person' : 'company',
   };
 
   return (

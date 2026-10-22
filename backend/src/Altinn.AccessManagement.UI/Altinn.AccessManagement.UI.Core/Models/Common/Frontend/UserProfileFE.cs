@@ -1,4 +1,5 @@
 ﻿using Altinn.AccessManagement.UI.Core.Enums;
+using Altinn.AccessManagement.UI.Core.Models.Common.Frontend;
 using Altinn.AccessManagement.UI.Core.Models.Profile;
 
 namespace Altinn.AccessManagement.UI.Core.Models
@@ -51,7 +52,7 @@ namespace Altinn.AccessManagement.UI.Core.Models
         /// <summary>
         /// Gets or sets the <see cref="Party"/>
         /// </summary>
-        public LegacyPartyFE Party { get; set; }
+        public PartyFE Party { get; set; }
 
         /// <summary>
         /// Gets or sets the <see cref="UserType"/>
@@ -79,7 +80,7 @@ namespace Altinn.AccessManagement.UI.Core.Models
             PartyId = userProfile.PartyId;
             UserType = userProfile.UserType;
             ProfileSettingPreference = userProfile.ProfileSettingPreference;
-            Party = new LegacyPartyFE(userProfile.Party);
+            Party = PartyFE.FromRegisterParty(userProfile.Party);
         }
 
         /// <summary>

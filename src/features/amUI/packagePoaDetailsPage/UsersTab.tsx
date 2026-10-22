@@ -15,7 +15,6 @@ import { mapConnectionsToUserSearchNodes } from '../common/UserSearch/connection
 import { mapPermissionsToUserSearchNodes } from '../common/UserSearch/permissionMapper';
 import type { UserActionTarget } from '../common/UserSearch/types';
 import { usePartyRepresentation } from '../common/PartyRepresentationContext/PartyRepresentationContext';
-import { mapPartyEntityToParty } from '../common/PartyRepresentationContext/partyUtils';
 import { DelegationAction } from '../common/DelegationModal/EditModal';
 import {
   RestoreFocusFallback,
@@ -61,22 +60,22 @@ export const UsersTab = ({ accessPackage, isLoading, isFetching }: UsersTabProps
     isFetching: isFetchingIndirectConnections,
   } = useGetRightHoldersQuery(
     {
-      partyUuid: fromParty?.partyUuid ?? '',
-      fromUuid: fromParty?.partyUuid ?? '',
+      partyUuid: fromParty?.id ?? '',
+      fromUuid: fromParty?.id ?? '',
       toUuid: '', // all
     },
     {
-      skip: !fromParty?.partyUuid,
+      skip: !fromParty?.id,
     },
   );
 
   const users = useMemo(
     () =>
       mapPermissionsToUserSearchNodes(accessPackage?.permissions, {
-        toPartyUuid: toParty?.partyUuid,
-        fromPartyUuid: fromParty?.partyUuid,
+        toPartyUuid: toParty?.id,
+        fromPartyUuid: fromParty?.id,
       }),
-    [accessPackage?.permissions, toParty?.partyUuid, fromParty?.partyUuid],
+    [accessPackage?.permissions, toParty?.id, fromParty?.id],
   );
 
   const indirectUsers = useMemo(
@@ -124,18 +123,16 @@ export const UsersTab = ({ accessPackage, isLoading, isFetching }: UsersTabProps
   });
 
   const handleOnDelegate = (user: UserActionTarget) => {
-    const toParty = mapPartyEntityToParty(user);
     if (accessPackage) {
       actionTargetRef.current = user;
-      onDelegate(accessPackage, toParty);
+      onDelegate(accessPackage, user);
     }
   };
 
   const handleOnRevoke = (user: UserActionTarget) => {
-    const toParty = mapPartyEntityToParty(user);
     if (accessPackage) {
       actionTargetRef.current = user;
-      onRevoke(accessPackage, toParty);
+      onRevoke(accessPackage, user);
     }
   };
 

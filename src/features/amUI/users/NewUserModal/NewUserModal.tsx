@@ -4,7 +4,7 @@ import { DsButton, DsDialog } from '@altinn/altinn-components';
 import { PlusIcon } from '@navikt/aksel-icons';
 
 import { getActionError } from '@/resources/hooks/useActionError';
-import { type User } from '@/rtk/features/userInfoApi';
+import { PartyType, type PartyEntity } from '@/dataObjects/dtos/Party';
 import { useAddRightHolderMutation } from '@/rtk/features/connectionApi';
 
 import { AddUserForm } from '../../common/AddUserForm/AddUserForm';
@@ -17,7 +17,7 @@ import { SubmitErrorAlert, type SubmitError } from '../../common/AddUserForm/Sub
  */
 interface NewUserButtonProps {
   variant: 'primary' | 'secondary';
-  onComplete?: (user: User) => void;
+  onComplete?: (user: PartyEntity) => void;
 }
 
 export const NewUserButton: React.FC<NewUserButtonProps> = ({ variant, onComplete }) => {
@@ -47,13 +47,13 @@ export const NewUserButton: React.FC<NewUserButtonProps> = ({ variant, onComplet
     close();
     onComplete?.(
       recipient.kind === 'person'
-        ? { id: toUuid, name: recipient.lastName, type: 'person', children: null }
+        ? { id: toUuid, name: recipient.lastName, type: PartyType.Person, isDeleted: false }
         : {
-            id: recipient.organization.partyUuid,
+            id: recipient.organization.id,
             name: recipient.organization.name,
-            type: 'organisasjon',
-            children: null,
-            organizationIdentifier: recipient.organization.orgNumber,
+            type: PartyType.Organization,
+            isDeleted: false,
+            organizationIdentifier: recipient.organization.organizationIdentifier,
           },
     );
   };

@@ -5,12 +5,12 @@ import { Provider } from 'react-redux';
 import { configureStore } from '@reduxjs/toolkit';
 import { MemoryRouter } from 'react-router';
 
-import { PartyEntityType } from '@/dataObjects/dtos/Party';
+import { PartyType } from '@/dataObjects/dtos/Party';
 import * as lookupApi from '@/rtk/features/lookupApi';
 import * as userInfoApi from '@/rtk/features/userInfoApi';
 import * as accessPackageApi from '@/rtk/features/accessPackageApi';
 import * as connectionApi from '@/rtk/features/connectionApi';
-import type { Party } from '@/rtk/features/lookupApi';
+import type { PartyEntity } from '@/dataObjects/dtos/Party';
 import { useGetRightHoldersQuery, type Connection } from '@/rtk/features/connectionApi';
 
 import { useReporteeParty } from './useReporteeParty';
@@ -82,29 +82,29 @@ const TestConsumer = () => {
 };
 
 // Mock data
-const mockCurrentUser: Party = {
-  partyUuid: 'current-user-uuid',
+const mockCurrentUser: PartyEntity = {
+  id: 'current-user-uuid',
   partyId: 123,
   name: 'Current User',
-  partyTypeName: 1, // Person
+  type: PartyType.Person,
   isDeleted: false,
 };
 
-const mockReporteeParty: Party = {
-  partyUuid: 'reportee-party-uuid',
+const mockReporteeParty: PartyEntity = {
+  id: 'reportee-party-uuid',
   partyId: 456,
   name: 'Reportee Organization',
-  partyTypeName: 2, // Organization
-  orgNumber: '987654321',
+  type: PartyType.Organization,
+  organizationIdentifier: '987654321',
   isDeleted: false,
 };
 
-const mockConnectedParty: Party = {
-  partyUuid: 'connected-party-uuid',
+const mockConnectedParty: PartyEntity = {
+  id: 'connected-party-uuid',
   partyId: 789,
   name: 'Connected Party',
-  partyTypeName: 2, // Organization
-  orgNumber: '123456789',
+  type: PartyType.Organization,
+  organizationIdentifier: '123456789',
   isDeleted: false,
 };
 
@@ -112,7 +112,7 @@ const mockConnection: Connection = {
   party: {
     id: 'connected-party-uuid',
     name: 'Connected Party',
-    type: PartyEntityType.Organization,
+    type: PartyType.Organization,
     isDeleted: false,
     children: null,
     organizationIdentifier: '123456789',
@@ -273,8 +273,8 @@ describe('PartyRepresentationProvider - Acting Party Logic', () => {
     } as any);
 
     renderWithProvider(<TestConsumer />, {
-      toPartyUuid: mockCurrentUser.partyUuid,
-      actingPartyUuid: mockCurrentUser.partyUuid,
+      toPartyUuid: mockCurrentUser.id,
+      actingPartyUuid: mockCurrentUser.id,
     });
 
     await waitFor(() => {
@@ -286,9 +286,9 @@ describe('PartyRepresentationProvider - Acting Party Logic', () => {
 
   test('Case 2: empty connections are handled by regular error handling', async () => {
     const mockReporteeInfo = {
-      id: mockReporteeParty.partyUuid,
+      id: mockReporteeParty.id,
       name: mockReporteeParty.name,
-      type: PartyEntityType.Organization,
+      type: PartyType.Organization,
       organizationIdentifier: '987654321',
       partyId: 456,
       isDeleted: false,
@@ -336,9 +336,9 @@ describe('PartyRepresentationProvider - Acting Party Logic', () => {
     } as any);
 
     renderWithProvider(<TestConsumer />, {
-      fromPartyUuid: mockReporteeParty.partyUuid,
-      toPartyUuid: mockCurrentUser.partyUuid,
-      actingPartyUuid: mockReporteeParty.partyUuid,
+      fromPartyUuid: mockReporteeParty.id,
+      toPartyUuid: mockCurrentUser.id,
+      actingPartyUuid: mockReporteeParty.id,
     });
 
     await waitFor(() => {
@@ -381,9 +381,9 @@ describe('PartyRepresentationProvider - Acting Party Logic', () => {
     } as any);
 
     renderWithProvider(<TestConsumer />, {
-      fromPartyUuid: mockCurrentUser.partyUuid,
+      fromPartyUuid: mockCurrentUser.id,
       toPartyUuid: 'other-party-uuid',
-      actingPartyUuid: mockCurrentUser.partyUuid,
+      actingPartyUuid: mockCurrentUser.id,
     });
 
     await waitFor(() => {
@@ -419,9 +419,9 @@ describe('PartyRepresentationProvider - Acting Party Logic', () => {
     // Mock connections - reportee connection
     const reporteeConnection: Connection = {
       party: {
-        id: mockReporteeParty.partyUuid,
+        id: mockReporteeParty.id,
         name: mockReporteeParty.name,
-        type: PartyEntityType.Organization,
+        type: PartyType.Organization,
         isDeleted: false,
         children: null,
         organizationIdentifier: '987654321',
@@ -438,9 +438,9 @@ describe('PartyRepresentationProvider - Acting Party Logic', () => {
     } as any);
 
     renderWithProvider(<TestConsumer />, {
-      fromPartyUuid: mockReporteeParty.partyUuid,
+      fromPartyUuid: mockReporteeParty.id,
       toPartyUuid: 'other-party-uuid',
-      actingPartyUuid: mockReporteeParty.partyUuid,
+      actingPartyUuid: mockReporteeParty.id,
     });
 
     await waitFor(() => {
@@ -479,9 +479,9 @@ describe('PartyRepresentationProvider - Acting Party Logic', () => {
     } as any);
 
     renderWithProvider(<TestConsumer />, {
-      fromPartyUuid: mockCurrentUser.partyUuid,
+      fromPartyUuid: mockCurrentUser.id,
       toPartyUuid: 'other-party-uuid',
-      actingPartyUuid: mockCurrentUser.partyUuid,
+      actingPartyUuid: mockCurrentUser.id,
     });
 
     await waitFor(() => {
@@ -520,8 +520,8 @@ describe('PartyRepresentationProvider - Acting Party Logic', () => {
 
     renderWithProvider(<TestConsumer />, {
       fromPartyUuid: 'other-party-uuid',
-      toPartyUuid: mockCurrentUser.partyUuid,
-      actingPartyUuid: mockCurrentUser.partyUuid,
+      toPartyUuid: mockCurrentUser.id,
+      actingPartyUuid: mockCurrentUser.id,
     });
 
     await waitFor(() => {

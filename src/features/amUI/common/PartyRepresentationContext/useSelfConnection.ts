@@ -2,8 +2,6 @@ import { getCookie } from '@/resources/Cookie/CookieMethods';
 import { type Connection, useGetRightHoldersQuery } from '@/rtk/features/connectionApi';
 import { useGetPartyFromLoggedInUserQuery } from '@/rtk/features/lookupApi';
 
-import { mapPartyToPartyEntity } from './partyUtils';
-
 /**
  * useSelfConnection
  * ------------------
@@ -22,12 +20,12 @@ export const useSelfConnection = (): {
 
   const { data: connection, isLoading } = useGetRightHoldersQuery(
     {
-      partyUuid: currentUser?.partyUuid ?? '',
+      partyUuid: currentUser?.id ?? '',
       fromUuid: partyUuid,
-      toUuid: currentUser?.partyUuid ?? '',
+      toUuid: currentUser?.id ?? '',
     },
     {
-      skip: !currentUser?.partyUuid || !partyUuid,
+      skip: !currentUser?.id || !partyUuid,
     },
   );
 
@@ -35,7 +33,7 @@ export const useSelfConnection = (): {
 
   const partyConnection: Connection | undefined = currentUser
     ? {
-        party: mapPartyToPartyEntity(currentUser),
+        party: currentUser,
         roles: existingConn?.roles ?? [],
         connections: existingConn?.connections ?? [],
       }
