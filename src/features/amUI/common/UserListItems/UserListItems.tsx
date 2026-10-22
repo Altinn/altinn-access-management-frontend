@@ -8,7 +8,7 @@ import {
 } from '@altinn/altinn-components';
 import { useTranslation } from 'react-i18next';
 
-import { formatEntityDisplayName, matchesOrgNr } from '@/resources/utils/reporteeUtils';
+import { matchesOrgNr } from '@/resources/utils/reporteeUtils';
 
 import classes from './UserListItems.module.css';
 
@@ -101,7 +101,6 @@ export const UserListItems = ({
             <UserListItem
               key={item.id}
               {...item}
-              name={formatEntityDisplayName(item)}
               collapsible={collapsible}
               expanded={expanded}
               onClick={collapsible ? handleClick : item.onClick}
