@@ -100,7 +100,8 @@ export const Altinn2AccountForm = ({
               loading={isSendingForgotPasswordEmail}
               onClick={sendForgotPasswordEmail}
             >
-              {t('add_altinn2_account_page.send_link')}
+              {/* Wrapped so translation tools can't detach the text node the loading spinner is inserted before */}
+              <span>{t('add_altinn2_account_page.send_link')}</span>
             </DsButton>
             <DsButton
               variant='secondary'
@@ -150,7 +151,8 @@ export const Altinn2AccountForm = ({
             loading={isAddingAltinn2Account}
             onClick={addAltinn2Account}
           >
-            {t('add_altinn2_account_page.add_account_button')}
+            {/* Wrapped so translation tools can't detach the text node the loading spinner is inserted before */}
+            <span>{t('add_altinn2_account_page.add_account_button')}</span>
           </DsButton>
           <DsButton
             variant='secondary'

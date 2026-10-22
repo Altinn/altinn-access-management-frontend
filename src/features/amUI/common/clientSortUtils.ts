@@ -13,7 +13,7 @@ export const buildClientParentNameById = (clients: Client[]): Map<string, string
 
 export const buildClientSortKey = (client: Client, parentNameById: Map<string, string>): string => {
   const parentId = client.client.parent?.id;
-  const isSubUnit = Boolean(parentId) && isSubUnitByType(client.client.variant);
+  const isSubUnit = Boolean(parentId) && isSubUnitByType(client.client.unitType);
   const parentName =
     (parentId ? parentNameById.get(parentId) : undefined) ??
     client.client.parent?.name ??

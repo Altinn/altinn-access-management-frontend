@@ -46,9 +46,9 @@ const SingleRightsSectionContent = ({ isReportee }: { isReportee: boolean }) => 
     isLoading,
   } = useGetSingleRightsForRightholderQuery(
     {
-      actingParty: actingParty?.partyUuid || '',
-      from: fromParty?.partyUuid || '',
-      to: toParty?.partyUuid || '',
+      actingParty: actingParty?.id || '',
+      from: fromParty?.id || '',
+      to: toParty?.id || '',
     },
     {
       skip: !actingParty || !fromParty || !toParty,

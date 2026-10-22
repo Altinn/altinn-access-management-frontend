@@ -1,7 +1,7 @@
 import { createApi } from '@reduxjs/toolkit/query/react';
 
 import { createBaseQuery } from '@/rtk/app/baseQuery';
-import type { Entity } from '@/dataObjects/dtos/Common';
+import type { PartyEntity } from '@/dataObjects/dtos/Party';
 
 import { type ServiceResource } from './singleRights/singleRightsApi';
 import type { AccessPackage } from './accessPackageApi';
@@ -12,8 +12,8 @@ export interface RequestDto {
   id: string;
   type: string;
   status: RequestStatus;
-  from: Entity;
-  to: Entity;
+  from: PartyEntity;
+  to: PartyEntity;
   lastUpdated: string;
   lastUpdatedByName?: string;
   resourceId?: string;

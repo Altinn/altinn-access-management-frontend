@@ -3,6 +3,8 @@ import { act, render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 
+import { PartyType } from '@/dataObjects/dtos/Party';
+
 import { DelegationAction } from '../common/DelegationModal/EditModal';
 import type { UserActionTarget } from '../common/UserSearch/types';
 
@@ -26,12 +28,17 @@ vi.mock(
   async (importOriginal) => ({
     ...(await importOriginal<object>()),
     usePartyRepresentation: () => ({
-      fromParty: { partyUuid: 'from', name: 'Diskret Nær Tiger AS', partyTypeName: 'Organisasjon' },
+      fromParty: { id: 'from', name: 'Diskret Nær Tiger AS', type: 'Organization' },
     }),
   }),
 );
 
-const user: UserActionTarget = { id: 'user-1', name: 'Medaljong Ola', type: 'Person' };
+const user: UserActionTarget = {
+  id: 'user-1',
+  name: 'Medaljong Ola',
+  type: PartyType.Person,
+  isDeleted: false,
+};
 
 const accessPackage = {
   id: 'pkg-1',

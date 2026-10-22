@@ -1,14 +1,13 @@
 import { DsParagraph, DsHeading, Avatar } from '@altinn/altinn-components';
 import { t } from 'i18next';
 
-import { PartyType } from '@/rtk/features/userInfoApi';
 import {
   isSubUnitByType,
   formatEntityDisplayName,
   getAvatarType,
 } from '@/resources/utils/reporteeUtils';
 import { useIsMobileOrSmaller } from '@/resources/utils/screensizeUtils';
-import { type Party } from '@/rtk/features/lookupApi';
+import { PartyType, type PartyEntity } from '@/dataObjects/dtos/Party';
 
 import { usePartyRepresentation } from '../PartyRepresentationContext/PartyRepresentationContext';
 import { UserRoles } from '../UserRoles/UserRoles';
@@ -22,14 +21,14 @@ interface UserPageHeaderProps {
   displayRoles?: boolean;
 }
 
-const getUserHeadline = (userName: string, user?: Party) => {
-  const userIsOrganization = user?.partyTypeName === PartyType.Organization;
+const getUserHeadline = (userName: string, user?: PartyEntity) => {
+  const userIsOrganization = user?.type === PartyType.Organization;
   const userIsSubUnit = isSubUnitByType(user?.unitType?.toString());
   if (userIsOrganization) {
     return userIsSubUnit
       ? `${userName} (${t('common.subunit_lowercase')})`
       : `${userName} (${t('common.mainunit_lowercase')})`;
-  } else if (user?.partyTypeName === PartyType.Systemuser) {
+  } else if (user?.type === PartyType.SystemUser) {
     return `${userName} (${t('common.systemuser_lowercase')})`;
   }
   return userName;

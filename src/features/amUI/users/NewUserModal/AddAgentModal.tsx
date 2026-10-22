@@ -5,7 +5,7 @@ import { PlusIcon } from '@navikt/aksel-icons';
 
 import { getActionError } from '@/resources/hooks/useActionError';
 import { useAddAgentMutation, type AssignmentDto } from '@/rtk/features/clientApi';
-import { type User } from '@/rtk/features/userInfoApi';
+import { PartyType, type PartyEntity } from '@/dataObjects/dtos/Party';
 
 import { AddUserForm } from '../../common/AddUserForm/AddUserForm';
 import type { Recipient } from '../../common/AddUserForm/recipient';
@@ -13,7 +13,7 @@ import { SubmitErrorAlert, type SubmitError } from '../../common/AddUserForm/Sub
 
 interface AddAgentButtonProps {
   variant: 'primary' | 'secondary';
-  onComplete?: (user: User) => void;
+  onComplete?: (user: PartyEntity) => void;
 }
 
 export const AddAgentButton: React.FC<AddAgentButtonProps> = ({ variant, onComplete }) => {
@@ -52,8 +52,8 @@ export const AddAgentButton: React.FC<AddAgentButtonProps> = ({ variant, onCompl
     onComplete?.({
       id: assignment.toId || assignment.id,
       name: recipient.lastName,
-      type: 'person',
-      children: null,
+      type: PartyType.Person,
+      isDeleted: false,
     });
   };
 

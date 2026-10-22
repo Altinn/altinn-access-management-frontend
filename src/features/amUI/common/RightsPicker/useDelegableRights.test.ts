@@ -10,7 +10,7 @@ const resourceCheckQuery = vi.fn<QueryHook>();
 const instanceCheckQuery = vi.fn<QueryHook>();
 
 vi.mock('../PartyRepresentationContext/PartyRepresentationContext', () => ({
-  usePartyRepresentation: () => ({ actingParty: { partyUuid: 'acting-party' } }),
+  usePartyRepresentation: () => ({ actingParty: { id: 'acting-party' } }),
 }));
 
 vi.mock('@/rtk/features/singleRights/singleRightsApi', () => ({

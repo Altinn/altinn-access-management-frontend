@@ -28,7 +28,7 @@ vi.mock('@/rtk/features/singleRights/singleRightsApi', () => ({
   useLazyGetResourceRightsQuery: () => [resourceRights],
 }));
 
-const party = (partyUuid: string) => ({ partyUuid }) as never;
+const party = (id: string) => ({ id }) as never;
 
 // A lazy-query trigger result that resolves to `data`.
 const resolved = (data: unknown) => ({ unwrap: () => Promise.resolve(data), unsubscribe: vi.fn() });

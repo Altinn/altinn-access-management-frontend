@@ -2,40 +2,22 @@ import { createApi } from '@reduxjs/toolkit/query/react';
 
 import { createBaseQuery } from '@/rtk/app/baseQuery';
 import { getCookie } from '@/resources/Cookie/CookieMethods';
-import { type Entity } from '@/dataObjects/dtos/Common';
-
-import { type ExtendedUser } from './userInfoApi';
-
-export enum ConnectionUserType {
-  Person = 'Person',
-  Organization = 'Organisasjon',
-  Systemuser = 'Systembruker',
-}
+import { type PartyEntity } from '@/dataObjects/dtos/Party';
 
 export interface RoleInfo {
   id: string;
   code?: string;
-  viaParty?: Entity;
+  viaParty?: PartyEntity | null;
 }
 
 export interface Connection {
-  party: ExtendedUser;
+  party: PartyEntity;
   roles: RoleInfo[];
   connections: Connection[];
-  sortKey?: string;
-}
-
-export interface SimplifiedParty {
-  id: string;
-  name: string;
-  type: string;
-  variant?: string;
-  organizationIdentifier?: string;
-  isDeleted?: boolean;
 }
 
 export interface SimplifiedConnection {
-  party: SimplifiedParty;
+  party: PartyEntity;
   connections: SimplifiedConnection[];
 }
 

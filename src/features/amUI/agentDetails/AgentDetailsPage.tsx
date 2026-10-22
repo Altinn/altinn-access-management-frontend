@@ -6,8 +6,6 @@ import { getCookie } from '@/resources/Cookie/CookieMethods';
 import { useDocumentTitle } from '@/resources/hooks/useDocumentTitle';
 import { PageWrapper } from '@/components';
 import { useGetAgentsQuery } from '@/rtk/features/clientApi';
-import { type Party } from '@/rtk/features/lookupApi';
-import { PartyType } from '@/rtk/features/userInfoApi';
 
 import { PageLayoutWrapper } from '../common/PageLayoutWrapper';
 import { PartyRepresentationProvider } from '../common/PartyRepresentationContext/PartyRepresentationContext';
@@ -23,14 +21,7 @@ export const AgentDetailsPage = () => {
   const { data: agents } = useGetAgentsQuery();
   const selectedAgent = agents?.find((item) => item.agent.id === id);
 
-  const agentParty: Party | undefined = selectedAgent
-    ? {
-        name: selectedAgent.agent.name,
-        partyUuid: selectedAgent.agent.id,
-        partyTypeName: PartyType.Person,
-        partyId: Number(selectedAgent.agent.partyId ?? 0),
-      }
-    : undefined;
+  const agentParty = selectedAgent?.agent;
 
   return (
     <PageWrapper>

@@ -44,21 +44,27 @@
         {
           "from": {
             "id": "cd35779b-b174-4ecc-bbef-ece13611be7f",
+            "partyId": 51329012,
             "name": "DISKRET NÆR TIGER AS",
-            "type": "organization",
-            "variant": "AS",
-            "parent": null,
+            "type": "Organization",
+            "unitType": "AS",
+            "organizationIdentifier": null,
+            "dateOfBirth": null,
+            "isDeleted": false,
             "children": null,
-            "partyId": 51329012
+            "parent": null
           },
           "to": {
             "id": "167536b5-f8ed-4c5a-8f48-0279507e53ae",
+            "partyId": 50789533,
             "name": "SITRONGUL MEDALJONG",
-            "type": "person",
-            "variant": null,
-            "parent": null,
+            "type": "Person",
+            "unitType": null,
+            "organizationIdentifier": null,
+            "dateOfBirth": null,
+            "isDeleted": false,
             "children": null,
-            "partyId": 50789533
+            "parent": null
           },
           "via": null,
           "role": {
@@ -97,21 +103,27 @@
         {
           "from": {
             "id": "cd35779b-b174-4ecc-bbef-ece13611be7f",
+            "partyId": 51329012,
             "name": "DISKRET NÆR TIGER AS",
-            "type": "organization",
-            "variant": "AS",
-            "parent": null,
+            "type": "Organization",
+            "unitType": "AS",
+            "organizationIdentifier": null,
+            "dateOfBirth": null,
+            "isDeleted": false,
             "children": null,
-            "partyId": 51329012
+            "parent": null
           },
           "to": {
             "id": "167536b5-f8ed-4c5a-8f48-0279507e53ae",
+            "partyId": 50789533,
             "name": "SITRONGUL MEDALJONG",
-            "type": "person",
-            "variant": null,
-            "parent": null,
+            "type": "Person",
+            "unitType": null,
+            "organizationIdentifier": null,
+            "dateOfBirth": null,
+            "isDeleted": false,
             "children": null,
-            "partyId": 50789533
+            "parent": null
           },
           "via": null,
           "role": {
@@ -152,30 +164,39 @@
         {
           "from": {
             "id": "cd35779b-b174-4ecc-bbef-ece13611be7f",
+            "partyId": 51329012,
             "name": "DISKRET NÆR TIGER AS",
-            "type": "organization",
-            "variant": "AS",
-            "parent": null,
+            "type": "Organization",
+            "unitType": "AS",
+            "organizationIdentifier": null,
+            "dateOfBirth": null,
+            "isDeleted": false,
             "children": null,
-            "partyId": 51329012
+            "parent": null
           },
           "to": {
             "id": "167536b5-f8ed-4c5a-8f48-0279507e53ae",
+            "partyId": 50789533,
             "name": "SITRONGUL MEDALJONG",
-            "type": "person",
-            "variant": null,
-            "parent": null,
+            "type": "Person",
+            "unitType": null,
+            "organizationIdentifier": null,
+            "dateOfBirth": null,
+            "isDeleted": false,
             "children": null,
-            "partyId": 50789533
+            "parent": null
           },
           "via": {
             "id": "6b0574ae-f569-4c0d-a8d4-8ad56f427890",
+            "partyId": 50067799,
             "name": "Digitaliseringsdirektoratet",
-            "type": "organization",
-            "variant": "ORGL",
-            "parent": null,
+            "type": "Organization",
+            "unitType": "ORGL",
+            "organizationIdentifier": null,
+            "dateOfBirth": null,
+            "isDeleted": false,
             "children": null,
-            "partyId": 50067799
+            "parent": null
           },
           "role": null,
           "viaRole": {

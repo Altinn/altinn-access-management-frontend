@@ -1,5 +1,5 @@
 ﻿using Altinn.AccessManagement.UI.Core.ClientInterfaces;
-using Altinn.AccessManagement.UI.Core.Models;
+using Altinn.AccessManagement.UI.Core.Models.Common.Frontend;
 using Altinn.AccessManagement.UI.Core.Models.Profile;
 using Altinn.AccessManagement.UI.Core.Services.Interfaces;
 using Altinn.Register.Contracts.V1;
@@ -26,7 +26,7 @@ namespace Altinn.AccessManagement.UI.Core.Services
         public async Task<PartyFE> GetPartyForOrganization(string organizationNumber)
         {
             Party party = await _registerClient.GetPartyForOrganization(organizationNumber);
-            return party == null ? null : new PartyFE(party);
+            return PartyFE.FromRegisterParty(party);
         }
 
         /// <inheritdoc/>
@@ -39,7 +39,7 @@ namespace Altinn.AccessManagement.UI.Core.Services
         {
             Altinn.Register.Contracts.Party partyFromRegistry = await _registerClient.GetParty(uuid);
 
-            return partyFromRegistry == null ? null : new PartyFE(partyFromRegistry);
+            return PartyFE.FromRegisterParty(partyFromRegistry);
         }
     }
 }

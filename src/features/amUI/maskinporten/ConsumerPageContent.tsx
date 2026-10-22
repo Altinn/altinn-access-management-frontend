@@ -45,8 +45,8 @@ const ConsumerPageContentInner = () => {
   const [removeConsumer, { isLoading: isRemovingConsumer }] =
     useRemoveMaskinportenConsumerMutation();
   const [removeConsumerResource] = useRemoveMaskinportenConsumerResourceMutation();
-  const consumerOrgNumber = fromParty?.orgNumber;
-  const actingPartyUuid = actingParty?.partyUuid;
+  const consumerOrgNumber = fromParty?.organizationIdentifier ?? undefined;
+  const actingPartyUuid = actingParty?.id;
   const { remove, isLoading } = useMaskinportenResourceActions({
     remove: (resource) =>
       removeConsumerResource({

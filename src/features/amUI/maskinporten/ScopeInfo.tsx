@@ -48,8 +48,8 @@ export const ScopeInfo = ({ resource, availableActions = [] }: ScopeInfoProps) =
     useDelegationModalContext();
   const successTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
-  const consumerPartyUuid = fromParty?.partyUuid;
-  const supplierOrgNumber = toParty?.orgNumber ?? '';
+  const consumerPartyUuid = fromParty?.id;
+  const supplierOrgNumber = toParty?.organizationIdentifier ?? '';
   const scopes = getMaskinportenScopes(resource);
 
   const [addSupplierResource] = useAddMaskinportenSupplierResourceMutation();
@@ -67,8 +67,8 @@ export const ScopeInfo = ({ resource, availableActions = [] }: ScopeInfoProps) =
     remove: isRevokeOnly
       ? (r) =>
           removeConsumerResource({
-            party: toParty?.partyUuid ?? '',
-            consumer: fromParty?.orgNumber ?? '',
+            party: toParty?.id ?? '',
+            consumer: fromParty?.organizationIdentifier ?? '',
             resource: r.identifier,
           }).unwrap()
       : (r) =>
@@ -109,11 +109,11 @@ export const ScopeInfo = ({ resource, availableActions = [] }: ScopeInfoProps) =
   const { data: consumerResources, isFetching: isConsumerResourcesLoading } =
     useGetMaskinportenConsumerResourcesQuery(
       {
-        party: toParty?.partyUuid,
-        consumer: fromParty?.orgNumber,
+        party: toParty?.id,
+        consumer: fromParty?.organizationIdentifier ?? undefined,
       },
       {
-        skip: !isRevokeOnly || !toParty?.partyUuid || !fromParty?.orgNumber,
+        skip: !isRevokeOnly || !toParty?.id || !fromParty?.organizationIdentifier,
         refetchOnMountOrArgChange: true,
       },
     );

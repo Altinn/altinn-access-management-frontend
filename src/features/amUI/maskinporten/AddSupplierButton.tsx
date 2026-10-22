@@ -5,7 +5,7 @@ import { PlusIcon } from '@navikt/aksel-icons';
 
 import { getActionError } from '@/resources/hooks/useActionError';
 import { useAddMaskinportenSupplierMutation } from '@/rtk/features/maskinportenApi';
-import type { User } from '@/rtk/features/userInfoApi';
+import { PartyType, type PartyEntity } from '@/dataObjects/dtos/Party';
 
 import { usePartyRepresentation } from '../common/PartyRepresentationContext/PartyRepresentationContext';
 import { AddUserForm } from '../common/AddUserForm/AddUserForm';
@@ -14,7 +14,7 @@ import { SubmitErrorAlert, type SubmitError } from '../common/AddUserForm/Submit
 
 interface AddSupplierButtonProps {
   party: string;
-  onComplete: (user: User) => void;
+  onComplete: (user: PartyEntity) => void;
 }
 
 export const AddSupplierButton = ({ party, onComplete }: AddSupplierButtonProps) => {
@@ -39,7 +39,10 @@ export const AddSupplierButton = ({ party, onComplete }: AddSupplierButtonProps)
     }
     setSubmitError(null);
     try {
-      await addSupplier({ party, supplier: recipient.organization.orgNumber }).unwrap();
+      await addSupplier({
+        party,
+        supplier: recipient.organization.organizationIdentifier,
+      }).unwrap();
     } catch (error: unknown) {
       setSubmitError({ error: getActionError(error), recipientKind: 'org' });
       return;
@@ -47,10 +50,10 @@ export const AddSupplierButton = ({ party, onComplete }: AddSupplierButtonProps)
     close();
     onComplete({
       name: recipient.organization.name,
-      type: 'organisasjon',
-      children: null,
-      id: recipient.organization.partyUuid,
-      organizationIdentifier: recipient.organization.orgNumber,
+      type: PartyType.Organization,
+      isDeleted: false,
+      id: recipient.organization.id,
+      organizationIdentifier: recipient.organization.organizationIdentifier,
     });
   };
 
@@ -80,7 +83,7 @@ export const AddSupplierButton = ({ party, onComplete }: AddSupplierButtonProps)
               {
                 type: 'org',
                 submitLabel: t('new_user_modal.add_org_button'),
-                ownOrgNumber: actingParty?.orgNumber,
+                ownOrgNumber: actingParty?.organizationIdentifier ?? undefined,
                 ownOrgWarning: (
                   <DsAlert
                     data-size='sm'

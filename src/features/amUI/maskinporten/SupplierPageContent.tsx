@@ -43,8 +43,8 @@ const SupplierPageContentInner = () => {
   const [removeSupplierResource] = useRemoveMaskinportenSupplierResourceMutation();
 
   const { toParty, actingParty } = usePartyRepresentation();
-  const party = actingParty?.partyUuid;
-  const supplier = toParty?.orgNumber;
+  const party = actingParty?.id;
+  const supplier = toParty?.organizationIdentifier ?? undefined;
   const supplierName = toParty?.name ? formatEntityDisplayName(toParty) : '';
 
   const deleteDialogRef = React.useRef<HTMLDialogElement>(null);

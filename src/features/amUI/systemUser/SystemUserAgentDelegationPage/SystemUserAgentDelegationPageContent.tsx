@@ -262,10 +262,10 @@ export const SystemUserAgentDelegationPageContent = ({
     hasAddSelfPermission && reporteeData && (isSelfAdded || assignedCustomers.length > 0)
       ? [
           {
-            id: reporteeData.partyUuid,
+            id: reporteeData.id,
             name: reporteeName,
-            orgNo: reporteeData.organizationNumber || '',
-            unitType: reporteeData.unitType,
+            orgNo: reporteeData.organizationIdentifier || '',
+            unitType: reporteeData.unitType ?? undefined,
             access: [],
             isSelfOrg: true,
           },

@@ -1,15 +1,28 @@
 {
   "id": "1a04a7fa-24c1-4e06-9217-8aee89239a9f",
-
   "fromParty": {
-    "id": "urn:altinn:organization:identifier-no:cd35779b-b174-4ecc-bbef-ece13611be7f",
+    "id": "cd35779b-b174-4ecc-bbef-ece13611be7f",
+    "partyId": 51329012,
     "name": "DISKRET NÆR TIGER AS",
-    "type": 2
+    "type": "Organization",
+    "unitType": "AS",
+    "organizationIdentifier": "310202398",
+    "dateOfBirth": null,
+    "isDeleted": false,
+    "children": null,
+    "parent": null
   },
   "toParty": {
-    "id": "urn:altinn:organization:identifier-no:60fb3d5b-99c2-4df0-aa77-f3fca3bc5199",
+    "id": "60fb3d5b-99c2-4df0-aa77-f3fca3bc5199",
+    "partyId": 51317934,
     "name": "RAKRYGGET UNG TIGER AS",
-    "type": 2
+    "type": "Organization",
+    "unitType": "AS",
+    "organizationIdentifier": "313523497",
+    "dateOfBirth": null,
+    "isDeleted": false,
+    "children": null,
+    "parent": null
   },
   "handledByParty": null,
   "isPoa": true,

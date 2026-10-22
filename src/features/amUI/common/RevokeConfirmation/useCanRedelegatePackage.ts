@@ -13,8 +13,8 @@ export const useCanRedelegatePackage = () => {
     if (!fromParty) return false;
     // If the user is deleting their own access and is not hovedadmin, show the warning regardless
     // of the delegation check: the check passes only because they still hold the access.
-    if (toParty?.partyUuid === selfParty?.partyUuid) return !!isHovedadmin;
-    const check = runDelegationCheck({ party: fromParty.partyUuid });
+    if (toParty?.id === selfParty?.id) return !!isHovedadmin;
+    const check = runDelegationCheck({ party: fromParty.id });
     try {
       const checks = await check.unwrap();
       return checks.find((entry) => entry.package.id === packageId)?.result ?? false;

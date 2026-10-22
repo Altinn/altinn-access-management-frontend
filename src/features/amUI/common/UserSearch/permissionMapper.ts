@@ -1,23 +1,8 @@
 import type { Permissions } from '@/dataObjects/dtos/accessPackage';
-import type { Entity } from '@/dataObjects/dtos/Common';
+import type { PartyEntity } from '@/dataObjects/dtos/Party';
 
-import { addRole, buildSortKey, normalizeType } from './mapperUtils';
+import { addRole, mapPartyToUserSearchNode } from './mapperUtils';
 import type { UserSearchNode } from './types';
-
-const mapEntityToUserSearchNode = (entity: Entity, isInherited: boolean): UserSearchNode => ({
-  id: entity.id,
-  name: entity.name,
-  type: normalizeType(entity.type),
-  variant: entity.variant,
-  partyId: entity.partyId,
-  organizationIdentifier: entity.organizationIdentifier,
-  isDeleted: entity.isDeleted ?? undefined,
-  dateOfBirth: entity.dateOfBirth,
-  sortKey: buildSortKey(entity.name),
-  roles: [],
-  children: null,
-  isInherited,
-});
 
 export const mapPermissionsToUserSearchNodes = (
   permissions?: Permissions[],
@@ -27,7 +12,14 @@ export const mapPermissionsToUserSearchNodes = (
     return [];
   }
 
-  const hasViaEntity = (permission: Permissions) => permission.via != null;
+  const hasViaEntity = (
+    permission: Permissions,
+  ): permission is Permissions & { via: PartyEntity } => permission.via != null;
+
+  const toNode = (party: PartyEntity, isInherited: boolean): UserSearchNode => ({
+    ...mapPartyToUserSearchNode(party, { isInherited }),
+    children: null,
+  });
 
   const nodes: UserSearchNode[] = [];
   const sortedPermissions = [...permissions].sort((a, b) => {
@@ -49,7 +41,7 @@ export const mapPermissionsToUserSearchNodes = (
     return false;
   };
 
-  const getOrCreateTopLevelPermissionNode = (entity: Entity, inherited: boolean) => {
+  const getOrCreateTopLevelPermissionNode = (entity: PartyEntity, inherited: boolean) => {
     const existingNode = nodes.find((node) => node.id === entity.id);
 
     if (existingNode) {
@@ -57,14 +49,14 @@ export const mapPermissionsToUserSearchNodes = (
       return existingNode;
     }
 
-    const newNode = mapEntityToUserSearchNode(entity, inherited);
+    const newNode = toNode(entity, inherited);
     nodes.push(newNode);
     return newNode;
   };
 
   const getOrCreateChildPermissionNode = (
     parent: UserSearchNode,
-    entity: Entity,
+    entity: PartyEntity,
     inherited: boolean,
   ) => {
     const children = parent.children ?? [];
@@ -75,7 +67,7 @@ export const mapPermissionsToUserSearchNodes = (
       return existingChild;
     }
 
-    const newChild = mapEntityToUserSearchNode(entity, inherited);
+    const newChild = toNode(entity, inherited);
     parent.children = [newChild, ...children];
     return newChild;
   };

@@ -3,7 +3,7 @@ import { DsParagraph } from '@altinn/altinn-components';
 
 import { AccessPackageList } from '@/features/amUI/common/AccessPackageList/AccessPackageList';
 import type { AreaExpandedState } from '@/features/amUI/common/AccessPackageList/useAreaExpandedState';
-import type { Party } from '@/rtk/features/lookupApi';
+import type { PartyEntity } from '@/dataObjects/dtos/Party';
 import type { AccessPackage } from '@/rtk/features/accessPackageApi';
 
 import { useDelegationModalContext } from '../DelegationModalContext';
@@ -16,7 +16,7 @@ import classes from './PackageSearch.module.css';
 export interface PackageSearchProps {
   onSelection: (pack: AccessPackage) => void;
   onActionError: (accessPackage: AccessPackage) => void;
-  toParty?: Party;
+  toParty?: PartyEntity;
   availableActions?: DelegationAction[];
   expandedState?: AreaExpandedState;
 }

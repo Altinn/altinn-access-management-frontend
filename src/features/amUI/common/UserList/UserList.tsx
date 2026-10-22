@@ -2,7 +2,6 @@ import { useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Button, DsParagraph, List } from '@altinn/altinn-components';
 
-import type { ExtendedUser } from '@/rtk/features/userInfoApi';
 import { type Connection } from '@/rtk/features/connectionApi';
 
 import { type DelegationAction } from '../DelegationModal/EditModal';
@@ -98,7 +97,7 @@ export const UserList = ({
             disableLinks={disableLinks}
             controls={(user) => (
               <UserListActions
-                user={user as ExtendedUser}
+                user={user}
                 availableAction={availableAction}
                 onDelegate={() => onDelegate && onDelegate(user.id)}
                 onRevoke={() => onRevoke && onRevoke(user.id)}

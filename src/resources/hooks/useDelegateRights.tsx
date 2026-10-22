@@ -17,9 +17,9 @@ export const useDelegateRights = () => {
     }
 
     delegate({
-      partyUuid: actingParty.partyUuid,
-      fromUuid: fromParty.partyUuid,
-      toUuid: toParty.partyUuid,
+      partyUuid: actingParty.id,
+      fromUuid: fromParty.id,
+      toUuid: toParty.id,
       resourceId: resourceId,
       actionKeys: actionKeys,
     })
