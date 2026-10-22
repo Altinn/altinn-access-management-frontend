@@ -323,7 +323,7 @@ export const ClientAgentPackageList = ({
 
     return {
       id: agentId,
-      name: agent.agent.name,
+      name: agentName,
       type: userType,
       subUnit: isSubUnit,
       deleted: agent.agent.isDeleted ?? undefined,
