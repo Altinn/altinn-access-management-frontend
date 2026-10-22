@@ -230,18 +230,8 @@
       "count": 1
     }
   },
-  "src/features/amUI/common/ClientAccessList/ClientAccessList.tsx": {
-    "react-hooks/refs": {
-      "count": 1
-    }
-  },
   "src/features/amUI/common/ClientAdminSearchField/ClientAdminSearchField.tsx": {
     "react-hooks/use-memo": {
-      "count": 1
-    }
-  },
-  "src/features/amUI/common/ClientAgentPackageList/ClientAgentPackageList.tsx": {
-    "react-hooks/refs": {
       "count": 1
     }
   },
