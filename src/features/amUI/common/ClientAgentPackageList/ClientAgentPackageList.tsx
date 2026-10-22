@@ -291,7 +291,7 @@ export const ClientAgentPackageList = ({
 
     return {
       id: agentId,
-      name: agent.agent.name,
+      name: formatEntityDisplayName(agent.agent),
       type: userType,
       subUnit: isSubUnit,
       deleted: agent.agent.isDeleted ?? undefined,

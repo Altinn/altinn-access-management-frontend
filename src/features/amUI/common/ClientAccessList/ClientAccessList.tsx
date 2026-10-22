@@ -249,7 +249,7 @@ export const ClientAccessList = ({
 
     return {
       id: clientId,
-      name: client.client.name,
+      name: formatEntityDisplayName(client.client),
       organizationIdentifier: client.client.organizationIdentifier ?? undefined,
       type: userType,
       subUnit: isSubUnit,
