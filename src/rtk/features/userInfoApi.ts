@@ -1,7 +1,9 @@
 import { createApi } from '@reduxjs/toolkit/query/react';
+import type { AuthorizedParty } from '@altinn/altinn-components';
 
 import { createBaseQuery } from '@/rtk/app/baseQuery';
 import { getCookie } from '@/resources/Cookie/CookieMethods';
+import type { AuthorizedPartyEntity } from '@/dataObjects/dtos/Party';
 
 import type { Party } from './lookupApi';
 
@@ -33,21 +35,6 @@ export interface UserProfile {
   uuid: string;
   party: Party;
   profileSettingPreference: ProfileSettingPreference;
-}
-
-export interface ReporteeInfo {
-  partyUuid: string;
-  name: string;
-  organizationNumber?: string;
-  dateOfBirth?: string;
-  partyId: string;
-  type?: string;
-  unitType?: string;
-  isDeleted: boolean;
-  onlyHierarchyElementWithNoAccess: boolean;
-  authorizedResources: string[];
-  authorizedRoles: string[];
-  subunits?: ReporteeInfo[];
 }
 
 export enum PartyType {
@@ -103,11 +90,11 @@ export const userInfoApi = createApi({
       },
       invalidatesTags: ['UserProfile'],
     }),
-    getReportee: builder.query<ReporteeInfo, void>({
+    getReportee: builder.query<AuthorizedPartyEntity, void>({
       query: () => `reportee/${getCookie('AltinnPartyUuid')}`,
       keepUnusedDataFor: 300,
     }),
-    getReporteeListForAuthorizedUser: builder.query<ReporteeInfo[], void>({
+    getReporteeListForAuthorizedUser: builder.query<AuthorizedParty[], void>({
       query: () => {
         return '/actorlist/old';
       },

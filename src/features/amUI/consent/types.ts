@@ -1,13 +1,7 @@
-import type { PartyType } from '@/rtk/features/userInfoApi';
+import type { PartyEntity } from '@/dataObjects/dtos/Party';
 
 export type ConsentLocale = 'nb' | 'nn' | 'en';
 export type ConsentLanguage = Record<ConsentLocale, string>;
-
-export interface ConsentParty {
-  id: string;
-  name: string;
-  type: PartyType;
-}
 
 export interface ConsentRight {
   identifier: string;
@@ -35,9 +29,9 @@ export interface ConsentRequest {
   consentMessage?: ConsentLanguage;
   expiration: ConsentLanguage;
   handledBy?: ConsentLanguage;
-  fromParty: ConsentParty;
-  toParty: ConsentParty;
-  handledByParty?: ConsentParty;
+  fromParty: PartyEntity;
+  toParty: PartyEntity;
+  handledByParty?: PartyEntity;
   validTo: string;
   consentRequestEvents: ConsentRequestEvent[];
 }
@@ -46,8 +40,8 @@ export interface ActiveConsentListItem {
   id: string;
   isPendingConsent: boolean;
   isPoa: boolean;
-  fromParty: ConsentParty;
-  toParty: ConsentParty;
+  fromParty: PartyEntity;
+  toParty: PartyEntity;
   createdDate: string;
   consentedDate?: string;
 }
@@ -55,9 +49,9 @@ export interface ActiveConsentListItem {
 export interface ConsentHistoryItem {
   id: string;
   isPoa: boolean;
-  fromParty: ConsentParty;
-  toParty: ConsentParty;
-  handledByParty?: ConsentParty;
+  fromParty: PartyEntity;
+  toParty: PartyEntity;
+  handledByParty?: PartyEntity;
   validTo: string;
   consentRequestEvents: ConsentRequestEvent[];
 }
@@ -73,9 +67,9 @@ export interface Consent {
   handledBy?: ConsentLanguage;
   validTo: string;
   consentRequestEvents: ConsentRequestEvent[];
-  fromParty: ConsentParty;
-  toParty: ConsentParty;
-  handledByParty?: ConsentParty;
+  fromParty: PartyEntity;
+  toParty: PartyEntity;
+  handledByParty?: PartyEntity;
 }
 
 export interface ProblemDetail {

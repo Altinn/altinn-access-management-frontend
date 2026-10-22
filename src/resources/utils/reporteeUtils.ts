@@ -1,29 +1,33 @@
 import { formatDate, formatDisplayName } from '@altinn/altinn-components';
 import { t } from 'i18next';
 
-import type { Entity } from '@/dataObjects/dtos/Common';
 import type { Party } from '@/rtk/features/lookupApi';
-import { PartyType, type ReporteeInfo, type User } from '@/rtk/features/userInfoApi';
+import { PartyType, type User } from '@/rtk/features/userInfoApi';
+import {
+  PartyEntityType,
+  type AuthorizedPartyEntity,
+  type PartyEntity,
+} from '@/dataObjects/dtos/Party';
 import { type UserListItemData } from '@/features/amUI/common/UserListItems/UserListItems';
 
 const SUBUNIT_TYPES = ['BEDR', 'AAFY', 'ADOS'];
 
-export const isOrganization = (reportee?: ReporteeInfo): boolean => {
-  return reportee?.type === 'Organization';
+export const isOrganization = (reportee?: AuthorizedPartyEntity): boolean => {
+  return reportee?.type === PartyEntityType.Organization;
 };
 
 export const isSubUnitByType = (unitType?: string | null): boolean => {
   return !!unitType && SUBUNIT_TYPES.includes(unitType);
 };
 
-export const isSubUnit = (reportee?: ReporteeInfo): boolean => {
+export const isSubUnit = (reportee?: AuthorizedPartyEntity): boolean => {
   return isOrganization(reportee) && isSubUnitByType(reportee?.unitType);
 };
 
-/** The parts of a Party, User, ReporteeInfo, UserListItemData or Entity needed to format its name. */
+/** The parts of a Party, User, PartyEntity or UserListItemData needed to format its name. */
 type NamedEntity =
   | Pick<Party, 'name' | 'partyTypeName'>
-  | Pick<User | ReporteeInfo | Entity | UserListItemData, 'name' | 'type'>;
+  | Pick<User | PartyEntity | UserListItemData, 'name' | 'type'>;
 
 const isOrganizationEntity = (entity: NamedEntity): boolean =>
   'partyTypeName' in entity
@@ -36,7 +40,7 @@ const isSystemuserEntity = (entity: NamedEntity): boolean =>
     ? entity.partyTypeName === PartyType.Systemuser
     : entity.type?.toLowerCase() === 'systemuser' || entity.type?.toLowerCase() === 'systembruker';
 
-/** Formats the name of a Party, User, ReporteeInfo, UserListItemData or Entity with formatDisplayName. */
+/** Formats the name of a Party, User, PartyEntity or UserListItemData with formatDisplayName. */
 export const formatEntityDisplayName = (
   entity: NamedEntity | null | undefined,
   reverseNameOrder?: boolean,

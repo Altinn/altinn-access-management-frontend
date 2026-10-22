@@ -1,6 +1,7 @@
 import { useMemo } from 'react';
 
-import { PartyType, useGetIsAdminQuery, useGetReporteeQuery } from '@/rtk/features/userInfoApi';
+import { useGetIsAdminQuery, useGetReporteeQuery } from '@/rtk/features/userInfoApi';
+import { PartyEntityType } from '@/dataObjects/dtos/Party';
 import { useGetActiveConsentsQuery } from '@/rtk/features/consentApi';
 import { type Request } from '@/features/amUI/requestPage/types';
 import { useGetPendingSystemUserRequestsQuery } from '@/rtk/features/systemUserApi';
@@ -51,7 +52,7 @@ export const useRequests = ({ skipSentRequests = false }: UseRequestsOptions = {
   const hasApproveConsentPermission = hasConsentPermission(
     reportee,
     isAdmin,
-    currentUser?.partyUuid === reportee?.partyUuid,
+    currentUser?.partyUuid === reportee?.id,
   );
   const {
     data: activeConsents,
@@ -164,8 +165,8 @@ const mapConsentToRequest = (request: ActiveConsentListItem): Request => {
     type: 'consent',
     createdDate: request.createdDate,
     displayPartyName: request.toParty.name,
-    displayPartyType: request.toParty.type === PartyType.Person ? 'person' : 'company',
-    isSubUnit: request.toParty.type === PartyType.SubUnit,
+    displayPartyType: request.toParty.type === PartyEntityType.Person ? 'person' : 'company',
+    isSubUnit: isSubUnitByType(request.toParty.unitType),
     description: request.isPoa ? 'request_page.request_poa' : 'request_page.request_consent',
   };
 };
@@ -226,7 +227,7 @@ const mapAccessRequestToRequest = (
     displayPartyType: partyType,
     partyUuid: party.id,
     organizationIdentifier: party.organizationIdentifier ?? undefined,
-    isSubUnit: isSubUnitByType(party.variant),
+    isSubUnit: isSubUnitByType(party.unitType),
     description: undefined, // Use default description for access requests
     numberOfRequests: numberOfRequests ?? 1,
   };

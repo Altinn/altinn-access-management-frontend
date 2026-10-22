@@ -286,10 +286,11 @@ describe('PartyRepresentationProvider - Acting Party Logic', () => {
 
   test('Case 2: empty connections are handled by regular error handling', async () => {
     const mockReporteeInfo = {
-      partyUuid: mockReporteeParty.partyUuid,
+      id: mockReporteeParty.partyUuid,
       name: mockReporteeParty.name,
-      organizationNumber: '987654321',
-      partyId: '456',
+      type: PartyEntityType.Organization,
+      organizationIdentifier: '987654321',
+      partyId: 456,
       isDeleted: false,
       onlyHierarchyElementWithNoAccess: false,
       authorizedResources: [],

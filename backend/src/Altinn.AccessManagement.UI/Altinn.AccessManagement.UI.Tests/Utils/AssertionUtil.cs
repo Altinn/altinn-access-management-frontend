@@ -368,6 +368,26 @@ namespace Altinn.AccessManagement.UI.Tests.Utils
 
         }
 
+        public static void AssertEqual(AuthorizedPartyFE expected, AuthorizedPartyFE actual)
+        {
+            Assert.NotNull(actual);
+            Assert.NotNull(expected);
+
+            // Assert.Equivalent cannot compare the Children property AuthorizedPartyFE redeclares with new
+            Assert.Equal(expected.Id, actual.Id);
+            Assert.Equal(expected.PartyId, actual.PartyId);
+            Assert.Equal(expected.Name, actual.Name);
+            Assert.Equal(expected.Type, actual.Type);
+            Assert.Equal(expected.UnitType, actual.UnitType);
+            Assert.Equal(expected.OrganizationIdentifier, actual.OrganizationIdentifier);
+            Assert.Equal(expected.DateOfBirth, actual.DateOfBirth);
+            Assert.Equal(expected.IsDeleted, actual.IsDeleted);
+            Assert.Equal(expected.OnlyHierarchyElementWithNoAccess, actual.OnlyHierarchyElementWithNoAccess);
+            Assert.Equal(expected.AuthorizedResources, actual.AuthorizedResources);
+            Assert.Equal(expected.AuthorizedRoles, actual.AuthorizedRoles);
+            AssertCollections(expected.Children, actual.Children, AssertEqual);
+        }
+
         private static void AssertEqual(IdValuePair expected, IdValuePair actual)
         {
             Assert.NotNull(actual);
@@ -723,21 +743,6 @@ namespace Altinn.AccessManagement.UI.Tests.Utils
             AssertCollections(expected.Rights, actual.Rights, AssertEqual);
         }
 
-        public static void AssertEqual(ConsentPartyFE expected, ConsentPartyFE actual)
-        {
-            if (expected == null)
-            {
-                Assert.Null(actual);
-                return;
-            }
-            Assert.NotNull(actual);
-            Assert.NotNull(expected);
-
-            Assert.Equal(expected.Id, actual.Id);
-            Assert.Equal(expected.Name, actual.Name);
-            Assert.Equal(expected.Type, actual.Type);
-        }
-
         /// <summary>
         ///     Assert that two <see cref="OrgData" /> have the same property values.
         /// </summary>
@@ -885,14 +890,22 @@ namespace Altinn.AccessManagement.UI.Tests.Utils
             Assert.Equal(expected.Description, actual.Description);
         }
 
+        // The request expected results only hold id, name and type for the parties
+        private static void AssertEqualRequestParty(PartyFE expected, PartyFE actual)
+        {
+            Assert.Equal(expected.Id, actual.Id);
+            Assert.Equal(expected.Name, actual.Name);
+            Assert.Equal(expected.Type, actual.Type);
+        }
+
         public static void AssertEqual(RequestFE expected, RequestFE actual)
         {
             Assert.NotNull(actual);
             Assert.NotNull(expected);
 
             Assert.Equal(expected.Id, actual.Id);
-            Assert.Equal(expected.From.Id, actual.From.Id);
-            Assert.Equal(expected.To.Id, actual.To.Id);
+            AssertEqualRequestParty(expected.From, actual.From);
+            AssertEqualRequestParty(expected.To, actual.To);
             Assert.Equal(expected.ResourceId, actual.ResourceId);
             Assert.Equal(expected.PackageId, actual.PackageId);
             Assert.Equal(expected.Type, actual.Type);
@@ -906,8 +919,8 @@ namespace Altinn.AccessManagement.UI.Tests.Utils
             Assert.NotNull(expected);
 
             Assert.Equal(expected.Id, actual.Id);
-            Assert.Equal(expected.From.Id, actual.From.Id);
-            Assert.Equal(expected.To.Id, actual.To.Id);
+            AssertEqualRequestParty(expected.From, actual.From);
+            AssertEqualRequestParty(expected.To, actual.To);
             Assert.Equal(expected.ResourceId, actual.ResourceId);
             Assert.Equal(expected.Type, actual.Type);
             Assert.Equal(expected.Status, actual.Status);
@@ -921,8 +934,8 @@ namespace Altinn.AccessManagement.UI.Tests.Utils
             Assert.NotNull(expected);
 
             Assert.Equal(expected.Id, actual.Id);
-            Assert.Equal(expected.From.Id, actual.From.Id);
-            Assert.Equal(expected.To.Id, actual.To.Id);
+            AssertEqualRequestParty(expected.From, actual.From);
+            AssertEqualRequestParty(expected.To, actual.To);
             Assert.Equal(expected.PackageId, actual.PackageId);
             Assert.Equal(expected.Type, actual.Type);
             Assert.Equal(expected.Status, actual.Status);

@@ -71,7 +71,7 @@ export const LandingPage = () => {
   });
   const { data: currentUser, isLoading: currentUserIsLoading } = useGetPartyFromLoggedInUserQuery();
   const actingPartyUuid = getCookie('AltinnPartyUuid') ?? '';
-  const isCurrentUserReportee = reportee?.partyUuid === currentUser?.partyUuid;
+  const isCurrentUserReportee = reportee?.id === currentUser?.partyUuid;
 
   const { requestsBadgeCount, isLoading: isLoadingRequestsBadge } = useSidebarRequestCount({
     isAdmin,
@@ -242,8 +242,8 @@ export const LandingPage = () => {
   const isReporteeSubUnit = isSubUnit(reportee);
 
   const getReporteeDescription = (): string => {
-    if (isOrganization(reportee) && reportee?.organizationNumber) {
-      const orgNrString = `${t('common.org_nr')} ${formatOrgNr(reportee?.organizationNumber)}`;
+    if (isOrganization(reportee) && reportee?.organizationIdentifier) {
+      const orgNrString = `${t('common.org_nr')} ${formatOrgNr(reportee?.organizationIdentifier)}`;
       if (isReporteeSubUnit) {
         return `↳ ${orgNrString}, ${t('common.subunit').toLowerCase()}`;
       }
@@ -261,7 +261,7 @@ export const LandingPage = () => {
         <div className={classes.landingPage}>
           <div className={classes.landingPageHeading}>
             <UserListItem
-              id={reportee?.partyUuid ?? ''}
+              id={reportee?.id ?? ''}
               type={isOrganization(reportee) ? 'company' : 'person'}
               name={reporteeName}
               description={getReporteeDescription()}

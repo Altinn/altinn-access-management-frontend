@@ -257,9 +257,9 @@ export const userHandlers = (ACCESSMANAGEMENT_BASE_URL: string) => [
   }),
   http.get(`${ACCESSMANAGEMENT_BASE_URL}/user/reportee/:id`, () => {
     return HttpResponse.json({
-      partyUuid: '2a2f6ea4-ae81-4098-8e14-a68dec6f9aac',
+      id: '2a2f6ea4-ae81-4098-8e14-a68dec6f9aac',
       name: 'LEVENDE KUNSTIG APE',
-      organizationNumber: '312787075',
+      organizationIdentifier: '312787075',
       partyId: 51506003,
       type: 'Organization',
       unitType: 'FLI',
@@ -290,11 +290,11 @@ export const userHandlers = (ACCESSMANAGEMENT_BASE_URL: string) => [
         'APIADM',
         'A0298',
       ],
-      subunits: [
+      children: [
         {
-          partyUuid: 'fc2e9a43-c74b-42aa-9656-fbae2fabe950',
+          id: 'fc2e9a43-c74b-42aa-9656-fbae2fabe950',
           name: 'LEVENDE KUNSTIG APE',
-          organizationNumber: '311918265',
+          organizationIdentifier: '311918265',
           partyId: 51505983,
           type: 'Organization',
           unitType: 'AAFY',
@@ -325,12 +325,12 @@ export const userHandlers = (ACCESSMANAGEMENT_BASE_URL: string) => [
             'APIADM',
             'A0298',
           ],
-          subunits: [],
+          children: [],
         },
         {
-          partyUuid: '7be4bbc3-032d-4508-acf4-6fdb96ef0d9d',
+          id: '7be4bbc3-032d-4508-acf4-6fdb96ef0d9d',
           name: 'VIS KONGE PANDA',
-          organizationNumber: '313676781',
+          organizationIdentifier: '313676781',
           partyId: 51862126,
           type: 'Organization',
           unitType: 'ADOS',
@@ -338,7 +338,7 @@ export const userHandlers = (ACCESSMANAGEMENT_BASE_URL: string) => [
           onlyHierarchyElementWithNoAccess: false,
           authorizedResources: [],
           authorizedRoles: ['LEDE', 'LOPER', 'ADMAI', 'REGNA', 'SISKD', 'UILUF', 'UTINN', 'UTOMR'],
-          subunits: [],
+          children: [],
         },
       ],
     });

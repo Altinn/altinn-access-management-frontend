@@ -39,7 +39,7 @@ export const useSidebarItems = ({ isSmall }: { isSmall?: boolean }) => {
   const { t } = useTranslation();
   const { data: currentUser } = useGetPartyFromLoggedInUserQuery();
   const { data: reportee, isLoading: isLoadingReportee } = useGetReporteeQuery();
-  const isCurrentUserReportee = reportee?.partyUuid === currentUser?.partyUuid;
+  const isCurrentUserReportee = reportee?.id === currentUser?.partyUuid;
 
   const { data: roles } = useGetRolePermissionsQuery(
     {
