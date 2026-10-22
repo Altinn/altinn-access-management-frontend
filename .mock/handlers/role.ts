@@ -1,17 +1,24 @@
 import { http, HttpResponse } from 'msw';
 
-type Entity = {
+type MockParty = {
   id: string;
   name: string;
-  type: string;
-  variant: string;
+  type: 'Person' | 'Organization';
+  unitType: string | null;
+  isDeleted: boolean;
 };
 
-const createEntity = (id: string, name: string, type = 'Organization', variant = 'AS'): Entity => ({
+const createEntity = (
+  id: string,
+  name: string,
+  type: MockParty['type'] = 'Organization',
+  unitType: string | null = 'AS',
+): MockParty => ({
   id,
   name,
   type,
-  variant,
+  unitType,
+  isDeleted: false,
 });
 
 const roleResponse = {
@@ -132,7 +139,7 @@ const scenarioMap: Record<string, any[]> = {
   'party-via-role-employee': [
     {
       from: createEntity('org-aktiv-epoke', 'Aktiv Epoke AS'),
-      to: createEntity('party-via-role-employee', 'Fiona Økonom', 'Person', 'Person'),
+      to: createEntity('party-via-role-employee', 'Fiona Økonom', 'Person', null),
       via: createEntity('org-aktiv-epoke', 'Aktiv Epoke AS'),
       role: null,
       viaRole: viaRole('via-role-2', 'regnskapsforer'),

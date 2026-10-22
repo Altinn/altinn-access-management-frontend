@@ -1,4 +1,4 @@
-using Altinn.AccessManagement.UI.Core.Models.AccessPackage;
+using Altinn.AccessManagement.UI.Core.Models.AccessPackage.Frontend;
 using Altinn.AccessManagement.UI.Core.Models.ResourceRegistry.Frontend;
 
 namespace Altinn.AccessManagement.UI.Core.Models.SingleRight
@@ -16,12 +16,12 @@ namespace Altinn.AccessManagement.UI.Core.Models.SingleRight
         /// <summary>
         ///     List of permissions for the delegation
         /// </summary>
-        public List<Permission> Permissions { get; set; }
+        public List<PermissionFE> Permissions { get; set; }
 
         /// <summary>
         ///     Constructor
         /// </summary>
-        public ResourceDelegation(ServiceResourceFE resource, List<Permission> permissions)
+        public ResourceDelegation(ServiceResourceFE resource, List<PermissionFE> permissions)
         {
             Resource = resource;
             Permissions = permissions;

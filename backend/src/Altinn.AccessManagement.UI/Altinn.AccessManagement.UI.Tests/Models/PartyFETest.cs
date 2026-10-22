@@ -112,6 +112,29 @@ namespace Altinn.AccessManagement.UI.Tests.Models
         }
 
         /// <summary>
+        /// A subunit keeps its main unit as parent
+        /// </summary>
+        [Fact]
+        public void FromCompactEntity_MapsParent()
+        {
+            var parentId = Guid.NewGuid();
+            var entity = new CompactEntity
+            {
+                Name = "SUBUNIT",
+                Type = "Organisasjon",
+                Variant = "BEDR",
+                Parent = new CompactEntity { Id = parentId, Name = "MAIN UNIT", Type = "Organisasjon", Variant = "AS" },
+            };
+
+            PartyFE actual = PartyFE.FromCompactEntity(entity);
+
+            Assert.Equal(parentId, actual.Parent.Id);
+            Assert.Equal("MAIN UNIT", actual.Parent.Name);
+            Assert.Equal("AS", actual.Parent.UnitType);
+            Assert.Null(PartyFE.FromCompactEntity(new CompactEntity { Name = "NO PARENT" }).Parent);
+        }
+
+        /// <summary>
         /// Simplified parties map without party id or children
         /// </summary>
         [Fact]

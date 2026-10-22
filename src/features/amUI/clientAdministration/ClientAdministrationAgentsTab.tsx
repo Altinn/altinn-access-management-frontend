@@ -11,7 +11,7 @@ import { AddAgentButton } from '../users/NewUserModal/AddAgentModal';
 import { UserSearch } from '../common/UserSearch/UserSearch';
 import { usePartyRepresentation } from '../common/PartyRepresentationContext/PartyRepresentationContext';
 import { mapConnectionsToUserSearchNodes } from '../common/UserSearch/connectionMapper';
-import { mapEntityToUserSearchNode } from '../common/UserSearch/mapperUtils';
+import { mapPartyToUserSearchNode } from '../common/UserSearch/mapperUtils';
 import {
   RestoreFocusFallback,
   RestoreFocusProvider,
@@ -56,7 +56,10 @@ const ClientAdministrationAgentsTabContent = ({ isActive }: ClientAdministration
   const users = useMemo(
     () =>
       agents?.map((agent) =>
-        mapEntityToUserSearchNode(agent.agent, { addedAt: agent.agentAddedAt }),
+        mapPartyToUserSearchNode(
+          { ...agent.agent, children: null },
+          { addedAt: agent.agentAddedAt },
+        ),
       ) ?? [],
     [agents],
   );

@@ -4,6 +4,7 @@ using Altinn.AccessManagement.UI.Core.Models.AccessManagement;
 using Altinn.AccessManagement.UI.Core.Models.AccessPackage;
 using Altinn.AccessManagement.UI.Core.Models.AccessPackage.Frontend;
 using Altinn.AccessManagement.UI.Core.Models.Common;
+using Altinn.AccessManagement.UI.Core.Models.Common.Frontend;
 using Altinn.AccessManagement.UI.Core.Models.Consent;
 using Altinn.AccessManagement.UI.Core.Models.Consent.Frontend;
 using Altinn.AccessManagement.UI.Core.Models.Dialogporten;
@@ -16,6 +17,7 @@ using Altinn.AccessManagement.UI.Core.Models.ResourceRegistry.Frontend;
 using Altinn.AccessManagement.UI.Core.Models.Role;
 using Altinn.AccessManagement.UI.Core.Models.Role.Frontend;
 using Altinn.AccessManagement.UI.Core.Models.SingleRight;
+using Altinn.AccessManagement.UI.Core.Models.SingleRight.Frontend;
 using Altinn.AccessManagement.UI.Core.Models.SystemUser.Frontend;
 using Altinn.AccessManagement.UI.Core.Models.User;
 using Microsoft.AspNetCore.Mvc;
@@ -184,11 +186,11 @@ namespace Altinn.AccessManagement.UI.Tests.Utils
         }
 
         /// <summary>
-        ///     Assert that two <see cref="InstanceRights" /> have the same property values.
+        ///     Assert that two <see cref="InstanceRightsFE" /> have the same property values.
         /// </summary>
         /// <param name="expected">An instance with the expected values.</param>
         /// <param name="actual">The instance to verify.</param>
-        public static void AssertEqual(InstanceRights expected, InstanceRights actual)
+        public static void AssertEqual(InstanceRightsFE expected, InstanceRightsFE actual)
         {
             Assert.NotNull(actual);
             Assert.NotNull(expected);
@@ -411,7 +413,7 @@ namespace Altinn.AccessManagement.UI.Tests.Utils
 
         }
 
-        public static void AssertEqual(PackagePermission expected, PackagePermission actual)
+        public static void AssertEqual(PackagePermissionFE expected, PackagePermissionFE actual)
         {
             Assert.NotNull(actual);
             Assert.NotNull(expected);
@@ -430,7 +432,7 @@ namespace Altinn.AccessManagement.UI.Tests.Utils
             Assert.Equal(expected.Urn, actual.Urn);
         }
 
-        public static void AssertEqual(Permission expected, Permission actual)
+        public static void AssertEqual(PermissionFE expected, PermissionFE actual)
         {
             Assert.NotNull(actual);
             Assert.NotNull(expected);
@@ -454,13 +456,9 @@ namespace Altinn.AccessManagement.UI.Tests.Utils
         }
 
 
-        public static void AssertEqual(CompactEntity expected, CompactEntity actual)
+        public static void AssertEqual(PartyFE expected, PartyFE actual)
         {
-            Assert.Equal(expected?.Id, actual?.Id);
-            Assert.Equal(expected?.Name, actual?.Name);
-            Assert.Equal(expected?.OrganizationIdentifier, actual?.OrganizationIdentifier);
-            Assert.Equal(expected?.DateOfBirth, actual?.DateOfBirth);
-            Assert.Equal(expected?.PartyId, actual?.PartyId);
+            Assert.Equivalent(expected, actual, strict: true);
         }
 
         public static void AssertEqual(Core.Models.Common.Role expected, Core.Models.Common.Role actual)
@@ -480,7 +478,7 @@ namespace Altinn.AccessManagement.UI.Tests.Utils
             Assert.Equal(expected?.LegacyUrn, actual?.LegacyUrn);
         }
 
-        public static void AssertEqual(RightAccess expected, RightAccess actual)
+        public static void AssertEqual(RightAccessFE expected, RightAccessFE actual)
         {
             Assert.NotNull(actual);
             Assert.NotNull(expected);

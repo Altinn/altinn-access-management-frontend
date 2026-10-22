@@ -4,6 +4,7 @@ using System.Net.Http.Json;
 using System.Text;
 using Altinn.AccessManagement.UI.Controllers;
 using Altinn.AccessManagement.UI.Core.Models.ClientDelegation;
+using Altinn.AccessManagement.UI.Core.Models.ClientDelegation.Frontend;
 using Altinn.AccessManagement.UI.Core.Models.Connections;
 using Altinn.AccessManagement.UI.Mocks.Utils;
 using Altinn.AccessManagement.UI.Tests.Utils;
@@ -50,13 +51,13 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
         {
             Guid provider = Guid.Parse("cd35779b-b174-4ecc-bbef-ece13611be7f");
             string path = Path.Combine(_testDataFolder, "myClients.json");
-            List<MyClientDelegation> expectedResponse = Util.GetMockData<List<MyClientDelegation>>(path);
+            List<MyClientDelegationFE> expectedResponse = Util.GetMockData<List<MyClientDelegationFE>>(path);
             SetAuthHeader();
 
             HttpResponseMessage response = await _client.GetAsync(
                 $"accessmanagement/api/v1/clientdelegations/my/clients?provider={provider}");
-            List<MyClientDelegation> actualResponse =
-                await response.Content.ReadFromJsonAsync<List<MyClientDelegation>>();
+            List<MyClientDelegationFE> actualResponse =
+                await response.Content.ReadFromJsonAsync<List<MyClientDelegationFE>>();
 
             Assert.Equal(HttpStatusCode.OK, response.StatusCode);
             Assert.NotNull(actualResponse);
@@ -335,11 +336,11 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
         {
             Guid party = Guid.Parse("cd35779b-b174-4ecc-bbef-ece13611be7f");
             string path = Path.Combine(_testDataFolder, "clients.json");
-            List<ClientDelegation> expectedResponse = Util.GetMockData<List<ClientDelegation>>(path);
+            List<ClientDelegationFE> expectedResponse = Util.GetMockData<List<ClientDelegationFE>>(path);
             SetAuthHeader();
 
             HttpResponseMessage response = await _client.GetAsync($"accessmanagement/api/v1/clientdelegations/clients?party={party}");
-            List<ClientDelegation> actualResponse = await response.Content.ReadFromJsonAsync<List<ClientDelegation>>();
+            List<ClientDelegationFE> actualResponse = await response.Content.ReadFromJsonAsync<List<ClientDelegationFE>>();
 
             Assert.Equal(HttpStatusCode.OK, response.StatusCode);
             Assert.NotNull(actualResponse);
@@ -399,11 +400,11 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
         {
             Guid party = Guid.Parse("cd35779b-b174-4ecc-bbef-ece13611be7f");
             string path = Path.Combine(_testDataFolder, "agents.json");
-            List<AgentDelegation> expectedResponse = Util.GetMockData<List<AgentDelegation>>(path);
+            List<AgentDelegationFE> expectedResponse = Util.GetMockData<List<AgentDelegationFE>>(path);
             SetAuthHeader();
 
             HttpResponseMessage response = await _client.GetAsync($"accessmanagement/api/v1/clientdelegations/agents?party={party}");
-            List<AgentDelegation> actualResponse = await response.Content.ReadFromJsonAsync<List<AgentDelegation>>();
+            List<AgentDelegationFE> actualResponse = await response.Content.ReadFromJsonAsync<List<AgentDelegationFE>>();
 
             Assert.Equal(HttpStatusCode.OK, response.StatusCode);
             Assert.NotNull(actualResponse);
@@ -464,11 +465,11 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
             Guid party = Guid.Parse("cd35779b-b174-4ecc-bbef-ece13611be7f");
             Guid to = Guid.Parse("1c9f2b8b-779e-4f7e-a04a-3f2a3c2dd8b4");
             string path = Path.Combine(_testDataFolder, "agentsAccessPackages.json");
-            List<ClientDelegation> expectedResponse = Util.GetMockData<List<ClientDelegation>>(path);
+            List<ClientDelegationFE> expectedResponse = Util.GetMockData<List<ClientDelegationFE>>(path);
             SetAuthHeader();
 
             HttpResponseMessage response = await _client.GetAsync($"accessmanagement/api/v1/clientdelegations/agents/accesspackages?party={party}&to={to}");
-            List<ClientDelegation> actualResponse = await response.Content.ReadFromJsonAsync<List<ClientDelegation>>();
+            List<ClientDelegationFE> actualResponse = await response.Content.ReadFromJsonAsync<List<ClientDelegationFE>>();
 
             Assert.Equal(HttpStatusCode.OK, response.StatusCode);
             Assert.NotNull(actualResponse);
@@ -520,11 +521,11 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
             Guid party = Guid.Parse("cd35779b-b174-4ecc-bbef-ece13611be7f");
             Guid from = Guid.Parse("1c9f2b8b-779e-4f7e-a04a-3f2a3c2dd8b4");
             string path = Path.Combine(_testDataFolder, "clientsAccessPackages.json");
-            List<AgentDelegation> expectedResponse = Util.GetMockData<List<AgentDelegation>>(path);
+            List<AgentDelegationFE> expectedResponse = Util.GetMockData<List<AgentDelegationFE>>(path);
             SetAuthHeader();
 
             HttpResponseMessage response = await _client.GetAsync($"accessmanagement/api/v1/clientdelegations/clients/accesspackages?party={party}&from={from}");
-            List<AgentDelegation> actualResponse = await response.Content.ReadFromJsonAsync<List<AgentDelegation>>();
+            List<AgentDelegationFE> actualResponse = await response.Content.ReadFromJsonAsync<List<AgentDelegationFE>>();
 
             Assert.Equal(HttpStatusCode.OK, response.StatusCode);
             Assert.NotNull(actualResponse);
@@ -1067,7 +1068,7 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
 
             HttpResponseMessage response = await _client.GetAsync(
                 $"accessmanagement/api/v1/clientdelegations/agents/resources?party={party}&to={to}");
-            List<ClientDelegation> actualResponse = await response.Content.ReadFromJsonAsync<List<ClientDelegation>>();
+            List<ClientDelegationFE> actualResponse = await response.Content.ReadFromJsonAsync<List<ClientDelegationFE>>();
 
             Assert.Equal(HttpStatusCode.OK, response.StatusCode);
             CompactResource resource = Assert.Single(Assert.Single(Assert.Single(actualResponse).Access).Resources);
@@ -1134,7 +1135,7 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
 
             HttpResponseMessage response = await _client.GetAsync(
                 $"accessmanagement/api/v1/clientdelegations/clients/resources?party={party}&from={from}");
-            List<AgentDelegation> actualResponse = await response.Content.ReadFromJsonAsync<List<AgentDelegation>>();
+            List<AgentDelegationFE> actualResponse = await response.Content.ReadFromJsonAsync<List<AgentDelegationFE>>();
 
             Assert.Equal(HttpStatusCode.OK, response.StatusCode);
             CompactResource resource = Assert.Single(Assert.Single(Assert.Single(actualResponse).Access).Resources);

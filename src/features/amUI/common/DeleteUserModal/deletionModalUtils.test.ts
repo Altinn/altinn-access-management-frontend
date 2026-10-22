@@ -1,7 +1,7 @@
 import { describe, it, expect } from 'vitest';
 
 import { type RolePermission } from '@/rtk/features/roleApi';
-import { type Entity } from '@/dataObjects/dtos/Common';
+import { PartyEntityType, type PartyEntity } from '@/dataObjects/dtos/Party';
 
 import {
   A2_PROVIDER_CODE,
@@ -36,11 +36,12 @@ type rolePermissionSetting = {
   isRevocable?: boolean;
 };
 
-const defaultEntity: Entity = {
+const defaultEntity: PartyEntity = {
   id: 'entity-id',
   name: 'Entity Name',
-  type: 'entity-type',
-  variant: 'entity-variant',
+  type: PartyEntityType.Organization,
+  unitType: 'AS',
+  isDeleted: false,
 };
 
 const mockRolePermissions = (settings: rolePermissionSetting[]): RolePermission[] => {

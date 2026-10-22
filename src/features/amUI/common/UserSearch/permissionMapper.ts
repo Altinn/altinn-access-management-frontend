@@ -1,7 +1,7 @@
 import type { Permissions } from '@/dataObjects/dtos/accessPackage';
-import type { Entity } from '@/dataObjects/dtos/Common';
+import type { PartyEntity } from '@/dataObjects/dtos/Party';
 
-import { addRole, mapEntityToUserSearchNode } from './mapperUtils';
+import { addRole, mapPartyToUserSearchNode } from './mapperUtils';
 import type { UserSearchNode } from './types';
 
 export const mapPermissionsToUserSearchNodes = (
@@ -12,7 +12,14 @@ export const mapPermissionsToUserSearchNodes = (
     return [];
   }
 
-  const hasViaEntity = (permission: Permissions) => permission.via != null;
+  const hasViaEntity = (
+    permission: Permissions,
+  ): permission is Permissions & { via: PartyEntity } => permission.via != null;
+
+  const toNode = (party: PartyEntity, isInherited: boolean): UserSearchNode => ({
+    ...mapPartyToUserSearchNode(party, { isInherited }),
+    children: null,
+  });
 
   const nodes: UserSearchNode[] = [];
   const sortedPermissions = [...permissions].sort((a, b) => {
@@ -34,7 +41,7 @@ export const mapPermissionsToUserSearchNodes = (
     return false;
   };
 
-  const getOrCreateTopLevelPermissionNode = (entity: Entity, inherited: boolean) => {
+  const getOrCreateTopLevelPermissionNode = (entity: PartyEntity, inherited: boolean) => {
     const existingNode = nodes.find((node) => node.id === entity.id);
 
     if (existingNode) {
@@ -42,14 +49,14 @@ export const mapPermissionsToUserSearchNodes = (
       return existingNode;
     }
 
-    const newNode = mapEntityToUserSearchNode(entity, { isInherited: inherited });
+    const newNode = toNode(entity, inherited);
     nodes.push(newNode);
     return newNode;
   };
 
   const getOrCreateChildPermissionNode = (
     parent: UserSearchNode,
-    entity: Entity,
+    entity: PartyEntity,
     inherited: boolean,
   ) => {
     const children = parent.children ?? [];
@@ -60,7 +67,7 @@ export const mapPermissionsToUserSearchNodes = (
       return existingChild;
     }
 
-    const newChild = mapEntityToUserSearchNode(entity, { isInherited: inherited });
+    const newChild = toNode(entity, inherited);
     parent.children = [newChild, ...children];
     return newChild;
   };

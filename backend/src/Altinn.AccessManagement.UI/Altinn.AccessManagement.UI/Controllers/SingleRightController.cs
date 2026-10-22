@@ -1,5 +1,6 @@
 using Altinn.AccessManagement.UI.Core.Helpers;
 using Altinn.AccessManagement.UI.Core.Models.SingleRight;
+using Altinn.AccessManagement.UI.Core.Models.SingleRight.Frontend;
 using Altinn.AccessManagement.UI.Core.Services.Interfaces;
 using Altinn.AccessManagement.UI.Filters;
 using Microsoft.AspNetCore.Authorization;
@@ -177,12 +178,12 @@ namespace Altinn.AccessManagement.UI.Controllers
         [HttpGet]
         [Authorize]
         [Route("delegation/resources/rights")]
-        public async Task<ActionResult<ResourceRight>> GetDelegatedResourceRights([FromQuery] Guid party, [FromQuery] Guid from, [FromQuery] Guid to, [FromQuery] string resourceId)
+        public async Task<ActionResult<ResourceRightFE>> GetDelegatedResourceRights([FromQuery] Guid party, [FromQuery] Guid from, [FromQuery] Guid to, [FromQuery] string resourceId)
         {
             var languageCode = LanguageHelper.GetSelectedLanguageCookieValueBackendStandard(_httpContextAccessor.HttpContext);
             try
             {
-                ResourceRight delegations = await _singleRightService.GetDelegatedResourceRights(languageCode, party, from, to, resourceId);
+                ResourceRightFE delegations = await _singleRightService.GetDelegatedResourceRights(languageCode, party, from, to, resourceId);
                 return Ok(delegations);
             }
             catch (HttpStatusException statusEx)

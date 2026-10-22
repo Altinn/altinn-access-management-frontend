@@ -1,4 +1,4 @@
-using Altinn.AccessManagement.UI.Core.Models.AccessPackage;
+using Altinn.AccessManagement.UI.Core.Models.AccessPackage.Frontend;
 using Altinn.AccessManagement.UI.Core.Models.Dialogporten;
 using Altinn.AccessManagement.UI.Core.Models.ResourceRegistry.Frontend;
 
@@ -22,7 +22,7 @@ namespace Altinn.AccessManagement.UI.Core.Models.InstanceDelegation.Frontend
         /// <summary>
         /// Gets or sets the permissions for the delegation.
         /// </summary>
-        public List<Permission> Permissions { get; set; }
+        public List<PermissionFE> Permissions { get; set; }
 
         /// <summary>
         /// Gets or sets dialogporten lookup metadata for the delegated instance.
@@ -36,7 +36,7 @@ namespace Altinn.AccessManagement.UI.Core.Models.InstanceDelegation.Frontend
         /// <param name="instance">The delegated instance.</param>
         /// <param name="permissions">The delegation permissions.</param>
         /// <param name="dialogLookup">Dialogporten lookup metadata for the delegated instance.</param>
-        public InstanceDelegation(ServiceResourceFE resource, DelegationInstance instance, List<Permission> permissions, DialogLookup dialogLookup = null)
+        public InstanceDelegation(ServiceResourceFE resource, DelegationInstance instance, List<PermissionFE> permissions, DialogLookup dialogLookup = null)
         {
             Resource = resource;
             Instance = instance;

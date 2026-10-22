@@ -497,11 +497,11 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
             string resource = "generic-access-resource";
             string instance = "urn:altinn:instance-id:51599233/df333e75-5896-4254-a69f-146736eaf668";
             string path = Path.Combine(_mockFolder, "Data", "ExpectedResults", "Instance", "GetInstanceRights", $"{resource}.json");
-            InstanceRights expectedResponse = Util.GetMockData<InstanceRights>(path);
+            InstanceRightsFE expectedResponse = Util.GetMockData<InstanceRightsFE>(path);
 
             HttpResponseMessage httpResponse = await _client.GetAsync(
                 $"accessmanagement/api/v1/instances/delegation/instances/rights?party={party}&from={from}&to={to}&resource={resource}&instance={Uri.EscapeDataString(instance)}");
-            InstanceRights actualResponse = await httpResponse.Content.ReadFromJsonAsync<InstanceRights>();
+            InstanceRightsFE actualResponse = await httpResponse.Content.ReadFromJsonAsync<InstanceRightsFE>();
 
             Assert.Equal(HttpStatusCode.OK, httpResponse.StatusCode);
             AssertionUtil.AssertEqual(expectedResponse, actualResponse);

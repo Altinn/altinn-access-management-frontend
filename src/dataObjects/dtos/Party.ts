@@ -17,6 +17,8 @@ export interface PartyEntity {
   dateOfBirth?: string | null;
   isDeleted: boolean;
   children?: PartyEntity[] | null;
+  /** The main unit, for a subunit */
+  parent?: PartyEntity | null;
 }
 
 /** A party the user can act on behalf of, as sent by the BFF (AuthorizedPartyFE). */

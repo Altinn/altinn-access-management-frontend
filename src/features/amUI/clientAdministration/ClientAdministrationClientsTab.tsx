@@ -6,7 +6,7 @@ import { type Client, useGetClientsQuery } from '@/rtk/features/clientApi';
 
 import { UserSearch } from '../common/UserSearch/UserSearch';
 import { buildClientParentNameById, buildClientSortKey } from '../common/clientSortUtils';
-import { mapEntityToUserSearchNode } from '../common/UserSearch/mapperUtils';
+import { mapPartyToUserSearchNode } from '../common/UserSearch/mapperUtils';
 import type { UserSearchNode } from '../common/UserSearch/types';
 import { filterDeletedParties } from '../common/deletedPartyUtils';
 
@@ -19,9 +19,12 @@ const buildClientUsers = (clients?: Client[]): UserSearchNode[] => {
   const parentNameById = buildClientParentNameById(clients);
 
   return clients.map((client) =>
-    mapEntityToUserSearchNode(client.client, {
-      sortKey: buildClientSortKey(client, parentNameById),
-    }),
+    mapPartyToUserSearchNode(
+      { ...client.client, children: null },
+      {
+        sortKey: buildClientSortKey(client, parentNameById),
+      },
+    ),
   );
 };
 

@@ -49,7 +49,7 @@ export const ConsumerPage = () => {
       partyTypeName: PartyType.Organization,
       orgNumber: party.organizationIdentifier ?? '',
       isDeleted: party.isDeleted ?? false,
-      unitType: party.variant ?? '',
+      unitType: party.unitType ?? '',
     };
   }, [consumer]);
 

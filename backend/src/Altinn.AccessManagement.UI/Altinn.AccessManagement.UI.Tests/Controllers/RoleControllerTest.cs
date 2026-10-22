@@ -9,6 +9,7 @@ using Altinn.AccessManagement.UI.Core.ClientInterfaces;
 using Altinn.AccessManagement.UI.Core.Configuration;
 using Altinn.AccessManagement.UI.Core.Models.AccessPackage;
 using Altinn.AccessManagement.UI.Core.Models.Role;
+using Altinn.AccessManagement.UI.Core.Models.Role.Frontend;
 using Altinn.AccessManagement.UI.Mocks.Mocks;
 using Altinn.AccessManagement.UI.Mocks.Utils;
 using Altinn.AccessManagement.UI.Tests.Utils;
@@ -59,8 +60,8 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
 
             Assert.Equal(HttpStatusCode.OK, response.StatusCode);
 
-            List<RolePermission> actual = JsonSerializer.Deserialize<List<RolePermission>>(await response.Content.ReadAsStringAsync(), _serializerOptions);
-            List<RolePermission> expected = Util.GetMockData<List<RolePermission>>($"{ExpectedDataPath}/Role/Permissions/{ShortenIdentifier(from)}_{ShortenIdentifier(to)}.json");
+            List<RolePermissionFE> actual = JsonSerializer.Deserialize<List<RolePermissionFE>>(await response.Content.ReadAsStringAsync(), _serializerOptions);
+            List<RolePermissionFE> expected = Util.GetMockData<List<RolePermissionFE>>($"{ExpectedDataPath}/Role/Permissions/{ShortenIdentifier(from)}_{ShortenIdentifier(to)}.json");
 
             Assert.NotNull(actual);
             Assert.Equivalent(expected, actual);

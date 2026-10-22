@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using System.Net.Http;
 using Altinn.AccessManagement.UI.Core.Models.ClientDelegation;
+using Altinn.AccessManagement.UI.Core.Models.ClientDelegation.Frontend;
 using Altinn.AccessManagement.UI.Core.Models.Common;
 using Altinn.AccessManagement.UI.Core.Models.Connections;
 
@@ -18,7 +19,7 @@ namespace Altinn.AccessManagement.UI.Core.Services.Interfaces
         /// <param name="provider">Optional provider party uuids.</param>
         /// <param name="cancellationToken">Cancellation token.</param>
         /// <returns>A collection of providers and their delegated clients.</returns>
-        Task<IEnumerable<MyClientDelegation>> GetMyClients(string languageCode, List<Guid> provider = null, CancellationToken cancellationToken = default);
+        Task<IEnumerable<MyClientDelegationFE>> GetMyClients(string languageCode, List<Guid> provider = null, CancellationToken cancellationToken = default);
 
         /// <summary>
         /// Removes a provider relationship for the authenticated user, including delegated client access.
@@ -44,7 +45,7 @@ namespace Altinn.AccessManagement.UI.Core.Services.Interfaces
         /// <param name="roles">Optional list of role identifiers to filter by.</param>
         /// <param name="cancellationToken">Cancellation token.</param>
         /// <returns>A collection of clients.</returns>
-        Task<IEnumerable<ClientDelegation>> GetClients(Guid party, string languageCode, List<string> roles = null, CancellationToken cancellationToken = default);
+        Task<IEnumerable<ClientDelegationFE>> GetClients(Guid party, string languageCode, List<string> roles = null, CancellationToken cancellationToken = default);
 
         /// <summary>
         /// Gets the agents for the specified party.
@@ -53,7 +54,7 @@ namespace Altinn.AccessManagement.UI.Core.Services.Interfaces
         /// <param name="languageCode">Language code used when looking up resource names.</param>
         /// <param name="cancellationToken">Cancellation token.</param>
         /// <returns>A collection of agents.</returns>
-        Task<IEnumerable<AgentDelegation>> GetAgents(Guid party, string languageCode, CancellationToken cancellationToken = default);
+        Task<IEnumerable<AgentDelegationFE>> GetAgents(Guid party, string languageCode, CancellationToken cancellationToken = default);
 
         /// <summary>
         /// Gets the access packages delegated to an agent via the specified party.
@@ -63,7 +64,7 @@ namespace Altinn.AccessManagement.UI.Core.Services.Interfaces
         /// <param name="languageCode">Language code used when looking up resource names.</param>
         /// <param name="cancellationToken">Cancellation token.</param>
         /// <returns>A collection of clients with delegated access packages.</returns>
-        Task<IEnumerable<ClientDelegation>> GetAgentAccessPackages(Guid party, Guid to, string languageCode, CancellationToken cancellationToken = default);
+        Task<IEnumerable<ClientDelegationFE>> GetAgentAccessPackages(Guid party, Guid to, string languageCode, CancellationToken cancellationToken = default);
 
         /// <summary>
         /// Gets the access packages delegated from a client via the specified party.
@@ -73,7 +74,7 @@ namespace Altinn.AccessManagement.UI.Core.Services.Interfaces
         /// <param name="languageCode">Language code used when looking up resource names.</param>
         /// <param name="cancellationToken">Cancellation token.</param>
         /// <returns>A collection of agents with delegated access packages.</returns>
-        Task<IEnumerable<AgentDelegation>> GetClientAccessPackages(Guid party, Guid from, string languageCode, CancellationToken cancellationToken = default);
+        Task<IEnumerable<AgentDelegationFE>> GetClientAccessPackages(Guid party, Guid from, string languageCode, CancellationToken cancellationToken = default);
 
         /// <summary>
         /// Adds access packages for an agent via the specified party.
@@ -104,7 +105,7 @@ namespace Altinn.AccessManagement.UI.Core.Services.Interfaces
         /// <param name="languageCode">Language code used when looking up resource names.</param>
         /// <param name="cancellationToken">Cancellation token.</param>
         /// <returns>A collection of clients with delegated resources.</returns>
-        Task<IEnumerable<ClientDelegation>> GetAgentResources(Guid party, Guid to, string languageCode, CancellationToken cancellationToken = default);
+        Task<IEnumerable<ClientDelegationFE>> GetAgentResources(Guid party, Guid to, string languageCode, CancellationToken cancellationToken = default);
 
         /// <summary>
         /// Gets the resources delegated from a client via the specified party.
@@ -114,7 +115,7 @@ namespace Altinn.AccessManagement.UI.Core.Services.Interfaces
         /// <param name="languageCode">Language code used when looking up resource names.</param>
         /// <param name="cancellationToken">Cancellation token.</param>
         /// <returns>A collection of agents with delegated resources.</returns>
-        Task<IEnumerable<AgentDelegation>> GetClientResources(Guid party, Guid from, string languageCode, CancellationToken cancellationToken = default);
+        Task<IEnumerable<AgentDelegationFE>> GetClientResources(Guid party, Guid from, string languageCode, CancellationToken cancellationToken = default);
 
         /// <summary>
         /// Adds resources for an agent via the specified party.
