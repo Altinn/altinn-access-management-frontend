@@ -1,144 +1,248 @@
-﻿using Altinn.Register.Contracts.V1;
+using Altinn.AccessManagement.UI.Core.Enums;
+using Altinn.AccessManagement.UI.Core.Models.AccessManagement;
+using Altinn.AccessManagement.UI.Core.Models.User;
+using RegisterParty = Altinn.Register.Contracts.Party;
+using RegisterPartyType = Altinn.Register.Contracts.PartyType;
+using RegisterV1Party = Altinn.Register.Contracts.V1.Party;
+using RegisterV1PartyType = Altinn.Register.Contracts.V1.PartyType;
 
-namespace Altinn.AccessManagement.UI.Core.Models
+namespace Altinn.AccessManagement.UI.Core.Models.Common.Frontend
 {
     /// <summary>
-    /// Class representing a party for use in GUI (equal to the one from registry but without ssn)
+    /// A person, organization or system user, as sent to the frontend.
+    /// Services map their platform party models to this with the From* factories.
     /// </summary>
     public class PartyFE
     {
         /// <summary>
-        /// Gets or sets the ID of the party
+        /// Gets or sets the party uuid
         /// </summary>
-        public int PartyId { get; set; }
+        public Guid Id { get; set; }
 
         /// <summary>
-        /// Gets or sets the UUID of the party
+        /// Gets or sets the party id, when known
         /// </summary>
-        public Guid? PartyUuid { get; set; }
+        public int? PartyId { get; set; }
 
         /// <summary>
-        /// Gets or sets the type of party
-        /// </summary>
-        public PartyType PartyTypeName { get; set; }
-
-        /// <summary>
-        /// Gets the parties org number
-        /// </summary>
-        public string OrgNumber { get; set; }
-
-        /// <summary>
-        /// Gets or sets the UnitType
-        /// </summary>
-        public string UnitType { get; set; }
-
-        /// <summary>
-        /// Gets or sets the Name
+        /// Gets or sets the name
         /// </summary>
         public string Name { get; set; }
 
         /// <summary>
-        /// Gets or sets the IsDeleted
+        /// Gets or sets the party type
+        /// </summary>
+        public PartyTypeFE Type { get; set; }
+
+        /// <summary>
+        /// Gets or sets the unit type (AS, BEDR, AAFY …). Only set for organizations; subunits are recognized by it.
+        /// </summary>
+        public string UnitType { get; set; }
+
+        /// <summary>
+        /// Gets or sets the organization number
+        /// </summary>
+        public string OrganizationIdentifier { get; set; }
+
+        /// <summary>
+        /// Gets or sets the date of birth (yyyy-MM-dd)
+        /// </summary>
+        public string DateOfBirth { get; set; }
+
+        /// <summary>
+        /// Gets or sets a value indicating whether the party is deleted
         /// </summary>
         public bool IsDeleted { get; set; }
 
         /// <summary>
-        /// Gets or sets the DateOfBirth
+        /// Gets or sets the child parties (subunits)
         /// </summary>
-        public DateOnly? DateOfBirth { get; set; }
+        public List<PartyFE> Children { get; set; }
 
         /// <summary>
-        /// Gets or sets a value indicating whether if the reportee in the list is only there for showing the hierarchy (a parent unit with no access)
+        /// Maps an entity from the access management connection endpoints
         /// </summary>
-        public bool OnlyHierarchyElementWithNoAccess { get; set; }
-
-        /// <summary>
-        /// Gets or sets the person details for this party (will only be set if the party type is Person)
-        /// </summary>
-        public PersonFE Person { get; set; }
-
-        /// <summary>
-        /// Gets or sets the organization details for this party (will only be set if the party type is Organization)
-        /// </summary>
-        public Organization Organization { get; set; }
-
-        /// <summary>
-        /// Gets or sets the value of ChildParties
-        /// </summary>
-        public List<PartyFE> ChildParties { get; set; }
-
-        /// <summary>
-        /// Creates a PartyFE object from a Party object
-        /// </summary>
-        /// <param name="party">A Party object</param>
-        public PartyFE(Party party)
+        public static PartyFE FromEntity(Entity entity)
         {
-            PartyId = party.PartyId;
-            PartyUuid = party.PartyUuid;
-            PartyTypeName = (PartyType)party.PartyTypeName;
-            Name = party.Name;
-            IsDeleted = party.IsDeleted;
-            OrgNumber = party.OrgNumber;
-            UnitType = party.UnitType;
-            OnlyHierarchyElementWithNoAccess = party.OnlyHierarchyElementWithNoAccess;
-            Person = party.Person == null ? null : new PersonFE(party.Person);
-            Organization = party.Organization;
-            ChildParties = party.ChildParties == null ? null : MakeChildPartyFEList(party?.ChildParties.ToList());
+            if (entity == null)
+            {
+                return null;
+            }
+
+            PartyTypeFE type = ParseType(entity.Type);
+            return new PartyFE
+            {
+                Id = entity.Id,
+                PartyId = entity.PartyId,
+                Name = entity.Name,
+                Type = type,
+                UnitType = type == PartyTypeFE.Organization ? entity.Variant : null,
+                OrganizationIdentifier = entity.OrganizationIdentifier,
+                DateOfBirth = entity.DateOfBirth,
+                IsDeleted = entity.IsDeleted,
+                Children = entity.Children?.Select(FromEntity).ToList(),
+            };
         }
 
         /// <summary>
-        /// Creates a PartyFE object from the new Party model in Register.Contracts
+        /// Maps a compact entity from the access management permission endpoints
         /// </summary>
-        /// <param name="party">A polymorphic Party object</param>
-        public PartyFE(Altinn.Register.Contracts.Party party)
+        public static PartyFE FromCompactEntity(CompactEntity entity)
         {
-            PartyId = party.PartyId.HasValue ? (int)party.PartyId.Value : 0;
-            PartyUuid = party.Uuid;
-            PartyTypeName = party.Type.IsWellKnown ? (PartyType)party.Type.Value : PartyType.Person;
-            Name = (string)party.DisplayName;
-            IsDeleted = (bool)party.IsDeleted;
+            if (entity == null)
+            {
+                return null;
+            }
+
+            PartyTypeFE type = ParseType(entity.Type);
+            return new PartyFE
+            {
+                Id = entity.Id,
+                PartyId = entity.PartyId,
+                Name = entity.Name,
+                Type = type,
+                UnitType = type == PartyTypeFE.Organization ? entity.Variant : null,
+                OrganizationIdentifier = entity.OrganizationIdentifier,
+                DateOfBirth = entity.DateOfBirth,
+                IsDeleted = entity.IsDeleted,
+                Children = entity.Children?.Select(FromCompactEntity).ToList(),
+            };
+        }
+
+        /// <summary>
+        /// Maps a simplified party from the limited instance delegation endpoints
+        /// </summary>
+        public static PartyFE FromSimplifiedParty(SimplifiedParty party)
+        {
+            if (party == null)
+            {
+                return null;
+            }
+
+            PartyTypeFE type = ParseType(party.Type);
+            return new PartyFE
+            {
+                Id = party.Id,
+                Name = party.Name,
+                Type = type,
+                UnitType = type == PartyTypeFE.Organization ? party.Variant : null,
+                OrganizationIdentifier = party.OrganizationIdentifier,
+                IsDeleted = party.IsDeleted,
+            };
+        }
+
+        /// <summary>
+        /// Maps a Register V1 party
+        /// </summary>
+        public static PartyFE FromRegisterParty(RegisterV1Party party)
+        {
+            if (party == null)
+            {
+                return null;
+            }
+
+            PartyTypeFE type = party.PartyTypeName switch
+            {
+                RegisterV1PartyType.Organisation or RegisterV1PartyType.SubUnit or RegisterV1PartyType.BankruptcyEstate => PartyTypeFE.Organization,
+                RegisterV1PartyType.SelfIdentified => PartyTypeFE.SelfIdentified,
+                _ => PartyTypeFE.Person,
+            };
+
+            return new PartyFE
+            {
+                Id = party.PartyUuid ?? Guid.Empty,
+                PartyId = party.PartyId,
+                Name = party.Name,
+                Type = type,
+                UnitType = type == PartyTypeFE.Organization ? party.UnitType : null,
+                OrganizationIdentifier = party.OrgNumber,
+                IsDeleted = party.IsDeleted,
+                Children = party.ChildParties?.Select(FromRegisterParty).ToList(),
+            };
+        }
+
+        /// <summary>
+        /// Maps a Register party (the polymorphic model in Register.Contracts)
+        /// </summary>
+        public static PartyFE FromRegisterParty(RegisterParty party)
+        {
+            if (party == null)
+            {
+                return null;
+            }
+
+            var partyFE = new PartyFE
+            {
+                Id = party.Uuid,
+                PartyId = party.PartyId.HasValue ? (int)party.PartyId.Value : null,
+                Name = party.DisplayName.HasValue ? party.DisplayName.Value : null,
+                Type = !party.Type.IsWellKnown ? PartyTypeFE.Person : party.Type.Value switch
+                {
+                    RegisterPartyType.Organization => PartyTypeFE.Organization,
+                    RegisterPartyType.SystemUser => PartyTypeFE.SystemUser,
+                    RegisterPartyType.SelfIdentifiedUser => PartyTypeFE.SelfIdentified,
+                    _ => PartyTypeFE.Person,
+                },
+                IsDeleted = party.IsDeleted.HasValue && party.IsDeleted.Value,
+            };
+
             if (party is Altinn.Register.Contracts.Organization organization)
             {
-                OrgNumber = organization.OrganizationIdentifier.ToString();
-                UnitType = organization.UnitType.ToString();
-                Organization = new Altinn.Register.Contracts.V1.Organization
-                {
-                    OrgNumber = organization.OrganizationIdentifier.ToString(),
-                    Name = organization.DisplayName.ToString(),
-                    UnitType = organization.UnitType.ToString(),
-                    TelephoneNumber = organization.TelephoneNumber.ToString(),
-                    MobileNumber = organization.MobileNumber.ToString(),
-                    FaxNumber = organization.FaxNumber.ToString(),
-                    EMailAddress = organization.EmailAddress.ToString(),
-                    InternetAddress = organization.InternetAddress.ToString(),
-                    MailingAddress = organization.MailingAddress.ToString(),
-                    BusinessAddress = organization.BusinessAddress.ToString(),
-                    UnitStatus = organization.UnitStatus.ToString()
-                };
+                partyFE.OrganizationIdentifier = organization.OrganizationIdentifier?.ToString();
+                partyFE.UnitType = organization.UnitType.HasValue ? organization.UnitType.Value : null;
             }
-            else if (party is Altinn.Register.Contracts.Person person)
+            else if (party is Altinn.Register.Contracts.Person person && person.DateOfBirth.HasValue)
             {
-                DateOfBirth = person.DateOfBirth.IsNull ? null : person.DateOfBirth.Value;
+                partyFE.DateOfBirth = person.DateOfBirth.Value.ToString("yyyy-MM-dd");
             }
+
+            return partyFE;
         }
 
         /// <summary>
-        /// Default contructor
+        /// Copies the party fields from an authorized party. Used by <see cref="AuthorizedPartyFE"/>.
         /// </summary>
-        public PartyFE()
+        protected static void CopyFrom(AuthorizedParty party, PartyFE target)
         {
+            PartyTypeFE type = party.Type switch
+            {
+                AuthorizedPartyType.Organization => PartyTypeFE.Organization,
+                AuthorizedPartyType.SelfIdentified => PartyTypeFE.SelfIdentified,
+                _ => PartyTypeFE.Person,
+            };
+
+            target.Id = party.PartyUuid;
+            target.PartyId = party.PartyId;
+            target.Name = party.Name;
+            target.Type = type;
+            target.UnitType = type == PartyTypeFE.Organization ? party.UnitType : null;
+            target.OrganizationIdentifier = party.OrganizationNumber;
+            target.DateOfBirth = party.DateOfBirth;
+            target.IsDeleted = party.IsDeleted;
         }
 
-        private List<PartyFE> MakeChildPartyFEList(List<Party> childParties)
+        /// <summary>
+        /// Parses the party type strings used by the access management platform.
+        /// Accepts both Norwegian and English names, case-insensitively. Unknown values fall back to Person.
+        /// </summary>
+        internal static PartyTypeFE ParseType(string type)
         {
-            List<PartyFE> childPartiesFE = new List<PartyFE>();
-
-            foreach (Party childParty in childParties)
+            switch (type?.Trim().ToLowerInvariant())
             {
-                childPartiesFE.Add(new PartyFE(childParty));
+                case "organisasjon":
+                case "organization":
+                case "organisation":
+                    return PartyTypeFE.Organization;
+                case "systembruker":
+                case "systemuser":
+                    return PartyTypeFE.SystemUser;
+                case "selvidentifisert":
+                case "selfidentified":
+                case "selfidentifieduser":
+                    return PartyTypeFE.SelfIdentified;
+                default:
+                    return PartyTypeFE.Person;
             }
-
-            return childPartiesFE;
         }
     }
 }

@@ -56,7 +56,7 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
                 PhoneNumber = "12345678",
                 UserName = "UserName",
                 UserType = UserType.None,
-                Party = new PartyFE(),
+                Party = new LegacyPartyFE(),
                 ProfileSettingPreference = new ProfileSettingPreference
                 {
                     DoNotPromptForParty = false,

@@ -51,7 +51,7 @@ namespace Altinn.AccessManagement.UI.Core.Models
         /// <summary>
         /// Gets or sets the <see cref="Party"/>
         /// </summary>
-        public PartyFE Party { get; set; }
+        public LegacyPartyFE Party { get; set; }
 
         /// <summary>
         /// Gets or sets the <see cref="UserType"/>
@@ -79,7 +79,7 @@ namespace Altinn.AccessManagement.UI.Core.Models
             PartyId = userProfile.PartyId;
             UserType = userProfile.UserType;
             ProfileSettingPreference = userProfile.ProfileSettingPreference;
-            Party = new PartyFE(userProfile.Party);
+            Party = new LegacyPartyFE(userProfile.Party);
         }
 
         /// <summary>
