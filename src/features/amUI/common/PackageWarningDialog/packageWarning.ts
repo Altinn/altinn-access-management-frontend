@@ -23,7 +23,8 @@ export interface PendingPackageAction {
   toParty: PartyEntity;
 }
 
-const isPerson = (party: PartyEntity) => party.type === PartyType.Person;
+const isPerson = (party: PartyEntity) =>
+  party.type === PartyType.Person || party.type === PartyType.SelfIdentified;
 
 /**
  * Hovedadministrator and the access management packages are the most powerful packages in Altinn,
