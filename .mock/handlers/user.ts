@@ -8,13 +8,12 @@ type MockRole = {
 type MockConnectionParty = {
   id: string;
   name: string;
-  type: 'Person' | 'Organisasjon';
-  variant: string;
-  parent: null;
+  type: 'Person' | 'Organization';
+  unitType: string | null;
   children: null;
   partyId: number;
-  organizationIdentifier?: string;
-  dateOfBirth?: string;
+  organizationIdentifier: string | null;
+  dateOfBirth: string | null;
   isDeleted: boolean;
 };
 
@@ -41,12 +40,12 @@ const createOrgConnection = (id: string, name: string, roles: MockRole[]): MockC
   party: {
     id,
     name,
-    type: 'Organisasjon',
-    variant: 'AS',
-    parent: null,
+    type: 'Organization',
+    unitType: 'AS',
     children: null,
     partyId: getStablePartyId(id),
     organizationIdentifier: '310202398',
+    dateOfBirth: null,
     isDeleted: false,
   },
   roles,
@@ -58,10 +57,10 @@ const createPersonConnection = (id: string, name: string, roles: MockRole[]): Mo
     id,
     name,
     type: 'Person',
-    variant: 'Person',
-    parent: null,
+    unitType: null,
     children: null,
     partyId: getStablePartyId(id),
+    organizationIdentifier: null,
     dateOfBirth: '1984-04-03',
     isDeleted: false,
   },
@@ -76,18 +75,18 @@ type ConnectionPartyTemplate =
       dateOfBirth?: string;
     }
   | {
-      type: 'Organisasjon';
+      type: 'Organization';
       name: string;
       organizationIdentifier?: string;
-      variant?: string;
+      unitType?: string;
     };
 
 const connectedPartyTemplates: Record<string, ConnectionPartyTemplate> = {
   '123': {
-    type: 'Organisasjon',
+    type: 'Organization',
     name: 'DISKRET NÆR TIGER AS',
     organizationIdentifier: '310202398',
-    variant: 'AS',
+    unitType: 'AS',
   },
   '456': {
     type: 'Person',
@@ -95,10 +94,10 @@ const connectedPartyTemplates: Record<string, ConnectionPartyTemplate> = {
     dateOfBirth: '1984-04-03',
   },
   'mocked-party-uuid': {
-    type: 'Organisasjon',
+    type: 'Organization',
     name: 'LEVENDE KUNSTIG APE',
     organizationIdentifier: '312787075',
-    variant: 'FLI',
+    unitType: 'FLI',
   },
 };
 
@@ -107,10 +106,10 @@ const createConnectionForPartyId = (id: string, roles: MockRole[]): MockConnecti
     id.toLowerCase() === 'user'
       ? connectedPartyTemplates['456']
       : (connectedPartyTemplates[id] ?? {
-          type: 'Organisasjon',
+          type: 'Organization',
           name: 'DIGITALISERINGSDIREKTORATET',
           organizationIdentifier: '310202398',
-          variant: 'AS',
+          unitType: 'AS',
         });
 
   if (template.type === 'Person') {
@@ -121,12 +120,12 @@ const createConnectionForPartyId = (id: string, roles: MockRole[]): MockConnecti
     party: {
       id,
       name: template.name,
-      type: 'Organisasjon',
-      variant: template.variant ?? 'AS',
-      parent: null,
+      type: 'Organization',
+      unitType: template.unitType ?? 'AS',
       children: null,
       partyId: getStablePartyId(id),
       organizationIdentifier: template.organizationIdentifier ?? '310202398',
+      dateOfBirth: null,
       isDeleted: false,
     },
     roles,

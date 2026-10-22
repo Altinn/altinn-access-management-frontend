@@ -3,6 +3,7 @@ import React from 'react';
 import { RootProvider } from '@altinn/altinn-components';
 import { Provider } from 'react-redux';
 
+import { PartyEntityType } from '@/dataObjects/dtos/Party';
 import store from '@/rtk/app/store';
 import { type Connection } from '@/rtk/features/connectionApi';
 
@@ -16,11 +17,10 @@ const mockAllConnections: Connection[] = [
     party: {
       id: 'u1',
       name: 'Ola Nordmann',
-      type: 'Person',
-      variant: 'person',
+      type: PartyEntityType.Person,
+      isDeleted: false,
       children: null,
       dateOfBirth: '1990-04-15',
-      roles: [],
     },
     roles: [],
     connections: [],
@@ -29,11 +29,10 @@ const mockAllConnections: Connection[] = [
     party: {
       id: 'u2',
       name: 'Kari Nordmann',
-      type: 'Person',
-      variant: 'person',
+      type: PartyEntityType.Person,
+      isDeleted: false,
       children: null,
       dateOfBirth: '1985-11-30',
-      roles: [],
     },
     roles: [],
     connections: [],
@@ -42,11 +41,10 @@ const mockAllConnections: Connection[] = [
     party: {
       id: 'u3',
       name: 'Nina Nordmann',
-      type: 'Person',
-      variant: 'person',
+      type: PartyEntityType.Person,
+      isDeleted: false,
       children: null,
       dateOfBirth: '2000-01-20',
-      roles: [],
     },
     roles: [],
     connections: [],
@@ -55,11 +53,10 @@ const mockAllConnections: Connection[] = [
     party: {
       id: 'u4',
       name: 'Ottar Sitrongul',
-      type: 'Person',
-      variant: 'person',
+      type: PartyEntityType.Person,
+      isDeleted: false,
       children: null,
       dateOfBirth: '1975-07-07',
-      roles: [],
     },
     roles: [],
     connections: [],
@@ -68,11 +65,10 @@ const mockAllConnections: Connection[] = [
     party: {
       id: 'u5',
       name: 'Nora Sitrongul',
-      type: 'Person',
-      variant: 'person',
+      type: PartyEntityType.Person,
+      isDeleted: false,
       children: null,
       dateOfBirth: '2010-12-12',
-      roles: [],
     },
     roles: [],
     connections: [],
@@ -84,11 +80,10 @@ const mockConnections: Connection[] = [
     party: {
       id: 'u1',
       name: 'Ola Nordmann',
-      type: 'Person',
-      variant: 'person',
+      type: PartyEntityType.Person,
+      isDeleted: false,
       children: null,
       dateOfBirth: '1990-04-15',
-      roles: [],
     },
     roles: [],
     connections: [],
@@ -97,11 +92,10 @@ const mockConnections: Connection[] = [
     party: {
       id: 'u2',
       name: 'Kari Nordmann',
-      type: 'Person',
-      variant: 'person',
+      type: PartyEntityType.Person,
+      isDeleted: false,
       children: null,
       dateOfBirth: '1985-11-30',
-      roles: [],
     },
     roles: [],
     connections: [],
@@ -110,20 +104,21 @@ const mockConnections: Connection[] = [
     party: {
       id: 'o1',
       name: 'UNG GYLDEN BJØRN KOMMUNE',
-      type: 'Organisasjon',
-      variant: 'KOMM',
+      type: PartyEntityType.Organization,
+      isDeleted: false,
+      unitType: 'KOMM',
       organizationIdentifier: '311010905',
       children: [
         {
           id: 'o1-ados',
           name: 'VIS KONGE PANDA',
-          type: 'Organisasjon',
-          variant: 'ADOS',
+          type: PartyEntityType.Organization,
+          isDeleted: false,
+          unitType: 'ADOS',
           organizationIdentifier: '313676781',
           children: null,
         },
       ],
-      roles: [],
     },
     roles: [],
     connections: [],

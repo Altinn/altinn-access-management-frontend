@@ -1,3 +1,4 @@
+using Altinn.AccessManagement.UI.Core.Models.Common.Frontend;
 using Altinn.AccessManagement.UI.Core.Models.InstanceDelegation;
 using Altinn.AccessManagement.UI.Core.Models.InstanceDelegation.Frontend;
 using Altinn.AccessManagement.UI.Core.Models.SingleRight;
@@ -72,7 +73,7 @@ namespace Altinn.AccessManagement.UI.Core.Services.Interfaces
         /// <param name="resource">The resource identifier.</param>
         /// <param name="instance">The instance URN.</param>
         /// <returns>A list of simplified parties.</returns>
-        Task<List<SimplifiedParty>> GetInstanceUsers(Guid party, string resource, string instance);
+        Task<List<PartyFE>> GetInstanceUsers(Guid party, string resource, string instance);
 
         /// <summary>
         /// Removes an instance delegation and all its rights.

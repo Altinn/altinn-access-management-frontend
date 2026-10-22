@@ -4,7 +4,6 @@ import { useTranslation } from 'react-i18next';
 
 import { isSubUnitByType } from '@/resources/utils/reporteeUtils';
 import { UserItem } from '@/features/amUI/common/UserList/UserItem';
-import type { ExtendedUser, User } from '@/rtk/features/userInfoApi';
 
 import { UserListActions } from '../UserList/UserListActions';
 import { type DelegationAction } from '../DelegationModal/EditModal';
@@ -27,14 +26,14 @@ export interface UserSearchResultsProps {
   getUserLink?: (user: UserActionTarget) => string;
 }
 
-const mapUserToActionTarget = (user: UserSearchNode | ExtendedUser | User): UserActionTarget => ({
+const mapUserToActionTarget = (user: UserSearchNode): UserActionTarget => ({
   id: user.id,
   name: user.name,
   type: user.type,
-  variant: user.variant,
+  unitType: user.unitType,
   organizationIdentifier: user.organizationIdentifier,
   dateOfBirth: user.dateOfBirth,
-  isInherited: 'isInherited' in user ? user.isInherited : undefined,
+  isInherited: user.isInherited,
 });
 
 export const UserSearchResults: React.FC<UserSearchResultsProps> = ({
@@ -60,7 +59,7 @@ export const UserSearchResults: React.FC<UserSearchResultsProps> = ({
         {users.map((user) => (
           <UserItem
             includeSelfAsChild={includeSelfAsChild}
-            subUnit={isSubUnitByType(user?.variant)}
+            subUnit={isSubUnitByType(user.unitType)}
             key={user.id}
             user={user}
             size='md'
@@ -72,7 +71,7 @@ export const UserSearchResults: React.FC<UserSearchResultsProps> = ({
             controls={(user) => (
               <UserListActions
                 isLoading={isActionLoading}
-                user={user as ExtendedUser}
+                user={user}
                 availableAction={availableAction}
                 onRevoke={onRevoke ? () => onRevoke(user) : undefined}
                 onDelegate={onDelegate ? () => onDelegate(user) : undefined}

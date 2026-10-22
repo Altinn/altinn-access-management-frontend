@@ -1,23 +1,8 @@
 import type { Permissions } from '@/dataObjects/dtos/accessPackage';
 import type { Entity } from '@/dataObjects/dtos/Common';
 
-import { addRole, buildSortKey, normalizeType } from './mapperUtils';
+import { addRole, mapEntityToUserSearchNode } from './mapperUtils';
 import type { UserSearchNode } from './types';
-
-const mapEntityToUserSearchNode = (entity: Entity, isInherited: boolean): UserSearchNode => ({
-  id: entity.id,
-  name: entity.name,
-  type: normalizeType(entity.type),
-  variant: entity.variant,
-  partyId: entity.partyId,
-  organizationIdentifier: entity.organizationIdentifier,
-  isDeleted: entity.isDeleted ?? undefined,
-  dateOfBirth: entity.dateOfBirth,
-  sortKey: buildSortKey(entity.name),
-  roles: [],
-  children: null,
-  isInherited,
-});
 
 export const mapPermissionsToUserSearchNodes = (
   permissions?: Permissions[],
@@ -57,7 +42,7 @@ export const mapPermissionsToUserSearchNodes = (
       return existingNode;
     }
 
-    const newNode = mapEntityToUserSearchNode(entity, inherited);
+    const newNode = mapEntityToUserSearchNode(entity, { isInherited: inherited });
     nodes.push(newNode);
     return newNode;
   };
@@ -75,7 +60,7 @@ export const mapPermissionsToUserSearchNodes = (
       return existingChild;
     }
 
-    const newChild = mapEntityToUserSearchNode(entity, inherited);
+    const newChild = mapEntityToUserSearchNode(entity, { isInherited: inherited });
     parent.children = [newChild, ...children];
     return newChild;
   };

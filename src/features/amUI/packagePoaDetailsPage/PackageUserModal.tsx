@@ -1,29 +1,17 @@
 import { forwardRef, useImperativeHandle, useMemo, useRef, useState } from 'react';
 
-import { PartyType } from '@/rtk/features/userInfoApi';
-import type { Party } from '@/rtk/features/lookupApi';
 import type { AccessPackage } from '@/rtk/features/accessPackageApi';
 import type { ActionError } from '@/resources/hooks/useActionError';
 
 import type { UserActionTarget } from '../common/UserSearch/types';
 import { usePartyRepresentation } from '../common/PartyRepresentationContext/PartyRepresentationContext';
+import { mapPartyEntityToParty } from '../common/PartyRepresentationContext/partyUtils';
 import { type DelegationAction } from '../common/DelegationModal/EditModal';
 import { getInheritedStatus } from '../common/useInheritedStatus';
 
 import { PartyInfoModal } from './PartyInfoModal';
 
 const SUCCESS_ANIMATION_DURATION = 2000;
-
-export const mapUserToParty = (user: UserActionTarget): Party => ({
-  partyId: 0,
-  partyUuid: user.id,
-  orgNumber: user.organizationIdentifier ?? undefined,
-  name: user.name,
-  partyTypeName:
-    user.type?.toLowerCase() === 'organisasjon' ? PartyType.Organization : PartyType.Person,
-  dateOfBirth: user.dateOfBirth ?? undefined,
-  unitType: user.variant ?? undefined,
-});
 
 export interface PackageUserModalHandle {
   open: (user: UserActionTarget) => void;
@@ -100,7 +88,7 @@ export const PackageUserModal = forwardRef<PackageUserModalHandle, PackageUserMo
       () =>
         getInheritedStatus({
           permissions: selectedUserPermissions,
-          toParty: selectedUser ? mapUserToParty(selectedUser) : undefined,
+          toParty: mapPartyEntityToParty(selectedUser ?? undefined),
           fromParty,
         }),
       [selectedUserPermissions, selectedUser, fromParty],
@@ -112,7 +100,7 @@ export const PackageUserModal = forwardRef<PackageUserModalHandle, PackageUserMo
         partyInfo={
           selectedUser && accessPackage
             ? {
-                party: mapUserToParty(selectedUser),
+                party: mapPartyEntityToParty(selectedUser),
                 accessPackage,
                 userHasAccess: selectedUserHasAccess,
                 inheritedStatus: selectedUserInheritedStatus,

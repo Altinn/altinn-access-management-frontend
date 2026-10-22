@@ -5,6 +5,7 @@ import { Provider } from 'react-redux';
 import { configureStore } from '@reduxjs/toolkit';
 import { MemoryRouter } from 'react-router';
 
+import { PartyEntityType } from '@/dataObjects/dtos/Party';
 import * as lookupApi from '@/rtk/features/lookupApi';
 import * as userInfoApi from '@/rtk/features/userInfoApi';
 import * as accessPackageApi from '@/rtk/features/accessPackageApi';
@@ -111,10 +112,10 @@ const mockConnection: Connection = {
   party: {
     id: 'connected-party-uuid',
     name: 'Connected Party',
-    type: 'Organization',
+    type: PartyEntityType.Organization,
+    isDeleted: false,
     children: null,
     organizationIdentifier: '123456789',
-    roles: [],
   },
   roles: [],
   connections: [],
@@ -419,10 +420,10 @@ describe('PartyRepresentationProvider - Acting Party Logic', () => {
       party: {
         id: mockReporteeParty.partyUuid,
         name: mockReporteeParty.name,
-        type: 'Organization',
+        type: PartyEntityType.Organization,
+        isDeleted: false,
         children: null,
         organizationIdentifier: '987654321',
-        roles: [],
       },
       roles: [],
       connections: [],
