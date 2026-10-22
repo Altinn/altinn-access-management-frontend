@@ -39,7 +39,6 @@ export type ClientResourceEntry = {
   itemId: string;
   // The party the resource is delegated to or from: the client or the agent, depending on the list.
   party: PartyEntity;
-  refId: string;
   resource: ServiceResource;
   hasAccess: boolean;
   showAction: boolean;

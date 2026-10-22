@@ -169,7 +169,7 @@ export const ClientAccessList = ({
     setSelectedResource({
       itemId: entry.itemId,
       clientId: entry.party.id,
-      refId: entry.refId,
+      refId: entry.resource.identifier,
       resource: entry.resource,
       toPartyName: formatEntityDisplayName(entry.party),
       onDelegate: entry.showAction ? entry.onDelegate : undefined,
@@ -234,7 +234,6 @@ export const ClientAccessList = ({
         return {
           itemId: `${clientId}:${access.role.code}:${clientResource.refId}`,
           party: client.client,
-          refId: clientResource.refId,
           resource,
           hasAccess: clientHasResource(clientId, clientResource.refId),
           showAction: !requireDelegableForActions || resource.delegable,

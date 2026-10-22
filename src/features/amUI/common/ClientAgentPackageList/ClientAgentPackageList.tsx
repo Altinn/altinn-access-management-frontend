@@ -196,7 +196,7 @@ export const ClientAgentPackageList = ({
     setSelectedResource({
       itemId: entry.itemId,
       agentId: entry.party.id,
-      refId: entry.refId,
+      refId: entry.resource.identifier,
       resource: entry.resource,
       toPartyName: formatEntityDisplayName(entry.party),
       onDelegate: entry.onDelegate,
@@ -276,7 +276,6 @@ export const ClientAgentPackageList = ({
         return {
           itemId: `${idPrefix}:${access.role.code}:${clientResource.refId}`,
           party: agent.agent,
-          refId: clientResource.refId,
           resource,
           hasAccess: agentHasResource(agentId, clientResource.refId),
           showAction: delegable,
