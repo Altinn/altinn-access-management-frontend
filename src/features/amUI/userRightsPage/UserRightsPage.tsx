@@ -45,7 +45,7 @@ export const UserRightsPage = () => {
       ? currentUser?.id
       : getCookie('AltinnPartyUuid');
 
-  const isViewingOtherUser = !currentUserIsLoading && !!id && id !== currentUser?.partyUuid;
+  const isViewingOtherUser = !currentUserIsLoading && !!id && id !== currentUser?.id;
   const showNoAccessAlert = !isAdminLoading && isViewingOtherUser && isAdmin === false;
 
   useDocumentTitle(t('user_rights_page.page_title'));
