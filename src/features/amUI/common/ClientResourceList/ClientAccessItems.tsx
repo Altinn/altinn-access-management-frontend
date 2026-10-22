@@ -28,7 +28,6 @@ export type ClientPackageEntry = {
   itemId: string;
   party: PartyEntity;
   accessPackage: AccessPackage;
-  packageName: string;
   hasAccess: boolean;
   showAction: boolean;
   roleDescription?: string;
@@ -39,12 +38,11 @@ export type ClientPackageEntry = {
 export type ClientResourceEntry = {
   itemId: string;
   // The party the resource is delegated to or from: the client or the agent, depending on the list.
-  partyId: string;
+  party: PartyEntity;
   refId: string;
   resource: ServiceResource;
   hasAccess: boolean;
   showAction: boolean;
-  toPartyName: string;
   onDelegate?: ResourceActionHandler;
   onRevoke?: ResourceActionHandler;
 };
@@ -88,7 +86,6 @@ export const ClientAccessItems = ({
     return buildPackageItem({
       id: itemId,
       accessPackage,
-      packageName: entry.packageName,
       hasAccess: entry.hasAccess,
       showAction: entry.showAction,
       isMobileOrSmaller,

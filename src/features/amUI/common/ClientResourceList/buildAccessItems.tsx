@@ -83,8 +83,7 @@ const DelegationControl = ({ id, name, hasAccess, disabled, onAction }: Delegati
 
 export type BuildPackageItemOptions = {
   id: string;
-  accessPackage: AccessPackage | undefined;
-  packageName: string;
+  accessPackage: AccessPackage;
   hasAccess: boolean;
   showAction: boolean;
   isMobileOrSmaller: boolean;
@@ -137,7 +136,6 @@ const buildDelegationControl = ({
 export const buildPackageItem = ({
   id,
   accessPackage,
-  packageName,
   hasAccess,
   showAction,
   isMobileOrSmaller,
@@ -149,13 +147,13 @@ export const buildPackageItem = ({
   t,
 }: BuildPackageItemOptions): AccessPackageListItemProps => {
   const packageCount = t('access_packages.package_number_of_resources', {
-    count: accessPackage?.resources?.length ?? 0,
+    count: accessPackage.resources?.length ?? 0,
   });
 
-  const showModalTrigger = showAction && !!accessPackage && !!onOpenModal;
+  const showModalTrigger = showAction && !!onOpenModal;
   const controls = buildDelegationControl({
     id,
-    name: packageName,
+    name: accessPackage.name,
     isMobileOrSmaller,
     showAction,
     hasAccess,
@@ -167,7 +165,7 @@ export const buildPackageItem = ({
 
   return {
     id,
-    name: packageName,
+    name: accessPackage.name,
     interactive: showModalTrigger,
     as: showModalTrigger ? 'button' : 'div',
     titleAs: 'div',

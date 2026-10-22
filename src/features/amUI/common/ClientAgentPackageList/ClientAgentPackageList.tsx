@@ -195,10 +195,10 @@ export const ClientAgentPackageList = ({
   const openResourceModal = (entry: ClientResourceEntry) => {
     setSelectedResource({
       itemId: entry.itemId,
-      agentId: entry.partyId,
+      agentId: entry.party.id,
       refId: entry.refId,
       resource: entry.resource,
-      toPartyName: entry.toPartyName,
+      toPartyName: formatEntityDisplayName(entry.party),
       onDelegate: entry.onDelegate,
       onRevoke: entry.onRevoke,
     });
@@ -221,12 +221,10 @@ export const ClientAgentPackageList = ({
         const accessPackage = getAccessPackageByUrn(pkg.urn);
         if (!accessPackage) return [];
         const delegable = accessPackage.isDelegable ?? false;
-        const packageName = accessPackage.name;
         return {
           itemId: `${idPrefix}:${access.role.code}:${pkg.id}`,
           party: agent.agent,
           accessPackage,
-          packageName,
           hasAccess: agentHasPackage(agentId, pkg.id),
           showAction: delegable,
           roleDescription:
@@ -240,7 +238,7 @@ export const ClientAgentPackageList = ({
                   access.role.code,
                   pkg.urn,
                   agentName,
-                  packageName,
+                  accessPackage.name,
                   onSuccess,
                   onError,
                 )
@@ -252,7 +250,7 @@ export const ClientAgentPackageList = ({
                   access.role.code,
                   pkg.urn,
                   agentName,
-                  packageName,
+                  accessPackage.name,
                   onSuccess,
                   onError,
                 )
@@ -277,12 +275,11 @@ export const ClientAgentPackageList = ({
         };
         return {
           itemId: `${idPrefix}:${access.role.code}:${clientResource.refId}`,
-          partyId: agentId,
+          party: agent.agent,
           refId: clientResource.refId,
           resource,
           hasAccess: agentHasResource(agentId, clientResource.refId),
           showAction: delegable,
-          toPartyName: agentName,
           onDelegate: delegable
             ? (onSuccess, onError) => addClientResource(delegationInput, onSuccess, onError)
             : undefined,

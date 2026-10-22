@@ -168,10 +168,10 @@ export const ClientAccessList = ({
   const openResourceModal = (entry: ClientResourceEntry) => {
     setSelectedResource({
       itemId: entry.itemId,
-      clientId: entry.partyId,
+      clientId: entry.party.id,
       refId: entry.refId,
       resource: entry.resource,
-      toPartyName: entry.toPartyName,
+      toPartyName: formatEntityDisplayName(entry.party),
       onDelegate: entry.showAction ? entry.onDelegate : undefined,
       onRevoke: entry.showAction ? entry.onRevoke : undefined,
     });
@@ -190,18 +190,16 @@ export const ClientAccessList = ({
         // no name or resources to show.
         const accessPackage = getAccessPackageByUrn(pkg.urn);
         if (!accessPackage) return [];
-        const packageName = accessPackage.name;
         const action: ClientAccessPackageAction = {
           clientId,
           roleCode: access.role.code,
           packageId: pkg.urn,
-          accessPackageName: packageName,
+          accessPackageName: accessPackage.name,
         };
         return {
           itemId: `${clientId}:${access.role.code}:${pkg.id}`,
           party: client.client,
           accessPackage,
-          packageName,
           hasAccess: clientsForAccessState.some(
             (aap) =>
               aap.client.id === clientId &&
@@ -235,12 +233,11 @@ export const ClientAccessList = ({
         };
         return {
           itemId: `${clientId}:${access.role.code}:${clientResource.refId}`,
-          partyId: clientId,
+          party: client.client,
           refId: clientResource.refId,
           resource,
           hasAccess: clientHasResource(clientId, clientResource.refId),
           showAction: !requireDelegableForActions || resource.delegable,
-          toPartyName: formatEntityDisplayName(client.client),
           onDelegate: onAddResource
             ? (onSuccess, onError) => onAddResource(action, onSuccess, onError)
             : undefined,
