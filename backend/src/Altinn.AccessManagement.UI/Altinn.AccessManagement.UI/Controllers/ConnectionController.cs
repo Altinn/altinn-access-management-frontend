@@ -2,6 +2,7 @@
 using Altinn.AccessManagement.UI.Core.Helpers;
 using Altinn.AccessManagement.UI.Core.Models.Connections;
 using Altinn.AccessManagement.UI.Core.Models.User;
+using Altinn.AccessManagement.UI.Core.Models.User.Frontend;
 using Altinn.AccessManagement.UI.Core.Services.Interfaces;
 using Altinn.AccessManagement.UI.Filters;
 using Altinn.AccessManagement.UI.Models;
@@ -215,7 +216,7 @@ namespace Altinn.AccessManagement.UI.Controllers
         [HttpGet]
         [Authorize]
         [Route("rightholders")]
-        public async Task<ActionResult> GetRightholders(
+        public async Task<ActionResult<List<ConnectionFE>>> GetRightholders(
             [FromQuery] Guid party,
             [FromQuery] Guid? from,
             [FromQuery] Guid? to,
@@ -261,7 +262,7 @@ namespace Altinn.AccessManagement.UI.Controllers
         [HttpGet]
         [Authorize]
         [Route("simplified")]
-        public async Task<ActionResult<List<SimplifiedConnection>>> GetSimplifiedConnections([FromQuery] Guid party)
+        public async Task<ActionResult<List<SimplifiedConnectionFE>>> GetSimplifiedConnections([FromQuery] Guid party)
         {
             if (!ModelState.IsValid)
             {

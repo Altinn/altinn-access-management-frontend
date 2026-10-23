@@ -19,7 +19,7 @@ import type {
   RemoveAgentAccessPackagesFn,
   RemoveAgentResourcesFn,
 } from '@/rtk/features/clientApi';
-import { PartyType } from '@/rtk/features/userInfoApi';
+import { PartyType } from '@/dataObjects/dtos/Party';
 
 import { useRoleMetadata } from '../UserRoles/useRoleMetadata';
 import { isNewUser } from '../isNewUser';
@@ -84,8 +84,8 @@ type SelectedAgentResource = {
   ) => void | Promise<void>;
 };
 
-const getUserListItemType = (agentType: string): UserListItemProps['type'] => {
-  return agentType.toLowerCase() === 'person' ? 'person' : 'company';
+const getUserListItemType = (agentType: PartyType): UserListItemProps['type'] => {
+  return agentType === PartyType.Person ? 'person' : 'company';
 };
 
 const getAgentSortKey = (agent: Agent): string =>
@@ -186,7 +186,7 @@ export const ClientAgentPackageList = ({
     const agentId = agent.agent.id;
     const idPrefix = listKey ? `${listKey}:${agentId}` : agentId;
     const isRecentlyAdded = isNewUser(agent.agentAddedAt);
-    const isSubUnit = isSubUnitByType(agent.agent.variant);
+    const isSubUnit = isSubUnitByType(agent.agent.unitType);
     const userType = getUserListItemType(agent.agent.type);
     const agentName = formatEntityDisplayName(agent.agent);
     const nodes = clientAccess.reduce((acc, access) => {
@@ -234,18 +234,7 @@ export const ClientAgentPackageList = ({
                 setSelected({
                   itemId,
                   data: {
-                    party: {
-                      partyId: 0,
-                      partyUuid: agentId,
-                      name: agent.agent.name,
-                      orgNumber: agent.agent.organizationIdentifier ?? undefined,
-                      partyTypeName:
-                        agent.agent.type.toLowerCase() === 'person'
-                          ? PartyType.Person
-                          : PartyType.Organization,
-                      dateOfBirth: agent.agent.dateOfBirth ?? undefined,
-                      unitType: agent.agent.variant ?? undefined,
-                    },
+                    party: agent.agent,
                     accessPackage,
                     userHasAccess: hasAccess,
                     roleDescription,
@@ -371,10 +360,7 @@ export const ClientAgentPackageList = ({
   const modalData: ClientPackageModalData | undefined = selected
     ? {
         ...selected.data,
-        userHasAccess: agentHasPackage(
-          selected.data.party.partyUuid,
-          selected.data.accessPackage.id,
-        ),
+        userHasAccess: agentHasPackage(selected.data.party.id, selected.data.accessPackage.id),
       }
     : undefined;
 

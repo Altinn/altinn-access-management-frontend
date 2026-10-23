@@ -6,6 +6,7 @@ using Altinn.AccessManagement.UI.Core.ClientInterfaces;
 using Altinn.AccessManagement.UI.Core.Configuration;
 using Altinn.AccessManagement.UI.Core.Models;
 using Altinn.AccessManagement.UI.Core.Models.AccessManagement;
+using Altinn.AccessManagement.UI.Core.Models.Common.Frontend;
 using Altinn.AccessManagement.UI.Core.Models.User;
 using Altinn.AccessManagement.UI.Mocks.Utils;
 using Altinn.AccessManagement.UI.Tests.Utils;
@@ -127,11 +128,11 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
             string reporteePartyUuid = "cd35779b-b174-4ecc-bbef-ece13611be7f";
 
             string path = Path.Combine(_testDataFolder, "Data", "ExpectedResults", "ReporteeList", "GetPartyFromReporteeList", $"{reporteePartyUuid}.json");
-            AuthorizedParty expectedResponse = Util.GetMockData<AuthorizedParty>(path);
+            AuthorizedPartyFE expectedResponse = Util.GetMockData<AuthorizedPartyFE>(path);
 
 
             var response = await _client.GetAsync($"accessmanagement/api/v1/user/reportee/{reporteePartyUuid}");
-            AuthorizedParty actualResponse = await response.Content.ReadFromJsonAsync<AuthorizedParty>();
+            AuthorizedPartyFE actualResponse = await response.Content.ReadFromJsonAsync<AuthorizedPartyFE>();
 
             Assert.Equal(HttpStatusCode.OK, response.StatusCode);
             AssertionUtil.AssertEqual(expectedResponse, actualResponse);
@@ -149,13 +150,13 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
             string subunitPartyUuid = "b0a79f3d-4cef-430a-9774-301b754e0f6f";
 
             string path = Path.Combine(_testDataFolder, "Data", "ExpectedResults", "ReporteeList", "GetPartyFromReporteeList", $"{subunitPartyUuid}.json");
-            AuthorizedParty expectedResponse = Util.GetMockData<AuthorizedParty>(path);
+            AuthorizedPartyFE expectedResponse = Util.GetMockData<AuthorizedPartyFE>(path);
 
             var response = await _client.GetAsync($"accessmanagement/api/v1/user/reportee/{subunitPartyUuid}");
-            AuthorizedParty actualResponse = await response.Content.ReadFromJsonAsync<AuthorizedParty>();
+            AuthorizedPartyFE actualResponse = await response.Content.ReadFromJsonAsync<AuthorizedPartyFE>();
 
             Assert.Equal(HttpStatusCode.OK, response.StatusCode);
-            Assert.Equal(expectedResponse.PartyUuid, actualResponse.PartyUuid);
+            Assert.Equal(expectedResponse.Id, actualResponse.Id);
             AssertionUtil.AssertEqual(expectedResponse, actualResponse);
         }
 

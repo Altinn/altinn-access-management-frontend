@@ -9,6 +9,7 @@ using Altinn.AccessManagement.UI.Core.ClientInterfaces;
 using Altinn.AccessManagement.UI.Core.Configuration;
 using Altinn.AccessManagement.UI.Core.Helpers;
 using Altinn.AccessManagement.UI.Core.Models.AccessPackage;
+using Altinn.AccessManagement.UI.Core.Models.Common.Frontend;
 using Altinn.AccessManagement.UI.Core.Models.Connections;
 using Altinn.AccessManagement.UI.Core.Models.Dialogporten;
 using Altinn.AccessManagement.UI.Core.Models.InstanceDelegation;
@@ -496,11 +497,11 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
             string resource = "generic-access-resource";
             string instance = "urn:altinn:instance-id:51599233/df333e75-5896-4254-a69f-146736eaf668";
             string path = Path.Combine(_mockFolder, "Data", "ExpectedResults", "Instance", "GetInstanceRights", $"{resource}.json");
-            InstanceRights expectedResponse = Util.GetMockData<InstanceRights>(path);
+            InstanceRightsFE expectedResponse = Util.GetMockData<InstanceRightsFE>(path);
 
             HttpResponseMessage httpResponse = await _client.GetAsync(
                 $"accessmanagement/api/v1/instances/delegation/instances/rights?party={party}&from={from}&to={to}&resource={resource}&instance={Uri.EscapeDataString(instance)}");
-            InstanceRights actualResponse = await httpResponse.Content.ReadFromJsonAsync<InstanceRights>();
+            InstanceRightsFE actualResponse = await httpResponse.Content.ReadFromJsonAsync<InstanceRightsFE>();
 
             Assert.Equal(HttpStatusCode.OK, httpResponse.StatusCode);
             AssertionUtil.AssertEqual(expectedResponse, actualResponse);
@@ -794,14 +795,14 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
             string resource = "generic-access-resource";
             string instance = "urn:altinn:instance-id:51599233/df333e75-5896-4254-a69f-146736eaf668";
             string path = Path.Combine(_mockFolder, "Data", "ExpectedResults", "Instance", "GetInstanceUsers", $"{resource}.json");
-            List<SimplifiedParty> expectedResponse = Util.GetMockData<List<SimplifiedParty>>(path);
+            List<PartyFE> expectedResponse = Util.GetMockData<List<PartyFE>>(path);
 
             HttpResponseMessage httpResponse = await _client.GetAsync(
                 $"accessmanagement/api/v1/instances/delegation/instances/simplified/users?party={party}&resource={resource}&instance={Uri.EscapeDataString(instance)}");
-            List<SimplifiedParty> actualResponse = await httpResponse.Content.ReadFromJsonAsync<List<SimplifiedParty>>();
+            List<PartyFE> actualResponse = await httpResponse.Content.ReadFromJsonAsync<List<PartyFE>>();
 
             Assert.Equal(HttpStatusCode.OK, httpResponse.StatusCode);
-            AssertionUtil.AssertCollections(expectedResponse, actualResponse, AssertionUtil.AssertEqual);
+            Assert.Equivalent(expectedResponse, actualResponse, strict: true);
         }
 
         /// <summary>

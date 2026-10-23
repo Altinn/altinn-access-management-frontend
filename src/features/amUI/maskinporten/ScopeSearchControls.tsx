@@ -39,20 +39,20 @@ export const ScopeSearchControls = ({
   const { fromParty, toParty } = usePartyRepresentation();
   const { setActionError } = useDelegationModalContext();
   const [isCheckingDelegation, setIsCheckingDelegation] = React.useState(false);
-  const supplier = toParty?.orgNumber ?? '';
+  const supplier = toParty?.organizationIdentifier ?? '';
   const toPartyName = formatEntityDisplayName(toParty);
   const [addSupplierResource] = useAddMaskinportenSupplierResourceMutation();
   const [removeSupplierResource] = useRemoveMaskinportenSupplierResourceMutation();
   const { delegate, remove, isLoading } = useMaskinportenResourceActions({
     delegate: (r) =>
       addSupplierResource({
-        party: fromParty?.partyUuid ?? '',
+        party: fromParty?.id ?? '',
         supplier,
         resource: r.identifier,
       }).unwrap(),
     remove: (r) =>
       removeSupplierResource({
-        party: fromParty?.partyUuid ?? '',
+        party: fromParty?.id ?? '',
         supplier,
         resource: r.identifier,
       }).unwrap(),
@@ -74,12 +74,12 @@ export const ScopeSearchControls = ({
   };
 
   const handleAddResource = async () => {
-    if (!fromParty?.partyUuid || !resource.identifier) return;
+    if (!fromParty?.id || !resource.identifier) return;
 
     setIsCheckingDelegation(true);
     try {
       const delegationCheck = await checkDelegation({
-        party: fromParty.partyUuid,
+        party: fromParty.id,
         resource: resource.identifier,
       }).unwrap();
       const canDelegateResource = delegationCheck.rights?.some((right) => right.result) ?? false;

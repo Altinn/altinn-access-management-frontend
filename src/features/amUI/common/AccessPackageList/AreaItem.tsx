@@ -2,8 +2,8 @@ import { AccessAreaListItem, Badge } from '@altinn/altinn-components';
 import { useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 
+import { PartyType } from '@/dataObjects/dtos/Party';
 import { useIsMobileOrSmaller } from '@/resources/utils/screensizeUtils';
-import { PartyType } from '@/rtk/features/userInfoApi';
 import { usePermissionOverview } from '@/resources/hooks';
 
 import { PermissionsBadge } from '../PermissionsBadge/PermissionsBadge';

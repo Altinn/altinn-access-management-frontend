@@ -22,7 +22,7 @@ import {
   useRestoreFocusOnDataChange,
 } from '../common/RestoreFocus';
 
-import { PackageUserModal, mapUserToParty, type PackageUserModalHandle } from './PackageUserModal';
+import { PackageUserModal, type PackageUserModalHandle } from './PackageUserModal';
 import { AddPackageUserButton, type AddedPackageUser } from './AddPackageUserModal';
 import pageClasses from './PackagePoaDetailsPage.module.css';
 
@@ -60,22 +60,22 @@ export const UsersTab = ({ accessPackage, isLoading, isFetching }: UsersTabProps
     isFetching: isFetchingIndirectConnections,
   } = useGetRightHoldersQuery(
     {
-      partyUuid: fromParty?.partyUuid ?? '',
-      fromUuid: fromParty?.partyUuid ?? '',
+      partyUuid: fromParty?.id ?? '',
+      fromUuid: fromParty?.id ?? '',
       toUuid: '', // all
     },
     {
-      skip: !fromParty?.partyUuid,
+      skip: !fromParty?.id,
     },
   );
 
   const users = useMemo(
     () =>
       mapPermissionsToUserSearchNodes(accessPackage?.permissions, {
-        toPartyUuid: toParty?.partyUuid,
-        fromPartyUuid: fromParty?.partyUuid,
+        toPartyUuid: toParty?.id,
+        fromPartyUuid: fromParty?.id,
       }),
-    [accessPackage?.permissions, toParty?.partyUuid, fromParty?.partyUuid],
+    [accessPackage?.permissions, toParty?.id, fromParty?.id],
   );
 
   const indirectUsers = useMemo(
@@ -123,18 +123,16 @@ export const UsersTab = ({ accessPackage, isLoading, isFetching }: UsersTabProps
   });
 
   const handleOnDelegate = (user: UserActionTarget) => {
-    const toParty = mapUserToParty(user);
-    if (accessPackage && toParty) {
+    if (accessPackage) {
       actionTargetRef.current = user;
-      onDelegate(accessPackage, toParty);
+      onDelegate(accessPackage, user);
     }
   };
 
   const handleOnRevoke = (user: UserActionTarget) => {
-    const toParty = mapUserToParty(user);
-    if (accessPackage && toParty) {
+    if (accessPackage) {
       actionTargetRef.current = user;
-      onRevoke(accessPackage, toParty);
+      onRevoke(accessPackage, user);
     }
   };
 

@@ -2,7 +2,7 @@ import * as React from 'react';
 import { DsAlert, DsHeading, DsButton } from '@altinn/altinn-components';
 import { useTranslation } from 'react-i18next';
 
-import { PartyType } from '@/rtk/features/userInfoApi';
+import { PartyType } from '@/dataObjects/dtos/Party';
 import { TechnicalErrorParagraphs } from '@/features/amUI/common/TechnicalErrorParagraphs';
 import { useGetUserDelegationsQuery } from '@/rtk/features/accessPackageApi';
 import { useAccessPackageActions } from '@/features/amUI/common/AccessPackageList/useAccessPackageActions';
@@ -35,9 +35,9 @@ export const AccessPackageInfo = ({ accessPackage, availableActions = [] }: Pack
   const { canDelegatePackage } = useAccessPackageDelegationCheck();
 
   const { data: activeDelegations, isFetching } = useGetUserDelegationsQuery({
-    to: toParty?.partyUuid ?? '',
-    from: fromParty?.partyUuid ?? '',
-    party: actingParty?.partyUuid ?? '',
+    to: toParty?.id ?? '',
+    from: fromParty?.id ?? '',
+    party: actingParty?.id ?? '',
   });
 
   const { actionError, setActionError, actionSuccess, setActionSuccess } =
@@ -93,9 +93,7 @@ export const AccessPackageInfo = ({ accessPackage, availableActions = [] }: Pack
 
   const deletableStatus = React.useMemo(
     () =>
-      delegationAccess
-        ? getDeletableStatus(delegationAccess, toParty?.partyUuid, fromParty?.partyUuid)
-        : null,
+      delegationAccess ? getDeletableStatus(delegationAccess, toParty?.id, fromParty?.id) : null,
     [delegationAccess, toParty, fromParty],
   );
 
@@ -142,7 +140,7 @@ export const AccessPackageInfo = ({ accessPackage, availableActions = [] }: Pack
                   errorCode={actionError.details?.errorCode ?? actionError.details?.detail ?? ''}
                   translationValues={{
                     entity_type:
-                      toParty?.partyTypeName === PartyType.Person
+                      toParty?.type === PartyType.Person
                         ? t('common.persons_lowercase')
                         : t('common.organizations_lowercase'),
                   }}

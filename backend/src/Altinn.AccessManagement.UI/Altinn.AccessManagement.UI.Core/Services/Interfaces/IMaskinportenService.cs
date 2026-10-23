@@ -1,5 +1,5 @@
 using Altinn.AccessManagement.UI.Core.Models.ClientDelegation;
-using Altinn.AccessManagement.UI.Core.Models.Maskinporten;
+using Altinn.AccessManagement.UI.Core.Models.Maskinporten.Frontend;
 using Altinn.AccessManagement.UI.Core.Models.ResourceRegistry;
 using Altinn.AccessManagement.UI.Core.Models.ResourceRegistry.Frontend;
 using Altinn.AccessManagement.UI.Core.Models.SingleRight;
@@ -18,7 +18,7 @@ namespace Altinn.AccessManagement.UI.Core.Services.Interfaces
         /// <param name="supplier">Optional supplier org number to filter by.</param>
         /// <param name="cancellationToken">Cancellation token.</param>
         /// <returns>A collection of suppliers.</returns>
-        Task<IEnumerable<MaskinportenConnection>> GetSuppliers(Guid party, string supplier = null, CancellationToken cancellationToken = default);
+        Task<IEnumerable<MaskinportenConnectionFE>> GetSuppliers(Guid party, string supplier = null, CancellationToken cancellationToken = default);
 
         /// <summary>
         /// Searches Maskinporten scope resources.
@@ -85,7 +85,7 @@ namespace Altinn.AccessManagement.UI.Core.Services.Interfaces
         /// <param name="consumer">Optional consumer org number to filter by.</param>
         /// <param name="cancellationToken">Cancellation token.</param>
         /// <returns>A collection of consumers.</returns>
-        Task<IEnumerable<MaskinportenConnection>> GetConsumers(Guid party, string consumer = null, CancellationToken cancellationToken = default);
+        Task<IEnumerable<MaskinportenConnectionFE>> GetConsumers(Guid party, string consumer = null, CancellationToken cancellationToken = default);
 
         /// <summary>
         /// Removes a Maskinporten supplier from a consumer party.

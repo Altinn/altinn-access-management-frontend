@@ -30,5 +30,11 @@ namespace Altinn.AccessManagement.UI.Core.Configuration
         /// if it equals one of these values or ends with ".{value}".
         /// </summary>
         public List<string> AllowedRedirectDomains { get; set; } = new List<string>();
+
+        /// <summary>
+        /// Exact host names where the user keeps their session when redirected after a consent request.
+        /// Redirects to any other host log the user out first.
+        /// </summary>
+        public List<string> KeepSessionRedirectHosts { get; set; } = new List<string>();
     }
 }

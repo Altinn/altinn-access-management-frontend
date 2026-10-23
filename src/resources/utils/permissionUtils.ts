@@ -1,48 +1,55 @@
-import { type ReporteeInfo } from '@/rtk/features/userInfoApi';
+import { PartyType, type AuthorizedPartyEntity } from '@/dataObjects/dtos/Party';
 
 export const hasConsentPermission = (
-  reporteeInfo?: ReporteeInfo,
+  reporteeInfo?: AuthorizedPartyEntity,
   isAdmin: boolean = false,
   isCurrentUserReportee: boolean = false,
 ): boolean => {
   return (
-    reporteeInfo?.type !== 'SelfIdentified' &&
+    reporteeInfo?.type !== PartyType.SelfIdentified &&
     hasReporteeListAdminAccess(reporteeInfo, isAdmin, isCurrentUserReportee)
   );
 };
 
 export const hasCreateSystemUserPermission = (
-  reporteeInfo?: ReporteeInfo,
+  reporteeInfo?: AuthorizedPartyEntity,
   isAdmin: boolean = false,
 ): boolean | undefined => {
   if (!reporteeInfo) {
     return undefined;
   }
-  const isOrganization = reporteeInfo.type === 'Organization';
+  const isOrganization = reporteeInfo.type === PartyType.Organization;
   return isOrganization && isAdmin;
 };
 
 export const hasSystemUserClientAdminPermission = (
-  reporteeInfo?: ReporteeInfo,
+  reporteeInfo?: AuthorizedPartyEntity,
   isClientAdmin: boolean = false,
 ): boolean | undefined => {
   if (!reporteeInfo) {
     return undefined;
   }
 
-  const isOrganization = reporteeInfo.type === 'Organization';
+  const isOrganization = reporteeInfo.type === PartyType.Organization;
   return isOrganization && isClientAdmin;
 };
 
+export const hasActivityLogPermission = (
+  isAdmin: boolean = false,
+  isMaskinportenAdmin: boolean = false,
+): boolean => {
+  return window.featureFlags?.enableActivityLog === true && (isAdmin || isMaskinportenAdmin);
+};
+
 export const hasReporteeListAdminAccess = (
-  reporteeInfo?: ReporteeInfo,
+  reporteeInfo?: AuthorizedPartyEntity,
   isAdmin: boolean = false,
   isCurrentUserReportee: boolean = false,
 ): boolean => {
   if (!reporteeInfo) {
     return false;
   }
-  const isOrg = reporteeInfo.type === 'Organization';
+  const isOrg = reporteeInfo.type === PartyType.Organization;
   if (isOrg) {
     return isAdmin;
   }

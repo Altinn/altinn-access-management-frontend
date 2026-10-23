@@ -28,13 +28,13 @@ export const InstancePermissions = () => {
     isError,
   } = useGetInstancesQuery(
     {
-      party: actingParty?.partyUuid || '',
-      from: fromParty?.partyUuid,
-      to: toParty?.partyUuid,
+      party: actingParty?.id || '',
+      from: fromParty?.id,
+      to: toParty?.id,
       language: i18n.language,
     },
     {
-      skip: !actingParty?.partyUuid || !fromParty?.partyUuid,
+      skip: !actingParty?.id || !fromParty?.id,
     },
   );
 

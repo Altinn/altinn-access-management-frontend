@@ -125,23 +125,23 @@ export const DeleteUserModalContent = ({
     : t('delete_user.agent_role_client_admin_link');
 
   const onDeleteUser = async () => {
-    if (!toParty?.partyUuid || !fromParty?.partyUuid || !actingParty?.partyUuid) {
+    if (!toParty?.id || !fromParty?.id || !actingParty?.id) {
       return;
     }
 
     try {
       await deleteUser({
-        to: toParty.partyUuid,
-        from: fromParty.partyUuid,
-        party: actingParty.partyUuid,
+        to: toParty.id,
+        from: fromParty.id,
+        party: actingParty.id,
       }).unwrap();
 
       setIsSuccess(true);
       dispatch(roleApi.util.invalidateTags(['role-permissions', 'roles']));
       dispatch(accessPackageApi.util.invalidateTags(['AccessPackages']));
 
-      if (toParty.partyUuid === selfParty?.partyUuid) {
-        handleSelectAccount(selfParty.partyUuid);
+      if (toParty.id === selfParty?.id) {
+        handleSelectAccount(selfParty.id);
       }
     } catch {
       // Error details are shown from mutation state.
@@ -202,7 +202,7 @@ export const DeleteUserModalContent = ({
         const viaName = formatEntityDisplayName(viaParty);
         const goTo = viaParty.isMainUnit
           ? window.location.href
-          : `${window.location.origin}${GeneralPath.BasePath}/${amUIPath.Reportees}/${fromParty?.partyUuid}`;
+          : `${window.location.origin}${GeneralPath.BasePath}/${amUIPath.Reportees}/${fromParty?.id}`;
         return {
           key: `${reason}-${viaParty.id}`,
           i18nKey: isAdmin ? nonDeletableReasonKeys[reason] : viaRoleSwitchKey,

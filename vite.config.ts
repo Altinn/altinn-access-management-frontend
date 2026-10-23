@@ -9,7 +9,7 @@ import svgr from 'vite-plugin-svgr';
 // https://vitejs.dev/config/
 export default defineConfig({
   resolve: {
-    alias: [{ find: '@', replacement: path.resolve(__dirname, 'src') }],
+    alias: [{ find: '@', replacement: path.resolve(import.meta.dirname, 'src') }],
   },
   server: {
     cors: {
@@ -31,13 +31,13 @@ export default defineConfig({
   build: {
     target: 'es2020',
     manifest: true,
-    rollupOptions: {
+    rolldownOptions: {
       // overwrite default .html entry
       input: './entrypoint.js',
       output: {
         entryFileNames: 'assets/accessmanagement.js',
         assetFileNames: (assetInfo) => {
-          const extType = assetInfo.name.split('.')[1];
+          const extType = assetInfo.names[0]?.split('.')[1];
           if (/css/i.test(extType)) {
             return 'assets/accessmanagement.css';
           }

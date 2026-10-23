@@ -63,7 +63,7 @@ const ResourceRequestBody = ({
     isRequest: true,
   });
 
-  const isSelfParty = selfParty?.partyUuid === request.from.id;
+  const isSelfParty = selfParty?.id === request.from.id;
 
   return (
     <div>

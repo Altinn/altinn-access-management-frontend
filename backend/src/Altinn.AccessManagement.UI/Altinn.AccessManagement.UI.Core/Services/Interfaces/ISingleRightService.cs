@@ -1,4 +1,5 @@
 using Altinn.AccessManagement.UI.Core.Models.SingleRight;
+using Altinn.AccessManagement.UI.Core.Models.SingleRight.Frontend;
 
 namespace Altinn.AccessManagement.UI.Core.Services.Interfaces
 {
@@ -55,7 +56,7 @@ namespace Altinn.AccessManagement.UI.Core.Services.Interfaces
         /// <param name="to">The party that has received the delegations</param>
         /// <param name="resource">The identifier of the resource that has been granted access to</param>
         /// <returns></returns>
-        Task<ResourceRight> GetDelegatedResourceRights(string languageCode, Guid party, Guid from, Guid to, string resource);
+        Task<ResourceRightFE> GetDelegatedResourceRights(string languageCode, Guid party, Guid from, Guid to, string resource);
 
         /// <summary>
         /// Revokes all rights on a resource that has been granted from one party to another.

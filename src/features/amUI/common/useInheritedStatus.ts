@@ -1,5 +1,4 @@
-import type { Party } from '@/rtk/features/lookupApi';
-import type { Entity } from '@/dataObjects/dtos/Common';
+import type { PartyEntity } from '@/dataObjects/dtos/Party';
 import type { Permission } from '@/rtk/features/roleApi';
 
 export enum InheritedStatusType {
@@ -11,7 +10,7 @@ export enum InheritedStatusType {
 
 export interface InheritedStatusMessageType {
   type: InheritedStatusType;
-  via?: Entity;
+  via?: PartyEntity;
 }
 
 const resolveInheritanceStatus = (
@@ -55,9 +54,9 @@ const resolveInheritanceStatus = (
 
 interface GetInheritedStatusParams {
   permissions?: Permission[];
-  toParty?: Party;
-  fromParty?: Party;
-  actingParty?: Party;
+  toParty?: PartyEntity;
+  fromParty?: PartyEntity;
+  actingParty?: PartyEntity;
 }
 
 export const getInheritedStatus = ({
@@ -73,7 +72,7 @@ export const getInheritedStatus = ({
   const result: InheritedStatusMessageType[] = [];
 
   permissions.forEach((permission) => {
-    const isRelevantPermission = !toParty?.partyUuid || permission.to?.id === toParty.partyUuid;
+    const isRelevantPermission = !toParty?.id || permission.to?.id === toParty.id;
 
     if (isRelevantPermission) {
       const hasRightholderRole = permission.role?.code === 'rettighetshaver';

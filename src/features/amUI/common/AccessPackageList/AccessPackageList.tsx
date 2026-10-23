@@ -3,8 +3,7 @@ import { useTranslation } from 'react-i18next';
 
 import type { ActionError } from '@/resources/hooks/useActionError';
 import type { AccessPackage } from '@/rtk/features/accessPackageApi';
-import type { Party } from '@/rtk/features/lookupApi';
-import { PartyType } from '@/rtk/features/userInfoApi';
+import { PartyType, type PartyEntity } from '@/dataObjects/dtos/Party';
 
 import type { DelegationAction } from '../DelegationModal/EditModal';
 import { TechnicalErrorParagraphs } from '../TechnicalErrorParagraphs';
@@ -32,9 +31,9 @@ interface AccessPackageListProps {
   showPermissions?: boolean;
   showPackagesCount?: boolean;
   onSelect?: (accessPackage: AccessPackage) => void;
-  onDelegateSuccess?: (accessPackage: AccessPackage, toParty: Party) => void;
+  onDelegateSuccess?: (accessPackage: AccessPackage, toParty: PartyEntity) => void;
   onDelegateError?: (accessPackage: AccessPackage, error: ActionError) => void;
-  onRevokeSuccess?: (accessPackage: AccessPackage, toParty: Party) => void;
+  onRevokeSuccess?: (accessPackage: AccessPackage, toParty: PartyEntity) => void;
   onRevokeError?: (accessPackage: AccessPackage, error: ActionError) => void;
   packageAs?: React.ElementType;
   noPackagesText?: string;

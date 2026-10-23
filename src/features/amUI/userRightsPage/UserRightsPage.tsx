@@ -41,8 +41,8 @@ export const UserRightsPage = () => {
   const returnToUrl = `/${GeneralPath.BasePath}`;
 
   const actingPartyUuid =
-    !isHovedadminLoading && !isHovedadmin && !currentUserIsLoading && currentUser?.partyUuid === id
-      ? currentUser?.partyUuid
+    !isHovedadminLoading && !isHovedadmin && !currentUserIsLoading && currentUser?.id === id
+      ? currentUser?.id
       : getCookie('AltinnPartyUuid');
 
   const isViewingOtherUser = !currentUserIsLoading && !!id && id !== currentUser?.partyUuid;

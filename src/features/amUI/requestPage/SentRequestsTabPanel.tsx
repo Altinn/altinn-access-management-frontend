@@ -2,9 +2,9 @@ import { formatDisplayName } from '@altinn/altinn-components';
 import { useTranslation } from 'react-i18next';
 import { useRef, useState } from 'react';
 
+import { PartyType } from '@/dataObjects/dtos/Party';
 import { formatDateToNorwegian } from '@/resources/utils';
 import { getCookie } from '@/resources/Cookie/CookieMethods';
-import { PartyType } from '@/rtk/features/userInfoApi';
 
 import { useRestoreFocusContext } from '../common/RestoreFocus';
 import { PartyRepresentationProvider } from '../common/PartyRepresentationContext/PartyRepresentationContext';
@@ -70,12 +70,13 @@ export const SentRequestsTabPanel = ({
       <PartyRepresentationProvider
         fromPartyOverride={{
           partyId: 0,
-          partyUuid: openAccessRequest?.partyUuid || '',
+          id: openAccessRequest?.partyUuid || '',
           name: openAccessRequest?.displayPartyName || '',
-          partyTypeName:
+          type:
             openAccessRequest?.displayPartyType == 'person'
               ? PartyType.Person
               : PartyType.Organization,
+          isDeleted: false,
         }}
         toPartyUuid={getCookie('AltinnPartyUuid')}
         actingPartyUuid={getCookie('AltinnPartyUuid')}

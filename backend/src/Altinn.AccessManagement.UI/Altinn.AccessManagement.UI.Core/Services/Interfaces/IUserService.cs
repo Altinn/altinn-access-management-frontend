@@ -1,5 +1,6 @@
 ﻿using Altinn.AccessManagement.UI.Core.Models;
 using Altinn.AccessManagement.UI.Core.Models.AccessManagement;
+using Altinn.AccessManagement.UI.Core.Models.Common.Frontend;
 using Altinn.AccessManagement.UI.Core.Models.Profile;
 using Altinn.AccessManagement.UI.Core.Models.User;
 
@@ -35,7 +36,7 @@ namespace Altinn.AccessManagement.UI.Core.Services.Interfaces
         /// </summary>
         /// <param name="partyUuid">The party UUID of the party to retrieve</param>
         /// <returns>Party that corresponds to partyUuid parameter if it's in the users reporteelist</returns>
-        Task<AuthorizedParty> GetPartyFromReporteeListIfExists(Guid partyUuid);
+        Task<AuthorizedPartyFE> GetPartyFromReporteeListIfExists(Guid partyUuid);
 
         /// <summary>
         /// Endpoint for reportees the authenticated user can act on behalf of

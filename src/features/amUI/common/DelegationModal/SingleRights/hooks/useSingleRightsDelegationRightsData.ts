@@ -36,9 +36,9 @@ export const useSingleRightsDelegationRightsData = ({
     isLoading: isResourceRightsLoading,
   } = useGetResourceRightsQuery(
     {
-      actingParty: actingParty?.partyUuid || '',
-      from: fromParty?.partyUuid || '',
-      to: toParty?.partyUuid || '',
+      actingParty: actingParty?.id || '',
+      from: fromParty?.id || '',
+      to: toParty?.id || '',
       resourceId: resource.identifier,
     },
     { skip: !toParty || !fromParty || !actingParty || !resource.identifier || !hasResourceAccess },

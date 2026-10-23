@@ -3,6 +3,7 @@ using Altinn.AccessManagement.UI.Core.Helpers;
 using Altinn.AccessManagement.UI.Core.Models.AccessManagement;
 using Altinn.AccessManagement.UI.Core.Models.Connections;
 using Altinn.AccessManagement.UI.Core.Models.User;
+using Altinn.AccessManagement.UI.Core.Models.User.Frontend;
 using Altinn.AccessManagement.UI.Core.Services.Interfaces;
 using Altinn.Register.Contracts.V1;
 using Microsoft.Extensions.Logging;
@@ -110,7 +111,7 @@ namespace Altinn.AccessManagement.UI.Core.Services
         }
 
         /// <inheritdoc/>
-        public async Task<List<Connection>> GetConnections(
+        public async Task<List<ConnectionFE>> GetConnections(
             Guid party,
             Guid? from,
             Guid? to,
@@ -119,12 +120,13 @@ namespace Altinn.AccessManagement.UI.Core.Services
         {
             try
             {
-                return await _connectionClient.GetConnections(
+                List<Connection> connections = await _connectionClient.GetConnections(
                     party,
                     from,
                     to,
                     includeClientDelegations,
                     includeAgentConnections);
+                return connections?.Select(ConnectionFE.FromConnection).ToList();
             }
             catch (Exception ex)
             {
@@ -134,9 +136,10 @@ namespace Altinn.AccessManagement.UI.Core.Services
         }
 
         /// <inheritdoc/>
-        public async Task<List<SimplifiedConnection>> GetSimplifiedConnections(Guid party)
+        public async Task<List<SimplifiedConnectionFE>> GetSimplifiedConnections(Guid party)
         {
-            return await _connectionClient.GetSimplifiedConnections(party);
+            List<SimplifiedConnection> connections = await _connectionClient.GetSimplifiedConnections(party);
+            return connections?.Select(SimplifiedConnectionFE.FromSimplifiedConnection).ToList();
         }
     }
 }

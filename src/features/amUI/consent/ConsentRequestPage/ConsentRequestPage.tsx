@@ -4,7 +4,7 @@ import { useNavigate, useSearchParams } from 'react-router';
 import { DsAlert, DsButton, DsHeading, DsParagraph } from '@altinn/altinn-components';
 
 import { ConsentPath } from '@/routes/paths/consentPath';
-import { PartyType } from '@/rtk/features/userInfoApi';
+import { PartyType } from '@/dataObjects/dtos/Party';
 import {
   useApproveConsentRequestMutation,
   useGetConsentRequestQuery,
@@ -269,6 +269,7 @@ export const ConsentRequestPage = () => {
     <RequestPageLayout
       account={account}
       isLoading={isLoadingRequest}
+      requestPartyUuid={request?.fromParty.id}
       error={error}
       heading={heading}
       body={body}

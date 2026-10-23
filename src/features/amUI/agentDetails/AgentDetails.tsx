@@ -86,8 +86,8 @@ export const AgentDetails = () => {
 
   const backUrl = `/${amUIPath.ClientAdministration}#users`;
   const userName = formatEntityDisplayName(toParty);
-  const toPartyUuid = toParty?.partyUuid;
-  const actingPartyUuid = actingParty?.partyUuid;
+  const toPartyUuid = toParty?.id;
+  const actingPartyUuid = actingParty?.id;
   const accessStateClients = agentAccessPackages ?? [];
   const resourceAccessClients = agentResources ?? [];
   const actionsDisabled =

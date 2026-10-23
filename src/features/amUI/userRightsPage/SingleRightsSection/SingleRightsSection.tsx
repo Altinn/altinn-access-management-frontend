@@ -37,9 +37,7 @@ const SingleRightsSectionContent = ({ isReportee }: { isReportee: boolean }) => 
 
   const canGiveAccess = useCanGiveAccess(id ?? '', isReportee);
   const canRequestAccess =
-    !canGiveAccess &&
-    actingParty?.partyUuid === toParty?.partyUuid &&
-    toParty?.partyUuid !== fromParty?.partyUuid;
+    !canGiveAccess && actingParty?.id === toParty?.id && toParty?.id !== fromParty?.id;
 
   const {
     data: delegatedResources,
@@ -47,9 +45,9 @@ const SingleRightsSectionContent = ({ isReportee }: { isReportee: boolean }) => 
     isLoading,
   } = useGetSingleRightsForRightholderQuery(
     {
-      actingParty: actingParty?.partyUuid || '',
-      from: fromParty?.partyUuid || '',
-      to: toParty?.partyUuid || '',
+      actingParty: actingParty?.id || '',
+      from: fromParty?.id || '',
+      to: toParty?.id || '',
     },
     {
       skip: !actingParty || !fromParty || !toParty,

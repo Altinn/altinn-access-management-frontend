@@ -26,44 +26,51 @@
       {
         "from": {
           "id": "cd35779b-b174-4ecc-bbef-ece13611be7f",
+          "partyId": 51329012,
           "name": "DISKRET NÆR TIGER AS",
-          "type": "Organisasjon",
-          "variant": "AS",
-          "parent": null,
+          "type": "Organization",
+          "unitType": "AS",
+          "organizationIdentifier": "310202398",
+          "dateOfBirth": null,
+          "isDeleted": false,
           "children": [
             {
               "id": "b0a79f3d-4cef-430a-9774-301b754e0f6f",
+              "partyId": 51433301,
               "name": "DISKRET NÆR TIGER AS",
-              "type": "Organisasjon",
-              "variant": "BEDR",
+              "type": "Organization",
+              "unitType": "BEDR",
+              "organizationIdentifier": "311312294",
+              "dateOfBirth": null,
+              "isDeleted": false,
+              "children": null,
               "parent": {
                 "id": "cd35779b-b174-4ecc-bbef-ece13611be7f",
+                "partyId": 51329012,
                 "name": "DISKRET NÆR TIGER AS",
-                "type": "Organisasjon",
-                "variant": "AS",
-                "parent": null,
-                "children": null,
+                "type": "Organization",
+                "unitType": "AS",
                 "organizationIdentifier": "310202398",
-                "partyId": 51329012
-              },
-              "children": null,
-              "organizationIdentifier": "311312294",
-              "partyId": 51433301
+                "dateOfBirth": null,
+                "isDeleted": false,
+                "children": null,
+                "parent": null
+              }
             }
           ],
-          "organizationIdentifier": "310202398",
-          "partyId": 51329012
+          "parent": null
         },
         "to": {
           "id": "167536b5-f8ed-4c5a-8f48-0279507e53ae",
+          "partyId": 50789533,
           "name": "SITRONGUL MEDALJONG",
           "type": "Person",
-          "variant": "Person",
-          "parent": null,
-          "children": null,
-          "personIdentifier": "20838198385",
+          "unitType": null,
+          "organizationIdentifier": null,
           "dateOfBirth": "1981-03-20",
-          "partyId": 50789533
+          "isDeleted": false,
+          "children": null,
+          "parent": null
         },
         "via": null,
         "role": {

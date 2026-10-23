@@ -8,7 +8,8 @@ import { t } from 'i18next';
 
 import { formatEntityDisplayName } from '@/resources/utils/reporteeUtils';
 import { useGetRightHoldersQuery } from '@/rtk/features/connectionApi';
-import { useGetPartyFromLoggedInUserQuery, type Party } from '@/rtk/features/lookupApi';
+import { useGetPartyFromLoggedInUserQuery } from '@/rtk/features/lookupApi';
+import type { PartyEntity } from '@/dataObjects/dtos/Party';
 
 import { TechnicalErrorParagraphs } from '../TechnicalErrorParagraphs';
 import { createErrorDetails } from '../TechnicalErrorParagraphs/TechnicalErrorParagraphs';
@@ -33,16 +34,16 @@ interface PartyRepresentationProviderProps {
   /** Optional override of the back URL in case of an error - defaults to '/' */
   noConnectionBackUrl?: string;
   /** Optional override of the toParty - only use this if absolutely necessary */
-  toPartyOverride?: Party;
+  toPartyOverride?: PartyEntity;
   /** Optional override of the fromParty - only use this if absolutely necessary */
-  fromPartyOverride?: Party;
+  fromPartyOverride?: PartyEntity;
 }
 
 export interface PartyRepresentationContextOutput {
-  fromParty?: Party;
-  toParty?: Party;
-  actingParty?: Party;
-  selfParty?: Party;
+  fromParty?: PartyEntity;
+  toParty?: PartyEntity;
+  actingParty?: PartyEntity;
+  selfParty?: PartyEntity;
   isLoading?: boolean;
   isError?: boolean;
 }
@@ -92,8 +93,8 @@ export const PartyRepresentationProvider = ({
       !fromPartyUuid ||
       fromPartyUuid === actingPartyUuid ||
       isLoadingInitialState ||
-      fromPartyUuid === currentUser?.partyUuid ||
-      fromPartyUuid === reportee?.partyUuid ||
+      fromPartyUuid === currentUser?.id ||
+      fromPartyUuid === reportee?.id ||
       !!fromPartyOverride, // Skip if fromPartyOverride is provided, since that means the consumer is providing the fromParty data themselves
   });
 
@@ -103,13 +104,13 @@ export const PartyRepresentationProvider = ({
       !toPartyUuid ||
       toPartyUuid === actingPartyUuid ||
       isLoadingInitialState ||
-      toPartyUuid === currentUser?.partyUuid ||
-      toPartyUuid === reportee?.partyUuid ||
+      toPartyUuid === currentUser?.id ||
+      toPartyUuid === reportee?.id ||
       !!toPartyOverride, // Skip if toPartyOverride is provided, since that means the consumer is providing the toParty data themselves
   });
 
-  let actingParty: Party | undefined;
-  if (actingPartyUuid === currentUser?.partyUuid) {
+  let actingParty: PartyEntity | undefined;
+  if (actingPartyUuid === currentUser?.id) {
     // User is on their own page
     actingParty = currentUser;
   } else {
@@ -121,7 +122,7 @@ export const PartyRepresentationProvider = ({
     ? fromPartyOverride
     : fromPartyUuid === actingPartyUuid
       ? actingParty
-      : fromPartyUuid === reportee?.partyUuid
+      : fromPartyUuid === reportee?.id
         ? reportee
         : fromConnectedParty;
 
@@ -129,7 +130,7 @@ export const PartyRepresentationProvider = ({
     ? toPartyOverride
     : toPartyUuid === actingPartyUuid
       ? actingParty
-      : toPartyUuid === currentUser?.partyUuid
+      : toPartyUuid === currentUser?.id
         ? currentUser
         : toConnectedParty;
 
@@ -198,7 +199,7 @@ export const PartyRepresentationProvider = ({
   );
 };
 
-const formattedReporteeName = (reportee?: Party): string => formatEntityDisplayName(reportee);
+const formattedReporteeName = (reportee?: PartyEntity): string => formatEntityDisplayName(reportee);
 
 export const usePartyRepresentation = (): PartyRepresentationContextOutput => {
   const context = useContext(PartyRepresentationContext);

@@ -135,9 +135,9 @@ export const ClientDetails = () => {
   const backUrl = `/${amUIPath.ClientAdministration}#clients`;
   const clientName = formatEntityDisplayName(fromParty);
   const actingPartyName =
-    actingParty?.name && actingParty.partyTypeName ? formatEntityDisplayName(actingParty) : '';
-  const fromPartyUuid = fromParty?.partyUuid ?? id;
-  const actingPartyUuid = actingParty?.partyUuid;
+    actingParty?.name && actingParty.type ? formatEntityDisplayName(actingParty) : '';
+  const fromPartyUuid = fromParty?.id ?? id;
+  const actingPartyUuid = actingParty?.id;
 
   const onUserAdded = () =>
     queueSnackbar(t('client_administration_page.add_agent_client_access_success_snackbar'));

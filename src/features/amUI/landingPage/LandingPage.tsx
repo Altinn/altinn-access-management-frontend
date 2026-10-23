@@ -19,12 +19,14 @@ import {
   useGetReporteeQuery,
 } from '@/rtk/features/userInfoApi';
 import {
+  hasActivityLogPermission,
   hasConsentPermission,
   hasReporteeListAdminAccess,
   hasSystemUserClientAdminPermission,
   hasCreateSystemUserPermission,
 } from '@/resources/utils/permissionUtils';
 import {
+  getActivityLogMenuItem,
   getConsentMenuItem,
   getMaskinportenMenuItem,
   getPoaOverviewMenuItem,
@@ -71,7 +73,7 @@ export const LandingPage = () => {
   });
   const { data: currentUser, isLoading: currentUserIsLoading } = useGetPartyFromLoggedInUserQuery();
   const actingPartyUuid = getCookie('AltinnPartyUuid') ?? '';
-  const isCurrentUserReportee = reportee?.partyUuid === currentUser?.partyUuid;
+  const isCurrentUserReportee = reportee?.id === currentUser?.id;
 
   const { requestsBadgeCount, isLoading: isLoadingRequestsBadge } = useSidebarRequestCount({
     isAdmin,
@@ -84,12 +86,12 @@ export const LandingPage = () => {
 
   const { data: roles } = useGetRolePermissionsQuery(
     {
-      party: currentUser?.partyUuid ?? '',
+      party: currentUser?.id ?? '',
       from: actingPartyUuid,
-      to: currentUser?.partyUuid ?? '',
+      to: currentUser?.id ?? '',
     },
     {
-      skip: !actingPartyUuid || !currentUser?.partyUuid || isCurrentUserReportee,
+      skip: !actingPartyUuid || !currentUser?.id || isCurrentUserReportee,
     },
   );
 
@@ -183,6 +185,12 @@ export const LandingPage = () => {
         description: t('landing_page.maskinporten_item_description'),
       });
     }
+    if (hasActivityLogPermission(isAdmin, isMaskinportenAdmin)) {
+      items.push({
+        ...getActivityLogMenuItem(),
+        description: t('landing_page.activity_log_item_description', { reportee: reporteeName }),
+      });
+    }
     return items;
   };
 
@@ -219,7 +227,7 @@ export const LandingPage = () => {
     const items: MenuItemProps[] = [];
     items.push({
       ...getYourRightsMenuItem(
-        currentUser?.partyUuid ?? '',
+        currentUser?.id ?? '',
         formatEntityDisplayName(currentUser),
         '/',
         isLoading,
@@ -242,8 +250,8 @@ export const LandingPage = () => {
   const isReporteeSubUnit = isSubUnit(reportee);
 
   const getReporteeDescription = (): string => {
-    if (isOrganization(reportee) && reportee?.organizationNumber) {
-      const orgNrString = `${t('common.org_nr')} ${formatOrgNr(reportee?.organizationNumber)}`;
+    if (isOrganization(reportee) && reportee?.organizationIdentifier) {
+      const orgNrString = `${t('common.org_nr')} ${formatOrgNr(reportee?.organizationIdentifier)}`;
       if (isReporteeSubUnit) {
         return `↳ ${orgNrString}, ${t('common.subunit').toLowerCase()}`;
       }
@@ -261,7 +269,7 @@ export const LandingPage = () => {
         <div className={classes.landingPage}>
           <div className={classes.landingPageHeading}>
             <UserListItem
-              id={reportee?.partyUuid ?? ''}
+              id={reportee?.id ?? ''}
               type={isOrganization(reportee) ? 'company' : 'person'}
               name={reporteeName}
               description={getReporteeDescription()}

@@ -74,11 +74,11 @@ export const SingleRightsPermissions = () => {
     isError,
   } = useGetSingleRightsForRightholderQuery(
     {
-      actingParty: actingParty?.partyUuid || '',
-      from: fromParty?.partyUuid || '',
+      actingParty: actingParty?.id || '',
+      from: fromParty?.id || '',
     },
     {
-      skip: !actingParty?.partyUuid || !fromParty?.partyUuid,
+      skip: !actingParty?.id || !fromParty?.id,
     },
   );
 

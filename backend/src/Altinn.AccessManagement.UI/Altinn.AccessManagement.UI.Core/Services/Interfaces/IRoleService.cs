@@ -1,6 +1,6 @@
 using System.Collections.Generic;
 using Altinn.AccessManagement.UI.Core.Models.AccessPackage;
-using Altinn.AccessManagement.UI.Core.Models.Role;
+using Altinn.AccessManagement.UI.Core.Models.Role.Frontend;
 using RoleMetadata = Altinn.AccessManagement.UI.Core.Models.Common.Role;
 
 namespace Altinn.AccessManagement.UI.Core.Services.Interfaces
@@ -17,7 +17,7 @@ namespace Altinn.AccessManagement.UI.Core.Services.Interfaces
         /// <param name="from">Optional right owner filter.</param>
         /// <param name="to">Optional right holder filter.</param>
         /// <param name="languageCode">Language code for localization.</param>
-        Task<List<RolePermission>> GetRolePermissions(Guid party, Guid? from, Guid? to, string languageCode);
+        Task<List<RolePermissionFE>> GetRolePermissions(Guid party, Guid? from, Guid? to, string languageCode);
 
         /// <summary>
         /// Gets metadata for all roles.
