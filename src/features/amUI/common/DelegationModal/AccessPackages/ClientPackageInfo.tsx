@@ -11,7 +11,6 @@ import { StatusSection } from '../../StatusSection/StatusSection';
 import { TechnicalErrorParagraphs } from '../../TechnicalErrorParagraphs';
 import { ValidationErrorMessage } from '../../ValidationErrorMessage';
 import type { PartyInfoProps } from '../Party/PartyInfo';
-import { DelegationAction } from '../EditModal';
 
 import classes from './AccessPackageInfo.module.css';
 import { PackageHeader } from './PackageHeader';
@@ -23,7 +22,6 @@ export const ClientPackageInfo = ({
   userHasAccess,
   inheritedStatus,
   roleDescription,
-  availableActions = [DelegationAction.DELEGATE, DelegationAction.REVOKE],
   onDelegate,
   onRevoke,
   isLoading = false,
@@ -45,9 +43,8 @@ export const ClientPackageInfo = ({
 
   const userName = formatEntityDisplayName(party);
 
-  const canRevoke = userHasAccess && availableActions.includes(DelegationAction.REVOKE);
-  const canDelegate =
-    !userHasAccess && availableActions.includes(DelegationAction.DELEGATE) && !!onDelegate;
+  const canRevoke = userHasAccess && !!onRevoke;
+  const canDelegate = !userHasAccess && !!onDelegate;
   const cannotChangeAccess = accessPackage.isDelegable === false;
 
   return (

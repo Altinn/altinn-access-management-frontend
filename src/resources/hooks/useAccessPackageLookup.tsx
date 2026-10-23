@@ -25,23 +25,25 @@ export const useAccessPackageLookup = () => {
 
     accessAreas.forEach((area) => {
       area.accessPackages.forEach((pkg) => {
-        map.set(pkg.id, pkg);
+        if (pkg.urn) {
+          map.set(pkg.urn, pkg);
+        }
       });
     });
 
     return map;
   }, [accessAreas]);
 
-  const getAccessPackageById = React.useCallback(
-    (packageId?: string | null): AccessPackage | undefined => {
-      if (!packageId) {
+  const getAccessPackageByUrn = React.useCallback(
+    (packageUrn?: string | null): AccessPackage | undefined => {
+      if (!packageUrn) {
         return undefined;
       }
 
-      return packageMap.get(packageId);
+      return packageMap.get(packageUrn);
     },
     [packageMap],
   );
 
-  return { getAccessPackageById, isLoading, isFetching, error } as const;
+  return { getAccessPackageByUrn, isLoading, isFetching, error } as const;
 };
