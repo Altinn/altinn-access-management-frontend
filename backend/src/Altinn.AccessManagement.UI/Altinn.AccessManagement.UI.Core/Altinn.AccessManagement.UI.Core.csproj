@@ -21,7 +21,7 @@
 		<PackageReference Include="Markdig" Version="0.45.0" />
 		<PackageReference Include="Microsoft.AspNetCore.Http.Abstractions" Version="2.3.13" />
 		<PackageReference Include="Microsoft.Bcl.Cryptography" Version="10.0.13" />
-		<PackageReference Include="Microsoft.Extensions.Caching.Abstractions" Version="9.0.21" />
+		<PackageReference Include="Microsoft.Extensions.Caching.Abstractions" Version="10.0.11" />
 		<PackageReference Include="Microsoft.FeatureManagement" Version="4.8.0" />
 		<PackageReference Include="StyleCop.Analyzers" Version="1.2.0-beta.556">
 			<PrivateAssets>all</PrivateAssets>
