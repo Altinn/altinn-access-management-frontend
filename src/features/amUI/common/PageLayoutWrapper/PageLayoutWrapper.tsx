@@ -9,7 +9,7 @@ import {
 import { useTranslation } from 'react-i18next';
 
 import { useGetReporteeQuery } from '@/rtk/features/userInfoApi';
-import { isOrganization } from '@/resources/utils/reporteeUtils';
+import { getPartyColor } from '@/resources/utils/reporteeUtils';
 
 import { useGlobalMenu } from './useGlobalMenu';
 import { useFooter } from './useFooter';
@@ -43,7 +43,7 @@ export const PageLayoutWrapper = ({
       <NavigationFocus />
       <SnackbarProvider>
         <Layout
-          color={reportee ? (isOrganization(reportee) ? 'company' : 'person') : 'neutral'}
+          color={reportee ? getPartyColor(reportee) : 'neutral'}
           theme='subtle'
           header={header}
           banner={{
@@ -70,7 +70,7 @@ export const PageLayoutWrapper = ({
                 }
           }
           content={{
-            color: reportee ? (isOrganization(reportee) ? 'company' : 'person') : 'neutral',
+            color: reportee ? getPartyColor(reportee) : 'neutral',
           }}
           footer={footer}
           cookieBanner={

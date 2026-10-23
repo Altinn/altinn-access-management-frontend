@@ -2,7 +2,8 @@ import { AccessAreaListItem, Badge } from '@altinn/altinn-components';
 import { useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 
-import { PartyType } from '@/dataObjects/dtos/Party';
+import { type PartyType } from '@/dataObjects/dtos/Party';
+import { getPartyColor } from '@/resources/utils/reporteeUtils';
 import { useIsMobileOrSmaller } from '@/resources/utils/screensizeUtils';
 import { usePermissionOverview } from '@/resources/hooks';
 
@@ -46,7 +47,7 @@ export const AreaItem = ({
   const showPermissionsBadge = showPermissions;
   const showUndelegatedPackageWarning =
     showPermissions && area.packages.available.some((pkg) => isCriticalAndUndelegated(pkg));
-  const colorTheme = partyType === PartyType.Person ? 'person' : 'company';
+  const colorTheme = getPartyColor({ type: partyType });
 
   return (
     <AccessAreaListItem
