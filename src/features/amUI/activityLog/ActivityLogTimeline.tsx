@@ -10,12 +10,7 @@ import {
 
 import { useLanguageCode } from '@/resources/hooks/useLanguageCode';
 
-import type {
-  ActivityLogArea,
-  ActivityLogDirection,
-  ActivityLogDto,
-  ActivityTypeDto,
-} from './types';
+import type { ActivityLogDirection, ActivityLogDto, ActivityTypeDto } from './types';
 import {
   formatActivityLogTimestamp,
   getActivityLogColor,
@@ -25,7 +20,6 @@ import {
 import classes from './ActivityLogTimeline.module.css';
 
 interface ActivityLogTimelineProps {
-  area: ActivityLogArea;
   direction: ActivityLogDirection;
   /** Display name of the reportee the log is shown for. */
   reporteeName: string;
@@ -43,7 +37,6 @@ interface ActivityLogTimelineProps {
 }
 
 export const ActivityLogTimeline = ({
-  area,
   direction,
   reporteeName,
   entries,
@@ -72,7 +65,6 @@ export const ActivityLogTimeline = ({
           const color = getActivityLogColor(entry);
           const sentence = getActivityLogSentence({
             entry,
-            area,
             direction,
             reporteeName,
             t,

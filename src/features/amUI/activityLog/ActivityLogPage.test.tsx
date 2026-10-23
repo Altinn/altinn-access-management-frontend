@@ -22,6 +22,11 @@ vi.mock('../common/PageLayoutWrapper', () => ({
   PageLayoutWrapper: ({ children }: { children: React.ReactNode }) => <div>{children}</div>,
 }));
 
+// The tab content has its own tests; here it only matters which tab gets it.
+vi.mock('./ActivityLogTab', () => ({
+  ActivityLogTab: ({ area }: { area: string }) => <div data-testid={`activity-log-${area}`} />,
+}));
+
 const reportee = {
   partyUuid: 'reportee-uuid',
   name: 'Fysioterapeutene AS',
@@ -114,6 +119,16 @@ describe('ActivityLogPage', () => {
     expect(
       screen.getByRole('tab', { name: 'activity_log_page.tab_maskinporten' }),
     ).toBeInTheDocument();
+    expect(screen.getByTestId('activity-log-maskinporten')).toBeInTheDocument();
+  });
+
+  it('shows a placeholder instead of the log in the connections and request tabs', () => {
+    setPermissions({ isAdmin: true, isMaskinportenAdmin: false });
+    renderPage();
+
+    expect(screen.queryByTestId('activity-log-connections')).not.toBeInTheDocument();
+    expect(screen.queryByTestId('activity-log-request')).not.toBeInTheDocument();
+    expect(screen.getAllByText('activity_log_page.empty')).toHaveLength(2);
   });
 
   it('shows every area for a user who is both access manager and Maskinporten admin', () => {

@@ -134,7 +134,6 @@ export const ActivityLogTabPanel = ({
         </DsAlert>
       ) : (
         <ActivityLogTimeline
-          area={area}
           direction={direction}
           reporteeName={reporteeName}
           entries={entries}

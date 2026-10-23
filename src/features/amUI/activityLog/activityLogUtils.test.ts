@@ -4,7 +4,7 @@ import { describe, expect, it } from 'vitest';
 import {
   getActivityLogColor,
   getActivityLogCounterpart,
-  getActivityLogEventKeys,
+  getActivityLogEventKey,
   getActivityLogLocale,
   getActivityLogObjectLabel,
   getActivityLogSentence,
@@ -22,7 +22,7 @@ const baseEntry: ActivityLogDto = {
   id: 'entry-1',
   itemId: 'item-1',
   type: 'Assignment',
-  subtype: 'Package',
+  subtype: 'Resource',
   trigger: 'Created',
   when: '2025-01-15T11:15:00Z',
   byName: 'Helle Hovedadmin',
@@ -30,7 +30,7 @@ const baseEntry: ActivityLogDto = {
   fromName: 'Fysioterapeutene AS',
   toId: 'lise',
   toName: 'Lise Larsen AS',
-  packageName: 'Lønn',
+  resourceName: 'altinn:lonn:read',
 };
 
 describe('getActivityLogColor', () => {
@@ -38,14 +38,6 @@ describe('getActivityLogColor', () => {
     expect(getActivityLogColor(baseEntry)).toBe('company');
     expect(getActivityLogColor({ ...baseEntry, trigger: 'Deleted' })).toBe('danger');
     expect(getActivityLogColor({ ...baseEntry, trigger: 'Updated' })).toBe('neutral');
-  });
-
-  it('follows the new status for request status changes', () => {
-    const request: ActivityLogDto = { ...baseEntry, type: 'Request', trigger: 'Updated' };
-    expect(getActivityLogColor({ ...request, status: 'Approved' })).toBe('company');
-    expect(getActivityLogColor({ ...request, status: 'Rejected' })).toBe('danger');
-    expect(getActivityLogColor({ ...request, status: 'Withdrawn' })).toBe('danger');
-    expect(getActivityLogColor({ ...request, status: 'Pending' })).toBe('neutral');
   });
 });
 
@@ -67,74 +59,38 @@ describe('getActivityLogCounterpart', () => {
 });
 
 describe('getActivityLogObjectLabel', () => {
-  it('names the package, service or instance for child entries', () => {
-    expect(getActivityLogObjectLabel(baseEntry, 'connections', t)).toBe(
-      'activity_log_page.object.package({"name":"Lønn"})',
+  it('names the scope for scope entries', () => {
+    expect(getActivityLogObjectLabel(baseEntry, t)).toBe(
+      'activity_log_page.object.scope({"name":"altinn:lonn:read"})',
     );
-    expect(
-      getActivityLogObjectLabel(
-        { ...baseEntry, subtype: 'Resource', resourceName: 'Sykmelding' },
-        'connections',
-        t,
-      ),
-    ).toBe('activity_log_page.object.resource({"name":"Sykmelding"})');
-    expect(
-      getActivityLogObjectLabel(
-        { ...baseEntry, subtype: 'Instance', instanceId: 'skd/mva/1' },
-        'connections',
-        t,
-      ),
-    ).toBe('activity_log_page.object.instance({"name":"skd/mva/1"})');
-  });
-
-  it('calls a resource a scope in the Maskinporten area', () => {
-    expect(
-      getActivityLogObjectLabel(
-        { ...baseEntry, subtype: 'Resource', resourceName: 'altinn:lonn:read' },
-        'maskinporten',
-        t,
-      ),
-    ).toBe('activity_log_page.object.scope({"name":"altinn:lonn:read"})');
   });
 
   it('names the role for main assignment entries', () => {
     expect(
-      getActivityLogObjectLabel(
-        { ...baseEntry, subtype: null, roleName: 'Rettighetshaver' },
-        'connections',
-        t,
-      ),
-    ).toBe('activity_log_page.object.role({"name":"Rettighetshaver"})');
+      getActivityLogObjectLabel({ ...baseEntry, subtype: null, roleName: 'Leverandør' }, t),
+    ).toBe('activity_log_page.object.role({"name":"Leverandør"})');
+  });
+
+  it('falls back to a generic label when neither scope nor role is known', () => {
+    expect(getActivityLogObjectLabel({ ...baseEntry, subtype: null }, t)).toBe(
+      'activity_log_page.object.access',
+    );
   });
 });
 
-describe('getActivityLogEventKeys', () => {
-  it('prefers the status-specific key for request entries', () => {
-    expect(
-      getActivityLogEventKeys({
-        ...baseEntry,
-        type: 'Request',
-        trigger: 'Updated',
-        status: 'Approved',
-      }),
-    ).toEqual([
-      'activity_log_page.events.request.updated_approved',
-      'activity_log_page.events.request.updated',
-    ]);
-  });
-
-  it('uses only the trigger key when there is no status', () => {
-    expect(getActivityLogEventKeys(baseEntry)).toEqual([
-      'activity_log_page.events.assignment.created',
-    ]);
+describe('getActivityLogEventKey', () => {
+  it('is built from the type and trigger', () => {
+    expect(getActivityLogEventKey(baseEntry)).toBe('activity_log_page.events.assignment.created');
+    expect(getActivityLogEventKey({ ...baseEntry, trigger: 'Deleted' })).toBe(
+      'activity_log_page.events.assignment.deleted',
+    );
   });
 });
 
 describe('getActivityLogSentence', () => {
-  it('picks the first existing template and fills in the names', () => {
+  it('uses the event template and fills in the names', () => {
     const sentence = getActivityLogSentence({
       entry: baseEntry,
-      area: 'connections',
       direction: 'from',
       reporteeName: 'Fysioterapeutene AS',
       t,
@@ -146,28 +102,14 @@ describe('getActivityLogSentence', () => {
     expect(sentence.values).toMatchObject({
       reportee: 'Fysioterapeutene AS',
       counterpart: 'Lise Larsen AS',
-      object: 'activity_log_page.object.package({"name":"Lønn"})',
+      object: 'activity_log_page.object.scope({"name":"altinn:lonn:read"})',
       by: 'Helle Hovedadmin',
     });
-  });
-
-  it('falls back from the status-specific template to the trigger template', () => {
-    const sentence = getActivityLogSentence({
-      entry: { ...baseEntry, type: 'Request', trigger: 'Created', status: 'Pending' },
-      area: 'request',
-      direction: 'to',
-      reporteeName: 'Fysioterapeutene AS',
-      t,
-      exists: (key) => !key.includes('created_pending'),
-    });
-
-    expect(sentence.key).toBe('activity_log_page.events.request.created.to');
   });
 
   it('uses the catalog name when no template exists', () => {
     const sentence = getActivityLogSentence({
       entry: { ...baseEntry, activityTypeId: 'type-1', byName: null },
-      area: 'connections',
       direction: 'from',
       reporteeName: 'Fysioterapeutene AS',
       t,
@@ -176,9 +118,9 @@ describe('getActivityLogSentence', () => {
         {
           id: 'type-1',
           type: 'Assignment',
-          subtype: 'Package',
+          subtype: 'Resource',
           trigger: 'Created',
-          name: 'Tilgangspakke tildelt',
+          name: 'Scope tildelt',
           description: '',
         },
       ],
@@ -186,7 +128,7 @@ describe('getActivityLogSentence', () => {
 
     expect(sentence.key).toBe('activity_log_page.events.fallback.from');
     expect(sentence.byKey).toBeUndefined();
-    expect(sentence.values.typeName).toBe('Tilgangspakke tildelt');
+    expect(sentence.values.typeName).toBe('Scope tildelt');
   });
 });
 

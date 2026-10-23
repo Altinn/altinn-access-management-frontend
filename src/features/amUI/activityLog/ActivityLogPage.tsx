@@ -1,6 +1,6 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
-import { DsAlert } from '@altinn/altinn-components';
+import { DsAlert, DsParagraph } from '@altinn/altinn-components';
 
 import { PageWrapper } from '@/components';
 import { formatEntityDisplayName, isOrganization } from '@/resources/utils/reporteeUtils';
@@ -87,10 +87,15 @@ export const ActivityLogPage = () => {
                     key={area}
                     value={area}
                   >
-                    <ActivityLogTab
-                      area={area}
-                      reporteeName={reporteeName}
-                    />
+                    {area === 'maskinporten' ? (
+                      <ActivityLogTab
+                        area={area}
+                        reporteeName={reporteeName}
+                      />
+                    ) : (
+                      // The log for the other areas is added in a follow-up.
+                      <DsParagraph data-color='info'>{t('activity_log_page.empty')}</DsParagraph>
+                    )}
                   </AmTabs.Panel>
                 ))}
               </AmTabs>

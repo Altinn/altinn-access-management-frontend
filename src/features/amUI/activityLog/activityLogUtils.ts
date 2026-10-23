@@ -2,7 +2,6 @@ import type { TFunction } from 'i18next';
 import type { Color, LanguageCode } from '@altinn/altinn-components';
 
 import type {
-  ActivityLogArea,
   ActivityLogDirection,
   ActivityLogDto,
   ActivityLogFilterValueDto,
@@ -30,7 +29,7 @@ export const formatActivityLogTimestamp = (
   locale = localeByLanguage.nb,
 ): string => {
   const date = new Date(timestamp);
-  if (Number.isNaN(date.getTime())) {
+  if (isNaN(date.getTime())) {
     return timestamp;
   }
   return t('activity_log_page.timestamp', {
@@ -39,14 +38,8 @@ export const formatActivityLogTimestamp = (
   });
 };
 
-/** Blue for access given, red for access taken away or requests turned down, neutral for the rest. */
+/** Blue for access given, red for access taken away, neutral for the rest. */
 export const getActivityLogColor = (entry: ActivityLogDto): Color => {
-  if (entry.type === 'Request' && entry.trigger === 'Updated') {
-    if (entry.status === 'Approved') {
-      return 'company';
-    }
-    return entry.status === 'Rejected' || entry.status === 'Withdrawn' ? 'danger' : 'neutral';
-  }
   switch (entry.trigger) {
     case 'Created':
       return 'company';
@@ -67,42 +60,19 @@ export const getActivityLogCounterpart = (
   return id && name ? { id, name } : undefined;
 };
 
-/** The thing the entry concerns (package, service, scope, instance or role), as a translated label. */
-export const getActivityLogObjectLabel = (
-  entry: ActivityLogDto,
-  area: ActivityLogArea,
-  t: TranslateFunction,
-): string => {
-  switch (entry.subtype) {
-    case 'Package':
-      return t(`${OBJECT_KEY}.package`, { name: entry.packageName ?? '' });
-    case 'Resource':
-      return t(`${OBJECT_KEY}.${area === 'maskinporten' ? 'scope' : 'resource'}`, {
-        name: entry.resourceName ?? '',
-      });
-    case 'Instance':
-      return t(`${OBJECT_KEY}.instance`, { name: entry.instanceId ?? '' });
-    default:
-      break;
+/** The thing the entry concerns, as a translated label: the scope for scope entries, else the role. */
+export const getActivityLogObjectLabel = (entry: ActivityLogDto, t: TranslateFunction): string => {
+  if (entry.subtype === 'Resource') {
+    return t(`${OBJECT_KEY}.scope`, { name: entry.resourceName ?? '' });
   }
-  switch (entry.type) {
-    case 'Assignment':
-      return t(`${OBJECT_KEY}.role`, { name: entry.roleName ?? '' });
-    case 'Delegation':
-      return t(`${OBJECT_KEY}.delegation`, { name: entry.viaRoleName ?? entry.roleName ?? '' });
-    default:
-      return t(`${OBJECT_KEY}.access`);
-  }
+  return entry.roleName
+    ? t(`${OBJECT_KEY}.role`, { name: entry.roleName })
+    : t(`${OBJECT_KEY}.access`);
 };
 
-/**
- * Candidate translation keys for the entry's event, most specific first:
- * `events.<type>.<trigger>_<status>` for request entries with a status, then `events.<type>.<trigger>`.
- */
-export const getActivityLogEventKeys = (entry: ActivityLogDto): string[] => {
-  const base = `${EVENTS_KEY}.${entry.type.toLowerCase()}.${entry.trigger.toLowerCase()}`;
-  return entry.status ? [`${base}_${entry.status.toLowerCase()}`, base] : [base];
-};
+/** The translation key for the entry's event: `events.<type>.<trigger>`. */
+export const getActivityLogEventKey = (entry: ActivityLogDto): string =>
+  `${EVENTS_KEY}.${entry.type.toLowerCase()}.${entry.trigger.toLowerCase()}`;
 
 interface ActivityLogSentence {
   /** Key of the sentence describing what happened. */
@@ -113,7 +83,6 @@ interface ActivityLogSentence {
     reportee: string;
     counterpart: string;
     object: string;
-    via: string;
     by: string;
     typeName: string;
   };
@@ -121,27 +90,27 @@ interface ActivityLogSentence {
 
 interface GetActivityLogSentenceParams {
   entry: ActivityLogDto;
-  area: ActivityLogArea;
   direction: ActivityLogDirection;
+  /** Display name of the reportee the log is shown for. */
   reporteeName: string;
   t: TranslateFunction;
+  /** Whether a translation key exists, normally `i18n.exists`. */
   exists: (key: string) => boolean;
+  /** The area's catalog, used to name events without a sentence template. */
   activityTypes?: ActivityTypeDto[];
 }
 
 /** Resolves the sentence that describes an entry from the reportee's point of view. */
 export const getActivityLogSentence = ({
   entry,
-  area,
   direction,
   reporteeName,
   t,
   exists,
   activityTypes,
 }: GetActivityLogSentenceParams): ActivityLogSentence => {
-  const eventKey =
-    getActivityLogEventKeys(entry).find((key) => exists(`${key}.${direction}`)) ??
-    `${EVENTS_KEY}.fallback`;
+  const candidateKey = getActivityLogEventKey(entry);
+  const eventKey = exists(`${candidateKey}.${direction}`) ? candidateKey : `${EVENTS_KEY}.fallback`;
   const catalogName = activityTypes?.find((type) => type.id === entry.activityTypeId)?.name;
   const byKey = `${eventKey}.by`;
 
@@ -151,8 +120,7 @@ export const getActivityLogSentence = ({
     values: {
       reportee: reporteeName,
       counterpart: getActivityLogCounterpart(entry, direction)?.name ?? '',
-      object: getActivityLogObjectLabel(entry, area, t),
-      via: entry.viaName ?? '',
+      object: getActivityLogObjectLabel(entry, t),
       by: entry.byName ?? '',
       typeName: catalogName ?? `${entry.type} ${entry.trigger.toLowerCase()}`,
     },
