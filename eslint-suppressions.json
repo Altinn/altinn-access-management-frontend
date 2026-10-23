@@ -253,11 +253,6 @@
       "count": 4
     }
   },
-  "src/features/amUI/common/DelegationModal/AccessPackages/ClientPackageInfoModal.tsx": {
-    "@typescript-eslint/no-misused-promises": {
-      "count": 2
-    }
-  },
   "src/features/amUI/common/DelegationModal/DelegationModalContext.tsx": {
     "react-hooks/set-state-in-effect": {
       "count": 1

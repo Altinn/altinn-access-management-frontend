@@ -18,7 +18,7 @@ export interface ClientPackageModalData {
   inheritedStatus?: InheritedStatusMessageType[];
   roleDescription?: string;
   onDelegate?: (onSuccess?: () => void, onError?: () => void) => void | Promise<void>;
-  onRevoke: (onSuccess?: () => void, onError?: () => void) => void | Promise<void>;
+  onRevoke?: (onSuccess?: () => void, onError?: () => void) => void | Promise<void>;
 }
 
 interface ClientPackageInfoModalProps {
@@ -89,8 +89,20 @@ export const ClientPackageInfoModal = forwardRef<HTMLDialogElement, ClientPackag
               roleDescription={data.roleDescription}
               isLoading={isLoading}
               isSuccess={isSuccess}
-              onDelegate={data.onDelegate ? () => runAction(data.onDelegate!) : undefined}
-              onRevoke={() => runAction(data.onRevoke)}
+              onDelegate={
+                data.onDelegate
+                  ? () => {
+                      if (data.onDelegate) void runAction(data.onDelegate);
+                    }
+                  : undefined
+              }
+              onRevoke={
+                data.onRevoke
+                  ? () => {
+                      if (data.onRevoke) void runAction(data.onRevoke);
+                    }
+                  : undefined
+              }
             />
           )}
         </div>

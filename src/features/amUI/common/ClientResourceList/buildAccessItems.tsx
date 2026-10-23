@@ -85,7 +85,6 @@ export type BuildPackageItemOptions = {
   id: string;
   accessPackage: AccessPackage;
   hasAccess: boolean;
-  showAction: boolean;
   isMobileOrSmaller: boolean;
   addDisabled: boolean;
   removeDisabled: boolean;
@@ -99,7 +98,6 @@ type DelegationControlOptions = Pick<
   BuildPackageItemOptions,
   | 'id'
   | 'isMobileOrSmaller'
-  | 'showAction'
   | 'hasAccess'
   | 'addDisabled'
   | 'removeDisabled'
@@ -111,7 +109,6 @@ const buildDelegationControl = ({
   id,
   name,
   isMobileOrSmaller,
-  showAction,
   hasAccess,
   addDisabled,
   removeDisabled,
@@ -119,7 +116,7 @@ const buildDelegationControl = ({
   onRevoke,
 }: DelegationControlOptions): React.ReactNode => {
   const onAction = hasAccess ? onRevoke : onDelegate;
-  if (isMobileOrSmaller || !showAction || !onAction) {
+  if (isMobileOrSmaller || !onAction) {
     return undefined;
   }
   return (
@@ -137,7 +134,6 @@ export const buildPackageItem = ({
   id,
   accessPackage,
   hasAccess,
-  showAction,
   isMobileOrSmaller,
   addDisabled,
   removeDisabled,
@@ -150,12 +146,11 @@ export const buildPackageItem = ({
     count: accessPackage.resources?.length ?? 0,
   });
 
-  const showModalTrigger = showAction && !!onOpenModal;
+  const showModalTrigger = !!onOpenModal;
   const controls = buildDelegationControl({
     id,
     name: accessPackage.name,
     isMobileOrSmaller,
-    showAction,
     hasAccess,
     addDisabled,
     removeDisabled,
@@ -180,7 +175,6 @@ export type BuildResourceItemOptions = {
   id: string;
   resource: ServiceResource;
   hasAccess: boolean;
-  showAction: boolean;
   isMobileOrSmaller: boolean;
   addDisabled: boolean;
   removeDisabled: boolean;
@@ -193,7 +187,6 @@ export const buildResourceItem = ({
   id,
   resource,
   hasAccess,
-  showAction,
   isMobileOrSmaller,
   addDisabled,
   removeDisabled,
@@ -205,7 +198,6 @@ export const buildResourceItem = ({
     id,
     name: resource.title,
     isMobileOrSmaller,
-    showAction,
     hasAccess,
     addDisabled,
     removeDisabled,

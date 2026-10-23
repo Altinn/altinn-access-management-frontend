@@ -226,7 +226,6 @@ export const ClientAgentPackageList = ({
           party: agent.agent,
           accessPackage,
           hasAccess: agentHasPackage(agentId, pkg.id),
-          showAction: delegable,
           roleDescription:
             access.role.code !== 'rettighetshaver'
               ? t('client_administration_page.via_role', { role: roleName })
@@ -278,7 +277,6 @@ export const ClientAgentPackageList = ({
           party: agent.agent,
           resource,
           hasAccess: agentHasResource(agentId, clientResource.refId),
-          showAction: delegable,
           onDelegate: delegable
             ? (onSuccess, onError) => addClientResource(delegationInput, onSuccess, onError)
             : undefined,

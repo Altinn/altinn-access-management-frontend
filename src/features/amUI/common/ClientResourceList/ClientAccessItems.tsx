@@ -29,7 +29,6 @@ export type ClientPackageEntry = {
   party: PartyEntity;
   accessPackage: AccessPackage;
   hasAccess: boolean;
-  showAction: boolean;
   roleDescription?: string;
   onDelegate?: PackageActionHandler;
   onRevoke?: PackageActionHandler;
@@ -41,7 +40,6 @@ export type ClientResourceEntry = {
   party: PartyEntity;
   resource: ServiceResource;
   hasAccess: boolean;
-  showAction: boolean;
   onDelegate?: ResourceActionHandler;
   onRevoke?: ResourceActionHandler;
 };
@@ -86,14 +84,12 @@ export const ClientAccessItems = ({
       id: itemId,
       accessPackage,
       hasAccess: entry.hasAccess,
-      showAction: entry.showAction,
       isMobileOrSmaller,
       addDisabled,
       removeDisabled,
       onDelegate: restoreFocusOnSuccess(onDelegate, requestFocus),
       onRevoke: restoreFocusOnSuccess(onRevoke, requestFocus),
-      onOpenModal:
-        entry.showAction && (onDelegate || onRevoke) ? () => onOpenPackageModal(entry) : undefined,
+      onOpenModal: () => onOpenPackageModal(entry),
       t,
     });
   });
@@ -105,7 +101,6 @@ export const ClientAccessItems = ({
       id: entry.itemId,
       resource: entry.resource,
       hasAccess: entry.hasAccess,
-      showAction: entry.showAction,
       isMobileOrSmaller,
       addDisabled,
       removeDisabled,

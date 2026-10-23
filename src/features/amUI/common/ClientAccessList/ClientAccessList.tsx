@@ -159,7 +159,7 @@ export const ClientAccessList = ({
         userHasAccess: entry.hasAccess,
         roleDescription: entry.roleDescription,
         onDelegate: entry.onDelegate,
-        onRevoke: entry.onRevoke ?? (() => {}),
+        onRevoke: entry.onRevoke,
       },
     });
     modalRef.current?.showModal();
@@ -172,8 +172,8 @@ export const ClientAccessList = ({
       refId: entry.resource.identifier,
       resource: entry.resource,
       toPartyName: formatEntityDisplayName(entry.party),
-      onDelegate: entry.showAction ? entry.onDelegate : undefined,
-      onRevoke: entry.showAction ? entry.onRevoke : undefined,
+      onDelegate: entry.onDelegate,
+      onRevoke: entry.onRevoke,
     });
     resourceModalRef.current?.showModal();
   };
@@ -190,6 +190,7 @@ export const ClientAccessList = ({
         // no name or resources to show.
         const accessPackage = getAccessPackageByUrn(pkg.urn);
         if (!accessPackage) return [];
+        const canAct = !requireDelegableForActions || (accessPackage.isDelegable ?? false);
         const action: ClientAccessPackageAction = {
           clientId,
           roleCode: access.role.code,
@@ -205,17 +206,18 @@ export const ClientAccessList = ({
               aap.client.id === clientId &&
               aap.access.some((p) => p.packages.some((ap) => ap.id === pkg.id)),
           ),
-          showAction: !requireDelegableForActions || (accessPackage.isDelegable ?? false),
           roleDescription:
             access.role.code !== 'rettighetshaver'
               ? t('client_administration_page.via_role', { role: roleName })
               : undefined,
-          onDelegate: onAddAccessPackage
-            ? (onSuccess, onError) => onAddAccessPackage(action, onSuccess, onError)
-            : undefined,
-          onRevoke: onRemoveAccessPackage
-            ? (onSuccess, onError) => onRemoveAccessPackage(action, onSuccess, onError)
-            : undefined,
+          onDelegate:
+            canAct && onAddAccessPackage
+              ? (onSuccess, onError) => onAddAccessPackage(action, onSuccess, onError)
+              : undefined,
+          onRevoke:
+            canAct && onRemoveAccessPackage
+              ? (onSuccess, onError) => onRemoveAccessPackage(action, onSuccess, onError)
+              : undefined,
         };
       });
     });
@@ -225,6 +227,7 @@ export const ClientAccessList = ({
         const resource = clientResource.details;
         if (!resource) return [];
 
+        const canAct = !requireDelegableForActions || resource.delegable;
         const action: ClientResourceAction = {
           clientId,
           roleCode: access.role.code,
@@ -236,13 +239,14 @@ export const ClientAccessList = ({
           party: client.client,
           resource,
           hasAccess: clientHasResource(clientId, clientResource.refId),
-          showAction: !requireDelegableForActions || resource.delegable,
-          onDelegate: onAddResource
-            ? (onSuccess, onError) => onAddResource(action, onSuccess, onError)
-            : undefined,
-          onRevoke: onRemoveResource
-            ? (onSuccess, onError) => onRemoveResource(action, onSuccess, onError)
-            : undefined,
+          onDelegate:
+            canAct && onAddResource
+              ? (onSuccess, onError) => onAddResource(action, onSuccess, onError)
+              : undefined,
+          onRevoke:
+            canAct && onRemoveResource
+              ? (onSuccess, onError) => onRemoveResource(action, onSuccess, onError)
+              : undefined,
         };
       }),
     );
