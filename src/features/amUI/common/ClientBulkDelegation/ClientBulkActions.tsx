@@ -100,7 +100,7 @@ export const ClientBulkActions = ({
           label={t('client_administration_page.give_all')}
           ariaLabel={t('client_administration_page.give_all_for', { clientName })}
           isLoading={runningMode === 'add'}
-          isInactive={missing.length === 0 || bulk.disabled || !!bulk.activeRun}
+          isInactive={missing.length === 0 || bulk.bulkDisabled || !!bulk.activeRun}
           onClick={() => void bulk.start('add', clientId, clientName, missing)}
         />
         <BulkActionButton
@@ -109,7 +109,7 @@ export const ClientBulkActions = ({
           ariaLabel={t('client_administration_page.delete_all_for', { clientName })}
           color='danger'
           isLoading={runningMode === 'remove'}
-          isInactive={held.length === 0 || bulk.disabled || !!bulk.activeRun}
+          isInactive={held.length === 0 || bulk.bulkDisabled || !!bulk.activeRun}
           onClick={() => void bulk.start('remove', clientId, clientName, held)}
         />
       </div>

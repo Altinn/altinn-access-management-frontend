@@ -67,10 +67,13 @@ export const AgentDetails = () => {
     [clients, showDeleted],
   );
 
-  const [addAgentAccessPackages] = useAddAgentAccessPackagesMutation();
-  const [removeAgentAccessPackages] = useRemoveAgentAccessPackagesMutation();
-  const [addAgentResources] = useAddAgentResourcesMutation();
-  const [removeAgentResources] = useRemoveAgentResourcesMutation();
+  const [addAgentAccessPackages, { isLoading: isAddingAgentAccessPackages }] =
+    useAddAgentAccessPackagesMutation();
+  const [removeAgentAccessPackages, { isLoading: isRemovingAgentAccessPackages }] =
+    useRemoveAgentAccessPackagesMutation();
+  const [addAgentResources, { isLoading: isAddingAgentResources }] = useAddAgentResourcesMutation();
+  const [removeAgentResources, { isLoading: isRemovingAgentResources }] =
+    useRemoveAgentResourcesMutation();
   const { clientsWithAgentAccess, clientsWithoutAgentAccess } = useAgentDetailsAccessClientLists({
     agentAccessPackages,
     agentResources,
@@ -91,7 +94,14 @@ export const AgentDetails = () => {
   const accessStateClients = agentAccessPackages ?? [];
   const resourceAccessClients = agentResources ?? [];
   const actionsDisabled =
-    isFetchingAgentAccessPackages || isFetchingAgentResources || !toPartyUuid || !actingPartyUuid;
+    isAddingAgentAccessPackages ||
+    isRemovingAgentAccessPackages ||
+    isAddingAgentResources ||
+    isRemovingAgentResources ||
+    isFetchingAgentAccessPackages ||
+    isFetchingAgentResources ||
+    !toPartyUuid ||
+    !actingPartyUuid;
   const assignedSectionId = useId();
   const unassignedSectionId = useId();
   // One zone for both sections, so a client that moves between them is still found by its id.

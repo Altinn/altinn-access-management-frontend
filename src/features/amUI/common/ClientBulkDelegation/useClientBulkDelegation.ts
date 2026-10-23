@@ -38,6 +38,7 @@ type UseClientBulkDelegationParams = {
 export type ClientBulkDelegation = {
   getClientItems: (client: Client) => ClientBulkItems;
   disabled: boolean;
+  bulkDisabled: boolean;
   activeRun: ActiveRun | null;
   start: (
     mode: ClientBulkMode,
@@ -73,7 +74,11 @@ export const useClientBulkDelegation = ({
 }: UseClientBulkDelegationParams): ClientBulkDelegation => {
   const { t } = useTranslation();
   const { openSnackbar } = useSnackbar();
-  const { getAccessPackageById, isFetching: isFetchingAccessPackages } = useAccessPackageLookup();
+  const {
+    getAccessPackageById,
+    isFetching: isFetchingAccessPackages,
+    error: accessPackagesError,
+  } = useAccessPackageLookup();
   const { delegate, revoke } = useClientAccessDelegation({
     actingPartyUuid,
     addAgentAccessPackages,
@@ -125,9 +130,11 @@ export const useClientBulkDelegation = ({
       getClientItems,
       // A fetching lookup resolves no packages, so a run would silently skip all of them.
       disabled: disabled || isFetchingAccessPackages,
+      // A failed lookup leaves single resource actions usable, but a bulk run would skip packages.
+      bulkDisabled: disabled || isFetchingAccessPackages || !!accessPackagesError,
       activeRun,
       start,
     }),
-    [activeRun, disabled, getClientItems, isFetchingAccessPackages, start],
+    [accessPackagesError, activeRun, disabled, getClientItems, isFetchingAccessPackages, start],
   );
 };
