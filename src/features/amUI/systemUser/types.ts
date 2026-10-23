@@ -22,6 +22,9 @@ export interface ProblemDetail {
   // Optional extension forwarded from the backend: which access package/right could not be
   // delegated and why. Used to make delegation/approve errors self-explanatory.
   delegationReasons?: string;
+  // Optional extension forwarded from the backend: comma-separated ids of the resources the resource
+  // registry has marked as not delegable (AMUI-00082).
+  NotDelegableResources?: string;
 }
 
 export interface SystemUser {

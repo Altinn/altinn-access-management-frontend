@@ -1,7 +1,5 @@
 import { test } from 'playwright/fixture/pomFixture';
 
-import { EnduserConnection } from '../../../api-requests/EnduserConnection';
-
 test.describe('Aktørvalg, valg og visning av avgiver', () => {
   const HEADER_TEST_USER = '11886599619';
   const SHOW_DELETED_TEST_USER = '19846999968';
@@ -9,8 +7,6 @@ test.describe('Aktørvalg, valg og visning av avgiver', () => {
 
   const ACTOR_SEARCH_TEST_USER = '05826397782'; // Need a user with a decent number of actors to properly test the search functionality
   const ACTOR_SEARCH_DEFAULT_ACTOR_NAME = 'Usikker Ringdue';
-
-  const api = new EnduserConnection();
 
   test('Sjekk at slettede enheter kan vises/skjules', async ({ login, aktorvalgHeader }) => {
     await test.step('Log in', async () => {
@@ -104,11 +100,15 @@ test.describe('Aktørvalg, valg og visning av avgiver', () => {
   test('Virksomhet A skal ikke kunne velge hovedenhet B når underenhet B har delegert en tilgangspakke', async ({
     login,
     aktorvalgHeader,
+    api,
   }) => {
     await test.step('sett opp testdata', async () => {
-      await api.addConnectionAndPackagesToUser('10845998952', '311908421', '311151932', [
-        'urn:altinn:accesspackage:byggesoknad',
-      ]);
+      await api.connections.addConnectionAndPackagesToUser(
+        '10845998952',
+        '311908421',
+        '311151932',
+        ['urn:altinn:accesspackage:byggesoknad'],
+      );
     });
 
     await test.step('Logg inn', async () => {
@@ -127,10 +127,11 @@ test.describe('Aktørvalg, valg og visning av avgiver', () => {
   test('Virksomhet A skal ikke kunne velge hovedenhet B når underenhet B har delegert en enkelttjeneste', async ({
     login,
     aktorvalgHeader,
+    api,
   }) => {
     await test.step('sett opp testdata', async () => {
-      await api.addConnection('10845998952', '311908421', '311151932');
-      await api.delegateSingleService(
+      await api.connections.addConnection('10845998952', '311908421', '311151932');
+      await api.connections.delegateSingleService(
         '10845998952',
         '311908421',
         '311151932',

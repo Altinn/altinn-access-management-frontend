@@ -9,11 +9,6 @@
       "count": 1
     }
   },
-  ".storybook/main.ts": {
-    "@typescript-eslint/no-explicit-any": {
-      "count": 1
-    }
-  },
   ".storybook/preview.tsx": {
     "react-hooks/rules-of-hooks": {
       "count": 1
@@ -22,11 +17,6 @@
   "config.ts": {
     "@typescript-eslint/no-unsafe-assignment": {
       "count": 2
-    }
-  },
-  "playwright/e2eTests/altinn3/systemuser/deleteSystemUser.spec.ts": {
-    "@typescript-eslint/require-await": {
-      "count": 1
     }
   },
   "playwright/e2eTests/altinn3/systemuser/selectSystemVendor.spec.ts": {

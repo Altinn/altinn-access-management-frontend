@@ -25,8 +25,8 @@ export const ActiveDelegations = ({ searchString }: ActiveDelegationsProps) => {
   const { toParty, selfParty, actingParty, isLoading } = usePartyRepresentation();
   const { data: isHovedadmin } = useGetIsHovedadminQuery();
   const canGiveAccess =
-    actingParty?.partyUuid !== toParty?.partyUuid && // Acting party cannot grant access to itself
-    (toParty?.partyUuid !== selfParty?.partyUuid || isHovedadmin); // Only hovedadmin can give access to themselves
+    actingParty?.id !== toParty?.id && // Acting party cannot grant access to itself
+    (toParty?.id !== selfParty?.id || isHovedadmin); // Only hovedadmin can give access to themselves
   const { t } = useTranslation();
   const restoreFocus = useRestoreFocus();
 

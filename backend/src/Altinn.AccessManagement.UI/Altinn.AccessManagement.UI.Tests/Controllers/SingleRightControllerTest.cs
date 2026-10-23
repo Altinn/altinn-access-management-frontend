@@ -6,6 +6,7 @@ using System.Text.Json;
 using Altinn.AccessManagement.UI.Controllers;
 using Altinn.AccessManagement.UI.Core.Models;
 using Altinn.AccessManagement.UI.Core.Models.SingleRight;
+using Altinn.AccessManagement.UI.Core.Models.SingleRight.Frontend;
 using Altinn.AccessManagement.UI.Mocks.Mocks;
 using SingleRight = Altinn.AccessManagement.UI.Core.Models.SingleRight.Right;
 using Altinn.AccessManagement.UI.Mocks.Utils;
@@ -349,11 +350,11 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
             Guid to = Guid.Parse("167536b5-f8ed-4c5a-8f48-0279507e53ae");
             string resourceId = "appid-502";
             string path = Path.Combine(mockFolder, "Data", "ExpectedResults", "SingleRight", "GetResourceRights", $"{resourceId}.json");
-            ResourceRight expectedResponse = Util.GetMockData<ResourceRight>(path);
+            ResourceRightFE expectedResponse = Util.GetMockData<ResourceRightFE>(path);
 
             // Act
             HttpResponseMessage httpResponse = await _client.GetAsync($"accessmanagement/api/v1/singleright/delegation/resources/rights?party={party}&from={from}&to={to}&resourceId={resourceId}");
-            ResourceRight actualResponse = await httpResponse.Content.ReadFromJsonAsync<ResourceRight>();
+            ResourceRightFE actualResponse = await httpResponse.Content.ReadFromJsonAsync<ResourceRightFE>();
 
             // Assert
             Assert.Equal(HttpStatusCode.OK, httpResponse.StatusCode);

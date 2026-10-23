@@ -2,19 +2,15 @@
   {
     "client": {
       "id": "77777777-7777-7777-7777-777777777777",
+      "partyId": 500000,
       "name": "ACME AS",
       "type": "Organization",
-      "variant": "org",
-      "parent": null,
-      "children": null,
-      "partyId": 500000,
-      "userId": null,
-      "username": null,
+      "unitType": "org",
       "organizationIdentifier": "123456789",
       "dateOfBirth": null,
-      "dateOfDeath": null,
       "isDeleted": false,
-      "deletedAt": null
+      "children": null,
+      "parent": null
     },
     "access": [
       {
@@ -65,34 +61,26 @@
   {
     "client": {
       "id": "4e3c6b21-9c5a-4e1f-8c2b-0e7a6ec3f3c8",
+      "partyId": 500011,
       "name": "NORDIC DATA AS",
       "type": "Organization",
-      "variant": "org",
-      "parent": {
-        "id": "f1c4cc73-9ec1-4f11-8a3c-f2ad3d7c1e2a",
-        "name": "NORDIC GROUP AS",
-        "type": "Organization",
-        "variant": "org",
-        "parent": null,
-        "children": null,
-        "partyId": 500010,
-        "userId": null,
-        "username": null,
-        "organizationIdentifier": "999888777",
-        "dateOfBirth": null,
-        "dateOfDeath": null,
-        "isDeleted": false,
-        "deletedAt": null
-      },
-      "children": null,
-      "partyId": 500011,
-      "userId": null,
-      "username": null,
+      "unitType": "org",
       "organizationIdentifier": "910111213",
       "dateOfBirth": null,
-      "dateOfDeath": null,
       "isDeleted": false,
-      "deletedAt": null
+      "children": null,
+      "parent": {
+        "id": "f1c4cc73-9ec1-4f11-8a3c-f2ad3d7c1e2a",
+        "partyId": 500010,
+        "name": "NORDIC GROUP AS",
+        "type": "Organization",
+        "unitType": "org",
+        "organizationIdentifier": "999888777",
+        "dateOfBirth": null,
+        "isDeleted": false,
+        "children": null,
+        "parent": null
+      }
     },
     "access": [
       {
@@ -122,19 +110,15 @@
   {
     "client": {
       "id": "58e7ce4a-27f0-4a10-9f6e-620e6cb4390a",
+      "partyId": 500012,
       "name": "KYST OG HAV AS",
       "type": "Organization",
-      "variant": "org",
-      "parent": null,
-      "children": null,
-      "partyId": 500012,
-      "userId": null,
-      "username": null,
+      "unitType": "org",
       "organizationIdentifier": "913456789",
       "dateOfBirth": null,
-      "dateOfDeath": null,
       "isDeleted": false,
-      "deletedAt": null
+      "children": null,
+      "parent": null
     },
     "access": [
       {

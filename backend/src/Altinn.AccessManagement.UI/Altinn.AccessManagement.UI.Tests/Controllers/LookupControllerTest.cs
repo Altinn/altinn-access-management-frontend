@@ -3,11 +3,11 @@ using System.Net.Http.Headers;
 using System.Net.Http.Json;
 using Altinn.AccessManagement.UI.Controllers;
 using Altinn.AccessManagement.UI.Core.ClientInterfaces;
-using Altinn.AccessManagement.UI.Core.Models;
+using Altinn.AccessManagement.UI.Core.Enums;
+using Altinn.AccessManagement.UI.Core.Models.Common.Frontend;
 using Altinn.AccessManagement.UI.Mocks.Mocks;
 using Altinn.AccessManagement.UI.Mocks.Utils;
 using Altinn.AccessManagement.UI.Tests.Utils;
-using Altinn.Register.Contracts.V1;
 using AltinnCore.Authentication.JwtCookie;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc.Testing;
@@ -81,9 +81,9 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
             Assert.Equal(HttpStatusCode.OK, response.StatusCode);
 
             PartyFE actualParty = await response.Content.ReadFromJsonAsync<PartyFE>();
-            Assert.Equal(lookupOrgNo, actualParty.OrgNumber);
+            Assert.Equal(lookupOrgNo, actualParty.OrganizationIdentifier);
             Assert.Equal(50004222, actualParty.PartyId);
-            Assert.Equal(PartyType.Organisation, actualParty.PartyTypeName);
+            Assert.Equal(PartyTypeFE.Organization, actualParty.Type);
             Assert.Equal("KARLSTAD OG ULOYBUKT", actualParty.Name);
         }
 

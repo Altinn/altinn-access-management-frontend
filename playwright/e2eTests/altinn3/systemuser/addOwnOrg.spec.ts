@@ -1,5 +1,4 @@
 import { test, expect } from 'playwright/fixture/pomFixture';
-import { ApiRequests } from 'playwright/api-requests/SystemUserApiRequests';
 import { TestdataApi } from 'playwright/util/TestdataApi';
 import { pickRandom } from 'playwright/util/helper';
 
@@ -20,26 +19,26 @@ test.describe('Systembruker - Legg til egen organisasjon', () => {
     { orgNo: '313089789', managerPid: '17906298724', orgName: 'Klok Spesiell Tiger AS' },
   ];
 
-  let api: ApiRequests;
   let name: string;
   let systemId: string;
   let externalRef: string;
   let response: { confirmUrl: string; id: string };
 
-  test.beforeEach(async () => {
+  test.beforeEach(async ({ api }) => {
     name = '';
-    api = new ApiRequests();
     name = `Playwright-e2e-${accessPackageApiName}-${Date.now()}`;
     externalRef = TestdataApi.generateExternalRef();
 
     systemId = await test.step('Create system with access package', async () => {
-      return await api.createSystemInSystemregisterWithAccessPackages(vendorOrgNumber, name, [
-        { urn: accessPackageUrn },
-      ]);
+      return await api.systemUsers.createSystemInSystemregisterWithAccessPackages(
+        vendorOrgNumber,
+        name,
+        [{ urn: accessPackageUrn }],
+      );
     });
 
     response = await test.step('Create system user agent request', async () => {
-      return await api.postClientDelegationAgentRequest(
+      return await api.systemUsers.postClientDelegationAgentRequest(
         vendorOrgNumber,
         systemId,
         accessPackageApiName,
@@ -111,15 +110,15 @@ test.describe('Systembruker - Legg til egen organisasjon', () => {
       await clientDelegationPage.deleteSystemUser(name);
     });
   });
-  test.afterEach(async () => {
+  test.afterEach(async ({ api }) => {
     if (name) {
-      await api.cleanUpSystemUsersForSystem(
+      await api.systemUsers.cleanUpSystemUsersForSystem(
         `${vendorOrgNumber}_${name}`,
         systemUserOwner.managerPid,
         systemUserOwner.partyOrgNo,
         true,
       );
-      await api.deleteSystemInSystemRegister(vendorOrgNumber, name);
+      await api.systemUsers.deleteSystemInSystemRegister(vendorOrgNumber, name);
     }
   });
 });

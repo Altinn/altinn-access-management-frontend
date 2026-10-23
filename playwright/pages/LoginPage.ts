@@ -3,14 +3,15 @@ import { expect } from '@playwright/test';
 
 import { env } from 'playwright/util/helper';
 import { LANGUAGE_CODE, Language } from 'playwright/pages/LanguageMenu';
-import { SettingsApiRequests } from 'playwright/api-requests/SettingsApiRequests';
-import { AuthorizedParties } from 'playwright/api-requests/AuthorizedParties';
+import type { ApiClient } from 'playwright/api-requests';
+
+/** The only clients LoginPage uses: language before login, actor count after. */
+type LoginApi = Pick<ApiClient, 'settings' | 'authorizedParties'>;
 
 export class LoginPage {
   readonly page: Page;
   private readonly language: Language;
-  private readonly settings: SettingsApiRequests;
-  private readonly authorizedParties = new AuthorizedParties();
+  private readonly api: LoginApi;
   private loggedInPid?: string;
   readonly reporteeSearchBox: Locator;
   readonly pidInput: Locator;
@@ -22,10 +23,10 @@ export class LoginPage {
   readonly tilgangsstyringLink: Locator;
   readonly testIdLinkText: Locator;
 
-  constructor(page: Page, language: Language = Language.NB) {
+  constructor(page: Page, api: LoginApi, language: Language = Language.NB) {
     this.page = page;
+    this.api = api;
     this.language = language;
-    this.settings = new SettingsApiRequests();
     // Post-login "Velg aktør" page has a different (unnamed) searchbox — there is
     // only one searchbox role on that page, so a name is not needed to disambiguate.
     this.reporteeSearchBox = this.page.getByRole('searchbox');
@@ -43,7 +44,7 @@ export class LoginPage {
 
   async LoginToAccessManagement(pid: string) {
     // Setter språk med en gang i tilfelle noen har endret dette som kan brekke testen
-    await this.settings.setSelectedLanguage(pid, LANGUAGE_CODE[this.language]);
+    await this.api.settings.setSelectedLanguage(pid, LANGUAGE_CODE[this.language]);
     await this.navigateToLoginPage();
     await this.authenticateUser(pid);
   }
@@ -59,7 +60,9 @@ export class LoginPage {
     if (!this.loggedInPid) {
       throw new Error('Log in before selecting an actor.');
     }
-    const antallAktoerer = await this.authorizedParties.antallAktoererForbruker(this.loggedInPid);
+    const antallAktoerer = await this.api.authorizedParties.antallAktoererForbruker(
+      this.loggedInPid,
+    );
     const dialog = this.page.getByRole('dialog');
     await expect(dialog).toBeVisible();
 

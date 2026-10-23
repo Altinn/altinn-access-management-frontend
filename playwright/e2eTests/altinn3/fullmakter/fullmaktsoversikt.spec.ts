@@ -1,5 +1,4 @@
 import { expect, test } from '../../../fixture/pomFixture';
-import { EnduserConnection } from '../../../api-requests/EnduserConnection';
 
 /**
  * Fullmaktsoversikt — oversikt over tilgangspakker og hvem som har fullmakt.
@@ -47,8 +46,6 @@ const ACTORS = {
 const PAKKE = { urn: 'urn:altinn:accesspackage:posttjenester', navn: 'Posttjenester' };
 
 test.describe('Fullmaktsoversikt', () => {
-  const connections = new EnduserConnection();
-
   test.describe('oversikt', () => {
     const { virksomhet } = ACTORS.oversikt;
 
@@ -79,8 +76,8 @@ test.describe('Fullmaktsoversikt', () => {
   test.describe('pakkens brukere', () => {
     const { virksomhet, mottaker } = ACTORS.pakkensBrukere;
 
-    test.beforeEach(async () => {
-      await connections.addConnectionAndPackagesToUser(
+    test.beforeEach(async ({ api }) => {
+      await api.connections.addConnectionAndPackagesToUser(
         virksomhet.pid,
         virksomhet.org,
         mottaker.pid,
@@ -106,9 +103,9 @@ test.describe('Fullmaktsoversikt', () => {
       });
     });
 
-    test.afterEach(async () => {
+    test.afterEach(async ({ api }) => {
       try {
-        await connections.deleteConnection(virksomhet.pid, virksomhet.org, [mottaker.pid]);
+        await api.connections.deleteConnection(virksomhet.pid, virksomhet.org, [mottaker.pid]);
       } catch (error) {
         console.error('Cleanup: Failed to delete connection:', error);
       }
@@ -118,15 +115,15 @@ test.describe('Fullmaktsoversikt', () => {
   test.describe('gi og slett fullmakt fra pakkesiden', () => {
     const { virksomhet, bruker } = ACTORS.giOgSlett;
 
-    test.beforeEach(async () => {
+    test.beforeEach(async ({ api }) => {
       // A connection WITHOUT the package, so the user shows up on the package
       // page as someone who can be given it.
       try {
-        await connections.deleteConnection(virksomhet.pid, virksomhet.org, [bruker.pid]);
+        await api.connections.deleteConnection(virksomhet.pid, virksomhet.org, [bruker.pid]);
       } catch {
         /* not connected — nothing to clean */
       }
-      await connections.addConnection(virksomhet.pid, virksomhet.org, bruker.pid);
+      await api.connections.addConnection(virksomhet.pid, virksomhet.org, bruker.pid);
     });
 
     test('gi og slett fullmakt til en tilgangspakke', async ({ fullmaktsoversiktPage, login }) => {
@@ -156,9 +153,9 @@ test.describe('Fullmaktsoversikt', () => {
       });
     });
 
-    test.afterEach(async () => {
+    test.afterEach(async ({ api }) => {
       try {
-        await connections.deleteConnection(virksomhet.pid, virksomhet.org, [bruker.pid]);
+        await api.connections.deleteConnection(virksomhet.pid, virksomhet.org, [bruker.pid]);
       } catch (error) {
         console.error('Cleanup: Failed to delete connection:', error);
       }
@@ -191,16 +188,16 @@ test.describe('Fullmaktsoversikt', () => {
   test.describe('bruker uten tilgang', () => {
     const { virksomhet, bruker } = ACTORS.utenTilgang;
 
-    test.beforeEach(async () => {
+    test.beforeEach(async ({ api }) => {
       // Clear any leftover from an earlier failed run first — addConnection
       // fails if the connection is already there.
       try {
-        await connections.deleteConnection(virksomhet.pid, virksomhet.org, [bruker.pid]);
+        await api.connections.deleteConnection(virksomhet.pid, virksomhet.org, [bruker.pid]);
       } catch {
         /* not connected — nothing to clean */
       }
       // A plain right-holder: may represent the organisation, but is not admin.
-      await connections.addConnection(virksomhet.pid, virksomhet.org, bruker.pid);
+      await api.connections.addConnection(virksomhet.pid, virksomhet.org, bruker.pid);
     });
 
     test('bruker uten administratorrettighet får ikke se fullmaktsoversikten', async ({
@@ -223,9 +220,9 @@ test.describe('Fullmaktsoversikt', () => {
       });
     });
 
-    test.afterEach(async () => {
+    test.afterEach(async ({ api }) => {
       try {
-        await connections.deleteConnection(virksomhet.pid, virksomhet.org, [bruker.pid]);
+        await api.connections.deleteConnection(virksomhet.pid, virksomhet.org, [bruker.pid]);
       } catch (error) {
         console.error('Cleanup: Failed to delete connection:', error);
       }

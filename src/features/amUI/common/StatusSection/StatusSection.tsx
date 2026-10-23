@@ -9,8 +9,8 @@ import { DsParagraph } from '@altinn/altinn-components';
 import { useContext } from 'react';
 import { Trans, useTranslation } from 'react-i18next';
 
+import { PartyType } from '@/dataObjects/dtos/Party';
 import { formatEntityDisplayName } from '@/resources/utils/reporteeUtils';
-import { PartyType } from '@/rtk/features/userInfoApi';
 
 import { PartyRepresentationContext } from '../PartyRepresentationContext/PartyRepresentationContext';
 import { InheritedStatusType, type InheritedStatusMessageType } from '../useInheritedStatus';
@@ -123,7 +123,7 @@ export const StatusSection = ({
         const formattedViaName = formatEntityDisplayName(status.via);
 
         const textKey =
-          toParty?.partyUuid === status.via?.id && toParty?.partyTypeName === PartyType.Person
+          toParty?.id === status.via?.id && toParty?.type === PartyType.Person
             ? 'status_section.access_status.via_priv'
             : STATUS_TRANSLATION_KEYS[status.type];
 

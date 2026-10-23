@@ -24,11 +24,11 @@ export const GuardianshipSection = () => {
 
   const { data: accesses, isLoading: loadingAccesses } = useGetUserDelegationsQuery(
     {
-      from: fromParty?.partyUuid ?? '',
-      to: toParty?.partyUuid ?? '',
-      party: actingParty?.partyUuid ?? '',
+      from: fromParty?.id ?? '',
+      to: toParty?.id ?? '',
+      party: actingParty?.id ?? '',
     },
-    { skip: !toParty?.partyUuid || !fromParty?.partyUuid || !actingParty?.partyUuid },
+    { skip: !toParty?.id || !fromParty?.id || !actingParty?.id },
   );
 
   const numberOfAccesses = accesses

@@ -46,8 +46,8 @@ export const SentRequestsCombinedModal = ({
 
   const { actingParty, fromParty } = usePartyRepresentation();
   const { data: pendingSentAccessRequests } = useGetSentRequestsQuery(
-    { party: actingParty?.partyUuid || '', status: ['Pending'], to: fromParty?.partyUuid },
-    { skip: !isModalOpen || !actingParty?.partyUuid || !fromParty?.partyUuid },
+    { party: actingParty?.id || '', status: ['Pending'], to: fromParty?.id },
+    { skip: !isModalOpen || !actingParty?.id || !fromParty?.id },
   );
 
   const hasPendingSentResourceRequests = pendingSentAccessRequests

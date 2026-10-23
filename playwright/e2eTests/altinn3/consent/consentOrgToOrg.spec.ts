@@ -1,7 +1,6 @@
 import { expect } from '@playwright/test';
 
 import { test } from 'playwright/fixture/pomFixture';
-import { ConsentApiRequests } from 'playwright/api-requests/ConsentApiRequests';
 import { Language } from 'playwright/pages/consent/ConsentPage';
 import { addTimeToNowUtc, formatUiDateTime, pickRandom } from 'playwright/util/helper';
 
@@ -23,6 +22,7 @@ LANGUAGES.forEach((language) => {
     test(`Skal kunne godkjenne samtykke med Utfyller/innsender-rollen (${language})`, async ({
       consentPage,
       login,
+      api,
     }) => {
       // Create consent request from one org to another org
       // For å godkjenne her kreves det at ressursen i ressursregisteret er satt opp med utfyller/innsender-rollen for org til org-samtykke
@@ -30,10 +30,9 @@ LANGUAGES.forEach((language) => {
       const [fromOrg, fromPerson] = pickRandom(fromOrgs);
       const toOrg = pickRandom(toOrgs);
       const validTo = addTimeToNowUtc({ days: 2 });
-      const api = new ConsentApiRequests(toOrg);
 
       const consentResponse = await test.step('Create consent request', async () => {
-        return await api.createConsentRequest({
+        return await api.consent.createConsentRequest({
           from: { type: 'org', id: fromOrg },
           to: { type: 'org', id: toOrg },
           validToIsoUtc: validTo,

@@ -8,13 +8,12 @@ type MockRole = {
 type MockConnectionParty = {
   id: string;
   name: string;
-  type: 'Person' | 'Organisasjon';
-  variant: string;
-  parent: null;
+  type: 'Person' | 'Organization';
+  unitType: string | null;
   children: null;
   partyId: number;
-  organizationIdentifier?: string;
-  dateOfBirth?: string;
+  organizationIdentifier: string | null;
+  dateOfBirth: string | null;
   isDeleted: boolean;
 };
 
@@ -41,12 +40,12 @@ const createOrgConnection = (id: string, name: string, roles: MockRole[]): MockC
   party: {
     id,
     name,
-    type: 'Organisasjon',
-    variant: 'AS',
-    parent: null,
+    type: 'Organization',
+    unitType: 'AS',
     children: null,
     partyId: getStablePartyId(id),
     organizationIdentifier: '310202398',
+    dateOfBirth: null,
     isDeleted: false,
   },
   roles,
@@ -58,10 +57,10 @@ const createPersonConnection = (id: string, name: string, roles: MockRole[]): Mo
     id,
     name,
     type: 'Person',
-    variant: 'Person',
-    parent: null,
+    unitType: null,
     children: null,
     partyId: getStablePartyId(id),
+    organizationIdentifier: null,
     dateOfBirth: '1984-04-03',
     isDeleted: false,
   },
@@ -76,18 +75,18 @@ type ConnectionPartyTemplate =
       dateOfBirth?: string;
     }
   | {
-      type: 'Organisasjon';
+      type: 'Organization';
       name: string;
       organizationIdentifier?: string;
-      variant?: string;
+      unitType?: string;
     };
 
 const connectedPartyTemplates: Record<string, ConnectionPartyTemplate> = {
   '123': {
-    type: 'Organisasjon',
+    type: 'Organization',
     name: 'DISKRET NÆR TIGER AS',
     organizationIdentifier: '310202398',
-    variant: 'AS',
+    unitType: 'AS',
   },
   '456': {
     type: 'Person',
@@ -95,10 +94,10 @@ const connectedPartyTemplates: Record<string, ConnectionPartyTemplate> = {
     dateOfBirth: '1984-04-03',
   },
   'mocked-party-uuid': {
-    type: 'Organisasjon',
+    type: 'Organization',
     name: 'LEVENDE KUNSTIG APE',
     organizationIdentifier: '312787075',
-    variant: 'FLI',
+    unitType: 'FLI',
   },
 };
 
@@ -107,10 +106,10 @@ const createConnectionForPartyId = (id: string, roles: MockRole[]): MockConnecti
     id.toLowerCase() === 'user'
       ? connectedPartyTemplates['456']
       : (connectedPartyTemplates[id] ?? {
-          type: 'Organisasjon',
+          type: 'Organization',
           name: 'DIGITALISERINGSDIREKTORATET',
           organizationIdentifier: '310202398',
-          variant: 'AS',
+          unitType: 'AS',
         });
 
   if (template.type === 'Person') {
@@ -121,12 +120,12 @@ const createConnectionForPartyId = (id: string, roles: MockRole[]): MockConnecti
     party: {
       id,
       name: template.name,
-      type: 'Organisasjon',
-      variant: template.variant ?? 'AS',
-      parent: null,
+      type: 'Organization',
+      unitType: template.unitType ?? 'AS',
       children: null,
       partyId: getStablePartyId(id),
       organizationIdentifier: template.organizationIdentifier ?? '310202398',
+      dateOfBirth: null,
       isDeleted: false,
     },
     roles,
@@ -226,9 +225,12 @@ export const userHandlers = (ACCESSMANAGEMENT_BASE_URL: string) => [
       userName: 'GullMedalje',
       partyId: 50789533,
       party: {
+        id: '167536b5-f8ed-4c5a-8f48-0279507e53ae',
         partyId: 50789533,
-        partyUuid: '167536b5-f8ed-4c5a-8f48-0279507e53ae',
         name: 'SITRONGUL MEDALJONG',
+        type: 'Person',
+        dateOfBirth: '1981-03-20',
+        isDeleted: false,
       },
       userType: 1,
       profileSettingPreference: {
@@ -258,9 +260,9 @@ export const userHandlers = (ACCESSMANAGEMENT_BASE_URL: string) => [
   }),
   http.get(`${ACCESSMANAGEMENT_BASE_URL}/user/reportee/:id`, () => {
     return HttpResponse.json({
-      partyUuid: '2a2f6ea4-ae81-4098-8e14-a68dec6f9aac',
+      id: '2a2f6ea4-ae81-4098-8e14-a68dec6f9aac',
       name: 'LEVENDE KUNSTIG APE',
-      organizationNumber: '312787075',
+      organizationIdentifier: '312787075',
       partyId: 51506003,
       type: 'Organization',
       unitType: 'FLI',
@@ -291,11 +293,11 @@ export const userHandlers = (ACCESSMANAGEMENT_BASE_URL: string) => [
         'APIADM',
         'A0298',
       ],
-      subunits: [
+      children: [
         {
-          partyUuid: 'fc2e9a43-c74b-42aa-9656-fbae2fabe950',
+          id: 'fc2e9a43-c74b-42aa-9656-fbae2fabe950',
           name: 'LEVENDE KUNSTIG APE',
-          organizationNumber: '311918265',
+          organizationIdentifier: '311918265',
           partyId: 51505983,
           type: 'Organization',
           unitType: 'AAFY',
@@ -326,12 +328,12 @@ export const userHandlers = (ACCESSMANAGEMENT_BASE_URL: string) => [
             'APIADM',
             'A0298',
           ],
-          subunits: [],
+          children: [],
         },
         {
-          partyUuid: '7be4bbc3-032d-4508-acf4-6fdb96ef0d9d',
+          id: '7be4bbc3-032d-4508-acf4-6fdb96ef0d9d',
           name: 'VIS KONGE PANDA',
-          organizationNumber: '313676781',
+          organizationIdentifier: '313676781',
           partyId: 51862126,
           type: 'Organization',
           unitType: 'ADOS',
@@ -339,7 +341,7 @@ export const userHandlers = (ACCESSMANAGEMENT_BASE_URL: string) => [
           onlyHierarchyElementWithNoAccess: false,
           authorizedResources: [],
           authorizedRoles: ['LEDE', 'LOPER', 'ADMAI', 'REGNA', 'SISKD', 'UILUF', 'UTINN', 'UTOMR'],
-          subunits: [],
+          children: [],
         },
       ],
     });

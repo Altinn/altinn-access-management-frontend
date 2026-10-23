@@ -40,6 +40,8 @@ export const mapErrorCodeToErrorMessage = (errorCode?: string) => {
       return 'systemuser_delegation_errors.70_delegation_right_resource_not_delegable';
     case 'AMUI-00071':
       return 'systemuser_delegation_errors.71_delegation_right_resource_is_maskinporten_schema';
+    case 'AMUI-00082':
+      return 'systemuser_delegation_errors.82_rights_resource_not_delegable';
     default:
       return '';
   }

@@ -12,9 +12,8 @@ import { useAccessPackageLookup } from '@/resources/hooks/useAccessPackageLookup
 import type { ActionError } from '@/resources/hooks/useActionError';
 import type { ServiceResource } from '@/rtk/features/singleRights/singleRightsApi';
 import type { Client } from '@/rtk/features/clientApi';
+import { PartyType } from '@/dataObjects/dtos/Party';
 import { useIsMobileOrSmaller } from '@/resources/utils/screensizeUtils';
-import { PartyType } from '@/rtk/features/userInfoApi';
-import type { Party } from '@/rtk/features/lookupApi';
 
 import { buildClientParentNameById, buildClientSortKey } from '../clientSortUtils';
 import { useRoleMetadata } from '../UserRoles/useRoleMetadata';
@@ -103,8 +102,8 @@ type ClientAccessListProps = {
   restoreFocusFallbackId?: string;
 };
 
-const getUserListItemType = (clientType: string): UserListItemProps['type'] => {
-  return clientType.toLowerCase() === 'organisasjon' ? 'company' : 'person';
+const getUserListItemType = (clientType: PartyType): UserListItemProps['type'] => {
+  return clientType === PartyType.Organization ? 'company' : 'person';
 };
 
 const sortClientsByKey = (clients: Client[], parentNameById: Map<string, string>): Client[] =>
@@ -158,17 +157,8 @@ export const ClientAccessList = ({
 
   const userListItems: UserListItemData[] = sortedClients.map((client) => {
     const clientId = client.client.id;
-    const isSubUnit = isSubUnitByType(client.client.variant);
+    const isSubUnit = isSubUnitByType(client.client.unitType);
     const userType = getUserListItemType(client.client.type);
-    const clientParty: Party = {
-      partyId: 0,
-      partyUuid: clientId,
-      orgNumber: client.client.organizationIdentifier ?? undefined,
-      name: client.client.name,
-      partyTypeName: userType === 'company' ? PartyType.Organization : PartyType.Person,
-      dateOfBirth: client.client.dateOfBirth ?? undefined,
-      unitType: client.client.variant ?? undefined,
-    };
 
     const nodes = client.access.reduce((acc, access) => {
       if (access.packages.length === 0) return acc;
@@ -226,7 +216,7 @@ export const ClientAccessList = ({
                 setSelected({
                   itemId,
                   data: {
-                    party: clientParty,
+                    party: client.client,
                     accessPackage,
                     userHasAccess: hasAccess,
                     roleDescription,
@@ -363,7 +353,7 @@ export const ClientAccessList = ({
         ...selected.data,
         userHasAccess: clientsForAccessState.some(
           (aap) =>
-            aap.client.id === selected.data.party.partyUuid &&
+            aap.client.id === selected.data.party.id &&
             aap.access.some((p) =>
               p.packages.some((ap) => ap.id === selected.data.accessPackage.id),
             ),

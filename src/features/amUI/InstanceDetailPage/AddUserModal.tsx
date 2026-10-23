@@ -53,7 +53,7 @@ export const AddUserButton = ({ resourceId, instanceUrn }: AddUserButtonProps) =
     setSubmitError(null);
     try {
       await delegateInstanceRights({
-        party: actingParty?.partyUuid || '',
+        party: actingParty?.id || '',
         resource: resourceId,
         instance: instanceUrn,
         input: {
@@ -96,7 +96,7 @@ export const AddUserButton = ({ resourceId, instanceUrn }: AddUserButtonProps) =
             headingId={headingId}
             recipientKinds={[{ type: 'person', submitLabel: t('common.give_poa') }]}
             isSubmitDisabled={
-              !actingParty?.partyUuid || directRightKeys.length === 0 || isLoading || !!errorDetails
+              !actingParty?.id || directRightKeys.length === 0 || isLoading || !!errorDetails
             }
             isSubmitting={isSubmitting}
             onSubmit={(recipient) => void handleSubmit(recipient)}

@@ -1,14 +1,7 @@
-import { ApiRequests } from 'playwright/api-requests/SystemUserApiRequests';
-
 import { test, expect } from '../../../fixture/pomFixture';
 
 test.describe('Delegering av klienter til Systembruker', () => {
   const vendorOrgNumber = '310547891';
-  let api: ApiRequests;
-
-  test.beforeEach(() => {
-    api = new ApiRequests();
-  });
 
   test.describe('Ansvarlig revisor', () => {
     const role = 'revisor';
@@ -24,15 +17,18 @@ test.describe('Delegering av klienter til Systembruker', () => {
     let name: string;
     let response: { confirmUrl: string };
 
-    test.beforeEach(async () => {
+    test.beforeEach(async ({ api }) => {
       name = `Playwright-e2e-${role}-${Date.now()}`;
 
       const systemId = await test.step('Create system with access packages', async () => {
-        return await api.createSystemInSystemregisterWithAccessPackages(vendorOrgNumber, name);
+        return await api.systemUsers.createSystemInSystemregisterWithAccessPackages(
+          vendorOrgNumber,
+          name,
+        );
       });
 
       response = await test.step('Create client delegation agent request', async () => {
-        return await api.postClientDelegationAgentRequest(
+        return await api.systemUsers.postClientDelegationAgentRequest(
           vendorOrgNumber,
           systemId,
           accessPackageApiName,
@@ -41,15 +37,15 @@ test.describe('Delegering av klienter til Systembruker', () => {
       });
     });
 
-    test.afterEach(async () => {
+    test.afterEach(async ({ api }) => {
       if (name) {
-        await api.cleanUpSystemUsersForSystem(
+        await api.systemUsers.cleanUpSystemUsersForSystem(
           `${vendorOrgNumber}_${name}`,
           user.pid,
           user.org,
           true,
         );
-        await api.deleteSystemInSystemRegister(vendorOrgNumber, name);
+        await api.systemUsers.deleteSystemInSystemRegister(vendorOrgNumber, name);
       }
     });
 
@@ -110,15 +106,18 @@ test.describe('Delegering av klienter til Systembruker', () => {
     let name: string;
     let response: { confirmUrl: string };
 
-    test.beforeEach(async () => {
+    test.beforeEach(async ({ api }) => {
       name = `Playwright-e2e-${role}-${Date.now()}`;
 
       const systemId = await test.step('Create system with access packages', async () => {
-        return await api.createSystemInSystemregisterWithAccessPackages(vendorOrgNumber, name);
+        return await api.systemUsers.createSystemInSystemregisterWithAccessPackages(
+          vendorOrgNumber,
+          name,
+        );
       });
 
       response = await test.step('Create client delegation agent request', async () => {
-        return await api.postClientDelegationAgentRequest(
+        return await api.systemUsers.postClientDelegationAgentRequest(
           vendorOrgNumber,
           systemId,
           accessPackageApiName,
@@ -127,15 +126,15 @@ test.describe('Delegering av klienter til Systembruker', () => {
       });
     });
 
-    test.afterEach(async () => {
+    test.afterEach(async ({ api }) => {
       if (name) {
-        await api.cleanUpSystemUsersForSystem(
+        await api.systemUsers.cleanUpSystemUsersForSystem(
           `${vendorOrgNumber}_${name}`,
           user.pid,
           user.org,
           true,
         );
-        await api.deleteSystemInSystemRegister(vendorOrgNumber, name);
+        await api.systemUsers.deleteSystemInSystemRegister(vendorOrgNumber, name);
       }
     });
 
@@ -202,15 +201,18 @@ test.describe('Delegering av klienter til Systembruker', () => {
     let name: string;
     let response: { confirmUrl: string };
 
-    test.beforeEach(async () => {
+    test.beforeEach(async ({ api }) => {
       name = `Playwright-e2e-${role}-${Date.now()}`;
 
       const systemId = await test.step('Create system with access packages', async () => {
-        return await api.createSystemInSystemregisterWithAccessPackages(vendorOrgNumber, name);
+        return await api.systemUsers.createSystemInSystemregisterWithAccessPackages(
+          vendorOrgNumber,
+          name,
+        );
       });
 
       response = await test.step('Create client delegation agent request', async () => {
-        return await api.postClientDelegationAgentRequest(
+        return await api.systemUsers.postClientDelegationAgentRequest(
           vendorOrgNumber,
           systemId,
           accessPackageApiName,
@@ -219,15 +221,15 @@ test.describe('Delegering av klienter til Systembruker', () => {
       });
     });
 
-    test.afterEach(async () => {
+    test.afterEach(async ({ api }) => {
       if (name) {
-        await api.cleanUpSystemUsersForSystem(
+        await api.systemUsers.cleanUpSystemUsersForSystem(
           `${vendorOrgNumber}_${name}`,
           user.pid,
           user.org,
           true,
         );
-        await api.deleteSystemInSystemRegister(vendorOrgNumber, name);
+        await api.systemUsers.deleteSystemInSystemRegister(vendorOrgNumber, name);
       }
     });
 

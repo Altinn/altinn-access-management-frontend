@@ -6,15 +6,13 @@ import type {
   ActiveConsentListItem,
   Consent,
   ConsentHistoryItem,
-  ConsentParty,
   ConsentRequest,
 } from '@/features/amUI/consent/types';
-
-import { PartyType } from './userInfoApi';
+import { PartyType, type PartyEntity } from '@/dataObjects/dtos/Party';
 
 const baseUrl = `${import.meta.env.BASE_URL}accessmanagement/api/v1/`;
 
-const formatName = (party: ConsentParty): ConsentParty => {
+const formatName = (party: PartyEntity): PartyEntity => {
   const type = party.type === PartyType.Person ? 'person' : 'company';
   return {
     ...party,
@@ -23,7 +21,7 @@ const formatName = (party: ConsentParty): ConsentParty => {
 };
 
 function formatPartyNames<
-  T extends { fromParty: ConsentParty; toParty: ConsentParty; handledByParty?: ConsentParty },
+  T extends { fromParty: PartyEntity; toParty: PartyEntity; handledByParty?: PartyEntity },
 >(item: T): T {
   return {
     ...item,

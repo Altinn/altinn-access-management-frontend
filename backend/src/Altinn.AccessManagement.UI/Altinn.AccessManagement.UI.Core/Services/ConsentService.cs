@@ -5,6 +5,7 @@ using Altinn.AccessManagement.UI.Core.ClientInterfaces;
 using Altinn.AccessManagement.UI.Core.Configuration;
 using Altinn.AccessManagement.UI.Core.Constants;
 using Altinn.AccessManagement.UI.Core.Helpers;
+using Altinn.AccessManagement.UI.Core.Models.Common.Frontend;
 using Altinn.AccessManagement.UI.Core.Models.Consent;
 using Altinn.AccessManagement.UI.Core.Models.Consent.Frontend;
 using Altinn.AccessManagement.UI.Core.Models.ResourceRegistry;
@@ -499,19 +500,19 @@ namespace Altinn.AccessManagement.UI.Core.Services
             return consentTemplates.Any((template) => template.Id.Equals(templateId) && template.IsPoa);
         }
 
-        private static ConsentPartyFE GetConsentParty(string partyId, Party party)
+        private static PartyFE GetConsentParty(string partyUrn, Party party)
         {
-            if (string.IsNullOrEmpty(partyId))
+            if (string.IsNullOrEmpty(partyUrn))
             {
                 return null;
             }
 
-            bool isSubUnit = party?.UnitType is "BEDR" or "AAFY" or "ADOS";
-            return new ConsentPartyFE()
+            // A party register could not resolve is shown as a nameless organization, as before
+            return PartyFE.FromRegisterParty(party) ?? new PartyFE()
             {
-                Id = partyId,
-                Name = party?.Name ?? string.Empty,
-                Type = isSubUnit ? PartyType.SubUnit : party?.PartyTypeName ?? PartyType.Organisation,
+                Id = Guid.TryParse(GetUrnValue(partyUrn), out Guid partyUuid) ? partyUuid : Guid.Empty,
+                Name = string.Empty,
+                Type = Enums.PartyTypeFE.Organization,
             };
         }
     }

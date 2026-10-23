@@ -19,7 +19,7 @@ type AccessPackages = { urn: string }[];
 type CreatedRequest = { confirmUrl: string; id: string };
 
 /** System register and system user setup: systems are created by the vendor, users by the party. */
-export class ApiRequests {
+export class SystemUserApiRequests {
   public async createSystemInSystemregisterWithAccessPackages(
     vendorOrgNo: string,
     name: string,

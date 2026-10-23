@@ -1,18 +1,12 @@
 {
+  "id": "167536b5-f8ed-4c5a-8f48-0279507e53ae",
   "partyId": 50789533,
-  "partyUuid": "167536b5-f8ed-4c5a-8f48-0279507e53ae",
-  "partyTypeName": 1,
-  "orgNumber": null,
-  "unitType": null,
   "name": "SITRONGUL MEDALJONG",
+  "type": "Person",
+  "unitType": null,
+  "organizationIdentifier": null,
+  "dateOfBirth": "1981-03-20",
   "isDeleted": false,
-  "onlyHierarchyElementWithNoAccess": false,
-  "person": {
-    "name": "SITRONGUL MEDALJONG",
-    "firstName": "SITRONGUL",
-    "middleName": null,
-    "lastName": "MEDALJONG"
-  },
-  "organization": null,
-  "childParties": null
+  "children": null,
+  "parent": null
 }

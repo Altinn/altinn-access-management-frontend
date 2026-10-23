@@ -9,7 +9,7 @@ const delegateInstanceRights = vi.fn();
 let rightsMeta: unknown;
 let delegationCheck: unknown;
 
-vi.mock('lottie-react', () => ({ default: () => null }));
+vi.mock('lottie-react', () => ({ Lottie: () => null }));
 
 // Labels are the translation keys, per the convention in the other component tests. Interpolation
 // values are appended so assertions can still tell "2 of 3 actions" from "all actions".
@@ -27,8 +27,8 @@ vi.mock('react-redux', () => ({
 
 vi.mock('../common/PartyRepresentationContext/PartyRepresentationContext', () => ({
   usePartyRepresentation: () => ({
-    actingParty: { partyUuid: 'org' },
-    fromParty: { partyUuid: 'org' },
+    actingParty: { id: 'org' },
+    fromParty: { id: 'org' },
   }),
 }));
 
