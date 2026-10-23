@@ -66,6 +66,10 @@ const BreadcrumbConfig = {
     href: `/${amUIPath.Maskinporten}#consumers`,
     label: 'maskinporten_page.breadcrumb_consumers',
   },
+  activity_log: {
+    href: `/${amUIPath.ActivityLog}`,
+    label: 'sidebar.activity_log',
+  },
 };
 
 interface BreadcrumbsProps {

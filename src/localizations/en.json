@@ -172,7 +172,8 @@
     "settings": "Settings",
     "requests": "Requests",
     "requests_badge": "received",
-    "maskinporten": "Maskinporten administration"
+    "maskinporten": "Maskinporten administration",
+    "activity_log": "Activity log"
   },
   "error_page": {
     "page_title": "Error page - Altinn",
@@ -532,6 +533,15 @@
     "person_identifier_whitespace_forbidden_error": "Spaces are not allowed in SSN or username",
     "last_name_format_error": "Please enter a valid last name",
     "org_search_result_label": "You will add:"
+  },
+  "activity_log_page": {
+    "document_title": "Activity log - Altinn",
+    "heading": "Activity log for {{name}}",
+    "no_access": "You do not have access to this page",
+    "tab_connections": "Powers of attorney",
+    "tab_request": "Requests",
+    "tab_maskinporten": "Maskinporten administration",
+    "empty": "There is no activity in the log yet."
   },
   "maskinporten_page": {
     "scopes": "Scopes",
@@ -1131,6 +1141,7 @@
     "consent_item_description": "All concluded agreements",
     "systemuser_item_description": "{{reportee}}'s system accesses",
     "maskinporten_item_description": "Manage powers of attorney for APIs in Maskinporten",
+    "activity_log_item_description": "See what has happened to powers of attorney and access for {{reportee}}",
     "client_admin_item_description": "Grant powers of attorney from clients to users in {{reportee}}",
     "new_requests_self_zero": "You have no new requests",
     "new_requests_self_one": "You have one new request",
