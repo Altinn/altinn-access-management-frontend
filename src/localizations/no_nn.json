@@ -537,7 +537,48 @@
     "tab_connections": "Fullmakter",
     "tab_request": "Førespurnader",
     "tab_maskinporten": "Maskinportenadministrasjon",
-    "empty": "Det er ingen aktivitet i loggen enno."
+    "empty": "Det er ingen aktivitet i loggen enno.",
+    "direction_legend": "Vis aktivitet",
+    "direction_from": "Frå verksemda",
+    "direction_to": "Til verksemda",
+    "filter_party_to": "Til",
+    "filter_party_from": "Frå",
+    "add_filter": "Legg til filter",
+    "remove_filter": "Fjern filter",
+    "reset_filters": "Nullstill filter",
+    "timestamp": "{{date}} kl. {{time}}",
+    "load_more": "Last meir",
+    "load_error": "Kunne ikkje laste aktivitetsloggen.",
+    "no_results": "Ingen aktivitet funnen for valt filter.",
+    "object": {
+      "scope": "scopet «{{name}}»",
+      "role": "rolla «{{name}}»",
+      "access": "tilgang"
+    },
+    "events": {
+      "assignment": {
+        "created": {
+          "from": "<0>{{counterpart}}</0> fekk {{object}}.",
+          "to": "{{reportee}} fekk {{object}} frå <0>{{counterpart}}</0>.",
+          "by": "Det var {{by}} som tildelte tilgangen."
+        },
+        "updated": {
+          "from": "Tilgangen til {{object}} for <0>{{counterpart}}</0> vart flytta.",
+          "to": "Tilgangen til {{object}} frå <0>{{counterpart}}</0> vart flytta.",
+          "by": "Det var {{by}} som gjorde endringa."
+        },
+        "deleted": {
+          "from": "<0>{{counterpart}}</0> vart fråteken {{object}}.",
+          "to": "{{reportee}} vart fråteken {{object}} frå <0>{{counterpart}}</0>.",
+          "by": "Det var {{by}} som fjerna tilgangen."
+        }
+      },
+      "fallback": {
+        "from": "<0>{{counterpart}}</0>: {{typeName}} – {{object}}.",
+        "to": "<0>{{counterpart}}</0>: {{typeName}} – {{object}}.",
+        "by": "Utført av {{by}}."
+      }
+    }
   },
   "maskinporten_page": {
     "scopes": "Scopes",
