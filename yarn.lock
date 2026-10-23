@@ -3316,7 +3316,7 @@ __metadata:
     i18next-browser-languagedetector: "npm:^8.2.0"
     jsdom: "npm:^26.1.0"
     lint-staged: "npm:^16.1.5"
-    lottie-react: "npm:2.4.2"
+    lottie-react: "npm:3.1.2"
     madge: "npm:^8.0.0"
     msw: "npm:2.15.0"
     msw-storybook-addon: "npm:^3.0.3"
@@ -6908,15 +6908,15 @@ __metadata:
   languageName: node
   linkType: hard
 
-"lottie-react@npm:2.4.2":
-  version: 2.4.2
-  resolution: "lottie-react@npm:2.4.2"
+"lottie-react@npm:3.1.2":
+  version: 3.1.2
+  resolution: "lottie-react@npm:3.1.2"
   dependencies:
     lottie-web: "npm:^5.13.0"
   peerDependencies:
-    react: ^16.8.0 || ^17.0.0 || ^18.0.0 || ^19.0.0
-    react-dom: ^16.8.0 || ^17.0.0 || ^18.0.0 || ^19.0.0
-  checksum: 10/91caca0400b4b78d67a39aa6124dbc65a4123952adc7eec5627486949ef554d8887b26f490735bbe5604e93e6c66ccffaf9ca35ef070aa28a74b3e4215b11785
+    react: ^18.2.0 || ^19.0.0
+    react-dom: ^18.2.0 || ^19.0.0
+  checksum: 10/b76c7bc6f3b20db5e00283f488c59df8b014c114bc624b60eb212511668572077ed39bf91b1364674b5dc842c2abae902cd02d09c6a510b0eb6455fc7567a8bd
   languageName: node
   linkType: hard
 
