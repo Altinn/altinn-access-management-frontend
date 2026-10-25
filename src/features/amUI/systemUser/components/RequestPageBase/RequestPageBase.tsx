@@ -31,9 +31,9 @@ export const RequestPageBase = ({
 }: RequestPageBaseProps): React.ReactNode => {
   const { t } = useTranslation();
 
-  const account: { name: string; type: 'person' | 'company' } = {
+  const account: { name: string; color: 'person' | 'company' } = {
     name: reportee?.name || '',
-    type: getPartyColor(reportee),
+    color: getPartyColor(reportee),
   };
 
   return (

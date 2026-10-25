@@ -120,9 +120,9 @@ export const ConsentRequestPage = () => {
       : null;
   }, [request]);
 
-  const account: { name: string; type: 'person' | 'company' } = {
+  const account: { name: string; color: 'person' | 'company' } = {
     name: memoizedRequest?.fromParty.name ?? '',
-    type: getPartyColor(memoizedRequest?.fromParty),
+    color: getPartyColor(memoizedRequest?.fromParty),
   };
 
   let heading: React.ReactNode = null;

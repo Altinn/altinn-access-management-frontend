@@ -200,7 +200,7 @@ export const DraftRequestPage = () => {
     <RequestPageLayout
       account={{
         name: representativeRequest?.from.name ?? '',
-        type: getPartyColor(representativeRequest?.from),
+        color: getPartyColor(representativeRequest?.from),
       }}
       error={error}
       isLoading={isInitialLoad}
