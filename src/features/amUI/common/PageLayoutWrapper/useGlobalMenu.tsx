@@ -1,4 +1,9 @@
-import { type Theme, type MenuItemSize, type MenuItemProps } from '@altinn/altinn-components';
+import {
+  type Theme,
+  type MenuItemSize,
+  type MenuItemProps,
+  type GlobalMenuProps,
+} from '@altinn/altinn-components';
 import {
   InboxFillIcon,
   PersonCircleIcon,
@@ -50,7 +55,6 @@ export const useGlobalMenu = ({
 
   const lang = i18n.language as 'no_nb' | 'no_nn' | 'en';
   const isSm = useIsTabletOrSmaller();
-  const { data: reportee } = useGetReporteeQuery();
   const { data: userinfo } = useGetUserProfileQuery();
 
   const { sidebarItems, shortcutsMenuItem } = useSidebarItems({ isSmall: true });
@@ -126,7 +130,7 @@ export const useGlobalMenu = ({
     ...(isSm && !hideSidebarItems ? shortcutsMenuItem : []),
   ];
 
-  const globalMenu = {
+  const globalMenu: GlobalMenuProps = {
     logoutButton: {
       label: t('header.log_out'),
       onClick: () => {
@@ -138,12 +142,6 @@ export const useGlobalMenu = ({
     menuLabel: t('header.menu-label'),
     backLabel: t('header.back-label'),
     changeLabel: t('header.change-label'),
-
-    currentAccount: {
-      name: reportee?.name || '',
-      type: getPartyColor(reportee),
-      id: reportee?.partyId?.toString() ?? '',
-    },
   };
 
   const groups = {
