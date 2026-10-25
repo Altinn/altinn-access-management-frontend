@@ -1,4 +1,5 @@
 import { createApi } from '@reduxjs/toolkit/query/react';
+import { formatDisplayName } from '@altinn/altinn-components';
 
 import { createBaseQuery } from '@/rtk/app/baseQuery';
 import type {
@@ -7,15 +8,15 @@ import type {
   ConsentHistoryItem,
   ConsentRequest,
 } from '@/features/amUI/consent/types';
-import { type PartyEntity } from '@/dataObjects/dtos/Party';
-import { formatEntityDisplayName } from '@/resources/utils/reporteeUtils';
+import { PartyType, type PartyEntity } from '@/dataObjects/dtos/Party';
 
 const baseUrl = `${import.meta.env.BASE_URL}accessmanagement/api/v1/`;
 
 const formatName = (party: PartyEntity): PartyEntity => {
+  const type = party.type === PartyType.Person ? 'person' : 'company';
   return {
     ...party,
-    name: formatEntityDisplayName(party, true),
+    name: formatDisplayName({ fullName: party.name, type: type }),
   };
 };
 
