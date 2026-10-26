@@ -65,9 +65,9 @@ export const UserItem = ({
       (child) => child.type === PartyType.Person || child.type === PartyType.Organization,
     ) || [];
   const hasInheritingUsers = childrenToDisplay.length > 0;
-  // The party's own permission, listed among the children when it also has inherited ones
-  const selfAsChild = childrenToDisplay.find((child) => child.id === user.id);
-  const hasEditablePoas = showEditPoasHint && selfAsChild && !selfAsChild.isInherited;
+  const hasEditableAccesses =
+    showEditPoasHint &&
+    childrenToDisplay.some((child) => child.id === user.id && !child.isInherited);
   const [isExpanded, setExpanded] = useState(false);
   const { t } = useTranslation();
   const { mapRoles } = useRoleMetadata();
@@ -163,7 +163,7 @@ export const UserItem = ({
       }
       controls={
         hasInheritingUsers
-          ? !isExpanded && hasEditablePoas && <EditPoasHint />
+          ? !isExpanded && hasEditableAccesses && <EditPoasHint />
           : controls && controls(user)
       }
       titleAs='div'
