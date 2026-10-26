@@ -24,6 +24,7 @@ import { useRestoreFocusTarget } from '../RestoreFocus';
 import type { UserSearchNode } from '../UserSearch/types';
 
 import classes from './UserList.module.css';
+import { EditPoasHint } from './EditPoasHint';
 
 interface UserItemProps extends Pick<
   UserListItemProps,
@@ -37,6 +38,7 @@ interface UserItemProps extends Pick<
   linkTo?: string;
   onSelect?: (user: UserSearchNode) => void;
   controls?: (user: UserSearchNode) => ReactNode;
+  showEditPoasHint?: boolean;
 }
 
 export const UserItem = ({
@@ -52,6 +54,7 @@ export const UserItem = ({
   onSelect,
   shadow,
   controls,
+  showEditPoasHint,
   ...props
 }: UserItemProps) => {
   // Lets a row be re-focused after the user closes the modal it opened or after an inline action
@@ -63,6 +66,10 @@ export const UserItem = ({
     ) || [];
   const hasInheritingUsers = childrenToDisplay.length > 0;
   const [isExpanded, setExpanded] = useState(false);
+  const showHint =
+    showEditPoasHint &&
+    !isExpanded &&
+    childrenToDisplay.some((child) => child.id === user.id && !child.isInherited);
   const { t } = useTranslation();
   const { mapRoles } = useRoleMetadata();
   useEffect(() => setExpanded((hasInheritingUsers && user.matchInChildren) ?? false), [user]);
@@ -155,7 +162,7 @@ export const UserItem = ({
             ? 'button'
             : 'div'
       }
-      controls={!hasInheritingUsers && controls && controls(user)}
+      controls={hasInheritingUsers ? showHint && <EditPoasHint /> : controls?.(user)}
       titleAs='div'
       subUnit={subUnit || hasSubUnitRole || isSubUnitByType(user.unitType)}
       deleted={user.isDeleted}
