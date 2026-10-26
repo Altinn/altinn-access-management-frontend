@@ -26,3 +26,9 @@
 .inheritingUsers {
   padding: 0.5rem 1rem;
 }
+
+.editPoasHint {
+  padding-inline: var(--ds-size-2);
+  white-space: nowrap;
+  color: var(--ds-color-text-subtle);
+}

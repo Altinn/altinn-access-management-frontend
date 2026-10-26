@@ -75,6 +75,7 @@
     "delete_poa": "Slett fullmakt",
     "delete_poa_for": "Slett fullmakt for {{poa_object}}",
     "delete_poa_to_name": "Slett fullmakt til {{name}}",
+    "edit_poas": "Endre fullmakter",
     "delete_pos_confirm": "Er du sikker på at du vil slette denne?",
     "has_poa": "Har fullmakt",
     "refresh_cookie_alert": "Valgt aktør er endret i en annen fane. For å sykronisere visningen vil denne siden bli lastet på nytt.",

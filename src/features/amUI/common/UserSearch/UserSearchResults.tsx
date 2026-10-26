@@ -6,7 +6,7 @@ import { isSubUnitByType } from '@/resources/utils/reporteeUtils';
 import { UserItem } from '@/features/amUI/common/UserList/UserItem';
 
 import { UserListActions } from '../UserList/UserListActions';
-import { type DelegationAction } from '../DelegationModal/EditModal';
+import { DelegationAction } from '../DelegationModal/EditModal';
 
 import classes from './UserSearch.module.css';
 import type { UserActionTarget, UserSearchNode } from './types';
@@ -69,6 +69,7 @@ export const UserSearchResults: React.FC<UserSearchResultsProps> = ({
             onSelect={onSelect ? (user) => onSelect(mapUserToActionTarget(user)) : undefined}
             roleDirection='toUser'
             disableLinks={!isInteractive}
+            showEditPoasHint={availableAction === DelegationAction.REVOKE && !!onRevoke}
             controls={(user) => (
               <UserListActions
                 isLoading={isActionLoading}
