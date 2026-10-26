@@ -608,7 +608,9 @@
     "error_saving_addresses": "Noe gikk galt. Vennligst prøv igjen.",
     "no_addresses_error": "Virksomheten må ha minst én e-postadresse eller sms-adresse for varslinger.",
     "alert_settings_info": "Varslene som sendes ut til registrerte varslingsadresser sendes uavhengig av om mottaker har rettighet til å se innholdet i altinn. Hvis dere har en felles e-postadresse er det naturlig å legge den inn her. <a>Les mer</a>",
-    "info_button": "Informasjon om varslingsadresser"
+    "info_button": "Informasjon om varslingsadresser",
+    "service_announcement_heading": "Planlagt vedlikehold 31. oktober - 1. november",
+    "service_announcement_content": "Altinn utfører planlagt vedlikehold av varslingsadresser for virksomheter. Dette kan føre til ustabil oppførsel på denne siden i tidsrommet lørdag 31. oktober kl 08:00 til søndag 1. november kl 08:00. Sletting av adresser blir midlertidig utilgjengelig."
   },
   "text_field_errors": {
     "required": "Feltet er påkrevd",
