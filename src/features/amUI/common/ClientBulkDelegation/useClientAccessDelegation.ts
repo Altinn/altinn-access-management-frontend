@@ -1,11 +1,14 @@
 import { useCallback } from 'react';
 
 import { getActionError, type ActionError } from '@/resources/hooks/useActionError';
-import type {
-  AddAgentAccessPackagesFn,
-  AddAgentResourcesFn,
-  RemoveAgentAccessPackagesFn,
-  RemoveAgentResourcesFn,
+import { useAppDispatch } from '@/rtk/app/hooks';
+import type { AppDispatch } from '@/rtk/app/store';
+import {
+  clientApi,
+  type AddAgentAccessPackagesFn,
+  type AddAgentResourcesFn,
+  type RemoveAgentAccessPackagesFn,
+  type RemoveAgentResourcesFn,
 } from '@/rtk/features/clientApi';
 
 import type { ClientBulkItem } from './getClientBulkItems';
@@ -15,6 +18,8 @@ export type ClientAccessTarget = { clientId?: string; agentId?: string };
 export type ClientAccessOutcome = {
   failed: ClientBulkItem[];
   error?: ActionError;
+  // Settles once the delegation lists have been refetched after the run.
+  refetched: Promise<void>;
 };
 
 type UseClientAccessDelegationParams = {
@@ -41,6 +46,19 @@ const groupIdsByRole = (items: ClientBulkItem[]) =>
     return groups;
   }, []);
 
+const PACKAGE_TAGS = ['agentAccessPackages', 'clientAccessPackages'] as const;
+const RESOURCE_TAGS = ['agentResources', 'clientResources'] as const;
+
+// Invalidations are delayed while other clientApi requests are in flight, so the refetch can start
+// only after the currently running queries settle. Wait a few rounds to catch it.
+const waitForRefetch = async (dispatch: AppDispatch) => {
+  for (let round = 0; round < 3; round++) {
+    const running = dispatch(clientApi.util.getRunningQueriesThunk());
+    if (running.length === 0) return;
+    await Promise.allSettled(running);
+  }
+};
+
 const enqueue = <T>(key: string, task: () => Promise<T>): Promise<T> => {
   const previous = pendingByTarget.get(key) ?? Promise.resolve();
   const result = previous.then(task, task);
@@ -63,6 +81,8 @@ export const useClientAccessDelegation = ({
   addAgentResources,
   removeAgentResources,
 }: UseClientAccessDelegationParams) => {
+  const dispatch = useAppDispatch();
+
   const run = useCallback(
     async (
       { clientId, agentId }: ClientAccessTarget,
@@ -70,7 +90,9 @@ export const useClientAccessDelegation = ({
       packagesFn?: AddAgentAccessPackagesFn | RemoveAgentAccessPackagesFn,
       resourcesFn?: AddAgentResourcesFn | RemoveAgentResourcesFn,
     ): Promise<ClientAccessOutcome> => {
-      if (!clientId || !agentId || !actingPartyUuid) return { failed: items };
+      if (!clientId || !agentId || !actingPartyUuid) {
+        return { failed: items, refetched: Promise.resolve() };
+      }
 
       const args = { from: clientId, to: agentId, party: actingPartyUuid };
       const packages = items.filter((item) => item.kind === 'package');
@@ -108,7 +130,7 @@ export const useClientAccessDelegation = ({
         },
       ];
 
-      return enqueue(`${clientId}:${agentId}`, async () => {
+      const outcome = await enqueue(`${clientId}:${agentId}`, async () => {
         const failed: ClientBulkItem[] = [];
         let error: ActionError | undefined;
         for (const { items: callItems, call } of calls) {
@@ -126,8 +148,18 @@ export const useClientAccessDelegation = ({
         }
         return { failed, error };
       });
+
+      // The mutations do not invalidate tags themselves, so a run with several calls refetches
+      // the lists once at the end instead of moving rows around halfway through.
+      dispatch(
+        clientApi.util.invalidateTags([
+          ...(packages.length > 0 ? PACKAGE_TAGS : []),
+          ...(resources.length > 0 ? RESOURCE_TAGS : []),
+        ]),
+      );
+      return { ...outcome, refetched: waitForRefetch(dispatch) };
     },
-    [actingPartyUuid],
+    [actingPartyUuid, dispatch],
   );
 
   const delegate = useCallback(

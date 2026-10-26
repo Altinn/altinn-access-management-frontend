@@ -2,17 +2,30 @@ import React, { useLayoutEffect, useRef } from 'react';
 import { useTranslation } from 'react-i18next';
 import { DsButton, DsParagraph, DsSpinner } from '@altinn/altinn-components';
 
-import { formatEntityDisplayName } from '@/resources/utils/reporteeUtils';
-import type { Client } from '@/rtk/features/clientApi';
-
 import { useRestoreFocusContext, useRestoreFocusTarget } from '../RestoreFocus';
 
-import type { ClientBulkDelegation, ClientBulkMode } from './useClientBulkDelegation';
+import type {
+  ClientBulkDelegation,
+  ClientBulkMode,
+  ClientBulkNames,
+} from './useClientBulkDelegation';
+import type { ClientAccessTarget } from './useClientAccessDelegation';
 import type { ClientBulkItems } from './getClientBulkItems';
 import classes from './ClientBulkDelegation.module.css';
 
-const clientBulkControlId = (mode: ClientBulkMode, clientId: string) =>
-  `client-bulk-${mode}-${clientId}`;
+const clientBulkControlId = (mode: ClientBulkMode, rowKey: string) =>
+  `client-bulk-${mode}-${rowKey}`;
+
+const ARIA_LABELS = {
+  client: {
+    add: 'client_administration_page.give_all_for',
+    remove: 'client_administration_page.delete_all_for',
+  },
+  agent: {
+    add: 'client_administration_page.give_all_to',
+    remove: 'client_administration_page.delete_all_to',
+  },
+} as const;
 
 interface BulkActionButtonProps {
   id: string;
@@ -74,43 +87,48 @@ const BulkActionButton = ({
 };
 
 interface ClientBulkActionsProps {
-  client: Client;
+  // Unique among rows in the same RestoreFocus zone; the same row in two sections shares it.
+  rowKey: string;
+  // What the row represents, which decides whether the labels name the client or the agent.
+  rowKind: 'client' | 'agent';
+  target: ClientAccessTarget;
+  names: ClientBulkNames;
   items: ClientBulkItems;
   bulk: ClientBulkDelegation;
 }
 
 export const ClientBulkActions = ({
-  client,
+  rowKey,
+  rowKind,
+  target,
+  names,
   items: { missing, held },
   bulk,
 }: ClientBulkActionsProps) => {
   const { t } = useTranslation();
-
-  const clientId = client.client.id;
-  const clientName = formatEntityDisplayName(client.client);
-
-  const runningMode = bulk.activeRun?.clientId === clientId ? bulk.activeRun.mode : undefined;
+  const ariaLabels = ARIA_LABELS[rowKind];
+  const labelParams = { clientName: names.clientName, name: names.agentName };
 
   return (
     <div className={classes.bulkActions}>
       <DsParagraph>{t('client_administration_page.bulk_actions_description')}</DsParagraph>
       <div className={classes.bulkActionButtons}>
         <BulkActionButton
-          id={clientBulkControlId('add', clientId)}
+          id={clientBulkControlId('add', rowKey)}
           label={t('client_administration_page.give_all')}
-          ariaLabel={t('client_administration_page.give_all_for', { clientName })}
-          isLoading={runningMode === 'add'}
-          isInactive={missing.length === 0 || bulk.bulkDisabled || !!bulk.activeRun}
-          onClick={() => void bulk.start('add', clientId, clientName, missing)}
+          ariaLabel={t(ariaLabels.add, labelParams)}
+          isLoading={bulk.isRunning(target, 'add')}
+          isInactive={missing.length === 0 || bulk.bulkDisabled || bulk.hasActiveRun}
+          onClick={() => void bulk.start('add', target, names, missing)}
         />
         <BulkActionButton
-          id={clientBulkControlId('remove', clientId)}
+          id={clientBulkControlId('remove', rowKey)}
           label={t('client_administration_page.delete_all')}
-          ariaLabel={t('client_administration_page.delete_all_for', { clientName })}
+          ariaLabel={t(ariaLabels.remove, labelParams)}
           color='danger'
-          isLoading={runningMode === 'remove'}
-          isInactive={held.length === 0 || bulk.bulkDisabled || !!bulk.activeRun}
-          onClick={() => void bulk.start('remove', clientId, clientName, held)}
+          isLoading={bulk.isRunning(target, 'remove')}
+          isInactive={held.length === 0 || bulk.bulkDisabled || bulk.hasActiveRun}
+          onClick={() => void bulk.start('remove', target, names, held)}
         />
       </div>
     </div>

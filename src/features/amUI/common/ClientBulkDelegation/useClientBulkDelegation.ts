@@ -6,7 +6,7 @@ import { useAccessPackageLookup } from '@/resources/hooks/useAccessPackageLookup
 import type {
   AddAgentAccessPackagesFn,
   AddAgentResourcesFn,
-  Client,
+  ClientAccess,
   RemoveAgentAccessPackagesFn,
   RemoveAgentResourcesFn,
 } from '@/rtk/features/clientApi';
@@ -15,19 +15,20 @@ import {
   getClientBulkItems,
   type ClientBulkItem,
   type ClientBulkItems,
+  type HeldAccessByRow,
 } from './getClientBulkItems';
-import { useClientAccessDelegation } from './useClientAccessDelegation';
+import { useClientAccessDelegation, type ClientAccessTarget } from './useClientAccessDelegation';
 
 export type ClientBulkMode = 'add' | 'remove';
 
-type ActiveRun = { mode: ClientBulkMode; clientId: string };
+export type ClientBulkNames = { clientName: string; agentName: string };
+
+type ActiveRun = { mode: ClientBulkMode } & ClientAccessTarget;
 
 type UseClientBulkDelegationParams = {
-  agentName: string;
-  agentId?: string;
   actingPartyUuid?: string;
-  accessStateClients: Client[];
-  resourceAccessClients: Client[];
+  heldPackages: HeldAccessByRow;
+  heldResources: HeldAccessByRow;
   disabled: boolean;
   addAgentAccessPackages?: AddAgentAccessPackagesFn;
   removeAgentAccessPackages?: RemoveAgentAccessPackagesFn;
@@ -36,14 +37,15 @@ type UseClientBulkDelegationParams = {
 };
 
 export type ClientBulkDelegation = {
-  getClientItems: (client: Client) => ClientBulkItems;
+  getItems: (offered: ClientAccess[], rowId: string) => ClientBulkItems;
   disabled: boolean;
   bulkDisabled: boolean;
-  activeRun: ActiveRun | null;
+  isRunning: (target: ClientAccessTarget, mode?: ClientBulkMode) => boolean;
+  hasActiveRun: boolean;
   start: (
     mode: ClientBulkMode,
-    clientId: string,
-    clientName: string,
+    target: ClientAccessTarget,
+    names: ClientBulkNames,
     items: ClientBulkItem[],
   ) => Promise<void>;
 };
@@ -59,13 +61,11 @@ const MODE_MESSAGES = {
   },
 } as const;
 
-// Call this above both client sections, so pending state follows a client moving between them.
+// Call this above every section of the page, so pending state follows a row moving between them.
 export const useClientBulkDelegation = ({
-  agentName,
-  agentId,
   actingPartyUuid,
-  accessStateClients,
-  resourceAccessClients,
+  heldPackages,
+  heldResources,
   disabled,
   addAgentAccessPackages,
   removeAgentAccessPackages,
@@ -88,26 +88,43 @@ export const useClientBulkDelegation = ({
   });
   const [activeRun, setActiveRun] = useState<ActiveRun | null>(null);
 
-  const getClientItems = useCallback(
-    (client: Client) =>
+  const getItems = useCallback(
+    (offered: ClientAccess[], rowId: string) =>
       getClientBulkItems({
-        client,
-        accessStateClients,
-        resourceAccessClients,
+        offered,
+        heldPackages: heldPackages.get(rowId) ?? [],
+        heldResources: heldResources.get(rowId) ?? [],
         getAccessPackageById,
       }),
-    [accessStateClients, getAccessPackageById, resourceAccessClients],
+    [getAccessPackageById, heldPackages, heldResources],
+  );
+
+  const isRunning = useCallback(
+    ({ clientId, agentId }: ClientAccessTarget, mode?: ClientBulkMode) =>
+      !!activeRun &&
+      activeRun.clientId === clientId &&
+      activeRun.agentId === agentId &&
+      (!mode || activeRun.mode === mode),
+    [activeRun],
   );
 
   const start = useCallback(
-    async (mode: ClientBulkMode, clientId: string, clientName: string, items: ClientBulkItem[]) => {
+    async (
+      mode: ClientBulkMode,
+      target: ClientAccessTarget,
+      { clientName, agentName }: ClientBulkNames,
+      items: ClientBulkItem[],
+    ) => {
       if (activeRun || items.length === 0) return;
 
-      setActiveRun({ mode, clientId });
+      setActiveRun({ mode, ...target });
       const action = mode === 'add' ? delegate : revoke;
-      const { failed } = await action({ clientId, agentId }, items).catch(() => ({
+      const { failed, refetched } = await action(target, items).catch(() => ({
         failed: items,
+        refetched: Promise.resolve(),
       }));
+      // Keep the run active until the lists are fresh, so the row moves section only once.
+      await refetched;
       const failedCount = failed.length;
       setActiveRun(null);
 
@@ -122,19 +139,28 @@ export const useClientBulkDelegation = ({
         color: failedCount > 0 ? 'danger' : 'success',
       });
     },
-    [activeRun, agentId, agentName, delegate, openSnackbar, revoke, t],
+    [activeRun, delegate, openSnackbar, revoke, t],
   );
 
   return useMemo(
     () => ({
-      getClientItems,
+      getItems,
       // A fetching lookup resolves no packages, so a run would silently skip all of them.
       disabled: disabled || isFetchingAccessPackages,
       // A failed lookup leaves single resource actions usable, but a bulk run would skip packages.
       bulkDisabled: disabled || isFetchingAccessPackages || !!accessPackagesError,
-      activeRun,
+      isRunning,
+      hasActiveRun: !!activeRun,
       start,
     }),
-    [accessPackagesError, activeRun, disabled, getClientItems, isFetchingAccessPackages, start],
+    [
+      accessPackagesError,
+      activeRun,
+      disabled,
+      getItems,
+      isFetchingAccessPackages,
+      isRunning,
+      start,
+    ],
   );
 };

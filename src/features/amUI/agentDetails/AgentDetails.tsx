@@ -37,6 +37,7 @@ import {
 } from '../common/RestoreFocus';
 import { ClientBulkActions } from '../common/ClientBulkDelegation/ClientBulkActions';
 import { useClientBulkDelegation } from '../common/ClientBulkDelegation/useClientBulkDelegation';
+import { indexHeldAccess } from '../common/ClientBulkDelegation/getClientBulkItems';
 
 import { AgentDetailsDeleteModal } from './AgentDetailsDeleteModal';
 import { useAgentDetailsAccessClientLists } from './useAgentDetailsAccessClientLists';
@@ -106,12 +107,18 @@ export const AgentDetails = () => {
   const unassignedSectionId = useId();
   // One zone for both sections, so a client that moves between them is still found by its id.
   const restoreFocus = useRestoreFocus();
+  const heldPackages = useMemo(
+    () => indexHeldAccess(agentAccessPackages ?? [], (held) => held.client.id),
+    [agentAccessPackages],
+  );
+  const heldResources = useMemo(
+    () => indexHeldAccess(agentResources ?? [], (held) => held.client.id),
+    [agentResources],
+  );
   const bulk = useClientBulkDelegation({
-    agentName: userName,
-    agentId: toPartyUuid,
     actingPartyUuid,
-    accessStateClients,
-    resourceAccessClients,
+    heldPackages,
+    heldResources,
     disabled: actionsDisabled,
     addAgentAccessPackages,
     removeAgentAccessPackages,
@@ -120,17 +127,21 @@ export const AgentDetails = () => {
   });
   const renderClientActions = useCallback(
     (client: Client) => {
-      const items = bulk.getClientItems(client);
+      const clientId = client.client.id;
+      const items = bulk.getItems(client.access, clientId);
       if (items.missing.length === 0 && items.held.length === 0) return null;
       return (
         <ClientBulkActions
-          client={client}
+          rowKey={clientId}
+          rowKind='client'
+          target={{ clientId, agentId: toPartyUuid }}
+          names={{ clientName: formatEntityDisplayName(client.client), agentName: userName }}
           items={items}
           bulk={bulk}
         />
       );
     },
-    [bulk],
+    [bulk, toPartyUuid, userName],
   );
 
   if (isClientAdmin === false) {
@@ -232,7 +243,7 @@ export const AgentDetails = () => {
                         clients={clientsWithAgentAccess}
                         agentAccessPackages={accessStateClients}
                         agentResources={resourceAccessClients}
-                        isLoading={bulk.disabled || !!bulk.activeRun}
+                        isLoading={bulk.disabled || bulk.hasActiveRun}
                         renderClientActions={renderClientActions}
                         toPartyUuid={toPartyUuid}
                         actingPartyUuid={actingPartyUuid}
@@ -260,7 +271,7 @@ export const AgentDetails = () => {
                         agentResources={resourceAccessClients}
                         toPartyUuid={toPartyUuid}
                         actingPartyUuid={actingPartyUuid}
-                        isLoading={bulk.disabled || !!bulk.activeRun}
+                        isLoading={bulk.disabled || bulk.hasActiveRun}
                         renderClientActions={renderClientActions}
                         addAgentAccessPackages={addAgentAccessPackages}
                         removeAgentAccessPackages={removeAgentAccessPackages}

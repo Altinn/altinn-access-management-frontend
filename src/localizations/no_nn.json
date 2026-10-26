@@ -705,6 +705,8 @@
     "delete_all": "Slett alle",
     "give_all_for": "Gi alle fullmakter for {{clientName}}",
     "delete_all_for": "Slett alle fullmakter for {{clientName}}",
+    "give_all_to": "Gi alle fullmakter for klienten til {{name}}",
+    "delete_all_to": "Slett alle fullmakter for klienten til {{name}}",
     "delegate_all_success_snackbar": "{{name}} har no fått alle fullmakter for {{clientName}}.",
     "delegate_all_error": "{{failedCount}} av {{totalCount}} fullmakter for {{clientName}} kunne ikkje bli gitt til {{name}}.",
     "remove_all_success_snackbar": "{{name}} har ikkje lenger fullmakter for {{clientName}}.",

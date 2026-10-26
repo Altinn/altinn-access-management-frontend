@@ -1,5 +1,5 @@
 import type { AccessPackage } from '@/rtk/features/accessPackageApi';
-import type { Client } from '@/rtk/features/clientApi';
+import type { ClientAccess } from '@/rtk/features/clientApi';
 
 export type ClientBulkItem = {
   kind: 'package' | 'resource';
@@ -9,48 +9,55 @@ export type ClientBulkItem = {
 
 export type ClientBulkItems = { missing: ClientBulkItem[]; held: ClientBulkItem[] };
 
+// Held access for each row, keyed by the party that differs between rows: the client on the agent
+// page, the agent on the client page. Build it once per data change, not once per row.
+export type HeldAccessByRow = Map<string, ClientAccess[]>;
+
+export const indexHeldAccess = <T extends { access: ClientAccess[] }>(
+  entries: T[],
+  getRowId: (entry: T) => string,
+): HeldAccessByRow => {
+  const byRow: HeldAccessByRow = new Map();
+  entries.forEach((entry) => {
+    const rowId = getRowId(entry);
+    byRow.set(rowId, [...(byRow.get(rowId) ?? []), ...entry.access]);
+  });
+  return byRow;
+};
+
 type GetClientBulkItemsParams = {
-  client: Client;
-  accessStateClients: Client[];
-  resourceAccessClients: Client[];
+  offered: ClientAccess[];
+  heldPackages: ClientAccess[];
+  heldResources: ClientAccess[];
   getAccessPackageById: (packageId?: string | null) => AccessPackage | undefined;
 };
 
 // Revoking has to target the role the delegation was made under, not the offered one.
-const heldRolesForClient = (
-  clients: Client[],
-  clientId: string,
-  pick: (access: Client['access'][number]) => string[],
-) => {
+const heldRolesById = (accesses: ClientAccess[], pick: (access: ClientAccess) => string[]) => {
   const roles = new Map<string, string[]>();
-  clients
-    .filter((held) => held.client.id === clientId)
-    .forEach((held) =>
-      held.access.forEach((access) =>
-        pick(access).forEach((id) => {
-          const existing = roles.get(id);
-          if (!existing) {
-            roles.set(id, [access.role.code]);
-          } else if (!existing.includes(access.role.code)) {
-            existing.push(access.role.code);
-          }
-        }),
-      ),
-    );
+  accesses.forEach((access) =>
+    pick(access).forEach((id) => {
+      const existing = roles.get(id);
+      if (!existing) {
+        roles.set(id, [access.role.code]);
+      } else if (!existing.includes(access.role.code)) {
+        existing.push(access.role.code);
+      }
+    }),
+  );
   return roles;
 };
 
 export const getClientBulkItems = ({
-  client,
-  accessStateClients,
-  resourceAccessClients,
+  offered,
+  heldPackages,
+  heldResources,
   getAccessPackageById,
 }: GetClientBulkItemsParams): ClientBulkItems => {
-  const clientId = client.client.id;
-  const heldPackageRoles = heldRolesForClient(accessStateClients, clientId, (access) =>
+  const heldPackageRoles = heldRolesById(heldPackages, (access) =>
     access.packages.map((pkg) => pkg.id),
   );
-  const heldResourceRoles = heldRolesForClient(resourceAccessClients, clientId, (access) =>
+  const heldResourceRoles = heldRolesById(heldResources, (access) =>
     (access.resources ?? []).map((resource) => resource.refId),
   );
   const missing: ClientBulkItem[] = [];
@@ -73,7 +80,7 @@ export const getClientBulkItems = ({
     }
   };
 
-  client.access.forEach((access) => {
+  offered.forEach((access) => {
     access.packages.forEach((pkg) => {
       const accessPackage = getAccessPackageById(pkg.id);
       if (!accessPackage?.isDelegable || !pkg.urn) return;
