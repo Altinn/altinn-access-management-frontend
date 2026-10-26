@@ -42,12 +42,8 @@ export interface UserSearchProps {
 }
 
 const filterAvailableUserTypes = (items?: UserSearchNode[]) =>
-  items?.filter(
-    (item) =>
-      item.type === PartyType.Person ||
-      item.type === PartyType.Organization ||
-      item.type === PartyType.SystemUser,
-  ) || [];
+  items?.filter((item) => item.type === PartyType.Person || item.type === PartyType.Organization) ||
+  [];
 
 export const UserSearch: React.FC<UserSearchProps> = ({
   includeSelfAsChild,
