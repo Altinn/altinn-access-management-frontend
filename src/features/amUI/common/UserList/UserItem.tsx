@@ -54,7 +54,7 @@ export const UserItem = ({
   onSelect,
   shadow,
   controls,
-  showEditPoasHint = false,
+  showEditPoasHint,
   ...props
 }: UserItemProps) => {
   // Lets a row be re-focused after the user closes the modal it opened or after an inline action
@@ -65,10 +65,11 @@ export const UserItem = ({
       (child) => child.type === PartyType.Person || child.type === PartyType.Organization,
     ) || [];
   const hasInheritingUsers = childrenToDisplay.length > 0;
-  const hasEditableAccesses =
-    showEditPoasHint &&
-    childrenToDisplay.some((child) => child.id === user.id && !child.isInherited);
   const [isExpanded, setExpanded] = useState(false);
+  const showHint =
+    showEditPoasHint &&
+    !isExpanded &&
+    childrenToDisplay.some((child) => child.id === user.id && !child.isInherited);
   const { t } = useTranslation();
   const { mapRoles } = useRoleMetadata();
   useEffect(() => setExpanded((hasInheritingUsers && user.matchInChildren) ?? false), [user]);
@@ -161,11 +162,7 @@ export const UserItem = ({
             ? 'button'
             : 'div'
       }
-      controls={
-        hasInheritingUsers
-          ? !isExpanded && hasEditableAccesses && <EditPoasHint />
-          : controls && controls(user)
-      }
+      controls={hasInheritingUsers ? showHint && <EditPoasHint /> : controls?.(user)}
       titleAs='div'
       subUnit={subUnit || hasSubUnitRole || isSubUnitByType(user.unitType)}
       deleted={user.isDeleted}
