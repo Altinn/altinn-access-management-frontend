@@ -8,6 +8,7 @@ declare global {
       showIdPortenAuthorizations: boolean;
       enableSkyra: boolean;
       enableSingleRightsTabInPoaOverview: boolean;
+      enableBankruptcyEstateAdministration: boolean;
     };
   }
 }

@@ -239,6 +239,7 @@ void ConfigureServices(IServiceCollection services, IConfiguration config)
     services.AddSingleton<IUserService, UserService>();
     services.AddSingleton<IConnectionService, ConnectionService>();
     services.AddSingleton<IClientService, ClientService>();
+    services.AddSingleton<IBankruptcyEstateService, BankruptcyEstateService>();
     services.AddSingleton<IAccessTokenGenerator, AccessTokenGenerator>();
     services.AddSingleton<IAccessTokenProvider, AccessTokenProvider>();
     services.AddSingleton<ISingleRightService, SingleRightService>();
@@ -568,5 +569,14 @@ void ConfigureMockableClients(IServiceCollection services, IConfiguration config
     else
     {
         services.AddHttpClient<IIdPortenAuthorizationClient, IdPortenAuthorizationClient>();
+    }
+
+    if (mockSettings.BankruptcyEstateAdministration)
+    {
+        services.AddHttpClient<IBankruptcyEstateClient, BankruptcyEstateClientMock>();
+    }
+    else
+    {
+        services.AddHttpClient<IBankruptcyEstateClient, BankruptcyEstateClient>();
     }
 }

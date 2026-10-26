@@ -26,6 +26,7 @@ window.featureFlags = {
   showIdPortenAuthorizations: false,
   enableSkyra: false,
   enableSingleRightsTabInPoaOverview: false,
+  enableBankruptcyEstateAdministration: false,
 };
 
 // Initialise i18next;
