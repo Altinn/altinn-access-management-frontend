@@ -54,6 +54,7 @@ export const ResourceInfo = ({
   const isSingleRightRequest = availableActions?.includes(DelegationAction.REQUEST);
   const hasDelegateAction = availableActions?.includes(DelegationAction.DELEGATE);
   const hasApproveAction = availableActions?.includes(DelegationAction.APPROVE);
+  const hasRevokeAction = availableActions?.includes(DelegationAction.REVOKE);
 
   const { data: resourceDelegations, isLoading: isResourceDelegationsLoading } =
     useGetSingleRightsForRightholderQuery(
@@ -255,7 +256,7 @@ export const ResourceInfo = ({
                   {hasAccess ? t('common.update_poa') : t('common.give_poa')}
                 </DsButton>
               )}
-              {hasAccess && toParty && (
+              {hasAccess && toParty && hasRevokeAction && (
                 <DsButton
                   data-size='sm'
                   variant='secondary'

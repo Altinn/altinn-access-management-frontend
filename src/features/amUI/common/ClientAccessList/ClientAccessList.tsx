@@ -70,12 +70,12 @@ type ClientAccessListProps = {
   onAddAccessPackage?: (
     action: ClientAccessPackageAction,
     onSuccess?: () => void,
-    onError?: () => void,
+    onError?: (error?: ActionError) => void,
   ) => void | Promise<void>;
   onRemoveAccessPackage?: (
     action: ClientAccessPackageAction,
     onSuccess?: () => void,
-    onError?: () => void,
+    onError?: (error?: ActionError) => void,
   ) => void | Promise<void>;
   onAddResource?: (
     action: ClientResourceAction,
@@ -87,6 +87,7 @@ type ClientAccessListProps = {
     onSuccess?: () => void,
     onError?: (error?: ActionError) => void,
   ) => void | Promise<void>;
+  renderClientActions?: (client: Client, restoreFocusFallbackId?: string) => React.ReactNode;
   requireDelegableForActions?: boolean;
   emptyAccessText?: string;
   emptyText?: string;
@@ -112,6 +113,7 @@ export const ClientAccessList = ({
   onRemoveAccessPackage,
   onAddResource,
   onRemoveResource,
+  renderClientActions,
   requireDelegableForActions = true,
   emptyAccessText,
   emptyText,
@@ -258,18 +260,21 @@ export const ClientAccessList = ({
       as: 'button',
       titleAs: 'div',
       children: (
-        <ClientAccessItems
-          packages={packages}
-          resources={resources}
-          emptyText={emptyAccessText}
-          addDisabled={addDisabled}
-          removeDisabled={removeDisabled}
-          requestPackageFocus={requestPackageFocus}
-          requestResourceFocus={requestResourceFocus}
-          restoreFocusFallbackId={restoreFocusFallbackId}
-          onOpenPackageModal={openPackageModal}
-          onOpenResourceModal={openResourceModal}
-        />
+        <>
+          {renderClientActions?.(client, restoreFocusFallbackId)}
+          <ClientAccessItems
+            packages={packages}
+            resources={resources}
+            emptyText={emptyAccessText}
+            addDisabled={addDisabled}
+            removeDisabled={removeDisabled}
+            requestPackageFocus={requestPackageFocus}
+            requestResourceFocus={requestResourceFocus}
+            restoreFocusFallbackId={restoreFocusFallbackId}
+            onOpenPackageModal={openPackageModal}
+            onOpenResourceModal={openResourceModal}
+          />
+        </>
       ),
       description:
         userType === 'company'

@@ -1,9 +1,12 @@
 import { useCallback } from 'react';
-import { useSnackbar } from '@altinn/altinn-components';
-import { useTranslation } from 'react-i18next';
 
 import type { AddAgentResourcesFn, RemoveAgentResourcesFn } from '@/rtk/features/clientApi';
-import { getActionError, type ActionError } from '@/resources/hooks/useActionError';
+import type { ActionError } from '@/resources/hooks/useActionError';
+
+import {
+  useClientSingleAccessAction,
+  type ClientSingleAccessMode,
+} from '../ClientBulkDelegation/useClientSingleAccessAction';
 
 export type ClientResourceDelegationInput = {
   clientId: string;
@@ -25,101 +28,46 @@ export const useClientResourceActions = ({
   addAgentResources,
   removeAgentResources,
 }: UseClientResourceActionsParams) => {
-  const { t } = useTranslation();
-  const { openSnackbar } = useSnackbar();
+  const runSingle = useClientSingleAccessAction({
+    actingPartyUuid,
+    addAgentResources,
+    removeAgentResources,
+  });
 
-  const addClientResource = useCallback(
-    async (
+  const runResource = useCallback(
+    (
+      mode: ClientSingleAccessMode,
       input: ClientResourceDelegationInput,
       onSuccess?: () => void,
       onError?: (error?: ActionError) => void,
-    ) => {
-      if (!actingPartyUuid || !addAgentResources || !input.clientId || !input.agentId) {
-        onError?.();
-        return;
-      }
+    ) =>
+      runSingle(
+        mode,
+        { clientId: input.clientId, agentId: input.agentId },
+        { kind: 'resource', roleCode: input.roleCode, id: input.resourceId },
+        { agentName: input.agentName, accessName: input.resourceName },
+        onSuccess,
+        onError,
+      ),
+    [runSingle],
+  );
 
-      try {
-        await addAgentResources({
-          from: input.clientId,
-          to: input.agentId,
-          party: actingPartyUuid,
-          payload: {
-            values: [
-              {
-                role: input.roleCode,
-                resources: [input.resourceId],
-              },
-            ],
-          },
-        }).unwrap();
-        openSnackbar({
-          message: t('client_administration_page.delegate_success_snackbar', {
-            name: input.agentName,
-            accessName: input.resourceName,
-          }),
-          color: 'success',
-        });
-        onSuccess?.();
-      } catch (error) {
-        openSnackbar({
-          message: t('client_administration_page.delegate_error', {
-            name: input.agentName,
-            accessName: input.resourceName,
-          }),
-          color: 'danger',
-        });
-        onError?.(getActionError(error));
-      }
-    },
-    [actingPartyUuid, addAgentResources, openSnackbar, t],
+  const addClientResource = useCallback(
+    (
+      input: ClientResourceDelegationInput,
+      onSuccess?: () => void,
+      onError?: (error?: ActionError) => void,
+    ) => runResource('delegate', input, onSuccess, onError),
+    [runResource],
   );
 
   const removeClientResource = useCallback(
-    async (
+    (
       input: ClientResourceDelegationInput,
       onSuccess?: () => void,
       onError?: (error?: ActionError) => void,
-    ) => {
-      if (!actingPartyUuid || !removeAgentResources || !input.clientId || !input.agentId) {
-        onError?.();
-        return;
-      }
-
-      try {
-        await removeAgentResources({
-          from: input.clientId,
-          to: input.agentId,
-          party: actingPartyUuid,
-          payload: {
-            values: [
-              {
-                role: input.roleCode,
-                resources: [input.resourceId],
-              },
-            ],
-          },
-        }).unwrap();
-        openSnackbar({
-          message: t('client_administration_page.remove_success_snackbar', {
-            name: input.agentName,
-            accessName: input.resourceName,
-          }),
-          color: 'success',
-        });
-        onSuccess?.();
-      } catch (error) {
-        openSnackbar({
-          message: t('client_administration_page.remove_error', {
-            name: input.agentName,
-            accessName: input.resourceName,
-          }),
-          color: 'danger',
-        });
-        onError?.(getActionError(error));
-      }
-    },
-    [actingPartyUuid, openSnackbar, removeAgentResources, t],
+    ) => runResource('remove', input, onSuccess, onError),
+    [runResource],
   );
 
   return { addClientResource, removeClientResource };

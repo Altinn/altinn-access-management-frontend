@@ -52,6 +52,12 @@ type ClientAgentPackageListProps = {
   removeAgentAccessPackages: RemoveAgentAccessPackagesFn;
   addAgentResources?: AddAgentResourcesFn;
   removeAgentResources?: RemoveAgentResourcesFn;
+  // rowKey is unique per list, see listKey.
+  renderAgentActions?: (
+    agent: Agent,
+    rowKey: string,
+    restoreFocusFallbackId?: string,
+  ) => React.ReactNode;
   emptyText?: string;
   searchString?: string;
   expandedIds?: string[];
@@ -94,6 +100,7 @@ export const ClientAgentPackageList = ({
   removeAgentAccessPackages,
   addAgentResources,
   removeAgentResources,
+  renderAgentActions,
   emptyText,
   searchString,
   expandedIds,
@@ -293,17 +300,20 @@ export const ClientAgentPackageList = ({
       titleAs: 'h2',
       as: 'button',
       children: (
-        <ClientAccessItems
-          packages={packages}
-          resources={resources}
-          addDisabled={actionsDisabled}
-          removeDisabled={actionsDisabled}
-          requestPackageFocus={requestPackageFocus}
-          requestResourceFocus={requestResourceFocus}
-          restoreFocusFallbackId={restoreFocusFallbackId}
-          onOpenPackageModal={openPackageModal}
-          onOpenResourceModal={openResourceModal}
-        />
+        <>
+          {renderAgentActions?.(agent, idPrefix, restoreFocusFallbackId)}
+          <ClientAccessItems
+            packages={packages}
+            resources={resources}
+            addDisabled={actionsDisabled}
+            removeDisabled={actionsDisabled}
+            requestPackageFocus={requestPackageFocus}
+            requestResourceFocus={requestResourceFocus}
+            restoreFocusFallbackId={restoreFocusFallbackId}
+            onOpenPackageModal={openPackageModal}
+            onOpenResourceModal={openResourceModal}
+          />
+        </>
       ),
       description:
         userType === 'company'
