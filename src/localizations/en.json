@@ -612,7 +612,9 @@
     "error_saving_addresses": "Something went wrong. Please try again.",
     "no_addresses_error": "The organization must have at least one email address or SMS number for notifications.",
     "alert_settings_info": "Notifications sent to registered notification addresses are sent regardless of whether the recipient has the right to view the content in Altinn. If you have a shared email address, it is natural to include it here. <a>Read more</a>",
-    "info_button": "About notification addresses"
+    "info_button": "About notification addresses",
+    "service_announcement_heading": "Planned maintenance 31st of October - 1st of November",
+    "service_announcement_content": "Altinn is performing planned maintenance on notification addresses for organizations. This may cause unstable behaviour on this page between Saturday 31st of October at 08:00 and Sunday 1st of November at 08:00. Deleting addresses will be temporarily unavailable."
   },
   "text_field_errors": {
     "required": "The field is required",
