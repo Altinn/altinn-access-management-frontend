@@ -35,8 +35,6 @@ test.describe('Samtykke - Skatteetaten krav og betalinger ende til ende', () => 
       await test.step('Åpne samtykkeside og logg inn som dagligLeder', async () => {
         await consentPage.open(consentResp.viewUri);
         await login.loginNotChoosingActor(pid);
-        await consentPage.openMenu();
-        await consentPage.pickLanguage(consentPage.language);
       });
 
       await test.step('Godkjenn samtykke', async () => {

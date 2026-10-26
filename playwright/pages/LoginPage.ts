@@ -49,7 +49,14 @@ export class LoginPage {
     await this.authenticateUser(pid);
   }
 
-  async loginNotChoosingActor(pid: string) {
+  /**
+   * Logger inn fra en side som allerede har sendt brukeren til ID-porten (f.eks. samtykke).
+   * Språket settes via API før innlogging, med mindre testen skal velge det i GUI.
+   */
+  async loginNotChoosingActor(pid: string, { setLanguage = true } = {}) {
+    if (setLanguage) {
+      await this.api.settings.setSelectedLanguage(pid, LANGUAGE_CODE[this.language]);
+    }
     await this.testIdLink.click();
     await this.pidInput.fill(pid);
     await this.autentiserButton.click();

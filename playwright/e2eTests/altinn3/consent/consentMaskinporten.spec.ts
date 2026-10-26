@@ -62,8 +62,6 @@ test.describe('Fetch consent token after approval', () => {
       );
       await consentPage.open(response.viewUri);
       await login.loginNotChoosingActor(fromPerson);
-      await consentPage.openMenu();
-      await consentPage.pickLanguage(consentPage.language);
       return response;
     });
 
@@ -104,8 +102,6 @@ test.describe('Fetch consent token after approval', () => {
       );
       await consentPage.open(response.viewUri);
       await login.loginNotChoosingActor(personThatCanApprove);
-      await consentPage.openMenu();
-      await consentPage.pickLanguage(consentPage.language);
       return response;
     });
 
@@ -163,8 +159,6 @@ test.describe('Fetch consent token after approval', () => {
 
         await consentPage.open(response.viewUri);
         await login.loginNotChoosingActor(personThatCanApprove);
-        await consentPage.openMenu();
-        await consentPage.pickLanguage(consentPage.language);
         return response;
       });
 
@@ -226,8 +220,6 @@ test.describe('Fetch consent token after approval', () => {
 
         await consentPage.open(viewUri);
         await login.loginNotChoosingActor(fromPerson);
-        await consentPage.openMenu();
-        await consentPage.pickLanguage(consentPage.language);
 
         expect(viewUri).toBeTruthy();
         return { viewUri };
@@ -307,8 +299,6 @@ test.describe('Fetch consent token after approval', () => {
 
       await consentPage.open(viewUri);
       await login.loginNotChoosingActor(personThatCanApprove);
-      await consentPage.openMenu();
-      await consentPage.pickLanguage(consentPage.language);
 
       expect(viewUri).toBeTruthy();
       return { viewUri };

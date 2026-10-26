@@ -37,11 +37,11 @@ LANGUAGES.forEach((language) => {
 
       await test.step('Open consent page and login', async () => {
         await consentPage.open(consentResponse.viewUri);
-        await login.loginNotChoosingActor(fromPerson);
+        await login.loginNotChoosingActor(fromPerson, { setLanguage: false });
       });
 
+      // Eneste samtykketest som velger språk i GUI; resten setter det via API ved innlogging.
       await test.step('Pick language', async () => {
-        await consentPage.openMenu();
         await consentPage.pickLanguage(consentPage.language);
       });
 
@@ -78,11 +78,6 @@ LANGUAGES.forEach((language) => {
         await login.loginNotChoosingActor(fromPerson);
       });
 
-      await test.step('Pick language', async () => {
-        await consentPage.openMenu();
-        await consentPage.pickLanguage(consentPage.language);
-      });
-
       await test.step('Verify consent UI and expiry', async () => {
         await consentPage.expectKravIntro();
         const expected = formatUiDateTime(validTo);
@@ -113,11 +108,6 @@ LANGUAGES.forEach((language) => {
       await test.step('Open consent page and login', async () => {
         await consentPage.open(consentResponse.viewUri);
         await login.loginNotChoosingActor(fromPerson);
-      });
-
-      await test.step('Pick language', async () => {
-        await consentPage.openMenu();
-        await consentPage.pickLanguage(consentPage.language);
       });
 
       await test.step('Verify consent UI and expiry', async () => {
@@ -156,11 +146,6 @@ LANGUAGES.forEach((language) => {
         await login.loginNotChoosingActor(fromPerson);
       });
 
-      await test.step('Pick language', async () => {
-        await consentPage.openMenu();
-        await consentPage.pickLanguage(consentPage.language);
-      });
-
       await test.step('Verify consent UI', async () => {
         await consentPage.expectStandardIntro();
         await expect(consentPage.textLoanApplication).toBeVisible();
@@ -194,11 +179,6 @@ LANGUAGES.forEach((language) => {
       await test.step('Open consent page and login', async () => {
         await consentPage.open(consentResponse.viewUri);
         await login.loginNotChoosingActor(fromPerson);
-      });
-
-      await test.step('Pick language', async () => {
-        await consentPage.openMenu();
-        await consentPage.pickLanguage(consentPage.language);
       });
 
       await test.step('Verify consent UI', async () => {
@@ -235,11 +215,6 @@ LANGUAGES.forEach((language) => {
       await test.step('Open consent page and login', async () => {
         await consentPage.open(consentResponse.viewUri);
         await login.loginNotChoosingActor(fromPerson);
-      });
-
-      await test.step('Pick language', async () => {
-        await consentPage.openMenu();
-        await consentPage.pickLanguage(consentPage.language);
       });
 
       await test.step('Verify consent request heading', async () => {

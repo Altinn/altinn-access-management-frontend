@@ -47,11 +47,6 @@ LANGUAGES.forEach((language) => {
         await login.loginNotChoosingActor(fromPerson);
       });
 
-      await test.step('Pick language', async () => {
-        await consentPage.openMenu();
-        await consentPage.pickLanguage(consentPage.language);
-      });
-
       await test.step('Verify consent UI and expiry', async () => {
         await expect(consentPage.textIncomeData).toBeVisible();
         const expected = formatUiDateTime(validTo);
