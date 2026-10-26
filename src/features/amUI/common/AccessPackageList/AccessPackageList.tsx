@@ -15,7 +15,7 @@ import { type ExtendedAccessArea, useAreaPackageList } from './useAreaPackageLis
 import { useAccessPackageActions } from './useAccessPackageActions';
 import { SkeletonAccessPackageList } from './SkeletonAccessPackageList';
 import { AreaItem } from './AreaItem';
-import { useAreaExpandedContextOrLocal } from './AccessPackageExpandedContext';
+import { type AreaExpandedState, useAreaExpandedState } from './useAreaExpandedState';
 import { AreaItemContent, areaContentId } from './AreaItemContent';
 import { packageActionControlId } from './PackageItem';
 
@@ -40,6 +40,8 @@ interface AccessPackageListProps {
   filterByType?: boolean;
   firstHeadingLevel?: 2 | 3;
   showUnassignedAvailableAreas?: boolean;
+  /** Expanded state owned by a parent, e.g. to keep it while the list is unmounted. Local state is used when omitted */
+  expandedState?: AreaExpandedState;
 }
 
 export const AccessPackageList = ({
@@ -63,6 +65,7 @@ export const AccessPackageList = ({
   filterByType = true,
   firstHeadingLevel = 3,
   showUnassignedAvailableAreas = false,
+  expandedState,
 }: AccessPackageListProps) => {
   const { t } = useTranslation();
 
@@ -116,7 +119,8 @@ export const AccessPackageList = ({
   });
 
   const combinedAreas = [...assignedAreas, ...availableAreas];
-  const { toggleExpandedArea, isExpanded } = useAreaExpandedContextOrLocal();
+  const localExpandedState = useAreaExpandedState();
+  const { toggleExpandedArea, isExpanded } = expandedState ?? localExpandedState;
 
   if (loadingDelegations || loadingPackageAreas || isLoading) {
     return (
