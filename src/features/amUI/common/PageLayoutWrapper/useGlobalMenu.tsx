@@ -1,4 +1,11 @@
-import { type Theme, type MenuItemSize, type MenuItemProps } from '@altinn/altinn-components';
+import {
+  type Theme,
+  type MenuItemSize,
+  type MenuItemProps,
+  type GlobalMenuProps,
+  type MenuItemGroups,
+  type MenuProps,
+} from '@altinn/altinn-components';
 import {
   InboxFillIcon,
   PersonCircleIcon,
@@ -11,8 +18,8 @@ import {
 import { useTranslation } from 'react-i18next';
 import { Link } from 'react-router';
 
-import { formatEntityDisplayName, isOrganization } from '@/resources/utils/reporteeUtils';
-import { useGetReporteeQuery, useGetUserProfileQuery } from '@/rtk/features/userInfoApi';
+import { formatEntityDisplayName } from '@/resources/utils/reporteeUtils';
+import { useGetUserProfileQuery } from '@/rtk/features/userInfoApi';
 import { useIsTabletOrSmaller } from '@/resources/utils/screensizeUtils';
 import { getAfUrl, getAltinnStartPageUrl, getLogoutUrl } from '@/resources/utils/pathUtils';
 
@@ -50,7 +57,6 @@ export const useGlobalMenu = ({
 
   const lang = i18n.language as 'no_nb' | 'no_nn' | 'en';
   const isSm = useIsTabletOrSmaller();
-  const { data: reportee } = useGetReporteeQuery();
   const { data: userinfo } = useGetUserProfileQuery();
 
   const { sidebarItems, shortcutsMenuItem } = useSidebarItems({ isSmall: true });
@@ -126,7 +132,7 @@ export const useGlobalMenu = ({
     ...(isSm && !hideSidebarItems ? shortcutsMenuItem : []),
   ];
 
-  const globalMenu = {
+  const globalMenu: GlobalMenuProps = {
     logoutButton: {
       label: t('header.log_out'),
       onClick: () => {
@@ -138,12 +144,6 @@ export const useGlobalMenu = ({
     menuLabel: t('header.menu-label'),
     backLabel: t('header.back-label'),
     changeLabel: t('header.change-label'),
-
-    currentAccount: {
-      name: reportee?.name || '',
-      type: isOrganization(reportee) ? 'company' : 'person',
-      id: reportee?.partyId?.toString() ?? '',
-    },
   };
 
   const groups = {
@@ -162,24 +162,22 @@ export const useGlobalMenu = ({
     },
   };
 
-  const desktopMenu = {
+  const desktopMenu: MenuProps = {
     id: 'global-menu',
     items: headerLinks,
     groups,
   };
 
-  const mobileMenu = {
+  const mobileMenu: MenuProps = {
     id: 'global-menu',
     items: headerLinks,
     groups,
   };
 
-  const menuGroups = {
+  const menuGroups: MenuItemGroups = {
     shortcuts: {
       divider: false,
       title: t('header.shortcuts'),
-      defaultIconTheme: 'transparent' as Theme,
-      defaultItemSize: 'sm' as MenuItemSize,
     },
     global: {
       divider: false,

@@ -47,6 +47,7 @@ import {
   isOrganization,
   isSubUnit,
   formatEntityDisplayName,
+  getAvatarType,
 } from '@/resources/utils/reporteeUtils';
 import { useSidebarRequestCount } from '@/resources/hooks/useSidebarRequestCount';
 import { useGetRolePermissionsQuery } from '@/rtk/features/roleApi';
@@ -270,7 +271,7 @@ export const LandingPage = () => {
           <div className={classes.landingPageHeading}>
             <UserListItem
               id={reportee?.id ?? ''}
-              type={isOrganization(reportee) ? 'company' : 'person'}
+              type={getAvatarType(reportee)}
               name={reporteeName}
               description={getReporteeDescription()}
               subUnit={isReporteeSubUnit}

@@ -8,7 +8,7 @@ import type { ChipRight } from '../utils/rightsUtils';
 import { RightsSection } from './RightsSection';
 
 // DelegationAction comes from EditModal, which drags in the loading animation.
-vi.mock('lottie-react', () => ({ default: () => null }));
+vi.mock('lottie-react', () => ({ Lottie: () => null }));
 
 // Labels are the translation keys, per the convention in the other component tests. Interpolation
 // values are appended so assertions can tell the variants apart.
