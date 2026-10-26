@@ -1,7 +1,7 @@
 import { useMemo } from 'react';
 
-import type { Agent } from '@/rtk/features/clientApi';
 import { PartyType } from '@/dataObjects/dtos/Party';
+import type { Agent } from '@/rtk/features/clientApi';
 
 type UseClientDetailsAccessAgentListsParams = {
   clientAccessPackages?: Agent[];
