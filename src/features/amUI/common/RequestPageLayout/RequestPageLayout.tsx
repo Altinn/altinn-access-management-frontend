@@ -15,7 +15,7 @@ import { NavigationFocus } from '../PageLayoutWrapper/NavigationFocus';
 import classes from './RequestPageLayout.module.css';
 
 interface RequestPageLayoutProps {
-  account: { name: string; type: 'person' | 'company' };
+  account: { name: string; color: 'person' | 'company' };
   isLoading: boolean;
   /**
    * The party the request belongs to. When it differs from the active reportee,
@@ -59,7 +59,7 @@ export const RequestPageLayout = ({
     <RootProvider languageCode={languageCode}>
       <NavigationFocus />
       <Layout
-        color={account.type}
+        color={account.color}
         theme='subtle'
         header={{
           ...header,
@@ -83,7 +83,7 @@ export const RequestPageLayout = ({
           size: 'xs',
           children: t('common.skiplink'),
         }}
-        content={{ color: account.type }}
+        content={{ color: account.color }}
       >
         {showLoading && <LoadingState />}
         {!showLoading && error && <div className={classes.centerBlock}>{error}</div>}

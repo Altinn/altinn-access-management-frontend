@@ -1,4 +1,5 @@
 using Altinn.AccessManagement.UI.Core.Models.Common;
+using Altinn.AccessManagement.UI.Core.Models.User;
 
 namespace Altinn.AccessManagement.UI.Core.Models.Maskinporten
 {
@@ -10,7 +11,7 @@ namespace Altinn.AccessManagement.UI.Core.Models.Maskinporten
         /// <summary>
         /// The connected party.
         /// </summary>
-        public CompactEntity Party { get; set; } = new();
+        public Entity Party { get; set; } = new();
 
         /// <summary>
         /// The roles that apply to the connected party.
