@@ -1,6 +1,6 @@
 import React, { useLayoutEffect, useRef } from 'react';
 import { useTranslation } from 'react-i18next';
-import { DsButton, DsParagraph, DsSpinner } from '@altinn/altinn-components';
+import { DsButton, DsParagraph } from '@altinn/altinn-components';
 
 import { useRestoreFocusContext, useRestoreFocusTarget } from '../RestoreFocus';
 
@@ -34,10 +34,10 @@ interface BulkActionButtonProps {
   color?: 'danger';
   isLoading: boolean;
   isInactive: boolean;
+  restoreFocusFallbackId?: string;
   onClick: () => void;
 }
 
-// Inactive buttons use aria-disabled so they stay focusable as a RestoreFocus target.
 const BulkActionButton = ({
   id,
   label,
@@ -45,23 +45,22 @@ const BulkActionButton = ({
   color,
   isLoading,
   isInactive,
+  restoreFocusFallbackId,
   onClick,
 }: BulkActionButtonProps) => {
-  const { t } = useTranslation();
   const ref = useRef<HTMLButtonElement>(null);
   const requestFocus = useRestoreFocusContext()?.requestFocus;
   useRestoreFocusTarget(id);
 
-  // The client row moves to the other section when its access changes. Hand focus over to the
-  // same button there, which is still in the DOM when this layout cleanup runs.
+  // Hands focus to the same button when the row moves to another section.
   useLayoutEffect(() => {
     const element = ref.current;
     return () => {
       if (element && document.activeElement === element) {
-        requestFocus?.(id);
+        requestFocus?.(id, restoreFocusFallbackId);
       }
     };
-  }, [id, requestFocus]);
+  }, [id, requestFocus, restoreFocusFallbackId]);
 
   return (
     <DsButton
@@ -70,27 +69,21 @@ const BulkActionButton = ({
       data-size='sm'
       variant='secondary'
       data-color={color}
-      aria-disabled={(isInactive && !isLoading) || undefined}
+      loading={isLoading}
+      aria-disabled={isInactive || isLoading || undefined}
       onClick={isInactive || isLoading ? undefined : onClick}
       aria-label={ariaLabel}
     >
-      {isLoading ? (
-        <DsSpinner
-          aria-label={t('common.loading')}
-          data-size='sm'
-        />
-      ) : (
-        label
-      )}
+      <span>{label}</span>
     </DsButton>
   );
 };
 
 interface ClientBulkActionsProps {
-  // Unique among rows in the same RestoreFocus zone; the same row in two sections shares it.
+  // Shared by the same row in different sections, unique otherwise.
   rowKey: string;
-  // What the row represents, which decides whether the labels name the client or the agent.
   rowKind: 'client' | 'agent';
+  restoreFocusFallbackId?: string;
   target: ClientAccessTarget;
   names: ClientBulkNames;
   items: ClientBulkItems;
@@ -100,6 +93,7 @@ interface ClientBulkActionsProps {
 export const ClientBulkActions = ({
   rowKey,
   rowKind,
+  restoreFocusFallbackId,
   target,
   names,
   items: { missing, held },
@@ -118,6 +112,7 @@ export const ClientBulkActions = ({
           label={t('client_administration_page.give_all')}
           ariaLabel={t(ariaLabels.add, labelParams)}
           isLoading={bulk.isRunning(target, 'add')}
+          restoreFocusFallbackId={restoreFocusFallbackId}
           isInactive={missing.length === 0 || bulk.bulkDisabled || bulk.hasActiveRun}
           onClick={() => void bulk.start('add', target, names, missing)}
         />
@@ -127,6 +122,7 @@ export const ClientBulkActions = ({
           ariaLabel={t(ariaLabels.remove, labelParams)}
           color='danger'
           isLoading={bulk.isRunning(target, 'remove')}
+          restoreFocusFallbackId={restoreFocusFallbackId}
           isInactive={held.length === 0 || bulk.bulkDisabled || bulk.hasActiveRun}
           onClick={() => void bulk.start('remove', target, names, held)}
         />

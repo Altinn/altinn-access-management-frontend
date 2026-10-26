@@ -9,8 +9,7 @@ export type ClientBulkItem = {
 
 export type ClientBulkItems = { missing: ClientBulkItem[]; held: ClientBulkItem[] };
 
-// Held access for each row, keyed by the party that differs between rows: the client on the agent
-// page, the agent on the client page. Build it once per data change, not once per row.
+// Keyed by client on the agent page and by agent on the client page.
 export type HeldAccessByRow = Map<string, ClientAccess[]>;
 
 export const indexHeldAccess = <T extends { access: ClientAccess[] }>(
@@ -32,7 +31,6 @@ type GetClientBulkItemsParams = {
   getAccessPackageById: (packageId?: string | null) => AccessPackage | undefined;
 };
 
-// Revoking has to target the role the delegation was made under, not the offered one.
 const heldRolesById = (accesses: ClientAccess[], pick: (access: ClientAccess) => string[]) => {
   const roles = new Map<string, string[]>();
   accesses.forEach((access) =>

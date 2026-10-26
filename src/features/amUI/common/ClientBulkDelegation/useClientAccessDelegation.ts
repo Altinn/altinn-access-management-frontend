@@ -22,7 +22,7 @@ export type ClientAccessOutcome = {
   refetched: Promise<void>;
 };
 
-type UseClientAccessDelegationParams = {
+export type UseClientAccessDelegationParams = {
   actingPartyUuid?: string;
   addAgentAccessPackages?: AddAgentAccessPackagesFn;
   removeAgentAccessPackages?: RemoveAgentAccessPackagesFn;
@@ -30,9 +30,7 @@ type UseClientAccessDelegationParams = {
   removeAgentResources?: RemoveAgentResourcesFn;
 };
 
-// Temporary, until the backend fixes this issue: #4660
-// Now repeated roles in one payload or two calls for the same pair fail with Postgres 23505.
-// Fix: One call at a time.
+// Runs one call at a time per client and agent until https://github.com/Altinn/altinn-auth/issues/4660 is fixed.
 const pendingByTarget = new Map<string, Promise<unknown>>();
 
 const groupIdsByRole = (items: ClientBulkItem[]) =>
@@ -49,8 +47,7 @@ const groupIdsByRole = (items: ClientBulkItem[]) =>
 const PACKAGE_TAGS = ['agentAccessPackages', 'clientAccessPackages'] as const;
 const RESOURCE_TAGS = ['agentResources', 'clientResources'] as const;
 
-// Invalidations are delayed while other clientApi requests are in flight, so the refetch can start
-// only after the currently running queries settle. Wait a few rounds to catch it.
+// The refetch may only start once other running clientApi queries settle, so wait a few rounds.
 const waitForRefetch = async (dispatch: AppDispatch) => {
   for (let round = 0; round < 3; round++) {
     const running = dispatch(clientApi.util.getRunningQueriesThunk());
@@ -149,8 +146,6 @@ export const useClientAccessDelegation = ({
         return { failed, error };
       });
 
-      // The mutations do not invalidate tags themselves, so a run with several calls refetches
-      // the lists once at the end instead of moving rows around halfway through.
       dispatch(
         clientApi.util.invalidateTags([
           ...(packages.length > 0 ? PACKAGE_TAGS : []),

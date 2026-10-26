@@ -21,7 +21,7 @@ type AgentDetailsClientsListProps = {
   agentAccessPackages: Client[];
   agentResources?: Client[];
   isLoading: boolean;
-  renderClientActions: (client: Client) => React.ReactNode;
+  renderClientActions: (client: Client, restoreFocusFallbackId?: string) => React.ReactNode;
   toPartyUuid?: string;
   actingPartyUuid?: string;
   addAgentAccessPackages: AddAgentAccessPackagesFn;

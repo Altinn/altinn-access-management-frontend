@@ -58,7 +58,11 @@ type ClientAgentPackageListProps = {
   addAgentResources?: AddAgentResourcesFn;
   removeAgentResources?: RemoveAgentResourcesFn;
   // rowKey is unique per list, see listKey.
-  renderAgentActions?: (agent: Agent, rowKey: string) => React.ReactNode;
+  renderAgentActions?: (
+    agent: Agent,
+    rowKey: string,
+    restoreFocusFallbackId?: string,
+  ) => React.ReactNode;
   emptyText?: string;
   searchString?: string;
   expandedIds?: string[];
@@ -332,7 +336,7 @@ export const ClientAgentPackageList = ({
       as: 'button',
       children: (
         <>
-          {renderAgentActions?.(agent, idPrefix)}
+          {renderAgentActions?.(agent, idPrefix, restoreFocusFallbackId)}
           <ClientAccessSections
             packageItems={nodes}
             resourceItems={resourceNodes}

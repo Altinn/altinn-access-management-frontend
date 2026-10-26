@@ -151,8 +151,7 @@ export const clientApi = createApi({
       keepUnusedDataFor: 5 * 60,
       providesTags: ['clientResources'],
     }),
-    // The four agent delegation mutations leave tag invalidation to useClientAccessDelegation,
-    // which refetches once per run. Call them through that hook, not directly.
+    // Tags for the four agent delegation mutations are invalidated by useClientAccessDelegation.
     addAgentAccessPackages: builder.mutation<
       DelegationDto[],
       { from: string; to: string; payload: DelegationBatchInput; party?: string }

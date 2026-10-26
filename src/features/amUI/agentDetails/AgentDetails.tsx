@@ -126,7 +126,7 @@ export const AgentDetails = () => {
     removeAgentResources,
   });
   const renderClientActions = useCallback(
-    (client: Client) => {
+    (client: Client, restoreFocusFallbackId?: string) => {
       const clientId = client.client.id;
       const items = bulk.getItems(client.access, clientId);
       if (items.missing.length === 0 && items.held.length === 0) return null;
@@ -134,6 +134,7 @@ export const AgentDetails = () => {
         <ClientBulkActions
           rowKey={clientId}
           rowKind='client'
+          restoreFocusFallbackId={restoreFocusFallbackId}
           target={{ clientId, agentId: toPartyUuid }}
           names={{ clientName: formatEntityDisplayName(client.client), agentName: userName }}
           items={items}

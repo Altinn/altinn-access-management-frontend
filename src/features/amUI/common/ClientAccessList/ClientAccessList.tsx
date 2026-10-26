@@ -92,7 +92,7 @@ type ClientAccessListProps = {
     onSuccess?: () => void,
     onError?: (error?: ActionError) => void,
   ) => void | Promise<void>;
-  renderClientActions?: (client: Client) => React.ReactNode;
+  renderClientActions?: (client: Client, restoreFocusFallbackId?: string) => React.ReactNode;
   requireDelegableForActions?: boolean;
   emptyAccessText?: string;
   emptyText?: string;
@@ -328,7 +328,7 @@ export const ClientAccessList = ({
       titleAs: 'div',
       children: (
         <>
-          {renderClientActions?.(client)}
+          {renderClientActions?.(client, restoreFocusFallbackId)}
           <ClientAccessSections
             packageItems={nodes}
             resourceItems={resourceNodes}

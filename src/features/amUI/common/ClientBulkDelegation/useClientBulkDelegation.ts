@@ -61,7 +61,9 @@ const MODE_MESSAGES = {
   },
 } as const;
 
-// Call this above every section of the page, so pending state follows a row moving between them.
+const countAccesses = (items: ClientBulkItem[]) =>
+  new Set(items.map((item) => `${item.kind}:${item.id}`)).size;
+
 export const useClientBulkDelegation = ({
   actingPartyUuid,
   heldPackages,
@@ -123,9 +125,8 @@ export const useClientBulkDelegation = ({
         failed: items,
         refetched: Promise.resolve(),
       }));
-      // Keep the run active until the lists are fresh, so the row moves section only once.
       await refetched;
-      const failedCount = failed.length;
+      const failedCount = countAccesses(failed);
       setActiveRun(null);
 
       const messages = MODE_MESSAGES[mode];
@@ -134,7 +135,7 @@ export const useClientBulkDelegation = ({
           name: agentName,
           clientName,
           failedCount,
-          totalCount: items.length,
+          totalCount: countAccesses(items),
         }),
         color: failedCount > 0 ? 'danger' : 'success',
       });
@@ -145,9 +146,7 @@ export const useClientBulkDelegation = ({
   return useMemo(
     () => ({
       getItems,
-      // A fetching lookup resolves no packages, so a run would silently skip all of them.
       disabled: disabled || isFetchingAccessPackages,
-      // A failed lookup leaves single resource actions usable, but a bulk run would skip packages.
       bulkDisabled: disabled || isFetchingAccessPackages || !!accessPackagesError,
       isRunning,
       hasActiveRun: !!activeRun,
