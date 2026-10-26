@@ -3,6 +3,8 @@ import {
   type MenuItemSize,
   type MenuItemProps,
   type GlobalMenuProps,
+  type MenuItemGroups,
+  type MenuProps,
 } from '@altinn/altinn-components';
 import {
   InboxFillIcon,
@@ -16,8 +18,8 @@ import {
 import { useTranslation } from 'react-i18next';
 import { Link } from 'react-router';
 
-import { formatEntityDisplayName, getPartyColor } from '@/resources/utils/reporteeUtils';
-import { useGetReporteeQuery, useGetUserProfileQuery } from '@/rtk/features/userInfoApi';
+import { formatEntityDisplayName } from '@/resources/utils/reporteeUtils';
+import { useGetUserProfileQuery } from '@/rtk/features/userInfoApi';
 import { useIsTabletOrSmaller } from '@/resources/utils/screensizeUtils';
 import { getAfUrl, getAltinnStartPageUrl, getLogoutUrl } from '@/resources/utils/pathUtils';
 
@@ -160,24 +162,22 @@ export const useGlobalMenu = ({
     },
   };
 
-  const desktopMenu = {
+  const desktopMenu: MenuProps = {
     id: 'global-menu',
     items: headerLinks,
     groups,
   };
 
-  const mobileMenu = {
+  const mobileMenu: MenuProps = {
     id: 'global-menu',
     items: headerLinks,
     groups,
   };
 
-  const menuGroups = {
+  const menuGroups: MenuItemGroups = {
     shortcuts: {
       divider: false,
       title: t('header.shortcuts'),
-      defaultIconTheme: 'transparent' as Theme,
-      defaultItemSize: 'sm' as MenuItemSize,
     },
     global: {
       divider: false,
