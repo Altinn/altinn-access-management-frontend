@@ -30,7 +30,7 @@ namespace Altinn.AccessManagement.UI.Core.Models.Maskinporten.Frontend
 
             return new MaskinportenConnectionFE
             {
-                Party = PartyFE.FromCompactEntity(connection.Party),
+                Party = PartyFE.FromEntity(connection.Party),
                 Roles = connection.Roles ?? new(),
             };
         }

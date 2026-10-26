@@ -15,6 +15,13 @@ const lintedFiles = ['**/*.{js,jsx,mjs,cjs,ts,tsx,mts,cts}'];
 
 module.exports = defineConfig([
   globalIgnores([
+    '.claude/**',
+    '.dependencygraph/**',
+    '.git/**',
+    '.github/**',
+    '.storybook/**',
+    '.vscode/**',
+    'node_modules/**',
     '**/*.d.ts',
     'dist/**',
     'coverage/**',
