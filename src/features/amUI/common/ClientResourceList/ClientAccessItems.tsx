@@ -2,12 +2,12 @@ import React from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { useIsMobileOrSmaller } from '@/resources/utils/screensizeUtils';
-import type { ActionError } from '@/resources/hooks/useActionError';
 import type { PartyEntity } from '@/dataObjects/dtos/Party';
 import type { AccessPackage } from '@/rtk/features/accessPackageApi';
 import type { ServiceResource } from '@/rtk/features/singleRights/singleRightsApi';
 
 import type { useRestoreFocusOnDataChange } from '../RestoreFocus';
+import type { ClientAction } from '../DelegationModal/useClientAction';
 
 import { ClientAccessSections } from './ClientAccessSections';
 import {
@@ -17,21 +17,14 @@ import {
   restoreFocusOnSuccess,
 } from './buildAccessItems';
 
-type PackageActionHandler = (onSuccess?: () => void, onError?: () => void) => void | Promise<void>;
-
-type ResourceActionHandler = (
-  onSuccess?: () => void,
-  onError?: (error?: ActionError) => void,
-) => void | Promise<void>;
-
 export type ClientPackageEntry = {
   itemId: string;
   party: PartyEntity;
   accessPackage: AccessPackage;
   hasAccess: boolean;
   roleDescription?: string;
-  onDelegate?: PackageActionHandler;
-  onRevoke?: PackageActionHandler;
+  onDelegate?: ClientAction;
+  onRevoke?: ClientAction;
 };
 
 export type ClientResourceEntry = {
@@ -40,8 +33,8 @@ export type ClientResourceEntry = {
   party: PartyEntity;
   resource: ServiceResource;
   hasAccess: boolean;
-  onDelegate?: ResourceActionHandler;
-  onRevoke?: ResourceActionHandler;
+  onDelegate?: ClientAction;
+  onRevoke?: ClientAction;
 };
 
 type RequestFocus = ReturnType<typeof useRestoreFocusOnDataChange>;
