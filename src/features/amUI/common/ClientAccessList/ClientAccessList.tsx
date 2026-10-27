@@ -48,7 +48,6 @@ export type ClientResourceAction = {
 type SelectedClientResource = {
   itemId: string;
   clientId: string;
-  refId: string;
   resource: ServiceResource;
   toPartyName: string;
   onDelegate?: (
@@ -166,7 +165,6 @@ export const ClientAccessList = ({
     setSelectedResource({
       itemId: entry.itemId,
       clientId: entry.party.id,
-      refId: entry.resource.identifier,
       resource: entry.resource,
       toPartyName: formatEntityDisplayName(entry.party),
       onDelegate: entry.onDelegate,
@@ -320,7 +318,10 @@ export const ClientAccessList = ({
   const resourceModalData: ClientResourceModalData | undefined = selectedResource
     ? {
         resource: selectedResource.resource,
-        userHasAccess: clientHasResource(selectedResource.clientId, selectedResource.refId),
+        userHasAccess: clientHasResource(
+          selectedResource.clientId,
+          selectedResource.resource.identifier,
+        ),
         toPartyName: selectedResource.toPartyName,
         onDelegate: selectedResource.onDelegate,
         onRevoke: selectedResource.onRevoke,

@@ -20,15 +20,13 @@ export const ClientPackageInfo = ({
   party,
   accessPackage,
   userHasAccess,
-  inheritedStatus,
   roleDescription,
   onDelegate,
   onRevoke,
   isLoading = false,
   isSuccess = false,
-  disabled = false,
   error,
-}: PartyInfoProps) => {
+}: PartyInfoProps & { roleDescription?: string }) => {
   const { t } = useTranslation();
   const actionsRef = useRef<HTMLDivElement>(null);
   useRestoreFocusAfterSettled({
@@ -101,7 +99,6 @@ export const ClientPackageInfo = ({
           )}
           <StatusSection
             userHasAccess={userHasAccess}
-            inheritedStatus={inheritedStatus}
             cannotDelegateHere={cannotChangeAccess}
             toPartyName={userName}
           />
@@ -115,7 +112,7 @@ export const ClientPackageInfo = ({
             {canRevoke && (
               <DsButton
                 data-color='danger'
-                disabled={disabled || cannotChangeAccess}
+                disabled={cannotChangeAccess}
                 onClick={onRevoke}
               >
                 {t('common.delete_poa')}
@@ -123,7 +120,7 @@ export const ClientPackageInfo = ({
             )}
             {canDelegate && (
               <DsButton
-                disabled={disabled || cannotChangeAccess}
+                disabled={cannotChangeAccess}
                 onClick={onDelegate}
               >
                 {t('common.give_poa')}

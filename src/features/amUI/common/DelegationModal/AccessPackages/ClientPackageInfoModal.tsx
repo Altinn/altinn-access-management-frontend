@@ -4,7 +4,6 @@ import { DsDialog } from '@altinn/altinn-components';
 import type { PartyEntity } from '@/dataObjects/dtos/Party';
 import type { AccessPackage } from '@/rtk/features/accessPackageApi';
 
-import type { InheritedStatusMessageType } from '../../useInheritedStatus';
 import dialogClasses from '../DelegationModal.module.css';
 
 import { ClientPackageInfo } from './ClientPackageInfo';
@@ -15,7 +14,6 @@ export interface ClientPackageModalData {
   party: PartyEntity;
   accessPackage: AccessPackage;
   userHasAccess: boolean;
-  inheritedStatus?: InheritedStatusMessageType[];
   roleDescription?: string;
   onDelegate?: (onSuccess?: () => void, onError?: () => void) => void | Promise<void>;
   onRevoke?: (onSuccess?: () => void, onError?: () => void) => void | Promise<void>;
@@ -85,7 +83,6 @@ export const ClientPackageInfoModal = forwardRef<HTMLDialogElement, ClientPackag
               party={data.party}
               accessPackage={data.accessPackage}
               userHasAccess={data.userHasAccess}
-              inheritedStatus={data.inheritedStatus}
               roleDescription={data.roleDescription}
               isLoading={isLoading}
               isSuccess={isSuccess}
