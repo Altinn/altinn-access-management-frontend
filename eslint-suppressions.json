@@ -196,11 +196,6 @@
       "count": 1
     }
   },
-  "src/features/amUI/common/AccessPackageList/AccessPackageExpandedContext.tsx": {
-    "react-hooks/rules-of-hooks": {
-      "count": 1
-    }
-  },
   "src/features/amUI/common/AccessPackageList/AccessPackageList.tsx": {
     "@typescript-eslint/no-misused-promises": {
       "count": 4
@@ -261,11 +256,6 @@
   "src/features/amUI/common/DelegationModal/Instance/useInstanceDelegationRightsData.ts": {
     "react-hooks/set-state-in-effect": {
       "count": 1
-    }
-  },
-  "src/features/amUI/common/DelegationModal/SingleRights/ClientResourceInfoModal.tsx": {
-    "@typescript-eslint/no-misused-promises": {
-      "count": 2
     }
   },
   "src/features/amUI/common/DelegationModal/SingleRights/ResourceAlert.tsx": {
