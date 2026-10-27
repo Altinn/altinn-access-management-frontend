@@ -3,6 +3,7 @@ import { DsDialog } from '@altinn/altinn-components';
 
 import type { PartyEntity } from '@/dataObjects/dtos/Party';
 import type { AccessPackage } from '@/rtk/features/accessPackageApi';
+import { getActionError, type ActionError } from '@/resources/hooks/useActionError';
 
 import dialogClasses from '../DelegationModal.module.css';
 
@@ -28,23 +29,24 @@ export const ClientPackageInfoModal = forwardRef<HTMLDialogElement, ClientPackag
   ({ data, onClose }, ref) => {
     const [isLoading, setIsLoading] = useState(false);
     const [isSuccess, setIsSuccess] = useState(false);
-
-    const handleError = () => {
-      setIsLoading(false);
-      setIsSuccess(false);
-    };
+    const [actionError, setActionError] = useState<ActionError | null>(null);
 
     const handleClose = () => {
       setIsLoading(false);
       setIsSuccess(false);
+      setActionError(null);
       onClose?.();
     };
 
     const runAction = async (
-      action: (onSuccess?: () => void, onError?: () => void) => void | Promise<void>,
+      action: (
+        onSuccess?: () => void,
+        onError?: (error?: ActionError) => void,
+      ) => void | Promise<void>,
     ) => {
       setIsLoading(true);
       setIsSuccess(false);
+      setActionError(null);
       let actionHandled = false;
 
       const handleSuccess = () => {
@@ -54,9 +56,11 @@ export const ClientPackageInfoModal = forwardRef<HTMLDialogElement, ClientPackag
         setTimeout(() => setIsSuccess(false), animationDuration);
       };
 
-      const handleActionError = () => {
+      const handleActionError = (error?: ActionError) => {
         actionHandled = true;
-        handleError();
+        setIsLoading(false);
+        setIsSuccess(false);
+        setActionError(error ?? null);
       };
 
       try {
@@ -65,8 +69,8 @@ export const ClientPackageInfoModal = forwardRef<HTMLDialogElement, ClientPackag
         if (!actionHandled) {
           handleSuccess();
         }
-      } catch {
-        handleActionError();
+      } catch (error) {
+        handleActionError(getActionError(error));
       }
     };
 
@@ -86,6 +90,7 @@ export const ClientPackageInfoModal = forwardRef<HTMLDialogElement, ClientPackag
               roleDescription={data.roleDescription}
               isLoading={isLoading}
               isSuccess={isSuccess}
+              error={actionError}
               onDelegate={
                 data.onDelegate
                   ? () => {
