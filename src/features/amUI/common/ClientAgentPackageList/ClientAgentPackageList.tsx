@@ -188,7 +188,7 @@ export const ClientAgentPackageList = ({
         userHasAccess: entry.hasAccess,
         roleDescription: entry.roleDescription,
         onDelegate: entry.onDelegate,
-        onRevoke: entry.onRevoke ?? (() => {}),
+        onRevoke: entry.onRevoke,
       },
     });
     modalRef.current?.showModal();

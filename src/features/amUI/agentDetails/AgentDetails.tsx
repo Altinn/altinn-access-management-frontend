@@ -129,7 +129,8 @@ export const AgentDetails = () => {
     (client: Client, restoreFocusFallbackId?: string) => {
       const clientId = client.client.id;
       const items = bulk.getItems(client.access, clientId);
-      if (items.missing.length === 0 && items.held.length === 0) return null;
+      const disable = true;
+      if ((items.missing.length === 0 && items.held.length === 0) || disable) return null;
       return (
         <ClientBulkActions
           rowKey={clientId}
