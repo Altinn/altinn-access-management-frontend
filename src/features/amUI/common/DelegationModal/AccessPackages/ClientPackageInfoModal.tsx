@@ -1,24 +1,21 @@
-import { forwardRef, useState } from 'react';
+import { forwardRef } from 'react';
 import { DsDialog } from '@altinn/altinn-components';
 
 import type { PartyEntity } from '@/dataObjects/dtos/Party';
 import type { AccessPackage } from '@/rtk/features/accessPackageApi';
 
-import type { InheritedStatusMessageType } from '../../useInheritedStatus';
 import dialogClasses from '../DelegationModal.module.css';
+import { useClientAction, type ClientAction } from '../useClientAction';
 
 import { ClientPackageInfo } from './ClientPackageInfo';
-
-const animationDuration = 2000;
 
 export interface ClientPackageModalData {
   party: PartyEntity;
   accessPackage: AccessPackage;
   userHasAccess: boolean;
-  inheritedStatus?: InheritedStatusMessageType[];
   roleDescription?: string;
-  onDelegate?: (onSuccess?: () => void, onError?: () => void) => void | Promise<void>;
-  onRevoke: (onSuccess?: () => void, onError?: () => void) => void | Promise<void>;
+  onDelegate?: ClientAction;
+  onRevoke?: ClientAction;
 }
 
 interface ClientPackageInfoModalProps {
@@ -28,48 +25,11 @@ interface ClientPackageInfoModalProps {
 
 export const ClientPackageInfoModal = forwardRef<HTMLDialogElement, ClientPackageInfoModalProps>(
   ({ data, onClose }, ref) => {
-    const [isLoading, setIsLoading] = useState(false);
-    const [isSuccess, setIsSuccess] = useState(false);
-
-    const handleError = () => {
-      setIsLoading(false);
-      setIsSuccess(false);
-    };
+    const { isLoading, isSuccess, error, reset, bindAction } = useClientAction();
 
     const handleClose = () => {
-      setIsLoading(false);
-      setIsSuccess(false);
+      reset();
       onClose?.();
-    };
-
-    const runAction = async (
-      action: (onSuccess?: () => void, onError?: () => void) => void | Promise<void>,
-    ) => {
-      setIsLoading(true);
-      setIsSuccess(false);
-      let actionHandled = false;
-
-      const handleSuccess = () => {
-        actionHandled = true;
-        setIsLoading(false);
-        setIsSuccess(true);
-        setTimeout(() => setIsSuccess(false), animationDuration);
-      };
-
-      const handleActionError = () => {
-        actionHandled = true;
-        handleError();
-      };
-
-      try {
-        await action(handleSuccess, handleActionError);
-
-        if (!actionHandled) {
-          handleSuccess();
-        }
-      } catch {
-        handleActionError();
-      }
     };
 
     return (
@@ -85,12 +45,12 @@ export const ClientPackageInfoModal = forwardRef<HTMLDialogElement, ClientPackag
               party={data.party}
               accessPackage={data.accessPackage}
               userHasAccess={data.userHasAccess}
-              inheritedStatus={data.inheritedStatus}
               roleDescription={data.roleDescription}
               isLoading={isLoading}
               isSuccess={isSuccess}
-              onDelegate={data.onDelegate ? () => runAction(data.onDelegate!) : undefined}
-              onRevoke={() => runAction(data.onRevoke)}
+              error={error}
+              onDelegate={bindAction(data.onDelegate)}
+              onRevoke={bindAction(data.onRevoke)}
             />
           )}
         </div>

@@ -30,7 +30,7 @@ export interface PartyInfoProps {
   inheritedStatus?: InheritedStatusMessageType[];
   availableActions?: DelegationAction[];
   onDelegate?: () => void;
-  onRevoke: () => void;
+  onRevoke?: () => void;
   isLoading?: boolean;
   isSuccess?: boolean;
   // A post-action refetch that outlasts the success animation would otherwise let focus land on the

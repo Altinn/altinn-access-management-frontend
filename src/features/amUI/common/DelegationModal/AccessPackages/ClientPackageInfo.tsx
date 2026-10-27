@@ -11,7 +11,6 @@ import { StatusSection } from '../../StatusSection/StatusSection';
 import { TechnicalErrorParagraphs } from '../../TechnicalErrorParagraphs';
 import { ValidationErrorMessage } from '../../ValidationErrorMessage';
 import type { PartyInfoProps } from '../Party/PartyInfo';
-import { DelegationAction } from '../EditModal';
 
 import classes from './AccessPackageInfo.module.css';
 import { PackageHeader } from './PackageHeader';
@@ -21,16 +20,13 @@ export const ClientPackageInfo = ({
   party,
   accessPackage,
   userHasAccess,
-  inheritedStatus,
   roleDescription,
-  availableActions = [DelegationAction.DELEGATE, DelegationAction.REVOKE],
   onDelegate,
   onRevoke,
   isLoading = false,
   isSuccess = false,
-  disabled = false,
   error,
-}: PartyInfoProps) => {
+}: PartyInfoProps & { roleDescription?: string }) => {
   const { t } = useTranslation();
   const actionsRef = useRef<HTMLDivElement>(null);
   useRestoreFocusAfterSettled({
@@ -45,9 +41,8 @@ export const ClientPackageInfo = ({
 
   const userName = formatEntityDisplayName(party);
 
-  const canRevoke = userHasAccess && availableActions.includes(DelegationAction.REVOKE);
-  const canDelegate =
-    !userHasAccess && availableActions.includes(DelegationAction.DELEGATE) && !!onDelegate;
+  const canRevoke = userHasAccess && !!onRevoke;
+  const canDelegate = !userHasAccess && !!onDelegate;
   const cannotChangeAccess = accessPackage.isDelegable === false;
 
   return (
@@ -104,7 +99,6 @@ export const ClientPackageInfo = ({
           )}
           <StatusSection
             userHasAccess={userHasAccess}
-            inheritedStatus={inheritedStatus}
             cannotDelegateHere={cannotChangeAccess}
             toPartyName={userName}
           />
@@ -118,7 +112,7 @@ export const ClientPackageInfo = ({
             {canRevoke && (
               <DsButton
                 data-color='danger'
-                disabled={disabled || cannotChangeAccess}
+                disabled={cannotChangeAccess}
                 onClick={onRevoke}
               >
                 {t('common.delete_poa')}
@@ -126,7 +120,7 @@ export const ClientPackageInfo = ({
             )}
             {canDelegate && (
               <DsButton
-                disabled={disabled || cannotChangeAccess}
+                disabled={cannotChangeAccess}
                 onClick={onDelegate}
               >
                 {t('common.give_poa')}

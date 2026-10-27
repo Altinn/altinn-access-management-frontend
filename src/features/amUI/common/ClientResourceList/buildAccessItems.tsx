@@ -83,10 +83,8 @@ const DelegationControl = ({ id, name, hasAccess, disabled, onAction }: Delegati
 
 export type BuildPackageItemOptions = {
   id: string;
-  accessPackage: AccessPackage | undefined;
-  packageName: string;
+  accessPackage: AccessPackage;
   hasAccess: boolean;
-  showAction: boolean;
   isMobileOrSmaller: boolean;
   addDisabled: boolean;
   removeDisabled: boolean;
@@ -100,7 +98,6 @@ type DelegationControlOptions = Pick<
   BuildPackageItemOptions,
   | 'id'
   | 'isMobileOrSmaller'
-  | 'showAction'
   | 'hasAccess'
   | 'addDisabled'
   | 'removeDisabled'
@@ -112,7 +109,6 @@ const buildDelegationControl = ({
   id,
   name,
   isMobileOrSmaller,
-  showAction,
   hasAccess,
   addDisabled,
   removeDisabled,
@@ -120,7 +116,7 @@ const buildDelegationControl = ({
   onRevoke,
 }: DelegationControlOptions): React.ReactNode => {
   const onAction = hasAccess ? onRevoke : onDelegate;
-  if (isMobileOrSmaller || !showAction || !onAction) {
+  if (isMobileOrSmaller || !onAction) {
     return undefined;
   }
   return (
@@ -137,9 +133,7 @@ const buildDelegationControl = ({
 export const buildPackageItem = ({
   id,
   accessPackage,
-  packageName,
   hasAccess,
-  showAction,
   isMobileOrSmaller,
   addDisabled,
   removeDisabled,
@@ -149,15 +143,14 @@ export const buildPackageItem = ({
   t,
 }: BuildPackageItemOptions): AccessPackageListItemProps => {
   const packageCount = t('access_packages.package_number_of_resources', {
-    count: accessPackage?.resources?.length ?? 0,
+    count: accessPackage.resources?.length ?? 0,
   });
 
-  const showModalTrigger = showAction && !!accessPackage && !!onOpenModal;
+  const showModalTrigger = !!onOpenModal;
   const controls = buildDelegationControl({
     id,
-    name: packageName,
+    name: accessPackage.name,
     isMobileOrSmaller,
-    showAction,
     hasAccess,
     addDisabled,
     removeDisabled,
@@ -167,7 +160,7 @@ export const buildPackageItem = ({
 
   return {
     id,
-    name: packageName,
+    name: accessPackage.name,
     interactive: showModalTrigger,
     as: showModalTrigger ? 'button' : 'div',
     titleAs: 'div',
@@ -182,7 +175,6 @@ export type BuildResourceItemOptions = {
   id: string;
   resource: ServiceResource;
   hasAccess: boolean;
-  showAction: boolean;
   isMobileOrSmaller: boolean;
   addDisabled: boolean;
   removeDisabled: boolean;
@@ -195,7 +187,6 @@ export const buildResourceItem = ({
   id,
   resource,
   hasAccess,
-  showAction,
   isMobileOrSmaller,
   addDisabled,
   removeDisabled,
@@ -207,7 +198,6 @@ export const buildResourceItem = ({
     id,
     name: resource.title,
     isMobileOrSmaller,
-    showAction,
     hasAccess,
     addDisabled,
     removeDisabled,
