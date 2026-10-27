@@ -15,6 +15,7 @@ import { useRestoreFocusTarget } from '@/features/amUI/common/RestoreFocus';
 import { useProviderLogoUrl } from '@/resources/hooks/useProviderLogoUrl';
 
 import { ResourceFilterToolbar } from '../ResourceFilterToolbar/ResourceFilterToolbar';
+import { SearchHitsStatus } from '../SearchHitsStatus/SearchHitsStatus';
 
 import { ResourceDetails } from './ResourceDetails';
 import classes from './ResourceList.module.css';
@@ -212,6 +213,7 @@ export const ResourceList = <
           <div className={classes.delegationModalButton}>{delegationModal}</div>
         </div>
       )}
+      {enableSearch && <SearchHitsStatus hits={search ? filteredResources.length : undefined} />}
       {isSkeletonVisible ? (
         <SkeletonResourceList size={size} />
       ) : (

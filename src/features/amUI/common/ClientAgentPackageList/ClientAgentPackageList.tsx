@@ -23,7 +23,11 @@ import type {
 
 import { useRoleMetadata } from '../UserRoles/useRoleMetadata';
 import { isNewUser } from '../isNewUser';
-import { UserListItems, type UserListItemData } from '../UserListItems/UserListItems';
+import {
+  UserListItems,
+  matchesUserListSearch,
+  type UserListItemData,
+} from '../UserListItems/UserListItems';
 import {
   ClientPackageInfoModal,
   type ClientPackageModalData,
@@ -92,6 +96,11 @@ type SelectedAgentResource = {
 
 const getAgentSortKey = (agent: Agent): string =>
   `${isNewUser(agent.agentAddedAt) ? '0' : '1'}:${agent.agent.name.toLowerCase()}`;
+
+export const countAgentSearchHits = (agents: Agent[], searchString?: string) =>
+  agents.filter((agent) =>
+    matchesUserListSearch({ name: formatEntityDisplayName(agent.agent) }, searchString),
+  ).length;
 
 export const ClientAgentPackageList = ({
   agents,

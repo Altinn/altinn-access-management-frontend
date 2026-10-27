@@ -11,6 +11,7 @@ import { AmPagination } from '@/components/Paginering/AmPaginering';
 import { ResourceList } from '@/features/amUI/common/ResourceList/ResourceList';
 import { SkeletonResourceList } from '@/features/amUI/common/ResourceList/SkeletonResourceList';
 import { getInheritedStatus } from '@/features/amUI/common/useInheritedStatus';
+import { SearchHitsStatus } from '@/features/amUI/common/SearchHitsStatus/SearchHitsStatus';
 
 import { DelegationAction } from '../EditModal';
 import { useDelegationModalContext } from '../DelegationModalContext';
@@ -163,11 +164,7 @@ export const SearchResults = ({
   return (
     <>
       <div className={classes.resultCount}>
-        {!isFetching && totalNumberOfResults !== undefined && (
-          <DsParagraph>
-            {`${String(totalNumberOfResults)} ${t('single_rights.search_hits')}`}
-          </DsParagraph>
-        )}
+        <SearchHitsStatus hits={isFetching ? undefined : totalNumberOfResults} />
       </div>
       {isFetching ? (
         <div className={classes.resourceList}>

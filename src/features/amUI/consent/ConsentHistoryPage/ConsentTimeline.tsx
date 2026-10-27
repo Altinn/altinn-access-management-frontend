@@ -13,6 +13,7 @@ import { type TFunction } from 'i18next';
 
 import { useGetReporteeQuery } from '@/rtk/features/userInfoApi';
 import { getPartyColor } from '@/resources/utils/reporteeUtils';
+import { SearchHitsStatus } from '@/features/amUI/common/SearchHitsStatus/SearchHitsStatus';
 
 import { type ConsentHistoryItem } from '../types';
 import { toDateTimeString } from '../utils';
@@ -56,6 +57,7 @@ export const ConsentTimeline = ({ consentLog, showConsentDetails }: ConsentTimel
         />
         <DsSearch.Clear />
       </DsSearch>
+      <SearchHitsStatus hits={searchValue ? filteredTimelineItems.length : undefined} />
       <Timeline>
         {!searchValue && timeLineItems.length === 0 && (
           <DsParagraph data-color='info'>{t('consent_log.no_active_consents')}</DsParagraph>

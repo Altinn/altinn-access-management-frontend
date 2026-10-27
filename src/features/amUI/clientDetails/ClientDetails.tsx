@@ -35,7 +35,7 @@ import { UserPageHeaderSkeleton } from '../common/UserPageHeader/UserPageHeaderS
 import { AddAgentButton } from '../users/NewUserModal/AddAgentModal';
 import { ClientAdminSearchField } from '../common/ClientAdminSearchField/ClientAdminSearchField';
 import { CollapsibleContainer } from '../common/CollapsibleContainer/CollapsibleContainer';
-import { isNewUser } from '../common/isNewUser';
+import { SearchHitsStatus } from '../common/SearchHitsStatus/SearchHitsStatus';
 import {
   RestoreFocusFallback,
   RestoreFocusProvider,
@@ -79,16 +79,14 @@ export const ClientDetails = () => {
   const [removeAgentResources, { isLoading: isRemovingAgentResources }] =
     useRemoveAgentResourcesMutation();
 
-  const { agentsWithClientAccess, agentsWithoutClientAccess } = useClientDetailsAccessAgentLists({
-    clientAccessPackages,
-    clientResources,
-    agents,
-  });
-
-  const recentlyAddedClients = [...agentsWithClientAccess, ...agentsWithoutClientAccess].filter(
-    (x) => isNewUser(x.agentAddedAt),
-  );
   const [searchString, setSearchString] = useState<string>('');
+  const { recentlyAddedClients, agentsWithClientAccess, agentsWithoutClientAccess, searchHits } =
+    useClientDetailsAccessAgentLists({
+      clientAccessPackages,
+      clientResources,
+      agents,
+      searchString,
+    });
 
   // Hold the confirmation until the agents have refetched, so it is announced after the modal has
   // closed and focus has returned, together with the row it is about.
@@ -242,6 +240,7 @@ export const ClientDetails = () => {
                         variant='primary'
                       />
                     </ClientAdminSearchField>
+                    <SearchHitsStatus hits={searchHits} />
                     <div className={classes.agentSections}>
                       {recentlyAddedClients.length > 0 && (
                         <section aria-labelledby={recentlyAddedSectionId}>

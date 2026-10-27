@@ -1,20 +1,28 @@
 import { useMemo } from 'react';
+import { useTranslation } from 'react-i18next';
 
 import { PartyType } from '@/dataObjects/dtos/Party';
 import type { Agent } from '@/rtk/features/clientApi';
+
+import { isNewUser } from '../common/isNewUser';
+import { countAgentSearchHits } from '../common/ClientAgentPackageList/ClientAgentPackageList';
 
 type UseClientDetailsAccessAgentListsParams = {
   clientAccessPackages?: Agent[];
   clientResources?: Agent[];
   agents?: Agent[];
+  searchString?: string;
 };
 
 export const useClientDetailsAccessAgentLists = ({
   clientAccessPackages,
   clientResources,
   agents,
+  searchString,
 }: UseClientDetailsAccessAgentListsParams) => {
-  return useMemo(() => {
+  const { t } = useTranslation();
+
+  const lists = useMemo(() => {
     const selectableAgents = (agents ?? []).filter(
       (agent) => agent.agent.type !== PartyType.SystemUser,
     );
@@ -32,8 +40,33 @@ export const useClientDetailsAccessAgentLists = ({
       );
 
     return {
+      recentlyAddedClients: selectableAgents.filter((agent) => isNewUser(agent.agentAddedAt)),
       agentsWithClientAccess: selectableAgents.filter(hasClientAccess),
       agentsWithoutClientAccess: selectableAgents.filter((agent) => !hasClientAccess(agent)),
     };
   }, [agents, clientAccessPackages, clientResources]);
+
+  // The recently added section is only rendered when it has agents.
+  const searchHits = searchString
+    ? [
+        ...(lists.recentlyAddedClients.length > 0
+          ? [
+              {
+                count: countAgentSearchHits(lists.recentlyAddedClients, searchString),
+                list: t('client_administration_page.recently_added_users'),
+              },
+            ]
+          : []),
+        {
+          count: countAgentSearchHits(lists.agentsWithClientAccess, searchString),
+          list: t('client_administration_page.client_has_agents_tab'),
+        },
+        {
+          count: countAgentSearchHits(lists.agentsWithoutClientAccess, searchString),
+          list: t('client_administration_page.client_can_get_agents_tab'),
+        },
+      ]
+    : undefined;
+
+  return { ...lists, searchHits };
 };

@@ -14,6 +14,7 @@ import { useTranslation } from 'react-i18next';
 import { AmPagination } from '@/components/Paginering';
 import { formatOrgNr, isSubUnitByType, matchesOrgNr } from '@/resources/utils/reporteeUtils';
 import { useIsMobileOrSmaller } from '@/resources/utils/screensizeUtils';
+import { SearchHitsStatus } from '@/features/amUI/common/SearchHitsStatus/SearchHitsStatus';
 
 import type { AgentDelegation, AgentDelegationCustomer } from '../types';
 
@@ -121,6 +122,7 @@ export const CustomerList = ({
         )}
         {children}
       </div>
+      <SearchHitsStatus hits={searchValue ? filteredSearchList.length : undefined} />
       <List>
         {filteredSearchList.slice(startIndex, endIndex)?.map((customer) => (
           <ListItem

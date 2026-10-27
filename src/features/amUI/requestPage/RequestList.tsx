@@ -3,6 +3,7 @@ import { useTranslation } from 'react-i18next';
 import { Button, DsParagraph, List } from '@altinn/altinn-components';
 
 import { DebouncedSearchField } from '../common/DebouncedSearchField/DebouncedSearchField';
+import { SearchHitsStatus } from '../common/SearchHitsStatus/SearchHitsStatus';
 
 import type { HandledDirection } from './HandledRequestModal/useHandledRequests';
 import { HandledRequestsSection } from './HandledRequestsSection';
@@ -29,6 +30,7 @@ export const RequestList = ({
   const [searchString, setSearchString] = useState('');
   const [currentPage, setCurrentPage] = useState(1);
   const filteredRequests = useFilteredRequests(pendingRequests, searchString);
+  const filteredHandledRequests = useFilteredRequests(handledRequests, searchString);
 
   useEffect(() => {
     setCurrentPage(1);
@@ -37,6 +39,14 @@ export const RequestList = ({
   const hasSearchableRequests = (pendingRequests?.length ?? 0) + (handledRequests?.length ?? 0) > 0;
   const paginatedRequests = filteredRequests.slice(0, PAGE_SIZE * currentPage);
   const hasNextPage = filteredRequests.length > PAGE_SIZE * currentPage;
+  const searchHits = !searchString
+    ? undefined
+    : handledRequests?.length
+      ? [
+          { count: filteredRequests.length, list: t('request_page.pending_requests_title') },
+          { count: filteredHandledRequests.length, list: t('request_page.handled_requests_title') },
+        ]
+      : filteredRequests.length;
 
   return (
     <>
@@ -48,6 +58,7 @@ export const RequestList = ({
           />
         </div>
       )}
+      <SearchHitsStatus hits={searchHits} />
       {searchString && filteredRequests.length === 0 && (
         <DsParagraph className={classes.noResults}>
           {t('request_page.no_search_results', { searchTerm: searchString })}

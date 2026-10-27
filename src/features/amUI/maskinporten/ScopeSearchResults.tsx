@@ -4,6 +4,7 @@ import { useTranslation } from 'react-i18next';
 import { AmPagination } from '@/components/Paginering/AmPaginering';
 import { ResourceList } from '@/features/amUI/common/ResourceList/ResourceList';
 import { SkeletonResourceList } from '@/features/amUI/common/ResourceList/SkeletonResourceList';
+import { SearchHitsStatus } from '@/features/amUI/common/SearchHitsStatus/SearchHitsStatus';
 import type {
   ResourceDelegation,
   ServiceResource,
@@ -71,9 +72,7 @@ export const ScopeSearchResults = ({
   return (
     <>
       <div className={classes.resultCount}>
-        {!isFetching && totalNumberOfResults !== undefined && (
-          <DsParagraph>{`${String(totalNumberOfResults)} ${t('single_rights.search_hits')}`}</DsParagraph>
-        )}
+        <SearchHitsStatus hits={isFetching ? undefined : totalNumberOfResults} />
       </div>
       {isFetching ? (
         <div className={classes.resourceList}>

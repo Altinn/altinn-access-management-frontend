@@ -9,6 +9,7 @@ import { useFilteredUsers } from '../UserList/useFilteredUsers';
 import { DelegationAction } from '../DelegationModal/EditModal';
 import { UserList } from '../UserList/UserList';
 import { usePartyRepresentation } from '../PartyRepresentationContext/PartyRepresentationContext';
+import { SearchHitsStatus } from '../SearchHitsStatus/SearchHitsStatus';
 
 import classes from './UserSearch.module.css';
 import { UserSearchResults } from './UserSearchResults';
@@ -89,6 +90,8 @@ export const UserSearch: React.FC<UserSearchProps> = ({
     indirectUsers: filteredIndirectUsers,
     hasNextIndirectPage,
     goNextIndirectPage,
+    totalFilteredCount,
+    totalFilteredIndirectCount,
   } = useFilteredUsers({
     users: directUsers,
     indirectUsers,
@@ -103,6 +106,18 @@ export const UserSearch: React.FC<UserSearchProps> = ({
   const showDirectNoResults = isQuery && !directHasResults && indirectHasResults;
   const showIndirectList = isQuery && indirectHasResults && canDelegate;
   const showEmptyState = isQuery && !directHasResults && !indirectHasResults;
+
+  const directHeading = directConnectionsHeading ?? t('advanced_user_search.direct_connections');
+  const indirectHeading =
+    indirectConnectionsHeading ?? t('advanced_user_search.indirect_connections');
+  const searchHits = !isQuery
+    ? undefined
+    : showIndirectList
+      ? [
+          { count: totalFilteredCount, list: directHeading },
+          { count: totalFilteredIndirectCount, list: indirectHeading },
+        ]
+      : totalFilteredCount;
 
   if (isLoading) {
     return (
@@ -137,6 +152,7 @@ export const UserSearch: React.FC<UserSearchProps> = ({
       </div>
 
       <div className={classes.results}>
+        <SearchHitsStatus hits={searchHits} />
         <>
           {!hasDirectUsers && !isLoading && !isQuery && (
             <DsParagraph
@@ -149,11 +165,7 @@ export const UserSearch: React.FC<UserSearchProps> = ({
                 })}
             </DsParagraph>
           )}
-          {isQuery && showIndirectList && (
-            <h2 className={classes.subHeader}>
-              {directConnectionsHeading ?? t('advanced_user_search.direct_connections')}
-            </h2>
-          )}
+          {isQuery && showIndirectList && <h2 className={classes.subHeader}>{directHeading}</h2>}
           <UserSearchResults
             users={filteredDirectUsers}
             hasNextPage={hasNextPage}
@@ -180,9 +192,7 @@ export const UserSearch: React.FC<UserSearchProps> = ({
 
         {showIndirectList && (
           <>
-            <h2 className={classes.subHeader}>
-              {indirectConnectionsHeading ?? t('advanced_user_search.indirect_connections')}
-            </h2>
+            <h2 className={classes.subHeader}>{indirectHeading}</h2>
             <UserSearchResults
               users={filteredIndirectUsers}
               hasNextPage={!!hasNextIndirectPage}

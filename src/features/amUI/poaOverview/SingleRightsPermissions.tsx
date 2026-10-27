@@ -15,6 +15,7 @@ import { amUIPath } from '@/routes/paths/amUIPath';
 import { useDebouncedValue, usePermissionOverview } from '@/resources/hooks';
 
 import { CollapsibleContainer } from '../common/CollapsibleContainer/CollapsibleContainer';
+import { SearchHitsStatus } from '../common/SearchHitsStatus/SearchHitsStatus';
 import { ResourceFilterToolbar } from '../common/ResourceFilterToolbar/ResourceFilterToolbar';
 import { PermissionsBadge } from '../common/PermissionsBadge/PermissionsBadge';
 import { usePartyRepresentation } from '../common/PartyRepresentationContext/PartyRepresentationContext';
@@ -84,6 +85,7 @@ export const SingleRightsPermissions = () => {
 
   const {
     data: searchData,
+    currentData: currentSearchData,
     isFetching: isSearchFetching,
     isError: isSearchError,
     hasNextPage,
@@ -152,6 +154,25 @@ export const SingleRightsPermissions = () => {
 
   const hasSearch = debouncedSearch || filterState.length > 0;
 
+  // Delegated services are left out of the other services list, so the backend total is only exact
+  // once every page is loaded. currentData is undefined while a new search loads.
+  const otherServicesHitCount =
+    currentSearchData &&
+    (hasNextPage ? currentSearchData.pages[0].numEntriesTotal : searchResources.length);
+  const searchHits =
+    hasSearch && otherServicesHitCount !== undefined
+      ? [
+          {
+            count: filteredResources.length,
+            list: t('poa_overview_page.services_tab.assigned_services_title'),
+          },
+          {
+            count: otherServicesHitCount,
+            list: t('poa_overview_page.services_tab.other_services_title'),
+          },
+        ]
+      : undefined;
+
   if (isError) {
     return (
       <DsAlert
@@ -171,6 +192,7 @@ export const SingleRightsPermissions = () => {
         filterState={filterState}
         setFilterState={handleFilterChange}
       />
+      <SearchHitsStatus hits={searchHits} />
       <section aria-labelledby={ASSIGNED_SERVICES_SECTION}>
         <CollapsibleContainer
           heading={t('poa_overview_page.services_tab.assigned_services_title')}

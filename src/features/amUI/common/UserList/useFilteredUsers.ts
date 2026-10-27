@@ -154,5 +154,6 @@ export const useFilteredUsers = ({
     goNextPage,
     goNextIndirectPage,
     totalFilteredCount: processedUsers.length,
+    totalFilteredIndirectCount: indirectUsers?.length ?? 0,
   };
 };
