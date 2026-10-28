@@ -542,7 +542,48 @@
     "tab_connections": "Powers of attorney",
     "tab_request": "Requests",
     "tab_maskinporten": "Maskinporten administration",
-    "empty": "There is no activity in the log yet."
+    "empty": "There is no activity in the log yet.",
+    "direction_legend": "Show activity",
+    "direction_from": "From the organisation",
+    "direction_to": "To the organisation",
+    "filter_party_to": "To",
+    "filter_party_from": "From",
+    "add_filter": "Add filter",
+    "remove_filter": "Remove filter",
+    "reset_filters": "Reset filter",
+    "timestamp": "{{date}} at {{time}}",
+    "load_more": "Load more",
+    "load_error": "Could not load the activity log.",
+    "no_results": "No activity found for the selected filter.",
+    "object": {
+      "scope": "the scope “{{name}}”",
+      "role": "the role “{{name}}”",
+      "access": "access"
+    },
+    "events": {
+      "assignment": {
+        "created": {
+          "from": "<0>{{counterpart}}</0> was given {{object}}.",
+          "to": "{{reportee}} was given {{object}} by <0>{{counterpart}}</0>.",
+          "by": "It was {{by}} who granted the access."
+        },
+        "updated": {
+          "from": "The access to {{object}} for <0>{{counterpart}}</0> was moved.",
+          "to": "The access to {{object}} from <0>{{counterpart}}</0> was moved.",
+          "by": "It was {{by}} who made the change."
+        },
+        "deleted": {
+          "from": "<0>{{counterpart}}</0> lost {{object}}.",
+          "to": "{{reportee}} lost {{object}} from <0>{{counterpart}}</0>.",
+          "by": "It was {{by}} who removed the access."
+        }
+      },
+      "fallback": {
+        "from": "<0>{{counterpart}}</0>: {{typeName}} – {{object}}.",
+        "to": "<0>{{counterpart}}</0>: {{typeName}} – {{object}}.",
+        "by": "Performed by {{by}}."
+      }
+    }
   },
   "maskinporten_page": {
     "scopes": "Scopes",

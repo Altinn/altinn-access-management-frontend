@@ -18,6 +18,7 @@ import { Breadcrumbs } from '../common/Breadcrumbs/Breadcrumbs';
 import { PageLayoutWrapper } from '../common/PageLayoutWrapper';
 import { ReporteePageHeading } from '../common/ReporteePageHeading';
 
+import { ActivityLogTab } from './ActivityLogTab';
 import { type ActivityLogArea, activityLogAreas } from './types';
 
 const tabLabelKeys: Record<ActivityLogArea, string> = {
@@ -86,8 +87,15 @@ export const ActivityLogPage = () => {
                     key={area}
                     value={area}
                   >
-                    {/* The log for each area is added in a follow-up. */}
-                    <DsParagraph data-color='info'>{t('activity_log_page.empty')}</DsParagraph>
+                    {area === 'maskinporten' ? (
+                      <ActivityLogTab
+                        area={area}
+                        reporteeName={reporteeName}
+                      />
+                    ) : (
+                      // The log for the other areas is added in a follow-up.
+                      <DsParagraph data-color='info'>{t('activity_log_page.empty')}</DsParagraph>
+                    )}
                   </AmTabs.Panel>
                 ))}
               </AmTabs>

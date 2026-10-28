@@ -539,7 +539,48 @@
     "tab_connections": "Fullmakter",
     "tab_request": "Forespørsler",
     "tab_maskinporten": "Maskinportenadministrasjon",
-    "empty": "Det er ingen aktivitet i loggen ennå."
+    "empty": "Det er ingen aktivitet i loggen ennå.",
+    "direction_legend": "Vis aktivitet",
+    "direction_from": "Fra virksomheten",
+    "direction_to": "Til virksomheten",
+    "filter_party_to": "Til",
+    "filter_party_from": "Fra",
+    "add_filter": "Legg til filter",
+    "remove_filter": "Fjern filter",
+    "reset_filters": "Nullstill filter",
+    "timestamp": "{{date}} kl. {{time}}",
+    "load_more": "Last mer",
+    "load_error": "Kunne ikke laste aktivitetsloggen.",
+    "no_results": "Ingen aktivitet funnet for valgt filter.",
+    "object": {
+      "scope": "scopet «{{name}}»",
+      "role": "rollen «{{name}}»",
+      "access": "tilgang"
+    },
+    "events": {
+      "assignment": {
+        "created": {
+          "from": "<0>{{counterpart}}</0> fikk {{object}}.",
+          "to": "{{reportee}} fikk {{object}} fra <0>{{counterpart}}</0>.",
+          "by": "Det var {{by}} som tildelte tilgangen."
+        },
+        "updated": {
+          "from": "Tilgangen til {{object}} for <0>{{counterpart}}</0> ble flyttet.",
+          "to": "Tilgangen til {{object}} fra <0>{{counterpart}}</0> ble flyttet.",
+          "by": "Det var {{by}} som gjorde endringen."
+        },
+        "deleted": {
+          "from": "<0>{{counterpart}}</0> ble fratatt {{object}}.",
+          "to": "{{reportee}} ble fratatt {{object}} fra <0>{{counterpart}}</0>.",
+          "by": "Det var {{by}} som fjernet tilgangen."
+        }
+      },
+      "fallback": {
+        "from": "<0>{{counterpart}}</0>: {{typeName}} – {{object}}.",
+        "to": "<0>{{counterpart}}</0>: {{typeName}} – {{object}}.",
+        "by": "Utført av {{by}}."
+      }
+    }
   },
   "maskinporten_page": {
     "scopes": "Scopes",
