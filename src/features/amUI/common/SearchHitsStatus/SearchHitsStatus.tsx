@@ -22,7 +22,14 @@ export const SearchHitsStatus = ({ hits, message }: SearchHitsStatusProps) => {
 
   const total = Array.isArray(hits) ? hits.reduce((sum, hit) => sum + hit.count, 0) : hits;
   const text = Array.isArray(hits)
-    ? hits.map(({ count, list }) => t('common.search_hits_in_list', { count, list })).join('. ')
+    ? hits
+        .map(({ count, list }) =>
+          t('common.search_hits_in_list', {
+            count,
+            list: list.charAt(0).toLocaleLowerCase() + list.slice(1),
+          }),
+        )
+        .join('. ')
     : t('common.search_hits', { count: hits });
 
   return (

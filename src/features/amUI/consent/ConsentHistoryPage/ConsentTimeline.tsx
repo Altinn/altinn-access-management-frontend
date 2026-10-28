@@ -57,7 +57,7 @@ export const ConsentTimeline = ({ consentLog, showConsentDetails }: ConsentTimel
         />
         <DsSearch.Clear />
       </DsSearch>
-      <SearchHitsStatus hits={searchValue ? filteredTimelineItems.length : undefined} />
+      <SearchHitsStatus hits={searchValue.trim() ? filteredTimelineItems.length : undefined} />
       <Timeline>
         {!searchValue && timeLineItems.length === 0 && (
           <DsParagraph data-color='info'>{t('consent_log.no_active_consents')}</DsParagraph>

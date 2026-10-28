@@ -46,6 +46,9 @@ export const ScopeSearchResults = ({
 
   const requestFocusOnDataChange = useRestoreFocusOnDataChange(delegatedResources);
 
+  const settledTotal =
+    !searchString?.trim() || (isFetching && currentPage === 1) ? undefined : totalNumberOfResults;
+
   const isDelegated = (resourceId: string) =>
     delegatedResources?.some(
       (delegatedResource) => delegatedResource.resource?.identifier === resourceId,
@@ -72,7 +75,7 @@ export const ScopeSearchResults = ({
   return (
     <>
       <div className={classes.resultCount}>
-        <SearchHitsStatus hits={isFetching ? undefined : totalNumberOfResults} />
+        <SearchHitsStatus hits={settledTotal} />
       </div>
       {isFetching ? (
         <div className={classes.resourceList}>

@@ -39,7 +39,7 @@ export const RequestList = ({
   const hasSearchableRequests = (pendingRequests?.length ?? 0) + (handledRequests?.length ?? 0) > 0;
   const paginatedRequests = filteredRequests.slice(0, PAGE_SIZE * currentPage);
   const hasNextPage = filteredRequests.length > PAGE_SIZE * currentPage;
-  const searchHits = !searchString
+  const searchHits = !searchString.trim()
     ? undefined
     : handledRequests?.length
       ? [
@@ -59,7 +59,7 @@ export const RequestList = ({
         </div>
       )}
       <SearchHitsStatus hits={searchHits} />
-      {searchString && filteredRequests.length === 0 && (
+      {searchString && filteredRequests.length === 0 && filteredHandledRequests.length === 0 && (
         <DsParagraph className={classes.noResults}>
           {t('request_page.no_search_results', { searchTerm: searchString })}
         </DsParagraph>

@@ -213,7 +213,9 @@ export const ResourceList = <
           <div className={classes.delegationModalButton}>{delegationModal}</div>
         </div>
       )}
-      {enableSearch && <SearchHitsStatus hits={search ? filteredResources.length : undefined} />}
+      {enableSearch && (
+        <SearchHitsStatus hits={search.trim() ? filteredResources.length : undefined} />
+      )}
       {isSkeletonVisible ? (
         <SkeletonResourceList size={size} />
       ) : (

@@ -59,6 +59,12 @@ export const SearchResults = ({
   const { actingParty, fromParty, toParty } = usePartyRepresentation();
   const requestFocusOnDataChange = useRestoreFocusOnDataChange(delegatedResources);
 
+  // The total is only a hit count once there is a search term. The search resets to page 1 when it
+  // changes, so a fetch on page 1 is a new search and clears the total; a fetch for a later page
+  // keeps it, so paging does not re-announce it.
+  const settledTotal =
+    !searchString?.trim() || (isFetching && currentPage === 1) ? undefined : totalNumberOfResults;
+
   const { createRequest, deleteRequest, hasPendingRequest, isLoadingRequest } =
     useSingleRightRequests({
       canRequestRights: availableActions?.includes(DelegationAction.REQUEST) ?? false,
@@ -164,7 +170,7 @@ export const SearchResults = ({
   return (
     <>
       <div className={classes.resultCount}>
-        <SearchHitsStatus hits={isFetching ? undefined : totalNumberOfResults} />
+        <SearchHitsStatus hits={settledTotal} />
       </div>
       {isFetching ? (
         <div className={classes.resourceList}>
