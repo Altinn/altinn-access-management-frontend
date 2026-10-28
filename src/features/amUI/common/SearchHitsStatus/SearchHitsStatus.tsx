@@ -3,6 +3,8 @@ import { useTranslation } from 'react-i18next';
 
 import { StatusMessageForScreenReader } from '@/components/StatusMessageForScreenReader/StatusMessageForScreenReader';
 
+import classes from './SearchHitsStatus.module.css';
+
 export interface SearchHitsInList {
   count: number;
   list: string;
@@ -34,7 +36,14 @@ export const SearchHitsStatus = ({ hits, message }: SearchHitsStatusProps) => {
 
   return (
     <StatusMessageForScreenReader visible={!!total}>
-      {hits !== undefined && <DsParagraph data-size='sm'>{message ?? text}</DsParagraph>}
+      {hits !== undefined && (
+        <DsParagraph
+          data-size='sm'
+          className={classes.text}
+        >
+          {message ?? text}
+        </DsParagraph>
+      )}
     </StatusMessageForScreenReader>
   );
 };

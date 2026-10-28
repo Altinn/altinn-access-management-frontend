@@ -97,8 +97,8 @@ export const InstanceList = ({
         placeholder={t('poa_overview_page.instances_tab.search_label')}
         setDebouncedSearchString={setDebouncedSearchString}
       />
-      <SearchHitsStatus hits={hasSearch ? filteredInstances.length : undefined} />
       <div className={classes.container}>
+        <SearchHitsStatus hits={hasSearch ? filteredInstances.length : undefined} />
         {isLoading ? (
           <InstanceListSkeleton />
         ) : filteredInstances.length > 0 ? (
