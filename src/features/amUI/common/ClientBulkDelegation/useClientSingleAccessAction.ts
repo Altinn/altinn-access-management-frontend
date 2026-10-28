@@ -2,7 +2,7 @@ import { useCallback } from 'react';
 import { useSnackbar } from '@altinn/altinn-components';
 import { useTranslation } from 'react-i18next';
 
-import type { ActionError } from '@/resources/hooks/useActionError';
+import type { ClientAccessMode, ClientAccessResult } from '../ClientAccess/clientAccessEntry';
 
 import type { ClientBulkItem } from './getClientBulkItems';
 import {
@@ -10,8 +10,6 @@ import {
   type ClientAccessTarget,
   type UseClientAccessDelegationParams,
 } from './useClientAccessDelegation';
-
-export type ClientSingleAccessMode = 'delegate' | 'remove';
 
 export type ClientSingleAccessNames = { agentName: string; accessName: string };
 
@@ -33,13 +31,11 @@ export const useClientSingleAccessAction = (params: UseClientAccessDelegationPar
 
   return useCallback(
     async (
-      mode: ClientSingleAccessMode,
+      mode: ClientAccessMode,
       target: ClientAccessTarget,
       item: ClientBulkItem,
       { agentName, accessName }: ClientSingleAccessNames,
-      onSuccess?: () => void,
-      onError?: (error?: ActionError) => void,
-    ) => {
+    ): Promise<ClientAccessResult> => {
       const { failed, error } = await (mode === 'delegate' ? delegate : revoke)(target, [item]);
 
       const succeeded = failed.length === 0;
@@ -48,11 +44,7 @@ export const useClientSingleAccessAction = (params: UseClientAccessDelegationPar
         message: t(succeeded ? messages.success : messages.error, { name: agentName, accessName }),
         color: succeeded ? 'success' : 'danger',
       });
-      if (succeeded) {
-        onSuccess?.();
-      } else {
-        onError?.(error);
-      }
+      return succeeded ? { ok: true } : { ok: false, error };
     },
     [delegate, openSnackbar, revoke, t],
   );

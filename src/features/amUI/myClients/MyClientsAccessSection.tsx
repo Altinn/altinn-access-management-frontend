@@ -2,18 +2,19 @@ import React, { useCallback, useState } from 'react';
 import { useSnackbar } from '@altinn/altinn-components';
 import { useTranslation } from 'react-i18next';
 
+import { PartyType } from '@/dataObjects/dtos/Party';
 import {
   useRemoveMyClientAccessPackagesMutation,
   useRemoveMyClientResourcesMutation,
   type Client,
 } from '@/rtk/features/clientApi';
-import { getActionError, type ActionError } from '@/resources/hooks/useActionError';
+import { getActionError } from '@/resources/hooks/useActionError';
 
+import { ClientAccessList } from '../common/ClientAccessList/ClientAccessList';
 import {
-  ClientAccessList,
-  type ClientAccessPackageAction,
-  type ClientResourceAction,
-} from '../common/ClientAccessList/ClientAccessList';
+  getAccessName,
+  type RunClientAccessAction,
+} from '../common/ClientAccess/clientAccessEntry';
 import { ClientAdminSearchField } from '../common/ClientAdminSearchField/ClientAdminSearchField';
 
 type MyClientsAccessSectionProps = {
@@ -39,96 +40,48 @@ export const MyClientsAccessSection = ({
 
   const [searchString, setSearchString] = useState<string>('');
 
-  const onRemoveAccessPackage = useCallback(
-    async (
-      { clientId, roleCode, packageId, accessPackageName }: ClientAccessPackageAction,
-      onSuccess?: () => void,
-      onError?: () => void,
-    ) => {
-      if (!actingPartyUuid) {
-        onError?.();
-        return;
+  // Only removal is offered here: you can't give yourself access on behalf of a client.
+  const runAction = useCallback<RunClientAccessAction>(
+    async (mode, entry) => {
+      if (mode !== 'remove' || !actingPartyUuid) {
+        return { ok: false };
       }
 
+      const request = { provider: actingPartyUuid, from: entry.clientId };
+      const snackbarValues = { name: currentUserName, accessName: getAccessName(entry) };
       try {
-        await removeMyClientAccessPackages({
-          provider: actingPartyUuid,
-          from: clientId,
-          payload: {
-            values: [
-              {
-                role: roleCode,
-                packages: [packageId],
-              },
-            ],
-          },
-        }).unwrap();
+        if (entry.kind === 'package') {
+          await removeMyClientAccessPackages({
+            ...request,
+            payload: { values: [{ role: entry.roleCode, packages: [entry.accessId] }] },
+          }).unwrap();
+        } else {
+          await removeMyClientResources({
+            ...request,
+            payload: { values: [{ role: entry.roleCode, resources: [entry.accessId] }] },
+          }).unwrap();
+        }
         openSnackbar({
-          message: t('my_clients_page.remove_success_snackbar', {
-            name: currentUserName,
-            accessName: accessPackageName,
-          }),
+          message: t('my_clients_page.remove_success_snackbar', snackbarValues),
           color: 'success',
         });
-        onSuccess?.();
-      } catch {
-        openSnackbar({
-          message: t('my_clients_page.remove_error', {
-            name: currentUserName,
-            accessName: accessPackageName,
-          }),
-          color: 'danger',
-        });
-        onError?.();
-      }
-    },
-    [actingPartyUuid, currentUserName, openSnackbar, removeMyClientAccessPackages, t],
-  );
-
-  const onRemoveResource = useCallback(
-    async (
-      { clientId, roleCode, resourceId, resourceName }: ClientResourceAction,
-      onSuccess?: () => void,
-      onError?: (error?: ActionError) => void,
-    ) => {
-      if (!actingPartyUuid) {
-        onError?.();
-        return;
-      }
-
-      try {
-        await removeMyClientResources({
-          provider: actingPartyUuid,
-          from: clientId,
-          payload: {
-            values: [
-              {
-                role: roleCode,
-                resources: [resourceId],
-              },
-            ],
-          },
-        }).unwrap();
-        openSnackbar({
-          message: t('my_clients_page.remove_success_snackbar', {
-            name: currentUserName,
-            accessName: resourceName,
-          }),
-          color: 'success',
-        });
-        onSuccess?.();
+        return { ok: true };
       } catch (error) {
         openSnackbar({
-          message: t('my_clients_page.remove_error', {
-            name: currentUserName,
-            accessName: resourceName,
-          }),
+          message: t('my_clients_page.remove_error', snackbarValues),
           color: 'danger',
         });
-        onError?.(getActionError(error));
+        return { ok: false, error: getActionError(error) };
       }
     },
-    [actingPartyUuid, currentUserName, openSnackbar, removeMyClientResources, t],
+    [
+      actingPartyUuid,
+      currentUserName,
+      openSnackbar,
+      removeMyClientAccessPackages,
+      removeMyClientResources,
+      t,
+    ],
   );
 
   return (
@@ -141,11 +94,12 @@ export const MyClientsAccessSection = ({
       <ClientAccessList
         clients={clients}
         accessStateClients={clients}
+        recipient={{ id: actingPartyUuid, name: currentUserName, type: PartyType.Person }}
+        runAction={runAction}
+        canDelegate={false}
         removeDisabled={
           isRemovingMyClientAccessPackages || isRemovingMyClientResources || !actingPartyUuid
         }
-        onRemoveAccessPackage={onRemoveAccessPackage}
-        onRemoveResource={onRemoveResource}
         requireDelegableForActions={false}
         searchString={searchString}
         restoreFocusFallbackId={MY_CLIENTS_SEARCH_ID}

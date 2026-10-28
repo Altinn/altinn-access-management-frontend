@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import {
@@ -9,83 +9,28 @@ import {
   getAvatarType,
 } from '@/resources/utils/reporteeUtils';
 import { useAccessPackageLookup } from '@/resources/hooks/useAccessPackageLookup';
-import type { ActionError } from '@/resources/hooks/useActionError';
-import type { ServiceResource } from '@/rtk/features/singleRights/singleRightsApi';
 import type { Client } from '@/rtk/features/clientApi';
 
 import { buildClientParentNameById, buildClientSortKey } from '../clientSortUtils';
 import { useRoleMetadata } from '../UserRoles/useRoleMetadata';
-import { UserListItems, type UserListItemData } from '../UserListItems/UserListItems';
-import {
-  ClientPackageInfoModal,
-  type ClientPackageModalData,
-} from '../DelegationModal/AccessPackages/ClientPackageInfoModal';
-import {
-  ClientAccessItems,
-  type ClientPackageEntry,
-  type ClientResourceEntry,
-} from '../ClientResourceList/ClientAccessItems';
-import {
-  ClientResourceInfoModal,
-  type ClientResourceModalData,
-} from '../DelegationModal/SingleRights/ClientResourceInfoModal';
-import { useRestoreFocusContext, useRestoreFocusOnDataChange } from '../RestoreFocus';
-
-export type ClientAccessPackageAction = {
-  clientId: string;
-  roleCode: string;
-  packageId: string;
-  accessPackageName: string;
-};
-
-export type ClientResourceAction = {
-  clientId: string;
-  roleCode: string;
-  resourceId: string;
-  resourceName: string;
-};
-
-type SelectedClientResource = {
-  itemId: string;
-  clientId: string;
-  resource: ServiceResource;
-  toPartyName: string;
-  onDelegate?: (
-    onSuccess?: () => void,
-    onError?: (error?: ActionError) => void,
-  ) => void | Promise<void>;
-  onRevoke?: (
-    onSuccess?: () => void,
-    onError?: (error?: ActionError) => void,
-  ) => void | Promise<void>;
-};
+import { indexHeldAccess } from '../ClientBulkDelegation/getClientBulkItems';
+import type {
+  ClientAccessEntry,
+  ClientAccessRecipient,
+  RunClientAccessAction,
+} from '../ClientAccess/clientAccessEntry';
+import { ClientAccessRows, type ClientAccessRow } from '../ClientAccess/ClientAccessRows';
 
 type ClientAccessListProps = {
   clients: Client[];
   accessStateClients?: Client[];
   resourceAccessClients?: Client[];
+  /** The agent whose access to the clients is listed. */
+  recipient: ClientAccessRecipient;
+  runAction: RunClientAccessAction;
+  canDelegate?: boolean;
   addDisabled?: boolean;
   removeDisabled?: boolean;
-  onAddAccessPackage?: (
-    action: ClientAccessPackageAction,
-    onSuccess?: () => void,
-    onError?: (error?: ActionError) => void,
-  ) => void | Promise<void>;
-  onRemoveAccessPackage?: (
-    action: ClientAccessPackageAction,
-    onSuccess?: () => void,
-    onError?: (error?: ActionError) => void,
-  ) => void | Promise<void>;
-  onAddResource?: (
-    action: ClientResourceAction,
-    onSuccess?: () => void,
-    onError?: (error?: ActionError) => void,
-  ) => void | Promise<void>;
-  onRemoveResource?: (
-    action: ClientResourceAction,
-    onSuccess?: () => void,
-    onError?: (error?: ActionError) => void,
-  ) => void | Promise<void>;
   renderClientActions?: (client: Client, restoreFocusFallbackId?: string) => React.ReactNode;
   requireDelegableForActions?: boolean;
   emptyAccessText?: string;
@@ -102,16 +47,16 @@ const sortClientsByKey = (clients: Client[], parentNameById: Map<string, string>
     buildClientSortKey(a, parentNameById).localeCompare(buildClientSortKey(b, parentNameById)),
   );
 
+/** The agent-side list: one row per client, each showing that client's access for the agent. */
 export const ClientAccessList = ({
   clients,
   accessStateClients,
   resourceAccessClients,
-  addDisabled = false,
-  removeDisabled = false,
-  onAddAccessPackage,
-  onRemoveAccessPackage,
-  onAddResource,
-  onRemoveResource,
+  recipient,
+  runAction,
+  canDelegate,
+  addDisabled,
+  removeDisabled,
   renderClientActions,
   requireDelegableForActions = true,
   emptyAccessText,
@@ -124,156 +69,75 @@ export const ClientAccessList = ({
   const { t } = useTranslation();
   const { getAccessPackageByUrn } = useAccessPackageLookup();
   const { getRoleMetadata } = useRoleMetadata();
-  const modalRef = useRef<HTMLDialogElement>(null);
-  const resourceModalRef = useRef<HTMLDialogElement>(null);
-  const [selected, setSelected] = useState<{
-    itemId: string;
-    data: ClientPackageModalData;
-  } | null>(null);
-  const [selectedResource, setSelectedResource] = useState<SelectedClientResource | null>(null);
-  const clientsForAccessState = accessStateClients ?? clients;
-  const clientsForResourceAccessState = resourceAccessClients ?? clientsForAccessState;
-  const restoreFocus = useRestoreFocusContext();
-  const requestPackageFocus = useRestoreFocusOnDataChange(clientsForAccessState);
-  const requestResourceFocus = useRestoreFocusOnDataChange(clientsForResourceAccessState);
+
+  const packageAccessClients = accessStateClients ?? clients;
+  const heldPackages = useMemo(
+    () => indexHeldAccess(packageAccessClients, (held) => held.client.id),
+    [packageAccessClients],
+  );
+  const heldResources = useMemo(
+    () => indexHeldAccess(resourceAccessClients ?? packageAccessClients, (held) => held.client.id),
+    [resourceAccessClients, packageAccessClients],
+  );
+
   const parentNameById = buildClientParentNameById(clients);
   const sortedClients = sortClientsByKey(clients, parentNameById);
 
-  const clientHasResource = (clientId: string, refId: string) =>
-    clientsForResourceAccessState.some(
-      (aap) =>
-        aap.client.id === clientId &&
-        aap.access.some((access) => (access.resources ?? []).some((r) => r.refId === refId)),
-    );
-
-  const openPackageModal = (entry: ClientPackageEntry) => {
-    setSelected({
-      itemId: entry.itemId,
-      data: {
-        party: entry.party,
-        accessPackage: entry.accessPackage,
-        userHasAccess: entry.hasAccess,
-        roleDescription: entry.roleDescription,
-        onDelegate: entry.onDelegate,
-        onRevoke: entry.onRevoke,
-      },
-    });
-    modalRef.current?.showModal();
-  };
-
-  const openResourceModal = (entry: ClientResourceEntry) => {
-    setSelectedResource({
-      itemId: entry.itemId,
-      clientId: entry.party.id,
-      resource: entry.resource,
-      toPartyName: formatEntityDisplayName(entry.party),
-      onDelegate: entry.onDelegate,
-      onRevoke: entry.onRevoke,
-    });
-    resourceModalRef.current?.showModal();
-  };
-
-  const userListItems: UserListItemData[] = sortedClients.map((client) => {
-    const clientId = client.client.id;
-    const isSubUnit = isSubUnitByType(client.client.unitType);
-    const userType = getAvatarType(client.client);
-
-    const packages = client.access.flatMap((access) => {
+  const buildEntries = (client: Client) =>
+    client.access.flatMap<ClientAccessEntry>((access) => {
       const roleName = getRoleMetadata(access.role.id)?.name ?? access.role.name;
-      return access.packages.flatMap<ClientPackageEntry>((pkg) => {
+      const shared = { clientId: client.client.id, recipient, roleCode: access.role.code };
+
+      const packages = access.packages.flatMap<ClientAccessEntry>((pkg) => {
         // The client endpoints only send the package id and urn, so a package we can't look up has
         // no name or resources to show.
         const accessPackage = getAccessPackageByUrn(pkg.urn);
         if (!accessPackage) return [];
-        const canAct = !requireDelegableForActions || (accessPackage.isDelegable ?? false);
-        const action: ClientAccessPackageAction = {
-          clientId,
-          roleCode: access.role.code,
-          packageId: pkg.urn,
-          accessPackageName: accessPackage.name,
-        };
         return {
-          itemId: `${clientId}:${access.role.code}:${pkg.id}`,
-          party: client.client,
+          ...shared,
+          kind: 'package',
+          itemId: `${client.client.id}:${access.role.code}:${pkg.id}`,
+          accessId: pkg.urn,
           accessPackage,
-          hasAccess: clientsForAccessState.some(
-            (aap) =>
-              aap.client.id === clientId &&
-              aap.access.some((p) => p.packages.some((ap) => ap.id === pkg.id)),
-          ),
           roleDescription:
             access.role.code !== 'rettighetshaver'
               ? t('client_administration_page.via_role', { role: roleName })
               : undefined,
-          onDelegate:
-            canAct && onAddAccessPackage
-              ? (onSuccess, onError) => onAddAccessPackage(action, onSuccess, onError)
-              : undefined,
-          onRevoke:
-            canAct && onRemoveAccessPackage
-              ? (onSuccess, onError) => onRemoveAccessPackage(action, onSuccess, onError)
-              : undefined,
+          canAct: !requireDelegableForActions || (accessPackage.isDelegable ?? false),
         };
       });
-    });
 
-    const resources = client.access.flatMap((access) =>
-      (access.resources ?? []).flatMap<ClientResourceEntry>((clientResource) => {
+      const resources = (access.resources ?? []).flatMap<ClientAccessEntry>((clientResource) => {
         const resource = clientResource.details;
         if (!resource) return [];
-
-        const canAct = !requireDelegableForActions || resource.delegable;
-        const action: ClientResourceAction = {
-          clientId,
-          roleCode: access.role.code,
-          resourceId: clientResource.refId,
-          resourceName: resource.title,
-        };
         return {
-          itemId: `${clientId}:${access.role.code}:${clientResource.refId}`,
-          party: client.client,
+          ...shared,
+          kind: 'resource',
+          itemId: `${client.client.id}:${access.role.code}:${clientResource.refId}`,
+          accessId: clientResource.refId,
           resource,
-          hasAccess: clientHasResource(clientId, clientResource.refId),
-          onDelegate:
-            canAct && onAddResource
-              ? (onSuccess, onError) => onAddResource(action, onSuccess, onError)
-              : undefined,
-          onRevoke:
-            canAct && onRemoveResource
-              ? (onSuccess, onError) => onRemoveResource(action, onSuccess, onError)
-              : undefined,
+          canAct: !requireDelegableForActions || resource.delegable,
         };
-      }),
-    );
+      });
 
+      return [...packages, ...resources];
+    });
+
+  const rows: ClientAccessRow[] = sortedClients.map((client) => {
+    const userType = getAvatarType(client.client);
     return {
-      id: clientId,
+      id: client.client.id,
       name: formatEntityDisplayName(client.client),
       organizationIdentifier: client.client.organizationIdentifier ?? undefined,
       type: userType,
-      subUnit: isSubUnit,
+      subUnit: isSubUnitByType(client.client.unitType),
       deleted: client.client.isDeleted ?? undefined,
       collapsible: true,
       interactive: true,
       as: 'button',
       titleAs: 'div',
-      children: (
-        <>
-          {renderClientActions?.(client, restoreFocusFallbackId)}
-          <ClientAccessItems
-            packages={packages}
-            resources={resources}
-            emptyText={emptyAccessText}
-            addDisabled={addDisabled}
-            removeDisabled={removeDisabled}
-            requestPackageFocus={requestPackageFocus}
-            requestResourceFocus={requestResourceFocus}
-            restoreFocusFallbackId={restoreFocusFallbackId}
-            onOpenPackageModal={openPackageModal}
-            onOpenResourceModal={openResourceModal}
-          />
-        </>
-      ),
+      entries: buildEntries(client),
+      actions: renderClientActions?.(client, restoreFocusFallbackId),
       description:
         userType === 'company'
           ? t('client_administration_page.organization_identifier', {
@@ -285,74 +149,22 @@ export const ClientAccessList = ({
     };
   });
 
-  // Resolve the selected item's access live from the unfiltered access state, so the modal stays
-  // correct after a mutation even when its row leaves the rendered (filtered) list.
-  const modalData: ClientPackageModalData | undefined = selected
-    ? {
-        ...selected.data,
-        userHasAccess: clientsForAccessState.some(
-          (aap) =>
-            aap.client.id === selected.data.party.id &&
-            aap.access.some((p) =>
-              p.packages.some((ap) => ap.id === selected.data.accessPackage.id),
-            ),
-        ),
-      }
-    : undefined;
-
-  // Request focus synchronously before clearing state, so the originating item is targeted even
-  // if its row has moved to another section while the modal was open.
-  const restoreFocusOnClose = (itemId: string) => {
-    restoreFocus?.requestFocus(itemId, restoreFocusFallbackId);
-  };
-
-  // Removing the last client unmounts the list together with its open modal, so onClose never
-  // fires. Hand the request to the zone on the way out instead.
-  const restoreFocusOnUnmountRef = useRef<(() => void) | null>(null);
-  useEffect(() => {
-    const openItemId = selected?.itemId ?? selectedResource?.itemId;
-    restoreFocusOnUnmountRef.current = openItemId ? () => restoreFocusOnClose(openItemId) : null;
-  });
-  useEffect(() => () => restoreFocusOnUnmountRef.current?.(), []);
-
-  const resourceModalData: ClientResourceModalData | undefined = selectedResource
-    ? {
-        resource: selectedResource.resource,
-        userHasAccess: clientHasResource(
-          selectedResource.clientId,
-          selectedResource.resource.identifier,
-        ),
-        toPartyName: selectedResource.toPartyName,
-        onDelegate: selectedResource.onDelegate,
-        onRevoke: selectedResource.onRevoke,
-      }
-    : undefined;
-
   return (
-    <>
-      <UserListItems
-        items={userListItems}
-        emptyText={emptyText}
-        searchString={searchString}
-        expandedIds={expandedIds}
-        onToggleExpanded={onToggleExpanded}
-      />
-      <ClientPackageInfoModal
-        ref={modalRef}
-        data={modalData}
-        onClose={() => {
-          if (selected) restoreFocusOnClose(selected.itemId);
-          setSelected(null);
-        }}
-      />
-      <ClientResourceInfoModal
-        ref={resourceModalRef}
-        data={resourceModalData}
-        onClose={() => {
-          if (selectedResource) restoreFocusOnClose(selectedResource.itemId);
-          setSelectedResource(null);
-        }}
-      />
-    </>
+    <ClientAccessRows
+      rows={rows}
+      heldPackages={heldPackages}
+      heldResources={heldResources}
+      heldBy='client'
+      runAction={runAction}
+      canDelegate={canDelegate}
+      addDisabled={addDisabled}
+      removeDisabled={removeDisabled}
+      emptyText={emptyText}
+      emptyAccessText={emptyAccessText}
+      searchString={searchString}
+      expandedIds={expandedIds}
+      onToggleExpanded={onToggleExpanded}
+      restoreFocusFallbackId={restoreFocusFallbackId}
+    />
   );
 };
