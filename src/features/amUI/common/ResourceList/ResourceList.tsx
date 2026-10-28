@@ -214,7 +214,10 @@ export const ResourceList = <
         </div>
       )}
       {enableSearch && (
-        <SearchHitsStatus hits={search.trim() ? filteredResources.length : undefined} />
+        <SearchHitsStatus
+          hits={search.trim() ? filteredResources.length : undefined}
+          className={classes.searchHits}
+        />
       )}
       {isSkeletonVisible ? (
         <SkeletonResourceList size={size} />

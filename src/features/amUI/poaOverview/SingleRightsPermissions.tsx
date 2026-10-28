@@ -189,36 +189,38 @@ export const SingleRightsPermissions = () => {
         filterState={filterState}
         setFilterState={handleFilterChange}
       />
-      <SearchHitsStatus hits={searchHits} />
-      <section aria-labelledby={ASSIGNED_SERVICES_SECTION}>
-        <CollapsibleContainer
-          heading={t('poa_overview_page.services_tab.assigned_services_title')}
-          searchString={debouncedSearch}
-          id={ASSIGNED_SERVICES_SECTION}
-          defaultOpen
-        >
-          <ResourceList
-            className={classes.resourceList}
-            resources={filteredResources}
-            isLoading={isLoadingDelegations || isPartyLoading}
-            enableSearch={false}
-            showDetails={false}
-            getItemAs={getResourceItemAs}
-            noResourcesText={
-              hasSearch
-                ? t('poa_overview_page.services_tab.no_services_found')
-                : t('poa_overview_page.services_tab.no_services')
-            }
-            renderControls={(resource) => {
-              const permissions = permissionsByResource.get(resource.identifier);
-              return permissions?.length ? (
-                <SingleRightsPermissionBadge permissions={permissions} />
-              ) : null;
-            }}
-            size='md'
-          />
-        </CollapsibleContainer>
-      </section>
+      <div>
+        <SearchHitsStatus hits={searchHits} />
+        <section aria-labelledby={ASSIGNED_SERVICES_SECTION}>
+          <CollapsibleContainer
+            heading={t('poa_overview_page.services_tab.assigned_services_title')}
+            searchString={debouncedSearch}
+            id={ASSIGNED_SERVICES_SECTION}
+            defaultOpen
+          >
+            <ResourceList
+              className={classes.resourceList}
+              resources={filteredResources}
+              isLoading={isLoadingDelegations || isPartyLoading}
+              enableSearch={false}
+              showDetails={false}
+              getItemAs={getResourceItemAs}
+              noResourcesText={
+                hasSearch
+                  ? t('poa_overview_page.services_tab.no_services_found')
+                  : t('poa_overview_page.services_tab.no_services')
+              }
+              renderControls={(resource) => {
+                const permissions = permissionsByResource.get(resource.identifier);
+                return permissions?.length ? (
+                  <SingleRightsPermissionBadge permissions={permissions} />
+                ) : null;
+              }}
+              size='md'
+            />
+          </CollapsibleContainer>
+        </section>
+      </div>
       <section aria-labelledby={UNASSIGNED_SERVICES_SECTION}>
         <CollapsibleContainer
           heading={t('poa_overview_page.services_tab.other_services_title')}

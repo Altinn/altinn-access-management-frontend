@@ -47,7 +47,7 @@ export const ConsentTimeline = ({ consentLog, showConsentDetails }: ConsentTimel
   );
 
   return (
-    <>
+    <div className={classes.consentTimeline}>
       <DsSearch className={classes.consentSearchField}>
         <DsSearch.Input
           placeholder={t('consent_log.search_log')}
@@ -97,7 +97,7 @@ export const ConsentTimeline = ({ consentLog, showConsentDetails }: ConsentTimel
           );
         })}
       </Timeline>
-    </>
+    </div>
   );
 };
 

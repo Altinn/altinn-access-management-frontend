@@ -1,5 +1,6 @@
 import { DsParagraph } from '@altinn/altinn-components';
 import { useTranslation } from 'react-i18next';
+import cn from 'classnames';
 
 import { StatusMessageForScreenReader } from '@/components/StatusMessageForScreenReader/StatusMessageForScreenReader';
 
@@ -15,11 +16,12 @@ interface SearchHitsStatusProps {
   hits?: number | SearchHitsInList[];
   /** Overrides the default hit text. */
   message?: string;
+  className?: string;
 }
 
 // The live region stays mounted while there is no search, so screen readers pick up the first result too.
 // With no hits the text is only read, since the lists show their own no-results text.
-export const SearchHitsStatus = ({ hits, message }: SearchHitsStatusProps) => {
+export const SearchHitsStatus = ({ hits, message, className }: SearchHitsStatusProps) => {
   const { t } = useTranslation();
 
   const total = Array.isArray(hits) ? hits.reduce((sum, hit) => sum + hit.count, 0) : hits;
@@ -39,7 +41,7 @@ export const SearchHitsStatus = ({ hits, message }: SearchHitsStatusProps) => {
       {hits !== undefined && (
         <DsParagraph
           data-size='sm'
-          className={classes.text}
+          className={cn(classes.text, className)}
         >
           {message ?? text}
         </DsParagraph>

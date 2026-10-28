@@ -5,7 +5,7 @@
 .container {
   display: flex;
   flex-direction: column;
-  gap: var(--ds-spacing-4);
+  gap: var(--ds-spacing-6);
 }
 
 .controls {
@@ -46,7 +46,7 @@
 
 .subHeader {
   font-size: var(--ds-body-lg-font-size);
-  margin-top: var(--ds-size-2);
+  margin-top: var(--ds-spacing-2);
 }
 
 @media only screen and (max-width: 768px) {

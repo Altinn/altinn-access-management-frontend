@@ -9,7 +9,7 @@
   align-items: flex-start;
   flex-wrap: wrap;
   gap: var(--ds-spacing-2);
-  margin: var(--ds-spacing-3) 0;
+  margin: var(--ds-spacing-3) 0 var(--ds-spacing-6);
 }
 
 .toolbarContainer ul {
