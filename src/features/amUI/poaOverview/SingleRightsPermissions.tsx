@@ -155,9 +155,10 @@ export const SingleRightsPermissions = () => {
   const hasSearch = debouncedSearch || filterState.length > 0;
 
   // The other services count is the loaded rows: the backend total also counts delegated services,
-  // which are listed under assigned services. currentData is undefined while a new search loads.
+  // which are listed under assigned services. currentData is undefined while a new search loads,
+  // and both counts depend on the delegations.
   const searchHits =
-    hasSearch && currentSearchData
+    hasSearch && currentSearchData && !isLoadingDelegations && !isPartyLoading
       ? [
           {
             count: filteredResources.length,

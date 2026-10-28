@@ -688,6 +688,8 @@
     "single_rights_heading": "Enkelttjenester:",
     "agent_has_clients_tab": "Har disse klientene",
     "agent_can_get_clients_tab": "Kan få disse klientene",
+    "agent_has_clients_search_list": "klientene brukeren har",
+    "agent_can_get_clients_search_list": "klientene brukeren kan få",
     "client_has_agents_tab": "Brukere med fullmakt",
     "client_can_get_agents_tab": "Brukere som kan få fullmakt",
     "recently_added_users": "Nylig lagt til brukere",

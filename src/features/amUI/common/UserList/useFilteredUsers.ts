@@ -51,6 +51,13 @@ const filterUsers = (users: UserSearchNode[], searchString: string): UserSearchN
   return users.map((user) => filterUserNode(user, searchString)).filter((user) => user !== null);
 };
 
+// A connection that only matches through its children counts each matching child, as they are all shown.
+const countMatches = (users: UserSearchNode[]): number =>
+  users.reduce(
+    (sum, user) => sum + (user.matchInChildren ? countMatches(user.children ?? []) : 1),
+    0,
+  );
+
 const sortUsers = (users: UserSearchNode[]): UserSearchNode[] => {
   const processedUsers = users.map((user) => {
     const userCopy = { ...user };
@@ -153,7 +160,7 @@ export const useFilteredUsers = ({
     hasNextIndirectPage,
     goNextPage,
     goNextIndirectPage,
-    totalFilteredCount: processedUsers.length,
-    totalFilteredIndirectCount: indirectUsers?.length ?? 0,
+    totalFilteredCount: countMatches(processedUsers),
+    totalFilteredIndirectCount: countMatches(indirectUsers ?? []),
   };
 };

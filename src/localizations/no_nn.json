@@ -686,6 +686,8 @@
     "single_rights_heading": "Enkelttenester:",
     "agent_has_clients_tab": "Har desse klientane",
     "agent_can_get_clients_tab": "Kan få desse klientane",
+    "agent_has_clients_search_list": "klientane brukaren har",
+    "agent_can_get_clients_search_list": "klientane brukaren kan få",
     "client_has_agents_tab": "Brukarar med fullmakt",
     "client_can_get_agents_tab": "Brukarar som kan få fullmakt",
     "recently_added_users": "Nyleg lagt til brukarar",

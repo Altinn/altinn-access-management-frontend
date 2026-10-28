@@ -42,11 +42,11 @@ export const useAgentDetailsAccessClientLists = ({
     ? [
         {
           count: countClientSearchHits(lists.clientsWithAgentAccess, searchString),
-          list: t('client_administration_page.agent_has_clients_tab'),
+          list: t('client_administration_page.agent_has_clients_search_list'),
         },
         {
           count: countClientSearchHits(lists.clientsWithoutAgentAccess, searchString),
-          list: t('client_administration_page.agent_can_get_clients_tab'),
+          list: t('client_administration_page.agent_can_get_clients_search_list'),
         },
       ]
     : undefined;

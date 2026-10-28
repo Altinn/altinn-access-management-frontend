@@ -695,6 +695,8 @@
     "single_rights_heading": "Single services:",
     "agent_has_clients_tab": "Has these clients",
     "agent_can_get_clients_tab": "Can have these clients",
+    "agent_has_clients_search_list": "clients the user has",
+    "agent_can_get_clients_search_list": "clients the user can have",
     "client_has_agents_tab": "Users with power of attorney",
     "client_can_get_agents_tab": "Users who can get power of attorney",
     "recently_added_users": "Recently added users",
