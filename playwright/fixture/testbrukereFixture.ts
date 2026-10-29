@@ -6,8 +6,11 @@ import { test as base } from '@playwright/test';
 import { currentEnv } from 'playwright/util/helper';
 import { readCsv, type Organisasjon, type Person } from 'playwright/util/testdata';
 
+/** En hovedenhet og underenheten med samme navn. Daglig leder i hovedenheten representerer begge. */
+export type Hovedenhet = Organisasjon & { underenhetOrgNo: string };
+
 /** Testbrukergruppene i e2eTests/testdata/<gruppe>/<miljø>.csv, og hva hver rad blir til. */
-export type Grupper = { privatperson: Person; dagligLeder: Organisasjon };
+export type Grupper = { privatperson: Person; dagligLeder: Organisasjon; hovedenhet: Hovedenhet };
 export type Gruppe = keyof Grupper;
 
 const lesGruppe: { [G in Gruppe]: (miljo: string) => Grupper[G][] } = {
@@ -25,6 +28,14 @@ const lesGruppe: { [G in Gruppe]: (miljo: string) => Grupper[G][] } = {
       name: rad.orgnavn,
       pid: rad.fnr,
       managerName: rad.navn,
+    })),
+  hovedenhet: (miljo) =>
+    readCsv(`hovedenhet/${miljo}.csv`).map((rad) => ({
+      orgNo: rad.orgnr,
+      name: rad.orgnavn,
+      pid: rad.fnr,
+      managerName: rad.navn,
+      underenhetOrgNo: rad.underenhet_orgnr,
     })),
 };
 

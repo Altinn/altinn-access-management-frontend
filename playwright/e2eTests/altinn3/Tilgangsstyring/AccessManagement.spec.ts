@@ -1,7 +1,4 @@
 import { medTestbrukere, test } from '../../../fixture/pomFixture';
-import { loadTestdata } from '../../../util/testdata';
-
-const TESTDATA = loadTestdata('accessmanagement');
 
 const service = 'bruno-correspondence';
 
@@ -263,11 +260,9 @@ test.describe('Tilgangsstyring', () => {
 
 test.describe('over- og underenheter', () => {
   test.describe('Virksomhet skal kunne se tilgangspakker hos hoved- og underenhet som delegerte dem', () => {
-    const {
-      organisasjoner: [delegatorOrg, recipientOrg],
-    } = TESTDATA.pakkerHovedOgUnderenhet;
+    const test = medTestbrukere({ delegatorOrg: 'hovedenhet', recipientOrg: 'dagligLeder' });
 
-    test.beforeEach(async ({ api }) => {
+    test.beforeEach(async ({ delegatorOrg, recipientOrg, api }) => {
       await api.connections.addConnectionAndPackagesToUser(
         delegatorOrg.pid,
         delegatorOrg.orgNo,
@@ -276,7 +271,7 @@ test.describe('over- og underenheter', () => {
       );
     });
 
-    test.afterEach(async ({ api }) => {
+    test.afterEach(async ({ delegatorOrg, recipientOrg, api }) => {
       try {
         await api.connections.deleteConnection(delegatorOrg.pid, delegatorOrg.orgNo, [
           recipientOrg.orgNo,
@@ -287,6 +282,8 @@ test.describe('over- og underenheter', () => {
     });
 
     test('Virksomhet skal kunne se tilgangspakker hos hoved- og underenhet som delegerte dem', async ({
+      delegatorOrg,
+      recipientOrg,
       accessManagementFrontPage,
       login,
       aktorvalgHeader,
@@ -329,11 +326,9 @@ test.describe('over- og underenheter', () => {
   });
 
   test.describe('Underenhet A som delegerte tilgangspakke til Virksomhet B skal kunne se Virksomhet B i brukerlista si', () => {
-    const {
-      organisasjoner: [delegatorOrg, recipientOrg],
-    } = TESTDATA.pakkerUnderenhetTilVirksomhet;
+    const test = medTestbrukere({ delegatorOrg: 'hovedenhet', recipientOrg: 'dagligLeder' });
 
-    test.beforeEach(async ({ api }) => {
+    test.beforeEach(async ({ delegatorOrg, recipientOrg, api }) => {
       await api.connections.addConnectionAndPackagesToUser(
         delegatorOrg.pid,
         delegatorOrg.orgNo,
@@ -342,7 +337,7 @@ test.describe('over- og underenheter', () => {
       );
     });
 
-    test.afterEach(async ({ api }) => {
+    test.afterEach(async ({ delegatorOrg, recipientOrg, api }) => {
       try {
         await api.connections.deleteConnection(delegatorOrg.pid, delegatorOrg.orgNo, [
           recipientOrg.orgNo,
@@ -353,6 +348,8 @@ test.describe('over- og underenheter', () => {
     });
 
     test('Underenhet A som delegerte tilgangspakke til Virksomhet B skal kunne se Virksomhet B i brukerlista si', async ({
+      delegatorOrg,
+      recipientOrg,
       accessManagementFrontPage,
       login,
       aktorvalgHeader,
@@ -395,11 +392,9 @@ test.describe('over- og underenheter', () => {
   });
 
   test.describe('Virksomhet skal kunne se enkelttjenester hos hoved- og underenhet som delegerte dem', () => {
-    const {
-      organisasjoner: [delegatorOrg, recipientOrg],
-    } = TESTDATA.tjenesterHovedOgUnderenhet;
+    const test = medTestbrukere({ delegatorOrg: 'hovedenhet', recipientOrg: 'dagligLeder' });
 
-    test.beforeEach(async ({ api }) => {
+    test.beforeEach(async ({ delegatorOrg, recipientOrg, api }) => {
       await api.connections.addConnection(delegatorOrg.pid, delegatorOrg.orgNo, recipientOrg.orgNo);
       await api.connections.delegateSingleService(
         delegatorOrg.pid,
@@ -409,7 +404,7 @@ test.describe('over- og underenheter', () => {
       );
     });
 
-    test.afterEach(async ({ api }) => {
+    test.afterEach(async ({ delegatorOrg, recipientOrg, api }) => {
       try {
         await api.connections.deleteSingleServiceDelegation(
           delegatorOrg.pid,
@@ -430,6 +425,8 @@ test.describe('over- og underenheter', () => {
     });
 
     test('Virksomhet skal kunne se enkelttjenester hos hoved- og underenhet som delegerte dem', async ({
+      delegatorOrg,
+      recipientOrg,
       accessManagementFrontPage,
       login,
       aktorvalgHeader,
@@ -472,11 +469,9 @@ test.describe('over- og underenheter', () => {
   });
 
   test.describe('Underenhet A som delegerte enkelttjeneste til Virksomhet B skal kunne se Virksomhet B i brukerlista si', () => {
-    const {
-      organisasjoner: [delegatorOrg, recipientOrg],
-    } = TESTDATA.tjenesterUnderenhetTilVirksomhet;
+    const test = medTestbrukere({ delegatorOrg: 'hovedenhet', recipientOrg: 'dagligLeder' });
 
-    test.beforeEach(async ({ api }) => {
+    test.beforeEach(async ({ delegatorOrg, recipientOrg, api }) => {
       await api.connections.addConnection(delegatorOrg.pid, delegatorOrg.orgNo, recipientOrg.orgNo);
       await api.connections.delegateSingleService(
         delegatorOrg.pid,
@@ -486,7 +481,7 @@ test.describe('over- og underenheter', () => {
       );
     });
 
-    test.afterEach(async ({ api }) => {
+    test.afterEach(async ({ delegatorOrg, recipientOrg, api }) => {
       try {
         await api.connections.deleteSingleServiceDelegation(
           delegatorOrg.pid,
@@ -507,6 +502,8 @@ test.describe('over- og underenheter', () => {
     });
 
     test('Underenhet A som delegerte enkelttjeneste til Virksomhet B skal kunne se Virksomhet B i brukerlista si', async ({
+      delegatorOrg,
+      recipientOrg,
       accessManagementFrontPage,
       login,
       aktorvalgHeader,

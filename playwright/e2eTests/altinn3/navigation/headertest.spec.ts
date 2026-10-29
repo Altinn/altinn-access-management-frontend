@@ -2,7 +2,12 @@ import { medTestbrukere } from 'playwright/fixture/pomFixture';
 import { loadTestdata } from 'playwright/util/testdata';
 
 // Favoritter trenger bare en bruker med én aktør i tillegg til seg selv.
-const test = medTestbrukere({ favorittLeder: 'dagligLeder' });
+const test = medTestbrukere({
+  favorittLeder: 'dagligLeder',
+  // Underenheten til B delegerer til A, og daglig leder i A logger inn.
+  virksomhetA: 'dagligLeder',
+  virksomhetB: 'hovedenhet',
+});
 
 const TESTDATA = loadTestdata('header');
 const {
@@ -13,10 +18,6 @@ const {
   personer: [sokBruker],
   organisasjoner: [sokVirksomhet],
 } = TESTDATA.sok;
-const {
-  personer: [underenhetBruker],
-  organisasjoner: [underenhet, mottaker, hovedenhet],
-} = TESTDATA.underenhet;
 
 test.describe('Aktørvalg, valg og visning av avgiver', () => {
   const SHOW_DELETED_TEST_USER = slettedeEnheterBruker.pid;
@@ -120,58 +121,78 @@ test.describe('Aktørvalg, valg og visning av avgiver', () => {
     });
   });
 
-  test('Virksomhet A skal ikke kunne velge hovedenhet B når underenhet B har delegert en tilgangspakke', async ({
-    login,
-    aktorvalgHeader,
-    api,
-  }) => {
-    await test.step('sett opp testdata', async () => {
-      await api.connections.addConnectionAndPackagesToUser(
-        underenhet.pid,
-        underenhet.orgNo,
-        mottaker.orgNo,
-        ['urn:altinn:accesspackage:byggesoknad'],
-      );
+  test.describe('underenhet som delegerer', () => {
+    test.afterEach(async ({ virksomhetA, virksomhetB, api }) => {
+      try {
+        await api.connections.deleteConnection(virksomhetB.pid, virksomhetB.underenhetOrgNo, [
+          virksomhetA.orgNo,
+        ]);
+      } catch (error) {
+        console.error('Cleanup: Failed to delete connection:', error);
+      }
     });
 
-    await test.step('Logg inn', async () => {
-      await login.LoginToAccessManagement(underenhetBruker.pid);
+    test('Virksomhet A skal ikke kunne velge hovedenhet B når underenhet B har delegert en tilgangspakke', async ({
+      virksomhetA,
+      virksomhetB,
+      login,
+      aktorvalgHeader,
+      api,
+    }) => {
+      await test.step('sett opp testdata', async () => {
+        await api.connections.addConnectionAndPackagesToUser(
+          virksomhetB.pid,
+          virksomhetB.underenhetOrgNo,
+          virksomhetA.orgNo,
+          ['urn:altinn:accesspackage:byggesoknad'],
+        );
+      });
+
+      await test.step('Logg inn', async () => {
+        await login.LoginToAccessManagement(virksomhetA.pid);
+      });
+
+      await test.step(`Hovedenhet ${virksomhetB.name} skal ikke være klikkbar`, async () => {
+        await aktorvalgHeader.orgIsNotClickableInAktorvalg(virksomhetB.name);
+      });
+
+      await test.step(`Se at underenheten for ${virksomhetB.name} er klikkbar i aktørlista`, async () => {
+        await aktorvalgHeader.subOrgExistsInAktorvalg(virksomhetB.name);
+      });
     });
 
-    await test.step('Hovedenhet UVITENDE TOM TIGER AS skal ikke være klikkbar', async () => {
-      await aktorvalgHeader.orgIsNotClickableInAktorvalg(hovedenhet.name);
-    });
+    test('Virksomhet A skal ikke kunne velge hovedenhet B når underenhet B har delegert en enkelttjeneste', async ({
+      virksomhetA,
+      virksomhetB,
+      login,
+      aktorvalgHeader,
+      api,
+    }) => {
+      await test.step('sett opp testdata', async () => {
+        await api.connections.addConnection(
+          virksomhetB.pid,
+          virksomhetB.underenhetOrgNo,
+          virksomhetA.orgNo,
+        );
+        await api.connections.delegateSingleService(
+          virksomhetB.pid,
+          virksomhetB.underenhetOrgNo,
+          virksomhetA.orgNo,
+          'bruno-correspondence',
+        );
+      });
 
-    await test.step('Se at underenheten for UVITENDE TOM TIGER AS er klikkbare i aktørlista', async () => {
-      await aktorvalgHeader.subOrgExistsInAktorvalg(hovedenhet.name);
-    });
-  });
+      await test.step('Logg inn', async () => {
+        await login.LoginToAccessManagement(virksomhetA.pid);
+      });
 
-  test('Virksomhet A skal ikke kunne velge hovedenhet B når underenhet B har delegert en enkelttjeneste', async ({
-    login,
-    aktorvalgHeader,
-    api,
-  }) => {
-    await test.step('sett opp testdata', async () => {
-      await api.connections.addConnection(underenhet.pid, underenhet.orgNo, mottaker.orgNo);
-      await api.connections.delegateSingleService(
-        underenhet.pid,
-        underenhet.orgNo,
-        mottaker.orgNo,
-        'bruno-correspondence',
-      );
-    });
+      await test.step(`Hovedenhet ${virksomhetB.name} skal ikke være klikkbar`, async () => {
+        await aktorvalgHeader.orgIsNotClickableInAktorvalg(virksomhetB.name);
+      });
 
-    await test.step('Logg inn', async () => {
-      await login.LoginToAccessManagement(underenhetBruker.pid);
-    });
-
-    await test.step('Hovedenhet UVITENDE TOM TIGER AS skal ikke være klikkbar', async () => {
-      await aktorvalgHeader.orgIsNotClickableInAktorvalg(hovedenhet.name);
-    });
-
-    await test.step('Se at underenheten for UVITENDE TOM TIGER AS er klikkbare i aktørlista', async () => {
-      await aktorvalgHeader.subOrgExistsInAktorvalg(hovedenhet.name);
+      await test.step(`Se at underenheten for ${virksomhetB.name} er klikkbar i aktørlista`, async () => {
+        await aktorvalgHeader.subOrgExistsInAktorvalg(virksomhetB.name);
+      });
     });
   });
 });
