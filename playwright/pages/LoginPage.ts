@@ -18,7 +18,7 @@ export class LoginPage {
   readonly testIdLink: Locator;
   readonly loginButton: Locator;
   readonly profileLink: Locator;
-  readonly velgAktoerHeading: Locator;
+  readonly aktoerMeny: Locator;
   readonly autentiserButton: Locator;
   readonly tilgangsstyringLink: Locator;
   readonly testIdLinkText: Locator;
@@ -34,10 +34,9 @@ export class LoginPage {
     this.testIdLink = this.page.getByRole('link', { name: 'TestID Lag din egen' });
     this.loginButton = this.page.getByRole('button', { name: 'Logg inn', exact: true });
     this.profileLink = this.page.getByRole('link', { name: 'profil' });
-    this.velgAktoerHeading = this.page.getByRole('heading', {
-      level: 1,
-      name: 'Hvem vil du bruke Altinn på vegne av?',
-    });
+    // Aktørvalget er den eneste menyen på siden, enten som hel side eller i dialog.
+    // Overskriften kommer fra headeren og varierer med språk og nivå, så den brukes ikke.
+    this.aktoerMeny = this.page.getByRole('menu');
     this.autentiserButton = this.page.getByRole('button', { name: 'Autentiser' });
     this.tilgangsstyringLink = this.page.getByRole('link', { name: 'Tilgangsstyring' });
     this.testIdLinkText = this.page.getByRole('link', {
@@ -73,7 +72,7 @@ export class LoginPage {
     const antallAktoerer = await this.api.authorizedParties.antallAktoererForbruker(
       this.loggedInPid,
     );
-    await expect(this.velgAktoerHeading).toBeVisible();
+    await expect(this.aktoerMeny).toBeVisible();
 
     // Rett etter innlogging er velgeren en hel side; ellers ligger den i en dialog
     const dialog = this.page.getByRole('dialog');
@@ -88,7 +87,7 @@ export class LoginPage {
     }
 
     await item.click();
-    await expect(this.velgAktoerHeading).not.toBeVisible();
+    await expect(this.aktoerMeny).toBeHidden();
   }
 
   private async navigateToLoginPage() {
