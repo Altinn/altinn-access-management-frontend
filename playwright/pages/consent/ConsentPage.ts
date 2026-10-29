@@ -318,8 +318,8 @@ export class ConsentPage {
     return this.page.getByRole('heading', { name, exact: false });
   }
 
-  textContains(re: RegExp): Locator {
-    return this.page.getByText(re);
+  textContains(text: string | RegExp): Locator {
+    return this.page.getByText(text);
   }
 
   // Navigation
@@ -366,8 +366,7 @@ export class ConsentPage {
     };
 
     const expectedText = expiryTexts[this.language] || expiryTexts[Language.NB];
-    const re = new RegExp(expectedText.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'));
-    await expect(this.textContains(re)).toBeVisible();
+    await expect(this.textContains(expectedText)).toBeVisible();
   }
 
   async expectFullmaktExpiry(): Promise<void> {
@@ -375,8 +374,7 @@ export class ConsentPage {
   }
 
   async expectExpiryDate(formattedOslo: string): Promise<void> {
-    const re = new RegExp(formattedOslo.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'));
-    await expect(this.textContains(re)).toBeVisible();
+    await expect(this.textContains(formattedOslo)).toBeVisible();
   }
 
   // Loan metadata methods

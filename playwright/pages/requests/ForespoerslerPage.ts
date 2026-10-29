@@ -1,13 +1,9 @@
 import { expect, type Locator, type Page } from '@playwright/test';
 
-import { env, withPoaObject } from 'playwright/util/helper';
+import { env, startsWith, withPoaObject } from 'playwright/util/helper';
 
 import { LANGUAGE_DICTIONARIES, Language, type Dict } from '../LanguageMenu';
 import { SidebarNav } from '../SidebarNav';
-
-/** A regex matching text that begins with `value`, with regex chars escaped. */
-const startsWith = (value: string): RegExp =>
-  new RegExp(`^${value.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}`);
 
 /**
  * Forespørsler (https://am.ui.<env>.altinn.cloud/accessmanagement/ui/requests).

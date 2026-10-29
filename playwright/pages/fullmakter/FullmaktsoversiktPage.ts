@@ -1,14 +1,9 @@
 import { expect, type Locator, type Page } from '@playwright/test';
 
-import { env } from 'playwright/util/helper';
+import { env, startsWith } from 'playwright/util/helper';
 
 import { LANGUAGE_DICTIONARIES, Language, type Dict } from '../LanguageMenu';
 import { SidebarNav } from '../SidebarNav';
-
-const escapeRegExp = (value: string): string => value.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
-
-/** Matches an accessible name that BEGINS with `value`. */
-const startsWith = (value: string): RegExp => new RegExp(`^${escapeRegExp(value)}`);
 
 /**
  * Fullmaktsoversikt

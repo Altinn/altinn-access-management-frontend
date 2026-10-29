@@ -78,12 +78,7 @@ export class KlientAdministrasjonPage {
   }
 
   async goToKlientFane() {
-    await Promise.all([
-      this.page.waitForResponse(
-        (resp) => resp.url().includes('api/v1/clientdelegations/clients') && resp.ok(),
-      ),
-      this.klientFane.click(),
-    ]);
+    await this.klientFane.click();
     await expect(this.klientFane).toHaveAttribute('aria-selected', 'true');
   }
 

@@ -32,11 +32,6 @@
       "count": 1
     }
   },
-  "playwright/pages/tilgangsstyring/KlientAdministrasjonPage.ts": {
-    "@typescript-eslint/await-thenable": {
-      "count": 2
-    }
-  },
   "playwright/tenor/client/RegisterApiRequests.test.ts": {
     "@typescript-eslint/no-unsafe-argument": {
       "count": 3

@@ -1,6 +1,6 @@
 import { expect, type Locator, type Page } from '@playwright/test';
 
-import { env, withPoaObject } from 'playwright/util/helper';
+import { env, escapeRegExp, startsWith, withPoaObject } from 'playwright/util/helper';
 
 import { LANGUAGE_DICTIONARIES, Language, type Dict } from '../LanguageMenu';
 import { SidebarNav } from '../SidebarNav';
@@ -18,11 +18,6 @@ const SOFT_HYPHEN = '\u00AD';
  * matched literally, which the English heading (no soft hyphen) would otherwise
  * keep. Anchored at the start so it cannot match an unrelated heading.
  */
-const escapeRegExp = (value: string): string => value.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
-
-/** Matches an accessible name that BEGINS with `value`. */
-const startsWith = (value: string): RegExp => new RegExp(`^${escapeRegExp(value)}`);
-
 const headingPrefix = (template: string): RegExp => {
   const pattern = template
     .split('{{name}}')[0]
