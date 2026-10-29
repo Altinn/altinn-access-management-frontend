@@ -3,7 +3,9 @@ import { TestdataApi } from 'playwright/util/TestdataApi';
 import { env } from 'playwright/util/helper';
 import type { SystemUserApiRequests } from 'playwright/api-requests/SystemUserApiRequests';
 import { loadTestdata } from 'playwright/util/testdata';
-const { owner, vendor } = loadTestdata('systemuser').changes;
+const {
+  organisasjoner: [vendor, owner],
+} = loadTestdata('systemuser').changes;
 const vendorOrgNumber = vendor.orgNo;
 const prebuiltSystemId = '310547891_E2E-Playwright-Authentication';
 const testUserPid = owner.pid;

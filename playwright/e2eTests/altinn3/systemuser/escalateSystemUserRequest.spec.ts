@@ -6,7 +6,10 @@ import { SystemUserPage } from 'playwright/pages/systemuser/SystemUserPage';
 import { ClientDelegationPage } from 'playwright/pages/systemuser/ClientDelegation';
 
 test.describe('Systembruker - Eskaler', () => {
-  const { vendor, owner, regularUser } = loadTestdata('systemuser').escalate;
+  const {
+    organisasjoner: [vendor, owner],
+    personer: [regularUser],
+  } = loadTestdata('systemuser').escalate;
   const vendorOrgNumber = vendor.orgNo;
   const systemuserOwnerOrg = owner.orgNo;
   const regularUserPid = regularUser.pid; // No accessManager privileges, may escalate requests

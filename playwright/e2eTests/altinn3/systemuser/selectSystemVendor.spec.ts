@@ -6,7 +6,9 @@ import { loadTestdata } from 'playwright/util/testdata';
 // (settings API) and proves the dict-driven selectors work in a non-default
 // language. The rest of the suites run in the default bokmål.
 test.use({ language: Language.NN });
-const { owner, vendor } = loadTestdata('systemuser').creation;
+const {
+  organisasjoner: [vendor, owner],
+} = loadTestdata('systemuser').creation;
 const vendorOrgNumber = vendor.orgNo;
 const testUserPid = owner.pid;
 const testOrgName = owner.name;

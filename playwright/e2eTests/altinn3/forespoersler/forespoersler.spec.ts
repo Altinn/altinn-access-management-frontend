@@ -26,12 +26,14 @@ const byggesoknad = 'urn:altinn:accesspackage:byggesoknad';
  * To source replacements: `yarn tenor:virksomhet --env <env>` for an
  * organisation with its daglig leder, `yarn tenor --env <env> -n 1` for a person.
  */
-const ACTORS = loadTestdata('forespoersler');
+const TESTDATA = loadTestdata('forespoersler');
 
 test.describe('Forespørsler', () => {
   test.describe('godkjenn forespørsel', () => {
-    const { actor } = ACTORS.godkjenn;
-    const requester = ACTORS.godkjenn.requester.pid;
+    const {
+      organisasjoner: [actor],
+      personer: [{ pid: requester }],
+    } = TESTDATA.godkjenn;
 
     test.beforeEach(async ({ api }) => {
       await api.connections.addConnection(actor.pid, actor.orgNo, requester);
@@ -97,8 +99,10 @@ test.describe('Forespørsler', () => {
   });
 
   test.describe('avvis forespørsel', () => {
-    const { actor } = ACTORS.avvis;
-    const requester = ACTORS.avvis.requester.pid;
+    const {
+      organisasjoner: [actor],
+      personer: [{ pid: requester }],
+    } = TESTDATA.avvis;
 
     test.beforeEach(async ({ api }) => {
       await api.connections.addConnection(actor.pid, actor.orgNo, requester);
@@ -144,8 +148,10 @@ test.describe('Forespørsler', () => {
   });
 
   test.describe('godkjenn alle forespørsler', () => {
-    const { actor } = ACTORS.godkjennAlle;
-    const requester = ACTORS.godkjennAlle.requester.pid;
+    const {
+      organisasjoner: [actor],
+      personer: [{ pid: requester }],
+    } = TESTDATA.godkjennAlle;
 
     test.beforeEach(async ({ api }) => {
       await api.connections.addConnection(actor.pid, actor.orgNo, requester);
@@ -192,8 +198,10 @@ test.describe('Forespørsler', () => {
   });
 
   test.describe('sendt forespørsel', () => {
-    const { actor } = ACTORS.sendt;
-    const requester = ACTORS.sendt.requester.pid;
+    const {
+      organisasjoner: [actor],
+      personer: [{ pid: requester }],
+    } = TESTDATA.sendt;
 
     test.beforeEach(async ({ api }) => {
       await api.connections.addConnection(actor.pid, actor.orgNo, requester);
@@ -231,8 +239,10 @@ test.describe('Forespørsler', () => {
   });
 
   test.describe('trekk tilbake sendt forespørsel', () => {
-    const { actor } = ACTORS.trekkTilbake;
-    const requester = ACTORS.trekkTilbake.requester.pid;
+    const {
+      organisasjoner: [actor],
+      personer: [{ pid: requester }],
+    } = TESTDATA.trekkTilbake;
 
     test.beforeEach(async ({ api }) => {
       await api.connections.addConnection(actor.pid, actor.orgNo, requester);

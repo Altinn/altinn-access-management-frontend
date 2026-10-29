@@ -4,7 +4,9 @@ import { BASELINE_EPOST, TESTDATA } from './testdata';
 
 test.describe('Innstillinger - SMS-adresser', () => {
   test.describe('legg til SMS-adresse', () => {
-    const { actor } = TESTDATA.leggTilSms;
+    const {
+      organisasjoner: [actor],
+    } = TESTDATA.leggTilSms;
     // Deliberately an obviously-synthetic number, matching the dummy values in
     // the repo's own mock data. Any structurally valid Norwegian mobile number
     // could belong to a real subscriber, and this one is briefly registered as a

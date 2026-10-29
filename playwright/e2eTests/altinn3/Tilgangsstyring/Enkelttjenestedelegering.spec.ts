@@ -7,7 +7,9 @@ const service = 'bruno-correspondence';
 
 test.describe('Enkelttjenestedelegering fra person til person og person til org', () => {
   test.describe('Deleger enkelttjeneste til person', () => {
-    const { delegator, recipient } = TESTDATA.personDelegerTilPerson;
+    const {
+      personer: [delegator, recipient],
+    } = TESTDATA.personDelegerTilPerson;
 
     test.beforeEach(async ({ api }) => {
       await api.connections.addConnection(delegator.pid, delegator.pid, recipient.pid);
@@ -68,7 +70,10 @@ test.describe('Enkelttjenestedelegering fra person til person og person til org'
   });
 
   test.describe('Deleger enkelttjeneste til virksomhet', () => {
-    const { delegator, recipient } = TESTDATA.personDelegerTilVirksomhet;
+    const {
+      organisasjoner: [recipient],
+      personer: [delegator],
+    } = TESTDATA.personDelegerTilVirksomhet;
 
     test.beforeEach(async ({ api }) => {
       await api.connections.addConnection(delegator.pid, delegator.pid, recipient.orgNo);
@@ -131,7 +136,9 @@ test.describe('Enkelttjenestedelegering fra person til person og person til org'
   });
 
   test.describe('Slett enkelttjenestedelegering hos person', () => {
-    const { delegator, recipient } = TESTDATA.personSlettHosPerson;
+    const {
+      personer: [delegator, recipient],
+    } = TESTDATA.personSlettHosPerson;
 
     test.beforeEach(async ({ api }) => {
       await api.connections.addConnection(delegator.pid, delegator.pid, recipient.pid);
@@ -198,7 +205,10 @@ test.describe('Enkelttjenestedelegering fra person til person og person til org'
   });
 
   test.describe('Slett enkelttjeneste hos virksomhet', () => {
-    const { delegator, recipient } = TESTDATA.personSlettHosVirksomhet;
+    const {
+      organisasjoner: [recipient],
+      personer: [delegator],
+    } = TESTDATA.personSlettHosVirksomhet;
 
     test.beforeEach(async ({ api }) => {
       await api.connections.addConnection(delegator.pid, delegator.pid, recipient.orgNo);
@@ -269,7 +279,10 @@ test.describe('Enkelttjenestedelegering fra person til person og person til org'
 
 test.describe('Enkelttjenestedelegering fra org til person og org til org', () => {
   test.describe('Deleger enkelttjeneste fra org til person', () => {
-    const { delegator, recipient } = TESTDATA.orgDelegerTilPerson;
+    const {
+      organisasjoner: [delegator],
+      personer: [recipient],
+    } = TESTDATA.orgDelegerTilPerson;
 
     test.beforeEach(async ({ api }) => {
       await api.connections.addConnection(delegator.pid, delegator.orgNo, recipient.pid);
@@ -330,7 +343,9 @@ test.describe('Enkelttjenestedelegering fra org til person og org til org', () =
   });
 
   test.describe('Deleger enkelttjeneste fra org til org', () => {
-    const { delegator, recipient } = TESTDATA.orgDelegerTilVirksomhet;
+    const {
+      organisasjoner: [delegator, recipient],
+    } = TESTDATA.orgDelegerTilVirksomhet;
 
     test.beforeEach(async ({ api }) => {
       await api.connections.addConnection(delegator.pid, delegator.orgNo, recipient.orgNo);
@@ -393,7 +408,10 @@ test.describe('Enkelttjenestedelegering fra org til person og org til org', () =
   });
 
   test.describe('Slett enkelttjenestedelegering fra org til person', () => {
-    const { delegator, recipient } = TESTDATA.orgSlettHosPerson;
+    const {
+      organisasjoner: [delegator],
+      personer: [recipient],
+    } = TESTDATA.orgSlettHosPerson;
 
     test.beforeEach(async ({ api }) => {
       await api.connections.addConnection(delegator.pid, delegator.orgNo, recipient.pid);
@@ -460,7 +478,9 @@ test.describe('Enkelttjenestedelegering fra org til person og org til org', () =
   });
 
   test.describe('Slett enkelttjeneste fra org til org', () => {
-    const { delegator, recipient } = TESTDATA.orgSlettHosVirksomhet;
+    const {
+      organisasjoner: [delegator, recipient],
+    } = TESTDATA.orgSlettHosVirksomhet;
 
     test.beforeEach(async ({ api }) => {
       await api.connections.addConnection(delegator.pid, delegator.orgNo, recipient.orgNo);

@@ -7,7 +7,10 @@ const posttjenester = 'urn:altinn:accesspackage:posttjenester';
 
 test.describe('klientadministrasjon', () => {
   test.describe('legg til bruker', () => {
-    const { actor, agent } = TESTDATA.leggTilBruker;
+    const {
+      organisasjoner: [actor],
+      personer: [agent],
+    } = TESTDATA.leggTilBruker;
 
     test('legg til bruker', async ({
       accessManagementFrontPage,
@@ -44,7 +47,10 @@ test.describe('klientadministrasjon', () => {
   });
 
   test.describe('slett bruker', () => {
-    const { actor, agent } = TESTDATA.slettBruker;
+    const {
+      organisasjoner: [actor],
+      personer: [agent],
+    } = TESTDATA.slettBruker;
 
     test.beforeEach(async ({ api }) => {
       try {
@@ -94,7 +100,10 @@ test.describe('klientadministrasjon', () => {
   });
 
   test.describe('deleger klient til en bruker fra klientfanen', () => {
-    const { actor, client, agent } = TESTDATA.delegerFraKlientfanen;
+    const {
+      organisasjoner: [actor, client],
+      personer: [agent],
+    } = TESTDATA.delegerFraKlientfanen;
 
     test.beforeEach(async ({ api }) => {
       try {
@@ -161,7 +170,10 @@ test.describe('klientadministrasjon', () => {
   });
 
   test.describe('deleger klient til en bruker fra brukerfanen', () => {
-    const { actor, client, agent } = TESTDATA.delegerFraBrukerfanen;
+    const {
+      organisasjoner: [actor, client],
+      personer: [agent],
+    } = TESTDATA.delegerFraBrukerfanen;
 
     test.beforeEach(async ({ api }) => {
       try {
@@ -229,7 +241,10 @@ test.describe('klientadministrasjon', () => {
   });
 
   test.describe('Slett fullmakt for en bruker fra brukerfanen', () => {
-    const { actor, client, agent } = TESTDATA.slettFraBrukerfanen;
+    const {
+      organisasjoner: [actor, client],
+      personer: [agent],
+    } = TESTDATA.slettFraBrukerfanen;
 
     test.beforeEach(async ({ api }) => {
       try {
@@ -305,7 +320,10 @@ test.describe('klientadministrasjon', () => {
     // which is where the aktørvelger starts paging its list. `client` must be a
     // real ER client of `actor` — an arbitrary connection between two unrelated
     // organisations does not show up under the Klienter tab.
-    const { actor, client, agent } = TESTDATA.slettFraKlientfanen;
+    const {
+      organisasjoner: [actor, client],
+      personer: [agent],
+    } = TESTDATA.slettFraKlientfanen;
 
     test.beforeEach(async ({ api }) => {
       try {

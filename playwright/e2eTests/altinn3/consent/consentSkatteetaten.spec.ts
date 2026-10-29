@@ -1,6 +1,7 @@
 import { test, expect } from 'playwright/fixture/pomFixture';
 import { addTimeToNowUtc, currentEnv } from 'playwright/util/helper';
 import { fetchKrav } from 'playwright/api-requests/SkatteetatenApiRequests';
+import { loadTestdata } from 'playwright/util/testdata';
 
 import { getConsentRequestId } from './helper/consentHelper';
 
@@ -16,10 +17,13 @@ const ENV = currentEnv().toUpperCase();
 test.describe('Samtykke - Skatteetaten krav og betalinger ende til ende', () => {
   test.describe('Org', () => {
     test.skip(ENV !== 'TT02', 'Kun TT02');
-    const orgNr = '313506673'; // Org med krav og betalinger
-    const pid = '02925796975'; // innehaver
-
     test('Godkjenn samtykke og hent skattegrunnlag', async ({ login, consentPage, api }) => {
+      // Org med krav og betalinger, og innehaveren. Finnes bare i TT02, så lastes etter skip.
+      const {
+        organisasjoner: [innehaver],
+      } = loadTestdata('samtykke').skatteetaten;
+      const orgNr = innehaver.orgNo;
+      const pid = innehaver.pid;
       const validTo = addTimeToNowUtc({ days: 5 });
 
       const consentResp = await test.step('Opprett samtykkeforespørsel', async () => {

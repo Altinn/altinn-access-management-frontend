@@ -4,7 +4,9 @@ import { BASELINE_EPOST, TESTDATA } from './testdata';
 
 test.describe('Innstillinger - e-postadresser', () => {
   test.describe('legg til e-postadresse', () => {
-    const { actor } = TESTDATA.leggTilEpost;
+    const {
+      organisasjoner: [actor],
+    } = TESTDATA.leggTilEpost;
     const nyEpost = 'playwright-ny-epost@example.com';
 
     test.beforeEach(async ({ api }) => {
@@ -45,7 +47,9 @@ test.describe('Innstillinger - e-postadresser', () => {
   });
 
   test.describe('endre e-postadresse', () => {
-    const { actor } = TESTDATA.endreAdresse;
+    const {
+      organisasjoner: [actor],
+    } = TESTDATA.endreAdresse;
     const endretEpost = 'playwright-endret@example.com';
 
     test.beforeEach(async ({ api }) => {
@@ -84,7 +88,9 @@ test.describe('Innstillinger - e-postadresser', () => {
   });
 
   test.describe('slett e-postadresse', () => {
-    const { actor } = TESTDATA.slettAdresse;
+    const {
+      organisasjoner: [actor],
+    } = TESTDATA.slettAdresse;
     const ekstraEpost = 'playwright-skal-slettes@example.com';
 
     test.beforeEach(async ({ api }) => {
@@ -127,7 +133,9 @@ test.describe('Innstillinger - e-postadresser', () => {
   });
 
   test.describe('ugyldig e-postadresse', () => {
-    const { actor } = TESTDATA.ugyldigEpost;
+    const {
+      organisasjoner: [actor],
+    } = TESTDATA.ugyldigEpost;
 
     test.beforeEach(async ({ api }) => {
       await api.settings.setNotificationAddresses(actor.pid, actor.orgNo, {

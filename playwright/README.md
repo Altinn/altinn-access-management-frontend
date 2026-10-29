@@ -94,8 +94,12 @@ Test data - what do we need?
 
 AT23 and TT02 share the ID-porten environment, so they must never use the same
 test users. Users that log in should also not be shared between specs or
-language variants, since the language is stored on the user's profile. Consent
-test data is in `e2eTests/testdata/samtykke/<env>/`, one row per test.
+language variants, since the language is stored on the user's profile.
+
+Test users live in `e2eTests/testdata/<area>/<env>/<scenario>/`, as
+`personer.csv` (`fnr,navn`) and `organisasjoner.csv` (`orgnr,navn,fnr`, where
+`fnr` is the daglig leder). Specs read them with `loadTestdata('<area>')` and
+pick rows by position.
 
 ## Maskinporten Integration
 

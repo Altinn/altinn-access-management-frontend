@@ -1,12 +1,33 @@
 import { test } from 'playwright/fixture/pomFixture';
+import { loadTestdata } from 'playwright/util/testdata';
+
+const TESTDATA = loadTestdata('header');
+const {
+  personer: [favorittBruker],
+  organisasjoner: [favorittAktoer],
+} = TESTDATA.favoritter;
+const {
+  personer: [slettedeEnheterBruker],
+  organisasjoner: [slettetAktoer],
+} = TESTDATA.slettedeEnheter;
+const {
+  personer: [sokBruker],
+  organisasjoner: [sokVirksomhet],
+} = TESTDATA.sok;
+const {
+  personer: [underenhetBruker],
+  organisasjoner: [underenhet, mottaker, hovedenhet],
+} = TESTDATA.underenhet;
 
 test.describe('Aktørvalg, valg og visning av avgiver', () => {
-  const HEADER_TEST_USER = '11886599619';
-  const SHOW_DELETED_TEST_USER = '19846999968';
-  const DEFAULT_ACTOR_NAME = 'Kunnskapsrik Kry Ape';
+  const HEADER_TEST_USER = favorittBruker.pid;
+  const SHOW_DELETED_TEST_USER = slettedeEnheterBruker.pid;
+  const DEFAULT_ACTOR_NAME = favorittAktoer.name;
 
-  const ACTOR_SEARCH_TEST_USER = '05826397782'; // Need a user with a decent number of actors to properly test the search functionality
-  const ACTOR_SEARCH_DEFAULT_ACTOR_NAME = 'Usikker Ringdue';
+  // Need a user with a decent number of actors to properly test the search functionality.
+  // The search terms below must match the `sok` test data.
+  const ACTOR_SEARCH_TEST_USER = sokBruker.pid;
+  const ACTOR_SEARCH_DEFAULT_ACTOR_NAME = sokBruker.name;
 
   test('Sjekk at slettede enheter kan vises/skjules', async ({ login, aktorvalgHeader }) => {
     await test.step('Log in', async () => {
@@ -27,7 +48,7 @@ test.describe('Aktørvalg, valg og visning av avgiver', () => {
     });
 
     await test.step('Expect one of them to be a deleted actor', async () => {
-      await aktorvalgHeader.expectDeletedActorToBeVisible('Sjelden Ren Katt Konjakk');
+      await aktorvalgHeader.expectDeletedActorToBeVisible(slettetAktoer.name);
     });
   });
 
@@ -65,8 +86,8 @@ test.describe('Aktørvalg, valg og visning av avgiver', () => {
     });
 
     await test.step('Remove actor from favorites', async () => {
-      await aktorvalgHeader.selectActorFromHeaderMenu('Håndfast Plasma');
-      await aktorvalgHeader.goToSelectActor('Håndfast Plasma');
+      await aktorvalgHeader.selectActorFromHeaderMenu(favorittBruker.name);
+      await aktorvalgHeader.goToSelectActor(favorittBruker.name);
       await aktorvalgHeader.unfavoriteFirstActor();
     });
   });
@@ -84,16 +105,16 @@ test.describe('Aktørvalg, valg og visning av avgiver', () => {
 
     await test.step('Search for actor using several fields', async () => {
       await aktorvalgHeader.typeInSearchField('Usikk');
-      await aktorvalgHeader.actorIsListed('Usikker Ringdue');
+      await aktorvalgHeader.actorIsListed(sokBruker.name);
 
       await aktorvalgHeader.typeInSearchField('1963');
-      await aktorvalgHeader.actorIsListed('Usikker Ringdue');
+      await aktorvalgHeader.actorIsListed(sokBruker.name);
 
       await aktorvalgHeader.typeInSearchField('Hensynsfull');
-      await aktorvalgHeader.actorIsListed('Hensynsfull Rik Tiger');
+      await aktorvalgHeader.actorIsListed(sokVirksomhet.name);
 
-      await aktorvalgHeader.typeInSearchField('310111872');
-      await aktorvalgHeader.actorIsListed('Hensynsfull Rik Tiger');
+      await aktorvalgHeader.typeInSearchField(sokVirksomhet.orgNo);
+      await aktorvalgHeader.actorIsListed(sokVirksomhet.name);
     });
   });
 
@@ -104,23 +125,23 @@ test.describe('Aktørvalg, valg og visning av avgiver', () => {
   }) => {
     await test.step('sett opp testdata', async () => {
       await api.connections.addConnectionAndPackagesToUser(
-        '10845998952',
-        '311908421',
-        '311151932',
+        underenhet.pid,
+        underenhet.orgNo,
+        mottaker.orgNo,
         ['urn:altinn:accesspackage:byggesoknad'],
       );
     });
 
     await test.step('Logg inn', async () => {
-      await login.LoginToAccessManagement('08868199785');
+      await login.LoginToAccessManagement(underenhetBruker.pid);
     });
 
     await test.step('Hovedenhet UVITENDE TOM TIGER AS skal ikke være klikkbar', async () => {
-      await aktorvalgHeader.orgIsNotClickableInAktorvalg('UVITENDE TOM TIGER AS');
+      await aktorvalgHeader.orgIsNotClickableInAktorvalg(hovedenhet.name);
     });
 
     await test.step('Se at underenheten for UVITENDE TOM TIGER AS er klikkbare i aktørlista', async () => {
-      await aktorvalgHeader.subOrgExistsInAktorvalg('UVITENDE TOM TIGER AS');
+      await aktorvalgHeader.subOrgExistsInAktorvalg(hovedenhet.name);
     });
   });
 
@@ -130,25 +151,25 @@ test.describe('Aktørvalg, valg og visning av avgiver', () => {
     api,
   }) => {
     await test.step('sett opp testdata', async () => {
-      await api.connections.addConnection('10845998952', '311908421', '311151932');
+      await api.connections.addConnection(underenhet.pid, underenhet.orgNo, mottaker.orgNo);
       await api.connections.delegateSingleService(
-        '10845998952',
-        '311908421',
-        '311151932',
+        underenhet.pid,
+        underenhet.orgNo,
+        mottaker.orgNo,
         'bruno-correspondence',
       );
     });
 
     await test.step('Logg inn', async () => {
-      await login.LoginToAccessManagement('08868199785');
+      await login.LoginToAccessManagement(underenhetBruker.pid);
     });
 
     await test.step('Hovedenhet UVITENDE TOM TIGER AS skal ikke være klikkbar', async () => {
-      await aktorvalgHeader.orgIsNotClickableInAktorvalg('UVITENDE TOM TIGER AS');
+      await aktorvalgHeader.orgIsNotClickableInAktorvalg(hovedenhet.name);
     });
 
     await test.step('Se at underenheten for UVITENDE TOM TIGER AS er klikkbare i aktørlista', async () => {
-      await aktorvalgHeader.subOrgExistsInAktorvalg('UVITENDE TOM TIGER AS');
+      await aktorvalgHeader.subOrgExistsInAktorvalg(hovedenhet.name);
     });
   });
 });

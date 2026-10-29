@@ -4,7 +4,9 @@ import { BASELINE_EPOST, TESTDATA } from './testdata';
 
 test.describe('Innstillinger - tilgang og validering', () => {
   test.describe('kan ikke fjerne den siste adressen', () => {
-    const { actor } = TESTDATA.sisteAdresse;
+    const {
+      organisasjoner: [actor],
+    } = TESTDATA.sisteAdresse;
 
     test.beforeEach(async ({ api }) => {
       // Exactly one email and no SMS: emptying the email field then leaves the
@@ -50,7 +52,10 @@ test.describe('Innstillinger - tilgang og validering', () => {
   });
 
   test.describe('bruker uten tilgang', () => {
-    const { admin, bruker } = TESTDATA.ikkeAdmin;
+    const {
+      organisasjoner: [admin],
+      personer: [bruker],
+    } = TESTDATA.ikkeAdmin;
 
     test.beforeEach(async ({ api }) => {
       // Make `bruker` a plain right-holder so the organisation is selectable in

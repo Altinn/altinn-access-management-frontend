@@ -22,7 +22,7 @@ import { loadTestdata } from '../../../util/testdata';
  * makes it appear under `virksomhet`'s Konsumenter tab. In `utenTilgang`, `bruker`
  * may represent the organisation but is not Maskinporten administrator.
  */
-const ACTORS = loadTestdata('maskinporten');
+const TESTDATA = loadTestdata('maskinporten');
 
 /**
  * An API that is delegable in BOTH at23 and tt02.
@@ -55,7 +55,9 @@ test.describe('Maskinporten-administrasjon', () => {
   };
 
   test.describe('oversikt', () => {
-    const { virksomhet, konsument } = ACTORS.oversikt;
+    const {
+      organisasjoner: [virksomhet, konsument],
+    } = TESTDATA.oversikt;
 
     test.beforeEach(async ({ api }) => {
       await removeSupplierIfPresent(
@@ -98,7 +100,9 @@ test.describe('Maskinporten-administrasjon', () => {
   });
 
   test.describe('legg til leverandør', () => {
-    const { virksomhet, leverandoer } = ACTORS.leggTilLeverandoer;
+    const {
+      organisasjoner: [virksomhet, leverandoer],
+    } = TESTDATA.leggTilLeverandoer;
 
     test.beforeEach(async ({ api }) => {
       await removeSupplierIfPresent(
@@ -142,7 +146,9 @@ test.describe('Maskinporten-administrasjon', () => {
   });
 
   test.describe('gi leverandør fullmakt til et API', () => {
-    const { virksomhet, leverandoer } = ACTORS.giApiFullmakt;
+    const {
+      organisasjoner: [virksomhet, leverandoer],
+    } = TESTDATA.giApiFullmakt;
 
     test.beforeEach(async ({ api }) => {
       await removeSupplierIfPresent(
@@ -209,7 +215,9 @@ test.describe('Maskinporten-administrasjon', () => {
   });
 
   test.describe('slett leverandør', () => {
-    const { virksomhet, leverandoer } = ACTORS.slettLeverandoer;
+    const {
+      organisasjoner: [virksomhet, leverandoer],
+    } = TESTDATA.slettLeverandoer;
 
     test.beforeEach(async ({ api }) => {
       await removeSupplierIfPresent(
@@ -255,7 +263,10 @@ test.describe('Maskinporten-administrasjon', () => {
   });
 
   test.describe('bruker uten tilgang', () => {
-    const { virksomhet, bruker } = ACTORS.utenTilgang;
+    const {
+      organisasjoner: [virksomhet],
+      personer: [bruker],
+    } = TESTDATA.utenTilgang;
 
     test.beforeEach(async ({ api }) => {
       // Make `bruker` a plain right-holder: able to represent the organisation,

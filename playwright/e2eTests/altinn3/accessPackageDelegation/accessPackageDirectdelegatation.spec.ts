@@ -1,6 +1,11 @@
 import { test } from 'playwright/fixture/pomFixture';
 import { DelegationApiUtil } from 'playwright/util/delegationApiUtil';
 import { withTimeout } from 'playwright/util/asyncUtils';
+import { loadTestdata } from 'playwright/util/testdata';
+
+const {
+  organisasjoner: [avgiver, rettighetshaver],
+} = loadTestdata('tilgangspakker').direktedelegering;
 
 test.describe('Delegate access pacakge from Org-A(Avgiver) to Org-B(Rettighetshaver) ', () => {
   test.beforeEach(async ({}, testInfo) => {
@@ -36,8 +41,8 @@ test.describe('Delegate access pacakge from Org-A(Avgiver) to Org-B(Rettighetsha
     await test.step('Log in', async () => {
       // LoginToAccessManagement pins the app language (before login, via the
       // settings API) so selectors match regardless of the user's profile.
-      await login.LoginToAccessManagement('04856996188');
-      await aktorvalgHeader.selectActorFromHeaderMenu('SUBJEKTIV ELASTISK TIGER AS');
+      await login.LoginToAccessManagement(avgiver.pid);
+      await aktorvalgHeader.selectActorFromHeaderMenu(avgiver.name);
       await accessManagementFrontPage.goToUsers();
     });
 
@@ -48,7 +53,7 @@ test.describe('Delegate access pacakge from Org-A(Avgiver) to Org-B(Rettighetsha
 
     // Step 4: Add organization
     await test.step('Add organization', async () => {
-      await delegation.addOrganization('213091492');
+      await delegation.addOrganization(rettighetshaver.orgNo);
     });
 
     // Step 5: Grant access to multiple packages
@@ -90,8 +95,8 @@ test.describe('Delegate access pacakge from Org-A(Avgiver) to Org-B(Rettighetsha
     aktorvalgHeader,
   }) => {
     await test.step('log in', async () => {
-      await login.LoginToAccessManagement('04856996188');
-      await aktorvalgHeader.selectActorFromHeaderMenu('SUBJEKTIV ELASTISK TIGER AS');
+      await login.LoginToAccessManagement(avgiver.pid);
+      await aktorvalgHeader.selectActorFromHeaderMenu(avgiver.name);
     });
 
     await test.step('delegate stuff via api', async () => {

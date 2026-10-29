@@ -5,11 +5,7 @@ import { loadTestdata } from 'playwright/util/testdata';
 
 test.describe('Systembruker - Legg til egen organisasjon', () => {
   const {
-    vendor,
-    owner: systemUserOwner,
-    client1,
-    client2,
-    client3,
+    organisasjoner: [vendor, systemUserOwner, client1, client2, client3],
   } = loadTestdata('systemuser').addOwnOrg;
   const vendorOrgNumber = vendor.orgNo;
   const accessPackageApiName = pickRandom(['jordbruk', 'motorvognavgift', 'pensjon']);

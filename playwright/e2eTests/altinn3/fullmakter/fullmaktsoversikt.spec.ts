@@ -15,13 +15,15 @@ import { loadTestdata } from '../../../util/testdata';
  * organisations with their daglig leder, `yarn tenor personer --env <env>` for
  * people.
  */
-const ACTORS = loadTestdata('fullmakter');
+const TESTDATA = loadTestdata('fullmakter');
 
 const PAKKE = { urn: 'urn:altinn:accesspackage:posttjenester', navn: 'Posttjenester' };
 
 test.describe('Fullmaktsoversikt', () => {
   test.describe('oversikt', () => {
-    const { virksomhet } = ACTORS.oversikt;
+    const {
+      organisasjoner: [virksomhet],
+    } = TESTDATA.oversikt;
 
     // No setup: the overview lists every access package regardless of what has
     // been delegated, and nothing here asserts on a recipient.
@@ -48,7 +50,10 @@ test.describe('Fullmaktsoversikt', () => {
   });
 
   test.describe('pakkens brukere', () => {
-    const { virksomhet, mottaker } = ACTORS.pakkensBrukere;
+    const {
+      organisasjoner: [virksomhet],
+      personer: [mottaker],
+    } = TESTDATA.pakkensBrukere;
 
     test.beforeEach(async ({ api }) => {
       await api.connections.addConnectionAndPackagesToUser(
@@ -87,7 +92,10 @@ test.describe('Fullmaktsoversikt', () => {
   });
 
   test.describe('gi og slett fullmakt fra pakkesiden', () => {
-    const { virksomhet, bruker } = ACTORS.giOgSlett;
+    const {
+      organisasjoner: [virksomhet],
+      personer: [bruker],
+    } = TESTDATA.giOgSlett;
 
     test.beforeEach(async ({ api }) => {
       // A connection WITHOUT the package, so the user shows up on the package
@@ -137,7 +145,9 @@ test.describe('Fullmaktsoversikt', () => {
   });
 
   test.describe('pakkens tjenester', () => {
-    const { virksomhet } = ACTORS.tjenester;
+    const {
+      organisasjoner: [virksomhet],
+    } = TESTDATA.tjenester;
 
     test('tjenestefanen viser tjenestene pakken gir tilgang til', async ({
       fullmaktsoversiktPage,
@@ -160,7 +170,10 @@ test.describe('Fullmaktsoversikt', () => {
   });
 
   test.describe('bruker uten tilgang', () => {
-    const { virksomhet, bruker } = ACTORS.utenTilgang;
+    const {
+      organisasjoner: [virksomhet],
+      personer: [bruker],
+    } = TESTDATA.utenTilgang;
 
     test.beforeEach(async ({ api }) => {
       // Clear any leftover from an earlier failed run first — addConnection

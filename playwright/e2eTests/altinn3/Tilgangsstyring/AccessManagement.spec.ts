@@ -6,10 +6,14 @@ const TESTDATA = loadTestdata('accessmanagement');
 const service = 'bruno-correspondence';
 
 test.describe('Tilgangsstyring', () => {
-  const { org } = TESTDATA.tilgangsstyring;
+  const {
+    organisasjoner: [org],
+  } = TESTDATA.tilgangsstyring;
 
   test.describe('Tilgangsstyrer skal kunne delegere tilgangspakker de selv har', () => {
-    const { user } = TESTDATA.tilgangsstyrer;
+    const {
+      personer: [user],
+    } = TESTDATA.tilgangsstyrer;
     const packages = [
       'urn:altinn:accesspackage:tilgangsstyrer',
       'urn:altinn:accesspackage:posttjenester',
@@ -64,7 +68,9 @@ test.describe('Tilgangsstyring', () => {
   });
 
   test.describe('Hovedadministrator skal kunne delegere nesten alle tilgangspakker', () => {
-    const { user } = TESTDATA.hovedadministrator;
+    const {
+      personer: [user],
+    } = TESTDATA.hovedadministrator;
     const packages = ['urn:altinn:accesspackage:hovedadministrator'];
 
     test.beforeEach(async ({ api }) => {
@@ -172,7 +178,9 @@ test.describe('Tilgangsstyring', () => {
   });
 
   test.describe('Vanlig bruker skal ikke kunne delegere pakker de selv ikke har tilgang til', () => {
-    const { user } = TESTDATA.vanligBruker;
+    const {
+      personer: [user],
+    } = TESTDATA.vanligBruker;
     const packages = [
       'urn:altinn:accesspackage:tilgangsstyrer',
       'urn:altinn:accesspackage:byggesoknad',
@@ -208,7 +216,9 @@ test.describe('Tilgangsstyring', () => {
   });
 
   test.describe('Standard bruker skal kun kunne se deg selv på brukere-siden', () => {
-    const { user } = TESTDATA.standardBruker;
+    const {
+      personer: [user],
+    } = TESTDATA.standardBruker;
     const packages = ['urn:altinn:accesspackage:byggesoknad'];
 
     test.beforeEach(async ({ api }) => {
@@ -249,7 +259,9 @@ test.describe('Tilgangsstyring', () => {
 
 test.describe('over- og underenheter', () => {
   test.describe('Virksomhet skal kunne se tilgangspakker hos hoved- og underenhet som delegerte dem', () => {
-    const { delegatorOrg, recipientOrg } = TESTDATA.pakkerHovedOgUnderenhet;
+    const {
+      organisasjoner: [delegatorOrg, recipientOrg],
+    } = TESTDATA.pakkerHovedOgUnderenhet;
 
     test.beforeEach(async ({ api }) => {
       await api.connections.addConnectionAndPackagesToUser(
@@ -313,7 +325,9 @@ test.describe('over- og underenheter', () => {
   });
 
   test.describe('Underenhet A som delegerte tilgangspakke til Virksomhet B skal kunne se Virksomhet B i brukerlista si', () => {
-    const { delegatorOrg, recipientOrg } = TESTDATA.pakkerUnderenhetTilVirksomhet;
+    const {
+      organisasjoner: [delegatorOrg, recipientOrg],
+    } = TESTDATA.pakkerUnderenhetTilVirksomhet;
 
     test.beforeEach(async ({ api }) => {
       await api.connections.addConnectionAndPackagesToUser(
@@ -377,7 +391,9 @@ test.describe('over- og underenheter', () => {
   });
 
   test.describe('Virksomhet skal kunne se enkelttjenester hos hoved- og underenhet som delegerte dem', () => {
-    const { delegatorOrg, recipientOrg } = TESTDATA.tjenesterHovedOgUnderenhet;
+    const {
+      organisasjoner: [delegatorOrg, recipientOrg],
+    } = TESTDATA.tjenesterHovedOgUnderenhet;
 
     test.beforeEach(async ({ api }) => {
       await api.connections.addConnection(delegatorOrg.pid, delegatorOrg.orgNo, recipientOrg.orgNo);
@@ -452,7 +468,9 @@ test.describe('over- og underenheter', () => {
   });
 
   test.describe('Underenhet A som delegerte enkelttjeneste til Virksomhet B skal kunne se Virksomhet B i brukerlista si', () => {
-    const { delegatorOrg, recipientOrg } = TESTDATA.tjenesterUnderenhetTilVirksomhet;
+    const {
+      organisasjoner: [delegatorOrg, recipientOrg],
+    } = TESTDATA.tjenesterUnderenhetTilVirksomhet;
 
     test.beforeEach(async ({ api }) => {
       await api.connections.addConnection(delegatorOrg.pid, delegatorOrg.orgNo, recipientOrg.orgNo);

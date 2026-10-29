@@ -3,14 +3,19 @@ import { loadTestdata } from '../../../util/testdata';
 
 test.describe('Delegering av klienter til Systembruker', () => {
   const testdata = loadTestdata('systemuser');
-  const vendorOrgNumber = testdata.clientDelegation.vendor.orgNo;
+  const {
+    organisasjoner: [vendor],
+  } = testdata.clientDelegation;
+  const vendorOrgNumber = vendor.orgNo;
 
   test.describe('Ansvarlig revisor', () => {
     const role = 'revisor';
     const accessPackageApiName = 'ansvarlig-revisor';
     const accessPackageDisplayName = 'Ansvarlig revisor';
 
-    const { user } = testdata.revisor;
+    const {
+      organisasjoner: [user],
+    } = testdata.revisor;
 
     let name: string;
     let response: { confirmUrl: string };
@@ -87,7 +92,9 @@ test.describe('Delegering av klienter til Systembruker', () => {
     const accessPackageApiName = 'regnskapsforer-lonn';
     const accessPackageDisplayName = 'Regnskapsfører lønn';
 
-    const { user, customer } = testdata.regnskapsfoerer;
+    const {
+      organisasjoner: [user, customer],
+    } = testdata.regnskapsfoerer;
     const customers = [
       { label: customer.name, confirmation: customer.name, orgnummer: customer.orgNo },
     ];
@@ -173,7 +180,9 @@ test.describe('Delegering av klienter til Systembruker', () => {
     const accessPackageApiName = 'forretningsforer-eiendom';
     const accessPackageDisplayName = 'Forretningsforer eiendom';
 
-    const { user, customer } = testdata.forretningsfoerer;
+    const {
+      organisasjoner: [user, customer],
+    } = testdata.forretningsfoerer;
     const customers = [
       { label: customer.name, confirmation: customer.name, orgnummer: customer.orgNo },
     ];

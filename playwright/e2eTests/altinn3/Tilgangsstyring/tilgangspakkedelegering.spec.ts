@@ -5,7 +5,9 @@ const TESTDATA = loadTestdata('tilgangspakkedelegering');
 
 test.describe('tilgangspakkedelegering fra person til person og person til org', () => {
   test.describe('Legg til ny person hos deg selv', () => {
-    const { actor, target } = TESTDATA.personLeggTilPerson;
+    const {
+      personer: [actor, target],
+    } = TESTDATA.personLeggTilPerson;
 
     test('Legg til ny person hos deg selv', async ({
       login,
@@ -45,7 +47,10 @@ test.describe('tilgangspakkedelegering fra person til person og person til org',
   });
 
   test.describe('Legg til ny virksomhet hos deg selv', () => {
-    const { actor, target } = TESTDATA.personLeggTilVirksomhet;
+    const {
+      organisasjoner: [target],
+      personer: [actor],
+    } = TESTDATA.personLeggTilVirksomhet;
 
     test('Legg til ny virksomhet hos deg selv', async ({
       login,
@@ -86,7 +91,9 @@ test.describe('tilgangspakkedelegering fra person til person og person til org',
   });
 
   test.describe('Deleger tilgangspakke til person', () => {
-    const { actor, target } = TESTDATA.personDelegerTilPerson;
+    const {
+      personer: [actor, target],
+    } = TESTDATA.personDelegerTilPerson;
     const pkg = {
       urn: 'urn:altinn:accesspackage:innbygger-utdanning',
       name: 'Utdanning',
@@ -145,7 +152,10 @@ test.describe('tilgangspakkedelegering fra person til person og person til org',
   });
 
   test.describe('Deleger tilgangspakke til virksomhet', () => {
-    const { actor, target } = TESTDATA.personDelegerTilVirksomhet;
+    const {
+      organisasjoner: [target],
+      personer: [actor],
+    } = TESTDATA.personDelegerTilVirksomhet;
     const pkg = {
       urn: 'urn:altinn:accesspackage:innbygger-utdanning',
       name: 'Utdanning',
@@ -206,7 +216,9 @@ test.describe('tilgangspakkedelegering fra person til person og person til org',
   });
 
   test.describe('Slett tilgangspakke hos person', () => {
-    const { actor, target } = TESTDATA.personSlettHosPerson;
+    const {
+      personer: [actor, target],
+    } = TESTDATA.personSlettHosPerson;
     const pkg = {
       urn: 'urn:altinn:accesspackage:innbygger-samliv',
       name: 'Samliv',
@@ -273,7 +285,10 @@ test.describe('tilgangspakkedelegering fra person til person og person til org',
   });
 
   test.describe('Slett tilgangspakke hos virksomhet', () => {
-    const { actor, target } = TESTDATA.personSlettHosVirksomhet;
+    const {
+      organisasjoner: [target],
+      personer: [actor],
+    } = TESTDATA.personSlettHosVirksomhet;
     const pkg = {
       urn: 'urn:altinn:accesspackage:innbygger-samliv',
       name: 'Samliv',
@@ -344,7 +359,10 @@ test.describe('tilgangspakkedelegering fra person til person og person til org',
 
 test.describe('tilgangspakkedelegering fra org til person og org til org', () => {
   test.describe('Legg til ny person hos din org', () => {
-    const { actor, target } = TESTDATA.orgLeggTilPerson;
+    const {
+      organisasjoner: [actor],
+      personer: [target],
+    } = TESTDATA.orgLeggTilPerson;
 
     test('Legg til ny person hos din org', async ({
       login,
@@ -384,7 +402,9 @@ test.describe('tilgangspakkedelegering fra org til person og org til org', () =>
   });
 
   test.describe('Legg til ny virksomhet hos din org', () => {
-    const { actor, target } = TESTDATA.orgLeggTilVirksomhet;
+    const {
+      organisasjoner: [actor, target],
+    } = TESTDATA.orgLeggTilVirksomhet;
 
     test('Legg til ny virksomhet hos din org', async ({
       login,
@@ -425,7 +445,10 @@ test.describe('tilgangspakkedelegering fra org til person og org til org', () =>
   });
 
   test.describe('Deleger tilgangspakke til person', () => {
-    const { actor, target } = TESTDATA.orgDelegerTilPerson;
+    const {
+      organisasjoner: [actor],
+      personer: [target],
+    } = TESTDATA.orgDelegerTilPerson;
     const pkg = {
       urn: 'urn:altinn:accesspackage:posttjenester',
       name: 'Posttjenester',
@@ -484,7 +507,9 @@ test.describe('tilgangspakkedelegering fra org til person og org til org', () =>
   });
 
   test.describe('Deleger tilgangspakke til virksomhet', () => {
-    const { actor, target } = TESTDATA.orgDelegerTilVirksomhet;
+    const {
+      organisasjoner: [actor, target],
+    } = TESTDATA.orgDelegerTilVirksomhet;
     const pkg = {
       urn: 'urn:altinn:accesspackage:posttjenester',
       name: 'Posttjenester',
@@ -545,7 +570,10 @@ test.describe('tilgangspakkedelegering fra org til person og org til org', () =>
   });
 
   test.describe('Slett tilgangspakke hos person', () => {
-    const { actor, target } = TESTDATA.orgSlettHosPerson;
+    const {
+      organisasjoner: [actor],
+      personer: [target],
+    } = TESTDATA.orgSlettHosPerson;
     const pkg = {
       urn: 'urn:altinn:accesspackage:posttjenester',
       name: 'Posttjenester',
@@ -612,7 +640,9 @@ test.describe('tilgangspakkedelegering fra org til person og org til org', () =>
   });
 
   test.describe('Slett tilgangspakke hos virksomhet', () => {
-    const { actor, target } = TESTDATA.orgSlettHosVirksomhet;
+    const {
+      organisasjoner: [actor, target],
+    } = TESTDATA.orgSlettHosVirksomhet;
     const pkg = {
       urn: 'urn:altinn:accesspackage:posttjenester',
       name: 'Posttjenester',
