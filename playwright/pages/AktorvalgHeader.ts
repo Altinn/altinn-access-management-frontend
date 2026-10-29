@@ -220,16 +220,17 @@ export class AktorvalgHeader {
     await this.selectLanguage(Language.NB);
   }
 
-  async expectedNumberOfActors(number: number) {
-    await expect(this.VisibleActors).toHaveCount(number);
-  }
-
   async expectActorToBeVisible(name: string) {
     await expect(this.VisibleActors.filter({ hasText: name })).toBeVisible();
   }
 
   async expectDeletedActorToBeVisible(name: string) {
     await expect(this.deletedActorOption(name)).toBeVisible();
+  }
+
+  async expectDeletedActorToBeHidden(name: string) {
+    await expect(this.VisibleActors.first()).toBeVisible();
+    await expect(this.deletedActorOption(name)).toHaveCount(0);
   }
 
   async closePopups() {

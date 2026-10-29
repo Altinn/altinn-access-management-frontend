@@ -151,13 +151,13 @@ Concrete rules:
 
 - **Never assume a delegation or connection is absent at test start.** Set it up explicitly, even if a previous test run should have left it in that state.
 - **Access package delegations via `api.connections` are not automatically cleaned up.** If your test adds a connection or delegates a package, verify in `afterEach` whether it needs to be removed — otherwise it accumulates across runs and can cause unexpected state for other tests using the same org numbers.
-- **Each spec file must use its own dedicated org numbers and PIDs.** Because tests run in parallel, two spec files using the same `partyOrgNo` will see each other's delegations and system users simultaneously. Assign a unique org/PID pair per spec file and never share them across files. The `beforeEach`/`afterEach` lifecycle ensures the same org can be safely reused across runs of the same spec — but only because no other spec is touching that org at the same time.
+- **Take test users from the `testbrukere` pools** (`medTestbrukere({ rolle: 'dagligLeder' | 'privatperson' | 'hovedenhet' })` in `pomFixture.ts`). Each user is reserved for one test for the whole run, so no two tests ever share a user. Create the relations the test needs via API in `beforeEach`. Use fixed scenario data (`loadTestdata`) only when the test needs a relation that cannot be created via API, with separate data for AT23 and TT02.
 
 ## Test inputs
 
 - Generate unique system names per run: `Playwright-e2e-${featureName}-${Date.now()}`
 - Avoid `Math.random()` in names — `Date.now()` is sufficient for uniqueness
-- Use fixed or well-known test data for org numbers and PIDs — do not generate these randomly
+- Never hardcode org numbers or PIDs in specs — they live in `e2eTests/testdata/`
 - If varying inputs across runs is intentional (e.g. rotating access packages), keep the set small and fully documented
 
 ## Structure

@@ -11,6 +11,16 @@ export function env(name: string): string {
 
 export const DEFAULT_ENV = 'at23';
 
+/** Fødselsåret i et fødselsnummer (også syntetiske, med måned + 80), ut fra individnummeret. */
+export function foedselsaar(fnr: string): number {
+  const aar = Number(fnr.slice(4, 6));
+  const individ = Number(fnr.slice(6, 9));
+  if (individ < 500) return 1900 + aar;
+  if (individ < 750 && aar >= 54) return 1800 + aar;
+  if (aar < 40) return 2000 + aar;
+  return 1900 + aar;
+}
+
 /**
  * The environment the tests run against. Set as a shell variable by the
  * `env:<ENV>` scripts in package.json — not read from any .env file — so it is

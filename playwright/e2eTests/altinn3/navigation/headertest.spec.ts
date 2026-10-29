@@ -1,4 +1,5 @@
 import { medTestbrukere } from 'playwright/fixture/pomFixture';
+import { foedselsaar } from 'playwright/util/helper';
 import { loadTestdata } from 'playwright/util/testdata';
 
 // Favoritter trenger bare en bruker med én aktør i tillegg til seg selv.
@@ -23,7 +24,7 @@ test.describe('Aktørvalg, valg og visning av avgiver', () => {
   const SHOW_DELETED_TEST_USER = slettedeEnheterBruker.pid;
 
   // Need a user with a decent number of actors to properly test the search functionality.
-  // The search terms below must match the `sok` test data.
+  // The search terms are taken from the `sok` test data: the user and one of their organisations.
   const ACTOR_SEARCH_TEST_USER = sokBruker.pid;
   const ACTOR_SEARCH_DEFAULT_ACTOR_NAME = sokBruker.name;
 
@@ -32,20 +33,16 @@ test.describe('Aktørvalg, valg og visning av avgiver', () => {
       await login.LoginToAccessManagement(SHOW_DELETED_TEST_USER);
     });
 
-    await test.step('Expect three actors to be visible', async () => {
+    await test.step('Deleted actor is hidden while "show deleted" is off', async () => {
       await aktorvalgHeader.uncheckShowDeletedSwitch();
-      await aktorvalgHeader.expectedNumberOfActors(3);
+      await aktorvalgHeader.expectDeletedActorToBeHidden(slettetAktoer.name);
     });
 
     await test.step('Click the "show deleted" switch', async () => {
       await aktorvalgHeader.checkShowDeletedSwitch();
     });
 
-    await test.step('Expect four actors to be visible', async () => {
-      await aktorvalgHeader.expectedNumberOfActors(4);
-    });
-
-    await test.step('Expect one of them to be a deleted actor', async () => {
+    await test.step('Deleted actor is listed and marked as deleted', async () => {
       await aktorvalgHeader.expectDeletedActorToBeVisible(slettetAktoer.name);
     });
   });
@@ -107,13 +104,13 @@ test.describe('Aktørvalg, valg og visning av avgiver', () => {
     });
 
     await test.step('Search for actor using several fields', async () => {
-      await aktorvalgHeader.typeInSearchField('Usikk');
+      await aktorvalgHeader.typeInSearchField(sokBruker.name.slice(0, 5));
       await aktorvalgHeader.actorIsListed(sokBruker.name);
 
-      await aktorvalgHeader.typeInSearchField('1963');
+      await aktorvalgHeader.typeInSearchField(String(foedselsaar(sokBruker.pid)));
       await aktorvalgHeader.actorIsListed(sokBruker.name);
 
-      await aktorvalgHeader.typeInSearchField('Hensynsfull');
+      await aktorvalgHeader.typeInSearchField(sokVirksomhet.name.split(' ')[0]);
       await aktorvalgHeader.actorIsListed(sokVirksomhet.name);
 
       await aktorvalgHeader.typeInSearchField(sokVirksomhet.orgNo);

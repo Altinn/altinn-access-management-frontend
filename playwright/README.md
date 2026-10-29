@@ -96,10 +96,18 @@ AT23 and TT02 share the ID-porten environment, so they must never use the same
 test users. Users that log in should also not be shared between specs or
 language variants, since the language is stored on the user's profile.
 
-Test users live in `e2eTests/testdata/<area>/<env>/<scenario>/`, as
-`personer.csv` (`fnr,navn`) and `organisasjoner.csv` (`orgnr,navn,fnr`, where
-`fnr` is the daglig leder). Specs read them with `loadTestdata('<area>')` and
-pick rows by position.
+Most tests take users from pools in `e2eTests/testdata/<group>/<env>.csv`
+(`privatperson`, `dagligLeder`, `hovedenhet`). Each user is reserved for one
+test for the whole run:
+
+```ts
+const test = medTestbrukere({ actor: 'dagligLeder', requester: 'privatperson' });
+```
+
+Tests that need specific relations use fixed data in
+`e2eTests/testdata/<area>/<env>/<scenario>/{personer,organisasjoner}.csv`, read
+with `loadTestdata('<area>')`. The run stops if a fødselsnummer is in both AT23
+and TT02.
 
 ## Maskinporten Integration
 
