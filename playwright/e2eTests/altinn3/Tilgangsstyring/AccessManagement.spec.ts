@@ -1,16 +1,15 @@
 import { test } from '../../../fixture/pomFixture';
+import { loadTestdata } from '../../../util/testdata';
+
+const TESTDATA = loadTestdata('accessmanagement');
 
 const service = 'bruno-correspondence';
 
 test.describe('Tilgangsstyring', () => {
-  const org = {
-    managerPid: '12816699205',
-    orgNo: '314138910',
-    name: 'UNDERDANIG DYPSINDIG TIGER AS',
-  };
+  const { org } = TESTDATA.tilgangsstyring;
 
   test.describe('Tilgangsstyrer skal kunne delegere tilgangspakker de selv har', () => {
-    const user = { pid: '70885100226', name: 'Iherdig Litteratur' };
+    const { user } = TESTDATA.tilgangsstyrer;
     const packages = [
       'urn:altinn:accesspackage:tilgangsstyrer',
       'urn:altinn:accesspackage:posttjenester',
@@ -18,17 +17,12 @@ test.describe('Tilgangsstyring', () => {
     ];
 
     test.beforeEach(async ({ api }) => {
-      await api.connections.addConnectionAndPackagesToUser(
-        org.managerPid,
-        org.orgNo,
-        user.pid,
-        packages,
-      );
+      await api.connections.addConnectionAndPackagesToUser(org.pid, org.orgNo, user.pid, packages);
     });
 
     test.afterEach(async ({ api }) => {
       try {
-        await api.connections.deleteConnection(org.managerPid, org.orgNo, [user.pid]);
+        await api.connections.deleteConnection(org.pid, org.orgNo, [user.pid]);
       } catch (error) {
         console.error('Cleanup: Failed to delete connection:', error);
       }
@@ -70,16 +64,11 @@ test.describe('Tilgangsstyring', () => {
   });
 
   test.describe('Hovedadministrator skal kunne delegere nesten alle tilgangspakker', () => {
-    const user = { pid: '64866402394', name: 'TRÅDLØS TELEFONNUMMER' };
+    const { user } = TESTDATA.hovedadministrator;
     const packages = ['urn:altinn:accesspackage:hovedadministrator'];
 
     test.beforeEach(async ({ api }) => {
-      await api.connections.addConnectionAndPackagesToUser(
-        org.managerPid,
-        org.orgNo,
-        user.pid,
-        packages,
-      );
+      await api.connections.addConnectionAndPackagesToUser(org.pid, org.orgNo, user.pid, packages);
     });
 
     test('Hovedadministrator skal kunne delegere nesten alle tilgangspakker', async ({
@@ -183,19 +172,14 @@ test.describe('Tilgangsstyring', () => {
   });
 
   test.describe('Vanlig bruker skal ikke kunne delegere pakker de selv ikke har tilgang til', () => {
-    const user = { pid: '15843346194', name: 'DYREBAR MIDDAG' };
+    const { user } = TESTDATA.vanligBruker;
     const packages = [
       'urn:altinn:accesspackage:tilgangsstyrer',
       'urn:altinn:accesspackage:byggesoknad',
     ];
 
     test.beforeEach(async ({ api }) => {
-      await api.connections.addConnectionAndPackagesToUser(
-        org.managerPid,
-        org.orgNo,
-        user.pid,
-        packages,
-      );
+      await api.connections.addConnectionAndPackagesToUser(org.pid, org.orgNo, user.pid, packages);
     });
 
     test('Vanlig bruker skal ikke kunne delegere pakker de selv ikke har tilgang til', async ({
@@ -224,21 +208,16 @@ test.describe('Tilgangsstyring', () => {
   });
 
   test.describe('Standard bruker skal kun kunne se deg selv på brukere-siden', () => {
-    const user = { pid: '22907997719' };
+    const { user } = TESTDATA.standardBruker;
     const packages = ['urn:altinn:accesspackage:byggesoknad'];
 
     test.beforeEach(async ({ api }) => {
-      await api.connections.addConnectionAndPackagesToUser(
-        org.managerPid,
-        org.orgNo,
-        user.pid,
-        packages,
-      );
+      await api.connections.addConnectionAndPackagesToUser(org.pid, org.orgNo, user.pid, packages);
     });
 
     test.afterEach(async ({ api }) => {
       try {
-        await api.connections.deleteConnection(org.managerPid, org.orgNo, [user.pid]);
+        await api.connections.deleteConnection(org.pid, org.orgNo, [user.pid]);
       } catch (error) {
         console.error('Cleanup: Failed to delete connection:', error);
       }
@@ -270,20 +249,11 @@ test.describe('Tilgangsstyring', () => {
 
 test.describe('over- og underenheter', () => {
   test.describe('Virksomhet skal kunne se tilgangspakker hos hoved- og underenhet som delegerte dem', () => {
-    const delegatorOrg = {
-      managerPid: '25916799929',
-      orgNo: '313819566',
-      name: 'SMISKENDE UMODEN TIGER AS',
-    };
-    const recipientOrg = {
-      managerPid: '30847798242',
-      orgNo: '313244555',
-      name: 'KONSERVATIV USELVISK KATT KLINKEKULE',
-    };
+    const { delegatorOrg, recipientOrg } = TESTDATA.pakkerHovedOgUnderenhet;
 
     test.beforeEach(async ({ api }) => {
       await api.connections.addConnectionAndPackagesToUser(
-        delegatorOrg.managerPid,
+        delegatorOrg.pid,
         delegatorOrg.orgNo,
         recipientOrg.orgNo,
         ['urn:altinn:accesspackage:byggesoknad'],
@@ -292,7 +262,7 @@ test.describe('over- og underenheter', () => {
 
     test.afterEach(async ({ api }) => {
       try {
-        await api.connections.deleteConnection(delegatorOrg.managerPid, delegatorOrg.orgNo, [
+        await api.connections.deleteConnection(delegatorOrg.pid, delegatorOrg.orgNo, [
           recipientOrg.orgNo,
         ]);
       } catch (error) {
@@ -306,7 +276,7 @@ test.describe('over- og underenheter', () => {
       aktorvalgHeader,
     }) => {
       await test.step('Logg inn', async () => {
-        await login.LoginToAccessManagement(recipientOrg.managerPid);
+        await login.LoginToAccessManagement(recipientOrg.pid);
       });
 
       await test.step(`Se at hovedenhet og underenhet for ${delegatorOrg.name} er klikkbare i aktørlista`, async () => {
@@ -343,16 +313,11 @@ test.describe('over- og underenheter', () => {
   });
 
   test.describe('Underenhet A som delegerte tilgangspakke til Virksomhet B skal kunne se Virksomhet B i brukerlista si', () => {
-    const delegatorOrg = {
-      managerPid: '12828099912',
-      orgNo: '312160862',
-      name: 'INITIATIVRIK TOM TIGER AS',
-    };
-    const recipientOrg = { orgNo: '313244555', name: 'KONSERVATIV USELVISK KATT KLINKEKULE' };
+    const { delegatorOrg, recipientOrg } = TESTDATA.pakkerUnderenhetTilVirksomhet;
 
     test.beforeEach(async ({ api }) => {
       await api.connections.addConnectionAndPackagesToUser(
-        delegatorOrg.managerPid,
+        delegatorOrg.pid,
         delegatorOrg.orgNo,
         recipientOrg.orgNo,
         ['urn:altinn:accesspackage:byggesoknad'],
@@ -361,7 +326,7 @@ test.describe('over- og underenheter', () => {
 
     test.afterEach(async ({ api }) => {
       try {
-        await api.connections.deleteConnection(delegatorOrg.managerPid, delegatorOrg.orgNo, [
+        await api.connections.deleteConnection(delegatorOrg.pid, delegatorOrg.orgNo, [
           recipientOrg.orgNo,
         ]);
       } catch (error) {
@@ -375,7 +340,7 @@ test.describe('over- og underenheter', () => {
       aktorvalgHeader,
     }) => {
       await test.step('Logg inn', async () => {
-        await login.LoginToAccessManagement(delegatorOrg.managerPid);
+        await login.LoginToAccessManagement(delegatorOrg.pid);
       });
 
       await test.step(`Velg underenhet ${delegatorOrg.name} og gå til brukere`, async () => {
@@ -412,25 +377,12 @@ test.describe('over- og underenheter', () => {
   });
 
   test.describe('Virksomhet skal kunne se enkelttjenester hos hoved- og underenhet som delegerte dem', () => {
-    const delegatorOrg = {
-      managerPid: '26888197213',
-      orgNo: '310959502',
-      name: 'RIKTIG AUTENTISK APE',
-    };
-    const recipientOrg = {
-      managerPid: '16906997766',
-      orgNo: '312791404',
-      name: 'FORMBAR GENIERKLÆRT TIGER AS',
-    };
+    const { delegatorOrg, recipientOrg } = TESTDATA.tjenesterHovedOgUnderenhet;
 
     test.beforeEach(async ({ api }) => {
-      await api.connections.addConnection(
-        delegatorOrg.managerPid,
-        delegatorOrg.orgNo,
-        recipientOrg.orgNo,
-      );
+      await api.connections.addConnection(delegatorOrg.pid, delegatorOrg.orgNo, recipientOrg.orgNo);
       await api.connections.delegateSingleService(
-        delegatorOrg.managerPid,
+        delegatorOrg.pid,
         delegatorOrg.orgNo,
         recipientOrg.orgNo,
         service,
@@ -440,7 +392,7 @@ test.describe('over- og underenheter', () => {
     test.afterEach(async ({ api }) => {
       try {
         await api.connections.deleteSingleServiceDelegation(
-          delegatorOrg.managerPid,
+          delegatorOrg.pid,
           delegatorOrg.orgNo,
           recipientOrg.orgNo,
           service,
@@ -449,7 +401,7 @@ test.describe('over- og underenheter', () => {
         console.error('Cleanup: Failed to delete single service delegation:', error);
       }
       try {
-        await api.connections.deleteConnection(delegatorOrg.managerPid, delegatorOrg.orgNo, [
+        await api.connections.deleteConnection(delegatorOrg.pid, delegatorOrg.orgNo, [
           recipientOrg.orgNo,
         ]);
       } catch (error) {
@@ -463,7 +415,7 @@ test.describe('over- og underenheter', () => {
       aktorvalgHeader,
     }) => {
       await test.step('Logg inn', async () => {
-        await login.LoginToAccessManagement(recipientOrg.managerPid);
+        await login.LoginToAccessManagement(recipientOrg.pid);
       });
 
       await test.step(`Se at hovedenhet og underenhet for ${delegatorOrg.name} er klikkbare i aktørlista`, async () => {
@@ -500,21 +452,12 @@ test.describe('over- og underenheter', () => {
   });
 
   test.describe('Underenhet A som delegerte enkelttjeneste til Virksomhet B skal kunne se Virksomhet B i brukerlista si', () => {
-    const delegatorOrg = {
-      managerPid: '15817195900',
-      orgNo: '313019020',
-      name: 'KLOK VÅRLIG TIGER AS',
-    };
-    const recipientOrg = { orgNo: '312791404', name: 'FORMBAR GENIERKLÆRT TIGER AS' };
+    const { delegatorOrg, recipientOrg } = TESTDATA.tjenesterUnderenhetTilVirksomhet;
 
     test.beforeEach(async ({ api }) => {
-      await api.connections.addConnection(
-        delegatorOrg.managerPid,
-        delegatorOrg.orgNo,
-        recipientOrg.orgNo,
-      );
+      await api.connections.addConnection(delegatorOrg.pid, delegatorOrg.orgNo, recipientOrg.orgNo);
       await api.connections.delegateSingleService(
-        delegatorOrg.managerPid,
+        delegatorOrg.pid,
         delegatorOrg.orgNo,
         recipientOrg.orgNo,
         service,
@@ -524,7 +467,7 @@ test.describe('over- og underenheter', () => {
     test.afterEach(async ({ api }) => {
       try {
         await api.connections.deleteSingleServiceDelegation(
-          delegatorOrg.managerPid,
+          delegatorOrg.pid,
           delegatorOrg.orgNo,
           recipientOrg.orgNo,
           service,
@@ -533,7 +476,7 @@ test.describe('over- og underenheter', () => {
         console.error('Cleanup: Failed to delete single service delegation:', error);
       }
       try {
-        await api.connections.deleteConnection(delegatorOrg.managerPid, delegatorOrg.orgNo, [
+        await api.connections.deleteConnection(delegatorOrg.pid, delegatorOrg.orgNo, [
           recipientOrg.orgNo,
         ]);
       } catch (error) {
@@ -547,7 +490,7 @@ test.describe('over- og underenheter', () => {
       aktorvalgHeader,
     }) => {
       await test.step('Logg inn', async () => {
-        await login.LoginToAccessManagement(delegatorOrg.managerPid);
+        await login.LoginToAccessManagement(delegatorOrg.pid);
       });
 
       await test.step(`Velg underenhet ${delegatorOrg.name} og gå til brukere`, async () => {

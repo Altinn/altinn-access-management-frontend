@@ -1,12 +1,13 @@
 import { expect, test } from '../../../fixture/pomFixture';
 import { ApiError } from '../../../api-requests/apiRequest';
+import { loadTestdata } from '../../../util/testdata';
 
+const TESTDATA = loadTestdata('klientadministrasjon');
 const posttjenester = 'urn:altinn:accesspackage:posttjenester';
 
 test.describe('klientadministrasjon', () => {
   test.describe('legg til bruker', () => {
-    const actor = { pid: '09866598352', org: '213779702', orgName: 'UVANLIG FILOSOFISK TIGER AS' };
-    const agent = { pid: '29814895546', name: 'MUNTER SKO', lastName: 'Sko' };
+    const { actor, agent } = TESTDATA.leggTilBruker;
 
     test('legg til bruker', async ({
       accessManagementFrontPage,
@@ -14,9 +15,9 @@ test.describe('klientadministrasjon', () => {
       login,
       aktorvalgHeader,
     }) => {
-      await test.step(`Logg inn som ${actor.orgName} og åpne klientadministrasjon`, async () => {
+      await test.step(`Logg inn som ${actor.name} og åpne klientadministrasjon`, async () => {
         await login.LoginToAccessManagement(actor.pid);
-        await aktorvalgHeader.selectActorFromHeaderMenu(actor.orgName);
+        await aktorvalgHeader.selectActorFromHeaderMenu(actor.name);
         await accessManagementFrontPage.goToKlientAdministrasjon();
       });
 
@@ -35,7 +36,7 @@ test.describe('klientadministrasjon', () => {
 
     test.afterEach(async ({ api }) => {
       try {
-        await api.connections.deleteClientDelegationAgent(actor.pid, actor.org, agent.pid);
+        await api.connections.deleteClientDelegationAgent(actor.pid, actor.orgNo, agent.pid);
       } catch (error) {
         console.error('Cleanup: Failed to delete client delegation agent:', error);
       }
@@ -43,16 +44,15 @@ test.describe('klientadministrasjon', () => {
   });
 
   test.describe('slett bruker', () => {
-    const actor = { pid: '16830197862', org: '311164651', orgName: 'KLARTENKT UPRESIS ISBJØRN SA' };
-    const agent = { pid: '30877795760', name: 'TROVERDIG JUICE' };
+    const { actor, agent } = TESTDATA.slettBruker;
 
     test.beforeEach(async ({ api }) => {
       try {
-        await api.connections.deleteClientDelegationAgent(actor.pid, actor.org, agent.pid);
+        await api.connections.deleteClientDelegationAgent(actor.pid, actor.orgNo, agent.pid);
       } catch {
         /* ignore if nothing to clean */
       }
-      await api.connections.addClientDelegationAgent(actor.pid, actor.org, agent.pid);
+      await api.connections.addClientDelegationAgent(actor.pid, actor.orgNo, agent.pid);
     });
 
     test('slett bruker', async ({
@@ -61,9 +61,9 @@ test.describe('klientadministrasjon', () => {
       login,
       aktorvalgHeader,
     }) => {
-      await test.step(`Logg inn som ${actor.orgName} og åpne klientadministrasjon`, async () => {
+      await test.step(`Logg inn som ${actor.name} og åpne klientadministrasjon`, async () => {
         await login.LoginToAccessManagement(actor.pid);
-        await aktorvalgHeader.selectActorFromHeaderMenu(actor.orgName);
+        await aktorvalgHeader.selectActorFromHeaderMenu(actor.name);
         await accessManagementFrontPage.goToKlientAdministrasjon();
       });
 
@@ -86,7 +86,7 @@ test.describe('klientadministrasjon', () => {
       if (testInfo.status === 'passed') return;
 
       try {
-        await api.connections.deleteClientDelegationAgent(actor.pid, actor.org, agent.pid);
+        await api.connections.deleteClientDelegationAgent(actor.pid, actor.orgNo, agent.pid);
       } catch (error) {
         console.error('Cleanup: Failed to delete client delegation agent:', error);
       }
@@ -94,33 +94,24 @@ test.describe('klientadministrasjon', () => {
   });
 
   test.describe('deleger klient til en bruker fra klientfanen', () => {
-    const actor = { pid: '15846199893', org: '310002224', orgName: 'TRÅDLØS FORNUFTIG KATT LYTE' };
-    const client = {
-      connectionPid: '28868199808',
-      org: '314087917',
-      orgName: 'PARISK AKADEMISK KATT SITRON',
-    };
-    const agent = { pid: '28822449737', name: 'SINDIG BRUD' };
+    const { actor, client, agent } = TESTDATA.delegerFraKlientfanen;
 
     test.beforeEach(async ({ api }) => {
       try {
-        await api.connections.deleteConnection(client.connectionPid, client.org, [actor.org]);
+        await api.connections.deleteConnection(client.pid, client.orgNo, [actor.orgNo]);
       } catch {
         /* ignore if nothing to clean */
       }
       try {
-        await api.connections.deleteClientDelegationAgent(actor.pid, actor.org, agent.pid);
+        await api.connections.deleteClientDelegationAgent(actor.pid, actor.orgNo, agent.pid);
       } catch {
         /* ignore if nothing to clean */
       }
 
-      await api.connections.addConnectionAndPackagesToUser(
-        client.connectionPid,
-        client.org,
-        actor.org,
-        [posttjenester],
-      );
-      await api.connections.addClientDelegationAgent(actor.pid, actor.org, agent.pid);
+      await api.connections.addConnectionAndPackagesToUser(client.pid, client.orgNo, actor.orgNo, [
+        posttjenester,
+      ]);
+      await api.connections.addClientDelegationAgent(actor.pid, actor.orgNo, agent.pid);
     });
 
     test('deleger klient til en bruker fra klientfanen', async ({
@@ -129,15 +120,15 @@ test.describe('klientadministrasjon', () => {
       login,
       aktorvalgHeader,
     }) => {
-      await test.step(`Logg inn som ${actor.orgName} og åpne klientadministrasjon`, async () => {
+      await test.step(`Logg inn som ${actor.name} og åpne klientadministrasjon`, async () => {
         await login.LoginToAccessManagement(actor.pid);
-        await aktorvalgHeader.selectActorFromHeaderMenu(actor.orgName);
+        await aktorvalgHeader.selectActorFromHeaderMenu(actor.name);
         await accessManagementFrontPage.goToKlientAdministrasjon();
       });
 
-      await test.step(`Gå til klientfanen og velg ${client.orgName}`, async () => {
+      await test.step(`Gå til klientfanen og velg ${client.name}`, async () => {
         await klientAdministrasjonPage.goToKlientFane();
-        await klientAdministrasjonPage.klikkListeElement(client.orgName);
+        await klientAdministrasjonPage.klikkListeElement(client.name);
       });
 
       await test.step(`Gi ${agent.name} fullmakt til Posttjenester`, async () => {
@@ -157,12 +148,12 @@ test.describe('klientadministrasjon', () => {
 
     test.afterEach(async ({ api }) => {
       try {
-        await api.connections.deleteConnection(client.connectionPid, client.org, [actor.org]);
+        await api.connections.deleteConnection(client.pid, client.orgNo, [actor.orgNo]);
       } catch (error) {
         console.error('Cleanup: Failed to delete connection:', error);
       }
       try {
-        await api.connections.deleteClientDelegationAgent(actor.pid, actor.org, agent.pid);
+        await api.connections.deleteClientDelegationAgent(actor.pid, actor.orgNo, agent.pid);
       } catch (error) {
         console.error('Cleanup: Failed to delete client delegation agent:', error);
       }
@@ -170,37 +161,24 @@ test.describe('klientadministrasjon', () => {
   });
 
   test.describe('deleger klient til en bruker fra brukerfanen', () => {
-    const actor = {
-      pid: '16852749125',
-      org: '313662624',
-      orgName: 'INTERESSERT KONVENSJONELL TIGER AS',
-    };
-    const client = {
-      connectionPid: '23907296857',
-      org: '313238105',
-      orgName: 'BESTEMT SLAKK TIGER AS',
-    };
-    const agent = { pid: '47822800420', name: 'UVANLIG FREDAG' };
+    const { actor, client, agent } = TESTDATA.delegerFraBrukerfanen;
 
     test.beforeEach(async ({ api }) => {
       try {
-        await api.connections.deleteConnection(client.connectionPid, client.org, [actor.org]);
+        await api.connections.deleteConnection(client.pid, client.orgNo, [actor.orgNo]);
       } catch {
         /* ignore if nothing to clean */
       }
       try {
-        await api.connections.deleteClientDelegationAgent(actor.pid, actor.org, agent.pid);
+        await api.connections.deleteClientDelegationAgent(actor.pid, actor.orgNo, agent.pid);
       } catch {
         /* ignore if nothing to clean */
       }
 
-      await api.connections.addConnectionAndPackagesToUser(
-        client.connectionPid,
-        client.org,
-        actor.org,
-        [posttjenester],
-      );
-      await api.connections.addClientDelegationAgent(actor.pid, actor.org, agent.pid);
+      await api.connections.addConnectionAndPackagesToUser(client.pid, client.orgNo, actor.orgNo, [
+        posttjenester,
+      ]);
+      await api.connections.addClientDelegationAgent(actor.pid, actor.orgNo, agent.pid);
     });
 
     test('deleger klient til en bruker fra brukerfanen', async ({
@@ -209,9 +187,9 @@ test.describe('klientadministrasjon', () => {
       login,
       aktorvalgHeader,
     }) => {
-      await test.step(`Logg inn som ${actor.orgName} og åpne klientadministrasjon`, async () => {
+      await test.step(`Logg inn som ${actor.name} og åpne klientadministrasjon`, async () => {
         await login.LoginToAccessManagement(actor.pid);
-        await aktorvalgHeader.selectActorFromHeaderMenu(actor.orgName);
+        await aktorvalgHeader.selectActorFromHeaderMenu(actor.name);
         await accessManagementFrontPage.goToKlientAdministrasjon();
       });
 
@@ -221,14 +199,14 @@ test.describe('klientadministrasjon', () => {
         await klientAdministrasjonPage.verifyPaaBrukerDetaljer();
       });
 
-      await test.step(`Gi ${agent.name} fullmakt til Posttjenester for ${client.orgName}`, async () => {
+      await test.step(`Gi ${agent.name} fullmakt til Posttjenester for ${client.name}`, async () => {
         await klientAdministrasjonPage.klikkAlleKlienter();
-        await klientAdministrasjonPage.klikkKnapp(client.orgName);
+        await klientAdministrasjonPage.klikkKnapp(client.name);
         await klientAdministrasjonPage.klikkGiFullmakt('Posttjenester');
       });
 
       await test.step(`${agent.name} finnes nå i listen over eksisterende brukere`, async () => {
-        await expect(klientAdministrasjonPage.klientKnapp(client.orgName)).toBeVisible();
+        await expect(klientAdministrasjonPage.klientKnapp(client.name)).toBeVisible();
       });
 
       await test.step('og har tilgangspakken Posttjenester', async () => {
@@ -238,12 +216,12 @@ test.describe('klientadministrasjon', () => {
 
     test.afterEach(async ({ api }) => {
       try {
-        await api.connections.deleteConnection(client.connectionPid, client.org, [actor.org]);
+        await api.connections.deleteConnection(client.pid, client.orgNo, [actor.orgNo]);
       } catch (error) {
         console.error('Cleanup: Failed to delete connection:', error);
       }
       try {
-        await api.connections.deleteClientDelegationAgent(actor.pid, actor.org, agent.pid);
+        await api.connections.deleteClientDelegationAgent(actor.pid, actor.orgNo, agent.pid);
       } catch (error) {
         console.error('Cleanup: Failed to delete client delegation agent:', error);
       }
@@ -251,41 +229,32 @@ test.describe('klientadministrasjon', () => {
   });
 
   test.describe('Slett fullmakt for en bruker fra brukerfanen', () => {
-    const actor = { pid: '08873349590', org: '312772655', orgName: 'RØRETE RAKRYGGET TIGER AS' };
-    const client = {
-      connectionPid: '12886999389',
-      org: '313428435',
-      orgName: 'ROSA UNDERDANIG TIGER AS',
-    };
-    const agent = { pid: '04905999376', name: 'FORSTÅELSESFULL TRAFIKKORK' };
+    const { actor, client, agent } = TESTDATA.slettFraBrukerfanen;
 
     test.beforeEach(async ({ api }) => {
       try {
-        await api.connections.deleteConnection(client.connectionPid, client.org, [actor.org]);
+        await api.connections.deleteConnection(client.pid, client.orgNo, [actor.orgNo]);
       } catch (error) {
         if (!(error instanceof ApiError) || error.status !== 404) {
           console.warn('Pre-test cleanup: Failed to delete connection:', error);
         }
       }
       try {
-        await api.connections.deleteClientDelegationAgent(actor.pid, actor.org, agent.pid);
+        await api.connections.deleteClientDelegationAgent(actor.pid, actor.orgNo, agent.pid);
       } catch (error) {
         if (!(error instanceof ApiError) || error.status !== 404) {
           console.warn('Pre-test cleanup: Failed to delete client delegation agent:', error);
         }
       }
 
-      await api.connections.addConnectionAndPackagesToUser(
-        client.connectionPid,
-        client.org,
-        actor.org,
-        [posttjenester],
-      );
-      await api.connections.addClientDelegationAgent(actor.pid, actor.org, agent.pid);
+      await api.connections.addConnectionAndPackagesToUser(client.pid, client.orgNo, actor.orgNo, [
+        posttjenester,
+      ]);
+      await api.connections.addClientDelegationAgent(actor.pid, actor.orgNo, agent.pid);
       await api.connections.delegerKlientTilBruker(
         actor.pid,
-        actor.org,
-        client.org,
+        actor.orgNo,
+        client.orgNo,
         agent.pid,
         posttjenester,
       );
@@ -297,15 +266,15 @@ test.describe('klientadministrasjon', () => {
       login,
       aktorvalgHeader,
     }) => {
-      await test.step(`Logg inn som ${actor.orgName} og åpne klientadministrasjon`, async () => {
+      await test.step(`Logg inn som ${actor.name} og åpne klientadministrasjon`, async () => {
         await login.LoginToAccessManagement(actor.pid);
-        await aktorvalgHeader.selectActorFromHeaderMenu(actor.orgName);
+        await aktorvalgHeader.selectActorFromHeaderMenu(actor.name);
         await accessManagementFrontPage.goToKlientAdministrasjon();
       });
 
-      await test.step(`Gå til klienten ${client.orgName} hos brukeren ${agent.name}`, async () => {
+      await test.step(`Gå til klienten ${client.name} hos brukeren ${agent.name}`, async () => {
         await klientAdministrasjonPage.klikkBruker(agent.name);
-        await klientAdministrasjonPage.klikkKnapp(client.orgName);
+        await klientAdministrasjonPage.klikkKnapp(client.name);
       });
 
       await test.step('Slett fullmakt for Posttjenester', async () => {
@@ -319,12 +288,12 @@ test.describe('klientadministrasjon', () => {
 
     test.afterEach(async ({ api }) => {
       try {
-        await api.connections.deleteConnection(client.connectionPid, client.org, [actor.org]);
+        await api.connections.deleteConnection(client.pid, client.orgNo, [actor.orgNo]);
       } catch (error) {
         console.error('Cleanup: Failed to delete connection:', error);
       }
       try {
-        await api.connections.deleteClientDelegationAgent(actor.pid, actor.org, agent.pid);
+        await api.connections.deleteClientDelegationAgent(actor.pid, actor.orgNo, agent.pid);
       } catch (error) {
         console.error('Cleanup: Failed to delete client delegation agent:', error);
       }
@@ -336,37 +305,28 @@ test.describe('klientadministrasjon', () => {
     // which is where the aktørvelger starts paging its list. `client` must be a
     // real ER client of `actor` — an arbitrary connection between two unrelated
     // organisations does not show up under the Klienter tab.
-    const actor = { pid: '16847999717', org: '310280623', orgName: 'SKYFRI OPPRØMT TIGER AS' };
-    const client = {
-      connectionPid: '01909299930',
-      org: '313430626',
-      orgName: 'LETT AKVATISK KATT MANDOLIN',
-    };
-    const agent = { pid: '15855499999', name: 'INKONSEKVENT AMBULANSE' };
+    const { actor, client, agent } = TESTDATA.slettFraKlientfanen;
 
     test.beforeEach(async ({ api }) => {
       try {
-        await api.connections.deleteConnection(client.connectionPid, client.org, [actor.org]);
+        await api.connections.deleteConnection(client.pid, client.orgNo, [actor.orgNo]);
       } catch {
         /* ignore if nothing to clean */
       }
       try {
-        await api.connections.deleteClientDelegationAgent(actor.pid, actor.org, agent.pid);
+        await api.connections.deleteClientDelegationAgent(actor.pid, actor.orgNo, agent.pid);
       } catch {
         /* ignore if nothing to clean */
       }
 
-      await api.connections.addConnectionAndPackagesToUser(
-        client.connectionPid,
-        client.org,
-        actor.org,
-        [posttjenester],
-      );
-      await api.connections.addClientDelegationAgent(actor.pid, actor.org, agent.pid);
+      await api.connections.addConnectionAndPackagesToUser(client.pid, client.orgNo, actor.orgNo, [
+        posttjenester,
+      ]);
+      await api.connections.addClientDelegationAgent(actor.pid, actor.orgNo, agent.pid);
       await api.connections.delegerKlientTilBruker(
         actor.pid,
-        actor.org,
-        client.org,
+        actor.orgNo,
+        client.orgNo,
         agent.pid,
         posttjenester,
       );
@@ -378,16 +338,16 @@ test.describe('klientadministrasjon', () => {
       login,
       aktorvalgHeader,
     }) => {
-      await test.step(`Logg inn som ${actor.orgName} og åpne klientadministrasjon`, async () => {
+      await test.step(`Logg inn som ${actor.name} og åpne klientadministrasjon`, async () => {
         await login.LoginToAccessManagement(actor.pid);
-        await aktorvalgHeader.selectActorFromHeaderMenu(actor.orgName);
+        await aktorvalgHeader.selectActorFromHeaderMenu(actor.name);
         await accessManagementFrontPage.goToKlientAdministrasjon();
       });
 
-      await test.step(`Gå til brukeren ${agent.name} hos klienten ${client.orgName}`, async () => {
+      await test.step(`Gå til brukeren ${agent.name} hos klienten ${client.name}`, async () => {
         await klientAdministrasjonPage.verifyPaaKlientadministrasjon();
         await klientAdministrasjonPage.goToKlientFane();
-        await klientAdministrasjonPage.klikkListeElement(client.orgName);
+        await klientAdministrasjonPage.klikkListeElement(client.name);
         await klientAdministrasjonPage.verifyPaaKlientDetaljer();
         await klientAdministrasjonPage.klikkKnapp(agent.name);
       });
@@ -403,12 +363,12 @@ test.describe('klientadministrasjon', () => {
 
     test.afterEach(async ({ api }) => {
       try {
-        await api.connections.deleteConnection(client.connectionPid, client.org, [actor.org]);
+        await api.connections.deleteConnection(client.pid, client.orgNo, [actor.orgNo]);
       } catch (error) {
         console.error('Cleanup: Failed to delete connection:', error);
       }
       try {
-        await api.connections.deleteClientDelegationAgent(actor.pid, actor.org, agent.pid);
+        await api.connections.deleteClientDelegationAgent(actor.pid, actor.orgNo, agent.pid);
       } catch (error) {
         console.error('Cleanup: Failed to delete client delegation agent:', error);
       }
