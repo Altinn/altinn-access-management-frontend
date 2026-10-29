@@ -70,11 +70,13 @@ export class LoginPage {
     const antallAktoerer = await this.api.authorizedParties.antallAktoererForbruker(
       this.loggedInPid,
     );
-    const dialog = this.page.getByRole('dialog');
-    await expect(dialog).toBeVisible();
+    // Aktørvalget etter innlogging rendres som hovedinnhold, ikke som dialog.
+    const accountSelector = this.page.getByRole('main');
+    const menu = accountSelector.getByRole('menu');
+    await expect(menu).toBeVisible();
 
-    const searchBox = dialog.getByRole('searchbox');
-    const item = dialog.getByRole('menuitem', { name: targetReportee }).first();
+    const searchBox = accountSelector.getByRole('searchbox');
+    const item = menu.getByRole('menuitem', { name: targetReportee }).first();
 
     // Dersom flere enn 5 kan man søke i aktørene
     if (antallAktoerer > 5) {
@@ -82,7 +84,7 @@ export class LoginPage {
     }
 
     await item.click();
-    await expect(dialog).not.toBeVisible();
+    await expect(menu).toBeHidden();
   }
 
   private async navigateToLoginPage() {
