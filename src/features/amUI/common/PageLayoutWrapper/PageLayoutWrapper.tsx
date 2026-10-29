@@ -34,7 +34,10 @@ export const PageLayoutWrapper = ({
   const { menuGroups } = useGlobalMenu();
   const { isAnswered, acceptAll, rejectAll } = useConsent();
 
-  const { header, languageCode } = useHeader({ openAccountMenu, hideSidebarItems: hideSidebar });
+  const { header, languageCode, accountSelectionAsMain } = useHeader({
+    openAccountMenu,
+    hideSidebarItems: hideSidebar,
+  });
   const footer = useFooter();
   const { sidebarItems, shortcutsMenuItem } = useSidebarItems({ isSmall: false });
 
@@ -46,6 +49,7 @@ export const PageLayoutWrapper = ({
           color={reportee ? getPartyColor(reportee) : 'neutral'}
           theme='subtle'
           header={header}
+          accountSelectionAsMain={accountSelectionAsMain}
           banner={{
             title: t('info_banner.info'),
             link: {
