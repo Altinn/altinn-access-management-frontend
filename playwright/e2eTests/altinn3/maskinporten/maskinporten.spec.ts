@@ -295,7 +295,9 @@ test.describe('Maskinporten-administrasjon', () => {
         await maskinportenPage.goToMaskinportenViaUrl();
         // Assert where the user ended up, not just that the page is absent —
         // a bare toBeHidden() would also pass mid-load or on an error page.
-        await expect(maskinportenPage.page).toHaveURL(maskinportenPage.landingssideUrl);
+        await expect(maskinportenPage.page).toHaveURL((url) =>
+          maskinportenPage.landingssideUrl(url),
+        );
         await expect(maskinportenPage.landingssideOverskrift).toBeVisible();
         await expect(maskinportenPage.pageHeading).toBeHidden();
       });

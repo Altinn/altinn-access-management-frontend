@@ -43,16 +43,6 @@ export function loadEnv(envName: string, { override = true }: { override?: boole
   });
 }
 
-/** Escapes regex special characters so `value` is matched literally. */
-export function escapeRegExp(value: string): string {
-  return value.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
-}
-
-/** Matches text or an accessible name that BEGINS with `value`. */
-export function startsWith(value: string): RegExp {
-  return new RegExp(`^${escapeRegExp(value)}`);
-}
-
 /**
  * Picks a random element from an array
  */

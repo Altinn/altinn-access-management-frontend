@@ -1,6 +1,6 @@
 import { expect, type Locator, type Page } from '@playwright/test';
 
-import { env, startsWith, withPoaObject } from 'playwright/util/helper';
+import { env, withPoaObject } from 'playwright/util/helper';
 
 import { LANGUAGE_DICTIONARIES, Language, type Dict } from '../LanguageMenu';
 import { SidebarNav } from '../SidebarNav';
@@ -74,14 +74,12 @@ export class ForespoerslerPage {
       name: this.texts.common.close,
       exact: true,
     });
-    // Anchored rather than exact: the list step shows the bare status word while
-    // the detail step renders it inside "{{status}} den {{date}}", so an exact
-    // match misses the latter. A plain substring match is too loose in the other
-    // direction — it also catches the "Forespørsel godkjent" snackbar, since
-    // getByText matches case-insensitively. Anchoring to the start keeps both
-    // status renderings and drops the snackbar.
-    this.godkjentStatus = this.dialog.getByText(startsWith(requests.review_approved));
-    this.avvistStatus = this.dialog.getByText(startsWith(requests.review_rejected));
+    // Anchored to the start: the list step shows the bare status word while the
+    // detail step renders "{{status}} den {{date}}", and the snackbars
+    // ("Forespørsel godkjent", "Alle forespørsler godkjent") also contain the word.
+    // The status words are plain single words, so they need no regex escaping.
+    this.godkjentStatus = this.dialog.getByText(new RegExp(`^${requests.review_approved}`));
+    this.avvistStatus = this.dialog.getByText(new RegExp(`^${requests.review_rejected}`));
     this.kanIkkeGodkjenneVarsel = this.dialog.getByText(requests.cannot_approve_package);
   }
 

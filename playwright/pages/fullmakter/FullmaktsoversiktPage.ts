@@ -1,6 +1,6 @@
 import { expect, type Locator, type Page } from '@playwright/test';
 
-import { env, startsWith } from 'playwright/util/helper';
+import { env } from 'playwright/util/helper';
 
 import { LANGUAGE_DICTIONARIES, Language, type Dict } from '../LanguageMenu';
 import { SidebarNav } from '../SidebarNav';
@@ -41,7 +41,8 @@ export class FullmaktsoversiktPage {
 
     // heading is "Fullmaktsoversikt for {{name}}" — match the static prefix.
     this.pageHeading = this.page.getByRole('heading', {
-      name: startsWith(poa.heading.split('{{name}}')[0].trim()),
+      level: 1,
+      name: poa.heading.split('{{name}}')[0].trim(),
     });
     this.noAccessAlert = this.page.getByText(poa.no_access_title);
     this.lastNedKnapp = this.page.getByRole('button', {
@@ -63,19 +64,17 @@ export class FullmaktsoversiktPage {
     });
   }
 
-  /**
-   * A package link in the overview.
-   *
-   * Anchored: the link's accessible name is "<name> N tjenester", so matching the
-   * name alone would be ambiguous against packages whose names share a prefix.
-   */
+  /** A package link in the overview. Its accessible name is "<name> N tjenester". */
   pakkeLenke(pakkeNavn: string): Locator {
-    return this.page.getByRole('link', { name: startsWith(pakkeNavn) });
+    return this.page.getByRole('link', { name: pakkeNavn });
   }
 
-  /** A user row on a package's Brukere tab. */
+  /**
+   * A user row on a package's Brukere tab.
+   * .first(): the row comes before its "Gi/Slett fullmakt til <navn>" button, which also matches the name.
+   */
   brukerRad(navn: string): Locator {
-    return this.page.getByRole('button', { name: startsWith(navn) });
+    return this.page.getByRole('button', { name: navn }).first();
   }
 
   /** "Gi fullmakt til {{navn}}" — shown for a user who does not hold the package. */
@@ -92,11 +91,6 @@ export class FullmaktsoversiktPage {
       name: this.texts.common.delete_poa_to_name.replace('{{name}}', navn),
       exact: true,
     });
-  }
-
-  /** A named service on a package's Tjenester tab. */
-  tjenesteRad(tjenesteNavn: string): Locator {
-    return this.page.getByRole('button', { name: startsWith(tjenesteNavn) });
   }
 
   /**

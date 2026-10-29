@@ -1,32 +1,9 @@
 import { expect, type Locator, type Page } from '@playwright/test';
 
-import { env, escapeRegExp, startsWith, withPoaObject } from 'playwright/util/helper';
+import { env, withPoaObject } from 'playwright/util/helper';
 
 import { LANGUAGE_DICTIONARIES, Language, type Dict } from '../LanguageMenu';
 import { SidebarNav } from '../SidebarNav';
-
-/** U+00AD, used in localization strings as a line-break hint. */
-const SOFT_HYPHEN = '\u00AD';
-
-/**
- * A pattern matching the static part of a localized heading — everything before
- * the {{name}} placeholder.
- *
- * Two things make a plain string match unreliable here. The Norwegian headings
- * carry a soft hyphen that may or may not survive into the accessible name, so
- * it is matched optionally. And the placeholder has to be dropped rather than
- * matched literally, which the English heading (no soft hyphen) would otherwise
- * keep. Anchored at the start so it cannot match an unrelated heading.
- */
-const headingPrefix = (template: string): RegExp => {
-  const pattern = template
-    .split('{{name}}')[0]
-    .trim()
-    .split(SOFT_HYPHEN)
-    .map(escapeRegExp)
-    .join(`${SOFT_HYPHEN}?`);
-  return new RegExp(`^${pattern}`);
-};
 
 /**
  * Maskinporten-administrasjon
@@ -66,7 +43,11 @@ export class MaskinportenPage {
     this.sidebar = new SidebarNav(page, language);
     const mp = this.texts.maskinporten_page;
 
-    this.pageHeading = this.page.getByRole('heading', { name: headingPrefix(mp.heading) });
+    // "Maskinporten­administrasjon for {{name}}" — the soft hyphen is part of the accessible name.
+    this.pageHeading = this.page.getByRole('heading', {
+      level: 1,
+      name: mp.heading.split('{{name}}')[0].trim(),
+    });
     this.leverandoererFane = this.page.getByRole('tab', { name: mp.suppliers_tab });
     this.konsumenterFane = this.page.getByRole('tab', { name: mp.consumers_tab });
     this.ingenLeverandoererTekst = this.page.getByText(mp.no_suppliers);
@@ -153,14 +134,10 @@ export class MaskinportenPage {
 
   /**
    * The row for an API already granted to the supplier.
-   *
-   * Anchored to the start of the accessible name. The row's own button reads
-   * "<title> N scopes" while its sibling reads "Slett fullmakt for <title>" —
-   * both contain the title, and name matching is substring, so only anchoring
-   * separates them. This is what lets callers skip `.first()`.
+   * .first(): the row ("<title> N scopes") comes before its "Slett fullmakt for <title>" button.
    */
   delegertApi(apiTittel: string): Locator {
-    return this.page.getByRole('button', { name: startsWith(apiTittel) });
+    return this.page.getByRole('button', { name: apiTittel }).first();
   }
 
   /**
@@ -175,8 +152,9 @@ export class MaskinportenPage {
   }
 
   /** The URL the redirect lands on, tolerating a trailing slash. */
-  get landingssideUrl(): RegExp {
-    return new RegExp(`^${escapeRegExp(env('BASE_URL'))}/?$`);
+  landingssideUrl(url: URL): boolean {
+    const withoutSlash = (value: string) => (value.endsWith('/') ? value.slice(0, -1) : value);
+    return withoutSlash(url.href) === withoutSlash(env('BASE_URL'));
   }
 
   /** A supplier or consumer row, by organisation name. */
