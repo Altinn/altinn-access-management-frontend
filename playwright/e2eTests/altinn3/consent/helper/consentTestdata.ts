@@ -1,356 +1,68 @@
+import fs from 'fs';
+import path from 'path';
+
 import { Language } from 'playwright/pages/LanguageMenu';
 import { currentEnv } from 'playwright/util/helper';
+
+// Testdata ligger i e2eTests/testdata/samtykke/<miljø>/, med én rad per test.
+// AT23 og TT02 deler ID-porten-miljø, og språket lagres på personens profil,
+// så ingen person deles mellom miljøer, tester eller språk.
+const TESTDATA_DIR = path.resolve(__dirname, '../../../testdata/samtykke');
+
+const LANGUAGE_DIR: Record<Language, string> = {
+  [Language.NB]: 'bokmal',
+  [Language.NN]: 'nynorsk',
+  [Language.EN]: 'engelsk',
+};
 
 /** [orgnr, fnr til daglig leder som kan godkjenne samtykke på vegne av org-en] */
 export type OrgWithApprover = [orgNo: string, pid: string];
 
-interface ConsentTestdata {
-  /** consent.spec.ts */
-  personToOrg: Record<Language, string[]>;
-  /** consentOrgToOrg.spec.ts */
-  orgToOrg: Record<Language, OrgWithApprover[]>;
-  /** consentMaskinporten.spec.ts (bare NB) */
-  maskinporten: { persons: string[]; orgs: OrgWithApprover[] };
+function readCsv(relativePath: string): Record<string, string>[] {
+  const file = path.join(TESTDATA_DIR, relativePath);
+  if (!fs.existsSync(file)) {
+    throw new Error(`Fant ikke samtykke-testdata: ${file}`);
+  }
+  const [header, ...lines] = fs.readFileSync(file, 'utf8').trim().split(/\r?\n/);
+  const columns = header.split(',');
+  return lines.map((line) => {
+    const values = line.split(',');
+    return Object.fromEntries(columns.map((column, i) => [column, values[i]]));
+  });
 }
 
-// Testdata per miljø, hentet fra Tenor (bosatte, myndige personer og AS med
-// bosatt daglig leder) og verifisert i Register i både AT23 og TT02.
-//
-// - AT23 og TT02 har ingen felles personer: miljøene deler ID-porten-miljø,
-//   så samme testperson i begge miljøer gir kollisjoner når de kjøres samtidig.
-// - Hver spec og hvert språk har egne personer: språket settes på personens
-//   profil før innlogging, så to parallelle tester med samme person og ulikt
-//   språk overskriver hverandres språkvalg.
-const TESTDATA: Record<string, ConsentTestdata> = {
-  at23: {
-    personToOrg: {
-      [Language.NB]: [
-        '17880498193',
-        '06878699287',
-        '16849399687',
-        '13901149768',
-        '05836199660',
-        '10868598277',
-        '09895298937',
-        '05842148830',
-        '14917296139',
-        '12865597043',
-        '06895596548',
-        '30848999187',
-        '02870697638',
-        '02824598625',
-        '20918298879',
-        '01827999861',
-        '25869299254',
-        '17898398501',
-        '14885898786',
-        '01843747953',
-      ],
-      [Language.NN]: [
-        '26880098070',
-        '13847094855',
-        '31852049165',
-        '13833249414',
-        '15855599233',
-        '13874797167',
-        '02827699090',
-        '24928096005',
-        '21926098133',
-        '10815195898',
-        '18865698972',
-        '18856997231',
-        '22829298302',
-        '11817099450',
-        '04883249947',
-        '24853948728',
-        '18916899471',
-        '22890798474',
-        '27842548824',
-        '15891149384',
-      ],
-      [Language.EN]: [
-        '05837098027',
-        '21866399244',
-        '02922948405',
-        '26914499878',
-        '01814998408',
-        '25836898098',
-        '09817198004',
-        '30876096338',
-        '19924598274',
-        '28865797313',
-        '03879597780',
-        '23850398046',
-        '03864999300',
-        '21856998395',
-        '23852349549',
-        '06870499815',
-        '09923449377',
-        '01830498652',
-        '21912849381',
-        '02889699178',
-      ],
-    },
-    orgToOrg: {
-      [Language.NB]: [
-        ['314103742', '06915799130'],
-        ['312997169', '05836898984'],
-      ],
-      [Language.NN]: [
-        ['213426052', '11908199881'],
-        ['313374475', '13846298104'],
-      ],
-      [Language.EN]: [
-        ['310210315', '07897795943'],
-        ['313069362', '22908999677'],
-      ],
-    },
-    maskinporten: {
-      persons: [
-        '15926297195',
-        '22831249319',
-        '19929498103',
-        '19886897653',
-        '14905698924',
-        '03910597654',
-        '03920699404',
-        '25855298891',
-        '09927999479',
-        '03845696178',
-      ],
-      orgs: [
-        ['310698547', '13817099348'],
-        ['310386022', '17885296939'],
-        ['314281160', '06895998441'],
-        ['310594105', '05885196979'],
-      ],
-    },
-  },
-  tt02: {
-    personToOrg: {
-      [Language.NB]: [
-        '21917897759',
-        '23877199703',
-        '04833749558',
-        '03904397473',
-        '13897498477',
-        '14814999603',
-        '21828399311',
-        '01897098101',
-        '15874697971',
-        '12926397522',
-        '20874399249',
-        '21824698306',
-        '01854298875',
-        '03890948994',
-        '08847496682',
-        '01878899667',
-        '27928799005',
-        '11926797486',
-        '02866997902',
-        '04891149617',
-      ],
-      [Language.NN]: [
-        '31818397634',
-        '03845697719',
-        '25832048790',
-        '03824798191',
-        '26872248489',
-        '20847098598',
-        '23904398713',
-        '24855198750',
-        '10898797738',
-        '31882649140',
-        '27868896081',
-        '23887496447',
-        '24909299728',
-        '20893349600',
-        '16914697909',
-        '30910698121',
-        '04891649369',
-        '31886094518',
-        '08839197137',
-        '28867396774',
-      ],
-      [Language.EN]: [
-        '30832548185',
-        '08822447431',
-        '20925798445',
-        '01886999026',
-        '24874999039',
-        '21915698716',
-        '05925697593',
-        '13816197249',
-        '13897599605',
-        '06918298256',
-        '05926099436',
-        '01850148747',
-        '16865599181',
-        '12877696721',
-        '05928599800',
-        '29885597996',
-        '26907299588',
-        '12900849999',
-        '26878699571',
-        '21884697562',
-      ],
-    },
-    orgToOrg: {
-      [Language.NB]: [
-        ['312977737', '05905598629'],
-        ['313170837', '10827896735'],
-      ],
-      [Language.NN]: [
-        ['313113108', '28879498238'],
-        ['210539492', '31856297546'],
-      ],
-      [Language.EN]: [
-        ['313358224', '01815996344'],
-        ['310463663', '30897098438'],
-      ],
-    },
-    maskinporten: {
-      persons: [
-        '02849597933',
-        '18895196009',
-        '08812248546',
-        '26855196203',
-        '18913947998',
-        '27889199887',
-        '12854297749',
-        '02887096301',
-        '22836594510',
-        '27904796560',
-      ],
-      orgs: [
-        ['314186419', '13879998357'],
-        ['313347532', '01898296594'],
-        ['310969273', '15846096725'],
-        ['211009152', '28918997247'],
-      ],
-    },
-  },
-};
-
-export function consentTestdata(): ConsentTestdata {
-  const env = currentEnv();
-  const data = TESTDATA[env];
-  if (!data) {
-    throw new Error(
-      `Mangler samtykke-testdata for miljø '${env}' (finnes for: ${Object.keys(TESTDATA).join(', ')})`,
-    );
+function rowForTest(relativePath: string, test: string): Record<string, string> {
+  const row = readCsv(relativePath).find((r) => r.test === test);
+  if (!row) {
+    throw new Error(`Mangler rad for testen '${test}' i ${relativePath}`);
   }
-  return data;
+  return row;
+}
+
+/** Person som gir samtykke i consent.spec.ts */
+export function consentPerson(language: Language, test: string): string {
+  return rowForTest(`${currentEnv()}/personer/${LANGUAGE_DIR[language]}/personer.csv`, test).fnr;
+}
+
+/** Org og daglig leder som gir samtykke i consentOrgToOrg.spec.ts */
+export function consentOrg(language: Language, test: string): OrgWithApprover {
+  const row = rowForTest(
+    `${currentEnv()}/organisasjoner/${LANGUAGE_DIR[language]}/organisasjoner.csv`,
+    test,
+  );
+  return [row.orgnr, row.fnr];
+}
+
+/** Person som gir samtykke i consentMaskinporten.spec.ts */
+export function maskinportenPerson(test: string): string {
+  return rowForTest(`${currentEnv()}/maskinporten/personer.csv`, test).fnr;
+}
+
+/** Org og daglig leder som gir samtykke i consentMaskinporten.spec.ts */
+export function maskinportenOrg(test: string): OrgWithApprover {
+  const row = rowForTest(`${currentEnv()}/maskinporten/organisasjoner.csv`, test);
+  return [row.orgnr, row.fnr];
 }
 
 // Mottaker-org-er logger aldri inn, så de kan deles mellom miljøer og specer.
-export const toOrgs: string[] = [
-  '310486051',
-  '311758152',
-  '312594226',
-  '313289893',
-  '314262506',
-  '312956500',
-  '212275212',
-  '310798452',
-  '312894033',
-  '314113152',
-  '314282299',
-  '313619532',
-  '213050192',
-  '314001486',
-  '314245512',
-  '312534053',
-  '313570185',
-  '313430472',
-  '312711818',
-  '312236451',
-  '312780038',
-  '310574112',
-  '314106997',
-  '311121626',
-  '310934755',
-  '310074535',
-  '211016302',
-  '311706322',
-  '311022687',
-  '213520962',
-  '312606712',
-  '313581055',
-  '311747754',
-  '310259241',
-  '312921545',
-  '312936054',
-  '312837684',
-  '310275999',
-  '212934852',
-  '310408972',
-  '311811894',
-  '313988465',
-  '310262641',
-  '310844152',
-  '310142603',
-  '312489767',
-  '311018825',
-  '310023752',
-  '313397459',
-  '313211231',
-  '213989642',
-  '313579565',
-  '310279676',
-  '314020944',
-  '211769602',
-  '312592126',
-  '310366609',
-  '311148540',
-  '212757772',
-  '312218542',
-  '213512722',
-  '213259962',
-  '313448908',
-  '310486108',
-  '212440612',
-  '310599441',
-  '213460552',
-  '312167131',
-  '210360832',
-  '313177424',
-  '313937259',
-  '310145696',
-  '310646156',
-  '212455342',
-  '310783617',
-  '313774414',
-  '211086912',
-  '313255301',
-  '210736352',
-  '312241099',
-  '310339911',
-  '313296547',
-  '313390926',
-  '313139425',
-  '313601811',
-  '214155222',
-  '313606058',
-  '312852187',
-  '313561313',
-  '214111632',
-  '210216782',
-  '310671460',
-  '310650498',
-  '311061755',
-  '310316725',
-  '312179210',
-  '310536083',
-  '210837272',
-  '314282744',
-  '313506312',
-];
-
-export const fromOrgs: string[][] = [
-  ['314250184', '12867198324'],
-  ['314202791', '23817096786'],
-  ['310306991', '14906899788'],
-  ['310732893', '28898897712'],
-  ['312530422', '09917096101'],
-];
+export const toOrgs: string[] = readCsv('mottakere.csv').map((r) => r.orgnr);

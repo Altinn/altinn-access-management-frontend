@@ -94,8 +94,8 @@ Test data - what do we need?
 
 AT23 and TT02 share the ID-porten environment, so they must never use the same
 test users. Users that log in should also not be shared between specs or
-language variants, since the language is stored on the user's profile. See
-`e2eTests/altinn3/consent/helper/consentTestdata.ts`.
+language variants, since the language is stored on the user's profile. Consent
+test data is in `e2eTests/testdata/samtykke/<env>/`, one row per test.
 
 ## Maskinporten Integration
 
