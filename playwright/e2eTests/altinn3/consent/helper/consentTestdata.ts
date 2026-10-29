@@ -1,6 +1,8 @@
 import fs from 'fs';
 import path from 'path';
 
+import { parse } from 'csv-parse/sync';
+
 import { Language } from 'playwright/pages/LanguageMenu';
 import { currentEnv } from 'playwright/util/helper';
 
@@ -19,16 +21,8 @@ const LANGUAGE_DIR: Record<Language, string> = {
 export type OrgWithApprover = [orgNo: string, pid: string];
 
 function readCsv(relativePath: string): Record<string, string>[] {
-  const file = path.join(TESTDATA_DIR, relativePath);
-  if (!fs.existsSync(file)) {
-    throw new Error(`Fant ikke samtykke-testdata: ${file}`);
-  }
-  const [header, ...lines] = fs.readFileSync(file, 'utf8').trim().split(/\r?\n/);
-  const columns = header.split(',');
-  return lines.map((line) => {
-    const values = line.split(',');
-    return Object.fromEntries(columns.map((column, i) => [column, values[i]]));
-  });
+  const content = fs.readFileSync(path.join(TESTDATA_DIR, relativePath), 'utf-8');
+  return parse(content, { columns: true, skip_empty_lines: true, trim: true });
 }
 
 function rowForTest(relativePath: string, test: string): Record<string, string> {
