@@ -70,8 +70,14 @@ export class LoginPage {
     const antallAktoerer = await this.api.authorizedParties.antallAktoererForbruker(
       this.loggedInPid,
     );
-    // Aktørvalget etter innlogging rendres som hovedinnhold, ikke som dialog.
-    const accountSelector = this.page.getByRole('main');
+    // Aktørvalget rendres som hovedinnhold når det er påtvunget rett etter innlogging,
+    // og som dialog når det åpnes fra kontomenyen i headeren.
+    const hasMenu = { has: this.page.getByRole('menu') };
+    const accountSelector = this.page
+      .getByRole('dialog')
+      .filter(hasMenu)
+      .or(this.page.getByRole('main').filter(hasMenu))
+      .first();
     const menu = accountSelector.getByRole('menu');
     await expect(menu).toBeVisible();
 

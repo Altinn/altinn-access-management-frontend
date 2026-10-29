@@ -82,9 +82,9 @@ export class KlientAdministrasjonPage {
       this.page.waitForResponse(
         (resp) => resp.url().includes('api/v1/clientdelegations/clients') && resp.ok(),
       ),
-      await this.klientFane.click(),
-      await expect(this.klientFane).toHaveAttribute('aria-selected', 'true'),
+      this.klientFane.click(),
     ]);
+    await expect(this.klientFane).toHaveAttribute('aria-selected', 'true');
   }
 
   async clickLeggTilBrukerKnapp() {
@@ -124,12 +124,12 @@ export class KlientAdministrasjonPage {
 
   // Klient/brukerraden i en liste rendres som en knapp (med navn og org.nr.).
   // Brukes der raden er en knapp og ikke en heading.
-  // Hele navnet matches (uten store/små bokstaver) for å ikke treffe "Gi/Slett alle fullmakter for <navn>".
+  // .first(): raden kommer før knappene "Gi/Slett alle fullmakter for <navn>", som også matcher navnet.
   klientKnapp(navn: string): Locator {
-    const escaped = navn.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
     return this.page
       .getByRole('region', { name: this.texts.client_administration_page.agent_has_clients_tab })
-      .getByRole('button', { name: new RegExp(`^${escaped}$`, 'i') });
+      .getByRole('button', { name: navn })
+      .first();
   }
 
   async klikkListeElement(brukernavn: string) {
