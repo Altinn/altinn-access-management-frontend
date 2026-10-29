@@ -4,3 +4,7 @@
   gap: var(--ds-spacing-4);
   margin-top: var(--ds-spacing-8);
 }
+
+.resourceList {
+  min-height: 420px;
+}
