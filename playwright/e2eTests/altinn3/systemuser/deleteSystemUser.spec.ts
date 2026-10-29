@@ -1,21 +1,20 @@
-import { expect, test } from 'playwright/fixture/pomFixture';
+import { expect, medTestbrukere } from 'playwright/fixture/pomFixture';
 import { loadTestdata } from 'playwright/util/testdata';
 const {
-  organisasjoner: [vendor, owner],
+  organisasjoner: [vendor],
 } = loadTestdata('systemuser').deletion;
+const test = medTestbrukere({ owner: 'dagligLeder' });
 const vendorOrgNumber = vendor.orgNo;
-const testUserPid = owner.pid;
-const testOrgName = owner.name;
 
 test.describe('System user deletion', () => {
   let systemId: string;
 
-  test.beforeEach(async ({ api, login, systemUserPage, accessManagementFrontPage }) => {
+  test.beforeEach(async ({ owner, api, login, systemUserPage, accessManagementFrontPage }) => {
     systemId = '';
 
     await test.step('Login and navigate to application', async () => {
-      await login.LoginToAccessManagement(testUserPid);
-      await login.selectActor(testOrgName);
+      await login.LoginToAccessManagement(owner.pid);
+      await login.selectActor(owner.name);
     });
 
     await test.step('Create system in system register', async () => {
@@ -45,7 +44,7 @@ test.describe('System user deletion', () => {
     });
   });
 
-  test.afterEach(async ({ api }) => {
+  test.afterEach(async ({ owner, api }) => {
     if (systemId) {
       await api.systemUsers.cleanUpSystemUsersForSystem(
         `${vendorOrgNumber}_${systemId}`,

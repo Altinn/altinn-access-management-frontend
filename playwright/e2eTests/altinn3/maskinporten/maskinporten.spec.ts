@@ -1,6 +1,12 @@
-import { expect, test } from '../../../fixture/pomFixture';
+import { expect, medTestbrukere } from '../../../fixture/pomFixture';
 import type { MaskinportenApiRequests } from '../../../api-requests/MaskinportenApiRequests';
-import { loadTestdata } from '../../../util/testdata';
+
+const test = medTestbrukere({
+  virksomhet: 'dagligLeder',
+  konsument: 'dagligLeder',
+  leverandoer: 'dagligLeder',
+  bruker: 'privatperson',
+});
 
 /**
  * Maskinporten-administrasjon — leverandører, konsumenter og API-fullmakter.
@@ -22,7 +28,6 @@ import { loadTestdata } from '../../../util/testdata';
  * makes it appear under `virksomhet`'s Konsumenter tab. In `utenTilgang`, `bruker`
  * may represent the organisation but is not Maskinporten administrator.
  */
-const TESTDATA = loadTestdata('maskinporten');
 
 /**
  * An API that is delegable in BOTH at23 and tt02.
@@ -55,11 +60,7 @@ test.describe('Maskinporten-administrasjon', () => {
   };
 
   test.describe('oversikt', () => {
-    const {
-      organisasjoner: [virksomhet, konsument],
-    } = TESTDATA.oversikt;
-
-    test.beforeEach(async ({ api }) => {
+    test.beforeEach(async ({ virksomhet, konsument, api }) => {
       await removeSupplierIfPresent(
         api.maskinporten,
         konsument.pid,
@@ -70,6 +71,8 @@ test.describe('Maskinporten-administrasjon', () => {
     });
 
     test('leverandør- og konsumentfanen viser riktig innhold', async ({
+      virksomhet,
+      konsument,
       maskinportenPage,
       login,
     }) => {
@@ -90,7 +93,7 @@ test.describe('Maskinporten-administrasjon', () => {
       });
     });
 
-    test.afterEach(async ({ api }) => {
+    test.afterEach(async ({ virksomhet, konsument, api }) => {
       try {
         await api.maskinporten.removeSupplier(konsument.pid, konsument.orgNo, virksomhet.orgNo);
       } catch (error) {
@@ -100,11 +103,7 @@ test.describe('Maskinporten-administrasjon', () => {
   });
 
   test.describe('legg til leverandør', () => {
-    const {
-      organisasjoner: [virksomhet, leverandoer],
-    } = TESTDATA.leggTilLeverandoer;
-
-    test.beforeEach(async ({ api }) => {
+    test.beforeEach(async ({ virksomhet, leverandoer, api }) => {
       await removeSupplierIfPresent(
         api.maskinporten,
         virksomhet.pid,
@@ -113,7 +112,7 @@ test.describe('Maskinporten-administrasjon', () => {
       );
     });
 
-    test('legg til en leverandør', async ({ maskinportenPage, login }) => {
+    test('legg til en leverandør', async ({ virksomhet, leverandoer, maskinportenPage, login }) => {
       await test.step(`Logg inn som ${virksomhet.name} og åpne maskinportenadministrasjon`, async () => {
         await login.LoginToAccessManagement(virksomhet.pid);
         await login.selectActor(virksomhet.name);
@@ -136,7 +135,7 @@ test.describe('Maskinporten-administrasjon', () => {
       });
     });
 
-    test.afterEach(async ({ api }) => {
+    test.afterEach(async ({ virksomhet, leverandoer, api }) => {
       try {
         await api.maskinporten.removeSupplier(virksomhet.pid, virksomhet.orgNo, leverandoer.orgNo);
       } catch (error) {
@@ -146,11 +145,7 @@ test.describe('Maskinporten-administrasjon', () => {
   });
 
   test.describe('gi leverandør fullmakt til et API', () => {
-    const {
-      organisasjoner: [virksomhet, leverandoer],
-    } = TESTDATA.giApiFullmakt;
-
-    test.beforeEach(async ({ api }) => {
+    test.beforeEach(async ({ virksomhet, leverandoer, api }) => {
       await removeSupplierIfPresent(
         api.maskinporten,
         virksomhet.pid,
@@ -160,7 +155,13 @@ test.describe('Maskinporten-administrasjon', () => {
       await api.maskinporten.addSupplier(virksomhet.pid, virksomhet.orgNo, leverandoer.orgNo);
     });
 
-    test('gi og fjern fullmakt til et API', async ({ maskinportenPage, login, api }) => {
+    test('gi og fjern fullmakt til et API', async ({
+      virksomhet,
+      leverandoer,
+      maskinportenPage,
+      login,
+      api,
+    }) => {
       await test.step(`Logg inn som ${virksomhet.name} og åpne leverandøren`, async () => {
         await login.LoginToAccessManagement(virksomhet.pid);
         await login.selectActor(virksomhet.name);
@@ -205,7 +206,7 @@ test.describe('Maskinporten-administrasjon', () => {
       });
     });
 
-    test.afterEach(async ({ api }) => {
+    test.afterEach(async ({ virksomhet, leverandoer, api }) => {
       try {
         await api.maskinporten.removeSupplier(virksomhet.pid, virksomhet.orgNo, leverandoer.orgNo);
       } catch (error) {
@@ -215,11 +216,7 @@ test.describe('Maskinporten-administrasjon', () => {
   });
 
   test.describe('slett leverandør', () => {
-    const {
-      organisasjoner: [virksomhet, leverandoer],
-    } = TESTDATA.slettLeverandoer;
-
-    test.beforeEach(async ({ api }) => {
+    test.beforeEach(async ({ virksomhet, leverandoer, api }) => {
       await removeSupplierIfPresent(
         api.maskinporten,
         virksomhet.pid,
@@ -229,7 +226,7 @@ test.describe('Maskinporten-administrasjon', () => {
       await api.maskinporten.addSupplier(virksomhet.pid, virksomhet.orgNo, leverandoer.orgNo);
     });
 
-    test('slett en leverandør', async ({ maskinportenPage, login }) => {
+    test('slett en leverandør', async ({ virksomhet, leverandoer, maskinportenPage, login }) => {
       await test.step(`Logg inn som ${virksomhet.name} og åpne maskinportenadministrasjon`, async () => {
         await login.LoginToAccessManagement(virksomhet.pid);
         await login.selectActor(virksomhet.name);
@@ -251,7 +248,7 @@ test.describe('Maskinporten-administrasjon', () => {
       });
     });
 
-    test.afterEach(async ({ api }, testInfo) => {
+    test.afterEach(async ({ virksomhet, leverandoer, api }, testInfo) => {
       if (testInfo.status === 'passed') return;
 
       try {
@@ -263,18 +260,15 @@ test.describe('Maskinporten-administrasjon', () => {
   });
 
   test.describe('bruker uten tilgang', () => {
-    const {
-      organisasjoner: [virksomhet],
-      personer: [bruker],
-    } = TESTDATA.utenTilgang;
-
-    test.beforeEach(async ({ api }) => {
+    test.beforeEach(async ({ virksomhet, bruker, api }) => {
       // Make `bruker` a plain right-holder: able to represent the organisation,
       // but not a Maskinporten administrator.
       await api.connections.addConnection(virksomhet.pid, virksomhet.orgNo, bruker.pid);
     });
 
     test('bruker uten maskinportenrettighet kommer ikke inn på siden', async ({
+      virksomhet,
+      bruker,
       maskinportenPage,
       login,
     }) => {
@@ -297,7 +291,7 @@ test.describe('Maskinporten-administrasjon', () => {
       });
     });
 
-    test.afterEach(async ({ api }) => {
+    test.afterEach(async ({ virksomhet, bruker, api }) => {
       try {
         await api.connections.deleteConnection(virksomhet.pid, virksomhet.orgNo, [bruker.pid]);
       } catch (error) {

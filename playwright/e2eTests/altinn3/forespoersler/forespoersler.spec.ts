@@ -1,5 +1,6 @@
-import { expect, test } from '../../../fixture/pomFixture';
-import { loadTestdata } from '../../../util/testdata';
+import { expect, medTestbrukere } from '../../../fixture/pomFixture';
+
+const test = medTestbrukere({ actor: 'dagligLeder', requester: 'privatperson' });
 
 const posttjenester = 'urn:altinn:accesspackage:posttjenester';
 const posttjenesterNavn = 'Posttjenester';
@@ -12,9 +13,9 @@ const byggesoknad = 'urn:altinn:accesspackage:byggesoknad';
 /**
  * Forespørsler — mottatte og sendte forespørsler om fullmakt.
  *
- * Each describe block has its OWN organisation and requester, because the tests
- * create and answer requests against that organisation and the suite runs fully
- * parallel — a request left pending in one block would show up in another's list.
+ * Every test reserves its OWN organisation and requester from the testbruker pools,
+ * because the tests create and answer requests against that organisation and the suite
+ * runs fully parallel — a request left pending in one test would show up in another's list.
  *
  * `actor.pid` is the organisation's daglig leder, who can both see the page and
  * approve requests. `requester` is the person asking for access.
@@ -22,32 +23,25 @@ const byggesoknad = 'urn:altinn:accesspackage:byggesoknad';
  * A request can only be created when the organisation ALREADY has the requester
  * as a connection — the API rejects it with "No connection between party and to"
  * otherwise — so every `beforeEach` establishes that connection first.
- *
- * To source replacements: `yarn tenor:virksomhet --env <env>` for an
- * organisation with its daglig leder, `yarn tenor --env <env> -n 1` for a person.
  */
-const TESTDATA = loadTestdata('forespoersler');
 
 test.describe('Forespørsler', () => {
   test.describe('godkjenn forespørsel', () => {
-    const {
-      organisasjoner: [actor],
-      personer: [{ pid: requester }],
-    } = TESTDATA.godkjenn;
-
-    test.beforeEach(async ({ api }) => {
-      await api.connections.addConnection(actor.pid, actor.orgNo, requester);
-      await api.requests.withdrawAllPendingRequests(requester, actor.orgNo);
-      await api.requests.createPackageRequest(requester, actor.orgNo, posttjenester);
+    test.beforeEach(async ({ actor, requester, api }) => {
+      await api.connections.addConnection(actor.pid, actor.orgNo, requester.pid);
+      await api.requests.withdrawAllPendingRequests(requester.pid, actor.orgNo);
+      await api.requests.createPackageRequest(requester.pid, actor.orgNo, posttjenester);
     });
 
     test('godkjenn forespørsel og slett fullmakten etterpå', async ({
+      actor,
+      requester,
       accessManagementFrontPage,
       forespoerslerPage,
       login,
       api,
     }) => {
-      const requesterName = await api.token.getLastName(requester);
+      const requesterName = await api.token.getLastName(requester.pid);
 
       await test.step(`Logg inn som ${actor.name} og åpne forespørsler`, async () => {
         await login.LoginToAccessManagement(actor.pid);
@@ -84,14 +78,14 @@ test.describe('Forespørsler', () => {
       });
     });
 
-    test.afterEach(async ({ api }) => {
+    test.afterEach(async ({ actor, requester, api }) => {
       try {
-        await api.requests.withdrawAllPendingRequests(requester, actor.orgNo);
+        await api.requests.withdrawAllPendingRequests(requester.pid, actor.orgNo);
       } catch (error) {
         console.error('Cleanup: Failed to withdraw pending requests:', error);
       }
       try {
-        await api.connections.deleteConnection(actor.pid, actor.orgNo, [requester]);
+        await api.connections.deleteConnection(actor.pid, actor.orgNo, [requester.pid]);
       } catch (error) {
         console.error('Cleanup: Failed to delete connection:', error);
       }
@@ -99,19 +93,20 @@ test.describe('Forespørsler', () => {
   });
 
   test.describe('avvis forespørsel', () => {
-    const {
-      organisasjoner: [actor],
-      personer: [{ pid: requester }],
-    } = TESTDATA.avvis;
-
-    test.beforeEach(async ({ api }) => {
-      await api.connections.addConnection(actor.pid, actor.orgNo, requester);
-      await api.requests.withdrawAllPendingRequests(requester, actor.orgNo);
-      await api.requests.createPackageRequest(requester, actor.orgNo, posttjenester);
+    test.beforeEach(async ({ actor, requester, api }) => {
+      await api.connections.addConnection(actor.pid, actor.orgNo, requester.pid);
+      await api.requests.withdrawAllPendingRequests(requester.pid, actor.orgNo);
+      await api.requests.createPackageRequest(requester.pid, actor.orgNo, posttjenester);
     });
 
-    test('avvis forespørsel om tilgangspakke', async ({ forespoerslerPage, login, api }) => {
-      const requesterName = await api.token.getLastName(requester);
+    test('avvis forespørsel om tilgangspakke', async ({
+      actor,
+      requester,
+      forespoerslerPage,
+      login,
+      api,
+    }) => {
+      const requesterName = await api.token.getLastName(requester.pid);
 
       await test.step(`Logg inn som ${actor.name} og åpne forespørsler`, async () => {
         await login.LoginToAccessManagement(actor.pid);
@@ -133,14 +128,14 @@ test.describe('Forespørsler', () => {
       });
     });
 
-    test.afterEach(async ({ api }) => {
+    test.afterEach(async ({ actor, requester, api }) => {
       try {
-        await api.requests.withdrawAllPendingRequests(requester, actor.orgNo);
+        await api.requests.withdrawAllPendingRequests(requester.pid, actor.orgNo);
       } catch (error) {
         console.error('Cleanup: Failed to withdraw pending requests:', error);
       }
       try {
-        await api.connections.deleteConnection(actor.pid, actor.orgNo, [requester]);
+        await api.connections.deleteConnection(actor.pid, actor.orgNo, [requester.pid]);
       } catch (error) {
         console.error('Cleanup: Failed to delete connection:', error);
       }
@@ -148,20 +143,21 @@ test.describe('Forespørsler', () => {
   });
 
   test.describe('godkjenn alle forespørsler', () => {
-    const {
-      organisasjoner: [actor],
-      personer: [{ pid: requester }],
-    } = TESTDATA.godkjennAlle;
-
-    test.beforeEach(async ({ api }) => {
-      await api.connections.addConnection(actor.pid, actor.orgNo, requester);
-      await api.requests.withdrawAllPendingRequests(requester, actor.orgNo);
-      await api.requests.createPackageRequest(requester, actor.orgNo, posttjenester);
-      await api.requests.createPackageRequest(requester, actor.orgNo, byggesoknad);
+    test.beforeEach(async ({ actor, requester, api }) => {
+      await api.connections.addConnection(actor.pid, actor.orgNo, requester.pid);
+      await api.requests.withdrawAllPendingRequests(requester.pid, actor.orgNo);
+      await api.requests.createPackageRequest(requester.pid, actor.orgNo, posttjenester);
+      await api.requests.createPackageRequest(requester.pid, actor.orgNo, byggesoknad);
     });
 
-    test('godkjenn alle forespørsler på én gang', async ({ forespoerslerPage, login, api }) => {
-      const requesterName = await api.token.getLastName(requester);
+    test('godkjenn alle forespørsler på én gang', async ({
+      actor,
+      requester,
+      forespoerslerPage,
+      login,
+      api,
+    }) => {
+      const requesterName = await api.token.getLastName(requester.pid);
 
       await test.step(`Logg inn som ${actor.name} og åpne forespørsler`, async () => {
         await login.LoginToAccessManagement(actor.pid);
@@ -183,14 +179,14 @@ test.describe('Forespørsler', () => {
       });
     });
 
-    test.afterEach(async ({ api }) => {
+    test.afterEach(async ({ actor, requester, api }) => {
       try {
-        await api.requests.withdrawAllPendingRequests(requester, actor.orgNo);
+        await api.requests.withdrawAllPendingRequests(requester.pid, actor.orgNo);
       } catch (error) {
         console.error('Cleanup: Failed to withdraw pending requests:', error);
       }
       try {
-        await api.connections.deleteConnection(actor.pid, actor.orgNo, [requester]);
+        await api.connections.deleteConnection(actor.pid, actor.orgNo, [requester.pid]);
       } catch (error) {
         console.error('Cleanup: Failed to delete connection:', error);
       }
@@ -198,20 +194,20 @@ test.describe('Forespørsler', () => {
   });
 
   test.describe('sendt forespørsel', () => {
-    const {
-      organisasjoner: [actor],
-      personer: [{ pid: requester }],
-    } = TESTDATA.sendt;
-
-    test.beforeEach(async ({ api }) => {
-      await api.connections.addConnection(actor.pid, actor.orgNo, requester);
-      await api.requests.withdrawAllPendingRequests(requester, actor.orgNo);
-      await api.requests.createPackageRequest(requester, actor.orgNo, posttjenester);
+    test.beforeEach(async ({ actor, requester, api }) => {
+      await api.connections.addConnection(actor.pid, actor.orgNo, requester.pid);
+      await api.requests.withdrawAllPendingRequests(requester.pid, actor.orgNo);
+      await api.requests.createPackageRequest(requester.pid, actor.orgNo, posttjenester);
     });
 
-    test('avsender ser sin egen sendte forespørsel', async ({ forespoerslerPage, login }) => {
-      await test.step(`Logg inn som avsender ${requester}`, async () => {
-        await login.LoginToAccessManagement(requester);
+    test('avsender ser sin egen sendte forespørsel', async ({
+      actor,
+      requester,
+      forespoerslerPage,
+      login,
+    }) => {
+      await test.step(`Logg inn som avsender ${requester.pid}`, async () => {
+        await login.LoginToAccessManagement(requester.pid);
         await forespoerslerPage.goToForespoerslerViaUrl();
         await expect(
           forespoerslerPage.pageHeading.or(forespoerslerPage.ownRequestsHeading),
@@ -224,14 +220,14 @@ test.describe('Forespørsler', () => {
       });
     });
 
-    test.afterEach(async ({ api }) => {
+    test.afterEach(async ({ actor, requester, api }) => {
       try {
-        await api.requests.withdrawAllPendingRequests(requester, actor.orgNo);
+        await api.requests.withdrawAllPendingRequests(requester.pid, actor.orgNo);
       } catch (error) {
         console.error('Cleanup: Failed to withdraw pending requests:', error);
       }
       try {
-        await api.connections.deleteConnection(actor.pid, actor.orgNo, [requester]);
+        await api.connections.deleteConnection(actor.pid, actor.orgNo, [requester.pid]);
       } catch (error) {
         console.error('Cleanup: Failed to delete connection:', error);
       }
@@ -239,24 +235,21 @@ test.describe('Forespørsler', () => {
   });
 
   test.describe('trekk tilbake sendt forespørsel', () => {
-    const {
-      organisasjoner: [actor],
-      personer: [{ pid: requester }],
-    } = TESTDATA.trekkTilbake;
-
-    test.beforeEach(async ({ api }) => {
-      await api.connections.addConnection(actor.pid, actor.orgNo, requester);
-      await api.requests.withdrawAllPendingRequests(requester, actor.orgNo);
-      await api.requests.createPackageRequest(requester, actor.orgNo, posttjenester);
+    test.beforeEach(async ({ actor, requester, api }) => {
+      await api.connections.addConnection(actor.pid, actor.orgNo, requester.pid);
+      await api.requests.withdrawAllPendingRequests(requester.pid, actor.orgNo);
+      await api.requests.createPackageRequest(requester.pid, actor.orgNo, posttjenester);
     });
 
     test('avsender trekker tilbake sin egen forespørsel', async ({
+      actor,
+      requester,
       forespoerslerPage,
       login,
       api,
     }) => {
-      await test.step(`Logg inn som avsender ${requester}`, async () => {
-        await login.LoginToAccessManagement(requester);
+      await test.step(`Logg inn som avsender ${requester.pid}`, async () => {
+        await login.LoginToAccessManagement(requester.pid);
         await forespoerslerPage.goToForespoerslerViaUrl();
         await expect(
           forespoerslerPage.pageHeading.or(forespoerslerPage.ownRequestsHeading),
@@ -277,18 +270,18 @@ test.describe('Forespørsler', () => {
       await test.step('Forespørselen er trukket tilbake', async () => {
         await expect(forespoerslerPage.slettForespoerselKnapp(posttjenesterNavn)).toBeHidden();
         // And it is gone server-side, not just from the open dialog.
-        expect(await api.requests.getSentRequests(requester, requester)).toEqual([]);
+        expect(await api.requests.getSentRequests(requester.pid, requester.pid)).toEqual([]);
       });
     });
 
-    test.afterEach(async ({ api }) => {
+    test.afterEach(async ({ actor, requester, api }) => {
       try {
-        await api.requests.withdrawAllPendingRequests(requester, actor.orgNo);
+        await api.requests.withdrawAllPendingRequests(requester.pid, actor.orgNo);
       } catch (error) {
         console.error('Cleanup: Failed to withdraw pending requests:', error);
       }
       try {
-        await api.connections.deleteConnection(actor.pid, actor.orgNo, [requester]);
+        await api.connections.deleteConnection(actor.pid, actor.orgNo, [requester.pid]);
       } catch (error) {
         console.error('Cleanup: Failed to delete connection:', error);
       }

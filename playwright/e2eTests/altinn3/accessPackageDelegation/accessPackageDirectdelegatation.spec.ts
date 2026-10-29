@@ -1,38 +1,21 @@
-import { test } from 'playwright/fixture/pomFixture';
+import { medTestbrukere } from 'playwright/fixture/pomFixture';
 import { DelegationApiUtil } from 'playwright/util/delegationApiUtil';
-import { withTimeout } from 'playwright/util/asyncUtils';
-import { loadTestdata } from 'playwright/util/testdata';
 
-const {
-  organisasjoner: [avgiver, rettighetshaver],
-} = loadTestdata('tilgangspakker').direktedelegering;
+// Rettighetshaverens daglig leder har nøkkelrolle og arver pakkene som delegeres til orgen.
+const test = medTestbrukere({ avgiver: 'dagligLeder', rettighetshaver: 'dagligLeder' });
 
 test.describe('Delegate access pacakge from Org-A(Avgiver) to Org-B(Rettighetshaver) ', () => {
-  test.beforeEach(async ({}, testInfo) => {
-    const title = testInfo.title || 'unknown-test';
+  test.afterEach(async ({ avgiver, rettighetshaver, api }) => {
     try {
-      await DelegationApiUtil.cleanupAllDelegations(title);
-    } catch {
-      /* ignore if nothing to clean */
-    }
-  });
-
-  test.afterEach(async ({}, testInfo) => {
-    const title = testInfo.title || 'unknown-test';
-
-    try {
-      await withTimeout(
-        DelegationApiUtil.cleanupAllDelegations(title),
-        15_000, // cleanup budget
-        `cleanupAllDelegations(${title})`,
-      );
-    } catch (err) {
-      // Don't fail tests if cleanup is flaky or slow
-      console.warn(`[afterEach] Cleanup failed or timed out for: ${title}`, err);
+      await api.connections.deleteConnection(avgiver.pid, avgiver.orgNo, [rettighetshaver.orgNo]);
+    } catch (error) {
+      console.error('Cleanup: Failed to delete connection:', error);
     }
   });
 
   test('Org-A delegates access package to Org-B', async ({
+    avgiver,
+    rettighetshaver,
     delegation,
     login,
     aktorvalgHeader,
@@ -73,8 +56,8 @@ test.describe('Delegate access pacakge from Org-A(Avgiver) to Org-B(Rettighetsha
       ]);
 
       await delegation.verifyKeyRoleUserHasDelegatedPackages(
-        'Sivilisert Trygg Tiger AS',
-        'Moderne Analyse',
+        rettighetshaver.name,
+        rettighetshaver.managerName,
         [
           { areaName: 'Bygg, anlegg og eiendom', packageName: 'Byggesøknad' },
           { areaName: 'Oppvekst og utdanning', packageName: 'Godkjenning av personell' },
@@ -90,6 +73,7 @@ test.describe('Delegate access pacakge from Org-A(Avgiver) to Org-B(Rettighetsha
 
   // Doesnt test anything? Skipping for now.
   test.skip('Org-C revokes all delegated rights from Org-D', async ({
+    avgiver,
     page,
     login,
     aktorvalgHeader,

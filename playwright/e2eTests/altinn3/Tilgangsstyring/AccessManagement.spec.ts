@@ -1,4 +1,4 @@
-import { test } from '../../../fixture/pomFixture';
+import { medTestbrukere, test } from '../../../fixture/pomFixture';
 import { loadTestdata } from '../../../util/testdata';
 
 const TESTDATA = loadTestdata('accessmanagement');
@@ -6,33 +6,37 @@ const TESTDATA = loadTestdata('accessmanagement');
 const service = 'bruno-correspondence';
 
 test.describe('Tilgangsstyring', () => {
-  const {
-    organisasjoner: [org],
-  } = TESTDATA.tilgangsstyring;
-
   test.describe('Tilgangsstyrer skal kunne delegere tilgangspakker de selv har', () => {
-    const {
-      personer: [user],
-    } = TESTDATA.tilgangsstyrer;
+    // The tilgangsstyrer delegates to ANOTHER user of the organisation: a clean tilgangsstyrer
+    // sees «Be om fullmakt» on their own page, so delegating to themselves is not the case here.
+    const test = medTestbrukere({
+      org: 'dagligLeder',
+      user: 'privatperson',
+      mottaker: 'privatperson',
+    });
     const packages = [
       'urn:altinn:accesspackage:tilgangsstyrer',
       'urn:altinn:accesspackage:posttjenester',
       'urn:altinn:accesspackage:byggesoknad',
     ];
 
-    test.beforeEach(async ({ api }) => {
+    test.beforeEach(async ({ org, user, mottaker, api }) => {
       await api.connections.addConnectionAndPackagesToUser(org.pid, org.orgNo, user.pid, packages);
+      await api.connections.addConnection(org.pid, org.orgNo, mottaker.pid);
     });
 
-    test.afterEach(async ({ api }) => {
+    test.afterEach(async ({ org, user, mottaker, api }) => {
       try {
-        await api.connections.deleteConnection(org.pid, org.orgNo, [user.pid]);
+        await api.connections.deleteConnection(org.pid, org.orgNo, [user.pid, mottaker.pid]);
       } catch (error) {
         console.error('Cleanup: Failed to delete connection:', error);
       }
     });
 
     test('Tilgangsstyrer skal kunne delegere tilgangspakker de selv har', async ({
+      org,
+      user,
+      mottaker,
       login,
       aktorvalgHeader,
       accessManagementFrontPage,
@@ -45,10 +49,10 @@ test.describe('Tilgangsstyring', () => {
         await aktorvalgHeader.selectActorFromHeaderMenu(org.name);
       });
 
-      await test.step(`Gå til brukere og velg bruker "${user.name}"`, async () => {
+      await test.step(`Gå til brukere og velg bruker "${mottaker.name}"`, async () => {
         await accessManagementFrontPage.goToUsers();
         await accessManagementFrontPage.expectOthersWithRightsListToBeVisible();
-        await accessManagementFrontPage.clickUser(user.name);
+        await accessManagementFrontPage.clickUser(mottaker.name);
       });
 
       await test.step('Klikk "Gi fullmakt"', async () => {
@@ -68,16 +72,16 @@ test.describe('Tilgangsstyring', () => {
   });
 
   test.describe('Hovedadministrator skal kunne delegere nesten alle tilgangspakker', () => {
-    const {
-      personer: [user],
-    } = TESTDATA.hovedadministrator;
+    const test = medTestbrukere({ org: 'dagligLeder', user: 'privatperson' });
     const packages = ['urn:altinn:accesspackage:hovedadministrator'];
 
-    test.beforeEach(async ({ api }) => {
+    test.beforeEach(async ({ org, user, api }) => {
       await api.connections.addConnectionAndPackagesToUser(org.pid, org.orgNo, user.pid, packages);
     });
 
     test('Hovedadministrator skal kunne delegere nesten alle tilgangspakker', async ({
+      org,
+      user,
       login,
       aktorvalgHeader,
       accessManagementFrontPage,
@@ -178,19 +182,19 @@ test.describe('Tilgangsstyring', () => {
   });
 
   test.describe('Vanlig bruker skal ikke kunne delegere pakker de selv ikke har tilgang til', () => {
-    const {
-      personer: [user],
-    } = TESTDATA.vanligBruker;
+    const test = medTestbrukere({ org: 'dagligLeder', user: 'privatperson' });
     const packages = [
       'urn:altinn:accesspackage:tilgangsstyrer',
       'urn:altinn:accesspackage:byggesoknad',
     ];
 
-    test.beforeEach(async ({ api }) => {
+    test.beforeEach(async ({ org, user, api }) => {
       await api.connections.addConnectionAndPackagesToUser(org.pid, org.orgNo, user.pid, packages);
     });
 
     test('Vanlig bruker skal ikke kunne delegere pakker de selv ikke har tilgang til', async ({
+      org,
+      user,
       login,
       aktorvalgHeader,
       accessManagementFrontPage,
@@ -216,16 +220,14 @@ test.describe('Tilgangsstyring', () => {
   });
 
   test.describe('Standard bruker skal kun kunne se deg selv på brukere-siden', () => {
-    const {
-      personer: [user],
-    } = TESTDATA.standardBruker;
+    const test = medTestbrukere({ org: 'dagligLeder', user: 'privatperson' });
     const packages = ['urn:altinn:accesspackage:byggesoknad'];
 
-    test.beforeEach(async ({ api }) => {
+    test.beforeEach(async ({ org, user, api }) => {
       await api.connections.addConnectionAndPackagesToUser(org.pid, org.orgNo, user.pid, packages);
     });
 
-    test.afterEach(async ({ api }) => {
+    test.afterEach(async ({ org, user, api }) => {
       try {
         await api.connections.deleteConnection(org.pid, org.orgNo, [user.pid]);
       } catch (error) {
@@ -234,6 +236,8 @@ test.describe('Tilgangsstyring', () => {
     });
 
     test('Standard bruker skal kun kunne se deg selv på brukere-siden', async ({
+      org,
+      user,
       login,
       aktorvalgHeader,
       accessManagementFrontPage,

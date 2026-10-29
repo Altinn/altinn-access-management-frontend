@@ -1,9 +1,7 @@
-import fs from 'fs';
-import path from 'path';
-
 import { token } from 'playwright/api-requests/callAs';
 import { appUrl, platformUrl } from 'playwright/api-requests/apiRequest';
 import { currentEnv, env } from 'playwright/util/helper';
+import { testdataFnr } from 'playwright/util/testdata';
 
 /**
  * Varmer opp miljøet før testene starter.
@@ -16,8 +14,9 @@ import { currentEnv, env } from 'playwright/util/helper';
  * (som går videre til authorizedparties) og authentication sin refresh. Bare
  * lesekall, ingen testdata opprettes.
  *
- * Testbrukerne er fødselsnumrene (11 siffer i anførselstegn) i testfilene, så
- * nye brukere blir med uten at noen må huske å legge dem til her.
+ * Testbrukerne er fødselsnumrene i testdata-CSV-ene for miljøet: alle i
+ * scenarioene og de første i hver pool. Poolene er for store til å varme opp
+ * hele, og kaldstarten gjelder miljøet, ikke den enkelte brukeren.
  *
  * Kallene går rett på `fetch` med ett forsøk og kort timeout, ikke via `send`
  * og dens retries, så en treg bruker ikke holder igjen hele oppvarmingen. Feil
@@ -26,22 +25,21 @@ import { currentEnv, env } from 'playwright/util/helper';
  * Kun i CI, så lokale kjøringer ikke blir tregere (`OPPVARMING=true` for å
  * tvinge den på).
  */
-const TESTMAPPER = ['e2eTests', 'uuTests'];
 const KALL_TIMEOUT_MS = 20_000;
+const FRA_HVER_FIL = 20;
+const MILJOER = ['at23', 'tt02'];
 
 function finnTestbrukere(): string[] {
-  const pids = new Set<string>();
-  for (const mappe of TESTMAPPER) {
-    const filer = fs.readdirSync(path.join(__dirname, mappe), {
-      recursive: true,
-      encoding: 'utf-8',
-    });
-    for (const fil of filer.filter((f) => f.endsWith('.ts'))) {
-      const innhold = fs.readFileSync(path.join(__dirname, mappe, fil), 'utf-8');
-      for (const [, pid] of innhold.matchAll(/['"`](\d{11})['"`]/g)) pids.add(pid);
-    }
+  return [...new Set(testdataFnr(currentEnv()).flatMap((fnr) => fnr.slice(0, FRA_HVER_FIL)))];
+}
+
+// AT23 og TT02 deler ID-porten, så samme person i begge kan krasje (innlogging, språk).
+function sjekkAtMiljoeneIkkeDelerTestbrukere(): void {
+  const [a, b] = MILJOER.map((miljo) => new Set(testdataFnr(miljo).flat()));
+  const felles = [...a].filter((fnr) => b.has(fnr));
+  if (felles.length) {
+    throw new Error(`Testbrukere finnes i både ${MILJOER.join(' og ')}: ${felles.join(', ')}`);
   }
-  return [...pids];
 }
 
 const sekunder = (ms: number) => `${(ms / 1000).toFixed(1)}s`;
@@ -92,6 +90,7 @@ async function get(url: string, bearer: string): Promise<Response> {
 }
 
 export default async function globalSetup(): Promise<void> {
+  sjekkAtMiljoeneIkkeDelerTestbrukere();
   if (!process.env.CI && process.env.OPPVARMING !== 'true') return;
 
   const pids = finnTestbrukere();

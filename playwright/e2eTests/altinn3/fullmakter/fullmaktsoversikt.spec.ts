@@ -1,5 +1,10 @@
-import { expect, test } from '../../../fixture/pomFixture';
-import { loadTestdata } from '../../../util/testdata';
+import { expect, medTestbrukere } from '../../../fixture/pomFixture';
+
+const test = medTestbrukere({
+  virksomhet: 'dagligLeder',
+  mottaker: 'privatperson',
+  bruker: 'privatperson',
+});
 
 /**
  * Fullmaktsoversikt — oversikt over tilgangspakker og hvem som har fullmakt.
@@ -15,19 +20,15 @@ import { loadTestdata } from '../../../util/testdata';
  * organisations with their daglig leder, `yarn tenor personer --env <env>` for
  * people.
  */
-const TESTDATA = loadTestdata('fullmakter');
 
 const PAKKE = { urn: 'urn:altinn:accesspackage:posttjenester', navn: 'Posttjenester' };
 
 test.describe('Fullmaktsoversikt', () => {
   test.describe('oversikt', () => {
-    const {
-      organisasjoner: [virksomhet],
-    } = TESTDATA.oversikt;
-
     // No setup: the overview lists every access package regardless of what has
     // been delegated, and nothing here asserts on a recipient.
     test('oversikten viser tilgangspakker og nedlastingsvalg', async ({
+      virksomhet,
       fullmaktsoversiktPage,
       login,
     }) => {
@@ -50,12 +51,7 @@ test.describe('Fullmaktsoversikt', () => {
   });
 
   test.describe('pakkens brukere', () => {
-    const {
-      organisasjoner: [virksomhet],
-      personer: [mottaker],
-    } = TESTDATA.pakkensBrukere;
-
-    test.beforeEach(async ({ api }) => {
+    test.beforeEach(async ({ virksomhet, mottaker, api }) => {
       await api.connections.addConnectionAndPackagesToUser(
         virksomhet.pid,
         virksomhet.orgNo,
@@ -64,7 +60,12 @@ test.describe('Fullmaktsoversikt', () => {
       );
     });
 
-    test('pakkesiden viser hvem som har fullmakt', async ({ fullmaktsoversiktPage, login }) => {
+    test('pakkesiden viser hvem som har fullmakt', async ({
+      virksomhet,
+      mottaker,
+      fullmaktsoversiktPage,
+      login,
+    }) => {
       await test.step(`Logg inn som ${virksomhet.name} og åpne ${PAKKE.navn}`, async () => {
         await login.LoginToAccessManagement(virksomhet.pid);
         await login.selectActor(virksomhet.name);
@@ -82,7 +83,7 @@ test.describe('Fullmaktsoversikt', () => {
       });
     });
 
-    test.afterEach(async ({ api }) => {
+    test.afterEach(async ({ virksomhet, mottaker, api }) => {
       try {
         await api.connections.deleteConnection(virksomhet.pid, virksomhet.orgNo, [mottaker.pid]);
       } catch (error) {
@@ -92,12 +93,7 @@ test.describe('Fullmaktsoversikt', () => {
   });
 
   test.describe('gi og slett fullmakt fra pakkesiden', () => {
-    const {
-      organisasjoner: [virksomhet],
-      personer: [bruker],
-    } = TESTDATA.giOgSlett;
-
-    test.beforeEach(async ({ api }) => {
+    test.beforeEach(async ({ virksomhet, bruker, api }) => {
       // A connection WITHOUT the package, so the user shows up on the package
       // page as someone who can be given it.
       try {
@@ -108,7 +104,12 @@ test.describe('Fullmaktsoversikt', () => {
       await api.connections.addConnection(virksomhet.pid, virksomhet.orgNo, bruker.pid);
     });
 
-    test('gi og slett fullmakt til en tilgangspakke', async ({ fullmaktsoversiktPage, login }) => {
+    test('gi og slett fullmakt til en tilgangspakke', async ({
+      virksomhet,
+      bruker,
+      fullmaktsoversiktPage,
+      login,
+    }) => {
       await test.step(`Logg inn som ${virksomhet.name} og åpne ${PAKKE.navn}`, async () => {
         await login.LoginToAccessManagement(virksomhet.pid);
         await login.selectActor(virksomhet.name);
@@ -135,7 +136,7 @@ test.describe('Fullmaktsoversikt', () => {
       });
     });
 
-    test.afterEach(async ({ api }) => {
+    test.afterEach(async ({ virksomhet, bruker, api }) => {
       try {
         await api.connections.deleteConnection(virksomhet.pid, virksomhet.orgNo, [bruker.pid]);
       } catch (error) {
@@ -145,11 +146,8 @@ test.describe('Fullmaktsoversikt', () => {
   });
 
   test.describe('pakkens tjenester', () => {
-    const {
-      organisasjoner: [virksomhet],
-    } = TESTDATA.tjenester;
-
     test('tjenestefanen viser tjenestene pakken gir tilgang til', async ({
+      virksomhet,
       fullmaktsoversiktPage,
       login,
     }) => {
@@ -170,12 +168,7 @@ test.describe('Fullmaktsoversikt', () => {
   });
 
   test.describe('bruker uten tilgang', () => {
-    const {
-      organisasjoner: [virksomhet],
-      personer: [bruker],
-    } = TESTDATA.utenTilgang;
-
-    test.beforeEach(async ({ api }) => {
+    test.beforeEach(async ({ virksomhet, bruker, api }) => {
       // Clear any leftover from an earlier failed run first — addConnection
       // fails if the connection is already there.
       try {
@@ -188,6 +181,8 @@ test.describe('Fullmaktsoversikt', () => {
     });
 
     test('bruker uten administratorrettighet får ikke se fullmaktsoversikten', async ({
+      virksomhet,
+      bruker,
       fullmaktsoversiktPage,
       login,
     }) => {
@@ -207,7 +202,7 @@ test.describe('Fullmaktsoversikt', () => {
       });
     });
 
-    test.afterEach(async ({ api }) => {
+    test.afterEach(async ({ virksomhet, bruker, api }) => {
       try {
         await api.connections.deleteConnection(virksomhet.pid, virksomhet.orgNo, [bruker.pid]);
       } catch (error) {

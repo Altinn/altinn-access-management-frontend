@@ -1,21 +1,16 @@
-import { test } from '../../../fixture/pomFixture';
-import { loadTestdata } from '../../../util/testdata';
-
-const TESTDATA = loadTestdata('enkelttjenestedelegering');
+import { medTestbrukere, test } from '../../../fixture/pomFixture';
 
 const service = 'bruno-correspondence';
 
 test.describe('Enkelttjenestedelegering fra person til person og person til org', () => {
   test.describe('Deleger enkelttjeneste til person', () => {
-    const {
-      personer: [delegator, recipient],
-    } = TESTDATA.personDelegerTilPerson;
+    const test = medTestbrukere({ delegator: 'privatperson', recipient: 'privatperson' });
 
-    test.beforeEach(async ({ api }) => {
+    test.beforeEach(async ({ delegator, recipient, api }) => {
       await api.connections.addConnection(delegator.pid, delegator.pid, recipient.pid);
     });
 
-    test.afterEach(async ({ api }) => {
+    test.afterEach(async ({ delegator, recipient, api }) => {
       try {
         await api.connections.deleteSingleServiceDelegation(
           delegator.pid,
@@ -34,6 +29,8 @@ test.describe('Enkelttjenestedelegering fra person til person og person til org'
     });
 
     test('Deleger enkelttjeneste til person', async ({
+      delegator,
+      recipient,
       login,
       aktorvalgHeader,
       accessManagementFrontPage,
@@ -70,16 +67,13 @@ test.describe('Enkelttjenestedelegering fra person til person og person til org'
   });
 
   test.describe('Deleger enkelttjeneste til virksomhet', () => {
-    const {
-      organisasjoner: [recipient],
-      personer: [delegator],
-    } = TESTDATA.personDelegerTilVirksomhet;
+    const test = medTestbrukere({ recipient: 'dagligLeder', delegator: 'privatperson' });
 
-    test.beforeEach(async ({ api }) => {
+    test.beforeEach(async ({ delegator, recipient, api }) => {
       await api.connections.addConnection(delegator.pid, delegator.pid, recipient.orgNo);
     });
 
-    test.afterEach(async ({ api }) => {
+    test.afterEach(async ({ delegator, recipient, api }) => {
       try {
         await api.connections.deleteSingleServiceDelegation(
           delegator.pid,
@@ -98,6 +92,8 @@ test.describe('Enkelttjenestedelegering fra person til person og person til org'
     });
 
     test('Deleger enkelttjeneste til virksomhet', async ({
+      delegator,
+      recipient,
       login,
       aktorvalgHeader,
       accessManagementFrontPage,
@@ -136,11 +132,9 @@ test.describe('Enkelttjenestedelegering fra person til person og person til org'
   });
 
   test.describe('Slett enkelttjenestedelegering hos person', () => {
-    const {
-      personer: [delegator, recipient],
-    } = TESTDATA.personSlettHosPerson;
+    const test = medTestbrukere({ delegator: 'privatperson', recipient: 'privatperson' });
 
-    test.beforeEach(async ({ api }) => {
+    test.beforeEach(async ({ delegator, recipient, api }) => {
       await api.connections.addConnection(delegator.pid, delegator.pid, recipient.pid);
       await api.connections.delegateSingleService(
         delegator.pid,
@@ -150,7 +144,7 @@ test.describe('Enkelttjenestedelegering fra person til person og person til org'
       );
     });
 
-    test.afterEach(async ({ api }, testInfo) => {
+    test.afterEach(async ({ delegator, recipient, api }, testInfo) => {
       if (testInfo.status !== 'passed') {
         try {
           await api.connections.deleteSingleServiceDelegation(
@@ -171,6 +165,8 @@ test.describe('Enkelttjenestedelegering fra person til person og person til org'
     });
 
     test('Slett enkelttjenestedelegering hos person', async ({
+      delegator,
+      recipient,
       login,
       aktorvalgHeader,
       accessManagementFrontPage,
@@ -205,12 +201,9 @@ test.describe('Enkelttjenestedelegering fra person til person og person til org'
   });
 
   test.describe('Slett enkelttjeneste hos virksomhet', () => {
-    const {
-      organisasjoner: [recipient],
-      personer: [delegator],
-    } = TESTDATA.personSlettHosVirksomhet;
+    const test = medTestbrukere({ recipient: 'dagligLeder', delegator: 'privatperson' });
 
-    test.beforeEach(async ({ api }) => {
+    test.beforeEach(async ({ delegator, recipient, api }) => {
       await api.connections.addConnection(delegator.pid, delegator.pid, recipient.orgNo);
       await api.connections.delegateSingleService(
         delegator.pid,
@@ -220,7 +213,7 @@ test.describe('Enkelttjenestedelegering fra person til person og person til org'
       );
     });
 
-    test.afterEach(async ({ api }, testInfo) => {
+    test.afterEach(async ({ delegator, recipient, api }, testInfo) => {
       if (testInfo.status !== 'passed') {
         try {
           await api.connections.deleteSingleServiceDelegation(
@@ -241,6 +234,8 @@ test.describe('Enkelttjenestedelegering fra person til person og person til org'
     });
 
     test('Slett enkelttjeneste hos virksomhet', async ({
+      delegator,
+      recipient,
       login,
       aktorvalgHeader,
       accessManagementFrontPage,
@@ -279,16 +274,13 @@ test.describe('Enkelttjenestedelegering fra person til person og person til org'
 
 test.describe('Enkelttjenestedelegering fra org til person og org til org', () => {
   test.describe('Deleger enkelttjeneste fra org til person', () => {
-    const {
-      organisasjoner: [delegator],
-      personer: [recipient],
-    } = TESTDATA.orgDelegerTilPerson;
+    const test = medTestbrukere({ delegator: 'dagligLeder', recipient: 'privatperson' });
 
-    test.beforeEach(async ({ api }) => {
+    test.beforeEach(async ({ delegator, recipient, api }) => {
       await api.connections.addConnection(delegator.pid, delegator.orgNo, recipient.pid);
     });
 
-    test.afterEach(async ({ api }) => {
+    test.afterEach(async ({ delegator, recipient, api }) => {
       try {
         await api.connections.deleteSingleServiceDelegation(
           delegator.pid,
@@ -307,6 +299,8 @@ test.describe('Enkelttjenestedelegering fra org til person og org til org', () =
     });
 
     test('Deleger enkelttjeneste fra org til person', async ({
+      delegator,
+      recipient,
       login,
       aktorvalgHeader,
       accessManagementFrontPage,
@@ -343,15 +337,13 @@ test.describe('Enkelttjenestedelegering fra org til person og org til org', () =
   });
 
   test.describe('Deleger enkelttjeneste fra org til org', () => {
-    const {
-      organisasjoner: [delegator, recipient],
-    } = TESTDATA.orgDelegerTilVirksomhet;
+    const test = medTestbrukere({ delegator: 'dagligLeder', recipient: 'dagligLeder' });
 
-    test.beforeEach(async ({ api }) => {
+    test.beforeEach(async ({ delegator, recipient, api }) => {
       await api.connections.addConnection(delegator.pid, delegator.orgNo, recipient.orgNo);
     });
 
-    test.afterEach(async ({ api }) => {
+    test.afterEach(async ({ delegator, recipient, api }) => {
       try {
         await api.connections.deleteSingleServiceDelegation(
           delegator.pid,
@@ -370,6 +362,8 @@ test.describe('Enkelttjenestedelegering fra org til person og org til org', () =
     });
 
     test('Deleger enkelttjeneste fra org til org', async ({
+      delegator,
+      recipient,
       login,
       aktorvalgHeader,
       accessManagementFrontPage,
@@ -408,12 +402,9 @@ test.describe('Enkelttjenestedelegering fra org til person og org til org', () =
   });
 
   test.describe('Slett enkelttjenestedelegering fra org til person', () => {
-    const {
-      organisasjoner: [delegator],
-      personer: [recipient],
-    } = TESTDATA.orgSlettHosPerson;
+    const test = medTestbrukere({ delegator: 'dagligLeder', recipient: 'privatperson' });
 
-    test.beforeEach(async ({ api }) => {
+    test.beforeEach(async ({ delegator, recipient, api }) => {
       await api.connections.addConnection(delegator.pid, delegator.orgNo, recipient.pid);
       await api.connections.delegateSingleService(
         delegator.pid,
@@ -423,7 +414,7 @@ test.describe('Enkelttjenestedelegering fra org til person og org til org', () =
       );
     });
 
-    test.afterEach(async ({ api }, testInfo) => {
+    test.afterEach(async ({ delegator, recipient, api }, testInfo) => {
       if (testInfo.status !== 'passed') {
         try {
           await api.connections.deleteSingleServiceDelegation(
@@ -444,6 +435,8 @@ test.describe('Enkelttjenestedelegering fra org til person og org til org', () =
     });
 
     test('Slett enkelttjenestedelegering fra org til person', async ({
+      delegator,
+      recipient,
       login,
       aktorvalgHeader,
       accessManagementFrontPage,
@@ -478,11 +471,9 @@ test.describe('Enkelttjenestedelegering fra org til person og org til org', () =
   });
 
   test.describe('Slett enkelttjeneste fra org til org', () => {
-    const {
-      organisasjoner: [delegator, recipient],
-    } = TESTDATA.orgSlettHosVirksomhet;
+    const test = medTestbrukere({ delegator: 'dagligLeder', recipient: 'dagligLeder' });
 
-    test.beforeEach(async ({ api }) => {
+    test.beforeEach(async ({ delegator, recipient, api }) => {
       await api.connections.addConnection(delegator.pid, delegator.orgNo, recipient.orgNo);
       await api.connections.delegateSingleService(
         delegator.pid,
@@ -492,7 +483,7 @@ test.describe('Enkelttjenestedelegering fra org til person og org til org', () =
       );
     });
 
-    test.afterEach(async ({ api }, testInfo) => {
+    test.afterEach(async ({ delegator, recipient, api }, testInfo) => {
       if (testInfo.status !== 'passed') {
         try {
           await api.connections.deleteSingleServiceDelegation(
@@ -513,6 +504,8 @@ test.describe('Enkelttjenestedelegering fra org til person og org til org', () =
     });
 
     test('Slett enkelttjeneste fra org til org', async ({
+      delegator,
+      recipient,
       login,
       aktorvalgHeader,
       accessManagementFrontPage,

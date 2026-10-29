@@ -1,26 +1,26 @@
-import { expect, test } from 'playwright/fixture/pomFixture';
+import { expect, medTestbrukere } from 'playwright/fixture/pomFixture';
 import { Language } from 'playwright/pages/LanguageMenu';
 import { loadTestdata } from 'playwright/util/testdata';
+
+const {
+  organisasjoner: [vendor],
+} = loadTestdata('systemuser').creation;
+const test = medTestbrukere({ owner: 'dagligLeder' });
 
 // Runs in nynorsk on purpose: exercises the before-login language pinning
 // (settings API) and proves the dict-driven selectors work in a non-default
 // language. The rest of the suites run in the default bokmål.
 test.use({ language: Language.NN });
-const {
-  organisasjoner: [vendor, owner],
-} = loadTestdata('systemuser').creation;
 const vendorOrgNumber = vendor.orgNo;
-const testUserPid = owner.pid;
-const testOrgName = owner.name;
 
 test.describe('System Register', async () => {
   let system: string;
 
-  test.beforeEach(async ({ api, login }) => {
+  test.beforeEach(async ({ owner, api, login }) => {
     system = '';
     system = await api.systemUsers.createSystemSystemRegister(vendorOrgNumber);
-    await login.LoginToAccessManagement(testUserPid);
-    await login.selectActor(testOrgName);
+    await login.LoginToAccessManagement(owner.pid);
+    await login.selectActor(owner.name);
   });
 
   test('Create system user and verify landing page', async ({
@@ -43,7 +43,7 @@ test.describe('System Register', async () => {
     });
   });
 
-  test.afterEach(async ({ api }) => {
+  test.afterEach(async ({ owner, api }) => {
     if (system) {
       await api.systemUsers.cleanUpSystemUsersForSystem(
         `${vendorOrgNumber}_${system}`,

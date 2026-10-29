@@ -1,18 +1,15 @@
-import { expect, test } from '../../../fixture/pomFixture';
+import { expect, medTestbrukere } from '../../../fixture/pomFixture';
 import { ApiError } from '../../../api-requests/apiRequest';
-import { loadTestdata } from '../../../util/testdata';
 
-const TESTDATA = loadTestdata('klientadministrasjon');
+const test = medTestbrukere({ actor: 'dagligLeder', agent: 'privatperson', client: 'dagligLeder' });
+
 const posttjenester = 'urn:altinn:accesspackage:posttjenester';
 
 test.describe('klientadministrasjon', () => {
   test.describe('legg til bruker', () => {
-    const {
-      organisasjoner: [actor],
-      personer: [agent],
-    } = TESTDATA.leggTilBruker;
-
     test('legg til bruker', async ({
+      actor,
+      agent,
       accessManagementFrontPage,
       klientAdministrasjonPage,
       login,
@@ -37,7 +34,7 @@ test.describe('klientadministrasjon', () => {
       });
     });
 
-    test.afterEach(async ({ api }) => {
+    test.afterEach(async ({ actor, agent, api }) => {
       try {
         await api.connections.deleteClientDelegationAgent(actor.pid, actor.orgNo, agent.pid);
       } catch (error) {
@@ -47,12 +44,7 @@ test.describe('klientadministrasjon', () => {
   });
 
   test.describe('slett bruker', () => {
-    const {
-      organisasjoner: [actor],
-      personer: [agent],
-    } = TESTDATA.slettBruker;
-
-    test.beforeEach(async ({ api }) => {
+    test.beforeEach(async ({ actor, agent, api }) => {
       try {
         await api.connections.deleteClientDelegationAgent(actor.pid, actor.orgNo, agent.pid);
       } catch {
@@ -62,6 +54,8 @@ test.describe('klientadministrasjon', () => {
     });
 
     test('slett bruker', async ({
+      actor,
+      agent,
       accessManagementFrontPage,
       klientAdministrasjonPage,
       login,
@@ -88,7 +82,7 @@ test.describe('klientadministrasjon', () => {
       });
     });
 
-    test.afterEach(async ({ api }, testInfo) => {
+    test.afterEach(async ({ actor, agent, api }, testInfo) => {
       if (testInfo.status === 'passed') return;
 
       try {
@@ -100,12 +94,7 @@ test.describe('klientadministrasjon', () => {
   });
 
   test.describe('deleger klient til en bruker fra klientfanen', () => {
-    const {
-      organisasjoner: [actor, client],
-      personer: [agent],
-    } = TESTDATA.delegerFraKlientfanen;
-
-    test.beforeEach(async ({ api }) => {
+    test.beforeEach(async ({ actor, agent, client, api }) => {
       try {
         await api.connections.deleteConnection(client.pid, client.orgNo, [actor.orgNo]);
       } catch {
@@ -124,6 +113,9 @@ test.describe('klientadministrasjon', () => {
     });
 
     test('deleger klient til en bruker fra klientfanen', async ({
+      actor,
+      agent,
+      client,
       accessManagementFrontPage,
       klientAdministrasjonPage,
       login,
@@ -155,7 +147,7 @@ test.describe('klientadministrasjon', () => {
       });
     });
 
-    test.afterEach(async ({ api }) => {
+    test.afterEach(async ({ actor, agent, client, api }) => {
       try {
         await api.connections.deleteConnection(client.pid, client.orgNo, [actor.orgNo]);
       } catch (error) {
@@ -170,12 +162,7 @@ test.describe('klientadministrasjon', () => {
   });
 
   test.describe('deleger klient til en bruker fra brukerfanen', () => {
-    const {
-      organisasjoner: [actor, client],
-      personer: [agent],
-    } = TESTDATA.delegerFraBrukerfanen;
-
-    test.beforeEach(async ({ api }) => {
+    test.beforeEach(async ({ actor, agent, client, api }) => {
       try {
         await api.connections.deleteConnection(client.pid, client.orgNo, [actor.orgNo]);
       } catch {
@@ -194,6 +181,9 @@ test.describe('klientadministrasjon', () => {
     });
 
     test('deleger klient til en bruker fra brukerfanen', async ({
+      actor,
+      agent,
+      client,
       accessManagementFrontPage,
       klientAdministrasjonPage,
       login,
@@ -226,7 +216,7 @@ test.describe('klientadministrasjon', () => {
       });
     });
 
-    test.afterEach(async ({ api }) => {
+    test.afterEach(async ({ actor, agent, client, api }) => {
       try {
         await api.connections.deleteConnection(client.pid, client.orgNo, [actor.orgNo]);
       } catch (error) {
@@ -241,12 +231,7 @@ test.describe('klientadministrasjon', () => {
   });
 
   test.describe('Slett fullmakt for en bruker fra brukerfanen', () => {
-    const {
-      organisasjoner: [actor, client],
-      personer: [agent],
-    } = TESTDATA.slettFraBrukerfanen;
-
-    test.beforeEach(async ({ api }) => {
+    test.beforeEach(async ({ actor, agent, client, api }) => {
       try {
         await api.connections.deleteConnection(client.pid, client.orgNo, [actor.orgNo]);
       } catch (error) {
@@ -276,6 +261,9 @@ test.describe('klientadministrasjon', () => {
     });
 
     test('Slett fullmakt for en bruker fra brukerfanen', async ({
+      actor,
+      agent,
+      client,
       accessManagementFrontPage,
       klientAdministrasjonPage,
       login,
@@ -301,7 +289,7 @@ test.describe('klientadministrasjon', () => {
       });
     });
 
-    test.afterEach(async ({ api }) => {
+    test.afterEach(async ({ actor, agent, client, api }) => {
       try {
         await api.connections.deleteConnection(client.pid, client.orgNo, [actor.orgNo]);
       } catch (error) {
@@ -320,12 +308,8 @@ test.describe('klientadministrasjon', () => {
     // which is where the aktørvelger starts paging its list. `client` must be a
     // real ER client of `actor` — an arbitrary connection between two unrelated
     // organisations does not show up under the Klienter tab.
-    const {
-      organisasjoner: [actor, client],
-      personer: [agent],
-    } = TESTDATA.slettFraKlientfanen;
 
-    test.beforeEach(async ({ api }) => {
+    test.beforeEach(async ({ actor, agent, client, api }) => {
       try {
         await api.connections.deleteConnection(client.pid, client.orgNo, [actor.orgNo]);
       } catch {
@@ -351,6 +335,9 @@ test.describe('klientadministrasjon', () => {
     });
 
     test('Slett fullmakt for en bruker fra klientfanen', async ({
+      actor,
+      agent,
+      client,
       accessManagementFrontPage,
       klientAdministrasjonPage,
       login,
@@ -379,7 +366,7 @@ test.describe('klientadministrasjon', () => {
       });
     });
 
-    test.afterEach(async ({ api }) => {
+    test.afterEach(async ({ actor, agent, client, api }) => {
       try {
         await api.connections.deleteConnection(client.pid, client.orgNo, [actor.orgNo]);
       } catch (error) {

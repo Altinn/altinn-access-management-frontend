@@ -1,30 +1,30 @@
-import { test, expect } from 'playwright/fixture/pomFixture';
+import { expect, medTestbrukere } from 'playwright/fixture/pomFixture';
 import { TestdataApi } from 'playwright/util/TestdataApi';
 import { loadTestdata } from 'playwright/util/testdata';
 import { LoginPage } from 'playwright/pages/LoginPage';
 import { SystemUserPage } from 'playwright/pages/systemuser/SystemUserPage';
 import { ClientDelegationPage } from 'playwright/pages/systemuser/ClientDelegation';
 
+// `regularUser` is connected to the owner as a plain right-holder: no access manager
+// privileges, so they may escalate the request but not approve it.
+const test = medTestbrukere({ owner: 'dagligLeder', regularUser: 'privatperson' });
+
 test.describe('Systembruker - Eskaler', () => {
   const {
-    organisasjoner: [vendor, owner],
-    personer: [regularUser],
+    organisasjoner: [vendor],
   } = loadTestdata('systemuser').escalate;
   const vendorOrgNumber = vendor.orgNo;
-  const systemuserOwnerOrg = owner.orgNo;
-  const regularUserPid = regularUser.pid; // No accessManager privileges, may escalate requests
-  const managerPid = owner.pid;
-  const actorName = owner.name;
 
   let name: string;
   let systemId: string;
   let externalRef: string;
   let response: { confirmUrl: string; id: string };
 
-  test.beforeEach(async ({ api }) => {
+  test.beforeEach(async ({ owner, regularUser, api }) => {
     name = '';
     name = `Playwright-e2e-eskaler-${Date.now()}`;
     externalRef = TestdataApi.generateExternalRef();
+    await api.connections.addConnection(owner.pid, owner.orgNo, regularUser.pid);
 
     systemId = await test.step('Create system', async () => {
       return await api.systemUsers.createSystemInSystemregisterWithAccessPackages(
@@ -43,7 +43,7 @@ test.describe('Systembruker - Eskaler', () => {
         vendorOrgNumber,
         externalRef,
         systemId,
-        systemuserOwnerOrg,
+        owner.orgNo,
         undefined,
         [
           { resource: [{ value: 'vegardtestressurs', id: 'urn:altinn:resource' }] },
@@ -55,6 +55,8 @@ test.describe('Systembruker - Eskaler', () => {
   });
 
   test('Eskaler Systembrukerforespørsel som "vanlig" bruker og godkjenn som daglig leder', async ({
+    owner,
+    regularUser,
     page,
     login,
     systemUserPage,
@@ -64,7 +66,7 @@ test.describe('Systembruker - Eskaler', () => {
   }): Promise<void> => {
     await test.step('Login as regular user, select actor and escalate request', async () => {
       await page.goto(response.confirmUrl);
-      await login.loginNotChoosingActor(regularUserPid);
+      await login.loginNotChoosingActor(regularUser.pid);
       await systemUserPage.escalateConfirmButton.click();
       await Promise.all([page.waitForLoadState('load'), systemUserPage.finish.click()]);
     });
@@ -76,8 +78,8 @@ test.describe('Systembruker - Eskaler', () => {
     const managerClientDelegationPage = new ClientDelegationPage(managerPage, language);
 
     await test.step('Login as manager and choose reportee', async () => {
-      await managerLogin.LoginToAccessManagement(managerPid);
-      await managerLogin.selectActor(actorName);
+      await managerLogin.LoginToAccessManagement(owner.pid);
+      await managerLogin.selectActor(owner.name);
     });
 
     await test.step('Find and approve escalated request', async () => {
@@ -99,12 +101,17 @@ test.describe('Systembruker - Eskaler', () => {
     await managerContext.close();
   });
 
-  test.afterEach(async ({ api }) => {
+  test.afterEach(async ({ owner, regularUser, api }) => {
+    try {
+      await api.connections.deleteConnection(owner.pid, owner.orgNo, [regularUser.pid]);
+    } catch (error) {
+      console.error('Cleanup: Failed to delete connection:', error);
+    }
     if (name) {
       await api.systemUsers.cleanUpSystemUsersForSystem(
         `${vendorOrgNumber}_${name}`,
-        managerPid,
-        systemuserOwnerOrg,
+        owner.pid,
+        owner.orgNo,
       );
       await api.systemUsers.deleteSystemInSystemRegister(vendorOrgNumber, name);
     }

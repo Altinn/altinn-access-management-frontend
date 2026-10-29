@@ -1,5 +1,5 @@
 // pomFixtures.ts
-import { expect } from '@playwright/test';
+import { expect, mergeTests } from '@playwright/test';
 
 import { ConsentPage, Language } from 'playwright/pages/consent/ConsentPage';
 import { LanguageMenu } from 'playwright/pages/LanguageMenu';
@@ -19,6 +19,12 @@ import { MaskinportenPage } from 'playwright/pages/maskinporten/MaskinportenPage
 import { FullmaktsoversiktPage } from 'playwright/pages/fullmakter/FullmaktsoversiktPage';
 
 import { apiFixture } from './apiFixture';
+import {
+  testbrukereFixture,
+  type Gruppe,
+  type Grupper,
+  type Testbrukere,
+} from './testbrukereFixture';
 
 const defaultLang = Language.NB;
 
@@ -47,8 +53,8 @@ type Fixtures = {
   fullmaktsoversiktPage: FullmaktsoversiktPage;
 };
 
-// Page objects on top of the api fixture, so LoginPage (and specs) get `api` too.
-const test = apiFixture.extend<Fixtures>({
+// Page objects on top of the api and testbruker fixtures, so LoginPage (and specs) get `api` too.
+const test = mergeTests(apiFixture, testbrukereFixture).extend<Fixtures>({
   // Simulate slow CI runner network: SLOW_NETWORK=1 yarn run env:TT02 <path>
   slowNetwork: [
     async ({ page }, use) => {
@@ -130,4 +136,24 @@ const test = apiFixture.extend<Fixtures>({
   },
 });
 
-export { test, expect };
+/**
+ * Gir hver rolle i en spec en egen reservert testbruker som fixture, for eksempel
+ * `const test = medTestbrukere({ actor: 'dagligLeder', requester: 'privatperson' })`.
+ * Hooks og test i samme test får samme bruker.
+ */
+function medTestbrukere<R extends Record<string, Gruppe>>(roller: R) {
+  const fixtures = Object.fromEntries(
+    Object.entries(roller).map(([rolle, gruppe]) => [
+      rolle,
+      async (
+        { testbrukere }: { testbrukere: Testbrukere },
+        use: (bruker: Grupper[Gruppe]) => Promise<void>,
+      ) => {
+        await use(testbrukere.reserver(gruppe));
+      },
+    ]),
+  );
+  return test.extend<{ [K in keyof R]: Grupper[R[K]] }>(fixtures as never);
+}
+
+export { test, expect, medTestbrukere };

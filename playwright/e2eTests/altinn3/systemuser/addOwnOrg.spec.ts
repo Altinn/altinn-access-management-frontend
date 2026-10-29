@@ -1,28 +1,42 @@
-import { test, expect } from 'playwright/fixture/pomFixture';
+import { expect, medTestbrukere } from 'playwright/fixture/pomFixture';
 import { TestdataApi } from 'playwright/util/TestdataApi';
 import { pickRandom } from 'playwright/util/helper';
 import { loadTestdata } from 'playwright/util/testdata';
 
+// The clients delegate the access package to the owner in `beforeEach`, which is what
+// makes them show up under «Legg til alle kunder».
+const test = medTestbrukere({
+  systemUserOwner: 'dagligLeder',
+  client1: 'dagligLeder',
+  client2: 'dagligLeder',
+});
+
 test.describe('Systembruker - Legg til egen organisasjon', () => {
   const {
-    organisasjoner: [vendor, systemUserOwner, client1, client2, client3],
+    organisasjoner: [vendor],
   } = loadTestdata('systemuser').addOwnOrg;
   const vendorOrgNumber = vendor.orgNo;
   const accessPackageApiName = pickRandom(['jordbruk', 'motorvognavgift', 'pensjon']);
   const accessPackageUrn = `urn:altinn:accesspackage:${accessPackageApiName}`;
-
-  // All these clients must have delegated the accessPackages listed above to the owner organization
-  const clients = [client1, client2, client3];
 
   let name: string;
   let systemId: string;
   let externalRef: string;
   let response: { confirmUrl: string; id: string };
 
-  test.beforeEach(async ({ api }) => {
+  test.beforeEach(async ({ systemUserOwner, client1, client2, api }) => {
     name = '';
     name = `Playwright-e2e-${accessPackageApiName}-${Date.now()}`;
     externalRef = TestdataApi.generateExternalRef();
+
+    for (const client of [client1, client2]) {
+      await api.connections.addConnectionAndPackagesToUser(
+        client.pid,
+        client.orgNo,
+        systemUserOwner.orgNo,
+        [accessPackageUrn],
+      );
+    }
 
     systemId = await test.step('Create system with access package', async () => {
       return await api.systemUsers.createSystemInSystemregisterWithAccessPackages(
@@ -44,6 +58,9 @@ test.describe('Systembruker - Legg til egen organisasjon', () => {
   });
 
   test('Legg til din virksomhet', async ({
+    systemUserOwner,
+    client1,
+    client2,
     page,
     login,
     accessManagementFrontPage,
@@ -72,7 +89,7 @@ test.describe('Systembruker - Legg til egen organisasjon', () => {
     });
 
     await test.step('Verify clients are added', async () => {
-      for (const { orgNo, name: orgName } of clients) {
+      for (const { orgNo, name: orgName } of [client1, client2]) {
         const formatted = `Org.nr. ${orgNo.slice(0, 3)} ${orgNo.slice(3, 6)} ${orgNo.slice(6)}`;
         await expect(clientDelegationPage.ownOrgHeading(orgName)).toBeVisible();
         await expect(clientDelegationPage.clientOrgNumber(orgName, formatted)).toBeVisible();
@@ -105,7 +122,14 @@ test.describe('Systembruker - Legg til egen organisasjon', () => {
       await clientDelegationPage.deleteSystemUser(name);
     });
   });
-  test.afterEach(async ({ api }) => {
+  test.afterEach(async ({ systemUserOwner, client1, client2, api }) => {
+    for (const client of [client1, client2]) {
+      try {
+        await api.connections.deleteConnection(client.pid, client.orgNo, [systemUserOwner.orgNo]);
+      } catch (error) {
+        console.error('Cleanup: Failed to delete client connection:', error);
+      }
+    }
     if (name) {
       await api.systemUsers.cleanUpSystemUsersForSystem(
         `${vendorOrgNumber}_${name}`,

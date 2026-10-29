@@ -1,11 +1,10 @@
-import { test } from 'playwright/fixture/pomFixture';
+import { medTestbrukere } from 'playwright/fixture/pomFixture';
 import { loadTestdata } from 'playwright/util/testdata';
 
+// Favoritter trenger bare en bruker med én aktør i tillegg til seg selv.
+const test = medTestbrukere({ favorittLeder: 'dagligLeder' });
+
 const TESTDATA = loadTestdata('header');
-const {
-  personer: [favorittBruker],
-  organisasjoner: [favorittAktoer],
-} = TESTDATA.favoritter;
 const {
   personer: [slettedeEnheterBruker],
   organisasjoner: [slettetAktoer],
@@ -20,9 +19,7 @@ const {
 } = TESTDATA.underenhet;
 
 test.describe('Aktørvalg, valg og visning av avgiver', () => {
-  const HEADER_TEST_USER = favorittBruker.pid;
   const SHOW_DELETED_TEST_USER = slettedeEnheterBruker.pid;
-  const DEFAULT_ACTOR_NAME = favorittAktoer.name;
 
   // Need a user with a decent number of actors to properly test the search functionality.
   // The search terms below must match the `sok` test data.
@@ -53,12 +50,13 @@ test.describe('Aktørvalg, valg og visning av avgiver', () => {
   });
 
   test('Check that all header buttons are visible and clickable', async ({
+    favorittLeder,
     login,
     aktorvalgHeader,
   }) => {
     await test.step('Log in', async () => {
-      await login.LoginToAccessManagement(HEADER_TEST_USER);
-      await aktorvalgHeader.selectActorFromHeaderMenu(DEFAULT_ACTOR_NAME);
+      await login.LoginToAccessManagement(favorittLeder.pid);
+      await aktorvalgHeader.selectActorFromHeaderMenu(favorittLeder.name);
       await aktorvalgHeader.chooseBokmalLanguage();
     });
 
@@ -67,27 +65,31 @@ test.describe('Aktørvalg, valg og visning av avgiver', () => {
     });
   });
 
-  test('Add and remove favorite actor from actor menu', async ({ login, aktorvalgHeader }) => {
+  test('Add and remove favorite actor from actor menu', async ({
+    favorittLeder,
+    login,
+    aktorvalgHeader,
+  }) => {
     await test.step('Log in', async () => {
-      await login.LoginToAccessManagement(HEADER_TEST_USER);
-      await aktorvalgHeader.selectActorFromHeaderMenu(DEFAULT_ACTOR_NAME);
+      await login.LoginToAccessManagement(favorittLeder.pid);
+      await aktorvalgHeader.selectActorFromHeaderMenu(favorittLeder.name);
       await aktorvalgHeader.chooseBokmalLanguage();
     });
 
     await test.step('Reset favorites and select default actor', async () => {
-      await aktorvalgHeader.goToSelectActor(DEFAULT_ACTOR_NAME);
+      await aktorvalgHeader.goToSelectActor(favorittLeder.name);
       await aktorvalgHeader.removeAllFavorites();
-      await aktorvalgHeader.selectActorFromHeaderMenu(DEFAULT_ACTOR_NAME);
+      await aktorvalgHeader.selectActorFromHeaderMenu(favorittLeder.name);
     });
 
     await test.step('Add actor as favorite', async () => {
-      await aktorvalgHeader.goToSelectActor(DEFAULT_ACTOR_NAME);
+      await aktorvalgHeader.goToSelectActor(favorittLeder.name);
       await aktorvalgHeader.clickFavorite();
     });
 
     await test.step('Remove actor from favorites', async () => {
-      await aktorvalgHeader.selectActorFromHeaderMenu(favorittBruker.name);
-      await aktorvalgHeader.goToSelectActor(favorittBruker.name);
+      await aktorvalgHeader.selectActorFromHeaderMenu(favorittLeder.managerName);
+      await aktorvalgHeader.goToSelectActor(favorittLeder.managerName);
       await aktorvalgHeader.unfavoriteFirstActor();
     });
   });

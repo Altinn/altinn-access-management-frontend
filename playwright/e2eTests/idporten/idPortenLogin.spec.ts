@@ -1,12 +1,9 @@
-import { test } from 'playwright/fixture/pomFixture';
-import { loadTestdata } from 'playwright/util/testdata';
+import { medTestbrukere } from 'playwright/fixture/pomFixture';
 
-const {
-  personer: [bruker],
-} = loadTestdata('idporten').innlogging;
+const test = medTestbrukere({ bruker: 'privatperson' });
 
 test.describe('ID Porten Login', () => {
-  test('Login with TestID', async ({ login }) => {
+  test('Login with TestID', async ({ bruker, login }) => {
     await test.step('Login to Access Management', async () => {
       await login.LoginToAccessManagement(bruker.pid);
     });

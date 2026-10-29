@@ -5,7 +5,7 @@ import type { ConsentApiRequests } from 'playwright/api-requests/ConsentApiReque
 import { addTimeToNowUtc, currentEnv, formatUiDateTime, pickRandom } from 'playwright/util/helper';
 
 import { getConsentRequestId } from './helper/consentHelper.js';
-import { maskinportenOrg, maskinportenPerson, toOrgs } from './helper/consentTestdata';
+import { toOrgs } from './helper/consentTestdata';
 
 const MASKINPORTEN_ORG_DIGDIR = '991825827';
 const ENV = currentEnv().toUpperCase();
@@ -44,8 +44,8 @@ test.describe('Fetch consent token after approval', () => {
     expect(token.length).toBeGreaterThan(10);
   }
 
-  test('From person to org', async ({ login, consentPage, api }) => {
-    const fromPerson = maskinportenPerson(test.info().title);
+  test('From person to org', async ({ testbrukere, login, consentPage, api }) => {
+    const fromPerson = testbrukere.reserver('privatperson').pid;
     const toOrg = MASKINPORTEN_ORG_DIGDIR;
     const validTo = addTimeToNowUtc({ days: 5 });
 
@@ -84,8 +84,8 @@ test.describe('Fetch consent token after approval', () => {
     });
   });
 
-  test('From org to org', async ({ login, consentPage, api }) => {
-    const [fromOrg, personThatCanApprove] = maskinportenOrg(test.info().title);
+  test('From org to org', async ({ testbrukere, login, consentPage, api }) => {
+    const { orgNo: fromOrg, pid: personThatCanApprove } = testbrukere.reserver('dagligLeder');
     const toOrg = MASKINPORTEN_ORG_DIGDIR;
     const validTo = addTimeToNowUtc({ days: 5 });
 
@@ -136,8 +136,8 @@ test.describe('Fetch consent token after approval', () => {
    *
    */
 
-  test('E-bevis', async ({ login, consentPage, api }) => {
-    const [fromOrg, personThatCanApprove] = maskinportenOrg(test.info().title);
+  test('E-bevis', async ({ testbrukere, login, consentPage, api }) => {
+    const { orgNo: fromOrg, pid: personThatCanApprove } = testbrukere.reserver('dagligLeder');
     const toOrg = pickRandom(toOrgs);
     const validTo = addTimeToNowUtc({ days: 2 });
 
@@ -197,10 +197,10 @@ test.describe('Fetch consent token after approval', () => {
    * - Sparebanken Drift henter ut Maskinporten-token for Sparebank 1 Øst ved å oppgi
    *   consumer_org for Sparebank 1 Øst (for selve forespørselen).
    */
-  test('På vegne av - Person to org', async ({ login, consentPage, api }) => {
+  test('På vegne av - Person to org', async ({ testbrukere, login, consentPage, api }) => {
     const FROM_ORG = '313876144'; //Dagl 28913749776
 
-    const fromPerson = maskinportenPerson(test.info().title);
+    const fromPerson = testbrukere.reserver('privatperson').pid;
     const validTo = addTimeToNowUtc({ days: 5 });
 
     const consentResp =
@@ -272,11 +272,11 @@ test.describe('Fetch consent token after approval', () => {
    * - Sparebanken Drift henter ut Maskinporten-token for Sparebank 1 Øst ved å oppgi
    *   consumer_org for Sparebank 1 Øst (for selve forespørselen).
    */
-  test('På vegne av - Org to org', async ({ login, consentPage, api }) => {
+  test('På vegne av - Org to org', async ({ testbrukere, login, consentPage, api }) => {
     const SPAREBANKEN_ORG_NUMBER = '313876144'; //Dagl 28913749776
 
     // Org that consents
-    const [fromOrg, personThatCanApprove] = maskinportenOrg(test.info().title);
+    const { orgNo: fromOrg, pid: personThatCanApprove } = testbrukere.reserver('dagligLeder');
     const validTo = addTimeToNowUtc({ days: 5 });
 
     let viewUri: string;

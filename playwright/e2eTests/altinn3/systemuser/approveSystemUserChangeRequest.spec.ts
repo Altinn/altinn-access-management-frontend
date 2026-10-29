@@ -1,17 +1,14 @@
-import { test, expect } from 'playwright/fixture/pomFixture';
+import { expect, medTestbrukere } from 'playwright/fixture/pomFixture';
 import { TestdataApi } from 'playwright/util/TestdataApi';
 import { env } from 'playwright/util/helper';
 import type { SystemUserApiRequests } from 'playwright/api-requests/SystemUserApiRequests';
 import { loadTestdata } from 'playwright/util/testdata';
 const {
-  organisasjoner: [vendor, owner],
+  organisasjoner: [vendor],
 } = loadTestdata('systemuser').changes;
+const test = medTestbrukere({ owner: 'dagligLeder' });
 const vendorOrgNumber = vendor.orgNo;
 const prebuiltSystemId = '310547891_E2E-Playwright-Authentication';
-const testUserPid = owner.pid;
-const testOrgName = owner.name;
-
-const testUser = testUserPid;
 
 const changeRequest = {
   requiredRights: [{ resource: [{ value: 'vegardtestressurs', id: 'urn:altinn:resource' }] }],
@@ -27,7 +24,7 @@ test.describe('Systembruker endringsforespørsel', () => {
     ReturnType<SystemUserApiRequests['postSystemuserChangeRequest']>
   >;
 
-  test.beforeEach(async ({ api }) => {
+  test.beforeEach(async ({ owner, api }) => {
     externalRef = TestdataApi.generateExternalRef();
 
     const response = await api.systemUsers.postSystemuserRequest(
@@ -36,7 +33,7 @@ test.describe('Systembruker endringsforespørsel', () => {
       prebuiltSystemId,
       owner.orgNo,
     );
-    await api.systemUsers.approveSystemuserRequest(response.id, owner.orgNo, testUserPid);
+    await api.systemUsers.approveSystemuserRequest(response.id, owner.orgNo, owner.pid);
 
     systemUserId = await api.systemUsers.getSystemUserByQuery(
       vendorOrgNumber,
@@ -53,6 +50,7 @@ test.describe('Systembruker endringsforespørsel', () => {
   });
 
   test('Avvis endringsforespørsel', async ({
+    owner,
     page,
     login,
     systemUserConfirmPage,
@@ -60,7 +58,7 @@ test.describe('Systembruker endringsforespørsel', () => {
   }): Promise<void> => {
     await test.step('Navigate to change request confirmation page and login', async () => {
       await page.goto(changeRequestResponse.confirmUrl);
-      await login.loginNotChoosingActor(testUser);
+      await login.loginNotChoosingActor(owner.pid);
     });
 
     await test.step('Reject change request', async () => {
@@ -79,6 +77,7 @@ test.describe('Systembruker endringsforespørsel', () => {
   });
 
   test('Godkjenn endringsforespørsel', async ({
+    owner,
     page,
     login,
     systemUserConfirmPage,
@@ -86,7 +85,7 @@ test.describe('Systembruker endringsforespørsel', () => {
   }): Promise<void> => {
     await test.step('Navigate to change request confirmation page and login', async () => {
       await page.goto(changeRequestResponse.confirmUrl);
-      await login.loginNotChoosingActor(testUser);
+      await login.loginNotChoosingActor(owner.pid);
     });
 
     await test.step('Approve change request', async () => {
@@ -105,8 +104,8 @@ test.describe('Systembruker endringsforespørsel', () => {
     });
 
     await test.step('Verify rights changes are reflected', async () => {
-      await login.LoginToAccessManagement(testUser);
-      await login.selectActor(testOrgName);
+      await login.LoginToAccessManagement(owner.pid);
+      await login.selectActor(owner.name);
 
       const systemUserUrl = `${env('SYSTEMUSER_URL')}`;
       await page.goto(systemUserUrl + '/' + systemUserId);
@@ -121,7 +120,7 @@ test.describe('Systembruker endringsforespørsel', () => {
     });
   });
 
-  test.afterEach(async ({ api }) => {
+  test.afterEach(async ({ owner, api }) => {
     if (externalRef) {
       await api.systemUsers.cleanUpSystemUsersForSystem(
         prebuiltSystemId,

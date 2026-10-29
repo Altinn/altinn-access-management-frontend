@@ -1,15 +1,12 @@
-import { test } from '../../../fixture/pomFixture';
-import { loadTestdata } from '../../../util/testdata';
-
-const TESTDATA = loadTestdata('tilgangspakkedelegering');
+import { medTestbrukere, test } from '../../../fixture/pomFixture';
 
 test.describe('tilgangspakkedelegering fra person til person og person til org', () => {
   test.describe('Legg til ny person hos deg selv', () => {
-    const {
-      personer: [actor, target],
-    } = TESTDATA.personLeggTilPerson;
+    const test = medTestbrukere({ actor: 'privatperson', target: 'privatperson' });
 
     test('Legg til ny person hos deg selv', async ({
+      actor,
+      target,
       login,
       aktorvalgHeader,
       accessManagementFrontPage,
@@ -37,7 +34,7 @@ test.describe('tilgangspakkedelegering fra person til person og person til org',
       });
     });
 
-    test.afterEach(async ({ api }) => {
+    test.afterEach(async ({ actor, target, api }) => {
       try {
         await api.connections.deleteConnection(actor.pid, actor.pid, [target.pid]);
       } catch (error) {
@@ -47,12 +44,11 @@ test.describe('tilgangspakkedelegering fra person til person og person til org',
   });
 
   test.describe('Legg til ny virksomhet hos deg selv', () => {
-    const {
-      organisasjoner: [target],
-      personer: [actor],
-    } = TESTDATA.personLeggTilVirksomhet;
+    const test = medTestbrukere({ target: 'dagligLeder', actor: 'privatperson' });
 
     test('Legg til ny virksomhet hos deg selv', async ({
+      actor,
+      target,
       login,
       aktorvalgHeader,
       accessManagementFrontPage,
@@ -81,7 +77,7 @@ test.describe('tilgangspakkedelegering fra person til person og person til org',
       });
     });
 
-    test.afterEach(async ({ api }) => {
+    test.afterEach(async ({ actor, target, api }) => {
       try {
         await api.connections.deleteConnection(actor.pid, actor.pid, [target.orgNo]);
       } catch (error) {
@@ -91,16 +87,14 @@ test.describe('tilgangspakkedelegering fra person til person og person til org',
   });
 
   test.describe('Deleger tilgangspakke til person', () => {
-    const {
-      personer: [actor, target],
-    } = TESTDATA.personDelegerTilPerson;
+    const test = medTestbrukere({ actor: 'privatperson', target: 'privatperson' });
     const pkg = {
       urn: 'urn:altinn:accesspackage:innbygger-utdanning',
       name: 'Utdanning',
       area: 'Arbeidsliv, skole og utdanning',
     };
 
-    test.beforeEach(async ({ api }) => {
+    test.beforeEach(async ({ actor, target, api }) => {
       try {
         await api.connections.deleteConnection(actor.pid, actor.pid, [target.pid]);
       } catch {
@@ -110,6 +104,8 @@ test.describe('tilgangspakkedelegering fra person til person og person til org',
     });
 
     test('Deleger tilgangspakke til person', async ({
+      actor,
+      target,
       login,
       aktorvalgHeader,
       accessManagementFrontPage,
@@ -142,7 +138,7 @@ test.describe('tilgangspakkedelegering fra person til person og person til org',
       });
     });
 
-    test.afterEach(async ({ api }) => {
+    test.afterEach(async ({ actor, target, api }) => {
       try {
         await api.connections.deleteConnection(actor.pid, actor.pid, [target.pid]);
       } catch (error) {
@@ -152,17 +148,14 @@ test.describe('tilgangspakkedelegering fra person til person og person til org',
   });
 
   test.describe('Deleger tilgangspakke til virksomhet', () => {
-    const {
-      organisasjoner: [target],
-      personer: [actor],
-    } = TESTDATA.personDelegerTilVirksomhet;
+    const test = medTestbrukere({ target: 'dagligLeder', actor: 'privatperson' });
     const pkg = {
       urn: 'urn:altinn:accesspackage:innbygger-utdanning',
       name: 'Utdanning',
       area: 'Arbeidsliv, skole og utdanning',
     };
 
-    test.beforeEach(async ({ api }) => {
+    test.beforeEach(async ({ actor, target, api }) => {
       try {
         await api.connections.deleteConnection(actor.pid, actor.pid, [target.orgNo]);
       } catch {
@@ -172,6 +165,8 @@ test.describe('tilgangspakkedelegering fra person til person og person til org',
     });
 
     test('Deleger tilgangspakke til virksomhet', async ({
+      actor,
+      target,
       login,
       aktorvalgHeader,
       accessManagementFrontPage,
@@ -206,7 +201,7 @@ test.describe('tilgangspakkedelegering fra person til person og person til org',
       });
     });
 
-    test.afterEach(async ({ api }) => {
+    test.afterEach(async ({ actor, target, api }) => {
       try {
         await api.connections.deleteConnection(actor.pid, actor.pid, [target.orgNo]);
       } catch (error) {
@@ -216,22 +211,22 @@ test.describe('tilgangspakkedelegering fra person til person og person til org',
   });
 
   test.describe('Slett tilgangspakke hos person', () => {
-    const {
-      personer: [actor, target],
-    } = TESTDATA.personSlettHosPerson;
+    const test = medTestbrukere({ actor: 'privatperson', target: 'privatperson' });
     const pkg = {
       urn: 'urn:altinn:accesspackage:innbygger-samliv',
       name: 'Samliv',
       area: 'Familie og fritid',
     };
 
-    test.beforeEach(async ({ api }) => {
+    test.beforeEach(async ({ actor, target, api }) => {
       await api.connections.addConnectionAndPackagesToUser(actor.pid, actor.pid, target.pid, [
         pkg.urn,
       ]);
     });
 
     test('Slett tilgangspakke hos person', async ({
+      actor,
+      target,
       login,
       aktorvalgHeader,
       accessManagementFrontPage,
@@ -263,7 +258,7 @@ test.describe('tilgangspakkedelegering fra person til person og person til org',
       });
     });
 
-    test.afterEach(async ({ api }, testInfo) => {
+    test.afterEach(async ({ actor, target, api }, testInfo) => {
       if (testInfo.status === 'passed') return;
 
       try {
@@ -285,23 +280,22 @@ test.describe('tilgangspakkedelegering fra person til person og person til org',
   });
 
   test.describe('Slett tilgangspakke hos virksomhet', () => {
-    const {
-      organisasjoner: [target],
-      personer: [actor],
-    } = TESTDATA.personSlettHosVirksomhet;
+    const test = medTestbrukere({ target: 'dagligLeder', actor: 'privatperson' });
     const pkg = {
       urn: 'urn:altinn:accesspackage:innbygger-samliv',
       name: 'Samliv',
       area: 'Familie og fritid',
     };
 
-    test.beforeEach(async ({ api }) => {
+    test.beforeEach(async ({ actor, target, api }) => {
       await api.connections.addConnectionAndPackagesToUser(actor.pid, actor.pid, target.orgNo, [
         pkg.urn,
       ]);
     });
 
     test('Slett tilgangspakke hos virksomhet', async ({
+      actor,
+      target,
       login,
       aktorvalgHeader,
       accessManagementFrontPage,
@@ -335,7 +329,7 @@ test.describe('tilgangspakkedelegering fra person til person og person til org',
       });
     });
 
-    test.afterEach(async ({ api }, testInfo) => {
+    test.afterEach(async ({ actor, target, api }, testInfo) => {
       if (testInfo.status === 'passed') return;
 
       try {
@@ -359,12 +353,11 @@ test.describe('tilgangspakkedelegering fra person til person og person til org',
 
 test.describe('tilgangspakkedelegering fra org til person og org til org', () => {
   test.describe('Legg til ny person hos din org', () => {
-    const {
-      organisasjoner: [actor],
-      personer: [target],
-    } = TESTDATA.orgLeggTilPerson;
+    const test = medTestbrukere({ actor: 'dagligLeder', target: 'privatperson' });
 
     test('Legg til ny person hos din org', async ({
+      actor,
+      target,
       login,
       aktorvalgHeader,
       accessManagementFrontPage,
@@ -392,7 +385,7 @@ test.describe('tilgangspakkedelegering fra org til person og org til org', () =>
       });
     });
 
-    test.afterEach(async ({ api }) => {
+    test.afterEach(async ({ actor, target, api }) => {
       try {
         await api.connections.deleteConnection(actor.pid, actor.orgNo, [target.pid]);
       } catch (error) {
@@ -402,11 +395,11 @@ test.describe('tilgangspakkedelegering fra org til person og org til org', () =>
   });
 
   test.describe('Legg til ny virksomhet hos din org', () => {
-    const {
-      organisasjoner: [actor, target],
-    } = TESTDATA.orgLeggTilVirksomhet;
+    const test = medTestbrukere({ actor: 'dagligLeder', target: 'dagligLeder' });
 
     test('Legg til ny virksomhet hos din org', async ({
+      actor,
+      target,
       login,
       aktorvalgHeader,
       accessManagementFrontPage,
@@ -435,7 +428,7 @@ test.describe('tilgangspakkedelegering fra org til person og org til org', () =>
       });
     });
 
-    test.afterEach(async ({ api }) => {
+    test.afterEach(async ({ actor, target, api }) => {
       try {
         await api.connections.deleteConnection(actor.pid, actor.orgNo, [target.orgNo]);
       } catch (error) {
@@ -445,17 +438,14 @@ test.describe('tilgangspakkedelegering fra org til person og org til org', () =>
   });
 
   test.describe('Deleger tilgangspakke til person', () => {
-    const {
-      organisasjoner: [actor],
-      personer: [target],
-    } = TESTDATA.orgDelegerTilPerson;
+    const test = medTestbrukere({ actor: 'dagligLeder', target: 'privatperson' });
     const pkg = {
       urn: 'urn:altinn:accesspackage:posttjenester',
       name: 'Posttjenester',
       area: 'Andre tjenesteytende næringer',
     };
 
-    test.beforeEach(async ({ api }) => {
+    test.beforeEach(async ({ actor, target, api }) => {
       try {
         await api.connections.deleteConnection(actor.pid, actor.orgNo, [target.pid]);
       } catch {
@@ -465,6 +455,8 @@ test.describe('tilgangspakkedelegering fra org til person og org til org', () =>
     });
 
     test('Deleger tilgangspakke til person', async ({
+      actor,
+      target,
       login,
       aktorvalgHeader,
       accessManagementFrontPage,
@@ -497,7 +489,7 @@ test.describe('tilgangspakkedelegering fra org til person og org til org', () =>
       });
     });
 
-    test.afterEach(async ({ api }) => {
+    test.afterEach(async ({ actor, target, api }) => {
       try {
         await api.connections.deleteConnection(actor.pid, actor.orgNo, [target.pid]);
       } catch (error) {
@@ -507,16 +499,14 @@ test.describe('tilgangspakkedelegering fra org til person og org til org', () =>
   });
 
   test.describe('Deleger tilgangspakke til virksomhet', () => {
-    const {
-      organisasjoner: [actor, target],
-    } = TESTDATA.orgDelegerTilVirksomhet;
+    const test = medTestbrukere({ actor: 'dagligLeder', target: 'dagligLeder' });
     const pkg = {
       urn: 'urn:altinn:accesspackage:posttjenester',
       name: 'Posttjenester',
       area: 'Andre tjenesteytende næringer',
     };
 
-    test.beforeEach(async ({ api }) => {
+    test.beforeEach(async ({ actor, target, api }) => {
       try {
         await api.connections.deleteConnection(actor.pid, actor.orgNo, [target.orgNo]);
       } catch {
@@ -526,6 +516,8 @@ test.describe('tilgangspakkedelegering fra org til person og org til org', () =>
     });
 
     test('Deleger tilgangspakke til virksomhet', async ({
+      actor,
+      target,
       login,
       aktorvalgHeader,
       accessManagementFrontPage,
@@ -560,7 +552,7 @@ test.describe('tilgangspakkedelegering fra org til person og org til org', () =>
       });
     });
 
-    test.afterEach(async ({ api }) => {
+    test.afterEach(async ({ actor, target, api }) => {
       try {
         await api.connections.deleteConnection(actor.pid, actor.orgNo, [target.orgNo]);
       } catch (error) {
@@ -570,23 +562,22 @@ test.describe('tilgangspakkedelegering fra org til person og org til org', () =>
   });
 
   test.describe('Slett tilgangspakke hos person', () => {
-    const {
-      organisasjoner: [actor],
-      personer: [target],
-    } = TESTDATA.orgSlettHosPerson;
+    const test = medTestbrukere({ actor: 'dagligLeder', target: 'privatperson' });
     const pkg = {
       urn: 'urn:altinn:accesspackage:posttjenester',
       name: 'Posttjenester',
       area: 'Andre tjenesteytende næringer',
     };
 
-    test.beforeEach(async ({ api }) => {
+    test.beforeEach(async ({ actor, target, api }) => {
       await api.connections.addConnectionAndPackagesToUser(actor.pid, actor.orgNo, target.pid, [
         pkg.urn,
       ]);
     });
 
     test('Slett tilgangspakke hos person', async ({
+      actor,
+      target,
       login,
       aktorvalgHeader,
       accessManagementFrontPage,
@@ -618,7 +609,7 @@ test.describe('tilgangspakkedelegering fra org til person og org til org', () =>
       });
     });
 
-    test.afterEach(async ({ api }, testInfo) => {
+    test.afterEach(async ({ actor, target, api }, testInfo) => {
       if (testInfo.status === 'passed') return;
 
       try {
@@ -640,22 +631,22 @@ test.describe('tilgangspakkedelegering fra org til person og org til org', () =>
   });
 
   test.describe('Slett tilgangspakke hos virksomhet', () => {
-    const {
-      organisasjoner: [actor, target],
-    } = TESTDATA.orgSlettHosVirksomhet;
+    const test = medTestbrukere({ actor: 'dagligLeder', target: 'dagligLeder' });
     const pkg = {
       urn: 'urn:altinn:accesspackage:posttjenester',
       name: 'Posttjenester',
       area: 'Andre tjenesteytende næringer',
     };
 
-    test.beforeEach(async ({ api }) => {
+    test.beforeEach(async ({ actor, target, api }) => {
       await api.connections.addConnectionAndPackagesToUser(actor.pid, actor.orgNo, target.orgNo, [
         pkg.urn,
       ]);
     });
 
     test('Slett tilgangspakke hos virksomhet', async ({
+      actor,
+      target,
       login,
       aktorvalgHeader,
       accessManagementFrontPage,
@@ -689,7 +680,7 @@ test.describe('tilgangspakkedelegering fra org til person og org til org', () =>
       });
     });
 
-    test.afterEach(async ({ api }, testInfo) => {
+    test.afterEach(async ({ actor, target, api }, testInfo) => {
       if (testInfo.status === 'passed') return;
 
       try {

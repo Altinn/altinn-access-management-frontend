@@ -72,6 +72,10 @@ export class LoginPage {
     const antallAktoerer = await this.api.authorizedParties.antallAktoererForbruker(
       this.loggedInPid,
     );
+    // Med bare én aktør velger Altinn den selv, og aktørvalget vises ikke.
+    if (antallAktoerer === 1) {
+      return;
+    }
     await expect(this.aktoerMeny).toBeVisible();
 
     // Rett etter innlogging er velgeren en hel side; ellers ligger den i en dialog

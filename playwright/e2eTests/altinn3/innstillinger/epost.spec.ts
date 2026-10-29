@@ -1,21 +1,20 @@
-import { expect, test } from '../../../fixture/pomFixture';
+import { expect, medTestbrukere } from '../../../fixture/pomFixture';
 
-import { BASELINE_EPOST, TESTDATA } from './testdata';
+import { BASELINE_EPOST } from './testdata';
+
+const test = medTestbrukere({ actor: 'dagligLeder' });
 
 test.describe('Innstillinger - e-postadresser', () => {
   test.describe('legg til e-postadresse', () => {
-    const {
-      organisasjoner: [actor],
-    } = TESTDATA.leggTilEpost;
     const nyEpost = 'playwright-ny-epost@example.com';
 
-    test.beforeEach(async ({ api }) => {
+    test.beforeEach(async ({ actor, api }) => {
       await api.settings.setNotificationAddresses(actor.pid, actor.orgNo, {
         emails: [BASELINE_EPOST],
       });
     });
 
-    test('legg til e-postadresse', async ({ innstillingerPage, login }) => {
+    test('legg til e-postadresse', async ({ actor, innstillingerPage, login }) => {
       await test.step(`Logg inn som ${actor.name} og åpne innstillinger`, async () => {
         await login.LoginToAccessManagement(actor.pid);
         await login.selectActor(actor.name);
@@ -39,7 +38,7 @@ test.describe('Innstillinger - e-postadresser', () => {
       });
     });
 
-    test.afterEach(async ({ api }) => {
+    test.afterEach(async ({ actor, api }) => {
       await api.settings.setNotificationAddresses(actor.pid, actor.orgNo, {
         emails: [BASELINE_EPOST],
       });
@@ -47,18 +46,15 @@ test.describe('Innstillinger - e-postadresser', () => {
   });
 
   test.describe('endre e-postadresse', () => {
-    const {
-      organisasjoner: [actor],
-    } = TESTDATA.endreAdresse;
     const endretEpost = 'playwright-endret@example.com';
 
-    test.beforeEach(async ({ api }) => {
+    test.beforeEach(async ({ actor, api }) => {
       await api.settings.setNotificationAddresses(actor.pid, actor.orgNo, {
         emails: [BASELINE_EPOST],
       });
     });
 
-    test('endre e-postadresse', async ({ innstillingerPage, login }) => {
+    test('endre e-postadresse', async ({ actor, innstillingerPage, login }) => {
       await test.step(`Logg inn som ${actor.name} og åpne innstillinger`, async () => {
         await login.LoginToAccessManagement(actor.pid);
         await login.selectActor(actor.name);
@@ -80,7 +76,7 @@ test.describe('Innstillinger - e-postadresser', () => {
       });
     });
 
-    test.afterEach(async ({ api }) => {
+    test.afterEach(async ({ actor, api }) => {
       await api.settings.setNotificationAddresses(actor.pid, actor.orgNo, {
         emails: [BASELINE_EPOST],
       });
@@ -88,18 +84,15 @@ test.describe('Innstillinger - e-postadresser', () => {
   });
 
   test.describe('slett e-postadresse', () => {
-    const {
-      organisasjoner: [actor],
-    } = TESTDATA.slettAdresse;
     const ekstraEpost = 'playwright-skal-slettes@example.com';
 
-    test.beforeEach(async ({ api }) => {
+    test.beforeEach(async ({ actor, api }) => {
       await api.settings.setNotificationAddresses(actor.pid, actor.orgNo, {
         emails: [BASELINE_EPOST, ekstraEpost],
       });
     });
 
-    test('slett e-postadresse', async ({ innstillingerPage, login }) => {
+    test('slett e-postadresse', async ({ actor, innstillingerPage, login }) => {
       await test.step(`Logg inn som ${actor.name} og åpne innstillinger`, async () => {
         await login.LoginToAccessManagement(actor.pid);
         await login.selectActor(actor.name);
@@ -125,7 +118,7 @@ test.describe('Innstillinger - e-postadresser', () => {
       });
     });
 
-    test.afterEach(async ({ api }) => {
+    test.afterEach(async ({ actor, api }) => {
       await api.settings.setNotificationAddresses(actor.pid, actor.orgNo, {
         emails: [BASELINE_EPOST],
       });
@@ -133,17 +126,13 @@ test.describe('Innstillinger - e-postadresser', () => {
   });
 
   test.describe('ugyldig e-postadresse', () => {
-    const {
-      organisasjoner: [actor],
-    } = TESTDATA.ugyldigEpost;
-
-    test.beforeEach(async ({ api }) => {
+    test.beforeEach(async ({ actor, api }) => {
       await api.settings.setNotificationAddresses(actor.pid, actor.orgNo, {
         emails: [BASELINE_EPOST],
       });
     });
 
-    test('ugyldig e-postadresse kan ikke lagres', async ({ innstillingerPage, login }) => {
+    test('ugyldig e-postadresse kan ikke lagres', async ({ actor, innstillingerPage, login }) => {
       await test.step(`Logg inn som ${actor.name} og åpne innstillinger`, async () => {
         await login.LoginToAccessManagement(actor.pid);
         await login.selectActor(actor.name);
@@ -168,7 +157,7 @@ test.describe('Innstillinger - e-postadresser', () => {
       });
     });
 
-    test.afterEach(async ({ api }) => {
+    test.afterEach(async ({ actor, api }) => {
       await api.settings.setNotificationAddresses(actor.pid, actor.orgNo, {
         emails: [BASELINE_EPOST],
       });
