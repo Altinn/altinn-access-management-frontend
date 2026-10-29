@@ -9,9 +9,11 @@ import { readCsv, type Organisasjon, type Person } from 'playwright/util/testdat
 /** En hovedenhet og underenheten med samme navn. Daglig leder i hovedenheten representerer begge. */
 export type Hovedenhet = Organisasjon & { underenhetOrgNo: string };
 
-/** Testbrukergruppene i e2eTests/testdata/<gruppe>/<miljø>.csv, og hva hver rad blir til. */
+/** Gruppene i e2eTests/testdata/<gruppe>/<miljø>.csv, og hva hver rad blir til. */
 export type Grupper = { privatperson: Person; dagligLeder: Organisasjon; hovedenhet: Hovedenhet };
 export type Gruppe = keyof Grupper;
+
+export type Testbrukere = { reserver: <G extends Gruppe>(gruppe: G) => Grupper[G] };
 
 const lesGruppe: { [G in Gruppe]: (miljo: string) => Grupper[G][] } = {
   // Personer som bare kan representere seg selv.
@@ -21,7 +23,7 @@ const lesGruppe: { [G in Gruppe]: (miljo: string) => Grupper[G][] } = {
       name: rad.navn,
       lastName: rad.etternavn,
     })),
-  // Daglig leder for en virksomhet uten underenheter, med høyst seks aktører totalt.
+  // Daglig leder for en virksomhet uten underenheter, med høyst seks aktører.
   dagligLeder: (miljo) =>
     readCsv(`dagligLeder/${miljo}.csv`).map((rad) => ({
       orgNo: rad.orgnr,
@@ -39,62 +41,34 @@ const lesGruppe: { [G in Gruppe]: (miljo: string) => Grupper[G][] } = {
     })),
 };
 
-// Første ledige bruker i lista reserveres med en fil som bare kan opprettes én gang, så to tester
-// som kjører samtidig aldri får samme bruker. Reservasjonen blir stående resten av kjøringen,
-// så ingen bruker brukes to ganger, heller ikke av en retry.
-function reserverTestbruker<T extends { pid: string }>(
-  brukere: T[],
-  katalog: string,
-  testId: string,
-  allerede: Set<string>,
-): T | undefined {
-  mkdirSync(katalog, { recursive: true });
-
-  for (const bruker of brukere.filter((b) => !allerede.has(b.pid))) {
-    try {
-      writeFileSync(path.join(katalog, bruker.pid), testId, { flag: 'wx' });
-      return bruker;
-    } catch {
-      // Reservert av en annen test.
-    }
-  }
-
-  return undefined;
-}
-
 /**
- * Reserverer testbrukere for én test. Reservasjonene gjelder på tvers av grupper, siden
- * de er per fødselsnummer, og frigis ikke før neste kjøring.
+ * Hver test reserverer brukerne sine med en låsefil per fødselsnummer. Fila kan bare opprettes
+ * én gang, så en bruker går til én test per kjøring, også ved retry. Playwright tømmer
+ * output-mappa ved start, så reservasjonene gjelder bare denne kjøringen.
  */
-export class Testbrukere {
-  private readonly reservert = new Set<string>();
-
-  constructor(
-    private readonly miljo: string,
-    private readonly katalog: string,
-    private readonly testId: string,
-  ) {}
-
-  // Brukerne stokkes, så testene ikke bruker de samme brukerne kjøring etter kjøring.
-  reserver<G extends Gruppe>(gruppe: G): Grupper[G] {
-    const brukere = lesGruppe[gruppe](this.miljo).sort(() => Math.random() - 0.5);
-    const bruker = reserverTestbruker(brukere, this.katalog, this.testId, this.reservert);
-    if (!bruker) {
-      throw new Error(
-        `Fant ingen ledig testbruker i ${gruppe}/${this.miljo}.csv; ` +
-          `alle ${brukere.length} er brukt i denne kjøringen.`,
-      );
-    }
-    this.reservert.add(bruker.pid);
-    return bruker;
-  }
-}
-
-// Playwright tømmer output-mappa ved start, så reservasjonene gjelder én kjøring.
 export const testbrukereFixture = base.extend<{ testbrukere: Testbrukere }>({
   testbrukere: async ({}, use, testInfo) => {
     const miljo = currentEnv();
     const katalog = path.join(testInfo.project.outputDir, '.testbrukere', miljo);
-    await use(new Testbrukere(miljo, katalog, testInfo.testId));
+    mkdirSync(katalog, { recursive: true });
+
+    const reserver = <G extends Gruppe>(gruppe: G): Grupper[G] => {
+      // Stokkes, så testene ikke får de samme brukerne kjøring etter kjøring.
+      const brukere = lesGruppe[gruppe](miljo).sort(() => Math.random() - 0.5);
+      const ledig = brukere.find((bruker) => {
+        try {
+          writeFileSync(path.join(katalog, bruker.pid), '', { flag: 'wx' });
+          return true;
+        } catch {
+          return false;
+        }
+      });
+      if (!ledig) {
+        throw new Error(`Alle ${brukere.length} i ${gruppe}/${miljo}.csv er brukt i kjøringen.`);
+      }
+      return ledig;
+    };
+
+    await use({ reserver });
   },
 });
