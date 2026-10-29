@@ -92,29 +92,10 @@ Test data - what do we need?
 
 ## Test data per environment
 
-**AT23 and TT02 must never share test users.** The two environments use the
-same ID-porten environment, so when the same person logs in from AT23 and
-TT02 at the same time (for example scheduled runs in both environments), the
-tests interfere with each other. Every person and org/person pair that logs in
-must belong to exactly one environment.
-
-Within an environment, test users must also not be shared between specs or
-between language variants of the same spec. The app language is stored on the
-user's profile (`loginNotChoosingActor`/`LoginToAccessManagement` set it via
-the settings API before login), so two parallel tests that use the same person
-with different languages overwrite each other's language, and one of them
-renders in the wrong language.
-
-Consent test data lives in `e2eTests/altinn3/consent/helper/consentTestdata.ts`,
-keyed by environment (`at23`, `tt02`) and then by spec and language. Use
-`consentTestdata()` to get the data for the current environment. Recipient
-orgs (`toOrgs`) never log in and can be shared.
-
-New test data comes from Tenor (see `tenor/README.md`): resident adult persons
-(`yarn tenor personer`) and AS organizations with a resident daglig leder
-(`yarn tenor be-om-tilgang`). Check that they exist in Register in the target
-environment, and that they are not already in use in another environment or
-spec, before adding them.
+AT23 and TT02 share the ID-porten environment, so they must never use the same
+test users. Users that log in should also not be shared between specs or
+language variants, since the language is stored on the user's profile. See
+`e2eTests/altinn3/consent/helper/consentTestdata.ts`.
 
 ## Maskinporten Integration
 
