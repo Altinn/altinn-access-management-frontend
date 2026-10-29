@@ -34,7 +34,10 @@ export class LoginPage {
     this.testIdLink = this.page.getByRole('link', { name: 'TestID Lag din egen' });
     this.loginButton = this.page.getByRole('button', { name: 'Logg inn', exact: true });
     this.profileLink = this.page.getByRole('link', { name: 'profil' });
-    this.velgAktoerHeading = this.page.getByRole('heading', { level: 1, name: 'Velg aktør' });
+    this.velgAktoerHeading = this.page.getByRole('heading', {
+      level: 1,
+      name: 'Hvem vil du bruke Altinn på vegne av?',
+    });
     this.autentiserButton = this.page.getByRole('button', { name: 'Autentiser' });
     this.tilgangsstyringLink = this.page.getByRole('link', { name: 'Tilgangsstyring' });
     this.testIdLinkText = this.page.getByRole('link', {
@@ -70,11 +73,14 @@ export class LoginPage {
     const antallAktoerer = await this.api.authorizedParties.antallAktoererForbruker(
       this.loggedInPid,
     );
-    const dialog = this.page.getByRole('dialog');
-    await expect(dialog).toBeVisible();
+    await expect(this.velgAktoerHeading).toBeVisible();
 
-    const searchBox = dialog.getByRole('searchbox');
-    const item = dialog.getByRole('menuitem', { name: targetReportee }).first();
+    // Rett etter innlogging er velgeren en hel side; ellers ligger den i en dialog
+    const dialog = this.page.getByRole('dialog');
+    const root = (await dialog.count()) > 0 ? dialog : this.page;
+
+    const searchBox = root.getByRole('searchbox');
+    const item = root.getByRole('menuitem', { name: targetReportee }).first();
 
     // Dersom flere enn 5 kan man søke i aktørene
     if (antallAktoerer > 5) {
@@ -82,7 +88,7 @@ export class LoginPage {
     }
 
     await item.click();
-    await expect(dialog).not.toBeVisible();
+    await expect(this.velgAktoerHeading).not.toBeVisible();
   }
 
   private async navigateToLoginPage() {
