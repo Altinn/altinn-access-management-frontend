@@ -1,10 +1,9 @@
 import { test, expect } from 'playwright/fixture/pomFixture';
 import { TestdataApi } from 'playwright/util/TestdataApi';
 import type { SystemUserApiRequests } from 'playwright/api-requests/SystemUserApiRequests';
-
-import { systemUserOwners } from './testdata';
-const owner = systemUserOwners.requests;
-const vendorOrgNumber = '310547891';
+import { loadTestdata } from 'playwright/util/testdata';
+const { owner, vendor } = loadTestdata('systemuser').requests;
+const vendorOrgNumber = vendor.orgNo;
 const prebuiltSystemId = '310547891_E2E-Playwright-Authentication';
 const testUserPid = owner.pid;
 

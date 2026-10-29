@@ -1,25 +1,25 @@
 import { expect, test } from '../../../fixture/pomFixture';
 
-import { ACTORS, BASELINE_EPOST, IKKE_ADMIN } from './testdata';
+import { BASELINE_EPOST, TESTDATA } from './testdata';
 
 test.describe('Innstillinger - tilgang og validering', () => {
   test.describe('kan ikke fjerne den siste adressen', () => {
-    const actor = ACTORS.sisteAdresse;
+    const { actor } = TESTDATA.sisteAdresse;
 
     test.beforeEach(async ({ api }) => {
       // Exactly one email and no SMS: emptying the email field then leaves the
       // organisation with no notification address at all, which is what the
       // dialog must refuse to save.
-      await api.settings.setNotificationAddresses(actor.pid, actor.org, {
+      await api.settings.setNotificationAddresses(actor.pid, actor.orgNo, {
         emails: [BASELINE_EPOST],
         phones: [],
       });
     });
 
     test('kan ikke fjerne den siste adressen', async ({ innstillingerPage, login }) => {
-      await test.step(`Logg inn som ${actor.orgName} og åpne innstillinger`, async () => {
+      await test.step(`Logg inn som ${actor.name} og åpne innstillinger`, async () => {
         await login.LoginToAccessManagement(actor.pid);
-        await login.selectActor(actor.orgName);
+        await login.selectActor(actor.name);
         await innstillingerPage.goToInnstillinger();
       });
 
@@ -42,7 +42,7 @@ test.describe('Innstillinger - tilgang og validering', () => {
     });
 
     test.afterEach(async ({ api }) => {
-      await api.settings.setNotificationAddresses(actor.pid, actor.org, {
+      await api.settings.setNotificationAddresses(actor.pid, actor.orgNo, {
         emails: [BASELINE_EPOST],
         phones: [],
       });
@@ -50,21 +50,21 @@ test.describe('Innstillinger - tilgang og validering', () => {
   });
 
   test.describe('bruker uten tilgang', () => {
-    const { admin, bruker } = IKKE_ADMIN;
+    const { admin, bruker } = TESTDATA.ikkeAdmin;
 
     test.beforeEach(async ({ api }) => {
       // Make `bruker` a plain right-holder so the organisation is selectable in
       // the header menu, without granting any administrator right.
-      await api.connections.addConnection(admin.pid, admin.org, bruker.pid);
+      await api.connections.addConnection(admin.pid, admin.orgNo, bruker.pid);
     });
 
     test('bruker uten administratorrettighet får ikke redigere varslingsadresser', async ({
       innstillingerPage,
       login,
     }) => {
-      await test.step(`Logg inn som ${bruker.pid} og velg ${admin.orgName}`, async () => {
+      await test.step(`Logg inn som ${bruker.pid} og velg ${admin.name}`, async () => {
         await login.LoginToAccessManagement(bruker.pid);
-        await login.selectActor(admin.orgName);
+        await login.selectActor(admin.name);
         await innstillingerPage.goToInnstillingerViaUrl();
       });
 
@@ -80,7 +80,7 @@ test.describe('Innstillinger - tilgang og validering', () => {
     });
 
     test.afterEach(async ({ api }) => {
-      await api.connections.deleteConnection(admin.pid, admin.org, [bruker.pid]);
+      await api.connections.deleteConnection(admin.pid, admin.orgNo, [bruker.pid]);
     });
   });
 });

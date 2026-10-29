@@ -1,18 +1,16 @@
 import { test, expect } from '../../../fixture/pomFixture';
+import { loadTestdata } from '../../../util/testdata';
 
 test.describe('Delegering av klienter til Systembruker', () => {
-  const vendorOrgNumber = '310547891';
+  const testdata = loadTestdata('systemuser');
+  const vendorOrgNumber = testdata.clientDelegation.vendor.orgNo;
 
   test.describe('Ansvarlig revisor', () => {
     const role = 'revisor';
     const accessPackageApiName = 'ansvarlig-revisor';
     const accessPackageDisplayName = 'Ansvarlig revisor';
 
-    const user = {
-      pid: '07875898560',
-      org: '314251768',
-      name: 'KUNST STERK MINK ANS',
-    };
+    const { user } = testdata.revisor;
 
     let name: string;
     let response: { confirmUrl: string };
@@ -32,7 +30,7 @@ test.describe('Delegering av klienter til Systembruker', () => {
           vendorOrgNumber,
           systemId,
           accessPackageApiName,
-          user.org,
+          user.orgNo,
         );
       });
     });
@@ -42,7 +40,7 @@ test.describe('Delegering av klienter til Systembruker', () => {
         await api.systemUsers.cleanUpSystemUsersForSystem(
           `${vendorOrgNumber}_${name}`,
           user.pid,
-          user.org,
+          user.orgNo,
           true,
         );
         await api.systemUsers.deleteSystemInSystemRegister(vendorOrgNumber, name);
@@ -89,18 +87,9 @@ test.describe('Delegering av klienter til Systembruker', () => {
     const accessPackageApiName = 'regnskapsforer-lonn';
     const accessPackageDisplayName = 'Regnskapsfører lønn';
 
-    const user = {
-      pid: '25872549881',
-      org: '312433834',
-      name: 'TILFELDIG RAKRYGGET KATT MALSTRØM',
-    };
-
+    const { user, customer } = testdata.regnskapsfoerer;
     const customers = [
-      {
-        label: 'DYP VERD TIGER AS',
-        confirmation: 'DYP VERD TIGER AS',
-        orgnummer: '214172542',
-      },
+      { label: customer.name, confirmation: customer.name, orgnummer: customer.orgNo },
     ];
 
     let name: string;
@@ -121,7 +110,7 @@ test.describe('Delegering av klienter til Systembruker', () => {
           vendorOrgNumber,
           systemId,
           accessPackageApiName,
-          user.org,
+          user.orgNo,
         );
       });
     });
@@ -131,7 +120,7 @@ test.describe('Delegering av klienter til Systembruker', () => {
         await api.systemUsers.cleanUpSystemUsersForSystem(
           `${vendorOrgNumber}_${name}`,
           user.pid,
-          user.org,
+          user.orgNo,
           true,
         );
         await api.systemUsers.deleteSystemInSystemRegister(vendorOrgNumber, name);
@@ -184,18 +173,9 @@ test.describe('Delegering av klienter til Systembruker', () => {
     const accessPackageApiName = 'forretningsforer-eiendom';
     const accessPackageDisplayName = 'Forretningsforer eiendom';
 
-    const user = {
-      pid: '12826697375',
-      org: '312158019',
-      name: 'MOMENTAN VENNLIG TIGER AS',
-    };
-
+    const { user, customer } = testdata.forretningsfoerer;
     const customers = [
-      {
-        label: 'SAMEIET ARTIG SKRIVEFØR LØVE',
-        confirmation: 'SAMEIET ARTIG SKRIVEFØR LØVE',
-        orgnummer: '213461532',
-      },
+      { label: customer.name, confirmation: customer.name, orgnummer: customer.orgNo },
     ];
 
     let name: string;
@@ -216,7 +196,7 @@ test.describe('Delegering av klienter til Systembruker', () => {
           vendorOrgNumber,
           systemId,
           accessPackageApiName,
-          user.org,
+          user.orgNo,
         );
       });
     });
@@ -226,7 +206,7 @@ test.describe('Delegering av klienter til Systembruker', () => {
         await api.systemUsers.cleanUpSystemUsersForSystem(
           `${vendorOrgNumber}_${name}`,
           user.pid,
-          user.org,
+          user.orgNo,
           true,
         );
         await api.systemUsers.deleteSystemInSystemRegister(vendorOrgNumber, name);

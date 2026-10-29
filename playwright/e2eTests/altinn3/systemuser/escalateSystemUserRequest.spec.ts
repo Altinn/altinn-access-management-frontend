@@ -1,15 +1,17 @@
 import { test, expect } from 'playwright/fixture/pomFixture';
 import { TestdataApi } from 'playwright/util/TestdataApi';
+import { loadTestdata } from 'playwright/util/testdata';
 import { LoginPage } from 'playwright/pages/LoginPage';
 import { SystemUserPage } from 'playwright/pages/systemuser/SystemUserPage';
 import { ClientDelegationPage } from 'playwright/pages/systemuser/ClientDelegation';
 
 test.describe('Systembruker - Eskaler', () => {
-  const vendorOrgNumber = '312591332';
-  const systemuserOwnerOrg = '313084167';
-  const regularUserPid = '09817897166'; // No accessManager privileges, may escalate requests
-  const managerPid = '29849098304';
-  const actorName = 'Ugjennomsiktig Usnobbet Ape';
+  const { vendor, owner, regularUser } = loadTestdata('systemuser').escalate;
+  const vendorOrgNumber = vendor.orgNo;
+  const systemuserOwnerOrg = owner.orgNo;
+  const regularUserPid = regularUser.pid; // No accessManager privileges, may escalate requests
+  const managerPid = owner.pid;
+  const actorName = owner.name;
 
   let name: string;
   let systemId: string;

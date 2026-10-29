@@ -1,8 +1,7 @@
 import { expect, test } from 'playwright/fixture/pomFixture';
-
-import { systemUserOwners } from './testdata';
-const owner = systemUserOwners.deletion;
-const vendorOrgNumber = '310736007';
+import { loadTestdata } from 'playwright/util/testdata';
+const { owner, vendor } = loadTestdata('systemuser').deletion;
+const vendorOrgNumber = vendor.orgNo;
 const testUserPid = owner.pid;
 const testOrgName = owner.name;
 

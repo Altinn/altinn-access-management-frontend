@@ -1,4 +1,5 @@
 import { expect, test } from '../../../fixture/pomFixture';
+import { loadTestdata } from '../../../util/testdata';
 
 /**
  * Fullmaktsoversikt — oversikt over tilgangspakker og hvem som har fullmakt.
@@ -14,34 +15,7 @@ import { expect, test } from '../../../fixture/pomFixture';
  * organisations with their daglig leder, `yarn tenor personer --env <env>` for
  * people.
  */
-const ACTORS = {
-  oversikt: {
-    virksomhet: { pid: '06876299923', org: '314241363', orgName: 'UNGT LAV TIGER AS' },
-  },
-  pakkensBrukere: {
-    virksomhet: { pid: '25887399541', org: '214242192', orgName: 'FREDFULL SUNN TIGER AS' },
-    mottaker: { pid: '27862749125', navn: 'Trofast Kråkebolle' },
-  },
-  giOgSlett: {
-    virksomhet: {
-      pid: '25877799797',
-      org: '310990361',
-      orgName: 'AKTPÅGIVENDE ORDENTLIG TIGER AS',
-    },
-    bruker: { pid: '05880549792', navn: 'Grå Jantelov' },
-  },
-  tjenester: {
-    virksomhet: {
-      pid: '17845498598',
-      org: '214251892',
-      orgName: 'JORDNÆR FORMBAR KATT GUVERNANTE',
-    },
-  },
-  utenTilgang: {
-    virksomhet: { pid: '19817296923', org: '212204242', orgName: 'ALLSIDIG ENTUSIASTISK TIGER AS' },
-    bruker: { pid: '04817099306' },
-  },
-};
+const ACTORS = loadTestdata('fullmakter');
 
 const PAKKE = { urn: 'urn:altinn:accesspackage:posttjenester', navn: 'Posttjenester' };
 
@@ -55,9 +29,9 @@ test.describe('Fullmaktsoversikt', () => {
       fullmaktsoversiktPage,
       login,
     }) => {
-      await test.step(`Logg inn som ${virksomhet.orgName} og åpne fullmaktsoversikten`, async () => {
+      await test.step(`Logg inn som ${virksomhet.name} og åpne fullmaktsoversikten`, async () => {
         await login.LoginToAccessManagement(virksomhet.pid);
-        await login.selectActor(virksomhet.orgName);
+        await login.selectActor(virksomhet.name);
         await fullmaktsoversiktPage.goToFullmakter();
         await fullmaktsoversiktPage.verifyPaaFullmaktsoversikt();
       });
@@ -79,33 +53,33 @@ test.describe('Fullmaktsoversikt', () => {
     test.beforeEach(async ({ api }) => {
       await api.connections.addConnectionAndPackagesToUser(
         virksomhet.pid,
-        virksomhet.org,
+        virksomhet.orgNo,
         mottaker.pid,
         [PAKKE.urn],
       );
     });
 
     test('pakkesiden viser hvem som har fullmakt', async ({ fullmaktsoversiktPage, login }) => {
-      await test.step(`Logg inn som ${virksomhet.orgName} og åpne ${PAKKE.navn}`, async () => {
+      await test.step(`Logg inn som ${virksomhet.name} og åpne ${PAKKE.navn}`, async () => {
         await login.LoginToAccessManagement(virksomhet.pid);
-        await login.selectActor(virksomhet.orgName);
+        await login.selectActor(virksomhet.name);
         await fullmaktsoversiktPage.goToFullmakter();
         await fullmaktsoversiktPage.aapneTilgangspakke(PAKKE.navn);
       });
 
-      await test.step(`${mottaker.navn} står oppført med fullmakt`, async () => {
+      await test.step(`${mottaker.name} står oppført med fullmakt`, async () => {
         // The tab lists only a handful of users up front, so find the user the
         // way the tab intends — by searching. Which users appear unprompted
         // depends on how many the organisation has, so relying on that is flaky.
-        await fullmaktsoversiktPage.sokEtterBruker(mottaker.navn);
-        await expect(fullmaktsoversiktPage.brukerRad(mottaker.navn)).toBeVisible();
-        await expect(fullmaktsoversiktPage.slettFullmaktKnapp(mottaker.navn)).toBeVisible();
+        await fullmaktsoversiktPage.sokEtterBruker(mottaker.name);
+        await expect(fullmaktsoversiktPage.brukerRad(mottaker.name)).toBeVisible();
+        await expect(fullmaktsoversiktPage.slettFullmaktKnapp(mottaker.name)).toBeVisible();
       });
     });
 
     test.afterEach(async ({ api }) => {
       try {
-        await api.connections.deleteConnection(virksomhet.pid, virksomhet.org, [mottaker.pid]);
+        await api.connections.deleteConnection(virksomhet.pid, virksomhet.orgNo, [mottaker.pid]);
       } catch (error) {
         console.error('Cleanup: Failed to delete connection:', error);
       }
@@ -119,43 +93,43 @@ test.describe('Fullmaktsoversikt', () => {
       // A connection WITHOUT the package, so the user shows up on the package
       // page as someone who can be given it.
       try {
-        await api.connections.deleteConnection(virksomhet.pid, virksomhet.org, [bruker.pid]);
+        await api.connections.deleteConnection(virksomhet.pid, virksomhet.orgNo, [bruker.pid]);
       } catch {
         /* not connected — nothing to clean */
       }
-      await api.connections.addConnection(virksomhet.pid, virksomhet.org, bruker.pid);
+      await api.connections.addConnection(virksomhet.pid, virksomhet.orgNo, bruker.pid);
     });
 
     test('gi og slett fullmakt til en tilgangspakke', async ({ fullmaktsoversiktPage, login }) => {
-      await test.step(`Logg inn som ${virksomhet.orgName} og åpne ${PAKKE.navn}`, async () => {
+      await test.step(`Logg inn som ${virksomhet.name} og åpne ${PAKKE.navn}`, async () => {
         await login.LoginToAccessManagement(virksomhet.pid);
-        await login.selectActor(virksomhet.orgName);
+        await login.selectActor(virksomhet.name);
         await fullmaktsoversiktPage.goToFullmakter();
         await fullmaktsoversiktPage.aapneTilgangspakke(PAKKE.navn);
       });
 
-      await test.step(`Gi ${bruker.navn} fullmakt til ${PAKKE.navn}`, async () => {
-        await fullmaktsoversiktPage.sokEtterBruker(bruker.navn);
-        await expect(fullmaktsoversiktPage.giFullmaktKnapp(bruker.navn)).toBeVisible();
-        await fullmaktsoversiktPage.giFullmakt(bruker.navn);
+      await test.step(`Gi ${bruker.name} fullmakt til ${PAKKE.navn}`, async () => {
+        await fullmaktsoversiktPage.sokEtterBruker(bruker.name);
+        await expect(fullmaktsoversiktPage.giFullmaktKnapp(bruker.name)).toBeVisible();
+        await fullmaktsoversiktPage.giFullmakt(bruker.name);
       });
 
-      await test.step(`${bruker.navn} har nå fullmakt`, async () => {
-        await expect(fullmaktsoversiktPage.slettFullmaktKnapp(bruker.navn)).toBeVisible();
+      await test.step(`${bruker.name} har nå fullmakt`, async () => {
+        await expect(fullmaktsoversiktPage.slettFullmaktKnapp(bruker.name)).toBeVisible();
       });
 
       await test.step('Slett fullmakten igjen', async () => {
-        await fullmaktsoversiktPage.slettFullmakt(bruker.navn);
+        await fullmaktsoversiktPage.slettFullmakt(bruker.name);
       });
 
-      await test.step(`${bruker.navn} kan igjen få fullmakt`, async () => {
-        await expect(fullmaktsoversiktPage.giFullmaktKnapp(bruker.navn)).toBeVisible();
+      await test.step(`${bruker.name} kan igjen få fullmakt`, async () => {
+        await expect(fullmaktsoversiktPage.giFullmaktKnapp(bruker.name)).toBeVisible();
       });
     });
 
     test.afterEach(async ({ api }) => {
       try {
-        await api.connections.deleteConnection(virksomhet.pid, virksomhet.org, [bruker.pid]);
+        await api.connections.deleteConnection(virksomhet.pid, virksomhet.orgNo, [bruker.pid]);
       } catch (error) {
         console.error('Cleanup: Failed to delete connection:', error);
       }
@@ -169,9 +143,9 @@ test.describe('Fullmaktsoversikt', () => {
       fullmaktsoversiktPage,
       login,
     }) => {
-      await test.step(`Logg inn som ${virksomhet.orgName} og åpne ${PAKKE.navn}`, async () => {
+      await test.step(`Logg inn som ${virksomhet.name} og åpne ${PAKKE.navn}`, async () => {
         await login.LoginToAccessManagement(virksomhet.pid);
-        await login.selectActor(virksomhet.orgName);
+        await login.selectActor(virksomhet.name);
         await fullmaktsoversiktPage.goToFullmakter();
         // The overview lists every package, so no delegation is needed to reach it.
         await fullmaktsoversiktPage.aapneTilgangspakke(PAKKE.navn);
@@ -192,21 +166,21 @@ test.describe('Fullmaktsoversikt', () => {
       // Clear any leftover from an earlier failed run first — addConnection
       // fails if the connection is already there.
       try {
-        await api.connections.deleteConnection(virksomhet.pid, virksomhet.org, [bruker.pid]);
+        await api.connections.deleteConnection(virksomhet.pid, virksomhet.orgNo, [bruker.pid]);
       } catch {
         /* not connected — nothing to clean */
       }
       // A plain right-holder: may represent the organisation, but is not admin.
-      await api.connections.addConnection(virksomhet.pid, virksomhet.org, bruker.pid);
+      await api.connections.addConnection(virksomhet.pid, virksomhet.orgNo, bruker.pid);
     });
 
     test('bruker uten administratorrettighet får ikke se fullmaktsoversikten', async ({
       fullmaktsoversiktPage,
       login,
     }) => {
-      await test.step(`Logg inn som ${bruker.pid} og velg ${virksomhet.orgName}`, async () => {
+      await test.step(`Logg inn som ${bruker.pid} og velg ${virksomhet.name}`, async () => {
         await login.LoginToAccessManagement(bruker.pid);
-        await login.selectActor(virksomhet.orgName);
+        await login.selectActor(virksomhet.name);
         await fullmaktsoversiktPage.goToFullmakterViaUrl();
       });
 
@@ -222,7 +196,7 @@ test.describe('Fullmaktsoversikt', () => {
 
     test.afterEach(async ({ api }) => {
       try {
-        await api.connections.deleteConnection(virksomhet.pid, virksomhet.org, [bruker.pid]);
+        await api.connections.deleteConnection(virksomhet.pid, virksomhet.orgNo, [bruker.pid]);
       } catch (error) {
         console.error('Cleanup: Failed to delete connection:', error);
       }

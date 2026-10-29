@@ -1,14 +1,13 @@
 import { expect, test } from 'playwright/fixture/pomFixture';
 import { Language } from 'playwright/pages/LanguageMenu';
-
-import { systemUserOwners } from './testdata';
+import { loadTestdata } from 'playwright/util/testdata';
 
 // Runs in nynorsk on purpose: exercises the before-login language pinning
 // (settings API) and proves the dict-driven selectors work in a non-default
 // language. The rest of the suites run in the default bokmål.
 test.use({ language: Language.NN });
-const owner = systemUserOwners.creation;
-const vendorOrgNumber = '310547891';
+const { owner, vendor } = loadTestdata('systemuser').creation;
+const vendorOrgNumber = vendor.orgNo;
 const testUserPid = owner.pid;
 const testOrgName = owner.name;
 

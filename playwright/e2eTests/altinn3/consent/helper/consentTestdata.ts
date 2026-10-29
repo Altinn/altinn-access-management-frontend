@@ -1,16 +1,10 @@
-import fs from 'fs';
-import path from 'path';
-
-import { parse } from 'csv-parse/sync';
-
 import { Language } from 'playwright/pages/LanguageMenu';
 import { currentEnv } from 'playwright/util/helper';
+import { readCsv } from 'playwright/util/testdata';
 
 // Testdata ligger i e2eTests/testdata/samtykke/<miljø>/, med én rad per test.
 // AT23 og TT02 deler ID-porten-miljø, og språket lagres på personens profil,
 // så ingen person deles mellom miljøer, tester eller språk.
-const TESTDATA_DIR = path.resolve(__dirname, '../../../testdata/samtykke');
-
 const LANGUAGE_DIR: Record<Language, string> = {
   [Language.NB]: 'bokmal',
   [Language.NN]: 'nynorsk',
@@ -20,13 +14,8 @@ const LANGUAGE_DIR: Record<Language, string> = {
 /** [orgnr, fnr til daglig leder som kan godkjenne samtykke på vegne av org-en] */
 export type OrgWithApprover = [orgNo: string, pid: string];
 
-function readCsv(relativePath: string): Record<string, string>[] {
-  const content = fs.readFileSync(path.join(TESTDATA_DIR, relativePath), 'utf-8');
-  return parse(content, { columns: true, skip_empty_lines: true, trim: true });
-}
-
 function rowForTest(relativePath: string, test: string): Record<string, string> {
-  const row = readCsv(relativePath).find((r) => r.test === test);
+  const row = readCsv(`samtykke/${relativePath}`).find((r) => r.test === test);
   if (!row) {
     throw new Error(`Mangler rad for testen '${test}' i ${relativePath}`);
   }
@@ -59,4 +48,4 @@ export function maskinportenOrg(test: string): OrgWithApprover {
 }
 
 // Mottaker-org-er logger aldri inn, så de kan deles mellom miljøer og specer.
-export const toOrgs: string[] = readCsv('mottakere.csv').map((r) => r.orgnr);
+export const toOrgs: string[] = readCsv('samtykke/mottakere.csv').map((r) => r.orgnr);

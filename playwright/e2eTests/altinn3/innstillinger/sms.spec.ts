@@ -1,10 +1,10 @@
 import { expect, test } from '../../../fixture/pomFixture';
 
-import { ACTORS, BASELINE_EPOST } from './testdata';
+import { BASELINE_EPOST, TESTDATA } from './testdata';
 
 test.describe('Innstillinger - SMS-adresser', () => {
   test.describe('legg til SMS-adresse', () => {
-    const actor = ACTORS.leggTilSms;
+    const { actor } = TESTDATA.leggTilSms;
     // Deliberately an obviously-synthetic number, matching the dummy values in
     // the repo's own mock data. Any structurally valid Norwegian mobile number
     // could belong to a real subscriber, and this one is briefly registered as a
@@ -14,16 +14,16 @@ test.describe('Innstillinger - SMS-adresser', () => {
     test.beforeEach(async ({ api }) => {
       // Baseline keeps one email and no SMS, so the SMS dialog opens on an
       // empty first row and the org still has the one address it must have.
-      await api.settings.setNotificationAddresses(actor.pid, actor.org, {
+      await api.settings.setNotificationAddresses(actor.pid, actor.orgNo, {
         emails: [BASELINE_EPOST],
         phones: [],
       });
     });
 
     test('legg til SMS-adresse', async ({ innstillingerPage, login }) => {
-      await test.step(`Logg inn som ${actor.orgName} og åpne innstillinger`, async () => {
+      await test.step(`Logg inn som ${actor.name} og åpne innstillinger`, async () => {
         await login.LoginToAccessManagement(actor.pid);
-        await login.selectActor(actor.orgName);
+        await login.selectActor(actor.name);
         await innstillingerPage.goToInnstillinger();
       });
 
@@ -42,7 +42,7 @@ test.describe('Innstillinger - SMS-adresser', () => {
     });
 
     test.afterEach(async ({ api }) => {
-      await api.settings.setNotificationAddresses(actor.pid, actor.org, {
+      await api.settings.setNotificationAddresses(actor.pid, actor.orgNo, {
         emails: [BASELINE_EPOST],
         phones: [],
       });

@@ -1,0 +1,11 @@
+scenario,rolle,fnr,orgnr,navn,etternavn
+godkjenn,actor,28897598797,314242602,SOFISTIKERT KOMPLETT TIGER AS,
+godkjenn,requester,14818398574,,,
+avvis,actor,08827999653,314243048,FANTASILØS FIRKANTET TIGER AS,
+avvis,requester,14892149020,,,
+godkjennAlle,actor,12835498199,312681528,HELLIG SPISS PUMA,
+godkjennAlle,requester,23887998442,,,
+sendt,actor,22877497392,314239458,BEVISST KNUSLETE TIGER AS,
+sendt,requester,26884895145,,,
+trekkTilbake,actor,16926997746,312203189,UNG ANSTENDIG PUMA,
+trekkTilbake,requester,04849196710,,,

@@ -1,5 +1,6 @@
 import { expect, test } from '../../../fixture/pomFixture';
 import type { MaskinportenApiRequests } from '../../../api-requests/MaskinportenApiRequests';
+import { loadTestdata } from '../../../util/testdata';
 
 /**
  * Maskinporten-administrasjon — leverandører, konsumenter og API-fullmakter.
@@ -16,33 +17,12 @@ import type { MaskinportenApiRequests } from '../../../api-requests/Maskinporten
  * user/isMaskinportenAdmin` returns true), so no access package needs delegating
  * in setup. To source replacements, `yarn tenor:virksomhet --env <env>` prints an
  * organisation with its daglig leder; prefer one with no existing suppliers.
+ *
+ * In `oversikt`, `konsument` adds `virksomhet` as its own supplier, which is what
+ * makes it appear under `virksomhet`'s Konsumenter tab. In `utenTilgang`, `bruker`
+ * may represent the organisation but is not Maskinporten administrator.
  */
-const ACTORS = {
-  oversikt: {
-    virksomhet: { pid: '27849297746', org: '310343439', orgName: 'UFORNUFTIG VIRTUELL PUMA' },
-    // Adds `virksomhet` as its own supplier, which is what makes it appear under
-    // `virksomhet`'s Konsumenter tab.
-    konsument: { pid: '22907797000', org: '312281325', orgName: 'DOGMATISK ANONYM TIGER AS' },
-  },
-  leggTilLeverandoer: {
-    virksomhet: { pid: '01906499998', org: '314241878', orgName: 'ETTERPÅKLOK USENSUELL TIGER AS' },
-    leverandoer: { org: '312281325', orgName: 'DOGMATISK ANONYM TIGER AS' },
-  },
-  slettLeverandoer: {
-    virksomhet: { pid: '20855398150', org: '314318277', orgName: 'SLAKK KJEMPENDE MINK ANS' },
-    leverandoer: { org: '312281325', orgName: 'DOGMATISK ANONYM TIGER AS' },
-  },
-  giApiFullmakt: {
-    virksomhet: { pid: '12897599595', org: '312810336', orgName: 'EKSTRA KONKRET PUMA' },
-    leverandoer: { org: '312281325', orgName: 'DOGMATISK ANONYM TIGER AS' },
-  },
-  utenTilgang: {
-    virksomhet: { pid: '22877497392', org: '314239458', orgName: 'BEVISST KNUSLETE TIGER AS' },
-    // A plain right-holder: may represent the organisation, but is not
-    // Maskinporten administrator.
-    bruker: { pid: '14871748749' },
-  },
-};
+const ACTORS = loadTestdata('maskinporten');
 
 /**
  * An API that is delegable in BOTH at23 and tt02.
@@ -78,17 +58,22 @@ test.describe('Maskinporten-administrasjon', () => {
     const { virksomhet, konsument } = ACTORS.oversikt;
 
     test.beforeEach(async ({ api }) => {
-      await removeSupplierIfPresent(api.maskinporten, konsument.pid, konsument.org, virksomhet.org);
-      await api.maskinporten.addSupplier(konsument.pid, konsument.org, virksomhet.org);
+      await removeSupplierIfPresent(
+        api.maskinporten,
+        konsument.pid,
+        konsument.orgNo,
+        virksomhet.orgNo,
+      );
+      await api.maskinporten.addSupplier(konsument.pid, konsument.orgNo, virksomhet.orgNo);
     });
 
     test('leverandør- og konsumentfanen viser riktig innhold', async ({
       maskinportenPage,
       login,
     }) => {
-      await test.step(`Logg inn som ${virksomhet.orgName} og åpne maskinportenadministrasjon`, async () => {
+      await test.step(`Logg inn som ${virksomhet.name} og åpne maskinportenadministrasjon`, async () => {
         await login.LoginToAccessManagement(virksomhet.pid);
-        await login.selectActor(virksomhet.orgName);
+        await login.selectActor(virksomhet.name);
         await maskinportenPage.goToMaskinporten();
         await maskinportenPage.verifyPaaMaskinporten();
       });
@@ -97,15 +82,15 @@ test.describe('Maskinporten-administrasjon', () => {
         await expect(maskinportenPage.ingenLeverandoererTekst).toBeVisible();
       });
 
-      await test.step(`Konsumentfanen viser ${konsument.orgName}`, async () => {
+      await test.step(`Konsumentfanen viser ${konsument.name}`, async () => {
         await maskinportenPage.goToKonsumenterFane();
-        await expect(maskinportenPage.connectionRad(konsument.orgName)).toBeVisible();
+        await expect(maskinportenPage.connectionRad(konsument.name)).toBeVisible();
       });
     });
 
     test.afterEach(async ({ api }) => {
       try {
-        await api.maskinporten.removeSupplier(konsument.pid, konsument.org, virksomhet.org);
+        await api.maskinporten.removeSupplier(konsument.pid, konsument.orgNo, virksomhet.orgNo);
       } catch (error) {
         console.error('Cleanup: Failed to remove consumer relationship:', error);
       }
@@ -119,15 +104,15 @@ test.describe('Maskinporten-administrasjon', () => {
       await removeSupplierIfPresent(
         api.maskinporten,
         virksomhet.pid,
-        virksomhet.org,
-        leverandoer.org,
+        virksomhet.orgNo,
+        leverandoer.orgNo,
       );
     });
 
     test('legg til en leverandør', async ({ maskinportenPage, login }) => {
-      await test.step(`Logg inn som ${virksomhet.orgName} og åpne maskinportenadministrasjon`, async () => {
+      await test.step(`Logg inn som ${virksomhet.name} og åpne maskinportenadministrasjon`, async () => {
         await login.LoginToAccessManagement(virksomhet.pid);
-        await login.selectActor(virksomhet.orgName);
+        await login.selectActor(virksomhet.name);
         await maskinportenPage.goToMaskinporten();
       });
 
@@ -135,21 +120,21 @@ test.describe('Maskinporten-administrasjon', () => {
         await expect(maskinportenPage.ingenLeverandoererTekst).toBeVisible();
       });
 
-      await test.step(`Legg til ${leverandoer.orgName} som leverandør`, async () => {
-        await maskinportenPage.leggTilLeverandoer(leverandoer.org);
+      await test.step(`Legg til ${leverandoer.name} som leverandør`, async () => {
+        await maskinportenPage.leggTilLeverandoer(leverandoer.orgNo);
       });
 
       await test.step('Leverandøren er lagt til og vises i oversikten', async () => {
         // Adding navigates straight to the new supplier's own page.
         await expect(maskinportenPage.slettLeverandoerKnapp).toBeVisible();
         await maskinportenPage.goToMaskinporten();
-        await expect(maskinportenPage.connectionRad(leverandoer.orgName)).toBeVisible();
+        await expect(maskinportenPage.connectionRad(leverandoer.name)).toBeVisible();
       });
     });
 
     test.afterEach(async ({ api }) => {
       try {
-        await api.maskinporten.removeSupplier(virksomhet.pid, virksomhet.org, leverandoer.org);
+        await api.maskinporten.removeSupplier(virksomhet.pid, virksomhet.orgNo, leverandoer.orgNo);
       } catch (error) {
         console.error('Cleanup: Failed to remove supplier:', error);
       }
@@ -163,18 +148,18 @@ test.describe('Maskinporten-administrasjon', () => {
       await removeSupplierIfPresent(
         api.maskinporten,
         virksomhet.pid,
-        virksomhet.org,
-        leverandoer.org,
+        virksomhet.orgNo,
+        leverandoer.orgNo,
       );
-      await api.maskinporten.addSupplier(virksomhet.pid, virksomhet.org, leverandoer.org);
+      await api.maskinporten.addSupplier(virksomhet.pid, virksomhet.orgNo, leverandoer.orgNo);
     });
 
     test('gi og fjern fullmakt til et API', async ({ maskinportenPage, login, api }) => {
-      await test.step(`Logg inn som ${virksomhet.orgName} og åpne leverandøren`, async () => {
+      await test.step(`Logg inn som ${virksomhet.name} og åpne leverandøren`, async () => {
         await login.LoginToAccessManagement(virksomhet.pid);
-        await login.selectActor(virksomhet.orgName);
+        await login.selectActor(virksomhet.name);
         await maskinportenPage.goToMaskinporten();
-        await maskinportenPage.aapneLeverandoer(leverandoer.orgName);
+        await maskinportenPage.aapneLeverandoer(leverandoer.name);
       });
 
       await test.step(`Gi fullmakt til ${API.title}`, async () => {
@@ -189,8 +174,8 @@ test.describe('Maskinporten-administrasjon', () => {
       await test.step('Fullmakten er faktisk lagret hos leverandøren', async () => {
         const resources = await api.maskinporten.getSupplierResources(
           virksomhet.pid,
-          virksomhet.org,
-          leverandoer.org,
+          virksomhet.orgNo,
+          leverandoer.orgNo,
         );
         expect(resources.length).toBeGreaterThan(0);
       });
@@ -207,8 +192,8 @@ test.describe('Maskinporten-administrasjon', () => {
       await test.step('og fullmakten er fjernet hos leverandøren', async () => {
         const resources = await api.maskinporten.getSupplierResources(
           virksomhet.pid,
-          virksomhet.org,
-          leverandoer.org,
+          virksomhet.orgNo,
+          leverandoer.orgNo,
         );
         expect(resources).toHaveLength(0);
       });
@@ -216,7 +201,7 @@ test.describe('Maskinporten-administrasjon', () => {
 
     test.afterEach(async ({ api }) => {
       try {
-        await api.maskinporten.removeSupplier(virksomhet.pid, virksomhet.org, leverandoer.org);
+        await api.maskinporten.removeSupplier(virksomhet.pid, virksomhet.orgNo, leverandoer.orgNo);
       } catch (error) {
         console.error('Cleanup: Failed to remove supplier:', error);
       }
@@ -230,22 +215,22 @@ test.describe('Maskinporten-administrasjon', () => {
       await removeSupplierIfPresent(
         api.maskinporten,
         virksomhet.pid,
-        virksomhet.org,
-        leverandoer.org,
+        virksomhet.orgNo,
+        leverandoer.orgNo,
       );
-      await api.maskinporten.addSupplier(virksomhet.pid, virksomhet.org, leverandoer.org);
+      await api.maskinporten.addSupplier(virksomhet.pid, virksomhet.orgNo, leverandoer.orgNo);
     });
 
     test('slett en leverandør', async ({ maskinportenPage, login }) => {
-      await test.step(`Logg inn som ${virksomhet.orgName} og åpne maskinportenadministrasjon`, async () => {
+      await test.step(`Logg inn som ${virksomhet.name} og åpne maskinportenadministrasjon`, async () => {
         await login.LoginToAccessManagement(virksomhet.pid);
-        await login.selectActor(virksomhet.orgName);
+        await login.selectActor(virksomhet.name);
         await maskinportenPage.goToMaskinporten();
       });
 
-      await test.step(`Åpne leverandøren ${leverandoer.orgName}`, async () => {
-        await expect(maskinportenPage.connectionRad(leverandoer.orgName)).toBeVisible();
-        await maskinportenPage.aapneLeverandoer(leverandoer.orgName);
+      await test.step(`Åpne leverandøren ${leverandoer.name}`, async () => {
+        await expect(maskinportenPage.connectionRad(leverandoer.name)).toBeVisible();
+        await maskinportenPage.aapneLeverandoer(leverandoer.name);
       });
 
       await test.step('Slett leverandøren', async () => {
@@ -254,7 +239,7 @@ test.describe('Maskinporten-administrasjon', () => {
 
       await test.step('Leverandøren er borte fra oversikten', async () => {
         await expect(maskinportenPage.ingenLeverandoererTekst).toBeVisible();
-        await expect(maskinportenPage.connectionRad(leverandoer.orgName)).toBeHidden();
+        await expect(maskinportenPage.connectionRad(leverandoer.name)).toBeHidden();
       });
     });
 
@@ -262,7 +247,7 @@ test.describe('Maskinporten-administrasjon', () => {
       if (testInfo.status === 'passed') return;
 
       try {
-        await api.maskinporten.removeSupplier(virksomhet.pid, virksomhet.org, leverandoer.org);
+        await api.maskinporten.removeSupplier(virksomhet.pid, virksomhet.orgNo, leverandoer.orgNo);
       } catch (error) {
         console.error('Cleanup: Failed to remove supplier:', error);
       }
@@ -275,16 +260,16 @@ test.describe('Maskinporten-administrasjon', () => {
     test.beforeEach(async ({ api }) => {
       // Make `bruker` a plain right-holder: able to represent the organisation,
       // but not a Maskinporten administrator.
-      await api.connections.addConnection(virksomhet.pid, virksomhet.org, bruker.pid);
+      await api.connections.addConnection(virksomhet.pid, virksomhet.orgNo, bruker.pid);
     });
 
     test('bruker uten maskinportenrettighet kommer ikke inn på siden', async ({
       maskinportenPage,
       login,
     }) => {
-      await test.step(`Logg inn som ${bruker.pid} og velg ${virksomhet.orgName}`, async () => {
+      await test.step(`Logg inn som ${bruker.pid} og velg ${virksomhet.name}`, async () => {
         await login.LoginToAccessManagement(bruker.pid);
-        await login.selectActor(virksomhet.orgName);
+        await login.selectActor(virksomhet.name);
       });
 
       await test.step('Menyvalget for maskinportenadministrasjon vises ikke', async () => {
@@ -303,7 +288,7 @@ test.describe('Maskinporten-administrasjon', () => {
 
     test.afterEach(async ({ api }) => {
       try {
-        await api.connections.deleteConnection(virksomhet.pid, virksomhet.org, [bruker.pid]);
+        await api.connections.deleteConnection(virksomhet.pid, virksomhet.orgNo, [bruker.pid]);
       } catch (error) {
         console.error('Cleanup: Failed to delete connection:', error);
       }
