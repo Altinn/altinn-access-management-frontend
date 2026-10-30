@@ -5,7 +5,13 @@ import type { ConsentApiRequests } from 'playwright/api-requests/ConsentApiReque
 import { addTimeToNowUtc, currentEnv, formatUiDateTime, pickRandom } from 'playwright/util/helper';
 
 import { getConsentRequestId } from './helper/consentHelper.js';
-import { fromOrgs, fromPersons, toOrgs } from './helper/consentTestdata';
+import {
+  maskinportenEbevisOrg,
+  maskinportenOrgToOrg,
+  maskinportenPaaVegneAvPerson,
+  maskinportenPersonToOrgPerson,
+  toOrgs,
+} from './helper/consentTestdata';
 
 const MASKINPORTEN_ORG_DIGDIR = '991825827';
 const ENV = currentEnv().toUpperCase();
@@ -45,7 +51,7 @@ test.describe('Fetch consent token after approval', () => {
   }
 
   test('From person to org', async ({ login, consentPage, api }) => {
-    const fromPerson = pickRandom(fromPersons);
+    const fromPerson = maskinportenPersonToOrgPerson;
     const toOrg = MASKINPORTEN_ORG_DIGDIR;
     const validTo = addTimeToNowUtc({ days: 5 });
 
@@ -85,7 +91,7 @@ test.describe('Fetch consent token after approval', () => {
   });
 
   test('From org to org', async ({ login, consentPage, api }) => {
-    const [fromOrg, personThatCanApprove] = pickRandom(fromOrgs);
+    const [fromOrg, personThatCanApprove] = maskinportenOrgToOrg;
     const toOrg = MASKINPORTEN_ORG_DIGDIR;
     const validTo = addTimeToNowUtc({ days: 5 });
 
@@ -137,7 +143,7 @@ test.describe('Fetch consent token after approval', () => {
    */
 
   test('E-bevis', async ({ login, consentPage, api }) => {
-    const [fromOrg, personThatCanApprove] = pickRandom(fromOrgs);
+    const [fromOrg, personThatCanApprove] = maskinportenEbevisOrg;
     const toOrg = pickRandom(toOrgs);
     const validTo = addTimeToNowUtc({ days: 2 });
 
@@ -200,7 +206,7 @@ test.describe('Fetch consent token after approval', () => {
   test('På vegne av - Person to org', async ({ login, consentPage, api }) => {
     const FROM_ORG = '313876144'; //Dagl 28913749776
 
-    const fromPerson = pickRandom(fromPersons);
+    const fromPerson = maskinportenPaaVegneAvPerson;
     const validTo = addTimeToNowUtc({ days: 5 });
 
     const consentResp =

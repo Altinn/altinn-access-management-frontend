@@ -1,4 +1,6 @@
-export const fromPersons: string[] = [
+import { Language } from 'playwright/pages/LanguageMenu';
+
+const fromPersons: string[] = [
   '10829996974',
   '15811148722',
   '10916898504',
@@ -204,10 +206,35 @@ export const toOrgs: string[] = [
   '313506312',
 ];
 
-export const fromOrgs: string[][] = [
+const fromOrgs: string[][] = [
   ['314250184', '12867198324'],
   ['314202791', '23817096786'],
   ['310306991', '14906899788'],
   ['310732893', '28898897712'],
   ['312530422', '09917096101'],
 ];
+
+/*
+ * Testene kjører i parallell, og språket lagres på personen som logger inn. Hver test
+ * får derfor sin egen faste person, slik at to tester aldri logger inn med samme bruker.
+ */
+
+/** consent.spec.ts: seks tester per språk */
+export const personToOrgPersons: Record<Language, string[]> = {
+  [Language.NB]: fromPersons.slice(0, 6),
+  [Language.NN]: fromPersons.slice(6, 12),
+  [Language.EN]: fromPersons.slice(12, 18),
+};
+
+/** consentMaskinporten.spec.ts */
+export const maskinportenPersonToOrgPerson = fromPersons[18];
+export const maskinportenPaaVegneAvPerson = fromPersons[19];
+export const maskinportenOrgToOrg = fromOrgs[3];
+export const maskinportenEbevisOrg = fromOrgs[4];
+
+/** consentOrgToOrg.spec.ts: én per språk */
+export const orgToOrgPerLanguage: Record<Language, string[]> = {
+  [Language.NB]: fromOrgs[0],
+  [Language.NN]: fromOrgs[1],
+  [Language.EN]: fromOrgs[2],
+};
