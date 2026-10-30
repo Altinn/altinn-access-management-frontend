@@ -5,15 +5,24 @@ import { env } from 'playwright/util/helper';
 import { LANGUAGE_CODE, Language } from 'playwright/pages/LanguageMenu';
 import type { ApiClient } from 'playwright/api-requests';
 
-/** The only clients LoginPage uses: language before login, actor count after. */
-type LoginApi = Pick<ApiClient, 'settings' | 'authorizedParties'>;
+/** The only client LoginPage uses: language before login. */
+type LoginApi = Pick<ApiClient, 'settings'>;
+
+/**
+ * Heading of the account selector. The text comes from AccountSelector in
+ * @altinn/altinn-components, not from src/localizations, so it is not in the dict.
+ */
+const ACCOUNT_SELECTOR_HEADING: Record<Language, string> = {
+  [Language.NB]: 'Hvem vil du bruke Altinn på vegne av?',
+  [Language.NN]: 'Kven vil du bruke Altinn på vegner av?',
+  [Language.EN]: 'Who do you want to use Altinn on behalf of?',
+};
 
 export class LoginPage {
   readonly page: Page;
   private readonly language: Language;
   private readonly api: LoginApi;
-  private loggedInPid?: string;
-  readonly reporteeSearchBox: Locator;
+  readonly accountSearchBox: Locator;
   readonly pidInput: Locator;
   readonly testIdLink: Locator;
   readonly loginButton: Locator;
@@ -27,16 +36,21 @@ export class LoginPage {
     this.page = page;
     this.api = api;
     this.language = language;
-    // Post-login "Velg aktør" page has a different (unnamed) searchbox — there is
-    // only one searchbox role on that page, so a name is not needed to disambiguate.
-    this.reporteeSearchBox = this.page.getByRole('searchbox');
     this.pidInput = this.page.getByRole('textbox', { name: 'Personidentifikator' });
     this.testIdLink = this.page.getByRole('link', { name: 'TestID Lag din egen' });
     this.loginButton = this.page.getByRole('button', { name: 'Logg inn', exact: true });
     this.profileLink = this.page.getByRole('link', { name: 'profil' });
+    // Aktørvalget er en h1 i hovedinnholdet når det er påtvunget rett etter innlogging,
+    // og en h2 i en dialog når det åpnes fra kontomenyen i headeren.
+    const accountSelectorHeading = ACCOUNT_SELECTOR_HEADING[language];
     this.velgAktoerHeading = this.page.getByRole('heading', {
-      level: 1,
-      name: 'Hvem vil du bruke Altinn på vegne av?',
+      name: accountSelectorHeading,
+      exact: true,
+    });
+    // Søkefeltet er merket med overskriften (aria-labelledby)
+    this.accountSearchBox = this.page.getByRole('searchbox', {
+      name: accountSelectorHeading,
+      exact: true,
     });
     this.autentiserButton = this.page.getByRole('button', { name: 'Autentiser' });
     this.tilgangsstyringLink = this.page.getByRole('link', { name: 'Tilgangsstyring' });
@@ -63,32 +77,24 @@ export class LoginPage {
     await this.testIdLink.click();
     await this.pidInput.fill(pid);
     await this.autentiserButton.click();
-    this.loggedInPid = pid;
   }
 
   async selectActor(targetReportee: string) {
-    if (!this.loggedInPid) {
-      throw new Error('Log in before selecting an actor.');
-    }
-    const antallAktoerer = await this.api.authorizedParties.antallAktoererForbruker(
-      this.loggedInPid,
-    );
     await expect(this.velgAktoerHeading).toBeVisible();
 
-    // Rett etter innlogging er velgeren en hel side; ellers ligger den i en dialog
-    const dialog = this.page.getByRole('dialog');
-    const root = (await dialog.count()) > 0 ? dialog : this.page;
-
-    const searchBox = root.getByRole('searchbox');
-    const item = root.getByRole('menuitem', { name: targetReportee }).first();
-
-    // Dersom flere enn 5 kan man søke i aktørene
-    if (antallAktoerer > 5) {
-      await searchBox.fill(targetReportee);
+    // Søkefeltet vises bare når brukeren har flere enn 5 aktører. Det rendres sammen
+    // med overskriften, så når overskriften er synlig kan vi lese det av som en bruker.
+    if (await this.accountSearchBox.isVisible()) {
+      await this.accountSearchBox.fill(targetReportee);
     }
 
-    await item.click();
+    // Hoved- og underenhet har samme navn; den første er hovedenheten
+    await this.accountOption(targetReportee).first().click();
     await expect(this.velgAktoerHeading).not.toBeVisible();
+  }
+
+  private accountOption(name: string): Locator {
+    return this.page.getByRole('menuitem', { name });
   }
 
   private async navigateToLoginPage() {
@@ -100,7 +106,6 @@ export class LoginPage {
   private async authenticateUser(pid: string) {
     await this.pidInput.fill(pid);
     await this.autentiserButton.click();
-    this.loggedInPid = pid;
   }
 }
 
