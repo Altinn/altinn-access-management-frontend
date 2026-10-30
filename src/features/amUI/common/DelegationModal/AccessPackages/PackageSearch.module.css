@@ -14,7 +14,7 @@
   width: 100%;
   display: flex;
   gap: 12px;
-  padding-bottom: 5px;
+  padding-bottom: var(--ds-spacing-4);
 }
 
 .searchResults {

@@ -29,6 +29,7 @@ import { UserPageHeader } from '../common/UserPageHeader/UserPageHeader';
 import { UserPageHeaderSkeleton } from '../common/UserPageHeader/UserPageHeaderSkeleton';
 import { ClientAdminSearchField } from '../common/ClientAdminSearchField/ClientAdminSearchField';
 import { CollapsibleContainer } from '../common/CollapsibleContainer/CollapsibleContainer';
+import { SearchHitsStatus } from '../common/SearchHitsStatus/SearchHitsStatus';
 import { filterDeletedParties } from '../common/deletedPartyUtils';
 import {
   RestoreFocusFallback,
@@ -75,12 +76,14 @@ export const AgentDetails = () => {
   const [addAgentResources, { isLoading: isAddingAgentResources }] = useAddAgentResourcesMutation();
   const [removeAgentResources, { isLoading: isRemovingAgentResources }] =
     useRemoveAgentResourcesMutation();
-  const { clientsWithAgentAccess, clientsWithoutAgentAccess } = useAgentDetailsAccessClientLists({
-    agentAccessPackages,
-    agentResources,
-    clients: visibleClients,
-  });
   const [searchString, setSearchString] = useState<string>('');
+  const { clientsWithAgentAccess, clientsWithoutAgentAccess, searchHits } =
+    useAgentDetailsAccessClientLists({
+      agentAccessPackages,
+      agentResources,
+      clients: visibleClients,
+      searchString,
+    });
   const [expandedIds, setExpandedIds] = useState<string[]>([]);
   const toggleExpanded = (id: string) =>
     setExpandedIds((prev) => (prev.includes(id) ? prev.filter((x) => x !== id) : [...prev, id]));
@@ -232,6 +235,7 @@ export const AgentDetails = () => {
                     />
                   }
                 />
+                <SearchHitsStatus hits={searchHits} />
                 <div className={classes.clientSections}>
                   <section aria-labelledby={assignedSectionId}>
                     <CollapsibleContainer

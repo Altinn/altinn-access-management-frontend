@@ -13,6 +13,7 @@ import { useProviderLogoUrl } from '@/resources/hooks';
 import { type InstanceDelegation } from '@/rtk/features/instanceApi';
 
 import { DebouncedSearchField } from '../DebouncedSearchField/DebouncedSearchField';
+import { SearchHitsStatus } from '../SearchHitsStatus/SearchHitsStatus';
 
 import { InstanceListSkeleton } from './InstanceListSkeleton';
 import { InstanceInboxLink } from './InstanceInboxLink';
@@ -96,7 +97,8 @@ export const InstanceList = ({
         placeholder={t('poa_overview_page.instances_tab.search_label')}
         setDebouncedSearchString={setDebouncedSearchString}
       />
-      <div className={classes.container}>
+      <div>
+        <SearchHitsStatus hits={hasSearch ? filteredInstances.length : undefined} />
         {isLoading ? (
           <InstanceListSkeleton />
         ) : filteredInstances.length > 0 ? (

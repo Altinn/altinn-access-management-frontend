@@ -6,6 +6,7 @@ import { type Connection } from '@/rtk/features/connectionApi';
 
 import { type DelegationAction } from '../DelegationModal/EditModal';
 import { mapConnectionsToUserSearchNodes } from '../UserSearch/connectionMapper';
+import { SearchHitsStatus } from '../SearchHitsStatus/SearchHitsStatus';
 
 import { UserItem } from './UserItem';
 import { useFilteredUsers } from './useFilteredUsers';
@@ -43,7 +44,7 @@ export const UserList = ({
   const { t } = useTranslation();
   const mappedUsers = useMemo(() => mapConnectionsToUserSearchNodes(connections), [connections]);
   const trimmedQuery = searchString.trim();
-  const { users, hasNextPage, goNextPage } = useFilteredUsers({
+  const { users, hasNextPage, goNextPage, totalFilteredCount } = useFilteredUsers({
     users: mappedUsers,
     searchString: trimmedQuery,
   });
@@ -61,6 +62,9 @@ export const UserList = ({
 
   return (
     <>
+      <SearchHitsStatus
+        hits={trimmedQuery && !promptForNoResults ? totalFilteredCount : undefined}
+      />
       {promptForNoResults && (
         <div
           role='alert'

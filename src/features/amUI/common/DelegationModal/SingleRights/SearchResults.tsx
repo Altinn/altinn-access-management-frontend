@@ -11,6 +11,7 @@ import { AmPagination } from '@/components/Paginering/AmPaginering';
 import { ResourceList } from '@/features/amUI/common/ResourceList/ResourceList';
 import { SkeletonResourceList } from '@/features/amUI/common/ResourceList/SkeletonResourceList';
 import { getInheritedStatus } from '@/features/amUI/common/useInheritedStatus';
+import { SearchHitsStatus } from '@/features/amUI/common/SearchHitsStatus/SearchHitsStatus';
 
 import { DelegationAction } from '../EditModal';
 import { useDelegationModalContext } from '../DelegationModalContext';
@@ -57,6 +58,12 @@ export const SearchResults = ({
   const { setActionError } = useDelegationModalContext();
   const { actingParty, fromParty, toParty } = usePartyRepresentation();
   const requestFocusOnDataChange = useRestoreFocusOnDataChange(delegatedResources);
+
+  // The total is only a hit count once there is a search term. The search resets to page 1 when it
+  // changes, so a fetch on page 1 is a new search and clears the total; a fetch for a later page
+  // keeps it, so paging does not re-announce it.
+  const settledTotal =
+    !searchString?.trim() || (isFetching && currentPage === 1) ? undefined : totalNumberOfResults;
 
   const { createRequest, deleteRequest, hasPendingRequest, isLoadingRequest } =
     useSingleRightRequests({
@@ -163,11 +170,7 @@ export const SearchResults = ({
   return (
     <>
       <div className={classes.resultCount}>
-        {!isFetching && totalNumberOfResults !== undefined && (
-          <DsParagraph>
-            {`${String(totalNumberOfResults)} ${t('single_rights.search_hits')}`}
-          </DsParagraph>
-        )}
+        <SearchHitsStatus hits={settledTotal} />
       </div>
       {isFetching ? (
         <div className={classes.resourceList}>

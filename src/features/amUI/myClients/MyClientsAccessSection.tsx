@@ -11,9 +11,11 @@ import { getActionError, type ActionError } from '@/resources/hooks/useActionErr
 
 import {
   ClientAccessList,
+  countClientSearchHits,
   type ClientAccessPackageAction,
   type ClientResourceAction,
 } from '../common/ClientAccessList/ClientAccessList';
+import { SearchHitsStatus } from '../common/SearchHitsStatus/SearchHitsStatus';
 import { ClientAdminSearchField } from '../common/ClientAdminSearchField/ClientAdminSearchField';
 
 type MyClientsAccessSectionProps = {
@@ -137,6 +139,9 @@ export const MyClientsAccessSection = ({
         setSearchString={setSearchString}
         searchPlaceholder={t('my_clients_page.search_placeholder')}
         inputId={MY_CLIENTS_SEARCH_ID}
+      />
+      <SearchHitsStatus
+        hits={searchString ? countClientSearchHits(clients, searchString) : undefined}
       />
       <ClientAccessList
         clients={clients}
