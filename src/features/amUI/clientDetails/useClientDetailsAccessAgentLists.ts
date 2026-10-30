@@ -53,17 +53,17 @@ export const useClientDetailsAccessAgentLists = ({
           ? [
               {
                 count: countAgentSearchHits(lists.recentlyAddedClients, searchString),
-                list: t('client_administration_page.recently_added_users'),
+                listHeading: t('client_administration_page.recently_added_users'),
               },
             ]
           : []),
         {
           count: countAgentSearchHits(lists.agentsWithClientAccess, searchString),
-          list: t('client_administration_page.client_has_agents_tab'),
+          listHeading: t('client_administration_page.client_has_agents_tab'),
         },
         {
           count: countAgentSearchHits(lists.agentsWithoutClientAccess, searchString),
-          list: t('client_administration_page.client_can_get_agents_tab'),
+          listHeading: t('client_administration_page.client_can_get_agents_tab'),
         },
       ]
     : undefined;

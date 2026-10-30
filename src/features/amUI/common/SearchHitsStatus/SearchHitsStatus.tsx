@@ -8,7 +8,7 @@ import classes from './SearchHitsStatus.module.css';
 
 export interface SearchHitsInList {
   count: number;
-  list: string;
+  listHeading: string;
 }
 
 interface SearchHitsStatusProps {
@@ -27,10 +27,10 @@ export const SearchHitsStatus = ({ hits, message, className }: SearchHitsStatusP
   const total = Array.isArray(hits) ? hits.reduce((sum, hit) => sum + hit.count, 0) : hits;
   const text = Array.isArray(hits)
     ? hits
-        .map(({ count, list }) =>
+        .map(({ count, listHeading }) =>
           t('common.search_hits_in_list', {
             count,
-            list: list.charAt(0).toLocaleLowerCase() + list.slice(1),
+            list: listHeading.charAt(0).toLocaleLowerCase() + listHeading.slice(1),
           }),
         )
         .join('. ')

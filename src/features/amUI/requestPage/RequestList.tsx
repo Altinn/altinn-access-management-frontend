@@ -43,8 +43,11 @@ export const RequestList = ({
     ? undefined
     : handledRequests?.length
       ? [
-          { count: filteredRequests.length, list: t('request_page.pending_requests_title') },
-          { count: filteredHandledRequests.length, list: t('request_page.handled_requests_title') },
+          { count: filteredRequests.length, listHeading: t('request_page.pending_requests_title') },
+          {
+            count: filteredHandledRequests.length,
+            listHeading: t('request_page.handled_requests_title'),
+          },
         ]
       : filteredRequests.length;
 

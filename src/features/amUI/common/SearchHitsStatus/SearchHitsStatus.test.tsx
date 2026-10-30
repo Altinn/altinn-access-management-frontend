@@ -25,8 +25,8 @@ describe('SearchHitsStatus', () => {
     render(
       <SearchHitsStatus
         hits={[
-          { count: 0, list: 'A' },
-          { count: 2, list: 'B' },
+          { count: 0, listHeading: 'A' },
+          { count: 2, listHeading: 'B' },
         ]}
       />,
     );

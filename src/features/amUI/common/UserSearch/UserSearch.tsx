@@ -114,8 +114,8 @@ export const UserSearch: React.FC<UserSearchProps> = ({
     ? undefined
     : showIndirectList
       ? [
-          { count: totalFilteredCount, list: directHeading },
-          { count: totalFilteredIndirectCount, list: indirectHeading },
+          { count: totalFilteredCount, listHeading: directHeading },
+          { count: totalFilteredIndirectCount, listHeading: indirectHeading },
         ]
       : totalFilteredCount;
 

@@ -154,22 +154,9 @@ export const SingleRightsPermissions = () => {
 
   const hasSearch = debouncedSearch || filterState.length > 0;
 
-  // The other services count is the loaded rows: the backend total also counts delegated services,
-  // which are listed under assigned services. currentData is undefined while a new search loads,
-  // and both counts depend on the delegations.
-  const searchHits =
-    hasSearch && currentSearchData && !isLoadingDelegations && !isPartyLoading
-      ? [
-          {
-            count: filteredResources.length,
-            list: t('poa_overview_page.services_tab.assigned_services_title'),
-          },
-          {
-            count: searchResources.length,
-            list: t('poa_overview_page.services_tab.other_services_title'),
-          },
-        ]
-      : undefined;
+  // The backend total counts every matching service, delegated or not, so it is announced as one
+  // number. currentData is undefined while a new search loads.
+  const searchHits = hasSearch ? currentSearchData?.pages[0]?.numEntriesTotal : undefined;
 
   if (isError) {
     return (
