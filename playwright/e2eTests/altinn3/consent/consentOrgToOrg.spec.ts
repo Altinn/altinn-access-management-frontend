@@ -4,7 +4,7 @@ import { test } from 'playwright/fixture/pomFixture';
 import { Language } from 'playwright/pages/consent/ConsentPage';
 import { addTimeToNowUtc, formatUiDateTime, pickRandom } from 'playwright/util/helper';
 
-import { toOrgs } from './helper/consentTestdata';
+import { orgTilOrg, toOrgs } from './helper/consentTestdata';
 
 const REDIRECT_URL = 'https://example.com/';
 const APPROVED_REDIRECT_URL = `${REDIRECT_URL}?Status=OK`;
@@ -23,12 +23,11 @@ LANGUAGES.forEach((language) => {
       consentPage,
       login,
       api,
-      consentOrg,
     }) => {
       // Create consent request from one org to another org
       // For å godkjenne her kreves det at ressursen i ressursregisteret er satt opp med utfyller/innsender-rollen for org til org-samtykke
       // fordi privatperson" ikke har rettighet til å godkjenne på vegne av en organisasjon
-      const [fromOrg, fromPerson] = consentOrg;
+      const { orgnr: fromOrg, fnr: fromPerson } = orgTilOrg[language];
       const toOrg = pickRandom(toOrgs);
       const validTo = addTimeToNowUtc({ days: 2 });
 

@@ -17,7 +17,6 @@ import { InnstillingerPage } from 'playwright/pages/settings/InnstillingerPage';
 import { ForespoerslerPage } from 'playwright/pages/requests/ForespoerslerPage';
 import { MaskinportenPage } from 'playwright/pages/maskinporten/MaskinportenPage';
 import { FullmaktsoversiktPage } from 'playwright/pages/fullmakter/FullmaktsoversiktPage';
-import { fromOrgs, fromPersons } from 'playwright/e2eTests/altinn3/consent/helper/consentTestdata';
 
 import { apiFixture } from './apiFixture';
 
@@ -46,21 +45,7 @@ type Fixtures = {
   forespoerslerPage: ForespoerslerPage;
   maskinportenPage: MaskinportenPage;
   fullmaktsoversiktPage: FullmaktsoversiktPage;
-  // Samtykke: personen som logger inn, og [orgnr, person som kan godkjenne for orgen]
-  consentPerson: string;
-  consentOrg: string[];
 };
-
-/**
- * Språket lagres på personen som logger inn, så tester som kjører samtidig må ha ulike
- * brukere. parallelIndex er unik for hver worker som kjører samtidig.
- */
-function perWorker<T>(testdata: T[], parallelIndex: number): T {
-  if (parallelIndex >= testdata.length) {
-    throw new Error(`For lite testdata: ${testdata.length} brukere til worker ${parallelIndex}`);
-  }
-  return testdata[parallelIndex];
-}
 
 // Page objects on top of the api fixture, so LoginPage (and specs) get `api` too.
 const test = apiFixture.extend<Fixtures>({
@@ -142,12 +127,6 @@ const test = apiFixture.extend<Fixtures>({
 
   fullmaktsoversiktPage: async ({ page, language }, use) => {
     await use(new FullmaktsoversiktPage(page, language));
-  },
-  consentPerson: async ({}, use, testInfo) => {
-    await use(perWorker(fromPersons, testInfo.parallelIndex));
-  },
-  consentOrg: async ({}, use, testInfo) => {
-    await use(perWorker(fromOrgs, testInfo.parallelIndex));
   },
 });
 
