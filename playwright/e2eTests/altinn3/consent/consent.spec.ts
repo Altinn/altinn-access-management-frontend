@@ -4,7 +4,7 @@ import { test } from 'playwright/fixture/pomFixture';
 import { Language } from 'playwright/pages/consent/ConsentPage';
 import { addTimeToNowUtc, formatUiDateTime, pickRandom } from 'playwright/util/helper';
 
-import { personToOrgPersons, toOrgs } from './helper/consentTestdata';
+import { toOrgs } from './helper/consentTestdata';
 
 const REDIRECT_URL = 'https://example.com/';
 const APPROVED_REDIRECT_URL = `${REDIRECT_URL}?Status=OK`;
@@ -19,17 +19,8 @@ LANGUAGES.forEach((language) => {
       language,
       viewport: MOBILE_VIEWPORT,
     });
-    const [
-      standardPerson,
-      kravPerson,
-      fullmaktPerson,
-      laanesoeknadPerson,
-      enkeltPerson,
-      avvisPerson,
-    ] = personToOrgPersons[language];
-
-    test(`Standard samtykke`, async ({ login, consentPage, api }) => {
-      const fromPerson = standardPerson;
+    test(`Standard samtykke`, async ({ login, consentPage, api, consentPerson }) => {
+      const fromPerson = consentPerson;
       const toOrg = pickRandom(toOrgs);
       const validTo = addTimeToNowUtc({ days: 2 });
 
@@ -66,8 +57,8 @@ LANGUAGES.forEach((language) => {
       });
     });
 
-    test(`Krav-template`, async ({ consentPage, login, api }) => {
-      const fromPerson = kravPerson;
+    test(`Krav-template`, async ({ consentPage, login, api, consentPerson }) => {
+      const fromPerson = consentPerson;
       const toOrg = pickRandom(toOrgs);
       const validTo = addTimeToNowUtc({ days: 2 });
 
@@ -98,8 +89,8 @@ LANGUAGES.forEach((language) => {
       });
     });
 
-    test(`Fullmakt utføre tjeneste`, async ({ consentPage, page, login, api }) => {
-      const fromPerson = fullmaktPerson;
+    test(`Fullmakt utføre tjeneste`, async ({ consentPage, page, login, api, consentPerson }) => {
+      const fromPerson = consentPerson;
       const toOrg = pickRandom(toOrgs);
       const validTo = addTimeToNowUtc({ days: 2 });
 
@@ -134,8 +125,8 @@ LANGUAGES.forEach((language) => {
       });
     });
 
-    test(`Lånesøknad`, async ({ consentPage, login, api }) => {
-      const fromPerson = laanesoeknadPerson;
+    test(`Lånesøknad`, async ({ consentPage, login, api, consentPerson }) => {
+      const fromPerson = consentPerson;
       const toOrg = pickRandom(toOrgs);
       const validTo = addTimeToNowUtc({ days: 2 });
 
@@ -169,8 +160,8 @@ LANGUAGES.forEach((language) => {
       });
     });
 
-    test(`Enkelt samtykke`, async ({ consentPage, login, api }) => {
-      const fromPerson = enkeltPerson;
+    test(`Enkelt samtykke`, async ({ consentPage, login, api, consentPerson }) => {
+      const fromPerson = consentPerson;
       const toOrg = pickRandom(toOrgs);
       const validTo = addTimeToNowUtc({ days: 2 });
 
@@ -205,8 +196,8 @@ LANGUAGES.forEach((language) => {
       });
     });
 
-    test(`Avvis samtykke`, async ({ consentPage, login, api }) => {
-      const fromPerson = avvisPerson;
+    test(`Avvis samtykke`, async ({ consentPage, login, api, consentPerson }) => {
+      const fromPerson = consentPerson;
       const toOrg = pickRandom(toOrgs);
       const validTo = addTimeToNowUtc({ days: 2 });
 
