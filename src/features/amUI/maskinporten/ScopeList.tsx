@@ -14,6 +14,7 @@ interface ScopeListProps {
   renderControls?: (resource: ServiceResource) => ReactNode;
   search: string;
   setSearch: (value: string) => void;
+  debouncedSearch: string;
   filterState: string[];
   setFilterState: (value: string[]) => void;
   serviceOwnerOptions: { value: string; label: string; count?: number }[];
@@ -28,6 +29,7 @@ export const ScopeList = ({
   renderControls,
   search,
   setSearch,
+  debouncedSearch,
   filterState,
   setFilterState,
   serviceOwnerOptions,
@@ -51,8 +53,8 @@ export const ScopeList = ({
         {addNewResourceButton}
       </div>
       <SearchHitsStatus
-        hits={search.trim() ? resources.length : undefined}
-        searchString={search}
+        hits={debouncedSearch.trim() ? resources.length : undefined}
+        searchString={debouncedSearch}
       />
       {resources.length === 0 && emptyState !== undefined ? (
         emptyState

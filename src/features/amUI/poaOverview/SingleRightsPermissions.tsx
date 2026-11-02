@@ -26,6 +26,7 @@ import {
   extractOrgCode,
   extractDescription,
   isExpiredResource,
+  matchesAnySearchWord,
 } from '../common/ResourceList/utils';
 
 import classes from './SingleRightsPermissions.module.css';
@@ -33,44 +34,6 @@ import classes from './SingleRightsPermissions.module.css';
 const searchResultsPerPage = 7;
 const ASSIGNED_SERVICES_SECTION = 'assigned-services-section';
 const UNASSIGNED_SERVICES_SECTION = 'unassigned-services-section';
-
-// Mirrors the BFF resource search (ResourceService.GetPaginatedSearchResults), so delegated
-// services can be subtracted from its total without fetching every page.
-const matchesBackendSearch = (
-  resource: ServiceResource,
-  searchString: string,
-  serviceOwnerFilter: string[],
-): boolean => {
-  if (
-    resource.visible === false ||
-    resource.resourceType === 'MaskinportenSchema' ||
-    resource.resourceType === 'Systemresource'
-  ) {
-    return false;
-  }
-  if (
-    serviceOwnerFilter.length > 0 &&
-    !serviceOwnerFilter.some(
-      (owner) => owner.toLowerCase() === resource.resourceOwnerOrgcode?.toLowerCase(),
-    )
-  ) {
-    return false;
-  }
-  const search = searchString.trim().toLowerCase();
-  if (!search) {
-    return true;
-  }
-  const words = search.split(/\s/);
-  const fields = [
-    resource.title,
-    resource.description,
-    resource.rightDescription,
-    resource.resourceOwnerName,
-    resource.identifier,
-    ...(resource.keywords ?? []),
-  ];
-  return words.some((word) => fields.some((field) => field?.toLowerCase().includes(word)));
-};
 
 export const SingleRightsPermissions = () => {
   const { t } = useTranslation();
@@ -188,41 +151,29 @@ export const SingleRightsPermissions = () => {
     getOwnerOrgCode: extractOrgCode,
     getDescription: extractDescription,
     isExpiredResource: isExpiredResource,
+    matchesSearch: matchesAnySearchWord,
   });
 
   const hasSearch = debouncedSearch || filterState.length > 0;
 
-  // The backend total also counts delegated services, which are left out of other services.
+  // The backend total also counts delegated services, which are listed under assigned services.
   // currentData is undefined while a new search loads.
-  const searchHits = useMemo(() => {
-    if (!hasSearch || !currentSearchData || isLoadingDelegations || isPartyLoading) {
-      return undefined;
-    }
-    const delegatedMatches = resources.filter((resource) =>
-      matchesBackendSearch(resource, debouncedSearch, filterState),
-    ).length;
-    const numEntriesTotal = currentSearchData.pages[0]?.numEntriesTotal ?? 0;
-    return [
-      {
-        count: filteredResources.length,
-        listHeading: t('poa_overview_page.services_tab.assigned_services_title'),
-      },
-      {
-        count: Math.max(0, numEntriesTotal - delegatedMatches),
-        listHeading: t('poa_overview_page.services_tab.other_services_title'),
-      },
-    ];
-  }, [
-    hasSearch,
-    currentSearchData,
-    isLoadingDelegations,
-    isPartyLoading,
-    resources,
-    debouncedSearch,
-    filterState,
-    filteredResources.length,
-    t,
-  ]);
+  const searchHits =
+    hasSearch && currentSearchData && !isLoadingDelegations && !isPartyLoading
+      ? [
+          {
+            count: filteredResources.length,
+            listHeading: t('poa_overview_page.services_tab.assigned_services_title'),
+          },
+          {
+            count: Math.max(
+              0,
+              (currentSearchData.pages[0]?.numEntriesTotal ?? 0) - filteredResources.length,
+            ),
+            listHeading: t('poa_overview_page.services_tab.other_services_title'),
+          },
+        ]
+      : undefined;
 
   if (isError) {
     return (

@@ -12,6 +12,7 @@ import {
 import { type TFunction } from 'i18next';
 
 import { useGetReporteeQuery } from '@/rtk/features/userInfoApi';
+import { useDebouncedValue } from '@/resources/hooks';
 import { getPartyColor } from '@/resources/utils/reporteeUtils';
 import { SearchHitsStatus } from '@/features/amUI/common/SearchHitsStatus/SearchHitsStatus';
 
@@ -28,6 +29,7 @@ interface ConsentTimelineProps {
 export const ConsentTimeline = ({ consentLog, showConsentDetails }: ConsentTimelineProps) => {
   const { t } = useTranslation();
   const [searchValue, setSearchValue] = useState<string>('');
+  const debouncedSearch = useDebouncedValue(searchValue, searchValue ? 300 : 0);
   const { data: reportee } = useGetReporteeQuery();
 
   const handleSearch = (event: React.ChangeEvent<HTMLInputElement>): void => {
@@ -38,12 +40,12 @@ export const ConsentTimeline = ({ consentLog, showConsentDetails }: ConsentTimel
   const filteredTimelineItems = useMemo(
     () =>
       timeLineItems.filter((item) => {
-        const q = searchValue.trim().toLowerCase();
+        const q = debouncedSearch.trim().toLowerCase();
         return [item.fromPartyName, item.toPartyName].some((name) =>
           name?.toLowerCase().includes(q),
         );
       }),
-    [searchValue, timeLineItems],
+    [debouncedSearch, timeLineItems],
   );
 
   return (
@@ -58,14 +60,14 @@ export const ConsentTimeline = ({ consentLog, showConsentDetails }: ConsentTimel
         <DsSearch.Clear />
       </DsSearch>
       <SearchHitsStatus
-        hits={searchValue.trim() ? filteredTimelineItems.length : undefined}
-        searchString={searchValue}
+        hits={debouncedSearch.trim() ? filteredTimelineItems.length : undefined}
+        searchString={debouncedSearch}
       />
       <Timeline>
-        {!searchValue && timeLineItems.length === 0 && (
+        {!debouncedSearch && timeLineItems.length === 0 && (
           <DsParagraph data-color='info'>{t('consent_log.no_active_consents')}</DsParagraph>
         )}
-        {searchValue && filteredTimelineItems.length === 0 && (
+        {debouncedSearch && filteredTimelineItems.length === 0 && (
           <DsParagraph data-color='info'>{t('consent_log.no_results')}</DsParagraph>
         )}
         {filteredTimelineItems.map((item) => {

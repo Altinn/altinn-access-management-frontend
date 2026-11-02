@@ -4,6 +4,7 @@ import { useTranslation } from 'react-i18next';
 
 import { formatEntityDisplayName } from '@/resources/utils/reporteeUtils';
 import { PartyType } from '@/dataObjects/dtos/Party';
+import { useDebouncedValue } from '@/resources/hooks';
 
 import { useFilteredUsers } from '../UserList/useFilteredUsers';
 import { DelegationAction } from '../DelegationModal/EditModal';
@@ -79,7 +80,7 @@ export const UserSearch: React.FC<UserSearchProps> = ({
     [initialIndirectUsers],
   );
 
-  const trimmedQuery = query.trim();
+  const trimmedQuery = useDebouncedValue(query, query ? 300 : 0).trim();
   const isQuery = trimmedQuery !== '' || hasActiveAdditionalFilters;
   const hasFiltersOnly = hasActiveAdditionalFilters && trimmedQuery === '';
 

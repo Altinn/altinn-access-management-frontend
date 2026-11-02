@@ -1,13 +1,9 @@
-import { act, render, screen } from '@testing-library/react';
-import { afterEach, describe, expect, it, vi } from 'vitest';
+import { render, screen } from '@testing-library/react';
+import { describe, expect, it } from 'vitest';
 
 import { SearchHitsStatus } from './SearchHitsStatus';
 
 describe('SearchHitsStatus', () => {
-  afterEach(() => {
-    vi.useRealTimers();
-  });
-
   it('keeps an empty live region mounted while nothing is searched for', () => {
     render(<SearchHitsStatus />);
     expect(screen.getByRole('status')).toBeEmptyDOMElement();
@@ -49,32 +45,7 @@ describe('SearchHitsStatus', () => {
     expect(screen.getByRole('status')).toHaveTextContent('5 hits in 2 areas');
   });
 
-  it('waits until the search has settled before updating', () => {
-    vi.useFakeTimers();
-    const { rerender } = render(
-      <SearchHitsStatus
-        hits={5}
-        message='5 hits'
-        searchString='a'
-      />,
-    );
-    rerender(
-      <SearchHitsStatus
-        hits={2}
-        message='2 hits'
-        searchString='ab'
-      />,
-    );
-    expect(screen.getByRole('status')).toHaveTextContent('5 hits');
-
-    act(() => {
-      vi.advanceTimersByTime(300);
-    });
-    expect(screen.getByRole('status')).toHaveTextContent('2 hits');
-  });
-
   it('replaces the text for a new search with the same hit count', () => {
-    vi.useFakeTimers();
     const { rerender } = render(
       <SearchHitsStatus
         hits={2}
@@ -88,10 +59,25 @@ describe('SearchHitsStatus', () => {
         searchString='b'
       />,
     );
-    act(() => {
-      vi.advanceTimersByTime(300);
-    });
 
     expect(screen.getByText('common.search_hits')).not.toBe(before);
+  });
+
+  it('keeps the text while the search stays the same', () => {
+    const { rerender } = render(
+      <SearchHitsStatus
+        hits={2}
+        searchString='a'
+      />,
+    );
+    const before = screen.getByText('common.search_hits');
+    rerender(
+      <SearchHitsStatus
+        hits={2}
+        searchString='a'
+      />,
+    );
+
+    expect(screen.getByText('common.search_hits')).toBe(before);
   });
 });
