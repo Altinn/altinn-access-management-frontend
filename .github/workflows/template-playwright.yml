@@ -98,10 +98,15 @@ jobs:
         continue-on-error: true
         env:
           UU_DIR: playwright/playwright-report/${{ inputs.environment }}/uu
+          UU_URL: ${{ env.REPORT_URL }}uu/index.html
         run: |
           [ -f "$UU_DIR/summary.md" ] || exit 0
+          echo "UU report: $UU_URL"
+          if [ -f "$UU_DIR/warning.txt" ]; then
+            echo "::warning title=UU-funn::$(cat "$UU_DIR/warning.txt"). UU-rapport: $UU_URL"
+          fi
           {
             echo "### UU"
             cat "$UU_DIR/summary.md"
-            echo "➡️ [Åpne UU-rapporten](${REPORT_URL}uu/index.html)"
+            echo "➡️ [Åpne UU-rapporten]($UU_URL)"
           } >> "$GITHUB_STEP_SUMMARY"

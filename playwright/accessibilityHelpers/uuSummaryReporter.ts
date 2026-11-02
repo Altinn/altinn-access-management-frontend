@@ -30,7 +30,8 @@ const impact = (violation: Violation) => IMPACT_LABEL[violation.impact ?? ''] ??
  * Samler axe-funnene fra alle testene:
  * - `<outputFolder>/index.html`: samleside med én rad per regel og lenke til hver skanning.
  * - `<outputFolder>/summary.md`: kort oppsummering som CI legger i jobboppsummeringen.
- * - Én linje i terminalen, og en GitHub-advarsel i CI. Brekker aldri bygget.
+ * - `<outputFolder>/warning.txt`: kun ved funn; CI gjør den til en gul advarsel med lenke.
+ * - Én linje i terminalen. Brekker aldri bygget.
  */
 export default class UuSummaryReporter implements Reporter {
   // Siste forsøk per test, så retries ikke telles dobbelt.
@@ -121,11 +122,10 @@ export default class UuSummaryReporter implements Reporter {
       ].join('\n'),
     );
 
+    // CI viser denne som gul advarsel med lenke til rapporten (se template-playwright.yml).
+    if (rules.size || errors) fs.writeFileSync(path.join(outputFolder, 'warning.txt'), headline);
+
     console.log(`UU: ${headline} → ${path.join(outputFolder, 'index.html')}`);
-    if (process.env.GITHUB_ACTIONS && (rules.size || errors)) {
-      // Workflow-kommando: gul advarsel på kjøringen, ikke rødt bygg.
-      console.log(`::warning title=UU-funn::${headline}. Se UU-rapporten i jobboppsummeringen.`);
-    }
   }
 
   printsToStdio() {
