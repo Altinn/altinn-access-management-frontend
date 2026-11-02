@@ -79,14 +79,10 @@ async function withViolationMarkers<T>(
   }
 }
 
-/** Scan the current page's state with axe and attach results/screenshot/report to the test. */
-export async function scanPage(
-  page: Page,
-  testInfo: TestInfo,
-  name: string,
-): Promise<{ scanned: boolean }> {
+/** Scan the current page's state with axe and attach results/screenshot/report to the test. Returns false for pages outside the app. */
+export async function scanPage(page: Page, testInfo: TestInfo, name: string): Promise<boolean> {
   if (page.isClosed() || !new URL(page.url()).pathname.startsWith('/accessmanagement/ui'))
-    return { scanned: false };
+    return false;
   await page.bringToFront();
   await waitForAnimations(page);
   const results = await runAxe(page);
@@ -120,5 +116,5 @@ export async function scanPage(
       description: `${name}: ${violation.id} — ${violation.help}`,
     });
   }
-  return { scanned: true };
+  return true;
 }

@@ -11,7 +11,7 @@ import { SystemUserConfirmPage } from 'playwright/pages/systemuser/SystemUserCon
 import { DelegationPage } from 'playwright/pages/profile/accessPackageDelegationPage';
 import { AktorvalgHeader } from 'playwright/pages/AktorvalgHeader';
 import { ClientDelegationPage } from 'playwright/pages/systemuser/ClientDelegation';
-import { runAccessibilityTests } from 'playwright/accessibilityHelpers/accessibilityHelper';
+import { AccessibilityScanner } from 'playwright/accessibilityHelpers/accessibilityHelper';
 import { KlientAdministrasjonPage } from 'playwright/pages/tilgangsstyring/KlientAdministrasjonPage';
 import { InnstillingerPage } from 'playwright/pages/settings/InnstillingerPage';
 import { ForespoerslerPage } from 'playwright/pages/requests/ForespoerslerPage';
@@ -36,7 +36,7 @@ type Fixtures = {
   systemUserPage: SystemUserPage;
   systemUserConfirmPage: SystemUserConfirmPage;
   logoutUser: logoutWithUser;
-  runAccessibilityTest: runAccessibilityTests;
+  runAccessibilityTest: AccessibilityScanner;
   delegation: DelegationPage;
   consentPage: ConsentPage;
   aktorvalgHeader: AktorvalgHeader;
@@ -101,7 +101,7 @@ const test = apiFixture.extend<Fixtures>({
     await use(new logoutWithUser(page));
   },
   runAccessibilityTest: async ({ page }, use, testInfo) => {
-    await use(new runAccessibilityTests(page, testInfo, process.env.UU_SCAN !== '0'));
+    await use(new AccessibilityScanner(page, testInfo, process.env.UU_SCAN !== '0'));
   },
   delegation: async ({ page, language }, use) => {
     await use(new DelegationPage(page, language));
