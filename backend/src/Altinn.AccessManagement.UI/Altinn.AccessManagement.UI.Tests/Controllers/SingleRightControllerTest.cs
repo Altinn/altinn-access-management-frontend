@@ -300,6 +300,29 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
         }
 
         /// <summary>
+        ///     Test case: Retrieve delegated resources in a selected language
+        ///     Expected: Returns the keywords of each resource in that language, as the resource search does
+        /// </summary>
+        [Fact]
+        public async Task GetDelegatedResources_ReturnsKeywordsInSelectedLanguage()
+        {
+            // Arrange
+            Guid party = Guid.Parse("cd35779b-b174-4ecc-bbef-ece13611be7f");
+            Guid from = Guid.Parse("cd35779b-b174-4ecc-bbef-ece13611be7f");
+            HttpRequestMessage request = new HttpRequestMessage(HttpMethod.Get, $"accessmanagement/api/v1/singleright/delegation/resources?party={party}&from={from}");
+            request.Headers.Add("Cookie", "selectedLanguage=no_nb");
+
+            // Act
+            HttpResponseMessage httpResponse = await _client.SendAsync(request);
+            List<ResourceDelegation> actualResponse = await httpResponse.Content.ReadFromJsonAsync<List<ResourceDelegation>>();
+
+            // Assert
+            Assert.Equal(HttpStatusCode.OK, httpResponse.StatusCode);
+            ResourceDelegation delegation = actualResponse.Single(d => d.Resource.Identifier == "appid-502");
+            Assert.Equal(["klesskapet_kw"], delegation.Resource.Keywords);
+        }
+
+        /// <summary>
         ///     Test case: Handles unexpected errors when retrieving delegated resources
         ///     Expected: Returns an internal server error
         /// </summary>

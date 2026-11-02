@@ -1,9 +1,9 @@
 import type { ReactNode } from 'react';
 import { useTranslation } from 'react-i18next';
-import { DsParagraph } from '@altinn/altinn-components';
 
 import { ResourceFilterToolbar } from '@/features/amUI/common/ResourceFilterToolbar/ResourceFilterToolbar';
 import { ResourceList } from '@/features/amUI/common/ResourceList/ResourceList';
+import { SearchHitsStatus } from '@/features/amUI/common/SearchHitsStatus/SearchHitsStatus';
 import type { ServiceResource } from '@/rtk/features/singleRights/singleRightsApi';
 
 import classes from './ScopeList.module.css';
@@ -14,6 +14,7 @@ interface ScopeListProps {
   renderControls?: (resource: ServiceResource) => ReactNode;
   search: string;
   setSearch: (value: string) => void;
+  debouncedSearch: string;
   filterState: string[];
   setFilterState: (value: string[]) => void;
   serviceOwnerOptions: { value: string; label: string; count?: number }[];
@@ -21,8 +22,6 @@ interface ScopeListProps {
   getHasAccess?: (resource: ServiceResource) => boolean;
   emptyState?: ReactNode;
   addNewResourceButton?: ReactNode;
-  showResultsCount?: boolean;
-  totalResultsCount?: number;
 }
 
 export const ScopeList = ({
@@ -30,6 +29,7 @@ export const ScopeList = ({
   renderControls,
   search,
   setSearch,
+  debouncedSearch,
   filterState,
   setFilterState,
   serviceOwnerOptions,
@@ -37,8 +37,6 @@ export const ScopeList = ({
   getHasAccess,
   emptyState,
   addNewResourceButton,
-  showResultsCount,
-  totalResultsCount,
 }: ScopeListProps) => {
   const { t } = useTranslation();
   return (
@@ -54,17 +52,14 @@ export const ScopeList = ({
         />
         {addNewResourceButton}
       </div>
+      <SearchHitsStatus
+        hits={debouncedSearch.trim() ? resources.length : undefined}
+        searchString={debouncedSearch}
+      />
       {resources.length === 0 && emptyState !== undefined ? (
         emptyState
       ) : (
         <>
-          {showResultsCount && (
-            <DsParagraph data-size='sm'>
-              {t('maskinporten_page.search_results_count', {
-                count: totalResultsCount ?? resources.length,
-              })}
-            </DsParagraph>
-          )}
           <ResourceList
             resources={resources}
             enableSearch={false}

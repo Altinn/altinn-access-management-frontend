@@ -4,6 +4,7 @@ import * as React from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { useFilteredResources } from '@/features/amUI/common/ResourceList/useFilteredResources';
+import { useDebouncedValue } from '@/resources/hooks';
 import { useIsMobileOrSmaller } from '@/resources/utils/screensizeUtils';
 import type {
   ResourceDelegation,
@@ -43,6 +44,7 @@ export const DelegatedResourcesSection = ({
   const { t } = useTranslation();
   const isMobile = useIsMobileOrSmaller();
   const [search, setSearch] = React.useState('');
+  const debouncedSearch = useDebouncedValue(search, search ? 300 : 0);
   const [filterState, setFilterState] = React.useState<string[]>([]);
 
   const delegatedResources = (resourcePermissions ?? [])
@@ -51,7 +53,7 @@ export const DelegatedResourcesSection = ({
 
   const { resources: filteredResources } = useFilteredResources<ServiceResource>({
     resources: delegatedResources,
-    searchString: search,
+    searchString: debouncedSearch,
     serviceOwnerFilter: filterState,
     getResourceName: (resource) => resource.title ?? '',
     getOwnerName: (resource) => resource.resourceOwnerName ?? '',
@@ -101,6 +103,7 @@ export const DelegatedResourcesSection = ({
           resources={filteredResources}
           search={search}
           setSearch={setSearch}
+          debouncedSearch={debouncedSearch}
           filterState={filterState}
           setFilterState={setFilterState}
           serviceOwnerOptions={serviceOwnerOptions}
@@ -128,7 +131,7 @@ export const DelegatedResourcesSection = ({
             <DsParagraph data-size='md'>
               {delegatedResources.length === 0
                 ? t('maskinporten_page.no_delegated_resources')
-                : t('resource_list.no_resources_filtered', { searchTerm: search })}
+                : t('resource_list.no_resources_filtered', { searchTerm: debouncedSearch })}
             </DsParagraph>
           }
         />
