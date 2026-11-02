@@ -20,6 +20,7 @@ const config: PlaywrightTestConfig = {
   },
   reporter: [
     process.env.CI ? ['line'] : ['dot'],
+    ['./accessibilityHelpers/uuSummaryReporter.ts'],
     [
       'json',
       {

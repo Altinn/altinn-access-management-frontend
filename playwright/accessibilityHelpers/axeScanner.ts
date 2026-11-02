@@ -2,7 +2,7 @@ import type { Page, TestInfo } from '@playwright/test';
 import AxeBuilder from '@axe-core/playwright';
 import type { AxeResults } from 'axe-core';
 
-import { collectScanMetadata, renderAccessibilityReport } from './accessibilityReport';
+import { renderAccessibilityReport } from './accessibilityReport';
 
 // Contrast checks must use final colors, rather than an opening transition.
 async function waitForAnimations(page: Page) {
@@ -103,13 +103,14 @@ export async function scanPage(
   const screenshot = results.violations.length
     ? await withViolationMarkers(page, results.violations, takeScreenshot)
     : await takeScreenshot();
-  const metadata = await collectScanMetadata(testInfo, page, name);
-  await testInfo.attach(`${name}-scan-metadata`, {
-    body: JSON.stringify(metadata),
-    contentType: 'application/json',
-  });
+  const info = {
+    title: testInfo.title,
+    stage: name,
+    url: page.url(),
+    language: await page.locator('html').getAttribute('lang'),
+  };
   await testInfo.attach(`${name}-uu-report`, {
-    body: renderAccessibilityReport(results, screenshot, metadata),
+    body: renderAccessibilityReport(results, screenshot, info),
     contentType: 'text/html',
   });
 

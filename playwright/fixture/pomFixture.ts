@@ -53,8 +53,7 @@ const test = apiFixture.extend<Fixtures>({
   accessibilityScan: [
     async ({ runAccessibilityTest }, use, testInfo) => {
       await use();
-      const coveredElsewhere = testInfo.annotations.some(({ type }) => type === 'UU-dekket-av');
-      if (testInfo.status === 'passed' && !runAccessibilityTest.scanned && !coveredElsewhere) {
+      if (testInfo.status === 'passed' && !runAccessibilityTest.scanned) {
         await runAccessibilityTest.scan('sluttside');
       }
     },

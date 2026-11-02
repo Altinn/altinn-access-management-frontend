@@ -2,7 +2,6 @@ import type { Page, TestInfo } from '@playwright/test';
 
 import { runOptionalCheck } from './accessibilityCheckBoundary';
 import { scanPage } from './axeScanner';
-import { checkDialogInteractions, type DialogCheckOptions } from './dialogAccessibilityChecks';
 
 export class runAccessibilityTests {
   scanned = false;
@@ -22,15 +21,5 @@ export class runAccessibilityTests {
       const { scanned } = await scanPage(this.page, this.testInfo, name);
       if (scanned) this.scanned = true;
     });
-  }
-
-  /**
-   * Checks this dialog's tab trap, Escape-to-close and focus-return, plus that
-   * a simulated search-request failure (HTTP 500) is announced accessibly.
-   */
-  async checkDialog(options: DialogCheckOptions) {
-    await runOptionalCheck(this.testInfo, this.enabled, options.name ?? 'dialogkontroller', () =>
-      checkDialogInteractions(this.page, this.testInfo, options),
-    );
   }
 }
