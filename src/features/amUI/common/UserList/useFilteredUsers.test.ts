@@ -250,6 +250,51 @@ describe('useFilteredUsers', () => {
     expect(result?.current?.users?.[0]?.children?.[0]?.name).toBe('InheritAlice');
   });
 
+  it('counts each matching child when a user only matches through its children', () => {
+    const party = (id: string, name: string, children: PartyEntity[] | null = null) => ({
+      id,
+      name,
+      type: PartyType.Person,
+      isDeleted: false,
+      children,
+    });
+    const users = [
+      mapPartyToUserSearchNode({
+        ...party('org', 'Org AS', [party('child-1', 'Kari Match'), party('child-2', 'Ola Match')]),
+        type: PartyType.Organization,
+      }),
+      mapPartyToUserSearchNode(party('person', 'Per Match')),
+    ];
+    const { result } = renderHook(() => useFilteredUsers({ users, searchString: 'Match' }));
+
+    expect(result.current.users).toHaveLength(2);
+    expect(result.current.totalFilteredCount).toBe(3);
+  });
+
+  it('ignores matching children that are not shown', () => {
+    const users = [
+      mapPartyToUserSearchNode({
+        id: 'org',
+        name: 'Org AS',
+        type: PartyType.Organization,
+        isDeleted: false,
+        children: [
+          {
+            id: 'system-user',
+            name: 'Match system user',
+            type: PartyType.SystemUser,
+            isDeleted: false,
+            children: null,
+          },
+        ],
+      }),
+    ];
+    const { result } = renderHook(() => useFilteredUsers({ users, searchString: 'Match' }));
+
+    expect(result.current.users).toHaveLength(0);
+    expect(result.current.totalFilteredCount).toBe(0);
+  });
+
   it('sorts by sort key before type ordering when listing users', () => {
     const { result } = renderHook(() =>
       useFilteredUsers({

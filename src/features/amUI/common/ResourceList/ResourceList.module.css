@@ -7,9 +7,13 @@
 .searchAndAdd {
   display: flex;
   align-items: center;
-  padding-bottom: var(--ds-size-2);
+  padding-bottom: var(--ds-spacing-4);
   flex-wrap: wrap;
   gap: var(--ds-size-2);
+}
+
+.searchHits {
+  margin-bottom: var(--ds-spacing-1);
 }
 
 .expiredSwitch {
