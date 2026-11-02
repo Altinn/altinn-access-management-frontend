@@ -1,6 +1,6 @@
 import React from 'react';
 import { describe, expect, it, vi } from 'vitest';
-import { render, screen } from '@testing-library/react';
+import { render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 
 import type { PackageResource, ResourceProvider } from '@/rtk/features/accessPackageApi';
@@ -130,7 +130,9 @@ describe('ResourceList', () => {
 
     await user.type(screen.getAllByRole('searchbox')[0], 'Beta');
 
-    expect(screen.queryByRole('button', { name: /Alpha Service/i })).not.toBeInTheDocument();
+    await waitFor(() => {
+      expect(screen.queryByRole('button', { name: /Alpha Service/i })).not.toBeInTheDocument();
+    });
     expect(screen.getByRole('button', { name: /Beta Service/i })).toBeInTheDocument();
   });
 

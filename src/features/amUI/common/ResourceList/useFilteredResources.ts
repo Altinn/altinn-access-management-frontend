@@ -10,6 +10,7 @@ interface UseFilteredResourcesProps<TResource> {
   getOwnerOrgCode: (resource: TResource) => string;
   getDescription?: (resource: TResource) => string;
   isExpiredResource?: (resource: TResource) => boolean;
+  matchesSearch?: (resource: TResource, normalizedSearch: string) => boolean;
 }
 
 export const useFilteredResources = <TResource>({
@@ -22,6 +23,7 @@ export const useFilteredResources = <TResource>({
   getOwnerOrgCode,
   getDescription,
   isExpiredResource,
+  matchesSearch,
 }: UseFilteredResourcesProps<TResource>) => {
   const normalizedSearch = searchString.trim().toLowerCase();
 
@@ -41,12 +43,12 @@ export const useFilteredResources = <TResource>({
               .map((owner) => owner.toLowerCase())
               .includes(getOwnerOrgCode(resource).toLowerCase())
           : true;
-      return (
-        (nameOrTitle.includes(normalizedSearch) ||
+      const searchMatch = matchesSearch
+        ? matchesSearch(resource, normalizedSearch)
+        : nameOrTitle.includes(normalizedSearch) ||
           ownerName.includes(normalizedSearch) ||
-          description.includes(normalizedSearch)) &&
-        serviceOwnerMatch
-      );
+          description.includes(normalizedSearch);
+      return searchMatch && serviceOwnerMatch;
     });
   }, [
     resources,
@@ -56,6 +58,7 @@ export const useFilteredResources = <TResource>({
     getDescription,
     getOwnerName,
     getResourceName,
+    matchesSearch,
   ]);
 
   return {

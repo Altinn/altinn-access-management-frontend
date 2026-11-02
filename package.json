@@ -19,7 +19,7 @@
     "vitest:ci": "vitest --coverage"
   },
   "dependencies": {
-    "@altinn/altinn-components": "^0.76.5",
+    "@altinn/altinn-components": "^0.78.0",
     "@navikt/aksel-icons": "^8.11.1",
     "@reduxjs/toolkit": "^2.11.2",
     "classnames": "^2.5.1",
