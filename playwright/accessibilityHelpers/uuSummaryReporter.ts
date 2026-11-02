@@ -85,9 +85,26 @@ export default class UuSummaryReporter implements Reporter {
       '',
     ].join('\n');
 
-    if (process.env.GITHUB_STEP_SUMMARY)
-      fs.appendFileSync(process.env.GITHUB_STEP_SUMMARY, summary);
-    else console.log(`\n${summary}`);
+    if (!process.env.GITHUB_ACTIONS) {
+      console.log(`\n${summary}`);
+      return;
+    }
+    // UU skal bare varsle, aldri brekke bygget.
+    try {
+      if (process.env.GITHUB_STEP_SUMMARY)
+        fs.appendFileSync(process.env.GITHUB_STEP_SUMMARY, summary);
+      if (rules.size || errors) {
+        const critical = [...rules.values()].filter(
+          ({ violation }) => violation.impact === 'critical',
+        ).length;
+        // Workflow-kommando: vises som gul advarsel på kjøringen og i PR-en.
+        console.log(
+          `::warning title=UU-funn::${rules.size} axe-regler med brudd (${critical} kritiske) og ${errors} tekniske UU-feil i ${scans} skanninger. Se oppsummeringen av kjøringen.`,
+        );
+      }
+    } catch (error) {
+      console.warn('Kunne ikke skrive UU-oppsummering:', error);
+    }
   }
 
   printsToStdio() {
