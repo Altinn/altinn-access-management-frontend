@@ -29,9 +29,9 @@ const impact = (violation: Violation) => IMPACT_LABEL[violation.impact ?? ''] ??
 /**
  * Samler axe-funnene fra alle testene:
  * - `<outputFolder>/index.html`: samleside med én rad per regel og lenke til hver skanning.
- * - `<outputFolder>/summary.md`: kort oppsummering som CI legger i jobboppsummeringen.
- * - `<outputFolder>/warning.txt`: kun ved funn; CI gjør den til en gul advarsel med lenke.
- * - Én linje i terminalen. Brekker aldri bygget.
+ * - Én linje i terminalen med lenke til samlesiden.
+ * - I CI: gul advarsel og kort oppsummering i jobben, med lenke til rapporten
+ *   (`REPORT_URL` settes i template-playwright.yml). Brekker aldri bygget.
  */
 export default class UuSummaryReporter implements Reporter {
   // Siste forsøk per test, så retries ikke telles dobbelt.
@@ -103,29 +103,40 @@ export default class UuSummaryReporter implements Reporter {
       path.join(outputFolder, 'index.html'),
       renderIndex(headline, sortedRules, scans),
     );
-    fs.writeFileSync(
-      path.join(outputFolder, 'summary.md'),
-      [
-        `**UU (axe):** ${headline}.`,
-        ...(sortedRules.length
-          ? [
-              '',
-              '| Alvorlighet | Regel | Skanninger |',
-              '|---|---|---:|',
-              ...sortedRules.map(
-                ({ violation, scans }) =>
-                  `| ${impact(violation)} | ${violation.help} \`${violation.id}\` | ${scans.length} |`,
-              ),
-            ]
-          : []),
-        '',
-      ].join('\n'),
-    );
+    const reportLink = process.env.REPORT_URL
+      ? `${process.env.REPORT_URL}uu/index.html`
+      : path.join(outputFolder, 'index.html');
+    console.log(`UU: ${headline} → ${reportLink}`);
+    if (!process.env.GITHUB_ACTIONS) return;
 
-    // CI viser denne som gul advarsel med lenke til rapporten (se template-playwright.yml).
-    if (rules.size || errors) fs.writeFileSync(path.join(outputFolder, 'warning.txt'), headline);
-
-    console.log(`UU: ${headline} → ${path.join(outputFolder, 'index.html')}`);
+    if (rules.size || errors) {
+      // Workflow-kommando: gul advarsel på kjøringen, ikke rødt bygg.
+      console.log(`::warning title=UU-funn::${headline}. UU-rapport: ${reportLink}`);
+    }
+    if (process.env.GITHUB_STEP_SUMMARY) {
+      const ruleTable = sortedRules.length
+        ? [
+            '| Alvorlighet | Regel | Skanninger |',
+            '|---|---|---:|',
+            ...sortedRules.map(
+              ({ violation, scans }) =>
+                `| ${impact(violation)} | ${violation.help} \`${violation.id}\` | ${scans.length} |`,
+            ),
+            '',
+          ]
+        : [];
+      fs.appendFileSync(
+        process.env.GITHUB_STEP_SUMMARY,
+        [
+          '### UU',
+          `${headline}.`,
+          '',
+          ...ruleTable,
+          `➡️ [Åpne UU-rapporten](${reportLink})`,
+          '',
+        ].join('\n'),
+      );
+    }
   }
 
   printsToStdio() {
