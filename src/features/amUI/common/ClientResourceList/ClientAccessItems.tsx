@@ -1,6 +1,6 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
-import { DsButton, DsParagraph } from '@altinn/altinn-components';
+import { DsButton, DsHeading, DsParagraph } from '@altinn/altinn-components';
 
 import { useIsMobileOrSmaller } from '@/resources/utils/screensizeUtils';
 import type { ActionError } from '@/resources/hooks/useActionError';
@@ -114,7 +114,7 @@ export const ClientAccessItems = ({
         border: isMissingAccessPackage ? 'dotted' : undefined,
         variant: isMissingAccessPackage ? 'default' : undefined,
         shadow: isMissingAccessPackage ? 'none' : undefined,
-        badge: isMissingAccessPackage ? { theme: 'subtle', label: 'Mangler' } : undefined,
+        badge: isMissingAccessPackage ? { theme: 'subtle', label: 'Mangler fullmakt' } : undefined,
       };
     });
   };
@@ -181,10 +181,6 @@ export const ClientAccessItems = ({
   const enrichedAssignedAccessPackages = mapAccessPackages(assignedAccessPackages, true);
   const enrichedUnassignedAccessPackages = mapAccessPackages(unassignedAccessPackages, true);
 
-  const otherAccessPackages = packageItems.filter(
-    (x) => enrichedAssignedAccessPackages.map((x) => x.id).indexOf(x.id) === -1,
-  );
-
   const canAssignToSystemuser = unassignedAccessPackages.length === 0;
   const isAddedToSystemuser =
     unassignedAccessPackages.length === 0 && assignedAccessPackages.every((x) => x.hasAccess);
@@ -197,18 +193,92 @@ export const ClientAccessItems = ({
           flexDirection: 'column',
           gap: '0.5rem',
           padding: '1rem',
-          borderLeft: '4px solid #000',
-          backgroundColor: isAddedToSystemuser ? '#d3eafd' : 'transparent',
+          //borderLeft: '4px solid #000',
+          marginBottom: '1rem',
+          backgroundColor: '#d3eafd',
         }}
       >
         <div>
+          <DsHeading data-size='2xs'>Lønnsmodul</DsHeading>
           <div style={{ display: 'flex', flexDirection: 'row', gap: '1rem', alignItems: 'center' }}>
             <DsButton
               variant='secondary'
+              data-size='sm'
+              data-color={'danger'}
+              disabled={false}
+            >
+              {'Fjern klient fra systembruker'}
+            </DsButton>
+          </div>
+        </div>
+        <ClientAccessSections
+          packageItems={[enrichedAssignedAccessPackages[0]]}
+          resourceItems={[]}
+          emptyText={emptyText}
+        />
+        <ClientAccessSections
+          packageItems={[]}
+          resourceItems={[]}
+          emptyText={emptyText}
+        />
+      </div>
+      <div
+        style={{
+          display: 'flex',
+          flexDirection: 'column',
+          gap: '0.5rem',
+          padding: '1rem',
+          //borderLeft: '4px solid #000',
+          marginBottom: '1rem',
+          backgroundColor: isAddedToSystemuser ? '#d3eafd' : '#e1e1e1',
+        }}
+      >
+        <div>
+          <DsHeading data-size='2xs'>Revisor-modul</DsHeading>
+          <div style={{ display: 'flex', flexDirection: 'row', gap: '1rem', alignItems: 'center' }}>
+            <DsButton
+              variant='secondary'
+              data-size='sm'
+              data-color={isAddedToSystemuser ? 'danger' : undefined}
+            >
+              {'Legg klient til systembruker'}
+            </DsButton>
+          </div>
+        </div>
+        <ClientAccessSections
+          packageItems={[enrichedAssignedAccessPackages[0], enrichedAssignedAccessPackages[0]]}
+          resourceItems={[]}
+          emptyText={emptyText}
+        />
+        <ClientAccessSections
+          packageItems={[]}
+          resourceItems={[]}
+          emptyText={emptyText}
+        />
+      </div>
+      <div
+        style={{
+          display: 'flex',
+          flexDirection: 'column',
+          gap: '0.5rem',
+          padding: '1rem',
+          //borderLeft: '4px solid #000',
+          marginBottom: '1rem',
+          backgroundColor: isAddedToSystemuser ? '#d3eafd' : '#e1e1e1',
+        }}
+      >
+        <div>
+          <DsHeading data-size='2xs'>Økonomi-modul</DsHeading>
+          <div style={{ display: 'flex', flexDirection: 'row', gap: '1rem', alignItems: 'center' }}>
+            <DsButton
+              variant='secondary'
+              data-size='sm'
               data-color={isAddedToSystemuser ? 'danger' : undefined}
               disabled={!canAssignToSystemuser}
             >
-              {isAddedToSystemuser ? 'Fjern fra systembruker' : 'Legg til systembruker'}
+              {isAddedToSystemuser
+                ? 'Fjern klient fra systembruker'
+                : 'Legg klient til systembruker'}
             </DsButton>
             {!canAssignToSystemuser && (
               <DsParagraph data-size='sm'>
@@ -228,16 +298,6 @@ export const ClientAccessItems = ({
           emptyText={emptyText}
         />
       </div>
-      {(otherAccessPackages.length > 0 || resourceItems.length > 0) && (
-        <div style={{ marginTop: '2rem' }}>
-          <div>Andre:</div>
-          <ClientAccessSections
-            packageItems={otherAccessPackages}
-            resourceItems={resourceItems}
-            emptyText={emptyText}
-          />
-        </div>
-      )}
     </div>
   );
 
