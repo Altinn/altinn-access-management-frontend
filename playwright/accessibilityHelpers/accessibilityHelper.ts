@@ -12,11 +12,11 @@ export class AccessibilityScanner {
     private readonly enabled = true,
   ) {}
 
-  /** Scan the current page without navigating away from the state under test. */
-  async scan(name: string) {
+  /** Scan the current page without navigating away from the state under test. Pass `page` to scan another tab/context. */
+  async scan(name: string, page = this.page) {
     if (!this.enabled) return;
     try {
-      if (await scanPage(this.page, this.testInfo, name)) this.scanned = true;
+      if (await scanPage(page, this.testInfo, name)) this.scanned = true;
     } catch (error) {
       const message = error instanceof Error ? error.message : String(error);
       this.testInfo.annotations.push({ type: 'UU-feil', description: `${name}: ${message}` });
