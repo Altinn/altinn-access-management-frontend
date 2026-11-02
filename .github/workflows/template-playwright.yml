@@ -93,3 +93,15 @@ jobs:
         run: |
           echo "Playwright report: $REPORT_URL"
           echo "[Playwright report]($REPORT_URL)" >> "$GITHUB_STEP_SUMMARY"
+      - name: UU summary
+        if: always()
+        continue-on-error: true
+        env:
+          UU_DIR: playwright/playwright-report/${{ inputs.environment }}/uu
+        run: |
+          [ -f "$UU_DIR/summary.md" ] || exit 0
+          {
+            echo "### UU"
+            cat "$UU_DIR/summary.md"
+            echo "➡️ [Åpne UU-rapporten](${REPORT_URL}uu/)"
+          } >> "$GITHUB_STEP_SUMMARY"

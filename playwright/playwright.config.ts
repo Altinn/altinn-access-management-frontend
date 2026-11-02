@@ -20,7 +20,6 @@ const config: PlaywrightTestConfig = {
   },
   reporter: [
     process.env.CI ? ['line'] : ['dot'],
-    ['./accessibilityHelpers/uuSummaryReporter.ts'],
     [
       'json',
       {
@@ -34,6 +33,11 @@ const config: PlaywrightTestConfig = {
         outputDir: `playwright-report/${currentEnv().toUpperCase()}`,
         outputFolder: `playwright-report/${currentEnv().toUpperCase()}`,
       },
+    ],
+    // After the html reporter, which empties its folder; the UU page lives inside it.
+    [
+      './accessibilityHelpers/uuSummaryReporter.ts',
+      { outputFolder: `playwright-report/${currentEnv().toUpperCase()}/uu` },
     ],
   ],
 
