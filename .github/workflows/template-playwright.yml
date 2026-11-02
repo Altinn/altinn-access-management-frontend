@@ -103,5 +103,5 @@ jobs:
           {
             echo "### UU"
             cat "$UU_DIR/summary.md"
-            echo "➡️ [Åpne UU-rapporten](${REPORT_URL}uu/)"
+            echo "➡️ [Åpne UU-rapporten](${REPORT_URL}uu/index.html)"
           } >> "$GITHUB_STEP_SUMMARY"
