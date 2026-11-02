@@ -23,6 +23,7 @@ LANGUAGES.forEach((language) => {
       consentPage,
       login,
       api,
+      runAccessibilityTest,
     }) => {
       // Create consent request from one org to another org
       // For å godkjenne her kreves det at ressursen i ressursregisteret er satt opp med utfyller/innsender-rollen for org til org-samtykke
@@ -53,6 +54,9 @@ LANGUAGES.forEach((language) => {
         await consentPage.expectExpiry(expected);
         await expect(consentPage.getIncomeYearText('2028')).toBeVisible();
       });
+
+      // UU: kun på bokmål; språket endrer ikke axe-reglene, og siden etter godkjenning er ekstern.
+      if (language === Language.NB) await runAccessibilityTest.scan('samtykke-org-til-org');
 
       await test.step('Approve consent', async () => {
         await consentPage.approveStandardAndWaitLogout(APPROVED_REDIRECT_URL);

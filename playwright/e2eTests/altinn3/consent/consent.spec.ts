@@ -12,6 +12,9 @@ const REJECTED_REDIRECT_URL = `${REDIRECT_URL}?Status=Failed&ErrorMessage=User+d
 
 const LANGUAGES = [Language.NB, Language.NN, Language.EN];
 const MOBILE_VIEWPORT = { width: 375, height: 667 };
+// UU: én skanning per unike samtykkevariant, kun på bokmål. Språket endrer ikke
+// axe-reglene, og siden etter godkjenning er ekstern og skannes derfor ikke automatisk.
+const scanUu = (language: Language) => language === Language.NB;
 
 LANGUAGES.forEach((language) => {
   test.describe(`Samtykke - fra person til org (${language})`, () => {
@@ -19,7 +22,7 @@ LANGUAGES.forEach((language) => {
       language,
       viewport: MOBILE_VIEWPORT,
     });
-    test(`Standard samtykke`, async ({ login, consentPage, api }) => {
+    test(`Standard samtykke`, async ({ login, consentPage, api, runAccessibilityTest }) => {
       const fromPerson = personTilOrg[language].standard;
       const toOrg = pickRandom(toOrgs);
       const validTo = addTimeToNowUtc({ days: 2 });
@@ -52,12 +55,14 @@ LANGUAGES.forEach((language) => {
         await consentPage.expectExpiry(expected);
       });
 
+      if (scanUu(language)) await runAccessibilityTest.scan('samtykke-standard');
+
       await test.step('Approve consent', async () => {
         await consentPage.approveStandardAndWaitLogout(APPROVED_REDIRECT_URL);
       });
     });
 
-    test(`Krav-template`, async ({ consentPage, login, api }) => {
+    test(`Krav-template`, async ({ consentPage, login, api, runAccessibilityTest }) => {
       const fromPerson = personTilOrg[language].krav;
       const toOrg = pickRandom(toOrgs);
       const validTo = addTimeToNowUtc({ days: 2 });
@@ -84,12 +89,20 @@ LANGUAGES.forEach((language) => {
         await consentPage.expectExpiry(expected);
       });
 
+      if (scanUu(language)) await runAccessibilityTest.scan('samtykke-krav');
+
       await test.step('Approve consent', async () => {
         await consentPage.approveStandardAndWaitLogout(APPROVED_REDIRECT_URL);
       });
     });
 
-    test(`Fullmakt utføre tjeneste`, async ({ consentPage, page, login, api }) => {
+    test(`Fullmakt utføre tjeneste`, async ({
+      consentPage,
+      page,
+      login,
+      api,
+      runAccessibilityTest,
+    }) => {
       const fromPerson = personTilOrg[language].fullmakt;
       const toOrg = pickRandom(toOrgs);
       const validTo = addTimeToNowUtc({ days: 2 });
@@ -120,12 +133,14 @@ LANGUAGES.forEach((language) => {
         await consentPage.expectExpiryDate(expected);
       });
 
+      if (scanUu(language)) await runAccessibilityTest.scan('samtykke-fullmakt');
+
       await test.step('Approve consent', async () => {
         await consentPage.approveFullmaktAndWaitLogout(APPROVED_REDIRECT_URL);
       });
     });
 
-    test(`Lånesøknad`, async ({ consentPage, login, api }) => {
+    test(`Lånesøknad`, async ({ consentPage, login, api, runAccessibilityTest }) => {
       const fromPerson = personTilOrg[language].laanesoeknad;
       const toOrg = pickRandom(toOrgs);
       const validTo = addTimeToNowUtc({ days: 2 });
@@ -155,12 +170,14 @@ LANGUAGES.forEach((language) => {
         await expect(consentPage.textOneTimeDelivery).toBeVisible();
       });
 
+      if (scanUu(language)) await runAccessibilityTest.scan('samtykke-laanesoeknad');
+
       await test.step('Approve consent', async () => {
         await consentPage.approveStandardAndWaitLogout(APPROVED_REDIRECT_URL);
       });
     });
 
-    test(`Enkelt samtykke`, async ({ consentPage, login, api }) => {
+    test(`Enkelt samtykke`, async ({ consentPage, login, api, runAccessibilityTest }) => {
       const fromPerson = personTilOrg[language].enkelt;
       const toOrg = pickRandom(toOrgs);
       const validTo = addTimeToNowUtc({ days: 2 });
@@ -190,6 +207,8 @@ LANGUAGES.forEach((language) => {
         ).toBeVisible();
         await expect(consentPage.textOneTimeUse).toBeVisible();
       });
+
+      if (scanUu(language)) await runAccessibilityTest.scan('samtykke-enkelt');
 
       await test.step('Approve consent', async () => {
         await consentPage.approveStandardAndWaitLogout(APPROVED_REDIRECT_URL);
