@@ -186,6 +186,13 @@ namespace Altinn.AccessManagement.UI.Core.Constants
             = _factory.Create(71, HttpStatusCode.Forbidden, "DelegationCheck failed with error: The resource is not delegable because it is a Maskinporten schema resource.");
 
         /// <summary>
+        /// Gets a <see cref="ProblemDescriptor"/>. One or more of the requested rights refer to a resource the
+        /// resource registry has marked as not delegable. Mirrors AUTH-00082 from authentication.
+        /// </summary>
+        public static ProblemDescriptor Rights_ResourceNotDelegable { get; }
+            = _factory.Create(82, HttpStatusCode.BadRequest, "One or more resources specified in rights is marked as not delegable in the resource registry.");
+
+        /// <summary>
         /// Gets a <see cref="ProblemDescriptor"/>. Used when a call to a downstream API fails with a
         /// transient network error (socket exception), so that the caller may retry.
         /// </summary>

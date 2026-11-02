@@ -1,7 +1,7 @@
 import { DsAlert, DsHeading } from '@altinn/altinn-components';
 import { useTranslation } from 'react-i18next';
 
-import { PartyType } from '@/rtk/features/userInfoApi';
+import { PartyType } from '@/dataObjects/dtos/Party';
 import type { ActionError } from '@/resources/hooks/useActionError';
 
 import { TechnicalErrorParagraphs } from '../common/TechnicalErrorParagraphs/TechnicalErrorParagraphs';
@@ -38,7 +38,7 @@ export const ScopeActionAlert = ({ actionError, mode }: ScopeActionAlertProps) =
           errorCode={errorCode}
           translationValues={{
             entity_type:
-              toParty?.partyTypeName === PartyType.Person
+              toParty?.type === PartyType.Person
                 ? t('common.persons_lowercase')
                 : t('common.organizations_lowercase'),
           }}

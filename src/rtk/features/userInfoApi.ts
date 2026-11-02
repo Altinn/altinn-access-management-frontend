@@ -1,37 +1,12 @@
 import { createApi } from '@reduxjs/toolkit/query/react';
+import type { AuthorizedParty } from '@altinn/altinn-components';
 
 import { createBaseQuery } from '@/rtk/app/baseQuery';
 import { getCookie } from '@/resources/Cookie/CookieMethods';
-
-import type { Party } from './lookupApi';
-import { type Connection, type RoleInfo } from './connectionApi';
-
-export interface ExtendedUser extends Omit<User, 'children'> {
-  roles: RoleInfo[];
-  children: (ExtendedUser | User)[] | null;
-  matchInChildren?: boolean;
-  isInherited?: boolean;
-}
-
-export interface User {
-  id: string;
-  name: string;
-  type?: string;
-  variant?: string;
-  children: (User | ExtendedUser)[] | null;
-  parent?: ExtendedUser | null;
-  partyId?: number | string | null;
-  organizationIdentifier?: string | null;
-  dateOfBirth?: string | null;
-  userId?: string | null;
-  username?: string | null;
-  sortKey?: string;
-  addedAt?: string;
-  isDeleted?: boolean;
-}
+import type { AuthorizedPartyEntity, PartyEntity } from '@/dataObjects/dtos/Party';
 
 interface UserProfileApiResponse {
-  party: Party;
+  party: PartyEntity;
   userUuid: string;
   profileSettingPreference: ProfileSettingPreference;
 }
@@ -39,30 +14,8 @@ interface UserProfileApiResponse {
 export interface UserProfile {
   name: string;
   uuid: string;
-  party: Party;
+  party: PartyEntity;
   profileSettingPreference: ProfileSettingPreference;
-}
-
-export interface ReporteeInfo {
-  partyUuid: string;
-  name: string;
-  organizationNumber?: string;
-  dateOfBirth?: string;
-  partyId: string;
-  type?: string;
-  unitType?: string;
-  isDeleted: boolean;
-  onlyHierarchyElementWithNoAccess: boolean;
-  authorizedResources: string[];
-  authorizedRoles: string[];
-  subunits?: ReporteeInfo[];
-}
-
-export enum PartyType {
-  Person = 1,
-  Organization = 2,
-  SelfIdentified = 3,
-  SubUnit = 4,
 }
 
 export interface UserAccesses {
@@ -110,26 +63,13 @@ export const userInfoApi = createApi({
       },
       invalidatesTags: ['UserProfile'],
     }),
-    getReportee: builder.query<ReporteeInfo, void>({
+    getReportee: builder.query<AuthorizedPartyEntity, void>({
       query: () => `reportee/${getCookie('AltinnPartyUuid')}`,
       keepUnusedDataFor: 300,
     }),
-    getReporteeListForParty: builder.query<User[], void>({
-      query: () => {
-        const partyUuid = getCookie('AltinnPartyUuid');
-        return `/reporteelist/${partyUuid}`;
-      },
-      keepUnusedDataFor: 300,
-    }),
-    getReporteeListForAuthorizedUser: builder.query<ReporteeInfo[], void>({
+    getReporteeListForAuthorizedUser: builder.query<AuthorizedParty[], void>({
       query: () => {
         return '/actorlist/old';
-      },
-      keepUnusedDataFor: 300,
-    }),
-    getActorListForAuthorizedUser: builder.query<Connection[], void>({
-      query: () => {
-        return '/actorlist';
       },
       keepUnusedDataFor: 300,
     }),
@@ -183,9 +123,7 @@ export const {
   useGetUserProfileQuery,
   useUpdateShowDeletedMutation,
   useGetReporteeQuery,
-  useGetReporteeListForPartyQuery,
   useGetReporteeListForAuthorizedUserQuery,
-  useGetActorListForAuthorizedUserQuery,
   useGetFavoriteActorUuidsQuery,
   useAddFavoriteActorUuidMutation,
   useRemoveFavoriteActorUuidMutation,

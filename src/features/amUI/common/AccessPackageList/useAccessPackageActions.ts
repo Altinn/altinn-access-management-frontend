@@ -1,12 +1,13 @@
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { formatDisplayName, useSnackbar } from '@altinn/altinn-components';
+import { useSnackbar } from '@altinn/altinn-components';
 
+import { formatEntityDisplayName } from '@/resources/utils/reporteeUtils';
 import type { DelegationErrorDetails } from '@/resources/hooks/useDelegateAccessPackage';
 import { useDelegateAccessPackage } from '@/resources/hooks/useDelegateAccessPackage';
 import { useRevokeAccessPackage } from '@/resources/hooks/useRevokeAccessPackage';
 import type { AccessPackage } from '@/rtk/features/accessPackageApi';
-import type { Party } from '@/rtk/features/lookupApi';
+import type { PartyEntity } from '@/dataObjects/dtos/Party';
 import type { ActionError } from '@/resources/hooks/useActionError';
 import {
   useCreatePackageRequestMutation,
@@ -15,17 +16,24 @@ import {
 } from '@/rtk/features/requestApi';
 import { getRequestPartyQueryParams } from '@/resources/utils/singleRightRequestUtils';
 import { useSnackbarOnIdle } from '@/resources/hooks/useSnackbarOnIdle';
-import { PartyType } from '@/rtk/features/userInfoApi';
 
 import { usePackageWarningDialog } from '../PackageWarningDialog';
 import { usePartyRepresentation } from '../PartyRepresentationContext/PartyRepresentationContext';
 import { useCanRedelegatePackage, useRevokeConfirmation } from '../RevokeConfirmation';
 
 interface useAccessPackageActionsProps {
-  onDelegateSuccess?: (accessPackage: AccessPackage, toParty: Party) => void;
-  onDelegateError?: (accessPackage: AccessPackage, errorInfo: ActionError, toParty?: Party) => void;
-  onRevokeSuccess?: (accessPackage: AccessPackage, toParty: Party) => void;
-  onRevokeError?: (accessPackage: AccessPackage, errorInfo: ActionError, toParty?: Party) => void;
+  onDelegateSuccess?: (accessPackage: AccessPackage, toParty: PartyEntity) => void;
+  onDelegateError?: (
+    accessPackage: AccessPackage,
+    errorInfo: ActionError,
+    toParty?: PartyEntity,
+  ) => void;
+  onRevokeSuccess?: (accessPackage: AccessPackage, toParty: PartyEntity) => void;
+  onRevokeError?: (
+    accessPackage: AccessPackage,
+    errorInfo: ActionError,
+    toParty?: PartyEntity,
+  ) => void;
   // Defers delegate/revoke success snackbars until this signal settles (true -> false), so the
   // snackbar arrives together with the refreshed list. When omitted, snackbars open immediately.
   snackbarBusy?: boolean;
@@ -61,10 +69,7 @@ export const useAccessPackageActions = ({
     if (snackbarBusy === undefined) openSnackbar({ message, color: 'success' });
     else queueSnackbar(message);
   };
-  const requestQueryParams = getRequestPartyQueryParams(
-    actingParty?.partyUuid,
-    fromParty?.partyUuid,
-  );
+  const requestQueryParams = getRequestPartyQueryParams(actingParty?.id, fromParty?.id);
 
   const {
     data: packageRequests,
@@ -87,14 +92,11 @@ export const useAccessPackageActions = ({
     }
   }, [isFetchingPackageRequests, awaitingRefetch]);
 
-  const formatToPartyName = (party: Party) => {
-    return formatDisplayName({
-      fullName: party.name,
-      type: party?.partyTypeName === PartyType.Person ? 'person' : 'company',
-    });
+  const formatToPartyName = (party: PartyEntity) => {
+    return formatEntityDisplayName(party);
   };
 
-  const handleDelegateSuccess = (accessPackage: AccessPackage, toParty: Party) => {
+  const handleDelegateSuccess = (accessPackage: AccessPackage, toParty: PartyEntity) => {
     showSuccessSnackbar(
       t('access_packages.package_delegation_success', {
         name: formatToPartyName(toParty),
@@ -106,7 +108,7 @@ export const useAccessPackageActions = ({
 
   const handleDelegateError = (
     accessPackage: AccessPackage,
-    toParty: Party,
+    toParty: PartyEntity,
     httpStatus: string,
     timestamp: string,
     details?: DelegationErrorDetails,
@@ -124,7 +126,7 @@ export const useAccessPackageActions = ({
     }
   };
 
-  const handleRevokeSuccess = (accessPackage: AccessPackage, toParty: Party) => {
+  const handleRevokeSuccess = (accessPackage: AccessPackage, toParty: PartyEntity) => {
     showSuccessSnackbar(
       t('access_packages.package_deletion_success', {
         name: formatToPartyName(toParty),
@@ -136,7 +138,7 @@ export const useAccessPackageActions = ({
 
   const handleRevokeError = (
     accessPackage: AccessPackage,
-    toParty: Party,
+    toParty: PartyEntity,
     httpStatus: string,
     timestamp: string,
   ) => {
@@ -162,7 +164,7 @@ export const useAccessPackageActions = ({
     )?.id;
   };
 
-  const onDelegate = async (accessPackage: AccessPackage, toParty?: Party) => {
+  const onDelegate = async (accessPackage: AccessPackage, toParty?: PartyEntity) => {
     if (!fromParty || !actingParty) {
       return;
     }
@@ -195,7 +197,7 @@ export const useAccessPackageActions = ({
     );
   };
 
-  const resolveRevoke = (accessPackage: AccessPackage, toParty?: Party) => {
+  const resolveRevoke = (accessPackage: AccessPackage, toParty?: PartyEntity) => {
     if (!fromParty || !actingParty) return null;
     const targetToParty = toParty ?? toPartyFromContext;
     if (!targetToParty) return null;
@@ -223,12 +225,12 @@ export const useAccessPackageActions = ({
     };
   };
 
-  const onRevoke = (accessPackage: AccessPackage, toParty?: Party) => {
+  const onRevoke = (accessPackage: AccessPackage, toParty?: PartyEntity) => {
     const resolved = resolveRevoke(accessPackage, toParty);
     if (!resolved) return;
     const { targetToParty, revoke } = resolved;
     return confirmRevoke(
-      `${accessPackage.id}-${targetToParty.partyUuid}`,
+      `${accessPackage.id}-${targetToParty.id}`,
       () => canRedelegatePackage(accessPackage.id),
       revoke,
       { name: accessPackage.name, toName: formatToPartyName(targetToParty) },
@@ -236,7 +238,7 @@ export const useAccessPackageActions = ({
   };
 
   // For callers that already confirm, e.g. PackageIsPartiallyDeletableAlert.
-  const revokeWithoutConfirmation = (accessPackage: AccessPackage, toParty?: Party) => {
+  const revokeWithoutConfirmation = (accessPackage: AccessPackage, toParty?: PartyEntity) => {
     resolveRevoke(accessPackage, toParty)?.revoke();
   };
 
@@ -256,8 +258,8 @@ export const useAccessPackageActions = ({
 
       try {
         await createPackageRequest({
-          party: actingParty.partyUuid,
-          to: fromParty.partyUuid,
+          party: actingParty.id,
+          to: fromParty.id,
           package: packageId,
         }).unwrap();
 

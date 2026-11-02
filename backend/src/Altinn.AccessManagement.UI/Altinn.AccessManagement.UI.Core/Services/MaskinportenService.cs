@@ -1,7 +1,9 @@
 using Altinn.AccessManagement.UI.Core.ClientInterfaces;
 using Altinn.AccessManagement.UI.Core.Enums;
+using Altinn.AccessManagement.UI.Core.Models.AccessPackage.Frontend;
 using Altinn.AccessManagement.UI.Core.Models.ClientDelegation;
 using Altinn.AccessManagement.UI.Core.Models.Maskinporten;
+using Altinn.AccessManagement.UI.Core.Models.Maskinporten.Frontend;
 using Altinn.AccessManagement.UI.Core.Models.ResourceRegistry;
 using Altinn.AccessManagement.UI.Core.Models.ResourceRegistry.Frontend;
 using Altinn.AccessManagement.UI.Core.Models.SingleRight;
@@ -29,9 +31,10 @@ namespace Altinn.AccessManagement.UI.Core.Services
         }
 
         /// <inheritdoc />
-        public async Task<IEnumerable<MaskinportenConnection>> GetSuppliers(Guid party, string supplier = null, CancellationToken cancellationToken = default)
+        public async Task<IEnumerable<MaskinportenConnectionFE>> GetSuppliers(Guid party, string supplier = null, CancellationToken cancellationToken = default)
         {
-            return await _maskinportenClient.GetSuppliers(party, supplier, cancellationToken);
+            IEnumerable<MaskinportenConnection> suppliers = await _maskinportenClient.GetSuppliers(party, supplier, cancellationToken);
+            return suppliers?.Select(MaskinportenConnectionFE.FromMaskinportenConnection).ToList();
         }
 
         /// <inheritdoc />
@@ -72,9 +75,10 @@ namespace Altinn.AccessManagement.UI.Core.Services
         }
 
         /// <inheritdoc />
-        public async Task<IEnumerable<MaskinportenConnection>> GetConsumers(Guid party, string consumer = null, CancellationToken cancellationToken = default)
+        public async Task<IEnumerable<MaskinportenConnectionFE>> GetConsumers(Guid party, string consumer = null, CancellationToken cancellationToken = default)
         {
-            return await _maskinportenClient.GetConsumers(party, consumer, cancellationToken);
+            IEnumerable<MaskinportenConnection> consumers = await _maskinportenClient.GetConsumers(party, consumer, cancellationToken);
+            return consumers?.Select(MaskinportenConnectionFE.FromMaskinportenConnection).ToList();
         }
 
         /// <inheritdoc />
@@ -116,7 +120,7 @@ namespace Altinn.AccessManagement.UI.Core.Services
 
             return results
                 .Where(r => r.Resource != null)
-                .Select(r => new ResourceDelegation(r.Resource, r.Permission.Permissions))
+                .Select(r => new ResourceDelegation(r.Resource, PermissionFE.FromPermissions(r.Permission.Permissions)))
                 .ToList();
         }
     }

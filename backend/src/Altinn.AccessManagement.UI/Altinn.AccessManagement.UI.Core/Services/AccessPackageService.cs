@@ -46,19 +46,19 @@ namespace Altinn.AccessManagement.UI.Core.Services
         }
 
         /// <inheritdoc/>
-        public async Task<Dictionary<Guid, List<PackagePermission>>> GetDelegations(Guid party, Guid? to, Guid? from, string languageCode)
+        public async Task<Dictionary<Guid, List<PackagePermissionFE>>> GetDelegations(Guid party, Guid? to, Guid? from, string languageCode)
         {
             PaginatedResult<PackagePermission> paginatedAccesses = await _accessPackageClient.GetAccessPackageAccesses(party, to, from, languageCode);
-            IEnumerable<PackagePermission> accesses = paginatedAccesses.Items;
+            IEnumerable<PackagePermissionFE> accesses = paginatedAccesses.Items.Select(PackagePermissionFE.FromPackagePermission);
 
-            var sortedAccesses = new Dictionary<Guid, List<PackagePermission>>();
-            foreach (PackagePermission access in accesses)
+            var sortedAccesses = new Dictionary<Guid, List<PackagePermissionFE>>();
+            foreach (PackagePermissionFE access in accesses)
             {
                 Guid areaId = access.Package.AreaId;
 
                 if (!sortedAccesses.ContainsKey(areaId))
                 {
-                    sortedAccesses.Add(areaId, new List<PackagePermission> { access });
+                    sortedAccesses.Add(areaId, new List<PackagePermissionFE> { access });
                 }
                 else
                 {
@@ -93,7 +93,7 @@ namespace Altinn.AccessManagement.UI.Core.Services
                         IsAssignable = package.IsAssignable,
                         Description = package.Description,
                         Resources = ResourceUtils.MapToAccessPackageResourceFE(package.Resources),
-                        Permissions = packagePermissions?.Permissions?.ToList() ?? new List<Permission>()
+                        Permissions = PermissionFE.FromPermissions(packagePermissions?.Permissions)
                     };
                 }
             }

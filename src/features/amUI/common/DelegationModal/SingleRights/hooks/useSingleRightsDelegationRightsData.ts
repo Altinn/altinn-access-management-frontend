@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
-import { formatDisplayName } from '@altinn/altinn-components';
 
+import { formatEntityDisplayName } from '@/resources/utils/reporteeUtils';
 import {
   type ServiceResource,
   useDelegationCheckQuery,
@@ -8,7 +8,6 @@ import {
   useGetResourceRightsQuery,
 } from '@/rtk/features/singleRights/singleRightsApi';
 import { createErrorDetails } from '@/features/amUI/common/TechnicalErrorParagraphs/TechnicalErrorParagraphs';
-import { PartyType } from '@/rtk/features/userInfoApi';
 
 import { usePartyRepresentation } from '../../../PartyRepresentationContext/PartyRepresentationContext';
 import { mapRightsToChipRights, type ChipRight } from '../../utils/rightsUtils';
@@ -37,9 +36,9 @@ export const useSingleRightsDelegationRightsData = ({
     isLoading: isResourceRightsLoading,
   } = useGetResourceRightsQuery(
     {
-      actingParty: actingParty?.partyUuid || '',
-      from: fromParty?.partyUuid || '',
-      to: toParty?.partyUuid || '',
+      actingParty: actingParty?.id || '',
+      from: fromParty?.id || '',
+      to: toParty?.id || '',
       resourceId: resource.identifier,
     },
     { skip: !toParty || !fromParty || !actingParty || !resource.identifier || !hasResourceAccess },
@@ -121,15 +120,8 @@ export const useSingleRightsDelegationRightsData = ({
             });
             return inheritedStatus.length > 0
               ? {
-                  toParty: formatDisplayName({
-                    fullName: toParty?.name || '',
-                    type: toParty?.partyTypeName === PartyType.Person ? 'person' : 'company',
-                  }),
-                  viaParty:
-                    formatDisplayName({
-                      fullName: inheritedStatus[0].via?.name || '',
-                      type: inheritedStatus[0].via?.type === 'Person' ? 'person' : 'company',
-                    }) || '',
+                  toParty: formatEntityDisplayName(toParty),
+                  viaParty: formatEntityDisplayName(inheritedStatus[0].via),
                   reason: inheritedStatus[0].type,
                 }
               : undefined;

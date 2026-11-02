@@ -2,6 +2,8 @@ import React from 'react';
 import type { AccessPackageListItemProps } from '@altinn/altinn-components';
 import { AccessPackageListItem, List } from '@altinn/altinn-components';
 
+import { useRestoreFocusTarget } from '../RestoreFocus';
+
 export type AccessPackageListItemData = AccessPackageListItemProps;
 
 interface AccessPackageListItemsProps {
@@ -9,14 +11,23 @@ interface AccessPackageListItemsProps {
   labelledBy?: string;
 }
 
+const AccessPackageListRow = (item: AccessPackageListItemData) => {
+  useRestoreFocusTarget(item.id);
+  return (
+    <AccessPackageListItem
+      {...item}
+      interactive={item.interactive ?? false}
+    />
+  );
+};
+
 export const AccessPackageListItems = ({ items, labelledBy }: AccessPackageListItemsProps) => {
   return (
     <List aria-labelledby={labelledBy}>
       {items.map((item) => (
-        <AccessPackageListItem
+        <AccessPackageListRow
           key={item.id}
           {...item}
-          interactive={item.interactive ?? false}
         />
       ))}
     </List>

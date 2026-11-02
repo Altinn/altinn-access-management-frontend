@@ -8,8 +8,9 @@ import { useCanGiveAccess } from '@/resources/hooks/useCanGiveAccess';
 import { useCanRequestAccess } from '@/resources/hooks/useCanRequestAccess';
 import { useGetUserDelegationsQuery } from '@/rtk/features/accessPackageApi';
 
-import { DelegationModal, DelegationType } from '../../common/DelegationModal/DelegationModal';
+import { AccessPackageDelegationModal } from '../../common/DelegationModal/AccessPackages/AccessPackageDelegationModal';
 import { DelegationAction } from '../../common/DelegationModal/EditModal';
+import { getAvailableActions } from '../../common/DelegationModal/delegationActionUtils';
 import { usePartyRepresentation } from '../../common/PartyRepresentationContext/PartyRepresentationContext';
 import { TabContentSkeleton } from '../../common/RightsTabs/TabContentSkeleton';
 import { DebouncedSearchField } from '../../common/DebouncedSearchField/DebouncedSearchField';
@@ -28,17 +29,19 @@ export const AccessPackageSection = ({ isReportee = false }: { isReportee?: bool
     actingParty,
     isLoading: loadingPartyRepresentation,
   } = usePartyRepresentation();
-  const partyId = isReportee ? (toParty?.partyUuid ?? '') : (id ?? '');
+  const partyId = isReportee ? (toParty?.id ?? '') : (id ?? '');
   const canGiveAccess = useCanGiveAccess(partyId, isReportee);
   const canRequestAccess = useCanRequestAccess(isReportee) && !canGiveAccess;
 
+  const availableActions = getAvailableActions({ canGiveAccess, canRequestAccess });
+
   const { data: accesses, isLoading: loadingAccesses } = useGetUserDelegationsQuery(
     {
-      from: fromParty?.partyUuid ?? '',
-      to: toParty?.partyUuid ?? '',
-      party: actingParty?.partyUuid ?? '',
+      from: fromParty?.id ?? '',
+      to: toParty?.id ?? '',
+      party: actingParty?.id ?? '',
     },
-    { skip: !toParty?.partyUuid || !fromParty?.partyUuid || !actingParty?.partyUuid },
+    { skip: !toParty?.id || !fromParty?.id || !actingParty?.id },
   );
 
   const numberOfAccesses = accesses
@@ -75,18 +78,16 @@ export const AccessPackageSection = ({ isReportee = false }: { isReportee?: bool
               />
             </div>
             <div className={classes.delegateButton}>
-              {(canGiveAccess || canRequestAccess) && (
-                <DelegationModal
-                  delegationType={DelegationType.AccessPackage}
-                  availableActions={[
-                    DelegationAction.REVOKE,
-                    canGiveAccess ? DelegationAction.DELEGATE : DelegationAction.REQUEST,
-                  ]}
-                />
+              {(availableActions.includes(DelegationAction.DELEGATE) ||
+                availableActions.includes(DelegationAction.REQUEST)) && (
+                <AccessPackageDelegationModal availableActions={availableActions} />
               )}
             </div>
           </div>
-          <ActiveDelegations searchString={debouncedSearchString} />
+          <ActiveDelegations
+            searchString={debouncedSearchString}
+            availableActions={availableActions}
+          />
         </>
       )}
     </>

@@ -1,7 +1,6 @@
 import { getCookie } from '@/resources/Cookie/CookieMethods';
 import { type Connection, useGetRightHoldersQuery } from '@/rtk/features/connectionApi';
 import { useGetPartyFromLoggedInUserQuery } from '@/rtk/features/lookupApi';
-import { type ExtendedUser } from '@/rtk/features/userInfoApi';
 
 /**
  * useSelfConnection
@@ -21,32 +20,20 @@ export const useSelfConnection = (): {
 
   const { data: connection, isLoading } = useGetRightHoldersQuery(
     {
-      partyUuid: currentUser?.partyUuid ?? '',
+      partyUuid: currentUser?.id ?? '',
       fromUuid: partyUuid,
-      toUuid: currentUser?.partyUuid ?? '',
+      toUuid: currentUser?.id ?? '',
     },
     {
-      skip: !currentUser?.partyUuid || !partyUuid,
+      skip: !currentUser?.id || !partyUuid,
     },
   );
 
   const existingConn = connection?.find((c) => c.party.id === partyUuid);
 
-  const party: ExtendedUser | undefined = currentUser
+  const partyConnection: Connection | undefined = currentUser
     ? {
-        id: currentUser.partyUuid,
-        name: currentUser.name,
-        type: currentUser.partyTypeName?.toString(),
-        organizationIdentifier: currentUser.orgNumber,
-        partyId: currentUser.partyId,
-        dateOfBirth: currentUser.dateOfBirth,
-        roles: existingConn?.roles ?? [],
-        children: [],
-      }
-    : undefined;
-  const partyConnection: Connection | undefined = party
-    ? {
-        party,
+        party: currentUser,
         roles: existingConn?.roles ?? [],
         connections: existingConn?.connections ?? [],
       }

@@ -81,7 +81,7 @@ export const MultipleDraftRequestsView = ({
   };
 
   const displayFromName =
-    requests[0].from.id === selfParty?.partyUuid ? t('common.you_uppercase') : fromName;
+    requests[0].from.id === selfParty?.id ? t('common.you_uppercase') : fromName;
 
   if (selectedRequest) {
     return (

@@ -1,8 +1,7 @@
 import { forwardRef, useImperativeHandle, useMemo, useRef, useState } from 'react';
 
-import { PartyType } from '@/rtk/features/userInfoApi';
-import type { Party } from '@/rtk/features/lookupApi';
 import type { AccessPackage } from '@/rtk/features/accessPackageApi';
+import type { ActionError } from '@/resources/hooks/useActionError';
 
 import type { UserActionTarget } from '../common/UserSearch/types';
 import { usePartyRepresentation } from '../common/PartyRepresentationContext/PartyRepresentationContext';
@@ -13,20 +12,12 @@ import { PartyInfoModal } from './PartyInfoModal';
 
 const SUCCESS_ANIMATION_DURATION = 2000;
 
-export const mapUserToParty = (user: UserActionTarget): Party => ({
-  partyId: 0,
-  partyUuid: user.id,
-  orgNumber: user.organizationIdentifier ?? undefined,
-  name: user.name,
-  partyTypeName:
-    user.type?.toLowerCase() === 'organisasjon' ? PartyType.Organization : PartyType.Person,
-  dateOfBirth: user.dateOfBirth ?? undefined,
-  variant: user.variant ?? undefined,
-});
-
 export interface PackageUserModalHandle {
   open: (user: UserActionTarget) => void;
   showSuccess: () => void;
+  // Shows a failed delegate/revoke in the dialog, opening it for the user first if the action was
+  // taken from the list.
+  showError: (user: UserActionTarget, error: ActionError) => void;
 }
 
 interface PackageUserModalProps {
@@ -58,6 +49,7 @@ export const PackageUserModal = forwardRef<PackageUserModalHandle, PackageUserMo
     const dialogRef = useRef<HTMLDialogElement>(null);
     const [selectedUser, setSelectedUser] = useState<UserActionTarget | null>(null);
     const [actionSuccess, setActionSuccess] = useState(false);
+    const [actionError, setActionError] = useState<ActionError | null>(null);
 
     useImperativeHandle(ref, () => ({
       open: (user) => {
@@ -65,8 +57,18 @@ export const PackageUserModal = forwardRef<PackageUserModalHandle, PackageUserMo
         dialogRef.current?.showModal();
       },
       showSuccess: () => {
+        setActionError(null);
         setActionSuccess(true);
         setTimeout(() => setActionSuccess(false), SUCCESS_ANIMATION_DURATION);
+      },
+      showError: (user, error) => {
+        // The error is about this user, even if the dialog was opened on someone else meanwhile.
+        setSelectedUser(user);
+        setActionError(error);
+        setActionSuccess(false);
+        if (!dialogRef.current?.open) {
+          dialogRef.current?.showModal();
+        }
       },
     }));
 
@@ -85,7 +87,7 @@ export const PackageUserModal = forwardRef<PackageUserModalHandle, PackageUserMo
       () =>
         getInheritedStatus({
           permissions: selectedUserPermissions,
-          toParty: selectedUser ? mapUserToParty(selectedUser) : undefined,
+          toParty: selectedUser ?? undefined,
           fromParty,
         }),
       [selectedUserPermissions, selectedUser, fromParty],
@@ -97,7 +99,7 @@ export const PackageUserModal = forwardRef<PackageUserModalHandle, PackageUserMo
         partyInfo={
           selectedUser && accessPackage
             ? {
-                party: mapUserToParty(selectedUser),
+                party: selectedUser,
                 accessPackage,
                 userHasAccess: selectedUserHasAccess,
                 inheritedStatus: selectedUserInheritedStatus,
@@ -105,8 +107,15 @@ export const PackageUserModal = forwardRef<PackageUserModalHandle, PackageUserMo
                 isLoading: isActionLoading,
                 isFetching,
                 isSuccess: actionSuccess,
-                onDelegate: () => onDelegate(selectedUser),
-                onRevoke: () => onRevoke(selectedUser),
+                error: actionError,
+                onDelegate: () => {
+                  setActionError(null);
+                  onDelegate(selectedUser);
+                },
+                onRevoke: () => {
+                  setActionError(null);
+                  onRevoke(selectedUser);
+                },
               }
             : undefined
         }
@@ -116,6 +125,7 @@ export const PackageUserModal = forwardRef<PackageUserModalHandle, PackageUserMo
           }
           setSelectedUser(null);
           setActionSuccess(false);
+          setActionError(null);
         }}
       />
     );

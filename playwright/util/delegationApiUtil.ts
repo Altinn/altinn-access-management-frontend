@@ -1,12 +1,8 @@
-import { request } from '@playwright/test';
-
 import { DelegationApiRequest } from 'playwright/api-requests/delegation-tilgangspakke/delegationApiRequest';
 import {
   type CleanupResolved,
   getCleanupDataForTest,
 } from 'playwright/util/cleanup-delegationutils';
-
-import { Token } from '../api-requests/Token';
 
 import { getTestPersonForCategory } from './testDelegationdatautil';
 
@@ -23,22 +19,17 @@ async function getDagligLederForCategory(category: string) {
 
 export class DelegationApiUtil {
   static async addOrgToDelegate(fromCategory: string, toCategory: string) {
-    const apiContext = await request.newContext();
-    const token = new Token();
-    const api = new DelegationApiRequest(apiContext, token);
+    const api = new DelegationApiRequest();
 
     const fromPerson = await getTestPersonForCategory(fromCategory);
     const toPerson = await getTestPersonForCategory(toCategory);
     const authPerson = await getDagligLederForCategory(fromCategory);
 
     await api.addOrgForDelegation(fromPerson, toPerson, authPerson);
-    await apiContext.dispose();
   }
 
   static async delegateAccessPackage(fromCategory: string, toCategory: string, packages: string[]) {
-    const apiContext = await request.newContext();
-    const token = new Token();
-    const api = new DelegationApiRequest(apiContext, token);
+    const api = new DelegationApiRequest();
 
     const fromPerson = await getTestPersonForCategory(fromCategory);
     const toPerson = await getTestPersonForCategory(toCategory);
@@ -47,31 +38,22 @@ export class DelegationApiUtil {
     for (const pkg of packages) {
       await api.delegateAccessPkg(fromPerson, toPerson, pkg, authPerson);
     }
-    await apiContext.dispose();
   }
 
   static async cleanupAllDelegations(testTitle?: string) {
     const title = (testTitle ?? '').trim();
     if (!title) return;
 
-    const apiContext = await request.newContext({ timeout: 10_000 });
+    const api = new DelegationApiRequest();
+    const items: CleanupResolved[] = await getCleanupDataForTest(title);
 
-    try {
-      const tokenClass = new Token();
-      const api = new DelegationApiRequest(apiContext, tokenClass);
+    if (!items.length) {
+      console.warn(`[cleanupAllDelegations] No cleanup pairs for title="${title}"`);
+      return;
+    }
 
-      const items: CleanupResolved[] = await getCleanupDataForTest(title);
-
-      if (!items.length) {
-        console.warn(`[cleanupAllDelegations] No cleanup pairs for title="${title}"`);
-        return;
-      }
-
-      for (const { fromOrg, toOrg, authPerson } of items) {
-        await api.cleanupDelegations(fromOrg, toOrg, authPerson);
-      }
-    } finally {
-      await apiContext.dispose();
+    for (const { fromOrg, toOrg, authPerson } of items) {
+      await api.cleanupDelegations(fromOrg, toOrg, authPerson);
     }
   }
 }

@@ -1,4 +1,4 @@
-import { DsParagraph, DsSkeleton } from '@altinn/altinn-components';
+import { DsSkeleton } from '@altinn/altinn-components';
 
 import type { ServiceResource } from '@/rtk/features/singleRights/singleRightsApi';
 
@@ -22,7 +22,6 @@ export const ServicePoaDetailsHeader = ({ resource, isLoading }: ServicePoaDetai
         resource={resource}
         level={1}
       />
-      {resource.description && <DsParagraph data-size='sm'>{resource.description}</DsParagraph>}
     </div>
   );
 };

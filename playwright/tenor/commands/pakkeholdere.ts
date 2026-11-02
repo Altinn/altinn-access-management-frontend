@@ -232,7 +232,7 @@ async function hentBrukere(
   token: Token,
   antall: number,
   utelat: string[],
-): Promise<Array<{ foedselsnummer: string; navn: string; partyUuid: string; lastName: string }>> {
+): Promise<Array<{ foedselsnummer: string; navn: string }>> {
   const kandidater = await tenor.hentPersonerPaginert(
     TenorApiRequests.bosattMyndigKql(),
     antall * KANDIDAT_FAKTOR,
@@ -248,8 +248,6 @@ async function hentBrukere(
       brukere.push({
         foedselsnummer: kandidat.foedselsnummer,
         navn: rensTekst(kandidat.navn) || rensTekst(ids.lastName),
-        partyUuid: ids.partyUuid,
-        lastName: ids.lastName,
       });
     } catch {
       continue; // Personen er ikke synket til dette miljøet.
@@ -324,7 +322,6 @@ async function run(argv: string[]): Promise<void> {
   console.error(`Henter ${args.antall} testpersoner fra Tenor ...`);
   const brukere = await hentBrukere(tenor, token, args.antall, [virksomhet.dagligLeder]);
 
-  const orgUuid = await token.getPartyUuid(virksomhet.organisasjonsnummer);
   const fordelingSpek = fordelingFor(args.pakke);
   const fordeling = pakkerPerBruker(brukere.length, fordelingSpek);
   const resultat: Resultat = {
@@ -358,8 +355,6 @@ async function run(argv: string[]): Promise<void> {
         virksomhet.dagligLeder,
         virksomhet.organisasjonsnummer,
         bruker.foedselsnummer,
-        orgUuid,
-        bruker.lastName,
       );
       tilkoblingBekreftet = true;
       resultat.brukere.push(pakkeholder);
@@ -371,9 +366,6 @@ async function run(argv: string[]): Promise<void> {
           virksomhet.organisasjonsnummer,
           bruker.foedselsnummer,
           [pakke],
-          orgUuid,
-          bruker.partyUuid,
-          bruker.lastName,
         );
         pakkeholder.pakker.push(pakke);
       }

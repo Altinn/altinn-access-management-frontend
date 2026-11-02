@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using System.Net;
 using Altinn.AccessManagement.UI.Core.Helpers;
 using Altinn.AccessManagement.UI.Core.Models.ClientDelegation;
+using Altinn.AccessManagement.UI.Core.Models.ClientDelegation.Frontend;
 using Altinn.AccessManagement.UI.Core.Models.Common;
 using Altinn.AccessManagement.UI.Core.Models.Connections;
 using Altinn.AccessManagement.UI.Core.Services.Interfaces;
@@ -43,7 +44,7 @@ namespace Altinn.AccessManagement.UI.Controllers
         [HttpGet]
         [Authorize]
         [Route("my/clients")]
-        public async Task<ActionResult<IEnumerable<MyClientDelegation>>> GetMyClients(
+        public async Task<ActionResult<IEnumerable<MyClientDelegationFE>>> GetMyClients(
             [FromQuery] List<Guid> provider = null,
             CancellationToken cancellationToken = default)
         {
@@ -54,7 +55,7 @@ namespace Altinn.AccessManagement.UI.Controllers
 
             try
             {
-                IEnumerable<MyClientDelegation> clients = await _clientService.GetMyClients(LanguageHelper.GetSelectedLanguageCookieValueBackendStandard(HttpContext), provider, cancellationToken);
+                IEnumerable<MyClientDelegationFE> clients = await _clientService.GetMyClients(LanguageHelper.GetSelectedLanguageCookieValueBackendStandard(HttpContext), provider, cancellationToken);
                 return Ok(clients);
             }
             catch (HttpStatusException ex)
@@ -158,7 +159,7 @@ namespace Altinn.AccessManagement.UI.Controllers
         [HttpGet]
         [Authorize]
         [Route("clients")]
-        public async Task<ActionResult<IEnumerable<ClientDelegation>>> GetClients(
+        public async Task<ActionResult<IEnumerable<ClientDelegationFE>>> GetClients(
             [FromQuery] Guid party,
             [FromQuery] List<string> roles = null,
             CancellationToken cancellationToken = default)
@@ -170,7 +171,7 @@ namespace Altinn.AccessManagement.UI.Controllers
 
             try
             {
-                IEnumerable<ClientDelegation> clients = await _clientService.GetClients(party, LanguageHelper.GetSelectedLanguageCookieValueBackendStandard(HttpContext), roles, cancellationToken);
+                IEnumerable<ClientDelegationFE> clients = await _clientService.GetClients(party, LanguageHelper.GetSelectedLanguageCookieValueBackendStandard(HttpContext), roles, cancellationToken);
                 return Ok(clients);
             }
             catch (HttpStatusException ex)
@@ -194,7 +195,7 @@ namespace Altinn.AccessManagement.UI.Controllers
         [HttpGet]
         [Authorize]
         [Route("agents")]
-        public async Task<ActionResult<IEnumerable<AgentDelegation>>> GetAgents([FromQuery] Guid party, CancellationToken cancellationToken = default)
+        public async Task<ActionResult<IEnumerable<AgentDelegationFE>>> GetAgents([FromQuery] Guid party, CancellationToken cancellationToken = default)
         {
             if (!ModelState.IsValid)
             {
@@ -203,7 +204,7 @@ namespace Altinn.AccessManagement.UI.Controllers
             
             try
             {
-                IEnumerable<AgentDelegation> agents = await _clientService.GetAgents(party, LanguageHelper.GetSelectedLanguageCookieValueBackendStandard(HttpContext), cancellationToken);
+                IEnumerable<AgentDelegationFE> agents = await _clientService.GetAgents(party, LanguageHelper.GetSelectedLanguageCookieValueBackendStandard(HttpContext), cancellationToken);
                 return Ok(agents);
             }
             catch (HttpStatusException ex)
@@ -228,7 +229,7 @@ namespace Altinn.AccessManagement.UI.Controllers
         [HttpGet]
         [Authorize]
         [Route("agents/accesspackages")]
-        public async Task<ActionResult<IEnumerable<ClientDelegation>>> GetAgentAccessPackages([FromQuery] Guid party, [FromQuery] Guid to, CancellationToken cancellationToken = default)
+        public async Task<ActionResult<IEnumerable<ClientDelegationFE>>> GetAgentAccessPackages([FromQuery] Guid party, [FromQuery] Guid to, CancellationToken cancellationToken = default)
         {
             if (!ModelState.IsValid)
             {
@@ -237,7 +238,7 @@ namespace Altinn.AccessManagement.UI.Controllers
 
             try
             {
-                IEnumerable<ClientDelegation> clients = await _clientService.GetAgentAccessPackages(party, to, LanguageHelper.GetSelectedLanguageCookieValueBackendStandard(HttpContext), cancellationToken);
+                IEnumerable<ClientDelegationFE> clients = await _clientService.GetAgentAccessPackages(party, to, LanguageHelper.GetSelectedLanguageCookieValueBackendStandard(HttpContext), cancellationToken);
                 return Ok(clients);
             }
             catch (HttpStatusException ex)
@@ -262,7 +263,7 @@ namespace Altinn.AccessManagement.UI.Controllers
         [HttpGet]
         [Authorize]
         [Route("clients/accesspackages")]
-        public async Task<ActionResult<IEnumerable<AgentDelegation>>> GetClientAccessPackages([FromQuery] Guid party, [FromQuery] Guid from, CancellationToken cancellationToken = default)
+        public async Task<ActionResult<IEnumerable<AgentDelegationFE>>> GetClientAccessPackages([FromQuery] Guid party, [FromQuery] Guid from, CancellationToken cancellationToken = default)
         {
             if (!ModelState.IsValid)
             {
@@ -271,7 +272,7 @@ namespace Altinn.AccessManagement.UI.Controllers
 
             try
             {
-                IEnumerable<AgentDelegation> agents = await _clientService.GetClientAccessPackages(party, from, LanguageHelper.GetSelectedLanguageCookieValueBackendStandard(HttpContext), cancellationToken);
+                IEnumerable<AgentDelegationFE> agents = await _clientService.GetClientAccessPackages(party, from, LanguageHelper.GetSelectedLanguageCookieValueBackendStandard(HttpContext), cancellationToken);
                 return Ok(agents);
             }
             catch (HttpStatusException ex)
@@ -389,7 +390,7 @@ namespace Altinn.AccessManagement.UI.Controllers
         [HttpGet]
         [Authorize]
         [Route("agents/resources")]
-        public async Task<ActionResult<IEnumerable<ClientDelegation>>> GetAgentResources([FromQuery] Guid party, [FromQuery] Guid to, CancellationToken cancellationToken = default)
+        public async Task<ActionResult<IEnumerable<ClientDelegationFE>>> GetAgentResources([FromQuery] Guid party, [FromQuery] Guid to, CancellationToken cancellationToken = default)
         {
             if (!ModelState.IsValid)
             {
@@ -398,7 +399,7 @@ namespace Altinn.AccessManagement.UI.Controllers
 
             try
             {
-                IEnumerable<ClientDelegation> clients = await _clientService.GetAgentResources(party, to, LanguageHelper.GetSelectedLanguageCookieValueBackendStandard(HttpContext), cancellationToken);
+                IEnumerable<ClientDelegationFE> clients = await _clientService.GetAgentResources(party, to, LanguageHelper.GetSelectedLanguageCookieValueBackendStandard(HttpContext), cancellationToken);
                 return Ok(clients);
             }
             catch (HttpStatusException ex)
@@ -424,7 +425,7 @@ namespace Altinn.AccessManagement.UI.Controllers
         [HttpGet]
         [Authorize]
         [Route("clients/resources")]
-        public async Task<ActionResult<IEnumerable<AgentDelegation>>> GetClientResources([FromQuery] Guid party, [FromQuery] Guid from, CancellationToken cancellationToken = default)
+        public async Task<ActionResult<IEnumerable<AgentDelegationFE>>> GetClientResources([FromQuery] Guid party, [FromQuery] Guid from, CancellationToken cancellationToken = default)
         {
             if (!ModelState.IsValid)
             {
@@ -433,7 +434,7 @@ namespace Altinn.AccessManagement.UI.Controllers
 
             try
             {
-                IEnumerable<AgentDelegation> agents = await _clientService.GetClientResources(party, from, LanguageHelper.GetSelectedLanguageCookieValueBackendStandard(HttpContext), cancellationToken);
+                IEnumerable<AgentDelegationFE> agents = await _clientService.GetClientResources(party, from, LanguageHelper.GetSelectedLanguageCookieValueBackendStandard(HttpContext), cancellationToken);
                 return Ok(agents);
             }
             catch (HttpStatusException ex)

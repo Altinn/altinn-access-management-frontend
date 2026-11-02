@@ -79,33 +79,6 @@ namespace Altinn.AccessManagement.UI.Integration.Clients
         }
 
         /// <inheritdoc />
-        public async Task<List<AuthorizedParty>> GetReporteeRightHolders(int partyId)
-        {
-            string endpointUrl = $"rightholders/{partyId}"; // TODO: Switch with actual backend endpoint when available
-            string token = JwtTokenUtil.GetTokenFromContext(_httpContextAccessor.HttpContext, _platformSettings.JwtCookieName);
-
-            HttpResponseMessage response = await _client.GetAsync(token, endpointUrl);
-
-            if (response.StatusCode == HttpStatusCode.OK)
-            {
-                string responseContent = await response.Content.ReadAsStringAsync();
-                return JsonSerializer.Deserialize<List<AuthorizedParty>>(responseContent, _serializerOptions);
-            }
-
-            _logger.LogError("Getting right holders from accessmanagement failed with {StatusCode}", response.StatusCode);
-            throw new HttpStatusException("StatusError", "Unexpected response status from Access Management", response.StatusCode, Activity.Current?.Id ?? _httpContextAccessor.HttpContext?.TraceIdentifier);
-        }
-
-        /// <inheritdoc />
-        public async Task<List<AuthorizedParty>> GetReporteeList(Guid partyId)
-        {
-            string endpointUrl = $"enduser/access/parties?party={partyId}"; // TODO: Switch with actual backend endpoint when available
-            string token = JwtTokenUtil.GetTokenFromContext(_httpContextAccessor.HttpContext, _platformSettings.JwtCookieName);
-            HttpResponseMessage response = await _client.GetAsync(token, endpointUrl);
-            return await ClientUtils.DeserializeIfSuccessfullStatusCode<List<AuthorizedParty>>(response);
-        }
-
-        /// <inheritdoc />
         public async Task<UserAccesses> GetUserAccesses(Guid from, Guid to)
         {
             string endpointUrl = $"enduser/{from}/access/{to}"; // TODO: Switch with actual backend endpoint when available

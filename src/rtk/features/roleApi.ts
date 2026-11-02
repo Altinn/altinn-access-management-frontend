@@ -1,7 +1,8 @@
 import { createApi } from '@reduxjs/toolkit/query/react';
 
 import { createBaseQuery } from '@/rtk/app/baseQuery';
-import { type CompactRole, type Entity } from '@/dataObjects/dtos/Common';
+import { type CompactRole } from '@/dataObjects/dtos/Common';
+import { type PartyEntity } from '@/dataObjects/dtos/Party';
 
 export interface ProviderType {
   id: string;
@@ -9,9 +10,9 @@ export interface ProviderType {
 }
 
 export interface Permission {
-  to: Entity;
-  from: Entity;
-  via?: Entity;
+  to: PartyEntity;
+  from: PartyEntity;
+  via?: PartyEntity | null;
   role: CompactRole | null;
   viaRole?: CompactRole | null;
   reason: { items: { name: string; description: string }[] } | null;

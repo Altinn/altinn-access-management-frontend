@@ -2,21 +2,27 @@
   {
     "party": {
       "id": "22222222-2222-2222-2222-222222222222",
+      "partyId": null,
       "name": "Mock Available User",
       "type": "Person",
-      "variant": "person",
+      "unitType": null,
       "organizationIdentifier": null,
-      "isDeleted": false
+      "dateOfBirth": null,
+      "isDeleted": false,
+      "children": null
     },
     "connections": [
       {
         "party": {
           "id": "33333333-3333-3333-3333-333333333333",
+          "partyId": null,
           "name": "Mock Nested Available User",
           "type": "Person",
-          "variant": "person",
+          "unitType": null,
           "organizationIdentifier": null,
-          "isDeleted": false
+          "dateOfBirth": null,
+          "isDeleted": false,
+          "children": null
         },
         "connections": []
       }

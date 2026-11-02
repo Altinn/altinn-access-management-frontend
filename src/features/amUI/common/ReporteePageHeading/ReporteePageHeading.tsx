@@ -2,7 +2,7 @@ import * as React from 'react';
 import { useTranslation } from 'react-i18next';
 import { DsHeading, DsSkeleton } from '@altinn/altinn-components';
 
-import { type ReporteeInfo } from '@/rtk/features/userInfoApi';
+import type { AuthorizedPartyEntity } from '@/dataObjects/dtos/Party';
 import { formatOrgNr, isSubUnit } from '@/resources/utils/reporteeUtils';
 import { useIsTabletOrSmaller } from '@/resources/utils/screensizeUtils';
 
@@ -13,7 +13,7 @@ import styles from './ReporteePageHeading.module.css';
 type Props = {
   title: string;
   'data-testid'?: string;
-  reportee?: ReporteeInfo;
+  reportee?: AuthorizedPartyEntity;
   className?: string;
   level?: 1 | 2 | 3 | 4 | 5 | 6;
   dataSize?: 'sm' | 'md' | 'lg';
@@ -34,8 +34,8 @@ export const ReporteePageHeading: React.FC<Props> = ({
   downloadable = false,
 }) => {
   const { t } = useTranslation();
-  const orgNumber = reportee?.organizationNumber ?? '';
-  const isReporteeMainUnit = (reportee?.subunits?.length ?? 0) > 0;
+  const orgNumber = reportee?.organizationIdentifier ?? '';
+  const isReporteeMainUnit = (reportee?.children?.length ?? 0) > 0;
   const isReporteeSubUnit = isSubUnit(reportee);
   const isSmallScreen = useIsTabletOrSmaller();
 

@@ -1,13 +1,11 @@
+import type { PartyEntity } from '@/dataObjects/dtos/Party';
 import type { Connection } from '@/rtk/features/connectionApi';
-import type { ExtendedUser, User } from '@/rtk/features/userInfoApi';
 
 type DeletableParty = { isDeleted?: boolean | null };
 
-type ConnectionChild = ExtendedUser | User;
-
 const filterDeletedChildren = (
-  children: ConnectionChild[] | null | undefined,
-): ConnectionChild[] | null => {
+  children: PartyEntity[] | null | undefined,
+): PartyEntity[] | null => {
   if (!children) {
     return null;
   }

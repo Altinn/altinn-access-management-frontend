@@ -1,19 +1,40 @@
 {
   "id": "e2071c55-6adf-487b-af05-9198a230ed44",
   "fromParty": {
-    "id": "urn:altinn:person:identifier-no:167536b5-f8ed-4c5a-8f48-0279507e53ae",
+    "id": "167536b5-f8ed-4c5a-8f48-0279507e53ae",
+    "partyId": 50789533,
     "name": "SITRONGUL MEDALJONG",
-    "type": 1
+    "type": "Person",
+    "unitType": null,
+    "organizationIdentifier": null,
+    "dateOfBirth": null,
+    "isDeleted": false,
+    "children": null,
+    "parent": null
   },
   "toParty": {
-    "id": "urn:altinn:organization:identifier-no:b0a79f3d-4cef-430a-9774-301b754e0f6f",
+    "id": "b0a79f3d-4cef-430a-9774-301b754e0f6f",
+    "partyId": 51433301,
     "name": "DISKRET NÆR TIGER AS",
-    "type": 4
+    "type": "Organization",
+    "unitType": "BEDR",
+    "organizationIdentifier": "311312294",
+    "dateOfBirth": null,
+    "isDeleted": false,
+    "children": null,
+    "parent": null
   },
   "handledByParty": {
-    "id": "urn:altinn:organization:identifier-no:87ee6b0e-5d14-4365-82df-d1ee436b51a8",
+    "id": "87ee6b0e-5d14-4365-82df-d1ee436b51a8",
+    "partyId": 51473841,
     "name": "STA TOM TIGER AS",
-    "type": 2
+    "type": "Organization",
+    "unitType": "AS",
+    "organizationIdentifier": "313160300",
+    "dateOfBirth": null,
+    "isDeleted": false,
+    "children": null,
+    "parent": null
   },
   "isPoa": false,
   "title": {

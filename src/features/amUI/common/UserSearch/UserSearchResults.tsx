@@ -4,10 +4,9 @@ import { useTranslation } from 'react-i18next';
 
 import { isSubUnitByType } from '@/resources/utils/reporteeUtils';
 import { UserItem } from '@/features/amUI/common/UserList/UserItem';
-import type { ExtendedUser, User } from '@/rtk/features/userInfoApi';
 
 import { UserListActions } from '../UserList/UserListActions';
-import { type DelegationAction } from '../DelegationModal/EditModal';
+import { DelegationAction } from '../DelegationModal/EditModal';
 
 import classes from './UserSearch.module.css';
 import type { UserActionTarget, UserSearchNode } from './types';
@@ -27,14 +26,15 @@ export interface UserSearchResultsProps {
   getUserLink?: (user: UserActionTarget) => string;
 }
 
-const mapUserToActionTarget = (user: UserSearchNode | ExtendedUser | User): UserActionTarget => ({
+const mapUserToActionTarget = (user: UserSearchNode): UserActionTarget => ({
   id: user.id,
   name: user.name,
   type: user.type,
-  variant: user.variant,
+  unitType: user.unitType,
   organizationIdentifier: user.organizationIdentifier,
   dateOfBirth: user.dateOfBirth,
-  isInherited: 'isInherited' in user ? user.isInherited : undefined,
+  isDeleted: user.isDeleted,
+  isInherited: user.isInherited,
 });
 
 export const UserSearchResults: React.FC<UserSearchResultsProps> = ({
@@ -60,7 +60,7 @@ export const UserSearchResults: React.FC<UserSearchResultsProps> = ({
         {users.map((user) => (
           <UserItem
             includeSelfAsChild={includeSelfAsChild}
-            subUnit={isSubUnitByType(user?.variant)}
+            subUnit={isSubUnitByType(user.unitType)}
             key={user.id}
             user={user}
             size='md'
@@ -69,10 +69,11 @@ export const UserSearchResults: React.FC<UserSearchResultsProps> = ({
             onSelect={onSelect ? (user) => onSelect(mapUserToActionTarget(user)) : undefined}
             roleDirection='toUser'
             disableLinks={!isInteractive}
+            showEditPoasHint={availableAction === DelegationAction.REVOKE && !!onRevoke}
             controls={(user) => (
               <UserListActions
                 isLoading={isActionLoading}
-                user={user as ExtendedUser}
+                user={user}
                 availableAction={availableAction}
                 onRevoke={onRevoke ? () => onRevoke(user) : undefined}
                 onDelegate={onDelegate ? () => onDelegate(user) : undefined}

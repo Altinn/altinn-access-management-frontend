@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import {
   DsButton,
   DsSearch,
@@ -13,7 +13,9 @@ import { useTranslation } from 'react-i18next';
 
 import { AmPagination } from '@/components/Paginering';
 import { formatOrgNr, isSubUnitByType, matchesOrgNr } from '@/resources/utils/reporteeUtils';
+import { useDebouncedValue } from '@/resources/hooks';
 import { useIsMobileOrSmaller } from '@/resources/utils/screensizeUtils';
+import { SearchHitsStatus } from '@/features/amUI/common/SearchHitsStatus/SearchHitsStatus';
 
 import type { AgentDelegation, AgentDelegationCustomer } from '../types';
 
@@ -64,6 +66,7 @@ export const CustomerList = ({
   const { t } = useTranslation();
 
   const [searchValue, setSearchValue] = useState<string>('');
+  const debouncedSearch = useDebouncedValue(searchValue, searchValue ? 300 : 0);
   const [currentPage, setCurrentPage] = useState<number>(1);
   const [isHideAssignedChecked, setIsHideAssignedChecked] = useState<boolean>(false);
 
@@ -71,18 +74,16 @@ export const CustomerList = ({
     list,
     delegations ?? [],
     isHideAssignedChecked,
-    searchValue,
+    debouncedSearch,
   );
 
   const totalPages = Math.ceil(filteredSearchList.length / itemsPerPage);
-  const startIndex = (currentPage - 1) * itemsPerPage;
-  const endIndex = currentPage * itemsPerPage;
-
-  useEffect(() => {
-    if (currentPage > totalPages) {
-      setCurrentPage(1);
-    }
-  }, [totalPages, currentPage, itemsPerPage]);
+  const safeCurrentPage = currentPage > totalPages ? 1 : currentPage;
+  if (currentPage !== safeCurrentPage) {
+    setCurrentPage(safeCurrentPage);
+  }
+  const startIndex = (safeCurrentPage - 1) * itemsPerPage;
+  const endIndex = safeCurrentPage * itemsPerPage;
 
   const onSearch = (event: React.ChangeEvent<HTMLInputElement>): void => {
     setSearchValue(event.target.value);
@@ -123,6 +124,10 @@ export const CustomerList = ({
         )}
         {children}
       </div>
+      <SearchHitsStatus
+        hits={debouncedSearch.trim() ? filteredSearchList.length : undefined}
+        searchString={debouncedSearch}
+      />
       <List>
         {filteredSearchList.slice(startIndex, endIndex)?.map((customer) => (
           <ListItem
@@ -157,7 +162,7 @@ export const CustomerList = ({
           <AmPagination
             totalPages={totalPages}
             showPages={showPages}
-            currentPage={currentPage}
+            currentPage={safeCurrentPage}
             setCurrentPage={setCurrentPage}
             size='sm'
           />

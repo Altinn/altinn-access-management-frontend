@@ -32,6 +32,7 @@ import { AddAltinn2AccountPage } from '@/features/amUI/altinn2Account/AddAltinn2
 import { MaskinportenPage } from '@/features/amUI/maskinporten/MaskinportenPage';
 import { SupplierPage } from '@/features/amUI/maskinporten/SupplierPage';
 import { ConsumerPage } from '@/features/amUI/maskinporten/ConsumerPage';
+import { ActivityLogPage } from '@/features/amUI/activityLog/ActivityLogPage';
 
 import { GeneralPath, amUIPath, SystemUserPath, ConsentPath } from '../paths';
 
@@ -169,6 +170,10 @@ export const Router = createBrowserRouter(
         <Route
           path={amUIPath.MaskinportenConsumer}
           element={<ConsumerPage />}
+        />
+        <Route
+          path={amUIPath.ActivityLog}
+          element={<ActivityLogPage />}
         />
         <Route
           path='errorpage/reportee'

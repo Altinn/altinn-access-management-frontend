@@ -3,6 +3,7 @@ using System.Net;
 using Altinn.AccessManagement.UI.Core.Helpers;
 using Altinn.AccessManagement.UI.Core.Models.AccessPackage;
 using Altinn.AccessManagement.UI.Core.Models.Role;
+using Altinn.AccessManagement.UI.Core.Models.Role.Frontend;
 using Altinn.AccessManagement.UI.Core.Services.Interfaces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -42,7 +43,7 @@ namespace Altinn.AccessManagement.UI.Controllers
         [HttpGet]
         [Authorize]
         [Route("permissions")]
-        public async Task<ActionResult<List<RolePermission>>> GetRolePermissions([FromQuery] Guid party, [FromQuery] Guid? from, [FromQuery] Guid? to)
+        public async Task<ActionResult<List<RolePermissionFE>>> GetRolePermissions([FromQuery] Guid party, [FromQuery] Guid? from, [FromQuery] Guid? to)
         {
             if (!ModelState.IsValid)
             {
@@ -57,7 +58,7 @@ namespace Altinn.AccessManagement.UI.Controllers
             try
             {
                 string languageCode = LanguageHelper.GetSelectedLanguageCookieValueBackendStandard(_httpContextAccessor.HttpContext);
-                List<RolePermission> permissions = await _roleService.GetRolePermissions(party, from, to, languageCode);
+                List<RolePermissionFE> permissions = await _roleService.GetRolePermissions(party, from, to, languageCode);
                 return Ok(permissions);
             }
             catch (HttpStatusException ex)

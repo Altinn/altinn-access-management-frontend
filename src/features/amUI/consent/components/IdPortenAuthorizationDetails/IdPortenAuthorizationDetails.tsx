@@ -70,7 +70,7 @@ export const IdPortenAuthorizationDetails = ({
         <RevokeConsentPopover
           isRevoking={isWithdrawing}
           consentIsPoa={false}
-          onRevokeConsent={handleRevokeConsent}
+          onRevokeConsent={() => void handleRevokeConsent()}
         />
         {withdrawError && (
           <DsAlert

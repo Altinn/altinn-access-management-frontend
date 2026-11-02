@@ -73,7 +73,7 @@ export const useSaveAddressChanges = (
       return; // Prevent multiple simultaneous saves
     }
 
-    if (isChanges && actingParty?.orgNumber) {
+    if (isChanges && actingParty?.organizationIdentifier) {
       setIsSaving(true);
       setIsError(false); // Reset error state
 
@@ -102,16 +102,16 @@ export const useSaveAddressChanges = (
       // Delete outdated addresses and add new ones
       Promise.all([
         ...additions.map((address) =>
-          createAddress({ orgNumber: actingParty?.orgNumber ?? '', address: address }),
+          createAddress({ orgNumber: actingParty?.organizationIdentifier ?? '', address: address }),
         ),
         ...deletions.map((address) =>
           deleteAddress({
-            orgNumber: actingParty?.orgNumber ?? '',
+            orgNumber: actingParty?.organizationIdentifier ?? '',
             notificationAddressId: address.notificationAddressId,
           }),
         ),
         ...updates.map((address) =>
-          updateAddress({ orgNumber: actingParty?.orgNumber ?? '', address: address }),
+          updateAddress({ orgNumber: actingParty?.organizationIdentifier ?? '', address: address }),
         ),
       ])
         .then((results) => {

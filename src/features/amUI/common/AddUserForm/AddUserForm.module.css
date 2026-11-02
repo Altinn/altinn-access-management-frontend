@@ -1,0 +1,16 @@
+.fields {
+  display: flex;
+  flex-direction: column;
+  gap: var(--ds-spacing-3);
+  margin-bottom: var(--ds-spacing-4);
+}
+
+/* The content is a flex column, so without this the button would span the dialog. */
+.submit {
+  margin-top: var(--ds-spacing-2);
+  align-self: flex-start;
+}
+
+.heading {
+  margin-bottom: var(--ds-spacing-6);
+}

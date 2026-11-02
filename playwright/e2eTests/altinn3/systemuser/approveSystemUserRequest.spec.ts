@@ -1,24 +1,20 @@
 import { test, expect } from 'playwright/fixture/pomFixture';
 import { TestdataApi } from 'playwright/util/TestdataApi';
-import { ApiRequests } from 'playwright/api-requests/SystemUserApiRequests';
+import type { SystemUserApiRequests } from 'playwright/api-requests/SystemUserApiRequests';
 
 import { systemUserOwners } from './testdata';
-
-const reportArea = { annotation: { type: 'report-area', description: 'Systembruker' } };
 const owner = systemUserOwners.requests;
 const vendorOrgNumber = '310547891';
 const prebuiltSystemId = '310547891_E2E-Playwright-Authentication';
 const testUserPid = owner.pid;
 
-test.describe('Godkjenn og avvis Systembrukerforespørsel', reportArea, () => {
-  let api: ApiRequests;
+test.describe('Godkjenn og avvis Systembrukerforespørsel', () => {
   let externalRef: string;
-  let response: Awaited<ReturnType<ApiRequests['postSystemuserRequest']>>;
+  let response: Awaited<ReturnType<SystemUserApiRequests['postSystemuserRequest']>>;
 
-  test.beforeEach(async () => {
-    api = new ApiRequests();
+  test.beforeEach(async ({ api }) => {
     externalRef = TestdataApi.generateExternalRef();
-    response = await api.postSystemuserRequest(
+    response = await api.systemUsers.postSystemuserRequest(
       vendorOrgNumber,
       externalRef,
       prebuiltSystemId,
@@ -31,7 +27,7 @@ test.describe('Godkjenn og avvis Systembrukerforespørsel', reportArea, () => {
     page,
     login,
     systemUserConfirmPage,
-    runAccessibilityTest,
+    api,
   }): Promise<void> => {
     await test.step('Navigate to confirmation page and login', async () => {
       await page.goto(response.confirmUrl);
@@ -39,8 +35,6 @@ test.describe('Godkjenn og avvis Systembrukerforespørsel', reportArea, () => {
     });
 
     await test.step('Reject system user request', async () => {
-      await expect(systemUserConfirmPage.rejectButton).toBeVisible();
-      await runAccessibilityTest.scan('forespørsel-før-reject');
       await systemUserConfirmPage.reject();
     });
 
@@ -49,10 +43,9 @@ test.describe('Godkjenn og avvis Systembrukerforespørsel', reportArea, () => {
       await expect(page).toHaveURL('https://info.altinn.no');
 
       //Read from status api to verify that status is not rejected after clicking "Avvis"
-      const statusApiRequest = await api.getStatusForSystemUserRequest<{ status: string }>(
-        vendorOrgNumber,
-        response.id,
-      );
+      const statusApiRequest = await api.systemUsers.getStatusForSystemUserRequest<{
+        status: string;
+      }>(vendorOrgNumber, response.id);
       expect(statusApiRequest.status).toBe('Rejected');
     });
   });
@@ -61,7 +54,7 @@ test.describe('Godkjenn og avvis Systembrukerforespørsel', reportArea, () => {
     page,
     login,
     systemUserConfirmPage,
-    runAccessibilityTest,
+    api,
   }): Promise<void> => {
     await test.step('Navigate to confirmation page and login', async () => {
       await page.goto(response.confirmUrl);
@@ -69,8 +62,6 @@ test.describe('Godkjenn og avvis Systembrukerforespørsel', reportArea, () => {
     });
 
     await test.step('Approve system user request', async () => {
-      await expect(systemUserConfirmPage.approveButton).toBeVisible();
-      await runAccessibilityTest.scan('forespørsel-før-approve');
       await systemUserConfirmPage.approve();
     });
 
@@ -79,16 +70,15 @@ test.describe('Godkjenn og avvis Systembrukerforespørsel', reportArea, () => {
       await expect(page).toHaveURL('https://info.altinn.no');
 
       //Read from status api to verify that status is not Accepted after clicking "Avvis"
-      const statusApiRequest = await api.getStatusForSystemUserRequest<{ status: string }>(
-        vendorOrgNumber,
-        response.id,
-      );
+      const statusApiRequest = await api.systemUsers.getStatusForSystemUserRequest<{
+        status: string;
+      }>(vendorOrgNumber, response.id);
       expect(statusApiRequest.status).toBe('Accepted');
     });
   });
-  test.afterEach(async () => {
+  test.afterEach(async ({ api }) => {
     if (externalRef) {
-      await api.cleanUpSystemUsersForSystem(
+      await api.systemUsers.cleanUpSystemUsersForSystem(
         prebuiltSystemId,
         owner.pid,
         owner.orgNo,

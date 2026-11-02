@@ -8,6 +8,8 @@ declare global {
       showIdPortenAuthorizations: boolean;
       enableSkyra: boolean;
       enableSingleRightsTabInPoaOverview: boolean;
+      enableActivityLog: boolean;
+      showSettingsPageServiceAnnouncement: boolean;
     };
   }
 }

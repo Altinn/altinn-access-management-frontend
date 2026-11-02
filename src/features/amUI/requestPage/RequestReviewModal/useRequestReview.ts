@@ -44,16 +44,16 @@ export const useRequestReview = (request: Request | null, onClose: () => void) =
     isLoading: isLoadingResourceRequests,
     isFetching: isFetchingResourceRequests,
   } = useGetEnrichedReceivedResourceRequestsQuery(
-    { party: actingParty?.partyUuid || '', from: request?.partyUuid || '', status: ['Pending'] },
-    { skip: !actingParty?.partyUuid || !request?.partyUuid },
+    { party: actingParty?.id || '', from: request?.partyUuid || '', status: ['Pending'] },
+    { skip: !actingParty?.id || !request?.partyUuid },
   );
   const {
     data: packageRequests,
     isLoading: isLoadingPackageRequests,
     isFetching: isFetchingPackageRequests,
   } = useGetEnrichedReceivedPackageRequestsQuery(
-    { party: actingParty?.partyUuid || '', from: request?.partyUuid || '', status: ['Pending'] },
-    { skip: !actingParty?.partyUuid || !request?.partyUuid },
+    { party: actingParty?.id || '', from: request?.partyUuid || '', status: ['Pending'] },
+    { skip: !actingParty?.id || !request?.partyUuid },
   );
 
   // Snapshot: capture first non-empty result, keep it stable while modal is open
@@ -174,12 +174,12 @@ export const useRequestReview = (request: Request | null, onClose: () => void) =
     if (resourceId && packageId) return; // Should not happen, but guard against it
 
     const requestId = findRequestId(resourceId, packageId);
-    if (!requestId || !actingParty?.partyUuid) return;
+    if (!requestId || !actingParty?.id) return;
     setActionLoading('approve');
 
     try {
       const result = await approveRequest({
-        party: actingParty.partyUuid,
+        party: actingParty.id,
         id: requestId,
       }).unwrap();
       const id = resourceId ?? packageId ?? '';
@@ -209,11 +209,11 @@ export const useRequestReview = (request: Request | null, onClose: () => void) =
     packageId?: string;
   }) => {
     const requestId = findRequestId(resourceId, packageId);
-    if (!requestId || !actingParty?.partyUuid) return;
+    if (!requestId || !actingParty?.id) return;
     setActionLoading('reject');
     try {
       const result = await rejectRequest({
-        party: actingParty.partyUuid,
+        party: actingParty.id,
         id: requestId,
       }).unwrap();
       const id = resourceId ?? packageId ?? '';
@@ -239,8 +239,8 @@ export const useRequestReview = (request: Request | null, onClose: () => void) =
     type: 'approve_all' | 'reject_all',
     items: { id: string; key: string }[],
   ) => {
-    if (!actingParty?.partyUuid) return;
-    const partyUuid = actingParty.partyUuid;
+    if (!actingParty?.id) return;
+    const partyUuid = actingParty.id;
     const mutate = type === 'approve_all' ? approveRequest : rejectRequest;
     const status: ProcessedStatus = type === 'approve_all' ? 'approved' : 'rejected';
     setBulkActionLoading(type === 'approve_all' ? 'approveAll' : 'rejectAll');

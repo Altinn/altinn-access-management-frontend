@@ -8,7 +8,7 @@ export const useCanGiveAccess = (id: string, isReportee: boolean = false) => {
   if (isReportee) {
     return false;
   }
-  const isCurrentUser = selfParty?.partyUuid === id;
+  const isCurrentUser = selfParty?.id === id;
   const canGiveAccess = !isCurrentUser || (isCurrentUser && isHovedadmin);
 
   return canGiveAccess;

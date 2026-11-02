@@ -1,14 +1,13 @@
 import * as React from 'react';
-import { Button, DsButton, DsParagraph, formatDisplayName } from '@altinn/altinn-components';
+import { DsButton, DsParagraph } from '@altinn/altinn-components';
 import { useTranslation } from 'react-i18next';
-import { MinusCircleIcon } from '@navikt/aksel-icons';
 
+import { formatEntityDisplayName } from '@/resources/utils/reporteeUtils';
 import { useIsMobileOrSmaller } from '@/resources/utils/screensizeUtils';
 import { StatusMessageForScreenReader } from '@/components/StatusMessageForScreenReader/StatusMessageForScreenReader';
 import { useRevokeResource } from '@/resources/hooks/useRevokeResource';
 import { useUpdateResource } from '@/resources/hooks/useUpdateResource';
 import { useDelegateRights } from '@/resources/hooks/useDelegateRights';
-import { PartyType } from '@/rtk/features/userInfoApi';
 import {
   useGetSingleRightsForRightholderQuery,
   type ServiceResource,
@@ -55,13 +54,14 @@ export const ResourceInfo = ({
   const isSingleRightRequest = availableActions?.includes(DelegationAction.REQUEST);
   const hasDelegateAction = availableActions?.includes(DelegationAction.DELEGATE);
   const hasApproveAction = availableActions?.includes(DelegationAction.APPROVE);
+  const hasRevokeAction = availableActions?.includes(DelegationAction.REVOKE);
 
   const { data: resourceDelegations, isLoading: isResourceDelegationsLoading } =
     useGetSingleRightsForRightholderQuery(
       {
-        actingParty: actingParty?.partyUuid || '',
-        from: fromParty?.partyUuid || '',
-        to: toParty?.partyUuid || '',
+        actingParty: actingParty?.id || '',
+        from: fromParty?.id || '',
+        to: toParty?.id || '',
       },
       { skip: !actingParty || !fromParty || !toParty },
     );
@@ -81,8 +81,8 @@ export const ResourceInfo = ({
   const { createRequest, deleteRequest, hasPendingRequest, isLoadingRequest } =
     useSingleRightRequests({
       canRequestRights: isSingleRightRequest,
-      actingPartyUuid: actingParty?.partyUuid,
-      fromPartyUuid: fromParty?.partyUuid,
+      actingPartyUuid: actingParty?.id,
+      fromPartyUuid: fromParty?.id,
     });
 
   const delegateRights = useDelegateRights();
@@ -134,12 +134,7 @@ export const ResourceInfo = ({
     actingParty,
   });
 
-  const toName =
-    toPartyName ??
-    formatDisplayName({
-      fullName: toParty?.name ?? '',
-      type: toParty?.partyTypeName === PartyType.Organization ? 'company' : 'person',
-    });
+  const toName = toPartyName ?? formatEntityDisplayName(toParty);
 
   const hasDelegableRights = rights.some((r) => r.delegable);
   const showMissingRightsStatus =
@@ -226,7 +221,7 @@ export const ResourceInfo = ({
               <ResourceAlert
                 error={technicalErrorDetails}
                 availableActions={availableActions}
-                rightReasons={rights.map((r) => r.delegationReason)}
+                rightReasons={rights.flatMap((r) => r.delegationReasons)}
                 resource={resource}
                 className={classes.resourceAlert}
               />
@@ -248,7 +243,7 @@ export const ResourceInfo = ({
               className={classes.editButtons}
             >
               {hasDelegateAction && (
-                <Button
+                <DsButton
                   data-size='sm'
                   disabled={
                     isActionLoading ||
@@ -259,23 +254,22 @@ export const ResourceInfo = ({
                   onClick={hasAccess ? saveEditedRights : delegateChosenRights}
                 >
                   {hasAccess ? t('common.update_poa') : t('common.give_poa')}
-                </Button>
+                </DsButton>
               )}
-              {hasAccess && toParty && (
-                <Button
+              {hasAccess && toParty && hasRevokeAction && (
+                <DsButton
                   data-size='sm'
-                  variant={hasDelegateAction ? 'tertiary' : 'primary'}
+                  variant='secondary'
                   onClick={confirmAndRevokeResource}
                   disabled={
                     isActionLoading ||
                     rights.length === 0 ||
                     rights.some((r) => r.inherited === true)
                   }
-                  color='danger'
+                  data-color='danger'
                 >
-                  <MinusCircleIcon aria-hidden='true' />
                   {t('common.delete_poa')}
-                </Button>
+                </DsButton>
               )}
               {!hasAccess && !hasPendingRequest(resource.identifier) && isSingleRightRequest && (
                 <DsButton
@@ -290,6 +284,7 @@ export const ResourceInfo = ({
               {hasPendingRequest(resource.identifier) && isSingleRightRequest && (
                 <DsButton
                   data-size='sm'
+                  variant='secondary'
                   disabled={isLoadingSingleRightRequest}
                   data-color='danger'
                   loading={isLoadingSingleRightRequest}

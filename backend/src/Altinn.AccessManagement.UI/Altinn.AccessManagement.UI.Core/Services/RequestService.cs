@@ -4,6 +4,7 @@ using Altinn.AccessManagement.UI.Core.Exceptions;
 using Altinn.AccessManagement.UI.Core.Helpers;
 using Altinn.AccessManagement.UI.Core.Models.AccessPackage;
 using Altinn.AccessManagement.UI.Core.Models.Common;
+using Altinn.AccessManagement.UI.Core.Models.Common.Frontend;
 using Altinn.AccessManagement.UI.Core.Models.Request;
 using Altinn.AccessManagement.UI.Core.Models.Request.Frontend;
 using Altinn.AccessManagement.UI.Core.Models.ResourceRegistry.Frontend;
@@ -163,8 +164,8 @@ namespace Altinn.AccessManagement.UI.Core.Services
             return new RequestFE()
             {
                 Id = x.Id,
-                From = x.From,
-                To = x.To,
+                From = PartyFE.FromEntity(x.From),
+                To = PartyFE.FromEntity(x.To),
                 Type = x.Type,
                 Status = x.Status,
                 ResourceId = x.Resource?.ReferenceId,

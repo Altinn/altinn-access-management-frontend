@@ -1,7 +1,8 @@
 import { createApi } from '@reduxjs/toolkit/query/react';
 
 import { createBaseQuery } from '@/rtk/app/baseQuery';
-import type { CompactRole, Entity } from '@/dataObjects/dtos/Common';
+import type { CompactRole } from '@/dataObjects/dtos/Common';
+import type { PartyEntity } from '@/dataObjects/dtos/Party';
 import { getCookie } from '@/resources/Cookie/CookieMethods';
 
 import type { AssignmentDto } from './clientApi';
@@ -12,7 +13,7 @@ import type {
 } from './singleRights/singleRightsApi';
 
 export interface MaskinportenConnection {
-  party: Entity;
+  party: PartyEntity;
   roles: CompactRole[];
 }
 

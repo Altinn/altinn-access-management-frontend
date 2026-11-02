@@ -3,6 +3,7 @@ using Altinn.AccessManagement.UI.Core.Helpers;
 using Altinn.AccessManagement.UI.Core.Models.AccessManagement;
 using Altinn.AccessManagement.UI.Core.Models.Connections;
 using Altinn.AccessManagement.UI.Core.Models.User;
+using Altinn.AccessManagement.UI.Core.Models.User.Frontend;
 using Altinn.AccessManagement.UI.Core.Services.Interfaces;
 using Altinn.Register.Contracts.V1;
 using Microsoft.Extensions.Logging;
@@ -15,7 +16,6 @@ namespace Altinn.AccessManagement.UI.Core.Services
     public class ConnectionService : IConnectionService
     {
         private readonly ILogger _logger;
-        private readonly IAccessManagementClient _accessManagementClient;
         private readonly IConnectionClient _connectionClient;
         private readonly IRegisterClient _registerClient;
 
@@ -23,27 +23,16 @@ namespace Altinn.AccessManagement.UI.Core.Services
         /// Initializes a new instance of the <see cref="ConnectionService"/> class.
         /// </summary>
         /// <param name="logger">handler for logger</param>
-        /// <param name="accessManagementClient">handler for AM client</param>
         /// <param name="registerClient">handler for register client</param>
         /// <param name="connectionClient">handler for right holder client</param>
         public ConnectionService(
             ILogger<ConnectionService> logger,
-            IAccessManagementClient accessManagementClient,
             IRegisterClient registerClient,
             IConnectionClient connectionClient)
         {
             _logger = logger;
-            _accessManagementClient = accessManagementClient;
             _registerClient = registerClient;
             _connectionClient = connectionClient;
-        }
-
-        /// <inheritdoc/>
-        public async Task<List<User>> GetReporteeConnections(int partyId)
-        {
-            List<AuthorizedParty> rightHolders = await _accessManagementClient.GetReporteeRightHolders(partyId);
-
-            return rightHolders.Select(party => new User(party)).ToList();
         }
 
         /// <inheritdoc/>
@@ -122,7 +111,7 @@ namespace Altinn.AccessManagement.UI.Core.Services
         }
 
         /// <inheritdoc/>
-        public async Task<List<Connection>> GetConnections(
+        public async Task<List<ConnectionFE>> GetConnections(
             Guid party,
             Guid? from,
             Guid? to,
@@ -131,12 +120,13 @@ namespace Altinn.AccessManagement.UI.Core.Services
         {
             try
             {
-                return await _connectionClient.GetConnections(
+                List<Connection> connections = await _connectionClient.GetConnections(
                     party,
                     from,
                     to,
                     includeClientDelegations,
                     includeAgentConnections);
+                return connections?.Select(ConnectionFE.FromConnection).ToList();
             }
             catch (Exception ex)
             {
@@ -146,9 +136,10 @@ namespace Altinn.AccessManagement.UI.Core.Services
         }
 
         /// <inheritdoc/>
-        public async Task<List<SimplifiedConnection>> GetSimplifiedConnections(Guid party)
+        public async Task<List<SimplifiedConnectionFE>> GetSimplifiedConnections(Guid party)
         {
-            return await _connectionClient.GetSimplifiedConnections(party);
+            List<SimplifiedConnection> connections = await _connectionClient.GetSimplifiedConnections(party);
+            return connections?.Select(SimplifiedConnectionFE.FromSimplifiedConnection).ToList();
         }
     }
 }

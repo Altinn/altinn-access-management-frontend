@@ -3,20 +3,20 @@ import { useTranslation } from 'react-i18next';
 
 import type { ActionError } from '@/resources/hooks/useActionError';
 import type { AccessPackage } from '@/rtk/features/accessPackageApi';
-import type { Party } from '@/rtk/features/lookupApi';
-import { PartyType } from '@/rtk/features/userInfoApi';
+import { PartyType, type PartyEntity } from '@/dataObjects/dtos/Party';
 
 import type { DelegationAction } from '../DelegationModal/EditModal';
 import { TechnicalErrorParagraphs } from '../TechnicalErrorParagraphs';
 import { createErrorDetails } from '../TechnicalErrorParagraphs/TechnicalErrorParagraphs';
 import { useRestoreFocusOnDataChange } from '../RestoreFocus';
+import { SearchHitsStatus } from '../SearchHitsStatus/SearchHitsStatus';
 
 import classes from './AccessPackageList.module.css';
 import { type ExtendedAccessArea, useAreaPackageList } from './useAreaPackageList';
 import { useAccessPackageActions } from './useAccessPackageActions';
 import { SkeletonAccessPackageList } from './SkeletonAccessPackageList';
 import { AreaItem } from './AreaItem';
-import { useAreaExpandedContextOrLocal } from './AccessPackageExpandedContext';
+import { type AreaExpandedState, useAreaExpandedState } from './useAreaExpandedState';
 import { AreaItemContent, areaContentId } from './AreaItemContent';
 import { packageActionControlId } from './PackageItem';
 
@@ -32,15 +32,17 @@ interface AccessPackageListProps {
   showPermissions?: boolean;
   showPackagesCount?: boolean;
   onSelect?: (accessPackage: AccessPackage) => void;
-  onDelegateSuccess?: (accessPackage: AccessPackage, toParty: Party) => void;
+  onDelegateSuccess?: (accessPackage: AccessPackage, toParty: PartyEntity) => void;
   onDelegateError?: (accessPackage: AccessPackage, error: ActionError) => void;
-  onRevokeSuccess?: (accessPackage: AccessPackage, toParty: Party) => void;
+  onRevokeSuccess?: (accessPackage: AccessPackage, toParty: PartyEntity) => void;
   onRevokeError?: (accessPackage: AccessPackage, error: ActionError) => void;
   packageAs?: React.ElementType;
   noPackagesText?: string;
   filterByType?: boolean;
   firstHeadingLevel?: 2 | 3;
   showUnassignedAvailableAreas?: boolean;
+  /** Expanded state owned by a parent, e.g. to keep it while the list is unmounted. Local state is used when omitted */
+  expandedState?: AreaExpandedState;
 }
 
 export const AccessPackageList = ({
@@ -64,6 +66,7 @@ export const AccessPackageList = ({
   filterByType = true,
   firstHeadingLevel = 3,
   showUnassignedAvailableAreas = false,
+  expandedState,
 }: AccessPackageListProps) => {
   const { t } = useTranslation();
 
@@ -117,7 +120,8 @@ export const AccessPackageList = ({
   });
 
   const combinedAreas = [...assignedAreas, ...availableAreas];
-  const { toggleExpandedArea, isExpanded } = useAreaExpandedContextOrLocal();
+  const localExpandedState = useAreaExpandedState();
+  const { toggleExpandedArea, isExpanded } = expandedState ?? localExpandedState;
 
   if (loadingDelegations || loadingPackageAreas || isLoading) {
     return (
@@ -130,6 +134,7 @@ export const AccessPackageList = ({
   if (fetchingSearch && searchString && searchString.length > 0) {
     return (
       <div className={classes.loadingSpinner}>
+        <SearchHitsStatus />
         <DsSpinner aria-label={t('common.loading')} />
       </div>
     );
@@ -159,6 +164,18 @@ export const AccessPackageList = ({
 
   const areasWithActiveMatches = combinedAreas.filter((x) => x.packages.assigned.length > 0);
   const areasWithoutActiveMatches = combinedAreas.filter((x) => x.packages.assigned.length === 0);
+
+  const countPackages = (areas: ExtendedAccessArea[]) =>
+    areas.reduce(
+      (sum, area) => sum + area.packages.assigned.length + area.packages.available.length,
+      0,
+    );
+  const searchHitsText = showUnassignedAvailableAreas
+    ? `${t('access_packages.search_hits_active', { count: countPackages(areasWithActiveMatches) })}. ${t('access_packages.search_other_hits', { count: countPackages(areasWithoutActiveMatches) })}`
+    : t('access_packages.search_hits', {
+        count: countPackages(displayAreas),
+        areas: t('access_packages.search_hits_areas', { count: displayAreas.length }),
+      });
 
   const renderAccessPackageList = (items: ExtendedAccessArea[], headingLevel: 2 | 3 | 4) => {
     return (
@@ -212,6 +229,10 @@ export const AccessPackageList = ({
   ) {
     return (
       <div className={classes.accessAreaList}>
+        <SearchHitsStatus
+          hits={0}
+          searchString={searchString}
+        />
         <DsParagraph className={classes.noAccessPackages}>
           {t('access_packages.no_matching_search')}
         </DsParagraph>
@@ -222,6 +243,7 @@ export const AccessPackageList = ({
   if (displayAreas.length === 0 && !searchError && !activeDelegationsError) {
     return (
       <div className={classes.accessAreaList}>
+        <SearchHitsStatus />
         <DsParagraph className={classes.noAccessPackages}>
           {noPackagesText || t('access_packages.no_packages')}
         </DsParagraph>
@@ -231,6 +253,11 @@ export const AccessPackageList = ({
 
   return (
     <div className={classes.accessAreaList}>
+      <SearchHitsStatus
+        hits={searchString ? countPackages(displayAreas) : undefined}
+        searchString={searchString}
+        message={searchHitsText}
+      />
       {showUnassignedAvailableAreas ? (
         <>
           <DsHeading

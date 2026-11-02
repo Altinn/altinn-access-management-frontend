@@ -37,19 +37,19 @@ export const RoleInfo = ({ role }: RoleInfoProps) => {
   const { actionError } = useDelegationModalContext();
 
   const { fromParty, actingParty, toParty } = usePartyRepresentation();
-  const shouldSkipRoleRefs = !role?.code || !fromParty?.variant;
+  const shouldSkipRoleRefs = !role?.code || !fromParty?.unitType;
   const { data: roleResources, isLoading: isRoleResourcesLoading } = useGetRoleResourcesQuery(
-    { roleCode: role.code ?? '', variant: fromParty?.variant || '' },
+    { roleCode: role.code ?? '', variant: fromParty?.unitType || '' },
     { skip: shouldSkipRoleRefs },
   );
   const { data: permissions, isLoading: isPermissionsLoading } = useGetRolePermissionsQuery(
     {
-      party: actingParty?.partyUuid ?? '',
-      from: fromParty?.partyUuid,
-      to: toParty?.partyUuid,
+      party: actingParty?.id ?? '',
+      from: fromParty?.id,
+      to: toParty?.id,
     },
     {
-      skip: !actingParty?.partyUuid || !fromParty?.partyUuid || !toParty?.partyUuid,
+      skip: !actingParty?.id || !fromParty?.id || !toParty?.id,
     },
   );
 

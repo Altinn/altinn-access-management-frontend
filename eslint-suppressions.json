@@ -9,11 +9,6 @@
       "count": 1
     }
   },
-  ".storybook/main.ts": {
-    "@typescript-eslint/no-explicit-any": {
-      "count": 1
-    }
-  },
   ".storybook/preview.tsx": {
     "react-hooks/rules-of-hooks": {
       "count": 1
@@ -22,104 +17,6 @@
   "config.ts": {
     "@typescript-eslint/no-unsafe-assignment": {
       "count": 2
-    }
-  },
-  "playwright/api-requests/AuthorizedParties.ts": {
-    "@typescript-eslint/no-unsafe-assignment": {
-      "count": 1
-    }
-  },
-  "playwright/api-requests/EnduserConnection.tsx": {
-    "@typescript-eslint/no-unsafe-argument": {
-      "count": 7
-    },
-    "@typescript-eslint/no-unsafe-assignment": {
-      "count": 32
-    },
-    "@typescript-eslint/no-unsafe-call": {
-      "count": 1
-    },
-    "@typescript-eslint/no-unsafe-member-access": {
-      "count": 10
-    },
-    "@typescript-eslint/no-unsafe-return": {
-      "count": 3
-    }
-  },
-  "playwright/api-requests/MaskinportenApiRequests.ts": {
-    "@typescript-eslint/no-unsafe-assignment": {
-      "count": 7
-    },
-    "@typescript-eslint/no-unsafe-return": {
-      "count": 3
-    }
-  },
-  "playwright/api-requests/MaskinportenToken.ts": {
-    "@typescript-eslint/no-unsafe-assignment": {
-      "count": 2
-    },
-    "@typescript-eslint/no-unsafe-member-access": {
-      "count": 2
-    },
-    "@typescript-eslint/no-unsafe-return": {
-      "count": 2
-    }
-  },
-  "playwright/api-requests/RequestApiRequests.ts": {
-    "@typescript-eslint/no-unsafe-assignment": {
-      "count": 10
-    },
-    "@typescript-eslint/no-unsafe-return": {
-      "count": 4
-    }
-  },
-  "playwright/api-requests/SettingsApiRequests.tsx": {
-    "@typescript-eslint/no-unsafe-return": {
-      "count": 3
-    }
-  },
-  "playwright/api-requests/SystemUserApiRequests.tsx": {
-    "@typescript-eslint/no-unsafe-argument": {
-      "count": 2
-    },
-    "@typescript-eslint/no-unsafe-assignment": {
-      "count": 7
-    },
-    "@typescript-eslint/no-unsafe-member-access": {
-      "count": 1
-    },
-    "@typescript-eslint/no-unsafe-return": {
-      "count": 4
-    }
-  },
-  "playwright/api-requests/Token.tsx": {
-    "@typescript-eslint/no-unsafe-assignment": {
-      "count": 3
-    },
-    "@typescript-eslint/no-unsafe-member-access": {
-      "count": 7
-    },
-    "@typescript-eslint/no-unsafe-return": {
-      "count": 2
-    }
-  },
-  "playwright/api-requests/delegation-tilgangspakke/delegationApiRequest.ts": {
-    "@typescript-eslint/no-explicit-any": {
-      "count": 10
-    },
-    "@typescript-eslint/no-unsafe-argument": {
-      "count": 2
-    },
-    "@typescript-eslint/no-unsafe-assignment": {
-      "count": 14
-    },
-    "@typescript-eslint/no-unsafe-member-access": {
-      "count": 16
-    }
-  },
-  "playwright/e2eTests/altinn3/systemuser/deleteSystemUser.spec.ts": {
-    "@typescript-eslint/require-await": {
-      "count": 1
     }
   },
   "playwright/e2eTests/altinn3/systemuser/selectSystemVendor.spec.ts": {
@@ -193,17 +90,6 @@
       "count": 5
     }
   },
-  "playwright/tenor/commands/pakkeholdere.ts": {
-    "@typescript-eslint/no-unsafe-argument": {
-      "count": 3
-    },
-    "@typescript-eslint/no-unsafe-assignment": {
-      "count": 4
-    },
-    "@typescript-eslint/no-unsafe-member-access": {
-      "count": 3
-    }
-  },
   "playwright/tenor/commands/registerOptIn.test.ts": {
     "@typescript-eslint/no-unsafe-argument": {
       "count": 2
@@ -223,7 +109,7 @@
   },
   "playwright/util/cleanup-delegationutils.ts": {
     "@typescript-eslint/no-explicit-any": {
-      "count": 7
+      "count": 1
     },
     "@typescript-eslint/no-redundant-type-constituents": {
       "count": 1
@@ -248,21 +134,8 @@
       "count": 1
     }
   },
-  "src/features/amUI/InstanceDetailPage/AddUserModal.tsx": {
-    "@typescript-eslint/no-unsafe-assignment": {
-      "count": 4
-    },
-    "@typescript-eslint/no-unsafe-member-access": {
-      "count": 3
-    }
-  },
   "src/features/amUI/InstanceDetailPage/RequestInstanceAdminPackage/RequestModalBody.tsx": {
     "@typescript-eslint/no-misused-promises": {
-      "count": 2
-    }
-  },
-  "src/features/amUI/InstanceDetailPage/useInstanceRights.ts": {
-    "@typescript-eslint/no-unsafe-assignment": {
       "count": 2
     }
   },
@@ -359,11 +232,6 @@
       "count": 1
     }
   },
-  "src/features/amUI/common/ClientResourceList/buildAccessItems.tsx": {
-    "@typescript-eslint/no-misused-promises": {
-      "count": 2
-    }
-  },
   "src/features/amUI/common/CollapsibleContainer/CollapsibleContainer.tsx": {
     "react-hooks/set-state-in-effect": {
       "count": 1
@@ -408,9 +276,6 @@
     }
   },
   "src/features/amUI/common/DelegationModal/SingleRights/ResourceAlert.tsx": {
-    "@typescript-eslint/no-unsafe-enum-comparison": {
-      "count": 2
-    },
     "react-hooks/set-state-in-effect": {
       "count": 1
     }
@@ -451,11 +316,6 @@
       "count": 2
     }
   },
-  "src/features/amUI/common/DelegationModal/missingAccessUtils.ts": {
-    "@typescript-eslint/no-unsafe-enum-comparison": {
-      "count": 6
-    }
-  },
   "src/features/amUI/common/DeleteClientProviderModal/DeleteClientProviderModal.tsx": {
     "@typescript-eslint/no-misused-promises": {
       "count": 1
@@ -472,14 +332,6 @@
     },
     "@typescript-eslint/no-misused-promises": {
       "count": 1
-    }
-  },
-  "src/features/amUI/common/PageLayoutWrapper/useGlobalMenu.tsx": {
-    "@typescript-eslint/require-await": {
-      "count": 1
-    },
-    "jsx-a11y/anchor-has-content": {
-      "count": 7
     }
   },
   "src/features/amUI/common/PageLayoutWrapper/useHeader.tsx": {
@@ -547,52 +399,11 @@
       "count": 1
     }
   },
-  "src/features/amUI/consent/ActiveConsentsPage/ActiveConsentsPage.tsx": {
-    "@typescript-eslint/no-unsafe-assignment": {
-      "count": 2
-    },
-    "@typescript-eslint/no-unsafe-member-access": {
-      "count": 1
-    }
-  },
-  "src/features/amUI/consent/ActiveConsentsPage/ActiveConsentsPageContent.tsx": {
-    "@typescript-eslint/no-floating-promises": {
-      "count": 1
-    }
-  },
-  "src/features/amUI/consent/ConsentRequestPage/ConsentRequestPage.tsx": {
-    "@typescript-eslint/no-floating-promises": {
-      "count": 2
-    },
-    "@typescript-eslint/no-misused-promises": {
-      "count": 2
-    }
-  },
-  "src/features/amUI/consent/components/ConsentDetails/ConsentDetails.tsx": {
-    "@typescript-eslint/no-misused-promises": {
-      "count": 1
-    }
-  },
-  "src/features/amUI/consent/components/ConsentRights/ConsentRights.tsx": {
-    "@typescript-eslint/no-unsafe-enum-comparison": {
-      "count": 1
-    }
-  },
-  "src/features/amUI/consent/components/IdPortenAuthorizationDetails/IdPortenAuthorizationDetails.tsx": {
-    "@typescript-eslint/no-misused-promises": {
-      "count": 1
-    }
-  },
   "src/features/amUI/landingPage/LandingPage.tsx": {
     "@typescript-eslint/no-unsafe-assignment": {
       "count": 1
     },
     "react-hooks/set-state-in-effect": {
-      "count": 1
-    }
-  },
-  "src/features/amUI/maskinporten/AddSupplierButton.tsx": {
-    "@typescript-eslint/no-misused-promises": {
       "count": 1
     }
   },
@@ -659,9 +470,6 @@
     }
   },
   "src/features/amUI/poaOverview/SingleRightsPermissions.tsx": {
-    "@typescript-eslint/no-floating-promises": {
-      "count": 1
-    },
     "react/display-name": {
       "count": 1
     }
@@ -783,11 +591,6 @@
       "count": 2
     }
   },
-  "src/features/amUI/systemUser/SystemUserAgentDelegationPage/CustomerList.tsx": {
-    "react-hooks/set-state-in-effect": {
-      "count": 1
-    }
-  },
   "src/features/amUI/systemUser/SystemUserAgentDelegationPage/SystemUserAgentDelegationPage.tsx": {
     "@typescript-eslint/no-floating-promises": {
       "count": 1
@@ -844,22 +647,6 @@
   },
   "src/features/amUI/userRightsPage/SingleRightsSection/SingleRightsSection.tsx": {
     "@typescript-eslint/no-misused-promises": {
-      "count": 1
-    }
-  },
-  "src/features/amUI/users/NewUserModal/AddAgentModal.tsx": {
-    "@typescript-eslint/no-misused-promises": {
-      "count": 1
-    },
-    "react-hooks/set-state-in-effect": {
-      "count": 1
-    }
-  },
-  "src/features/amUI/users/NewUserModal/NewUserModal.tsx": {
-    "@typescript-eslint/no-floating-promises": {
-      "count": 2
-    },
-    "react-hooks/set-state-in-effect": {
       "count": 1
     }
   },

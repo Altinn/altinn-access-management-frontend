@@ -1,5 +1,6 @@
 ﻿using Altinn.AccessManagement.UI.Core.Models;
 using Altinn.AccessManagement.UI.Core.Models.AccessManagement;
+using Altinn.AccessManagement.UI.Core.Models.Common.Frontend;
 using Altinn.AccessManagement.UI.Core.Models.Profile;
 using Altinn.AccessManagement.UI.Core.Models.User;
 
@@ -31,30 +32,17 @@ namespace Altinn.AccessManagement.UI.Core.Services.Interfaces
         Task SetLanguageProfileSetting(string languageCode);
 
         /// <summary>
-        /// Get the reportees for the user 
-        /// </summary>
-        /// <param name="userId">The user id</param>
-        /// <returns></returns>
-        Task<List<User>> GetReporteeList(Guid userId);
-
-        /// <summary>
         /// Gets a Party based on partyUuid if the party is in the users reporteelist
         /// </summary>
         /// <param name="partyUuid">The party UUID of the party to retrieve</param>
         /// <returns>Party that corresponds to partyUuid parameter if it's in the users reporteelist</returns>
-        Task<AuthorizedParty> GetPartyFromReporteeListIfExists(Guid partyUuid);
+        Task<AuthorizedPartyFE> GetPartyFromReporteeListIfExists(Guid partyUuid);
 
         /// <summary>
         /// Endpoint for reportees the authenticated user can act on behalf of
         /// </summary>
         /// <returns>List of reportees</returns>
         Task<List<AuthorizedParty>> GetReporteeListForUser();
-
-        /// <summary>
-        /// Endpoint for getting the parties the authenticated user can act on behalf of, with connection info
-        /// </summary>
-        /// <returns>List of connections</returns>
-        Task<List<Connection>> GetActorListForUser(Guid authenticatedUserPartyUuid);
 
         /// <summary>
         /// Function for getting the favorite actors of the authenticated user

@@ -39,9 +39,9 @@ export const RoleDeleteButton = ({
     if (!fromParty || !toParty) return;
     removeRole({
       roleCode: role.code,
-      from: fromParty.partyUuid,
-      to: toParty.partyUuid,
-      party: actingParty?.partyUuid ?? '',
+      from: fromParty.id,
+      to: toParty.id,
+      party: actingParty?.id ?? '',
     })
       .unwrap()
       .then(() => {
@@ -58,7 +58,6 @@ export const RoleDeleteButton = ({
       warningText={t('role.delete_role_confirmation')}
       handleDeletion={handleDeleteRole}
       isDeleteLoading={isRemoveRoleLoading}
-      loadingAriaLabel={t('role.deleting_role_loading')}
       disabled={disabled}
       size={size}
       color={color}

@@ -2,8 +2,9 @@ import { createApi } from '@reduxjs/toolkit/query/react';
 
 import { createBaseQuery } from '@/rtk/app/baseQuery';
 import type { Permissions } from '@/dataObjects/dtos/accessPackage';
+import type { PartyEntity } from '@/dataObjects/dtos/Party';
 
-import type { PersonInput, SimplifiedParty } from './connectionApi';
+import type { PersonInput } from './connectionApi';
 import type {
   DelegationCheckedRight,
   RightAccess,
@@ -122,7 +123,7 @@ export const instanceApi = createApi({
       invalidatesTags: ['instances', 'instanceRights', 'instanceDelegationCheck'],
     }),
     getInstanceUsers: builder.query<
-      SimplifiedParty[],
+      PartyEntity[],
       { party: string; resource: string; instance: string }
     >({
       query: ({ party, resource, instance }) =>

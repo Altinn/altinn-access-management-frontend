@@ -1,14 +1,16 @@
 import React, { useMemo, useState } from 'react';
-import { DsSearch, DsParagraph, formatDisplayName } from '@altinn/altinn-components';
+import { DsSearch, DsParagraph } from '@altinn/altinn-components';
 import { useTranslation } from 'react-i18next';
 
-import { ConnectionUserType } from '@/rtk/features/connectionApi';
-import { PartyType } from '@/rtk/features/userInfoApi';
+import { formatEntityDisplayName } from '@/resources/utils/reporteeUtils';
+import { PartyType } from '@/dataObjects/dtos/Party';
+import { useDebouncedValue } from '@/resources/hooks';
 
 import { useFilteredUsers } from '../UserList/useFilteredUsers';
 import { DelegationAction } from '../DelegationModal/EditModal';
 import { UserList } from '../UserList/UserList';
 import { usePartyRepresentation } from '../PartyRepresentationContext/PartyRepresentationContext';
+import { SearchHitsStatus } from '../SearchHitsStatus/SearchHitsStatus';
 
 import classes from './UserSearch.module.css';
 import { UserSearchResults } from './UserSearchResults';
@@ -42,10 +44,8 @@ export interface UserSearchProps {
 }
 
 const filterAvailableUserTypes = (items?: UserSearchNode[]) =>
-  items?.filter(
-    (item) =>
-      item.type === ConnectionUserType.Person || item.type === ConnectionUserType.Organization,
-  ) || [];
+  items?.filter((item) => item.type === PartyType.Person || item.type === PartyType.Organization) ||
+  [];
 
 export const UserSearch: React.FC<UserSearchProps> = ({
   includeSelfAsChild,
@@ -80,7 +80,7 @@ export const UserSearch: React.FC<UserSearchProps> = ({
     [initialIndirectUsers],
   );
 
-  const trimmedQuery = query.trim();
+  const trimmedQuery = useDebouncedValue(query, query ? 300 : 0).trim();
   const isQuery = trimmedQuery !== '' || hasActiveAdditionalFilters;
   const hasFiltersOnly = hasActiveAdditionalFilters && trimmedQuery === '';
 
@@ -91,6 +91,8 @@ export const UserSearch: React.FC<UserSearchProps> = ({
     indirectUsers: filteredIndirectUsers,
     hasNextIndirectPage,
     goNextIndirectPage,
+    totalFilteredCount,
+    totalFilteredIndirectCount,
   } = useFilteredUsers({
     users: directUsers,
     indirectUsers,
@@ -105,6 +107,18 @@ export const UserSearch: React.FC<UserSearchProps> = ({
   const showDirectNoResults = isQuery && !directHasResults && indirectHasResults;
   const showIndirectList = isQuery && indirectHasResults && canDelegate;
   const showEmptyState = isQuery && !directHasResults && !indirectHasResults;
+
+  const directHeading = directConnectionsHeading ?? t('advanced_user_search.direct_connections');
+  const indirectHeading =
+    indirectConnectionsHeading ?? t('advanced_user_search.indirect_connections');
+  const searchHits = !isQuery
+    ? undefined
+    : showIndirectList
+      ? [
+          { count: totalFilteredCount, listHeading: directHeading },
+          { count: totalFilteredIndirectCount, listHeading: indirectHeading },
+        ]
+      : totalFilteredCount;
 
   if (isLoading) {
     return (
@@ -139,6 +153,10 @@ export const UserSearch: React.FC<UserSearchProps> = ({
       </div>
 
       <div className={classes.results}>
+        <SearchHitsStatus
+          hits={searchHits}
+          searchString={trimmedQuery}
+        />
         <>
           {!hasDirectUsers && !isLoading && !isQuery && (
             <DsParagraph
@@ -147,18 +165,11 @@ export const UserSearch: React.FC<UserSearchProps> = ({
             >
               {noUsersText ??
                 t('package_poa_details_page.users_tab.no_users', {
-                  fromparty: formatDisplayName({
-                    fullName: fromParty?.name ?? '',
-                    type: fromParty?.partyTypeName === PartyType.Person ? 'person' : 'company',
-                  }),
+                  fromparty: formatEntityDisplayName(fromParty),
                 })}
             </DsParagraph>
           )}
-          {isQuery && showIndirectList && (
-            <h2 className={classes.subHeader}>
-              {directConnectionsHeading ?? t('advanced_user_search.direct_connections')}
-            </h2>
-          )}
+          {isQuery && showIndirectList && <h2 className={classes.subHeader}>{directHeading}</h2>}
           <UserSearchResults
             users={filteredDirectUsers}
             hasNextPage={hasNextPage}
@@ -185,9 +196,7 @@ export const UserSearch: React.FC<UserSearchProps> = ({
 
         {showIndirectList && (
           <>
-            <h2 className={classes.subHeader}>
-              {indirectConnectionsHeading ?? t('advanced_user_search.indirect_connections')}
-            </h2>
+            <h2 className={classes.subHeader}>{indirectHeading}</h2>
             <UserSearchResults
               users={filteredIndirectUsers}
               hasNextPage={!!hasNextIndirectPage}

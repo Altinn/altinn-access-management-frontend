@@ -1,5 +1,6 @@
 using System.Net;
 using Altinn.AccessManagement.UI.Core.Helpers;
+using Altinn.AccessManagement.UI.Core.Models.Common.Frontend;
 using Altinn.AccessManagement.UI.Core.Models.InstanceDelegation;
 using Altinn.AccessManagement.UI.Core.Models.InstanceDelegation.Frontend;
 using Altinn.AccessManagement.UI.Core.Models.SingleRight;
@@ -166,7 +167,7 @@ namespace Altinn.AccessManagement.UI.Controllers
         [HttpGet]
         [Authorize]
         [Route("delegation/instances/rights")]
-        public async Task<ActionResult<InstanceRights>> GetInstanceRights(
+        public async Task<ActionResult<InstanceRightsFE>> GetInstanceRights(
             [FromQuery] Guid party,
             [FromQuery] Guid from,
             [FromQuery] Guid to,
@@ -177,7 +178,7 @@ namespace Altinn.AccessManagement.UI.Controllers
 
             try
             {
-                InstanceRights delegations = await _instanceService.GetInstanceRights(languageCode, party, from, to, resource, instance);
+                InstanceRightsFE delegations = await _instanceService.GetInstanceRights(languageCode, party, from, to, resource, instance);
                 return Ok(delegations);
             }
             catch (HttpStatusException ex)
@@ -237,7 +238,7 @@ namespace Altinn.AccessManagement.UI.Controllers
         [HttpGet]
         [Authorize]
         [Route("delegation/instances/simplified/users")]
-        public async Task<ActionResult<List<SimplifiedParty>>> GetInstanceUsers(
+        public async Task<ActionResult<List<PartyFE>>> GetInstanceUsers(
             [FromQuery] Guid party,
             [FromQuery] string resource,
             [FromQuery] string instance)

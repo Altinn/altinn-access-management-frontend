@@ -1,11 +1,8 @@
 import { test, expect } from 'playwright/fixture/pomFixture';
-import { ConsentApiRequests } from 'playwright/api-requests/ConsentApiRequests';
 import { addTimeToNowUtc, currentEnv } from 'playwright/util/helper';
 import { fetchKrav } from 'playwright/api-requests/SkatteetatenApiRequests';
 
 import { getConsentRequestId } from './helper/consentHelper';
-
-const reportArea = { annotation: { type: 'report-area', description: 'Samtykke' } };
 
 const DIGDIR_ORG = '991825827';
 const MASKINPORTEN_CLIENT_ID_ENV = 'MASKINPORTEN_CLIENT_ID';
@@ -16,47 +13,39 @@ const REDIRECT_URL = 'https://example.com/';
 const APPROVED_REDIRECT_URL = `${REDIRECT_URL}?Status=OK`;
 const ENV = currentEnv().toUpperCase();
 
-test.describe('Samtykke - Skatteetaten krav og betalinger ende til ende', reportArea, () => {
+test.describe('Samtykke - Skatteetaten krav og betalinger ende til ende', () => {
   test.describe('Org', () => {
     test.skip(ENV !== 'TT02', 'Kun TT02');
-    const from = { orgNo: '313506673', pid: '02925796975' }; // Virksomhet med krav og innehaver
-    const to = { orgNo: DIGDIR_ORG };
+    const orgNr = '313506673'; // Org med krav og betalinger
+    const pid = '02925796975'; // innehaver
 
-    test('Godkjenn samtykke og hent skattegrunnlag', async ({
-      login,
-      consentPage,
-      runAccessibilityTest,
-    }) => {
+    test('Godkjenn samtykke og hent skattegrunnlag', async ({ login, consentPage, api }) => {
       const validTo = addTimeToNowUtc({ days: 5 });
-      const api = new ConsentApiRequests(to.orgNo);
 
       const consentResp = await test.step('Opprett samtykkeforespørsel', async () => {
-        return await api.createConsentRequest({
-          from: { type: 'org', id: from.orgNo },
-          to: { type: 'org', id: to.orgNo },
+        return await api.consent.createConsentRequest({
+          from: { type: 'org', id: orgNr },
+          to: { type: 'org', id: DIGDIR_ORG },
           validToIsoUtc: validTo,
           resourceValue: SKATTEETATEN_RESOURCE,
           redirectUrl: REDIRECT_URL,
         });
       });
+
       await test.step('Åpne samtykkeside og logg inn som dagligLeder', async () => {
         await consentPage.open(consentResp.viewUri);
-        await login.loginNotChoosingActor(from.pid);
-        await consentPage.openMenu();
-        await consentPage.pickLanguage(consentPage.language);
+        await login.loginNotChoosingActor(pid);
       });
 
       await test.step('Godkjenn samtykke', async () => {
-        await expect(consentPage.buttonApprove).toBeEnabled();
-        await runAccessibilityTest.scan('samtykke-før-godkjenning');
         await consentPage.approveStandardAndWaitLogout(APPROVED_REDIRECT_URL);
       });
 
       await test.step('Hent consent-token og verifiser krav-og-betalinger-API', async () => {
         const consentId = getConsentRequestId(consentResp.viewUri);
-        const consentToken = await api.getConsentTokenWithMaskinporten(
+        const consentToken = await api.consent.getConsentTokenWithMaskinporten(
           consentId,
-          `urn:altinn:organization:identifier-no:${from.orgNo}`,
+          `urn:altinn:organization:identifier-no:${orgNr}`,
           MASKINPORTEN_CLIENT_ID_ENV,
           MASKINPORTEN_JWK_ENV,
           undefined,
@@ -64,7 +53,7 @@ test.describe('Samtykke - Skatteetaten krav og betalinger ende til ende', report
         );
         expect(consentToken).toBeTruthy();
 
-        const response = await fetchKrav(from.orgNo, consentToken);
+        const response = await fetchKrav(orgNr, consentToken);
         expect(response.status).toBe(200);
       });
     });

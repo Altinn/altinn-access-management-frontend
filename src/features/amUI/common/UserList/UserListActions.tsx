@@ -1,12 +1,12 @@
-import { DsButton, DsSkeleton, formatDisplayName } from '@altinn/altinn-components';
+import { DsButton, DsSkeleton } from '@altinn/altinn-components';
 import { useTranslation } from 'react-i18next';
 import { MinusCircleIcon, PlusCircleIcon } from '@navikt/aksel-icons';
 
-import { type ExtendedUser } from '@/rtk/features/userInfoApi';
-import { ConnectionUserType } from '@/rtk/features/connectionApi';
+import { formatEntityDisplayName } from '@/resources/utils/reporteeUtils';
 import { useIsMobileOrSmaller } from '@/resources/utils/screensizeUtils';
 
 import { DelegationAction } from '../DelegationModal/EditModal';
+import type { UserSearchNode } from '../UserSearch/types';
 
 export const UserListActions = ({
   user,
@@ -18,10 +18,10 @@ export const UserListActions = ({
   delegateLabel,
   revokeLabel,
 }: {
-  user: ExtendedUser;
-  onDelegate?: (user: ExtendedUser) => void;
-  onRevoke?: (user: ExtendedUser) => void;
-  onRequest?: (user: ExtendedUser) => void;
+  user: UserSearchNode;
+  onDelegate?: (user: UserSearchNode) => void;
+  onRevoke?: (user: UserSearchNode) => void;
+  onRequest?: (user: UserSearchNode) => void;
   availableAction?: DelegationAction;
   isLoading?: boolean;
   delegateLabel?: string;
@@ -29,13 +29,7 @@ export const UserListActions = ({
 }) => {
   const { t } = useTranslation();
   const isSmall = useIsMobileOrSmaller();
-  const displayName =
-    user.type === ConnectionUserType.Person || user.type === ConnectionUserType.Organization
-      ? formatDisplayName({
-          fullName: user.name,
-          type: user.type === ConnectionUserType.Person ? 'person' : 'company',
-        })
-      : user.name;
+  const displayName = formatEntityDisplayName(user);
 
   if (!availableAction || isSmall) {
     return null;

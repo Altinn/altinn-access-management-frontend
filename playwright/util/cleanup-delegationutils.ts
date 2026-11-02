@@ -3,7 +3,7 @@ import path from 'path';
 
 import csv from 'csv-parser';
 
-import { getTestPersonForCategory } from './testDelegationdatautil';
+import { getTestPersonForCategory, type TestPerson } from './testDelegationdatautil';
 import { currentEnv } from './helper';
 
 export type CleanupRow = {
@@ -12,9 +12,9 @@ export type CleanupRow = {
   ToCategory: string;
 };
 export type CleanupResolved = {
-  fromOrg: any; // ORG object (Org-A/Org-C) used in URL params
-  toOrg: any; // ORG object (Org-B/Org-D) used in URL params
-  authPerson: any; // Daglig leder used only for token
+  fromOrg: TestPerson; // ORG object (Org-A/Org-C) used in URL params
+  toOrg: TestPerson; // ORG object (Org-B/Org-D) used in URL params
+  authPerson: TestPerson; // Daglig leder used only for token
 };
 
 const TEST_ENV = currentEnv();
@@ -31,9 +31,7 @@ function normalizeOrgCategory(category: string): string {
     .trim();
 }
 
-export async function getCleanupDataForTest(
-  testTitle: string,
-): Promise<{ fromOrg: any; toOrg: any; authPerson: any }[]> {
+export async function getCleanupDataForTest(testTitle: string): Promise<CleanupResolved[]> {
   if (!fs.existsSync(CLEANUP_CSV)) {
     throw new Error(`cleanup-data.csv not found at: ${CLEANUP_CSV}`);
   }

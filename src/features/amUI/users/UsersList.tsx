@@ -1,22 +1,13 @@
 import { useCallback, useMemo, useState } from 'react';
 import { Trans, useTranslation } from 'react-i18next';
 import { Link, useNavigate } from 'react-router';
-import {
-  DsHeading,
-  DsParagraph,
-  DsSearch,
-  DsSwitch,
-  formatDisplayName,
-} from '@altinn/altinn-components';
+import { DsHeading, DsParagraph, DsSearch, DsSwitch } from '@altinn/altinn-components';
 
+import { PartyType, type PartyEntity } from '@/dataObjects/dtos/Party';
+import { formatEntityDisplayName } from '@/resources/utils/reporteeUtils';
 import { debounce } from '@/resources/utils';
-import {
-  type Connection,
-  ConnectionUserType,
-  useGetRightHoldersQuery,
-} from '@/rtk/features/connectionApi';
-import { PartyType, useGetIsAdminQuery } from '@/rtk/features/userInfoApi';
-import type { User } from '@/rtk/features/userInfoApi';
+import { type Connection, useGetRightHoldersQuery } from '@/rtk/features/connectionApi';
+import { useGetIsAdminQuery } from '@/rtk/features/userInfoApi';
 
 import { UserList } from '../common/UserList/UserList';
 import { CurrentUserPageHeader } from '../common/CurrentUserPageHeader/CurrentUserPageHeader';
@@ -36,23 +27,19 @@ export const UsersList = () => {
 
   const { data: rightHolders, isLoading: loadingRightHolders } = useGetRightHoldersQuery(
     {
-      partyUuid: fromParty?.partyUuid ?? '',
-      fromUuid: fromParty?.partyUuid ?? '',
+      partyUuid: fromParty?.id ?? '',
+      fromUuid: fromParty?.id ?? '',
       toUuid: '', // all
-      includeAgentConnections:
-        fromParty?.partyTypeName === PartyType.Person || includeAgentConnections,
+      includeAgentConnections: fromParty?.type === PartyType.Person || includeAgentConnections,
     },
     {
       skip: !fromParty || !isAdmin,
     },
   );
   const { partyConnection: currentUser, isLoading: currentUserLoading } = useSelfConnection();
-  const fromPartyName = formatDisplayName({
-    fullName: fromParty?.name ?? '',
-    type: fromParty?.partyTypeName === PartyType.Person ? 'person' : 'company',
-  });
+  const fromPartyName = formatEntityDisplayName(fromParty);
 
-  const handleNewUser = (user: User) => {
+  const handleNewUser = (user: PartyEntity) => {
     navigate(`/users/${user.id}`);
   };
 
@@ -84,10 +71,7 @@ export const UsersList = () => {
     };
 
     return rightHolders.reduce<Connection[]>((acc, connection) => {
-      if (
-        connection.party.id === removeUuid ||
-        connection.party.type === ConnectionUserType.Systemuser
-      ) {
+      if (connection.party.id === removeUuid || connection.party.type === PartyType.SystemUser) {
         return acc;
       }
       acc.push(mapConnection(connection));
@@ -156,7 +140,7 @@ export const UsersList = () => {
                     }}
                   />
                 </DsSearch>
-                {fromParty?.partyTypeName === PartyType.Organization && (
+                {fromParty?.type === PartyType.Organization && (
                   <DsSwitch
                     data-size={'sm'}
                     checked={includeAgentConnections}

@@ -1,10 +1,10 @@
 import React, { useRef, useState } from 'react';
 import { HandshakeIcon, MinusCircleIcon } from '@navikt/aksel-icons';
-import { DsButton, formatDisplayName, ListItem } from '@altinn/altinn-components';
+import { DsButton, ListItem } from '@altinn/altinn-components';
 import { useTranslation } from 'react-i18next';
 
+import { formatEntityDisplayName } from '@/resources/utils/reporteeUtils';
 import { type ServiceResource } from '@/rtk/features/singleRights/singleRightsApi';
-import { PartyType } from '@/rtk/features/userInfoApi';
 import { useIsTabletOrSmaller } from '@/resources/utils/screensizeUtils';
 import { useGetEnrichedSentResourceRequestsQuery } from '@/rtk/features/requestApi';
 import { getRequestPartyQueryParams } from '@/resources/utils/singleRightRequestUtils';
@@ -28,8 +28,8 @@ export const PendingRequests = () => {
 
   const { singleRightRequests = [] } = useSingleRightRequests({
     canRequestRights: true,
-    actingPartyUuid: actingParty?.partyUuid,
-    fromPartyUuid: fromParty?.partyUuid,
+    actingPartyUuid: actingParty?.id,
+    fromPartyUuid: fromParty?.id,
   });
 
   return (
@@ -38,10 +38,7 @@ export const PendingRequests = () => {
         isModalOpen={isModalOpen}
         modalRef={modalRef}
         heading={t('delegation_modal.request.sent_requests_modal_header', {
-          partyName: formatDisplayName({
-            fullName: fromParty?.name || '',
-            type: fromParty?.partyTypeName === PartyType.Person ? 'person' : 'company',
-          }),
+          partyName: formatEntityDisplayName(fromParty),
         })}
         onClose={() => setIsModalOpen(false)}
       />
@@ -130,11 +127,11 @@ export const PendingRequestsList = ({
   const { data: singleRightRequests = [], isLoading: isLoadingRequests } =
     useGetEnrichedSentResourceRequestsQuery(
       {
-        ...getRequestPartyQueryParams(actingParty?.partyUuid, fromParty?.partyUuid),
+        ...getRequestPartyQueryParams(actingParty?.id, fromParty?.id),
         status: ['Pending'],
       },
       {
-        skip: !actingParty?.partyUuid || !fromParty?.partyUuid,
+        skip: !actingParty?.id || !fromParty?.id,
       },
     );
 
@@ -144,8 +141,8 @@ export const PendingRequestsList = ({
 
   const { deleteRequest, isLoadingRequest } = useSingleRightRequests({
     canRequestRights: true,
-    actingPartyUuid: actingParty?.partyUuid,
-    fromPartyUuid: fromParty?.partyUuid,
+    actingPartyUuid: actingParty?.id,
+    fromPartyUuid: fromParty?.id,
     onDeleteRequestSuccess: (resource) => requestFocusOnDataChange(resource.identifier),
   });
 

@@ -9,6 +9,7 @@ import {
 import { useTranslation } from 'react-i18next';
 
 import { useGetReporteeQuery } from '@/rtk/features/userInfoApi';
+import { getPartyColor } from '@/resources/utils/reporteeUtils';
 
 import { useGlobalMenu } from './useGlobalMenu';
 import { useFooter } from './useFooter';
@@ -22,10 +23,6 @@ interface PageLayoutWrapperProps {
   children?: React.ReactNode;
 }
 
-const getAccountType = (type: string): 'company' | 'person' => {
-  return type === 'Organization' ? 'company' : 'person';
-};
-
 export const PageLayoutWrapper = ({
   openAccountMenu = false,
   hideSidebar = false,
@@ -37,29 +34,28 @@ export const PageLayoutWrapper = ({
   const { menuGroups } = useGlobalMenu();
   const { isAnswered, acceptAll, rejectAll } = useConsent();
 
-  const { header, languageCode } = useHeader({ openAccountMenu, hideSidebarItems: hideSidebar });
+  const { header, languageCode, accountSelectionAsMain } = useHeader({
+    openAccountMenu,
+    hideSidebarItems: hideSidebar,
+  });
   const footer = useFooter();
   const { sidebarItems, shortcutsMenuItem } = useSidebarItems({ isSmall: false });
-
-  const isNewBanner = new Date() >= new Date(2026, 5, 20); // Change to new banner on June 20th, 2026
-  const bannerLink = isNewBanner ? getBannerLink_new(languageCode) : getBannerLink(languageCode);
 
   return (
     <RootProvider languageCode={languageCode}>
       <NavigationFocus />
       <SnackbarProvider>
         <Layout
-          color={reportee?.type ? getAccountType(reportee.type) : 'neutral'}
+          color={reportee ? getPartyColor(reportee) : 'neutral'}
           theme='subtle'
           header={header}
+          accountSelectionAsMain={accountSelectionAsMain}
           banner={{
-            title: !isNewBanner ? t('info_banner.info') : t('info_banner.info_new'),
+            title: t('info_banner.info'),
             link: {
-              label: !isNewBanner ? t('info_banner.link') : t('info_banner.link_new'),
-              href: bannerLink,
+              label: t('info_banner.link'),
+              href: getBannerLink(languageCode),
             },
-            color: !isNewBanner ? 'warning' : undefined,
-            variant: !isNewBanner ? 'alert' : undefined,
           }}
           skipLink={{
             href: '#main-content',
@@ -77,7 +73,9 @@ export const PageLayoutWrapper = ({
                   },
                 }
           }
-          content={{ color: reportee?.type ? getAccountType(reportee.type) : 'neutral' }}
+          content={{
+            color: reportee ? getPartyColor(reportee) : 'neutral',
+          }}
           footer={footer}
           cookieBanner={
             window.featureFlags?.enableSkyra !== true || isAnswered
@@ -94,17 +92,6 @@ export const PageLayoutWrapper = ({
 };
 
 const getBannerLink = (languageCode: string) => {
-  switch (languageCode) {
-    case 'en':
-      return 'https://info.altinn.no/en/news/check-if-you-need-to-take-action-before-we-shut-down-the-old-altinn/';
-    case 'nn':
-      return 'https://info.altinn.no/nn/nyheiter/sjekk-om-du-ma-gjere-noko-for-vi-slar-av-gamle-altinn/';
-    default:
-      return 'https://info.altinn.no/nyheter/sjekk-om-du-ma-gjore-noe-for-vi-slar-av-gamle-altinn/';
-  }
-};
-
-const getBannerLink_new = (languageCode: string) => {
   switch (languageCode) {
     case 'en':
       return 'https://info.altinn.no/en/news/new-power-of-attorney-solution/';

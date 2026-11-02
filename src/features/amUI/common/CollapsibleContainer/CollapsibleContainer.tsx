@@ -56,6 +56,7 @@ export const CollapsibleContainer = ({
       </DsHeading>
       <div
         id={contentId}
+        hidden={!isOpen}
         className={isOpen ? classes.detailOpen : classes.detailClosed}
       >
         {children}

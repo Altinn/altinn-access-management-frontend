@@ -4,9 +4,10 @@ using Altinn.AccessManagement.UI.Core.Models.AccessManagement;
 using Altinn.AccessManagement.UI.Core.Models.AccessPackage;
 using Altinn.AccessManagement.UI.Core.Models.AccessPackage.Frontend;
 using Altinn.AccessManagement.UI.Core.Models.Common;
+using Altinn.AccessManagement.UI.Core.Models.Common.Frontend;
 using Altinn.AccessManagement.UI.Core.Models.DelegationExport;
 using Altinn.AccessManagement.UI.Core.Models.InstanceDelegation.Frontend;
-using Altinn.AccessManagement.UI.Core.Models.Role;
+using Altinn.AccessManagement.UI.Core.Models.Role.Frontend;
 using Altinn.AccessManagement.UI.Core.Models.SingleRight;
 using Altinn.AccessManagement.UI.Core.Services.Interfaces;
 
@@ -162,10 +163,10 @@ namespace Altinn.AccessManagement.UI.Core.Services
 
             foreach (AuthorizedParty giver in givers)
             {
-                List<RolePermission> permissions = await _roleService.GetRolePermissions(giver.PartyUuid, giver.PartyUuid, null, language);
-                foreach (RolePermission rolePermission in permissions ?? new List<RolePermission>())
+                List<RolePermissionFE> permissions = await _roleService.GetRolePermissions(giver.PartyUuid, giver.PartyUuid, null, language);
+                foreach (RolePermissionFE rolePermission in permissions ?? new List<RolePermissionFE>())
                 {
-                    foreach (Permission permission in DirectPermissions(rolePermission.Permissions))
+                    foreach (PermissionFE permission in DirectPermissions(rolePermission.Permissions))
                     {
                         string roleName = rolePermission.Role != null && roleNameLookup.TryGetValue(rolePermission.Role.Id, out string name)
                             ? name
@@ -177,7 +178,7 @@ namespace Altinn.AccessManagement.UI.Core.Services
                             GiverNavn = giver.Name,
                             MottakerId = RecipientId(permission.To),
                             MottakerNavn = permission.To?.Name,
-                            MottakerType = permission.To?.Type,
+                            MottakerType = RecipientType(permission.To),
                             RolleNavn = roleName,
                             RolleCode = rolePermission.Role?.Code,
                         });
@@ -207,18 +208,18 @@ namespace Altinn.AccessManagement.UI.Core.Services
 
             foreach (AuthorizedParty giver in givers)
             {
-                Dictionary<Guid, List<PackagePermission>> delegations =
+                Dictionary<Guid, List<PackagePermissionFE>> delegations =
                     await _accessPackageService.GetDelegations(giver.PartyUuid, null, giver.PartyUuid, language);
 
-                foreach (List<PackagePermission> packagePermissions in (delegations ?? new Dictionary<Guid, List<PackagePermission>>()).Values)
+                foreach (List<PackagePermissionFE> packagePermissions in (delegations ?? new Dictionary<Guid, List<PackagePermissionFE>>()).Values)
                 {
-                    foreach (PackagePermission packagePermission in packagePermissions)
+                    foreach (PackagePermissionFE packagePermission in packagePermissions)
                     {
                         string packageName = packagePermission.Package != null && packageNames.TryGetValue(packagePermission.Package.Id, out string name)
                             ? name
                             : null;
 
-                        foreach (Permission permission in DirectPermissions(packagePermission.Permissions))
+                        foreach (PermissionFE permission in DirectPermissions(packagePermission.Permissions))
                         {
                             rows.Add(new AccessPackageExportRow
                             {
@@ -226,7 +227,7 @@ namespace Altinn.AccessManagement.UI.Core.Services
                                 GiverNavn = giver.Name,
                                 MottakerId = RecipientId(permission.To),
                                 MottakerNavn = permission.To?.Name,
-                                MottakerType = permission.To?.Type,
+                                MottakerType = RecipientType(permission.To),
                                 TilgangspakkeNavn = packageName,
                                 TilgangspakkeCode = packagePermission.Package?.Urn,
                             });
@@ -249,7 +250,7 @@ namespace Altinn.AccessManagement.UI.Core.Services
 
                 foreach (InstanceDelegation delegation in delegations ?? new List<InstanceDelegation>())
                 {
-                    foreach (Permission permission in DirectPermissions(delegation.Permissions))
+                    foreach (PermissionFE permission in DirectPermissions(delegation.Permissions))
                     {
                         rows.Add(new InstanceRightExportRow
                         {
@@ -257,7 +258,7 @@ namespace Altinn.AccessManagement.UI.Core.Services
                             GiverNavn = giver.Name,
                             MottakerId = RecipientId(permission.To),
                             MottakerNavn = permission.To?.Name,
-                            MottakerType = permission.To?.Type,
+                            MottakerType = RecipientType(permission.To),
                             TjenesteNavn = delegation.Resource?.Title,
                             ResourceId = delegation.Resource?.Identifier,
                             InstansId = delegation.Instance?.RefId,
@@ -283,7 +284,7 @@ namespace Altinn.AccessManagement.UI.Core.Services
 
                 foreach (ResourceDelegation delegation in delegations ?? new List<ResourceDelegation>())
                 {
-                    foreach (Permission permission in DirectPermissions(delegation.Permissions))
+                    foreach (PermissionFE permission in DirectPermissions(delegation.Permissions))
                     {
                         rows.Add(new SingleRightExportRow
                         {
@@ -291,7 +292,7 @@ namespace Altinn.AccessManagement.UI.Core.Services
                             GiverNavn = giver.Name,
                             MottakerId = RecipientId(permission.To),
                             MottakerNavn = permission.To?.Name,
-                            MottakerType = permission.To?.Type,
+                            MottakerType = RecipientType(permission.To),
                             TjenesteNavn = delegation.Resource?.Title,
                             ResourceId = delegation.Resource?.Identifier,
                         });
@@ -319,12 +320,25 @@ namespace Altinn.AccessManagement.UI.Core.Services
 
         // Only direct delegations are included (v1 scope): permissions routed via an
         // intermediary party (inherited/indirect) are skipped.
-        private static IEnumerable<Permission> DirectPermissions(IEnumerable<Permission> permissions)
+        private static IEnumerable<PermissionFE> DirectPermissions(IEnumerable<PermissionFE> permissions)
         {
-            return (permissions ?? Enumerable.Empty<Permission>()).Where(p => p != null && p.Via == null);
+            return (permissions ?? Enumerable.Empty<PermissionFE>()).Where(p => p != null && p.Via == null);
         }
 
-        private static string RecipientId(CompactEntity recipient)
+        // The export has always shown the access management platform's Norwegian type names.
+        private static string RecipientType(PartyFE recipient)
+        {
+            return recipient?.Type switch
+            {
+                null => null,
+                PartyTypeFE.Organization => "Organisasjon",
+                PartyTypeFE.SystemUser => "Systembruker",
+                PartyTypeFE.SelfIdentified => "Selvidentifisert",
+                _ => "Person",
+            };
+        }
+
+        private static string RecipientId(PartyFE recipient)
         {
             if (recipient == null)
             {

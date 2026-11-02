@@ -22,6 +22,10 @@
     "reset_choices": "Reset",
     "apply": "Apply",
     "search": "Search",
+    "search_hits_one": "{{count}} search match",
+    "search_hits_other": "{{count}} search matches",
+    "search_hits_in_list_one": "{{count}} match in {{list}}",
+    "search_hits_in_list_other": "{{count}} matches in {{list}}",
     "add": "Add",
     "remove": "Remove",
     "removed": "Removed",
@@ -76,6 +80,7 @@
     "delete_poa": "Delete power of attorney",
     "delete_poa_for": "Delete power of attorney for {{poa_object}}",
     "delete_poa_to_name": "Delete {{name}}'s power of attorney",
+    "edit_poas": "Edit powers of attorney",
     "delete_pos_confirm": "Are you sure you want to delete the power of attorney?",
     "has_poa": "Has power of attorney",
     "refresh_cookie_alert": "The chosen actor has been changed in another tab. To synchronize with the change, this page will now reload.",
@@ -93,6 +98,7 @@
     "subunit": "Subunit",
     "subunit_lowercase": "subunit",
     "mainunit_lowercase": "main unit",
+    "systemuser_lowercase": "system access",
     "org_nr_lowercase": "org.no. {{org_number}}",
     "org_no": "Org.no",
     "part_of": "part of",
@@ -118,10 +124,8 @@
     "too_many_subunits_warning": "This organization has too many subunits to include them in the download. We are working on a solution for this, but for now, you must download each subunit separately if you want their information."
   },
   "info_banner": {
-    "info": "June 19: the old Altinn will be shut down.",
-    "info_new": "Altinn has been renewed.",
-    "link": "Here's what you need to be aware of.",
-    "link_new": "This is how you grant new powers of attorney and accesses."
+    "info": "Altinn has been renewed.",
+    "link": "This is how you grant new powers of attorney and accesses."
   },
   "header": {
     "access_management": "Access management",
@@ -142,7 +146,6 @@
     "log_out": "Log out",
     "locale_title": "Choose language",
     "logged_in_as_name": "Logged in as {{name}}",
-    "new_altinn_info": "About new Altinn",
     "help_pages": "Help pages",
     "leave_beta": "Go to old Altinn",
     "shortcuts": "Shortcuts",
@@ -174,7 +177,8 @@
     "settings": "Settings",
     "requests": "Requests",
     "requests_badge": "received",
-    "maskinporten": "Maskinporten administration"
+    "maskinporten": "Maskinporten administration",
+    "activity_log": "Activity log"
   },
   "error_page": {
     "page_title": "Error page - Altinn",
@@ -219,7 +223,6 @@
     "change_rights": "Edit client rights"
   },
   "single_rights": {
-    "search_hits": "matches found:",
     "give_new_single_right": "Give power of attorney",
     "current_services_title": "Power of attorney for {{count}} single services",
     "delete_singleRight_success_message": "Power of attorney over {{resourceTitle}} has been successfully revoked for {{name}}.",
@@ -261,6 +264,14 @@
     "search_active_matches": "Matches in active powers of attorney",
     "search_no_active_matches": "No matches in active powers of attorney",
     "search_other_matches": "Other matches",
+    "search_hits_one": "{{count}} match in {{areas}}",
+    "search_hits_other": "{{count}} matches in {{areas}}",
+    "search_hits_areas_one": "{{count}} area",
+    "search_hits_areas_other": "{{count}} areas",
+    "search_hits_active_one": "{{count}} match in active powers of attorney",
+    "search_hits_active_other": "{{count}} matches in active powers of attorney",
+    "search_other_hits_one": "{{count}} other match",
+    "search_other_hits_other": "{{count}} other matches",
     "info_alert_text": "Access packages replace today's Altinn roles. Read more on the <a href='https://info.altinn.no/en/help/access-managment/'>help pages</a>.",
     "delegation_check": {
       "delegation_check_error_heading": "Technical error",
@@ -287,7 +298,6 @@
     "resources_title": "Gives access to {{count}} services",
     "resources_empty": "This role has no services.",
     "delete_role_confirmation": "Roles from the old Altinn solution have been discontinued, so you will NOT be able to grant power of attorney to this role again.",
-    "deleting_role_loading": "Waiting for the role to be deleted...",
     "delete_role_success": "The power of attorney for this role has been deleted.",
     "delete_role_error": "Could not delete the role.",
     "cannot_assign_role_poa": "This role has been discontinued and can no longer be granted as a power of attorney. To grant access to services, please use access packages or single services.",
@@ -316,7 +326,8 @@
     "show_users_with_client_access": "Show users with client access",
     "indirect_connections": "Users without power of attorney",
     "no_access_to_users_header": "Only access managers can see other users with powers of attorney",
-    "no_access_to_users_message": "You are not an access manager for {{name}} and can only see your own powers of attorney."
+    "no_access_to_users_message": "You are not an access manager for {{name}} and can only see your own powers of attorney.",
+    "no_access_to_users_page": "You do not have access to view this page."
   },
   "advanced_user_search": {
     "add_user_button": "Add user",
@@ -373,6 +384,7 @@
     "non_deletable_reason_agent_role": "Client accesses can be managed in <agentLink>{{linkText}}</agentLink>.",
     "non_deletable_reason_guardianship": "Powers of attorney granted through guardianship from <guardianshipLink>the Norwegian Civil Affairs Authority</guardianshipLink>.",
     "non_deletable_reason_via_role": "Powers of attorney received through <viaLink>{{via_name}}</viaLink> must be deleted there.",
+    "non_deletable_reason_via_role_switch": "Powers of attorney received through {{via_name}} must be deleted there. <switchLink>Switch to {{via_name}} and delete powers of attorney there.</switchLink>",
     "yes_button": "Yes, delete",
     "user_partial_confirmation_message": "<p>The user also has other powers of attorney, and you can delete them here. Do you want to proceed? <i>This action cannot be undone.</i></p>",
     "yourself_trigger_button": "Delete all access",
@@ -433,7 +445,7 @@
     },
     "specific_rights": {
       "missing_role_message": "You cannot delegate the entire service because you lack some of the rights yourself.",
-      "missing_srr_right_message": "{{reportee}} is not given permission from {{resourceOwner}} to delegate the whole service. Contact them if you want to change this."
+      "access_list_message": "{{reportee}} is not given permission from {{resourceOwner}} to delegate the whole service. Contact them if you want to change this."
     },
     "technical_error_message": {
       "heading": "Oops! Something went wrong.",
@@ -534,6 +546,15 @@
     "last_name_format_error": "Please enter a valid last name",
     "org_search_result_label": "You will add:"
   },
+  "activity_log_page": {
+    "document_title": "Activity log - Altinn",
+    "heading": "Activity log for {{name}}",
+    "no_access": "You do not have access to this page",
+    "tab_connections": "Powers of attorney",
+    "tab_request": "Requests",
+    "tab_maskinporten": "Maskinporten administration",
+    "empty": "There is no activity in the log yet."
+  },
   "maskinporten_page": {
     "scopes": "Scopes",
     "heading": "Maskinporten administration for {{name}}",
@@ -574,7 +595,6 @@
     "search_api_placeholder": "Search for API",
     "no_scopes": "No scopes found for this service.",
     "scope_count": "{{count}} scopes",
-    "search_results_count": "{{count}} search matches",
     "delegated_resources_heading": "Power of attorney for {{count}} APIs",
     "no_delegated_resources": "No power of attorney has been added yet.",
     "delegated_resources_error": "Could not load power of attorney.",
@@ -602,7 +622,9 @@
     "error_saving_addresses": "Something went wrong. Please try again.",
     "no_addresses_error": "The organization must have at least one email address or SMS number for notifications.",
     "alert_settings_info": "Notifications sent to registered notification addresses are sent regardless of whether the recipient has the right to view the content in Altinn. If you have a shared email address, it is natural to include it here. <a>Read more</a>",
-    "info_button": "About notification addresses"
+    "info_button": "About notification addresses",
+    "service_announcement_heading": "Planned maintenance 31st of October - 1st of November",
+    "service_announcement_content": "Altinn is performing planned maintenance on notification addresses for organizations. This may cause unstable behaviour on this page between Saturday 31st of October at 08:00 and Sunday 1st of November at 08:00. Deleting addresses will be temporarily unavailable."
   },
   "text_field_errors": {
     "required": "The field is required",
@@ -654,7 +676,6 @@
     "agents_tab_title": "Users",
     "add_agent_button": "Add new user",
     "add_agent_button_short": "Add",
-    "add_agentModal_agent_tab_title": "Person",
     "add_agent_error": "Could not add user.",
     "add_agent_success_snackbar": "User added.",
     "add_agent_client_access_success_snackbar": "The user now has client access.",
@@ -677,6 +698,8 @@
     "single_rights_heading": "Single services:",
     "agent_has_clients_tab": "Has these clients",
     "agent_can_get_clients_tab": "Can have these clients",
+    "agent_has_clients_search_list": "clients the user has",
+    "agent_can_get_clients_search_list": "clients the user can have",
     "client_has_agents_tab": "Users with power of attorney",
     "client_can_get_agents_tab": "Users who can get power of attorney",
     "recently_added_users": "Recently added users",
@@ -695,7 +718,18 @@
     "no_agents": "No users have been given client access yet.",
     "addUserPrompt": "Select «Add new user» to give more users power of attorney for this client.",
     "no_results": "No users were found for this search.",
-    "client_search_placeholder": "Search for client"
+    "client_search_placeholder": "Search for client",
+    "bulk_actions_description": "Powers of attorney that can be granted on behalf of the client",
+    "give_all": "Give all",
+    "delete_all": "Delete all",
+    "give_all_for": "Give all powers of attorney for {{clientName}}",
+    "delete_all_for": "Delete all powers of attorney for {{clientName}}",
+    "give_all_to": "Give {{name}} all powers of attorney for the client",
+    "delete_all_to": "Delete all of {{name}}'s powers of attorney for the client",
+    "delegate_all_success_snackbar": "{{name}} now has all powers of attorney for {{clientName}}.",
+    "delegate_all_error": "{{failedCount}} of {{totalCount}} powers of attorney for {{clientName}} could not be granted to {{name}}.",
+    "remove_all_success_snackbar": "{{name}} no longer has any powers of attorney for {{clientName}}.",
+    "remove_all_error": "{{failedCount}} of {{totalCount}} of {{name}}'s powers of attorney for {{clientName}} could not be removed."
   },
   "systemuser_creationpage": {
     "page_title": "Create new system access - Altinn",
@@ -866,6 +900,7 @@
     "69_delegation_right_access_list_validation_fail": "Delegation of services failed: The receiver does not have the right based on Access List delegation.",
     "70_delegation_right_resource_not_delegable": "Delegation of services failed: The resource cannot be delegated to another user or entity.",
     "71_delegation_right_resource_is_maskinporten_schema": "Delegation of services failed: The resource is not delegable because it is a Maskinporten schema resource.",
+    "82_rights_resource_not_delegable": "One or more services can no longer be delegated. The service owner has marked the service as not delegable.",
     "title_resources": "Services that could not be delegated:",
     "title_accesspackages": "Access packages that could not be delegated:",
     "summary_both": "Delegation failed: you lack the necessary rights to delegate the required services and access packages.",
@@ -998,7 +1033,7 @@
     "services_tab": {
       "assigned_services_title": "Services with power of attorney granted",
       "other_services_title": "Other services",
-      "description": "This shows services that power of attorney has been granted for directly. If a user has been given power of attorney for a service through access packages, it is not shown here.",
+      "description": "Individual services granted to others are shown here. Services granted via an access package are not shown here.",
       "no_services": "Power of attorney has not been granted to any service directly.",
       "no_services_found": "No services found",
       "no_other_services": "No other services found."
@@ -1069,13 +1104,26 @@
     },
     "services_tab": {
       "no_resources": "This package includes no services"
+    },
+    "add_user_modal": {
+      "heading": "Give power of attorney to a new user"
     }
   },
   "service_poa_details_page": {
     "page_title": "Service - Altinn",
     "page_title_service": "{{service}} - Altinn",
     "load_error": "Oops! Something went wrong.",
-    "back_to_overview_link": "Go back to the overview"
+    "back_to_overview_link": "Go back to the overview",
+    "users_description": "Search for users to give or delete power of attorney.",
+    "no_users": "No one has power of attorney for this service.",
+    "search_placeholder": "Search for a person or an organisation",
+    "delegation_success": "{{name}} now has power of attorney for {{service}}",
+    "revoke_success": "{{name}} no longer has power of attorney for {{service}}",
+    "revoke_error": "Could not delete the power of attorney for {{service}} for {{name}}",
+    "add_user_modal": {
+      "heading": "Give power of attorney to a new user",
+      "user_will_receive": "The user will receive:"
+    }
   },
   "resource_list": {
     "resource_search_placeholder": "Search resources",
@@ -1119,6 +1167,7 @@
     "consent_item_description": "All concluded agreements",
     "systemuser_item_description": "{{reportee}}'s system accesses",
     "maskinporten_item_description": "Manage powers of attorney for APIs in Maskinporten",
+    "activity_log_item_description": "See what has happened to powers of attorney and access for {{reportee}}",
     "client_admin_item_description": "Grant powers of attorney from clients to users in {{reportee}}",
     "new_requests_self_zero": "You have no new requests",
     "new_requests_self_one": "You have one new request",
@@ -1161,6 +1210,7 @@
     "review_handled_on": "{{status}} on {{date}}",
     "review_handled_by": "{{status}} by {{name}} on {{date}}",
     "handled_requests_title": "Handled requests",
+    "pending_requests_title": "Unhandled requests",
     "handled_requests_description": "Here you can see requests that were processed up to a year ago.",
     "search_placeholder": "Search requests",
     "no_search_results": "No results for \"{{searchTerm}}\".",

@@ -9,7 +9,7 @@ import {
   ShieldLockIcon,
 } from '@navikt/aksel-icons';
 
-import { PartyType } from '@/rtk/features/userInfoApi';
+import { PartyType } from '@/dataObjects/dtos/Party';
 import { useGetUserDelegationsQuery } from '@/rtk/features/accessPackageApi';
 import { isGuardianshipUrn } from '@/resources/utils';
 import { useTabState } from '@/resources/hooks';
@@ -50,22 +50,22 @@ export const RightsTabs = ({
 
   const { data: activeDelegations } = useGetUserDelegationsQuery(
     {
-      from: fromParty?.partyUuid ?? '',
-      to: toParty?.partyUuid ?? '',
-      party: actingParty?.partyUuid ?? '',
+      from: fromParty?.id ?? '',
+      to: toParty?.id ?? '',
+      party: actingParty?.id ?? '',
     },
     {
-      skip: (!toParty?.partyUuid && !fromParty?.partyUuid) || !actingParty?.partyUuid,
+      skip: (!toParty?.id && !fromParty?.id) || !actingParty?.id,
     },
   );
 
   const hasGuardianPermission = Object.values(activeDelegations ?? {})
     .flat()
     .filter((item) => isGuardianshipUrn(item.package.urn))
-    .some((item) => item.permissions.some((perm) => perm.from.id === fromParty?.partyUuid));
+    .some((item) => item.permissions.some((perm) => perm.from.id === fromParty?.id));
 
   const showGuardianshipsTab =
-    guardianshipsPanel && fromParty?.partyTypeName === PartyType.Person && hasGuardianPermission;
+    guardianshipsPanel && fromParty?.type === PartyType.Person && hasGuardianPermission;
   const availableTabs = useMemo(
     () => [
       'packages',

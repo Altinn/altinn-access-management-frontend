@@ -1,10 +1,10 @@
-import { Button, formatDisplayName, useSnackbar } from '@altinn/altinn-components';
+import { Button, useSnackbar } from '@altinn/altinn-components';
 import * as React from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router';
 import { TrashIcon } from '@navikt/aksel-icons';
 
-import { PartyType } from '@/rtk/features/userInfoApi';
+import { formatEntityDisplayName } from '@/resources/utils/reporteeUtils';
 import { amUIPath } from '@/routes/paths';
 import type { ServiceResource } from '@/rtk/features/singleRights/singleRightsApi';
 import {
@@ -14,7 +14,6 @@ import {
 } from '@/rtk/features/maskinportenApi';
 
 import { DelegationAction, EditModal } from '../common/DelegationModal/EditModal';
-import { DelegationModal, DelegationType } from '../common/DelegationModal/DelegationModal';
 import { PageContainer } from '../common/PageContainer/PageContainer';
 import { UserPageHeader } from '../common/UserPageHeader/UserPageHeader';
 import { usePartyRepresentation } from '../common/PartyRepresentationContext/PartyRepresentationContext';
@@ -26,6 +25,7 @@ import {
   useRestoreFocusOnDataChange,
 } from '../common/RestoreFocus';
 
+import { ScopeDelegationModal } from './ScopeDelegationModal';
 import { useMaskinportenResourceActions } from './hooks/useMaskinportenResourceActions';
 import { MaskinportenDeleteDialog } from './MaskinportenDeleteDialog';
 import {
@@ -43,14 +43,9 @@ const SupplierPageContentInner = () => {
   const [removeSupplierResource] = useRemoveMaskinportenSupplierResourceMutation();
 
   const { toParty, actingParty } = usePartyRepresentation();
-  const party = actingParty?.partyUuid;
-  const supplier = toParty?.orgNumber;
-  const supplierName = toParty?.name
-    ? formatDisplayName({
-        fullName: toParty.name,
-        type: toParty.partyTypeName === PartyType.Person ? 'person' : 'company',
-      })
-    : '';
+  const party = actingParty?.id;
+  const supplier = toParty?.organizationIdentifier ?? undefined;
+  const supplierName = toParty?.name ? formatEntityDisplayName(toParty) : '';
 
   const deleteDialogRef = React.useRef<HTMLDialogElement>(null);
   const scopeModalRef = React.useRef<HTMLDialogElement>(null);
@@ -153,6 +148,7 @@ const SupplierPageContentInner = () => {
             <EditModal
               ref={scopeModalRef}
               maskinportenScope={selectedResource ?? undefined}
+              availableActions={[DelegationAction.DELEGATE, DelegationAction.REVOKE]}
               onClose={() => {
                 // Restore focus to the row that opened the modal before clearing state. If the
                 // resource was revoked inside the modal its row is gone, so the heading catches it.
@@ -167,9 +163,8 @@ const SupplierPageContentInner = () => {
             />
           }
           addNewResourceButton={
-            <DelegationModal
-              delegationType={DelegationType.MaskinportenScope}
-              availableActions={[DelegationAction.DELEGATE]}
+            <ScopeDelegationModal
+              availableActions={[DelegationAction.DELEGATE, DelegationAction.REVOKE]}
             />
           }
         />

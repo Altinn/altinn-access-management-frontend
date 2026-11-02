@@ -1,3 +1,5 @@
+import { type PersonInput } from '@/rtk/features/connectionApi';
+
 const isValidSsnFormat = (personIdentifier: string) => /^\d{11}$/.test(personIdentifier);
 const isDigitsOnly = (personIdentifier: string) => /^\d+$/.test(personIdentifier);
 const containsWhitespace = (personIdentifier: string) => /\s/.test(personIdentifier);
@@ -23,3 +25,9 @@ export const getPersonIdentifierErrorKey = (identifier: string): string | null =
 
   return null;
 };
+
+/*** Whether the identity typed into the person fields can be submitted */
+export const isPersonInputValid = (value: PersonInput): boolean =>
+  value.personIdentifier.trim().length > 0 &&
+  getPersonIdentifierErrorKey(value.personIdentifier) === null &&
+  value.lastName.trim().length >= 1;

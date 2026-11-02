@@ -34,8 +34,8 @@ export const AccessPackageDelegationCheckProvider = ({
   const { data: isAdmin } = useGetIsAdminQuery();
 
   const { data, isLoading, error, isError } = useDelegationCheckQuery(
-    { party: actingParty?.partyUuid },
-    { skip: !actingParty?.partyUuid || !isAdmin },
+    { party: actingParty?.id },
+    { skip: !actingParty?.id || !isAdmin },
   );
 
   const resultMap = useMemo(

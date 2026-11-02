@@ -1,11 +1,10 @@
 import { useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
-import { useGetIsHovedadminQuery } from '@/rtk/features/userInfoApi';
 import type { AccessPackage } from '@/rtk/features/accessPackageApi';
 
 import { AccessPackageList } from '../../common/AccessPackageList/AccessPackageList';
-import { DelegationAction, EditModal } from '../../common/DelegationModal/EditModal';
+import { type DelegationAction, EditModal } from '../../common/DelegationModal/EditModal';
 import { usePartyRepresentation } from '../../common/PartyRepresentationContext/PartyRepresentationContext';
 import { useDelegationModalContext } from '../../common/DelegationModal/DelegationModalContext';
 import {
@@ -16,17 +15,14 @@ import {
 
 interface ActiveDelegationsProps {
   searchString?: string;
+  availableActions: DelegationAction[];
 }
 
-export const ActiveDelegations = ({ searchString }: ActiveDelegationsProps) => {
+export const ActiveDelegations = ({ searchString, availableActions }: ActiveDelegationsProps) => {
   const modalRef = useRef<HTMLDialogElement>(null);
   const [modalItem, setModalItem] = useState<AccessPackage | undefined>(undefined);
   const { setActionError } = useDelegationModalContext();
-  const { toParty, selfParty, actingParty, isLoading } = usePartyRepresentation();
-  const { data: isHovedadmin } = useGetIsHovedadminQuery();
-  const canGiveAccess =
-    actingParty?.partyUuid !== toParty?.partyUuid && // Acting party cannot grant access to itself
-    (toParty?.partyUuid !== selfParty?.partyUuid || isHovedadmin); // Only hovedadmin can give access to themselves
+  const { isLoading } = usePartyRepresentation();
   const { t } = useTranslation();
   const restoreFocus = useRestoreFocus();
 
@@ -45,10 +41,7 @@ export const ActiveDelegations = ({ searchString }: ActiveDelegationsProps) => {
             setModalItem(accessPackage);
             modalRef.current?.showModal();
           }}
-          availableActions={[
-            DelegationAction.REVOKE,
-            canGiveAccess ? DelegationAction.DELEGATE : DelegationAction.REQUEST,
-          ]}
+          availableActions={availableActions}
           onDelegateError={(accessPackage, error) => {
             setActionError(error);
             setModalItem(accessPackage);
@@ -72,10 +65,7 @@ export const ActiveDelegations = ({ searchString }: ActiveDelegationsProps) => {
           }
           setModalItem(undefined);
         }}
-        availableActions={[
-          DelegationAction.REVOKE,
-          canGiveAccess ? DelegationAction.DELEGATE : DelegationAction.REQUEST,
-        ]}
+        availableActions={availableActions}
       />
     </RestoreFocusProvider>
   );

@@ -1,29 +1,26 @@
 import { createApi } from '@reduxjs/toolkit/query/react';
-import { formatDisplayName } from '@altinn/altinn-components';
 
 import { createBaseQuery } from '@/rtk/app/baseQuery';
 import type {
   ActiveConsentListItem,
   Consent,
   ConsentHistoryItem,
-  ConsentParty,
   ConsentRequest,
 } from '@/features/amUI/consent/types';
-
-import { PartyType } from './userInfoApi';
+import { type PartyEntity } from '@/dataObjects/dtos/Party';
+import { formatEntityDisplayName } from '@/resources/utils/reporteeUtils';
 
 const baseUrl = `${import.meta.env.BASE_URL}accessmanagement/api/v1/`;
 
-const formatName = (party: ConsentParty): ConsentParty => {
-  const type = party.type === PartyType.Person ? 'person' : 'company';
+const formatName = (party: PartyEntity): PartyEntity => {
   return {
     ...party,
-    name: formatDisplayName({ fullName: party.name, type: type }),
+    name: formatEntityDisplayName(party, true),
   };
 };
 
 function formatPartyNames<
-  T extends { fromParty: ConsentParty; toParty: ConsentParty; handledByParty?: ConsentParty },
+  T extends { fromParty: PartyEntity; toParty: PartyEntity; handledByParty?: PartyEntity },
 >(item: T): T {
   return {
     ...item,

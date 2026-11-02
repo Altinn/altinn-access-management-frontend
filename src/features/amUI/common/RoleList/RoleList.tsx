@@ -35,12 +35,12 @@ export const RoleList = ({ onSelect, isLoading }: RoleListProps) => {
     error: permissionsError,
   } = useGetRolePermissionsQuery(
     {
-      party: actingParty?.partyUuid ?? '',
-      from: fromParty?.partyUuid,
-      to: toParty?.partyUuid,
+      party: actingParty?.id ?? '',
+      from: fromParty?.id,
+      to: toParty?.id,
     },
     {
-      skip: !actingParty?.partyUuid || !fromParty?.partyUuid || !toParty?.partyUuid,
+      skip: !actingParty?.id || !fromParty?.id || !toParty?.id,
     },
   );
 

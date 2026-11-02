@@ -31,12 +31,12 @@ export const useInstanceDelegationRightsData = ({
   const shouldLoadInstanceRights = !!fromPartyUuid && !!toPartyUuid;
   const shouldSkipRightsMetaQuery = !isEnabled || !resourceId;
   const shouldSkipDelegationCheckQuery =
-    !isEnabled || !actingParty?.partyUuid || !resourceId || !instanceUrn;
+    !isEnabled || !actingParty?.id || !resourceId || !instanceUrn;
 
   const shouldSkipInstanceRightsQuery =
     mode === 'delegate' ||
     !isEnabled ||
-    !actingParty?.partyUuid ||
+    !actingParty?.id ||
     !fromPartyUuid ||
     !toPartyUuid ||
     !resourceId ||
@@ -56,7 +56,7 @@ export const useInstanceDelegationRightsData = ({
     error: delegationCheckError,
   } = useInstanceDelegationCheckQuery(
     {
-      party: actingParty?.partyUuid || '',
+      party: actingParty?.id || '',
       resource: resourceId,
       instance: instanceUrn,
     },
@@ -70,7 +70,7 @@ export const useInstanceDelegationRightsData = ({
     error: instanceRightsError,
   } = useGetInstanceRightsQuery(
     {
-      party: actingParty?.partyUuid || '',
+      party: actingParty?.id || '',
       from: fromPartyUuid || '',
       to: toPartyUuid || '',
       resource: resourceId,
@@ -95,6 +95,7 @@ export const useInstanceDelegationRightsData = ({
     return {
       status: errorDetails?.status ?? (isRightsMetaEmpty ? 'empty response' : 'no status'),
       time: errorDetails?.time ?? new Date().toISOString(),
+      traceId: errorDetails?.traceId,
     };
   }, [isRightsMetaError, isRightsMetaEmpty, rightsMetaError]);
 

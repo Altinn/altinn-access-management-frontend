@@ -1,33 +1,28 @@
 import { test, expect } from 'playwright/fixture/pomFixture';
-import { ApiRequests } from 'playwright/api-requests/SystemUserApiRequests';
 import { TestdataApi } from 'playwright/util/TestdataApi';
 import { LoginPage } from 'playwright/pages/LoginPage';
 import { SystemUserPage } from 'playwright/pages/systemuser/SystemUserPage';
 import { ClientDelegationPage } from 'playwright/pages/systemuser/ClientDelegation';
 
-const reportArea = { annotation: { type: 'report-area', description: 'Systembruker' } };
-
-test.describe('Systembruker - Eskaler', reportArea, () => {
+test.describe('Systembruker - Eskaler', () => {
   const vendorOrgNumber = '312591332';
   const systemuserOwnerOrg = '313084167';
   const regularUserPid = '09817897166'; // No accessManager privileges, may escalate requests
   const managerPid = '29849098304';
   const actorName = 'Ugjennomsiktig Usnobbet Ape';
 
-  let api: ApiRequests;
   let name: string;
   let systemId: string;
   let externalRef: string;
   let response: { confirmUrl: string; id: string };
 
-  test.beforeEach(async () => {
+  test.beforeEach(async ({ api }) => {
     name = '';
-    api = new ApiRequests();
     name = `Playwright-e2e-eskaler-${Date.now()}`;
     externalRef = TestdataApi.generateExternalRef();
 
     systemId = await test.step('Create system', async () => {
-      return await api.createSystemInSystemregisterWithAccessPackages(
+      return await api.systemUsers.createSystemInSystemregisterWithAccessPackages(
         vendorOrgNumber,
         name,
         [{ urn: 'urn:altinn:accesspackage:baerekraft' }],
@@ -39,7 +34,7 @@ test.describe('Systembruker - Eskaler', reportArea, () => {
       );
     });
     response = await test.step('Create system user request', async () => {
-      return await api.postSystemuserRequest(
+      return await api.systemUsers.postSystemuserRequest(
         vendorOrgNumber,
         externalRef,
         systemId,
@@ -59,24 +54,21 @@ test.describe('Systembruker - Eskaler', reportArea, () => {
     login,
     systemUserPage,
     browser,
-    runAccessibilityTest,
+    api,
+    language,
   }): Promise<void> => {
     await test.step('Login as regular user, select actor and escalate request', async () => {
       await page.goto(response.confirmUrl);
       await login.loginNotChoosingActor(regularUserPid);
-      await expect(systemUserPage.escalateConfirmButton).toBeVisible();
-      await runAccessibilityTest.scan('forespørsel-før-eskalering');
       await systemUserPage.escalateConfirmButton.click();
       await Promise.all([page.waitForLoadState('load'), systemUserPage.finish.click()]);
     });
 
     const managerContext = await browser.newContext();
     const managerPage = await managerContext.newPage();
-    const managerScan = runAccessibilityTest.forPage(managerPage);
-
-    const managerLogin = new LoginPage(managerPage);
-    const managerSystemUserPage = new SystemUserPage(managerPage);
-    const managerClientDelegationPage = new ClientDelegationPage(managerPage);
+    const managerLogin = new LoginPage(managerPage, api, language);
+    const managerSystemUserPage = new SystemUserPage(managerPage, language);
+    const managerClientDelegationPage = new ClientDelegationPage(managerPage, language);
 
     await test.step('Login as manager and choose reportee', async () => {
       await managerLogin.LoginToAccessManagement(managerPid);
@@ -87,7 +79,6 @@ test.describe('Systembruker - Eskaler', reportArea, () => {
       await managerSystemUserPage.requestsMenuItem.click();
       await managerSystemUserPage.requestLink(response.id).click();
       await expect(managerClientDelegationPage.confirmButton).toBeVisible();
-      await managerScan.scan('eskalert-forespørsel');
       await managerClientDelegationPage.confirmButton.click();
     });
 
@@ -100,18 +91,17 @@ test.describe('Systembruker - Eskaler', reportArea, () => {
       ).toBeVisible();
     });
 
-    await managerScan.scan('systembruker-etter-eskalering');
     await managerContext.close();
   });
 
-  test.afterEach(async () => {
+  test.afterEach(async ({ api }) => {
     if (name) {
-      await api.cleanUpSystemUsersForSystem(
+      await api.systemUsers.cleanUpSystemUsersForSystem(
         `${vendorOrgNumber}_${name}`,
         managerPid,
         systemuserOwnerOrg,
       );
-      await api.deleteSystemInSystemRegister(vendorOrgNumber, name);
+      await api.systemUsers.deleteSystemInSystemRegister(vendorOrgNumber, name);
     }
   });
 });

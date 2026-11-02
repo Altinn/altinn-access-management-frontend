@@ -6,6 +6,7 @@ using System.Text.Json;
 using Altinn.AccessManagement.UI.Controllers;
 using Altinn.AccessManagement.UI.Core.Models;
 using Altinn.AccessManagement.UI.Core.Models.SingleRight;
+using Altinn.AccessManagement.UI.Core.Models.SingleRight.Frontend;
 using Altinn.AccessManagement.UI.Mocks.Mocks;
 using SingleRight = Altinn.AccessManagement.UI.Core.Models.SingleRight.Right;
 using Altinn.AccessManagement.UI.Mocks.Utils;
@@ -299,6 +300,29 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
         }
 
         /// <summary>
+        ///     Test case: Retrieve delegated resources in a selected language
+        ///     Expected: Returns the keywords of each resource in that language, as the resource search does
+        /// </summary>
+        [Fact]
+        public async Task GetDelegatedResources_ReturnsKeywordsInSelectedLanguage()
+        {
+            // Arrange
+            Guid party = Guid.Parse("cd35779b-b174-4ecc-bbef-ece13611be7f");
+            Guid from = Guid.Parse("cd35779b-b174-4ecc-bbef-ece13611be7f");
+            HttpRequestMessage request = new HttpRequestMessage(HttpMethod.Get, $"accessmanagement/api/v1/singleright/delegation/resources?party={party}&from={from}");
+            request.Headers.Add("Cookie", "selectedLanguage=no_nb");
+
+            // Act
+            HttpResponseMessage httpResponse = await _client.SendAsync(request);
+            List<ResourceDelegation> actualResponse = await httpResponse.Content.ReadFromJsonAsync<List<ResourceDelegation>>();
+
+            // Assert
+            Assert.Equal(HttpStatusCode.OK, httpResponse.StatusCode);
+            ResourceDelegation delegation = actualResponse.Single(d => d.Resource.Identifier == "appid-502");
+            Assert.Equal(["klesskapet_kw"], delegation.Resource.Keywords);
+        }
+
+        /// <summary>
         ///     Test case: Handles unexpected errors when retrieving delegated resources
         ///     Expected: Returns an internal server error
         /// </summary>
@@ -349,11 +373,11 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
             Guid to = Guid.Parse("167536b5-f8ed-4c5a-8f48-0279507e53ae");
             string resourceId = "appid-502";
             string path = Path.Combine(mockFolder, "Data", "ExpectedResults", "SingleRight", "GetResourceRights", $"{resourceId}.json");
-            ResourceRight expectedResponse = Util.GetMockData<ResourceRight>(path);
+            ResourceRightFE expectedResponse = Util.GetMockData<ResourceRightFE>(path);
 
             // Act
             HttpResponseMessage httpResponse = await _client.GetAsync($"accessmanagement/api/v1/singleright/delegation/resources/rights?party={party}&from={from}&to={to}&resourceId={resourceId}");
-            ResourceRight actualResponse = await httpResponse.Content.ReadFromJsonAsync<ResourceRight>();
+            ResourceRightFE actualResponse = await httpResponse.Content.ReadFromJsonAsync<ResourceRightFE>();
 
             // Assert
             Assert.Equal(HttpStatusCode.OK, httpResponse.StatusCode);

@@ -1,14 +1,9 @@
 import React from 'react';
 import { useTranslation, Trans } from 'react-i18next';
 import { useNavigate, useSearchParams } from 'react-router';
-import {
-  DsAlert,
-  DsHeading,
-  DsParagraph,
-  DsButton,
-  formatDisplayName,
-} from '@altinn/altinn-components';
+import { DsAlert, DsHeading, DsParagraph, DsButton } from '@altinn/altinn-components';
 
+import { formatEntityDisplayName } from '@/resources/utils/reporteeUtils';
 import { hasCreateSystemUserPermission } from '@/resources/utils/permissionUtils';
 import { SystemUserPath } from '@/routes/paths';
 import { getLogoutUrl } from '@/resources/utils/pathUtils';
@@ -146,7 +141,7 @@ export const SystemUserRequestPage = () => {
               i18nKey={'systemuser_request.system_description'}
               values={{
                 systemName: request.system.name,
-                partyName: formatDisplayName({ fullName: reporteeData?.name, type: 'company' }),
+                partyName: formatEntityDisplayName(reporteeData),
               }}
             ></Trans>
           </DsParagraph>

@@ -15,6 +15,7 @@ import { amUIPath } from '@/routes/paths/amUIPath';
 import { useDebouncedValue, usePermissionOverview } from '@/resources/hooks';
 
 import { CollapsibleContainer } from '../common/CollapsibleContainer/CollapsibleContainer';
+import { SearchHitsStatus } from '../common/SearchHitsStatus/SearchHitsStatus';
 import { ResourceFilterToolbar } from '../common/ResourceFilterToolbar/ResourceFilterToolbar';
 import { PermissionsBadge } from '../common/PermissionsBadge/PermissionsBadge';
 import { usePartyRepresentation } from '../common/PartyRepresentationContext/PartyRepresentationContext';
@@ -25,6 +26,7 @@ import {
   extractOrgCode,
   extractDescription,
   isExpiredResource,
+  matchesAnySearchWord,
 } from '../common/ResourceList/utils';
 
 import classes from './SingleRightsPermissions.module.css';
@@ -41,6 +43,19 @@ export const SingleRightsPermissions = () => {
   // ServicesToolbar so that typing does not re-render the service lists below.
   const [debouncedSearch, setDebouncedSearch] = useState('');
   const [filterState, setFilterState] = useState<string[]>([]);
+  // How many non-delegated results the "other services" list should try to display. Grows by
+  // one page per "show more" click, reset to one page whenever the search changes below.
+  const [targetResultCount, setTargetResultCount] = useState(searchResultsPerPage);
+
+  const handleSearchChange = useCallback((search: string) => {
+    setDebouncedSearch(search);
+    setTargetResultCount(searchResultsPerPage);
+  }, []);
+
+  const handleFilterChange = useCallback((filters: string[]) => {
+    setFilterState(filters);
+    setTargetResultCount(searchResultsPerPage);
+  }, []);
 
   // Both lists link to the service's own details page.
   const getResourceItemAs = useCallback(
@@ -61,16 +76,17 @@ export const SingleRightsPermissions = () => {
     isError,
   } = useGetSingleRightsForRightholderQuery(
     {
-      actingParty: actingParty?.partyUuid || '',
-      from: fromParty?.partyUuid || '',
+      actingParty: actingParty?.id || '',
+      from: fromParty?.id || '',
     },
     {
-      skip: !actingParty?.partyUuid || !fromParty?.partyUuid,
+      skip: !actingParty?.id || !fromParty?.id,
     },
   );
 
   const {
     data: searchData,
+    currentData: currentSearchData,
     isFetching: isSearchFetching,
     isError: isSearchError,
     hasNextPage,
@@ -94,6 +110,27 @@ export const SingleRightsPermissions = () => {
     );
   }, [searchData, delegatedIds]);
 
+  // Resources already assigned are filtered out of each fetched page above, so a fetched page can
+  // contribute fewer results than `searchResultsPerPage`. Keep fetching until enough non-delegated
+  // results have been found to reach the target, or there is nothing more to fetch.
+  useEffect(() => {
+    if (
+      searchResources.length < targetResultCount &&
+      hasNextPage &&
+      !isSearchFetching &&
+      !isSearchError
+    ) {
+      void fetchNextPage();
+    }
+  }, [
+    searchResources.length,
+    targetResultCount,
+    hasNextPage,
+    isSearchFetching,
+    fetchNextPage,
+    isSearchError,
+  ]);
+
   const resources = useMemo(
     () => (delegations ?? []).map((delegation) => delegation.resource).filter(Boolean),
     [delegations],
@@ -114,9 +151,29 @@ export const SingleRightsPermissions = () => {
     getOwnerOrgCode: extractOrgCode,
     getDescription: extractDescription,
     isExpiredResource: isExpiredResource,
+    matchesSearch: matchesAnySearchWord,
   });
 
   const hasSearch = debouncedSearch || filterState.length > 0;
+
+  // The backend total also counts delegated services, which are listed under assigned services.
+  // currentData is undefined while a new search loads.
+  const searchHits =
+    hasSearch && currentSearchData && !isLoadingDelegations && !isPartyLoading
+      ? [
+          {
+            count: filteredResources.length,
+            listHeading: t('poa_overview_page.services_tab.assigned_services_title'),
+          },
+          {
+            count: Math.max(
+              0,
+              (currentSearchData.pages[0]?.numEntriesTotal ?? 0) - filteredResources.length,
+            ),
+            listHeading: t('poa_overview_page.services_tab.other_services_title'),
+          },
+        ]
+      : undefined;
 
   if (isError) {
     return (
@@ -131,41 +188,47 @@ export const SingleRightsPermissions = () => {
 
   return (
     <>
-      <DsParagraph className={classes.description}>
-        {t('poa_overview_page.services_tab.description')}
-      </DsParagraph>
+      <DsParagraph>{t('poa_overview_page.services_tab.description')}</DsParagraph>
       <ServicesToolbar
-        onSearchChange={setDebouncedSearch}
+        onSearchChange={handleSearchChange}
         filterState={filterState}
-        setFilterState={setFilterState}
+        setFilterState={handleFilterChange}
       />
-      <section aria-labelledby={ASSIGNED_SERVICES_SECTION}>
-        <CollapsibleContainer
-          heading={t('poa_overview_page.services_tab.assigned_services_title')}
-          searchString={debouncedSearch}
-          id={ASSIGNED_SERVICES_SECTION}
-          defaultOpen
-        >
-          <ResourceList
-            resources={filteredResources}
-            isLoading={isLoadingDelegations || isPartyLoading}
-            enableSearch={false}
-            showDetails={false}
-            getItemAs={getResourceItemAs}
-            noResourcesText={
-              hasSearch
-                ? t('poa_overview_page.services_tab.no_services_found')
-                : t('poa_overview_page.services_tab.no_services')
-            }
-            renderControls={(resource) => {
-              const permissions = permissionsByResource.get(resource.identifier);
-              return permissions?.length ? (
-                <SingleRightsPermissionBadge permissions={permissions} />
-              ) : null;
-            }}
-          />
-        </CollapsibleContainer>
-      </section>
+      <div>
+        <SearchHitsStatus
+          hits={searchHits}
+          searchString={debouncedSearch + filterState.join('')}
+        />
+        <section aria-labelledby={ASSIGNED_SERVICES_SECTION}>
+          <CollapsibleContainer
+            heading={t('poa_overview_page.services_tab.assigned_services_title')}
+            searchString={debouncedSearch}
+            id={ASSIGNED_SERVICES_SECTION}
+            defaultOpen
+          >
+            <ResourceList
+              className={classes.resourceList}
+              resources={filteredResources}
+              isLoading={isLoadingDelegations || isPartyLoading}
+              enableSearch={false}
+              showDetails={false}
+              getItemAs={getResourceItemAs}
+              noResourcesText={
+                hasSearch
+                  ? t('poa_overview_page.services_tab.no_services_found')
+                  : t('poa_overview_page.services_tab.no_services')
+              }
+              renderControls={(resource) => {
+                const permissions = permissionsByResource.get(resource.identifier);
+                return permissions?.length ? (
+                  <SingleRightsPermissionBadge permissions={permissions} />
+                ) : null;
+              }}
+              size='md'
+            />
+          </CollapsibleContainer>
+        </section>
+      </div>
       <section aria-labelledby={UNASSIGNED_SERVICES_SECTION}>
         <CollapsibleContainer
           heading={t('poa_overview_page.services_tab.other_services_title')}
@@ -182,6 +245,7 @@ export const SingleRightsPermissions = () => {
           ) : (
             <>
               <ResourceList
+                className={classes.resourceList}
                 resources={searchResources}
                 isLoading={
                   isLoadingDelegations ||
@@ -192,6 +256,7 @@ export const SingleRightsPermissions = () => {
                 showDetails={false}
                 getItemAs={getResourceItemAs}
                 noResourcesText={t('poa_overview_page.services_tab.no_other_services')}
+                size='md'
               />
               {hasNextPage && (
                 <div className={classes.showMoreButton}>
@@ -200,7 +265,7 @@ export const SingleRightsPermissions = () => {
                     data-size='sm'
                     onClick={() => {
                       if (!isSearchFetching) {
-                        fetchNextPage();
+                        setTargetResultCount((count) => count + searchResultsPerPage);
                       }
                     }}
                     aria-disabled={isSearchFetching}

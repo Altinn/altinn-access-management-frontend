@@ -235,5 +235,33 @@ namespace Altinn.AccessManagement.UI.Tests.Helpers
             Assert.True(actualError.Extensions.TryGetValue("delegationReasons", out string reason));
             Assert.Equal(reasons, reason);
         }
+
+        [Fact]
+        public void MapToAuthUiError_ShouldReturnError82()
+        {
+            // Arrange
+            string responseContent = "{  \"code\": \"AUTH-00082\" }";
+
+            // Act
+            ProblemInstance actualError = ProblemMapper.MapToAuthUiError(responseContent, HttpStatusCode.BadRequest);
+
+            // Assert
+            Assert.Equal("AMUI-00082", actualError.ErrorCode.ToString());
+        }
+
+        [Fact]
+        public void MapToAuthUiError_ForwardsNotDelegableResources()
+        {
+            // Arrange - authentication lists the resources the resource registry has marked as not delegable
+            string responseContent = "{ \"code\": \"AUTH-00082\", \"NotDelegableResources\": \"resource-a, resource-b\" }";
+
+            // Act
+            ProblemInstance actualError = ProblemMapper.MapToAuthUiError(responseContent, HttpStatusCode.BadRequest);
+
+            // Assert - the list survives to the frontend so it can name the affected services
+            Assert.Equal("AMUI-00082", actualError.ErrorCode.ToString());
+            Assert.True(actualError.Extensions.TryGetValue("NotDelegableResources", out string resources));
+            Assert.Equal("resource-a, resource-b", resources);
+        }
     }
 }

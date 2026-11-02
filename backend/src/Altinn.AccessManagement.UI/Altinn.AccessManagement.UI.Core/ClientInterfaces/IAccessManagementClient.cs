@@ -18,19 +18,6 @@ namespace Altinn.AccessManagement.UI.Core.ClientInterfaces
                 Task<AuthorizedParty> GetPartyFromReporteeListIfExists(int partyId);
 
                 /// <summary>
-                /// Gets the right holders of a given reportee
-                /// </summary>
-                /// <param name="partyId">The party Id of the reportee</param>
-                /// <returns>List of parties holding rights for the partyId</returns>
-                Task<List<AuthorizedParty>> GetReporteeRightHolders(int partyId);
-
-                /// <summary>
-                /// Gets a list of all reportees for a given party
-                /// </summary>
-                /// <param name="partyId">The id of the party</param>
-                Task<List<AuthorizedParty>> GetReporteeList(Guid partyId);
-
-                /// <summary>
                 /// Gets all accesses of a given right holder for a reportee
                 /// </summary>
                 /// <param name = "from" > The uuid for the reportee which the right holder has access to</param>

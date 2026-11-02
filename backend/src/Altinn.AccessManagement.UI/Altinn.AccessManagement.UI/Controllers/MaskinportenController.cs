@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations;
 using System.Net;
 using Altinn.AccessManagement.UI.Core.Helpers;
 using Altinn.AccessManagement.UI.Core.Models.ClientDelegation;
-using Altinn.AccessManagement.UI.Core.Models.Maskinporten;
+using Altinn.AccessManagement.UI.Core.Models.Maskinporten.Frontend;
 using Altinn.AccessManagement.UI.Core.Models.ResourceRegistry;
 using Altinn.AccessManagement.UI.Core.Models.ResourceRegistry.Frontend;
 using Altinn.AccessManagement.UI.Core.Models.SingleRight;
@@ -233,7 +233,7 @@ namespace Altinn.AccessManagement.UI.Controllers
         [HttpGet]
         [Authorize]
         [Route("suppliers")]
-        public async Task<ActionResult<IEnumerable<MaskinportenConnection>>> GetSuppliers([FromQuery] Guid party, [FromQuery] string supplier = null, CancellationToken cancellationToken = default)
+        public async Task<ActionResult<IEnumerable<MaskinportenConnectionFE>>> GetSuppliers([FromQuery] Guid party, [FromQuery] string supplier = null, CancellationToken cancellationToken = default)
         {
             if (!ModelState.IsValid)
             {
@@ -242,7 +242,7 @@ namespace Altinn.AccessManagement.UI.Controllers
 
             try
             {
-                IEnumerable<MaskinportenConnection> suppliers = await _maskinportenService.GetSuppliers(party, supplier, cancellationToken);
+                IEnumerable<MaskinportenConnectionFE> suppliers = await _maskinportenService.GetSuppliers(party, supplier, cancellationToken);
                 return Ok(suppliers);
             }
             catch (HttpStatusException ex)
@@ -301,7 +301,7 @@ namespace Altinn.AccessManagement.UI.Controllers
         [HttpGet]
         [Authorize]
         [Route("consumers")]
-        public async Task<ActionResult<IEnumerable<MaskinportenConnection>>> GetConsumers([FromQuery] Guid party, [FromQuery] string consumer = null, CancellationToken cancellationToken = default)
+        public async Task<ActionResult<IEnumerable<MaskinportenConnectionFE>>> GetConsumers([FromQuery] Guid party, [FromQuery] string consumer = null, CancellationToken cancellationToken = default)
         {
             if (!ModelState.IsValid)
             {
@@ -310,7 +310,7 @@ namespace Altinn.AccessManagement.UI.Controllers
 
             try
             {
-                IEnumerable<MaskinportenConnection> consumers = await _maskinportenService.GetConsumers(party, consumer, cancellationToken);
+                IEnumerable<MaskinportenConnectionFE> consumers = await _maskinportenService.GetConsumers(party, consumer, cancellationToken);
                 return Ok(consumers);
             }
             catch (HttpStatusException ex)

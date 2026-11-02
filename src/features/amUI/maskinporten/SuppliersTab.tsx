@@ -1,8 +1,9 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
-import { DsParagraph, formatDisplayName } from '@altinn/altinn-components';
+import { DsParagraph } from '@altinn/altinn-components';
 import { useNavigate } from 'react-router';
 
+import { formatEntityDisplayName } from '@/resources/utils/reporteeUtils';
 import { useGetMaskinportenSuppliersQuery } from '@/rtk/features/maskinportenApi';
 
 import { usePartyRepresentation } from '../common/PartyRepresentationContext/PartyRepresentationContext';
@@ -33,7 +34,7 @@ export const SuppliersTab = ({ party, isActive, canFetch }: SuppliersTabProps) =
       <div className={classes.description}>
         <DsParagraph>
           {t('maskinporten_page.suppliers_description', {
-            name: formatDisplayName({ fullName: actingParty?.name ?? '', type: 'company' }) ?? '',
+            name: formatEntityDisplayName(actingParty),
           })}
         </DsParagraph>
         <MaskinportenInfoPopover

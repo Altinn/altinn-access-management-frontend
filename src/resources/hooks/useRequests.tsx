@@ -1,7 +1,6 @@
 import { useMemo } from 'react';
-import { formatDisplayName } from '@altinn/altinn-components';
 
-import { PartyType, useGetIsAdminQuery, useGetReporteeQuery } from '@/rtk/features/userInfoApi';
+import { useGetIsAdminQuery, useGetReporteeQuery } from '@/rtk/features/userInfoApi';
 import { useGetActiveConsentsQuery } from '@/rtk/features/consentApi';
 import { type Request } from '@/features/amUI/requestPage/types';
 import { useGetPendingSystemUserRequestsQuery } from '@/rtk/features/systemUserApi';
@@ -13,7 +12,11 @@ import {
   useGetReceivedRequestsQuery,
   useGetSentRequestsQuery,
 } from '@/rtk/features/requestApi';
-import { isSubUnitByType } from '@/resources/utils/reporteeUtils';
+import {
+  isSubUnitByType,
+  formatEntityDisplayName,
+  getAvatarType,
+} from '@/resources/utils/reporteeUtils';
 import { useGetPartyFromLoggedInUserQuery } from '@/rtk/features/lookupApi';
 
 import { hasConsentPermission, hasCreateSystemUserPermission } from '../utils/permissionUtils';
@@ -48,7 +51,7 @@ export const useRequests = ({ skipSentRequests = false }: UseRequestsOptions = {
   const hasApproveConsentPermission = hasConsentPermission(
     reportee,
     isAdmin,
-    currentUser?.partyUuid === reportee?.partyUuid,
+    currentUser?.id === reportee?.id,
   );
   const {
     data: activeConsents,
@@ -161,8 +164,8 @@ const mapConsentToRequest = (request: ActiveConsentListItem): Request => {
     type: 'consent',
     createdDate: request.createdDate,
     displayPartyName: request.toParty.name,
-    displayPartyType: request.toParty.type === PartyType.Person ? 'person' : 'company',
-    isSubUnit: request.toParty.type === PartyType.SubUnit,
+    displayPartyType: getAvatarType(request.toParty),
+    isSubUnit: isSubUnitByType(request.toParty.unitType),
     description: request.isPoa ? 'request_page.request_poa' : 'request_page.request_consent',
   };
 };
@@ -173,7 +176,7 @@ const mapSystemUserRequestToRequest = (request: SystemUser): Request => {
     type: request.userType === 'agent' ? 'agentsystemuser' : 'systemuser',
     createdDate: request.created,
     displayPartyName: request.system.systemVendorOrgName,
-    displayPartyType: 'system',
+    displayPartyType: 'company',
     organizationIdentifier: request.system.systemVendorOrgNumber,
     description: 'request_page.request_systemuser',
   };
@@ -213,8 +216,8 @@ const mapAccessRequestToRequest = (
   numberOfRequests: number = 1,
 ): Request => {
   const party = direction === 'sent' ? request.to : request.from;
-  const partyType = party.organizationIdentifier ? 'company' : 'person';
-  const partyName = formatDisplayName({ fullName: party.name, type: partyType });
+  const partyType = getAvatarType(party);
+  const partyName = formatEntityDisplayName(party);
   return {
     id: request.id,
     type: 'accessrequest',
@@ -223,7 +226,7 @@ const mapAccessRequestToRequest = (
     displayPartyType: partyType,
     partyUuid: party.id,
     organizationIdentifier: party.organizationIdentifier ?? undefined,
-    isSubUnit: isSubUnitByType(party.variant),
+    isSubUnit: isSubUnitByType(party.unitType),
     description: undefined, // Use default description for access requests
     numberOfRequests: numberOfRequests ?? 1,
   };

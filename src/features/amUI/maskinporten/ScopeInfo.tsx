@@ -1,5 +1,4 @@
-import { Button, DsHeading, DsParagraph } from '@altinn/altinn-components';
-import { MinusCircleIcon } from '@navikt/aksel-icons';
+import { DsButton, DsHeading, DsParagraph } from '@altinn/altinn-components';
 import { useEffect, useRef } from 'react';
 import { useTranslation } from 'react-i18next';
 
@@ -38,10 +37,7 @@ interface ScopeInfoProps {
   availableActions?: DelegationAction[];
 }
 
-export const ScopeInfo = ({
-  resource,
-  availableActions = [DelegationAction.DELEGATE, DelegationAction.REVOKE],
-}: ScopeInfoProps) => {
+export const ScopeInfo = ({ resource, availableActions = [] }: ScopeInfoProps) => {
   const canDelegate = availableActions.includes(DelegationAction.DELEGATE);
   const canRevoke = availableActions.includes(DelegationAction.REVOKE);
   const isRevokeOnly = canRevoke && !canDelegate;
@@ -52,8 +48,8 @@ export const ScopeInfo = ({
     useDelegationModalContext();
   const successTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
-  const consumerPartyUuid = fromParty?.partyUuid;
-  const supplierOrgNumber = toParty?.orgNumber ?? '';
+  const consumerPartyUuid = fromParty?.id;
+  const supplierOrgNumber = toParty?.organizationIdentifier ?? '';
   const scopes = getMaskinportenScopes(resource);
 
   const [addSupplierResource] = useAddMaskinportenSupplierResourceMutation();
@@ -71,8 +67,8 @@ export const ScopeInfo = ({
     remove: isRevokeOnly
       ? (r) =>
           removeConsumerResource({
-            party: toParty?.partyUuid ?? '',
-            consumer: fromParty?.orgNumber ?? '',
+            party: toParty?.id ?? '',
+            consumer: fromParty?.organizationIdentifier ?? '',
             resource: r.identifier,
           }).unwrap()
       : (r) =>
@@ -113,11 +109,11 @@ export const ScopeInfo = ({
   const { data: consumerResources, isFetching: isConsumerResourcesLoading } =
     useGetMaskinportenConsumerResourcesQuery(
       {
-        party: toParty?.partyUuid,
-        consumer: fromParty?.orgNumber,
+        party: toParty?.id,
+        consumer: fromParty?.organizationIdentifier ?? undefined,
       },
       {
-        skip: !isRevokeOnly || !toParty?.partyUuid || !fromParty?.orgNumber,
+        skip: !isRevokeOnly || !toParty?.id || !fromParty?.organizationIdentifier,
         refetchOnMountOrArgChange: true,
       },
     );
@@ -148,7 +144,7 @@ export const ScopeInfo = ({
         }
       : null;
   const delegationCheckRightReasons = showDelegationCheckWarning
-    ? (delegationCheck?.rights?.map((right) => right.reasonCodes?.[0] ?? '') ?? [''])
+    ? (delegationCheck?.rights?.flatMap((right) => right.reasonCodes ?? []) ?? [])
     : undefined;
   const displayResourceAlert =
     canDelegate &&
@@ -272,18 +268,18 @@ export const ScopeInfo = ({
                 className={classes.editButtons}
               >
                 {hasDelegatedResource ? (
-                  <Button
-                    size='sm'
+                  <DsButton
+                    data-size='sm'
                     variant='secondary'
+                    data-color='danger'
                     disabled={isActionLoading}
                     onClick={handleRemoveResource}
                   >
-                    <MinusCircleIcon aria-hidden='true' />
                     {t('common.delete_poa')}
-                  </Button>
+                  </DsButton>
                 ) : (
-                  <Button
-                    size='sm'
+                  <DsButton
+                    data-size='sm'
                     disabled={
                       isActionLoading ||
                       !!displayResourceAlert ||
@@ -294,7 +290,7 @@ export const ScopeInfo = ({
                     onClick={handleAddResource}
                   >
                     {t('common.give_poa')}
-                  </Button>
+                  </DsButton>
                 )}
               </div>
             ) : null}

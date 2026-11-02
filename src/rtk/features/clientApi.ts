@@ -1,6 +1,6 @@
 import { createApi } from '@reduxjs/toolkit/query/react';
 
-import { type Entity } from '@/dataObjects/dtos/Common';
+import { type PartyEntity } from '@/dataObjects/dtos/Party';
 import { getCookie } from '@/resources/Cookie/CookieMethods';
 import { createBaseQuery } from '@/rtk/app/baseQuery';
 
@@ -22,18 +22,18 @@ export interface ClientAccess {
 }
 
 export interface Client {
-  client: Entity;
+  client: PartyEntity;
   access: ClientAccess[];
 }
 
 export interface Agent {
-  agent: Entity;
+  agent: PartyEntity;
   agentAddedAt: string;
   access: ClientAccess[];
 }
 
 export interface MyClientsByProvider {
-  provider: Entity;
+  provider: PartyEntity;
   clients: Client[];
 }
 
@@ -151,6 +151,7 @@ export const clientApi = createApi({
       keepUnusedDataFor: 5 * 60,
       providesTags: ['clientResources'],
     }),
+    // Tags for the four agent delegation mutations are invalidated by useClientAccessDelegation.
     addAgentAccessPackages: builder.mutation<
       DelegationDto[],
       { from: string; to: string; payload: DelegationBatchInput; party?: string }
@@ -160,7 +161,6 @@ export const clientApi = createApi({
         method: 'POST',
         body: payload,
       }),
-      invalidatesTags: ['agentAccessPackages', 'clientAccessPackages'],
     }),
     removeAgentAccessPackages: builder.mutation<
       void,
@@ -171,7 +171,6 @@ export const clientApi = createApi({
         method: 'DELETE',
         body: payload,
       }),
-      invalidatesTags: ['agentAccessPackages', 'clientAccessPackages'],
     }),
     addAgentResources: builder.mutation<
       ResourceDelegationDto[],
@@ -182,7 +181,6 @@ export const clientApi = createApi({
         method: 'POST',
         body: payload,
       }),
-      invalidatesTags: ['agentResources', 'clientResources'],
     }),
     removeAgentResources: builder.mutation<
       void,
@@ -193,7 +191,6 @@ export const clientApi = createApi({
         method: 'DELETE',
         body: payload,
       }),
-      invalidatesTags: ['agentResources', 'clientResources'],
     }),
     removeMyClientAccessPackages: builder.mutation<
       void,

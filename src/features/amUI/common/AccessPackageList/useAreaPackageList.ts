@@ -1,6 +1,7 @@
 import { useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 
+import { PartyType } from '@/dataObjects/dtos/Party';
 import type { Permissions } from '@/dataObjects/dtos/accessPackage';
 import {
   useGetUserDelegationsQuery,
@@ -9,7 +10,6 @@ import {
   type AccessPackage,
   type AccessPackageDelegation,
 } from '@/rtk/features/accessPackageApi';
-import { PartyType } from '@/rtk/features/userInfoApi';
 import { isGuardianshipUrn } from '@/resources/utils/urnUtils';
 
 import { getInheritedStatus, type InheritedStatusMessageType } from '../useInheritedStatus';
@@ -53,7 +53,7 @@ export const useAreaPackageList = ({
   const { i18n } = useTranslation();
   const { fromParty, toParty, actingParty } = usePartyRepresentation();
   const typeName = fromParty
-    ? fromParty?.partyTypeName === PartyType.Organization
+    ? fromParty?.type === PartyType.Organization
       ? 'Organisasjon'
       : 'Person'
     : undefined;
@@ -81,12 +81,12 @@ export const useAreaPackageList = ({
     error: activeDelegationsError,
   } = useGetUserDelegationsQuery(
     {
-      from: fromParty?.partyUuid ?? '',
-      to: toParty?.partyUuid ?? '',
-      party: actingParty?.partyUuid ?? '',
+      from: fromParty?.id ?? '',
+      to: toParty?.id ?? '',
+      party: actingParty?.id ?? '',
     },
     {
-      skip: (!toParty?.partyUuid && !fromParty?.partyUuid) || !actingParty?.partyUuid,
+      skip: (!toParty?.id && !fromParty?.id) || !actingParty?.id,
     },
   );
 
@@ -112,11 +112,7 @@ export const useAreaPackageList = ({
               (pkgAcc, pkg) => {
                 const pkgAccess = activeDelegationArea.find((d) => d.package.id === pkg.id);
                 if (pkgAccess !== undefined) {
-                  const deletableStatus = getDeletableStatus(
-                    pkgAccess,
-                    toParty?.partyUuid,
-                    fromParty?.partyUuid,
-                  );
+                  const deletableStatus = getDeletableStatus(pkgAccess, toParty?.id, fromParty?.id);
                   const inheritedStatus = getInheritedStatus({
                     permissions: pkgAccess.permissions,
                     actingParty,

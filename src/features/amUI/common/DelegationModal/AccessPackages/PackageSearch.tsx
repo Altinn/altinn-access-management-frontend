@@ -2,7 +2,8 @@ import { useTranslation } from 'react-i18next';
 import { DsParagraph } from '@altinn/altinn-components';
 
 import { AccessPackageList } from '@/features/amUI/common/AccessPackageList/AccessPackageList';
-import type { Party } from '@/rtk/features/lookupApi';
+import type { AreaExpandedState } from '@/features/amUI/common/AccessPackageList/useAreaExpandedState';
+import type { PartyEntity } from '@/dataObjects/dtos/Party';
 import type { AccessPackage } from '@/rtk/features/accessPackageApi';
 
 import { useDelegationModalContext } from '../DelegationModalContext';
@@ -15,8 +16,9 @@ import classes from './PackageSearch.module.css';
 export interface PackageSearchProps {
   onSelection: (pack: AccessPackage) => void;
   onActionError: (accessPackage: AccessPackage) => void;
-  toParty?: Party;
+  toParty?: PartyEntity;
   availableActions?: DelegationAction[];
+  expandedState?: AreaExpandedState;
 }
 
 export const PackageSearch = ({
@@ -24,6 +26,7 @@ export const PackageSearch = ({
   onSelection,
   onActionError,
   availableActions,
+  expandedState,
 }: PackageSearchProps) => {
   const { t } = useTranslation();
   const { searchString, setSearchString, setActionError } = useDelegationModalContext();
@@ -51,6 +54,7 @@ export const PackageSearch = ({
               onSelect={onSelection}
               searchString={searchString}
               availableActions={availableActions}
+              expandedState={expandedState}
               onDelegateError={(accessPackage, errorInfo) => {
                 onActionError(accessPackage);
                 setActionError(errorInfo);

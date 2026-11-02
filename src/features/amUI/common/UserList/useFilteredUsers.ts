@@ -1,5 +1,6 @@
 import { useMemo, useState, useEffect } from 'react';
 
+import { PartyType } from '@/dataObjects/dtos/Party';
 import { matchesOrgNr } from '@/resources/utils/reporteeUtils';
 
 import type { UserSearchNode } from '../UserSearch/types';
@@ -29,9 +30,11 @@ const filterUserNode = (userNode: UserSearchNode, searchString: string): UserSea
     };
   }
 
+  // UserItem only shows persons and organizations as children.
   const matchingChildren =
     userNode.children
-      ?.map((child) => filterUserNode(child, searchString))
+      ?.filter((child) => child.type === PartyType.Person || child.type === PartyType.Organization)
+      .map((child) => filterUserNode(child, searchString))
       .filter((child) => child !== null) ?? [];
 
   if (matchingChildren.length > 0) {
@@ -50,6 +53,13 @@ const filterUsers = (users: UserSearchNode[], searchString: string): UserSearchN
   return users.map((user) => filterUserNode(user, searchString)).filter((user) => user !== null);
 };
 
+// A connection that only matches through its children counts each matching child, as they are all shown.
+const countMatches = (users: UserSearchNode[]): number =>
+  users.reduce(
+    (sum, user) => sum + (user.matchInChildren ? countMatches(user.children ?? []) : 1),
+    0,
+  );
+
 const sortUsers = (users: UserSearchNode[]): UserSearchNode[] => {
   const processedUsers = users.map((user) => {
     const userCopy = { ...user };
@@ -66,10 +76,9 @@ const sortUsers = (users: UserSearchNode[]): UserSearchNode[] => {
       return sortKeyComparison;
     }
 
-    if (a.type?.toLowerCase() === 'organisasjon' && b.type?.toLowerCase() !== 'organisasjon')
-      return -1;
-    if (b.type?.toLowerCase() === 'organisasjon' && a.type?.toLowerCase() !== 'organisasjon')
-      return 1;
+    const aIsOrg = a.type === PartyType.Organization;
+    const bIsOrg = b.type === PartyType.Organization;
+    if (aIsOrg !== bIsOrg) return aIsOrg ? -1 : 1;
 
     return a.name.localeCompare(b.name);
   });
@@ -153,6 +162,7 @@ export const useFilteredUsers = ({
     hasNextIndirectPage,
     goNextPage,
     goNextIndirectPage,
-    totalFilteredCount: processedUsers.length,
+    totalFilteredCount: countMatches(processedUsers),
+    totalFilteredIndirectCount: countMatches(indirectUsers ?? []),
   };
 };

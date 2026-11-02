@@ -75,20 +75,20 @@ export const useHandledRequests = (request: Request | null, direction: HandledDi
 
   // All four queries are declared (rules of hooks); only the pair matching `direction` runs.
   const receivedResource = useGetEnrichedReceivedResourceRequestsQuery(
-    { party: actingParty?.partyUuid || '', from: request?.partyUuid || '', status: handledStatus },
-    { skip: !isReceived || !actingParty?.partyUuid || !request?.partyUuid },
+    { party: actingParty?.id || '', from: request?.partyUuid || '', status: handledStatus },
+    { skip: !isReceived || !actingParty?.id || !request?.partyUuid },
   );
   const receivedPackage = useGetEnrichedReceivedPackageRequestsQuery(
-    { party: actingParty?.partyUuid || '', from: request?.partyUuid || '', status: handledStatus },
-    { skip: !isReceived || !actingParty?.partyUuid || !request?.partyUuid },
+    { party: actingParty?.id || '', from: request?.partyUuid || '', status: handledStatus },
+    { skip: !isReceived || !actingParty?.id || !request?.partyUuid },
   );
   const sentResource = useGetEnrichedSentResourceRequestsQuery(
-    { party: actingParty?.partyUuid || '', to: request?.partyUuid || '', status: handledStatus },
-    { skip: isReceived || !actingParty?.partyUuid || !request?.partyUuid },
+    { party: actingParty?.id || '', to: request?.partyUuid || '', status: handledStatus },
+    { skip: isReceived || !actingParty?.id || !request?.partyUuid },
   );
   const sentPackage = useGetEnrichedSentPackageRequestsQuery(
-    { party: actingParty?.partyUuid || '', to: request?.partyUuid || '', status: handledStatus },
-    { skip: isReceived || !actingParty?.partyUuid || !request?.partyUuid },
+    { party: actingParty?.id || '', to: request?.partyUuid || '', status: handledStatus },
+    { skip: isReceived || !actingParty?.id || !request?.partyUuid },
   );
 
   const resourceQuery = isReceived ? receivedResource : sentResource;

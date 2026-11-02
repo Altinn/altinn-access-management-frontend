@@ -41,6 +41,8 @@ export const PermissionsBadge = ({ permissions }: { permissions: AvatarProps[] }
               <Avatar
                 name={p.name}
                 type={p.type}
+                isDeleted={p.isDeleted}
+                isParent={p.isParent}
                 size='md'
               />
               <DsParagraph className={classes.permissionsBadgeItemName}>{p.name}</DsParagraph>

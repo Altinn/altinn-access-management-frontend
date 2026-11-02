@@ -1,8 +1,13 @@
 import { useMemo } from 'react';
-import { type AvatarProps, formatDisplayName } from '@altinn/altinn-components';
+import { type AvatarProps } from '@altinn/altinn-components';
 
 import type { Permissions } from '@/dataObjects/dtos/accessPackage';
-import { isSubUnitByType } from '@/resources/utils/reporteeUtils';
+import { PartyType } from '@/dataObjects/dtos/Party';
+import {
+  isSubUnitByType,
+  formatEntityDisplayName,
+  getAvatarType,
+} from '@/resources/utils/reporteeUtils';
 
 export const usePermissionOverview = ({ permissions }: { permissions: Permissions[] }) => {
   const calculatedPermissions = useMemo(() => {
@@ -14,13 +19,11 @@ export const usePermissionOverview = ({ permissions }: { permissions: Permission
       const id = to?.id;
       if (!to || !id) continue;
       if (seen.has(id)) continue;
-      const isPerson = to?.type === 'Person';
-      const type = isPerson ? 'person' : 'company';
-      const name = formatDisplayName({
-        fullName: to?.name || '',
-        type,
-      });
-      const isParent = !isPerson && !isSubUnitByType(to.variant);
+      if (to.type === PartyType.SystemUser) continue; // skip system users
+      const isPerson = to.type === PartyType.Person;
+      const type = getAvatarType(to);
+      const name = formatEntityDisplayName(to);
+      const isParent = !isPerson && !isSubUnitByType(to.unitType);
       seen.add(id);
       result.push({
         id,
@@ -28,6 +31,7 @@ export const usePermissionOverview = ({ permissions }: { permissions: Permission
         size: 'md',
         type,
         isParent,
+        isDeleted: to?.isDeleted ?? undefined,
       });
     }
 

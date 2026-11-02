@@ -1,3 +1,5 @@
+using Altinn.AccessManagement.UI.Core.Models.Common.Frontend;
+
 namespace Altinn.AccessManagement.UI.Core.Models.Consent.Frontend
 {
     /// <summary>
@@ -23,12 +25,12 @@ namespace Altinn.AccessManagement.UI.Core.Models.Consent.Frontend
         /// <summary>
         /// Party that requested the consent
         /// </summary>
-        public ConsentPartyFE ToParty { get; set; }
+        public PartyFE ToParty { get; set; }
 
         /// <summary>
         /// Party that requested the consent
         /// </summary>
-        public ConsentPartyFE FromParty { get; set; }
+        public PartyFE FromParty { get; set; }
 
         /// <summary>
         /// Date when consent request was created

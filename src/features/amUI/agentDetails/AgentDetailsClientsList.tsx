@@ -1,6 +1,6 @@
 import React from 'react';
-import { formatDisplayName } from '@altinn/altinn-components';
 
+import { formatEntityDisplayName } from '@/resources/utils/reporteeUtils';
 import type { ActionError } from '@/resources/hooks/useActionError';
 import type {
   AddAgentAccessPackagesFn,
@@ -9,7 +9,6 @@ import type {
   RemoveAgentAccessPackagesFn,
   RemoveAgentResourcesFn,
 } from '@/rtk/features/clientApi';
-import { PartyType } from '@/rtk/features/userInfoApi';
 
 import { ClientAccessList } from '../common/ClientAccessList/ClientAccessList';
 import { useClientResourceActions } from '../common/ClientResourceList/useClientResourceActions';
@@ -22,6 +21,7 @@ type AgentDetailsClientsListProps = {
   agentAccessPackages: Client[];
   agentResources?: Client[];
   isLoading: boolean;
+  renderClientActions: (client: Client, restoreFocusFallbackId?: string) => React.ReactNode;
   toPartyUuid?: string;
   actingPartyUuid?: string;
   addAgentAccessPackages: AddAgentAccessPackagesFn;
@@ -32,6 +32,7 @@ type AgentDetailsClientsListProps = {
   emptyText?: string;
   expandedIds?: string[];
   onToggleExpanded?: (id: string) => void;
+  restoreFocusFallbackId?: string;
 };
 
 export const AgentDetailsClientsList = ({
@@ -39,6 +40,7 @@ export const AgentDetailsClientsList = ({
   agentAccessPackages,
   agentResources,
   isLoading,
+  renderClientActions,
   toPartyUuid,
   actingPartyUuid,
   addAgentAccessPackages,
@@ -49,9 +51,9 @@ export const AgentDetailsClientsList = ({
   emptyText,
   expandedIds,
   onToggleExpanded,
+  restoreFocusFallbackId,
 }: AgentDetailsClientsListProps) => {
-  const delegateDisabled = isLoading || !toPartyUuid || !actingPartyUuid;
-  const removeDisabled = isLoading || !toPartyUuid || !actingPartyUuid;
+  const actionDisabled = isLoading || !toPartyUuid || !actingPartyUuid;
 
   const { addAgentAccessPackage, removeAgentAccessPackage } = useAgentDetailsAccessPackageActions({
     toPartyUuid,
@@ -65,51 +67,26 @@ export const AgentDetailsClientsList = ({
     removeAgentResources,
   });
   const { toParty } = usePartyRepresentation();
-  const agentName = formatDisplayName({
-    fullName: toParty?.name || '',
-    type: toParty?.partyTypeName === PartyType.Person ? 'person' : 'company',
-  });
+  const agentName = formatEntityDisplayName(toParty);
 
   return (
     <ClientAccessList
       clients={clients}
       accessStateClients={agentAccessPackages}
       resourceAccessClients={agentResources}
-      addDisabled={delegateDisabled}
-      removeDisabled={removeDisabled}
+      addDisabled={actionDisabled}
+      removeDisabled={actionDisabled}
       searchString={searchString}
       emptyText={emptyText}
       expandedIds={expandedIds}
       onToggleExpanded={onToggleExpanded}
-      onAddAccessPackage={(
-        { clientId, roleCode, packageId, accessPackageName },
-        onSuccess?: () => void,
-        onError?: () => void,
-      ) =>
-        addAgentAccessPackage(
-          clientId,
-          roleCode,
-          packageId,
-          agentName,
-          accessPackageName,
-          onSuccess,
-          onError,
-        )
+      restoreFocusFallbackId={restoreFocusFallbackId}
+      renderClientActions={renderClientActions}
+      onAddAccessPackage={(action, onSuccess, onError) =>
+        addAgentAccessPackage({ ...action, agentName }, onSuccess, onError)
       }
-      onRemoveAccessPackage={(
-        { clientId, roleCode, packageId, accessPackageName },
-        onSuccess?: () => void,
-        onError?: () => void,
-      ) =>
-        removeAgentAccessPackage(
-          clientId,
-          roleCode,
-          packageId,
-          agentName,
-          accessPackageName,
-          onSuccess,
-          onError,
-        )
+      onRemoveAccessPackage={(action, onSuccess, onError) =>
+        removeAgentAccessPackage({ ...action, agentName }, onSuccess, onError)
       }
       onAddResource={(
         { clientId, roleCode, resourceId, resourceName },

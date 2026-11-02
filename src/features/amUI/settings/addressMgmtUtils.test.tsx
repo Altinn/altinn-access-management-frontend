@@ -4,9 +4,9 @@ import { Provider } from 'react-redux';
 import { configureStore } from '@reduxjs/toolkit';
 import React from 'react';
 
+import { PartyType } from '@/dataObjects/dtos/Party';
 import type { NotificationAddress } from '@/rtk/features/settingsApi';
 import { settingsApi } from '@/rtk/features/settingsApi';
-import { PartyType } from '@/rtk/features/userInfoApi';
 
 import { usePartyRepresentation } from '../common/PartyRepresentationContext/PartyRepresentationContext';
 
@@ -100,10 +100,11 @@ describe('addressMgmtUtils', () => {
     vi.mocked(usePartyRepresentation).mockReturnValue({
       actingParty: {
         partyId: 1,
-        partyUuid: 'test-uuid-123',
-        orgNumber: '123456789',
+        id: 'test-uuid-123',
+        organizationIdentifier: '123456789',
         name: 'Test Organization',
-        partyTypeName: PartyType.Organization,
+        type: PartyType.Organization,
+        isDeleted: false,
       },
       isLoading: false,
       isError: false,

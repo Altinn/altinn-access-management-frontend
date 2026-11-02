@@ -1,7 +1,8 @@
 import { useCallback, useState, useEffect, useRef } from 'react';
-import { formatDisplayName, useSnackbar } from '@altinn/altinn-components';
+import { useSnackbar } from '@altinn/altinn-components';
 import { useTranslation } from 'react-i18next';
 
+import { formatEntityDisplayName } from '@/resources/utils/reporteeUtils';
 import { getActionError, type ActionError } from '@/resources/hooks/useActionError';
 import { usePartyRepresentation } from '@/features/amUI/common/PartyRepresentationContext/PartyRepresentationContext';
 import {
@@ -11,7 +12,6 @@ import {
   useRevokeResourceMutation,
   type ServiceResource,
 } from '@/rtk/features/singleRights/singleRightsApi';
-import { PartyType } from '@/rtk/features/userInfoApi';
 
 interface UseResourceListDelegationProps {
   onActionError?: (resource: ServiceResource, errorInfo: ActionError) => void;
@@ -38,16 +38,13 @@ export const useResourceListDelegation = ({
   const { actingParty, fromParty, toParty } = usePartyRepresentation();
   const { isFetching } = useGetSingleRightsForRightholderQuery(
     {
-      actingParty: actingParty?.partyUuid || '',
-      from: fromParty?.partyUuid || '',
-      to: toParty?.partyUuid || '',
+      actingParty: actingParty?.id || '',
+      from: fromParty?.id || '',
+      to: toParty?.id || '',
     },
     { skip: !toParty || !fromParty || !actingParty },
   );
-  const toPartyName = formatDisplayName({
-    fullName: toParty?.name || '',
-    type: toParty?.partyTypeName === PartyType.Person ? 'person' : 'company',
-  });
+  const toPartyName = formatEntityDisplayName(toParty);
 
   const [loadingByResourceId, setLoadingByResourceId] = useState<Record<string, boolean>>({});
   const waitingForRefetchRef = useRef<Set<string>>(new Set());
@@ -92,9 +89,9 @@ export const useResourceListDelegation = ({
         if (canDelegateAllActions) {
           const allActionKeys = result.data.map((action) => action.right.key);
           delegateRights({
-            partyUuid: actingParty!.partyUuid,
-            fromUuid: fromParty!.partyUuid,
-            toUuid: toParty!.partyUuid,
+            partyUuid: actingParty!.id,
+            fromUuid: fromParty!.id,
+            toUuid: toParty!.id,
             resourceId: resource.identifier,
             actionKeys: allActionKeys,
           })
@@ -144,9 +141,9 @@ export const useResourceListDelegation = ({
     (resource: ServiceResource) => {
       setResourceLoading(resource.identifier, true);
       revokeResource({
-        from: fromParty!.partyUuid,
-        to: toParty!.partyUuid,
-        party: actingParty!.partyUuid,
+        from: fromParty!.id,
+        to: toParty!.id,
+        party: actingParty!.id,
         resourceId: resource.identifier,
       })
         .unwrap()

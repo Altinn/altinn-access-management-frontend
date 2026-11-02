@@ -7,9 +7,9 @@ export const useRevokeResource = () => {
 
   const revokeResource = (resourceId: string, onSuccess?: () => void, onError?: () => void) => {
     revoke({
-      from: fromParty?.partyUuid || '',
-      to: toParty?.partyUuid || '',
-      party: actingParty?.partyUuid || '',
+      from: fromParty?.id || '',
+      to: toParty?.id || '',
+      party: actingParty?.id || '',
       resourceId,
     })
       .unwrap()

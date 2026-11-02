@@ -1,8 +1,8 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { useLocation } from 'react-router';
-import { formatDisplayName } from '@altinn/altinn-components';
 
+import { formatEntityDisplayName } from '@/resources/utils/reporteeUtils';
 import { useDocumentTitle } from '@/resources/hooks/useDocumentTitle';
 import { PageWrapper } from '@/components';
 import { useGetActiveConsentsQuery } from '@/rtk/features/consentApi';
@@ -26,16 +26,12 @@ export const ActiveConsentsPage = () => {
   useDocumentTitle(t('active_consents.page_title'));
   const partyUuid = getCookie('AltinnPartyUuid');
 
-  const newlyCreatedId = routerLocation?.state?.createdId;
+  const newlyCreatedId = (routerLocation.state as { createdId?: string } | null)?.createdId;
 
   const { data: reportee, isLoading: isLoadingReportee } = useGetReporteeQuery();
   const { data: currentUser, isLoading: isCurrentUserLoading } = useGetPartyFromLoggedInUserQuery();
   const { data: isAdmin, isLoading: isLoadingIsAdmin } = useGetIsAdminQuery();
-  const hasPermission = hasConsentPermission(
-    reportee,
-    isAdmin,
-    currentUser?.partyUuid === reportee?.partyUuid,
-  );
+  const hasPermission = hasConsentPermission(reportee, isAdmin, currentUser?.id === reportee?.id);
 
   const {
     data: activeConsents,
@@ -58,10 +54,7 @@ export const ActiveConsentsPage = () => {
     isLoadingActiveConsents ||
     isLoadingIdPortenAuthorizations;
 
-  const reporteeName = formatDisplayName({
-    fullName: reportee?.name || '',
-    type: reportee?.type === 'Person' ? 'person' : 'company',
-  });
+  const reporteeName = formatEntityDisplayName(reportee);
 
   return (
     <PageWrapper>

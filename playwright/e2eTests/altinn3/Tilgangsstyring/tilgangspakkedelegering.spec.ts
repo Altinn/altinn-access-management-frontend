@@ -1,11 +1,6 @@
 import { test } from '../../../fixture/pomFixture';
-import { EnduserConnection } from '../../../api-requests/EnduserConnection';
 
-const reportArea = { annotation: { type: 'report-area', description: 'Fullmakter' } };
-
-test.describe('tilgangspakkedelegering fra person til person og person til org', reportArea, () => {
-  const api = new EnduserConnection();
-
+test.describe('tilgangspakkedelegering fra person til person og person til org', () => {
   test.describe('Legg til ny person hos deg selv', () => {
     const actor = { pid: '01837396103', name: 'DRIFTIG KATEGORI' };
     const target = { pid: '52858201748', lastName: 'KOMPOSISJON', name: 'MEMORERENDE KOMPOSISJON' };
@@ -38,9 +33,9 @@ test.describe('tilgangspakkedelegering fra person til person og person til org',
       });
     });
 
-    test.afterEach(async () => {
+    test.afterEach(async ({ api }) => {
       try {
-        await api.deleteConnection(actor.pid, actor.pid, [target.pid]);
+        await api.connections.deleteConnection(actor.pid, actor.pid, [target.pid]);
       } catch (error) {
         console.error('Cleanup: Failed to delete connection:', error);
       }
@@ -80,9 +75,9 @@ test.describe('tilgangspakkedelegering fra person til person og person til org',
       });
     });
 
-    test.afterEach(async () => {
+    test.afterEach(async ({ api }) => {
       try {
-        await api.deleteConnection(actor.pid, actor.pid, [target.org]);
+        await api.connections.deleteConnection(actor.pid, actor.pid, [target.org]);
       } catch (error) {
         console.error('Cleanup: Failed to delete connection:', error);
       }
@@ -98,13 +93,13 @@ test.describe('tilgangspakkedelegering fra person til person og person til org',
       area: 'Arbeidsliv, skole og utdanning',
     };
 
-    test.beforeEach(async () => {
+    test.beforeEach(async ({ api }) => {
       try {
-        await api.deleteConnection(actor.pid, actor.pid, [target.pid]);
+        await api.connections.deleteConnection(actor.pid, actor.pid, [target.pid]);
       } catch {
         /* ignore if nothing to clean */
       }
-      await api.addConnection(actor.pid, actor.pid, target.pid);
+      await api.connections.addConnection(actor.pid, actor.pid, target.pid);
     });
 
     test('Deleger tilgangspakke til person', async ({
@@ -140,9 +135,9 @@ test.describe('tilgangspakkedelegering fra person til person og person til org',
       });
     });
 
-    test.afterEach(async () => {
+    test.afterEach(async ({ api }) => {
       try {
-        await api.deleteConnection(actor.pid, actor.pid, [target.pid]);
+        await api.connections.deleteConnection(actor.pid, actor.pid, [target.pid]);
       } catch (error) {
         console.error('Cleanup: Failed to delete connection:', error);
       }
@@ -158,13 +153,13 @@ test.describe('tilgangspakkedelegering fra person til person og person til org',
       area: 'Arbeidsliv, skole og utdanning',
     };
 
-    test.beforeEach(async () => {
+    test.beforeEach(async ({ api }) => {
       try {
-        await api.deleteConnection(actor.pid, actor.pid, [target.org]);
+        await api.connections.deleteConnection(actor.pid, actor.pid, [target.org]);
       } catch {
         /* ignore if nothing to clean */
       }
-      await api.addConnection(actor.pid, actor.pid, target.org);
+      await api.connections.addConnection(actor.pid, actor.pid, target.org);
     });
 
     test('Deleger tilgangspakke til virksomhet', async ({
@@ -202,9 +197,9 @@ test.describe('tilgangspakkedelegering fra person til person og person til org',
       });
     });
 
-    test.afterEach(async () => {
+    test.afterEach(async ({ api }) => {
       try {
-        await api.deleteConnection(actor.pid, actor.pid, [target.org]);
+        await api.connections.deleteConnection(actor.pid, actor.pid, [target.org]);
       } catch (error) {
         console.error('Cleanup: Failed to delete connection:', error);
       }
@@ -220,8 +215,10 @@ test.describe('tilgangspakkedelegering fra person til person og person til org',
       area: 'Familie og fritid',
     };
 
-    test.beforeEach(async () => {
-      await api.addConnectionAndPackagesToUser(actor.pid, actor.pid, target.pid, [pkg.urn]);
+    test.beforeEach(async ({ api }) => {
+      await api.connections.addConnectionAndPackagesToUser(actor.pid, actor.pid, target.pid, [
+        pkg.urn,
+      ]);
     });
 
     test('Slett tilgangspakke hos person', async ({
@@ -256,16 +253,21 @@ test.describe('tilgangspakkedelegering fra person til person og person til org',
       });
     });
 
-    test.afterEach(async ({}, testInfo) => {
+    test.afterEach(async ({ api }, testInfo) => {
       if (testInfo.status === 'passed') return;
 
       try {
-        await api.deleteAccessPackageDelegation(actor.pid, actor.pid, target.pid, pkg.urn);
+        await api.connections.deleteAccessPackageDelegation(
+          actor.pid,
+          actor.pid,
+          target.pid,
+          pkg.urn,
+        );
       } catch (error) {
         console.error('Cleanup: Failed to delete access package delegation:', error);
       }
       try {
-        await api.deleteConnection(actor.pid, actor.pid, [target.pid]);
+        await api.connections.deleteConnection(actor.pid, actor.pid, [target.pid]);
       } catch (error) {
         console.error('Cleanup: Failed to delete connection:', error);
       }
@@ -281,8 +283,10 @@ test.describe('tilgangspakkedelegering fra person til person og person til org',
       area: 'Familie og fritid',
     };
 
-    test.beforeEach(async () => {
-      await api.addConnectionAndPackagesToUser(actor.pid, actor.pid, target.org, [pkg.urn]);
+    test.beforeEach(async ({ api }) => {
+      await api.connections.addConnectionAndPackagesToUser(actor.pid, actor.pid, target.org, [
+        pkg.urn,
+      ]);
     });
 
     test('Slett tilgangspakke hos virksomhet', async ({
@@ -319,16 +323,21 @@ test.describe('tilgangspakkedelegering fra person til person og person til org',
       });
     });
 
-    test.afterEach(async ({}, testInfo) => {
+    test.afterEach(async ({ api }, testInfo) => {
       if (testInfo.status === 'passed') return;
 
       try {
-        await api.deleteAccessPackageDelegation(actor.pid, actor.pid, target.org, pkg.urn);
+        await api.connections.deleteAccessPackageDelegation(
+          actor.pid,
+          actor.pid,
+          target.org,
+          pkg.urn,
+        );
       } catch (error) {
         console.error('Cleanup: Failed to delete access package delegation:', error);
       }
       try {
-        await api.deleteConnection(actor.pid, actor.pid, [target.org]);
+        await api.connections.deleteConnection(actor.pid, actor.pid, [target.org]);
       } catch (error) {
         console.error('Cleanup: Failed to delete connection:', error);
       }
@@ -336,9 +345,7 @@ test.describe('tilgangspakkedelegering fra person til person og person til org',
   });
 });
 
-test.describe('tilgangspakkedelegering fra org til person og org til org', reportArea, () => {
-  const api = new EnduserConnection();
-
+test.describe('tilgangspakkedelegering fra org til person og org til org', () => {
   test.describe('Legg til ny person hos din org', () => {
     const actor = { pid: '19858798917', org: '310945552', orgName: 'HARDHUDET REDELIG TIGER AS' };
     const target = { pid: '41926701744', lastName: 'APRIKOS', name: 'OMSORGSFULL APRIKOS' };
@@ -371,9 +378,9 @@ test.describe('tilgangspakkedelegering fra org til person og org til org', repor
       });
     });
 
-    test.afterEach(async () => {
+    test.afterEach(async ({ api }) => {
       try {
-        await api.deleteConnection(actor.pid, actor.org, [target.pid]);
+        await api.connections.deleteConnection(actor.pid, actor.org, [target.pid]);
       } catch (error) {
         console.error('Cleanup: Failed to delete connection:', error);
       }
@@ -417,9 +424,9 @@ test.describe('tilgangspakkedelegering fra org til person og org til org', repor
       });
     });
 
-    test.afterEach(async () => {
+    test.afterEach(async ({ api }) => {
       try {
-        await api.deleteConnection(actor.pid, actor.org, [target.org]);
+        await api.connections.deleteConnection(actor.pid, actor.org, [target.org]);
       } catch (error) {
         console.error('Cleanup: Failed to delete connection:', error);
       }
@@ -435,13 +442,13 @@ test.describe('tilgangspakkedelegering fra org til person og org til org', repor
       area: 'Andre tjenesteytende næringer',
     };
 
-    test.beforeEach(async () => {
+    test.beforeEach(async ({ api }) => {
       try {
-        await api.deleteConnection(actor.pid, actor.org, [target.pid]);
+        await api.connections.deleteConnection(actor.pid, actor.org, [target.pid]);
       } catch {
         /* ignore if nothing to clean */
       }
-      await api.addConnection(actor.pid, actor.org, target.pid);
+      await api.connections.addConnection(actor.pid, actor.org, target.pid);
     });
 
     test('Deleger tilgangspakke til person', async ({
@@ -477,9 +484,9 @@ test.describe('tilgangspakkedelegering fra org til person og org til org', repor
       });
     });
 
-    test.afterEach(async () => {
+    test.afterEach(async ({ api }) => {
       try {
-        await api.deleteConnection(actor.pid, actor.org, [target.pid]);
+        await api.connections.deleteConnection(actor.pid, actor.org, [target.pid]);
       } catch (error) {
         console.error('Cleanup: Failed to delete connection:', error);
       }
@@ -495,13 +502,13 @@ test.describe('tilgangspakkedelegering fra org til person og org til org', repor
       area: 'Andre tjenesteytende næringer',
     };
 
-    test.beforeEach(async () => {
+    test.beforeEach(async ({ api }) => {
       try {
-        await api.deleteConnection(actor.pid, actor.org, [target.org]);
+        await api.connections.deleteConnection(actor.pid, actor.org, [target.org]);
       } catch {
         /* ignore if nothing to clean */
       }
-      await api.addConnection(actor.pid, actor.org, target.org);
+      await api.connections.addConnection(actor.pid, actor.org, target.org);
     });
 
     test('Deleger tilgangspakke til virksomhet', async ({
@@ -539,9 +546,9 @@ test.describe('tilgangspakkedelegering fra org til person og org til org', repor
       });
     });
 
-    test.afterEach(async () => {
+    test.afterEach(async ({ api }) => {
       try {
-        await api.deleteConnection(actor.pid, actor.org, [target.org]);
+        await api.connections.deleteConnection(actor.pid, actor.org, [target.org]);
       } catch (error) {
         console.error('Cleanup: Failed to delete connection:', error);
       }
@@ -557,8 +564,10 @@ test.describe('tilgangspakkedelegering fra org til person og org til org', repor
       area: 'Andre tjenesteytende næringer',
     };
 
-    test.beforeEach(async () => {
-      await api.addConnectionAndPackagesToUser(actor.pid, actor.org, target.pid, [pkg.urn]);
+    test.beforeEach(async ({ api }) => {
+      await api.connections.addConnectionAndPackagesToUser(actor.pid, actor.org, target.pid, [
+        pkg.urn,
+      ]);
     });
 
     test('Slett tilgangspakke hos person', async ({
@@ -593,16 +602,21 @@ test.describe('tilgangspakkedelegering fra org til person og org til org', repor
       });
     });
 
-    test.afterEach(async ({}, testInfo) => {
+    test.afterEach(async ({ api }, testInfo) => {
       if (testInfo.status === 'passed') return;
 
       try {
-        await api.deleteAccessPackageDelegation(actor.pid, actor.org, target.pid, pkg.urn);
+        await api.connections.deleteAccessPackageDelegation(
+          actor.pid,
+          actor.org,
+          target.pid,
+          pkg.urn,
+        );
       } catch (error) {
         console.error('Cleanup: Failed to delete access package delegation:', error);
       }
       try {
-        await api.deleteConnection(actor.pid, actor.org, [target.pid]);
+        await api.connections.deleteConnection(actor.pid, actor.org, [target.pid]);
       } catch (error) {
         console.error('Cleanup: Failed to delete connection:', error);
       }
@@ -618,8 +632,10 @@ test.describe('tilgangspakkedelegering fra org til person og org til org', repor
       area: 'Andre tjenesteytende næringer',
     };
 
-    test.beforeEach(async () => {
-      await api.addConnectionAndPackagesToUser(actor.pid, actor.org, target.org, [pkg.urn]);
+    test.beforeEach(async ({ api }) => {
+      await api.connections.addConnectionAndPackagesToUser(actor.pid, actor.org, target.org, [
+        pkg.urn,
+      ]);
     });
 
     test('Slett tilgangspakke hos virksomhet', async ({
@@ -656,16 +672,21 @@ test.describe('tilgangspakkedelegering fra org til person og org til org', repor
       });
     });
 
-    test.afterEach(async ({}, testInfo) => {
+    test.afterEach(async ({ api }, testInfo) => {
       if (testInfo.status === 'passed') return;
 
       try {
-        await api.deleteAccessPackageDelegation(actor.pid, actor.org, target.org, pkg.urn);
+        await api.connections.deleteAccessPackageDelegation(
+          actor.pid,
+          actor.org,
+          target.org,
+          pkg.urn,
+        );
       } catch (error) {
         console.error('Cleanup: Failed to delete access package delegation:', error);
       }
       try {
-        await api.deleteConnection(actor.pid, actor.org, [target.org]);
+        await api.connections.deleteConnection(actor.pid, actor.org, [target.org]);
       } catch (error) {
         console.error('Cleanup: Failed to delete connection:', error);
       }

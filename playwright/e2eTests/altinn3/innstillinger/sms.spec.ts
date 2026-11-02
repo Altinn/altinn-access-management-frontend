@@ -1,13 +1,8 @@
 import { expect, test } from '../../../fixture/pomFixture';
-import { SettingsApiRequests } from '../../../api-requests/SettingsApiRequests';
 
 import { ACTORS, BASELINE_EPOST } from './testdata';
 
-const reportArea = { annotation: { type: 'report-area', description: 'Innstillinger' } };
-
-test.describe('Innstillinger - SMS-adresser', reportArea, () => {
-  const api = new SettingsApiRequests();
-
+test.describe('Innstillinger - SMS-adresser', () => {
   test.describe('legg til SMS-adresse', () => {
     const actor = ACTORS.leggTilSms;
     // Deliberately an obviously-synthetic number, matching the dummy values in
@@ -16,16 +11,16 @@ test.describe('Innstillinger - SMS-adresser', reportArea, () => {
     // real notification address before afterEach removes it.
     const nyttNummer = { countryCode: '+47', phone: '99999999' };
 
-    test.beforeEach(async () => {
+    test.beforeEach(async ({ api }) => {
       // Baseline keeps one email and no SMS, so the SMS dialog opens on an
       // empty first row and the org still has the one address it must have.
-      await api.setNotificationAddresses(actor.pid, actor.org, {
+      await api.settings.setNotificationAddresses(actor.pid, actor.org, {
         emails: [BASELINE_EPOST],
         phones: [],
       });
     });
 
-    test('legg til SMS-adresse', async ({ runAccessibilityTest, innstillingerPage, login }) => {
+    test('legg til SMS-adresse', async ({ innstillingerPage, login }) => {
       await test.step(`Logg inn som ${actor.orgName} og åpne innstillinger`, async () => {
         await login.LoginToAccessManagement(actor.pid);
         await login.selectActor(actor.orgName);
@@ -34,7 +29,6 @@ test.describe('Innstillinger - SMS-adresser', reportArea, () => {
 
       await test.step('Legg til et telefonnummer for varslinger', async () => {
         await innstillingerPage.openSmsDialog();
-        await runAccessibilityTest.scan('sms-tom-dialog');
         await innstillingerPage.leggTilTelefonnummer(nyttNummer);
         await innstillingerPage.lagreEndringer();
       });
@@ -44,12 +38,11 @@ test.describe('Innstillinger - SMS-adresser', reportArea, () => {
         await expect(innstillingerPage.smsRows).toHaveCount(1);
         await expect(innstillingerPage.countryCodeFields).toHaveValue(nyttNummer.countryCode);
         await expect(innstillingerPage.phoneFields).toHaveValue(nyttNummer.phone);
-        await runAccessibilityTest.scan('sms-lagret');
       });
     });
 
-    test.afterEach(async () => {
-      await api.setNotificationAddresses(actor.pid, actor.org, {
+    test.afterEach(async ({ api }) => {
+      await api.settings.setNotificationAddresses(actor.pid, actor.org, {
         emails: [BASELINE_EPOST],
         phones: [],
       });

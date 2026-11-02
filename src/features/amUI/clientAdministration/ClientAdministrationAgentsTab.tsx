@@ -3,6 +3,7 @@ import { useTranslation } from 'react-i18next';
 import { DsAlert, DsParagraph, useSnackbar } from '@altinn/altinn-components';
 import { useNavigate } from 'react-router';
 
+import { PartyType } from '@/dataObjects/dtos/Party';
 import { useAddAgentMutation, useGetAgentsQuery } from '@/rtk/features/clientApi';
 import { useGetRightHoldersQuery } from '@/rtk/features/connectionApi';
 
@@ -10,6 +11,13 @@ import { AddAgentButton } from '../users/NewUserModal/AddAgentModal';
 import { UserSearch } from '../common/UserSearch/UserSearch';
 import { usePartyRepresentation } from '../common/PartyRepresentationContext/PartyRepresentationContext';
 import { mapConnectionsToUserSearchNodes } from '../common/UserSearch/connectionMapper';
+import { mapPartyToUserSearchNode } from '../common/UserSearch/mapperUtils';
+import {
+  RestoreFocusFallback,
+  RestoreFocusProvider,
+  useRestoreFocus,
+  useRestoreFocusOnDataChange,
+} from '../common/RestoreFocus';
 
 import classes from './ClientAdministrationAgentsTab.module.css';
 
@@ -17,7 +25,9 @@ type ClientAdministrationAgentsTabProps = {
   isActive: boolean;
 };
 
-export const ClientAdministrationAgentsTab = ({ isActive }: ClientAdministrationAgentsTabProps) => {
+const AGENT_SEARCH_FALLBACK_ID = 'client_administration_agent_search';
+
+const ClientAdministrationAgentsTabContent = ({ isActive }: ClientAdministrationAgentsTabProps) => {
   const { t } = useTranslation();
   const { openSnackbar } = useSnackbar();
   const navigate = useNavigate();
@@ -28,6 +38,7 @@ export const ClientAdministrationAgentsTab = ({ isActive }: ClientAdministration
   } = useGetAgentsQuery(undefined, { skip: !isActive });
   const [addAgent, { isLoading: isAdding }] = useAddAgentMutation();
   const { fromParty } = usePartyRepresentation();
+  const requestFocusOnDataChange = useRestoreFocusOnDataChange(agents);
 
   const {
     data: indirectConnections,
@@ -35,46 +46,40 @@ export const ClientAdministrationAgentsTab = ({ isActive }: ClientAdministration
     isFetching: isIndirectFetching,
   } = useGetRightHoldersQuery(
     {
-      partyUuid: fromParty?.partyUuid ?? '',
-      fromUuid: fromParty?.partyUuid ?? '',
+      partyUuid: fromParty?.id ?? '',
+      fromUuid: fromParty?.id ?? '',
       toUuid: '',
     },
-    { skip: !isActive || !fromParty?.partyUuid },
+    { skip: !isActive || !fromParty?.id },
   );
 
   const users = useMemo(
     () =>
-      mapConnectionsToUserSearchNodes(
-        agents?.map((agent) => ({
-          party: {
-            ...agent.agent,
-            children: null,
-            parent: null,
-            addedAt: agent.agentAddedAt,
-            isDeleted: agent.agent.isDeleted ?? undefined,
-            variant: agent.agent.variant ?? undefined,
-            roles: [],
-          },
-          roles: [],
-          connections: [],
-        })) ?? [],
-      ),
+      agents?.map((agent) =>
+        mapPartyToUserSearchNode(
+          { ...agent.agent, children: null },
+          { addedAt: agent.agentAddedAt },
+        ),
+      ) ?? [],
     [agents],
   );
   const indirectUsers = useMemo(
     () =>
       mapConnectionsToUserSearchNodes(
         indirectConnections?.filter((connection) => {
-          return connection.party.type === 'Person';
+          return connection.party.type === PartyType.Person;
         }) ?? [],
       ),
     [indirectConnections],
   );
 
+  // Adding moves the user from the indirect list to the direct one, so focus follows the row by id
+  // once the agents have refetched.
   const handleAddAgent = (userId: string) => {
     void addAgent({ to: userId })
       .unwrap()
       .then(() => {
+        requestFocusOnDataChange(userId, AGENT_SEARCH_FALLBACK_ID);
         openSnackbar({
           message: t('client_administration_page.add_agent_success_snackbar'),
           color: 'success',
@@ -100,31 +105,43 @@ export const ClientAdministrationAgentsTab = ({ isActive }: ClientAdministration
   }
 
   return (
-    <div className={classes.agentTabContainer}>
-      <UserSearch
-        includeSelfAsChild={false}
-        includeSelfAsChildOnIndirect={false}
-        users={users}
-        indirectUsers={indirectUsers}
-        getUserLink={(user) => `/clientadministration/agent/${user.id}`}
-        isLoading={isAgentsLoading || isIndirectLoading}
-        isActionLoading={isIndirectFetching || isAdding}
-        AddUserButton={
-          <AddAgentButton
-            variant='secondary'
-            onComplete={(user) => navigate(`/clientadministration/agent/${user.id}`)}
-          />
-        }
-        addUserButtonLabel={t('client_administration_page.add_agent_button_short')}
-        onDelegate={(user) => {
-          handleAddAgent(user.id);
-        }}
-        canDelegate={true}
-        noUsersText={t('client_administration_page.no_agents')}
-        searchPlaceholder={t('client_administration_page.agent_search_placeholder')}
-        directConnectionsHeading={t('client_administration_page.direct_connections_heading')}
-        indirectConnectionsHeading={t('client_administration_page.indirect_connections_heading')}
-      />
-    </div>
+    <RestoreFocusFallback>
+      <div className={classes.agentTabContainer}>
+        <UserSearch
+          includeSelfAsChild={false}
+          includeSelfAsChildOnIndirect={false}
+          users={users}
+          indirectUsers={indirectUsers}
+          getUserLink={(user) => `/clientadministration/agent/${user.id}`}
+          isLoading={isAgentsLoading || isIndirectLoading}
+          isActionLoading={isIndirectFetching || isAdding}
+          AddUserButton={
+            <AddAgentButton
+              variant='secondary'
+              onComplete={(user) => navigate(`/clientadministration/agent/${user.id}`)}
+            />
+          }
+          addUserButtonLabel={t('client_administration_page.add_agent_button_short')}
+          onDelegate={(user) => {
+            handleAddAgent(user.id);
+          }}
+          canDelegate={true}
+          noUsersText={t('client_administration_page.no_agents')}
+          searchPlaceholder={t('client_administration_page.agent_search_placeholder')}
+          directConnectionsHeading={t('client_administration_page.direct_connections_heading')}
+          indirectConnectionsHeading={t('client_administration_page.indirect_connections_heading')}
+          restoreFocusFallbackId={AGENT_SEARCH_FALLBACK_ID}
+        />
+      </div>
+    </RestoreFocusFallback>
+  );
+};
+
+export const ClientAdministrationAgentsTab = (props: ClientAdministrationAgentsTabProps) => {
+  const restoreFocus = useRestoreFocus();
+  return (
+    <RestoreFocusProvider restoreFocus={restoreFocus}>
+      <ClientAdministrationAgentsTabContent {...props} />
+    </RestoreFocusProvider>
   );
 };

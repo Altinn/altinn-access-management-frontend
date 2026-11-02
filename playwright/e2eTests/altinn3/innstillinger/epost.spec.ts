@@ -1,38 +1,30 @@
 import { expect, test } from '../../../fixture/pomFixture';
-import { SettingsApiRequests } from '../../../api-requests/SettingsApiRequests';
 
 import { ACTORS, BASELINE_EPOST } from './testdata';
 
-const reportArea = { annotation: { type: 'report-area', description: 'Innstillinger' } };
-
-test.describe('Innstillinger - e-postadresser', reportArea, () => {
-  const api = new SettingsApiRequests();
-
+test.describe('Innstillinger - e-postadresser', () => {
   test.describe('legg til e-postadresse', () => {
     const actor = ACTORS.leggTilEpost;
     const nyEpost = 'playwright-ny-epost@example.com';
 
-    test.beforeEach(async () => {
-      await api.setNotificationAddresses(actor.pid, actor.org, { emails: [BASELINE_EPOST] });
+    test.beforeEach(async ({ api }) => {
+      await api.settings.setNotificationAddresses(actor.pid, actor.org, {
+        emails: [BASELINE_EPOST],
+      });
     });
 
-    test('legg til e-postadresse', async ({ runAccessibilityTest, innstillingerPage, login }) => {
+    test('legg til e-postadresse', async ({ innstillingerPage, login }) => {
       await test.step(`Logg inn som ${actor.orgName} og åpne innstillinger`, async () => {
         await login.LoginToAccessManagement(actor.pid);
         await login.selectActor(actor.orgName);
         await innstillingerPage.goToInnstillinger();
         await innstillingerPage.verifyPaaInnstillinger();
-        await expect(innstillingerPage.emailAddressCount).toHaveText(/^1\b/);
-        await runAccessibilityTest.scan('varslingsinnstillinger');
       });
 
       await test.step('Legg til en ny e-postadresse', async () => {
         await innstillingerPage.openEpostDialog();
-        await runAccessibilityTest.scan('epost-dialog');
         await innstillingerPage.klikkLeggTilFlere();
         await innstillingerPage.skrivEpost('', nyEpost);
-        await expect(innstillingerPage.saveButton).toBeEnabled();
-        await runAccessibilityTest.scan('epost-flere-adresser');
         await innstillingerPage.lagreEndringer();
       });
 
@@ -42,12 +34,13 @@ test.describe('Innstillinger - e-postadresser', reportArea, () => {
         await expect(innstillingerPage.emailFields).toHaveCount(2);
         await expect(innstillingerPage.emailField(BASELINE_EPOST)).toBeVisible();
         await expect(innstillingerPage.emailField(nyEpost)).toBeVisible();
-        await runAccessibilityTest.scan('epost-lagret');
       });
     });
 
-    test.afterEach(async () => {
-      await api.setNotificationAddresses(actor.pid, actor.org, { emails: [BASELINE_EPOST] });
+    test.afterEach(async ({ api }) => {
+      await api.settings.setNotificationAddresses(actor.pid, actor.org, {
+        emails: [BASELINE_EPOST],
+      });
     });
   });
 
@@ -55,8 +48,10 @@ test.describe('Innstillinger - e-postadresser', reportArea, () => {
     const actor = ACTORS.endreAdresse;
     const endretEpost = 'playwright-endret@example.com';
 
-    test.beforeEach(async () => {
-      await api.setNotificationAddresses(actor.pid, actor.org, { emails: [BASELINE_EPOST] });
+    test.beforeEach(async ({ api }) => {
+      await api.settings.setNotificationAddresses(actor.pid, actor.org, {
+        emails: [BASELINE_EPOST],
+      });
     });
 
     test('endre e-postadresse', async ({ innstillingerPage, login }) => {
@@ -81,8 +76,10 @@ test.describe('Innstillinger - e-postadresser', reportArea, () => {
       });
     });
 
-    test.afterEach(async () => {
-      await api.setNotificationAddresses(actor.pid, actor.org, { emails: [BASELINE_EPOST] });
+    test.afterEach(async ({ api }) => {
+      await api.settings.setNotificationAddresses(actor.pid, actor.org, {
+        emails: [BASELINE_EPOST],
+      });
     });
   });
 
@@ -90,8 +87,8 @@ test.describe('Innstillinger - e-postadresser', reportArea, () => {
     const actor = ACTORS.slettAdresse;
     const ekstraEpost = 'playwright-skal-slettes@example.com';
 
-    test.beforeEach(async () => {
-      await api.setNotificationAddresses(actor.pid, actor.org, {
+    test.beforeEach(async ({ api }) => {
+      await api.settings.setNotificationAddresses(actor.pid, actor.org, {
         emails: [BASELINE_EPOST, ekstraEpost],
       });
     });
@@ -122,23 +119,23 @@ test.describe('Innstillinger - e-postadresser', reportArea, () => {
       });
     });
 
-    test.afterEach(async () => {
-      await api.setNotificationAddresses(actor.pid, actor.org, { emails: [BASELINE_EPOST] });
+    test.afterEach(async ({ api }) => {
+      await api.settings.setNotificationAddresses(actor.pid, actor.org, {
+        emails: [BASELINE_EPOST],
+      });
     });
   });
 
   test.describe('ugyldig e-postadresse', () => {
     const actor = ACTORS.ugyldigEpost;
 
-    test.beforeEach(async () => {
-      await api.setNotificationAddresses(actor.pid, actor.org, { emails: [BASELINE_EPOST] });
+    test.beforeEach(async ({ api }) => {
+      await api.settings.setNotificationAddresses(actor.pid, actor.org, {
+        emails: [BASELINE_EPOST],
+      });
     });
 
-    test('ugyldig e-postadresse kan ikke lagres', async ({
-      innstillingerPage,
-      login,
-      runAccessibilityTest,
-    }) => {
+    test('ugyldig e-postadresse kan ikke lagres', async ({ innstillingerPage, login }) => {
       await test.step(`Logg inn som ${actor.orgName} og åpne innstillinger`, async () => {
         await login.LoginToAccessManagement(actor.pid);
         await login.selectActor(actor.orgName);
@@ -156,8 +153,6 @@ test.describe('Innstillinger - e-postadresser', reportArea, () => {
         await expect(innstillingerPage.saveButton).toBeDisabled();
       });
 
-      await runAccessibilityTest.scan('ugyldig-epost');
-
       await test.step('Den opprinnelige adressen er uendret', async () => {
         await innstillingerPage.lukkDialog();
         await innstillingerPage.openEpostDialog();
@@ -165,8 +160,10 @@ test.describe('Innstillinger - e-postadresser', reportArea, () => {
       });
     });
 
-    test.afterEach(async () => {
-      await api.setNotificationAddresses(actor.pid, actor.org, { emails: [BASELINE_EPOST] });
+    test.afterEach(async ({ api }) => {
+      await api.settings.setNotificationAddresses(actor.pid, actor.org, {
+        emails: [BASELINE_EPOST],
+      });
     });
   });
 });

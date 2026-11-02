@@ -3,11 +3,11 @@ using System.Net.Http.Headers;
 using System.Net.Http.Json;
 using Altinn.AccessManagement.UI.Controllers;
 using Altinn.AccessManagement.UI.Core.ClientInterfaces;
-using Altinn.AccessManagement.UI.Core.Models;
+using Altinn.AccessManagement.UI.Core.Enums;
+using Altinn.AccessManagement.UI.Core.Models.Common.Frontend;
 using Altinn.AccessManagement.UI.Mocks.Mocks;
 using Altinn.AccessManagement.UI.Mocks.Utils;
 using Altinn.AccessManagement.UI.Tests.Utils;
-using Altinn.Register.Contracts.V1;
 using AltinnCore.Authentication.JwtCookie;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc.Testing;
@@ -81,9 +81,9 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
             Assert.Equal(HttpStatusCode.OK, response.StatusCode);
 
             PartyFE actualParty = await response.Content.ReadFromJsonAsync<PartyFE>();
-            Assert.Equal(lookupOrgNo, actualParty.OrgNumber);
+            Assert.Equal(lookupOrgNo, actualParty.OrganizationIdentifier);
             Assert.Equal(50004222, actualParty.PartyId);
-            Assert.Equal(PartyType.Organisation, actualParty.PartyTypeName);
+            Assert.Equal(PartyTypeFE.Organization, actualParty.Type);
             Assert.Equal("KARLSTAD OG ULOYBUKT", actualParty.Name);
         }
 
@@ -100,26 +100,6 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
             Assert.Equal(HttpStatusCode.Unauthorized, response.StatusCode);
         }
 
-        /// <summary>  
-        /// Assert that an authenticated user is able to lookup a party based on uuid, using the old Register data  
-        /// </summary>  
-        [Fact]
-        public async Task GetPartyByUUID_OldRegistry_Success()
-        {
-            _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", PrincipalUtil.GetToken(1337, 501337));
-            Guid lookupUUID = new Guid("60fb3d5b-99c2-4df0-aa77-f3fca3bc5199");
-
-            HttpResponseMessage response = await _client.GetAsync($"accessmanagement/api/v1/lookup/party/{lookupUUID}");
-
-            Assert.Equal(HttpStatusCode.OK, response.StatusCode);
-
-            PartyFE actualParty = await response.Content.ReadFromJsonAsync<PartyFE>();
-            Assert.Equal(lookupUUID, actualParty.PartyUuid);
-            Assert.Equal(51317934, actualParty.PartyId);
-            Assert.Equal(PartyType.Organisation, actualParty.PartyTypeName);
-            Assert.Equal("RAKRYGGET UNG TIGER AS", actualParty.Name);
-        }
-
         /// <summary>
         /// Assert that a request for a non-existant partyUUID yields a 404 response
         /// </summary>
@@ -132,67 +112,6 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
             HttpResponseMessage response = await _client.GetAsync($"accessmanagement/api/v1/lookup/party/{lookupUUID}");
 
             Assert.Equal(HttpStatusCode.NotFound, response.StatusCode);
-        }
-
-        /// <summary>
-        /// Assert that an un-authenticated user gets 401 response
-        /// </summary>
-        [Fact]
-        public async Task GetPartyByUUID_Unauthenticated_401()
-        {
-            Guid lookupUUID = new Guid("0b74b132-cd8c-44ba-8818-a8d0cf4401bc");
-
-            HttpResponseMessage response = await _client.GetAsync($"accessmanagement/api/v1/lookup/party/{lookupUUID}");
-
-            Assert.Equal(HttpStatusCode.Unauthorized, response.StatusCode);
-        }
-
-        /// <summary>
-        /// Assert that an authenticated user is able to lookup a user based on uuid
-        /// </summary>
-        [Fact]
-        public async Task GetUserByUUID_Success()
-        {
-            _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", PrincipalUtil.GetToken(1337, 501337));
-            Guid lookupUUID = new Guid("cd772c20-f780-43f6-819f-2d9f23fc0a1a");
-
-            HttpResponseMessage response = await _client.GetAsync($"accessmanagement/api/v1/lookup/user/{lookupUUID}");
-
-            Assert.Equal(HttpStatusCode.OK, response.StatusCode);
-
-            UserProfileFE actualUser = await response.Content.ReadFromJsonAsync<UserProfileFE>();
-            Assert.Equal(lookupUUID, actualUser.UserUuid);
-            Assert.Equal(20004938, actualUser.UserId);
-            Assert.Equal(50019992, actualUser.PartyId);
-            Assert.Equal(PartyType.Person, actualUser.Party.PartyTypeName);
-            Assert.Equal("JARLE GJERSTAD", actualUser.Party.Name);
-        }
-
-        /// <summary>
-        /// Assert that a request for a non-existant userUUID yields a 404 response
-        /// </summary>
-        [Fact]
-        public async Task GetUserByUUID_NotFound()
-        {
-            _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", PrincipalUtil.GetToken(1337, 501337));
-            Guid lookupUUID = new Guid("0b74b132-cd8c-44ba-8818-a8d0cf4401bc"); // non-existent partyUUID
-
-            HttpResponseMessage response = await _client.GetAsync($"accessmanagement/api/v1/lookup/user/{lookupUUID}");
-
-            Assert.Equal(HttpStatusCode.NotFound, response.StatusCode);
-        }
-
-        /// <summary>
-        /// Assert that an un-authenticated user gets 401 response
-        /// </summary>
-        [Fact]
-        public async Task GetUserByUUID_Unauthenticated_401()
-        {
-            Guid lookupUUID = new Guid("cd772c20-f780-43f6-819f-2d9f23fc0a1a");
-
-            HttpResponseMessage response = await _client.GetAsync($"accessmanagement/api/v1/lookup/user/{lookupUUID}");
-
-            Assert.Equal(HttpStatusCode.Unauthorized, response.StatusCode);
         }
 
         /// <summary>

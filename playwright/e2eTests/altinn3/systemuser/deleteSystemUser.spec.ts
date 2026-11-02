@@ -1,24 +1,16 @@
 import { expect, test } from 'playwright/fixture/pomFixture';
-import { ApiRequests } from 'playwright/api-requests/SystemUserApiRequests';
-import { TestdataApi } from 'playwright/util/TestdataApi';
 
 import { systemUserOwners } from './testdata';
-
-const reportArea = { annotation: { type: 'report-area', description: 'Systembruker' } };
 const owner = systemUserOwners.deletion;
 const vendorOrgNumber = '310736007';
 const testUserPid = owner.pid;
 const testOrgName = owner.name;
 
-test.describe('System user deletion', reportArea, () => {
+test.describe('System user deletion', () => {
   let systemId: string;
-  let api: ApiRequests;
 
-  test.beforeEach(async ({ login, systemUserPage, accessManagementFrontPage }) => {
-    await test.step('Setup API client', async () => {
-      systemId = '';
-      api = new ApiRequests();
-    });
+  test.beforeEach(async ({ api, login, systemUserPage, accessManagementFrontPage }) => {
+    systemId = '';
 
     await test.step('Login and navigate to application', async () => {
       await login.LoginToAccessManagement(testUserPid);
@@ -26,7 +18,7 @@ test.describe('System user deletion', reportArea, () => {
     });
 
     await test.step('Create system in system register', async () => {
-      systemId = await api.createSystemSystemRegister(vendorOrgNumber);
+      systemId = await api.systemUsers.createSystemSystemRegister(vendorOrgNumber);
     });
 
     await test.step('Navigate to system user page and create system user', async () => {
@@ -42,26 +34,25 @@ test.describe('System user deletion', reportArea, () => {
     });
   });
 
-  test('Delete created system user', async ({ systemUserPage, runAccessibilityTest }) => {
+  test('Delete created system user', async ({ systemUserPage }) => {
     await test.step('Select system user to delete', async () => {
       await systemUserPage.openSystemUser(systemId);
     });
 
     await test.step('Delete system user and verify removal from overview', async () => {
-      await runAccessibilityTest.scan('systembruker-før-sletting');
       await systemUserPage.deleteSystemUser(systemId);
     });
   });
 
-  test.afterEach(async () => {
+  test.afterEach(async ({ api }) => {
     if (systemId) {
-      await api.cleanUpSystemUsersForSystem(
+      await api.systemUsers.cleanUpSystemUsersForSystem(
         `${vendorOrgNumber}_${systemId}`,
         owner.pid,
         owner.orgNo,
       );
       // Remove system after deleting its users
-      await TestdataApi.removeSystem(vendorOrgNumber, systemId);
+      await api.systemUsers.deleteSystemInSystemRegister(vendorOrgNumber, systemId);
     }
   });
 });

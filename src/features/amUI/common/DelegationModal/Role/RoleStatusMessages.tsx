@@ -1,8 +1,9 @@
 import { Trans } from 'react-i18next';
-import { DsParagraph, formatDisplayName } from '@altinn/altinn-components';
+import { DsParagraph } from '@altinn/altinn-components';
 import { InformationSquareFillIcon } from '@navikt/aksel-icons';
 
-import { PartyType } from '@/rtk/features/userInfoApi';
+import { PartyType } from '@/dataObjects/dtos/Party';
+import { formatEntityDisplayName } from '@/resources/utils/reporteeUtils';
 import { type Role, useGetRolePermissionsQuery } from '@/rtk/features/roleApi';
 
 import { usePartyRepresentation } from '../../PartyRepresentationContext/PartyRepresentationContext';
@@ -25,11 +26,11 @@ export const RoleStatusMessage = ({ role }: RoleStatusMessageProps) => {
   const { fromParty, toParty, actingParty } = usePartyRepresentation();
   const { data: rolePermissions } = useGetRolePermissionsQuery(
     {
-      party: actingParty?.partyUuid ?? '',
-      from: fromParty?.partyUuid,
-      to: toParty?.partyUuid,
+      party: actingParty?.id ?? '',
+      from: fromParty?.id,
+      to: toParty?.id,
     },
-    { skip: !actingParty?.partyUuid },
+    { skip: !actingParty?.id },
   );
 
   const matchingPermissions = rolePermissions?.find((permission) => permission.role.id === role.id);
@@ -41,11 +42,7 @@ export const RoleStatusMessage = ({ role }: RoleStatusMessageProps) => {
     toParty,
   });
 
-  const formattedUserName = formatDisplayName({
-    fullName: toParty?.name || '',
-    type: toParty?.partyTypeName === PartyType.Person ? 'person' : 'company',
-    reverseNameOrder: false,
-  });
+  const formattedUserName = formatEntityDisplayName(toParty);
 
   // remove duplicates from inheritedStatus. Items are duplicate if type AND via.id are the same
   const uniqueInheritedStatus = Array.from(
@@ -63,15 +60,10 @@ export const RoleStatusMessage = ({ role }: RoleStatusMessageProps) => {
   return (
     <>
       {filteredStatuses.map((s) => {
-        const safeViaType = s.via?.type ? String(s.via.type).toLowerCase() : '';
-        const formattedViaName = formatDisplayName({
-          fullName: s.via?.name || '',
-          type: safeViaType === 'person' ? 'person' : 'company',
-          reverseNameOrder: false,
-        });
+        const formattedViaName = formatEntityDisplayName(s.via);
 
         const textKey =
-          toParty?.partyUuid === s.via?.id && toParty?.partyTypeName === PartyType.Person
+          toParty?.id === s.via?.id && toParty?.type === PartyType.Person
             ? 'role.access_status.via_priv'
             : STATUS_TRANSLATION_KEYS[s.type];
 

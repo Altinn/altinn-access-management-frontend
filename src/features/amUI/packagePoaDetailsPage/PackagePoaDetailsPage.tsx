@@ -51,11 +51,11 @@ const BreadcrumbsWrapper = () => {
 
   const { data: accessPackage } = useGetPackagePermissionDetailsQuery(
     {
-      from: fromParty?.partyUuid ?? '',
+      from: fromParty?.id ?? '',
       packageId: id || '',
       language: i18n.language,
     },
-    { skip: !id || !fromParty?.partyUuid },
+    { skip: !id || !fromParty?.id },
   );
 
   return (

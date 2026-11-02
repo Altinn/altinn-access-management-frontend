@@ -1,15 +1,12 @@
-import {
-  DsAlert,
-  DsButton,
-  DsHeading,
-  DsParagraph,
-  formatDisplayName,
-} from '@altinn/altinn-components';
+import { DsAlert, DsButton, DsHeading, DsParagraph } from '@altinn/altinn-components';
+import { useRef } from 'react';
 import { useTranslation } from 'react-i18next';
 
-import { PartyType } from '@/rtk/features/userInfoApi';
+import { PartyType } from '@/dataObjects/dtos/Party';
+import { formatEntityDisplayName } from '@/resources/utils/reporteeUtils';
 
 import { LoadingAnimation } from '../../LoadingAnimation/LoadingAnimation';
+import { focusFirstEnabledButton, useRestoreFocusAfterSettled } from '../../RestoreFocus';
 import { StatusSection } from '../../StatusSection/StatusSection';
 import { TechnicalErrorParagraphs } from '../../TechnicalErrorParagraphs';
 import { ValidationErrorMessage } from '../../ValidationErrorMessage';
@@ -35,12 +32,18 @@ export const ClientPackageInfo = ({
   error,
 }: PartyInfoProps) => {
   const { t } = useTranslation();
-
-  const userName = formatDisplayName({
-    fullName: party.name,
-    type: party.partyTypeName === PartyType.Person ? 'person' : 'company',
-    reverseNameOrder: false,
+  const actionsRef = useRef<HTMLDivElement>(null);
+  useRestoreFocusAfterSettled({
+    isSettled: !isLoading && !isSuccess,
+    requestWhen: isLoading,
+    onRestore: () => {
+      focusFirstEnabledButton(actionsRef.current);
+      // Revoke-only lists leave no action button, so fall back to the dialog's close button.
+      focusFirstEnabledButton(actionsRef.current?.closest('dialog') ?? null);
+    },
   });
+
+  const userName = formatEntityDisplayName(party);
 
   const canRevoke = userHasAccess && availableActions.includes(DelegationAction.REVOKE);
   const canDelegate =
@@ -76,7 +79,7 @@ export const ClientPackageInfo = ({
                   errorCode={error.details?.errorCode ?? error.details?.detail ?? ''}
                   translationValues={{
                     entity_type:
-                      party.partyTypeName === PartyType.Person
+                      party.type === PartyType.Person
                         ? t('common.persons_lowercase')
                         : t('common.organizations_lowercase'),
                   }}
@@ -108,7 +111,10 @@ export const ClientPackageInfo = ({
 
           <PackageMeta accessPackage={accessPackage} />
 
-          <div className={classes.actions}>
+          <div
+            ref={actionsRef}
+            className={classes.actions}
+          >
             {canRevoke && (
               <DsButton
                 data-color='danger'

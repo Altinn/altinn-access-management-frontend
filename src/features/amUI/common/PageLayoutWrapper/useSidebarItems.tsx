@@ -4,12 +4,14 @@ import { useTranslation } from 'react-i18next';
 
 import { getCookie } from '@/resources/Cookie/CookieMethods';
 import {
+  hasActivityLogPermission,
   hasConsentPermission,
   hasCreateSystemUserPermission,
   hasReporteeListAdminAccess,
   hasSystemUserClientAdminPermission,
 } from '@/resources/utils/permissionUtils';
 import {
+  getActivityLogMenuItem,
   getConsentMenuItem,
   getHeadingMenuItem,
   getClientAdministrationMenuItem,
@@ -39,16 +41,16 @@ export const useSidebarItems = ({ isSmall }: { isSmall?: boolean }) => {
   const { t } = useTranslation();
   const { data: currentUser } = useGetPartyFromLoggedInUserQuery();
   const { data: reportee, isLoading: isLoadingReportee } = useGetReporteeQuery();
-  const isCurrentUserReportee = reportee?.partyUuid === currentUser?.partyUuid;
+  const isCurrentUserReportee = reportee?.id === currentUser?.id;
 
   const { data: roles } = useGetRolePermissionsQuery(
     {
-      party: currentUser?.partyUuid ?? '',
+      party: currentUser?.id ?? '',
       from: getCookie('AltinnPartyUuid') ?? '',
-      to: currentUser?.partyUuid ?? '',
+      to: currentUser?.id ?? '',
     },
     {
-      skip: !currentUser?.partyUuid || isCurrentUserReportee,
+      skip: !currentUser?.id || isCurrentUserReportee,
     },
   );
   const isAgent = roles?.some((rolePermission) => rolePermission.role.code === 'agent');
@@ -132,6 +134,10 @@ export const useSidebarItems = ({ isSmall }: { isSmall?: boolean }) => {
 
   if (isMaskinportenAdmin) {
     items.push(getMaskinportenMenuItem(pathname, isLoading, isSmall));
+  }
+
+  if (hasActivityLogPermission(isAdmin, isMaskinportenAdmin)) {
+    items.push(getActivityLogMenuItem(pathname, isLoading, isSmall));
   }
 
   const sidebarItems = items.map((item) => {

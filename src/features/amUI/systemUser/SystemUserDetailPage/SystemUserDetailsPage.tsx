@@ -1,8 +1,9 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate, useParams } from 'react-router';
-import { DsAlert, DsParagraph, formatDisplayName } from '@altinn/altinn-components';
+import { DsAlert, DsParagraph } from '@altinn/altinn-components';
 
+import { formatEntityDisplayName } from '@/resources/utils/reporteeUtils';
 import { useDeleteSystemuserMutation, useGetSystemUserQuery } from '@/rtk/features/systemUserApi';
 import { getCookie } from '@/resources/Cookie/CookieMethods';
 import { PageLayoutWrapper } from '@/features/amUI/common/PageLayoutWrapper';
@@ -78,10 +79,7 @@ export const SystemUserDetailsPage = (): React.ReactNode => {
             <div className={classes.systemUserDetails}>
               <SystemUserHeader
                 title={systemUser?.integrationTitle ?? ''}
-                subTitle={formatDisplayName({
-                  fullName: reporteeData?.name || '',
-                  type: 'company',
-                })}
+                subTitle={formatEntityDisplayName(reporteeData)}
                 isLoading={isLoadingSystemUser}
               />
               <RightsList

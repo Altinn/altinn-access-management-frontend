@@ -29,6 +29,10 @@ export const DelegationCheckError = ({
   // Specifics forwarded from the backend (which access package/right and why). Shown in addition to
   // the headline so the user/support sees the actual reason without digging through logs.
   const reasons = parseDelegationReasons(error?.data.delegationReasons);
+  // Resources authentication reported as no longer delegable in the resource registry (AMUI-00082).
+  // Forwarded as a comma-separated list of ids; shown with their titles so the user sees which
+  // services are affected.
+  const notDelegableResources = parseNotDelegableResources(error?.data.NotDelegableResources);
 
   // When the backend forwarded structured reasons we show a generic headline that reflects which
   // categories failed (services, access packages, or both) and let the itemized list carry the
@@ -64,6 +68,20 @@ export const DelegationCheckError = ({
               accessPackages={accessPackages}
               resources={resources}
             />
+          </div>
+        )}
+        {notDelegableResources.length > 0 && (
+          <div className={classes.delegationReasons}>
+            <div className={classes.delegationReasonsTitle}>
+              {t('systemuser_delegation_errors.title_resources')}
+            </div>
+            <DsListUnordered>
+              {notDelegableResources.map((id) => (
+                <DsListItem key={id}>
+                  {resources.find((x) => x.identifier === id)?.title ?? id}
+                </DsListItem>
+              ))}
+            </DsListUnordered>
           </div>
         )}
       </DsAlert>
@@ -122,6 +140,18 @@ const parseDelegationReasons = (delegationReasons?: string): Reason[] | null => 
     return null;
   }
   return reasons.filter((reason) => !!reason && typeof reason === 'object') as Reason[];
+};
+
+// NotDelegableResources is forwarded verbatim from upstream as "id-a, id-b". An empty or missing value
+// yields an empty list so the alert renders without the itemized section.
+const parseNotDelegableResources = (notDelegableResources?: string): string[] => {
+  if (!notDelegableResources) {
+    return [];
+  }
+  return notDelegableResources
+    .split(',')
+    .map((id) => id.trim())
+    .filter((id) => id.length > 0);
 };
 
 interface DelegationReasonDetailsProps {

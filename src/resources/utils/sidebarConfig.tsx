@@ -11,6 +11,7 @@ import {
   KeyVerticalIcon,
   ExternalLinkIcon,
   DatabaseIcon,
+  FileTextIcon,
 } from '@navikt/aksel-icons';
 import i18next, { t } from 'i18next';
 import { Link } from 'react-router';
@@ -243,6 +244,24 @@ export const getMaskinportenMenuItem = (
     selected: pathname?.includes(`/${amUIPath.Maskinporten}`),
     icon: { svgElement: ApiIcon, theme: isSmall ? 'surface' : 'default' },
     as: (props) => getMenuLinkAs(props, `/${amUIPath.Maskinporten}`),
+  };
+};
+
+export const getActivityLogMenuItem = (
+  pathname?: string,
+  isLoading = false,
+  isSmall = false,
+): MenuItemProps => {
+  return {
+    groupId: '18',
+    id: 'activity-log',
+    size: 'md',
+    loading: isLoading,
+    variant: isSmall ? 'default' : 'tinted',
+    title: t('sidebar.activity_log'),
+    selected: pathname?.includes(`/${amUIPath.ActivityLog}`),
+    icon: { svgElement: FileTextIcon, theme: isSmall ? 'surface' : 'default' },
+    as: (props: ComponentProps<typeof Link>) => getMenuLinkAs(props, `/${amUIPath.ActivityLog}`),
   };
 };
 

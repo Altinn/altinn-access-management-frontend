@@ -5,18 +5,17 @@ import {
   DsHeading,
   DsParagraph,
   DsSwitch,
-  formatDisplayName,
 } from '@altinn/altinn-components';
 import { DownloadIcon } from '@navikt/aksel-icons';
 import { useTranslation } from 'react-i18next';
 import { useRef, useState } from 'react';
 
+import { PartyType } from '@/dataObjects/dtos/Party';
 import {
-  PartyType,
   useGetIsAdminQuery,
   useGetReporteeListForAuthorizedUserQuery,
 } from '@/rtk/features/userInfoApi';
-import { isSubUnitByType } from '@/resources/utils/reporteeUtils';
+import { isSubUnitByType, formatEntityDisplayName } from '@/resources/utils/reporteeUtils';
 
 import { usePartyRepresentation } from '../PartyRepresentationContext/PartyRepresentationContext';
 
@@ -42,15 +41,14 @@ export const DownloadFileButton = ({
 
   const { data: isAdmin } = useGetIsAdminQuery();
   const { fromParty } = usePartyRepresentation();
-  const reporteeName = formatDisplayName({ fullName: fromParty?.name || '', type: 'company' });
+  const reporteeName = formatEntityDisplayName(fromParty);
   const { data: accountList } = useGetReporteeListForAuthorizedUserQuery(undefined, {
-    skip: !isAdmin || fromParty?.partyTypeName !== PartyType.Organization,
+    skip: !isAdmin || fromParty?.type !== PartyType.Organization,
   });
   const fromAccountSubunitsNumber =
-    accountList?.find((account) => account.partyUuid === fromParty?.partyUuid)?.subunits?.length ||
-    0;
+    accountList?.find((account) => account.partyUuid === fromParty?.id)?.subunits?.length || 0;
   const allowSubunitDownload =
-    !isSubUnitByType(fromParty?.variant) &&
+    !isSubUnitByType(fromParty?.unitType) &&
     fromAccountSubunitsNumber > 0 &&
     fromAccountSubunitsNumber <= MAX_SUBUNITS_FOR_DOWNLOAD_OPTION;
 
@@ -58,7 +56,7 @@ export const DownloadFileButton = ({
     if (!fromParty) return;
 
     const params = new URLSearchParams({
-      partyUuid: fromParty.partyUuid,
+      partyUuid: fromParty.id,
       includeSubunits: String(includeSubunits),
     });
 
@@ -79,7 +77,7 @@ export const DownloadFileButton = ({
     setIsDialogOpen(false);
   };
 
-  if (fromParty?.partyTypeName !== PartyType.Organization || !isAdmin) {
+  if (fromParty?.type !== PartyType.Organization || !isAdmin) {
     return null;
   }
 

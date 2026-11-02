@@ -6,6 +6,7 @@ import { currentEnv, loadEnv } from './util/helper';
 loadEnv(currentEnv());
 
 const config: PlaywrightTestConfig = {
+  globalSetup: './globalSetup.ts',
   fullyParallel: true,
   retries: 1,
   use: {

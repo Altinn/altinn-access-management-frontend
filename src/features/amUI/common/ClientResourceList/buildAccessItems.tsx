@@ -1,11 +1,14 @@
-import React from 'react';
+import React, { useState } from 'react';
 import type { TFunction } from 'i18next';
-import { Button, type AccessPackageListItemProps } from '@altinn/altinn-components';
+import { useTranslation } from 'react-i18next';
+import { Button, DsSpinner, type AccessPackageListItemProps } from '@altinn/altinn-components';
 import { MinusCircleIcon, PlusCircleIcon } from '@navikt/aksel-icons';
 
 import type { AccessPackage } from '@/rtk/features/accessPackageApi';
 import type { ActionError } from '@/resources/hooks/useActionError';
 import type { ServiceResource } from '@/rtk/features/singleRights/singleRightsApi';
+
+import { useRestoreFocusTarget } from '../RestoreFocus';
 
 import type { ClientResourceListItemData } from './ClientResourceListItems';
 
@@ -14,8 +17,72 @@ type DelegateHandler = (
   onError?: (error?: ActionError) => void,
 ) => void | Promise<void>;
 
+// DOM id for an item's inline action button, usable as a RestoreFocus target distinct from the item.
+export const clientActionControlId = (itemId: string) => `list-action-${itemId}`;
+
+export const restoreFocusOnSuccess = (
+  handler: DelegateHandler | undefined,
+  requestFocus: () => void,
+): DelegateHandler | undefined =>
+  handler &&
+  ((onSuccess, onError) =>
+    handler(() => {
+      requestFocus();
+      onSuccess?.();
+    }, onError));
+
+interface DelegationControlProps {
+  id: string;
+  name: string;
+  hasAccess: boolean;
+  disabled: boolean;
+  onAction: DelegateHandler;
+}
+
+// Stays rendered and enabled while its own action runs, so focus is never lost to <body>.
+const DelegationControl = ({ id, name, hasAccess, disabled, onAction }: DelegationControlProps) => {
+  const { t } = useTranslation();
+  const [isLoading, setIsLoading] = useState(false);
+  useRestoreFocusTarget(id);
+
+  const onClick = () => {
+    if (isLoading) return;
+    setIsLoading(true);
+    void Promise.resolve(onAction()).finally(() => setIsLoading(false));
+  };
+
+  return (
+    <Button
+      id={id}
+      variant='tertiary'
+      disabled={disabled && !isLoading}
+      onClick={onClick}
+      aria-label={t(hasAccess ? 'common.delete_poa_for' : 'common.give_poa_for', {
+        poa_object: name,
+      })}
+    >
+      {isLoading ? (
+        <DsSpinner
+          aria-label={t('common.loading')}
+          data-size='sm'
+        />
+      ) : hasAccess ? (
+        <>
+          <MinusCircleIcon aria-hidden='true' />
+          {t('common.delete_poa')}
+        </>
+      ) : (
+        <>
+          <PlusCircleIcon aria-hidden='true' />
+          {t('common.give_poa')}
+        </>
+      )}
+    </Button>
+  );
+};
+
 export type BuildPackageItemOptions = {
-  pkg: { id: string; urn?: string; name: string };
+  id: string;
   accessPackage: AccessPackage | undefined;
   packageName: string;
   hasAccess: boolean;
@@ -29,8 +96,9 @@ export type BuildPackageItemOptions = {
   t: TFunction;
 };
 
-type DelegationControlsOptions = Pick<
+type DelegationControlOptions = Pick<
   BuildPackageItemOptions,
+  | 'id'
   | 'isMobileOrSmaller'
   | 'showAction'
   | 'hasAccess'
@@ -38,10 +106,11 @@ type DelegationControlsOptions = Pick<
   | 'removeDisabled'
   | 'onDelegate'
   | 'onRevoke'
-  | 't'
->;
+> & { name: string };
 
-const buildDelegationControls = ({
+const buildDelegationControl = ({
+  id,
+  name,
   isMobileOrSmaller,
   showAction,
   hasAccess,
@@ -49,37 +118,24 @@ const buildDelegationControls = ({
   removeDisabled,
   onDelegate,
   onRevoke,
-  t,
-}: DelegationControlsOptions): React.ReactNode => {
-  if (!isMobileOrSmaller && showAction && hasAccess && onRevoke) {
-    return (
-      <Button
-        variant='tertiary'
-        disabled={removeDisabled}
-        onClick={() => onRevoke()}
-      >
-        <MinusCircleIcon aria-hidden='true' />
-        {t('common.delete_poa')}
-      </Button>
-    );
+}: DelegationControlOptions): React.ReactNode => {
+  const onAction = hasAccess ? onRevoke : onDelegate;
+  if (isMobileOrSmaller || !showAction || !onAction) {
+    return undefined;
   }
-  if (!isMobileOrSmaller && showAction && !hasAccess && onDelegate) {
-    return (
-      <Button
-        variant='tertiary'
-        disabled={addDisabled}
-        onClick={() => onDelegate()}
-      >
-        <PlusCircleIcon aria-hidden='true' />
-        {t('common.give_poa')}
-      </Button>
-    );
-  }
-  return undefined;
+  return (
+    <DelegationControl
+      id={clientActionControlId(id)}
+      name={name}
+      hasAccess={hasAccess}
+      disabled={hasAccess ? removeDisabled : addDisabled}
+      onAction={onAction}
+    />
+  );
 };
 
 export const buildPackageItem = ({
-  pkg,
+  id,
   accessPackage,
   packageName,
   hasAccess,
@@ -97,7 +153,9 @@ export const buildPackageItem = ({
   });
 
   const showModalTrigger = showAction && !!accessPackage && !!onOpenModal;
-  const controls = buildDelegationControls({
+  const controls = buildDelegationControl({
+    id,
+    name: packageName,
     isMobileOrSmaller,
     showAction,
     hasAccess,
@@ -105,11 +163,10 @@ export const buildPackageItem = ({
     removeDisabled,
     onDelegate,
     onRevoke,
-    t,
   });
 
   return {
-    id: pkg.id,
+    id,
     name: packageName,
     interactive: showModalTrigger,
     as: showModalTrigger ? 'button' : 'div',
@@ -132,7 +189,6 @@ export type BuildResourceItemOptions = {
   onDelegate: DelegateHandler | undefined;
   onRevoke: DelegateHandler | undefined;
   onOpenModal: () => void;
-  t: TFunction;
 };
 
 export const buildResourceItem = ({
@@ -146,9 +202,10 @@ export const buildResourceItem = ({
   onDelegate,
   onRevoke,
   onOpenModal,
-  t,
 }: BuildResourceItemOptions): ClientResourceListItemData => {
-  const controls = buildDelegationControls({
+  const controls = buildDelegationControl({
+    id,
+    name: resource.title,
     isMobileOrSmaller,
     showAction,
     hasAccess,
@@ -156,7 +213,6 @@ export const buildResourceItem = ({
     removeDisabled,
     onDelegate,
     onRevoke,
-    t,
   });
 
   return {

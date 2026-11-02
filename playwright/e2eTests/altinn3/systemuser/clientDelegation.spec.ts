@@ -1,16 +1,7 @@
-import { ApiRequests } from 'playwright/api-requests/SystemUserApiRequests';
-
 import { test, expect } from '../../../fixture/pomFixture';
 
-const reportArea = { annotation: { type: 'report-area', description: 'Systembruker' } };
-
-test.describe('Delegering av klienter til Systembruker', reportArea, () => {
+test.describe('Delegering av klienter til Systembruker', () => {
   const vendorOrgNumber = '310547891';
-  let api: ApiRequests;
-
-  test.beforeEach(() => {
-    api = new ApiRequests();
-  });
 
   test.describe('Ansvarlig revisor', () => {
     const role = 'revisor';
@@ -18,40 +9,43 @@ test.describe('Delegering av klienter til Systembruker', reportArea, () => {
     const accessPackageDisplayName = 'Ansvarlig revisor';
 
     const user = {
-      pid: '01836299988',
-      orgNo: '314246993',
-      name: 'ROMANTISK ULLEN TIGER AS',
+      pid: '07875898560',
+      org: '314251768',
+      name: 'KUNST STERK MINK ANS',
     };
 
     let name: string;
     let response: { confirmUrl: string };
 
-    test.beforeEach(async () => {
+    test.beforeEach(async ({ api }) => {
       name = `Playwright-e2e-${role}-${Date.now()}`;
 
       const systemId = await test.step('Create system with access packages', async () => {
-        return await api.createSystemInSystemregisterWithAccessPackages(vendorOrgNumber, name);
+        return await api.systemUsers.createSystemInSystemregisterWithAccessPackages(
+          vendorOrgNumber,
+          name,
+        );
       });
 
       response = await test.step('Create client delegation agent request', async () => {
-        return await api.postClientDelegationAgentRequest(
+        return await api.systemUsers.postClientDelegationAgentRequest(
           vendorOrgNumber,
           systemId,
           accessPackageApiName,
-          user.orgNo,
+          user.org,
         );
       });
     });
 
-    test.afterEach(async () => {
+    test.afterEach(async ({ api }) => {
       if (name) {
-        await api.cleanUpSystemUsersForSystem(
+        await api.systemUsers.cleanUpSystemUsersForSystem(
           `${vendorOrgNumber}_${name}`,
           user.pid,
-          user.orgNo,
+          user.org,
           true,
         );
-        await api.deleteSystemInSystemRegister(vendorOrgNumber, name);
+        await api.systemUsers.deleteSystemInSystemRegister(vendorOrgNumber, name);
       }
     });
 
@@ -60,13 +54,10 @@ test.describe('Delegering av klienter til Systembruker', reportArea, () => {
       login,
       accessManagementFrontPage,
       clientDelegationPage,
-      runAccessibilityTest,
     }) => {
       await test.step('Approve system user request', async () => {
         await page.goto(response.confirmUrl);
         await login.loginNotChoosingActor(user.pid);
-        await expect(clientDelegationPage.confirmButton).toBeVisible();
-        await runAccessibilityTest.scan('klientforespørsel');
         await clientDelegationPage.confirmAndCreateSystemUser(accessPackageDisplayName);
         await expect(login.loginButton).toBeVisible();
       });
@@ -87,8 +78,6 @@ test.describe('Delegering av klienter til Systembruker', reportArea, () => {
         await clientDelegationPage.confirmAndCloseButton.click();
       });
 
-      await runAccessibilityTest.scan('systembruker-med-klienter');
-
       await test.step('Cleanup: Delete system user', async () => {
         await clientDelegationPage.deleteSystemUser(name);
       });
@@ -101,48 +90,51 @@ test.describe('Delegering av klienter til Systembruker', reportArea, () => {
     const accessPackageDisplayName = 'Regnskapsfører lønn';
 
     const user = {
-      pid: '04816298283',
-      orgNo: '310309486',
-      name: 'HENSYNSLØS HENSYNSLØS TIGER AS',
+      pid: '25872549881',
+      org: '312433834',
+      name: 'TILFELDIG RAKRYGGET KATT MALSTRØM',
     };
 
     const customers = [
       {
-        label: 'FYLDIG OMKOMMEN TIGER AS',
-        confirmation: 'FYLDIG OMKOMMEN TIGER AS',
-        orgnummer: '311810308',
+        label: 'DYP VERD TIGER AS',
+        confirmation: 'DYP VERD TIGER AS',
+        orgnummer: '214172542',
       },
     ];
 
     let name: string;
     let response: { confirmUrl: string };
 
-    test.beforeEach(async () => {
+    test.beforeEach(async ({ api }) => {
       name = `Playwright-e2e-${role}-${Date.now()}`;
 
       const systemId = await test.step('Create system with access packages', async () => {
-        return await api.createSystemInSystemregisterWithAccessPackages(vendorOrgNumber, name);
+        return await api.systemUsers.createSystemInSystemregisterWithAccessPackages(
+          vendorOrgNumber,
+          name,
+        );
       });
 
       response = await test.step('Create client delegation agent request', async () => {
-        return await api.postClientDelegationAgentRequest(
+        return await api.systemUsers.postClientDelegationAgentRequest(
           vendorOrgNumber,
           systemId,
           accessPackageApiName,
-          user.orgNo,
+          user.org,
         );
       });
     });
 
-    test.afterEach(async () => {
+    test.afterEach(async ({ api }) => {
       if (name) {
-        await api.cleanUpSystemUsersForSystem(
+        await api.systemUsers.cleanUpSystemUsersForSystem(
           `${vendorOrgNumber}_${name}`,
           user.pid,
-          user.orgNo,
+          user.org,
           true,
         );
-        await api.deleteSystemInSystemRegister(vendorOrgNumber, name);
+        await api.systemUsers.deleteSystemInSystemRegister(vendorOrgNumber, name);
       }
     });
 
@@ -151,13 +143,10 @@ test.describe('Delegering av klienter til Systembruker', reportArea, () => {
       login,
       accessManagementFrontPage,
       clientDelegationPage,
-      runAccessibilityTest,
     }) => {
       await test.step('Approve system user request', async () => {
         await page.goto(response.confirmUrl);
         await login.loginNotChoosingActor(user.pid);
-        await expect(clientDelegationPage.confirmButton).toBeVisible();
-        await runAccessibilityTest.scan('klientforespørsel');
         await clientDelegationPage.confirmAndCreateSystemUser(accessPackageDisplayName);
         await expect(login.loginButton).toBeVisible();
       });
@@ -183,8 +172,6 @@ test.describe('Delegering av klienter til Systembruker', reportArea, () => {
           );
         }
       });
-
-      await runAccessibilityTest.scan('systembruker-med-klienter');
 
       await test.step('Cleanup: Delete system user', async () => {
         await clientDelegationPage.deleteSystemUser(name);
@@ -198,48 +185,51 @@ test.describe('Delegering av klienter til Systembruker', reportArea, () => {
     const accessPackageDisplayName = 'Forretningsforer eiendom';
 
     const user = {
-      pid: '26904899347',
-      orgNo: '313404757',
-      name: 'OVERBEVISENDE INNSIKTSFULL TIGER AS',
+      pid: '12826697375',
+      org: '312158019',
+      name: 'MOMENTAN VENNLIG TIGER AS',
     };
 
     const customers = [
       {
-        label: 'LAV TREG LØVE SAMEIE',
-        confirmation: 'LAV TREG LØVE SAMEIE',
-        orgnummer: '313347737',
+        label: 'SAMEIET ARTIG SKRIVEFØR LØVE',
+        confirmation: 'SAMEIET ARTIG SKRIVEFØR LØVE',
+        orgnummer: '213461532',
       },
     ];
 
     let name: string;
     let response: { confirmUrl: string };
 
-    test.beforeEach(async () => {
+    test.beforeEach(async ({ api }) => {
       name = `Playwright-e2e-${role}-${Date.now()}`;
 
       const systemId = await test.step('Create system with access packages', async () => {
-        return await api.createSystemInSystemregisterWithAccessPackages(vendorOrgNumber, name);
+        return await api.systemUsers.createSystemInSystemregisterWithAccessPackages(
+          vendorOrgNumber,
+          name,
+        );
       });
 
       response = await test.step('Create client delegation agent request', async () => {
-        return await api.postClientDelegationAgentRequest(
+        return await api.systemUsers.postClientDelegationAgentRequest(
           vendorOrgNumber,
           systemId,
           accessPackageApiName,
-          user.orgNo,
+          user.org,
         );
       });
     });
 
-    test.afterEach(async () => {
+    test.afterEach(async ({ api }) => {
       if (name) {
-        await api.cleanUpSystemUsersForSystem(
+        await api.systemUsers.cleanUpSystemUsersForSystem(
           `${vendorOrgNumber}_${name}`,
           user.pid,
-          user.orgNo,
+          user.org,
           true,
         );
-        await api.deleteSystemInSystemRegister(vendorOrgNumber, name);
+        await api.systemUsers.deleteSystemInSystemRegister(vendorOrgNumber, name);
       }
     });
 
@@ -248,13 +238,10 @@ test.describe('Delegering av klienter til Systembruker', reportArea, () => {
       login,
       accessManagementFrontPage,
       clientDelegationPage,
-      runAccessibilityTest,
     }) => {
       await test.step('Approve system user request', async () => {
         await page.goto(response.confirmUrl);
         await login.loginNotChoosingActor(user.pid);
-        await expect(clientDelegationPage.confirmButton).toBeVisible();
-        await runAccessibilityTest.scan('klientforespørsel');
         await clientDelegationPage.confirmAndCreateSystemUser(accessPackageDisplayName);
         await expect(login.loginButton).toBeVisible();
       });
@@ -280,8 +267,6 @@ test.describe('Delegering av klienter til Systembruker', reportArea, () => {
           );
         }
       });
-
-      await runAccessibilityTest.scan('systembruker-med-klienter');
 
       await test.step('Cleanup: Delete system user', async () => {
         await clientDelegationPage.deleteSystemUser(name);

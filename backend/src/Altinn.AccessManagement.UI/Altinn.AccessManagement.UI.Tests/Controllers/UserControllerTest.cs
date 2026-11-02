@@ -6,6 +6,7 @@ using Altinn.AccessManagement.UI.Core.ClientInterfaces;
 using Altinn.AccessManagement.UI.Core.Configuration;
 using Altinn.AccessManagement.UI.Core.Models;
 using Altinn.AccessManagement.UI.Core.Models.AccessManagement;
+using Altinn.AccessManagement.UI.Core.Models.Common.Frontend;
 using Altinn.AccessManagement.UI.Core.Models.User;
 using Altinn.AccessManagement.UI.Mocks.Utils;
 using Altinn.AccessManagement.UI.Tests.Utils;
@@ -16,7 +17,6 @@ using Microsoft.Extensions.Options;
 using Altinn.AccessManagement.UI.Core.Services;
 using Altinn.AccessManagement.UI.Core.Services.Interfaces;
 using Moq;
-using User = Altinn.AccessManagement.UI.Core.Models.User.User;
 using Altinn.AccessManagement.UI.Core.Models.Profile;
 using Altinn.AccessManagement.UI.Core.Enums;
 
@@ -128,11 +128,11 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
             string reporteePartyUuid = "cd35779b-b174-4ecc-bbef-ece13611be7f";
 
             string path = Path.Combine(_testDataFolder, "Data", "ExpectedResults", "ReporteeList", "GetPartyFromReporteeList", $"{reporteePartyUuid}.json");
-            AuthorizedParty expectedResponse = Util.GetMockData<AuthorizedParty>(path);
+            AuthorizedPartyFE expectedResponse = Util.GetMockData<AuthorizedPartyFE>(path);
 
 
             var response = await _client.GetAsync($"accessmanagement/api/v1/user/reportee/{reporteePartyUuid}");
-            AuthorizedParty actualResponse = await response.Content.ReadFromJsonAsync<AuthorizedParty>();
+            AuthorizedPartyFE actualResponse = await response.Content.ReadFromJsonAsync<AuthorizedPartyFE>();
 
             Assert.Equal(HttpStatusCode.OK, response.StatusCode);
             AssertionUtil.AssertEqual(expectedResponse, actualResponse);
@@ -150,13 +150,13 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
             string subunitPartyUuid = "b0a79f3d-4cef-430a-9774-301b754e0f6f";
 
             string path = Path.Combine(_testDataFolder, "Data", "ExpectedResults", "ReporteeList", "GetPartyFromReporteeList", $"{subunitPartyUuid}.json");
-            AuthorizedParty expectedResponse = Util.GetMockData<AuthorizedParty>(path);
+            AuthorizedPartyFE expectedResponse = Util.GetMockData<AuthorizedPartyFE>(path);
 
             var response = await _client.GetAsync($"accessmanagement/api/v1/user/reportee/{subunitPartyUuid}");
-            AuthorizedParty actualResponse = await response.Content.ReadFromJsonAsync<AuthorizedParty>();
+            AuthorizedPartyFE actualResponse = await response.Content.ReadFromJsonAsync<AuthorizedPartyFE>();
 
             Assert.Equal(HttpStatusCode.OK, response.StatusCode);
-            Assert.Equal(expectedResponse.PartyUuid, actualResponse.PartyUuid);
+            Assert.Equal(expectedResponse.Id, actualResponse.Id);
             AssertionUtil.AssertEqual(expectedResponse, actualResponse);
         }
 
@@ -174,50 +174,6 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
             var response = await _client.GetAsync($"accessmanagement/api/v1/user/reportee/{reporteePartyUuid}");
 
             Assert.Equal(HttpStatusCode.NotFound, response.StatusCode);
-        }
-
-        /// <summary>
-        ///  Test case: Get reportee list
-        ///  Expected: Returns a list of reportees
-        /// </summary>
-        [Fact]
-        public async Task GetReporteeList_ReturnsList()
-        {
-            // Arrange
-            string partyId = "cd35779b-b174-4ecc-bbef-ece13611be7f";
-            string path = Path.Combine(_testDataFolder, "Data", "ExpectedResults", "ReporteeList", $"{partyId}.json");
-            const int userId = 1234;
-            List<User> expectedResponse = Util.GetMockData<List<User>>(path);
-            var token = PrincipalUtil.GetToken(userId, 1234, 2);
-            _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
-
-            // Act
-            var response = await _client.GetAsync($"accessmanagement/api/v1/user/reporteelist/{partyId}");
-            List<User> actualResponse = await response.Content.ReadFromJsonAsync<List<User>>();
-
-            // Assert
-            Assert.Equal(HttpStatusCode.OK, response.StatusCode);
-            AssertionUtil.AssertCollections(expectedResponse, actualResponse, AssertionUtil.AssertEqual);
-        }
-
-        /// <summary>
-        ///  Test case: Get reportee list
-        ///  Expected: Returns Bad Request if model state is invalid
-        /// </summary>
-        [Fact]
-        public async Task GetReporteeList_InvalidModelState_ReturnsBadRequest()
-        {
-            // Arrange
-            string invalidPartyId = "1234";
-            const int userId = 1234;
-            var token = PrincipalUtil.GetToken(userId, 1234, 2);
-            _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
-
-            // Act
-            var response = await _client.GetAsync($"accessmanagement/api/v1/user/reporteelist/{invalidPartyId}");
-
-            // Assert
-            Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
         }
 
         /// <summary>
@@ -280,90 +236,6 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
 
             // Act
             var response = await _client.GetAsync("accessmanagement/api/v1/user/actorlist/old");
-
-            // Assert
-            Assert.Equal(HttpStatusCode.InternalServerError, response.StatusCode);
-        }
-
-        /// <summary>
-        /// Test case: GetActorListForAuthenticatedUser returns a list of connections for valid user
-        /// Expected: Returns OK with list of connections
-        /// </summary>
-        [Fact]
-        public async Task GetActorListForAuthenticatedUser_ValidUser_ReturnsConnections()
-        {
-            // Arrange
-            const int userId = 20004938;
-            var token = PrincipalUtil.GetToken(userId, 1234, 2);
-            _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
-
-            string path = Path.Combine(_testDataFolder, "Data", "ExpectedResults", "RightHolders", "cd35779b-b174-4ecc-bbef-ece13611be7f.json");
-            List<Connection> expectedResponse = Util.GetMockData<List<Connection>>(path);
-
-            // Act
-            var response = await _client.GetAsync("accessmanagement/api/v1/user/actorlist");
-            List<Connection> actualResponse = await response.Content.ReadFromJsonAsync<List<Connection>>();
-
-            // Assert
-            Assert.Equal(HttpStatusCode.OK, response.StatusCode);
-            AssertionUtil.AssertCollections(expectedResponse, actualResponse, AssertionUtil.AssertEqual);
-        }
-
-        /// <summary>
-        /// Test case: GetActorListForAuthenticatedUser returns empty list when no connections exist
-        /// Expected: Returns OK with empty list
-        /// </summary>
-        [Fact]
-        public async Task GetActorListForAuthenticatedUser_NoConnections_ReturnsEmptyList()
-        {
-            // Arrange
-            const int userId = 1234;
-            var token = PrincipalUtil.GetToken(userId, 1234, 2);
-            _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
-
-            // Act
-            var response = await _client.GetAsync("accessmanagement/api/v1/user/actorlist");
-            List<Connection> actualResponse = await response.Content.ReadFromJsonAsync<List<Connection>>();
-
-            // Assert
-            Assert.Equal(HttpStatusCode.OK, response.StatusCode);
-            Assert.NotNull(actualResponse);
-            Assert.Empty(actualResponse);
-        }
-
-        /// <summary>
-        /// Test case: GetActorListForAuthenticatedUser returns 404 when service returns null
-        /// Expected: Returns 404 Not Found
-        /// </summary>
-        [Fact]
-        public async Task GetActorListForAuthenticatedUser_ServiceReturnsNull_Returns404()
-        {
-            // Arrange
-            const int userId = 404;
-            var token = PrincipalUtil.GetToken(userId, 1234, 2);
-            _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
-
-            // Act
-            var response = await _client.GetAsync("accessmanagement/api/v1/user/actorlist");
-
-            // Assert
-            Assert.Equal(HttpStatusCode.NotFound, response.StatusCode);
-        }
-
-        /// <summary>
-        /// Test case: GetActorListForAuthenticatedUser returns 500 when internal server error occurs
-        /// Expected: Returns 500 Internal Server Error
-        /// </summary>
-        [Fact]
-        public async Task GetActorListForAuthenticatedUser_InternalServerError_Returns500()
-        {
-            // Arrange
-            const int userId = 500;
-            var token = PrincipalUtil.GetToken(userId, 1234, 2);
-            _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
-
-            // Act
-            var response = await _client.GetAsync("accessmanagement/api/v1/user/actorlist");
 
             // Assert
             Assert.Equal(HttpStatusCode.InternalServerError, response.StatusCode);

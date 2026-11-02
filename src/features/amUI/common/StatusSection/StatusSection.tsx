@@ -5,11 +5,12 @@ import {
   InformationSquareFillIcon,
   XMarkOctagonFillIcon,
 } from '@navikt/aksel-icons';
-import { DsParagraph, formatDisplayName } from '@altinn/altinn-components';
+import { DsParagraph } from '@altinn/altinn-components';
 import { useContext } from 'react';
 import { Trans, useTranslation } from 'react-i18next';
 
-import { PartyType } from '@/rtk/features/userInfoApi';
+import { PartyType } from '@/dataObjects/dtos/Party';
+import { formatEntityDisplayName } from '@/resources/utils/reporteeUtils';
 
 import { PartyRepresentationContext } from '../PartyRepresentationContext/PartyRepresentationContext';
 import { InheritedStatusType, type InheritedStatusMessageType } from '../useInheritedStatus';
@@ -65,19 +66,9 @@ export const StatusSection = ({
     return null;
   }
 
-  const formattedToPartyName =
-    toPartyName ??
-    formatDisplayName({
-      fullName: toParty?.name || '',
-      type: toParty?.partyTypeName === PartyType.Person ? 'person' : 'company',
-      reverseNameOrder: false,
-    });
+  const formattedToPartyName = toPartyName ?? formatEntityDisplayName(toParty);
 
-  const formattedFromPartyName = formatDisplayName({
-    fullName: fromParty?.name || '',
-    type: fromParty?.partyTypeName === PartyType.Person ? 'person' : 'company',
-    reverseNameOrder: false,
-  });
+  const formattedFromPartyName = formatEntityDisplayName(fromParty);
 
   const formattedUserName = formattedToPartyName;
   const shouldShowDelegationCheck = !cannotDelegateHere && showDelegationCheckWarning;
@@ -129,14 +120,10 @@ export const StatusSection = ({
         </div>
       )}
       {uniqueInheritedStatus?.map((status) => {
-        const formattedViaName = formatDisplayName({
-          fullName: status.via?.name || '',
-          type: status.via?.type?.toLowerCase() === 'person' ? 'person' : 'company',
-          reverseNameOrder: false,
-        });
+        const formattedViaName = formatEntityDisplayName(status.via);
 
         const textKey =
-          toParty?.partyUuid === status.via?.id && toParty?.partyTypeName === PartyType.Person
+          toParty?.id === status.via?.id && toParty?.type === PartyType.Person
             ? 'status_section.access_status.via_priv'
             : STATUS_TRANSLATION_KEYS[status.type];
 

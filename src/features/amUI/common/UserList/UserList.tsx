@@ -2,11 +2,11 @@ import { useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Button, DsParagraph, List } from '@altinn/altinn-components';
 
-import type { ExtendedUser } from '@/rtk/features/userInfoApi';
 import { type Connection } from '@/rtk/features/connectionApi';
 
 import { type DelegationAction } from '../DelegationModal/EditModal';
 import { mapConnectionsToUserSearchNodes } from '../UserSearch/connectionMapper';
+import { SearchHitsStatus } from '../SearchHitsStatus/SearchHitsStatus';
 
 import { UserItem } from './UserItem';
 import { useFilteredUsers } from './useFilteredUsers';
@@ -44,7 +44,7 @@ export const UserList = ({
   const { t } = useTranslation();
   const mappedUsers = useMemo(() => mapConnectionsToUserSearchNodes(connections), [connections]);
   const trimmedQuery = searchString.trim();
-  const { users, hasNextPage, goNextPage } = useFilteredUsers({
+  const { users, hasNextPage, goNextPage, totalFilteredCount } = useFilteredUsers({
     users: mappedUsers,
     searchString: trimmedQuery,
   });
@@ -62,6 +62,10 @@ export const UserList = ({
 
   return (
     <>
+      <SearchHitsStatus
+        hits={trimmedQuery && !promptForNoResults ? totalFilteredCount : undefined}
+        searchString={trimmedQuery}
+      />
       {promptForNoResults && (
         <div
           role='alert'
@@ -98,7 +102,7 @@ export const UserList = ({
             disableLinks={disableLinks}
             controls={(user) => (
               <UserListActions
-                user={user as ExtendedUser}
+                user={user}
                 availableAction={availableAction}
                 onDelegate={() => onDelegate && onDelegate(user.id)}
                 onRevoke={() => onRevoke && onRevoke(user.id)}

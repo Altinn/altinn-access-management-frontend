@@ -38,13 +38,13 @@ const InstanceSectionContent = ({ isReportee = false }: { isReportee?: boolean }
     isError,
   } = useGetInstancesQuery(
     {
-      party: actingParty?.partyUuid || '',
-      from: fromParty?.partyUuid,
-      to: toParty?.partyUuid,
+      party: actingParty?.id || '',
+      from: fromParty?.id,
+      to: toParty?.id,
       language: i18n.language,
     },
     {
-      skip: !actingParty?.partyUuid || !fromParty?.partyUuid || !toParty?.partyUuid,
+      skip: !actingParty?.id || !fromParty?.id || !toParty?.id,
     },
   );
 

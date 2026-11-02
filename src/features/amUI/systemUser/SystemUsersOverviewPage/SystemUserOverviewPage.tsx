@@ -7,11 +7,11 @@ import {
   DsButton,
   DsParagraph,
   DsSkeleton,
-  formatDisplayName,
   List,
   ListItem,
 } from '@altinn/altinn-components';
 
+import { formatEntityDisplayName } from '@/resources/utils/reporteeUtils';
 import { useDocumentTitle } from '@/resources/hooks/useDocumentTitle';
 import { PageWrapper } from '@/components';
 import {
@@ -49,7 +49,7 @@ export const SystemUserOverviewPage = () => {
   // load only for isAdmin
   const {
     data: systemUsers,
-    isLoading: isLoadingSystemUsers,
+    isFetching: isLoadingSystemUsers,
     isError: isLoadSystemUsersError,
   } = useGetSystemUsersQuery(partyId, {
     skip: !isAdmin,
@@ -58,7 +58,7 @@ export const SystemUserOverviewPage = () => {
   // load for isAdmin and isClientAdmin
   const {
     data: agentSystemUsers,
-    isLoading: isLoadingAgentSystemUsers,
+    isFetching: isLoadingAgentSystemUsers,
     isError: isLoadAgentSystemUsersError,
   } = useGetAgentSystemUsersQuery(partyId, {
     skip: !isAdmin && !isClientAdmin,
@@ -66,7 +66,7 @@ export const SystemUserOverviewPage = () => {
 
   const {
     data: pendingSystemUsers,
-    isLoading: isLoadingPendingSystemUsers,
+    isFetching: isLoadingPendingSystemUsers,
     isError: isLoadPendingSystemUsersError,
   } = useGetPendingSystemUserRequestsQuery(partyUuid, {
     skip: !hasCreateSystemUserPermission(reporteeData, isAdmin),
@@ -80,10 +80,7 @@ export const SystemUserOverviewPage = () => {
     isLoadingPendingSystemUsers ||
     isLoadingIsAdmin;
 
-  const reporteeName = formatDisplayName({
-    fullName: reporteeData?.name || '',
-    type: reporteeData?.type === 'Person' ? 'person' : 'company',
-  });
+  const reporteeName = formatEntityDisplayName(reporteeData);
 
   return (
     <PageWrapper>

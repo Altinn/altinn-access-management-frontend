@@ -1,13 +1,9 @@
-import {
-  Button,
-  SnackbarDuration,
-  formatDisplayName,
-  useSnackbar,
-} from '@altinn/altinn-components';
+import { Button, SnackbarDuration, useSnackbar } from '@altinn/altinn-components';
 import * as React from 'react';
 import { useTranslation } from 'react-i18next';
 import { MinusCircleIcon, PlusCircleIcon } from '@navikt/aksel-icons';
 
+import { formatEntityDisplayName } from '@/resources/utils/reporteeUtils';
 import { useIsMobileOrSmaller } from '@/resources/utils/screensizeUtils';
 import {
   useAddMaskinportenSupplierResourceMutation,
@@ -15,7 +11,6 @@ import {
   useRemoveMaskinportenSupplierResourceMutation,
 } from '@/rtk/features/maskinportenApi';
 import type { ServiceResource } from '@/rtk/features/singleRights/singleRightsApi';
-import { PartyType } from '@/rtk/features/userInfoApi';
 
 import { useDelegationModalContext } from '../common/DelegationModal/DelegationModalContext';
 import { resourceActionControlId } from '../common/DelegationModal/SingleRights/createSearchResultControlsRenderer';
@@ -44,23 +39,20 @@ export const ScopeSearchControls = ({
   const { fromParty, toParty } = usePartyRepresentation();
   const { setActionError } = useDelegationModalContext();
   const [isCheckingDelegation, setIsCheckingDelegation] = React.useState(false);
-  const supplier = toParty?.orgNumber ?? '';
-  const toPartyName = formatDisplayName({
-    fullName: toParty?.name ?? '',
-    type: toParty?.partyTypeName === PartyType.Person ? 'person' : 'company',
-  });
+  const supplier = toParty?.organizationIdentifier ?? '';
+  const toPartyName = formatEntityDisplayName(toParty);
   const [addSupplierResource] = useAddMaskinportenSupplierResourceMutation();
   const [removeSupplierResource] = useRemoveMaskinportenSupplierResourceMutation();
   const { delegate, remove, isLoading } = useMaskinportenResourceActions({
     delegate: (r) =>
       addSupplierResource({
-        party: fromParty?.partyUuid ?? '',
+        party: fromParty?.id ?? '',
         supplier,
         resource: r.identifier,
       }).unwrap(),
     remove: (r) =>
       removeSupplierResource({
-        party: fromParty?.partyUuid ?? '',
+        party: fromParty?.id ?? '',
         supplier,
         resource: r.identifier,
       }).unwrap(),
@@ -82,12 +74,12 @@ export const ScopeSearchControls = ({
   };
 
   const handleAddResource = async () => {
-    if (!fromParty?.partyUuid || !resource.identifier) return;
+    if (!fromParty?.id || !resource.identifier) return;
 
     setIsCheckingDelegation(true);
     try {
       const delegationCheck = await checkDelegation({
-        party: fromParty.partyUuid,
+        party: fromParty.id,
         resource: resource.identifier,
       }).unwrap();
       const canDelegateResource = delegationCheck.rights?.some((right) => right.result) ?? false;

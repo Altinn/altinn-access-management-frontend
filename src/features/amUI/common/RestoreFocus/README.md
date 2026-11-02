@@ -74,12 +74,12 @@ bucket has no collapse toggle, so it doesn't need one.
 
 ## Case: back button in the delegation modal
 
-`DelegationModalContent` ([DelegationModal/DelegationModalContent.tsx](../DelegationModal/DelegationModalContent.tsx))
+`DelegationDialog` ([DelegationModal/DelegationDialog.tsx](../DelegationModal/DelegationDialog.tsx))
 owns one zone for the whole modal dialog.
 
 - Selecting a package row opens a secondary detail view. The back button autofocuses via
   `useAutoFocusRef` (rule 1, independent of RestoreFocus).
-- Clicking back calls `restoreFocus.requestFocus(packageToView?.id ?? resourceToView?.identifier)`
+- Clicking back calls `restoreFocus.requestFocus(focusTargetId)` (the package id or resource identifier)
   before the view flips back.
 - The list remounts. The row with that id (registered via `useRestoreFocusTarget`) gets focused. The
   user lands back where they left off, not at the top of the modal.

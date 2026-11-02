@@ -3,12 +3,13 @@ import { useTranslation } from 'react-i18next';
 import { DsAlert, DsParagraph } from '@altinn/altinn-components';
 
 import { useGetInstanceUsersQuery } from '@/rtk/features/instanceApi';
-import { ConnectionUserType, useGetSimplifiedConnectionsQuery } from '@/rtk/features/connectionApi';
+import { PartyType } from '@/dataObjects/dtos/Party';
+import { useGetSimplifiedConnectionsQuery } from '@/rtk/features/connectionApi';
 
 import UserSearch from '../common/UserSearch/UserSearch';
 import {
   mapSimplifiedConnectionsToUserSearchNodes,
-  mapSimplifiedPartiesToUserSearchNodes,
+  mapPartiesToUserSearchNodes,
 } from '../common/UserSearch/connectionMapper';
 import {
   createErrorDetails,
@@ -42,12 +43,12 @@ export const InstanceUsersAsInstanceAdmin = ({
     error: instanceUsersError,
   } = useGetInstanceUsersQuery(
     {
-      party: actingParty?.partyUuid || '',
+      party: actingParty?.id || '',
       resource: resourceId,
       instance: instanceUrn,
     },
     {
-      skip: !actingParty?.partyUuid || !resourceId || !instanceUrn,
+      skip: !actingParty?.id || !resourceId || !instanceUrn,
     },
   );
 
@@ -58,23 +59,19 @@ export const InstanceUsersAsInstanceAdmin = ({
     isError: isConnectionError,
     error: connectionError,
   } = useGetSimplifiedConnectionsQuery(
-    { partyUuid: fromParty?.partyUuid ?? '' },
+    { partyUuid: fromParty?.id ?? '' },
     {
-      skip: !fromParty?.partyUuid,
+      skip: !fromParty?.id,
     },
   );
 
-  const users = useMemo(
-    () => mapSimplifiedPartiesToUserSearchNodes(instanceUsers),
-    [instanceUsers],
-  );
+  const users = useMemo(() => mapPartiesToUserSearchNodes(instanceUsers), [instanceUsers]);
 
   const indirectUsers = useMemo(
     () =>
       mapSimplifiedConnectionsToUserSearchNodes(simplifiedConnections).filter(
         (user) =>
-          user.type !== ConnectionUserType.Organization ||
-          (user.children && user.children.length > 0),
+          user.type !== PartyType.Organization || (user.children && user.children.length > 0),
       ),
     [simplifiedConnections],
   );

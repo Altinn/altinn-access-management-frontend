@@ -1,8 +1,9 @@
 import React, { useMemo } from 'react';
-import { DsAlert, DsParagraph, DsSkeleton, formatDisplayName } from '@altinn/altinn-components';
+import { DsAlert, DsParagraph, DsSkeleton } from '@altinn/altinn-components';
 import { useTranslation } from 'react-i18next';
 
-import { PartyType, useGetReporteeQuery } from '@/rtk/features/userInfoApi';
+import { formatEntityDisplayName } from '@/resources/utils/reporteeUtils';
+import { useGetReporteeQuery } from '@/rtk/features/userInfoApi';
 import { useGetMyClientsQuery, type Client } from '@/rtk/features/clientApi';
 import { useGetPartyFromLoggedInUserQuery } from '@/rtk/features/lookupApi';
 import { useDocumentTitle } from '@/resources/hooks/useDocumentTitle';
@@ -18,6 +19,11 @@ import {
   createErrorDetails,
   TechnicalErrorParagraphs,
 } from '../common/TechnicalErrorParagraphs/TechnicalErrorParagraphs';
+import {
+  RestoreFocusFallback,
+  RestoreFocusProvider,
+  useRestoreFocus,
+} from '../common/RestoreFocus';
 
 import { MyClientsAccessSection } from './MyClientsAccessSection';
 import { MyClientsDeleteClientProviderModal } from './MyClientsDeleteClientProviderModal';
@@ -28,6 +34,9 @@ export const MyClientsPage = () => {
   const actingPartyUuid = getCookie('AltinnPartyUuid') ?? '';
 
   useDocumentTitle(t('my_clients_page.page_title'));
+  // The zone lives here, not in MyClientsAccessSection: revoking the last access unmounts the whole
+  // section, and the fallback must outlive it.
+  const restoreFocus = useRestoreFocus();
 
   const {
     data: currentUser,
@@ -36,7 +45,7 @@ export const MyClientsPage = () => {
   } = useGetPartyFromLoggedInUserQuery();
   const { data: reportee, isLoading: isLoadingReportee } = useGetReporteeQuery();
   const backUrl = useBackUrl(`/`);
-  const isActingOnBehalfOfSelf = currentUser?.partyUuid === actingPartyUuid;
+  const isActingOnBehalfOfSelf = currentUser?.id === actingPartyUuid;
 
   const {
     data: myClientsByProvider,
@@ -45,8 +54,7 @@ export const MyClientsPage = () => {
   } = useGetMyClientsQuery(
     { provider: [actingPartyUuid] },
     {
-      skip:
-        !actingPartyUuid || !currentUser?.partyUuid || isActingOnBehalfOfSelf || !!currentUserError,
+      skip: !actingPartyUuid || !currentUser?.id || isActingOnBehalfOfSelf || !!currentUserError,
     },
   );
 
@@ -66,15 +74,9 @@ export const MyClientsPage = () => {
     return [...dedupedClients.values()];
   }, [myClientsByProvider]);
 
-  const currentUserName = formatDisplayName({
-    fullName: currentUser?.name || '',
-    type: currentUser?.partyTypeName === PartyType.Person ? 'person' : 'company',
-  });
+  const currentUserName = formatEntityDisplayName(currentUser);
 
-  const actingPartyName = formatDisplayName({
-    fullName: reportee?.name || '',
-    type: reportee?.type === 'Person' ? 'person' : 'company',
-  });
+  const actingPartyName = formatEntityDisplayName(reportee);
 
   const errorDetails = createErrorDetails(myClientsError || currentUserError);
 
@@ -88,7 +90,7 @@ export const MyClientsPage = () => {
             <MyClientsDeleteClientProviderModal
               provider={actingPartyUuid}
               providerName={actingPartyName}
-              selfPartyUuid={currentUser?.partyUuid}
+              selfPartyUuid={currentUser?.id}
             />
           }
         >
@@ -98,37 +100,41 @@ export const MyClientsPage = () => {
               reportee={reportee}
               isLoading={isLoadingReportee}
             />
-            <div className={classes.content}>
-              {isActingOnBehalfOfSelf ? (
-                <DsAlert data-color='info'>
-                  {t('my_clients_page.not_acting_on_behalf_info')}
-                </DsAlert>
-              ) : errorDetails ? (
-                <DsAlert data-color='danger'>
-                  <TechnicalErrorParagraphs
-                    status={errorDetails.status}
-                    time={errorDetails.time}
-                    traceId={errorDetails.traceId}
-                  />
-                </DsAlert>
-              ) : isLoadingCurrentUser || isLoadingMyClients ? (
-                <DsSkeleton
-                  variant='rectangle'
-                  width='100%'
-                  height='220px'
-                />
-              ) : clients.length > 0 ? (
-                <MyClientsAccessSection
-                  clients={clients}
-                  actingPartyUuid={actingPartyUuid}
-                  currentUserName={currentUserName}
-                />
-              ) : (
-                <DsParagraph>
-                  {t('my_clients_page.no_clients', { actingParty: actingPartyName })}
-                </DsParagraph>
-              )}
-            </div>
+            <RestoreFocusProvider restoreFocus={restoreFocus}>
+              <div className={classes.content}>
+                <RestoreFocusFallback>
+                  {isActingOnBehalfOfSelf ? (
+                    <DsAlert data-color='info'>
+                      {t('my_clients_page.not_acting_on_behalf_info')}
+                    </DsAlert>
+                  ) : errorDetails ? (
+                    <DsAlert data-color='danger'>
+                      <TechnicalErrorParagraphs
+                        status={errorDetails.status}
+                        time={errorDetails.time}
+                        traceId={errorDetails.traceId}
+                      />
+                    </DsAlert>
+                  ) : isLoadingCurrentUser || isLoadingMyClients ? (
+                    <DsSkeleton
+                      variant='rectangle'
+                      width='100%'
+                      height='220px'
+                    />
+                  ) : clients.length > 0 ? (
+                    <MyClientsAccessSection
+                      clients={clients}
+                      actingPartyUuid={actingPartyUuid}
+                      currentUserName={currentUserName}
+                    />
+                  ) : (
+                    <DsParagraph>
+                      {t('my_clients_page.no_clients', { actingParty: actingPartyName })}
+                    </DsParagraph>
+                  )}
+                </RestoreFocusFallback>
+              </div>
+            </RestoreFocusProvider>
           </>
         </PageContainer>
       </PageLayoutWrapper>

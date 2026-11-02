@@ -14,18 +14,17 @@ export interface DeleteUserModalProps {
 export const DeleteUserModal = ({ direction = 'to' }: DeleteUserModalProps) => {
   const { fromParty, toParty, actingParty, selfParty } = usePartyRepresentation();
 
-  const targetPartyUuid = direction === 'to' ? toParty?.partyUuid : fromParty?.partyUuid;
-  const viewingYourself =
-    !!targetPartyUuid && !!selfParty?.partyUuid && targetPartyUuid === selfParty.partyUuid;
+  const targetPartyUuid = direction === 'to' ? toParty?.id : fromParty?.id;
+  const viewingYourself = !!targetPartyUuid && !!selfParty?.id && targetPartyUuid === selfParty.id;
 
   const { data: rolePermissions, isLoading: isRolePermissionsLoading } = useGetRolePermissionsQuery(
     {
-      from: fromParty?.partyUuid ?? '',
-      to: toParty?.partyUuid ?? '',
-      party: actingParty?.partyUuid ?? '',
+      from: fromParty?.id ?? '',
+      to: toParty?.id ?? '',
+      party: actingParty?.id ?? '',
     },
     {
-      skip: !fromParty?.partyUuid || !toParty?.partyUuid || !actingParty?.partyUuid,
+      skip: !fromParty?.id || !toParty?.id || !actingParty?.id,
     },
   );
 

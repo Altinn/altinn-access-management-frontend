@@ -13,10 +13,11 @@ namespace Altinn.AccessManagement.UI.Core.Helpers
     {
         /// <summary>
         /// Extension members forwarded verbatim from the upstream (authentication) problem so the
-        /// specifics (e.g. which access package/right could not be delegated and why) survive to the
-        /// frontend instead of being flattened to just the error code.
+        /// specifics (e.g. which access package/right could not be delegated and why, or which resources
+        /// the resource registry has marked as not delegable) survive to the frontend instead of being
+        /// flattened to just the error code.
         /// </summary>
-        private static readonly string[] ForwardableExtensionKeys = ["delegationReasons"];
+        private static readonly string[] ForwardableExtensionKeys = ["delegationReasons", "NotDelegableResources"];
 
         /// <summary>
         /// Map error codes from AUTH to AMUI error codes
@@ -55,6 +56,7 @@ namespace Altinn.AccessManagement.UI.Core.Helpers
                     "AUTH-00069" => Problem.DelegationRightAccessListValidationFail,
                     "AUTH-00070" => Problem.DelegationRightResourceNotDelegable,
                     "AUTH-00071" => Problem.DelegationRightResourceIsMaskinPortenSchema,
+                    "AUTH-00082" => Problem.Rights_ResourceNotDelegable,
 
                     _ => Problem.Generic_EndOfMethod,
                 };

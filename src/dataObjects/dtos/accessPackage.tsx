@@ -1,4 +1,5 @@
-import type { CompactRole, Entity } from './Common';
+import type { CompactRole } from './Common';
+import type { PartyEntity } from './Party';
 
 export interface Reason {
   items: ReasonItem[];
@@ -9,9 +10,9 @@ export interface ReasonItem {
   description: string;
 }
 export interface Permissions {
-  to: Entity;
-  from: Entity;
-  via: Entity;
+  to: PartyEntity;
+  from: PartyEntity;
+  via: PartyEntity | null;
   role: CompactRole | null;
   viaRole: CompactRole | null;
   reason: Reason;

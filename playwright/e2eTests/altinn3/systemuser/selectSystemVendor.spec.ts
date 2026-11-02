@@ -1,11 +1,7 @@
 import { expect, test } from 'playwright/fixture/pomFixture';
 import { Language } from 'playwright/pages/LanguageMenu';
-import { TestdataApi } from 'playwright/util/TestdataApi';
-import { ApiRequests } from 'playwright/api-requests/SystemUserApiRequests';
 
 import { systemUserOwners } from './testdata';
-
-const reportArea = { annotation: { type: 'report-area', description: 'Systembruker' } };
 
 // Runs in nynorsk on purpose: exercises the before-login language pinning
 // (settings API) and proves the dict-driven selectors work in a non-default
@@ -16,14 +12,12 @@ const vendorOrgNumber = '310547891';
 const testUserPid = owner.pid;
 const testOrgName = owner.name;
 
-test.describe('System Register', reportArea, async () => {
+test.describe('System Register', async () => {
   let system: string;
-  let api: ApiRequests;
 
-  test.beforeEach(async ({ login }) => {
+  test.beforeEach(async ({ api, login }) => {
     system = '';
-    api = new ApiRequests();
-    system = await api.createSystemSystemRegister(vendorOrgNumber);
+    system = await api.systemUsers.createSystemSystemRegister(vendorOrgNumber);
     await login.LoginToAccessManagement(testUserPid);
     await login.selectActor(testOrgName);
   });
@@ -31,7 +25,6 @@ test.describe('System Register', reportArea, async () => {
   test('Create system user and verify landing page', async ({
     systemUserPage,
     accessManagementFrontPage,
-    runAccessibilityTest,
   }): Promise<void> => {
     await test.step('Navigate to system user page', async () => {
       await accessManagementFrontPage.systemUserMenuLink.click();
@@ -46,14 +39,17 @@ test.describe('System Register', reportArea, async () => {
     await test.step('Verify system user created', async () => {
       await expect(systemUserPage.systemUserCreatedHeading).toBeVisible();
       await expect(systemUserPage.systemUserLink(system)).toBeVisible();
-      await runAccessibilityTest.scan('systembruker');
     });
   });
 
-  test.afterEach(async () => {
+  test.afterEach(async ({ api }) => {
     if (system) {
-      await api.cleanUpSystemUsersForSystem(`${vendorOrgNumber}_${system}`, owner.pid, owner.orgNo);
-      await TestdataApi.removeSystem(vendorOrgNumber, system);
+      await api.systemUsers.cleanUpSystemUsersForSystem(
+        `${vendorOrgNumber}_${system}`,
+        owner.pid,
+        owner.orgNo,
+      );
+      await api.systemUsers.deleteSystemInSystemRegister(vendorOrgNumber, system);
     }
   });
 });

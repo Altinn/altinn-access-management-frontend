@@ -1,5 +1,5 @@
 using System.Collections.Generic;
-using Altinn.AccessManagement.UI.Core.Models.Common;
+using Altinn.AccessManagement.UI.Core.Models.User;
 
 namespace Altinn.AccessManagement.UI.Core.Models.ClientDelegation
 {
@@ -11,7 +11,7 @@ namespace Altinn.AccessManagement.UI.Core.Models.ClientDelegation
         /// <summary>
         /// Gets or sets the provider that has delegated client access to the authenticated user.
         /// </summary>
-        public CompactEntity Provider { get; set; } = new();
+        public Entity Provider { get; set; } = new();
 
         /// <summary>
         /// Gets or sets the clients delegated via the provider.

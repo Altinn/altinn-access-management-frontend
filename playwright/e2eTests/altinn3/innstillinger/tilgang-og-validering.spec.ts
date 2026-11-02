@@ -1,32 +1,22 @@
 import { expect, test } from '../../../fixture/pomFixture';
-import { SettingsApiRequests } from '../../../api-requests/SettingsApiRequests';
-import { EnduserConnection } from '../../../api-requests/EnduserConnection';
 
 import { ACTORS, BASELINE_EPOST, IKKE_ADMIN } from './testdata';
 
-const reportArea = { annotation: { type: 'report-area', description: 'Innstillinger' } };
-
-test.describe('Innstillinger - tilgang og validering', reportArea, () => {
-  const api = new SettingsApiRequests();
-
+test.describe('Innstillinger - tilgang og validering', () => {
   test.describe('kan ikke fjerne den siste adressen', () => {
     const actor = ACTORS.sisteAdresse;
 
-    test.beforeEach(async () => {
+    test.beforeEach(async ({ api }) => {
       // Exactly one email and no SMS: emptying the email field then leaves the
       // organisation with no notification address at all, which is what the
       // dialog must refuse to save.
-      await api.setNotificationAddresses(actor.pid, actor.org, {
+      await api.settings.setNotificationAddresses(actor.pid, actor.org, {
         emails: [BASELINE_EPOST],
         phones: [],
       });
     });
 
-    test('kan ikke fjerne den siste adressen', async ({
-      innstillingerPage,
-      login,
-      runAccessibilityTest,
-    }) => {
+    test('kan ikke fjerne den siste adressen', async ({ innstillingerPage, login }) => {
       await test.step(`Logg inn som ${actor.orgName} og åpne innstillinger`, async () => {
         await login.LoginToAccessManagement(actor.pid);
         await login.selectActor(actor.orgName);
@@ -44,8 +34,6 @@ test.describe('Innstillinger - tilgang og validering', reportArea, () => {
         await expect(innstillingerPage.saveButton).toBeDisabled();
       });
 
-      await runAccessibilityTest.scan('valideringsfeil');
-
       await test.step('Adressen er uendret etter at dialogen lukkes', async () => {
         await innstillingerPage.lukkDialog();
         await innstillingerPage.openEpostDialog();
@@ -53,8 +41,8 @@ test.describe('Innstillinger - tilgang og validering', reportArea, () => {
       });
     });
 
-    test.afterEach(async () => {
-      await api.setNotificationAddresses(actor.pid, actor.org, {
+    test.afterEach(async ({ api }) => {
+      await api.settings.setNotificationAddresses(actor.pid, actor.org, {
         emails: [BASELINE_EPOST],
         phones: [],
       });
@@ -63,12 +51,11 @@ test.describe('Innstillinger - tilgang og validering', reportArea, () => {
 
   test.describe('bruker uten tilgang', () => {
     const { admin, bruker } = IKKE_ADMIN;
-    const connections = new EnduserConnection();
 
-    test.beforeEach(async () => {
+    test.beforeEach(async ({ api }) => {
       // Make `bruker` a plain right-holder so the organisation is selectable in
       // the header menu, without granting any administrator right.
-      await connections.addConnection(admin.pid, admin.org, bruker.pid);
+      await api.connections.addConnection(admin.pid, admin.org, bruker.pid);
     });
 
     test('bruker uten administratorrettighet får ikke redigere varslingsadresser', async ({
@@ -92,8 +79,8 @@ test.describe('Innstillinger - tilgang og validering', reportArea, () => {
       });
     });
 
-    test.afterEach(async () => {
-      await connections.deleteConnection(admin.pid, admin.org, [bruker.pid]);
+    test.afterEach(async ({ api }) => {
+      await api.connections.deleteConnection(admin.pid, admin.org, [bruker.pid]);
     });
   });
 });

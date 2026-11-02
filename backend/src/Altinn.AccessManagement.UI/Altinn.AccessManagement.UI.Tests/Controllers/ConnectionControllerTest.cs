@@ -9,6 +9,7 @@ using Altinn.AccessManagement.UI.Core.Configuration;
 using Altinn.AccessManagement.UI.Core.Helpers;
 using Altinn.AccessManagement.UI.Core.Models.Connections;
 using Altinn.AccessManagement.UI.Core.Models.User;
+using Altinn.AccessManagement.UI.Core.Models.User.Frontend;
 using Altinn.AccessManagement.UI.Core.Services.Interfaces;
 using Altinn.AccessManagement.UI.Mocks.Mocks;
 using Altinn.AccessManagement.UI.Mocks.Utils;
@@ -23,7 +24,6 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Moq;
-using User = Altinn.AccessManagement.UI.Core.Models.User.User;
 
 namespace Altinn.AccessManagement.UI.Tests.Controllers
 {
@@ -76,27 +76,6 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
             {
                 // If reflection fails, just continue - tests might still work
             }
-        }
-
-        /// <summary>
-        /// Assert that List of right holders is returned when valid input
-        /// </summary>
-        [Fact]
-        public async Task GetReporteeRightHolders_ReturnsList()
-        {
-            const int userId = 1234;
-            var token = PrincipalUtil.GetToken(userId, 1234, 2);
-            _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
-            string reporteePartyID = "51329012";
-
-            string path = Path.Combine(_testDataFolder, "Data", "ExpectedResults", "RightHolders", $"{reporteePartyID}.json");
-            List<User> expectedResponse = Util.GetMockData<List<User>>(path);
-
-            var response = await _client.GetAsync($"accessmanagement/api/v1/connection/reportee/{reporteePartyID}/rightholders");
-            List<User> actualResponse = await response.Content.ReadFromJsonAsync<List<User>>();
-
-            Assert.Equal(HttpStatusCode.OK, response.StatusCode);
-            AssertionUtil.AssertCollections(expectedResponse, actualResponse, AssertionUtil.AssertEqual);
         }
 
         /// <summary>
@@ -810,16 +789,16 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
             var token = PrincipalUtil.GetToken(1234, 1234, 2);
             _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
             string path = Path.Combine(_testDataFolder, "Data", "ExpectedResults", "RightHolders", $"{party}.json");
-            List<Connection> expectedResponse = Util.GetMockData<List<Connection>>(path);
+            List<ConnectionFE> expectedResponse = Util.GetMockData<List<ConnectionFE>>(path);
 
             // Act
             var response = await _client.GetAsync($"accessmanagement/api/v1/connection/rightholders?party={party}&from={from}&to={to}");
             var resJson = await response.Content.ReadAsStringAsync();
-            List<Connection> actualResponse = await response.Content.ReadFromJsonAsync<List<Connection>>();
+            List<ConnectionFE> actualResponse = await response.Content.ReadFromJsonAsync<List<ConnectionFE>>();
 
             // Assert
             Assert.Equal(HttpStatusCode.OK, response.StatusCode);
-            AssertionUtil.AssertCollections(expectedResponse, actualResponse, AssertionUtil.AssertEqual);
+            Assert.Equivalent(expectedResponse, actualResponse, strict: true);
         }
 
         /// <summary>
@@ -861,16 +840,16 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
             var token = PrincipalUtil.GetToken(1234, 1234, 2);
             _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
             string path = Path.Combine(_testDataFolder, "Data", "ExpectedResults", "RightHolders", "SimplifiedConnections", $"{party}.json");
-            List<SimplifiedConnection> expectedResponse = Util.GetMockData<List<SimplifiedConnection>>(path);
+            List<SimplifiedConnectionFE> expectedResponse = Util.GetMockData<List<SimplifiedConnectionFE>>(path);
 
             // Act
             HttpResponseMessage httpResponse = await _client.GetAsync(
                 $"accessmanagement/api/v1/connection/simplified?party={party}");
-            List<SimplifiedConnection> actualResponse = await httpResponse.Content.ReadFromJsonAsync<List<SimplifiedConnection>>();
+            List<SimplifiedConnectionFE> actualResponse = await httpResponse.Content.ReadFromJsonAsync<List<SimplifiedConnectionFE>>();
 
             // Assert
             Assert.Equal(HttpStatusCode.OK, httpResponse.StatusCode);
-            AssertionUtil.AssertCollections(expectedResponse, actualResponse, AssertionUtil.AssertEqual);
+            Assert.Equivalent(expectedResponse, actualResponse, strict: true);
         }
 
         /// <summary>

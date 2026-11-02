@@ -2,6 +2,7 @@
 using Altinn.AccessManagement.UI.Core.Helpers;
 using Altinn.AccessManagement.UI.Core.Models.Connections;
 using Altinn.AccessManagement.UI.Core.Models.User;
+using Altinn.AccessManagement.UI.Core.Models.User.Frontend;
 using Altinn.AccessManagement.UI.Core.Services.Interfaces;
 using Altinn.AccessManagement.UI.Filters;
 using Altinn.AccessManagement.UI.Models;
@@ -32,34 +33,6 @@ namespace Altinn.AccessManagement.UI.Controllers
             _connectionService = connectionService;
             _httpContextAccessor = httpContextAccessor;
             _logger = logger;
-        }
-
-        /// <summary>
-        /// Endpoint for retrieving all right holders of a reportee
-        /// </summary>
-        /// <param name="partyId">The partyId for the reportee who's right holders to return</param>
-        /// <returns>List of right holders</returns>
-        [HttpGet]
-        [Authorize]
-        [Route("reportee/{partyId}/rightholders")]
-        public async Task<ActionResult<List<User>>> GetReporteeRightHolders(int partyId)
-        {
-            if (!ModelState.IsValid)
-            {
-                return BadRequest(ModelState);
-            }
-
-            try
-            {
-                List<User> rightHolders = await _connectionService.GetReporteeConnections(partyId);
-
-                return rightHolders;
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError(ex, "GetReportee failed to fetch right holders");
-                return StatusCode(500);
-            }
         }
 
         /// <summary>
@@ -243,7 +216,7 @@ namespace Altinn.AccessManagement.UI.Controllers
         [HttpGet]
         [Authorize]
         [Route("rightholders")]
-        public async Task<ActionResult> GetRightholders(
+        public async Task<ActionResult<List<ConnectionFE>>> GetRightholders(
             [FromQuery] Guid party,
             [FromQuery] Guid? from,
             [FromQuery] Guid? to,
@@ -289,7 +262,7 @@ namespace Altinn.AccessManagement.UI.Controllers
         [HttpGet]
         [Authorize]
         [Route("simplified")]
-        public async Task<ActionResult<List<SimplifiedConnection>>> GetSimplifiedConnections([FromQuery] Guid party)
+        public async Task<ActionResult<List<SimplifiedConnectionFE>>> GetSimplifiedConnections([FromQuery] Guid party)
         {
             if (!ModelState.IsValid)
             {

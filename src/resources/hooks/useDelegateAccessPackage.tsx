@@ -1,6 +1,6 @@
 import type { AccessPackage } from '@/rtk/features/accessPackageApi';
 import { useDelegatePackageMutation } from '@/rtk/features/accessPackageApi';
-import type { Party } from '@/rtk/features/lookupApi';
+import type { PartyEntity } from '@/dataObjects/dtos/Party';
 
 export interface ValidationErrorDetail {
   code: string;
@@ -21,18 +21,18 @@ export const useDelegateAccessPackage = () => {
   const [delegate, { isLoading }] = useDelegatePackageMutation();
 
   const delegatePackage = (
-    toParty: Party,
-    fromParty: Party,
-    actingParty: Party,
+    toParty: PartyEntity,
+    fromParty: PartyEntity,
+    actingParty: PartyEntity,
     resource: AccessPackage,
     onSuccess?: () => void,
     onError?: (status: string | number, details?: DelegationErrorDetails) => void,
   ) => {
     delegate({
-      to: toParty.partyUuid,
+      to: toParty.id,
       packageId: resource.id,
-      from: fromParty.partyUuid,
-      party: actingParty.partyUuid,
+      from: fromParty.id,
+      party: actingParty.id,
     })
       .unwrap()
       .then(() => {

@@ -1,4 +1,5 @@
 ﻿using Altinn.AccessManagement.UI.Core.Enums;
+using Altinn.AccessManagement.UI.Core.Models.Common.Frontend;
 using Altinn.AccessManagement.UI.Core.Models.Profile;
 
 namespace Altinn.AccessManagement.UI.Core.Models
@@ -79,7 +80,7 @@ namespace Altinn.AccessManagement.UI.Core.Models
             PartyId = userProfile.PartyId;
             UserType = userProfile.UserType;
             ProfileSettingPreference = userProfile.ProfileSettingPreference;
-            Party = new PartyFE(userProfile.Party);
+            Party = PartyFE.FromRegisterParty(userProfile.Party);
         }
 
         /// <summary>

@@ -4,7 +4,7 @@ import { useNavigate, useSearchParams } from 'react-router';
 import { DsAlert, DsButton, DsHeading, DsParagraph } from '@altinn/altinn-components';
 
 import { ConsentPath } from '@/routes/paths/consentPath';
-import { PartyType } from '@/rtk/features/userInfoApi';
+import { getPartyColor } from '@/resources/utils/reporteeUtils';
 import {
   useApproveConsentRequestMutation,
   useGetConsentRequestQuery,
@@ -99,7 +99,7 @@ export const ConsentRequestPage = () => {
     if (skipLogout && isApproved) {
       setIsReceiptVisible(true);
     } else if (skipLogout && !isApproved) {
-      navigate(`/${ConsentPath.Consent}/${ConsentPath.Active}`);
+      void navigate(`/${ConsentPath.Consent}/${ConsentPath.Active}`);
     } else {
       window.location.assign(
         `${import.meta.env.BASE_URL}accessmanagement/api/v1/consent/request/${request?.id}/logout`,
@@ -120,9 +120,9 @@ export const ConsentRequestPage = () => {
       : null;
   }, [request]);
 
-  const account: { name: string; type: 'person' | 'company' } = {
+  const account: { name: string; color: 'person' | 'company' } = {
     name: memoizedRequest?.fromParty.name ?? '',
-    type: memoizedRequest?.fromParty.type === PartyType.Person ? 'person' : 'company',
+    color: getPartyColor(memoizedRequest?.fromParty),
   };
 
   let heading: React.ReactNode = null;
@@ -156,7 +156,7 @@ export const ConsentRequestPage = () => {
         </DsParagraph>
         <DsButton
           onClick={() => {
-            navigate(`/${ConsentPath.Consent}/${ConsentPath.Active}`, {
+            void navigate(`/${ConsentPath.Consent}/${ConsentPath.Active}`, {
               state: { createdId: requestId },
             });
           }}
@@ -244,7 +244,7 @@ export const ConsentRequestPage = () => {
             variant='primary'
             aria-disabled={isActionButtonDisabled}
             loading={isApprovingConsent}
-            onClick={approveConsent}
+            onClick={() => void approveConsent()}
           >
             {memoizedRequest.isPoa
               ? t('consent_request.approve_poa')
@@ -254,7 +254,7 @@ export const ConsentRequestPage = () => {
             variant='primary'
             aria-disabled={isActionButtonDisabled}
             loading={isRejectingConsent}
-            onClick={rejectConsent}
+            onClick={() => void rejectConsent()}
           >
             {memoizedRequest.isPoa
               ? t('consent_request.reject_poa')
@@ -269,6 +269,7 @@ export const ConsentRequestPage = () => {
     <RequestPageLayout
       account={account}
       isLoading={isLoadingRequest}
+      requestPartyUuid={request?.fromParty.id}
       error={error}
       heading={heading}
       body={body}

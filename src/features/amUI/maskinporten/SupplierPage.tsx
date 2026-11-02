@@ -1,14 +1,12 @@
-import { useMemo } from 'react';
 import { Link, useParams } from 'react-router';
 import { useTranslation } from 'react-i18next';
-import { DsAlert, DsParagraph, DsSkeleton, formatDisplayName } from '@altinn/altinn-components';
+import { DsAlert, DsParagraph, DsSkeleton } from '@altinn/altinn-components';
 
 import { PageWrapper } from '@/components/PageWrapper/PageWrapper';
+import { formatEntityDisplayName } from '@/resources/utils/reporteeUtils';
 import { getCookie } from '@/resources/Cookie/CookieMethods';
 import { useDocumentTitle } from '@/resources/hooks/useDocumentTitle';
-import type { Party } from '@/rtk/features/lookupApi';
 import { useGetMaskinportenSuppliersQuery } from '@/rtk/features/maskinportenApi';
-import { PartyType } from '@/rtk/features/userInfoApi';
 import { amUIPath } from '@/routes/paths';
 
 import { PartyRepresentationProvider } from '../common/PartyRepresentationContext/PartyRepresentationContext';
@@ -34,25 +32,9 @@ export const SupplierPage = () => {
   );
 
   const supplier = data?.[0];
-  const supplierName = supplier?.party.name
-    ? formatDisplayName({ fullName: supplier?.party.name, type: 'company' })
-    : '';
+  const supplierName = formatEntityDisplayName(supplier?.party);
 
-  const supplierParty = useMemo((): Party | undefined => {
-    const party = supplier?.party;
-    if (!party) {
-      return undefined;
-    }
-    return {
-      partyUuid: party.id,
-      partyId: 0,
-      name: party.name,
-      partyTypeName: PartyType.Organization,
-      orgNumber: party.organizationIdentifier ?? '',
-      isDeleted: party.isDeleted ?? false,
-      variant: party.variant ?? '',
-    };
-  }, [supplier]);
+  const supplierParty = supplier?.party;
 
   const notFound = !!error || (!isLoading && !data?.length);
 

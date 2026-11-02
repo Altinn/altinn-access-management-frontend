@@ -2,7 +2,6 @@
 using System.Text.Json;
 using Altinn.AccessManagement.UI.Core.ClientInterfaces;
 using Altinn.AccessManagement.UI.Core.Helpers;
-using Altinn.Platform.Models.Register;
 using Altinn.Register.Contracts.V1;
 
 namespace Altinn.AccessManagement.UI.Mocks.Mocks

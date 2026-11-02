@@ -1,6 +1,7 @@
 import { useTranslation } from 'react-i18next';
-import { DsParagraph, formatDisplayName } from '@altinn/altinn-components';
+import { DsParagraph } from '@altinn/altinn-components';
 
+import { formatEntityDisplayName } from '@/resources/utils/reporteeUtils';
 import { useGetMaskinportenConsumersQuery } from '@/rtk/features/maskinportenApi';
 
 import { usePartyRepresentation } from '../common/PartyRepresentationContext/PartyRepresentationContext';
@@ -29,7 +30,7 @@ export const ConsumersTab = ({ party, isActive, canFetch }: ConsumersTabProps) =
       <div className={classes.description}>
         <DsParagraph>
           {t('maskinporten_page.consumers_description', {
-            name: formatDisplayName({ fullName: actingParty?.name ?? '', type: 'company' }) ?? '',
+            name: formatEntityDisplayName(actingParty),
           })}
         </DsParagraph>
         <MaskinportenInfoPopover

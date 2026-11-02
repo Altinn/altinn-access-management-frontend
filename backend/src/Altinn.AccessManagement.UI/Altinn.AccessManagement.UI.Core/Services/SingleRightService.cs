@@ -1,7 +1,9 @@
 using Altinn.AccessManagement.UI.Core.ClientInterfaces;
+using Altinn.AccessManagement.UI.Core.Models.AccessPackage.Frontend;
 using Altinn.AccessManagement.UI.Core.Models.ResourceRegistry.Frontend;
 using Altinn.AccessManagement.UI.Core.Models.ResourceRegistry.ResourceOwner;
 using Altinn.AccessManagement.UI.Core.Models.SingleRight;
+using Altinn.AccessManagement.UI.Core.Models.SingleRight.Frontend;
 using Altinn.AccessManagement.UI.Core.Services.Interfaces;
 
 namespace Altinn.AccessManagement.UI.Core.Services
@@ -89,9 +91,10 @@ namespace Altinn.AccessManagement.UI.Core.Services
                         contactPoints: resource.ContactPoints,
                         spatial: resource.Spatial,
                         authorizationReference: resource.AuthorizationReference,
-                        resourceOwnerLogoUrl: org?.Logo);
+                        resourceOwnerLogoUrl: org?.Logo,
+                        keywords: resource.Keywords?.FindAll(kw => kw.Language == languageCode).Select(kw => kw.Word).ToList());
 
-                    delegationsFE.Add(new ResourceDelegation(resourceFE, resourcePermission.Permissions));
+                    delegationsFE.Add(new ResourceDelegation(resourceFE, PermissionFE.FromPermissions(resourcePermission.Permissions)));
                 }
             }
 
@@ -99,9 +102,10 @@ namespace Altinn.AccessManagement.UI.Core.Services
         }
 
         /// <inheritdoc />
-        public async Task<ResourceRight> GetDelegatedResourceRights(string languageCode, Guid party, Guid from, Guid to, string resource)
+        public async Task<ResourceRightFE> GetDelegatedResourceRights(string languageCode, Guid party, Guid from, Guid to, string resource)
         {
-            return await _singleRightClient.GetDelegatedResourceRights(languageCode, party, from, to, resource);
+            ResourceRight resourceRight = await _singleRightClient.GetDelegatedResourceRights(languageCode, party, from, to, resource);
+            return ResourceRightFE.FromResourceRight(resourceRight);
         }
 
         /// <inheritdoc />

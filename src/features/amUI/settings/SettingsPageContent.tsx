@@ -5,25 +5,22 @@ import {
   DsAlert,
   DsHeading,
   DsPopover,
-  formatDisplayName,
   List,
   SettingsItem,
 } from '@altinn/altinn-components';
 import { ChatIcon, PaperplaneIcon, QuestionmarkCircleIcon } from '@navikt/aksel-icons';
 
+import { formatEntityDisplayName } from '@/resources/utils/reporteeUtils';
 import { useDocumentTitle } from '@/resources/hooks/useDocumentTitle';
 import { useGetOrgNotificationAddressesQuery } from '@/rtk/features/settingsApi';
-import {
-  PartyType,
-  useGetIsCompanyProfileAdminQuery,
-  useGetReporteeQuery,
-} from '@/rtk/features/userInfoApi';
+import { useGetIsCompanyProfileAdminQuery, useGetReporteeQuery } from '@/rtk/features/userInfoApi';
 
 import { usePartyRepresentation } from '../common/PartyRepresentationContext/PartyRepresentationContext';
 import { ReporteePageHeading } from '../common/ReporteePageHeading/ReporteePageHeading';
 
 import classes from './SettingsPageContent.module.css';
 import { SettingsModal } from './SettingsModal';
+import { SettingsServiceAnnouncement } from './SettingsServiceAnnouncement';
 
 export const SettingsPageContent = () => {
   const { t } = useTranslation();
@@ -35,8 +32,8 @@ export const SettingsPageContent = () => {
   const { data: reportee, isLoading: isLoadingReportee } = useGetReporteeQuery();
   const { actingParty, isLoading: actorLoading } = usePartyRepresentation();
   const { data: notificationAddresses, isLoading: notifLoading } =
-    useGetOrgNotificationAddressesQuery(actingParty?.orgNumber ?? '', {
-      skip: !actingParty?.orgNumber,
+    useGetOrgNotificationAddressesQuery(actingParty?.organizationIdentifier ?? '', {
+      skip: !actingParty?.organizationIdentifier,
     });
 
   const { data: isCompanyProfileAdmin, isLoading: isCompanyProfileAdminLoading } =
@@ -61,10 +58,7 @@ export const SettingsPageContent = () => {
     setModalMode(null);
   };
 
-  const formattedActingPartyName = formatDisplayName({
-    fullName: actingParty?.name || '',
-    type: actingParty?.partyTypeName === PartyType.Person ? 'person' : 'company',
-  });
+  const formattedActingPartyName = formatEntityDisplayName(actingParty);
 
   // Show not-admin alert when loaded and user lacks permission
   if (!isCompanyProfileAdmin && !isCompanyProfileAdminLoading) {
@@ -90,6 +84,7 @@ export const SettingsPageContent = () => {
         reportee={reportee}
         isLoading={isLoading}
       />
+      <SettingsServiceAnnouncement />
       <div className={classes.settingsHeaderAndInfo}>
         <DsHeading
           level={2}

@@ -1,12 +1,8 @@
 import { test } from '../../../fixture/pomFixture';
-import { EnduserConnection } from '../../../api-requests/EnduserConnection';
-
-const reportArea = { annotation: { type: 'report-area', description: 'Fullmakter' } };
 
 const service = 'bruno-correspondence';
 
-test.describe('Tilgangsstyring', reportArea, () => {
-  const api = new EnduserConnection();
+test.describe('Tilgangsstyring', () => {
   const org = {
     managerPid: '12816699205',
     orgNo: '314138910',
@@ -21,13 +17,18 @@ test.describe('Tilgangsstyring', reportArea, () => {
       'urn:altinn:accesspackage:byggesoknad',
     ];
 
-    test.beforeEach(async () => {
-      await api.addConnectionAndPackagesToUser(org.managerPid, org.orgNo, user.pid, packages);
+    test.beforeEach(async ({ api }) => {
+      await api.connections.addConnectionAndPackagesToUser(
+        org.managerPid,
+        org.orgNo,
+        user.pid,
+        packages,
+      );
     });
 
-    test.afterEach(async () => {
+    test.afterEach(async ({ api }) => {
       try {
-        await api.deleteConnection(org.managerPid, org.orgNo, [user.pid]);
+        await api.connections.deleteConnection(org.managerPid, org.orgNo, [user.pid]);
       } catch (error) {
         console.error('Cleanup: Failed to delete connection:', error);
       }
@@ -72,8 +73,13 @@ test.describe('Tilgangsstyring', reportArea, () => {
     const user = { pid: '64866402394', name: 'TRÅDLØS TELEFONNUMMER' };
     const packages = ['urn:altinn:accesspackage:hovedadministrator'];
 
-    test.beforeEach(async () => {
-      await api.addConnectionAndPackagesToUser(org.managerPid, org.orgNo, user.pid, packages);
+    test.beforeEach(async ({ api }) => {
+      await api.connections.addConnectionAndPackagesToUser(
+        org.managerPid,
+        org.orgNo,
+        user.pid,
+        packages,
+      );
     });
 
     test('Hovedadministrator skal kunne delegere nesten alle tilgangspakker', async ({
@@ -183,8 +189,13 @@ test.describe('Tilgangsstyring', reportArea, () => {
       'urn:altinn:accesspackage:byggesoknad',
     ];
 
-    test.beforeEach(async () => {
-      await api.addConnectionAndPackagesToUser(org.managerPid, org.orgNo, user.pid, packages);
+    test.beforeEach(async ({ api }) => {
+      await api.connections.addConnectionAndPackagesToUser(
+        org.managerPid,
+        org.orgNo,
+        user.pid,
+        packages,
+      );
     });
 
     test('Vanlig bruker skal ikke kunne delegere pakker de selv ikke har tilgang til', async ({
@@ -216,13 +227,18 @@ test.describe('Tilgangsstyring', reportArea, () => {
     const user = { pid: '22907997719' };
     const packages = ['urn:altinn:accesspackage:byggesoknad'];
 
-    test.beforeEach(async () => {
-      await api.addConnectionAndPackagesToUser(org.managerPid, org.orgNo, user.pid, packages);
+    test.beforeEach(async ({ api }) => {
+      await api.connections.addConnectionAndPackagesToUser(
+        org.managerPid,
+        org.orgNo,
+        user.pid,
+        packages,
+      );
     });
 
-    test.afterEach(async () => {
+    test.afterEach(async ({ api }) => {
       try {
-        await api.deleteConnection(org.managerPid, org.orgNo, [user.pid]);
+        await api.connections.deleteConnection(org.managerPid, org.orgNo, [user.pid]);
       } catch (error) {
         console.error('Cleanup: Failed to delete connection:', error);
       }
@@ -252,9 +268,7 @@ test.describe('Tilgangsstyring', reportArea, () => {
   });
 });
 
-test.describe('over- og underenheter', reportArea, () => {
-  const api = new EnduserConnection();
-
+test.describe('over- og underenheter', () => {
   test.describe('Virksomhet skal kunne se tilgangspakker hos hoved- og underenhet som delegerte dem', () => {
     const delegatorOrg = {
       managerPid: '25916799929',
@@ -267,8 +281,8 @@ test.describe('over- og underenheter', reportArea, () => {
       name: 'KONSERVATIV USELVISK KATT KLINKEKULE',
     };
 
-    test.beforeEach(async () => {
-      await api.addConnectionAndPackagesToUser(
+    test.beforeEach(async ({ api }) => {
+      await api.connections.addConnectionAndPackagesToUser(
         delegatorOrg.managerPid,
         delegatorOrg.orgNo,
         recipientOrg.orgNo,
@@ -276,9 +290,9 @@ test.describe('over- og underenheter', reportArea, () => {
       );
     });
 
-    test.afterEach(async () => {
+    test.afterEach(async ({ api }) => {
       try {
-        await api.deleteConnection(delegatorOrg.managerPid, delegatorOrg.orgNo, [
+        await api.connections.deleteConnection(delegatorOrg.managerPid, delegatorOrg.orgNo, [
           recipientOrg.orgNo,
         ]);
       } catch (error) {
@@ -336,8 +350,8 @@ test.describe('over- og underenheter', reportArea, () => {
     };
     const recipientOrg = { orgNo: '313244555', name: 'KONSERVATIV USELVISK KATT KLINKEKULE' };
 
-    test.beforeEach(async () => {
-      await api.addConnectionAndPackagesToUser(
+    test.beforeEach(async ({ api }) => {
+      await api.connections.addConnectionAndPackagesToUser(
         delegatorOrg.managerPid,
         delegatorOrg.orgNo,
         recipientOrg.orgNo,
@@ -345,9 +359,9 @@ test.describe('over- og underenheter', reportArea, () => {
       );
     });
 
-    test.afterEach(async () => {
+    test.afterEach(async ({ api }) => {
       try {
-        await api.deleteConnection(delegatorOrg.managerPid, delegatorOrg.orgNo, [
+        await api.connections.deleteConnection(delegatorOrg.managerPid, delegatorOrg.orgNo, [
           recipientOrg.orgNo,
         ]);
       } catch (error) {
@@ -409,9 +423,13 @@ test.describe('over- og underenheter', reportArea, () => {
       name: 'FORMBAR GENIERKLÆRT TIGER AS',
     };
 
-    test.beforeEach(async () => {
-      await api.addConnection(delegatorOrg.managerPid, delegatorOrg.orgNo, recipientOrg.orgNo);
-      await api.delegateSingleService(
+    test.beforeEach(async ({ api }) => {
+      await api.connections.addConnection(
+        delegatorOrg.managerPid,
+        delegatorOrg.orgNo,
+        recipientOrg.orgNo,
+      );
+      await api.connections.delegateSingleService(
         delegatorOrg.managerPid,
         delegatorOrg.orgNo,
         recipientOrg.orgNo,
@@ -419,9 +437,9 @@ test.describe('over- og underenheter', reportArea, () => {
       );
     });
 
-    test.afterEach(async () => {
+    test.afterEach(async ({ api }) => {
       try {
-        await api.deleteSingleServiceDelegation(
+        await api.connections.deleteSingleServiceDelegation(
           delegatorOrg.managerPid,
           delegatorOrg.orgNo,
           recipientOrg.orgNo,
@@ -431,7 +449,7 @@ test.describe('over- og underenheter', reportArea, () => {
         console.error('Cleanup: Failed to delete single service delegation:', error);
       }
       try {
-        await api.deleteConnection(delegatorOrg.managerPid, delegatorOrg.orgNo, [
+        await api.connections.deleteConnection(delegatorOrg.managerPid, delegatorOrg.orgNo, [
           recipientOrg.orgNo,
         ]);
       } catch (error) {
@@ -489,9 +507,13 @@ test.describe('over- og underenheter', reportArea, () => {
     };
     const recipientOrg = { orgNo: '312791404', name: 'FORMBAR GENIERKLÆRT TIGER AS' };
 
-    test.beforeEach(async () => {
-      await api.addConnection(delegatorOrg.managerPid, delegatorOrg.orgNo, recipientOrg.orgNo);
-      await api.delegateSingleService(
+    test.beforeEach(async ({ api }) => {
+      await api.connections.addConnection(
+        delegatorOrg.managerPid,
+        delegatorOrg.orgNo,
+        recipientOrg.orgNo,
+      );
+      await api.connections.delegateSingleService(
         delegatorOrg.managerPid,
         delegatorOrg.orgNo,
         recipientOrg.orgNo,
@@ -499,9 +521,9 @@ test.describe('over- og underenheter', reportArea, () => {
       );
     });
 
-    test.afterEach(async () => {
+    test.afterEach(async ({ api }) => {
       try {
-        await api.deleteSingleServiceDelegation(
+        await api.connections.deleteSingleServiceDelegation(
           delegatorOrg.managerPid,
           delegatorOrg.orgNo,
           recipientOrg.orgNo,
@@ -511,7 +533,7 @@ test.describe('over- og underenheter', reportArea, () => {
         console.error('Cleanup: Failed to delete single service delegation:', error);
       }
       try {
-        await api.deleteConnection(delegatorOrg.managerPid, delegatorOrg.orgNo, [
+        await api.connections.deleteConnection(delegatorOrg.managerPid, delegatorOrg.orgNo, [
           recipientOrg.orgNo,
         ]);
       } catch (error) {

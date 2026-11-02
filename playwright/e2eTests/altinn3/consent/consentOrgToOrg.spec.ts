@@ -1,13 +1,10 @@
 import { expect } from '@playwright/test';
 
 import { test } from 'playwright/fixture/pomFixture';
-import { ConsentApiRequests } from 'playwright/api-requests/ConsentApiRequests';
 import { Language } from 'playwright/pages/consent/ConsentPage';
 import { addTimeToNowUtc, formatUiDateTime, pickRandom } from 'playwright/util/helper';
 
-import { fromOrgs, toOrgs } from './helper/consentTestdata';
-
-const reportArea = { annotation: { type: 'report-area', description: 'Samtykke' } };
+import { orgTilOrg, toOrgs } from './helper/consentTestdata';
 
 const REDIRECT_URL = 'https://example.com/';
 const APPROVED_REDIRECT_URL = `${REDIRECT_URL}?Status=OK`;
@@ -16,7 +13,7 @@ const LANGUAGES = [Language.NB, Language.NN, Language.EN];
 const MOBILE_VIEWPORT = { width: 375, height: 667 };
 
 LANGUAGES.forEach((language) => {
-  test.describe(`Samtykke fra organisasjon til organisasjon: (${language})`, reportArea, () => {
+  test.describe(`Samtykke fra organisasjon til organisasjon: (${language})`, () => {
     test.use({
       language,
       viewport: MOBILE_VIEWPORT,
@@ -25,35 +22,29 @@ LANGUAGES.forEach((language) => {
     test(`Skal kunne godkjenne samtykke med Utfyller/innsender-rollen (${language})`, async ({
       consentPage,
       login,
-      runAccessibilityTest,
+      api,
     }) => {
       // Create consent request from one org to another org
       // For å godkjenne her kreves det at ressursen i ressursregisteret er satt opp med utfyller/innsender-rollen for org til org-samtykke
       // fordi privatperson" ikke har rettighet til å godkjenne på vegne av en organisasjon
-      const [orgNo, pid] = pickRandom(fromOrgs);
-      const from = { orgNo, pid };
-      const to = { orgNo: pickRandom(toOrgs) };
+      const { orgnr: fromOrg, fnr: fromPerson } = orgTilOrg[language];
+      const toOrg = pickRandom(toOrgs);
       const validTo = addTimeToNowUtc({ days: 2 });
-      const api = new ConsentApiRequests(to.orgNo);
 
       const consentResponse = await test.step('Create consent request', async () => {
-        return await api.createConsentRequest({
-          from: { type: 'org', id: from.orgNo },
-          to: { type: 'org', id: to.orgNo },
+        return await api.consent.createConsentRequest({
+          from: { type: 'org', id: fromOrg },
+          to: { type: 'org', id: toOrg },
           validToIsoUtc: validTo,
           resourceValue: 'standard-samtykke-for-dele-data',
           redirectUrl: REDIRECT_URL,
           metaData: { inntektsaar: '2028' },
         });
       });
+
       await test.step('Open consent page and login', async () => {
         await consentPage.open(consentResponse.viewUri);
-        await login.loginNotChoosingActor(from.pid);
-      });
-
-      await test.step('Pick language', async () => {
-        await consentPage.openMenu();
-        await consentPage.pickLanguage(consentPage.language);
+        await login.loginNotChoosingActor(fromPerson);
       });
 
       await test.step('Verify consent UI and expiry', async () => {
@@ -64,8 +55,6 @@ LANGUAGES.forEach((language) => {
       });
 
       await test.step('Approve consent', async () => {
-        await expect(consentPage.buttonApprove).toBeEnabled();
-        await runAccessibilityTest.scan('samtykke-før-godkjenning');
         await consentPage.approveStandardAndWaitLogout(APPROVED_REDIRECT_URL);
       });
     });

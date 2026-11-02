@@ -1,10 +1,10 @@
-import { Button, formatDisplayName, useSnackbar } from '@altinn/altinn-components';
+import { Button, useSnackbar } from '@altinn/altinn-components';
 import * as React from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router';
 import { TrashIcon } from '@navikt/aksel-icons';
 
-import { PartyType } from '@/rtk/features/userInfoApi';
+import { formatEntityDisplayName } from '@/resources/utils/reporteeUtils';
 import { amUIPath } from '@/routes/paths';
 import type { ServiceResource } from '@/rtk/features/singleRights/singleRightsApi';
 import {
@@ -45,8 +45,8 @@ const ConsumerPageContentInner = () => {
   const [removeConsumer, { isLoading: isRemovingConsumer }] =
     useRemoveMaskinportenConsumerMutation();
   const [removeConsumerResource] = useRemoveMaskinportenConsumerResourceMutation();
-  const consumerOrgNumber = fromParty?.orgNumber;
-  const actingPartyUuid = actingParty?.partyUuid;
+  const consumerOrgNumber = fromParty?.organizationIdentifier ?? undefined;
+  const actingPartyUuid = actingParty?.id;
   const { remove, isLoading } = useMaskinportenResourceActions({
     remove: (resource) =>
       removeConsumerResource({
@@ -55,12 +55,7 @@ const ConsumerPageContentInner = () => {
         resource: resource.identifier,
       }).unwrap(),
   });
-  const consumerName = fromParty?.name
-    ? formatDisplayName({
-        fullName: fromParty.name,
-        type: fromParty.partyTypeName === PartyType.Person ? 'person' : 'company',
-      })
-    : '';
+  const consumerName = fromParty?.name ? formatEntityDisplayName(fromParty) : '';
   const {
     data: resourcePermissions,
     error: resourcesError,

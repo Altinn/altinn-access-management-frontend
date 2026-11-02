@@ -28,7 +28,7 @@ vi.mock('@/rtk/features/singleRights/singleRightsApi', () => ({
   useLazyGetResourceRightsQuery: () => [resourceRights],
 }));
 
-const party = (partyUuid: string) => ({ partyUuid }) as never;
+const party = (id: string) => ({ id }) as never;
 
 // A lazy-query trigger result that resolves to `data`.
 const resolved = (data: unknown) => ({ unwrap: () => Promise.resolve(data), unsubscribe: vi.fn() });
@@ -83,5 +83,38 @@ describe.each([
 
     await expect(run()).resolves.toBe(true);
     expect(check).not.toHaveBeenCalled();
+  });
+});
+
+describe('useCanRedelegateResource with an explicit recipient', () => {
+  const canRedelegate = (resourceId: string, toPartyUuid?: string) =>
+    renderHook(useCanRedelegateResource).result.current.canRedelegateResource(
+      resourceId,
+      toPartyUuid,
+    );
+
+  it('checks the rights held by the given recipient, not the one in context', async () => {
+    mockParties({ to: 'context-user', self: 'me' });
+
+    await expect(canRedelegate('res', 'row-user')).resolves.toBe(true);
+    expect(resourceRights).toHaveBeenCalledWith(expect.objectContaining({ to: 'row-user' }));
+  });
+
+  it('resolves without a recipient in context, as on a page listing many recipients', async () => {
+    vi.mocked(usePartyRepresentation).mockReturnValue({
+      actingParty: party('org'),
+      fromParty: party('org'),
+      selfParty: party('me'),
+    });
+
+    await expect(canRedelegate('res', 'row-user')).resolves.toBe(true);
+    expect(resourceCheck).toHaveBeenCalledTimes(1);
+  });
+
+  it('applies the own-access guard to the given recipient', async () => {
+    mockParties({ to: 'someone-else', self: 'me' });
+
+    await expect(canRedelegate('res', 'me')).resolves.toBe(false);
+    expect(resourceCheck).not.toHaveBeenCalled();
   });
 });

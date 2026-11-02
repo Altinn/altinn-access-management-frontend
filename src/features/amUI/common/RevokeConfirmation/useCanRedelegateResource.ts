@@ -12,16 +12,22 @@ export const useCanRedelegateResource = () => {
   const [runDelegationCheck] = useLazyDelegationCheckQuery();
   const [getResourceRights] = useLazyGetResourceRightsQuery();
 
-  const canRedelegateResource = async (resourceId: string): Promise<boolean> => {
-    if (!actingParty || !fromParty || !toParty) return false;
+  // `toPartyUuid` overrides the recipient from context, for lists where the row being revoked
+  // decides the recipient rather than the surrounding page.
+  const canRedelegateResource = async (
+    resourceId: string,
+    toPartyUuid?: string,
+  ): Promise<boolean> => {
+    const to = toPartyUuid ?? toParty?.id;
+    if (!actingParty || !fromParty || !to) return false;
     // If the user is deleting their own access and is not hovedadmin, show the warning regardless
     // of the delegation check: the check passes only because they still hold the access.
-    if (toParty.partyUuid === selfParty?.partyUuid) return !!isHovedadmin;
-    const check = runDelegationCheck({ resourceId, from: fromParty.partyUuid });
+    if (to === selfParty?.id) return !!isHovedadmin;
+    const check = runDelegationCheck({ resourceId, from: fromParty.id });
     const rights = getResourceRights({
-      actingParty: actingParty.partyUuid,
-      from: fromParty.partyUuid,
-      to: toParty.partyUuid,
+      actingParty: actingParty.id,
+      from: fromParty.id,
+      to,
       resourceId,
     });
     try {

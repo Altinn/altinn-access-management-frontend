@@ -10,6 +10,7 @@ interface ClientAdminSearchFieldProps {
   setSearchString: (newSearch: string) => void;
   filters?: React.ReactNode;
   children?: React.ReactNode;
+  inputId?: string;
 }
 
 export const ClientAdminSearchField = ({
@@ -17,6 +18,7 @@ export const ClientAdminSearchField = ({
   setSearchString,
   filters,
   children,
+  inputId,
 }: ClientAdminSearchFieldProps) => {
   const onSearch = useCallback(
     debounce((newSearchString: string) => {
@@ -30,6 +32,7 @@ export const ClientAdminSearchField = ({
       <div className={classes.searchAndFilters}>
         <DsSearch className={classes.searchBar}>
           <DsSearch.Input
+            id={inputId}
             aria-label={searchPlaceholder}
             placeholder={searchPlaceholder}
             onChange={(event: React.ChangeEvent<HTMLInputElement>) => onSearch(event.target.value)}

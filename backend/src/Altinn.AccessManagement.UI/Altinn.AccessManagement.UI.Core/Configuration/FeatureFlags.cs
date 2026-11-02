@@ -22,5 +22,10 @@ namespace Altinn.AccessManagement.UI.Core.Configuration
         /// Whether or not to include ID-porten authorizations in active consents list
         /// </summary>
         public const string ShowIdPortenAuthorizations = "AccessManagementUI.ShowIdPortenAuthorizations";
+
+        /// <summary>
+        /// Whether or not to show the planned maintenance service announcement on the settings page
+        /// </summary>
+        public const string ShowSettingsPageServiceAnnouncement = "AccessManagementUI.ShowSettingsPageServiceAnnouncement";
     }
 }

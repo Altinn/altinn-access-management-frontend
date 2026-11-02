@@ -1,11 +1,4 @@
-import {
-  Avatar,
-  DsAlert,
-  DsButton,
-  DsHeading,
-  DsParagraph,
-  formatDisplayName,
-} from '@altinn/altinn-components';
+import { Avatar, DsAlert, DsButton, DsHeading, DsParagraph } from '@altinn/altinn-components';
 import { useRef } from 'react';
 import { Trans, useTranslation } from 'react-i18next';
 
@@ -13,9 +6,10 @@ import {
   formatOrgNr,
   getFormattedDateOfBirthLabel,
   isSubUnitByType,
+  formatEntityDisplayName,
+  getAvatarType,
 } from '@/resources/utils/reporteeUtils';
-import { PartyType } from '@/rtk/features/userInfoApi';
-import type { Party } from '@/rtk/features/lookupApi';
+import { PartyType, type PartyEntity } from '@/dataObjects/dtos/Party';
 import type { AccessPackage } from '@/rtk/features/accessPackageApi';
 import type { ActionError } from '@/resources/hooks/useActionError';
 
@@ -30,7 +24,7 @@ import { focusFirstEnabledButton, useRestoreFocusAfterSettled } from '../../Rest
 import classes from './PartyInfo.module.css';
 
 export interface PartyInfoProps {
-  party: Party;
+  party: PartyEntity;
   accessPackage: AccessPackage;
   userHasAccess: boolean;
   inheritedStatus?: InheritedStatusMessageType[];
@@ -73,22 +67,18 @@ export const PartyInfo = ({
     onRestore: () => focusFirstEnabledButton(actionsRef.current),
   });
 
-  const userName = formatDisplayName({
-    fullName: party.name,
-    type: party.partyTypeName === PartyType.Person ? 'person' : 'company',
-    reverseNameOrder: false,
-  });
-  const partyAvatarType = party.partyTypeName === PartyType.Person ? 'person' : 'company';
+  const userName = formatEntityDisplayName(party);
+  const partyAvatarType = getAvatarType(party);
 
   const canRevoke = userHasAccess && availableActions.includes(DelegationAction.REVOKE);
   const canDelegate =
     !userHasAccess && availableActions.includes(DelegationAction.DELEGATE) && !!onDelegate;
 
   const partySubtitle =
-    party.partyTypeName === PartyType.Person
+    party.type === PartyType.Person
       ? getFormattedDateOfBirthLabel(party.dateOfBirth)
-      : party.orgNumber
-        ? `${t('common.org_nr')} ${formatOrgNr(party.orgNumber)}`
+      : party.organizationIdentifier
+        ? `${t('common.org_nr')} ${formatOrgNr(party.organizationIdentifier)}`
         : undefined;
 
   const actionDescriptionKey = userHasAccess
@@ -103,7 +93,7 @@ export const PartyInfo = ({
           type={partyAvatarType}
           size='md'
           isDeleted={party.isDeleted}
-          isParent={!isSubUnitByType(party.variant?.toString())}
+          isParent={!isSubUnitByType(party.unitType?.toString())}
           className={classes.avatar}
         />
         <DsHeading
@@ -161,7 +151,7 @@ export const PartyInfo = ({
                   errorCode={error.details?.errorCode ?? error.details?.detail ?? ''}
                   translationValues={{
                     entity_type:
-                      party.partyTypeName === PartyType.Person
+                      party.type === PartyType.Person
                         ? t('common.persons_lowercase')
                         : t('common.organizations_lowercase'),
                   }}
@@ -171,6 +161,7 @@ export const PartyInfo = ({
                   size='xs'
                   status={error.httpStatus}
                   time={error.timestamp}
+                  traceId={error.details?.traceId}
                 />
               )}
             </DsAlert>

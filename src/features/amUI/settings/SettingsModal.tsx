@@ -38,8 +38,8 @@ export const SettingsModal = ({
   const [addressList, setAddressList] = useState<NotificationAddress[]>([]);
   const [storedAddresses, setStoredAddresses] = useState<NotificationAddress[]>([]);
   const { data: notificationAddresses, isLoading } = useGetOrgNotificationAddressesQuery(
-    actingParty?.orgNumber ?? '',
-    { skip: !actingParty?.orgNumber },
+    actingParty?.organizationIdentifier ?? '',
+    { skip: !actingParty?.organizationIdentifier },
   );
   const { isChanges, saveChanges, isSaving, isError, setIsError } = useSaveAddressChanges(
     storedAddresses,

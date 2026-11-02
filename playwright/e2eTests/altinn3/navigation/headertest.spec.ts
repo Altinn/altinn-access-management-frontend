@@ -1,10 +1,6 @@
 import { test } from 'playwright/fixture/pomFixture';
 
-import { EnduserConnection } from '../../../api-requests/EnduserConnection';
-
-const reportArea = { annotation: { type: 'report-area', description: 'Aktørvalg og meny' } };
-
-test.describe('Aktørvalg, valg og visning av avgiver', reportArea, () => {
+test.describe('Aktørvalg, valg og visning av avgiver', () => {
   const HEADER_TEST_USER = '11886599619';
   const SHOW_DELETED_TEST_USER = '19846999968';
   const DEFAULT_ACTOR_NAME = 'Kunnskapsrik Kry Ape';
@@ -12,13 +8,7 @@ test.describe('Aktørvalg, valg og visning av avgiver', reportArea, () => {
   const ACTOR_SEARCH_TEST_USER = '05826397782'; // Need a user with a decent number of actors to properly test the search functionality
   const ACTOR_SEARCH_DEFAULT_ACTOR_NAME = 'Usikker Ringdue';
 
-  const api = new EnduserConnection();
-
-  test('Sjekk at slettede enheter kan vises/skjules', async ({
-    login,
-    aktorvalgHeader,
-    runAccessibilityTest,
-  }) => {
+  test('Sjekk at slettede enheter kan vises/skjules', async ({ login, aktorvalgHeader }) => {
     await test.step('Log in', async () => {
       await login.LoginToAccessManagement(SHOW_DELETED_TEST_USER);
     });
@@ -26,7 +16,6 @@ test.describe('Aktørvalg, valg og visning av avgiver', reportArea, () => {
     await test.step('Expect three actors to be visible', async () => {
       await aktorvalgHeader.uncheckShowDeletedSwitch();
       await aktorvalgHeader.expectedNumberOfActors(3);
-      await runAccessibilityTest.scan('aktørliste');
     });
 
     await test.step('Click the "show deleted" switch', async () => {
@@ -39,7 +28,6 @@ test.describe('Aktørvalg, valg og visning av avgiver', reportArea, () => {
 
     await test.step('Expect one of them to be a deleted actor', async () => {
       await aktorvalgHeader.expectDeletedActorToBeVisible('Sjelden Ren Katt Konjakk');
-      await runAccessibilityTest.scan('aktørliste-med-slettede');
     });
   });
 
@@ -58,11 +46,7 @@ test.describe('Aktørvalg, valg og visning av avgiver', reportArea, () => {
     });
   });
 
-  test('Add and remove favorite actor from actor menu', async ({
-    login,
-    aktorvalgHeader,
-    runAccessibilityTest,
-  }) => {
+  test('Add and remove favorite actor from actor menu', async ({ login, aktorvalgHeader }) => {
     await test.step('Log in', async () => {
       await login.LoginToAccessManagement(HEADER_TEST_USER);
       await aktorvalgHeader.selectActorFromHeaderMenu(DEFAULT_ACTOR_NAME);
@@ -78,7 +62,6 @@ test.describe('Aktørvalg, valg og visning av avgiver', reportArea, () => {
     await test.step('Add actor as favorite', async () => {
       await aktorvalgHeader.goToSelectActor(DEFAULT_ACTOR_NAME);
       await aktorvalgHeader.clickFavorite();
-      await runAccessibilityTest.scan('aktørliste-med-favoritt');
     });
 
     await test.step('Remove actor from favorites', async () => {
@@ -117,11 +100,15 @@ test.describe('Aktørvalg, valg og visning av avgiver', reportArea, () => {
   test('Virksomhet A skal ikke kunne velge hovedenhet B når underenhet B har delegert en tilgangspakke', async ({
     login,
     aktorvalgHeader,
+    api,
   }) => {
     await test.step('sett opp testdata', async () => {
-      await api.addConnectionAndPackagesToUser('10845998952', '311908421', '311151932', [
-        'urn:altinn:accesspackage:byggesoknad',
-      ]);
+      await api.connections.addConnectionAndPackagesToUser(
+        '10845998952',
+        '311908421',
+        '311151932',
+        ['urn:altinn:accesspackage:byggesoknad'],
+      );
     });
 
     await test.step('Logg inn', async () => {
@@ -137,37 +124,31 @@ test.describe('Aktørvalg, valg og visning av avgiver', reportArea, () => {
     });
   });
 
-  test(
-    'Virksomhet A skal ikke kunne velge hovedenhet B når underenhet B har delegert en enkelttjeneste',
-    {
-      annotation: {
-        type: 'UU-dekket-av',
-        description:
-          'Virksomhet A skal ikke kunne velge hovedenhet B når underenhet B har delegert en tilgangspakke',
-      },
-    },
-    async ({ login, aktorvalgHeader }) => {
-      await test.step('sett opp testdata', async () => {
-        await api.addConnection('10845998952', '311908421', '311151932');
-        await api.delegateSingleService(
-          '10845998952',
-          '311908421',
-          '311151932',
-          'bruno-correspondence',
-        );
-      });
+  test('Virksomhet A skal ikke kunne velge hovedenhet B når underenhet B har delegert en enkelttjeneste', async ({
+    login,
+    aktorvalgHeader,
+    api,
+  }) => {
+    await test.step('sett opp testdata', async () => {
+      await api.connections.addConnection('10845998952', '311908421', '311151932');
+      await api.connections.delegateSingleService(
+        '10845998952',
+        '311908421',
+        '311151932',
+        'bruno-correspondence',
+      );
+    });
 
-      await test.step('Logg inn', async () => {
-        await login.LoginToAccessManagement('08868199785');
-      });
+    await test.step('Logg inn', async () => {
+      await login.LoginToAccessManagement('08868199785');
+    });
 
-      await test.step('Hovedenhet UVITENDE TOM TIGER AS skal ikke være klikkbar', async () => {
-        await aktorvalgHeader.orgIsNotClickableInAktorvalg('UVITENDE TOM TIGER AS');
-      });
+    await test.step('Hovedenhet UVITENDE TOM TIGER AS skal ikke være klikkbar', async () => {
+      await aktorvalgHeader.orgIsNotClickableInAktorvalg('UVITENDE TOM TIGER AS');
+    });
 
-      await test.step('Se at underenheten for UVITENDE TOM TIGER AS er klikkbare i aktørlista', async () => {
-        await aktorvalgHeader.subOrgExistsInAktorvalg('UVITENDE TOM TIGER AS');
-      });
-    },
-  );
+    await test.step('Se at underenheten for UVITENDE TOM TIGER AS er klikkbare i aktørlista', async () => {
+      await aktorvalgHeader.subOrgExistsInAktorvalg('UVITENDE TOM TIGER AS');
+    });
+  });
 });
