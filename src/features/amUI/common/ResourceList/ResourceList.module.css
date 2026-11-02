@@ -12,10 +12,6 @@
   gap: var(--ds-size-2);
 }
 
-.expiredSwitch {
-  display: flex;
-  align-items: center;
-}
 .delegationModalButton {
   margin-left: auto;
 }
