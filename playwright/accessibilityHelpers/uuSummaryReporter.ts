@@ -13,7 +13,8 @@ type Scan = {
   stage: string;
   page: string;
   violations: Violation[];
-  file?: string;
+  /** Link to the scan's axe report, if one was written. */
+  href?: string;
 };
 type Rule = { violation: Violation; nodes: number; scans: Scan[] };
 
@@ -56,6 +57,8 @@ export default class UuSummaryReporter implements Reporter {
     const scans: Scan[] = [];
     let errors = 0;
     fs.rmSync(outputFolder, { recursive: true, force: true });
+    // Absolute in CI: Azure also serves `…/uu` without a trailing slash, which breaks relative links.
+    const linkBase = process.env.REPORT_URL ? `${process.env.REPORT_URL}uu/` : '';
 
     for (const { test, result } of this.results.values()) {
       errors += result.annotations.filter(({ type }) => type === 'UU-feil').length;
@@ -72,9 +75,10 @@ export default class UuSummaryReporter implements Reporter {
         };
         const html = read(result.attachments.find(({ name }) => name === `${stage}-uu-report`));
         if (html) {
-          scan.file = `scan-${scans.length + 1}.html`;
+          const file = `scan-${scans.length + 1}.html`;
           fs.mkdirSync(outputFolder, { recursive: true });
-          fs.writeFileSync(path.join(outputFolder, scan.file), html);
+          fs.writeFileSync(path.join(outputFolder, file), html);
+          scan.href = linkBase + file;
         }
         scans.push(scan);
       }
@@ -166,7 +170,7 @@ const STYLE = `
 `;
 
 const scanLink = (scan: Scan, text: string) =>
-  scan.file ? html`<a href="${scan.file}">${text}</a>` : text;
+  scan.href ? html`<a href="${scan.href}">${text}</a>` : text;
 
 const table = (caption: string, columns: string[], rows: SafeHtml[]) => html`
   <div
