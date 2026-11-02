@@ -216,6 +216,7 @@ export const ResourceList = <
       {enableSearch && (
         <SearchHitsStatus
           hits={search.trim() ? filteredResources.length : undefined}
+          searchString={search}
           className={classes.searchHits}
         />
       )}

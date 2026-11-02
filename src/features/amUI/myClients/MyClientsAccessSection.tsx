@@ -142,6 +142,7 @@ export const MyClientsAccessSection = ({
       />
       <SearchHitsStatus
         hits={searchString ? countClientSearchHits(clients, searchString) : undefined}
+        searchString={searchString}
       />
       <ClientAccessList
         clients={clients}

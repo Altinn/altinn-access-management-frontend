@@ -229,7 +229,10 @@ export const AccessPackageList = ({
   ) {
     return (
       <div className={classes.accessAreaList}>
-        <SearchHitsStatus hits={0} />
+        <SearchHitsStatus
+          hits={0}
+          searchString={searchString}
+        />
         <DsParagraph className={classes.noAccessPackages}>
           {t('access_packages.no_matching_search')}
         </DsParagraph>
@@ -252,6 +255,7 @@ export const AccessPackageList = ({
     <div className={classes.accessAreaList}>
       <SearchHitsStatus
         hits={searchString ? countPackages(displayAreas) : undefined}
+        searchString={searchString}
         message={searchHitsText}
       />
       {showUnassignedAvailableAreas ? (

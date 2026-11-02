@@ -26,6 +26,8 @@ export interface ServiceResource {
   authorizationReference: IdValuePair[];
   resourceType: string;
   delegable: boolean;
+  visible?: boolean;
+  keywords?: string[];
 }
 
 export interface ResourceDelegation {

@@ -30,9 +30,11 @@ const filterUserNode = (userNode: UserSearchNode, searchString: string): UserSea
     };
   }
 
+  // UserItem only shows persons and organizations as children.
   const matchingChildren =
     userNode.children
-      ?.map((child) => filterUserNode(child, searchString))
+      ?.filter((child) => child.type === PartyType.Person || child.type === PartyType.Organization)
+      .map((child) => filterUserNode(child, searchString))
       .filter((child) => child !== null) ?? [];
 
   if (matchingChildren.length > 0) {

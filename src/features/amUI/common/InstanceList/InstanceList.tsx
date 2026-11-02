@@ -98,7 +98,10 @@ export const InstanceList = ({
         setDebouncedSearchString={setDebouncedSearchString}
       />
       <div>
-        <SearchHitsStatus hits={hasSearch ? filteredInstances.length : undefined} />
+        <SearchHitsStatus
+          hits={hasSearch ? filteredInstances.length : undefined}
+          searchString={debouncedSearchString}
+        />
         {isLoading ? (
           <InstanceListSkeleton />
         ) : filteredInstances.length > 0 ? (

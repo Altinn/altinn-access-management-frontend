@@ -75,7 +75,10 @@ export const ScopeSearchResults = ({
   return (
     <>
       <div className={classes.resultCount}>
-        <SearchHitsStatus hits={settledTotal} />
+        <SearchHitsStatus
+          hits={settledTotal}
+          searchString={searchString}
+        />
       </div>
       {isFetching ? (
         <div className={classes.resourceList}>

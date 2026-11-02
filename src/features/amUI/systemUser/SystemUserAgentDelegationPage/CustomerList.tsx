@@ -122,7 +122,10 @@ export const CustomerList = ({
         )}
         {children}
       </div>
-      <SearchHitsStatus hits={searchValue.trim() ? filteredSearchList.length : undefined} />
+      <SearchHitsStatus
+        hits={searchValue.trim() ? filteredSearchList.length : undefined}
+        searchString={searchValue}
+      />
       <List>
         {filteredSearchList.slice(startIndex, endIndex)?.map((customer) => (
           <ListItem

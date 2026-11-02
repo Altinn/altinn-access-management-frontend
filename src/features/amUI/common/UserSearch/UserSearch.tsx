@@ -152,7 +152,10 @@ export const UserSearch: React.FC<UserSearchProps> = ({
       </div>
 
       <div className={classes.results}>
-        <SearchHitsStatus hits={searchHits} />
+        <SearchHitsStatus
+          hits={searchHits}
+          searchString={trimmedQuery}
+        />
         <>
           {!hasDirectUsers && !isLoading && !isQuery && (
             <DsParagraph

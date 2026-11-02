@@ -240,7 +240,10 @@ export const ClientDetails = () => {
                         variant='primary'
                       />
                     </ClientAdminSearchField>
-                    <SearchHitsStatus hits={searchHits} />
+                    <SearchHitsStatus
+                      hits={searchHits}
+                      searchString={searchString}
+                    />
                     <div className={classes.agentSections}>
                       {recentlyAddedClients.length > 0 && (
                         <section aria-labelledby={recentlyAddedSectionId}>

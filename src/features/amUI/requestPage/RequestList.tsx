@@ -61,7 +61,10 @@ export const RequestList = ({
           />
         </div>
       )}
-      <SearchHitsStatus hits={searchHits} />
+      <SearchHitsStatus
+        hits={searchHits}
+        searchString={searchString}
+      />
       {searchString && filteredRequests.length === 0 && filteredHandledRequests.length === 0 && (
         <DsParagraph className={classes.noResults}>
           {t('request_page.no_search_results', { searchTerm: searchString })}

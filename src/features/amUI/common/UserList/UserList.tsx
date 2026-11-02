@@ -64,6 +64,7 @@ export const UserList = ({
     <>
       <SearchHitsStatus
         hits={trimmedQuery && !promptForNoResults ? totalFilteredCount : undefined}
+        searchString={trimmedQuery}
       />
       {promptForNoResults && (
         <div

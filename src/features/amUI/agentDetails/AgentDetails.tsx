@@ -235,7 +235,10 @@ export const AgentDetails = () => {
                     />
                   }
                 />
-                <SearchHitsStatus hits={searchHits} />
+                <SearchHitsStatus
+                  hits={searchHits}
+                  searchString={searchString}
+                />
                 <div className={classes.clientSections}>
                   <section aria-labelledby={assignedSectionId}>
                     <CollapsibleContainer

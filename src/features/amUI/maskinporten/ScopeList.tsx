@@ -50,7 +50,10 @@ export const ScopeList = ({
         />
         {addNewResourceButton}
       </div>
-      <SearchHitsStatus hits={search.trim() ? resources.length : undefined} />
+      <SearchHitsStatus
+        hits={search.trim() ? resources.length : undefined}
+        searchString={search}
+      />
       {resources.length === 0 && emptyState !== undefined ? (
         emptyState
       ) : (
