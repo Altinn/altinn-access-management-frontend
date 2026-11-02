@@ -74,6 +74,8 @@ export interface ResourceListProps<
   renderControls?: (resource: TResource) => React.ReactNode;
   getBadge?: (resource: TResource, index: number) => ResourceListItemProps['badge'];
   getDescriptionText?: (resource: TResource, index: number) => string | undefined;
+  /** Text matched by the search field besides name and owner. Defaults to the description. */
+  getSearchableText?: (resource: TResource) => string;
   getHasAccess?: (resource: TResource) => boolean;
   getActionControlId?: (resource: TResource) => string;
   delegationModal?: React.ReactNode;
@@ -89,6 +91,7 @@ export const ResourceList = <
   isLoading,
   noResourcesText,
   enableSearch = true,
+  searchPlaceholder,
   onSelect,
   getItemAs,
   showDetails,
@@ -100,6 +103,7 @@ export const ResourceList = <
   renderControls,
   getBadge,
   getDescriptionText,
+  getSearchableText = extractDescription,
   getHasAccess,
   getActionControlId,
   delegationModal,
@@ -155,7 +159,7 @@ export const ResourceList = <
     getResourceName: extractResourceName,
     getOwnerName: extractOwnerName,
     getOwnerOrgCode: extractOrgCode,
-    getDescription: extractDescription,
+    getDescription: getSearchableText,
     isExpiredResource: isExpiredResource,
   });
 
@@ -188,6 +192,7 @@ export const ResourceList = <
             filterState={filterState}
             setFilterState={setFilterState}
             serviceOwnerOptions={serviceOwnerOptions}
+            searchPlaceholder={searchPlaceholder}
           />
           {hasExpiredResources && (
             <div className={classes.expiredSwitch}>
