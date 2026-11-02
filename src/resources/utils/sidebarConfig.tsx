@@ -11,6 +11,7 @@ import {
   KeyVerticalIcon,
   ExternalLinkIcon,
   DatabaseIcon,
+  GavelIcon,
 } from '@navikt/aksel-icons';
 import i18next, { t } from 'i18next';
 import { Link } from 'react-router';
@@ -243,6 +244,24 @@ export const getMaskinportenMenuItem = (
     selected: pathname?.includes(`/${amUIPath.Maskinporten}`),
     icon: { svgElement: ApiIcon, theme: isSmall ? 'surface' : 'default' },
     as: (props) => getMenuLinkAs(props, `/${amUIPath.Maskinporten}`),
+  };
+};
+
+export const getBankruptcyEstateAdministrationMenuItem = (
+  pathname?: string,
+  isLoading = false,
+  isSmall = false,
+): MenuItemProps => {
+  return {
+    groupId: '14',
+    id: 'bankruptcy-estate-admin',
+    size: 'md',
+    loading: isLoading,
+    variant: isSmall ? 'default' : 'tinted',
+    title: t('sidebar.bankruptcy_estate_administration'),
+    icon: { svgElement: GavelIcon, theme: isSmall ? 'surface' : 'default' },
+    selected: pathname?.includes(`/${amUIPath.BankruptcyEstateAdministration}`),
+    as: (props) => getMenuLinkAs(props, `/${amUIPath.BankruptcyEstateAdministration}`),
   };
 };
 

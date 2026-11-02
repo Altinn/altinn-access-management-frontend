@@ -36,6 +36,7 @@ import {
   getYourClientsMenuItem,
   getUsersMenuItem,
   getYourRightsMenuItem,
+  getBankruptcyEstateAdministrationMenuItem,
 } from '@/resources/utils/sidebarConfig';
 import { getCookie } from '@/resources/Cookie/CookieMethods';
 import { useGetPartyFromLoggedInUserQuery } from '@/rtk/features/lookupApi';
@@ -49,6 +50,7 @@ import {
 import { useSidebarRequestCount } from '@/resources/hooks/useSidebarRequestCount';
 import { useGetRolePermissionsQuery } from '@/rtk/features/roleApi';
 import { useDocumentTitle } from '@/resources/hooks/useDocumentTitle';
+import { useGetHasAdminAccessQuery } from '@/rtk/features/bankruptcyEstateApi';
 
 import { PageLayoutWrapper } from '../common/PageLayoutWrapper';
 import { Breadcrumbs } from '../common/Breadcrumbs/Breadcrumbs';
@@ -68,6 +70,11 @@ export const LandingPage = () => {
     useGetIsCompanyProfileAdminQuery();
   const { data: isMaskinportenAdmin } = useGetIsMaskinportenAdminQuery(undefined, {
     skip: !isOrganization(reportee),
+  });
+  const showBankruptcyEstateAdministration =
+    window.featureFlags.enableBankruptcyEstateAdministration;
+  const { data: hasBankruptcyEstateAdminAccess } = useGetHasAdminAccessQuery(undefined, {
+    skip: !showBankruptcyEstateAdministration,
   });
   const { data: currentUser, isLoading: currentUserIsLoading } = useGetPartyFromLoggedInUserQuery();
   const actingPartyUuid = getCookie('AltinnPartyUuid') ?? '';
@@ -181,6 +188,14 @@ export const LandingPage = () => {
       items.push({
         ...getMaskinportenMenuItem(),
         description: t('landing_page.maskinporten_item_description'),
+      });
+    }
+    if (showBankruptcyEstateAdministration && hasBankruptcyEstateAdminAccess) {
+      items.push({
+        ...getBankruptcyEstateAdministrationMenuItem(),
+        description: t('landing_page.bankruptcy_estate_admin_item_description', {
+          reportee: reporteeName,
+        }),
       });
     }
     return items;

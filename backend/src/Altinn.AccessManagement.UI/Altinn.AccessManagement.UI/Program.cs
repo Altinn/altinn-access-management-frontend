@@ -573,7 +573,7 @@ void ConfigureMockableClients(IServiceCollection services, IConfiguration config
 
     if (mockSettings.BankruptcyEstateAdministration)
     {
-        services.AddHttpClient<IBankruptcyEstateClient, BankruptcyEstateClientMock>();
+        services.AddTransient<IBankruptcyEstateClient, BankruptcyEstateClientMock>();
     }
     else
     {

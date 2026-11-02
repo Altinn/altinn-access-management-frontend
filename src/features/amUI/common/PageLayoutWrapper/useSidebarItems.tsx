@@ -22,6 +22,7 @@ import {
   getSystemUserMenuItem,
   getUsersMenuItem,
   getYourClientsMenuItem,
+  getBankruptcyEstateAdministrationMenuItem,
 } from '@/resources/utils/sidebarConfig';
 import { useGetPartyFromLoggedInUserQuery } from '@/rtk/features/lookupApi';
 import { isOrganization } from '@/resources/utils/reporteeUtils';
@@ -34,6 +35,7 @@ import {
 } from '@/rtk/features/userInfoApi';
 import { useGetRolePermissionsQuery } from '@/rtk/features/roleApi';
 import { useSidebarRequestCount } from '@/resources/hooks/useSidebarRequestCount';
+import { useGetHasAdminAccessQuery } from '@/rtk/features/bankruptcyEstateApi';
 
 export const useSidebarItems = ({ isSmall }: { isSmall?: boolean }) => {
   const { t } = useTranslation();
@@ -61,6 +63,11 @@ export const useSidebarItems = ({ isSmall }: { isSmall?: boolean }) => {
     useGetIsCompanyProfileAdminQuery();
   const { data: isMaskinportenAdmin } = useGetIsMaskinportenAdminQuery(undefined, {
     skip: !isOrganization(reportee),
+  });
+  const showBankruptcyEstateAdministration =
+    window.featureFlags.enableBankruptcyEstateAdministration;
+  const { data: hasBankruptcyEstateAdminAccess } = useGetHasAdminAccessQuery(undefined, {
+    skip: !showBankruptcyEstateAdministration,
   });
 
   const isLoading =
@@ -132,6 +139,10 @@ export const useSidebarItems = ({ isSmall }: { isSmall?: boolean }) => {
 
   if (isMaskinportenAdmin) {
     items.push(getMaskinportenMenuItem(pathname, isLoading, isSmall));
+  }
+
+  if (showBankruptcyEstateAdministration && hasBankruptcyEstateAdminAccess) {
+    items.push(getBankruptcyEstateAdministrationMenuItem(pathname, isLoading, isSmall));
   }
 
   const sidebarItems = items.map((item) => {

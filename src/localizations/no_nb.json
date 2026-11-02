@@ -202,7 +202,8 @@
     "settings": "Innstillinger",
     "requests": "Forespørsler",
     "requests_badge": "mottatt",
-    "maskinporten": "Maskinporten\u00ADadministrasjon"
+    "maskinporten": "Maskinporten\u00ADadministrasjon",
+    "bankruptcy_estate_administration": "Borolle\u00ADadministrasjon"
   },
   "profile": {
     "received": "Mottatte",
@@ -1134,7 +1135,8 @@
     "new_requests_self_other": "Du har {{count}} nye forespørsler",
     "new_requests_zero": "{{reportee}} har ingen nye forespørsler",
     "new_requests_one": "{{reportee}} har en ny forespørsel",
-    "new_requests_other": "{{reportee}} har {{count}} nye forespørsler"
+    "new_requests_other": "{{reportee}} har {{count}} nye forespørsler",
+    "bankruptcy_estate_admin_item_description": "Gi andre tilgang til å administrere konkursboene til {{reportee}}."
   },
   "request_page": {
     "page_title": "Forespørsler - Altinn",
@@ -1242,5 +1244,10 @@
     "add_account_from_token_error": "Kunne ikke legge til konto",
     "add_account_from_token_invalid_token": "Lenken er ugyldig eller utløpt",
     "add_account_from_token_not_from_caller": "Lenken ble ikke forespurt av pålogget bruker"
+  },
+  "bankruptcy_estate_administration_page": {
+    "page_title": "Borolleadministrasjon - Altinn",
+    "page_heading": "Borolleadministrasjon for {{name}}",
+    "no_access_title": "Du har ikke tilgang til borolleadministrasjon"
   }
 }
