@@ -4,6 +4,8 @@ import path from 'node:path';
 import type { Reporter, TestCase, TestResult } from '@playwright/test/reporter';
 import type { AxeResults } from 'axe-core';
 
+import { html, type SafeHtml } from './html';
+
 type Violation = AxeResults['violations'][number];
 type Scan = {
   area: string;
@@ -23,8 +25,6 @@ const IMPACT_LABEL: Record<string, string> = {
 };
 const IMPACT_ORDER = Object.keys(IMPACT_LABEL);
 const impact = (violation: Violation) => IMPACT_LABEL[violation.impact ?? ''] ?? 'Ukjent';
-const escapeHtml = (value: string) =>
-  value.replace(/[&<>"']/g, (char) => `&#${char.charCodeAt(0)};`);
 
 /**
  * Samler axe-funnene fra alle testene:
@@ -140,40 +140,7 @@ function read(attachment?: TestResult['attachments'][number]) {
 
 const MAX_PLACES = 5;
 
-function renderIndex(headline: string, rules: Rule[], scans: Scan[]) {
-  const scanLink = (scan: Scan, text: string) =>
-    scan.file ? `<a href="${scan.file}">${escapeHtml(text)}</a>` : escapeHtml(text);
-  const places = (rule: Rule) => {
-    const items = rule.scans.map(
-      (scan) => `<li>${scanLink(scan, `${scan.area} – ${scan.stage}`)}</li>`,
-    );
-    if (items.length <= MAX_PLACES) return `<ul>${items.join('')}</ul>`;
-    return `<ul>${items.slice(0, MAX_PLACES).join('')}</ul><details><summary>Vis ${items.length - MAX_PLACES} til</summary><ul>${items.slice(MAX_PLACES).join('')}</ul></details>`;
-  };
-  const ruleRows = rules
-    .map(
-      (rule) =>
-        `<tr><td><span class="impact ${escapeHtml(rule.violation.impact ?? '')}">${impact(rule.violation)}</span></td><td><a href="${escapeHtml(rule.violation.helpUrl)}">${escapeHtml(rule.violation.help)}</a><br><code>${escapeHtml(rule.violation.id)}</code></td><td>${rule.scans.length} skanninger<br>${rule.nodes} elementer</td><td>${places(rule)}</td></tr>`,
-    )
-    .join('');
-  const scanRows = [...scans]
-    .sort((a, b) => b.violations.length - a.violations.length)
-    .map((scan) => {
-      const count = scan.violations.length;
-      return `<tr><td>${escapeHtml(scan.area)}</td><td>${scanLink(scan, scan.test)}<br><small>${escapeHtml(scan.stage)} · <code>${escapeHtml(scan.page)}</code></small></td><td>${count ? `<span class="bad">${count} ${count === 1 ? 'regel' : 'regler'}</span>` : '<span class="ok">Ingen</span>'}</td></tr>`;
-    })
-    .join('');
-  const table = (caption: string, head: string[], rows: string) =>
-    `<div class="scroll" role="region" aria-label="${caption}" tabindex="0"><table><caption>${caption}</caption><thead><tr>${head.map((h) => `<th scope="col">${h}</th>`).join('')}</tr></thead><tbody>${rows}</tbody></table></div>`;
-  const environment = process.env.environment?.toUpperCase() ?? '';
-  const generated = new Date().toLocaleString('nb-NO', { timeZone: 'Europe/Oslo' });
-
-  return `<!doctype html>
-<html lang="nb">
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>UU-rapport ${environment}</title>
-<style>
+const STYLE = `
   :root{color-scheme:light dark;--fg:#1e2b3c;--muted:#566270;--bg:#fff;--line:#d5dde5;--head:#eaf1f7;--link:#005db1;--bad:#b3261e;--ok:#1b6e3a}
   @media (prefers-color-scheme:dark){:root{--fg:#e6ebf0;--muted:#a8b3bf;--bg:#14191f;--line:#33404d;--head:#1f2a35;--link:#7cb8ff;--bad:#ff8a80;--ok:#7ed69a}}
   body{font:16px/1.5 system-ui,sans-serif;max-width:1100px;margin:0 auto;padding:24px 16px;color:var(--fg);background:var(--bg)}
@@ -185,13 +152,122 @@ function renderIndex(headline: string, rules: Rule[], scans: Scan[]) {
   th{background:var(--head)}
   ul{margin:0;padding-left:18px} small,code{color:var(--muted)}
   .impact{font-weight:600} .critical,.serious,.bad{color:var(--bad);font-weight:600} .ok{color:var(--ok)}
-</style>
-<main>
-<h1>UU-rapport ${environment}</h1>
-<p><strong>${escapeHtml(headline)}.</strong><br><small>Generert ${generated}. Automatiske funn fra axe (WCAG 2.2 A/AA). Ingen funn betyr ikke at siden er universelt utformet.</small></p>
-${rules.length ? table('Brudd per regel', ['Alvorlighet', 'Regel', 'Omfang', 'Hvor'], ruleRows) : '<p>Ingen automatiske brudd funnet.</p>'}
-${table('Alle skanninger', ['Område', 'Test', 'Brudd'], scanRows)}
-</main>
-</html>
 `;
+
+const scanLink = (scan: Scan, text: string) =>
+  scan.file ? html`<a href="${scan.file}">${text}</a>` : text;
+
+const table = (caption: string, columns: string[], rows: SafeHtml[]) => html`
+  <div
+    class="scroll"
+    role="region"
+    aria-label="${caption}"
+    tabindex="0"
+  >
+    <table>
+      <caption>
+        ${caption}
+      </caption>
+      <thead>
+        <tr>
+          ${columns.map((column) => html`<th scope="col">${column}</th>`)}
+        </tr>
+      </thead>
+      <tbody>
+        ${rows}
+      </tbody>
+    </table>
+  </div>
+`;
+
+function places(rule: Rule) {
+  const items = rule.scans.map(
+    (scan) => html`<li>${scanLink(scan, `${scan.area} – ${scan.stage}`)}</li>`,
+  );
+  if (items.length <= MAX_PLACES)
+    return html`<ul>
+      ${items}
+    </ul>`;
+  return html`
+    <ul>
+      ${items.slice(0, MAX_PLACES)}
+    </ul>
+    <details>
+      <summary>Vis ${items.length - MAX_PLACES} til</summary>
+      <ul>
+        ${items.slice(MAX_PLACES)}
+      </ul>
+    </details>
+  `;
+}
+
+const ruleRow = (rule: Rule) => html`
+  <tr>
+    <td><span class="impact ${rule.violation.impact}">${impact(rule.violation)}</span></td>
+    <td>
+      <a href="${rule.violation.helpUrl}">${rule.violation.help}</a><br />
+      <code>${rule.violation.id}</code>
+    </td>
+    <td>${rule.scans.length} skanninger<br />${rule.nodes} elementer</td>
+    <td>${places(rule)}</td>
+  </tr>
+`;
+
+function scanRow(scan: Scan) {
+  const count = scan.violations.length;
+  return html`
+    <tr>
+      <td>${scan.area}</td>
+      <td>
+        ${scanLink(scan, scan.test)}<br />
+        <small>${scan.stage} · <code>${scan.page}</code></small>
+      </td>
+      <td>
+        ${
+          count
+            ? html`<span class="bad">${count} ${count === 1 ? 'regel' : 'regler'}</span>`
+            : html`<span class="ok">Ingen</span>`
+        }
+      </td>
+    </tr>
+  `;
+}
+
+function renderIndex(headline: string, rules: Rule[], scans: Scan[]) {
+  const environment = process.env.environment?.toUpperCase() ?? '';
+  const generated = new Date().toLocaleString('nb-NO', { timeZone: 'Europe/Oslo' });
+  const sortedScans = [...scans].sort((a, b) => b.violations.length - a.violations.length);
+
+  return html`<!doctype html>
+    <html lang="nb">
+      <meta charset="utf-8" />
+      <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1"
+      />
+      <title>UU-rapport ${environment}</title>
+      <style>
+        ${STYLE}
+      </style>
+      <main>
+        <h1>UU-rapport ${environment}</h1>
+        <p>
+          <strong>${headline}.</strong><br />
+          <small>
+            Generert ${generated}. Automatiske funn fra axe (WCAG 2.2 A/AA). Ingen funn betyr ikke
+            at siden er universelt utformet.
+          </small>
+        </p>
+        ${
+          rules.length
+            ? table(
+                'Brudd per regel',
+                ['Alvorlighet', 'Regel', 'Omfang', 'Hvor'],
+                rules.map(ruleRow),
+              )
+            : html`<p>Ingen automatiske brudd funnet.</p>`
+        }
+        ${table('Alle skanninger', ['Område', 'Test', 'Brudd'], sortedScans.map(scanRow))}
+      </main>
+    </html> `.toString();
 }
