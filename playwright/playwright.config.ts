@@ -34,6 +34,8 @@ const config: PlaywrightTestConfig = {
         outputFolder: `playwright-report/${currentEnv().toUpperCase()}`,
       },
     ],
+    // Job summary in GitHub: standard tests first, then UU.
+    ['./reporters/testSummaryReporter.ts'],
     // After the html reporter, which empties its folder; the UU page lives inside it.
     [
       './accessibilityHelpers/uuSummaryReporter.ts',
