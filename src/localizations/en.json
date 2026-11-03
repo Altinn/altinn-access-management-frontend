@@ -289,6 +289,8 @@
     "modal_info_info_2": "To see what this power of attorney covers, you can go to the <a>guardianship tab</a> in the overview."
   },
   "role": {
+    "roles_removed_heading": "Old Altinn roles have been removed",
+    "roles_removed_content": "Old Altinn roles have now been removed and no longer give access to anything in Altinn. This tab will disappear soon. If you or others have lost access, go to <packages>Access packages</packages> to request or give power of attorney. If you only need access to a single service, you can use <singleRights>Single services</singleRights> instead.",
     "header_info": "Information about roles in Altinn",
     "header_info_content": "These roles have been transferred from the old Altinn and will gradually be phased out. Please note that the roles may be incomplete and that you cannot grant/request new powers of attorney for roles. Use access packages or single services instead.",
     "provider_status": "This role is fetched from ",

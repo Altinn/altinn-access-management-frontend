@@ -1,15 +1,12 @@
 import React from 'react';
 import {
   DsParagraph,
-  DsPopover,
-  DsSwitch,
   List,
   ResourceListItem,
   type ResourceListItemProps,
 } from '@altinn/altinn-components';
 import { useTranslation } from 'react-i18next';
 import cn from 'classnames';
-import { QuestionmarkCircleIcon } from '@navikt/aksel-icons';
 
 import { useRestoreFocusTarget } from '@/features/amUI/common/RestoreFocus';
 import { useDebouncedValue } from '@/resources/hooks';
@@ -67,8 +64,6 @@ export interface ResourceListProps<
   size?: ResourceListItemProps['size'];
   interactive?: boolean | ((resource: TResource) => boolean);
   as?: ResourceListItemProps['as'];
-  showMoreButton?: boolean;
-  skeletonCount?: number;
   resolveLogos?: boolean;
   enableMaxHeight?: boolean;
   renderControls?: (resource: TResource) => React.ReactNode;
@@ -193,30 +188,12 @@ export const ResourceList = <
             setFilterState={setFilterState}
             serviceOwnerOptions={serviceOwnerOptions}
             searchPlaceholder={searchPlaceholder}
+            expiredToggle={
+              hasExpiredResources
+                ? { checked: includeExpired, onChange: setIncludeExpired }
+                : undefined
+            }
           />
-          {hasExpiredResources && (
-            <div className={classes.expiredSwitch}>
-              <DsSwitch
-                data-size='sm'
-                checked={includeExpired}
-                onChange={(e) => {
-                  setIncludeExpired(e.target.checked);
-                }}
-                label={t('resource_list.show_expired_services')}
-              />
-              <DsPopover.TriggerContext>
-                <DsPopover.Trigger
-                  icon
-                  variant='tertiary'
-                  data-size='sm'
-                  aria-label={t('resource_list.show_expired_services_helptext_button')}
-                >
-                  <QuestionmarkCircleIcon aria-hidden='true' />
-                </DsPopover.Trigger>
-                <DsPopover>{t('resource_list.show_expired_services_helptext')}</DsPopover>
-              </DsPopover.TriggerContext>
-            </div>
-          )}
           <div className={classes.delegationModalButton}>{delegationModal}</div>
         </div>
       )}

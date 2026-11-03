@@ -1,6 +1,9 @@
 import React from 'react';
-import { type FilterState, Toolbar } from '@altinn/altinn-components';
+import { DsPopover, DsSwitch, type FilterState, Toolbar } from '@altinn/altinn-components';
 import { useTranslation } from 'react-i18next';
+import { QuestionmarkCircleIcon } from '@navikt/aksel-icons';
+
+import classes from './ResourceFilterToolbar.module.css';
 
 interface ResourceFilterToolbarProps {
   search: string;
@@ -9,6 +12,11 @@ interface ResourceFilterToolbarProps {
   setFilterState: (newValue: string[]) => void;
   serviceOwnerOptions: { value: string; label: string; count?: number }[];
   searchPlaceholder?: string;
+  /** Renders the "show expired services" switch after the toolbar when set. */
+  expiredToggle?: {
+    checked: boolean;
+    onChange: (checked: boolean) => void;
+  };
 }
 const OWNER_FILTER_KEY = 'owner';
 const ALL_SERVICE_OWNERS = 'all_service_owners_key';
@@ -20,6 +28,7 @@ export const ResourceFilterToolbar = ({
   setFilterState,
   serviceOwnerOptions,
   searchPlaceholder,
+  expiredToggle,
 }: ResourceFilterToolbarProps) => {
   const { t } = useTranslation();
   const placeholder = searchPlaceholder ?? t('resource_list.resource_search_placeholder');
@@ -43,71 +52,95 @@ export const ResourceFilterToolbar = ({
   };
 
   return (
-    <Toolbar
-      search={{
-        name: 'search',
-        value: search,
-        onChange: (e: React.ChangeEvent<HTMLInputElement>) => setSearch(e.target.value),
-        label: placeholder,
-        placeholder: placeholder,
-        clearButtonAltText: t('resource_list.resource_search_clear'),
-        onClear: () => setSearch(''),
-      }}
-      filter={{
-        filterState: filterStateWithOwner,
-        onFilterStateChange: onFilterStateChange,
-        getFilterLabel: (_name, value) => {
-          const selectedOwners = (value ?? []).filter((owner) => owner !== ALL_SERVICE_OWNERS);
-          if (selectedOwners.length > 1) {
-            return t('resource_list.filtered_serviceowners', { count: selectedOwners.length });
-          } else if (selectedOwners.length === 1) {
-            return serviceOwnerOptions.find((owner) => owner.value === selectedOwners[0])?.label;
-          }
-          return t('resource_list.all_serviceowners');
-        },
-        filters: [
-          {
-            id: OWNER_FILTER_KEY,
-            name: OWNER_FILTER_KEY,
-            title: t('resource_list.filter_by_serviceowner'),
-            label: t('resource_list.filter_by_serviceowner'),
-            removable: false,
-            searchable: true,
-            search: {
-              placeholder: t('resource_list.service_owner_filter'),
-              name: 'search-service-owner',
-              clearButtonAltText: t('resource_list.service_owner_filter_clear'),
-              onChange: (e: React.ChangeEvent<HTMLInputElement>) => setOwnerSearch(e.target.value),
-              onClear: () => setOwnerSearch(''),
-            },
-            groups: { all: { title: t('resource_list.choose_serviceowner') }, owners: {} },
-            items: [
-              ...(ownerSearch.trim().length > 0
-                ? []
-                : [
-                    {
-                      id: ALL_SERVICE_OWNERS,
-                      value: ALL_SERVICE_OWNERS,
-                      name: OWNER_FILTER_KEY,
-                      groupId: 'all',
-                      role: 'checkbox',
-                      label: t('resource_list.all_serviceowners'),
-                    },
-                  ]),
-              ...serviceOwnerOptions.map((owner) => ({
-                id: owner.value,
-                value: owner.value,
-                name: OWNER_FILTER_KEY,
-                groupId: 'owners',
-                role: 'checkbox',
-                count: owner.count,
-                label: `${owner.label}${owner.count ? ` (${owner.count})` : ''}`,
-                searchWords: [owner.label],
-              })),
-            ],
+    <>
+      <Toolbar
+        search={{
+          name: 'search',
+          value: search,
+          onChange: (e: React.ChangeEvent<HTMLInputElement>) => setSearch(e.target.value),
+          label: placeholder,
+          placeholder: placeholder,
+          clearButtonAltText: t('resource_list.resource_search_clear'),
+          onClear: () => setSearch(''),
+        }}
+        filter={{
+          filterState: filterStateWithOwner,
+          onFilterStateChange: onFilterStateChange,
+          getFilterLabel: (_name, value) => {
+            const selectedOwners = (value ?? []).filter((owner) => owner !== ALL_SERVICE_OWNERS);
+            if (selectedOwners.length > 1) {
+              return t('resource_list.filtered_serviceowners', { count: selectedOwners.length });
+            } else if (selectedOwners.length === 1) {
+              return serviceOwnerOptions.find((owner) => owner.value === selectedOwners[0])?.label;
+            }
+            return t('resource_list.all_serviceowners');
           },
-        ],
-      }}
-    />
+          filters: [
+            {
+              id: OWNER_FILTER_KEY,
+              name: OWNER_FILTER_KEY,
+              title: t('resource_list.filter_by_serviceowner'),
+              label: t('resource_list.filter_by_serviceowner'),
+              removable: false,
+              searchable: true,
+              search: {
+                placeholder: t('resource_list.service_owner_filter'),
+                name: 'search-service-owner',
+                clearButtonAltText: t('resource_list.service_owner_filter_clear'),
+                onChange: (e: React.ChangeEvent<HTMLInputElement>) =>
+                  setOwnerSearch(e.target.value),
+                onClear: () => setOwnerSearch(''),
+              },
+              groups: { all: { title: t('resource_list.choose_serviceowner') }, owners: {} },
+              items: [
+                ...(ownerSearch.trim().length > 0
+                  ? []
+                  : [
+                      {
+                        id: ALL_SERVICE_OWNERS,
+                        value: ALL_SERVICE_OWNERS,
+                        name: OWNER_FILTER_KEY,
+                        groupId: 'all',
+                        role: 'checkbox',
+                        label: t('resource_list.all_serviceowners'),
+                      },
+                    ]),
+                ...serviceOwnerOptions.map((owner) => ({
+                  id: owner.value,
+                  value: owner.value,
+                  name: OWNER_FILTER_KEY,
+                  groupId: 'owners',
+                  role: 'checkbox',
+                  count: owner.count,
+                  label: `${owner.label}${owner.count ? ` (${owner.count})` : ''}`,
+                  searchWords: [owner.label],
+                })),
+              ],
+            },
+          ],
+        }}
+      />
+      {expiredToggle && (
+        <div className={classes.expiredToggle}>
+          <DsSwitch
+            data-size='sm'
+            checked={expiredToggle.checked}
+            onChange={(e) => expiredToggle.onChange(e.target.checked)}
+            label={t('resource_list.show_expired_services')}
+          />
+          <DsPopover.TriggerContext>
+            <DsPopover.Trigger
+              icon
+              variant='tertiary'
+              data-size='sm'
+              aria-label={t('resource_list.show_expired_services_helptext_button')}
+            >
+              <QuestionmarkCircleIcon aria-hidden='true' />
+            </DsPopover.Trigger>
+            <DsPopover>{t('resource_list.show_expired_services_helptext')}</DsPopover>
+          </DsPopover.TriggerContext>
+        </div>
+      )}
+    </>
   );
 };

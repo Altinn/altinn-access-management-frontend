@@ -28,6 +28,7 @@ window.featureFlags = {
   enableSingleRightsTabInPoaOverview: false,
   enableActivityLog: false,
   showSettingsPageServiceAnnouncement: false,
+  showRolesRemovedAlert: false,
   enableBankruptcyEstateAdministration: false,
 };
 

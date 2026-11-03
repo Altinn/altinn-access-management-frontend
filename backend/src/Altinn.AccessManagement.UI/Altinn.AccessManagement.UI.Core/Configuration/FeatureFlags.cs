@@ -29,6 +29,11 @@ namespace Altinn.AccessManagement.UI.Core.Configuration
         public const string ShowSettingsPageServiceAnnouncement = "AccessManagementUI.ShowSettingsPageServiceAnnouncement";
 
         /// <summary>
+        /// Whether or not to replace the content of the role tabs with an alert saying that Altinn 2 roles have been removed
+        /// </summary>
+        public const string ShowRolesRemovedAlert = "AccessManagementUI.ShowRolesRemovedAlert";
+
+        /// <summary>
         /// Whether or not to enable bankruptcy estate administration features
         /// </summary>
         public const string EnableBankruptcyEstateAdministration = "AccessManagementUI.EnableBankruptcyEstateAdministration";
