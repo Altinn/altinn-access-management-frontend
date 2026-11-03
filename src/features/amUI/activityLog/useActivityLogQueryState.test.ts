@@ -1,62 +1,37 @@
 import { act, renderHook } from '@testing-library/react';
 import { describe, expect, it } from 'vitest';
 
-import { getCookie } from '@/resources/Cookie/CookieMethods';
-
-import {
-  ACTIVITY_LOG_PAGE_SIZE,
-  ACTIVITY_LOG_PARTY_FILTER,
-  useActivityLogQueryState,
-} from './useActivityLogQueryState';
+import { ACTIVITY_LOG_PARTY_FILTER, useActivityLogQueryState } from './useActivityLogQueryState';
 
 describe('useActivityLogQueryState', () => {
-  it('starts with access given by the reportee, no filter and the first page', () => {
+  it('starts with access given by the reportee and no filter', () => {
     const { result } = renderHook(() => useActivityLogQueryState());
 
-    expect(result.current.queryParams).toEqual({
-      party: getCookie('AltinnPartyUuid'),
-      direction: 'from',
-      to: [],
-      pageNo: 0,
-      pageSize: ACTIVITY_LOG_PAGE_SIZE,
-    });
+    expect(result.current.direction).toBe('from');
+    expect(result.current.counterpartField).toBe('to');
+    expect(result.current.filterState).toEqual({});
+    expect(result.current.selectedPartyIds).toEqual([]);
   });
 
-  it('maps the party filter to the counterpart side of the query', () => {
+  it('exposes the selected parties and the side of the entries they apply to', () => {
     const { result } = renderHook(() => useActivityLogQueryState());
 
     act(() => result.current.changeFilterState({ [ACTIVITY_LOG_PARTY_FILTER]: ['lise', 'fysio'] }));
     expect(result.current.selectedPartyIds).toEqual(['lise', 'fysio']);
-    expect(result.current.queryParams.to).toEqual(['lise', 'fysio']);
-    expect(result.current.queryParams.from).toBeUndefined();
+    expect(result.current.counterpartField).toBe('to');
 
     act(() => result.current.changeDirection('to'));
-    act(() => result.current.changeFilterState({ [ACTIVITY_LOG_PARTY_FILTER]: ['skatt'] }));
-    expect(result.current.queryParams.from).toEqual(['skatt']);
-    expect(result.current.queryParams.to).toBeUndefined();
+    expect(result.current.counterpartField).toBe('from');
   });
 
-  it('starts over from the first page and clears the filter when the direction changes', () => {
+  it('clears the filter when the direction changes', () => {
     const { result } = renderHook(() => useActivityLogQueryState());
 
     act(() => result.current.changeFilterState({ [ACTIVITY_LOG_PARTY_FILTER]: ['lise'] }));
-    act(() => result.current.loadMore());
-    act(() => result.current.loadMore());
-    expect(result.current.queryParams.pageNo).toBe(2);
-
     act(() => result.current.changeDirection('to'));
 
     expect(result.current.direction).toBe('to');
     expect(result.current.filterState).toEqual({});
-    expect(result.current.queryParams.pageNo).toBe(0);
-  });
-
-  it('starts over from the first page when the filter changes', () => {
-    const { result } = renderHook(() => useActivityLogQueryState());
-
-    act(() => result.current.loadMore());
-    act(() => result.current.changeFilterState({ [ACTIVITY_LOG_PARTY_FILTER]: [] }));
-
-    expect(result.current.queryParams.pageNo).toBe(0);
+    expect(result.current.selectedPartyIds).toEqual([]);
   });
 });
