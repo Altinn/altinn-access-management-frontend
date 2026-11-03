@@ -26,6 +26,10 @@
   margin-top: var(--ds-spacing-4);
 }
 
+.actionError {
+  margin-top: var(--ds-spacing-4);
+}
+
 .processedStatus {
   display: flex;
   align-items: center;

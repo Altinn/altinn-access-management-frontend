@@ -55,6 +55,8 @@ export const RequestPage = () => {
     isLoadingReceivedRequests,
     isSentRequestsError,
     isReceivedRequestsError,
+    sentRequestsError,
+    receivedRequestsError,
   } = useRequests({ skipSentRequests: !showSentRequestsTab });
 
   const partyUuid = getCookie('AltinnPartyUuid');
@@ -122,6 +124,7 @@ export const RequestPage = () => {
                       count={receivedRequestsCount}
                       isLoading={isLoadingReceivedRequests}
                       isError={isReceivedRequestsError}
+                      error={receivedRequestsError}
                       emptyMessage={
                         isCurrentUserReportee
                           ? t('request_page.no_received_requests_you')
@@ -142,6 +145,7 @@ export const RequestPage = () => {
                         count={sentRequestCount ?? 0}
                         isLoading={isLoadingSentRequests}
                         isError={isSentRequestsError}
+                        error={sentRequestsError}
                         emptyMessage={
                           isCurrentUserReportee
                             ? t('request_page.no_sent_requests_you')
