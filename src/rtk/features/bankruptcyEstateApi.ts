@@ -9,12 +9,12 @@ export const bankruptcyEstateApi = createApi({
   reducerPath: 'bankruptcyEstateApi',
   baseQuery: createBaseQuery(baseUrl),
   endpoints: (builder) => ({
-    getHasAdminAccess: builder.query<boolean, void>({
-      query: () => `hasadminaccess?party=${getCookie('AltinnPartyUuid')}`,
+    getIsBankruptcyEstateAdmin: builder.query<boolean, void>({
+      query: () => `isBankruptcyEstateAdmin?party=${getCookie('AltinnPartyUuid')}`,
     }),
   }),
 });
 
-export const { useGetHasAdminAccessQuery } = bankruptcyEstateApi;
+export const { useGetIsBankruptcyEstateAdminQuery } = bankruptcyEstateApi;
 
 export const { endpoints, reducerPath, reducer, middleware } = bankruptcyEstateApi;

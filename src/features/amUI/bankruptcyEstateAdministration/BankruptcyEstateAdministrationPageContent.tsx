@@ -4,7 +4,7 @@ import { DsAlert } from '@altinn/altinn-components';
 
 import { formatEntityDisplayName, isPerson } from '@/resources/utils/reporteeUtils';
 import { useGetReporteeQuery } from '@/rtk/features/userInfoApi';
-import { useGetHasAdminAccessQuery } from '@/rtk/features/bankruptcyEstateApi';
+import { useGetIsBankruptcyEstateAdminQuery } from '@/rtk/features/bankruptcyEstateApi';
 
 import { usePartyRepresentation } from '../common/PartyRepresentationContext/PartyRepresentationContext';
 import { ReporteePageHeading } from '../common/ReporteePageHeading/ReporteePageHeading';
@@ -13,14 +13,12 @@ export const BankruptcyEstateAdministrationPageContent = () => {
   const { t } = useTranslation();
   const { actingParty, isLoading: actorLoading } = usePartyRepresentation();
   const { data: reportee, isLoading: isLoadingReportee } = useGetReporteeQuery();
-  const { data: hasAdminAccess, isLoading: isLoadingHasAdminAccess } = useGetHasAdminAccessQuery(
-    undefined,
-    { skip: !isPerson(reportee) },
-  );
+  const { data: isBankruptcyEstateAdmin, isLoading: isLoadingIsBankruptcyEstateAdmin } =
+    useGetIsBankruptcyEstateAdminQuery(undefined, { skip: !isPerson(reportee) });
 
-  const isLoading = isLoadingReportee || actorLoading || isLoadingHasAdminAccess;
+  const isLoading = isLoadingReportee || actorLoading || isLoadingIsBankruptcyEstateAdmin;
 
-  if (!isLoading && (!isPerson(reportee) || hasAdminAccess === false)) {
+  if (!isLoading && (!isPerson(reportee) || isBankruptcyEstateAdmin === false)) {
     return (
       <DsAlert data-color='warning'>
         {t('bankruptcy_estate_administration_page.no_access_title')}

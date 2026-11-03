@@ -40,8 +40,8 @@ namespace Altinn.AccessManagement.UI.Controllers
         /// <returns>True when the user should see bankruptcy estate administration; otherwise false.</returns>
         [HttpGet]
         [Authorize]
-        [Route("hasadminaccess")]
-        public async Task<ActionResult<bool>> HasAdminAccess(
+        [Route("isBankruptcyEstateAdmin")]
+        public async Task<ActionResult<bool>> IsBankruptcyEstateAdmin(
             [FromQuery] Guid party,
             CancellationToken cancellationToken)
         {
@@ -52,7 +52,7 @@ namespace Altinn.AccessManagement.UI.Controllers
 
             try
             {
-                bool hasAccess = await _bankruptcyEstateService.HasBankruptcyEstateAdminAccess(party, cancellationToken);
+                bool hasAccess = await _bankruptcyEstateService.IsBankruptcyEstateAdmin(party, cancellationToken);
                 return Ok(hasAccess);
             }
             catch (HttpStatusException ex)
@@ -62,7 +62,7 @@ namespace Altinn.AccessManagement.UI.Controllers
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "HasAdminAccess failed unexpectedly");
+                _logger.LogError(ex, "IsBankruptcyEstateAdmin failed unexpectedly");
                 return StatusCode((int)HttpStatusCode.InternalServerError);
             }
         }

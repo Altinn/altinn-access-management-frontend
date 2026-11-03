@@ -20,7 +20,7 @@ namespace Altinn.AccessManagement.UI.Core.Services
         }
 
         /// <inheritdoc/>
-        public async Task<bool> HasBankruptcyEstateAdminAccess(Guid partyId, CancellationToken cancellationToken = default)
+        public async Task<bool> IsBankruptcyEstateAdmin(Guid partyId, CancellationToken cancellationToken = default)
         {
             return await _bankruptcyEstateClient.HasAnyEstates(partyId, cancellationToken);
         }

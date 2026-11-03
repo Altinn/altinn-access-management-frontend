@@ -14,7 +14,7 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
     [Collection("BankruptcyEstateController Tests")]
     public class BankruptcyEstateControllerTest : IClassFixture<CustomWebApplicationFactory<BankruptcyEstateController>>
     {
-        private const string HasAdminAccessUrl = "accessmanagement/api/v1/bankruptcyestate/hasadminaccess";
+        private const string IsBankruptcyEstateAdminUrl = "accessmanagement/api/v1/bankruptcyestate/isBankruptcyEstateAdmin";
 
         private readonly HttpClient _client;
 
@@ -34,15 +34,15 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
         }
 
         /// <summary>
-        /// Test case: HasAdminAccess returns true for a party the mock reports as having bankruptcy estates.
+        /// Test case: IsBankruptcyEstateAdmin returns true for a party the mock reports as having bankruptcy estates.
         /// </summary>
         [Fact]
-        public async Task HasAdminAccess_ReturnsTrue()
+        public async Task IsBankruptcyEstateAdmin_ReturnsTrue()
         {
             Guid party = Guid.Parse("cd35779b-b174-4ecc-bbef-ece13611be7f");
             SetAuthHeader();
 
-            HttpResponseMessage response = await _client.GetAsync($"{HasAdminAccessUrl}?party={party}");
+            HttpResponseMessage response = await _client.GetAsync($"{IsBankruptcyEstateAdminUrl}?party={party}");
             bool actualResponse = await response.Content.ReadFromJsonAsync<bool>();
 
             Assert.Equal(HttpStatusCode.OK, response.StatusCode);
@@ -50,28 +50,28 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
         }
 
         /// <summary>
-        /// Test case: HasAdminAccess with invalid party format returns bad request.
+        /// Test case: IsBankruptcyEstateAdmin with invalid party format returns bad request.
         /// </summary>
         [Fact]
-        public async Task HasAdminAccess_InvalidParty_ReturnsBadRequest()
+        public async Task IsBankruptcyEstateAdmin_InvalidParty_ReturnsBadRequest()
         {
             SetAuthHeader();
 
-            HttpResponseMessage response = await _client.GetAsync($"{HasAdminAccessUrl}?party=not-a-guid");
+            HttpResponseMessage response = await _client.GetAsync($"{IsBankruptcyEstateAdminUrl}?party=not-a-guid");
 
             Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
         }
 
         /// <summary>
-        /// Test case: HasAdminAccess returns the backend status code and problem details when the client throws HttpStatusException.
+        /// Test case: IsBankruptcyEstateAdmin returns the backend status code and problem details when the client throws HttpStatusException.
         /// </summary>
         [Fact]
-        public async Task HasAdminAccess_ClientThrowsHttpStatusException_ReturnsProblemDetails()
+        public async Task IsBankruptcyEstateAdmin_ClientThrowsHttpStatusException_ReturnsProblemDetails()
         {
             Guid party = Guid.Parse("00000000-0000-0000-0000-000000000404");
             SetAuthHeader();
 
-            HttpResponseMessage response = await _client.GetAsync($"{HasAdminAccessUrl}?party={party}");
+            HttpResponseMessage response = await _client.GetAsync($"{IsBankruptcyEstateAdminUrl}?party={party}");
             ProblemDetails problemDetails = await response.Content.ReadFromJsonAsync<ProblemDetails>();
 
             Assert.Equal(HttpStatusCode.NotFound, response.StatusCode);
@@ -82,15 +82,15 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
         }
 
         /// <summary>
-        /// Test case: HasAdminAccess returns internal server error when the client throws an unexpected exception.
+        /// Test case: IsBankruptcyEstateAdmin returns internal server error when the client throws an unexpected exception.
         /// </summary>
         [Fact]
-        public async Task HasAdminAccess_ClientThrowsException_ReturnsInternalServerError()
+        public async Task IsBankruptcyEstateAdmin_ClientThrowsException_ReturnsInternalServerError()
         {
             Guid party = Guid.Empty;
             SetAuthHeader();
 
-            HttpResponseMessage response = await _client.GetAsync($"{HasAdminAccessUrl}?party={party}");
+            HttpResponseMessage response = await _client.GetAsync($"{IsBankruptcyEstateAdminUrl}?party={party}");
 
             Assert.Equal(HttpStatusCode.InternalServerError, response.StatusCode);
         }

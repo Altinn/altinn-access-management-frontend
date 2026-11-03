@@ -14,6 +14,6 @@
         /// <param name="partyId">The party the user is acting on behalf of.</param>
         /// <param name="cancellationToken">A token used to cancel the asynchronous operation.</param>
         /// <returns><see langword="true"/> when the user should see bankruptcy estate administration for the party; otherwise <see langword="false"/>.</returns>
-        Task<bool> HasBankruptcyEstateAdminAccess(Guid partyId, CancellationToken cancellationToken = default);
+        Task<bool> IsBankruptcyEstateAdmin(Guid partyId, CancellationToken cancellationToken = default);
     }
 }

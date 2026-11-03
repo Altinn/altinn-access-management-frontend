@@ -35,7 +35,7 @@ import {
 } from '@/rtk/features/userInfoApi';
 import { useGetRolePermissionsQuery } from '@/rtk/features/roleApi';
 import { useSidebarRequestCount } from '@/resources/hooks/useSidebarRequestCount';
-import { useGetHasAdminAccessQuery } from '@/rtk/features/bankruptcyEstateApi';
+import { useGetIsBankruptcyEstateAdminQuery } from '@/rtk/features/bankruptcyEstateApi';
 
 export const useSidebarItems = ({ isSmall }: { isSmall?: boolean }) => {
   const { t } = useTranslation();
@@ -66,7 +66,7 @@ export const useSidebarItems = ({ isSmall }: { isSmall?: boolean }) => {
   });
   const showBankruptcyEstateAdministration =
     window.featureFlags.enableBankruptcyEstateAdministration && isPerson(reportee);
-  const { data: hasBankruptcyEstateAdminAccess } = useGetHasAdminAccessQuery(undefined, {
+  const { data: isBankruptcyEstateAdmin } = useGetIsBankruptcyEstateAdminQuery(undefined, {
     skip: !showBankruptcyEstateAdministration,
   });
 
@@ -141,7 +141,7 @@ export const useSidebarItems = ({ isSmall }: { isSmall?: boolean }) => {
     items.push(getMaskinportenMenuItem(pathname, isLoading, isSmall));
   }
 
-  if (showBankruptcyEstateAdministration && hasBankruptcyEstateAdminAccess) {
+  if (showBankruptcyEstateAdministration && isBankruptcyEstateAdmin) {
     items.push(getBankruptcyEstateAdministrationMenuItem(pathname, isLoading, isSmall));
   }
 

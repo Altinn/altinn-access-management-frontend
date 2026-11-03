@@ -51,7 +51,7 @@ import {
 import { useSidebarRequestCount } from '@/resources/hooks/useSidebarRequestCount';
 import { useGetRolePermissionsQuery } from '@/rtk/features/roleApi';
 import { useDocumentTitle } from '@/resources/hooks/useDocumentTitle';
-import { useGetHasAdminAccessQuery } from '@/rtk/features/bankruptcyEstateApi';
+import { useGetIsBankruptcyEstateAdminQuery } from '@/rtk/features/bankruptcyEstateApi';
 
 import { PageLayoutWrapper } from '../common/PageLayoutWrapper';
 import { Breadcrumbs } from '../common/Breadcrumbs/Breadcrumbs';
@@ -74,7 +74,7 @@ export const LandingPage = () => {
   });
   const showBankruptcyEstateAdministration =
     window.featureFlags.enableBankruptcyEstateAdministration && isPerson(reportee);
-  const { data: hasBankruptcyEstateAdminAccess } = useGetHasAdminAccessQuery(undefined, {
+  const { data: isBankruptcyEstateAdmin } = useGetIsBankruptcyEstateAdminQuery(undefined, {
     skip: !showBankruptcyEstateAdministration,
   });
   const { data: currentUser, isLoading: currentUserIsLoading } = useGetPartyFromLoggedInUserQuery();
@@ -191,7 +191,7 @@ export const LandingPage = () => {
         description: t('landing_page.maskinporten_item_description'),
       });
     }
-    if (showBankruptcyEstateAdministration && hasBankruptcyEstateAdminAccess) {
+    if (showBankruptcyEstateAdministration && isBankruptcyEstateAdmin) {
       items.push({
         ...getBankruptcyEstateAdministrationMenuItem(),
         description: t('landing_page.bankruptcy_estate_admin_item_description', {
