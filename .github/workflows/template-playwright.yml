@@ -87,7 +87,10 @@ jobs:
               --destination-path "$REPORT_ID/$REPORT_NAME" \
               --source "playwright/playwright-report/$REPORT_NAME" \
               --overwrite \
-              --auth-mode login
+              --auth-mode login \
+              --no-progress \
+              --only-show-errors \
+              --output none
 
           echo "REPORT_URL=https://playwrightreporting.z1.web.core.windows.net/$REPORT_ID/$REPORT_NAME/" >> "$GITHUB_ENV"
       - name: Show report URL
@@ -95,3 +98,7 @@ jobs:
         run: |
           echo "Playwright report: $REPORT_URL"
           echo "[Playwright report]($REPORT_URL)" >> "$GITHUB_STEP_SUMMARY"
+          # The UU reporter only writes uu/ when the run had axe scans.
+          if [ -f "playwright/playwright-report/${{ inputs.environment }}/uu/index.html" ]; then
+            echo "UU report: ${REPORT_URL}uu/index.html"
+          fi
