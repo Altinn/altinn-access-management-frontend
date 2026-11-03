@@ -206,6 +206,7 @@ function renderStepSummary(rules: Rule[], scanCount: number, technicalErrors: st
     : '';
 
   return html`
+    <br />
     <h3>${status} Universell utforming ${environment}</h3>
     <p>
       ${parts.length ? `Regler med brudd: ${parts.join(' · ')}` : 'Ingen automatiske brudd'} ·
