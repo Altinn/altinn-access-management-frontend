@@ -12,7 +12,9 @@ import {
 import { type TFunction } from 'i18next';
 
 import { useGetReporteeQuery } from '@/rtk/features/userInfoApi';
-import { PartyType } from '@/dataObjects/dtos/Party';
+import { useDebouncedValue } from '@/resources/hooks';
+import { getPartyColor } from '@/resources/utils/reporteeUtils';
+import { SearchHitsStatus } from '@/features/amUI/common/SearchHitsStatus/SearchHitsStatus';
 
 import { type ConsentHistoryItem } from '../types';
 import { toDateTimeString } from '../utils';
@@ -27,6 +29,7 @@ interface ConsentTimelineProps {
 export const ConsentTimeline = ({ consentLog, showConsentDetails }: ConsentTimelineProps) => {
   const { t } = useTranslation();
   const [searchValue, setSearchValue] = useState<string>('');
+  const debouncedSearch = useDebouncedValue(searchValue, searchValue ? 300 : 0);
   const { data: reportee } = useGetReporteeQuery();
 
   const handleSearch = (event: React.ChangeEvent<HTMLInputElement>): void => {
@@ -37,16 +40,16 @@ export const ConsentTimeline = ({ consentLog, showConsentDetails }: ConsentTimel
   const filteredTimelineItems = useMemo(
     () =>
       timeLineItems.filter((item) => {
-        const q = searchValue.trim().toLowerCase();
+        const q = debouncedSearch.trim().toLowerCase();
         return [item.fromPartyName, item.toPartyName].some((name) =>
           name?.toLowerCase().includes(q),
         );
       }),
-    [searchValue, timeLineItems],
+    [debouncedSearch, timeLineItems],
   );
 
   return (
-    <>
+    <div className={classes.consentTimeline}>
       <DsSearch className={classes.consentSearchField}>
         <DsSearch.Input
           placeholder={t('consent_log.search_log')}
@@ -56,18 +59,22 @@ export const ConsentTimeline = ({ consentLog, showConsentDetails }: ConsentTimel
         />
         <DsSearch.Clear />
       </DsSearch>
+      <SearchHitsStatus
+        hits={debouncedSearch.trim() ? filteredTimelineItems.length : undefined}
+        searchString={debouncedSearch}
+      />
       <Timeline>
-        {!searchValue && timeLineItems.length === 0 && (
+        {!debouncedSearch && timeLineItems.length === 0 && (
           <DsParagraph data-color='info'>{t('consent_log.no_active_consents')}</DsParagraph>
         )}
-        {searchValue && filteredTimelineItems.length === 0 && (
+        {debouncedSearch && filteredTimelineItems.length === 0 && (
           <DsParagraph data-color='info'>{t('consent_log.no_results')}</DsParagraph>
         )}
         {filteredTimelineItems.map((item) => {
           return (
             <TimelineSegment
-              data-color={reportee?.type === PartyType.Person ? 'person' : 'company'}
-              borderColor={reportee?.type === PartyType.Person ? 'person' : 'company'}
+              data-color={getPartyColor(reportee)}
+              borderColor={getPartyColor(reportee)}
               key={`${item.consentId}-${item.consentEventId}`}
             >
               <TimelineActivity byline={item.bylineText}>
@@ -95,7 +102,7 @@ export const ConsentTimeline = ({ consentLog, showConsentDetails }: ConsentTimel
           );
         })}
       </Timeline>
-    </>
+    </div>
   );
 };
 

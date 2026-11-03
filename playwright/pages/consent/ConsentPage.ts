@@ -1,7 +1,13 @@
 import type { Page, Locator } from '@playwright/test';
 import { expect } from '@playwright/test';
 
-import { LANGUAGE_DICTIONARIES, Language, LanguageMenu, type Dict } from '../LanguageMenu';
+import {
+  HTML_LANG,
+  LANGUAGE_DICTIONARIES,
+  Language,
+  LanguageMenu,
+  type Dict,
+} from '../LanguageMenu';
 
 export { Language };
 
@@ -20,6 +26,7 @@ export class ConsentPage {
   readonly languageMenu: LanguageMenu;
 
   // Headings
+  readonly mainHeading: Locator;
   readonly standardHeading: Locator;
   readonly headingKrav: Locator;
   readonly headingFullmakt: Locator;
@@ -95,6 +102,8 @@ export class ConsentPage {
       .getByRole('button', { name: /^(Menu|Meny)$/ });
     this.languagePicker = page.getByLabel('Språk/language');
     this.languageMenu = new LanguageMenu(page);
+    // Vises først når forespørselen og aktørbyttet er ferdig lastet (før det er det kun en spinner).
+    this.mainHeading = page.getByRole('main').getByRole('heading', { level: 1 });
     this.linkAltinn = page.getByRole('link', { name: /altinn\.no/i });
 
     // Button labels come from the frontend localization files (consent_request.*),
@@ -443,13 +452,17 @@ export class ConsentPage {
     await this.waitForLogout(redirectUrl);
   }
 
-  async openMenu(): Promise<void> {
-    await this.menuButton.click();
-  }
-
+  /**
+   * Velger språk i menyen, slik en bruker ville gjort. Header rendres på nytt når
+   * aktøren er ferdig lastet, og da lukkes en åpen meny — så vi venter til
+   * samtykket vises før vi åpner den.
+   */
   async pickLanguage(lang: Language): Promise<void> {
+    await expect(this.mainHeading).toBeVisible();
+    await this.menuButton.click();
     await this.languagePicker.click();
     await this.languageMenu.select(lang);
+    await expect(this.page.locator('html')).toHaveAttribute('lang', HTML_LANG[lang]);
   }
 
   async waitForLogout(redirectUrl: string, timeout = 30000): Promise<void> {

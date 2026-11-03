@@ -9,7 +9,7 @@ const onKindChange = vi.fn();
 
 let organization: unknown;
 
-vi.mock('lottie-react', () => ({ default: () => null }));
+vi.mock('lottie-react', () => ({ Lottie: () => null }));
 
 vi.mock('react-i18next', () => ({
   useTranslation: () => ({ t: (key: string) => key }),

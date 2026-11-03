@@ -8,7 +8,7 @@ import {
 } from '@altinn/altinn-components';
 import { useTranslation } from 'react-i18next';
 
-import { formatEntityDisplayName, matchesOrgNr } from '@/resources/utils/reporteeUtils';
+import { matchesOrgNr } from '@/resources/utils/reporteeUtils';
 
 import classes from './UserListItems.module.css';
 
@@ -27,6 +27,18 @@ interface UserListItemsProps {
 
 const PAGE_SIZE = 8;
 
+export const matchesUserListSearch = (
+  { name, organizationIdentifier }: Pick<UserListItemData, 'name' | 'organizationIdentifier'>,
+  searchString?: string,
+) => {
+  const normalizedSearch = searchString?.trim().toLowerCase();
+  return (
+    !normalizedSearch ||
+    name.toLowerCase().includes(normalizedSearch) ||
+    matchesOrgNr(organizationIdentifier, normalizedSearch)
+  );
+};
+
 export const UserListItems = ({
   items,
   emptyText,
@@ -40,16 +52,10 @@ export const UserListItems = ({
   const [currentPage, setCurrentPage] = useState(1);
 
   const filteredItems = useMemo(() => {
-    const normalizedSearch = searchString?.trim().toLowerCase();
-    if (!normalizedSearch) {
+    if (!searchString?.trim()) {
       return items;
     }
-    return items.filter((item) => {
-      return (
-        item.name.toLowerCase().includes(normalizedSearch) ||
-        matchesOrgNr(item.organizationIdentifier, normalizedSearch)
-      );
-    });
+    return items.filter((item) => matchesUserListSearch(item, searchString));
   }, [items, searchString]);
 
   useEffect(() => {
@@ -101,7 +107,6 @@ export const UserListItems = ({
             <UserListItem
               key={item.id}
               {...item}
-              name={formatEntityDisplayName(item)}
               collapsible={collapsible}
               expanded={expanded}
               onClick={collapsible ? handleClick : item.onClick}

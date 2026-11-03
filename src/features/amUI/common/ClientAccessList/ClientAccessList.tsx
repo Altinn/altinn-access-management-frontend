@@ -1,23 +1,27 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { type AccessPackageListItemProps, type UserListItemProps } from '@altinn/altinn-components';
+import { type AccessPackageListItemProps } from '@altinn/altinn-components';
 
 import {
   getFormattedDateOfBirthLabel,
   formatEntityDisplayName,
   formatOrgNr,
   isSubUnitByType,
+  getAvatarType,
 } from '@/resources/utils/reporteeUtils';
 import { useAccessPackageLookup } from '@/resources/hooks/useAccessPackageLookup';
 import type { ActionError } from '@/resources/hooks/useActionError';
 import type { ServiceResource } from '@/rtk/features/singleRights/singleRightsApi';
 import type { Client } from '@/rtk/features/clientApi';
-import { PartyType } from '@/dataObjects/dtos/Party';
 import { useIsMobileOrSmaller } from '@/resources/utils/screensizeUtils';
 
 import { buildClientParentNameById, buildClientSortKey } from '../clientSortUtils';
 import { useRoleMetadata } from '../UserRoles/useRoleMetadata';
-import { UserListItems, type UserListItemData } from '../UserListItems/UserListItems';
+import {
+  UserListItems,
+  matchesUserListSearch,
+  type UserListItemData,
+} from '../UserListItems/UserListItems';
 import {
   ClientPackageInfoModal,
   type ClientPackageModalData,
@@ -75,12 +79,12 @@ type ClientAccessListProps = {
   onAddAccessPackage?: (
     action: ClientAccessPackageAction,
     onSuccess?: () => void,
-    onError?: () => void,
+    onError?: (error?: ActionError) => void,
   ) => void | Promise<void>;
   onRemoveAccessPackage?: (
     action: ClientAccessPackageAction,
     onSuccess?: () => void,
-    onError?: () => void,
+    onError?: (error?: ActionError) => void,
   ) => void | Promise<void>;
   onAddResource?: (
     action: ClientResourceAction,
@@ -92,6 +96,7 @@ type ClientAccessListProps = {
     onSuccess?: () => void,
     onError?: (error?: ActionError) => void,
   ) => void | Promise<void>;
+  renderClientActions?: (client: Client, restoreFocusFallbackId?: string) => React.ReactNode;
   requireDelegableForActions?: boolean;
   emptyAccessText?: string;
   emptyText?: string;
@@ -102,14 +107,21 @@ type ClientAccessListProps = {
   restoreFocusFallbackId?: string;
 };
 
-const getUserListItemType = (clientType: PartyType): UserListItemProps['type'] => {
-  return clientType === PartyType.Organization ? 'company' : 'person';
-};
-
 const sortClientsByKey = (clients: Client[], parentNameById: Map<string, string>): Client[] =>
   [...clients].sort((a, b) =>
     buildClientSortKey(a, parentNameById).localeCompare(buildClientSortKey(b, parentNameById)),
   );
+
+export const countClientSearchHits = (clients: Client[], searchString?: string) =>
+  clients.filter((client) =>
+    matchesUserListSearch(
+      {
+        name: formatEntityDisplayName(client.client),
+        organizationIdentifier: client.client.organizationIdentifier ?? undefined,
+      },
+      searchString,
+    ),
+  ).length;
 
 export const ClientAccessList = ({
   clients,
@@ -121,6 +133,7 @@ export const ClientAccessList = ({
   onRemoveAccessPackage,
   onAddResource,
   onRemoveResource,
+  renderClientActions,
   requireDelegableForActions = true,
   emptyAccessText,
   emptyText,
@@ -158,7 +171,7 @@ export const ClientAccessList = ({
   const userListItems: UserListItemData[] = sortedClients.map((client) => {
     const clientId = client.client.id;
     const isSubUnit = isSubUnitByType(client.client.unitType);
-    const userType = getUserListItemType(client.client.type);
+    const userType = getAvatarType(client.client);
 
     const nodes = client.access.reduce((acc, access) => {
       if (access.packages.length === 0) return acc;
@@ -184,7 +197,7 @@ export const ClientAccessList = ({
           requestPackageFocus(clientActionControlId(itemId), restoreFocusFallbackId);
 
         const onDelegate = onAddAccessPackage
-          ? (onSuccess?: () => void, onError?: () => void) =>
+          ? (onSuccess?: () => void, onError?: (error?: ActionError) => void) =>
               onAddAccessPackage(
                 {
                   clientId,
@@ -197,7 +210,7 @@ export const ClientAccessList = ({
               )
           : undefined;
         const onRevoke = onRemoveAccessPackage
-          ? (onSuccess?: () => void, onError?: () => void) =>
+          ? (onSuccess?: () => void, onError?: (error?: ActionError) => void) =>
               onRemoveAccessPackage(
                 {
                   clientId,
@@ -319,7 +332,7 @@ export const ClientAccessList = ({
 
     return {
       id: clientId,
-      name: client.client.name,
+      name: formatEntityDisplayName(client.client),
       organizationIdentifier: client.client.organizationIdentifier ?? undefined,
       type: userType,
       subUnit: isSubUnit,
@@ -329,11 +342,14 @@ export const ClientAccessList = ({
       as: 'button',
       titleAs: 'div',
       children: (
-        <ClientAccessSections
-          packageItems={nodes}
-          resourceItems={resourceNodes}
-          emptyText={emptyAccessText}
-        />
+        <>
+          {renderClientActions?.(client, restoreFocusFallbackId)}
+          <ClientAccessSections
+            packageItems={nodes}
+            resourceItems={resourceNodes}
+            emptyText={emptyAccessText}
+          />
+        </>
       ),
       description:
         userType === 'company'

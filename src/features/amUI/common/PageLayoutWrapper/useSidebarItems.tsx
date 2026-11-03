@@ -4,12 +4,14 @@ import { useTranslation } from 'react-i18next';
 
 import { getCookie } from '@/resources/Cookie/CookieMethods';
 import {
+  hasActivityLogPermission,
   hasConsentPermission,
   hasCreateSystemUserPermission,
   hasReporteeListAdminAccess,
   hasSystemUserClientAdminPermission,
 } from '@/resources/utils/permissionUtils';
 import {
+  getActivityLogMenuItem,
   getConsentMenuItem,
   getHeadingMenuItem,
   getClientAdministrationMenuItem,
@@ -139,6 +141,10 @@ export const useSidebarItems = ({ isSmall }: { isSmall?: boolean }) => {
 
   if (isMaskinportenAdmin) {
     items.push(getMaskinportenMenuItem(pathname, isLoading, isSmall));
+  }
+
+  if (hasActivityLogPermission(isAdmin, isMaskinportenAdmin)) {
+    items.push(getActivityLogMenuItem(pathname, isLoading, isSmall));
   }
 
   if (showBankruptcyEstateAdministration && isBankruptcyEstateAdmin) {

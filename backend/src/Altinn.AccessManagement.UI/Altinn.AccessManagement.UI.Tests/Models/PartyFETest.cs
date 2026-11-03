@@ -89,49 +89,26 @@ namespace Altinn.AccessManagement.UI.Tests.Models
         }
 
         /// <summary>
-        /// Compact entities map like entities
-        /// </summary>
-        [Fact]
-        public void FromCompactEntity_MapsFields()
-        {
-            var entity = new CompactEntity
-            {
-                Id = Guid.NewGuid(),
-                PartyId = 1,
-                Name = "SYSTEMBRUKER",
-                Type = "Systembruker",
-                Variant = "StandardSystem",
-                Children = new List<CompactEntity> { new CompactEntity { Name = "child", Type = "Organisasjon", Variant = "BEDR" } },
-            };
-
-            PartyFE actual = PartyFE.FromCompactEntity(entity);
-
-            Assert.Equal(PartyTypeFE.SystemUser, actual.Type);
-            Assert.Null(actual.UnitType);
-            Assert.Equal("BEDR", Assert.Single(actual.Children).UnitType);
-        }
-
-        /// <summary>
         /// A subunit keeps its main unit as parent
         /// </summary>
         [Fact]
-        public void FromCompactEntity_MapsParent()
+        public void FromEntity_MapsParent()
         {
             var parentId = Guid.NewGuid();
-            var entity = new CompactEntity
+            var entity = new Entity
             {
                 Name = "SUBUNIT",
                 Type = "Organisasjon",
                 Variant = "BEDR",
-                Parent = new CompactEntity { Id = parentId, Name = "MAIN UNIT", Type = "Organisasjon", Variant = "AS" },
+                Parent = new Entity { Id = parentId, Name = "MAIN UNIT", Type = "Organisasjon", Variant = "AS" },
             };
 
-            PartyFE actual = PartyFE.FromCompactEntity(entity);
+            PartyFE actual = PartyFE.FromEntity(entity);
 
             Assert.Equal(parentId, actual.Parent.Id);
             Assert.Equal("MAIN UNIT", actual.Parent.Name);
             Assert.Equal("AS", actual.Parent.UnitType);
-            Assert.Null(PartyFE.FromCompactEntity(new CompactEntity { Name = "NO PARENT" }).Parent);
+            Assert.Null(PartyFE.FromEntity(new Entity { Name = "NO PARENT" }).Parent);
         }
 
         /// <summary>

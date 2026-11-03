@@ -24,6 +24,11 @@ namespace Altinn.AccessManagement.UI.Core.Configuration
         public const string ShowIdPortenAuthorizations = "AccessManagementUI.ShowIdPortenAuthorizations";
 
         /// <summary>
+        /// Whether or not to show the planned maintenance service announcement on the settings page
+        /// </summary>
+        public const string ShowSettingsPageServiceAnnouncement = "AccessManagementUI.ShowSettingsPageServiceAnnouncement";
+
+        /// <summary>
         /// Whether or not to enable bankruptcy estate administration features
         /// </summary>
         public const string EnableBankruptcyEstateAdministration = "AccessManagementUI.EnableBankruptcyEstateAdministration";

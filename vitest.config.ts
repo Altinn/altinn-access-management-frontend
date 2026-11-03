@@ -8,8 +8,8 @@ export default defineConfig({
   plugins: [react(), svgr()],
   resolve: {
     alias: [
-      { find: '@', replacement: path.resolve(__dirname, 'src') },
-      { find: '@mock', replacement: path.resolve(__dirname, '.mock') },
+      { find: '@', replacement: path.resolve(import.meta.dirname, 'src') },
+      { find: '@mock', replacement: path.resolve(import.meta.dirname, '.mock') },
     ],
   },
   test: {

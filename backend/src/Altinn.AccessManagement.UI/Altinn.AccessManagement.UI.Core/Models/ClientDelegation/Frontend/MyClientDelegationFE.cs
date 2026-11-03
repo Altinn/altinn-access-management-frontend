@@ -29,7 +29,7 @@ namespace Altinn.AccessManagement.UI.Core.Models.ClientDelegation.Frontend
 
             return new MyClientDelegationFE
             {
-                Provider = PartyFE.FromCompactEntity(delegation.Provider),
+                Provider = PartyFE.FromEntity(delegation.Provider),
                 Clients = delegation.Clients?.Select(ClientDelegationFE.FromClientDelegation).ToList() ?? new(),
             };
         }

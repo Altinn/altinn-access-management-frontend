@@ -1,10 +1,11 @@
-import React, { useId, useMemo, useState } from 'react';
+import React, { useCallback, useId, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { DsAlert, DsParagraph, DsSkeleton, Switch } from '@altinn/altinn-components';
 import { useParams } from 'react-router';
 import { skipToken } from '@reduxjs/toolkit/query';
 
 import { formatEntityDisplayName } from '@/resources/utils/reporteeUtils';
+import type { Client } from '@/rtk/features/clientApi';
 import {
   useAddAgentAccessPackagesMutation,
   useAddAgentResourcesMutation,
@@ -28,12 +29,16 @@ import { UserPageHeader } from '../common/UserPageHeader/UserPageHeader';
 import { UserPageHeaderSkeleton } from '../common/UserPageHeader/UserPageHeaderSkeleton';
 import { ClientAdminSearchField } from '../common/ClientAdminSearchField/ClientAdminSearchField';
 import { CollapsibleContainer } from '../common/CollapsibleContainer/CollapsibleContainer';
+import { SearchHitsStatus } from '../common/SearchHitsStatus/SearchHitsStatus';
 import { filterDeletedParties } from '../common/deletedPartyUtils';
 import {
   RestoreFocusFallback,
   RestoreFocusProvider,
   useRestoreFocus,
 } from '../common/RestoreFocus';
+import { ClientBulkActions } from '../common/ClientBulkDelegation/ClientBulkActions';
+import { useClientBulkDelegation } from '../common/ClientBulkDelegation/useClientBulkDelegation';
+import { indexHeldAccess } from '../common/ClientBulkDelegation/getClientBulkItems';
 
 import { AgentDetailsDeleteModal } from './AgentDetailsDeleteModal';
 import { useAgentDetailsAccessClientLists } from './useAgentDetailsAccessClientLists';
@@ -48,11 +53,13 @@ export const AgentDetails = () => {
   const {
     data: agentAccessPackages,
     isLoading: isLoadingAgentAccessPackages,
+    isFetching: isFetchingAgentAccessPackages,
     error: agentAccessPackagesError,
   } = useGetAgentAccessPackagesQuery(id ? { to: id } : skipToken);
   const {
     data: agentResources,
     isLoading: isLoadingAgentResources,
+    isFetching: isFetchingAgentResources,
     error: agentResourcesError,
   } = useGetAgentResourcesQuery(id ? { to: id } : skipToken);
   const { data: clients, isLoading: isLoadingClients, error: clientsError } = useGetClientsQuery();
@@ -69,13 +76,14 @@ export const AgentDetails = () => {
   const [addAgentResources, { isLoading: isAddingAgentResources }] = useAddAgentResourcesMutation();
   const [removeAgentResources, { isLoading: isRemovingAgentResources }] =
     useRemoveAgentResourcesMutation();
-
-  const { clientsWithAgentAccess, clientsWithoutAgentAccess } = useAgentDetailsAccessClientLists({
-    agentAccessPackages,
-    agentResources,
-    clients: visibleClients,
-  });
   const [searchString, setSearchString] = useState<string>('');
+  const { clientsWithAgentAccess, clientsWithoutAgentAccess, searchHits } =
+    useAgentDetailsAccessClientLists({
+      agentAccessPackages,
+      agentResources,
+      clients: visibleClients,
+      searchString,
+    });
   const [expandedIds, setExpandedIds] = useState<string[]>([]);
   const toggleExpanded = (id: string) =>
     setExpandedIds((prev) => (prev.includes(id) ? prev.filter((x) => x !== id) : [...prev, id]));
@@ -87,10 +95,58 @@ export const AgentDetails = () => {
   const userName = formatEntityDisplayName(toParty);
   const toPartyUuid = toParty?.id;
   const actingPartyUuid = actingParty?.id;
+  const accessStateClients = agentAccessPackages ?? [];
+  const resourceAccessClients = agentResources ?? [];
+  const actionsDisabled =
+    isAddingAgentAccessPackages ||
+    isRemovingAgentAccessPackages ||
+    isAddingAgentResources ||
+    isRemovingAgentResources ||
+    isFetchingAgentAccessPackages ||
+    isFetchingAgentResources ||
+    !toPartyUuid ||
+    !actingPartyUuid;
   const assignedSectionId = useId();
   const unassignedSectionId = useId();
   // One zone for both sections, so a client that moves between them is still found by its id.
   const restoreFocus = useRestoreFocus();
+  const heldPackages = useMemo(
+    () => indexHeldAccess(agentAccessPackages ?? [], (held) => held.client.id),
+    [agentAccessPackages],
+  );
+  const heldResources = useMemo(
+    () => indexHeldAccess(agentResources ?? [], (held) => held.client.id),
+    [agentResources],
+  );
+  const bulk = useClientBulkDelegation({
+    actingPartyUuid,
+    heldPackages,
+    heldResources,
+    disabled: actionsDisabled,
+    addAgentAccessPackages,
+    removeAgentAccessPackages,
+    addAgentResources,
+    removeAgentResources,
+  });
+  const renderClientActions = useCallback(
+    (client: Client, restoreFocusFallbackId?: string) => {
+      const clientId = client.client.id;
+      const items = bulk.getItems(client.access, clientId);
+      if (items.missing.length === 0 && items.held.length === 0) return null;
+      return (
+        <ClientBulkActions
+          rowKey={clientId}
+          rowKind='client'
+          restoreFocusFallbackId={restoreFocusFallbackId}
+          target={{ clientId, agentId: toPartyUuid }}
+          names={{ clientName: formatEntityDisplayName(client.client), agentName: userName }}
+          items={items}
+          bulk={bulk}
+        />
+      );
+    },
+    [bulk, toPartyUuid, userName],
+  );
 
   if (isClientAdmin === false) {
     return (
@@ -179,6 +235,10 @@ export const AgentDetails = () => {
                     />
                   }
                 />
+                <SearchHitsStatus
+                  hits={searchHits}
+                  searchString={searchString}
+                />
                 <div className={classes.clientSections}>
                   <section aria-labelledby={assignedSectionId}>
                     <CollapsibleContainer
@@ -189,14 +249,10 @@ export const AgentDetails = () => {
                     >
                       <AgentDetailsClientsList
                         clients={clientsWithAgentAccess}
-                        agentAccessPackages={agentAccessPackages ?? []}
-                        agentResources={agentResources ?? []}
-                        isLoading={
-                          isAddingAgentAccessPackages ||
-                          isRemovingAgentAccessPackages ||
-                          isAddingAgentResources ||
-                          isRemovingAgentResources
-                        }
+                        agentAccessPackages={accessStateClients}
+                        agentResources={resourceAccessClients}
+                        isLoading={bulk.disabled || bulk.hasActiveRun}
+                        renderClientActions={renderClientActions}
                         toPartyUuid={toPartyUuid}
                         actingPartyUuid={actingPartyUuid}
                         addAgentAccessPackages={addAgentAccessPackages}
@@ -219,16 +275,12 @@ export const AgentDetails = () => {
                     >
                       <AgentDetailsClientsList
                         clients={clientsWithoutAgentAccess}
-                        agentAccessPackages={agentAccessPackages ?? []}
-                        agentResources={agentResources ?? []}
+                        agentAccessPackages={accessStateClients}
+                        agentResources={resourceAccessClients}
                         toPartyUuid={toPartyUuid}
                         actingPartyUuid={actingPartyUuid}
-                        isLoading={
-                          isAddingAgentAccessPackages ||
-                          isRemovingAgentAccessPackages ||
-                          isAddingAgentResources ||
-                          isRemovingAgentResources
-                        }
+                        isLoading={bulk.disabled || bulk.hasActiveRun}
+                        renderClientActions={renderClientActions}
                         addAgentAccessPackages={addAgentAccessPackages}
                         removeAgentAccessPackages={removeAgentAccessPackages}
                         addAgentResources={addAgentResources}

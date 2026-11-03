@@ -55,6 +55,7 @@ test.describe('Godkjenn og avvis Systembrukerforespørsel', () => {
     login,
     systemUserConfirmPage,
     api,
+    runAccessibilityTest,
   }): Promise<void> => {
     await test.step('Navigate to confirmation page and login', async () => {
       await page.goto(response.confirmUrl);
@@ -62,6 +63,8 @@ test.describe('Godkjenn og avvis Systembrukerforespørsel', () => {
     });
 
     await test.step('Approve system user request', async () => {
+      await expect(systemUserConfirmPage.approveButton).toBeVisible();
+      await runAccessibilityTest.scan('systembruker-forespørsel');
       await systemUserConfirmPage.approve();
     });
 

@@ -12,9 +12,11 @@ import cn from 'classnames';
 import { QuestionmarkCircleIcon } from '@navikt/aksel-icons';
 
 import { useRestoreFocusTarget } from '@/features/amUI/common/RestoreFocus';
+import { useDebouncedValue } from '@/resources/hooks';
 import { useProviderLogoUrl } from '@/resources/hooks/useProviderLogoUrl';
 
 import { ResourceFilterToolbar } from '../ResourceFilterToolbar/ResourceFilterToolbar';
+import { SearchHitsStatus } from '../SearchHitsStatus/SearchHitsStatus';
 
 import { ResourceDetails } from './ResourceDetails';
 import classes from './ResourceList.module.css';
@@ -72,6 +74,8 @@ export interface ResourceListProps<
   renderControls?: (resource: TResource) => React.ReactNode;
   getBadge?: (resource: TResource, index: number) => ResourceListItemProps['badge'];
   getDescriptionText?: (resource: TResource, index: number) => string | undefined;
+  /** Text matched by the search field besides name and owner. Defaults to the description. */
+  getSearchableText?: (resource: TResource) => string;
   getHasAccess?: (resource: TResource) => boolean;
   getActionControlId?: (resource: TResource) => string;
   delegationModal?: React.ReactNode;
@@ -87,6 +91,7 @@ export const ResourceList = <
   isLoading,
   noResourcesText,
   enableSearch = true,
+  searchPlaceholder,
   onSelect,
   getItemAs,
   showDetails,
@@ -98,6 +103,7 @@ export const ResourceList = <
   renderControls,
   getBadge,
   getDescriptionText,
+  getSearchableText = extractDescription,
   getHasAccess,
   getActionControlId,
   delegationModal,
@@ -107,6 +113,7 @@ export const ResourceList = <
 }: ResourceListProps<TResource>) => {
   const { t } = useTranslation();
   const [search, setSearch] = React.useState('');
+  const debouncedSearch = useDebouncedValue(search, search ? 300 : 0);
   const [filterState, setFilterState] = React.useState<string[]>([]);
   const [includeExpired, setIncludeExpired] = React.useState<boolean>(false);
   const [selected, setSelected] = React.useState<TResource | null>(null);
@@ -147,12 +154,12 @@ export const ResourceList = <
   const { resources: filteredResources } = useFilteredResources<TResource>({
     resources,
     serviceOwnerFilter: filterState,
-    searchString: enableSearch ? search : '',
+    searchString: enableSearch ? debouncedSearch : '',
     includeExpiredResources: enableSearch ? includeExpired : true,
     getResourceName: extractResourceName,
     getOwnerName: extractOwnerName,
     getOwnerOrgCode: extractOrgCode,
-    getDescription: extractDescription,
+    getDescription: getSearchableText,
     isExpiredResource: isExpiredResource,
   });
 
@@ -185,6 +192,7 @@ export const ResourceList = <
             filterState={filterState}
             setFilterState={setFilterState}
             serviceOwnerOptions={serviceOwnerOptions}
+            searchPlaceholder={searchPlaceholder}
           />
           {hasExpiredResources && (
             <div className={classes.expiredSwitch}>
@@ -212,18 +220,25 @@ export const ResourceList = <
           <div className={classes.delegationModalButton}>{delegationModal}</div>
         </div>
       )}
+      {enableSearch && (
+        <SearchHitsStatus
+          hits={debouncedSearch.trim() ? filteredResources.length : undefined}
+          searchString={debouncedSearch}
+          className={classes.searchHits}
+        />
+      )}
       {isSkeletonVisible ? (
         <SkeletonResourceList size={size} />
       ) : (
         <>
-          {resources.length === 0 && !search && (
+          {resources.length === 0 && !debouncedSearch && (
             <DsParagraph data-size='md'>
               {noResourcesText ?? t('resource_list.no_resources')}
             </DsParagraph>
           )}
-          {enableSearch && search.length > 0 && filteredResources.length === 0 && (
+          {enableSearch && debouncedSearch.length > 0 && filteredResources.length === 0 && (
             <DsParagraph data-size='md'>
-              {t('resource_list.no_resources_filtered', { searchTerm: search })}
+              {t('resource_list.no_resources_filtered', { searchTerm: debouncedSearch })}
             </DsParagraph>
           )}
           <div

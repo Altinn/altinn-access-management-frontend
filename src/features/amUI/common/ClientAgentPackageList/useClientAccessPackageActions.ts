@@ -1,11 +1,15 @@
 import { useCallback } from 'react';
-import { useSnackbar } from '@altinn/altinn-components';
-import { useTranslation } from 'react-i18next';
 
+import type { ActionError } from '@/resources/hooks/useActionError';
 import type {
   AddAgentAccessPackagesFn,
   RemoveAgentAccessPackagesFn,
 } from '@/rtk/features/clientApi';
+
+import {
+  useClientSingleAccessAction,
+  type ClientSingleAccessMode,
+} from '../ClientBulkDelegation/useClientSingleAccessAction';
 
 type UseClientAccessPackageActionsParams = {
   fromPartyUuid?: string;
@@ -20,109 +24,78 @@ export const useClientAccessPackageActions = ({
   addAgentAccessPackages,
   removeAgentAccessPackages,
 }: UseClientAccessPackageActionsParams) => {
-  const { t } = useTranslation();
-  const { openSnackbar } = useSnackbar();
+  const runSingle = useClientSingleAccessAction({
+    actingPartyUuid,
+    addAgentAccessPackages,
+    removeAgentAccessPackages,
+  });
 
-  const addClientAccessPackage = useCallback(
-    async (
+  const runPackage = useCallback(
+    (
+      mode: ClientSingleAccessMode,
       agentId: string,
       roleCode: string,
       packageId: string,
       agentName: string,
       accessPackageName: string,
       onSuccess?: () => void,
-      onError?: () => void,
-    ) => {
-      if (!fromPartyUuid || !actingPartyUuid) {
-        onError?.();
-        return;
-      }
+      onError?: (error?: ActionError) => void,
+    ) =>
+      runSingle(
+        mode,
+        { clientId: fromPartyUuid, agentId },
+        { kind: 'package', roleCode, id: packageId },
+        { agentName, accessName: accessPackageName },
+        onSuccess,
+        onError,
+      ),
+    [fromPartyUuid, runSingle],
+  );
 
-      try {
-        await addAgentAccessPackages({
-          from: fromPartyUuid,
-          to: agentId,
-          party: actingPartyUuid,
-          payload: {
-            values: [
-              {
-                role: roleCode,
-                packages: [packageId],
-              },
-            ],
-          },
-        }).unwrap();
-        openSnackbar({
-          message: t('client_administration_page.delegate_success_snackbar', {
-            name: agentName,
-            accessName: accessPackageName,
-          }),
-          color: 'success',
-        });
-        onSuccess?.();
-      } catch {
-        openSnackbar({
-          message: t('client_administration_page.delegate_error', {
-            name: agentName,
-            accessName: accessPackageName,
-          }),
-          color: 'danger',
-        });
-        onError?.();
-      }
-    },
-    [actingPartyUuid, addAgentAccessPackages, fromPartyUuid, openSnackbar, t],
+  const addClientAccessPackage = useCallback(
+    (
+      agentId: string,
+      roleCode: string,
+      packageId: string,
+      agentName: string,
+      accessPackageName: string,
+      onSuccess?: () => void,
+      onError?: (error?: ActionError) => void,
+    ) =>
+      runPackage(
+        'delegate',
+        agentId,
+        roleCode,
+        packageId,
+        agentName,
+        accessPackageName,
+        onSuccess,
+        onError,
+      ),
+    [runPackage],
   );
 
   const removeClientAccessPackage = useCallback(
-    async (
+    (
       agentId: string,
       roleCode: string,
       packageId: string,
       agentName: string,
       accessPackageName: string,
       onSuccess?: () => void,
-      onError?: () => void,
-    ) => {
-      if (!fromPartyUuid || !actingPartyUuid) {
-        onError?.();
-        return;
-      }
-
-      try {
-        await removeAgentAccessPackages({
-          from: fromPartyUuid,
-          to: agentId,
-          party: actingPartyUuid,
-          payload: {
-            values: [
-              {
-                role: roleCode,
-                packages: [packageId],
-              },
-            ],
-          },
-        }).unwrap();
-        openSnackbar({
-          message: t('client_administration_page.remove_success_snackbar', {
-            name: agentName,
-            accessName: accessPackageName,
-          }),
-          color: 'success',
-        });
-        onSuccess?.();
-      } catch {
-        openSnackbar({
-          message: t('client_administration_page.remove_error', {
-            name: agentName,
-            accessName: accessPackageName,
-          }),
-          color: 'danger',
-        });
-        onError?.();
-      }
-    },
-    [actingPartyUuid, fromPartyUuid, openSnackbar, removeAgentAccessPackages, t],
+      onError?: (error?: ActionError) => void,
+    ) =>
+      runPackage(
+        'remove',
+        agentId,
+        roleCode,
+        packageId,
+        agentName,
+        accessPackageName,
+        onSuccess,
+        onError,
+      ),
+    [runPackage],
   );
 
   return { addClientAccessPackage, removeClientAccessPackage };

@@ -19,12 +19,14 @@ import {
   useGetReporteeQuery,
 } from '@/rtk/features/userInfoApi';
 import {
+  hasActivityLogPermission,
   hasConsentPermission,
   hasReporteeListAdminAccess,
   hasSystemUserClientAdminPermission,
   hasCreateSystemUserPermission,
 } from '@/resources/utils/permissionUtils';
 import {
+  getActivityLogMenuItem,
   getConsentMenuItem,
   getMaskinportenMenuItem,
   getPoaOverviewMenuItem,
@@ -46,6 +48,7 @@ import {
   isOrganization,
   isSubUnit,
   formatEntityDisplayName,
+  getAvatarType,
   isPerson,
 } from '@/resources/utils/reporteeUtils';
 import { useSidebarRequestCount } from '@/resources/hooks/useSidebarRequestCount';
@@ -191,6 +194,12 @@ export const LandingPage = () => {
         description: t('landing_page.maskinporten_item_description'),
       });
     }
+    if (hasActivityLogPermission(isAdmin, isMaskinportenAdmin)) {
+      items.push({
+        ...getActivityLogMenuItem(),
+        description: t('landing_page.activity_log_item_description', { reportee: reporteeName }),
+      });
+    }
     if (showBankruptcyEstateAdministration && isBankruptcyEstateAdmin) {
       items.push({
         ...getBankruptcyEstateAdministrationMenuItem(),
@@ -278,7 +287,7 @@ export const LandingPage = () => {
           <div className={classes.landingPageHeading}>
             <UserListItem
               id={reportee?.id ?? ''}
-              type={isOrganization(reportee) ? 'company' : 'person'}
+              type={getAvatarType(reportee)}
               name={reporteeName}
               description={getReporteeDescription()}
               subUnit={isReporteeSubUnit}

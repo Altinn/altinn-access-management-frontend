@@ -16,10 +16,12 @@ import {
 } from '@/features/amUI/common/RestoreFocus';
 import { useCanGiveAccess } from '@/resources/hooks/useCanGiveAccess';
 import { useIsTabletOrSmaller } from '@/resources/utils/screensizeUtils';
+import { useCanRequestAccess } from '@/resources/hooks/useCanRequestAccess';
 
-import { DelegationModal, DelegationType } from '../../common/DelegationModal/DelegationModal';
+import { SingleRightsDelegationModal } from '../../common/DelegationModal/SingleRights/SingleRightsDelegationModal';
 import { usePartyRepresentation } from '../../common/PartyRepresentationContext/PartyRepresentationContext';
 import { DelegationAction, EditModal } from '../../common/DelegationModal/EditModal';
+import { getAvailableActions } from '../../common/DelegationModal/delegationActionUtils';
 import { getInheritedStatus } from '../../common/useInheritedStatus';
 import { HelpText } from '../../common/HelpText/HelpText';
 import { useCanRedelegateResource, useRevokeConfirmation } from '../../common/RevokeConfirmation';
@@ -36,8 +38,7 @@ const SingleRightsSectionContent = ({ isReportee }: { isReportee: boolean }) => 
   const { toParty, fromParty, actingParty, isLoading: isPartyLoading } = usePartyRepresentation();
 
   const canGiveAccess = useCanGiveAccess(id ?? '', isReportee);
-  const canRequestAccess =
-    !canGiveAccess && actingParty?.id === toParty?.id && toParty?.id !== fromParty?.id;
+  const canRequestAccess = useCanRequestAccess(isReportee) && !canGiveAccess;
 
   const {
     data: delegatedResources,
@@ -97,11 +98,7 @@ const SingleRightsSectionContent = ({ isReportee }: { isReportee: boolean }) => 
     return <SingleRightsSectionSkeleton />;
   }
 
-  const availableActions = [
-    DelegationAction.REVOKE,
-    ...(canGiveAccess ? [DelegationAction.DELEGATE] : []),
-    ...(canRequestAccess ? [DelegationAction.REQUEST] : []),
-  ];
+  const availableActions = getAvailableActions({ canGiveAccess, canRequestAccess });
 
   return (
     toParty && (
@@ -137,14 +134,12 @@ const SingleRightsSectionContent = ({ isReportee }: { isReportee: boolean }) => 
               delegationModal={
                 (availableActions.includes(DelegationAction.DELEGATE) ||
                   availableActions.includes(DelegationAction.REQUEST)) && (
-                  <DelegationModal
-                    delegationType={DelegationType.SingleRights}
-                    availableActions={availableActions}
-                  />
+                  <SingleRightsDelegationModal availableActions={availableActions} />
                 )
               }
               renderControls={(resource) => {
-                if (isSmallScreen) return null;
+                if (isSmallScreen || !availableActions.includes(DelegationAction.REVOKE))
+                  return null;
                 const isInherited = isResourceInherited(resource.identifier);
                 return (
                   <DeleteResourceButton

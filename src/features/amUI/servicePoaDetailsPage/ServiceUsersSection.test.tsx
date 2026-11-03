@@ -24,7 +24,7 @@ let userSearchProps: UserSearchProps;
 
 // Pulled in transitively by the DelegationAction import chain (EditModal -> ResourceInfo ->
 // LoadingAnimation). lottie-web needs a canvas, which jsdom does not implement.
-vi.mock('lottie-react', () => ({ default: () => null }));
+vi.mock('lottie-react', () => ({ Lottie: () => null }));
 
 vi.mock('../common/UserSearch/UserSearch', () => ({
   default: (props: UserSearchProps) => {

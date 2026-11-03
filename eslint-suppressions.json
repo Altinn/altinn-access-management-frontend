@@ -9,11 +9,6 @@
       "count": 1
     }
   },
-  ".storybook/main.ts": {
-    "@typescript-eslint/no-explicit-any": {
-      "count": 1
-    }
-  },
   ".storybook/preview.tsx": {
     "react-hooks/rules-of-hooks": {
       "count": 1
@@ -136,14 +131,6 @@
   },
   "playwright/util/testDelegationdatautil.ts": {
     "@typescript-eslint/no-unsafe-argument": {
-      "count": 1
-    }
-  },
-  "playwright/uuTests/accessibilityHelpers/delegeringHelper.ts": {
-    "@typescript-eslint/no-explicit-any": {
-      "count": 1
-    },
-    "@typescript-eslint/restrict-template-expressions": {
       "count": 1
     }
   },

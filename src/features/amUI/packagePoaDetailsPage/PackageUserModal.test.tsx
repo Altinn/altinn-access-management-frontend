@@ -13,7 +13,7 @@ import { PackageUserModal, type PackageUserModalHandle } from './PackageUserModa
 const onDelegate = vi.fn();
 const onRevoke = vi.fn();
 
-vi.mock('lottie-react', () => ({ default: () => null }));
+vi.mock('lottie-react', () => ({ Lottie: () => null }));
 
 vi.mock('react-i18next', () => ({
   useTranslation: () => ({

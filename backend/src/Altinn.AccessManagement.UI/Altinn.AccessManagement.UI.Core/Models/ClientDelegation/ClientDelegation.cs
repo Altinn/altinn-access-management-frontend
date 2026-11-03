@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using Altinn.AccessManagement.UI.Core.Models.AccessPackage;
 using Altinn.AccessManagement.UI.Core.Models.Common;
 using Altinn.AccessManagement.UI.Core.Models.ResourceRegistry.Frontend;
+using Altinn.AccessManagement.UI.Core.Models.User;
 
 namespace Altinn.AccessManagement.UI.Core.Models.ClientDelegation
 {
@@ -14,7 +15,7 @@ namespace Altinn.AccessManagement.UI.Core.Models.ClientDelegation
         /// <summary>
         /// Gets or sets the client entity.
         /// </summary>
-        public CompactEntity Client { get; set; } = new();
+        public Entity Client { get; set; } = new();
 
         /// <summary>
         /// Gets or sets a collection of access information for the client.

@@ -1,12 +1,13 @@
 import React, { useMemo, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { type AccessPackageListItemProps, type UserListItemProps } from '@altinn/altinn-components';
+import { type AccessPackageListItemProps } from '@altinn/altinn-components';
 
 import { useIsMobileOrSmaller } from '@/resources/utils/screensizeUtils';
 import {
   getFormattedDateOfBirthLabel,
   isSubUnitByType,
   formatEntityDisplayName,
+  getAvatarType,
 } from '@/resources/utils/reporteeUtils';
 import { useAccessPackageLookup } from '@/resources/hooks/useAccessPackageLookup';
 import type { ActionError } from '@/resources/hooks/useActionError';
@@ -19,11 +20,14 @@ import type {
   RemoveAgentAccessPackagesFn,
   RemoveAgentResourcesFn,
 } from '@/rtk/features/clientApi';
-import { PartyType } from '@/dataObjects/dtos/Party';
 
 import { useRoleMetadata } from '../UserRoles/useRoleMetadata';
 import { isNewUser } from '../isNewUser';
-import { UserListItems, type UserListItemData } from '../UserListItems/UserListItems';
+import {
+  UserListItems,
+  matchesUserListSearch,
+  type UserListItemData,
+} from '../UserListItems/UserListItems';
 import {
   ClientPackageInfoModal,
   type ClientPackageModalData,
@@ -57,6 +61,12 @@ type ClientAgentPackageListProps = {
   removeAgentAccessPackages: RemoveAgentAccessPackagesFn;
   addAgentResources?: AddAgentResourcesFn;
   removeAgentResources?: RemoveAgentResourcesFn;
+  // rowKey is unique per list, see listKey.
+  renderAgentActions?: (
+    agent: Agent,
+    rowKey: string,
+    restoreFocusFallbackId?: string,
+  ) => React.ReactNode;
   emptyText?: string;
   searchString?: string;
   expandedIds?: string[];
@@ -84,12 +94,13 @@ type SelectedAgentResource = {
   ) => void | Promise<void>;
 };
 
-const getUserListItemType = (agentType: PartyType): UserListItemProps['type'] => {
-  return agentType === PartyType.Person ? 'person' : 'company';
-};
-
 const getAgentSortKey = (agent: Agent): string =>
   `${isNewUser(agent.agentAddedAt) ? '0' : '1'}:${agent.agent.name.toLowerCase()}`;
+
+export const countAgentSearchHits = (agents: Agent[], searchString?: string) =>
+  agents.filter((agent) =>
+    matchesUserListSearch({ name: formatEntityDisplayName(agent.agent) }, searchString),
+  ).length;
 
 export const ClientAgentPackageList = ({
   agents,
@@ -103,6 +114,7 @@ export const ClientAgentPackageList = ({
   removeAgentAccessPackages,
   addAgentResources,
   removeAgentResources,
+  renderAgentActions,
   emptyText,
   searchString,
   expandedIds,
@@ -187,7 +199,7 @@ export const ClientAgentPackageList = ({
     const idPrefix = listKey ? `${listKey}:${agentId}` : agentId;
     const isRecentlyAdded = isNewUser(agent.agentAddedAt);
     const isSubUnit = isSubUnitByType(agent.agent.unitType);
-    const userType = getUserListItemType(agent.agent.type);
+    const userType = getAvatarType(agent.agent);
     const agentName = formatEntityDisplayName(agent.agent);
     const nodes = clientAccess.reduce((acc, access) => {
       if (access.packages.length === 0) return acc;
@@ -323,7 +335,7 @@ export const ClientAgentPackageList = ({
 
     return {
       id: agentId,
-      name: agent.agent.name,
+      name: agentName,
       type: userType,
       subUnit: isSubUnit,
       deleted: agent.agent.isDeleted ?? undefined,
@@ -332,10 +344,13 @@ export const ClientAgentPackageList = ({
       titleAs: 'h2',
       as: 'button',
       children: (
-        <ClientAccessSections
-          packageItems={nodes}
-          resourceItems={resourceNodes}
-        />
+        <>
+          {renderAgentActions?.(agent, idPrefix, restoreFocusFallbackId)}
+          <ClientAccessSections
+            packageItems={nodes}
+            resourceItems={resourceNodes}
+          />
+        </>
       ),
       description:
         userType === 'company'

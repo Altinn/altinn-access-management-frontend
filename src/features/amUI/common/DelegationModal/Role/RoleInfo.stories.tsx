@@ -8,6 +8,7 @@ import { PartyType, type PartyEntity } from '@/dataObjects/dtos/Party';
 
 import { InheritedStatusType } from '../../useInheritedStatus';
 import { PartyRepresentationContext } from '../../PartyRepresentationContext/PartyRepresentationContext';
+import { DelegationModalProvider } from '../DelegationModalContext';
 
 import { RoleInfo } from './RoleInfo';
 
@@ -98,7 +99,9 @@ const meta: Meta<RoleInfoStoryProps> = {
               isError: false,
             }}
           >
-            <RoleInfo role={role} />
+            <DelegationModalProvider>
+              <RoleInfo role={role} />
+            </DelegationModalProvider>
           </PartyRepresentationContext.Provider>
         </RootProvider>
       </Provider>

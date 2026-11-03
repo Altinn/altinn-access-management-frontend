@@ -91,7 +91,8 @@ namespace Altinn.AccessManagement.UI.Core.Services
                         contactPoints: resource.ContactPoints,
                         spatial: resource.Spatial,
                         authorizationReference: resource.AuthorizationReference,
-                        resourceOwnerLogoUrl: org?.Logo);
+                        resourceOwnerLogoUrl: org?.Logo,
+                        keywords: resource.Keywords?.FindAll(kw => kw.Language == languageCode).Select(kw => kw.Word).ToList());
 
                     delegationsFE.Add(new ResourceDelegation(resourceFE, PermissionFE.FromPermissions(resourcePermission.Permissions)));
                 }
