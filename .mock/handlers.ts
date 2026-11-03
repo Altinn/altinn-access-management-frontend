@@ -9,7 +9,7 @@ import { systemUserHandlers } from './handlers/systemUser';
 import { settingsHandler } from './handlers/settings';
 import { roleHandlers } from './handlers/role';
 
-export const ACCESSMANAGEMENT_BASE_URL = 'http://localhost:6006/accessmanagement/api/v1';
+export const ACCESSMANAGEMENT_BASE_URL = '/accessmanagement/api/v1';
 
 export const handlers = [
   ...resourceHandler(ACCESSMANAGEMENT_BASE_URL),
