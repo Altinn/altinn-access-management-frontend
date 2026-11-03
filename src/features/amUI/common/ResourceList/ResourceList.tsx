@@ -64,8 +64,6 @@ export interface ResourceListProps<
   size?: ResourceListItemProps['size'];
   interactive?: boolean | ((resource: TResource) => boolean);
   as?: ResourceListItemProps['as'];
-  showMoreButton?: boolean;
-  skeletonCount?: number;
   resolveLogos?: boolean;
   enableMaxHeight?: boolean;
   renderControls?: (resource: TResource) => React.ReactNode;

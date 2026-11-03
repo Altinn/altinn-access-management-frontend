@@ -20,17 +20,6 @@
   margin-left: auto;
 }
 
-.showMoreButtonContainer {
-  display: flex;
-  justify-content: center;
-  margin-top: 1rem;
-  width: 100%;
-}
-
-.showMoreButton {
-  width: 100%;
-}
-
 .resourceListContainer {
   padding-top: var(--ds-size-1);
 }
