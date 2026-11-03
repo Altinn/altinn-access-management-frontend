@@ -48,10 +48,15 @@ namespace Altinn.AccessManagement.UI.Integration.Clients
             _httpContextAccessor = httpContextAccessor;
         }
 
-        ///Determines whether the specified party has any bankruptcy estates.
+        /// <summary>
+        /// Determines whether the specified party has any bankruptcy estates.
+        /// </summary>
         /// <remarks>A <see cref="HttpStatusCode.Forbidden"/> response is treated as no accessible estates
-        /// and returns <see langword="false"/>.</remarks>The unique identifier of the party to check.A token to cancel the asynchronous operation.<see langword="true"/> when at least one estate exists for the specified party; otherwise, <see
-        /// langword="false"/>.Thrown when the HTTP response indicates a failure other than <see cref="HttpStatusCode.Forbidden"/>.
+        /// and returns <see langword="false"/>.</remarks>
+        /// <param name="partyId">The unique identifier of the party to check.</param>
+        /// <param name="cancellationToken">A token to cancel the asynchronous operation.</param>
+        /// <returns><see langword="true"/> when at least one estate exists for the specified party; otherwise, <see langword="false"/>.</returns>
+        /// <exception cref="HttpStatusException">Thrown when the HTTP response indicates a failure other than <see cref="HttpStatusCode.Forbidden"/>.</exception>
         public async Task<bool> HasAnyEstates(Guid partyId, CancellationToken cancellationToken = default)
         {
             string endpointUrl = $"enduser/bankruptcyestate/estates/any?party={partyId}";
@@ -67,6 +72,7 @@ namespace Altinn.AccessManagement.UI.Integration.Clients
             {
                 throw new HttpStatusException("Unexpected http response.", "Unexpected http response.", httpResponse.StatusCode, null, httpResponse.ReasonPhrase);
             }
+
             string content = await httpResponse.Content.ReadAsStringAsync(cancellationToken);
             return JsonSerializer.Deserialize<bool>(content);
         }
