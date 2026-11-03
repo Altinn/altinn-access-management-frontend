@@ -281,6 +281,8 @@
     "modal_info_info_2": "For å se hva denne fullmakten gjelder, kan du gå til <a>fanen for vergemål</a> i oversikten."
   },
   "role": {
+    "roles_removed_heading": "Gamle Altinn-roller er fjernet",
+    "roles_removed_content": "Gamle Altinn-roller er nå fjernet og gir ikke lenger tilgang til noe i Altinn. Denne fanen vil snart forsvinne. Dersom du eller andre har mistet tilgang, gå til <packages>Tilgangspakker</packages> for å be om fullmakt eller gi fullmakt til andre. Hvis du kun trenger tilgang til én enkelt tjeneste, bruk gjerne <singleRights>Enkelttjenester</singleRights> i stedet.",
     "header_info": "Informasjon om roller i Altinn",
     "header_info_content": "Disse rollene er overført fra gamle Altinn og vil gradvis fases ut. Vær oppmerksom på at rollene kan være ufullstendige og at du ikke kan gi/be om nye fullmakter til roller. Bruk heller tilgangspakker eller enkelttjenester.",
     "provider_status": "Denne rollen er hentet fra ",

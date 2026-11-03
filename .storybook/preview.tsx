@@ -28,6 +28,7 @@ window.featureFlags = {
   enableSingleRightsTabInPoaOverview: false,
   enableActivityLog: false,
   showSettingsPageServiceAnnouncement: false,
+  showRolesRemovedAlert: false,
 };
 
 // Initialise i18next;
