@@ -2,7 +2,7 @@ import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { DsAlert } from '@altinn/altinn-components';
 
-import { formatEntityDisplayName } from '@/resources/utils/reporteeUtils';
+import { formatEntityDisplayName, isPerson } from '@/resources/utils/reporteeUtils';
 import { useGetReporteeQuery } from '@/rtk/features/userInfoApi';
 import { useGetHasAdminAccessQuery } from '@/rtk/features/bankruptcyEstateApi';
 
@@ -13,9 +13,14 @@ export const BankruptcyEstateAdministrationPageContent = () => {
   const { t } = useTranslation();
   const { actingParty, isLoading: actorLoading } = usePartyRepresentation();
   const { data: reportee, isLoading: isLoadingReportee } = useGetReporteeQuery();
-  const { data: hasAdminAccess, isLoading: isLoadingHasAdminAccess } = useGetHasAdminAccessQuery();
+  const { data: hasAdminAccess, isLoading: isLoadingHasAdminAccess } = useGetHasAdminAccessQuery(
+    undefined,
+    { skip: !isPerson(reportee) },
+  );
 
-  if (!isLoadingHasAdminAccess && hasAdminAccess === false) {
+  const isLoading = isLoadingReportee || actorLoading || isLoadingHasAdminAccess;
+
+  if (!isLoading && (!isPerson(reportee) || hasAdminAccess === false)) {
     return (
       <DsAlert data-color='warning'>
         {t('bankruptcy_estate_administration_page.no_access_title')}
@@ -29,7 +34,7 @@ export const BankruptcyEstateAdministrationPageContent = () => {
         name: formatEntityDisplayName(actingParty),
       })}
       reportee={reportee}
-      isLoading={isLoadingReportee || actorLoading || isLoadingHasAdminAccess}
+      isLoading={isLoading}
     />
   );
 };

@@ -10,6 +10,10 @@ export const isOrganization = (reportee?: AuthorizedPartyEntity): boolean => {
   return reportee?.type === PartyType.Organization;
 };
 
+export const isPerson = (reportee?: AuthorizedPartyEntity): boolean => {
+  return reportee?.type === PartyType.Person;
+};
+
 export const isSubUnitByType = (unitType?: string | null): boolean => {
   return !!unitType && SUBUNIT_TYPES.includes(unitType);
 };

@@ -46,6 +46,7 @@ import {
   isOrganization,
   isSubUnit,
   formatEntityDisplayName,
+  isPerson,
 } from '@/resources/utils/reporteeUtils';
 import { useSidebarRequestCount } from '@/resources/hooks/useSidebarRequestCount';
 import { useGetRolePermissionsQuery } from '@/rtk/features/roleApi';
@@ -72,7 +73,7 @@ export const LandingPage = () => {
     skip: !isOrganization(reportee),
   });
   const showBankruptcyEstateAdministration =
-    window.featureFlags.enableBankruptcyEstateAdministration;
+    window.featureFlags.enableBankruptcyEstateAdministration && isPerson(reportee);
   const { data: hasBankruptcyEstateAdminAccess } = useGetHasAdminAccessQuery(undefined, {
     skip: !showBankruptcyEstateAdministration,
   });

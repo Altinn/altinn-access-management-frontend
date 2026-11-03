@@ -25,7 +25,7 @@ import {
   getBankruptcyEstateAdministrationMenuItem,
 } from '@/resources/utils/sidebarConfig';
 import { useGetPartyFromLoggedInUserQuery } from '@/rtk/features/lookupApi';
-import { isOrganization } from '@/resources/utils/reporteeUtils';
+import { isOrganization, isPerson } from '@/resources/utils/reporteeUtils';
 import {
   useGetIsAdminQuery,
   useGetIsClientAdminQuery,
@@ -65,7 +65,7 @@ export const useSidebarItems = ({ isSmall }: { isSmall?: boolean }) => {
     skip: !isOrganization(reportee),
   });
   const showBankruptcyEstateAdministration =
-    window.featureFlags.enableBankruptcyEstateAdministration;
+    window.featureFlags.enableBankruptcyEstateAdministration && isPerson(reportee);
   const { data: hasBankruptcyEstateAdminAccess } = useGetHasAdminAccessQuery(undefined, {
     skip: !showBankruptcyEstateAdministration,
   });
