@@ -1,0 +1,137 @@
+[
+  {
+    "id": "228ceaa6-0213-4673-94d2-d12572869e99",
+    "type": "Assignment",
+    "subtype": null,
+    "trigger": "Created",
+    "status": null,
+    "name": "Rolletildeling opprettet",
+    "description": "En part fikk en rolle hos en annen part, f.eks. som rettighetshaver eller tilgangsstyrer."
+  },
+  {
+    "id": "1ad8e8b5-cd6e-49d6-9de8-6118dab071e7",
+    "type": "Assignment",
+    "subtype": null,
+    "trigger": "Deleted",
+    "status": null,
+    "name": "Rolletildeling fjernet",
+    "description": "Rolletildelingen mellom partene ble fjernet."
+  },
+  {
+    "id": "928868d6-5c58-4815-be71-f944a7edcf02",
+    "type": "Assignment",
+    "subtype": "Package",
+    "trigger": "Created",
+    "status": null,
+    "name": "Tilgangspakke tildelt",
+    "description": "En tilgangspakke ble lagt til i rolletildelingen mellom partene."
+  },
+  {
+    "id": "43ec6f13-c464-4667-9b91-a21a385c1044",
+    "type": "Assignment",
+    "subtype": "Package",
+    "trigger": "Deleted",
+    "status": null,
+    "name": "Tilgangspakke fjernet",
+    "description": "Tilgangspakken ble fjernet fra rolletildelingen."
+  },
+  {
+    "id": "cdb21c9c-efe9-4dd8-a4ff-05e6ed85b363",
+    "type": "Assignment",
+    "subtype": "Resource",
+    "trigger": "Created",
+    "status": null,
+    "name": "Enkelttjeneste tildelt",
+    "description": "Det ble gitt tilgang til en enkelttjeneste."
+  },
+  {
+    "id": "2cc78d26-16a1-4a88-95cd-3ca427fb0731",
+    "type": "Assignment",
+    "subtype": "Resource",
+    "trigger": "Deleted",
+    "status": null,
+    "name": "Enkelttjeneste fjernet",
+    "description": "Tilgangen til enkelttjenesten ble fjernet."
+  },
+  {
+    "id": "6ef1a7af-4660-4c1e-b67c-2dc42b930dcc",
+    "type": "Assignment",
+    "subtype": "Instance",
+    "trigger": "Created",
+    "status": null,
+    "name": "Instanstilgang tildelt",
+    "description": "Det ble gitt tilgang til en enkelt instans, f.eks. et skjema eller en dialog."
+  },
+  {
+    "id": "61fc5569-a7e8-49b3-841b-ace4a7d4accd",
+    "type": "Assignment",
+    "subtype": "Instance",
+    "trigger": "Updated",
+    "status": null,
+    "name": "Instanstilgang flyttet",
+    "description": "Tilgangen til instansen ble flyttet til en annen rolletildeling (administrativ opprydding)."
+  },
+  {
+    "id": "6424f43d-5507-423b-a281-22994e75c573",
+    "type": "Assignment",
+    "subtype": "Instance",
+    "trigger": "Deleted",
+    "status": null,
+    "name": "Instanstilgang fjernet",
+    "description": "Tilgangen til instansen ble fjernet."
+  },
+  {
+    "id": "9ab53bde-0e35-4532-bb1d-236ca5c87de2",
+    "type": "Delegation",
+    "subtype": null,
+    "trigger": "Created",
+    "status": null,
+    "name": "Klientdelegering opprettet",
+    "description": "En fasilitator, f.eks. et regnskapsbyrå, koblet en klient til en agent."
+  },
+  {
+    "id": "a654f39c-1aa8-45c4-82ea-f6ac16c529f7",
+    "type": "Delegation",
+    "subtype": null,
+    "trigger": "Deleted",
+    "status": null,
+    "name": "Klientdelegering fjernet",
+    "description": "Koblingen mellom klient og agent ble fjernet."
+  },
+  {
+    "id": "ce3dff23-95d0-4b7c-997a-5f65edddb696",
+    "type": "Delegation",
+    "subtype": "Package",
+    "trigger": "Created",
+    "status": null,
+    "name": "Tilgangspakke delegert",
+    "description": "En tilgangspakke ble delegert videre fra klient til agent via fasilitator."
+  },
+  {
+    "id": "f598e047-e908-45cf-867c-fb839e5587bc",
+    "type": "Delegation",
+    "subtype": "Package",
+    "trigger": "Deleted",
+    "status": null,
+    "name": "Delegert tilgangspakke fjernet",
+    "description": "Den delegerte tilgangspakken ble fjernet fra klientdelegeringen."
+  },
+  {
+    "id": "d013ef2e-91f7-48e1-94cc-2f1884727fe0",
+    "type": "Delegation",
+    "subtype": "Resource",
+    "trigger": "Created",
+    "status": null,
+    "name": "Enkelttjeneste delegert",
+    "description": "En enkelttjeneste ble delegert videre fra klient til agent via fasilitator."
+  },
+  {
+    "id": "cbd8d3b1-1df4-4125-9ca5-7b137e18dd48",
+    "type": "Delegation",
+    "subtype": "Resource",
+    "trigger": "Deleted",
+    "status": null,
+    "name": "Delegert enkelttjeneste fjernet",
+    "description": "Den delegerte enkelttjenesten ble fjernet fra klientdelegeringen."
+  }
+]

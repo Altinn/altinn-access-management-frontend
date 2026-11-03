@@ -1,0 +1,182 @@
+[
+  {
+    "id": "904cdd82-37b6-41d7-b4e3-a85fcc152d25",
+    "type": "Request",
+    "subtype": null,
+    "trigger": "Created",
+    "status": null,
+    "name": "Forespørsel opprettet",
+    "description": "Det ble opprettet en forespørsel mellom partene."
+  },
+  {
+    "id": "0a0ee722-e6e9-4462-873f-93f2c02f7836",
+    "type": "Request",
+    "subtype": null,
+    "trigger": "Deleted",
+    "status": null,
+    "name": "Forespørsel fjernet",
+    "description": "Forespørselen ble fjernet."
+  },
+  {
+    "id": "37bac747-9827-4472-adce-0371dec07bfd",
+    "type": "Request",
+    "subtype": "Package",
+    "trigger": "Created",
+    "status": null,
+    "name": "Forespørsel om tilgangspakke opprettet",
+    "description": "Det ble opprettet en forespørsel om tilgang til en tilgangspakke."
+  },
+  {
+    "id": "0b818b59-1066-4734-bf65-894905c0a1e8",
+    "type": "Request",
+    "subtype": "Package",
+    "trigger": "Created",
+    "status": "Draft",
+    "name": "Utkast til forespørsel om tilgangspakke opprettet",
+    "description": "Et utkast til forespørsel om tilgangspakke ble opprettet, men er ikke sendt ennå."
+  },
+  {
+    "id": "e786a7fd-22c4-4498-891b-68961535ee2d",
+    "type": "Request",
+    "subtype": "Package",
+    "trigger": "Created",
+    "status": "Pending",
+    "name": "Forespørsel om tilgangspakke sendt",
+    "description": "Forespørselen om tilgangspakke ble sendt til mottakeren for behandling."
+  },
+  {
+    "id": "0dcbb3e0-69c6-4a21-b03c-be6a654bfc40",
+    "type": "Request",
+    "subtype": "Package",
+    "trigger": "Updated",
+    "status": null,
+    "name": "Forespørsel om tilgangspakke oppdatert",
+    "description": "Forespørselen om tilgangspakke endret status."
+  },
+  {
+    "id": "5d3b7916-0938-432c-a798-ffc4ffdfb482",
+    "type": "Request",
+    "subtype": "Package",
+    "trigger": "Updated",
+    "status": "Pending",
+    "name": "Utkast til forespørsel om tilgangspakke sendt",
+    "description": "Utkastet ble bekreftet og forespørselen sendt til mottakeren for behandling."
+  },
+  {
+    "id": "c2dcc001-9ec0-4d66-a0b3-93f675241459",
+    "type": "Request",
+    "subtype": "Package",
+    "trigger": "Updated",
+    "status": "Approved",
+    "name": "Forespørsel om tilgangspakke godkjent",
+    "description": "Mottakeren godkjente forespørselen, og tilgangen ble opprettet."
+  },
+  {
+    "id": "815978d1-42a0-4b2d-94ec-9de231d17a1e",
+    "type": "Request",
+    "subtype": "Package",
+    "trigger": "Updated",
+    "status": "Rejected",
+    "name": "Forespørsel om tilgangspakke avslått",
+    "description": "Mottakeren avslo forespørselen."
+  },
+  {
+    "id": "43400193-44eb-49dd-b715-7220abb631f1",
+    "type": "Request",
+    "subtype": "Package",
+    "trigger": "Updated",
+    "status": "Withdrawn",
+    "name": "Forespørsel om tilgangspakke trukket",
+    "description": "Avsenderen trakk forespørselen tilbake."
+  },
+  {
+    "id": "a71dff2e-b269-49cc-a660-3ad409569bce",
+    "type": "Request",
+    "subtype": "Package",
+    "trigger": "Deleted",
+    "status": null,
+    "name": "Forespørsel om tilgangspakke fjernet",
+    "description": "Forespørselen om tilgangspakke ble fjernet."
+  },
+  {
+    "id": "c807957c-3bb3-4a3a-8e2d-46e7aa64a606",
+    "type": "Request",
+    "subtype": "Resource",
+    "trigger": "Created",
+    "status": null,
+    "name": "Forespørsel om enkelttjeneste opprettet",
+    "description": "Det ble opprettet en forespørsel om tilgang til en enkelttjeneste."
+  },
+  {
+    "id": "8c22da2f-27c3-4daa-9ecb-f57401409ed8",
+    "type": "Request",
+    "subtype": "Resource",
+    "trigger": "Created",
+    "status": "Draft",
+    "name": "Utkast til forespørsel om enkelttjeneste opprettet",
+    "description": "Et utkast til forespørsel om enkelttjeneste ble opprettet, men er ikke sendt ennå."
+  },
+  {
+    "id": "e744329d-a35d-4fc9-a8a2-af4dd5f16a6c",
+    "type": "Request",
+    "subtype": "Resource",
+    "trigger": "Created",
+    "status": "Pending",
+    "name": "Forespørsel om enkelttjeneste sendt",
+    "description": "Forespørselen om enkelttjeneste ble sendt til mottakeren for behandling."
+  },
+  {
+    "id": "f52ceef9-4c7d-485c-a793-4251cd744885",
+    "type": "Request",
+    "subtype": "Resource",
+    "trigger": "Updated",
+    "status": null,
+    "name": "Forespørsel om enkelttjeneste oppdatert",
+    "description": "Forespørselen om enkelttjeneste endret status."
+  },
+  {
+    "id": "92b177e3-a739-4e70-8203-f0a2b0d766d4",
+    "type": "Request",
+    "subtype": "Resource",
+    "trigger": "Updated",
+    "status": "Pending",
+    "name": "Utkast til forespørsel om enkelttjeneste sendt",
+    "description": "Utkastet ble bekreftet og forespørselen sendt til mottakeren for behandling."
+  },
+  {
+    "id": "84dee7b3-5e0d-4dd7-b65f-5fea095bf6c5",
+    "type": "Request",
+    "subtype": "Resource",
+    "trigger": "Updated",
+    "status": "Approved",
+    "name": "Forespørsel om enkelttjeneste godkjent",
+    "description": "Mottakeren godkjente forespørselen, og tilgangen ble opprettet."
+  },
+  {
+    "id": "f590cb1b-84eb-4e10-971f-96e2a8c51c27",
+    "type": "Request",
+    "subtype": "Resource",
+    "trigger": "Updated",
+    "status": "Rejected",
+    "name": "Forespørsel om enkelttjeneste avslått",
+    "description": "Mottakeren avslo forespørselen."
+  },
+  {
+    "id": "b5d6d610-a6eb-421d-9923-e36f1488452e",
+    "type": "Request",
+    "subtype": "Resource",
+    "trigger": "Updated",
+    "status": "Withdrawn",
+    "name": "Forespørsel om enkelttjeneste trukket",
+    "description": "Avsenderen trakk forespørselen tilbake."
+  },
+  {
+    "id": "a3052a8c-8f2b-44c5-ae0e-3983e6ff212e",
+    "type": "Request",
+    "subtype": "Resource",
+    "trigger": "Deleted",
+    "status": null,
+    "name": "Forespørsel om enkelttjeneste fjernet",
+    "description": "Forespørselen om enkelttjeneste ble fjernet."
+  }
+]
