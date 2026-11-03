@@ -16,23 +16,8 @@
   margin-bottom: var(--ds-spacing-1);
 }
 
-.expiredSwitch {
-  display: flex;
-  align-items: center;
-}
 .delegationModalButton {
   margin-left: auto;
-}
-
-.showMoreButtonContainer {
-  display: flex;
-  justify-content: center;
-  margin-top: 1rem;
-  width: 100%;
-}
-
-.showMoreButton {
-  width: 100%;
 }
 
 .resourceListContainer {

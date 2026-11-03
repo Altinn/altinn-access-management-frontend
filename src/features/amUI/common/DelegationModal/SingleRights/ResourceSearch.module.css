@@ -16,13 +16,6 @@
   max-height: 30rem;
 }
 
-.toggleContainer {
-  display: flex;
-  align-items: center;
-  gap: var(--ds-spacing-1);
-  flex-shrink: 0;
-}
-
 .pagination {
   margin-top: 16px;
   margin: auto;

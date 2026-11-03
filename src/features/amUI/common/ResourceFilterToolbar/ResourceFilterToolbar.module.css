@@ -1,0 +1,6 @@
+.expiredToggle {
+  display: flex;
+  align-items: center;
+  gap: var(--ds-spacing-1);
+  flex-shrink: 0;
+}
