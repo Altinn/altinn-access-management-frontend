@@ -96,13 +96,10 @@ jobs:
       - name: Show report URL
         if: always()
         run: |
-          echo "Playwright report: $REPORT_URL"
-          echo "[Playwright report]($REPORT_URL)" >> "$GITHUB_STEP_SUMMARY"
-          NOTICE="Playwright: $REPORT_URL"
+          NOTICE="Playwright-rapport: $REPORT_URL"
           # The UU reporter only writes uu/ when the run had axe scans.
           if [ -f "playwright/playwright-report/${{ inputs.environment }}/uu/index.html" ]; then
-            echo "UU report: ${REPORT_URL}uu/index.html"
-            NOTICE="$NOTICE – UU: ${REPORT_URL}uu/index.html"
+            NOTICE="$NOTICE%0APlaywright Universell Utforming-rapport: ${REPORT_URL}uu/index.html"
           fi
-          # Annotation: shown at the top of the run page without expanding the step.
+          # The only place the report links are printed: an annotation at the top of the run page.
           echo "::notice title=Rapporter ${{ inputs.environment }}::$NOTICE"

@@ -30,9 +30,9 @@ const impact = (violation: Violation) => IMPACT_LABEL[violation.impact ?? ''] ??
 /**
  * Samler axe-funnene fra alle testene:
  * - `<outputFolder>/index.html`: samleside med én rad per regel og lenke til hver skanning.
- * - Én linje i terminalen med lenke til samlesiden.
- * - I CI: gul advarsel og kort oppsummering i jobben, med lenke til rapporten
- *   (`REPORT_URL` settes i template-playwright.yml). Brekker aldri bygget.
+ * - Én linje i terminalen, lokalt med sti til samlesiden.
+ * - I CI: gul advarsel og kort oppsummering i jobben. Lenken til rapporten skrives av
+ *   «Show report URL» i template-playwright.yml. Brekker aldri bygget.
  */
 export default class UuSummaryReporter implements Reporter {
   // Siste forsøk per test, så retries ikke telles dobbelt.
@@ -107,15 +107,16 @@ export default class UuSummaryReporter implements Reporter {
       path.join(outputFolder, 'index.html'),
       renderIndex(headline, sortedRules, scans),
     );
-    const reportLink = process.env.REPORT_URL
-      ? `${process.env.REPORT_URL}uu/index.html`
-      : path.join(outputFolder, 'index.html');
-    console.log(`UU: ${headline} → ${reportLink}`);
-    if (!process.env.GITHUB_ACTIONS) return;
+    if (!process.env.GITHUB_ACTIONS) {
+      console.log(`UU: ${headline} → ${path.join(outputFolder, 'index.html')}`);
+      return;
+    }
+    // I CI skrives lenken til rapporten bare av «Show report URL» i template-playwright.yml.
+    console.log(`UU: ${headline}`);
 
     if (rules.size || errors) {
       // Workflow-kommando: gul advarsel på kjøringen, ikke rødt bygg.
-      console.log(`::warning title=UU-funn::${headline}. UU-rapport: ${reportLink}`);
+      console.log(`::warning title=UU-funn::${headline}.`);
     }
     if (process.env.GITHUB_STEP_SUMMARY) {
       const ruleTable = sortedRules.length
@@ -131,14 +132,7 @@ export default class UuSummaryReporter implements Reporter {
         : [];
       fs.appendFileSync(
         process.env.GITHUB_STEP_SUMMARY,
-        [
-          '### UU',
-          `${headline}.`,
-          '',
-          ...ruleTable,
-          `➡️ [Åpne UU-rapporten](${reportLink})`,
-          '',
-        ].join('\n'),
+        ['### UU', `${headline}.`, '', ...ruleTable].join('\n'),
       );
     }
   }
