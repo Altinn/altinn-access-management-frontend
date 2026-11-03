@@ -53,6 +53,8 @@ jobs:
           ENVIRONMENT: ${{ inputs.environment }}
           PROJECT: ${{ inputs.project }}
           PLAYWRIGHT_HTML_OPEN: never
+          # Same URL as the Azure upload below; the UU reporter links to it.
+          REPORT_URL: https://playwrightreporting.z1.web.core.windows.net/${{ github.run_id }}-${{ inputs.environment }}/${{ inputs.environment }}/
         run: yarn run "env:${ENVIRONMENT}" --project "${PROJECT}" --workers=4
       - name: Upload Playwright report
         uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
@@ -93,15 +95,3 @@ jobs:
         run: |
           echo "Playwright report: $REPORT_URL"
           echo "[Playwright report]($REPORT_URL)" >> "$GITHUB_STEP_SUMMARY"
-      - name: UU summary
-        if: always()
-        continue-on-error: true
-        env:
-          UU_DIR: playwright/playwright-report/${{ inputs.environment }}/uu
-        run: |
-          [ -f "$UU_DIR/summary.md" ] || exit 0
-          {
-            echo "### UU"
-            cat "$UU_DIR/summary.md"
-            echo "➡️ [Åpne UU-rapporten](${REPORT_URL}uu/index.html)"
-          } >> "$GITHUB_STEP_SUMMARY"

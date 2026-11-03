@@ -13,7 +13,8 @@ type Scan = {
   stage: string;
   page: string;
   violations: Violation[];
-  file?: string;
+  /** Link to the scan's axe report, if one was written. */
+  href?: string;
 };
 type Rule = { violation: Violation; nodes: number; scans: Scan[] };
 
@@ -29,8 +30,9 @@ const impact = (violation: Violation) => IMPACT_LABEL[violation.impact ?? ''] ??
 /**
  * Samler axe-funnene fra alle testene:
  * - `<outputFolder>/index.html`: samleside med én rad per regel og lenke til hver skanning.
- * - `<outputFolder>/summary.md`: kort oppsummering som CI legger i jobboppsummeringen.
- * - Én linje i terminalen, og en GitHub-advarsel i CI. Brekker aldri bygget.
+ * - Én linje i terminalen med lenke til samlesiden.
+ * - I CI: gul advarsel og kort oppsummering i jobben, med lenke til rapporten
+ *   (`REPORT_URL` settes i template-playwright.yml). Brekker aldri bygget.
  */
 export default class UuSummaryReporter implements Reporter {
   // Siste forsøk per test, så retries ikke telles dobbelt.
@@ -55,6 +57,8 @@ export default class UuSummaryReporter implements Reporter {
     const scans: Scan[] = [];
     let errors = 0;
     fs.rmSync(outputFolder, { recursive: true, force: true });
+    // Absolute in CI: Azure also serves `…/uu` without a trailing slash, which breaks relative links.
+    const linkBase = process.env.REPORT_URL ? `${process.env.REPORT_URL}uu/` : '';
 
     for (const { test, result } of this.results.values()) {
       errors += result.annotations.filter(({ type }) => type === 'UU-feil').length;
@@ -71,9 +75,10 @@ export default class UuSummaryReporter implements Reporter {
         };
         const html = read(result.attachments.find(({ name }) => name === `${stage}-uu-report`));
         if (html) {
-          scan.file = `scan-${scans.length + 1}.html`;
+          const file = `scan-${scans.length + 1}.html`;
           fs.mkdirSync(outputFolder, { recursive: true });
-          fs.writeFileSync(path.join(outputFolder, scan.file), html);
+          fs.writeFileSync(path.join(outputFolder, file), html);
+          scan.href = linkBase + file;
         }
         scans.push(scan);
       }
@@ -102,29 +107,39 @@ export default class UuSummaryReporter implements Reporter {
       path.join(outputFolder, 'index.html'),
       renderIndex(headline, sortedRules, scans),
     );
-    fs.writeFileSync(
-      path.join(outputFolder, 'summary.md'),
-      [
-        `**UU (axe):** ${headline}.`,
-        ...(sortedRules.length
-          ? [
-              '',
-              '| Alvorlighet | Regel | Skanninger |',
-              '|---|---|---:|',
-              ...sortedRules.map(
-                ({ violation, scans }) =>
-                  `| ${impact(violation)} | ${violation.help} \`${violation.id}\` | ${scans.length} |`,
-              ),
-            ]
-          : []),
-        '',
-      ].join('\n'),
-    );
+    const reportLink = process.env.REPORT_URL
+      ? `${process.env.REPORT_URL}uu/index.html`
+      : path.join(outputFolder, 'index.html');
+    console.log(`UU: ${headline} → ${reportLink}`);
+    if (!process.env.GITHUB_ACTIONS) return;
 
-    console.log(`UU: ${headline} → ${path.join(outputFolder, 'index.html')}`);
-    if (process.env.GITHUB_ACTIONS && (rules.size || errors)) {
+    if (rules.size || errors) {
       // Workflow-kommando: gul advarsel på kjøringen, ikke rødt bygg.
-      console.log(`::warning title=UU-funn::${headline}. Se UU-rapporten i jobboppsummeringen.`);
+      console.log(`::warning title=UU-funn::${headline}. UU-rapport: ${reportLink}`);
+    }
+    if (process.env.GITHUB_STEP_SUMMARY) {
+      const ruleTable = sortedRules.length
+        ? [
+            '| Alvorlighet | Regel | Skanninger |',
+            '|---|---|---:|',
+            ...sortedRules.map(
+              ({ violation, scans }) =>
+                `| ${impact(violation)} | ${violation.help} \`${violation.id}\` | ${scans.length} |`,
+            ),
+            '',
+          ]
+        : [];
+      fs.appendFileSync(
+        process.env.GITHUB_STEP_SUMMARY,
+        [
+          '### UU',
+          `${headline}.`,
+          '',
+          ...ruleTable,
+          `➡️ [Åpne UU-rapporten](${reportLink})`,
+          '',
+        ].join('\n'),
+      );
     }
   }
 
@@ -155,7 +170,7 @@ const STYLE = `
 `;
 
 const scanLink = (scan: Scan, text: string) =>
-  scan.file ? html`<a href="${scan.file}">${text}</a>` : text;
+  scan.href ? html`<a href="${scan.href}">${text}</a>` : text;
 
 const table = (caption: string, columns: string[], rows: SafeHtml[]) => html`
   <div
