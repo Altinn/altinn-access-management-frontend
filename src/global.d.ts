@@ -10,6 +10,7 @@ declare global {
       enableSingleRightsTabInPoaOverview: boolean;
       enableActivityLog: boolean;
       showSettingsPageServiceAnnouncement: boolean;
+      showRolesRemovedAlert: boolean;
     };
   }
 }

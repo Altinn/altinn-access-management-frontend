@@ -16,6 +16,7 @@ import { useTabState } from '@/resources/hooks';
 
 import { AmTabs } from '../AmTabs/AmTabs';
 import { usePartyRepresentation } from '../PartyRepresentationContext/PartyRepresentationContext';
+import { RolesRemovedAlert } from '../RoleList/RolesRemovedAlert';
 
 import classes from './RightsTabs.module.css';
 
@@ -156,7 +157,13 @@ export const RightsTabs = ({
           className={classes.tabContent}
           value='roleAssignments'
         >
-          <div className={classes.innerTabContent}>{roleAssignmentsPanel}</div>
+          <div className={classes.innerTabContent}>
+            {window.featureFlags?.showRolesRemovedAlert ? (
+              <RolesRemovedAlert />
+            ) : (
+              roleAssignmentsPanel
+            )}
+          </div>
         </AmTabs.Panel>
       )}
       {showGuardianshipsTab && (
