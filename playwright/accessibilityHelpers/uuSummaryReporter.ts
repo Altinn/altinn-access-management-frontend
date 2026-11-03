@@ -30,9 +30,9 @@ const impact = (violation: Violation) => IMPACT_LABEL[violation.impact ?? ''] ??
 /**
  * Samler axe-funnene fra alle testene:
  * - `<outputFolder>/index.html`: samleside med én rad per regel og lenke til hver skanning.
- * - Én linje i terminalen med lenke til samlesiden.
- * - I CI: gul advarsel og kort oppsummering i jobben, med lenke til rapporten
- *   (`REPORT_URL` settes i template-playwright.yml). Brekker aldri bygget.
+ * - Én linje i terminalen, lokalt med sti til samlesiden.
+ * - I CI: gul advarsel og kort oppsummering i jobben. Lenken til rapporten skrives av
+ *   «Show report URL» i template-playwright.yml. Brekker aldri bygget.
  */
 export default class UuSummaryReporter implements Reporter {
   // Siste forsøk per test, så retries ikke telles dobbelt.
@@ -55,13 +55,15 @@ export default class UuSummaryReporter implements Reporter {
   private write() {
     const { outputFolder } = this.options;
     const scans: Scan[] = [];
-    let errors = 0;
+    const technicalErrors: string[] = [];
     fs.rmSync(outputFolder, { recursive: true, force: true });
     // Absolute in CI: Azure also serves `…/uu` without a trailing slash, which breaks relative links.
     const linkBase = process.env.REPORT_URL ? `${process.env.REPORT_URL}uu/` : '';
 
     for (const { test, result } of this.results.values()) {
-      errors += result.annotations.filter(({ type }) => type === 'UU-feil').length;
+      for (const { type, description } of result.annotations) {
+        if (type === 'UU-feil') technicalErrors.push(`${test.title}: ${description ?? ''}`);
+      }
       for (const attachment of result.attachments) {
         if (!attachment.name.endsWith('-axe-results')) continue;
         const stage = attachment.name.replace(/-axe-results$/, '');
@@ -83,6 +85,7 @@ export default class UuSummaryReporter implements Reporter {
         scans.push(scan);
       }
     }
+    const errors = technicalErrors.length;
     if (!scans.length && !errors) return;
 
     const rules = new Map<string, Rule>();
@@ -107,38 +110,21 @@ export default class UuSummaryReporter implements Reporter {
       path.join(outputFolder, 'index.html'),
       renderIndex(headline, sortedRules, scans),
     );
-    const reportLink = process.env.REPORT_URL
-      ? `${process.env.REPORT_URL}uu/index.html`
-      : path.join(outputFolder, 'index.html');
-    console.log(`UU: ${headline} → ${reportLink}`);
-    if (!process.env.GITHUB_ACTIONS) return;
+    if (!process.env.GITHUB_ACTIONS) {
+      console.log(`UU: ${headline} → ${path.join(outputFolder, 'index.html')}`);
+      return;
+    }
+    // I CI skrives lenken til rapporten bare av «Show report URL» i template-playwright.yml.
+    console.log(`UU: ${headline}`);
 
     if (rules.size || errors) {
       // Workflow-kommando: gul advarsel på kjøringen, ikke rødt bygg.
-      console.log(`::warning title=UU-funn::${headline}. UU-rapport: ${reportLink}`);
+      console.log(`::warning title=UU-funn::${headline}.`);
     }
     if (process.env.GITHUB_STEP_SUMMARY) {
-      const ruleTable = sortedRules.length
-        ? [
-            '| Alvorlighet | Regel | Skanninger |',
-            '|---|---|---:|',
-            ...sortedRules.map(
-              ({ violation, scans }) =>
-                `| ${impact(violation)} | ${violation.help} \`${violation.id}\` | ${scans.length} |`,
-            ),
-            '',
-          ]
-        : [];
       fs.appendFileSync(
         process.env.GITHUB_STEP_SUMMARY,
-        [
-          '### UU',
-          `${headline}.`,
-          '',
-          ...ruleTable,
-          `➡️ [Åpne UU-rapporten](${reportLink})`,
-          '',
-        ].join('\n'),
+        `${renderStepSummary(sortedRules, scans.length, technicalErrors)}\n\n`,
       );
     }
   }
@@ -154,6 +140,85 @@ function read(attachment?: TestResult['attachments'][number]) {
 }
 
 const MAX_PLACES = 5;
+
+/** Rødt for kritisk/alvorlig, varseltrekant for moderat. */
+const IMPACT_ICON: Record<string, string> = {
+  critical: '🔴',
+  serious: '🔴',
+  moderate: '⚠️',
+  minor: 'ℹ️',
+};
+const plural = (n: number, one: string, many: string) => `${n} ${n === 1 ? one : many}`;
+const icon = (violation: Violation) => IMPACT_ICON[violation.impact ?? ''] ?? 'ℹ️';
+
+/** Jobboppsummering i GitHub (begrenset HTML: ingen CSS). Bare funn, med lenke til hver skanning. */
+function renderStepSummary(rules: Rule[], scanCount: number, technicalErrors: string[]) {
+  const environment = process.env.environment?.toUpperCase() ?? '';
+  const count = (impacts: string[]) =>
+    rules.filter(({ violation }) => impacts.includes(violation.impact ?? '')).length;
+  const severe = count(['critical', 'serious']);
+  const moderate = count(['moderate']);
+  const minor = rules.length - severe - moderate;
+  const status = severe
+    ? '🔴'
+    : moderate
+      ? '⚠️'
+      : rules.length || technicalErrors.length
+        ? 'ℹ️'
+        : '✅';
+  const parts = [
+    severe && `🔴 ${severe} alvorlige`,
+    moderate && `⚠️ ${moderate} moderate`,
+    minor && `ℹ️ ${minor} mindre alvorlige`,
+  ].filter(Boolean);
+  const reportUrl = process.env.REPORT_URL ? `${process.env.REPORT_URL}uu/index.html` : undefined;
+
+  const ruleDetails = rules.map(
+    (rule) =>
+      html`<details>
+        <summary>
+          ${icon(rule.violation)} <b>${rule.violation.help}</b> <code>${rule.violation.id}</code> –
+          ${plural(rule.scans.length, 'skanning', 'skanninger')},
+          ${plural(rule.nodes, 'element', 'elementer')}
+        </summary>
+        <ul>
+          ${rule.scans.map(
+            (scan) =>
+              html`<li>
+                ${scanLink(scan, `${scan.area} – ${scan.stage}`)} <code>${scan.page}</code>
+              </li>`,
+          )}
+        </ul>
+        <p><a href="${rule.violation.helpUrl}">Om regelen (axe)</a></p>
+      </details>`,
+  );
+  const errorDetails = technicalErrors.length
+    ? html`<details>
+        <summary>
+          ⚙️
+          <b>${plural(technicalErrors.length, 'teknisk UU-feil', 'tekniske UU-feil')}</b>
+          (skanningen feilet)
+        </summary>
+        <ul>
+          ${technicalErrors.map((error) => html`<li><code>${error}</code></li>`)}
+        </ul>
+      </details>`
+    : '';
+
+  return html`
+    <br />
+    <h3>${status} Universell utforming ${environment}</h3>
+    <p>
+      ${parts.length ? `Regler med brudd: ${parts.join(' · ')}` : 'Ingen automatiske brudd'} ·
+      ${plural(scanCount, 'skanning', 'skanninger')}${
+        reportUrl ? html` · <a href="${reportUrl}">Åpne UU-rapporten</a>` : ''
+      }
+    </p>
+    ${ruleDetails} ${errorDetails}
+  `
+    .toString()
+    .replace(/^[ \t]+/gm, '');
+}
 
 const STYLE = `
   :root{color-scheme:light dark;--fg:#1e2b3c;--muted:#566270;--bg:#fff;--line:#d5dde5;--head:#eaf1f7;--link:#005db1;--bad:#b3261e;--ok:#1b6e3a}
