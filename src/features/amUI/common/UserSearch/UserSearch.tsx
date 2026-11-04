@@ -48,7 +48,7 @@ const filterAvailableUserTypes = (items?: UserSearchNode[]) =>
     (item) =>
       item.type === PartyType.Person ||
       item.type === PartyType.Organization ||
-      (window.featureFlags.showSystemUsersAsRightHolders && item.type === PartyType.SystemUser),
+      (window.featureFlags?.showSystemUsersAsRightHolders && item.type === PartyType.SystemUser),
   ) || [];
 
 export const UserSearch: React.FC<UserSearchProps> = ({

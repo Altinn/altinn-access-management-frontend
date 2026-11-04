@@ -24,7 +24,7 @@ export const useClientDetailsAccessAgentLists = ({
 
   const lists = useMemo(() => {
     const selectableAgents = (agents ?? []).filter((agent) =>
-      window.featureFlags.showSystemUsersAsRightHolders
+      window.featureFlags?.showSystemUsersAsRightHolders
         ? true
         : agent.agent.type !== PartyType.SystemUser,
     );

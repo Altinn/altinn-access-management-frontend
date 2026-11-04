@@ -19,7 +19,7 @@ export const usePermissionOverview = ({ permissions }: { permissions: Permission
       const id = to?.id;
       if (!to || !id) continue;
       if (seen.has(id)) continue;
-      if (!window.featureFlags.showSystemUsersAsRightHolders && to.type === PartyType.SystemUser)
+      if (!window.featureFlags?.showSystemUsersAsRightHolders && to.type === PartyType.SystemUser)
         continue; // skip system users
       const isPerson = to.type === PartyType.Person;
       const type = getAvatarType(to);
