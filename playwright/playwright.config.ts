@@ -12,7 +12,7 @@ const config: PlaywrightTestConfig = {
   use: {
     trace: 'on',
     screenshot: { mode: 'only-on-failure', fullPage: true },
-    video: { mode: 'retain-on-failure', size: { width: 1900, height: 1500 } },
+    video: 'off',
     launchOptions: {
       args: ['--start-maximized'],
     },
@@ -30,10 +30,16 @@ const config: PlaywrightTestConfig = {
       'html',
       {
         open: 'on-failure',
-        trace: 'on',
         outputDir: `playwright-report/${currentEnv().toUpperCase()}`,
         outputFolder: `playwright-report/${currentEnv().toUpperCase()}`,
       },
+    ],
+    // Job summary in GitHub: standard tests first, then UU.
+    ['./reporters/testSummaryReporter.ts'],
+    // After the html reporter, which empties its folder; the UU page lives inside it.
+    [
+      './accessibilityHelpers/uuSummaryReporter.ts',
+      { outputFolder: `playwright-report/${currentEnv().toUpperCase()}/uu` },
     ],
   ],
 
@@ -42,17 +48,6 @@ const config: PlaywrightTestConfig = {
       name: 'e2e-tests',
       testMatch: 'playwright/e2eTests/**/*.spec.ts',
       timeout: 90 * 1000,
-      expect: {
-        timeout: 15 * 1000, // 15 seconds for expect assertions
-      },
-      use: {
-        browserName: 'chromium',
-        headless: true,
-      },
-    },
-    {
-      name: 'accessibility-tests',
-      testMatch: 'playwright/uuTests/accessibilityTests/*.spec.ts',
       expect: {
         timeout: 15 * 1000, // 15 seconds for expect assertions
       },

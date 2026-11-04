@@ -1,4 +1,24 @@
+import type { ServiceResource } from '@/rtk/features/singleRights/singleRightsApi';
+
 import { type ResourceListItemResource } from './types';
+
+// Matches like the BFF resource search (ResourceService.SearchInResourceList).
+export const matchesAnySearchWord = (
+  resource: ServiceResource,
+  normalizedSearch: string,
+): boolean => {
+  const fields = [
+    resource.title,
+    resource.description,
+    resource.rightDescription,
+    resource.resourceOwnerName,
+    resource.identifier,
+    ...(resource.keywords ?? []),
+  ];
+  return normalizedSearch
+    .split(/\s/)
+    .some((word) => fields.some((field) => field?.toLowerCase().includes(word)));
+};
 
 export const extractResourceName = (resource: ResourceListItemResource): string => {
   if ('name' in resource && typeof resource.name === 'string' && resource.name.trim().length > 0) {

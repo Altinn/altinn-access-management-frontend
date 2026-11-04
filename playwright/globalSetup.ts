@@ -26,7 +26,7 @@ import { currentEnv, env } from 'playwright/util/helper';
  * Kun i CI, så lokale kjøringer ikke blir tregere (`OPPVARMING=true` for å
  * tvinge den på).
  */
-const TESTMAPPER = ['e2eTests', 'uuTests'];
+const TESTMAPPER = ['e2eTests'];
 const KALL_TIMEOUT_MS = 20_000;
 
 function finnTestbrukere(): string[] {

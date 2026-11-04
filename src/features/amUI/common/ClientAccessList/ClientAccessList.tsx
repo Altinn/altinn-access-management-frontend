@@ -15,7 +15,11 @@ import type { Client } from '@/rtk/features/clientApi';
 
 import { buildClientParentNameById, buildClientSortKey } from '../clientSortUtils';
 import { useRoleMetadata } from '../UserRoles/useRoleMetadata';
-import { UserListItems, type UserListItemData } from '../UserListItems/UserListItems';
+import {
+  UserListItems,
+  matchesUserListSearch,
+  type UserListItemData,
+} from '../UserListItems/UserListItems';
 import {
   ClientPackageInfoModal,
   type ClientPackageModalData,
@@ -101,6 +105,17 @@ const sortClientsByKey = (clients: Client[], parentNameById: Map<string, string>
   [...clients].sort((a, b) =>
     buildClientSortKey(a, parentNameById).localeCompare(buildClientSortKey(b, parentNameById)),
   );
+
+export const countClientSearchHits = (clients: Client[], searchString?: string) =>
+  clients.filter((client) =>
+    matchesUserListSearch(
+      {
+        name: formatEntityDisplayName(client.client),
+        organizationIdentifier: client.client.organizationIdentifier ?? undefined,
+      },
+      searchString,
+    ),
+  ).length;
 
 export const ClientAccessList = ({
   clients,

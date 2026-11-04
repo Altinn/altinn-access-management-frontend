@@ -134,14 +134,6 @@
       "count": 1
     }
   },
-  "playwright/uuTests/accessibilityHelpers/delegeringHelper.ts": {
-    "@typescript-eslint/no-explicit-any": {
-      "count": 1
-    },
-    "@typescript-eslint/restrict-template-expressions": {
-      "count": 1
-    }
-  },
   "src/features/amUI/InstanceDetailPage/RequestInstanceAdminPackage/RequestModalBody.tsx": {
     "@typescript-eslint/no-misused-promises": {
       "count": 2
