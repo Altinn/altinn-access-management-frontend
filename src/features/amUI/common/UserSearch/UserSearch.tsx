@@ -1,9 +1,10 @@
-import React, { useState } from 'react';
+import React, { useMemo, useState } from 'react';
 import { DsSearch, DsParagraph } from '@altinn/altinn-components';
 import { useTranslation } from 'react-i18next';
 
 import { formatEntityDisplayName } from '@/resources/utils/reporteeUtils';
 import { useDebouncedValue } from '@/resources/hooks';
+import { PartyType } from '@/dataObjects/dtos/Party';
 
 import { useFilteredUsers } from '../UserList/useFilteredUsers';
 import { DelegationAction } from '../DelegationModal/EditModal';
@@ -42,6 +43,14 @@ export interface UserSearchProps {
   restoreFocusFallbackId?: string;
 }
 
+const filterAvailableUserTypes = (items?: UserSearchNode[]) =>
+  items?.filter(
+    (item) =>
+      item.type === PartyType.Person ||
+      item.type === PartyType.Organization ||
+      (window.featureFlags.showSystemUsersAsRightHolders && item.type === PartyType.SystemUser),
+  ) || [];
+
 export const UserSearch: React.FC<UserSearchProps> = ({
   includeSelfAsChild,
   includeSelfAsChildOnIndirect = true,
@@ -68,9 +77,12 @@ export const UserSearch: React.FC<UserSearchProps> = ({
   const { t } = useTranslation();
   const [query, setQuery] = useState('');
   const { fromParty } = usePartyRepresentation();
-  const directUsers = initialUsers;
+  const directUsers = useMemo(() => filterAvailableUserTypes(initialUsers), [initialUsers]);
 
-  const indirectUsers = initialIndirectUsers;
+  const indirectUsers = useMemo(
+    () => filterAvailableUserTypes(initialIndirectUsers),
+    [initialIndirectUsers],
+  );
 
   const trimmedQuery = useDebouncedValue(query, query ? 300 : 0).trim();
   const isQuery = trimmedQuery !== '' || hasActiveAdditionalFilters;

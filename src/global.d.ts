@@ -11,6 +11,7 @@ declare global {
       enableActivityLog: boolean;
       showSettingsPageServiceAnnouncement: boolean;
       showRolesRemovedAlert: boolean;
+      showSystemUsersAsRightHolders: boolean;
     };
   }
 }
