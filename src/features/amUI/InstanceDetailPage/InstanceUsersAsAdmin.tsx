@@ -138,6 +138,7 @@ export const InstanceUsersAsAdmin = ({
         onDelegate={onDelegate}
         onSelect={onSelect}
         onRevoke={onRevoke}
+        hideSystemUsers={true}
       />
     </>
   );

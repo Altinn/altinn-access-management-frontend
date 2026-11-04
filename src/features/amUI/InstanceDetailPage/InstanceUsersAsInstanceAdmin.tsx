@@ -117,6 +117,7 @@ export const InstanceUsersAsInstanceAdmin = ({
         indirectConnectionsHeading={t('instance_detail_page.indirect_connections')}
         searchPlaceholder={t('instance_detail_page.search_placeholder')}
         onDelegate={onDelegate}
+        hideSystemUsers={true}
       />
     </>
   );

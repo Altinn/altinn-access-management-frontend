@@ -1,7 +1,6 @@
 import { useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 
-import { PartyType } from '@/dataObjects/dtos/Party';
 import type { Agent } from '@/rtk/features/clientApi';
 
 import { isNewUser } from '../common/isNewUser';
@@ -23,9 +22,7 @@ export const useClientDetailsAccessAgentLists = ({
   const { t } = useTranslation();
 
   const lists = useMemo(() => {
-    const selectableAgents = (agents ?? []).filter(
-      (agent) => agent.agent.type !== PartyType.SystemUser,
-    );
+    const selectableAgents = agents ?? [];
 
     const hasClientAccess = (agent: Agent) =>
       (clientAccessPackages ?? []).some(
