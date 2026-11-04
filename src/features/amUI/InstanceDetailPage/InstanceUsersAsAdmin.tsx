@@ -65,7 +65,7 @@ export const InstanceUsersAsAdmin = ({
         {
           fromPartyUuid: fromParty?.id,
         },
-      ),
+      ).filter((user) => user.type !== PartyType.SystemUser),
     [fromParty?.id, instances],
   );
 
@@ -90,7 +90,8 @@ export const InstanceUsersAsAdmin = ({
     () =>
       mapConnectionsToUserSearchNodes(indirectConnections).filter(
         (user) =>
-          user.type !== PartyType.Organization || (user.children && user.children.length > 0),
+          (user.type !== PartyType.Organization && user.type !== PartyType.SystemUser) ||
+          (user.children && user.children.length > 0),
       ),
     [indirectConnections],
   );
@@ -138,7 +139,6 @@ export const InstanceUsersAsAdmin = ({
         onDelegate={onDelegate}
         onSelect={onSelect}
         onRevoke={onRevoke}
-        hideSystemUsers={true}
       />
     </>
   );

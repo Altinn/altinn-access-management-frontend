@@ -65,13 +65,20 @@ export const InstanceUsersAsInstanceAdmin = ({
     },
   );
 
-  const users = useMemo(() => mapPartiesToUserSearchNodes(instanceUsers), [instanceUsers]);
+  const users = useMemo(
+    () =>
+      mapPartiesToUserSearchNodes(instanceUsers).filter(
+        (user) => user.type !== PartyType.SystemUser,
+      ),
+    [instanceUsers],
+  );
 
   const indirectUsers = useMemo(
     () =>
       mapSimplifiedConnectionsToUserSearchNodes(simplifiedConnections).filter(
         (user) =>
-          user.type !== PartyType.Organization || (user.children && user.children.length > 0),
+          (user.type !== PartyType.Organization && user.type !== PartyType.SystemUser) ||
+          (user.children && user.children.length > 0),
       ),
     [simplifiedConnections],
   );
@@ -117,7 +124,6 @@ export const InstanceUsersAsInstanceAdmin = ({
         indirectConnectionsHeading={t('instance_detail_page.indirect_connections')}
         searchPlaceholder={t('instance_detail_page.search_placeholder')}
         onDelegate={onDelegate}
-        hideSystemUsers={true}
       />
     </>
   );
