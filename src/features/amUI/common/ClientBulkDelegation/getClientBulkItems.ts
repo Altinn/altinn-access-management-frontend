@@ -28,7 +28,7 @@ type GetClientBulkItemsParams = {
   offered: ClientAccess[];
   heldPackages: ClientAccess[];
   heldResources: ClientAccess[];
-  getAccessPackageById: (packageId?: string | null) => AccessPackage | undefined;
+  getAccessPackageByUrn: (packageUrn?: string | null) => AccessPackage | undefined;
 };
 
 const heldRolesById = (accesses: ClientAccess[], pick: (access: ClientAccess) => string[]) => {
@@ -50,7 +50,7 @@ export const getClientBulkItems = ({
   offered,
   heldPackages,
   heldResources,
-  getAccessPackageById,
+  getAccessPackageByUrn,
 }: GetClientBulkItemsParams): ClientBulkItems => {
   const heldPackageRoles = heldRolesById(heldPackages, (access) =>
     access.packages.map((pkg) => pkg.id),
@@ -80,7 +80,7 @@ export const getClientBulkItems = ({
 
   offered.forEach((access) => {
     access.packages.forEach((pkg) => {
-      const accessPackage = getAccessPackageById(pkg.id);
+      const accessPackage = getAccessPackageByUrn(pkg.urn);
       if (!accessPackage?.isDelegable || !pkg.urn) return;
 
       add('package', pkg.urn, access.role.code, heldPackageRoles.get(pkg.id));
