@@ -77,7 +77,7 @@ export const useClientBulkDelegation = ({
   const { t } = useTranslation();
   const { openSnackbar } = useSnackbar();
   const {
-    getAccessPackageById,
+    getAccessPackageByUrn,
     isFetching: isFetchingAccessPackages,
     error: accessPackagesError,
   } = useAccessPackageLookup();
@@ -96,9 +96,9 @@ export const useClientBulkDelegation = ({
         offered,
         heldPackages: heldPackages.get(rowId) ?? [],
         heldResources: heldResources.get(rowId) ?? [],
-        getAccessPackageById,
+        getAccessPackageByUrn,
       }),
-    [getAccessPackageById, heldPackages, heldResources],
+    [getAccessPackageByUrn, heldPackages, heldResources],
   );
 
   const isRunning = useCallback(

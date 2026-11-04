@@ -1,12 +1,14 @@
 import { describe, expect, it } from 'vitest';
 
+import type { CompactPackage } from '@/dataObjects/dtos/accessPackage';
 import type { AccessPackage } from '@/rtk/features/accessPackageApi';
 import type { Agent, Client, ClientAccess } from '@/rtk/features/clientApi';
 
 import { getClientBulkItems, indexHeldAccess } from './getClientBulkItems';
 
 const pkg = (id: string, isDelegable = true) =>
-  ({ id, urn: `urn:${id}`, name: id, isDelegable }) as unknown as AccessPackage;
+  ({ id, urn: `urn:${id}`, areaId: 'area', name: id, isDelegable }) as unknown as AccessPackage &
+    CompactPackage;
 
 const resource = (refId: string, delegable = true) => ({
   id: refId,
@@ -16,7 +18,7 @@ const resource = (refId: string, delegable = true) => ({
 
 const access = (
   roleCode: string,
-  packages: AccessPackage[],
+  packages: CompactPackage[],
   resources: ClientAccess['resources'] = [],
 ): ClientAccess => ({
   role: { id: roleCode, code: roleCode, name: roleCode } as never,
@@ -24,17 +26,14 @@ const access = (
   resources,
 });
 
+const knownPackages = [pkg('lonn'), pkg('ikke-delegerbar', false), pkg('sykefravaer')];
+
 const offered: ClientAccess[] = [
-  access(
-    'regnskapsforer',
-    [pkg('lonn'), pkg('ikke-delegerbar', false), pkg('sykefravaer')],
-    [resource('sykemelding'), resource('stengt', false)],
-  ),
+  access('regnskapsforer', knownPackages, [resource('sykemelding'), resource('stengt', false)]),
   access('revisor', [pkg('lonn')]),
 ];
 
-const getAccessPackageById = (id?: string | null) =>
-  offered.flatMap((a) => a.packages).find((p) => p.id === id);
+const getAccessPackageByUrn = (urn?: string | null) => knownPackages.find((p) => p.urn === urn);
 
 describe('getClientBulkItems', () => {
   it('splits delegable accesses into missing and held, once per access', () => {
@@ -42,7 +41,7 @@ describe('getClientBulkItems', () => {
       offered,
       heldPackages: [access('revisor', [pkg('lonn')])],
       heldResources: [],
-      getAccessPackageById,
+      getAccessPackageByUrn,
     });
 
     expect(held).toEqual([{ kind: 'package', roleCode: 'revisor', id: 'urn:lonn' }]);
@@ -57,7 +56,7 @@ describe('getClientBulkItems', () => {
       offered,
       heldPackages: [access('regnskapsforer', [pkg('lonn')]), access('revisor', [pkg('lonn')])],
       heldResources: [access('revisor', [], [resource('sykemelding')])],
-      getAccessPackageById,
+      getAccessPackageByUrn,
     });
 
     expect(held).toEqual([
@@ -72,7 +71,7 @@ describe('getClientBulkItems', () => {
       offered,
       heldPackages: [],
       heldResources: [],
-      getAccessPackageById: () => undefined,
+      getAccessPackageByUrn: () => undefined,
     });
 
     expect(missing).toEqual([{ kind: 'resource', roleCode: 'regnskapsforer', id: 'sykemelding' }]);
@@ -97,8 +96,12 @@ describe('indexHeldAccess', () => {
 
   it('groups held access by agent on the client page, merging repeated agents', () => {
     const agents = [
-      { agent: entity('agent-1'), access: [access('regnskapsforer', [pkg('lonn')])] },
-      { agent: entity('agent-1'), access: [access('revisor', [pkg('lonn')])] },
+      {
+        agent: entity('agent-1'),
+        agentAddedAt: '',
+        access: [access('regnskapsforer', [pkg('lonn')])],
+      },
+      { agent: entity('agent-1'), agentAddedAt: '', access: [access('revisor', [pkg('lonn')])] },
     ] as Agent[];
 
     const byAgent = indexHeldAccess(agents, (held) => held.agent.id);

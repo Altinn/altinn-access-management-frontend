@@ -3,9 +3,9 @@ import { createApi } from '@reduxjs/toolkit/query/react';
 import { type PartyEntity } from '@/dataObjects/dtos/Party';
 import { getCookie } from '@/resources/Cookie/CookieMethods';
 import { createBaseQuery } from '@/rtk/app/baseQuery';
+import { type CompactPackage } from '@/dataObjects/dtos/accessPackage';
 
 import { type Role } from './roleApi';
-import { type AccessPackage } from './accessPackageApi';
 import { type PersonInput } from './connectionApi';
 import { type ServiceResource } from './singleRights/singleRightsApi';
 
@@ -17,7 +17,7 @@ export interface ClientResource {
 
 export interface ClientAccess {
   role: Role;
-  packages: AccessPackage[];
+  packages: CompactPackage[];
   resources?: ClientResource[];
 }
 
