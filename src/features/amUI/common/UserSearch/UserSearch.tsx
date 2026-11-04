@@ -41,11 +41,16 @@ export interface UserSearchProps {
   // here when an acted-on row is gone. The parent owns the value so it stays unique within its
   // RestoreFocusProvider zone; UserSearch decides which element carries it.
   restoreFocusFallbackId?: string;
+  hideSystemUsers?: boolean;
 }
 
-const filterAvailableUserTypes = (items?: UserSearchNode[]) =>
-  items?.filter((item) => item.type === PartyType.Person || item.type === PartyType.Organization) ||
-  [];
+const filterAvailableUserTypes = (items?: UserSearchNode[], hideSystemUsers?: boolean) =>
+  items?.filter(
+    (item) =>
+      item.type === PartyType.Person ||
+      item.type === PartyType.Organization ||
+      (item.type === PartyType.SystemUser && !item.isDeleted && !hideSystemUsers),
+  ) || [];
 
 export const UserSearch: React.FC<UserSearchProps> = ({
   includeSelfAsChild,
@@ -69,15 +74,19 @@ export const UserSearch: React.FC<UserSearchProps> = ({
   additionalFilters,
   hasActiveAdditionalFilters = false,
   restoreFocusFallbackId,
+  hideSystemUsers = false,
 }) => {
   const { t } = useTranslation();
   const [query, setQuery] = useState('');
   const { fromParty } = usePartyRepresentation();
-  const directUsers = useMemo(() => filterAvailableUserTypes(initialUsers), [initialUsers]);
+  const directUsers = useMemo(
+    () => filterAvailableUserTypes(initialUsers, hideSystemUsers),
+    [initialUsers, hideSystemUsers],
+  );
 
   const indirectUsers = useMemo(
-    () => filterAvailableUserTypes(initialIndirectUsers),
-    [initialIndirectUsers],
+    () => filterAvailableUserTypes(initialIndirectUsers, hideSystemUsers),
+    [initialIndirectUsers, hideSystemUsers],
   );
 
   const trimmedQuery = useDebouncedValue(query, query ? 300 : 0).trim();
