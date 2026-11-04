@@ -13,7 +13,9 @@ import { useTranslation } from 'react-i18next';
 
 import { AmPagination } from '@/components/Paginering';
 import { formatOrgNr, isSubUnitByType, matchesOrgNr } from '@/resources/utils/reporteeUtils';
+import { useDebouncedValue } from '@/resources/hooks';
 import { useIsMobileOrSmaller } from '@/resources/utils/screensizeUtils';
+import { SearchHitsStatus } from '@/features/amUI/common/SearchHitsStatus/SearchHitsStatus';
 
 import type { AgentDelegation, AgentDelegationCustomer } from '../types';
 
@@ -64,6 +66,7 @@ export const CustomerList = ({
   const { t } = useTranslation();
 
   const [searchValue, setSearchValue] = useState<string>('');
+  const debouncedSearch = useDebouncedValue(searchValue, searchValue ? 300 : 0);
   const [currentPage, setCurrentPage] = useState<number>(1);
   const [isHideAssignedChecked, setIsHideAssignedChecked] = useState<boolean>(false);
 
@@ -71,7 +74,7 @@ export const CustomerList = ({
     list,
     delegations ?? [],
     isHideAssignedChecked,
-    searchValue,
+    debouncedSearch,
   );
 
   const totalPages = Math.ceil(filteredSearchList.length / itemsPerPage);
@@ -121,6 +124,10 @@ export const CustomerList = ({
         )}
         {children}
       </div>
+      <SearchHitsStatus
+        hits={debouncedSearch.trim() ? filteredSearchList.length : undefined}
+        searchString={debouncedSearch}
+      />
       <List>
         {filteredSearchList.slice(startIndex, endIndex)?.map((customer) => (
           <ListItem

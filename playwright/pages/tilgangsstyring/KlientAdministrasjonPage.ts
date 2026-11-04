@@ -124,10 +124,12 @@ export class KlientAdministrasjonPage {
 
   // Klient/brukerraden i en liste rendres som en knapp (med navn og org.nr.).
   // Brukes der raden er en knapp og ikke en heading.
+  // Hele navnet matches (uten store/små bokstaver) for å ikke treffe "Gi/Slett alle fullmakter for <navn>".
   klientKnapp(navn: string): Locator {
+    const escaped = navn.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
     return this.page
       .getByRole('region', { name: this.texts.client_administration_page.agent_has_clients_tab })
-      .getByRole('button', { name: navn });
+      .getByRole('button', { name: new RegExp(`^${escaped}$`, 'i') });
   }
 
   async klikkListeElement(brukernavn: string) {

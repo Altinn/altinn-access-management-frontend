@@ -13,6 +13,7 @@ import type { Client } from '@/rtk/features/clientApi';
 
 import { buildClientParentNameById, buildClientSortKey } from '../clientSortUtils';
 import { useRoleMetadata } from '../UserRoles/useRoleMetadata';
+import { matchesUserListSearch } from '../UserListItems/UserListItems';
 import { indexHeldAccess } from '../ClientBulkDelegation/getClientBulkItems';
 import type {
   ClientAccessEntry,
@@ -46,6 +47,17 @@ const sortClientsByKey = (clients: Client[], parentNameById: Map<string, string>
   [...clients].sort((a, b) =>
     buildClientSortKey(a, parentNameById).localeCompare(buildClientSortKey(b, parentNameById)),
   );
+
+export const countClientSearchHits = (clients: Client[], searchString?: string) =>
+  clients.filter((client) =>
+    matchesUserListSearch(
+      {
+        name: formatEntityDisplayName(client.client),
+        organizationIdentifier: client.client.organizationIdentifier ?? undefined,
+      },
+      searchString,
+    ),
+  ).length;
 
 /** The agent-side list: one row per client, each showing that client's access for the agent. */
 export const ClientAccessList = ({

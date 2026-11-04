@@ -4,7 +4,7 @@ import { test } from 'playwright/fixture/pomFixture';
 import { Language } from 'playwright/pages/consent/ConsentPage';
 import { addTimeToNowUtc, formatUiDateTime, pickRandom } from 'playwright/util/helper';
 
-import { fromOrgs, toOrgs } from './helper/consentTestdata';
+import { orgTilOrg, toOrgs } from './helper/consentTestdata';
 
 const REDIRECT_URL = 'https://example.com/';
 const APPROVED_REDIRECT_URL = `${REDIRECT_URL}?Status=OK`;
@@ -23,11 +23,12 @@ LANGUAGES.forEach((language) => {
       consentPage,
       login,
       api,
+      runAccessibilityTest,
     }) => {
       // Create consent request from one org to another org
       // For å godkjenne her kreves det at ressursen i ressursregisteret er satt opp med utfyller/innsender-rollen for org til org-samtykke
       // fordi privatperson" ikke har rettighet til å godkjenne på vegne av en organisasjon
-      const [fromOrg, fromPerson] = pickRandom(fromOrgs);
+      const { orgnr: fromOrg, fnr: fromPerson } = orgTilOrg[language];
       const toOrg = pickRandom(toOrgs);
       const validTo = addTimeToNowUtc({ days: 2 });
 
@@ -47,17 +48,15 @@ LANGUAGES.forEach((language) => {
         await login.loginNotChoosingActor(fromPerson);
       });
 
-      await test.step('Pick language', async () => {
-        await consentPage.openMenu();
-        await consentPage.pickLanguage(consentPage.language);
-      });
-
       await test.step('Verify consent UI and expiry', async () => {
         await expect(consentPage.textIncomeData).toBeVisible();
         const expected = formatUiDateTime(validTo);
         await consentPage.expectExpiry(expected);
         await expect(consentPage.getIncomeYearText('2028')).toBeVisible();
       });
+
+      // UU: kun på bokmål; språket endrer ikke axe-reglene, og siden etter godkjenning er ekstern.
+      if (language === Language.NB) await runAccessibilityTest.scan('samtykke-org-til-org');
 
       await test.step('Approve consent', async () => {
         await consentPage.approveStandardAndWaitLogout(APPROVED_REDIRECT_URL);

@@ -10,11 +10,15 @@ import {
 } from '@/rtk/features/clientApi';
 import { getActionError } from '@/resources/hooks/useActionError';
 
-import { ClientAccessList } from '../common/ClientAccessList/ClientAccessList';
+import {
+  ClientAccessList,
+  countClientSearchHits,
+} from '../common/ClientAccessList/ClientAccessList';
 import {
   getAccessName,
   type RunClientAccessAction,
 } from '../common/ClientAccess/clientAccessEntry';
+import { SearchHitsStatus } from '../common/SearchHitsStatus/SearchHitsStatus';
 import { ClientAdminSearchField } from '../common/ClientAdminSearchField/ClientAdminSearchField';
 
 type MyClientsAccessSectionProps = {
@@ -90,6 +94,10 @@ export const MyClientsAccessSection = ({
         setSearchString={setSearchString}
         searchPlaceholder={t('my_clients_page.search_placeholder')}
         inputId={MY_CLIENTS_SEARCH_ID}
+      />
+      <SearchHitsStatus
+        hits={searchString ? countClientSearchHits(clients, searchString) : undefined}
+        searchString={searchString}
       />
       <ClientAccessList
         clients={clients}

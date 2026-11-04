@@ -20,6 +20,7 @@ import { ReporteePageHeading } from '../common/ReporteePageHeading/ReporteePageH
 
 import classes from './SettingsPageContent.module.css';
 import { SettingsModal } from './SettingsModal';
+import { SettingsServiceAnnouncement } from './SettingsServiceAnnouncement';
 
 export const SettingsPageContent = () => {
   const { t } = useTranslation();
@@ -83,6 +84,7 @@ export const SettingsPageContent = () => {
         reportee={reportee}
         isLoading={isLoading}
       />
+      <SettingsServiceAnnouncement />
       <div className={classes.settingsHeaderAndInfo}>
         <DsHeading
           level={2}

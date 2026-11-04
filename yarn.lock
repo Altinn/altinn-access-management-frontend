@@ -19,9 +19,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@altinn/altinn-components@npm:^0.76.5":
-  version: 0.76.5
-  resolution: "@altinn/altinn-components@npm:0.76.5"
+"@altinn/altinn-components@npm:^0.78.0":
+  version: 0.78.0
+  resolution: "@altinn/altinn-components@npm:0.78.0"
   dependencies:
     "@digdir/designsystemet-css": "npm:^1.14.0"
     "@digdir/designsystemet-react": "npm:^1.14.0"
@@ -34,7 +34,7 @@ __metadata:
   peerDependencies:
     react: ">=18.3.1 || ^19.0.0"
     react-dom: ">=18.3.1 || ^19.0.0"
-  checksum: 10/da0e728a2b0f5e69ce5e952e655274d7a4cae8105e6a1560dda7b276590e63fdfcde785715577761415de72af4370928d414c0ad2b123f2d065135c6f411fe55
+  checksum: 10/50d4ef377b5411d865c0bca4d7b38fc845e416103dce4e3aae887ac935f9bea4f61a87447dcad97f3ec5ce285ed422b8361bcab85b9ddd76f27bae34c3455fd1
   languageName: node
   linkType: hard
 
@@ -3209,7 +3209,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "access-management@workspace:."
   dependencies:
-    "@altinn/altinn-components": "npm:^0.76.5"
+    "@altinn/altinn-components": "npm:^0.78.0"
     "@axe-core/playwright": "npm:^4.10.2"
     "@eslint/js": "npm:^9.34.0"
     "@navikt/aksel-icons": "npm:^8.11.1"
@@ -3554,10 +3554,21 @@ __metadata:
   languageName: node
   linkType: hard
 
-"axe-core@npm:~4.14.0":
+"axe-core@npm:^4.13.0, axe-core@npm:~4.14.0":
   version: 4.14.0
   resolution: "axe-core@npm:4.14.0"
   checksum: 10/b41f9c5fb670b3e1812ba203b17570efa026071e6c722cd8384bacbe5f2be1578fc5d7544acf06df7758eb755c7d23629df922e86cc0655d656784157c0d8df5
+  languageName: node
+  linkType: hard
+
+"axe-html-reporter@npm:^2.2.11":
+  version: 2.2.11
+  resolution: "axe-html-reporter@npm:2.2.11"
+  dependencies:
+    mustache: "npm:^4.0.1"
+  peerDependencies:
+    axe-core: ">=3"
+  checksum: 10/489a904c62fe5c74db9490773a624e8573906b54a9c8264b831ee50b648f623ba292a011598d257bd6b8dc35eede21998fc25c799bd99eb9ca8ecf2d05ef92a1
   languageName: node
   linkType: hard
 
@@ -7117,6 +7128,15 @@ __metadata:
   languageName: node
   linkType: hard
 
+"mustache@npm:^4.0.1":
+  version: 4.2.0
+  resolution: "mustache@npm:4.2.0"
+  bin:
+    mustache: bin/mustache
+  checksum: 10/6e668bd5803255ab0779c3983b9412b5c4f4f90e822230e0e8f414f5449ed7a137eed29430e835aa689886f663385cfe05f808eb34b16e1f3a95525889b05cd3
+  languageName: node
+  linkType: hard
+
 "mute-stream@npm:^3.0.0":
   version: 3.0.0
   resolution: "mute-stream@npm:3.0.0"
@@ -7759,6 +7779,8 @@ __metadata:
     "@playwright/test": "npm:^1.60.0"
     "@types/jsonwebtoken": "npm:^9.0.10"
     "@types/node": "npm:^22.18.0"
+    axe-core: "npm:^4.13.0"
+    axe-html-reporter: "npm:^2.2.11"
     cross-env: "npm:^7.0.3"
     csv-parse: "npm:^7.0.0"
     dotenv: "npm:^16.6.1"

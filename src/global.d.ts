@@ -9,6 +9,8 @@ declare global {
       enableSkyra: boolean;
       enableSingleRightsTabInPoaOverview: boolean;
       enableActivityLog: boolean;
+      showSettingsPageServiceAnnouncement: boolean;
+      showRolesRemovedAlert: boolean;
     };
   }
 }

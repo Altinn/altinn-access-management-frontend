@@ -19,6 +19,7 @@ import type {
 
 import { useRoleMetadata } from '../UserRoles/useRoleMetadata';
 import { isNewUser } from '../isNewUser';
+import { matchesUserListSearch } from '../UserListItems/UserListItems';
 import { indexHeldAccess } from '../ClientBulkDelegation/getClientBulkItems';
 import type { ClientAccessEntry, ClientAccessRecipient } from '../ClientAccess/clientAccessEntry';
 import { ClientAccessRows, type ClientAccessRow } from '../ClientAccess/ClientAccessRows';
@@ -55,6 +56,11 @@ type ClientAgentPackageListProps = {
 
 const getAgentSortKey = (agent: Agent): string =>
   `${isNewUser(agent.agentAddedAt) ? '0' : '1'}:${agent.agent.name.toLowerCase()}`;
+
+export const countAgentSearchHits = (agents: Agent[], searchString?: string) =>
+  agents.filter((agent) =>
+    matchesUserListSearch({ name: formatEntityDisplayName(agent.agent) }, searchString),
+  ).length;
 
 /** The client page's list: one row per agent, each showing the client's access for that agent. */
 export const ClientAgentPackageList = ({
