@@ -135,17 +135,6 @@ export const SettingsModal = ({
       </div>
 
       <div className={classes.modalContent}>
-        {(noAddressesError || generalErrorKey) && (
-          <DsAlert
-            data-color='danger'
-            className={classes.errorBox}
-            data-size='sm'
-          >
-            <DsParagraph className={classes.errorText}>
-              {t(generalErrorKey ?? 'settings_page.no_addresses_error')}
-            </DsParagraph>
-          </DsAlert>
-        )}
         <DsHeading
           level={3}
           data-size='2xs'
@@ -183,6 +172,18 @@ export const SettingsModal = ({
         <DsParagraph className={classes.infoText}>
           {t('settings_page.manage_addresses_info')}
         </DsParagraph>
+        {(noAddressesError || generalErrorKey) && (
+          <DsAlert
+            role='alert'
+            data-color='danger'
+            className={classes.errorBox}
+            data-size='sm'
+          >
+            <DsParagraph className={classes.errorText}>
+              {t(generalErrorKey ?? 'settings_page.no_addresses_error')}
+            </DsParagraph>
+          </DsAlert>
+        )}
         <div className={classes.buttonRow}>
           <DsButton
             variant='primary'
